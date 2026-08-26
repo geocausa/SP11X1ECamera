@@ -23,3 +23,9 @@ Goal: bring up the SP11 rear camera from Windows-derived board evidence while pr
 3. CCI0 and qcom-camss probe without fatal errors;
 4. `/dev/media*` appears if the driver exposes the media controller without a sensor, or logs prove CAMSS successfully initialized if it defers external registration;
 5. no sensor rail/reset/MCLK transition occurs because no sensor node exists.
+
+## E002a result
+
+**PASS.** The isolated E002a one-shot boot bound X1E CAMCC, CCI0 and integrated CAMSS successfully. Linux moved from zero media/video nodes to `/dev/media0` plus sixteen VFE `/dev/video*` nodes. All camera infrastructure runtime-PM state returned to suspended; CSI supplies and all camera MCLK/CCI/CSIPHY/CSID/VFE clocks remained disabled. Golden playback/capture and soft-pause enumeration remained intact. See `e002a-infra/RESULT.md`.
+
+Next gate: **E002b rear probe only**.

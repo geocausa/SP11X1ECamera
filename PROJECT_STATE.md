@@ -1,14 +1,16 @@
 # Project state
 
 **Updated:** 2026-08-26  
-**State ID:** E001 Windows oracle map  
+**State ID:** E002a camera infrastructure accepted  
 **Golden remains:** SP11 Audio FullIO v19c
 
 ## Current boundary
 
-E001 has completed the implementation-grade static/host routing map needed to begin a Linux rear-camera experiment. The one-shot Windows oracle boot returned cleanly to Linux. Running kernel is still `7.1.5-sp11-render-parity-v4+` from FullIO v19c, GRUB `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, and Linux still exposes zero `/dev/video*` / `/dev/media*` nodes.
+E002a is mechanically accepted. A one-shot candidate using the exact FullIO v19c kernel/initrd and a DT-only camera-infrastructure delta booted successfully. X1E CAMCC, CCI0 and integrated CAMSS bound without camera-specific warnings/errors. Linux now exposes `/dev/media0` plus sixteen VFE `/dev/video*` nodes.
 
-No camera kernel/DT/runtime change has yet been installed.
+The infrastructure is electrically idle after registration: CAMCC/CCI0/CAMSS runtime-PM are suspended; the CSI 0.8 V and 1.2 V supply consumers have enable count 0; camera MCLK/CCI/CSIPHY/CSID/VFE clocks have prepare/enable count 0; no sensor node or sensor probe exists.
+
+Golden remains protected: `saved_entry=sp11-audio-fullio-v19c`, the E002a one-shot was consumed, and FullIO playback/capture plus soft-pause enumeration are unchanged.
 
 ## Exact SP11 camera hardware
 
@@ -84,6 +86,6 @@ Keep them on the parity backlog; do not guess them into Linux.
 
 ## Next action
 
-**E002 — rear OV13858 D-PHY infrastructure.**
+**E002b — rear OV13858 probe only.**
 
-From Golden v19c, audit the current X1E CAMSS/CCI/CSIPHY source and Denali DT, then create the smallest isolated candidate that describes only the proven rear path. First milestone is safe enumeration/probe; streaming comes only after the graph and power lifecycle are proven.
+Extend the accepted E002a DT with only the Windows-derived rear sensor power/reset/MCLK/control-bus description on **CCI0 master1**. The acceptance target is the OV13858 chip ID `0xd855` at 7-bit address `0x10`. Do not add/start CSI streaming until this power/probe lifecycle is proven.

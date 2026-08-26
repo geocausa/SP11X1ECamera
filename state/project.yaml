@@ -93,12 +93,20 @@ strategy:
     - IMX681 front
     - VD55G0 IR
 
-current_experiment: E001-windows-oracle-map
-next_experiment: E002-rear-ov13858-dphy
+current_experiment: E002-rear-ov13858-dphy
+current_gate: E002b-rear-probe
+e002a:
+  status: pass
+  boot_entry: sp11-camera-e002a-infra
+  candidate_dtb_sha256: dc229b994bd01cccae0d282166b243317f673aa55a84cc9e3da768458cdb6117
+  media_nodes: 1
+  video_nodes: 16
+  electrical_idle_verified: true
+next_experiment: E002b-rear-probe
 next_action: >-
-  Begin E002 from protected FullIO v19c: audit current X1E CAMSS/CCI/CSIPHY support and Denali
-  base DT, add only the rear OV13858 Windows-derived power/control/PHY path on CCI0 master1 and
-  CSIPHY1, preserve a separate candidate kernel/DT/boot payload, and prove enumeration before stream.
+  Extend the accepted E002a infrastructure candidate with only the Windows-derived rear OV13858
+  power/reset/MCLK node on CCI0 master1. Prove sensor ID 0xd855 at 7-bit address 0x10 without
+  creating a streaming endpoint or starting CSI transport. Preserve Golden as the saved GRUB default.
 
 handoff:
   first_read:
