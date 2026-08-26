@@ -1,0 +1,94 @@
+schema: 1
+project: SP11X1ECamera
+repo: https://github.com/geocausa/SP11X1ECamera
+updated: 2026-08-26
+machine: Microsoft Surface Pro 11 Denali X1E80100
+state_id: E000-baseline
+phase: oracle-mapping
+status: initialized
+
+golden:
+  boot_entry: sp11-audio-fullio-v19c
+  kernel_release: 7.1.5-sp11-render-parity-v4+
+  protected: true
+  rule: never overwrite Golden with an unproven camera candidate
+
+workspace:
+  canonical: /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
+  kernel_build_anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+
+machines:
+  sp11_linux:
+    role: primary Linux build/deploy/runtime target
+  sp11_windows:
+    role: same physical SP11; Windows hardware oracle and KD target
+  sp7_windows:
+    role: debugger/oracle companion; KD and USB/EEM host when useful
+
+camera_hardware:
+  front_rgb:
+    acpi_id: SONY0681
+    silicon: Sony IMX681
+    surface_subsystem: MSHW0490
+    mclk_observed_resource: cam_cc_mclk4_clk
+  rear_rgb:
+    acpi_id: OVTID858
+    silicon: OmniVision OV13858
+    surface_subsystem: MSHW0491
+    mclk_observed_resource: cam_cc_mclk1_clk
+  front_ir:
+    acpi_id: SMO55F0
+    silicon: ST VD55G0
+    surface_subsystem: MSHW0492
+    mclk_observed_resource: cam_cc_mclk0_clk
+  platform:
+    acpi_id: QCOM0C32
+    silicon: Qualcomm Spectra 695
+    surface_subsystem: MSHW0495
+
+linux_baseline:
+  video_nodes: 0
+  media_nodes: 0
+  config_video_qcom_camss: module
+  qcom_camss_module_installed: true
+  i2c_qcom_cci_module_installed: true
+  denali_camera_graph_enabled: false
+
+strategy:
+  reuse_upstream:
+    - X1E80100 CAMSS
+    - CCI
+    - CSI PHY where correct
+    - CSID/VFE
+    - media-controller/V4L2
+  derive_from_windows:
+    - Denali topology
+    - power/reset sequencing
+    - clocks and PMIC votes
+    - sensor modes and register lifecycle
+    - CSI lane/trio configuration
+    - privacy/illuminator behaviour
+  sensor_order:
+    - OV13858 rear
+    - IMX681 front
+    - VD55G0 IR
+
+current_experiment: E000-baseline
+next_experiment: E001-windows-oracle-map
+next_action: >-
+  Decode the selected SP11 Windows camera resource/sensor packages into an evidence table
+  for I2C/CCI, power order, clocks, reset, CSI physical mode, lane mapping, first stream mode,
+  and stream-on/off lifecycle before modifying Linux DT.
+
+handoff:
+  first_read:
+    - CONTINUE.md
+    - AGENTS.md
+    - PROJECT_STATE.md
+    - state/project.yaml
+  live_check: ./tools/project-status.sh
+  update_before_session_end:
+    - PROJECT_STATE.md
+    - state/project.yaml
+    - current experiment record
+    - git commit and push
