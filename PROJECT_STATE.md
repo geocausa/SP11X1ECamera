@@ -89,3 +89,12 @@ Keep them on the parity backlog; do not guess them into Linux.
 **E002b — rear OV13858 probe only.**
 
 Extend the accepted E002a DT with only the Windows-derived rear sensor power/reset/MCLK/control-bus description on **CCI0 master1**. The acceptance target is the OV13858 chip ID `0xd855` at 7-bit address `0x10`. Do not add/start CSI streaming until this power/probe lifecycle is proven.
+
+
+## E002b-r1 accepted — isolated camera regulator providers
+
+The first E002b attempt exposed a regulator-provider isolation bug: adding PM8550-B LDO16 into the existing Golden `regulators-0` provider caused that whole provider to fail registration, cascading into audio and Wi-Fi deferrals. This was not a missing-kitchen DTB.
+
+E002b-r1 fixes the architecture by registering PM8550-B LDO16 and PM8010-M LDO1/LDO5/LDO6 in separate camera-only RPMh provider devices with no registration-time voltage constraints. The one-shot r1 boot passed with Wi-Fi, playback, capture and CAMSS intact; all four new camera rails remained at 0 users / 0 mV.
+
+Next gate: E002b-r2 rear OV13858 identity probe. The probe module must be candidate-initrd-only; the shared Golden `/lib/modules` tree must not be modified. No CSI endpoint or streaming is allowed in r2.
