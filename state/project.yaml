@@ -73,12 +73,12 @@ strategy:
     - IMX681 front
     - VD55G0 IR
 
-current_experiment: E000-baseline
-next_experiment: E001-windows-oracle-map
+current_experiment: E001-windows-oracle-map
+next_experiment: E002-camss-infrastructure
 next_action: >-
-  Decode the selected SP11 Windows camera resource/sensor packages into an evidence table
-  for I2C/CCI, power order, clocks, reset, CSI physical mode, lane mapping, first stream mode,
-  and stream-on/off lifecycle before modifying Linux DT.
+  Complete E001 dynamic Windows oracle: map each camera slot to CCI/CSIPHY/CSID, capture host
+  PHY configuration/link parameters and privacy-LED lifecycle, then return to Linux and begin
+  E002 with rear OV13858 D-PHY CAMSS infrastructure only.
 
 handoff:
   first_read:
