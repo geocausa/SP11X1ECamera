@@ -1,0 +1,225 @@
+# 0 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts"
+# 0 "<built-in>"
+# 0 "<command-line>"
+# 1 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts"
+/dts-v1/;
+/plugin/;
+
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/interrupt-controller/arm-gic.h" 1
+# 9 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/interrupt-controller/arm-gic.h"
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/interrupt-controller/irq.h" 1
+# 10 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/interrupt-controller/arm-gic.h" 2
+# 5 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts" 2
+
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/clock/qcom,rpmh.h" 1
+# 7 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts" 2
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/clock/qcom,x1e80100-gcc.h" 1
+# 8 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts" 2
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/clock/qcom,x1e80100-camcc.h" 1
+# 9 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts" 2
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/interconnect/qcom,icc.h" 1
+# 10 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts" 2
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h" 1
+# 11 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts" 2
+# 1 "/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/power/qcom,rpmhpd.h" 1
+# 12 "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r1-isolated-rails/e002b-r1-isolated-rails-overlay.dts" 2
+
+/ {
+ fragment@0 {
+  target-path = "/soc@0";
+
+  __overlay__ {
+   camcc_e002a: clock-controller@ade0000 {
+    compatible = "qcom,x1e80100-camcc";
+    reg = <0 0x0ade0000 0 0x20000>;
+    clocks = <&gcc 16>,
+      <&rpmhcc 0>,
+      <&rpmhcc 1>,
+      <&sleep_clk>;
+    power-domains = <&rpmhpd 10>,
+      <&rpmhpd 6>;
+    required-opps = <&rpmhpd_opp_low_svs>,
+      <&rpmhpd_opp_low_svs>;
+    #clock-cells = <1>;
+    #reset-cells = <1>;
+    #power-domain-cells = <1>;
+    status = "okay";
+   };
+
+   cci0_e002a: cci@ac15000 {
+    compatible = "qcom,x1e80100-cci", "qcom,msm8996-cci";
+    reg = <0 0x0ac15000 0 0x1000>;
+    interrupts = <0 460 1>;
+    clocks = <&camcc_e002a 5>,
+      <&camcc_e002a 14>,
+      <&camcc_e002a 9>;
+    clock-names = "camnoc_axi", "cpas_ahb", "cci";
+    power-domains = <&camcc_e002a 5>;
+    #address-cells = <1>;
+    #size-cells = <0>;
+    status = "okay";
+
+    i2c-bus@0 {
+     reg = <0>;
+     clock-frequency = <1000000>;
+     #address-cells = <1>;
+     #size-cells = <0>;
+    };
+
+    i2c-bus@1 {
+     reg = <1>;
+     clock-frequency = <1000000>;
+     #address-cells = <1>;
+     #size-cells = <0>;
+    };
+   };
+
+   camss_e002a: isp@acb7000 {
+    compatible = "qcom,x1e80100-camss";
+    reg = <0 0x0acb7000 0 0x2000>,
+          <0 0x0acb9000 0 0x2000>,
+          <0 0x0acbb000 0 0x2000>,
+          <0 0x0acc6000 0 0x1000>,
+          <0 0x0acca000 0 0x1000>,
+          <0 0x0acb6000 0 0x1000>,
+          <0 0x0ace4000 0 0x1000>,
+          <0 0x0ace6000 0 0x1000>,
+          <0 0x0ace8000 0 0x1000>,
+          <0 0x0acec000 0 0x4000>,
+          <0 0x0acf6000 0 0x1000>,
+          <0 0x0acf7000 0 0x1000>,
+          <0 0x0acf8000 0 0x1000>,
+          <0 0x0ac62000 0 0x4000>,
+          <0 0x0ac71000 0 0x4000>,
+          <0 0x0acc7000 0 0x2000>,
+          <0 0x0accb000 0 0x2000>;
+    reg-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1",
+         "csid_wrapper", "csiphy0", "csiphy1", "csiphy2", "csiphy4",
+         "csitpg0", "csitpg1", "csitpg2", "vfe0", "vfe1", "vfe_lite0", "vfe_lite1";
+
+    clocks = <&camcc_e002a 4>,
+      <&camcc_e002a 5>,
+      <&camcc_e002a 13>,
+      <&camcc_e002a 14>,
+      <&camcc_e002a 16>,
+      <&camcc_e002a 17>,
+      <&camcc_e002a 18>,
+      <&camcc_e002a 19>,
+      <&camcc_e002a 22>,
+      <&camcc_e002a 35>,
+      <&camcc_e002a 37>,
+      <&camcc_e002a 38>,
+      <&camcc_e002a 23>,
+      <&camcc_e002a 39>,
+      <&camcc_e002a 25>,
+      <&camcc_e002a 40>,
+      <&camcc_e002a 27>,
+      <&camcc_e002a 42>,
+      <&camcc_e002a 31>,
+      <&gcc 17>,
+      <&gcc 18>,
+      <&camcc_e002a 49>,
+      <&camcc_e002a 52>,
+      <&camcc_e002a 53>,
+      <&camcc_e002a 56>,
+      <&camcc_e002a 58>,
+      <&camcc_e002a 57>,
+      <&camcc_e002a 60>,
+      <&camcc_e002a 61>;
+    clock-names = "camnoc_nrt_axi", "camnoc_rt_axi", "core_ahb", "cpas_ahb",
+           "cpas_fast_ahb", "cpas_vfe0", "cpas_vfe1", "cpas_vfe_lite",
+           "cphy_rx_clk_src", "csid", "csid_csiphy_rx", "csiphy0", "csiphy0_timer",
+           "csiphy1", "csiphy1_timer", "csiphy2", "csiphy2_timer", "csiphy4", "csiphy4_timer",
+           "gcc_axi_hf", "gcc_axi_sf", "vfe0", "vfe0_fast_ahb", "vfe1", "vfe1_fast_ahb",
+           "vfe_lite", "vfe_lite_ahb", "vfe_lite_cphy_rx", "vfe_lite_csid";
+
+    interrupts = <0 464 1>,
+          <0 466 1>,
+          <0 431 1>,
+          <0 468 1>,
+          <0 359 1>,
+          <0 477 1>,
+          <0 478 1>,
+          <0 479 1>,
+          <0 122 1>,
+          <0 465 1>,
+          <0 467 1>,
+          <0 469 1>,
+          <0 360 1>;
+    interrupt-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1",
+       "csiphy0", "csiphy1", "csiphy2", "csiphy4", "vfe0", "vfe1", "vfe_lite0", "vfe_lite1";
+
+    interconnects = <&gem_noc 3 ((1 << 0) | (1 << 1))
+       &config_noc 5 ((1 << 0) | (1 << 1))>,
+      <&mmss_noc 1 ((1 << 0) | (1 << 1) | (1 << 2))
+       &mc_virt 1 ((1 << 0) | (1 << 1) | (1 << 2))>,
+      <&mmss_noc 3 ((1 << 0) | (1 << 1) | (1 << 2))
+       &mc_virt 1 ((1 << 0) | (1 << 1) | (1 << 2))>,
+      <&mmss_noc 2 ((1 << 0) | (1 << 1) | (1 << 2))
+       &mc_virt 1 ((1 << 0) | (1 << 1) | (1 << 2))>;
+    interconnect-names = "ahb", "hf_mnoc", "sf_mnoc", "sf_icp_mnoc";
+
+    iommus = <&apps_smmu 0x800 0x60>,
+      <&apps_smmu 0x860 0x60>,
+      <&apps_smmu 0x1800 0x60>,
+      <&apps_smmu 0x1860 0x60>,
+      <&apps_smmu 0x18e0 0x00>,
+      <&apps_smmu 0x1980 0x20>,
+      <&apps_smmu 0x1900 0x00>,
+      <&apps_smmu 0x19a0 0x20>;
+
+    power-domains = <&camcc_e002a 1>,
+      <&camcc_e002a 2>,
+      <&camcc_e002a 5>;
+    power-domain-names = "ife0", "ife1", "top";
+
+
+
+
+    vdd-csiphy-0p8-supply = <&vreg_l2c_0p8>;
+    vdd-csiphy-1p2-supply = <&vreg_l1c_1p2>;
+
+    status = "okay";
+
+    ports {
+     #address-cells = <1>;
+     #size-cells = <0>;
+    };
+   };
+  };
+ };
+
+
+
+
+ fragment@1 {
+  target-path = "/soc@0/rsc@17500000";
+  __overlay__ {
+   camera_regulators_b_e002b_r1: regulators-camera-pm8550-b-e002b-r1 {
+    compatible = "qcom,pm8550-rpmh-regulators";
+    qcom,pmic-id = "b";
+
+    vreg_l16b_camera_e002b_r1: ldo16 {
+     regulator-name = "vreg_l16b_camera_e002b_r1";
+    };
+   };
+
+   camera_regulators_m_e002b_r1: regulators-camera-pm8010-m-e002b-r1 {
+    compatible = "qcom,pm8010-rpmh-regulators";
+    qcom,pmic-id = "m";
+
+    vreg_l1m_camera_e002b_r1: ldo1 {
+     regulator-name = "vreg_l1m_camera_e002b_r1";
+    };
+
+    vreg_l5m_camera_e002b_r1: ldo5 {
+     regulator-name = "vreg_l5m_camera_e002b_r1";
+    };
+
+    vreg_l6m_camera_e002b_r1: ldo6 {
+     regulator-name = "vreg_l6m_camera_e002b_r1";
+    };
+   };
+  };
+ };
+};
