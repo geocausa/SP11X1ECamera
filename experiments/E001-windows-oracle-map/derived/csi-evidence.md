@@ -32,11 +32,12 @@ The deployed X1E CAMSS source has no obvious `V4L2_MBUS_CSI2_CPHY` / `PHY_TYPE_C
 2. keep front IMX681 C-PHY as a separate PHY-extension milestone;
 3. do not let front C-PHY work contaminate or block the first rear RAW capture.
 
-## Still unknown after static oracle
-- exact CCI controller per sensor
-- exact CSIPHY/CSID receiver assignment per sensor
-- host PHY rate/settle values
-- dynamic privacy LED timing/ownership
-- whether any host routing differs across Windows camera profiles
+## Host-routing result
+See `routing-map.md`. The Windows PCFG parser establishes:
+- rear: CCI0/master1, CSIPHY1;
+- front: CCI1/master1, CSIPHY2;
+- IR: CCI0/master0, CSIPHY0.
 
-Those are E001 dynamic-oracle targets.
+For rear, RAW10 + four lanes + 474.24 MHz pixel rate establishes 1.1856 Gbit/s/lane / 592.8 MHz link frequency.
+
+Still to capture later for parity: exact Windows runtime settleTimeNS, privacy-LED transition timing, and any profile-dependent receiver changes. These are not prerequisites for the first rear Linux transport experiment.

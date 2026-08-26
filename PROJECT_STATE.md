@@ -1,72 +1,89 @@
 # Project state
 
 **Updated:** 2026-08-26  
-**State ID:** E000 baseline  
+**State ID:** E001 Windows oracle map  
 **Golden remains:** SP11 Audio FullIO v19c
 
-## What is mechanically proven
+## Current boundary
 
-The current SP11 Linux boot is `7.1.5-sp11-render-parity-v4+` from the dedicated FullIO v19c payload. Audio playback and capture enumerate and the custom soft-pause lifecycle remains present. Camera work has not modified this Golden.
+E001 has completed the implementation-grade static/host routing map needed to begin a Linux rear-camera experiment. The one-shot Windows oracle boot returned cleanly to Linux. Running kernel is still `7.1.5-sp11-render-parity-v4+` from FullIO v19c, GRUB `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, and Linux still exposes zero `/dev/video*` / `/dev/media*` nodes.
 
-Linux currently exposes **no `/dev/video*` and no `/dev/media*`**. The deployed Denali DT has no enabled camera media graph even though camera reserved memory exists and the kernel contains X1E80100 CAMSS support.
+No camera kernel/DT/runtime change has yet been installed.
 
-The running kernel configuration already includes `CONFIG_VIDEO_QCOM_CAMSS=m`, V4L2 subdevice API and media-controller support. Installed modules include `qcom-camss.ko.zst` and `i2c-qcom-cci.ko.zst`.
+## Exact SP11 camera hardware
 
-## Exact SP11 camera hardware proven from Windows
+- rear RGB: OmniVision **OV13858**, `OVTID858`, `MSHW0491`;
+- front RGB: Sony **IMX681**, `SONY0681`, `MSHW0490`;
+- front IR/Hello: ST **VD55G0**, `SMO55F0`, `MSHW0492`;
+- camera platform: Qualcomm **Spectra 695 / X1E80100**, Surface `MSHW0495`.
 
-The Windows SYSTEM hive and selected Surface camera packages identify:
+## Windows-derived board routing
 
-- front RGB: `SONY0681` / **Sony IMX681**, Surface subsystem `MSHW0490`;
-- rear RGB: `OVTID858` / **OmniVision OV13858**, subsystem `MSHW0491`;
-- front IR/Hello: `SMO55F0` / **ST VD55G0**, subsystem `MSHW0492`;
-- camera platform: `QCOM0C32` / Qualcomm **Spectra 695** camera platform, Surface subsystem `MSHW0495`.
+The exact installed `CAMP_PCFG_MSHW0495.bin` and `qccamplatform8380.sys` were decoded/reversed. The driver parser proves the packed platform connection fields and the flattened CCI-master split.
 
-Windows also installs Qualcomm MIPI CSI, ISP, secure ISP, JPEG encoder, flash/platform and Surface AVStream components.
+| Sensor | CCI route | Receive PHY | Physical mode |
+|---|---|---|---|
+| OV13858 rear | **CCI0 master1** | **CSIPHY1** | 4-lane D-PHY |
+| IMX681 front | **CCI1 master1** | **CSIPHY2** | **1-trio C-PHY** |
+| VD55G0 IR | **CCI0 master0** | **CSIPHY0** | to be finalized later |
 
-## Oracle evidence already extracted
+Front IMX681 C-PHY is independently proven by Microsoft's own sensor register program: `CSI_SIGNALING_MODE (0x0111) = 3`, with Linux CCS definitions independently identifying value 3 as CSI-2 C-PHY.
 
-Selected Surface packages contain sensor-specific Qualcomm Chromatix data and board-resource packages. We have observed structure/field names for sensor slave addresses, I2C mode, power sequencing, resolution/mode data, stream configuration, lane assignment and C-PHY/D-PHY combo metadata.
+Windows MIPI-CSI MMIO resources line up with upstream X1E CSIPHY0/1/2/4 and CSITPG blocks, so Windows is using the same receive fabric Linux models.
 
-Board-resource observations include:
+## Rear OV13858 first-target facts
 
-- IMX681 front: `cam_cc_mclk4_clk`, PMIC votes including `LDO3_M` and `LDO7_B`;
-- OV13858 rear: `cam_cc_mclk1_clk`, PMIC votes including `LDO1_M`, `LDO5_M`, `LDO6_M`, `LDO16_B`;
-- VD55G0 IR: `cam_cc_mclk0_clk`, PMIC votes including `LDO2_M`, `LDO4_M`, `LDO7_M`;
-- common camera XO/AHB/CPAS/Titan-top GDSC/MMCX resources and TLMM GPIO/delay resources.
+Windows power/resources:
+- reset GPIO **110**;
+- MCLK **cam_cc_mclk1_clk @ 19.2 MHz**;
+- LDO6_M 1.8 V;
+- LDO1_M 1.2 V;
+- LDO5_M 2.8 V;
+- LDO16_B 2.9 V;
+- exact D0/D3 order/delays are in E001 `power-map.md`.
 
-These observations are clues, not yet a complete decoded sequencing table.
+Probe:
+- Linux 7-bit slave address **0x10**;
+- ID register **0x300b**;
+- expected ID **0xd855**;
+- Qualcomm FAST CCI mode.
 
-## Upstream/community assessment
+Transport:
+- VC0 / RAW10;
+- four lanes (`laneAssign=0x3210`);
+- Windows route **CCI0 master1 -> CSIPHY1**;
+- 474.24 MHz RAW pixel rate => **1.1856 Gbit/s per lane**, **592.8 MHz link frequency**;
+- Microsoft's PLL is not mainline's stock 540/270 MHz OV13858 profile (`0x0300=0x05`, `0x0301=0`, `0x0302=0xf7`, `0x0303=0`).
 
-X1E80100 CAMSS support exists and should be reused. Current upstream CSI-PHY work is still evolving; as of the E000 research snapshot, the new standalone X1E CSI2 PHY series is D-PHY-first and C-PHY work remains a follow-on. Therefore the IMX681 physical-link mode must be proven from Windows before we encode a DT assumption.
+Therefore E002 must not simply wire the generic mainline OV13858 mode and call it parity. Reuse the upstream driver infrastructure, but introduce/audit an SP11 Windows-derived mode/link profile.
 
-Community SP11 camera work is valuable research but does not yet provide a proven complete SP11 Snapdragon camera stream. Treat its proposed DT snippets as hypotheses until validated.
+## Reuse boundary
 
-## Architecture decision
+Reuse upstream Linux:
+- X1E CAMSS;
+- CCI;
+- D-PHY/CSID/VFE/media-controller infrastructure;
+- generic OV13858 driver architecture.
 
-We are starting a **new native Surface-specific implementation** while retaining upstream Qualcomm infrastructure.
+Derive Surface-specific behavior from Windows:
+- board routing;
+- power/reset/regulator sequencing;
+- MCLK;
+- sensor modes/PLL/link frequency;
+- front C-PHY extension;
+- later privacy LED/IR illumination and image-quality parity.
 
-Bring-up order:
+## Remaining Windows parity observations
 
-1. static Windows oracle decode;
-2. dynamic Windows trace plan;
-3. common X1E CAMSS/CCI/PHY infrastructure and test pattern;
-4. rear OV13858 first;
-5. front IMX681 second;
-6. IR VD55G0 last;
-7. ISP/libcamera image-quality parity after stable transport.
+Not blocking rear E002:
+- exact runtime `settleTimeNS` value used by Windows receiver;
+- privacy LED transition timing/ownership;
+- whether any specialized profile changes receiver routing.
+
+Keep them on the parity backlog; do not guess them into Linux.
 
 ## Next action
 
-**E001: build the Windows-oracle camera map before touching Linux DT.**
+**E002 — rear OV13858 D-PHY infrastructure.**
 
-Decode the selected MSHW049x resource/configuration packages far enough to produce, for each camera:
-
-- sensor I2C/CCI controller and slave address;
-- exact MCLK and rate;
-- ordered regulator/GPIO/reset/power delays;
-- CSI PHY/index, lane/trio arrangement and D-PHY vs C-PHY mode;
-- first useful sensor mode: dimensions, bit depth, link frequency/timing;
-- stream-on/off register lifecycle.
-
-Then design the smallest Linux CAMSS test-pattern/DT experiment from evidence rather than from community templates.
+From Golden v19c, audit the current X1E CAMSS/CCI/CSIPHY source and Denali DT, then create the smallest isolated candidate that describes only the proven rear path. First milestone is safe enumeration/probe; streaming comes only after the graph and power lifecycle are proven.

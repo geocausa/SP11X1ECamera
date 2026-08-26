@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-26
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E000-baseline
-phase: oracle-mapping
-status: initialized
+state_id: E001-oracle-map
+phase: rear-dphy-bringup
+status: oracle-routing-complete
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -46,6 +46,26 @@ camera_hardware:
     silicon: Qualcomm Spectra 695
     surface_subsystem: MSHW0495
 
+windows_oracle_routing:
+  rear_rgb:
+    cci_controller: 0
+    cci_master: 1
+    csiphy: 1
+    bus_type: dphy
+    lanes: 4
+    link_frequency_hz: 592800000
+    lane_bit_rate_bps: 1185600000
+  front_rgb:
+    cci_controller: 1
+    cci_master: 1
+    csiphy: 2
+    bus_type: cphy
+    trios: 1
+  front_ir:
+    cci_controller: 0
+    cci_master: 0
+    csiphy: 0
+
 linux_baseline:
   video_nodes: 0
   media_nodes: 0
@@ -74,11 +94,11 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E001-windows-oracle-map
-next_experiment: E002-camss-infrastructure
+next_experiment: E002-rear-ov13858-dphy
 next_action: >-
-  Complete E001 dynamic Windows oracle: map each camera slot to CCI/CSIPHY/CSID, capture host
-  PHY configuration/link parameters and privacy-LED lifecycle, then return to Linux and begin
-  E002 with rear OV13858 D-PHY CAMSS infrastructure only.
+  Begin E002 from protected FullIO v19c: audit current X1E CAMSS/CCI/CSIPHY support and Denali
+  base DT, add only the rear OV13858 Windows-derived power/control/PHY path on CCI0 master1 and
+  CSIPHY1, preserve a separate candidate kernel/DT/boot payload, and prove enumeration before stream.
 
 handoff:
   first_read:
