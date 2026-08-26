@@ -1,0 +1,210 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r2-probe/base.sorted.dts	2026-08-26 23:03:23.663470012 +0100
++++ /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r2-probe/candidate.sorted.dts	2026-08-26 23:03:23.685469616 +0100
+@@ -44,7 +44,14 @@
+ 		bwmon_cluster0 = "/soc@0/pmu@240b3400";
+ 		bwmon_cluster2 = "/soc@0/pmu@240b5400";
+ 		cam_indicator_en = "/soc@0/pinctrl@f100000/cam-indicator-en-state";
++		camcc_e002a = "/soc@0/clock-controller@ade0000";
+ 		camera_mem = "/reserved-memory/camera@8e100000";
++		camera_regulators_b_e002b_r1 = "/soc@0/rsc@17500000/regulators-camera-pm8550-b-e002b-r1";
++		camera_regulators_m_e002b_r1 = "/soc@0/rsc@17500000/regulators-camera-pm8010-m-e002b-r1";
++		camss_e002a = "/soc@0/isp@acb7000";
++		cci0_e002a = "/soc@0/cci@ac15000";
++		cci0_r2_default = "/soc@0/pinctrl@f100000/cci0-r2-default-state";
++		cci0_r2_sleep = "/soc@0/pinctrl@f100000/cci0-r2-sleep-state";
+ 		cdsp_mem = "/reserved-memory/cdsp@8b900000";
+ 		charge_limit_delta = "/soc@0/arbiter@c400000/spmi@c42d000/pmic@0/nvram@7e00/charge-limit-delta@76";
+ 		charge_limit_en = "/soc@0/arbiter@c400000/spmi@c42d000/pmic@0/nvram@7e00/charge-limit-en@73";
+@@ -645,12 +652,14 @@
+ 		vreg_l13b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo13";
+ 		vreg_l14b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo14";
+ 		vreg_l15b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo15";
++		vreg_l16b_camera_e002b_r1 = "/soc@0/rsc@17500000/regulators-camera-pm8550-b-e002b-r1/ldo16";
+ 		vreg_l17b_2p5 = "/soc@0/rsc@17500000/regulators-0/ldo17";
+ 		vreg_l1b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo1";
+ 		vreg_l1c_1p2 = "/soc@0/rsc@17500000/regulators-1/ldo1";
+ 		vreg_l1d_0p8 = "/soc@0/rsc@17500000/regulators-2/ldo1";
+ 		vreg_l1i_1p8 = "/soc@0/rsc@17500000/regulators-6/ldo1";
+ 		vreg_l1j_0p8 = "/soc@0/rsc@17500000/regulators-7/ldo1";
++		vreg_l1m_camera_e002b_r1 = "/soc@0/rsc@17500000/regulators-camera-pm8010-m-e002b-r1/ldo1";
+ 		vreg_l2b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo2";
+ 		vreg_l2c_0p8 = "/soc@0/rsc@17500000/regulators-1/ldo2";
+ 		vreg_l2d_0p9 = "/soc@0/rsc@17500000/regulators-2/ldo2";
+@@ -663,7 +672,9 @@
+ 		vreg_l3i_0p8 = "/soc@0/rsc@17500000/regulators-6/ldo3";
+ 		vreg_l3j_0p8 = "/soc@0/rsc@17500000/regulators-7/ldo3";
+ 		vreg_l4b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo4";
++		vreg_l5m_camera_e002b_r1 = "/soc@0/rsc@17500000/regulators-camera-pm8010-m-e002b-r1/ldo5";
+ 		vreg_l6b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo6";
++		vreg_l6m_camera_e002b_r1 = "/soc@0/rsc@17500000/regulators-camera-pm8010-m-e002b-r1/ldo6";
+ 		vreg_l8b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo8";
+ 		vreg_l9b_2p9 = "/soc@0/rsc@17500000/regulators-0/ldo9";
+ 		vreg_nvme = "/regulator-nvme";
+@@ -2310,6 +2321,48 @@
+ 			};
+ 		};
+ 
++		cci@ac15000 {
++			#address-cells = <0x01>;
++			#size-cells = <0x00>;
++			clock-names = "camnoc_axi", "cpas_ahb", "cci";
++			clocks = <0x2b6 0x05 0x2b6 0x0e 0x2b6 0x09>;
++			compatible = "qcom,x1e80100-cci", "qcom,msm8996-cci";
++			interrupts = <0x00 0x1cc 0x01>;
++			phandle = <0x2bd>;
++			pinctrl-0 = <0x2b7>;
++			pinctrl-1 = <0x2b8>;
++			pinctrl-names = "default", "sleep";
++			power-domains = <0x2b6 0x05>;
++			reg = <0x00 0xac15000 0x00 0x1000>;
++			status = "okay";
++
++			i2c-bus@0 {
++				#address-cells = <0x01>;
++				#size-cells = <0x00>;
++				clock-frequency = <0xf4240>;
++				reg = <0x00>;
++			};
++
++			i2c-bus@1 {
++				#address-cells = <0x01>;
++				#size-cells = <0x00>;
++				clock-frequency = <0x61a80>;
++				reg = <0x01>;
++
++				rear-probe@10 {
++					clock-names = "xclk";
++					clocks = <0x2b6 0x49>;
++					compatible = "microsoft,sp11-ov13858-probe";
++					ldo16b-supply = <0x2bc>;
++					ldo1m-supply = <0x2ba>;
++					ldo5m-supply = <0x2bb>;
++					ldo6m-supply = <0x2b9>;
++					reg = <0x10>;
++					reset-gpios = <0x89 0x6e 0x01>;
++				};
++			};
++		};
++
+ 		clock-controller@100000 {
+ 			#clock-cells = <0x01>;
+ 			#power-domain-cells = <0x01>;
+@@ -2368,6 +2421,19 @@
+ 			required-opps = <0x2f 0x2f>;
+ 		};
+ 
++		clock-controller@ade0000 {
++			#clock-cells = <0x01>;
++			#power-domain-cells = <0x01>;
++			#reset-cells = <0x01>;
++			clocks = <0x3e 0x10 0x02 0x00 0x02 0x01 0x33>;
++			compatible = "qcom,x1e80100-camcc";
++			phandle = <0x2b6>;
++			power-domains = <0x3c 0x0a 0x3c 0x06>;
++			reg = <0x00 0xade0000 0x00 0x20000>;
++			required-opps = <0x2f 0x2f>;
++			status = "okay";
++		};
++
+ 		clock-controller@af00000 {
+ 			#clock-cells = <0x01>;
+ 			#power-domain-cells = <0x01>;
+@@ -4899,6 +4965,30 @@
+ 			reg = <0x00 0x3da0000 0x00 0x40000>;
+ 		};
+ 
++		isp@acb7000 {
++			clock-names = "camnoc_nrt_axi", "camnoc_rt_axi", "core_ahb", "cpas_ahb", "cpas_fast_ahb", "cpas_vfe0", "cpas_vfe1", "cpas_vfe_lite", "cphy_rx_clk_src", "csid", "csid_csiphy_rx", "csiphy0", "csiphy0_timer", "csiphy1", "csiphy1_timer", "csiphy2", "csiphy2_timer", "csiphy4", "csiphy4_timer", "gcc_axi_hf", "gcc_axi_sf", "vfe0", "vfe0_fast_ahb", "vfe1", "vfe1_fast_ahb", "vfe_lite", "vfe_lite_ahb", "vfe_lite_cphy_rx", "vfe_lite_csid";
++			clocks = <0x2b6 0x04 0x2b6 0x05 0x2b6 0x0d 0x2b6 0x0e 0x2b6 0x10 0x2b6 0x11 0x2b6 0x12 0x2b6 0x13 0x2b6 0x16 0x2b6 0x23 0x2b6 0x25 0x2b6 0x26 0x2b6 0x17 0x2b6 0x27 0x2b6 0x19 0x2b6 0x28 0x2b6 0x1b 0x2b6 0x2a 0x2b6 0x1f 0x3e 0x11 0x3e 0x12 0x2b6 0x31 0x2b6 0x34 0x2b6 0x35 0x2b6 0x38 0x2b6 0x3a 0x2b6 0x39 0x2b6 0x3c 0x2b6 0x3d>;
++			compatible = "qcom,x1e80100-camss";
++			interconnect-names = "ahb", "hf_mnoc", "sf_mnoc", "sf_icp_mnoc";
++			interconnects = <0x40 0x03 0x03 0x41 0x05 0x03 0xfe 0x01 0x07 0x21 0x01 0x07 0xfe 0x03 0x07 0x21 0x01 0x07 0xfe 0x02 0x07 0x21 0x01 0x07>;
++			interrupt-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1", "csiphy0", "csiphy1", "csiphy2", "csiphy4", "vfe0", "vfe1", "vfe_lite0", "vfe_lite1";
++			interrupts = <0x00 0x1d0 0x01 0x00 0x1d2 0x01 0x00 0x1af 0x01 0x00 0x1d4 0x01 0x00 0x167 0x01 0x00 0x1dd 0x01 0x00 0x1de 0x01 0x00 0x1df 0x01 0x00 0x7a 0x01 0x00 0x1d1 0x01 0x00 0x1d3 0x01 0x00 0x1d5 0x01 0x00 0x168 0x01>;
++			iommus = <0x3d 0x800 0x60 0x3d 0x860 0x60 0x3d 0x1800 0x60 0x3d 0x1860 0x60 0x3d 0x18e0 0x00 0x3d 0x1980 0x20 0x3d 0x1900 0x00 0x3d 0x19a0 0x20>;
++			phandle = <0x2be>;
++			power-domain-names = "ife0", "ife1", "top";
++			power-domains = <0x2b6 0x01 0x2b6 0x02 0x2b6 0x05>;
++			reg = <0x00 0xacb7000 0x00 0x2000 0x00 0xacb9000 0x00 0x2000 0x00 0xacbb000 0x00 0x2000 0x00 0xacc6000 0x00 0x1000 0x00 0xacca000 0x00 0x1000 0x00 0xacb6000 0x00 0x1000 0x00 0xace4000 0x00 0x1000 0x00 0xace6000 0x00 0x1000 0x00 0xace8000 0x00 0x1000 0x00 0xacec000 0x00 0x4000 0x00 0xacf6000 0x00 0x1000 0x00 0xacf7000 0x00 0x1000 0x00 0xacf8000 0x00 0x1000 0x00 0xac62000 0x00 0x4000 0x00 0xac71000 0x00 0x4000 0x00 0xacc7000 0x00 0x2000 0x00 0xaccb000 0x00 0x2000>;
++			reg-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1", "csid_wrapper", "csiphy0", "csiphy1", "csiphy2", "csiphy4", "csitpg0", "csitpg1", "csitpg2", "vfe0", "vfe1", "vfe_lite0", "vfe_lite1";
++			status = "okay";
++			vdd-csiphy-0p8-supply = <0x28c>;
++			vdd-csiphy-1p2-supply = <0x28b>;
++
++			ports {
++				#address-cells = <0x01>;
++				#size-cells = <0x00>;
++			};
++		};
++
+ 		mailbox@17430000 {
+ 			#mbox-cells = <0x01>;
+ 			compatible = "qcom,x1e80100-cpucp-mbox";
+@@ -5839,6 +5929,28 @@
+ 				pins = "gpio225";
+ 			};
+ 
++			cci0-r2-default-state {
++				phandle = <0x2b7>;
++
++				cci0-r2-i2c1-default-pins {
++					bias-pull-up;
++					drive-strength = <0x02>;
++					function = "cci_i2c";
++					pins = "gpio103", "gpio104";
++				};
++			};
++
++			cci0-r2-sleep-state {
++				phandle = <0x2b8>;
++
++				cci0-r2-i2c1-sleep-pins {
++					bias-pull-down;
++					drive-strength = <0x02>;
++					function = "cci_i2c";
++					pins = "gpio103", "gpio104";
++				};
++			};
++
+ 			edp-reg-en-state {
+ 				bias-disable;
+ 				drive-strength = <0x10>;
+@@ -7502,6 +7614,38 @@
+ 					regulator-name = "vreg_s5j_1p2";
+ 				};
+ 			};
++
++			regulators-camera-pm8010-m-e002b-r1 {
++				compatible = "qcom,pm8010-rpmh-regulators";
++				phandle = <0x2c0>;
++				qcom,pmic-id = "m";
++
++				ldo1 {
++					phandle = <0x2ba>;
++					regulator-name = "vreg_l1m_camera_e002b_r1";
++				};
++
++				ldo5 {
++					phandle = <0x2bb>;
++					regulator-name = "vreg_l5m_camera_e002b_r1";
++				};
++
++				ldo6 {
++					phandle = <0x2b9>;
++					regulator-name = "vreg_l6m_camera_e002b_r1";
++				};
++			};
++
++			regulators-camera-pm8550-b-e002b-r1 {
++				compatible = "qcom,pm8550-rpmh-regulators";
++				phandle = <0x2bf>;
++				qcom,pmic-id = "b";
++
++				ldo16 {
++					phandle = <0x2bc>;
++					regulator-name = "vreg_l16b_camera_e002b_r1";
++				};
++			};
+ 		};
+ 
+ 		soundwire@6ab0000 {
