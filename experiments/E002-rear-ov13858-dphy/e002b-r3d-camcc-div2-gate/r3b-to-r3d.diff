@@ -1,0 +1,117 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r3b-ov13858-id/candidate.sorted.dts	2026-08-26 23:27:42.718353587 +0100
++++ /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002b-r3d-camcc-div2-gate/candidate.sorted.dts	2026-08-26 23:39:05.208612873 +0100
+@@ -46,11 +46,11 @@
+ 		cam_indicator_en = "/soc@0/pinctrl@f100000/cam-indicator-en-state";
+ 		camcc_e002a = "/soc@0/clock-controller@ade0000";
+ 		camera_mem = "/reserved-memory/camera@8e100000";
+-		camera_rpmh_r3b = "/soc@0/rsc@17500000/camera-rpmh-regulators";
++		camera_rpmh_r3d = "/soc@0/rsc@17500000/camera-rpmh-regulators";
+ 		camss_e002a = "/soc@0/isp@acb7000";
+ 		cci0_e002a = "/soc@0/cci@ac15000";
+-		cci0_r3b_default = "/soc@0/pinctrl@f100000/cci0-r3b-default-state";
+-		cci0_r3b_sleep = "/soc@0/pinctrl@f100000/cci0-r3b-sleep-state";
++		cci0_r3d_default = "/soc@0/pinctrl@f100000/cci0-r3d-default-state";
++		cci0_r3d_sleep = "/soc@0/pinctrl@f100000/cci0-r3d-sleep-state";
+ 		cdsp_mem = "/reserved-memory/cdsp@8b900000";
+ 		charge_limit_delta = "/soc@0/arbiter@c400000/spmi@c42d000/pmic@0/nvram@7e00/charge-limit-delta@76";
+ 		charge_limit_en = "/soc@0/arbiter@c400000/spmi@c42d000/pmic@0/nvram@7e00/charge-limit-en@73";
+@@ -651,14 +651,14 @@
+ 		vreg_l13b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo13";
+ 		vreg_l14b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo14";
+ 		vreg_l15b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo15";
+-		vreg_l16b_camera_r3b = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo16b";
++		vreg_l16b_camera_r3d = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo16b";
+ 		vreg_l17b_2p5 = "/soc@0/rsc@17500000/regulators-0/ldo17";
+ 		vreg_l1b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo1";
+ 		vreg_l1c_1p2 = "/soc@0/rsc@17500000/regulators-1/ldo1";
+ 		vreg_l1d_0p8 = "/soc@0/rsc@17500000/regulators-2/ldo1";
+ 		vreg_l1i_1p8 = "/soc@0/rsc@17500000/regulators-6/ldo1";
+ 		vreg_l1j_0p8 = "/soc@0/rsc@17500000/regulators-7/ldo1";
+-		vreg_l1m_camera_r3b = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo1m";
++		vreg_l1m_camera_r3d = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo1m";
+ 		vreg_l2b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo2";
+ 		vreg_l2c_0p8 = "/soc@0/rsc@17500000/regulators-1/ldo2";
+ 		vreg_l2d_0p9 = "/soc@0/rsc@17500000/regulators-2/ldo2";
+@@ -671,9 +671,9 @@
+ 		vreg_l3i_0p8 = "/soc@0/rsc@17500000/regulators-6/ldo3";
+ 		vreg_l3j_0p8 = "/soc@0/rsc@17500000/regulators-7/ldo3";
+ 		vreg_l4b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo4";
+-		vreg_l5m_camera_r3b = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo5m";
++		vreg_l5m_camera_r3d = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo5m";
+ 		vreg_l6b_1p8 = "/soc@0/rsc@17500000/regulators-0/ldo6";
+-		vreg_l6m_camera_r3b = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo6m";
++		vreg_l6m_camera_r3d = "/soc@0/rsc@17500000/camera-rpmh-regulators/ldo6m";
+ 		vreg_l8b_3p0 = "/soc@0/rsc@17500000/regulators-0/ldo8";
+ 		vreg_l9b_2p9 = "/soc@0/rsc@17500000/regulators-0/ldo9";
+ 		vreg_nvme = "/regulator-nvme";
+@@ -2424,7 +2424,7 @@
+ 			#clock-cells = <0x01>;
+ 			#power-domain-cells = <0x01>;
+ 			#reset-cells = <0x01>;
+-			clocks = <0x3e 0x10 0x02 0x00 0x02 0x01 0x33>;
++			clocks = <0x3e 0x10 0x32 0x119 0x33>;
+ 			compatible = "qcom,x1e80100-camcc";
+ 			phandle = <0x2b6>;
+ 			power-domains = <0x3c 0x0a 0x3c 0x06>;
+@@ -5928,10 +5928,10 @@
+ 				pins = "gpio225";
+ 			};
+ 
+-			cci0-r3b-default-state {
++			cci0-r3d-default-state {
+ 				phandle = <0x2b7>;
+ 
+-				cci0-r3b-i2c1-default-pins {
++				cci0-r3d-i2c1-default-pins {
+ 					bias-pull-up;
+ 					drive-strength = <0x02>;
+ 					function = "cci_i2c";
+@@ -5939,10 +5939,10 @@
+ 				};
+ 			};
+ 
+-			cci0-r3b-sleep-state {
++			cci0-r3d-sleep-state {
+ 				phandle = <0x2b8>;
+ 
+-				cci0-r3b-i2c1-sleep-pins {
++				cci0-r3d-i2c1-sleep-pins {
+ 					bias-pull-down;
+ 					drive-strength = <0x02>;
+ 					function = "cci_i2c";
+@@ -7196,7 +7196,7 @@
+ 					microsoft,target-microvolt = <0x2c4020>;
+ 					microsoft,vrm-mode = <0x07>;
+ 					phandle = <0x2bc>;
+-					regulator-name = "vreg_l16b_camera_r3b";
++					regulator-name = "vreg_l16b_camera_r3d";
+ 				};
+ 
+ 				ldo1m {
+@@ -7204,7 +7204,7 @@
+ 					microsoft,target-microvolt = <0x124f80>;
+ 					microsoft,vrm-mode = <0x07>;
+ 					phandle = <0x2ba>;
+-					regulator-name = "vreg_l1m_camera_r3b";
++					regulator-name = "vreg_l1m_camera_r3d";
+ 				};
+ 
+ 				ldo5m {
+@@ -7212,7 +7212,7 @@
+ 					microsoft,target-microvolt = <0x2ab980>;
+ 					microsoft,vrm-mode = <0x07>;
+ 					phandle = <0x2bb>;
+-					regulator-name = "vreg_l5m_camera_r3b";
++					regulator-name = "vreg_l5m_camera_r3d";
+ 				};
+ 
+ 				ldo6m {
+@@ -7220,7 +7220,7 @@
+ 					microsoft,target-microvolt = <0x1b7740>;
+ 					microsoft,vrm-mode = <0x07>;
+ 					phandle = <0x2b9>;
+-					regulator-name = "vreg_l6m_camera_r3b";
++					regulator-name = "vreg_l6m_camera_r3d";
+ 				};
+ 			};
+ 
