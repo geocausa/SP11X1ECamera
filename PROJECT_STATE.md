@@ -1,3 +1,7 @@
+## E002k-B prepared — standard OV13858 supply bindings — 2026-08-27
+
+E002k-B is a naming/binding-only conversion on top of accepted E002k-A: `dovdd` maps to the same LDO6_M/VIO 1.8 V provider, `dvdd` to LDO1_M/VDIG 1.2 V, and `avdd` to LDO5_M/VANA 2.8 V. LDO16_B/VAF is removed from the sensor DT node. Driver enable/disable order, voltages, mode, MCLK/reset and transport are unchanged. A reproducible DT builder yields byte-identical candidates and asserts all pre-existing non-supply sensor properties remain unchanged.
+
 ## E002k-A ACCEPTED — VAF separated from OV13858 — 2026-08-27
 
 With the exact accepted E002h-r1 kernel/DT and only LDO16_B ownership removed from `ov13858`, native identity and full streaming passed with zero LDO16_B enable votes. The one-frame internal color-bar SHA-256 is exactly the same as E002j (`6987a736...f09346`). Therefore LDO16_B 2.9 V is not required by the rear sensor path and is classified as VAF/actuator power. Next: rename the remaining three consumers to standard `dovdd`/`dvdd`/`avdd` DT supplies without changing their rails/order/voltages.
