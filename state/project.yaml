@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002d-prepared
+state_id: E002d-accepted
 phase: rear-dphy-bringup
-status: rear-csiphy1-graph-prepared-no-stream
+status: rear-csiphy1-graph-accepted
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002c-native-ov13858-bind
+current_gate: E002d-rear-csiphy1-graph
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,11 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002d-rear-csiphy1-graph-runtime
+next_experiment: E002e-rear-mode-linkfreq
 next_action: >-
-  Boot E002d one-shot with exact E002c-r1 kernel/initrd/native driver and only the reciprocal rear
-  OV13858 <-> CAMSS port@1/CSIPHY1 four-lane D-PHY endpoints added. Prove async graph completion,
-  immutable sensor-to-CSIPHY1 media link and electrical idle. Do not invoke any stream operation.
+  Prepare E002e as a no-stream rear-mode/link-frequency validation. Keep accepted E002c-r1 native
+  power ownership and E002d OV13858 -> CSIPHY1 graph unchanged. Reconcile the Windows first rear mode
+  timing/lane-rate with the native OV13858 supported-mode/link-frequency table and add only the minimum
+  firmware metadata or driver correction required for a mechanically valid first mode. Do not call s_stream.
 
 handoff:
   first_read:

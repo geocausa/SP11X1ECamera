@@ -1,3 +1,7 @@
+## E002d ACCEPTED — native rear OV13858 -> CSIPHY1 graph — 2026-08-27
+
+Read-only `MEDIA_IOC_G_TOPOLOGY` proved `ov13858 1-0010` pad0 -> `msm_csiphy1` pad0 with flags `0x3` (ENABLED + IMMUTABLE) and data-link type. Sensor remained runtime-suspended (usage 0), MCLK1/CSIPHY1/CSI1 PHY timer enable counts stayed 0, reset stayed asserted, and no rail activity occurred after boot identity. E002d is accepted. Next gate is E002e: reconcile Windows rear mode/lane timing with native OV13858 link-frequency/mode metadata, still with no stream operation.
+
 ## E002d prepared — rear OV13858 <-> CSIPHY1 graph only — 2026-08-27
 
 E002d adds only reciprocal four-lane D-PHY endpoints between the accepted native OV13858 and CAMSS `port@1`, mechanically mapped by the exact X1E source to CSIPHY1 and independently proven by Windows routing. Host lanes are `<0 1 2 3>`, sensor lanes `<1 2 3 4>`, bus type explicitly D-PHY. No link frequency, mode, CSID/VFE route or stream is added. Local source proves async graph completion/media-link creation does not power or stream CSIPHY. Candidate DTB `ea55cafd...`; E002c-r1 kernel/initrd remain byte-identical.
