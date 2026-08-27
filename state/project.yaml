@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002k-c-firmware-profile-accepted
+current_gate: E002k-d-source-integration-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,13 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-d-production-source-integration
+next_experiment: E002k-d-source-copy-and-patch-split
 next_action: >-
-  Prepare E002k-D as source-level production integration from the accepted E002k-C behaviour. Build a clean,
-  reviewable kernel/DT patch set against the canonical development source: standard OV13858 supplies and power
-  lifecycle, firmware-selected Surface mode, Denali rear sensor/CCI/CAMSS graph, GPIO97 MCLK, and the proven
-  CSIPHY1 8 KiB resource. Remove temporary E00x initrd/loader assumptions where possible while preserving
-  Golden as the boot default and validating the integrated candidate one-shot before promotion.
+  Create a fresh copy-on-write development source from the exact Golden replay source, prove there are no
+  writable hardlinks back to Golden, and generate reviewable OV13858 and Denali rear-camera patches from the
+  accepted E002k-C behaviour. Keep native PM8010-M regulator replacement as a separate sub-gate until the
+  L1_M/L6_M input parents are evidence-backed; do not guess them.
 
 handoff:
   first_read:

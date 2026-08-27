@@ -1,3 +1,7 @@
+## E002k-D prepared — source integration with native-PMIC split — 2026-08-27
+
+Golden was mechanically reverified after E002k-C. Historical kernel worktrees are too contaminated for camera integration, so E002k-D will use a fresh writable copy of the exact Golden replay source. Linux already has native PM8010 RPMh-regulator support; live Golden simply lacks PMIC-M in DT. A saved SP11 baseline proves native PMIC-M and its L3/L4 and L5 input parents, but not L1/L2 or L6, so native-regulator replacement is isolated until those parents are proven rather than guessed. Driver and Denali rear-camera source integration can proceed independently.
+
 ## E002k-C ACCEPTED — rear profile no longer experiment-gated — 2026-08-27
 
 The rear OV13858 now selects its proven 4076x2806@30 Surface profile solely from standard four-lane 592.8 MHz endpoint metadata; no `microsoft,e002*` property or stream gate remains. The deterministic color-bar SHA remains `6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346`, and a 16-frame normal run completed seq 0-15 at 29.9575 fps with clean teardown, zero VAF votes and healthy audio/Wi-Fi. Next is source-level production integration and removal of temporary initrd/module scaffolding.
