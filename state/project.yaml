@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002k-d-r1-native-pm8010-accepted
+current_gate: E002k-d-r2-native-pm8010-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-d-r2-native-pm8010-camera
+next_experiment: E002k-d-r2-runtime
 next_action: >-
-  Return to Golden, then prepare E002k-D-R2 from the accepted E002k-C camera payload. Replace only the
-  temporary camera-specific RPMh provider with the accepted native PM8010-M regulators LDO1/LDO5/LDO6,
-  keep the standard dovdd/dvdd/avdd consumers and all sensor/CAMSS/mode bytes unchanged, and require
-  the known color-bar SHA plus 16-frame stability before accepting native regulator integration.
+  Boot E002k-D-R2 one-shot. Require native regulators-8 before the unchanged accepted OV13858 module binds,
+  then reproduce the known hardware color-bar SHA and 16-frame stability with no custom RPMh provider
+  present. Verify clean teardown, Wi-Fi/audio, and Golden saved default before accepting native PM8010 camera integration.
 
 handoff:
   first_read:

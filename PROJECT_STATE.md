@@ -1,3 +1,7 @@
+## E002k-D-R2 prepared — native PM8010 camera integration — 2026-08-27
+
+R2 starts from exact accepted E002k-C camera bytes and replaces only the temporary camera RPMh shim with the R1-accepted native PM8010-M provider. Sensor standard supplies now point to native L6/L1/L5; the accepted OV13858 module is byte-identical. Initrd no longer contains the custom provider module and waits for built-in `regulators-8`. Runtime acceptance requires the known color-bar SHA plus 16-frame stability.
+
 ## E002k-D-R1 ACCEPTED — native PM8010-M provider — 2026-08-27
 
 Provider-only one-shot passed: stock `qcom-rpmh-regulator` bound PM8010 ID `m` as `regulators-8`; LDO6_M 1.8 V, LDO5_M 2.8 V and LDO1_M 1.2 V all registered with zero users and no enable vote. Regulator summary confirms L6<-S4C, L5<-BOB1, L1<-S5J. No camera node was present; Wi-Fi/audio remained healthy. Next gate replaces the temporary camera RPMh shim in accepted E002k-C with these native regulators only.
