@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002h-preflight
+state_id: E002h-r1-preflight
 phase: rear-dphy-bringup
 status: native-surface-mode0-semantics-accepted
 
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002h-first-controlled-stream-preflight
+current_gate: E002h-r1-csiphy1-window
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002h-first-controlled-stream-runtime
+next_experiment: E002h-r1-csiphy1-window-runtime
 next_action: >-
-  One-shot boot E002h from Golden and configure only the accepted native route
-  OV13858 -> CSIPHY1 -> CSID0 -> VFE0 RDI0 -> /dev/video0 at 4076x2806 SGRBG10 / packed GRBG10.
-  Request exactly one mmap frame under an external timeout, then verify normal STREAMOFF/close teardown,
-  sensor runtime suspend, zero MCLK1/CSIPHY1 enable counts and normal system health. Do not retry blindly on failure.
+  One-shot E002h-r1 with kernel/initrd/module/stream route byte-identical to E002h and only the integrated
+  CAMSS csiphy1 MMIO resource size corrected from 0x1000 to 0x2000. Configure the accepted RAW10 path and
+  request exactly one bounded frame. If another failure occurs, capture its first hardware/software boundary
+  before any retry. Golden remains saved default.
 
 handoff:
   first_read:

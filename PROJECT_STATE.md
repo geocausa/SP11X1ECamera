@@ -1,3 +1,7 @@
+## E002h first stream BLOCKED / r1 prepared — CSIPHY1 MMIO window — 2026-08-27
+
+The first E002h STREAMON Oopsed in `csiphy_reset()` before sensor streaming: sensor PM stayed suspended and MCLK1 stayed off while CSIPHY1 clocks enabled. Active DT mapped CSIPHY1 `0xace6000+0x1000`, but X1E CSIPHY uses `regs->offset=0x1000` and immediately writes at base+0x1000. Denali's own standalone PHY node and SM8550/8650 use a 0x2000 window. E002h-r1 changes only that one resource-size cell to 0x2000; kernel/initrd/module/mode/graph/stream permission are byte-identical.
+
 ## E002h prepared — first controlled native rear stream — 2026-08-27
 
 E002h changes only the experiment permission boundary: one DT boolean `microsoft,e002h-allow-stream` plus an 11-line driver gate. The accepted 4076x2806 Surface mode, 592.8 MHz D-PHY link, 432732960 Hz VT pixel rate, power/reset/MCLK sequence, graph and unmodified X1E CAMSS remain unchanged. Read-only and hard-blocked E002g tests proved the native default path `OV13858 -> CSIPHY1 -> CSID0 -> VFE0 RDI0 -> /dev/video0` and active SGRBG10 propagation, with `/dev/video0` packed GRBG10 (`pgAA`) sizeimage 14321824. E002h will request exactly one mmap frame under an external timeout.
