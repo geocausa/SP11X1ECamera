@@ -1,3 +1,7 @@
+## E002h prepared — first controlled native rear stream — 2026-08-27
+
+E002h changes only the experiment permission boundary: one DT boolean `microsoft,e002h-allow-stream` plus an 11-line driver gate. The accepted 4076x2806 Surface mode, 592.8 MHz D-PHY link, 432732960 Hz VT pixel rate, power/reset/MCLK sequence, graph and unmodified X1E CAMSS remain unchanged. Read-only and hard-blocked E002g tests proved the native default path `OV13858 -> CSIPHY1 -> CSID0 -> VFE0 RDI0 -> /dev/video0` and active SGRBG10 propagation, with `/dev/video0` packed GRBG10 (`pgAA`) sizeimage 14321824. E002h will request exactly one mmap frame under an external timeout.
+
 ## E002g ACCEPTED — native Surface rear mode semantics — 2026-08-27
 
 Strict no-stream runtime exposes exactly one rear mode, 4076x2806 RAW10, with LINK_FREQ=592800000, PIXEL_RATE=432732960, HBLANK=412 and VBLANK=408. This computes exactly 30 fps at the pixel array while keeping CSI output throughput separate. E002e/e002f validation still passes, sensor/CSIPHY return to electrical idle, and system health is intact. Offline Windows-oracle comparison also proves the clean upstream+Surface reconstruction reaches identical final values for all 207 Windows-covered mode0 registers; the proprietary table remains local oracle evidence, not shipped source. Next gate is E002h first bounded transport activation.

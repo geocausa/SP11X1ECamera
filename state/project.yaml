@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002g-accepted
+state_id: E002h-preflight
 phase: rear-dphy-bringup
 status: native-surface-mode0-semantics-accepted
 
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002g-native-surface-mode0-accepted
+current_gate: E002h-first-controlled-stream-preflight
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002h-first-controlled-stream
+next_experiment: E002h-first-controlled-stream-runtime
 next_action: >-
-  Prepare E002h first controlled rear transport activation. Keep the accepted Surface 4076x2806 mode,
-  592.8 MHz link, 432732960 Hz VT pixel rate, power/reset/MCLK and CSIPHY1 graph unchanged. Audit
-  CAMSS CSIPHY1/CSID/VFE routing and receiver link-frequency consumption before removing the hard
-  no-stream guard. Use the shortest bounded capture/rollback path and preserve Golden as saved default.
+  One-shot boot E002h from Golden and configure only the accepted native route
+  OV13858 -> CSIPHY1 -> CSID0 -> VFE0 RDI0 -> /dev/video0 at 4076x2806 SGRBG10 / packed GRBG10.
+  Request exactly one mmap frame under an external timeout, then verify normal STREAMOFF/close teardown,
+  sensor runtime suspend, zero MCLK1/CSIPHY1 enable counts and normal system health. Do not retry blindly on failure.
 
 handoff:
   first_read:
