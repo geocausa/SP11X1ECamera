@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002h-r1-accepted
+state_id: E002i-a-preflight
 phase: rear-dphy-bringup
 status: native-surface-mode0-semantics-accepted
 
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002h-r1-first-native-frame-accepted
+current_gate: E002i-a-stream-stability
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002i-rear-stream-stability-exposure
+next_experiment: E002i-a-stream-stability-runtime
 next_action: >-
-  Prepare E002i as a bounded rear stream-stability and exposure-control gate using the accepted E002h-r1
-  pipeline. Preserve the exact 4076x2806 RAW10 route and CSIPHY1 0x2000 resource. First prove a short
-  multi-frame stream with monotonic sequence/timestamps and clean teardown; then vary only standard V4L2
-  exposure/gain controls to verify image response. Keep raw frames local-only and Golden saved default.
+  One-shot the exact accepted E002h-r1 payload with no artifact changes. Configure the accepted 4076x2806
+  RAW10 route and stream exactly 16 frames to /dev/null. Verify sequences, full bytesused, timestamp cadence,
+  clean runtime-PM/clock teardown and system health. Only after E002i-A passes, proceed to standard V4L2
+  exposure response with gain and transport fixed.
 
 handoff:
   first_read:
