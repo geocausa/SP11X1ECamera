@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003a-front-imx681-static-cphy-audit
+state_id: E003c-front-imx681-native-bind
 phase: front-imx681-cphy-bringup
-status: rear-production-accepted-golden-restored
+status: front-imx681-identity-accepted-golden-restored
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E003-front-imx681-cphy
-current_gate: E002k-d-r3-source-integrated-accepted
+current_gate: E003b-front-imx681-electrical-identity-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,13 +102,13 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E003a-front-imx681-static-cphy-audit
+next_experiment: E003c-front-imx681-native-bind
 next_action: >-
-  Keep SP11 on FullIO v19c Golden. Audit/backport the current Qualcomm CAMSS C-PHY series against
-  /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-repro/src, determine the exact X1E80100
-  CSIPHY generation/configuration delta, and derive the IMX681 front sensor power/probe/mode plan from
-  the already-decoded SP11 Windows packages. E003a is compile/static-only: do not vote front rails, toggle
-  GPIO237, enable MCLK4, issue CCI1 transactions, or add a live C-PHY endpoint yet.
+  Build E003c from the true Golden-repro plus accepted rear-camera source and the E003b-proven front
+  power/CCI wiring. Implement a clean native IMX681 V4L2 sensor driver sufficient to bind, identify,
+  enumerate formats/modes and exercise runtime-PM power up/down, but do not add a front CAMSS endpoint,
+  do not program CSIPHY2 and do not stream. Preserve Golden as saved default and use a separate one-shot.
+
 
 
 handoff:

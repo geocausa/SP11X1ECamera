@@ -1,3 +1,7 @@
+## E003b ACCEPTED — front IMX681 electrical identity — 2026-08-27
+
+Linux one-shot E003b reproduced the same-machine Windows front-camera electrical lifecycle on CCI1/master1 and read IMX681 register `0x0004 = 0x0aff` at address `0x10`. MCLK4, LDO3_M and LDO7_B returned disabled, GPIO237 returned reset-low, CSIPHY2 stayed unused with no front media link, and Wi-Fi/audio/touch/rear-camera health remained intact. The machine then returned to byte-exact FullIO v19c Golden with empty `next_entry`. Next is E003c: native IMX681 V4L2 bind only, still no front CSI endpoint or streaming.
+
 ## E003 STARTED — front IMX681 / C-PHY static integration phase — 2026-08-27
 
 Rear OV13858 production integration is closed by E002k-D-R3. R3 booted one-shot on the exact FullIO v19c Golden Image with the maintained reconciled DTB and production OV13858 module, reproduced the accepted color-bar SHA-256 `6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346`, streamed 16/16 4076x2806 RAW10 frames at 29.9504 fps, and tore down cleanly. The machine was then returned to Golden; Golden kernel/initrd/DTB hashes remain exact and Wi-Fi/audio/touch are healthy. Source audit proves the production base is `.golden-v33-repro/src` plus exactly three intentional source-file differences; `.golden-v33-delta-replay/src` contains later audio drift and is not a production base.
