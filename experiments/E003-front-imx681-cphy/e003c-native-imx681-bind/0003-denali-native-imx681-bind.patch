@@ -1,0 +1,23 @@
+--- a/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
+@@ -1542,16 +1542,16 @@
+ &cci1_i2c1 {
+ 	clock-frequency = <400000>;
+ 
+-	front-probe@10 {
+-		compatible = "microsoft,sp11-imx681-probe";
++	camera@10 {
++		compatible = "sony,imx681";
+ 		reg = <0x10>;
+ 		clocks = <&camcc CAM_CC_MCLK4_CLK>;
+ 		clock-names = "xclk";
+ 		reset-gpios = <&tlmm 237 GPIO_ACTIVE_LOW>;
+ 		pinctrl-0 = <&front_imx681_default>;
+ 		pinctrl-names = "default";
+-		ldo3m-supply = <&vreg_l3m_camera>;
+-		ldo7b-supply = <&vreg_l7b_2p8>;
++		dovdd-supply = <&vreg_l3m_camera>;
++		avdd-supply = <&vreg_l7b_2p8>;
+ 	};
+ };
+ 
