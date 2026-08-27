@@ -1,0 +1,42 @@
+E003e install preflight
+2026-08-27T19:04:22+01:00
+=== running ===
+7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
+=== hashes ===
+8299ff53e31f40782bd58ea12b52bb6c52ffb848b22ad92abd406dbd217e8b36  /boot/sp11-7.1.5-camera-e003e-mode0-standby/initrd.img-7.1.5-sp11-camera-e003e-mode0-standby
+bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a  /boot/sp11-7.1.5-camera-e003e-mode0-standby/vmlinuz-7.1.5-sp11-render-parity-v4+
+9e5eab025ed4dc0d23983f0e0ab0b84ca6095826f5a9b4f57fb1c6b9b3e50d79  /boot/sp11-7.1.5-camera-e003e-mode0-standby/x1e80100-microsoft-denali-sp11-e003e-mode0-standby.dtb
+=== grub env ===
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+=== grub stanza ===
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003e — IMX681 mode0 standby' --id 'sp11-camera-e003e-mode0-standby' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003e-mode0-standby/x1e80100-microsoft-denali-sp11-e003e-mode0-standby.dtb
+ linux /boot/sp11-7.1.5-camera-e003e-mode0-standby/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003e-mode0-standby sp11_camera_e003e_mode0_standby=1
+ initrd /boot/sp11-7.1.5-camera-e003e-mode0-standby/initrd.img-7.1.5-sp11-camera-e003e-mode0-standby
+}
+=== grub cfg entry ===
+562:menuentry 'SP11 Camera E003e — IMX681 mode0 standby' --id 'sp11-camera-e003e-mode0-standby' --class ubuntu --class gnu-linux --class gnu --class os {
+563- load_video
+564- set gfxpayload=keep
+565- insmod gzio
+566- insmod part_gpt
+567- insmod ext2
+568- insmod fdt
+569- search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+570- devicetree /boot/sp11-7.1.5-camera-e003e-mode0-standby/x1e80100-microsoft-denali-sp11-e003e-mode0-standby.dtb
+571- linux /boot/sp11-7.1.5-camera-e003e-mode0-standby/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003e-mode0-standby sp11_camera_e003e_mode0_standby=1
+572- initrd /boot/sp11-7.1.5-camera-e003e-mode0-standby/initrd.img-7.1.5-sp11-camera-e003e-mode0-standby
+573-}
+574-### END /etc/grub.d/99g_sp11_camera_e003e_mode0_standby ###
+E003E_INSTALL_GUARDS=PASS
