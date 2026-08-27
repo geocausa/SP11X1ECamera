@@ -1,3 +1,7 @@
+## E002k-D-R1 ACCEPTED — native PM8010-M provider — 2026-08-27
+
+Provider-only one-shot passed: stock `qcom-rpmh-regulator` bound PM8010 ID `m` as `regulators-8`; LDO6_M 1.8 V, LDO5_M 2.8 V and LDO1_M 1.2 V all registered with zero users and no enable vote. Regulator summary confirms L6<-S4C, L5<-BOB1, L1<-S5J. No camera node was present; Wi-Fi/audio remained healthy. Next gate replaces the temporary camera RPMh shim in accepted E002k-C with these native regulators only.
+
 ## E002k-D-R1 prepared — native PM8010-M provider-only gate — 2026-08-27
 
 A DT-only provider gate adds native `qcom,pm8010-rpmh-regulators` PMIC ID `m` under the Golden RSC, with no camera/CAMSS/CCI consumer. Upstream-backed X1 parents are L1/L2=`vreg_s5j_1p2`, L3/L4=`vreg_s4c_1p8`, L5=`vreg_bob1`, L6=`vreg_s4c_1p8`, L7=`vreg_bob1`. Only LDO1/LDO5/LDO6 children are exposed using non-fixed voltage ranges, with no boot-on/always-on/initial-mode vote. Candidate DTB SHA-256 `6291de3c0b4148735acec2f0a48b54a51208e2931b9898f7c91d90db6ac119b0`; kernel/initrd remain exact Golden. Runtime has not yet occurred.
