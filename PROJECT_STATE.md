@@ -1,3 +1,7 @@
+## E002j ACCEPTED — sensor-generated RAW10 integrity — 2026-08-27
+
+Using the exact accepted E002h-r1 binaries, standard `V4L2_CID_TEST_PATTERN=1` produced one complete 4076x2806 packed-GRBG10 frame. Decoded RAW contains only levels 64 and 1023; all same-parity rows are bit-identical and Bayer-channel transition positions form deterministic vertical bars. Test pattern was restored to disabled and all camera power/clocks returned idle. This independently proves sensor-generated RAW10 packing/order through CSIPHY1 -> CSID0 -> VFE0 RDI0. Next: E002k productionize the rear path into standard/native bindings and driver logic.
+
 ## E002j prepared — sensor-generated RAW10 integrity gate — 2026-08-27
 
 E002j is a control-only test on the exact accepted E002h-r1 binaries. No kernel/module/initrd/DT changes. It will enable the upstream OV13858 standard `V4L2_CID_TEST_PATTERN=1` (Vertical Color Bar Type 1), capture exactly one 4076x2806 packed-GRBG10 frame, validate vertical-band structure after RAW10 decode, restore test pattern to disabled, and verify electrical teardown.
