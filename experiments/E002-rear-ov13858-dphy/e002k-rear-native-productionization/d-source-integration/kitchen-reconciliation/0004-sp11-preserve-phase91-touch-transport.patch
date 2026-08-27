@@ -1,0 +1,59 @@
+--- a/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
+@@ -1165,6 +1165,14 @@
+ 	gpio-reserved-ranges = <44 4>, /* SPI (TPM) */
+ 			       <238 1>; /* UFS Reset */
+ 
++	/* Extra QSPI data lanes used by the boot-validated Phase91 touch path. */
++	g6ts_qspi_data23: g6ts-qspi-data23-state {
++		pins = "gpio49", "gpio50";
++		function = "qup1_se2";
++		drive-strength = <6>;
++		bias-disable;
++	};
++
+ 	hall_int_n_default: hall-int-n-state {
+ 		pins = "gpio2";
+ 		function = "gpio";
+@@ -1280,6 +1288,41 @@
+ 	};
+ };
+ 
++/*
++ * Preserve the Phase91 Surface touch transport used by every accepted SP11
++ * audio boot.  QSPI type 4 and this GPIO tuple are taken byte-for-byte from
++ * the boot-validated clean2 DTB, not inferred from recovered prose.
++ */
++&gpi_dma1 {
++	status = "okay";
++};
++
++&spi10 {
++	qcom,enable-gsi-dma;
++	qcom,biosref-qspi;
++
++	dmas = <&gpi_dma1 0 2 QCOM_GPI_QSPI>,
++	       <&gpi_dma1 1 2 QCOM_GPI_QSPI>;
++	dma-names = "tx", "rx";
++
++	pinctrl-0 = <&qup_spi10_data_clk &qup_spi10_cs &g6ts_qspi_data23>;
++	pinctrl-names = "default";
++
++	status = "okay";
++
++	touchscreen@0 {
++		compatible = "microsoft,mshw0485";
++		reg = <0>;
++		spi-max-frequency = <40000000>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <51 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-gpios = <&tlmm 51 GPIO_ACTIVE_LOW>;
++		power-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&tlmm 48 GPIO_ACTIVE_HIGH>;
++	};
++};
++
+ &uart2 {
+ 	status = "okay";
+ 

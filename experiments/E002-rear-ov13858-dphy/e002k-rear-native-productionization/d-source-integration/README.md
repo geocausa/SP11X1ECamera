@@ -1,6 +1,6 @@
 # E002k-D — source-level rear-camera production integration
 
-Status: PREPARED / NO RUNTIME MUTATION YET
+Status: SOURCE + KITCHEN RECONCILED / NO INTEGRATED RUNTIME MUTATION YET
 
 ## Accepted input
 
@@ -62,6 +62,10 @@ That baseline does **not** prove the input parents for L1_M/L2_M or L6_M. E002k-
 - No experiment may overwrite Golden kernel/initrd/DTB or existing modules.
 - One major unknown per runtime boot.
 
+## Current Kitchen reconciliation
+
+The exact FullIO v19c non-camera delta has now been reconstructed at source level as two additional maintained patches: Phase91 touch/QSPI transport and TX-DMIC FullIO capture closure. The five-patch Golden replay applies with `--fuzz=0`, the reconciled Denali OLED DT compiles cleanly, and `kitchen-reconciliation/verify-v19c-kitchen.py` reports `NONCAMERA_V19C_RECONCILIATION=PASS`. See `kitchen-reconciliation/RESULT.md`.
+
 ## Immediate next action
 
-Create a fresh copy-on-write camera development source from the exact Golden replay source, prove there are no writable hardlinks to Golden, initialize a local integration baseline, and generate clean driver/Denali patch deltas from E002k-C without changing runtime state.
+Collect the independent full kernel/modules build, require exact kernelrelease and valid `Image`/`Module.symvers`, inspect OV13858/CAMSS/CCI module vermagic and modversion CRC compatibility, and only then construct a separate one-shot integrated runtime candidate using the reconciled DTB. Golden remains the saved default.
