@@ -1,20 +1,29 @@
-# E002b-r3g result — permissive PASS, strict confirmation pending
+# E002b-r3g result — ACCEPTED
 
 ## Result
 
-**PASS on the permissive isolation boot.**
+**PASS on both permissive and strict boots.**
 
 The r3g DT-only correction selected the Windows-proven rear MCLK1 pad:
 
-- GPIO97 raw TLMM control after boot: `0x00000244`;
+- GPIO97 raw TLMM control: `0x00000244`;
 - Linux debug decode: `out ... func1 4mA no pull`;
 - X1E function 1 on GPIO97 is `cam_mclk`.
 
-With the kernel, initrd, probe module, rails, reset, CCI route/rate/address, MCLK rate and Windows-exact ID transaction all unchanged from r3f, the rear sensor changed from `-ENXIO` to a valid identity response:
+With kernel, initrd, probe module, rails, reset, CCI route/rate/address, MCLK rate and Windows-exact ID transaction unchanged from r3f, the rear sensor changed from `-ENXIO` to a valid identity response on both runs:
 
 `SP11 E002b-r3f PASS: OV13858 chip ID 0xd855 at 0x10`
 
 (The message retains the `r3f` label intentionally because r3g reuses the exact r3f probe module byte-for-byte.)
+
+## Strict confirmation
+
+The second boot used the exact same kernel/initrd/DTB and removed only:
+
+- `clk_ignore_unused`
+- `pd_ignore_unused`
+
+Mechanical comparison of the two GRUB Linux lines confirmed those were the only payload-command-line flags removed. The strict runtime reported `STRICT_FLAGS_ABSENT=yes`, GPIO97 remained `0x00000244`, and the OV13858 again returned `0xd855`.
 
 ## Mechanical controls
 
@@ -26,7 +35,7 @@ With the kernel, initrd, probe module, rails, reset, CCI route/rate/address, MCL
 
 ## Teardown / health
 
-After the successful ID read:
+After each successful ID read:
 
 - all four camera rails disabled in reverse order;
 - MCLK1 branch/source returned to enable count 0 at 19.2 MHz;
@@ -38,6 +47,8 @@ After the successful ID read:
 
 ## Conclusion
 
-The r3f NACK root cause is **proven**: Linux enabled the internal MCLK1 clock but did not route it to physical GPIO97. Adding the Windows-equivalent GPIO97 MCLK pin state is sufficient for the real OV13858 to ACK and return its expected silicon ID.
+The r3f NACK root cause is **proven**: Linux enabled the internal MCLK1 clock but did not route it to physical GPIO97. Adding the Windows-equivalent GPIO97 MCLK pin state is sufficient for the real OV13858 to ACK and return its expected silicon ID, including without permissive unused-clock/power-domain flags.
 
-Before accepting the rear identity gate, run one otherwise-identical strict r3g boot with only `clk_ignore_unused pd_ignore_unused` removed. No other change is justified.
+**E002b rear physical-contact / identity gate: ACCEPTED.**
+
+Next smallest gate: replace the probe-only rear client with the native Linux OV13858 sensor/V4L2 path and add only the rear CSI endpoint required to bind it to the already-proven CAMSS infrastructure. Keep the accepted GPIO97 MCLK route, CCI0/master1, rails/reset and first sensor mode derived from Windows unchanged.

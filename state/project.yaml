@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002b-r3g-permissive-pass
+state_id: E002b-r3g-accepted
 phase: rear-dphy-bringup
-status: rear-ov13858-id-pass-strict-confirmation-pending
+status: rear-ov13858-physical-contact-identity-accepted
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -102,11 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002b-r3g-strict-runtime
+next_experiment: E002c-native-ov13858-bind
 next_action: >-
-  Repeat E002b-r3g one-shot with the exact same kernel/initrd/DTB but remove only
-  clk_ignore_unused and pd_ignore_unused from the command line. Reconfirm GPIO97=0x244,
-  OV13858 ID 0xd855, clean teardown and normal system health before accepting the rear identity gate.
+  Prepare E002c as the smallest native OV13858/V4L2 bind experiment. Reuse the accepted E002b-r3g
+  GPIO97 MCLK1 route, CCI0/master1, 400 kHz, address 0x10 and Windows-derived power/reset sequence;
+  add only the native sensor driver integration and rear CSI endpoint required for media-graph binding.
+  Do not stream until native sensor bind and graph enumeration are proven.
 
 handoff:
   first_read:

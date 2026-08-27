@@ -1,3 +1,7 @@
+## E002b-r3g ACCEPTED — rear OV13858 physical contact / identity — 2026-08-27
+
+The strict A/B boot removed only `clk_ignore_unused pd_ignore_unused` and reproduced the permissive result: GPIO97 `0x00000244`, OV13858 ID `0xd855` at address `0x10`, clean reverse teardown, CAMSS nodes present, Wi-Fi/audio healthy. E002b is accepted. The r3f NACK root cause was the missing physical MCLK1 GPIO97 route. Next gate is E002c: native Linux OV13858/V4L2 bind plus the minimum rear CSI endpoint, with no streaming yet.
+
 ## E002b-r3g permissive runtime PASS — 2026-08-27
 
 The one-variable GPIO97 correction changed the rear OV13858 from the r3f `-ENXIO` NACK to a valid `0xd855` chip ID at `0x10`. GPIO97 reads `0x00000244` exactly as Windows did; the unchanged r3f probe then completed and tore all rails/MCLK down cleanly. Wi-Fi, playback and capture remained healthy and Golden remained the saved default. This proves missing physical MCLK1 routing was the r3f NACK root cause. A strict one-shot with only `clk_ignore_unused pd_ignore_unused` removed is required before accepting the identity gate.
