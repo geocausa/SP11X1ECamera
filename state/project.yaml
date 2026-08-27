@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002b-r3g-prepared
+state_id: E002b-r3g-permissive-pass
 phase: rear-dphy-bringup
-status: gpio97-mclk1-proven-r3g-prepared
+status: rear-ov13858-id-pass-strict-confirmation-pending
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -102,11 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002b-r3g-runtime
+next_experiment: E002b-r3g-strict-runtime
 next_action: >-
-  Boot E002b-r3g one-shot. Verify GPIO97 is selected as cam_mclk with the intended Windows-derived
-  pinconf, then observe the unchanged Windows-exact OV13858 0x300b -> 0xd855 identity transaction.
-  Preserve Golden as saved default and tear down to Golden after evidence capture.
+  Repeat E002b-r3g one-shot with the exact same kernel/initrd/DTB but remove only
+  clk_ignore_unused and pd_ignore_unused from the command line. Reconfirm GPIO97=0x244,
+  OV13858 ID 0xd855, clean teardown and normal system health before accepting the rear identity gate.
 
 handoff:
   first_read:

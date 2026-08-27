@@ -1,3 +1,7 @@
+## E002b-r3g permissive runtime PASS — 2026-08-27
+
+The one-variable GPIO97 correction changed the rear OV13858 from the r3f `-ENXIO` NACK to a valid `0xd855` chip ID at `0x10`. GPIO97 reads `0x00000244` exactly as Windows did; the unchanged r3f probe then completed and tore all rails/MCLK down cleanly. Wi-Fi, playback and capture remained healthy and Golden remained the saved default. This proves missing physical MCLK1 routing was the r3f NACK root cause. A strict one-shot with only `clk_ignore_unused pd_ignore_unused` removed is required before accepting the identity gate.
+
 ## E002b-r3g prepared — physical rear MCLK1 pad proven — 2026-08-27
 
 A one-shot SP11 Windows KD session read X1E TLMM directly. Windows leaves GPIO97 at `0x00000244`: function 1 `cam_mclk`, 4 mA, no pull, output enabled. Golden/r3f Linux reads GPIO97 as `0x00000001`: GPIO/function 0, 2 mA, pull-down, output disabled. Qualcomm's 2026 Hamoa/X1E80100 pinctrl series independently maps `cam_mclk1_default` to GPIO97 and its camera overlay pairs that pinctrl with `CAM_CC_MCLK1_CLK`.
