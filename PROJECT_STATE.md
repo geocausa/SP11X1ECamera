@@ -1,3 +1,9 @@
+## E003 STARTED — front IMX681 / C-PHY static integration phase — 2026-08-27
+
+Rear OV13858 production integration is closed by E002k-D-R3. R3 booted one-shot on the exact FullIO v19c Golden Image with the maintained reconciled DTB and production OV13858 module, reproduced the accepted color-bar SHA-256 `6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346`, streamed 16/16 4076x2806 RAW10 frames at 29.9504 fps, and tore down cleanly. The machine was then returned to Golden; Golden kernel/initrd/DTB hashes remain exact and Wi-Fi/audio/touch are healthy. Source audit proves the production base is `.golden-v33-repro/src` plus exactly three intentional source-file differences; `.golden-v33-delta-replay/src` contains later audio drift and is not a production base.
+
+Phase D now begins as E003 front IMX681. Existing same-machine Windows oracle evidence proves CCI1/master1, CSIPHY2, MCLK4 19.2 MHz, reset GPIO237, LDO3_M 1.8 V + LDO7_B 2.8 V, Linux slave address 0x10, ID register 0x0004 expected 0x0aff, and CSI-2 C-PHY (`0x0111=3`). E003a is static/compile-only: audit the current C-PHY CAMSS series against the exact true Golden source and derive a clean front sensor/power plan before any powered runtime.
+
 ## E002k-D-R2 ACCEPTED — native PM8010 rear camera — 2026-08-27
 
 The temporary camera RPMh shim is retired. Accepted E002k-C camera bytes with only the provider swapped to stock `qcom,pm8010-rpmh-regulators` reproduced the exact hardware color-bar SHA `6987a736...f09346` and 16/16 normal frames at ~30.065 fps. Native LDO6/LDO1/LDO5 returned disabled/users 0 after streaming; no custom provider existed; Wi-Fi/audio remained healthy. Next is compile-only maintained-source integration in the isolated exact-Golden tree.
