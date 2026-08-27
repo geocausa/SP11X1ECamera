@@ -1,0 +1,53 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002d-rear-csiphy1-graph/base.sorted.dts	2026-08-27 09:15:14.665899659 +0100
++++ /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002d-rear-csiphy1-graph/candidate.sorted.dts	2026-08-27 09:15:14.687898496 +0100
+@@ -97,6 +97,7 @@
+ 		cpucp_mem = "/reserved-memory/cpucp@80e40000";
+ 		crypto = "/soc@0/crypto@1dfa000";
+ 		cryptobam = "/soc@0/dma-controller@1dc4000";
++		csiphy1_e002d_ep = "/soc@0/isp@acb7000/ports/port@1/endpoint";
+ 		cvp_mem = "/reserved-memory/cvp@8da00000";
+ 		dcc_tpdm_out = "/soc@0/tpdm@10003000/out-ports/port/endpoint";
+ 		ddr_funnel0_in6 = "/soc@0/funnel@10d04000/in-ports/port@6/endpoint";
+@@ -280,6 +281,7 @@
+ 		ncc_mem = "/reserved-memory/ncc@80a00000";
+ 		nsp_noc = "/soc@0/interconnect@320c0000";
+ 		nvme_reg_en = "/soc@0/pinctrl@f100000/nvme-reg-en-state";
++		ov13858_e002d_ep = "/soc@0/cci@ac15000/i2c-bus@1/rear-probe@10/port/endpoint";
+ 		panel = "/soc@0/display-subsystem@ae00000/displayport-controller@aea0000/aux-bus/panel";
+ 		pcie3 = "/soc@0/pcie@1bd0000";
+ 		pcie3_opp_table = "/soc@0/pcie@1bd0000/opp-table";
+@@ -2361,6 +2363,16 @@
+ 					pinctrl-names = "default";
+ 					reg = <0x10>;
+ 					reset-gpios = <0x89 0x6e 0x01>;
++
++					port {
++
++						endpoint {
++							bus-type = <0x04>;
++							data-lanes = <0x01 0x02 0x03 0x04>;
++							phandle = <0x2c1>;
++							remote-endpoint = <0x2c2>;
++						};
++					};
+ 				};
+ 			};
+ 		};
+@@ -4988,6 +5000,17 @@
+ 			ports {
+ 				#address-cells = <0x01>;
+ 				#size-cells = <0x00>;
++
++				port@1 {
++					reg = <0x01>;
++
++					endpoint {
++						bus-type = <0x04>;
++						data-lanes = <0x00 0x01 0x02 0x03>;
++						phandle = <0x2c2>;
++						remote-endpoint = <0x2c1>;
++					};
++				};
+ 			};
+ 		};
+ 

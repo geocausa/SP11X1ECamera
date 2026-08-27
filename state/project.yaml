@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002c-r1-accepted
+state_id: E002d-prepared
 phase: rear-dphy-bringup
-status: native-ov13858-bind-identity-runtime-pm-accepted
+status: rear-csiphy1-graph-prepared-no-stream
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -102,11 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002d-rear-csiphy1-graph
+next_experiment: E002d-rear-csiphy1-graph-runtime
 next_action: >-
-  Prepare E002d as a graph-only rear transport experiment: keep the accepted E002c native driver,
-  power/CCI/MCLK/reset path and no-stream rule unchanged; add only the OV13858 four-lane D-PHY endpoint
-  paired to Windows-proven CSIPHY1 and prove async media-graph binding/enumeration before any stream.
+  Boot E002d one-shot with exact E002c-r1 kernel/initrd/native driver and only the reciprocal rear
+  OV13858 <-> CAMSS port@1/CSIPHY1 four-lane D-PHY endpoints added. Prove async graph completion,
+  immutable sensor-to-CSIPHY1 media link and electrical idle. Do not invoke any stream operation.
 
 handoff:
   first_read:

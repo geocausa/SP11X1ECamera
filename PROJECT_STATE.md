@@ -1,3 +1,7 @@
+## E002d prepared — rear OV13858 <-> CSIPHY1 graph only — 2026-08-27
+
+E002d adds only reciprocal four-lane D-PHY endpoints between the accepted native OV13858 and CAMSS `port@1`, mechanically mapped by the exact X1E source to CSIPHY1 and independently proven by Windows routing. Host lanes are `<0 1 2 3>`, sensor lanes `<1 2 3 4>`, bus type explicitly D-PHY. No link frequency, mode, CSID/VFE route or stream is added. Local source proves async graph completion/media-link creation does not power or stream CSIPHY. Candidate DTB `ea55cafd...`; E002c-r1 kernel/initrd remain byte-identical.
+
 ## E002c-r1 ACCEPTED — native OV13858 bind / identity / runtime PM — 2026-08-27
 
 E002c-r1 automatically loaded the accepted RPMh provider, exact V4L2 dependencies and patched native `ov13858` from initrd. The native driver bound to `1-0010`, upstream 24-bit identity passed, then all rails and MCLK tore down with runtime PM `suspended`, usage 0. Loaded sensor module srcversion `02C96088AA5798CD5A70BFE` proves the patched module was running. No sensor CSI endpoint existed and no stream occurred. E002c is accepted. Next gate E002d adds only rear four-lane D-PHY graph wiring to Windows-proven CSIPHY1.

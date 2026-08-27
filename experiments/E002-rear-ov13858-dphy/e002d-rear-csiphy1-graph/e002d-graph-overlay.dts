@@ -1,0 +1,32 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target-path = "/soc@0/isp@acb7000/ports";
+		__overlay__ {
+			port@1 {
+				reg = <1>;
+
+				csiphy1_e002d_ep: endpoint {
+					bus-type = <4>; /* MEDIA_BUS_TYPE_CSI2_DPHY */
+					data-lanes = <0 1 2 3>;
+					remote-endpoint = <&ov13858_e002d_ep>;
+				};
+			};
+		};
+	};
+
+	fragment@1 {
+		target-path = "/soc@0/cci@ac15000/i2c-bus@1/rear-probe@10";
+		__overlay__ {
+			port {
+				ov13858_e002d_ep: endpoint {
+					bus-type = <4>; /* MEDIA_BUS_TYPE_CSI2_DPHY */
+					data-lanes = <1 2 3 4>;
+					remote-endpoint = <&csiphy1_e002d_ep>;
+				};
+			};
+		};
+	};
+};
