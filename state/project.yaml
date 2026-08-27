@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002k-b-standard-supplies-prepared
+current_gate: E002k-b-standard-supplies-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-b-standard-supplies-runtime
+next_experiment: E002k-c-remove-experiment-gates
 next_action: >-
-  Boot E002k-B with standard OV13858 sensor supply bindings: dovdd=LDO6_M 1.8V, dvdd=LDO1_M 1.2V,
-  avdd=LDO5_M 2.8V, with LDO16_B/VAF absent. Verify native identity, identical physical rail order, zero
-  VAF enables, and one deterministic test-pattern frame matching SHA256 6987a736...f09346. Preserve all
-  mode/stream experiment gates until this naming-only conversion is accepted.
+  Prepare E002k-C from the accepted E002k-B source and DT. Remove the microsoft,e002e/e002f/e002g/e002h
+  experiment-only booleans and all corresponding probe/stream gating. Select the Surface 4076x2806 mode and
+  592.8 MHz transport from standard firmware endpoint/link-frequency data, retain the validated standard sensor
+  supplies and power sequence, and re-run deterministic sensor test-pattern plus short native streaming.
 
 handoff:
   first_read:
