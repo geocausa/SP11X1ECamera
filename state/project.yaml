@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002b-r3f-prepared
+state_id: E002b-r3f-safe-nack
 phase: rear-dphy-bringup
-status: windows-exact-id-transaction-prepared
+status: windows-exact-id-still-nack-mclk-pad-unresolved
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -102,11 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002b-r3f-windows-exact-id
+next_experiment: E002b-r3g-prove-mclk1-pad
 next_action: >-
-  One-shot boot E002b-r3f with the accepted r3d DT and Windows-exact 16-bit identity read
-  at register 0x300b expecting 0xd855 on CCI0/master1 at 400 kHz. If permissive r3f passes,
-  repeat the identical candidate without clk_ignore_unused and pd_ignore_unused before promotion.
+  Use a one-shot SP11 Windows oracle boot to prove which X1E TLMM pad GPIO96..GPIO100 carries
+  rear cam_cc_mclk1_clk during CAMS D0. Then prepare E002b-r3g as a DT-only MCLK pinctrl
+  correction with r3f's Windows-exact ID transaction and all accepted power/CCI settings unchanged.
 
 handoff:
   first_read:

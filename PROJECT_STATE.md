@@ -6,12 +6,9 @@
 
 ## Current boundary
 
-E002a is mechanically accepted. A one-shot candidate using the exact FullIO v19c kernel/initrd and a DT-only camera-infrastructure delta booted successfully. X1E CAMCC, CCI0 and integrated CAMSS bound without camera-specific warnings/errors. Linux now exposes `/dev/media0` plus sixteen VFE `/dev/video*` nodes.
+E002b-r3f booted stably and used the Windows-exact OV13858 ID transaction (`0x10`, FAST/400 kHz, register `0x300b`, 16-bit expected `0xd855`) on Windows-proven CCI0/master1. The first transfer still returned `-ENXIO`; teardown was clean and no crash occurred.
 
-The infrastructure is electrically idle after registration: CAMCC/CCI0/CAMSS runtime-PM are suspended; the CSI 0.8 V and 1.2 V supply consumers have enable count 0; camera MCLK/CCI/CSIPHY/CSID/VFE clocks have prepare/enable count 0; no sensor node or sensor probe exists.
-
-Golden remains protected: `saved_entry=sp11-audio-fullio-v19c`, the E002a one-shot was consumed, and FullIO playback/capture plus soft-pause enumeration are unchanged.
-
+Live TLMM inspection exposed the strongest remaining omission: CCI GPIO103/104 are correctly muxed, but all X1E camera-MCLK capable GPIO96..99 are func0/unclaimed and the rear node has no MCLK pinctrl state. Before another powered probe, prove from Windows which physical pad carries `cam_cc_mclk1_clk`, then add only that pinctrl correction.
 
 ## E002b-r3e boundary and r3f preparation — 2026-08-27
 
