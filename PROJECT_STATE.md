@@ -1,3 +1,7 @@
+## E002i-A ACCEPTED — 16-frame rear stream stability — 2026-08-27
+
+The byte-identical accepted E002h-r1 payload streamed sequences 0..15 with full 14,321,824-byte buffers at ~29.95 fps and clean PM/clock teardown. No drops or new kernel faults. E002i-B may now vary only standard exposure with gain/transport fixed.
+
 ## E002i prepared — rear short-stream stability, then exposure response — 2026-08-27
 
 E002i reuses the accepted E002h-r1 kernel/initrd/module/DTB byte-for-byte. Phase A streams exactly 16 frames through the native 4076x2806 RAW10 route to `/dev/null` and checks sequence/timestamp/full-buffer stability plus clean teardown. Only after that passes will Phase B vary the standard V4L2 exposure control with gain and all transport settings fixed.
