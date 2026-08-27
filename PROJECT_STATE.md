@@ -1,3 +1,7 @@
+## E002j prepared — sensor-generated RAW10 integrity gate — 2026-08-27
+
+E002j is a control-only test on the exact accepted E002h-r1 binaries. No kernel/module/initrd/DT changes. It will enable the upstream OV13858 standard `V4L2_CID_TEST_PATTERN=1` (Vertical Color Bar Type 1), capture exactly one 4076x2806 packed-GRBG10 frame, validate vertical-band structure after RAW10 decode, restore test pattern to disabled, and verify electrical teardown.
+
 ## E002i-B ACCEPTED — standard rear exposure response — 2026-08-27
 
 With gain and transport fixed, standard V4L2 exposure 100 -> 3000 lines produced a coherent RAW10 signal increase (full-frame mean 64.3415 -> 65.2285; central mean 64.3500 -> 65.3988) while both captures and teardown remained clean. The scene is close to black pedestal, so next E002j uses the sensor's standard test-pattern control as an optics-independent packing/data-integrity proof.

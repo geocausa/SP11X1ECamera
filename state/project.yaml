@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002i-b-exposure-response-accepted
+current_gate: E002j-test-pattern-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002j-sensor-test-pattern-integrity
+next_experiment: E002j-test-pattern-runtime
 next_action: >-
-  Prepare E002j as an optics-independent sensor-data integrity gate on the exact accepted E002h-r1 pipeline.
-  Keep exposure/gain/mode/transport fixed at defaults and enable only the OV13858 standard V4L2 test_pattern
-  control for one local-only frame. Decode the packed GRBG10 payload and verify the expected spatial color-bar
-  structure, then disable test pattern and confirm clean teardown.
+  Reboot the exact accepted E002h-r1 payload and run E002j with no code/DT changes. Configure the accepted
+  4076x2806 RAW10 route, hold exposure/gain/VBLANK at defaults, enable standard V4L2 test_pattern=1 for
+  exactly one local-only frame, decode its vertical-band structure, restore test_pattern=0, and verify
+  clean runtime-PM/clock teardown and normal system health.
 
 handoff:
   first_read:
