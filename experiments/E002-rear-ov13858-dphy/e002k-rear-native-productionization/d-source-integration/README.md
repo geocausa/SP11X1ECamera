@@ -1,6 +1,6 @@
 # E002k-D — source-level rear-camera production integration
 
-Status: SOURCE + KITCHEN RECONCILED / NO INTEGRATED RUNTIME MUTATION YET
+Status: R3 SOURCE-INTEGRATED RUNTIME ACCEPTED / GOLDEN RESTORED
 
 ## Accepted input
 
@@ -15,18 +15,21 @@ E002k-C proved the physical rear OV13858 path without experiment-specific DT swi
 
 ## Base-source decision
 
-Historical audio kernel trees are not suitable camera development bases: several contain thousands of modified/untracked files. E002k-D therefore uses a fresh writable copy of the exact Golden replay source:
+The canonical production anchor is the true Golden v33 reproduction source:
 
-`/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src`
+`/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-repro/src`
 
-The original Golden replay source is read-only by policy for this experiment and must not be edited.
+A later audit proved that `.golden-v33-delta-replay/src` contains post-Golden audio-development changes and must **not** be used as the production base. See `SOURCE-BASE-CORRECTION.md`.
 
-Vanilla Linux 7.1.5 and the Golden replay source have byte-identical:
+The accepted maintained five-patch series replays against the true Golden source with `patch --fuzz=0 -p1` and reproduces byte-for-byte the three source files used by R3. See `TRUE-GOLDEN-PATCH-REPLAY.md`.
+
+The final accepted source delta relative to true Golden is exactly three files:
 
 - `drivers/media/i2c/ov13858.c`;
-- `drivers/regulator/qcom-rpmh-regulator.c`.
+- `arch/arm64/boot/dts/qcom/hamoa.dtsi`;
+- `arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi`.
 
-The Golden Denali DTS differs from vanilla only because of already-accepted non-camera board deltas (audio/Wi-Fi), which must be preserved.
+The Denali DTS delta includes both camera integration and the reconciled FullIO v19c / Phase91 touch-QSPI semantics.
 
 ## Patch split
 
@@ -58,14 +61,21 @@ That baseline does **not** prove the input parents for L1_M/L2_M or L6_M. E002k-
 ## Runtime safety
 
 - Golden v19c remains the saved GRUB default.
-- Any integrated camera kernel uses a separate release, module tree, boot directory and one-shot GRUB entry.
-- No experiment may overwrite Golden kernel/initrd/DTB or existing modules.
+- R3 intentionally reused the exact Golden Image and Golden module environment because CAMCC was already built in and CCI/CAMSS were unchanged; only the reconciled DTB and production OV13858 module changed.
+- R3 used a separate boot directory, isolated initrd layer and one-shot GRUB entry.
+- No experiment overwrites Golden kernel/initrd/DTB or existing modules.
 - One major unknown per runtime boot.
 
-## Current Kitchen reconciliation
+## Kitchen reconciliation
 
-The exact FullIO v19c non-camera delta has now been reconstructed at source level as two additional maintained patches: Phase91 touch/QSPI transport and TX-DMIC FullIO capture closure. The five-patch Golden replay applies with `--fuzz=0`, the reconciled Denali OLED DT compiles cleanly, and `kitchen-reconciliation/verify-v19c-kitchen.py` reports `NONCAMERA_V19C_RECONCILIATION=PASS`. See `kitchen-reconciliation/RESULT.md`.
+The exact FullIO v19c non-camera delta is reconstructed at source level as two maintained patches: Phase91 touch/QSPI transport and TX-DMIC FullIO capture closure. The five-patch series applies to the true Golden source with `--fuzz=0`, the reconciled Denali OLED DT compiles cleanly, and `kitchen-reconciliation/verify-v19c-kitchen.py` reports `NONCAMERA_V19C_RECONCILIATION=PASS`.
+
+## Accepted R3 runtime
+
+R3 booted one-shot using the exact Golden v19c Image plus the reconciled DTB and production OV13858 in an isolated initrd. It proved native PM8010-M, production OV13858 srcversion `9366B03E91F9212A1501AEC`, the accepted 4076x2806 RAW10 graph, deterministic color-bar SHA-256 `6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346`, and 16/16 normal frames at 29.9504 fps with clean teardown. Wi-Fi, FullIO playback/capture and G6 touch survived. See `r3-source-integrated-runtime/RESULT.md`.
+
+After evidence collection the machine rebooted normally to the saved Golden v19c entry. Golden kernel/initrd/DTB hashes remained exact, `next_entry` is empty, and the post-return fault scan is clean.
 
 ## Immediate next action
 
-Collect the independent full kernel/modules build, require exact kernelrelease and valid `Image`/`Module.symvers`, inspect OV13858/CAMSS/CCI module vermagic and modversion CRC compatibility, and only then construct a separate one-shot integrated runtime candidate using the reconciled DTB. Golden remains the saved default.
+Treat R3 as the accepted production camera payload. Keep Golden as the recovery/default baseline while converting the accepted five-patch series and R3 packaging into the durable production handoff/cleanup state. Do not reintroduce the post-Golden audio drift from `delta-replay`.
