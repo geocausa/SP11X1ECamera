@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002k-b-standard-supplies-accepted
+current_gate: E002k-c-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-c-remove-experiment-gates
+next_experiment: E002k-c-runtime
 next_action: >-
-  Prepare E002k-C from the accepted E002k-B source and DT. Remove the microsoft,e002e/e002f/e002g/e002h
-  experiment-only booleans and all corresponding probe/stream gating. Select the Surface 4076x2806 mode and
-  592.8 MHz transport from standard firmware endpoint/link-frequency data, retain the validated standard sensor
-  supplies and power sequence, and re-run deterministic sensor test-pattern plus short native streaming.
+  Boot E002k-C one-shot from Golden. Verify the live sensor node has no microsoft,e002 properties and that
+  standard four-lane 592.8 MHz endpoint metadata selects the 4076x2806 Surface profile automatically. Require
+  the deterministic color-bar SHA and 16-frame native stream/teardown to match the accepted E002j/E002i path
+  before accepting the experiment-gate removal.
 
 handoff:
   first_read:

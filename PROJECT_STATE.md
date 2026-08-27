@@ -1,3 +1,7 @@
+## E002k-C prepared — firmware-selected rear profile, no experiment gates — 2026-08-27
+
+The candidate removes all four `microsoft,e002*` DT booleans and corresponding driver gate/validation state. The Surface 4076x2806 profile is selected from standard firmware endpoint metadata: four-lane D-PHY with a single 592.8 MHz link frequency. Generic OV13858 mode/540 MHz PLL tables are mechanically unchanged and devices without that firmware signature retain the upstream fallback. Candidate artifacts are reproducible; runtime has not yet occurred.
+
 ## E002k-B ACCEPTED — standard OV13858 supply bindings — 2026-08-27
 
 The sensor now consumes standard `dovdd`, `dvdd`, and `avdd` supplies mapped to the same proven LDO6_M 1.8 V, LDO1_M 1.2 V and LDO5_M 2.8 V providers. LDO16_B/VAF is absent from the sensor node and had zero enable events. Native identity/streaming passed and the hardware color-bar frame remained byte-identical to E002j/E002k-A at SHA-256 `6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346`. Teardown and system health were clean. Next is removal of the remaining experiment-only mode/stream properties.
