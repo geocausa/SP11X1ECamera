@@ -1,3 +1,7 @@
+## E002i-B ACCEPTED — standard rear exposure response — 2026-08-27
+
+With gain and transport fixed, standard V4L2 exposure 100 -> 3000 lines produced a coherent RAW10 signal increase (full-frame mean 64.3415 -> 65.2285; central mean 64.3500 -> 65.3988) while both captures and teardown remained clean. The scene is close to black pedestal, so next E002j uses the sensor's standard test-pattern control as an optics-independent packing/data-integrity proof.
+
 ## E002i-A ACCEPTED — 16-frame rear stream stability — 2026-08-27
 
 The byte-identical accepted E002h-r1 payload streamed sequences 0..15 with full 14,321,824-byte buffers at ~29.95 fps and clean PM/clock teardown. No drops or new kernel faults. E002i-B may now vary only standard exposure with gain/transport fixed.

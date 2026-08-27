@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002i-a-accepted
+state_id: E002i-b-accepted
 phase: rear-dphy-bringup
 status: native-surface-mode0-semantics-accepted
 
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002i-b-exposure-response
+current_gate: E002i-b-exposure-response-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002i-b-exposure-response-runtime
+next_experiment: E002j-sensor-test-pattern-integrity
 next_action: >-
-  On the same accepted E002h-r1 pipeline, keep analogue gain=128, digital gain=1024, mode, VBLANK and all
-  transport settings fixed. Capture one local-only frame at exposure=100 and one at exposure=3000 using
-  standard V4L2 controls, returning to electrical idle between streams. Decode RAW10 statistics and require
-  a coherent brightness/noise response before accepting exposure control.
+  Prepare E002j as an optics-independent sensor-data integrity gate on the exact accepted E002h-r1 pipeline.
+  Keep exposure/gain/mode/transport fixed at defaults and enable only the OV13858 standard V4L2 test_pattern
+  control for one local-only frame. Decode the packed GRBG10 payload and verify the expected spatial color-bar
+  structure, then disable test pattern and confirm clean teardown.
 
 handoff:
   first_read:
