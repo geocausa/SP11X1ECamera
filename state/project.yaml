@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002j-test-pattern-integrity-accepted
+current_gate: E002k-a-no-vaf-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,13 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-rear-native-productionization
+next_experiment: E002k-a-no-vaf-runtime
 next_action: >-
-  Prepare E002k as the rear-camera productionization pass. Reconcile current upstream OV13858 power/reset
-  work and X1E CAMSS/CSI-PHY resource definitions with our proven Denali implementation. Replace experiment-only
-  microsoft,e002* gates and naming with standard Linux bindings/driver logic while preserving the accepted
-  4076x2806@30 mode, 592.8 MHz link, GPIO97 MCLK1, power sequence and CSIPHY1 0x2000 resource. Build and
-  validate the clean candidate against the same identity, test-pattern and short-stream gates before proposing merge.
+  Boot E002k-A with the accepted E002h-r1 DT/kernel but a sensor module that no longer acquires or votes
+  LDO16_B/VAF. Prove native identity and one standard OV13858 test-pattern frame while confirming there is
+  no LDO16_B enable event. Restore test pattern, verify clean teardown/health, and only then convert the
+  driver/DT to standard avdd/dvdd/dovdd supply naming.
 
 handoff:
   first_read:

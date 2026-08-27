@@ -1,3 +1,7 @@
+## E002k-A prepared — separate VAF from OV13858 sensor power — 2026-08-27
+
+Static QTI `sensorDriverData` classifies the rear sensor power-up as RESET -> VANA -> VDIG -> VIO -> MCLK -> RESET release; VAF is absent from power-up and explicitly disabled in power-down. With the board voltages this maps VIO=LDO6_M 1.8 V, VDIG=LDO1_M 1.2 V, VANA=LDO5_M 2.8 V, VAF=LDO16_B 2.9 V. E002k-A keeps the accepted E002h-r1 kernel/DT/mode/transport byte-identical and removes only LDO16_B ownership from `ov13858`. It will repeat identity plus the internal color-bar frame and require zero LDO16_B enable votes.
+
 ## E002j ACCEPTED — sensor-generated RAW10 integrity — 2026-08-27
 
 Using the exact accepted E002h-r1 binaries, standard `V4L2_CID_TEST_PATTERN=1` produced one complete 4076x2806 packed-GRBG10 frame. Decoded RAW contains only levels 64 and 1023; all same-parity rows are bit-identical and Bayer-channel transition positions form deterministic vertical bars. Test pattern was restored to disabled and all camera power/clocks returned idle. This independently proves sensor-generated RAW10 packing/order through CSIPHY1 -> CSID0 -> VFE0 RDI0. Next: E002k productionize the rear path into standard/native bindings and driver logic.
