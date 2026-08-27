@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003d-front-imx681-cphy-graph
+state_id: E003f-front-cphy-receiver-electrical-r3-prepared
 phase: front-imx681-cphy-bringup
-status: front-imx681-native-bind-accepted-golden-restored
+status: e003f-r3-host-power-retry-prepared-golden-restored
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E003-front-imx681-cphy
-current_gate: E003e-front-imx681-mode0-standby-accepted
+current_gate: E003f-R3-host-powered-receiver-electrical-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,17 +102,22 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E003f-front-cphy-receiver-electrical
+next_experiment: E003f-R3-host-powered-receiver-electrical-runtime
 next_action: >-
-  Keep SP11 on FullIO v19c Golden. E003f is receiver-only: dynamically discover the bound IMX681/CSIPHY2
-  entities, keep IMX681 MODE_SELECT/0x0100 at standby and preserve the sensor s_stream(1)=-EOPNOTSUPP gate,
-  then execute only CSIPHY2's X1E one-trio C-PHY electrical start/stop path. Mechanically compare the live
-  receiver register state with the same-machine Windows oracle, require full CSIPHY2 clock/power teardown,
-  and do not permit sensor transmission or frame capture. Never hardcode CCI adapter numbers or Wi-Fi IPs.
+  Keep SP11 on byte-exact FullIO v19c Golden until all guards are rechecked. E003f-R2 proved the corrected
+  8 KiB CSIPHY2 aperture and local receiver power-on, but 78 expected non-zero Windows C-PHY values remained
+  zero. E003f-R3 is prepared to add only the normal VFE0/IFE/CAMNOC/CPAS host-power context around the same
+  receiver-only CSIPHY2 start/compare/stop path. Reverify the corrected R3 GRUB paths and artifact hashes, arm
+  only `sp11-camera-e003f-r3-cphy-receiver` as a one-shot, discover dynamic Wi-Fi/CCI identities, verify idle
+  sensor/receiver state, then load the SHA-checked R3 harness exactly once. Require 121/121 final Windows-live
+  register agreement, clean receiver/VFE teardown, no IMX681 transmission, full platform health, and byte-exact
+  Golden return before accepting E003f.
+
 
 
 
 handoff:
+  latest: docs/runbooks/2026-08-27-e003f-r3-camera-handoff.md
   first_read:
     - CONTINUE.md
     - AGENTS.md

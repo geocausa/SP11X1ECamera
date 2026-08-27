@@ -1,0 +1,27 @@
+E003f install preflight
+2026-08-27T19:26:52+01:00
+=== running ===
+7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
+=== hashes ===
+4c353be73e3bca787f91d0f07ce3f287098cf300206d01c29d246f3d159dcf02  /boot/sp11-7.1.5-camera-e003f-cphy-receiver/initrd.img-7.1.5-sp11-camera-e003f-cphy-receiver
+bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a  /boot/sp11-7.1.5-camera-e003f-cphy-receiver/vmlinuz-7.1.5-sp11-render-parity-v4+
+9e5eab025ed4dc0d23983f0e0ab0b84ca6095826f5a9b4f57fb1c6b9b3e50d79  /boot/sp11-7.1.5-camera-e003f-cphy-receiver/x1e80100-microsoft-denali-sp11-e003f-cphy-receiver.dtb
+=== grub env ===
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+=== entry ===
+577:menuentry 'SP11 Camera E003f — receiver-only C-PHY electrical' --id 'sp11-camera-e003f-cphy-receiver' --class ubuntu --class gnu-linux --class gnu --class os {
+578- load_video
+579- set gfxpayload=keep
+580- insmod gzio
+581- insmod part_gpt
+582- insmod ext2
+583- insmod fdt
+584- search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+585- devicetree /boot/sp11-7.1.5-camera-e003f-cphy-receiver/x1e80100-microsoft-denali-sp11-e003f-cphy-receiver.dtb
+586- linux /boot/sp11-7.1.5-camera-e003f-cphy-receiver/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003f-cphy-receiver sp11_camera_e003f_cphy_receiver=1
+587- initrd /boot/sp11-7.1.5-camera-e003f-cphy-receiver/initrd.img-7.1.5-sp11-camera-e003f-cphy-receiver
+588-}
+589-### END /etc/grub.d/99h_sp11_camera_e003f_cphy_receiver ###
+E003F_INSTALL_GUARDS=PASS
