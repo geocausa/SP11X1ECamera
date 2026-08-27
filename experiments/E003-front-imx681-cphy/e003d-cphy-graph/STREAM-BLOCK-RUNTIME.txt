@@ -1,0 +1,24 @@
+=== pre callback ===
+2026-08-27T18:35:20+01:00
+             cam_cc_mclk4_clk        0       0        0        19200000    0          0     50000      N               3-0010                          xclk
+             cam_cc_csi2phytimer_clk 0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2_timer
+             cam_cc_csiphy2_clk      0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2
+=== insert harness ===
+Aug 27 18:35:20 SP11X1e kernel: imx681 3-0010: SP11 E003c: streaming blocked by bind-only safety gate
+Aug 27 18:35:20 SP11X1e kernel: E003C_STREAM_BLOCK_TEST: s_stream(1) ret=-95 expected=-95
+=== post callback ===
+runtime_status=suspended
+runtime_usage=0
+control=auto
+             cam_cc_mclk4_clk        0       0        0        19200000    0          0     50000      N               3-0010                          xclk
+             cam_cc_csi2phytimer_clk 0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2_timer
+             cam_cc_csiphy2_clk      0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2
+       vreg_l3m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+          3-0010-dovdd            0                                 0mA  1800mV  1800mV
+       vreg_l6m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+--
+       vreg_l7b_2p8               0    1      0  normal  2800mV     0mA  2800mV  2800mV
+          3-0010-avdd             0                                 0mA  2800mV  2800mV
+       vreg_l17b_2p5              0    0      0  normal  2504mV     0mA  2504mV  2504mV
+ gpio237 : out low  func0 2mA no pull
+E003D_STREAM_BLOCK=PASS

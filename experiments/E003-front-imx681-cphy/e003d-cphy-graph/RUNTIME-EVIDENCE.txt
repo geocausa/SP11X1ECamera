@@ -1,0 +1,110 @@
+E003d runtime acceptance evidence
+2026-08-27T18:35:49+01:00
+=== BOOT ===
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-camera-e003d-cphy-graph/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003d-cphy-graph sp11_camera_e003d_cphy_graph=1
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+=== MODULE IDENTITIES ===
+qcom_camss srcversion=446A14F6FC085EC7F4C542F taint=E
+imx681 srcversion=E9DD300C13909125CA27C6E taint=OE
+=== IDENTITIES/BIND ===
+Aug 27 18:34:15 SP11X1e kernel: imx681 3-0010: SP11 E003c PASS: IMX681 Windows ID 0x0aff, Sony ID 0x0681
+Aug 27 18:34:15 SP11X1e kernel: imx681 3-0010: SP11 E003c native V4L2 bind complete; streaming remains blocked
+Aug 27 18:34:15 SP11X1e sp11-camera-e003d-initrd: IMX681 driver bound to 3-0010
+=== MEDIA LINK ===
+		-> "msm_csid2":0 []
+		-> "msm_csid3":0 []
+		-> "msm_csid4":0 []
+
+- entity 7: msm_csiphy2 (2 pads, 6 links, 0 routes)
+            type V4L2 subdev subtype Unknown flags 0
+            device node name /dev/v4l-subdev2
+	pad0: SINK
+		[stream:0 fmt:UYVY8_1X16/1920x1080 field:none colorspace:srgb]
+		<- "imx681 3-0010":0 [ENABLED,IMMUTABLE]
+	pad1: SOURCE
+		[stream:0 fmt:UYVY8_1X16/1920x1080 field:none colorspace:srgb]
+		-> "msm_csid0":0 []
+--
+	pad0: SOURCE
+		[stream:0 fmt:SGRBG10_1X10/4076x2806 field:none]
+		-> "msm_csiphy1":0 [ENABLED,IMMUTABLE]
+
+- entity 389: imx681 3-0010 (1 pad, 1 link, 0 routes)
+              type V4L2 subdev subtype Sensor flags 0
+              device node name /dev/v4l-subdev26
+	pad0: SOURCE
+		[stream:0 fmt:SRGGB10_1X10/3840x2640 field:none colorspace:raw xfer:none ycbcr:601 quantization:full-range]
+		-> "msm_csiphy2":0 [ENABLED,IMMUTABLE]
+
+=== STREAM BLOCK ===
+Aug 27 18:35:20 SP11X1e kernel: imx681 3-0010: SP11 E003c: streaming blocked by bind-only safety gate
+Aug 27 18:35:20 SP11X1e kernel: E003C_STREAM_BLOCK_TEST: s_stream(1) ret=-95 expected=-95
+=== PM ===
+runtime_status=suspended
+runtime_usage=0
+control=auto
+=== CLOCKS ===
+             cam_cc_mclk4_clk        0       0        0        19200000    0          0     50000      N               3-0010                          xclk
+             cam_cc_csi2phytimer_clk 0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2_timer
+             cam_cc_csiphy2_clk      0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2
+=== RAILS ===
+       vreg_l3m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+          3-0010-dovdd            0                                 0mA  1800mV  1800mV
+       vreg_l6m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+--
+       vreg_l7b_2p8               0    1      0  normal  2800mV     0mA  2800mV  2800mV
+          3-0010-avdd             0                                 0mA  2800mV  2800mV
+       vreg_l17b_2p5              0    0      0  normal  2504mV     0mA  2504mV  2504mV
+=== RESET ===
+ gpio237 : out low  func0 2mA no pull
+=== REAR ===
+/sys/bus/i2c/drivers/ov13858
+	pad0: SINK
+		[stream:0 fmt:UYVY8_1X16/1920x1080 field:none colorspace:srgb]
+		<- "ov13858 1-0010":0 [ENABLED,IMMUTABLE]
+	pad1: SOURCE
+		[stream:0 fmt:UYVY8_1X16/1920x1080 field:none colorspace:srgb]
+		-> "msm_csid0":0 [ENABLED]
+		-> "msm_csid1":0 []
+		-> "msm_csid2":0 []
+--
+		<- "msm_vfe3_rdi3":1 [ENABLED,IMMUTABLE]
+
+- entity 387: ov13858 1-0010 (1 pad, 1 link, 0 routes)
+              type V4L2 subdev subtype Sensor flags 0
+              device node name /dev/v4l-subdev25
+	pad0: SOURCE
+		[stream:0 fmt:SGRBG10_1X10/4076x2806 field:none]
+		-> "msm_csiphy1":0 [ENABLED,IMMUTABLE]
+=== WIFI ===
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP>
+wlP4p1s0         UP             00:03:7f:12:f5:64 <BROADCAST,MULTICAST,UP,LOWER_UP>
+		type P2P-device
+	Interface wlP4p1s0
+		ssid GEOCA
+		type managed
+		channel 44 (5220 MHz), width: 80 MHz, center1: 5210 MHz
+=== AUDIO ===
+**** List of PLAYBACK Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 0: MultiMedia1 Playback (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+**** List of CAPTURE Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 2: MultiMedia3 Capture (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+=== TOUCH ===
+I: Bus=001c Vendor=0000 Product=0000 Version=0000
+N: Name="Microsoft Surface G6 Touch"
+P: Phys=
+S: Sysfs=/devices/platform/soc@0/ac0000.geniqup/a88000.spi/spi_master/spi0/spi0.0/input/input1
+U: Uniq=
+H: Handlers=mouse0 event1
+B: PROP=2
+B: EV=b
+B: KEY=400 0 0 0 0 0
+B: ABS=260800000000003
+=== SERIOUS FAULTS ===
+E003D_RUNTIME_IN_CANDIDATE=PASS

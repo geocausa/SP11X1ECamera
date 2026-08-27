@@ -1,3 +1,7 @@
+## E003d ACCEPTED — IMX681 one-trio C-PHY idle graph — 2026-08-27
+
+The accepted native IMX681 now appears in `/dev/media0` with an ENABLED+IMMUTABLE link to `msm_csiphy2` using one zero-based CSI-2 C-PHY trio. The exact Windows-derived X1E C-PHY table is compiled into candidate CAMSS, but a direct sensor-only `s_stream(1)` test still returned `-EOPNOTSUPP`; MCLK4, CSIPHY2/timer, both front rails and reset therefore remained electrically idle. Rear camera, Wi-Fi, FullIO audio and G6 touch stayed healthy. Normal reboot restored byte-exact FullIO v19c Golden. Next is E003e: exact Windows IMX681 3840x2640@30 mode0 programming in standby, still with MODE_SELECT prohibited and no PHY streaming.
+
 ## E003c ACCEPTED — native IMX681 V4L2 bind-only gate — 2026-08-27
 
 The front Sony IMX681 now binds under a native V4L2 sensor driver on CCI1/master1 and passes both the SP11 Windows/platform identity (`0x0004 = 0x0aff`) and Sony silicon identity (`0x0016 = 0x0681`). E003c intentionally contains no sensor write path and no front endpoint. A separate test-only harness called the bound V4L2 `s_stream(1)` callback directly and proved `-EOPNOTSUPP`; runtime PM then remained suspended with usage 0, MCLK4/front rails/CSIPHY2 disabled and GPIO237 reset-low. Golden was restored byte-exact with Wi-Fi/audio/touch healthy. Next is E003d: add the C-PHY graph and X1E80100 receiver programming while keeping streaming blocked.

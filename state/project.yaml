@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E003-front-imx681-cphy
-current_gate: E003c-front-imx681-native-bind-accepted
+current_gate: E003d-front-imx681-cphy-idle-graph-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E003d-front-imx681-cphy-graph
+next_experiment: E003e-front-imx681-mode0-standby
 next_action: >-
-  Keep SP11 on FullIO v19c Golden. E003d adds the front IMX681 CSI-2 C-PHY graph and X1E80100
-  CSIPHY2 receiver programming derived from the two-run Windows KD oracle. Preserve the accepted E003c
-  sensor driver stream block: topology/bind/idle-PM only. Do not program sensor mode registers or permit
-  MODE_SELECT/0x0100 streaming until the graph and PHY idle/runtime-PM gates pass.
+  Keep SP11 on FullIO v19c Golden. E003e adds the exact same-machine Windows IMX681 mode0
+  3840x2640@30 register lifecycle and exact transport metadata in sensor standby only. Preserve the
+  accepted E003d C-PHY graph and the hard stream block: MODE_SELECT/0x0100 must remain prohibited,
+  CSIPHY2/MCLK4/front rails must return idle, and no bounded C-PHY transport is allowed until E003e passes.
 
 
 

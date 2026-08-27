@@ -26,7 +26,8 @@ Canonical evidence remains under `../E001-windows-oracle-map/derived/`. Propriet
 1. **E003a — static C-PHY + sensor-driver audit.** No hardware mutation.
 2. **E003b — electrical identity only.** Power/reset/MCLK4/CCI1 master1, no CSI endpoint, no stream.
 3. **E003c — native IMX681 V4L2 bind**, still no CSI streaming.
-4. **E003d — C-PHY graph/receiver configuration**, no stream until topology and PM remain idle.
-5. **E003e+ — mode/transport and first bounded frame**, only after preceding gates pass.
+4. **E003d — C-PHY graph/receiver configuration — ACCEPTED.** Immutable IMX681 → CSIPHY2 link with PM/electrical idle and stream block proven.
+5. **E003e — mode0 standby.** Exact Windows mode0 register lifecycle + transport metadata, MODE_SELECT still prohibited and CSIPHY2 idle.
+6. **E003f+ — bounded C-PHY transport and first frame**, only after preceding gates pass.
 
 Each runtime gate must keep Golden as saved default, use a one-shot candidate, and verify audio/touch/Wi-Fi before and after.
