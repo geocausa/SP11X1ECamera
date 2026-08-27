@@ -1,3 +1,7 @@
+## E002e prepared — rear 592.8 MHz transport metadata, hard no-stream — 2026-08-27
+
+Exact Windows QTI mode data proves the Surface rear transport uses RAW10/four-lane D-PHY at 474.24 MHz pixel rate = 1.1856 Gbit/s/lane = 592.8 MHz DDR link frequency. Windows mode0 is 4076x2806 and differs from upstream full-res in only 19 of 199 shared final register values plus a small address delta. E002e intentionally changes no sensor PLL/mode register arrays: it adds 592.8 MHz endpoint/control metadata, validates four-lane D-PHY at probe, and installs a DT-selected stream guard before runtime-PM power-up. Candidate initrd A/B are byte-identical at `48517776...`; candidate DTB `0e25c28f...`.
+
 ## E002d ACCEPTED — native rear OV13858 -> CSIPHY1 graph — 2026-08-27
 
 Read-only `MEDIA_IOC_G_TOPOLOGY` proved `ov13858 1-0010` pad0 -> `msm_csiphy1` pad0 with flags `0x3` (ENABLED + IMMUTABLE) and data-link type. Sensor remained runtime-suspended (usage 0), MCLK1/CSIPHY1/CSI1 PHY timer enable counts stayed 0, reset stayed asserted, and no rail activity occurred after boot identity. E002d is accepted. Next gate is E002e: reconcile Windows rear mode/lane timing with native OV13858 link-frequency/mode metadata, still with no stream operation.

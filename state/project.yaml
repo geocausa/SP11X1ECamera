@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002d-accepted
+state_id: E002e-prepared
 phase: rear-dphy-bringup
-status: rear-csiphy1-graph-accepted
+status: rear-linkfreq-5928-prepared-no-stream
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002d-rear-csiphy1-graph
+current_gate: E002e-rear-linkfreq-5928
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002e-rear-mode-linkfreq
+next_experiment: E002e-runtime
 next_action: >-
-  Prepare E002e as a no-stream rear-mode/link-frequency validation. Keep accepted E002c-r1 native
-  power ownership and E002d OV13858 -> CSIPHY1 graph unchanged. Reconcile the Windows first rear mode
-  timing/lane-rate with the native OV13858 supported-mode/link-frequency table and add only the minimum
-  firmware metadata or driver correction required for a mechanically valid first mode. Do not call s_stream.
+  Boot E002e one-shot with the accepted E002d graph plus only Windows-proven 592.8 MHz sensor-endpoint
+  metadata and the E002e native transport-validation module. Read-only verify LINK_FREQ=592800000,
+  PIXEL_RATE=474240000, immutable OV13858 -> CSIPHY1 graph and electrical idle. Do not program a mode
+  or stream. Optionally prove the pre-power no-stream guard rejects stream enable without rail/clock activity.
 
 handoff:
   first_read:
