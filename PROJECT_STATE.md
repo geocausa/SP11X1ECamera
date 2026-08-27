@@ -1,3 +1,7 @@
+## E002k-C ACCEPTED — rear profile no longer experiment-gated — 2026-08-27
+
+The rear OV13858 now selects its proven 4076x2806@30 Surface profile solely from standard four-lane 592.8 MHz endpoint metadata; no `microsoft,e002*` property or stream gate remains. The deterministic color-bar SHA remains `6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346`, and a 16-frame normal run completed seq 0-15 at 29.9575 fps with clean teardown, zero VAF votes and healthy audio/Wi-Fi. Next is source-level production integration and removal of temporary initrd/module scaffolding.
+
 ## E002k-C prepared — firmware-selected rear profile, no experiment gates — 2026-08-27
 
 The candidate removes all four `microsoft,e002*` DT booleans and corresponding driver gate/validation state. The Surface 4076x2806 profile is selected from standard firmware endpoint metadata: four-lane D-PHY with a single 592.8 MHz link frequency. Generic OV13858 mode/540 MHz PLL tables are mechanically unchanged and devices without that firmware signature retain the upstream fallback. Candidate artifacts are reproducible; runtime has not yet occurred.

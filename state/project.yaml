@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002k-c-prepared
+current_gate: E002k-c-firmware-profile-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,13 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-c-runtime
+next_experiment: E002k-d-production-source-integration
 next_action: >-
-  Boot E002k-C one-shot from Golden. Verify the live sensor node has no microsoft,e002 properties and that
-  standard four-lane 592.8 MHz endpoint metadata selects the 4076x2806 Surface profile automatically. Require
-  the deterministic color-bar SHA and 16-frame native stream/teardown to match the accepted E002j/E002i path
-  before accepting the experiment-gate removal.
+  Prepare E002k-D as source-level production integration from the accepted E002k-C behaviour. Build a clean,
+  reviewable kernel/DT patch set against the canonical development source: standard OV13858 supplies and power
+  lifecycle, firmware-selected Surface mode, Denali rear sensor/CCI/CAMSS graph, GPIO97 MCLK, and the proven
+  CSIPHY1 8 KiB resource. Remove temporary E00x initrd/loader assumptions where possible while preserving
+  Golden as the boot default and validating the integrated candidate one-shot before promotion.
 
 handoff:
   first_read:
