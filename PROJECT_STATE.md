@@ -1,3 +1,7 @@
+## E002c-r1 ACCEPTED — native OV13858 bind / identity / runtime PM — 2026-08-27
+
+E002c-r1 automatically loaded the accepted RPMh provider, exact V4L2 dependencies and patched native `ov13858` from initrd. The native driver bound to `1-0010`, upstream 24-bit identity passed, then all rails and MCLK tore down with runtime PM `suspended`, usage 0. Loaded sensor module srcversion `02C96088AA5798CD5A70BFE` proves the patched module was running. No sensor CSI endpoint existed and no stream occurred. E002c is accepted. Next gate E002d adds only rear four-lane D-PHY graph wiring to Windows-proven CSIPHY1.
+
 ## E002c-r1 prepared — packaging-only fix after manual native PASS — 2026-08-27
 
 E002c r0 automatic loading failed before electrical action because Golden has no module `extra/` directory and r0 emitted only its nested `extra/e002c/`. Loading the exact same provider and patched native driver after full boot passed completely: native OV13858 bound, ID verified, runtime-suspended, rails/MCLK off, reset asserted. r1 changes only initrd packaging: emit the missing parent `extra/` and preserve real insmod errno. r1 initrd A/B are byte-identical at `d1e56f66...`; kernel, DTB and camera module bytes are unchanged.

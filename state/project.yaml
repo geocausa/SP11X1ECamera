@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002c-r1-prepared
+state_id: E002c-r1-accepted
 phase: rear-dphy-bringup
-status: native-bind-manual-pass-r1-packaging-prepared
+status: native-ov13858-bind-identity-runtime-pm-accepted
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002b-rear-probe
+current_gate: E002c-native-ov13858-bind
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,11 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002c-r1-native-ov13858-runtime
+next_experiment: E002d-rear-csiphy1-graph
 next_action: >-
-  Boot E002c-r1 one-shot with the exact r0 kernel/DT/native driver but the packaging-only corrected
-  Golden-based initrd. Require automatic provider/native OV13858 bind, native identity PASS and
-  runtime-suspended electrical idle with no CSI endpoint and no streaming.
+  Prepare E002d as a graph-only rear transport experiment: keep the accepted E002c native driver,
+  power/CCI/MCLK/reset path and no-stream rule unchanged; add only the OV13858 four-lane D-PHY endpoint
+  paired to Windows-proven CSIPHY1 and prove async media-graph binding/enumeration before any stream.
 
 handoff:
   first_read:
