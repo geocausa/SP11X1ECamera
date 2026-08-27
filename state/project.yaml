@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-08-26
+updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E001-oracle-map
+state_id: E002b-r3f-prepared
 phase: rear-dphy-bringup
-status: oracle-routing-complete
+status: windows-exact-id-transaction-prepared
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -102,11 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002b-rear-probe
+next_experiment: E002b-r3f-windows-exact-id
 next_action: >-
-  Extend the accepted E002a infrastructure candidate with only the Windows-derived rear OV13858
-  power/reset/MCLK node on CCI0 master1. Prove sensor ID 0xd855 at 7-bit address 0x10 without
-  creating a streaming endpoint or starting CSI transport. Preserve Golden as the saved GRUB default.
+  One-shot boot E002b-r3f with the accepted r3d DT and Windows-exact 16-bit identity read
+  at register 0x300b expecting 0xd855 on CCI0/master1 at 400 kHz. If permissive r3f passes,
+  repeat the identical candidate without clk_ignore_unused and pd_ignore_unused before promotion.
 
 handoff:
   first_read:

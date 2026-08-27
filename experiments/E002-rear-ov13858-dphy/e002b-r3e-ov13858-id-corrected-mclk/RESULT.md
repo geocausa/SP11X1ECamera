@@ -29,3 +29,15 @@ The experiment has moved beyond regulator and MCLK bring-up. The remaining failu
 - first successful identification transaction/register sequence
 
 Do not infer these from another X1E board. If the static Surface/Qualcomm blobs do not settle them unambiguously, use SP7 KD into a one-shot SP11 Windows boot and trace `\\_SB.CAMS` D0 bring-up.
+
+## Oracle resolution after r3e — 2026-08-27
+
+The Windows oracle has now settled every item listed above:
+
+- rear route: **CCI0/master1**;
+- bus rate: **FAST / 400 kHz**;
+- Linux slave address: **0x10** (`0x20` QTI 8-bit representation);
+- reset/MCLK/rail sequence: unchanged from r3e and Windows-derived;
+- Windows/QTI ID transfer: **16-bit register address `0x300b`, 16-bit data, expected `0xd855`**.
+
+Therefore r3e's remaining known mismatch was its generic three-byte read beginning at `0x300a`. E002b-r3f changes only that transaction shape. No DT, route, bus-rate, rail, reset or MCLK change is justified by the current evidence.

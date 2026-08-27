@@ -1,7 +1,7 @@
 # Project state
 
-**Updated:** 2026-08-26  
-**State ID:** E002a camera infrastructure accepted  
+**Updated:** 2026-08-27
+**State ID:** E002b-r3e NACK resolved to Windows-exact ID-transfer gate
 **Golden remains:** SP11 Audio FullIO v19c
 
 ## Current boundary
@@ -11,6 +11,13 @@ E002a is mechanically accepted. A one-shot candidate using the exact FullIO v19c
 The infrastructure is electrically idle after registration: CAMCC/CCI0/CAMSS runtime-PM are suspended; the CSI 0.8 V and 1.2 V supply consumers have enable count 0; camera MCLK/CCI/CSIPHY/CSID/VFE clocks have prepare/enable count 0; no sensor node or sensor probe exists.
 
 Golden remains protected: `saved_entry=sp11-audio-fullio-v19c`, the E002a one-shot was consumed, and FullIO playback/capture plus soft-pause enumeration are unchanged.
+
+
+## E002b-r3e boundary and r3f preparation — 2026-08-27
+
+r3e safely reached the first CCI transaction after the full rear power/MCLK/reset sequence, but returned `-ENXIO`. A one-shot Windows KD session plus the exact installed QTI sensor/platform blobs now confirm CCI0/master1, FAST 400 kHz, Linux address `0x10`, GPIO110/reset, MCLK1 19.2 MHz and the existing rail order. The Windows sensor configuration identifies using a 16-bit read at `0x300b`, expected `0xd855`; r3e instead used a generic three-byte read from `0x300a`.
+
+E002b-r3f is prepared as a transaction-only correction. Its module and candidate initrd both build byte-identically across two clean builds. Golden is unchanged. The GRUB audit found no camera-blocking parameter; future accepted camera gates must, however, pass a second strict boot without `clk_ignore_unused pd_ignore_unused` so those permissive flags cannot mask missing DT ownership.
 
 ## Exact SP11 camera hardware
 
@@ -86,9 +93,9 @@ Keep them on the parity backlog; do not guess them into Linux.
 
 ## Next action
 
-**E002b — rear OV13858 probe only.**
+**E002b-r3f — Windows-exact rear OV13858 identity transaction.**
 
-Extend the accepted E002a DT with only the Windows-derived rear sensor power/reset/MCLK/control-bus description on **CCI0 master1**. The acceptance target is the OV13858 chip ID `0xd855` at 7-bit address `0x10`. Do not add/start CSI streaming until this power/probe lifecycle is proven.
+Reuse the accepted r3d DT/power route byte-for-byte and change only the r3e identity transfer to a 16-bit read at `0x300b`, expecting `0xd855`. First test permissively; if it passes, repeat without `clk_ignore_unused pd_ignore_unused`. Do not add/start CSI streaming until this identity lifecycle is proven.
 
 
 ## E002b-r1 accepted — isolated camera regulator providers
