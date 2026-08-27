@@ -2,6 +2,7 @@
 /* SP11 E003f: direct receiver-only CSIPHY2 C-PHY electrical verifier. */
 #include <linux/device.h>
 #include <linux/io.h>
+#include <linux/ioport.h>
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <media/v4l2-subdev.h>
@@ -15,6 +16,8 @@
 static int __init e003f_test_init(void)
 {
 	struct device *dev;
+	struct platform_device *pdev;
+	struct resource *res;
 	struct camss *camss;
 	struct csiphy_device *phy;
 	struct v4l2_subdev *sd;
@@ -26,6 +29,17 @@ static int __init e003f_test_init(void)
 	dev = bus_find_device_by_name(&platform_bus_type, NULL, "acb7000.isp");
 	if (!dev)
 		return -ENODEV;
+	pdev = to_platform_device(dev);
+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "csiphy2");
+	if (!res || resource_size(res) < 0x2000) {
+		pr_err("E003F_PREFLIGHT_FAIL: csiphy2 MMIO size=0x%llx, need >=0x2000\n",
+		       res ? (unsigned long long)resource_size(res) : 0ULL);
+		ret = -EINVAL;
+		goto out_put;
+	}
+	pr_info("E003F_MMIO_PREFLIGHT_PASS: csiphy2 start=%pa size=0x%llx\n",
+		 &res->start, (unsigned long long)resource_size(res));
+
 	camss = dev_get_drvdata(dev);
 	if (!camss || !camss->csiphy || camss->res->csiphy_num <= E003F_PHY_ID) {
 		ret = -ENODEV;

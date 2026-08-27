@@ -1,0 +1,139 @@
+E003f first runtime fault
+2026-08-27T19:37:19+01:00
+=== boot ===
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-camera-e003f-cphy-receiver/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003f-cphy-receiver sp11_camera_e003f_cphy_receiver=1
+=== fault lines ===
+[Thu Aug 27 19:33:36 2026] qcom-soundwire 6b10000.soundwire: SP11 CPS wake parity: bank=0 route_old=0x5000f route_new=0x5000f pcm_reg=0x1d54 pcm_old=0x3 pcm_new=0x3 ret=0
+[Thu Aug 27 19:33:36 2026] qcom-soundwire 6b10000.soundwire: SP11 feedback active Offset2 parity: port=13 bank=0 old=0x00ff001f new=0x0300001f ch=0x3
+[Thu Aug 27 19:33:36 2026] qcom-soundwire 6b10000.soundwire: SP11 CPS wake parity: bank=1 route_old=0x5000f route_new=0x5000f pcm_reg=0x1d54 pcm_old=0x3 pcm_new=0x3 ret=0
+[Thu Aug 27 19:33:36 2026] qcom-soundwire 6b10000.soundwire: SP11 CPS wake parity: bank=0 route_old=0x5000f route_new=0x5000f pcm_reg=0x1d54 pcm_old=0x3 pcm_new=0x3 ret=0
+[Thu Aug 27 19:33:41 2026] systemd-journald[532]: Time jumped backwards, rotating.
+[Thu Aug 27 19:34:55 2026] E003F_PREFLIGHT_PASS: csiphy=2 CPHY trios=1 pos0=0 expected_regs=121
+[Thu Aug 27 19:34:55 2026] Unable to handle kernel paging request at virtual address ffff800080396000
+[Thu Aug 27 19:34:55 2026] Mem abort info:
+[Thu Aug 27 19:34:55 2026]   ESR = 0x0000000096000047
+[Thu Aug 27 19:34:55 2026]   EC = 0x25: DABT (current EL), IL = 32 bits
+[Thu Aug 27 19:34:55 2026]   SET = 0, FnV = 0
+[Thu Aug 27 19:34:55 2026]   EA = 0, S1PTW = 0
+[Thu Aug 27 19:34:55 2026]   FSC = 0x07: level 3 translation fault
+[Thu Aug 27 19:34:55 2026] Data abort info:
+[Thu Aug 27 19:34:55 2026]   ISV = 0, ISS = 0x00000047, ISS2 = 0x00000000
+[Thu Aug 27 19:34:55 2026]   CM = 0, WnR = 1, TnD = 0, TagAccess = 0
+[Thu Aug 27 19:34:55 2026]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[Thu Aug 27 19:34:55 2026] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000ab7df1000
+[Thu Aug 27 19:34:55 2026] [ffff800080396000] pgd=0000000000000000, p4d=10000008803b8403, pud=10000008803b9403, pmd=1000000880d30403, pte=0000000000000000
+[Thu Aug 27 19:34:55 2026] Internal error: Oops: 0000000096000047 [#1]  SMP
+[Thu Aug 27 19:34:55 2026] Modules linked in: e003f_csiphy_test(OE+) aes_ce_ccm snd_seq_dummy snd_hrtimer rfcomm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device nf_tables nfnetlink algif_hash algif_skcipher af_alg bnep qrtr_mhi binfmt_misc reset_gpio ath12k_wifi7 ath12k mac80211 gpio_shared_proxy cfg80211 q6prm_clocks nls_iso8859_1 mhi libarc4 aes_ce_blk ghash_ce gf128mul sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher sm4 surface_aggregator_tabletsw qcom_spmi_temp_alarm pm8941_pwrkey industrialio snd_soc_hdmi_codec q6prm fastrpc qcrypto qcom_edac authenc pci_pwrctrl_pwrseq libdes qcom_rng input_leds joydev sch_fq_codel efi_pstore dmi_sysfs autofs4 snd_soc_wcd938x snd_soc_wcd_classh snd_soc_wcd938x_sdw snd_soc_wcd_common snd_soc_wcd_mbhc snd_soc_x1e80100 snd_soc_qcom_common snd_soc_qcom_sdw snd_soc_wsa884x(O) regmap_sdw imx681(OE) v4l2_cci qcom_camss(OE) videobuf2_dma_sg videobuf2_v4l2 videobuf2_memops videobuf2_common ov13858(E) v4l2_fwnode v4l2_async videodev mc q6apm_lpass_dais q6apm_dai snd_q6dsp_common
+[Thu Aug 27 19:34:55 2026]  hid_multitouch hid_generic snd_q6apm(O) apr surface_hid surface_hid_core hid surface_battery surface_aggregator_hub surface_charger surface_aggregator_registry hci_uart nvme qcom_pon btqca btrtl panel_samsung_atna33xc20 nvmem_qcom_spmi_sdam btbcm nvme_core reboot_mode rtc_pm8xxx surface_aggregator btintel nvme_keyring rpmsg_ctrl qrtr_smd crc_itu_t ps883x bluetooth nvme_auth qcom_pd_mapper mshw0485_touch(O) soundwire_qcom(O) slimbus snd_soc_lpass_wsa_macro(OE) snd_soc_lpass_tx_macro(E) snd_soc_lpass_rx_macro snd_soc_lpass_va_macro(E) soundwire_bus snd_soc_lpass_macro_common(E) qcom_spmi_pmic i2c_qcom_geni qcom_stats snd_soc_core msm qcom_geni_serial spi_geni_qcom(O) phy_qcom_edp snd_compress qcom_q6v5_pas gpi(O) qcom_pil_info videocc_sm8550 i2c_qcom_cci dispcc_x1e80100 qcom_q6v5 ac97_bus ubwc_config snd_pcm_dmaengine qcom_sysmon ocmem pinctrl_sm8550_lpass_lpi qcom_common snd_pcm pinctrl_lpass_lpi drm_gpuvm qcom_glink_smem drm_exec lpasscc_sc8280xp icc_bwmon gpucc_x1e80100 snd_timer mdt_loader gpu_sched
+[Thu Aug 27 19:34:55 2026]  sbsa_gwdt tcsrcc_x1e80100 qcom_cpucp_mbox snd ucsi_glink typec_ucsi pwrseq_qcom_wcn soundcore arm_smccc_trng socinfo gpio_keys fixed qrtr
+[Thu Aug 27 19:34:55 2026] CPU: 3 UID: 0 PID: 8202 Comm: insmod Tainted: G           OE       7.1.5-sp11-render-parity-v4+ #5 PREEMPT(full)
+[Thu Aug 27 19:34:55 2026] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[Thu Aug 27 19:34:55 2026] Hardware name: Microsoft Corporation Microsoft Surface Pro, 11th Edition/Microsoft Surface Pro, 11th Edition, BIOS 175.222.235 02/23/2026
+[Thu Aug 27 19:34:55 2026] pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[Thu Aug 27 19:34:55 2026] pc : csiphy_reset+0x3c/0x170 [qcom_camss]
+[Thu Aug 27 19:34:55 2026] lr : csiphy_set_power+0x154/0x3a0 [qcom_camss]
+[Thu Aug 27 19:34:55 2026] sp : ffff8000932bb590
+[Thu Aug 27 19:34:55 2026] x29: ffff8000932bb590 x28: 0000aaaabf10cf78 x27: ffff0008021f8c10
+[Thu Aug 27 19:34:55 2026] x26: 0000000000000000 x25: 000000000000000c x24: ffff0008021f8c10
+[Thu Aug 27 19:34:55 2026] x23: 0000000011e1a300 x22: 0000000000000000 x21: ffff00081a851e00
+[Thu Aug 27 19:34:55 2026] x20: 3fe7b16ec486dddc x19: ffff00081c551660 x18: 0000000000000000
+[Thu Aug 27 19:34:55 2026] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[Thu Aug 27 19:34:55 2026] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+[Thu Aug 27 19:34:55 2026] x11: 00000000000000c0 x10: 0000000000000000 x9 : ffffb16ec486dddc
+[Thu Aug 27 19:34:55 2026] x8 : 0000000000000000 x7 : 0000000000000fff x6 : 0000000000000fff
+[Thu Aug 27 19:34:55 2026] x5 : ffff0008075a9c18 x4 : 0000000000000000 x3 : 0000000000000000
+[Thu Aug 27 19:34:55 2026] x2 : ffff800080396000 x1 : ffffb16ec486c108 x0 : 0000000000000001
+[Thu Aug 27 19:34:55 2026] Call trace:
+[Thu Aug 27 19:34:55 2026]  csiphy_reset+0x3c/0x170 [qcom_camss] (P)
+[Thu Aug 27 19:34:55 2026]  csiphy_set_power+0x154/0x3a0 [qcom_camss]
+[Thu Aug 27 19:34:55 2026]  e003f_test_init+0x120/0xfa0 [e003f_csiphy_test]
+[Thu Aug 27 19:34:55 2026]  do_one_initcall+0x5c/0x4e0
+[Thu Aug 27 19:34:55 2026]  do_init_module+0x9c/0x2f0
+[Thu Aug 27 19:34:55 2026]  load_module+0x1da0/0x2738
+[Thu Aug 27 19:34:55 2026]  init_module_from_file+0x104/0x178
+[Thu Aug 27 19:34:55 2026]  __arm64_sys_finit_module+0x210/0x3a8
+[Thu Aug 27 19:34:55 2026]  invoke_syscall.constprop.0+0xac/0x128
+[Thu Aug 27 19:34:55 2026]  el0_svc_common.constprop.0+0x40/0x138
+[Thu Aug 27 19:34:55 2026]  do_el0_svc+0x24/0x50
+[Thu Aug 27 19:34:55 2026]  el0_svc+0x44/0x230
+[Thu Aug 27 19:34:55 2026]  el0t_64_sync_handler+0xb8/0x100
+[Thu Aug 27 19:34:55 2026]  el0t_64_sync+0x1b0/0x1b8
+[Thu Aug 27 19:34:55 2026] Code: b9400ea0 8b000042 d503201f 52800020 (b9000040)
+[Thu Aug 27 19:34:55 2026] ---[ end trace 0000000000000000 ]---
+=== post-oops clocks ===
+                cam_cc_csiphy2_clk   1       1        0        400000000   0          0     50000      Y                  acb7000.isp                     csiphy2
+                cam_cc_csi2phytimer_clk_src 1       1        0        400000000   0          0     50000      Y                  deviceless                      no_connection_id
+                   cam_cc_csi2phytimer_clk 1       1        0        400000000   0          0     50000      Y                     acb7000.isp                     csiphy2_timer
+          cam_cc_mclk4_clk_src       0       0        0        19200000    0          0     50000      N            deviceless                      no_connection_id
+             cam_cc_mclk4_clk        0       0        0        19200000    0          0     50000      N               3-0010                          xclk
+=== post-oops regulators ===
+       vreg_l2e_0p8               0    0      0  normal   880mV     0mA   880mV   880mV
+       vreg_l2c_0p8               1    4      0  normal   880mV     0mA   880mV   880mV
+          acb7000.isp-vdd-csiphy-0p8   0                               105mA*    0mV     0mV
+          acb7000.isp-vdd-csiphy-0p8   1                               105mA     0mV     0mV
+          acb7000.isp-vdd-csiphy-0p8   0                               105mA*    0mV     0mV
+          acb7000.isp-vdd-csiphy-0p8   0                               105mA*    0mV     0mV
+       vreg_l3c_0p8               0    0      0  normal   912mV     0mA   912mV   912mV
+       vreg_l1d_0p8               1    1      0  normal   880mV     0mA   880mV   880mV
+          1bfc000.phy-vdda-phy    1                                 0mA     0mV     0mV
+--
+          1c0e000.phy-vdda-pll    1                                 0mA     0mV     0mV
+       vreg_l1c_1p2               1    4      0  normal  1200mV     0mA  1200mV  1200mV
+          acb7000.isp-vdd-csiphy-1p2   0                                58mA*    0mV     0mV
+          acb7000.isp-vdd-csiphy-1p2   1                                58mA     0mV     0mV
+          acb7000.isp-vdd-csiphy-1p2   0                                58mA*    0mV     0mV
+          acb7000.isp-vdd-csiphy-1p2   0                                58mA*    0mV     0mV
+       vreg_l2i_1p2               0    0      0  normal  1200mV     0mA  1200mV  1200mV
+       vreg_l12b_1p2              2    2      0  normal  1200mV     0mA  1200mV  1200mV
+          sdw:1:0:0217:0204:00:0-vdd-io   1                                 0mA     0mV     0mV
+--
+          sdw:1:0:0217:0204:00:1-vdd-1p8   1                                 0mA     0mV     0mV
+          wcn7850-pmu-vddio       1                                 0mA     0mV     0mV
+       vreg_l3m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+          3-0010-dovdd            0                                 0mA  1800mV  1800mV
+       vreg_l6m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+          1-0010-dovdd            0                                 0mA  1800mV  1800mV
+--
+    vreg_bob2                     0    3      0    fast  3000mV     0mA  3000mV  3000mV
+       vreg_l6b_1p8               0    0      0  normal  1800mV     0mA  1800mV  2960mV
+       vreg_l7b_2p8               0    1      0  normal  2800mV     0mA  2800mV  2800mV
+          3-0010-avdd             0                                 0mA  2800mV  2800mV
+       vreg_l17b_2p5              0    0      0  normal  2504mV     0mA  2504mV  2504mV
+    vreg_s2i_1p0                  0    0      0    fast  1000mV     0mA  1000mV  1100mV
+=== platform parent resources ===
+0ac62000-0ac65fff : acb7000.isp vfe0
+0ac71000-0ac74fff : acb7000.isp vfe1
+0acb6000-0acb6fff : acb7000.isp csid_wrapper
+0acb7000-0acb8fff : acb7000.isp csid0
+0acb9000-0acbafff : acb7000.isp csid1
+0acbb000-0acbcfff : acb7000.isp csid2
+0acc6000-0acc6fff : acb7000.isp csid_lite0
+0acc7000-0acc8fff : acb7000.isp vfe_lite0
+0acca000-0accafff : acb7000.isp csid_lite1
+0accb000-0acccfff : acb7000.isp vfe_lite1
+0ace4000-0ace4fff : acb7000.isp csiphy0
+0ace6000-0ace7fff : acb7000.isp csiphy1
+0ace8000-0ace8fff : acb7000.isp csiphy2
+0acec000-0aceffff : acb7000.isp csiphy4
+=== live DT parent reg-names/reg ===
+reg-names=csid0 csid1 csid2 csid_lite0 csid_lite1 csid_wrapper csiphy0 csiphy1 csiphy2 csiphy4 csitpg0 csitpg1 csitpg2 vfe0 vfe1 vfe_lite0 vfe_lite1
+ 00000000 0070cb0a 00000000 00200000
+ 00000000 0090cb0a 00000000 00200000
+ 00000000 00b0cb0a 00000000 00200000
+ 00000000 0060cc0a 00000000 00100000
+ 00000000 00a0cc0a 00000000 00100000
+ 00000000 0060cb0a 00000000 00100000
+ 00000000 0040ce0a 00000000 00100000
+ 00000000 0060ce0a 00000000 00200000
+ 00000000 0080ce0a 00000000 00100000
+ 00000000 00c0ce0a 00000000 00400000
+ 00000000 0060cf0a 00000000 00100000
+ 00000000 0070cf0a 00000000 00100000
+ 00000000 0080cf0a 00000000 00100000
+ 00000000 0020c60a 00000000 00400000
+ 00000000 0010c70a 00000000 00400000
+ 00000000 0070cc0a 00000000 00200000
+ 00000000 00b0cc0a 00000000 00200000
+=== module state ===
+drwxr-xr-x 5 root root 0 Aug 27 19:35 /sys/module/e003f_csiphy_test
