@@ -1,3 +1,7 @@
+## E002f prepared — Surface rear mode0 standby programming — 2026-08-27
+
+E002f composes a clean-room Surface mode0 program from a 12-register Windows-derived 592.8 MHz PLL, the unchanged upstream full-resolution common table, and a compact 24-register Surface delta. It validates 4076x2806, line length 1122, static VTS 3208, MIPI timing 0x0d, then writes/readbacks final QTI frame length 3214 while MODE_SELECT remains standby. The E002e pre-power stream guard remains intact and CSIPHY is never powered. Candidate module `d70cd770...`, initrd A/B `b23b757b...`, DTB `b669db40...`.
+
 ## E002e ACCEPTED — rear 592.8 MHz transport metadata — 2026-08-27
 
 Automatic driver endpoint validation proved four-lane D-PHY at 592800000 Hz. Read-only V4L2 controls returned LINK_FREQ=592800000 and PIXEL_RATE=474240000, exactly matching the Windows QTI RAW10/four-lane transport. The immutable enabled OV13858->CSIPHY1 link remained present; sensor runtime PM stayed suspended/usage 0 and MCLK1/CSIPHY1/CSI1 timer enable counts stayed 0 after identity. No PLL/mode register array or stream operation was executed. E002e is accepted. Next is E002f: program the focused Windows Surface mode0 PLL/register delta in sensor standby, still with no stream/CSIPHY power.

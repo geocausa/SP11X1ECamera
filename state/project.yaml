@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002e-accepted
+state_id: E002f-prepared
 phase: rear-dphy-bringup
-status: rear-linkfreq-5928-accepted
+status: rear-surface-mode0-standby-prepared
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002e-rear-linkfreq-5928
+current_gate: E002f-surface-mode0-standby
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002f-surface-mode0-standby
+next_experiment: E002f-runtime
 next_action: >-
-  Prepare E002f as a no-stream Surface rear mode-0 standby-programming gate. Keep E002e 592.8 MHz
-  transport metadata, accepted power ownership and E002d graph unchanged. Program the exact Windows-derived
-  Surface PLL plus a focused delta over the upstream full-resolution mode, then read back key PLL/output/VTS
-  registers while the sensor remains in standby. Retain the pre-power stream guard and do not power CSIPHY.
+  Boot E002f one-shot. Let the native rear driver program the Windows-derived Surface mode0 PLL plus
+  compact delta over the unchanged upstream full-res common table, read back key PLL/output/VTS registers
+  with MODE_SELECT remaining standby, then tear power down. Verify CSIPHY1 remains electrically idle and
+  the accepted 592.8 MHz controls/media graph remain unchanged. Do not invoke stream.
 
 handoff:
   first_read:
