@@ -1,0 +1,37 @@
+--- a/arch/arm64/boot/dts/qcom/hamoa.dtsi	2026-08-27 16:14:22.665430330 +0100
++++ b/arch/arm64/boot/dts/qcom/hamoa.dtsi	2026-08-27 16:15:36.214423066 +0100
+@@ -9775,6 +9775,34 @@
+ 		};
+ 	};
+ 
++	cci1: cci@ac16000 {
++		compatible = "qcom,x1e80100-cci", "qcom,msm8996-cci";
++		reg = <0 0x0ac16000 0 0x1000>;
++		interrupts = <GIC_SPI 271 IRQ_TYPE_EDGE_RISING>;
++		clocks = <&camcc CAM_CC_CAMNOC_AXI_RT_CLK>,
++			 <&camcc CAM_CC_CPAS_AHB_CLK>,
++			 <&camcc CAM_CC_CCI_1_CLK>;
++		clock-names = "camnoc_axi", "cpas_ahb", "cci";
++		power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		cci1_i2c0: i2c-bus@0 {
++			reg = <0>;
++			clock-frequency = <1000000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		cci1_i2c1: i2c-bus@1 {
++			reg = <1>;
++			clock-frequency = <1000000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++	};
++
+ 	camss: isp@acb7000 {
+ 		compatible = "qcom,x1e80100-camss";
+ 		reg = <0 0x0acb7000 0 0x2000>,

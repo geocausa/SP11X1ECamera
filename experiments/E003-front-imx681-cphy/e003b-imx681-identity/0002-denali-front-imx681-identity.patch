@@ -1,0 +1,97 @@
+--- a/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi	2026-08-27 16:14:22.667390828 +0100
++++ b/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi	2026-08-27 16:15:36.215211008 +0100
+@@ -530,6 +530,13 @@
+ 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+ 		};
+ 
++		vreg_l7b_2p8: ldo7 {
++			regulator-name = "vreg_l7b_2p8";
++			regulator-min-microvolt = <2800000>;
++			regulator-max-microvolt = <2800000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
+ 		vreg_l8b_3p0: ldo8 {
+ 			regulator-name = "vreg_l8b_3p0";
+ 			regulator-min-microvolt = <3072000>;
+@@ -1450,6 +1457,12 @@
+ 			regulator-max-microvolt = <1260000>;
+ 		};
+ 
++		vreg_l3m_camera: ldo3 {
++			regulator-name = "vreg_l3m_camera";
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
+ 		vreg_l5m_camera: ldo5 {
+ 			regulator-name = "vreg_l5m_camera";
+ 			regulator-min-microvolt = <2800000>;
+@@ -1519,6 +1532,29 @@
+ 	};
+ };
+ 
++&cci1 {
++	pinctrl-0 = <&cci1_master1_default>;
++	pinctrl-1 = <&cci1_master1_sleep>;
++	pinctrl-names = "default", "sleep";
++	status = "okay";
++};
++
++&cci1_i2c1 {
++	clock-frequency = <400000>;
++
++	front-probe@10 {
++		compatible = "microsoft,sp11-imx681-probe";
++		reg = <0x10>;
++		clocks = <&camcc CAM_CC_MCLK4_CLK>;
++		clock-names = "xclk";
++		reset-gpios = <&tlmm 237 GPIO_ACTIVE_LOW>;
++		pinctrl-0 = <&front_imx681_default>;
++		pinctrl-names = "default";
++		ldo3m-supply = <&vreg_l3m_camera>;
++		ldo7b-supply = <&vreg_l7b_2p8>;
++	};
++};
++
+ &tlmm {
+ 	cci0_default: cci0-default-state {
+ 		cci0-i2c1-pins {
+@@ -1538,6 +1574,37 @@
+ 		};
+ 	};
+ 
++	cci1_master1_default: cci1-master1-default-state {
++		pins = "gpio235", "gpio236";
++		function = "aon_cci";
++		drive-strength = <2>;
++		bias-pull-up;
++	};
++
++	cci1_master1_sleep: cci1-master1-sleep-state {
++		pins = "gpio235", "gpio236";
++		function = "aon_cci";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	front_imx681_default: front-imx681-default-state {
++		mclk-pins {
++			pins = "gpio100";
++			function = "cam_aon";
++			drive-strength = <4>;
++			bias-disable;
++			output-enable;
++		};
++
++		reset-pins {
++			pins = "gpio237";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
+ 	rear_mclk1_default: rear-mclk1-default-state {
+ 		pins = "gpio97";
+ 		function = "cam_mclk";
