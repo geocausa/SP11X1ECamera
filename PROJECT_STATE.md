@@ -1,3 +1,7 @@
+## E002k-D-R2 ACCEPTED — native PM8010 rear camera — 2026-08-27
+
+The temporary camera RPMh shim is retired. Accepted E002k-C camera bytes with only the provider swapped to stock `qcom,pm8010-rpmh-regulators` reproduced the exact hardware color-bar SHA `6987a736...f09346` and 16/16 normal frames at ~30.065 fps. Native LDO6/LDO1/LDO5 returned disabled/users 0 after streaming; no custom provider existed; Wi-Fi/audio remained healthy. Next is compile-only maintained-source integration in the isolated exact-Golden tree.
+
 ## E002k-D-R2 prepared — native PM8010 camera integration — 2026-08-27
 
 R2 starts from exact accepted E002k-C camera bytes and replaces only the temporary camera RPMh shim with the R1-accepted native PM8010-M provider. Sensor standard supplies now point to native L6/L1/L5; the accepted OV13858 module is byte-identical. Initrd no longer contains the custom provider module and waits for built-in `regulators-8`. Runtime acceptance requires the known color-bar SHA plus 16-frame stability.
