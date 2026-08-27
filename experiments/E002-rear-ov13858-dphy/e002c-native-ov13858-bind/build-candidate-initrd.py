@@ -44,7 +44,7 @@ def main():
     if len(tr)!=1: raise SystemExit(f'expected one Golden trailer, got {len(tr)}')
     off=tr[0][3]; prefix=raw[:off]; gm0={e[0]:e for e in es}
 
-    root=w/'layer-root'; extra=pathlib.Path(f'usr/lib/modules/{REL}/extra/e002c')
+    root=w/'layer-root'; extra_parent=pathlib.Path(f'usr/lib/modules/{REL}/extra'); extra=extra_parent/'e002c'
     root_extra=root/extra; root_extra.mkdir(parents=True)
     orderrel=pathlib.Path('scripts/init-top/ORDER')
     loaderrel=pathlib.Path('scripts/init-top/zz-sp11-camera-e002c-native-bind')
@@ -80,8 +80,10 @@ E=/usr/lib/modules/{REL}/extra/e002c
 loadmod() {{
   p="$1"; n="$2"
   if [ -d "/sys/module/$n" ]; then log "$n already loaded"; return 0; fi
-  if /usr/bin/insmod "$p"; then log "$n loaded"; return 0; fi
-  rc=$?; log "$n load failed rc=$rc"; return $rc
+  /usr/bin/insmod "$p"
+  rc=$?
+  if [ "$rc" -eq 0 ]; then log "$n loaded"; return 0; fi
+  log "$n load failed rc=$rc"; return $rc
 }}
 if ! loadmod "$E/sp11_camera_rpmh_regulator.ko" sp11_camera_rpmh_regulator; then
   log "provider unavailable; native sensor bind skipped"; exit 0
@@ -104,16 +106,16 @@ exit 0
 '''
     (root/loaderrel).write_text(loader); os.chmod(root/loaderrel,0o755)
 
-    tracked=[root_extra,*sorted(root_extra.iterdir()),root/loaderrel,root/orderrel]
+    tracked=[root/extra_parent,root_extra,*sorted(root_extra.iterdir()),root/loaderrel,root/orderrel]
     for q in tracked: os.utime(q,(0,0),follow_symlinks=False)
-    names='\n'.join([str(extra),*(str(extra/x.name) for x in sorted(root_extra.iterdir())),str(loaderrel),str(orderrel)])+'\n'
+    names='\n'.join([str(extra_parent),str(extra),*(str(extra/x.name) for x in sorted(root_extra.iterdir())),str(loaderrel),str(orderrel)])+'\n'
     cp=subprocess.run(['cpio','-o','-H','newc','--quiet','--reproducible'],cwd=root,input=names.encode(),stdout=subprocess.PIPE,check=True)
     combined=prefix+cp.stdout
     (w/'combined.cpio').write_bytes(combined)
     subprocess.run(['zstd','-q','-T1','-6','-f',str(w/'combined.cpio'),'-o',a.out],check=True)
 
     gm=fmap(es); cm=fmap(parse_newc(combined)); changes=[(n,gm.get(n),cm.get(n)) for n in sorted(set(gm)|set(cm)) if gm.get(n)!=cm.get(n)]
-    expected={str(extra),*(str(extra/x) for x in files),*(str(extra/x) for x in deps),str(loaderrel),str(orderrel)}
+    expected={str(extra_parent),str(extra),*(str(extra/x) for x in files),*(str(extra/x) for x in deps),str(loaderrel),str(orderrel)}
     actual={x[0] for x in changes}
     if actual != expected:
         raise SystemExit(f'unexpected delta: only={sorted(actual-expected)} missing={sorted(expected-actual)}')

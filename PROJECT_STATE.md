@@ -1,3 +1,7 @@
+## E002c-r1 prepared — packaging-only fix after manual native PASS — 2026-08-27
+
+E002c r0 automatic loading failed before electrical action because Golden has no module `extra/` directory and r0 emitted only its nested `extra/e002c/`. Loading the exact same provider and patched native driver after full boot passed completely: native OV13858 bound, ID verified, runtime-suspended, rails/MCLK off, reset asserted. r1 changes only initrd packaging: emit the missing parent `extra/` and preserve real insmod errno. r1 initrd A/B are byte-identical at `d1e56f66...`; kernel, DTB and camera module bytes are unchanged.
+
 ## E002c prepared — native OV13858 bind only, no CSI — 2026-08-27
 
 E002c now cleanly separates native sensor-driver ownership from transport. Starting from accepted r3g, the DT changes only the rear client compatible to `ovti,ov13858`; no endpoint is added. The exact upstream OV13858 source was adapted only to own Denali's proven four-rail/GPIO110/MCLK1 power lifecycle and runtime PM. The module builds with exact Golden v4 vermagic (`35c99b5...`). A Golden-based initrd containing the accepted RPMh provider, exact V4L2 dependencies and patched native driver was built twice byte-identically (`48e092c4...`). No E002c runtime boot has occurred yet.

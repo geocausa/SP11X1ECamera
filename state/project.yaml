@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002c-prepared
+state_id: E002c-r1-prepared
 phase: rear-dphy-bringup
-status: native-ov13858-bind-prepared-no-csi
+status: native-bind-manual-pass-r1-packaging-prepared
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -102,11 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002c-native-ov13858-runtime
+next_experiment: E002c-r1-native-ov13858-runtime
 next_action: >-
-  Boot E002c one-shot using the accepted r3g electrical base, one-compatible-string DT delta and
-  deterministic Golden-based initrd. Prove the patched native OV13858 V4L2 driver binds, verifies
-  identity and returns to runtime-suspended electrical idle. E002c has no CSI endpoint and must not stream.
+  Boot E002c-r1 one-shot with the exact r0 kernel/DT/native driver but the packaging-only corrected
+  Golden-based initrd. Require automatic provider/native OV13858 bind, native identity PASS and
+  runtime-suspended electrical idle with no CSI endpoint and no streaming.
 
 handoff:
   first_read:
