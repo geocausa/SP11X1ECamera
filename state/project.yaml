@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002f-prepared
+state_id: E002f-accepted
 phase: rear-dphy-bringup
-status: rear-surface-mode0-standby-prepared
+status: rear-surface-mode0-standby-accepted
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002f-runtime
+next_experiment: E002g-rear-timing-semantics
 next_action: >-
-  Boot E002f one-shot. Let the native rear driver program the Windows-derived Surface mode0 PLL plus
-  compact delta over the unchanged upstream full-res common table, read back key PLL/output/VTS registers
-  with MODE_SELECT remaining standby, then tear power down. Verify CSIPHY1 remains electrically idle and
-  the accepted 592.8 MHz controls/media graph remain unchanged. Do not invoke stream.
+  Resolve E002g as a static/read-only rear timing-semantics gate before exposing Surface mode0 through
+  normal V4L2 mode enumeration. Reconcile QTI line-length value 1122, frame length 3214, 30 fps and
+  474.24 MHz transport pixel-rate with OV13858 register/PLL semantics and upstream HBLANK calculations.
+  Use Windows static/KD evidence or public sensor documentation as needed. Do not stream or alter hardware.
 
 handoff:
   first_read:

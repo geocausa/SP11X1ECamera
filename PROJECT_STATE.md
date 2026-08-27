@@ -1,3 +1,7 @@
+## E002f ACCEPTED — Surface rear mode0 programmed/read back in standby — 2026-08-27
+
+The real OV13858 accepted the compact clean-room Surface profile in standby: PLL 05/00/f7, 4076x2806 output, line-length register 1122, static VTS 3208, MIPI timing 0x0d, then final QTI VTS 3214, with MODE_SELECT=0 before and after. Power teardown was clean; CSIPHY1/CSI1 timer never enabled; E002e controls and E002d graph remained unchanged. E002f is accepted. Next is E002g: resolve Surface 30-fps line-length/pixel-rate semantics before exposing the mode via normal V4L2 enumeration.
+
 ## E002f prepared — Surface rear mode0 standby programming — 2026-08-27
 
 E002f composes a clean-room Surface mode0 program from a 12-register Windows-derived 592.8 MHz PLL, the unchanged upstream full-resolution common table, and a compact 24-register Surface delta. It validates 4076x2806, line length 1122, static VTS 3208, MIPI timing 0x0d, then writes/readbacks final QTI frame length 3214 while MODE_SELECT remains standby. The E002e pre-power stream guard remains intact and CSIPHY is never powered. Candidate module `d70cd770...`, initrd A/B `b23b757b...`, DTB `b669db40...`.
