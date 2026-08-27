@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002f-accepted
+state_id: E002g-prepared
 phase: rear-dphy-bringup
-status: rear-surface-mode0-standby-accepted
+status: native-surface-mode0-semantics-prepared
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002f-surface-mode0-standby
+current_gate: E002g-native-surface-mode0
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,11 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002g-rear-timing-semantics
+next_experiment: E002g-native-surface-mode0-runtime
 next_action: >-
-  Resolve E002g as a static/read-only rear timing-semantics gate before exposing Surface mode0 through
-  normal V4L2 mode enumeration. Reconcile QTI line-length value 1122, frame length 3214, 30 fps and
-  474.24 MHz transport pixel-rate with OV13858 register/PLL semantics and upstream HBLANK calculations.
-  Use Windows static/KD evidence or public sensor documentation as needed. Do not stream or alter hardware.
+  Boot E002g strict one-shot with no streaming. Verify the SP11-only V4L2 mode set exposes exactly
+  4076x2806 with LINK_FREQ 592800000, PIXEL_RATE 432732960, HBLANK 412 and VBLANK 408 while
+  E002f standby validation still passes and all sensor/CSIPHY resources return to electrical idle.
 
 handoff:
   first_read:

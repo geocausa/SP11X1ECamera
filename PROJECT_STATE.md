@@ -1,3 +1,7 @@
+## E002g prepared — native Surface rear mode semantics — 2026-08-27
+
+Offline oracle equivalence proves the E002f clean reconstruction covers all 207 Windows mode-0 register addresses with identical final Windows-covered values after the normal final VTS write; only Linux's explicit `0x4503=0` test-pattern-disabled write is extra. E002g therefore keeps the clean upstream+Surface-delta implementation rather than embedding the proprietary table. Timing semantics are now split natively: LINK_FREQ=592.8 MHz / CSI output throughput=474.24 Mpixel/s, while the sensor-array VT PIXEL_RATE is 432,732,960 Hz from 4488 pixel clocks/line * 3214 lines * 30 fps. HBLANK=412 and VBLANK=408. E002g exposes only 4076x2806 on the SP11 experiment and retains the pre-power hard no-stream guard.
+
 ## E002f ACCEPTED — Surface rear mode0 programmed/read back in standby — 2026-08-27
 
 The real OV13858 accepted the compact clean-room Surface profile in standby: PLL 05/00/f7, 4076x2806 output, line-length register 1122, static VTS 3208, MIPI timing 0x0d, then final QTI VTS 3214, with MODE_SELECT=0 before and after. Power teardown was clean; CSIPHY1/CSI1 timer never enabled; E002e controls and E002d graph remained unchanged. E002f is accepted. Next is E002g: resolve Surface 30-fps line-length/pixel-rate semantics before exposing the mode via normal V4L2 enumeration.
@@ -51,7 +55,7 @@ r3g is therefore a DT-only correction applied directly to the exact r3f DTB. It 
 # Project state
 
 **Updated:** 2026-08-27
-**State ID:** E002b-r3e NACK resolved to Windows-exact ID-transfer gate
+**State ID:** E002g native Surface mode semantics prepared
 **Golden remains:** SP11 Audio FullIO v19c
 
 ## Current boundary
