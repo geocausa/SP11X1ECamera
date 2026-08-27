@@ -20,9 +20,10 @@ static int __init e003f_test_init(void)
 	struct resource *res;
 	struct camss *camss;
 	struct csiphy_device *phy;
-	struct v4l2_subdev *sd;
+	struct vfe_device *vfe;
+	struct v4l2_subdev *sd, *vfe_sd;
 	unsigned int i, mismatches = 0;
-	bool powered = false, streamed = false;
+	bool host_powered = false, powered = false, streamed = false;
 	int ret = 0, off_ret;
 	u32 actual;
 
@@ -47,6 +48,12 @@ static int __init e003f_test_init(void)
 	}
 	phy = &camss->csiphy[E003F_PHY_ID];
 	sd = &phy->subdev;
+	if (!camss->vfe || camss->res->vfe_num < 1 || !camss->vfe[0].line) {
+		ret = -ENODEV;
+		goto out_put;
+	}
+	vfe = &camss->vfe[0];
+	vfe_sd = &vfe->line[0].subdev;
 	if (phy->id != E003F_PHY_ID || !phy->base || !phy->cfg.csi2) {
 		ret = -EINVAL;
 		goto out_put;
@@ -63,6 +70,20 @@ static int __init e003f_test_init(void)
 	}
 	pr_info("E003F_PREFLIGHT_PASS: csiphy=%u CPHY trios=1 pos0=0 expected_regs=%zu\n",
 		phy->id, ARRAY_SIZE(e003f_windows_expected));
+
+	/*
+	 * Normal CAMSS pipeline power brings up a VFE parent before CSID/PHY
+	 * activity.  Reproduce only that host-side prerequisite here: no CSID
+	 * stream and no sensor callback are invoked.  VFE0 supplies the X1E
+	 * IFE domain plus CAMNOC/CPAS AHB clock context needed by CSIPHY MMIO.
+	 */
+	ret = v4l2_subdev_call(vfe_sd, core, s_power, 1);
+	if (ret < 0) {
+		pr_err("E003F_HOST_POWER_ON_FAIL: ret=%d\n", ret);
+		goto out_put;
+	}
+	host_powered = true;
+	pr_info("E003F_HOST_POWER_ON_PASS: vfe0 power_count=%d\n", vfe->power_count);
 
 	ret = v4l2_subdev_call(sd, core, s_power, 1);
 	if (ret < 0) {
@@ -118,6 +139,13 @@ out_unwind:
 		if (off_ret < 0 && !ret)
 			ret = off_ret;
 		powered = false;
+	}
+	if (host_powered) {
+		off_ret = v4l2_subdev_call(vfe_sd, core, s_power, 0);
+		if (off_ret < 0 && !ret)
+			ret = off_ret;
+		host_powered = false;
+		pr_info("E003F_HOST_POWER_OFF: vfe0 power_count=%d\n", vfe->power_count);
 	}
 	if (!ret)
 		pr_info("E003F_RECEIVER_ONLY_PASS: 121/121 Windows-live registers exact; receiver stopped and powered off\n");
