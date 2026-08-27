@@ -1,0 +1,38 @@
+---
+ drivers/media/platform/qcom/camss/camss.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 66171069057f8..ebf8f21b5fa2e 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -4760,21 +4760,21 @@ static int camss_parse_endpoint_node(struct device *dev,
+ 	struct v4l2_fwnode_endpoint vep = { { 0 } };
+ 	unsigned int i;
+ 	int ret;
+ 
+ 	ret = v4l2_fwnode_endpoint_parse(ep, &vep);
+ 	if (ret)
+ 		return ret;
+ 
+-	/*
+-	 * Most SoCs support both D-PHY and C-PHY standards, but currently only
+-	 * D-PHY is supported in the driver.
+-	 */
+-	if (vep.bus_type != V4L2_MBUS_CSI2_DPHY) {
++	switch (vep.bus_type) {
++	case V4L2_MBUS_CSI2_CPHY:
++	case V4L2_MBUS_CSI2_DPHY:
++		break;
++	default:
+ 		dev_err(dev, "Unsupported bus type %d\n", vep.bus_type);
+ 		return -EINVAL;
+ 	}
+ 
+ 	csd->interface.csiphy_id = vep.base.port;
+ 
+ 	mipi_csi2 = &vep.bus.mipi_csi2;
+ 	lncfg->num_data = mipi_csi2->num_data_lanes;
+
+-- 
+2.53.0
