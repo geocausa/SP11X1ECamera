@@ -1,0 +1,43 @@
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -1170,6 +1170,8 @@
+ {
+ 	struct csiphy_lanes_cfg *c = &cfg->csi2->lane_cfg;
+ 	struct csiphy_device_regs *regs = csiphy->regs;
++	const bool x1e_cphy = csiphy->camss->res->version == CAMSS_X1E80100 &&
++			      c->phy_cfg == V4L2_MBUS_CSI2_CPHY;
+ 	u8 settle_cnt;
+ 	u8 val;
+ 	int i;
+@@ -1194,8 +1196,7 @@
+ 	writel_relaxed(val, csiphy->base +
+ 		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 6));
+ 
+-	if (csiphy->camss->res->version == CAMSS_X1E80100 &&
+-	    c->phy_cfg == V4L2_MBUS_CSI2_CPHY)
++	if (x1e_cphy)
+ 		val = 0x7a;
+ 	else
+ 		val = 0x02;
+@@ -1211,10 +1212,17 @@
+ 	else
+ 		csiphy_gen1_config_lanes(csiphy, cfg, settle_cnt);
+ 
+-	/* IRQ_MASK registers - disable all interrupts */
+-	for (i = 11; i < 22; i++) {
+-		writel_relaxed(0, csiphy->base +
+-			       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, i));
++	/*
++	 * The X1E80100 C-PHY Windows table includes the final values for
++	 * common CTRL11..CTRL21 (0x102c..0x1054). Do not clobber those
++	 * exact receiver values with the generic interrupt-mask zeroing.
++	 */
++	if (!x1e_cphy) {
++		/* IRQ_MASK registers - disable all interrupts */
++		for (i = 11; i < 22; i++) {
++			writel_relaxed(0, csiphy->base +
++				       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, i));
++		}
+ 	}
+ }
+ 
