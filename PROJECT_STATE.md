@@ -1,3 +1,7 @@
+## E002k-D-R1 prepared — native PM8010-M provider-only gate — 2026-08-27
+
+A DT-only provider gate adds native `qcom,pm8010-rpmh-regulators` PMIC ID `m` under the Golden RSC, with no camera/CAMSS/CCI consumer. Upstream-backed X1 parents are L1/L2=`vreg_s5j_1p2`, L3/L4=`vreg_s4c_1p8`, L5=`vreg_bob1`, L6=`vreg_s4c_1p8`, L7=`vreg_bob1`. Only LDO1/LDO5/LDO6 children are exposed using non-fixed voltage ranges, with no boot-on/always-on/initial-mode vote. Candidate DTB SHA-256 `6291de3c0b4148735acec2f0a48b54a51208e2931b9898f7c91d90db6ac119b0`; kernel/initrd remain exact Golden. Runtime has not yet occurred.
+
 ## E002k-D prepared — source integration with native-PMIC split — 2026-08-27
 
 Golden was mechanically reverified after E002k-C. Historical kernel worktrees are too contaminated for camera integration, so E002k-D will use a fresh writable copy of the exact Golden replay source. Linux already has native PM8010 RPMh-regulator support; live Golden simply lacks PMIC-M in DT. A saved SP11 baseline proves native PMIC-M and its L3/L4 and L5 input parents, but not L1/L2 or L6, so native-regulator replacement is isolated until those parents are proven rather than guessed. Driver and Denali rear-camera source integration can proceed independently.

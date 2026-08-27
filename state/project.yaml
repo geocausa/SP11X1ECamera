@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002k-d-source-integration-prepared
+current_gate: E002k-d-r1-native-pm8010-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-d-source-copy-and-patch-split
+next_experiment: E002k-d-r1-runtime
 next_action: >-
-  Create a fresh copy-on-write development source from the exact Golden replay source, prove there are no
-  writable hardlinks back to Golden, and generate reviewable OV13858 and Denali rear-camera patches from the
-  accepted E002k-C behaviour. Keep native PM8010-M regulator replacement as a separate sub-gate until the
-  L1_M/L6_M input parents are evidence-backed; do not guess them.
+  Boot E002k-D-R1 one-shot using Golden kernel/initrd and only the native PM8010-M provider DT delta.
+  Require regulators-8 to bind with L1/L5/L6 present but unused/disabled, no camera/RPMh vote, no provider
+  errors, and normal Golden Wi-Fi/audio. If it passes, return to Golden and prepare D-R2 replacing the
+  temporary camera RPMh shim in accepted E002k-C with these native regulators.
 
 handoff:
   first_read:

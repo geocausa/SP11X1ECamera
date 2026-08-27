@@ -1,0 +1,40 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target = <&apps_rsc>;
+
+		__overlay__ {
+			regulators-8 {
+				compatible = "qcom,pm8010-rpmh-regulators";
+				qcom,pmic-id = "m";
+
+				/* X1 upstream-backed PM8010 input topology. */
+				vdd-l1-l2-supply = <&vreg_s5j_1p2>;
+				vdd-l3-l4-supply = <&vreg_s4c_1p8>;
+				vdd-l5-supply = <&vreg_bob1>;
+				vdd-l6-supply = <&vreg_s4c_1p8>;
+				vdd-l7-supply = <&vreg_bob1>;
+
+				vreg_l1m_camera: ldo1 {
+					regulator-name = "vreg_l1m_camera";
+					regulator-min-microvolt = <1200000>;
+					regulator-max-microvolt = <1260000>;
+				};
+
+				vreg_l5m_camera: ldo5 {
+					regulator-name = "vreg_l5m_camera";
+					regulator-min-microvolt = <2800000>;
+					regulator-max-microvolt = <3072000>;
+				};
+
+				vreg_l6m_camera: ldo6 {
+					regulator-name = "vreg_l6m_camera";
+					regulator-min-microvolt = <1800000>;
+					regulator-max-microvolt = <1808000>;
+				};
+			};
+		};
+	};
+};
