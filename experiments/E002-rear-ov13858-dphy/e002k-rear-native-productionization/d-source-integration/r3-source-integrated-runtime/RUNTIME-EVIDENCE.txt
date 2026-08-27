@@ -1,0 +1,121 @@
+# E002k-D-R3 runtime evidence
+2026-08-27T15:05:28+01:00
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-camera-e002k-d-r3-source-integrated/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-d-r3-source-integrated sp11_camera_e002k_d_r3=1
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+=== loaded driver ===
+ov13858_srcversion=9366B03E91F9212A1501AEC
+ov13858_driver=../../../../../../bus/i2c/drivers/ov13858
+pm8010_provider=../../../../../bus/platform/drivers/qcom-rpmh-regulator
+=== initrd ===
+[Thu Aug 27 14:58:53 2026] sp11-camera-e002k-d-r3-initrd: native PM8010 provider bound
+[Thu Aug 27 14:58:53 2026] sp11-camera-e002k-d-r3-initrd: mc loaded
+[Thu Aug 27 14:58:53 2026] sp11-camera-e002k-d-r3-initrd: videodev loaded
+[Thu Aug 27 14:58:53 2026] sp11-camera-e002k-d-r3-initrd: v4l2_async loaded
+[Thu Aug 27 14:58:53 2026] sp11-camera-e002k-d-r3-initrd: v4l2_fwnode loaded
+[Thu Aug 27 14:58:53 2026] ov13858 1-0010: using four-lane 592.8 MHz firmware camera profile
+[Thu Aug 27 14:58:53 2026] sp11-camera-e002k-d-r3-initrd: ov13858 loaded
+[Thu Aug 27 14:58:53 2026] sp11-camera-e002k-d-r3-initrd: native OV13858 driver bound to 1-0010
+=== API ===
+              vertical_blanking 0x009e0901 (int)    : min=408 max=29961 step=1 default=408 value=408 flags=has-min-max
+            horizontal_blanking 0x009e0902 (int)    : min=412 max=412 step=1 default=412 value=412 flags=read-only, has-min-max
+                 link_frequency 0x009f0901 (intmenu): min=0 max=2 default=2 value=2 (592800000 0x23556900) flags=read-only, has-min-max
+                     pixel_rate 0x009f0902 (int64)  : min=432732960 max=432732960 step=1 default=432732960 value=432732960 flags=read-only, has-min-max
+                   test_pattern 0x009f0903 (menu)   : min=0 max=4 default=0 value=0 (Disabled) flags=has-min-max
+Format Video Capture Multiplanar:
+	Width/Height      : 4076/2806
+	Pixel Format      : 'pgAA' (10-bit Bayer GRGR/BGBG Packed)
+	Field             : None
+	Number of planes  : 1
+	Flags             :
+	Colorspace        : sRGB
+	Transfer Function : sRGB
+	YCbCr/HSV Encoding: ITU-R 601
+	Quantization      : Full Range
+	Plane 0           :
+	   Bytes per Line : 5104
+	   Size Image     : 14321824
+=== deterministic pattern ===
+		VIDIOC_REQBUFS returned 0 (Success)
+		VIDIOC_CREATE_BUFS returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_G_FMT returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_STREAMON returned 0 (Success)
+cap dqbuf: 0 seq:      0 bytesused: 14321824 ts: 314.146637 field: None (ts-monotonic, ts-src-eof)
+
+VIDIOC_QUERYCAP: ok
+bytes=14321824
+6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346  /tmp/e002k-d-r3-colorbar.raw
+=== normal 16-frame ===
+		VIDIOC_REQBUFS returned 0 (Success)
+		VIDIOC_CREATE_BUFS returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_G_FMT returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_STREAMON returned 0 (Success)
+cap dqbuf: 0 seq:      0 bytesused: 14321824 ts: 341.326464 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 1 seq:      1 bytesused: 14321824 ts: 341.360261 delta: 33.797 ms field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 2 seq:      2 bytesused: 14321824 ts: 341.391405 delta: 31.144 ms field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 3 seq:      3 bytesused: 14321824 ts: 341.424726 delta: 33.321 ms field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 0 seq:      4 bytesused: 14321824 ts: 341.458094 delta: 33.368 ms fps: 30.39 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 1 seq:      5 bytesused: 14321824 ts: 341.491554 delta: 33.460 ms fps: 30.29 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 2 seq:      6 bytesused: 14321824 ts: 341.524934 delta: 33.380 ms fps: 30.23 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 3 seq:      7 bytesused: 14321824 ts: 341.560182 delta: 35.248 ms fps: 29.95 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 0 seq:      8 bytesused: 14321824 ts: 341.593568 delta: 33.386 ms fps: 29.95 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 1 seq:      9 bytesused: 14321824 ts: 341.626958 delta: 33.390 ms fps: 29.95 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 2 seq:     10 bytesused: 14321824 ts: 341.658536 delta: 31.578 ms fps: 30.11 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 3 seq:     11 bytesused: 14321824 ts: 341.691811 delta: 33.275 ms fps: 30.11 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 0 seq:     12 bytesused: 14321824 ts: 341.727124 delta: 35.313 ms fps: 29.95 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 1 seq:     13 bytesused: 14321824 ts: 341.758634 delta: 31.510 ms fps: 30.08 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 2 seq:     14 bytesused: 14321824 ts: 341.792049 delta: 33.415 ms fps: 30.07 field: None (ts-monotonic, ts-src-eof)
+cap dqbuf: 3 seq:     15 bytesused: 14321824 ts: 341.827292 delta: 35.243 ms fps: 29.95 field: None (ts-monotonic, ts-src-eof)
+
+VIDIOC_QUERYCAP: ok
+=== teardown ===
+test_pattern=0 (Disabled)
+sensor_status=suspended
+sensor_usage=0
+                cam_cc_csiphy1_clk   0       0        0        300000000   0          0     50000      N                  acb7000.isp                     csiphy1
+                cam_cc_csi1phytimer_clk_src 0       0        0        266666666   0          0     50000      N                  deviceless                      no_connection_id
+                   cam_cc_csi1phytimer_clk 0       0        0        266666666   0          0     50000      N                     acb7000.isp                     csiphy1_timer
+          cam_cc_mclk1_clk_src       0       0        0        19200000    0          0     50000      N            deviceless                      no_connection_id
+             cam_cc_mclk1_clk        0       0        0        19200000    0          0     50000      N               1-0010                          no_connection_id
+       vreg_l1m_camera            0    1      0 unknown  1200mV     0mA  1200mV  1256mV
+       vreg_l6m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+       vreg_l5m_camera            0    1      0 unknown  2800mV     0mA  2800mV  3072mV
+=== faults ===
+=== health ===
+wlP4p1s0         UP             00:03:7f:12:05:15 <BROADCAST,MULTICAST,UP,LOWER_UP>
+wlP4p1s0:wifi:connected
+p2p-dev-wlP4p1s0:wifi-p2p:disconnected
+**** List of PLAYBACK Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 0: MultiMedia1 Playback (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+**** List of CAPTURE Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 2: MultiMedia3 Capture (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+
+I: Bus=001c Vendor=0000 Product=0000 Version=0000
+N: Name="Microsoft Surface G6 Touch"
+P: Phys=
+S: Sysfs=/devices/platform/soc@0/ac0000.geniqup/a88000.spi/spi_master/spi0/spi0.0/input/input1
+U: Uniq=
+H: Handlers=mouse0 event1
+B: PROP=2
+B: EV=b
