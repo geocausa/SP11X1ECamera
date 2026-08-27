@@ -1,3 +1,7 @@
+## E002g ACCEPTED — native Surface rear mode semantics — 2026-08-27
+
+Strict no-stream runtime exposes exactly one rear mode, 4076x2806 RAW10, with LINK_FREQ=592800000, PIXEL_RATE=432732960, HBLANK=412 and VBLANK=408. This computes exactly 30 fps at the pixel array while keeping CSI output throughput separate. E002e/e002f validation still passes, sensor/CSIPHY return to electrical idle, and system health is intact. Offline Windows-oracle comparison also proves the clean upstream+Surface reconstruction reaches identical final values for all 207 Windows-covered mode0 registers; the proprietary table remains local oracle evidence, not shipped source. Next gate is E002h first bounded transport activation.
+
 ## E002g prepared — native Surface rear mode semantics — 2026-08-27
 
 Offline oracle equivalence proves the E002f clean reconstruction covers all 207 Windows mode-0 register addresses with identical final Windows-covered values after the normal final VTS write; only Linux's explicit `0x4503=0` test-pattern-disabled write is extra. E002g therefore keeps the clean upstream+Surface-delta implementation rather than embedding the proprietary table. Timing semantics are now split natively: LINK_FREQ=592.8 MHz / CSI output throughput=474.24 Mpixel/s, while the sensor-array VT PIXEL_RATE is 432,732,960 Hz from 4488 pixel clocks/line * 3214 lines * 30 fps. HBLANK=412 and VBLANK=408. E002g exposes only 4076x2806 on the SP11 experiment and retains the pre-power hard no-stream guard.
@@ -55,7 +59,7 @@ r3g is therefore a DT-only correction applied directly to the exact r3f DTB. It 
 # Project state
 
 **Updated:** 2026-08-27
-**State ID:** E002g native Surface mode semantics prepared
+**State ID:** E002g native Surface mode semantics accepted
 **Golden remains:** SP11 Audio FullIO v19c
 
 ## Current boundary

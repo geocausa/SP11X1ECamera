@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E002g-prepared
+state_id: E002g-accepted
 phase: rear-dphy-bringup
-status: native-surface-mode0-semantics-prepared
+status: native-surface-mode0-semantics-accepted
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002g-native-surface-mode0
+current_gate: E002g-native-surface-mode0-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,11 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002g-native-surface-mode0-runtime
+next_experiment: E002h-first-controlled-stream
 next_action: >-
-  Boot E002g strict one-shot with no streaming. Verify the SP11-only V4L2 mode set exposes exactly
-  4076x2806 with LINK_FREQ 592800000, PIXEL_RATE 432732960, HBLANK 412 and VBLANK 408 while
-  E002f standby validation still passes and all sensor/CSIPHY resources return to electrical idle.
+  Prepare E002h first controlled rear transport activation. Keep the accepted Surface 4076x2806 mode,
+  592.8 MHz link, 432732960 Hz VT pixel rate, power/reset/MCLK and CSIPHY1 graph unchanged. Audit
+  CAMSS CSIPHY1/CSID/VFE routing and receiver link-frequency consumption before removing the hard
+  no-stream guard. Use the shortest bounded capture/rollback path and preserve Golden as saved default.
 
 handoff:
   first_read:
