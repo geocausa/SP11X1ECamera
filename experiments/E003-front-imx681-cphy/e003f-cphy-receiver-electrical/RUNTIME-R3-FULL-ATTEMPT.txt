@@ -1,0 +1,54 @@
+E003f-R3 host-powered receiver electrical runtime
+2026-08-27T20:40:23+01:00
+=== gate ===
+harness_sha=20c60fa0d6fd5650a1cca51adb78b6697b8b0dbdb70edb692d7c1b2ba105a1f6
+=== pre clocks ===
+             cam_cc_mclk4_clk        0       0        0        19200000    0          0     50000      N               3-0010                          xclk
+             cam_cc_cpas_ife_0_clk   0       0        0        19200000    0          0     50000      N               acb7000.isp                     cpas_vfe0
+             cam_cc_ife_0_clk        0       0        0        19200000    0          0     50000      N               acb7000.isp                     vfe0
+             cam_cc_csi2phytimer_clk 0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2_timer
+             cam_cc_csiphy2_clk      0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2
+=== pre rails/reset ===
+       vreg_l3m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+       vreg_l7b_2p8               0    1      0  normal  2800mV     0mA  2800mV  2800mV
+ gpio237 : out low  func0 2mA no pull
+=== insmod exactly once ===
+insmod_rc=0
+=== E003F kernel evidence ===
+[Thu Aug 27 20:40:23 2026] E003F_MMIO_PREFLIGHT_PASS: csiphy2 start=0x000000000ace8000 size=0x2000
+[Thu Aug 27 20:40:23 2026] E003F_PREFLIGHT_PASS: csiphy=2 CPHY trios=1 pos0=0 expected_regs=121
+[Thu Aug 27 20:40:23 2026] E003F_HOST_POWER_ON_PASS: vfe0 power_count=1
+[Thu Aug 27 20:40:23 2026] E003F_POWER_ON_PASS: timer_clk_rate=400000000
+[Thu Aug 27 20:40:23 2026] E003F_LIVE_COMPARE: expected=121 mismatches=0 ctrl5=0x00000002 ctrl6=0x00000001 ctrl7=0x0000007a
+[Thu Aug 27 20:40:23 2026] E003F_STREAM_OFF_PASS: ctrl5=0 ctrl6=0
+[Thu Aug 27 20:40:23 2026] E003F_HOST_POWER_OFF: vfe0 power_count=0
+[Thu Aug 27 20:40:23 2026] E003F_RECEIVER_ONLY_PASS: 121/121 Windows-live registers exact; receiver stopped and powered off
+=== module state ===
+e003f_csiphy_test      16384  0
+=== rmmod verifier ===
+rmmod_rc=0
+=== post sensor ===
+status=suspended
+usage=0
+=== post clocks ===
+                   cam_cc_cpas_ife_0_clk 0       0        0        345600000   0          0     50000      N                     acb7000.isp                     cpas_vfe0
+                   cam_cc_ife_0_clk  0       0        0        345600000   0          0     50000      N                     acb7000.isp                     vfe0
+                cam_cc_csiphy2_clk   0       0        0        400000000   0          0     50000      N                  acb7000.isp                     csiphy2
+                   cam_cc_csi2phytimer_clk 0       0        0        400000000   0          0     50000      N                     acb7000.isp                     csiphy2_timer
+             cam_cc_mclk4_clk        0       0        0        19200000    0          0     50000      N               3-0010                          xclk
+=== post rails/reset ===
+       vreg_l3m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV
+       vreg_l7b_2p8               0    1      0  normal  2800mV     0mA  2800mV  2800mV
+ gpio237 : out low  func0 2mA no pull
+=== faults ===
+Aug 27 20:36:19 SP11X1e kernel: simple-framebuffer simple-framebuffer.0: [drm] Registered 1 planes with drm panic
+Aug 27 20:36:19 SP11X1e kernel: watchdog: NMI not fully supported
+Aug 27 20:36:19 SP11X1e kernel: watchdog: Hard watchdog permanently disabled
+Aug 27 20:36:19 SP11X1e kernel: sbsa-gwdt 1c840000.watchdog: Initialized with 10s timeout @ 19200000 Hz, action=0.
+=== result marker ===
+[  263.144156] E003F_HOST_POWER_ON_PASS: vfe0 power_count=1
+[  263.152308] E003F_POWER_ON_PASS: timer_clk_rate=400000000
+[  263.173781] E003F_LIVE_COMPARE: expected=121 mismatches=0 ctrl5=0x00000002 ctrl6=0x00000001 ctrl7=0x0000007a
+[  263.173794] E003F_STREAM_OFF_PASS: ctrl5=0 ctrl6=0
+[  263.174599] E003F_HOST_POWER_OFF: vfe0 power_count=0
+[  263.174602] E003F_RECEIVER_ONLY_PASS: 121/121 Windows-live registers exact; receiver stopped and powered off

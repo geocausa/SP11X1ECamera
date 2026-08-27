@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003f-front-cphy-receiver-electrical-r3-prepared
+state_id: E003f-front-cphy-receiver-electrical-accepted
 phase: front-imx681-cphy-bringup
-status: e003f-r3-host-power-retry-prepared-golden-restored
+status: e003f-r3-receiver-electrical-accepted-golden-restored
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E003-front-imx681-cphy
-current_gate: E003f-R3-host-powered-receiver-electrical-prepared
+current_gate: E003f-R3-host-powered-receiver-electrical-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,22 +102,30 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E003f-R3-host-powered-receiver-electrical-runtime
+e003f:
+  status: pass
+  accepted_variant: R3-host-powered-receiver-electrical
+  boot_entry: sp11-camera-e003f-r3-cphy-receiver
+  harness_sha256: 20c60fa0d6fd5650a1cca51adb78b6697b8b0dbdb70edb692d7c1b2ba105a1f6
+  loaded_camss_srcversion: 1D2912B8FF127D1F3D94704
+  candidate_dtb_sha256: e9fd13a29b6580955d2662c27377dbd1caba14f7f89613510b5e23bd6c266293
+  windows_live_registers_expected: 121
+  windows_live_register_mismatches: 0
+  sensor_transmission: false
+  receiver_teardown_verified: true
+  platform_regressions_passed: true
+  golden_return_verified: true
+next_experiment: E003g-front-transport-static-plan
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden until all guards are rechecked. E003f-R2 proved the corrected
-  8 KiB CSIPHY2 aperture and local receiver power-on, but 78 expected non-zero Windows C-PHY values remained
-  zero. E003f-R3 is prepared to add only the normal VFE0/IFE/CAMNOC/CPAS host-power context around the same
-  receiver-only CSIPHY2 start/compare/stop path. Reverify the corrected R3 GRUB paths and artifact hashes, arm
-  only `sp11-camera-e003f-r3-cphy-receiver` as a one-shot, discover dynamic Wi-Fi/CCI identities, verify idle
-  sensor/receiver state, then load the SHA-checked R3 harness exactly once. Require 121/121 final Windows-live
-  register agreement, clean receiver/VFE teardown, no IMX681 transmission, full platform health, and byte-exact
-  Golden return before accepting E003f.
-
-
-
+  Keep SP11 on byte-exact FullIO v19c Golden. E003f is accepted: with normal VFE0/IFE/CAMNOC/CPAS host power,
+  CSIPHY2 matched all 121 Windows-live final C-PHY registers and unwound cleanly without any IMX681 transmission.
+  Begin E003g static-only. Derive the exact front CSID/VFE/RDI path and the smallest native IMX681 stream-on/stream-off
+  lifecycle from the accepted E003d/e/f graph, current Linux source and same-machine Windows evidence. Mechanically
+  define timeout, teardown and rollback gates before removing the stream block or permitting MODE_SELECT=1. Do not
+  attempt a frame until a separate one-shot E003g candidate has passed those static and build-time guards.
 
 handoff:
-  latest: docs/runbooks/2026-08-27-e003f-r3-camera-handoff.md
+  latest: docs/runbooks/2026-08-27-e003f-accepted-e003g-handoff.md
   first_read:
     - CONTINUE.md
     - AGENTS.md
