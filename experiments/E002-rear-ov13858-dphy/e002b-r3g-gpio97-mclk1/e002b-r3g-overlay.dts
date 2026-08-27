@@ -1,0 +1,25 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target-path = "/soc@0/pinctrl@f100000";
+		__overlay__ {
+			rear_mclk1_r3g_default: rear-mclk1-r3g-default-state {
+				pins = "gpio97";
+				function = "cam_mclk";
+				drive-strength = <4>;
+				bias-disable;
+				output-enable;
+			};
+		};
+	};
+
+	fragment@1 {
+		target-path = "/soc@0/cci@ac15000/i2c-bus@1/rear-probe@10";
+		__overlay__ {
+			pinctrl-0 = <&rear_mclk1_r3g_default>;
+			pinctrl-names = "default";
+		};
+	};
+};

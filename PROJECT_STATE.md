@@ -1,3 +1,9 @@
+## E002b-r3g prepared — physical rear MCLK1 pad proven — 2026-08-27
+
+A one-shot SP11 Windows KD session read X1E TLMM directly. Windows leaves GPIO97 at `0x00000244`: function 1 `cam_mclk`, 4 mA, no pull, output enabled. Golden/r3f Linux reads GPIO97 as `0x00000001`: GPIO/function 0, 2 mA, pull-down, output disabled. Qualcomm's 2026 Hamoa/X1E80100 pinctrl series independently maps `cam_mclk1_default` to GPIO97 and its camera overlay pairs that pinctrl with `CAM_CC_MCLK1_CLK`.
+
+r3g is therefore a DT-only correction applied directly to the exact r3f DTB. It adds one GPIO97 `cam_mclk` state plus `pinctrl-0`/`pinctrl-names` on the existing rear probe node. Kernel, r3f initrd/probe module, rail/reset order, MCLK1 19.2 MHz, CCI0/master1 @ 400 kHz, address `0x10`, and the Windows-exact `0x300b -> 0xd855` transaction are unchanged. Candidate DTB SHA-256: `396259a06edffd4f9e0482480ef02201aa88acd98731db57fbb33358650a0b33`.
+
 # Project state
 
 **Updated:** 2026-08-27

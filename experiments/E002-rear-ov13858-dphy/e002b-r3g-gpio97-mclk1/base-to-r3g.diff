@@ -1,0 +1,35 @@
+--- experiments/E002-rear-ov13858-dphy/e002b-r3g-gpio97-mclk1/base.sorted.dts	2026-08-27 08:20:14.255716749 +0100
++++ experiments/E002-rear-ov13858-dphy/e002b-r3g-gpio97-mclk1/candidate.sorted.dts	2026-08-27 08:20:14.281715651 +0100
+@@ -448,6 +448,7 @@
+ 		qupv3_0 = "/soc@0/geniqup@bc0000";
+ 		qupv3_1 = "/soc@0/geniqup@ac0000";
+ 		qupv3_2 = "/soc@0/geniqup@8c0000";
++		rear_mclk1_r3g_default = "/soc@0/pinctrl@f100000/rear-mclk1-r3g-default-state";
+ 		reboot_reason = "/soc@0/arbiter@c400000/spmi@c42d000/pmic@0/nvram@7100/reboot-reason@48";
+ 		remoteproc_adsp = "/soc@0/remoteproc@6800000";
+ 		remoteproc_cdsp = "/soc@0/remoteproc@32300000";
+@@ -2356,6 +2357,8 @@
+ 					ldo1m-supply = <0x2ba>;
+ 					ldo5m-supply = <0x2bb>;
+ 					ldo6m-supply = <0x2b9>;
++					pinctrl-0 = <0x2c0>;
++					pinctrl-names = "default";
+ 					reg = <0x10>;
+ 					reset-gpios = <0x89 0x6e 0x01>;
+ 				};
+@@ -6694,6 +6697,15 @@
+ 				};
+ 			};
+ 
++			rear-mclk1-r3g-default-state {
++				bias-disable;
++				drive-strength = <0x04>;
++				function = "cam_mclk";
++				output-enable;
++				phandle = <0x2c0>;
++				pins = "gpio97";
++			};
++
+ 			rtmr1-1p15-reg-en-state {
+ 				bias-disable;
+ 				drive-strength = <0x02>;
