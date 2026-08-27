@@ -1,0 +1,34 @@
+--- a/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
+@@ -1496,6 +1496,16 @@
+ 				remote-endpoint = <&ov13858_ep>;
+ 			};
+ 		};
++
++		port@2 {
++			reg = <2>;
++
++			camss_csiphy2_ep: endpoint {
++				bus-type = <MEDIA_BUS_TYPE_CSI2_CPHY>;
++				data-lanes = <0>;
++				remote-endpoint = <&imx681_ep>;
++			};
++		};
+ 	};
+ };
+ 
+@@ -1552,6 +1562,14 @@
+ 		pinctrl-names = "default";
+ 		dovdd-supply = <&vreg_l3m_camera>;
+ 		avdd-supply = <&vreg_l7b_2p8>;
++
++		port {
++			imx681_ep: endpoint {
++				bus-type = <MEDIA_BUS_TYPE_CSI2_CPHY>;
++				data-lanes = <0>;
++				remote-endpoint = <&camss_csiphy2_ep>;
++			};
++		};
+ 	};
+ };
+ 
