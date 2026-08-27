@@ -1,3 +1,7 @@
+## E003c ACCEPTED — native IMX681 V4L2 bind-only gate — 2026-08-27
+
+The front Sony IMX681 now binds under a native V4L2 sensor driver on CCI1/master1 and passes both the SP11 Windows/platform identity (`0x0004 = 0x0aff`) and Sony silicon identity (`0x0016 = 0x0681`). E003c intentionally contains no sensor write path and no front endpoint. A separate test-only harness called the bound V4L2 `s_stream(1)` callback directly and proved `-EOPNOTSUPP`; runtime PM then remained suspended with usage 0, MCLK4/front rails/CSIPHY2 disabled and GPIO237 reset-low. Golden was restored byte-exact with Wi-Fi/audio/touch healthy. Next is E003d: add the C-PHY graph and X1E80100 receiver programming while keeping streaming blocked.
+
 ## E003b ACCEPTED — front IMX681 electrical identity — 2026-08-27
 
 Linux one-shot E003b reproduced the same-machine Windows front-camera electrical lifecycle on CCI1/master1 and read IMX681 register `0x0004 = 0x0aff` at address `0x10`. MCLK4, LDO3_M and LDO7_B returned disabled, GPIO237 returned reset-low, CSIPHY2 stayed unused with no front media link, and Wi-Fi/audio/touch/rear-camera health remained intact. The machine then returned to byte-exact FullIO v19c Golden with empty `next_entry`. Next is E003c: native IMX681 V4L2 bind only, still no front CSI endpoint or streaming.

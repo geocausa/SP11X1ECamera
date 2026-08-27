@@ -1,0 +1,78 @@
+E003c runtime acceptance — native IMX681 bind-only gate
+Date: 2026-08-27
+
+BOOT
+2026-08-27T17:05:41+01:00
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-camera-e003c-imx681-bind/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003c-imx681-bind sp11_camera_e003c_imx681_bind=1
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+
+IDENTITY/BIND LOGS
+Aug 27 17:03:01 SP11X1e kernel: Kernel command line: sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003c-imx681-bind sp11_camera_e003c_imx681_bind=1
+Aug 27 17:03:01 SP11X1e kernel: Unknown kernel command line parameters "splash sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 sp11_entry=7.1.5-sp11-camera-e003c-imx681-bind sp11_camera_e003c_imx681_bind=1", will be passed to user space.
+Aug 27 17:03:01 SP11X1e kernel:     sp11_entry=7.1.5-sp11-camera-e003c-imx681-bind
+Aug 27 17:03:01 SP11X1e sp11-camera-e003c-initrd: loading native bind-only IMX681 driver; streaming is compiled out
+Aug 27 17:03:01 SP11X1e sp11-camera-e003c-initrd: v4l2_cci loaded
+Aug 27 17:03:01 SP11X1e kernel: imx681 3-0010: SP11 E003c: runtime power-on complete
+Aug 27 17:03:01 SP11X1e kernel: imx681 3-0010: SP11 E003c PASS: IMX681 Windows ID 0x0aff, Sony ID 0x0681
+Aug 27 17:03:01 SP11X1e kernel: imx681 3-0010: SP11 E003c: runtime power-off complete
+Aug 27 17:03:01 SP11X1e kernel: imx681 3-0010: SP11 E003c native V4L2 bind complete; streaming remains blocked
+Aug 27 17:03:01 SP11X1e sp11-camera-e003c-initrd: imx681 loaded
+Aug 27 17:03:01 SP11X1e sp11-camera-e003c-initrd: IMX681 driver bound to 3-0010
+Aug 27 17:04:50 SP11X1e kernel: imx681 3-0010: SP11 E003c: streaming blocked by bind-only safety gate
+Aug 27 17:04:50 SP11X1e kernel: E003C_STREAM_BLOCK_TEST: s_stream(1) ret=-95 expected=-95
+
+MODULE
+E9DD300C13909125CA27C6E
+
+I2C BIND
+/sys/bus/i2c/drivers/imx681
+imx681
+
+RUNTIME PM
+runtime_status=suspended
+runtime_usage=0
+control=auto
+
+CLOCKS
+             cam_cc_mclk4_clk        0       0        0        19200000    0          0     50000      N               3-0010                          xclk                     
+          cam_cc_csi2phytimer_clk_src 0       0        0        19200000    0          0     50000      N            deviceless                      no_connection_id         
+             cam_cc_csi2phytimer_clk 0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2_timer            
+             cam_cc_csiphy2_clk      0       0        0        19200000    0          0     50000      N               acb7000.isp                     csiphy2                  
+
+RAILS
+       vreg_l3m_camera            0    1      0 unknown  1800mV     0mA  1800mV  1800mV 
+          3-0010-dovdd            0                                 0mA  1800mV  1800mV
+       vreg_l7b_2p8               0    1      0  normal  2800mV     0mA  2800mV  2800mV 
+          3-0010-avdd             0                                 0mA  2800mV  2800mV
+
+RESET
+ gpio237 : out low  func0 2mA no pull
+
+MEDIA FRONT REFERENCES
+imx681_media_graph_occurrences=0
+
+PLATFORM HEALTH
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+wlP4p1s0         UP             00:03:7f:12:9c:be <BROADCAST,MULTICAST,UP,LOWER_UP> 
+tailscale0       UNKNOWN        <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> 
+**** List of PLAYBACK Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 0: MultiMedia1 Playback (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+**** List of CAPTURE Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 2: MultiMedia3 Capture (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+I: Bus=001c Vendor=0000 Product=0000 Version=0000
+N: Name="Microsoft Surface G6 Touch"
+P: Phys=
+S: Sysfs=/devices/platform/soc@0/ac0000.geniqup/a88000.spi/spi_master/spi0/spi0.0/input/input1
+U: Uniq=
+H: Handlers=mouse0 event1 
+B: PROP=2
+B: EV=b
+B: KEY=400 0 0 0 0 0
+
+SERIOUS FAULTS

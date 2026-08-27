@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-27
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003c-front-imx681-native-bind
+state_id: E003d-front-imx681-cphy-graph
 phase: front-imx681-cphy-bringup
-status: front-imx681-identity-accepted-golden-restored
+status: front-imx681-native-bind-accepted-golden-restored
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E003-front-imx681-cphy
-current_gate: E003b-front-imx681-electrical-identity-accepted
+current_gate: E003c-front-imx681-native-bind-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E003c-front-imx681-native-bind
+next_experiment: E003d-front-imx681-cphy-graph
 next_action: >-
-  Build E003c from the true Golden-repro plus accepted rear-camera source and the E003b-proven front
-  power/CCI wiring. Implement a clean native IMX681 V4L2 sensor driver sufficient to bind, identify,
-  enumerate formats/modes and exercise runtime-PM power up/down, but do not add a front CAMSS endpoint,
-  do not program CSIPHY2 and do not stream. Preserve Golden as saved default and use a separate one-shot.
+  Keep SP11 on FullIO v19c Golden. E003d adds the front IMX681 CSI-2 C-PHY graph and X1E80100
+  CSIPHY2 receiver programming derived from the two-run Windows KD oracle. Preserve the accepted E003c
+  sensor driver stream block: topology/bind/idle-PM only. Do not program sensor mode registers or permit
+  MODE_SELECT/0x0100 streaming until the graph and PHY idle/runtime-PM gates pass.
 
 
 
