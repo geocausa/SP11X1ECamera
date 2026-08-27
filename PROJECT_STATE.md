@@ -1,3 +1,7 @@
+## E002c prepared — native OV13858 bind only, no CSI — 2026-08-27
+
+E002c now cleanly separates native sensor-driver ownership from transport. Starting from accepted r3g, the DT changes only the rear client compatible to `ovti,ov13858`; no endpoint is added. The exact upstream OV13858 source was adapted only to own Denali's proven four-rail/GPIO110/MCLK1 power lifecycle and runtime PM. The module builds with exact Golden v4 vermagic (`35c99b5...`). A Golden-based initrd containing the accepted RPMh provider, exact V4L2 dependencies and patched native driver was built twice byte-identically (`48e092c4...`). No E002c runtime boot has occurred yet.
+
 ## E002b-r3g ACCEPTED — rear OV13858 physical contact / identity — 2026-08-27
 
 The strict A/B boot removed only `clk_ignore_unused pd_ignore_unused` and reproduced the permissive result: GPIO97 `0x00000244`, OV13858 ID `0xd855` at address `0x10`, clean reverse teardown, CAMSS nodes present, Wi-Fi/audio healthy. E002b is accepted. The r3f NACK root cause was the missing physical MCLK1 GPIO97 route. Next gate is E002c: native Linux OV13858/V4L2 bind plus the minimum rear CSI endpoint, with no streaming yet.

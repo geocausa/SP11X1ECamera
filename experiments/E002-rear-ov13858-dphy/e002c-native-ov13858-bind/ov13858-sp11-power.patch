@@ -1,0 +1,235 @@
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/media/i2c/ov13858.c	2026-07-24 15:21:27.000000000 +0100
++++ /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E002-rear-ov13858-dphy/e002c-native-ov13858-bind/ov13858.c	2026-08-27 08:38:38.481179438 +0100
+@@ -3,9 +3,12 @@
+ 
+ #include <linux/acpi.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-event.h>
+@@ -22,6 +25,8 @@
+ #define OV13858_REG_SOFTWARE_RST	0x0103
+ #define OV13858_SOFTWARE_RST		0x01
+ 
++#define OV13858_XCLK_FREQ		19200000UL
++
+ /* PLL1 generates PCLK and MIPI_PHY_CLK */
+ #define OV13858_REG_PLL1_CTRL_0		0x0300
+ #define OV13858_REG_PLL1_CTRL_1		0x0301
+@@ -1031,6 +1036,12 @@
+ struct ov13858 {
+ 	struct device *dev;
+ 	struct clk *clk;
++	struct regulator *ldo6m;
++	struct regulator *ldo1m;
++	struct regulator *ldo5m;
++	struct regulator *ldo16b;
++	struct gpio_desc *reset;
++	bool powered;
+ 
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pad;
+@@ -1407,6 +1418,99 @@
+ 	return 0;
+ }
+ 
++/* SP11 Denali power sequencing, derived from the installed Windows CAMS resource. */
++static void ov13858_power_off(struct ov13858 *ov13858)
++{
++	if (!ov13858->powered)
++		return;
++
++	/* Windows D3: reset low, delay, MCLK off, rails off in reverse order. */
++	gpiod_set_value_cansleep(ov13858->reset, 1);
++	usleep_range(1000, 1500);
++	clk_disable_unprepare(ov13858->clk);
++	regulator_disable(ov13858->ldo16b);
++	regulator_disable(ov13858->ldo5m);
++	regulator_disable(ov13858->ldo1m);
++	regulator_disable(ov13858->ldo6m);
++	ov13858->powered = false;
++}
++
++static int ov13858_power_on(struct ov13858 *ov13858)
++{
++	struct device *dev = ov13858->dev;
++	int ret;
++
++	/* GPIO_ACTIVE_LOW: logical 1 is physical low/asserted reset. */
++	gpiod_set_value_cansleep(ov13858->reset, 1);
++
++	ret = regulator_enable(ov13858->ldo6m);
++	if (ret)
++		return dev_err_probe(dev, ret, "enable LDO6_M failed\n");
++
++	ret = regulator_enable(ov13858->ldo1m);
++	if (ret)
++		goto err_l6;
++
++	ret = regulator_enable(ov13858->ldo5m);
++	if (ret)
++		goto err_l1;
++
++	usleep_range(1000, 1500);
++
++	ret = regulator_enable(ov13858->ldo16b);
++	if (ret)
++		goto err_l5;
++
++	ret = clk_set_rate(ov13858->clk, OV13858_XCLK_FREQ);
++	if (ret)
++		goto err_l16;
++
++	if (clk_get_rate(ov13858->clk) != OV13858_XCLK_FREQ) {
++		ret = -EINVAL;
++		dev_err(dev, "MCLK1 rate is %lu, expected %lu\n",
++			clk_get_rate(ov13858->clk), OV13858_XCLK_FREQ);
++		goto err_l16;
++	}
++
++	ret = clk_prepare_enable(ov13858->clk);
++	if (ret)
++		goto err_l16;
++
++	gpiod_set_value_cansleep(ov13858->reset, 0);
++	usleep_range(10000, 12000);
++	ov13858->powered = true;
++	return 0;
++
++err_l16:
++	regulator_disable(ov13858->ldo16b);
++err_l5:
++	regulator_disable(ov13858->ldo5m);
++err_l1:
++	regulator_disable(ov13858->ldo1m);
++err_l6:
++	regulator_disable(ov13858->ldo6m);
++	return ret;
++}
++
++static int ov13858_runtime_resume(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++
++	return ov13858_power_on(to_ov13858(sd));
++}
++
++static int ov13858_runtime_suspend(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++
++	ov13858_power_off(to_ov13858(sd));
++	return 0;
++}
++
++static DEFINE_RUNTIME_DEV_PM_OPS(ov13858_pm_ops,
++				 ov13858_runtime_suspend,
++				 ov13858_runtime_resume, NULL);
++
+ /* Start streaming */
+ static int ov13858_start_streaming(struct ov13858 *ov13858)
+ {
+@@ -1673,20 +1777,62 @@
+ 				     "failed to get clock\n");
+ 
+ 	freq = clk_get_rate(ov13858->clk);
+-	if (freq != 19200000)
++	if (freq != OV13858_XCLK_FREQ)
+ 		return dev_err_probe(ov13858->dev, -EINVAL,
+ 				     "external clock %lu is not supported\n",
+ 				     freq);
+ 
++	ov13858->ldo6m = devm_regulator_get(ov13858->dev, "ldo6m");
++	if (IS_ERR(ov13858->ldo6m))
++		return dev_err_probe(ov13858->dev, PTR_ERR(ov13858->ldo6m),
++				     "get LDO6_M failed\n");
++	ov13858->ldo1m = devm_regulator_get(ov13858->dev, "ldo1m");
++	if (IS_ERR(ov13858->ldo1m))
++		return dev_err_probe(ov13858->dev, PTR_ERR(ov13858->ldo1m),
++				     "get LDO1_M failed\n");
++	ov13858->ldo5m = devm_regulator_get(ov13858->dev, "ldo5m");
++	if (IS_ERR(ov13858->ldo5m))
++		return dev_err_probe(ov13858->dev, PTR_ERR(ov13858->ldo5m),
++				     "get LDO5_M failed\n");
++	ov13858->ldo16b = devm_regulator_get(ov13858->dev, "ldo16b");
++	if (IS_ERR(ov13858->ldo16b))
++		return dev_err_probe(ov13858->dev, PTR_ERR(ov13858->ldo16b),
++				     "get LDO16_B failed\n");
++
++	ov13858->reset = devm_gpiod_get(ov13858->dev, "reset", GPIOD_OUT_HIGH);
++	if (IS_ERR(ov13858->reset))
++		return dev_err_probe(ov13858->dev, PTR_ERR(ov13858->reset),
++				     "get reset GPIO failed\n");
++
++	ret = regulator_set_voltage(ov13858->ldo6m, 1800000, 1800000);
++	if (ret)
++		return dev_err_probe(ov13858->dev, ret, "set LDO6_M failed\n");
++	ret = regulator_set_voltage(ov13858->ldo1m, 1200000, 1200000);
++	if (ret)
++		return dev_err_probe(ov13858->dev, ret, "set LDO1_M failed\n");
++	ret = regulator_set_voltage(ov13858->ldo5m, 2800000, 2800000);
++	if (ret)
++		return dev_err_probe(ov13858->dev, ret, "set LDO5_M failed\n");
++	ret = regulator_set_voltage(ov13858->ldo16b, 2900000, 2900000);
++	if (ret)
++		return dev_err_probe(ov13858->dev, ret, "set LDO16_B failed\n");
++
+ 	/* Initialize subdev */
+ 	v4l2_i2c_subdev_init(&ov13858->sd, client, &ov13858_subdev_ops);
+ 
+-	/* Check module identity */
++	ret = ov13858_power_on(ov13858);
++	if (ret)
++		return ret;
++
++	/* Check module identity using the native upstream 24-bit read. */
+ 	ret = ov13858_identify_module(ov13858);
+ 	if (ret) {
+ 		dev_err(ov13858->dev, "failed to find sensor: %d\n", ret);
++		ov13858_power_off(ov13858);
+ 		return ret;
+ 	}
++	dev_info(ov13858->dev, "SP11 E002c PASS: native OV13858 identity verified\n");
++	ov13858_power_off(ov13858);
+ 
+ 	/* Set default mode to max resolution */
+ 	ov13858->cur_mode = &supported_modes[0];
+@@ -1714,13 +1860,9 @@
+ 	if (ret < 0)
+ 		goto error_media_entity;
+ 
+-	/*
+-	 * Device is already turned on by i2c-core with ACPI domain PM.
+-	 * Enable runtime PM and turn off the device.
+-	 */
+-	pm_runtime_set_active(ov13858->dev);
++	/* E002c leaves the sensor physically off after probe. */
++	pm_runtime_set_suspended(ov13858->dev);
+ 	pm_runtime_enable(ov13858->dev);
+-	pm_runtime_idle(ov13858->dev);
+ 
+ 	return 0;
+ 
+@@ -1744,6 +1886,8 @@
+ 	ov13858_free_controls(ov13858);
+ 
+ 	pm_runtime_disable(ov13858->dev);
++	if (!pm_runtime_status_suspended(ov13858->dev))
++		ov13858_power_off(ov13858);
+ }
+ 
+ static const struct i2c_device_id ov13858_id_table[] = {
+@@ -1766,6 +1910,7 @@
+ 	.driver = {
+ 		.name = "ov13858",
+ 		.acpi_match_table = ACPI_PTR(ov13858_acpi_ids),
++		.pm = pm_ptr(&ov13858_pm_ops),
+ 	},
+ 	.probe = ov13858_probe,
+ 	.remove = ov13858_remove,
