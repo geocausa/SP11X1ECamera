@@ -1,3 +1,7 @@
+## E002h-r1 ACCEPTED — first native rear RAW10 frame — 2026-08-27
+
+A one-cell DT correction (`csiphy1` MMIO size 0x1000 -> 0x2000) removed the reset Oops. The unchanged native pipeline `OV13858 -> CSIPHY1 -> CSID0 -> VFE0 RDI0 -> /dev/video0` then STREAMON'd successfully and dequeued sequence 0 with exactly 14,321,824 bytes of packed 4076x2806 GRBG10. Local frame SHA-256 `c025aaa5...`. RAW10 decoding yielded 11,437,256 non-constant pixels with a coherent dark-scene pedestal. Normal close returned sensor PM usage to 0 and MCLK/CSIPHY clocks to 0; Wi-Fi/audio remained healthy. First physical rear-camera frame transport is proven. Next E002i: bounded stream stability then standard exposure/gain response.
+
 ## E002h first stream BLOCKED / r1 prepared — CSIPHY1 MMIO window — 2026-08-27
 
 The first E002h STREAMON Oopsed in `csiphy_reset()` before sensor streaming: sensor PM stayed suspended and MCLK1 stayed off while CSIPHY1 clocks enabled. Active DT mapped CSIPHY1 `0xace6000+0x1000`, but X1E CSIPHY uses `regs->offset=0x1000` and immediately writes at base+0x1000. Denali's own standalone PHY node and SM8550/8650 use a 0x2000 window. E002h-r1 changes only that one resource-size cell to 0x2000; kernel/initrd/module/mode/graph/stream permission are byte-identical.
