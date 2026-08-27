@@ -1,0 +1,81 @@
+# E002k-A runtime evidence
+
+=== cmdline ===
+BOOT_IMAGE=/boot/sp11-7.1.5-camera-e002k-a/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-a sp11_camera_e002k_a=1
+=== module srcversion ===
+4DB808B24637BDE41689BC5
+=== relevant dmesg ===
+[Thu Aug 27 11:05:35 2026] Kernel command line: BOOT_IMAGE=/boot/sp11-7.1.5-camera-e002k-a/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 \
+[Thu Aug 27 11:05:35 2026] Kernel command line: sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-a sp11_camera_e002k_a=1
+[Thu Aug 27 11:05:35 2026] Unknown kernel command line parameters "splash sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 sp11_entry=7.1.5-sp11-camera-e002k-a sp11_camera_e002k_a=1", will be passed to user space.
+[Thu Aug 27 11:05:35 2026]     sp11_entry=7.1.5-sp11-camera-e002k-a
+[Thu Aug 27 11:05:44 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l16b_camera_r3d ready resource=ldob16 addr=0x00041400 target=2900000uV mode=7 (no vote sent)
+[Thu Aug 27 11:05:44 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l5m_camera_r3d ready resource=ldom5 addr=0x00041500 target=2800000uV mode=7 (no vote sent)
+[Thu Aug 27 11:05:44 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l1m_camera_r3d ready resource=ldom1 addr=0x00042000 target=1200000uV mode=7 (no vote sent)
+[Thu Aug 27 11:05:44 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l6m_camera_r3d ready resource=ldom6 addr=0x00040d00 target=1800000uV mode=7 (no vote sent)
+[Thu Aug 27 11:05:44 2026] sp11-camera-e002k-a-initrd: sp11_camera_rpmh_regulator loaded
+[Thu Aug 27 11:05:44 2026] sp11-camera-e002k-a-initrd: camera RPMh provider bound
+[Thu Aug 27 11:05:44 2026] sp11-camera-e002k-a-initrd: mc loaded
+[Thu Aug 27 11:05:44 2026] sp11-camera-e002k-a-initrd: videodev loaded
+[Thu Aug 27 11:05:44 2026] sp11-camera-e002k-a-initrd: v4l2_async loaded
+[Thu Aug 27 11:05:44 2026] sp11-camera-e002k-a-initrd: v4l2_fwnode loaded
+[Thu Aug 27 11:05:44 2026] ov13858 1-0010: SP11 E002k-A: sensor owns VIO/LDO6_M, VDIG/LDO1_M, VANA/LDO5_M; VAF excluded
+[Thu Aug 27 11:05:44 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l6m_camera_r3d enabled 1800000uV mode=7
+[Thu Aug 27 11:05:44 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l1m_camera_r3d enabled 1200000uV mode=7
+[Thu Aug 27 11:05:44 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l5m_camera_r3d enabled 2800000uV mode=7
+[Thu Aug 27 11:05:44 2026] ov13858 1-0010: SP11 E002c PASS: native OV13858 identity verified
+[Thu Aug 27 11:05:45 2026] ov13858 1-0010: SP11 E002f PASS: Surface mode0 standby 4076x2806, VTS 3214, PLL 592.8 MHz profile
+[Thu Aug 27 11:05:45 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l5m_camera_r3d disabled
+[Thu Aug 27 11:05:45 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l1m_camera_r3d disabled
+[Thu Aug 27 11:05:45 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l6m_camera_r3d disabled
+[Thu Aug 27 11:05:45 2026] ov13858 1-0010: SP11 E002g PASS: native 4076x2806@30 mode semantics selected, VT pixel rate 432732960 Hz
+[Thu Aug 27 11:05:45 2026] sp11-camera-e002k-a-initrd: ov13858 loaded
+[Thu Aug 27 11:05:45 2026] sp11-camera-e002k-a-initrd: native OV13858 driver bound to 1-0010
+[Thu Aug 27 11:06:52 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l6m_camera_r3d enabled 1800000uV mode=7
+[Thu Aug 27 11:06:52 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l1m_camera_r3d enabled 1200000uV mode=7
+[Thu Aug 27 11:06:52 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l5m_camera_r3d enabled 2800000uV mode=7
+[Thu Aug 27 11:06:52 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l5m_camera_r3d disabled
+[Thu Aug 27 11:06:52 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l1m_camera_r3d disabled
+[Thu Aug 27 11:06:52 2026] sp11-camera-rpmh-regulator 17500000.rsc:camera-rpmh-regulators: vreg_l6m_camera_r3d disabled
+=== LDO16B enable count ===
+0
+=== capture ===
+		VIDIOC_REQBUFS returned 0 (Success)
+		VIDIOC_CREATE_BUFS returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_QUERYBUF returned 0 (Success)
+		VIDIOC_G_FMT returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_QBUF returned 0 (Success)
+		VIDIOC_STREAMON returned 0 (Success)
+cap dqbuf: 0 seq:      0 bytesused: 14321824 ts: 77.397370 field: None (ts-monotonic, ts-src-eof)
+
+VIDIOC_QUERYCAP: ok
+=== raw identity ===
+size=14321824
+6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346  /tmp/e002k-a-pattern.raw
+=== runtime PM ===
+suspended
+0
+=== clocks ===
+                cam_cc_csiphy1_clk   0       0        0        300000000   0          0     50000      N                  acb7000.isp                     csiphy1
+                cam_cc_csi1phytimer_clk_src 0       0        0        266666666   0          0     50000      N                  deviceless                      no_connection_id
+                   cam_cc_csi1phytimer_clk 0       0        0        266666666   0          0     50000      N                     acb7000.isp                     csiphy1_timer
+          cam_cc_mclk1_clk_src       0       0        0        19200000    0          0     50000      N            deviceless                      no_connection_id
+             cam_cc_mclk1_clk        0       0        0        19200000    0          0     50000      N               1-0010                          no_connection_id
+=== health ===
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP>
+wlP4p1s0         UP             00:03:7f:12:c0:00 <BROADCAST,MULTICAST,UP,LOWER_UP>
+tailscale0       UNKNOWN        <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP>
+**** List of PLAYBACK Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 0: MultiMedia1 Playback (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+**** List of CAPTURE Hardware Devices ****
+card 0: X1E80100Microso [X1E80100-Microsoft-Surface-Pro-], device 2: MultiMedia3 Capture (*) []
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0

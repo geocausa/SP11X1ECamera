@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E002-rear-ov13858-dphy
-current_gate: E002k-a-no-vaf-prepared
+current_gate: E002k-a-no-vaf-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -102,12 +102,12 @@ e002a:
   media_nodes: 1
   video_nodes: 16
   electrical_idle_verified: true
-next_experiment: E002k-a-no-vaf-runtime
+next_experiment: E002k-b-standard-supply-names
 next_action: >-
-  Boot E002k-A with the accepted E002h-r1 DT/kernel but a sensor module that no longer acquires or votes
-  LDO16_B/VAF. Prove native identity and one standard OV13858 test-pattern frame while confirming there is
-  no LDO16_B enable event. Restore test pattern, verify clean teardown/health, and only then convert the
-  driver/DT to standard avdd/dvdd/dovdd supply naming.
+  Prepare E002k-B with E002k-A behaviour unchanged but rename the three sensor-owned rail consumers to
+  standard Linux/OmniVision supplies: dovdd=LDO6_M 1.8V, dvdd=LDO1_M 1.2V, avdd=LDO5_M 2.8V. Remove
+  ldo16b-supply from the sensor DT node. Re-run native identity and one deterministic test-pattern frame
+  before removing the remaining experiment-only mode/stream properties.
 
 handoff:
   first_read:

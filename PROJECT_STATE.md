@@ -1,3 +1,7 @@
+## E002k-A ACCEPTED — VAF separated from OV13858 — 2026-08-27
+
+With the exact accepted E002h-r1 kernel/DT and only LDO16_B ownership removed from `ov13858`, native identity and full streaming passed with zero LDO16_B enable votes. The one-frame internal color-bar SHA-256 is exactly the same as E002j (`6987a736...f09346`). Therefore LDO16_B 2.9 V is not required by the rear sensor path and is classified as VAF/actuator power. Next: rename the remaining three consumers to standard `dovdd`/`dvdd`/`avdd` DT supplies without changing their rails/order/voltages.
+
 ## E002k-A prepared — separate VAF from OV13858 sensor power — 2026-08-27
 
 Static QTI `sensorDriverData` classifies the rear sensor power-up as RESET -> VANA -> VDIG -> VIO -> MCLK -> RESET release; VAF is absent from power-up and explicitly disabled in power-down. With the board voltages this maps VIO=LDO6_M 1.8 V, VDIG=LDO1_M 1.2 V, VANA=LDO5_M 2.8 V, VAF=LDO16_B 2.9 V. E002k-A keeps the accepted E002h-r1 kernel/DT/mode/transport byte-identical and removes only LDO16_B ownership from `ov13858`. It will repeat identity plus the internal color-bar frame and require zero LDO16_B enable votes.
