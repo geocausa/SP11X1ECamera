@@ -1,0 +1,37 @@
+{
+  "accepted": true,
+  "instruction_boundaries": {
+    "core_cfg_write_rva": "0x18814",
+    "first_cdm_object_mmio_write": "IRQ0_MASK +0x30 = 1",
+    "first_cdm_object_mmio_write_rva": "0x187a8",
+    "map_return_store_rva": "0x1849c",
+    "pre_first_mmio_boundary_rva": "0x187a0",
+    "reset_cmd_write_rva": "0x187b4",
+    "resource_getter_call_rva": "0x18494"
+  },
+  "linux_consequence": "Do not write FE_CFG or FIFO0_CFG. After the proven-equivalent platform/power domain is active and before the first RT-CDM MMIO write, read-only validate HW_VERSION=0x20010000, FE_CFG=0x07ff000f and FIFO0_CFG=0x01000000; fail closed without MMIO writes if any mismatch. Then follow the Windows init sequence.",
+  "ownership_classification": "positive same-machine timing: FE_CFG/FIFO0_CFG are restored by pre-CDM-object platform/power-up/hardware state; they are not programmed by the front CDM-object MMIO path. This does not distinguish firmware from hardware reset/default ownership.",
+  "remaining_before_static_linux_rtcdm_init": "derive the Linux read-only validation/power-ownership placement and implement the exact init/reset/IRQ/FIFO state machine without enabling runtime",
+  "schema": "sp11-e003h-windows-rtcdm1-fe-fifo-origin-v1",
+  "source": {
+    "binary": "qccamisp8380.sys",
+    "binary_bytes": 376560,
+    "binary_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "raw_log": "E003H_FEFIFO_ORIGIN_20260828.log",
+    "raw_log_bytes": 18444,
+    "raw_log_sha256": "4d54bca3a1c8d2c542b6b09361e9cdee50a4e85175cb0667f0b8dd10c92076bb"
+  },
+  "two_cycle_oracle": {
+    "between_cycles_first_0x80_bytes": "all 0x80000000 powered-off sentinel",
+    "cycle1_object": "0xffff880c3fe4d010",
+    "cycle2_object": "0xffff880c3d4e9010",
+    "fe_fifo_unchanged_after_core_cfg": true,
+    "fe_fifo_unchanged_after_reset_wait": true,
+    "final_first_0x80_bytes": "all 0x80000000 powered-off sentinel",
+    "map_return_before_first_cdm_object_mmio": true,
+    "map_return_equals_pre_first_mmio": true,
+    "map_return_fe_cfg": "0x07ff000f",
+    "map_return_fifo0_cfg": "0x01000000",
+    "rtcdm1_mapped_va": "0xffffb401cf92c000"
+  }
+}

@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-static-rtcdm-stop-power-closed-golden-unchanged
+status: e003h-vfe1-static-rtcdm-fe-fifo-origin-closed-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-stop-power-oracle-closed-positive-origin-next
+  status: vfe1-static-rtcdm1-fe-fifo-origin-closed-linux-init-static-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -316,18 +316,31 @@ e003h:
   windows_rt_cdm_platform_power_off_reference_counted: true
   windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel after StopAsync/dispose/session teardown
   windows_rt_cdm_post_exact_0x805_boundary_sampled: false
+  windows_rt_cdm_fe_fifo_origin_raw_sha256: 4d54bca3a1c8d2c542b6b09361e9cdee50a4e85175cb0667f0b8dd10c92076bb
+  windows_rt_cdm_fe_fifo_origin_raw_bytes: 18444
+  windows_rt_cdm_fe_fifo_origin_extractor_sha256: 16f283a084152c8998f1b222dd681fdf7257998ce29c311af97e734d4e7b4243
+  windows_rt_cdm_fe_fifo_origin_json_sha256: 7ab8eab8867393639d1a034d15bcd361e8773d64a5346a9de5f764f0a0a8ea3b
+  windows_rt_cdm_between_cycles_powered_off_sentinel: true
+  windows_rt_cdm_map_return_before_front_object_mmio: true
+  windows_rt_cdm_map_return_hw_version: 0x20010000
+  windows_rt_cdm_map_return_fe_cfg: 0x07ff000f
+  windows_rt_cdm_map_return_fifo0_cfg: 0x01000000
+  windows_rt_cdm_fe_fifo_survive_reset_and_core_cfg: true
+  windows_rt_cdm_fe_fifo_ownership: pre-CDM-object platform/power-up/hardware layer; ultimate firmware-vs-reset source intentionally unresolved
+  linux_rt_cdm_fe_fifo_action: read-only validate exact values before first RT-CDM write; never synthesize/write; fail closed on mismatch
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: obtain positive same-machine FE_CFG/FIFO0_CFG origin/timing before any Linux RT-CDM MMIO-init/arm/submit; exact sentinel transition remains optional runtime-PM follow-up; then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-windows-rtcdm1-fe-fifo-positive-origin-oracle
+  unresolved: build static-only Linux RT-CDM1 read-only preflight plus exact Windows init/reset/start/stop/commit state machine with no runtime caller; exact sentinel transition remains optional runtime-PM follow-up; then implement valid VFE1 PIX/TP10-UBWC path
+next_experiment: E003h-linux-rtcdm1-readonly-preflight-init-static
 next_action: >-
   Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The exact same-machine Windows
   RT_CDM1 open/init, DEVICE_START, dynamic FIFO0 commit, IRQ-clear and DEVICE_STOP ordering is fail-closed and reproducible.
   The optional CGC_CFG +0x14=7 path is now statically closed as not-taken and must not be written by Linux. The strengthened
   mapping/alias/helper/parser census finds no in-binary CPU write path for FE_CFG +0x20=0x07ff000f or FIFO0_CFG +0x5c=0x01000000,
-  but do not convert that negative result into a reset-default claim. Stream stop versus later session-delete/platform-power
-  collapse is now mechanically separated: do not invent CORE_EN=0/reset. Obtain positive same-machine origin/timing for both
-  FE_CFG/FIFO0_CFG values before any Linux RT-CDM MMIO write/arm/submit path. Exact sentinel-transition timing can remain a
-  later runtime-PM follow-up if needed. No Linux RT-CDM arm, submission, sensor transmission or frame yet.
+  The two-cycle Windows oracle now positively proves FE_CFG/FIFO0_CFG are restored before the front CDM object's first MMIO
+  write after a powered-off interval. Linux must never program those fields: add a read-only preflight for HW_VERSION/FE_CFG/
+  FIFO0_CFG after equivalent platform power is active and fail closed before any write on mismatch. Then build the exact Windows
+  init/reset/start/stop/commit state machine as static-only unreachable code. No Linux RT-CDM arm, submission, sensor transmission
+  or frame yet. Exact sentinel-transition timing can remain a later runtime-PM follow-up if needed.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
