@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-static-ownership-aperture-bus-closed-golden-unchanged
+status: e003h-vfe1-static-rtcdm-config-ownership-narrowed-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-init-order-oracle-closed-ownership-next
+  status: vfe1-static-rtcdm1-config-ownership-oracle-closed-positive-origin-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -292,17 +292,31 @@ e003h:
   windows_rt_cdm_fe_cfg_direct_store_present: false
   windows_rt_cdm_fifo0_cfg_direct_store_present: false
   windows_rt_cdm_fe_fifo_negative_scope: bounded mapped-base static store sweep; does not prove reset/default ownership
+  windows_rt_cdm_config_ownership_extractor_sha256: d25da738a827d81439d426b4de828300af0c6544d2e3d1d0dab78bb8a981b1e7
+  windows_rt_cdm_config_ownership_json_sha256: 4c01a85709d9442953cfd5692219c04b57db5683312f788082e18b5aa6677b7c
+  windows_rt_cdm_object_bytes: 0xa40
+  windows_rt_cdm_object_full_zero_before_init: true
+  windows_rt_cdm_object_guard_a38_fixed_accesses: 1-read-only
+  windows_rt_cdm_cgc_cfg_7_normal_path: not-taken
+  windows_rt_cdm_cgc_cfg_7_linux_action: do-not-write
+  windows_rt_cdm_mapping_field: object +0x48
+  windows_command_parser_mapping_field: object +0x838
+  windows_rt_cdm_alternate_in_binary_mapping_found: false
+  windows_rt_cdm_fe_cfg_in_binary_cpu_write_found: false
+  windows_rt_cdm_fifo0_cfg_in_binary_cpu_write_found: false
+  windows_rt_cdm_fe_fifo_positive_reset_default_proven: false
   windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: close same-machine FE_CFG/FIFO0_CFG ownership/timing, conditional CGC_CFG path, and final CDM stop/power semantics before any Linux RT-CDM MMIO-init/arm/submit; then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-windows-rtcdm1-config-ownership-oracle
+  unresolved: obtain positive same-machine FE_CFG/FIFO0_CFG origin/timing and close final CDM stop/power semantics before any Linux RT-CDM MMIO-init/arm/submit; then implement valid VFE1 PIX/TP10-UBWC path
+next_experiment: E003h-windows-rtcdm1-positive-origin-stop-power-oracle
 next_action: >-
   Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The exact same-machine Windows
-  RT_CDM1 open/init, DEVICE_START, dynamic FIFO0 commit, IRQ-clear and DEVICE_STOP ordering is now fail-closed and reproducible.
-  Keep static 0014 inert. Before adding any RT-CDM MMIO write/arm/submit path, close same-machine ownership/timing for live
-  FE_CFG +0x20=0x07ff000f and FIFO0_CFG +0x5c=0x01000000, determine whether conditional CGC_CFG +0x14=7 applies to the accepted
-  front RT_CDM1 instance, and resolve hardware/power semantics after CDM stop masks IRQ0 to zero. Do not convert the bounded
-  no-direct-store result into a reset-default claim. No Linux RT-CDM arm, submission, sensor transmission or frame yet.
+  RT_CDM1 open/init, DEVICE_START, dynamic FIFO0 commit, IRQ-clear and DEVICE_STOP ordering is fail-closed and reproducible.
+  The optional CGC_CFG +0x14=7 path is now statically closed as not-taken and must not be written by Linux. The strengthened
+  mapping/alias/helper/parser census finds no in-binary CPU write path for FE_CFG +0x20=0x07ff000f or FIFO0_CFG +0x5c=0x01000000,
+  but do not convert that negative result into a reset-default claim. Obtain positive same-machine origin/timing for both values
+  and resolve hardware/power semantics after CDM stop masks IRQ0 to zero before any Linux RT-CDM MMIO write/arm/submit path.
+  No Linux RT-CDM arm, submission, sensor transmission or frame yet.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

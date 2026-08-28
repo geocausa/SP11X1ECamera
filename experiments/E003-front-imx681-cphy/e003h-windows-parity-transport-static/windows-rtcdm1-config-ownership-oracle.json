@@ -1,0 +1,112 @@
+{
+  "accepted": true,
+  "bulk_memory_calls": {
+    "init_memset_rvas": [
+      "0x1839c",
+      "0x18628",
+      "0x18888"
+    ],
+    "runtime_bulk_bookkeeping_offset": "0x890",
+    "runtime_memcpy_rvas": [
+      "0x28774",
+      "0x2897c"
+    ],
+    "runtime_memset_rvas": [
+      "0x28784",
+      "0x28a80"
+    ]
+  },
+  "cdm_object": {
+    "bytes": 2624,
+    "cdm_init_resource_getter_calls": [
+      "0x18494"
+    ],
+    "full_zero_before_init": true,
+    "full_zero_rva": "0x1839c",
+    "rtcdm_mmio_field_offset": "0x48",
+    "rtcdm_mmio_store_rva": "0x1849c",
+    "rtcdm_resource_getter_rva": "0x18494"
+  },
+  "cgc_cfg": {
+    "bulk_memory_census_preserves_guard_after_initial_zero": true,
+    "conditional_value": "0x00000007",
+    "direct_store_overlap_guard": false,
+    "guard_fixed_offset_accesses": [
+      {
+        "mnemonic": "ldrb",
+        "op_str": "w8, [x20, #0xa38]",
+        "rva": 167772
+      }
+    ],
+    "guard_initial_value": 0,
+    "guard_object_offset": "0xa38",
+    "normal_in_binary_lifecycle_branch_taken": false,
+    "register_offset": "0x14",
+    "status": "static not-taken: full object is zero-initialized and exact binary exposes no writer/overlapping bulk copy to guard byte +0xa38"
+  },
+  "fe_fifo_config_ownership": {
+    "alternate_in_binary_rtcdm_mapping_found": false,
+    "classification": "no in-binary CPU software write path found after mapped-base, alias/resource-getter, helper and command-parser separation",
+    "command_parser_is_distinct_target_aperture": true,
+    "direct_rtcdm_store_offsets_runtime": [
+      "0x10",
+      "0x14",
+      "0x1c",
+      "0x30",
+      "0x34",
+      "0x38",
+      "0x50",
+      "0x54",
+      "0x58",
+      "0x134",
+      "0x138",
+      "0x234",
+      "0x238",
+      "0x334",
+      "0x338"
+    ],
+    "fe_cfg_cpu_store_found": false,
+    "fifo0_cfg_cpu_store_found": false,
+    "positive_origin_timing_status": "unresolved; hardware/reset origin remains candidate until same-machine timing evidence or equivalent positive proof",
+    "positive_reset_default_proven": false,
+    "windows_live_fe_cfg_offset": "0x20",
+    "windows_live_fe_cfg_value": "0x07ff000f",
+    "windows_live_fifo0_cfg_offset": "0x5c",
+    "windows_live_fifo0_cfg_value": "0x01000000"
+  },
+  "linux_consequence": "Remove CGC_CFG +0x14=7 from the active-front unresolved set and do not write it. Keep FE_CFG +0x20 and FIFO0_CFG +0x5c unwritten: exact Windows binary exposes no in-binary CPU write path, but positive reset/hardware origin timing is still unresolved. 0014 remains inert.",
+  "remaining_blockers_before_linux_rtcdm_mmio": [
+    "positive same-machine origin/timing of FE_CFG +0x20 = 0x07ff000f",
+    "positive same-machine origin/timing of FIFO0_CFG +0x5c = 0x01000000",
+    "exact hardware/power semantics after CDM stop masks IRQ0 to zero"
+  ],
+  "resource_getter_census": {
+    "all_call_rvas": [
+      "0x6e88",
+      "0x7138",
+      "0x9a70",
+      "0xbc30",
+      "0x17784",
+      "0x17790",
+      "0x18494",
+      "0x22408",
+      "0x294a0",
+      "0x294f4"
+    ],
+    "command_parser_calls": [
+      "0x294a0",
+      "0x294f4"
+    ],
+    "command_parser_target_field": "object +0x838, not RT-CDM object +0x48",
+    "function_va": "0x14002b568",
+    "interpretation": "no second in-binary RT-CDM object mapping path was found",
+    "rtcdm_object_init_call_rva": "0x18494"
+  },
+  "schema": "sp11-e003h-windows-rtcdm1-config-ownership-v1",
+  "source": {
+    "binary": "qccamisp8380.sys",
+    "bytes": 376560,
+    "image_base": "0x140000000",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  }
+}
