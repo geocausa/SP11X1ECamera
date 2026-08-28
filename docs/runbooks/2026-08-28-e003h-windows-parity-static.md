@@ -75,6 +75,8 @@ Combined with the static ISP-internal decode, Windows therefore uses:
 
 Raw KD evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-dynamic/E003H_LIFECYCLE_ABS_20260828.log`, 51,296 bytes, SHA-256 `2908392a619b14f229161dec616e43052103b53b161a3fc77edda56b782d1b36`. The parser and exact front-only holder are archived beside it.
 
+A four-cycle MIPI follow-up closes CSIPHY placement. Raw evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-mipi-order/E003H_MIPI_ORDER_20260828.log`, 8,600 bytes, SHA-256 `09a9b0aa11c677563dee521b14157d76eaecebe9971491a8156b82020bbef224`. All starts are exactly **ISP done -> MIPI start enter -> MIPI start done -> sensor-on**. On stop, ISP teardown always completes first, but sensor-off is unordered relative to MIPI stop: Windows demonstrated sensor-off before MIPI entry, between entry/done, and after MIPI completion. The parser therefore validates a partial order rather than inventing a total order.
+
 Detailed evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-ISP-LIFECYCLE.md`.
 
 ## Linux gaps discovered
@@ -84,7 +86,7 @@ Detailed evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-tran
 3. The static E003h RX patch now computes the exact Windows `0x11300000` for CSIPHY2 one-trio C-PHY and changes no D-PHY bits. CAMSS builds cleanly with Golden vermagic. It is not deployed.
 4. Current CSID680 stream programming is RDI-only; Windows uses IPP.
 5. Current VFE680 output is RDI-only. The generic PIX line mapping is explicitly invalid and would send line 3 through WM27/LTM_STATS. Do not enable PIX as-is.
-6. Generic Linux stop traversal VFE -> CSID conflicts with Windows ISP-internal CSID -> IFE teardown. Static-only `0010-x1e-windows-stop-order.patch` now changes X1E teardown to CSID -> VFE -> the existing remaining upstream tail, preserving sensor-last. The patch applies reproducibly from the recorded pre-image and builds cleanly; it is not deployed.
+6. Generic Linux stop traversal VFE -> CSID conflicts with Windows ISP-internal CSID -> IFE teardown. Static-only `0010-x1e-windows-stop-order.patch` changes X1E teardown to CSID -> VFE -> the existing remaining upstream tail. The current CSIPHY -> sensor tail is one Windows-observed valid serialization of the now-proven unordered sensor/MIPI stop tail; do not claim Windows requires that relative order. The patch applies reproducibly and is not deployed.
 
 ## Static artifact
 
@@ -101,12 +103,11 @@ Build result:
 
 ## Exact next task
 
-1. Resolve CSIPHY/MIPI placement relative to ISP start/stop from same-machine Windows evidence; do not infer it from sensor/ISP ordering.
-2. Keep `0010` static-only and revisit it only if that MIPI evidence requires a narrower order.
-3. Derive the minimum CSID680 IPP support whose programmed live state matches the Windows CSID1 IPP registers for the front mode.
-4. Derive a valid VFE680 PIX architecture for the Windows path; do not reuse the current RDI-only WM mapping as a shortcut.
-5. Separate invariant configuration from counters/status/address fields; copy only configuration that Windows proves necessary.
-6. Build/static-test the complete parity candidate and prove rear D-PHY behavior is unchanged.
-7. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
+1. Derive the minimum CSID680 **IPP** support whose programmed live state matches the Windows CSID1 IPP registers for the front mode.
+2. Derive a valid VFE680 **PIX/ISP** architecture for the Windows path; do not reuse the current RDI-only WM mapping as a shortcut.
+3. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
+4. Separate invariant configuration from counters/status/address fields; copy only configuration that Windows proves necessary.
+5. Build/static-test the complete parity candidate and prove rear D-PHY behavior is unchanged.
+6. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
 
 RDI remains available solely as an explicitly non-parity diagnostic if it becomes useful for fault isolation.

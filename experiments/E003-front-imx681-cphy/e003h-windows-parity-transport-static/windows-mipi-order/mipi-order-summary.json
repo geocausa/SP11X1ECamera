@@ -1,0 +1,174 @@
+{
+  "status": "PASS",
+  "policy": "Same-machine Windows on this exact SP11 is the behavioral oracle.",
+  "raw_log": {
+    "path": "E003H_MIPI_ORDER_20260828.log",
+    "bytes": 8600,
+    "sha256": "09a9b0aa11c677563dee521b14157d76eaecebe9971491a8156b82020bbef224",
+    "encoding": "UTF-16LE via KD .logopen /u"
+  },
+  "driver_oracle": {
+    "qccamisp8380.sys": {
+      "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+      "base": "0xfffff8034aaa0000"
+    },
+    "qccammipicsi8380.sys": {
+      "sha256": "033f5b1431ad4c76a12ac3b7f0a5be42e460a03bcff40d249511b3034786d407",
+      "base": "0xfffff803488e0000"
+    },
+    "surfacecamfrontsensor8380.sys": {
+      "sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03",
+      "base": "0xfffff8034af30000"
+    }
+  },
+  "mipi_static_rvas": {
+    "start_enter": "0x2068",
+    "start_done": "0x2398",
+    "stop_enter": "0x1e70",
+    "stop_done": "0x2024"
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "order": [
+        "isp_start_done",
+        "mipi_start_enter",
+        "mipi_start_done",
+        "sensor_on",
+        "isp_stop_done",
+        "sensor_off",
+        "mipi_stop_enter",
+        "mipi_stop_done"
+      ],
+      "lines": {
+        "isp_start_done": 18,
+        "mipi_start_enter": 19,
+        "mipi_start_done": 20,
+        "sensor_on": 21,
+        "isp_stop_done": 22,
+        "sensor_off": 23,
+        "mipi_stop_enter": 24,
+        "mipi_stop_done": 25
+      },
+      "stop_tail": [
+        "sensor_off",
+        "mipi_stop_enter",
+        "mipi_stop_done"
+      ]
+    },
+    {
+      "cycle": 2,
+      "order": [
+        "isp_start_done",
+        "mipi_start_enter",
+        "mipi_start_done",
+        "sensor_on",
+        "isp_stop_done",
+        "mipi_stop_enter",
+        "sensor_off",
+        "mipi_stop_done"
+      ],
+      "lines": {
+        "isp_start_done": 26,
+        "mipi_start_enter": 27,
+        "mipi_start_done": 28,
+        "sensor_on": 29,
+        "isp_stop_done": 30,
+        "mipi_stop_enter": 31,
+        "sensor_off": 32,
+        "mipi_stop_done": 33
+      },
+      "stop_tail": [
+        "mipi_stop_enter",
+        "sensor_off",
+        "mipi_stop_done"
+      ]
+    },
+    {
+      "cycle": 3,
+      "order": [
+        "isp_start_done",
+        "mipi_start_enter",
+        "mipi_start_done",
+        "sensor_on",
+        "isp_stop_done",
+        "mipi_stop_enter",
+        "sensor_off",
+        "mipi_stop_done"
+      ],
+      "lines": {
+        "isp_start_done": 34,
+        "mipi_start_enter": 35,
+        "mipi_start_done": 36,
+        "sensor_on": 37,
+        "isp_stop_done": 38,
+        "mipi_stop_enter": 39,
+        "sensor_off": 40,
+        "mipi_stop_done": 41
+      },
+      "stop_tail": [
+        "mipi_stop_enter",
+        "sensor_off",
+        "mipi_stop_done"
+      ]
+    },
+    {
+      "cycle": 4,
+      "order": [
+        "isp_start_done",
+        "mipi_start_enter",
+        "mipi_start_done",
+        "sensor_on",
+        "isp_stop_done",
+        "mipi_stop_enter",
+        "mipi_stop_done",
+        "sensor_off"
+      ],
+      "lines": {
+        "isp_start_done": 42,
+        "mipi_start_enter": 43,
+        "mipi_start_done": 44,
+        "sensor_on": 45,
+        "isp_stop_done": 46,
+        "mipi_stop_enter": 47,
+        "mipi_stop_done": 48,
+        "sensor_off": 49
+      },
+      "stop_tail": [
+        "mipi_stop_enter",
+        "mipi_stop_done",
+        "sensor_off"
+      ]
+    }
+  ],
+  "proven_start_total_order": [
+    "isp_start_done",
+    "mipi_start_enter",
+    "mipi_start_done",
+    "sensor_on"
+  ],
+  "proven_stop_partial_order": {
+    "isp_stop_done_before_sensor_off": true,
+    "isp_stop_done_before_mipi_stop_enter": true,
+    "mipi_stop_enter_before_mipi_stop_done": true,
+    "sensor_off_vs_mipi_stop": "unordered by Windows; observed before enter, between enter/done, and after done"
+  },
+  "observed_stop_tail_forms": [
+    [
+      "sensor_off",
+      "mipi_stop_enter",
+      "mipi_stop_done"
+    ],
+    [
+      "mipi_stop_enter",
+      "sensor_off",
+      "mipi_stop_done"
+    ],
+    [
+      "mipi_stop_enter",
+      "mipi_stop_done",
+      "sensor_off"
+    ]
+  ],
+  "linux_0010_consequence": "CSID -> VFE -> CSIPHY -> sensor is an observed-valid serialization of the Windows stop partial order; do not claim Windows requires CSIPHY before sensor."
+}

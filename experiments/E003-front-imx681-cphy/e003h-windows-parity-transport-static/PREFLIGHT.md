@@ -26,7 +26,7 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 3. VFE680 Linux output supports RDI only. Its generic PIX line mapping is explicitly invalid for PIX and would map line 3 through `RDI_WM(3)` to WM27/LTM_STATS. Enabling PIX as-is would be wrong.
 4. Windows uses VFE1 FULL Y/C and real ISP scaling from 3840x2160 to 2560x1440, not a raw RDI write master.
 5. Linux generic stop ordering VFE -> CSID does not match Windows. Static-only `0010-x1e-windows-stop-order.patch` changes X1E teardown to CSID -> VFE -> existing remaining upstream tail, while non-X1E traversal is unchanged. The patch reproducibly builds to qcom-camss SHA-256 `b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591`; it is not deployed.
-6. Sensor-vs-ISP ordering is resolved. The remaining lifecycle unknown is the exact CSIPHY/MIPI placement relative to ISP start/stop.
+6. Lifecycle placement is fully resolved. Four MIPI-instrumented Windows cycles prove strict ISP -> MIPI -> sensor start ordering and an unordered sensor-off/MIPI-stop tail after ISP teardown. `0010`'s current CSIPHY -> sensor tail is an observed-valid serialization, not a claimed Windows requirement.
 
 ## Policy consequence
 

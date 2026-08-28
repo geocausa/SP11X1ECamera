@@ -80,10 +80,10 @@ Combining dynamic ordering with the static ISP-internal disassembly gives the cu
 
 **stop: CSID stop -> IFE stop -> CDM/remaining core stop -> sensor `0x0100=0x00`**
 
-The Windows MIPI/CSIPHY driver's exact placement relative to those ISP operations is still a separate question; do not infer it from the sensor/ISP ordering alone.
+## MIPI/CSIPHY placement — resolved dynamically
 
-## Linux mismatch to resolve
+A four-cycle follow-up uses statically anchored `qccammipicsi8380.sys` START/STOP RVAs and the same ISP/sensor markers. Every start reproduced **ISP_START_DONE -> MIPI_START_ENTER -> MIPI_START_DONE -> SENSOR_STREAM_ON_APPLY**. On stop, `ISP_STOP_DONE` always precedes both sensor-off and MIPI-stop, while sensor-off appeared before MIPI entry, between MIPI entry/completion, and after MIPI completion across four runs. Therefore Windows proves a **partial order**, not a total order, between sensor-off and MIPI-stop. See `windows-mipi-order/README.md`.
 
-Current CAMSS `video_start_streaming()` walks upstream from video as VFE -> CSID -> CSIPHY -> sensor. VFE-before-CSID and sensor-last are consistent with the proven Windows ordering at those boundaries, but CSIPHY placement still requires same-machine evidence.
+## Linux lifecycle consequence
 
-Current CAMSS `video_stop_streaming()` also walks VFE -> CSID -> CSIPHY -> sensor. Sensor-last is now proven compatible with Windows, but **VFE-before-CSID is the opposite of Windows' CSID-before-IFE/VFE stop order**. A parity candidate must fix that host ordering without inventing a sensor-off-first teardown.
+Current CAMSS start traversal VFE -> CSID -> CSIPHY -> sensor matches the proven Windows dependency chain. Static-only `0010` corrects X1E stop's host prefix to CSID -> VFE and leaves CSIPHY -> sensor as the serial tail. Because Windows directly demonstrated MIPI-stop completion before sensor-off in one run, that tail is an observed-valid serialization. It is not a Windows requirement; either relative scheduling is legal after ISP teardown according to the same-machine oracle.

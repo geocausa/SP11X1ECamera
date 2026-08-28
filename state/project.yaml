@@ -149,21 +149,28 @@ e003h:
   windows_dynamic_lifecycle_raw_sha256: 2908392a619b14f229161dec616e43052103b53b161a3fc77edda56b782d1b36
   windows_dynamic_lifecycle_raw_bytes: 51296
   windows_dynamic_lifecycle_cycles: 2
+  windows_mipi_order_raw_sha256: 09a9b0aa11c677563dee521b14157d76eaecebe9971491a8156b82020bbef224
+  windows_mipi_order_raw_bytes: 8600
+  windows_mipi_order_cycles: 4
+  windows_start_total_order: ISP_START_DONE -> MIPI_START -> MIPI_START_DONE -> SENSOR_STREAM_ON
+  windows_stop_partial_order: ISP_STOP_DONE before both MIPI_STOP and SENSOR_STREAM_OFF; sensor-off vs MIPI-stop unordered
   linux_csid_rx_patch_build: pass
   linux_csid_rx_patch_module_sha256: 900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af
   linux_stop_order_patch: 0010-x1e-windows-stop-order.patch
   linux_stop_order_patch_build: pass
   linux_stop_order_patch_module_sha256: b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591
   linux_stop_order_x1e: CSID -> VFE -> remaining upstream tail
+  linux_stop_tail_current_serialization: CSIPHY -> sensor
+  linux_stop_tail_windows_status: observed-valid serialization; Windows proves no dependency between sensor-off and MIPI-stop
   linux_stop_order_non_x1e_unchanged: true
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: CSIPHY/MIPI placement relative to ISP lifecycle; valid CSID1 IPP and VFE1 PIX implementation
+  unresolved: valid CSID1 IPP and VFE1 PIX/ISP implementation
 next_experiment: E003h-ipp-vfe1-parity-static-architecture
 next_action: >-
   Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Strict same-machine Windows
-  parity remains the acceptance target. Preserve the now-proven sensor-last start/stop boundary and the static-only
-  0010 X1E teardown candidate that orders CSID before VFE. Resolve CSIPHY/MIPI placement from same-machine Windows
-  evidence, then implement only the Windows-proven CSID1 IPP and valid VFE1 PIX/ISP architecture. The current Linux RDI path may be used only as
+  parity remains the acceptance target. Lifecycle placement is closed: Windows starts ISP then MIPI then sensor; on
+  stop ISP teardown completes before both sensor-off and MIPI-stop, with no total order between those latter two.
+  Preserve static-only 0010 and implement only the Windows-proven CSID1 IPP and valid VFE1 PIX/ISP architecture. The current Linux RDI path may be used only as
   an explicitly non-parity diagnostic and must never be treated as the production or acceptance endpoint. No runtime
   parity candidate or frame is authorized until static build, ABI, DT, rear-DPHY non-regression, timeout and rollback gates pass.
 
