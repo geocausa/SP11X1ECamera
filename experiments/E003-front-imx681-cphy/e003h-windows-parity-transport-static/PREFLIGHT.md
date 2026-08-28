@@ -15,7 +15,7 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 - VFE1 Windows ISP output: FULL Y 2560x1440, FULL C 2560x720, DS4 320x180, DS16 80x45 plus statistics clients;
 - VFE0 is inactive for the front WinRT stream;
 - sensor stream-on/off is exactly `0x0100=1` / `0x0100=0`, zero delay; group hold `0x0104` is separate;
-- Windows ISP internal start order is IFE -> initial IFE/CSID packets -> CSID;
+- Windows ISP internal start order is CDM -> IFE -> initial IFE/SFE/CSID packets -> CSID;
 - Windows ISP internal stop order is CSID -> IFE -> CDM/remaining core;
 - native front IFE command execution uses hardware RT_CDM1 v2.1 at physical `0x0ac26000`, FIFO0;
 - RT_CDM1 registers as interrupt class 3 / instance 1 with firmware GSI `319` (`0x13f`), which maps to Linux `GIC_SPI 287` (`0x11f`) on this SP11;
@@ -29,6 +29,7 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 4. Windows uses VFE1 FULL Y/C and real ISP scaling from 3840x2160 to 2560x1440, not a raw RDI write master.
 5. Linux generic stop ordering VFE -> CSID does not match Windows. Static-only `0010-x1e-windows-stop-order.patch` changes X1E teardown to CSID -> VFE -> existing remaining upstream tail, while non-X1E traversal is unchanged. The patch reproducibly builds to qcom-camss SHA-256 `b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591`; it is not deployed.
 6. Lifecycle placement is fully resolved. Four MIPI-instrumented Windows cycles prove strict ISP -> MIPI -> sensor start ordering and an unordered sensor-off/MIPI-stop tail after ISP teardown. `0010`'s current CSIPHY -> sensor tail is an observed-valid serialization, not a claimed Windows requirement.
+7. Static `0015-sp11-rtcdm1-windows-static-recipe.patch` now compiles the exact Windows-derived RT_CDM1 preflight/init/start/FIFO0/stop recipe behind an unreachable private ops table. FE_CFG/FIFO0_CFG remain read-only validation targets, the optional CGC path is absent, no `CORE_EN=0` shutdown is invented, and no runtime code references the recipe.
 
 ## Policy consequence
 

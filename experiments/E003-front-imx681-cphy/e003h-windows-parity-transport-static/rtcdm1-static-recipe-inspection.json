@@ -1,0 +1,36 @@
+{
+  "accepted": true,
+  "compiled_mechanics": {
+    "fifo_len_high_field_0x00100000": true,
+    "fifo_offsets_0x50_0x54_0x58_present": true,
+    "open_init_dmb_sy": true,
+    "start_dmb_sy": true
+  },
+  "forbidden_writes": {
+    "cgc_cfg_symbol": false,
+    "core_en_zero_write": false,
+    "fe_cfg_write": false,
+    "fifo0_cfg_write": false
+  },
+  "module_sha256": "0c2f3df7423310c3384b02f6465b5ecb4b91ce73391b1f7fc10adca7157440d9",
+  "object_sha256": "167bcd1897a4bf688fe6a4e6a433d1580e36d3c8165ab746c87663528ce40a67",
+  "patch_paths": [
+    "drivers/media/platform/qcom/camss/camss.c"
+  ],
+  "patch_sha256": "32661bf7e6eae864d857cd96bcfccdf01e820fbfbc3a2c2d9bf5cfa8f5ad9514",
+  "policy": "static-only; no runtime caller, no FE/FIFO/CGC write, no CORE_EN=0 shutdown",
+  "runtime_isolation": {
+    "helper_relocations": [
+      "0000000000001460 R_AARCH64_ABS64   camss_rtcdm1_windows_preflight",
+      "0000000000001468 R_AARCH64_ABS64   camss_rtcdm1_windows_open_init",
+      "0000000000001470 R_AARCH64_ABS64   camss_rtcdm1_windows_start",
+      "0000000000001478 R_AARCH64_ABS64   camss_rtcdm1_windows_fifo0_commit",
+      "0000000000001480 R_AARCH64_ABS64   camss_rtcdm1_windows_stop"
+    ],
+    "interpretation": "helpers are retained only by the private data table; no code path references that table",
+    "recipe_compiled_relocation_present": false,
+    "recipe_source_reference_count": 1
+  },
+  "schema": "sp11-e003h-linux-rtcdm1-static-recipe-inspection-v1",
+  "source_sha256": "ee7d14e191c1c3803437ab26d82a7c9fb33d47665419ac8f0a0330b2f76f32be"
+}

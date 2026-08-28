@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-static-rtcdm-fe-fifo-origin-closed-golden-unchanged
+status: e003h-vfe1-static-rtcdm-windows-recipe-built-unreachable-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-fe-fifo-origin-closed-linux-init-static-next
+  status: vfe1-static-rtcdm1-windows-recipe-built-unreachable-pix-static-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -329,18 +329,29 @@ e003h:
   windows_rt_cdm_fe_fifo_ownership: pre-CDM-object platform/power-up/hardware layer; ultimate firmware-vs-reset source intentionally unresolved
   linux_rt_cdm_fe_fifo_action: read-only validate exact values before first RT-CDM write; never synthesize/write; fail closed on mismatch
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: build static-only Linux RT-CDM1 read-only preflight plus exact Windows init/reset/start/stop/commit state machine with no runtime caller; exact sentinel transition remains optional runtime-PM follow-up; then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-linux-rtcdm1-readonly-preflight-init-static
+  linux_rt_cdm1_static_recipe_patch_sha256: 32661bf7e6eae864d857cd96bcfccdf01e820fbfbc3a2c2d9bf5cfa8f5ad9514
+  linux_rt_cdm1_static_recipe_inspector_sha256: 07338c3751c4d0cc53a6cb813b4f3fb43af9f9af26c27e9e0d65b8f31e3ad72a
+  linux_rt_cdm1_static_recipe_json_sha256: 23f9f601f0e9b8880e447d17685585bbdc1e0058a8be60fcf330172e366aa346
+  linux_rt_cdm1_static_recipe_build_log_sha256: 2e11d7ee50ed0b13c6d6bc2b80a7c5e568efd751c0b1a83d9942456cff520efc
+  linux_rt_cdm1_static_recipe_module_sha256: 0c2f3df7423310c3384b02f6465b5ecb4b91ce73391b1f7fc10adca7157440d9
+  linux_rt_cdm1_static_recipe_runtime_reachable: false
+  linux_rt_cdm1_static_recipe_fe_cfg_write: false
+  linux_rt_cdm1_static_recipe_fifo0_cfg_write: false
+  linux_rt_cdm1_static_recipe_cgc_cfg_write: false
+  linux_rt_cdm1_static_recipe_core_en_zero_write: false
+  linux_rt_cdm1_static_recipe_compiled_open_init: IRQ0_MASK=1 -> RST_CMD=9 -> reset-done <=500ms -> DMB SY -> CORE_CFG=0x11f
+  linux_rt_cdm1_static_recipe_compiled_start: IRQ0_MASK=0x00070007 -> DMB SY -> CORE_EN=1
+  linux_rt_cdm1_static_recipe_compiled_fifo0: dynamic BASE -> observed encoded LEN -> STORE=1 -> BL-done wait
+  linux_rt_cdm1_static_recipe_compiled_stop: IRQ0_MASK=0 only
+  unresolved: derive/build valid VFE1 PIX/ISP QC10C/TP10-UBWC path and prove rear isolation before connecting RT-CDM recipe; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-vfe1-pix-qc10c-static-architecture
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The exact same-machine Windows
-  RT_CDM1 open/init, DEVICE_START, dynamic FIFO0 commit, IRQ-clear and DEVICE_STOP ordering is fail-closed and reproducible.
-  The optional CGC_CFG +0x14=7 path is now statically closed as not-taken and must not be written by Linux. The strengthened
-  mapping/alias/helper/parser census finds no in-binary CPU write path for FE_CFG +0x20=0x07ff000f or FIFO0_CFG +0x5c=0x01000000,
-  The two-cycle Windows oracle now positively proves FE_CFG/FIFO0_CFG are restored before the front CDM object's first MMIO
-  write after a powered-off interval. Linux must never program those fields: add a read-only preflight for HW_VERSION/FE_CFG/
-  FIFO0_CFG after equivalent platform power is active and fail closed before any write on mismatch. Then build the exact Windows
-  init/reset/start/stop/commit state machine as static-only unreachable code. No Linux RT-CDM arm, submission, sensor transmission
-  or frame yet. Exact sentinel-transition timing can remain a later runtime-PM follow-up if needed.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0015 now compiles the exact
+  Windows-derived RT_CDM1 read-only preflight plus reset/init/start/FIFO0/stop recipe behind a private retained table with no
+  runtime reference; FE_CFG/FIFO0_CFG/CGC remain unwritten and no CORE_EN=0 shutdown is invented. Do not connect that recipe
+  to runtime yet. Derive and build the minimum fail-closed VFE1 PIX/ISP architecture for Windows 3840x2160 input -> 2560x1440
+  QC10C/TP10-UBWC FULL output using only same-machine Windows-proven BUS/DS/statistics/IQ state, and prove rear D-PHY/RDI
+  isolation. No Linux RT-CDM arm/submission, sensor transmission or front frame before complete static/build/ABI/DT/rollback gates.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

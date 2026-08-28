@@ -1,0 +1,266 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7,10 +7,13 @@
+  * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+  * Copyright (C) 2015-2018 Linaro Ltd.
+  */
++#include <asm/barrier.h>
++
+ #include <linux/clk.h>
+ #include <linux/interconnect.h>
+ #include <linux/interrupt.h>
+ #include <linux/ioport.h>
++#include <linux/jiffies.h>
+ #include <linux/media-bus-format.h>
+ #include <linux/media.h>
+ #include <linux/module.h>
+@@ -4969,6 +4972,32 @@
+ #define CAMSS_X1E80100_RTCDM1_PHYS_BASE 0x0ac26000
+ #define CAMSS_X1E80100_RTCDM1_SIZE      SZ_4K
+ 
++/*
++ * RT-CDM v2.1 layout. Public Qualcomm source names the registers only; every
++ * value and ordering below is pinned to the same-machine Windows oracles.
++ */
++#define CAMSS_RTCDM_HW_VERSION          0x000
++#define CAMSS_RTCDM_RST_CMD             0x010
++#define CAMSS_RTCDM_CORE_CFG            0x018
++#define CAMSS_RTCDM_CORE_EN             0x01c
++#define CAMSS_RTCDM_FE_CFG              0x020
++#define CAMSS_RTCDM_IRQ0_MASK           0x030
++#define CAMSS_RTCDM_FIFO0_BASE          0x050
++#define CAMSS_RTCDM_FIFO0_LEN           0x054
++#define CAMSS_RTCDM_FIFO0_STORE         0x058
++#define CAMSS_RTCDM_FIFO0_CFG           0x05c
++
++#define CAMSS_RTCDM_WINDOWS_HW_VERSION  0x20010000
++#define CAMSS_RTCDM_WINDOWS_FE_CFG      0x07ff000f
++#define CAMSS_RTCDM_WINDOWS_FIFO0_CFG   0x01000000
++#define CAMSS_RTCDM_WINDOWS_CORE_CFG    0x0000011f
++#define CAMSS_RTCDM_WINDOWS_RESET_CMD   0x00000009
++#define CAMSS_RTCDM_WINDOWS_RESET_MASK  0x00000001
++#define CAMSS_RTCDM_WINDOWS_CORE_EN     0x00000001
++#define CAMSS_RTCDM_WINDOWS_FIFO_LEN_HIGH    BIT(20)
++#define CAMSS_RTCDM_WINDOWS_FIFO_LOW20  GENMASK(19, 0)
++#define CAMSS_RTCDM_WINDOWS_WAIT_MS     500
++
+ /* RT-CDM v2.1 IRQ layout; Qualcomm source is naming/layout only. */
+ #define CAMSS_RTCDM_IRQ_CONTEXT_STATUS  0x02c
+ #define CAMSS_RTCDM_IRQ0_CLEAR          0x034
+@@ -5040,13 +5069,215 @@
+ 		WRITE_ONCE(rt->irq_armed, false);
+ 	}
+ 
+-	if (status & (CAMSS_RTCDM_IRQ_INLINE | CAMSS_RTCDM_IRQ_BL_DONE))
++	/* Windows blocks on reset-done and BL-done events; inline is informational. */
++	if (status & (CAMSS_RTCDM_IRQ_RESET_DONE | CAMSS_RTCDM_IRQ_BL_DONE))
+ 		complete(&rt->completion);
+ 
+ 	return IRQ_HANDLED;
+ }
+ 
+ /*
++ * E003h static-only Windows RT-CDM1 recipe.
++ *
++ * These helpers are retained through an internal __used ops table below, but
++ * that table has no runtime reference in this patch. They therefore cannot be
++ * reached by probe, media setup, stream-on/off, or teardown. The purpose of
++ * this layer is to compile the exact already-proven state machine before any
++ * live Linux authorization.
++ *
++ * In particular FE_CFG/FIFO0_CFG are never written. The two-cycle Windows
++ * oracle proves that they reappear after power collapse before the front CDM
++ * object performs its first MMIO write, so Linux may only validate them.
++ */
++static int camss_rtcdm1_windows_preflight(struct camss *camss)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++	u32 hw_version;
++	u32 fe_cfg;
++	u32 fifo0_cfg;
++
++	if (!rt->present || !rt->base)
++		return -ENODEV;
++
++	hw_version = readl_relaxed(rt->base + CAMSS_RTCDM_HW_VERSION);
++	fe_cfg = readl_relaxed(rt->base + CAMSS_RTCDM_FE_CFG);
++	fifo0_cfg = readl_relaxed(rt->base + CAMSS_RTCDM_FIFO0_CFG);
++
++	if (hw_version != CAMSS_RTCDM_WINDOWS_HW_VERSION ||
++	    fe_cfg != CAMSS_RTCDM_WINDOWS_FE_CFG ||
++	    fifo0_cfg != CAMSS_RTCDM_WINDOWS_FIFO0_CFG)
++		return -ENODEV;
++
++	return 0;
++}
++
++static int camss_rtcdm1_windows_wait(struct camss_rtcdm *rt, u32 required)
++{
++	unsigned long left;
++	u32 status;
++
++	left = wait_for_completion_timeout(&rt->completion,
++					msecs_to_jiffies(CAMSS_RTCDM_WINDOWS_WAIT_MS));
++	if (!left)
++		return -ETIMEDOUT;
++	if (READ_ONCE(rt->faulted))
++		return -EIO;
++
++	status = READ_ONCE(rt->last_irq_status);
++	if (!(status & required) || (status & ~CAMSS_RTCDM_IRQ_KNOWN))
++		return -EIO;
++
++	return 0;
++}
++
++static int camss_rtcdm1_windows_open_init(struct camss *camss)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++	int ret;
++
++	/* Positive Windows timing requires this read-only gate before any write. */
++	ret = camss_rtcdm1_windows_preflight(camss);
++	if (ret)
++		return ret;
++
++	mutex_lock(&rt->lock);
++	if (READ_ONCE(rt->irq_armed)) {
++		ret = -EBUSY;
++		goto out_unlock;
++	}
++
++	reinit_completion(&rt->completion);
++	WRITE_ONCE(rt->faulted, false);
++	WRITE_ONCE(rt->last_irq_context, 0);
++	WRITE_ONCE(rt->last_irq_status, 0);
++	WRITE_ONCE(rt->last_user_data, 0);
++
++	/* Linux interrupt-controller mechanics; no RT-CDM register is changed. */
++	WRITE_ONCE(rt->irq_armed, true);
++	enable_irq(rt->irq);
++
++	/* Exact same-machine Windows open/init MMIO order. */
++	writel_relaxed(CAMSS_RTCDM_WINDOWS_RESET_MASK,
++		       rt->base + CAMSS_RTCDM_IRQ0_MASK);
++	writel_relaxed(CAMSS_RTCDM_WINDOWS_RESET_CMD,
++		       rt->base + CAMSS_RTCDM_RST_CMD);
++
++	ret = camss_rtcdm1_windows_wait(rt, CAMSS_RTCDM_IRQ_RESET_DONE);
++	if (ret) {
++		disable_irq(rt->irq);
++		WRITE_ONCE(rt->irq_armed, false);
++		goto out_unlock;
++	}
++
++	/* qccamisp8380.sys executes DMB SY immediately before CORE_CFG. */
++	dmb(sy);
++	writel_relaxed(CAMSS_RTCDM_WINDOWS_CORE_CFG,
++		       rt->base + CAMSS_RTCDM_CORE_CFG);
++
++out_unlock:
++	mutex_unlock(&rt->lock);
++	return ret;
++}
++
++static int camss_rtcdm1_windows_start(struct camss *camss)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++	int ret = 0;
++
++	if (!rt->present || !rt->base)
++		return -ENODEV;
++
++	mutex_lock(&rt->lock);
++	if (!READ_ONCE(rt->irq_armed) || READ_ONCE(rt->faulted)) {
++		ret = -EIO;
++		goto out_unlock;
++	}
++
++	writel_relaxed(CAMSS_RTCDM_WINDOWS_IRQ0_MASK,
++		       rt->base + CAMSS_RTCDM_IRQ0_MASK);
++	dmb(sy);
++	writel_relaxed(CAMSS_RTCDM_WINDOWS_CORE_EN,
++		       rt->base + CAMSS_RTCDM_CORE_EN);
++
++out_unlock:
++	mutex_unlock(&rt->lock);
++	return ret;
++}
++
++static int camss_rtcdm1_windows_fifo0_commit(struct camss *camss,
++					     u32 base, u32 len_low20)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++	u32 encoded_len;
++	int ret = 0;
++
++	if (!rt->present || !rt->base)
++		return -ENODEV;
++	if (!base || !len_low20 || (len_low20 & ~CAMSS_RTCDM_WINDOWS_FIFO_LOW20))
++		return -EINVAL;
++
++	/* Windows BFI at RVA 0x2887c replaces bits 31:20 with 0x001. */
++	encoded_len = len_low20 | CAMSS_RTCDM_WINDOWS_FIFO_LEN_HIGH;
++
++	mutex_lock(&rt->lock);
++	if (!READ_ONCE(rt->irq_armed) || READ_ONCE(rt->faulted)) {
++		ret = -EIO;
++		goto out_unlock;
++	}
++
++	reinit_completion(&rt->completion);
++	WRITE_ONCE(rt->last_irq_context, 0);
++	WRITE_ONCE(rt->last_irq_status, 0);
++	WRITE_ONCE(rt->last_user_data, 0);
++
++	/* Exact Windows dynamic FIFO0 commit: BASE -> encoded LEN -> STORE. */
++	writel_relaxed(base, rt->base + CAMSS_RTCDM_FIFO0_BASE);
++	writel_relaxed(encoded_len, rt->base + CAMSS_RTCDM_FIFO0_LEN);
++	writel_relaxed(1, rt->base + CAMSS_RTCDM_FIFO0_STORE);
++
++	ret = camss_rtcdm1_windows_wait(rt, CAMSS_RTCDM_IRQ_BL_DONE);
++
++out_unlock:
++	mutex_unlock(&rt->lock);
++	return ret;
++}
++
++static void camss_rtcdm1_windows_stop(struct camss *camss)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++
++	if (!rt->present || !rt->base)
++		return;
++
++	mutex_lock(&rt->lock);
++	/* Exact DEVICE_STOP CDM action: mask IRQ0 only. No CORE_EN=0/reset. */
++	writel_relaxed(0, rt->base + CAMSS_RTCDM_IRQ0_MASK);
++	mutex_unlock(&rt->lock);
++}
++
++struct camss_rtcdm1_windows_static_ops {
++	int (*preflight)(struct camss *camss);
++	int (*open_init)(struct camss *camss);
++	int (*start)(struct camss *camss);
++	int (*fifo0_commit)(struct camss *camss, u32 base, u32 len_low20);
++	void (*stop)(struct camss *camss);
++};
++
++/*
++ * Deliberately retained for static/build inspection only. Search/call-graph
++ * policy for E003h requires zero references to this object outside its own
++ * definition until a later runtime gate is explicitly authorized.
++ */
++static const struct camss_rtcdm1_windows_static_ops
++camss_rtcdm1_windows_recipe __used = {
++	.preflight = camss_rtcdm1_windows_preflight,
++	.open_init = camss_rtcdm1_windows_open_init,
++	.start = camss_rtcdm1_windows_start,
++	.fifo0_commit = camss_rtcdm1_windows_fifo0_commit,
++	.stop = camss_rtcdm1_windows_stop,
++};
++
++/*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
+  * rejects any address that cannot be represented by RT-CDM's 32-bit BL base.
