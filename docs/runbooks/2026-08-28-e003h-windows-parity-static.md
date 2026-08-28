@@ -6,7 +6,7 @@ Branch: `experiment/e003-front-imx681-cphy`
 
 Last pushed checkpoint entering E003h: `c60bad2` (`docs: align current state with E003g route oracle`).
 
-Golden remains byte-exact FullIO v19c and is the saved default. E003h has performed no boot, module load, sensor transmission or frame attempt.
+Golden remains byte-exact FullIO v19c and is the saved default. E003h static CAMSS code remains undeployed. A same-machine Windows-only KD round trip has now resolved cross-driver lifecycle ordering; the machine returned to byte-exact Golden afterward. No Linux E003h module load, sensor transmission or frame attempt has occurred.
 
 ## Non-negotiable oracle rule
 
@@ -63,7 +63,17 @@ Static disassembly of DEVICE_STOP (`0x805`) proves:
 
 **CSID stop -> IFE stop -> CDM/remaining core stop**.
 
-The front sensor KMD powers/opens MIPI CSI before sensor init/config/crop and applies `SensorStreamOn` later through its async path. However, the exact cross-driver ordering of sensor `0x0100=1/0` versus ISP DEVICE_START/STOP is not yet mechanically resolved. Keep sensor transmission blocked until it is.
+The front sensor KMD powers/opens MIPI CSI before sensor init/config/crop and applies `SensorStreamOn` later through its async path. A two-pass same-machine Windows KD oracle now resolves the cross-driver boundary too. Both exact `Surface Camera Front` WinRT cycles mechanically produced:
+
+**ISP_START_DONE -> SENSOR_STREAM_ON_APPLY -> ISP_STOP_DONE -> SENSOR_STREAM_OFF_APPLY**.
+
+Combined with the static ISP-internal decode, Windows therefore uses:
+
+**start: IFE -> config packets -> CSID -> sensor `0x0100=1`**
+
+**stop: CSID -> IFE -> CDM/remaining core -> sensor `0x0100=0`**.
+
+Raw KD evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-dynamic/E003H_LIFECYCLE_ABS_20260828.log`, 51,296 bytes, SHA-256 `2908392a619b14f229161dec616e43052103b53b161a3fc77edda56b782d1b36`. The parser and exact front-only holder are archived beside it.
 
 Detailed evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-ISP-LIFECYCLE.md`.
 
@@ -74,7 +84,7 @@ Detailed evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-tran
 3. The static E003h RX patch now computes the exact Windows `0x11300000` for CSIPHY2 one-trio C-PHY and changes no D-PHY bits. CAMSS builds cleanly with Golden vermagic. It is not deployed.
 4. Current CSID680 stream programming is RDI-only; Windows uses IPP.
 5. Current VFE680 output is RDI-only. The generic PIX line mapping is explicitly invalid and would send line 3 through WM27/LTM_STATS. Do not enable PIX as-is.
-6. Generic Linux stop traversal VFE -> CSID conflicts with Windows ISP-internal CSID -> IFE teardown.
+6. Generic Linux stop traversal VFE -> CSID conflicts with Windows ISP-internal CSID -> IFE teardown. Dynamic Windows proof now also establishes that sensor stream-off occurs only after the ISP stop sequence completes; do not “fix” this by moving sensor-off first.
 
 ## Static artifact
 
@@ -89,12 +99,12 @@ Build result:
 
 ## Exact next task
 
-1. Resolve the sensor `0x0100=1/0` scheduling point relative to ISP DEVICE_START/STOP using same-machine Windows evidence; do not guess.
-2. Derive the minimum CSID680 IPP support whose programmed live state matches the Windows CSID1 IPP registers for the front mode.
-3. Derive a valid VFE680 PIX architecture for the Windows path; do not reuse the current RDI-only WM mapping as a shortcut.
-4. Separate invariant configuration from counters/status/address fields; copy only configuration that Windows proves necessary.
-5. Reconcile Linux start/stop traversal with Windows lifecycle before authorizing sensor transmission.
+1. Trace local CAMSS stream start/stop code mechanically. Preserve the proven sensor-last boundary, but correct the Linux VFE-before-CSID stop ordering to Windows CSID-before-IFE/VFE semantics without guessing CSIPHY placement.
+2. Resolve CSIPHY/MIPI placement relative to ISP start/stop from same-machine Windows evidence if the Linux ordering decision depends on it.
+3. Derive the minimum CSID680 IPP support whose programmed live state matches the Windows CSID1 IPP registers for the front mode.
+4. Derive a valid VFE680 PIX architecture for the Windows path; do not reuse the current RDI-only WM mapping as a shortcut.
+5. Separate invariant configuration from counters/status/address fields; copy only configuration that Windows proves necessary.
 6. Build/static-test the complete parity candidate and prove rear D-PHY behavior is unchanged.
-7. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front frame is authorized before these conditions are met.
+7. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
 
 RDI remains available solely as an explicitly non-parity diagnostic if it becomes useful for fault isolation.

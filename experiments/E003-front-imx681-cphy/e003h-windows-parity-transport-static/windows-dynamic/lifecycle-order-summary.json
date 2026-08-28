@@ -1,0 +1,87 @@
+{
+  "status": "PASS",
+  "policy": "Same-machine Windows on this exact SP11 is the behavioral oracle.",
+  "raw_log": {
+    "path": "E003H_LIFECYCLE_ABS_20260828.log",
+    "bytes": 51296,
+    "sha256": "2908392a619b14f229161dec616e43052103b53b161a3fc77edda56b782d1b36",
+    "encoding": "UTF-16LE via KD .logopen /u"
+  },
+  "driver_oracle": {
+    "qccamisp8380.sys": {
+      "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+      "base": "0xfffff802eed70000",
+      "entry_rva": "0x2c730"
+    },
+    "qccammipicsi8380.sys": {
+      "sha256": "033f5b1431ad4c76a12ac3b7f0a5be42e460a03bcff40d249511b3034786d407",
+      "base": "0xfffff802eb340000",
+      "entry_rva": "0x7f70"
+    },
+    "surfacecamfrontsensor8380.sys": {
+      "sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03",
+      "base": "0xfffff802ef200000",
+      "entry_rva": "0xb980"
+    }
+  },
+  "breakpoints": {
+    "isp_start_enter": "0xfffff802eed85ee0",
+    "isp_start_done": "0xfffff802eed86220",
+    "isp_stop_enter": "0xfffff802eed86300",
+    "isp_stop_done": "0xfffff802eed86500",
+    "sensor_stream_on_apply": "0xfffff802ef207e94",
+    "sensor_stream_off_apply": "0xfffff802ef207c6c"
+  },
+  "runtime_enter_marker_counts": {
+    "ISP_START_ENTER": 408,
+    "ISP_STOP_ENTER": 406
+  },
+  "runtime_enter_marker_policy": "ISP START/STOP ENTER addresses are internal command-path sites and are intentionally not used to define top-level lifecycle order.",
+  "cycles": [
+    {
+      "cycle": 1,
+      "order": [
+        "isp_start_done",
+        "sensor_stream_on_apply",
+        "isp_stop_done",
+        "sensor_stream_off_apply"
+      ],
+      "lines": {
+        "isp_start_done": 22,
+        "sensor_stream_on_apply": 25,
+        "isp_stop_done": 422,
+        "sensor_stream_off_apply": 423
+      }
+    },
+    {
+      "cycle": 2,
+      "order": [
+        "isp_start_done",
+        "sensor_stream_on_apply",
+        "isp_stop_done",
+        "sensor_stream_off_apply"
+      ],
+      "lines": {
+        "isp_start_done": 435,
+        "sensor_stream_on_apply": 438,
+        "isp_stop_done": 831,
+        "sensor_stream_off_apply": 832
+      }
+    }
+  ],
+  "proven_cross_driver_start": "ISP_START_DONE -> SENSOR_STREAM_ON_APPLY",
+  "proven_cross_driver_stop": "ISP_STOP_DONE -> SENSOR_STREAM_OFF_APPLY",
+  "combined_windows_start": "IFE start -> initial IFE/CSID configuration -> CSID start -> sensor 0x0100=0x01",
+  "combined_windows_stop": "CSID stop -> IFE stop -> CDM/remaining core stop -> sensor 0x0100=0x00",
+  "kd_script": {
+    "path": "e003h-abs-lifecycle.kd",
+    "bytes": 559,
+    "sha256": "7413f63bc7bcc4bb46f749829ce1f26e6b7632d4004e79734b431ae1211d2c04"
+  },
+  "winrt_holder": {
+    "path": "E003H-WinRT-Holder.ps1",
+    "bytes": 3809,
+    "sha256": "7eb5971788d89024ef85614774866ddf205ba39c2b9ded618890ee0eef7ddd75",
+    "required_device": "Surface Camera Front"
+  }
+}

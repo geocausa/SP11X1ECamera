@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-static-parity-architecture-golden-unchanged
+status: e003h-dynamic-lifecycle-resolved-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: static-parity-architecture-in-progress
+  status: dynamic-lifecycle-resolved-static-parity-architecture-in-progress
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -144,18 +144,23 @@ e003h:
   vfe1_full_c: 2560x720
   windows_isp_start_order: IFE -> config packets -> CSID
   windows_isp_stop_order: CSID -> IFE -> CDM
+  windows_cross_driver_start: ISP_START_DONE -> SENSOR_STREAM_ON_APPLY
+  windows_cross_driver_stop: ISP_STOP_DONE -> SENSOR_STREAM_OFF_APPLY
+  windows_dynamic_lifecycle_raw_sha256: 2908392a619b14f229161dec616e43052103b53b161a3fc77edda56b782d1b36
+  windows_dynamic_lifecycle_raw_bytes: 51296
+  windows_dynamic_lifecycle_cycles: 2
   linux_csid_rx_patch_build: pass
   linux_csid_rx_patch_module_sha256: 900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: exact sensor stream-on/off scheduling relative to ISP DEVICE_START/STOP
+  unresolved: CSIPHY/MIPI placement relative to ISP lifecycle; valid CSID1 IPP and VFE1 PIX implementation
 next_experiment: E003h-ipp-vfe1-parity-static-architecture
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 transmission blocked. Strict same-machine Windows
-  parity remains the acceptance target. Resolve the sensor 0x0100=1/0 scheduling point relative to Windows ISP
-  DEVICE_START/STOP, then implement only the Windows-proven CSID1 IPP and valid VFE1 PIX/ISP architecture plus
-  lifecycle ordering. The current Linux RDI path may be used only as an explicitly non-parity diagnostic and must
-  never be treated as the production or acceptance endpoint. No runtime candidate or frame is authorized until
-  the parity implementation passes static build, ABI, DT, rear-DPHY non-regression, timeout and rollback gates.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Strict same-machine Windows
+  parity remains the acceptance target. Preserve the now-proven sensor-last start/stop boundary, correct Linux's
+  VFE-before-CSID teardown to Windows CSID-before-IFE/VFE semantics, resolve CSIPHY placement if needed, then implement
+  only the Windows-proven CSID1 IPP and valid VFE1 PIX/ISP architecture. The current Linux RDI path may be used only as
+  an explicitly non-parity diagnostic and must never be treated as the production or acceptance endpoint. No runtime
+  parity candidate or frame is authorized until static build, ABI, DT, rear-DPHY non-regression, timeout and rollback gates pass.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

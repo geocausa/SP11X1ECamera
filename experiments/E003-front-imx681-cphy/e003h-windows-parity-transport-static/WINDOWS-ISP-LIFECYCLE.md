@@ -1,8 +1,8 @@
-# Same-machine Windows ISP lifecycle — static oracle
+# Same-machine Windows ISP lifecycle — static + dynamic oracle
 
 Date: 2026-08-28
 
-This is static evidence from the exact Windows camera binaries installed for this SP11. No external implementation is treated as behavioral evidence.
+This combines static evidence from the exact Windows camera binaries installed for this SP11 with a two-pass same-machine KD runtime oracle. No external implementation is treated as behavioral evidence.
 
 ## Exact binaries
 
@@ -49,10 +49,41 @@ Therefore the Windows ISP-internal teardown order is:
 
 The exact front-sensor KMD shows MIPI CSI power/open during `CameraSensorDriver_PowerOn()` before sensor init/config/crop packets are submitted. Sensor `CSLPacketOpcodesSensorStreamOn` is archived and later applied by `SensorAsyncProcessUpdate()`. The SHA-pinned sensor data itself defines stream-on as the single write `0x0100=0x01` and stream-off as `0x0100=0x00`, both with zero delay.
 
-This proves that Windows does not require a guessed multi-register stream toggle and strongly supports a receiver/host-ready-before-transmitter architecture. The exact cross-driver scheduling point of sensor `0x0100=1` relative to ISP DEVICE_START is **not yet mechanically proven**, so E003h must not permit Linux sensor transmission yet.
+This proves that Windows does not require a guessed multi-register stream toggle and establishes the exact sensor control operations used below.
+
+## Dynamic cross-driver lifecycle oracle
+
+A corrected WinRT holder hard-selects the `Surface Camera Front` source group and refuses to start unless the chosen source itself reports `DeviceInformation.Name == Surface Camera Front`. Two independent runs both completed `MediaFrameReader.StartAsync=Success` and normal `StopAsync()`. The exact holder is archived as `windows-dynamic/E003H-WinRT-Holder.ps1` (3,809 bytes, SHA-256 `7eb5971788d89024ef85614774866ddf205ba39c2b9ded618890ee0eef7ddd75`).
+
+The current DriverStore binaries were re-hashed immediately before capture and matched the static oracle. Same-machine Windows kernel enumeration supplied the live image bases used for relocation-proof absolute breakpoints:
+
+- `qccamisp8380.sys` base `0xfffff802eed70000`;
+- `qccammipicsi8380.sys` base `0xfffff802eb340000`;
+- `surfacecamfrontsensor8380.sys` base `0xfffff802ef200000`.
+
+The raw KD log is `windows-dynamic/E003H_LIFECYCLE_ABS_20260828.log`, 51,296 bytes, SHA-256 `2908392a619b14f229161dec616e43052103b53b161a3fc77edda56b782d1b36`. The deterministic parser `windows-dynamic/extract_lifecycle_order.py` rejects any sequence other than two identical cycles. It finds:
+
+- cycle 1: line 22 `ISP_START_DONE`, line 25 `SENSOR_STREAM_ON_APPLY`, line 422 `ISP_STOP_DONE`, line 423 `SENSOR_STREAM_OFF_APPLY`;
+- cycle 2: line 435 `ISP_START_DONE`, line 438 `SENSOR_STREAM_ON_APPLY`, line 831 `ISP_STOP_DONE`, line 832 `SENSOR_STREAM_OFF_APPLY`.
+
+The ISP start/stop *entry* offsets are internal command-path sites and fire hundreds of times; they are intentionally excluded from top-level lifecycle acceptance. The unique completion/sensor markers are reproducible.
+
+Therefore the cross-driver ordering is mechanically proven twice:
+
+**ISP start complete -> sensor stream-on apply**
+
+**ISP stop complete -> sensor stream-off apply**
+
+Combining dynamic ordering with the static ISP-internal disassembly gives the current Windows lifecycle oracle:
+
+**start: IFE start -> initial IFE/CSID configuration -> CSID start -> sensor `0x0100=0x01`**
+
+**stop: CSID stop -> IFE stop -> CDM/remaining core stop -> sensor `0x0100=0x00`**
+
+The Windows MIPI/CSIPHY driver's exact placement relative to those ISP operations is still a separate question; do not infer it from the sensor/ISP ordering alone.
 
 ## Linux mismatch to resolve
 
-Current CAMSS `video_start_streaming()` walks upstream from video and calls `s_stream(1)` as VFE -> CSID -> CSIPHY -> sensor. The broad direction is compatible with host/receiver before sensor, but exact parity is not established.
+Current CAMSS `video_start_streaming()` walks upstream from video as VFE -> CSID -> CSIPHY -> sensor. VFE-before-CSID and sensor-last are consistent with the proven Windows ordering at those boundaries, but CSIPHY placement still requires same-machine evidence.
 
-Current CAMSS `video_stop_streaming()` calls `s_stream(0)` in the same VFE -> CSID -> CSIPHY -> sensor direction. That does **not** match the mechanically proven Windows ISP-internal order CSID -> IFE. A parity candidate must resolve this before runtime acceptance.
+Current CAMSS `video_stop_streaming()` also walks VFE -> CSID -> CSIPHY -> sensor. Sensor-last is now proven compatible with Windows, but **VFE-before-CSID is the opposite of Windows' CSID-before-IFE/VFE stop order**. A parity candidate must fix that host ordering without inventing a sensor-off-first teardown.
