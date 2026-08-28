@@ -1,0 +1,528 @@
+{
+  "date": "2026-08-28",
+  "device": "Surface Camera Front / Sony IMX681",
+  "acquisition": "same-machine Windows 11; WinRT MediaCapture/MediaFrameReader; two StartAsync=Success passes with clean StopAsync; SP7 KDNET physical MMIO",
+  "raw_file": "E003G_ROUTE_ORACLE_20260828.log",
+  "raw_bytes": 2457712,
+  "raw_sha256": "fd8edcee46e794dffa0e2305331f19d4e9d2cd5b9ba5197484aa1cc7fa6c6fca",
+  "qualcomm_register_map_reference": {
+    "repo": "https://github.com/qualcomm-linux/camera-driver",
+    "branch": "camera-kernel.qclinux.0.0",
+    "commit": "0f16924ff6a7f9bb56a7e958016da2ed8a174f2f",
+    "policy": "register names/layout only; Windows values remain the behavioral oracle"
+  },
+  "regions": {
+    "wrapper": {
+      "base": "0x0acb6000",
+      "size_bytes": 4096,
+      "dwords": 1024,
+      "live1_live2_mismatches": 0,
+      "stable_changed_vs_idle_dwords": 1024,
+      "live1_nonzero_nonsentinel_dwords": 3,
+      "idle_post1_mismatches": 0,
+      "idle_post2_mismatches": 0,
+      "volatile_live_offsets": []
+    },
+    "csid0": {
+      "base": "0x0acb7000",
+      "size_bytes": 8192,
+      "dwords": 2048,
+      "live1_live2_mismatches": 0,
+      "stable_changed_vs_idle_dwords": 2048,
+      "live1_nonzero_nonsentinel_dwords": 79,
+      "idle_post1_mismatches": 0,
+      "idle_post2_mismatches": 0,
+      "volatile_live_offsets": []
+    },
+    "csid1": {
+      "base": "0x0acb9000",
+      "size_bytes": 8192,
+      "dwords": 2048,
+      "live1_live2_mismatches": 6,
+      "stable_changed_vs_idle_dwords": 2042,
+      "live1_nonzero_nonsentinel_dwords": 107,
+      "idle_post1_mismatches": 0,
+      "idle_post2_mismatches": 0,
+      "volatile_live_offsets": [
+        "0x0240",
+        "0x0394",
+        "0x0398",
+        "0x03a0",
+        "0x03a8",
+        "0x03b0"
+      ]
+    },
+    "csid2": {
+      "base": "0x0acbb000",
+      "size_bytes": 8192,
+      "dwords": 2048,
+      "live1_live2_mismatches": 0,
+      "stable_changed_vs_idle_dwords": 2048,
+      "live1_nonzero_nonsentinel_dwords": 79,
+      "idle_post1_mismatches": 0,
+      "idle_post2_mismatches": 0,
+      "volatile_live_offsets": []
+    },
+    "vfe0": {
+      "base": "0x0ac62000",
+      "size_bytes": 16384,
+      "dwords": 4096,
+      "live1_live2_mismatches": 0,
+      "stable_changed_vs_idle_dwords": 4096,
+      "live1_nonzero_nonsentinel_dwords": 0,
+      "idle_post1_mismatches": 0,
+      "idle_post2_mismatches": 0,
+      "volatile_live_offsets": []
+    },
+    "vfe1": {
+      "base": "0x0ac71000",
+      "size_bytes": 16384,
+      "dwords": 4096,
+      "live1_live2_mismatches": 34,
+      "stable_changed_vs_idle_dwords": 4062,
+      "live1_nonzero_nonsentinel_dwords": 217,
+      "idle_post1_mismatches": 0,
+      "idle_post2_mismatches": 0,
+      "volatile_live_offsets": [
+        "0x0e04",
+        "0x0e40",
+        "0x0e70",
+        "0x0e7c",
+        "0x0f04",
+        "0x0f40",
+        "0x0f70",
+        "0x0f7c",
+        "0x1004",
+        "0x1070",
+        "0x107c",
+        "0x1104",
+        "0x1170",
+        "0x117c",
+        "0x1904",
+        "0x1970",
+        "0x197c",
+        "0x1a04",
+        "0x1a70",
+        "0x1a7c",
+        "0x1b04",
+        "0x1b70",
+        "0x1b7c",
+        "0x1c04",
+        "0x1c70",
+        "0x1c7c",
+        "0x2004",
+        "0x2070",
+        "0x207c",
+        "0x3b70",
+        "0x3d78",
+        "0x3d7c",
+        "0x3d80",
+        "0x3d84"
+      ]
+    },
+    "csiphy2": {
+      "base": "0x0ace8000",
+      "size_bytes": 8192,
+      "dwords": 2048,
+      "live1_live2_mismatches": 4,
+      "stable_changed_vs_idle_dwords": 2044,
+      "live1_nonzero_nonsentinel_dwords": 106,
+      "idle_post1_mismatches": 0,
+      "idle_post2_mismatches": 0,
+      "volatile_live_offsets": [
+        "0x0340",
+        "0x0358",
+        "0x0360",
+        "0x0368"
+      ]
+    }
+  },
+  "route_decode": {
+    "wrapper_io_path_cfg0": {
+      "csid0": "0x00000001",
+      "csid1": "0x00000101",
+      "csid2": "0x00000001",
+      "active_output_ife": "CSID1 (bit8 OUTPUT_IFE_EN set only at wrapper +0x004)"
+    },
+    "csid1_ipp": {
+      "cfg0": "0x802b2000",
+      "enabled": true,
+      "dt_id": 0,
+      "vc": 0,
+      "data_type": 43,
+      "decode_format": 2,
+      "cfg1": "0x00007241",
+      "hcrop": "0x0eff0000",
+      "crop_x_start": 0,
+      "crop_x_end": 3839,
+      "vcrop": "0x086f0000",
+      "crop_y_start": 0,
+      "crop_y_end": 2159,
+      "format_measure_cfg1": "0x08700f00",
+      "measured_width": 3840,
+      "measured_height": 2160
+    },
+    "vfe": {
+      "vfe0_live_nonzero": 0,
+      "vfe1_live_nonzero": 217,
+      "vfe1_bus_hw_version": "0x20020000",
+      "clients": [
+        {
+          "client": 0,
+          "name": "FULL_Y",
+          "cfg": "0x00000011",
+          "enabled": true,
+          "image_addr": "0x1242e000",
+          "frame_incr": "0x004f2000",
+          "image_cfg0": "0x05a00a00",
+          "image_cfg2": "0x00000e00",
+          "packer_cfg": "0x0000000b"
+        },
+        {
+          "client": 1,
+          "name": "FULL_C",
+          "cfg": "0x00000011",
+          "enabled": true,
+          "image_addr": "0x1291d000",
+          "frame_incr": "0x00279000",
+          "image_cfg0": "0x02d00a00",
+          "image_cfg2": "0x00000e00",
+          "packer_cfg": "0x0000000b"
+        },
+        {
+          "client": 2,
+          "name": "DS4",
+          "cfg": "0x00000011",
+          "enabled": true,
+          "image_addr": "0x159a8000",
+          "frame_incr": "0x00084000",
+          "image_cfg0": "0x00b40140",
+          "image_cfg2": "0x00000b00",
+          "packer_cfg": "0x0000000a"
+        },
+        {
+          "client": 3,
+          "name": "DS16",
+          "cfg": "0x00000011",
+          "enabled": true,
+          "image_addr": "0x15d68000",
+          "frame_incr": "0x0000c000",
+          "image_cfg0": "0x002d0050",
+          "image_cfg2": "0x00000300",
+          "packer_cfg": "0x0000000a"
+        },
+        {
+          "client": 4,
+          "name": "DISP_Y",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 5,
+          "name": "DISP_C",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 6,
+          "name": "DISP_DS4",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 7,
+          "name": "DISP_DS16",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 8,
+          "name": "FD_Y",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 9,
+          "name": "FD_C",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 10,
+          "name": "PIXEL_RAW",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 11,
+          "name": "STATS_BE0",
+          "cfg": "0x00010001",
+          "enabled": true,
+          "image_addr": "0x15f9c000",
+          "frame_incr": "0x000a0000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000001",
+          "packer_cfg": "0x0000000a"
+        },
+        {
+          "client": 12,
+          "name": "STATS_BHIST0",
+          "cfg": "0x00010001",
+          "enabled": true,
+          "image_addr": "0x164a8000",
+          "frame_incr": "0x00001800",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000001",
+          "packer_cfg": "0x0000000a"
+        },
+        {
+          "client": 13,
+          "name": "STATS_TINTLESS_BG",
+          "cfg": "0x00010001",
+          "enabled": true,
+          "image_addr": "0x172e4000",
+          "frame_incr": "0x00048000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000001",
+          "packer_cfg": "0x0000000a"
+        },
+        {
+          "client": 14,
+          "name": "STATS_AWB_BG",
+          "cfg": "0x00010001",
+          "enabled": true,
+          "image_addr": "0x168c0000",
+          "frame_incr": "0x00151800",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000001",
+          "packer_cfg": "0x0000000a"
+        },
+        {
+          "client": 15,
+          "name": "STATS_AWB_BFW",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 16,
+          "name": "STATS_BAF",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 17,
+          "name": "STATS_BHIST",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 18,
+          "name": "STATS_RS",
+          "cfg": "0x00010001",
+          "enabled": true,
+          "image_addr": "0x1642c000",
+          "frame_incr": "0x00010000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000001",
+          "packer_cfg": "0x00000008"
+        },
+        {
+          "client": 19,
+          "name": "STATS_IHIST",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 20,
+          "name": "SPARSE_PD",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 21,
+          "name": "PDAF_PD_DATA",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 22,
+          "name": "PDAF_SAD",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 23,
+          "name": "LCR",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 24,
+          "name": "RDI0",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 25,
+          "name": "RDI1",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 26,
+          "name": "RDI2",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        },
+        {
+          "client": 27,
+          "name": "LTM_STATS",
+          "cfg": "0x00000010",
+          "enabled": false,
+          "image_addr": "0x00000000",
+          "frame_incr": "0x00000000",
+          "image_cfg0": "0x00000000",
+          "image_cfg2": "0x00000000",
+          "packer_cfg": "0x00000000"
+        }
+      ],
+      "enabled_clients": [
+        {
+          "client": 0,
+          "name": "FULL_Y",
+          "cfg": "0x00000011"
+        },
+        {
+          "client": 1,
+          "name": "FULL_C",
+          "cfg": "0x00000011"
+        },
+        {
+          "client": 2,
+          "name": "DS4",
+          "cfg": "0x00000011"
+        },
+        {
+          "client": 3,
+          "name": "DS16",
+          "cfg": "0x00000011"
+        },
+        {
+          "client": 11,
+          "name": "STATS_BE0",
+          "cfg": "0x00010001"
+        },
+        {
+          "client": 12,
+          "name": "STATS_BHIST0",
+          "cfg": "0x00010001"
+        },
+        {
+          "client": 13,
+          "name": "STATS_TINTLESS_BG",
+          "cfg": "0x00010001"
+        },
+        {
+          "client": 14,
+          "name": "STATS_AWB_BG",
+          "cfg": "0x00010001"
+        },
+        {
+          "client": 18,
+          "name": "STATS_RS",
+          "cfg": "0x00010001"
+        }
+      ]
+    }
+  }
+}

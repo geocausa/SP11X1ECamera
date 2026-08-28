@@ -1,5 +1,7 @@
 # E003g Windows CSID/VFE oracle checkpoint — 2026-08-27
 
+> **Superseded route interpretation (2026-08-28):** the route-complete follow-up proves the front Windows path is **CSIPHY2 -> CSID1 -> IFE1/VFE1**. VFE0 and VFE1 are separate 16 KiB resources; do **not** resume the old pending `VFE0 +0x4000..+0xefff` capture. Continue from `docs/runbooks/2026-08-28-e003g-route-resolved.md`.
+
 ## Resume point
 
 Branch: `experiment/e003-front-imx681-cphy`
