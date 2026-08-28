@@ -145,7 +145,7 @@ First, `CDM-EXEC-ORACLE.md` records a bounded live diagnostic which rejects impo
 - `RT_CDM_1` physical `0x0ac26000`;
 - both `HW_VERSION=0x20010000`, matching public RT-CDM v2.1 layout;
 - the front path is active on **RT_CDM_1 FIFO0**; RT_CDM0 BL state and RT_CDM1 FIFO1/2/3 base+length are zero;
-- normal StopAsync returns both sampled RT-CDM windows to the `0x80000000` powered-off sentinel.
+- the archived POST sample, taken after normal StopAsync **and dispose/session teardown**, returns both RT-CDM windows to the `0x80000000` powered-off sentinel; it was not sampled exactly at DEVICE_STOP `0x805`.
 
 Dynamic BL base/length values are command-buffer state and must never be hard-coded. The Linux parity target is now an equivalent fail-closed **RT_CDM1 hardware execution path**, not guessed direct VFE DMI MMIO.
 
@@ -173,7 +173,7 @@ The same patch provides a caller-sized coherent DMA arena through the existing C
 
 `extract_rtcdm_init_order.py` is fail-closed to exact installed `qccamisp8380.sys` SHA-256 `64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c`. It mechanically pins open/init as `IRQ0_MASK=1 -> RST_CMD=9 -> reset wait <=500 ms -> DMB SY -> CORE_CFG=0x11f`; full DEVICE_START as **CDM -> IFE -> initial IFE/SFE/CSID packets -> CSID**; RT-CDM start as `IRQ0_MASK=0x00070007 -> DMB SY -> CORE_EN=1`; dynamic FIFO0 commit as `BASE -> encoded LEN/tag/arb -> STORE=1`; and DEVICE_STOP as **CSID -> IFE -> CDM**, with the direct CDM stop write limited to `IRQ0_MASK=0`.
 
-The deterministic bounded mapped-base store sweep finds no direct software store to live `FE_CFG +0x20=0x07ff000f` or `FIFO0_CFG +0x5c=0x01000000`. This is intentionally classified as negative evidence only: it does not prove reset/default ownership. Final CDM teardown after mask-zero, applicability of conditional `CGC_CFG +0x14=7`, and ownership/timing of those two live configuration values remain blockers. Extractor SHA-256 is `399a7a6ecd412d652fcce1bad469514c87a0e696ad7bf4e68a55c51f148e6629`; JSON SHA-256 is `489f47f45465603260a06f8aa2083cc417fff816478be9b6c8f68233bb0be927`. See `WINDOWS-RTCDM1-INIT-ORDER.md`. No Linux RT-CDM behavior was enabled.
+The deterministic bounded mapped-base store sweep finds no direct software store to live `FE_CFG +0x20=0x07ff000f` or `FIFO0_CFG +0x5c=0x01000000`. This is intentionally classified as negative evidence only: it does not prove reset/default ownership. The conditional `CGC_CFG +0x14=7` path and final stop/power separation are closed by the subsequent exact-binary oracles; positive ownership/timing of the two live configuration values remains the RT-CDM initialization blocker. Extractor SHA-256 is `399a7a6ecd412d652fcce1bad469514c87a0e696ad7bf4e68a55c51f148e6629`; JSON SHA-256 is `489f47f45465603260a06f8aa2083cc417fff816478be9b6c8f68233bb0be927`. See `WINDOWS-RTCDM1-INIT-ORDER.md`. No Linux RT-CDM behavior was enabled.
 
 ### Windows RT-CDM1 configuration ownership narrowed
 
@@ -183,13 +183,21 @@ The optional `CGC_CFG +0x14=7` write is guarded by object byte `+0xa38`. That by
 
 For live `FE_CFG +0x20=0x07ff000f` and `FIFO0_CFG +0x5c=0x01000000`, the stronger alias/resource/helper/parser census still finds no in-binary CPU write path. This is not promoted to a reset-default claim: positive hardware/reset origin timing remains unresolved. Extractor SHA-256 is `d25da738a827d81439d426b4de828300af0c6544d2e3d1d0dab78bb8a981b1e7`; JSON SHA-256 is `4c01a85709d9442953cfd5692219c04b57db5683312f788082e18b5aa6677b7c`. See `WINDOWS-RTCDM1-CONFIG-OWNERSHIP.md`.
 
+### Windows RT-CDM1 stream stop versus power collapse separated
+
+`extract_rtcdm_stop_power.py` is fail-closed to the exact installed `qccamisp8380.sys` and the exact prior HW-CDM live log. It proves that `DEVICE_STOP 0x805` is a stream-level stop: **CSID -> IFE -> CDM**, with the CDM command's direct mapped-MMIO write limited to `IRQ0_MASK +0x30 = 0`. There is no proven `CORE_EN=0` or reset write.
+
+Later camera control `0x80e` dispatches manager/session delete. That path releases per-block CDM associations, closes the CDM software object, clears its manager slot, then explicitly powers off/closes CSID followed by IFE. The exact CDM close/cleanup range contains no access to the object's RT-CDM MMIO field `+0x48`, so it hides no shutdown register write. CSID and IFE `POWER_OFF` both converge on the same reference-counted platform helper, which invokes the platform callback only when the component use count reaches zero.
+
+Accordingly the archived all-`0x80000000` POST state is scoped to **post StopAsync/dispose/session teardown**, not the exact `0x805` boundary. Linux must preserve stream stop and final runtime/power teardown as separate layers and must not invent a `CORE_EN=0`/reset sequence. Extractor SHA-256 is `3bf8189e2657fead2f7b1ee128e56f368d457e64618ebb1c732770c82d69f805`; JSON SHA-256 is `75711e2cf1bc1697db11e7415f23f71de1e12706d86d5fa55666bfd4ddfc39b8`. See `WINDOWS-RTCDM1-STOP-POWER.md`.
+
 ## Exact next task
 
 1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
 2. Treat the VFE1 FULL memory format as resolved: one contiguous 2560x1440 **TP10 UBWC / QC10C-family** surface with 3584-byte stride and `Y_META -> Y_TP10 -> C_META -> C_TP10` layout. Linear NV12 is not parity.
 3. Treat the Windows IFE startup byte corpus as complete: four main CDM streams, 2,131 register writes and all 46 DMI payload references/bytes are captured. Further Windows byte capture is not the current blocker.
 4. Treat register ownership and VFE aperture as closed by the deterministic classifier and `0012`: never replay the five live-volatile offsets or any Windows buffer/status address, and keep the `0xf000` override Denali-only.
-5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads. Execution is proven to use native hardware **RT_CDM_1 v2.1 at `0x0ac26000`** with `SW CDM=0`, and its dedicated interrupt is firmware GSI 319 -> Linux **`GIC_SPI 287`**. Resource representation is closed by `0013`, disabled IRQ/DMA scaffolding by `0014`, init/start/commit/stop ordering by the first static oracle, and the optional CGC path is closed as not-taken by the ownership oracle. Before any Linux MMIO initialization, obtain positive same-machine origin/timing for `FE_CFG +0x20` and `FIFO0_CFG +0x5c`, then close final CDM stop/power semantics.
+5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads. Execution is proven to use native hardware **RT_CDM_1 v2.1 at `0x0ac26000`** with `SW CDM=0`, and its dedicated interrupt is firmware GSI 319 -> Linux **`GIC_SPI 287`**. Resource representation is closed by `0013`, disabled IRQ/DMA scaffolding by `0014`, init/start/commit/stop ordering by the first static oracle, and the optional CGC path is closed as not-taken by the ownership oracle. Before any Linux MMIO initialization, obtain positive same-machine origin/timing for `FE_CFG +0x20` and `FIFO0_CFG +0x5c`. Stream-stop versus later session-delete/platform-power semantics are closed by the stop/power oracle; the exact component transition that first produces the sentinel is only a later runtime-PM detail if needed.
 6. Treat the FULL BUS topology as closed: WM0+WM1, one QC10C/TP10-UBWC surface, exact 3584-byte stride/`0x76b000` core layout, VIDEO completion from VFE rather than CSID IPP. Dynamic addresses remain per-buffer.
 7. Derive a fail-closed VFE680 PIX/ISP implementation for the Windows 3840x2160 input -> 2560x1440 TP10 UBWC FULL path, including only DS/statistics/IQ state Windows proves necessary.
 8. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.

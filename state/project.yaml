@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-static-rtcdm-config-ownership-narrowed-golden-unchanged
+status: e003h-vfe1-static-rtcdm-stop-power-closed-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-config-ownership-oracle-closed-positive-origin-next
+  status: vfe1-static-rtcdm1-stop-power-oracle-closed-positive-origin-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -305,18 +305,29 @@ e003h:
   windows_rt_cdm_fe_cfg_in_binary_cpu_write_found: false
   windows_rt_cdm_fifo0_cfg_in_binary_cpu_write_found: false
   windows_rt_cdm_fe_fifo_positive_reset_default_proven: false
-  windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel
+  windows_rt_cdm_stop_power_extractor_sha256: 3bf8189e2657fead2f7b1ee128e56f368d457e64618ebb1c732770c82d69f805
+  windows_rt_cdm_stop_power_json_sha256: 75711e2cf1bc1697db11e7415f23f71de1e12706d86d5fa55666bfd4ddfc39b8
+  windows_rt_cdm_stream_stop_layer: CSID -> IFE -> CDM; CDM direct write IRQ0_MASK=0 only
+  windows_rt_cdm_stream_stop_core_en_zero_proven: false
+  windows_rt_cdm_stream_stop_reset_proven: false
+  windows_rt_cdm_session_delete_control: 0x80e
+  windows_rt_cdm_session_delete_cdm_close_mmio_access: false
+  windows_rt_cdm_session_delete_order: CDM ownership release/close -> CSID POWER_OFF/close -> IFE POWER_OFF/close
+  windows_rt_cdm_platform_power_off_reference_counted: true
+  windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel after StopAsync/dispose/session teardown
+  windows_rt_cdm_post_exact_0x805_boundary_sampled: false
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: obtain positive same-machine FE_CFG/FIFO0_CFG origin/timing and close final CDM stop/power semantics before any Linux RT-CDM MMIO-init/arm/submit; then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-windows-rtcdm1-positive-origin-stop-power-oracle
+  unresolved: obtain positive same-machine FE_CFG/FIFO0_CFG origin/timing before any Linux RT-CDM MMIO-init/arm/submit; exact sentinel transition remains optional runtime-PM follow-up; then implement valid VFE1 PIX/TP10-UBWC path
+next_experiment: E003h-windows-rtcdm1-fe-fifo-positive-origin-oracle
 next_action: >-
   Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The exact same-machine Windows
   RT_CDM1 open/init, DEVICE_START, dynamic FIFO0 commit, IRQ-clear and DEVICE_STOP ordering is fail-closed and reproducible.
   The optional CGC_CFG +0x14=7 path is now statically closed as not-taken and must not be written by Linux. The strengthened
   mapping/alias/helper/parser census finds no in-binary CPU write path for FE_CFG +0x20=0x07ff000f or FIFO0_CFG +0x5c=0x01000000,
-  but do not convert that negative result into a reset-default claim. Obtain positive same-machine origin/timing for both values
-  and resolve hardware/power semantics after CDM stop masks IRQ0 to zero before any Linux RT-CDM MMIO write/arm/submit path.
-  No Linux RT-CDM arm, submission, sensor transmission or frame yet.
+  but do not convert that negative result into a reset-default claim. Stream stop versus later session-delete/platform-power
+  collapse is now mechanically separated: do not invent CORE_EN=0/reset. Obtain positive same-machine origin/timing for both
+  FE_CFG/FIFO0_CFG values before any Linux RT-CDM MMIO write/arm/submit path. Exact sentinel-transition timing can remain a
+  later runtime-PM follow-up if needed. No Linux RT-CDM arm, submission, sensor transmission or frame yet.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

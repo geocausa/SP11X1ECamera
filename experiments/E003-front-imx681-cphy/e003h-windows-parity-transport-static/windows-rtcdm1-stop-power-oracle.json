@@ -1,0 +1,64 @@
+{
+  "accepted": true,
+  "conclusion": "Windows separates stream stop from power collapse. DEVICE_STOP 0x805 stops CSID then IFE then CDM and the CDM command only masks IRQ0 to zero. Later control 0x80e deletes the manager/session: CDM software object is closed without RT-CDM MMIO shutdown, then CSID/IFE explicit POWER_OFF paths use a shared reference-counted platform power-off helper. The post StopAsync/dispose 0x80000000 RT-CDM sentinel is therefore consistent with this later platform power-collapse phase, not evidence for an invented CORE_EN=0/reset write.",
+  "linux_consequence": "Model stream-stop and final runtime/power teardown as separate layers. Do not add unobserved RT-CDM CORE_EN=0 or reset writes. Preserve Windows stop order and IRQ-mask-zero behavior; only collapse the platform/power domain through a proven equivalent ownership path after resource teardown/refcounts permit it.",
+  "platform_power_off": {
+    "callback_only_when_refcount_reaches_zero": true,
+    "callback_rva": "0x13080",
+    "csid_calls_helper": true,
+    "helper_rva": "0x12fd0",
+    "ife_calls_helper": true,
+    "reference_counted": true
+  },
+  "post_stop_dispose_oracle": {
+    "rtcdm0_all": "0x80000000",
+    "rtcdm0_first_0x100_dwords": 64,
+    "rtcdm1_all": "0x80000000",
+    "rtcdm1_first_0x100_dwords": 64,
+    "timing_scope": "post normal StopAsync/dispose/session teardown; not sampled exactly at the 0x805 boundary"
+  },
+  "remaining_blockers_before_linux_rtcdm_mmio": [
+    "positive same-machine origin/timing of FE_CFG +0x20 = 0x07ff000f",
+    "positive same-machine origin/timing of FIFO0_CFG +0x5c = 0x01000000",
+    "exact component/power transition that first changes RT-CDM1 to the 0x80000000 sentinel, if required for Linux runtime-PM ordering"
+  ],
+  "schema": "sp11-e003h-windows-rtcdm1-stop-power-v1",
+  "session_delete_0x80e": {
+    "cdm_close_method_rva": "0x28a90",
+    "cdm_close_mmio_shutdown_write": false,
+    "cdm_close_rtcdm_mmio_field_accesses": [],
+    "dispatch_call_rva": "0x50ec",
+    "manager_delete_rva": "0x196f8",
+    "order": [
+      "release per-block CDM associations",
+      "CDM software-object close",
+      "clear manager CDM slot",
+      "CSID POWER_OFF",
+      "CSID object close",
+      "IFE POWER_OFF",
+      "IFE object close"
+    ]
+  },
+  "source": {
+    "binary": "qccamisp8380.sys",
+    "binary_bytes": 376560,
+    "binary_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "hwcdm_log": "E003H_HWCDM_ORACLE_20260828.log",
+    "hwcdm_log_bytes": 27014,
+    "hwcdm_log_sha256": "458b05c41718c7d01d0efb2921d1f6e2e4323e94e24447e379499544ca21cc1a"
+  },
+  "stream_stop_0x805": {
+    "classification": "stream-level stop; do not invent CORE_EN=0 or reset",
+    "core_en_zero_write_proven": false,
+    "isp_manager_order": "CSID stop -> IFE stop -> CDM stop",
+    "reset_write_proven": false,
+    "rtcdm_direct_mmio_writes": [
+      {
+        "offset": "0x30",
+        "register": "IRQ0_MASK",
+        "rva": "0x28550",
+        "value": "0x00000000"
+      }
+    ]
+  }
+}
