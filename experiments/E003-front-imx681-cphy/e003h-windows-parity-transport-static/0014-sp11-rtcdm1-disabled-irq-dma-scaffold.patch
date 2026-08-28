@@ -1,0 +1,264 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -9,6 +9,7 @@
+  */
+ #include <linux/clk.h>
+ #include <linux/interconnect.h>
++#include <linux/interrupt.h>
+ #include <linux/ioport.h>
+ #include <linux/media-bus-format.h>
+ #include <linux/media.h>
+@@ -4968,19 +4969,185 @@
+ #define CAMSS_X1E80100_RTCDM1_PHYS_BASE 0x0ac26000
+ #define CAMSS_X1E80100_RTCDM1_SIZE      SZ_4K
+ 
++/* RT-CDM v2.1 IRQ layout; Qualcomm source is naming/layout only. */
++#define CAMSS_RTCDM_IRQ_CONTEXT_STATUS  0x02c
++#define CAMSS_RTCDM_IRQ0_CLEAR          0x034
++#define CAMSS_RTCDM_IRQ0_CLEAR_CMD      0x038
++#define CAMSS_RTCDM_IRQ0_STATUS         0x044
++#define CAMSS_RTCDM_USR_DATA            0x080
++
++#define CAMSS_RTCDM_IRQ_RESET_DONE      BIT(0)
++#define CAMSS_RTCDM_IRQ_INLINE          BIT(1)
++#define CAMSS_RTCDM_IRQ_BL_DONE         BIT(2)
++#define CAMSS_RTCDM_IRQ_INVALID_CMD     BIT(16)
++#define CAMSS_RTCDM_IRQ_OVERFLOW        BIT(17)
++#define CAMSS_RTCDM_IRQ_AHB_ERROR       BIT(18)
++#define CAMSS_RTCDM_IRQ_ERRORS          (CAMSS_RTCDM_IRQ_INVALID_CMD | \
++					 CAMSS_RTCDM_IRQ_OVERFLOW | \
++					 CAMSS_RTCDM_IRQ_AHB_ERROR)
++#define CAMSS_RTCDM_IRQ_KNOWN           (CAMSS_RTCDM_IRQ_RESET_DONE | \
++					 CAMSS_RTCDM_IRQ_INLINE | \
++					 CAMSS_RTCDM_IRQ_BL_DONE | \
++					 CAMSS_RTCDM_IRQ_ERRORS)
++#define CAMSS_RTCDM_WINDOWS_IRQ0_MASK   0x00070007
++
++static_assert(CAMSS_RTCDM_IRQ_KNOWN == CAMSS_RTCDM_WINDOWS_IRQ0_MASK);
++
++/*
++ * The IRQ remains disabled in this E003h layer. There is intentionally no
++ * public arm/enable function yet. The body below records the v2.1 FIFO0
++ * status/clear mechanism for the next gate, but is unreachable while
++ * irq_armed is false and the IRQ was requested with IRQF_NO_AUTOEN.
++ */
++static irqreturn_t camss_rtcdm1_isr(int irq, void *data)
++{
++	struct camss *camss = data;
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++	u32 context;
++	u32 status;
++	u32 user_data;
++
++	if (irq != rt->irq || !READ_ONCE(rt->irq_armed))
++		return IRQ_NONE;
++
++	context = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ_CONTEXT_STATUS);
++	if (!(context & BIT(0)))
++		return IRQ_NONE;
++
++	/* The accepted front path is FIFO0-only. Fail closed on any other FIFO. */
++	if (context & ~BIT(0)) {
++		WRITE_ONCE(rt->faulted, true);
++		disable_irq_nosync(rt->irq);
++		WRITE_ONCE(rt->irq_armed, false);
++		return IRQ_HANDLED;
++	}
++
++	status = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ0_STATUS);
++	if (!status)
++		return IRQ_NONE;
++
++	user_data = readl_relaxed(rt->base + CAMSS_RTCDM_USR_DATA);
++	writel_relaxed(status, rt->base + CAMSS_RTCDM_IRQ0_CLEAR);
++	writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ0_CLEAR_CMD);
++
++	WRITE_ONCE(rt->last_irq_context, context);
++	WRITE_ONCE(rt->last_irq_status, status);
++	WRITE_ONCE(rt->last_user_data, user_data);
++
++	if ((status & ~CAMSS_RTCDM_IRQ_KNOWN) || (status & CAMSS_RTCDM_IRQ_ERRORS)) {
++		WRITE_ONCE(rt->faulted, true);
++		disable_irq_nosync(rt->irq);
++		WRITE_ONCE(rt->irq_armed, false);
++	}
++
++	if (status & (CAMSS_RTCDM_IRQ_INLINE | CAMSS_RTCDM_IRQ_BL_DONE))
++		complete(&rt->completion);
++
++	return IRQ_HANDLED;
++}
++
++/*
++ * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
++ * probe already installs a 32-bit coherent DMA mask. This helper independently
++ * rejects any address that cannot be represented by RT-CDM's 32-bit BL base.
++ * It does not populate the arena or submit it to hardware.
++ */
++int camss_rtcdm1_alloc_arena(struct camss *camss, size_t size)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++	dma_addr_t dma;
++	void *cpu;
++	int ret = 0;
++
++	if (!rt->present)
++		return -ENODEV;
++	if (!size || !IS_ALIGNED(size, sizeof(u32)) || size > U32_MAX)
++		return -EINVAL;
++
++	mutex_lock(&rt->lock);
++	if (rt->arena_cpu) {
++		ret = -EBUSY;
++		goto out_unlock;
++	}
++
++	cpu = dma_alloc_coherent(camss->dev, size, &dma, GFP_KERNEL);
++	if (!cpu) {
++		ret = -ENOMEM;
++		goto out_unlock;
++	}
++
++	if ((u64)dma > U32_MAX) {
++		dma_free_coherent(camss->dev, size, cpu, dma);
++		ret = -ERANGE;
++		goto out_unlock;
++	}
++
++	memset(cpu, 0, size);
++	rt->arena_cpu = cpu;
++	rt->arena_dma = dma;
++	rt->arena_size = size;
++
++out_unlock:
++	mutex_unlock(&rt->lock);
++	return ret;
++}
++
++void camss_rtcdm1_free_arena(struct camss *camss)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++	void *cpu;
++	dma_addr_t dma;
++	size_t size;
++
++	if (!rt->present)
++		return;
++
++	mutex_lock(&rt->lock);
++	cpu = rt->arena_cpu;
++	dma = rt->arena_dma;
++	size = rt->arena_size;
++	rt->arena_cpu = NULL;
++	rt->arena_dma = 0;
++	rt->arena_size = 0;
++	mutex_unlock(&rt->lock);
++
++	if (!cpu)
++		return;
++
++	memzero_explicit(cpu, size);
++	dma_free_coherent(camss->dev, size, cpu, dma);
++}
++
++void camss_rtcdm1_cleanup(struct camss *camss)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++
++	if (!rt->present)
++		return;
++
++	/* No arm path exists in this layer; keep teardown fail-closed regardless. */
++	if (READ_ONCE(rt->irq_armed)) {
++		disable_irq(rt->irq);
++		WRITE_ONCE(rt->irq_armed, false);
++	}
++
++	camss_rtcdm1_free_arena(camss);
++}
++
+ /*
+  * camss_rtcdm1_init - Resolve the optional Denali RT_CDM1 resource contract.
+  *
+  * Same-machine Windows proves RT_CDM1 at 0x0ac26000 with a dedicated IRQ.
+- * This static E003h helper is deliberately inert: it only validates and maps
+- * the named resource. It does not read or write RT-CDM registers, request the
+- * IRQ, allocate command memory, or expose a submission path.
++ * This E003h layer maps the resource and registers a disabled IRQ handler.
++ * It does not read/write RT-CDM registers, arm the IRQ, allocate command
++ * memory, configure the engine, reset it, or expose a submission path.
+  */
+ static int camss_rtcdm1_init(struct platform_device *pdev, struct camss *camss)
+ {
+ 	struct resource *res;
+ 	void __iomem *base;
+ 	int irq;
++	int ret;
+ 
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rt_cdm1");
+ 	if (!res)
+@@ -5007,6 +5174,16 @@
+ 
+ 	camss->rtcdm1.base = base;
+ 	camss->rtcdm1.irq = irq;
++	init_completion(&camss->rtcdm1.completion);
++	mutex_init(&camss->rtcdm1.lock);
++
++	ret = devm_request_irq(camss->dev, irq, camss_rtcdm1_isr,
++			       IRQF_TRIGGER_RISING | IRQF_NO_AUTOEN,
++			       "camss-rt_cdm1", camss);
++	if (ret)
++		return dev_err_probe(camss->dev, ret,
++				     "failed to request disabled rt_cdm1 IRQ\n");
++
+ 	camss->rtcdm1.present = true;
+ 
+ 	return 0;
+@@ -5143,6 +5320,7 @@
+ 
+ void camss_delete(struct camss *camss)
+ {
++	camss_rtcdm1_cleanup(camss);
+ 	v4l2_device_unregister(&camss->v4l2_dev);
+ 	media_device_unregister(&camss->media_dev);
+ 	media_device_cleanup(&camss->media_dev);
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -10,7 +10,10 @@
+ #ifndef QC_MSM_CAMSS_H
+ #define QC_MSM_CAMSS_H
+ 
++#include <linux/completion.h>
+ #include <linux/device.h>
++#include <linux/dma-mapping.h>
++#include <linux/mutex.h>
+ #include <linux/types.h>
+ #include <media/v4l2-async.h>
+ #include <media/v4l2-device.h>
+@@ -105,6 +108,16 @@
+ 	void __iomem *base;
+ 	int irq;
+ 	bool present;
++	bool irq_armed;
++	bool faulted;
++	struct completion completion;
++	struct mutex lock;
++	void *arena_cpu;
++	dma_addr_t arena_dma;
++	size_t arena_size;
++	u32 last_irq_context;
++	u32 last_irq_status;
++	u32 last_user_data;
+ };
+ 
+ struct camss_resources {
+@@ -176,6 +189,9 @@
+ void camss_pm_domain_off(struct camss *camss, int id);
+ int camss_vfe_get(struct camss *camss, int id);
+ void camss_vfe_put(struct camss *camss, int id);
++int camss_rtcdm1_alloc_arena(struct camss *camss, size_t size);
++void camss_rtcdm1_free_arena(struct camss *camss);
++void camss_rtcdm1_cleanup(struct camss *camss);
+ void camss_delete(struct camss *camss);
+ void camss_buf_done(struct camss *camss, int hw_id, int port_id);
+ void camss_reg_update(struct camss *camss, int hw_id,

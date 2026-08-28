@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-inert-resource-built-irq-dma-helper-next
+  status: vfe1-static-rtcdm1-disabled-irq-dma-scaffold-built-windows-init-order-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -261,21 +261,39 @@ e003h:
   linux_rt_cdm1_resource_runtime_inert: true
   linux_rt_cdm1_resource_mmio_reads_writes: 0
   linux_rt_cdm1_resource_submit_api: false
+  linux_rt_cdm1_irq_dma_patch: 0014-sp11-rtcdm1-disabled-irq-dma-scaffold.patch
+  linux_rt_cdm1_irq_dma_patch_sha256: 2aa503a83e2259cb719d548ba6316f4ec2c89317548de0add17d38fcf019e1c7
+  linux_rt_cdm1_irq_dma_build: pass
+  linux_rt_cdm1_irq_dma_module_sha256: 0a3f1e64af5e69d428f08982aad1ad7dd39d32a5eb5baa11df6c4c78a9ce9a10
+  linux_rt_cdm1_irq_request_mode: IRQF_TRIGGER_RISING + IRQF_NO_AUTOEN
+  linux_rt_cdm1_irq_arm_api: false
+  linux_rt_cdm1_irq_armed_true_assignments: 0
+  linux_rt_cdm1_windows_irq0_mask: 0x00070007
+  linux_rt_cdm1_irq_known_mask_compile_assert: 0x00070007
+  linux_rt_cdm1_dma_arena: caller-sized coherent allocation from CAMSS DMA domain
+  linux_rt_cdm1_dma_upper_32bit_reject: true
+  linux_rt_cdm1_dma_zero_on_alloc_and_before_free: true
+  linux_rt_cdm1_fifo_submit_api: false
+  linux_rt_cdm1_fifo_mmio_write_paths: 0
+  linux_rt_cdm1_config_reset_enable_write_paths: 0
+  linux_rt_cdm1_dtb_unchanged_from_0013: true
+  linux_rt_cdm1_irq_dma_dtb_sha256: bbe48a77c5bc23f1c155ddc87b9a5b2ed56497656f06cab1a2db8e6346f0304b
   windows_front_active_rt_cdm: RT_CDM_1
   windows_front_active_rt_cdm_physical: 0x0ac26000
   windows_rt_cdm1_fifo0_cfg_live: 0x01000000
   windows_rt_cdm1_secondary_fifo_base_len_zero: true
   windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: implement fail-closed Linux RT_CDM1 MMIO/FIFO0/DMA/IRQ/completion/teardown helper using proven GIC_SPI 287; then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-vfe1-rtcdm1-static-irq-dma-helper
+  unresolved: recover exact same-machine Windows RT_CDM1 initialization/write ordering before any Linux MMIO-init or FIFO0 submission path; then implement valid VFE1 PIX/TP10-UBWC path
+next_experiment: E003h-windows-rtcdm1-init-order-oracle
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0013 now appends only the
-  proven Denali RT_CDM1 0x0ac26000/0x1000 resource and GIC_SPI 287, validates/maps it X1E-only, and performs zero RT-CDM
-  MMIO or submission. Build the next fail-closed layer around public v2.1 mechanism plus Windows value authority: request
-  the dedicated IRQ only when the helper is explicitly armed, decode/clear reset/inline/BL-done/error status correctly,
-  add coherent command-buffer allocation with a hard upper_32_bits(dma)==0 check and deterministic free/teardown, and
-  keep FIFO0 submission disabled. Then prove module/DT/rear-resource isolation before implementing any RT-CDM writes.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0014 now registers the
+  proven RT_CDM1 IRQ disabled with IRQF_NO_AUTOEN, models FIFO0-only status/clear/error bookkeeping behind an unreachable
+  irq_armed gate, and provides caller-sized 32-bit coherent DMA arena allocation/zero/free without any FIFO or configuration
+  write path. Before adding any RT-CDM MMIO writes, mechanically recover the exact same-machine Windows RT_CDM1 init/write
+  sequence from the SHA-pinned qccamisp8380.sys and/or a bounded Windows oracle: separate reset/core/FE/FIFO0/IRQ initialization
+  from dynamic BL submission and establish ordering relative to IFE start and initial IFE CDM packets. Do not import public
+  Qualcomm default values or ordering as behavioral truth. No Linux RT-CDM arm, submission, sensor transmission or frame yet.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
