@@ -16,7 +16,8 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 - VFE0 is inactive for the front WinRT stream;
 - sensor stream-on/off is exactly `0x0100=1` / `0x0100=0`, zero delay; group hold `0x0104` is separate;
 - Windows ISP internal start order is IFE -> initial IFE/CSID packets -> CSID;
-- Windows ISP internal stop order is CSID -> IFE -> CDM/remaining core.
+- Windows ISP internal stop order is CSID -> IFE -> CDM/remaining core;
+- two independent dynamic cycles prove ISP start completion before sensor `0x0100=1`, and ISP stop completion before sensor `0x0100=0`.
 
 ## Linux gaps
 
@@ -24,8 +25,8 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 2. CSID680 Linux streaming supports RDI paths only; the Windows path is IPP.
 3. VFE680 Linux output supports RDI only. Its generic PIX line mapping is explicitly invalid for PIX and would map line 3 through `RDI_WM(3)` to WM27/LTM_STATS. Enabling PIX as-is would be wrong.
 4. Windows uses VFE1 FULL Y/C and real ISP scaling from 3840x2160 to 2560x1440, not a raw RDI write master.
-5. Linux generic stop ordering VFE -> CSID does not match the Windows ISP-internal stop order CSID -> IFE.
-6. The exact cross-driver scheduling point of sensor `0x0100=1/0` relative to ISP DEVICE_START/STOP remains unresolved.
+5. Linux generic stop ordering VFE -> CSID does not match Windows. Static-only `0010-x1e-windows-stop-order.patch` changes X1E teardown to CSID -> VFE -> existing remaining upstream tail, while non-X1E traversal is unchanged. The patch reproducibly builds to qcom-camss SHA-256 `b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591`; it is not deployed.
+6. Sensor-vs-ISP ordering is resolved. The remaining lifecycle unknown is the exact CSIPHY/MIPI placement relative to ISP start/stop.
 
 ## Policy consequence
 

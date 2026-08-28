@@ -1,0 +1,156 @@
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -18,0 +19,2 @@
++#include "camss-csid.h"
++#include "camss-vfe.h"
+@@ -227,0 +230,111 @@
++#define CAMSS_VIDEO_MAX_PIPELINE_SUBDEVS	8
++
++static unsigned int
++video_collect_pipeline_subdevs(struct camss_video *video,
++			       struct v4l2_subdev **subdevs,
++			       unsigned int max_subdevs)
++{
++	struct media_entity *entity = &video->vdev.entity;
++	unsigned int num_subdevs = 0;
++	struct media_pad *pad;
++
++	while (num_subdevs < max_subdevs) {
++		pad = &entity->pads[0];
++		if (!(pad->flags & MEDIA_PAD_FL_SINK))
++			break;
++
++		pad = media_pad_remote_pad_first(pad);
++		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
++			break;
++
++		entity = pad->entity;
++		subdevs[num_subdevs++] = media_entity_to_v4l2_subdev(entity);
++	}
++
++	return num_subdevs;
++}
++
++static bool video_subdev_is_csid(struct camss *camss,
++			 struct v4l2_subdev *subdev)
++{
++	unsigned int i;
++
++	for (i = 0; i < camss->res->csid_num; i++)
++		if (subdev == &camss->csid[i].subdev)
++			return true;
++
++	return false;
++}
++
++static bool video_subdev_is_vfe(struct camss *camss,
++			struct v4l2_subdev *subdev)
++{
++	unsigned int i, line;
++
++	for (i = 0; i < camss->res->vfe_num; i++)
++		for (line = 0; line < camss->vfe[i].res->line_num; line++)
++			if (subdev == &camss->vfe[i].line[line].subdev)
++				return true;
++
++	return false;
++}
++
++static int video_stop_subdev(struct camss_video *video,
++			     struct v4l2_subdev *subdev)
++{
++	int ret;
++
++	ret = v4l2_subdev_call(subdev, video, s_stream, 0);
++	if (ret)
++		dev_err(video->camss->dev, "Video pipeline stop failed on %s: %d\n",
++			subdev->name, ret);
++
++	return ret;
++}
++
++/*
++ * X1E80100 Windows stops CSID before IFE/VFE and applies sensor stream-off
++ * only after the ISP stop sequence completes. Keep the existing CSIPHY ->
++ * sensor tail intact until the same-machine MIPI lifecycle is resolved.
++ */
++static int video_stop_streaming_x1e(struct camss_video *video)
++{
++	struct v4l2_subdev *subdevs[CAMSS_VIDEO_MAX_PIPELINE_SUBDEVS];
++	int csid_idx = -1, vfe_idx = -1;
++	unsigned int num_subdevs;
++	unsigned int i;
++	int ret;
++
++	num_subdevs = video_collect_pipeline_subdevs(video, subdevs,
++					     ARRAY_SIZE(subdevs));
++
++	for (i = 0; i < num_subdevs; i++) {
++		if (csid_idx < 0 && video_subdev_is_csid(video->camss, subdevs[i]))
++			csid_idx = i;
++		if (vfe_idx < 0 && video_subdev_is_vfe(video->camss, subdevs[i]))
++			vfe_idx = i;
++	}
++
++	if (csid_idx < 0 || vfe_idx < 0)
++		return -ENODEV;
++
++	ret = video_stop_subdev(video, subdevs[csid_idx]);
++	if (ret)
++		return ret;
++
++	ret = video_stop_subdev(video, subdevs[vfe_idx]);
++	if (ret)
++		return ret;
++
++	for (i = 0; i < num_subdevs; i++) {
++		if (i == csid_idx || i == vfe_idx)
++			continue;
++
++		ret = video_stop_subdev(video, subdevs[i]);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+@@ -300,17 +413,3 @@
+-	entity = &vdev->entity;
+-	while (1) {
+-		pad = &entity->pads[0];
+-		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+-			break;
+-
+-		pad = media_pad_remote_pad_first(pad);
+-		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+-			break;
+-
+-		entity = pad->entity;
+-		subdev = media_entity_to_v4l2_subdev(entity);
+-
+-		ret = v4l2_subdev_call(subdev, video, s_stream, 0);
+-
+-		if (ret) {
+-			dev_err(video->camss->dev, "Video pipeline stop failed: %d\n", ret);
++	if (video->camss->res->version == CAMSS_X1E80100) {
++		ret = video_stop_streaming_x1e(video);
++		if (ret)
+@@ -317,0 +417,17 @@
++	} else {
++		entity = &vdev->entity;
++		while (1) {
++			pad = &entity->pads[0];
++			if (!(pad->flags & MEDIA_PAD_FL_SINK))
++				break;
++
++			pad = media_pad_remote_pad_first(pad);
++			if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
++				break;
++
++			entity = pad->entity;
++			subdev = media_entity_to_v4l2_subdev(entity);
++
++			ret = video_stop_subdev(video, subdev);
++			if (ret)
++				return;

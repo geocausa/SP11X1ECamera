@@ -1,0 +1,24 @@
+E003h static-only X1E80100 lifecycle-order candidate
+Date: 2026-08-28
+Source overlay: /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
+Build config/output anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+Patch: 0010-x1e-windows-stop-order.patch
+Patch SHA256: e654736b61cce269700809d6971d3c8744fcf3070aa43439924532ed9a8f3697
+Pre-patch camss-video.c SHA256: a67eea0abb1ad3dfa12349ea24ee80411ba95e1c6a1fe8f8921be8ca365919a5
+Post-patch camss-video.c SHA256: cb433181c89bf9fe32880952cbc2b047467c4c00c276b3567a40dbaa7392d701
+
+Behavioral oracle:
+- same-machine Windows start boundary: IFE/VFE start -> CSID start -> sensor stream-on
+- same-machine Windows stop boundary: CSID stop -> IFE/VFE stop -> sensor stream-off
+
+Candidate behavior on CAMSS_X1E80100 only:
+- start traversal unchanged: VFE -> CSID -> CSIPHY -> sensor
+- stop traversal: CSID -> VFE -> existing remaining upstream order (CSIPHY -> sensor on the SP11 graph)
+- non-X1E CAMSS stop traversal unchanged
+- no sensor-off-first teardown
+- no runtime deployment
+
+Initial build result:
+- PASS, no warnings/errors
+- qcom-camss.ko SHA256: b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591
+- vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64

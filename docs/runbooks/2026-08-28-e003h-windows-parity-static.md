@@ -84,23 +84,25 @@ Detailed evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-tran
 3. The static E003h RX patch now computes the exact Windows `0x11300000` for CSIPHY2 one-trio C-PHY and changes no D-PHY bits. CAMSS builds cleanly with Golden vermagic. It is not deployed.
 4. Current CSID680 stream programming is RDI-only; Windows uses IPP.
 5. Current VFE680 output is RDI-only. The generic PIX line mapping is explicitly invalid and would send line 3 through WM27/LTM_STATS. Do not enable PIX as-is.
-6. Generic Linux stop traversal VFE -> CSID conflicts with Windows ISP-internal CSID -> IFE teardown. Dynamic Windows proof now also establishes that sensor stream-off occurs only after the ISP stop sequence completes; do not “fix” this by moving sensor-off first.
+6. Generic Linux stop traversal VFE -> CSID conflicts with Windows ISP-internal CSID -> IFE teardown. Static-only `0010-x1e-windows-stop-order.patch` now changes X1E teardown to CSID -> VFE -> the existing remaining upstream tail, preserving sensor-last. The patch applies reproducibly from the recorded pre-image and builds cleanly; it is not deployed.
 
 ## Static artifact
 
-`experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0009-x1e-csid680-cphy-rx-windows-parity.patch`
+- `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0009-x1e-csid680-cphy-rx-windows-parity.patch`
+- `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0010-x1e-windows-stop-order.patch`
 
 Build result:
 
 - PASS, no warnings/errors;
-- qcom-camss module SHA-256 `900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af`;
+- RX-only 0009 module SHA-256 `900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af`;
+- RX + lifecycle 0010 module SHA-256 `b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591`;
 - Golden vermagic `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
 - no deployment.
 
 ## Exact next task
 
-1. Trace local CAMSS stream start/stop code mechanically. Preserve the proven sensor-last boundary, but correct the Linux VFE-before-CSID stop ordering to Windows CSID-before-IFE/VFE semantics without guessing CSIPHY placement.
-2. Resolve CSIPHY/MIPI placement relative to ISP start/stop from same-machine Windows evidence if the Linux ordering decision depends on it.
+1. Resolve CSIPHY/MIPI placement relative to ISP start/stop from same-machine Windows evidence; do not infer it from sensor/ISP ordering.
+2. Keep `0010` static-only and revisit it only if that MIPI evidence requires a narrower order.
 3. Derive the minimum CSID680 IPP support whose programmed live state matches the Windows CSID1 IPP registers for the front mode.
 4. Derive a valid VFE680 PIX architecture for the Windows path; do not reuse the current RDI-only WM mapping as a shortcut.
 5. Separate invariant configuration from counters/status/address fields; copy only configuration that Windows proves necessary.
