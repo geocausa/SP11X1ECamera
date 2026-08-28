@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-ownership-aperture-bus-resolved-dmi-execution-next
+  status: vfe1-static-hardware-cdm1-execution-resolved-linux-rtcdm-architecture-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -231,18 +231,34 @@ e003h:
   windows_vfe1_bus_mask0: 0xd0000000
   windows_vfe1_video_done: TOP status1 bit0 -> event 3 -> IFE VIDEO buf done
   linux_rear_rdi_completion: CSID680 BUF_DONE; unchanged by future front VFE VIDEO completion
-  dmi_execution_status: unresolved DMISel application; data ports +8/+12 proven by Qualcomm software-DMI helper
+  dmi_execution_status: resolved native Windows hardware CDM; direct VFE680 DMI replay rejected
+  windows_dmi_exec_raw_sha256: 8ccb149a22dddf21edb3b7115493a9000368a29c132f9dcfddc4867070c1e9cc
+  windows_dmi_exec_raw_bytes: 12432
+  windows_dmi_direct_recipe_status: rejected; VFE17x selector/address read sequence did not expose known nonzero VFE680 payload
+  windows_hwcdm_raw_sha256: 458b05c41718c7d01d0efb2921d1f6e2e4323e94e24447e379499544ca21cc1a
+  windows_hwcdm_raw_bytes: 27014
+  windows_native_sw_cdm_byte: 0x00
+  windows_native_hardware_cdm_branch: true
+  windows_native_software_cdm_branch: false
+  windows_rt_cdm0_physical: 0x0ac25000
+  windows_rt_cdm1_physical: 0x0ac26000
+  windows_rt_cdm_hw_version: 0x20010000
+  windows_front_active_rt_cdm: RT_CDM_1
+  windows_front_active_rt_cdm_physical: 0x0ac26000
+  windows_rt_cdm1_fifo0_cfg_live: 0x01000000
+  windows_rt_cdm1_secondary_fifo_base_len_zero: true
+  windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: mechanically resolve DMI DMISel execution semantics, then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-vfe1-dmi-execution-static
+  unresolved: close Linux RT_CDM1 clock/power/reset/IOMMU/IRQ integration, then implement valid VFE1 PIX/TP10-UBWC path
+next_experiment: E003h-vfe1-rtcdm1-static-architecture
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. VFE1 register ownership,
-  Denali aperture sizing, FULL QC10C BUS layout and Windows VIDEO completion semantics are now mechanically closed.
-  Preserve Denali-only static 0012 and never replay live-volatile offsets or Windows buffer/status addresses. Resolve
-  exactly how DMI DMISel is applied before deciding whether the 16 exact Windows LUT payloads can be replayed by direct
-  MMIO or require a minimal CDM mechanism. Then derive/build the fail-closed VFE1 PIX/FULL candidate and prove rear
-  D-PHY/RDI behavior unchanged. No runtime VFE1 parity candidate or front frame is authorized until static build/ABI/DT/
-  rear-DPHY/rollback gates pass.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Same-machine Windows now proves
+  the native front acquire uses SW_CDM=0 and hardware RT_CDM_1 v2.1 at physical 0x0ac26000; the older direct VFE680 DMI
+  recipe is rejected. Derive the smallest fail-closed Linux RT_CDM1 mechanism around the exact hardware interface: close
+  clock/power/reset ownership, DMA/IOMMU command-buffer addressability, FIFO0 submission, completion/IRQ and teardown,
+  without hard-coding Windows dynamic BL addresses. Then integrate the already-captured exact IFE CDM/DMI corpus with
+  the VFE1 PIX/QC10C path and prove rear D-PHY/RDI behavior unchanged. No Linux RT-CDM submission or front frame is
+  authorized until static build/ABI/DT/rear-DPHY/rollback gates pass.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

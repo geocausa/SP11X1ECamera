@@ -133,13 +133,29 @@ The two-pass VFE1 BUS oracle independently closes the FULL surface: client 0 FUL
 
 Windows IRQ behavior is cross-proven dynamically and statically: live `TOP_MASK0=0x0007f051`, `BUS_MASK0=0xd0000000`, and exact `qccamisp8380.sys` writes those literals in its VFE interrupt initializer. Its DPC maps TOP status1 bit0 to normalized event 3, logged as `IFE VIDEO buf done`. Rear X1E RDI completion remains CSID680 BUF_DONE-driven, while CSID1 IPP handles RUP only, so a front VFE VIDEO-done implementation can be isolated from the accepted rear path.
 
+## Hardware CDM execution now resolved
+
+The exact DMI selector/execution ambiguity is closed by two same-machine Windows follow-ups under `windows-ife-cdm/`.
+
+First, `CDM-EXEC-ORACLE.md` records a bounded live diagnostic which rejects importing the older VFE17x direct LUT-dump sequence as VFE680 behavior. Second, `HW-CDM-ORACLE.md` records the decisive native path:
+
+- acquire input `SW CDM = 0x00`;
+- exact hardware-CDM branch hit; software-CDM branch did not hit;
+- `RT_CDM_0` physical `0x0ac25000`;
+- `RT_CDM_1` physical `0x0ac26000`;
+- both `HW_VERSION=0x20010000`, matching public RT-CDM v2.1 layout;
+- the front path is active on **RT_CDM_1 FIFO0**; RT_CDM0 BL state and RT_CDM1 FIFO1/2/3 base+length are zero;
+- normal StopAsync returns both sampled RT-CDM windows to the `0x80000000` powered-off sentinel.
+
+Dynamic BL base/length values are command-buffer state and must never be hard-coded. The Linux parity target is now an equivalent fail-closed **RT_CDM1 hardware execution path**, not guessed direct VFE DMI MMIO.
+
 ## Exact next task
 
 1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
 2. Treat the VFE1 FULL memory format as resolved: one contiguous 2560x1440 **TP10 UBWC / QC10C-family** surface with 3584-byte stride and `Y_META -> Y_TP10 -> C_META -> C_TP10` layout. Linear NV12 is not parity.
 3. Treat the Windows IFE startup byte corpus as complete: four main CDM streams, 2,131 register writes and all 46 DMI payload references/bytes are captured. Further Windows byte capture is not the current blocker.
 4. Treat register ownership and VFE aperture as closed by the deterministic classifier and `0012`: never replay the five live-volatile offsets or any Windows buffer/status address, and keep the `0xf000` override Denali-only.
-5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads; resolve the **execution mechanism** next. Qualcomm's software DMI path proves the data ports but does not apply `DMISel`, so do not claim direct-MMIO parity until selector/address/data sequencing is mechanically established.
+5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads. Execution is now proven to use native hardware **RT_CDM_1 v2.1 at `0x0ac26000`** with `SW CDM=0`; direct VFE680 DMI replay is rejected. Close Linux RT-CDM1 clock/power/reset, DMA/IOMMU, FIFO0 completion/IRQ and teardown semantics before any submission.
 6. Treat the FULL BUS topology as closed: WM0+WM1, one QC10C/TP10-UBWC surface, exact 3584-byte stride/`0x76b000` core layout, VIDEO completion from VFE rather than CSID IPP. Dynamic addresses remain per-buffer.
 7. Derive a fail-closed VFE680 PIX/ISP implementation for the Windows 3840x2160 input -> 2560x1440 TP10 UBWC FULL path, including only DS/statistics/IQ state Windows proves necessary.
 8. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
