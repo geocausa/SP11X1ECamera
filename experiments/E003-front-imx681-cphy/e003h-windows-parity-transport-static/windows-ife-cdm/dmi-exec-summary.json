@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "policy": "Same-machine Windows is behavioral oracle. The bounded selector/address writes were diagnostic only and were restored before native StopAsync.",
+  "raw": {
+    "bytes": 12432,
+    "sha256": "8ccb149a22dddf21edb3b7115493a9000368a29c132f9dcfddc4867070c1e9cc",
+    "encoding": "UTF-16LE KD text log"
+  },
+  "dmi_quartets": {
+    "addresses": [
+      "0x0ac74d08",
+      "0x0ac75308",
+      "0x0ac75708",
+      "0x0ac75908",
+      "0x0ac76408",
+      "0x0ac76a08",
+      "0x0ac76f08",
+      "0x0ac7b008",
+      "0x0ac7b208",
+      "0x0ac7c208"
+    ],
+    "idle": "all four dwords 0x80000000 at all ten blocks",
+    "native_live": "all four dwords 0x00000000 at all ten blocks",
+    "post": "all four dwords 0x80000000 at all ten blocks"
+  },
+  "bounded_4708_diagnostic": {
+    "physical_block": "0x0ac75708 (VFE1 + 0x4708)",
+    "write_sequence": [
+      "DMI_CFG <= 0x00000101",
+      "DMI_ADDR <= 0x00000000"
+    ],
+    "cfg_readback": "0x00000001",
+    "candidate_data_ports": [
+      "+0x10",
+      "+0x14"
+    ],
+    "candidate_data_reads": "all zero",
+    "restore": [
+      "DMI_CFG <= 0",
+      "DMI_ADDR <= 0"
+    ],
+    "restored_quartet": "all zero while native stream remained live",
+    "conclusion": "The older Qualcomm VFE17x LUT-dump recipe is not accepted as a VFE680 DMI read mechanism on this SP11; it did not expose the known nonzero Windows payload at +0x4708 selector 1."
+  },
+  "native_holder": "Surface Camera Front WinRT reader StartAsync=Success; normal StopAsync/Dispose after diagnostic",
+  "golden_return": "rebooted to 7.1.5-sp11-render-parity-v4+; protected kernel/initrd/DTB hashes reverified; saved GRUB default unchanged and next_entry empty",
+  "next_required_oracle": "Prove native SW_CDM=0 / hardware-CDM branch and resolve RT_CDM_0/RT_CDM_1 mapped and physical bases/version before any Linux DMI execution design."
+}
