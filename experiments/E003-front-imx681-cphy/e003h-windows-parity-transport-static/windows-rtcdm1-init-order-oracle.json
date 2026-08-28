@@ -1,0 +1,132 @@
+{
+  "accepted": true,
+  "device_start": {
+    "manager_evidence_rvas": [
+      "0x15f50",
+      "0x15fec",
+      "0x160a4",
+      "0x160f4",
+      "0x16138",
+      "0x16208"
+    ],
+    "manager_order": [
+      "CDM start command 0x804",
+      "IFE start command 0x804",
+      "initial packet command 0x803 to IFE/SFE/CSID resources",
+      "CSID start command 0x804"
+    ],
+    "rtcdm_evidence_rvas": [
+      "0x285d0",
+      "0x285d4",
+      "0x285e0"
+    ],
+    "rtcdm_start_order": [
+      "IRQ0_MASK=0x00070007",
+      "DMB SY",
+      "CORE_EN=0x00000001"
+    ]
+  },
+  "device_stop": {
+    "core_enable_disable_direct_write_observed": false,
+    "manager_evidence_rvas": [
+      "0x163c8",
+      "0x16434",
+      "0x164b4"
+    ],
+    "manager_order": [
+      "CSID stop command 0x805",
+      "IFE stop command 0x805",
+      "CDM stop command 0x805"
+    ],
+    "rtcdm_evidence_rvas": [
+      "0x28550"
+    ],
+    "rtcdm_stop_direct_write": [
+      "IRQ0_MASK=0x00000000"
+    ],
+    "teardown_after_mask_zero_status": "unresolved; do not invent CORE_EN=0"
+  },
+  "direct_mapped_base_store_sweep": {
+    "count": 20,
+    "fe_cfg_0x20_store_present": false,
+    "fifo0_cfg_0x5c_store_present": false,
+    "interpretation": "bounded static negative only; does not prove reset/default ownership",
+    "offsets": [
+      "0x10",
+      "0x14",
+      "0x18",
+      "0x1c",
+      "0x30",
+      "0x34",
+      "0x38",
+      "0x50",
+      "0x54",
+      "0x58",
+      "0x134",
+      "0x138",
+      "0x234",
+      "0x238",
+      "0x334",
+      "0x338"
+    ],
+    "region_rva": "0x18000..0x2a000"
+  },
+  "dynamic_fifo0_commit": {
+    "dynamic_addresses_must_not_be_hard_coded": true,
+    "evidence_rvas": [
+      "0x28884",
+      "0x2888c",
+      "0x28894"
+    ],
+    "order": [
+      "FIFO0_BASE=dynamic request base",
+      "FIFO0_LEN=dynamic encoded len/tag/arb",
+      "FIFO0_STORE=1"
+    ]
+  },
+  "flush_reset_path": {
+    "association": "diagnostic strings mechanically associate command path with CDM core Flush / reset wait",
+    "front_runtime_use": "not established by this static oracle",
+    "observed_writes": [
+      "CORE_EN read-modify-write sets pause bit while preserving enable",
+      "RST_CMD=0x00000009"
+    ]
+  },
+  "irq_clear": {
+    "fifo0_evidence_rvas": [
+      "0x29228",
+      "0x29248"
+    ],
+    "mechanism": "read per-FIFO status; mask with 0x00070007; write status to CLEAR; write 1 to CLEAR_CMD"
+  },
+  "linux_consequence": "Do not add RT-CDM MMIO init/arm/submit from generic Qualcomm defaults. Open/init, start, dynamic commit and manager ordering are now statically pinned; FE_CFG/FIFO0_CFG ownership and final stop semantics remain blocked pending same-machine evidence.",
+  "open_init": {
+    "evidence_rvas": [
+      "0x187a8",
+      "0x187b4",
+      "0x187b8",
+      "0x18808",
+      "0x18814"
+    ],
+    "order": [
+      "IRQ0_MASK=0x00000001",
+      "RST_CMD=0x00000009",
+      "wait reset completion up to 500 ms",
+      "DMB SY",
+      "CORE_CFG=0x0000011f"
+    ]
+  },
+  "schema": "sp11-e003h-windows-rtcdm1-init-order-v1",
+  "source": {
+    "binary": "qccamisp8380.sys",
+    "bytes": 376560,
+    "image_base": "0x140000000",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "unresolved": [
+    "origin/ownership of live FE_CFG +0x20 = 0x07ff000f",
+    "origin/ownership of live FIFO0_CFG +0x5c = 0x01000000",
+    "whether conditional CGC_CFG +0x14 = 7 path applies to the accepted front RT_CDM1 instance",
+    "exact hardware/power semantics after CDM stop masks IRQ0 to zero"
+  ]
+}

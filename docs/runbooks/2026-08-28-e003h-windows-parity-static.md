@@ -69,7 +69,7 @@ The front sensor KMD powers/opens MIPI CSI before sensor init/config/crop and ap
 
 Combined with the static ISP-internal decode, Windows therefore uses:
 
-**start: IFE -> config packets -> CSID -> sensor `0x0100=1`**
+**start: CDM -> IFE -> config packets -> CSID -> sensor `0x0100=1`**
 
 **stop: CSID -> IFE -> CDM/remaining core -> sensor `0x0100=0`**.
 
@@ -169,13 +169,19 @@ Static `0014-sp11-rtcdm1-disabled-irq-dma-scaffold.patch` adds the next layer wi
 
 The same patch provides a caller-sized coherent DMA arena through the existing CAMSS 32-bit DMA domain, independently rejects DMA addresses above `0xffffffff`, allows one arena, and zeroes it both after allocation and before deterministic free. There is no FIFO0 base/length/store/config write, no IRQ-mask write, no reset/core/FE/core-enable write, and no submit API. Module build is clean with Golden vermagic, SHA-256 `0a3f1e64af5e69d428f08982aad1ad7dd39d32a5eb5baa11df6c4c78a9ce9a10`; the Denali DTB remains byte-identical to `0013` at SHA-256 `bbe48a77c5bc23f1c155ddc87b9a5b2ed56497656f06cab1a2db8e6346f0304b`. See `RTCDM1-IRQ-DMA-SCAFFOLD.md`. No runtime occurred.
 
+### Windows RT-CDM1 init/start/commit/stop order pinned
+
+`extract_rtcdm_init_order.py` is fail-closed to exact installed `qccamisp8380.sys` SHA-256 `64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c`. It mechanically pins open/init as `IRQ0_MASK=1 -> RST_CMD=9 -> reset wait <=500 ms -> DMB SY -> CORE_CFG=0x11f`; full DEVICE_START as **CDM -> IFE -> initial IFE/SFE/CSID packets -> CSID**; RT-CDM start as `IRQ0_MASK=0x00070007 -> DMB SY -> CORE_EN=1`; dynamic FIFO0 commit as `BASE -> encoded LEN/tag/arb -> STORE=1`; and DEVICE_STOP as **CSID -> IFE -> CDM**, with the direct CDM stop write limited to `IRQ0_MASK=0`.
+
+The deterministic bounded mapped-base store sweep finds no direct software store to live `FE_CFG +0x20=0x07ff000f` or `FIFO0_CFG +0x5c=0x01000000`. This is intentionally classified as negative evidence only: it does not prove reset/default ownership. Final CDM teardown after mask-zero, applicability of conditional `CGC_CFG +0x14=7`, and ownership/timing of those two live configuration values remain blockers. Extractor SHA-256 is `399a7a6ecd412d652fcce1bad469514c87a0e696ad7bf4e68a55c51f148e6629`; JSON SHA-256 is `489f47f45465603260a06f8aa2083cc417fff816478be9b6c8f68233bb0be927`. See `WINDOWS-RTCDM1-INIT-ORDER.md`. No Linux RT-CDM behavior was enabled.
+
 ## Exact next task
 
 1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
 2. Treat the VFE1 FULL memory format as resolved: one contiguous 2560x1440 **TP10 UBWC / QC10C-family** surface with 3584-byte stride and `Y_META -> Y_TP10 -> C_META -> C_TP10` layout. Linear NV12 is not parity.
 3. Treat the Windows IFE startup byte corpus as complete: four main CDM streams, 2,131 register writes and all 46 DMI payload references/bytes are captured. Further Windows byte capture is not the current blocker.
 4. Treat register ownership and VFE aperture as closed by the deterministic classifier and `0012`: never replay the five live-volatile offsets or any Windows buffer/status address, and keep the `0xf000` override Denali-only.
-5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads. Execution is proven to use native hardware **RT_CDM_1 v2.1 at `0x0ac26000`** with `SW CDM=0`, and its dedicated interrupt is firmware GSI 319 -> Linux **`GIC_SPI 287`**. Resource representation is closed by `0013` and disabled IRQ/DMA scaffolding by `0014`. Before any Linux MMIO initialization, recover the exact Windows RT_CDM1 reset/core/FE/FIFO/IRQ write sequence and separate static initialization from dynamic BL submission.
+5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads. Execution is proven to use native hardware **RT_CDM_1 v2.1 at `0x0ac26000`** with `SW CDM=0`, and its dedicated interrupt is firmware GSI 319 -> Linux **`GIC_SPI 287`**. Resource representation is closed by `0013`, disabled IRQ/DMA scaffolding by `0014`, and init/start/commit/stop ordering by the new static oracle. Before any Linux MMIO initialization, close same-machine ownership/timing for `FE_CFG +0x20`, `FIFO0_CFG +0x5c`, conditional `CGC_CFG +0x14=7`, and final CDM stop/power semantics.
 6. Treat the FULL BUS topology as closed: WM0+WM1, one QC10C/TP10-UBWC surface, exact 3584-byte stride/`0x76b000` core layout, VIDEO completion from VFE rather than CSID IPP. Dynamic addresses remain per-buffer.
 7. Derive a fail-closed VFE680 PIX/ISP implementation for the Windows 3840x2160 input -> 2560x1440 TP10 UBWC FULL path, including only DS/statistics/IQ state Windows proves necessary.
 8. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.

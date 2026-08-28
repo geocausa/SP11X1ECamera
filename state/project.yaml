@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-disabled-irq-dma-scaffold-built-windows-init-order-next
+  status: vfe1-static-rtcdm1-init-order-oracle-closed-ownership-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -142,7 +142,7 @@ e003h:
   csid1_ipp_output: 3840x2160
   vfe1_full_y: 2560x1440
   vfe1_full_c: 2560x720
-  windows_isp_start_order: IFE -> config packets -> CSID
+  windows_isp_start_order: CDM -> IFE -> config packets -> CSID
   windows_isp_stop_order: CSID -> IFE -> CDM
   windows_cross_driver_start: ISP_START_DONE -> SENSOR_STREAM_ON_APPLY
   windows_cross_driver_stop: ISP_STOP_DONE -> SENSOR_STREAM_OFF_APPLY
@@ -282,18 +282,27 @@ e003h:
   windows_front_active_rt_cdm_physical: 0x0ac26000
   windows_rt_cdm1_fifo0_cfg_live: 0x01000000
   windows_rt_cdm1_secondary_fifo_base_len_zero: true
+  windows_rt_cdm_init_order_extractor_sha256: 399a7a6ecd412d652fcce1bad469514c87a0e696ad7bf4e68a55c51f148e6629
+  windows_rt_cdm_init_order_json_sha256: 489f47f45465603260a06f8aa2083cc417fff816478be9b6c8f68233bb0be927
+  windows_rt_cdm_open_init_order: IRQ0_MASK=1 -> RST_CMD=9 -> reset wait <=500ms -> DMB -> CORE_CFG=0x11f
+  windows_rt_cdm_start_order: IRQ0_MASK=0x00070007 -> DMB -> CORE_EN=1
+  windows_rt_cdm_fifo0_commit_order: dynamic BASE -> dynamic encoded LEN/tag/arb -> STORE=1
+  windows_rt_cdm_stop_direct_write: IRQ0_MASK=0
+  windows_rt_cdm_stop_core_en_zero_proven: false
+  windows_rt_cdm_fe_cfg_direct_store_present: false
+  windows_rt_cdm_fifo0_cfg_direct_store_present: false
+  windows_rt_cdm_fe_fifo_negative_scope: bounded mapped-base static store sweep; does not prove reset/default ownership
   windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: recover exact same-machine Windows RT_CDM1 initialization/write ordering before any Linux MMIO-init or FIFO0 submission path; then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-windows-rtcdm1-init-order-oracle
+  unresolved: close same-machine FE_CFG/FIFO0_CFG ownership/timing, conditional CGC_CFG path, and final CDM stop/power semantics before any Linux RT-CDM MMIO-init/arm/submit; then implement valid VFE1 PIX/TP10-UBWC path
+next_experiment: E003h-windows-rtcdm1-config-ownership-oracle
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0014 now registers the
-  proven RT_CDM1 IRQ disabled with IRQF_NO_AUTOEN, models FIFO0-only status/clear/error bookkeeping behind an unreachable
-  irq_armed gate, and provides caller-sized 32-bit coherent DMA arena allocation/zero/free without any FIFO or configuration
-  write path. Before adding any RT-CDM MMIO writes, mechanically recover the exact same-machine Windows RT_CDM1 init/write
-  sequence from the SHA-pinned qccamisp8380.sys and/or a bounded Windows oracle: separate reset/core/FE/FIFO0/IRQ initialization
-  from dynamic BL submission and establish ordering relative to IFE start and initial IFE CDM packets. Do not import public
-  Qualcomm default values or ordering as behavioral truth. No Linux RT-CDM arm, submission, sensor transmission or frame yet.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The exact same-machine Windows
+  RT_CDM1 open/init, DEVICE_START, dynamic FIFO0 commit, IRQ-clear and DEVICE_STOP ordering is now fail-closed and reproducible.
+  Keep static 0014 inert. Before adding any RT-CDM MMIO write/arm/submit path, close same-machine ownership/timing for live
+  FE_CFG +0x20=0x07ff000f and FIFO0_CFG +0x5c=0x01000000, determine whether conditional CGC_CFG +0x14=7 applies to the accepted
+  front RT_CDM1 instance, and resolve hardware/power semantics after CDM stop masks IRQ0 to zero. Do not convert the bounded
+  no-direct-store result into a reset-default claim. No Linux RT-CDM arm, submission, sensor transmission or frame yet.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
