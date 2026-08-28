@@ -1,0 +1,24 @@
+{
+  "accepted": true,
+  "irq_masks": {
+    "bus_mask0": "0xd0000000",
+    "bus_mask0_mmio_offset_from_bus_base": "0x0018",
+    "top_mask0": "0x0007f051",
+    "top_mask0_mmio_offset": "0x0034",
+    "top_mask1": "object-derived; not frozen by this oracle"
+  },
+  "linux_consequence": "Future X1E PIX/QC10C completion must complete the one contiguous Y/C surface once per Windows VIDEO event. Keep VFE680 RDI completion behavior untouched.",
+  "schema": "sp11-e003h-windows-vfe1-video-completion-v1",
+  "source": {
+    "binary": "qccamisp8380.sys",
+    "bytes": 376560,
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "video_completion": {
+    "diagnostic": "IFE%d IFE VIDEO buf done Irq occured.",
+    "event_id": 3,
+    "interpretation": "Windows emits one VIDEO completion event for the VIDEO/FULL path; do not model FULL_Y and FULL_C as two independent vb2 frames.",
+    "top_status_bit": 0,
+    "top_status_word": "status1"
+  }
+}

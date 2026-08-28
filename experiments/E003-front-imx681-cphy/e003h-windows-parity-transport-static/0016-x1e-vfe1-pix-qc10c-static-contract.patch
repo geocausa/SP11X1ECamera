@@ -1,0 +1,274 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -4129,7 +4129,7 @@
+ 			.pd_name = "ife1",
+ 			.hw_ops = &vfe_ops_680,
+ 			.formats_rdi = &vfe_formats_rdi_845,
+-			.formats_pix = &vfe_formats_pix_845
++			.formats_pix = &vfe_formats_pix_x1e80100
+ 		},
+ 	},
+ 	/* IFE_LITE_0 */
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -283,6 +283,21 @@
+ 	.formats = formats_rdi_845
+ };
+ 
++/*
++ * Same-machine Windows front parity on X1E80100 uses RAW10 at the VFE PIX
++ * media-bus boundary and one opaque QC10C/TP10-UBWC memory surface. Keep this
++ * separate from the generic 845 placeholder and from all RDI/lite formats.
++ */
++static const struct camss_format_info formats_pix_x1e80100[] = {
++	{ MEDIA_BUS_FMT_SRGGB10_1X10, 10, V4L2_PIX_FMT_QC10C, 1,
++	  PER_PLANE_DATA(0, 1, 1, 1, 1, 10) },
++};
++
++const struct camss_formats vfe_formats_pix_x1e80100 = {
++	.nformats = ARRAY_SIZE(formats_pix_x1e80100),
++	.formats = formats_pix_x1e80100,
++};
++
+ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
+ 			    unsigned int index, u32 src_req_code)
+ {
+@@ -609,6 +624,16 @@
+ 	const struct vfe_hw_ops *ops = vfe->res->hw_ops;
+ 	int ret;
+ 
++	/*
++	 * E003h static parity gate: current v2 output plumbing maps PIX line 3 to
++	 * one RDI-style WM, which would be WM27/LTM_STATS on VFE680. Windows uses
++	 * FULL WM0+WM1 plus DS/statistics and RT-CDM/IQ. Fail before IRQ enable or
++	 * any VFE output programming until that complete path is connected.
++	 */
++	if (vfe->camss->res->version == CAMSS_X1E80100 && vfe->id == 1 &&
++	    !vfe->res->is_lite && line->id == VFE_LINE_PIX)
++		return -EOPNOTSUPP;
++
+ 	mutex_lock(&vfe->stream_lock);
+ 
+ 	if (vfe->res->hw_ops->enable_irq)
+@@ -1346,9 +1371,17 @@
+ 			if (fmt->code == line->formats[i].code)
+ 				break;
+ 
+-		/* If not found, use UYVY as default */
+-		if (i >= line->nformats)
+-			fmt->code = MEDIA_BUS_FMT_UYVY8_1X16;
++		/* Keep the legacy default everywhere except the Windows-proven VFE1 PIX gate. */
++		if (i >= line->nformats) {
++			struct vfe_device *vfe = to_vfe(line);
++
++			if (vfe->camss->res->version == CAMSS_X1E80100 &&
++			    vfe->id == 1 && !vfe->res->is_lite &&
++			    line->id == VFE_LINE_PIX)
++				fmt->code = line->formats[0].code;
++			else
++				fmt->code = MEDIA_BUS_FMT_UYVY8_1X16;
++		}
+ 
+ 		fmt->width = clamp_t(u32, fmt->width, 1, 8191);
+ 		fmt->height = clamp_t(u32, fmt->height, 1, 8191);
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -240,6 +240,7 @@
+ extern const struct camss_formats vfe_formats_pix_8x96;
+ extern const struct camss_formats vfe_formats_rdi_845;
+ extern const struct camss_formats vfe_formats_pix_845;
++extern const struct camss_formats vfe_formats_pix_x1e80100;
+ 
+ extern const struct vfe_hw_ops vfe_ops_4_1;
+ extern const struct vfe_hw_ops vfe_ops_4_7;
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -26,6 +26,11 @@
+ #define CAMSS_FRAME_MAX_HEIGHT_RDI	8191
+ #define CAMSS_FRAME_MAX_HEIGHT_PIX	4096
+ 
++#define CAMSS_X1E80100_QC10C_WIDTH		2560
++#define CAMSS_X1E80100_QC10C_HEIGHT		1440
++#define CAMSS_X1E80100_QC10C_STRIDE		3584
++#define CAMSS_X1E80100_QC10C_SIZEIMAGE		0x76b000
++
+ /* -----------------------------------------------------------------------------
+  * Helper functions
+  */
+@@ -52,6 +57,18 @@
+ 	memset(pix, 0, sizeof(*pix));
+ 	v4l2_fill_pix_format_mplane(pix, mbus);
+ 	pix->pixelformat = f->pixelformat;
++
++	if (f->pixelformat == V4L2_PIX_FMT_QC10C) {
++		if (mbus->width != CAMSS_X1E80100_QC10C_WIDTH ||
++		    mbus->height != CAMSS_X1E80100_QC10C_HEIGHT)
++			return -EINVAL;
++
++		pix->num_planes = 1;
++		pix->plane_fmt[0].bytesperline = CAMSS_X1E80100_QC10C_STRIDE;
++		pix->plane_fmt[0].sizeimage = CAMSS_X1E80100_QC10C_SIZEIMAGE;
++		return 0;
++	}
++
+ 	pix->num_planes = f->planes;
+ 	for (i = 0; i < pix->num_planes; i++) {
+ 		bytesperline = pix->width / f->hsub[i].numerator *
+@@ -546,6 +563,13 @@
+ 	if (i == video->nformats)
+ 		return -EINVAL;
+ 
++	if (fsize->pixel_format == V4L2_PIX_FMT_QC10C) {
++		fsize->type = V4L2_FRMSIZE_TYPE_DISCRETE;
++		fsize->discrete.width = CAMSS_X1E80100_QC10C_WIDTH;
++		fsize->discrete.height = CAMSS_X1E80100_QC10C_HEIGHT;
++		return 0;
++	}
++
+ 	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
+ 	fsize->stepwise.min_width = CAMSS_FRAME_MIN_WIDTH;
+ 	fsize->stepwise.max_width = CAMSS_FRAME_MAX_WIDTH;
+@@ -604,6 +628,15 @@
+ 	memset(pix_mp, 0, sizeof(*pix_mp));
+ 
+ 	pix_mp->pixelformat = fi->pixelformat;
++	if (fi->pixelformat == V4L2_PIX_FMT_QC10C) {
++		pix_mp->width = CAMSS_X1E80100_QC10C_WIDTH;
++		pix_mp->height = CAMSS_X1E80100_QC10C_HEIGHT;
++		pix_mp->num_planes = 1;
++		pix_mp->plane_fmt[0].bytesperline = CAMSS_X1E80100_QC10C_STRIDE;
++		pix_mp->plane_fmt[0].sizeimage = CAMSS_X1E80100_QC10C_SIZEIMAGE;
++		goto set_colorimetry;
++	}
++
+ 	pix_mp->width = clamp_t(u32, width, 1, CAMSS_FRAME_MAX_WIDTH);
+ 	pix_mp->height = clamp_t(u32, height, 1, CAMSS_FRAME_MAX_HEIGHT_RDI);
+ 	pix_mp->num_planes = fi->planes;
+@@ -616,6 +649,7 @@
+ 			fi->vsub[i].numerator * fi->vsub[i].denominator * bpl;
+ 	}
+ 
++set_colorimetry:
+ 	pix_mp->field = V4L2_FIELD_NONE;
+ 	pix_mp->colorspace = V4L2_COLORSPACE_SRGB;
+ 	pix_mp->flags = 0;
+@@ -624,7 +658,7 @@
+ 					pix_mp->colorspace, pix_mp->ycbcr_enc);
+ 	pix_mp->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix_mp->colorspace);
+ 
+-	if (video->line_based)
++	if (video->line_based && pix_mp->pixelformat != V4L2_PIX_FMT_QC10C)
+ 		for (i = 0; i < pix_mp->num_planes; i++) {
+ 			p = &pix_mp->plane_fmt[i];
+ 			p->bytesperline = clamp_t(u32, p->bytesperline,
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -106,6 +106,108 @@
+  */
+ #define RDI_WM(n)			((vfe_is_lite(vfe) ? 0 : 24) + (n))
+ 
++
++/*
++ * E003h same-machine Windows VFE1 PIX/FULL contract, static only.
++ * Public VFE680 data is used only to confirm that FULL structurally owns WM0
++ * + WM1 in one compression group. Every value below comes from the two-pass
++ * Windows VFE1 oracle. Dynamic Windows IOVAs/status values are absent.
++ */
++#define VFE680_X1E_QC10C_WIDTH          2560
++#define VFE680_X1E_QC10C_HEIGHT         1440
++#define VFE680_X1E_QC10C_STRIDE         3584
++#define VFE680_X1E_QC10C_SIZE           0x0076b000
++#define VFE680_X1E_QC10C_Y_DATA_OFF     0x00006000
++#define VFE680_X1E_QC10C_C_META_OFF     0x004f2000
++#define VFE680_X1E_QC10C_C_DATA_OFF     0x004f5000
++#define VFE680_X1E_WINDOWS_TOP_MASK0    0x0007f051
++#define VFE680_X1E_WINDOWS_BUS_MASK0    0xd0000000
++#define VFE680_X1E_WINDOWS_VIDEO_EVENT  3
++
++struct vfe680_x1e_windows_client_contract {
++	u8 client;
++	u32 cfg;
++	u32 frame_incr;
++	u32 image_cfg0;
++	u32 image_cfg1;
++	u32 image_cfg2;
++	u32 packer_cfg;
++	u32 bw_limit;
++	u32 irq_subsample_pattern;
++	u32 framedrop_pattern;
++	u32 meta_cfg;
++	u32 mode_cfg;
++	u32 ctrl_2;
++	u32 lossy_thresh0;
++	u32 lossy_thresh1;
++};
++
++#define VFE680_X1E_WINDOWS_CLIENT(_id, _cfg, _incr, _cfg0, _cfg2, \
++				  _packer, _bw, _meta, _mode, _ctrl2, \
++				  _loss0, _loss1) \
++	{ .client = (_id), .cfg = (_cfg), .frame_incr = (_incr), .image_cfg0 = (_cfg0), \
++	  .image_cfg1 = 0, .image_cfg2 = (_cfg2), .packer_cfg = (_packer), .bw_limit = (_bw), \
++	  .irq_subsample_pattern = 1, .framedrop_pattern = 1, \
++	  .meta_cfg = (_meta), .mode_cfg = (_mode), .ctrl_2 = (_ctrl2), \
++	  .lossy_thresh0 = (_loss0), .lossy_thresh1 = (_loss1) }
++
++static const struct vfe680_x1e_windows_client_contract
++vfe680_x1e_windows_full_contract[] __used = {
++	VFE680_X1E_WINDOWS_CLIENT(0, 0x11, 0x004f2000, 0x05a00a00, 0x0e00,
++				  0x0b, 0x0b, 0x400, 0x23, 1, 0x06210022, 0x0000040a),
++	VFE680_X1E_WINDOWS_CLIENT(1, 0x11, 0x00279000, 0x02d00a00, 0x0e00,
++				  0x0b, 0x0b, 0x400, 0x33, 1, 0x06210022, 0x0000040a),
++};
++
++static const struct vfe680_x1e_windows_client_contract
++vfe680_x1e_windows_aux_contract[] __used = {
++	VFE680_X1E_WINDOWS_CLIENT(2, 0x11, 0x00084000, 0x00b40140, 0x0b00,
++				  0x0a, 0, 0, 0, 0, 0, 0),
++	VFE680_X1E_WINDOWS_CLIENT(3, 0x11, 0x0000c000, 0x002d0050, 0x0300,
++				  0x0a, 0, 0, 0, 0, 0, 0),
++	VFE680_X1E_WINDOWS_CLIENT(11, 0x00010001, 0x000a0000, 0, 1,
++				  0x0a, 0, 0, 0, 0, 0, 0),
++	VFE680_X1E_WINDOWS_CLIENT(12, 0x00010001, 0x00001800, 0, 1,
++				  0x0a, 0, 0, 0, 0, 0, 0),
++	VFE680_X1E_WINDOWS_CLIENT(13, 0x00010001, 0x00048000, 0, 1,
++				  0x0a, 0, 0, 0, 0, 0, 0),
++	VFE680_X1E_WINDOWS_CLIENT(14, 0x00010001, 0x00151800, 0, 1,
++				  0x0a, 0, 0, 0, 0, 0, 0),
++	VFE680_X1E_WINDOWS_CLIENT(18, 0x00010001, 0x00010000, 0, 1,
++				  0x08, 0, 0, 0, 0, 0, 0),
++};
++
++struct vfe680_x1e_windows_pix_contract {
++	u32 width;
++	u32 height;
++	u32 stride;
++	u32 surface_size;
++	u32 y_meta_offset;
++	u32 y_data_offset;
++	u32 c_meta_offset;
++	u32 c_data_offset;
++	u32 top_mask0;
++	u32 bus_mask0;
++	u32 video_event;
++	u8 full_wm[2];
++};
++
++static const struct vfe680_x1e_windows_pix_contract
++vfe680_x1e_windows_pix_contract __used = {
++	.width = VFE680_X1E_QC10C_WIDTH,
++	.height = VFE680_X1E_QC10C_HEIGHT,
++	.stride = VFE680_X1E_QC10C_STRIDE,
++	.surface_size = VFE680_X1E_QC10C_SIZE,
++	.y_meta_offset = 0,
++	.y_data_offset = VFE680_X1E_QC10C_Y_DATA_OFF,
++	.c_meta_offset = VFE680_X1E_QC10C_C_META_OFF,
++	.c_data_offset = VFE680_X1E_QC10C_C_DATA_OFF,
++	.top_mask0 = VFE680_X1E_WINDOWS_TOP_MASK0,
++	.bus_mask0 = VFE680_X1E_WINDOWS_BUS_MASK0,
++	.video_event = VFE680_X1E_WINDOWS_VIDEO_EVENT,
++	.full_wm = { 0, 1 },
++};
++
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+ 	/* VFE680 has no global reset, simply report a completion */

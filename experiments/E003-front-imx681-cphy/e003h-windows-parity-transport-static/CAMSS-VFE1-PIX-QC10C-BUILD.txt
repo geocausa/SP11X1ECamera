@@ -1,0 +1,20 @@
+E003h 0016 VFE1 PIX/QC10C static-contract build
+Date: 2026-08-29 Europe/London
+Runtime authorized: false
+Module loaded: false
+Sensor stream authorized: false
+Frame attempted: false
+Build: make O=<Golden build anchor> ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules
+Build result: PASS
+Compiler warning/error diagnostics: none
+qcom-camss.ko SHA-256: 97fd2dd9a482c0ba8e6c0d3e5a7cf190612bdca4610a81c59a576bc5e4cf7834
+vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+0016 patch SHA-256: 4e0cbba5b169353a4f62cfdf1aacd93ac811ae3366f72658eeee7cefaca7ab03
+static contract SHA-256: 820c7971218e4b018994ed36e60ba5d04f8a75fec91fdca66fcf981d4a5fc3b5
+static inspector SHA-256: af5b43ac294f442260f132ca4e2731812cf5100186fc0cecc17a103a94936f51
+static inspection JSON SHA-256: cb2d5ae35b0879d2f716f1193aec54f921daddf4560e410f0cd0fed7d742fe10
+Windows VIDEO-completion extractor SHA-256: 04d54dce4b103e6c8f50785d90db2fe6db71c70ffdc09b00efbc5c7bffd09409
+Windows VIDEO-completion JSON SHA-256: c8436846bb73082de504da00d0760280b347cd5b8fbbc5e9702197ed0509573c
+Denali DTB unchanged from 0013/0014/0015: bbe48a77c5bc23f1c155ddc87b9a5b2ed56497656f06cab1a2db8e6346f0304b
+Isolation: IFE0 and both Lite PIX format tables unchanged; existing VFE680 RDI WM start/update/stop functions unchanged by 0016.
+Safety: VFE1 PIX stream-on returns -EOPNOTSUPP before stream lock/IRQ/output setup. No VFE1 PIX BUS write path is connected.

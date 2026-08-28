@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-static-rtcdm-windows-recipe-built-unreachable-golden-unchanged
+status: e003h-vfe1-pix-qc10c-static-contract-built-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-windows-recipe-built-unreachable-pix-static-next
+  status: vfe1-pix-qc10c-static-contract-built-stream-blocked-bus-order-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -343,15 +343,33 @@ e003h:
   linux_rt_cdm1_static_recipe_compiled_start: IRQ0_MASK=0x00070007 -> DMB SY -> CORE_EN=1
   linux_rt_cdm1_static_recipe_compiled_fifo0: dynamic BASE -> observed encoded LEN -> STORE=1 -> BL-done wait
   linux_rt_cdm1_static_recipe_compiled_stop: IRQ0_MASK=0 only
-  unresolved: derive/build valid VFE1 PIX/ISP QC10C/TP10-UBWC path and prove rear isolation before connecting RT-CDM recipe; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-vfe1-pix-qc10c-static-architecture
+  windows_vfe1_video_completion_extractor_sha256: 04d54dce4b103e6c8f50785d90db2fe6db71c70ffdc09b00efbc5c7bffd09409
+  windows_vfe1_video_completion_json_sha256: c8436846bb73082de504da00d0760280b347cd5b8fbbc5e9702197ed0509573c
+  windows_vfe1_video_completion: TOP status1 bit0 -> event 3 -> IFE VIDEO buf done
+  windows_vfe1_top_mask0: 0x0007f051
+  windows_vfe1_bus_mask0: 0xd0000000
+  vfe1_pix_static_contract_extractor_sha256: 95efd94c70584a971dd79f074aed5cfb0a9904739bc530f0e6dffe3ac1dbd490
+  vfe1_pix_static_contract_json_sha256: 820c7971218e4b018994ed36e60ba5d04f8a75fec91fdca66fcf981d4a5fc3b5
+  linux_vfe1_pix_0016_patch_sha256: 4e0cbba5b169353a4f62cfdf1aacd93ac811ae3366f72658eeee7cefaca7ab03
+  linux_vfe1_pix_0016_inspector_sha256: af5b43ac294f442260f132ca4e2731812cf5100186fc0cecc17a103a94936f51
+  linux_vfe1_pix_0016_json_sha256: cb2d5ae35b0879d2f716f1193aec54f921daddf4560e410f0cd0fed7d742fe10
+  linux_vfe1_pix_0016_module_sha256: 97fd2dd9a482c0ba8e6c0d3e5a7cf190612bdca4610a81c59a576bc5e4cf7834
+  linux_vfe1_pix_format: V4L2_PIX_FMT_QC10C one V4L2 plane 2560x1440 stride 3584 sizeimage 0x76b000
+  linux_vfe1_pix_internal_offsets: Y_META=0 Y_TP10=0x6000 C_META=0x4f2000 C_TP10=0x4f5000
+  linux_vfe1_pix_ife1_only: true
+  linux_vfe1_pix_stream_reachable: false
+  linux_vfe1_pix_stream_gate: -EOPNOTSUPP before stream lock/IRQ/output setup
+  linux_vfe1_pix_retained_contract_runtime_relocation: false
+  linux_vfe1_pix_rear_rdi_functions_changed: false
+  unresolved: recover exact Windows BUS client programming/dynamic address update ordering and DS/stats buffer ownership/lifetime before unreachable BUS recipe; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-windows-vfe1-bus-program-order-oracle
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0015 now compiles the exact
-  Windows-derived RT_CDM1 read-only preflight plus reset/init/start/FIFO0/stop recipe behind a private retained table with no
-  runtime reference; FE_CFG/FIFO0_CFG/CGC remain unwritten and no CORE_EN=0 shutdown is invented. Do not connect that recipe
-  to runtime yet. Derive and build the minimum fail-closed VFE1 PIX/ISP architecture for Windows 3840x2160 input -> 2560x1440
-  QC10C/TP10-UBWC FULL output using only same-machine Windows-proven BUS/DS/statistics/IQ state, and prove rear D-PHY/RDI
-  isolation. No Linux RT-CDM arm/submission, sensor transmission or front frame before complete static/build/ABI/DT/rollback gates.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0016 now closes only the
+  IFE1 PIX RAW10->QC10C format, exact 2560x1440 one-plane surface, WM0/WM1 structure and VIDEO completion representation;
+  VFE1 PIX stream-on still fails before hardware setup and 0015 RT-CDM remains unreachable. Recover exact same-machine Windows
+  BUS client programming and dynamic address-update ordering/lifetime for FULL plus DS4/DS16/stats relative to RT-CDM/IFE start
+  and per-frame updates. Never freeze Windows IOVAs. Then build an unreachable BUS recipe and combine it with the captured IQ/DMI
+  corpus. No Linux RT-CDM arm/submission, VFE1 PIX hardware enable, sensor transmission or front frame yet.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
