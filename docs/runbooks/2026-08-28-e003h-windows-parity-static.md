@@ -149,13 +149,21 @@ First, `CDM-EXEC-ORACLE.md` records a bounded live diagnostic which rejects impo
 
 Dynamic BL base/length values are command-buffer state and must never be hard-coded. The Linux parity target is now an equivalent fail-closed **RT_CDM1 hardware execution path**, not guessed direct VFE DMI MMIO.
 
+### Dedicated RT-CDM interrupt closed
+
+A controlled restart of only the same-machine Windows ISP device hit the exact `qccamisp8380.sys` interrupt-registration routine during WDF `PrepareHardware`. The focused raw oracle is `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/raw/E003H_RTCDM_IRQ_MAP_20260828.log`, 7,428 bytes, SHA-256 `0f4b30273ddd7af23bbad5158b2da57a320c143b43ce5119927bbfbcfa6cbf1b`.
+
+Mechanical registration arguments prove RT_CDM0 = class 3 / instance 0 / raw firmware GSI 488 (`0x1e8`) and **RT_CDM1 = class 3 / instance 1 / raw firmware GSI 319 (`0x13f`)**. The Windows-translated vector is OS-local and is not a Linux DT value. The SP11's existing CAMSS DT provides a six-resource namespace cross-check: `GIC_SPI` cells 464..469 map exactly to Windows ISP GSIs 496..501. Therefore this platform uses `GSI/INTID = GIC_SPI cell + 32`, and RT_CDM1's Linux DT cell is exactly **`GIC_SPI 287` (`0x11f`)**. `windows-ife-cdm/extract_rtcdm_irq_oracle.py` is hash-pinned and fail-closed; see `RTCDM-IRQ-ORACLE.md`.
+
+The controlled Windows ISP restart recovered `Started/OK`, and SP11 then returned to byte-exact Golden with all three canonical hashes unchanged and empty GRUB `next_entry`.
+
 ## Exact next task
 
 1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
 2. Treat the VFE1 FULL memory format as resolved: one contiguous 2560x1440 **TP10 UBWC / QC10C-family** surface with 3584-byte stride and `Y_META -> Y_TP10 -> C_META -> C_TP10` layout. Linear NV12 is not parity.
 3. Treat the Windows IFE startup byte corpus as complete: four main CDM streams, 2,131 register writes and all 46 DMI payload references/bytes are captured. Further Windows byte capture is not the current blocker.
 4. Treat register ownership and VFE aperture as closed by the deterministic classifier and `0012`: never replay the five live-volatile offsets or any Windows buffer/status address, and keep the `0xf000` override Denali-only.
-5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads. Execution is now proven to use native hardware **RT_CDM_1 v2.1 at `0x0ac26000`** with `SW CDM=0`; direct VFE680 DMI replay is rejected. Close Linux RT-CDM1 clock/power/reset, DMA/IOMMU, FIFO0 completion/IRQ and teardown semantics before any submission.
+5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads. Execution is proven to use native hardware **RT_CDM_1 v2.1 at `0x0ac26000`** with `SW CDM=0`, and its dedicated interrupt is now proven as firmware GSI 319 -> Linux **`GIC_SPI 287`**. Direct VFE680 DMI replay is rejected. Implement the smallest fail-closed Linux RT-CDM1 helper using the existing IFE1/Titan/CPAS power context and CAMSS DMA/IOMMU domain, with command submission disabled until static gates pass.
 6. Treat the FULL BUS topology as closed: WM0+WM1, one QC10C/TP10-UBWC surface, exact 3584-byte stride/`0x76b000` core layout, VIDEO completion from VFE rather than CSID IPP. Dynamic addresses remain per-buffer.
 7. Derive a fail-closed VFE680 PIX/ISP implementation for the Windows 3840x2160 input -> 2560x1440 TP10 UBWC FULL path, including only DS/statistics/IQ state Windows proves necessary.
 8. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.

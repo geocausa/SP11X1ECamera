@@ -17,6 +17,8 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 - sensor stream-on/off is exactly `0x0100=1` / `0x0100=0`, zero delay; group hold `0x0104` is separate;
 - Windows ISP internal start order is IFE -> initial IFE/CSID packets -> CSID;
 - Windows ISP internal stop order is CSID -> IFE -> CDM/remaining core;
+- native front IFE command execution uses hardware RT_CDM1 v2.1 at physical `0x0ac26000`, FIFO0;
+- RT_CDM1 registers as interrupt class 3 / instance 1 with firmware GSI `319` (`0x13f`), which maps to Linux `GIC_SPI 287` (`0x11f`) on this SP11;
 - two independent dynamic cycles prove ISP start completion before sensor `0x0100=1`, and ISP stop completion before sensor `0x0100=0`.
 
 ## Linux gaps
