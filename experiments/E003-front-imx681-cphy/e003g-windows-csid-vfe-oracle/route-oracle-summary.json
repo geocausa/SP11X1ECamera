@@ -144,6 +144,19 @@
       "csid2": "0x00000001",
       "active_output_ife": "CSID1 (bit8 OUTPUT_IFE_EN set only at wrapper +0x004)"
     },
+    "csid1_rx": {
+      "cfg0": "0x11300000",
+      "num_active_lanes_field": 0,
+      "active_lanes_or_trios": 1,
+      "lane_cfg": 0,
+      "phy_num_sel": 3,
+      "phy_type_sel": 1,
+      "tpg_mux_en": 0,
+      "tpg_num_sel": 1,
+      "cfg1": "0x00000001",
+      "packet_ecc_correction_en": true,
+      "misr_enable": false
+    },
     "csid1_ipp": {
       "cfg0": "0x802b2000",
       "enabled": true,
@@ -152,6 +165,20 @@
       "data_type": 43,
       "decode_format": 2,
       "cfg1": "0x00007241",
+      "cfg1_named_bits": {
+        "crop_h_en": true,
+        "crop_v_en": true,
+        "pix_store_en": true,
+        "timestamp_en": true,
+        "early_eof_en": false,
+        "drop_h_en": false,
+        "drop_v_en": false,
+        "format_measure_en_bit4": false,
+        "unresolved_set_bits": [
+          0,
+          6
+        ]
+      },
       "hcrop": "0x0eff0000",
       "crop_x_start": 0,
       "crop_x_end": 3839,
@@ -176,7 +203,10 @@
           "frame_incr": "0x004f2000",
           "image_cfg0": "0x05a00a00",
           "image_cfg2": "0x00000e00",
-          "packer_cfg": "0x0000000b"
+          "packer_cfg": "0x0000000b",
+          "width": 2560,
+          "height": 1440,
+          "stride": 3584
         },
         {
           "client": 1,
@@ -187,7 +217,10 @@
           "frame_incr": "0x00279000",
           "image_cfg0": "0x02d00a00",
           "image_cfg2": "0x00000e00",
-          "packer_cfg": "0x0000000b"
+          "packer_cfg": "0x0000000b",
+          "width": 2560,
+          "height": 720,
+          "stride": 3584
         },
         {
           "client": 2,
@@ -198,7 +231,10 @@
           "frame_incr": "0x00084000",
           "image_cfg0": "0x00b40140",
           "image_cfg2": "0x00000b00",
-          "packer_cfg": "0x0000000a"
+          "packer_cfg": "0x0000000a",
+          "width": 320,
+          "height": 180,
+          "stride": 2816
         },
         {
           "client": 3,
@@ -209,7 +245,10 @@
           "frame_incr": "0x0000c000",
           "image_cfg0": "0x002d0050",
           "image_cfg2": "0x00000300",
-          "packer_cfg": "0x0000000a"
+          "packer_cfg": "0x0000000a",
+          "width": 80,
+          "height": 45,
+          "stride": 768
         },
         {
           "client": 4,
@@ -220,7 +259,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 5,
@@ -231,7 +273,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 6,
@@ -242,7 +287,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 7,
@@ -253,7 +301,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 8,
@@ -264,7 +315,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 9,
@@ -275,7 +329,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 10,
@@ -286,7 +343,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 11,
@@ -297,7 +357,10 @@
           "frame_incr": "0x000a0000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000001",
-          "packer_cfg": "0x0000000a"
+          "packer_cfg": "0x0000000a",
+          "width": 0,
+          "height": 0,
+          "stride": 1
         },
         {
           "client": 12,
@@ -308,7 +371,10 @@
           "frame_incr": "0x00001800",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000001",
-          "packer_cfg": "0x0000000a"
+          "packer_cfg": "0x0000000a",
+          "width": 0,
+          "height": 0,
+          "stride": 1
         },
         {
           "client": 13,
@@ -319,7 +385,10 @@
           "frame_incr": "0x00048000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000001",
-          "packer_cfg": "0x0000000a"
+          "packer_cfg": "0x0000000a",
+          "width": 0,
+          "height": 0,
+          "stride": 1
         },
         {
           "client": 14,
@@ -330,7 +399,10 @@
           "frame_incr": "0x00151800",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000001",
-          "packer_cfg": "0x0000000a"
+          "packer_cfg": "0x0000000a",
+          "width": 0,
+          "height": 0,
+          "stride": 1
         },
         {
           "client": 15,
@@ -341,7 +413,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 16,
@@ -352,7 +427,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 17,
@@ -363,7 +441,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 18,
@@ -374,7 +455,10 @@
           "frame_incr": "0x00010000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000001",
-          "packer_cfg": "0x00000008"
+          "packer_cfg": "0x00000008",
+          "width": 0,
+          "height": 0,
+          "stride": 1
         },
         {
           "client": 19,
@@ -385,7 +469,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 20,
@@ -396,7 +483,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 21,
@@ -407,7 +497,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 22,
@@ -418,7 +511,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 23,
@@ -429,7 +525,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 24,
@@ -440,7 +539,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 25,
@@ -451,7 +553,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 26,
@@ -462,7 +567,10 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         },
         {
           "client": 27,
@@ -473,56 +581,109 @@
           "frame_incr": "0x00000000",
           "image_cfg0": "0x00000000",
           "image_cfg2": "0x00000000",
-          "packer_cfg": "0x00000000"
+          "packer_cfg": "0x00000000",
+          "width": 0,
+          "height": 0,
+          "stride": 0
         }
       ],
       "enabled_clients": [
         {
           "client": 0,
           "name": "FULL_Y",
-          "cfg": "0x00000011"
+          "cfg": "0x00000011",
+          "width": 2560,
+          "height": 1440,
+          "stride": 3584,
+          "frame_incr": "0x004f2000",
+          "packer_cfg": "0x0000000b"
         },
         {
           "client": 1,
           "name": "FULL_C",
-          "cfg": "0x00000011"
+          "cfg": "0x00000011",
+          "width": 2560,
+          "height": 720,
+          "stride": 3584,
+          "frame_incr": "0x00279000",
+          "packer_cfg": "0x0000000b"
         },
         {
           "client": 2,
           "name": "DS4",
-          "cfg": "0x00000011"
+          "cfg": "0x00000011",
+          "width": 320,
+          "height": 180,
+          "stride": 2816,
+          "frame_incr": "0x00084000",
+          "packer_cfg": "0x0000000a"
         },
         {
           "client": 3,
           "name": "DS16",
-          "cfg": "0x00000011"
+          "cfg": "0x00000011",
+          "width": 80,
+          "height": 45,
+          "stride": 768,
+          "frame_incr": "0x0000c000",
+          "packer_cfg": "0x0000000a"
         },
         {
           "client": 11,
           "name": "STATS_BE0",
-          "cfg": "0x00010001"
+          "cfg": "0x00010001",
+          "width": 0,
+          "height": 0,
+          "stride": 1,
+          "frame_incr": "0x000a0000",
+          "packer_cfg": "0x0000000a"
         },
         {
           "client": 12,
           "name": "STATS_BHIST0",
-          "cfg": "0x00010001"
+          "cfg": "0x00010001",
+          "width": 0,
+          "height": 0,
+          "stride": 1,
+          "frame_incr": "0x00001800",
+          "packer_cfg": "0x0000000a"
         },
         {
           "client": 13,
           "name": "STATS_TINTLESS_BG",
-          "cfg": "0x00010001"
+          "cfg": "0x00010001",
+          "width": 0,
+          "height": 0,
+          "stride": 1,
+          "frame_incr": "0x00048000",
+          "packer_cfg": "0x0000000a"
         },
         {
           "client": 14,
           "name": "STATS_AWB_BG",
-          "cfg": "0x00010001"
+          "cfg": "0x00010001",
+          "width": 0,
+          "height": 0,
+          "stride": 1,
+          "frame_incr": "0x00151800",
+          "packer_cfg": "0x0000000a"
         },
         {
           "client": 18,
           "name": "STATS_RS",
-          "cfg": "0x00010001"
+          "cfg": "0x00010001",
+          "width": 0,
+          "height": 0,
+          "stride": 1,
+          "frame_incr": "0x00010000",
+          "packer_cfg": "0x00000008"
         }
-      ]
+      ],
+      "windows_full_output": {
+        "width": 2560,
+        "height": 1440,
+        "chroma_height": 720
+      }
     }
   }
 }

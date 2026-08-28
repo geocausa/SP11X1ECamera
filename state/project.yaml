@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003g-windows-front-route-resolved
+state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003g-route-oracle-resolved-golden-restored
+status: e003h-static-parity-architecture-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E003-front-imx681-cphy
-current_gate: E003g-Windows-route-oracle-resolved
+current_gate: E003h-Windows-parity-transport-static
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -131,17 +131,34 @@ e003g:
   vfe1_live_nonzero_dwords: 217
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
-next_experiment: E003g-csid1-vfe1-rdi-static-build
+e003h:
+  status: static-parity-architecture-in-progress
+  runtime_authorized: false
+  sensor_stream_authorized: false
+  sensor_stream_on: 0x0100=0x01
+  sensor_stream_off: 0x0100=0x00
+  csid1_rx_cfg0_windows: 0x11300000
+  csid1_rx_cfg1_windows: 0x00000001
+  csid1_ipp_output: 3840x2160
+  vfe1_full_y: 2560x1440
+  vfe1_full_c: 2560x720
+  windows_isp_start_order: IFE -> config packets -> CSID
+  windows_isp_stop_order: CSID -> IFE -> CDM
+  linux_csid_rx_patch_build: pass
+  linux_csid_rx_patch_module_sha256: 900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af
+  parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
+  unresolved: exact sensor stream-on/off scheduling relative to ISP DEVICE_START/STOP
+next_experiment: E003h-ipp-vfe1-parity-static-architecture
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden. The same-machine Windows route is now proven as
-  IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1; do not resume the superseded VFE0-extension hypothesis.
-  Audit and minimally adjust the E003d/e/f media graph and any hard-coded host-power selection so front mode0
-  reaches CSID1 and VFE1 rather than CSID0/VFE0. Linux VFE680 currently supports RDI output only, so derive and
-  build the smallest bounded CSID1 -> VFE1 RDI stream-on/stream-off candidate with explicit timeout, fail-closed
-  teardown and rollback. Do not attempt a frame until its static, build, ABI and DT safety gates pass.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 transmission blocked. Strict same-machine Windows
+  parity remains the acceptance target. Resolve the sensor 0x0100=1/0 scheduling point relative to Windows ISP
+  DEVICE_START/STOP, then implement only the Windows-proven CSID1 IPP and valid VFE1 PIX/ISP architecture plus
+  lifecycle ordering. The current Linux RDI path may be used only as an explicitly non-parity diagnostic and must
+  never be treated as the production or acceptance endpoint. No runtime candidate or frame is authorized until
+  the parity implementation passes static build, ABI, DT, rear-DPHY non-regression, timeout and rollback gates.
 
 handoff:
-  latest: docs/runbooks/2026-08-28-e003g-route-resolved.md
+  latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
     - CONTINUE.md
     - AGENTS.md

@@ -1,0 +1,16 @@
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -105,0 +106 @@
++#define		CSI2_RX_CFG0_TPG_NUM_SEL			28
+@@ -191,0 +193,11 @@
++	val |= phy->phy_sel << CSI2_RX_CFG0_PHY_TYPE_SEL;
++
++	/*
++	 * Same-machine SP11 Windows programs TPG_NUM_SEL=1 for the active
++	 * one-trio C-PHY receiver while leaving TPG mux disabled. Preserve
++	 * that otherwise-inert field on X1E80100 rather than normalizing it
++	 * away: CSIPHY2 C-PHY must produce RX_CFG0 == 0x11300000.
++	 */
++	if (csid->camss->res->version == CAMSS_X1E80100 &&
++	    phy->phy_sel == CSID_PHY_SEL_CPHY)
++		val |= 1 << CSI2_RX_CFG0_TPG_NUM_SEL;

@@ -1,0 +1,26 @@
+E003h static-only CSID680 parity build
+Date: 2026-08-28
+Source overlay: /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
+Build config/output anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+Command: make O=/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826 ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules
+Result: PASS
+Warnings/errors: none
+qcom-camss.ko SHA256: 900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af
+qcom-camss.ko vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+Deployment: NONE
+Runtime: NONE
+
+Exact same-machine Windows CSID1 RX target:
+RX_CFG0 @ +0x200 = 0x11300000
+RX_CFG1 @ +0x204 = 0x00000001
+
+Patched Linux front formula for one-trio CSIPHY2 C-PHY:
+NUM_ACTIVE_LANES field = 0
+LANE_CFG = 0
+PHY_NUM_SEL = 3
+PHY_TYPE_SEL = 1
+TPG_MUX_EN = 0
+TPG_NUM_SEL = 1
+Computed RX_CFG0 = 0x11300000 PASS
+
+The new PHY_TYPE/TPG_NUM additions are C-PHY/X1E-only. D-PHY paths receive no new bits.

@@ -1,3 +1,15 @@
+## E003h ACTIVE — Windows-parity transport architecture, static only — 2026-08-28
+
+The project target remains strict same-machine Windows parity, not merely a working raw stream. Static decoding of the exact installed Windows sensor/ISP binaries and the E003g MMIO oracle has now closed several lifecycle and format gaps. The SHA-pinned IMX681 sensor data defines stream-on/off as exactly `0x0100=0x01` / `0x0100=0x00` with zero delay; group hold `0x0104` is separate. CSID1 Windows RX is exactly `RX_CFG0=0x11300000`, `RX_CFG1=0x00000001`. The current Linux CSID680 path omitted the C-PHY type bit and Windows' reproducible bit-28 field; a static-only patch now computes the exact Windows RX_CFG0 for one-trio CSIPHY2 C-PHY and builds cleanly with Golden vermagic. It has **not** been deployed.
+
+Windows VFE1 is a real ISP path: CSID1 IPP crops/measures the 3840x2640 RAW10 sensor mode to 3840x2160, then VFE1 emits FULL Y 2560x1440, FULL C 2560x720, DS4 320x180, DS16 80x45 and statistics clients. Current Linux VFE680 explicitly supports only RDI; its generic PIX mapping is invalid for PIX and would route line 3 through WM27/LTM_STATS. Therefore a Linux RDI frame can at most be a diagnostic transport proof and **cannot satisfy parity**.
+
+Static disassembly of the exact installed `qccamisp8380.sys` (SHA-256 `64463b4d...17c21c`) mechanically establishes ISP-internal lifecycle ordering: **IFE start -> initial IFE/CSID config packets -> CSID start** and **CSID stop -> IFE stop -> CDM/remaining core stop**. Current generic CAMSS stop order differs. The exact cross-driver scheduling point of sensor `0x0100=1/0` relative to ISP DEVICE_START/STOP remains unresolved, so sensor transmission stays prohibited.
+
+**Next action:** finish the parity architecture statically: resolve sensor-vs-ISP start/stop scheduling from same-machine Windows evidence, implement only Windows-proven CSID1 IPP/VFE1 PIX support and lifecycle ordering, and build/test it without loading or transmitting. Do not use an RDI frame as an acceptance criterion. No runtime E003h candidate is authorized until the static implementation can represent the observed Windows path and passes build/ABI/DT/rollback gates.
+
+Canonical handoff: `docs/runbooks/2026-08-28-e003h-windows-parity-static.md`.
+
 ## E003g ROUTE RESOLVED — same-machine Windows front route is CSIPHY2 -> CSID1 -> IFE1/VFE1 — 2026-08-28
 
 A route-complete same-machine Windows oracle supersedes the earlier E003g CSID0/VFE0 hypothesis. Two independent `Surface Camera Front` WinRT reader cycles (`StartAsync=Success`, normal `StopAsync`) were captured by SP7 KDNET across `IDLE -> LIVE1 -> POST -> LIVE2 -> POST2` for the CSID wrapper, CSID0/1/2, VFE0/1 and CSIPHY2. The canonical raw log is `experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/raw/E003G_ROUTE_ORACLE_20260828.log`, 2,457,712 bytes, SHA-256 `fd8edcee46e794dffa0e2305331f19d4e9d2cd5b9ba5197484aa1cc7fa6c6fca`. Both post-stop states equal idle exactly.

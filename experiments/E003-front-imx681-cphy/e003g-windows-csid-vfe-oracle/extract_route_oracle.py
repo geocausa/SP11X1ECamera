@@ -91,6 +91,7 @@ def main():
         write_nonzero(args.out/f'{r}-route-live-nonzero.csv',base,l1,l2)
     wb=REGIONS['wrapper'][0]; c1=REGIONS['csid1'][0]; v1=REGIONS['vfe1'][0]
     w=d['LIVE1']['wrapper']; cs=d['LIVE1']['csid1']; vf=d['LIVE1']['vfe1']
+    rx0=cs[c1+0x200]; rx1=cs[c1+0x204]
     ipp=cs[c1+0x300]
     hc=cs[c1+0x35c]; vc=cs[c1+0x360]
     fm=cs[c1+0x388]
@@ -99,9 +100,33 @@ def main():
             'csid0':f'0x{w[wb+0]:08x}','csid1':f'0x{w[wb+4]:08x}','csid2':f'0x{w[wb+8]:08x}',
             'active_output_ife':'CSID1 (bit8 OUTPUT_IFE_EN set only at wrapper +0x004)',
         },
+        'csid1_rx':{
+            'cfg0':f'0x{rx0:08x}',
+            'num_active_lanes_field':rx0 & 0xf,
+            'active_lanes_or_trios':(rx0 & 0xf)+1,
+            'lane_cfg':(rx0 >> 4) & 0xffff,
+            'phy_num_sel':(rx0 >> 20) & 0xf,
+            'phy_type_sel':(rx0 >> 24) & 0x1,
+            'tpg_mux_en':(rx0 >> 27) & 0x1,
+            'tpg_num_sel':(rx0 >> 28) & 0xf,
+            'cfg1':f'0x{rx1:08x}',
+            'packet_ecc_correction_en':bool(rx1 & 1),
+            'misr_enable':bool(rx1 & (1 << 6)),
+        },
         'csid1_ipp':{
             'cfg0':f'0x{ipp:08x}',**decode_csid_cfg0(ipp),
             'cfg1':f'0x{cs[c1+0x310]:08x}',
+            'cfg1_named_bits':{
+                'crop_h_en':bool(cs[c1+0x310] & (1 << 12)),
+                'crop_v_en':bool(cs[c1+0x310] & (1 << 13)),
+                'pix_store_en':bool(cs[c1+0x310] & (1 << 14)),
+                'timestamp_en':bool(cs[c1+0x310] & (1 << 9)),
+                'early_eof_en':bool(cs[c1+0x310] & (1 << 16)),
+                'drop_h_en':bool(cs[c1+0x310] & (1 << 10)),
+                'drop_v_en':bool(cs[c1+0x310] & (1 << 11)),
+                'format_measure_en_bit4':bool(cs[c1+0x310] & (1 << 4)),
+                'unresolved_set_bits':[bit for bit in range(32) if (cs[c1+0x310] & (1 << bit)) and bit not in (4,9,10,11,12,13,14,16)],
+            },
             'hcrop':f'0x{hc:08x}','crop_x_start':hc&0x3fff,'crop_x_end':(hc>>16)&0xffff,
             'vcrop':f'0x{vc:08x}','crop_y_start':vc&0x3fff,'crop_y_end':(vc>>16)&0xffff,
             'format_measure_cfg1':f'0x{fm:08x}','measured_width':fm&0xffff,'measured_height':(fm>>16)&0xffff,
@@ -132,11 +157,15 @@ def main():
             'image_cfg0':f'0x{vf[v1+off+0x0c]:08x}',
             'image_cfg2':f'0x{vf[v1+off+0x14]:08x}',
             'packer_cfg':f'0x{vf[v1+off+0x18]:08x}',
+            'width':vf[v1+off+0x0c] & 0xffff,
+            'height':(vf[v1+off+0x0c] >> 16) & 0xffff,
+            'stride':vf[v1+off+0x14],
         })
     summary['route_decode']['vfe']['clients']=clients
     summary['route_decode']['vfe']['enabled_clients']=[
-        {'client':c['client'],'name':c['name'],'cfg':c['cfg']} for c in clients if c['enabled']
+        {k:c[k] for k in ('client','name','cfg','width','height','stride','frame_incr','packer_cfg')} for c in clients if c['enabled']
     ]
+    summary['route_decode']['vfe']['windows_full_output']={'width':clients[0]['width'],'height':clients[0]['height'],'chroma_height':clients[1]['height']}
     (args.out/'route-oracle-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print(json.dumps(summary,indent=2))
 if __name__=='__main__': main()

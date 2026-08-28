@@ -1,5 +1,7 @@
 # E003g route-resolved handoff — 2026-08-28
 
+> **Superseded for next-action purposes by E003h.** The route findings remain valid, but the proposed RDI-first transport step is diagnostic-only under strict Windows parity. Resume from `docs/runbooks/2026-08-28-e003h-windows-parity-static.md`.
+
 ## Resume point
 
 Branch: `experiment/e003-front-imx681-cphy`.

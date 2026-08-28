@@ -15,7 +15,7 @@ The project goal is **not** to cargo-cult an existing Surface patchset. We use W
 
 ## Current milestone
 
-Front IMX681 E003g route resolution is complete. A two-pass same-machine Windows/KD oracle proves the active front path is **IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1**. CSID1 IPP receives RAW10 VC0 and the Windows ISP path measures/crops the established 3840x2640 sensor mode to 3840x2160. Linux VFE680 currently supports RDI output only, so the next experiment is a bounded **CSID1 -> VFE1 RDI** transport build; no Linux front-frame result is claimed yet. See [`docs/runbooks/2026-08-28-e003g-route-resolved.md`](docs/runbooks/2026-08-28-e003g-route-resolved.md).
+Front IMX681 E003h is now the active **Windows-parity static architecture** gate. Same-machine Windows proves **IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1**, CSID1 IPP RAW10 VC0 with 3840x2160 crop/measurement, and a VFE1 ISP pipeline whose FULL output is 2560x1440 Y/C with DS4/DS16 and statistics clients. The exact sensor stream control is `0x0100=1/0`, and the exact Windows ISP binary starts IFE before CSID and stops CSID before IFE. Linux VFE680's current RDI-only path is therefore **not** the parity target; RDI may be used only as a clearly-labelled diagnostic. No Linux front-frame result is claimed yet. See [`docs/runbooks/2026-08-28-e003h-windows-parity-static.md`](docs/runbooks/2026-08-28-e003h-windows-parity-static.md).
 
 ## Start here
 

@@ -107,15 +107,16 @@ Windows does **not** enable the VFE680 `PIXEL_RAW` or RDI0/1/2 write-master clie
 
 Our current `drivers/media/platform/qcom/camss/camss-vfe-680.c` explicitly documents that RDI is all it supports today and maps full VFE RDI output to WM24..26. It does not represent Windows' FULL/DS/statistics ISP pipeline.
 
-Therefore the smallest defensible Linux transport gate is:
+The strict parity consequence is stronger than the first E003g handoff originally stated:
 
 1. preserve the Windows-proven physical instance route **CSIPHY2 -> CSID1 -> VFE1**;
-2. keep sensor mode0 at the accepted Windows values, initially including the full 3840x2640 RAW10 transport;
-3. use Linux's existing supported RDI output path on VFE1 for the smallest transport proof rather than cloning Windows FULL/DS/statistics programming;
-4. keep the experiment bounded, one-shot, fail-closed, with complete stream/power teardown;
-5. only after raw transport is proven decide whether a later Linux pixel/IPP implementation should reproduce the Windows 3840x2160 crop/full-ISP path.
+2. preserve the accepted 3840x2640 RAW10 sensor transport and exact sensor stream controls;
+3. implement the Windows-observed CSID1 **IPP** path, not an RDI substitute, for parity;
+4. implement a valid VFE1 PIX/ISP output architecture before enabling the PIX line — current VFE680's generic line-to-WM mapping is explicitly invalid for PIX;
+5. reproduce Windows lifecycle ordering where mechanically established and leave unresolved ordering gated;
+6. an RDI capture may be useful as a diagnostic transport experiment, but it must be labelled **non-parity** and cannot be an acceptance endpoint.
 
-No Linux first-frame patch is part of this oracle checkpoint.
+Additional 2026-08-28 decoding shows Windows VFE1 FULL output geometry is Y `2560x1440`, C `2560x720`, with DS4 `320x180` and DS16 `80x45`; the WinRT path is therefore a real ISP/downscale pipeline. The SHA-pinned sensor data also proves stream-on/off is exactly `0x0100=1/0` with zero delay. See E003h for the parity architecture. No Linux first-frame patch is part of this oracle checkpoint.
 
 ## Register-map reference policy
 
