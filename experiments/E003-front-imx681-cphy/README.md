@@ -28,7 +28,7 @@ Canonical evidence remains under `../E001-windows-oracle-map/derived/`. Propriet
 3. **E003c — native IMX681 V4L2 bind**, still no CSI streaming.
 4. **E003d — C-PHY graph/receiver configuration — ACCEPTED.** Immutable IMX681 → CSIPHY2 link with PM/electrical idle and stream block proven.
 5. **E003e — mode0 standby — ACCEPTED.** Exact Windows init + 3840x2640@30 mode0 programmed with MODE_SELECT=0; fixed one-trio C-PHY metadata proven and CSIPHY2 idle.
-6. **E003f — receiver-only C-PHY electrical activation — ACCEPTED.** Under normal VFE0/IFE/CAMNOC/CPAS host power, CSIPHY2 matched all 121 Windows-live final registers exactly and unwound cleanly while IMX681 remained non-transmitting.
+6. **E003f — receiver-only C-PHY electrical activation — ACCEPTED.** Under a VFE0-powered host-context harness, CSIPHY2 matched all 121 Windows-live final registers exactly and unwound cleanly while IMX681 remained non-transmitting. E003g later proved that this VFE0 call supplied host context only; the active Windows front output route is CSID1 -> VFE1.
 7. **E003g — Windows CSID/VFE route resolved.** A route-complete two-pass same-machine Windows oracle proves the front physical path is **IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1**. CSID1 IPP receives RAW10 VC0 and crops the 3840x2640 sensor mode to 3840x2160 for the Windows ISP path. VFE1, not VFE0, is active. Linux VFE680 currently supports only RDI output, so the next bounded transport gate must preserve the Windows-proven CSID1/VFE1 instance route while using Linux's supported raw RDI path.
 
 Each runtime gate must keep Golden as saved default, use a one-shot candidate, and verify audio/touch/Wi-Fi before and after.

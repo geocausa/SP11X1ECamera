@@ -1,3 +1,15 @@
+## E003g ROUTE RESOLVED — same-machine Windows front route is CSIPHY2 -> CSID1 -> IFE1/VFE1 — 2026-08-28
+
+A route-complete same-machine Windows oracle supersedes the earlier E003g CSID0/VFE0 hypothesis. Two independent `Surface Camera Front` WinRT reader cycles (`StartAsync=Success`, normal `StopAsync`) were captured by SP7 KDNET across `IDLE -> LIVE1 -> POST -> LIVE2 -> POST2` for the CSID wrapper, CSID0/1/2, VFE0/1 and CSIPHY2. The canonical raw log is `experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/raw/E003G_ROUTE_ORACLE_20260828.log`, 2,457,712 bytes, SHA-256 `fd8edcee46e794dffa0e2305331f19d4e9d2cd5b9ba5197484aa1cc7fa6c6fca`. Both post-stop states equal idle exactly.
+
+The wrapper proves only CSID1 has `OUTPUT_IFE_EN` (`+0x000=0x1`, `+0x004=0x101`, `+0x008=0x1`). CSID1 is the active receiver block and its IPP `CFG0=0x802b2000` mechanically decodes as enabled VC0 / CSI-2 DT `0x2b` RAW10 / 10-bit decode. Windows IPP crop/measurement is 3840x2160 (`x=0..3839`, `y=0..2159`) from the established 3840x2640 sensor mode. VFE0 has zero live non-zero/non-sentinel dwords; VFE1 has 217 and contains active FULL Y/C, DS4, DS16 and statistics bus clients. Qualcomm's published CSID680/VFE680 tables are used only for register naming/layout; same-machine Windows remains the behavioral oracle.
+
+**Current boundary:** the physical front route is now proven as `IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1`. E003f's VFE0 power call remains valid historical evidence that sufficient host CAMNOC/CPAS context was needed to exercise CSIPHY2, but it was not proof that VFE0 is the Windows front output route. Linux `camss-vfe-680.c` explicitly supports only RDI output today, so the first native transport experiment must preserve the proven CSID1/VFE1 instance selection while using Linux's supported RDI path rather than copying Windows FULL/DS/statistics programming. No first-frame Linux patch has been accepted yet.
+
+**Next action:** keep byte-exact FullIO v19c Golden as the saved default. Audit and minimally adjust the E003d/e/f media graph and any hard-coded host-power selection so the front mode0 path reaches CSID1 and VFE1 instead of CSID0/VFE0. Derive/build the smallest bounded CSID1 -> VFE1 RDI stream-on/off candidate with explicit timeout, fail-closed teardown and rollback. Do not treat the old "extend VFE0 to 0xf000" instruction as active; it is superseded by the route-complete oracle. Do not attempt a frame until the static/build/ABI/DT safety gates for that candidate pass.
+
+Canonical handoff: `docs/runbooks/2026-08-28-e003g-route-resolved.md`.
+
 ## E003f ACCEPTED — host-powered CSIPHY2 C-PHY receiver parity — 2026-08-27
 
 E003f-R3 passed the receiver electrical gate. After exact Golden/candidate preflight, the one-shot `sp11-camera-e003f-r3-cphy-receiver` booted with the corrected 8 KiB CSIPHY2 DT resource and patched CAMSS srcversion `1D2912B8FF127D1F3D94704`. The SHA-checked verifier added only normal VFE0/IFE/CAMNOC/CPAS host power around CSIPHY2; it made no CSID stream or sensor/CCI/MODE_SELECT call. CSIPHY2 power-on succeeded at a 400 MHz timer rate and the live comparison matched **121/121** Windows final C-PHY registers with zero mismatches (`CTRL5=0x02`, `CTRL6=0x01`, `CTRL7=0x7a`). Stream-off cleared CTRL5/6, VFE0 power_count returned to zero, and IMX681 remained runtime-suspended/usage 0 with reset-low, front MCLK/rails inactive and no sensor/CCI messages in the R3 window. Rear camera, Wi-Fi, FullIO audio and G6 touch remained healthy. Normal reboot restored byte-exact FullIO v19c Golden: Image `bca0a336...428a`, initrd `ac3ba64b...b66d`, DTB `2fcfa738...6d00`, saved default Golden and empty `next_entry`. E003g starts static-only: derive the exact front CSID/VFE/RDI route and smallest bounded sensor-stream lifecycle before any MODE_SELECT=1 or frame attempt.
@@ -158,13 +170,13 @@ A one-shot SP11 Windows KD session read X1E TLMM directly. Windows leaves GPIO97
 
 r3g is therefore a DT-only correction applied directly to the exact r3f DTB. It adds one GPIO97 `cam_mclk` state plus `pinctrl-0`/`pinctrl-names` on the existing rear probe node. Kernel, r3f initrd/probe module, rail/reset order, MCLK1 19.2 MHz, CCI0/master1 @ 400 kHz, address `0x10`, and the Windows-exact `0x300b -> 0xd855` transaction are unchanged. Candidate DTB SHA-256: `396259a06edffd4f9e0482480ef02201aa88acd98731db57fbb33358650a0b33`.
 
-# Project state
+# Historical project-state snapshot — superseded by the newest sections above
 
-**Updated:** 2026-08-27
-**State ID:** E002g native Surface mode semantics accepted
+**Snapshot date:** 2026-08-27
+**Historical state ID:** E002g native Surface mode semantics accepted
 **Golden remains:** SP11 Audio FullIO v19c
 
-## Current boundary
+## Historical boundary at that snapshot
 
 E002b-r3f booted stably and used the Windows-exact OV13858 ID transaction (`0x10`, FAST/400 kHz, register `0x300b`, 16-bit expected `0xd855`) on Windows-proven CCI0/master1. The first transfer still returned `-ENXIO`; teardown was clean and no crash occurred.
 
@@ -248,7 +260,7 @@ Not blocking rear E002:
 
 Keep them on the parity backlog; do not guess them into Linux.
 
-## Next action
+## Historical next action at that snapshot — completed/superseded
 
 **E002b-r3f — Windows-exact rear OV13858 identity transaction.**
 

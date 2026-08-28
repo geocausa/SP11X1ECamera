@@ -13,6 +13,10 @@ The project goal is **not** to cargo-cult an existing Surface patchset. We use W
 | Front IR / Hello | `ACPI\\SMO55F0` | ST VD55G0 | `MSHW0492` |
 | Camera platform | `ACPI\\QCOM0C32` | Qualcomm Spectra 695 / X1E camera stack | `MSHW0495` |
 
+## Current milestone
+
+Front IMX681 E003g route resolution is complete. A two-pass same-machine Windows/KD oracle proves the active front path is **IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1**. CSID1 IPP receives RAW10 VC0 and the Windows ISP path measures/crops the established 3840x2640 sensor mode to 3840x2160. Linux VFE680 currently supports RDI output only, so the next experiment is a bounded **CSID1 -> VFE1 RDI** transport build; no Linux front-frame result is claimed yet. See [`docs/runbooks/2026-08-28-e003g-route-resolved.md`](docs/runbooks/2026-08-28-e003g-route-resolved.md).
+
 ## Start here
 
 If resuming after a new chat/session, read in this order:

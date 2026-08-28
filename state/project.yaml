@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-08-27
+updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003f-front-cphy-receiver-electrical-accepted
+state_id: E003g-windows-front-route-resolved
 phase: front-imx681-cphy-bringup
-status: e003f-r3-receiver-electrical-accepted-golden-restored
+status: e003g-route-oracle-resolved-golden-restored
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -94,7 +94,7 @@ strategy:
     - VD55G0 IR
 
 current_experiment: E003-front-imx681-cphy
-current_gate: E003f-R3-host-powered-receiver-electrical-accepted
+current_gate: E003g-Windows-route-oracle-resolved
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -115,17 +115,33 @@ e003f:
   receiver_teardown_verified: true
   platform_regressions_passed: true
   golden_return_verified: true
-next_experiment: E003g-front-transport-static-plan
+e003g:
+  status: route-oracle-resolved
+  windows_raw_sha256: fd8edcee46e794dffa0e2305331f19d4e9d2cd5b9ba5197484aa1cc7fa6c6fca
+  windows_raw_bytes: 2457712
+  physical_route: IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1
+  csid_instance: 1
+  vfe_instance: 1
+  csid_path: IPP
+  vc: 0
+  csi2_data_type: 0x2b
+  sensor_mode: 3840x2640 RAW10
+  windows_ipp_output: 3840x2160
+  vfe0_live_nonzero_dwords: 0
+  vfe1_live_nonzero_dwords: 217
+  golden_return_verified: true
+  linux_vfe680_constraint: RDI output only
+next_experiment: E003g-csid1-vfe1-rdi-static-build
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden. E003f is accepted: with normal VFE0/IFE/CAMNOC/CPAS host power,
-  CSIPHY2 matched all 121 Windows-live final C-PHY registers and unwound cleanly without any IMX681 transmission.
-  Begin E003g static-only. Derive the exact front CSID/VFE/RDI path and the smallest native IMX681 stream-on/stream-off
-  lifecycle from the accepted E003d/e/f graph, current Linux source and same-machine Windows evidence. Mechanically
-  define timeout, teardown and rollback gates before removing the stream block or permitting MODE_SELECT=1. Do not
-  attempt a frame until a separate one-shot E003g candidate has passed those static and build-time guards.
+  Keep SP11 on byte-exact FullIO v19c Golden. The same-machine Windows route is now proven as
+  IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1; do not resume the superseded VFE0-extension hypothesis.
+  Audit and minimally adjust the E003d/e/f media graph and any hard-coded host-power selection so front mode0
+  reaches CSID1 and VFE1 rather than CSID0/VFE0. Linux VFE680 currently supports RDI output only, so derive and
+  build the smallest bounded CSID1 -> VFE1 RDI stream-on/stream-off candidate with explicit timeout, fail-closed
+  teardown and rollback. Do not attempt a frame until its static, build, ABI and DT safety gates pass.
 
 handoff:
-  latest: docs/runbooks/2026-08-27-e003f-accepted-e003g-handoff.md
+  latest: docs/runbooks/2026-08-28-e003g-route-resolved.md
   first_read:
     - CONTINUE.md
     - AGENTS.md
