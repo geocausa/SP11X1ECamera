@@ -1,0 +1,133 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -9,6 +9,7 @@
+  */
+ #include <linux/clk.h>
+ #include <linux/interconnect.h>
++#include <linux/ioport.h>
+ #include <linux/media-bus-format.h>
+ #include <linux/media.h>
+ #include <linux/module.h>
+@@ -19,6 +20,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/pm_domain.h>
+ #include <linux/slab.h>
++#include <linux/sizes.h>
+ #include <linux/videodev2.h>
+ 
+ #include <media/media-device.h>
+@@ -4963,6 +4965,53 @@
+ 	dev_pm_domain_detach(camss->genpd, true);
+ }
+ 
++#define CAMSS_X1E80100_RTCDM1_PHYS_BASE 0x0ac26000
++#define CAMSS_X1E80100_RTCDM1_SIZE      SZ_4K
++
++/*
++ * camss_rtcdm1_init - Resolve the optional Denali RT_CDM1 resource contract.
++ *
++ * Same-machine Windows proves RT_CDM1 at 0x0ac26000 with a dedicated IRQ.
++ * This static E003h helper is deliberately inert: it only validates and maps
++ * the named resource. It does not read or write RT-CDM registers, request the
++ * IRQ, allocate command memory, or expose a submission path.
++ */
++static int camss_rtcdm1_init(struct platform_device *pdev, struct camss *camss)
++{
++	struct resource *res;
++	void __iomem *base;
++	int irq;
++
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rt_cdm1");
++	if (!res)
++		return 0;
++
++	if (camss->res->version != CAMSS_X1E80100)
++		return dev_err_probe(camss->dev, -EINVAL,
++				     "rt_cdm1 resource is X1E80100-only\n");
++
++	if (res->start != CAMSS_X1E80100_RTCDM1_PHYS_BASE ||
++	    resource_size(res) != CAMSS_X1E80100_RTCDM1_SIZE)
++		return dev_err_probe(camss->dev, -EINVAL,
++				     "unexpected rt_cdm1 resource %pr\n", res);
++
++	irq = platform_get_irq_byname(pdev, "rt_cdm1");
++	if (irq < 0)
++		return dev_err_probe(camss->dev, irq,
++				     "failed to resolve rt_cdm1 IRQ\n");
++
++	base = devm_platform_ioremap_resource_byname(pdev, "rt_cdm1");
++	if (IS_ERR(base))
++		return dev_err_probe(camss->dev, PTR_ERR(base),
++				     "failed to map rt_cdm1\n");
++
++	camss->rtcdm1.base = base;
++	camss->rtcdm1.irq = irq;
++	camss->rtcdm1.present = true;
++
++	return 0;
++}
++
+ /*
+  * camss_probe - Probe CAMSS platform device
+  * @pdev: Pointer to CAMSS platform device
+@@ -5027,6 +5076,10 @@
+ 	if (ret)
+ 		goto err_genpd_cleanup;
+ 
++	ret = camss_rtcdm1_init(pdev, camss);
++	if (ret)
++		goto err_genpd_cleanup;
++
+ 	camss->media_dev.dev = camss->dev;
+ 	strscpy(camss->media_dev.model, "Qualcomm Camera Subsystem",
+ 		sizeof(camss->media_dev.model));
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -101,6 +101,12 @@
+ 	ICC_SM8250_COUNT = 4,
+ };
+ 
++struct camss_rtcdm {
++	void __iomem *base;
++	int irq;
++	bool present;
++};
++
+ struct camss_resources {
+ 	enum camss_version version;
+ 	const char *pd_name;
+@@ -126,6 +132,7 @@
+ 	struct ispif_device *ispif;
+ 	struct vfe_device *vfe;
+ 	void __iomem *csid_wrapper_base;
++	struct camss_rtcdm rtcdm1;
+ 	atomic_t ref_count;
+ 	int genpd_num;
+ 	struct device *genpd;
+--- a/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
+@@ -1499,7 +1499,23 @@
+ 			      <0 0x0ac62000 0 0xf000>,
+ 			      <0 0x0ac71000 0 0xf000>,
+ 			      <0 0x0acc7000 0 0x2000>,
+-			      <0 0x0accb000 0 0x2000>;
++			      <0 0x0accb000 0 0x2000>,
++			      <0 0x0ac26000 0 0x1000>;
++	reg-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1",
++		    "csid_wrapper", "csiphy0", "csiphy1", "csiphy2", "csiphy4",
++		    "csitpg0", "csitpg1", "csitpg2", "vfe0", "vfe1",
++		    "vfe_lite0", "vfe_lite1", "rt_cdm1";
++
++	interrupts = <GIC_SPI 464 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 466 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 431 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 468 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 359 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 477 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 478 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 479 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 122 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 465 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 467 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 469 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 360 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 287 IRQ_TYPE_EDGE_RISING>;
++	interrupt-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1",
++			 "csiphy0", "csiphy1", "csiphy2", "csiphy4", "vfe0",
++			 "vfe1", "vfe_lite0", "vfe_lite1", "rt_cdm1";
+ 
+ 	vdd-csiphy-0p8-supply = <&vreg_l2c_0p8>;
+ 	vdd-csiphy-1p2-supply = <&vreg_l1c_1p2>;

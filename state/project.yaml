@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-static-rtcdm1-execution-and-irq-resolved-linux-helper-next
+  status: vfe1-static-rtcdm1-inert-resource-built-irq-dma-helper-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -253,6 +253,14 @@ e003h:
   linux_rt_cdm1_gic_spi_dt_cell: 287
   linux_rt_cdm1_gic_spi_dt_cell_hex: 0x11f
   linux_rt_cdm_irq_namespace_crosscheck: existing SP11 csid0/vfe0/csid1/vfe1/csid_lite0/vfe_lite0 DT cells 464..469 map to Windows GSIs 496..501
+  linux_rt_cdm1_resource_patch: 0013-sp11-rtcdm1-inert-resource.patch
+  linux_rt_cdm1_resource_patch_sha256: 1ffd67b8e1e8b706a2569384e4daef41676b307148a11e64fee0e7480bfc553b
+  linux_rt_cdm1_resource_build: pass
+  linux_rt_cdm1_resource_module_sha256: 7bdb7e43edda74c4f9b6fc0351fe46255e9696d4a7d008c3ab2817d83b8052ad
+  linux_rt_cdm1_resource_dtb_sha256: bbe48a77c5bc23f1c155ddc87b9a5b2ed56497656f06cab1a2db8e6346f0304b
+  linux_rt_cdm1_resource_runtime_inert: true
+  linux_rt_cdm1_resource_mmio_reads_writes: 0
+  linux_rt_cdm1_resource_submit_api: false
   windows_front_active_rt_cdm: RT_CDM_1
   windows_front_active_rt_cdm_physical: 0x0ac26000
   windows_rt_cdm1_fifo0_cfg_live: 0x01000000
@@ -260,16 +268,14 @@ e003h:
   windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
   unresolved: implement fail-closed Linux RT_CDM1 MMIO/FIFO0/DMA/IRQ/completion/teardown helper using proven GIC_SPI 287; then implement valid VFE1 PIX/TP10-UBWC path
-next_experiment: E003h-vfe1-rtcdm1-static-helper
+next_experiment: E003h-vfe1-rtcdm1-static-irq-dma-helper
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Same-machine Windows proves
-  hardware RT_CDM_1 v2.1 at physical 0x0ac26000 and now mechanically pins its dedicated interrupt to firmware GSI 319,
-  which is Linux DT GIC_SPI 287 after a six-resource SP11 namespace cross-check. Implement the smallest fail-closed
-  static Linux RT_CDM1 helper using the existing CAMSS IFE1/Titan/CPAS power context and CAMSS DMA/IOMMU domain: map only
-  the proven RT_CDM1 aperture, request only GIC_SPI 287, allocate 32-bit-addressable coherent command memory, model FIFO0
-  submit/completion/error/reset/teardown from the v2.1 oracle, and keep all submission paths disabled until build/ABI/DT/
-  rear-DPHY/rollback gates pass. Then integrate the exact IFE CDM/DMI corpus with VFE1 PIX/QC10C. No Linux RT-CDM MMIO
-  submission or front frame is authorized yet.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0013 now appends only the
+  proven Denali RT_CDM1 0x0ac26000/0x1000 resource and GIC_SPI 287, validates/maps it X1E-only, and performs zero RT-CDM
+  MMIO or submission. Build the next fail-closed layer around public v2.1 mechanism plus Windows value authority: request
+  the dedicated IRQ only when the helper is explicitly armed, decode/clear reset/inline/BL-done/error status correctly,
+  add coherent command-buffer allocation with a hard upper_32_bits(dma)==0 check and deterministic free/teardown, and
+  keep FIFO0 submission disabled. Then prove module/DT/rear-resource isolation before implementing any RT-CDM writes.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
