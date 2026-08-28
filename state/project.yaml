@@ -163,16 +163,25 @@ e003h:
   linux_stop_tail_current_serialization: CSIPHY -> sensor
   linux_stop_tail_windows_status: observed-valid serialization; Windows proves no dependency between sensor-off and MIPI-stop
   linux_stop_order_non_x1e_unchanged: true
+  linux_csid1_ipp_patch: 0011-x1e-csid1-ipp-windows-parity.patch
+  linux_csid1_ipp_patch_sha256: a002e6bbd0725bc46fbc911269c2ad6f946c2e19bff4b78d9de9b109ae9f1e9f
+  linux_csid1_ipp_patch_build: pass
+  linux_csid1_ipp_patch_module_sha256: ff02c59fa29001093cdeda8ace138cf6e5ef6e29fb27f86beb632237c4c0f90b
+  linux_csid1_ipp_fail_closed_tuple: CSID1 + CSIPHY2 + one-trio C-PHY + SRGGB10 3840x2640
+  linux_csid1_ipp_vc: 0
+  linux_csid1_ipp_windows_cfg0: 0x802b2000
+  linux_csid1_ipp_windows_cfg1: 0x00007241
+  linux_csid1_ipp_windows_crop: 3840x2160
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: valid CSID1 IPP and VFE1 PIX/ISP implementation
-next_experiment: E003h-ipp-vfe1-parity-static-architecture
+  unresolved: valid VFE1 PIX/ISP implementation
+next_experiment: E003h-vfe1-pix-parity-static-architecture
 next_action: >-
   Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Strict same-machine Windows
-  parity remains the acceptance target. Lifecycle placement is closed: Windows starts ISP then MIPI then sensor; on
-  stop ISP teardown completes before both sensor-off and MIPI-stop, with no total order between those latter two.
-  Preserve static-only 0010 and implement only the Windows-proven CSID1 IPP and valid VFE1 PIX/ISP architecture. The current Linux RDI path may be used only as
-  an explicitly non-parity diagnostic and must never be treated as the production or acceptance endpoint. No runtime
-  parity candidate or frame is authorized until static build, ABI, DT, rear-DPHY non-regression, timeout and rollback gates pass.
+  parity remains the acceptance target. Lifecycle placement and static CSID1 IPP representation are closed. Preserve
+  static-only 0010 and 0011 and derive only the Windows-proven VFE1 PIX/ISP architecture, starting with the minimum
+  FULL Y/C path and adding DS/statistics state only where Windows evidence proves it required. The current Linux RDI
+  path may be used only as an explicitly non-parity diagnostic. No runtime parity candidate or frame is authorized
+  until static build, ABI, DT, rear-DPHY non-regression, timeout and rollback gates pass.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

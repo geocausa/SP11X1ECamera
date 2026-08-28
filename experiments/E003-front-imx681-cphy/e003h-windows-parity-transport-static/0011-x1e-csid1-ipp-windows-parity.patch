@@ -1,0 +1,210 @@
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -25,0 +26,2 @@
++#define MSM_CSID_PAD_PIX (MSM_CSID_PAD_FIRST_SRC + 3)
++#define MSM_CSID_STREAM_PIX (MSM_CSID_PAD_PIX - MSM_CSID_PAD_FIRST_SRC)
+@@ -76,0 +79 @@
++	bool en_ipp;
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -1293 +1293,9 @@
+-		if (flags & MEDIA_LNK_FL_ENABLED)
++		/*
++		 * X1E full CSID source pad 4 is the PIX/IPP path, not VC3/RDI3.
++		 * Keep it out of the VC bitmap so the front PIX link can remain
++		 * VC0 while selecting the dedicated IPP register block.
++		 */
++		if (csid->camss->res->version == CAMSS_X1E80100 &&
++		    local->index == MSM_CSID_PAD_PIX) {
++			csid->phy.en_ipp = flags & MEDIA_LNK_FL_ENABLED;
++		} else if (flags & MEDIA_LNK_FL_ENABLED) {
+@@ -1295 +1303 @@
+-		else
++		} else {
+@@ -1296,0 +1305 @@
++		}
+@@ -1300,2 +1309,3 @@
+-		dev_dbg(dev, "%s: Enabled CSID virtual channels mask 0x%x\n",
+-			__func__, csid->phy.en_vc);
++		dev_dbg(dev,
++			"%s: Enabled CSID RDI VC mask 0x%x IPP %u\n",
++			__func__, csid->phy.en_vc, csid->phy.en_ipp);
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -130,0 +131,44 @@
++/* Full-CSID IPP path, Qualcomm CSID680 register layout. */
++#define CSID_IPP_IRQ_STATUS					0xac
++#define CSID_IPP_IRQ_MASK					0xb0
++#define CSID_IPP_IRQ_CLEAR					0xb4
++#define		CSID_IPP_RUP_DONE				BIT(23)
++
++#define CSID_IPP_CFG0						0x300
++#define		IPP_CFG0_DECODE_FORMAT				12
++#define		IPP_CFG0_DATA_TYPE				16
++#define		IPP_CFG0_VIRTUAL_CHANNEL			22
++#define		IPP_CFG0_DT_ID					27
++#define		IPP_CFG0_ENABLE					BIT(31)
++#define CSID_IPP_CTRL						0x304
++#define CSID_IPP_CFG1						0x310
++#define CSID_IPP_BIN_PD_DETECT_CFG1				0x328
++#define CSID_IPP_BIN_PD_DETECT_CFG2				0x32c
++#define CSID_IPP_EPOCH_IRQ_CFG					0x334
++#define CSID_IPP_EPOCH0_SUBSAMPLE_PATTERN			0x338
++#define CSID_IPP_EPOCH1_SUBSAMPLE_PATTERN			0x33c
++#define CSID_IPP_HCROP						0x35c
++#define CSID_IPP_VCROP						0x360
++#define CSID_IPP_PIX_DROP_PATTERN				0x364
++#define CSID_IPP_PIX_DROP_PERIOD				0x368
++#define CSID_IPP_LINE_DROP_PATTERN				0x36c
++#define CSID_IPP_LINE_DROP_PERIOD				0x370
++#define CSID_IPP_FRM_DROP_PATTERN				0x374
++#define CSID_IPP_FRM_DROP_PERIOD				0x378
++#define CSID_IPP_IRQ_SUBSAMPLE_PATTERN				0x37c
++#define CSID_IPP_IRQ_SUBSAMPLE_PERIOD				0x380
++#define CSID_IPP_FORMAT_MEASURE_CFG0				0x384
++#define CSID_IPP_FORMAT_MEASURE_CFG1				0x388
++
++/* Exact same-machine Windows front mode-0 IPP stable configuration. */
++#define SP11_IPP_CFG1_MODE0					0x00007241
++#define SP11_IPP_BIN_PD_DETECT_MODE0				0xffff0000
++#define SP11_IPP_EPOCH_IRQ_MODE0				0x00130013
++#define SP11_IPP_EPOCH_SUBSAMPLE_MODE0				0xffffffff
++#define SP11_IPP_HCROP_MODE0					0x0eff0000
++#define SP11_IPP_VCROP_MODE0					0x086f0000
++#define SP11_IPP_DROP_PERIOD_MODE0				0x00000001
++#define SP11_IPP_IRQ_SUBSAMPLE_PATTERN_MODE0			0x00000001
++#define SP11_IPP_FORMAT_MEASURE_CFG0_MODE0			0x0000001f
++#define SP11_IPP_FORMAT_MEASURE_CFG1_MODE0			0x08700f00
++
+@@ -171,0 +216,5 @@
++static inline int reg_update_ipp(void)
++{
++	return BIT(0) | BIT(16);
++}
++
+@@ -174 +223,6 @@
+-	csid->reg_update |= reg_update_rdi(csid, port_id);
++	if (csid->camss->res->version == CAMSS_X1E80100 &&
++	    port_id == MSM_CSID_STREAM_PIX && csid->phy.en_ipp)
++		csid->reg_update |= reg_update_ipp();
++	else
++		csid->reg_update |= reg_update_rdi(csid, port_id);
++
+@@ -181 +235,6 @@
+-	csid->reg_update &= ~reg_update_rdi(csid, port_id);
++	if (csid->camss->res->version == CAMSS_X1E80100 &&
++	    port_id == MSM_CSID_STREAM_PIX && csid->phy.en_ipp)
++		csid->reg_update &= ~reg_update_ipp();
++	else
++		csid->reg_update &= ~reg_update_rdi(csid, port_id);
++
+@@ -224,0 +284,84 @@
++static bool __csid_sp11_front_ipp_mode0(struct csid_device *csid)
++{
++	struct v4l2_mbus_framefmt *fmt = &csid->fmt[MSM_CSID_PAD_PIX];
++
++	return csid->camss->res->version == CAMSS_X1E80100 &&
++	       csid->id == 1 && csid->phy.csiphy_id == 2 &&
++	       csid->phy.phy_sel == CSID_PHY_SEL_CPHY &&
++	       csid->phy.lane_cnt == 1 &&
++	       fmt->code == MEDIA_BUS_FMT_SRGGB10_1X10 &&
++	       fmt->width == 3840 && fmt->height == 2640;
++}
++
++static void __csid_ctrl_ipp(struct csid_device *csid, int enable)
++{
++	writel(enable ? 1 : 0, csid->base + CSID_IPP_CTRL);
++}
++
++static bool __csid_configure_ipp_stream(struct csid_device *csid, u8 enable)
++{
++	struct v4l2_mbus_framefmt *input_format = &csid->fmt[MSM_CSID_PAD_PIX];
++	const struct csid_format_info *format;
++	u32 val;
++
++	if (enable && !__csid_sp11_front_ipp_mode0(csid)) {
++		dev_err(csid->camss->dev,
++			"CSID%d: refusing non-Windows-proven X1E IPP mode %ux%u code 0x%x\n",
++			csid->id, input_format->width, input_format->height,
++			input_format->code);
++		return false;
++	}
++
++	format = csid_get_fmt_entry(csid->res->formats->formats,
++				    csid->res->formats->nformats,
++				    input_format->code);
++
++	if (!enable) {
++		val = readl(csid->base + CSID_IPP_CFG0);
++		val &= ~IPP_CFG0_ENABLE;
++		writel(val, csid->base + CSID_IPP_CFG0);
++		return true;
++	}
++
++	/*
++	 * Same-machine Windows: CSID1 IPP receives VC0/DT0x2b RAW10 and
++	 * crops the accepted 3840x2640 sensor mode to 3840x2160. Preserve
++	 * only stable configuration values; counters/timestamps are not copied.
++	 */
++	val = format->decode_format << IPP_CFG0_DECODE_FORMAT;
++	val |= format->data_type << IPP_CFG0_DATA_TYPE;
++	/* VC=0 and DT_ID=0 are intentionally zero. */
++	writel(val, csid->base + CSID_IPP_CFG0);
++	writel(SP11_IPP_CFG1_MODE0, csid->base + CSID_IPP_CFG1);
++	writel(SP11_IPP_BIN_PD_DETECT_MODE0,
++	       csid->base + CSID_IPP_BIN_PD_DETECT_CFG1);
++	writel(SP11_IPP_BIN_PD_DETECT_MODE0,
++	       csid->base + CSID_IPP_BIN_PD_DETECT_CFG2);
++	writel(SP11_IPP_EPOCH_IRQ_MODE0, csid->base + CSID_IPP_EPOCH_IRQ_CFG);
++	writel(SP11_IPP_EPOCH_SUBSAMPLE_MODE0,
++	       csid->base + CSID_IPP_EPOCH0_SUBSAMPLE_PATTERN);
++	writel(SP11_IPP_EPOCH_SUBSAMPLE_MODE0,
++	       csid->base + CSID_IPP_EPOCH1_SUBSAMPLE_PATTERN);
++	writel(SP11_IPP_HCROP_MODE0, csid->base + CSID_IPP_HCROP);
++	writel(SP11_IPP_VCROP_MODE0, csid->base + CSID_IPP_VCROP);
++	writel(0, csid->base + CSID_IPP_PIX_DROP_PATTERN);
++	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_PIX_DROP_PERIOD);
++	writel(0, csid->base + CSID_IPP_LINE_DROP_PATTERN);
++	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_LINE_DROP_PERIOD);
++	writel(0, csid->base + CSID_IPP_FRM_DROP_PATTERN);
++	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_FRM_DROP_PERIOD);
++	writel(SP11_IPP_IRQ_SUBSAMPLE_PATTERN_MODE0,
++	       csid->base + CSID_IPP_IRQ_SUBSAMPLE_PATTERN);
++	writel(0, csid->base + CSID_IPP_IRQ_SUBSAMPLE_PERIOD);
++	writel(SP11_IPP_FORMAT_MEASURE_CFG0_MODE0,
++	       csid->base + CSID_IPP_FORMAT_MEASURE_CFG0);
++	writel(SP11_IPP_FORMAT_MEASURE_CFG1_MODE0,
++	       csid->base + CSID_IPP_FORMAT_MEASURE_CFG1);
++
++	val = readl(csid->base + CSID_IPP_CFG0);
++	val |= IPP_CFG0_ENABLE;
++	writel(val, csid->base + CSID_IPP_CFG0);
++
++	return true;
++}
++
+@@ -305 +448,6 @@
+-       /* Loop through all enabled VCs and configure stream for each */
++	if (csid->phy.en_ipp && __csid_configure_ipp_stream(csid, enable)) {
++		__csid_configure_rx(csid, &csid->phy, 0);
++		__csid_ctrl_ipp(csid, enable);
++	}
++
++       /* Loop through all enabled RDI VCs and configure stream for each */
+@@ -349,0 +498,3 @@
++	if (!csid_is_lite(csid))
++		writel(CSID_IPP_RUP_DONE, csid->base + CSID_IPP_IRQ_MASK);
++
+@@ -377 +528 @@
+-	u32 buf_done_val, val, val_top;
++	u32 buf_done_val, ipp_val = 0, val, val_top;
+@@ -390,0 +542,9 @@
++
++	if (!csid_is_lite(csid)) {
++		ipp_val = readl(csid->base + CSID_IPP_IRQ_STATUS);
++		if (ipp_val)
++			writel(ipp_val, csid->base + CSID_IPP_IRQ_CLEAR);
++
++		if (ipp_val & CSID_IPP_RUP_DONE)
++			csid_reg_update_clear(csid, MSM_CSID_STREAM_PIX);
++	}

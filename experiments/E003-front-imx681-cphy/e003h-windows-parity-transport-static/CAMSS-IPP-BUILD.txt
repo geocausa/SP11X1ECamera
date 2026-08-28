@@ -1,0 +1,49 @@
+E003h static-only X1E80100 CSID1 IPP Windows-parity candidate
+Date: 2026-08-28
+Source overlay: /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
+Build config/output anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+Patch: 0011-x1e-csid1-ipp-windows-parity.patch
+Patch SHA256: a002e6bbd0725bc46fbc911269c2ad6f946c2e19bff4b78d9de9b109ae9f1e9f
+
+Pre-image SHA256:
+- camss-csid.h: fa9b3e53e273ebb74f7a56296933d7d3db37b4d5ea44d73ed5ff04f07872aef4
+- camss-csid.c: 273be452192112ddfb603e4b684f13ca14d6c17e941b22ad8c0a0154fb99bb8f
+- camss-csid-680.c: 86cbfccf565a8cc0c8d72d60851e8c3c53922241f455e9ede0ad4bd2be5e2240
+
+Post-image SHA256:
+- camss-csid.h: 0b0ab06ea610597b172530117063993aed9e1a616673b1881e869dc63d105057
+- camss-csid.c: df0d2a0aa92078da7d86e1a96d2ff3b9c0876e702e14f8e172676a1f0371acd2
+- camss-csid-680.c: f8ec7ce09b7be605d970ac4912a9f794aaeef9c097e2989580c85868958f7eb4
+
+Reproducibility gate:
+- exact pre-images restored: PASS
+- patch -p1 --dry-run: PASS
+- real patch apply: PASS
+- all three post-image hashes reproduced exactly: PASS
+- rebuild reproduced qcom-camss.ko SHA256: ff02c59fa29001093cdeda8ace138cf6e5ef6e29fb27f86beb632237c4c0f90b
+- vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+- warnings: 0
+- errors: 0
+- deployment: NONE
+- runtime: NONE
+
+Behavioral oracle and scope:
+- same-machine Windows front route: IMX681 -> CSIPHY2 -> CSID1 IPP -> IFE1/VFE1
+- accepted sensor transport: SRGGB10 / RAW10 VC0, 3840x2640, one C-PHY trio
+- Windows CSID1 IPP live CFG0: 0x802b2000
+- Windows CSID1 IPP live CTRL: 0x00000001
+- Windows CSID1 IPP live CFG1: 0x00007241
+- Windows HCROP: 0x0eff0000 = x 0..3839
+- Windows VCROP: 0x086f0000 = y 0..2159
+- Windows format-measure target: 0x08700f00 = 3840x2160
+
+Candidate architecture:
+- X1E source pad 4 is separated from the RDI virtual-channel bitmap and represented as dedicated IPP state.
+- The front PIX link therefore selects CSID1 IPP while remaining CSI VC0; it no longer aliases pad index 4 to RDI3/VC3 semantics.
+- IPP RUP/AUP uses the published CSID680 mask 0x10001 and the dedicated IPP IRQ block.
+- Stable same-machine Windows IPP configuration is reproduced; dynamic counters/timestamps are not copied.
+- Enable is fail-closed to exactly CSID1 + CSIPHY2 + one-trio C-PHY + SRGGB10 3840x2640.
+- Rear RDI0/VC0 and non-X1E source-pad behavior are unchanged by the new selection logic.
+
+Important boundary:
+This closes the static CSID1 IPP representation gap only. It does not implement or claim the Windows VFE1 PIX/ISP pipeline and does not authorize a Linux front stream/frame.

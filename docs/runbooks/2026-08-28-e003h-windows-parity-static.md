@@ -98,16 +98,20 @@ Build result:
 - PASS, no warnings/errors;
 - RX-only 0009 module SHA-256 `900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af`;
 - RX + lifecycle 0010 module SHA-256 `b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591`;
+- CSID1 IPP 0011 patch SHA-256 `a002e6bbd0725bc46fbc911269c2ad6f946c2e19bff4b78d9de9b109ae9f1e9f`;
+- CSID1 IPP 0011 module SHA-256 `ff02c59fa29001093cdeda8ace138cf6e5ef6e29fb27f86beb632237c4c0f90b`;
 - Golden vermagic `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
 - no deployment.
 
+`0011` makes X1E source pad 4 a dedicated IPP selection instead of RDI3/VC3, keeps the Windows front path on VC0, programs the stable CSID1 IPP mode-0 registers/crop/measure, and is fail-closed to the accepted CSID1/CSIPHY2/one-trio-C-PHY/SRGGB10 3840x2640 tuple. Rear RDI0/VC0 selection is unchanged. Full reproducibility details are in `CAMSS-IPP-BUILD.txt`.
+
 ## Exact next task
 
-1. Derive the minimum CSID680 **IPP** support whose programmed live state matches the Windows CSID1 IPP registers for the front mode.
+1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
 2. Derive a valid VFE680 **PIX/ISP** architecture for the Windows path; do not reuse the current RDI-only WM mapping as a shortcut.
-3. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
-4. Separate invariant configuration from counters/status/address fields; copy only configuration that Windows proves necessary.
-5. Build/static-test the complete parity candidate and prove rear D-PHY behavior is unchanged.
+3. Map the minimum FULL Y/C path first, then determine which DS/statistics blocks are required for Windows-equivalent startup rather than copying every live counter/status/address field.
+4. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
+5. Build/static-test the complete parity candidate and prove rear D-PHY/RDI behavior is unchanged.
 6. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
 
 RDI remains available solely as an explicitly non-parity diagnostic if it becomes useful for fault isolation.
