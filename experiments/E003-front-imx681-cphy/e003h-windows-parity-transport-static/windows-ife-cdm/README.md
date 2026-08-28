@@ -39,6 +39,12 @@ The maximum decoded register offset is `+0xbe70`. Across the four startup packet
 
 Re-running the parser into a fresh directory reproduces all nine derived files byte-for-byte.
 
-## Remaining oracle
+## Patch/DMI oracle — closed
 
-The main stream contains 46 DMI commands total, and those commands reference LUT/data IOVAs. Each Windows startup packet also carries descriptor 1 (type `0x12`) and descriptor 2 (type `0x0c`). Their mapped bytes were not preserved in this capture. Full ISP parity therefore remains blocked until a bounded same-machine Windows follow-up captures the companion descriptor mappings/used bytes and mechanically resolves the DMI/LUT payloads. Do not synthesize LUT contents or RAW-to-YUV/scaler state from the main stream alone.
+A same-machine Windows follow-up now closes all 46 DMI/LUT references. The canonical final capture is `raw/E003H_IFE_PATCH_DMI_EXACT_20260828.log` (5,832,792 bytes, SHA-256 `719043805efd57d26483497c0c1964251e77461ccdb7213e5fdc1947defbffc7`). Exact `qccamisp8380.sys` disassembly proves the internal Windows patch record is 24 bytes and maps source IOVA/CPU addresses into the main CDM stream.
+
+`extract_patch_dmi_oracle.py` validates **46/46** patch records against **46/46** decoded DMI commands: every patch targets the exact DMI address word in the correct command-buffer slot, every resulting IOVA equals the captured source IOVA plus the patch source offset, and every encoded DMI `length+1` byte range is present. The 128 KiB source window is identical at all four startup hits (SHA-256 `bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a`), maximum referenced end is `+0x1bccc`, and the 46 references reduce to 21 exact register/selector/payload groups and 16 unique payload byte strings.
+
+See `DMI-ORACLE.md`, `patch-dmi-summary.json`, `dmi-payloads.csv`, `dmi-source-window.bin` and `dmi-payloads/*.bin`. The public Qualcomm VFE680 kernel header does not name the pixel-IQ DMI block map at these offsets, so block names are deliberately left unresolved instead of guessed from table size.
+
+The remaining parity work is no longer a byte-capture problem. It is static architecture/classification: combine the exact 2,131 register writes and 16 DMI payloads, separate writable pixel-IQ/scaler/statistics state from dynamic/status/output-address values, prove the VFE1 aperture required by the exact access set, and implement a valid VFE1 PIX/TP10-UBWC path. No Linux runtime/front frame is authorized yet.

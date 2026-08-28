@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-windows-ife-main-cdm-oracle-golden-unchanged
+status: e003h-windows-ife-startup-byte-oracle-closed-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -195,17 +195,32 @@ e003h:
   linux_current_vfe1_aperture_bytes: 0x4000
   historical_denali_vfe_aperture_bytes: 0xf000
   historical_denali_vfe_aperture_status: hypothesis revived by Windows accesses; not yet authorized as Linux change
+  windows_ife_patch_dmi_raw_sha256: 719043805efd57d26483497c0c1964251e77461ccdb7213e5fdc1947defbffc7
+  windows_ife_patch_dmi_raw_bytes: 5832792
+  windows_ife_patch_dmi_packets: 4
+  windows_ife_patch_count: 46
+  windows_ife_patch_record_bytes: 24
+  windows_ife_patch_dmi_resolved: 46/46
+  windows_ife_dmi_source_capture_bytes: 131072
+  windows_ife_dmi_source_sha256: bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a
+  windows_ife_dmi_source_identical_four_hits: true
+  windows_ife_dmi_max_source_end: 0x1bccc
+  windows_ife_dmi_identity_groups: 21
+  windows_ife_dmi_unique_payloads: 16
+  windows_ife_dmi_semantic_names_status: unresolved; public VFE680 kernel map does not expose pixel-IQ DMI block names, do not guess
+  windows_ife_descriptor1_status: CSID1 IPP command data; same-machine crop state reproduced
+  windows_ife_descriptor2_status: not DMI source allocation
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: companion Windows descriptor 1/2 DMI/LUT bytes and valid VFE1 PIX/ISP implementation
-next_experiment: E003h-windows-ife-companion-dmi-oracle
+  unresolved: classify exact VFE1 register/DMI ownership and implement valid PIX/TP10-UBWC path
+next_experiment: E003h-vfe1-pix-isp-static-ownership
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The exact four Windows initial
-  IFE descriptor-0 CDM streams are captured and decode completely; their VFE1 base is cross-validated and they reach
-  +0xbe70, proving the current 0x4000 Linux aperture cannot represent the observed PIX/ISP path. Preserve this oracle,
-  capture descriptor 1/2 mapped bytes for the same four DEVICE_START packets, and resolve all referenced DMI/LUT data
-  before implementing VFE1 RAW-to-TP10/scaler state. Do not enlarge the aperture or synthesize LUT contents from the
-  historical 0xf000 Denali map alone. No runtime VFE1 parity candidate or front frame is authorized until the companion
-  oracle and the normal static build/ABI/DT/rear-DPHY/rollback gates pass.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The Windows startup byte oracle
+  is closed: all four main CDM streams, 2131 register writes, and all 46/46 DMI payload references are captured and
+  mechanically resolved into 21 exact register/selector groups and 16 unique payloads. Classify the exact register and
+  DMI corpus into writable pixel-IQ/scaler/statistics configuration versus dynamic/status/output-address state, prove
+  the required VFE1 MMIO aperture from the observed access set, and derive a fail-closed VFE1 PIX + TP10 UBWC/QC10C
+  implementation. Do not guess unpublished IQ-block names or blindly replay dynamic addresses/status. No runtime VFE1
+  parity candidate or front frame is authorized until static build/ABI/DT/rear-DPHY/rollback gates pass.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

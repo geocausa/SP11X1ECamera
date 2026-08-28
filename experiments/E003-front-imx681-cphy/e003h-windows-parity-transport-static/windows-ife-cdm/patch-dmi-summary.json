@@ -1,0 +1,1234 @@
+{
+  "status": "PASS",
+  "policy": "Same-machine Windows is the behavioral oracle; exact qccamisp8380.sys disassembly defines the Windows patch record mechanics. Qualcomm public source is used only to confirm CDM DMI length semantics (length field + 1 bytes).",
+  "raw": {
+    "bytes": 5832792,
+    "sha256": "719043805efd57d26483497c0c1964251e77461ccdb7213e5fdc1947defbffc7",
+    "encoding": "UTF-16LE KD text log",
+    "runtime_breaks": 4
+  },
+  "windows_isp": {
+    "binary_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "device_start_ife_0x803_callsite_rva": "0x16094",
+    "ife_handler_rva": "0x22cd0",
+    "patch_processor_rva": "0x28618..0x2870c"
+  },
+  "qualcomm_cdm_reference_commit": "0f16924ff6a7f9bb56a7e958016da2ed8a174f2f",
+  "mechanical_patch_layout": {
+    "record_bytes": 24,
+    "fields": [
+      "u64 dst_handle",
+      "u32 dst_offset",
+      "u64 src_handle (packed at +0x0c)",
+      "u32 src_offset"
+    ],
+    "payload_base_from_windows_handler": "packet + 0x74",
+    "patchset_address": "packet + 0x74 + patchsetOffset",
+    "source_mapping_record": "[src_handle+0] IOVA, [src_handle+8] CPU VA",
+    "patched_value": "low32(source IOVA + src_offset) written to destination CPU VA + dst_offset"
+  },
+  "closure": {
+    "total_patches": 46,
+    "total_dmi_commands": 46,
+    "patch_count_equals_dmi_count_per_packet": true,
+    "all_patch_destinations_are_exact_dmi_address_fields": true,
+    "all_patched_iovas_equal_source_iova_plus_src_offset": true,
+    "all_payloads_captured": true,
+    "dmi_length_semantics": "payload bytes = encoded length + 1",
+    "max_source_end": "0x1bccc",
+    "captured_source_window_bytes": 131072,
+    "source_window_sha256": "bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a",
+    "source_window_identical_at_all_four_hits": true,
+    "dmi_register_selector_payload_groups": 21,
+    "unique_payload_sha256_count": 16
+  },
+  "dmi_groups": [
+    {
+      "dmi_register_offset": "0x3d08",
+      "dmi_sel": 1,
+      "payload_bytes": 512,
+      "payload_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 0,
+          "src_offset": "0x0",
+          "data_iova": "0x17af8000"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 0,
+          "src_offset": "0x8000",
+          "data_iova": "0x17b00000"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 0,
+          "src_offset": "0x10000",
+          "data_iova": "0x17b08000"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4308",
+      "dmi_sel": 1,
+      "payload_bytes": 884,
+      "payload_sha256": "6447e93bf908c694541ea71ba99613e6618696ffbbe3e3d41b5660e65ed7d1d8",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 1,
+          "src_offset": "0x400",
+          "data_iova": "0x17af8400"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4308",
+      "dmi_sel": 1,
+      "payload_bytes": 884,
+      "payload_sha256": "96a65dc04c64a3f483010e100a0f9069fc0a08368c12d1d94eabe44149db39d5",
+      "references": [
+        {
+          "packet": 1,
+          "dmi_index": 1,
+          "src_offset": "0x8400",
+          "data_iova": "0x17b00400"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 1,
+          "src_offset": "0x10400",
+          "data_iova": "0x17b08400"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4308",
+      "dmi_sel": 2,
+      "payload_bytes": 884,
+      "payload_sha256": "6b40f8ca05febaa4967a85161c4488adeaa68526af3db023cf82b329732f43bd",
+      "references": [
+        {
+          "packet": 1,
+          "dmi_index": 2,
+          "src_offset": "0x8774",
+          "data_iova": "0x17b00774"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 2,
+          "src_offset": "0x10774",
+          "data_iova": "0x17b08774"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4308",
+      "dmi_sel": 2,
+      "payload_bytes": 884,
+      "payload_sha256": "d61327d1fde5a597ac5ea9d70fe9e1e0ab24831482c2172cb1b7b3d0ae3908e5",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 2,
+          "src_offset": "0x774",
+          "data_iova": "0x17af8774"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4308",
+      "dmi_sel": 3,
+      "payload_bytes": 884,
+      "payload_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 3,
+          "src_offset": "0xae8",
+          "data_iova": "0x17af8ae8"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 3,
+          "src_offset": "0x8ae8",
+          "data_iova": "0x17b00ae8"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 3,
+          "src_offset": "0x10ae8",
+          "data_iova": "0x17b08ae8"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4708",
+      "dmi_sel": 1,
+      "payload_bytes": 512,
+      "payload_sha256": "2f5dcd1256b95729a2c7ed1fef920c707b03ff17f65b268d19eea8b345392881",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 4,
+          "src_offset": "0x62e",
+          "data_iova": "0x17af862e"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4708",
+      "dmi_sel": 1,
+      "payload_bytes": 512,
+      "payload_sha256": "c19141e4374c3e85cbe58105f1689f930ae240ad6aebb6c57f42b764c06406c3",
+      "references": [
+        {
+          "packet": 1,
+          "dmi_index": 4,
+          "src_offset": "0x862e",
+          "data_iova": "0x17b0062e"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 4,
+          "src_offset": "0x1062e",
+          "data_iova": "0x17b0862e"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x4908",
+      "dmi_sel": 1,
+      "payload_bytes": 256,
+      "payload_sha256": "c48a9ca4c0431ee4d98b78f9c59858a53adacd5604c88bd0c7f591ff2858e6ed",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 5,
+          "src_offset": "0x1ab8",
+          "data_iova": "0x17af9ab8"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 5,
+          "src_offset": "0x9ab8",
+          "data_iova": "0x17b01ab8"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 5,
+          "src_offset": "0x11ab8",
+          "data_iova": "0x17b09ab8"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x5408",
+      "dmi_sel": 1,
+      "payload_bytes": 68,
+      "payload_sha256": "1751ac12e70e15b4f76c16775cd329ae55973b612521dab2de828a5cdb6c8ab3",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 6,
+          "src_offset": "0xcef",
+          "data_iova": "0x17af8cef"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 6,
+          "src_offset": "0x8cef",
+          "data_iova": "0x17b00cef"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x5408",
+      "dmi_sel": 2,
+      "payload_bytes": 68,
+      "payload_sha256": "1751ac12e70e15b4f76c16775cd329ae55973b612521dab2de828a5cdb6c8ab3",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 7,
+          "src_offset": "0xd33",
+          "data_iova": "0x17af8d33"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 7,
+          "src_offset": "0x8d33",
+          "data_iova": "0x17b00d33"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x5a08",
+      "dmi_sel": 1,
+      "payload_bytes": 2048,
+      "payload_sha256": "b71d4b3eadec95941586227f171e771ae5dc1c70fd48fa5ebf599dcf8fd77d81",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 8,
+          "src_offset": "0x34cc",
+          "data_iova": "0x17afb4cc"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 8,
+          "src_offset": "0xb4cc",
+          "data_iova": "0x17b034cc"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 6,
+          "src_offset": "0x134cc",
+          "data_iova": "0x17b0b4cc"
+        },
+        {
+          "packet": 3,
+          "dmi_index": 0,
+          "src_offset": "0x1b4cc",
+          "data_iova": "0x17b134cc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x5f08",
+      "dmi_sel": 1,
+      "payload_bytes": 1024,
+      "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 9,
+          "src_offset": "0x3ccc",
+          "data_iova": "0x17afbccc"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 9,
+          "src_offset": "0xbccc",
+          "data_iova": "0x17b03ccc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x5f08",
+      "dmi_sel": 2,
+      "payload_bytes": 1024,
+      "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 10,
+          "src_offset": "0x40cc",
+          "data_iova": "0x17afc0cc"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 10,
+          "src_offset": "0xc0cc",
+          "data_iova": "0x17b040cc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0x5f08",
+      "dmi_sel": 3,
+      "payload_bytes": 1024,
+      "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 11,
+          "src_offset": "0x44cc",
+          "data_iova": "0x17afc4cc"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 11,
+          "src_offset": "0xc4cc",
+          "data_iova": "0x17b044cc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0xa008",
+      "dmi_sel": 1,
+      "payload_bytes": 768,
+      "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 12,
+          "src_offset": "0x4acc",
+          "data_iova": "0x17afcacc"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 12,
+          "src_offset": "0xcacc",
+          "data_iova": "0x17b04acc"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 7,
+          "src_offset": "0x14acc",
+          "data_iova": "0x17b0cacc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0xa008",
+      "dmi_sel": 2,
+      "payload_bytes": 768,
+      "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 13,
+          "src_offset": "0x4dcc",
+          "data_iova": "0x17afcdcc"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 13,
+          "src_offset": "0xcdcc",
+          "data_iova": "0x17b04dcc"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 8,
+          "src_offset": "0x14dcc",
+          "data_iova": "0x17b0cdcc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0xa208",
+      "dmi_sel": 1,
+      "payload_bytes": 384,
+      "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 14,
+          "src_offset": "0x50cc",
+          "data_iova": "0x17afd0cc"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 14,
+          "src_offset": "0xd0cc",
+          "data_iova": "0x17b050cc"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 9,
+          "src_offset": "0x150cc",
+          "data_iova": "0x17b0d0cc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0xa208",
+      "dmi_sel": 2,
+      "payload_bytes": 384,
+      "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 15,
+          "src_offset": "0x524c",
+          "data_iova": "0x17afd24c"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 15,
+          "src_offset": "0xd24c",
+          "data_iova": "0x17b0524c"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 10,
+          "src_offset": "0x1524c",
+          "data_iova": "0x17b0d24c"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0xb208",
+      "dmi_sel": 1,
+      "payload_bytes": 4096,
+      "payload_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 16,
+          "src_offset": "0x5ccc",
+          "data_iova": "0x17afdccc"
+        }
+      ]
+    },
+    {
+      "dmi_register_offset": "0xb208",
+      "dmi_sel": 2,
+      "payload_bytes": 80,
+      "payload_sha256": "5b6fb58e61fa475939767d68a446f97f1bff02c0e5935a3ea8bb51e6515783d8",
+      "references": [
+        {
+          "packet": 0,
+          "dmi_index": 17,
+          "src_offset": "0x6ccc",
+          "data_iova": "0x17afeccc"
+        }
+      ]
+    }
+  ],
+  "packets": [
+    {
+      "packet": 0,
+      "packet_index": 0,
+      "handler": "0xfffff802c33d2cd0",
+      "cmd_buffers_offset": 0,
+      "num_cmd_buffers": 3,
+      "patchset_offset": 52464,
+      "num_patches": 18,
+      "main_handle": "0xffffc9024d6c6730",
+      "main_iova": "0x17a60000",
+      "main_cpu_va": "0xffffdf0038e52000",
+      "main_used_length": 3732,
+      "main_sha256": "8f1b08159b15cc22676a56802131a22a91768c8d8df99432d69b6bbfe6375cb6",
+      "decoded_command_count": 110,
+      "decoded_register_write_count": 695,
+      "decoded_dmi_count": 18,
+      "source_handle": "0xffffc9024d6c6810",
+      "source_iova": "0x17af8000",
+      "source_cpu_va": "0xffffdf0038ee8000",
+      "source_capture_bytes": 131072,
+      "source_capture_sha256": "bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a",
+      "dmi": [
+        {
+          "packet": 0,
+          "dmi_index": 0,
+          "stream_offset": "0xdc",
+          "command": "DMI",
+          "dmi_register_offset": "0x3d08",
+          "dmi_sel": 1,
+          "length_field": 511,
+          "payload_bytes": 512,
+          "dst_offset": "0xe0",
+          "src_offset": "0x0",
+          "data_iova": "0x17af8000",
+          "payload_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 1,
+          "stream_offset": "0x14c",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 1,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0x150",
+          "src_offset": "0x400",
+          "data_iova": "0x17af8400",
+          "payload_sha256": "6447e93bf908c694541ea71ba99613e6618696ffbbe3e3d41b5660e65ed7d1d8"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 2,
+          "stream_offset": "0x158",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 2,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0x15c",
+          "src_offset": "0x774",
+          "data_iova": "0x17af8774",
+          "payload_sha256": "d61327d1fde5a597ac5ea9d70fe9e1e0ab24831482c2172cb1b7b3d0ae3908e5"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 3,
+          "stream_offset": "0x164",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 3,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0x168",
+          "src_offset": "0xae8",
+          "data_iova": "0x17af8ae8",
+          "payload_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 4,
+          "stream_offset": "0x1d8",
+          "command": "DMI",
+          "dmi_register_offset": "0x4708",
+          "dmi_sel": 1,
+          "length_field": 511,
+          "payload_bytes": 512,
+          "dst_offset": "0x1dc",
+          "src_offset": "0x62e",
+          "data_iova": "0x17af862e",
+          "payload_sha256": "2f5dcd1256b95729a2c7ed1fef920c707b03ff17f65b268d19eea8b345392881"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 5,
+          "stream_offset": "0x274",
+          "command": "DMI",
+          "dmi_register_offset": "0x4908",
+          "dmi_sel": 1,
+          "length_field": 255,
+          "payload_bytes": 256,
+          "dst_offset": "0x278",
+          "src_offset": "0x1ab8",
+          "data_iova": "0x17af9ab8",
+          "payload_sha256": "c48a9ca4c0431ee4d98b78f9c59858a53adacd5604c88bd0c7f591ff2858e6ed"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 6,
+          "stream_offset": "0x2f8",
+          "command": "DMI",
+          "dmi_register_offset": "0x5408",
+          "dmi_sel": 1,
+          "length_field": 67,
+          "payload_bytes": 68,
+          "dst_offset": "0x2fc",
+          "src_offset": "0xcef",
+          "data_iova": "0x17af8cef",
+          "payload_sha256": "1751ac12e70e15b4f76c16775cd329ae55973b612521dab2de828a5cdb6c8ab3"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 7,
+          "stream_offset": "0x304",
+          "command": "DMI",
+          "dmi_register_offset": "0x5408",
+          "dmi_sel": 2,
+          "length_field": 67,
+          "payload_bytes": 68,
+          "dst_offset": "0x308",
+          "src_offset": "0xd33",
+          "data_iova": "0x17af8d33",
+          "payload_sha256": "1751ac12e70e15b4f76c16775cd329ae55973b612521dab2de828a5cdb6c8ab3"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 8,
+          "stream_offset": "0x794",
+          "command": "DMI",
+          "dmi_register_offset": "0x5a08",
+          "dmi_sel": 1,
+          "length_field": 2047,
+          "payload_bytes": 2048,
+          "dst_offset": "0x798",
+          "src_offset": "0x34cc",
+          "data_iova": "0x17afb4cc",
+          "payload_sha256": "b71d4b3eadec95941586227f171e771ae5dc1c70fd48fa5ebf599dcf8fd77d81"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 9,
+          "stream_offset": "0x7b4",
+          "command": "DMI",
+          "dmi_register_offset": "0x5f08",
+          "dmi_sel": 1,
+          "length_field": 1023,
+          "payload_bytes": 1024,
+          "dst_offset": "0x7b8",
+          "src_offset": "0x3ccc",
+          "data_iova": "0x17afbccc",
+          "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 10,
+          "stream_offset": "0x7c0",
+          "command": "DMI",
+          "dmi_register_offset": "0x5f08",
+          "dmi_sel": 2,
+          "length_field": 1023,
+          "payload_bytes": 1024,
+          "dst_offset": "0x7c4",
+          "src_offset": "0x40cc",
+          "data_iova": "0x17afc0cc",
+          "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 11,
+          "stream_offset": "0x7cc",
+          "command": "DMI",
+          "dmi_register_offset": "0x5f08",
+          "dmi_sel": 3,
+          "length_field": 1023,
+          "payload_bytes": 1024,
+          "dst_offset": "0x7d0",
+          "src_offset": "0x44cc",
+          "data_iova": "0x17afc4cc",
+          "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 12,
+          "stream_offset": "0xab8",
+          "command": "DMI",
+          "dmi_register_offset": "0xa008",
+          "dmi_sel": 1,
+          "length_field": 767,
+          "payload_bytes": 768,
+          "dst_offset": "0xabc",
+          "src_offset": "0x4acc",
+          "data_iova": "0x17afcacc",
+          "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 13,
+          "stream_offset": "0xac4",
+          "command": "DMI",
+          "dmi_register_offset": "0xa008",
+          "dmi_sel": 2,
+          "length_field": 767,
+          "payload_bytes": 768,
+          "dst_offset": "0xac8",
+          "src_offset": "0x4dcc",
+          "data_iova": "0x17afcdcc",
+          "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 14,
+          "stream_offset": "0xad0",
+          "command": "DMI",
+          "dmi_register_offset": "0xa208",
+          "dmi_sel": 1,
+          "length_field": 383,
+          "payload_bytes": 384,
+          "dst_offset": "0xad4",
+          "src_offset": "0x50cc",
+          "data_iova": "0x17afd0cc",
+          "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 15,
+          "stream_offset": "0xadc",
+          "command": "DMI",
+          "dmi_register_offset": "0xa208",
+          "dmi_sel": 2,
+          "length_field": 383,
+          "payload_bytes": 384,
+          "dst_offset": "0xae0",
+          "src_offset": "0x524c",
+          "data_iova": "0x17afd24c",
+          "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 16,
+          "stream_offset": "0xd24",
+          "command": "DMI",
+          "dmi_register_offset": "0xb208",
+          "dmi_sel": 1,
+          "length_field": 4095,
+          "payload_bytes": 4096,
+          "dst_offset": "0xd28",
+          "src_offset": "0x5ccc",
+          "data_iova": "0x17afdccc",
+          "payload_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"
+        },
+        {
+          "packet": 0,
+          "dmi_index": 17,
+          "stream_offset": "0xd30",
+          "command": "DMI",
+          "dmi_register_offset": "0xb208",
+          "dmi_sel": 2,
+          "length_field": 79,
+          "payload_bytes": 80,
+          "dst_offset": "0xd34",
+          "src_offset": "0x6ccc",
+          "data_iova": "0x17afeccc",
+          "payload_sha256": "5b6fb58e61fa475939767d68a446f97f1bff02c0e5935a3ea8bb51e6515783d8"
+        }
+      ]
+    },
+    {
+      "packet": 1,
+      "packet_index": 1,
+      "handler": "0xfffff802c33d2cd0",
+      "cmd_buffers_offset": 0,
+      "num_cmd_buffers": 3,
+      "patchset_offset": 52464,
+      "num_patches": 16,
+      "main_handle": "0xffffc9024d6c6730",
+      "main_iova": "0x17a6a000",
+      "main_cpu_va": "0xffffdf0038e5c000",
+      "main_used_length": 3636,
+      "main_sha256": "f5346de79249e64537f1da04b46fb8f72e37ddefd840782492780a2a935380dd",
+      "decoded_command_count": 103,
+      "decoded_register_write_count": 687,
+      "decoded_dmi_count": 16,
+      "source_handle": "0xffffc9024d6c6810",
+      "source_iova": "0x17af8000",
+      "source_cpu_va": "0xffffdf0038ee8000",
+      "source_capture_bytes": 131072,
+      "source_capture_sha256": "bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a",
+      "dmi": [
+        {
+          "packet": 1,
+          "dmi_index": 0,
+          "stream_offset": "0xdc",
+          "command": "DMI",
+          "dmi_register_offset": "0x3d08",
+          "dmi_sel": 1,
+          "length_field": 511,
+          "payload_bytes": 512,
+          "dst_offset": "0xa0e0",
+          "src_offset": "0x8000",
+          "data_iova": "0x17b00000",
+          "payload_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 1,
+          "stream_offset": "0x138",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 1,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0xa13c",
+          "src_offset": "0x8400",
+          "data_iova": "0x17b00400",
+          "payload_sha256": "96a65dc04c64a3f483010e100a0f9069fc0a08368c12d1d94eabe44149db39d5"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 2,
+          "stream_offset": "0x144",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 2,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0xa148",
+          "src_offset": "0x8774",
+          "data_iova": "0x17b00774",
+          "payload_sha256": "6b40f8ca05febaa4967a85161c4488adeaa68526af3db023cf82b329732f43bd"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 3,
+          "stream_offset": "0x150",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 3,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0xa154",
+          "src_offset": "0x8ae8",
+          "data_iova": "0x17b00ae8",
+          "payload_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 4,
+          "stream_offset": "0x1c4",
+          "command": "DMI",
+          "dmi_register_offset": "0x4708",
+          "dmi_sel": 1,
+          "length_field": 511,
+          "payload_bytes": 512,
+          "dst_offset": "0xa1c8",
+          "src_offset": "0x862e",
+          "data_iova": "0x17b0062e",
+          "payload_sha256": "c19141e4374c3e85cbe58105f1689f930ae240ad6aebb6c57f42b764c06406c3"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 5,
+          "stream_offset": "0x260",
+          "command": "DMI",
+          "dmi_register_offset": "0x4908",
+          "dmi_sel": 1,
+          "length_field": 255,
+          "payload_bytes": 256,
+          "dst_offset": "0xa264",
+          "src_offset": "0x9ab8",
+          "data_iova": "0x17b01ab8",
+          "payload_sha256": "c48a9ca4c0431ee4d98b78f9c59858a53adacd5604c88bd0c7f591ff2858e6ed"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 6,
+          "stream_offset": "0x2cc",
+          "command": "DMI",
+          "dmi_register_offset": "0x5408",
+          "dmi_sel": 1,
+          "length_field": 67,
+          "payload_bytes": 68,
+          "dst_offset": "0xa2d0",
+          "src_offset": "0x8cef",
+          "data_iova": "0x17b00cef",
+          "payload_sha256": "1751ac12e70e15b4f76c16775cd329ae55973b612521dab2de828a5cdb6c8ab3"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 7,
+          "stream_offset": "0x2d8",
+          "command": "DMI",
+          "dmi_register_offset": "0x5408",
+          "dmi_sel": 2,
+          "length_field": 67,
+          "payload_bytes": 68,
+          "dst_offset": "0xa2dc",
+          "src_offset": "0x8d33",
+          "data_iova": "0x17b00d33",
+          "payload_sha256": "1751ac12e70e15b4f76c16775cd329ae55973b612521dab2de828a5cdb6c8ab3"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 8,
+          "stream_offset": "0x768",
+          "command": "DMI",
+          "dmi_register_offset": "0x5a08",
+          "dmi_sel": 1,
+          "length_field": 2047,
+          "payload_bytes": 2048,
+          "dst_offset": "0xa76c",
+          "src_offset": "0xb4cc",
+          "data_iova": "0x17b034cc",
+          "payload_sha256": "b71d4b3eadec95941586227f171e771ae5dc1c70fd48fa5ebf599dcf8fd77d81"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 9,
+          "stream_offset": "0x788",
+          "command": "DMI",
+          "dmi_register_offset": "0x5f08",
+          "dmi_sel": 1,
+          "length_field": 1023,
+          "payload_bytes": 1024,
+          "dst_offset": "0xa78c",
+          "src_offset": "0xbccc",
+          "data_iova": "0x17b03ccc",
+          "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 10,
+          "stream_offset": "0x794",
+          "command": "DMI",
+          "dmi_register_offset": "0x5f08",
+          "dmi_sel": 2,
+          "length_field": 1023,
+          "payload_bytes": 1024,
+          "dst_offset": "0xa798",
+          "src_offset": "0xc0cc",
+          "data_iova": "0x17b040cc",
+          "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 11,
+          "stream_offset": "0x7a0",
+          "command": "DMI",
+          "dmi_register_offset": "0x5f08",
+          "dmi_sel": 3,
+          "length_field": 1023,
+          "payload_bytes": 1024,
+          "dst_offset": "0xa7a4",
+          "src_offset": "0xc4cc",
+          "data_iova": "0x17b044cc",
+          "payload_sha256": "5a0237322ad86a63afa00152f43d049ba9db6494753a20fbf35149a51e978f2b"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 12,
+          "stream_offset": "0xa80",
+          "command": "DMI",
+          "dmi_register_offset": "0xa008",
+          "dmi_sel": 1,
+          "length_field": 767,
+          "payload_bytes": 768,
+          "dst_offset": "0xaa84",
+          "src_offset": "0xcacc",
+          "data_iova": "0x17b04acc",
+          "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 13,
+          "stream_offset": "0xa8c",
+          "command": "DMI",
+          "dmi_register_offset": "0xa008",
+          "dmi_sel": 2,
+          "length_field": 767,
+          "payload_bytes": 768,
+          "dst_offset": "0xaa90",
+          "src_offset": "0xcdcc",
+          "data_iova": "0x17b04dcc",
+          "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 14,
+          "stream_offset": "0xa98",
+          "command": "DMI",
+          "dmi_register_offset": "0xa208",
+          "dmi_sel": 1,
+          "length_field": 383,
+          "payload_bytes": 384,
+          "dst_offset": "0xaa9c",
+          "src_offset": "0xd0cc",
+          "data_iova": "0x17b050cc",
+          "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af"
+        },
+        {
+          "packet": 1,
+          "dmi_index": 15,
+          "stream_offset": "0xaa4",
+          "command": "DMI",
+          "dmi_register_offset": "0xa208",
+          "dmi_sel": 2,
+          "length_field": 383,
+          "payload_bytes": 384,
+          "dst_offset": "0xaaa8",
+          "src_offset": "0xd24c",
+          "data_iova": "0x17b0524c",
+          "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af"
+        }
+      ]
+    },
+    {
+      "packet": 2,
+      "packet_index": 2,
+      "handler": "0xfffff802c33d2cd0",
+      "cmd_buffers_offset": 0,
+      "num_cmd_buffers": 3,
+      "patchset_offset": 52464,
+      "num_patches": 11,
+      "main_handle": "0xffffc9024d6c6730",
+      "main_iova": "0x17a74000",
+      "main_cpu_va": "0xffffdf0038e66000",
+      "main_used_length": 2308,
+      "main_sha256": "f8bbe757a3bf3c1c43e473f1848104ecbc8392fc71410d309460dbfaaf35d052",
+      "decoded_command_count": 52,
+      "decoded_register_write_count": 462,
+      "decoded_dmi_count": 11,
+      "source_handle": "0xffffc9024d6c6810",
+      "source_iova": "0x17af8000",
+      "source_cpu_va": "0xffffdf0038ee8000",
+      "source_capture_bytes": 131072,
+      "source_capture_sha256": "bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a",
+      "dmi": [
+        {
+          "packet": 2,
+          "dmi_index": 0,
+          "stream_offset": "0xdc",
+          "command": "DMI",
+          "dmi_register_offset": "0x3d08",
+          "dmi_sel": 1,
+          "length_field": 511,
+          "payload_bytes": 512,
+          "dst_offset": "0x140e0",
+          "src_offset": "0x10000",
+          "data_iova": "0x17b08000",
+          "payload_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 1,
+          "stream_offset": "0x138",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 1,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0x1413c",
+          "src_offset": "0x10400",
+          "data_iova": "0x17b08400",
+          "payload_sha256": "96a65dc04c64a3f483010e100a0f9069fc0a08368c12d1d94eabe44149db39d5"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 2,
+          "stream_offset": "0x144",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 2,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0x14148",
+          "src_offset": "0x10774",
+          "data_iova": "0x17b08774",
+          "payload_sha256": "6b40f8ca05febaa4967a85161c4488adeaa68526af3db023cf82b329732f43bd"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 3,
+          "stream_offset": "0x150",
+          "command": "DMI",
+          "dmi_register_offset": "0x4308",
+          "dmi_sel": 3,
+          "length_field": 883,
+          "payload_bytes": 884,
+          "dst_offset": "0x14154",
+          "src_offset": "0x10ae8",
+          "data_iova": "0x17b08ae8",
+          "payload_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 4,
+          "stream_offset": "0x1c4",
+          "command": "DMI",
+          "dmi_register_offset": "0x4708",
+          "dmi_sel": 1,
+          "length_field": 511,
+          "payload_bytes": 512,
+          "dst_offset": "0x141c8",
+          "src_offset": "0x1062e",
+          "data_iova": "0x17b0862e",
+          "payload_sha256": "c19141e4374c3e85cbe58105f1689f930ae240ad6aebb6c57f42b764c06406c3"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 5,
+          "stream_offset": "0x260",
+          "command": "DMI",
+          "dmi_register_offset": "0x4908",
+          "dmi_sel": 1,
+          "length_field": 255,
+          "payload_bytes": 256,
+          "dst_offset": "0x14264",
+          "src_offset": "0x11ab8",
+          "data_iova": "0x17b09ab8",
+          "payload_sha256": "c48a9ca4c0431ee4d98b78f9c59858a53adacd5604c88bd0c7f591ff2858e6ed"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 6,
+          "stream_offset": "0x6b4",
+          "command": "DMI",
+          "dmi_register_offset": "0x5a08",
+          "dmi_sel": 1,
+          "length_field": 2047,
+          "payload_bytes": 2048,
+          "dst_offset": "0x146b8",
+          "src_offset": "0x134cc",
+          "data_iova": "0x17b0b4cc",
+          "payload_sha256": "b71d4b3eadec95941586227f171e771ae5dc1c70fd48fa5ebf599dcf8fd77d81"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 7,
+          "stream_offset": "0x840",
+          "command": "DMI",
+          "dmi_register_offset": "0xa008",
+          "dmi_sel": 1,
+          "length_field": 767,
+          "payload_bytes": 768,
+          "dst_offset": "0x14844",
+          "src_offset": "0x14acc",
+          "data_iova": "0x17b0cacc",
+          "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 8,
+          "stream_offset": "0x84c",
+          "command": "DMI",
+          "dmi_register_offset": "0xa008",
+          "dmi_sel": 2,
+          "length_field": 767,
+          "payload_bytes": 768,
+          "dst_offset": "0x14850",
+          "src_offset": "0x14dcc",
+          "data_iova": "0x17b0cdcc",
+          "payload_sha256": "2c67e29e973aaaa45ac5aa18b64dbd08745be2096ffbc0d618dfff0adadffd2b"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 9,
+          "stream_offset": "0x858",
+          "command": "DMI",
+          "dmi_register_offset": "0xa208",
+          "dmi_sel": 1,
+          "length_field": 383,
+          "payload_bytes": 384,
+          "dst_offset": "0x1485c",
+          "src_offset": "0x150cc",
+          "data_iova": "0x17b0d0cc",
+          "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af"
+        },
+        {
+          "packet": 2,
+          "dmi_index": 10,
+          "stream_offset": "0x864",
+          "command": "DMI",
+          "dmi_register_offset": "0xa208",
+          "dmi_sel": 2,
+          "length_field": 383,
+          "payload_bytes": 384,
+          "dst_offset": "0x14868",
+          "src_offset": "0x1524c",
+          "data_iova": "0x17b0d24c",
+          "payload_sha256": "8c9b8daa8246b2cdcf7b999509c388b4fc95555f37ce9c8eff04995f172ea9af"
+        }
+      ]
+    },
+    {
+      "packet": 3,
+      "packet_index": 3,
+      "handler": "0xfffff802c33d2cd0",
+      "cmd_buffers_offset": 0,
+      "num_cmd_buffers": 3,
+      "patchset_offset": 52464,
+      "num_patches": 1,
+      "main_handle": "0xffffc9024d6c6730",
+      "main_iova": "0x17a7e000",
+      "main_cpu_va": "0xffffdf0038e70000",
+      "main_used_length": 1256,
+      "main_sha256": "2f299be42c688915a825a890588557bcce3c2ab6fa9b97e09d4100133eee3aae",
+      "decoded_command_count": 13,
+      "decoded_register_write_count": 287,
+      "decoded_dmi_count": 1,
+      "source_handle": "0xffffc9024d6c6810",
+      "source_iova": "0x17af8000",
+      "source_cpu_va": "0xffffdf0038ee8000",
+      "source_capture_bytes": 131072,
+      "source_capture_sha256": "bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a",
+      "dmi": [
+        {
+          "packet": 3,
+          "dmi_index": 0,
+          "stream_offset": "0x468",
+          "command": "DMI",
+          "dmi_register_offset": "0x5a08",
+          "dmi_sel": 1,
+          "length_field": 2047,
+          "payload_bytes": 2048,
+          "dst_offset": "0x1e46c",
+          "src_offset": "0x1b4cc",
+          "data_iova": "0x17b134cc",
+          "payload_sha256": "b71d4b3eadec95941586227f171e771ae5dc1c70fd48fa5ebf599dcf8fd77d81"
+        }
+      ]
+    }
+  ],
+  "next_required_work": "Classify the exact captured DMI/LUT payloads by VFE register/selector and combine them with the already-decoded main CDM register programming into a static Windows-parity VFE1 PIX/ISP implementation plan. No Linux runtime is authorized by this parser alone."
+}
