@@ -105,14 +105,23 @@ Build result:
 
 `0011` makes X1E source pad 4 a dedicated IPP selection instead of RDI3/VC3, keeps the Windows front path on VC0, programs the stable CSID1 IPP mode-0 registers/crop/measure, and is fail-closed to the accepted CSID1/CSIPHY2/one-trio-C-PHY/SRGGB10 3840x2640 tuple. Rear RDI0/VC0 selection is unchanged. Full reproducibility details are in `CAMSS-IPP-BUILD.txt`.
 
+## Windows initial IFE CDM oracle
+
+A bounded same-machine Windows KD pass stopped only at the four IFE `0x803` submissions inside DEVICE_START and preserved descriptor 0's mapped CPU bytes while the allocations were live. Canonical raw evidence: `experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/raw/E003H_IFE_CDM_INIT_EXACT_20260828.log`, 175,222 bytes, SHA-256 `a22f94b6a024226791c139336b17777f1359f1847146bafa6e092215e86e762a`.
+
+The deterministic decoder uses Qualcomm camera-driver commit `0f16924ff6a7f9bb56a7e958016da2ed8a174f2f` only for CDM encoding/names. All four main streams decode exactly to their declared used lengths with zero unknown opcodes: 278 CDM commands, 2,131 register writes and 46 DMI commands total. Packet 3 writes `+0x24=0x00006000` and `+0x90=0x00000001`; these equal the independent E003g Windows-live VFE1 values, mechanically pinning the CDM base to VFE1 `0x0ac71000`.
+
+The decoded main streams reach `VFE1 + 0xbe70`, with 2,015 startup register writes outside the current upstream X1E VFE `0x4000` aperture. This revives the older Denali-derived `0xf000` VFE aperture as a hypothesis, but it is not sufficient evidence to change Linux by itself. The main streams also contain 46 DMI commands whose referenced LUT/data bytes are not in descriptor 0. Full ISP parity therefore remains blocked on the companion descriptor oracle. See `windows-ife-cdm/README.md` and `initial-ife-cdm-summary.json`.
+
 ## Exact next task
 
 1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
 2. Treat the VFE1 FULL memory format as resolved: Windows clients 0/1 form one contiguous 2560x1440 **TP10 UBWC / QC10C-family** surface with 3584-byte stride and `Y_META -> Y_TP10 -> C_META -> C_TP10` layout. See `vfe1-full-layout/README.md`. Linear NV12 is not parity.
-3. Capture/decode the exact Windows `0x803` initial IFE configuration packet(s). Qualcomm's public VFE680 code explicitly says IFE top configuration is programmed via CDM, so RAW-to-YUV/scaler state must not be guessed from bus-client registers alone.
-4. After the packet oracle is resolved, derive the valid VFE680 PIX/ISP implementation and determine which DS/statistics blocks are required for Windows-equivalent startup rather than copying every live counter/status/address field.
-5. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
-6. Build/static-test the complete parity candidate and prove rear D-PHY/RDI behavior is unchanged.
-7. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
+3. Treat descriptor 0 of the four Windows initial IFE `0x803` packets as captured/decoded. Capture descriptor 1/2 mapped bytes for the same four DEVICE_START packets and resolve every referenced DMI/LUT payload mechanically.
+4. Do not enlarge the Linux VFE aperture from 0x4000 merely because the old Denali map used 0xf000. Require the companion oracle plus a precise MMIO-boundary audit; the current evidence proves only that Windows accesses through +0xbe70.
+5. After the packet/DMI oracle is resolved, derive the valid VFE680 PIX/ISP implementation and determine which DS/statistics blocks are required for Windows-equivalent startup rather than copying every live counter/status/address field.
+6. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
+7. Build/static-test the complete parity candidate and prove rear D-PHY/RDI behavior is unchanged.
+8. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
 
 RDI remains available solely as an explicitly non-parity diagnostic if it becomes useful for fault isolation.
