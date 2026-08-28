@@ -108,10 +108,11 @@ Build result:
 ## Exact next task
 
 1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
-2. Derive a valid VFE680 **PIX/ISP** architecture for the Windows path; do not reuse the current RDI-only WM mapping as a shortcut.
-3. Map the minimum FULL Y/C path first, then determine which DS/statistics blocks are required for Windows-equivalent startup rather than copying every live counter/status/address field.
-4. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
-5. Build/static-test the complete parity candidate and prove rear D-PHY/RDI behavior is unchanged.
-6. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
+2. Treat the VFE1 FULL memory format as resolved: Windows clients 0/1 form one contiguous 2560x1440 **TP10 UBWC / QC10C-family** surface with 3584-byte stride and `Y_META -> Y_TP10 -> C_META -> C_TP10` layout. See `vfe1-full-layout/README.md`. Linear NV12 is not parity.
+3. Capture/decode the exact Windows `0x803` initial IFE configuration packet(s). Qualcomm's public VFE680 code explicitly says IFE top configuration is programmed via CDM, so RAW-to-YUV/scaler state must not be guessed from bus-client registers alone.
+4. After the packet oracle is resolved, derive the valid VFE680 PIX/ISP implementation and determine which DS/statistics blocks are required for Windows-equivalent startup rather than copying every live counter/status/address field.
+5. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
+6. Build/static-test the complete parity candidate and prove rear D-PHY/RDI behavior is unchanged.
+7. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
 
 RDI remains available solely as an explicitly non-parity diagnostic if it becomes useful for fault isolation.

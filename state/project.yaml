@@ -172,16 +172,25 @@ e003h:
   linux_csid1_ipp_windows_cfg0: 0x802b2000
   linux_csid1_ipp_windows_cfg1: 0x00007241
   linux_csid1_ipp_windows_crop: 3840x2160
+  windows_vfe1_full_format: QC10C / TP10 UBWC
+  windows_vfe1_full_dimensions: 2560x1440
+  windows_vfe1_full_stride_bytes: 3584
+  windows_vfe1_full_y_meta_bytes: 24576
+  windows_vfe1_full_c_meta_bytes: 12288
+  windows_vfe1_full_y_slice_bytes: 5185536
+  windows_vfe1_full_c_slice_bytes: 2592768
+  windows_vfe1_full_surface_bytes: 7778304
+  windows_vfe1_full_layout: Y_META -> Y_TP10 -> C_META -> C_TP10
+  windows_vfe1_full_layout_status: mechanically resolved from two same-machine live address sets
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: valid VFE1 PIX/ISP implementation
-next_experiment: E003h-vfe1-pix-parity-static-architecture
+  unresolved: exact Windows 0x803 IFE/CDM configuration packet and valid VFE1 PIX/ISP implementation
+next_experiment: E003h-windows-ife-config-packet-oracle
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Strict same-machine Windows
-  parity remains the acceptance target. Lifecycle placement and static CSID1 IPP representation are closed. Preserve
-  static-only 0010 and 0011 and derive only the Windows-proven VFE1 PIX/ISP architecture, starting with the minimum
-  FULL Y/C path and adding DS/statistics state only where Windows evidence proves it required. The current Linux RDI
-  path may be used only as an explicitly non-parity diagnostic. No runtime parity candidate or frame is authorized
-  until static build, ABI, DT, rear-DPHY non-regression, timeout and rollback gates pass.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Lifecycle placement, static
+  CSID1 IPP representation, and the VFE1 FULL QC10C/TP10 UBWC memory layout are closed. Preserve static-only 0010 and
+  0011. Capture and decode the exact same-machine Windows 0x803 initial IFE configuration packet submitted after IFE
+  start and before CSID start; do not invent RAW-to-YUV/scaler register programming. No runtime VFE1 parity candidate
+  or front frame is authorized until that oracle and the normal static build/ABI/DT/rear-DPHY/rollback gates pass.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

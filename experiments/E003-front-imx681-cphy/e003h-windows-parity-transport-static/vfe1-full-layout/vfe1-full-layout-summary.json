@@ -1,0 +1,75 @@
+{
+  "status": "PASS",
+  "policy": "Same-machine Windows is behavioral oracle; Qualcomm source is register/format-layout reference only.",
+  "windows_vfe1_full": {
+    "width": 2560,
+    "height": 1440,
+    "chroma_height": 720,
+    "packer_cfg": "0x0000000b",
+    "packer_decode": "PACKER_FMT_VER3_TP_10",
+    "v4l2_opaque_format_family": "V4L2_PIX_FMT_QC10C (Qualcomm compressed 10-bit YUV420 / TP10 UBWC)",
+    "stride_bytes": 3584,
+    "y_meta_size": 24576,
+    "y_data_size": 5160960,
+    "c_meta_size": 12288,
+    "c_data_size": 2580480,
+    "y_slice_size": 5185536,
+    "c_slice_size": 2592768,
+    "total_surface_size": 7778304,
+    "layout": [
+      "Y_META",
+      "Y_TP10_UBWC",
+      "C_META",
+      "C_TP10_UBWC"
+    ]
+  },
+  "windows_address_runs": [
+    {
+      "phase": "live1",
+      "base_y_meta": "0x12428000",
+      "y_image": "0x1242e000",
+      "c_meta": "0x1291a000",
+      "c_image": "0x1291d000",
+      "y_image_minus_y_meta": "0x6000",
+      "c_meta_minus_y_meta": "0x4f2000",
+      "c_image_minus_c_meta": "0x3000"
+    },
+    {
+      "phase": "live2",
+      "base_y_meta": "0x150b0000",
+      "y_image": "0x150b6000",
+      "c_meta": "0x155a2000",
+      "c_image": "0x155a5000",
+      "y_image_minus_y_meta": "0x6000",
+      "c_meta_minus_y_meta": "0x4f2000",
+      "c_image_minus_c_meta": "0x3000"
+    }
+  ],
+  "stable_client_config": {
+    "full_y": {
+      "cfg": "0x00000011",
+      "frame_incr": "0x004f2000",
+      "image_cfg0": "0x05a00a00",
+      "stride": "0x00000e00",
+      "packer": "0x0000000b",
+      "meta_cfg": "0x00000400",
+      "mode_cfg": "0x00000023",
+      "ctrl2": "0x00000001",
+      "lossy0": "0x06210022",
+      "lossy1": "0x0000040a"
+    },
+    "full_c": {
+      "cfg": "0x00000011",
+      "frame_incr": "0x00279000",
+      "image_cfg0": "0x02d00a00",
+      "stride": "0x00000e00",
+      "packer": "0x0000000b",
+      "meta_cfg": "0x00000400",
+      "mode_cfg": "0x00000033",
+      "ctrl2": "0x00000001",
+      "lossy0": "0x06210022",
+      "lossy1": "0x0000040a"
+    }
+  },
+  "linux_consequence": "One contiguous vb2 DMA buffer is sufficient in principle; CAMSS must derive internal Y/C meta+data addresses and implement QC10C/TP10 UBWC plus the Windows VFE1 ISP/scaler programming. Linear NV12 is not parity."
+}
