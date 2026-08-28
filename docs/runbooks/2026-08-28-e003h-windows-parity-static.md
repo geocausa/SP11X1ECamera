@@ -111,7 +111,7 @@ The same-machine Windows startup byte oracle is now closed at the four IFE `0x80
 
 Main CDM evidence: `windows-ife-cdm/raw/E003H_IFE_CDM_INIT_EXACT_20260828.log`, 175,222 bytes, SHA-256 `a22f94b6a024226791c139336b17777f1359f1847146bafa6e092215e86e762a`. The deterministic decoder uses Qualcomm camera-driver commit `0f16924ff6a7f9bb56a7e958016da2ed8a174f2f` only for CDM encoding/names. All four streams decode exactly to their declared lengths with zero unknown opcodes: 278 CDM commands, 2,131 register writes and 46 DMI commands. Packet 3 independently matches the E003g Windows-live VFE1 values at `+0x24` and `+0x90`, mechanically pinning the CDM base to VFE1 `0x0ac71000`.
 
-The main streams reach `VFE1+0xbe70`; 2,015 startup writes lie outside the current upstream X1E VFE `0x4000` aperture. That proves 0x4000 is insufficient for the Windows PIX/ISP path. The old Denali `0xf000` aperture remains a hypothesis, not an automatic Linux change.
+The main streams reach `VFE1+0xbe70`; 2,015 startup writes lie outside the current upstream X1E VFE `0x4000` aperture. The deterministic ownership classifier now proves the exact required span is `0xbe74`, page-rounded `0xc000`. The same-machine Denali VFE0->VFE1 bases are exactly `0xf000` apart and the historical Denali resource span is exactly `0xf000`, which covers the complete observed corpus. Static-only `0012-sp11-vfe-aperture-windows-parity.patch` therefore overrides only Denali VFE0/VFE1 sizes from `0x4000` to `0xf000`. The DT build passes, output size is unchanged, and a byte comparison shows exactly two changed bytes: one size byte for each VFE aperture. No common X1E resource is changed.
 
 Final patch/DMI evidence: `windows-ife-cdm/raw/E003H_IFE_PATCH_DMI_EXACT_20260828.log`, 5,832,792 bytes, SHA-256 `719043805efd57d26483497c0c1964251e77461ccdb7213e5fdc1947defbffc7`. Exact ARM64 disassembly of installed `qccamisp8380.sys` proves the internal packet fields and 24-byte patch record mechanism. `extract_patch_dmi_oracle.py` mechanically proves:
 
@@ -127,15 +127,21 @@ Supporting captures prove descriptor 1 is CSID1 IPP command data and reproduces 
 
 The pinned public VFE680 kernel header exposes top/bus layout but not the pixel-IQ DMI block map at the observed DMI register offsets. Do **not** guess semantic labels such as gamma/rolloff/GTM/LTM from payload size. Preserve exact register+selector+payload identity until an authoritative layout or exact Windows static proof supplies the names.
 
+Ownership result: 695 unique startup offsets = 650 single-valued + 45 packet-phase-varying, with zero within-packet value changes. Five offsets independently proven live-volatile by the E003g two-pass oracle are classified `runtime_volatile_do_not_freeze`. The initial-CDM corpus contains zero writes in the public VFE680 BUS-client range, so Windows output-buffer programming is not mixed into the IQ startup replay.
+
+The two-pass VFE1 BUS oracle independently closes the FULL surface: client 0 FULL_Y and client 1 FULL_C are stable writable configuration around a single contiguous 2560x1440 TP10-UBWC/QC10C surface. The kernel's existing QC10C tile geometry produces the same 3584-byte stride and exact camera core surface `0x76b000` with offsets `Y_META=0`, `Y_DATA=0x6000`, `C_META=0x4f2000`, `C_DATA=0x4f5000`. Dynamic Windows image/meta addresses and status readback are explicitly excluded from replay.
+
+Windows IRQ behavior is cross-proven dynamically and statically: live `TOP_MASK0=0x0007f051`, `BUS_MASK0=0xd0000000`, and exact `qccamisp8380.sys` writes those literals in its VFE interrupt initializer. Its DPC maps TOP status1 bit0 to normalized event 3, logged as `IFE VIDEO buf done`. Rear X1E RDI completion remains CSID680 BUF_DONE-driven, while CSID1 IPP handles RUP only, so a front VFE VIDEO-done implementation can be isolated from the accepted rear path.
+
 ## Exact next task
 
 1. Treat CSID1 IPP static representation as closed by `0011`; do not expand it beyond same-machine Windows-proven mode-0 state without new oracle evidence.
 2. Treat the VFE1 FULL memory format as resolved: one contiguous 2560x1440 **TP10 UBWC / QC10C-family** surface with 3584-byte stride and `Y_META -> Y_TP10 -> C_META -> C_TP10` layout. Linear NV12 is not parity.
 3. Treat the Windows IFE startup byte corpus as complete: four main CDM streams, 2,131 register writes and all 46 DMI payload references/bytes are captured. Further Windows byte capture is not the current blocker.
-4. Classify the register corpus into writable static/config state, runtime output-address state, counters/status/debug state and command/update triggers. Never blindly replay live Windows addresses or status.
-5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads; resolve semantic IQ-block names only from authoritative layout or exact Windows binary evidence.
-6. Mechanically determine the VFE1 MMIO resource size required by the observed access set. Current 0x4000 is proven insufficient; do not select 0xf000 merely because historical Denali used it.
-7. Derive a fail-closed VFE680 PIX/ISP implementation for the Windows 3840x2160 input -> 2560x1440 TP10 UBWC FULL path, including only DS/statistics state that Windows startup actually requires.
+4. Treat register ownership and VFE aperture as closed by the deterministic classifier and `0012`: never replay the five live-volatile offsets or any Windows buffer/status address, and keep the `0xf000` override Denali-only.
+5. Preserve the 21 exact DMI register/selector identities and 16 exact payloads; resolve the **execution mechanism** next. Qualcomm's software DMI path proves the data ports but does not apply `DMISel`, so do not claim direct-MMIO parity until selector/address/data sequencing is mechanically established.
+6. Treat the FULL BUS topology as closed: WM0+WM1, one QC10C/TP10-UBWC surface, exact 3584-byte stride/`0x76b000` core layout, VIDEO completion from VFE rather than CSID IPP. Dynamic addresses remain per-buffer.
+7. Derive a fail-closed VFE680 PIX/ISP implementation for the Windows 3840x2160 input -> 2560x1440 TP10 UBWC FULL path, including only DS/statistics/IQ state Windows proves necessary.
 8. Preserve the proven lifecycle: ISP -> MIPI -> sensor on start; ISP teardown first on stop, with no invented dependency between MIPI-stop and sensor-off. Keep `0010` static-only.
 9. Build/static-test the complete parity candidate and prove rear D-PHY/RDI behavior is unchanged.
 10. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.

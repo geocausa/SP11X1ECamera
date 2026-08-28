@@ -1,0 +1,39 @@
+E003h 0012 — SP11/Denali VFE aperture, static only
+Date: 2026-08-28
+Policy: same-machine Windows is behavioral oracle; no runtime/deployment authorized.
+
+Mechanical requirement:
+- Windows VFE1 startup ordinary writes reach +0xbe70.
+- Exact touched span through that 32-bit register is 0xbe74 bytes.
+- Page-rounded minimum is 0xc000 bytes.
+- Current common X1E mapping is 0x4000 bytes: insufficient.
+- Same-machine Denali baseline VFE0/VFE1 span is 0xf000 bytes.
+- VFE0 base 0x0ac62000 -> VFE1 base 0x0ac71000 spacing is exactly 0xf000.
+- Therefore 0xf000 is an evidence-backed SP11 static mapping candidate, not a heuristic.
+
+Implementation isolation:
+- Change is in x1-microsoft-denali.dtsi only; hamoa.dtsi/common X1E is untouched.
+- Board CAMSS reg override preserves every current resource tuple and changes only:
+  VFE0 0x0ac62000 size 0x4000 -> 0xf000
+  VFE1 0x0ac71000 size 0x4000 -> 0xf000
+
+Build:
+- Target: qcom/x1e80100-microsoft-denali-oled.dtb
+- Build anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+- ARCH=arm64
+- PASS, no warning/error diagnostics.
+
+Before DTB:
+- SHA-256 e9fd13a29b6580955d2662c27377dbd1caba14f7f89613510b5e23bd6c266293
+- bytes 215173
+After DTB:
+- SHA-256 13a7faf7b5f4cbdbccfc4177145cbb179746bdfc698a273ec3c3e2bcc359bd19
+- bytes 215173
+
+Byte-level isolation:
+- cmp -l reports exactly 2 differing bytes:
+  byte 144159: octal 100 -> 360 (0x40 -> 0xf0)
+  byte 144175: octal 100 -> 360 (0x40 -> 0xf0)
+- These are the two VFE size cells. No other DTB byte changes.
+
+No boot, module load, sensor transmission, or frame attempt occurred.

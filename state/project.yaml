@@ -5,7 +5,7 @@ updated: 2026-08-28
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-windows-ife-startup-byte-oracle-closed-golden-unchanged
+status: e003h-vfe1-static-ownership-aperture-bus-closed-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: dynamic-lifecycle-resolved-static-parity-architecture-in-progress
+  status: vfe1-static-ownership-aperture-bus-resolved-dmi-execution-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -194,7 +194,20 @@ e003h:
   windows_ife_initial_cdm_base_status: mechanically cross-checked against E003g live VFE1 +0x24/+0x90
   linux_current_vfe1_aperture_bytes: 0x4000
   historical_denali_vfe_aperture_bytes: 0xf000
-  historical_denali_vfe_aperture_status: hypothesis revived by Windows accesses; not yet authorized as Linux change
+  historical_denali_vfe_aperture_status: evidence-backed Denali-only static candidate; exact instance spacing and complete Windows corpus coverage
+  windows_vfe1_exact_required_span_bytes: 0xbe74
+  windows_vfe1_page_rounded_required_span_bytes: 0xc000
+  linux_denali_vfe_aperture_patch: 0012-sp11-vfe-aperture-windows-parity.patch
+  linux_denali_vfe_aperture_bytes: 0xf000
+  linux_denali_vfe_aperture_build: pass
+  linux_denali_vfe_aperture_dtb_changed_bytes: 2
+  linux_denali_vfe_aperture_non_denali_unchanged: true
+  windows_vfe1_startup_unique_offsets: 695
+  windows_vfe1_startup_single_valued_offsets: 650
+  windows_vfe1_startup_packet_phase_variant_offsets: 45
+  windows_vfe1_startup_within_packet_variant_offsets: 0
+  windows_vfe1_startup_live_volatile_do_not_freeze: 5
+  windows_vfe1_initial_cdm_public_bus_writes: 0
   windows_ife_patch_dmi_raw_sha256: 719043805efd57d26483497c0c1964251e77461ccdb7213e5fdc1947defbffc7
   windows_ife_patch_dmi_raw_bytes: 5832792
   windows_ife_patch_dmi_packets: 4
@@ -210,17 +223,26 @@ e003h:
   windows_ife_dmi_semantic_names_status: unresolved; public VFE680 kernel map does not expose pixel-IQ DMI block names, do not guess
   windows_ife_descriptor1_status: CSID1 IPP command data; same-machine crop state reproduced
   windows_ife_descriptor2_status: not DMI source allocation
+  windows_vfe1_bus_oracle_two_pass: pass
+  windows_vfe1_bus_full_clients: WM0 FULL_Y + WM1 FULL_C
+  windows_vfe1_bus_qc10c_core_surface_bytes: 0x76b000
+  windows_vfe1_bus_qc10c_offsets: Y_META=0 Y_DATA=0x6000 C_META=0x4f2000 C_DATA=0x4f5000
+  windows_vfe1_top_mask0: 0x0007f051
+  windows_vfe1_bus_mask0: 0xd0000000
+  windows_vfe1_video_done: TOP status1 bit0 -> event 3 -> IFE VIDEO buf done
+  linux_rear_rdi_completion: CSID680 BUF_DONE; unchanged by future front VFE VIDEO completion
+  dmi_execution_status: unresolved DMISel application; data ports +8/+12 proven by Qualcomm software-DMI helper
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
-  unresolved: classify exact VFE1 register/DMI ownership and implement valid PIX/TP10-UBWC path
-next_experiment: E003h-vfe1-pix-isp-static-ownership
+  unresolved: mechanically resolve DMI DMISel execution semantics, then implement valid VFE1 PIX/TP10-UBWC path
+next_experiment: E003h-vfe1-dmi-execution-static
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. The Windows startup byte oracle
-  is closed: all four main CDM streams, 2131 register writes, and all 46/46 DMI payload references are captured and
-  mechanically resolved into 21 exact register/selector groups and 16 unique payloads. Classify the exact register and
-  DMI corpus into writable pixel-IQ/scaler/statistics configuration versus dynamic/status/output-address state, prove
-  the required VFE1 MMIO aperture from the observed access set, and derive a fail-closed VFE1 PIX + TP10 UBWC/QC10C
-  implementation. Do not guess unpublished IQ-block names or blindly replay dynamic addresses/status. No runtime VFE1
-  parity candidate or front frame is authorized until static build/ABI/DT/rear-DPHY/rollback gates pass.
+  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. VFE1 register ownership,
+  Denali aperture sizing, FULL QC10C BUS layout and Windows VIDEO completion semantics are now mechanically closed.
+  Preserve Denali-only static 0012 and never replay live-volatile offsets or Windows buffer/status addresses. Resolve
+  exactly how DMI DMISel is applied before deciding whether the 16 exact Windows LUT payloads can be replayed by direct
+  MMIO or require a minimal CDM mechanism. Then derive/build the fail-closed VFE1 PIX/FULL candidate and prove rear
+  D-PHY/RDI behavior unchanged. No runtime VFE1 parity candidate or front frame is authorized until static build/ABI/DT/
+  rear-DPHY/rollback gates pass.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

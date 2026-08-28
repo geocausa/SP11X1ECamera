@@ -1,0 +1,82 @@
+{
+  "status": "PASS",
+  "policy": "Same-machine Windows is behavioral oracle; Qualcomm source is used only for VFE680 register names/layout.",
+  "qualcomm_vfe680_reference_commit": "0f16924ff6a7f9bb56a7e958016da2ed8a174f2f",
+  "windows_corpus": {
+    "ordinary_register_writes": 2131,
+    "unique_ordinary_register_offsets": 695,
+    "dmi_commands": 46,
+    "dmi_identity_groups": 21,
+    "unique_dmi_payloads": 16
+  },
+  "behavior": {
+    "single_value_unique_offsets": 650,
+    "cross_packet_variant_unique_offsets": 45,
+    "within_packet_value_change_offsets": [],
+    "within_packet_value_change_count": 0,
+    "independent_live_volatile_overlap_count": 5,
+    "independent_live_volatile_overlap_offsets": [
+      "0x3b70",
+      "0x3d78",
+      "0x3d7c",
+      "0x3d80",
+      "0x3d84"
+    ],
+    "dmi_associated_control_count": 20,
+    "dmi_associated_control_offsets": [
+      "0x3d58",
+      "0x3d5c",
+      "0x4358",
+      "0x435c",
+      "0x4758",
+      "0x475c",
+      "0x4958",
+      "0x495c",
+      "0x5458",
+      "0x545c",
+      "0x5a58",
+      "0x5a5c",
+      "0x5f58",
+      "0x5f5c",
+      "0xa058",
+      "0xa05c",
+      "0xa258",
+      "0xa25c",
+      "0xb258",
+      "0xb25c"
+    ],
+    "dmi_associated_phase_variant_count": 16,
+    "dmi_associated_static_control_count": 4
+  },
+  "ownership_counts": {
+    "dmi_associated_phase_variant_control": 16,
+    "dmi_associated_static_control": 4,
+    "known_top_phase_variant": 1,
+    "known_top_static_config_candidate": 3,
+    "runtime_volatile_do_not_freeze": 5,
+    "unpublished_iq_phase_variant": 23,
+    "unpublished_iq_static_config_candidate": 643
+  },
+  "public_vfe680_bus_crosscheck": {
+    "public_bus_range": "0xc00..0x2988",
+    "initial_cdm_writes_in_public_bus_range": 0,
+    "conclusion": "Initial IFE CDM corpus does not contain VFE680 bus-client programming; FULL/DS/stats buffer state is programmed elsewhere."
+  },
+  "aperture": {
+    "vfe0_base": "0x0ac62000",
+    "vfe1_base": "0x0ac71000",
+    "instance_base_spacing_bytes": 61440,
+    "max_ordinary_register_offset": "0xbe70",
+    "max_dmi_register_offset": "0xb208",
+    "max_touched_offset": "0xbe70",
+    "exact_required_span_bytes": 48756,
+    "page_rounded_required_span_bytes": 49152,
+    "current_x1e_span_bytes": 16384,
+    "same_machine_denali_baseline_span_bytes": 61440,
+    "denali_span_equals_vfe_instance_spacing": true,
+    "denali_span_covers_windows_corpus": true,
+    "denali_span_headroom_bytes": 12684,
+    "static_conclusion": "0x4000 is mechanically insufficient. 0xf000 is now an evidence-backed SP11 static mapping candidate because it is the same-machine Denali baseline span, exactly equals VFE0->VFE1 base spacing, and covers every observed Windows startup access. Runtime remains unauthorized."
+  },
+  "remaining_boundary": "Semantic names for unpublished IQ blocks and the Linux PIX/TP10-UBWC ownership/implementation remain unresolved. Do not replay live-volatile offsets as fixed state."
+}
