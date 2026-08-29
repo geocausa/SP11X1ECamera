@@ -1,6 +1,6 @@
 # E003h preflight — Windows-parity transport architecture, static only
 
-Date: 2026-08-28
+Date: 2026-08-29
 
 ## Purpose
 
@@ -31,6 +31,7 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 6. Lifecycle placement is fully resolved. Four MIPI-instrumented Windows cycles prove strict ISP -> MIPI -> sensor start ordering and an unordered sensor-off/MIPI-stop tail after ISP teardown. `0010`'s current CSIPHY -> sensor tail is an observed-valid serialization, not a claimed Windows requirement.
 7. Static `0015-sp11-rtcdm1-windows-static-recipe.patch` now compiles the exact Windows-derived RT_CDM1 preflight/init/start/FIFO0/stop recipe behind an unreachable private ops table. FE_CFG/FIFO0_CFG remain read-only validation targets, the optional CGC path is absent, no `CORE_EN=0` shutdown is invented, and no runtime code references the recipe.
 8. Static `0016-x1e-vfe1-pix-qc10c-static-contract.patch` closes only the VFE1 PIX memory/completion representation: IFE1-only RAW10 -> fixed 2560x1440 QC10C, FULL WM0+WM1, exact surface offsets and Windows VIDEO completion contract. VFE1 PIX stream-on remains rejected before hardware setup; IFE0/Lite/RDI behavior remains unchanged.
+9. The dynamic BUS-address path is now exact: Windows RVA `0x1dd20` writes `IMAGE_ADDR +0x04` and FULL `META_ADDR +0x40` in the nine-client order, with the initial set after BUS enable/before ISP start completion and later sets per frame. Static `0017` accepts Linux DMA IOVAs only and retains `prepare/update/stop` behind an unreferenced private table. Captured Windows IOVAs/ring strides are forbidden and VFE1 PIX remains stream-blocked.
 
 ## Policy consequence
 

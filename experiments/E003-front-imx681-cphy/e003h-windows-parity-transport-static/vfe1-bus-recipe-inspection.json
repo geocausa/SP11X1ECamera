@@ -1,0 +1,52 @@
+{
+  "accepted": true,
+  "client_order": [
+    0,
+    1,
+    2,
+    3,
+    11,
+    18,
+    12,
+    14,
+    13
+  ],
+  "dynamic_registers": {
+    "image_addr": "0x04",
+    "meta_addr": "0x40"
+  },
+  "initial_mmio_order": [
+    "static_config",
+    "enable",
+    "dynamic_addresses"
+  ],
+  "module_sha256": "44b9233d668cad0eb8da3c7805845d006ee3bd000ef17a5e2173fac9846783ef",
+  "object_sha256": "7e3eb78fc9242b971cd90920830a7f381b9cea9d0f2327a2e35fce81959c09da",
+  "oracle_sha256": "925028750e8be60c65a69f24349bb540b0ba0776726f40d59273b0be7f464282",
+  "patch_paths": [
+    "drivers/media/platform/qcom/camss/camss-vfe-680.c"
+  ],
+  "patch_sha256": "55e88685bf71fff5ba74ceb53972b28f71c6c9120659cd756847d8308a7b2d5e",
+  "policy": "build/static only; Linux DMA IOVAs are caller-provided; no module load, RT-CDM submission, PIX enable or sensor transmission authorized",
+  "qc10c_offsets": {
+    "c_data": 5197824,
+    "c_meta": 5185536,
+    "y_data": 24576,
+    "y_meta": 0
+  },
+  "runtime_isolation": {
+    "helper_relocations": [
+      "0000000000000148 R_AARCH64_ABS64   vfe680_x1e_bus_prepare",
+      "0000000000000150 R_AARCH64_ABS64   vfe680_x1e_bus_update",
+      "0000000000000158 R_AARCH64_ABS64   vfe680_x1e_bus_stop"
+    ],
+    "pix_stream_gate": "-EOPNOTSUPP before stream lock/IRQ/output",
+    "recipe_compiled_relocation_present": false,
+    "recipe_source_reference_count": 1,
+    "vfe_ops_reference_present": false
+  },
+  "schema": "sp11-e003h-linux-vfe1-bus-unreachable-recipe-inspection-v1",
+  "source_sha256": "29726aad9e6d5228ba73811b254dec6b08cd8efc91645af71bbb11572df5c05a",
+  "windows_iovas_frozen": false,
+  "windows_slot_stride_frozen": false
+}

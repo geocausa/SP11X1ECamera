@@ -1,0 +1,310 @@
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -56,6 +56,30 @@
+ #define VFE_BUS_MMU_PREFETCH_MAX_OFFSET(vfe, c)	((vfe_is_lite(vfe) ? 0x464 : 0xe64) + (c) * 0x100)
+ #define VFE_BUS_ADDR_STATUS0(vfe, c)		((vfe_is_lite(vfe) ? 0x470 : 0xe70) + (c) * 0x100)
+ 
++/* X1E80100 VFE1 BUS client register layout used by the private E003h recipe. */
++#define VFE680_X1E_BUS_CLIENT_BASE		0x0e00
++#define VFE680_X1E_BUS_CLIENT_STRIDE		0x0100
++#define VFE680_X1E_BUS_CFG			0x00
++#define VFE680_X1E_BUS_IMAGE_ADDR		0x04
++#define VFE680_X1E_BUS_FRAME_INCR		0x08
++#define VFE680_X1E_BUS_IMAGE_CFG0		0x0c
++#define VFE680_X1E_BUS_IMAGE_CFG1		0x10
++#define VFE680_X1E_BUS_IMAGE_CFG2		0x14
++#define VFE680_X1E_BUS_PACKER_CFG		0x18
++#define VFE680_X1E_BUS_BW_LIMIT		0x1c
++#define VFE680_X1E_BUS_IRQ_SUBSAMPLE_PERIOD	0x30
++#define VFE680_X1E_BUS_IRQ_SUBSAMPLE_PATTERN	0x34
++#define VFE680_X1E_BUS_FRAMEDROP_PERIOD	0x38
++#define VFE680_X1E_BUS_FRAMEDROP_PATTERN	0x3c
++#define VFE680_X1E_BUS_META_ADDR		0x40
++#define VFE680_X1E_BUS_META_CFG		0x44
++#define VFE680_X1E_BUS_MODE_CFG		0x48
++#define VFE680_X1E_BUS_STATS_CTRL		0x4c
++#define VFE680_X1E_BUS_CTRL_2			0x50
++#define VFE680_X1E_BUS_LOSSY_THRESH0		0x54
++#define VFE680_X1E_BUS_LOSSY_THRESH1		0x58
++#define VFE680_X1E_BUS_LOSSY_VAR_OFFSET	0x5c
++
+ /*
+  * TODO: differentiate the port id based on requested type of RDI, BHIST etc
+  *
+@@ -208,6 +232,276 @@
+ 	.full_wm = { 0, 1 },
+ };
+ 
++/*
++ * E003h same-machine Windows BUS recipe, retained and unreachable.
++ *
++ * The 2026-08-29 KD oracle closes the MMIO lifecycle as:
++ *   static client config -> enable -> initial dynamic addresses -> ISP start done
++ * followed by repeated per-frame dynamic-address updates. Stop clears the same
++ * resource sequence. The exact Windows IOVAs are evidence only and never appear
++ * here; callers must supply Linux DMA IOVAs for every backing allocation.
++ */
++struct vfe680_x1e_bus_iovas {
++	dma_addr_t qc10c;
++	dma_addr_t ds4;
++	dma_addr_t ds16;
++	dma_addr_t aec_be;
++	dma_addr_t rs;
++	dma_addr_t bhist;
++	dma_addr_t awb_bg;
++	dma_addr_t tl_bg;
++};
++
++struct vfe680_x1e_bus_addresses {
++	u32 image[9];
++	u32 full_meta[2];
++};
++
++static const u8 vfe680_x1e_windows_bus_client_order[] = {
++	0, 1, 2, 3, 11, 18, 12, 14, 13,
++};
++
++static void __iomem *vfe680_x1e_bus_reg(struct vfe_device *vfe,
++					u8 client, u32 reg)
++{
++	return vfe->base + VFE680_X1E_BUS_CLIENT_BASE +
++		client * VFE680_X1E_BUS_CLIENT_STRIDE + reg;
++}
++
++static bool vfe680_x1e_bus_target(struct vfe_device *vfe)
++{
++	return vfe && vfe->camss &&
++		vfe->camss->res->version == CAMSS_X1E80100 && vfe->id == 1 &&
++		!vfe_is_lite(vfe);
++}
++
++static const struct vfe680_x1e_windows_client_contract *
++vfe680_x1e_bus_contract(u8 client)
++{
++	switch (client) {
++	case 0:
++		return &vfe680_x1e_windows_full_contract[0];
++	case 1:
++		return &vfe680_x1e_windows_full_contract[1];
++	case 2:
++		return &vfe680_x1e_windows_aux_contract[0];
++	case 3:
++		return &vfe680_x1e_windows_aux_contract[1];
++	case 11:
++		return &vfe680_x1e_windows_aux_contract[2];
++	case 12:
++		return &vfe680_x1e_windows_aux_contract[3];
++	case 13:
++		return &vfe680_x1e_windows_aux_contract[4];
++	case 14:
++		return &vfe680_x1e_windows_aux_contract[5];
++	case 18:
++		return &vfe680_x1e_windows_aux_contract[6];
++	default:
++		return NULL;
++	}
++}
++
++static void vfe680_x1e_bus_config_client(struct vfe_device *vfe,
++					 const struct vfe680_x1e_windows_client_contract *c)
++{
++	void __iomem *cfg = vfe680_x1e_bus_reg(vfe, c->client, 0);
++
++	/* Windows config is session-static; bit 0 is toggled only by enable. */
++	writel_relaxed(c->cfg & ~VFE_BUS_WRITE_CLIENT_CFG_EN,
++		       cfg + VFE680_X1E_BUS_CFG);
++	writel_relaxed(0, cfg + VFE680_X1E_BUS_IRQ_SUBSAMPLE_PERIOD);
++	writel_relaxed(c->irq_subsample_pattern,
++		       cfg + VFE680_X1E_BUS_IRQ_SUBSAMPLE_PATTERN);
++	writel_relaxed(0, cfg + VFE680_X1E_BUS_FRAMEDROP_PERIOD);
++	writel_relaxed(c->framedrop_pattern,
++		       cfg + VFE680_X1E_BUS_FRAMEDROP_PATTERN);
++	writel_relaxed(c->frame_incr, cfg + VFE680_X1E_BUS_FRAME_INCR);
++	writel_relaxed(c->image_cfg0, cfg + VFE680_X1E_BUS_IMAGE_CFG0);
++	writel_relaxed(c->packer_cfg, cfg + VFE680_X1E_BUS_PACKER_CFG);
++	writel_relaxed(c->image_cfg2, cfg + VFE680_X1E_BUS_IMAGE_CFG2);
++
++	/* The compression/meta fields are present only on Windows FULL Y/C. */
++	if (c->meta_cfg || c->mode_cfg || c->ctrl_2 || c->lossy_thresh0 ||
++	    c->lossy_thresh1) {
++		writel_relaxed(c->image_cfg1, cfg + VFE680_X1E_BUS_IMAGE_CFG1);
++		writel_relaxed(c->bw_limit, cfg + VFE680_X1E_BUS_BW_LIMIT);
++		writel_relaxed(c->meta_cfg, cfg + VFE680_X1E_BUS_META_CFG);
++		writel_relaxed(c->mode_cfg, cfg + VFE680_X1E_BUS_MODE_CFG);
++		writel_relaxed(0, cfg + VFE680_X1E_BUS_STATS_CTRL);
++		writel_relaxed(c->ctrl_2, cfg + VFE680_X1E_BUS_CTRL_2);
++		writel_relaxed(c->lossy_thresh0,
++			       cfg + VFE680_X1E_BUS_LOSSY_THRESH0);
++		writel_relaxed(c->lossy_thresh1,
++			       cfg + VFE680_X1E_BUS_LOSSY_THRESH1);
++		writel_relaxed(0, cfg + VFE680_X1E_BUS_LOSSY_VAR_OFFSET);
++	}
++}
++
++static int vfe680_x1e_bus_addr32(dma_addr_t base, u32 offset, u32 *addr)
++{
++	if (base > U32_MAX || offset > U32_MAX - (u32)base)
++		return -ERANGE;
++
++	*addr = (u32)base + offset;
++	return 0;
++}
++
++static int vfe680_x1e_bus_build_addresses(const struct vfe680_x1e_bus_iovas *iovas,
++					  struct vfe680_x1e_bus_addresses *addr)
++{
++	int ret;
++
++	ret = vfe680_x1e_bus_addr32(iovas->qc10c, 0,
++				    &addr->full_meta[0]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->qc10c,
++				    VFE680_X1E_QC10C_Y_DATA_OFF,
++					    &addr->image[0]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->qc10c,
++				    VFE680_X1E_QC10C_C_META_OFF,
++					    &addr->full_meta[1]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->qc10c,
++				    VFE680_X1E_QC10C_C_DATA_OFF,
++					    &addr->image[1]);
++	if (ret)
++		return ret;
++
++	ret = vfe680_x1e_bus_addr32(iovas->ds4, 0, &addr->image[2]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->ds16, 0, &addr->image[3]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->aec_be, 0, &addr->image[4]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->rs, 0, &addr->image[5]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->bhist, 0, &addr->image[6]);
++	if (ret)
++		return ret;
++	ret = vfe680_x1e_bus_addr32(iovas->awb_bg, 0, &addr->image[7]);
++	if (ret)
++		return ret;
++	return vfe680_x1e_bus_addr32(iovas->tl_bg, 0, &addr->image[8]);
++}
++
++static void vfe680_x1e_bus_write_addresses(struct vfe_device *vfe,
++					   const struct vfe680_x1e_bus_addresses *addr)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(vfe680_x1e_windows_bus_client_order); i++) {
++		u8 client = vfe680_x1e_windows_bus_client_order[i];
++		void __iomem *cfg = vfe680_x1e_bus_reg(vfe, client, 0);
++
++		writel_relaxed(addr->image[i], cfg + VFE680_X1E_BUS_IMAGE_ADDR);
++		if (client == 0)
++			writel_relaxed(addr->full_meta[0],
++				       cfg + VFE680_X1E_BUS_META_ADDR);
++		else if (client == 1)
++			writel_relaxed(addr->full_meta[1],
++				       cfg + VFE680_X1E_BUS_META_ADDR);
++	}
++}
++
++static void vfe680_x1e_bus_set_enabled(struct vfe_device *vfe, bool enable)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(vfe680_x1e_windows_bus_client_order); i++) {
++		u8 client = vfe680_x1e_windows_bus_client_order[i];
++		void __iomem *reg = vfe680_x1e_bus_reg(vfe, client,
++							      VFE680_X1E_BUS_CFG);
++		u32 cfg = readl_relaxed(reg);
++
++		if (enable)
++			cfg |= VFE_BUS_WRITE_CLIENT_CFG_EN;
++		else
++			cfg &= ~VFE_BUS_WRITE_CLIENT_CFG_EN;
++		writel_relaxed(cfg, reg);
++	}
++}
++
++static int vfe680_x1e_bus_prepare(struct vfe_device *vfe,
++				  const struct vfe680_x1e_bus_iovas *iovas)
++{
++	struct vfe680_x1e_bus_addresses addr;
++	unsigned int i;
++	int ret;
++
++	if (!vfe680_x1e_bus_target(vfe))
++		return -ENODEV;
++
++	/* Validate every dynamic address before the first MMIO write. */
++	ret = vfe680_x1e_bus_build_addresses(iovas, &addr);
++	if (ret)
++		return ret;
++
++	for (i = 0; i < ARRAY_SIZE(vfe680_x1e_windows_bus_client_order); i++) {
++		const struct vfe680_x1e_windows_client_contract *c;
++
++		c = vfe680_x1e_bus_contract(vfe680_x1e_windows_bus_client_order[i]);
++		if (!c)
++			return -EINVAL;
++		vfe680_x1e_bus_config_client(vfe, c);
++	}
++
++	/* Exact Windows lifecycle: all resources enabled before initial IOVAs. */
++	vfe680_x1e_bus_set_enabled(vfe, true);
++	vfe680_x1e_bus_write_addresses(vfe, &addr);
++
++	return 0;
++}
++
++static int vfe680_x1e_bus_update(struct vfe_device *vfe,
++				 const struct vfe680_x1e_bus_iovas *iovas)
++{
++	struct vfe680_x1e_bus_addresses addr;
++	int ret;
++
++	if (!vfe680_x1e_bus_target(vfe))
++		return -ENODEV;
++
++	ret = vfe680_x1e_bus_build_addresses(iovas, &addr);
++	if (ret)
++		return ret;
++
++	vfe680_x1e_bus_write_addresses(vfe, &addr);
++	return 0;
++}
++
++static void vfe680_x1e_bus_stop(struct vfe_device *vfe)
++{
++	if (!vfe680_x1e_bus_target(vfe))
++		return;
++
++	vfe680_x1e_bus_set_enabled(vfe, false);
++}
++
++struct vfe680_x1e_bus_static_ops {
++	int (*prepare)(struct vfe_device *vfe,
++		       const struct vfe680_x1e_bus_iovas *iovas);
++	int (*update)(struct vfe_device *vfe,
++		      const struct vfe680_x1e_bus_iovas *iovas);
++	void (*stop)(struct vfe_device *vfe);
++};
++
++/* Private retention only: there is intentionally no runtime reference. */
++static const struct vfe680_x1e_bus_static_ops
++vfe680_x1e_windows_bus_recipe __used = {
++	.prepare = vfe680_x1e_bus_prepare,
++	.update = vfe680_x1e_bus_update,
++	.stop = vfe680_x1e_bus_stop,
++};
++
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+ 	/* VFE680 has no global reset, simply report a completion */

@@ -1,0 +1,53 @@
+﻿SP11 E003h VFE1 dynamic address-writer oracle — 2026-08-29
+
+Same-machine Windows driver:
+qccamisp8380.sys SHA256 64463B4D78894FDEEE01CE87B51E3153662243E3FDF16F87596579B58617C21C
+
+Raw oracle logs:
+E003H_VFE1_DYNAMIC_REQUEST_20260829.log | 126474 | SHA256 AC68F99AD39BCA7042C3F954EB3602040BA861CD0B0D276966D9F591F5305F5C
+E003H_VFE1_LIVE_CORRELATE_20260829.log | 16344 | SHA256 102761BF27D562DC863843F79FC6E5F87B4BE27140BECFC5CC250F613C2B04AE
+E003H_VFE1_ADDR_WRITER_20260829.log | 18160 | SHA256 64E5A4E4F682829497F0868F00D2D0FF76B235F22D22C375184AAF37F2A788BC
+
+Exact dynamic writer:
+qccamisp8380 RVA 0x1dd20, runtime writer body at +0x1dea4 / +0x1dee8.
+PE .pdata confirms function begin RVA 0x1dd20.
+No direct BL/immediate reference exists; it is reached through an indirect callback path.
+
+VFE1 register-offset table values:
+ctx +0x3408 = 0x04  => WM IMAGE_ADDR
+ctx +0x3450 = 0x40  => WM META_ADDR
+
+Writer algorithm at RVA 0x1de60..0x1df00:
+- select per-resource/per-plane base pointer (x11)
+- load per-plane offset at resource + ((selector+6)*4) (w10)
+- load additional image offset at resource + selector*0x30 + 0x38
+- image_iova = base + w10 + image_offset   (w21)
+- meta_iova  = base + w10                  (w23)
+- store image_iova to client + ctx[0x3408] = client + 0x04
+- for metadata-bearing FULL paths, store meta_iova to client + ctx[0x3450] = client + 0x40
+
+Live context/resource proof (ctx=1):
+rid 0x3000 selector 0 => FULL Y, IMAGE_ADDR +0x04, META_ADDR +0x40
+rid 0x3000 selector 1 => FULL C, IMAGE_ADDR +0x04, META_ADDR +0x40
+rid 0x3001 selector 0 => DS4, IMAGE_ADDR +0x04
+rid 0x3002 selector 0 => DS16, IMAGE_ADDR +0x04
+rid 0x301c selector 0 => AEC_BE, IMAGE_ADDR +0x04
+rid 0x3010 selector 0 => RS, IMAGE_ADDR +0x04
+rid 0x300f selector 0 => BHIST, IMAGE_ADDR +0x04
+rid 0x300e selector 0 => AWB_BG, IMAGE_ADDR +0x04
+rid 0x300c selector 0 => TL_BG, IMAGE_ADDR +0x04
+
+Two successive live address sets exactly matched earlier VFE1 MMIO snapshots:
+set A: FULL-Y image/meta 10dea000/10de4000; FULL-C 112d9000/112d6000; DS4 1581c000; DS16 15d44000; AEC_BE 15dbc000; RS 163fc000; BHIST 1649c000; AWB_BG 164c4000; TL_BG 1720c000
+set B: FULL-Y image/meta 11556000/11550000; FULL-C 11a45000/11a42000; DS4 158a0000; DS16 15d50000; AEC_BE 15e5c000; RS 1640c000; BHIST 164a0000; AWB_BG 16618000; TL_BG 17254000
+
+Observed slot progression:
+FULL Y image sequence: 10dea000,11556000,11cc2000,1242e000,12b9a000,13306000,13a72000,141de000 => +0x76c000 each
+FULL C sequence follows the same +0x76c000 slot stride.
+DS4 sequence advances +0x84000; DS16 +0xc000.
+
+Important negative result:
+RVA 0x27920 command-buffer builder is not the dynamic address writer. Its post-start payloads repeat byte-for-byte while live WM addresses change. The earlier next-step wording that targeted 0x27920 for address updates is superseded by this oracle.
+
+Safety state:
+Windows reader StartAsync succeeded. No Linux PIX/RT-CDM enable or sensor transmission was attempted during this oracle work.

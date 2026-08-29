@@ -1,0 +1,23 @@
+E003h 0017 VFE1 BUS unreachable-recipe build
+Date: 2026-08-29 Europe/London
+Runtime authorized: false
+Module loaded: false
+Sensor stream authorized: false
+Frame attempted: false
+Build: make O=<Golden build anchor> ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules
+Build result: PASS
+Compiler warning/error diagnostics: none
+qcom-camss.ko SHA-256: 44b9233d668cad0eb8da3c7805845d006ee3bd000ef17a5e2173fac9846783ef
+vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+0017 patch SHA-256: 55e88685bf71fff5ba74ceb53972b28f71c6c9120659cd756847d8308a7b2d5e
+Windows dynamic-address extractor SHA-256: e8d9e278de52f1e1d363c60621a2cc789dc33f149cb53d222bab0b0092419211
+Windows dynamic-address oracle JSON SHA-256: 925028750e8be60c65a69f24349bb540b0ba0776726f40d59273b0be7f464282
+Linux BUS recipe inspector SHA-256: db54f0feec5948c68cf6450a1d424f1c447fcf8444c203671cf295aabefbd09d
+Linux BUS recipe inspection JSON SHA-256: 92715605c99523366dd619331c6abe9bb09c7e6476bf8921ccb5b18cbaae262e
+Build log SHA-256: 79a56e9ff0ec192016dc2ec0902a3d801d444dc10f73816809a5b1874adedbf2
+Patch forward/reverse reconstruction: PASS
+Checkpatch: zero code/style findings; only missing mail-patch description/Signed-off-by metadata
+Runtime isolation: exactly 3 ABS64 relocations from private __used table to prepare/update/stop; no relocation/reference to the table from runtime code
+Windows IOVAs frozen in Linux source: false
+Windows allocator slot stride frozen in Linux source: false
+Safety: existing X1E VFE1 PIX -EOPNOTSUPP gate remains before stream lock/IRQ/output setup; module not loaded; no video/media nodes; no Linux camera MMIO or sensor transmission occurred.

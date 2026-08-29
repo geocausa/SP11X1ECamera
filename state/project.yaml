@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-08-28
+updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-pix-qc10c-static-contract-built-stream-blocked-golden-unchanged
+status: e003h-vfe1-bus-unreachable-recipe-built-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -372,16 +372,34 @@ e003h:
   windows_vfe1_bus_wm_update_builder_rva: 0x27920
   windows_vfe1_bus_wm_update_builder_hits: 110
   windows_vfe1_request_update_0x1e928_hits: 0
-  windows_vfe1_dynamic_iova_rule: image/meta addresses remain per-buffer; never freeze Windows IOVAs
-  unresolved: recover exact Windows 0x27920 dynamic request-buffer contents/address patch ordering and FULL/DS/stats buffer lifetime before unreachable BUS recipe; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-windows-vfe1-dynamic-request-buffer-oracle
+  windows_vfe1_dynamic_writer_rva: 0x1dd20
+  windows_vfe1_dynamic_image_write_rva: 0x1dea4
+  windows_vfe1_dynamic_meta_write_rva: 0x1dee8
+  windows_vfe1_dynamic_image_addr_offset: 0x04
+  windows_vfe1_dynamic_meta_addr_offset: 0x40
+  windows_vfe1_dynamic_address_order: FULL_Y, FULL_C, DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG
+  windows_vfe1_initial_address_lifecycle: BUS static config -> BUS enable -> initial dynamic addresses -> ISP_START_DONE -> repeated per-frame dynamic addresses
+  windows_vfe1_full_enable_disable_internal_order: WM0 then WM1
+  windows_vfe1_dynamic_iova_rule: image/meta addresses remain per-buffer; never freeze Windows IOVAs or observed Windows ring strides
+  windows_vfe1_dynamic_address_extractor_sha256: e8d9e278de52f1e1d363c60621a2cc789dc33f149cb53d222bab0b0092419211
+  windows_vfe1_dynamic_address_json_sha256: 925028750e8be60c65a69f24349bb540b0ba0776726f40d59273b0be7f464282
+  windows_vfe1_initial_address_order_raw_sha256: 3a2dd357e994f8f5d52668f7c914ad27a2dda6fdee8804e55daa3fcde1c5bed6
+  linux_vfe1_bus_0017_patch_sha256: 55e88685bf71fff5ba74ceb53972b28f71c6c9120659cd756847d8308a7b2d5e
+  linux_vfe1_bus_0017_inspector_sha256: db54f0feec5948c68cf6450a1d424f1c447fcf8444c203671cf295aabefbd09d
+  linux_vfe1_bus_0017_json_sha256: 92715605c99523366dd619331c6abe9bb09c7e6476bf8921ccb5b18cbaae262e
+  linux_vfe1_bus_0017_module_sha256: 44b9233d668cad0eb8da3c7805845d006ee3bd000ef17a5e2173fac9846783ef
+  linux_vfe1_bus_0017_runtime_reachable: false
+  linux_vfe1_bus_0017_address_source: caller-supplied Linux dma_addr_t only
+  unresolved: define and statically prove front PIX buffer/completion ownership across one composite QC10C VIDEO surface plus independent DS4/DS16/statistics allocations, then combine the unreachable BUS and RT-CDM/IQ recipes without making either reachable; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-linux-vfe1-pix-buffer-completion-ownership-static
 next_action: >-
-  Keep IMX681 Linux transmission blocked. The three-session Windows oracle now closes session-static BUS config/enable/disable
-  ordering before/after ISP_START_DONE and confirms that writable BUS configuration is stable while image/meta IOVAs are dynamic.
-  Reboot one-shot to same-machine Windows and capture the active qccamisp8380+0x27920 command-buffer descriptors plus pointed
-  request-buffer contents around pre-start and per-frame updates. Decode exact FULL Y/C, DS4/DS16 and statistics address patch
-  ordering/lifetime without freezing any Windows IOVA. Then return to Golden Linux and build only an unreachable BUS recipe; no
-  RT-CDM arm/submission, VFE1 PIX hardware enable, sensor transmission or front frame yet.
+  Keep IMX681 Linux transmission blocked. Treat the Windows dynamic-address path and unreachable 0017 BUS recipe as closed:
+  qccamisp8380 RVA 0x1dd20 writes caller/request-derived IMAGE_ADDR +0x04 and FULL META_ADDR +0x40 in the exact nine-client order,
+  with the first set after BUS enable and before ISP_START_DONE and later sets per frame. Do not revisit 0x27920 as the address writer,
+  and never freeze Windows IOVAs or observed ring strides. Next, statically define front PIX ownership so one userspace QC10C VIDEO
+  buffer maps to FULL WM0/WM1 while DS4/DS16 and statistics use separate internal allocations/completions. Combine that ownership model
+  only with unreachable 0017 BUS address programming and unreachable 0015 RT-CDM/IQ execution. No module load, RT-CDM submission,
+  VFE1 PIX hardware enable, sensor transmission or front frame until a separate bounded runtime gate is explicitly prepared.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
