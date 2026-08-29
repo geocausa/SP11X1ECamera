@@ -1,0 +1,41 @@
+{
+  "accepted": true,
+  "clear_behavior": "masked per-FIFO status -> CLEAR (+0x34/+0x134/+0x234/+0x334), then 1 -> CLEAR_CMD (+0x38/+0x138/+0x238/+0x338)",
+  "clear_write_rvas": [
+    "0x29228",
+    "0x29230",
+    "0x29238",
+    "0x29240",
+    "0x29248",
+    "0x29250",
+    "0x29258",
+    "0x29260"
+  ],
+  "fifo_status_reads": [
+    "FIFO0 +0x44",
+    "FIFO1 +0x144",
+    "FIFO2 +0x244",
+    "FIFO3 +0x344"
+  ],
+  "handler": {
+    "mapped_base_object_field": "0x48",
+    "rva_end_exclusive": "0x2930c",
+    "rva_start": "0x29120"
+  },
+  "irq_context_status_0x2c_read_in_handler": false,
+  "linux_consequence": "Do not gate RT-CDM1 FIFO0 ISR on IRQ_CONTEXT_STATUS bit0. Read IRQ0_STATUS directly, derive handled bits with 0x00070007, and clear only the masked known status. Unknown/error raw bits may still fail closed after the known status is acknowledged.",
+  "schema": "sp11-e003h-windows-rtcdm1-irq-handler-v1",
+  "source": {
+    "bytes": 376560,
+    "driver": "qccamisp8380.sys",
+    "image_base": "0x140000000",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "status_mask": "0x00070007",
+  "status_mask_rvas": [
+    "0x291a0",
+    "0x291b0",
+    "0x291c0",
+    "0x291d8"
+  ]
+}

@@ -1,0 +1,48 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5106,34 +5106,29 @@
+ {
+ 	struct camss *camss = data;
+ 	struct camss_rtcdm *rt = &camss->rtcdm1;
+-	u32 context;
++	u32 clear_status;
+ 	u32 status;
+ 	u32 user_data;
+ 
+ 	if (irq != rt->irq || !READ_ONCE(rt->irq_armed))
+ 		return IRQ_NONE;
+ 
+-	context = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ_CONTEXT_STATUS);
+-	if (!(context & BIT(0)))
+-		return IRQ_NONE;
+-
+-	/* The accepted front path is FIFO0-only. Fail closed on any other FIFO. */
+-	if (context & ~BIT(0)) {
+-		WRITE_ONCE(rt->faulted, true);
+-		disable_irq_nosync(rt->irq);
+-		WRITE_ONCE(rt->irq_armed, false);
+-		return IRQ_HANDLED;
+-	}
+-
++	/*
++	 * Exact same-machine Windows RT-CDM handler RVA 0x29120 reads the
++	 * per-FIFO status directly. It does not read IRQ_CONTEXT_STATUS.
++	 */
+ 	status = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ0_STATUS);
+ 	if (!status)
+ 		return IRQ_NONE;
+ 
+ 	user_data = readl_relaxed(rt->base + CAMSS_RTCDM_USR_DATA);
+-	writel_relaxed(status, rt->base + CAMSS_RTCDM_IRQ0_CLEAR);
+-	writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ0_CLEAR_CMD);
++	clear_status = status & CAMSS_RTCDM_IRQ_KNOWN;
++	if (clear_status) {
++		writel_relaxed(clear_status, rt->base + CAMSS_RTCDM_IRQ0_CLEAR);
++		writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ0_CLEAR_CMD);
++	}
+ 
+-	WRITE_ONCE(rt->last_irq_context, context);
++	WRITE_ONCE(rt->last_irq_context, 0);
+ 	WRITE_ONCE(rt->last_irq_status, status);
+ 	WRITE_ONCE(rt->last_user_data, user_data);
+ 
