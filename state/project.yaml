@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-first-pix-epoch0-pacing-closed-callable-runner-static-next-golden-safe
+status: e003h-priming-full-batch-closed-callable-runner-static-next-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -680,11 +680,25 @@ e003h:
   windows_vfe1_replay_epoch0_pacing_oracle_sha256: 73899c498339c10c3d919fa563c76e3d30dc9917dd09b0e179fdbb380303c0c8
   windows_vfe1_first_pix_pacing: sensor-on -> Epoch0#0 -> nine-client BUS retarget -> replay2/request2 -> VIDEO -> Epoch0#1 -> nine-client BUS retarget -> replay3/request3
   linux_front_first_pix_bounded_prefix: sensor-on -> Epoch0#0 -> BUS slot1 -> replay2/request2 -> VIDEO(slot0) -> stop
+  linux_front_0032_patch_sha256: fc8752b0b0f8e681340d0577dea23d029cee550c73f13204e660e07a4d694b35
+  linux_front_0032_source_sha256: 1111d3e88b88729a8851a60f31ef1bbc877dc127ccb9d4cb998311f5ba7834f5
+  linux_front_0032_object_sha256: 10ffb2f154459f2cb4d1c35bdbaf80e5ea32e563ed68b693e45bb908fd33caaa
+  linux_front_0032_module_sha256: a5572a5211807ba5338af27e4a558d5f194021f710930fa9a2c040bf5457522d
+  linux_front_0032_verifier_sha256: 064f63f974c4b5834f6f95a55b3371253fef0236400dbd503e6ca1468667e477
+  linux_front_0032_proof_json_sha256: fde1a5891b3d5aed069d5676bf19e09af0dcf0a9bf953223083d694c94440b41
+  linux_front_0032_inspector_sha256: 4245eea85666cb1c6742ab660d78f85a61b8e342cf41253aede70a9d483f36d4
+  linux_front_0032_inspection_json_sha256: 8d154bce52dbc065e9ba16b01f2816744302dc72842d4b3cd27541d8f43f472b
+  linux_front_0032_priming_bl_counts: 4,5,5,5
+  linux_front_0032_companion_bl_windows_byte_exact: true
+  linux_front_0032_main_bl_reuses_linux_repatched_priming: true
+  linux_front_0032_fifo_length_rule: byte_count - 1 for every BL
+  linux_front_0032_callable_runner_present: false
+  linux_front_0032_runtime_reachable: false
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; callable bounded PIX execution remains unbuilt/uninspected
 next_experiment: E003h-bounded-vfe1-pix-callable-runner-static
 next_action: >-
-  Do not repeat RDI or Windows startup/pacing captures. Build the callable-but-unarmed PIX runner only for the now-proven first-frame prefix: exact 0031 startup,
-  sensor-on, Epoch0#0, complete BUS retarget to slot1, replay2/request2, first VIDEO/slot0, then immediate bounded stop/rollback. Do not pre-submit replay3.
+  Do not repeat RDI or Windows startup/pacing captures. Build the callable-but-unarmed PIX runner on top of 0032 complete priming batches. Follow exact 0031 startup,
+  sensor-on, Epoch0#0, complete BUS retarget to slot1, complete replay2/request2 batch, first VIDEO/slot0, then immediate bounded stop/rollback. Do not pre-submit replay3.
   Keep the runner unreferenced from probe/V4L2 and do not arm hardware until source/object call-graph inspection is clean. Golden remains saved/default.
 
 handoff:

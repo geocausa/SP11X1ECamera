@@ -1,0 +1,238 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -6676,14 +6676,135 @@
+  * E003h parsed PIX capsule -> Linux-owned DMA materialization, retained and
+  * unreachable. This composes only 0019/0021 startup/priming materialization and
+  * 0025 steady Epoch0 materialization. It performs no MMIO or FIFO submission.
++ *
++ * Selector-2 priming is not a one-BL replay of the main corpus packet. The
++ * same-machine Windows queue capture proves four complete priming batches:
++ * packet0 has four BLs, while packets1..3 have five. Keep their small companion
++ * command lists in a separate Linux-owned coherent arena; BL1 always points at
++ * the already-materialized priming main packet with Linux-patched DMI IOVAs.
+  */
++#define CAMSS_X1E_PIX_PRIMING_PACKET_COUNT	4
++#define CAMSS_X1E_PIX_PRIMING_MAX_BL_COUNT	5
++#define CAMSS_X1E_PIX_PRIMING_COMPANION_SIZE	SZ_4K
++#define CAMSS_X1E_PIX_PRIMING_PACKET_STRIDE	0x100
++
++struct camss_x1e_pix_prime {
++	void *cpu;
++	dma_addr_t dma;
++	u32 bl_dma[CAMSS_X1E_PIX_PRIMING_PACKET_COUNT]
++		  [CAMSS_X1E_PIX_PRIMING_MAX_BL_COUNT];
++	u16 bl_len[CAMSS_X1E_PIX_PRIMING_PACKET_COUNT]
++		  [CAMSS_X1E_PIX_PRIMING_MAX_BL_COUNT];
++	u8 bl_count[CAMSS_X1E_PIX_PRIMING_PACKET_COUNT];
++	bool materialized;
++};
++
+ struct camss_x1e_pix_capsule_materialized {
+ 	struct camss_rtcdm1_corpus startup;
+ 	struct camss_rtcdm1_corpus priming;
++	struct camss_x1e_pix_prime prime;
+ 	struct camss_x1e_epoch0_materialized steady;
+ 	bool materialized;
+ };
+ 
++static void camss_x1e_pix_prime_write(u8 *dst, const u32 *words,
++				      unsigned int count)
++{
++	unsigned int i;
++
++	for (i = 0; i < count; i++)
++		put_unaligned_le32(words[i], dst + i * sizeof(u32));
++}
++
++static void camss_x1e_pix_prime_release(struct camss *camss,
++					struct camss_x1e_pix_prime *prime)
++{
++	if (!camss || !prime)
++		return;
++	if (prime->cpu) {
++		memzero_explicit(prime->cpu, CAMSS_X1E_PIX_PRIMING_COMPANION_SIZE);
++		dma_free_coherent(camss->dev, CAMSS_X1E_PIX_PRIMING_COMPANION_SIZE,
++				  prime->cpu, prime->dma);
++	}
++	memset(prime, 0, sizeof(*prime));
++}
++
++static int camss_x1e_pix_prime_materialize(struct camss *camss,
++					   struct camss_x1e_pix_prime *out,
++					   const struct camss_rtcdm1_corpus *main)
++{
++	static const u32 change_vfe1[] = { 0x0800f000 };
++	static const u32 change_companion[] = { 0x08057000 };
++	static const u32 companion_common[] = {
++		0x03000002, 0x0000035c, 0x0eff0000, 0x086f0000,
++	};
++	static const u32 companion_packet0[] = {
++		0x03000001, 0x00000330, 0x00000000,
++		0x03000002, 0x0000037c, 0x00000001, 0x00000000,
++		0x03000002, 0x0000035c, 0x0eff0000, 0x086f0000,
++		0x03000002, 0x00000384, 0x0000001f, 0x08700f00,
++	};
++	static const u32 irq_prefix[] = {
++		0x04000001, 0x00000018, 0x01f501f5, 0x06000000,
++	};
++	u8 *cpu;
++	unsigned int packet;
++	int ret;
++
++	if (!camss || !out || !main || !main->materialized || out->materialized)
++		return -EINVAL;
++
++	ret = camss_rtcdm1_corpus_alloc(camss->dev,
++					CAMSS_X1E_PIX_PRIMING_COMPANION_SIZE,
++					 &out->cpu, &out->dma);
++	if (ret)
++		return ret;
++	cpu = out->cpu;
++
++	for (packet = 0; packet < CAMSS_X1E_PIX_PRIMING_PACKET_COUNT; packet++) {
++		u32 base = packet * CAMSS_X1E_PIX_PRIMING_PACKET_STRIDE;
++		u8 *bl0 = cpu + base;
++		u8 *bl2 = cpu + base + 0x40;
++		u8 *bl3 = cpu + base + 0x80;
++		u8 *bl4 = cpu + base + 0xc0;
++		u64 dma = (u64)out->dma + base;
++
++		camss_x1e_pix_prime_write(bl0, change_vfe1,
++					  ARRAY_SIZE(change_vfe1));
++		camss_x1e_pix_prime_write(bl2, change_companion,
++					  ARRAY_SIZE(change_companion));
++		out->bl_dma[packet][0] = (u32)dma;
++		out->bl_len[packet][0] = sizeof(change_vfe1);
++		out->bl_dma[packet][1] = main->packet_dma[packet];
++		out->bl_len[packet][1] = main->packet_len[packet];
++		out->bl_dma[packet][2] = (u32)dma + 0x40;
++		out->bl_len[packet][2] = sizeof(change_companion);
++
++		if (!packet) {
++			camss_x1e_pix_prime_write(bl3, companion_packet0,
++						  ARRAY_SIZE(companion_packet0));
++			out->bl_dma[packet][3] = (u32)dma + 0x80;
++			out->bl_len[packet][3] = sizeof(companion_packet0);
++			out->bl_count[packet] = 4;
++			continue;
++		}
++
++		camss_x1e_pix_prime_write(bl3, companion_common,
++					  ARRAY_SIZE(companion_common));
++		camss_x1e_pix_prime_write(bl4, irq_prefix,
++					  ARRAY_SIZE(irq_prefix));
++		put_unaligned_le32(packet, bl4 + sizeof(irq_prefix));
++		out->bl_dma[packet][3] = (u32)dma + 0x80;
++		out->bl_len[packet][3] = sizeof(companion_common);
++		out->bl_dma[packet][4] = (u32)dma + 0xc0;
++		out->bl_len[packet][4] = sizeof(irq_prefix) + sizeof(u32);
++		out->bl_count[packet] = 5;
++	}
++
++	out->materialized = true;
++	return 0;
++}
++
+ static void camss_x1e_pix_capsule_materialized_release(
+ 	struct camss *camss, struct camss_x1e_pix_capsule_materialized *out)
+ {
+@@ -6691,6 +6812,7 @@
+ 		return;
+ 
+ 	camss_x1e_epoch0_release(camss, &out->steady);
++	camss_x1e_pix_prime_release(camss, &out->prime);
+ 	camss_rtcdm1_corpus_release(camss, &out->priming);
+ 	camss_rtcdm1_corpus_release(camss, &out->startup);
+ 	memset(out, 0, sizeof(*out));
+@@ -6704,7 +6826,7 @@
+ 
+ 	if (!camss || !out || !input || out->materialized ||
+ 	    out->startup.materialized || out->priming.materialized ||
+-	    out->steady.materialized)
++	    out->prime.materialized || out->steady.materialized)
+ 		return -EINVAL;
+ 
+ 	ret = camss_rtcdm1_corpus_materialize(camss, &out->startup,
+@@ -6717,6 +6839,11 @@
+ 	if (ret)
+ 		goto err_release;
+ 
++	ret = camss_x1e_pix_prime_materialize(camss, &out->prime,
++					      &out->priming);
++	if (ret)
++		goto err_release;
++
+ 	ret = camss_x1e_epoch0_materialize(camss, &out->steady, &input->steady);
+ 	if (ret)
+ 		goto err_release;
+@@ -6788,9 +6915,9 @@
+ 	return ret;
+ }
+ 
+-static int camss_x1e_pix_rtcdm_submit_corpus_packet(
+-	struct camss *camss, const struct camss_rtcdm1_corpus *corpus,
+-	unsigned int packet)
++static int camss_x1e_pix_submit_startup(struct camss *camss,
++					const struct camss_rtcdm1_corpus *corpus,
++					unsigned int packet)
+ {
+ 	if (!corpus || !corpus->materialized ||
+ 	    packet >= CAMSS_RTCDM1_CORPUS_PACKET_COUNT ||
+@@ -6801,6 +6928,31 @@
+ 						  corpus->packet_len[packet] - 1);
+ }
+ 
++static int camss_x1e_pix_submit_prime(struct camss *camss,
++				      const struct camss_x1e_pix_prime *prime,
++				      unsigned int packet)
++{
++	unsigned int i;
++	int ret;
++
++	if (!prime || !prime->materialized ||
++	    packet >= CAMSS_X1E_PIX_PRIMING_PACKET_COUNT ||
++	    !prime->bl_count[packet])
++		return -EINVAL;
++
++	for (i = 0; i < prime->bl_count[packet]; i++) {
++		if (!prime->bl_dma[packet][i] || !prime->bl_len[packet][i])
++			return -EINVAL;
++		ret = camss_rtcdm1_windows_fifo0_commit(camss,
++							prime->bl_dma[packet][i],
++							prime->bl_len[packet][i] - 1);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int camss_x1e_pix_rtcdm_submit_epoch0_batch(
+ 	struct camss *camss, const struct camss_x1e_epoch0_materialized *steady)
+ {
+@@ -6830,9 +6982,12 @@
+ 
+ struct camss_x1e_pix_rtcdm_static_ops {
+ 	int (*open_start)(struct camss *camss);
+-	int (*submit_corpus_packet)(struct camss *camss,
+-				    const struct camss_rtcdm1_corpus *corpus,
+-				    unsigned int packet);
++	int (*submit_startup)(struct camss *camss,
++			      const struct camss_rtcdm1_corpus *corpus,
++			      unsigned int packet);
++	int (*submit_prime)(struct camss *camss,
++			    const struct camss_x1e_pix_prime *prime,
++			    unsigned int packet);
+ 	int (*submit_epoch0_batch)(struct camss *camss,
+ 				   const struct camss_x1e_epoch0_materialized *steady);
+ 	void (*stop_close)(struct camss *camss);
+@@ -6842,7 +6997,8 @@
+ static const struct camss_x1e_pix_rtcdm_static_ops
+ camss_x1e_pix_rtcdm_recipe __used = {
+ 	.open_start = camss_x1e_pix_rtcdm_open_start,
+-	.submit_corpus_packet = camss_x1e_pix_rtcdm_submit_corpus_packet,
++	.submit_startup = camss_x1e_pix_submit_startup,
++	.submit_prime = camss_x1e_pix_submit_prime,
+ 	.submit_epoch0_batch = camss_x1e_pix_rtcdm_submit_epoch0_batch,
+ 	.stop_close = camss_x1e_pix_rtcdm_stop_close,
+ };

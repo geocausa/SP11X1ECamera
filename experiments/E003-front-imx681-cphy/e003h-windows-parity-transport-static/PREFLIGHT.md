@@ -51,6 +51,8 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 24. Post-sensor first-frame pacing is exact: Epoch0 #0 -> complete nine-client BUS retarget -> replay2/request2 -> VIDEO, with replay3 deferred until Epoch0 #1 after another BUS retarget. A bounded first-PIX proof must not pre-submit replay3 before the first VIDEO.
 25. Two-cycle Windows cross-order now proves replay0/1 precede CSID1 start and replay2/3 follow MIPI completion plus sensor-on. The only remaining start-order ambiguity is the mutual interleave of replay0/1 with the separately proven packet0/1 -> BUS -> packet2/3 prefix before CSID1 start. PIX remains unauthorized until that final relation is closed.
 
+26. Static `0032` closes selector-2 priming batch granularity: replay0..3 are complete `4/5/5/5`-BL batches. Linux companion BLs are byte-proven against Windows; BL1 reuses the Linux-repatched priming main and every FIFO length is `byte_count - 1`. The retained recipe has no callable runner or runtime reference.
+
 ## Policy consequence
 
 An RDI frame can be useful later as a diagnostic transport proof, but **must never be called Windows parity or accepted as the production endpoint**. E003h remains static until the IPP/VFE1 pixel pipeline and lifecycle can be represented without inventing behavior.
