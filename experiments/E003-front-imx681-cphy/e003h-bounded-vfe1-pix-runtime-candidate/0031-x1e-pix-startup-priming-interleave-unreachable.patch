@@ -1,0 +1,81 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -6857,13 +6857,12 @@
+  * The generic VFE1 PIX s_stream path remains forbidden because it still maps
+  * PIX to the RDI-style WM27 path; VFE1 activation is RT-CDM + BUS owned.
+  *
+- * Two ordering gaps remain deliberately explicit: selector-2 replay0/1 are
+- * known only to precede ISP_START_DONE, and replay2/3 are known only to follow
+- * it.  Their exact placement against CSID1 start and CSIPHY2/sensor start is not
+- * yet mechanically cross-ordered.  Consequently this contract cannot authorize
+- * a callable hardware runner.
++ * Same-machine cross-order now places all four selector-2 priming replays:
++ * packet0 -> replay0 -> packet1 -> BUS prepare -> replay1 -> packet2/3 ->
++ * CSID1 -> ISP done -> CSIPHY2 -> sensor -> replay2 -> replay3 -> steady.
++ * This contract remains data-only; callable execution is still a later gate.
+  */
+-#define CAMSS_X1E_PIX_HW_HOST_STAGE_COUNT	10
++#define CAMSS_X1E_PIX_HW_HOST_STAGE_COUNT	16
+ #define CAMSS_X1E_PIX_HW_STOP_STAGE_COUNT	5
+ #define CAMSS_X1E_PIX_HW_ROLLBACK_STAGE_COUNT	7
+ 
+@@ -6872,14 +6871,19 @@
+ 	CAMSS_X1E_PIX_HW_RTCDM_OPEN_START,
+ 	CAMSS_X1E_PIX_HW_IFE1_RESOURCE_HELD,
+ 	CAMSS_X1E_PIX_HW_STARTUP_PACKET0,
++	CAMSS_X1E_PIX_HW_PRIMING_REPLAY0,
+ 	CAMSS_X1E_PIX_HW_STARTUP_PACKET1,
+ 	CAMSS_X1E_PIX_HW_BUS_PREPARE,
++	CAMSS_X1E_PIX_HW_PRIMING_REPLAY1,
+ 	CAMSS_X1E_PIX_HW_STARTUP_PACKET2,
+ 	CAMSS_X1E_PIX_HW_STARTUP_PACKET3,
+ 	CAMSS_X1E_PIX_HW_CSID1_IPP_START,
+ 	CAMSS_X1E_PIX_HW_ISP_START_DONE,
+ 	CAMSS_X1E_PIX_HW_CSIPHY2_START,
+ 	CAMSS_X1E_PIX_HW_SENSOR_START,
++	CAMSS_X1E_PIX_HW_PRIMING_REPLAY2,
++	CAMSS_X1E_PIX_HW_PRIMING_REPLAY3,
++	CAMSS_X1E_PIX_HW_STEADY_READY,
+ 	CAMSS_X1E_PIX_HW_EPOCH0_POLL,
+ 	CAMSS_X1E_PIX_HW_BUS_UPDATE,
+ 	CAMSS_X1E_PIX_HW_STEADY_CDM,
+@@ -6921,6 +6925,7 @@
+ 	bool replay23_after_isp_done;
+ 	bool replay01_vs_csid_start_closed;
+ 	bool replay23_vs_mipi_sensor_start_closed;
++	bool startup_priming_interleave_closed;
+ 	bool callable_runner_authorized;
+ };
+ 
+@@ -6930,13 +6935,19 @@
+ 		CAMSS_X1E_PIX_HW_RTCDM_OPEN_START,
+ 		CAMSS_X1E_PIX_HW_IFE1_RESOURCE_HELD,
+ 		CAMSS_X1E_PIX_HW_STARTUP_PACKET0,
++		CAMSS_X1E_PIX_HW_PRIMING_REPLAY0,
+ 		CAMSS_X1E_PIX_HW_STARTUP_PACKET1,
+ 		CAMSS_X1E_PIX_HW_BUS_PREPARE,
++		CAMSS_X1E_PIX_HW_PRIMING_REPLAY1,
+ 		CAMSS_X1E_PIX_HW_STARTUP_PACKET2,
+ 		CAMSS_X1E_PIX_HW_STARTUP_PACKET3,
+ 		CAMSS_X1E_PIX_HW_CSID1_IPP_START,
+ 		CAMSS_X1E_PIX_HW_ISP_START_DONE,
+ 		CAMSS_X1E_PIX_HW_CSIPHY2_START,
++		CAMSS_X1E_PIX_HW_SENSOR_START,
++		CAMSS_X1E_PIX_HW_PRIMING_REPLAY2,
++		CAMSS_X1E_PIX_HW_PRIMING_REPLAY3,
++		CAMSS_X1E_PIX_HW_STEADY_READY,
+ 	},
+ 	/* One Windows-observed valid serialization of the unordered MIPI/sensor tail. */
+ 	.stop_order = {
+@@ -6968,8 +6979,9 @@
+ 	.sensor_vs_csiphy_stop_order_required = false,
+ 	.replay01_before_isp_done = true,
+ 	.replay23_after_isp_done = true,
+-	.replay01_vs_csid_start_closed = false,
+-	.replay23_vs_mipi_sensor_start_closed = false,
++	.replay01_vs_csid_start_closed = true,
++	.replay23_vs_mipi_sensor_start_closed = true,
++	.startup_priming_interleave_closed = true,
+ 	.callable_runner_authorized = false,
+ };
+ 

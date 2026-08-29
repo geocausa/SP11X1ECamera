@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-priming-csid-mipi-crossorder-closed-final-precsid-interleave-next-golden-safe
+status: e003h-startup-priming-interleave-closed-pix-runner-static-next-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -658,12 +658,29 @@ e003h:
   windows_vfe1_priming_mipi_crossorder_total: replay0 -> replay1 -> CSID1 start -> ISP_START_DONE -> MIPI start enter -> MIPI start done -> sensor-on -> replay2 -> replay3 -> first steady 0x958
   windows_vfe1_replay01_vs_csid_start_closed: true
   windows_vfe1_replay23_vs_mipi_sensor_start_closed: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; replay0/1 are now before CSID1 and replay2/3 after sensor-on, but replay0/1 versus the separately proven packet0 -> packet1 -> BUS -> packet2 -> packet3 prefix remains unclosed; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-windows-startup-priming-interleave-oracle
+  windows_vfe1_startup_priming_interleave_raw_sha256: cae67c10421246f86a469d95c73cdfa3684c1004827847fe922ab59c2d9273ed
+  windows_vfe1_startup_priming_interleave_raw_bytes: 9624
+  windows_vfe1_startup_priming_interleave_extractor_sha256: d75dd99d654036708d47d662c257374e686a718e57a2d0e097a9d8f97dac654b
+  windows_vfe1_startup_priming_interleave_oracle_sha256: 849b6cc2d9e49c3cf912e1b1c6041b68cc1a76c8ba05496e278dc763f1a24032
+  windows_vfe1_startup_priming_exact_pre_csid: startup0 -> priming0 -> startup1 -> BUS config/enable/initial addresses -> priming1 -> startup2 -> startup3 -> CSID1 start
+  windows_vfe1_startup_priming_full_start: startup0 -> priming0 -> startup1 -> BUS -> priming1 -> startup2 -> startup3 -> CSID1 -> ISP_START_DONE -> CSIPHY2/MIPI -> sensor-on -> priming2 -> priming3 -> steady
+  linux_front_0031_patch_sha256: e19cdd47ce6d0fd307d8c022b65ce80fe31bfe83b7907b6a43b1a4ca1bf8066d
+  linux_front_0031_source_sha256: 1902c56b0258c789c17260163ad0e46d9cf52df7cdbdbfbd677e53a8cafb5e68
+  linux_front_0031_object_sha256: 809593d8aa1a8ff13527c72c056649b86fdf052d35fc71a09a9ad5a6a95c4f0d
+  linux_front_0031_module_sha256: cb6f4de7398743dfaac076c8bbdd25a42d5571e7b3f4940e24cbe96bb1881225
+  linux_front_0031_inspector_sha256: fc3c83e0a0abf8ecc7f11f668d6bc227fb726a7eff1690221968cc4e5e48434a
+  linux_front_0031_inspection_json_sha256: ed6cc17f5ba69397e1cb2ba45a4ab0a05f610414622916276798c2f726d81b5f
+  linux_front_0031_host_stage_count: 16
+  linux_front_0031_startup_priming_interleave_closed: true
+  linux_front_0031_callable_runner_authorized: false
+  linux_front_0031_runtime_reachable: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; callable bounded PIX execution remains unbuilt/uninspected
+next_experiment: E003h-bounded-vfe1-pix-callable-runner-static
 next_action: >-
-  Do not repeat RDI or the completed priming/MIPI capture. Run one narrow same-machine Windows start oracle combining packet0..3, BUS-prepare boundary,
-  replay0/1 and CSID1 start. Close their mutual pre-CSID interleave, then refine the retained 0030 order and inspect a callable-but-unarmed PIX runner.
-  Do not arm Linux PIX before that relation closes. Golden remains saved/default and empty-next-entry.
+  Do not repeat RDI or Windows startup ordering captures. The exact 16-stage startup/priming interleave is closed in 0031. Next build a callable-but-unarmed
+  PIX runner that consumes the parsed/materialized capsule, reuses existing pipeline-PM/VFE1/CSID1/CSIPHY2 power ownership, submits only the proven RT-CDM
+  and BUS operations, uses bounded raw Epoch0/VIDEO waits, and unwinds by the recorded rollback order. Keep the runner unreferenced from probe/V4L2 and do not
+  arm hardware until source/object inspection proves every callsite is oracle-backed. Golden remains saved/default with empty next_entry.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
