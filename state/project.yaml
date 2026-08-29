@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-pix-rtcdm-submit-primitives-built-unreachable-golden-safe
+status: e003h-pix-hardware-order-contract-built-unreachable-two-priming-placement-gaps-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -635,13 +635,27 @@ e003h:
   linux_front_0029_software_close_rtcdm_mmio: false
   linux_front_0029_recipe_runtime_references: 0
   linux_front_0029_runtime_reachable: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-bounded-vfe1-pix-hardware-order-contract-static
+  linux_front_0030_hw_order_patch_sha256: 494256d23ec7cfa4dee4076e4aeffffa765168d6f9dc5e649d2242a27e0cc894
+  linux_front_0030_hw_order_source_sha256: 79f488a794036c8d4e706d47334d6dcf0b991e4280cc78314501e848ac661ca8
+  linux_front_0030_hw_order_object_sha256: 0ec5f0501cc31662d461b4f28c45784742633546c337110198052d0effd45cca
+  linux_front_0030_hw_order_module_sha256: 235b334f1245f0395a6c3ada3a8c6cd152c4e26d8bf7b30870e9a75b1029f16a
+  linux_front_0030_hw_order_inspector_sha256: 6ae629cb76a440221bd99db930a317ec53c104f2690272d48f78f8048f44909b
+  linux_front_0030_hw_order_inspection_json_sha256: e1237d8c470f3d3ab3ecc025230edfa83fdd1cd8343d0ebcb991ac43acfa36db
+  linux_front_0030_power_owner: v4l2_pipeline_pm_get/put; no duplicate PIX-runner power refs
+  linux_front_0030_generic_vfe1_pix_s_stream_allowed: false
+  linux_front_0030_steady_order: Epoch0 raw poll -> BUS IOVA update -> five-BL RT-CDM submit -> VIDEO raw poll/retirement
+  linux_front_0030_stop_prefix: CSID1 IPP stop -> VFE1 BUS stop -> RT-CDM mask/close
+  linux_front_0030_rollback_order: sensor -> CSIPHY2 -> CSID1 -> BUS -> RT-CDM -> capsule DMA -> pipeline PM
+  linux_front_0030_replay01_vs_csid_start_closed: false
+  linux_front_0030_replay23_vs_mipi_sensor_start_closed: false
+  linux_front_0030_callable_runner_authorized: false
+  linux_front_0030_runtime_reachable: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; exact selector-2 replay0/1 placement versus CSID1 start and replay2/3 placement versus CSIPHY2/sensor start remain unclosed; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-windows-priming-mipi-crossorder-oracle
 next_action: >-
-  Do not repeat the successful RDI frame. 0029 now provides retained/unreachable RT-CDM open/start, byte_count-minus-one startup/priming packet submit,
-  five-BL steady submit, Windows mask-only stop and Linux software-only IRQ close primitives. Next close the cross-file hardware-order contract before
-  writing a callable runner: identify the exact existing VFE1 resource-power, CSID1 IPP and CSIPHY2 operations that can be reused, and define rollback
-  ownership at every stage. No PIX activation is authorized by 0029. Golden remains saved/default and untouched.
+  Do not repeat the successful RDI frame. 0030 now fixes Linux power ownership, host prefix, steady Epoch0/BUS/CDM/VIDEO order, stop prefix and reverse rollback
+  while keeping the runner unreachable. Next use a focused same-machine Windows cross-order oracle to place selector-2 replay0/1 relative to CSID1 start and
+  replay2/3 relative to MIPI/CSIPHY and sensor-on. Do not create or arm the callable Linux PIX runner until both relations close. Golden remains saved/default.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

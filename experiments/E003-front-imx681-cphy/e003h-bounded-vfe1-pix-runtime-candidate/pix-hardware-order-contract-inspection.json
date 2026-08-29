@@ -1,0 +1,21 @@
+{
+  "accepted": true,
+  "callable_runner_authorized": false,
+  "contract_relocation_references": 0,
+  "contract_symbol_retained": true,
+  "csid1": "reuse existing subdev power; IPP start uses existing X1E CSID680 configure_stream path",
+  "csiphy2": "reuse existing subdev power + stream lane enable/disable",
+  "object_sha256": "0ec5f0501cc31662d461b4f28c45784742633546c337110198052d0effd45cca",
+  "open_gaps": [
+    "replay0/1 exact placement versus CSID1 start",
+    "replay2/3 exact placement versus CSIPHY2/sensor start"
+  ],
+  "power_boundary": "reuse video_prepare_streaming v4l2_pipeline_pm_get/put; do not duplicate resource refs in PIX runner",
+  "rollback": "sensor -> CSIPHY2 -> CSID1 -> BUS -> RT-CDM -> capsule DMA -> pipeline PM",
+  "runtime_reachable": false,
+  "schema": "sp11-e003h-pix-hardware-order-contract-v1",
+  "source_sha256": "79f488a794036c8d4e706d47334d6dcf0b991e4280cc78314501e848ac661ca8",
+  "steady_order": "Epoch0 raw poll -> BUS IOVA update -> five-BL RT-CDM submit -> VIDEO raw poll/retirement",
+  "stop_order": "CSID1 IPP stop -> VFE1 BUS stop -> RT-CDM mask/close -> one observed-valid CSIPHY2/sensor tail",
+  "vfe1": "reuse vfe_get/put for resource power only; generic VFE1 PIX s_stream stays fail-closed"
+}
