@@ -401,3 +401,13 @@ The first Windows-matched PIX runtime input package is now deterministic without
 The capsule binary remains `.gitignore`d and local. Git stores only schema, deterministic builder, hash-only manifest and fail-closed validator. The validator enforces magic/version/length, the exact 36-section type census, descriptor/hash identity, non-overlap, zero padding/header reserve and named-module masks. This closes the input-container boundary only; it does not submit RT-CDM or enable VFE1 PIX.
 
 **Next:** implement and inspect an unreachable bounded PIX runner consuming the local capsule into Linux-owned DMA. Compose only the already-proven RT-CDM start/priming, VFE1 BUS, CSID1 IPP and raw Epoch0/VIDEO polling/clear contracts. Do not arm the disposable PIX run until the runner has no unproven MMIO/FIFO/teardown behavior.
+
+## 2026-08-29 — PIX capsule parser/materialization and raw polling compiled unreachable (`0026`–`0028`)
+
+`0026-x1e-vfe1-raw-irq-poll-unreachable.patch` compiles only the two same-machine raw event identities required by the bounded PIX experiment: Epoch0 = BUS status1 bit21 and VIDEO = TOP status1 bit0. The helper snapshots TOP/BUS status0/1 and applies the exact Windows clear registers/global-clear order. Timeout is caller-owned; no IRQ mask or additional event bit is inferred. The private recipe has exactly two retention relocations and no runtime reference.
+
+`0027-x1e-pix-capsule-parser-unreachable.patch` maps the versioned `E3HPIX01` local capsule to two `camss_rtcdm1_corpus_input` objects (startup/priming) and one `camss_x1e_epoch0_input`. It validates section census/bounds/non-overlap, u64 requestId/u32 subrequest, module masks/payload lengths and then calls the already-existing startup and steady fail-closed validators. The parser contains no MMIO, DMA allocation, firmware loader, IRQ or FIFO operation and has no runtime caller.
+
+`0028-x1e-pix-capsule-materialize-unreachable.patch` composes the existing 0019/0021 and 0025 materializers into three Linux-owned DMA products: startup corpus, priming corpus, and first steady Epoch0 command/DMI set. It introduces no hardware access and remains unreferenced. Final module SHA-256 is `522033b849552e4a62d572a09fdbec8b1ad4ece55538d676370f32dece8976f1` with Golden `7.1.5-sp11-render-parity-v4+` vermagic.
+
+**Next:** compile the actual bounded hardware-order runner, still unreachable: RT-CDM preflight/open/start, exact startup/priming FIFO ordering, VFE1 BUS prepare/update, CSID1 IPP placement, raw Epoch0/VIDEO bounded waits, and exact stop/clear sequence. Do not arm it until binary/source inspection proves every MMIO/FIFO callsite is already oracle-backed.

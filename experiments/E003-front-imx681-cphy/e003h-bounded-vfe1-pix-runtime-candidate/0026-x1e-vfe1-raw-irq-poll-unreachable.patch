@@ -1,0 +1,106 @@
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -503,6 +503,103 @@
+ 	.stop = vfe680_x1e_bus_stop,
+ };
+ 
++
++/*
++ * E003h raw VFE1 PIX event polling, retained and unreachable.
++ *
++ * Same-machine Windows proves only two raw event identities needed by the
++ * bounded first PIX experiment: Epoch0 is BUS status1 bit 21 and VIDEO is TOP
++ * status1 bit 0. The KMD IRQ reader clears TOP/BUS status0 and status1 through
++ * their matching clear registers, then issues each global clear. No other raw
++ * event bit or IRQ mask is inferred here. Timeout remains a caller-owned bound.
++ */
++#define VFE680_X1E_RAW_EPOCH0	BIT(21)
++#define VFE680_X1E_RAW_VIDEO	BIT(0)
++
++struct vfe680_x1e_irq_snapshot {
++	u32 top0;
++	u32 top1;
++	u32 bus0;
++	u32 bus1;
++};
++
++static void vfe680_x1e_irq_snapshot(struct vfe_device *vfe,
++				    struct vfe680_x1e_irq_snapshot *s)
++{
++	s->top0 = readl_relaxed(vfe->base + VFE_TOP_IRQn_STATUS(vfe, 0));
++	s->top1 = readl_relaxed(vfe->base + VFE_TOP_IRQn_STATUS(vfe, 1));
++	s->bus0 = readl_relaxed(vfe->base + VFE_BUS_IRQn_STATUS(vfe, 0));
++	s->bus1 = readl_relaxed(vfe->base + VFE_BUS_IRQn_STATUS(vfe, 1));
++}
++
++static void vfe680_x1e_irq_clear_snapshot(struct vfe_device *vfe,
++					 const struct vfe680_x1e_irq_snapshot *s)
++{
++	/* Exact Windows clear order from qccamisp8380 RVA 0x1dc20. */
++	writel_relaxed(s->top0, vfe->base + VFE_TOP_IRQn_CLEAR(vfe, 0));
++	writel_relaxed(s->top1, vfe->base + VFE_TOP_IRQn_CLEAR(vfe, 1));
++	writel_relaxed(VFE_TOP_IRQ_CMD_GLOBAL_CLEAR,
++		       vfe->base + VFE_TOP_IRQ_CMD(vfe));
++	writel_relaxed(s->bus0, vfe->base + VFE_BUS_IRQn_CLEAR(vfe, 0));
++	writel_relaxed(s->bus1, vfe->base + VFE_BUS_IRQn_CLEAR(vfe, 1));
++	writel_relaxed(1, vfe->base + VFE_BUS_IRQ_GLOBAL_CLEAR(vfe));
++}
++
++static int vfe680_x1e_poll_raw_status1(struct vfe_device *vfe, bool bus,
++				       u32 bit, unsigned long timeout_us,
++				       struct vfe680_x1e_irq_snapshot *snapshot)
++{
++	void __iomem *reg;
++	u32 status;
++	int ret;
++
++	if (!vfe680_x1e_bus_target(vfe) || !snapshot || !timeout_us)
++		return -EINVAL;
++
++	reg = vfe->base + (bus ? VFE_BUS_IRQn_STATUS(vfe, 1) :
++				    VFE_TOP_IRQn_STATUS(vfe, 1));
++	ret = readl_relaxed_poll_timeout(reg, status, status & bit, 10, timeout_us);
++	if (ret)
++		return ret;
++
++	vfe680_x1e_irq_snapshot(vfe, snapshot);
++	if (!((bus ? snapshot->bus1 : snapshot->top1) & bit))
++		return -EIO;
++
++	vfe680_x1e_irq_clear_snapshot(vfe, snapshot);
++	return 0;
++}
++
++static int vfe680_x1e_poll_epoch0(struct vfe_device *vfe,
++				  unsigned long timeout_us,
++				  struct vfe680_x1e_irq_snapshot *snapshot)
++{
++	return vfe680_x1e_poll_raw_status1(vfe, true, VFE680_X1E_RAW_EPOCH0,
++					    timeout_us, snapshot);
++}
++
++static int vfe680_x1e_poll_video(struct vfe_device *vfe,
++				 unsigned long timeout_us,
++				 struct vfe680_x1e_irq_snapshot *snapshot)
++{
++	return vfe680_x1e_poll_raw_status1(vfe, false, VFE680_X1E_RAW_VIDEO,
++					    timeout_us, snapshot);
++}
++
++struct vfe680_x1e_raw_irq_static_ops {
++	int (*epoch0)(struct vfe_device *vfe, unsigned long timeout_us,
++		      struct vfe680_x1e_irq_snapshot *snapshot);
++	int (*video)(struct vfe_device *vfe, unsigned long timeout_us,
++		     struct vfe680_x1e_irq_snapshot *snapshot);
++};
++
++/* Private retention only: no ISR, VFE ops or stream path references it. */
++static const struct vfe680_x1e_raw_irq_static_ops
++vfe680_x1e_raw_irq_recipe __used = {
++	.epoch0 = vfe680_x1e_poll_epoch0,
++	.video = vfe680_x1e_poll_video,
++};
++
+ /*
+  * E003h PIX frame-bundle ownership, retained and unreachable.
+  *

@@ -100,7 +100,7 @@ def main():
  if len(sections)!=36: die('section count')
 
  hdr=bytearray(HEADER_BYTES)
- struct.pack_into('<8sIIIIIIIIIIQII',hdr,0,MAGIC,VERSION,HEADER_BYTES,0,len(sections),startup_period[0],startup_period[1],priming_period[0],priming_period[1],0x958,2,0,0,0)
+ struct.pack_into('<8sIIIIIIIIIQIII',hdr,0,MAGIC,VERSION,HEADER_BYTES,0,len(sections),startup_period[0],startup_period[1],priming_period[0],priming_period[1],0x958,2,0,0,0)
  off=align(HEADER_BYTES); body=bytearray(); desc=[]
  for typ,idx,b in sections:
   target=off

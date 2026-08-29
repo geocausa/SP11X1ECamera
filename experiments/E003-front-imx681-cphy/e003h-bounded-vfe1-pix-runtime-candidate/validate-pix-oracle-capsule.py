@@ -19,7 +19,7 @@ def main():
     if m.get('capsule_committed') is not False: die('capsule privacy policy drift')
     if len(cap)!=m['capsule']['bytes'] or sha(cap)!=m['capsule']['sha256']: die('capsule identity')
     if len(cap)<HEADER_BYTES: die('short capsule')
-    vals=struct.unpack_from('<8sIIIIIIIIIIQII',cap,0)
+    vals=struct.unpack_from('<8sIIIIIIIIIQIII',cap,0)
     magic,ver,hdr,total,count,s0,s1,p0,p1,variant,req,sub,res0,res1=vals
     if magic!=MAGIC or ver!=VERSION or hdr!=HEADER_BYTES: die('header identity')
     if total!=len(cap) or count!=len(m['sections']): die('header size/count')

@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-pix-oracle-capsule-reproducible-golden-safe
+status: e003h-pix-capsule-dma-materialization-built-unreachable-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -608,18 +608,33 @@ e003h:
   linux_front_pix_oracle_capsule_bytes: 41088
   linux_front_pix_oracle_capsule_sections: 36
   linux_front_pix_oracle_capsule_committed: false
-  linux_front_pix_oracle_capsule_builder_sha256: 45390f4cb60a009f91bbf447de105499abffd03e1c9f43d0612e41f245c33f49
-  linux_front_pix_oracle_capsule_validator_sha256: e4fef2cfd5917041afc96d92d1514b96277a29b985366f8a36feab9b1cb4e97a
+  linux_front_pix_oracle_capsule_builder_sha256: 4a825f55862afb7457c16ab67813123a9a6aff5d2be2b2e6dd5676d211007c46
+  linux_front_pix_oracle_capsule_validator_sha256: f5eee3aa275dc899f30dea469e868e59641b3ed04feb94a57d5efdfe65c3bc7c
   linux_front_pix_oracle_capsule_manifest_sha256: 7b0f4469b28966bf0e1b1fb8d7eab737d5305c447e2caed5722dd54c7c91be42
-  linux_front_pix_oracle_capsule_schema_sha256: 20f1386ac8dc8c62cf38948968ff8c72a171b240d9a65fc64ff3a24308e5d320
+  linux_front_pix_oracle_capsule_schema_sha256: f3256b4e44e68af6062206882760b6648d015b69fc015da037d22a9460fc582b
   linux_front_pix_oracle_capsule_ab_identical: true
+  linux_front_0026_raw_irq_poll_patch_sha256: 31b7c7a4a1637874a015179b4f965fabfe473037e0d195c3f0c253ddd56a8835
+  linux_front_0026_raw_irq_poll_module_sha256: 58f5c34b47f7c4285fe4452a6684ee0ae17d4b2a7d7417392a2c7333df807eac
+  linux_front_0026_raw_irq_poll_source_sha256: cdbd58c0276df79605d51a81784a6ba37cf8b0f1b1eb32e2693d1a1e9b0a97c6
+  linux_front_0026_runtime_reachable: false
+  linux_front_0027_capsule_parser_patch_sha256: 37b99fdbb86ffe20d2275dfce4aced5e66eb0288ab74bc9e12d0a8c90fad89aa
+  linux_front_0027_capsule_parser_module_sha256: 071831417f39fc835cf9b4565b7b94efdb7ac8feac9c8cf6e0d01dc778ced917
+  linux_front_0027_capsule_parser_request_id_bits: 64
+  linux_front_0027_mmio_or_dma_in_parser: false
+  linux_front_0027_runtime_reachable: false
+  linux_front_0028_capsule_materialize_patch_sha256: de6d67e3fd427950cadc5edd9d4e2d02fd71cc6df8bd7185caac07ffda9dccee
+  linux_front_0028_capsule_materialize_module_sha256: 522033b849552e4a62d572a09fdbec8b1ad4ece55538d676370f32dece8976f1
+  linux_front_0028_capsule_materialize_source_sha256: f347fa0e29ab4fbb6a572645c6ef42551521b6fdf4c7f723db863625f7eccd91
+  linux_front_0028_products: startup corpus DMA; priming corpus DMA; steady Epoch0 command/DMI DMA
+  linux_front_0028_hardware_access_in_composition: false
+  linux_front_0028_runtime_reachable: false
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-bounded-vfe1-pix-runtime-runner-static
+next_experiment: E003h-bounded-vfe1-pix-hardware-order-runner-static
 next_action: >-
-  Do not repeat the successful RDI frame. The local disposable PIX oracle capsule is now A/B reproducible and fail-closed validated; its proprietary
-  bytes remain ignored/untracked. Build the bounded VFE1 PIX/QC10C runner that consumes this capsule into Linux-owned DMA and composes the already-closed
-  RT-CDM start/priming, BUS, CSID1 IPP and raw Epoch0/VIDEO polling contracts. First keep the runner static/unreachable and inspect all MMIO/FIFO/teardown
-  callsites. Only after that proof may a one-shot disposable PIX activation be armed. Golden remains saved/default and must not be overwritten.
+  Do not repeat the successful RDI frame. The local PIX capsule is A/B reproducible; 0027 parses it into existing fail-closed inputs and 0028 materializes
+  startup, priming and first steady Epoch0 into Linux-owned DMA with no hardware access. 0026 provides retained-only raw BUS status1 bit21 Epoch0 and TOP
+  status1 bit0 VIDEO polling/clear helpers. Next build the static/unreachable hardware-order runner that composes only proven RT-CDM start/FIFO, VFE1 BUS,
+  CSID1 IPP and bounded poll/teardown operations. Inspect every callsite before any one-shot activation. Golden remains saved/default and untouched.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

@@ -1,0 +1,82 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -6671,6 +6671,79 @@
+ 	.parse = camss_x1e_pix_capsule_parse,
+ };
+ 
++
++/*
++ * E003h parsed PIX capsule -> Linux-owned DMA materialization, retained and
++ * unreachable. This composes only 0019/0021 startup/priming materialization and
++ * 0025 steady Epoch0 materialization. It performs no MMIO or FIFO submission.
++ */
++struct camss_x1e_pix_capsule_materialized {
++	struct camss_rtcdm1_corpus startup;
++	struct camss_rtcdm1_corpus priming;
++	struct camss_x1e_epoch0_materialized steady;
++	bool materialized;
++};
++
++static void camss_x1e_pix_capsule_materialized_release(
++	struct camss *camss, struct camss_x1e_pix_capsule_materialized *out)
++{
++	if (!camss || !out)
++		return;
++
++	camss_x1e_epoch0_release(camss, &out->steady);
++	camss_rtcdm1_corpus_release(camss, &out->priming);
++	camss_rtcdm1_corpus_release(camss, &out->startup);
++	memset(out, 0, sizeof(*out));
++}
++
++static int camss_x1e_pix_capsule_materialize(
++	struct camss *camss, struct camss_x1e_pix_capsule_materialized *out,
++	const struct camss_x1e_pix_capsule_inputs *input)
++{
++	int ret;
++
++	if (!camss || !out || !input || out->materialized ||
++	    out->startup.materialized || out->priming.materialized ||
++	    out->steady.materialized)
++		return -EINVAL;
++
++	ret = camss_rtcdm1_corpus_materialize(camss, &out->startup,
++					       &input->startup);
++	if (ret)
++		return ret;
++
++	ret = camss_rtcdm1_corpus_materialize(camss, &out->priming,
++					       &input->priming);
++	if (ret)
++		goto err_release;
++
++	ret = camss_x1e_epoch0_materialize(camss, &out->steady, &input->steady);
++	if (ret)
++		goto err_release;
++
++	out->materialized = true;
++	return 0;
++
++err_release:
++	camss_x1e_pix_capsule_materialized_release(camss, out);
++	return ret;
++}
++
++struct camss_x1e_pix_capsule_materialize_static_ops {
++	int (*materialize)(struct camss *camss,
++			   struct camss_x1e_pix_capsule_materialized *out,
++			   const struct camss_x1e_pix_capsule_inputs *input);
++	void (*release)(struct camss *camss,
++			struct camss_x1e_pix_capsule_materialized *out);
++};
++
++/* Retention only: no probe, VFE, RT-CDM submit, firmware or stream reference. */
++static const struct camss_x1e_pix_capsule_materialize_static_ops
++camss_x1e_pix_capsule_materialize_recipe __used = {
++	.materialize = camss_x1e_pix_capsule_materialize,
++	.release = camss_x1e_pix_capsule_materialized_release,
++};
++
+ /*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
