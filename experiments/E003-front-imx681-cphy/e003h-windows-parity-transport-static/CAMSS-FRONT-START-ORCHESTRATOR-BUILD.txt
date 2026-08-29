@@ -1,0 +1,66 @@
+E003h front-start orchestrator static build proof
+Date: 2026-08-29
+
+Source:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
+
+Build anchor:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+
+Command:
+make -C <source> O=<build-anchor> ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules
+
+Result: PASS
+Compiler diagnostics: none
+Golden vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+Cross-order raw:
+47032 bytes
+SHA-256 c32acebd61e0b2364450035c2b9e383a86e0ad355387760c149fb0e113342963
+
+Cross-order extractor SHA-256:
+e0cd5d690b60b8a9a18dc7a413a4bf0956b44ce25dc6d8e176218e80939913ad
+
+Cross-order oracle SHA-256:
+b495cc833c45e97b1467749bf094bb3035c5e6070bd0ea13d26a99ceec6acce6
+
+Pre-0022 camss.c SHA-256:
+6b0b0fce4481b26620a3a1f4ae82157d87a309131da8b26747ce655b66cd4a0c
+
+0022 patch SHA-256:
+1bf7d406e50bb3b57884d6f3a043d6c728327a8d8162f6ed9a678d2b8317e190
+
+Resulting camss.c SHA-256:
+2958909bae68cc6b459be39cf8abf8b4e8c19ba295feef4a8525504f3e1f6dff
+
+camss.o SHA-256:
+6dadb664c316fdb4aa440f4280e8a7348be1d3c0ec1674426e880cb2cd89d66b
+
+qcom-camss.ko SHA-256:
+d845b027f2c0ae70c47deb24d6cf08cf597cb02a1c4545b2a97a66508a8ac8c8
+
+Build log SHA-256:
+8fab4200274b46f77105288316240075c47f7faab9f052126702030dfd837572
+
+Checkpatch SHA-256:
+5072302fa03c1771778d33dc4982627a932e138ca15c416dc9762ef2504de6eb
+Checkpatch code/style checks: 0
+Only missing mail-patch commit description / Signed-off-by metadata remains.
+
+Inspector SHA-256:
+aa4348699216c7bdbb623a552f6e1b235249d115868a3f26f1874fd49358ba47
+
+Inspection JSON SHA-256:
+dc4a86ae51cfc608074194d89874268d03cd52569591694b4e32c71dd3ec700a
+
+Forward reconstruction: PASS byte-for-byte
+Reverse reconstruction: PASS byte-for-byte
+
+Runtime safety:
+- qcom-camss not loaded
+- no /dev/video* or /dev/media* nodes
+- VFE1 PIX -EOPNOTSUPP gate unchanged before stream lock/IRQ/output
+- front-start recipe retained-only; one ABS64 relocation to validator
+- no relocation references the private front-start recipe
+- validator reaches only the corpus input validator, not RT-CDM/BUS/CSID/VFE hardware helpers
+- no RT-CDM FIFO0 submission, VFE1 BUS MMIO, CSID1 start, PIX enable, MIPI/sensor transmission or frame

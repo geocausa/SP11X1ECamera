@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-rtcdm-period-two-value-contract-built-unreachable-stream-blocked-golden-unchanged
+status: e003h-front-start-orchestrator-contract-built-unreachable-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -451,14 +451,29 @@ e003h:
   rtcdm_period_cfg_packet_mapping: packet0=value0; packets1,2,3=value1
   rtcdm_period_cfg_values_embedded: false
   linux_rtcdm_0021_runtime_reachable: false
-  unresolved: compose a private unreachable front-start orchestrator from the closed static route/RT-CDM/BUS/PIX/corpus layers while keeping two upstream period_cfg values explicit; post-start live VFE update ownership and exact sentinel transition remain later gates
-next_experiment: E003h-unreachable-front-start-orchestrator-static
+  windows_vfe1_bus_cdm_crossorder_raw_sha256: c32acebd61e0b2364450035c2b9e383a86e0ad355387760c149fb0e113342963
+  windows_vfe1_bus_cdm_crossorder_raw_bytes: 47032
+  windows_vfe1_bus_cdm_crossorder_extractor_sha256: e0cd5d690b60b8a9a18dc7a413a4bf0956b44ce25dc6d8e176218e80939913ad
+  windows_vfe1_bus_cdm_crossorder_json_sha256: b495cc833c45e97b1467749bf094bb3035c5e6070bd0ea13d26a99ceec6acce6
+  windows_vfe1_host_start_order: RT-CDM start -> IFE resource start -> IFE803 packet0 -> packet1 -> VFE1 BUS config/enable/initial addresses -> packet2 -> packet3 -> CSID1 start -> ISP_START_DONE
+  linux_front_0022_patch_sha256: 1bf7d406e50bb3b57884d6f3a043d6c728327a8d8162f6ed9a678d2b8317e190
+  linux_front_0022_source_sha256: 2958909bae68cc6b459be39cf8abf8b4e8c19ba295feef4a8525504f3e1f6dff
+  linux_front_0022_object_sha256: 6dadb664c316fdb4aa440f4280e8a7348be1d3c0ec1674426e880cb2cd89d66b
+  linux_front_0022_module_sha256: d845b027f2c0ae70c47deb24d6cf08cf597cb02a1c4545b2a97a66508a8ac8c8
+  linux_front_0022_inspector_sha256: aa4348699216c7bdbb623a552f6e1b235249d115868a3f26f1874fd49358ba47
+  linux_front_0022_inspection_json_sha256: dc4a86ae51cfc608074194d89874268d03cd52569591694b4e32c71dd3ec700a
+  linux_front_0022_period_packet_mapping: packet0=value0; packets1,2,3=value1
+  linux_front_0022_hardware_execution_authorized: false
+  linux_front_0022_mipi_sensor_start_included: false
+  linux_front_0022_runtime_reachable: false
+  unresolved: close post-ISP_START_DONE VFE1 update ownership, separating software-owned per-frame BUS IOVA updates from hardware-live counters/state; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-post-start-vfe1-update-ownership-static
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0021 as the closed kernel-side period_cfg transport contract: two opaque upstream
-  start inputs map to four packet sites (packet0 and one shared packets1/2/3 value), with no observed Windows value embedded. Next,
-  build a private unreachable front-start orchestrator that composes 0011/0015/0017/0018/0019/0020/0021 and preserves the proven
-  lifecycle ordering while keeping all hardware-executing helpers unreachable. Do not arm RT-CDM IRQ execution, submit FIFO0, connect
-  VFE ops/media paths, enable VFE1 PIX, transmit IMX681, or attempt a front frame.
+  Keep IMX681 Linux transmission blocked. Treat 0022 as the closed non-executable host startup ordering contract: packet0/1 precede
+  VFE1 BUS config/enable/initial addresses and packet2/3 follow before CSID1 start/ISP_START_DONE. Next, close post-start VFE1 update
+  ownership: identify which changing fields/events are software-owned Linux actions versus hardware-live observation, while retaining the
+  already-proven per-frame BUS IOVA update path. Do not create a caller for 0022, arm RT-CDM IRQ/FIFO0, start CSID1 IPP, enable VFE1 PIX,
+  start MIPI/CSIPHY, transmit IMX681, or attempt a front frame.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

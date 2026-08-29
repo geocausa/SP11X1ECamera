@@ -1,0 +1,76 @@
+{
+  "accepted": true,
+  "counts": {
+    "bus_enable": 8,
+    "bus_static_config": 9,
+    "ife_803_after_bus": 2,
+    "ife_803_before_bus": 2,
+    "initial_dynamic_address_writes": 9
+  },
+  "cross_layer_order": [
+    "CDM_START",
+    "IFE_START",
+    "IFE803_PACKET0",
+    "IFE803_PACKET1",
+    "VFE1_BUS_STATIC_CONFIG",
+    "VFE1_BUS_ENABLE",
+    "VFE1_INITIAL_DYNAMIC_ADDRESSES",
+    "IFE803_PACKET2",
+    "IFE803_PACKET3",
+    "CSID_START",
+    "ISP_START_DONE"
+  ],
+  "linux_consequence": {
+    "bus_prepare": "static config -> enable -> initial address set remains one ordered phase between packet1 and packet2",
+    "packet_split": "the four startup IFE 0x803 packets are not one uninterrupted block; VFE1 BUS prepare lands between packets 1 and 2",
+    "runtime": "no Linux runtime authorization follows from this oracle",
+    "sensor_gate": "front sensor/MIPI start remains outside the static host orchestrator and after ISP_START_DONE"
+  },
+  "outside_orchestrator_after_start_done": [
+    "MIPI/CSIPHY start",
+    "IMX681 stream-on 0x0100=1"
+  ],
+  "pre_start_events": [
+    "EV IFE803 p=0",
+    "EV IFE803 p=1",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_CONFIG",
+    "EV BUS_SET",
+    "EV BUS_SET",
+    "EV BUS_SET",
+    "EV BUS_SET",
+    "EV BUS_SET",
+    "EV BUS_SET",
+    "EV BUS_SET",
+    "EV BUS_SET",
+    "EV ADDR",
+    "EV ADDR",
+    "EV ADDR",
+    "EV ADDR",
+    "EV ADDR",
+    "EV ADDR",
+    "EV ADDR",
+    "EV ADDR",
+    "EV ADDR",
+    "EV IFE803 p=2",
+    "EV IFE803 p=3",
+    "EV ISP_START_DONE"
+  ],
+  "raw": {
+    "bytes": 47032,
+    "sha256": "c32acebd61e0b2364450035c2b9e383a86e0ad355387760c149fb0e113342963"
+  },
+  "schema": "sp11-e003h-vfe1-bus-cdm-crossorder-v1",
+  "upstream_oracles": {
+    "bus_order_sha256": "89ddee9746d54927f8624a5267f5726d38ee8b02190ae60b9525a4b783206363",
+    "lifecycle_sha256": "0414879944824585eb3d4e6a8ce6384a0396bb37571c9aaa68d5de9074fd6301",
+    "rtcdm_order_sha256": "489f47f45465603260a06f8aa2083cc417fff816478be9b6c8f68233bb0be927"
+  }
+}

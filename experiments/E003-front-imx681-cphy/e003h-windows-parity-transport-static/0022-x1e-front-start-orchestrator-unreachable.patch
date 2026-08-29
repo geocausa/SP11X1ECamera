@@ -1,0 +1,117 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5616,0 +5617,114 @@
++ * E003h front-start orchestration contract, retained and unreachable.
++ *
++ * This is deliberately a contract/validator rather than an execution path.
++ * The exact same-machine Windows cross-order is now closed far enough to place
++ * VFE1 BUS prepare between initial IFE packets 1 and 2, but Linux still has no
++ * authorization to arm RT-CDM, submit FIFO0, start CSID1 IPP, enable VFE1 PIX,
++ * start MIPI/CSIPHY, or transmit IMX681. The stage arrays below compose the
++ * already-built private layers without calling any hardware-writing helper.
++ */
++#define CAMSS_X1E_FRONT_PREP_STAGE_COUNT	2
++#define CAMSS_X1E_FRONT_START_STAGE_COUNT	10
++
++/* Preparation is Linux-owned memory/state only; neither stage performs MMIO. */
++enum camss_x1e_front_prepare_stage {
++	CAMSS_X1E_FRONT_PREP_PIX_OWNERSHIP,
++	CAMSS_X1E_FRONT_PREP_RTCDM_CORPUS,
++};
++
++/*
++ * Hardware lifecycle markers. These identify where the retained 0011/0015/
++ * 0017/0019 mechanics belong if a later runtime gate is authorized. They are
++ * data only: this patch does not invoke those mechanics.
++ */
++enum camss_x1e_front_start_stage {
++	CAMSS_X1E_FRONT_START_RTCDM_OPEN_INIT,
++	CAMSS_X1E_FRONT_START_RTCDM_START,
++	CAMSS_X1E_FRONT_START_IFE_RESOURCE_START,
++	CAMSS_X1E_FRONT_START_IFE803_PACKET0,
++	CAMSS_X1E_FRONT_START_IFE803_PACKET1,
++	CAMSS_X1E_FRONT_START_VFE1_BUS_PREPARE,
++	CAMSS_X1E_FRONT_START_IFE803_PACKET2,
++	CAMSS_X1E_FRONT_START_IFE803_PACKET3,
++	CAMSS_X1E_FRONT_START_CSID1_IPP_START,
++	CAMSS_X1E_FRONT_START_ISP_START_DONE,
++};
++
++struct camss_x1e_front_start_contract {
++	u8 csiphy_id;
++	u8 csid_id;
++	u8 vfe_id;
++	u8 period_packet_map[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u8 prepare_order[CAMSS_X1E_FRONT_PREP_STAGE_COUNT];
++	u8 start_order[CAMSS_X1E_FRONT_START_STAGE_COUNT];
++	bool hardware_execution_authorized;
++	bool mipi_sensor_start_included;
++};
++
++static const struct camss_x1e_front_start_contract
++camss_x1e_front_start_contract __used = {
++	.csiphy_id = 2,
++	.csid_id = 1,
++	.vfe_id = 1,
++	.period_packet_map = { 0, 1, 1, 1 },
++	.prepare_order = {
++		CAMSS_X1E_FRONT_PREP_PIX_OWNERSHIP,
++		CAMSS_X1E_FRONT_PREP_RTCDM_CORPUS,
++	},
++	.start_order = {
++		CAMSS_X1E_FRONT_START_RTCDM_OPEN_INIT,
++		CAMSS_X1E_FRONT_START_RTCDM_START,
++		CAMSS_X1E_FRONT_START_IFE_RESOURCE_START,
++		CAMSS_X1E_FRONT_START_IFE803_PACKET0,
++		CAMSS_X1E_FRONT_START_IFE803_PACKET1,
++		CAMSS_X1E_FRONT_START_VFE1_BUS_PREPARE,
++		CAMSS_X1E_FRONT_START_IFE803_PACKET2,
++		CAMSS_X1E_FRONT_START_IFE803_PACKET3,
++		CAMSS_X1E_FRONT_START_CSID1_IPP_START,
++		CAMSS_X1E_FRONT_START_ISP_START_DONE,
++	},
++	.hardware_execution_authorized = false,
++	.mipi_sensor_start_included = false,
++};
++
++static int camss_x1e_front_start_validate(struct camss *camss,
++					  const struct camss_rtcdm1_corpus_input *input)
++{
++	struct v4l2_mbus_framefmt *fmt;
++	struct csid_device *csid;
++	struct vfe_device *vfe;
++
++	if (!camss || !camss->res || camss->res->version != CAMSS_X1E80100)
++		return -EINVAL;
++	if (camss->res->csid_num <= 1 || camss->res->vfe_num <= 1)
++		return -ENODEV;
++
++	csid = &camss->csid[1];
++	vfe = &camss->vfe[1];
++	if (csid->id != 1 || vfe->id != 1 || vfe->res->is_lite)
++		return -EINVAL;
++	if (csid->phy.csiphy_id != 2 || csid->phy.phy_sel != CSID_PHY_SEL_CPHY ||
++	    csid->phy.lane_cnt != 1 || !csid->phy.en_ipp)
++		return -EINVAL;
++
++	fmt = &csid->fmt[MSM_CSID_PAD_PIX];
++	if (fmt->code != MEDIA_BUS_FMT_SRGGB10_1X10 ||
++	    fmt->width != 3840 || fmt->height != 2640)
++		return -EINVAL;
++
++	/* 0021 keeps the two period values opaque and validates all corpus holes. */
++	return camss_rtcdm1_corpus_validate_input(input);
++}
++
++struct camss_x1e_front_start_static_ops {
++	int (*validate)(struct camss *camss,
++			const struct camss_rtcdm1_corpus_input *input);
++};
++
++/* No probe, media, VFE, CSID, RT-CDM or sensor path references this table. */
++static const struct camss_x1e_front_start_static_ops
++camss_x1e_front_start_recipe __used = {
++	.validate = camss_x1e_front_start_validate,
++};
++
++/*

@@ -1,0 +1,53 @@
+{
+  "accepted": true,
+  "bus_crossorder": "IFE803 packet0, packet1 -> BUS static config/enable/initial addresses -> packet2, packet3",
+  "crossorder_oracle_sha256": "b495cc833c45e97b1467749bf094bb3035c5e6070bd0ea13d26a99ceec6acce6",
+  "hardware_execution_authorized": false,
+  "mipi_sensor_start_included": false,
+  "module_sha256": "d845b027f2c0ae70c47deb24d6cf08cf597cb02a1c4545b2a97a66508a8ac8c8",
+  "object_sha256": "6dadb664c316fdb4aa440f4280e8a7348be1d3c0ec1674426e880cb2cd89d66b",
+  "patch_sha256": "1bf7d406e50bb3b57884d6f3a043d6c728327a8d8162f6ed9a678d2b8317e190",
+  "period_packet_mapping": [
+    0,
+    1,
+    1,
+    1
+  ],
+  "policy": "static contract only; no module load, RT-CDM IRQ arm/FIFO0 submission, VFE1 BUS write, CSID1 start, PIX enable, MIPI/sensor transmission or frame authorized",
+  "prepare_order": [
+    "PIX_OWNERSHIP",
+    "RTCDM_CORPUS_MATERIALIZE"
+  ],
+  "prepare_order_scope": "Linux-owned allocation/materialization only; no Windows hardware-order claim",
+  "runtime_isolation": {
+    "front_recipe_helper_relocations": [
+      "0000000000001578 R_AARCH64_ABS64   camss_x1e_front_start_validate"
+    ],
+    "front_recipe_relocation_present": false,
+    "front_recipe_source_reference_count": 1,
+    "hardware_helper_calls_added": false,
+    "pix_stream_gate": "-EOPNOTSUPP before stream lock/IRQ/output",
+    "validator_only_safe_call": "camss_rtcdm1_corpus_validate_input"
+  },
+  "schema": "sp11-e003h-linux-front-start-orchestrator-static-inspection-v1",
+  "source_sha256": "2958909bae68cc6b459be39cf8abf8b4e8c19ba295feef4a8525504f3e1f6dff",
+  "start_order_contract": [
+    "CAMSS_X1E_FRONT_START_RTCDM_OPEN_INIT",
+    "CAMSS_X1E_FRONT_START_RTCDM_START",
+    "CAMSS_X1E_FRONT_START_IFE_RESOURCE_START",
+    "CAMSS_X1E_FRONT_START_IFE803_PACKET0",
+    "CAMSS_X1E_FRONT_START_IFE803_PACKET1",
+    "CAMSS_X1E_FRONT_START_VFE1_BUS_PREPARE",
+    "CAMSS_X1E_FRONT_START_IFE803_PACKET2",
+    "CAMSS_X1E_FRONT_START_IFE803_PACKET3",
+    "CAMSS_X1E_FRONT_START_CSID1_IPP_START",
+    "CAMSS_X1E_FRONT_START_ISP_START_DONE"
+  ],
+  "target": "X1E80100 front: CSIPHY2 C-PHY one trio -> CSID1 IPP RAW10 3840x2640 -> IFE1/VFE1",
+  "upstream_inspections": {
+    "bus_0017": "92715605c99523366dd619331c6abe9bb09c7e6476bf8921ccb5b18cbaae262e",
+    "period_cfg_0021": "169cf024d87e2f9a4ec620fb15be657767d8e01dd87da0b47ebe9c11375e37c3",
+    "pix_ownership_0018": "bc8bf64152882e8c312e0e1379b544e2ae733dc75b4e571784fac3b88b4b7dcf",
+    "rtcdm_0015": "23f9f601f0e9b8880e447d17685585bbdc1e0058a8be60fcf330172e366aa346"
+  }
+}
