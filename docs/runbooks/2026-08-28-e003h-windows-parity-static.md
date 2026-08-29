@@ -393,3 +393,11 @@ A disposable front-only candidate captured one 3840x2640 packed RAW10 frame thro
 ## 2026-08-29 — raw VFE1 Epoch0/VIDEO IRQ mapping closed
 
 Exact KMD IRQ-reader RVA `0x1dc20` reads TOP status0/1 from `+0x44/+0x48` and BUS status0/1 from BUS `+0x28/+0x2c`, preserving them in the DPC message before clear. DPC decoding proves `VIDEO = TOP status1 bit0` and `Epoch0 = BUS status1 bit21`. A focused same-machine IFE1 hit records `TOP0=0x00002010`, `TOP1=0x00000271`, `BUS0=0x00000017`, `BUS1=0x00611ff8`; mask registers are `TOP_MASK0=0x0007f051`, `TOP_MASK1=0`, `BUS_MASK0=0xd0000000`, `BUS_MASK1=0`. The Windows clear sequence is TOP/BUS status0 -> `+0x3c`, status1 -> `+0x40`, then global clear `+0x30=1`. This closes a bounded polling implementation for the disposable PIX candidate without enabling a guessed Linux VFE IRQ mask.
+
+## 2026-08-29 — disposable PIX oracle capsule reproducible
+
+The first Windows-matched PIX runtime input package is now deterministic without committing proprietary payload bytes. `build-pix-oracle-capsule.py` emits a 41,088-byte local `E3HPIX01` capsule with 36 64-byte-aligned sections: four normalized startup mains, sixteen startup DMI payloads, one normalized steady `0x958` main, nine named-module value/mask records, and fourteen steady DMI payloads. Header metadata carries the two startup and two priming `period_cfg` values plus steady requestId/subrequest. A/B builds are byte-identical at SHA-256 `6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20`.
+
+The capsule binary remains `.gitignore`d and local. Git stores only schema, deterministic builder, hash-only manifest and fail-closed validator. The validator enforces magic/version/length, the exact 36-section type census, descriptor/hash identity, non-overlap, zero padding/header reserve and named-module masks. This closes the input-container boundary only; it does not submit RT-CDM or enable VFE1 PIX.
+
+**Next:** implement and inspect an unreachable bounded PIX runner consuming the local capsule into Linux-owned DMA. Compose only the already-proven RT-CDM start/priming, VFE1 BUS, CSID1 IPP and raw Epoch0/VIDEO polling/clear contracts. Do not arm the disposable PIX run until the runner has no unproven MMIO/FIFO/teardown behavior.

@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-front-rdi-first-frame-proven-golden-return-verified
+status: e003h-pix-oracle-capsule-reproducible-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -604,13 +604,22 @@ e003h:
   linux_front_rdi_is_windows_parity: false
   linux_front_rdi_rtcdm_fifo0_used: false
   linux_front_rdi_vfe1_pix_used: false
+  linux_front_pix_oracle_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_pix_oracle_capsule_bytes: 41088
+  linux_front_pix_oracle_capsule_sections: 36
+  linux_front_pix_oracle_capsule_committed: false
+  linux_front_pix_oracle_capsule_builder_sha256: 45390f4cb60a009f91bbf447de105499abffd03e1c9f43d0612e41f245c33f49
+  linux_front_pix_oracle_capsule_validator_sha256: e4fef2cfd5917041afc96d92d1514b96277a29b985366f8a36feab9b1cb4e97a
+  linux_front_pix_oracle_capsule_manifest_sha256: 7b0f4469b28966bf0e1b1fb8d7eab737d5305c447e2caed5722dd54c7c91be42
+  linux_front_pix_oracle_capsule_schema_sha256: 20f1386ac8dc8c62cf38948968ff8c72a171b240d9a65fc64ff3a24308e5d320
+  linux_front_pix_oracle_capsule_ab_identical: true
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-bounded-vfe1-pix-runtime-candidate
+next_experiment: E003h-bounded-vfe1-pix-runtime-runner-static
 next_action: >-
-  Do not repeat the successful RDI frame. Preserve Golden as saved default and build a separate disposable VFE1 PIX/QC10C runtime candidate from
-  the already-closed RT-CDM start/priming, BUS, CSID1 IPP, completion and 0025 module-input contracts using Linux-owned DMA. Keep live CamX IQ
-  algorithm outputs as explicit provider inputs; do not invent or freeze them as Linux constants. Bound activation/teardown and return to Golden
-  automatically. A PIX frame is not accepted until QC10C layout, completion ownership and teardown match the Windows oracle.
+  Do not repeat the successful RDI frame. The local disposable PIX oracle capsule is now A/B reproducible and fail-closed validated; its proprietary
+  bytes remain ignored/untracked. Build the bounded VFE1 PIX/QC10C runner that consumes this capsule into Linux-owned DMA and composes the already-closed
+  RT-CDM start/priming, BUS, CSID1 IPP and raw Epoch0/VIDEO polling contracts. First keep the runner static/unreachable and inspect all MMIO/FIFO/teardown
+  callsites. Only after that proof may a one-shot disposable PIX activation be armed. Golden remains saved/default and must not be overwritten.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
