@@ -1,0 +1,41 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5288 +5288,2 @@
+- * byte strings and all four period values explicitly. The 16 startup words at
++ * byte strings and two logical period values explicitly: packet 0 and the shared
++ * packet 1/2/3 value. The 16 startup words at
+@@ -5302 +5303,2 @@
+-#define CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT	4
++#define CAMSS_RTCDM1_CORPUS_DYNAMIC_VALUE_COUNT	2
++#define CAMSS_RTCDM1_CORPUS_DYNAMIC_PATCH_COUNT	4
+@@ -5305 +5307 @@
+-#define CAMSS_RTCDM1_CORPUS_DYNAMIC_VALID	GENMASK(3, 0)
++#define CAMSS_RTCDM1_CORPUS_DYNAMIC_VALID	GENMASK(1, 0)
+@@ -5315 +5317 @@
+-	u32 dynamic[CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT];
++	u32 dynamic[CAMSS_RTCDM1_CORPUS_DYNAMIC_VALUE_COUNT];
+@@ -5343,0 +5346 @@
++	u8 value;
+@@ -5424,5 +5427,5 @@
+-camss_rtcdm1_corpus_dynamic[CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT] = {
+-	{ .packet = 0, .field = 0xe84, .reg = 0x8c },
+-	{ .packet = 1, .field = 0xe24, .reg = 0x8c },
+-	{ .packet = 2, .field = 0x8f4, .reg = 0x8c },
+-	{ .packet = 3, .field = 0x4d8, .reg = 0x8c },
++camss_rtcdm1_corpus_dynamic[CAMSS_RTCDM1_CORPUS_DYNAMIC_PATCH_COUNT] = {
++	{ .packet = 0, .value = 0, .field = 0xe84, .reg = 0x8c },
++	{ .packet = 1, .value = 1, .field = 0xe24, .reg = 0x8c },
++	{ .packet = 2, .value = 1, .field = 0x8f4, .reg = 0x8c },
++	{ .packet = 3, .value = 1, .field = 0x4d8, .reg = 0x8c },
+@@ -5439 +5442 @@
+-	      CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT);
++	      CAMSS_RTCDM1_CORPUS_DYNAMIC_PATCH_COUNT);
+@@ -5511 +5514 @@
+-	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT; i++) {
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DYNAMIC_PATCH_COUNT; i++) {
+@@ -5583 +5586 @@
+-	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT; i++) {
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DYNAMIC_PATCH_COUNT; i++) {
+@@ -5588 +5591 @@
+-		put_unaligned_le32(input->dynamic[i], field);
++		put_unaligned_le32(input->dynamic[patch->value], field);

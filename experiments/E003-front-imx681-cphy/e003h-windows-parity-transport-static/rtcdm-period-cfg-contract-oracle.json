@@ -1,0 +1,51 @@
+{
+  "accepted": true,
+  "contract": {
+    "logical_values_per_start": 2,
+    "ownership": "already populated at qccamisp DEVICE_START/IFE 0x803 entry; kernel transport treats the two values as opaque upstream caller inputs",
+    "packet0_distinct_from_packets123_in_every_observed_start": true,
+    "packet_mapping": {
+      "0": "packet0",
+      "1": "packets123",
+      "2": "packets123",
+      "3": "packets123"
+    },
+    "packets_1_2_3_equal_in_every_observed_start": true,
+    "qccamisp_0x26838_mutates_period_cfg": false,
+    "register": "0x8c period_cfg"
+  },
+  "linux_consequence": {
+    "captured_windows_period_values_must_not_be_embedded": true,
+    "materializer_dynamic_values": 2,
+    "materializer_patch_sites": 4,
+    "rule": "caller supplies packet0 and packets123 period_cfg values; packets 1/2/3 must be materialized from one shared caller value"
+  },
+  "observed_starts": {
+    "final_corpus": {
+      "packet0": "0xa81fdf00",
+      "packets123": "0x99fe3000"
+    },
+    "fresh_kmd": {
+      "packet0": "0xa81a19a0",
+      "packets123": "0xf5993000"
+    },
+    "initial_corpus": {
+      "packet0": "0xe5cdfd40",
+      "packets123": "0x0a503000"
+    },
+    "producer_pass": {
+      "packet0": "0xea8ba8c0",
+      "packets123": "0xd6483000"
+    }
+  },
+  "safety": {
+    "fifo0_submission_authorized": false,
+    "runtime_authorized": false,
+    "vfe1_pix_authorized": false
+  },
+  "schema": "sp11-e003h-rtcdm-period-cfg-contract-v1",
+  "source_oracles": {
+    "producer_log_sha256": "a70534c7a13a374e8f8258e0c134d56bcf182d4d64be1d33b0b7ffbf4b1fde0d",
+    "startup_ownership_sha256": "402510679bae860f801166bd7ff36834ca8284650aa29d64f1c08d7c6afda856"
+  }
+}

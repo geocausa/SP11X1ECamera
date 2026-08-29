@@ -1,0 +1,43 @@
+E003h RT-CDM period_cfg two-value contract build/static proof
+Date: 2026-08-29
+
+Scope:
+  drivers/media/platform/qcom/camss/camss.c only
+  static/private/unreachable refinement on top of 0020
+
+Result:
+  build PASS
+  forward reconstruction PASS
+  reverse reconstruction PASS
+  compiler warning/error diagnostics NONE
+  strict checkpatch code/style checks 0
+  checkpatch remaining items: missing commit-description/Signed-off-by mail metadata only
+  CAMSS module loaded: NO
+  /dev/video*: none
+  /dev/media*: none
+  FIFO0 submission: NO
+  VFE1 PIX runtime: blocked
+  IMX681 Linux transmission/frame: NO
+
+Golden vermagic:
+  7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+SHA-256:
+  patch     2f30286f01e6214c6af4fdf1e8908837ae3db39cb4a68075584fc2732b689636
+  source    6b0b0fce4481b26620a3a1f4ae82157d87a309131da8b26747ce655b66cd4a0c
+  object    bfede5744a855384fe4792398287fd4d42969a8ba63ce7aa7ab06efa75d2b7c0
+  module    6f29ccec021c0f2a6662bf9f7b27ec799d842ce14e1e235be3794e050dc6b921
+  build log 59bbe45ed0a88ba231e11a50a3cb6705e1a27c804f26006894b0090ea0ade00c
+  extractor 5a3232054bab9fb1b97f0aa47d55dc4d4db53d5b26afa6925c2c2520ace7be24
+  oracle    0e6128140b6126845ca2656977f7cc137b1a32e6063b51497d3e808db29fed0d
+  materializer 0b2ef49b06e1a4500657f29b222e7777669dfcb0abcc4aaca0a57e5c36de925e
+  materialization JSON aacc1b92dea07069ff7980526b87262d52bb2cea4dbb14437f9cc97d3fd2dadb
+  inspector 12b88a54d80c2d5fd53167324d6be655791cd223dffed98a2a2e2ffc33950d0d
+  inspection JSON 169cf024d87e2f9a4ec620fb15be657767d8e01dd87da0b47ebe9c11375e37c3
+
+Contract:
+  two opaque upstream period_cfg inputs per start
+  packet 0 -> value 0
+  packets 1/2/3 -> shared value 1
+  four patch sites total
+  observed Windows values are evidence only and are not embedded
