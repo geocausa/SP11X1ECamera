@@ -385,3 +385,7 @@ STREAMOFF immediately logs IMX681 `MODE_SELECT=0` and runtime power-off. Sensor 
 
 **Consequence:** native front C-PHY sensor/receiver/CSID/VFE RDI transport works. This is **not** Windows parity: RT-CDM FIFO0 and VFE1 PIX/QC10C were not used. Do not repeat the RDI proof. The next runtime candidate must compose the closed RT-CDM start/priming, BUS, CSID1 IPP, completion and 0025 module-input contracts with Linux-owned DMA and explicit live-IQ provider inputs, with the same bounded teardown/Golden rollback discipline.
 
+
+## 2026-08-29 — bounded front RDI transport frame and Golden rollback verified
+
+A disposable front-only candidate captured one 3840x2640 packed RAW10 frame through `IMX681 -> CSIPHY2 -> CSID1 RDI0 -> VFE1 RDI0`. The frame SHA-256 is `8e892cfeb8f9aea6c9454dbc1fe22b0c26a11e4a108e551a2995069d76e000ac`; scene bytes remain local/untracked. STREAMOFF restored `MODE_SELECT=0`; sensor/CAMSS runtime PM suspended, camera clock counts and regulator use counts returned to zero, and no kernel fault was observed. A normal reboot then returned to Golden FullIO v19c with unchanged Golden hashes and no candidate camera module loaded. This is transport proof only, not VFE1 PIX/QC10C parity.

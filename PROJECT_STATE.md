@@ -81,6 +81,8 @@ Runtime camera/image testing is now authorized. Golden remains the saved/default
 
 **Next action:** do not repeat the RDI frame. Preserve the successful transport evidence and move to a separate disposable **VFE1 PIX/QC10C runtime candidate**. Compose only the already-closed RT-CDM start/priming, BUS ownership, CSID1 IPP and 0025 module-input boundaries with Linux-owned DMA; keep proprietary CamX live-IQ algorithms as explicit caller/provider inputs rather than inventing them. Bound every activation and retain automatic Golden rollback. A future PIX frame may be called Windows transport/format parity only after its QC10C surface, completion groups and teardown match the oracle.
 
+Post-test Golden return is now independently verified. The machine booted `sp11-audio-fullio-v19c` on `7.1.5-sp11-render-parity-v4+`, GRUB retained `saved_entry=sp11-audio-fullio-v19c` with an empty `next_entry`, no candidate `qcom_camss`/`imx681`/`ov13858` module was loaded, and the Golden kernel/initrd SHA-256 values remained `bca0a336...bb428a` / `ac3ba64b...add9c`. This closes the RDI runtime rollback gate.
+
 Canonical handoff: `docs/runbooks/2026-08-28-e003h-windows-parity-static.md`.
 
 ## E003g ROUTE RESOLVED — same-machine Windows front route is CSIPHY2 -> CSID1 -> IFE1/VFE1 — 2026-08-28

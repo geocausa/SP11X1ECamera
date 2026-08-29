@@ -51,3 +51,7 @@ Teardown PASS:
 
 Golden remained the saved GRUB default throughout. RT-CDM FIFO0 and VFE1 PIX
 were not used by this RDI diagnostic.
+
+## Golden return verification
+
+After the bounded capture and teardown, a normal reboot returned to `sp11-audio-fullio-v19c`. `next_entry` was empty, no camera candidate module was loaded, the Golden kernel/initrd hashes were unchanged, and the post-return root dmesg fault scan was empty.
