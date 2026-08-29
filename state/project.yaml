@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-pix-hardware-order-contract-built-unreachable-two-priming-placement-gaps-golden-safe
+status: e003h-priming-csid-mipi-crossorder-closed-final-precsid-interleave-next-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -650,12 +650,20 @@ e003h:
   linux_front_0030_replay23_vs_mipi_sensor_start_closed: false
   linux_front_0030_callable_runner_authorized: false
   linux_front_0030_runtime_reachable: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; exact selector-2 replay0/1 placement versus CSID1 start and replay2/3 placement versus CSIPHY2/sensor start remain unclosed; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-windows-priming-mipi-crossorder-oracle
+  windows_vfe1_priming_mipi_crossorder_raw_sha256: 06127e46dca5759cfded698b1a1a8dc0dcd40dd04ca271d515a54fbed42987ee
+  windows_vfe1_priming_mipi_crossorder_raw_bytes: 7420
+  windows_vfe1_priming_mipi_crossorder_extractor_sha256: ff4397b20f1019f52f7ff6d716236e055441d8b60bd2ee191151f196289b140b
+  windows_vfe1_priming_mipi_crossorder_oracle_sha256: 849687aaa5206c25484b9a6e015aba320d7d01610d5292a33df54605f20ae599
+  windows_vfe1_priming_mipi_crossorder_cycles: 2
+  windows_vfe1_priming_mipi_crossorder_total: replay0 -> replay1 -> CSID1 start -> ISP_START_DONE -> MIPI start enter -> MIPI start done -> sensor-on -> replay2 -> replay3 -> first steady 0x958
+  windows_vfe1_replay01_vs_csid_start_closed: true
+  windows_vfe1_replay23_vs_mipi_sensor_start_closed: true
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; replay0/1 are now before CSID1 and replay2/3 after sensor-on, but replay0/1 versus the separately proven packet0 -> packet1 -> BUS -> packet2 -> packet3 prefix remains unclosed; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-windows-startup-priming-interleave-oracle
 next_action: >-
-  Do not repeat the successful RDI frame. 0030 now fixes Linux power ownership, host prefix, steady Epoch0/BUS/CDM/VIDEO order, stop prefix and reverse rollback
-  while keeping the runner unreachable. Next use a focused same-machine Windows cross-order oracle to place selector-2 replay0/1 relative to CSID1 start and
-  replay2/3 relative to MIPI/CSIPHY and sensor-on. Do not create or arm the callable Linux PIX runner until both relations close. Golden remains saved/default.
+  Do not repeat RDI or the completed priming/MIPI capture. Run one narrow same-machine Windows start oracle combining packet0..3, BUS-prepare boundary,
+  replay0/1 and CSID1 start. Close their mutual pre-CSID interleave, then refine the retained 0030 order and inspect a callable-but-unarmed PIX runner.
+  Do not arm Linux PIX before that relation closes. Golden remains saved/default and empty-next-entry.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

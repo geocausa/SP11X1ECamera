@@ -1,0 +1,148 @@
+{
+  "accepted": true,
+  "closure": {
+    "replay01_relation": "replay0 -> replay1 -> CSID1 start",
+    "replay01_vs_csid_start_closed": true,
+    "replay23_relation": "MIPI start done -> sensor stream-on -> replay2 -> replay3",
+    "replay23_vs_mipi_sensor_start_closed": true,
+    "two_cycles_identical": true
+  },
+  "cycle_count": 2,
+  "cycles": [
+    {
+      "cycle": 1,
+      "lines": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "markers": [
+        "CDM_MAIN_e93",
+        "CDM_MAIN_e33",
+        "CSID_START_CALL",
+        "ISP_START_DONE",
+        "MIPI_START_ENTER",
+        "MIPI_START_DONE",
+        "SENSOR_STREAM_ON_APPLY",
+        "CDM_MAIN_903",
+        "CDM_MAIN_4e7",
+        "CDM_MAIN_957",
+        "CDM_MAIN_957",
+        "CDM_MAIN_957",
+        "CDM_MAIN_957"
+      ],
+      "total_order": [
+        "replay0",
+        "replay1",
+        "csid1_start",
+        "isp_start_done",
+        "mipi_start_enter",
+        "mipi_start_done",
+        "sensor_stream_on",
+        "replay2",
+        "replay3",
+        "steady_0x958"
+      ]
+    },
+    {
+      "cycle": 2,
+      "lines": [
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "markers": [
+        "CDM_MAIN_e93",
+        "CDM_MAIN_e33",
+        "CSID_START_CALL",
+        "ISP_START_DONE",
+        "MIPI_START_ENTER",
+        "MIPI_START_DONE",
+        "SENSOR_STREAM_ON_APPLY",
+        "CDM_MAIN_903",
+        "CDM_MAIN_4e7",
+        "CDM_MAIN_957",
+        "CDM_MAIN_957",
+        "CDM_MAIN_957",
+        "CDM_MAIN_957"
+      ],
+      "total_order": [
+        "replay0",
+        "replay1",
+        "csid1_start",
+        "isp_start_done",
+        "mipi_start_enter",
+        "mipi_start_done",
+        "sensor_stream_on",
+        "replay2",
+        "replay3",
+        "steady_0x958"
+      ]
+    }
+  ],
+  "drivers": {
+    "qccamisp8380.sys": {
+      "csid_start_call_rva": "0x16208",
+      "isp_start_done_rva": "0x16220",
+      "replay_main_probe_rva": "0x287e4",
+      "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+    },
+    "qccammipicsi8380.sys": {
+      "sha256": "033f5b1431ad4c76a12ac3b7f0a5be42e460a03bcff40d249511b3034786d407",
+      "start_done_rva": "0x2398",
+      "start_enter_rva": "0x2068"
+    },
+    "surfacecamfrontsensor8380.sys": {
+      "sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03",
+      "stream_on_apply_rva": "0x7e94"
+    }
+  },
+  "linux_consequence": "The two 0030 priming placement blockers are closed. A bounded PIX runner may place replay0/1 before CSID1 start, then complete ISP/MIPI/sensor start, then replay2/3 before the first steady Epoch0 0x958 batch. This oracle does not by itself authorize Linux runtime; the callable runner still requires static composition/inspection and rollback gating.",
+  "proven_total_order": [
+    "replay0",
+    "replay1",
+    "CSID1 start",
+    "ISP_START_DONE",
+    "MIPI/CSIPHY start enter",
+    "MIPI/CSIPHY start done",
+    "sensor MODE_SELECT=1 apply",
+    "replay2",
+    "replay3",
+    "first steady 0x958 batch"
+  ],
+  "replay_main_encoded_lengths": {
+    "first_steady": "0x957 -> 0x958 bytes",
+    "replay0": "0xe93 -> 0xe94 bytes",
+    "replay1": "0xe33 -> 0xe34 bytes",
+    "replay2": "0x903 -> 0x904 bytes",
+    "replay3": "0x4e7 -> 0x4e8 bytes"
+  },
+  "schema": "sp11-e003h-windows-priming-mipi-crossorder-v1",
+  "source": {
+    "bytes": 7420,
+    "encoding": "UTF-16LE KD log",
+    "log": "E003H_PRIMING_MIPI_CROSSORDER_20260829.log",
+    "sha256": "06127e46dca5759cfded698b1a1a8dc0dcd40dd04ca271d515a54fbed42987ee"
+  }
+}
+PASS: two cycles prove replay0/1 -> CSID1 -> ISP -> MIPI -> sensor-on -> replay2/3 -> first steady

@@ -47,6 +47,7 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 
 21. Bounded native transport runtime is now proven separately from parity: one disposable front-only candidate captured sequence 0 as a complete 12,672,000-byte 3840x2640 `pRAA` RAW10 frame through CSIPHY2 -> CSID1 RDI0 -> VFE1 RDI0. Raw SHA-256 `8e892cfe...e000ac`; offline preview visibly resolves scene geometry. STREAMOFF returned IMX681/CAMSS suspended with camera clock counts and regulator use counts zero. RT-CDM FIFO0 and VFE1 PIX were not used.
 22. Static `0030-x1e-pix-hardware-order-contract-unreachable.patch` fixes cross-file Linux power, host-start, steady-loop, stop and reverse-rollback ownership without a caller. It reuses V4L2 pipeline PM, VFE1 `vfe_get/put`, CSID1 IPP and CSIPHY2 subdev operations, and keeps generic VFE1 PIX `s_stream` blocked. Two selector-2 placement relations remain explicit blockers, so PIX activation is still unauthorized.
+23. Two-cycle Windows cross-order now proves replay0/1 precede CSID1 start and replay2/3 follow MIPI completion plus sensor-on. The only remaining start-order ambiguity is the mutual interleave of replay0/1 with the separately proven packet0/1 -> BUS -> packet2/3 prefix before CSID1 start. PIX remains unauthorized until that final relation is closed.
 
 ## Policy consequence
 
