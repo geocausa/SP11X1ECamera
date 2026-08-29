@@ -1,0 +1,213 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -10,6 +10,8 @@
+ #include <asm/barrier.h>
+ 
+ #include <linux/clk.h>
++#include <linux/dma-mapping.h>
++#include <linux/firmware.h>
+ #include <linux/interconnect.h>
+ #include <linux/interrupt.h>
+ #include <linux/ioport.h>
+@@ -33,6 +35,7 @@
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-mc.h>
+ #include <media/v4l2-fwnode.h>
++#include <media/videobuf2-dma-sg.h>
+ 
+ #include "camss.h"
+ 
+@@ -47,6 +50,12 @@
+ #define CAMSS_CPHY_DIVISOR 7
+ #define CAMSS_DPHY_DIVISOR 16
+ 
++/* Disposable E003h PIX trigger. False by default and read-only after load. */
++static bool camss_x1e_pix_runtime_arm;
++module_param_named(e003h_pix_runtime_arm, camss_x1e_pix_runtime_arm, bool, 0400);
++MODULE_PARM_DESC(e003h_pix_runtime_arm,
++		 "Arm the disposable SP11 E003h one-shot PIX sysfs trigger");
++
+ static const struct parent_dev_ops vfe_parent_dev_ops;
+ 
+ static const struct camss_subdev_resources csiphy_res_8x16[] = {
+@@ -7636,6 +7645,156 @@
+ };
+ 
+ /*
++ * E003h disposable sysfs trigger. The attribute is created only when the module
++ * is explicitly loaded with e003h_pix_runtime_arm=1 on X1E80100. It accepts
++ * exactly "RUN", discovers only the two preallocated DEQUEUED buffers 0/1,
++ * loads the fixed local capsule firmware, and invokes the irreversible 0034
++ * gate. It never QBUFs or STREAMONs the normal vb2 path.
++ */
++#define CAMSS_X1E_PIX_TRIGGER_FW "sp11/e003h/E003H_PIX_ORACLE_CAPSULE.bin"
++
++static int camss_x1e_pix_trigger_buffer(struct camss_video *video,
++					unsigned int index,
++					struct camss_buffer **buffer)
++{
++	struct vb2_v4l2_buffer *vbuf;
++	struct vb2_buffer *vb;
++
++	if (!video || !buffer || index >= video->vb2_q.max_num_buffers ||
++	    !video->vb2_q.bufs || !video->vb2_q.bufs[index])
++		return -EINVAL;
++	vb = video->vb2_q.bufs[index];
++	if (vb->vb2_queue != &video->vb2_q)
++		return -EINVAL;
++	vbuf = to_vb2_v4l2_buffer(vb);
++	*buffer = container_of(vbuf, struct camss_buffer, vb);
++	return 0;
++}
++
++static int camss_x1e_pix_trigger_sync(struct camss *camss,
++				      struct camss_buffer *buffer, bool for_device)
++{
++	struct vb2_buffer *vb = &buffer->vb.vb2_buf;
++	struct sg_table *sgt;
++	struct scatterlist *sg;
++	dma_addr_t next;
++	u64 total = 0;
++	unsigned int i;
++
++	sgt = vb2_dma_sg_plane_desc(vb, 0);
++	if (!sgt || !sgt->nents)
++		return -EFAULT;
++	next = buffer->addr[0];
++	for_each_sg(sgt->sgl, sg, sgt->nents, i) {
++		if (sg_dma_address(sg) != next || !sg_dma_len(sg))
++			return -ERANGE;
++		next += sg_dma_len(sg);
++		total += sg_dma_len(sg);
++	}
++	if (total < CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++		return -ERANGE;
++
++	if (for_device)
++		dma_sync_sgtable_for_device(camss->dev, sgt, DMA_FROM_DEVICE);
++	else
++		dma_sync_sgtable_for_cpu(camss->dev, sgt, DMA_FROM_DEVICE);
++	return 0;
++}
++
++static ssize_t e003h_pix_run_once_store(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	struct camss_x1e_pix_runner_result result = { 0 };
++	struct camss_x1e_pix_gate_request req = { 0 };
++	struct camss_buffer *video0 = NULL;
++	struct camss_buffer *video1 = NULL;
++	const struct firmware *fw = NULL;
++	struct media_pad *sensor_pad;
++	struct camss_video *video;
++	struct v4l2_subdev *sensor;
++	struct camss *camss;
++	bool synced0 = false;
++	bool synced1 = false;
++	int ret;
++
++	if (!camss_x1e_pix_runtime_arm || !sysfs_streq(buf, "RUN"))
++		return -EPERM;
++	camss = dev_get_drvdata(dev);
++	if (!camss || !camss->res || camss->res->version != CAMSS_X1E80100)
++		return -ENODEV;
++
++	ret = request_firmware_direct(&fw, CAMSS_X1E_PIX_TRIGGER_FW, dev);
++	if (ret)
++		return ret;
++	if (fw->size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES) {
++		ret = -EINVAL;
++		goto out_fw;
++	}
++
++	video = &camss->vfe[1].line[VFE_LINE_PIX].video_out;
++	mutex_lock(&video->lock);
++	mutex_lock(&video->q_lock);
++	if (vb2_get_num_buffers(&video->vb2_q) != 2) {
++		ret = -EINVAL;
++		goto out_unlock;
++	}
++	ret = camss_x1e_pix_trigger_buffer(video, 0, &video0);
++	if (ret)
++		goto out_unlock;
++	ret = camss_x1e_pix_trigger_buffer(video, 1, &video1);
++	if (ret)
++		goto out_unlock;
++
++	sensor_pad = media_pad_remote_pad_first(&camss->csiphy[2].pads[MSM_CSIPHY_PAD_SINK]);
++	if (!sensor_pad || !is_media_entity_v4l2_subdev(sensor_pad->entity)) {
++		ret = -ENOLINK;
++		goto out_unlock;
++	}
++	sensor = media_entity_to_v4l2_subdev(sensor_pad->entity);
++
++	ret = camss_x1e_pix_trigger_sync(camss, video0, true);
++	if (ret)
++		goto out_unlock;
++	synced0 = true;
++	ret = camss_x1e_pix_trigger_sync(camss, video1, true);
++	if (ret)
++		goto out_sync_cpu;
++	synced1 = true;
++
++	req.runner.capsule = fw->data;
++	req.runner.capsule_size = fw->size;
++	req.runner.sensor = sensor;
++	req.runner.video[0] = video0;
++	req.runner.video[1] = video1;
++	memcpy(req.capsule_sha256, camss_x1e_pix_gate_capsule_sha256,
++	       sizeof(req.capsule_sha256));
++	ret = camss_x1e_pix_gate_run_once(camss, &req, &result);
++	if (!result.teardown_safe)
++		goto out_unlock;
++
++out_sync_cpu:
++	if (synced1)
++		camss_x1e_pix_trigger_sync(camss, video1, false);
++	if (synced0)
++		camss_x1e_pix_trigger_sync(camss, video0, false);
++out_unlock:
++	mutex_unlock(&video->q_lock);
++	mutex_unlock(&video->lock);
++out_fw:
++	release_firmware(fw);
++	if (ret)
++		return ret;
++	if (result.video_done != video0 || !result.epoch0_seen || !result.video_seen ||
++	    !result.teardown_safe)
++		return -EIO;
++
++	dev_info(dev, "E003h PIX one-shot completed: VIDEO slot0 returned safely\n");
++	return count;
++}
++static DEVICE_ATTR_WO(e003h_pix_run_once);
++
++/*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
+  * rejects any address that cannot be represented by RT-CDM's 32-bit BL base.
+@@ -7889,6 +8048,14 @@
+ 		goto err_media_device_unregister;
+ 	}
+ 
++	if (camss_x1e_pix_runtime_arm && camss->res->version == CAMSS_X1E80100) {
++		ret = device_create_file(dev, &dev_attr_e003h_pix_run_once);
++		if (ret) {
++			v4l2_async_nf_unregister(&camss->notifier);
++			goto err_media_device_unregister;
++		}
++	}
++
+ 	return 0;
+ 
+ err_media_device_unregister:
+@@ -7927,6 +8094,8 @@
+ {
+ 	struct camss *camss = platform_get_drvdata(pdev);
+ 
++	if (camss_x1e_pix_runtime_arm && camss->res->version == CAMSS_X1E80100)
++		device_remove_file(&pdev->dev, &dev_attr_e003h_pix_run_once);
+ 	v4l2_async_nf_unregister(&camss->notifier);
+ 	v4l2_async_nf_cleanup(&camss->notifier);
+ 	camss_unregister_entities(camss);

@@ -474,6 +474,16 @@ Patch SHA-256 `6c015395dbb199d94bdd23e01d0a9266f8e71b377c4b5943d36675ae77119b14`
 
 **Next:** prepare but do not arm the disposable trigger/package that verifies capsule/module/DT hashes and Golden rollback externally, then supplies two preallocated QC10C buffers to `0034` without invoking normal vb2 STREAMON. Inspect that trigger before any hardware authorization.
 
+## 2026-08-29 — disposable one-shot PIX trigger/package complete, not armed (`0035`)
+
+`0035` adds the only prospective external entry point, still disabled by default. `e003h_pix_runtime_arm` is a load-time read-only bool whose zero-initialized default creates no trigger. When explicitly set to 1 on X1E80100, probe creates owner-write-only `e003h_pix_run_once`; the only accepted payload is `RUN`. The handler loads fixed firmware `sp11/e003h/E003H_PIX_ORACLE_CAPSULE.bin`, locks the PIX video/vb2 queue, requires exactly two allocated buffers 0/1, validates their mapped SG ranges are contiguous, moves cache ownership to the DMA device, calls `0034`, then returns cache ownership to CPU only after safe teardown. It never QBUFs and never enters normal vb2 STREAMON.
+
+The userspace helper source SHA-256 is `98c97a468e3ab120b99e329f88e6b55dd8742a8f063e0f43c99c4d8600cff140` and compiled local binary `d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09`. It sets exact QC10C 2560x1440/3584/0x76b000, REQBUFS exactly two MMAP buffers, QUERYBUF+mmap only, writes `RUN`, then saves the first 0x76b000 bytes. Source contains no VIDIOC_QBUF or VIDIOC_STREAMON call. The front-only DT builder is `e071b29e50dc1641ef9aa793f00d39abf59e2700c0991a7d67c44c383febdecc` and yields DTB `083fd7d3a207cb329938c561aee84c8642cb02e52034b753b36aaff599a381ed` from the already-proven RDI front-only DT; only VFE spans are widened to 0xf000 and RT-CDM1/GIC_SPI287 is appended. Graph validation has no graph warning.
+
+The installed `sp11-camera-e003h-pix-one-shot` entry reuses Golden kernel `bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a` and initrd `ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d`, blacklists camera modules for manual loading and points firmware_class.path at the local experiment tree. It does not call grub-reboot. Package inspection `7f08beebd6df54bd22bc6a1afacc8abea19c02fea309fbc606d52e6e7c181033` confirms the boot entry is installed but not armed, Golden is saved/default, next_entry empty, camera modules unloaded, DT front-only, and every capsule/module/DT/helper hash exact. `0035` patch SHA-256 `7c7f33340fcd698e422729ee6cb4ad5c7611b97cc4227a6d69e40d199dd2ca38`, module `5a09b33c73feb7060c9e0f504cf893fc2e120f6225c4f8b222765c57fc135c79`, trigger inspector `c4339c9f7f766425c2978c24162b98eae13b1b2fa466c9b6bc2e92e03575b353` / JSON `a18a8f48c98871cd99b91e16e1d1c014dfc7a5abe475e79b2b56f3b6d85d5b7d`. Strict checkpatch has zero code/style findings.
+
+**Next:** a separate explicit runtime-arm checkpoint may schedule exactly one candidate boot/one `RUN`. Abort on any package, media-link, buffer or rollback mismatch; after RUN or any failure, reboot to Golden before further work.
+
 
 ## 2026-08-29 — complete selector-2 priming BL batches compiled retained-only (`0032`)
 

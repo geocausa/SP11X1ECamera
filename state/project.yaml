@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-one-shot-pix-gate-built-unarmed-trigger-packaging-next-golden-safe
+status: e003h-pix-trigger-package-complete-not-armed-runtime-review-next-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -735,12 +735,36 @@ e003h:
   linux_front_0034_gate_recipe_runtime_references: 0
   linux_front_0034_runtime_reachable: false
   linux_front_0034_runtime_authorized: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; disposable host trigger/package and actual capsule/module/DT preflight remain unbuilt
-next_experiment: E003h-bounded-vfe1-pix-trigger-package-static
+  linux_front_0035_patch_sha256: 7c7f33340fcd698e422729ee6cb4ad5c7611b97cc4227a6d69e40d199dd2ca38
+  linux_front_0035_source_sha256: b50aea562b05d8edcc08d56eeb45a938772a8c614a97027ee9fa7f7baf3c1582
+  linux_front_0035_object_sha256: df38c16c58a20a6ae471f535db67ee92fdc82e37836f77a8cf39b5b8fa1d8852
+  linux_front_0035_linked_object_sha256: 6714f96b83fb9e6e3ae824d2c3f2403e3eecdcd74e7841b6f51cb766069f8f4c
+  linux_front_0035_module_sha256: 5a09b33c73feb7060c9e0f504cf893fc2e120f6225c4f8b222765c57fc135c79
+  linux_front_0035_inspector_sha256: c4339c9f7f766425c2978c24162b98eae13b1b2fa466c9b6bc2e92e03575b353
+  linux_front_0035_inspection_json_sha256: a18a8f48c98871cd99b91e16e1d1c014dfc7a5abe475e79b2b56f3b6d85d5b7d
+  linux_front_0035_package_inspector_sha256: 86862e1c0abd77e178d0e584f85f133ecd6450e1862a92e7cb0dee55a4315005
+  linux_front_0035_package_inspection_json_sha256: 7f08beebd6df54bd22bc6a1afacc8abea19c02fea309fbc606d52e6e7c181033
+  linux_front_0035_module_param: e003h_pix_runtime_arm, default=false, mode=0400
+  linux_front_0035_sysfs_trigger: e003h_pix_run_once, command=RUN, owner-write-only
+  linux_front_0035_normal_qbuf_used: false
+  linux_front_0035_normal_streamon_used: false
+  linux_front_0035_helper_source_sha256: 98c97a468e3ab120b99e329f88e6b55dd8742a8f063e0f43c99c4d8600cff140
+  linux_front_0035_helper_binary_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  linux_front_0035_frontonly_dtb_sha256: 083fd7d3a207cb329938c561aee84c8642cb02e52034b753b36aaff599a381ed
+  linux_front_0035_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_0035_candidate_boot_entry: sp11-camera-e003h-pix-one-shot
+  linux_front_0035_candidate_boot_installed: true
+  linux_front_0035_candidate_boot_armed: false
+  linux_front_0035_runtime_reachable_by_default: false
+  linux_front_0035_runtime_reachable_when_explicitly_armed: true
+  linux_front_0035_runtime_authorized: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; the prepared disposable trigger has not yet been explicitly runtime-authorized or exercised
+next_experiment: E003h-bounded-vfe1-pix-one-shot-runtime
 next_action: >-
-  Keep 0034 unreferenced and unarmed. Build a disposable front-only runtime package and host preflight that cryptographically verifies the capsule, candidate qcom-camss module and DTB,
-  confirms Golden saved/default plus one-shot rollback, and prepares exactly two QC10C buffers without normal vb2 STREAMON. Add only a deliberately narrow trigger path to the 0034 gate,
-  inspect it end-to-end, and keep runtime unauthorized until a separate checkpoint explicitly arms one attempt.
+  Runtime package 0035 is installed but not armed. Before any boot rerun package inspection and host preflight, verify Golden saved/default with empty next_entry and no camera modules,
+  then explicitly schedule only sp11-camera-e003h-pix-one-shot. On candidate boot manually load qcom-camss with e003h_pix_runtime_arm=1 and the pinned IMX681,
+  configure only IMX681->CSIPHY2->CSID1 IPP->VFE1 PIX, allocate exactly two QC10C buffers without QBUF/STREAMON, invoke RUN once, save slot0, and reboot to Golden immediately.
+  Abort before RUN on any hash/link/format/buffer/trigger mismatch. Do not retry in the same boot because the gate latch is irreversible.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
