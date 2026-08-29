@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-second-pix-diagnostic-authorized-not-yet-armed-golden-safe
+status: e003h-second-pix-diagnostic-abrupt-reset-golden-restored-persistent-stage-observer-next
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -807,14 +807,27 @@ e003h:
   linux_front_0038_load_script_sha256: 461e225c010725d800e9df95b1e012a786c41d590754e985428975b7f3d62637
   linux_front_0038_preflight_script_sha256: 5f50b32d5c23973f14cc17b59fc834e97c6c2cbb8e23987222eb31ef5f89c902
   linux_front_0038_candidate_boot_armed: false
-  linux_front_0038_runtime_authorized: true
+  linux_front_0038_runtime_authorized: false
   linux_front_0038_runtime_authorization_scope: exactly one candidate boot and one RUN; no same-boot retry; archive 0036 telemetry; immediate Golden reboot after success/failure
   linux_front_0038_authorization_review_sha256: 991534b4dd4db9bf7201864f54f07cf8d4faabe24582f8b5d5a4ce3b361a5eb8
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; first attempt timed out before sensor-on and exact RT-CDM timeout stage is not yet distinguished; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-instrumented-second-one-shot-runtime
+  linux_front_0038_runtime_authorization_consumed: true
+  linux_front_0038_nonroot_pretrigger_consumed_run: false
+  linux_front_0038_root_run_treated_consumed: true
+  linux_front_0038_result: abrupt unclean reset during/after root invocation; no QC10C output; no persisted RT-CDM stage error
+  linux_front_0038_normal_shutdown_observed: false
+  linux_front_0038_following_boot_ext4_orphan_cleanup: true
+  linux_front_0038_pstore_record: false
+  linux_front_0038_qc10c_output_present: false
+  linux_front_0038_run_file_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  linux_front_0038_previous_boot_evidence_sha256: 01578d825d07401fc4c879608028a2b6d2c2215124b24c0d65b93c76da4aed3c
+  linux_front_0038_golden_return_sha256: 06d033c19dfe1e1482e0f8388eef5d8d51ff91346a1f60b9a13d88fc16f9312b
+  linux_front_0038_result_markdown_sha256: fdc2c2166dc9dcf7497864cce034e74fc6fd121d40041b1be2aaf376fd56fbe9
+  linux_front_0038_last_rtcdm_stage_persisted: false
+  linux_front_0038_golden_return_verified: true
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the second diagnostic reset abruptly before RT-CDM stage telemetry persisted, so the last executed stage is unknown; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-rtcdm-persistent-stage-observer-static
 next_action: >-
-  Exactly one instrumented second candidate boot and one RUN are authorized. Arm only sp11-camera-e003h-pix-one-shot, manually load the pinned 0036+0037 CAMSS and pinned IMX681,
-  configure the exact front PIX route, invoke RUN once, archive stage telemetry/output, never retry in the same boot, and immediately reboot to Golden after success or failure.
+  Do not repeat either PIX attempt. Golden is restored after the second diagnostic's unclean reset. Build and inspect a non-MMIO persistent stage observer for the existing 0036 RT-CDM stage state, with no new hardware write or trigger semantics. A third runtime is not authorized.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

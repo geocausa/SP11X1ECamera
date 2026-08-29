@@ -534,3 +534,11 @@ The existing front-only one-shot package was repinned to CAMSS module `96e48ff17
 Fresh package/Golden review passed after the exact Windows IRQ correction: candidate CAMSS `96e48ff176a048c391841d2c56bafdce76cfbe8a78b7310173caf175af49c9e9`, front-only DT/capsule/helper hashes exact, branch/origin synchronized, saved/default Golden with empty `next_entry`, candidate camera modules unloaded and trigger absent. Review JSON SHA-256 `991534b4dd4db9bf7201864f54f07cf8d4faabe24582f8b5d5a4ce3b361a5eb8`.
 
 Exactly one candidate boot and one `RUN` are authorized. The diagnostic must not retry in the same boot. `0036` stage telemetry must be archived whether the run fails or succeeds, and the machine must immediately return to Golden afterwards.
+
+## 2026-08-30 — second PIX diagnostic ended in unclean reset; Golden recovered
+
+The non-root helper probe could not open the root-write-only trigger and never issued `RUN`. The subsequent root invocation is treated as the one authorized trigger and was not repeated. The candidate reset before any result or `0036` error line became persistent. The prior boot has no systemd shutdown/reboot sequence; the next Golden boot reports EXT4 orphan cleanup, proving an unclean reset. No QC10C output exists, `RUNTIME-PIX-DIAG2-RUN.txt` is zero bytes, and `/sys/fs/pstore` contains no crash record.
+
+Golden return is verified with `saved_entry=sp11-audio-fullio-v19c`, empty `next_entry`, byte-exact protected kernel/initrd and no candidate camera modules. The run does not prove whether reset/open, core-start or a FIFO submission was the last stage. No third PIX attempt is authorized. Persistent evidence hashes: previous-boot `01578d825d07401fc4c879608028a2b6d2c2215124b24c0d65b93c76da4aed3c`; Golden-return `06d033c19dfe1e1482e0f8388eef5d8d51ff91346a1f60b9a13d88fc16f9312b`; result record `fdc2c2166dc9dcf7497864cce034e74fc6fd121d40041b1be2aaf376fd56fbe9`.
+
+**Next:** add only a non-MMIO persistent observer for the existing `0036` diagnostic state so an abrupt reset cannot erase the last stage. Do not alter RT-CDM programming or authorize another runtime in that checkpoint.
