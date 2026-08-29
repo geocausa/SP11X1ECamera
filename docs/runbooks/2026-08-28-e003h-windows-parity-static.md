@@ -464,6 +464,16 @@ The VFE680 bridge stays internal to `qcom-camss`: two caller QC10C surfaces acqu
 
 **Next:** do not arm `0033` yet. Build and inspect a one-shot disposable caller/preflight that supplies the local capsule and exactly two validated QC10C buffers, confirms the front-only candidate/links and Golden rollback state, and exposes no repeated/probe/vb2 auto-start path. Runtime authorization belongs to a later checkpoint.
 
+## 2026-08-29 — one-shot PIX caller/preflight gate compiled unarmed (`0034`)
+
+`0034-x1e-pix-one-shot-runtime-gate-unarmed.patch` wraps the retained `0033` runner in a second retained-only gate. The gate consumes an irreversible atomic one-shot latch **before validation**, so a failed attempt cannot be retried without module reload/reboot. It requires the exact 41,088-byte local oracle capsule digest `6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20`, VFE1 resource `0x0ac71000/0xf000`, RT-CDM1 `0x0ac26000/0x1000`, a front-only graph with no CSIPHY1 rear-sensor link, and the exact front route already revalidated by `0033`.
+
+The caller must supply two distinct VFE1 PIX vb2 buffers that are still `DEQUEUED`; the queue must not be streaming or driver-owned. Active format is required to be exactly QC10C `2560x1440`, stride 3584, one plane, `sizeimage=0x76b000`. Each DMA base must be nonzero, page-aligned, wholly below 4 GiB and non-overlapping. `0034` neither allocates nor queues those buffers and contains no normal vb2 STREAMON path. The pinned digest is compared against a caller-reported digest; the kernel does not hash the capsule itself, so actual file/module/DT hashing remains a mandatory host-side preflight responsibility.
+
+Patch SHA-256 `6c015395dbb199d94bdd23e01d0a9266f8e71b377c4b5943d36675ae77119b14`; inspector `fd5c5c283bfa9e3bf34ff7995755a6ce7fa1af790373471f07c581e8adfcee38`; inspection JSON `50ed709b0963dab0d1aa6c81414e7bda689ff6598c38a0bf017030800ffe2076`; `camss.c` `df79291cde9784233204970155dcf3d30c1e5ef46d90b175e8bbf50afe0d4536`; object `b26b2a245b0e941c137ec6b029e9ee9e48819d12775c58b29f39084a4309b8c4`; linked object `b3f3e8bba4452d86d9b128e7372b4f12ef5aacf3a9c4c8acf214ecd420435e5d`; module `d3d636c8b587ddfc3891150824acbad8b0f310b1c0edfde709b9e62d94c8ea4b`; build log `b60f8dccadc64ca83283b878633d1d88eb1f2c95956691b750bc214f335c2565`. Forward/reverse reconstruction returns exact `0033`; one gate-recipe ABS64 retention relocation exists and the recipe has zero runtime references. Compiler diagnostics are zero, Golden vermagic matches, and strict checkpatch reports zero code/style findings.
+
+**Next:** prepare but do not arm the disposable trigger/package that verifies capsule/module/DT hashes and Golden rollback externally, then supplies two preallocated QC10C buffers to `0034` without invoking normal vb2 STREAMON. Inspect that trigger before any hardware authorization.
+
 
 ## 2026-08-29 — complete selector-2 priming BL batches compiled retained-only (`0032`)
 

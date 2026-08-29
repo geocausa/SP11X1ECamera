@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-first-frame-pix-runner-built-unarmed-runtime-caller-preflight-next-golden-safe
+status: e003h-one-shot-pix-gate-built-unarmed-trigger-packaging-next-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -716,12 +716,31 @@ e003h:
   linux_front_0033_teardown_failure_policy: pin DMA/pipeline power until reboot
   linux_front_0033_callable_runner_present: true
   linux_front_0033_runtime_reachable: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; disposable one-shot runtime caller/preflight remains unbuilt
-next_experiment: E003h-bounded-vfe1-pix-runtime-caller-preflight-static
+  linux_front_0034_patch_sha256: 6c015395dbb199d94bdd23e01d0a9266f8e71b377c4b5943d36675ae77119b14
+  linux_front_0034_source_sha256: df79291cde9784233204970155dcf3d30c1e5ef46d90b175e8bbf50afe0d4536
+  linux_front_0034_object_sha256: b26b2a245b0e941c137ec6b029e9ee9e48819d12775c58b29f39084a4309b8c4
+  linux_front_0034_linked_object_sha256: b3f3e8bba4452d86d9b128e7372b4f12ef5aacf3a9c4c8acf214ecd420435e5d
+  linux_front_0034_module_sha256: d3d636c8b587ddfc3891150824acbad8b0f310b1c0edfde709b9e62d94c8ea4b
+  linux_front_0034_inspector_sha256: fd5c5c283bfa9e3bf34ff7995755a6ce7fa1af790373471f07c581e8adfcee38
+  linux_front_0034_inspection_json_sha256: 50ed709b0963dab0d1aa6c81414e7bda689ff6598c38a0bf017030800ffe2076
+  linux_front_0034_build_log_sha256: b60f8dccadc64ca83283b878633d1d88eb1f2c95956691b750bc214f335c2565
+  linux_front_0034_checkpatch_sha256: 38a0393200c6f84325f4953d84990557493d7a48c54be28f2f23f2254ed8fcd2
+  linux_front_0034_capsule_bytes: 41088
+  linux_front_0034_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_0034_buffer_contract: two distinct DEQUEUED non-streaming QC10C buffers, 2560x1440 stride3584 size0x76b000, page-aligned 32-bit non-overlap
+  linux_front_0034_resource_contract: VFE1=0x0ac71000/0xf000; RT-CDM1=0x0ac26000/0x1000; front-only CSIPHY1 sink unlinked
+  linux_front_0034_one_shot_latch: atomic cmpxchg 0->1 before validation, no reset until reload/reboot
+  linux_front_0034_capsule_hash_verified_in_kernel: false
+  linux_front_0034_gate_recipe_relocations: 1
+  linux_front_0034_gate_recipe_runtime_references: 0
+  linux_front_0034_runtime_reachable: false
+  linux_front_0034_runtime_authorized: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; disposable host trigger/package and actual capsule/module/DT preflight remain unbuilt
+next_experiment: E003h-bounded-vfe1-pix-trigger-package-static
 next_action: >-
-  Keep the inspected 0033 runner unreferenced and unarmed. Build a one-shot disposable caller/preflight that accepts only the SHA-pinned local capsule and exactly two validated
-  caller-owned QC10C surfaces, requires the exact front-only candidate/module/DT/media-link tuple, verifies Golden saved/default plus rollback preparation, and latches one execution only.
-  Inspect the caller so no probe, generic VFE1 PIX s_stream, vb2 automatic start, or repeated path can reach 0033. Do not attempt PIX hardware until that separate gate passes.
+  Keep 0034 unreferenced and unarmed. Build a disposable front-only runtime package and host preflight that cryptographically verifies the capsule, candidate qcom-camss module and DTB,
+  confirms Golden saved/default plus one-shot rollback, and prepares exactly two QC10C buffers without normal vb2 STREAMON. Add only a deliberately narrow trigger path to the 0034 gate,
+  inspect it end-to-end, and keep runtime unauthorized until a separate checkpoint explicitly arms one attempt.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

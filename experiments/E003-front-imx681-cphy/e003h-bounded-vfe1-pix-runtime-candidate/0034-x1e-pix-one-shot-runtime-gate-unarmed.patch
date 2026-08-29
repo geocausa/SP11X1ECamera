@@ -1,0 +1,170 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7475,6 +7475,167 @@
+ };
+ 
+ /*
++ * E003h one-shot PIX caller/preflight gate, retained and unreferenced.
++ *
++ * This is the final in-kernel boundary before a disposable runtime trigger is
++ * allowed to exist. It does not discover, allocate, queue, or start vb2
++ * buffers. A later experiment must hand it exactly two caller-owned QC10C
++ * buffers that are still under userspace control, plus the separately
++ * SHA-verified local oracle capsule. The latch is intentionally irreversible
++ * until module reload/reboot, including on validation or runner failure.
++ */
++#define CAMSS_X1E_PIX_GATE_CAPSULE_BYTES	41088
++#define CAMSS_X1E_PIX_GATE_QC10C_WIDTH		2560
++#define CAMSS_X1E_PIX_GATE_QC10C_HEIGHT	1440
++#define CAMSS_X1E_PIX_GATE_QC10C_STRIDE	3584
++#define CAMSS_X1E_PIX_GATE_QC10C_BYTES		0x0076b000
++#define CAMSS_X1E_PIX_GATE_VFE1_BASE		0x0ac71000
++#define CAMSS_X1E_PIX_GATE_VFE1_BYTES		0x0000f000
++#define CAMSS_X1E_PIX_GATE_RTCDM1_BASE		0x0ac26000
++#define CAMSS_X1E_PIX_GATE_RTCDM1_BYTES	SZ_4K
++
++static const u8 camss_x1e_pix_gate_capsule_sha256[32] = {
++	0x6a, 0xed, 0x02, 0x8d, 0x1c, 0xaa, 0xf0, 0x36,
++	0x6b, 0x00, 0x40, 0x38, 0xae, 0xe3, 0xe9, 0x54,
++	0xca, 0x95, 0xa9, 0x5c, 0x11, 0x7e, 0x26, 0x19,
++	0x55, 0x5b, 0xdd, 0x96, 0x05, 0x74, 0x6a, 0x20,
++};
++
++struct camss_x1e_pix_gate_request {
++	struct camss_x1e_pix_runner_request runner;
++	u8 capsule_sha256[ARRAY_SIZE(camss_x1e_pix_gate_capsule_sha256)];
++};
++
++static atomic_t camss_x1e_pix_gate_once = ATOMIC_INIT(0);
++
++static int camss_x1e_pix_gate_buffer(struct camss_video *video,
++				     struct camss_buffer *buffer)
++{
++	const struct v4l2_pix_format_mplane *fmt;
++	struct vb2_buffer *vb;
++	u64 end;
++
++	if (!video || !buffer)
++		return -EINVAL;
++	fmt = &video->active_fmt.fmt.pix_mp;
++	vb = &buffer->vb.vb2_buf;
++
++	if (fmt->pixelformat != V4L2_PIX_FMT_QC10C ||
++	    fmt->width != CAMSS_X1E_PIX_GATE_QC10C_WIDTH ||
++	    fmt->height != CAMSS_X1E_PIX_GATE_QC10C_HEIGHT ||
++	    fmt->num_planes != 1 ||
++	    fmt->plane_fmt[0].bytesperline != CAMSS_X1E_PIX_GATE_QC10C_STRIDE ||
++	    fmt->plane_fmt[0].sizeimage != CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++		return -EINVAL;
++	if (vb->vb2_queue != &video->vb2_q || vb->num_planes != 1 ||
++	    vb->state != VB2_BUF_STATE_DEQUEUED || vb2_plane_size(vb, 0) <
++	    CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++		return -EBUSY;
++	if (!buffer->addr[0] || !IS_ALIGNED(buffer->addr[0], PAGE_SIZE))
++		return -EINVAL;
++	end = (u64)buffer->addr[0] + CAMSS_X1E_PIX_GATE_QC10C_BYTES - 1;
++	if (end > U32_MAX)
++		return -ERANGE;
++
++	return 0;
++}
++
++static int camss_x1e_pix_gate_resources(struct camss *camss)
++{
++	struct platform_device *pdev;
++	struct resource *vfe1;
++	struct resource *rtcdm1;
++
++	if (!camss || !camss->dev || !camss->rtcdm1.present)
++		return -ENODEV;
++	pdev = to_platform_device(camss->dev);
++	vfe1 = platform_get_resource_byname(pdev, IORESOURCE_MEM, "vfe1");
++	rtcdm1 = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rt_cdm1");
++	if (!vfe1 || vfe1->start != CAMSS_X1E_PIX_GATE_VFE1_BASE ||
++	    resource_size(vfe1) != CAMSS_X1E_PIX_GATE_VFE1_BYTES)
++		return -ENODEV;
++	if (!rtcdm1 || rtcdm1->start != CAMSS_X1E_PIX_GATE_RTCDM1_BASE ||
++	    resource_size(rtcdm1) != CAMSS_X1E_PIX_GATE_RTCDM1_BYTES)
++		return -ENODEV;
++	if (!camss->rtcdm1.base)
++		return -ENODEV;
++
++	return 0;
++}
++
++static int camss_x1e_pix_gate_validate(struct camss *camss,
++				       const struct camss_x1e_pix_gate_request *req)
++{
++	struct camss_video *video;
++	u64 a0, a1;
++	int ret;
++
++	if (!req || req->runner.capsule_size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES ||
++	    memcmp(req->capsule_sha256, camss_x1e_pix_gate_capsule_sha256,
++		   sizeof(camss_x1e_pix_gate_capsule_sha256)))
++		return -EINVAL;
++	ret = camss_x1e_pix_runner_validate(camss, &req->runner);
++	if (ret)
++		return ret;
++	ret = camss_x1e_pix_gate_resources(camss);
++	if (ret)
++		return ret;
++
++	video = &camss->vfe[1].line[VFE_LINE_PIX].video_out;
++	if (video->vb2_q.streaming || video->vb2_q.start_streaming_called ||
++	    atomic_read(&video->vb2_q.owned_by_drv_count))
++		return -EBUSY;
++	ret = camss_x1e_pix_gate_buffer(video, req->runner.video[0]);
++	if (ret)
++		return ret;
++	ret = camss_x1e_pix_gate_buffer(video, req->runner.video[1]);
++	if (ret)
++		return ret;
++	if (req->runner.video[0]->vb.vb2_buf.index ==
++	    req->runner.video[1]->vb.vb2_buf.index)
++		return -EINVAL;
++
++	a0 = req->runner.video[0]->addr[0];
++	a1 = req->runner.video[1]->addr[0];
++	if (a0 < a1 + CAMSS_X1E_PIX_GATE_QC10C_BYTES &&
++	    a1 < a0 + CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++		return -EINVAL;
++
++	/* The disposable front-only DT must not have a rear sensor link. */
++	if (media_pad_remote_pad_first(&camss->csiphy[1].pads[MSM_CSIPHY_PAD_SINK]))
++		return -EBUSY;
++
++	return 0;
++}
++
++static int camss_x1e_pix_gate_run_once(struct camss *camss,
++				       const struct camss_x1e_pix_gate_request *req,
++				       struct camss_x1e_pix_runner_result *result)
++{
++	int ret;
++
++	if (atomic_cmpxchg(&camss_x1e_pix_gate_once, 0, 1))
++		return -EALREADY;
++	ret = camss_x1e_pix_gate_validate(camss, req);
++	if (ret)
++		return ret;
++
++	return camss_x1e_pix_runner_once(camss, &req->runner, result);
++}
++
++struct camss_x1e_pix_gate_static_ops {
++	int (*run_once)(struct camss *camss,
++			const struct camss_x1e_pix_gate_request *req,
++			struct camss_x1e_pix_runner_result *result);
++};
++
++/* Retention only: no probe, vb2, ioctl, debugfs or firmware path references it. */
++static const struct camss_x1e_pix_gate_static_ops
++camss_x1e_pix_gate_recipe __used = {
++	.run_once = camss_x1e_pix_gate_run_once,
++};
++
++/*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
+  * rejects any address that cannot be represented by RT-CDM's 32-bit BL base.
