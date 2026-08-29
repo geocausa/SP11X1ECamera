@@ -42,6 +42,7 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 17. Representative steady-state DMI payload bytes are now hash-closed for all five variants from local Windows source-ring/slot evidence; raw payload bytes remain untracked. Exact KMD disassembly proves the five BL sizes are upstream IQ-packet shapes, not a hidden KMD selector. Frame-varying IQ values and the exact GEN_IRQ tag source remain upstream inputs; runtime stays blocked.
 
 18. GEN_IRQ tagging is now exact for the accepted front stream: 245 consumed requests prove BL4 userdata equals `low32(requestId)` with `subRequest=0`; the first two tags are the already-proven primed batches. A second `0x83c` payload sample confirms only `4308/1` and `4308/2` vary. The remaining steady-state producer is upstream IQ packet content, not KMD tagging/selection.
+19. The exact Surface camera INF registers `QcDeviceMFT8380.dll` as DeviceMFT; its CamX Titan680 builders own all 24 changing steady register fields and all eight DMI register identities. LSC/Gamma/GTM/DSX/PDPC/WB/Demux dependency families are statically named, while proprietary algorithm reproduction remains explicitly out of scope. The next Linux step is an unreachable consumer/materializer only.
 
 ## Policy consequence
 

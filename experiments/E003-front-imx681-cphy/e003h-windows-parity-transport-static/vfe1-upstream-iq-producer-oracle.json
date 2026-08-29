@@ -1,0 +1,182 @@
+{
+  "accepted": true,
+  "crosscheck": {
+    "all_dmi_registers_named": true,
+    "all_dynamic_registers_named": true,
+    "epoch0_dmi_register_count": 8,
+    "epoch0_dynamic_register_count": 24
+  },
+  "linux_consequence": {
+    "algorithm_boundary": "This oracle identifies the Windows producer and dependency families; it does not claim Linux has reproduced Qualcomm CamX AEC/AWB/TMC/tintless/IQ algorithms.",
+    "consumer_boundary": "Linux steady-state materialization must consume module-level IQ outputs/dirty groups and rewrite DMI addresses to Linux-owned DMA; it must not freeze captured Windows frame values or payload IOVAs.",
+    "runtime_authorized": false
+  },
+  "module_map": {
+    "BPCABF411": {
+      "dependencies": [
+        "BPC/ABF tuning and per-request IQ inputs"
+      ],
+      "dmi": [
+        "0x4908:1:0x100"
+      ],
+      "dynamic_registers": [
+        "0x4958",
+        "0x495c"
+      ],
+      "producer": "CamX::IFEBPCABF411 / IFEBPCABF411Titan680"
+    },
+    "DSX101": {
+      "dependencies": [
+        "crop type",
+        "MNDS output geometry",
+        "DS4 path geometry"
+      ],
+      "dmi": [
+        "0xa008:1:0x300",
+        "0xa008:2:0x300",
+        "0xa208:1:0x180",
+        "0xa208:2:0x180"
+      ],
+      "dynamic_registers": [
+        "0xa058",
+        "0xa05c",
+        "0xa258",
+        "0xa25c"
+      ],
+      "producer": "CamX::IFEDSX101 / IFEDSX101Titan680"
+    },
+    "DemuxBLS141": {
+      "dependencies": [
+        "pixel format",
+        "ISP/channel gain",
+        "BLS/tuning state"
+      ],
+      "dmi": [],
+      "dynamic_registers": [
+        "0x3b70",
+        "0x3b74"
+      ],
+      "producer": "CamX::IFEDemuxBLS141 / IFEDemuxBLS141Titan680"
+    },
+    "GIC311": {
+      "dependencies": [
+        "CamX GIC311 IQ interpolation/calculation inputs"
+      ],
+      "dmi": [
+        "0x4708:1:0x200"
+      ],
+      "dynamic_registers": [
+        "0x4758",
+        "0x475c"
+      ],
+      "producer": "CamX::IFEGIC311 / IFEGIC311Titan680"
+    },
+    "GTM131": {
+      "dependencies": [
+        "TMC state",
+        "AEC gain",
+        "DRC gain",
+        "GTM/LTM percentage and tone-mapping triggers"
+      ],
+      "dmi": [
+        "0x5a08:1:0x800"
+      ],
+      "dynamic_registers": [
+        "0x5a58",
+        "0x5a5c"
+      ],
+      "producer": "CamX::IFEGTM131 / IFEGTM131Titan680"
+    },
+    "Gamma151": {
+      "dependencies": [
+        "AEC update",
+        "AWB update",
+        "gamma tuning state"
+      ],
+      "dmi": [
+        "0x5f08:1:0x400",
+        "0x5f08:2:0x400",
+        "0x5f08:3:0x400"
+      ],
+      "dynamic_registers": [
+        "0x5f58",
+        "0x5f5c"
+      ],
+      "producer": "CamX::IFEGamma151 / IFEGamma151Titan680"
+    },
+    "LSC411": {
+      "dependencies": [
+        "AEC update",
+        "AWB update",
+        "sensor calibration",
+        "geometry",
+        "tintless/ALSC stats and state"
+      ],
+      "dmi": [
+        "0x4308:1:0x374",
+        "0x4308:2:0x374",
+        "0x4308:3:0x374"
+      ],
+      "dynamic_registers": [
+        "0x4358",
+        "0x435c"
+      ],
+      "producer": "CamX::IFELSC411 / IFELSC411Titan680"
+    },
+    "PDPC311": {
+      "dependencies": [
+        "sensor mode/format",
+        "PDAF configuration",
+        "PDPC tuning/mapping state"
+      ],
+      "dmi": [
+        "0x3d08:1:0x200"
+      ],
+      "dynamic_registers": [
+        "0x3d58",
+        "0x3d5c",
+        "0x3d78",
+        "0x3d7c",
+        "0x3d80",
+        "0x3d84"
+      ],
+      "producer": "CamX::IFEPDPC311 / IFEPDPC311Titan680"
+    },
+    "WB201": {
+      "dependencies": [
+        "application/AWB white-balance gains",
+        "WB tuning state"
+      ],
+      "dmi": [],
+      "dynamic_registers": [
+        "0x456c",
+        "0x4570"
+      ],
+      "producer": "CamX::IFEWB201 / IFEWB201Titan680"
+    }
+  },
+  "ownership": {
+    "five_shape_rule": "the 0x958/0x868/0x83c/0x6b8/0x5a4 steady main-BL shapes are incoming CamX IQ-module/dirty-group subsets, not a hidden qccamisp KMD selector",
+    "iq_value_and_dmi_payload_producer": "registered QcDeviceMFT8380.dll CamX DeviceMFT",
+    "kernel_consumer": "qccamisp8380 DAL_ife_process_iq_packet, already pinned separately",
+    "transport": "CamX builds/commits CSL command buffers; Surface AVStream miniport receives UMD CSL descriptors/address patches and queues/sends packets"
+  },
+  "package": {
+    "avstream": {
+      "bytes": 547192,
+      "file": "surfacecamavs8380.sys",
+      "sha256": "b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed"
+    },
+    "device_mft": {
+      "bytes": 23998368,
+      "clsid": "{4C2331F0-66BE-4177-9841-2FCBA8CCF5CA}",
+      "file": "QcDeviceMFT8380.dll",
+      "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+    },
+    "inf": {
+      "bytes": 16736,
+      "sha256": "4db3acab414e344dc460478b54d964c9c7b5d3d648ee0c19db13523431262fcb"
+    }
+  },
+  "schema": "sp11-e003h-windows-vfe1-upstream-iq-producer-v1"
+}

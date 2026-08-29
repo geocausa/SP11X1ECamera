@@ -345,3 +345,14 @@ A focused same-machine correlation captures 246 BL4 `GEN_IRQ` tags `1..0xf6` and
 A second dedicated `0x83c` DMI slot (local/untracked raw SHA-256 `3ff9097d63db3386670287519c2e95133fe6cbaa145fcc668626825346d62659`) confirms the same payload rule seen in the other multi-sample variants: only `4308/1` and `4308/2` vary; the other ten carried DMI identities are invariant across the two samples. The updated hash-only DMI extractor/oracle remain raw-byte-free.
 
 **Next:** move above qccamisp KMD and identify the producer/value contract for the frame-varying IQ register and DMI values supplied in each incoming IQ packet. Runtime remains blocked.
+
+
+## 2026-08-29 — registered CamX DeviceMFT owns steady-state IQ values
+
+The remaining upstream ownership ambiguity is closed from the exact Surface camera package. `surfacecamavs8380.inf` (16,736 bytes, SHA-256 `4db3acab414e344dc460478b54d964c9c7b5d3d648ee0c19db13523431262fcb`) registers CLSID `{4C2331F0-66BE-4177-9841-2FCBA8CCF5CA}` to `QcDeviceMFT8380.dll`. The exact DeviceMFT is 23,998,368 bytes SHA-256 `c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35`; it contains Qualcomm CamX IFE node, IQ-module and Titan680 hardware-setting paths. `surfacecamavs8380.sys` (547,192 bytes SHA-256 `b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed`) explicitly receives UMD CSL command descriptors/address patches and queues/sends packets.
+
+Exact ARM64 command-builder anchors map every `0024` changing register and DMI identity to CamX: DemuxBLS141 (`0x3b70/74`), PDPC311 (`0x3d58/5c`, `0x3d78..84`, DMI `0x3d08`), LSC411 (`0x4358/5c`, DMI `0x4308`), WB201 (`0x456c/70`), GIC311 (`0x4758/5c`, DMI `0x4708`), BPCABF411 (`0x4958/5c`, DMI `0x4908`), GTM131 (`0x5a58/5c`, DMI `0x5a08`), Gamma151 (`0x5f58/5c`, DMI `0x5f08`) and DSX101 (`0xa058/5c`, `0xa258/5c`, DMI `0xa008/0xa208`). The five steady BL shapes are thus incoming CamX IQ-module/dirty-group subsets, not a hidden KMD mode selector.
+
+Dependency strings pin the semantic boundary without reverse-engineering proprietary algorithms: LSC uses AEC/AWB/calibration/tintless state; Gamma consumes AEC/AWB; GTM uses TMC/AEC/DRC tone-mapping state; DSX is crop/MNDS/DS4 geometry driven; PDPC uses sensor/PDAF state; WB uses application/AWB gains; DemuxBLS uses format/gain/BLS state. Extractor SHA-256 `85f8b405b3e10b195f972f732df658daec66be45f03cce76883fbe4bf129ba18`; derived oracle `cbd8908d967f4831e67f8eb3c36ae9799c4bcb42e1923f0ee34c2152841c03ef`.
+
+**Next:** build an unreachable **consumer-side** steady-state materializer. It may accept an observed normalized template shape and module-level values/payloads and repatch Linux-owned DMI DMA plus request-derived GEN_IRQ. It must not embed Windows values, reproduce Windows allocator geometry, invent CamX algorithms, or submit RT-CDM hardware.
