@@ -1,0 +1,51 @@
+{
+  "accepted": true,
+  "corpus": {
+    "caller_dynamic_values": 20,
+    "commands": 278,
+    "dmi_commands": 46,
+    "ordinary_register_writes": 2131,
+    "packets": 4,
+    "unique_payloads": 16
+  },
+  "dynamic_policy": {
+    "normalized_holes_must_be_zero": true,
+    "period_cfg_0x8c_caller_supplied": true,
+    "prior_live_volatile_offsets": [
+      "0x3b70",
+      "0x3d78",
+      "0x3d7c",
+      "0x3d80",
+      "0x3d84"
+    ],
+    "valid_mask_required": "0x000fffff"
+  },
+  "linux_layout": {
+    "dmi_arena_bytes": 14848,
+    "main_arena_bytes": 16384,
+    "main_slots": "4 x 4KiB",
+    "payload_alignment": 64,
+    "windows_dmi_source_offsets_frozen": false,
+    "windows_main_slot_stride_frozen": false
+  },
+  "module_sha256": "f783550d532c20066a4b378d6ba0a86c9242d567b036603fd8623681e3e3ae66",
+  "object_sha256": "d9403e5c53d9745f6d6f8ebdedd238fc8e90581afc23b611be1f5ab99c7cb85c",
+  "oracle_sha256": "1d1b753eeaf25bcdfd1105154138bb9123d40330f070b1b8fd0eb6ab69f38cdc",
+  "patch_sha256": "5e6f557ef692b32ada97a98daa9188db979c70ba46b9c8dd21b6f8a93ced25a2",
+  "policy": "static-only materialization; no module load, RT-CDM FIFO0 submission, VFE1 PIX enable, sensor transmission or frame authorized",
+  "raw_corpus_embedded": false,
+  "runtime_isolation": {
+    "helper_relocations": [
+      "00000000000015d8 R_AARCH64_ABS64   camss_rtcdm1_corpus_materialize",
+      "00000000000015e0 R_AARCH64_ABS64   camss_rtcdm1_corpus_release"
+    ],
+    "mmio_or_irq_or_fifo_submission_added": false,
+    "pix_stream_gate": "-EOPNOTSUPP before stream lock/IRQ/output",
+    "recipe_compiled_relocation_present": false,
+    "recipe_source_reference_count": 1
+  },
+  "schema": "sp11-e003h-linux-rtcdm-corpus-materializer-inspection-v1",
+  "source_sha256": "78570e6ec2a4bc832f45e900b3ef47fb8120e24cf092c6395c7d9b3c6b38c0da",
+  "static_proof_sha256": "7e3577fba84d50e02fb43d0c47ac2b440e9714575acb93ae0db64a5fc2c9938b",
+  "windows_iovas_frozen": false
+}

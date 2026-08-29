@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-pix-ownership-unreachable-built-stream-blocked-golden-unchanged
+status: e003h-rtcdm-corpus-materializer-unreachable-built-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -407,15 +407,35 @@ e003h:
   linux_vfe1_pix_0018_group_fifos: 5 independent two-slot FIFOs
   linux_vfe1_pix_0018_aux_allocations_per_slot: DS4, DS16, AEC_BE, BHIST, TL_BG, AWB_BG, RS
   linux_vfe1_pix_0018_runtime_reachable: false
-  unresolved: materialize the exact captured Windows IFE main-CDM/DMI corpus into a Linux-owned unreachable RT-CDM command/data arena, patching only mechanically classified dynamic fields; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-linux-rtcdm-command-corpus-materializer-static
+  rtcdm_corpus_materializer_packets: 4
+  rtcdm_corpus_materializer_commands: 278
+  rtcdm_corpus_materializer_register_writes: 2131
+  rtcdm_corpus_materializer_dmi_commands: 46
+  rtcdm_corpus_materializer_unique_payloads: 16
+  rtcdm_corpus_materializer_dynamic_fields: 20
+  rtcdm_corpus_cross_capture_new_dynamic_register: 0x8c period_cfg
+  rtcdm_corpus_normalized_initial_equals_final: true
+  rtcdm_corpus_linux_main_arena_bytes: 0x4000
+  rtcdm_corpus_linux_dmi_arena_bytes: 0x3a00
+  rtcdm_corpus_windows_main_stride_frozen: false
+  rtcdm_corpus_windows_dmi_offsets_frozen: false
+  linux_rtcdm_0019_patch_sha256: 5e6f557ef692b32ada97a98daa9188db979c70ba46b9c8dd21b6f8a93ced25a2
+  linux_rtcdm_0019_extractor_sha256: 3f02b5860996c95a323f3e1fce49c927674511e231a0466536f146b83c572faf
+  linux_rtcdm_0019_oracle_sha256: 1d1b753eeaf25bcdfd1105154138bb9123d40330f070b1b8fd0eb6ab69f38cdc
+  linux_rtcdm_0019_materializer_sha256: 65c40480074b1a77f2db762e41dc59d5470a4e2d3f09c0ff7881ffc293708cac
+  linux_rtcdm_0019_static_json_sha256: 7e3577fba84d50e02fb43d0c47ac2b440e9714575acb93ae0db64a5fc2c9938b
+  linux_rtcdm_0019_inspector_sha256: 1264822dd10f71a3eb90acf2d903f51464f0241082198eec381dbc08527f2ea2
+  linux_rtcdm_0019_inspection_json_sha256: f0a4fc0fcc83306db0fec7c1345240bc91eb1b267636af35a86203d38ee0b62e
+  linux_rtcdm_0019_module_sha256: f783550d532c20066a4b378d6ba0a86c9242d567b036603fd8623681e3e3ae66
+  linux_rtcdm_0019_runtime_reachable: false
+  unresolved: recover exact Windows producer/source/update semantics for period_cfg +0x8c and VFE1 +0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84 before a full unreachable start orchestrator; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-windows-vfe1-dynamic-startup-fields-oracle
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0017 BUS addressing and 0018 PIX ownership/completion as closed. Windows completion
-  events use independent per-group FIFOs, so never impose the five-cycle observed cross-group order as a Linux requirement. Next,
-  materialize the four captured Windows IFE main-CDM streams into Linux-owned static command/data arenas: preserve exact command bytes
-  and 2131 ordinary register writes, resolve all 46 DMI commands from the 16 captured payload byte strings, and patch only fields already
-  classified dynamic. Keep the materializer and 0015 RT-CDM execution unreachable; do not submit FIFO0, connect VFE ops, enable VFE1 PIX,
-  transmit IMX681, or attempt a front frame until a separate bounded runtime gate is explicitly prepared.
+  Keep IMX681 Linux transmission blocked. Treat 0019 RT-CDM command/data materialization, 0018 PIX ownership and 0017 BUS addressing
+  as closed. Do not substitute either captured Windows value set for period_cfg +0x8c or the five prior live-volatile VFE1 offsets. Recover
+  the exact same-machine Windows builder/source fields and update cadence for +0x8c/+0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84, then
+  feed those values into unreachable 0019. Only after that may a private unreachable orchestrator combine 0011/0015/0017/0018/0019.
+  No module load, FIFO0 submission, VFE1 PIX hardware enable, sensor transmission or front frame until a separate bounded runtime gate.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

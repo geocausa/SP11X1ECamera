@@ -1,0 +1,35 @@
+# CAMSS RT-CDM corpus materializer static build
+
+Date: 2026-08-29
+Kernel source: `/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src`
+Golden build anchor: `/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826`
+Build: `make O=<Golden build anchor> ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules`
+
+Result: PASS
+Compiler warnings/errors: none
+Golden vermagic: `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+
+Static/reproducibility gates:
+- forward reconstruction from `camss.pre-0019.c`: PASS
+- reverse reconstruction: PASS
+- corpus oracle byte reproduction: PASS
+- user-space materialization proof byte reproduction: PASS
+- kernel materializer inspection byte reproduction: PASS
+- checkpatch code/style findings: 0; only non-mail-patch description/Signed-off-by metadata is reported
+- qcom-camss loaded during test: no
+- `/dev/video*`: none
+- `/dev/media*`: none
+- RT-CDM FIFO0 submission: none
+- VFE1 PIX enable: none
+- IMX681 transmission/front frame: none
+
+Hashes:
+- `0019-x1e-rtcdm-corpus-materializer-unreachable.patch`: `5e6f557ef692b32ada97a98daa9188db979c70ba46b9c8dd21b6f8a93ced25a2`
+- `extract_rtcdm_corpus_materializer.py`: `3f02b5860996c95a323f3e1fce49c927674511e231a0466536f146b83c572faf`
+- `rtcdm-corpus-materializer-oracle.json`: `1d1b753eeaf25bcdfd1105154138bb9123d40330f070b1b8fd0eb6ab69f38cdc`
+- `materialize_rtcdm_corpus.py`: `65c40480074b1a77f2db762e41dc59d5470a4e2d3f09c0ff7881ffc293708cac`
+- `rtcdm-corpus-materialization-static.json`: `7e3577fba84d50e02fb43d0c47ac2b440e9714575acb93ae0db64a5fc2c9938b`
+- `inspect_rtcdm_corpus_materializer.py`: `1264822dd10f71a3eb90acf2d903f51464f0241082198eec381dbc08527f2ea2`
+- `rtcdm-corpus-materializer-inspection.json`: `f0a4fc0fcc83306db0fec7c1345240bc91eb1b267636af35a86203d38ee0b62e`
+- `CAMSS-RTCDM-CORPUS-MATERIALIZER-BUILD.log`: `a3f3fd55145ada5d2debdfa82eed63f58948c30557fe6520d8f966c9192508bb`
+- `qcom-camss.ko`: `f783550d532c20066a4b378d6ba0a86c9242d567b036603fd8623681e3e3ae66`

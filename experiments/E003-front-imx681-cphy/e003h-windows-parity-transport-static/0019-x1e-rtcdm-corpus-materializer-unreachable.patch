@@ -1,0 +1,362 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -25,6 +25,7 @@
+ #include <linux/pm_domain.h>
+ #include <linux/slab.h>
+ #include <linux/sizes.h>
++#include <linux/unaligned.h>
+ #include <linux/videodev2.h>
+ 
+ #include <media/media-device.h>
+@@ -5278,6 +5279,351 @@
+ };
+ 
+ /*
++ * E003h static-only IFE command-corpus materializer.
++ *
++ * The exact command and DMI payload bytes remain local oracle inputs and are
++ * intentionally not embedded in the kernel source. Callers must provide four
++ * normalized command templates whose 46 DMI address fields and 20 dynamic
++ * register values are zero, plus the 16 exact DMI payload byte strings and all
++ * 20 dynamic values explicitly. This layer then copies them into Linux-owned
++ * coherent memory and replaces only those proven holes.
++ *
++ * Linux deliberately does not reproduce Windows' 0xa000 command-slot stride or
++ * DMI source-window offsets. Main lists use independent 4 KiB Linux slots and
++ * the 16 unique DMI payloads use a compact 64-byte-aligned Linux layout.
++ * Nothing here submits FIFO0 or references the live RT-CDM recipe above.
++ */
++#define CAMSS_RTCDM1_CORPUS_PACKET_COUNT	4
++#define CAMSS_RTCDM1_CORPUS_PAYLOAD_COUNT	16
++#define CAMSS_RTCDM1_CORPUS_DMI_COUNT		46
++#define CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT	20
++#define CAMSS_RTCDM1_CORPUS_MAIN_SIZE		SZ_16K
++#define CAMSS_RTCDM1_CORPUS_DMI_SIZE		0x3a00
++#define CAMSS_RTCDM1_CORPUS_DYNAMIC_VALID	GENMASK(19, 0)
++
++struct camss_rtcdm1_corpus_blob {
++	const void *data;
++	size_t size;
++};
++
++struct camss_rtcdm1_corpus_input {
++	struct camss_rtcdm1_corpus_blob main[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	struct camss_rtcdm1_corpus_blob payload[CAMSS_RTCDM1_CORPUS_PAYLOAD_COUNT];
++	u32 dynamic[CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT];
++	u32 dynamic_valid;
++};
++
++struct camss_rtcdm1_corpus {
++	void *main_cpu;
++	dma_addr_t main_dma;
++	void *dmi_cpu;
++	dma_addr_t dmi_dma;
++	u32 packet_dma[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u16 packet_len[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	bool materialized;
++};
++
++struct camss_rtcdm1_corpus_payload_desc {
++	u16 offset;
++	u16 size;
++};
++
++struct camss_rtcdm1_corpus_dmi_ref {
++	u16 field;
++	u8 packet;
++	u8 payload;
++};
++
++struct camss_rtcdm1_corpus_dynamic_patch {
++	u16 field;
++	u16 reg;
++	u8 packet;
++};
++
++static const u16 camss_rtcdm1_corpus_packet_used[CAMSS_RTCDM1_CORPUS_PACKET_COUNT] = {
++	0x0e94,
++	0x0e34,
++	0x0904,
++	0x04e8,
++};
++
++static const struct camss_rtcdm1_corpus_payload_desc
++camss_rtcdm1_corpus_payloads[CAMSS_RTCDM1_CORPUS_PAYLOAD_COUNT] = {
++	{ .offset = 0x0, .size = 0x200 }, /* 0 */
++	{ .offset = 0x200, .size = 0x44 }, /* 1 */
++	{ .offset = 0x280, .size = 0x300 }, /* 2 */
++	{ .offset = 0x580, .size = 0x200 }, /* 3 */
++	{ .offset = 0x780, .size = 0x400 }, /* 4 */
++	{ .offset = 0xb80, .size = 0x50 }, /* 5 */
++	{ .offset = 0xc00, .size = 0x374 }, /* 6 */
++	{ .offset = 0xf80, .size = 0x374 }, /* 7 */
++	{ .offset = 0x1300, .size = 0x374 }, /* 8 */
++	{ .offset = 0x1680, .size = 0x180 }, /* 9 */
++	{ .offset = 0x1800, .size = 0x374 }, /* 10 */
++	{ .offset = 0x1b80, .size = 0x1000 }, /* 11 */
++	{ .offset = 0x2b80, .size = 0x800 }, /* 12 */
++	{ .offset = 0x3380, .size = 0x200 }, /* 13 */
++	{ .offset = 0x3580, .size = 0x100 }, /* 14 */
++	{ .offset = 0x3680, .size = 0x374 }, /* 15 */
++};
++
++static const struct camss_rtcdm1_corpus_dmi_ref
++camss_rtcdm1_corpus_dmi_refs[CAMSS_RTCDM1_CORPUS_DMI_COUNT] = {
++	{ .packet = 0, .payload = 0, .field = 0xe0 },
++	{ .packet = 0, .payload = 6, .field = 0x150 },
++	{ .packet = 0, .payload = 15, .field = 0x15c },
++	{ .packet = 0, .payload = 8, .field = 0x168 },
++	{ .packet = 0, .payload = 3, .field = 0x1dc },
++	{ .packet = 0, .payload = 14, .field = 0x278 },
++	{ .packet = 0, .payload = 1, .field = 0x2fc },
++	{ .packet = 0, .payload = 1, .field = 0x308 },
++	{ .packet = 0, .payload = 12, .field = 0x798 },
++	{ .packet = 0, .payload = 4, .field = 0x7b8 },
++	{ .packet = 0, .payload = 4, .field = 0x7c4 },
++	{ .packet = 0, .payload = 4, .field = 0x7d0 },
++	{ .packet = 0, .payload = 2, .field = 0xabc },
++	{ .packet = 0, .payload = 2, .field = 0xac8 },
++	{ .packet = 0, .payload = 9, .field = 0xad4 },
++	{ .packet = 0, .payload = 9, .field = 0xae0 },
++	{ .packet = 0, .payload = 11, .field = 0xd28 },
++	{ .packet = 0, .payload = 5, .field = 0xd34 },
++	{ .packet = 1, .payload = 0, .field = 0xe0 },
++	{ .packet = 1, .payload = 10, .field = 0x13c },
++	{ .packet = 1, .payload = 7, .field = 0x148 },
++	{ .packet = 1, .payload = 8, .field = 0x154 },
++	{ .packet = 1, .payload = 13, .field = 0x1c8 },
++	{ .packet = 1, .payload = 14, .field = 0x264 },
++	{ .packet = 1, .payload = 1, .field = 0x2d0 },
++	{ .packet = 1, .payload = 1, .field = 0x2dc },
++	{ .packet = 1, .payload = 12, .field = 0x76c },
++	{ .packet = 1, .payload = 4, .field = 0x78c },
++	{ .packet = 1, .payload = 4, .field = 0x798 },
++	{ .packet = 1, .payload = 4, .field = 0x7a4 },
++	{ .packet = 1, .payload = 2, .field = 0xa84 },
++	{ .packet = 1, .payload = 2, .field = 0xa90 },
++	{ .packet = 1, .payload = 9, .field = 0xa9c },
++	{ .packet = 1, .payload = 9, .field = 0xaa8 },
++	{ .packet = 2, .payload = 0, .field = 0xe0 },
++	{ .packet = 2, .payload = 10, .field = 0x13c },
++	{ .packet = 2, .payload = 7, .field = 0x148 },
++	{ .packet = 2, .payload = 8, .field = 0x154 },
++	{ .packet = 2, .payload = 13, .field = 0x1c8 },
++	{ .packet = 2, .payload = 14, .field = 0x264 },
++	{ .packet = 2, .payload = 12, .field = 0x6b8 },
++	{ .packet = 2, .payload = 2, .field = 0x844 },
++	{ .packet = 2, .payload = 2, .field = 0x850 },
++	{ .packet = 2, .payload = 9, .field = 0x85c },
++	{ .packet = 2, .payload = 9, .field = 0x868 },
++	{ .packet = 3, .payload = 12, .field = 0x46c },
++};
++
++static const struct camss_rtcdm1_corpus_dynamic_patch
++camss_rtcdm1_corpus_dynamic[CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT] = {
++	{ .packet = 0, .field = 0xe84, .reg = 0x8c },
++	{ .packet = 0, .field = 0x48, .reg = 0x3b70 },
++	{ .packet = 0, .field = 0xa4, .reg = 0x3d78 },
++	{ .packet = 0, .field = 0xa8, .reg = 0x3d7c },
++	{ .packet = 0, .field = 0xac, .reg = 0x3d80 },
++	{ .packet = 0, .field = 0xb0, .reg = 0x3d84 },
++	{ .packet = 1, .field = 0xe24, .reg = 0x8c },
++	{ .packet = 1, .field = 0x48, .reg = 0x3b70 },
++	{ .packet = 1, .field = 0xa4, .reg = 0x3d78 },
++	{ .packet = 1, .field = 0xa8, .reg = 0x3d7c },
++	{ .packet = 1, .field = 0xac, .reg = 0x3d80 },
++	{ .packet = 1, .field = 0xb0, .reg = 0x3d84 },
++	{ .packet = 2, .field = 0x8f4, .reg = 0x8c },
++	{ .packet = 2, .field = 0x48, .reg = 0x3b70 },
++	{ .packet = 2, .field = 0xa4, .reg = 0x3d78 },
++	{ .packet = 2, .field = 0xa8, .reg = 0x3d7c },
++	{ .packet = 2, .field = 0xac, .reg = 0x3d80 },
++	{ .packet = 2, .field = 0xb0, .reg = 0x3d84 },
++	{ .packet = 3, .field = 0x4d8, .reg = 0x8c },
++	{ .packet = 3, .field = 0x1c, .reg = 0x3b70 },
++};
++
++
++static_assert(ARRAY_SIZE(camss_rtcdm1_corpus_packet_used) ==
++	      CAMSS_RTCDM1_CORPUS_PACKET_COUNT);
++static_assert(ARRAY_SIZE(camss_rtcdm1_corpus_payloads) ==
++	      CAMSS_RTCDM1_CORPUS_PAYLOAD_COUNT);
++static_assert(ARRAY_SIZE(camss_rtcdm1_corpus_dmi_refs) ==
++	      CAMSS_RTCDM1_CORPUS_DMI_COUNT);
++static_assert(ARRAY_SIZE(camss_rtcdm1_corpus_dynamic) ==
++	      CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT);
++
++static int camss_rtcdm1_corpus_alloc(struct device *dev, size_t size,
++				     void **cpu, dma_addr_t *dma)
++{
++	void *p;
++	dma_addr_t d;
++
++	p = dma_alloc_coherent(dev, size, &d, GFP_KERNEL);
++	if (!p)
++		return -ENOMEM;
++	if ((u64)d + size - 1 > U32_MAX) {
++		dma_free_coherent(dev, size, p, d);
++		return -ERANGE;
++	}
++
++	memset(p, 0, size);
++	*cpu = p;
++	*dma = d;
++	return 0;
++}
++
++static void camss_rtcdm1_corpus_release(struct camss *camss,
++					struct camss_rtcdm1_corpus *corpus)
++{
++	if (!camss || !corpus)
++		return;
++
++	if (corpus->dmi_cpu) {
++		memzero_explicit(corpus->dmi_cpu, CAMSS_RTCDM1_CORPUS_DMI_SIZE);
++		dma_free_coherent(camss->dev, CAMSS_RTCDM1_CORPUS_DMI_SIZE,
++				  corpus->dmi_cpu, corpus->dmi_dma);
++	}
++	if (corpus->main_cpu) {
++		memzero_explicit(corpus->main_cpu, CAMSS_RTCDM1_CORPUS_MAIN_SIZE);
++		dma_free_coherent(camss->dev, CAMSS_RTCDM1_CORPUS_MAIN_SIZE,
++				  corpus->main_cpu, corpus->main_dma);
++	}
++
++	memset(corpus, 0, sizeof(*corpus));
++}
++
++static int camss_rtcdm1_corpus_validate_input(
++	const struct camss_rtcdm1_corpus_input *input)
++{
++	unsigned int i;
++
++	if (!input || input->dynamic_valid != CAMSS_RTCDM1_CORPUS_DYNAMIC_VALID)
++		return -EINVAL;
++
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_PACKET_COUNT; i++)
++		if (!input->main[i].data ||
++		    input->main[i].size != camss_rtcdm1_corpus_packet_used[i])
++			return -EINVAL;
++
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_PAYLOAD_COUNT; i++)
++		if (!input->payload[i].data ||
++		    input->payload[i].size != camss_rtcdm1_corpus_payloads[i].size)
++			return -EINVAL;
++
++	/* Normalized templates must contain no captured Windows DMI address. */
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DMI_COUNT; i++) {
++		const struct camss_rtcdm1_corpus_dmi_ref *ref =
++			&camss_rtcdm1_corpus_dmi_refs[i];
++		const u8 *main = input->main[ref->packet].data;
++
++		if (ref->field + sizeof(u32) > input->main[ref->packet].size ||
++		    get_unaligned_le32(main + ref->field))
++			return -EINVAL;
++	}
++
++	/* Dynamic VFE values are also explicit caller inputs, never template data. */
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT; i++) {
++		const struct camss_rtcdm1_corpus_dynamic_patch *patch =
++			&camss_rtcdm1_corpus_dynamic[i];
++		const u8 *main = input->main[patch->packet].data;
++
++		if (patch->field + sizeof(u32) > input->main[patch->packet].size ||
++		    get_unaligned_le32(main + patch->field))
++			return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int camss_rtcdm1_corpus_materialize(
++	struct camss *camss, struct camss_rtcdm1_corpus *corpus,
++	const struct camss_rtcdm1_corpus_input *input)
++{
++	u8 *main;
++	u8 *dmi;
++	unsigned int i;
++	int ret;
++
++	if (!camss || !camss->rtcdm1.present || !corpus)
++		return -ENODEV;
++	if (corpus->materialized || corpus->main_cpu || corpus->dmi_cpu)
++		return -EBUSY;
++
++	ret = camss_rtcdm1_corpus_validate_input(input);
++	if (ret)
++		return ret;
++
++	ret = camss_rtcdm1_corpus_alloc(camss->dev,
++					 CAMSS_RTCDM1_CORPUS_MAIN_SIZE,
++					 &corpus->main_cpu, &corpus->main_dma);
++	if (ret)
++		return ret;
++	ret = camss_rtcdm1_corpus_alloc(camss->dev,
++					 CAMSS_RTCDM1_CORPUS_DMI_SIZE,
++					 &corpus->dmi_cpu, &corpus->dmi_dma);
++	if (ret)
++		goto err_release;
++
++	main = corpus->main_cpu;
++	dmi = corpus->dmi_cpu;
++
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_PACKET_COUNT; i++) {
++		u32 slot = i * SZ_4K;
++		u64 dma = (u64)corpus->main_dma + slot;
++
++		memcpy(main + slot, input->main[i].data, input->main[i].size);
++		corpus->packet_dma[i] = (u32)dma;
++		corpus->packet_len[i] = camss_rtcdm1_corpus_packet_used[i];
++	}
++
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_PAYLOAD_COUNT; i++) {
++		const struct camss_rtcdm1_corpus_payload_desc *desc =
++			&camss_rtcdm1_corpus_payloads[i];
++
++		memcpy(dmi + desc->offset, input->payload[i].data, desc->size);
++	}
++
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DMI_COUNT; i++) {
++		const struct camss_rtcdm1_corpus_dmi_ref *ref =
++			&camss_rtcdm1_corpus_dmi_refs[i];
++		const struct camss_rtcdm1_corpus_payload_desc *payload =
++			&camss_rtcdm1_corpus_payloads[ref->payload];
++		u8 *field = main + ref->packet * SZ_4K + ref->field;
++		u64 dma = (u64)corpus->dmi_dma + payload->offset;
++
++		put_unaligned_le32((u32)dma, field);
++	}
++
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT; i++) {
++		const struct camss_rtcdm1_corpus_dynamic_patch *patch =
++			&camss_rtcdm1_corpus_dynamic[i];
++		u8 *field = main + patch->packet * SZ_4K + patch->field;
++
++		put_unaligned_le32(input->dynamic[i], field);
++	}
++
++	corpus->materialized = true;
++	return 0;
++
++err_release:
++	camss_rtcdm1_corpus_release(camss, corpus);
++	return ret;
++}
++
++struct camss_rtcdm1_corpus_static_ops {
++	int (*materialize)(struct camss *camss,
++			   struct camss_rtcdm1_corpus *corpus,
++			   const struct camss_rtcdm1_corpus_input *input);
++	void (*release)(struct camss *camss, struct camss_rtcdm1_corpus *corpus);
++};
++
++/* Retention only: no probe, VFE, RT-CDM submit, or stream path references it. */
++static const struct camss_rtcdm1_corpus_static_ops
++camss_rtcdm1_corpus_recipe __used = {
++	.materialize = camss_rtcdm1_corpus_materialize,
++	.release = camss_rtcdm1_corpus_release,
++};
++
++/*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
+  * rejects any address that cannot be represented by RT-CDM's 32-bit BL base.
