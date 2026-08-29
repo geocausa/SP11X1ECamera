@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-upstream-iq-producer-module-ownership-closed-stream-blocked-golden-unchanged
+status: e003h-epoch0-module-input-materializer-built-unreachable-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -549,15 +549,31 @@ e003h:
   windows_vfe1_iq_producer_extractor_sha256: 85f8b405b3e10b195f972f732df658daec66be45f03cce76883fbe4bf129ba18
   windows_vfe1_iq_producer_oracle_sha256: cbd8908d967f4831e67f8eb3c36ae9799c4bcb42e1923f0ee34c2152841c03ef
   windows_vfe1_iq_algorithms_reproduced_in_linux: false
-  unresolved: build and statically prove an unreachable Linux steady-state consumer/materializer accepting observed template shape plus module-level register/DMI outputs without embedding Windows values or claiming CamX algorithm parity; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-linux-epoch0-module-input-materializer-static
+  linux_front_0025_patch_sha256: 75b882588d2945721ccd000b76fee79266bc88c6b69aeddbddf506cd7982ae68
+  linux_front_0025_source_sha256: 378bd309fdd6246f7ce2742891a0a9cfa3ec6df4a1cd830d8c5e902d7fdaed85
+  linux_front_0025_object_sha256: 07a22e14d74a9dc494e05c51e581b4ef4b4907a82957d9152195cdad73bf7917
+  linux_front_0025_module_sha256: 09abae83c74330806359af7b095c988abd2680af765ea148ee48c996252b6c35
+  linux_front_0025_materializer_proof_script_sha256: 9da0f3772102f4576181d36ee476bc6ce2deaec01ed70a8086999f249d1a6009
+  linux_front_0025_materializer_proof_json_sha256: 7c4b37c2579bd1bf4eae8e1756a7557cad9505929bbc21a986855209af94b4bc
+  linux_front_0025_inspector_sha256: 46d3601e3ba1e8f2478156947d5f64abfa218821782cc791f2bb7cba4e903c10
+  linux_front_0025_inspection_json_sha256: ae60274a57a0b95d1a56f074daa90f98f9c672ef60a6f4af5028fef0ca041b46
+  linux_front_0025_cmd_arena_bytes: 0x1000
+  linux_front_0025_dmi_arena_bytes: 0x3000
+  linux_front_0025_dmi_payload_slots: 14
+  linux_front_0025_genirq_rule: GEN_IRQ userdata = low32(request_id); subrequest=0
+  linux_front_0025_windows_template_embedded: false
+  linux_front_0025_windows_payload_embedded: false
+  linux_front_0025_windows_iova_embedded: false
+  linux_front_0025_fifo0_submission_authorized: false
+  linux_front_0025_runtime_reachable: false
+  unresolved: close the named IQ-module input-provider boundary, separating deterministic sensor/geometry/tuning-derived outputs from live stats/AEC/AWB/TMC/tintless feedback and pinning the Windows priming state before the first steady Epoch0 update; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-iq-module-input-provider-boundary-static
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0022/0023/0024, DMI topology, GEN_IRQ=requestId, and the registered QcDeviceMFT CamX
-  producer/module ownership map as closed. Next build only an unreachable steady-state consumer/materializer: caller supplies one of the
-  five observed normalized command shapes plus module-level register values and DMI payload bytes; Linux rewrites every DMI address to
-  Linux-owned DMA and derives BL4 GEN_IRQ userdata from requestId. Do not embed captured Windows values/ring geometry, invent a hidden
-  KMD selector, claim reproduction of CamX AEC/AWB/TMC/tintless algorithms, arm RT-CDM IRQ/FIFO0, start CSID1/VFE1/MIPI, transmit
-  IMX681, or attempt a front frame.
+  Keep IMX681 Linux transmission blocked. Treat 0022/0023/0024/0025, DMI topology, GEN_IRQ=requestId, and the registered QcDeviceMFT CamX
+  producer/module ownership map as closed. Next classify the nine named IQ-module outputs into deterministic sensor/geometry/tuning inputs
+  versus live statistics/AEC/AWB/TMC/tintless feedback, and pin what Windows primes before the first steady Epoch0 update. Do not freeze
+  captured Windows values, claim CamX algorithm reproduction, create a caller for 0025, arm RT-CDM IRQ/FIFO0, start CSID1/VFE1/MIPI,
+  transmit IMX681, or attempt a front frame.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

@@ -1,0 +1,62 @@
+E003h VFE1 Epoch0 module-input materializer — static/unreachable build proof
+Date: 2026-08-29
+
+Scope:
+- consumes one caller-supplied normalized steady main-BL template of exactly 0x958/0x868/0x83c/0x6b8/0x5a4 bytes;
+- consumes named module-level register values and DMI payloads from the already-proven QcDeviceMFT CamX ownership map;
+- validates exact per-variant register-valid and payload-valid masks and requires every proven template hole to be zero;
+- requires request_id != 0 and subrequest == 0; BL4 GEN_IRQ userdata is low32(request_id);
+- allocates Linux-owned 0x1000 command and 0x3000 DMI coherent arenas;
+- rewrites all DMI address words to Linux DMA addresses using a compact Linux-only 14-slot layout;
+- constructs the four fixed companion BLs from public CDM encodings whose bytes independently match the accepted 0024 SHA-256 identities;
+- does not embed a Windows main template, DMI payload bytes, Windows IOVAs or Windows ring geometry;
+- does not submit RT-CDM FIFO0, write MMIO, enable IRQs, start VFE/CSID/MIPI, or transmit IMX681.
+
+Independent userspace reconstruction:
+- script SHA-256: 9da0f3772102f4576181d36ee476bc6ce2deaec01ed70a8086999f249d1a6009
+- proof JSON SHA-256: 7c4b37c2579bd1bf4eae8e1756a7557cad9505929bbc21a986855209af94b4bc
+- real normalized Windows samples used: 0x958=batch4, 0x868=batch11, 0x83c=batch35, 0x6b8=batch22, 0x5a4=batch34
+- synthetic module values/payload bytes and synthetic Linux DMA addresses only
+- exact decoded outputs:
+  - 0x958: 56 commands / 472 register writes / 14 DMI
+  - 0x868: 45 / 436 / 12
+  - 0x83c: 43 / 429 / 12
+  - 0x6b8: 35 / 352 / 8
+  - 0x5a4: 22 / 315 / 2
+- companion BL lengths: {4, main, 4, 16, 20}
+- no FIFO submission performed
+
+Kernel build:
+- accepted 0024 base camss.c SHA-256: fd1baf78bcba6f3cf926f66ea7fcb8b212e0659048a9187ed67011a5066c20c5
+- 0025 candidate camss.c SHA-256: 378bd309fdd6246f7ce2742891a0a9cfa3ec6df4a1cd830d8c5e902d7fdaed85
+- camss.o SHA-256: 07a22e14d74a9dc494e05c51e581b4ef4b4907a82957d9152195cdad73bf7917
+- qcom-camss.ko SHA-256: 09abae83c74330806359af7b095c988abd2680af765ea148ee48c996252b6c35
+- 0025 patch SHA-256: 75b882588d2945721ccd000b76fee79266bc88c6b69aeddbddf506cd7982ae68
+- Golden build anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+- vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+- compiler diagnostics: none
+- build log SHA-256: 6b028cc9a2bca4331a346eb924499b17a16ca16480e15869db09679de089535c
+
+Static inspection:
+- inspector SHA-256: 46d3601e3ba1e8f2478156947d5f64abfa218821782cc791f2bb7cba4e903c10
+- inspection JSON SHA-256: ae60274a57a0b95d1a56f074daa90f98f9c672ef60a6f4af5028fef0ca041b46
+- forward patch reconstruction: PASS byte-for-byte
+- reverse patch reconstruction: PASS byte-for-byte to accepted 0024 source
+- retained private recipe: exactly two ABS64 relocations, to materialize and release
+- relocation/reference to recipe itself: none
+- materializer hardware calls: none
+- existing VFE1 PIX -EOPNOTSUPP gate remains before stream lock/IRQ/output setup
+
+Checkpatch:
+- strict checkpatch code/style checks: zero
+- only raw-mail-patch metadata remains: missing commit description and Signed-off-by
+- final checkpatch output SHA-256: 5723ba19ba1a6ec6cc4e6fac847f3ad6a4b5effd80ddc63262fb4825ad947838
+
+Runtime safety:
+- CAMSS module loaded: NO
+- running kernel: 7.1.5-sp11-render-parity-v4+
+- running boot image: FullIO v19c Golden
+- no RT-CDM FIFO0 submission
+- no VFE1 PIX / CSID1 IPP / MIPI start
+- no IMX681 transmission
+- no Linux front frame

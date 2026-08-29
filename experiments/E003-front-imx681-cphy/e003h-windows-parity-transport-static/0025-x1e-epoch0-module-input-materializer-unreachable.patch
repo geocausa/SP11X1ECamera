@@ -1,0 +1,578 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5883,6 +5883,575 @@
+ };
+
+ /*
++ * E003h steady-state Epoch0 consumer/materializer, retained and unreachable.
++ *
++ * The registered Windows DeviceMFT proves the values below are upstream CamX
++ * IQ-module outputs, not values invented by qccamisp KMD. Consequently this
++ * helper accepts a caller-provided normalized main template plus module-level
++ * register values/DMI payloads. It validates only the five exact 0024 shapes,
++ * rewrites proven holes into Linux-owned DMA, and derives GEN_IRQ userdata from
++ * request_id. No captured Windows main template, payload, IOVA or ring geometry
++ * is embedded here, and nothing submits these BLs to RT-CDM.
++ */
++#define CAMSS_X1E_EPOCH0_CMD_SIZE		SZ_4K
++#define CAMSS_X1E_EPOCH0_DMI_SIZE		0x3000
++#define CAMSS_X1E_EPOCH0_BL0_OFFSET		0x000
++#define CAMSS_X1E_EPOCH0_MAIN_OFFSET		0x040
++#define CAMSS_X1E_EPOCH0_BL2_OFFSET		0xa00
++#define CAMSS_X1E_EPOCH0_BL3_OFFSET		0xa40
++#define CAMSS_X1E_EPOCH0_BL4_OFFSET		0xa80
++#define CAMSS_X1E_EPOCH0_MODULE_REG_MAX	6
++#define CAMSS_X1E_EPOCH0_MODULE_PAYLOAD_MAX	4
++
++/* Standard CDM encodings/values reproduced by the 0024 companion-BL hashes. */
++#define CAMSS_X1E_EPOCH0_BL0_CHANGE_BASE	0x0800f000
++#define CAMSS_X1E_EPOCH0_BL2_CHANGE_BASE	0x08057000
++#define CAMSS_X1E_EPOCH0_BL3_REG_CONT		0x03000002
++#define CAMSS_X1E_EPOCH0_BL3_REG_OFFSET	0x0000035c
++#define CAMSS_X1E_EPOCH0_BL3_VALUE0		0x0eff0000
++#define CAMSS_X1E_EPOCH0_BL3_VALUE1		0x086f0000
++#define CAMSS_X1E_EPOCH0_BL4_REG_RANDOM	0x04000001
++#define CAMSS_X1E_EPOCH0_BL4_REG_OFFSET	0x00000018
++#define CAMSS_X1E_EPOCH0_BL4_REG_VALUE		0x01f501f5
++#define CAMSS_X1E_EPOCH0_BL4_GEN_IRQ		0x06000000
++
++enum camss_x1e_epoch0_iq_module {
++	CAMSS_X1E_IQ_DEMUX_BLS,
++	CAMSS_X1E_IQ_PDPC,
++	CAMSS_X1E_IQ_LSC,
++	CAMSS_X1E_IQ_WB,
++	CAMSS_X1E_IQ_GIC,
++	CAMSS_X1E_IQ_BPC_ABF,
++	CAMSS_X1E_IQ_GTM,
++	CAMSS_X1E_IQ_GAMMA,
++	CAMSS_X1E_IQ_DSX,
++	CAMSS_X1E_IQ_NUM,
++};
++
++struct camss_x1e_epoch0_iq_module_input {
++	u32 value[CAMSS_X1E_EPOCH0_MODULE_REG_MAX];
++	u8 value_valid;
++	struct camss_rtcdm1_corpus_blob payload[CAMSS_X1E_EPOCH0_MODULE_PAYLOAD_MAX];
++	u8 payload_valid;
++};
++
++struct camss_x1e_epoch0_input {
++	struct camss_rtcdm1_corpus_blob normalized_main;
++	struct camss_x1e_epoch0_iq_module_input module[CAMSS_X1E_IQ_NUM];
++	u64 request_id;
++	u32 subrequest;
++};
++
++struct camss_x1e_epoch0_materialized {
++	void *cmd_cpu;
++	dma_addr_t cmd_dma;
++	void *dmi_cpu;
++	dma_addr_t dmi_dma;
++	u32 bl_dma[CAMSS_X1E_EPOCH0_CDM_STEADY_BL_COUNT];
++	u16 bl_len[CAMSS_X1E_EPOCH0_CDM_STEADY_BL_COUNT];
++	bool materialized;
++};
++
++struct camss_x1e_epoch0_payload_desc {
++	u16 offset;
++	u16 size;
++	u8 module;
++	u8 payload;
++};
++
++struct camss_x1e_epoch0_reg_patch {
++	u16 field;
++	u16 reg;
++	u8 module;
++	u8 value;
++};
++
++struct camss_x1e_epoch0_dmi_patch {
++	u16 field;
++	u16 dmi_reg;
++	u8 module;
++	u8 payload;
++	u8 selector;
++};
++
++struct camss_x1e_epoch0_variant_desc {
++	u16 main_bytes;
++	const struct camss_x1e_epoch0_reg_patch *reg;
++	u8 reg_count;
++	const struct camss_x1e_epoch0_dmi_patch *dmi;
++	u8 dmi_count;
++};
++
++/* Linux-only compact DMI layout; deliberately unrelated to the Windows ring. */
++static const struct camss_x1e_epoch0_payload_desc camss_x1e_epoch0_payloads[] = {
++	{ .module = CAMSS_X1E_IQ_PDPC, .payload = 0, .offset = 0x0000, .size = 0x0200 },
++	{ .module = CAMSS_X1E_IQ_LSC, .payload = 0, .offset = 0x0200, .size = 0x0374 },
++	{ .module = CAMSS_X1E_IQ_LSC, .payload = 1, .offset = 0x0580, .size = 0x0374 },
++	{ .module = CAMSS_X1E_IQ_LSC, .payload = 2, .offset = 0x0900, .size = 0x0374 },
++	{ .module = CAMSS_X1E_IQ_GIC, .payload = 0, .offset = 0x0c80, .size = 0x0200 },
++	{ .module = CAMSS_X1E_IQ_BPC_ABF, .payload = 0, .offset = 0x0e80, .size = 0x0100 },
++	{ .module = CAMSS_X1E_IQ_GTM, .payload = 0, .offset = 0x0f80, .size = 0x0800 },
++	{ .module = CAMSS_X1E_IQ_GAMMA, .payload = 0, .offset = 0x1780, .size = 0x0400 },
++	{ .module = CAMSS_X1E_IQ_GAMMA, .payload = 1, .offset = 0x1b80, .size = 0x0400 },
++	{ .module = CAMSS_X1E_IQ_GAMMA, .payload = 2, .offset = 0x1f80, .size = 0x0400 },
++	{ .module = CAMSS_X1E_IQ_DSX, .payload = 0, .offset = 0x2380, .size = 0x0300 },
++	{ .module = CAMSS_X1E_IQ_DSX, .payload = 1, .offset = 0x2680, .size = 0x0300 },
++	{ .module = CAMSS_X1E_IQ_DSX, .payload = 2, .offset = 0x2980, .size = 0x0180 },
++	{ .module = CAMSS_X1E_IQ_DSX, .payload = 3, .offset = 0x2b00, .size = 0x0180 },
++};
++
++static const struct camss_x1e_epoch0_reg_patch camss_x1e_epoch0_reg_v0[] = {
++	{ .field = 0x48, .reg = 0x3b70, .module = CAMSS_X1E_IQ_DEMUX_BLS, .value = 0 },
++	{ .field = 0x4c, .reg = 0x3b74, .module = CAMSS_X1E_IQ_DEMUX_BLS, .value = 1 },
++	{ .field = 0x78, .reg = 0x3d58, .module = CAMSS_X1E_IQ_PDPC, .value = 0 },
++	{ .field = 0x7c, .reg = 0x3d5c, .module = CAMSS_X1E_IQ_PDPC, .value = 1 },
++	{ .field = 0xa4, .reg = 0x3d78, .module = CAMSS_X1E_IQ_PDPC, .value = 2 },
++	{ .field = 0xa8, .reg = 0x3d7c, .module = CAMSS_X1E_IQ_PDPC, .value = 3 },
++	{ .field = 0xac, .reg = 0x3d80, .module = CAMSS_X1E_IQ_PDPC, .value = 4 },
++	{ .field = 0xb0, .reg = 0x3d84, .module = CAMSS_X1E_IQ_PDPC, .value = 5 },
++	{ .field = 0xf0, .reg = 0x4358, .module = CAMSS_X1E_IQ_LSC, .value = 0 },
++	{ .field = 0xf4, .reg = 0x435c, .module = CAMSS_X1E_IQ_LSC, .value = 1 },
++	{ .field = 0x168, .reg = 0x456c, .module = CAMSS_X1E_IQ_WB, .value = 0 },
++	{ .field = 0x16c, .reg = 0x4570, .module = CAMSS_X1E_IQ_WB, .value = 1 },
++	{ .field = 0x1a8, .reg = 0x4758, .module = CAMSS_X1E_IQ_GIC, .value = 0 },
++	{ .field = 0x1ac, .reg = 0x475c, .module = CAMSS_X1E_IQ_GIC, .value = 1 },
++	{ .field = 0x254, .reg = 0x4958, .module = CAMSS_X1E_IQ_BPC_ABF, .value = 0 },
++	{ .field = 0x258, .reg = 0x495c, .module = CAMSS_X1E_IQ_BPC_ABF, .value = 1 },
++	{ .field = 0x2d4, .reg = 0x5a58, .module = CAMSS_X1E_IQ_GTM, .value = 0 },
++	{ .field = 0x2d8, .reg = 0x5a5c, .module = CAMSS_X1E_IQ_GTM, .value = 1 },
++	{ .field = 0x704, .reg = 0x5f58, .module = CAMSS_X1E_IQ_GAMMA, .value = 0 },
++	{ .field = 0x708, .reg = 0x5f5c, .module = CAMSS_X1E_IQ_GAMMA, .value = 1 },
++	{ .field = 0x73c, .reg = 0xa058, .module = CAMSS_X1E_IQ_DSX, .value = 0 },
++	{ .field = 0x740, .reg = 0xa05c, .module = CAMSS_X1E_IQ_DSX, .value = 1 },
++	{ .field = 0x83c, .reg = 0xa258, .module = CAMSS_X1E_IQ_DSX, .value = 2 },
++	{ .field = 0x840, .reg = 0xa25c, .module = CAMSS_X1E_IQ_DSX, .value = 3 },
++};
++
++static const struct camss_x1e_epoch0_dmi_patch camss_x1e_epoch0_dmi_v0[] = {
++	{ .field = 0xe0, .dmi_reg = 0x3d08, .module = CAMSS_X1E_IQ_PDPC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x13c, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x148, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x154, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 2, .selector = 3 },
++	{ .field = 0x1c8, .dmi_reg = 0x4708, .module = CAMSS_X1E_IQ_GIC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x264, .dmi_reg = 0x4908, .module = CAMSS_X1E_IQ_BPC_ABF,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x6f4, .dmi_reg = 0x5a08, .module = CAMSS_X1E_IQ_GTM,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x714, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x720, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x72c, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 2, .selector = 3 },
++	{ .field = 0x8b8, .dmi_reg = 0xa008, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x8c4, .dmi_reg = 0xa008, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x8d0, .dmi_reg = 0xa208, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 2, .selector = 1 },
++	{ .field = 0x8dc, .dmi_reg = 0xa208, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 3, .selector = 2 },
++};
++
++static const struct camss_x1e_epoch0_reg_patch camss_x1e_epoch0_reg_v1[] = {
++	{ .field = 0x48, .reg = 0x3b70, .module = CAMSS_X1E_IQ_DEMUX_BLS, .value = 0 },
++	{ .field = 0x4c, .reg = 0x3b74, .module = CAMSS_X1E_IQ_DEMUX_BLS, .value = 1 },
++	{ .field = 0x78, .reg = 0x3d58, .module = CAMSS_X1E_IQ_PDPC, .value = 0 },
++	{ .field = 0x7c, .reg = 0x3d5c, .module = CAMSS_X1E_IQ_PDPC, .value = 1 },
++	{ .field = 0xa4, .reg = 0x3d78, .module = CAMSS_X1E_IQ_PDPC, .value = 2 },
++	{ .field = 0xa8, .reg = 0x3d7c, .module = CAMSS_X1E_IQ_PDPC, .value = 3 },
++	{ .field = 0xac, .reg = 0x3d80, .module = CAMSS_X1E_IQ_PDPC, .value = 4 },
++	{ .field = 0xb0, .reg = 0x3d84, .module = CAMSS_X1E_IQ_PDPC, .value = 5 },
++	{ .field = 0xf0, .reg = 0x4358, .module = CAMSS_X1E_IQ_LSC, .value = 0 },
++	{ .field = 0xf4, .reg = 0x435c, .module = CAMSS_X1E_IQ_LSC, .value = 1 },
++	{ .field = 0x168, .reg = 0x456c, .module = CAMSS_X1E_IQ_WB, .value = 0 },
++	{ .field = 0x16c, .reg = 0x4570, .module = CAMSS_X1E_IQ_WB, .value = 1 },
++	{ .field = 0x1e4, .reg = 0x5a58, .module = CAMSS_X1E_IQ_GTM, .value = 0 },
++	{ .field = 0x1e8, .reg = 0x5a5c, .module = CAMSS_X1E_IQ_GTM, .value = 1 },
++	{ .field = 0x614, .reg = 0x5f58, .module = CAMSS_X1E_IQ_GAMMA, .value = 0 },
++	{ .field = 0x618, .reg = 0x5f5c, .module = CAMSS_X1E_IQ_GAMMA, .value = 1 },
++	{ .field = 0x64c, .reg = 0xa058, .module = CAMSS_X1E_IQ_DSX, .value = 0 },
++	{ .field = 0x650, .reg = 0xa05c, .module = CAMSS_X1E_IQ_DSX, .value = 1 },
++	{ .field = 0x74c, .reg = 0xa258, .module = CAMSS_X1E_IQ_DSX, .value = 2 },
++	{ .field = 0x750, .reg = 0xa25c, .module = CAMSS_X1E_IQ_DSX, .value = 3 },
++};
++
++static const struct camss_x1e_epoch0_dmi_patch camss_x1e_epoch0_dmi_v1[] = {
++	{ .field = 0xe0, .dmi_reg = 0x3d08, .module = CAMSS_X1E_IQ_PDPC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x13c, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x148, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x154, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 2, .selector = 3 },
++	{ .field = 0x604, .dmi_reg = 0x5a08, .module = CAMSS_X1E_IQ_GTM,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x624, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x630, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x63c, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 2, .selector = 3 },
++	{ .field = 0x7c8, .dmi_reg = 0xa008, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x7d4, .dmi_reg = 0xa008, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x7e0, .dmi_reg = 0xa208, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 2, .selector = 1 },
++	{ .field = 0x7ec, .dmi_reg = 0xa208, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 3, .selector = 2 },
++};
++
++static const struct camss_x1e_epoch0_reg_patch camss_x1e_epoch0_reg_v2[] = {
++	{ .field = 0x78, .reg = 0x3d78, .module = CAMSS_X1E_IQ_PDPC, .value = 2 },
++	{ .field = 0x7c, .reg = 0x3d7c, .module = CAMSS_X1E_IQ_PDPC, .value = 3 },
++	{ .field = 0x80, .reg = 0x3d80, .module = CAMSS_X1E_IQ_PDPC, .value = 4 },
++	{ .field = 0x84, .reg = 0x3d84, .module = CAMSS_X1E_IQ_PDPC, .value = 5 },
++	{ .field = 0xc4, .reg = 0x4358, .module = CAMSS_X1E_IQ_LSC, .value = 0 },
++	{ .field = 0xc8, .reg = 0x435c, .module = CAMSS_X1E_IQ_LSC, .value = 1 },
++	{ .field = 0x13c, .reg = 0x456c, .module = CAMSS_X1E_IQ_WB, .value = 0 },
++	{ .field = 0x140, .reg = 0x4570, .module = CAMSS_X1E_IQ_WB, .value = 1 },
++	{ .field = 0x5e8, .reg = 0x5f58, .module = CAMSS_X1E_IQ_GAMMA, .value = 0 },
++	{ .field = 0x5ec, .reg = 0x5f5c, .module = CAMSS_X1E_IQ_GAMMA, .value = 1 },
++	{ .field = 0x620, .reg = 0xa058, .module = CAMSS_X1E_IQ_DSX, .value = 0 },
++	{ .field = 0x624, .reg = 0xa05c, .module = CAMSS_X1E_IQ_DSX, .value = 1 },
++	{ .field = 0x720, .reg = 0xa258, .module = CAMSS_X1E_IQ_DSX, .value = 2 },
++	{ .field = 0x724, .reg = 0xa25c, .module = CAMSS_X1E_IQ_DSX, .value = 3 },
++};
++
++static const struct camss_x1e_epoch0_dmi_patch camss_x1e_epoch0_dmi_v2[] = {
++	{ .field = 0xb4, .dmi_reg = 0x3d08, .module = CAMSS_X1E_IQ_PDPC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x110, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x11c, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x128, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 2, .selector = 3 },
++	{ .field = 0x5d8, .dmi_reg = 0x5a08, .module = CAMSS_X1E_IQ_GTM,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x5f8, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x604, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x610, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 2, .selector = 3 },
++	{ .field = 0x79c, .dmi_reg = 0xa008, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x7a8, .dmi_reg = 0xa008, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x7b4, .dmi_reg = 0xa208, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 2, .selector = 1 },
++	{ .field = 0x7c0, .dmi_reg = 0xa208, .module = CAMSS_X1E_IQ_DSX,
++	  .payload = 3, .selector = 2 },
++};
++
++static const struct camss_x1e_epoch0_reg_patch camss_x1e_epoch0_reg_v3[] = {
++	{ .field = 0xa4, .reg = 0x3d78, .module = CAMSS_X1E_IQ_PDPC, .value = 2 },
++	{ .field = 0xa8, .reg = 0x3d7c, .module = CAMSS_X1E_IQ_PDPC, .value = 3 },
++	{ .field = 0xac, .reg = 0x3d80, .module = CAMSS_X1E_IQ_PDPC, .value = 4 },
++	{ .field = 0xb0, .reg = 0x3d84, .module = CAMSS_X1E_IQ_PDPC, .value = 5 },
++	{ .field = 0xf0, .reg = 0x4358, .module = CAMSS_X1E_IQ_LSC, .value = 0 },
++	{ .field = 0xf4, .reg = 0x435c, .module = CAMSS_X1E_IQ_LSC, .value = 1 },
++	{ .field = 0x168, .reg = 0x456c, .module = CAMSS_X1E_IQ_WB, .value = 0 },
++	{ .field = 0x16c, .reg = 0x4570, .module = CAMSS_X1E_IQ_WB, .value = 1 },
++	{ .field = 0x614, .reg = 0x5f58, .module = CAMSS_X1E_IQ_GAMMA, .value = 0 },
++	{ .field = 0x618, .reg = 0x5f5c, .module = CAMSS_X1E_IQ_GAMMA, .value = 1 },
++};
++
++static const struct camss_x1e_epoch0_dmi_patch camss_x1e_epoch0_dmi_v3[] = {
++	{ .field = 0xe0, .dmi_reg = 0x3d08, .module = CAMSS_X1E_IQ_PDPC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x13c, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x148, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x154, .dmi_reg = 0x4308, .module = CAMSS_X1E_IQ_LSC,
++	  .payload = 2, .selector = 3 },
++	{ .field = 0x604, .dmi_reg = 0x5a08, .module = CAMSS_X1E_IQ_GTM,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x624, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x630, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 1, .selector = 2 },
++	{ .field = 0x63c, .dmi_reg = 0x5f08, .module = CAMSS_X1E_IQ_GAMMA,
++	  .payload = 2, .selector = 3 },
++};
++
++static const struct camss_x1e_epoch0_reg_patch camss_x1e_epoch0_reg_v4[] = {
++	{ .field = 0x78, .reg = 0x3d78, .module = CAMSS_X1E_IQ_PDPC, .value = 2 },
++	{ .field = 0x7c, .reg = 0x3d7c, .module = CAMSS_X1E_IQ_PDPC, .value = 3 },
++	{ .field = 0x80, .reg = 0x3d80, .module = CAMSS_X1E_IQ_PDPC, .value = 4 },
++	{ .field = 0x84, .reg = 0x3d84, .module = CAMSS_X1E_IQ_PDPC, .value = 5 },
++	{ .field = 0xc8, .reg = 0x456c, .module = CAMSS_X1E_IQ_WB, .value = 0 },
++	{ .field = 0xcc, .reg = 0x4570, .module = CAMSS_X1E_IQ_WB, .value = 1 },
++};
++
++static const struct camss_x1e_epoch0_dmi_patch camss_x1e_epoch0_dmi_v4[] = {
++	{ .field = 0xb4, .dmi_reg = 0x3d08, .module = CAMSS_X1E_IQ_PDPC,
++	  .payload = 0, .selector = 1 },
++	{ .field = 0x528, .dmi_reg = 0x5a08, .module = CAMSS_X1E_IQ_GTM,
++	  .payload = 0, .selector = 1 },
++};
++
++static const struct camss_x1e_epoch0_variant_desc camss_x1e_epoch0_variants[] = {
++	{ .main_bytes = 0x0958, .reg = camss_x1e_epoch0_reg_v0,
++	  .reg_count = ARRAY_SIZE(camss_x1e_epoch0_reg_v0),
++	  .dmi = camss_x1e_epoch0_dmi_v0,
++	  .dmi_count = ARRAY_SIZE(camss_x1e_epoch0_dmi_v0) },
++	{ .main_bytes = 0x0868, .reg = camss_x1e_epoch0_reg_v1,
++	  .reg_count = ARRAY_SIZE(camss_x1e_epoch0_reg_v1),
++	  .dmi = camss_x1e_epoch0_dmi_v1,
++	  .dmi_count = ARRAY_SIZE(camss_x1e_epoch0_dmi_v1) },
++	{ .main_bytes = 0x083c, .reg = camss_x1e_epoch0_reg_v2,
++	  .reg_count = ARRAY_SIZE(camss_x1e_epoch0_reg_v2),
++	  .dmi = camss_x1e_epoch0_dmi_v2,
++	  .dmi_count = ARRAY_SIZE(camss_x1e_epoch0_dmi_v2) },
++	{ .main_bytes = 0x06b8, .reg = camss_x1e_epoch0_reg_v3,
++	  .reg_count = ARRAY_SIZE(camss_x1e_epoch0_reg_v3),
++	  .dmi = camss_x1e_epoch0_dmi_v3,
++	  .dmi_count = ARRAY_SIZE(camss_x1e_epoch0_dmi_v3) },
++	{ .main_bytes = 0x05a4, .reg = camss_x1e_epoch0_reg_v4,
++	  .reg_count = ARRAY_SIZE(camss_x1e_epoch0_reg_v4),
++	  .dmi = camss_x1e_epoch0_dmi_v4,
++	  .dmi_count = ARRAY_SIZE(camss_x1e_epoch0_dmi_v4) },
++};
++
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_payloads) == 14);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_variants) ==
++	      CAMSS_X1E_EPOCH0_CDM_VARIANT_COUNT);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_reg_v0) == 24);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_dmi_v0) == 14);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_reg_v1) == 20);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_dmi_v1) == 12);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_reg_v2) == 14);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_dmi_v2) == 12);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_reg_v3) == 10);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_dmi_v3) == 8);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_reg_v4) == 6);
++static_assert(ARRAY_SIZE(camss_x1e_epoch0_dmi_v4) == 2);
++
++static const struct camss_x1e_epoch0_payload_desc *
++camss_x1e_epoch0_payload_desc(u8 module, u8 payload)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(camss_x1e_epoch0_payloads); i++)
++		if (camss_x1e_epoch0_payloads[i].module == module &&
++		    camss_x1e_epoch0_payloads[i].payload == payload)
++			return &camss_x1e_epoch0_payloads[i];
++
++	return NULL;
++}
++
++static const struct camss_x1e_epoch0_variant_desc *
++camss_x1e_epoch0_variant(size_t main_bytes)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(camss_x1e_epoch0_variants); i++)
++		if (camss_x1e_epoch0_variants[i].main_bytes == main_bytes)
++			return &camss_x1e_epoch0_variants[i];
++
++	return NULL;
++}
++
++static int camss_x1e_epoch0_validate_input(const struct camss_x1e_epoch0_input *input,
++					   const struct camss_x1e_epoch0_variant_desc **variant_out)
++{
++	const struct camss_x1e_epoch0_variant_desc *variant;
++	u8 expected_value[CAMSS_X1E_IQ_NUM] = { 0 };
++	u8 expected_payload[CAMSS_X1E_IQ_NUM] = { 0 };
++	unsigned int i;
++
++	if (!input || !input->normalized_main.data || !input->request_id ||
++	    input->subrequest)
++		return -EINVAL;
++
++	variant = camss_x1e_epoch0_variant(input->normalized_main.size);
++	if (!variant)
++		return -EINVAL;
++
++	for (i = 0; i < variant->reg_count; i++) {
++		const struct camss_x1e_epoch0_reg_patch *patch = &variant->reg[i];
++		const u8 *main = input->normalized_main.data;
++
++		if (patch->module >= CAMSS_X1E_IQ_NUM ||
++		    patch->value >= CAMSS_X1E_EPOCH0_MODULE_REG_MAX ||
++		    patch->field + sizeof(u32) > input->normalized_main.size ||
++		    get_unaligned_le32(main + patch->field))
++			return -EINVAL;
++		expected_value[patch->module] |= BIT(patch->value);
++	}
++
++	for (i = 0; i < variant->dmi_count; i++) {
++		const struct camss_x1e_epoch0_dmi_patch *patch = &variant->dmi[i];
++		const struct camss_x1e_epoch0_payload_desc *payload;
++		const u8 *main = input->normalized_main.data;
++
++		if (patch->module >= CAMSS_X1E_IQ_NUM ||
++		    patch->payload >= CAMSS_X1E_EPOCH0_MODULE_PAYLOAD_MAX ||
++		    patch->field + sizeof(u32) > input->normalized_main.size ||
++		    get_unaligned_le32(main + patch->field))
++			return -EINVAL;
++		payload = camss_x1e_epoch0_payload_desc(patch->module, patch->payload);
++		if (!payload)
++			return -EINVAL;
++		expected_payload[patch->module] |= BIT(patch->payload);
++	}
++
++	for (i = 0; i < CAMSS_X1E_IQ_NUM; i++) {
++		const struct camss_x1e_epoch0_iq_module_input *module = &input->module[i];
++		unsigned int payload;
++
++		if (module->value_valid != expected_value[i] ||
++		    module->payload_valid != expected_payload[i])
++			return -EINVAL;
++
++		for (payload = 0; payload < CAMSS_X1E_EPOCH0_MODULE_PAYLOAD_MAX; payload++) {
++			const struct camss_x1e_epoch0_payload_desc *desc;
++
++			if (!(expected_payload[i] & BIT(payload)))
++				continue;
++			desc = camss_x1e_epoch0_payload_desc(i, payload);
++			if (!desc || !module->payload[payload].data ||
++			    module->payload[payload].size != desc->size)
++				return -EINVAL;
++		}
++	}
++
++	*variant_out = variant;
++	return 0;
++}
++
++static void camss_x1e_epoch0_release(struct camss *camss,
++				     struct camss_x1e_epoch0_materialized *out)
++{
++	if (!camss || !out)
++		return;
++
++	if (out->dmi_cpu) {
++		memzero_explicit(out->dmi_cpu, CAMSS_X1E_EPOCH0_DMI_SIZE);
++		dma_free_coherent(camss->dev, CAMSS_X1E_EPOCH0_DMI_SIZE,
++				  out->dmi_cpu, out->dmi_dma);
++	}
++	if (out->cmd_cpu) {
++		memzero_explicit(out->cmd_cpu, CAMSS_X1E_EPOCH0_CMD_SIZE);
++		dma_free_coherent(camss->dev, CAMSS_X1E_EPOCH0_CMD_SIZE,
++				  out->cmd_cpu, out->cmd_dma);
++	}
++	memset(out, 0, sizeof(*out));
++}
++
++static int camss_x1e_epoch0_materialize(struct camss *camss,
++					struct camss_x1e_epoch0_materialized *out,
++				 const struct camss_x1e_epoch0_input *input)
++{
++	const struct camss_x1e_epoch0_variant_desc *variant;
++	u8 *cmd, *main, *dmi, *bl0, *bl2, *bl3, *bl4;
++	unsigned int i;
++	int ret;
++
++	if (!camss || !camss->res || camss->res->version != CAMSS_X1E80100 ||
++	    !camss->rtcdm1.present || !out)
++		return -ENODEV;
++	if (out->materialized || out->cmd_cpu || out->dmi_cpu)
++		return -EBUSY;
++
++	ret = camss_x1e_epoch0_validate_input(input, &variant);
++	if (ret)
++		return ret;
++
++	ret = camss_rtcdm1_corpus_alloc(camss->dev,
++					CAMSS_X1E_EPOCH0_CMD_SIZE,
++					 &out->cmd_cpu, &out->cmd_dma);
++	if (ret)
++		return ret;
++	ret = camss_rtcdm1_corpus_alloc(camss->dev,
++					CAMSS_X1E_EPOCH0_DMI_SIZE,
++					 &out->dmi_cpu, &out->dmi_dma);
++	if (ret)
++		goto err_release;
++
++	cmd = out->cmd_cpu;
++	dmi = out->dmi_cpu;
++	bl0 = cmd + CAMSS_X1E_EPOCH0_BL0_OFFSET;
++	main = cmd + CAMSS_X1E_EPOCH0_MAIN_OFFSET;
++	bl2 = cmd + CAMSS_X1E_EPOCH0_BL2_OFFSET;
++	bl3 = cmd + CAMSS_X1E_EPOCH0_BL3_OFFSET;
++	bl4 = cmd + CAMSS_X1E_EPOCH0_BL4_OFFSET;
++
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL0_CHANGE_BASE, bl0);
++	memcpy(main, input->normalized_main.data, variant->main_bytes);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL2_CHANGE_BASE, bl2);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL3_REG_CONT, bl3 + 0x0);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL3_REG_OFFSET, bl3 + 0x4);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL3_VALUE0, bl3 + 0x8);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL3_VALUE1, bl3 + 0xc);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL4_REG_RANDOM, bl4 + 0x0);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL4_REG_OFFSET, bl4 + 0x4);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL4_REG_VALUE, bl4 + 0x8);
++	put_unaligned_le32(CAMSS_X1E_EPOCH0_BL4_GEN_IRQ, bl4 + 0xc);
++	put_unaligned_le32(lower_32_bits(input->request_id), bl4 + 0x10);
++
++	for (i = 0; i < variant->dmi_count; i++) {
++		const struct camss_x1e_epoch0_dmi_patch *patch = &variant->dmi[i];
++		const struct camss_x1e_epoch0_payload_desc *payload =
++			camss_x1e_epoch0_payload_desc(patch->module, patch->payload);
++		const struct camss_rtcdm1_corpus_blob *blob =
++			&input->module[patch->module].payload[patch->payload];
++		u64 dma = (u64)out->dmi_dma + payload->offset;
++
++		memcpy(dmi + payload->offset, blob->data, payload->size);
++		put_unaligned_le32((u32)dma, main + patch->field);
++	}
++
++	for (i = 0; i < variant->reg_count; i++) {
++		const struct camss_x1e_epoch0_reg_patch *patch = &variant->reg[i];
++		u32 value = input->module[patch->module].value[patch->value];
++
++		put_unaligned_le32(value, main + patch->field);
++	}
++
++	out->bl_dma[0] = (u32)out->cmd_dma + CAMSS_X1E_EPOCH0_BL0_OFFSET;
++	out->bl_dma[1] = (u32)out->cmd_dma + CAMSS_X1E_EPOCH0_MAIN_OFFSET;
++	out->bl_dma[2] = (u32)out->cmd_dma + CAMSS_X1E_EPOCH0_BL2_OFFSET;
++	out->bl_dma[3] = (u32)out->cmd_dma + CAMSS_X1E_EPOCH0_BL3_OFFSET;
++	out->bl_dma[4] = (u32)out->cmd_dma + CAMSS_X1E_EPOCH0_BL4_OFFSET;
++	out->bl_len[0] = 0x0004;
++	out->bl_len[1] = variant->main_bytes;
++	out->bl_len[2] = 0x0004;
++	out->bl_len[3] = 0x0010;
++	out->bl_len[4] = 0x0014;
++	out->materialized = true;
++	return 0;
++
++err_release:
++	camss_x1e_epoch0_release(camss, out);
++	return ret;
++}
++
++struct camss_x1e_epoch0_static_ops {
++	int (*materialize)(struct camss *camss,
++			   struct camss_x1e_epoch0_materialized *out,
++			   const struct camss_x1e_epoch0_input *input);
++	void (*release)(struct camss *camss, struct camss_x1e_epoch0_materialized *out);
++};
++
++/* Retention only: no ISR, VFE, CSID, RT-CDM submit or stream path references it. */
++static const struct camss_x1e_epoch0_static_ops
++camss_x1e_epoch0_recipe __used = {
++	.materialize = camss_x1e_epoch0_materialize,
++	.release = camss_x1e_epoch0_release,
++};
++
++/*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
+  * rejects any address that cannot be represented by RT-CDM's 32-bit BL base.
