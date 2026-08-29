@@ -1,0 +1,77 @@
+{
+  "accepted": true,
+  "base_0032_sha256": {
+    "camss-vfe-680.c": "cdbd58c0276df79605d51a81784a6ba37cf8b0f1b1eb32e2693d1a1e9b0a97c6",
+    "camss-vfe.h": "cbae10aa8d6ac29dbbfbd11182e63fc33748530eb6ca09f8e7b50ff3285813fa",
+    "camss.c": "1111d3e88b88729a8851a60f31ef1bbc877dc127ccb9d4cb998311f5ba7834f5"
+  },
+  "bus_update_slot": 1,
+  "callable_runner_authorized_flag": false,
+  "camss_object_sha256": "bd696a7657bee48a12cec7489d77e6b6fdfffe86c633fae5bd53cc19102daf16",
+  "epoch0_timeout_us": 500000,
+  "first_frame_call_order": [
+    "camss_x1e_pix_submit_startup(camss, &materialized->startup, 0)",
+    "camss_x1e_pix_submit_prime(camss, &materialized->prime, 0)",
+    "camss_x1e_pix_submit_startup(camss, &materialized->startup, 1)",
+    "vfe680_x1e_pix_runtime_bus_prepare(vfe, pix)",
+    "camss_x1e_pix_submit_prime(camss, &materialized->prime, 1)",
+    "camss_x1e_pix_submit_startup(camss, &materialized->startup, 2)",
+    "camss_x1e_pix_submit_startup(camss, &materialized->startup, 3)",
+    "camss_x1e_pix_runner_stream(&csid->subdev, true)",
+    "camss_x1e_pix_runner_stream(&csiphy->subdev, true)",
+    "camss_x1e_pix_runner_stream(req->sensor, true)",
+    "vfe680_x1e_pix_runtime_poll_epoch0(vfe,",
+    "vfe680_x1e_pix_runtime_bus_update(vfe, pix, 1)",
+    "camss_x1e_pix_submit_prime(camss, &materialized->prime, 2)",
+    "vfe680_x1e_pix_runtime_poll_video(vfe,",
+    "vfe680_x1e_pix_runtime_retire_video(pix, 0, &result->video_done)"
+  ],
+  "forward_reconstruction_sha256": {
+    "camss-vfe-680.c": "96781d29a02e0a153be8d4e5500bf69b5fafa5b6abd435c9f3b52f72c2b8c435",
+    "camss-vfe.h": "3b65be0e3527bc3e8baaacc8cdb977f6bccb86d31390fb874cd48e2e0de8fcd6",
+    "camss.c": "2a94daa17493af214335e541853ff733251410f0b0d6fe3e8ba9ab6aed90a237"
+  },
+  "generic_vfe1_pix_s_stream_called": false,
+  "linked_object_sha256": "06896ad2a4b54d2af757638ae84c60c24ab1c96039a02e81be95b9fdba32c9d7",
+  "module_sha256": "4f57a18339b7c11c423df767fa70c65a71a8ec84b6fa545a85097c40de9d8e59",
+  "normal_stop_order": [
+    "camss_x1e_pix_runner_stream(&csid->subdev, false)",
+    "vfe680_x1e_pix_runtime_bus_stop(vfe, pix)",
+    "camss_x1e_pix_rtcdm_stop_close(camss)",
+    "camss_x1e_pix_runner_stream(&csiphy->subdev, false)",
+    "camss_x1e_pix_runner_stream(req->sensor, false)"
+  ],
+  "patch_sha256": "431cd2b5f8736dac25abf4f2a9f675002406874968a879cf7d2c7193342883c4",
+  "prime3_submitted": false,
+  "prime_indices_submitted": [
+    0,
+    1,
+    2
+  ],
+  "reverse_reconstruction_sha256": {
+    "camss-vfe-680.c": "cdbd58c0276df79605d51a81784a6ba37cf8b0f1b1eb32e2693d1a1e9b0a97c6",
+    "camss-vfe.h": "cbae10aa8d6ac29dbbfbd11182e63fc33748530eb6ca09f8e7b50ff3285813fa",
+    "camss.c": "1111d3e88b88729a8851a60f31ef1bbc877dc127ccb9d4cb998311f5ba7834f5"
+  },
+  "rollback_order": [
+    "camss_x1e_pix_runner_stream(req->sensor, false)",
+    "camss_x1e_pix_runner_stream(&csiphy->subdev, false)",
+    "camss_x1e_pix_runner_stream(&csid->subdev, false)",
+    "vfe680_x1e_pix_runtime_bus_stop(vfe, pix)",
+    "camss_x1e_pix_rtcdm_stop_close(camss)"
+  ],
+  "runner_recipe_relocations": 1,
+  "runner_recipe_runtime_references": 0,
+  "runtime_reachable": false,
+  "schema": "sp11-e003h-pix-first-frame-runner-unarmed-v1",
+  "source_sha256": {
+    "camss-vfe-680.c": "96781d29a02e0a153be8d4e5500bf69b5fafa5b6abd435c9f3b52f72c2b8c435",
+    "camss-vfe.h": "3b65be0e3527bc3e8baaacc8cdb977f6bccb86d31390fb874cd48e2e0de8fcd6",
+    "camss.c": "2a94daa17493af214335e541853ff733251410f0b0d6fe3e8ba9ab6aed90a237"
+  },
+  "steady_batch_submitted": false,
+  "teardown_failure_policy": "do not free DMA or drop pipeline power; pin until reboot",
+  "timeout_policy": "bounded experiment safety limits, not claimed Windows timing constants",
+  "video_retire_slot": 0,
+  "video_timeout_us": 500000
+}

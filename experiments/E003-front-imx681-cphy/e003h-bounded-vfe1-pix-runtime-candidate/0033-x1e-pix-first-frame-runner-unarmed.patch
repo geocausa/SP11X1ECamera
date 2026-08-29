@@ -1,0 +1,519 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7142,6 +7142,339 @@
+ };
+ 
+ /*
++ * E003h bounded first-QC10C runner, callable but deliberately unarmed.
++ *
++ * No probe, vb2, ioctl or media stream path references this recipe.  It exists
++ * only so the complete first-frame hardware call graph can be compiled and
++ * inspected before a later disposable runtime gate is allowed to reference it.
++ *
++ * The first-frame prefix is intentionally shorter than the full 0031 steady
++ * lifecycle.  Same-machine Windows proves that replay2 belongs to Epoch0 #0,
++ * after the complete slot1 BUS retarget, and that the first VIDEO then retires
++ * slot0.  Replay3 belongs to Epoch0 #1 and must not be pre-submitted here.
++ */
++#define CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US	500000
++#define CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US	500000
++
++struct camss_x1e_pix_runner_request {
++	const void *capsule;
++	size_t capsule_size;
++	struct v4l2_subdev *sensor;
++	struct camss_buffer *video[2];
++};
++
++struct camss_x1e_pix_runner_result {
++	struct camss_buffer *video_done;
++	bool epoch0_seen;
++	bool video_seen;
++	bool teardown_safe;
++};
++
++static int camss_x1e_pix_runner_stream(struct v4l2_subdev *sd, bool enable)
++{
++	int ret;
++
++	if (!sd)
++		return -EINVAL;
++
++	ret = v4l2_subdev_call(sd, video, s_stream, enable);
++	if (ret == -ENOIOCTLCMD)
++		return -EOPNOTSUPP;
++
++	return ret;
++}
++
++static bool camss_x1e_pix_link(const struct media_pad *local,
++			       const struct media_entity *remote,
++			       unsigned int remote_pad)
++{
++	struct media_pad *pad;
++
++	pad = media_pad_remote_pad_first(local);
++	return pad && pad->entity == remote && pad->index == remote_pad;
++}
++
++static int camss_x1e_pix_runner_validate(struct camss *camss,
++					 const struct camss_x1e_pix_runner_request *req)
++{
++	struct media_pad *sensor_pad;
++	struct media_pad *csiphy_src;
++	struct media_pad *csid_pix;
++	struct media_pad *vfe_pix_src;
++	struct csiphy_device *csiphy;
++	struct csid_device *csid;
++	struct vfe_device *vfe;
++
++	if (!camss || !req || !req->capsule || !req->capsule_size || !req->sensor ||
++	    !req->video[0] || !req->video[1] || req->video[0] == req->video[1] ||
++	    !camss->res || camss->res->version != CAMSS_X1E80100 ||
++	    camss->res->vfe_num <= 1 || camss->res->csid_num <= 1 ||
++	    camss->res->csiphy_num <= 2)
++		return -EINVAL;
++
++	vfe = &camss->vfe[1];
++	csid = &camss->csid[1];
++	csiphy = &camss->csiphy[2];
++	if (vfe->id != 1 || vfe->res->is_lite || csid->id != 1 || csiphy->id != 2 ||
++	    req->sensor->entity.function != MEDIA_ENT_F_CAM_SENSOR ||
++	    req->sensor->host_priv != csiphy)
++		return -EINVAL;
++	if (csid->phy.csiphy_id != 2 || csid->phy.phy_sel != CSID_PHY_SEL_CPHY ||
++	    csid->phy.lane_cnt != 1 || !csid->phy.en_ipp)
++		return -EINVAL;
++	if (csid->fmt[MSM_CSID_PAD_PIX].code != MEDIA_BUS_FMT_SRGGB10_1X10 ||
++	    csid->fmt[MSM_CSID_PAD_PIX].width != 3840 ||
++	    csid->fmt[MSM_CSID_PAD_PIX].height != 2640)
++		return -EINVAL;
++	if (vfe->line[VFE_LINE_PIX].fmt[MSM_VFE_PAD_SINK].code !=
++	    MEDIA_BUS_FMT_SRGGB10_1X10)
++		return -EINVAL;
++
++	/* Fail closed unless the exact front PIX media route is already enabled. */
++	sensor_pad = media_pad_remote_pad_first(&csiphy->pads[MSM_CSIPHY_PAD_SINK]);
++	if (!sensor_pad || sensor_pad->entity != &req->sensor->entity)
++		return -ENOLINK;
++	csiphy_src = &csiphy->pads[MSM_CSIPHY_PAD_SRC];
++	csid_pix = &csid->pads[MSM_CSID_PAD_PIX];
++	vfe_pix_src = &vfe->line[VFE_LINE_PIX].pads[MSM_VFE_PAD_SRC];
++	if (!camss_x1e_pix_link(csiphy_src, &csid->subdev.entity, MSM_CSID_PAD_SINK))
++		return -ENOLINK;
++	if (!camss_x1e_pix_link(csid_pix, &vfe->line[VFE_LINE_PIX].subdev.entity,
++				MSM_VFE_PAD_SINK))
++		return -ENOLINK;
++	if (!camss_x1e_pix_link(vfe_pix_src,
++				&vfe->line[VFE_LINE_PIX].video_out.vdev.entity, 0))
++		return -ENOLINK;
++
++	return 0;
++}
++
++static int camss_x1e_pix_runner_once(struct camss *camss,
++				     const struct camss_x1e_pix_runner_request *req,
++				     struct camss_x1e_pix_runner_result *result)
++{
++	struct camss_x1e_pix_capsule_materialized *materialized;
++	struct camss_x1e_pix_capsule_inputs *inputs;
++	struct vfe680_x1e_pix_runtime *pix = NULL;
++	struct media_entity *video_entity;
++	struct csiphy_device *csiphy;
++	struct csid_device *csid;
++	struct vfe_device *vfe;
++	bool sensor_streaming = false;
++	bool csiphy_streaming = false;
++	bool csid_streaming = false;
++	bool pipeline_powered = false;
++	bool rtcdm_started = false;
++	bool bus_started = false;
++	bool frame_done = false;
++	bool teardown_safe = true;
++	int stop_ret;
++	int ret;
++
++	if (!result)
++		return -EINVAL;
++	memset(result, 0, sizeof(*result));
++
++	ret = camss_x1e_pix_runner_validate(camss, req);
++	if (ret)
++		return ret;
++
++	vfe = &camss->vfe[1];
++	csid = &camss->csid[1];
++	csiphy = &camss->csiphy[2];
++	video_entity = &vfe->line[VFE_LINE_PIX].video_out.vdev.entity;
++
++	inputs = kzalloc_obj(*inputs, GFP_KERNEL);
++	materialized = kzalloc_obj(*materialized, GFP_KERNEL);
++	if (!inputs || !materialized) {
++		ret = -ENOMEM;
++		goto out_free_inputs;
++	}
++
++	ret = camss_x1e_pix_capsule_parse(req->capsule, req->capsule_size, inputs);
++	if (ret)
++		goto out_free_inputs;
++	ret = camss_x1e_pix_capsule_materialize(camss, materialized, inputs);
++	if (ret)
++		goto out_free_inputs;
++
++	/* Same power owner used by the already-proven RDI video prepare path. */
++	ret = v4l2_pipeline_pm_get(video_entity);
++	if (ret)
++		goto out_materialized;
++	pipeline_powered = true;
++
++	ret = vfe680_x1e_pix_runtime_alloc(vfe, req->video[0], req->video[1], &pix);
++	if (ret)
++		goto out_unwind;
++
++	ret = camss_x1e_pix_rtcdm_open_start(camss);
++	if (ret)
++		goto out_unwind;
++	rtcdm_started = true;
++
++	/* Exact 0031 pre-CSID startup/priming interleave, now with whole replay batches. */
++	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 0);
++	if (ret)
++		goto out_unwind;
++	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 0);
++	if (ret)
++		goto out_unwind;
++	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 1);
++	if (ret)
++		goto out_unwind;
++	ret = vfe680_x1e_pix_runtime_bus_prepare(vfe, pix);
++	if (ret)
++		goto out_unwind;
++	bus_started = true;
++	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 1);
++	if (ret)
++		goto out_unwind;
++	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 2);
++	if (ret)
++		goto out_unwind;
++	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 3);
++	if (ret)
++		goto out_unwind;
++
++	ret = camss_x1e_pix_runner_stream(&csid->subdev, true);
++	if (ret)
++		goto out_unwind;
++	csid_streaming = true;
++	ret = camss_x1e_pix_runner_stream(&csiphy->subdev, true);
++	if (ret)
++		goto out_unwind;
++	csiphy_streaming = true;
++	ret = camss_x1e_pix_runner_stream(req->sensor, true);
++	if (ret)
++		goto out_unwind;
++	sensor_streaming = true;
++
++	/* First-frame pacing: Epoch0 #0 -> BUS slot1 -> replay2/request2 -> VIDEO. */
++	ret = vfe680_x1e_pix_runtime_poll_epoch0(vfe,
++						 CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
++	if (ret)
++		goto out_unwind;
++	result->epoch0_seen = true;
++	ret = vfe680_x1e_pix_runtime_bus_update(vfe, pix, 1);
++	if (ret)
++		goto out_unwind;
++	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 2);
++	if (ret)
++		goto out_unwind;
++	ret = vfe680_x1e_pix_runtime_poll_video(vfe,
++						CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++	if (ret)
++		goto out_unwind;
++	result->video_seen = true;
++	ret = vfe680_x1e_pix_runtime_retire_video(pix, 0, &result->video_done);
++	if (!ret)
++		frame_done = true;
++
++out_unwind:
++	if (frame_done) {
++		/* Proven normal host stop prefix: CSID1 -> BUS/IFE -> RT-CDM. */
++		if (csid_streaming) {
++			stop_ret = camss_x1e_pix_runner_stream(&csid->subdev, false);
++			if (stop_ret) {
++				teardown_safe = false;
++				if (!ret)
++					ret = stop_ret;
++			}
++		}
++		if (bus_started) {
++			vfe680_x1e_pix_runtime_bus_stop(vfe, pix);
++			bus_started = false;
++		}
++		if (rtcdm_started)
++			camss_x1e_pix_rtcdm_stop_close(camss);
++
++		/* One Windows-observed valid ordering of the unordered tail. */
++		if (csiphy_streaming) {
++			stop_ret = camss_x1e_pix_runner_stream(&csiphy->subdev, false);
++			if (stop_ret) {
++				teardown_safe = false;
++				if (!ret)
++					ret = stop_ret;
++			}
++		}
++		if (sensor_streaming) {
++			stop_ret = camss_x1e_pix_runner_stream(req->sensor, false);
++			if (stop_ret) {
++				teardown_safe = false;
++				if (!ret)
++					ret = stop_ret;
++			}
++		}
++	} else {
++		/* Start failure rolls back the exact reverse ownership order. */
++		if (sensor_streaming) {
++			stop_ret = camss_x1e_pix_runner_stream(req->sensor, false);
++			if (stop_ret) {
++				teardown_safe = false;
++				if (!ret)
++					ret = stop_ret;
++			}
++		}
++		if (csiphy_streaming) {
++			stop_ret = camss_x1e_pix_runner_stream(&csiphy->subdev, false);
++			if (stop_ret) {
++				teardown_safe = false;
++				if (!ret)
++					ret = stop_ret;
++			}
++		}
++		if (csid_streaming) {
++			stop_ret = camss_x1e_pix_runner_stream(&csid->subdev, false);
++			if (stop_ret) {
++				teardown_safe = false;
++				if (!ret)
++					ret = stop_ret;
++			}
++		}
++		if (bus_started) {
++			vfe680_x1e_pix_runtime_bus_stop(vfe, pix);
++			bus_started = false;
++		}
++		if (rtcdm_started)
++			camss_x1e_pix_rtcdm_stop_close(camss);
++	}
++
++	result->teardown_safe = teardown_safe;
++	if (!teardown_safe) {
++		result->video_done = NULL;
++		dev_err(camss->dev,
++			"E003h PIX teardown failed; DMA/power intentionally pinned until reboot\n");
++		return ret ? ret : -EIO;
++	}
++
++	/* Hardware producers are stopped before force-releasing pending aux slots. */
++	if (pix)
++		vfe680_x1e_pix_runtime_release(vfe, pix);
++	if (pipeline_powered)
++		v4l2_pipeline_pm_put(video_entity);
++
++out_materialized:
++	camss_x1e_pix_capsule_materialized_release(camss, materialized);
++out_free_inputs:
++	kfree(materialized);
++	kfree(inputs);
++	return ret;
++}
++
++struct camss_x1e_pix_runner_static_ops {
++	int (*run_once)(struct camss *camss,
++			const struct camss_x1e_pix_runner_request *req,
++			struct camss_x1e_pix_runner_result *result);
++};
++
++/* Retention only: no probe, vb2, ioctl or stream path references this table. */
++static const struct camss_x1e_pix_runner_static_ops
++camss_x1e_pix_runner_recipe __used = {
++	.run_once = camss_x1e_pix_runner_once,
++};
++
++/*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
+  * rejects any address that cannot be represented by RT-CDM's 32-bit BL base.
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -930,6 +930,140 @@
+ 	.complete = vfe680_x1e_pix_ownership_complete,
+ };
+ 
++/*
++ * E003h module-internal VFE680 PIX runtime bridge.
++ *
++ * This object deliberately hides the private BUS/IRQ/ownership structures from
++ * camss.c.  It is used only by the retained, unreferenced bounded PIX runner.
++ * Allocation and begin are DMA/state-only.  BUS prepare/update/stop and raw
++ * polling are the already-inspected Windows-parity helpers above.
++ */
++struct vfe680_x1e_pix_runtime {
++	struct vfe680_x1e_pix_ownership ownership;
++	struct vfe680_x1e_bus_iovas iovas[VFE680_X1E_PIX_SLOT_COUNT];
++	bool bus_started;
++};
++
++int vfe680_x1e_pix_runtime_alloc(struct vfe_device *vfe,
++				 struct camss_buffer *video0,
++				 struct camss_buffer *video1,
++				 struct vfe680_x1e_pix_runtime **runtime)
++{
++	struct vfe680_x1e_pix_runtime *rt;
++	int ret;
++
++	if (!vfe680_x1e_bus_target(vfe) || !video0 || !video1 || !runtime)
++		return -EINVAL;
++	*runtime = NULL;
++
++	rt = kzalloc_obj(*rt, GFP_KERNEL);
++	if (!rt)
++		return -ENOMEM;
++
++	ret = vfe680_x1e_pix_ownership_alloc(vfe, &rt->ownership);
++	if (ret)
++		goto err_free;
++	ret = vfe680_x1e_pix_ownership_begin(&rt->ownership, 0, video0,
++					     &rt->iovas[0]);
++	if (ret)
++		goto err_release;
++	ret = vfe680_x1e_pix_ownership_begin(&rt->ownership, 1, video1,
++					     &rt->iovas[1]);
++	if (ret)
++		goto err_release;
++
++	*runtime = rt;
++	return 0;
++
++err_release:
++	vfe680_x1e_pix_ownership_release(vfe, &rt->ownership);
++err_free:
++	kfree(rt);
++	return ret;
++}
++
++void vfe680_x1e_pix_runtime_release(struct vfe_device *vfe,
++				    struct vfe680_x1e_pix_runtime *runtime)
++{
++	if (!vfe680_x1e_bus_target(vfe) || !runtime)
++		return;
++
++	/* Caller must stop BUS/hardware before freeing in-flight auxiliary DMA. */
++	if (WARN_ON(runtime->bus_started))
++		return;
++	vfe680_x1e_pix_ownership_release(vfe, &runtime->ownership);
++	kfree(runtime);
++}
++
++int vfe680_x1e_pix_runtime_bus_prepare(struct vfe_device *vfe,
++				       struct vfe680_x1e_pix_runtime *runtime)
++{
++	int ret;
++
++	if (!runtime || runtime->bus_started)
++		return -EINVAL;
++	ret = vfe680_x1e_bus_prepare(vfe, &runtime->iovas[0]);
++	if (!ret)
++		runtime->bus_started = true;
++	return ret;
++}
++
++int vfe680_x1e_pix_runtime_bus_update(struct vfe_device *vfe,
++				      struct vfe680_x1e_pix_runtime *runtime,
++				      unsigned int slot)
++{
++	if (!runtime || !runtime->bus_started || slot >= VFE680_X1E_PIX_SLOT_COUNT)
++		return -EINVAL;
++	return vfe680_x1e_bus_update(vfe, &runtime->iovas[slot]);
++}
++
++void vfe680_x1e_pix_runtime_bus_stop(struct vfe_device *vfe,
++				     struct vfe680_x1e_pix_runtime *runtime)
++{
++	if (!runtime || !runtime->bus_started)
++		return;
++	vfe680_x1e_bus_stop(vfe);
++	runtime->bus_started = false;
++}
++
++int vfe680_x1e_pix_runtime_poll_epoch0(struct vfe_device *vfe,
++				       unsigned long timeout_us)
++{
++	struct vfe680_x1e_irq_snapshot snapshot;
++
++	return vfe680_x1e_poll_epoch0(vfe, timeout_us, &snapshot);
++}
++
++int vfe680_x1e_pix_runtime_poll_video(struct vfe_device *vfe,
++				      unsigned long timeout_us)
++{
++	struct vfe680_x1e_irq_snapshot snapshot;
++
++	return vfe680_x1e_poll_video(vfe, timeout_us, &snapshot);
++}
++
++int vfe680_x1e_pix_runtime_retire_video(struct vfe680_x1e_pix_runtime *runtime,
++					unsigned int expected_slot,
++					struct camss_buffer **video_done)
++{
++	struct camss_buffer *done;
++	bool reusable;
++	unsigned int index;
++	int ret;
++
++	if (!runtime || !video_done || expected_slot >= VFE680_X1E_PIX_SLOT_COUNT)
++		return -EINVAL;
++	ret = vfe680_x1e_pix_ownership_complete(&runtime->ownership, 0x03,
++						&index, &done, &reusable);
++	if (ret)
++		return ret;
++	if (index != expected_slot || !done || reusable)
++		return -EPROTO;
++
++	*video_done = done;
++	return 0;
++}
++
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+ 	/* VFE680 has no global reset, simply report a completion */
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -315,4 +315,31 @@
+ int vfe_queue_buffer_v2(struct camss_video *vid,
+ 			struct camss_buffer *buf);
+ 
++/*
++ * E003h private VFE680 PIX bridge.  These are module-internal helpers for the
++ * retained bounded runner only; no symbol is exported to other modules.
++ */
++struct vfe680_x1e_pix_runtime;
++
++int vfe680_x1e_pix_runtime_alloc(struct vfe_device *vfe,
++				 struct camss_buffer *video0,
++				 struct camss_buffer *video1,
++				 struct vfe680_x1e_pix_runtime **runtime);
++void vfe680_x1e_pix_runtime_release(struct vfe_device *vfe,
++				    struct vfe680_x1e_pix_runtime *runtime);
++int vfe680_x1e_pix_runtime_bus_prepare(struct vfe_device *vfe,
++				       struct vfe680_x1e_pix_runtime *runtime);
++int vfe680_x1e_pix_runtime_bus_update(struct vfe_device *vfe,
++				      struct vfe680_x1e_pix_runtime *runtime,
++				      unsigned int slot);
++void vfe680_x1e_pix_runtime_bus_stop(struct vfe_device *vfe,
++				     struct vfe680_x1e_pix_runtime *runtime);
++int vfe680_x1e_pix_runtime_poll_epoch0(struct vfe_device *vfe,
++				       unsigned long timeout_us);
++int vfe680_x1e_pix_runtime_poll_video(struct vfe_device *vfe,
++				      unsigned long timeout_us);
++int vfe680_x1e_pix_runtime_retire_video(struct vfe680_x1e_pix_runtime *runtime,
++					unsigned int expected_slot,
++					struct camss_buffer **video_done);
++
+ #endif /* QC_MSM_CAMSS_VFE_H */

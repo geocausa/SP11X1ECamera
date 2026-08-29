@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-priming-full-batch-closed-callable-runner-static-next-golden-safe
+status: e003h-first-frame-pix-runner-built-unarmed-runtime-caller-preflight-next-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -694,12 +694,34 @@ e003h:
   linux_front_0032_fifo_length_rule: byte_count - 1 for every BL
   linux_front_0032_callable_runner_present: false
   linux_front_0032_runtime_reachable: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; callable bounded PIX execution remains unbuilt/uninspected
-next_experiment: E003h-bounded-vfe1-pix-callable-runner-static
+  linux_front_0033_patch_sha256: 431cd2b5f8736dac25abf4f2a9f675002406874968a879cf7d2c7193342883c4
+  linux_front_0033_camss_source_sha256: 2a94daa17493af214335e541853ff733251410f0b0d6fe3e8ba9ab6aed90a237
+  linux_front_0033_vfe680_source_sha256: 96781d29a02e0a153be8d4e5500bf69b5fafa5b6abd435c9f3b52f72c2b8c435
+  linux_front_0033_vfe_header_sha256: 3b65be0e3527bc3e8baaacc8cdb977f6bccb86d31390fb874cd48e2e0de8fcd6
+  linux_front_0033_camss_object_sha256: bd696a7657bee48a12cec7489d77e6b6fdfffe86c633fae5bd53cc19102daf16
+  linux_front_0033_vfe680_object_sha256: 1358d2a157c98007986856890f2239a38adb533c27ba5c7fde49a27fdf3f8dc7
+  linux_front_0033_linked_object_sha256: 06896ad2a4b54d2af757638ae84c60c24ab1c96039a02e81be95b9fdba32c9d7
+  linux_front_0033_module_sha256: 4f57a18339b7c11c423df767fa70c65a71a8ec84b6fa545a85097c40de9d8e59
+  linux_front_0033_inspector_sha256: dbd70a81f1057f5992e3b9afecbb930ce29e1f5e603c27915b31b6eab2449983
+  linux_front_0033_inspection_json_sha256: 86aa949f8dd41fc9a55e16a34a72ffbb00f75cc2eae10d4b65c2ee5f385df2d3
+  linux_front_0033_build_log_sha256: 1bc1fbb5e8a3feb94b69b00dab3cf4c755074a458e9cd478ca4cd6752ba2ea52
+  linux_front_0033_checkpatch_sha256: 0d6770cd08b80defbfbdc4dc8dffc6b1b8172f2afbc5c21a9c1ca4f9cb4f41d2
+  linux_front_0033_first_frame_order: startup0 -> prime0 -> startup1 -> BUS slot0 -> prime1 -> startup2 -> startup3 -> CSID1 -> CSIPHY2 -> sensor-on -> Epoch0#0 -> BUS slot1 -> prime2/request2 -> VIDEO slot0 -> stop
+  linux_front_0033_prime_indices_submitted: 0,1,2
+  linux_front_0033_prime3_submitted: false
+  linux_front_0033_steady_batch_before_first_video: false
+  linux_front_0033_generic_vfe1_pix_s_stream_called: false
+  linux_front_0033_runner_recipe_relocations: 1
+  linux_front_0033_runner_recipe_runtime_references: 0
+  linux_front_0033_teardown_failure_policy: pin DMA/pipeline power until reboot
+  linux_front_0033_callable_runner_present: true
+  linux_front_0033_runtime_reachable: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; disposable one-shot runtime caller/preflight remains unbuilt
+next_experiment: E003h-bounded-vfe1-pix-runtime-caller-preflight-static
 next_action: >-
-  Do not repeat RDI or Windows startup/pacing captures. Build the callable-but-unarmed PIX runner on top of 0032 complete priming batches. Follow exact 0031 startup,
-  sensor-on, Epoch0#0, complete BUS retarget to slot1, complete replay2/request2 batch, first VIDEO/slot0, then immediate bounded stop/rollback. Do not pre-submit replay3.
-  Keep the runner unreferenced from probe/V4L2 and do not arm hardware until source/object call-graph inspection is clean. Golden remains saved/default.
+  Keep the inspected 0033 runner unreferenced and unarmed. Build a one-shot disposable caller/preflight that accepts only the SHA-pinned local capsule and exactly two validated
+  caller-owned QC10C surfaces, requires the exact front-only candidate/module/DT/media-link tuple, verifies Golden saved/default plus rollback preparation, and latches one execution only.
+  Inspect the caller so no probe, generic VFE1 PIX s_stream, vb2 automatic start, or repeated path can reach 0033. Do not attempt PIX hardware until that separate gate passes.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
