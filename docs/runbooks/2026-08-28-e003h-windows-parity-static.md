@@ -411,3 +411,11 @@ The capsule binary remains `.gitignore`d and local. Git stores only schema, dete
 `0028-x1e-pix-capsule-materialize-unreachable.patch` composes the existing 0019/0021 and 0025 materializers into three Linux-owned DMA products: startup corpus, priming corpus, and first steady Epoch0 command/DMI set. It introduces no hardware access and remains unreferenced. Final module SHA-256 is `522033b849552e4a62d572a09fdbec8b1ad4ece55538d676370f32dece8976f1` with Golden `7.1.5-sp11-render-parity-v4+` vermagic.
 
 **Next:** compile the actual bounded hardware-order runner, still unreachable: RT-CDM preflight/open/start, exact startup/priming FIFO ordering, VFE1 BUS prepare/update, CSID1 IPP placement, raw Epoch0/VIDEO bounded waits, and exact stop/clear sequence. Do not arm it until binary/source inspection proves every MMIO/FIFO callsite is already oracle-backed.
+
+## 2026-08-29 — PIX RT-CDM submit primitives compiled unreachable (`0029`)
+
+`0029-x1e-pix-rtcdm-submit-primitives-unreachable.patch` composes no new RT-CDM register semantics. `open_start` delegates the existing same-machine Windows `open_init` and `start` helpers; startup/priming packet submission delegates FIFO0 commit with `packet_len - 1`; the steady path submits all five materialized BLs with `bl_len - 1`. Stop delegates the Windows DEVICE_STOP action (IRQ0 mask to zero) and then performs Linux software-only IRQ ownership close (`disable_irq` + `irq_armed=false`) with no RT-CDM MMIO, matching the separately proven later session-delete boundary.
+
+The private recipe has exactly four ABS64 retention relocations and no runtime reference. Build is warning-free with Golden vermagic; patch SHA-256 `3ffd45d64e1f25fd8f81f67b22fca930c516eaf22146d6a1548650783f107182`, candidate module SHA-256 `64ab3390f7dd19b72f819acce16cb9de46d499a5be0e98ebd5552fb94bc4c3e2`.
+
+**Next:** close a static cross-file hardware-order/rollback contract around existing VFE1 resource power, VFE1 BUS, CSID1 IPP and CSIPHY2 operations before creating any callable PIX runner.

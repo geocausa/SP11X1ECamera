@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-pix-capsule-dma-materialization-built-unreachable-golden-safe
+status: e003h-pix-rtcdm-submit-primitives-built-unreachable-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -628,13 +628,20 @@ e003h:
   linux_front_0028_products: startup corpus DMA; priming corpus DMA; steady Epoch0 command/DMI DMA
   linux_front_0028_hardware_access_in_composition: false
   linux_front_0028_runtime_reachable: false
+  linux_front_0029_rtcdm_submit_patch_sha256: 3ffd45d64e1f25fd8f81f67b22fca930c516eaf22146d6a1548650783f107182
+  linux_front_0029_rtcdm_submit_module_sha256: 64ab3390f7dd19b72f819acce16cb9de46d499a5be0e98ebd5552fb94bc4c3e2
+  linux_front_0029_rtcdm_submit_source_sha256: fc6f2dbcc588f93e3ed537bafd2640392d8c797ece3b851f2f9adcad5d418e89
+  linux_front_0029_fifo_length_semantics: byte_count - 1
+  linux_front_0029_software_close_rtcdm_mmio: false
+  linux_front_0029_recipe_runtime_references: 0
+  linux_front_0029_runtime_reachable: false
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-bounded-vfe1-pix-hardware-order-runner-static
+next_experiment: E003h-bounded-vfe1-pix-hardware-order-contract-static
 next_action: >-
-  Do not repeat the successful RDI frame. The local PIX capsule is A/B reproducible; 0027 parses it into existing fail-closed inputs and 0028 materializes
-  startup, priming and first steady Epoch0 into Linux-owned DMA with no hardware access. 0026 provides retained-only raw BUS status1 bit21 Epoch0 and TOP
-  status1 bit0 VIDEO polling/clear helpers. Next build the static/unreachable hardware-order runner that composes only proven RT-CDM start/FIFO, VFE1 BUS,
-  CSID1 IPP and bounded poll/teardown operations. Inspect every callsite before any one-shot activation. Golden remains saved/default and untouched.
+  Do not repeat the successful RDI frame. 0029 now provides retained/unreachable RT-CDM open/start, byte_count-minus-one startup/priming packet submit,
+  five-BL steady submit, Windows mask-only stop and Linux software-only IRQ close primitives. Next close the cross-file hardware-order contract before
+  writing a callable runner: identify the exact existing VFE1 resource-power, CSID1 IPP and CSIPHY2 operations that can be reused, and define rollback
+  ownership at every stage. No PIX activation is authorized by 0029. Golden remains saved/default and untouched.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

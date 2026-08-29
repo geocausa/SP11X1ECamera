@@ -1,0 +1,112 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -6744,6 +6744,109 @@
+ 	.release = camss_x1e_pix_capsule_materialized_release,
+ };
+ 
++
++/*
++ * E003h bounded PIX RT-CDM submission primitives, retained and unreachable.
++ *
++ * These wrappers compose only the already-proven Windows RT-CDM recipe with
++ * Linux-owned materialized command buffers. Queue lengths are passed exactly as
++ * Windows encodes them: byte_count - 1 in FIFO0 bits 19:0. The software close
++ * corresponds to the later manager/session delete phase: it disables the Linux
++ * IRQ ownership only and performs no RT-CDM MMIO.
++ */
++static void camss_x1e_pix_rtcdm_close_sw(struct camss *camss)
++{
++	struct camss_rtcdm *rt;
++
++	if (!camss)
++		return;
++	rt = &camss->rtcdm1;
++	if (!rt->present)
++		return;
++
++	mutex_lock(&rt->lock);
++	if (READ_ONCE(rt->irq_armed)) {
++		disable_irq(rt->irq);
++		WRITE_ONCE(rt->irq_armed, false);
++	}
++	mutex_unlock(&rt->lock);
++}
++
++static int camss_x1e_pix_rtcdm_open_start(struct camss *camss)
++{
++	int ret;
++
++	if (!camss || !camss->res || camss->res->version != CAMSS_X1E80100)
++		return -EINVAL;
++
++	ret = camss_rtcdm1_windows_open_init(camss);
++	if (ret)
++		return ret;
++	ret = camss_rtcdm1_windows_start(camss);
++	if (ret)
++		camss_x1e_pix_rtcdm_close_sw(camss);
++	return ret;
++}
++
++static int camss_x1e_pix_rtcdm_submit_corpus_packet(
++	struct camss *camss, const struct camss_rtcdm1_corpus *corpus,
++	unsigned int packet)
++{
++	if (!corpus || !corpus->materialized ||
++	    packet >= CAMSS_RTCDM1_CORPUS_PACKET_COUNT ||
++	    !corpus->packet_dma[packet] || !corpus->packet_len[packet])
++		return -EINVAL;
++
++	return camss_rtcdm1_windows_fifo0_commit(camss, corpus->packet_dma[packet],
++						  corpus->packet_len[packet] - 1);
++}
++
++static int camss_x1e_pix_rtcdm_submit_epoch0_batch(
++	struct camss *camss, const struct camss_x1e_epoch0_materialized *steady)
++{
++	unsigned int i;
++	int ret;
++
++	if (!steady || !steady->materialized)
++		return -EINVAL;
++
++	for (i = 0; i < CAMSS_X1E_EPOCH0_CDM_STEADY_BL_COUNT; i++) {
++		if (!steady->bl_dma[i] || !steady->bl_len[i])
++			return -EINVAL;
++		ret = camss_rtcdm1_windows_fifo0_commit(camss, steady->bl_dma[i],
++							steady->bl_len[i] - 1);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++static void camss_x1e_pix_rtcdm_stop_close(struct camss *camss)
++{
++	camss_rtcdm1_windows_stop(camss);
++	camss_x1e_pix_rtcdm_close_sw(camss);
++}
++
++struct camss_x1e_pix_rtcdm_static_ops {
++	int (*open_start)(struct camss *camss);
++	int (*submit_corpus_packet)(struct camss *camss,
++				    const struct camss_rtcdm1_corpus *corpus,
++				    unsigned int packet);
++	int (*submit_epoch0_batch)(struct camss *camss,
++				   const struct camss_x1e_epoch0_materialized *steady);
++	void (*stop_close)(struct camss *camss);
++};
++
++/* Retention only: the bounded PIX hardware-order runner does not exist yet. */
++static const struct camss_x1e_pix_rtcdm_static_ops
++camss_x1e_pix_rtcdm_recipe __used = {
++	.open_start = camss_x1e_pix_rtcdm_open_start,
++	.submit_corpus_packet = camss_x1e_pix_rtcdm_submit_corpus_packet,
++	.submit_epoch0_batch = camss_x1e_pix_rtcdm_submit_epoch0_batch,
++	.stop_close = camss_x1e_pix_rtcdm_stop_close,
++};
++
+ /*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
