@@ -531,6 +531,6 @@ The existing front-only one-shot package was repinned to CAMSS module `96e48ff17
 
 ## 2026-08-30 — one instrumented second PIX diagnostic authorized
 
-Fresh package/Golden review passed after the exact Windows IRQ correction: candidate CAMSS , front-only DT/capsule/helper hashes exact, branch/origin synchronized, saved/default Golden with empty , candidate camera modules unloaded and trigger absent. Review JSON SHA-256 .
+Fresh package/Golden review passed after the exact Windows IRQ correction: candidate CAMSS `96e48ff176a048c391841d2c56bafdce76cfbe8a78b7310173caf175af49c9e9`, front-only DT/capsule/helper hashes exact, branch/origin synchronized, saved/default Golden with empty `next_entry`, candidate camera modules unloaded and trigger absent. Review JSON SHA-256 `991534b4dd4db9bf7201864f54f07cf8d4faabe24582f8b5d5a4ce3b361a5eb8`.
 
-Exactly one candidate boot and one  are authorized. The diagnostic must not retry in the same boot.  stage telemetry must be archived whether the run fails or succeeds, and the machine must immediately return to Golden afterwards.
+Exactly one candidate boot and one `RUN` are authorized. The diagnostic must not retry in the same boot. `0036` stage telemetry must be archived whether the run fails or succeeds, and the machine must immediately return to Golden afterwards.
