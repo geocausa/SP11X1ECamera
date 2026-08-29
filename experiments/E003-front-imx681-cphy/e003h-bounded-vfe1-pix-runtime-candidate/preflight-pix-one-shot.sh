@@ -12,7 +12,7 @@ check() { local got; got=$(sha256sum "$1" | cut -d' ' -f1); [ "$got" = "$2" ] ||
 [ "$(uname -r)" = 7.1.5-sp11-render-parity-v4+ ] || { echo 'FAIL kernel release'; exit 1; }
 check /boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+ bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
 check /boot/sp11-7.1.5-audio-fullio-v19c/initrd.img-7.1.5-sp11-fullio-v19c ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d
-check "$CAMSS" 5a09b33c73feb7060c9e0f504cf893fc2e120f6225c4f8b222765c57fc135c79
+check "$CAMSS" 96e48ff176a048c391841d2c56bafdce76cfbe8a78b7310173caf175af49c9e9
 check "$SENSOR" 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
 check "$DTB" 083fd7d3a207cb329938c561aee84c8642cb02e52034b753b36aaff599a381ed
 check "$CAP" 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20

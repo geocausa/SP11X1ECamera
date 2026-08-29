@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-rtcdm-irq-parity-corrected-static-runtime-blocked-golden-safe
+status: e003h-rtcdm-diagnostic-package-refreshed-unarmed-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -800,11 +800,19 @@ e003h:
   linux_front_0037_clear_rule: raw_status & 0x00070007
   linux_front_0037_first_timeout_cause_status: plausible context-gate suppression; not proven
   linux_front_0037_runtime_authorized: false
+  linux_front_0038_diagnostic_camss_sha256: 96e48ff176a048c391841d2c56bafdce76cfbe8a78b7310173caf175af49c9e9
+  linux_front_0038_package_inspector_sha256: d20839c47ec0e7b293bf6a3eb071b491993da5a4c2f992fb56d398f519b24b27
+  linux_front_0038_package_inspection_json_sha256: 991534b4dd4db9bf7201864f54f07cf8d4faabe24582f8b5d5a4ce3b361a5eb8
+  linux_front_0038_preflight_sha256: 1a0b26722dc74118a2d68b0fad69a0401105a6ab17194d730738be367af2c74c
+  linux_front_0038_load_script_sha256: 461e225c010725d800e9df95b1e012a786c41d590754e985428975b7f3d62637
+  linux_front_0038_preflight_script_sha256: 5f50b32d5c23973f14cc17b59fc834e97c6c2cbb8e23987222eb31ef5f89c902
+  linux_front_0038_candidate_boot_armed: false
+  linux_front_0038_runtime_authorized: false
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; first attempt timed out before sensor-on and exact RT-CDM timeout stage is not yet distinguished; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-diagnostic-repackage-static
+next_experiment: E003h-rtcdm-diagnostic-second-one-shot-authorization-review
 next_action: >-
-  Keep PIX runtime blocked. Rebuild the disposable front-only diagnostic package with the 0036 stage telemetry plus 0037 exact Windows IRQ-status/clear correction,
-  update the pinned module hash, and rerun package/Golden/media preflights without arming next_entry. A second one-shot requires a new authorization checkpoint only after those inspections pass.
+  Package v2 inspection and Golden-host preflight pass with 0036+0037 and next_entry empty. Perform a fresh authorization review; if accepted, authorize exactly one candidate boot and one RUN,
+  never retry in the same boot, archive stage telemetry/output, and immediately return to Golden after success or failure. Do not arm before that authorization checkpoint is committed and pushed.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

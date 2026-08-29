@@ -74,3 +74,5 @@ An RDI frame can be useful later as a diagnostic transport proof, but **must nev
 29. Static `0036` adds read-only RT-CDM failure telemetry: reset/core/FIFO stage, FIFO sequence/base/length, raw IRQ context/status/userdata and last ISR snapshot, plus semantic packet/BL error labels. It adds zero MMIO writes and no new runtime trigger. A second PIX attempt is not authorized.
 
 30. Exact Windows RT-CDM IRQ handler disassembly proves no IRQ_CONTEXT_STATUS read and masked `0x00070007` FIFO status clears. Static `0037` removes the Linux context-bit prerequisite and clears only known masked status; runtime remains blocked pending a freshly inspected diagnostic package and separate authorization.
+
+31. The disposable front-only package is refreshed to the 0036+0037 CAMSS module and package/preflight inspections pass while unarmed. No second RUN is authorized by the refresh itself.

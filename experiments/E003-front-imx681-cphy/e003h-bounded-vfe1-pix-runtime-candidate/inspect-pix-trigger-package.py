@@ -3,7 +3,7 @@ import argparse, hashlib, json, subprocess
 from pathlib import Path
 EXP=Path(__file__).resolve().parent
 EXPECTED={
- 'camss':'5a09b33c73feb7060c9e0f504cf893fc2e120f6225c4f8b222765c57fc135c79',
+ 'camss':'96e48ff176a048c391841d2c56bafdce76cfbe8a78b7310173caf175af49c9e9',
  'sensor':'389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388',
  'dtb':'083fd7d3a207cb329938c561aee84c8642cb02e52034b753b36aaff599a381ed',
  'capsule':'6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20',
@@ -41,6 +41,6 @@ def main():
  boot=Path('/boot/sp11-7.1.5-camera-e003h-pix-one-shot')
  installed={'kernel':sha(boot/'vmlinuz-7.1.5-sp11-render-parity-v4+'),'initrd':sha(boot/'initrd.img-7.1.5-sp11-camera-e003h-pix-one-shot'),'dtb':sha(boot/'x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb')}
  if installed != {'kernel':EXPECTED['golden_kernel'],'initrd':EXPECTED['golden_initrd'],'dtb':EXPECTED['dtb']}: die('installed candidate boot drift')
- out={'accepted':True,'schema':'sp11-e003h-pix-trigger-package-v1','hashes':EXPECTED,'installed_boot':installed,'front_only_ports':ports,'normal_vb2_qbuf_used':False,'normal_vb2_streamon_used':False,'candidate_boot_installed':True,'candidate_boot_armed':False,'golden_saved_default':True,'camera_modules_loaded':False,'runtime_authorized':False,'next':'explicit one-shot runtime authorization/arm'}
+ out={'accepted':True,'schema':'sp11-e003h-pix-trigger-package-v2-rtcdm-diag','hashes':EXPECTED,'installed_boot':installed,'front_only_ports':ports,'normal_vb2_qbuf_used':False,'normal_vb2_streamon_used':False,'candidate_boot_installed':True,'candidate_boot_armed':False,'golden_saved_default':True,'camera_modules_loaded':False,'runtime_authorized':False,'rtcdm_stage_telemetry':True,'rtcdm_irq_context_gate':False,'next':'fresh diagnostic one-shot authorization review'}
  a.output.write_text(json.dumps(out,indent=2,sort_keys=True)+'\n'); print('PASS: disposable PIX trigger package installed, hash-pinned, front-only and not armed')
 if __name__=='__main__': main()
