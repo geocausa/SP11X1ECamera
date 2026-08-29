@@ -447,3 +447,9 @@ Static `0031-x1e-pix-startup-priming-interleave-unreachable.patch` updates only 
 **Next:** build and inspect a callable-but-unarmed PIX runner that consumes the already parsed/materialized capsule and composes only the now-closed 16-stage start order, bounded Epoch0/VIDEO waits, stop prefix and rollback. Do not connect that runner to V4L2/probe/stream paths or arm hardware yet.
 
 **Next:** one narrow Windows start capture combining only packet0..3, BUS-prepare boundary, replay0/1 and CSID1 start. Once that relation is closed, refine the retained hardware-order contract and inspect a callable-but-unarmed runner before any Linux PIX activation.
+
+## 2026-08-29 — replay/Epoch0 pacing closes bounded first-PIX frame prefix
+
+A focused same-machine Windows trace fixes the pacing that a first callable-runner draft had guessed incorrectly. After IMX681 stream-on, the **first Epoch0** executes a complete nine-client BUS-address update, then selector-2 consumes replay2 (`0x904` bytes, requestId 2, subRequest 0); the first VIDEO completion follows. The **next Epoch0** executes the next complete nine-client BUS-address update before replay3 (`0x4e8`, requestId 3). Raw log `E003H_REPLAY_EPOCH0_PACING_20260829.log` is 2,008 bytes, SHA-256 `db0d038625843d77428633fcd229a0818a8dc9aafa0af06bc63c06cc6b949b35`; extractor SHA-256 `b65103e41e944f7777ed8160d11af1e2c2d693dc17cf10171c61c21b8f0be29a`; oracle SHA-256 `73899c498339c10c3d919fa563c76e3d30dc9917dd09b0e179fdbb380303c0c8`.
+
+**Consequence:** do not submit replay2/replay3 back-to-back after sensor-on. A deliberately bounded first-QC10C proof can stop after `Epoch0 #0 -> BUS retarget slot1 -> replay2/request2 -> VIDEO(slot0)` and then execute the already-closed stop/rollback path. Replay3 belongs to the next Epoch0 and is not required before returning the first VIDEO buffer. Later Epoch0 hits in this intrusive debugger window are not interpreted for steady-state cadence.

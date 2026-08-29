@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-startup-priming-interleave-closed-pix-runner-static-next-golden-safe
+status: e003h-first-pix-epoch0-pacing-closed-callable-runner-static-next-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -674,13 +674,18 @@ e003h:
   linux_front_0031_startup_priming_interleave_closed: true
   linux_front_0031_callable_runner_authorized: false
   linux_front_0031_runtime_reachable: false
+  windows_vfe1_replay_epoch0_pacing_raw_sha256: db0d038625843d77428633fcd229a0818a8dc9aafa0af06bc63c06cc6b949b35
+  windows_vfe1_replay_epoch0_pacing_raw_bytes: 2008
+  windows_vfe1_replay_epoch0_pacing_extractor_sha256: b65103e41e944f7777ed8160d11af1e2c2d693dc17cf10171c61c21b8f0be29a
+  windows_vfe1_replay_epoch0_pacing_oracle_sha256: 73899c498339c10c3d919fa563c76e3d30dc9917dd09b0e179fdbb380303c0c8
+  windows_vfe1_first_pix_pacing: sensor-on -> Epoch0#0 -> nine-client BUS retarget -> replay2/request2 -> VIDEO -> Epoch0#1 -> nine-client BUS retarget -> replay3/request3
+  linux_front_first_pix_bounded_prefix: sensor-on -> Epoch0#0 -> BUS slot1 -> replay2/request2 -> VIDEO(slot0) -> stop
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; callable bounded PIX execution remains unbuilt/uninspected
 next_experiment: E003h-bounded-vfe1-pix-callable-runner-static
 next_action: >-
-  Do not repeat RDI or Windows startup ordering captures. The exact 16-stage startup/priming interleave is closed in 0031. Next build a callable-but-unarmed
-  PIX runner that consumes the parsed/materialized capsule, reuses existing pipeline-PM/VFE1/CSID1/CSIPHY2 power ownership, submits only the proven RT-CDM
-  and BUS operations, uses bounded raw Epoch0/VIDEO waits, and unwinds by the recorded rollback order. Keep the runner unreferenced from probe/V4L2 and do not
-  arm hardware until source/object inspection proves every callsite is oracle-backed. Golden remains saved/default with empty next_entry.
+  Do not repeat RDI or Windows startup/pacing captures. Build the callable-but-unarmed PIX runner only for the now-proven first-frame prefix: exact 0031 startup,
+  sensor-on, Epoch0#0, complete BUS retarget to slot1, replay2/request2, first VIDEO/slot0, then immediate bounded stop/rollback. Do not pre-submit replay3.
+  Keep the runner unreferenced from probe/V4L2 and do not arm hardware until source/object call-graph inspection is clean. Golden remains saved/default.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
