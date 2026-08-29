@@ -1,0 +1,68 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5283,10 +5283,13 @@
+  *
+  * The exact command and DMI payload bytes remain local oracle inputs and are
+  * intentionally not embedded in the kernel source. Callers must provide four
+- * normalized command templates whose 46 DMI address fields and 20 dynamic
+- * register values are zero, plus the 16 exact DMI payload byte strings and all
+- * 20 dynamic values explicitly. This layer then copies them into Linux-owned
+- * coherent memory and replaces only those proven holes.
++ * normalized command templates whose 46 DMI address fields and four
++ * start-dependent period_cfg values are zero, plus the 16 exact DMI payload
++ * byte strings and all four period values explicitly. The 16 startup words at
++ * +0x3b70/+0x3d78..+0x3d84 remain exact template data: Windows proves their
++ * startup values invariant even though some live registers mutate afterward.
++ * This layer copies into Linux-owned coherent memory and replaces only the
++ * proven DMI/period holes.
+  *
+  * Linux deliberately does not reproduce Windows' 0xa000 command-slot stride or
+  * DMI source-window offsets. Main lists use independent 4 KiB Linux slots and
+@@ -5296,10 +5299,10 @@
+ #define CAMSS_RTCDM1_CORPUS_PACKET_COUNT	4
+ #define CAMSS_RTCDM1_CORPUS_PAYLOAD_COUNT	16
+ #define CAMSS_RTCDM1_CORPUS_DMI_COUNT		46
+-#define CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT	20
++#define CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT	4
+ #define CAMSS_RTCDM1_CORPUS_MAIN_SIZE		SZ_16K
+ #define CAMSS_RTCDM1_CORPUS_DMI_SIZE		0x3a00
+-#define CAMSS_RTCDM1_CORPUS_DYNAMIC_VALID	GENMASK(19, 0)
++#define CAMSS_RTCDM1_CORPUS_DYNAMIC_VALID	GENMASK(3, 0)
+ 
+ struct camss_rtcdm1_corpus_blob {
+ 	const void *data;
+@@ -5420,25 +5423,9 @@
+ static const struct camss_rtcdm1_corpus_dynamic_patch
+ camss_rtcdm1_corpus_dynamic[CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT] = {
+ 	{ .packet = 0, .field = 0xe84, .reg = 0x8c },
+-	{ .packet = 0, .field = 0x48, .reg = 0x3b70 },
+-	{ .packet = 0, .field = 0xa4, .reg = 0x3d78 },
+-	{ .packet = 0, .field = 0xa8, .reg = 0x3d7c },
+-	{ .packet = 0, .field = 0xac, .reg = 0x3d80 },
+-	{ .packet = 0, .field = 0xb0, .reg = 0x3d84 },
+ 	{ .packet = 1, .field = 0xe24, .reg = 0x8c },
+-	{ .packet = 1, .field = 0x48, .reg = 0x3b70 },
+-	{ .packet = 1, .field = 0xa4, .reg = 0x3d78 },
+-	{ .packet = 1, .field = 0xa8, .reg = 0x3d7c },
+-	{ .packet = 1, .field = 0xac, .reg = 0x3d80 },
+-	{ .packet = 1, .field = 0xb0, .reg = 0x3d84 },
+ 	{ .packet = 2, .field = 0x8f4, .reg = 0x8c },
+-	{ .packet = 2, .field = 0x48, .reg = 0x3b70 },
+-	{ .packet = 2, .field = 0xa4, .reg = 0x3d78 },
+-	{ .packet = 2, .field = 0xa8, .reg = 0x3d7c },
+-	{ .packet = 2, .field = 0xac, .reg = 0x3d80 },
+-	{ .packet = 2, .field = 0xb0, .reg = 0x3d84 },
+ 	{ .packet = 3, .field = 0x4d8, .reg = 0x8c },
+-	{ .packet = 3, .field = 0x1c, .reg = 0x3b70 },
+ };
+ 
+ 
+@@ -5520,7 +5507,7 @@
+ 			return -EINVAL;
+ 	}
+ 
+-	/* Dynamic VFE values are also explicit caller inputs, never template data. */
++	/* Only start-dependent period_cfg values are caller inputs, never template data. */
+ 	for (i = 0; i < CAMSS_RTCDM1_CORPUS_DYNAMIC_COUNT; i++) {
+ 		const struct camss_rtcdm1_corpus_dynamic_patch *patch =
+ 			&camss_rtcdm1_corpus_dynamic[i];

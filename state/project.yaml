@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-rtcdm-corpus-materializer-unreachable-built-stream-blocked-golden-unchanged
+status: e003h-rtcdm-startup-dynamic-ownership-built-unreachable-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -428,14 +428,24 @@ e003h:
   linux_rtcdm_0019_inspection_json_sha256: f0a4fc0fcc83306db0fec7c1345240bc91eb1b267636af35a86203d38ee0b62e
   linux_rtcdm_0019_module_sha256: f783550d532c20066a4b378d6ba0a86c9242d567b036603fd8623681e3e3ae66
   linux_rtcdm_0019_runtime_reachable: false
-  unresolved: recover exact Windows producer/source/update semantics for period_cfg +0x8c and VFE1 +0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84 before a full unreachable start orchestrator; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-windows-vfe1-dynamic-startup-fields-oracle
+  linux_rtcdm_0020_patch_sha256: 147b89961803f3812c10dfd6f89cc00a4273d077514fc39756e5eb78f2d2d86e
+  linux_rtcdm_0020_ownership_extractor_sha256: 4309c598eed431cb6d0e83461ce4cf917195ec90a6fd1c9123487a3d76f113e3
+  linux_rtcdm_0020_ownership_oracle_sha256: 402510679bae860f801166bd7ff36834ca8284650aa29d64f1c08d7c6afda856
+  linux_rtcdm_0020_static_materialization_sha256: 65f614dd40ede7dd96136f9a926c5dce960039d24983b5b559b93c7d09099043
+  linux_rtcdm_0020_inspection_json_sha256: a589a5546342bb9ad127bc6b5b880071cb1be35bdc8327524b7e521eb48f4add
+  linux_rtcdm_0020_module_sha256: ccafdf9e94ec6e5e1609bb5e36ec8c1f6bb97055d8e6a4ce80a09c3cecd73d2f
+  rtcdm_startup_dynamic_caller_values: 4
+  rtcdm_startup_template_invariant_live_mutable_values: 16
+  rtcdm_startup_normalized_holes: 50
+  rtcdm_0020_runtime_reachable: false
+  unresolved: close upstream period_cfg +0x8c production/value rule and later live-update/orchestration semantics for VFE1 +0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-rtcdm-period-cfg-and-live-update-oracle
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0019 RT-CDM command/data materialization, 0018 PIX ownership and 0017 BUS addressing
-  as closed. Do not substitute either captured Windows value set for period_cfg +0x8c or the five prior live-volatile VFE1 offsets. Recover
-  the exact same-machine Windows builder/source fields and update cadence for +0x8c/+0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84, then
-  feed those values into unreachable 0019. Only after that may a private unreachable orchestrator combine 0011/0015/0017/0018/0019.
-  No module load, FIFO0 submission, VFE1 PIX hardware enable, sensor transmission or front frame until a separate bounded runtime gate.
+  Keep IMX681 Linux transmission blocked. Treat 0020 RT-CDM startup ownership, 0018 PIX ownership and 0017 BUS addressing as closed
+  static layers. Only four period_cfg +0x8c words remain caller-dynamic in the materializer; keep the 16 invariant startup words in the exact
+  command templates and do not use them as post-start live-state constants. Recover the upstream +0x8c production/value rule and define
+  the later live-update ownership needed by a private unreachable orchestrator combining 0011/0015/0017/0018/0020. No module load, FIFO0
+  submission, VFE1 PIX hardware enable, sensor transmission or front frame until a separate bounded runtime gate.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

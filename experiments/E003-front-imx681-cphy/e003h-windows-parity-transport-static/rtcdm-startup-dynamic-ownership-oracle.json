@@ -1,0 +1,294 @@
+{
+  "accepted": true,
+  "closure": {
+    "dmi_address_holes": 46,
+    "dmi_plus_period_only_normalization_equal_across_independent_windows_captures": true,
+    "period_cfg_register": "0x8c",
+    "previous_dynamic_holes": 20,
+    "qccamisp_0x26838_changes_these_fields": false,
+    "refined_dynamic_holes": 4,
+    "startup_template_invariant_live_mutable_fields": 16,
+    "total_normalized_holes": 50
+  },
+  "fresh_kmd_entry_values": {
+    "0": {
+      "0x3b70": "0x04260427",
+      "0x3d78": "0x000020b1",
+      "0x3d7c": "0x000017e7",
+      "0x3d80": "0x000007d5",
+      "0x3d84": "0x00000ab6",
+      "0x8c": "0xa81a19a0"
+    },
+    "1": {
+      "0x3b70": "0x04260427",
+      "0x3d78": "0x00001c37",
+      "0x3d7c": "0x00001fc7",
+      "0x3d80": "0x00000913",
+      "0x3d84": "0x0000080e",
+      "0x8c": "0xf5993000"
+    },
+    "2": {
+      "0x3b70": "0x04270427",
+      "0x3d78": "0x00001c37",
+      "0x3d7c": "0x00001fc7",
+      "0x3d80": "0x00000913",
+      "0x3d84": "0x0000080e",
+      "0x8c": "0xf5993000"
+    },
+    "3": {
+      "0x3b70": "0x04270427",
+      "0x8c": "0xf5993000"
+    }
+  },
+  "live_cadence_samples": [
+    {
+      "+0x3b70": "0x04270427",
+      "+0x3d78..84": [
+        "0x0000194a",
+        "0x0000240f",
+        "0x00000a1f",
+        "0x00000719"
+      ],
+      "period_cfg": "0x00000000",
+      "sample": 1
+    },
+    {
+      "+0x3b70": "0x04270427",
+      "+0x3d78..84": [
+        "0x00001951",
+        "0x00002417",
+        "0x00000a1d",
+        "0x00000718"
+      ],
+      "period_cfg": "0x00000000",
+      "sample": 2
+    },
+    {
+      "+0x3b70": "0x04270427",
+      "+0x3d78..84": [
+        "0x00001965",
+        "0x000023e7",
+        "0x00000a15",
+        "0x00000721"
+      ],
+      "period_cfg": "0x00000000",
+      "sample": 3
+    }
+  ],
+  "ownership": {
+    "0x3b70_0x3d78_0x3d7c_0x3d80_0x3d84": "exact startup-template values; invariant across independent startup corpora/fresh KMD; do not use as post-start live-state constants",
+    "0x3d78_0x3d84_live_behavior": "hardware-visible values mutate during streaming; later update/readback semantics remain outside this materializer",
+    "period_cfg_0x8c": "upstream_start_dynamic_caller_input; changes across starts/captures; live readback zero after startup"
+  },
+  "period_fields": [
+    {
+      "classification": "cross_capture_dynamic_period_cfg",
+      "final_value": "0xa81fdf00",
+      "initial_value": "0xe5cdfd40",
+      "packet": 0,
+      "register_offset": "0x8c",
+      "value_field_offset": "0xe84"
+    },
+    {
+      "classification": "cross_capture_dynamic_period_cfg",
+      "final_value": "0x99fe3000",
+      "initial_value": "0x0a503000",
+      "packet": 1,
+      "register_offset": "0x8c",
+      "value_field_offset": "0xe24"
+    },
+    {
+      "classification": "cross_capture_dynamic_period_cfg",
+      "final_value": "0x99fe3000",
+      "initial_value": "0x0a503000",
+      "packet": 2,
+      "register_offset": "0x8c",
+      "value_field_offset": "0x8f4"
+    },
+    {
+      "classification": "cross_capture_dynamic_period_cfg",
+      "final_value": "0x99fe3000",
+      "initial_value": "0x0a503000",
+      "packet": 3,
+      "register_offset": "0x8c",
+      "value_field_offset": "0x4d8"
+    }
+  ],
+  "refined_main_slots": [
+    {
+      "normalized_sha256": "8c9ee558869a05fa6a5fe36f8c6266af8e7b7ce12db135ef4747c0b606124e6b",
+      "packet": 0,
+      "period_field_offset": "0xe84",
+      "period_final": "0xa81fdf00",
+      "period_initial": "0xe5cdfd40",
+      "used_bytes": 3732
+    },
+    {
+      "normalized_sha256": "59ff6ba89a82963cea5384c012764f1dec3e56f7a93f7eb4f4fac9ad6be2e963",
+      "packet": 1,
+      "period_field_offset": "0xe24",
+      "period_final": "0x99fe3000",
+      "period_initial": "0x0a503000",
+      "used_bytes": 3636
+    },
+    {
+      "normalized_sha256": "05bec5f3b39d953f19fd55a6a826973e74a312bf6ac6b1afd359b67b00dc8da8",
+      "packet": 2,
+      "period_field_offset": "0x8f4",
+      "period_final": "0x99fe3000",
+      "period_initial": "0x0a503000",
+      "used_bytes": 2308
+    },
+    {
+      "normalized_sha256": "807d3cdb8053a7d56b0bf78effa01f42947572b385643e0866473712990980f8",
+      "packet": 3,
+      "period_field_offset": "0x4d8",
+      "period_final": "0x99fe3000",
+      "period_initial": "0x0a503000",
+      "used_bytes": 1256
+    }
+  ],
+  "safety": {
+    "fifo0_submission_authorized": false,
+    "materializer_rule": "zero only 46 DMI address fields + four period_cfg fields; retain the 16 invariant startup words in exact caller-provided templates",
+    "runtime_authorized": false,
+    "vfe1_pix_authorized": false
+  },
+  "schema": "sp11-e003h-rtcdm-startup-dynamic-ownership-oracle-v1",
+  "source_oracles": {
+    "0019_materializer_oracle_sha256": "1d1b753eeaf25bcdfd1105154138bb9123d40330f070b1b8fd0eb6ab69f38cdc",
+    "cadence_log_sha256": "c450fe3e9053a2e2fc522a46f0fea9ea85d4d21ae921eb9c6c159e6baf60546a",
+    "kmd_pass_log_sha256": "f721edb7dadc4f3c551f3b933b633e4882b9fead793c9f9e7960ff863334346f",
+    "producer_log_sha256": "a70534c7a13a374e8f8258e0c134d56bcf182d4d64be1d33b0b7ffbf4b1fde0d"
+  },
+  "startup_template_fields": [
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x04260427",
+      "initial_value": "0x04260427",
+      "packet": 0,
+      "register_offset": "0x3b70",
+      "value_field_offset": "0x48"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x000020b1",
+      "initial_value": "0x000020b1",
+      "packet": 0,
+      "register_offset": "0x3d78",
+      "value_field_offset": "0xa4"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x000017e7",
+      "initial_value": "0x000017e7",
+      "packet": 0,
+      "register_offset": "0x3d7c",
+      "value_field_offset": "0xa8"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x000007d5",
+      "initial_value": "0x000007d5",
+      "packet": 0,
+      "register_offset": "0x3d80",
+      "value_field_offset": "0xac"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x00000ab6",
+      "initial_value": "0x00000ab6",
+      "packet": 0,
+      "register_offset": "0x3d84",
+      "value_field_offset": "0xb0"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x04260427",
+      "initial_value": "0x04260427",
+      "packet": 1,
+      "register_offset": "0x3b70",
+      "value_field_offset": "0x48"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x00001c37",
+      "initial_value": "0x00001c37",
+      "packet": 1,
+      "register_offset": "0x3d78",
+      "value_field_offset": "0xa4"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x00001fc7",
+      "initial_value": "0x00001fc7",
+      "packet": 1,
+      "register_offset": "0x3d7c",
+      "value_field_offset": "0xa8"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x00000913",
+      "initial_value": "0x00000913",
+      "packet": 1,
+      "register_offset": "0x3d80",
+      "value_field_offset": "0xac"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x0000080e",
+      "initial_value": "0x0000080e",
+      "packet": 1,
+      "register_offset": "0x3d84",
+      "value_field_offset": "0xb0"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x04270427",
+      "initial_value": "0x04270427",
+      "packet": 2,
+      "register_offset": "0x3b70",
+      "value_field_offset": "0x48"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x00001c37",
+      "initial_value": "0x00001c37",
+      "packet": 2,
+      "register_offset": "0x3d78",
+      "value_field_offset": "0xa4"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x00001fc7",
+      "initial_value": "0x00001fc7",
+      "packet": 2,
+      "register_offset": "0x3d7c",
+      "value_field_offset": "0xa8"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x00000913",
+      "initial_value": "0x00000913",
+      "packet": 2,
+      "register_offset": "0x3d80",
+      "value_field_offset": "0xac"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x0000080e",
+      "initial_value": "0x0000080e",
+      "packet": 2,
+      "register_offset": "0x3d84",
+      "value_field_offset": "0xb0"
+    },
+    {
+      "classification": "runtime_volatile_do_not_freeze",
+      "final_value": "0x04270427",
+      "initial_value": "0x04270427",
+      "packet": 3,
+      "register_offset": "0x3b70",
+      "value_field_offset": "0x1c"
+    }
+  ]
+}
