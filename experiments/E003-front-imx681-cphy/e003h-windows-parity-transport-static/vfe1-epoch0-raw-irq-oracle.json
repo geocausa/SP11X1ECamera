@@ -1,0 +1,51 @@
+{
+  "accepted": true,
+  "events": {
+    "epoch0": {
+      "dpc_register": "w25",
+      "handler_rva": "0x25268",
+      "isr_callsite_rva": "0x1f410",
+      "raw": "BUS status1 bit21"
+    },
+    "video": {
+      "event_id": 3,
+      "raw": "TOP status1 bit0"
+    }
+  },
+  "kmd_irq_reader": {
+    "bus_base_object_field": "0x150",
+    "bus_clear": "status0 -> BUS+0x3c; status1 -> BUS+0x40; 1 -> BUS+0x30",
+    "message_mapping": {
+      "+0x04": "TOP status0 = TOP+0x44",
+      "+0x08": "TOP status1 = TOP+0x48",
+      "+0x0c": "BUS status0 = BUS+0x28",
+      "+0x10": "BUS status1 = BUS+0x2c"
+    },
+    "rva": "0x1dc20",
+    "top_base_object_field": "0x140",
+    "top_clear": "status0 -> TOP+0x3c; status1 -> TOP+0x40; 1 -> TOP+0x30"
+  },
+  "linux_consequence": "A bounded X1E VFE1 PIX candidate may keep the normal IRQ path untouched and poll raw BUS status1 bit21 for Epoch0 and TOP status1 bit0 for VIDEO, then clear with the exact Windows clear registers. Do not infer other event bits from this oracle.",
+  "live_hit": {
+    "bus0": "0x00000017",
+    "bus1": "0x00611ff8",
+    "epoch0_bit_set": true,
+    "ife": 1,
+    "top0": "0x00002010",
+    "top1": "0x00000271"
+  },
+  "live_masks": {
+    "bus_mask0": "0xd0000000",
+    "bus_mask1": "0x00000000",
+    "top_mask0": "0x0007f051",
+    "top_mask1": "0x00000000"
+  },
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-vfe1-raw-irq-mapping-v1",
+  "source": {
+    "driver_bytes": 376560,
+    "driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "live_log_bytes": 668,
+    "live_log_sha256": "52a5546e9d908cb6a0a8cb41879cea9b4e4aabb0fa8f83194a97c2c0c14e18e4"
+  }
+}

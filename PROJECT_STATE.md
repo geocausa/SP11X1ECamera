@@ -83,6 +83,8 @@ Runtime camera/image testing is now authorized. Golden remains the saved/default
 
 Post-test Golden return is now independently verified. The machine booted `sp11-audio-fullio-v19c` on `7.1.5-sp11-render-parity-v4+`, GRUB retained `saved_entry=sp11-audio-fullio-v19c` with an empty `next_entry`, no candidate `qcom_camss`/`imx681`/`ov13858` module was loaded, and the Golden kernel/initrd SHA-256 values remained `bca0a336...bb428a` / `ac3ba64b...add9c`. This closes the RDI runtime rollback gate.
 
+The final raw IRQ mapping needed by the bounded PIX harness is now closed. Exact `qccamisp8380.sys` reader RVA `0x1dc20` copies TOP `+0x44/+0x48` and BUS `+0x28/+0x2c` into its DPC message, then uses Windows clear registers. DPC decoding maps **VIDEO to TOP status1 bit0** and **Epoch0 to BUS status1 bit21**. A focused IFE1 live hit recorded `TOP0=0x00002010`, `TOP1=0x00000271`, `BUS0=0x00000017`, `BUS1=0x00611ff8`, with live masks `TOP0=0x0007f051`, `TOP1=0`, `BUS0=0xd0000000`, `BUS1=0`. This permits a candidate polling worker without changing the normal VFE IRQ path.
+
 Canonical handoff: `docs/runbooks/2026-08-28-e003h-windows-parity-static.md`.
 
 ## E003g ROUTE RESOLVED — same-machine Windows front route is CSIPHY2 -> CSID1 -> IFE1/VFE1 — 2026-08-28

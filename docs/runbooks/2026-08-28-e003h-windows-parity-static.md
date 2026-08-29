@@ -389,3 +389,7 @@ STREAMOFF immediately logs IMX681 `MODE_SELECT=0` and runtime power-off. Sensor 
 ## 2026-08-29 — bounded front RDI transport frame and Golden rollback verified
 
 A disposable front-only candidate captured one 3840x2640 packed RAW10 frame through `IMX681 -> CSIPHY2 -> CSID1 RDI0 -> VFE1 RDI0`. The frame SHA-256 is `8e892cfeb8f9aea6c9454dbc1fe22b0c26a11e4a108e551a2995069d76e000ac`; scene bytes remain local/untracked. STREAMOFF restored `MODE_SELECT=0`; sensor/CAMSS runtime PM suspended, camera clock counts and regulator use counts returned to zero, and no kernel fault was observed. A normal reboot then returned to Golden FullIO v19c with unchanged Golden hashes and no candidate camera module loaded. This is transport proof only, not VFE1 PIX/QC10C parity.
+
+## 2026-08-29 — raw VFE1 Epoch0/VIDEO IRQ mapping closed
+
+Exact KMD IRQ-reader RVA `0x1dc20` reads TOP status0/1 from `+0x44/+0x48` and BUS status0/1 from BUS `+0x28/+0x2c`, preserving them in the DPC message before clear. DPC decoding proves `VIDEO = TOP status1 bit0` and `Epoch0 = BUS status1 bit21`. A focused same-machine IFE1 hit records `TOP0=0x00002010`, `TOP1=0x00000271`, `BUS0=0x00000017`, `BUS1=0x00611ff8`; mask registers are `TOP_MASK0=0x0007f051`, `TOP_MASK1=0`, `BUS_MASK0=0xd0000000`, `BUS_MASK1=0`. The Windows clear sequence is TOP/BUS status0 -> `+0x3c`, status1 -> `+0x40`, then global clear `+0x30=1`. This closes a bounded polling implementation for the disposable PIX candidate without enabling a guessed Linux VFE IRQ mask.
