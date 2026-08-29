@@ -78,3 +78,5 @@ An RDI frame can be useful later as a diagnostic transport proof, but **must nev
 31. The disposable front-only package is refreshed to the 0036+0037 CAMSS module and package/preflight inspections pass while unarmed. No second RUN is authorized by the refresh itself.
 
 28. The second instrumented PIX authorization is consumed. Its root invocation was followed by an unclean reset (no shutdown journal; next Golden boot EXT4 orphan cleanup), no QC10C output and no persisted RT-CDM stage result. Golden is restored. No third runtime is authorized; persistent stage observation is the next static gate.
+
+29. Static `0039` adds only an arm-gated read-only RT-CDM stage sysfs snapshot and fsync-backed watcher. It publishes pre-write reset/core/FIFO software markers, adds zero MMIO writes, preserves `RUN` semantics, passes forward/reverse reconstruction and Golden-vermagic build. Runtime remains unauthorized. Patch `b4349284fabdba7be35a0973894e51e1d872ae8838724f9f68fc863df32aef8a`, module `cabc1851006f86e83f4086226342c11702aed6b8734d2f5144e9f51fb8042ed3`.

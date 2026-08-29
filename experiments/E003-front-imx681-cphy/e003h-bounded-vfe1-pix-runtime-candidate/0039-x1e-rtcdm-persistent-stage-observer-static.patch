@@ -1,0 +1,152 @@
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -119,6 +119,7 @@
+ 	u32 last_irq_status;
+ 	u32 last_user_data;
+ 	u32 diag_stage;
++	u32 diag_transition_seq;
+ 	u32 diag_fifo_seq;
+ 	u32 diag_base;
+ 	u32 diag_len_low20;
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5035,9 +5035,11 @@
+ enum camss_rtcdm_diag_stage {
+ 	CAMSS_RTCDM_DIAG_IDLE,
+ 	CAMSS_RTCDM_DIAG_PREFLIGHT,
++	CAMSS_RTCDM_DIAG_RESET_COMMAND,
+ 	CAMSS_RTCDM_DIAG_RESET_WAIT,
+ 	CAMSS_RTCDM_DIAG_RESET_DONE,
+ 	CAMSS_RTCDM_DIAG_CORE_CONFIGURED,
++	CAMSS_RTCDM_DIAG_CORE_STARTING,
+ 	CAMSS_RTCDM_DIAG_CORE_STARTED,
+ 	CAMSS_RTCDM_DIAG_FIFO_WAIT,
+ 	CAMSS_RTCDM_DIAG_FIFO_DONE,
+@@ -5049,12 +5051,16 @@
+ 	switch (stage) {
+ 	case CAMSS_RTCDM_DIAG_PREFLIGHT:
+ 		return "preflight";
++	case CAMSS_RTCDM_DIAG_RESET_COMMAND:
++		return "reset-command";
+ 	case CAMSS_RTCDM_DIAG_RESET_WAIT:
+ 		return "reset-wait";
+ 	case CAMSS_RTCDM_DIAG_RESET_DONE:
+ 		return "reset-done";
+ 	case CAMSS_RTCDM_DIAG_CORE_CONFIGURED:
+ 		return "core-configured";
++	case CAMSS_RTCDM_DIAG_CORE_STARTING:
++		return "core-starting";
+ 	case CAMSS_RTCDM_DIAG_CORE_STARTED:
+ 		return "core-started";
+ 	case CAMSS_RTCDM_DIAG_FIFO_WAIT:
+@@ -5072,20 +5078,27 @@
+ 				  u32 required, int error)
+ {
+ 	struct camss_rtcdm *rt = &camss->rtcdm1;
++	u32 seq;
+ 
+ 	WRITE_ONCE(rt->diag_stage, stage);
+ 	WRITE_ONCE(rt->diag_required_irq, required);
+ 	WRITE_ONCE(rt->diag_last_error, error);
+-	if (!error || !rt->base)
+-		return;
++	if (error && rt->base) {
++		WRITE_ONCE(rt->diag_mmio_context,
++			   readl_relaxed(rt->base + CAMSS_RTCDM_IRQ_CONTEXT_STATUS));
++		WRITE_ONCE(rt->diag_mmio_status,
++			   readl_relaxed(rt->base + CAMSS_RTCDM_IRQ0_STATUS));
++		WRITE_ONCE(rt->diag_mmio_user_data,
++			   readl_relaxed(rt->base + CAMSS_RTCDM_USR_DATA));
++	}
+ 
+-	WRITE_ONCE(rt->diag_mmio_context,
+-		   readl_relaxed(rt->base + CAMSS_RTCDM_IRQ_CONTEXT_STATUS));
+-	WRITE_ONCE(rt->diag_mmio_status,
+-		   readl_relaxed(rt->base + CAMSS_RTCDM_IRQ0_STATUS));
+-	WRITE_ONCE(rt->diag_mmio_user_data,
+-		   readl_relaxed(rt->base + CAMSS_RTCDM_USR_DATA));
++	seq = READ_ONCE(rt->diag_transition_seq) + 1;
++	/* Pairs with e003h_pix_rtcdm_diag_show() acquire load. */
++	smp_store_release(&rt->diag_transition_seq, seq);
++	sysfs_notify(&camss->dev->kobj, NULL, "e003h_pix_rtcdm_diag");
+ 
++	if (!error)
++		return;
+ 	dev_err(camss->dev,
+ 		"E003h RT-CDM1 stage=%s error=%d fifo_seq=%u base=%#x len=%#x required=%#x raw_context=%#x raw_status=%#x raw_userdata=%#x last_context=%#x last_status=%#x last_userdata=%#x\n",
+ 		camss_rtcdm1_diag_stage_name(stage), error,
+@@ -5239,6 +5252,7 @@
+ 	enable_irq(rt->irq);
+ 
+ 	/* Exact same-machine Windows open/init MMIO order. */
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_RESET_COMMAND, 0, 0);
+ 	writel_relaxed(CAMSS_RTCDM_WINDOWS_RESET_MASK,
+ 		       rt->base + CAMSS_RTCDM_IRQ0_MASK);
+ 	writel_relaxed(CAMSS_RTCDM_WINDOWS_RESET_CMD,
+@@ -5283,6 +5297,7 @@
+ 		goto out_unlock;
+ 	}
+ 
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_CORE_STARTING, 0, 0);
+ 	writel_relaxed(CAMSS_RTCDM_WINDOWS_IRQ0_MASK,
+ 		       rt->base + CAMSS_RTCDM_IRQ0_MASK);
+ 	dmb(sy);
+@@ -7813,6 +7828,31 @@
+ 	return 0;
+ }
+ 
++static ssize_t e003h_pix_rtcdm_diag_show(struct device *dev,
++					 struct device_attribute *attr, char *buf)
++{
++	struct camss *camss = dev_get_drvdata(dev);
++	struct camss_rtcdm *rt;
++	u32 seq;
++
++	if (!camss || !camss->res || camss->res->version != CAMSS_X1E80100)
++		return -ENODEV;
++	rt = &camss->rtcdm1;
++	/* Pairs with camss_rtcdm1_diag_set() release store. */
++	seq = smp_load_acquire(&rt->diag_transition_seq);
++
++	return sysfs_emit(buf,
++		"seq=%u stage=%u name=%s fifo_seq=%u base=%#x len=%#x required=%#x error=%d irq_armed=%u faulted=%u last_status=%#x last_userdata=%#x\n",
++		seq, READ_ONCE(rt->diag_stage),
++		camss_rtcdm1_diag_stage_name(READ_ONCE(rt->diag_stage)),
++		READ_ONCE(rt->diag_fifo_seq), READ_ONCE(rt->diag_base),
++		READ_ONCE(rt->diag_len_low20), READ_ONCE(rt->diag_required_irq),
++		READ_ONCE(rt->diag_last_error), READ_ONCE(rt->irq_armed),
++		READ_ONCE(rt->faulted), READ_ONCE(rt->last_irq_status),
++		READ_ONCE(rt->last_user_data));
++}
++static DEVICE_ATTR_RO(e003h_pix_rtcdm_diag);
++
+ static ssize_t e003h_pix_run_once_store(struct device *dev,
+ 					struct device_attribute *attr,
+ 					const char *buf, size_t count)
+@@ -8161,8 +8201,14 @@
+ 	}
+ 
+ 	if (camss_x1e_pix_runtime_arm && camss->res->version == CAMSS_X1E80100) {
++		ret = device_create_file(dev, &dev_attr_e003h_pix_rtcdm_diag);
++		if (ret) {
++			v4l2_async_nf_unregister(&camss->notifier);
++			goto err_media_device_unregister;
++		}
+ 		ret = device_create_file(dev, &dev_attr_e003h_pix_run_once);
+ 		if (ret) {
++			device_remove_file(dev, &dev_attr_e003h_pix_rtcdm_diag);
+ 			v4l2_async_nf_unregister(&camss->notifier);
+ 			goto err_media_device_unregister;
+ 		}
+@@ -8206,8 +8252,10 @@
+ {
+ 	struct camss *camss = platform_get_drvdata(pdev);
+ 
+-	if (camss_x1e_pix_runtime_arm && camss->res->version == CAMSS_X1E80100)
++	if (camss_x1e_pix_runtime_arm && camss->res->version == CAMSS_X1E80100) {
+ 		device_remove_file(&pdev->dev, &dev_attr_e003h_pix_run_once);
++		device_remove_file(&pdev->dev, &dev_attr_e003h_pix_rtcdm_diag);
++	}
+ 	v4l2_async_nf_unregister(&camss->notifier);
+ 	v4l2_async_nf_cleanup(&camss->notifier);
+ 	camss_unregister_entities(camss);

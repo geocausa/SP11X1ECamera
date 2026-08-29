@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-second-pix-diagnostic-abrupt-reset-golden-restored-persistent-stage-observer-next
+status: e003h-persistent-rtcdm-stage-observer-built-static-runtime-blocked-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -824,10 +824,27 @@ e003h:
   linux_front_0038_result_markdown_sha256: fdc2c2166dc9dcf7497864cce034e74fc6fd121d40041b1be2aaf376fd56fbe9
   linux_front_0038_last_rtcdm_stage_persisted: false
   linux_front_0038_golden_return_verified: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the second diagnostic reset abruptly before RT-CDM stage telemetry persisted, so the last executed stage is unknown; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-persistent-stage-observer-static
+  linux_front_0039_patch_sha256: b4349284fabdba7be35a0973894e51e1d872ae8838724f9f68fc863df32aef8a
+  linux_front_0039_source_sha256: 7ccbd4008e44af0dd35d5443c4aa43e12b43b96b62d3ea6c469bd4ccd943063c
+  linux_front_0039_header_sha256: 062125bad5d1fe16429563996f5728abc14873d6a4c58389dca932b26d1836cc
+  linux_front_0039_object_sha256: 19b013c2042bc3d7a409468199e2590197af164a8430dd354c9e6b543a2efc73
+  linux_front_0039_module_sha256: cabc1851006f86e83f4086226342c11702aed6b8734d2f5144e9f51fb8042ed3
+  linux_front_0039_inspector_sha256: 06e5f423ab40f90c54f10c4531ab19277dbede63a2b0666256cacf1377ba3432
+  linux_front_0039_inspection_json_sha256: 2deb71213db9f07d4a5b875a4cfb99a40dda44db7cff8ed4ac2966925a77a48b
+  linux_front_0039_watcher_sha256: 8698afdc615ee1d544d0068441241625487cc8459ca97a758b62d3b863743d84
+  linux_front_0039_build_log_sha256: 9f038e815505e840c436c71b6fe784dc67713d9abc147b6f04c05b1c0a388539
+  linux_front_0039_checkpatch_sha256: e1919651c9925e905437e669265e9364186524cf8dd2ceabb77b8acceb2b0cde
+  linux_front_0039_read_only_sysfs_attribute: e003h_pix_rtcdm_diag
+  linux_front_0039_transition_sequence: release/acquire published diagnostic generation
+  linux_front_0039_prewrite_markers: reset-command; core-starting; fifo-wait
+  linux_front_0039_persistence: userspace watcher fsyncs each changed snapshot; sysfs POLLPRI plus 1ms fallback poll
+  linux_front_0039_new_mmio_writes: 0
+  linux_front_0039_trigger_semantics_changed: false
+  linux_front_0039_runtime_authorized: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the second diagnostic reset abruptly before the last RT-CDM stage persisted; RT-CDM non-FIFO0 IRQ clearing and command-buffer DMA/SMMU ownership remain to be audited before any further runtime; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-rtcdm-multififo-dma-domain-static-audit
 next_action: >-
-  Do not repeat either PIX attempt. Golden is restored after the second diagnostic's unclean reset. Build and inspect a non-MMIO persistent stage observer for the existing 0036 RT-CDM stage state, with no new hardware write or trigger semantics. A third runtime is not authorized.
+  Do not repeat either PIX attempt. 0039 now provides an arm-gated read-only RT-CDM stage attribute plus fsync-backed watcher and adds zero MMIO writes. Before any third runtime, statically close the Windows multi-FIFO IRQ-clear semantics and prove the Linux coherent command-buffer DMA mapping is valid for the RT-CDM1 requester/SMMU domain. Runtime remains unauthorized.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
