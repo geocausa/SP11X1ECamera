@@ -41,6 +41,8 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 16. The clean Epoch0 selector-2 batch oracle supersedes only 0023's no-rewrite interpretation, not its scheduler order. Exactly 175 steady batches use five BLs and five main-list variants (`0x958/0x868/0x83c/0x6b8/0x5a4`); every varying command dword is a DMI address or register value. `+0x008c/+0x3b70/+0x3d78..+0x3d84` are queued per-frame CDM writes, while a separate direct-MMIO rewrite remains forbidden. Static `0024` records the corrected ownership/topology only as retained data and explicitly leaves DMI payload bytes/FIFO submission unclosed.
 17. Representative steady-state DMI payload bytes are now hash-closed for all five variants from local Windows source-ring/slot evidence; raw payload bytes remain untracked. Exact KMD disassembly proves the five BL sizes are upstream IQ-packet shapes, not a hidden KMD selector. Frame-varying IQ values and the exact GEN_IRQ tag source remain upstream inputs; runtime stays blocked.
 
+18. GEN_IRQ tagging is now exact for the accepted front stream: 245 consumed requests prove BL4 userdata equals `low32(requestId)` with `subRequest=0`; the first two tags are the already-proven primed batches. A second `0x83c` payload sample confirms only `4308/1` and `4308/2` vary. The remaining steady-state producer is upstream IQ packet content, not KMD tagging/selection.
+
 ## Policy consequence
 
 An RDI frame can be useful later as a diagnostic transport proof, but **must never be called Windows parity or accepted as the production endpoint**. E003h remains static until the IPP/VFE1 pixel pipeline and lifecycle can be represented without inventing behavior.

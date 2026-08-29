@@ -14,6 +14,7 @@ BLOBS = {
     'slot_958_b': ('ae190b55035b991627f94dbd92f439f765d540485f4ef48856cb282f2309c3bf', 0x8000),
     'slot_5a4_a': ('3216624294597cc95e767fdd01bdf7195f07fe6bd375821bc40b079d4e8dd20e', 0x8000),
     'slot_5a4_b': ('c121d6213129953fd13051b1b912adb3bbda649a72023391f75a2e2582d5f9b1', 0x8000),
+    'slot_83c_b': ('3ff9097d63db3386670287519c2e95133fe6cbaa145fcc668626825346d62659', 0x8000),
 }
 # Same 0x8000 DMI source-slot layout already mechanically established by the
 # initial Windows patch/DMI oracle. The steady-state ring uses the same layout.
@@ -45,6 +46,7 @@ RING_MAP = [
 SINGLE = [
     ('958A','958','slot_958_a'), ('958B','958','slot_958_b'),
     ('5a4A','5a4','slot_5a4_a'), ('5a4B','5a4','slot_5a4_b'),
+    ('83cB','83c','slot_83c_b'),
 ]
 EXPECTED_LIVE = [
     ('23','6b8','8'), ('24','83c','c'), ('25','5a4','2'), ('26','958','e'),

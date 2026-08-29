@@ -1,0 +1,66 @@
+{
+  "accepted": true,
+  "driver": {
+    "anchors": {
+      "0x25ec0": "mov x2, #0",
+      "0x25ec4": "mov w1, #2",
+      "0x25ec8": "bl #0x140028480",
+      "0x25ecc": "ldr x23, [sp, #0x60]",
+      "0x25ee8": "ldr w20, [sp, #0x68]",
+      "0x25ef4": "mov x3, x23",
+      "0x25f20": "str x23, [x21, #0xc80]",
+      "0x25f34": "stp w20, w9, [x8]",
+      "0x25f78": "str x23, [x8]",
+      "0x25f80": "str x9, [x8, #8]",
+      "0x287e4": "ldr w22, [sp, #0x20]",
+      "0x287e8": "ldr w20, [sp, #0x30]",
+      "0x2896c": "cbz x22, #0x140028980",
+      "0x28970": "sxtw x2, w23",
+      "0x2897c": "bl #0x14002dca0"
+    },
+    "bytes": 376560,
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "kmd_handoff": {
+    "epoch0_selector2_call_rva": "0x25ec8",
+    "request_saved_for_epoch_state_rvas": [
+      "0x25f20",
+      "0x25f78"
+    ],
+    "selector2_request_load_rva": "0x25ecc",
+    "selector2_subrequest_load_rva": "0x25ee8",
+    "subrequest_saved_rvas": [
+      "0x25f34",
+      "0x25f80"
+    ]
+  },
+  "linux_consequence": "For the accepted front stream, steady GEN_IRQ userdata is the requestId tag, not an independent CDM-local counter. Keep it caller/request-derived; do not freeze captured tag values.",
+  "live_log": {
+    "bytes": 26760,
+    "request_count": 245,
+    "request_range": "0x2..0xf6",
+    "sha256": "7a182c14f2f797fef4143177e2c9e17dae885766a6c2a4781564a3f5250a974c",
+    "subrequest_values": [
+      0
+    ],
+    "tag_count": 246,
+    "tag_range": "0x1..0xf6"
+  },
+  "policy": "oracle only; no Linux RT-CDM submission or front runtime authorized",
+  "schema": "sp11-e003h-vfe1-genirq-request-tag-v1",
+  "startup_prime": {
+    "interpretation": "consistent with already-proven two-bundle priming before first Epoch0 completion/consume; first consumed selector-2 request is 0x2",
+    "unmatched_initial_tags": [
+      "0x1",
+      "0x2"
+    ]
+  },
+  "steady_correlation": {
+    "all_match": true,
+    "first": "0x2",
+    "last": "0xf6",
+    "observed_subrequest": 0,
+    "pairs": 245,
+    "rule": "GEN_IRQ userdata == low32(requestId)"
+  }
+}

@@ -19,12 +19,12 @@ The five variants carry nested DMI identity sets:
 - `0x83c` / `0x868`: additionally carry `a008/1..2` and `a208/1..2`;
 - `0x958`: additionally carries `4708/1` and `4908/1`.
 
-Representative sample counts in the payload oracle are `0x958=2`, `0x868=10`, `0x83c=1`, `0x6b8=4`, `0x5a4=2`. Within those samples:
+Representative sample counts in the payload oracle are `0x958=2`, `0x868=10`, `0x83c=2`, `0x6b8=4`, `0x5a4=2`. Within those samples:
 
 - `4308/1` and `4308/2` are frame-varying in `0x958`, `0x868` and `0x6b8`;
 - `4708/1` and `5a08/1` are also frame-varying in the two captured `0x958` samples;
 - the observed `0x5a4` payload identities are invariant across its two samples;
-- `0x83c` has only one dedicated payload sample, so within-variant invariance is intentionally not claimed.
+- the second dedicated `0x83c` sample confirms only `4308/1` and `4308/2` vary; its other ten carried DMI identities are byte-identical across both samples.
 
 The derived JSON contains every payload identity, byte length and SHA-256 set. No raw payload byte string is embedded in the extractor, oracle or kernel source.
 
@@ -36,6 +36,6 @@ Therefore **qccamisp8380 KMD does not own a hidden 0x958/0x868/0x83c/0x6b8/0x5a4
 
 ## Remaining boundary
 
-`0024` already proves the companion BL4 `GEN_IRQ` userdata equals the monotonic observed batch index. The exact upstream tag/request source is still not closed. Likewise, the producer/value rule for frame-varying IQ payloads remains above KMD.
+`0024` already proved the companion BL4 `GEN_IRQ` userdata is monotonic. A new focused same-machine correlation now closes its source: 245 consumed requests (`0x2..0xf6`) have exact `GEN_IRQ userdata == low32(requestId)` and `subRequest=0`; the initial tags `1,2` are the already-proven two primed batches before the first consume. The tag is therefore request-derived, not an independent CDM-local counter. The remaining producer/value rule for frame-varying IQ payloads remains above KMD.
 
-The next bounded oracle should therefore target the upstream IQ-packet producer/tag handoff, not another Epoch0 batch capture. No RT-CDM FIFO submission, VFE1 PIX/CSID1/MIPI start, IMX681 transmission or Linux front frame is authorized.
+The next bounded oracle should therefore target the upstream IQ-packet value producer, not another Epoch0 batch/tag capture. No RT-CDM FIFO submission, VFE1 PIX/CSID1/MIPI start, IMX681 transmission or Linux front frame is authorized.
