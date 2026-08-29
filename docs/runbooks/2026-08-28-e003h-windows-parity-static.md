@@ -528,3 +528,9 @@ Patch `5406e8d7683ba1b9d27ff0fc70e65ff7ca7c7c024c2930d17de2494fb9adf021`; inspec
 ## 2026-08-30 — disposable PIX diagnostic package refreshed with `0036+0037`, unarmed
 
 The existing front-only one-shot package was repinned to CAMSS module `96e48ff176a048c391841d2c56bafdce76cfbe8a78b7310173caf175af49c9e9`. No DT, sensor, capsule or helper behavior changed. Package inspection v2 SHA-256 `991534b4dd4db9bf7201864f54f07cf8d4faabe24582f8b5d5a4ce3b361a5eb8` proves stage telemetry is present, the IRQ context gate is absent, the boot entry remains installed but unarmed, and normal QBUF/STREAMON remain unused. Golden-host preflight `1a0b26722dc74118a2d68b0fad69a0401105a6ab17194d730738be367af2c74c` passes with saved/default Golden and empty `next_entry`. Runtime remains unauthorized pending a fresh one-shot authorization checkpoint.
+
+## 2026-08-30 — one instrumented second PIX diagnostic authorized
+
+Fresh package/Golden review passed after the exact Windows IRQ correction: candidate CAMSS , front-only DT/capsule/helper hashes exact, branch/origin synchronized, saved/default Golden with empty , candidate camera modules unloaded and trigger absent. Review JSON SHA-256 .
+
+Exactly one candidate boot and one  are authorized. The diagnostic must not retry in the same boot.  stage telemetry must be archived whether the run fails or succeeds, and the machine must immediately return to Golden afterwards.

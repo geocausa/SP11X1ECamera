@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-rtcdm-diagnostic-package-refreshed-unarmed-golden-safe
+status: e003h-second-pix-diagnostic-authorized-not-yet-armed-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -807,12 +807,14 @@ e003h:
   linux_front_0038_load_script_sha256: 461e225c010725d800e9df95b1e012a786c41d590754e985428975b7f3d62637
   linux_front_0038_preflight_script_sha256: 5f50b32d5c23973f14cc17b59fc834e97c6c2cbb8e23987222eb31ef5f89c902
   linux_front_0038_candidate_boot_armed: false
-  linux_front_0038_runtime_authorized: false
+  linux_front_0038_runtime_authorized: true
+  linux_front_0038_runtime_authorization_scope: exactly one candidate boot and one RUN; no same-boot retry; archive 0036 telemetry; immediate Golden reboot after success/failure
+  linux_front_0038_authorization_review_sha256: 991534b4dd4db9bf7201864f54f07cf8d4faabe24582f8b5d5a4ce3b361a5eb8
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; first attempt timed out before sensor-on and exact RT-CDM timeout stage is not yet distinguished; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-diagnostic-second-one-shot-authorization-review
+next_experiment: E003h-rtcdm-instrumented-second-one-shot-runtime
 next_action: >-
-  Package v2 inspection and Golden-host preflight pass with 0036+0037 and next_entry empty. Perform a fresh authorization review; if accepted, authorize exactly one candidate boot and one RUN,
-  never retry in the same boot, archive stage telemetry/output, and immediately return to Golden after success or failure. Do not arm before that authorization checkpoint is committed and pushed.
+  Exactly one instrumented second candidate boot and one RUN are authorized. Arm only sp11-camera-e003h-pix-one-shot, manually load the pinned 0036+0037 CAMSS and pinned IMX681,
+  configure the exact front PIX route, invoke RUN once, archive stage telemetry/output, never retry in the same boot, and immediately reboot to Golden after success or failure.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
