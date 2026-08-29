@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-epoch0-cdm-batch-contract-built-unreachable-stream-blocked-golden-unchanged
+status: e003h-epoch0-dmi-payload-topology-hash-closed-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -517,15 +517,26 @@ e003h:
   linux_front_0024_dmi_payload_bytes_closed: false
   linux_front_0024_fifo0_submission_authorized: false
   linux_front_0024_runtime_reachable: false
-  unresolved: recover exact steady-state DMI payload source CPU aliases/bytes for all five main-BL variants plus upstream variant selection and GEN_IRQ batch-tag production before any unreachable steady-state materializer; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-windows-vfe1-epoch0-dmi-payload-variant-selector-oracle
+  windows_vfe1_epoch0_dmi_payload_live_log_sha256: f44d09f8669576fe868a51d2b410c443dd863c8d00b7ab53ad1375b3b4acf3b0
+  windows_vfe1_epoch0_dmi_payload_live_log_bytes: 8868
+  windows_vfe1_epoch0_dmi_payload_extractor_sha256: 824a99ebf3351ec58b75cbca295b85e17dbf5960a5bb56e00cbe8cb7da670f13
+  windows_vfe1_epoch0_dmi_payload_oracle_sha256: f4b4fbd710efea9cb2a588b51548939115a180f463dd94192f05fd1359bdb17a
+  windows_vfe1_epoch0_dmi_payload_samples: 0x958=2, 0x868=10, 0x83c=1, 0x6b8=4, 0x5a4=2
+  windows_vfe1_epoch0_dmi_frame_varying_observed: 4308/1, 4308/2; plus 4708/1 and 5a08/1 in 0x958
+  windows_vfe1_epoch0_dmi_raw_payloads_committed: false
+  windows_vfe1_epoch0_dmi_windows_ring_geometry_frozen: false
+  windows_vfe1_epoch0_variant_selection_owner: upstream IQ packet producer; no hidden KMD five-way selector proven
+  windows_vfe1_epoch0_kmd_iq_parser_rva: 0x26838
+  windows_vfe1_epoch0_genirq_tag_source_closed: false
+  unresolved: recover the upstream frame-varying IQ payload producer/value contract and exact GEN_IRQ request/tag source; obtain a second dedicated 0x83c payload sample before claiming within-variant stability; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-windows-upstream-iq-producer-genirq-tag-oracle
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0022 host-start ordering, 0023 scheduler ownership and 0024 steady-state CDM batch
-  topology as closed and non-executable; do not repeat the Epoch0 batch capture. Windows per-frame RT-CDM lists include period_cfg +0x8c
-  and +0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84, so retain the correction that these belong to queued CDM programming, not a
-  separate Linux direct-MMIO rewrite loop. Next recover the real DMI payload source CPU aliases/bytes for the five main-BL variants,
-  the upstream variant-selection rule and the GEN_IRQ tag source. Only then build an unreachable steady-state materializer. Do not create
-  a caller for 0022/0023/0024, arm RT-CDM IRQ/FIFO0, start CSID1 IPP/VFE1 PIX/MIPI, transmit IMX681, or attempt a front frame.
+  Keep IMX681 Linux transmission blocked. Treat 0022 host-start ordering, 0023 scheduler ownership, 0024 steady-state CDM batch topology
+  and the hash-only five-variant DMI payload topology as closed and non-executable. Do not repeat the Epoch0 batch or payload-ring captures.
+  qccamisp8380 KMD derives changed groups from incoming IQ packet records; it does not own a hidden 0x958/0x868/0x83c/0x6b8/0x5a4 selector.
+  Next recover the upstream producer/value rule for frame-varying IQ payloads and the exact GEN_IRQ request/tag source, with a second 0x83c
+  sample if needed for within-variant stability. Only then build an unreachable steady-state materializer using Linux-owned DMI buffers.
+  Do not arm RT-CDM IRQ/FIFO0, start CSID1 IPP/VFE1 PIX/MIPI, transmit IMX681, or attempt a front frame.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
