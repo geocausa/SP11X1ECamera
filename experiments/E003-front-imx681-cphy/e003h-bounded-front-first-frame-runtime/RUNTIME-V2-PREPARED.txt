@@ -1,0 +1,28 @@
+E003h bounded front RDI runtime V2 prepared — 2026-08-29
+
+Purpose: one-frame physical transport diagnostic only. It is not Windows PIX/ISP parity.
+
+V1 failed safely before stream because the initrd media dependency order was incomplete,
+then stock qcom-camss rejected the C-PHY endpoint. Manual no-stream validation proved the
+candidate qcom-camss module probes once videobuf2-v4l2 + videobuf2-dma-sg are present.
+
+V2 corrections:
+- front-only DT graph: remove CAMSS CSIPHY1/rear endpoint, disable rear OV13858 and remove its graph port;
+- preserve front C-PHY endpoint as bus-type 1, one trio data-lanes=<0> to CSIPHY2;
+- complete early initrd dependency closure: mc, videodev, v4l2-async, v4l2-fwnode,
+  videobuf2-common, videobuf2-memops, videobuf2-v4l2, videobuf2-dma-sg, v4l2-cci,
+  candidate qcom-camss, candidate imx681;
+- find IMX681 I2C client by name rather than a hard-coded adapter number.
+
+Expected front-only DTB SHA-256:
+526b8b05192b9466a2df38512b4c7d3e30581673042da976c7ef06eee824c16d
+
+Expected reproducible V2 initrd SHA-256 (A == B):
+e0edfec2a9f4929ca6f808a98232ca357e31dfc43cd4dca09358fbdff7d1f188
+
+Candidate qcom-camss SHA-256:
+09abae83c74330806359af7b095c988abd2680af765ea148ee48c996252b6c35
+Candidate imx681 SHA-256:
+389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+
+Golden remains saved/default and is not modified.

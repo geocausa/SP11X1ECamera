@@ -1,0 +1,55 @@
+E003h bounded front runtime V1 pre-stream failure — 2026-08-29
+
+Kernel/cmdline:
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-camera-e003h-rdi-first-frame/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003h-rdi-first-frame sp11_camera_e003h_rdi_first_frame=1
+
+Accepted interpretation:
+- Disposable E003h candidate booted.
+- Initrd loader stopped before candidate CAMSS because videobuf2_common dependency order was incomplete.
+- Rootfs stock qcom-camss then probed and rejected C-PHY bus type 6.
+- Candidate IMX681 later bound manually/in userspace, completed ID + standby mode programming, and returned power off.
+- Candidate qcom-camss.ko was subsequently loaded manually after videobuf2_v4l2 + videobuf2_dma_sg and probed successfully.
+- CAMSS notifier remained incomplete because rear OV13858 did not bind; front sensor entity therefore had zero media links.
+- Stock OV13858 probe attempt returned -EIO and did not bind.
+- No media link was enabled, no STREAMON was issued, no MODE_SELECT=1 was observed, and no frame was attempted.
+
+Hashes:
+e9fd13a29b6580955d2662c27377dbd1caba14f7f89613510b5e23bd6c266293  /boot/sp11-7.1.5-camera-e003h-rdi-first-frame/x1e80100-microsoft-denali-sp11-e003h-rdi-first-frame.dtb
+fe0d35ea027fe785bbd5f45beae3a7e6c9938ef9b2882f2c79f0832c0909ce5c  /boot/sp11-7.1.5-camera-e003h-rdi-first-frame/initrd.img-7.1.5-sp11-camera-e003h-rdi-first-frame
+09abae83c74330806359af7b095c988abd2680af765ea148ee48c996252b6c35  /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/qcom-camss.ko
+389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388  experiments/E003-front-imx681-cphy/e003h-bounded-front-first-frame-runtime/imx681.ko
+
+Relevant dmesg:
+[Sat Aug 29 17:47:18 2026] sp11-camera-e003h-rdi-initrd: loading E003h bounded RDI diagnostic; IMX681 stream requests enabled
+[Sat Aug 29 17:47:18 2026] sp11-camera-e003h-rdi-initrd: videobuf2_common load failed rc=1
+[Sat Aug 29 17:47:20 2026] qcom-camss acb7000.isp: Unsupported bus type 6
+[Sat Aug 29 17:47:20 2026] qcom-camss acb7000.isp: probe with driver qcom-camss failed with error -22
+[Sat Aug 29 17:50:20 2026] imx681 6-0010: SP11 E003c: runtime power-on complete
+[Sat Aug 29 17:50:20 2026] imx681 6-0010: SP11 E003c PASS: IMX681 Windows ID 0x0aff, Sony ID 0x0681
+[Sat Aug 29 17:50:20 2026] imx681 6-0010: SP11 E003e PASS: Windows init=364 + mode0=68 programmed in standby; MODE_SELECT=0; C-PHY symbol=2400MHz link=1200MHz
+[Sat Aug 29 17:50:20 2026] imx681 6-0010: SP11 E003c: runtime power-off complete
+[Sat Aug 29 17:50:20 2026] imx681 6-0010: SP11 E003h bounded-runtime V4L2 bind complete; stream requests enabled only in disposable candidate
+[Sat Aug 29 17:51:11 2026] imx681 6-0010: SP11 E003c: runtime power-on complete
+[Sat Aug 29 17:51:11 2026] imx681 6-0010: SP11 E003c PASS: IMX681 Windows ID 0x0aff, Sony ID 0x0681
+[Sat Aug 29 17:51:11 2026] imx681 6-0010: SP11 E003e PASS: Windows init=364 + mode0=68 programmed in standby; MODE_SELECT=0; C-PHY symbol=2400MHz link=1200MHz
+[Sat Aug 29 17:51:11 2026] imx681 6-0010: SP11 E003c: runtime power-off complete
+[Sat Aug 29 17:51:11 2026] imx681 6-0010: SP11 E003h bounded-runtime V4L2 bind complete; stream requests enabled only in disposable candidate
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_queue_init (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_dma_sg_memops (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_streamoff (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_expbuf (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_querybuf (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_video_unregister_device (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_fop_release (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_dqbuf (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_create_bufs (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_prepare_buf (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_qbuf (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_fop_mmap (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_fop_read (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_streamon (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_fop_poll (err -2)
+[Sat Aug 29 17:59:35 2026] qcom_camss: Unknown symbol vb2_ioctl_reqbufs (err -2)
+[Sat Aug 29 18:03:09 2026] ov13858 2-0010: failed to find sensor: -5
+[Sat Aug 29 18:03:09 2026] ov13858 2-0010: probe with driver ov13858 failed with error -5
