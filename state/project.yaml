@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-front-start-orchestrator-contract-built-unreachable-stream-blocked-golden-unchanged
+status: e003h-post-start-vfe1-ownership-data-contract-built-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -466,14 +466,41 @@ e003h:
   linux_front_0022_hardware_execution_authorized: false
   linux_front_0022_mipi_sensor_start_included: false
   linux_front_0022_runtime_reachable: false
-  unresolved: close post-ISP_START_DONE VFE1 update ownership, separating software-owned per-frame BUS IOVA updates from hardware-live counters/state; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-post-start-vfe1-update-ownership-static
+  windows_vfe1_post_start_raw_sha256: 81aa7b23e2434dd89ddea21868917e23a2ce3abc1220a19b53805324c37825b5
+  windows_vfe1_post_start_raw_bytes: 8616
+  windows_vfe1_post_start_complete_sessions: 2
+  windows_vfe1_post_start_extractor_sha256: 54bf175c539255fde78c9483cdd7511394cd4593845e5c43e932ff0ff5730f30
+  windows_vfe1_post_start_oracle_sha256: d426c7cf4525f36c80623cab628061005c880abd5df02d17d8a76683fea4e66e
+  windows_vfe1_epoch0_handler_rva: 0x25268
+  windows_vfe1_epoch0_bus_update_call_rva: 0x25a38
+  windows_vfe1_epoch0_cdm_consume_call_rva: 0x25ec8
+  windows_vfe1_cdm_dispatcher_rva: 0x28480
+  windows_vfe1_cdm_epoch_consume_selector: 2
+  windows_vfe1_post_start_stage_order: IFE Epoch0 -> complete VFE1 BUS IOVA update -> RT-CDM queued BL consume/program -> completion dispatch/retirement
+  windows_vfe1_post_start_address_bundle_clients: 9
+  windows_vfe1_post_start_observed_initial_prime_bundles: 2
+  windows_vfe1_post_start_completion_groups: 5
+  windows_vfe1_post_start_completion_cross_group_order_required: false
+  windows_vfe1_post_start_no_rewrite_regs: 0x008c, 0x3b70, 0x3d78, 0x3d7c, 0x3d80, 0x3d84
+  windows_vfe1_post_start_hardware_live_mutable_regs: 0x3d78, 0x3d7c, 0x3d80, 0x3d84
+  linux_front_0023_patch_sha256: 962c8f6792b1ceb1649d6928df325ee1ed884f292342b0633b98c826a52cd7be
+  linux_front_0023_source_sha256: 4cd8594b3cc11b485522cb1dc19ff3d31a3f20e2a498d37f7939dd090a9e4c33
+  linux_front_0023_object_sha256: b24fdcf16a5a717e51df10ed98c8a5b39da68db8de30c2eafd601e5f60e7d135
+  linux_front_0023_module_sha256: 15754a8529b12b65cc37adfd9135e10de4b30418613204488c7722c37c1e2b6d
+  linux_front_0023_inspector_sha256: e6c19ce210caf4e65b2fb18dcbf5230c9ef42846063644f6228f8a2d7b4ce1ca
+  linux_front_0023_inspection_json_sha256: e7251c0bd0f047473891c7b4011ed760e1821bebf8b7fea2e2602a29b9875625
+  linux_front_0023_data_only: true
+  linux_front_0023_runtime_reachable: false
+  unresolved: recover exact same-machine Windows steady-state RT-CDM BL batches queued before and consumed at IFE Epoch0, including descriptor/command-byte identity and invariant versus per-frame fields; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-windows-vfe1-epoch0-cdm-batch-oracle
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0022 as the closed non-executable host startup ordering contract: packet0/1 precede
-  VFE1 BUS config/enable/initial addresses and packet2/3 follow before CSID1 start/ISP_START_DONE. Next, close post-start VFE1 update
-  ownership: identify which changing fields/events are software-owned Linux actions versus hardware-live observation, while retaining the
-  already-proven per-frame BUS IOVA update path. Do not create a caller for 0022, arm RT-CDM IRQ/FIFO0, start CSID1 IPP, enable VFE1 PIX,
-  start MIPI/CSIPHY, transmit IMX681, or attempt a front frame.
+  Keep IMX681 Linux transmission blocked. Treat 0022 host-start ordering and 0023 post-start ownership as closed and non-executable.
+  Windows post-start software ownership is IFE Epoch0 -> complete nine-client BUS IOVA update -> RT-CDM queued-BL consume/program,
+  followed by completion retirement through five independent group FIFOs; two complete address bundles are observed primed before the
+  first completion. Do not schedule Linux rewrites for period_cfg +0x8c or +0x3b70/+0x3d78..+0x3d84. Next, capture multiple Windows
+  steady-state CDM BL batches at queue/consume boundaries and preserve their exact command bytes/lengths so invariant versus per-frame
+  content is closed. Do not create a caller for 0022/0023, arm RT-CDM IRQ/FIFO0, start CSID1 IPP/VFE1 PIX/MIPI, transmit IMX681, or
+  attempt a front frame.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

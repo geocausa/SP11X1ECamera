@@ -1,0 +1,54 @@
+{
+  "accepted": true,
+  "address_bundle_clients": 9,
+  "completion_groups": 5,
+  "cross_group_completion_order_required": false,
+  "data_only_contract": true,
+  "hardware_live_mutable_observation_only": [
+    "0x3d78",
+    "0x3d7c",
+    "0x3d80",
+    "0x3d84"
+  ],
+  "module_sha256": "15754a8529b12b65cc37adfd9135e10de4b30418613204488c7722c37c1e2b6d",
+  "no_post_start_rewrite_regs": [
+    "0x008c",
+    "0x3b70",
+    "0x3d78",
+    "0x3d7c",
+    "0x3d80",
+    "0x3d84"
+  ],
+  "object_sha256": "b24fdcf16a5a717e51df10ed98c8a5b39da68db8de30c2eafd601e5f60e7d135",
+  "observed_initial_prime_bundles": 2,
+  "patch_sha256": "962c8f6792b1ceb1649d6928df325ee1ed884f292342b0633b98c826a52cd7be",
+  "policy": "post-start ownership/scheduling data only; no module load, RT-CDM IRQ arm/FIFO0 submission, VFE1 BUS write, CSID1/PIX/MIPI start, IMX681 transmission or frame authorized",
+  "post_start_oracle_sha256": "d426c7cf4525f36c80623cab628061005c880abd5df02d17d8a76683fea4e66e",
+  "runtime_isolation": {
+    "callable_helper_added": false,
+    "compiled_relocation_to_contract": false,
+    "hardware_execution_authorized": false,
+    "hardware_primitive_added": false,
+    "pix_stream_gate": "-EOPNOTSUPP before stream lock/IRQ/output"
+  },
+  "schema": "sp11-e003h-linux-front-post-start-ownership-static-inspection-v1",
+  "slot_reuse_requires_all_groups": true,
+  "software_owned_post_start": [
+    "BUS_IOVA_UPDATE",
+    "RTCDM_BATCH_CONSUME",
+    "COMPLETION_RETIREMENT"
+  ],
+  "source_sha256": "4cd8594b3cc11b485522cb1dc19ff3d31a3f20e2a498d37f7939dd090a9e4c33",
+  "stage_order": [
+    "EPOCH0",
+    "VFE1_BUS_UPDATE",
+    "RTCDM_BATCH_CONSUME",
+    "COMPLETION_RETIRE"
+  ],
+  "upstream_inspections": {
+    "bus_0017": "92715605c99523366dd619331c6abe9bb09c7e6476bf8921ccb5b18cbaae262e",
+    "front_start_0022": "dc4a86ae51cfc608074194d89874268d03cd52569591694b4e32c71dd3ec700a",
+    "pix_ownership_0018": "bc8bf64152882e8c312e0e1379b544e2ae733dc75b4e571784fac3b88b4b7dcf",
+    "rtcdm_0015": "23f9f601f0e9b8880e447d17685585bbdc1e0058a8be60fcf330172e366aa346"
+  }
+}

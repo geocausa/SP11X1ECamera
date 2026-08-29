@@ -1,0 +1,66 @@
+E003h front post-start ownership static build proof
+Date: 2026-08-29
+
+Source:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
+
+Build anchor:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
+
+Command:
+make -C <source> O=<build-anchor> ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules
+
+Result: PASS
+Compiler diagnostics: none
+Golden vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+Accepted Windows post-start raw:
+8616 bytes
+SHA-256 81aa7b23e2434dd89ddea21868917e23a2ce3abc1220a19b53805324c37825b5
+
+Post-start extractor SHA-256:
+54bf175c539255fde78c9483cdd7511394cd4593845e5c43e932ff0ff5730f30
+
+Post-start oracle SHA-256:
+d426c7cf4525f36c80623cab628061005c880abd5df02d17d8a76683fea4e66e
+
+Pre-0023 camss.c SHA-256:
+2958909bae68cc6b459be39cf8abf8b4e8c19ba295feef4a8525504f3e1f6dff
+
+0023 patch SHA-256:
+962c8f6792b1ceb1649d6928df325ee1ed884f292342b0633b98c826a52cd7be
+
+Resulting camss.c SHA-256:
+4cd8594b3cc11b485522cb1dc19ff3d31a3f20e2a498d37f7939dd090a9e4c33
+
+camss.o SHA-256:
+b24fdcf16a5a717e51df10ed98c8a5b39da68db8de30c2eafd601e5f60e7d135
+
+qcom-camss.ko SHA-256:
+15754a8529b12b65cc37adfd9135e10de4b30418613204488c7722c37c1e2b6d
+
+Build log SHA-256:
+59bbe45ed0a88ba231e11a50a3cb6705e1a27c804f26006894b0090ea0ade00c
+
+Checkpatch SHA-256:
+a472871613f9de574372753963df261ab071ef2d645bea7bc1c93d8f98fcefc9
+Checkpatch code/style checks: 0
+Only missing mail-patch commit description / Signed-off-by metadata remains.
+
+Inspector SHA-256:
+e6c19ce210caf4e65b2fb18dcbf5230c9ef42846063644f6228f8a2d7b4ce1ca
+
+Inspection JSON SHA-256:
+e7251c0bd0f047473891c7b4011ed760e1821bebf8b7fea2e2602a29b9875625
+
+Forward reconstruction: PASS byte-for-byte
+Reverse reconstruction: PASS byte-for-byte
+
+Runtime safety:
+- qcom-camss not loaded
+- no /dev/video* or /dev/media* nodes
+- VFE1 PIX -EOPNOTSUPP gate unchanged before stream lock/IRQ/output
+- 0023 adds one read-only data contract only; no callable helper or ops table
+- no object relocation references camss_x1e_front_post_start_contract
+- no MMIO, IRQ, DMA or hardware-helper primitive added by 0023
+- no RT-CDM FIFO0 submission, VFE1 BUS MMIO, CSID1/PIX/MIPI start, IMX681 transmission or frame

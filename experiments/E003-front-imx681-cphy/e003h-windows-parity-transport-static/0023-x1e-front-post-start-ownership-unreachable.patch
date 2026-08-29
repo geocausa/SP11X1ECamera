@@ -1,0 +1,81 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5730,0 +5731,78 @@
++ * E003h post-ISP_START_DONE ownership/scheduling contract, retained and
++ * unreachable. This object is intentionally data-only: no helper or ops table
++ * can execute it.
++ *
++ * Exact same-machine Windows disassembly proves the IFE Epoch0 path runs before
++ * completion dispatch. Epoch0 first invokes the BUS resource-update wrapper,
++ * then invokes RT-CDM operation 2 to consume/program an already queued BL batch.
++ * Two live sessions independently show one complete nine-client address bundle
++ * before ISP_START_DONE, a second complete bundle after START_DONE but before
++ * the first completion cycle, and a refill bundle after that cycle retires.
++ *
++ * The observed VIDEO/AEC-BHIST/Tintless/AWB/RS interrupt order is not encoded as
++ * a dependency: the exact Windows completion helper owns an independent FIFO per
++ * group. Likewise, startup-template registers are not converted into periodic
++ * Linux writes. +0x3d78..+0x3d84 are live-mutating hardware observation; +0x3b70
++ * was stable only in bounded samples; period_cfg +0x8c reads back zero live.
++ */
++#define CAMSS_X1E_FRONT_POST_START_STAGE_COUNT	4
++#define CAMSS_X1E_FRONT_POST_START_BUNDLE_CLIENTS	9
++#define CAMSS_X1E_FRONT_POST_START_COMPLETION_GROUPS	5
++#define CAMSS_X1E_FRONT_POST_START_INITIAL_PRIME_BUNDLES	2
++#define CAMSS_X1E_FRONT_POST_START_NO_REWRITE_REGS	6
++#define CAMSS_X1E_FRONT_POST_START_LIVE_MUTABLE_REGS	4
++
++enum camss_x1e_front_post_start_stage {
++	CAMSS_X1E_FRONT_POST_START_EPOCH0,
++	CAMSS_X1E_FRONT_POST_START_VFE1_BUS_UPDATE,
++	CAMSS_X1E_FRONT_POST_START_RTCDM_BATCH_CONSUME,
++	CAMSS_X1E_FRONT_POST_START_COMPLETION_RETIRE,
++};
++
++struct camss_x1e_front_post_start_contract {
++	u8 stage_order[CAMSS_X1E_FRONT_POST_START_STAGE_COUNT];
++	u8 address_bundle_clients;
++	u8 observed_initial_prime_bundles;
++	u8 completion_group_count;
++	u16 no_post_start_rewrite_regs[CAMSS_X1E_FRONT_POST_START_NO_REWRITE_REGS];
++	u16 hardware_live_mutable_regs[CAMSS_X1E_FRONT_POST_START_LIVE_MUTABLE_REGS];
++	bool second_bundle_before_first_completion;
++	bool refill_after_first_completion_cycle;
++	bool completion_cross_group_order_required;
++	bool slot_reuse_requires_all_groups;
++	bool bus_iova_update_software_owned;
++	bool rtcdm_batch_consume_software_owned;
++	bool completion_retirement_software_owned;
++	bool live_register_rewrite_authorized;
++	bool hardware_execution_authorized;
++};
++
++static const struct camss_x1e_front_post_start_contract
++camss_x1e_front_post_start_contract __used = {
++	.stage_order = {
++		CAMSS_X1E_FRONT_POST_START_EPOCH0,
++		CAMSS_X1E_FRONT_POST_START_VFE1_BUS_UPDATE,
++		CAMSS_X1E_FRONT_POST_START_RTCDM_BATCH_CONSUME,
++		CAMSS_X1E_FRONT_POST_START_COMPLETION_RETIRE,
++	},
++	.address_bundle_clients = CAMSS_X1E_FRONT_POST_START_BUNDLE_CLIENTS,
++	.observed_initial_prime_bundles = CAMSS_X1E_FRONT_POST_START_INITIAL_PRIME_BUNDLES,
++	.completion_group_count = CAMSS_X1E_FRONT_POST_START_COMPLETION_GROUPS,
++	.no_post_start_rewrite_regs = {
++		0x008c, 0x3b70, 0x3d78, 0x3d7c, 0x3d80, 0x3d84,
++	},
++	.hardware_live_mutable_regs = {
++		0x3d78, 0x3d7c, 0x3d80, 0x3d84,
++	},
++	.second_bundle_before_first_completion = true,
++	.refill_after_first_completion_cycle = true,
++	.completion_cross_group_order_required = false,
++	.slot_reuse_requires_all_groups = true,
++	.bus_iova_update_software_owned = true,
++	.rtcdm_batch_consume_software_owned = true,
++	.completion_retirement_software_owned = true,
++	.live_register_rewrite_authorized = false,
++	.hardware_execution_authorized = false,
++};
++
++/*
