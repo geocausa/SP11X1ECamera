@@ -484,6 +484,10 @@ The installed `sp11-camera-e003h-pix-one-shot` entry reuses Golden kernel `bca0a
 
 **Next:** a separate explicit runtime-arm checkpoint may schedule exactly one candidate boot/one `RUN`. Abort on any package, media-link, buffer or rollback mismatch; after RUN or any failure, reboot to Golden before further work.
 
+## 2026-08-29 — one first-PIX attempt explicitly authorized
+
+The post-checkpoint arm review reran both package inspection and host preflight with the final `0035` module and installed boot artifacts. All pinned hashes match; candidate camera modules are unloaded; Golden remains saved/default with empty `next_entry`; and the write-only PIX trigger is absent on Golden. Authorization is therefore limited to **one** `sp11-camera-e003h-pix-one-shot` boot and **one** `RUN`. The irreversible latch prohibits same-boot retry. Any mismatch before `RUN` aborts, while any result after `RUN` is archived and followed immediately by reboot to Golden.
+
 
 ## 2026-08-29 — complete selector-2 priming BL batches compiled retained-only (`0032`)
 

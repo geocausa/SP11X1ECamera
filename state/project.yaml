@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-pix-trigger-package-complete-not-armed-runtime-review-next-golden-safe
+status: e003h-pix-one-shot-runtime-authorized-not-yet-armed-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -757,14 +757,15 @@ e003h:
   linux_front_0035_candidate_boot_armed: false
   linux_front_0035_runtime_reachable_by_default: false
   linux_front_0035_runtime_reachable_when_explicitly_armed: true
-  linux_front_0035_runtime_authorized: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms; the prepared disposable trigger has not yet been explicitly runtime-authorized or exercised
+  linux_front_0035_runtime_authorized: true
+  linux_front_0035_runtime_authorization_scope: exactly one candidate boot and one RUN; no same-boot retry; immediate Golden reboot after success/failure
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
 next_experiment: E003h-bounded-vfe1-pix-one-shot-runtime
 next_action: >-
-  Runtime package 0035 is installed but not armed. Before any boot rerun package inspection and host preflight, verify Golden saved/default with empty next_entry and no camera modules,
-  then explicitly schedule only sp11-camera-e003h-pix-one-shot. On candidate boot manually load qcom-camss with e003h_pix_runtime_arm=1 and the pinned IMX681,
-  configure only IMX681->CSIPHY2->CSID1 IPP->VFE1 PIX, allocate exactly two QC10C buffers without QBUF/STREAMON, invoke RUN once, save slot0, and reboot to Golden immediately.
-  Abort before RUN on any hash/link/format/buffer/trigger mismatch. Do not retry in the same boot because the gate latch is irreversible.
+  Final package inspection and Golden-host preflight passed. Exactly one disposable runtime attempt is authorized: schedule only sp11-camera-e003h-pix-one-shot,
+  manually load the pinned qcom-camss with e003h_pix_runtime_arm=1 plus pinned IMX681, configure only the exact front PIX route, allocate exactly two QC10C
+  buffers without QBUF/STREAMON, invoke RUN once, archive slot0/logs, and reboot to Golden immediately after success or failure. Abort before RUN on any mismatch;
+  never retry in the same boot because the gate latch is irreversible.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
