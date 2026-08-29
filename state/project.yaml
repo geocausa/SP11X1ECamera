@@ -132,7 +132,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-pix-qc10c-static-contract-built-stream-blocked-bus-order-next
+  status: vfe1-bus-session-order-resolved-dynamic-request-buffer-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -361,15 +361,27 @@ e003h:
   linux_vfe1_pix_stream_gate: -EOPNOTSUPP before stream lock/IRQ/output setup
   linux_vfe1_pix_retained_contract_runtime_relocation: false
   linux_vfe1_pix_rear_rdi_functions_changed: false
-  unresolved: recover exact Windows BUS client programming/dynamic address update ordering and DS/stats buffer ownership/lifetime before unreachable BUS recipe; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-windows-vfe1-bus-program-order-oracle
+  windows_vfe1_bus_order_raw_sha256: b6777baf442eab4cfea0985ad3a1274e80e3545505483935e506e2d9e086dd41
+  windows_vfe1_bus_order_raw_bytes: 291780
+  windows_vfe1_bus_order_extractor_sha256: c7edb8f1b17f83b91ee5f8c08a72b872c904a3a3f50eac1952bb1e5d2018013b
+  windows_vfe1_bus_order_json_sha256: 89ddee9746d54927f8624a5267f5726d38ee8b02190ae60b9525a4b783206363
+  windows_vfe1_bus_order_complete_sessions: 3
+  windows_vfe1_bus_session_order: BUS static config -> BUS enable -> ISP_START_DONE -> BUS disable
+  windows_vfe1_bus_static_config_sequence: FULL[0], FULL[1], DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG
+  windows_vfe1_bus_enable_disable_order: FULL, DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG
+  windows_vfe1_bus_wm_update_builder_rva: 0x27920
+  windows_vfe1_bus_wm_update_builder_hits: 110
+  windows_vfe1_request_update_0x1e928_hits: 0
+  windows_vfe1_dynamic_iova_rule: image/meta addresses remain per-buffer; never freeze Windows IOVAs
+  unresolved: recover exact Windows 0x27920 dynamic request-buffer contents/address patch ordering and FULL/DS/stats buffer lifetime before unreachable BUS recipe; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-windows-vfe1-dynamic-request-buffer-oracle
 next_action: >-
-  Keep SP11 on byte-exact FullIO v19c Golden and keep IMX681 Linux transmission blocked. Static 0016 now closes only the
-  IFE1 PIX RAW10->QC10C format, exact 2560x1440 one-plane surface, WM0/WM1 structure and VIDEO completion representation;
-  VFE1 PIX stream-on still fails before hardware setup and 0015 RT-CDM remains unreachable. Recover exact same-machine Windows
-  BUS client programming and dynamic address-update ordering/lifetime for FULL plus DS4/DS16/stats relative to RT-CDM/IFE start
-  and per-frame updates. Never freeze Windows IOVAs. Then build an unreachable BUS recipe and combine it with the captured IQ/DMI
-  corpus. No Linux RT-CDM arm/submission, VFE1 PIX hardware enable, sensor transmission or front frame yet.
+  Keep IMX681 Linux transmission blocked. The three-session Windows oracle now closes session-static BUS config/enable/disable
+  ordering before/after ISP_START_DONE and confirms that writable BUS configuration is stable while image/meta IOVAs are dynamic.
+  Reboot one-shot to same-machine Windows and capture the active qccamisp8380+0x27920 command-buffer descriptors plus pointed
+  request-buffer contents around pre-start and per-frame updates. Decode exact FULL Y/C, DS4/DS16 and statistics address patch
+  ordering/lifetime without freezing any Windows IOVA. Then return to Golden Linux and build only an unreachable BUS recipe; no
+  RT-CDM arm/submission, VFE1 PIX hardware enable, sensor transmission or front frame yet.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

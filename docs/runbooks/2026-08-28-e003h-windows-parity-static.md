@@ -225,3 +225,16 @@ Static `0016-x1e-vfe1-pix-qc10c-static-contract.patch` implements only that repr
 10. Only then define a bounded one-shot runtime gate with exact Golden rollback. No front parity frame is authorized before these conditions are met.
 
 RDI remains available solely as an explicitly non-parity diagnostic if it becomes useful for fault isolation.
+
+
+## 2026-08-29 — VFE1 BUS session order closed
+
+A new same-machine KD capture (`raw/E003H_VFE1_BUS_ORDER_20260829.log`, SHA-256 `b6777baf442eab4cfea0985ad3a1274e80e3545505483935e506e2d9e086dd41`) was parsed by `extract_vfe1_bus_order.py` (SHA-256 `c7edb8f1b17f83b91ee5f8c08a72b872c904a3a3f50eac1952bb1e5d2018013b`). The resulting `vfe1-bus-order-oracle.json` is byte-reproducible and proves three complete Windows sessions with identical ordering:
+
+`BUS static config -> BUS enable -> ISP_START_DONE -> BUS disable`
+
+The exact resource sequence is `FULL[0], FULL[1], DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG`; enable and disable both use `FULL, DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG`. This aligns mechanically with the earlier two-pass VFE1 live oracle: the active write clients and all writable non-address configuration remain stable between starts, while image/meta IOVAs change and therefore remain per-buffer state.
+
+The capture also corrects the next breakpoint target. `qccamisp8380+0x1e928` did not fire; the active path repeatedly enters `qccamisp8380+0x27920`, whose `x1` argument is a command-buffer descriptor containing a 64-bit request buffer reference followed by offset/length fields. Pre-start descriptors advance through `0x9000`-sized regions, and later request processing continues through the same builder. The exact buffer contents/address patch order and lifetime are not yet captured, so Linux PIX/RT-CDM execution remains blocked.
+
+Next: dump and decode the `0x27920` request-buffer contents on same-machine Windows, correlate their dynamic address patches with FULL Y/C, DS4/DS16 and statistics clients, then build an **unreachable** BUS recipe. Do not freeze Windows IOVAs and do not arm Linux streaming yet.
