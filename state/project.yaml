@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-vfe1-bus-unreachable-recipe-built-stream-blocked-golden-unchanged
+status: e003h-vfe1-pix-ownership-unreachable-built-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -390,16 +390,32 @@ e003h:
   linux_vfe1_bus_0017_module_sha256: 44b9233d668cad0eb8da3c7805845d006ee3bd000ef17a5e2173fac9846783ef
   linux_vfe1_bus_0017_runtime_reachable: false
   linux_vfe1_bus_0017_address_source: caller-supplied Linux dma_addr_t only
-  unresolved: define and statically prove front PIX buffer/completion ownership across one composite QC10C VIDEO surface plus independent DS4/DS16/statistics allocations, then combine the unreachable BUS and RT-CDM/IQ recipes without making either reachable; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-linux-vfe1-pix-buffer-completion-ownership-static
+  windows_vfe1_completion_groups_raw_sha256: 1e3e810ae170dabb003491b6b8522c3b77dbd5964a14445ce7bbd3636e5b77ec
+  windows_vfe1_completion_groups_complete_cycles: 5
+  windows_vfe1_completion_groups_observed_order: VIDEO, AEC_BE_BHIST, TINTLESS_BG, AWB_BG, RS
+  windows_vfe1_completion_helper_rva: 0x26460
+  windows_vfe1_completion_group_indices: 0, 5, 6, 7, 9
+  windows_vfe1_completion_cross_group_order_required: false
+  windows_vfe1_completion_queue_model: independent FIFO per group; preserve FIFO only within each group
+  windows_vfe1_completion_extractor_sha256: 461899f4b32e0208466db17ac23b366987caeb9d59210faba65023ce265c8162
+  windows_vfe1_completion_json_sha256: 696f476a18bbfe4d6a30e06198c744d6495048b85399d22ff1bfe6c6176763f9
+  linux_vfe1_pix_0018_patch_sha256: fb1d0acece63c9acde2f48bb51d1bac19fcdc17d3c7f1fd46de6f2bf0adc924f
+  linux_vfe1_pix_0018_inspector_sha256: 1f91e87fce072a37d7c870b65fd186f3e56d18c271ec6149e465bbf668c27d2e
+  linux_vfe1_pix_0018_json_sha256: bc8bf64152882e8c312e0e1379b544e2ae733dc75b4e571784fac3b88b4b7dcf
+  linux_vfe1_pix_0018_module_sha256: 7d88c0d6c69d3690c4e83437b41e8afb05560d1390d0d819e8b8374db71e5010
+  linux_vfe1_pix_0018_slots: 2
+  linux_vfe1_pix_0018_group_fifos: 5 independent two-slot FIFOs
+  linux_vfe1_pix_0018_aux_allocations_per_slot: DS4, DS16, AEC_BE, BHIST, TL_BG, AWB_BG, RS
+  linux_vfe1_pix_0018_runtime_reachable: false
+  unresolved: materialize the exact captured Windows IFE main-CDM/DMI corpus into a Linux-owned unreachable RT-CDM command/data arena, patching only mechanically classified dynamic fields; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-linux-rtcdm-command-corpus-materializer-static
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat the Windows dynamic-address path and unreachable 0017 BUS recipe as closed:
-  qccamisp8380 RVA 0x1dd20 writes caller/request-derived IMAGE_ADDR +0x04 and FULL META_ADDR +0x40 in the exact nine-client order,
-  with the first set after BUS enable and before ISP_START_DONE and later sets per frame. Do not revisit 0x27920 as the address writer,
-  and never freeze Windows IOVAs or observed ring strides. Next, statically define front PIX ownership so one userspace QC10C VIDEO
-  buffer maps to FULL WM0/WM1 while DS4/DS16 and statistics use separate internal allocations/completions. Combine that ownership model
-  only with unreachable 0017 BUS address programming and unreachable 0015 RT-CDM/IQ execution. No module load, RT-CDM submission,
-  VFE1 PIX hardware enable, sensor transmission or front frame until a separate bounded runtime gate is explicitly prepared.
+  Keep IMX681 Linux transmission blocked. Treat 0017 BUS addressing and 0018 PIX ownership/completion as closed. Windows completion
+  events use independent per-group FIFOs, so never impose the five-cycle observed cross-group order as a Linux requirement. Next,
+  materialize the four captured Windows IFE main-CDM streams into Linux-owned static command/data arenas: preserve exact command bytes
+  and 2131 ordinary register writes, resolve all 46 DMI commands from the 16 captured payload byte strings, and patch only fields already
+  classified dynamic. Keep the materializer and 0015 RT-CDM execution unreachable; do not submit FIFO0, connect VFE ops, enable VFE1 PIX,
+  transmit IMX681, or attempt a front frame until a separate bounded runtime gate is explicitly prepared.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

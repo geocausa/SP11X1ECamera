@@ -1,0 +1,55 @@
+{
+  "accepted": true,
+  "allocation_model": "each of two slots owns seven separate coherent Linux auxiliary allocations; user QC10C is caller/vb2-owned",
+  "auxiliary_payload_sizes": {
+    "AEC_BE": 655360,
+    "AWB_BG": 1382400,
+    "BHIST": 6144,
+    "DS16": 49152,
+    "DS4": 540672,
+    "RS": 65536,
+    "TL_BG": 294912
+  },
+  "completion_oracle_sha256": "696f476a18bbfe4d6a30e06198c744d6495048b85399d22ff1bfe6c6176763f9",
+  "cross_group_order_required": false,
+  "dynamic_oracle_sha256": "925028750e8be60c65a69f24349bb540b0ba0776726f40d59273b0be7f464282",
+  "group_fifo_model": "five independent two-slot FIFO queues; each begin enqueues the slot into every group and each event pops only its own group",
+  "lifetime": "VIDEO may return user buffer; slot reusable only after all five independent groups retire, in any cross-group order",
+  "linux_logical_completion_mask": "0x1f",
+  "module_sha256": "7d88c0d6c69d3690c4e83437b41e8afb05560d1390d0d819e8b8374db71e5010",
+  "object_sha256": "29fbecf45525929ac5864d2599e08a74eb6ee80783e66030e5bf424dbc180ddf",
+  "observed_completion_order": [
+    "VIDEO",
+    "AEC_BE_BHIST",
+    "TINTLESS_BG",
+    "AWB_BG",
+    "RS"
+  ],
+  "patch_sha256": "fb1d0acece63c9acde2f48bb51d1bac19fcdc17d3c7f1fd46de6f2bf0adc924f",
+  "policy": "static-only; no module load, BUS write, RT-CDM submission, PIX enable, sensor transmission or frame authorized",
+  "runtime_isolation": {
+    "bus_recipe_called": false,
+    "helper_relocations": [
+      "00000000000001c0 R_AARCH64_ABS64   vfe680_x1e_pix_ownership_alloc",
+      "00000000000001c8 R_AARCH64_ABS64   vfe680_x1e_pix_ownership_free",
+      "00000000000001d0 R_AARCH64_ABS64   vfe680_x1e_pix_ownership_begin",
+      "00000000000001d8 R_AARCH64_ABS64   vfe680_x1e_pix_ownership_complete"
+    ],
+    "live_isr_or_vfe_buf_done_modified": false,
+    "pix_stream_gate": "-EOPNOTSUPP before stream lock/IRQ/output",
+    "recipe_compiled_relocation_present": false,
+    "recipe_source_reference_count": 1
+  },
+  "schema": "sp11-e003h-linux-vfe1-pix-ownership-static-inspection-v1",
+  "slots": 2,
+  "source_sha256": "f543cafbfc70d9ddec5fe91609a103959dda5107f83f1c28b8447baecc5fc5f8",
+  "video_group": {
+    "internal": [
+      "DS4",
+      "DS16"
+    ],
+    "user_qc10c": true
+  },
+  "windows_iovas_frozen": false,
+  "windows_ring_strides_frozen": false
+}

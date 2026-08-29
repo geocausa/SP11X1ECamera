@@ -1,0 +1,166 @@
+{
+  "accepted": true,
+  "driver": {
+    "bytes": 376560,
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "group_queue_model": {
+    "cross_group_order_enforced": false,
+    "dequeue": "one independent FIFO pop per completion group",
+    "helper_rva": "0x26460",
+    "queue_fields": {
+      "capacity": "+0x10",
+      "count": "+0x18",
+      "read_index": "+0x2c",
+      "stride": "+0x14"
+    },
+    "queue_pointer_table": "object + (0x66b + group_index) * 8",
+    "selector": "caller group index in w1"
+  },
+  "groups": [
+    {
+      "clients": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "event_id": 3,
+      "group": "VIDEO",
+      "group_index": 0,
+      "ports": [
+        "0x3000:0",
+        "0x3000:1",
+        "0x3001",
+        "0x3002"
+      ],
+      "resources": [
+        "FULL_Y",
+        "FULL_C",
+        "DS4",
+        "DS16"
+      ],
+      "user_visible": true
+    },
+    {
+      "clients": [
+        11,
+        12
+      ],
+      "event_id": 13,
+      "group": "AEC_BE_BHIST",
+      "group_index": 5,
+      "ports": [
+        "0x301c",
+        "0x300f"
+      ],
+      "resources": [
+        "AEC_BE",
+        "BHIST"
+      ],
+      "user_visible": false
+    },
+    {
+      "clients": [
+        13
+      ],
+      "event_id": 14,
+      "group": "TINTLESS_BG",
+      "group_index": 6,
+      "ports": [
+        "0x300c"
+      ],
+      "resources": [
+        "TL_BG"
+      ],
+      "user_visible": false
+    },
+    {
+      "clients": [
+        14
+      ],
+      "event_id": 16,
+      "group": "AWB_BG",
+      "group_index": 7,
+      "ports": [
+        "0x300e"
+      ],
+      "resources": [
+        "AWB_BG"
+      ],
+      "user_visible": false
+    },
+    {
+      "clients": [
+        18
+      ],
+      "event_id": 18,
+      "group": "RS",
+      "group_index": 9,
+      "ports": [
+        "0x3010"
+      ],
+      "resources": [
+        "RS"
+      ],
+      "user_visible": false
+    }
+  ],
+  "linux_consequence": {
+    "completion_order": "do not require the five observed groups to arrive in one fixed cross-group order; preserve FIFO order independently within each group",
+    "generic_vfe_buf_done": "single-WM generic completion is not a valid X1E VFE1 PIX model",
+    "slot_reuse": "a frame bundle containing VIDEO plus auxiliary buffers must not be reused until all five active completion groups have completed",
+    "stats": "AEC_BE and BHIST share one completion group; TL_BG, AWB_BG and RS are distinct groups",
+    "video_event": "one userspace QC10C surface completion; FULL Y/C are not independent frames",
+    "video_group_internal_outputs": "DS4 and DS16 share VIDEO completion ownership with FULL"
+  },
+  "linux_logical_completion_mask": {
+    "AEC_BE_BHIST": "0x02",
+    "ALL": "0x1f",
+    "AWB_BG": "0x08",
+    "RS": "0x10",
+    "TINTLESS_BG": "0x04",
+    "VIDEO": "0x01"
+  },
+  "live_log": {
+    "all_valid_event_ids": [
+      "0x3",
+      "0xd",
+      "0xe",
+      "0x10",
+      "0x12",
+      "0x3",
+      "0xd",
+      "0xe",
+      "0x10",
+      "0x12",
+      "0x3",
+      "0xd",
+      "0xe",
+      "0x10",
+      "0x12",
+      "0x3",
+      "0xd",
+      "0xe",
+      "0x10",
+      "0x12",
+      "0x3",
+      "0xd",
+      "0xe",
+      "0x10",
+      "0x12"
+    ],
+    "bytes": 3572,
+    "complete_cycles": 5,
+    "cross_group_order": "observed in five cycles; not a driver-enforced dependency",
+    "observed_cycle_event_ids": [
+      "0x3",
+      "0xd",
+      "0xe",
+      "0x10",
+      "0x12"
+    ],
+    "sha256": "1e3e810ae170dabb003491b6b8522c3b77dbd5964a14445ce7bbd3636e5b77ec"
+  },
+  "schema": "sp11-e003h-windows-vfe1-completion-groups-v1"
+}

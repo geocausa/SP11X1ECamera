@@ -1,0 +1,39 @@
+E003h 0018 VFE1 PIX buffer/completion ownership static build
+Date: 2026-08-29 Europe/London
+Runtime authorized: false
+Module loaded: false
+BUS writes authorized: false
+RT-CDM submission authorized: false
+Sensor stream authorized: false
+Frame attempted: false
+
+Windows completion evidence:
+- exact qccamisp8380.sys SHA-256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
+- live completion log: 3572 bytes, SHA-256 1e3e810ae170dabb003491b6b8522c3b77dbd5964a14445ce7bbd3636e5b77ec
+- five observed cycles: VIDEO -> AEC_BE_BHIST -> TINTLESS_BG -> AWB_BG -> RS
+- static helper qccamisp8380+0x26460 proves group-index-selected independent FIFO queues; observed cross-group order is not a required protocol
+
+Linux 0018 model:
+- two frame slots (CAMSS_INIT_BUF_COUNT=2)
+- one caller/vb2-owned QC10C allocation per active slot
+- seven separate coherent Linux auxiliary allocations per slot: DS4, DS16, AEC_BE, BHIST, TL_BG, AWB_BG, RS
+- each begin enqueues the slot into five independent completion-group FIFOs
+- each event pops only its own FIFO; VIDEO may return the user buffer
+- slot reusable only after all five group bits have retired, regardless of cross-group order
+- no captured Windows IOVA or observed Windows ring stride is embedded
+- no 0017 BUS helper, ISR, vfe_buf_done or VFE ops path is connected
+- existing X1E VFE1 PIX -EOPNOTSUPP gate remains before stream lock/IRQ/output setup
+
+Build: PASS
+Compiler warning/error diagnostics: none
+Forward reconstruction: PASS
+Reverse reconstruction: PASS
+checkpatch code/style checks: 0 (mail-patch description/Signed-off-by metadata only)
+Golden vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+qcom-camss.ko SHA-256: 7d88c0d6c69d3690c4e83437b41e8afb05560d1390d0d819e8b8374db71e5010
+0018 patch SHA-256: fb1d0acece63c9acde2f48bb51d1bac19fcdc17d3c7f1fd46de6f2bf0adc924f
+completion extractor SHA-256: 461899f4b32e0208466db17ac23b366987caeb9d59210faba65023ce265c8162
+completion oracle SHA-256: 696f476a18bbfe4d6a30e06198c744d6495048b85399d22ff1bfe6c6176763f9
+ownership inspector SHA-256: 1f91e87fce072a37d7c870b65fd186f3e56d18c271ec6149e465bbf668c27d2e
+ownership inspection JSON SHA-256: bc8bf64152882e8c312e0e1379b544e2ae733dc75b4e571784fac3b88b4b7dcf
+build log SHA-256: e0c9a9744f64cf8b85be63ac1bfbdbbfffb8e221bd09730783d5d0f8076bb009

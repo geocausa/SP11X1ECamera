@@ -1,0 +1,347 @@
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -8,6 +8,7 @@
+  */
+ 
+ #include <linux/delay.h>
++#include <linux/dma-mapping.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+@@ -502,6 +503,336 @@
+ 	.stop = vfe680_x1e_bus_stop,
+ };
+ 
++/*
++ * E003h PIX frame-bundle ownership, retained and unreachable.
++ *
++ * Five same-machine Windows cycles observed VIDEO -> AEC_BE_BHIST ->
++ * TINTLESS_BG -> AWB_BG -> RS, but qccamisp8380+0x26460 proves those are
++ * independent group FIFOs, not a required cross-group sequence. Each frame is
++ * therefore queued into all five groups. A completion retires only that
++ * group's oldest frame. VIDEO owns FULL Y/C plus DS4/DS16 and may return the
++ * user QC10C buffer; the auxiliary slot remains busy until every group retires.
++ */
++#define VFE680_X1E_PIX_SLOT_COUNT	CAMSS_INIT_BUF_COUNT
++#define VFE680_X1E_PIX_GROUP_COUNT	5
++#define VFE680_X1E_AUX_DS4_SIZE		0x00084000
++#define VFE680_X1E_AUX_DS16_SIZE	0x0000c000
++#define VFE680_X1E_AUX_AEC_BE_SIZE	0x000a0000
++#define VFE680_X1E_AUX_BHIST_SIZE	0x00001800
++#define VFE680_X1E_AUX_TL_BG_SIZE	0x00048000
++#define VFE680_X1E_AUX_AWB_BG_SIZE	0x00151800
++#define VFE680_X1E_AUX_RS_SIZE		0x00010000
++
++#define VFE680_X1E_DONE_VIDEO		BIT(0)
++#define VFE680_X1E_DONE_AEC_BE_BHIST	BIT(1)
++#define VFE680_X1E_DONE_TINTLESS_BG	BIT(2)
++#define VFE680_X1E_DONE_AWB_BG		BIT(3)
++#define VFE680_X1E_DONE_RS		BIT(4)
++#define VFE680_X1E_DONE_ALL		GENMASK(4, 0)
++
++enum vfe680_x1e_aux_id {
++	VFE680_X1E_AUX_DS4,
++	VFE680_X1E_AUX_DS16,
++	VFE680_X1E_AUX_AEC_BE,
++	VFE680_X1E_AUX_BHIST,
++	VFE680_X1E_AUX_TL_BG,
++	VFE680_X1E_AUX_AWB_BG,
++	VFE680_X1E_AUX_RS,
++	VFE680_X1E_AUX_NUM,
++};
++
++enum vfe680_x1e_completion_group {
++	VFE680_X1E_GROUP_VIDEO,
++	VFE680_X1E_GROUP_AEC_BE_BHIST,
++	VFE680_X1E_GROUP_TINTLESS_BG,
++	VFE680_X1E_GROUP_AWB_BG,
++	VFE680_X1E_GROUP_RS,
++};
++
++static const size_t vfe680_x1e_aux_sizes[VFE680_X1E_AUX_NUM] = {
++	[VFE680_X1E_AUX_DS4] = VFE680_X1E_AUX_DS4_SIZE,
++	[VFE680_X1E_AUX_DS16] = VFE680_X1E_AUX_DS16_SIZE,
++	[VFE680_X1E_AUX_AEC_BE] = VFE680_X1E_AUX_AEC_BE_SIZE,
++	[VFE680_X1E_AUX_BHIST] = VFE680_X1E_AUX_BHIST_SIZE,
++	[VFE680_X1E_AUX_TL_BG] = VFE680_X1E_AUX_TL_BG_SIZE,
++	[VFE680_X1E_AUX_AWB_BG] = VFE680_X1E_AUX_AWB_BG_SIZE,
++	[VFE680_X1E_AUX_RS] = VFE680_X1E_AUX_RS_SIZE,
++};
++
++struct vfe680_x1e_aux_buffer {
++	void *cpu;
++	dma_addr_t dma;
++	size_t size;
++};
++
++struct vfe680_x1e_pix_slot {
++	struct camss_buffer *video;
++	struct vfe680_x1e_aux_buffer aux[VFE680_X1E_AUX_NUM];
++	u8 pending_mask;
++	bool in_use;
++};
++
++struct vfe680_x1e_group_fifo {
++	u8 slot[VFE680_X1E_PIX_SLOT_COUNT];
++	u8 head;
++	u8 tail;
++	u8 count;
++};
++
++struct vfe680_x1e_pix_ownership {
++	struct vfe680_x1e_pix_slot slot[VFE680_X1E_PIX_SLOT_COUNT];
++	struct vfe680_x1e_group_fifo group[VFE680_X1E_PIX_GROUP_COUNT];
++	bool allocated;
++};
++
++static bool vfe680_x1e_dma_span_32bit(dma_addr_t dma, size_t size)
++{
++	if (!size || dma > U32_MAX)
++		return false;
++
++	return size - 1 <= U32_MAX - (u32)dma;
++}
++
++static int vfe680_x1e_group_from_event(u32 event_id)
++{
++	switch (event_id) {
++	case 0x03:
++		return VFE680_X1E_GROUP_VIDEO;
++	case 0x0d:
++		return VFE680_X1E_GROUP_AEC_BE_BHIST;
++	case 0x0e:
++		return VFE680_X1E_GROUP_TINTLESS_BG;
++	case 0x10:
++		return VFE680_X1E_GROUP_AWB_BG;
++	case 0x12:
++		return VFE680_X1E_GROUP_RS;
++	default:
++		return -EINVAL;
++	}
++}
++
++static bool vfe680_x1e_group_fifo_full(const struct vfe680_x1e_group_fifo *fifo)
++{
++	return fifo->count >= VFE680_X1E_PIX_SLOT_COUNT;
++}
++
++static void vfe680_x1e_group_fifo_push(struct vfe680_x1e_group_fifo *fifo,
++				       unsigned int index)
++{
++	fifo->slot[fifo->tail] = index;
++	fifo->tail = (fifo->tail + 1) % VFE680_X1E_PIX_SLOT_COUNT;
++	fifo->count++;
++}
++
++static int vfe680_x1e_group_fifo_peek(const struct vfe680_x1e_group_fifo *fifo)
++{
++	if (!fifo->count)
++		return -ENOENT;
++
++	return fifo->slot[fifo->head];
++}
++
++static void vfe680_x1e_group_fifo_pop(struct vfe680_x1e_group_fifo *fifo)
++{
++	fifo->head = (fifo->head + 1) % VFE680_X1E_PIX_SLOT_COUNT;
++	fifo->count--;
++}
++
++static int vfe680_x1e_aux_alloc(struct device *dev,
++				struct vfe680_x1e_aux_buffer *buf, size_t size)
++{
++	buf->cpu = dma_alloc_coherent(dev, size, &buf->dma, GFP_KERNEL);
++	if (!buf->cpu)
++		return -ENOMEM;
++
++	if (!vfe680_x1e_dma_span_32bit(buf->dma, size)) {
++		dma_free_coherent(dev, size, buf->cpu, buf->dma);
++		memset(buf, 0, sizeof(*buf));
++		return -ERANGE;
++	}
++
++	buf->size = size;
++	memset(buf->cpu, 0, size);
++	return 0;
++}
++
++static void vfe680_x1e_aux_free(struct device *dev,
++				struct vfe680_x1e_aux_buffer *buf)
++{
++	if (!buf->cpu)
++		return;
++
++	memset(buf->cpu, 0, buf->size);
++	dma_free_coherent(dev, buf->size, buf->cpu, buf->dma);
++	memset(buf, 0, sizeof(*buf));
++}
++
++static void vfe680_x1e_pix_ownership_release(struct vfe_device *vfe,
++					     struct vfe680_x1e_pix_ownership *own)
++{
++	unsigned int slot, aux;
++
++	for (slot = 0; slot < VFE680_X1E_PIX_SLOT_COUNT; slot++)
++		for (aux = 0; aux < VFE680_X1E_AUX_NUM; aux++)
++			vfe680_x1e_aux_free(vfe->camss->dev, &own->slot[slot].aux[aux]);
++
++	memset(own, 0, sizeof(*own));
++}
++
++static int vfe680_x1e_pix_ownership_alloc(struct vfe_device *vfe,
++					  struct vfe680_x1e_pix_ownership *own)
++{
++	unsigned int slot, aux;
++	int ret;
++
++	if (!vfe680_x1e_bus_target(vfe) || !own)
++		return -EINVAL;
++	if (own->allocated)
++		return -EBUSY;
++
++	for (slot = 0; slot < VFE680_X1E_PIX_SLOT_COUNT; slot++) {
++		for (aux = 0; aux < VFE680_X1E_AUX_NUM; aux++) {
++			ret = vfe680_x1e_aux_alloc(vfe->camss->dev,
++						   &own->slot[slot].aux[aux],
++						    vfe680_x1e_aux_sizes[aux]);
++			if (ret) {
++				vfe680_x1e_pix_ownership_release(vfe, own);
++				return ret;
++			}
++		}
++	}
++
++	own->allocated = true;
++	return 0;
++}
++
++static int vfe680_x1e_pix_ownership_free(struct vfe_device *vfe,
++					 struct vfe680_x1e_pix_ownership *own)
++{
++	unsigned int slot, group;
++
++	if (!vfe680_x1e_bus_target(vfe) || !own || !own->allocated)
++		return -EINVAL;
++
++	for (slot = 0; slot < VFE680_X1E_PIX_SLOT_COUNT; slot++)
++		if (own->slot[slot].in_use)
++			return -EBUSY;
++	for (group = 0; group < VFE680_X1E_PIX_GROUP_COUNT; group++)
++		if (own->group[group].count)
++			return -EBUSY;
++
++	vfe680_x1e_pix_ownership_release(vfe, own);
++	return 0;
++}
++
++static int vfe680_x1e_pix_ownership_begin(struct vfe680_x1e_pix_ownership *own,
++					  unsigned int index,
++					    struct camss_buffer *video,
++					    struct vfe680_x1e_bus_iovas *iovas)
++{
++	struct vfe680_x1e_pix_slot *slot;
++	unsigned int group;
++
++	if (!own || !own->allocated || index >= VFE680_X1E_PIX_SLOT_COUNT ||
++	    !video || !iovas)
++		return -EINVAL;
++	if (vb2_plane_size(&video->vb.vb2_buf, 0) < VFE680_X1E_QC10C_SIZE)
++		return -EINVAL;
++	if (!vfe680_x1e_dma_span_32bit(video->addr[0], VFE680_X1E_QC10C_SIZE))
++		return -ERANGE;
++
++	slot = &own->slot[index];
++	if (slot->in_use)
++		return -EBUSY;
++	for (group = 0; group < VFE680_X1E_PIX_GROUP_COUNT; group++)
++		if (vfe680_x1e_group_fifo_full(&own->group[group]))
++			return -EBUSY;
++
++	slot->video = video;
++	slot->pending_mask = VFE680_X1E_DONE_ALL;
++	slot->in_use = true;
++	for (group = 0; group < VFE680_X1E_PIX_GROUP_COUNT; group++)
++		vfe680_x1e_group_fifo_push(&own->group[group], index);
++
++	memset(iovas, 0, sizeof(*iovas));
++	iovas->qc10c = video->addr[0];
++	iovas->ds4 = slot->aux[VFE680_X1E_AUX_DS4].dma;
++	iovas->ds16 = slot->aux[VFE680_X1E_AUX_DS16].dma;
++	iovas->aec_be = slot->aux[VFE680_X1E_AUX_AEC_BE].dma;
++	iovas->bhist = slot->aux[VFE680_X1E_AUX_BHIST].dma;
++	iovas->tl_bg = slot->aux[VFE680_X1E_AUX_TL_BG].dma;
++	iovas->awb_bg = slot->aux[VFE680_X1E_AUX_AWB_BG].dma;
++	iovas->rs = slot->aux[VFE680_X1E_AUX_RS].dma;
++
++	return 0;
++}
++
++static int vfe680_x1e_pix_ownership_complete(struct vfe680_x1e_pix_ownership *own,
++					     u32 event_id, unsigned int *index,
++					       struct camss_buffer **video_done,
++					       bool *slot_reusable)
++{
++	struct vfe680_x1e_group_fifo *fifo;
++	struct vfe680_x1e_pix_slot *slot;
++	int group, queued_index;
++	u8 bit;
++
++	if (!own || !own->allocated || !index || !video_done || !slot_reusable)
++		return -EINVAL;
++
++	*video_done = NULL;
++	*slot_reusable = false;
++	group = vfe680_x1e_group_from_event(event_id);
++	if (group < 0)
++		return group;
++
++	fifo = &own->group[group];
++	queued_index = vfe680_x1e_group_fifo_peek(fifo);
++	if (queued_index < 0)
++		return queued_index;
++	if (queued_index >= VFE680_X1E_PIX_SLOT_COUNT)
++		return -EPROTO;
++
++	slot = &own->slot[queued_index];
++	bit = BIT(group);
++	if (!slot->in_use || !(slot->pending_mask & bit))
++		return -EPROTO;
++
++	vfe680_x1e_group_fifo_pop(fifo);
++	slot->pending_mask &= ~bit;
++	*index = queued_index;
++	if (group == VFE680_X1E_GROUP_VIDEO) {
++		*video_done = slot->video;
++		slot->video = NULL;
++	}
++
++	if (!slot->pending_mask) {
++		slot->in_use = false;
++		*slot_reusable = true;
++	}
++
++	return 0;
++}
++
++struct vfe680_x1e_pix_ownership_ops {
++	int (*alloc)(struct vfe_device *vfe, struct vfe680_x1e_pix_ownership *own);
++	int (*free)(struct vfe_device *vfe, struct vfe680_x1e_pix_ownership *own);
++	int (*begin)(struct vfe680_x1e_pix_ownership *own, unsigned int index,
++		     struct camss_buffer *video, struct vfe680_x1e_bus_iovas *iovas);
++	int (*complete)(struct vfe680_x1e_pix_ownership *own, u32 event_id,
++			unsigned int *index, struct camss_buffer **video_done,
++			bool *slot_reusable);
++};
++
++/* Private retention only: no ISR, VFE ops or stream path references this table. */
++static const struct vfe680_x1e_pix_ownership_ops
++vfe680_x1e_pix_ownership_recipe __used = {
++	.alloc = vfe680_x1e_pix_ownership_alloc,
++	.free = vfe680_x1e_pix_ownership_free,
++	.begin = vfe680_x1e_pix_ownership_begin,
++	.complete = vfe680_x1e_pix_ownership_complete,
++};
++
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+ 	/* VFE680 has no global reset, simply report a completion */
