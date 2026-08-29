@@ -1,0 +1,139 @@
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -117,6 +117,9 @@
+ 	size_t arena_size;
+ 	u32 last_irq_context;
+ 	u32 last_irq_status;
++	u32 last_irq_status1;
++	u32 last_irq_status2;
++	u32 last_irq_status3;
+ 	u32 last_user_data;
+ 	u32 diag_stage;
+ 	u32 diag_transition_seq;
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5014,6 +5014,15 @@
+ #define CAMSS_RTCDM_IRQ0_CLEAR_CMD      0x038
+ #define CAMSS_RTCDM_IRQ0_STATUS         0x044
+ #define CAMSS_RTCDM_USR_DATA            0x080
++#define CAMSS_RTCDM_IRQ1_CLEAR          0x134
++#define CAMSS_RTCDM_IRQ1_CLEAR_CMD      0x138
++#define CAMSS_RTCDM_IRQ1_STATUS         0x144
++#define CAMSS_RTCDM_IRQ2_CLEAR          0x234
++#define CAMSS_RTCDM_IRQ2_CLEAR_CMD      0x238
++#define CAMSS_RTCDM_IRQ2_STATUS         0x244
++#define CAMSS_RTCDM_IRQ3_CLEAR          0x334
++#define CAMSS_RTCDM_IRQ3_CLEAR_CMD      0x338
++#define CAMSS_RTCDM_IRQ3_STATUS         0x344
+ 
+ #define CAMSS_RTCDM_IRQ_RESET_DONE      BIT(0)
+ #define CAMSS_RTCDM_IRQ_INLINE          BIT(1)
+@@ -5119,40 +5128,55 @@
+ {
+ 	struct camss *camss = data;
+ 	struct camss_rtcdm *rt = &camss->rtcdm1;
+-	u32 clear_status;
+-	u32 status;
++	u32 clear0, clear1, clear2, clear3;
++	u32 status0, status1, status2, status3;
+ 	u32 user_data;
+ 
+ 	if (irq != rt->irq || !READ_ONCE(rt->irq_armed))
+ 		return IRQ_NONE;
+ 
+ 	/*
+-	 * Exact same-machine Windows RT-CDM handler RVA 0x29120 reads the
+-	 * per-FIFO status directly. It does not read IRQ_CONTEXT_STATUS.
++	 * Exact same-machine Windows handler RVA 0x29120 reads and masks all
++	 * four FIFO status banks. Its clear/callback block is gated by masked
++	 * FIFO0 status, not IRQ_CONTEXT_STATUS.
+ 	 */
+-	status = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ0_STATUS);
+-	if (!status)
++	status0 = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ0_STATUS);
++	status1 = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ1_STATUS);
++	status2 = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ2_STATUS);
++	status3 = readl_relaxed(rt->base + CAMSS_RTCDM_IRQ3_STATUS);
++	clear0 = status0 & CAMSS_RTCDM_IRQ_KNOWN;
++	clear1 = status1 & CAMSS_RTCDM_IRQ_KNOWN;
++	clear2 = status2 & CAMSS_RTCDM_IRQ_KNOWN;
++	clear3 = status3 & CAMSS_RTCDM_IRQ_KNOWN;
++	if (!clear0)
+ 		return IRQ_NONE;
+ 
+ 	user_data = readl_relaxed(rt->base + CAMSS_RTCDM_USR_DATA);
+-	clear_status = status & CAMSS_RTCDM_IRQ_KNOWN;
+-	if (clear_status) {
+-		writel_relaxed(clear_status, rt->base + CAMSS_RTCDM_IRQ0_CLEAR);
+-		writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ0_CLEAR_CMD);
+-	}
++	writel_relaxed(clear0, rt->base + CAMSS_RTCDM_IRQ0_CLEAR);
++	writel_relaxed(clear1, rt->base + CAMSS_RTCDM_IRQ1_CLEAR);
++	writel_relaxed(clear2, rt->base + CAMSS_RTCDM_IRQ2_CLEAR);
++	writel_relaxed(clear3, rt->base + CAMSS_RTCDM_IRQ3_CLEAR);
++	writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ0_CLEAR_CMD);
++	writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ1_CLEAR_CMD);
++	writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ2_CLEAR_CMD);
++	writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ3_CLEAR_CMD);
+ 
+ 	WRITE_ONCE(rt->last_irq_context, 0);
+-	WRITE_ONCE(rt->last_irq_status, status);
++	WRITE_ONCE(rt->last_irq_status, status0);
++	WRITE_ONCE(rt->last_irq_status1, status1);
++	WRITE_ONCE(rt->last_irq_status2, status2);
++	WRITE_ONCE(rt->last_irq_status3, status3);
+ 	WRITE_ONCE(rt->last_user_data, user_data);
+ 
+-	if ((status & ~CAMSS_RTCDM_IRQ_KNOWN) || (status & CAMSS_RTCDM_IRQ_ERRORS)) {
++	if ((status0 & ~CAMSS_RTCDM_IRQ_KNOWN) ||
++	    (status0 & CAMSS_RTCDM_IRQ_ERRORS)) {
+ 		WRITE_ONCE(rt->faulted, true);
+ 		disable_irq_nosync(rt->irq);
+ 		WRITE_ONCE(rt->irq_armed, false);
+ 	}
+ 
+-	/* Windows blocks on reset-done and BL-done events; inline is informational. */
+-	if (status & (CAMSS_RTCDM_IRQ_RESET_DONE | CAMSS_RTCDM_IRQ_BL_DONE))
++	/* Windows completion callback is driven by the masked FIFO0 status. */
++	if (clear0 & (CAMSS_RTCDM_IRQ_RESET_DONE | CAMSS_RTCDM_IRQ_BL_DONE))
+ 		complete(&rt->completion);
+ 
+ 	return IRQ_HANDLED;
+@@ -5239,6 +5263,9 @@
+ 	WRITE_ONCE(rt->faulted, false);
+ 	WRITE_ONCE(rt->last_irq_context, 0);
+ 	WRITE_ONCE(rt->last_irq_status, 0);
++	WRITE_ONCE(rt->last_irq_status1, 0);
++	WRITE_ONCE(rt->last_irq_status2, 0);
++	WRITE_ONCE(rt->last_irq_status3, 0);
+ 	WRITE_ONCE(rt->last_user_data, 0);
+ 	WRITE_ONCE(rt->diag_fifo_seq, 0);
+ 	WRITE_ONCE(rt->diag_base, 0);
+@@ -5334,6 +5361,9 @@
+ 	reinit_completion(&rt->completion);
+ 	WRITE_ONCE(rt->last_irq_context, 0);
+ 	WRITE_ONCE(rt->last_irq_status, 0);
++	WRITE_ONCE(rt->last_irq_status1, 0);
++	WRITE_ONCE(rt->last_irq_status2, 0);
++	WRITE_ONCE(rt->last_irq_status3, 0);
+ 	WRITE_ONCE(rt->last_user_data, 0);
+ 	WRITE_ONCE(rt->diag_fifo_seq, READ_ONCE(rt->diag_fifo_seq) + 1);
+ 	WRITE_ONCE(rt->diag_base, base);
+@@ -7842,14 +7872,15 @@
+ 	seq = smp_load_acquire(&rt->diag_transition_seq);
+ 
+ 	return sysfs_emit(buf,
+-		"seq=%u stage=%u name=%s fifo_seq=%u base=%#x len=%#x required=%#x error=%d irq_armed=%u faulted=%u last_status=%#x last_userdata=%#x\n",
++		"seq=%u stage=%u name=%s fifo_seq=%u base=%#x len=%#x required=%#x error=%d irq_armed=%u faulted=%u last_status=%#x/%#x/%#x/%#x last_userdata=%#x\n",
+ 		seq, READ_ONCE(rt->diag_stage),
+ 		camss_rtcdm1_diag_stage_name(READ_ONCE(rt->diag_stage)),
+ 		READ_ONCE(rt->diag_fifo_seq), READ_ONCE(rt->diag_base),
+ 		READ_ONCE(rt->diag_len_low20), READ_ONCE(rt->diag_required_irq),
+ 		READ_ONCE(rt->diag_last_error), READ_ONCE(rt->irq_armed),
+ 		READ_ONCE(rt->faulted), READ_ONCE(rt->last_irq_status),
+-		READ_ONCE(rt->last_user_data));
++		READ_ONCE(rt->last_irq_status1), READ_ONCE(rt->last_irq_status2),
++		READ_ONCE(rt->last_irq_status3), READ_ONCE(rt->last_user_data));
+ }
+ static DEVICE_ATTR_RO(e003h_pix_rtcdm_diag);
+ 

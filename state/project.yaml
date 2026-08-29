@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-persistent-rtcdm-stage-observer-built-static-runtime-blocked-golden-safe
+status: e003h-rtcdm-multififo-irq-parity-closed-dma-domain-next-runtime-blocked-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -841,10 +841,28 @@ e003h:
   linux_front_0039_new_mmio_writes: 0
   linux_front_0039_trigger_semantics_changed: false
   linux_front_0039_runtime_authorized: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the second diagnostic reset abruptly before the last RT-CDM stage persisted; RT-CDM non-FIFO0 IRQ clearing and command-buffer DMA/SMMU ownership remain to be audited before any further runtime; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-multififo-dma-domain-static-audit
+  windows_rtcdm1_multififo_irq_extractor_sha256: 99c9a0f1451daf9753b39a5b255e9ac274a21b3ec55ac9c0a17b6ecfcc0b59f7
+  windows_rtcdm1_multififo_irq_oracle_sha256: 4664eb9ea3f5552303351d7d49d4148218ba431fb7c42f48b6e98af226ba6b40
+  windows_rtcdm1_multififo_status_offsets: FIFO0=0x44; FIFO1=0x144; FIFO2=0x244; FIFO3=0x344
+  windows_rtcdm1_multififo_dispatch_gate: masked FIFO0 status only
+  windows_rtcdm1_multififo_clear_rule: masked status0..3 -> 0x34/0x134/0x234/0x334; 1 -> 0x38/0x138/0x238/0x338
+  linux_front_0040_patch_sha256: a3a728b67523dfa39cb99f313ed97c715ba272202ba74f1836b0ccde6e6d3aed
+  linux_front_0040_source_sha256: fbdb8786067a4e6df78893974e8dd17f8bd043c7bae8391cfb3fa1ff1fd71384
+  linux_front_0040_header_sha256: 4e69f21ea8a04022722912f24133edcd38cad3348ff06bf4b07ac19a422c1176
+  linux_front_0040_object_sha256: 4c082b79f9964e5157f8fd5393442bde4bc056a4f153ba7884cfe1774c020eae
+  linux_front_0040_module_sha256: 7d8c8953f8c14e34d36e3d2352b3ea2581d66a5af777f061f6cd0951fcee1680
+  linux_front_0040_inspector_sha256: 8e59097540ba81c97be2b4b5f8ba63b5e909d517bcc095f2e7c057461dee0d76
+  linux_front_0040_inspection_json_sha256: 937f842fd02e86a4189afe9696aa5bb3eae17abbd1402ca05d9c24fb97236fbd
+  linux_front_0040_build_log_sha256: 8a5bb9f7511a73b3a257798fd54d1bdf67265a867a83ca533dfd41a4d5067d41
+  linux_front_0040_checkpatch_sha256: c1ac0843964b4083ff2abade4f5747d08a40c65cc3173f76e1974b221ce4d283
+  linux_front_0040_irq_context_gate: false
+  linux_front_0040_completion_source: masked FIFO0 reset-done/BL-done only
+  linux_front_0040_other_fifo_semantics_invented: false
+  linux_front_0040_runtime_authorized: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the second diagnostic reset abruptly before the last RT-CDM stage persisted; command-buffer DMA/SMMU ownership for the RT-CDM1 requester remains unproven before any further runtime; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-rtcdm-dma-domain-static-audit
 next_action: >-
-  Do not repeat either PIX attempt. 0039 now provides an arm-gated read-only RT-CDM stage attribute plus fsync-backed watcher and adds zero MMIO writes. Before any third runtime, statically close the Windows multi-FIFO IRQ-clear semantics and prove the Linux coherent command-buffer DMA mapping is valid for the RT-CDM1 requester/SMMU domain. Runtime remains unauthorized.
+  Do not repeat either PIX attempt. 0040 now mirrors exact Windows four-FIFO RT-CDM IRQ acknowledgement while keeping FIFO0 as the only completion/dispatch source. Next prove which X1E CAMSS SMMU stream ID owns RT-CDM1 command fetches and whether dma_alloc_coherent(camss->dev, ...) maps that requester. Runtime remains unauthorized.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

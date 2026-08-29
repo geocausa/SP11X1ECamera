@@ -1,0 +1,24 @@
+{
+  "accepted": true,
+  "callback_payload": "stack pair at +0x20 contains masked FIFO0 status w21 and CDM context x19; async enqueue call RVA 0x292a8",
+  "clear_commands": "1 written to +0x38/+0x138/+0x238/+0x338",
+  "clear_values": "masked status0/1/2/3 written to +0x34/+0x134/+0x234/+0x334",
+  "dispatch_gate": "masked FIFO0 status (w21) must be nonzero; CBNZ 0x29208 -> clear block 0x29220",
+  "handler_rva": "0x29120..0x2930c",
+  "irq_context_status_read": false,
+  "linux_consequence": "When FIFO0 has known status, mirror Windows by sampling and acknowledging all four FIFO status banks. Completion remains driven by FIFO0. Record other banks but do not invent front-path semantics from them.",
+  "mask": "0x00070007",
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-windows-rtcdm1-multififo-irq-v1",
+  "source": {
+    "bytes": 376560,
+    "driver": "qccamisp8380.sys",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "status_reads": {
+    "fifo0": "0x44",
+    "fifo1": "0x144",
+    "fifo2": "0x244",
+    "fifo3": "0x344"
+  }
+}

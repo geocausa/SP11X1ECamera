@@ -1,0 +1,45 @@
+{
+  "accepted": true,
+  "clear_commands": [
+    "FIFO0 +0x38",
+    "FIFO1 +0x138",
+    "FIFO2 +0x238",
+    "FIFO3 +0x338"
+  ],
+  "clear_values": [
+    "FIFO0 +0x34",
+    "FIFO1 +0x134",
+    "FIFO2 +0x234",
+    "FIFO3 +0x334"
+  ],
+  "completion_source": "masked FIFO0 reset-done/BL-done only",
+  "dispatch_gate": "masked FIFO0 status only",
+  "header_sha256": "4e69f21ea8a04022722912f24133edcd38cad3348ff06bf4b07ac19a422c1176",
+  "incremental_new_mmio_writes": [
+    "writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ0_CLEAR_CMD);",
+    "writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ1_CLEAR_CMD);",
+    "writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ2_CLEAR_CMD);",
+    "writel_relaxed(1, rt->base + CAMSS_RTCDM_IRQ3_CLEAR_CMD);",
+    "writel_relaxed(clear0, rt->base + CAMSS_RTCDM_IRQ0_CLEAR);",
+    "writel_relaxed(clear1, rt->base + CAMSS_RTCDM_IRQ1_CLEAR);",
+    "writel_relaxed(clear2, rt->base + CAMSS_RTCDM_IRQ2_CLEAR);",
+    "writel_relaxed(clear3, rt->base + CAMSS_RTCDM_IRQ3_CLEAR);"
+  ],
+  "irq_context_status_gate": false,
+  "module_sha256": "7d8c8953f8c14e34d36e3d2352b3ea2581d66a5af777f061f6cd0951fcee1680",
+  "oracle_sha256": "4664eb9ea3f5552303351d7d49d4148218ba431fb7c42f48b6e98af226ba6b40",
+  "other_fifo_semantics_invented": false,
+  "patch_sha256": "a3a728b67523dfa39cb99f313ed97c715ba272202ba74f1836b0ccde6e6d3aed",
+  "runtime_authorized": false,
+  "runtime_repeat_authorized": false,
+  "schema": "sp11-e003h-linux-rtcdm1-multififo-irq-v1",
+  "source_sha256": "fbdb8786067a4e6df78893974e8dd17f8bd043c7bae8391cfb3fa1ff1fd71384",
+  "status_mask": "0x00070007",
+  "status_reads": [
+    "FIFO0 +0x44",
+    "FIFO1 +0x144",
+    "FIFO2 +0x244",
+    "FIFO3 +0x344"
+  ],
+  "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+}
