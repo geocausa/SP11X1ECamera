@@ -1,0 +1,124 @@
+{
+  "accepted": true,
+  "linux_consequence": "Do not schedule four host-start packets again from this trace. Model a distinct four-program selector-2 priming replay phase whose templates equal startup main streams except newly supplied two-value period_cfg; keep Windows DMI IOVAs nonportable. Exact replay2/replay3 placement relative to MIPI_START and SENSOR_STREAM_ON remains unclosed.",
+  "replay": {
+    "dmi_iovas_reused_identically_in_capture": true,
+    "only_difference_vs_startup_each_packet": "one period_cfg +0x8c dword",
+    "packet_count": 4,
+    "packets": [
+      {
+        "decoded_commands": 110,
+        "dmi_address_words_identical": true,
+        "dmi_commands": 18,
+        "main_bytes": 3732,
+        "ordinary_register_writes": 695,
+        "packet": 0,
+        "period_field": "0xe84",
+        "replay_period_cfg": "0x16ede540",
+        "replay_sha256": "429289e089316c78b6701152ff8185d7766acc31134d9f94d229f9545344f3ba",
+        "startup_period_cfg": "0xe5cdfd40",
+        "startup_sha256": "dea5956975ba241fd3809a55a9005d1ba0055e92d31b73476ddb7942fdef4e89"
+      },
+      {
+        "decoded_commands": 103,
+        "dmi_address_words_identical": true,
+        "dmi_commands": 16,
+        "main_bytes": 3636,
+        "ordinary_register_writes": 687,
+        "packet": 1,
+        "period_field": "0xe24",
+        "replay_period_cfg": "0x37213000",
+        "replay_sha256": "a34d8cf1a3ba81ed660b956d9e22aeeb11a31afad9b87df287a9eb0d703c3e07",
+        "startup_period_cfg": "0x0a503000",
+        "startup_sha256": "45e73b067b486762546018bb0c712aa156124ad2c458aca1e439bf92e09528ae"
+      },
+      {
+        "decoded_commands": 52,
+        "dmi_address_words_identical": true,
+        "dmi_commands": 11,
+        "main_bytes": 2308,
+        "ordinary_register_writes": 462,
+        "packet": 2,
+        "period_field": "0x8f4",
+        "replay_period_cfg": "0x37213000",
+        "replay_sha256": "a78fe2dd553bef1f50b64aeb8eb7046e8a10e485fa64a48fab8712e01da929c3",
+        "startup_period_cfg": "0x0a503000",
+        "startup_sha256": "03fa6fb28c23563b02d0cb8120afdfedcec186c0da2c9874408ff9c68e7459dc"
+      },
+      {
+        "decoded_commands": 13,
+        "dmi_address_words_identical": true,
+        "dmi_commands": 1,
+        "main_bytes": 1256,
+        "ordinary_register_writes": 287,
+        "packet": 3,
+        "period_field": "0x4d8",
+        "replay_period_cfg": "0x37213000",
+        "replay_sha256": "395fdadac443334372609938cc6d1a668ea033c5d21c526b61e59333aee6af57",
+        "startup_period_cfg": "0x0a503000",
+        "startup_sha256": "0a1cc423d7fca7acba6d1c4507d52fdb960221f19c6026468881334af4857a7e"
+      }
+    ],
+    "period_packet_mapping": "packet0=value0; packets1,2,3=value1",
+    "startup_template_lengths": [
+      "0xe94",
+      "0xe34",
+      "0x904",
+      "0x4e8"
+    ]
+  },
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-vfe1-epoch0-priming-replay-v1",
+  "source_evidence": {
+    "batch_oracle_sha256": "3bcf4efe34c891dcc6bc78c3cefc94d916ffd71e27dab81e75493f9ed320dce4",
+    "clean_selector2_log_sha256": "1e8dc9671296e35a0704315588669fc8ed97612fd4b72c1d71b11bb7244d9a7f",
+    "producer_oracle_sha256": "cbd8908d967f4831e67f8eb3c36ae9799c4bcb42e1923f0ee34c2152841c03ef",
+    "qcdevicemft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+  },
+  "startup_only_dmi": {
+    "BHistStats16": {
+      "dmi": [
+        "0xb208:1:0x1000",
+        "0xb208:2:0x50"
+      ],
+      "owner_proof": "IFEBHistStats16Titan680::Initialize stores 0xb208 in object +0x34; CreateCmdList loads +0x34 for 0x1000/0x50 selector1/2 writes",
+      "selector2_replays": [
+        0
+      ],
+      "semantic_role": "stats configuration/resource priming (ROI/channel/uniform/segment configuration), not a steady IQ feedback LUT",
+      "steady_presence": false
+    },
+    "LCAC111": {
+      "dmi": [
+        "0x5408:1:0x44",
+        "0x5408:2:0x44"
+      ],
+      "owner_proof": "IFELCAC111Titan680::CreateCmdList directly emits both 0x5408 DMI commands",
+      "selector2_replays": [
+        0,
+        1
+      ],
+      "steady_presence": false
+    }
+  },
+  "timeline": {
+    "host_start_distinction": "these selector-2 replays are not the original 0022 host-start packet submissions; original IFE803 packet2/3 are already proven before ISP_START_DONE",
+    "observed_selector2_order": "replay0 -> replay1 -> ISP_START_DONE -> replay2 -> replay3 -> first steady 0x958"
+  },
+  "umd_instruction_proof": {
+    "0xa0728c": "movk x8, #0xb208, lsl #32",
+    "0xa07298": "stp x9, x8, [x19, #0x28]",
+    "0xb39dc8": "mov w5, #0x44",
+    "0xb39dd4": "mov w2, #1",
+    "0xb39dd8": "mov w1, #0x5408",
+    "0xb39dec": "mov w5, #0x44",
+    "0xb39df8": "mov w2, #2",
+    "0xb39dfc": "mov w1, #0x5408",
+    "0xb3fd84": "ldr w1, [x20, #0x34]",
+    "0xb3fd88": "mov w5, #0x1000",
+    "0xb3fd94": "mov w2, #1",
+    "0xb3fda8": "ldr w1, [x20, #0x34]",
+    "0xb3fdb0": "mov w5, #0x50",
+    "0xb3fdb8": "mov w2, #2"
+  }
+}

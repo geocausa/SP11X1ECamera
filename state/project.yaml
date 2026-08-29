@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-epoch0-module-input-materializer-built-unreachable-stream-blocked-golden-unchanged
+status: e003h-priming-replay-closed-bounded-runtime-authorized-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -566,14 +566,21 @@ e003h:
   linux_front_0025_windows_iova_embedded: false
   linux_front_0025_fifo0_submission_authorized: false
   linux_front_0025_runtime_reachable: false
-  unresolved: close the named IQ-module input-provider boundary, separating deterministic sensor/geometry/tuning-derived outputs from live stats/AEC/AWB/TMC/tintless feedback and pinning the Windows priming state before the first steady Epoch0 update; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-iq-module-input-provider-boundary-static
+  windows_vfe1_priming_replay_extractor_sha256: 28e305f28db1e7ffa9687306a89fe9033f8eb5ab51677018e90d7248f6718f08
+  windows_vfe1_priming_replay_oracle_sha256: 4d49864c26d0bf311b92f65d7020a7942421b9a216fc6068bae45bf47c8c1ef2
+  windows_vfe1_priming_replay_order: replay0 -> replay1 -> ISP_START_DONE -> replay2 -> replay3 -> first steady 0x958
+  windows_vfe1_priming_replay_packet_count: 4
+  windows_vfe1_priming_replay_delta: period_cfg +0x8c only versus corresponding startup template
+  windows_vfe1_priming_replay_period_mapping: packet0=value0; packets1,2,3=value1
+  windows_vfe1_priming_startup_only_dmi: LCAC111 0x5408 selectors1/2; BHistStats16 0xb208 selectors1/2
+  runtime_testing_authorized: true
+  unresolved: bounded Linux first-frame runtime remains unproven; named live IQ feedback provider algorithms are not reproduced and first runtime will use a disposable candidate path with explicit rollback
+next_experiment: E003h-bounded-front-first-frame-runtime
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0022/0023/0024/0025, DMI topology, GEN_IRQ=requestId, and the registered QcDeviceMFT CamX
-  producer/module ownership map as closed. Next classify the nine named IQ-module outputs into deterministic sensor/geometry/tuning inputs
-  versus live statistics/AEC/AWB/TMC/tintless feedback, and pin what Windows primes before the first steady Epoch0 update. Do not freeze
-  captured Windows values, claim CamX algorithm reproduction, create a caller for 0025, arm RT-CDM IRQ/FIFO0, start CSID1/VFE1/MIPI,
-  transmit IMX681, or attempt a front frame.
+  Runtime camera/image testing is authorized. Preserve Golden as saved default and use a disposable E003h candidate boot. First checkpoint the
+  four selector-2 priming replays, then bring up the Windows-matched RT-CDM/VFE1 BUS/CSID1/CSIPHY2/IMX681 path in exact staged order with
+  private Linux DMA buffers and bounded timeout. Capture at most a small number of frames, stop sensor/receiver/CSID/BUS/CDM, verify rails/clocks
+  return idle, archive logs and any captured QC10C surface, then automatically return to Golden on reboot. Do not overwrite Golden artifacts.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
