@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-pix-one-shot-runtime-authorized-not-yet-armed-golden-safe
+status: e003h-first-pix-runtime-timeout-before-sensor-on-golden-restored-rtcdm-diagnostics-next
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -757,15 +757,26 @@ e003h:
   linux_front_0035_candidate_boot_armed: false
   linux_front_0035_runtime_reachable_by_default: false
   linux_front_0035_runtime_reachable_when_explicitly_armed: true
-  linux_front_0035_runtime_authorized: true
+  linux_front_0035_runtime_authorized: false
   linux_front_0035_runtime_authorization_scope: exactly one candidate boot and one RUN; no same-boot retry; immediate Golden reboot after success/failure
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-bounded-vfe1-pix-one-shot-runtime
+  linux_front_0035_runtime_authorization_consumed: true
+  linux_front_pix_first_attempt_result: ETIMEDOUT before sensor-on; no QC10C output
+  linux_front_pix_first_attempt_elapsed_seconds_approx: 0.76
+  linux_front_pix_first_attempt_sensor_stream_started: false
+  linux_front_pix_first_attempt_same_boot_retry: false
+  linux_front_pix_first_attempt_teardown_clean: true
+  linux_front_pix_first_attempt_golden_return_verified: true
+  linux_front_pix_first_attempt_runtime_log_sha256: 5afe12491657d945c15f985a1c6ece59a2cfd327009d6c86f70d202763b89364
+  linux_front_pix_first_attempt_media_preflight_sha256: afa0092fa4d3ecd3e4759ef186d7bc672404d86aa4e675150846eef5ae7b972e
+  linux_front_pix_first_attempt_pre_reboot_sha256: d612ffb2e44ea7a706bd4a8ff22877f55e0be23df69b4e7299aeb87711d23ac7
+  linux_front_pix_first_attempt_previous_boot_kernel_sha256: 4d8ca04078fec7e4bb6decbac381aa5dac4be29c0e28dfe71fd2d87016577467
+  linux_front_pix_first_attempt_result_sha256: ea63866026effce95e56779a4321df64b8e1d45384bf6ff74ecb64af481614cf
+  linux_front_pix_timeout_stage_closed: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; first attempt timed out before sensor-on and exact RT-CDM timeout stage is not yet distinguished; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-rtcdm-stage-diagnostics-static
 next_action: >-
-  Final package inspection and Golden-host preflight passed. Exactly one disposable runtime attempt is authorized: schedule only sp11-camera-e003h-pix-one-shot,
-  manually load the pinned qcom-camss with e003h_pix_runtime_arm=1 plus pinned IMX681, configure only the exact front PIX route, allocate exactly two QC10C
-  buffers without QBUF/STREAMON, invoke RUN once, archive slot0/logs, and reboot to Golden immediately after success or failure. Abort before RUN on any mismatch;
-  never retry in the same boot because the gate latch is irreversible.
+  Do not repeat the PIX attempt. Add and inspect static fail-closed RT-CDM stage telemetry around preflight/open-reset, core start, and FIFO0 BL commit/wait
+  boundaries. Keep runtime blocked; any future diagnostic requires a new explicit one-shot authorization checkpoint. Golden remains saved/default.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
