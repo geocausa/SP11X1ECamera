@@ -45,6 +45,8 @@ Close the remaining host/receiver/sensor lifecycle gaps under the project rule t
 19. The exact Surface camera INF registers `QcDeviceMFT8380.dll` as DeviceMFT; its CamX Titan680 builders own all 24 changing steady register fields and all eight DMI register identities. LSC/Gamma/GTM/DSX/PDPC/WB/Demux dependency families are statically named, while proprietary algorithm reproduction remains explicitly out of scope. The next Linux step is an unreachable consumer/materializer only.
 20. Static `0025-x1e-epoch0-module-input-materializer-unreachable.patch` closes that consumer side without making it reachable. One of the five normalized main shapes plus exact named-module value/payload masks is copied into Linux-owned 4 KiB command and 12 KiB DMI arenas; all DMI IOVAs are repatched to Linux DMA and BL4 userdata derives from `low32(request_id)` with `subrequest=0`. Real normalized Windows samples plus synthetic module outputs decode to the exact five Windows command/write/DMI counts. No Windows template/payload/IOVA is embedded, the private recipe has no caller, and FIFO0 remains unauthorized. The next gate is module-input provider/priming ownership, not execution.
 
+21. Bounded native transport runtime is now proven separately from parity: one disposable front-only candidate captured sequence 0 as a complete 12,672,000-byte 3840x2640 `pRAA` RAW10 frame through CSIPHY2 -> CSID1 RDI0 -> VFE1 RDI0. Raw SHA-256 `8e892cfe...e000ac`; offline preview visibly resolves scene geometry. STREAMOFF returned IMX681/CAMSS suspended with camera clock counts and regulator use counts zero. RT-CDM FIFO0 and VFE1 PIX were not used.
+
 ## Policy consequence
 
 An RDI frame can be useful later as a diagnostic transport proof, but **must never be called Windows parity or accepted as the production endpoint**. E003h remains static until the IPP/VFE1 pixel pipeline and lifecycle can be represented without inventing behavior.
@@ -52,7 +54,8 @@ An RDI frame can be useful later as a diagnostic transport proof, but **must nev
 ## Safety state
 
 - Golden remains saved default and byte-exact.
-- No candidate initrd/DTB/GRUB entry was created.
-- No module was loaded.
-- No sensor stream write occurred.
-- No front frame was attempted.
+- One disposable RDI diagnostic captured exactly one front frame; it is explicitly not Windows parity.
+- Scene bytes remain local/untracked; only hashes/statistics/filtered logs are retained in Git.
+- Sensor and CAMSS are runtime-suspended after STREAMOFF; mutable links are disabled.
+- Relevant camera clock counts and regulator use counts returned to zero; no kernel fault occurred.
+- RT-CDM FIFO0 and VFE1 PIX remain unused by this diagnostic.

@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-priming-replay-closed-bounded-runtime-authorized-golden-unchanged
+status: e003h-front-rdi-first-frame-proven-golden-return-pending
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -574,13 +574,30 @@ e003h:
   windows_vfe1_priming_replay_period_mapping: packet0=value0; packets1,2,3=value1
   windows_vfe1_priming_startup_only_dmi: LCAC111 0x5408 selectors1/2; BHistStats16 0xb208 selectors1/2
   runtime_testing_authorized: true
-  unresolved: bounded Linux first-frame runtime remains unproven; named live IQ feedback provider algorithms are not reproduced and first runtime will use a disposable candidate path with explicit rollback
-next_experiment: E003h-bounded-front-first-frame-runtime
+  linux_front_rdi_first_frame_proven: true
+  linux_front_rdi_first_frame_path: IMX681 -> CSIPHY2 -> CSID1 RDI0 -> VFE1 RDI0 -> /dev/video4
+  linux_front_rdi_first_frame_format: 3840x2640 SRGGB10 packed pRAA, stride 4800, sizeimage 12672000
+  linux_front_rdi_first_frame_sequence: 0
+  linux_front_rdi_first_frame_bytes: 12672000
+  linux_front_rdi_first_frame_sha256: 8e892cfeb8f9aea6c9454dbc1fe22b0c26a11e4a108e551a2995069d76e000ac
+  linux_front_rdi_first_frame_stats_sha256: be6fe8c2e899c8bfaa20aa531130760f95a2b658db195aeac1a5bc5d3fb8ec0d
+  linux_front_rdi_first_frame_preview_sha256: a9f759897f4b4bd7c2bd8153dd19d739b268cd5d914cda16160df3ccf16a84c7
+  linux_front_rdi_scene_bytes_committed: false
+  linux_front_rdi_sensor_runtime_suspended_after: true
+  linux_front_rdi_camss_runtime_suspended_after: true
+  linux_front_rdi_camera_clock_counts_zero_after: true
+  linux_front_rdi_regulator_use_counts_zero_after: true
+  linux_front_rdi_kernel_fault_observed: false
+  linux_front_rdi_is_windows_parity: false
+  linux_front_rdi_rtcdm_fifo0_used: false
+  linux_front_rdi_vfe1_pix_used: false
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-bounded-vfe1-pix-runtime-candidate
 next_action: >-
-  Runtime camera/image testing is authorized. Preserve Golden as saved default and use a disposable E003h candidate boot. First checkpoint the
-  four selector-2 priming replays, then bring up the Windows-matched RT-CDM/VFE1 BUS/CSID1/CSIPHY2/IMX681 path in exact staged order with
-  private Linux DMA buffers and bounded timeout. Capture at most a small number of frames, stop sensor/receiver/CSID/BUS/CDM, verify rails/clocks
-  return idle, archive logs and any captured QC10C surface, then automatically return to Golden on reboot. Do not overwrite Golden artifacts.
+  Do not repeat the successful RDI frame. Preserve Golden as saved default and build a separate disposable VFE1 PIX/QC10C runtime candidate from
+  the already-closed RT-CDM start/priming, BUS, CSID1 IPP, completion and 0025 module-input contracts using Linux-owned DMA. Keep live CamX IQ
+  algorithm outputs as explicit provider inputs; do not invent or freeze them as Linux constants. Bound activation/teardown and return to Golden
+  automatically. A PIX frame is not accepted until QC10C layout, completion ownership and teardown match the Windows oracle.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
