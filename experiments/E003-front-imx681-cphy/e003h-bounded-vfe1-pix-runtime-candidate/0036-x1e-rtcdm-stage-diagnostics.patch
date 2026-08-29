@@ -1,0 +1,265 @@
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -118,6 +118,15 @@
+ 	u32 last_irq_context;
+ 	u32 last_irq_status;
+ 	u32 last_user_data;
++	u32 diag_stage;
++	u32 diag_fifo_seq;
++	u32 diag_base;
++	u32 diag_len_low20;
++	u32 diag_required_irq;
++	u32 diag_mmio_context;
++	u32 diag_mmio_status;
++	u32 diag_mmio_user_data;
++	int diag_last_error;
+ };
+ 
+ struct camss_resources {
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5032,6 +5032,70 @@
+ 
+ static_assert(CAMSS_RTCDM_IRQ_KNOWN == CAMSS_RTCDM_WINDOWS_IRQ0_MASK);
+ 
++enum camss_rtcdm_diag_stage {
++	CAMSS_RTCDM_DIAG_IDLE,
++	CAMSS_RTCDM_DIAG_PREFLIGHT,
++	CAMSS_RTCDM_DIAG_RESET_WAIT,
++	CAMSS_RTCDM_DIAG_RESET_DONE,
++	CAMSS_RTCDM_DIAG_CORE_CONFIGURED,
++	CAMSS_RTCDM_DIAG_CORE_STARTED,
++	CAMSS_RTCDM_DIAG_FIFO_WAIT,
++	CAMSS_RTCDM_DIAG_FIFO_DONE,
++	CAMSS_RTCDM_DIAG_STOPPED,
++};
++
++static const char *camss_rtcdm1_diag_stage_name(u32 stage)
++{
++	switch (stage) {
++	case CAMSS_RTCDM_DIAG_PREFLIGHT:
++		return "preflight";
++	case CAMSS_RTCDM_DIAG_RESET_WAIT:
++		return "reset-wait";
++	case CAMSS_RTCDM_DIAG_RESET_DONE:
++		return "reset-done";
++	case CAMSS_RTCDM_DIAG_CORE_CONFIGURED:
++		return "core-configured";
++	case CAMSS_RTCDM_DIAG_CORE_STARTED:
++		return "core-started";
++	case CAMSS_RTCDM_DIAG_FIFO_WAIT:
++		return "fifo-wait";
++	case CAMSS_RTCDM_DIAG_FIFO_DONE:
++		return "fifo-done";
++	case CAMSS_RTCDM_DIAG_STOPPED:
++		return "stopped";
++	default:
++		return "idle";
++	}
++}
++
++static void camss_rtcdm1_diag_set(struct camss *camss, u32 stage,
++				  u32 required, int error)
++{
++	struct camss_rtcdm *rt = &camss->rtcdm1;
++
++	WRITE_ONCE(rt->diag_stage, stage);
++	WRITE_ONCE(rt->diag_required_irq, required);
++	WRITE_ONCE(rt->diag_last_error, error);
++	if (!error || !rt->base)
++		return;
++
++	WRITE_ONCE(rt->diag_mmio_context,
++		   readl_relaxed(rt->base + CAMSS_RTCDM_IRQ_CONTEXT_STATUS));
++	WRITE_ONCE(rt->diag_mmio_status,
++		   readl_relaxed(rt->base + CAMSS_RTCDM_IRQ0_STATUS));
++	WRITE_ONCE(rt->diag_mmio_user_data,
++		   readl_relaxed(rt->base + CAMSS_RTCDM_USR_DATA));
++
++	dev_err(camss->dev,
++		"E003h RT-CDM1 stage=%s error=%d fifo_seq=%u base=%#x len=%#x required=%#x raw_context=%#x raw_status=%#x raw_userdata=%#x last_context=%#x last_status=%#x last_userdata=%#x\n",
++		camss_rtcdm1_diag_stage_name(stage), error,
++		READ_ONCE(rt->diag_fifo_seq), READ_ONCE(rt->diag_base),
++		READ_ONCE(rt->diag_len_low20), required,
++		READ_ONCE(rt->diag_mmio_context), READ_ONCE(rt->diag_mmio_status),
++		READ_ONCE(rt->diag_mmio_user_data), READ_ONCE(rt->last_irq_context),
++		READ_ONCE(rt->last_irq_status), READ_ONCE(rt->last_user_data));
++}
++
+ /*
+  * The IRQ remains disabled in this E003h layer. There is intentionally no
+  * public arm/enable function yet. The body below records the v2.1 FIFO0
+@@ -5109,14 +5173,21 @@
+ 	if (!rt->present || !rt->base)
+ 		return -ENODEV;
+ 
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_PREFLIGHT, 0, 0);
+ 	hw_version = readl_relaxed(rt->base + CAMSS_RTCDM_HW_VERSION);
+ 	fe_cfg = readl_relaxed(rt->base + CAMSS_RTCDM_FE_CFG);
+ 	fifo0_cfg = readl_relaxed(rt->base + CAMSS_RTCDM_FIFO0_CFG);
+ 
+ 	if (hw_version != CAMSS_RTCDM_WINDOWS_HW_VERSION ||
+ 	    fe_cfg != CAMSS_RTCDM_WINDOWS_FE_CFG ||
+-	    fifo0_cfg != CAMSS_RTCDM_WINDOWS_FIFO0_CFG)
++	    fifo0_cfg != CAMSS_RTCDM_WINDOWS_FIFO0_CFG) {
++		dev_err(camss->dev,
++			"E003h RT-CDM1 preflight mismatch hw=%#x fe=%#x fifo0=%#x\n",
++			hw_version, fe_cfg, fifo0_cfg);
++		camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_PREFLIGHT, 0,
++				      -ENODEV);
+ 		return -ENODEV;
++	}
+ 
+ 	return 0;
+ }
+@@ -5161,6 +5232,12 @@
+ 	WRITE_ONCE(rt->last_irq_context, 0);
+ 	WRITE_ONCE(rt->last_irq_status, 0);
+ 	WRITE_ONCE(rt->last_user_data, 0);
++	WRITE_ONCE(rt->diag_fifo_seq, 0);
++	WRITE_ONCE(rt->diag_base, 0);
++	WRITE_ONCE(rt->diag_len_low20, 0);
++	WRITE_ONCE(rt->diag_mmio_context, 0);
++	WRITE_ONCE(rt->diag_mmio_status, 0);
++	WRITE_ONCE(rt->diag_mmio_user_data, 0);
+ 
+ 	/* Linux interrupt-controller mechanics; no RT-CDM register is changed. */
+ 	WRITE_ONCE(rt->irq_armed, true);
+@@ -5172,8 +5249,12 @@
+ 	writel_relaxed(CAMSS_RTCDM_WINDOWS_RESET_CMD,
+ 		       rt->base + CAMSS_RTCDM_RST_CMD);
+ 
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_RESET_WAIT,
++			      CAMSS_RTCDM_IRQ_RESET_DONE, 0);
+ 	ret = camss_rtcdm1_windows_wait(rt, CAMSS_RTCDM_IRQ_RESET_DONE);
+ 	if (ret) {
++		camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_RESET_WAIT,
++				      CAMSS_RTCDM_IRQ_RESET_DONE, ret);
+ 		disable_irq(rt->irq);
+ 		WRITE_ONCE(rt->irq_armed, false);
+ 		goto out_unlock;
+@@ -5181,8 +5262,11 @@
+ 
+ 	/* qccamisp8380.sys executes DMB SY immediately before CORE_CFG. */
+ 	dmb(sy);
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_RESET_DONE,
++			      CAMSS_RTCDM_IRQ_RESET_DONE, 0);
+ 	writel_relaxed(CAMSS_RTCDM_WINDOWS_CORE_CFG,
+ 		       rt->base + CAMSS_RTCDM_CORE_CFG);
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_CORE_CONFIGURED, 0, 0);
+ 
+ out_unlock:
+ 	mutex_unlock(&rt->lock);
+@@ -5200,6 +5284,7 @@
+ 	mutex_lock(&rt->lock);
+ 	if (!READ_ONCE(rt->irq_armed) || READ_ONCE(rt->faulted)) {
+ 		ret = -EIO;
++		camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_CORE_STARTED, 0, ret);
+ 		goto out_unlock;
+ 	}
+ 
+@@ -5208,6 +5293,7 @@
+ 	dmb(sy);
+ 	writel_relaxed(CAMSS_RTCDM_WINDOWS_CORE_EN,
+ 		       rt->base + CAMSS_RTCDM_CORE_EN);
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_CORE_STARTED, 0, 0);
+ 
+ out_unlock:
+ 	mutex_unlock(&rt->lock);
+@@ -5239,6 +5325,11 @@
+ 	WRITE_ONCE(rt->last_irq_context, 0);
+ 	WRITE_ONCE(rt->last_irq_status, 0);
+ 	WRITE_ONCE(rt->last_user_data, 0);
++	WRITE_ONCE(rt->diag_fifo_seq, READ_ONCE(rt->diag_fifo_seq) + 1);
++	WRITE_ONCE(rt->diag_base, base);
++	WRITE_ONCE(rt->diag_len_low20, len_low20);
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_FIFO_WAIT,
++			      CAMSS_RTCDM_IRQ_BL_DONE, 0);
+ 
+ 	/* Exact Windows dynamic FIFO0 commit: BASE -> encoded LEN -> STORE. */
+ 	writel_relaxed(base, rt->base + CAMSS_RTCDM_FIFO0_BASE);
+@@ -5246,6 +5337,12 @@
+ 	writel_relaxed(1, rt->base + CAMSS_RTCDM_FIFO0_STORE);
+ 
+ 	ret = camss_rtcdm1_windows_wait(rt, CAMSS_RTCDM_IRQ_BL_DONE);
++	if (ret)
++		camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_FIFO_WAIT,
++				      CAMSS_RTCDM_IRQ_BL_DONE, ret);
++	else
++		camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_FIFO_DONE,
++				      CAMSS_RTCDM_IRQ_BL_DONE, 0);
+ 
+ out_unlock:
+ 	mutex_unlock(&rt->lock);
+@@ -5262,6 +5359,7 @@
+ 	mutex_lock(&rt->lock);
+ 	/* Exact DEVICE_STOP CDM action: mask IRQ0 only. No CORE_EN=0/reset. */
+ 	writel_relaxed(0, rt->base + CAMSS_RTCDM_IRQ0_MASK);
++	camss_rtcdm1_diag_set(camss, CAMSS_RTCDM_DIAG_STOPPED, 0, 0);
+ 	mutex_unlock(&rt->lock);
+ }
+ 
+@@ -6916,11 +7014,15 @@
+ 		return -EINVAL;
+ 
+ 	ret = camss_rtcdm1_windows_open_init(camss);
+-	if (ret)
++	if (ret) {
++		dev_err(camss->dev, "E003h PIX RT-CDM open/init failed: %d\n", ret);
+ 		return ret;
++	}
+ 	ret = camss_rtcdm1_windows_start(camss);
+-	if (ret)
++	if (ret) {
++		dev_err(camss->dev, "E003h PIX RT-CDM core start failed: %d\n", ret);
+ 		camss_x1e_pix_rtcdm_close_sw(camss);
++	}
+ 	return ret;
+ }
+ 
+@@ -6933,8 +7035,17 @@
+ 	    !corpus->packet_dma[packet] || !corpus->packet_len[packet])
+ 		return -EINVAL;
+ 
+-	return camss_rtcdm1_windows_fifo0_commit(camss, corpus->packet_dma[packet],
+-						  corpus->packet_len[packet] - 1);
++	{
++		u32 base = corpus->packet_dma[packet];
++		u32 len = corpus->packet_len[packet] - 1;
++		int ret;
++
++		ret = camss_rtcdm1_windows_fifo0_commit(camss, base, len);
++		if (ret)
++			dev_err(camss->dev, "E003h PIX startup packet%u failed: %d\n",
++				packet, ret);
++		return ret;
++	}
+ }
+ 
+ static int camss_x1e_pix_submit_prime(struct camss *camss,
+@@ -6955,8 +7066,12 @@
+ 		ret = camss_rtcdm1_windows_fifo0_commit(camss,
+ 							prime->bl_dma[packet][i],
+ 							prime->bl_len[packet][i] - 1);
+-		if (ret)
++		if (ret) {
++			dev_err(camss->dev,
++				"E003h PIX prime packet%u BL%u failed: %d\n",
++				packet, i, ret);
+ 			return ret;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -6976,8 +7091,10 @@
+ 			return -EINVAL;
+ 		ret = camss_rtcdm1_windows_fifo0_commit(camss, steady->bl_dma[i],
+ 							steady->bl_len[i] - 1);
+-		if (ret)
++		if (ret) {
++			dev_err(camss->dev, "E003h PIX steady BL%u failed: %d\n", i, ret);
+ 			return ret;
++		}
+ 	}
+ 
+ 	return 0;

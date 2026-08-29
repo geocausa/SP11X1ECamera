@@ -70,3 +70,5 @@ An RDI frame can be useful later as a diagnostic transport proof, but **must nev
 - RT-CDM FIFO0 and VFE1 PIX remain unused by this diagnostic.
 
 28. The first authorized VFE1 PIX one-shot was consumed and returned `-ETIMEDOUT` before any IMX681 stream-on message. No frame was produced; teardown/Golden return were clean and there was no same-boot retry. Runtime is blocked again until RT-CDM stage diagnostics distinguish reset/open from FIFO0 BL completion.
+
+29. Static `0036` adds read-only RT-CDM failure telemetry: reset/core/FIFO stage, FIFO sequence/base/length, raw IRQ context/status/userdata and last ISR snapshot, plus semantic packet/BL error labels. It adds zero MMIO writes and no new runtime trigger. A second PIX attempt is not authorized.
