@@ -1,0 +1,102 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5744,3 +5744,4 @@
+- * group. Likewise, startup-template registers are not converted into periodic
+- * Linux writes. +0x3d78..+0x3d84 are live-mutating hardware observation; +0x3b70
+- * was stable only in bounded samples; period_cfg +0x8c reads back zero live.
++ * group. The later steady-state CDM oracle supersedes the earlier "no post-start
++ * rewrite" interpretation for the six register identities below: Windows does
++ * carry them in queued per-frame RT-CDM command lists. This still does not
++ * authorize a separate direct-MMIO/polling rewrite path in Linux.
+@@ -5752 +5753 @@
+-#define CAMSS_X1E_FRONT_POST_START_NO_REWRITE_REGS	6
++#define CAMSS_X1E_FRONT_POST_START_CDM_PROGRAMMED_REGS	6
+@@ -5767 +5768 @@
+-	u16 no_post_start_rewrite_regs[CAMSS_X1E_FRONT_POST_START_NO_REWRITE_REGS];
++	u16 cdm_programmed_regs[CAMSS_X1E_FRONT_POST_START_CDM_PROGRAMMED_REGS];
+@@ -5776 +5777 @@
+-	bool live_register_rewrite_authorized;
++	bool direct_mmio_rewrite_authorized;
+@@ -5791 +5792 @@
+-	.no_post_start_rewrite_regs = {
++	.cdm_programmed_regs = {
+@@ -5804 +5805 @@
+-	.live_register_rewrite_authorized = false,
++	.direct_mmio_rewrite_authorized = false,
+@@ -5805,0 +5807,76 @@
++};
++
++/*
++ * E003h steady-state Epoch0 RT-CDM batch topology, retained and unreachable.
++ *
++ * A hash-pinned same-machine Windows selector-2 capture contains 175 steady
++ * Epoch0 batches. Every batch has five BL records: CHANGE_BASE(VFE1), one main
++ * IFE BL selected from the five shapes below, CHANGE_BASE(companion), one fixed
++ * two-register BL and one fixed register + GEN_IRQ BL. The queue-record length
++ * field is byte_count - 1. Captured Windows IOVAs are not represented here.
++ *
++ * Main BLs carry per-batch DMI address words and variant-specific per-frame
++ * register values. Their payload bytes are not closed by this contract, so the
++ * contract cannot materialize or submit a command list. GEN_IRQ userdata tracks
++ * the observed batch tag, but no Linux tag-production rule is invented here.
++ */
++#define CAMSS_X1E_EPOCH0_CDM_STEADY_BL_COUNT	5
++#define CAMSS_X1E_EPOCH0_CDM_VARIANT_COUNT	5
++#define CAMSS_X1E_EPOCH0_CDM_STEADY_BATCHES	175
++
++struct camss_x1e_epoch0_cdm_variant_contract {
++	u16 main_bytes;
++	u16 command_count;
++	u16 register_write_count;
++	u8 dmi_count;
++	u8 dynamic_register_count;
++	u8 observed_samples;
++};
++
++struct camss_x1e_epoch0_cdm_batch_contract {
++	u16 bl_bytes[CAMSS_X1E_EPOCH0_CDM_STEADY_BL_COUNT];
++	u32 vfe1_change_base;
++	u32 companion_change_base;
++	struct camss_x1e_epoch0_cdm_variant_contract
++		variant[CAMSS_X1E_EPOCH0_CDM_VARIANT_COUNT];
++	u16 observed_steady_batches;
++	bool encoded_length_is_byte_count_minus_one;
++	bool main_dmi_addresses_per_batch;
++	bool main_register_values_per_frame;
++	bool genirq_userdata_tracks_batch_tag;
++	bool dmi_payload_bytes_closed;
++	bool direct_mmio_rewrite_authorized;
++	bool fifo0_submission_authorized;
++};
++
++static const struct camss_x1e_epoch0_cdm_batch_contract
++camss_x1e_epoch0_cdm_batch_contract __used = {
++	/* BL1 is the variant-sized main IFE list and is represented as zero here. */
++	.bl_bytes = { 0x0004, 0x0000, 0x0004, 0x0010, 0x0014 },
++	.vfe1_change_base = 0x0000f000,
++	.companion_change_base = 0x00057000,
++	.variant = {
++		{ .main_bytes = 0x0958, .command_count = 56,
++		  .register_write_count = 472, .dmi_count = 14,
++		  .dynamic_register_count = 24, .observed_samples = 8 },
++		{ .main_bytes = 0x0868, .command_count = 45,
++		  .register_write_count = 436, .dmi_count = 12,
++		  .dynamic_register_count = 20, .observed_samples = 42 },
++		{ .main_bytes = 0x083c, .command_count = 43,
++		  .register_write_count = 429, .dmi_count = 12,
++		  .dynamic_register_count = 14, .observed_samples = 46 },
++		{ .main_bytes = 0x06b8, .command_count = 35,
++		  .register_write_count = 352, .dmi_count = 8,
++		  .dynamic_register_count = 10, .observed_samples = 24 },
++		{ .main_bytes = 0x05a4, .command_count = 22,
++		  .register_write_count = 315, .dmi_count = 2,
++		  .dynamic_register_count = 6, .observed_samples = 55 },
++	},
++	.observed_steady_batches = CAMSS_X1E_EPOCH0_CDM_STEADY_BATCHES,
++	.encoded_length_is_byte_count_minus_one = true,
++	.main_dmi_addresses_per_batch = true,
++	.main_register_values_per_frame = true,
++	.genirq_userdata_tracks_batch_tag = true,
++	.dmi_payload_bytes_closed = false,
++	.direct_mmio_rewrite_authorized = false,
++	.fifo0_submission_authorized = false,

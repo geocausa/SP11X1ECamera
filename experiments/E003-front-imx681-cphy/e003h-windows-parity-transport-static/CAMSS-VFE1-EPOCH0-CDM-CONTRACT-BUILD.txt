@@ -1,0 +1,41 @@
+E003h VFE1 Epoch0 CDM batch contract — static-only build proof
+Date: 2026-08-29
+
+Scope:
+- exact same-machine Windows clean Epoch0 selector-2 capture: 179 batches / 894 BL records;
+- 4 startup batches followed by 175 steady-state batches;
+- steady state always uses five BLs with fixed companion roles and one of five main IFE BL shapes;
+- 0024 is retained read-only contract data only; no executable helper or runtime caller is added.
+
+Steady main IFE BL variants:
+- 0x958 bytes: 8 samples, 56 commands, 472 register writes, 14 DMI commands, 24 varying register-value fields;
+- 0x868 bytes: 42 samples, 45 commands, 436 register writes, 12 DMI commands, 20 varying register-value fields;
+- 0x83c bytes: 46 samples, 43 commands, 429 register writes, 12 DMI commands, 14 varying register-value fields;
+- 0x6b8 bytes: 24 samples, 35 commands, 352 register writes, 8 DMI commands, 10 varying register-value fields;
+- 0x5a4 bytes: 55 samples, 22 commands, 315 register writes, 2 DMI commands, 6 varying register-value fields.
+
+Common steady BL shape:
+- BL0: 4-byte CHANGE_BASE 0x0000f000;
+- BL1: variant-sized main IFE command list;
+- BL2: 4-byte CHANGE_BASE 0x00057000;
+- BL3: fixed 0x10-byte two-register list;
+- BL4: fixed 0x14-byte register + GEN_IRQ list; userdata equals observed batch index.
+
+Ownership correction:
+- 0023's earlier no-post-start-rewrite interpretation is superseded for +0x008c, +0x3b70, +0x3d78, +0x3d7c, +0x3d80, +0x3d84;
+- Windows carries those identities inside queued steady-state RT-CDM BLs;
+- this does not authorize a separate direct-MMIO/polling rewrite loop in Linux.
+
+Build:
+- module command: make -C <candidate-source> O=<Golden-v4-output> ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules
+- compiler diagnostics: none
+- Golden vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+- forward patch reconstruction: PASS
+- reverse patch reconstruction: PASS
+- strict checkpatch: zero code/style checks; only non-mail-patch commit-description/Signed-off-by metadata remains
+- CAMSS module loaded: NO
+- /dev/video*: none
+- /dev/media*: none
+
+Safety:
+No RT-CDM FIFO0 submission, VFE1 PIX/CSID1/MIPI enable, IMX681 transmission, or Linux front frame is authorized by this contract.

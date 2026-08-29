@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-post-start-vfe1-ownership-data-contract-built-stream-blocked-golden-unchanged
+status: e003h-epoch0-cdm-batch-contract-built-unreachable-stream-blocked-golden-unchanged
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -481,7 +481,7 @@ e003h:
   windows_vfe1_post_start_observed_initial_prime_bundles: 2
   windows_vfe1_post_start_completion_groups: 5
   windows_vfe1_post_start_completion_cross_group_order_required: false
-  windows_vfe1_post_start_no_rewrite_regs: 0x008c, 0x3b70, 0x3d78, 0x3d7c, 0x3d80, 0x3d84
+  windows_vfe1_post_start_0023_no_rewrite_regs_superseded: 0x008c, 0x3b70, 0x3d78, 0x3d7c, 0x3d80, 0x3d84
   windows_vfe1_post_start_hardware_live_mutable_regs: 0x3d78, 0x3d7c, 0x3d80, 0x3d84
   linux_front_0023_patch_sha256: 962c8f6792b1ceb1649d6928df325ee1ed884f292342b0633b98c826a52cd7be
   linux_front_0023_source_sha256: 4cd8594b3cc11b485522cb1dc19ff3d31a3f20e2a498d37f7939dd090a9e4c33
@@ -491,16 +491,41 @@ e003h:
   linux_front_0023_inspection_json_sha256: e7251c0bd0f047473891c7b4011ed760e1821bebf8b7fea2e2602a29b9875625
   linux_front_0023_data_only: true
   linux_front_0023_runtime_reachable: false
-  unresolved: recover exact same-machine Windows steady-state RT-CDM BL batches queued before and consumed at IFE Epoch0, including descriptor/command-byte identity and invariant versus per-frame fields; exact sentinel transition remains optional runtime-PM follow-up
-next_experiment: E003h-windows-vfe1-epoch0-cdm-batch-oracle
+  windows_vfe1_epoch0_cdm_raw_sha256: 1e8dc9671296e35a0704315588669fc8ed97612fd4b72c1d71b11bb7244d9a7f
+  windows_vfe1_epoch0_cdm_raw_bytes: 3994804
+  windows_vfe1_epoch0_cdm_total_batches: 179
+  windows_vfe1_epoch0_cdm_total_records: 894
+  windows_vfe1_epoch0_cdm_steady_batches: 175
+  windows_vfe1_epoch0_cdm_steady_bl_count: 5
+  windows_vfe1_epoch0_cdm_encoded_length_semantics: byte_count_minus_one
+  windows_vfe1_epoch0_cdm_fixed_shape: 0x4 CHANGE_BASE(0xf000), variant main, 0x4 CHANGE_BASE(0x57000), 0x10 fixed registers, 0x14 fixed register+GEN_IRQ
+  windows_vfe1_epoch0_cdm_variant_0958: samples=8 commands=56 writes=472 dmi=14 dynamic_regs=24 normalized_sha256=6c979a87c9a550ba1dfbfe740e714f8538238e7537251f855ba997c1fadc42a2
+  windows_vfe1_epoch0_cdm_variant_0868: samples=42 commands=45 writes=436 dmi=12 dynamic_regs=20 normalized_sha256=001b086bcc594a37a3a8b846a038f8e534a3b7974eb87a03a2961f1247deb856
+  windows_vfe1_epoch0_cdm_variant_083c: samples=46 commands=43 writes=429 dmi=12 dynamic_regs=14 normalized_sha256=3bcc4def6731cd107ad70ffa7d0c5c52e7a712ef6436814e50a7b9725aaf9c61
+  windows_vfe1_epoch0_cdm_variant_06b8: samples=24 commands=35 writes=352 dmi=8 dynamic_regs=10 normalized_sha256=ed90abec133e939674d19bfcbcc2250fee9e23cb539306fbeb574054b43df6d8
+  windows_vfe1_epoch0_cdm_variant_05a4: samples=55 commands=22 writes=315 dmi=2 dynamic_regs=6 normalized_sha256=3dd3c9d87f07db98df529ff522a9541cf0c9c38f0d5862c425431660b467f0e9
+  windows_vfe1_epoch0_cdm_extractor_sha256: d02f7faaeb034e0d7b0931f6c1490a37211784cf535599b29544baf8f3fc329a
+  windows_vfe1_epoch0_cdm_oracle_sha256: 3bcf4efe34c891dcc6bc78c3cefc94d916ffd71e27dab81e75493f9ed320dce4
+  windows_vfe1_epoch0_cdm_0023_correction: +0x008c/+0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84 are queued per-frame RT-CDM writes; separate direct-MMIO polling rewrites remain unauthorized
+  linux_front_0024_patch_sha256: 4b234a789b25bb1f37d703d2cbfdf8824c0443466523b3d4484e06457689f095
+  linux_front_0024_source_sha256: fd1baf78bcba6f3cf926f66ea7fcb8b212e0659048a9187ed67011a5066c20c5
+  linux_front_0024_object_sha256: 6e218d223ffe62ee6b3592efbec06086932bbdf9cf7795146da56447f222357d
+  linux_front_0024_module_sha256: 1f88683b72263db8a425d2ef54627c5e9ce7db7e4c6f66e71463fa01c9fdd9ad
+  linux_front_0024_inspector_sha256: 193eddc9a3dc4fb95dcdc02119d641724f0721450935b8d8093c9da319538afb
+  linux_front_0024_inspection_json_sha256: 2f7bab800b36d9fc1529b4f08552b069c0d8bd6163025306d553ba62c0a8f90a
+  linux_front_0024_data_only: true
+  linux_front_0024_dmi_payload_bytes_closed: false
+  linux_front_0024_fifo0_submission_authorized: false
+  linux_front_0024_runtime_reachable: false
+  unresolved: recover exact steady-state DMI payload source CPU aliases/bytes for all five main-BL variants plus upstream variant selection and GEN_IRQ batch-tag production before any unreachable steady-state materializer; exact sentinel transition remains optional runtime-PM follow-up
+next_experiment: E003h-windows-vfe1-epoch0-dmi-payload-variant-selector-oracle
 next_action: >-
-  Keep IMX681 Linux transmission blocked. Treat 0022 host-start ordering and 0023 post-start ownership as closed and non-executable.
-  Windows post-start software ownership is IFE Epoch0 -> complete nine-client BUS IOVA update -> RT-CDM queued-BL consume/program,
-  followed by completion retirement through five independent group FIFOs; two complete address bundles are observed primed before the
-  first completion. Do not schedule Linux rewrites for period_cfg +0x8c or +0x3b70/+0x3d78..+0x3d84. Next, capture multiple Windows
-  steady-state CDM BL batches at queue/consume boundaries and preserve their exact command bytes/lengths so invariant versus per-frame
-  content is closed. Do not create a caller for 0022/0023, arm RT-CDM IRQ/FIFO0, start CSID1 IPP/VFE1 PIX/MIPI, transmit IMX681, or
-  attempt a front frame.
+  Keep IMX681 Linux transmission blocked. Treat 0022 host-start ordering, 0023 scheduler ownership and 0024 steady-state CDM batch
+  topology as closed and non-executable; do not repeat the Epoch0 batch capture. Windows per-frame RT-CDM lists include period_cfg +0x8c
+  and +0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84, so retain the correction that these belong to queued CDM programming, not a
+  separate Linux direct-MMIO rewrite loop. Next recover the real DMI payload source CPU aliases/bytes for the five main-BL variants,
+  the upstream variant-selection rule and the GEN_IRQ tag source. Only then build an unreachable steady-state materializer. Do not create
+  a caller for 0022/0023/0024, arm RT-CDM IRQ/FIFO0, start CSID1 IPP/VFE1 PIX/MIPI, transmit IMX681, or attempt a front frame.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

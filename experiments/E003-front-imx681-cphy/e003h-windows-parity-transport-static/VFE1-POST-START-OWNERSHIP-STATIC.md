@@ -83,3 +83,9 @@ Forward/reverse patch reconstruction passes. Compiler diagnostics are empty. Str
 ## Next gate
 
 The remaining steady-state parity blocker is no longer ownership. Windows Epoch0 consumes an RT-CDM BL batch, while the existing `0019/0020/0021` corpus covers the four **startup** IFE `0x803` command streams only. The next same-machine Windows oracle must capture multiple post-start queued/consumed RT-CDM BL descriptors and their command bytes, then classify invariant versus per-frame/request-dependent content. Until that closes, do not connect `0022/0023` to runtime and do not arm RT-CDM, VFE1 PIX, CSID1 IPP, MIPI, IMX681 transmission or a front frame.
+
+## Superseded ownership detail — 0024
+
+The 0023 scheduler/two-slot/completion conclusions remain valid, but its narrower statement that no post-start software rewrite had been proven for `+0x008c/+0x3b70/+0x3d78..+0x3d84` is superseded by the later clean Epoch0 selector-2 command capture. Windows does carry all six identities in queued steady-state RT-CDM command lists.
+
+The active rule is: **no separate direct-MMIO/polling rewrite loop is authorized**. Those register writes belong to the per-frame CDM program. See `WINDOWS-VFE1-EPOCH0-CDM-BATCHES.md` and `VFE1-EPOCH0-CDM-BATCH-CONTRACT.md`.

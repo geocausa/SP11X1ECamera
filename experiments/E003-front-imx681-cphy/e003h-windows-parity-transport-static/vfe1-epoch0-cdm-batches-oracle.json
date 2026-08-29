@@ -1,0 +1,1314 @@
+{
+  "accepted": true,
+  "capture": {
+    "startup_batches": [
+      {
+        "batch": 0,
+        "main_bytes": 3732,
+        "record_count": 4
+      },
+      {
+        "batch": 1,
+        "main_bytes": 3636,
+        "record_count": 5
+      },
+      {
+        "batch": 2,
+        "main_bytes": 2308,
+        "record_count": 5
+      },
+      {
+        "batch": 3,
+        "main_bytes": 1256,
+        "record_count": 5
+      }
+    ],
+    "steady_state_batches": 175,
+    "steady_vector_counts": [
+      {
+        "count": 55,
+        "lengths": [
+          "0x4",
+          "0x5a4",
+          "0x4",
+          "0x10",
+          "0x14"
+        ]
+      },
+      {
+        "count": 46,
+        "lengths": [
+          "0x4",
+          "0x83c",
+          "0x4",
+          "0x10",
+          "0x14"
+        ]
+      },
+      {
+        "count": 42,
+        "lengths": [
+          "0x4",
+          "0x868",
+          "0x4",
+          "0x10",
+          "0x14"
+        ]
+      },
+      {
+        "count": 24,
+        "lengths": [
+          "0x4",
+          "0x6b8",
+          "0x4",
+          "0x10",
+          "0x14"
+        ]
+      },
+      {
+        "count": 8,
+        "lengths": [
+          "0x4",
+          "0x958",
+          "0x4",
+          "0x10",
+          "0x14"
+        ]
+      }
+    ],
+    "total_batches": 179,
+    "total_records": 894
+  },
+  "linux_consequence": {
+    "dmi_policy": "DMI address dwords are per-batch DMA state and must be repatched to Linux-owned payload IOVAs; payload bytes are not captured by this oracle and remain a separate closure gate",
+    "main_variant_count": 5,
+    "main_variant_lengths": [
+      "0x958",
+      "0x868",
+      "0x83c",
+      "0x6b8",
+      "0x5a4"
+    ],
+    "runtime_gate": "remain fail-closed; no Linux RT-CDM FIFO0 submission, CSID1/VFE1 PIX/MIPI start, IMX681 transmission or front frame is authorized",
+    "steady_state_model": "five-BL Epoch0 batch: CHANGE_BASE(VFE1), one variant main IFE BL, CHANGE_BASE(companion), fixed two-register BL, fixed register+GEN_IRQ BL with caller batch tag"
+  },
+  "main_bl_variants": [
+    {
+      "batch_numbers": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13
+      ],
+      "command_count": 56,
+      "dmi_address_fields": [
+        "0xe0",
+        "0x13c",
+        "0x148",
+        "0x154",
+        "0x1c8",
+        "0x264",
+        "0x6f4",
+        "0x714",
+        "0x720",
+        "0x72c",
+        "0x8b8",
+        "0x8c4",
+        "0x8d0",
+        "0x8dc"
+      ],
+      "dmi_count": 14,
+      "dmi_shape": [
+        {
+          "dmi_register_offset": "0x3d08",
+          "field": "0xe0",
+          "payload_bytes": 512,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x13c",
+          "payload_bytes": 884,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x148",
+          "payload_bytes": 884,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x154",
+          "payload_bytes": 884,
+          "selector": 3
+        },
+        {
+          "dmi_register_offset": "0x4708",
+          "field": "0x1c8",
+          "payload_bytes": 512,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4908",
+          "field": "0x264",
+          "payload_bytes": 256,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5a08",
+          "field": "0x6f4",
+          "payload_bytes": 2048,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x714",
+          "payload_bytes": 1024,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x720",
+          "payload_bytes": 1024,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x72c",
+          "payload_bytes": 1024,
+          "selector": 3
+        },
+        {
+          "dmi_register_offset": "0xa008",
+          "field": "0x8b8",
+          "payload_bytes": 768,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0xa008",
+          "field": "0x8c4",
+          "payload_bytes": 768,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0xa208",
+          "field": "0x8d0",
+          "payload_bytes": 384,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0xa208",
+          "field": "0x8dc",
+          "payload_bytes": 384,
+          "selector": 2
+        }
+      ],
+      "dynamic_register_fields": [
+        {
+          "field": "0x48",
+          "register_offset": "0x3b70"
+        },
+        {
+          "field": "0x4c",
+          "register_offset": "0x3b74"
+        },
+        {
+          "field": "0x78",
+          "register_offset": "0x3d58"
+        },
+        {
+          "field": "0x7c",
+          "register_offset": "0x3d5c"
+        },
+        {
+          "field": "0xa4",
+          "register_offset": "0x3d78"
+        },
+        {
+          "field": "0xa8",
+          "register_offset": "0x3d7c"
+        },
+        {
+          "field": "0xac",
+          "register_offset": "0x3d80"
+        },
+        {
+          "field": "0xb0",
+          "register_offset": "0x3d84"
+        },
+        {
+          "field": "0xf0",
+          "register_offset": "0x4358"
+        },
+        {
+          "field": "0xf4",
+          "register_offset": "0x435c"
+        },
+        {
+          "field": "0x168",
+          "register_offset": "0x456c"
+        },
+        {
+          "field": "0x16c",
+          "register_offset": "0x4570"
+        },
+        {
+          "field": "0x1a8",
+          "register_offset": "0x4758"
+        },
+        {
+          "field": "0x1ac",
+          "register_offset": "0x475c"
+        },
+        {
+          "field": "0x254",
+          "register_offset": "0x4958"
+        },
+        {
+          "field": "0x258",
+          "register_offset": "0x495c"
+        },
+        {
+          "field": "0x2d4",
+          "register_offset": "0x5a58"
+        },
+        {
+          "field": "0x2d8",
+          "register_offset": "0x5a5c"
+        },
+        {
+          "field": "0x704",
+          "register_offset": "0x5f58"
+        },
+        {
+          "field": "0x708",
+          "register_offset": "0x5f5c"
+        },
+        {
+          "field": "0x73c",
+          "register_offset": "0xa058"
+        },
+        {
+          "field": "0x740",
+          "register_offset": "0xa05c"
+        },
+        {
+          "field": "0x83c",
+          "register_offset": "0xa258"
+        },
+        {
+          "field": "0x840",
+          "register_offset": "0xa25c"
+        }
+      ],
+      "main_bytes": 2392,
+      "normalized_holes": [
+        "0x48",
+        "0x4c",
+        "0x78",
+        "0x7c",
+        "0xa4",
+        "0xa8",
+        "0xac",
+        "0xb0",
+        "0xe0",
+        "0xf0",
+        "0xf4",
+        "0x13c",
+        "0x148",
+        "0x154",
+        "0x168",
+        "0x16c",
+        "0x1a8",
+        "0x1ac",
+        "0x1c8",
+        "0x254",
+        "0x258",
+        "0x264",
+        "0x2d4",
+        "0x2d8",
+        "0x6f4",
+        "0x704",
+        "0x708",
+        "0x714",
+        "0x720",
+        "0x72c",
+        "0x73c",
+        "0x740",
+        "0x83c",
+        "0x840",
+        "0x8b8",
+        "0x8c4",
+        "0x8d0",
+        "0x8dc"
+      ],
+      "normalized_sha256": "6c979a87c9a550ba1dfbfe740e714f8538238e7537251f855ba997c1fadc42a2",
+      "opcode_counts": {
+        "DMI": 14,
+        "REG_CONT": 42
+      },
+      "register_write_count": 472,
+      "sample_count": 8,
+      "tail_registers": {
+        "0x24": {
+          "field": "0x93c",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00006000"
+          ]
+        },
+        "0x8c": {
+          "field": "0x948",
+          "invariant_within_variant": true,
+          "values": [
+            "0x37213000"
+          ]
+        },
+        "0x90": {
+          "field": "0x954",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00000001"
+          ]
+        }
+      }
+    },
+    {
+      "batch_numbers": [
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        25,
+        27,
+        29,
+        31,
+        33,
+        41,
+        47,
+        61,
+        67,
+        69,
+        83,
+        85,
+        93,
+        99,
+        103,
+        111,
+        117,
+        123,
+        127,
+        129,
+        137,
+        139,
+        145,
+        149,
+        155,
+        157,
+        159,
+        165,
+        171,
+        173,
+        175
+      ],
+      "command_count": 45,
+      "dmi_address_fields": [
+        "0xe0",
+        "0x13c",
+        "0x148",
+        "0x154",
+        "0x604",
+        "0x624",
+        "0x630",
+        "0x63c",
+        "0x7c8",
+        "0x7d4",
+        "0x7e0",
+        "0x7ec"
+      ],
+      "dmi_count": 12,
+      "dmi_shape": [
+        {
+          "dmi_register_offset": "0x3d08",
+          "field": "0xe0",
+          "payload_bytes": 512,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x13c",
+          "payload_bytes": 884,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x148",
+          "payload_bytes": 884,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x154",
+          "payload_bytes": 884,
+          "selector": 3
+        },
+        {
+          "dmi_register_offset": "0x5a08",
+          "field": "0x604",
+          "payload_bytes": 2048,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x624",
+          "payload_bytes": 1024,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x630",
+          "payload_bytes": 1024,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x63c",
+          "payload_bytes": 1024,
+          "selector": 3
+        },
+        {
+          "dmi_register_offset": "0xa008",
+          "field": "0x7c8",
+          "payload_bytes": 768,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0xa008",
+          "field": "0x7d4",
+          "payload_bytes": 768,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0xa208",
+          "field": "0x7e0",
+          "payload_bytes": 384,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0xa208",
+          "field": "0x7ec",
+          "payload_bytes": 384,
+          "selector": 2
+        }
+      ],
+      "dynamic_register_fields": [
+        {
+          "field": "0x48",
+          "register_offset": "0x3b70"
+        },
+        {
+          "field": "0x4c",
+          "register_offset": "0x3b74"
+        },
+        {
+          "field": "0x78",
+          "register_offset": "0x3d58"
+        },
+        {
+          "field": "0x7c",
+          "register_offset": "0x3d5c"
+        },
+        {
+          "field": "0xa4",
+          "register_offset": "0x3d78"
+        },
+        {
+          "field": "0xa8",
+          "register_offset": "0x3d7c"
+        },
+        {
+          "field": "0xac",
+          "register_offset": "0x3d80"
+        },
+        {
+          "field": "0xb0",
+          "register_offset": "0x3d84"
+        },
+        {
+          "field": "0xf0",
+          "register_offset": "0x4358"
+        },
+        {
+          "field": "0xf4",
+          "register_offset": "0x435c"
+        },
+        {
+          "field": "0x168",
+          "register_offset": "0x456c"
+        },
+        {
+          "field": "0x16c",
+          "register_offset": "0x4570"
+        },
+        {
+          "field": "0x1e4",
+          "register_offset": "0x5a58"
+        },
+        {
+          "field": "0x1e8",
+          "register_offset": "0x5a5c"
+        },
+        {
+          "field": "0x614",
+          "register_offset": "0x5f58"
+        },
+        {
+          "field": "0x618",
+          "register_offset": "0x5f5c"
+        },
+        {
+          "field": "0x64c",
+          "register_offset": "0xa058"
+        },
+        {
+          "field": "0x650",
+          "register_offset": "0xa05c"
+        },
+        {
+          "field": "0x74c",
+          "register_offset": "0xa258"
+        },
+        {
+          "field": "0x750",
+          "register_offset": "0xa25c"
+        }
+      ],
+      "main_bytes": 2152,
+      "normalized_holes": [
+        "0x48",
+        "0x4c",
+        "0x78",
+        "0x7c",
+        "0xa4",
+        "0xa8",
+        "0xac",
+        "0xb0",
+        "0xe0",
+        "0xf0",
+        "0xf4",
+        "0x13c",
+        "0x148",
+        "0x154",
+        "0x168",
+        "0x16c",
+        "0x1e4",
+        "0x1e8",
+        "0x604",
+        "0x614",
+        "0x618",
+        "0x624",
+        "0x630",
+        "0x63c",
+        "0x64c",
+        "0x650",
+        "0x74c",
+        "0x750",
+        "0x7c8",
+        "0x7d4",
+        "0x7e0",
+        "0x7ec"
+      ],
+      "normalized_sha256": "001b086bcc594a37a3a8b846a038f8e534a3b7974eb87a03a2961f1247deb856",
+      "opcode_counts": {
+        "DMI": 12,
+        "REG_CONT": 33
+      },
+      "register_write_count": 436,
+      "sample_count": 42,
+      "tail_registers": {
+        "0x24": {
+          "field": "0x84c",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00006000"
+          ]
+        },
+        "0x8c": {
+          "field": "0x858",
+          "invariant_within_variant": true,
+          "values": [
+            "0x37213000"
+          ]
+        },
+        "0x90": {
+          "field": "0x864",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00000001"
+          ]
+        }
+      }
+    },
+    {
+      "batch_numbers": [
+        35,
+        37,
+        39,
+        43,
+        45,
+        49,
+        51,
+        53,
+        55,
+        57,
+        59,
+        63,
+        65,
+        71,
+        73,
+        75,
+        77,
+        79,
+        81,
+        87,
+        89,
+        91,
+        95,
+        97,
+        101,
+        105,
+        107,
+        109,
+        113,
+        115,
+        119,
+        121,
+        125,
+        131,
+        133,
+        135,
+        141,
+        143,
+        147,
+        151,
+        153,
+        161,
+        163,
+        167,
+        169,
+        177
+      ],
+      "command_count": 43,
+      "dmi_address_fields": [
+        "0xb4",
+        "0x110",
+        "0x11c",
+        "0x128",
+        "0x5d8",
+        "0x5f8",
+        "0x604",
+        "0x610",
+        "0x79c",
+        "0x7a8",
+        "0x7b4",
+        "0x7c0"
+      ],
+      "dmi_count": 12,
+      "dmi_shape": [
+        {
+          "dmi_register_offset": "0x3d08",
+          "field": "0xb4",
+          "payload_bytes": 512,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x110",
+          "payload_bytes": 884,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x11c",
+          "payload_bytes": 884,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x128",
+          "payload_bytes": 884,
+          "selector": 3
+        },
+        {
+          "dmi_register_offset": "0x5a08",
+          "field": "0x5d8",
+          "payload_bytes": 2048,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x5f8",
+          "payload_bytes": 1024,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x604",
+          "payload_bytes": 1024,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x610",
+          "payload_bytes": 1024,
+          "selector": 3
+        },
+        {
+          "dmi_register_offset": "0xa008",
+          "field": "0x79c",
+          "payload_bytes": 768,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0xa008",
+          "field": "0x7a8",
+          "payload_bytes": 768,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0xa208",
+          "field": "0x7b4",
+          "payload_bytes": 384,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0xa208",
+          "field": "0x7c0",
+          "payload_bytes": 384,
+          "selector": 2
+        }
+      ],
+      "dynamic_register_fields": [
+        {
+          "field": "0x78",
+          "register_offset": "0x3d78"
+        },
+        {
+          "field": "0x7c",
+          "register_offset": "0x3d7c"
+        },
+        {
+          "field": "0x80",
+          "register_offset": "0x3d80"
+        },
+        {
+          "field": "0x84",
+          "register_offset": "0x3d84"
+        },
+        {
+          "field": "0xc4",
+          "register_offset": "0x4358"
+        },
+        {
+          "field": "0xc8",
+          "register_offset": "0x435c"
+        },
+        {
+          "field": "0x13c",
+          "register_offset": "0x456c"
+        },
+        {
+          "field": "0x140",
+          "register_offset": "0x4570"
+        },
+        {
+          "field": "0x5e8",
+          "register_offset": "0x5f58"
+        },
+        {
+          "field": "0x5ec",
+          "register_offset": "0x5f5c"
+        },
+        {
+          "field": "0x620",
+          "register_offset": "0xa058"
+        },
+        {
+          "field": "0x624",
+          "register_offset": "0xa05c"
+        },
+        {
+          "field": "0x720",
+          "register_offset": "0xa258"
+        },
+        {
+          "field": "0x724",
+          "register_offset": "0xa25c"
+        }
+      ],
+      "main_bytes": 2108,
+      "normalized_holes": [
+        "0x78",
+        "0x7c",
+        "0x80",
+        "0x84",
+        "0xb4",
+        "0xc4",
+        "0xc8",
+        "0x110",
+        "0x11c",
+        "0x128",
+        "0x13c",
+        "0x140",
+        "0x5d8",
+        "0x5e8",
+        "0x5ec",
+        "0x5f8",
+        "0x604",
+        "0x610",
+        "0x620",
+        "0x624",
+        "0x720",
+        "0x724",
+        "0x79c",
+        "0x7a8",
+        "0x7b4",
+        "0x7c0"
+      ],
+      "normalized_sha256": "3bcc4def6731cd107ad70ffa7d0c5c52e7a712ef6436814e50a7b9725aaf9c61",
+      "opcode_counts": {
+        "DMI": 12,
+        "REG_CONT": 31
+      },
+      "register_write_count": 429,
+      "sample_count": 46,
+      "tail_registers": {
+        "0x24": {
+          "field": "0x820",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00006000"
+          ]
+        },
+        "0x8c": {
+          "field": "0x82c",
+          "invariant_within_variant": true,
+          "values": [
+            "0x37213000"
+          ]
+        },
+        "0x90": {
+          "field": "0x838",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00000001"
+          ]
+        }
+      }
+    },
+    {
+      "batch_numbers": [
+        22,
+        24,
+        26,
+        28,
+        30,
+        32,
+        46,
+        48,
+        56,
+        80,
+        90,
+        100,
+        108,
+        110,
+        126,
+        134,
+        138,
+        142,
+        150,
+        152,
+        154,
+        160,
+        170,
+        172
+      ],
+      "command_count": 35,
+      "dmi_address_fields": [
+        "0xe0",
+        "0x13c",
+        "0x148",
+        "0x154",
+        "0x604",
+        "0x624",
+        "0x630",
+        "0x63c"
+      ],
+      "dmi_count": 8,
+      "dmi_shape": [
+        {
+          "dmi_register_offset": "0x3d08",
+          "field": "0xe0",
+          "payload_bytes": 512,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x13c",
+          "payload_bytes": 884,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x148",
+          "payload_bytes": 884,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x4308",
+          "field": "0x154",
+          "payload_bytes": 884,
+          "selector": 3
+        },
+        {
+          "dmi_register_offset": "0x5a08",
+          "field": "0x604",
+          "payload_bytes": 2048,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x624",
+          "payload_bytes": 1024,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x630",
+          "payload_bytes": 1024,
+          "selector": 2
+        },
+        {
+          "dmi_register_offset": "0x5f08",
+          "field": "0x63c",
+          "payload_bytes": 1024,
+          "selector": 3
+        }
+      ],
+      "dynamic_register_fields": [
+        {
+          "field": "0xa4",
+          "register_offset": "0x3d78"
+        },
+        {
+          "field": "0xa8",
+          "register_offset": "0x3d7c"
+        },
+        {
+          "field": "0xac",
+          "register_offset": "0x3d80"
+        },
+        {
+          "field": "0xb0",
+          "register_offset": "0x3d84"
+        },
+        {
+          "field": "0xf0",
+          "register_offset": "0x4358"
+        },
+        {
+          "field": "0xf4",
+          "register_offset": "0x435c"
+        },
+        {
+          "field": "0x168",
+          "register_offset": "0x456c"
+        },
+        {
+          "field": "0x16c",
+          "register_offset": "0x4570"
+        },
+        {
+          "field": "0x614",
+          "register_offset": "0x5f58"
+        },
+        {
+          "field": "0x618",
+          "register_offset": "0x5f5c"
+        }
+      ],
+      "main_bytes": 1720,
+      "normalized_holes": [
+        "0xa4",
+        "0xa8",
+        "0xac",
+        "0xb0",
+        "0xe0",
+        "0xf0",
+        "0xf4",
+        "0x13c",
+        "0x148",
+        "0x154",
+        "0x168",
+        "0x16c",
+        "0x604",
+        "0x614",
+        "0x618",
+        "0x624",
+        "0x630",
+        "0x63c"
+      ],
+      "normalized_sha256": "ed90abec133e939674d19bfcbcc2250fee9e23cb539306fbeb574054b43df6d8",
+      "opcode_counts": {
+        "DMI": 8,
+        "REG_CONT": 27
+      },
+      "register_write_count": 352,
+      "sample_count": 24,
+      "tail_registers": {
+        "0x24": {
+          "field": "0x69c",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00006000"
+          ]
+        },
+        "0x8c": {
+          "field": "0x6a8",
+          "invariant_within_variant": true,
+          "values": [
+            "0x37213000"
+          ]
+        },
+        "0x90": {
+          "field": "0x6b4",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00000001"
+          ]
+        }
+      }
+    },
+    {
+      "batch_numbers": [
+        34,
+        36,
+        38,
+        40,
+        42,
+        44,
+        50,
+        52,
+        54,
+        58,
+        60,
+        62,
+        64,
+        66,
+        68,
+        70,
+        72,
+        74,
+        76,
+        78,
+        82,
+        84,
+        86,
+        88,
+        92,
+        94,
+        96,
+        98,
+        102,
+        104,
+        106,
+        112,
+        114,
+        116,
+        118,
+        120,
+        122,
+        124,
+        128,
+        130,
+        132,
+        136,
+        140,
+        144,
+        146,
+        148,
+        156,
+        158,
+        162,
+        164,
+        166,
+        168,
+        174,
+        176,
+        178
+      ],
+      "command_count": 22,
+      "dmi_address_fields": [
+        "0xb4",
+        "0x528"
+      ],
+      "dmi_count": 2,
+      "dmi_shape": [
+        {
+          "dmi_register_offset": "0x3d08",
+          "field": "0xb4",
+          "payload_bytes": 512,
+          "selector": 1
+        },
+        {
+          "dmi_register_offset": "0x5a08",
+          "field": "0x528",
+          "payload_bytes": 2048,
+          "selector": 1
+        }
+      ],
+      "dynamic_register_fields": [
+        {
+          "field": "0x78",
+          "register_offset": "0x3d78"
+        },
+        {
+          "field": "0x7c",
+          "register_offset": "0x3d7c"
+        },
+        {
+          "field": "0x80",
+          "register_offset": "0x3d80"
+        },
+        {
+          "field": "0x84",
+          "register_offset": "0x3d84"
+        },
+        {
+          "field": "0xc8",
+          "register_offset": "0x456c"
+        },
+        {
+          "field": "0xcc",
+          "register_offset": "0x4570"
+        }
+      ],
+      "main_bytes": 1444,
+      "normalized_holes": [
+        "0x78",
+        "0x7c",
+        "0x80",
+        "0x84",
+        "0xb4",
+        "0xc8",
+        "0xcc",
+        "0x528"
+      ],
+      "normalized_sha256": "3dd3c9d87f07db98df529ff522a9541cf0c9c38f0d5862c425431660b467f0e9",
+      "opcode_counts": {
+        "DMI": 2,
+        "REG_CONT": 20
+      },
+      "register_write_count": 315,
+      "sample_count": 55,
+      "tail_registers": {
+        "0x24": {
+          "field": "0x588",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00006000"
+          ]
+        },
+        "0x8c": {
+          "field": "0x594",
+          "invariant_within_variant": true,
+          "values": [
+            "0x37213000"
+          ]
+        },
+        "0x90": {
+          "field": "0x5a0",
+          "invariant_within_variant": true,
+          "values": [
+            "0x00000001"
+          ]
+        }
+      }
+    }
+  ],
+  "queue_record_contract": {
+    "cpu_alias_field_stack_offset": "+0x28",
+    "encoded_length_field_stack_offset": "+0x30",
+    "encoded_length_semantics": "byte_count_minus_one",
+    "fifo0_commit_rvas": [
+      "0x28884",
+      "0x2888c",
+      "0x28894"
+    ],
+    "instruction_anchors": {
+      "0x25eac": "ldr x0, [x21, #0x98]",
+      "0x25ec0": "mov x2, #0",
+      "0x25ec4": "mov w1, #2",
+      "0x25ec8": "bl #0x140028480",
+      "0x287cc": "mov x9, #0x28",
+      "0x287d0": "add x8, sp, #0x68",
+      "0x287d4": "umaddl x8, w24, w9, x8",
+      "0x287d8": "ldp q17, q16, [x8]",
+      "0x287dc": "ldr x8, [x8, #0x20]",
+      "0x287e0": "stp q17, q16, [sp, #0x20]",
+      "0x287e4": "ldr w22, [sp, #0x20]",
+      "0x287e8": "ldr w20, [sp, #0x30]",
+      "0x28884": "str w22, [x8, #0x50]",
+      "0x2888c": "str w20, [x8, #0x54]",
+      "0x28894": "str w9, [x8, #0x58]"
+    },
+    "iova_field_stack_offset": "+0x20",
+    "record_bytes": 40,
+    "record_stack_copy_rva": "0x287d8",
+    "selector": 2
+  },
+  "schema": "sp11-e003h-windows-vfe1-epoch0-cdm-batches-v1",
+  "source_evidence": {
+    "driver": {
+      "bytes": 376560,
+      "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+    },
+    "post_start_0023_oracle_sha256": "d426c7cf4525f36c80623cab628061005c880abd5df02d17d8a76683fea4e66e",
+    "raw_log": {
+      "bytes": 3994804,
+      "encoding": "UTF-16LE KD text",
+      "sha256": "1e8dc9671296e35a0704315588669fc8ed97612fd4b72c1d71b11bb7244d9a7f"
+    }
+  },
+  "steady_companion_bls": {
+    "bl0_change_base_sha256": "18608790dc8901f9d1f17ad4d0ed33032309e5344be7abfab71a78c918f571a6",
+    "bl2_change_base_sha256": "60f2aed139a671e7e3f4e9c9c1b36a5cf3e09483811e694001011beb4a5a3937",
+    "bl3_register_sha256": "45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7",
+    "bl4_genirq_normalized_sha256": "ca6b6e27572543c00f23defa46d678ed247a68cd7bb2d5e51219ea38fe4934c5",
+    "bl4_genirq_userdata_rule": "exact batch index for all 175 steady-state batches"
+  },
+  "supersedes_0023_wording": {
+    "correction": "Windows steady-state queued RT-CDM BLs do contain writes to these registers. Do not model them as a separate direct-MMIO/polling rewrite loop; they belong to the per-frame CDM command program.",
+    "prior_post_start_stage_order_retained": "IFE Epoch0 -> complete VFE1 BUS IOVA update -> RT-CDM queued-BL consume/program -> completion dispatch/retirement",
+    "registers": [
+      "0x8c",
+      "0x3b70",
+      "0x3d78",
+      "0x3d7c",
+      "0x3d80",
+      "0x3d84"
+    ]
+  }
+}
