@@ -1,0 +1,81 @@
+{
+  "accepted": true,
+  "authorization_sha256": "2bfa23aacf53eb10be780b8b2317fb5e005663f9458b45bd9b7e245ca022eb25",
+  "camss_post_runtime_status": "suspended",
+  "comparison": {
+    "0042_0043_0044_stable_boundary_identical": true,
+    "0042_buf_done_status_mask": [
+      "0x00000000",
+      "0x0001ffff"
+    ],
+    "0043_buf_done_status_mask": [
+      "0x00000000",
+      "0x00000001"
+    ],
+    "0044_buf_done_status_mask": [
+      "0x00000000",
+      "0x00000001"
+    ],
+    "buf_done_mask_parity_drift": "Windows/0042 final mask 0x0001ffff; 0043/0044 final mask 0x00000001",
+    "stable_fields_compared": [
+      "route",
+      "regupd",
+      "top",
+      "rx",
+      "cfg_rx",
+      "pkts",
+      "ecc",
+      "crc",
+      "ipp",
+      "ctrl",
+      "cfg_ipp",
+      "z324",
+      "z330",
+      "epoch",
+      "crop",
+      "drop",
+      "measure"
+    ],
+    "volatile_observation_word_excluded": true
+  },
+  "conclusions": [
+    "0044 exact common reset/config/companion/private-stop lifecycle does not unlock CSID CAMIF/RUP/Epoch or VFE1 Epoch0.",
+    "The 0043 teardown-only V4L2 call_s_stream warning is eliminated by 0044 private stop.",
+    "Do not repeat 0044 runtime or blindly rewrite BUF_DONE mask late; statically determine why the Windows-builder value 0x0001ffff becomes 0x00000001 in 0043/0044 and whether that transition is a symptom of a broader CSID state/lifecycle mismatch."
+  ],
+  "csid1_timeout": {
+    "cfg0": "0x802b2000",
+    "cfg1": "0x00007241",
+    "crc_errors": 0,
+    "ctrl": "0x1",
+    "ecc_errors": 0,
+    "epoch": "0x00130013",
+    "ipp_irq_mask": "0x3cbc601c",
+    "ipp_irq_status": "0x00011e00",
+    "packets": 37016
+  },
+  "date": "2026-08-30",
+  "evidence_sha256": {
+    "dmesg": "d848302d307e4b3c36da5fa3766a58721c13f4c2b4c65a0ef3e083fc4dd3f6db",
+    "post": "8e981019a5c182c7d6cc221ebf9eda0f4b4aff2d8ad626d62eef557f2bfdbda6",
+    "run": "bed32b2125dfb914eb1c4c254460d7c8a6d6d9d80a2d505b0a488125e9439212",
+    "stages": "c1b1da6d3794af1fba6c432cbbc3e6df80089263bdc090daf51f963d7a564ad4"
+  },
+  "helper_invocations": 1,
+  "next_gate": "Trace every CPU/RT-CDM/hardware lifecycle effect that can change CSID1 +0x90 after the full builder; compare exact same-machine Windows reset/ISR/start state before proposing any write.",
+  "qc10c_output": false,
+  "rtcdm": {
+    "faulted": false,
+    "final_stage": "stopped",
+    "pre_csid_fifo_bl_completed": 13
+  },
+  "run_result": "ETIMEDOUT waiting VFE1 raw Epoch0; no QC10C output",
+  "runtime_authorized": false,
+  "same_boot_retry": false,
+  "schema": "sp11-e003h-csid1-0044-runtime-result-v1",
+  "sensor": {
+    "post_runtime_status": "suspended",
+    "stream_off_seen": true,
+    "stream_on_seen": true
+  }
+}

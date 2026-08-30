@@ -1,3 +1,15 @@
+## E003h ACTIVE — 0044 hardware run consumed; common lifecycle cause closed; BUF_DONE drift next — 2026-08-30
+
+The package-v3 boot-3 authorization was consumed exactly once. Runtime preflight passed from `/tmp`, `load-candidate.sh` passed its own pre-module gate, the exact front PIX graph was established, persistent RT-CDM observer reached READY/idle, and the sole root helper invocation returned `ETIMEDOUT` while waiting for VFE1 raw Epoch0. No same-boot retry occurred and the wrapper immediately returned SP11 to FullIO v19c Golden.
+
+Fail-closed runtime analysis SHA-256 `1f826e629328c182d3c1d8571a480f89100737c697dc44c4d5e3364b5804e746` proves the 0044 stable timeout boundary is identical to 0042/0043: 13 pre-CSID RT-CDM BL completions with no fault, IMX681 stream-on, 37,016 clean CSI packets, zero ECC/CRC, `IPP_IRQ_STATUS=0x00011e00`, exact `CFG0=0x802b2000`/`CFG1=0x7241`, but no CAMIF/RUP/Epoch progression and no QC10C output. The 0043 V4L2 `call_s_stream()` teardown warning is absent, confirming the private 0044 stop fix works but is unrelated to Epoch0.
+
+A new mechanically verified parity drift is now the next static boundary: Windows and Linux 0042 finish with CSID1 `BUF_DONE_IRQ_MASK +0x90 = 0x0001ffff`, whereas Linux 0043/0044 finish with `0x00000001`. Current 0044 C source has only the full-builder front-path CPU write of `0x1ffff`; ISR clears +0x94 and does not write +0x90. Therefore **do not blindly rewrite +0x90 late**. First trace every RT-CDM/common-hardware lifecycle effect that can transform the builder value after early configuration and compare the exact Windows reset/ISR/start path.
+
+Boot-3 authorization is preserved as `AUTHORIZATION-BOOT3-CONSUMED.json` SHA-256 `2bfa23aacf53eb10be780b8b2317fb5e005663f9458b45bd9b7e245ca022eb25`. Runtime evidence: RUN `bed32b2125dfb914eb1c4c254460d7c8a6d6d9d80a2d505b0a488125e9439212`, POST `8e981019a5c182c7d6cc221ebf9eda0f4b4aff2d8ad626d62eef557f2bfdbda6`, dmesg `d848302d307e4b3c36da5fa3766a58721c13f4c2b4c65a0ef3e083fc4dd3f6db`, RT-CDM stages `c1b1da6d3794af1fba6c432cbbc3e6df80089263bdc090daf51f963d7a564ad4`. Golden recovery is verified with Wi-Fi connected, Surface touch/touchpad present, ALSA playback/capture present, camera modules absent, saved default Golden and empty `next_entry`.
+
+**No Linux runtime is authorized.** Next close the CSID1 `+0x90` ownership/transition statically and only then decide whether a read-only stage telemetry candidate is needed.
+
 ## E003h ACTIVE — 0044 boot-3 one-shot authorized on package v3; unarmed — 2026-08-30
 
 Fresh boot-3 review SHA-256 `348ac96d7c6bc9bdbcb8238f1a72e21e1d69cdb0ce3947e6537203b244b95adc` passes against public package-v3 commit `be15f50b6c249f4b6ca7f1e2f72824f8e23bad29`. Both earlier 0044 boots are proven zero-hardware; package v3 pins cwd-independent Git ancestry checks in runtime preflight and run wrapper, Golden is current/saved default, `next_entry` is empty, no active RUN evidence exists, and bounded provenance is green.

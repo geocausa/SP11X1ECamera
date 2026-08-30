@@ -644,3 +644,7 @@ Fresh replacement review `0bed79f1a6fd4a8edbfcfc906206f902c6740be81712623341c1b5
 ## 2026-08-30 — 0044 boot-2 pre-exec abort; cwd-independent package v3
 
 The replacement candidate boot reached the new runtime preflight but failed before module load because its embedded `git merge-base` lacked a repository cwd. Candidate identity/auth were correct; qcom_camss/IMX681 were never loaded, helper/RUN count was zero, no same-boot retry occurred, and Golden return is clean. The consumed authorization is preserved. Package v3 fixes both `runtime-preflight.sh` and `run-once.sh` to use explicit `git -C <repo> merge-base --is-ancestor`, tests the operation from `/tmp`, and pins both zero-hardware consumed boot records in the inspector. Runtime is blocked pending a fresh authorization checkpoint.
+
+## 2026-08-30 — 0044 boot-3 hardware result: same Epoch0 boundary; BUF_DONE drift exposed
+
+The package-v3 boot-3 diagnostic executed exactly one root helper and returned `ETIMEDOUT` at VFE1 Epoch0. RT-CDM completed 13 pre-CSID BLs without fault; IMX681 streamed; CSID1 received exactly 37,016 packets with zero ECC/CRC and IPP status `0x00011e00`; no QC10C output. Golden return is clean and there was no retry. Runtime analysis `1f826e629328c182d3c1d8571a480f89100737c697dc44c4d5e3364b5804e746` proves the stable 0042/0043/0044 boundary is identical and 0044 removes the prior teardown warning. The next static discrepancy is `BUF_DONE_IRQ_MASK`: Windows/0042 `0x1ffff`, 0043/0044 `0x1`. Do not patch it blindly; trace its post-builder owner/transition first.
