@@ -1,0 +1,80 @@
+{
+  "schema": "sp11-e003h-windows-csid1-common-reset-v1",
+  "accepted": true,
+  "date": "2026-08-30",
+  "machine": "SP11 Windows same physical X1E80100 device",
+  "source": {
+    "driver": "qccamisp8380.sys",
+    "driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "manager_decomp_sha256": "08107ae0e9b59274aba29eb887e8f5601d26b2b53f7f08a0badbc25a52864f9e",
+    "common_decomp_sha256": "df872bd0e099ddd04752167a086364839680a43d6df1b734b8893cfd5cd93d7f",
+    "callbacks_decomp_sha256": "8741c4f651406fbd67a50eea3b4231252ed19174703be4548e37e87a711a2a0f"
+  },
+  "gen2_callback_table": {
+    "object_0x1e8_hw_version": "RVA 0x1b830; read MMIO +0x0 only",
+    "object_0x1f0_reset": "RVA 0x1a330",
+    "object_0x1f8_full_configure": "RVA 0x1a870",
+    "object_0x218_path_enable": "RVA 0x1b3d0",
+    "object_0x228_wrapper_route": "RVA 0x1a800"
+  },
+  "wrapper_route": {
+    "callback_rva": "0x1a800",
+    "csid1_wrapper_offset": "0x4",
+    "front_normal_value": "0x00000101",
+    "alternate_value": "0x00000102"
+  },
+  "normal_reset": {
+    "dispatcher_command": 4,
+    "callback_argument": 2,
+    "callback_rva": "0x1a330",
+    "writes_in_order": [
+      {
+        "offset": "0x080",
+        "value": "0x00000001",
+        "role": "TOP_IRQ_MASK"
+      },
+      {
+        "offset": "0x00c",
+        "value": "0x00000011",
+        "role": "RESET_CFG immediate + complete-location"
+      },
+      {
+        "offset": "0x010",
+        "value": "0x00000002",
+        "role": "RESET_CMD software reset only"
+      }
+    ],
+    "pre_reset_irq_cmd_0x14_write": false,
+    "reset_wait_ms": 50
+  },
+  "irq_ack": {
+    "isr_rva": "0x1b5f0",
+    "irq_cmd_write_rva": "0x1b7b8",
+    "offset": "0x014",
+    "value": "0x00000001",
+    "classification": "post-status-clear ISR acknowledgement, not a pre-reset write"
+  },
+  "stop_reset": {
+    "dispatcher_opcode": "0x805",
+    "callback_argument": 1,
+    "reset_cmd": "0x00000001",
+    "role": "hardware reset only"
+  },
+  "device_config_runtime_order": [
+    "CSID setInfo/object state",
+    "wrapper route command 7 -> CSID1 wrapper +0x4 = 0x101",
+    "CSID reset command 4 -> TOP mask 1 -> RESET_CFG 0x11 -> RESET_CMD 2 -> wait",
+    "IFE/SFE reset completion as applicable",
+    "jump to post-reset config loop",
+    "CSID config command 6 -> full Gen2 builder RVA 0x1a870"
+  ],
+  "linux_current_mismatch": {
+    "route_relative_to_reset": "Linux route is programmed during stream prepare after reset; Windows programs route before reset.",
+    "reset_cmd": "Linux CSID680 uses HW_RESET|SW_RESET = 3; Windows normal CSID reset uses software-only = 2.",
+    "irq_cmd": "Linux prewrites IRQ_CMD_CLEAR before reset; Windows normal reset callback has no +0x14 write. Windows +0x14=1 is ISR acknowledgement.",
+    "post_reset_generic_masks": "Linux csid_reset writes generic RDI/IPP/BUF/TOP masks after reset; Windows proceeds from reset completion into exact full configure without that generic all-mask staging."
+  },
+  "linux_consequence": "For the bounded SP11 front CSID1 path, represent the Windows common lifecycle before another runtime: program wrapper route 0x101 before reset; use RESET_CFG 0x11 and software-only RESET_CMD 2 with TOP mask 1; do not prewrite IRQ_CMD; after reset do not stage generic all-path masks before the exact front configure. Keep the existing ISR IRQ_CMD acknowledgement. Scope the delta to the same-machine X1E CSID1 front path unless broader parity is separately proven.",
+  "runtime_authorized": false,
+  "next_gate": "Implement/inspect the front-only reset+route lifecycle delta and fix prepared-state rollback warning; no runtime yet."
+}

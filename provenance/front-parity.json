@@ -1,6 +1,6 @@
 {
   "schema": "sp11-front-parity-provenance-v1",
-  "generated_from_commit": "c3d3f35867bd4519759baf6406315a27793dad26",
+  "generated_from_commit": "3dec5a43022259772a1c04dbff575e59c1f6e4b7",
   "policy": {
     "authority": "Same-machine SP11 Windows is authoritative for hardware behavior. Upstream sources are vocabulary/implementation references only.",
     "classifications": [
@@ -76,6 +76,44 @@
           "sha256": "95e26dd7d116fdc48b7281a153222a7b4edd11294703b555d81e25c2251b1238"
         }
       ]
+    },
+    {
+      "id": "front.csid1_common_lifecycle",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Exact same-machine qccamisp CSID1 DEVICE_CONFIG lifecycle is wrapper route 0x101 -> TOP IRQ mask 1 -> RESET_CFG 0x11 -> software-only RESET_CMD 2 -> reset completion -> full Gen2 builder; the normal reset callback does not prewrite IRQ_CMD. CSID stream stop uses the same reset callback with hardware-only RESET_CMD 1.",
+      "linux_use": "For the bounded front mode0 path, perform the Windows common lifecycle at CSID power/reset time, retain IRQ_CMD acknowledgement only in the ISR, and do not inherit generic post-reset all-path mask staging into this path.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-csid1-common-reset-oracle.json",
+          "sha256": "43a265f0cd63fa9e01406e8b5ff0b62c756dc2bc2f8c3a24df74a4f832b76996"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-csid1-ipp-start-oracle.json",
+          "sha256": "01960da41376809d694c6aa2336ecef6ff4c010abfa29e4674b1a68d303c3cda"
+        }
+      ]
+    },
+    {
+      "id": "linux.csid1_common_lifecycle_0044",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Static 0044 scopes the Windows common CSID1 lifecycle to the already-pinned X1E80100 front mode0 predicate, moves the full builder to successful CSID power/reset, places captured CSID companion writes immediately after each matching IFE startup packet, removes unowned +0x328/+0x32c replay, and uses a private hardware-reset-only stop.",
+      "linux_use": "Use this as the bounded native Linux implementation candidate; generic/non-front CSID680 reset remains unchanged and no runtime is authorized by the static checkpoint itself.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0044-x1e-csid1-common-lifecycle-windows-parity.patch",
+          "sha256": "a96339ab84094cfa0d103d73e6c04294dce5f211738fcbbe2bd370b9c5bb3340"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/csid1-common-lifecycle-linux-inspection.json",
+          "sha256": "4d1dfc9d264e3b19d6e7e688b9c0d56f7db40a6f238b50856c26072fc9447ac7"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "The exact Windows reset/route/stop callbacks, full-builder ownership and CSID 0x803/0x804 packet/path-enable ownership are separately pinned from the same SP11 Windows driver and command captures; the Linux delta reproduces those effects only inside the exact front-mode predicate and passes byte-roundtrip/static inspection."
     },
     {
       "id": "front.cross_driver_start_order",
@@ -604,7 +642,7 @@
         },
         {
           "path": "state/project.yaml",
-          "sha256": "54734030e73e1e4c7285d94e54111e17f57607e98c0c4906e35ce72857d72bb9"
+          "sha256": "2c96ac60f9044d2ab95925353ecd1afc2ba918556bffd8eafe3f5dea8c1a76fa"
         }
       ],
       "blocking_reason": "Production image-quality/provider work remains open; not the immediate first-frame transport gate."

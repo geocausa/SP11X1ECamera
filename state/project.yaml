@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0043-runtime-repeats-0042-boundary-csid-common-path-diff-next
+status: e003h-0044-csid1-common-lifecycle-static-pass-package-inspection-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: csid1-ipp-start-oracle-0042-static-pass-package-next
+  status: csid1-common-lifecycle-0044-static-pass-package-inspection-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -990,12 +990,12 @@ e003h:
   - iq.live_provider_algorithms
   front_parity_provenance_checker: tools/check-front-parity-provenance.py
   front_parity_provenance_enforced_in_pix_preflight: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the
-    prior replacement diagnostic was consumed at sensor-on -> Epoch0 timeout; 0042
-    now corrects the exact Windows CSID1 IPP start boundary and adds bounded timeout
-    telemetry, but no new runtime is yet authorized; production parity still requires
-    the ultimate FE_CFG/FIFO0_CFG owner classification and an independently implemented
-    live IQ/provider strategy
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; 0042 and
+    0043 both reached clean sensor/CSI ingress but timed out before CSID CAMIF/RUP/Epoch
+    progression. Static 0044 now corrects the exact Windows CSID1 common reset/full-builder
+    and initial-companion lifecycle and fixes private rollback, but no new runtime is yet
+    authorized. Production parity still requires the ultimate FE_CFG/FIFO0_CFG owner
+    classification and an independently implemented live IQ/provider strategy
   linux_front_postprov_authorization_boot_consumed: true
   linux_front_postprov_hardware_run_executed: false
   linux_front_postprov_harness_abort: pre-exec shell redirection Permission denied
@@ -1204,14 +1204,45 @@ e003h:
   linux_front_0043_golden_return_verified: true
   linux_front_0043_golden_next_entry_empty: true
   linux_front_0043_golden_camera_modules_loaded: false
-next_experiment: E003h-windows-csid1-common-path-mmio-diff
+  windows_csid1_common_reset_oracle_sha256: 43a265f0cd63fa9e01406e8b5ff0b62c756dc2bc2f8c3a24df74a4f832b76996
+  windows_csid1_common_reset_extractor_sha256: 4ae58e9978852175ef06d0c10ffda480d370c93b88376a6f7f82ca527db113df
+  windows_csid1_device_config_order: wrapper 0x101 -> TOP mask 1 -> RESET_CFG 0x11 -> SW RESET_CMD 2 -> wait -> full Gen2 builder
+  windows_csid1_normal_reset_irq_cmd_prewrite: false
+  windows_csid1_normal_reset_timeout_ms: 50
+  windows_csid1_stop_reset_cmd: 0x00000001
+  windows_csid1_stop_reset_class: hardware-only reset
+  windows_csid1_full_builder_stage: DEVICE_CONFIG post-reset
+  windows_csid1_initial_companion_order: IFE packetN -> CSID companionN for packets 0..3
+  windows_csid1_unowned_live_final_offsets: +0x328; +0x32c
+  linux_front_0044_patch: 0044-x1e-csid1-common-lifecycle-windows-parity.patch
+  linux_front_0044_patch_sha256: a96339ab84094cfa0d103d73e6c04294dce5f211738fcbbe2bd370b9c5bb3340
+  linux_front_0044_build_log_sha256: 99ea98ba59b015b1111053654d8535b965723f88be827cb568ce2fa04fabbd8b
+  linux_front_0044_checkpatch_log_sha256: e6e2a7f1ef5193106f623889a6f3c6b7cb88bd15ec031f537e419af79f7a6e07
+  linux_front_0044_inspector_sha256: cd8ef616050560c20bad94b39b74d335a73c9e5e6838c7992de5d54bc6d1bbe7
+  linux_front_0044_inspection_sha256: 4d1dfc9d264e3b19d6e7e688b9c0d56f7db40a6f238b50856c26072fc9447ac7
+  linux_front_0044_module_sha256: 98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc
+  linux_front_0044_module_vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+  linux_front_0044_csid680_source_sha256: 59e07a1b8322c7279a051bc1255f8912452300aadbf9bf8086312aec4daca1d0
+  linux_front_0044_csid_header_sha256: e581e9a43a74a577aa535a7e33af4f5cd7e8c7af455d3c3fccd083dac2766f44
+  linux_front_0044_camss_source_sha256: 5eccf7c32a754ef97d19bafecb6a98cada393af57526d02835c9ff2176f90695
+  linux_front_0044_front_mode0_only: true
+  linux_front_0044_pre_reset_irq_cmd_write: false
+  linux_front_0044_generic_post_reset_mask_staging: false
+  linux_front_0044_unowned_0x328_0x32c_replay_removed: true
+  linux_front_0044_public_csid_s_stream_rollback_removed: true
+  linux_front_0044_isr_irq_ack_retained: true
+  linux_front_0044_patch_roundtrip_byte_identical: true
+  linux_front_0044_runtime_authorized: false
+  front_parity_provenance_manifest: provenance/front-parity.json
+  front_parity_provenance_bounded_pass: true
+next_experiment: E003h-csid1-common-lifecycle-0044-package-inspection
 next_action: >-
-  Do not repeat Linux PIX runtime. The consumed 0043 run completed all 13 RT-CDM pre-CSID BLs,
-  started IMX681, and reproduced the exact 0042 timeout boundary: 37016 clean CSI packets and IPP
-  status 0x00011e00 with no CAMIF/RUP/Epoch events. The Windows-observed prepare -> exact 0x01f501f5
-  RUP/AUP -> enable ordering therefore does not by itself fix the path. Enumerate every exact
-  same-machine Windows CSID1 common/path configure write and lifecycle prerequisite, diff against
-  Linux prepare, and separately fix the prepared-state teardown warning before any future runtime authorization.
+  Do not repeat Linux PIX runtime. Static 0044 now represents the exact same-machine Windows CSID1
+  common lifecycle: wrapper route 0x101 before software-only reset, exact post-reset full builder,
+  per-packet CSID 0x803 companions, retained 0x804 path enable, and hardware-only private stop. Build
+  and inspect a distinct one-shot 0044 package against Golden and all pinned front artifacts, but
+  leave it unarmed. Package construction or inspection does not authorize a hardware RUN; any later
+  runtime requires a separate explicit authorization checkpoint.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:

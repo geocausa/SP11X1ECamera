@@ -1,3 +1,15 @@
+## E003h ACTIVE — 0044 closes Windows CSID1 common lifecycle statically; package inspection next — 2026-08-30
+
+Exact same-machine `qccamisp8380.sys` control flow now closes the CSID1 common lifecycle that 0042/0043 did not model. Normal front DEVICE_CONFIG is `wrapper route 0x101 -> TOP_IRQ_MASK=1 -> RESET_CFG=0x11 -> software-only RESET_CMD=2 -> reset completion -> full Gen2 builder`; the reset callback has no pre-reset `IRQ_CMD` write. Windows writes `IRQ_CMD=1` only in the ISR acknowledgement path, and stream stop invokes the same reset callback with hardware-only `RESET_CMD=1`. Accepted common-lifecycle oracle SHA-256 is `43a265f0cd63fa9e01406e8b5ff0b62c756dc2bc2f8c3a24df74a4f832b76996`.
+
+The full builder runs at DEVICE_CONFIG time. Captured initial CSID `0x803` companion writes instead occur immediately after each matching IFE startup packet; packet0 owns `+0x330`, IRQ-subsample, crop and format-measure writes, while packets1..3 repeat crop only. Later path-5 `0x804` enable remains `CTRL=1 -> IPP mask 0x3cbc601c -> TOP mask 1`. The old Linux `+0x328/+0x32c=0xffff0000` replay is removed because neither exact software owner writes those offsets.
+
+Static `0044-x1e-csid1-common-lifecycle-windows-parity.patch` implements only this front-mode0 delta and fixes the 0043 teardown-only V4L2 bookkeeping warning with a private hardware-reset-only CSID stop. Patch SHA-256 `a96339ab84094cfa0d103d73e6c04294dce5f211738fcbbe2bd370b9c5bb3340`; qcom-camss SHA-256 `98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc`; Golden vermagic matches. Strict checkpatch is `0 errors, 0 warnings, 0 checks`. Fail-closed inspection SHA-256 `4d1dfc9d264e3b19d6e7e688b9c0d56f7db40a6f238b50856c26072fc9447ac7` proves exact reset/builder/companion/enable/stop ordering and byte-identical patch round-trip.
+
+Bounded provenance remains green after adding explicit `front.csid1_common_lifecycle` and `linux.csid1_common_lifecycle_0044` facts. Production blockers remain only `rtcdm.fe_fifo_ultimate_origin` and `iq.live_provider_algorithms`.
+
+**No Linux runtime is authorized.** Next build and inspect a distinct 0044 one-shot package while Golden remains saved/default and the package remains unarmed. Package construction/inspection is not runtime authorization.
+
 ## E003h ACTIVE — 0043 runtime reproduces 0042 boundary exactly; move to full CSID common/path diff — 2026-08-30
 
 The separately authorized 0043 diagnostic was consumed exactly once and returned immediately to Golden. RT-CDM completed all 13 pre-CSID FIFO0 BLs without fault, IMX681 entered `MODE_SELECT=1`, and the runner timed out waiting for VFE1 raw Epoch0. No QC10C output was produced and no same-boot retry occurred. FullIO v19c Golden is restored with empty `next_entry`, no camera candidate modules loaded, Wi-Fi connected, Surface touch/touchpad present, and ALSA playback/capture nodes present.

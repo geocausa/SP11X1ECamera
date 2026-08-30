@@ -606,3 +606,13 @@ The first-frame runner next waits for raw VFE1 Epoch0 before BUS retarget to slo
 
 The runtime therefore proves Linux CAMSS coherent command IOVAs are visible to RT-CDM1 through the corrected requester/SMMU domain. The next static discrepancy is the retained `0022` host stage `IFE resource start`: Windows places it between RT-CDM start and startup packet0, but the callable runner currently only acquires pipeline/VFE power and has no distinct IFE resource-start operation. No further runtime is authorized until the exact same-machine Windows IFE `0x804` start semantics are recovered, represented and inspected.
 
+
+## 2026-08-30 — CSID1 common lifecycle closed and Linux 0044 built static
+
+The consumed 0043 run proved the earlier `configure -> RUP/AUP -> enable` correction was insufficient, so the next boundary was recovered from exact same-machine `qccamisp8380.sys`. The accepted common-reset oracle SHA-256 `43a265f0cd63fa9e01406e8b5ff0b62c756dc2bc2f8c3a24df74a4f832b76996` proves normal front DEVICE_CONFIG performs `wrapper 0x101 -> TOP mask 1 -> RESET_CFG 0x11 -> software-only RESET_CMD 2 -> reset completion -> full Gen2 builder`. The reset callback has no pre-reset IRQ_CMD write; `IRQ_CMD=1` belongs to ISR acknowledgement. Windows stop invokes the same reset callback with argument 1, i.e. hardware-only reset.
+
+Full-builder ownership is also separated from the later initial packets. The full Gen2 builder runs immediately after DEVICE_CONFIG reset. Each DEVICE_START IFE `0x803` packet is then followed by its exact CSID companion; packet0 owns `+0x330`, IRQ subsample, crop and format-measure writes, packets1..3 repeat crop, and later `0x804` IPP enable remains `CTRL=1 -> 0x3cbc601c -> TOP=1`. Live-final `+0x328/+0x32c=0xffff0000` are not written by either proven software owner, so Linux no longer replays them.
+
+Static `0044-x1e-csid1-common-lifecycle-windows-parity.patch` SHA-256 `a96339ab84094cfa0d103d73e6c04294dce5f211738fcbbe2bd370b9c5bb3340` implements only the fail-closed X1E front-mode0 delta. qcom-camss SHA-256 is `98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc` with exact Golden vermagic. Strict checkpatch is `0 errors, 0 warnings, 0 checks`; fail-closed inspection JSON SHA-256 `4d1dfc9d264e3b19d6e7e688b9c0d56f7db40a6f238b50856c26072fc9447ac7` proves reset/builder/companion/enable/stop ordering, patch byte-roundtrip, retained ISR ack and removal of the teardown-only public CSID `s_stream(false)` rollback.
+
+Bounded provenance remains green after explicitly adding the new Windows and Linux implementation facts. **No runtime is authorized.** Next build and inspect a distinct one-shot 0044 package while Golden remains the saved/default recovery entry and the package remains unarmed.

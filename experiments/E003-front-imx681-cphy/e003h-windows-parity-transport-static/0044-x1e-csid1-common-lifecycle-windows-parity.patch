@@ -1,0 +1,391 @@
+Subject: [PATCH] media: qcom: camss: match SP11 CSID1 common lifecycle
+
+Use the exact same-machine Windows CSID1 lifecycle for the bounded front
+mode0 path. Program wrapper route 0x101 before reset, use software-only
+RESET_CMD=2 with RESET_CFG=0x11 and TOP mask 1, then run the full Gen2
+CSID builder immediately after reset. Do not stage the generic Linux
+pre-reset IRQ_CMD clear or post-reset all-path masks on this front path.
+
+Place each captured CSID 0x803 companion write after its matching IFE
+startup packet, keep the existing 0x804 IPP enable order, and use the
+Windows hardware-reset-only stop callback for private rollback. This also
+avoids calling V4L2 s_stream(false) for a subdevice that the private
+runner never started through V4L2.
+
+Remove the old +0x328/+0x32c final-state replay because neither the exact
+full builder nor the captured companion packets own those writes.
+
+Generic/non-front CSID680 reset behavior is unchanged.
+
+---
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -144,8 +144,6 @@
+ #define CSID_IPP_CFG1						0x310
+ /* Exact same-machine Windows writes; semantic names are not yet proven. */
+ #define CSID_IPP_SP11_PARITY_ZERO0				0x324
+-#define CSID_IPP_BIN_PD_DETECT_CFG1				0x328
+-#define CSID_IPP_BIN_PD_DETECT_CFG2				0x32c
+ #define CSID_IPP_SP11_PARITY_ZERO1				0x330
+ #define CSID_IPP_EPOCH_IRQ_CFG					0x334
+ #define CSID_IPP_EPOCH0_SUBSAMPLE_PATTERN			0x338
+@@ -169,7 +167,6 @@
+ 
+ /* Exact same-machine Windows front mode-0 IPP stable configuration. */
+ #define SP11_IPP_CFG1_MODE0					0x00007241
+-#define SP11_IPP_BIN_PD_DETECT_MODE0				0xffff0000
+ #define SP11_IPP_EPOCH_IRQ_MODE0				0x00130013
+ #define SP11_IPP_EPOCH_SUBSAMPLE_MODE0				0xffffffff
+ #define SP11_IPP_HCROP_MODE0					0x0eff0000
+@@ -183,6 +180,7 @@
+ #define SP11_CSID_RX_IRQ_MASK_MODE0				0x019fb800
+ #define SP11_CSID_IPP_IRQ_MASK_PREP_MODE0			0x3c1c7004
+ #define SP11_CSID_IPP_IRQ_MASK_MODE0				0x3cbc601c
++#define SP11_CSID_RESET_TIMEOUT_MS				50
+ 
+ #define CSID_RDI_CFG0(rdi)					(0x500 + 0x100 * (rdi))
+ #define		RDI_CFG0_DECODE_FORMAT				12
+@@ -310,60 +308,33 @@
+ 	writel(enable ? 1 : 0, csid->base + CSID_IPP_CTRL);
+ }
+ 
+-static bool __csid_configure_ipp_stream(struct csid_device *csid, u8 enable)
++static int __csid_sp11_front_ipp_full_config(struct csid_device *csid)
+ {
+ 	struct v4l2_mbus_framefmt *input_format = &csid->fmt[MSM_CSID_PAD_PIX];
+ 	const struct csid_format_info *format;
+-	bool front_mode0;
+ 	u32 val;
+ 
+-	front_mode0 = __csid_sp11_front_ipp_mode0(csid);
+-	if (enable && !front_mode0) {
+-		dev_err(csid->camss->dev,
+-			"CSID%d: refusing non-Windows-proven X1E IPP mode %ux%u code 0x%x\n",
+-			csid->id, input_format->width, input_format->height,
+-			input_format->code);
+-		return false;
+-	}
++	if (!__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
+ 
+ 	format = csid_get_fmt_entry(csid->res->formats->formats,
+ 				    csid->res->formats->nformats,
+ 				    input_format->code);
+ 
+-	if (!enable) {
+-		val = readl(csid->base + CSID_IPP_CFG0);
+-		val &= ~IPP_CFG0_ENABLE;
+-		writel(val, csid->base + CSID_IPP_CFG0);
+-		return true;
+-	}
+-
+-	/*
+-	 * Windows full-CSID initial configuration programs these masks before
+-	 * the IPP path is enabled.  Keep this front-mode0-only: generic CSID680
+-	 * interrupt policy is intentionally unchanged.
+-	 */
++	/* qccamisp8380 full-CSID builder RVA 0x1a870, exact write order. */
++	__csid_configure_rx(csid, &csid->phy, 0);
+ 	writel(SP11_CSID_RX_IRQ_MASK_MODE0, csid->base + CSID_CSI2_RX_IRQ_MASK);
+ 	writel(SP11_CSID_BUF_DONE_IRQ_MASK_MODE0,
+ 	       csid->base + CSID_BUF_DONE_IRQ_MASK);
+-
+-	/*
+-	 * Same-machine Windows: CSID1 IPP receives VC0/DT0x2b RAW10 and
+-	 * crops the accepted 3840x2640 sensor mode to 3840x2160. Preserve
+-	 * only stable configuration values; counters/timestamps are not copied.
+-	 */
+-	val = format->decode_format << IPP_CFG0_DECODE_FORMAT;
+-	val |= format->data_type << IPP_CFG0_DATA_TYPE;
+-	/* VC=0 and DT_ID=0 are intentionally zero. */
+-	writel(val, csid->base + CSID_IPP_CFG0);
+-	writel(SP11_IPP_CFG1_MODE0, csid->base + CSID_IPP_CFG1);
+-	/* qccamisp8380 full-CSID builder RVA 0x1ab24. */
+-	writel(0, csid->base + CSID_IPP_SP11_PARITY_ZERO0);
+-	writel(SP11_IPP_BIN_PD_DETECT_MODE0,
+-	       csid->base + CSID_IPP_BIN_PD_DETECT_CFG1);
+-	writel(SP11_IPP_BIN_PD_DETECT_MODE0,
+-	       csid->base + CSID_IPP_BIN_PD_DETECT_CFG2);
+-	/* Exact packet-0 descriptor-1 write from the same-machine CSID 0x803. */
+-	writel(0, csid->base + CSID_IPP_SP11_PARITY_ZERO1);
++	writel(0, csid->base + CSID_IPP_FRM_DROP_PATTERN);
++	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_FRM_DROP_PERIOD);
++	writel(SP11_IPP_IRQ_SUBSAMPLE_PATTERN_MODE0,
++	       csid->base + CSID_IPP_IRQ_SUBSAMPLE_PATTERN);
++	writel(0, csid->base + CSID_IPP_IRQ_SUBSAMPLE_PERIOD);
++	writel(0, csid->base + CSID_IPP_PIX_DROP_PATTERN);
++	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_PIX_DROP_PERIOD);
++	writel(0, csid->base + CSID_IPP_LINE_DROP_PATTERN);
++	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_LINE_DROP_PERIOD);
+ 	writel(SP11_IPP_EPOCH_IRQ_MODE0, csid->base + CSID_IPP_EPOCH_IRQ_CFG);
+ 	writel(SP11_IPP_EPOCH_SUBSAMPLE_MODE0,
+ 	       csid->base + CSID_IPP_EPOCH0_SUBSAMPLE_PATTERN);
+@@ -371,25 +342,17 @@
+ 	       csid->base + CSID_IPP_EPOCH1_SUBSAMPLE_PATTERN);
+ 	writel(SP11_IPP_HCROP_MODE0, csid->base + CSID_IPP_HCROP);
+ 	writel(SP11_IPP_VCROP_MODE0, csid->base + CSID_IPP_VCROP);
+-	writel(0, csid->base + CSID_IPP_PIX_DROP_PATTERN);
+-	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_PIX_DROP_PERIOD);
+-	writel(0, csid->base + CSID_IPP_LINE_DROP_PATTERN);
+-	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_LINE_DROP_PERIOD);
+-	writel(0, csid->base + CSID_IPP_FRM_DROP_PATTERN);
+-	writel(SP11_IPP_DROP_PERIOD_MODE0, csid->base + CSID_IPP_FRM_DROP_PERIOD);
+-	writel(SP11_IPP_IRQ_SUBSAMPLE_PATTERN_MODE0,
+-	       csid->base + CSID_IPP_IRQ_SUBSAMPLE_PATTERN);
+-	writel(0, csid->base + CSID_IPP_IRQ_SUBSAMPLE_PERIOD);
+-	writel(SP11_IPP_FORMAT_MEASURE_CFG0_MODE0,
+-	       csid->base + CSID_IPP_FORMAT_MEASURE_CFG0);
+-	writel(SP11_IPP_FORMAT_MEASURE_CFG1_MODE0,
+-	       csid->base + CSID_IPP_FORMAT_MEASURE_CFG1);
+-
+-	val = readl(csid->base + CSID_IPP_CFG0);
++
++	val = format->decode_format << IPP_CFG0_DECODE_FORMAT;
++	val |= format->data_type << IPP_CFG0_DATA_TYPE;
+ 	val |= IPP_CFG0_ENABLE;
+ 	writel(val, csid->base + CSID_IPP_CFG0);
+-
+-	return true;
++	writel(SP11_IPP_CFG1_MODE0, csid->base + CSID_IPP_CFG1);
++	writel(0, csid->base + CSID_IPP_SP11_PARITY_ZERO0);
++	writel(SP11_CSID_IPP_IRQ_MASK_PREP_MODE0,
++	       csid->base + CSID_IPP_IRQ_MASK);
++
++	return 0;
+ }
+ 
+ static void __csid_configure_top(struct csid_device *csid)
+@@ -466,23 +429,29 @@
+ 	writel(val, csid->base + CSID_RDI_CFG0(vc));
+ }
+ 
+-int csid680_x1e_front_ipp_prepare(struct csid_device *csid)
+-{
+-	if (!csid || !csid->phy.en_ipp || !__csid_sp11_front_ipp_mode0(csid))
++int csid680_x1e_front_ipp_companion(struct csid_device *csid, unsigned int packet)
++{
++	if (!csid || !csid->phy.en_ipp || !__csid_sp11_front_ipp_mode0(csid) ||
++	    packet >= 4)
+ 		return -EINVAL;
+ 
+-	/*
+-	 * Same-machine Windows ordering: qccamisp configures the full IPP path
+-	 * while CTRL remains zero, then RT-CDM issues the RUP/AUP command, and
+-	 * only afterwards does the CSID 0x804 path-5 enable set CTRL=1.
+-	 */
+-	__csid_configure_top(csid);
+-	if (!__csid_configure_ipp_stream(csid, true))
+-		return -EINVAL;
+-	__csid_configure_rx(csid, &csid->phy, 0);
+-	writel(SP11_CSID_IPP_IRQ_MASK_PREP_MODE0,
+-	       csid->base + CSID_IPP_IRQ_MASK);
+-	writel(SP11_CSID_TOP_IRQ_MASK_MODE0, csid->base + CSID_TOP_IRQ_MASK);
++	/* Exact CSID descriptor-1 companion writes after each IFE 0x803 packet. */
++	if (!packet) {
++		writel(0, csid->base + CSID_IPP_SP11_PARITY_ZERO1);
++		writel(SP11_IPP_IRQ_SUBSAMPLE_PATTERN_MODE0,
++		       csid->base + CSID_IPP_IRQ_SUBSAMPLE_PATTERN);
++		writel(0, csid->base + CSID_IPP_IRQ_SUBSAMPLE_PERIOD);
++	}
++
++	writel(SP11_IPP_HCROP_MODE0, csid->base + CSID_IPP_HCROP);
++	writel(SP11_IPP_VCROP_MODE0, csid->base + CSID_IPP_VCROP);
++
++	if (!packet) {
++		writel(SP11_IPP_FORMAT_MEASURE_CFG0_MODE0,
++		       csid->base + CSID_IPP_FORMAT_MEASURE_CFG0);
++		writel(SP11_IPP_FORMAT_MEASURE_CFG1_MODE0,
++		       csid->base + CSID_IPP_FORMAT_MEASURE_CFG1);
++	}
+ 
+ 	return 0;
+ }
+@@ -504,17 +473,9 @@
+ {
+ 	int i;
+ 
+-	if (csid->phy.en_ipp) {
+-		if (enable && __csid_sp11_front_ipp_mode0(csid)) {
+-			if (!csid680_x1e_front_ipp_prepare(csid))
+-				csid680_x1e_front_ipp_enable(csid);
+-		} else {
+-			__csid_configure_top(csid);
+-			if (__csid_configure_ipp_stream(csid, enable)) {
+-				__csid_configure_rx(csid, &csid->phy, 0);
+-				__csid_ctrl_ipp(csid, enable);
+-			}
+-		}
++	if (csid->phy.en_ipp && __csid_sp11_front_ipp_mode0(csid)) {
++		if (enable)
++			csid680_x1e_front_ipp_enable(csid);
+ 	} else {
+ 		__csid_configure_top(csid);
+ 	}
+@@ -591,11 +552,35 @@
+  */
+ static int csid_reset(struct csid_device *csid)
+ {
++	bool front_mode0 = __csid_sp11_front_ipp_mode0(csid);
+ 	unsigned long time;
+ 	u32 val;
+ 	int i;
+ 
+ 	reinit_completion(&csid->reset_complete);
++
++	if (front_mode0) {
++		/*
++		 * Same-machine Windows DEVICE_CONFIG:
++		 * wrapper route -> TOP mask -> RESET_CFG -> SW reset -> full builder.
++		 */
++		__csid_configure_top(csid);
++		writel(SP11_CSID_TOP_IRQ_MASK_MODE0,
++		       csid->base + CSID_TOP_IRQ_MASK);
++		val = CSID_RESET_CFG_MODE_IMMEDIATE |
++		      CSID_RESET_CFG_LOCATION_COMPLETE;
++		writel(val, csid->base + CSID_RESET_CFG);
++		writel(CSID_RESET_CMD_SW_RESET, csid->base + CSID_RESET_CMD);
++
++		time = wait_for_completion_timeout(&csid->reset_complete,
++						   msecs_to_jiffies(SP11_CSID_RESET_TIMEOUT_MS));
++		if (!time) {
++			dev_err(csid->camss->dev, "SP11 CSID1 software reset timeout\n");
++			return -EIO;
++		}
++
++		return __csid_sp11_front_ipp_full_config(csid);
++	}
+ 
+ 	writel(CSID_IRQ_CMD_CLEAR, csid->base + CSID_IRQ_CMD);
+ 
+@@ -629,6 +614,30 @@
+ 
+ 	/* Unmask all TOP interrupts */
+ 	writel(~0u, csid->base + CSID_TOP_IRQ_MASK);
++
++	return 0;
++}
++
++int csid680_x1e_front_ipp_stop(struct csid_device *csid)
++{
++	unsigned long time;
++	u32 val;
++
++	if (!csid || !csid->phy.en_ipp || !__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
++
++	reinit_completion(&csid->reset_complete);
++	writel(SP11_CSID_TOP_IRQ_MASK_MODE0, csid->base + CSID_TOP_IRQ_MASK);
++	val = CSID_RESET_CFG_MODE_IMMEDIATE | CSID_RESET_CFG_LOCATION_COMPLETE;
++	writel(val, csid->base + CSID_RESET_CFG);
++	writel(CSID_RESET_CMD_HW_RESET, csid->base + CSID_RESET_CMD);
++
++	time = wait_for_completion_timeout(&csid->reset_complete,
++					   msecs_to_jiffies(SP11_CSID_RESET_TIMEOUT_MS));
++	if (!time) {
++		dev_err(csid->camss->dev, "SP11 CSID1 hardware stop reset timeout\n");
++		return -EIO;
++	}
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -243,8 +243,9 @@
+  */
+ u32 csid_hw_version(struct csid_device *csid);
+ 
+-int csid680_x1e_front_ipp_prepare(struct csid_device *csid);
++int csid680_x1e_front_ipp_companion(struct csid_device *csid, unsigned int packet);
+ int csid680_x1e_front_ipp_enable(struct csid_device *csid);
++int csid680_x1e_front_ipp_stop(struct csid_device *csid);
+ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason);
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7429,7 +7429,7 @@
+ 	bool sensor_streaming = false;
+ 	bool csiphy_streaming = false;
+ 	bool csid_streaming = false;
+-	bool csid_prepared = false;
++	bool csid_configured = false;
+ 	bool pipeline_powered = false;
+ 	bool rtcdm_started = false;
+ 	bool bus_started = false;
+@@ -7470,6 +7470,7 @@
+ 	if (ret)
+ 		goto out_materialized;
+ 	pipeline_powered = true;
++	csid_configured = true;
+ 
+ 	ret = vfe680_x1e_pix_runtime_alloc(vfe, req->video[0], req->video[1], &pix);
+ 	if (ret)
+@@ -7482,6 +7483,9 @@
+ 
+ 	/* Exact 0031 pre-CSID startup/priming interleave, now with whole replay batches. */
+ 	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 0);
++	if (ret)
++		goto out_unwind;
++	ret = csid680_x1e_front_ipp_companion(csid, 0);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 0);
+@@ -7490,16 +7494,13 @@
+ 	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 1);
+ 	if (ret)
+ 		goto out_unwind;
++	ret = csid680_x1e_front_ipp_companion(csid, 1);
++	if (ret)
++		goto out_unwind;
+ 	ret = vfe680_x1e_pix_runtime_bus_prepare(vfe, pix);
+ 	if (ret)
+ 		goto out_unwind;
+ 	bus_started = true;
+-
+-	/* Windows: CSID1 IPP configure (CTRL=0) -> prime1 RUP/AUP -> enable. */
+-	ret = csid680_x1e_front_ipp_prepare(csid);
+-	if (ret)
+-		goto out_unwind;
+-	csid_prepared = true;
+ 
+ 	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 1);
+ 	if (ret)
+@@ -7507,7 +7508,13 @@
+ 	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 2);
+ 	if (ret)
+ 		goto out_unwind;
++	ret = csid680_x1e_front_ipp_companion(csid, 2);
++	if (ret)
++		goto out_unwind;
+ 	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 3);
++	if (ret)
++		goto out_unwind;
++	ret = csid680_x1e_front_ipp_companion(csid, 3);
+ 	if (ret)
+ 		goto out_unwind;
+ 
+@@ -7550,8 +7557,8 @@
+ out_unwind:
+ 	if (frame_done) {
+ 		/* Proven normal host stop prefix: CSID1 -> BUS/IFE -> RT-CDM. */
+-		if (csid_streaming || csid_prepared) {
+-			stop_ret = camss_x1e_pix_runner_stream(&csid->subdev, false);
++		if (csid_streaming || csid_configured) {
++			stop_ret = csid680_x1e_front_ipp_stop(csid);
+ 			if (stop_ret) {
+ 				teardown_safe = false;
+ 				if (!ret)
+@@ -7600,8 +7607,8 @@
+ 					ret = stop_ret;
+ 			}
+ 		}
+-		if (csid_streaming || csid_prepared) {
+-			stop_ret = camss_x1e_pix_runner_stream(&csid->subdev, false);
++		if (csid_streaming || csid_configured) {
++			stop_ret = csid680_x1e_front_ipp_stop(csid);
+ 			if (stop_ret) {
+ 				teardown_safe = false;
+ 				if (!ret)

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "schema": "sp11-e003h-linux-csid1-common-lifecycle-0044-inspection-v1",
+  "windows_oracles": {
+    "common_reset_sha256": "43a265f0cd63fa9e01406e8b5ff0b62c756dc2bc2f8c3a24df74a4f832b76996",
+    "ipp_start_sha256": "01960da41376809d694c6aa2336ecef6ff4c010abfa29e4674b1a68d303c3cda",
+    "accepted": true
+  },
+  "patch": {
+    "sha256": "a96339ab84094cfa0d103d73e6c04294dce5f211738fcbbe2bd370b9c5bb3340",
+    "strict_checkpatch": "0 errors, 0 warnings, 0 checks",
+    "reverse_forward_roundtrip_byte_identical": true
+  },
+  "source": {
+    "camss_csid_680_sha256": "59e07a1b8322c7279a051bc1255f8912452300aadbf9bf8086312aec4daca1d0",
+    "camss_csid_h_sha256": "e581e9a43a74a577aa535a7e33af4f5cd7e8c7af455d3c3fccd083dac2766f44",
+    "camss_c_sha256": "5eccf7c32a754ef97d19bafecb6a98cada393af57526d02835c9ff2176f90695"
+  },
+  "module": {
+    "sha256": "98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+  },
+  "proved_delta": {
+    "front_mode0_only": true,
+    "device_config_order": "wrapper 0x101 -> TOP mask 1 -> RESET_CFG 0x11 -> SW reset 2 -> wait 50 ms -> exact full builder",
+    "front_pre_reset_irq_cmd_write": false,
+    "front_generic_post_reset_mask_staging": false,
+    "unowned_0x328_0x32c_replay_removed": true,
+    "initial_packet_order": "IFE packetN -> exact CSID companionN for N=0..3",
+    "path_enable_order": "IPP_CTRL=1 -> IPP mask 0x3cbc601c -> TOP mask 1",
+    "private_stop_order": "TOP mask 1 -> RESET_CFG 0x11 -> HW reset 1 -> wait 50 ms",
+    "public_csid_s_stream_rollback_removed": true,
+    "isr_irq_cmd_ack_retained": true,
+    "pipeline_pm_success_pins_csid_configuration_success": true
+  },
+  "runtime_authorized": false,
+  "next_gate": "Refresh provenance and durable state, then build/inspect a distinct one-shot package before any runtime authorization."
+}
