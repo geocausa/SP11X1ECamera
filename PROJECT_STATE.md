@@ -1,3 +1,9 @@
+## E003h ACTIVE — CSID1 0042 one-shot separately authorized; candidate still not armed — 2026-08-30
+
+Package checkpoint  is public and remains the immutable runtime base. Separate  SHA-256  authorizes exactly one boot of  and exactly one root helper invocation. The contract forbids a non-root pre-trigger, normal QBUF/STREAMON, or same-boot retry; requires the persistent RT-CDM observer and idle pre-run state; and requires immediate evidence archival followed by Golden reboot after any helper result. Production image-quality parity is explicitly not authorized or claimed.
+
+The run remains physically unexecuted at this checkpoint: Golden is still the current boot, the new candidate is not yet armed, and no camera module has been loaded. Next action is to verify repo/origin + provenance + GRUB safety one final time, set one-shot  to the new boot ID, reboot once, load/setup/observe, invoke  once, and verify Golden return before interpreting the result.
+
 ## E003h ACTIVE — fresh CSID1 0042 one-shot package installed, Golden-safe, authorization still absent — 2026-08-30
 
 The static `0042` checkpoint is now packaged under a fresh, non-consumed runtime identity. Candidate GRUB ID `sp11-camera-e003h-csid1-0042-one-shot` points at `/boot/sp11-7.1.5-camera-e003h-csid1-0042` and reuses the byte-exact Golden kernel/initrd, accepted front-only DTB, IMX681 module, PIX capsule/helper, media setup, and persistent RT-CDM observer. The only camera-code delta is `qcom-camss.ko` SHA-256 `c67ce602f88be5db2ffecd816879081d74f996f7884e8661bea252d924f7098e`, containing static patch `0042` and pre-teardown CSID1 timeout telemetry.
