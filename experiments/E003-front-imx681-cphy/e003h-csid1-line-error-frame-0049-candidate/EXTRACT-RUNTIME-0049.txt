@@ -1,0 +1,103 @@
+{
+  "accepted": true,
+  "authorization_consumed": true,
+  "classification": {
+    "causal_link_to_vfe_epoch0_proven": false,
+    "crop_register_readback_matches_windows": true,
+    "error_is_line_count_mismatch": true,
+    "error_is_width_mismatch": false,
+    "extra_lines": 480,
+    "failure_boundary": "Linux CSID1 receives 3840x2640 cleanly and reaches CAMIF/RUP/Epoch, but at least one IPP IRQ measures 3840x2640 while expected/cropped geometry is 3840x2160; VFE1 raw Epoch0 remains absent.",
+    "linux_error_geometry_proven": true,
+    "sensor_mode_change_justified": false
+  },
+  "csid1": {
+    "camif_eof_seen": true,
+    "camif_epoch0_seen": true,
+    "camif_epoch1_seen": true,
+    "camif_sof_seen": true,
+    "crop_readback_h": "0x0eff0000",
+    "crop_readback_v": "0x086f0000",
+    "error_time_actual_frame": "0x0a500f00",
+    "error_time_actual_height": 2640,
+    "error_time_actual_width": 3840,
+    "error_time_hbi": "0x02c502c0",
+    "error_time_vbi": "0x00000000",
+    "height_delta_lines": 480,
+    "irq_history_bits": [
+      "CAMIF_EOF",
+      "CAMIF_SOF",
+      "FRAME_DROP_EOF",
+      "FRAME_DROP_EOL",
+      "FRAME_DROP_SOL",
+      "FRAME_DROP_SOF",
+      "INFO_INPUT_EOF",
+      "INFO_INPUT_EOL",
+      "INFO_INPUT_SOL",
+      "INFO_INPUT_SOF",
+      "ERROR_LINE_COUNT",
+      "VCDT_GRP1_SEL",
+      "CAMIF_EPOCH0",
+      "CAMIF_EPOCH1",
+      "RUP_DONE"
+    ],
+    "irq_history_count": 4,
+    "irq_history_last": "0x00004ee8",
+    "irq_history_or": "0x00e15ff8",
+    "line_count_error_seen": true,
+    "programmed_expected_frame": "0x08700f00",
+    "programmed_expected_height": 2160,
+    "programmed_expected_width": 3840,
+    "rup_done_seen": true
+  },
+  "date": "2026-08-30",
+  "evidence_sha256": {
+    "auth": "54939039e4b884300d5832e46c2f2bb9915404907b4e0c622470a20cb2b8eb19",
+    "dmesg": "c601fd004fa76684aafcc14e6870acb7feef964eb06fba48626f84496ab840ab",
+    "golden": "d36e01d738c2fe0366353e7189ade878768149f151d58f10dbfc03b37fb32ade",
+    "linux_static": "e5d53e72e90406023616c2658f413ca80d6c49e9ff1f4622929012299eb17afe",
+    "package": "fa62bdc06eb154f66784491cc6435f27d345bd0edeaf69158251a8ecdfc774d5",
+    "post": "b7bd551403efdeb285d711006951beefe1c5d1bff20b0d924662a535661ea970",
+    "run": "c007c07bd045f05d02c871cbcfc43be42c697ea2c6593708c9286ea7420179e6",
+    "stages": "24d883ce60f0793f4e31bcd824bd8978c43b2678b3e9822c0a609a6d1d642d2d",
+    "windows_line_oracle": "2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e"
+  },
+  "golden_return_verified": true,
+  "helper_invocations": 1,
+  "next_gate": "Capture same-machine Windows CSID1 historical IPP bit14 dynamically during normal front startup; if bit14 occurs, capture +0x388/+0x38c/+0x390/+0x394 at that exact IRQ. Do not infer historical absence from Windows live status.",
+  "qc10c_output": false,
+  "rtcdm": {
+    "faulted": false,
+    "fifo_bl_completed": 17,
+    "final_stage": "stopped"
+  },
+  "run_rc": 1,
+  "runtime_authorized": false,
+  "same_boot_retry": false,
+  "schema": "sp11-e003h-csid1-line-error-frame-0049-runtime-result-v1",
+  "sensor": {
+    "clean_csi_packets": 37016,
+    "crc_errors": 0,
+    "ecc_errors": 0,
+    "mode_select_off_seen": true,
+    "mode_select_on_seen": true,
+    "transport_height": 2640,
+    "transport_width": 3840
+  },
+  "vfe1": {
+    "bus_status1": "0x00000000",
+    "raw_epoch0_seen": false,
+    "top_status1": "0x00030003"
+  },
+  "windows_comparison": {
+    "historical_bit14_absence_proven": false,
+    "historical_bit14_observed": null,
+    "live_actual_frame": "0x08700f00",
+    "live_actual_height": 2160,
+    "live_actual_width": 3840,
+    "live_expected_frame": "0x08700f00",
+    "live_ipp_bit14": false,
+    "live_ipp_status": "0x00e11ff8",
+    "reason": "Windows live IRQ status is not a historical OR; qccamisp services/clears CSID IRQs, so a transient Windows bit14 remains unresolved."
+  }
+}

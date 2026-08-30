@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0049-one-shot-authorized-unarmed-run-next
+status: e003h-0049-consumed-3840x2640-vs-3840x2160-line-error-windows-history-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1717,7 +1717,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003h-0049-csid1-line-count-error-frame-one-shot-run
+next_experiment: E003h-windows-csid1-bit14-history-dynamic
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -1838,5 +1838,48 @@ linux_0049_authorization:
   persistent_rtcdm_observer_required: true
   candidate_boot_armed: false
 
+linux_0049_runtime:
+  accepted: true
+  date: 2026-08-30
+  authorization_consumed: true
+  helper_invocations: 1
+  same_boot_retry: false
+  run_rc: 1
+  result: ETIMEDOUT_waiting_vfe1_raw_epoch0
+  qc10c_output: false
+  golden_return_verified: true
+  rtcdm_fifo_bl_completed: 17
+  rtcdm_faulted: false
+  csid_packets: 37016
+  csid_ecc_errors: 0
+  csid_crc_errors: 0
+  csid_ipp_history_or: 0x00e15ff8
+  csid_ipp_history_last: 0x00004ee8
+  csid_ipp_history_count: 4
+  csid_line_count_error_seen: true
+  error_time_actual_frame: 0x0a500f00
+  error_time_actual_width: 3840
+  error_time_actual_height: 2640
+  programmed_expected_frame: 0x08700f00
+  programmed_expected_width: 3840
+  programmed_expected_height: 2160
+  height_delta_lines: 480
+  error_time_hbi: 0x02c502c0
+  error_time_vbi: 0x00000000
+  crop_h_readback: 0x0eff0000
+  crop_v_readback: 0x086f0000
+  vfe_raw_epoch0_seen: false
+  windows_live_bit14_absent: true
+  windows_historical_bit14_absence_proven: false
+  prior_history_vs_live_parity_classification_superseded: true
+  runtime_run_sha256: c007c07bd045f05d02c871cbcfc43be42c697ea2c6593708c9286ea7420179e6
+  runtime_post_sha256: b7bd551403efdeb285d711006951beefe1c5d1bff20b0d924662a535661ea970
+  runtime_dmesg_sha256: c601fd004fa76684aafcc14e6870acb7feef964eb06fba48626f84496ab840ab
+  runtime_rtcdm_stages_sha256: 24d883ce60f0793f4e31bcd824bd8978c43b2678b3e9822c0a609a6d1d642d2d
+  runtime_golden_return_sha256: d36e01d738c2fe0366353e7189ade878768149f151d58f10dbfc03b37fb32ade
+  runtime_extractor_sha256: 335ff1908298e54189bfbeafc69070223d8d94c68b22b33960c40e82ad44b962
+  runtime_analysis_sha256: dd7860df3b63a78ca9af13b871a5b5e44d2e3aaef12da64f791094257fc4eac4
+  runtime_authorized: false
+
 next_action: >-
-  After the authorization commit is pushed and HEAD equals origin, arm exactly sp11-camera-e003h-csidframe-0049-one-shot and reboot. On candidate boot run authorization-aware preflight, load the frozen modules, configure the front PIX graph, start the persistent RT-CDM observer, invoke the helper exactly once, archive the error-time frame/HBI/VBI evidence, and immediately return to Golden. No retry.
+  Freeze 0049 consumed evidence, then use same-machine Windows to determine historical CSID1 IPP bit14 behavior during normal front-camera startup. Prefer a conditional KD breakpoint on qccamisp's IPP-error path; if bit14 is observed, capture +0x388/+0x38c/+0x390/+0x394 at that exact IRQ. Do not change the IMX681 mode or authorize another Linux runtime until the Windows historical comparison is closed.
