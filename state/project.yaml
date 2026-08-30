@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-postprov-replacement-one-shot-authorized-not-yet-armed-golden-safe
+status: e003h-postprov-run-reaches-sensor-on-epoch0-timeout-golden-restored-ife-start-static-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1005,21 +1005,40 @@ e003h:
   linux_front_postprov_harness_abort_result_sha256: 08ebdf455a97b151cbe62724e8b1c6a3ab244f10fa787b1731cb1a3e35f4ffba
   linux_front_postprov_corrected_wrapper_sha256: 7724dabef6fe147809919d0349d1adfe1a4b1c2418ede82c7235e0d79e1d396d
   linux_front_postprov_authorization_consumed: true
-  linux_front_postprov_replacement_runtime_authorized: true
+  linux_front_postprov_replacement_runtime_authorized: false
   linux_front_postprov_replacement_authorization_scope: exactly one replacement candidate
     boot and one root helper invocation; prior boot had no hardware RUN; persistent
     observer required; no same-boot retry; immediate Golden reboot after result
   linux_front_postprov_replacement_authorization_review_sha256: 555d2cbb35cbffa8da1183201efab1d17a92e904fa035460bc98bd7029ab1ec7
   linux_front_postprov_replacement_wrapper_sha256: 7724dabef6fe147809919d0349d1adfe1a4b1c2418ede82c7235e0d79e1d396d
-  linux_front_postprov_replacement_hardware_run_consumed: false
-next_experiment: E003h-bounded-vfe1-pix-postprovenance-replacement-runtime
-next_action: Exactly one replacement post-provenance candidate boot and one root helper
-  invocation are authorized because the prior candidate boot failed before helper/sysfs
-  entry and RT-CDM remained idle. Arm only sp11-camera-e003h-pix-one-shot, load pinned
-  CAMSS+IMX681, configure exact front PIX route, allocate exactly two QC10C buffers
-  without QBUF/STREAMON, start/fsync persistent watcher, run the corrected wrapper
-  once, archive evidence, never retry in the same boot, and return immediately to
-  Golden.
+  linux_front_postprov_replacement_hardware_run_consumed: true
+  linux_front_postprov_replacement_result: ETIMEDOUT after sensor-on while waiting
+    VFE1 raw Epoch0; no QC10C output
+  linux_front_postprov_replacement_elapsed_seconds_approx: 0.8
+  linux_front_postprov_replacement_sensor_stream_started: true
+  linux_front_postprov_replacement_rtcdm_fifo_completed: 13
+  linux_front_postprov_replacement_rtcdm_last_stage: fifo-done then stopped
+  linux_front_postprov_replacement_rtcdm_last_status: FIFO0=0x4 FIFO1=0 FIFO2=0 FIFO3=0;
+    faulted=0
+  linux_front_postprov_replacement_prime2_submitted: false
+  linux_front_postprov_replacement_epoch0_seen: false
+  linux_front_postprov_replacement_same_boot_retry: false
+  linux_front_postprov_replacement_golden_return_verified: true
+  linux_front_postprov_replacement_run_sha256: 240a4f9e01df41cacfbe028c659f313f6a83eb114c410735988740dd357f83c4
+  linux_front_postprov_replacement_post_sha256: f694c3b5c141f1e1eb1d984c37b5e465231d0cf41301b96b36836e25b76ffc01
+  linux_front_postprov_replacement_dmesg_sha256: 9c723f1f3a259dc6866c8e9cad1f275a803fdd9f147252be002e0e3a7c605e11
+  linux_front_postprov_replacement_stage_sha256: 3e4721891ac466b24a8de41b625ca9928b8fc259da8bdfa2cff29f1a6b122f83
+  linux_front_postprov_replacement_result_sha256: 0ae73343624959bab54d52daaf6c6fe1457cf9202a2073eb80fa7269eee65434
+  linux_front_rtcdm_pre_csid_prefix_runtime_proven: true
+  linux_front_epoch0_runtime_proven: false
+  linux_front_runner_ife_resource_start_present: false
+next_experiment: E003h-ife-resource-start-static-oracle
+next_action: Do not repeat PIX runtime. The replacement run proves RT-CDM1 DMA/SMMU
+  visibility and all 13 pre-CSID FIFO completions, then starts IMX681 transmission
+  and times out waiting VFE1 raw Epoch0 before BUS slot1/prime2. Statically recover
+  the exact same-machine Windows IFE resource-start command 0x804 semantics and compare
+  them with the runner, which currently powers VFE1 but omits the retained 0022 IFE_RESOURCE_START
+  stage. Build/inspect that stage before any new runtime authorization.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:

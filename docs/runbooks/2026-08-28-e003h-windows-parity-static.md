@@ -598,4 +598,11 @@ A corrected wrapper now creates its evidence log before the privileged helper in
 Fresh bounded provenance, package, branch-sync, Golden boot-state and corrected-wrapper review all pass. The previous candidate boot did not enter the helper/sysfs trigger and does not count as a PIX hardware run, but its boot authorization is consumed. Corrected wrapper SHA-256 `7724dabef6fe147809919d0349d1adfe1a4b1c2418ede82c7235e0d79e1d396d` prevents the root-owned-redirection failure and refuses reuse of an actual-run evidence path.
 
 Exactly one replacement candidate boot and one root helper invocation are authorized. Persistent RT-CDM watcher must be ready/fsyncing before the helper. No non-root pre-trigger and no same-boot retry. Any helper result is archived and followed immediately by Golden reboot. Review JSON SHA-256 `555d2cbb35cbffa8da1183201efab1d17a92e904fa035460bc98bd7029ab1ec7`.
+## 2026-08-30 — replacement post-provenance run reaches sensor-on, times out at VFE1 Epoch0
+
+The single authorized replacement helper invocation returned `ETIMEDOUT` after approximately 0.80 s and produced no QC10C file, but it materially advances the hardware boundary. The persistent observer records 13 successful FIFO0 BL-done completions with no RT-CDM fault. These are exactly the pre-CSID command prefix: startup0, all four prime0 BLs, startup1, all five prime1 BLs, startup2 and startup3. IMX681 then logs `MODE_SELECT=1 front transmission started`.
+
+The first-frame runner next waits for raw VFE1 Epoch0 before BUS retarget to slot1 and prime2/request2. No Epoch0 arrived within the bounded wait, so prime2 was never submitted. Teardown wrote `MODE_SELECT=0`, stopped/masked RT-CDM, returned CAMSS/sensor PM to suspended and rebooted to Golden; no same-boot retry occurred.
+
+The runtime therefore proves Linux CAMSS coherent command IOVAs are visible to RT-CDM1 through the corrected requester/SMMU domain. The next static discrepancy is the retained `0022` host stage `IFE resource start`: Windows places it between RT-CDM start and startup packet0, but the callable runner currently only acquires pipeline/VFE power and has no distinct IFE resource-start operation. No further runtime is authorized until the exact same-machine Windows IFE `0x804` start semantics are recovered, represented and inspected.
 
