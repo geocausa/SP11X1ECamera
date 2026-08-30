@@ -24,14 +24,14 @@ git -C "$REPO" diff --quiet || fail 'tracked worktree dirty'
 git -C "$REPO" diff --cached --quiet || fail 'staged worktree dirty'
 [ -f "$AUTH" ] || fail 'authorization file absent'
 [ -f "$PKG" ] || fail 'package inspection absent'
-python3 - "$AUTH" "$HEAD" "$PKG" "$REPO/provenance/front-parity.json" "$CAMSS" "$SENSOR" "$DTB" "$CAP" "$HELPER" <<'PY' || exit 1
+python3 - "$AUTH" "$HEAD" "$PKG" "$REPO/provenance/front-parity.json" "$CAMSS" "$SENSOR" "$DTB" "$CAP" "$HELPER" "$REPO" <<'PY' || exit 1
 import hashlib,json,subprocess,sys
-au_path,head,pkg_path,prov_path,camss,sensor,dtb,cap,helper=sys.argv[1:]
+au_path,head,pkg_path,prov_path,camss,sensor,dtb,cap,helper,repo=sys.argv[1:]
 sha=lambda p: hashlib.sha256(open(p,'rb').read()).hexdigest()
 au=json.load(open(au_path)); pkg=json.load(open(pkg_path))
 assert au.get('accepted') is True and au.get('runtime_authorized') is True
 assert au.get('production_parity_authorized') is False
-subprocess.check_call(['git','merge-base','--is-ancestor',au['package_commit'],head],stdout=subprocess.DEVNULL)
+subprocess.check_call(['git','-C',repo,'merge-base','--is-ancestor',au['package_commit'],head],stdout=subprocess.DEVNULL)
 ex=au['execution_contract']
 assert ex['boot_count']==1 and ex['root_helper_invocation_count']==1 and ex['same_boot_retry'] is False
 assert ex['persistent_rtcdm_observer_required'] is True

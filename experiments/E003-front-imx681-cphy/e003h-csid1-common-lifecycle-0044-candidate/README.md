@@ -16,3 +16,7 @@ Package creation/installation **does not authorize or arm runtime**. `AUTHORIZAT
 The first authorized 0044 candidate boot was consumed before camera execution because the package-only `preflight.sh` was mistakenly invoked after authorization; it correctly rejected the active authorization. No camera modules were loaded, the helper was never entered, and Golden return is verified. The original authorization is preserved as `AUTHORIZATION-BOOT1-CONSUMED.json` with `BOOT1-CONSUMPTION.json` and pre-exec evidence.
 
 `runtime-preflight.sh` is now the authorization-aware candidate-boot gate. `load-candidate.sh` calls it before any `modprobe`/`insmod`. The package-only `preflight.sh` remains intentionally authorization-free. No replacement runtime is authorized by this harness correction itself.
+
+## Harness v3
+
+Boot 2 was consumed before module load because the authorization-aware preflight invoked `git merge-base` without a repository cwd. Both `runtime-preflight.sh` and `run-once.sh` now use explicit `git -C <repo> merge-base --is-ancestor`; package v3 pins those hashes and both zero-hardware boot-consumption records. No active authorization remains after this correction.

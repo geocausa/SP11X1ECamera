@@ -26,13 +26,13 @@ git -C "$REPO" diff --quiet || fail 'tracked worktree dirty'
 git -C "$REPO" diff --cached --quiet || fail 'staged worktree dirty'
 python3 "$REPO/tools/check-front-parity-provenance.py" --repo "$REPO" --target bounded_first_pix >/dev/null || fail 'bounded provenance not green'
 [ -f "$AUTH" ] || fail 'authorization file absent'
-python3 - "$AUTH" "$HEAD" <<'PY' || exit 1
+python3 - "$AUTH" "$HEAD" "$REPO" <<'PY' || exit 1
 import json,subprocess,sys
-p,head=sys.argv[1:]
+p,head,repo=sys.argv[1:]
 x=json.load(open(p))
 assert x.get('accepted') is True and x.get('runtime_authorized') is True
 pkg=x['package_commit']
-subprocess.check_call(['git','merge-base','--is-ancestor',pkg,head])
+subprocess.check_call(['git','-C',repo,'merge-base','--is-ancestor',pkg,head])
 assert x['execution_contract']['boot_count']==1
 assert x['execution_contract']['root_helper_invocation_count']==1
 assert x['execution_contract']['same_boot_retry'] is False

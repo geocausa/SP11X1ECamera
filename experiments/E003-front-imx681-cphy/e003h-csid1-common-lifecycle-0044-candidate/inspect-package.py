@@ -32,9 +32,9 @@ EXPECTED={
 SCRIPT_EXPECTED={
  'install-candidate.sh':'1a23b370faed0e402f5961192c6868474c7e32a01f027885150b77ceb3f42228',
  'load-candidate.sh':'1f7be8b1b252ad8268edd09dd4f1a22fced2e38911367ec5e2fb64162ff3072e',
- 'runtime-preflight.sh':'6f778ebc77417ca9eb150a5a42fb79db40b7198dfe433a1e7e2a3ac1673ae9b4',
+ 'runtime-preflight.sh':'63611d2cf887145db0be950880d2a0b2d4f5c8651ba99ee011a1040b91aa62ff',
  'preflight.sh':'f9bf2c51561d51dc3986fdae0abb82db1da56ca40ee1f34c768f37667c2699b4',
- 'run-once.sh':'11dd9b025c967c462b074b67e6f7c28c90c7a42dcd64a0322fe643e1dd546a91',
+ 'run-once.sh':'b001583638120696990ffe45d81c70d6eac5e12eb4d088b7600f0e79b61a7f0a',
  'setup-media.sh':'4761ecfd1eb1dbd91582d687a7380c922d451e0ad2b7d03253dfedbe1380fe71',
  'start-observer.sh':'1068b954462d6f75bf8776ea2900b13c90f6bfcdf3263d7fdbc52a142e0fce6c',
 }
@@ -58,11 +58,16 @@ def main():
  if sha(NEW/'BOOT1-CONSUMPTION.json')!='b462e7688d81dd710fd62ae1244419df9d542b7841de5afefadfa5a2ff9f07f9': die('boot1 consumption drift')
  boot1=json.loads((NEW/'BOOT1-CONSUMPTION.json').read_text())
  if not boot1.get('accepted') or boot1.get('hardware_run_executed') is not False or boot1.get('helper_invocations') != 0 or boot1.get('camera_modules_loaded') is not False or boot1.get('golden_return_verified') is not True: die('boot1 no-hardware record drift')
+ if sha(NEW/'AUTHORIZATION-BOOT2-CONSUMED.json')!='6fc9802e64d1ba16b5b30c961e1a0ceceb9e270131d8cb28b609e53e962f4f53': die('boot2 authorization history drift')
+ if sha(NEW/'BOOT2-CONSUMPTION.json')!='4743403e99bc2f4a15864aabd7915906f8a29bd2b3623f91005fd56d086f4ef0': die('boot2 consumption drift')
+ boot2=json.loads((NEW/'BOOT2-CONSUMPTION.json').read_text())
+ if not boot2.get('accepted') or boot2.get('hardware_run_executed') is not False or boot2.get('helper_invocations') != 0 or boot2.get('camera_modules_loaded') is not False or boot2.get('golden_return_verified') is not True: die('boot2 no-hardware record drift')
  if (NEW/'AUTHORIZATION.json').exists(): die('authorization exists at package-only gate')
  runtime_pre=(NEW/'runtime-preflight.sh').read_text()
  for r in ('AUTHORIZATION.json','check-front-parity-provenance.py','repo/origin divergence','RUN log already exists; refusing retry','module already loaded','sp11_camera_e003h_csid1_0044=1','next_entry must be empty'):
   if r not in runtime_pre: die('runtime preflight missing gate '+r)
  if 'insmod ' in runtime_pre or 'modprobe ' in runtime_pre or 'tee "$TRIGGER"' in runtime_pre or 'echo RUN' in runtime_pre: die('runtime preflight contains hardware activation')
+ if "['git','-C',repo,'merge-base','--is-ancestor'" not in runtime_pre: die('runtime preflight git ancestry check is not cwd-independent')
  load=(NEW/'load-candidate.sh').read_text()
  call=load.find('"$NEW/runtime-preflight.sh"')
  first_mod=min(x for x in (load.find('modprobe '),load.find('insmod ')) if x >= 0)
@@ -74,6 +79,7 @@ def main():
  if 'echo RUN' in run or 'printf RUN' in run or 'tee "$TRIGGER"' in run: die('wrapper directly writes trigger')
  for r in ('AUTHORIZATION.json','check-front-parity-provenance.py','RUN log already exists; refusing retry','watcher not ready','RT-CDM diagnostic not idle before RUN'):
   if r not in run: die('run wrapper missing gate '+r)
+ if "['git','-C',repo,'merge-base','--is-ancestor'" not in run: die('run wrapper git ancestry check is not cwd-independent')
  ports=cmd(['fdtget','-l',str(DTB),'/soc@0/isp@acb7000/ports']).split()
  if ports!=['port@2']: die('DT not front-only')
  reg=cmd(['fdtget','-t','x',str(DTB),'/soc@0/isp@acb7000','reg'])
@@ -91,14 +97,14 @@ def main():
  for t in ('sp11-camera-e003h-csid1-0044-one-shot','sp11_camera_e003h_csid1_0044=1',str(BOOT/'x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb')):
   if t not in entry: die('installed entry missing '+t)
  subprocess.check_call(['python3',str(REPO/'tools/check-front-parity-provenance.py'),'--repo',str(REPO),'--target','bounded_first_pix'],stdout=subprocess.DEVNULL)
- out={'accepted':True,'schema':'sp11-e003h-csid1-0044-package-v2','hashes':EXPECTED,'runtime_scripts':SCRIPT_EXPECTED,
+ out={'accepted':True,'schema':'sp11-e003h-csid1-0044-package-v3','hashes':EXPECTED,'runtime_scripts':SCRIPT_EXPECTED,
       'installed_boot':installed,'boot_id':'sp11-camera-e003h-csid1-0044-one-shot','front_only_ports':ports,
       'iommu_set':['0x800/0x60','0x820/0x60','0x840/0x60','0x860/0x60','0x18a0/0'],
       'golden_saved_default':True,'candidate_boot_installed':True,'candidate_boot_armed':False,'camera_modules_loaded':False,
       'authorization_present':False,'single_helper_invocation_enforced':True,'same_boot_retry_refused_by_runlog':True,
       'bounded_provenance_green':True,'runtime_authorized':False,'runtime_preflight_before_module_load':True,
-      'boot1_consumed_without_hardware_run':True,
-      'next':'commit/push corrected v2 harness checkpoint; replacement hardware run requires a fresh authorization'}
+      'boot1_consumed_without_hardware_run':True,'boot2_consumed_without_hardware_run':True,'cwd_independent_git_checks':True,
+      'next':'commit/push corrected v3 harness checkpoint; any hardware run requires a fresh authorization'}
  (NEW/'package-inspection.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
- print('PASS: 0044 common-lifecycle package v2 is installed, hash-pinned, Golden-safe and unarmed')
+ print('PASS: 0044 common-lifecycle package v3 is installed, hash-pinned, Golden-safe and unarmed')
 if __name__=='__main__': main()
