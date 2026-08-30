@@ -1,0 +1,53 @@
+{
+  "accepted": true,
+  "bounded_end": {
+    "actual_frame": "0x08700f00",
+    "expected_frame": "0x08700f00",
+    "hbi": "0x03b203ad",
+    "height": 2160,
+    "ipp_bit14": false,
+    "ipp_status": "0x00e11ff8",
+    "vbi": "0x00ffffff",
+    "width": 3840
+  },
+  "bounded_windows_result": "Across one selector-proven CSID1 IPP start plus two timestamped/UI-confirmed Camera restarts, qccamisp never entered its IPP error branch while the breakpoint remained armed.",
+  "classification": {
+    "causal_link_to_missing_vfe_epoch0_proven": false,
+    "linux_0049_line_count_error_is_concrete_parity_fault": true,
+    "linux_0049_line_count_error_is_normal_windows_startup_transient": false,
+    "sensor_mode_change_justified": false,
+    "universal_windows_bit14_absence_proven": false,
+    "windows_bit14_absent_in_bounded_normal_sample": true
+  },
+  "date": "2026-08-30",
+  "evidence_sha256": {
+    "cycles": "45fd5b2d70581d0822c0dd5c965b0c35c09b440a442a575b0f638c2b914aa628",
+    "kd": "7ba4a32a14a3a1ae44ca13425de6115b00ce7a35cf0d65bdb4fed43f6c43fdec",
+    "linux0049": "dd7860df3b63a78ca9af13b871a5b5e44d2e3aaef12da64f791094257fc4eac4",
+    "static": "2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e"
+  },
+  "linux_0049_comparison": {
+    "actual_height": 2640,
+    "bit14_seen": true,
+    "error_time_actual": "0x0a500f00",
+    "expected": "0x08700f00",
+    "extra_lines": 480
+  },
+  "next_gate": "Statically close CSID680 vertical-crop active/shadow/update semantics: Linux readback matches Windows but error-time actual remains 3840x2640, while bounded Windows reaches actual=expected 3840x2160 without qccamisp IPP error. No Linux runtime or programming delta is authorized by this oracle.",
+  "pre_enable": {
+    "actual_frame": "0x00000000",
+    "cfg0": "0x802b2000",
+    "expected_frame": "0x08700f00",
+    "hcrop": "0x0eff0000",
+    "vcrop": "0x086f0000"
+  },
+  "qccamisp_error_branch_rva": "0x1ba04",
+  "qccamisp_ipp_error_branch_hits": 0,
+  "schema": "sp11-e003h-windows-csid1-bit14-history-v1",
+  "selector_proven_start": {
+    "csid_index": 1,
+    "mmio_va": "ffffe700d1a32000",
+    "selector": 5
+  },
+  "tested_front_starts": 3
+}

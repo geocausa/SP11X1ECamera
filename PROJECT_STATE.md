@@ -1,3 +1,11 @@
+## E003h ACTIVE — bounded Windows bit14 history negative; Linux 480-line error is a parity fault — 2026-08-30
+
+Same-SP11 Windows dynamic tracing now closes the historical-comparison gate conservatively. qccamisp8380 IPP-error branch RVA `0x1ba04` remained armed across one selector-proven CSID1 IPP start plus two timestamped/UI-confirmed Camera restarts and recorded **zero hits**. The proof start dynamically identified selector `5`, CSID index `1`, with pre-enable `CFG0=0x802b2000`, crop `0x0eff0000/0x086f0000`, expected `0x08700f00`. At the bounded end Windows had expected=actual `0x08700f00` (3840x2160), HBI `0x03b203ad`, VBI `0x00ffffff`, IPP `0x00e11ff8`.
+
+This does not claim Windows can never assert bit14; it proves the tested normal startup sample does not reproduce Linux 0049's error. Linux 0049 measured actual `0x0a500f00` (3840x2640) against expected `0x08700f00` (3840x2160), exactly 480 lines high. That mismatch is therefore a concrete parity fault. Sensor-mode change remains forbidden: Windows uses the same 3840x2640 transport and reaches 2160 lines inside CSID. Causality to missing VFE1 raw Epoch0 is still unproven.
+
+Windows raw KD/cycle SHA-256: `7ba4a32a...fdec` / `45fd5b2d...a628`; extractor/oracle: `3cbaa942...8fe2` / `f7523499...3db5`. Golden FullIO v19c is restored with empty `next_entry`; no Linux runtime is authorized. Next close CSID680 vertical-crop active/shadow/update semantics statically.
+
 ## E003h ACTIVE — 0049 consumed; exact 480-line CSID error localized, Windows historical bit14 next — 2026-08-30
 
 The authorized 0049 read-only one-shot executed exactly once and returned cleanly to FullIO v19c Golden. The sole helper returned `ETIMEDOUT` waiting for VFE1 raw BUS Epoch0; no QC10C output was returned, RT-CDM completed 17 FIFO BLs with no fault, sensor/CAMSS runtime PM returned to suspended, and there was no same-boot retry. Golden return is verified with `saved_entry=sp11-audio-fullio-v19c`, empty `next_entry`, synchronized authorization commit, and all camera modules absent.
