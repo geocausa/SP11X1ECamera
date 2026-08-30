@@ -1,0 +1,90 @@
+{
+  "accepted": true,
+  "authorization_sha256": "f0fc250dbbb3eb83c288515faa0a634eb6f1ccd8bf399d269db7a035d2e99d96",
+  "conclusions": [
+    "VFE1 FULL client0/client1 static configuration and Linux-owned image/meta address programming are exact at timeout; all four dynamic FULL address readbacks equal the expected slot-0 IOVAs.",
+    "VFE1 reports no BUS write violation, overflow, or image violation, and the three Windows-live-stable startup markers are all 1.",
+    "Linux VFE1 TOP/BUS IRQ masks remain 0/0, unlike same-machine Windows TOP mask0 0x0007f051 and BUS mask0 0xd0000000; the private PIX path never performs the Windows DAL_ife_start mask callback.",
+    "Same-machine Windows DAL_ife_start also writes VFE TOP +0x24=0 immediately before BUS start, creating a 0x6000 -> 0 -> BUS start -> 0x6000 transition between startup packets1 and2; Linux currently omits that transition.",
+    "TOP status1 bit0 (Windows VIDEO event identity) is set while BUS status1 bit21 (Windows Epoch0 identity) is absent. Treat this as an early/spurious VIDEO-state anomaly, not a successful userspace frame: the Windows-proven Epoch0 -> BUS retarget -> replay2 -> VIDEO prefix did not execute and no QC10C buffer was returned.",
+    "Do not repeat 0046. Next statically implement the complete Windows VFE start prefix immediately before existing bus_prepare: TOP/BUS mask pairs plus TOP +0x24=0, leaving packet order, CSID, sensor and RT-CDM payloads unchanged."
+  ],
+  "csid1_timeout": {
+    "buf_done_mask": "0x0001ffff",
+    "crc_errors": 0,
+    "ecc_errors": 0,
+    "ipp_irq_mask": "0x3cbc601c",
+    "ipp_irq_status": "0x00011e00",
+    "packets": 37016
+  },
+  "date": "2026-08-30",
+  "evidence_sha256": {
+    "dmesg": "14e469dc0e93bef04595f10c4a880febea7e548a66fbc7065d45462e68443621",
+    "golden": "d4ad7bbdb83306c153dd5d6fabf1e24b70df0d3cb611beccda22dfc13553b16f",
+    "load": "8a62d17165d3cd0c956e4b0a5e8b1a7b3cf5900b7921b2920b7bbf3bec5fb600",
+    "media": "e3ef135c67ca08b0cc6445193ee8c32a9b68ebdaa15a45b6c32e3a2557f328d0",
+    "post": "d325970993c758f43b81078fd1f5a1469409c7e248ea25c73b21a2c402987728",
+    "pre": "04124dd46c9fd9151989590bd1bcf775870ce8c75ba1aa39373102f3b6dd878b",
+    "run": "6638ecb2aad847764ba5c34719584752537f22e9275a4050d4221b6f07c5efd3",
+    "stages": "ca739d19182d8ea7049fd86a2abf8bed7b8e617d58cd864f2970f6eb39481e81"
+  },
+  "golden_return_verified": true,
+  "helper_invocations": 1,
+  "next_gate": "E003h-0047 static VFE1 DAL_ife_start prefix: exact mask pairs and TOP +0x24 zero immediately before existing BUS prepare between startup packet1 and packet2.",
+  "package_inspection_sha256": "70d9f0b2fdb7e835525c98807151922c113dbf026aaeec3d2445c505e2fd5571",
+  "qc10c_output": false,
+  "rtcdm": {
+    "faulted": false,
+    "fifo_bl_completed": 17,
+    "final_stage": "stopped"
+  },
+  "run_result": "ETIMEDOUT waiting VFE1 raw Epoch0; no QC10C userspace output",
+  "runtime_authorized": false,
+  "same_boot_retry": false,
+  "schema": "sp11-e003h-vfe1-timeout-0046-runtime-result-v1",
+  "vfe1_timeout": {
+    "bus_image_violation": "0x00000000",
+    "bus_mask0": "0x00000000",
+    "bus_mask1": "0x00000000",
+    "bus_overflow": "0x00000000",
+    "bus_status0": "0x00000000",
+    "bus_status1": "0x00000000",
+    "bus_violation": "0x00000000",
+    "full0": {
+      "cfg": "0x00000011",
+      "frame_incr": "0x004f2000",
+      "image_cfg0": "0x05a00a00",
+      "image_cfg2": "0x00000e00",
+      "image_expected": "0xff806000",
+      "image_readback": "0xff806000",
+      "meta_expected": "0xff800000",
+      "meta_readback": "0xff800000",
+      "mode": "0x00000023",
+      "packer": "0x0000000b"
+    },
+    "full1": {
+      "cfg": "0x00000011",
+      "frame_incr": "0x00279000",
+      "image_cfg0": "0x02d00a00",
+      "image_cfg2": "0x00000e00",
+      "image_expected": "0xffcf5000",
+      "image_readback": "0xffcf5000",
+      "meta_expected": "0xffcf2000",
+      "meta_readback": "0xffcf2000",
+      "mode": "0x00000033",
+      "packer": "0x0000000b"
+    },
+    "linux_owned_full_addresses_match_expected": true,
+    "startup_markers": [
+      "0x00000001",
+      "0x00000001",
+      "0x00000001"
+    ],
+    "top_mask0": "0x00000000",
+    "top_mask1": "0x00000000",
+    "top_status0": "0x00000000",
+    "top_status1": "0x00030003",
+    "windows_epoch0_bit_bus_status1_bit21_set": false,
+    "windows_video_bit_top_status1_bit0_set": true
+  }
+}

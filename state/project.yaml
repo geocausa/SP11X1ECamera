@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0046-vfe1-timeout-one-shot-authorized-unarmed-runtime-next
+status: e003h-0046-runtime-vfe-bus-exact-missing-start-prefix-0047-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1191,7 +1191,42 @@ e003h:
   linux_front_0046_authorization_normal_streamon: false
   linux_front_0046_authorization_runtime: true
   linux_front_0046_authorization_production_parity: false
-  linux_front_0046_authorization_consumed: false
+  linux_front_0046_authorization_consumed: true
+  linux_front_0046_hardware_run_consumed: true
+  linux_front_0046_helper_invocations: 1
+  linux_front_0046_same_boot_retry: false
+  linux_front_0046_run_rc: 1
+  linux_front_0046_qc10c_output: false
+  linux_front_0046_rtcdm_fifo_completed: 17
+  linux_front_0046_rtcdm_faulted: false
+  linux_front_0046_vfe_top_status0: 0x00000000
+  linux_front_0046_vfe_top_status1: 0x00030003
+  linux_front_0046_vfe_top_mask0: 0x00000000
+  linux_front_0046_vfe_top_mask1: 0x00000000
+  linux_front_0046_vfe_bus_status0: 0x00000000
+  linux_front_0046_vfe_bus_status1: 0x00000000
+  linux_front_0046_vfe_bus_mask0: 0x00000000
+  linux_front_0046_vfe_bus_mask1: 0x00000000
+  linux_front_0046_vfe_bus_faults_zero: true
+  linux_front_0046_vfe_startup_markers: [0x00000001, 0x00000001, 0x00000001]
+  linux_front_0046_full0_linux_addresses_match_expected: true
+  linux_front_0046_full1_linux_addresses_match_expected: true
+  linux_front_0046_windows_video_bit_observed_early: true
+  linux_front_0046_windows_epoch0_bit_observed: false
+  linux_front_0046_csid_packets: 37016
+  linux_front_0046_csid_ecc_crc_zero: true
+  linux_front_0046_csid_ipp_irq_status: 0x00011e00
+  linux_front_0046_csid_buf_done_mask: 0x0001ffff
+  linux_front_0046_run_sha256: 6638ecb2aad847764ba5c34719584752537f22e9275a4050d4221b6f07c5efd3
+  linux_front_0046_post_sha256: d325970993c758f43b81078fd1f5a1469409c7e248ea25c73b21a2c402987728
+  linux_front_0046_dmesg_sha256: 14e469dc0e93bef04595f10c4a880febea7e548a66fbc7065d45462e68443621
+  linux_front_0046_rtcdm_stages_sha256: ca739d19182d8ea7049fd86a2abf8bed7b8e617d58cd864f2970f6eb39481e81
+  linux_front_0046_pre_run_sha256: 04124dd46c9fd9151989590bd1bcf775870ce8c75ba1aa39373102f3b6dd878b
+  linux_front_0046_load_sha256: 8a62d17165d3cd0c956e4b0a5e8b1a7b3cf5900b7921b2920b7bbf3bec5fb600
+  linux_front_0046_media_sha256: e3ef135c67ca08b0cc6445193ee8c32a9b68ebdaa15a45b6c32e3a2557f328d0
+  linux_front_0046_golden_return_sha256: d4ad7bbdb83306c153dd5d6fabf1e24b70df0d3cb611beccda22dfc13553b16f
+  linux_front_0046_runtime_extractor_sha256: ada30c61d8be71d7899df881264f7232ed518cc35f22c9368613dfff2ccdc202
+  linux_front_0046_runtime_analysis_sha256: f43b743250a4172c2cebbc1e5f142d2ee7ea9b160b6769c315378060cf802ee7
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_manifest_sha256: 5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
@@ -1501,22 +1536,6 @@ e003h:
   linux_front_0044_package_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-vfe1-timeout-readonly-0046-one-shot-runtime
+next_experiment: E003h-vfe1-dal-start-prefix-0047-static
 next_action: >-
-  The 0046 one-shot authorization is reviewed and still unarmed. Commit/push this authorization checkpoint.
-  Then arm exactly one GRUB next boot for sp11-camera-e003h-vfe1-0046-one-shot. On the candidate require the
-  authorization-aware preflight before module load, exact front PIX graph, persistent RT-CDM observer READY/idle,
-  then invoke run-once.sh exactly once. Archive VFE1+CSID1 timeout telemetry and return immediately to Golden.
-handoff:
-  latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
-  first_read:
-  - CONTINUE.md
-  - AGENTS.md
-  - PROJECT_STATE.md
-  - state/project.yaml
-  live_check: ./tools/project-status.sh
-  update_before_session_end:
-  - PROJECT_STATE.md
-  - state/project.yaml
-  - current experiment record
-  - git commit and push
+  Freeze the exact same-machine Windows VFE680 DAL_ife_start prefix: callback +0x6b690 writes TOP mask pair 0x0007f051/0 and BUS mask pair 0xd0000000/0, callback +0x6b698 writes VFE TOP +0x24=0, then DAL_ife_bus_start. Existing Windows cross-order places BUS start between IFE startup packets 1 and 2. Implement that complete prefix immediately before the existing Linux bus_prepare, with no other runtime behavior change. Build/check/inspect statically and do not authorize hardware yet.

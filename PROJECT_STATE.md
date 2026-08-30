@@ -1,3 +1,15 @@
+## E003h ACTIVE — 0046 runtime consumed; VFE BUS exact, Windows DAL_ife_start prefix missing — 2026-08-30
+
+The authorized 0046 telemetry one-shot executed exactly once and returned cleanly to FullIO v19c Golden. The sole helper returned `ETIMEDOUT` waiting for raw VFE1 Epoch0; there was no same-boot retry and no QC10C userspace output. RT-CDM completed 17 FIFO BLs with no fault. Golden recovery verifies saved default `sp11-audio-fullio-v19c`, empty `next_entry`, Wi-Fi/audio/Surface input health, and no camera modules.
+
+The new VFE1 snapshot sharply localizes the next parity gap. FULL client0/client1 static configuration is exact, and every Linux-owned FULL image/meta register readback equals its expected slot-0 IOVA. VFE BUS violation, overflow and image-violation status are all zero. The three Windows-live-stable startup markers are all `1`. CSID remains at the prior clean-ingress boundary: 37,016 packets, zero ECC/CRC, `IPP_IRQ_STATUS=0x00011e00`, and `BUF_DONE_IRQ_MASK=0x0001ffff`.
+
+The concrete mismatch is VFE start state: Linux has `TOP_MASK0/1=0/0` and `BUS_MASK0/1=0/0`, while same-machine Windows uses `TOP_MASK0=0x0007f051`, `TOP_MASK1=0`, `BUS_MASK0=0xd0000000`, `BUS_MASK1=0`. Ghidra/static qccamisp reversal also proves Windows VFE680 `DAL_ife_start` invokes callback `+0x6b690` for those mask pairs, then callback `+0x6b698` writes VFE TOP `+0x24=0`, then enters `DAL_ife_bus_start`. Existing same-machine BUS/CDM cross-order places this phase between startup packets 1 and 2. Because every startup packet writes `+0x24=0x6000`, Windows therefore performs a deliberate `0x6000 -> 0 -> BUS start -> 0x6000` transition that Linux currently omits.
+
+A second observation is retained but not over-interpreted: Linux TOP status1 is `0x00030003`, so Windows VIDEO identity bit0 is set, while BUS status1 is zero and Windows Epoch0 identity bit21 is absent. The accepted Windows pacing oracle still proves `sensor-on -> Epoch0 #0 -> BUS retarget -> replay2 -> VIDEO`; therefore this Linux bit is classified as an early/spurious VIDEO-state anomaly, not a successful frame.
+
+Fail-closed runtime analysis SHA-256 is `f43b743250a4172c2cebbc1e5f142d2ee7ea9b160b6769c315378060cf802ee7`; extractor SHA-256 `ada30c61d8be71d7899df881264f7232ed518cc35f22c9368613dfff2ccdc202`. Authorization `f0fc250d...9d96` is preserved as `AUTHORIZATION-CONSUMED.json`. **Runtime is blocked again.** Next is static 0047: reproduce the complete Windows VFE DAL_ife_start prefix immediately before the existing BUS prepare, then build/check/inspect before any new authorization.
+
 ## E003h ACTIVE — 0046 VFE1 telemetry one-shot authorized, still unarmed — 2026-08-30
 
 Fresh authorization review passed against public package commit `19918c17cb7399d9724a4f8f2bcdb87841e4cfbe`. It re-ran package preflight/inspection, reproduced inspection SHA-256 `70d9f0b2fdb7e835525c98807151922c113dbf026aaeec3d2445c505e2fd5571`, verified HEAD/origin synchronization, bounded provenance, frozen assets, Golden saved default, empty `next_entry`, and no camera modules.
