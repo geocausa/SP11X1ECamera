@@ -1,0 +1,132 @@
+{
+  "accepted": true,
+  "authorization_consumed": true,
+  "classification": {
+    "csid_camif_progression_seen": true,
+    "csid_epoch_progression_seen": true,
+    "csid_rup_done_seen": true,
+    "failure_boundary": "after CSID1 CAMIF/RUP/Epoch progression and before VFE1 raw BUS Epoch0; Linux history also contains transient CSID bit14 ERROR_LINE_COUNT absent from accepted Windows live status",
+    "sensor_to_csid_rx_clean": true,
+    "transient_csid_line_count_error_seen": true,
+    "vfe1_epoch0_seen": false
+  },
+  "csid1": {
+    "camif_eof_seen": true,
+    "camif_epoch0_seen": true,
+    "camif_epoch1_seen": true,
+    "camif_sof_seen": true,
+    "final_ipp_status": "0x00011e00",
+    "final_ipp_status_bits": [
+      "INFO_INPUT_EOF",
+      "INFO_INPUT_EOL",
+      "INFO_INPUT_SOL",
+      "INFO_INPUT_SOF",
+      "VCDT_GRP1_SEL"
+    ],
+    "ipp_mask": "0x3cbc601c",
+    "irq_history_count": 4,
+    "irq_history_last": "0x00004ee8",
+    "irq_history_last_bits": [
+      "CAMIF_EOF",
+      "FRAME_DROP_EOF",
+      "FRAME_DROP_EOL",
+      "FRAME_DROP_SOL",
+      "INFO_INPUT_EOF",
+      "INFO_INPUT_EOL",
+      "INFO_INPUT_SOL",
+      "ERROR_LINE_COUNT"
+    ],
+    "irq_history_or": "0x00e15ff8",
+    "irq_history_or_bits": [
+      "CAMIF_EOF",
+      "CAMIF_SOF",
+      "FRAME_DROP_EOF",
+      "FRAME_DROP_EOL",
+      "FRAME_DROP_SOL",
+      "FRAME_DROP_SOF",
+      "INFO_INPUT_EOF",
+      "INFO_INPUT_EOL",
+      "INFO_INPUT_SOL",
+      "INFO_INPUT_SOF",
+      "ERROR_LINE_COUNT",
+      "VCDT_GRP1_SEL",
+      "CAMIF_EPOCH0",
+      "CAMIF_EPOCH1",
+      "RUP_DONE"
+    ],
+    "line_count_error_seen": true,
+    "rup_done_seen": true
+  },
+  "date": "2026-08-30",
+  "evidence_sha256": {
+    "auth": "f76ca42c08493a321bd482f2c9a4389186b071ea3e6e06a9325e41548e7c1b8a",
+    "dmesg": "1c6aac0f80bb3bd6e43dd8d0238973d6403e537f8c83191edd09f0abd17afbf8",
+    "golden": "3353e34bd4f8fdcb9e9c06213d55fc541db006fc91f6f179008732b5480967f7",
+    "linux_static": "6e98360aa0a83c8c61db1e67bd5c12f4fb6c7856698f48aea404a23100de8eb2",
+    "observer": "23bc970a9bacff901e1336208282904cb9c0add0dfd5bea311194caeacb5451d",
+    "package": "b4f03e0775da5deaf03fd29196c57e0781f256261ccd12d40af86b4460e339cd",
+    "post": "4ecbf70abb7d82c5700bb800393eaf244a43f9ad8bde93b1098dafeac67613f6",
+    "run": "0aa806d4274c589e68abf0ca97976cdd215ba6a3b13de05977634ccb79a522c5",
+    "stages": "2c5a23faf00439f566843e4358e2e6b9c204359fc3c875f207cdbcd8258379fa"
+  },
+  "golden_return_verified": true,
+  "helper_invocations": 1,
+  "next_gate": "Statically close CSID1 bit14 ERROR_LINE_COUNT provenance/Windows handling and the CSID1-to-VFE1 CAMIF handoff/start-state before any further Linux runtime.",
+  "qc10c_output": false,
+  "rtcdm": {
+    "faulted": false,
+    "fifo_bl_completed": 17,
+    "final_stage": "stopped"
+  },
+  "run_rc": 1,
+  "runtime_authorized": false,
+  "same_boot_retry": false,
+  "schema": "sp11-e003h-csid1-ipp-irq-history-0048-runtime-result-v1",
+  "sensor": {
+    "clean_csi_packets": 37016,
+    "crc_errors": 0,
+    "ecc_errors": 0,
+    "mode_select_off_seen": true,
+    "mode_select_on_seen": true
+  },
+  "supersedes": {
+    "new_fact": "in-ISR OR history proves all five events occurred before timeout and were cleared by the normal CSID ISR",
+    "old_inference": "final IPP_IRQ_STATUS=0x00011e00 proved CAMIF_SOF/CAMIF_EOF/CAMIF_EPOCH0/CAMIF_EPOCH1/RUP_DONE never occurred",
+    "scope": "0042-0047 historical interpretation only; raw final snapshots remain valid"
+  },
+  "vfe1_timeout": {
+    "bus_mask0": "0xd0000000",
+    "bus_mask1": "0x00000000",
+    "bus_status0": "0x00000000",
+    "bus_status1": "0x00000000",
+    "raw_epoch0_seen": false,
+    "top_mask0": "0x0007f051",
+    "top_mask1": "0x00000000",
+    "top_status0": "0x00000000",
+    "top_status1": "0x00030003"
+  },
+  "windows_live_comparison": {
+    "accepted_windows_live_bits": [
+      "CAMIF_EOF",
+      "CAMIF_SOF",
+      "FRAME_DROP_EOF",
+      "FRAME_DROP_EOL",
+      "FRAME_DROP_SOL",
+      "FRAME_DROP_SOF",
+      "INFO_INPUT_EOF",
+      "INFO_INPUT_EOL",
+      "INFO_INPUT_SOL",
+      "INFO_INPUT_SOF",
+      "VCDT_GRP1_SEL",
+      "CAMIF_EPOCH0",
+      "CAMIF_EPOCH1",
+      "RUP_DONE"
+    ],
+    "accepted_windows_live_ipp_status": "0x00e11ff8",
+    "linux_history_extra_bits": [
+      "ERROR_LINE_COUNT"
+    ],
+    "linux_history_extra_vs_windows_live": "0x00004000",
+    "linux_history_missing_windows_live": "0x00000000"
+  }
+}

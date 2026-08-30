@@ -1,0 +1,39 @@
+{
+  "schema": "sp11-e003h-csid1-ipp-irq-history-0048-one-shot-authorization-v1",
+  "accepted": true,
+  "date": "2026-08-30",
+  "runtime_authorized": true,
+  "production_parity_authorized": false,
+  "authorization_review_sha256": "3a0c73f25684518fb07c8bd8dc5d6fb14cdec834a927496a635d94041e5ebb8f",
+  "package_commit": "d6c0c7af7103db94c0c863b98ddb245666bb649b",
+  "package_inspection_sha256": "b4f03e0775da5deaf03fd29196c57e0781f256261ccd12d40af86b4460e339cd",
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "boot": {
+    "id": "sp11-camera-e003h-csidirq-0048-one-shot",
+    "cmdline_marker": "sp11_camera_e003h_csidirq_0048=1",
+    "golden_saved_default": "sp11-audio-fullio-v19c",
+    "candidate_was_unarmed_at_authorization": true
+  },
+  "candidate": {
+    "camss_sha256": "94cc14d9702492bffa2b4e72989db45356cf59ffcce7f4c382be13e7130030b7",
+    "sensor_sha256": "389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "capsule_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09"
+  },
+  "execution_contract": {
+    "boot_count": 1,
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false,
+    "existing_run_log_refuses_execution": true,
+    "persistent_rtcdm_observer_required": true,
+    "normal_qbuf": false,
+    "normal_streamon": false,
+    "nonroot_pretrigger": false,
+    "epoch0_timeout_requires_vfe1_and_csid1_snapshot": true,
+    "after_any_helper_result": "archive evidence then immediately reboot to Golden"
+  },
+  "purpose": "One bounded observer-only first-frame diagnostic on the exact 0047 transport, using 0048 software latches to recover the CSID1 IPP IRQ history that the normal ISR clears before the final timeout snapshot.",
+  "success_boundary": "At most one bounded diagnostic. The result classifies CSID IRQ history only; any QC10C frame remains transport evidence and is not production parity.",
+  "failure_boundary": "Any preflight mismatch aborts without RUN; any helper result consumes this authorization."
+}

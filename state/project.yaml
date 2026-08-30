@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0048-one-shot-authorized-unarmed-run-next
+status: e003h-0048-consumed-csid-camif-rup-epoch-proven-line-count-error-vfe-handoff-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1717,6 +1717,48 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003h-0048-csid1-ipp-irq-history-one-shot-run
+next_experiment: E003h-windows-csid1-line-count-and-vfe-handoff-static
+linux_0048_runtime:
+  accepted: true
+  date: 2026-08-30
+  authorization_consumed: true
+  helper_invocations: 1
+  same_boot_retry: false
+  run_rc: 1
+  result: ETIMEDOUT_waiting_vfe1_raw_epoch0
+  qc10c_output: false
+  golden_return_verified: true
+  rtcdm_fifo_bl_completed: 17
+  rtcdm_faulted: false
+  csid_packets: 37016
+  csid_ecc_errors: 0
+  csid_crc_errors: 0
+  csid_final_ipp_status: 0x00011e00
+  csid_ipp_history_or: 0x00e15ff8
+  csid_ipp_history_last: 0x00004ee8
+  csid_ipp_history_count: 4
+  csid_camif_sof_seen: true
+  csid_camif_eof_seen: true
+  csid_epoch0_seen: true
+  csid_epoch1_seen: true
+  csid_rup_done_seen: true
+  csid_line_count_error_seen: true
+  windows_live_ipp_status: 0x00e11ff8
+  linux_history_extra_vs_windows_live: 0x00004000
+  linux_history_extra_decode: ERROR_LINE_COUNT
+  vfe_top_status1: 0x00030003
+  vfe_bus_status1: 0x00000000
+  vfe_raw_epoch0_seen: false
+  supersedes_0042_0047_missing_csid_event_inference: true
+  runtime_run_sha256: 0aa806d4274c589e68abf0ca97976cdd215ba6a3b13de05977634ccb79a522c5
+  runtime_post_sha256: 4ecbf70abb7d82c5700bb800393eaf244a43f9ad8bde93b1098dafeac67613f6
+  runtime_dmesg_sha256: 1c6aac0f80bb3bd6e43dd8d0238973d6403e537f8c83191edd09f0abd17afbf8
+  runtime_rtcdm_stages_sha256: 2c5a23faf00439f566843e4358e2e6b9c204359fc3c875f207cdbcd8258379fa
+  runtime_golden_return_sha256: 3353e34bd4f8fdcb9e9c06213d55fc541db006fc91f6f179008732b5480967f7
+  runtime_extractor_sha256: 54026e02919b9fb7ab8bd4455fca2f1e1b0660952baafd6114abd4d3b029c58e
+  runtime_analysis_sha256: 70d0dad027d266026bde7b2c81cc8d9e4d73a477f12fcb3e831f9d10a9a98866
+  failure_boundary: after CSID1 CAMIF/RUP/Epoch progression and before VFE1 raw BUS Epoch0
+  runtime_authorized: false
+
 next_action: >-
-  Do not repeat 0047. Close the remaining same-machine Windows first-start lifecycle after VFE BUS start and before sensor-on, focusing on direct VFE/CSID callbacks or state transitions not represented by the current startup packet/callback model. Use existing KD/Ghidra evidence first; only authorize another Linux run after a new exact parity delta or narrowly justified phase telemetry is frozen and inspected.
+  Do not repeat 0048. Statically close the transient CSID1 bit14 ERROR_LINE_COUNT provenance and same-machine Windows handling, then close the exact CSID1-to-VFE1 CAMIF handoff/start-state. Prefer existing KD/Ghidra evidence; only consider another Linux run after a new exact parity delta or narrowly justified phase telemetry is frozen and inspected.
