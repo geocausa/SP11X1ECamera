@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0048-static-pass-csid-ipp-irq-history-package-next
+status: e003h-0048-package-pass-unarmed-authorization-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1683,6 +1683,24 @@ linux_irq_observer_integrity_0048:
   hardware_behavior_changed: false
   runtime_authorized: false
 
-next_experiment: E003h-0048-csid1-ipp-irq-history-package
+linux_0048_package:
+  accepted: true
+  package_dir: experiments/E003-front-imx681-cphy/e003h-csid1-ipp-irq-history-0048-candidate
+  asset_manifest_sha256: b2a14e6491b16b22f6bc0bf9e44917c31ff4f7ab6d68204bc87a035b9f96f797
+  package_inspection_sha256: b4f03e0775da5deaf03fd29196c57e0781f256261ccd12d40af86b4460e339cd
+  inspect_package_sha256: 41f27b3c0fce8a538eeb79192ad96d854e49c6a09f9046cadcc1268415021c28
+  camss_sha256: 94cc14d9702492bffa2b4e72989db45356cf59ffcce7f4c382be13e7130030b7
+  sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+  dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  boot_id: sp11-camera-e003h-csidirq-0048-one-shot
+  cmdline_marker: sp11_camera_e003h_csidirq_0048=1
+  candidate_boot_installed: true
+  candidate_boot_armed: false
+  camera_modules_loaded: false
+  hardware_behavior_changed: false
+  authorization_present: false
+  runtime_authorized: false
+
+next_experiment: E003h-0048-csid1-ipp-irq-history-authorization
 next_action: >-
   Do not repeat 0047. Close the remaining same-machine Windows first-start lifecycle after VFE BUS start and before sensor-on, focusing on direct VFE/CSID callbacks or state transitions not represented by the current startup packet/callback model. Use existing KD/Ghidra evidence first; only authorize another Linux run after a new exact parity delta or narrowly justified phase telemetry is frozen and inspected.

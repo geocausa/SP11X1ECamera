@@ -8,6 +8,12 @@ The blocker, however, does not move. VFE1 `TOP_STATUS1` remains `0x00030003` wit
 
 Golden recovery is verified with `saved_entry=sp11-audio-fullio-v19c`, empty `next_entry`, Wi-Fi connected, playback/capture devices present, Surface touch/touchpad present, and camera modules absent. Authorization `98d8d7ae...6c91a` is preserved as `AUTHORIZATION-CONSUMED.json`. **Do not repeat 0047.** Next close the remaining same-machine Windows first-start lifecycle after BUS start and before sensor-on using existing KD/Ghidra evidence before considering any new Linux hardware run.
 
+## E003h ACTIVE — 0048 package installed, frozen and unarmed — 2026-08-30
+
+The software-only CSID1 IPP IRQ-history delta is now packaged independently as `e003h-csid1-ipp-irq-history-0048-candidate`. Package inspection SHA-256 `b4f03e07...339cd` verifies the 0048 CAMSS module `94cc14d9...030b7`, unchanged 0047 sensor/DTB/capsule/helper assets, front-only `port@2`, exact CAMSS IOMMU set, Golden kernel/initrd bytes, runtime-preflight-before-load, exactly one helper invocation, no same-boot retry, and mandatory reboot. The installed GRUB identity is `sp11-camera-e003h-csidirq-0048-one-shot` with marker `sp11_camera_e003h_csidirq_0048=1`.
+
+Golden remains the saved default and `next_entry` is empty. Camera modules are not loaded. `AUTHORIZATION.json` is absent, `runtime_authorized=false`, and package installation did not activate camera hardware. The next gate is a fresh authorization commit tied to this immutable package checkpoint; only after that may one bounded candidate boot be armed.
+
 ## E003h ACTIVE — 0048 software-only CSID IPP IRQ history static PASS — 2026-08-30
 
 A Linux observer-integrity audit corrects an important diagnostic overclaim from the consumed 0042–0047 runs. VFE680's normal ISR is a no-op, so the 0047 absence of raw VFE1 `BUS status1 bit21` remains trustworthy: the normal Linux ISR cannot consume Epoch0 before the private poll sees it. CSID680 is different: while powered its IRQ is enabled, and its ISR reads IPP status `+0xac` then clears the complete non-zero value through `+0xb4`. Therefore the later timeout value `IPP_IRQ_STATUS=0x00011e00` is not a historical OR and **cannot by itself prove** CAMIF SOF/EOF, CAMIF Epoch0/1 or RUP_DONE never asserted earlier. The raw packet counts, zero ECC/CRC, final status values, exact config/masks and VFE1 Epoch0 absence remain valid.
