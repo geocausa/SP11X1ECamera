@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-ife804-closed-csid1-ipp-start-oracle-0042-static-pass-package-next
+status: e003h-csid1-0042-package-installed-golden-safe-authorization-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1067,14 +1067,33 @@ e003h:
   linux_front_0042_epoch0_timeout_csid_snapshot: true
   linux_front_0042_patch_roundtrip_byte_identical: true
   linux_front_0042_runtime_authorized: false
-next_experiment: E003h-csid1-ipp-start-parity-candidate-package
-next_action: Do not run PIX yet. IFE 0x804 is closed as a logical-only usecase/skip
-  capture for the front session. Exact Windows CSID 0x804/path-5 start semantics are
-  now represented by Linux 0042 and the static build/inspection gate passes. Build an
-  exact one-shot candidate package containing the c67ce602... qcom-camss module,
-  preserve Golden as saved/default, re-run package/provenance inspection, checkpoint
-  exact hashes, then authorize at most one diagnostic. On Epoch0 timeout capture the
-  new CSID1 snapshot before teardown; no same-boot retry.
+  linux_front_0042_package_dir: experiments/E003-front-imx681-cphy/e003h-csid1-ipp-start-parity-candidate
+  linux_front_0042_candidate_boot_id: sp11-camera-e003h-csid1-0042-one-shot
+  linux_front_0042_candidate_boot_dir: /boot/sp11-7.1.5-camera-e003h-csid1-0042
+  linux_front_0042_candidate_cmdline_marker: sp11_camera_e003h_csid1_0042=1
+  linux_front_0042_candidate_installed: true
+  linux_front_0042_candidate_armed: false
+  linux_front_0042_package_camss_sha256: c67ce602f88be5db2ffecd816879081d74f996f7884e8661bea252d924f7098e
+  linux_front_0042_package_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  linux_front_0042_package_sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+  linux_front_0042_package_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_0042_package_helper_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  linux_front_0042_package_golden_kernel_sha256: bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
+  linux_front_0042_package_golden_initrd_sha256: ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d
+  linux_front_0042_package_golden_saved_default: true
+  linux_front_0042_package_next_entry_empty: true
+  linux_front_0042_package_camera_modules_loaded: false
+  linux_front_0042_package_authorization_present: false
+  linux_front_0042_package_runtime_authorized: false
+next_experiment: E003h-csid1-ipp-start-parity-authorization-review
+next_action: Do not boot the candidate until the installed 0042 package checkpoint is
+  committed and pushed and a separate fail-closed authorization review is committed.
+  The package is installed under fresh boot ID sp11-camera-e003h-csid1-0042-one-shot,
+  Golden remains saved/default with empty next_entry, and no camera modules are loaded.
+  Authorization may permit exactly one candidate boot and one root helper invocation,
+  with persistent RT-CDM observer required, no normal QBUF/STREAMON, no same-boot retry,
+  immediate Golden reboot after the result, and mandatory CSID1 timeout snapshot if
+  VFE1 Epoch0 remains absent.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
