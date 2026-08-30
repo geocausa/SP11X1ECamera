@@ -593,4 +593,9 @@ Authorization is exactly one candidate boot and one **root** `RUN`. There is no 
 The authorized candidate boot passed corrected-IOMMU/front-PIX preflight and started the persistent RT-CDM observer at idle. No hardware `RUN` occurred: a shell redirection to a root-owned evidence file failed with `Permission denied` before the sole privileged helper executable was entered. The persisted observer remained `seq=0 stage=idle`, `irq_armed=0`; sensor transmission never began; no QC10C output exists; CAMSS/sensor stayed suspended; Golden return is clean. The candidate boot is considered consumed but this is not a failed PIX attempt and no same-boot retry occurred.
 
 A corrected wrapper now creates its evidence log before the privileged helper invocation and fails closed on any existing actual-run log. A replacement candidate boot/root `RUN` requires a new explicit authorization checkpoint.
+## 2026-08-30 — replacement post-provenance one-shot authorized after pre-exec abort
+
+Fresh bounded provenance, package, branch-sync, Golden boot-state and corrected-wrapper review all pass. The previous candidate boot did not enter the helper/sysfs trigger and does not count as a PIX hardware run, but its boot authorization is consumed. Corrected wrapper SHA-256 `7724dabef6fe147809919d0349d1adfe1a4b1c2418ede82c7235e0d79e1d396d` prevents the root-owned-redirection failure and refuses reuse of an actual-run evidence path.
+
+Exactly one replacement candidate boot and one root helper invocation are authorized. Persistent RT-CDM watcher must be ready/fsyncing before the helper. No non-root pre-trigger and no same-boot retry. Any helper result is archived and followed immediately by Golden reboot. Review JSON SHA-256 `555d2cbb35cbffa8da1183201efab1d17a92e904fa035460bc98bd7029ab1ec7`.
 

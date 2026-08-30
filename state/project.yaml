@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-postprov-boot-consumed-no-hardware-run-golden-restored-replacement-review-next
+status: e003h-postprov-replacement-one-shot-authorized-not-yet-armed-golden-safe
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1005,12 +1005,21 @@ e003h:
   linux_front_postprov_harness_abort_result_sha256: 08ebdf455a97b151cbe62724e8b1c6a3ab244f10fa787b1731cb1a3e35f4ffba
   linux_front_postprov_corrected_wrapper_sha256: 7724dabef6fe147809919d0349d1adfe1a4b1c2418ede82c7235e0d79e1d396d
   linux_front_postprov_authorization_consumed: true
-next_experiment: E003h-bounded-vfe1-pix-replacement-one-shot-authorization-review
-next_action: 'Do not treat the prior candidate boot as a PIX hardware attempt: shell
-  redirection failed before the privileged helper entered and RT-CDM stayed idle.
-  The candidate-boot authorization is consumed, hardware RUN was not. Rerun Golden/package/provenance
-  review, inspect the corrected wrapper, and create a fresh single-boot/single-root-RUN
-  authorization checkpoint before re-arming. No same-boot retry occurred.'
+  linux_front_postprov_replacement_runtime_authorized: true
+  linux_front_postprov_replacement_authorization_scope: exactly one replacement candidate
+    boot and one root helper invocation; prior boot had no hardware RUN; persistent
+    observer required; no same-boot retry; immediate Golden reboot after result
+  linux_front_postprov_replacement_authorization_review_sha256: 555d2cbb35cbffa8da1183201efab1d17a92e904fa035460bc98bd7029ab1ec7
+  linux_front_postprov_replacement_wrapper_sha256: 7724dabef6fe147809919d0349d1adfe1a4b1c2418ede82c7235e0d79e1d396d
+  linux_front_postprov_replacement_hardware_run_consumed: false
+next_experiment: E003h-bounded-vfe1-pix-postprovenance-replacement-runtime
+next_action: Exactly one replacement post-provenance candidate boot and one root helper
+  invocation are authorized because the prior candidate boot failed before helper/sysfs
+  entry and RT-CDM remained idle. Arm only sp11-camera-e003h-pix-one-shot, load pinned
+  CAMSS+IMX681, configure exact front PIX route, allocate exactly two QC10C buffers
+  without QBUF/STREAMON, start/fsync persistent watcher, run the corrected wrapper
+  once, archive evidence, never retry in the same boot, and return immediately to
+  Golden.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
