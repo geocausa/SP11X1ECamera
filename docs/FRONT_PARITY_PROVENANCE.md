@@ -15,20 +15,16 @@ The machine-readable ledger is `provenance/front-parity.json`; `tools/check-fron
 
 ## Current audit result
 
-The current pass contains 35 runtime/production-relevant facts:
+The current pass contains 36 runtime/production-relevant facts:
 
-- 17 `WINDOWS_OBSERVED`;
+- 18 `WINDOWS_OBSERVED`;
 - 8 `WINDOWS_REVERSED`;
-- 7 `LINUX_IMPLEMENTATION`;
-- 3 `UNVERIFIED`.
+- 8 `LINUX_IMPLEMENTATION`;
+- 2 `UNVERIFIED`.
 
-For the bounded first VFE1 PIX/QC10C transport target there is exactly one critical blocker:
+For the bounded first VFE1 PIX/QC10C transport target there are now **zero provenance blockers**. This means the evidence ledger no longer contains a runtime-critical `UNVERIFIED` fact; it does not itself authorize hardware execution.
 
-`rtcdm.command_dma_domain_visibility`
-
-The exact same-machine `qcsmmu8380.inf` now proves VFE client CB16/VM4 `S1_IFE_HLOS` maps SID `0x0800` mask `0x0060` plus SID `0x18a0` mask `0`. It also separately proves CB17/VM4 `S1_ICP_IPE_BPS_CDM` maps `0x1800/0x60`, `0x1900/0`, and `0x1980/0x20`. A public X1E80100 CAMSS v13 binding independently labels `0x18a0` as the `CDM IFE` stream, but that public label is implementation corroboration rather than Windows proof.
-
-The narrower same-machine fact still missing is **which SID RT_CDM1 command fetches actually emit**. The audit also found a concrete Linux defect: the integrated eight-entry CAMSS IOMMU list omits `0x18a0`. Therefore `dma_alloc_coherent(camss->dev, ...)` cannot yet be accepted for RT-CDM command buffers and another Linux PIX/RT-CDM run remains blocked.
+The last blocker, `rtcdm.command_dma_domain_visibility`, was split into two independently classified facts. Same-machine Windows now proves **RT-CDM1 front IFE command fetch -> SID `0x18a0` -> CB16 / `S1_IFE_HLOS`** by combining installed `qciommuext8380.inf` VFE-HLOS aggregate semantics, live IORT group mapping, installed `qcsmmu8380.inf` CB16 grouping, and the accepted `qccamisp8380.sys` hardware-CDM oracle. Public X1E naming is retained only as corroboration. Separately, Linux `0041` plus DMA-core/ARM-SMMU inspection proves `dma_alloc_coherent(camss->dev, ...)` allocates an IOVA in the CAMSS device translation domain that contains SID `0x18a0`. That composite Linux visibility fact is classified `LINUX_IMPLEMENTATION` with `parity_claim=false`.
 
 For production parity two additional open provenance items remain: the ultimate owner of pre-existing `FE_CFG/FIFO0_CFG` state, and an independently implemented live IQ/provider strategy. Neither is allowed to masquerade as a Windows fact.
 
@@ -36,7 +32,7 @@ For production parity two additional open provenance items remain: the ultimate 
 
 `windows-ife-cdm/RTCDM-IRQ-ORACLE.md` previously ended its parity consequence with `DMA source: CAMSS device DMA/IOMMU domain`. The interrupt oracle did **not** prove that. The document is corrected to say the DMA requester/domain is unestablished and runtime-blocking. Historical patch artifacts are left byte-stable as historical evidence; their `CAMSS DMA domain` comments are now classified as a Linux implementation hypothesis by the provenance ledger rather than retroactively rewritten.
 
-An upstream-only assertion that `SID 0x18a0` is the RT-CDM requester remains rejected as Windows proof. The new same-machine qcsmmu oracle does establish that `0x18a0` belongs to VFE/IFE HLOS CB16; the exact RT-CDM1 requester-to-SID relation remains open.
+The earlier upstream-only assertion that `SID 0x18a0` is the RT-CDM requester remains recorded as rejected **as upstream-only proof**. It is now superseded by the independent same-machine Windows derivation in `WINDOWS-RTCDM1-REQUESTER-SID.md`; public naming is not used as the behavioral authority.
 
 ## Runtime enforcement
 
@@ -53,4 +49,4 @@ Only a green target may be considered for a new authorization. A green provenanc
 
 ## Linux IOMMU implementation correction
 
-Static `0041` now fixes the Linux side without promoting it to a Windows fact. The old eight-entry CAMSS list omitted `0x18a0`; the candidate uses the public X1E five-entry set and rebuilds Denali with an `iommus`-only structural change. Inspector `671cdcee8cbe7e21ec9923c4c555f50f139b6d7b32abd5f24e489b71d0a61827` proves the normal Linux DMA/IOMMU path maps CAMSS coherent allocations into the single CAMSS device domain that owns all five fwspec stream entries. The remaining runtime blocker is therefore narrower: same-machine Windows must still prove that RT-CDM1 command fetches actually use the `0x18a0` route (or identify another requester).
+Static `0041` now fixes the Linux side without promoting it to a Windows fact. The old eight-entry CAMSS list omitted `0x18a0`; the candidate uses the public X1E five-entry set and rebuilds Denali with an `iommus`-only structural change. Inspector `671cdcee8cbe7e21ec9923c4c555f50f139b6d7b32abd5f24e489b71d0a61827` proves the normal Linux DMA/IOMMU path maps CAMSS coherent allocations into the single CAMSS device domain that owns all five fwspec stream entries. The subsequent same-machine requester oracle now proves RT-CDM1 command fetch uses the `0x18a0` route. With that Windows fact plus Linux `0041`, the bounded provenance target has no critical `UNVERIFIED` item.

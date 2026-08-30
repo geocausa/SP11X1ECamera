@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-linux-camss-iommu-five-entry-built-requester-sid-still-blocked-golden-safe
+status: e003h-rtcdm-requester-sid-proven-bounded-provenance-green-runtime-unarmed-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -886,17 +886,23 @@ e003h:
   linux_camss_iommu_current_list_status: stale; omits 0x18a0 CDM-IFE candidate route
   linux_camss_iommu_public_v13_reference: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
   linux_camss_iommu_public_v13_is_windows_proof: false
-  rtcdm_exact_command_fetch_sid_proven_same_machine: false
+  rtcdm_exact_command_fetch_sid_proven_same_machine: true
+  rtcdm_exact_command_fetch_sid: 0x18a0
+  rtcdm_exact_command_fetch_context_bank: 16
+  rtcdm_exact_command_fetch_context_name: S1_IFE_HLOS
+  windows_rtcdm1_requester_sid_extractor_sha256: 1efe9046ca42fe3eb78d55ef086e4503f607193cc49bda0e43918591ccc48f06
+  windows_rtcdm1_requester_sid_oracle_sha256: 528c767850b25b59d615756b715cd19cb5156b1489fc409a62bf78591c8a1dfc
+  windows_rtcdm1_requester_sid_narrative_sha256: e5935c1dc32d4d6a9b3b08dde18a5cfcd8e55b575054aad735312b1d04fb3655
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
-  front_parity_provenance_runtime_blockers: [rtcdm.command_dma_domain_visibility]
-  front_parity_provenance_production_blockers: [rtcdm.fe_fifo_ultimate_origin, rtcdm.command_dma_domain_visibility, iq.live_provider_algorithms]
+  front_parity_provenance_runtime_blockers: []
+  front_parity_provenance_production_blockers: [rtcdm.fe_fifo_ultimate_origin, iq.live_provider_algorithms]
   front_parity_provenance_checker: tools/check-front-parity-provenance.py
   front_parity_provenance_enforced_in_pix_preflight: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; Linux CAMSS IOMMU implementation now includes 0x18a0 and coherent allocations are proven to use the CAMSS IOMMU domain, but exact same-machine RT-CDM1 command-fetch requester->SID remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-requester-sid-static-oracle
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; bounded transport provenance is green but no new PIX runtime is authorized; production parity still requires the ultimate FE_CFG/FIFO0_CFG owner classification and an independently implemented live IQ/provider strategy
+next_experiment: E003h-bounded-vfe1-pix-post-provenance-authorization-review
 next_action: >-
-  Do not repeat PIX runtime. 0041 fixes the Linux CAMSS IOMMU implementation and proves dma_alloc_coherent(camss->dev) maps into the CAMSS IOMMU domain containing the declared five streams. The remaining bounded runtime blocker is exact same-machine RT-CDM1 command-fetch requester->SID identity. Continue Windows qcsmmu/qcISP oracle work until that relation is mechanical; runtime stays unauthorized.
+  Do not run PIX yet. The same-machine Windows requester oracle now proves RT-CDM1 command fetch uses SID 0x18a0/CB16, and Linux 0041 proves coherent CAMSS command allocations use the device translation domain containing that SID. Rerun both provenance targets and perform a fresh Golden/package/runtime safety review. A green bounded provenance gate is necessary but not sufficient; any further PIX attempt requires a new explicit one-shot authorization checkpoint.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

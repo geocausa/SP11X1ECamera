@@ -1,0 +1,52 @@
+{
+  "accepted": true,
+  "derivation": [
+    "Installed qciommuext groups VFE HLOS input IDs 0x01030000..0x01030004 and labels the group Camera CDM IFE plus IFE/SFE RD/WR non-protected streams.",
+    "Same-machine live IORT maps group base 0x01030000 to SID 0x18a0; the other four group IDs map to 0x800/0x860/0x840/0x820.",
+    "Installed qcsmmu independently places singleton SID 0x18a0 and masked 0x800-family streams in CB16 S1_IFE_HLOS.",
+    "Exact qccamisp oracle proves accepted front IFE command execution is hardware RT_CDM1."
+  ],
+  "linux_consequence": "For the accepted front IFE command path, RT-CDM1 command fetches use SID 0x18a0 in CB16/S1_IFE_HLOS. A Linux CAMSS DMA domain that includes 0x18a0 can expose coherent command-buffer IOVAs to this requester; the Linux domain wiring is a separate implementation fact.",
+  "public_vocabulary_crosscheck": {
+    "reference": "https://www.spinics.net/lists/kernel/msg6121499.html",
+    "role": "naming/corroboration only; not behavioral authority",
+    "statement": "X1E CAMSS IOMMU entry ordering independently names the fifth 0x18a0 entry S1 HLOS CDM IFE non-protected."
+  },
+  "requester_context_bank": 16,
+  "requester_context_name": "S1_IFE_HLOS",
+  "requester_sid": "0x18a0",
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-windows-rtcdm1-requester-sid-v1",
+  "source": {
+    "hwcdm_oracle_git_sha256": "315710e90598e2ad18c1f5a2dd3080e361e182412b2df8153450d2925f274d5e",
+    "live_iort": {
+      "bytes": 5366,
+      "sha256": "c561d68b2c3e731c927481ca37bc97302a2f3dcd24747ebf530b8be19795445b"
+    },
+    "qciommuext8380.inf": {
+      "bytes": 22974,
+      "sha256": "18e06ef557a9b0ef7d22fa3c8f97909699e915946aeec0a758f3e32cb9676a6c"
+    },
+    "qcsmmu_oracle_git_sha256": "5a3873e2f26ef67a8cc3df9124b9cc8c07d2dfd1e30d072dcb16d28c000cb0bf"
+  },
+  "windows_front_command_engine": "RT_CDM_1",
+  "windows_iort_group_map": {
+    "0x01030000": "0x18a0",
+    "0x01030001": "0x0800",
+    "0x01030002": "0x0860",
+    "0x01030003": "0x0840",
+    "0x01030004": "0x0820"
+  },
+  "windows_qcsmmu_cb16": {
+    "name": "S1_IFE_HLOS",
+    "sid_mask": [
+      "0x0800/0x0060",
+      "0x18a0/0x0000"
+    ]
+  },
+  "windows_vfe_hlos_s1ag": {
+    "count": 5,
+    "input_base": "0x01030000",
+    "semantic_comment": "0x01030000        0x5        //VFE      HLOS  (S1_IFE_HLOS)         (Camera CDM IFE, IFE/SFE RD/WR non-protected stream)"
+  }
+}

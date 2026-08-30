@@ -1,6 +1,6 @@
 {
   "schema": "sp11-front-parity-provenance-v1",
-  "generated_from_commit": "8bc7ce5aa5a661cf7cbec4dfc0d6bc1a99119c1a",
+  "generated_from_commit": "afd93b8cd0298cbf5be3a2e63cbe9407035ed465",
   "policy": {
     "authority": "Same-machine SP11 Windows is authoritative for hardware behavior. Upstream sources are vocabulary/implementation references only.",
     "classifications": [
@@ -19,7 +19,7 @@
       "scope": "rtcdm.command_dma_domain_visibility",
       "candidate": "SID 0x18a0",
       "status": "REJECTED_AS_PROOF",
-      "reason": "The upstream-only SID 0x18a0 claim remains invalid as Windows proof. A separate same-machine qcsmmu oracle now proves 0x18a0/mask0 belongs to VFE client CB16 S1_IFE_HLOS; the exact RT-CDM1 command-fetch requester->SID relation is still not proven."
+      "reason": "The earlier upstream-only assertion that SID 0x18a0 was the RT-CDM requester was correctly rejected as proof. It is now superseded by a separate same-machine Windows derivation from qciommuext S1AG grouping + live IORT + installed qcsmmu + the accepted RT-CDM1 activity oracle; upstream naming remains corroboration only."
     }
   ],
   "facts": [
@@ -399,6 +399,28 @@
       ]
     },
     {
+      "id": "rtcdm.requester_sid",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Same-machine Windows mechanically identifies the accepted front RT-CDM1 IFE command-fetch requester as SID 0x18a0 in CB16 / S1_IFE_HLOS.",
+      "linux_use": "Use SID 0x18a0 as the Windows-proven RT-CDM1 command requester. This closes requester identity only; Linux DMA-domain wiring remains an independently classified implementation fact.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-requester-sid-oracle.json",
+          "sha256": "528c767850b25b59d615756b715cd19cb5156b1489fc409a62bf78591c8a1dfc"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-RTCDM1-REQUESTER-SID.md",
+          "sha256": "e5935c1dc32d4d6a9b3b08dde18a5cfcd8e55b575054aad735312b1d04fb3655"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/extract_rtcdm_requester_sid.py",
+          "sha256": "1efe9046ca42fe3eb78d55ef086e4503f607193cc49bda0e43918591ccc48f06"
+        }
+      ]
+    },
+    {
       "id": "linux.camss_iommu_current_set",
       "classification": "LINUX_IMPLEMENTATION",
       "runtime_critical": true,
@@ -424,26 +446,27 @@
     },
     {
       "id": "rtcdm.command_dma_domain_visibility",
-      "classification": "UNVERIFIED",
+      "classification": "LINUX_IMPLEMENTATION",
       "runtime_critical": true,
       "production_critical": true,
-      "claim": "Linux 0041 now provides the five-stream CAMSS IOMMU domain including 0x18a0, and Linux DMA API inspection proves coherent CAMSS allocations use that device IOMMU domain. Same-machine Windows qcsmmu proves 0x18a0/mask0 belongs to VFE/IFE HLOS CB16. The remaining unverified fact is the exact RT-CDM1 command-fetch requester->SID relation.",
-      "linux_use": "Runtime remains blocked until same-machine Windows mechanically ties RT-CDM1 command fetches to 0x18a0 (or identifies a different requester/SID). Do not infer requester identity from public X1E naming alone.",
+      "claim": "Linux 0041 declares the five-entry X1E CAMSS IOMMU fwspec including SID 0x18a0, and Linux DMA-core/SMMU inspection proves dma_alloc_coherent(camss->dev, ...) allocates an IOVA in that CAMSS device translation domain.",
+      "linux_use": "The Linux CAMSS coherent command-buffer IOVA is visible through the same CAMSS translation domain that contains the Windows-proven RT-CDM1 requester SID 0x18a0. This is an independently verified Linux implementation equivalence, not a Windows literal.",
       "evidence": [
         {
-          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-qcsmmu-camera-sid-oracle.json",
-          "sha256": "5a3873e2f26ef67a8cc3df9124b9cc8c07d2dfd1e30d072dcb16d28c000cb0bf"
-        },
-        {
-          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-QCSMMU-CAMERA-SID.md",
-          "sha256": "db6bc136303355f2adea480cb64b676e93114a08f5c139b0841495c530f609e1"
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-requester-sid-oracle.json",
+          "sha256": "528c767850b25b59d615756b715cd19cb5156b1489fc409a62bf78591c8a1dfc"
         },
         {
           "path": "experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/camss-iommu-five-entry-inspection.json",
           "sha256": "bbff1a0b2d2127c1fc389db257c57a75ac39320135f42024a77e6bd44e2dc935"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/0041-x1e-camss-iommu-five-entry-linux-implementation.patch",
+          "sha256": "41b7187b9b2cf35f471ba2627f689e80ff35e9019c84865d792dfa9dbad9bef0"
         }
       ],
-      "blocking_reason": "Exact same-machine RT-CDM1 command-fetch requester->SID is still unproven; Linux implementation side is corrected but cannot substitute for Windows requester evidence."
+      "parity_claim": false,
+      "equivalence_basis": "Same-machine Windows proves RT-CDM1 front IFE command fetch uses SID 0x18a0/CB16 S1_IFE_HLOS. Linux 0041 includes 0x18a0 in the CAMSS device fwspec, and Linux DMA/SMMU code inspection proves CAMSS coherent allocations use the same device translation domain containing all fwspec streams."
     },
     {
       "id": "rtcdm.startup_corpus",
@@ -581,7 +604,7 @@
         },
         {
           "path": "state/project.yaml",
-          "sha256": "7ec3c81a0621398971449be0804b29b37473edf7383129762c1e80aa39267683"
+          "sha256": "2b73bb4834c7bfb296556fcd437987976bc7538f04d726eaa263a825ff7a47fa"
         }
       ],
       "blocking_reason": "Production image-quality/provider work remains open; not the immediate first-frame transport gate."
