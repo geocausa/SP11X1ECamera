@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-rtcdm-requester-sid-proven-bounded-provenance-green-runtime-unarmed-golden-safe
+status: e003h-post-provenance-pix-package-v3-installed-unarmed-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -893,6 +893,19 @@ e003h:
   windows_rtcdm1_requester_sid_extractor_sha256: 1efe9046ca42fe3eb78d55ef086e4503f607193cc49bda0e43918591ccc48f06
   windows_rtcdm1_requester_sid_oracle_sha256: 528c767850b25b59d615756b715cd19cb5156b1489fc409a62bf78591c8a1dfc
   windows_rtcdm1_requester_sid_narrative_sha256: e5935c1dc32d4d6a9b3b08dde18a5cfcd8e55b575054aad735312b1d04fb3655
+  linux_front_postprov_camss_sha256: 7d8c8953f8c14e34d36e3d2352b3ea2581d66a5af777f061f6cd0951fcee1680
+  linux_front_postprov_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  linux_front_postprov_dtb_builder_sha256: 085378c9aaf493651912d1918bc28f9d8a8d016c5c219716ba99d0257e9ea68c
+  linux_front_postprov_load_script_sha256: e4be4c046a51994134aada91ff30ae7b4f3989b04bc309cc4afb0c34249fc85d
+  linux_front_postprov_preflight_script_sha256: 68af81ab332af7ad635e4fa74ecaa62eccc78c45ed9c4655289d478581527347
+  linux_front_postprov_package_inspector_sha256: 5e43b0896aa7be079e3096ddaaad6f34f026a0a52e042a9423c2dd7d306c546f
+  linux_front_postprov_package_inspection_sha256: d28f04d96f0e405fbf8710f3e0e0a872c845b781af05b60a6ed98ecc10c5cce4
+  linux_front_postprov_install_log_sha256: 02b271e002ae5d5e717d44d99a335281b5bb1210fff72c0a5138821124917ecd
+  linux_front_postprov_preflight_log_sha256: 4741a23df4e8c2d0503266552ba61182e7fa7ee36f87a65207858f32b84dc2aa
+  linux_front_postprov_iommu_set: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
+  linux_front_postprov_package_installed: true
+  linux_front_postprov_package_armed: false
+  linux_front_postprov_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
   front_parity_provenance_runtime_blockers: []
@@ -902,7 +915,7 @@ e003h:
   unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; bounded transport provenance is green but no new PIX runtime is authorized; production parity still requires the ultimate FE_CFG/FIFO0_CFG owner classification and an independently implemented live IQ/provider strategy
 next_experiment: E003h-bounded-vfe1-pix-post-provenance-authorization-review
 next_action: >-
-  Do not run PIX yet. The same-machine Windows requester oracle now proves RT-CDM1 command fetch uses SID 0x18a0/CB16, and Linux 0041 proves coherent CAMSS command allocations use the device translation domain containing that SID. Rerun both provenance targets and perform a fresh Golden/package/runtime safety review. A green bounded provenance gate is necessary but not sufficient; any further PIX attempt requires a new explicit one-shot authorization checkpoint.
+  Do not run PIX yet. Bounded provenance and post-provenance package v3 preflight are green, with the corrected 0x18a0 CAMSS IOMMU domain, persistent RT-CDM observer, and exact four-FIFO IRQ parity. Perform a fresh one-shot authorization review against Golden, package hashes, prior two failure modes, rollback and persistent observer readiness. Any further PIX attempt requires a new explicit one-shot authorization checkpoint.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
