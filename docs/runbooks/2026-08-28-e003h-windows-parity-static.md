@@ -588,3 +588,9 @@ The disposable package is repinned after requester-SID closure and Linux `0041`.
 Fresh Golden/package review passes with bounded provenance green, CAMSS `7d8c8953f8c14e34d36e3d2352b3ea2581d66a5af777f061f6cd0951fcee1680`, front-only corrected-IOMMU DT `019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f`, persistent stage observer required and candidate boot installed but unarmed. The two earlier failure modes now have concrete mitigations: exact Windows IRQ acknowledgement replaces the first context-gate mismatch, and the stale Linux CAMSS IOMMU list is corrected with the same-machine requester SID 0x18a0 now proven. Review JSON SHA-256 `73cec6f240c8c20f54eca1dfa141dc8330564e763fd6d9fc2cb43709a723d6d6`.
 
 Authorization is exactly one candidate boot and one **root** `RUN`. There is no non-root pre-trigger probe and no same-boot retry. The persistent RT-CDM watcher must be active and fsyncing before RUN. Any result is archived and followed by immediate Golden reboot.
+## 2026-08-30 — post-provenance candidate boot aborted before hardware RUN
+
+The authorized candidate boot passed corrected-IOMMU/front-PIX preflight and started the persistent RT-CDM observer at idle. No hardware `RUN` occurred: a shell redirection to a root-owned evidence file failed with `Permission denied` before the sole privileged helper executable was entered. The persisted observer remained `seq=0 stage=idle`, `irq_armed=0`; sensor transmission never began; no QC10C output exists; CAMSS/sensor stayed suspended; Golden return is clean. The candidate boot is considered consumed but this is not a failed PIX attempt and no same-boot retry occurred.
+
+A corrected wrapper now creates its evidence log before the privileged helper invocation and fails closed on any existing actual-run log. A replacement candidate boot/root `RUN` requires a new explicit authorization checkpoint.
+

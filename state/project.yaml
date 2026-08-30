@@ -5,18 +5,15 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-third-pix-diagnostic-authorized-not-yet-armed-golden-safe
-
+status: e003h-postprov-boot-consumed-no-hardware-run-golden-restored-replacement-review-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
   protected: true
   rule: never overwrite Golden with an unproven camera candidate
-
 workspace:
   canonical: /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
   kernel_build_anchor: /home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
-
 machines:
   sp11_linux:
     role: primary Linux build/deploy/runtime target
@@ -24,7 +21,6 @@ machines:
     role: same physical SP11; Windows hardware oracle and KD target
   sp7_windows:
     role: debugger/oracle companion; KD and USB/EEM host when useful
-
 camera_hardware:
   front_rgb:
     acpi_id: SONY0681
@@ -45,7 +41,6 @@ camera_hardware:
     acpi_id: QCOM0C32
     silicon: Qualcomm Spectra 695
     surface_subsystem: MSHW0495
-
 windows_oracle_routing:
   rear_rgb:
     cci_controller: 0
@@ -65,7 +60,6 @@ windows_oracle_routing:
     cci_controller: 0
     cci_master: 0
     csiphy: 0
-
 linux_baseline:
   video_nodes: 0
   media_nodes: 0
@@ -73,26 +67,24 @@ linux_baseline:
   qcom_camss_module_installed: true
   i2c_qcom_cci_module_installed: true
   denali_camera_graph_enabled: false
-
 strategy:
   reuse_upstream:
-    - X1E80100 CAMSS
-    - CCI
-    - CSI PHY where correct
-    - CSID/VFE
-    - media-controller/V4L2
+  - X1E80100 CAMSS
+  - CCI
+  - CSI PHY where correct
+  - CSID/VFE
+  - media-controller/V4L2
   derive_from_windows:
-    - Denali topology
-    - power/reset sequencing
-    - clocks and PMIC votes
-    - sensor modes and register lifecycle
-    - CSI lane/trio configuration
-    - privacy/illuminator behaviour
+  - Denali topology
+  - power/reset sequencing
+  - clocks and PMIC votes
+  - sensor modes and register lifecycle
+  - CSI lane/trio configuration
+  - privacy/illuminator behaviour
   sensor_order:
-    - OV13858 rear
-    - IMX681 front
-    - VD55G0 IR
-
+  - OV13858 rear
+  - IMX681 front
+  - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
 current_gate: E003h-Windows-parity-transport-static
 e002a:
@@ -124,7 +116,7 @@ e003g:
   vfe_instance: 1
   csid_path: IPP
   vc: 0
-  csi2_data_type: 0x2b
+  csi2_data_type: 43
   sensor_mode: 3840x2640 RAW10
   windows_ipp_output: 3840x2160
   vfe0_live_nonzero_dwords: 0
@@ -137,8 +129,8 @@ e003h:
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
   sensor_stream_off: 0x0100=0x00
-  csid1_rx_cfg0_windows: 0x11300000
-  csid1_rx_cfg1_windows: 0x00000001
+  csid1_rx_cfg0_windows: 288358400
+  csid1_rx_cfg1_windows: 1
   csid1_ipp_output: 3840x2160
   vfe1_full_y: 2560x1440
   vfe1_full_c: 2560x720
@@ -153,7 +145,8 @@ e003h:
   windows_mipi_order_raw_bytes: 8600
   windows_mipi_order_cycles: 4
   windows_start_total_order: ISP_START_DONE -> MIPI_START -> MIPI_START_DONE -> SENSOR_STREAM_ON
-  windows_stop_partial_order: ISP_STOP_DONE before both MIPI_STOP and SENSOR_STREAM_OFF; sensor-off vs MIPI-stop unordered
+  windows_stop_partial_order: ISP_STOP_DONE before both MIPI_STOP and SENSOR_STREAM_OFF;
+    sensor-off vs MIPI-stop unordered
   linux_csid_rx_patch_build: pass
   linux_csid_rx_patch_module_sha256: 900b016c6dca0f79a150eaf50bfe17e0c9cbfbb3cc5ab92596330c5698b4a7af
   linux_stop_order_patch: 0010-x1e-windows-stop-order.patch
@@ -161,7 +154,8 @@ e003h:
   linux_stop_order_patch_module_sha256: b7c9ed932e2dccca4eaf73d085d2c5c8e6104d7cb807bafd00804051a9e82591
   linux_stop_order_x1e: CSID -> VFE -> remaining upstream tail
   linux_stop_tail_current_serialization: CSIPHY -> sensor
-  linux_stop_tail_windows_status: observed-valid serialization; Windows proves no dependency between sensor-off and MIPI-stop
+  linux_stop_tail_windows_status: observed-valid serialization; Windows proves no
+    dependency between sensor-off and MIPI-stop
   linux_stop_order_non_x1e_unchanged: true
   linux_csid1_ipp_patch: 0011-x1e-csid1-ipp-windows-parity.patch
   linux_csid1_ipp_patch_sha256: a002e6bbd0725bc46fbc911269c2ad6f946c2e19bff4b78d9de9b109ae9f1e9f
@@ -169,8 +163,8 @@ e003h:
   linux_csid1_ipp_patch_module_sha256: ff02c59fa29001093cdeda8ace138cf6e5ef6e29fb27f86beb632237c4c0f90b
   linux_csid1_ipp_fail_closed_tuple: CSID1 + CSIPHY2 + one-trio C-PHY + SRGGB10 3840x2640
   linux_csid1_ipp_vc: 0
-  linux_csid1_ipp_windows_cfg0: 0x802b2000
-  linux_csid1_ipp_windows_cfg1: 0x00007241
+  linux_csid1_ipp_windows_cfg0: 2150309888
+  linux_csid1_ipp_windows_cfg1: 29249
   linux_csid1_ipp_windows_crop: 3840x2160
   windows_vfe1_full_format: QC10C / TP10 UBWC
   windows_vfe1_full_dimensions: 2560x1440
@@ -181,24 +175,27 @@ e003h:
   windows_vfe1_full_c_slice_bytes: 2592768
   windows_vfe1_full_surface_bytes: 7778304
   windows_vfe1_full_layout: Y_META -> Y_TP10 -> C_META -> C_TP10
-  windows_vfe1_full_layout_status: mechanically resolved from two same-machine live address sets
+  windows_vfe1_full_layout_status: mechanically resolved from two same-machine live
+    address sets
   windows_ife_initial_cdm_raw_sha256: a22f94b6a024226791c139336b17777f1359f1847146bafa6e092215e86e762a
   windows_ife_initial_cdm_raw_bytes: 175222
   windows_ife_initial_cdm_packets: 4
   windows_ife_initial_cdm_unknown_opcodes: 0
   windows_ife_initial_cdm_register_writes: 2131
   windows_ife_initial_cdm_dmi_commands: 46
-  windows_ife_initial_cdm_max_register_offset: 0xbe70
+  windows_ife_initial_cdm_max_register_offset: 48752
   windows_ife_initial_cdm_writes_outside_0x4000: 2015
-  windows_ife_initial_cdm_base: 0x0ac71000
-  windows_ife_initial_cdm_base_status: mechanically cross-checked against E003g live VFE1 +0x24/+0x90
-  linux_current_vfe1_aperture_bytes: 0x4000
-  historical_denali_vfe_aperture_bytes: 0xf000
-  historical_denali_vfe_aperture_status: evidence-backed Denali-only static candidate; exact instance spacing and complete Windows corpus coverage
-  windows_vfe1_exact_required_span_bytes: 0xbe74
-  windows_vfe1_page_rounded_required_span_bytes: 0xc000
+  windows_ife_initial_cdm_base: 180817920
+  windows_ife_initial_cdm_base_status: mechanically cross-checked against E003g live
+    VFE1 +0x24/+0x90
+  linux_current_vfe1_aperture_bytes: 16384
+  historical_denali_vfe_aperture_bytes: 61440
+  historical_denali_vfe_aperture_status: evidence-backed Denali-only static candidate;
+    exact instance spacing and complete Windows corpus coverage
+  windows_vfe1_exact_required_span_bytes: 48756
+  windows_vfe1_page_rounded_required_span_bytes: 49152
   linux_denali_vfe_aperture_patch: 0012-sp11-vfe-aperture-windows-parity.patch
-  linux_denali_vfe_aperture_bytes: 0xf000
+  linux_denali_vfe_aperture_bytes: 61440
   linux_denali_vfe_aperture_build: pass
   linux_denali_vfe_aperture_dtb_changed_bytes: 2
   linux_denali_vfe_aperture_non_denali_unchanged: true
@@ -217,32 +214,37 @@ e003h:
   windows_ife_dmi_source_capture_bytes: 131072
   windows_ife_dmi_source_sha256: bbb9dc35ec2fccc68c81af7f2e13813c75d3c27d5b4450903f5004dc3cc69d9a
   windows_ife_dmi_source_identical_four_hits: true
-  windows_ife_dmi_max_source_end: 0x1bccc
+  windows_ife_dmi_max_source_end: 113868
   windows_ife_dmi_identity_groups: 21
   windows_ife_dmi_unique_payloads: 16
-  windows_ife_dmi_semantic_names_status: unresolved; public VFE680 kernel map does not expose pixel-IQ DMI block names, do not guess
-  windows_ife_descriptor1_status: CSID1 IPP command data; same-machine crop state reproduced
+  windows_ife_dmi_semantic_names_status: unresolved; public VFE680 kernel map does
+    not expose pixel-IQ DMI block names, do not guess
+  windows_ife_descriptor1_status: CSID1 IPP command data; same-machine crop state
+    reproduced
   windows_ife_descriptor2_status: not DMI source allocation
   windows_vfe1_bus_oracle_two_pass: pass
   windows_vfe1_bus_full_clients: WM0 FULL_Y + WM1 FULL_C
-  windows_vfe1_bus_qc10c_core_surface_bytes: 0x76b000
+  windows_vfe1_bus_qc10c_core_surface_bytes: 7778304
   windows_vfe1_bus_qc10c_offsets: Y_META=0 Y_DATA=0x6000 C_META=0x4f2000 C_DATA=0x4f5000
-  windows_vfe1_top_mask0: 0x0007f051
-  windows_vfe1_bus_mask0: 0xd0000000
+  windows_vfe1_top_mask0: 520273
+  windows_vfe1_bus_mask0: 3489660928
   windows_vfe1_video_done: TOP status1 bit0 -> event 3 -> IFE VIDEO buf done
-  linux_rear_rdi_completion: CSID680 BUF_DONE; unchanged by future front VFE VIDEO completion
-  dmi_execution_status: resolved native Windows hardware CDM; direct VFE680 DMI replay rejected
+  linux_rear_rdi_completion: CSID680 BUF_DONE; unchanged by future front VFE VIDEO
+    completion
+  dmi_execution_status: resolved native Windows hardware CDM; direct VFE680 DMI replay
+    rejected
   windows_dmi_exec_raw_sha256: 8ccb149a22dddf21edb3b7115493a9000368a29c132f9dcfddc4867070c1e9cc
   windows_dmi_exec_raw_bytes: 12432
-  windows_dmi_direct_recipe_status: rejected; VFE17x selector/address read sequence did not expose known nonzero VFE680 payload
+  windows_dmi_direct_recipe_status: rejected; VFE17x selector/address read sequence
+    did not expose known nonzero VFE680 payload
   windows_hwcdm_raw_sha256: 458b05c41718c7d01d0efb2921d1f6e2e4323e94e24447e379499544ca21cc1a
   windows_hwcdm_raw_bytes: 27014
-  windows_native_sw_cdm_byte: 0x00
+  windows_native_sw_cdm_byte: 0
   windows_native_hardware_cdm_branch: true
   windows_native_software_cdm_branch: false
-  windows_rt_cdm0_physical: 0x0ac25000
-  windows_rt_cdm1_physical: 0x0ac26000
-  windows_rt_cdm_hw_version: 0x20010000
+  windows_rt_cdm0_physical: 180506624
+  windows_rt_cdm1_physical: 180510720
+  windows_rt_cdm_hw_version: 536936448
   windows_rt_cdm_irq_raw_sha256: 0f4b30273ddd7af23bbad5158b2da57a320c143b43ce5119927bbfbcfa6cbf1b
   windows_rt_cdm_irq_raw_bytes: 7428
   windows_rt_cdm_irq_capture_context: WDF PrepareHardware dedicated RT-CDM registration
@@ -251,8 +253,9 @@ e003h:
   windows_rt_cdm1_interrupt_class_instance: class3-instance1
   windows_rt_cdm1_firmware_gsi: 319
   linux_rt_cdm1_gic_spi_dt_cell: 287
-  linux_rt_cdm1_gic_spi_dt_cell_hex: 0x11f
-  linux_rt_cdm_irq_namespace_crosscheck: existing SP11 csid0/vfe0/csid1/vfe1/csid_lite0/vfe_lite0 DT cells 464..469 map to Windows GSIs 496..501
+  linux_rt_cdm1_gic_spi_dt_cell_hex: 287
+  linux_rt_cdm_irq_namespace_crosscheck: existing SP11 csid0/vfe0/csid1/vfe1/csid_lite0/vfe_lite0
+    DT cells 464..469 map to Windows GSIs 496..501
   linux_rt_cdm1_resource_patch: 0013-sp11-rtcdm1-inert-resource.patch
   linux_rt_cdm1_resource_patch_sha256: 1ffd67b8e1e8b706a2569384e4daef41676b307148a11e64fee0e7480bfc553b
   linux_rt_cdm1_resource_build: pass
@@ -268,9 +271,10 @@ e003h:
   linux_rt_cdm1_irq_request_mode: IRQF_TRIGGER_RISING + IRQF_NO_AUTOEN
   linux_rt_cdm1_irq_arm_api: false
   linux_rt_cdm1_irq_armed_true_assignments: 0
-  linux_rt_cdm1_windows_irq0_mask: 0x00070007
-  linux_rt_cdm1_irq_known_mask_compile_assert: 0x00070007
-  linux_rt_cdm1_dma_arena: caller-sized coherent allocation using camss->dev (Linux implementation hypothesis; RT-CDM1 requester visibility unproven)
+  linux_rt_cdm1_windows_irq0_mask: 458759
+  linux_rt_cdm1_irq_known_mask_compile_assert: 458759
+  linux_rt_cdm1_dma_arena: caller-sized coherent allocation using camss->dev (Linux
+    implementation hypothesis; RT-CDM1 requester visibility unproven)
   windows_rt_cdm1_dma_requester_domain_proven: false
   windows_rt_cdm1_upstream_sid_0x18a0_accepted_as_proof: false
   linux_rt_cdm1_dma_upper_32bit_reject: true
@@ -281,22 +285,25 @@ e003h:
   linux_rt_cdm1_dtb_unchanged_from_0013: true
   linux_rt_cdm1_irq_dma_dtb_sha256: bbe48a77c5bc23f1c155ddc87b9a5b2ed56497656f06cab1a2db8e6346f0304b
   windows_front_active_rt_cdm: RT_CDM_1
-  windows_front_active_rt_cdm_physical: 0x0ac26000
-  windows_rt_cdm1_fifo0_cfg_live: 0x01000000
+  windows_front_active_rt_cdm_physical: 180510720
+  windows_rt_cdm1_fifo0_cfg_live: 16777216
   windows_rt_cdm1_secondary_fifo_base_len_zero: true
   windows_rt_cdm_init_order_extractor_sha256: 399a7a6ecd412d652fcce1bad469514c87a0e696ad7bf4e68a55c51f148e6629
   windows_rt_cdm_init_order_json_sha256: 489f47f45465603260a06f8aa2083cc417fff816478be9b6c8f68233bb0be927
-  windows_rt_cdm_open_init_order: IRQ0_MASK=1 -> RST_CMD=9 -> reset wait <=500ms -> DMB -> CORE_CFG=0x11f
+  windows_rt_cdm_open_init_order: IRQ0_MASK=1 -> RST_CMD=9 -> reset wait <=500ms ->
+    DMB -> CORE_CFG=0x11f
   windows_rt_cdm_start_order: IRQ0_MASK=0x00070007 -> DMB -> CORE_EN=1
-  windows_rt_cdm_fifo0_commit_order: dynamic BASE -> dynamic encoded LEN/tag/arb -> STORE=1
+  windows_rt_cdm_fifo0_commit_order: dynamic BASE -> dynamic encoded LEN/tag/arb ->
+    STORE=1
   windows_rt_cdm_stop_direct_write: IRQ0_MASK=0
   windows_rt_cdm_stop_core_en_zero_proven: false
   windows_rt_cdm_fe_cfg_direct_store_present: false
   windows_rt_cdm_fifo0_cfg_direct_store_present: false
-  windows_rt_cdm_fe_fifo_negative_scope: bounded mapped-base static store sweep; does not prove reset/default ownership
+  windows_rt_cdm_fe_fifo_negative_scope: bounded mapped-base static store sweep; does
+    not prove reset/default ownership
   windows_rt_cdm_config_ownership_extractor_sha256: d25da738a827d81439d426b4de828300af0c6544d2e3d1d0dab78bb8a981b1e7
   windows_rt_cdm_config_ownership_json_sha256: 4c01a85709d9442953cfd5692219c04b57db5683312f788082e18b5aa6677b7c
-  windows_rt_cdm_object_bytes: 0xa40
+  windows_rt_cdm_object_bytes: 2624
   windows_rt_cdm_object_full_zero_before_init: true
   windows_rt_cdm_object_guard_a38_fixed_accesses: 1-read-only
   windows_rt_cdm_cgc_cfg_7_normal_path: not-taken
@@ -309,14 +316,17 @@ e003h:
   windows_rt_cdm_fe_fifo_positive_reset_default_proven: false
   windows_rt_cdm_stop_power_extractor_sha256: 3bf8189e2657fead2f7b1ee128e56f368d457e64618ebb1c732770c82d69f805
   windows_rt_cdm_stop_power_json_sha256: 75711e2cf1bc1697db11e7415f23f71de1e12706d86d5fa55666bfd4ddfc39b8
-  windows_rt_cdm_stream_stop_layer: CSID -> IFE -> CDM; CDM direct write IRQ0_MASK=0 only
+  windows_rt_cdm_stream_stop_layer: CSID -> IFE -> CDM; CDM direct write IRQ0_MASK=0
+    only
   windows_rt_cdm_stream_stop_core_en_zero_proven: false
   windows_rt_cdm_stream_stop_reset_proven: false
-  windows_rt_cdm_session_delete_control: 0x80e
+  windows_rt_cdm_session_delete_control: 2062
   windows_rt_cdm_session_delete_cdm_close_mmio_access: false
-  windows_rt_cdm_session_delete_order: CDM ownership release/close -> CSID POWER_OFF/close -> IFE POWER_OFF/close
+  windows_rt_cdm_session_delete_order: CDM ownership release/close -> CSID POWER_OFF/close
+    -> IFE POWER_OFF/close
   windows_rt_cdm_platform_power_off_reference_counted: true
-  windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel after StopAsync/dispose/session teardown
+  windows_rt_cdm_post: first 0x100 bytes of both resources return 0x80000000 sentinel
+    after StopAsync/dispose/session teardown
   windows_rt_cdm_post_exact_0x805_boundary_sampled: false
   windows_rt_cdm_fe_fifo_origin_raw_sha256: 4d54bca3a1c8d2c542b6b09361e9cdee50a4e85175cb0667f0b8dd10c92076bb
   windows_rt_cdm_fe_fifo_origin_raw_bytes: 18444
@@ -324,12 +334,14 @@ e003h:
   windows_rt_cdm_fe_fifo_origin_json_sha256: 7ab8eab8867393639d1a034d15bcd361e8773d64a5346a9de5f764f0a0a8ea3b
   windows_rt_cdm_between_cycles_powered_off_sentinel: true
   windows_rt_cdm_map_return_before_front_object_mmio: true
-  windows_rt_cdm_map_return_hw_version: 0x20010000
-  windows_rt_cdm_map_return_fe_cfg: 0x07ff000f
-  windows_rt_cdm_map_return_fifo0_cfg: 0x01000000
+  windows_rt_cdm_map_return_hw_version: 536936448
+  windows_rt_cdm_map_return_fe_cfg: 134152207
+  windows_rt_cdm_map_return_fifo0_cfg: 16777216
   windows_rt_cdm_fe_fifo_survive_reset_and_core_cfg: true
-  windows_rt_cdm_fe_fifo_ownership: pre-CDM-object platform/power-up/hardware layer; ultimate firmware-vs-reset source intentionally unresolved
-  linux_rt_cdm_fe_fifo_action: read-only validate exact values before first RT-CDM write; never synthesize/write; fail closed on mismatch
+  windows_rt_cdm_fe_fifo_ownership: pre-CDM-object platform/power-up/hardware layer;
+    ultimate firmware-vs-reset source intentionally unresolved
+  linux_rt_cdm_fe_fifo_action: read-only validate exact values before first RT-CDM
+    write; never synthesize/write; fail closed on mismatch
   parity_target: CSID1 IPP + VFE1 PIX/ISP; RDI is diagnostic-only
   linux_rt_cdm1_static_recipe_patch_sha256: 32661bf7e6eae864d857cd96bcfccdf01e820fbfbc3a2c2d9bf5cfa8f5ad9514
   linux_rt_cdm1_static_recipe_inspector_sha256: 07338c3751c4d0cc53a6cb813b4f3fb43af9f9af26c27e9e0d65b8f31e3ad72a
@@ -341,22 +353,23 @@ e003h:
   linux_rt_cdm1_static_recipe_fifo0_cfg_write: false
   linux_rt_cdm1_static_recipe_cgc_cfg_write: false
   linux_rt_cdm1_static_recipe_core_en_zero_write: false
-  linux_rt_cdm1_static_recipe_compiled_open_init: IRQ0_MASK=1 -> RST_CMD=9 -> reset-done <=500ms -> DMB SY -> CORE_CFG=0x11f
+  linux_rt_cdm1_static_recipe_compiled_open_init: IRQ0_MASK=1 -> RST_CMD=9 -> reset-done
+    <=500ms -> DMB SY -> CORE_CFG=0x11f
   linux_rt_cdm1_static_recipe_compiled_start: IRQ0_MASK=0x00070007 -> DMB SY -> CORE_EN=1
-  linux_rt_cdm1_static_recipe_compiled_fifo0: dynamic BASE -> observed encoded LEN -> STORE=1 -> BL-done wait
+  linux_rt_cdm1_static_recipe_compiled_fifo0: dynamic BASE -> observed encoded LEN
+    -> STORE=1 -> BL-done wait
   linux_rt_cdm1_static_recipe_compiled_stop: IRQ0_MASK=0 only
   windows_vfe1_video_completion_extractor_sha256: 04d54dce4b103e6c8f50785d90db2fe6db71c70ffdc09b00efbc5c7bffd09409
   windows_vfe1_video_completion_json_sha256: c8436846bb73082de504da00d0760280b347cd5b8fbbc5e9702197ed0509573c
   windows_vfe1_video_completion: TOP status1 bit0 -> event 3 -> IFE VIDEO buf done
-  windows_vfe1_top_mask0: 0x0007f051
-  windows_vfe1_bus_mask0: 0xd0000000
   vfe1_pix_static_contract_extractor_sha256: 95efd94c70584a971dd79f074aed5cfb0a9904739bc530f0e6dffe3ac1dbd490
   vfe1_pix_static_contract_json_sha256: 820c7971218e4b018994ed36e60ba5d04f8a75fec91fdca66fcf981d4a5fc3b5
   linux_vfe1_pix_0016_patch_sha256: 4e0cbba5b169353a4f62cfdf1aacd93ac811ae3366f72658eeee7cefaca7ab03
   linux_vfe1_pix_0016_inspector_sha256: af5b43ac294f442260f132ca4e2731812cf5100186fc0cecc17a103a94936f51
   linux_vfe1_pix_0016_json_sha256: cb2d5ae35b0879d2f716f1193aec54f921daddf4560e410f0cd0fed7d742fe10
   linux_vfe1_pix_0016_module_sha256: 97fd2dd9a482c0ba8e6c0d3e5a7cf190612bdca4610a81c59a576bc5e4cf7834
-  linux_vfe1_pix_format: V4L2_PIX_FMT_QC10C one V4L2 plane 2560x1440 stride 3584 sizeimage 0x76b000
+  linux_vfe1_pix_format: V4L2_PIX_FMT_QC10C one V4L2 plane 2560x1440 stride 3584 sizeimage
+    0x76b000
   linux_vfe1_pix_internal_offsets: Y_META=0 Y_TP10=0x6000 C_META=0x4f2000 C_TP10=0x4f5000
   linux_vfe1_pix_ife1_only: true
   linux_vfe1_pix_stream_reachable: false
@@ -368,21 +381,27 @@ e003h:
   windows_vfe1_bus_order_extractor_sha256: c7edb8f1b17f83b91ee5f8c08a72b872c904a3a3f50eac1952bb1e5d2018013b
   windows_vfe1_bus_order_json_sha256: 89ddee9746d54927f8624a5267f5726d38ee8b02190ae60b9525a4b783206363
   windows_vfe1_bus_order_complete_sessions: 3
-  windows_vfe1_bus_session_order: BUS static config -> BUS enable -> ISP_START_DONE -> BUS disable
-  windows_vfe1_bus_static_config_sequence: FULL[0], FULL[1], DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG
-  windows_vfe1_bus_enable_disable_order: FULL, DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG
-  windows_vfe1_bus_wm_update_builder_rva: 0x27920
+  windows_vfe1_bus_session_order: BUS static config -> BUS enable -> ISP_START_DONE
+    -> BUS disable
+  windows_vfe1_bus_static_config_sequence: FULL[0], FULL[1], DS4, DS16, AEC_BE, RS,
+    BHIST, AWB_BG, TL_BG
+  windows_vfe1_bus_enable_disable_order: FULL, DS4, DS16, AEC_BE, RS, BHIST, AWB_BG,
+    TL_BG
+  windows_vfe1_bus_wm_update_builder_rva: 162080
   windows_vfe1_bus_wm_update_builder_hits: 110
   windows_vfe1_request_update_0x1e928_hits: 0
-  windows_vfe1_dynamic_writer_rva: 0x1dd20
-  windows_vfe1_dynamic_image_write_rva: 0x1dea4
-  windows_vfe1_dynamic_meta_write_rva: 0x1dee8
-  windows_vfe1_dynamic_image_addr_offset: 0x04
-  windows_vfe1_dynamic_meta_addr_offset: 0x40
-  windows_vfe1_dynamic_address_order: FULL_Y, FULL_C, DS4, DS16, AEC_BE, RS, BHIST, AWB_BG, TL_BG
-  windows_vfe1_initial_address_lifecycle: BUS static config -> BUS enable -> initial dynamic addresses -> ISP_START_DONE -> repeated per-frame dynamic addresses
+  windows_vfe1_dynamic_writer_rva: 122144
+  windows_vfe1_dynamic_image_write_rva: 122532
+  windows_vfe1_dynamic_meta_write_rva: 122600
+  windows_vfe1_dynamic_image_addr_offset: 4
+  windows_vfe1_dynamic_meta_addr_offset: 64
+  windows_vfe1_dynamic_address_order: FULL_Y, FULL_C, DS4, DS16, AEC_BE, RS, BHIST,
+    AWB_BG, TL_BG
+  windows_vfe1_initial_address_lifecycle: BUS static config -> BUS enable -> initial
+    dynamic addresses -> ISP_START_DONE -> repeated per-frame dynamic addresses
   windows_vfe1_full_enable_disable_internal_order: WM0 then WM1
-  windows_vfe1_dynamic_iova_rule: image/meta addresses remain per-buffer; never freeze Windows IOVAs or observed Windows ring strides
+  windows_vfe1_dynamic_iova_rule: image/meta addresses remain per-buffer; never freeze
+    Windows IOVAs or observed Windows ring strides
   windows_vfe1_dynamic_address_extractor_sha256: e8d9e278de52f1e1d363c60621a2cc789dc33f149cb53d222bab0b0092419211
   windows_vfe1_dynamic_address_json_sha256: 925028750e8be60c65a69f24349bb540b0ba0776726f40d59273b0be7f464282
   windows_vfe1_initial_address_order_raw_sha256: 3a2dd357e994f8f5d52668f7c914ad27a2dda6fdee8804e55daa3fcde1c5bed6
@@ -394,11 +413,13 @@ e003h:
   linux_vfe1_bus_0017_address_source: caller-supplied Linux dma_addr_t only
   windows_vfe1_completion_groups_raw_sha256: 1e3e810ae170dabb003491b6b8522c3b77dbd5964a14445ce7bbd3636e5b77ec
   windows_vfe1_completion_groups_complete_cycles: 5
-  windows_vfe1_completion_groups_observed_order: VIDEO, AEC_BE_BHIST, TINTLESS_BG, AWB_BG, RS
-  windows_vfe1_completion_helper_rva: 0x26460
+  windows_vfe1_completion_groups_observed_order: VIDEO, AEC_BE_BHIST, TINTLESS_BG,
+    AWB_BG, RS
+  windows_vfe1_completion_helper_rva: 156768
   windows_vfe1_completion_group_indices: 0, 5, 6, 7, 9
   windows_vfe1_completion_cross_group_order_required: false
-  windows_vfe1_completion_queue_model: independent FIFO per group; preserve FIFO only within each group
+  windows_vfe1_completion_queue_model: independent FIFO per group; preserve FIFO only
+    within each group
   windows_vfe1_completion_extractor_sha256: 461899f4b32e0208466db17ac23b366987caeb9d59210faba65023ce265c8162
   windows_vfe1_completion_json_sha256: 696f476a18bbfe4d6a30e06198c744d6495048b85399d22ff1bfe6c6176763f9
   linux_vfe1_pix_0018_patch_sha256: fb1d0acece63c9acde2f48bb51d1bac19fcdc17d3c7f1fd46de6f2bf0adc924f
@@ -407,7 +428,8 @@ e003h:
   linux_vfe1_pix_0018_module_sha256: 7d88c0d6c69d3690c4e83437b41e8afb05560d1390d0d819e8b8374db71e5010
   linux_vfe1_pix_0018_slots: 2
   linux_vfe1_pix_0018_group_fifos: 5 independent two-slot FIFOs
-  linux_vfe1_pix_0018_aux_allocations_per_slot: DS4, DS16, AEC_BE, BHIST, TL_BG, AWB_BG, RS
+  linux_vfe1_pix_0018_aux_allocations_per_slot: DS4, DS16, AEC_BE, BHIST, TL_BG, AWB_BG,
+    RS
   linux_vfe1_pix_0018_runtime_reachable: false
   rtcdm_corpus_materializer_packets: 4
   rtcdm_corpus_materializer_commands: 278
@@ -417,8 +439,8 @@ e003h:
   rtcdm_corpus_materializer_dynamic_fields: 20
   rtcdm_corpus_cross_capture_new_dynamic_register: 0x8c period_cfg
   rtcdm_corpus_normalized_initial_equals_final: true
-  rtcdm_corpus_linux_main_arena_bytes: 0x4000
-  rtcdm_corpus_linux_dmi_arena_bytes: 0x3a00
+  rtcdm_corpus_linux_main_arena_bytes: 16384
+  rtcdm_corpus_linux_dmi_arena_bytes: 14848
   rtcdm_corpus_windows_main_stride_frozen: false
   rtcdm_corpus_windows_dmi_offsets_frozen: false
   linux_rtcdm_0019_patch_sha256: 5e6f557ef692b32ada97a98daa9188db979c70ba46b9c8dd21b6f8a93ced25a2
@@ -457,7 +479,9 @@ e003h:
   windows_vfe1_bus_cdm_crossorder_raw_bytes: 47032
   windows_vfe1_bus_cdm_crossorder_extractor_sha256: e0cd5d690b60b8a9a18dc7a413a4bf0956b44ce25dc6d8e176218e80939913ad
   windows_vfe1_bus_cdm_crossorder_json_sha256: b495cc833c45e97b1467749bf094bb3035c5e6070bd0ea13d26a99ceec6acce6
-  windows_vfe1_host_start_order: RT-CDM start -> IFE resource start -> IFE803 packet0 -> packet1 -> VFE1 BUS config/enable/initial addresses -> packet2 -> packet3 -> CSID1 start -> ISP_START_DONE
+  windows_vfe1_host_start_order: RT-CDM start -> IFE resource start -> IFE803 packet0
+    -> packet1 -> VFE1 BUS config/enable/initial addresses -> packet2 -> packet3 ->
+    CSID1 start -> ISP_START_DONE
   linux_front_0022_patch_sha256: 1bf7d406e50bb3b57884d6f3a043d6c728327a8d8162f6ed9a678d2b8317e190
   linux_front_0022_source_sha256: 2958909bae68cc6b459be39cf8abf8b4e8c19ba295feef4a8525504f3e1f6dff
   linux_front_0022_object_sha256: 6dadb664c316fdb4aa440f4280e8a7348be1d3c0ec1674426e880cb2cd89d66b
@@ -473,17 +497,19 @@ e003h:
   windows_vfe1_post_start_complete_sessions: 2
   windows_vfe1_post_start_extractor_sha256: 54bf175c539255fde78c9483cdd7511394cd4593845e5c43e932ff0ff5730f30
   windows_vfe1_post_start_oracle_sha256: d426c7cf4525f36c80623cab628061005c880abd5df02d17d8a76683fea4e66e
-  windows_vfe1_epoch0_handler_rva: 0x25268
-  windows_vfe1_epoch0_bus_update_call_rva: 0x25a38
-  windows_vfe1_epoch0_cdm_consume_call_rva: 0x25ec8
-  windows_vfe1_cdm_dispatcher_rva: 0x28480
+  windows_vfe1_epoch0_handler_rva: 152168
+  windows_vfe1_epoch0_bus_update_call_rva: 154168
+  windows_vfe1_epoch0_cdm_consume_call_rva: 155336
+  windows_vfe1_cdm_dispatcher_rva: 164992
   windows_vfe1_cdm_epoch_consume_selector: 2
-  windows_vfe1_post_start_stage_order: IFE Epoch0 -> complete VFE1 BUS IOVA update -> RT-CDM queued BL consume/program -> completion dispatch/retirement
+  windows_vfe1_post_start_stage_order: IFE Epoch0 -> complete VFE1 BUS IOVA update
+    -> RT-CDM queued BL consume/program -> completion dispatch/retirement
   windows_vfe1_post_start_address_bundle_clients: 9
   windows_vfe1_post_start_observed_initial_prime_bundles: 2
   windows_vfe1_post_start_completion_groups: 5
   windows_vfe1_post_start_completion_cross_group_order_required: false
-  windows_vfe1_post_start_0023_no_rewrite_regs_superseded: 0x008c, 0x3b70, 0x3d78, 0x3d7c, 0x3d80, 0x3d84
+  windows_vfe1_post_start_0023_no_rewrite_regs_superseded: 0x008c, 0x3b70, 0x3d78,
+    0x3d7c, 0x3d80, 0x3d84
   windows_vfe1_post_start_hardware_live_mutable_regs: 0x3d78, 0x3d7c, 0x3d80, 0x3d84
   linux_front_0023_patch_sha256: 962c8f6792b1ceb1649d6928df325ee1ed884f292342b0633b98c826a52cd7be
   linux_front_0023_source_sha256: 4cd8594b3cc11b485522cb1dc19ff3d31a3f20e2a498d37f7939dd090a9e4c33
@@ -500,15 +526,23 @@ e003h:
   windows_vfe1_epoch0_cdm_steady_batches: 175
   windows_vfe1_epoch0_cdm_steady_bl_count: 5
   windows_vfe1_epoch0_cdm_encoded_length_semantics: byte_count_minus_one
-  windows_vfe1_epoch0_cdm_fixed_shape: 0x4 CHANGE_BASE(0xf000), variant main, 0x4 CHANGE_BASE(0x57000), 0x10 fixed registers, 0x14 fixed register+GEN_IRQ
-  windows_vfe1_epoch0_cdm_variant_0958: samples=8 commands=56 writes=472 dmi=14 dynamic_regs=24 normalized_sha256=6c979a87c9a550ba1dfbfe740e714f8538238e7537251f855ba997c1fadc42a2
-  windows_vfe1_epoch0_cdm_variant_0868: samples=42 commands=45 writes=436 dmi=12 dynamic_regs=20 normalized_sha256=001b086bcc594a37a3a8b846a038f8e534a3b7974eb87a03a2961f1247deb856
-  windows_vfe1_epoch0_cdm_variant_083c: samples=46 commands=43 writes=429 dmi=12 dynamic_regs=14 normalized_sha256=3bcc4def6731cd107ad70ffa7d0c5c52e7a712ef6436814e50a7b9725aaf9c61
-  windows_vfe1_epoch0_cdm_variant_06b8: samples=24 commands=35 writes=352 dmi=8 dynamic_regs=10 normalized_sha256=ed90abec133e939674d19bfcbcc2250fee9e23cb539306fbeb574054b43df6d8
-  windows_vfe1_epoch0_cdm_variant_05a4: samples=55 commands=22 writes=315 dmi=2 dynamic_regs=6 normalized_sha256=3dd3c9d87f07db98df529ff522a9541cf0c9c38f0d5862c425431660b467f0e9
+  windows_vfe1_epoch0_cdm_fixed_shape: 0x4 CHANGE_BASE(0xf000), variant main, 0x4
+    CHANGE_BASE(0x57000), 0x10 fixed registers, 0x14 fixed register+GEN_IRQ
+  windows_vfe1_epoch0_cdm_variant_0958: samples=8 commands=56 writes=472 dmi=14 dynamic_regs=24
+    normalized_sha256=6c979a87c9a550ba1dfbfe740e714f8538238e7537251f855ba997c1fadc42a2
+  windows_vfe1_epoch0_cdm_variant_0868: samples=42 commands=45 writes=436 dmi=12 dynamic_regs=20
+    normalized_sha256=001b086bcc594a37a3a8b846a038f8e534a3b7974eb87a03a2961f1247deb856
+  windows_vfe1_epoch0_cdm_variant_083c: samples=46 commands=43 writes=429 dmi=12 dynamic_regs=14
+    normalized_sha256=3bcc4def6731cd107ad70ffa7d0c5c52e7a712ef6436814e50a7b9725aaf9c61
+  windows_vfe1_epoch0_cdm_variant_06b8: samples=24 commands=35 writes=352 dmi=8 dynamic_regs=10
+    normalized_sha256=ed90abec133e939674d19bfcbcc2250fee9e23cb539306fbeb574054b43df6d8
+  windows_vfe1_epoch0_cdm_variant_05a4: samples=55 commands=22 writes=315 dmi=2 dynamic_regs=6
+    normalized_sha256=3dd3c9d87f07db98df529ff522a9541cf0c9c38f0d5862c425431660b467f0e9
   windows_vfe1_epoch0_cdm_extractor_sha256: d02f7faaeb034e0d7b0931f6c1490a37211784cf535599b29544baf8f3fc329a
   windows_vfe1_epoch0_cdm_oracle_sha256: 3bcf4efe34c891dcc6bc78c3cefc94d916ffd71e27dab81e75493f9ed320dce4
-  windows_vfe1_epoch0_cdm_0023_correction: +0x008c/+0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84 are queued per-frame RT-CDM writes; separate direct-MMIO polling rewrites remain unauthorized
+  windows_vfe1_epoch0_cdm_0023_correction: +0x008c/+0x3b70/+0x3d78/+0x3d7c/+0x3d80/+0x3d84
+    are queued per-frame RT-CDM writes; separate direct-MMIO polling rewrites remain
+    unauthorized
   linux_front_0024_patch_sha256: 4b234a789b25bb1f37d703d2cbfdf8824c0443466523b3d4484e06457689f095
   linux_front_0024_source_sha256: fd1baf78bcba6f3cf926f66ea7fcb8b212e0659048a9187ed67011a5066c20c5
   linux_front_0024_object_sha256: 6e218d223ffe62ee6b3592efbec06086932bbdf9cf7795146da56447f222357d
@@ -524,11 +558,13 @@ e003h:
   windows_vfe1_epoch0_dmi_payload_extractor_sha256: b802a9005581b636405cc4f43f6dd024b8691b5271ee5bf5fd6262c79b715e05
   windows_vfe1_epoch0_dmi_payload_oracle_sha256: 90155ed2f0dce9eefc2f3c1c32fb2c60eec58ed0f8ebf0a0e74622bc686357e7
   windows_vfe1_epoch0_dmi_payload_samples: 0x958=2, 0x868=10, 0x83c=2, 0x6b8=4, 0x5a4=2
-  windows_vfe1_epoch0_dmi_frame_varying_observed: 4308/1, 4308/2; plus 4708/1 and 5a08/1 in 0x958
+  windows_vfe1_epoch0_dmi_frame_varying_observed: 4308/1, 4308/2; plus 4708/1 and
+    5a08/1 in 0x958
   windows_vfe1_epoch0_dmi_raw_payloads_committed: false
   windows_vfe1_epoch0_dmi_windows_ring_geometry_frozen: false
-  windows_vfe1_epoch0_variant_selection_owner: upstream IQ packet producer; no hidden KMD five-way selector proven
-  windows_vfe1_epoch0_kmd_iq_parser_rva: 0x26838
+  windows_vfe1_epoch0_variant_selection_owner: upstream IQ packet producer; no hidden
+    KMD five-way selector proven
+  windows_vfe1_epoch0_kmd_iq_parser_rva: 157752
   windows_vfe1_genirq_request_raw_sha256: 7a182c14f2f797fef4143177e2c9e17dae885766a6c2a4781564a3f5250a974c
   windows_vfe1_genirq_request_raw_bytes: 26760
   windows_vfe1_genirq_request_pairs: 245
@@ -542,12 +578,14 @@ e003h:
   windows_surface_avstream_inf_bytes: 16736
   windows_qcdevice_mft_sha256: c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
   windows_qcdevice_mft_bytes: 23998368
-  windows_qcdevice_mft_clsid: "{4C2331F0-66BE-4177-9841-2FCBA8CCF5CA}"
+  windows_qcdevice_mft_clsid: '{4C2331F0-66BE-4177-9841-2FCBA8CCF5CA}'
   windows_surfacecamavs_sha256: b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed
   windows_surfacecamavs_bytes: 547192
   windows_vfe1_iq_producer: registered QcDeviceMFT8380.dll CamX DeviceMFT
   windows_vfe1_iq_kmd_consumer: qccamisp8380 DAL_ife_process_iq_packet RVA 0x26838
-  windows_vfe1_iq_module_map: DemuxBLS141=0x3b70/74; PDPC311=0x3d58/5c,0x3d78..84,DMI0x3d08; LSC411=0x4358/5c,DMI0x4308; WB201=0x456c/70; GIC311=0x4758/5c,DMI0x4708; BPCABF411=0x4958/5c,DMI0x4908; GTM131=0x5a58/5c,DMI0x5a08; Gamma151=0x5f58/5c,DMI0x5f08; DSX101=0xa058/5c,0xa258/5c,DMI0xa008/0xa208
+  windows_vfe1_iq_module_map: DemuxBLS141=0x3b70/74; PDPC311=0x3d58/5c,0x3d78..84,DMI0x3d08;
+    LSC411=0x4358/5c,DMI0x4308; WB201=0x456c/70; GIC311=0x4758/5c,DMI0x4708; BPCABF411=0x4958/5c,DMI0x4908;
+    GTM131=0x5a58/5c,DMI0x5a08; Gamma151=0x5f58/5c,DMI0x5f08; DSX101=0xa058/5c,0xa258/5c,DMI0xa008/0xa208
   windows_vfe1_iq_producer_extractor_sha256: 85f8b405b3e10b195f972f732df658daec66be45f03cce76883fbe4bf129ba18
   windows_vfe1_iq_producer_oracle_sha256: cbd8908d967f4831e67f8eb3c36ae9799c4bcb42e1923f0ee34c2152841c03ef
   windows_vfe1_iq_algorithms_reproduced_in_linux: false
@@ -559,8 +597,8 @@ e003h:
   linux_front_0025_materializer_proof_json_sha256: 7c4b37c2579bd1bf4eae8e1756a7557cad9505929bbc21a986855209af94b4bc
   linux_front_0025_inspector_sha256: 46d3601e3ba1e8f2478156947d5f64abfa218821782cc791f2bb7cba4e903c10
   linux_front_0025_inspection_json_sha256: ae60274a57a0b95d1a56f074daa90f98f9c672ef60a6f4af5028fef0ca041b46
-  linux_front_0025_cmd_arena_bytes: 0x1000
-  linux_front_0025_dmi_arena_bytes: 0x3000
+  linux_front_0025_cmd_arena_bytes: 4096
+  linux_front_0025_dmi_arena_bytes: 12288
   linux_front_0025_dmi_payload_slots: 14
   linux_front_0025_genirq_rule: GEN_IRQ userdata = low32(request_id); subrequest=0
   linux_front_0025_windows_template_embedded: false
@@ -570,15 +608,20 @@ e003h:
   linux_front_0025_runtime_reachable: false
   windows_vfe1_priming_replay_extractor_sha256: 28e305f28db1e7ffa9687306a89fe9033f8eb5ab51677018e90d7248f6718f08
   windows_vfe1_priming_replay_oracle_sha256: 4d49864c26d0bf311b92f65d7020a7942421b9a216fc6068bae45bf47c8c1ef2
-  windows_vfe1_priming_replay_order: replay0 -> replay1 -> ISP_START_DONE -> replay2 -> replay3 -> first steady 0x958
+  windows_vfe1_priming_replay_order: replay0 -> replay1 -> ISP_START_DONE -> replay2
+    -> replay3 -> first steady 0x958
   windows_vfe1_priming_replay_packet_count: 4
-  windows_vfe1_priming_replay_delta: period_cfg +0x8c only versus corresponding startup template
+  windows_vfe1_priming_replay_delta: period_cfg +0x8c only versus corresponding startup
+    template
   windows_vfe1_priming_replay_period_mapping: packet0=value0; packets1,2,3=value1
-  windows_vfe1_priming_startup_only_dmi: LCAC111 0x5408 selectors1/2; BHistStats16 0xb208 selectors1/2
+  windows_vfe1_priming_startup_only_dmi: LCAC111 0x5408 selectors1/2; BHistStats16
+    0xb208 selectors1/2
   runtime_testing_authorized: true
   linux_front_rdi_first_frame_proven: true
-  linux_front_rdi_first_frame_path: IMX681 -> CSIPHY2 -> CSID1 RDI0 -> VFE1 RDI0 -> /dev/video4
-  linux_front_rdi_first_frame_format: 3840x2640 SRGGB10 packed pRAA, stride 4800, sizeimage 12672000
+  linux_front_rdi_first_frame_path: IMX681 -> CSIPHY2 -> CSID1 RDI0 -> VFE1 RDI0 ->
+    /dev/video4
+  linux_front_rdi_first_frame_format: 3840x2640 SRGGB10 packed pRAA, stride 4800,
+    sizeimage 12672000
   linux_front_rdi_first_frame_sequence: 0
   linux_front_rdi_first_frame_bytes: 12672000
   linux_front_rdi_first_frame_sha256: 8e892cfeb8f9aea6c9454dbc1fe22b0c26a11e4a108e551a2995069d76e000ac
@@ -600,9 +643,10 @@ e003h:
   windows_vfe1_raw_irq_oracle_sha256: 103d1bd11a5ac24d99602a909e24469e1b2bd177cdc499b857bda340308f0322
   windows_vfe1_epoch0_raw_event: BUS status1 bit21
   windows_vfe1_video_raw_event: TOP status1 bit0
-  windows_vfe1_top_mask1: 0x00000000
-  windows_vfe1_bus_mask1: 0x00000000
-  windows_vfe1_irq_clear_semantics: TOP status0/1 -> +0x3c/+0x40 then +0x30=1; BUS status0/1 -> BUS+0x3c/+0x40 then BUS+0x30=1
+  windows_vfe1_top_mask1: 0
+  windows_vfe1_bus_mask1: 0
+  windows_vfe1_irq_clear_semantics: TOP status0/1 -> +0x3c/+0x40 then +0x30=1; BUS
+    status0/1 -> BUS+0x3c/+0x40 then BUS+0x30=1
   linux_front_rdi_is_windows_parity: false
   linux_front_rdi_rtcdm_fifo0_used: false
   linux_front_rdi_vfe1_pix_used: false
@@ -627,7 +671,8 @@ e003h:
   linux_front_0028_capsule_materialize_patch_sha256: de6d67e3fd427950cadc5edd9d4e2d02fd71cc6df8bd7185caac07ffda9dccee
   linux_front_0028_capsule_materialize_module_sha256: 522033b849552e4a62d572a09fdbec8b1ad4ece55538d676370f32dece8976f1
   linux_front_0028_capsule_materialize_source_sha256: f347fa0e29ab4fbb6a572645c6ef42551521b6fdf4c7f723db863625f7eccd91
-  linux_front_0028_products: startup corpus DMA; priming corpus DMA; steady Epoch0 command/DMI DMA
+  linux_front_0028_products: startup corpus DMA; priming corpus DMA; steady Epoch0
+    command/DMI DMA
   linux_front_0028_hardware_access_in_composition: false
   linux_front_0028_runtime_reachable: false
   linux_front_0029_rtcdm_submit_patch_sha256: 3ffd45d64e1f25fd8f81f67b22fca930c516eaf22146d6a1548650783f107182
@@ -643,11 +688,14 @@ e003h:
   linux_front_0030_hw_order_module_sha256: 235b334f1245f0395a6c3ada3a8c6cd152c4e26d8bf7b30870e9a75b1029f16a
   linux_front_0030_hw_order_inspector_sha256: 6ae629cb76a440221bd99db930a317ec53c104f2690272d48f78f8048f44909b
   linux_front_0030_hw_order_inspection_json_sha256: e1237d8c470f3d3ab3ecc025230edfa83fdd1cd8343d0ebcb991ac43acfa36db
-  linux_front_0030_power_owner: v4l2_pipeline_pm_get/put; no duplicate PIX-runner power refs
+  linux_front_0030_power_owner: v4l2_pipeline_pm_get/put; no duplicate PIX-runner
+    power refs
   linux_front_0030_generic_vfe1_pix_s_stream_allowed: false
-  linux_front_0030_steady_order: Epoch0 raw poll -> BUS IOVA update -> five-BL RT-CDM submit -> VIDEO raw poll/retirement
+  linux_front_0030_steady_order: Epoch0 raw poll -> BUS IOVA update -> five-BL RT-CDM
+    submit -> VIDEO raw poll/retirement
   linux_front_0030_stop_prefix: CSID1 IPP stop -> VFE1 BUS stop -> RT-CDM mask/close
-  linux_front_0030_rollback_order: sensor -> CSIPHY2 -> CSID1 -> BUS -> RT-CDM -> capsule DMA -> pipeline PM
+  linux_front_0030_rollback_order: sensor -> CSIPHY2 -> CSID1 -> BUS -> RT-CDM ->
+    capsule DMA -> pipeline PM
   linux_front_0030_replay01_vs_csid_start_closed: false
   linux_front_0030_replay23_vs_mipi_sensor_start_closed: false
   linux_front_0030_callable_runner_authorized: false
@@ -657,15 +705,21 @@ e003h:
   windows_vfe1_priming_mipi_crossorder_extractor_sha256: ff4397b20f1019f52f7ff6d716236e055441d8b60bd2ee191151f196289b140b
   windows_vfe1_priming_mipi_crossorder_oracle_sha256: 849687aaa5206c25484b9a6e015aba320d7d01610d5292a33df54605f20ae599
   windows_vfe1_priming_mipi_crossorder_cycles: 2
-  windows_vfe1_priming_mipi_crossorder_total: replay0 -> replay1 -> CSID1 start -> ISP_START_DONE -> MIPI start enter -> MIPI start done -> sensor-on -> replay2 -> replay3 -> first steady 0x958
+  windows_vfe1_priming_mipi_crossorder_total: replay0 -> replay1 -> CSID1 start ->
+    ISP_START_DONE -> MIPI start enter -> MIPI start done -> sensor-on -> replay2
+    -> replay3 -> first steady 0x958
   windows_vfe1_replay01_vs_csid_start_closed: true
   windows_vfe1_replay23_vs_mipi_sensor_start_closed: true
   windows_vfe1_startup_priming_interleave_raw_sha256: cae67c10421246f86a469d95c73cdfa3684c1004827847fe922ab59c2d9273ed
   windows_vfe1_startup_priming_interleave_raw_bytes: 9624
   windows_vfe1_startup_priming_interleave_extractor_sha256: d75dd99d654036708d47d662c257374e686a718e57a2d0e097a9d8f97dac654b
   windows_vfe1_startup_priming_interleave_oracle_sha256: 849b6cc2d9e49c3cf912e1b1c6041b68cc1a76c8ba05496e278dc763f1a24032
-  windows_vfe1_startup_priming_exact_pre_csid: startup0 -> priming0 -> startup1 -> BUS config/enable/initial addresses -> priming1 -> startup2 -> startup3 -> CSID1 start
-  windows_vfe1_startup_priming_full_start: startup0 -> priming0 -> startup1 -> BUS -> priming1 -> startup2 -> startup3 -> CSID1 -> ISP_START_DONE -> CSIPHY2/MIPI -> sensor-on -> priming2 -> priming3 -> steady
+  windows_vfe1_startup_priming_exact_pre_csid: startup0 -> priming0 -> startup1 ->
+    BUS config/enable/initial addresses -> priming1 -> startup2 -> startup3 -> CSID1
+    start
+  windows_vfe1_startup_priming_full_start: startup0 -> priming0 -> startup1 -> BUS
+    -> priming1 -> startup2 -> startup3 -> CSID1 -> ISP_START_DONE -> CSIPHY2/MIPI
+    -> sensor-on -> priming2 -> priming3 -> steady
   linux_front_0031_patch_sha256: e19cdd47ce6d0fd307d8c022b65ce80fe31bfe83b7907b6a43b1a4ca1bf8066d
   linux_front_0031_source_sha256: 1902c56b0258c789c17260163ad0e46d9cf52df7cdbdbfbd677e53a8cafb5e68
   linux_front_0031_object_sha256: 809593d8aa1a8ff13527c72c056649b86fdf052d35fc71a09a9ad5a6a95c4f0d
@@ -680,8 +734,10 @@ e003h:
   windows_vfe1_replay_epoch0_pacing_raw_bytes: 2008
   windows_vfe1_replay_epoch0_pacing_extractor_sha256: b65103e41e944f7777ed8160d11af1e2c2d693dc17cf10171c61c21b8f0be29a
   windows_vfe1_replay_epoch0_pacing_oracle_sha256: 73899c498339c10c3d919fa563c76e3d30dc9917dd09b0e179fdbb380303c0c8
-  windows_vfe1_first_pix_pacing: sensor-on -> Epoch0#0 -> nine-client BUS retarget -> replay2/request2 -> VIDEO -> Epoch0#1 -> nine-client BUS retarget -> replay3/request3
-  linux_front_first_pix_bounded_prefix: sensor-on -> Epoch0#0 -> BUS slot1 -> replay2/request2 -> VIDEO(slot0) -> stop
+  windows_vfe1_first_pix_pacing: sensor-on -> Epoch0#0 -> nine-client BUS retarget
+    -> replay2/request2 -> VIDEO -> Epoch0#1 -> nine-client BUS retarget -> replay3/request3
+  linux_front_first_pix_bounded_prefix: sensor-on -> Epoch0#0 -> BUS slot1 -> replay2/request2
+    -> VIDEO(slot0) -> stop
   linux_front_0032_patch_sha256: fc8752b0b0f8e681340d0577dea23d029cee550c73f13204e660e07a4d694b35
   linux_front_0032_source_sha256: 1111d3e88b88729a8851a60f31ef1bbc877dc127ccb9d4cb998311f5ba7834f5
   linux_front_0032_object_sha256: 10ffb2f154459f2cb4d1c35bdbaf80e5ea32e563ed68b693e45bb908fd33caaa
@@ -708,7 +764,9 @@ e003h:
   linux_front_0033_inspection_json_sha256: 86aa949f8dd41fc9a55e16a34a72ffbb00f75cc2eae10d4b65c2ee5f385df2d3
   linux_front_0033_build_log_sha256: 1bc1fbb5e8a3feb94b69b00dab3cf4c755074a458e9cd478ca4cd6752ba2ea52
   linux_front_0033_checkpatch_sha256: 0d6770cd08b80defbfbdc4dc8dffc6b1b8172f2afbc5c21a9c1ca4f9cb4f41d2
-  linux_front_0033_first_frame_order: startup0 -> prime0 -> startup1 -> BUS slot0 -> prime1 -> startup2 -> startup3 -> CSID1 -> CSIPHY2 -> sensor-on -> Epoch0#0 -> BUS slot1 -> prime2/request2 -> VIDEO slot0 -> stop
+  linux_front_0033_first_frame_order: startup0 -> prime0 -> startup1 -> BUS slot0
+    -> prime1 -> startup2 -> startup3 -> CSID1 -> CSIPHY2 -> sensor-on -> Epoch0#0
+    -> BUS slot1 -> prime2/request2 -> VIDEO slot0 -> stop
   linux_front_0033_prime_indices_submitted: 0,1,2
   linux_front_0033_prime3_submitted: false
   linux_front_0033_steady_batch_before_first_video: false
@@ -729,9 +787,12 @@ e003h:
   linux_front_0034_checkpatch_sha256: 38a0393200c6f84325f4953d84990557493d7a48c54be28f2f23f2254ed8fcd2
   linux_front_0034_capsule_bytes: 41088
   linux_front_0034_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
-  linux_front_0034_buffer_contract: two distinct DEQUEUED non-streaming QC10C buffers, 2560x1440 stride3584 size0x76b000, page-aligned 32-bit non-overlap
-  linux_front_0034_resource_contract: VFE1=0x0ac71000/0xf000; RT-CDM1=0x0ac26000/0x1000; front-only CSIPHY1 sink unlinked
-  linux_front_0034_one_shot_latch: atomic cmpxchg 0->1 before validation, no reset until reload/reboot
+  linux_front_0034_buffer_contract: two distinct DEQUEUED non-streaming QC10C buffers,
+    2560x1440 stride3584 size0x76b000, page-aligned 32-bit non-overlap
+  linux_front_0034_resource_contract: VFE1=0x0ac71000/0xf000; RT-CDM1=0x0ac26000/0x1000;
+    front-only CSIPHY1 sink unlinked
+  linux_front_0034_one_shot_latch: atomic cmpxchg 0->1 before validation, no reset
+    until reload/reboot
   linux_front_0034_capsule_hash_verified_in_kernel: false
   linux_front_0034_gate_recipe_relocations: 1
   linux_front_0034_gate_recipe_runtime_references: 0
@@ -760,7 +821,8 @@ e003h:
   linux_front_0035_runtime_reachable_by_default: false
   linux_front_0035_runtime_reachable_when_explicitly_armed: true
   linux_front_0035_runtime_authorized: false
-  linux_front_0035_runtime_authorization_scope: exactly one candidate boot and one RUN; no same-boot retry; immediate Golden reboot after success/failure
+  linux_front_0035_runtime_authorization_scope: exactly one candidate boot and one
+    RUN; no same-boot retry; immediate Golden reboot after success/failure
   linux_front_0035_runtime_authorization_consumed: true
   linux_front_pix_first_attempt_result: ETIMEDOUT before sensor-on; no QC10C output
   linux_front_pix_first_attempt_elapsed_seconds_approx: 0.76
@@ -784,13 +846,14 @@ e003h:
   linux_front_0036_build_log_sha256: b60f8dccadc64ca83283b878633d1d88eb1f2c95956691b750bc214f335c2565
   linux_front_0036_checkpatch_sha256: 00fb143e51c15a224439325fb1e768d91536fc876fba41763d65f2794b3f4f01
   linux_front_0036_new_mmio_writes: 0
-  linux_front_0036_error_snapshot: raw IRQ context/status/userdata + last ISR snapshot + FIFO sequence/base/length + required IRQ
+  linux_front_0036_error_snapshot: raw IRQ context/status/userdata + last ISR snapshot
+    + FIFO sequence/base/length + required IRQ
   linux_front_0036_semantic_labels: startup packet; priming packet+BL; steady BL
   linux_front_0036_runtime_authorized: false
   windows_rtcdm1_irq_handler_extractor_sha256: 5a258eaf97a768262ea6a843948e48d707ade70eb5dca69fe95e20cdf3f8b43b
   windows_rtcdm1_irq_handler_oracle_sha256: 99ffd25d52f154915d6462c7b6d9fa35f86cf75026855d5afce983f77d41cf05
   windows_rtcdm1_irq_handler_context_status_read: false
-  windows_rtcdm1_irq_handler_status_mask: 0x00070007
+  windows_rtcdm1_irq_handler_status_mask: 458759
   windows_rtcdm1_irq_handler_clear_rule: masked FIFO status -> CLEAR; 1 -> CLEAR_CMD
   linux_front_0037_patch_sha256: 5406e8d7683ba1b9d27ff0fc70e65ff7ca7c7c024c2930d17de2494fb9adf021
   linux_front_0037_source_sha256: ed7d5887a9bfe41d7b677005884493e3e2fb7b1493ba96b9ff43f3f7ac9119d5
@@ -800,7 +863,8 @@ e003h:
   linux_front_0037_inspection_json_sha256: c37fb0a4bd7403f1d4e48ddb1e153627009248fc91c5def6ede9614f2ee8e835
   linux_front_0037_irq_context_gate: false
   linux_front_0037_clear_rule: raw_status & 0x00070007
-  linux_front_0037_first_timeout_cause_status: plausible context-gate suppression; not proven
+  linux_front_0037_first_timeout_cause_status: plausible context-gate suppression;
+    not proven
   linux_front_0037_runtime_authorized: false
   linux_front_0038_diagnostic_camss_sha256: 96e48ff176a048c391841d2c56bafdce76cfbe8a78b7310173caf175af49c9e9
   linux_front_0038_package_inspector_sha256: d20839c47ec0e7b293bf6a3eb071b491993da5a4c2f992fb56d398f519b24b27
@@ -810,12 +874,15 @@ e003h:
   linux_front_0038_preflight_script_sha256: 5f50b32d5c23973f14cc17b59fc834e97c6c2cbb8e23987222eb31ef5f89c902
   linux_front_0038_candidate_boot_armed: false
   linux_front_0038_runtime_authorized: false
-  linux_front_0038_runtime_authorization_scope: exactly one candidate boot and one RUN; no same-boot retry; archive 0036 telemetry; immediate Golden reboot after success/failure
+  linux_front_0038_runtime_authorization_scope: exactly one candidate boot and one
+    RUN; no same-boot retry; archive 0036 telemetry; immediate Golden reboot after
+    success/failure
   linux_front_0038_authorization_review_sha256: 991534b4dd4db9bf7201864f54f07cf8d4faabe24582f8b5d5a4ce3b361a5eb8
   linux_front_0038_runtime_authorization_consumed: true
   linux_front_0038_nonroot_pretrigger_consumed_run: false
   linux_front_0038_root_run_treated_consumed: true
-  linux_front_0038_result: abrupt unclean reset during/after root invocation; no QC10C output; no persisted RT-CDM stage error
+  linux_front_0038_result: abrupt unclean reset during/after root invocation; no QC10C
+    output; no persisted RT-CDM stage error
   linux_front_0038_normal_shutdown_observed: false
   linux_front_0038_following_boot_ext4_orphan_cleanup: true
   linux_front_0038_pstore_record: false
@@ -839,7 +906,8 @@ e003h:
   linux_front_0039_read_only_sysfs_attribute: e003h_pix_rtcdm_diag
   linux_front_0039_transition_sequence: release/acquire published diagnostic generation
   linux_front_0039_prewrite_markers: reset-command; core-starting; fifo-wait
-  linux_front_0039_persistence: userspace watcher fsyncs each changed snapshot; sysfs POLLPRI plus 1ms fallback poll
+  linux_front_0039_persistence: userspace watcher fsyncs each changed snapshot; sysfs
+    POLLPRI plus 1ms fallback poll
   linux_front_0039_new_mmio_writes: 0
   linux_front_0039_trigger_semantics_changed: false
   linux_front_0039_runtime_authorized: false
@@ -847,7 +915,8 @@ e003h:
   windows_rtcdm1_multififo_irq_oracle_sha256: 4664eb9ea3f5552303351d7d49d4148218ba431fb7c42f48b6e98af226ba6b40
   windows_rtcdm1_multififo_status_offsets: FIFO0=0x44; FIFO1=0x144; FIFO2=0x244; FIFO3=0x344
   windows_rtcdm1_multififo_dispatch_gate: masked FIFO0 status only
-  windows_rtcdm1_multififo_clear_rule: masked status0..3 -> 0x34/0x134/0x234/0x334; 1 -> 0x38/0x138/0x238/0x338
+  windows_rtcdm1_multififo_clear_rule: masked status0..3 -> 0x34/0x134/0x234/0x334;
+    1 -> 0x38/0x138/0x238/0x338
   linux_front_0040_patch_sha256: a3a728b67523dfa39cb99f313ed97c715ba272202ba74f1836b0ccde6e6d3aed
   linux_front_0040_source_sha256: fbdb8786067a4e6df78893974e8dd17f8bd043c7bae8391cfb3fa1ff1fd71384
   linux_front_0040_header_sha256: 4e69f21ea8a04022722912f24133edcd38cad3348ff06bf4b07ac19a422c1176
@@ -870,7 +939,8 @@ e003h:
   linux_front_0041_checkpatch_sha256: e34af2c1d699c0004297c1bec10adee662c606d38d5027c0020ce9089123bbcd
   linux_front_0041_iommu_set: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
   linux_front_0041_classification: LINUX_IMPLEMENTATION; parity_claim=false
-  linux_front_0041_dma_semantics: dma_alloc_coherent(camss->dev) -> iommu_dma_alloc when IOMMU-backed; all CAMSS fwspec entries attach to one translation domain/cbndx
+  linux_front_0041_dma_semantics: dma_alloc_coherent(camss->dev) -> iommu_dma_alloc
+    when IOMMU-backed; all CAMSS fwspec entries attach to one translation domain/cbndx
   linux_front_0041_old_dtb_sha256: bbe48a77c5bc23f1c155ddc87b9a5b2ed56497656f06cab1a2db8e6346f0304b
   linux_front_0041_new_dtb_sha256: 333e3c81c8a490f1b8b444e9a8d8005539799c438f2d03ebc6acfc366074b14e
   linux_front_0041_runtime_authorized: false
@@ -884,10 +954,11 @@ e003h:
   windows_qcsmmu_camera_sid_oracle_sha256: 319de2be449edd70494089f6af63c9b698e4a59474f919296be21210768d0a04
   windows_qcsmmu_camera_sid_extractor_sha256: 3c4979414082c3b5e5e7eb6d796d0a7c9153419449f30bcff053a5bc93bc1445
   linux_camss_iommu_current_list_status: stale; omits 0x18a0 CDM-IFE candidate route
-  linux_camss_iommu_public_v13_reference: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
+  linux_camss_iommu_public_v13_reference: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60;
+    0x18a0/0
   linux_camss_iommu_public_v13_is_windows_proof: false
   rtcdm_exact_command_fetch_sid_proven_same_machine: true
-  rtcdm_exact_command_fetch_sid: 0x18a0
+  rtcdm_exact_command_fetch_sid: 6304
   rtcdm_exact_command_fetch_context_bank: 16
   rtcdm_exact_command_fetch_context_name: S1_IFE_HLOS
   windows_rtcdm1_requester_sid_extractor_sha256: 1efe9046ca42fe3eb78d55ef086e4503f607193cc49bda0e43918591ccc48f06
@@ -902,33 +973,54 @@ e003h:
   linux_front_postprov_package_inspection_sha256: d28f04d96f0e405fbf8710f3e0e0a872c845b781af05b60a6ed98ecc10c5cce4
   linux_front_postprov_install_log_sha256: 02b271e002ae5d5e717d44d99a335281b5bb1210fff72c0a5138821124917ecd
   linux_front_postprov_preflight_log_sha256: 4741a23df4e8c2d0503266552ba61182e7fa7ee36f87a65207858f32b84dc2aa
-  linux_front_postprov_iommu_set: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
+  linux_front_postprov_iommu_set: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60;
+    0x18a0/0
   linux_front_postprov_package_installed: true
   linux_front_postprov_package_armed: false
-  linux_front_postprov_runtime_authorized: true
-  linux_front_postprov_authorization_scope: exactly one candidate boot and one root RUN; no non-root pre-trigger; no same-boot retry; persistent observer required; immediate Golden reboot after any result
+  linux_front_postprov_runtime_authorized: false
+  linux_front_postprov_authorization_scope: exactly one candidate boot and one root
+    RUN; no non-root pre-trigger; no same-boot retry; persistent observer required;
+    immediate Golden reboot after any result
   linux_front_postprov_authorization_review_sha256: 73cec6f240c8c20f54eca1dfa141dc8330564e763fd6d9fc2cb43709a723d6d6
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
   front_parity_provenance_runtime_blockers: []
-  front_parity_provenance_production_blockers: [rtcdm.fe_fifo_ultimate_origin, iq.live_provider_algorithms]
+  front_parity_provenance_production_blockers:
+  - rtcdm.fe_fifo_ultimate_origin
+  - iq.live_provider_algorithms
   front_parity_provenance_checker: tools/check-front-parity-provenance.py
   front_parity_provenance_enforced_in_pix_preflight: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; exactly one post-provenance diagnostic is authorized but not yet consumed; production parity still requires the ultimate FE_CFG/FIFO0_CFG owner classification and an independently implemented live IQ/provider strategy
-next_experiment: E003h-bounded-vfe1-pix-third-diagnostic-one-shot-runtime
-next_action: >-
-  Exactly one post-provenance diagnostic candidate boot and one root RUN are authorized. Arm only sp11-camera-e003h-pix-one-shot; load the pinned CAMSS+IMX681; configure only the exact front PIX route; allocate exactly two QC10C buffers without QBUF/STREAMON; start the persistent RT-CDM watcher before RUN; invoke the helper once as root; archive all evidence; never retry in the same boot; immediately return to Golden after success or failure.
-
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; exactly
+    one post-provenance diagnostic is authorized but not yet consumed; production
+    parity still requires the ultimate FE_CFG/FIFO0_CFG owner classification and an
+    independently implemented live IQ/provider strategy
+  linux_front_postprov_authorization_boot_consumed: true
+  linux_front_postprov_hardware_run_executed: false
+  linux_front_postprov_harness_abort: pre-exec shell redirection Permission denied
+    before sudo helper entry; sysfs RUN not written
+  linux_front_postprov_harness_abort_run_log_sha256: ed2b5241d70a09765d931fb644b393652e1bae7f7ba4417b1f6040ec7a57b7bd
+  linux_front_postprov_harness_abort_post_sha256: 280b95d1f5085f20226dbf849c7d17aa645c2a7efbab24d0cc414b02850c5b96
+  linux_front_postprov_harness_abort_dmesg_sha256: 8a87cd16f8a2a0d0ecf3644ec8c6e150fb7fc86ea34493abf5205f879f7ff11f
+  linux_front_postprov_harness_abort_stage_sha256: 82d9b77042ecf4edcd90fc572f9e33999bcafefced6b5188d1742b863b808a51
+  linux_front_postprov_harness_abort_result_sha256: 08ebdf455a97b151cbe62724e8b1c6a3ab244f10fa787b1731cb1a3e35f4ffba
+  linux_front_postprov_corrected_wrapper_sha256: 7724dabef6fe147809919d0349d1adfe1a4b1c2418ede82c7235e0d79e1d396d
+  linux_front_postprov_authorization_consumed: true
+next_experiment: E003h-bounded-vfe1-pix-replacement-one-shot-authorization-review
+next_action: 'Do not treat the prior candidate boot as a PIX hardware attempt: shell
+  redirection failed before the privileged helper entered and RT-CDM stayed idle.
+  The candidate-boot authorization is consumed, hardware RUN was not. Rerun Golden/package/provenance
+  review, inspect the corrected wrapper, and create a fresh single-boot/single-root-RUN
+  authorization checkpoint before re-arming. No same-boot retry occurred.'
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
-    - CONTINUE.md
-    - AGENTS.md
-    - PROJECT_STATE.md
-    - state/project.yaml
+  - CONTINUE.md
+  - AGENTS.md
+  - PROJECT_STATE.md
+  - state/project.yaml
   live_check: ./tools/project-status.sh
   update_before_session_end:
-    - PROJECT_STATE.md
-    - state/project.yaml
-    - current experiment record
-    - git commit and push
+  - PROJECT_STATE.md
+  - state/project.yaml
+  - current experiment record
+  - git commit and push
