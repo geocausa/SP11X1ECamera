@@ -648,3 +648,11 @@ The replacement candidate boot reached the new runtime preflight but failed befo
 ## 2026-08-30 — 0044 boot-3 hardware result: same Epoch0 boundary; BUF_DONE drift exposed
 
 The package-v3 boot-3 diagnostic executed exactly one root helper and returned `ETIMEDOUT` at VFE1 Epoch0. RT-CDM completed 13 pre-CSID BLs without fault; IMX681 streamed; CSID1 received exactly 37,016 packets with zero ECC/CRC and IPP status `0x00011e00`; no QC10C output. Golden return is clean and there was no retry. Runtime analysis `1f826e629328c182d3c1d8571a480f89100737c697dc44c4d5e3364b5804e746` proves the stable 0042/0043/0044 boundary is identical and 0044 removes the prior teardown warning. The next static discrepancy is `BUF_DONE_IRQ_MASK`: Windows/0042 `0x1ffff`, 0043/0044 `0x1`. Do not patch it blindly; trace its post-builder owner/transition first.
+
+## 2026-08-30 — Windows RT-CDM BL boundary ambiguity closed dynamically
+
+Fresh same-SP11 Windows KD logging at qccamisp commit RVA `0x28884` records every RT-CDM BL descriptor and live arena neighbors. Static decompile of `FUN_140028480` independently proves `+0x50=BL base`, `+0x54=(length-1)|0x00100000`, `+0x58=trigger`; consequently `0x00100003`, `0x0010000f`, and `0x00100013` are exact 4-, 16-, and 20-byte BLs. The first-start queue submits `0x0800f000` as one 4-byte BL and `0x08057000` later as a distinct 4-byte BL. The intervening arena word `0x0803c000` is skipped and is not a hardware command.
+
+The same trace shows all submitted CSID common RUP/AUP blocks use `+0x18=0x01f501f5` for replay1, replay2, replay3 and steady state; adjacent `0x000001f5` / `0x01f50000` words are not submitted. CSID1 path enable occurs exactly once with selector `5` (IPP), with no hidden RDI/PPP start. Physical base arithmetic remains `0x0ac62000+0xf000=0x0ac71000` VFE1 and `+0x57000=0x0acb9000` CSID1.
+
+Raw logs are frozen under `windows-rtcdm-bl-boundaries/`. Fail-closed extractor SHA-256 `e823b0048ebe786d9e9320dd17e8c20e1459edd71c7784c97df2d6d91b845e6d` reproduces oracle SHA-256 `6741c46589c6bc976ad87a0aad566088e831c452e41961df309bda40f62dc45f` and output SHA-256 `6e192974185085eff4839b135168254e7655c63a05f28dff75a10764e135e19b`. No Linux delta follows from this closure. Continue with the already-selected Windows first-start lifecycle after VFE BUS start and before sensor-on.

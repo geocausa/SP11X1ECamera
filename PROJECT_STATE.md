@@ -8,6 +8,14 @@ The blocker, however, does not move. VFE1 `TOP_STATUS1` remains `0x00030003` wit
 
 Golden recovery is verified with `saved_entry=sp11-audio-fullio-v19c`, empty `next_entry`, Wi-Fi connected, playback/capture devices present, Surface touch/touchpad present, and camera modules absent. Authorization `98d8d7ae...6c91a` is preserved as `AUTHORIZATION-CONSUMED.json`. **Do not repeat 0047.** Next close the remaining same-machine Windows first-start lifecycle after BUS start and before sensor-on using existing KD/Ghidra evidence before considering any new Linux hardware run.
 
+## E003h ACTIVE — Windows RT-CDM BL boundaries closed; post-BUS/pre-sensor lifecycle remains next — 2026-08-30
+
+A fresh same-SP11 Windows KD run resolves the last ambiguity in the RT-CDM command arena. qccamisp commit RVA `0x28884` dynamically submits BL base/length pairs, while static `FUN_140028480` proves `+0x50=base`, `+0x54=(length-1)|0x00100000`, `+0x58=1`. Live first-start descriptors therefore prove the adjacent arena sequence `0x0800f000 0x0803c000 0x08057000` is **not** one command stream: Windows submits a 4-byte `0x0800f000` BL, skips the `+4` `0x0803c000` word, and later submits a separate 4-byte `0x08057000` BL. Linux must not add `0x0803c000`.
+
+The same capture proves replay1/replay2/replay3 and steady-state submitted RUP/AUP blocks all program CSID common `+0x18 = 0x01f501f5`; adjacent lower-only `0x000001f5` and upper-only `0x01f50000` arena words are not submitted masks. Exactly one CSID1 enable occurs and selector `5` is IPP; no hidden RDI/PPP start exists. Existing physical anchors remain exact: RT-CDM `0x0ac62000 + 0xf000 = VFE1 0x0ac71000`, and `+0x57000 = CSID1 0x0acb9000`.
+
+Fail-closed extractor SHA-256 is `e823b0048ebe786d9e9320dd17e8c20e1459edd71c7784c97df2d6d91b845e6d`; derived oracle SHA-256 is `6741c46589c6bc976ad87a0aad566088e831c452e41961df309bda40f62dc45f`; deterministic output SHA-256 is `6e192974185085eff4839b135168254e7655c63a05f28dff75a10764e135e19b`. It pins the three raw KD logs plus the static commit-function dump byte-for-byte and cross-pins the corrected configure→RUP→enable oracle (`0a2cec61...23ae1`). This is a negative-search closure only: **no Linux runtime or new writer delta is authorized**. The durable next gate remains same-machine Windows first-start lifecycle after VFE BUS start and before sensor-on.
+
 ## E003h ACTIVE — 0047 one-shot runtime authorized, still unarmed — 2026-08-30
 
 Fresh authorization review passed against public package commit `64f7e3119438d925857ff235c3b66457bdcccc1a`. It re-ran package preflight and fail-closed package inspection before creating authorization, reproduced package inspection SHA-256 `498937c1093375c8bb1204e8aed8604e1258cc4531428757b818649d7eaaf509`, verified HEAD/origin synchronization, bounded provenance, frozen assets, Golden saved default, empty `next_entry`, and no camera modules.

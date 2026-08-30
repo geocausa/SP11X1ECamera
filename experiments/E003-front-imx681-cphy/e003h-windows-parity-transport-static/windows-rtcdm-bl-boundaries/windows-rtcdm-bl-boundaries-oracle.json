@@ -1,0 +1,93 @@
+{
+  "accepted": true,
+  "corrections_to_prior_interpretation": [
+    "The old manual dd arena sequence 0800f000 0803c000 08057000 must not be decoded as one submitted command stream.",
+    "0x0803c000 is adjacent arena data skipped by the FIFO BL descriptors; do not add it to Linux.",
+    "Adjacent lower-only/upper-only RUP values are not replay2/replay3 submissions; actual submitted replay1/replay2/replay3 and steady RUP/AUP blocks use 0x01f501f5."
+  ],
+  "date": "2026-08-30",
+  "driver": {
+    "name": "qccamisp8380.sys",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "first_start_pre_enable": {
+    "adjacent_0x0803c000_submitted": false,
+    "arena_layout_note": "At both VFE1 CHANGE_BASE commits, the live arena contains 0x0800f000 at +0, 0x0803c000 at +4, 0x08057000 at +8. Hardware commit length is exactly four bytes at +0, then later exactly four bytes at +8; +4 is skipped.",
+    "combined_rup_aup": "0x01f501f5",
+    "order": [
+      "CSID1 configure CTRL=0",
+      "CHANGE_BASE VFE1 0x0000f000",
+      "priming main0",
+      "CHANGE_BASE CSID1 0x00057000",
+      "CSID companion0",
+      "CHANGE_BASE VFE1 0x0000f000",
+      "priming main1",
+      "CHANGE_BASE CSID1 0x00057000",
+      "CSID companion1",
+      "REG_RANDOM CSID1 +0x18=0x01f501f5 + GEN_IRQ tag1",
+      "CSID1 enable selector5"
+    ]
+  },
+  "linux_consequence": "Retain the current Linux BL boundary model: 4-byte 0x0800f000 wrapper, main list, 4-byte 0x08057000 companion base, companion list, and combined 0x01f501f5 RUP/AUP+GEN_IRQ. No 0x0803c000 or split-mask delta is justified.",
+  "machine": "same SP11 X1E80100 Windows oracle",
+  "next_gate": "Find the first Windows CSID1 state transition after sensor-on that produces RUP_DONE/CAMIF/Epoch; current BL content, boundaries, bases, masks, and active path set are closed.",
+  "physical_crosscheck": {
+    "csid1_change_base": "0x00057000",
+    "csid1_physical": "0x0acb9000",
+    "note": "CSID1 physical base is independently pinned by the existing same-machine CSID oracle; this session also manually observed PFN 0xacb9 via !pte.",
+    "rtcdm_anchor": "0x0ac62000",
+    "vfe1_change_base": "0x0000f000",
+    "vfe1_physical": "0x0ac71000"
+  },
+  "post_enable": {
+    "hidden_rdi_or_ppp_enable_observed": false,
+    "lower_only_0x000001f5_submitted": false,
+    "only_csid1_path_selector_enabled": 5,
+    "replay2_rup_aup": "0x01f501f5",
+    "replay3_rup_aup": "0x01f501f5",
+    "selector_meaning": "IPP",
+    "steady_rup_aup": "0x01f501f5",
+    "upper_only_0x01f50000_submitted": false
+  },
+  "prior_oracles": {
+    "windows_config_rup_enable_order_sha256": "0a2cec61ba2707ebf5b4899128d99c1f79aa931605383c24bd0b98d99f23ae1e",
+    "windows_csid1_ipp_start_sha256": "01960da41376809d694c6aa2336ecef6ff4c010abfa29e4674b1a68d303c3cda"
+  },
+  "qccamisp_static_commit": {
+    "fifo0_base_register_offset": "0x50",
+    "fifo0_length_register_offset": "0x54",
+    "fifo0_trigger_register_offset": "0x58",
+    "function_rva": "0x28480",
+    "length_encoding": "(BL byte length - 1) in low 20 bits, OR 0x00100000",
+    "mmio_commit_instruction_rva": "0x28884",
+    "proved_examples": {
+      "0x00100003": 4,
+      "0x0010000f": 16,
+      "0x00100013": 20
+    }
+  },
+  "raw_evidence": {
+    "boundary": {
+      "bytes": 174214,
+      "file": "E003H_RTCDM_BL_BOUNDARIES_20260830.log",
+      "sha256": "8e285eaf8bd8ace1cd5f82b59b4209a3824dc67b78bf0f317cbb123e91568c19"
+    },
+    "content": {
+      "bytes": 3656,
+      "file": "E003H_RTCDM_BL_CONTENT_FIRSTSTART_20260830.log",
+      "sha256": "8fcde86f2577caaf292df6ce535b98efb5d5140a8eeef8afeee827805a928a9f"
+    },
+    "post": {
+      "bytes": 145562,
+      "file": "E003H_RTCDM_POST_ENABLE_RUP_MASKS_20260830.log",
+      "sha256": "3f84acd8bdb9915241a96f18d1cf8f28d07ef37487668b360a1796f261373037"
+    },
+    "static": {
+      "bytes": 32324,
+      "file": "E003H_RUP_COMMIT_FUNC_20260830.txt",
+      "sha256": "fce1aabcc6310f0a6eafc2b55475ac5bc81e6dea584eeded9cae428cf7841e5d"
+    }
+  },
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-windows-rtcdm-bl-boundaries-v1"
+}
