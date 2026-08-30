@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0047-one-shot-authorized-unarmed-runtime-next
+status: e003h-0047-runtime-vfe-masks-fixed-boundary-unchanged-windows-postbus-lifecycle-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1611,8 +1611,38 @@ e003h:
   linux_front_0047_authorization_normal_streamon: false
   linux_front_0047_authorization_runtime: true
   linux_front_0047_authorization_production_parity: false
-  linux_front_0047_authorization_consumed: false
+  linux_front_0047_authorization_consumed: true
+  linux_front_0047_runtime_run_sha256: 9d5cb8d1e67f2cacd794dcbc99a7b4e31c5f15a2219c1ce5064c0062cfffd7d2
+  linux_front_0047_runtime_post_sha256: c510245c31efc18c3e370a594f64469995e59f8fe3f0b5a8a4a0020ee40ae234
+  linux_front_0047_runtime_dmesg_sha256: 5932b3b68397c4542b85c4eb57c82679c57a095693b78908a07125cfc631e829
+  linux_front_0047_runtime_rtcdm_stages_sha256: 6117c7fda586ec3dff3e6513bc118e26479beafa610805f95c79d059090bb258
+  linux_front_0047_runtime_pre_sha256: 3c99148cdaaf709f0fd64672d14fc1edfa90ed07a97c554572ccf81bbd29611d
+  linux_front_0047_runtime_load_sha256: 0a1be25e490506267ebb4798a48d8d4de82c8ac3822cb069619a0c8d8cfc3985
+  linux_front_0047_runtime_media_sha256: f15ec70d7447992f718a709349313e75f5825ae9f1e60d3e39125ac83b6673c9
+  linux_front_0047_runtime_golden_return_sha256: 36246b60a0e80bc18d21651ff87e92d05f0673c7e288076edb8b55475b9ab371
+  linux_front_0047_runtime_hashes_sha256: 5030bd3102015aff2d08fa16a58dad6800091c1d9fca2f873ebe5b66b0906774
+  linux_front_0047_runtime_aborted_observer_stages_sha256: 608cc4339aca2cfbd7b35ea3b17ad2f19228f6d50ca405c33c0fc915052566e6
+  linux_front_0047_runtime_aborted_observer_ready_sha256: 3dfa3fb239f56c778a1e9b33eb31328349edd155a95806dac4378904e88527e5
+  linux_front_0047_runtime_extractor_sha256: 881c89a3e3998eba9e56c4130a80dcfd242ef824929eca4280d5fd928dc27d80
+  linux_front_0047_runtime_analysis_sha256: acdcbd8b50de3b96a3484da22f4b5678e58633663d0768414f4132d53c2f0a0a
+  linux_front_0047_runtime_helper_invocations: 1
+  linux_front_0047_runtime_same_boot_retry: false
+  linux_front_0047_runtime_qc10c_output: false
+  linux_front_0047_runtime_result: ETIMEDOUT_waiting_vfe1_raw_epoch0
+  linux_front_0047_runtime_rtcdm_fifo_bl_completed: 17
+  linux_front_0047_runtime_rtcdm_faulted: false
+  linux_front_0047_runtime_vfe_top_mask0: 0x0007f051
+  linux_front_0047_runtime_vfe_bus_mask0: 0xd0000000
+  linux_front_0047_runtime_vfe_top_status1: 0x00030003
+  linux_front_0047_runtime_vfe_bus_status1: 0x00000000
+  linux_front_0047_runtime_csid_packets: 37016
+  linux_front_0047_runtime_csid_ecc_errors: 0
+  linux_front_0047_runtime_csid_crc_errors: 0
+  linux_front_0047_runtime_csid_ipp_status: 0x00011e00
+  linux_front_0047_runtime_failure_boundary_moved: false
+  linux_front_0047_runtime_golden_return_verified: true
+  linux_front_0047_runtime_observer_relaunch_before_run: true
 
-next_experiment: E003h-vfe1-dal-start-prefix-0047-one-shot-runtime
+next_experiment: E003h-windows-first-start-postbus-presensor-lifecycle
 next_action: >-
-  Publish this authorization checkpoint while the candidate remains unarmed. Then set next_entry exactly once to sp11-camera-e003h-vfe1-0047-one-shot, boot the candidate, run authorization-aware preflight before module load, establish the exact front PIX graph and persistent RT-CDM observer, invoke the root helper exactly once, archive the result, and immediately reboot to Golden. No same-boot retry and no normal QBUF/STREAMON.
+  Do not repeat 0047. Close the remaining same-machine Windows first-start lifecycle after VFE BUS start and before sensor-on, focusing on direct VFE/CSID callbacks or state transitions not represented by the current startup packet/callback model. Use existing KD/Ghidra evidence first; only authorize another Linux run after a new exact parity delta or narrowly justified phase telemetry is frozen and inspected.

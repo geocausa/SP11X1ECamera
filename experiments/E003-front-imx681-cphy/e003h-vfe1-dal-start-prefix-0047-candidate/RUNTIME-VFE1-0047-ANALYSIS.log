@@ -1,0 +1,113 @@
+{
+  "accepted": true,
+  "authorization_sha256": "98d8d7aeaaeddc01b7b8326da54a897b7dda31a233bafb1cb4b5b8cd95e6c91a",
+  "conclusions": [
+    "0047 mechanically fixes the VFE1 IRQ-mask parity gap: timeout readback now exactly matches same-machine Windows TOP mask0 0x0007f051/TOP mask1 0 and BUS mask0 0xd0000000/BUS mask1 0.",
+    "The failure boundary does not move: raw BUS Epoch0 remains absent, TOP status1 remains 0x00030003 with the early Windows VIDEO identity bit set, and no QC10C userspace buffer is returned.",
+    "CSID1 remains byte-for-byte at the prior clean-ingress/no-CAMIF boundary: 37,016 packets, zero ECC/CRC, IPP status 0x00011e00, exact final masks/config, and no CAMIF/RUP/Epoch progression.",
+    "Therefore the VFE DAL_ife_start mask/+0x24 prefix was a real parity correction but is not sufficient to unlock CSID CAMIF/VFE Epoch0. Do not repeat 0047.",
+    "Next close the remaining Windows first-start lifecycle after BUS start and before sensor-on, focusing on any direct VFE/CSID start callbacks or state transitions not represented by the current packet/callback model; prefer existing same-machine KD/static evidence before another Linux run."
+  ],
+  "csid1_timeout": {
+    "buf_done_mask": "0x0001ffff",
+    "crc_errors": 0,
+    "ecc_errors": 0,
+    "ipp_irq_mask": "0x3cbc601c",
+    "ipp_irq_status": "0x00011e00",
+    "packets": 37016
+  },
+  "date": "2026-08-30",
+  "differential_vs_0046": {
+    "bus_mask0": [
+      "0x00000000",
+      "0xd0000000"
+    ],
+    "bus_status1_unchanged": true,
+    "csid_ipp_status_unchanged": true,
+    "csid_packet_count_unchanged": true,
+    "full_client_state_unchanged": true,
+    "qc10c_output_unchanged_absent": true,
+    "top_mask0": [
+      "0x00000000",
+      "0x0007f051"
+    ],
+    "top_status1_unchanged": true
+  },
+  "evidence_sha256": {
+    "aborted_ready": "3dfa3fb239f56c778a1e9b33eb31328349edd155a95806dac4378904e88527e5",
+    "aborted_stages": "608cc4339aca2cfbd7b35ea3b17ad2f19228f6d50ca405c33c0fc915052566e6",
+    "dmesg": "5932b3b68397c4542b85c4eb57c82679c57a095693b78908a07125cfc631e829",
+    "golden": "36246b60a0e80bc18d21651ff87e92d05f0673c7e288076edb8b55475b9ab371",
+    "load": "0a1be25e490506267ebb4798a48d8d4de82c8ac3822cb069619a0c8d8cfc3985",
+    "media": "f15ec70d7447992f718a709349313e75f5825ae9f1e60d3e39125ac83b6673c9",
+    "post": "c510245c31efc18c3e370a594f64469995e59f8fe3f0b5a8a4a0020ee40ae234",
+    "pre": "3c99148cdaaf709f0fd64672d14fc1edfa90ed07a97c554572ccf81bbd29611d",
+    "run": "9d5cb8d1e67f2cacd794dcbc99a7b4e31c5f15a2219c1ce5064c0062cfffd7d2",
+    "stages": "6117c7fda586ec3dff3e6513bc118e26479beafa610805f95c79d059090bb258"
+  },
+  "golden_return_verified": true,
+  "helper_invocations": 1,
+  "next_gate": "E003h-Windows first-start post-BUS/pre-sensor lifecycle closure; no further Linux runtime until a new exact parity delta or phase telemetry is statically justified.",
+  "observer_relaunch": {
+    "initial_capture_preserved": true,
+    "occurred": true,
+    "reason": "initial foreground observer was terminated by orchestration timeout before RUN",
+    "run_observer_ready": true
+  },
+  "package_inspection_sha256": "498937c1093375c8bb1204e8aed8604e1258cc4531428757b818649d7eaaf509",
+  "qc10c_output": false,
+  "rtcdm": {
+    "faulted": false,
+    "fifo_bl_completed": 17,
+    "final_stage": "stopped"
+  },
+  "run_result": "ETIMEDOUT waiting VFE1 raw Epoch0; no QC10C userspace output",
+  "runtime_authorized": false,
+  "same_boot_retry": false,
+  "schema": "sp11-e003h-vfe1-dal-start-0047-runtime-result-v1",
+  "vfe1_timeout": {
+    "bus_image_violation": "0x00000000",
+    "bus_mask0": "0xd0000000",
+    "bus_mask1": "0x00000000",
+    "bus_overflow": "0x00000000",
+    "bus_status0": "0x00000000",
+    "bus_status1": "0x00000000",
+    "bus_violation": "0x00000000",
+    "full0": {
+      "cfg": "0x00000011",
+      "frame_incr": "0x004f2000",
+      "image_cfg0": "0x05a00a00",
+      "image_cfg2": "0x00000e00",
+      "image_expected": "0xff806000",
+      "image_readback": "0xff806000",
+      "meta_expected": "0xff800000",
+      "meta_readback": "0xff800000",
+      "mode": "0x00000023",
+      "packer": "0x0000000b"
+    },
+    "full1": {
+      "cfg": "0x00000011",
+      "frame_incr": "0x00279000",
+      "image_cfg0": "0x02d00a00",
+      "image_cfg2": "0x00000e00",
+      "image_expected": "0xffcf5000",
+      "image_readback": "0xffcf5000",
+      "meta_expected": "0xffcf2000",
+      "meta_readback": "0xffcf2000",
+      "mode": "0x00000033",
+      "packer": "0x0000000b"
+    },
+    "linux_owned_full_addresses_match_expected": true,
+    "startup_markers": [
+      "0x00000001",
+      "0x00000001",
+      "0x00000001"
+    ],
+    "top_mask0": "0x0007f051",
+    "top_mask1": "0x00000000",
+    "top_status0": "0x00000000",
+    "top_status1": "0x00030003",
+    "windows_epoch0_bit_bus_status1_bit21_set": false,
+    "windows_video_bit_top_status1_bit0_set": true
+  }
+}

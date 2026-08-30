@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0047 runtime consumed; VFE masks fixed exactly, Epoch0 boundary unchanged — 2026-08-30
+
+The authorized 0047 one-shot executed exactly once and returned to FullIO v19c Golden. The sole root helper returned `ETIMEDOUT` while waiting for raw VFE1 Epoch0; there was no same-boot retry and no QC10C userspace output. RT-CDM reached 17 FIFO BL completions with no fault. The first foreground observer launch was terminated by orchestration timeout before RUN; its one-line idle capture was preserved byte-for-byte, the same frozen observer was relaunched persistently, reached READY/idle, and remained the observer used for the sole helper invocation.
+
+The 0047 differential is decisive. VFE1 IRQ masks now read back exactly like same-machine Windows: `TOP_MASK0=0x0007f051`, `TOP_MASK1=0`, `BUS_MASK0=0xd0000000`, `BUS_MASK1=0`. FULL client0/client1 configuration and every Linux-owned image/meta address remain exact, the three startup markers remain `1`, and BUS violation/overflow/image-violation status remains zero. Therefore the Windows `DAL_ife_start` mask/+0x24 prefix was a real parity correction and executed as intended.
+
+The blocker, however, does not move. VFE1 `TOP_STATUS1` remains `0x00030003` with the early Windows VIDEO identity bit set, while `BUS_STATUS1=0` so raw Epoch0 bit21 is absent. CSID1 is unchanged at the clean-ingress/no-CAMIF boundary: 37,016 packets, zero ECC/CRC, `IPP_IRQ_STATUS=0x00011e00`, exact final masks/config, and no CAMIF/RUP/Epoch progression. No QC10C buffer is returned. Fail-closed runtime analysis SHA-256 is `acdcbd8b50de3b96a3484da22f4b5678e58633663d0768414f4132d53c2f0a0a`; extractor SHA-256 `881c89a3e3998eba9e56c4130a80dcfd242ef824929eca4280d5fd928dc27d80`.
+
+Golden recovery is verified with `saved_entry=sp11-audio-fullio-v19c`, empty `next_entry`, Wi-Fi connected, playback/capture devices present, Surface touch/touchpad present, and camera modules absent. Authorization `98d8d7ae...6c91a` is preserved as `AUTHORIZATION-CONSUMED.json`. **Do not repeat 0047.** Next close the remaining same-machine Windows first-start lifecycle after BUS start and before sensor-on using existing KD/Ghidra evidence before considering any new Linux hardware run.
+
 ## E003h ACTIVE — 0047 one-shot runtime authorized, still unarmed — 2026-08-30
 
 Fresh authorization review passed against public package commit `64f7e3119438d925857ff235c3b66457bdcccc1a`. It re-ran package preflight and fail-closed package inspection before creating authorization, reproduced package inspection SHA-256 `498937c1093375c8bb1204e8aed8604e1258cc4531428757b818649d7eaaf509`, verified HEAD/origin synchronization, bounded provenance, frozen assets, Golden saved default, empty `next_entry`, and no camera modules.
