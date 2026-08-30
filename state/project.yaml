@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0046-vfe1-timeout-package-installed-unarmed-auth-review-next
+status: e003h-0046-vfe1-timeout-one-shot-authorized-unarmed-runtime-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1178,6 +1178,20 @@ e003h:
   linux_front_0046_package_next_entry_empty: true
   linux_front_0046_package_camera_modules_loaded: false
   linux_front_0046_package_frozen_runtime_assets: true
+  linux_front_0046_authorization_package_commit: 19918c17cb7399d9724a4f8f2bcdb87841e4cfbe
+  linux_front_0046_authorization_preflight_sha256: 842caf98406696cac9f99f278bf288980add822478be6146a23dd9ed517b69b9
+  linux_front_0046_authorization_reinspection_sha256: a58a19d8b6411ef61ea990a8c8561851b45de94b3a58e3696327f40211c61730
+  linux_front_0046_authorization_review_sha256: 935f1ce200ddba851b9551fa6a106ddab52a4e42ae822e53f1089ebf265e34f2
+  linux_front_0046_authorization_sha256: f0fc250dbbb3eb83c288515faa0a634eb6f1ccd8bf399d269db7a035d2e99d96
+  linux_front_0046_authorization_boot_count: 1
+  linux_front_0046_authorization_root_helper_invocations: 1
+  linux_front_0046_authorization_same_boot_retry: false
+  linux_front_0046_authorization_persistent_observer_required: true
+  linux_front_0046_authorization_normal_qbuf: false
+  linux_front_0046_authorization_normal_streamon: false
+  linux_front_0046_authorization_runtime: true
+  linux_front_0046_authorization_production_parity: false
+  linux_front_0046_authorization_consumed: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_manifest_sha256: 5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
@@ -1487,13 +1501,12 @@ e003h:
   linux_front_0044_package_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-vfe1-timeout-readonly-0046-authorization-review
+next_experiment: E003h-vfe1-timeout-readonly-0046-one-shot-runtime
 next_action: >-
-  The distinct 0046 telemetry package is installed, frozen, hash-pinned and unarmed. Commit/push this package
-  checkpoint, then perform a fresh authorization review against that exact public commit. Require Golden current
-  and saved default, empty next_entry, package inspection 70d9f0b2...5571, bounded provenance green, no camera
-  modules, no active/runtime evidence, and the one-boot/one-helper/no-retry contract. Do not arm before the
-  authorization checkpoint itself is committed and pushed.
+  The 0046 one-shot authorization is reviewed and still unarmed. Commit/push this authorization checkpoint.
+  Then arm exactly one GRUB next boot for sp11-camera-e003h-vfe1-0046-one-shot. On the candidate require the
+  authorization-aware preflight before module load, exact front PIX graph, persistent RT-CDM observer READY/idle,
+  then invoke run-once.sh exactly once. Archive VFE1+CSID1 timeout telemetry and return immediately to Golden.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:

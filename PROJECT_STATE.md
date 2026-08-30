@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0046 VFE1 telemetry one-shot authorized, still unarmed — 2026-08-30
+
+Fresh authorization review passed against public package commit `19918c17cb7399d9724a4f8f2bcdb87841e4cfbe`. It re-ran package preflight/inspection, reproduced inspection SHA-256 `70d9f0b2fdb7e835525c98807151922c113dbf026aaeec3d2445c505e2fd5571`, verified HEAD/origin synchronization, bounded provenance, frozen assets, Golden saved default, empty `next_entry`, and no camera modules.
+
+`AUTHORIZATION-REVIEW.json` SHA-256 is `935f1ce200ddba851b9551fa6a106ddab52a4e42ae822e53f1089ebf265e34f2`; `AUTHORIZATION.json` SHA-256 is `f0fc250dbbb3eb83c288515faa0a634eb6f1ccd8bf399d269db7a035d2e99d96`. It permits exactly one candidate boot and one root helper invocation, requires the persistent RT-CDM observer, prohibits normal QBUF/STREAMON and same-boot retry, and requires immediate Golden return after any helper result. Production parity remains unauthorized.
+
+**The candidate remains unarmed until this authorization checkpoint is pushed.**
+
 ## E003h ACTIVE — 0046 VFE1 telemetry package installed/inspected unarmed — 2026-08-30
 
 The read-only 0046 CAMSS candidate is packaged distinctly at `e003h-vfe1-timeout-readonly-0046-candidate` with frozen package-local runtime inputs. Only CAMSS changes from the consumed 0045 package: module SHA-256 `f1b5ce5dc973a140b29257927c02b2749f96f379fc01b78a10841443a15ab4be`; sensor, front-only DTB, capsule, helper, media setup and persistent observer remain byte-identical.
