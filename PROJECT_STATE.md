@@ -1,3 +1,9 @@
+## E003h ACTIVE — 0044 boot-3 one-shot authorized on package v3; unarmed — 2026-08-30
+
+Fresh boot-3 review SHA-256 `348ac96d7c6bc9bdbcb8238f1a72e21e1d69cdb0ce3947e6537203b244b95adc` passes against public package-v3 commit `be15f50b6c249f4b6ca7f1e2f72824f8e23bad29`. Both earlier 0044 boots are proven zero-hardware; package v3 pins cwd-independent Git ancestry checks in runtime preflight and run wrapper, Golden is current/saved default, `next_entry` is empty, no active RUN evidence exists, and bounded provenance is green.
+
+`AUTHORIZATION.json` SHA-256 `2bfa23aacf53eb10be780b8b2317fb5e005663f9458b45bd9b7e245ca022eb25` permits exactly one candidate boot and one root helper invocation, with persistent RT-CDM observer READY/idle, no QBUF/STREAMON, no same-boot retry, and immediate Golden reboot after any helper result. Production parity remains unauthorized. The candidate is **not armed** until this checkpoint is committed and pushed.
+
 ## E003h ACTIVE — 0044 boot-2 consumed pre-exec; package v3 closes cwd-dependent Git gate — 2026-08-30
 
 The replacement 0044 candidate boot was consumed before any camera module or helper execution. Exact candidate boot identity and replacement authorization were present, but `runtime-preflight.sh` failed its ancestry check because the embedded Python invoked `git merge-base` without `-C`/repo cwd. qcom_camss/imx681/ov13858 remained unloaded, no RUN log/output/watcher file existed, helper invocation count stayed zero, no same-boot retry occurred, and Golden return is verified. Boot-2 abort evidence SHA-256 is `df0f02e7cf49d3b874d4c35bcc4cc8493c3db3a49a8c6382706b6f425c315394`; boot-2 consumption SHA-256 `4743403e99bc2f4a15864aabd7915906f8a29bd2b3623f91005fd56d086f4ef0`. Replacement authorization is preserved as consumed history SHA-256 `6fc9802e64d1ba16b5b30c961e1a0ceceb9e270131d8cb28b609e53e962f4f53`.
