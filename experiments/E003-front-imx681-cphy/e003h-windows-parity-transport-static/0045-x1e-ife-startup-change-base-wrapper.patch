@@ -1,0 +1,228 @@
+Subject: [PATCH] media: qcom: camss: restore SP11 IFE startup CDM base wrapper
+
+Same-machine Windows qccamisp queues one four-byte KMD common-config BL
+before every IFE startup main BL. The captured startup main streams contain
+no CHANGE_BASE command themselves, while their Windows MMIO effects prove
+that they execute relative to VFE1.
+
+Materialize four Linux-owned one-dword CHANGE_BASE(VFE1) BLs. Submit the
+matching wrapper before startup packets 0..3 while leaving captured startup
+main bytes, selector-2 priming batches, CSID companion writes and steady
+Epoch0 batches unchanged.
+
+The exact wrapper word 0x0800f000 follows mechanically from the reversed
+Windows four-byte pre-descriptor BL contract and the independently observed
+same-machine VFE1 CHANGE_BASE encoding. No late CSID mask repair is added.
+
+---
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -6834,6 +6834,17 @@
+ #define CAMSS_X1E_PIX_PRIMING_MAX_BL_COUNT	5
+ #define CAMSS_X1E_PIX_PRIMING_COMPANION_SIZE	SZ_4K
+ #define CAMSS_X1E_PIX_PRIMING_PACKET_STRIDE	0x100
++#define CAMSS_X1E_PIX_STARTUP_WRAPPER_SIZE			\
++	(CAMSS_RTCDM1_CORPUS_PACKET_COUNT * sizeof(u32))
++#define CAMSS_X1E_PIX_STARTUP_CHANGE_BASE	0x0800f000
++
++struct camss_x1e_pix_startup_wrapper {
++	void *cpu;
++	dma_addr_t dma;
++	u32 bl_dma[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u16 bl_len[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	bool materialized;
++};
+ 
+ struct camss_x1e_pix_prime {
+ 	void *cpu;
+@@ -6848,12 +6859,54 @@
+ 
+ struct camss_x1e_pix_capsule_materialized {
+ 	struct camss_rtcdm1_corpus startup;
++	struct camss_x1e_pix_startup_wrapper startup_wrapper;
+ 	struct camss_rtcdm1_corpus priming;
+ 	struct camss_x1e_pix_prime prime;
+ 	struct camss_x1e_epoch0_materialized steady;
+ 	bool materialized;
+ };
+ 
++static void camss_x1e_pix_startup_wrapper_release(struct camss *camss,
++						  struct camss_x1e_pix_startup_wrapper *wrapper)
++{
++	if (!camss || !wrapper)
++		return;
++
++	if (wrapper->cpu) {
++		memzero_explicit(wrapper->cpu, CAMSS_X1E_PIX_STARTUP_WRAPPER_SIZE);
++		dma_free_coherent(camss->dev, CAMSS_X1E_PIX_STARTUP_WRAPPER_SIZE,
++				  wrapper->cpu, wrapper->dma);
++	}
++	memset(wrapper, 0, sizeof(*wrapper));
++}
++
++static int camss_x1e_pix_startup_wrapper_materialize(struct camss *camss,
++						     struct camss_x1e_pix_startup_wrapper *out)
++{
++	u8 *cpu;
++	unsigned int packet;
++	int ret;
++
++	if (!camss || !out || out->materialized || out->cpu)
++		return -EINVAL;
++
++	ret = camss_rtcdm1_corpus_alloc(camss->dev,
++					CAMSS_X1E_PIX_STARTUP_WRAPPER_SIZE,
++					&out->cpu, &out->dma);
++	if (ret)
++		return ret;
++
++	cpu = out->cpu;
++	for (packet = 0; packet < CAMSS_RTCDM1_CORPUS_PACKET_COUNT; packet++) {
++		put_unaligned_le32(CAMSS_X1E_PIX_STARTUP_CHANGE_BASE,
++				   cpu + packet * sizeof(u32));
++		out->bl_dma[packet] = (u32)out->dma + packet * sizeof(u32);
++		out->bl_len[packet] = sizeof(u32);
++	}
++	out->materialized = true;
++	return 0;
++}
++
+ static void camss_x1e_pix_prime_write(u8 *dst, const u32 *words,
+ 				      unsigned int count)
+ {
+@@ -6961,6 +7014,7 @@
+ 	camss_x1e_epoch0_release(camss, &out->steady);
+ 	camss_x1e_pix_prime_release(camss, &out->prime);
+ 	camss_rtcdm1_corpus_release(camss, &out->priming);
++	camss_x1e_pix_startup_wrapper_release(camss, &out->startup_wrapper);
+ 	camss_rtcdm1_corpus_release(camss, &out->startup);
+ 	memset(out, 0, sizeof(*out));
+ }
+@@ -6972,8 +7026,9 @@
+ 	int ret;
+ 
+ 	if (!camss || !out || !input || out->materialized ||
+-	    out->startup.materialized || out->priming.materialized ||
+-	    out->prime.materialized || out->steady.materialized)
++	    out->startup.materialized || out->startup_wrapper.materialized ||
++	    out->priming.materialized || out->prime.materialized ||
++	    out->steady.materialized)
+ 		return -EINVAL;
+ 
+ 	ret = camss_rtcdm1_corpus_materialize(camss, &out->startup,
+@@ -6981,6 +7036,10 @@
+ 	if (ret)
+ 		return ret;
+ 
++	ret = camss_x1e_pix_startup_wrapper_materialize(camss, &out->startup_wrapper);
++	if (ret)
++		goto err_release;
++
+ 	ret = camss_rtcdm1_corpus_materialize(camss, &out->priming,
+ 					       &input->priming);
+ 	if (ret)
+@@ -7067,25 +7126,38 @@
+ }
+ 
+ static int camss_x1e_pix_submit_startup(struct camss *camss,
+-					const struct camss_rtcdm1_corpus *corpus,
+-					unsigned int packet)
++	const struct camss_x1e_pix_startup_wrapper *wrapper,
++	const struct camss_rtcdm1_corpus *corpus, unsigned int packet)
+ {
+-	if (!corpus || !corpus->materialized ||
+-	    packet >= CAMSS_RTCDM1_CORPUS_PACKET_COUNT ||
++	int ret;
++
++	if (!wrapper || !wrapper->materialized || !corpus ||
++	    !corpus->materialized || packet >= CAMSS_RTCDM1_CORPUS_PACKET_COUNT ||
++	    !wrapper->bl_dma[packet] || wrapper->bl_len[packet] != sizeof(u32) ||
+ 	    !corpus->packet_dma[packet] || !corpus->packet_len[packet])
+ 		return -EINVAL;
+ 
+-	{
+-		u32 base = corpus->packet_dma[packet];
+-		u32 len = corpus->packet_len[packet] - 1;
+-		int ret;
+-
+-		ret = camss_rtcdm1_windows_fifo0_commit(camss, base, len);
+-		if (ret)
+-			dev_err(camss->dev, "E003h PIX startup packet%u failed: %d\n",
+-				packet, ret);
++	/*
++	 * Windows queues one four-byte KMD common-config BL before every startup
++	 * main BL.  The main streams contain no CHANGE_BASE themselves, while
++	 * same-machine execution proves them VFE1-relative.  Keep the captured
++	 * main bytes untouched and establish VFE1 base explicitly here.
++	 */
++	ret = camss_rtcdm1_windows_fifo0_commit(camss, wrapper->bl_dma[packet],
++						wrapper->bl_len[packet] - 1);
++	if (ret) {
++		dev_err(camss->dev,
++			"E003h PIX startup packet%u CHANGE_BASE failed: %d\n",
++			packet, ret);
+ 		return ret;
+ 	}
++
++	ret = camss_rtcdm1_windows_fifo0_commit(camss, corpus->packet_dma[packet],
++						corpus->packet_len[packet] - 1);
++	if (ret)
++		dev_err(camss->dev, "E003h PIX startup packet%u failed: %d\n",
++			packet, ret);
++	return ret;
+ }
+ 
+ static int camss_x1e_pix_submit_prime(struct camss *camss,
+@@ -7149,8 +7221,8 @@
+ struct camss_x1e_pix_rtcdm_static_ops {
+ 	int (*open_start)(struct camss *camss);
+ 	int (*submit_startup)(struct camss *camss,
+-			      const struct camss_rtcdm1_corpus *corpus,
+-			      unsigned int packet);
++		const struct camss_x1e_pix_startup_wrapper *wrapper,
++		const struct camss_rtcdm1_corpus *corpus, unsigned int packet);
+ 	int (*submit_prime)(struct camss *camss,
+ 			    const struct camss_x1e_pix_prime *prime,
+ 			    unsigned int packet);
+@@ -7482,7 +7554,9 @@
+ 	rtcdm_started = true;
+ 
+ 	/* Exact 0031 pre-CSID startup/priming interleave, now with whole replay batches. */
+-	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 0);
++	ret = camss_x1e_pix_submit_startup(camss,
++					   &materialized->startup_wrapper,
++					   &materialized->startup, 0);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = csid680_x1e_front_ipp_companion(csid, 0);
+@@ -7491,7 +7565,9 @@
+ 	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 0);
+ 	if (ret)
+ 		goto out_unwind;
+-	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 1);
++	ret = camss_x1e_pix_submit_startup(camss,
++					   &materialized->startup_wrapper,
++					   &materialized->startup, 1);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = csid680_x1e_front_ipp_companion(csid, 1);
+@@ -7505,13 +7581,17 @@
+ 	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 1);
+ 	if (ret)
+ 		goto out_unwind;
+-	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 2);
++	ret = camss_x1e_pix_submit_startup(camss,
++					   &materialized->startup_wrapper,
++					   &materialized->startup, 2);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = csid680_x1e_front_ipp_companion(csid, 2);
+ 	if (ret)
+ 		goto out_unwind;
+-	ret = camss_x1e_pix_submit_startup(camss, &materialized->startup, 3);
++	ret = camss_x1e_pix_submit_startup(camss,
++					   &materialized->startup_wrapper,
++					   &materialized->startup, 3);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = csid680_x1e_front_ipp_companion(csid, 3);

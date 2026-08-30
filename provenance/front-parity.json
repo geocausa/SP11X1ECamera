@@ -116,6 +116,44 @@
       "equivalence_basis": "The exact Windows reset/route/stop callbacks, full-builder ownership and CSID 0x803/0x804 packet/path-enable ownership are separately pinned from the same SP11 Windows driver and command captures; the Linux delta reproduces those effects only inside the exact front-mode predicate and passes byte-roundtrip/static inspection."
     },
     {
+      "id": "front.ife_startup_base_wrapper",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Same-machine qccamisp queues one four-byte KMD BL before each IFE startup main descriptor BL. The main startup streams contain no CHANGE_BASE but execute VFE1-relative. The required one-dword VFE1 wrapper is 0x0800f000; its little-endian bytes are SHA-256-identical to an independently captured same-machine Windows four-byte VFE1 CHANGE_BASE BL0.",
+      "linux_use": "Before each front startup main packet 0..3, submit a separate Linux-owned four-byte CHANGE_BASE(VFE1) BL. Do not edit the captured main packet bytes or repair CSID BUF_DONE_IRQ_MASK after the fact.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-startup-base-wrapper-derived.json",
+          "sha256": "7b400bc1402e6b6d6b8f1fba7bbbae1888fe6ee6d37798cb301cedd739840801"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-startup-base-wrapper-oracle.json",
+          "sha256": "93b793d4bb13bc9d0abc09b667502466681f1a3e81d39bc837700d50ada96d03"
+        }
+      ]
+    },
+    {
+      "id": "linux.ife_startup_base_wrapper_0045",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Static 0045 materializes four Linux-owned coherent one-dword 0x0800f000 BLs and submits the matching wrapper before each unchanged startup main packet. CSID implementation, selector-2 priming materializer and steady Epoch0 materializer are unchanged; no late CSID mask repair is added.",
+      "linux_use": "Use as the next bounded front PIX candidate after separate unarmed packaging and authorization review. The static checkpoint itself does not authorize runtime.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0045-x1e-ife-startup-change-base-wrapper.patch",
+          "sha256": "9fd8ddd43013441a2bedc2a603f9373a42559da17cc113ab8bbe959f38d7be4e"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/linux-0045-startup-base-wrapper-inspection.json",
+          "sha256": "bacbb046f5442b0542393302df42e4cbb2f2e2ca544c716d1c43434b9f2d9937"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "The Windows queue code directly proves a four-byte pre-descriptor BL, startup-main decode proves zero embedded CHANGE_BASE commands, same-machine MMIO proves VFE1-relative execution, and the independently captured Windows steady BL0 is byte-identical to little-endian 0x0800f000. 0045 reproduces only that missing base-establishment BL before each startup main packet."
+    },
+    {
       "id": "front.cross_driver_start_order",
       "classification": "WINDOWS_OBSERVED",
       "runtime_critical": true,

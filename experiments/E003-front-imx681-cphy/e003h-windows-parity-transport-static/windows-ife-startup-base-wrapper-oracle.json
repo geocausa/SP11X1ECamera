@@ -1,0 +1,63 @@
+{
+  "accepted": true,
+  "classification": {
+    "exact_wrapper_word_0x0800f000": "WINDOWS_REVERSED_PLUS_INDEPENDENT_WINDOWS_BL_BYTE_IDENTITY",
+    "linux_0042_0043_0044_mask_differential": "LINUX_OBSERVED",
+    "special_wrapper_presence_order_size": "WINDOWS_REVERSED",
+    "startup_main_active_base_vfe1": "WINDOWS_OBSERVED_CROSSCHECK"
+  },
+  "linux_consequence": {
+    "do_not_add": "speculative late CSID BUF_DONE mask repair",
+    "do_not_modify": "captured startup main packet bytes, selector-2 priming batches, CSID companions or steady Epoch0 batch structure",
+    "required_native_change": "prepend a Linux-owned four-byte 0x0800f000 CHANGE_BASE BL before each startup main packet 0..3",
+    "runtime_authorized": false
+  },
+  "linux_failure_prediction": {
+    "0042_hide_mechanism": "0042 rewrote Windows CSID masks late after startup2/startup3, hiding an earlier mis-based +0x90=1 write",
+    "0042_timeout_buf_done_mask": "0x0001ffff",
+    "0043_reveal_mechanism": "0043 moved CSID prepare/masks before startup2/startup3; packet3 then leaves +0x90=1 visible if the VFE1 CHANGE_BASE wrapper is omitted",
+    "0043_timeout_buf_done_mask": "0x00000001",
+    "0044_timeout_buf_done_mask": "0x00000001",
+    "bare_startup_submission_is_invalid": true,
+    "packet3_vfe_relative_offset_0x90_value": "0x00000001"
+  },
+  "schema": "sp11-e003h-windows-ife-startup-base-wrapper-oracle-v1",
+  "source_evidence": {
+    "derived_windows_disassembly": {
+      "driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+      "path": "SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-startup-base-wrapper-derived.json",
+      "sha256": "7b400bc1402e6b6d6b8f1fba7bbbae1888fe6ee6d37798cb301cedd739840801"
+    },
+    "initial_ife_cdm_summary_sha256": "0444e1d40c19b34bebf9c150aa3681fb1261a74997338adfa0c6dee5ee1d8a8a",
+    "linux_runtime_0042_dmesg_sha256": "32b2236f38977564936e9f69942c5892008375a45e3e87328eec2ca50538d201",
+    "linux_runtime_0043_dmesg_sha256": "ab2f5df944dd60a8be716eb52703ba46f654386fa65c2f1308811d7ee5403abd",
+    "linux_runtime_0044_dmesg_sha256": "d848302d307e4b3c36da5fa3766a58721c13f4c2b4c65a0ef3e083fc4dd3f6db",
+    "steady_batch_oracle_sha256": "3bcf4efe34c891dcc6bc78c3cefc94d916ffd71e27dab81e75493f9ed320dce4",
+    "windows_csid_prepare_order_sha256": "d433307f97f97d2a1bdcf27b47fd9010e78b7fbb3ab75dfe78aad78c886cd19d"
+  },
+  "windows_queue_contract": {
+    "add_bl_helper_rva": "0x22200",
+    "dal_ife_process_iq_packet_rva": "0x26838",
+    "ife_cdm_handle_context_offset": "0x98",
+    "ordinary_descriptor_bl_rule": "descriptor_length_minus_one",
+    "pre_descriptor_bl_bytes": 4,
+    "pre_descriptor_bl_length_minus_one": 3,
+    "startup_main_active_base": "VFE1 0x0ac71000",
+    "startup_main_change_base_command_count": 0
+  },
+  "wrapper_command": {
+    "basis": [
+      "Windows queues exactly one four-byte KMD BL before ordinary IFE startup descriptor BLs",
+      "captured startup main BLs contain zero CHANGE_BASE commands",
+      "same-machine Windows MMIO proves startup main BLs execute VFE1-relative",
+      "the exact little-endian 0x0800f000 word hashes identically to an independently captured same-machine Windows four-byte VFE1 CHANGE_BASE BL0",
+      "hardware RT-CDM FIFO metadata has no per-client target register-base selector"
+    ],
+    "byte_identity_to_captured_windows_bl0": true,
+    "captured_windows_steady_bl0_sha256": "18608790dc8901f9d1f17ad4d0ed33032309e5344be7abfab71a78c918f571a6",
+    "cdm_word": "0x0800f000",
+    "little_endian_sha256": "18608790dc8901f9d1f17ad4d0ed33032309e5344be7abfab71a78c918f571a6",
+    "raw_startup_kmd_word_directly_captured": false,
+    "semantic": "CHANGE_BASE 0x0000f000 -> VFE1 0x0ac71000"
+  }
+}

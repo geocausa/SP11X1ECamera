@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0044-runtime-same-boundary-buf-done-transition-static-next
+status: e003h-0045-startup-base-wrapper-static-pass-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1024,6 +1024,30 @@ e003h:
   linux_front_0043_buf_done_irq_mask_final: 0x00000001
   linux_front_0044_buf_done_irq_mask_final: 0x00000001
   linux_front_buf_done_mask_transition_owner: unproven; static trace required before any write
+  windows_ife_startup_base_wrapper_derived_sha256: 7b400bc1402e6b6d6b8f1fba7bbbae1888fe6ee6d37798cb301cedd739840801
+  windows_ife_startup_base_wrapper_extractor_sha256: f6c4fd179001aa722d60b10d9f665252d88e45f901d5922c4f5718545a9f2ebf
+  windows_ife_startup_base_wrapper_oracle_sha256: 93b793d4bb13bc9d0abc09b667502466681f1a3e81d39bc837700d50ada96d03
+  windows_ife_startup_special_bl_bytes: 4
+  windows_ife_startup_special_bl_length_minus_1: 3
+  windows_ife_startup_main_embedded_change_base_count: 0
+  windows_ife_startup_vfe1_change_base_word: 0x0800f000
+  windows_ife_startup_vfe1_change_base_sha256: 18608790dc8901f9d1f17ad4d0ed33032309e5344be7abfab71a78c918f571a6
+  windows_ife_startup_vfe1_change_base_matches_captured_steady_bl0: true
+  linux_front_0045_patch: 0045-x1e-ife-startup-change-base-wrapper.patch
+  linux_front_0045_patch_sha256: 9fd8ddd43013441a2bedc2a603f9373a42559da17cc113ab8bbe959f38d7be4e
+  linux_front_0045_checkpatch_log_sha256: 934aa08971b6c2d9ec60a31dff00656f44fde14c2be0ccd801f8de17413d0dbf
+  linux_front_0045_build_log_sha256: d6fa15c9340c05eb24993864f0a1b28e61c4b0af9a5ef28990eec1b9af10a15a
+  linux_front_0045_inspector_sha256: 42a984240ecbd53967e1ee5b0da02c626813f045a7c4e0f2e3bd0b87ae868aed
+  linux_front_0045_inspection_sha256: bacbb046f5442b0542393302df42e4cbb2f2e2ca544c716d1c43434b9f2d9937
+  linux_front_0045_camss_source_sha256: 2b7930869bfe2a263a4242393536188f3f97249d3d76806bf19b4f955da291b0
+  linux_front_0045_module_sha256: cfdd66c9d2c56533993f5f73831d77b3f5018c1d552183da634971378aa06923
+  linux_front_0045_module_vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+  linux_front_0045_wrapper_entries: 4
+  linux_front_0045_wrapper_bytes_each: 4
+  linux_front_0045_submit_order: wrapper -> unchanged startup main
+  linux_front_0045_late_csid_mask_repair: false
+  linux_front_0045_patch_roundtrip_byte_identical: true
+  linux_front_0045_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_manifest_sha256: 5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
@@ -1333,14 +1357,14 @@ e003h:
   linux_front_0044_package_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-csid1-buf-done-mask-transition-static-oracle
+next_experiment: E003h-ife-startup-base-wrapper-0045-package
 next_action: >-
-  Do not repeat Linux PIX runtime. The consumed 0044 boot-3 run reproduces the exact 0042/0043
-  Epoch0 timeout boundary and closes the common-lifecycle hypothesis as the direct cause. Statically
-  trace why CSID1 BUF_DONE_IRQ_MASK +0x90, written as Windows value 0x0001ffff by the full builder,
-  becomes 0x00000001 in 0043/0044. Enumerate CPU, RT-CDM and reset/start hardware transitions and
-  compare exact same-machine Windows reset/ISR/start ownership. Do not blindly restore the mask late;
-  authorize no runtime until the transition is mechanically explained or bounded read-only telemetry is built.
+  The CSID1 +0x90 transition is mechanically explained by the missing Windows IFE startup
+  CHANGE_BASE wrapper. Static Linux 0045 is built and inspected cleanly. Build a distinct
+  unarmed 0045 one-shot package from Golden, pin CAMSS/DTB/sensor/capsule/helper identities,
+  verify saved_entry remains Golden with empty next_entry and no camera modules loaded, then
+  checkpoint/push the package. No runtime is authorized by the static 0045 checkpoint.
+
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
