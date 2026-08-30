@@ -8,6 +8,12 @@ The blocker, however, does not move. VFE1 `TOP_STATUS1` remains `0x00030003` wit
 
 Golden recovery is verified with `saved_entry=sp11-audio-fullio-v19c`, empty `next_entry`, Wi-Fi connected, playback/capture devices present, Surface touch/touchpad present, and camera modules absent. Authorization `98d8d7ae...6c91a` is preserved as `AUTHORIZATION-CONSUMED.json`. **Do not repeat 0047.** Next close the remaining same-machine Windows first-start lifecycle after BUS start and before sensor-on using existing KD/Ghidra evidence before considering any new Linux hardware run.
 
+## E003h ACTIVE — 0048 one-shot authorization published, boot still unarmed — 2026-08-30
+
+Fresh authorization is bound to frozen package commit `d6c0c7a`. Review SHA-256 `3a0c73f2...ebb8f`, authorization SHA-256 `f76ca42c...c1b8a`, and authorization-inspection SHA-256 `b5d96e05...da2bb` verify the package was installed but unarmed at review time, Golden was the saved default with empty `next_entry`, no camera modules were loaded, and the 0048 delta has zero new MMIO reads/writes and no hardware-behavior change.
+
+The execution contract permits exactly one 0048 candidate boot and exactly one root helper invocation, forbids same-boot retry, requires the persistent RT-CDM observer, and requires evidence archival followed by immediate Golden reboot after any helper result. Production parity remains unauthorized. The one question is the historical CSID1 IPP IRQ OR/last/count from front reset through the VFE1 Epoch0 timeout.
+
 ## E003h ACTIVE — 0048 package installed, frozen and unarmed — 2026-08-30
 
 The software-only CSID1 IPP IRQ-history delta is now packaged independently as `e003h-csid1-ipp-irq-history-0048-candidate`. Package inspection SHA-256 `b4f03e07...339cd` verifies the 0048 CAMSS module `94cc14d9...030b7`, unchanged 0047 sensor/DTB/capsule/helper assets, front-only `port@2`, exact CAMSS IOMMU set, Golden kernel/initrd bytes, runtime-preflight-before-load, exactly one helper invocation, no same-boot retry, and mandatory reboot. The installed GRUB identity is `sp11-camera-e003h-csidirq-0048-one-shot` with marker `sp11_camera_e003h_csidirq_0048=1`.

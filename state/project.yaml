@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0048-package-pass-unarmed-authorization-next
+status: e003h-0048-one-shot-authorized-unarmed-run-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1701,6 +1701,22 @@ linux_0048_package:
   authorization_present: false
   runtime_authorized: false
 
-next_experiment: E003h-0048-csid1-ipp-irq-history-authorization
+linux_0048_authorization:
+  accepted: true
+  date: 2026-08-30
+  package_commit: d6c0c7af7103db94c0c863b98ddb245666bb649b
+  authorization_review_sha256: 3a0c73f25684518fb07c8bd8dc5d6fb14cdec834a927496a635d94041e5ebb8f
+  authorization_sha256: f76ca42c08493a321bd482f2c9a4389186b071ea3e6e06a9325e41548e7c1b8a
+  authorization_inspection_sha256: b5d96e055d1c15640782905afb82bf3d216eab3b03f0a073f1d3f0182e1da2bb
+  runtime_authorized: true
+  production_parity_authorized: false
+  boot_count: 1
+  root_helper_invocation_count: 1
+  same_boot_retry: false
+  persistent_rtcdm_observer_required: true
+  after_any_helper_result: archive evidence then immediately reboot to Golden
+  candidate_boot_armed: false
+
+next_experiment: E003h-0048-csid1-ipp-irq-history-one-shot-run
 next_action: >-
   Do not repeat 0047. Close the remaining same-machine Windows first-start lifecycle after VFE BUS start and before sensor-on, focusing on direct VFE/CSID callbacks or state transitions not represented by the current startup packet/callback model. Use existing KD/Ghidra evidence first; only authorize another Linux run after a new exact parity delta or narrowly justified phase telemetry is frozen and inspected.
