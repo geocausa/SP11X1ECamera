@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-rtcdm-multififo-irq-parity-closed-dma-domain-next-runtime-blocked-golden-safe
+status: e003h-qcsmmu-cb16-18a0-proven-linux-iommu-list-stale-runtime-blocked
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -270,7 +270,9 @@ e003h:
   linux_rt_cdm1_irq_armed_true_assignments: 0
   linux_rt_cdm1_windows_irq0_mask: 0x00070007
   linux_rt_cdm1_irq_known_mask_compile_assert: 0x00070007
-  linux_rt_cdm1_dma_arena: caller-sized coherent allocation from CAMSS DMA domain
+  linux_rt_cdm1_dma_arena: caller-sized coherent allocation using camss->dev (Linux implementation hypothesis; RT-CDM1 requester visibility unproven)
+  windows_rt_cdm1_dma_requester_domain_proven: false
+  windows_rt_cdm1_upstream_sid_0x18a0_accepted_as_proof: false
   linux_rt_cdm1_dma_upper_32bit_reject: true
   linux_rt_cdm1_dma_zero_on_alloc_and_before_free: true
   linux_rt_cdm1_fifo_submit_api: false
@@ -859,10 +861,29 @@ e003h:
   linux_front_0040_completion_source: masked FIFO0 reset-done/BL-done only
   linux_front_0040_other_fifo_semantics_invented: false
   linux_front_0040_runtime_authorized: false
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the second diagnostic reset abruptly before the last RT-CDM stage persisted; command-buffer DMA/SMMU ownership for the RT-CDM1 requester remains unproven before any further runtime; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-dma-domain-static-audit
+  windows_qcsmmu_inf_sha256: c1afd89419c12ca093a7d3b1f80ef980723d78d3549ceb158b9ee1a1ca051846
+  windows_qcsmmu_inf_bytes: 53052
+  windows_qcsmmu_driver_version: 1.0.4160.6000
+  windows_qcsmmu_cb16_name: S1_IFE_HLOS
+  windows_qcsmmu_cb16_mappings: 0x0800/0x0060; 0x18a0/0x0000
+  windows_qcsmmu_cb17_name: S1_ICP_IPE_BPS_CDM
+  windows_qcsmmu_cb17_mappings: 0x1800/0x0060; 0x1900/0x0000; 0x1980/0x0020
+  windows_qcsmmu_camera_sid_oracle_sha256: 319de2be449edd70494089f6af63c9b698e4a59474f919296be21210768d0a04
+  windows_qcsmmu_camera_sid_extractor_sha256: 3c4979414082c3b5e5e7eb6d796d0a7c9153419449f30bcff053a5bc93bc1445
+  linux_camss_iommu_current_list_status: stale; omits 0x18a0 CDM-IFE candidate route
+  linux_camss_iommu_public_v13_reference: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
+  linux_camss_iommu_public_v13_is_windows_proof: false
+  rtcdm_exact_command_fetch_sid_proven_same_machine: false
+  front_parity_provenance_manifest: provenance/front-parity.json
+  front_parity_provenance_schema: sp11-front-parity-provenance-v1
+  front_parity_provenance_runtime_blockers: [rtcdm.command_dma_domain_visibility]
+  front_parity_provenance_production_blockers: [rtcdm.fe_fifo_ultimate_origin, rtcdm.command_dma_domain_visibility, iq.live_provider_algorithms]
+  front_parity_provenance_checker: tools/check-front-parity-provenance.py
+  front_parity_provenance_enforced_in_pix_preflight: true
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; same-machine qcsmmu proves 0x18a0 in S1_IFE_HLOS but exact RT-CDM1 command-fetch requester->SID is still unproven; current Linux CAMSS IOMMU list omits 0x18a0; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-rtcdm-dma-domain-and-linux-iommu-correction-static
 next_action: >-
-  Do not repeat either PIX attempt. 0040 now mirrors exact Windows four-FIFO RT-CDM IRQ acknowledgement while keeping FIFO0 as the only completion/dispatch source. Next prove which X1E CAMSS SMMU stream ID owns RT-CDM1 command fetches and whether dma_alloc_coherent(camss->dev, ...) maps that requester. Runtime remains unauthorized.
+  Do not repeat PIX runtime. Same-machine qcsmmu now proves 0x18a0 belongs to VFE/IFE HLOS CB16 and the integrated Linux CAMSS IOMMU list is stale/missing it. Build a Linux-only corrected IOMMU candidate using the public X1E five-entry set, but keep parity_claim=false. In parallel continue the same-machine Windows oracle for the exact RT-CDM1 command-fetch requester/SID. Runtime stays blocked until both implementation and requester provenance are clean.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

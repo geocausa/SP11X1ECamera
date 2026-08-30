@@ -58,7 +58,7 @@ The Linux RT_CDM1 prerequisite is now pinned to a dedicated interrupt instead of
 - command path: FIFO0;
 - firmware GSI/INTID: `319` (`0x13f`);
 - Linux DT interrupt cell: `GIC_SPI 287` (`0x11f`);
-- DMA source: CAMSS device DMA/IOMMU domain;
+- DMA source / translation domain: **not established by this oracle**. The current Linux `dma_alloc_coherent(camss->dev, ...)` choice is an implementation hypothesis and remains runtime-blocking until same-machine Windows proves the RT-CDM1 requester/SID/context/domain and command-buffer visibility;
 - power/clock ownership: existing Windows-proven IFE1/Titan/CPAS context, with no independently proven RT-CDM clock or GDSC.
 
 No Linux MMIO write or command submission is authorized by this document alone.

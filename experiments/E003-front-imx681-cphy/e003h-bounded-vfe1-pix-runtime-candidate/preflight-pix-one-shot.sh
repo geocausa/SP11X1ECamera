@@ -8,6 +8,7 @@ SENSOR=$REPO/experiments/E003-front-imx681-cphy/e003h-bounded-front-first-frame-
 DTB=$EXP/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
 CAP=$EXP/firmware/sp11/e003h/E003H_PIX_ORACLE_CAPSULE.bin
 HELPER=$EXP/e003h-pix-one-shot
+python3 "$REPO/tools/check-front-parity-provenance.py" --repo "$REPO" --target bounded_first_pix
 check() { local got; got=$(sha256sum "$1" | cut -d' ' -f1); [ "$got" = "$2" ] || { echo "FAIL hash $1 $got" >&2; exit 1; }; }
 [ "$(uname -r)" = 7.1.5-sp11-render-parity-v4+ ] || { echo 'FAIL kernel release'; exit 1; }
 check /boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+ bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a

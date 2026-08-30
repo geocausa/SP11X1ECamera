@@ -1,0 +1,637 @@
+{
+  "schema": "sp11-front-parity-provenance-v1",
+  "generated_from_commit": "7504afb8a1ab13781d283ea0d2993730730e7254",
+  "policy": {
+    "authority": "Same-machine SP11 Windows is authoritative for hardware behavior. Upstream sources are vocabulary/implementation references only.",
+    "classifications": [
+      "WINDOWS_OBSERVED",
+      "WINDOWS_REVERSED",
+      "LINUX_IMPLEMENTATION",
+      "UNVERIFIED"
+    ],
+    "runtime_rule": "Any runtime_critical UNVERIFIED fact blocks bounded_first_pix runtime.",
+    "production_rule": "Any production_critical UNVERIFIED fact blocks production parity.",
+    "linux_implementation_rule": "LINUX_IMPLEMENTATION facts must set parity_claim=false and state an equivalence_basis."
+  },
+  "rejected_unproven_candidates": [
+    {
+      "scope": "rtcdm.command_dma_domain_visibility",
+      "candidate": "SID 0x18a0",
+      "status": "REJECTED_AS_PROOF",
+      "reason": "The upstream-only SID 0x18a0 claim remains invalid as Windows proof. A separate same-machine qcsmmu oracle now proves 0x18a0/mask0 belongs to VFE client CB16 S1_IFE_HLOS; the exact RT-CDM1 command-fetch requester->SID relation is still not proven."
+    }
+  ],
+  "facts": [
+    {
+      "id": "front.route",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Front RGB physical route is IMX681 -> CSIPHY2 -> CSID1 -> IFE1/VFE1; VFE0 is inactive.",
+      "linux_use": "Select CSIPHY2, CSID1 IPP and VFE1 only for the front parity path.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/route-oracle-summary.json",
+          "sha256": "80431440804fbfd0614252d1005ceede4eb40a86a958a7691cb3255244050572"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/README.md",
+          "sha256": "b5582276a3c804eccb86a4f725891709b4d1b68e64fd7e16e3b690aa6a316549"
+        }
+      ]
+    },
+    {
+      "id": "front.sensor_mode0",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Accepted front sensor mode is RAW10 VC0 3840x2640, one-trio C-PHY; stream-on/off is IMX681 0x0100=1/0.",
+      "linux_use": "Program the independently written IMX681 driver to the observed mode and lifecycle.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/route-oracle-summary.json",
+          "sha256": "80431440804fbfd0614252d1005ceede4eb40a86a958a7691cb3255244050572"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/sensor-lifecycle-oracle.json",
+          "sha256": "da9e85608a3e247c6e049eaad75b24b345677b188ea1c3d2aadad77b74c21800"
+        }
+      ]
+    },
+    {
+      "id": "front.csid1_ipp",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "CSID1 IPP receives VC0/DT0x2b RAW10 and uses CFG0=0x802b2000, CFG1=0x00007241 with 3840x2160 crop/measure.",
+      "linux_use": "Use the observed IPP tuple and values; do not route parity through RDI.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/route-oracle-summary.json",
+          "sha256": "80431440804fbfd0614252d1005ceede4eb40a86a958a7691cb3255244050572"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/csid1-route-live-nonzero.csv",
+          "sha256": "8115b87248bce8720eb27c9f96307d6268fc09ffeca596e975cd483359ed44b7"
+        }
+      ]
+    },
+    {
+      "id": "front.cross_driver_start_order",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Windows start total order is ISP_START_DONE -> MIPI_START -> MIPI_START_DONE -> sensor stream-on.",
+      "linux_use": "Linux parity orchestration must not start sensor transmission before the observed ISP/MIPI prefix.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-dynamic/lifecycle-order-summary.json",
+          "sha256": "fb9908e86af51b1b56c46d7986630768de172a45f9b3e838bb9a7d08bb37ee20"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-mipi-order/mipi-order-summary.json",
+          "sha256": "255a36aaa822ce0669676a585e7158fddb5bfcd2e1f2ba0b40fe71d6ca69854f"
+        }
+      ]
+    },
+    {
+      "id": "front.cross_driver_stop_order",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "ISP_STOP_DONE precedes both MIPI stop and sensor stream-off; Windows did not establish an order between the final two.",
+      "linux_use": "Use an observed-valid tail serialization only; do not claim the sensor-vs-MIPI tail order is mandatory.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-dynamic/lifecycle-order-summary.json",
+          "sha256": "fb9908e86af51b1b56c46d7986630768de172a45f9b3e838bb9a7d08bb37ee20"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-mipi-order/mipi-order-summary.json",
+          "sha256": "255a36aaa822ce0669676a585e7158fddb5bfcd2e1f2ba0b40fe71d6ca69854f"
+        }
+      ]
+    },
+    {
+      "id": "vfe1.aperture_linux_span",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Linux maps a 0xf000 VFE1 aperture. Windows command evidence requires at least through +0xbe70; 0xf000 is a Linux coverage choice, not a Windows literal.",
+      "linux_use": "Keep the Denali-only mapping large enough for the Windows-observed command span.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/initial-ife-cdm-summary.json",
+          "sha256": "0b52330d9bfa7fdab439c49e838fb2cb26f0aea3194467edd7caee9ff4ddc2a6"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0012-sp11-vfe-aperture-windows-parity.patch",
+          "sha256": "afc290818d697a39908d2b685aad3a78afc49befffb97b3f0935fbac23d1f59a"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "Covers every observed Windows VFE1 offset while preserving Denali instance isolation."
+    },
+    {
+      "id": "vfe1.qc10c_layout",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Front VIDEO/FULL output is 2560x1440 QC10C/TP10-UBWC with stride 3584, size 0x76b000 and observed Y/C metadata/data offsets.",
+      "linux_use": "Represent the userspace surface exactly; captured Windows IOVAs are not constants.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-full-layout/vfe1-full-layout-summary.json",
+          "sha256": "2d8087d898e98131685afe061d2d8ea7606127b02f85050eae71e6857dd9e2f7"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-pix-qc10c-static-contract.json",
+          "sha256": "ecd251512119d34745d355850a17ed629a7285911281ebe30ed74d1a0ae04638"
+        }
+      ]
+    },
+    {
+      "id": "vfe1.bus_static_config",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "VFE1 BUS static client configuration and FULL WM0/WM1 geometry are pinned from same-machine Windows.",
+      "linux_use": "Use public register names only as vocabulary; values/order come from the Windows capture.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-vfe1-bus/vfe1-bus-oracle.json",
+          "sha256": "900fa7f63de48724f61029599ca3b1846f3dad5035668c88b91d0a9ad35502ee"
+        }
+      ]
+    },
+    {
+      "id": "vfe1.bus_dynamic_addresses",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "qccamisp8380 live writer programs the nine-client address bundle in the proven order; FULL image/meta sites and cadence are closed.",
+      "linux_use": "Patch Linux DMA IOVAs into the same observed client/address fields; never reuse Windows allocation addresses or ring geometry.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-dynamic-address-oracle.json",
+          "sha256": "58da11fe0935b709b27bbc0a62b6ac3e678de0a0c3661e59d5e4a196c80f6a38"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-VFE1-DYNAMIC-ADDRESS.md",
+          "sha256": "a7eca953ce34336b4ba94f15f36aa56178db25ddff53355c630de2cd2418c38e"
+        }
+      ]
+    },
+    {
+      "id": "vfe1.completion_ownership",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "VIDEO owns FULL Y/C + DS4 + DS16; stats use independent group FIFOs with no required cross-group completion order.",
+      "linux_use": "Linux may model independent software ownership as long as per-group FIFO semantics and VIDEO return ownership are preserved.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-completion-groups-oracle.json",
+          "sha256": "b48e724ac3950d43d73082172002ad6a420e82465be5de04ccae6c221a0c3b0d"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/VFE1-PIX-OWNERSHIP-STATIC.md",
+          "sha256": "3a5d07b5b053c8ded32f9d5eb0b7bdb9ffcae3e1ae1820449f436ccfb393f66b"
+        }
+      ]
+    },
+    {
+      "id": "vfe1.raw_epoch0_video_irqs",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Epoch0 is BUS status1 bit21 and VIDEO is TOP status1 bit0, with exact Windows clear registers/semantics.",
+      "linux_use": "Bounded PIX diagnostics may poll only these proven raw bits; no other event bit is inferred.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-epoch0-raw-irq-oracle.json",
+          "sha256": "75b068c9b813de40f8eb758102af24425fefc58fa2ab17e33a383def3bb654a5"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.identity",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Front uses hardware RT_CDM1 v2.1 at physical 0x0ac26000, FIFO0, with dedicated firmware GSI 319.",
+      "linux_use": "Bind the Denali RT-CDM resource to the observed block and interrupt identity.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/hwcdm-oracle-summary.json",
+          "sha256": "5ad4055ba6e70025af22606f52827768b97218e299139a2f2a9e63e4c121dbbd"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/rtcdm-irq-oracle-summary.json",
+          "sha256": "f3e469e6adc8c44c263b3e4fd9f65be95c0244b44d12491dd7a3fb51666aa955"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.dt_resource_span",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Linux represents RT_CDM1 as a 4 KiB resource. The page span is a bounded Linux mapping choice, not a Windows-proven allocation size.",
+      "linux_use": "Map only the observed RT_CDM1 page and do not cross into neighboring RT_CDM0/unknown space.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/RTCDM1-STATIC-RESOURCE.md",
+          "sha256": "ab470aeb8ed67cff110f1efb51c01d7ea7052b853a15b1d55672c5f2cb779997"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "Windows locates RT_CDM0/1 on adjacent pages; public v2.1 register vocabulary is bounded within the selected page."
+    },
+    {
+      "id": "rtcdm.irq_gsi_and_edge",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "RT_CDM1 raw firmware GSI is 319; Linux SPI cell 287 is mechanically namespace-crosschecked. Windows descriptor class matches the known edge/latched camera resources.",
+      "linux_use": "Use GIC_SPI 287 with edge-rising encoding and keep the IRQ disabled until explicitly armed.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/RTCDM-IRQ-ORACLE.md",
+          "sha256": "3eb8a85d20f3eb7e1f470c17f5b93462d7bce856e9cb566b4c4f82fa609132d9"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/RTCDM1-STATIC-RESOURCE.md",
+          "sha256": "ab470aeb8ed67cff110f1efb51c01d7ea7052b853a15b1d55672c5f2cb779997"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.irq_request_policy",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "IRQF_TRIGGER_RISING | IRQF_NO_AUTOEN is the Linux request policy.",
+      "linux_use": "Preserve Windows-observed edge semantics while making Linux arm/disarm explicit.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0014-sp11-rtcdm1-disabled-irq-dma-scaffold.patch",
+          "sha256": "62b53141a66f9b55bef04092fe7ab58e38f777f0bef69af7a8c3e52d06effe69"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "Trigger encoding follows the Windows raw descriptor class; NO_AUTOEN is Linux safety ownership."
+    },
+    {
+      "id": "rtcdm.open_start_commit_stop",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "RT-CDM open/reset/core-start, FIFO0 commit and stream-stop MMIO order/literals are recovered from the exact Windows driver.",
+      "linux_use": "Do not synthesize FE/FIFO defaults, optional CGC writes, CORE_EN=0 stop, or unobserved MMIO.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-init-order-oracle.json",
+          "sha256": "81164cb34823fb9af82403c6c2702a04f09dc96ff6f2b8c419d3e03259355677"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-config-ownership-oracle.json",
+          "sha256": "2d973d661ed35f378e165e67ca146f4ad9720d19cd43435e10b18e0fc760c2be"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-stop-power-oracle.json",
+          "sha256": "6dbe08a6c498a1dcb8d17b17bdf4876a84b091848a327112a5c2378b111f0751"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.fe_fifo_preexisting_values",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "FE_CFG=0x07ff000f and FIFO0_CFG=0x01000000 are already present before the front CDM-object path; ultimate firmware/reset ownership is unresolved.",
+      "linux_use": "Linux may read/validate these exact values and fail closed, but must not synthesize/write them.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-fe-fifo-origin-oracle.json",
+          "sha256": "f211010e4df525e676fbd0677df872a46561ce4f62dd30d0293afdaaa20f4f71"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.fe_fifo_ultimate_origin",
+      "classification": "UNVERIFIED",
+      "runtime_critical": false,
+      "production_critical": true,
+      "claim": "Whether firmware or hardware reset/default ultimately owns FE_CFG/FIFO0_CFG is not established.",
+      "linux_use": "No production implementation may claim or program the unknown owner; current bounded code only validates.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-fe-fifo-origin-oracle.json",
+          "sha256": "f211010e4df525e676fbd0677df872a46561ce4f62dd30d0293afdaaa20f4f71"
+        }
+      ],
+      "blocking_reason": "Production provenance remains incomplete, but bounded runtime does not write these registers."
+    },
+    {
+      "id": "rtcdm.irq_handler_fifo0",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Windows RT-CDM handler does not read IRQ_CONTEXT_STATUS; it masks FIFO status with 0x00070007 and acknowledges masked status then CLEAR_CMD.",
+      "linux_use": "Linux must not gate FIFO completion on an invented context bit.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-irq-handler-oracle.json",
+          "sha256": "84d2519fbdceb2e92d16868e29c35231898d1bd125552173307b87145f8a93b7"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.irq_handler_multififo",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Windows reads/acknowledges FIFO0..3 status banks; masked FIFO0 alone gates dispatch/completion.",
+      "linux_use": "Acknowledge all four known banks, but derive completion only from FIFO0.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-rtcdm1-multififo-irq-oracle.json",
+          "sha256": "710f96cc45a20c2ad1f0556585c9afc05af7f625436e60260c5dde6a8e7b170e"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.command_dma_address_width",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "RT-CDM BL descriptors carry the observed 32-bit command-buffer address fields; Linux rejects DMA addresses above 32 bits.",
+      "linux_use": "Fail closed on an address that cannot be represented in the Windows descriptor format.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/CDM-EXEC-ORACLE.md",
+          "sha256": "9918c020a395a2d2bfc929871758eba596bd55ff077957b54fdf98c7bfa79dd4"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/hwcdm-oracle-summary.json",
+          "sha256": "5ad4055ba6e70025af22606f52827768b97218e299139a2f2a9e63e4c121dbbd"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.windows_qcsmmu_vfe_sid_groups",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Exact same-machine qcsmmu configuration assigns VFE client CB16/VM4 S1_IFE_HLOS to SID 0x0800 mask 0x0060 plus SID 0x18a0 mask 0; CB17/VM4 S1_ICP_IPE_BPS_CDM maps 0x1800/0x60, 0x1900/0 and 0x1980/0x20.",
+      "linux_use": "Treat 0x18a0 as a real Windows VFE/IFE HLOS SMMU route. Do not yet call it the RT-CDM1 fetch SID without the narrower requester proof.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-qcsmmu-camera-sid-oracle.json",
+          "sha256": "319de2be449edd70494089f6af63c9b698e4a59474f919296be21210768d0a04"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-QCSMMU-CAMERA-SID.md",
+          "sha256": "68708710c97b61d1635cf153641c18371b8499b4cc5e5c000cabc8687a6303df"
+        }
+      ]
+    },
+    {
+      "id": "linux.camss_iommu_current_set",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "The integrated Linux X1E camera infrastructure still uses the older eight-entry CAMSS IOMMU list: 0x800/0x60, 0x860/0x60, 0x1800/0x60, 0x1860/0x60, 0x18e0/0, 0x1980/0x20, 0x1900/0, 0x19a0/0x20; it omits 0x18a0.",
+      "linux_use": "Do not treat dma_alloc_coherent(camss->dev, ...) as proven for RT-CDM command fetch while this list is active. A corrected Linux-only IOMMU implementation must be built and inspected before any runtime reconsideration.",
+      "evidence": [
+        {
+          "path": "experiments/E002-rear-ov13858-dphy/e002k-rear-native-productionization/d-source-integration/0002-arm64-dts-qcom-hamoa-add-x1e-camera-infrastructure.patch",
+          "sha256": "ea593bfe866184bf2ba44fd32604d8a5ab3eaf41fbae433355bbadc79daa1783"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-qcsmmu-camera-sid-oracle.json",
+          "sha256": "319de2be449edd70494089f6af63c9b698e4a59474f919296be21210768d0a04"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "Historical Linux implementation only. Same-machine Windows qcsmmu now proves 0x18a0 belongs to the IFE HLOS route, while public X1E CAMSS v13 independently replaces the obsolete list with five CAMSS HLOS entries including 0x18a0."
+    },
+    {
+      "id": "rtcdm.command_dma_domain_visibility",
+      "classification": "UNVERIFIED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Same-machine Windows now proves that SID 0x18a0/mask0 is in VFE client CB16 S1_IFE_HLOS, and public X1E CAMSS v13 identifies 0x18a0 as the CDM IFE stream. The remaining unverified point is the narrower same-machine requester proof that RT-CDM1 command fetches use that SID/domain; the current Linux CAMSS IOMMU list also omits 0x18a0.",
+      "linux_use": "Runtime remains blocked. First correct and inspect the Linux CAMSS IOMMU set; separately close the exact RT-CDM1 requester-to-SID relation before accepting command-buffer visibility.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-qcsmmu-camera-sid-oracle.json",
+          "sha256": "319de2be449edd70494089f6af63c9b698e4a59474f919296be21210768d0a04"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-QCSMMU-CAMERA-SID.md",
+          "sha256": "68708710c97b61d1635cf153641c18371b8499b4cc5e5c000cabc8687a6303df"
+        },
+        {
+          "path": "experiments/E002-rear-ov13858-dphy/e002k-rear-native-productionization/d-source-integration/0002-arm64-dts-qcom-hamoa-add-x1e-camera-infrastructure.patch",
+          "sha256": "ea593bfe866184bf2ba44fd32604d8a5ab3eaf41fbae433355bbadc79daa1783"
+        }
+      ],
+      "blocking_reason": "Current Linux IOMMU list is mechanically stale/missing 0x18a0; exact RT-CDM1 requester->SID remains unproven on same-machine Windows."
+    },
+    {
+      "id": "rtcdm.startup_corpus",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Four startup command streams contain the pinned command/write/DMI topology; Linux materializes normalized templates and repatches local DMA addresses.",
+      "linux_use": "Captured allocator geometry and Windows IOVAs remain forbidden as Linux constants.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/initial-ife-cdm-summary.json",
+          "sha256": "0b52330d9bfa7fdab439c49e838fb2cb26f0aea3194467edd7caee9ff4ddc2a6"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-ife-cdm/patch-dmi-summary.json",
+          "sha256": "84cc95ec5154a14fcfea555293829c13e73002a5117d4cb8a20fafdca96ec663"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.period_cfg_inputs",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Only two logical period_cfg inputs remain dynamic across startup: packet0 value0; packets1/2/3 share value1. Their upstream formula remains opaque.",
+      "linux_use": "Treat both as explicit provider/test inputs; do not invent a Linux formula.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/rtcdm-period-cfg-contract-oracle.json",
+          "sha256": "9dc27e67ea0a1a27c15473fd4cbb8a583d4d6bffbca116a830d3bd601b3bf6ef"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.startup_priming_interleave",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Exact startup/priming interleave is startup0 -> prime0 -> startup1 -> BUS -> prime1 -> startup2 -> startup3 -> CSID1 -> ISP done -> MIPI/sensor -> prime2 -> prime3/steady cadence.",
+      "linux_use": "Use the closed ordering; do not reorder from generic CAMSS assumptions.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-startup-priming-interleave/startup-priming-interleave-oracle.json",
+          "sha256": "4c492c1498cf36fdbce6cce4f16f49b728b837a42b769c8510af4d051c8f06cf"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-priming-mipi-crossorder/priming-mipi-crossorder-oracle.json",
+          "sha256": "08e0cb3057d5d586e03b11bda8519938b8f450c0212fc0f0d28b7811ca10edd7"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.first_frame_pacing",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "For the first VIDEO: sensor-on -> Epoch0#0 -> complete BUS retarget -> replay2/request2 -> VIDEO; replay3 waits for Epoch0#1.",
+      "linux_use": "A bounded one-frame runner must stop before replay3/steady work if it returns after first VIDEO.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-replay-epoch0-pacing/replay-epoch0-pacing-oracle.json",
+          "sha256": "7459f7ee155c42810792b31cd8413a6181126f60291bd6dcffb795b61d2cec7c"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.priming_batch_shape",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Selector-2 replay0..3 are complete 4/5/5/5-BL batches, not main-list-only submits.",
+      "linux_use": "Materialize and submit complete Linux-owned companion BLs with byte_count-1 lengths.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-epoch0-priming-replay-oracle.json",
+          "sha256": "27310a21a45452245263e8adb9de5fd01cb49ff3b6a94bd7c6c6800b524dac2e"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-startup-priming-interleave/startup-priming-interleave-oracle.json",
+          "sha256": "4c492c1498cf36fdbce6cce4f16f49b728b837a42b769c8510af4d051c8f06cf"
+        }
+      ]
+    },
+    {
+      "id": "rtcdm.steady_epoch0_batches",
+      "classification": "WINDOWS_OBSERVED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Steady Epoch0 uses five-BL batches and five observed main-list variants with captured DMI topology and GEN_IRQ request tagging.",
+      "linux_use": "Materialize local DMA with explicit module inputs; do not freeze captured payloads as production constants.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-epoch0-cdm-batches-oracle.json",
+          "sha256": "d4d239c370852599074f2bc9fd3531d2eed2aac0e595f5db89d22946d45b451f"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-genirq-request-tag-oracle.json",
+          "sha256": "76c21e81e3724ad8dac7a15327fc01d5c435373e03e8a2be1897e92e73ea8a24"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-epoch0-dmi-payload-variants-oracle.json",
+          "sha256": "7ee9a73f8d8249b25a843f38534a77ca6df8096ea2bb4c24dd99b4faf8c8883a"
+        }
+      ]
+    },
+    {
+      "id": "iq.provider_module_ownership",
+      "classification": "WINDOWS_REVERSED",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Exact Surface QcDeviceMFT/CamX Titan680 builders own the named changing register/DMI groups.",
+      "linux_use": "Linux consumer boundaries may name the observed module inputs without claiming proprietary algorithm equivalence.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-upstream-iq-producer-oracle.json",
+          "sha256": "c1cde89e6442b94d97c613b936fa128d5743f1ece1b99468aed0fc16be426e3d"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/WINDOWS-VFE1-UPSTREAM-IQ-PRODUCER.md",
+          "sha256": "217530638e581616d46c51d03290807737f6fa079973f2e70a530a2a06bb87a2"
+        }
+      ]
+    },
+    {
+      "id": "iq.live_provider_algorithms",
+      "classification": "UNVERIFIED",
+      "runtime_critical": false,
+      "production_critical": true,
+      "claim": "Linux does not reproduce the Windows live IQ feedback algorithms that generate changing module values/payloads.",
+      "linux_use": "For bounded oracle experiments use explicit same-machine captured inputs only; production parity requires an independently implemented provider strategy.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-upstream-iq-producer-oracle.json",
+          "sha256": "c1cde89e6442b94d97c613b936fa128d5743f1ece1b99468aed0fc16be426e3d"
+        },
+        {
+          "path": "state/project.yaml",
+          "sha256": "b35a38ae24e7d8203dbfdc18f8e8577ff6e2d56ec4112635c8163d6c044823ab"
+        }
+      ],
+      "blocking_reason": "Production image-quality/provider work remains open; not the immediate first-frame transport gate."
+    },
+    {
+      "id": "linux.compact_dma_arenas",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": true,
+      "production_critical": true,
+      "claim": "Compact Linux command/DMI arenas, frame slots and software ownership queues are Linux implementation choices rather than Windows allocator geometry.",
+      "linux_use": "They are acceptable only if every hardware-visible descriptor/value matches Windows and requester DMA visibility is proven.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0019-x1e-rtcdm-corpus-materializer-unreachable.patch",
+          "sha256": "23b7e1c4bc607956a7511cb2f71065eb800ca2f81af7364efc4b06663c87765d"
+        },
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/0025-x1e-epoch0-module-input-materializer-unreachable.patch",
+          "sha256": "84ce4329d7235e8da9ed47b07e00c9661dbe82f97c524a34144ef12810010d14"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "Windows allocator addresses/strides are intentionally not copied; hardware-visible command bytes and addresses are repatched locally."
+    },
+    {
+      "id": "linux.one_shot_gate",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": false,
+      "production_critical": false,
+      "claim": "Atomic one-shot gating, hash preflight and Golden rollback are Linux lab safety mechanisms, not Windows behavior.",
+      "linux_use": "Keep these safety gates outside the parity claim.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/preflight-pix-one-shot.sh",
+          "sha256": "11778459591b9b502920f1ddfefeade879d66c69387c8e9690f86ffc50c4e4f0"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "Safety/control-plane only; not hardware behavior."
+    },
+    {
+      "id": "linux.rdi_transport_proof",
+      "classification": "LINUX_IMPLEMENTATION",
+      "runtime_critical": false,
+      "production_critical": false,
+      "claim": "The successful Linux RDI frame proves sensor/CSI transport only and is explicitly not Windows PIX/QC10C parity.",
+      "linux_use": "Never use the RDI success as evidence for RT-CDM/VFE1 PIX DMA or processing parity.",
+      "evidence": [
+        {
+          "path": "experiments/E003-front-imx681-cphy/e003h-bounded-front-first-frame-runtime/RDI-V3-FIRST-FRAME-PASS.md",
+          "sha256": "15c623b711e523a5b856deab2af6b83274df463c66853f13c8c6f6555249948a"
+        }
+      ],
+      "parity_claim": false,
+      "equivalence_basis": "Diagnostic transport proof only."
+    }
+  ]
+}
