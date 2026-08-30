@@ -1,0 +1,163 @@
+Subject: [PATCH] media: qcom: camss: order SP11 CSID1 prepare before RUP
+
+Match the same-machine Windows CSID1 IPP lifecycle proven with KD on SP11.
+Windows configures the front IPP path with CTRL=0 and the pre-RUP IRQ
+state, RT-CDM then issues the existing all-path RUP/AUP command, and only
+afterwards the CSID start path enables IPP with CTRL=1 and its final IRQ
+mask.
+
+Split the X1E front-mode0 IPP handling into explicit prepare and enable
+helpers. The bounded PIX runner stages prepare before its already-proven
+prime1 RUP/AUP batch and performs only the enable step at the former CSID
+stream-on point. Keep generic non-front behavior unchanged and retain the
+existing stop path for rollback/teardown.
+
+No new RUP/AUP command is added.
+
+---
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+index 13c53da..b42ca66 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -181,6 +181,7 @@
+ #define SP11_CSID_TOP_IRQ_MASK_MODE0				0x00000001
+ #define SP11_CSID_BUF_DONE_IRQ_MASK_MODE0			0x0001ffff
+ #define SP11_CSID_RX_IRQ_MASK_MODE0				0x019fb800
++#define SP11_CSID_IPP_IRQ_MASK_PREP_MODE0			0x3c1c7004
+ #define SP11_CSID_IPP_IRQ_MASK_MODE0				0x3cbc601c
+ 
+ #define CSID_RDI_CFG0(rdi)					(0x500 + 0x100 * (rdi))
+@@ -465,22 +466,57 @@ static void __csid_configure_rdi_stream(struct csid_device *csid, u8 enable, u8
+ 	writel(val, csid->base + CSID_RDI_CFG0(vc));
+ }
+ 
+-static void csid_configure_stream(struct csid_device *csid, u8 enable)
++int csid680_x1e_front_ipp_prepare(struct csid_device *csid)
+ {
+-	int i;
++	if (!csid || !csid->phy.en_ipp || !__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
+ 
++	/*
++	 * Same-machine Windows ordering: qccamisp configures the full IPP path
++	 * while CTRL remains zero, then RT-CDM issues the RUP/AUP command, and
++	 * only afterwards does the CSID 0x804 path-5 enable set CTRL=1.
++	 */
+ 	__csid_configure_top(csid);
++	if (!__csid_configure_ipp_stream(csid, true))
++		return -EINVAL;
++	__csid_configure_rx(csid, &csid->phy, 0);
++	writel(SP11_CSID_IPP_IRQ_MASK_PREP_MODE0,
++	       csid->base + CSID_IPP_IRQ_MASK);
++	writel(SP11_CSID_TOP_IRQ_MASK_MODE0, csid->base + CSID_TOP_IRQ_MASK);
++
++	return 0;
++}
++
++int csid680_x1e_front_ipp_enable(struct csid_device *csid)
++{
++	if (!csid || !csid->phy.en_ipp || !__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
++
++	/* Windows CSID 0x804 path-5 enable: CTRL -> final IPP mask -> TOP mask. */
++	__csid_ctrl_ipp(csid, true);
++	writel(SP11_CSID_IPP_IRQ_MASK_MODE0, csid->base + CSID_IPP_IRQ_MASK);
++	writel(SP11_CSID_TOP_IRQ_MASK_MODE0, csid->base + CSID_TOP_IRQ_MASK);
++
++	return 0;
++}
++
++static void csid_configure_stream(struct csid_device *csid, u8 enable)
++{
++	int i;
+ 
+-	if (csid->phy.en_ipp && __csid_configure_ipp_stream(csid, enable)) {
+-		__csid_configure_rx(csid, &csid->phy, 0);
+-		__csid_ctrl_ipp(csid, enable);
++	if (csid->phy.en_ipp) {
+ 		if (enable && __csid_sp11_front_ipp_mode0(csid)) {
+-			/* Windows CSID 0x804 path-5 enable: CTRL -> IPP mask -> TOP mask. */
+-			writel(SP11_CSID_IPP_IRQ_MASK_MODE0,
+-			       csid->base + CSID_IPP_IRQ_MASK);
+-			writel(SP11_CSID_TOP_IRQ_MASK_MODE0,
+-			       csid->base + CSID_TOP_IRQ_MASK);
++			if (!csid680_x1e_front_ipp_prepare(csid))
++				csid680_x1e_front_ipp_enable(csid);
++		} else {
++			__csid_configure_top(csid);
++			if (__csid_configure_ipp_stream(csid, enable)) {
++				__csid_configure_rx(csid, &csid->phy, 0);
++				__csid_ctrl_ipp(csid, enable);
++			}
+ 		}
++	} else {
++		__csid_configure_top(csid);
+ 	}
+ 
+        /* Loop through all enabled RDI VCs and configure stream for each */
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index 176b919..f674bcd 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -243,6 +243,8 @@ bool csid_is_lite(struct csid_device *csid);
+  */
+ u32 csid_hw_version(struct csid_device *csid);
+ 
++int csid680_x1e_front_ipp_prepare(struct csid_device *csid);
++int csid680_x1e_front_ipp_enable(struct csid_device *csid);
+ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason);
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index aa5feb9..8a77f0a 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7429,6 +7429,7 @@ static int camss_x1e_pix_runner_once(struct camss *camss,
+ 	bool sensor_streaming = false;
+ 	bool csiphy_streaming = false;
+ 	bool csid_streaming = false;
++	bool csid_prepared = false;
+ 	bool pipeline_powered = false;
+ 	bool rtcdm_started = false;
+ 	bool bus_started = false;
+@@ -7493,6 +7494,13 @@ static int camss_x1e_pix_runner_once(struct camss *camss,
+ 	if (ret)
+ 		goto out_unwind;
+ 	bus_started = true;
++
++	/* Windows: CSID1 IPP configure (CTRL=0) -> prime1 RUP/AUP -> enable. */
++	ret = csid680_x1e_front_ipp_prepare(csid);
++	if (ret)
++		goto out_unwind;
++	csid_prepared = true;
++
+ 	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 1);
+ 	if (ret)
+ 		goto out_unwind;
+@@ -7503,7 +7511,7 @@ static int camss_x1e_pix_runner_once(struct camss *camss,
+ 	if (ret)
+ 		goto out_unwind;
+ 
+-	ret = camss_x1e_pix_runner_stream(&csid->subdev, true);
++	ret = csid680_x1e_front_ipp_enable(csid);
+ 	if (ret)
+ 		goto out_unwind;
+ 	csid_streaming = true;
+@@ -7542,7 +7550,7 @@ static int camss_x1e_pix_runner_once(struct camss *camss,
+ out_unwind:
+ 	if (frame_done) {
+ 		/* Proven normal host stop prefix: CSID1 -> BUS/IFE -> RT-CDM. */
+-		if (csid_streaming) {
++		if (csid_streaming || csid_prepared) {
+ 			stop_ret = camss_x1e_pix_runner_stream(&csid->subdev, false);
+ 			if (stop_ret) {
+ 				teardown_safe = false;
+@@ -7592,7 +7600,7 @@ out_unwind:
+ 					ret = stop_ret;
+ 			}
+ 		}
+-		if (csid_streaming) {
++		if (csid_streaming || csid_prepared) {
+ 			stop_ret = camss_x1e_pix_runner_stream(&csid->subdev, false);
+ 			if (stop_ret) {
+ 				teardown_safe = false;

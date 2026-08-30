@@ -1,0 +1,80 @@
+{
+  "schema": "sp11-e003h-windows-csid1-config-rup-enable-order-v1",
+  "accepted": true,
+  "date": "2026-08-30",
+  "machine": "SP11 Windows on same X1E80100 device",
+  "driver": {
+    "name": "qccamisp8380.sys",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "dynamic_kd": {
+    "host": "SP7",
+    "raw_log": "E003H_CSID1_CONFIG_RUP_ENABLE_ORDER_PRIVACY_ALLOW_20260830.log",
+    "raw_log_sha256": "eeb60ca85e08d8d69cbd42a7fb8847663e4031f90482c9592e1c2cd2e686da30",
+    "privacy_precondition": {
+      "windows_camera_app_camera_toggle": "On",
+      "windows_camera_app_microphone_toggle": "On",
+      "note": "These OS permission changes enabled the oracle app only; they are not camera-stack parity evidence."
+    }
+  },
+  "configure_phase": {
+    "qccamisp_rva": "0x1b3a4 observation after front IPP configuration",
+    "csid_instance": 1,
+    "mmio_base_live": "ffff8a8132d78000",
+    "ctrl": "0x00000000",
+    "reg_update_cmd_readback": "0x00000000",
+    "cfg0": "0x802b2000",
+    "cfg1": "0x00007241",
+    "ipp_irq_mask": "0x3c1c7004",
+    "top_irq_mask": "0x00000001",
+    "epoch1_subsample": "0xffffffff",
+    "hcrop": "0x0eff0000",
+    "vcrop": "0x086f0000",
+    "format_measure_cfg0": "0x00000000",
+    "format_measure_cfg1": "0x00000000"
+  },
+  "rup_aup_phase": {
+    "transport": "RT-CDM kernel-owned command buffer",
+    "observed_words": [
+      "0x0800f000",
+      "0x0803c000",
+      "0x08057000",
+      "0x04000001",
+      "0x00000018",
+      "0x01f501f5",
+      "0x06000000",
+      "0x00000000"
+    ],
+    "change_base": "0x00057000",
+    "offset": "0x18",
+    "value": "0x01f501f5",
+    "mask_decode": {
+      "ipp": "0x00010001",
+      "ppp": "0x00040004",
+      "rdi0": "0x00100010",
+      "rdi1": "0x00200020",
+      "rdi2": "0x00400040",
+      "rdi3": "0x00800080",
+      "rdi4": "0x01000100",
+      "or": "0x01f501f5"
+    },
+    "note": "No additional Linux RUP/AUP command is justified; current prime1 already submits this exact value."
+  },
+  "enable_phase": {
+    "qccamisp_resource_selector": 5,
+    "meaning": "IPP",
+    "qccamisp_enable_rva": "0x1b3e0 entry / 0x1b4d0 completion observation",
+    "ctrl_before": "0x00000000",
+    "ctrl_after": "0x00000001",
+    "ipp_irq_mask_after": "0x3cbc601c",
+    "top_irq_mask_after": "0x00000001"
+  },
+  "proved_order": [
+    "front IPP configure with CTRL=0 and pre-RUP IRQ masks",
+    "RT-CDM RUP/AUP offset 0x18 value 0x01f501f5",
+    "IPP resource-5 enable CTRL=1",
+    "final IPP IRQ mask 0x3cbc601c and TOP mask 0x1"
+  ],
+  "linux_consequence": "The bounded PIX runner must prepare/configure CSID1 IPP before prime1, preserve the existing prime1 RUP/AUP command, and perform only path enable at the former CSID stream-on point.",
+  "runtime_authorized": false
+}
