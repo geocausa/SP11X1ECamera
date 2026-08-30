@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0046 VFE1 telemetry package installed/inspected unarmed — 2026-08-30
+
+The read-only 0046 CAMSS candidate is packaged distinctly at `e003h-vfe1-timeout-readonly-0046-candidate` with frozen package-local runtime inputs. Only CAMSS changes from the consumed 0045 package: module SHA-256 `f1b5ce5dc973a140b29257927c02b2749f96f379fc01b78a10841443a15ab4be`; sensor, front-only DTB, capsule, helper, media setup and persistent observer remain byte-identical.
+
+Golden package preflight and installation passed. GRUB ID is `sp11-camera-e003h-vfe1-0046-one-shot`, boot directory `/boot/sp11-7.1.5-camera-e003h-vfe1-0046`, marker `sp11_camera_e003h_vfe1_0046=1`. The installer contains no `grub-reboot`; Golden remains `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, and no camera modules are loaded.
+
+Fail-closed package inspection SHA-256 is `70d9f0b2fdb7e835525c98807151922c113dbf026aaeec3d2445c505e2fd5571`. It pins the 0046 telemetry proof (30 reads, zero added writes/polls), frozen assets, front-only DT/IOMMU set, runtime-preflight-before-module-load, one helper invocation, same-boot retry refusal and mandatory reboot. **No authorization exists and runtime remains blocked.** Next publish this package checkpoint, then perform a fresh authorization review against that public commit.
+
 ## E003h ACTIVE — 0046 VFE1 timeout telemetry static PASS; package next — 2026-08-30
 
 0045 proved the missing IFE startup CHANGE_BASE wrapper was a real bug and repaired the CSID1 BUF_DONE mask clobber, but VFE1 raw Epoch0 still never arrives. Static 0046 adds **read-only timeout telemetry only** so the next bounded run can distinguish bad VFE programming from a missing upstream CAMIF handoff without changing camera behavior.

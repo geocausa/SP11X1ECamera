@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0046-vfe1-timeout-readonly-static-pass-package-next
+status: e003h-0046-vfe1-timeout-package-installed-unarmed-auth-review-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1145,6 +1145,39 @@ e003h:
   linux_front_0046_start_stop_irq_clear_buffer_programming_changed: false
   linux_front_0046_patch_roundtrip_byte_identical: true
   linux_front_0046_runtime_authorized: false
+  linux_front_0046_package_dir: experiments/E003-front-imx681-cphy/e003h-vfe1-timeout-readonly-0046-candidate
+  linux_front_0046_package_asset_manifest_sha256: 1ff11cfafa93d6fd14c7b45ca2eb3e121231a43dd807e8b366d7e6296d1ade7e
+  linux_front_0046_package_readme_sha256: 51f731d79f262874663b6e94625d827b412f66e278a1be71e9cc9457d2ce81b2
+  linux_front_0046_package_preflight_script_sha256: ad8e5e596eacffaeb15e90aa92f6559ceae2a2bff40ce35c4f101aaa535d180d
+  linux_front_0046_package_install_script_sha256: a205af7baf4ab45be4259a6944dc616615066c88ae34180ed0b265878947265c
+  linux_front_0046_package_runtime_preflight_script_sha256: c187fdff230f92b80386622d1b03f5bf59720aaef0736d3648dd42149d250172
+  linux_front_0046_package_load_script_sha256: e490791374d740e7ff5b0ddbd552926d5b678154082b0228887aea2cfe5ab54f
+  linux_front_0046_package_setup_script_sha256: 1eea4f94efe1648aac7a80a476ab51d7f1a23303a433b2bdcaac10ceed9b600b
+  linux_front_0046_package_observer_script_sha256: 7630bc0b2cd6bdcfa0bddddac6bea4197e482c95ccadb82d6e13a30fc6219940
+  linux_front_0046_package_run_script_sha256: 2f1548024fb18d75dfef8da8d6642c066d42b1dfd6a51cbb9e0d028a3738a36a
+  linux_front_0046_package_inspector_sha256: 08ebf2b696b1ad544826fd9c42e56533807673aacfea3359c04106cdfd6e244c
+  linux_front_0046_package_inspection_sha256: 70d9f0b2fdb7e835525c98807151922c113dbf026aaeec3d2445c505e2fd5571
+  linux_front_0046_package_preflight_log_sha256: 842caf98406696cac9f99f278bf288980add822478be6146a23dd9ed517b69b9
+  linux_front_0046_package_install_log_sha256: f0c9630de1d7847fa87dcfc9550e9d06c7a9e9d3524bcbb8367135b2d8bccd61
+  linux_front_0046_package_inspection_log_sha256: a58a19d8b6411ef61ea990a8c8561851b45de94b3a58e3696327f40211c61730
+  linux_front_0046_package_camss_sha256: f1b5ce5dc973a140b29257927c02b2749f96f379fc01b78a10841443a15ab4be
+  linux_front_0046_package_sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+  linux_front_0046_package_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  linux_front_0046_package_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_0046_package_helper_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  linux_front_0046_package_media_oracle_sha256: 666e458daf9a3ed8938d81d10fd3d3a0e4f760252db920e09531bd7aa3ef633f
+  linux_front_0046_package_watcher_oracle_sha256: 8698afdc615ee1d544d0068441241625487cc8459ca97a758b62d3b863743d84
+  linux_front_0046_candidate_boot_id: sp11-camera-e003h-vfe1-0046-one-shot
+  linux_front_0046_candidate_boot_dir: /boot/sp11-7.1.5-camera-e003h-vfe1-0046
+  linux_front_0046_candidate_cmdline_marker: sp11_camera_e003h_vfe1_0046=1
+  linux_front_0046_candidate_installed: true
+  linux_front_0046_candidate_armed: false
+  linux_front_0046_package_authorization_present: false
+  linux_front_0046_package_runtime_authorized: false
+  linux_front_0046_package_golden_saved_default: true
+  linux_front_0046_package_next_entry_empty: true
+  linux_front_0046_package_camera_modules_loaded: false
+  linux_front_0046_package_frozen_runtime_assets: true
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_manifest_sha256: 5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
@@ -1454,13 +1487,13 @@ e003h:
   linux_front_0044_package_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-vfe1-timeout-readonly-0046-package
+next_experiment: E003h-vfe1-timeout-readonly-0046-authorization-review
 next_action: >-
-  Static 0046 is telemetry-only and passes strict inspection: 30 readl_relaxed reads, zero MMIO writes,
-  zero new polling primitives, and a timeout-only call site before the existing CSID snapshot. Build a distinct
-  0046 one-shot package using the exact frozen 0045 sensor/DT/capsule/helper/setup/watcher inputs and only the
-  new CAMSS module f1b5ce5d...ab4be. Install and inspect it unarmed with Golden saved default and empty next_entry.
-  Any runtime requires a fresh authorization review after the package checkpoint is committed and pushed.
+  The distinct 0046 telemetry package is installed, frozen, hash-pinned and unarmed. Commit/push this package
+  checkpoint, then perform a fresh authorization review against that exact public commit. Require Golden current
+  and saved default, empty next_entry, package inspection 70d9f0b2...5571, bounded provenance green, no camera
+  modules, no active/runtime evidence, and the one-boot/one-helper/no-retry contract. Do not arm before the
+  authorization checkpoint itself is committed and pushed.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
