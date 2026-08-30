@@ -1,0 +1,403 @@
+{
+  "accepted": true,
+  "bus_split": {
+    "after": "IFE803_PACKET2",
+    "before": "IFE803_PACKET1",
+    "phase": [
+      "VFE mask callback",
+      "VFE TOP +0x24=0",
+      "VFE1 BUS static config",
+      "VFE1 BUS enable",
+      "VFE1 initial dynamic addresses"
+    ]
+  },
+  "callback_table": {
+    "generation_selector_context_field": "IFE context +0x6b678 == 0 selects VFE680 callback family",
+    "irq_mask_callback_rva": "0x1d2b0",
+    "irq_mask_callback_slot": "IFE context +0x6b690",
+    "pre_bus_top_callback_rva": "0x1d820",
+    "pre_bus_top_callback_slot": "IFE context +0x6b698"
+  },
+  "cross_layer_order": [
+    "CDM_START",
+    "IFE_START",
+    "IFE803_PACKET0",
+    "IFE803_PACKET1",
+    "VFE1_BUS_STATIC_CONFIG",
+    "VFE1_BUS_ENABLE",
+    "VFE1_INITIAL_DYNAMIC_ADDRESSES",
+    "IFE803_PACKET2",
+    "IFE803_PACKET3",
+    "CSID_START",
+    "ISP_START_DONE"
+  ],
+  "date": "2026-08-30",
+  "driver": {
+    "bytes": 376560,
+    "name": "qccamisp8380.sys",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "instruction_anchors": [
+    {
+      "mnemonic": "adrp",
+      "operands": "x8, #0x14001b000",
+      "rva": "0x19fec"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x9, x8, #0xe80",
+      "rva": "0x19ff0"
+    },
+    {
+      "mnemonic": "adrp",
+      "operands": "x8, #0x14001d000",
+      "rva": "0x19ff4"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x2b0",
+      "rva": "0x19ff8"
+    },
+    {
+      "mnemonic": "csel",
+      "operands": "x9, x9, x8, ne",
+      "rva": "0x19ffc"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x19, #0x6b, lsl #12",
+      "rva": "0x1a000"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "x9, [x8, #0x690]",
+      "rva": "0x1a004"
+    },
+    {
+      "mnemonic": "adrp",
+      "operands": "x8, #0x14001c000",
+      "rva": "0x1a008"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x9, x8, #0xe0",
+      "rva": "0x1a00c"
+    },
+    {
+      "mnemonic": "adrp",
+      "operands": "x8, #0x14001d000",
+      "rva": "0x1a010"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x820",
+      "rva": "0x1a014"
+    },
+    {
+      "mnemonic": "csel",
+      "operands": "x9, x9, x8, ne",
+      "rva": "0x1a018"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x19, #0x6b, lsl #12",
+      "rva": "0x1a01c"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "x9, [x8, #0x698]",
+      "rva": "0x1a020"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x9, #0x14001d340",
+      "rva": "0x1d2bc"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x10, x0, #0x15c",
+      "rva": "0x1d2c0"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "x8, #0xd0000000",
+      "rva": "0x1d2c4"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "x9, [x10]",
+      "rva": "0x1d2c8"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x11, x0, #0x164",
+      "rva": "0x1d2cc"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "x8, [x11]",
+      "rva": "0x1d2d0"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x8, [x0, #0x140]",
+      "rva": "0x1d2d4"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w9, [x8, #0x34]",
+      "rva": "0x1d2dc"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x9, [x0, #0x140]",
+      "rva": "0x1d2e8"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x9, #0x38]",
+      "rva": "0x1d2f4"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "w8, [x11]",
+      "rva": "0x1d300"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x9, [x0, #0x150]",
+      "rva": "0x1d304"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x9, #0x18]",
+      "rva": "0x1d308"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "w8, [x0, #0x168]",
+      "rva": "0x1d30c"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x9, [x0, #0x150]",
+      "rva": "0x1d310"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x9, #0x1c]",
+      "rva": "0x1d314"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x0, #0x6b, lsl #12",
+      "rva": "0x1d318"
+    },
+    {
+      "mnemonic": "ldrb",
+      "operands": "w8, [x8, #0x6f0]",
+      "rva": "0x1d31c"
+    },
+    {
+      "mnemonic": "cbz",
+      "operands": "w8, #0x14001d330",
+      "rva": "0x1d320"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x9, [x0, #0x150]",
+      "rva": "0x1d324"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "w8, #0xfffffff",
+      "rva": "0x1d328"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x9, #8]",
+      "rva": "0x1d32c"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x8, [x0, #0x140]",
+      "rva": "0x1d820"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "wzr, [x8, #0x24]",
+      "rva": "0x1d824"
+    },
+    {
+      "mnemonic": "ret",
+      "operands": "",
+      "rva": "0x1d828"
+    },
+    {
+      "mnemonic": "ldrb",
+      "operands": "w8, [x20, x25]",
+      "rva": "0x270d4"
+    },
+    {
+      "mnemonic": "cbnz",
+      "operands": "w8, #0x140027128",
+      "rva": "0x270d8"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x20, #0x6b, lsl #12",
+      "rva": "0x270dc"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x690]",
+      "rva": "0x270e8"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "x0, x20",
+      "rva": "0x270ec"
+    },
+    {
+      "mnemonic": "blr",
+      "operands": "x15",
+      "rva": "0x27100"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x20, #0x6b, lsl #12",
+      "rva": "0x27104"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x698]",
+      "rva": "0x27110"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "x0, x20",
+      "rva": "0x2710c"
+    },
+    {
+      "mnemonic": "blr",
+      "operands": "x15",
+      "rva": "0x27124"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "x1, x22",
+      "rva": "0x27128"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "x0, x20",
+      "rva": "0x2712c"
+    },
+    {
+      "mnemonic": "bl",
+      "operands": "#0x1400274c8",
+      "rva": "0x27130"
+    }
+  ],
+  "irq_mask_callback": {
+    "optional_write": {
+      "base": "VFE BUS",
+      "guard": "IFE context +0x6b6f0 != 0",
+      "linux_status": "not authorized; same-machine SP11 flag/value not proven for this use case",
+      "offset": "0x08",
+      "value": "0x0fffffff"
+    },
+    "rva": "0x1d2b0",
+    "writes": [
+      {
+        "base": "VFE TOP",
+        "offset": "0x34",
+        "role": "TOP IRQ mask0",
+        "value": "0x0007f051"
+      },
+      {
+        "base": "VFE TOP",
+        "offset": "0x38",
+        "role": "TOP IRQ mask1",
+        "value": "0x00000000"
+      },
+      {
+        "base": "VFE BUS",
+        "offset": "0x18",
+        "role": "BUS IRQ mask0",
+        "value": "0xd0000000"
+      },
+      {
+        "base": "VFE BUS",
+        "offset": "0x1c",
+        "role": "BUS IRQ mask1",
+        "value": "0x00000000"
+      }
+    ]
+  },
+  "linux_consequence": "Immediately before the existing private X1E VFE1 PIX bus_prepare between startup packets 1 and 2, reproduce only the four proven IRQ-mask writes and VFE TOP +0x24=0. Do not add the optional BUS +0x08 write. Keep BUS prepare, startup packet bytes/order, CSID, RT-CDM payloads and sensor lifecycle unchanged.",
+  "normal_first_start": {
+    "bus_start_call_rva": "0x27130",
+    "first_start_flag": "IFE context +0x3488",
+    "first_start_gate_rva": "0x270d4",
+    "function_rva": "0x26838",
+    "mask_callback_call_rva": "0x270e8 / BLR at 0x27100",
+    "order": [
+      "callback +0x6b690",
+      "callback +0x6b698",
+      "DAL_ife_bus_start (FUN_1400274c8)"
+    ],
+    "top_zero_callback_call_rva": "0x27110 / BLR at 0x27124"
+  },
+  "pre_bus_top_callback": {
+    "rva": "0x1d820",
+    "write": {
+      "base": "VFE TOP",
+      "offset": "0x24",
+      "semantic_name": "intentionally unresolved",
+      "value": "0x00000000"
+    }
+  },
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-windows-vfe1-dal-start-prefix-v1",
+  "source_evidence": {
+    "bus_cdm_crossorder": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-bus-cdm-crossorder-oracle.json",
+    "bus_cdm_crossorder_sha256": "b495cc833c45e97b1467749bf094bb3035c5e6070bd0ea13d26a99ceec6acce6"
+  },
+  "startup_packet_top_0x24_writes": [
+    {
+      "command_offset": "0x0e70",
+      "csv_sha256": "e031eeaf777fc366761b4d0fa7bead961d5c9e1a63c70d92b3c21b1391ac766f",
+      "packet": 0,
+      "physical_address": "0x0ac71024",
+      "register_offset": "0x24",
+      "value": "0x00006000"
+    },
+    {
+      "command_offset": "0x0e10",
+      "csv_sha256": "222bee6fe98b9df847df616d0ccb2fad11c680189d1f3484003df83a298a2420",
+      "packet": 1,
+      "physical_address": "0x0ac71024",
+      "register_offset": "0x24",
+      "value": "0x00006000"
+    },
+    {
+      "command_offset": "0x08e0",
+      "csv_sha256": "282bb0f140c5b7ec916823511aca5cd14296bb80b3d519a7f028a79a9f584917",
+      "packet": 2,
+      "physical_address": "0x0ac71024",
+      "register_offset": "0x24",
+      "value": "0x00006000"
+    },
+    {
+      "command_offset": "0x04c4",
+      "csv_sha256": "72f800492e990d678c880d540c748279e3b3abc900dc83c8e2d4fa5495a1d127",
+      "packet": 3,
+      "physical_address": "0x0ac71024",
+      "register_offset": "0x24",
+      "value": "0x00006000"
+    }
+  ],
+  "top_0x24_transition": "packet0/1 leave 0x6000 -> DAL_ife_start writes 0 -> BUS start -> packet2/3 restore 0x6000"
+}
+PASS: Windows VFE1 DAL_ife_start prefix and packet1/BUS/packet2 placement pinned

@@ -1,0 +1,70 @@
+From: SP11 Camera Parity <sp11-camera-parity@localhost>
+Subject: [PATCH] media: qcom: camss: add SP11 VFE1 DAL start prefix
+
+Same-machine Windows qccamisp8380 programs the VFE680 first-start prefix
+between initial IFE packets 1 and 2, immediately before DAL_ife_bus_start.
+The prefix writes TOP IRQ masks 0x0007f051/0, BUS IRQ masks
+0xd0000000/0, then VFE TOP +0x24 = 0.
+
+Reproduce only those five proven writes before the existing X1E VFE1 PIX
+BUS prepare. Keep the BUS programming, captured RT-CDM packet bytes/order,
+CSID, sensor lifecycle, and optional BUS +0x08 path unchanged.
+
+Signed-off-by: SP11 Camera Parity <sp11-camera-parity@localhost>
+---
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -152,6 +152,7 @@
+ #define VFE680_X1E_QC10C_C_DATA_OFF     0x004f5000
+ #define VFE680_X1E_WINDOWS_TOP_MASK0    0x0007f051
+ #define VFE680_X1E_WINDOWS_BUS_MASK0    0xd0000000
++#define VFE680_X1E_DAL_START_TOP_ZERO  0x00000024
+ #define VFE680_X1E_WINDOWS_VIDEO_EVENT  3
+ 
+ struct vfe680_x1e_windows_client_contract {
+@@ -1000,6 +1001,23 @@
+ 	kfree(runtime);
+ }
+ 
++int vfe680_x1e_pix_runtime_start_prefix(struct vfe_device *vfe)
++{
++	if (!vfe680_x1e_bus_target(vfe))
++		return -ENODEV;
++
++	/* Exact same-machine Windows VFE680 DAL_ife_start first-start prefix. */
++	writel_relaxed(VFE680_X1E_WINDOWS_TOP_MASK0,
++		       vfe->base + VFE_TOP_IRQn_MASK(vfe, 0));
++	writel_relaxed(0, vfe->base + VFE_TOP_IRQn_MASK(vfe, 1));
++	writel_relaxed(VFE680_X1E_WINDOWS_BUS_MASK0,
++		       vfe->base + VFE_BUS_IRQn_MASK(vfe, 0));
++	writel_relaxed(0, vfe->base + VFE_BUS_IRQn_MASK(vfe, 1));
++	writel_relaxed(0, vfe->base + VFE680_X1E_DAL_START_TOP_ZERO);
++
++	return 0;
++}
++
+ int vfe680_x1e_pix_runtime_bus_prepare(struct vfe_device *vfe,
+ 				       struct vfe680_x1e_pix_runtime *runtime)
+ {
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -327,6 +327,7 @@
+ 				 struct vfe680_x1e_pix_runtime **runtime);
+ void vfe680_x1e_pix_runtime_release(struct vfe_device *vfe,
+ 				    struct vfe680_x1e_pix_runtime *runtime);
++int vfe680_x1e_pix_runtime_start_prefix(struct vfe_device *vfe);
+ int vfe680_x1e_pix_runtime_bus_prepare(struct vfe_device *vfe,
+ 				       struct vfe680_x1e_pix_runtime *runtime);
+ int vfe680_x1e_pix_runtime_bus_update(struct vfe_device *vfe,
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7573,6 +7573,9 @@
+ 	ret = csid680_x1e_front_ipp_companion(csid, 1);
+ 	if (ret)
+ 		goto out_unwind;
++	ret = vfe680_x1e_pix_runtime_start_prefix(vfe);
++	if (ret)
++		goto out_unwind;
+ 	ret = vfe680_x1e_pix_runtime_bus_prepare(vfe, pix);
+ 	if (ret)
+ 		goto out_unwind;

@@ -1,3 +1,13 @@
+## E003h ACTIVE — Windows VFE DAL_ife_start prefix closed; Linux 0047 static PASS — 2026-08-30
+
+0046 localized the next parity gap to VFE start state: FULL BUS/client/address programming was exact and fault-free, but Linux had zero TOP/BUS IRQ masks. Exact qccamisp8380 reversal now closes the omitted Windows lifecycle prefix. For the active VFE680 family, callback slot `+0x6b690` selects RVA `0x1d2b0`, which writes TOP masks `0x0007f051/0` and BUS masks `0xd0000000/0`; slot `+0x6b698` selects RVA `0x1d820`, which writes VFE TOP `+0x24=0`. The normal first-start path invokes those callbacks in that order and then enters `DAL_ife_bus_start`.
+
+The existing same-machine BUS/CDM cross-order places that start phase between IFE startup packets 1 and 2. All four captured startup packets independently write VFE1 `+0x24=0x6000`, proving the exact Windows edge `packet1:0x6000 -> DAL_ife_start:0 -> BUS start -> packet2:0x6000`. The optional VFE BUS `+0x08=0x0fffffff` path is separately guarded in Windows and is **not** authorized because its SP11 use-case condition is not proven.
+
+Static patch `0047-x1e-vfe1-dal-start-prefix-windows-parity.patch` adds one private X1E VFE helper with exactly five writes—TOP mask0, TOP mask1, BUS mask0, BUS mask1, TOP `+0x24=0`—and calls it immediately before the existing BUS prepare. Captured RT-CDM bytes/order, BUS programming, CSID and sensor behavior are unchanged. Strict checkpatch is zero errors/warnings/checks; reverse/forward patch reconstruction is byte-identical. Golden-ABI CAMSS module SHA-256 is `5e7bdadf76f293b48e4efb54a69c011cb00ff9af75806e9558176cd925dd5007`; static inspection SHA-256 is `f45276a3dd7033930f80bf5d04247a638d8dfcfd2144d8e142cfe440671224bc`. Windows oracle SHA-256 is `75738af53bf5845f28e8c279dad573b0e8e052c4aa2fed9e11d0685fc9455cd7`.
+
+**No Linux runtime is authorized.** Next create/install/inspect a distinct unarmed 0047 package and publish it before a separate authorization review.
+
 ## E003h ACTIVE — 0046 runtime consumed; VFE BUS exact, Windows DAL_ife_start prefix missing — 2026-08-30
 
 The authorized 0046 telemetry one-shot executed exactly once and returned cleanly to FullIO v19c Golden. The sole helper returned `ETIMEDOUT` waiting for raw VFE1 Epoch0; there was no same-boot retry and no QC10C userspace output. RT-CDM completed 17 FIFO BLs with no fault. Golden recovery verifies saved default `sp11-audio-fullio-v19c`, empty `next_entry`, Wi-Fi/audio/Surface input health, and no camera modules.

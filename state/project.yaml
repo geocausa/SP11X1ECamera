@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0046-runtime-vfe-bus-exact-missing-start-prefix-0047-next
+status: e003h-0047-static-vfe-dal-start-prefix-pass-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1536,6 +1536,35 @@ e003h:
   linux_front_0044_package_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-vfe1-dal-start-prefix-0047-static
+  windows_vfe1_0047_dal_start_oracle: experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-vfe1-dal-start-prefix-oracle.json
+  windows_vfe1_0047_dal_start_oracle_sha256: 75738af53bf5845f28e8c279dad573b0e8e052c4aa2fed9e11d0685fc9455cd7
+  windows_vfe1_0047_dal_start_extractor_sha256: 8be3588d70053e91bdc2be5d0ea999b694a3004f2a2c1ddccbf293214ec25b30
+  windows_vfe1_0047_dal_start_log_sha256: 458c616ab8598da5283da5aab787458a2529a2db7ed08e9b57b1822ecbff5528
+  windows_vfe1_0047_dal_start_narrative_sha256: 465f0057d180ae4364109984bd3b10b9771b96753464a786cb682d90fe045112
+  windows_vfe1_0047_first_start_order: [vfe_irq_mask_pair_callback, vfe_top_0x24_zero_callback, dal_ife_bus_start]
+  windows_vfe1_0047_top_masks: [0x0007f051, 0x00000000]
+  windows_vfe1_0047_bus_masks: [0xd0000000, 0x00000000]
+  windows_vfe1_0047_top_0x24_pre_bus_value: 0x00000000
+  windows_vfe1_0047_top_0x24_startup_value: 0x00006000
+  windows_vfe1_0047_optional_bus_0x08_authorized: false
+  linux_front_0047_patch: 0047-x1e-vfe1-dal-start-prefix-windows-parity.patch
+  linux_front_0047_patch_sha256: f5192c50c15e1ab8d92659b3735d70f5dfeeff0bbae961d90e1dbf27486ffee4
+  linux_front_0047_checkpatch_log_sha256: e9dcb470ce2a2832dff5b0b9d372297bd4f08de45aaa165dea953abc2c0ea4f1
+  linux_front_0047_build_log_sha256: 8a5bb9f7511a73b3a257798fd54d1bdf67265a867a83ca533dfd41a4d5067d41
+  linux_front_0047_inspector_sha256: b6109ca4eb5f6efe80f4e4279227aef4fd08fbf073a5e1c65ea27e135a2a8a69
+  linux_front_0047_inspection_sha256: f45276a3dd7033930f80bf5d04247a638d8dfcfd2144d8e142cfe440671224bc
+  linux_front_0047_camss_source_sha256: 5a920032e138eee1154c4b9ae1846a445e02fbac3e7626a4245797502e73b793
+  linux_front_0047_vfe680_source_sha256: 0dc6269d8b7c0e57e1442dfea374f0e90bdf14b8e8ef58117a505cda6d643036
+  linux_front_0047_vfe_header_sha256: 1029c3d353e93209d212729be238f9665308ba97eb659d8c6648c86c238d1bbd
+  linux_front_0047_module_sha256: 5e7bdadf76f293b48e4efb54a69c011cb00ff9af75806e9558176cd925dd5007
+  linux_front_0047_module_vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+  linux_front_0047_write_count: 5
+  linux_front_0047_write_order: [top_mask0, top_mask1, bus_mask0, bus_mask1, top_0x24_zero]
+  linux_front_0047_optional_bus_0x08_added: false
+  linux_front_0047_runner_order: [startup_packet1, csid_companion1, vfe_dal_start_prefix, bus_prepare, prime1, startup_packet2]
+  linux_front_0047_patch_roundtrip_byte_identical: true
+  linux_front_0047_runtime_authorized: false
+
+next_experiment: E003h-vfe1-dal-start-prefix-0047-package
 next_action: >-
-  Freeze the exact same-machine Windows VFE680 DAL_ife_start prefix: callback +0x6b690 writes TOP mask pair 0x0007f051/0 and BUS mask pair 0xd0000000/0, callback +0x6b698 writes VFE TOP +0x24=0, then DAL_ife_bus_start. Existing Windows cross-order places BUS start between IFE startup packets 1 and 2. Implement that complete prefix immediately before the existing Linux bus_prepare, with no other runtime behavior change. Build/check/inspect statically and do not authorize hardware yet.
+  Build a distinct 0047 one-shot package from the proven 0046 harness with only the CAMSS module changed to SHA-256 5e7bdadf76f293b48e4efb54a69c011cb00ff9af75806e9558176cd925dd5007. Freeze package-local assets, install/inspect the new GRUB entry unarmed on Golden, and publish that package checkpoint. No runtime is authorized by the static 0047 checkpoint.
