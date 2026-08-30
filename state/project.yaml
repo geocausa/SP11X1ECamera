@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0043-package-installed-golden-safe-authorization-next
+status: e003h-0043-runtime-repeats-0042-boundary-csid-common-path-diff-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1176,12 +1176,42 @@ e003h:
   linux_front_0043_package_camera_modules_loaded: false
   linux_front_0043_package_authorization_present: false
   linux_front_0043_package_runtime_authorized: false
-next_experiment: E003h-csid1-0043-authorization-review
-next_action: The fresh 0043 one-shot boot is installed but not armed. Finalize the package
-  inspector against the refreshed bounded-provenance manifest, commit/push the exact
-  installed-package checkpoint, then create a separate authorization record for exactly
-  one candidate boot and one root helper invocation. Do not set next_entry or load camera
-  modules before that authorization checkpoint is public and all pre-arm gates pass.
+  linux_front_0043_authorization_sha256: ed7eb742c62f547312175c1672220458a78f1e35ced4000302a0375817bb65ca
+  linux_front_0043_authorization_consumed: true
+  linux_front_0043_hardware_run_consumed: true
+  linux_front_0043_helper_invocations: 1
+  linux_front_0043_same_boot_retry: false
+  linux_front_0043_run_result: ETIMEDOUT waiting VFE1 raw Epoch0; no QC10C output
+  linux_front_0043_rtcdm_fifo_completed: 13
+  linux_front_0043_rtcdm_faulted: false
+  linux_front_0043_sensor_stream_started: true
+  linux_front_0043_sensor_stream_stopped: true
+  linux_front_0043_csid1_rx_packets: 37016
+  linux_front_0043_csid1_ecc_errors: 0
+  linux_front_0043_csid1_crc_errors: 0
+  linux_front_0043_csid1_ipp_irq_status: 0x00011e00
+  linux_front_0043_failure_boundary: 'identical to 0042: after clean CSI packet/input-frame ingress and before CSID CAMIF/RUP/Epoch output progression into VFE1'
+  linux_front_0043_order_delta_changed_boundary: false
+  linux_front_0043_simple_shadow_stage_order_hypothesis_closed: true
+  linux_front_0043_teardown_v4l2_call_s_stream_warning: true
+  linux_front_0043_teardown_warning_failure_cause: false
+  linux_front_0043_runtime_analysis_sha256: b0b1dc635b64b4dde029bd359ed8603d5680d0f9548661cb23ef8ecb9a0d71b7
+  linux_front_0043_runtime_extractor_sha256: b0e3517dfb7b8342694643443b2ff3dcd9702bce9ccd4833256b846d9ab0935c
+  linux_front_0043_run_sha256: 994b21d07481a3590ddefebcc10cb4c13940a245b555c1956dba361a6fa21ac6
+  linux_front_0043_post_sha256: fb0095beb35193f941c902e7adf9727781bdf5c3f24d618f7f7227f26e2e26b7
+  linux_front_0043_dmesg_sha256: ab2f5df944dd60a8be716eb52703ba46f654386fa65c2f1308811d7ee5403abd
+  linux_front_0043_rtcdm_stages_sha256: 800ac8fd8ef054491b02416561ca14109c744f7155d74ef711017f7763743248
+  linux_front_0043_golden_return_verified: true
+  linux_front_0043_golden_next_entry_empty: true
+  linux_front_0043_golden_camera_modules_loaded: false
+next_experiment: E003h-windows-csid1-common-path-mmio-diff
+next_action: >-
+  Do not repeat Linux PIX runtime. The consumed 0043 run completed all 13 RT-CDM pre-CSID BLs,
+  started IMX681, and reproduced the exact 0042 timeout boundary: 37016 clean CSI packets and IPP
+  status 0x00011e00 with no CAMIF/RUP/Epoch events. The Windows-observed prepare -> exact 0x01f501f5
+  RUP/AUP -> enable ordering therefore does not by itself fix the path. Enumerate every exact
+  same-machine Windows CSID1 common/path configure write and lifecycle prerequisite, diff against
+  Linux prepare, and separately fix the prepared-state teardown warning before any future runtime authorization.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:

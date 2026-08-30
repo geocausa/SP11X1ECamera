@@ -1,0 +1,71 @@
+{
+  "schema": "sp11-e003h-csid1-0043-runtime-analysis-v1",
+  "accepted": true,
+  "source_hashes": {
+    "run": "994b21d07481a3590ddefebcc10cb4c13940a245b555c1956dba361a6fa21ac6",
+    "post": "fb0095beb35193f941c902e7adf9727781bdf5c3f24d618f7f7227f26e2e26b7",
+    "dmesg": "ab2f5df944dd60a8be716eb52703ba46f654386fa65c2f1308811d7ee5403abd",
+    "stages": "800ac8fd8ef054491b02416561ca14109c744f7155d74ef711017f7763743248",
+    "load": "2a7f156b464f370ef8a03efc222972110eea1ab6955faee0c05594130a21227b"
+  },
+  "0042_analysis_sha256": "83e6945ca44402e6aaea1974cedc52d9f843216c08e69a6da02e389181f9df8c",
+  "run": {
+    "helper_invocations": 1,
+    "run_rc": 1,
+    "trigger_errno_text": "Connection timed out",
+    "qc10c_output": false,
+    "same_boot_retry": false
+  },
+  "rtcdm": {
+    "fifo0_completions": 13,
+    "faulted": false,
+    "terminal_stage": "stopped"
+  },
+  "sensor": {
+    "mode_select_on_seen": true,
+    "mode_select_off_seen": true
+  },
+  "linux_csid1": {
+    "route": "0x00000101",
+    "reg_update_readback": "0x00000000",
+    "rx_irq_status": "0x00000017",
+    "rx_irq_mask": "0x019fb800",
+    "rx_cfg0": "0x11300000",
+    "rx_cfg1": "0x00000001",
+    "rx_packets": 37016,
+    "ecc_errors": 0,
+    "crc_errors": 0,
+    "ipp_irq_status": "0x00011e00",
+    "ipp_irq_mask": "0x3cbc601c",
+    "ipp_ctrl": "0x00000001",
+    "ipp_cfg0": "0x802b2000",
+    "ipp_cfg1": "0x00007241",
+    "epoch_cfg": "0x00130013",
+    "obs_0x340": "0x48000a08"
+  },
+  "comparison_to_0042": {
+    "rx_packets_identical": true,
+    "rx_irq_status_identical": true,
+    "ipp_irq_status_identical": true,
+    "ipp_irq_mask_identical": true,
+    "ipp_cfg_identical": true,
+    "epoch_cfg_identical": true,
+    "obs_0x340_identical": true
+  },
+  "classification": {
+    "0043_prepare_rup_enable_order_changed_hardware_boundary": false,
+    "failure_boundary": "identical to 0042: after clean CSI packet/input-frame ingress and before CSID CAMIF/RUP/Epoch output progression into VFE1",
+    "simple_shadow_stage_order_hypothesis_closed": true,
+    "wrong_rtcdm_target_not_implied_by_this_run": true
+  },
+  "teardown": {
+    "sensor_suspended": true,
+    "camss_suspended": true,
+    "v4l2_call_s_stream_warning_seen": true,
+    "warning_occurs_after_epoch0_timeout": true,
+    "warning_is_not_accepted_as_failure_cause": true,
+    "next_static_cleanup": "fix prepared-state rollback bookkeeping before any future runtime candidate"
+  },
+  "runtime_authorized": false,
+  "next_gate": "No repeat runtime. Enumerate every exact Windows CSID1 common/path configure write and lifecycle prerequisite, compare against Linux prepare, and separately fix teardown bookkeeping. Only a proven static delta can reopen runtime authorization."
+}
