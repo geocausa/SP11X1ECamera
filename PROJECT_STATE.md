@@ -1,3 +1,9 @@
+## E003h ACTIVE — 0049 one-shot read-only diagnostic authorized, still unarmed — 2026-08-30
+
+A separate authorization review is bound to frozen package commit `9618a02653e80965e6c2a24ff3f1123869e3a041`. It permits exactly one boot of `sp11-camera-e003h-csidframe-0049-one-shot` and one root helper invocation, with the persistent RT-CDM observer, no same-boot retry, and immediate Golden return after any helper result. The purpose is limited to capturing CSID1 error-time `+0x38c/+0x390/+0x394` when IPP bit14 asserts. Production parity is not authorized.
+
+Review/auth/inspection SHA-256: `b5ad6e55...d1d5` / `54939039...eb19` / `cd733dd7...0b19`. At authorization time Golden remains the saved default, `next_entry` is empty, candidate modules are absent, and the package is still unarmed.
+
 ## E003h ACTIVE — 0049 package installed/inspected unarmed; authorization review next — 2026-08-30
 
 The distinct 0049 one-shot package is installed but not armed. Package inspection is PASS: Golden saved default remains FullIO v19c, `next_entry` is empty, camera modules are absent, front-only DT/IOMMU routing is unchanged, the exact 0049 CAMSS module is pinned, and authorization is absent. The package preserves the static contract of three read-only error-time CSID1 format-measure reads and zero MMIO writes.

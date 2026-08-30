@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0049-package-pass-unarmed-authorization-next
+status: e003h-0049-one-shot-authorized-unarmed-run-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1717,7 +1717,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003h-0049-csid1-line-count-error-frame-authorization
+next_experiment: E003h-0049-csid1-line-count-error-frame-one-shot-run
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -1824,5 +1824,19 @@ linux_0049_package:
   authorization_present: false
   runtime_authorized: false
 
+linux_0049_authorization:
+  accepted: true
+  package_commit: 9618a02653e80965e6c2a24ff3f1123869e3a041
+  authorization_review_sha256: b5ad6e553fd34a712500471d2bfcc4d9e4cf5b3bf07fa8d40e844100fe75d1d5
+  authorization_sha256: 54939039e4b884300d5832e46c2f2bb9915404907b4e0c622470a20cb2b8eb19
+  authorization_inspection_sha256: cd733dd7f7dc19233151a9d651ea7e9446dee72bfe7dab92cfc635872d390b19
+  runtime_authorized: true
+  production_parity_authorized: false
+  boot_count: 1
+  root_helper_invocation_count: 1
+  same_boot_retry: false
+  persistent_rtcdm_observer_required: true
+  candidate_boot_armed: false
+
 next_action: >-
-  Publish the unarmed 0049 package checkpoint. Then perform a separate authorization review bound to that exact package commit. If authorized, allow exactly one candidate boot and one root helper invocation with the persistent RT-CDM observer, archive evidence, and immediately return to Golden with no same-boot retry.
+  After the authorization commit is pushed and HEAD equals origin, arm exactly sp11-camera-e003h-csidframe-0049-one-shot and reboot. On candidate boot run authorization-aware preflight, load the frozen modules, configure the front PIX graph, start the persistent RT-CDM observer, invoke the helper exactly once, archive the error-time frame/HBI/VBI evidence, and immediately return to Golden. No retry.
