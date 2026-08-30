@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0045 startup-base candidate installed and inspected unarmed — 2026-08-30
+
+The static 0045 startup-base correction is now packaged as a distinct one-shot candidate with frozen package-local runtime inputs. `preflight.sh` passed on Golden against the public static checkpoint, Windows startup-wrapper oracle, Linux 0045 inspection, bounded provenance, exact front-only DT/IOMMU set and all asset hashes. The installer created GRUB ID `sp11-camera-e003h-ife-base-0045-one-shot` under `/boot/sp11-7.1.5-camera-e003h-ife-base-0045` using the byte-proven Golden kernel/initrd and unchanged front-only DTB. It did not call `grub-reboot`; Golden remains `saved_entry=sp11-audio-fullio-v19c` and `next_entry` is empty.
+
+Runtime inputs are frozen locally in the package: CAMSS `cfdd66c9...6923`, IMX681 `389c4a8c...7388`, DTB `019c062a...77f`, capsule `6aed028d...4a20`, helper `d13ab2d...6ac09`, media setup `666e458d...633f`, and persistent observer `8698afdc...d84`. Binary `.ko/.dtb/.bin` assets remain Git-ignored; `asset-manifest.json` SHA-256 `9a615d1252c087065f450966941d6bb6f93ae8bb7bc039321e7fb850d8f5c341` is the durable asset contract.
+
+Fail-closed package inspection SHA-256 is `9be675f49382dcb57e53f4bfa02ac2c08381ec7316c5d00c67e02b65fff2a53a`. It proves package assets/scripts, exact static 0045 evidence, installed boot hashes, front-only DT/IOMMU structure, authorization absence, no preflight hardware activation, runtime-preflight-before-module-load, exactly one helper invocation in the run wrapper, same-boot retry refusal, Golden saved default, empty `next_entry`, and no camera modules loaded.
+
+**The 0045 candidate is installed but unarmed and no runtime is authorized.** Next checkpoint the package publicly, then perform a fresh authorization review against that exact package commit before any `grub-reboot`.
+
 ## E003h ACTIVE — startup CDM base-wrapper root cause closed; Linux 0045 static PASS — 2026-08-30
 
 The CSID1 `BUF_DONE_IRQ_MASK +0x90` drift is now mechanically explained without another Windows or Linux hardware boot. Exact qccamisp disassembly proves `DAL_ife_process_iq_packet` queues one special **4-byte KMD BL before the ordinary IFE descriptor BLs**. The four captured startup main streams contain zero `CHANGE_BASE` commands, while same-machine Windows MMIO proves those streams execute relative to VFE1. Independently, the Windows steady RT-CDM oracle captured a four-byte VFE1 CHANGE_BASE BL whose SHA-256 is `18608790dc8901f9d1f17ad4d0ed33032309e5344be7abfab71a78c918f571a6`; that is exactly the SHA-256 of little-endian `0x0800f000`. Therefore the missing startup wrapper is byte-pinned as `CHANGE_BASE 0x0000f000` / dword `0x0800f000`.

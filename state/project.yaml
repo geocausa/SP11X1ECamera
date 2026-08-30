@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0045-startup-base-wrapper-static-pass-package-next
+status: e003h-0045-package-installed-unarmed-authorization-review-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1048,6 +1048,39 @@ e003h:
   linux_front_0045_late_csid_mask_repair: false
   linux_front_0045_patch_roundtrip_byte_identical: true
   linux_front_0045_runtime_authorized: false
+  linux_front_0045_package_dir: experiments/E003-front-imx681-cphy/e003h-ife-startup-base-wrapper-0045-candidate
+  linux_front_0045_package_asset_manifest_sha256: 9a615d1252c087065f450966941d6bb6f93ae8bb7bc039321e7fb850d8f5c341
+  linux_front_0045_package_readme_sha256: 70d85621bcaed55e967ac641213ad25ca1f376e604e639c83041762df2ebf59e
+  linux_front_0045_package_preflight_script_sha256: d3ebc9f3b3184cf451f9ffe5d42ffb4b406aacb83fc042a4774138da08d937db
+  linux_front_0045_package_install_script_sha256: 70010a1bacc9328cb2d2f59ef98a4de574b1efcb6464aee3d8fa4d549e58e3bc
+  linux_front_0045_package_runtime_preflight_script_sha256: 90f9ca4b378af28eaf3739e3a9872c06dcf9fd888a9e79543ce886b90a5a5248
+  linux_front_0045_package_load_script_sha256: 2f0f42e5c3e45e878b654d7b7b8b611c7c85e78d47f266f3c197baf06a4cb751
+  linux_front_0045_package_setup_script_sha256: 05db8b70d3db48fc34ebefc9f71d113b401de73e4deee1b7d55a4982954a6ca2
+  linux_front_0045_package_observer_script_sha256: e0523a3f6ba096ddaec7ecb572e836e060164c269724ceb0ac42e347e9e30f66
+  linux_front_0045_package_run_script_sha256: 7e1761c3ef9467112aefe49e7bc793b17369dd396b26bbecd551ffd274958ff1
+  linux_front_0045_package_inspector_sha256: d54d3a5612a4cec69467d61440bc2608fb5ff3f45ecaed7d372530fdcf0a1648
+  linux_front_0045_package_inspection_sha256: 9be675f49382dcb57e53f4bfa02ac2c08381ec7316c5d00c67e02b65fff2a53a
+  linux_front_0045_package_preflight_log_sha256: 3015ba0151394e2c6d4bd74ab42ec3e194afddad9c4defecb24fb6c1652516f0
+  linux_front_0045_package_install_log_sha256: 584d6208be08ceea22b1b377b7ccc9d80cc9110928a0f5eb2148749d75102ad5
+  linux_front_0045_package_inspection_log_sha256: acd4f3ef6031d5f4350a65cb306e297a991d04e4164445a9f4eea98bccfe9b59
+  linux_front_0045_package_camss_sha256: cfdd66c9d2c56533993f5f73831d77b3f5018c1d552183da634971378aa06923
+  linux_front_0045_package_sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+  linux_front_0045_package_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  linux_front_0045_package_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_0045_package_helper_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  linux_front_0045_package_media_oracle_sha256: 666e458daf9a3ed8938d81d10fd3d3a0e4f760252db920e09531bd7aa3ef633f
+  linux_front_0045_package_watcher_oracle_sha256: 8698afdc615ee1d544d0068441241625487cc8459ca97a758b62d3b863743d84
+  linux_front_0045_candidate_boot_id: sp11-camera-e003h-ife-base-0045-one-shot
+  linux_front_0045_candidate_boot_dir: /boot/sp11-7.1.5-camera-e003h-ife-base-0045
+  linux_front_0045_candidate_cmdline_marker: sp11_camera_e003h_ife_base_0045=1
+  linux_front_0045_candidate_installed: true
+  linux_front_0045_candidate_armed: false
+  linux_front_0045_package_authorization_present: false
+  linux_front_0045_package_runtime_authorized: false
+  linux_front_0045_package_golden_saved_default: true
+  linux_front_0045_package_next_entry_empty: true
+  linux_front_0045_package_camera_modules_loaded: false
+  linux_front_0045_package_frozen_runtime_assets: true
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_manifest_sha256: 5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
@@ -1357,13 +1390,12 @@ e003h:
   linux_front_0044_package_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-ife-startup-base-wrapper-0045-package
+next_experiment: E003h-ife-startup-base-wrapper-0045-authorization-review
 next_action: >-
-  The CSID1 +0x90 transition is mechanically explained by the missing Windows IFE startup
-  CHANGE_BASE wrapper. Static Linux 0045 is built and inspected cleanly. Build a distinct
-  unarmed 0045 one-shot package from Golden, pin CAMSS/DTB/sensor/capsule/helper identities,
-  verify saved_entry remains Golden with empty next_entry and no camera modules loaded, then
-  checkpoint/push the package. No runtime is authorized by the static 0045 checkpoint.
+  The 0045 startup-base candidate is installed, frozen and package-inspected unarmed. Commit and
+  push this exact package checkpoint. Then perform a fresh authorization review against that public
+  package commit. Do not set GRUB next_entry or boot the candidate until a separate one-boot,
+  one-root-helper, no-retry authorization is committed and pushed. Production parity remains blocked.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
