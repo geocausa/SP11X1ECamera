@@ -11,7 +11,7 @@ This file makes the existing `AGENTS.md` evidence hierarchy executable for the f
 - `LINUX_IMPLEMENTATION` — an independently written Linux representation or safety mechanism. It is explicitly **not** claimed to be a Windows literal and must state an equivalence basis.
 - `UNVERIFIED` — provenance is incomplete, inferred, upstream-only, or the exact Windows owner/formula remains unknown.
 
-The machine-readable ledger is `provenance/front-parity.json`; `tools/check-front-parity-provenance.py` verifies every cited evidence file by SHA-256 and fails closed on critical `UNVERIFIED` entries.
+The machine-readable ledger is `provenance/front-parity.json`; `tools/check-front-parity-provenance.py` verifies every cited evidence file by SHA-256 and fails closed on critical `UNVERIFIED` entries. Evidence hashing uses canonical Git-index bytes, not checkout bytes, so CRLF/autocrlf differences cannot create false drift across SP7 Windows and SP11 Linux.
 
 ## Current audit result
 
@@ -50,3 +50,7 @@ python3 tools/check-front-parity-provenance.py --target production_parity
 ```
 
 Only a green target may be considered for a new authorization. A green provenance gate is necessary, not sufficient: Golden/preflight/runtime authorization rules still apply.
+
+## Linux IOMMU implementation correction
+
+Static `0041` now fixes the Linux side without promoting it to a Windows fact. The old eight-entry CAMSS list omitted `0x18a0`; the candidate uses the public X1E five-entry set and rebuilds Denali with an `iommus`-only structural change. Inspector `671cdcee8cbe7e21ec9923c4c555f50f139b6d7b32abd5f24e489b71d0a61827` proves the normal Linux DMA/IOMMU path maps CAMSS coherent allocations into the single CAMSS device domain that owns all five fwspec stream entries. The remaining runtime blocker is therefore narrower: same-machine Windows must still prove that RT-CDM1 command fetches actually use the `0x18a0` route (or identify another requester).

@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-qcsmmu-cb16-18a0-proven-linux-iommu-list-stale-runtime-blocked
+status: e003h-linux-camss-iommu-five-entry-built-requester-sid-still-blocked-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -861,6 +861,19 @@ e003h:
   linux_front_0040_completion_source: masked FIFO0 reset-done/BL-done only
   linux_front_0040_other_fifo_semantics_invented: false
   linux_front_0040_runtime_authorized: false
+  linux_front_0041_patch_sha256: 41b7187b9b2cf35f471ba2627f689e80ff35e9019c84865d792dfa9dbad9bef0
+  linux_front_0041_inspector_sha256: 671cdcee8cbe7e21ec9923c4c555f50f139b6d7b32abd5f24e489b71d0a61827
+  linux_front_0041_inspection_json_sha256: bbff1a0b2d2127c1fc389db257c57a75ac39320135f42024a77e6bd44e2dc935
+  linux_front_0041_structural_diff_sha256: 8f6f893b30e94f44e146440f496b40e37f0e14893120d81cad24daa8abe17f06
+  linux_front_0041_summary_sha256: fcdec662eaa8725ae4584d25d3cb56f41581b7ae5f5389bf2342ca5c468438bb
+  linux_front_0041_build_log_sha256: cec90f34a16586be016f0ecf015d5c71613348d1af9c58e4a5002f761f895024
+  linux_front_0041_checkpatch_sha256: e34af2c1d699c0004297c1bec10adee662c606d38d5027c0020ce9089123bbcd
+  linux_front_0041_iommu_set: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
+  linux_front_0041_classification: LINUX_IMPLEMENTATION; parity_claim=false
+  linux_front_0041_dma_semantics: dma_alloc_coherent(camss->dev) -> iommu_dma_alloc when IOMMU-backed; all CAMSS fwspec entries attach to one translation domain/cbndx
+  linux_front_0041_old_dtb_sha256: bbe48a77c5bc23f1c155ddc87b9a5b2ed56497656f06cab1a2db8e6346f0304b
+  linux_front_0041_new_dtb_sha256: 333e3c81c8a490f1b8b444e9a8d8005539799c438f2d03ebc6acfc366074b14e
+  linux_front_0041_runtime_authorized: false
   windows_qcsmmu_inf_sha256: c1afd89419c12ca093a7d3b1f80ef980723d78d3549ceb158b9ee1a1ca051846
   windows_qcsmmu_inf_bytes: 53052
   windows_qcsmmu_driver_version: 1.0.4160.6000
@@ -880,10 +893,10 @@ e003h:
   front_parity_provenance_production_blockers: [rtcdm.fe_fifo_ultimate_origin, rtcdm.command_dma_domain_visibility, iq.live_provider_algorithms]
   front_parity_provenance_checker: tools/check-front-parity-provenance.py
   front_parity_provenance_enforced_in_pix_preflight: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; same-machine qcsmmu proves 0x18a0 in S1_IFE_HLOS but exact RT-CDM1 command-fetch requester->SID is still unproven; current Linux CAMSS IOMMU list omits 0x18a0; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
-next_experiment: E003h-rtcdm-dma-domain-and-linux-iommu-correction-static
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; Linux CAMSS IOMMU implementation now includes 0x18a0 and coherent allocations are proven to use the CAMSS IOMMU domain, but exact same-machine RT-CDM1 command-fetch requester->SID remains unproven; named live IQ feedback provider algorithms remain explicit external inputs rather than reproduced Linux algorithms
+next_experiment: E003h-rtcdm-requester-sid-static-oracle
 next_action: >-
-  Do not repeat PIX runtime. Same-machine qcsmmu now proves 0x18a0 belongs to VFE/IFE HLOS CB16 and the integrated Linux CAMSS IOMMU list is stale/missing it. Build a Linux-only corrected IOMMU candidate using the public X1E five-entry set, but keep parity_claim=false. In parallel continue the same-machine Windows oracle for the exact RT-CDM1 command-fetch requester/SID. Runtime stays blocked until both implementation and requester provenance are clean.
+  Do not repeat PIX runtime. 0041 fixes the Linux CAMSS IOMMU implementation and proves dma_alloc_coherent(camss->dev) maps into the CAMSS IOMMU domain containing the declared five streams. The remaining bounded runtime blocker is exact same-machine RT-CDM1 command-fetch requester->SID identity. Continue Windows qcsmmu/qcISP oracle work until that relation is mechanical; runtime stays unauthorized.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

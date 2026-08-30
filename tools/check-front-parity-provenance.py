@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
-import argparse, hashlib, json, sys
+import argparse, hashlib, json, subprocess, sys
 from pathlib import Path
 
 ALLOWED={'WINDOWS_OBSERVED','WINDOWS_REVERSED','LINUX_IMPLEMENTATION','UNVERIFIED'}
 
-def sha256(path: Path):
-    h=hashlib.sha256()
-    with path.open('rb') as f:
-        for b in iter(lambda:f.read(1024*1024),b''): h.update(b)
-    return h.hexdigest()
+def sha256_bytes(data: bytes):
+    return hashlib.sha256(data).hexdigest()
+
+
+def evidence_bytes(root: Path, rel: str):
+    """Return Git-index bytes so hashes are stable across CRLF/autocrlf checkouts."""
+    try:
+        return subprocess.check_output(
+            ['git', '-C', str(root), 'show', ':' + rel], stderr=subprocess.DEVNULL)
+    except subprocess.CalledProcessError:
+        path = root / rel
+        if not path.is_file():
+            raise FileNotFoundError(rel)
+        return path.read_bytes()
 
 def main():
     ap=argparse.ArgumentParser(description='Fail-closed provenance gate for SP11 front Windows-parity work')
@@ -36,7 +45,8 @@ def main():
             if not rel or not exp: errors.append(f'{fid}: incomplete evidence record'); continue
             ep=root/rel
             if not ep.is_file(): errors.append(f'{fid}: missing evidence {rel}'); continue
-            got=sha256(ep)
+            try: got=sha256_bytes(evidence_bytes(root, rel))
+            except Exception as exc: errors.append(f'{fid}: cannot read canonical evidence {rel}: {exc}'); continue
             if got.lower()!=exp.lower(): errors.append(f'{fid}: evidence drift {rel}: {got} != {exp}')
         crit='runtime_critical' if a.target=='bounded_first_pix' else 'production_critical'
         if f.get(crit) and c=='UNVERIFIED': blockers.append(fid)

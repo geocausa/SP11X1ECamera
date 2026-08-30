@@ -1,0 +1,47 @@
+{
+  "accepted": true,
+  "classification": "LINUX_IMPLEMENTATION",
+  "dma_semantics": {
+    "address_result": "DMA API returns an IOVA from the device DMA/IOMMU domain when IOMMU-backed",
+    "coherent_allocation_api": "dma_alloc_coherent -> dma_alloc_attrs",
+    "iommu_branch": "use_dma_iommu(dev) -> iommu_dma_alloc(dev, ...)"
+  },
+  "equivalence_basis": "Public X1E CAMSS v13 uses this exact five-entry Linux implementation set; same-machine Windows qcsmmu independently proves 0x18a0/mask0 is a VFE/IFE HLOS route. Exact RT-CDM1 requester->SID remains separately unverified.",
+  "iommu_specifiers": [
+    {
+      "mask": "0x0060",
+      "sid": "0x0800"
+    },
+    {
+      "mask": "0x0060",
+      "sid": "0x0820"
+    },
+    {
+      "mask": "0x0060",
+      "sid": "0x0840"
+    },
+    {
+      "mask": "0x0060",
+      "sid": "0x0860"
+    },
+    {
+      "mask": "0x0000",
+      "sid": "0x18a0"
+    }
+  ],
+  "parity_claim": false,
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-linux-camss-iommu-five-entry-v1",
+  "smmu_semantics": {
+    "attach": "all fwspec entries are installed as S2CR_TYPE_TRANS to smmu_domain->cfg.cbndx",
+    "domain_scope": "one Linux IOMMU domain/context bank for the CAMSS platform device fwspec set",
+    "of_xlate": "each DT SID/mask is encoded into the device iommu_fwspec"
+  },
+  "source_sha256": {
+    "arm_smmu_c": "580bcc9326837da0607e45843f4906694c28a0a5b68ca9297bc516747704d55f",
+    "dma_mapping_c": "773ba3f94e8aa570784715ca90ab0818bbae3274347c3003588f0f6f29cd2037",
+    "hamoa_dtsi": "2f7688c37cf9bd13a08123d4404aac66fb5ed5621274d479f9a8a6945ca6e241",
+    "structural_diff": "8f6f893b30e94f44e146440f496b40e37f0e14893120d81cad24daa8abe17f06",
+    "summary": "fcdec662eaa8725ae4584d25d3cb56f41581b7ae5f5389bf2342ca5c468438bb"
+  }
+}

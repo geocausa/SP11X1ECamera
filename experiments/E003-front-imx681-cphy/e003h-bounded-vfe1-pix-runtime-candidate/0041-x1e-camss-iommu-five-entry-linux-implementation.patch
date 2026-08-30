@@ -1,0 +1,18 @@
+--- a/arch/arm64/boot/dts/qcom/hamoa.dtsi
++++ b/arch/arm64/boot/dts/qcom/hamoa.dtsi
+@@ -9878,10 +9878,11 @@
+ 				<&mmss_noc MASTER_CAMNOC_ICP QCOM_ICC_TAG_ALWAYS
+ 				 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
+ 		interconnect-names = "ahb", "hf_mnoc", "sf_mnoc", "sf_icp_mnoc";
+-		iommus = <&apps_smmu 0x800 0x60>, <&apps_smmu 0x860 0x60>,
+-			 <&apps_smmu 0x1800 0x60>, <&apps_smmu 0x1860 0x60>,
+-			 <&apps_smmu 0x18e0 0x00>, <&apps_smmu 0x1980 0x20>,
+-			 <&apps_smmu 0x1900 0x00>, <&apps_smmu 0x19a0 0x20>;
++		iommus = <&apps_smmu 0x800 0x60>,
++			 <&apps_smmu 0x820 0x60>,
++			 <&apps_smmu 0x840 0x60>,
++			 <&apps_smmu 0x860 0x60>,
++			 <&apps_smmu 0x18a0 0x00>;
+ 		power-domains = <&camcc CAM_CC_IFE_0_GDSC>, <&camcc CAM_CC_IFE_1_GDSC>,
+ 				<&camcc CAM_CC_TITAN_TOP_GDSC>;
+ 		power-domain-names = "ife0", "ife1", "top";
