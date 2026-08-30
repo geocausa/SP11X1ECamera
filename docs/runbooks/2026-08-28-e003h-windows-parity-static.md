@@ -672,3 +672,9 @@ The new software-only CSID ISR history is decisive: OR=`0x00e15ff8`, last=`0x000
 The accepted same-machine Windows live IPP status is `0x00e11ff8`; Linux's accumulated history differs by exactly `0x00004000`, bit14 `ERROR_LINE_COUNT` in the pinned CSID680 layout. This transient mismatch was also hidden by the final snapshot. VFE1 remains `TOP_STATUS1=0x00030003`, `BUS_STATUS1=0`, with exact Windows masks/FULL state and no raw BUS Epoch0 bit21. The current boundary is therefore after CSID1 CAMIF/RUP/Epoch progression and before VFE1 raw BUS Epoch0. Runtime is blocked; statically close bit14 line-count provenance/Windows handling and the CSID1-to-VFE1 handoff before another hardware run.
 
 Fail-closed extractor SHA-256 `54026e02919b9fb7ab8bd4455fca2f1e1b0660952baafd6114abd4d3b029c58e`; analysis SHA-256 `70d0dad027d266026bde7b2c81cc8d9e4d73a477f12fcb3e831f9d10a9a98866`.
+
+## 2026-08-30 — CSID1 bit14 line-count error classification closed
+
+Exact qccamisp reader/handler linkage proves CSID1 IPP `+0xac` is stored at IRQ payload `+0x10`, reloaded as the IPP field, and tested against Windows error mask `0x3c1c6004`; bit14 is included. Same-machine Windows live IPP `0x00e11ff8` lacks bit14. Windows expected/actual format-measure registers `+0x388/+0x38c` are both stable `0x08700f00` (2160×3840). Exact Qualcomm CSID680 commit `0f16924f...` identifies bit14 as fatal `ERROR_LINE_COUNT` / `CAM_ISP_HW_ERROR_CSID_FRAME_SIZE` and reads actual/expected frame-size plus HBI/VBI on the error path.
+
+Oracle `2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e` is fail-closed. The bit14 mismatch is real, but causality for missing VFE1 Epoch0 is not yet proven. A read-only 0049 capture of `+0x38c/+0x390/+0x394` at the instant bit14 is observed is justified; no hardware programming delta is authorized.

@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0048-consumed-csid-camif-rup-epoch-proven-line-count-error-vfe-handoff-next
+status: e003h-bit14-line-count-error-static-closed-0049-readonly-error-frame-telemetry-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1717,7 +1717,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003h-windows-csid1-line-count-and-vfe-handoff-static
+next_experiment: E003h-0049-csid1-line-count-error-frame-readonly-static
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -1760,5 +1760,31 @@ linux_0048_runtime:
   failure_boundary: after CSID1 CAMIF/RUP/Epoch progression and before VFE1 raw BUS Epoch0
   runtime_authorized: false
 
+windows_csid1_line_count_error_closure:
+  accepted: true
+  date: 2026-08-30
+  qccamisp_sha256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
+  qccamisp_ipp_mmio_read_rva: 0x1b65c
+  qccamisp_ipp_payload_offset: 0x10
+  qccamisp_error_handler_rva: 0x1b840
+  qccamisp_ipp_error_mask: 0x3c1c6004
+  qccamisp_ipp_error_mask_bit14: true
+  windows_live_ipp_status: 0x00e11ff8
+  windows_live_bit14: false
+  windows_format_expected_0x388: 0x08700f00
+  windows_format_actual_0x38c: 0x08700f00
+  windows_format_expected_actual_match: true
+  windows_format_decoded_height: 2160
+  windows_format_decoded_width: 3840
+  qualcomm_csid680_commit: 0f16924ff6a7f9bb56a7e958016da2ed8a174f2f
+  qualcomm_bit14_name: ERROR_LINE_COUNT
+  qualcomm_bit14_error_type: CAM_ISP_HW_ERROR_CSID_FRAME_SIZE
+  qualcomm_ipp_fatal_error_mask: 0x00186004
+  linux_0048_history_extra_bit14: true
+  causal_link_to_vfe_epoch0_proven: false
+  extractor_sha256: b411fd1affea7e191be3954761367222934ba1291e31186841c8e3068e113a09
+  oracle_sha256: 2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e
+  runtime_authorized: false
+
 next_action: >-
-  Do not repeat 0048. Statically close the transient CSID1 bit14 ERROR_LINE_COUNT provenance and same-machine Windows handling, then close the exact CSID1-to-VFE1 CAMIF handoff/start-state. Prefer existing KD/Ghidra evidence; only consider another Linux run after a new exact parity delta or narrowly justified phase telemetry is frozen and inspected.
+  Build and statically inspect 0049 read-only error-frame telemetry: when front-mode0 CSID1 IPP bit14 asserts, latch format-measure actual +0x38c and HBI/VBI +0x390/+0x394 before the existing clear. Do not alter masks, clears, CSID/VFE programming, RT-CDM, CSIPHY or sensor behavior. Package and authorize separately only after the static checkpoint passes.

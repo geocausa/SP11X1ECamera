@@ -1,3 +1,11 @@
+## E003h ACTIVE — Windows/Qualcomm bit14 line-count error path closed; 0049 read-only error-frame telemetry justified — 2026-08-30
+
+Cross-evidence now closes the newly exposed 0048 bit14 classification. Exact installed `qccamisp8380.sys` reads CSID1 IPP status from MMIO `+0xac` at RVA `0x1b65c`, stores it into IRQ payload `+0x10`, reloads that field as `w24` at RVA `0x1b8b0`, then tests it against exact IPP error mask literal `0x3c1c6004` before the dedicated `CSID Received error IRQs on IPP Path` log. That mask includes bit14. The accepted same-SP11 Windows live IPP status `0x00e11ff8` does not set bit14.
+
+The same Windows live capture contains CSID1 format-measure expected `+0x388=0x08700f00` and actual `+0x38c=0x08700f00`, both stable, decoding to 2160×3840. Exact Qualcomm CSID680 commit `0f16924f...` independently defines bit14 as `ERROR_LINE_COUNT`, assigns `CAM_ISP_HW_ERROR_CSID_FRAME_SIZE`, places it in the IPP fatal mask `0x00186004`, and its error handler reads actual frame size from `+0x38c`, expected from `+0x388`, plus HBI/VBI from `+0x390/+0x394`.
+
+Fail-closed oracle SHA-256 `2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e`; extractor SHA-256 `b411fd1affea7e191be3954761367222934ba1291e31186841c8e3068e113a09`. It proves Linux 0048's transient bit14 is a real parity mismatch but does **not** prove bit14 causes the missing VFE1 Epoch0. The next justified Linux delta is read-only 0049 telemetry: latch `+0x38c/+0x390/+0x394` inside the existing front-mode0 CSID ISR when bit14 is observed, before the existing IPP clear. No programming change or runtime is authorized by this oracle.
+
 ## E003h ACTIVE — 0048 consumed; CSID CAMIF/RUP/Epoch proven, transient line-count error exposed — 2026-08-30
 
 The authorized 0048 observer-only one-shot executed exactly once and returned to FullIO v19c Golden. The sole helper returned `ETIMEDOUT` waiting for VFE1 raw BUS Epoch0, no QC10C userspace buffer was returned, RT-CDM reached 17 FIFO BL completions with no fault, and there was no same-boot retry. Golden recovery is verified with `saved_entry=sp11-audio-fullio-v19c`, empty `next_entry`, HEAD/origin synchronized at the authorization commit, and all candidate camera modules absent.

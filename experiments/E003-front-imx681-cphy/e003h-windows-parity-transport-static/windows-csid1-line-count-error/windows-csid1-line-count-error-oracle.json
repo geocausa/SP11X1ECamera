@@ -1,0 +1,122 @@
+{
+  "accepted": true,
+  "classification": {
+    "causal_link_to_missing_vfe_epoch0_proven": false,
+    "linux_transient_bit14_is_real_parity_mismatch": true,
+    "same_machine_windows_expected_actual_frame_size_match": true,
+    "same_machine_windows_live_bit14_absent": true,
+    "windows_treats_ipp_bit14_as_error": true
+  },
+  "date": "2026-08-30",
+  "linux_0048": {
+    "camif_rup_epoch_seen": true,
+    "history_bit14_set": true,
+    "history_extra_vs_windows_live": "0x00004000",
+    "ipp_history_or": "0x00e15ff8",
+    "vfe1_raw_epoch0_seen": false
+  },
+  "next_gate": "Read-only Linux CSID1 format-measure result telemetry (+0x38c/+0x390/+0x394) is justified to determine the actual frame-size/HBI/VBI state when bit14 asserts; do not alter CSID/VFE programming from this oracle alone.",
+  "qualcomm_csid680_reference": {
+    "bit14_error_type": "CAM_ISP_HW_ERROR_CSID_FRAME_SIZE",
+    "bit14_fatal_for_ipp": true,
+    "bit14_name": "ERROR_LINE_COUNT",
+    "error_handler_reads_actual_and_expected": true,
+    "format_measure_actual_offset": "0x38c",
+    "format_measure_encoding": "height bits31:16, width bits15:0",
+    "format_measure_expected_offset": "0x388",
+    "ipp_fatal_error_mask": "0x00186004"
+  },
+  "runtime_authorized": false,
+  "same_machine_windows_live": {
+    "actual_frame_size_register": "0x08700f00",
+    "decoded_expected_actual": {
+      "height": 2160,
+      "width": 3840
+    },
+    "expected_equals_actual": true,
+    "expected_frame_size_register": "0x08700f00",
+    "ipp_bit14_set": false,
+    "ipp_status": "0x00e11ff8",
+    "registers": {
+      "+0x388": {
+        "live1": "0x08700f00",
+        "live2": "0x08700f00",
+        "stable": true
+      },
+      "+0x38c": {
+        "live1": "0x08700f00",
+        "live2": "0x08700f00",
+        "stable": true
+      },
+      "+0x390": {
+        "live1": "0x03b203ad",
+        "live2": "0x03b203ad",
+        "stable": true
+      },
+      "+0x394": {
+        "live1": "0x00ffffff",
+        "live2": "0x00b5f82c",
+        "stable": false
+      },
+      "+0xac": {
+        "live1": "0x00e11ff8",
+        "live2": "0x00e11ff8",
+        "stable": true
+      }
+    }
+  },
+  "schema": "sp11-e003h-windows-csid1-line-count-error-oracle-v1",
+  "source_evidence": {
+    "linux_0048_analysis_sha256": "70d0dad027d266026bde7b2c81cc8d9e4d73a477f12fcb3e831f9d10a9a98866",
+    "qccamisp": {
+      "bytes": 376560,
+      "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+    },
+    "qualcomm_public": {
+      "commit": "0f16924ff6a7f9bb56a7e958016da2ed8a174f2f",
+      "file_sha256": {
+        "cam_ife_csid680.h": "a0eb6dca54ea3dfa11a72b9e649b350390d26e613b8d27d7640f8544c0c24882",
+        "cam_ife_csid_hw_ver2.c": "a1079bfb5166d9936227099781a195471069a91f0f3b5f3e1b993325909d1266",
+        "cam_ife_csid_hw_ver2.h": "d0dbaaa1ed7b98a4e160434ac40cf3d0293c27b0507ca19cb1fbb70db5729ad7"
+      }
+    },
+    "windows_live_csv_sha256": "95e26dd7d116fdc48b7281a153222a7b4edd11294703b555d81e25c2251b1238"
+  },
+  "windows_qccamisp": {
+    "bit14_in_error_mask": true,
+    "csid_irq_reader_rva": "0x1b630",
+    "error_handler_rva": "0x1b840",
+    "instruction_anchors": {
+      "0x1b65c": "ldr w8, [x8, #0xac]",
+      "0x1b660": "and w8, w8, #0x3fffffff",
+      "0x1b664": "str w8, [x20, #0x10]",
+      "0x1b8b0": "ldp w25, w24, [x1, #0xc]",
+      "0x1b9f8": "ldr w27, #0x14001bdd8",
+      "0x1b9fc": "tst w24, w27",
+      "0x1ba00": "b.eq #0x14001ba1c",
+      "0x1ba0c": "mov w3, w24",
+      "0x1ba10": "add x1, x8, #0x148",
+      "0x1ba18": "bl #0x140029ad8"
+    },
+    "ipp_error_log_string_rva": "0x36148",
+    "ipp_error_mask": "0x3c1c6004",
+    "ipp_error_mask_bits": [
+      2,
+      13,
+      14,
+      18,
+      19,
+      20,
+      26,
+      27,
+      28,
+      29
+    ],
+    "ipp_error_mask_literal_rva": "0x1bdd8",
+    "ipp_mmio_offset": "0xac",
+    "ipp_mmio_read_rva": "0x1b65c",
+    "ipp_payload_register": "w24",
+    "payload_load_rva": "0x1b8b0",
+    "payload_store_offset": "0x10"
+  }
+}
