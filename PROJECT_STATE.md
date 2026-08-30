@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0044 replacement one-shot authorized; v2 harness; still unarmed — 2026-08-30
+
+Fresh replacement review SHA-256 `0bed79f1a6fd4a8edbfcfc906206f902c6740be81712623341c1b52b6e78f2ac` passes against corrected package-v2 commit `2e87aa99bb0c2fa15d8b06138f0edbaeba1458d8`. It proves boot-1 consumed zero camera hardware work, package inspection v2 `99396b73...2429` passes, runtime preflight `6f778ebc...e9b4` and corrected load script `1f7be8b1...072e` are exact, current boot is Golden, HEAD equals origin, bounded provenance is green, `next_entry` is empty, no active authorization existed at review time and no actual 0044 RUN log exists.
+
+Replacement `AUTHORIZATION.json` SHA-256 `6fc9802e64d1ba16b5b30c961e1a0ceceb9e270131d8cb28b609e53e962f4f53` permits exactly one new boot of `sp11-camera-e003h-csid1-0044-one-shot` and one root helper invocation. `load-candidate.sh` must execute the authorization-aware runtime preflight before any module load; persistent RT-CDM observer READY/idle is mandatory before the helper; no same-boot retry is allowed; any helper result must be archived followed immediately by Golden reboot. Production parity remains unauthorized.
+
+The replacement authorization checkpoint is **still unarmed**. Golden remains saved/default and `next_entry` must stay empty until this checkpoint is committed and pushed.
+
 ## E003h ACTIVE — 0044 boot-1 consumed pre-exec; corrected v2 runtime harness passes — 2026-08-30
 
 The first authorized 0044 candidate boot was consumed **before camera execution**. Candidate identity was correct, but the host invoked package-only `preflight.sh` after authorization; that script correctly failed with `authorization exists at package-only gate`. No qcom_camss/imx681/ov13858 module was loaded, the one-shot helper was never entered, no sysfs RUN existed, and no same-boot retry occurred. Golden return is verified. The original authorization remains byte-preserved as `AUTHORIZATION-BOOT1-CONSUMED.json` SHA-256 `94d4c1b8eb34e42990ed02ea5c228d37a2521cc44417bba64c97cc70ae9d6162`; boot-1 consumption record SHA-256 is `b462e7688d81dd710fd62ae1244419df9d542b7841de5afefadfa5a2ff9f07f9`.
