@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0044 one-shot package installed, inspected, Golden-safe and unarmed — 2026-08-30
+
+The published static 0044 base is commit `b0f4cded52b242ceeb8743bc51db19819b500237`. A distinct package now exists at `experiments/E003-front-imx681-cphy/e003h-csid1-common-lifecycle-0044-candidate` with boot ID `sp11-camera-e003h-csid1-0044-one-shot` and `/boot/sp11-7.1.5-camera-e003h-csid1-0044`. It reuses byte-exact Golden kernel/initrd, the accepted front-only DTB, IMX681 module, PIX capsule/helper and observer; qcom-camss is the 0044 module SHA-256 `98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc`.
+
+Golden-host preflight and package inspection both pass. Package inspection JSON SHA-256 is `be15d0f6558efbe7c00b3257ceed60cb7af9e4895a2957368a55ba159e649128`; inspector SHA-256 `7ca9badf8b249244de74bf0855d38b4c37ae3d0a816de9dc5f7ffb81ad1d1e86`. The stable bounded provenance manifest SHA-256 is `5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1`; bounded-first-PIX passes and production remains blocked by only `rtcdm.fe_fifo_ultimate_origin` and `iq.live_provider_algorithms`.
+
+Installed boot hashes are Golden kernel `bca0a336...428a`, Golden initrd `ac3ba64bd...f66d`, front-only DTB `019c062a...f77f`. `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, `AUTHORIZATION.json` is absent, and qcom_camss/imx681/ov13858 are unloaded. Package installation did not change the current Golden boot.
+
+**No Linux runtime is authorized by this package checkpoint.** The next gate is a separate authorization review against this committed/pushed package state. Any authorization must be exactly one candidate boot and one root helper invocation, with the persistent RT-CDM observer ready, no same-boot retry, and immediate Golden return after the result.
+
 ## E003h ACTIVE — 0044 closes Windows CSID1 common lifecycle statically; package inspection next — 2026-08-30
 
 Exact same-machine `qccamisp8380.sys` control flow now closes the CSID1 common lifecycle that 0042/0043 did not model. Normal front DEVICE_CONFIG is `wrapper route 0x101 -> TOP_IRQ_MASK=1 -> RESET_CFG=0x11 -> software-only RESET_CMD=2 -> reset completion -> full Gen2 builder`; the reset callback has no pre-reset `IRQ_CMD` write. Windows writes `IRQ_CMD=1` only in the ISR acknowledgement path, and stream stop invokes the same reset callback with hardware-only `RESET_CMD=1`. Accepted common-lifecycle oracle SHA-256 is `43a265f0cd63fa9e01406e8b5ff0b62c756dc2bc2f8c3a24df74a4f832b76996`.
