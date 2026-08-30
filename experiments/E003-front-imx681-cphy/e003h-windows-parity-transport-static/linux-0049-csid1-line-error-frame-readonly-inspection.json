@@ -1,0 +1,44 @@
+{
+  "accepted": true,
+  "base_0048_source_sha256": {
+    "camss-csid-680.c": "7ce2ec82c7bdf40a72385937c5a4a4412781b7a2e7fb321e4cbf35fd6b486950",
+    "camss-csid.h": "f2315c29cdde351f2f82b3f2db27934b76e0e8ee04f37c793f21120043fc96f5"
+  },
+  "capture_condition": "front-mode0 existing ISR and IPP bit14 ERROR_LINE_COUNT",
+  "capture_order": [
+    "existing read IPP status",
+    "software OR/last/count",
+    "if bit14: read actual frame +0x38c",
+    "read HBI +0x390",
+    "read VBI +0x394",
+    "existing IPP clear"
+  ],
+  "csiphy_changed": false,
+  "hardware_programming_changed": false,
+  "module_sha256": "610c0def762e6449c342452ffc436b195cd1330a41055076d25cca95f077a1f5",
+  "module_vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+  "new_mmio_read_offsets": [
+    "0x38c",
+    "0x390",
+    "0x394"
+  ],
+  "new_mmio_reads": 3,
+  "new_mmio_writes": 0,
+  "oracle_sha256": "2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e",
+  "patch_sha256": "58f9080b7ae1e9addbfb035930374d073a1694c0a666132dcd1604e13b14f4e3",
+  "rtcdm_changed": false,
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-linux-0049-csid1-line-error-frame-readonly-inspection-v1",
+  "sensor_changed": false,
+  "source_sha256": {
+    "camss-csid-680.c": "e207f5d8f522829c4bd45058ede1387fc064b16f7f1d2b649b62465601e5c261",
+    "camss-csid.h": "3088e0013292d6765b8d76cdde8407bd298b4941a67a67c9d28a7a3be2f13f47",
+    "camss-vfe-680.c": "0dc6269d8b7c0e57e1442dfea374f0e90bdf14b8e8ef58117a505cda6d643036",
+    "camss.c": "5a920032e138eee1154c4b9ae1846a445e02fbac3e7626a4245797502e73b793"
+  },
+  "touched_files": [
+    "drivers/media/platform/qcom/camss/camss-csid-680.c",
+    "drivers/media/platform/qcom/camss/camss-csid.h"
+  ],
+  "vfe_changed": false
+}

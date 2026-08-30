@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-bit14-line-count-error-static-closed-0049-readonly-error-frame-telemetry-next
+status: e003h-0049-readonly-error-frame-static-pass-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1717,7 +1717,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003h-0049-csid1-line-count-error-frame-readonly-static
+next_experiment: E003h-0049-csid1-line-count-error-frame-readonly-package
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -1786,5 +1786,23 @@ windows_csid1_line_count_error_closure:
   oracle_sha256: 2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e
   runtime_authorized: false
 
+linux_0049_static:
+  accepted: true
+  date: 2026-08-30
+  patch_sha256: 58f9080b7ae1e9addbfb035930374d073a1694c0a666132dcd1604e13b14f4e3
+  oracle_sha256: 2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e
+  inspector_sha256: 980fa12059c9f535a683145614e1e42cf13534cd5f6edff70a8f281622e14f66
+  inspection_sha256: e5d53e72e90406023616c2658f413ca80d6c49e9ff1f4622929012299eb17afe
+  module_sha256: 610c0def762e6449c342452ffc436b195cd1330a41055076d25cca95f077a1f5
+  source_csid680_sha256: e207f5d8f522829c4bd45058ede1387fc064b16f7f1d2b649b62465601e5c261
+  source_csid_h_sha256: 3088e0013292d6765b8d76cdde8407bd298b4941a67a67c9d28a7a3be2f13f47
+  new_mmio_reads: 3
+  new_mmio_read_offsets: [0x38c, 0x390, 0x394]
+  new_mmio_writes: 0
+  hardware_programming_changed: false
+  checkpatch_errors: 0
+  checkpatch_warnings: 0
+  runtime_authorized: false
+
 next_action: >-
-  Build and statically inspect 0049 read-only error-frame telemetry: when front-mode0 CSID1 IPP bit14 asserts, latch format-measure actual +0x38c and HBI/VBI +0x390/+0x394 before the existing clear. Do not alter masks, clears, CSID/VFE programming, RT-CDM, CSIPHY or sensor behavior. Package and authorize separately only after the static checkpoint passes.
+  Create and inspect a distinct unarmed 0049 one-shot package using the exact 0049 CAMSS module and unchanged 0048 sensor/DTB/capsule/helper/observer assets. Publish the package checkpoint before any separate authorization review; do not arm or activate camera hardware during packaging.

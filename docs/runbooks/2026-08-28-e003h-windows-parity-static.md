@@ -678,3 +678,7 @@ Fail-closed extractor SHA-256 `54026e02919b9fb7ab8bd4455fca2f1e1b0660952baafd611
 Exact qccamisp reader/handler linkage proves CSID1 IPP `+0xac` is stored at IRQ payload `+0x10`, reloaded as the IPP field, and tested against Windows error mask `0x3c1c6004`; bit14 is included. Same-machine Windows live IPP `0x00e11ff8` lacks bit14. Windows expected/actual format-measure registers `+0x388/+0x38c` are both stable `0x08700f00` (2160×3840). Exact Qualcomm CSID680 commit `0f16924f...` identifies bit14 as fatal `ERROR_LINE_COUNT` / `CAM_ISP_HW_ERROR_CSID_FRAME_SIZE` and reads actual/expected frame-size plus HBI/VBI on the error path.
 
 Oracle `2081159e5a28a02fa79a933c83fe0838a6efe778f1ccdd85a804c6f3d8ec9b3e` is fail-closed. The bit14 mismatch is real, but causality for missing VFE1 Epoch0 is not yet proven. A read-only 0049 capture of `+0x38c/+0x390/+0x394` at the instant bit14 is observed is justified; no hardware programming delta is authorized.
+
+## 2026-08-30 — 0049 read-only line-error frame telemetry static PASS
+
+0049 adds only three conditional MMIO reads to the existing CSID ISR error path: `+0x38c/+0x390/+0x394`, retained in software when IPP bit14 is seen before the normal clear. Zero writes and no transport programming change. Patch `58f9080b7ae1e9addbfb035930374d073a1694c0a666132dcd1604e13b14f4e3`; module `610c0def762e6449c342452ffc436b195cd1330a41055076d25cca95f077a1f5`; inspection `e5d53e72e90406023616c2658f413ca80d6c49e9ff1f4622929012299eb17afe`; checkpatch 0/0. Package and authorize separately.

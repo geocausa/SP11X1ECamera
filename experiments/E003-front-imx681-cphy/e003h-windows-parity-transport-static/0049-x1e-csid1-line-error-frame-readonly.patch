@@ -1,0 +1,68 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+index 1d5b6be..e0173df 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -160,6 +160,10 @@
+ #define CSID_IPP_IRQ_SUBSAMPLE_PERIOD				0x380
+ #define CSID_IPP_FORMAT_MEASURE_CFG0				0x384
+ #define CSID_IPP_FORMAT_MEASURE_CFG1				0x388
++#define CSID_IPP_FORMAT_MEASURE0				0x38c
++#define CSID_IPP_FORMAT_MEASURE1				0x390
++#define CSID_IPP_FORMAT_MEASURE2				0x394
++#define		CSID_IPP_ERROR_LINE_COUNT			BIT(14)
+ /* Read-only timeout telemetry offsets; never replay these values. */
+ #define CSID_IPP_OBSERVED_STATUS0				0x340
+ #define CSID_IPP_OBSERVED_READBACK0				0x398
+@@ -528,9 +532,10 @@ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason
+ 		 readl_relaxed(csid->base + CSID_IPP_SP11_PARITY_ZERO1),
+ 		 readl_relaxed(csid->base + CSID_IPP_EPOCH_IRQ_CFG));
+ 	dev_info(csid->camss->dev,
+-		 "E003h CSID1 %s ipp-history=%08x/%08x/%u\n",
++		 "E003h CSID1 %s ipp-history=%08x/%08x/%u line-error=%08x/%08x/%08x\n",
+ 		 why, csid->x1e_ipp_irq_seen_or, csid->x1e_ipp_irq_last,
+-		 csid->x1e_ipp_irq_count);
++		 csid->x1e_ipp_irq_count, csid->x1e_ipp_line_error_frame,
++		 csid->x1e_ipp_line_error_hbi, csid->x1e_ipp_line_error_vbi);
+ 	dev_info(csid->camss->dev,
+ 		 "E003h CSID1 %s crop=%08x/%08x drop=%08x/%08x/%08x/%08x/%08x/%08x measure=%08x/%08x obs=%08x/%08x/%08x\n",
+ 		 why, readl_relaxed(csid->base + CSID_IPP_HCROP),
+@@ -587,6 +592,9 @@ static int csid_reset(struct csid_device *csid)
+ 		csid->x1e_ipp_irq_seen_or = 0;
+ 		csid->x1e_ipp_irq_last = 0;
+ 		csid->x1e_ipp_irq_count = 0;
++		csid->x1e_ipp_line_error_frame = 0;
++		csid->x1e_ipp_line_error_hbi = 0;
++		csid->x1e_ipp_line_error_vbi = 0;
+ 
+ 		return __csid_sp11_front_ipp_full_config(csid);
+ 	}
+@@ -687,6 +695,14 @@ static irqreturn_t csid_isr(int irq, void *dev)
+ 			csid->x1e_ipp_irq_seen_or |= ipp_val;
+ 			csid->x1e_ipp_irq_last = ipp_val;
+ 			csid->x1e_ipp_irq_count++;
++			if (ipp_val & CSID_IPP_ERROR_LINE_COUNT) {
++				csid->x1e_ipp_line_error_frame =
++					readl_relaxed(csid->base + CSID_IPP_FORMAT_MEASURE0);
++				csid->x1e_ipp_line_error_hbi =
++					readl_relaxed(csid->base + CSID_IPP_FORMAT_MEASURE1);
++				csid->x1e_ipp_line_error_vbi =
++					readl_relaxed(csid->base + CSID_IPP_FORMAT_MEASURE2);
++			}
+ 		}
+ 		if (ipp_val)
+ 			writel(ipp_val, csid->base + CSID_IPP_IRQ_CLEAR);
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index 36ac4fc..f5ee7d7 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -168,6 +168,10 @@ struct csid_device {
+ 	u32 x1e_ipp_irq_seen_or;
+ 	u32 x1e_ipp_irq_last;
+ 	u32 x1e_ipp_irq_count;
++	/* E003h 0049 read-only snapshot captured only on IPP line-count error. */
++	u32 x1e_ipp_line_error_frame;
++	u32 x1e_ipp_line_error_hbi;
++	u32 x1e_ipp_line_error_vbi;
+ 	struct camss_clock *clock;
+ 	int nclocks;
+ 	struct regulator_bulk_data *supplies;

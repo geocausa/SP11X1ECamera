@@ -1,3 +1,9 @@
+## E003h ACTIVE — 0049 error-time frame/HBI/VBI telemetry static PASS — 2026-08-30
+
+Static 0049 is a read-only diagnostic delta on the exact 0048 transport. It adds three conditional reads inside the existing front-mode0 CSID ISR when IPP bit14 `ERROR_LINE_COUNT` is present: actual frame size `+0x38c`, HBI `+0x390`, and VBI `+0x394`. Values are retained in software and printed by the existing timeout dump. The reads occur after the existing IPP status read/history latch and before the existing IPP clear. There are **zero new MMIO writes** and no changes to masks, clears, CSID/VFE programming, RT-CDM, CSIPHY or sensor behavior.
+
+Patch SHA-256 `58f9080b...f4e3`; checkpatch 0/0; exact source round-trip PASS. Golden-ABI CAMSS SHA-256 `610c0def...a1f5`, exact vermagic. Inspector/inspection SHA-256 `980fa120...4f66` / `e5d53e72...7afe`. **Runtime is not authorized.** Next create/install/inspect a distinct unarmed 0049 package, publish it, then perform a separate one-shot authorization review.
+
 ## E003h ACTIVE — Windows/Qualcomm bit14 line-count error path closed; 0049 read-only error-frame telemetry justified — 2026-08-30
 
 Cross-evidence now closes the newly exposed 0048 bit14 classification. Exact installed `qccamisp8380.sys` reads CSID1 IPP status from MMIO `+0xac` at RVA `0x1b65c`, stores it into IRQ payload `+0x10`, reloads that field as `w24` at RVA `0x1b8b0`, then tests it against exact IPP error mask literal `0x3c1c6004` before the dedicated `CSID Received error IRQs on IPP Path` log. That mask includes bit14. The accepted same-SP11 Windows live IPP status `0x00e11ff8` does not set bit14.
