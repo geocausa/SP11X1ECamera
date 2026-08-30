@@ -1,3 +1,15 @@
+## E003h ACTIVE — 0045 runtime consumed; startup base clobber fixed, Epoch0 boundary unchanged — 2026-08-30
+
+The authorized 0045 one-shot executed exactly once and immediately returned to FullIO v19c Golden. Runtime preflight passed before module load, the exact front PIX graph selected `/dev/video7`, persistent RT-CDM observation reached READY/idle, and the sole root helper returned `ETIMEDOUT` waiting for VFE1 raw Epoch0. No same-boot retry occurred and no QC10C output was produced.
+
+Fail-closed runtime analysis SHA-256 `cf7a309c1cc2b9b2dfb376eaa6f1b7abc89634dc506d230dd57d06700f841d73` proves the 0045 startup wrappers executed: RT-CDM completed **17** FIFO BLs versus 13 in 0044, with no fault. The four added BL completions are exactly the four Linux-owned `0x0800f000` startup CHANGE_BASE wrappers. The decisive differential is CSID1 `BUF_DONE_IRQ_MASK`: 0044 ended at malformed `0x00000001`; 0045 restores the Windows/0042 value **`0x0001ffff`**. This confirms the missing startup base wrapper caused the earlier CSID `+0x90=1` clobber and closes that bug without any late repair write.
+
+The remaining failure boundary did **not** move. IMX681 starts/stops cleanly; CSID1 receives 37,016 packets with zero ECC/CRC; route, masks, CFG0/CFG1, crop/drop/measure and IPP CTRL remain exact; `IPP_IRQ_STATUS` is still `0x00011e00`, lacking CAMIF SOF/EOF, RUP_DONE and Epoch0/1. VFE1 raw Epoch0 never arrives. `+0x398/+0x39c` are excluded from configuration comparison because the same-machine Windows oracle classifies them as timestamp/readback state.
+
+Evidence: RUN `aef7acf3...b4626`, POST `635ce37d...7893b`, dmesg `69f50865...9ee6`, RT-CDM stages `a515ed78...2882`, pre-run `8faa7bd2...e88f`, Golden return `d416e8b7...cb32`. Golden recovery verifies saved default `sp11-audio-fullio-v19c`, empty `next_entry`, Wi-Fi, playback/capture, Surface touch/touchpad, and no camera modules. Authorization SHA-256 `75870317...8e29` is preserved as `AUTHORIZATION-CONSUMED.json`.
+
+**Runtime is blocked again.** Next build a read-only VFE1 timeout snapshot to distinguish “VFE startup programming/state wrong” from “VFE configured but no upstream CAMIF handoff.” Do not modify CSID behavior or repeat the same 0045 run without new telemetry.
+
 ## E003h ACTIVE — 0045 one-shot runtime authorized, still unarmed — 2026-08-30
 
 Fresh authorization review passed against public package commit `3ed5a2c99304ca426fcd591b30dcecd4f46977f9`. It re-ran the Golden package preflight and package inspector, reproduced package-inspection SHA-256 `9be675f49382dcb57e53f4bfa02ac2c08381ec7316c5d00c67e02b65fff2a53a`, verified HEAD/origin synchronization, bounded provenance, frozen runtime assets, Golden saved default, empty `next_entry`, and no camera modules loaded.

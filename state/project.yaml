@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0045-one-shot-authorized-unarmed-runtime-next
+status: e003h-0045-runtime-base-wrapper-clobber-fixed-epoch0-unchanged-vfe-telemetry-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1094,7 +1094,36 @@ e003h:
   linux_front_0045_authorization_normal_streamon: false
   linux_front_0045_authorization_runtime: true
   linux_front_0045_authorization_production_parity: false
-  linux_front_0045_authorization_consumed: false
+  linux_front_0045_authorization_consumed: true
+  linux_front_0045_hardware_run_consumed: true
+  linux_front_0045_helper_invocations: 1
+  linux_front_0045_same_boot_retry: false
+  linux_front_0045_run_result: ETIMEDOUT waiting VFE1 raw Epoch0; no QC10C output
+  linux_front_0045_rtcdm_fifo_completed: 17
+  linux_front_0045_rtcdm_baseline_0044_fifo_completed: 13
+  linux_front_0045_added_startup_wrapper_bls_completed: 4
+  linux_front_0045_rtcdm_faulted: false
+  linux_front_0045_sensor_stream_started: true
+  linux_front_0045_sensor_stream_stopped: true
+  linux_front_0045_csid1_rx_packets: 37016
+  linux_front_0045_csid1_ecc_errors: 0
+  linux_front_0045_csid1_crc_errors: 0
+  linux_front_0045_csid1_ipp_irq_status: 0x00011e00
+  linux_front_0045_csid1_buf_done_mask: 0x0001ffff
+  linux_front_0045_startup_wrapper_repairs_buf_done_clobber: true
+  linux_front_0045_epoch0_boundary_changed: false
+  linux_front_0045_runtime_extractor_sha256: 03fe02cd39f188c4dbc83798650b6ae3733acbad5405df6bcdf2b42b5e93c9cb
+  linux_front_0045_runtime_analysis_sha256: cf7a309c1cc2b9b2dfb376eaa6f1b7abc89634dc506d230dd57d06700f841d73
+  linux_front_0045_run_sha256: aef7acf30e924b880b03403e266db9aee002c7bb522f78277c0921e3541b4626
+  linux_front_0045_post_sha256: 635ce37d3d582f15d143cc6eaf3ca53d2a8346fc655a93f0de68ca2c5dc7893b
+  linux_front_0045_dmesg_sha256: 69f50865fa51bd996956ad93c294c947cee453409add6f1b3d66b31cbb3d9ee6
+  linux_front_0045_rtcdm_stages_sha256: a515ed7828833f35cdf20261af85cd6f6627b4338e8eab3d856bfb52fce82882
+  linux_front_0045_pre_run_sha256: 8faa7bd2569d9ad8372be47e95b9caf50bb75c9e3e8d760dfe55b9ec9f47e88f
+  linux_front_0045_load_sha256: 667728d5d4ab48d62f1928e920265a5e3025749d4c287581983c557fb801adde
+  linux_front_0045_golden_return_sha256: d416e8b727128a213df28a59658430e47349b94e24e532c87e2d9fa8e8d0cb32
+  linux_front_0045_golden_return_verified: true
+  linux_front_0045_golden_next_entry_empty: true
+  linux_front_0045_golden_camera_modules_loaded: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_manifest_sha256: 5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
@@ -1404,13 +1433,14 @@ e003h:
   linux_front_0044_package_runtime_authorized: false
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-ife-startup-base-wrapper-0045-one-shot-runtime
+next_experiment: E003h-vfe1-timeout-readonly-telemetry-0046
 next_action: >-
-  The 0045 one-shot authorization is reviewed and still unarmed. Commit and push this authorization
-  checkpoint. Then arm exactly one GRUB next boot for sp11-camera-e003h-ife-base-0045-one-shot.
-  On candidate boot run runtime-preflight/load, configure the exact front PIX graph, start the persistent
-  RT-CDM observer, invoke the root helper exactly once, archive evidence, and immediately return to Golden.
-
+  Do not repeat 0045 behavior unchanged. The consumed 0045 run proves all four startup CHANGE_BASE wrappers
+  execute and restore CSID1 BUF_DONE_IRQ_MASK to the Windows/0042 value 0x0001ffff, but CSID1 remains at
+  IPP_IRQ_STATUS 0x00011e00 with 37,016 clean packets and no CAMIF/RUP/Epoch progression; VFE1 raw Epoch0
+  still never arrives. Build a read-only VFE1 timeout snapshot using only exact Windows-owned IRQ masks/status,
+  bus violation/overflow status and selected stable startup/bus configuration registers. Make no start/stop/MMIO
+  behavior change, inspect/build/package it separately, and require a fresh authorization before any hardware run.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
