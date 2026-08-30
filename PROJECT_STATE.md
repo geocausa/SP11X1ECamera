@@ -1,3 +1,7 @@
+## E003h ACTIVE — 0043 separately authorized for exactly one bounded diagnostic — 2026-08-30
+
+Installed package checkpoint `280485bb7fbbbabc4953f5e7ba5046d2505689ed` is the immutable runtime base. Separate `AUTHORIZATION.json` SHA-256 `ed7eb742c62f547312175c1672220458a78f1e35ced4000302a0375817bb65ca` authorizes exactly one boot of `sp11-camera-e003h-csid1-0043-one-shot` and exactly one root helper invocation. No normal QBUF/STREAMON, no non-root pre-trigger, no same-boot retry. The persistent RT-CDM observer, green bounded provenance, exact module/DT/sensor/capsule/helper hashes, synchronized origin and Golden saved-default/one-shot safety are mandatory pre-arm gates. After any helper result, evidence is archived and SP11 immediately reboots to Golden. Production image-quality parity is not authorized or claimed.
+
 ## E003h ACTIVE — 0043 one-shot package installed, inspected, Golden-safe and unarmed — 2026-08-30
 
 The static `0043` checkpoint is packaged under fresh boot ID `sp11-camera-e003h-csid1-0043-one-shot` at `/boot/sp11-7.1.5-camera-e003h-csid1-0043`. It reuses byte-exact Golden kernel/initrd, the accepted front-only DTB, IMX681 module, PIX capsule/helper, media setup and persistent RT-CDM observer; only qcom-camss changes to SHA-256 `23cc63f742f70ca3f70e25d89b34c9e8cef531ed6f3c9562f2f7b0d3a7ac05a9`. Golden remains `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, and candidate camera modules are unloaded.

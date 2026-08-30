@@ -1,0 +1,38 @@
+{
+  "schema": "sp11-e003h-csid1-0043-one-shot-authorization-v1",
+  "accepted": true,
+  "runtime_authorized": true,
+  "production_parity_authorized": false,
+  "date": "2026-08-30",
+  "package_commit": "280485bb7fbbbabc4953f5e7ba5046d2505689ed",
+  "package_inspection_sha256": "f232c3042937570279693055b50f809884cfecdfcad2865c4ca9a0c495542141",
+  "bounded_provenance_sha256": "293c1dd909237d4cff44582b862cd165543547e2dcad285506d9463a6ace7b7e",
+  "boot": {
+    "id": "sp11-camera-e003h-csid1-0043-one-shot",
+    "cmdline_marker": "sp11_camera_e003h_csid1_0043=1",
+    "golden_saved_default": "sp11-audio-fullio-v19c",
+    "candidate_was_unarmed_at_package_checkpoint": true
+  },
+  "candidate": {
+    "camss_sha256": "23cc63f742f70ca3f70e25d89b34c9e8cef531ed6f3c9562f2f7b0d3a7ac05a9",
+    "sensor_sha256": "389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "capsule_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09"
+  },
+  "purpose": "One bounded diagnostic of the same-machine Windows-proven CSID1 configure -> existing RT-CDM RUP/AUP -> IPP enable ordering implemented by Linux 0043. Determine whether CSID CAMIF/RUP/Epoch progression and VFE1 Epoch0 now appear.",
+  "execution_contract": {
+    "boot_count": 1,
+    "root_helper_invocation_count": 1,
+    "nonroot_pretrigger": false,
+    "normal_qbuf": false,
+    "normal_streamon": false,
+    "persistent_rtcdm_observer_required": true,
+    "same_boot_retry": false,
+    "existing_run_log_refuses_execution": true,
+    "after_any_helper_result": "archive evidence then immediately reboot to Golden",
+    "epoch0_timeout_requires_csid1_snapshot": true
+  },
+  "success_boundary": "At most one bounded first-PIX diagnostic. A QC10C frame, if produced, is transport evidence only and does not establish production image-quality parity.",
+  "failure_boundary": "Any preflight mismatch aborts without RUN. Any helper result is consumed; no same-boot retry."
+}
