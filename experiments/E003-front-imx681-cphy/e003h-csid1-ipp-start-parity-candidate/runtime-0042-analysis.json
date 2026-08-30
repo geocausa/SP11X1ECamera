@@ -1,0 +1,111 @@
+{
+  "schema": "sp11-e003h-csid1-0042-runtime-analysis-v1",
+  "accepted": true,
+  "source_hashes": {
+    "dmesg": "32b2236f38977564936e9f69942c5892008375a45e3e87328eec2ca50538d201",
+    "run": "7278407c3dddacec05a3deb1acb1f8258680109e5ed40ef85aef76810eab7db8",
+    "post": "d53c198e9b856f00735eb01b5220aff0c26f67595733eeadd46f416ab1f97f58",
+    "stages": "3371d2b9645223c4de47cdd54d4dc3939c75a5d43532b1586475ef7944a28e8e",
+    "route": "95e26dd7d116fdc48b7281a153222a7b4edd11294703b555d81e25c2251b1238"
+  },
+  "run": {
+    "helper_invocations": 1,
+    "run_rc": 1,
+    "trigger_errno_text": "Connection timed out",
+    "qc10c_output": false,
+    "same_boot_retry": false
+  },
+  "rtcdm": {
+    "fifo0_completions": 13,
+    "faulted": false,
+    "terminal_stage": "stopped"
+  },
+  "sensor": {
+    "mode_select_on_seen": true,
+    "mode_select_off_seen": true
+  },
+  "linux_csid1": {
+    "route": "0x00000101",
+    "reg_update_readback": "0x00000000",
+    "rx_irq_status": "0x00000017",
+    "rx_irq_mask": "0x019fb800",
+    "rx_cfg0": "0x11300000",
+    "rx_cfg1": "0x00000001",
+    "rx_packets": 37016,
+    "ecc_errors": 0,
+    "crc_errors": 0,
+    "ipp_irq_status": "0x00011e00",
+    "ipp_irq_bits": [
+      "INFO_INPUT_EOF",
+      "INFO_INPUT_EOL",
+      "INFO_INPUT_SOL",
+      "INFO_INPUT_SOF",
+      "VCDT_GRP1_SEL"
+    ],
+    "ipp_irq_mask": "0x3cbc601c",
+    "ipp_ctrl": "0x00000001",
+    "ipp_cfg0": "0x802b2000",
+    "ipp_cfg1": "0x00007241",
+    "epoch_cfg": "0x00130013",
+    "obs_0x340": "0x48000a08"
+  },
+  "windows_live_comparison": {
+    "ipp_irq_status": "0x00e11ff8",
+    "ipp_irq_bits": [
+      "CAMIF_EOF",
+      "CAMIF_SOF",
+      "FRAME_DROP_EOF",
+      "FRAME_DROP_EOL",
+      "FRAME_DROP_SOL",
+      "FRAME_DROP_SOF",
+      "INFO_INPUT_EOF",
+      "INFO_INPUT_EOL",
+      "INFO_INPUT_SOL",
+      "INFO_INPUT_SOF",
+      "VCDT_GRP1_SEL",
+      "CAMIF_EPOCH0",
+      "CAMIF_EPOCH1",
+      "RUP_DONE"
+    ],
+    "buf_done_status": "0x00000271",
+    "missing_from_linux_status": "0x00e001f8",
+    "missing_bits": [
+      "CAMIF_EOF",
+      "CAMIF_SOF",
+      "FRAME_DROP_EOF",
+      "FRAME_DROP_EOL",
+      "FRAME_DROP_SOL",
+      "FRAME_DROP_SOF",
+      "CAMIF_EPOCH0",
+      "CAMIF_EPOCH1",
+      "RUP_DONE"
+    ],
+    "linux_only_status": "0x00000000",
+    "critical_missing": [
+      "CAMIF_EOF",
+      "CAMIF_SOF",
+      "CAMIF_EPOCH0",
+      "CAMIF_EPOCH1",
+      "RUP_DONE"
+    ]
+  },
+  "classification": {
+    "sensor_to_csid_rx_clean": true,
+    "complete_input_frame_boundaries_seen": true,
+    "ipp_config_and_enable_windows_matched": true,
+    "csid_camif_output_events_seen": false,
+    "csid_epoch_events_seen": false,
+    "csid_rup_done_seen": false,
+    "vfe1_epoch0_seen": false,
+    "failure_boundary": "after clean CSI packet/input-frame ingress and before CSID CAMIF/RUP/Epoch output progression into VFE1"
+  },
+  "public_register_reference": {
+    "repo": "https://github.com/qualcomm-linux/camera-driver",
+    "commit": "0f16924ff6a7f9bb56a7e958016da2ed8a174f2f",
+    "file": "camera/drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid680.h",
+    "ipp_rup_aup_mask": "0x00010001",
+    "rup_aup_cmd_offset": "0x018",
+    "evidence_class": "LINUX_IMPLEMENTATION/reference only; not yet Windows behavioral proof"
+  },
+  "next_gate": "Recover exact same-machine Windows CSID1 RUP/AUP command value and ordering; do not authorize another Linux runtime before this is closed."
+}

@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-csid1-0042-package-installed-golden-safe-authorization-next
+status: e003h-0042-runtime-clean-csid-input-missing-camif-rup-epoch-windows-rup-oracle-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1085,15 +1085,45 @@ e003h:
   linux_front_0042_package_camera_modules_loaded: false
   linux_front_0042_package_authorization_present: false
   linux_front_0042_package_runtime_authorized: false
-next_experiment: E003h-csid1-ipp-start-parity-authorization-review
-next_action: Do not boot the candidate until the installed 0042 package checkpoint is
-  committed and pushed and a separate fail-closed authorization review is committed.
-  The package is installed under fresh boot ID sp11-camera-e003h-csid1-0042-one-shot,
-  Golden remains saved/default with empty next_entry, and no camera modules are loaded.
-  Authorization may permit exactly one candidate boot and one root helper invocation,
-  with persistent RT-CDM observer required, no normal QBUF/STREAMON, no same-boot retry,
-  immediate Golden reboot after the result, and mandatory CSID1 timeout snapshot if
-  VFE1 Epoch0 remains absent.
+  linux_front_0042_hardware_run_consumed: true
+  linux_front_0042_helper_invocations: 1
+  linux_front_0042_same_boot_retry: false
+  linux_front_0042_run_result: ETIMEDOUT waiting VFE1 raw Epoch0; no QC10C output
+  linux_front_0042_rtcdm_fifo_completed: 13
+  linux_front_0042_rtcdm_faulted: false
+  linux_front_0042_sensor_stream_started: true
+  linux_front_0042_sensor_stream_stopped: true
+  linux_front_0042_csid1_rx_packets: 37016
+  linux_front_0042_csid1_ecc_errors: 0
+  linux_front_0042_csid1_crc_errors: 0
+  linux_front_0042_csid1_ipp_irq_status: 0x00011e00
+  windows_front_csid1_ipp_irq_status_live: 0x00e11ff8
+  linux_front_0042_ipp_input_events: INFO_INPUT_EOF; INFO_INPUT_EOL; INFO_INPUT_SOL; INFO_INPUT_SOF; VCDT_GRP1_SEL
+  linux_front_0042_missing_windows_ipp_events: CAMIF_EOF; CAMIF_SOF; CAMIF_EPOCH0; CAMIF_EPOCH1; RUP_DONE
+  linux_front_0042_ipp_error_bits: none
+  linux_front_0042_failure_boundary: after clean CSI packet/input-frame ingress and before CSID CAMIF/RUP/Epoch output progression into VFE1
+  linux_front_0042_runtime_analysis_sha256: 83e6945ca44402e6aaea1974cedc52d9f843216c08e69a6da02e389181f9df8c
+  linux_front_0042_runtime_extractor_sha256: 422353f55d100de55abca035f91dbc192ee9d7d8db3e67df17fe7a63b67f5aa4
+  linux_front_0042_run_sha256: 7278407c3dddacec05a3deb1acb1f8258680109e5ed40ef85aef76810eab7db8
+  linux_front_0042_post_sha256: d53c198e9b856f00735eb01b5220aff0c26f67595733eeadd46f416ab1f97f58
+  linux_front_0042_dmesg_sha256: 32b2236f38977564936e9f69942c5892008375a45e3e87328eec2ca50538d201
+  linux_front_0042_rtcdm_stages_sha256: 3371d2b9645223c4de47cdd54d4dc3939c75a5d43532b1586475ef7944a28e8e
+  linux_front_0042_golden_return_verified: true
+  linux_front_0042_golden_wifi_connected: true
+  linux_front_0042_golden_touch_present: true
+  linux_front_0042_golden_alsa_card_present: true
+  public_csid680_rup_aup_cmd_offset: 0x018
+  public_csid680_ipp_rup_aup_mask: 0x00010001
+  public_csid680_rup_evidence_class: LINUX_IMPLEMENTATION/reference; not Windows behavioral proof
+  linux_front_custom_runner_calls_csid_reg_update: false
+next_experiment: E003h-windows-csid1-rup-aup-oracle
+next_action: Do not repeat Linux PIX runtime. The 0042 run proves 37016 clean CSI packets,
+  complete IPP input-frame boundaries and Windows-matched IPP configuration, but no
+  CAMIF SOF/EOF, Epoch0/1 or RUP_DONE. Public CSID680 implementation evidence suggests
+  IPP RUP_AUP_CMD +0x18 with mask 0x00010001, and current Linux already has that mask
+  but the custom runner does not issue camss_reg_update(). Recover exact same-machine
+  Windows CSID1 RUP/AUP command value and lifecycle order before implementing or
+  authorizing any new Linux runtime.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
