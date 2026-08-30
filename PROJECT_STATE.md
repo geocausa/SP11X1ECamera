@@ -1,3 +1,9 @@
+## E003h ACTIVE — 0049 package installed/inspected unarmed; authorization review next — 2026-08-30
+
+The distinct 0049 one-shot package is installed but not armed. Package inspection is PASS: Golden saved default remains FullIO v19c, `next_entry` is empty, camera modules are absent, front-only DT/IOMMU routing is unchanged, the exact 0049 CAMSS module is pinned, and authorization is absent. The package preserves the static contract of three read-only error-time CSID1 format-measure reads and zero MMIO writes.
+
+Package inspection SHA-256 `fa62bdc06eb154f66784491cc6435f27d345bd0edeaf69158251a8ecdfc774d5`; asset manifest `6cf7a9f6985b9e584f323455c363d9e9b1b83085b7a7c3d97a46216aba5e53e9`. Boot ID `sp11-camera-e003h-csidframe-0049-one-shot`; marker `sp11_camera_e003h_csidframe_0049=1`. **Runtime remains unauthorized.** Publish this package checkpoint, then review authorization separately.
+
 ## E003h ACTIVE — 0049 error-time frame/HBI/VBI telemetry static PASS — 2026-08-30
 
 Static 0049 is a read-only diagnostic delta on the exact 0048 transport. It adds three conditional reads inside the existing front-mode0 CSID ISR when IPP bit14 `ERROR_LINE_COUNT` is present: actual frame size `+0x38c`, HBI `+0x390`, and VBI `+0x394`. Values are retained in software and printed by the existing timeout dump. The reads occur after the existing IPP status read/history latch and before the existing IPP clear. There are **zero new MMIO writes** and no changes to masks, clears, CSID/VFE programming, RT-CDM, CSIPHY or sensor behavior.

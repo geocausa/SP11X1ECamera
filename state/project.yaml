@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0049-readonly-error-frame-static-pass-package-next
+status: e003h-0049-package-pass-unarmed-authorization-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1717,7 +1717,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003h-0049-csid1-line-count-error-frame-readonly-package
+next_experiment: E003h-0049-csid1-line-count-error-frame-authorization
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -1804,5 +1804,25 @@ linux_0049_static:
   checkpatch_warnings: 0
   runtime_authorized: false
 
+linux_0049_package:
+  accepted: true
+  package_dir: experiments/E003-front-imx681-cphy/e003h-csid1-line-error-frame-0049-candidate
+  asset_manifest_sha256: 6cf7a9f6985b9e584f323455c363d9e9b1b83085b7a7c3d97a46216aba5e53e9
+  package_inspection_sha256: fa62bdc06eb154f66784491cc6435f27d345bd0edeaf69158251a8ecdfc774d5
+  inspect_package_sha256: 325e635bb3187a21173424773ff3504b74965559d0cf0490369311b15aa06748
+  camss_sha256: 610c0def762e6449c342452ffc436b195cd1330a41055076d25cca95f077a1f5
+  sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+  dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  boot_id: sp11-camera-e003h-csidframe-0049-one-shot
+  cmdline_marker: sp11_camera_e003h_csidframe_0049=1
+  candidate_boot_installed: true
+  candidate_boot_armed: false
+  camera_modules_loaded: false
+  new_mmio_reads: 3
+  new_mmio_writes: 0
+  hardware_programming_changed: false
+  authorization_present: false
+  runtime_authorized: false
+
 next_action: >-
-  Create and inspect a distinct unarmed 0049 one-shot package using the exact 0049 CAMSS module and unchanged 0048 sensor/DTB/capsule/helper/observer assets. Publish the package checkpoint before any separate authorization review; do not arm or activate camera hardware during packaging.
+  Publish the unarmed 0049 package checkpoint. Then perform a separate authorization review bound to that exact package commit. If authorized, allow exactly one candidate boot and one root helper invocation with the persistent RT-CDM observer, archive evidence, and immediately return to Golden with no same-boot retry.
