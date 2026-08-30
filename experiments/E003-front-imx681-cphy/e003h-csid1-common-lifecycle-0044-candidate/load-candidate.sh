@@ -2,9 +2,11 @@
 set -euo pipefail
 ROOT=/home/geoca/Documents/SP11-PROJECT
 REPO=$ROOT/06-camera/SP11X1ECamera
+NEW=$REPO/experiments/E003-front-imx681-cphy/e003h-csid1-common-lifecycle-0044-candidate
 CAMSS=$ROOT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/qcom-camss.ko
 SENSOR=$REPO/experiments/E003-front-imx681-cphy/e003h-bounded-front-first-frame-runtime/imx681.ko
 fail(){ echo "FAIL: $*" >&2; exit 1; }
+"$NEW/runtime-preflight.sh"
 grep -q 'sp11_camera_e003h_csid1_0044=1' /proc/cmdline || fail 'not 0044 candidate boot'
 grep -q '/boot/sp11-7.1.5-camera-e003h-csid1-0044/' /proc/cmdline || fail 'wrong candidate BOOT_IMAGE'
 [ "$(sha256sum "$CAMSS" | cut -d' ' -f1)" = 98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc ] || fail 'CAMSS hash'

@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0044 boot-1 consumed pre-exec; corrected v2 runtime harness passes — 2026-08-30
+
+The first authorized 0044 candidate boot was consumed **before camera execution**. Candidate identity was correct, but the host invoked package-only `preflight.sh` after authorization; that script correctly failed with `authorization exists at package-only gate`. No qcom_camss/imx681/ov13858 module was loaded, the one-shot helper was never entered, no sysfs RUN existed, and no same-boot retry occurred. Golden return is verified. The original authorization remains byte-preserved as `AUTHORIZATION-BOOT1-CONSUMED.json` SHA-256 `94d4c1b8eb34e42990ed02ea5c228d37a2521cc44417bba64c97cc70ae9d6162`; boot-1 consumption record SHA-256 is `b462e7688d81dd710fd62ae1244419df9d542b7841de5afefadfa5a2ff9f07f9`.
+
+Package v2 separates package and runtime gates. New `runtime-preflight.sh` SHA-256 `6f778ebc77417ca9eb150a5a42fb79db40b7198dfe433a1e7e2a3ac1673ae9b4` requires the candidate marker, HEAD==origin, active authorization, exact package/provenance/candidate hashes, Golden saved default, consumed one-shot `next_entry` empty, no modules, no existing RUN/output/watcher evidence, and the exact front-only DT/IOMMU set. It performs no module load or trigger write. Corrected `load-candidate.sh` SHA-256 `1f7be8b1b252ad8268edd09dd4f1a22fced2e38911367ec5e2fb64162ff3072e` invokes runtime preflight before its first `modprobe`/`insmod`.
+
+Golden package-only preflight v2 and package inspector v2 pass. Inspector SHA-256 is `e015b70ec7cbc90bd4932a619d19d9c30a6d2147147c321973d1ec042380e887`; package inspection v2 SHA-256 `99396b733a015c588f0aec464924d5f919c8e5b0cd59c9e1570c9c323cc02429`; inspection log SHA-256 `e6e5e23de418473b6bf1016aed70253076316931912eed2b7be2b9dc2c7562c3`. Active `AUTHORIZATION.json` is absent and runtime is blocked again.
+
+**No hardware runtime is currently authorized.** Next commit/push this corrected v2 harness and pre-exec evidence, then perform a fresh replacement authorization review. A replacement may authorize exactly one new candidate boot and one root helper invocation because boot-1 executed zero camera hardware work.
+
 ## E003h ACTIVE — 0044 exactly one bounded diagnostic authorized; still unarmed — 2026-08-30
 
 A fresh post-package authorization review passed against published package commit `8f5b405cc89de074c84e2318c33be90c9875bfc8`: HEAD equals origin, current boot is Golden, bounded provenance is green, package inspection remains exact, `next_entry` is empty, no camera modules are loaded, no prior 0044 runtime evidence exists, and the package was authorization-free at review time. Review SHA-256 is `b733c2576378268804e98d25fd9431002187357e61dbaced53d4152956034e44`.

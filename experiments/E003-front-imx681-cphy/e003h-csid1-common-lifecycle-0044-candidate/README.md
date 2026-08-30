@@ -10,3 +10,9 @@ It reuses the byte-proven Golden kernel/initrd, accepted front-only DTB, IMX681 
 - candidate CAMSS SHA-256: `98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc`
 
 Package creation/installation **does not authorize or arm runtime**. `AUTHORIZATION.json` must be absent at this gate. The installer must leave Golden as `saved_entry` and `next_entry` empty. A hardware RUN requires a later, separate authorization checkpoint.
+
+## v2 runtime-harness correction
+
+The first authorized 0044 candidate boot was consumed before camera execution because the package-only `preflight.sh` was mistakenly invoked after authorization; it correctly rejected the active authorization. No camera modules were loaded, the helper was never entered, and Golden return is verified. The original authorization is preserved as `AUTHORIZATION-BOOT1-CONSUMED.json` with `BOOT1-CONSUMPTION.json` and pre-exec evidence.
+
+`runtime-preflight.sh` is now the authorization-aware candidate-boot gate. `load-candidate.sh` calls it before any `modprobe`/`insmod`. The package-only `preflight.sh` remains intentionally authorization-free. No replacement runtime is authorized by this harness correction itself.

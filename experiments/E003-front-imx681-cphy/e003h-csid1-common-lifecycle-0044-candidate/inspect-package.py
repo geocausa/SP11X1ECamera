@@ -31,7 +31,8 @@ EXPECTED={
 }
 SCRIPT_EXPECTED={
  'install-candidate.sh':'1a23b370faed0e402f5961192c6868474c7e32a01f027885150b77ceb3f42228',
- 'load-candidate.sh':'c98f109a573a70bc41f6f20d1754322545b17892e5b347ded8a37d0a010974b4',
+ 'load-candidate.sh':'1f7be8b1b252ad8268edd09dd4f1a22fced2e38911367ec5e2fb64162ff3072e',
+ 'runtime-preflight.sh':'6f778ebc77417ca9eb150a5a42fb79db40b7198dfe433a1e7e2a3ac1673ae9b4',
  'preflight.sh':'f9bf2c51561d51dc3986fdae0abb82db1da56ca40ee1f34c768f37667c2699b4',
  'run-once.sh':'11dd9b025c967c462b074b67e6f7c28c90c7a42dcd64a0322fe643e1dd546a91',
  'setup-media.sh':'4761ecfd1eb1dbd91582d687a7380c922d451e0ad2b7d03253dfedbe1380fe71',
@@ -53,7 +54,19 @@ def main():
  if sha(REPO/'provenance/front-parity.json')!=EXPECTED['provenance']: die('provenance manifest drift')
  for n,h in SCRIPT_EXPECTED.items():
   if sha(NEW/n)!=h: die(n+' drift')
+ if sha(NEW/'AUTHORIZATION-BOOT1-CONSUMED.json')!='94d4c1b8eb34e42990ed02ea5c228d37a2521cc44417bba64c97cc70ae9d6162': die('boot1 authorization history drift')
+ if sha(NEW/'BOOT1-CONSUMPTION.json')!='b462e7688d81dd710fd62ae1244419df9d542b7841de5afefadfa5a2ff9f07f9': die('boot1 consumption drift')
+ boot1=json.loads((NEW/'BOOT1-CONSUMPTION.json').read_text())
+ if not boot1.get('accepted') or boot1.get('hardware_run_executed') is not False or boot1.get('helper_invocations') != 0 or boot1.get('camera_modules_loaded') is not False or boot1.get('golden_return_verified') is not True: die('boot1 no-hardware record drift')
  if (NEW/'AUTHORIZATION.json').exists(): die('authorization exists at package-only gate')
+ runtime_pre=(NEW/'runtime-preflight.sh').read_text()
+ for r in ('AUTHORIZATION.json','check-front-parity-provenance.py','repo/origin divergence','RUN log already exists; refusing retry','module already loaded','sp11_camera_e003h_csid1_0044=1','next_entry must be empty'):
+  if r not in runtime_pre: die('runtime preflight missing gate '+r)
+ if 'insmod ' in runtime_pre or 'modprobe ' in runtime_pre or 'tee "$TRIGGER"' in runtime_pre or 'echo RUN' in runtime_pre: die('runtime preflight contains hardware activation')
+ load=(NEW/'load-candidate.sh').read_text()
+ call=load.find('"$NEW/runtime-preflight.sh"')
+ first_mod=min(x for x in (load.find('modprobe '),load.find('insmod ')) if x >= 0)
+ if call < 0 or call > first_mod: die('runtime preflight is not before first module load')
  install=(NEW/'install-candidate.sh').read_text()
  if any('grub-reboot ' in l and not l.lstrip().startswith('#') for l in install.splitlines()): die('installer arms next boot')
  run=(NEW/'run-once.sh').read_text()
@@ -78,13 +91,14 @@ def main():
  for t in ('sp11-camera-e003h-csid1-0044-one-shot','sp11_camera_e003h_csid1_0044=1',str(BOOT/'x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb')):
   if t not in entry: die('installed entry missing '+t)
  subprocess.check_call(['python3',str(REPO/'tools/check-front-parity-provenance.py'),'--repo',str(REPO),'--target','bounded_first_pix'],stdout=subprocess.DEVNULL)
- out={'accepted':True,'schema':'sp11-e003h-csid1-0044-package-v1','hashes':EXPECTED,'runtime_scripts':SCRIPT_EXPECTED,
+ out={'accepted':True,'schema':'sp11-e003h-csid1-0044-package-v2','hashes':EXPECTED,'runtime_scripts':SCRIPT_EXPECTED,
       'installed_boot':installed,'boot_id':'sp11-camera-e003h-csid1-0044-one-shot','front_only_ports':ports,
       'iommu_set':['0x800/0x60','0x820/0x60','0x840/0x60','0x860/0x60','0x18a0/0'],
       'golden_saved_default':True,'candidate_boot_installed':True,'candidate_boot_armed':False,'camera_modules_loaded':False,
       'authorization_present':False,'single_helper_invocation_enforced':True,'same_boot_retry_refused_by_runlog':True,
-      'bounded_provenance_green':True,'runtime_authorized':False,
-      'next':'commit/push exact installed package checkpoint; any hardware run requires a separate authorization'}
+      'bounded_provenance_green':True,'runtime_authorized':False,'runtime_preflight_before_module_load':True,
+      'boot1_consumed_without_hardware_run':True,
+      'next':'commit/push corrected v2 harness checkpoint; replacement hardware run requires a fresh authorization'}
  (NEW/'package-inspection.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
- print('PASS: 0044 common-lifecycle package is installed, hash-pinned, Golden-safe and unarmed')
+ print('PASS: 0044 common-lifecycle package v2 is installed, hash-pinned, Golden-safe and unarmed')
 if __name__=='__main__': main()
