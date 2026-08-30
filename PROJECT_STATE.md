@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0047 VFE DAL start-prefix package installed/inspected unarmed — 2026-08-30
+
+Static 0047 is now packaged distinctly at `e003h-vfe1-dal-start-prefix-0047-candidate`. Only CAMSS changes from the consumed 0046 harness: module SHA-256 `5e7bdadf76f293b48e4efb54a69c011cb00ff9af75806e9558176cd925dd5007`; IMX681, front-only DTB, capsule, helper, media setup and persistent RT-CDM observer are byte-identical to the proven inputs.
+
+Golden package preflight passed and the installer created GRUB ID `sp11-camera-e003h-vfe1-0047-one-shot` under `/boot/sp11-7.1.5-camera-e003h-vfe1-0047`. It contains no `grub-reboot`; Golden remains `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, and no camera modules are loaded. The candidate therefore remains installed but unarmed.
+
+Fail-closed package inspection SHA-256 is `498937c1093375c8bb1204e8aed8604e1258cc4531428757b818649d7eaaf509`. It pins the exact five-write 0047 static proof, all frozen assets/scripts, front-only DT/IOMMU set, runtime-preflight-before-module-load, exactly one helper invocation, same-boot retry refusal and mandatory reboot. **No authorization exists and runtime remains blocked.** Next publish this package checkpoint, then perform a fresh authorization review against that exact public commit.
+
 ## E003h ACTIVE — Windows VFE DAL_ife_start prefix closed; Linux 0047 static PASS — 2026-08-30
 
 0046 localized the next parity gap to VFE start state: FULL BUS/client/address programming was exact and fault-free, but Linux had zero TOP/BUS IRQ masks. Exact qccamisp8380 reversal now closes the omitted Windows lifecycle prefix. For the active VFE680 family, callback slot `+0x6b690` selects RVA `0x1d2b0`, which writes TOP masks `0x0007f051/0` and BUS masks `0xd0000000/0`; slot `+0x6b698` selects RVA `0x1d820`, which writes VFE TOP `+0x24=0`. The normal first-start path invokes those callbacks in that order and then enters `DAL_ife_bus_start`.

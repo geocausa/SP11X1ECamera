@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0047-static-vfe-dal-start-prefix-pass-package-next
+status: e003h-0047-package-installed-unarmed-authorization-review-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1565,6 +1565,40 @@ e003h:
   linux_front_0047_patch_roundtrip_byte_identical: true
   linux_front_0047_runtime_authorized: false
 
-next_experiment: E003h-vfe1-dal-start-prefix-0047-package
+  linux_front_0047_package_dir: experiments/E003-front-imx681-cphy/e003h-vfe1-dal-start-prefix-0047-candidate
+  linux_front_0047_package_asset_manifest_sha256: 12a21ff0aeead670ff96a95f59592d7a9d9d12bd0e669f51651edc27828cf6ec
+  linux_front_0047_package_readme_sha256: a08f308fb974ba645f06e6c70821552d79803789c8eebab8a075c4df9d31444b
+  linux_front_0047_package_preflight_script_sha256: 0b4753c110867a32f685b581c7d2aa37a8c2384841583847822b1e48747a4e7b
+  linux_front_0047_package_install_script_sha256: 2fbd88bea3b882d9dcbe5028659399c16bca286640fc498c1696204473241def
+  linux_front_0047_package_runtime_preflight_script_sha256: 78773f00fd756e2106a4e2dfe28827209139836448877c5aa5c732979fc972bb
+  linux_front_0047_package_load_script_sha256: 2ce2c5e3374ed93dbe313d00f0795c3c84697518ebf2beedaea76561b9c39ede
+  linux_front_0047_package_setup_script_sha256: 03a20b192fce44aab3aef1f2e0daa787fbe35263db969c8c572601f74ef30e35
+  linux_front_0047_package_observer_script_sha256: 44119de1c591b0ffd6c58161c8093e6731255752d1c72be042cc9140a22e2a59
+  linux_front_0047_package_run_script_sha256: 72c89bb8db62ed4beaaec53205a7d9f108dda7a0554f106f1178a584fca35f3c
+  linux_front_0047_package_inspector_sha256: d9c49e599c85a4462dbf3e0139ef1a4e7e3b92c864be229dabd2c274295b2767
+  linux_front_0047_package_inspection_sha256: 498937c1093375c8bb1204e8aed8604e1258cc4531428757b818649d7eaaf509
+  linux_front_0047_package_preflight_log_sha256: d41e1949700127ddb26bbfbacee770b6fe7880d0496944afe5be038f2ed5a7de
+  linux_front_0047_package_install_log_sha256: 5176ca10f3c42cae908a05b0ce36f7f389ec3d3c857781d2b8d624b6118bb4ff
+  linux_front_0047_package_inspection_log_sha256: fb8678896ff2b928e61904c047a5d99dd4090f8995ddda2547c56c06874f0915
+  linux_front_0047_package_camss_sha256: 5e7bdadf76f293b48e4efb54a69c011cb00ff9af75806e9558176cd925dd5007
+  linux_front_0047_package_sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+  linux_front_0047_package_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  linux_front_0047_package_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_0047_package_helper_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  linux_front_0047_package_media_oracle_sha256: 666e458daf9a3ed8938d81d10fd3d3a0e4f760252db920e09531bd7aa3ef633f
+  linux_front_0047_package_watcher_oracle_sha256: 8698afdc615ee1d544d0068441241625487cc8459ca97a758b62d3b863743d84
+  linux_front_0047_candidate_boot_id: sp11-camera-e003h-vfe1-0047-one-shot
+  linux_front_0047_candidate_boot_dir: /boot/sp11-7.1.5-camera-e003h-vfe1-0047
+  linux_front_0047_candidate_cmdline_marker: sp11_camera_e003h_vfe1_0047=1
+  linux_front_0047_candidate_installed: true
+  linux_front_0047_candidate_armed: false
+  linux_front_0047_package_authorization_present: false
+  linux_front_0047_package_runtime_authorized: false
+  linux_front_0047_package_golden_saved_default: true
+  linux_front_0047_package_next_entry_empty: true
+  linux_front_0047_package_camera_modules_loaded: false
+  linux_front_0047_package_frozen_runtime_assets: true
+
+next_experiment: E003h-vfe1-dal-start-prefix-0047-authorization-review
 next_action: >-
-  Build a distinct 0047 one-shot package from the proven 0046 harness with only the CAMSS module changed to SHA-256 5e7bdadf76f293b48e4efb54a69c011cb00ff9af75806e9558176cd925dd5007. Freeze package-local assets, install/inspect the new GRUB entry unarmed on Golden, and publish that package checkpoint. No runtime is authorized by the static 0047 checkpoint.
+  Publish the installed/unarmed 0047 package checkpoint. Then rerun package preflight and package inspection against that exact public commit, verify Golden saved default, empty next_entry, no camera modules and frozen asset hashes, and only then create a separate one-boot/one-root-helper/no-retry authorization. Keep the candidate unarmed until the authorization commit is public.
