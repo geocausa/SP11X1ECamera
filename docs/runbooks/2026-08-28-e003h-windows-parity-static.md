@@ -581,3 +581,10 @@ Static Linux `0041` remains an independent `LINUX_IMPLEMENTATION`: it includes `
 The disposable package is repinned after requester-SID closure and Linux `0041`. Candidate CAMSS is `7d8c8953f8c14e34d36e3d2352b3ea2581d66a5af777f061f6cd0951fcee1680`, containing persistent stage observation and exact four-FIFO Windows acknowledgement. The rebuilt front-only DTB is `019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f` and contains exactly the five-entry CAMSS IOMMU set `0x800/0x60,0x820/0x60,0x840/0x60,0x860/0x60,0x18a0/0`, VFE spans `0xf000`, RT-CDM1 `0x0ac26000/0x1000`, and only front port@2.
 
 `preflight-pix-one-shot.sh` now requires a green bounded provenance gate and validates the exact IOMMU set. Package inspection v3 `d28f04d96f0e405fbf8710f3e0e0a872c845b781af05b60a6ed98ecc10c5cce4` passes with Golden saved/default, empty `next_entry`, candidate modules unloaded and the candidate boot installed but unarmed. No runtime authorization follows from this refresh.
+
+
+## 2026-08-30 — one post-provenance third PIX diagnostic authorized
+
+Fresh Golden/package review passes with bounded provenance green, CAMSS `7d8c8953f8c14e34d36e3d2352b3ea2581d66a5af777f061f6cd0951fcee1680`, front-only corrected-IOMMU DT `019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f`, persistent stage observer required and candidate boot installed but unarmed. The two earlier failure modes now have concrete mitigations: exact Windows IRQ acknowledgement replaces the first context-gate mismatch, and the stale Linux CAMSS IOMMU list is corrected with the same-machine requester SID 0x18a0 now proven. Review JSON SHA-256 `73cec6f240c8c20f54eca1dfa141dc8330564e763fd6d9fc2cb43709a723d6d6`.
+
+Authorization is exactly one candidate boot and one **root** `RUN`. There is no non-root pre-trigger probe and no same-boot retry. The persistent RT-CDM watcher must be active and fsyncing before RUN. Any result is archived and followed by immediate Golden reboot.

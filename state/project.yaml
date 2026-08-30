@@ -5,7 +5,7 @@ updated: 2026-08-29
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-post-provenance-pix-package-v3-installed-unarmed-golden-safe
+status: e003h-third-pix-diagnostic-authorized-not-yet-armed-golden-safe
 
 golden:
   boot_entry: sp11-audio-fullio-v19c
@@ -905,17 +905,19 @@ e003h:
   linux_front_postprov_iommu_set: 0x800/0x60; 0x820/0x60; 0x840/0x60; 0x860/0x60; 0x18a0/0
   linux_front_postprov_package_installed: true
   linux_front_postprov_package_armed: false
-  linux_front_postprov_runtime_authorized: false
+  linux_front_postprov_runtime_authorized: true
+  linux_front_postprov_authorization_scope: exactly one candidate boot and one root RUN; no non-root pre-trigger; no same-boot retry; persistent observer required; immediate Golden reboot after any result
+  linux_front_postprov_authorization_review_sha256: 73cec6f240c8c20f54eca1dfa141dc8330564e763fd6d9fc2cb43709a723d6d6
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_schema: sp11-front-parity-provenance-v1
   front_parity_provenance_runtime_blockers: []
   front_parity_provenance_production_blockers: [rtcdm.fe_fifo_ultimate_origin, iq.live_provider_algorithms]
   front_parity_provenance_checker: tools/check-front-parity-provenance.py
   front_parity_provenance_enforced_in_pix_preflight: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; bounded transport provenance is green but no new PIX runtime is authorized; production parity still requires the ultimate FE_CFG/FIFO0_CFG owner classification and an independently implemented live IQ/provider strategy
-next_experiment: E003h-bounded-vfe1-pix-post-provenance-authorization-review
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; exactly one post-provenance diagnostic is authorized but not yet consumed; production parity still requires the ultimate FE_CFG/FIFO0_CFG owner classification and an independently implemented live IQ/provider strategy
+next_experiment: E003h-bounded-vfe1-pix-third-diagnostic-one-shot-runtime
 next_action: >-
-  Do not run PIX yet. Bounded provenance and post-provenance package v3 preflight are green, with the corrected 0x18a0 CAMSS IOMMU domain, persistent RT-CDM observer, and exact four-FIFO IRQ parity. Perform a fresh one-shot authorization review against Golden, package hashes, prior two failure modes, rollback and persistent observer readiness. Any further PIX attempt requires a new explicit one-shot authorization checkpoint.
+  Exactly one post-provenance diagnostic candidate boot and one root RUN are authorized. Arm only sp11-camera-e003h-pix-one-shot; load the pinned CAMSS+IMX681; configure only the exact front PIX route; allocate exactly two QC10C buffers without QBUF/STREAMON; start the persistent RT-CDM watcher before RUN; invoke the helper once as root; archive all evidence; never retry in the same boot; immediately return to Golden after success or failure.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
