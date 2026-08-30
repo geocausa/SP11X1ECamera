@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0045 one-shot runtime authorized, still unarmed — 2026-08-30
+
+Fresh authorization review passed against public package commit `3ed5a2c99304ca426fcd591b30dcecd4f46977f9`. It re-ran the Golden package preflight and package inspector, reproduced package-inspection SHA-256 `9be675f49382dcb57e53f4bfa02ac2c08381ec7316c5d00c67e02b65fff2a53a`, verified HEAD/origin synchronization, bounded provenance, frozen runtime assets, Golden saved default, empty `next_entry`, and no camera modules loaded.
+
+`AUTHORIZATION-REVIEW.json` SHA-256 is `02fd9733e88bd908e5dee098384727a6ed1876a7fcfef79944729a5aa1e14872`; `AUTHORIZATION.json` SHA-256 is `75870317b1bae8fe5ac74b0e766bdf86628ea9732d78ffe98048771ff8d68e29`. The authorization permits exactly one 0045 candidate boot and one root helper invocation, requires the persistent RT-CDM observer, prohibits normal QBUF/STREAMON and non-root pretrigger, forbids same-boot retry, and requires evidence archival plus immediate Golden return after any helper result. Production parity is not authorized.
+
+**The candidate remains unarmed at this checkpoint.** After this authorization commit is pushed, set `next_entry` exactly once to `sp11-camera-e003h-ife-base-0045-one-shot`, boot the candidate, run the authorization-aware preflight/module/media/observer sequence, invoke the helper once, and return immediately to Golden.
+
 ## E003h ACTIVE — 0045 startup-base candidate installed and inspected unarmed — 2026-08-30
 
 The static 0045 startup-base correction is now packaged as a distinct one-shot candidate with frozen package-local runtime inputs. `preflight.sh` passed on Golden against the public static checkpoint, Windows startup-wrapper oracle, Linux 0045 inspection, bounded provenance, exact front-only DT/IOMMU set and all asset hashes. The installer created GRUB ID `sp11-camera-e003h-ife-base-0045-one-shot` under `/boot/sp11-7.1.5-camera-e003h-ife-base-0045` using the byte-proven Golden kernel/initrd and unchanged front-only DTB. It did not call `grub-reboot`; Golden remains `saved_entry=sp11-audio-fullio-v19c` and `next_entry` is empty.
