@@ -1,0 +1,335 @@
+{
+  "schema": "sp11-e003h-windows-csid1-ipp-start-v1",
+  "accepted": true,
+  "source": {
+    "driver": "qccamisp8380.sys",
+    "bytes": 376560,
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "companion_log": "E003H_IFE_CDM_COMPANION_EXACT_20260828.log",
+    "companion_bytes": 136290,
+    "companion_sha256": "3d9d1beb74641c8e699f045abcc79384c52d5365780dd3134a99ab0dbd42e194",
+    "route_log": "E003G_ROUTE_ORACLE_20260828.log",
+    "route_bytes": 2457712,
+    "route_sha256": "fd8edcee46e794dffa0e2305331f19d4e9d2cd5b9ba5197484aa1cc7fa6c6fca"
+  },
+  "windows_csid_0x804": {
+    "dispatcher_opcode_compare_rva": "0x218d8",
+    "branch_rva": "0x21b4c",
+    "payload_word0": "number of frames to skip",
+    "payload_word1": "camera use case",
+    "zero_skip_calls_dal_csid_start_rva": "0x24260",
+    "classification": "real CSID hardware/path start when frames_to_skip == 0"
+  },
+  "dal_csid_start": {
+    "function_rva": "0x24260",
+    "active_path_count_offset": "0x1e4",
+    "active_path_array_base_word_index": "0x72",
+    "path_enable_callback_offset": "0x218",
+    "ipp_path_id": 5
+  },
+  "ipp_path_enable": {
+    "function_rva": "0x1b3d0",
+    "path5_branch_rva": "0x1b48c",
+    "writes_in_order": [
+      {
+        "register_offset": "0x304",
+        "value": "0x00000001",
+        "role": "IPP control enable"
+      },
+      {
+        "register_offset": "0x0b0",
+        "value": "0x3cbc601c",
+        "role": "IPP IRQ mask"
+      },
+      {
+        "register_offset": "0x080",
+        "value": "0x00000001",
+        "role": "TOP IRQ mask"
+      }
+    ]
+  },
+  "initial_full_csid_builder": {
+    "function_rva": "0x1a870",
+    "proven_direct_writes": [
+      {
+        "register_offset": "0x0a0",
+        "value": "0x019fb800",
+        "role": "RX IRQ mask"
+      },
+      {
+        "register_offset": "0x090",
+        "value": "0x0001ffff",
+        "role": "BUF_DONE IRQ mask"
+      },
+      {
+        "register_offset": "0x334",
+        "value": "0x00130013",
+        "role": "IPP epoch IRQ config"
+      },
+      {
+        "register_offset": "0x324",
+        "value": "0x00000000",
+        "role": "exact zero; semantic name intentionally not promoted here"
+      }
+    ]
+  },
+  "captured_csid1_companion_0x803": {
+    "descriptor_index": 1,
+    "descriptor_type": "0x12",
+    "packets": [
+      {
+        "packet": 0,
+        "descriptor": {
+          "index": 1,
+          "handle": "0xffffd00d36103a20",
+          "offset": 0,
+          "capacity": 36864,
+          "used_length": 60,
+          "flags": 5,
+          "type": 18
+        },
+        "mapped_cpu_va": "0xffffe000190fa000",
+        "used_sha256": "1872731eaa3eb2233436029c2658682097c61ebf97e3facf46e31224ee25e2a2",
+        "commands": [
+          {
+            "stream_offset": "0x0",
+            "opcode": 3,
+            "count": 1,
+            "register_offset": "0x330",
+            "values": [
+              "0x00000000"
+            ]
+          },
+          {
+            "stream_offset": "0xc",
+            "opcode": 3,
+            "count": 2,
+            "register_offset": "0x37c",
+            "values": [
+              "0x00000001",
+              "0x00000000"
+            ]
+          },
+          {
+            "stream_offset": "0x1c",
+            "opcode": 3,
+            "count": 2,
+            "register_offset": "0x35c",
+            "values": [
+              "0x0eff0000",
+              "0x086f0000"
+            ]
+          },
+          {
+            "stream_offset": "0x2c",
+            "opcode": 3,
+            "count": 2,
+            "register_offset": "0x384",
+            "values": [
+              "0x0000001f",
+              "0x08700f00"
+            ]
+          }
+        ],
+        "writes": [
+          {
+            "register_offset": "0x330",
+            "value": "0x00000000"
+          },
+          {
+            "register_offset": "0x37c",
+            "value": "0x00000001"
+          },
+          {
+            "register_offset": "0x380",
+            "value": "0x00000000"
+          },
+          {
+            "register_offset": "0x35c",
+            "value": "0x0eff0000"
+          },
+          {
+            "register_offset": "0x360",
+            "value": "0x086f0000"
+          },
+          {
+            "register_offset": "0x384",
+            "value": "0x0000001f"
+          },
+          {
+            "register_offset": "0x388",
+            "value": "0x08700f00"
+          }
+        ]
+      },
+      {
+        "packet": 1,
+        "descriptor": {
+          "index": 1,
+          "handle": "0xffffd00d36103a20",
+          "offset": 36864,
+          "capacity": 36864,
+          "used_length": 16,
+          "flags": 5,
+          "type": 18
+        },
+        "mapped_cpu_va": "0xffffe00019103000",
+        "used_sha256": "45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7",
+        "commands": [
+          {
+            "stream_offset": "0x0",
+            "opcode": 3,
+            "count": 2,
+            "register_offset": "0x35c",
+            "values": [
+              "0x0eff0000",
+              "0x086f0000"
+            ]
+          }
+        ],
+        "writes": [
+          {
+            "register_offset": "0x35c",
+            "value": "0x0eff0000"
+          },
+          {
+            "register_offset": "0x360",
+            "value": "0x086f0000"
+          }
+        ]
+      },
+      {
+        "packet": 2,
+        "descriptor": {
+          "index": 1,
+          "handle": "0xffffd00d36103a20",
+          "offset": 73728,
+          "capacity": 36864,
+          "used_length": 16,
+          "flags": 5,
+          "type": 18
+        },
+        "mapped_cpu_va": "0xffffe0001910c000",
+        "used_sha256": "45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7",
+        "commands": [
+          {
+            "stream_offset": "0x0",
+            "opcode": 3,
+            "count": 2,
+            "register_offset": "0x35c",
+            "values": [
+              "0x0eff0000",
+              "0x086f0000"
+            ]
+          }
+        ],
+        "writes": [
+          {
+            "register_offset": "0x35c",
+            "value": "0x0eff0000"
+          },
+          {
+            "register_offset": "0x360",
+            "value": "0x086f0000"
+          }
+        ]
+      },
+      {
+        "packet": 3,
+        "descriptor": {
+          "index": 1,
+          "handle": "0xffffd00d36103a20",
+          "offset": 110592,
+          "capacity": 36864,
+          "used_length": 16,
+          "flags": 5,
+          "type": 18
+        },
+        "mapped_cpu_va": "0xffffe00019115000",
+        "used_sha256": "45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7",
+        "commands": [
+          {
+            "stream_offset": "0x0",
+            "opcode": 3,
+            "count": 2,
+            "register_offset": "0x35c",
+            "values": [
+              "0x0eff0000",
+              "0x086f0000"
+            ]
+          }
+        ],
+        "writes": [
+          {
+            "register_offset": "0x35c",
+            "value": "0x0eff0000"
+          },
+          {
+            "register_offset": "0x360",
+            "value": "0x086f0000"
+          }
+        ]
+      }
+    ],
+    "packet0_exact_zero_at_0x330": true,
+    "note": "The +0x330 zero is proven from exact same-machine command bytes; semantic register naming remains intentionally unresolved."
+  },
+  "same_machine_live_state": {
+    "wrapper_csid1_io_path_cfg0": "0x00000101",
+    "csid1_stable_values": {
+      "0x080": "0x00000001",
+      "0x090": "0x0001ffff",
+      "0x0a0": "0x019fb800",
+      "0x0b0": "0x3cbc601c",
+      "0x200": "0x11300000",
+      "0x204": "0x00000001",
+      "0x300": "0x802b2000",
+      "0x304": "0x00000001",
+      "0x310": "0x00007241",
+      "0x324": "0x00000000",
+      "0x328": "0xffff0000",
+      "0x32c": "0xffff0000",
+      "0x330": "0x00000000",
+      "0x334": "0x00130013",
+      "0x338": "0xffffffff",
+      "0x33c": "0xffffffff",
+      "0x35c": "0x0eff0000",
+      "0x360": "0x086f0000",
+      "0x364": "0x00000000",
+      "0x368": "0x00000001",
+      "0x36c": "0x00000000",
+      "0x370": "0x00000001",
+      "0x374": "0x00000000",
+      "0x378": "0x00000001",
+      "0x37c": "0x00000001",
+      "0x380": "0x00000000",
+      "0x384": "0x0000001f",
+      "0x388": "0x08700f00"
+    },
+    "volatile_or_readback_do_not_freeze": {
+      "0x340": "static ISR reads this as BUF_DONE/status state",
+      "0x398": "read by timestamp/readback path and differs between live passes",
+      "0x39c": "paired timestamp/readback field; do not promote merely because this capture is stable"
+    }
+  },
+  "linux_consequence": {
+    "front_mode0_only": true,
+    "required_parity_deltas": [
+      "write exact zero to CSID1 +0x324 during front IPP configuration",
+      "write exact zero to CSID1 +0x330 from captured companion packet",
+      "use Windows front-session IRQ masks: BUF_DONE +0x90=0x0001ffff, RX +0xa0=0x019fb800, IPP +0xb0=0x3cbc601c, TOP +0x80=0x00000001"
+    ],
+    "do_not_add": [
+      "a speculative CSID REG_UPDATE_CMD write: no such write is proven in the captured Windows CSID initial/start boundary",
+      "replay of +0x340/+0x398/+0x39c status/timestamp values"
+    ],
+    "timeout_telemetry_before_next_runtime": [
+      "wrapper CSID1 IO_PATH_CFG0",
+      "CSID1 RX packet/ECC/CRC counters",
+      "TOP/RX/IPP/BUF_DONE IRQ status and masks",
+      "CSID1 RX_CFG0/RX_CFG1",
+      "CSID1 IPP CFG/control/crop/drop/format-measure state"
+    ]
+  },
+  "runtime_authorized": false
+}

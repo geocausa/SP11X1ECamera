@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-08-29
+updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-postprov-run-reaches-sensor-on-epoch0-timeout-golden-restored-ife-start-static-next
+status: e003h-ife804-closed-csid1-ipp-start-oracle-0042-static-pass-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: vfe1-bus-session-order-resolved-dynamic-request-buffer-next
+  status: csid1-ipp-start-oracle-0042-static-pass-package-next
   runtime_authorized: false
   sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
@@ -990,10 +990,12 @@ e003h:
   - iq.live_provider_algorithms
   front_parity_provenance_checker: tools/check-front-parity-provenance.py
   front_parity_provenance_enforced_in_pix_preflight: true
-  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; exactly
-    one post-provenance diagnostic is authorized but not yet consumed; production
-    parity still requires the ultimate FE_CFG/FIFO0_CFG owner classification and an
-    independently implemented live IQ/provider strategy
+  unresolved: first Windows-matched VFE1 PIX/QC10C frame remains unproven; the
+    prior replacement diagnostic was consumed at sensor-on -> Epoch0 timeout; 0042
+    now corrects the exact Windows CSID1 IPP start boundary and adds bounded timeout
+    telemetry, but no new runtime is yet authorized; production parity still requires
+    the ultimate FE_CFG/FIFO0_CFG owner classification and an independently implemented
+    live IQ/provider strategy
   linux_front_postprov_authorization_boot_consumed: true
   linux_front_postprov_hardware_run_executed: false
   linux_front_postprov_harness_abort: pre-exec shell redirection Permission denied
@@ -1032,13 +1034,47 @@ e003h:
   linux_front_rtcdm_pre_csid_prefix_runtime_proven: true
   linux_front_epoch0_runtime_proven: false
   linux_front_runner_ife_resource_start_present: false
-next_experiment: E003h-ife-resource-start-static-oracle
-next_action: Do not repeat PIX runtime. The replacement run proves RT-CDM1 DMA/SMMU
-  visibility and all 13 pre-CSID FIFO completions, then starts IMX681 transmission
-  and times out waiting VFE1 raw Epoch0 before BUS slot1/prime2. Statically recover
-  the exact same-machine Windows IFE resource-start command 0x804 semantics and compare
-  them with the runner, which currently powers VFE1 but omits the retained 0022 IFE_RESOURCE_START
-  stage. Build/inspect that stage before any new runtime authorization.
+  windows_ife_start_804_log_sha256: 3b72a57e9c4b4568d66118f171690df476f4b1cbf4aaad159f46fbdc581acbfd
+  windows_ife_start_804_extractor_sha256: 2ebd922c6ff5b8a50f169d2a547de86761fcdb1c1ff5f244d7325e84b2e6f6e6
+  windows_ife_start_804_oracle_sha256: c26a33317ca4cd3bee5729099c7b14d7f8fd3b76a07343874db25081a29a5469
+  windows_ife_start_804_camera_use_case: 2
+  windows_ife_start_804_frames_to_skip: 0
+  windows_ife_start_804_direct_mmio: false
+  windows_ife_start_804_hardware_start_call: false
+  windows_ife_start_804_override_use_case_only: 4
+  windows_ife_start_804_front_skip_consumed: false
+  windows_ife_start_804_missing_start_hypothesis_closed: true
+  windows_csid1_start_oracle_extractor_sha256: 604aa1d91ee4d4eaab49392cf30db0822aa78e6f318b2a342872e74e010c9fd9
+  windows_csid1_start_oracle_sha256: 01960da41376809d694c6aa2336ecef6ff4c010abfa29e4674b1a68d303c3cda
+  windows_csid_804_zero_skip_calls_dal_csid_start: true
+  windows_csid_dal_start_rva: 0x24260
+  windows_csid_ipp_path_id: 5
+  windows_csid1_initial_rx_irq_mask: 0x019fb800
+  windows_csid1_initial_buf_done_irq_mask: 0x0001ffff
+  windows_csid1_ipp_start_order: +0x304=1 -> +0x0b0=0x3cbc601c -> +0x080=1
+  windows_csid1_ipp_exact_zero_offsets: +0x324=0; +0x330=0
+  windows_csid1_status_readback_do_not_freeze: +0x340; +0x398; +0x39c
+  linux_front_0042_patch: 0042-x1e-csid1-ipp-start-windows-parity.patch
+  linux_front_0042_patch_sha256: 0f21697369369be11d0692268f71ea2af3768346c9a63e5eb2d03f67c57e3414
+  linux_front_0042_build_log_sha256: cb24ce0d70c79acd7e2ed463a4a693b431a8fcec2d5667f9d2a4af66cd21c2a0
+  linux_front_0042_checkpatch_log_sha256: 6885c53cd76932b7910195a651a6c49fa401f43b0bd7d8ec57c8185210584e27
+  linux_front_0042_inspector_sha256: 333afdfc8ef360c84683ca10ab3a75687411157966fd91b62d433c5b27bf6263
+  linux_front_0042_inspection_sha256: 6d79f9ba9ff1265a372f37dd49717cf44208cbe3e413ccb3f0b0b385b3823430
+  linux_front_0042_module_sha256: c67ce602f88be5db2ffecd816879081d74f996f7884e8661bea252d924f7098e
+  linux_front_0042_module_vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+  linux_front_0042_front_mode0_only: true
+  linux_front_0042_synthetic_csid_reg_update_added: false
+  linux_front_0042_epoch0_timeout_csid_snapshot: true
+  linux_front_0042_patch_roundtrip_byte_identical: true
+  linux_front_0042_runtime_authorized: false
+next_experiment: E003h-csid1-ipp-start-parity-candidate-package
+next_action: Do not run PIX yet. IFE 0x804 is closed as a logical-only usecase/skip
+  capture for the front session. Exact Windows CSID 0x804/path-5 start semantics are
+  now represented by Linux 0042 and the static build/inspection gate passes. Build an
+  exact one-shot candidate package containing the c67ce602... qcom-camss module,
+  preserve Golden as saved/default, re-run package/provenance inspection, checkpoint
+  exact hashes, then authorize at most one diagnostic. On Epoch0 timeout capture the
+  new CSID1 snapshot before teardown; no same-boot retry.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:

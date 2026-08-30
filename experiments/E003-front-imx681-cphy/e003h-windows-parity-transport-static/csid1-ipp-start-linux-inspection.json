@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "schema": "sp11-e003h-linux-csid1-ipp-start-inspection-v1",
+  "windows_oracle": {
+    "sha256": "01960da41376809d694c6aa2336ecef6ff4c010abfa29e4674b1a68d303c3cda",
+    "accepted": true
+  },
+  "patch": {
+    "sha256": "0f21697369369be11d0692268f71ea2af3768346c9a63e5eb2d03f67c57e3414",
+    "checkpatch": "0 errors, 0 warnings",
+    "reverse_forward_roundtrip_byte_identical": true
+  },
+  "source": {
+    "camss_csid_680_sha256": "53b1b42e91e4dbf20567259dbbe14b3071b16892e78ca20c5a0decf667f89c76",
+    "camss_csid_h_sha256": "f76aa83cbee176d11c50bf4f631e21568d9ebc56e167763542538c8d91d6a08a",
+    "camss_c_sha256": "bd67117a82228897dcd30ed54fb8fe5f1e932c44cbe181c8784cc389ba922f5d"
+  },
+  "proved_linux_delta": {
+    "front_mode0_only": true,
+    "initial_masks": {
+      "buf_done": "0x0001ffff",
+      "rx": "0x019fb800"
+    },
+    "proven_zero_writes": [
+      "CSID1 +0x324 = 0",
+      "CSID1 +0x330 = 0"
+    ],
+    "start_order": [
+      "IPP_CTRL=1",
+      "IPP_IRQ_MASK=0x3cbc601c",
+      "TOP_IRQ_MASK=0x00000001"
+    ],
+    "synthetic_reg_update_cmd_added": false,
+    "epoch0_timeout_snapshot_before_teardown": true
+  },
+  "module": {
+    "sha256": "c67ce602f88be5db2ffecd816879081d74f996f7884e8661bea252d924f7098e",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+  },
+  "runtime_authorized": false,
+  "next_gate": "Update durable state and inspect the exact candidate package before any one-shot runtime authorization."
+}
