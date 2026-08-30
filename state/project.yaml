@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0047-package-installed-unarmed-authorization-review-next
+status: e003h-0047-one-shot-authorized-unarmed-runtime-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1598,7 +1598,21 @@ e003h:
   linux_front_0047_package_next_entry_empty: true
   linux_front_0047_package_camera_modules_loaded: false
   linux_front_0047_package_frozen_runtime_assets: true
+  linux_front_0047_authorization_package_commit: 64f7e3119438d925857ff235c3b66457bdcccc1a
+  linux_front_0047_authorization_preflight_sha256: d41e1949700127ddb26bbfbacee770b6fe7880d0496944afe5be038f2ed5a7de
+  linux_front_0047_authorization_reinspection_sha256: fb8678896ff2b928e61904c047a5d99dd4090f8995ddda2547c56c06874f0915
+  linux_front_0047_authorization_review_sha256: 1b96761e40198f97fd5f6ea9c673c256b3103c4e5b75a8ddf7aa8158d2bc4694
+  linux_front_0047_authorization_sha256: 98d8d7aeaaeddc01b7b8326da54a897b7dda31a233bafb1cb4b5b8cd95e6c91a
+  linux_front_0047_authorization_boot_count: 1
+  linux_front_0047_authorization_root_helper_invocations: 1
+  linux_front_0047_authorization_same_boot_retry: false
+  linux_front_0047_authorization_persistent_observer_required: true
+  linux_front_0047_authorization_normal_qbuf: false
+  linux_front_0047_authorization_normal_streamon: false
+  linux_front_0047_authorization_runtime: true
+  linux_front_0047_authorization_production_parity: false
+  linux_front_0047_authorization_consumed: false
 
-next_experiment: E003h-vfe1-dal-start-prefix-0047-authorization-review
+next_experiment: E003h-vfe1-dal-start-prefix-0047-one-shot-runtime
 next_action: >-
-  Publish the installed/unarmed 0047 package checkpoint. Then rerun package preflight and package inspection against that exact public commit, verify Golden saved default, empty next_entry, no camera modules and frozen asset hashes, and only then create a separate one-boot/one-root-helper/no-retry authorization. Keep the candidate unarmed until the authorization commit is public.
+  Publish this authorization checkpoint while the candidate remains unarmed. Then set next_entry exactly once to sp11-camera-e003h-vfe1-0047-one-shot, boot the candidate, run authorization-aware preflight before module load, establish the exact front PIX graph and persistent RT-CDM observer, invoke the root helper exactly once, archive the result, and immediately reboot to Golden. No same-boot retry and no normal QBUF/STREAMON.

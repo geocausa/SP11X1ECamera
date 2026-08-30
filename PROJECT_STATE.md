@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0047 one-shot runtime authorized, still unarmed — 2026-08-30
+
+Fresh authorization review passed against public package commit `64f7e3119438d925857ff235c3b66457bdcccc1a`. It re-ran package preflight and fail-closed package inspection before creating authorization, reproduced package inspection SHA-256 `498937c1093375c8bb1204e8aed8604e1258cc4531428757b818649d7eaaf509`, verified HEAD/origin synchronization, bounded provenance, frozen assets, Golden saved default, empty `next_entry`, and no camera modules.
+
+`AUTHORIZATION-REVIEW.json` SHA-256 is `1b96761e40198f97fd5f6ea9c673c256b3103c4e5b75a8ddf7aa8158d2bc4694`; `AUTHORIZATION.json` SHA-256 is `98d8d7aeaaeddc01b7b8326da54a897b7dda31a233bafb1cb4b5b8cd95e6c91a`. It permits exactly one 0047 candidate boot and one root helper invocation, requires the persistent RT-CDM observer, prohibits normal QBUF/STREAMON and non-root pretrigger, forbids same-boot retry, and requires evidence archival plus immediate Golden return after any helper result. Production parity remains unauthorized.
+
+**The candidate remains unarmed until this authorization checkpoint is pushed.**
+
 ## E003h ACTIVE — 0047 VFE DAL start-prefix package installed/inspected unarmed — 2026-08-30
 
 Static 0047 is now packaged distinctly at `e003h-vfe1-dal-start-prefix-0047-candidate`. Only CAMSS changes from the consumed 0046 harness: module SHA-256 `5e7bdadf76f293b48e4efb54a69c011cb00ff9af75806e9558176cd925dd5007`; IMX681, front-only DTB, capsule, helper, media setup and persistent RT-CDM observer are byte-identical to the proven inputs.
