@@ -1,0 +1,91 @@
+{
+  "accepted": true,
+  "bus_error_status": {
+    "classification": "read-only status; do not copy Windows values",
+    "offsets": [
+      "0xc64",
+      "0xc68",
+      "0xc70"
+    ]
+  },
+  "date": "2026-08-30",
+  "full_clients": {
+    "client0": {
+      "base": "0xe00",
+      "cfg": "0x00000011",
+      "frame_incr": "0x004f2000",
+      "image_cfg0": "0x05a00a00",
+      "image_cfg2": "0x00000e00",
+      "meta_cfg": "0x00000400",
+      "mode_cfg": "0x00000023",
+      "packer": "0x0000000b"
+    },
+    "client1": {
+      "base": "0xf00",
+      "cfg": "0x00000011",
+      "frame_incr": "0x00279000",
+      "image_cfg0": "0x02d00a00",
+      "image_cfg2": "0x00000e00",
+      "meta_cfg": "0x00000400",
+      "mode_cfg": "0x00000033",
+      "packer": "0x0000000b"
+    },
+    "dynamic_address_offsets": {
+      "client0_image": "0xe04",
+      "client0_meta": "0xe40",
+      "client1_image": "0xf04",
+      "client1_meta": "0xf40"
+    },
+    "dynamic_address_rule": "Compare Linux register readback only against Linux-owned slot-0 expected IOVAs; never compare/copy Windows addresses."
+  },
+  "irq": {
+    "bus_mask_offsets": [
+      "0xc18",
+      "0xc1c"
+    ],
+    "bus_status_offsets": [
+      "0xc28",
+      "0xc2c"
+    ],
+    "status_values_dynamic": true,
+    "top_mask_offsets": [
+      "0x34",
+      "0x38"
+    ],
+    "top_status_offsets": [
+      "0x44",
+      "0x48"
+    ],
+    "windows_example_active_status": {
+      "bus0": "0x00000017",
+      "bus1": "0x00611ff8",
+      "epoch0_bit_set": true,
+      "ife": 1,
+      "top0": "0x00002010",
+      "top1": "0x00000271"
+    },
+    "windows_live_masks": {
+      "bus0": "0xd0000000",
+      "bus1": "0x00000000",
+      "top0": "0x0007f051",
+      "top1": "0x00000000"
+    }
+  },
+  "policy": "Read-only timeout telemetry only. No MMIO writes, IRQ clears, start/stop changes or Windows dynamic addresses are permitted.",
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-vfe1-timeout-readonly-telemetry-oracle-v1",
+  "source": {
+    "bus_oracle": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-vfe1-bus/vfe1-bus-oracle.json",
+    "bus_oracle_sha256": "126599031f6b8e611f7f9930b2239edbfccbcee2f2d988f47a78b46e5786d927",
+    "raw_irq_oracle": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/vfe1-epoch0-raw-irq-oracle.json",
+    "raw_irq_oracle_sha256": "103d1bd11a5ac24d99602a909e24469e1b2bd177cdc499b857bda340308f0322",
+    "windows_vfe1_live_csv": "experiments/E003-front-imx681-cphy/e003g-windows-csid-vfe-oracle/vfe1-route-live-nonzero.csv",
+    "windows_vfe1_live_csv_sha256": "f99049d792a9c948de38923e2a11f1221e5d439e41e7f6c05ef97731f27edabc"
+  },
+  "startup_markers": {
+    "0x90": "0x00000001",
+    "0x94": "0x00000001",
+    "0x98": "0x00000001",
+    "classification": "same-machine Windows live-stable readback; semantic names intentionally unresolved"
+  }
+}

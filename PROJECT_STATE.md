@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0046 VFE1 timeout telemetry static PASS; package next — 2026-08-30
+
+0045 proved the missing IFE startup CHANGE_BASE wrapper was a real bug and repaired the CSID1 BUF_DONE mask clobber, but VFE1 raw Epoch0 still never arrives. Static 0046 adds **read-only timeout telemetry only** so the next bounded run can distinguish bad VFE programming from a missing upstream CAMIF handoff without changing camera behavior.
+
+The Windows telemetry allowlist is frozen in `vfe1-timeout-readonly-telemetry-oracle.json` SHA-256 `403f762c4d161823ca10deec27df733a50ca7d9d0d4aec4fb2cac05863ca6705`. It permits TOP/BUS IRQ status+masks, BUS violation/overflow/image-violation status, live-stable VFE1 offsets `+0x90/+0x94/+0x98`, and FULL client0/1 stable configuration. Dynamic image/meta addresses are compared only against Linux-owned slot-0 expected IOVAs; Windows dynamic addresses are not copied.
+
+Patch `0046-x1e-vfe1-timeout-readonly-telemetry.patch` SHA-256 `6ce9d732d73e6a09d73b756b1726b6f0e13702bede1d9ba0b61f9a5805d3b709` changes only `camss-vfe-680.c`, `camss-vfe.h`, and the existing Epoch0 timeout branch in `camss.c`. The helper performs 30 `readl_relaxed()` accesses, zero MMIO writes and zero new polling primitives; it runs only after the existing Epoch0 poll fails, before the existing CSID timeout snapshot. Start/stop, IRQ clear, buffer programming and CSID source are unchanged. Strict checkpatch is zero errors/warnings/checks; patch reverse/forward reconstruction is byte-identical.
+
+Golden-ABI module SHA-256 is `f1b5ce5dc973a140b29257927c02b2749f96f379fc01b78a10841443a15ab4be`; inspection SHA-256 is `2e9e0460e72567db162eaeac382fa7912656a85c2441ad582351e267f00edeca`. **No runtime is authorized.** Next package 0046 distinctly, install/inspect it unarmed, publish that package checkpoint, then perform a separate authorization review.
+
 ## E003h ACTIVE — 0045 runtime consumed; startup base clobber fixed, Epoch0 boundary unchanged — 2026-08-30
 
 The authorized 0045 one-shot executed exactly once and immediately returned to FullIO v19c Golden. Runtime preflight passed before module load, the exact front PIX graph selected `/dev/video7`, persistent RT-CDM observation reached READY/idle, and the sole root helper returned `ETIMEDOUT` waiting for VFE1 raw Epoch0. No same-boot retry occurred and no QC10C output was produced.

@@ -1,0 +1,120 @@
+From: geoca <geoca@localhost>
+Subject: [PATCH] media: qcom: camss: add bounded VFE1 timeout telemetry
+
+Add read-only VFE1 diagnostics at the existing E003h Epoch0 timeout.
+Report the same-machine Windows-owned TOP/BUS IRQ status and masks,
+bus violation/overflow status, three live-stable startup readback markers,
+and FULL client0/1 configuration plus Linux-owned dynamic address
+readback versus the already-materialized slot-0 expected IOVAs.
+
+The diagnostic helper performs no MMIO writes and changes no start, stop,
+IRQ-clear, polling or buffer programming behavior. It is invoked only after
+the existing bounded raw Epoch0 poll has timed out.
+
+Signed-off-by: geoca <geoca@localhost>
+---
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -37,6 +37,11 @@
+ #define VFE_BUS_WR_OVERFLOW_STATUS(vfe)		(vfe_is_lite(vfe) ? 0x268 : 0xc68)
+ #define VFE_BUS_WR_IMAGE_VIOLATION_STATUS(vfe)	(vfe_is_lite(vfe) ? 0x270 : 0xc70)
+ 
++/* Same-machine Windows VFE1 live-stable startup markers; semantics unresolved. */
++#define VFE680_X1E_STARTUP_MARKER0		0x0090
++#define VFE680_X1E_STARTUP_MARKER1		0x0094
++#define VFE680_X1E_STARTUP_MARKER2		0x0098
++
+ #define VFE_BUS_WRITE_CLIENT_CFG(vfe, c)	((vfe_is_lite(vfe) ? 0x400 : 0xe00) + (c) * 0x100)
+ #define		VFE_BUS_WRITE_CLIENT_CFG_EN	BIT(0)
+ #define VFE_BUS_IMAGE_ADDR(vfe, c)		((vfe_is_lite(vfe) ? 0x404 : 0xe04) + (c) * 0x100)
+@@ -1026,6 +1031,68 @@
+ 	runtime->bus_started = false;
+ }
+ 
++void vfe680_x1e_pix_runtime_dump(struct vfe_device *vfe,
++				 struct vfe680_x1e_pix_runtime *runtime,
++				 const char *reason)
++{
++	struct vfe680_x1e_bus_addresses expected;
++	void __iomem *c0, *c1;
++	const char *why = reason ? reason : "snapshot";
++	int ret;
++
++	if (!vfe680_x1e_bus_target(vfe) || !runtime || !runtime->bus_started)
++		return;
++
++	ret = vfe680_x1e_bus_build_addresses(&runtime->iovas[0], &expected);
++	if (ret) {
++		dev_info(vfe->camss->dev,
++			 "E003h VFE1 %s expected-address build failed: %d\n",
++			 why, ret);
++		return;
++	}
++
++	c0 = vfe680_x1e_bus_reg(vfe, 0, 0);
++	c1 = vfe680_x1e_bus_reg(vfe, 1, 0);
++	dev_info(vfe->camss->dev,
++		 "E003h VFE1 %s top=%08x/%08x mask=%08x/%08x bus=%08x/%08x bmask=%08x/%08x\n",
++		 why, readl_relaxed(vfe->base + VFE_TOP_IRQn_STATUS(vfe, 0)),
++		 readl_relaxed(vfe->base + VFE_TOP_IRQn_STATUS(vfe, 1)),
++		 readl_relaxed(vfe->base + VFE_TOP_IRQn_MASK(vfe, 0)),
++		 readl_relaxed(vfe->base + VFE_TOP_IRQn_MASK(vfe, 1)),
++		 readl_relaxed(vfe->base + VFE_BUS_IRQn_STATUS(vfe, 0)),
++		 readl_relaxed(vfe->base + VFE_BUS_IRQn_STATUS(vfe, 1)),
++		 readl_relaxed(vfe->base + VFE_BUS_IRQn_MASK(vfe, 0)),
++		 readl_relaxed(vfe->base + VFE_BUS_IRQn_MASK(vfe, 1)));
++	dev_info(vfe->camss->dev,
++		 "E003h VFE1 %s viol=%08x/%08x/%08x marker=%08x/%08x/%08x\n",
++		 why, readl_relaxed(vfe->base + VFE_BUS_WR_VIOLATION_STATUS(vfe)),
++		 readl_relaxed(vfe->base + VFE_BUS_WR_OVERFLOW_STATUS(vfe)),
++		 readl_relaxed(vfe->base + VFE_BUS_WR_IMAGE_VIOLATION_STATUS(vfe)),
++		 readl_relaxed(vfe->base + VFE680_X1E_STARTUP_MARKER0),
++		 readl_relaxed(vfe->base + VFE680_X1E_STARTUP_MARKER1),
++		 readl_relaxed(vfe->base + VFE680_X1E_STARTUP_MARKER2));
++	dev_info(vfe->camss->dev,
++		 "E003h VFE1 %s full0=%08x addr=%08x/%08x meta=%08x/%08x incr=%08x cfg0=%08x cfg2=%08x pack=%08x mode=%08x\n",
++		 why, readl_relaxed(c0 + VFE680_X1E_BUS_CFG),
++		 readl_relaxed(c0 + VFE680_X1E_BUS_IMAGE_ADDR), expected.image[0],
++		 readl_relaxed(c0 + VFE680_X1E_BUS_META_ADDR), expected.full_meta[0],
++		 readl_relaxed(c0 + VFE680_X1E_BUS_FRAME_INCR),
++		 readl_relaxed(c0 + VFE680_X1E_BUS_IMAGE_CFG0),
++		 readl_relaxed(c0 + VFE680_X1E_BUS_IMAGE_CFG2),
++		 readl_relaxed(c0 + VFE680_X1E_BUS_PACKER_CFG),
++		 readl_relaxed(c0 + VFE680_X1E_BUS_MODE_CFG));
++	dev_info(vfe->camss->dev,
++		 "E003h VFE1 %s full1=%08x addr=%08x/%08x meta=%08x/%08x incr=%08x cfg0=%08x cfg2=%08x pack=%08x mode=%08x\n",
++		 why, readl_relaxed(c1 + VFE680_X1E_BUS_CFG),
++		 readl_relaxed(c1 + VFE680_X1E_BUS_IMAGE_ADDR), expected.image[1],
++		 readl_relaxed(c1 + VFE680_X1E_BUS_META_ADDR), expected.full_meta[1],
++		 readl_relaxed(c1 + VFE680_X1E_BUS_FRAME_INCR),
++		 readl_relaxed(c1 + VFE680_X1E_BUS_IMAGE_CFG0),
++		 readl_relaxed(c1 + VFE680_X1E_BUS_IMAGE_CFG2),
++		 readl_relaxed(c1 + VFE680_X1E_BUS_PACKER_CFG),
++		 readl_relaxed(c1 + VFE680_X1E_BUS_MODE_CFG));
++}
++
+ int vfe680_x1e_pix_runtime_poll_epoch0(struct vfe_device *vfe,
+ 				       unsigned long timeout_us)
+ {
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -334,6 +334,9 @@
+ 				      unsigned int slot);
+ void vfe680_x1e_pix_runtime_bus_stop(struct vfe_device *vfe,
+ 				     struct vfe680_x1e_pix_runtime *runtime);
++void vfe680_x1e_pix_runtime_dump(struct vfe_device *vfe,
++				 struct vfe680_x1e_pix_runtime *runtime,
++				 const char *reason);
+ int vfe680_x1e_pix_runtime_poll_epoch0(struct vfe_device *vfe,
+ 				       unsigned long timeout_us);
+ int vfe680_x1e_pix_runtime_poll_video(struct vfe_device *vfe,
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7615,6 +7615,7 @@
+ 	ret = vfe680_x1e_pix_runtime_poll_epoch0(vfe,
+ 						 CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
+ 	if (ret) {
++		vfe680_x1e_pix_runtime_dump(vfe, pix, "epoch0-timeout");
+ 		csid680_x1e_front_runtime_dump(csid, "epoch0-timeout");
+ 		goto out_unwind;
+ 	}
