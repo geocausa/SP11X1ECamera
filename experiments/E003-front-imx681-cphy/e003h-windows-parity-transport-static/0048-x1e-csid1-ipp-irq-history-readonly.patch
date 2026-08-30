@@ -1,0 +1,54 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+index fb8e31c..1d5b6be 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -527,6 +527,10 @@ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason
+ 		 readl_relaxed(csid->base + CSID_IPP_SP11_PARITY_ZERO0),
+ 		 readl_relaxed(csid->base + CSID_IPP_SP11_PARITY_ZERO1),
+ 		 readl_relaxed(csid->base + CSID_IPP_EPOCH_IRQ_CFG));
++	dev_info(csid->camss->dev,
++		 "E003h CSID1 %s ipp-history=%08x/%08x/%u\n",
++		 why, csid->x1e_ipp_irq_seen_or, csid->x1e_ipp_irq_last,
++		 csid->x1e_ipp_irq_count);
+ 	dev_info(csid->camss->dev,
+ 		 "E003h CSID1 %s crop=%08x/%08x drop=%08x/%08x/%08x/%08x/%08x/%08x measure=%08x/%08x obs=%08x/%08x/%08x\n",
+ 		 why, readl_relaxed(csid->base + CSID_IPP_HCROP),
+@@ -579,6 +583,11 @@ static int csid_reset(struct csid_device *csid)
+ 			return -EIO;
+ 		}
+ 
++		/* Start a software-only history epoch before any front startup traffic. */
++		csid->x1e_ipp_irq_seen_or = 0;
++		csid->x1e_ipp_irq_last = 0;
++		csid->x1e_ipp_irq_count = 0;
++
+ 		return __csid_sp11_front_ipp_full_config(csid);
+ 	}
+ 
+@@ -674,6 +683,11 @@ static irqreturn_t csid_isr(int irq, void *dev)
+ 
+ 	if (!csid_is_lite(csid)) {
+ 		ipp_val = readl(csid->base + CSID_IPP_IRQ_STATUS);
++		if (ipp_val && __csid_sp11_front_ipp_mode0(csid)) {
++			csid->x1e_ipp_irq_seen_or |= ipp_val;
++			csid->x1e_ipp_irq_last = ipp_val;
++			csid->x1e_ipp_irq_count++;
++		}
+ 		if (ipp_val)
+ 			writel(ipp_val, csid->base + CSID_IPP_IRQ_CLEAR);
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index 0653ad1..36ac4fc 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -164,6 +164,10 @@ struct csid_device {
+ 	u32 irq;
+ 	char irq_name[30];
+ 	u32 reg_update;
++	/* E003h software-only IPP IRQ history; never used to drive hardware. */
++	u32 x1e_ipp_irq_seen_or;
++	u32 x1e_ipp_irq_last;
++	u32 x1e_ipp_irq_count;
+ 	struct camss_clock *clock;
+ 	int nclocks;
+ 	struct regulator_bulk_data *supplies;

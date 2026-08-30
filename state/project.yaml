@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-windows-rtcdm-bl-boundaries-closed-postbus-presensor-lifecycle-next
+status: e003h-0048-static-pass-csid-ipp-irq-history-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1664,6 +1664,25 @@ windows_rtcdm_bl_boundary_closure:
   linux_delta_justified: false
   runtime_authorized: false
 
-next_experiment: E003h-windows-first-start-postbus-presensor-lifecycle
+linux_irq_observer_integrity_0048:
+  accepted: true
+  date: 2026-08-30
+  vfe_epoch0_poll_observer_safe: true
+  vfe_reason: VFE680 ISR returns IRQ_HANDLED without reading or clearing TOP/BUS status
+  csid_timeout_ipp_snapshot_historical: false
+  csid_reason: CSID680 ISR reads IPP +0xac and clears the complete nonzero value through +0xb4 on each interrupt
+  superseded_inference: final IPP_IRQ_STATUS 0x00011e00 alone cannot prove CAMIF/RUP/Epoch bits never occurred earlier
+  observer_extractor_sha256: 67ec1a42a05c96648426cbee5625f3607158090de08d582e6c776c3d8a069a32
+  observer_oracle_sha256: 23bc970a9bacff901e1336208282904cb9c0add0dfd5bea311194caeacb5451d
+  patch_0048_sha256: 91d292888e563c2d4e0ffc65664cfa4b0a3225cb1f56af9053652998ff0be1d7
+  module_0048_sha256: 94cc14d9702492bffa2b4e72989db45356cf59ffcce7f4c382be13e7130030b7
+  inspector_0048_sha256: b1ea1ed6122281c0b67bd3283ad401dc80065a2633f6394fdc4d01c6106b1857
+  inspection_0048_sha256: 6e98360aa0a83c8c61db1e67bd5c12f4fb6c7856698f48aea404a23100de8eb2
+  new_mmio_reads: 0
+  new_mmio_writes: 0
+  hardware_behavior_changed: false
+  runtime_authorized: false
+
+next_experiment: E003h-0048-csid1-ipp-irq-history-package
 next_action: >-
   Do not repeat 0047. Close the remaining same-machine Windows first-start lifecycle after VFE BUS start and before sensor-on, focusing on direct VFE/CSID callbacks or state transitions not represented by the current startup packet/callback model. Use existing KD/Ghidra evidence first; only authorize another Linux run after a new exact parity delta or narrowly justified phase telemetry is frozen and inspected.

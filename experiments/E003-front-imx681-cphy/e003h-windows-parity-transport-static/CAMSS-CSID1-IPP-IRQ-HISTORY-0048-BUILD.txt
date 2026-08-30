@@ -1,0 +1,15 @@
+# E003h 0048 — CSID1 IPP IRQ history telemetry build
+
+Base: accepted 0047 source state.
+Build command:
+
+`make -C /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src O=/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826 ARCH=arm64 M=drivers/media/platform/qcom/camss -j4 modules`
+
+Result: clean build, no compiler warnings/errors.
+
+- `camss-csid.h` SHA-256: `f2315c29cdde351f2f82b3f2db27934b76e0e8ee04f37c793f21120043fc96f5`
+- `camss-csid-680.c` SHA-256: `7ce2ec82c7bdf40a72385937c5a4a4412781b7a2e7fb321e4cbf35fd6b486950`
+- `qcom-camss.ko` SHA-256: `94cc14d9702492bffa2b4e72989db45356cf59ffcce7f4c382be13e7130030b7`
+- vermagic: `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+
+The 0048 patch adds no MMIO reads or writes. It latches the value already read by the existing CSID680 ISR before the existing clear, into software-only per-CSID fields. Runtime remains unauthorized at this static checkpoint.

@@ -1,0 +1,39 @@
+{
+  "accepted": true,
+  "base_0047_source_sha256": {
+    "camss-csid-680.c": "59e07a1b8322c7279a051bc1255f8912452300aadbf9bf8086312aec4daca1d0",
+    "camss-csid.h": "e581e9a43a74a577aa535a7e33af4f5cd7e8c7af455d3c3fccd083dac2766f44",
+    "camss-vfe-680.c": "0dc6269d8b7c0e57e1442dfea374f0e90bdf14b8e8ef58117a505cda6d643036",
+    "camss.c": "5a920032e138eee1154c4b9ae1846a445e02fbac3e7626a4245797502e73b793"
+  },
+  "date": "2026-08-30",
+  "hardware_behavior_changed": false,
+  "history_epoch": "after CSID1 software-reset completion and before full front configuration/startup/RUP traffic",
+  "isr_order": [
+    "existing IPP status read",
+    "software-only OR/last/count latch",
+    "existing IPP status clear",
+    "existing RUP_DONE bookkeeping"
+  ],
+  "module_sha256": "94cc14d9702492bffa2b4e72989db45356cf59ffcce7f4c382be13e7130030b7",
+  "module_vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+  "new_mmio_reads": 0,
+  "new_mmio_writes": 0,
+  "observer_integrity_oracle_sha256": "23bc970a9bacff901e1336208282904cb9c0add0dfd5bea311194caeacb5451d",
+  "patch_scope": [
+    "drivers/media/platform/qcom/camss/camss-csid-680.c",
+    "drivers/media/platform/qcom/camss/camss-csid.h"
+  ],
+  "patch_sha256": "91d292888e563c2d4e0ffc65664cfa4b0a3225cb1f56af9053652998ff0be1d7",
+  "purpose": "Distinguish whether CSID CAMIF/RUP/Epoch events occurred and were consumed by the existing ISR before the 0047 timeout snapshot; VFE Epoch0 absence remains independently observer-safe.",
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-linux-0048-csid1-ipp-irq-history-inspection-v1",
+  "source_lines_removed": 0,
+  "source_sha256": {
+    "camss-csid-680.c": "7ce2ec82c7bdf40a72385937c5a4a4412781b7a2e7fb321e4cbf35fd6b486950",
+    "camss-csid.h": "f2315c29cdde351f2f82b3f2db27934b76e0e8ee04f37c793f21120043fc96f5",
+    "camss-vfe-680.c": "0dc6269d8b7c0e57e1442dfea374f0e90bdf14b8e8ef58117a505cda6d643036",
+    "camss.c": "5a920032e138eee1154c4b9ae1846a445e02fbac3e7626a4245797502e73b793"
+  }
+}
+PASS: 0048 is software-only CSID IPP IRQ history telemetry on exact 0047 transport
