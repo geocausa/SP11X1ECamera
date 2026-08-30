@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0043-static-csid1-prepare-rup-enable-pass-package-next
+status: e003h-0043-package-installed-golden-safe-authorization-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -1150,14 +1150,38 @@ e003h:
   linux_front_0043_prepared_state_rollback_covered: true
   linux_front_0043_patch_roundtrip_byte_identical: true
   linux_front_0043_runtime_authorized: false
-next_experiment: E003h-csid1-prepare-rup-enable-package
-next_action: Do not repeat Linux PIX runtime yet. Same-machine Windows now proves CSID1
-  IPP configure with CTRL=0 and pre-RUP IRQ state, then the existing RT-CDM all-path
-  RUP/AUP value 0x01f501f5, then resource-5 IPP enable with CTRL=1 and final IRQ mask.
-  Static 0043 implements exactly that ordering and passes build/checkpatch/roundtrip
-  inspection with no duplicate RUP command. Package the exact 0043 module under a fresh
-  one-shot identity, refresh bounded provenance, inspect Golden/front-only/hash safety,
-  then use a separate authorization checkpoint before any powered diagnostic.
+  linux_front_0043_package_dir: experiments/E003-front-imx681-cphy/e003h-csid1-prepare-rup-enable-parity-candidate
+  linux_front_0043_candidate_boot_id: sp11-camera-e003h-csid1-0043-one-shot
+  linux_front_0043_candidate_boot_dir: /boot/sp11-7.1.5-camera-e003h-csid1-0043
+  linux_front_0043_candidate_cmdline_marker: sp11_camera_e003h_csid1_0043=1
+  linux_front_0043_candidate_installed: true
+  linux_front_0043_candidate_armed: false
+  linux_front_0043_package_camss_sha256: 23cc63f742f70ca3f70e25d89b34c9e8cef531ed6f3c9562f2f7b0d3a7ac05a9
+  linux_front_0043_package_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  linux_front_0043_package_sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
+  linux_front_0043_package_capsule_sha256: 6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20
+  linux_front_0043_package_helper_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  linux_front_0043_package_golden_kernel_sha256: bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
+  linux_front_0043_package_golden_initrd_sha256: ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d
+  linux_front_0043_package_install_script_sha256: db31ef1727bae59a2ca3c205572cf069dfa5af6c3b037905e61270441ba07d5c
+  linux_front_0043_package_load_script_sha256: 3ebda0b3b016001bc0bf70ec2d23e9067b555c3bab84b9872388465aebb5c38c
+  linux_front_0043_package_preflight_script_sha256: 5c280f6252cc6d2f9a623f5d050d1df53fd9f7743b803c3512e6863117e67dce
+  linux_front_0043_package_run_script_sha256: 3e9eedf6301f46922d2d93a111db475ac20cdf5cb6159fd9fb15010c5775ee34
+  linux_front_0043_package_setup_script_sha256: 4761ecfd1eb1dbd91582d687a7380c922d451e0ad2b7d03253dfedbe1380fe71
+  linux_front_0043_package_observer_script_sha256: cf3bd747c5cf8966813111b743f8ad205081226938015bf8303055f113094387
+  linux_front_0043_package_preflight_log_sha256: 6fb14667d7bd7444f62de879628953e4b133bb35b0a3373cf4c51cfaf7b78b2d
+  linux_front_0043_package_install_log_sha256: a67d45720791d97989366b3a9cf5cfc8fd75fdbfad8f9e6eb11b979df552f9b8
+  linux_front_0043_package_golden_saved_default: true
+  linux_front_0043_package_next_entry_empty: true
+  linux_front_0043_package_camera_modules_loaded: false
+  linux_front_0043_package_authorization_present: false
+  linux_front_0043_package_runtime_authorized: false
+next_experiment: E003h-csid1-0043-authorization-review
+next_action: The fresh 0043 one-shot boot is installed but not armed. Finalize the package
+  inspector against the refreshed bounded-provenance manifest, commit/push the exact
+  installed-package checkpoint, then create a separate authorization record for exactly
+  one candidate boot and one root helper invocation. Do not set next_entry or load camera
+  modules before that authorization checkpoint is public and all pre-arm gates pass.
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md
   first_read:
