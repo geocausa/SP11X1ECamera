@@ -5,7 +5,7 @@ updated: 2026-08-30
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0044-package-installed-unarmed-authorization-review-next
+status: e003h-0044-one-shot-authorized-unarmed
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,9 +124,9 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: csid1-common-lifecycle-0044-package-installed-unarmed
-  runtime_authorized: false
-  sensor_stream_authorized: false
+  status: csid1-common-lifecycle-0044-one-shot-authorized-unarmed
+  runtime_authorized: true
+  sensor_stream_authorized: true
   sensor_stream_on: 0x0100=0x01
   sensor_stream_off: 0x0100=0x00
   csid1_rx_cfg0_windows: 288358400
@@ -1233,14 +1233,14 @@ e003h:
   linux_front_0044_public_csid_s_stream_rollback_removed: true
   linux_front_0044_isr_irq_ack_retained: true
   linux_front_0044_patch_roundtrip_byte_identical: true
-  linux_front_0044_runtime_authorized: false
+  linux_front_0044_runtime_authorized: true
   linux_front_0044_package_dir: experiments/E003-front-imx681-cphy/e003h-csid1-common-lifecycle-0044-candidate
   linux_front_0044_candidate_boot_id: sp11-camera-e003h-csid1-0044-one-shot
   linux_front_0044_candidate_boot_dir: /boot/sp11-7.1.5-camera-e003h-csid1-0044
   linux_front_0044_candidate_cmdline_marker: sp11_camera_e003h_csid1_0044=1
   linux_front_0044_candidate_installed: true
   linux_front_0044_candidate_armed: false
-  linux_front_0044_package_authorization_present: false
+  linux_front_0044_package_authorization_present: true
   linux_front_0044_package_camss_sha256: 98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc
   linux_front_0044_package_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
   linux_front_0044_package_sensor_sha256: 389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388
@@ -1262,18 +1262,25 @@ e003h:
   linux_front_0044_package_golden_saved_default: true
   linux_front_0044_package_next_entry_empty: true
   linux_front_0044_package_camera_modules_loaded: false
-  linux_front_0044_package_runtime_authorized: false
+  linux_front_0044_authorization_review_sha256: b733c2576378268804e98d25fd9431002187357e61dbaced53d4152956034e44
+  linux_front_0044_authorization_sha256: 94d4c1b8eb34e42990ed02ea5c228d37a2521cc44417bba64c97cc70ae9d6162
+  linux_front_0044_authorization_package_commit: 8f5b405cc89de074c84e2318c33be90c9875bfc8
+  linux_front_0044_authorization_boot_count: 1
+  linux_front_0044_authorization_root_helper_invocations: 1
+  linux_front_0044_authorization_same_boot_retry: false
+  linux_front_0044_authorization_consumed: false
+  linux_front_0044_hardware_run_consumed: false
+  linux_front_0044_package_runtime_authorized: true
   front_parity_provenance_manifest: provenance/front-parity.json
   front_parity_provenance_bounded_pass: true
-next_experiment: E003h-csid1-common-lifecycle-0044-authorization-review
+next_experiment: E003h-csid1-common-lifecycle-0044-one-shot-runtime
 next_action: >-
-  Do not run the 0044 candidate as part of the package checkpoint. The distinct package is installed,
-  inspected, Golden-safe and unarmed with AUTHORIZATION.json absent and next_entry empty. First commit
-  and push this exact package state. Then perform a separate fresh authorization review requiring
-  HEAD==origin, Golden current boot, bounded provenance green, exact package inspection/hashes,
-  persistent observer contract, and no existing run evidence. Only if that review passes may a new
-  authorization allow exactly one candidate boot and one root helper invocation, with no same-boot
-  retry and immediate Golden return after the result.
+  Commit and push the explicit 0044 authorization checkpoint while the candidate remains unarmed.
+  Then arm exactly one boot of sp11-camera-e003h-csid1-0044-one-shot. On the candidate boot rerun
+  preflight, load the exact CAMSS/sensor modules, configure only the front PIX graph, start the
+  persistent RT-CDM observer and require READY/idle before invoking the root helper exactly once.
+  Archive helper/observer/dmesg/post hashes for any result and immediately reboot to Golden. Never
+  retry in the same candidate boot; a QC10C frame is bounded transport evidence only, not production parity.
 
 handoff:
   latest: docs/runbooks/2026-08-28-e003h-windows-parity-static.md

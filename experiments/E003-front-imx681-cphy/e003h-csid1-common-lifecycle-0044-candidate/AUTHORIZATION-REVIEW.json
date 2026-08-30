@@ -1,0 +1,49 @@
+{
+  "schema": "sp11-e003h-csid1-0044-authorization-review-v1",
+  "accepted": true,
+  "runtime_authorization_recommended": true,
+  "production_parity_authorized": false,
+  "date": "2026-08-30",
+  "review_commit": "8f5b405cc89de074c84e2318c33be90c9875bfc8",
+  "branch_remote_equal": true,
+  "golden": {
+    "current_boot": true,
+    "kernel_release": "7.1.5-sp11-render-parity-v4+",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "empty",
+    "camera_modules_loaded": false
+  },
+  "package": {
+    "inspection_sha256": "be15d0f6558efbe7c00b3257ceed60cb7af9e4895a2957368a55ba159e649128",
+    "inspector_sha256": "7ca9badf8b249244de74bf0855d38b4c37ae3d0a816de9dc5f7ffb81ad1d1e86",
+    "authorization_present_before_review": false,
+    "prior_0044_run_evidence_present": false,
+    "candidate_boot_installed": true,
+    "candidate_boot_armed": false
+  },
+  "bounded_provenance": {
+    "sha256": "5b016ae79b599a4675f7c5fde31619d53ef2c9c6143791f683504513058e78b1",
+    "green": true
+  },
+  "candidate": {
+    "camss_sha256": "98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc",
+    "sensor_sha256": "389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "capsule_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09"
+  },
+  "reason": "0042/0043 reproduced clean CSI ingress but no CAMIF/RUP/Epoch. Static 0044 closes a concrete same-machine Windows CSID1 common lifecycle mismatch and the distinct package is fully inspected. One bounded diagnostic is justified to test whether CSID CAMIF/RUP/Epoch and VFE1 Epoch0 progress.",
+  "execution_contract": {
+    "boot_count": 1,
+    "root_helper_invocation_count": 1,
+    "nonroot_pretrigger": false,
+    "normal_qbuf": false,
+    "normal_streamon": false,
+    "persistent_rtcdm_observer_required": true,
+    "same_boot_retry": false,
+    "existing_run_log_refuses_execution": true,
+    "after_any_helper_result": "archive evidence then immediately reboot to Golden"
+  },
+  "success_boundary": "At most one bounded first-PIX diagnostic; any QC10C frame is transport evidence only, not production image-quality parity.",
+  "failure_boundary": "Any preflight mismatch aborts without RUN; any helper result consumes the authorization and forbids same-boot retry."
+}

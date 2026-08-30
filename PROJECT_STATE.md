@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0044 exactly one bounded diagnostic authorized; still unarmed — 2026-08-30
+
+A fresh post-package authorization review passed against published package commit `8f5b405cc89de074c84e2318c33be90c9875bfc8`: HEAD equals origin, current boot is Golden, bounded provenance is green, package inspection remains exact, `next_entry` is empty, no camera modules are loaded, no prior 0044 runtime evidence exists, and the package was authorization-free at review time. Review SHA-256 is `b733c2576378268804e98d25fd9431002187357e61dbaced53d4152956034e44`.
+
+`AUTHORIZATION.json` SHA-256 `94d4c1b8eb34e42990ed02ea5c228d37a2521cc44417bba64c97cc70ae9d6162` now authorizes exactly **one** boot of `sp11-camera-e003h-csid1-0044-one-shot` and exactly **one root helper invocation**. Persistent RT-CDM observation is mandatory before the helper; there is no non-root pre-trigger, no normal QBUF/STREAMON, and no same-boot retry. Any helper result is consumed and must be archived followed immediately by reboot to Golden. Production image-quality parity is not authorized or claimed.
+
+The candidate is **not armed yet** at this checkpoint: Golden remains saved/default and `next_entry` remains empty. The authorization must be committed/pushed before `grub-reboot` is used.
+
 ## E003h ACTIVE — 0044 one-shot package installed, inspected, Golden-safe and unarmed — 2026-08-30
 
 The published static 0044 base is commit `b0f4cded52b242ceeb8743bc51db19819b500237`. A distinct package now exists at `experiments/E003-front-imx681-cphy/e003h-csid1-common-lifecycle-0044-candidate` with boot ID `sp11-camera-e003h-csid1-0044-one-shot` and `/boot/sp11-7.1.5-camera-e003h-csid1-0044`. It reuses byte-exact Golden kernel/initrd, the accepted front-only DTB, IMX681 module, PIX capsule/helper and observer; qcom-camss is the 0044 module SHA-256 `98b3252e9d1e8c46e81ea48fe0a6b4b0ecea77e1206915b4b1378040dc473cbc`.
