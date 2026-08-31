@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0059-authorized-unarmed
+status: linux-0059-consumed-lowtop-exact-match-ingress-event-static-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: camnoc-300mhz-parity-noncausal-vfe-ingress-static-next
+  status: lowtop-16of16-windows-match-vfe-ingress-event-static-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -2296,5 +2296,30 @@ linux_0049_runtime:
   runtime_analysis_sha256: dd7860df3b63a78ca9af13b871a5b5e44d2e3aaef12da64f791094257fc4eac4
   runtime_authorized: false
 
+linux_0059_runtime:
+  accepted: true
+  date: 2026-08-31
+  authorization_consumed: true
+  helper_invocations: 1
+  same_boot_retry: false
+  run_rc: 1
+  qc10c_output: false
+  golden_return_verified: true
+  rtcdm_fifo_bl_completed: 25
+  rtcdm_faulted: false
+  csid_geometry: 3840x2160
+  csid_line_error: false
+  vfe_raw_epoch0_seen: false
+  windows_linux_lowtop_exact_match: true
+  windows_linux_lowtop_matched_registers: 16
+  windows_linux_lowtop_mismatches: 0
+  runtime_run_sha256: 2ba3a9f3031109f5740990e1b98261aaf693c5209be4ec1d734ca78c83a1e36f
+  runtime_post_sha256: 8a347b53523adea35865f4517b7d360d1974d71a9215151001bef2c0b789c12f
+  runtime_dmesg_sha256: 3c86d58173cc4518a3aed1b1d47e8c83bac7ab3189cf9d2807346fba162f3898
+  runtime_rtcdm_stages_sha256: 3f04c8fe3ae8216455f2bfd03318282bbad8fd0460f0c9009af14e4c10933ae0
+  runtime_analysis_sha256: ef07be2d87a6fbeea79797ee662ba075285d1d51747e6e21ae624ef0825c1061
+  runtime_authorized: false
+  classification: VFE1 low-TOP config cluster closed as remaining stall cause; successful Windows values match Linux 16/16 while raw Epoch0 remains absent
+
 next_action: >-
-  Publish the installed/unarmed 0059 package checkpoint, then perform a fresh authorization review against that public package. Only then may exactly one bounded read-only telemetry boot be armed.
+  Keep runtime blocked. Localize VFE1 ingress/event-generation state outside the closed low-TOP configuration cluster; prefer static ownership and read-only telemetry over another programming write.

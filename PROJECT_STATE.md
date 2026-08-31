@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0059 consumed; VFE1 low-TOP configuration matches Windows 16/16 — 2026-08-31
+
+0059 executed exactly one authorized read-only telemetry run and returned immediately to FullIO Golden. No retry occurred. RT-CDM completed FIFO sequence 25 without fault; CSID1 remained healthy at 3840x2160 with no line-count error; VFE1 raw Epoch0 and QC10C remained absent.
+
+The in-driver timeout reads close the remaining low-TOP configuration cluster completely. Linux matches successful same-machine Windows exactly at all 16 pinned offsets: `core_cfg0/1/2`, `diag_config`, `core_cfg3`, the three stats-throttle registers, `core_cfg4/5/6`, `period_cfg`, startup markers `+0x90/+0x94/+0x98`, and `epoch_height_cfg`. There are zero mismatches. Accepted runtime analysis SHA `ef07be2d87a6fbeea79797ee662ba075285d1d51747e6e21ae624ef0825c1061`.
+
+Therefore no new low-TOP programming write is justified. 0059 authorization is consumed and runtime is blocked again. Remaining boundary is now healthy sensor/CSID + parity clocks/transport/BUS/start prefix + Windows-identical VFE1 low-TOP configuration -> missing VFE1 raw Epoch0. Next gate is static/read-only localization of VFE1 ingress/event-generation state outside this closed configuration cluster.
+
 ## E003h ACTIVE — one 0059 read-only VFE low-TOP telemetry run authorized, unarmed — 2026-08-31
 
 Fresh authorization against public package `d97d3aa97cee2f470f948dc4781b4ef4afe4d190` permits exactly one 0059 candidate boot/helper invocation. The delta remains 13 in-driver MMIO reads, zero writes and no camera-programming change. Authorization SHA `c6cd7e067fefeeaac332cb6a2af2ab7a4e41df424eaf24a0a3806a66276357b1`; inspection SHA `71edebd0456caa6fc0ed0521c5153eff347655476da5535f614aaef6d23aaf15`.
