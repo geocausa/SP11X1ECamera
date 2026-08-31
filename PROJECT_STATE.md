@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0058 read-only VFE1 aperture package installed/inspected, Golden-safe and unarmed — 2026-08-31
+
+The distinct 0058 one-shot package is installed with GRUB ID `sp11-camera-e003h-vfeap-0058-one-shot` and marker `sp11_camera_e003h_vfeap_0058=1`. It reuses the exact consumed 0057 CAMSS module `3fd0ebdc8a3f17fdc49e117d77fa10e03711dfbd27bc552e79230540f1cef80c` and mode2 IMX681 `a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc`; camera programming is therefore byte-identical to 0057. The only new runtime component is the statically accepted read-only VFE1 aperture observer.
+
+Package preflight and independent installed inspection pass. Manifest SHA `dfe91e78a3b0ec8fba66ff31be77ccec10309e6a184333c32bf07f34434cb49c`; package inspection SHA `08cf6b7d81460b366a1a90e5e6863860a69575a9271af2ff227e3f94afea18aa`. Both persistent RT-CDM and VFE-aperture observers are mandatory; exactly one helper invocation is enforced; pre-existing runtime artifacts refuse retry; the run wrapper has mandatory Golden reboot. Golden remains saved, `next_entry` empty, modules absent, authorization absent and no 0058 RUN exists.
+
+**0058 is installed but unarmed and runtime is not authorized.** Publish this package checkpoint first. A fresh authorization review may then permit one telemetry-only boot/helper run with zero camera-programming delta.
+
 ## E003h ACTIVE — 0058 static telemetry PASS; no camera programming delta — 2026-08-31
 
 After consumed 0057 left the VFE1 timeout byte-for-byte unchanged, the next gate is read-only state localization rather than another programming change. Static 0058 freezes the exact stock-Windows VFE1 live aperture source and a persistent Linux `/dev/mem` sampler for physical VFE1 `0x0ac71000..0x0ac74fff`. The sampler opens `/dev/mem` `O_RDONLY|O_SYNC`, maps `PROT_READ`, performs no mapped-memory write, captures the full 0x4000 aperture plus low-register transitions, and changes no sensor/CAMSS/CSID/VFE/BUS/RT-CDM/clock/DT programming.
