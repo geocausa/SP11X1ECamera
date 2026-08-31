@@ -1,0 +1,187 @@
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -6834,15 +6834,23 @@
+ #define CAMSS_X1E_PIX_PRIMING_MAX_BL_COUNT	5
+ #define CAMSS_X1E_PIX_PRIMING_COMPANION_SIZE	SZ_4K
+ #define CAMSS_X1E_PIX_PRIMING_PACKET_STRIDE	0x100
+-#define CAMSS_X1E_PIX_STARTUP_WRAPPER_SIZE			\
+-	(CAMSS_RTCDM1_CORPUS_PACKET_COUNT * sizeof(u32))
++#define CAMSS_X1E_PIX_STARTUP_WRAPPER_SIZE	SZ_4K
++#define CAMSS_X1E_PIX_STARTUP_PACKET_STRIDE	0x100
++#define CAMSS_X1E_PIX_STARTUP_VFE_BASE_OFFSET	0x00
++#define CAMSS_X1E_PIX_STARTUP_CSID_BASE_OFFSET	0x40
++#define CAMSS_X1E_PIX_STARTUP_COMPANION_OFFSET	0x80
+ #define CAMSS_X1E_PIX_STARTUP_CHANGE_BASE	0x0800f000
++#define CAMSS_X1E_PIX_STARTUP_CSID_CHANGE_BASE	0x08057000
+ 
+ struct camss_x1e_pix_startup_wrapper {
+ 	void *cpu;
+ 	dma_addr_t dma;
+-	u32 bl_dma[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
+-	u16 bl_len[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u32 vfe_base_dma[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u16 vfe_base_len[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u32 csid_base_dma[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u16 csid_base_len[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u32 companion_dma[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
++	u16 companion_len[CAMSS_RTCDM1_CORPUS_PACKET_COUNT];
+ 	bool materialized;
+ };
+ 
+@@ -6883,8 +6891,18 @@
+ static int camss_x1e_pix_startup_wrapper_materialize(struct camss *camss,
+ 						     struct camss_x1e_pix_startup_wrapper *out)
+ {
++	static const u32 companion_packet0[] = {
++		0x03000001, 0x00000330, 0x00000000,
++		0x03000002, 0x0000037c, 0x00000001, 0x00000000,
++		0x03000002, 0x0000035c, 0x0eff0000, 0x086f0000,
++		0x03000002, 0x00000384, 0x0000001f, 0x08700f00,
++	};
++	static const u32 companion_common[] = {
++		0x03000002, 0x0000035c, 0x0eff0000, 0x086f0000,
++	};
+ 	u8 *cpu;
+ 	unsigned int packet;
++	unsigned int i;
+ 	int ret;
+ 
+ 	if (!camss || !out || out->materialized || out->cpu)
+@@ -6898,10 +6916,32 @@
+ 
+ 	cpu = out->cpu;
+ 	for (packet = 0; packet < CAMSS_RTCDM1_CORPUS_PACKET_COUNT; packet++) {
+-		put_unaligned_le32(CAMSS_X1E_PIX_STARTUP_CHANGE_BASE,
+-				   cpu + packet * sizeof(u32));
+-		out->bl_dma[packet] = (u32)out->dma + packet * sizeof(u32);
+-		out->bl_len[packet] = sizeof(u32);
++		u32 base = packet * CAMSS_X1E_PIX_STARTUP_PACKET_STRIDE;
++		u8 *vfe_base = cpu + base + CAMSS_X1E_PIX_STARTUP_VFE_BASE_OFFSET;
++		u8 *csid_base = cpu + base + CAMSS_X1E_PIX_STARTUP_CSID_BASE_OFFSET;
++		u8 *companion = cpu + base + CAMSS_X1E_PIX_STARTUP_COMPANION_OFFSET;
++		u64 dma = (u64)out->dma + base;
++		const u32 *words;
++		unsigned int count;
++
++		put_unaligned_le32(CAMSS_X1E_PIX_STARTUP_CHANGE_BASE, vfe_base);
++		put_unaligned_le32(CAMSS_X1E_PIX_STARTUP_CSID_CHANGE_BASE, csid_base);
++		out->vfe_base_dma[packet] = (u32)dma + CAMSS_X1E_PIX_STARTUP_VFE_BASE_OFFSET;
++		out->vfe_base_len[packet] = sizeof(u32);
++		out->csid_base_dma[packet] = (u32)dma + CAMSS_X1E_PIX_STARTUP_CSID_BASE_OFFSET;
++		out->csid_base_len[packet] = sizeof(u32);
++
++		if (!packet) {
++			words = companion_packet0;
++			count = ARRAY_SIZE(companion_packet0);
++		} else {
++			words = companion_common;
++			count = ARRAY_SIZE(companion_common);
++		}
++		for (i = 0; i < count; i++)
++			put_unaligned_le32(words[i], companion + i * sizeof(u32));
++		out->companion_dma[packet] = (u32)dma + CAMSS_X1E_PIX_STARTUP_COMPANION_OFFSET;
++		out->companion_len[packet] = count * sizeof(u32);
+ 	}
+ 	out->materialized = true;
+ 	return 0;
+@@ -7133,29 +7173,54 @@
+ 
+ 	if (!wrapper || !wrapper->materialized || !corpus ||
+ 	    !corpus->materialized || packet >= CAMSS_RTCDM1_CORPUS_PACKET_COUNT ||
+-	    !wrapper->bl_dma[packet] || wrapper->bl_len[packet] != sizeof(u32) ||
+-	    !corpus->packet_dma[packet] || !corpus->packet_len[packet])
++	    !wrapper->vfe_base_dma[packet] ||
++	    wrapper->vfe_base_len[packet] != sizeof(u32) ||
++	    !corpus->packet_dma[packet] || !corpus->packet_len[packet] ||
++	    !wrapper->csid_base_dma[packet] ||
++	    wrapper->csid_base_len[packet] != sizeof(u32) ||
++	    !wrapper->companion_dma[packet] || !wrapper->companion_len[packet])
+ 		return -EINVAL;
+ 
+ 	/*
+-	 * Windows queues one four-byte KMD common-config BL before every startup
+-	 * main BL.  The main streams contain no CHANGE_BASE themselves, while
+-	 * same-machine execution proves them VFE1-relative.  Keep the captured
+-	 * main bytes untouched and establish VFE1 base explicitly here.
++	 * Match the captured Windows startup ownership exactly: establish the VFE1
++	 * base, submit the IFE main BL, switch RT-CDM to CSID1, then submit the
++	 * descriptor-1 CSID companion BL. The companion bytes are unchanged from
++	 * the prior CPU-MMIO replay; only their hardware owner/transport changes.
+ 	 */
+-	ret = camss_rtcdm1_windows_fifo0_commit(camss, wrapper->bl_dma[packet],
+-						wrapper->bl_len[packet] - 1);
++	ret = camss_rtcdm1_windows_fifo0_commit(camss,
++						wrapper->vfe_base_dma[packet],
++						wrapper->vfe_base_len[packet] - 1);
+ 	if (ret) {
+ 		dev_err(camss->dev,
+-			"E003h PIX startup packet%u CHANGE_BASE failed: %d\n",
++			"E003h PIX startup packet%u VFE CHANGE_BASE failed: %d\n",
+ 			packet, ret);
+ 		return ret;
+ 	}
+ 
+ 	ret = camss_rtcdm1_windows_fifo0_commit(camss, corpus->packet_dma[packet],
+ 						corpus->packet_len[packet] - 1);
++	if (ret) {
++		dev_err(camss->dev, "E003h PIX startup packet%u failed: %d\n",
++			packet, ret);
++		return ret;
++	}
++
++	ret = camss_rtcdm1_windows_fifo0_commit(camss,
++						wrapper->csid_base_dma[packet],
++						wrapper->csid_base_len[packet] - 1);
++	if (ret) {
++		dev_err(camss->dev,
++			"E003h PIX startup packet%u CSID CHANGE_BASE failed: %d\n",
++			packet, ret);
++		return ret;
++	}
++
++	ret = camss_rtcdm1_windows_fifo0_commit(camss,
++						wrapper->companion_dma[packet],
++						wrapper->companion_len[packet] - 1);
+ 	if (ret)
+-		dev_err(camss->dev, "E003h PIX startup packet%u failed: %d\n",
++		dev_err(camss->dev,
++			"E003h PIX startup packet%u CSID companion failed: %d\n",
+ 			packet, ret);
+ 	return ret;
+ }
+@@ -7559,18 +7624,12 @@
+ 					   &materialized->startup, 0);
+ 	if (ret)
+ 		goto out_unwind;
+-	ret = csid680_x1e_front_ipp_companion(csid, 0);
+-	if (ret)
+-		goto out_unwind;
+ 	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 0);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = camss_x1e_pix_submit_startup(camss,
+ 					   &materialized->startup_wrapper,
+ 					   &materialized->startup, 1);
+-	if (ret)
+-		goto out_unwind;
+-	ret = csid680_x1e_front_ipp_companion(csid, 1);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = vfe680_x1e_pix_runtime_start_prefix(vfe);
+@@ -7589,15 +7648,9 @@
+ 					   &materialized->startup, 2);
+ 	if (ret)
+ 		goto out_unwind;
+-	ret = csid680_x1e_front_ipp_companion(csid, 2);
+-	if (ret)
+-		goto out_unwind;
+ 	ret = camss_x1e_pix_submit_startup(camss,
+ 					   &materialized->startup_wrapper,
+ 					   &materialized->startup, 3);
+-	if (ret)
+-		goto out_unwind;
+-	ret = csid680_x1e_front_ipp_companion(csid, 3);
+ 	if (ret)
+ 		goto out_unwind;
+ 

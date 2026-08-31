@@ -2,6 +2,10 @@
 
 ## Resume point
 
+## E003h ACTIVE — 0053 static PASS; startup companion transport parity — 2026-08-31
+
+Windows descriptor-1 startup companion bytes are now hash-reconstructed exactly and prove RT-CDM ownership after `CHANGE_BASE 0x00057000`. Linux 0052 used CPU MMIO for the same values. 0053 changes only transport: `VFE base -> startup main -> CSID base -> exact companion` through FIFO0, removing four active CPU-companion calls. Patch `dba1d21f...cfd6`, module `f04189d7...e876`, accepted inspection `72ceb088...20fea`, strict checkpatch 0/0/0. No new register/value and no causal crop claim. Runtime remains unauthorized; package unarmed next.
+
 ## E003h ACTIVE — 0052 clock-rate package installed/inspected unarmed — 2026-08-31
 
 A distinct Golden-safe 0052 package is installed under `/boot/sp11-7.1.5-camera-e003h-csidclk-0052` with GRUB ID `sp11-camera-e003h-csidclk-0052-one-shot`. It binds static checkpoint `23ea4ce8b6ddc2bc76e15f2121087eeef34b8484` and CAMSS `42662121c848d863b06e3aba737e0f80a35fc047faf8cf5b0f47e2554ba3e92a`; helper, IMX681, front-only DTB, capsule, media setup and RT-CDM observer remain byte-identical to consumed 0051.

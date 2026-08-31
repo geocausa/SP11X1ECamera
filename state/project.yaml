@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0052-consumed-hbi-fixed-crop-unchanged-static-next
+status: e003h-0053-static-startup-companion-rtcdm-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: linux-0052-consumed-hbi-fixed-crop-unchanged-static-next
+  status: linux-0053-static-startup-companion-rtcdm-package-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -287,6 +287,29 @@ e003h:
   linux_0052_runtime_analysis_sha256: 4367b9fe31552baf59cd7212743585fc990a07638794a81da178a22e1591ddba
   linux_0052_golden_return_verified: true
   linux_0052_next_gate: static CSID680 active vertical-crop/latch semantics; compare IPP CFG0/VCROP/CTRL order, RUP/AUP/update commands and LUT/active-bank selection; no runtime until concrete delta
+  linux_0053_status: static-pass-startup-companion-rtcdm-package-next
+  linux_0053_transport_oracle_sha256: 4b70a61a2e226b37d9310b4b4dee4d77c7516f975498973ee89dc29d772e2e5c
+  linux_0053_oracle_extractor_sha256: 3dfe96a9b900e98e4ee93168df65eb2db0fbea1d180a85ddc7239a85f6d76d68
+  linux_0053_patch_sha256: dba1d21fdc01f4091af89ce051283464661952ce2d1acd1f59afb75c8b52cfd6
+  linux_0053_base_camss_sha256: 5a920032e138eee1154c4b9ae1846a445e02fbac3e7626a4245797502e73b793
+  linux_0053_camss_sha256: b8cb256514337f1767ba5dab002cc59ff4f0c8f73f9be03f83de77ab8b3507c9
+  linux_0053_module_sha256: f04189d766f478083e09fd38b26e73c99c03306ce1f2fb81d68b2ebd0d2be876
+  linux_0053_inspector_sha256: ebd637308986670ea6f24a1933aee75ecc7c87ff692f62e87ad92f0ca1afaab2
+  linux_0053_inspection_sha256: 72ceb0880f673bc1d17698eb228612a88b8bf4683b8f034a9de4f1b784120fea
+  linux_0053_startup_rtcdm_commits_per_packet: 4
+  linux_0053_startup_rtcdm_order: VFE_CHANGE_BASE -> IFE_MAIN -> CSID1_CHANGE_BASE -> EXACT_DESCRIPTOR1_COMPANION
+  linux_0053_csid1_change_base: 0x00057000
+  linux_0053_packet0_companion_sha256: 1872731eaa3eb2233436029c2658682097c61ebf97e3facf46e31224ee25e2a2
+  linux_0053_packet1_3_companion_sha256: 45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7
+  linux_0053_cpu_startup_companion_calls_removed: 4
+  linux_0053_new_mmio_reads: 0
+  linux_0053_new_mmio_writes: 0
+  linux_0053_new_register_values: 0
+  linux_0053_transport_ownership_mismatch_proven: true
+  linux_0053_crop_failure_causality_proven: false
+  linux_0053_runtime_authorized: false
+  linux_0053_hardware_execution_performed: false
+  linux_0053_next_gate: build and inspect distinct unarmed one-shot package; separate fresh authorization required before hardware execution
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac

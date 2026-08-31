@@ -1,0 +1,113 @@
+{
+  "accepted": true,
+  "allowed_0053_delta": [
+    "materialize exact captured packet0 and packet1..3 CSID companion CDM bytes in Linux-owned coherent DMA",
+    "after each startup VFE main BL, submit CHANGE_BASE 0x08057000 then the exact matching CSID companion BL through the existing RT-CDM FIFO0 commit path",
+    "remove the four startup-path calls that replay those companion writes through CPU MMIO"
+  ],
+  "classification": {
+    "0053_static_delta_justified": true,
+    "active_shadow_latch_causality_proven": false,
+    "crop_failure_causality_proven": false,
+    "host_order_mismatch_proven": false,
+    "reason": "restore the exact captured Windows owner/transport for the already-proven startup CSID companion command bytes without introducing a new register or value",
+    "register_value_mismatch_proven": false,
+    "transport_ownership_mismatch_proven": true
+  },
+  "evidence_sha256": {
+    "camss": "5a920032e138eee1154c4b9ae1846a445e02fbac3e7626a4245797502e73b793",
+    "csid680": "683c0d5c042d3a8f24be211cda7dc02d06befe31e42aeb29fcd14f117397c81c",
+    "csidh": "5869c6721ebec550d5d3e21e6503fd1f580ebb1aa0991ea25532cfb12156b46d",
+    "qccamisp": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "windows_bl": "6741c46589c6bc976ad87a0aad566088e831c452e41961df309bda40f62dc45f",
+    "windows_ipp": "01960da41376809d694c6aa2336ecef6ff4c010abfa29e4674b1a68d303c3cda"
+  },
+  "forbidden_0053_delta": [
+    "new CSID register values",
+    "new crop coordinates",
+    "new RUP/AUP value",
+    "new LUT/bank write",
+    "new sensor/CSIPHY/VFE programming",
+    "runtime authorization",
+    "same-machine hardware execution"
+  ],
+  "linux_0052_baseline": {
+    "cpu_companion_calls": 4,
+    "same_companion_values_already_materializable_as_cdm": true,
+    "startup_csid_companion_transport": "CPU MMIO via csid680_x1e_front_ipp_companion()",
+    "startup_rtcdm_commits_per_packet": 2,
+    "startup_rtcdm_sequence": [
+      "CHANGE_BASE(VFE1)",
+      "IFE startup main"
+    ]
+  },
+  "next_gate": "implement the static transport-only delta, build qcom-camss.ko, strict-checkpatch and fail-closed inspect; no runtime/package authorization until that checkpoint is public",
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-csid1-startup-companion-transport-0053-oracle-v1",
+  "windows": {
+    "companion_descriptor_type": "0x12",
+    "csid1_change_base": "0x00057000",
+    "csid1_physical": "0x0acb9000",
+    "device": "same SP11 X1E80100",
+    "packet_count": 4,
+    "reconstructed_packets": [
+      {
+        "bytes": 60,
+        "packet": 0,
+        "sha256": "1872731eaa3eb2233436029c2658682097c61ebf97e3facf46e31224ee25e2a2",
+        "words": [
+          "0x03000001",
+          "0x00000330",
+          "0x00000000",
+          "0x03000002",
+          "0x0000037c",
+          "0x00000001",
+          "0x00000000",
+          "0x03000002",
+          "0x0000035c",
+          "0x0eff0000",
+          "0x086f0000",
+          "0x03000002",
+          "0x00000384",
+          "0x0000001f",
+          "0x08700f00"
+        ]
+      },
+      {
+        "bytes": 16,
+        "packet": 1,
+        "sha256": "45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7",
+        "words": [
+          "0x03000002",
+          "0x0000035c",
+          "0x0eff0000",
+          "0x086f0000"
+        ]
+      },
+      {
+        "bytes": 16,
+        "packet": 2,
+        "sha256": "45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7",
+        "words": [
+          "0x03000002",
+          "0x0000035c",
+          "0x0eff0000",
+          "0x086f0000"
+        ]
+      },
+      {
+        "bytes": 16,
+        "packet": 3,
+        "sha256": "45d059ec64587ea4f55eb8df64704520782801418c4a754f512831c7473fb5c7",
+        "words": [
+          "0x03000002",
+          "0x0000035c",
+          "0x0eff0000",
+          "0x086f0000"
+        ]
+      }
+    ],
+    "register_values_changed_by_0053": false,
+    "transport": "RT-CDM FIFO0 block-list submission after CHANGE_BASE(CSID1)"
+  }
+}

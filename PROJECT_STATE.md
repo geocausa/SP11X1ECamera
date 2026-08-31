@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0053 static PASS; startup CSID companion transport now matches Windows RT-CDM ownership — 2026-08-31
+
+The post-0052 latch audit found one concrete, previously untested parity delta without inventing a register value. Same-machine Windows submits each `0x803` descriptor-1 CSID1 companion as CDM bytes after `CHANGE_BASE 0x00057000`; Linux 0052 sent the matching values through CPU `writel()` after the VFE startup BL. The fail-closed 0053 oracle reconstructs Windows packet0 as 60 bytes SHA `1872731e...e2a2` and packets1..3 as 16 bytes SHA `45d059ec...5c7`, exactly matching the captured descriptor hashes.
+
+0053 changes only that ownership/transport. Each startup packet is now `CHANGE_BASE(VFE1) -> IFE main -> CHANGE_BASE(CSID1) -> exact CSID companion` through the existing RT-CDM FIFO0 path, and the four active CPU-companion calls are removed. No new MMIO read/write, register value, crop coordinate, RUP/AUP value, VFE, CSIPHY or sensor programming is introduced. Patch `dba1d21fdc01f4091af89ce051283464661952ce2d1acd1f59afb75c8b52cfd6`; module `f04189d766f478083e09fd38b26e73c99c03306ce1f2fb81d68b2ebd0d2be876`; inspection `72ceb0880f673bc1d17698eb228612a88b8bf4683b8f034a9de4f1b784120fea`; strict checkpatch 0/0/0.
+
+Causality is **not** claimed. This is a mechanically proven Windows transport-parity correction whose crop/latch effect remains unknown. **Runtime remains blocked.** Next gate: publish this static checkpoint, then build and inspect a distinct unarmed 0053 one-shot package before a separate authorization review.
+
 ## E003h ACTIVE — 0052 consumed; X1E CSID clock bug fixes HBI exactly but is non-causal for crop — 2026-08-31
 
 The single authorized 0052 differential executed exactly once under public authorization commit `73847668047aa120ee0e5966e458d641135fff07` and returned immediately to FullIO v19c Golden. There was no same-boot retry, no QC10C output, RT-CDM reached FIFO sequence 17 without fault, IMX681/CAMSS runtime PM returned to suspended, `saved_entry` remains Golden, `next_entry` is empty, and candidate camera modules are absent.
