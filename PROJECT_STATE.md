@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0059 read-only VFE low-TOP package installed/inspected, unarmed — 2026-08-31
+
+The distinct 0059 one-shot package is installed under `/boot/sp11-7.1.5-camera-e003h-vfelowtop-0059` with GRUB ID `sp11-camera-e003h-vfelowtop-0059-one-shot`. It uses CAMSS `e714330b3f2d32a18d51e5fb7577242b7e34f96f9af889afaf1e658d4bf752f0` and the frozen Windows-selected mode2 IMX681/helper/front-only DT/RT-CDM assets. Static delta is exactly 13 new VFE1 timeout-path reads, zero new writes and no camera-programming change.
+
+Package preflight and independent inspection pass. Manifest SHA `a6afc15da74f1c60f82d612bf50c5063c90c0eeffae1efba797ff71596dd10df`; package inspection SHA `cf4c752bc1b4638b3f6e2db7e29eca388b10f29b2f4236965c11313cfde4ca4c`. Golden remains the saved default, `next_entry` is empty, camera modules are absent, authorization is absent and no 0059 RUN exists.
+
+Runtime is not authorized. Publish this package first; only a fresh authorization against the public package may permit one bounded telemetry run.
+
 ## E003h ACTIVE — 0059 static PASS; powered VFE1 low-TOP telemetry only — 2026-08-31
 
 Static 0059 adds exactly 13 `readl_relaxed()` calls to the existing bounded X1E80100 VFE1 timeout dump for `core_cfg0/1/2`, `diag_config`, `core_cfg3`, the three stats-throttle registers, `core_cfg4/5/6`, `period_cfg`, and `epoch_height_cfg`. It freezes successful same-machine Windows LIVE1 values for the comparison. Existing marker `+0x90/+0x94/+0x98` reads remain unchanged.
