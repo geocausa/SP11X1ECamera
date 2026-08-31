@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0053 consumed; exact Windows startup-companion RT-CDM transport is non-causal for crop — 2026-08-31
+
+The single authorized 0053 differential executed exactly once under public authorization commit `d7fb66a16f9788d4f0f5d9dd302a64bb6f8b6c34` and returned immediately to FullIO v19c Golden. No retry occurred, no QC10C output was produced, IMX681/CAMSS returned suspended, `saved_entry` remains Golden, `next_entry` is empty, and camera modules are absent.
+
+0053 definitely executed the transport correction: RT-CDM completed FIFO sequence **25** versus 0052 sequence **17**, exactly +8 submissions (`CHANGE_BASE(CSID1)` + exact descriptor-1 companion for four startup packets), with no RT-CDM fault. Yet the decisive camera state is unchanged: `00811dd0/00000f00 -> 00600cc0/00000f00 -> 00000cc0/00000f00 -> 00004ee8/0a500f00`; completed EOF remains 3840x2640 with `ERROR_LINE_COUNT`; HBI remains Windows-matching `0x03b203ad`; VFE1 raw Epoch0 and QC10C remain absent.
+
+Therefore the startup companion ownership/transport mismatch was real but **not causal** for the vertical-crop failure. Runtime extractor `f9d8bc53b8f87430ec716870374902ea162f76abd4c8d2f3055de61d14bc896d`; accepted analysis `7ae66c8bcd725f193ab59b4d4a1f4c6e5688e72fc206960fad53de21c9ba3e22`. **Runtime is blocked again.** Next gate: static CSID1 active-state/lifecycle analysis; no new hardware candidate until a concrete Windows/Linux delta is proven.
+
 ## E003h ACTIVE — one 0053 startup-companion RT-CDM diagnostic authorized, still unarmed — 2026-08-31
 
 Fresh review passed against public unarmed package commit `d533d03b25601e30419d7266f62728877b97e74f`: HEAD/origin exact, package inspection exact, bounded provenance green, Golden current, empty `next_entry`, no camera modules, no prior 0053 RUN and no authorization before review. Review SHA `0ee3620ccaea747c208672d195ae1727d659d1836075cfadb12f7f6bcfc89770`.

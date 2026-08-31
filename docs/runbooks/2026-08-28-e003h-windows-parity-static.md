@@ -2,6 +2,10 @@
 
 ## Resume point
 
+## E003h ACTIVE — 0053 consumed; startup companion RT-CDM transport is non-causal — 2026-08-31
+
+One authorized 0053 run completed and returned to Golden. The transport change executed exactly (`fifo_seq 17 -> 25`, +8 expected BL submissions, no RT-CDM fault), but CSID geometry/error/HBI and the VFE1 timeout boundary are identical to 0052. Analysis `7ae66c8...a3e22`; no QC10C; no retry. Runtime blocked. Resume with static CSID1 active-state/lifecycle analysis only.
+
 ## E003h ACTIVE — one 0053 transport diagnostic authorized, still unarmed — 2026-08-31
 
 Public package commit `d533d03...`; fresh review `0ee3620c...`; authorization `ce172a7b...`; authorization inspector `bc9a6e27...`; accepted inspection `391657bc...`. Scope is exactly one boot/helper and only the startup CSID companion transport owner changes to the captured RT-CDM path; no new register/value and no crop-causality claim. Golden is still saved, `next_entry` empty, modules absent. Publish authorization before arming.

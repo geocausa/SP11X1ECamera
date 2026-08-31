@@ -1,0 +1,134 @@
+{
+  "accepted": true,
+  "classification": {
+    "0053_transport_delta_executed": true,
+    "first_completed_eof_geometry_improved": false,
+    "line_count_error_removed": false,
+    "speculative_crop_register_write_justified": false,
+    "transport_correction_causal_for_vertical_crop_failure": false,
+    "transport_ownership_mismatch_was_real": true,
+    "vertical_crop_failure_remains": "programmed/readback crop=0x0eff0000/0x086f0000 and expected=0x08700f00; completed frame still 0x0a500f00 (3840x2640) with ERROR_LINE_COUNT",
+    "vfe1_raw_epoch0_advanced": false
+  },
+  "comparison_0052": {
+    "completed_eof_geometry_identical": true,
+    "hbi_identical": true,
+    "line_error_identical": true,
+    "qc10c_advanced": false,
+    "rtcdm_fifo_count_increased_exactly_by_expected_8": true,
+    "sequence_identical": true,
+    "vfe1_raw_epoch0_advanced": false
+  },
+  "evidence_sha256": {
+    "auth": "ce172a7b39ef88c0c5f57531dd77b296338bcd9431e38152c072cd1714bcc3fc",
+    "dmesg": "44c45f71265a74ae28c264c43b1a59e97f7699a66818a1659258ee62bb7007b5",
+    "oracle": "4b70a61a2e226b37d9310b4b4dee4d77c7516f975498973ee89dc29d772e2e5c",
+    "package": "d283bbe2884aa1a31189c3cbb5c65fdeb9ee7c50e59190b3f55da0bce45bcedb",
+    "post": "caf641604214c660e513e91bb37e533eee197380ca076bcc0ab0da480eccfe8c",
+    "run": "ee9223ea56c103db203b479043a0f5870d04eee8a0d6c7d71587f45705d05400",
+    "runtime0052": "4367b9fe31552baf59cd7212743585fc990a07638794a81da178a22e1591ddba",
+    "stages": "47101a8613cdd26fe62566daf8f8adebdf883622187a48ebe1bf526f204dfba4",
+    "static": "72ceb0880f673bc1d17698eb228612a88b8bf4683b8f034a9de4f1b784120fea"
+  },
+  "execution": {
+    "camss_runtime_suspended_after": true,
+    "golden_return_verified": true,
+    "helper_invocations": 1,
+    "helper_result": "ETIMEDOUT / RUN_RC=1",
+    "qc10c_output": false,
+    "rtcdm_faulted": false,
+    "rtcdm_fifo_delta": 8,
+    "rtcdm_fifo_last_0052": 17,
+    "rtcdm_fifo_last_0053": 25,
+    "same_boot_retry": false,
+    "sensor_runtime_suspended_after": true
+  },
+  "line_error_0052": {
+    "actual": "0x0a500f00",
+    "hbi": "0x03b203ad",
+    "history_count": 4,
+    "history_last": "0x00004ee8",
+    "history_or": "0x00e15ff8",
+    "vbi": "0x00000000"
+  },
+  "line_error_0053": {
+    "actual": "0x0a500f00",
+    "hbi": "0x03b203ad",
+    "history_count": 4,
+    "history_last": "0x00004ee8",
+    "history_or": "0x00e15ff8",
+    "vbi": "0x00000000"
+  },
+  "linux_sequence": [
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "CAMIF_SOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "INFO_INPUT_SOF",
+        "RUP_DONE"
+      ],
+      "index": 0,
+      "status_hex": "0x00811dd0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "CAMIF_EPOCH0",
+        "CAMIF_EPOCH1"
+      ],
+      "index": 1,
+      "status_hex": "0x00600cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL"
+      ],
+      "index": 2,
+      "status_hex": "0x00000cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 2640,
+        "width": 3840
+      },
+      "actual_hex": "0x0a500f00",
+      "bits": [
+        "CAMIF_EOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "ERROR_LINE_COUNT"
+      ],
+      "index": 3,
+      "status_hex": "0x00004ee8"
+    }
+  ],
+  "next_gate": "Retire startup companion transport as crop cause. Return to static active-state/lifecycle analysis. Find a concrete Windows/Linux delta in CSID1 path enable/update/latch semantics or upstream pixel-path selection; no new runtime until proven.",
+  "schema": "sp11-e003h-runtime-0053-startup-csid-companion-rtcdm-v1"
+}
