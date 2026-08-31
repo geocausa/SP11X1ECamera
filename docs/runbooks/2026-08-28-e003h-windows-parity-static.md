@@ -1,3 +1,11 @@
+## E003h ACTIVE — one 0054 Windows-selected IMX681 mode2 diagnostic authorized, still unarmed — 2026-08-31
+
+Fresh review passed against public unarmed package commit `95ee1d3feddf623004f92375de80f20f30822236`: HEAD/origin exact, tracked worktree clean, package preflight/reinspection accepted, Golden current, empty `next_entry`, no camera modules, no prior 0054 RUN and no authorization before review. Review SHA `b03f8c43eee969bc5d1d31d892e8ee1d5de899d43be28dd116170976d863b674`.
+
+Authorization `e49515cc44a471231af0344c64edf3a22c336d6a1b15e504f761167fc0459696` permits exactly one boot of `sp11-camera-e003h-mode2-0054-one-shot` and one root helper invocation. Persistent RT-CDM observation is mandatory, a pre-existing RUN log refuses retry, and any helper result must be archived followed immediately by Golden reboot. The authorized hardware differential is only the statically proven Windows-selected sensor record 2 (68/68 Windows pair equality, seven changed values, 3840x2160) plus three CAMSS geometry eligibility gates; zero new CAMSS MMIO writes and no additional CSID/VFE/CSIPHY/DT/helper behavior are authorized. Production parity is not authorized.
+
+Independent authorization inspection SHA `fa6655ca3a42b20b82c3baeba7a8458ccaee59fe2de580b4648a5a2412db5ae7`. **The candidate remains unarmed until this authorization checkpoint is public.**
+
 ## E003h ACTIVE — 0054 mode2 package installed/inspected unarmed; authorization review next — 2026-08-31
 
 The Windows-selected IMX681 mode2 0054 bounded package is installed under `/boot/sp11-7.1.5-camera-e003h-mode2-0054` with GRUB ID `sp11-camera-e003h-mode2-0054-one-shot` and marker `sp11_camera_e003h_mode2_0054=1`. Package assets bind public static checkpoint `c690f67548dcce57ba6f017d98be836233a575e7`: CAMSS `0dc8e3a3318a4b68fc968ce6ff3c68e93bf2931502063b4469ed093cb0002be1`, IMX681 `a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc`, and media setup 3840x2160. Helper, front-only DTB, capsule and persistent RT-CDM observer remain inherited exact assets.

@@ -1,0 +1,51 @@
+{
+  "accepted": true,
+  "authorization_review_sha256": "b03f8c43eee969bc5d1d31d892e8ee1d5de899d43be28dd116170976d863b674",
+  "boot": {
+    "candidate_was_unarmed_at_authorization": true,
+    "cmdline_marker": "sp11_camera_e003h_mode2_0054=1",
+    "golden_saved_default": "sp11-audio-fullio-v19c",
+    "id": "sp11-camera-e003h-mode2-0054-one-shot"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "0dc8e3a3318a4b68fc968ce6ff3c68e93bf2931502063b4469ed093cb0002be1",
+    "capsule_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc"
+  },
+  "date": "2026-08-31",
+  "execution_contract": {
+    "after_any_helper_result": "archive evidence then immediately reboot to Golden",
+    "boot_count": 1,
+    "epoch0_timeout_requires_vfe1_and_csid1_snapshot": true,
+    "existing_run_log_refuses_execution": true,
+    "nonroot_pretrigger": false,
+    "normal_qbuf": false,
+    "normal_streamon": false,
+    "persistent_rtcdm_observer_required": true,
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "failure_boundary": "Any preflight mismatch aborts without RUN; any helper result consumes authorization.",
+  "package_commit": "95ee1d3feddf623004f92375de80f20f30822236",
+  "package_inspection_sha256": "1d1039e5b02b762955f443ad8a1cb42d9aedb6a664f74035075b222e741d6b37",
+  "production_parity_authorized": false,
+  "purpose": "One bounded diagnostic of the proven Windows-selected IMX681 mode2 correction. Linux changes the sensor from firmware record 0 3840x2640 to exact Windows record 2 3840x2160 and changes only three CAMSS geometry eligibility gates. The 68 sensor pairs, seven changed values, and zero new CAMSS MMIO writes are statically frozen. No additional sensor, CSID, VFE, CSIPHY, DT, RT-CDM or helper behavior is authorized.",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-imx681-mode2-0054-one-shot-authorization-v1",
+  "static_evidence": {
+    "camss_geometry_gate_changes": 3,
+    "csid_programming_values_changed": false,
+    "linux_0054_inspection_sha256": "19f6fddf77d323507bfe4ad390c5f1ae3e70ed983dd574a6ecfec0bd83645231",
+    "new_camss_mmio_writes": 0,
+    "sensor_changed_values": 7,
+    "sensor_geometry": "3840x2160@30",
+    "sensor_mode_pairs": 68,
+    "sensor_resolution_index": 2,
+    "windows_mode_selection_oracle_sha256": "4520699c754e131af6126587da87086c973201a9c273df252c279b93ad5916c4",
+    "windows_pair_equality": true
+  },
+  "success_boundary": "At most one bounded diagnostic. Result is evidence only, not production parity."
+}

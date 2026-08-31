@@ -400,9 +400,15 @@ e003h:
   linux_0054_package_boot_id: sp11-camera-e003h-mode2-0054-one-shot
   linux_0054_package_cmdline_marker: sp11_camera_e003h_mode2_0054=1
   linux_0054_package_armed: false
-  linux_0054_runtime_authorized: false
+  linux_0054_authorization_review_sha256: b03f8c43eee969bc5d1d31d892e8ee1d5de899d43be28dd116170976d863b674
+  linux_0054_authorization_sha256: e49515cc44a471231af0344c64edf3a22c336d6a1b15e504f761167fc0459696
+  linux_0054_authorization_inspection_sha256: fa6655ca3a42b20b82c3baeba7a8458ccaee59fe2de580b4648a5a2412db5ae7
+  linux_0054_authorized_boot_count: 1
+  linux_0054_authorized_root_helper_invocations: 1
+  linux_0054_same_boot_retry_authorized: false
+  linux_0054_runtime_authorized: true
   linux_0054_hardware_execution_performed: false
-  linux_0054_next_gate: publish unarmed package checkpoint then perform independent one-run authorization review; do not arm before authorization is public
+  linux_0054_next_gate: publish authorization while candidate remains unarmed; then arm exactly one 0054 boot, execute one helper under observer, archive and return immediately to Golden
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac
