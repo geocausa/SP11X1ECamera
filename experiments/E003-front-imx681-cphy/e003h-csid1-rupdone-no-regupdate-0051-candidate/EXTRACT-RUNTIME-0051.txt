@@ -1,0 +1,113 @@
+{
+  "accepted": true,
+  "classification": {
+    "0051_behavior_executed": "front-mode0 RUP_DONE software shadow clear without post-RUP REG_UPDATE_CMD +0x18 write",
+    "failure_boundary": "unchanged: after matching first RUP_DONE and by immediately following Epoch0/1 IRQ; Linux first Epoch height remains zero and later completes uncropped 3840x2640 with bit14",
+    "first_epoch_geometry_improved": false,
+    "line_count_error_removed": false,
+    "post_rup_zero_write_is_causal_for_crop_failure": false,
+    "post_rup_zero_write_was_real_parity_bug": true,
+    "speculative_crop_register_write_justified": false,
+    "vfe1_raw_epoch0_advanced": false
+  },
+  "comparison_0050": {
+    "critical_csid_geometry_identical": true,
+    "sequence_identical": true,
+    "vfe_epoch0_boundary_identical": true
+  },
+  "evidence_sha256": {
+    "auth": "0f4837282f952a38b53d1ec99dd940594b52203cc0e830f48ca0e98058e847b5",
+    "dmesg": "b65b5869238f072bed4a1aab8c1ee6c0c1933f7ae49ec1790e2e4e8c6a3c8df4",
+    "post": "446e528ac7b5047acca936141f7cf9b2619570e6cc7c492a48dfdbdf1b4ea307",
+    "run": "ed770846b70457f65cb731a2b829928590e8153cec4bc38c151e7fa29455c179",
+    "runtime0050": "bc8c2fd7033121592e540e3eedde134e56cab6d2525526f7771a74ec7b424459",
+    "stages": "d11355abc2d749656d12a054b1c4256c78830a5d33354f9a082e485992411fd5",
+    "static_inspection": "a0595d75392871542812ec185e632af37e8da889d6758e61cea794f25517d132"
+  },
+  "execution": {
+    "camss_runtime_suspended_after": true,
+    "golden_return_verified": true,
+    "helper_invocations": 1,
+    "helper_result": "ETIMEDOUT surfaced as Connection timed out / RUN_RC=1",
+    "qc10c_output": false,
+    "rtcdm_faulted": false,
+    "rtcdm_fifo_last": 17,
+    "same_boot_retry": false,
+    "sensor_runtime_suspended_after": true
+  },
+  "linux_sequence": [
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "CAMIF_SOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "FRAME_DROP_SOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "INFO_INPUT_SOF",
+        "VCDT_GRP1_SEL",
+        "RUP_DONE"
+      ],
+      "index": 0,
+      "status_hex": "0x00811dd0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "CAMIF_EPOCH0",
+        "CAMIF_EPOCH1"
+      ],
+      "index": 1,
+      "status_hex": "0x00600cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL"
+      ],
+      "index": 2,
+      "status_hex": "0x00000cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 2640,
+        "width": 3840
+      },
+      "actual_hex": "0x0a500f00",
+      "bits": [
+        "CAMIF_EOF",
+        "FRAME_DROP_EOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "ERROR_LINE_COUNT"
+      ],
+      "index": 3,
+      "status_hex": "0x00004ee8"
+    }
+  ],
+  "next_gate": "Keep 0051 ownership correction, but do not build on it as crop cause. Statically compare the exact event/active-update semantics that can distinguish Windows first Epoch 0x00600228 (EOF-class events, cropped 2160) from Linux 0x00600cc0 (SOL/EOL-class events, height incomplete) despite identical first RUP_DONE status/config/readbacks. No new runtime until a concrete programming or lifecycle delta is proven.",
+  "schema": "sp11-e003h-runtime-0051-rupdone-no-regupdate-v1"
+}

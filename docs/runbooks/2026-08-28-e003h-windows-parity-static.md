@@ -2,6 +2,17 @@
 
 ## Resume point
 
+## E003h ACTIVE — 0051 consumed; post-RUP +0x18 bug is real but non-causal — 2026-08-31
+
+The single authorized 0051 differential executed exactly once and returned immediately to FullIO v19c Golden with no retry. RT-CDM reached FIFO sequence 17 without fault, no QC10C buffer was produced, and IMX681/CAMSS runtime PM returned to suspended. Golden identity, saved default, empty `next_entry`, and absent camera modules are verified.
+
+0051 removed only the Windows-unmatched front-mode0 IPP post-RUP_DONE `REG_UPDATE_CMD +0x18` write while retaining Linux software bookkeeping and all RDI/non-front behavior. The result is byte-for-byte identical to 0050 at the critical CSID boundary: `00811dd0/00000f00 -> 00600cc0/00000f00 -> 00000cc0/00000f00 -> 00004ee8/0a500f00`. First-Epoch geometry does not improve, bit14 remains, VFE1 raw Epoch0 does not advance, and output remains absent.
+
+Therefore the post-RUP zero write is a genuine Windows-parity defect but is not causal for the vertical-crop failure. The proven boundary remains after the matching first RUP_DONE IRQ and by the immediately following Epoch IRQ, where Windows is already 3840x2160 and Linux is still height-incomplete. The Windows first-Epoch status carries EOF-class side bits (`0x00600228`) while Linux carries SOL/EOL-class side bits (`0x00600cc0`), but that status-class difference must not be assumed causal until IRQ coalescing/clear timing and active-update semantics are closed statically.
+
+Runtime extractor `3ac0fad9d4d34f54ebdd7cdc1d82d141b460df3bd63d71e1add6363108636e2f`; analysis `2e1fbd740073b98e9e86ef477f1986d9b7e94a26a5e486f4386197b8e331f9d1`. **No runtime is authorized.** Next gate: exact Windows/Qualcomm active-update and first-Epoch event semantics; no speculative crop-register write.
+
+
 Branch: `experiment/e003-front-imx681-cphy`
 
 Last pushed checkpoint entering E003h: `c60bad2` (`docs: align current state with E003g route oracle`).
