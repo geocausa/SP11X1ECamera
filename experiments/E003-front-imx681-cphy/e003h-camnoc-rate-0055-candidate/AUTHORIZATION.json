@@ -1,0 +1,33 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "23ce591d103a32fb7921a6d9c12c89b37d031dd8bce3f775732093438734d5cd",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_camnoc_0055=1",
+    "id": "sp11-camera-e003h-camnoc-0055-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "decision_gate": "If Linux live CFG=0x203 with branch bit0=1, close CAMNOC rate as noncausal; otherwise freeze mismatch before programming.",
+  "execution_contract": {
+    "boot_count": 1,
+    "camera_programming_delta": 0,
+    "camnoc_mmio_access": "read-only /dev/mem",
+    "persistent_camnoc_observer_required": true,
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "package_commit": "594d776b6b02faa6e3afc2930a9e7edb043efc77",
+  "package_inspection_sha256": "566d581cdb25885253b9b3a44df256aac3d0bb339f7989741a5c3288bbed5b9f",
+  "production_parity_authorized": false,
+  "purpose": "0055 telemetry-only CAMNOC RT rate comparison",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-camnoc-rate-0055-runtime-authorization-v1",
+  "user_authority_basis": "Current conversation grants dynamic/static/reboots/captures/traces/tool installs and usage full authorization on SP7 and SP11 Linux/Windows.",
+  "windows_camnoc_kd_sha256": "237e5c7ba0eeef73e0b7452a61778003d3364471ec1560e2649fdd35ac2e15f3",
+  "windows_expected": {
+    "branch": "0x00000001",
+    "cfg": "0x00000203",
+    "rate_hz": 300000000
+  }
+}
