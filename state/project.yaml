@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-camnoc-300mhz-0056-package-unarmed-authorization-next
+status: e003h-camnoc-300mhz-0056-authorized-one-shot-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: camnoc-300mhz-0056-package-unarmed-authorization-next
+  status: camnoc-300mhz-0056-authorized-one-shot-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -485,6 +485,16 @@ e003h:
   linux_0056_package_same_boot_retry_refused: true
   linux_0056_package_camnoc_observer_read_only: true
   linux_0056_package_next_gate: fresh authorization against public unarmed package commit; one boot, one helper, no retry, immediate Golden return
+  linux_0056_package_public_commit: f2cef8e585aeb2fd5d53b4e7273eac02044e1130
+  linux_0056_authorization_review_sha256: e888957cc138ccff2211b6db63eb5235651a3229d8433d9ff79b2f2bc0de7292
+  linux_0056_authorization_sha256: 1dfdd8e25f65c797409cfd566d83cc751e42140d2d3d80eebf3aed82274fcb26
+  linux_0056_authorization_inspection_sha256: 10b1b7ab680167da72733a53068e358119d7fa4aa499cb35e4a24a6ba63d64c2
+  linux_0056_authorized_boot_count: 1
+  linux_0056_authorized_root_helper_invocations: 1
+  linux_0056_same_boot_retry_authorized: false
+  linux_0056_runtime_authorized: true
+  linux_0056_production_parity_authorized: false
+  linux_0056_authorization_next_gate: publish authorization commit, then arm exactly one 0056 boot; verify physical CAMNOC CFG=0x203 before evaluating VFE1 Epoch0/QC10C
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac
