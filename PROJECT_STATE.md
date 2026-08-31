@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0060 static PASS; VFE1 BUS progression telemetry only — 2026-08-31
+
+The post-0059 BUS audit corrects one misleading inference: the bounded Linux PIX path already allocates, configures and enables all nine Windows-active VFE1 BUS clients (`0,1,2,3,11,18,12,14,13`). Earlier timeout telemetry printed only FULL0/FULL1. Qualcomm VFE680 also leaves BUS composite-group configuration disabled (`comp_cfg_needed=false`), so neither "missing seven clients" nor speculative composite-group writes are justified.
+
+The strongest unresolved BUS-common delta candidate is `BUS +0xc58`. Successful same-machine Windows reads `0x00001046`; Qualcomm's VFE680 map names this `UBWC_STATIC_CTRL` and the vendor BUS driver programs it for compression groups 0/1. The private Linux Windows-BUS recipe does not write `+0xc58`, but direct Windows ownership of that value is not yet proven and Linux's powered value has never been observed. Therefore no programming write is authorized.
+
+Static 0060 adds only read-only timeout telemetry: BUS common CGC/UBWC/power/debug state plus, for all nine active clients, CFG/image address, four address-status registers and two debug-status registers. It adds 14 direct `readl_relaxed()` callsites, zero MMIO writes, and changes no camera programming or ordering. Base source SHA `bcc889a8e91627c670dda14d371eb037c1a5833aa41d333ca0174223fb492310`; new source SHA `77544e3aa12bd9c374409ffdb436bc75f0325684c4f5046cb98704debb540527`; module SHA `00da9fd6510ed01455f4b2349d6730fcf8ce81571e94dbbdbade526b77cae8d6`; patch SHA `3cffc82325a70792da1fb605731a3aad39af1e8a0149cacbdbadf6f2e2f5326e`; static inspection SHA `ea20e55770ca58b029f21eef8a18a6c322b9df3677cd6031c5cebf818832fa34`; checkpatch 0/0 and Golden vermagic exact.
+
+Runtime remains blocked. Next gate is a distinct Golden-safe 0060 one-shot package installed and independently inspected unarmed; only a later fresh authorization may permit one telemetry run.
+
 ## E003h ACTIVE — 0059 consumed; VFE1 low-TOP configuration matches Windows 16/16 — 2026-08-31
 
 0059 executed exactly one authorized read-only telemetry run and returned immediately to FullIO Golden. No retry occurred. RT-CDM completed FIFO sequence 25 without fault; CSID1 remained healthy at 3840x2160 with no line-count error; VFE1 raw Epoch0 and QC10C remained absent.

@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0059-consumed-lowtop-exact-match-ingress-event-static-next
+status: linux-0060-bus-progress-readonly-static-pass-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2321,5 +2321,24 @@ linux_0059_runtime:
   runtime_authorized: false
   classification: VFE1 low-TOP config cluster closed as remaining stall cause; successful Windows values match Linux 16/16 while raw Epoch0 remains absent
 
+linux_0060_static:
+  accepted: true
+  date: 2026-08-31
+  base_source_sha256: bcc889a8e91627c670dda14d371eb037c1a5833aa41d333ca0174223fb492310
+  source_sha256: 77544e3aa12bd9c374409ffdb436bc75f0325684c4f5046cb98704debb540527
+  module_sha256: 00da9fd6510ed01455f4b2349d6730fcf8ce81571e94dbbdbade526b77cae8d6
+  patch_sha256: 3cffc82325a70792da1fb605731a3aad39af1e8a0149cacbdbadf6f2e2f5326e
+  oracle_sha256: 3ad6f52dad7557e3142ef46d7c2274a1a6c5bc106f1aae783b6f6565c7251b9f
+  inspector_sha256: 72f5b77d98065927b04612eede8be14bd426edd7157bb3bd1e664ef4723cfbc2
+  inspection_sha256: ea20e55770ca58b029f21eef8a18a6c322b9df3677cd6031c5cebf818832fa34
+  new_direct_mmio_read_callsites: 14
+  new_mmio_writes: 0
+  camera_programming_changed: false
+  nine_windows_bus_clients_already_present: true
+  vfe680_comp_cfg_needed: false
+  windows_live_ubwc_static_ctrl: 0x00001046
+  runtime_authorized: false
+  next_gate: build/install/inspect distinct Golden-safe 0060 one-shot package; no runtime until separate public package and fresh authorization
+
 next_action: >-
-  Keep runtime blocked. Localize VFE1 ingress/event-generation state outside the closed low-TOP configuration cluster; prefer static ownership and read-only telemetry over another programming write.
+  Build/install/inspect a distinct 0060 read-only BUS-progression one-shot package while keeping Golden saved and next_entry empty. Publish the unarmed package before any fresh runtime authorization.
