@@ -1,0 +1,44 @@
+{
+  "accepted": true,
+  "authorization_review_sha256": "0ee3620ccaea747c208672d195ae1727d659d1836075cfadb12f7f6bcfc89770",
+  "boot": {
+    "candidate_was_unarmed_at_authorization": true,
+    "cmdline_marker": "sp11_camera_e003h_csidcomp_0053=1",
+    "golden_saved_default": "sp11-audio-fullio-v19c",
+    "id": "sp11-camera-e003h-csidcomp-0053-one-shot"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "f04189d766f478083e09fd38b26e73c99c03306ce1f2fb81d68b2ebd0d2be876",
+    "capsule_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "sensor_sha256": "389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388"
+  },
+  "date": "2026-08-31",
+  "execution_contract": {
+    "after_any_helper_result": "archive evidence then immediately reboot to Golden",
+    "boot_count": 1,
+    "epoch0_timeout_requires_vfe1_and_csid1_snapshot": true,
+    "existing_run_log_refuses_execution": true,
+    "nonroot_pretrigger": false,
+    "normal_qbuf": false,
+    "normal_streamon": false,
+    "persistent_rtcdm_observer_required": true,
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "failure_boundary": "Any preflight mismatch aborts without RUN; any helper result consumes authorization.",
+  "package_commit": "d533d03b25601e30419d7266f62728877b97e74f",
+  "package_inspection_sha256": "d283bbe2884aa1a31189c3cbb5c65fdeb9ee7c50e59190b3f55da0bce45bcedb",
+  "production_parity_authorized": false,
+  "purpose": "One bounded differential diagnostic of the 0053 Windows-parity transport correction: the exact existing startup CSID1 descriptor-1 companion bytes move from CPU MMIO replay to the captured RT-CDM CHANGE_BASE(CSID1)+companion transport. No new register value, crop coordinate, RUP/AUP value, VFE, CSIPHY, sensor or DT programming is authorized.",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-startup-csid-companion-rtcdm-0053-one-shot-authorization-v1",
+  "static_evidence": {
+    "crop_failure_causality_proven": false,
+    "linux_0053_inspection_sha256": "72ceb0880f673bc1d17698eb228612a88b8bf4683b8f034a9de4f1b784120fea",
+    "transport_oracle_sha256": "4b70a61a2e226b37d9310b4b4dee4d77c7516f975498973ee89dc29d772e2e5c"
+  },
+  "success_boundary": "At most one bounded diagnostic. Result is evidence only, not production parity."
+}

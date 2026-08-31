@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0053-package-installed-unarmed-authorization-review-next
+status: e003h-0053-authorized-unarmed-one-shot
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: linux-0053-package-installed-unarmed-authorization-review-next
+  status: linux-0053-authorized-unarmed-one-shot
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -287,7 +287,7 @@ e003h:
   linux_0052_runtime_analysis_sha256: 4367b9fe31552baf59cd7212743585fc990a07638794a81da178a22e1591ddba
   linux_0052_golden_return_verified: true
   linux_0052_next_gate: static CSID680 active vertical-crop/latch semantics; compare IPP CFG0/VCROP/CTRL order, RUP/AUP/update commands and LUT/active-bank selection; no runtime until concrete delta
-  linux_0053_status: static-pass-startup-companion-rtcdm-package-next
+  linux_0053_status: authorized-unarmed-startup-companion-rtcdm-one-shot
   linux_0053_transport_oracle_sha256: 4b70a61a2e226b37d9310b4b4dee4d77c7516f975498973ee89dc29d772e2e5c
   linux_0053_oracle_extractor_sha256: 3dfe96a9b900e98e4ee93168df65eb2db0fbea1d180a85ddc7239a85f6d76d68
   linux_0053_patch_sha256: dba1d21fdc01f4091af89ce051283464661952ce2d1acd1f59afb75c8b52cfd6
@@ -307,7 +307,7 @@ e003h:
   linux_0053_new_register_values: 0
   linux_0053_transport_ownership_mismatch_proven: true
   linux_0053_crop_failure_causality_proven: false
-  linux_0053_runtime_authorized: false
+  linux_0053_runtime_authorized: true
   linux_0053_hardware_execution_performed: false
   linux_0053_next_gate: build and inspect distinct unarmed one-shot package; separate fresh authorization required before hardware execution
   linux_0053_package_boot_id: sp11-camera-e003h-csidcomp-0053-one-shot
@@ -317,13 +317,24 @@ e003h:
   linux_0053_package_inspection_sha256: d283bbe2884aa1a31189c3cbb5c65fdeb9ee7c50e59190b3f55da0bce45bcedb
   linux_0053_package_installed: true
   linux_0053_package_armed: false
-  linux_0053_package_authorization_present: false
+  linux_0053_package_authorization_present: true
   linux_0053_package_frozen_runtime_assets: true
   linux_0053_runtime_preflight_before_module_load: true
   linux_0053_single_helper_invocation_enforced: true
   linux_0053_same_boot_retry_refused_by_runlog: true
   linux_0053_package_public_static_commit: d977480aa80c4b5a115d263c15e5c79caa810e69
-  linux_0053_next_gate: fresh authorization review against public unarmed package commit; no arm before review and authorization are public
+  linux_0053_package_public_commit: d533d03b25601e30419d7266f62728877b97e74f
+  linux_0053_authorization_review_sha256: 0ee3620ccaea747c208672d195ae1727d659d1836075cfadb12f7f6bcfc89770
+  linux_0053_authorization_sha256: ce172a7b39ef88c0c5f57531dd77b296338bcd9431e38152c072cd1714bcc3fc
+  linux_0053_authorization_inspector_sha256: bc9a6e27a45052d426efff80a8940ad35e6797e7fe4e01691d3d630740b2a2a4
+  linux_0053_authorization_inspection_sha256: 391657bcfa53b47446b675817addc61b143c19b5128e1211e618e8ec1b473173
+  linux_0053_authorized_boot_count: 1
+  linux_0053_authorized_root_helper_invocations: 1
+  linux_0053_same_boot_retry_authorized: false
+  linux_0053_persistent_rtcdm_observer_required: true
+  linux_0053_production_parity_authorized: false
+  linux_0053_crop_failure_causality_proven_at_authorization: false
+  linux_0053_next_gate: publish authorization checkpoint; only then arm exactly one one-shot boot
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac
@@ -331,8 +342,8 @@ e003h:
   linux_0050_authorized_boot_count: 1
   linux_0050_authorized_root_helper_invocations: 1
   linux_0050_same_boot_retry_authorized: false
-  runtime_authorized: false
-  sensor_stream_authorized: false
+  runtime_authorized: true
+  sensor_stream_authorized: true
   sensor_stream_on: 0x0100=0x01
   sensor_stream_off: 0x0100=0x00
   csid1_rx_cfg0_windows: 288358400

@@ -2,6 +2,10 @@
 
 ## Resume point
 
+## E003h ACTIVE — one 0053 transport diagnostic authorized, still unarmed — 2026-08-31
+
+Public package commit `d533d03...`; fresh review `0ee3620c...`; authorization `ce172a7b...`; authorization inspector `bc9a6e27...`; accepted inspection `391657bc...`. Scope is exactly one boot/helper and only the startup CSID companion transport owner changes to the captured RT-CDM path; no new register/value and no crop-causality claim. Golden is still saved, `next_entry` empty, modules absent. Publish authorization before arming.
+
 ## E003h ACTIVE — 0053 package installed/inspected unarmed — 2026-08-31
 
 0053 is installed as `sp11-camera-e003h-csidcomp-0053-one-shot` but remains unarmed. Static public anchor `d977480...`; CAMSS `f04189d7...e876`; manifest `7c113067...09d52`; package inspector `3986c387...ee17`; accepted inspection `d283bbe2...cedb`. Golden saved/default remains exact, `next_entry` is empty, modules are absent, and no authorization/RUN exists. Runtime remains blocked pending a fresh review after this package checkpoint is public.

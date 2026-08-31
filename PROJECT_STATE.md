@@ -1,3 +1,11 @@
+## E003h ACTIVE — one 0053 startup-companion RT-CDM diagnostic authorized, still unarmed — 2026-08-31
+
+Fresh review passed against public unarmed package commit `d533d03b25601e30419d7266f62728877b97e74f`: HEAD/origin exact, package inspection exact, bounded provenance green, Golden current, empty `next_entry`, no camera modules, no prior 0053 RUN and no authorization before review. Review SHA `0ee3620ccaea747c208672d195ae1727d659d1836075cfadb12f7f6bcfc89770`.
+
+Authorization `ce172a7b39ef88c0c5f57531dd77b296338bcd9431e38152c072cd1714bcc3fc` permits exactly one boot of `sp11-camera-e003h-csidcomp-0053-one-shot` and one root helper invocation. Persistent RT-CDM observation is mandatory, a pre-existing RUN log refuses retry, and any helper result must be archived followed immediately by Golden reboot. The sole hardware-behavior differential is ownership/transport of the already-proven four startup CSID1 descriptor-1 companion byte streams: CPU MMIO replay becomes the captured RT-CDM `CHANGE_BASE(CSID1) -> companion` path. No new register value, crop coordinate, RUP/AUP value, VFE, CSIPHY, sensor or DT programming is authorized, and crop/latch causality remains explicitly unproven.
+
+Independent authorization inspector `bc9a6e27a45052d426efff80a8940ad35e6797e7fe4e01691d3d630740b2a2a4` produced accepted authorization inspection `391657bcfa53b47446b675817addc61b143c19b5128e1211e618e8ec1b473173`. **The authorization checkpoint remains unarmed until published.**
+
 ## E003h ACTIVE — 0053 package installed/inspected unarmed; authorization review next — 2026-08-31
 
 The distinct 0053 startup-CSID companion RT-CDM package is installed under `/boot/sp11-7.1.5-camera-e003h-csidcomp-0053` with GRUB ID `sp11-camera-e003h-csidcomp-0053-one-shot` and marker `sp11_camera_e003h_csidcomp_0053=1`. It binds public static checkpoint `d977480aa80c4b5a115d263c15e5c79caa810e69` and CAMSS `f04189d766f478083e09fd38b26e73c99c03306ce1f2fb81d68b2ebd0d2be876`; helper, IMX681, front-only DTB, capsule, media setup and persistent RT-CDM observer remain byte-identical to 0052.
