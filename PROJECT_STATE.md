@@ -1,3 +1,11 @@
+## E003h ACTIVE — one 0051 RUP_DONE ownership diagnostic authorized, still unarmed — 2026-08-31
+
+Fresh review passed against public unarmed package commit `42824cb69eb15a9124fb80d042c0c8f90d5197d0`: HEAD/origin equal, package inspection exact, bounded provenance green, Golden current, empty `next_entry`, no camera modules, no prior 0051 RUN and no prior authorization. Review SHA `f364d91485f5103cbfea28e74f7554523fee177eb76c7377d41c65acdaf5ee47`.
+
+Authorization `0f4837282f952a38b53d1ec99dd940594b52203cc0e830f48ca0e98058e847b5` permits exactly one boot of `sp11-camera-e003h-rupclear-0051-one-shot` and one root helper invocation. Persistent RT-CDM observer is mandatory, an existing RUN log refuses retry, and any helper result must be archived followed immediately by Golden reboot. The only hardware-behavior differential is removal of the Windows-unmatched post-RUP front-IPP `+0x18` command; no new MMIO write/value and no production parity are authorized.
+
+The authorization checkpoint remains unarmed until published.
+
 ## E003h ACTIVE — 0051 package installed/inspected unarmed; authorization review next — 2026-08-31
 
 The distinct 0051 RUP_DONE ownership package is installed while SP11 remains on FullIO v19c Golden. It pins CAMSS `6b7287e6eb96c44060d58691333b82f4e4103df929f98ad39ec50347b379f020` and reuses the exact consumed-0050 helper, IMX681 module, front-only DTB, capsule, media setup and persistent RT-CDM observer. Boot ID `sp11-camera-e003h-rupclear-0051-one-shot`; marker `sp11_camera_e003h_rupclear_0051=1`.

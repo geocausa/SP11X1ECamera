@@ -709,3 +709,7 @@ Exact qccamisp IRQ disassembly is now fail-closed: reader direct MMIO writes are
 ## 2026-08-31 — 0051 candidate installed and inspected unarmed
 
 A distinct 0051 package is installed under `/boot/sp11-7.1.5-camera-e003h-rupclear-0051`, boot ID `sp11-camera-e003h-rupclear-0051-one-shot`. It pins static commit `01d17d96a1882e6d3462c1b9e2caa261f8750821` and CAMSS `6b7287e6eb96c44060d58691333b82f4e4103df929f98ad39ec50347b379f020`; all non-CAMSS runtime assets are byte-identical to 0050. Package inspector `ed534bfd75486fbd9e41999f8ecb46392fd4664c57081622b96292245357a5ab` emits `be455f237db0864af6a667c36968ae1055add607716c1eec9368c2a831786009`. Golden is saved/default, `next_entry` is empty, authorization is absent and no camera module is loaded. Runtime remains blocked pending a separate authorization review.
+
+## 2026-08-31 — one 0051 RUP_DONE ownership diagnostic authorized, unarmed
+
+Fresh review `f364d91485f5103cbfea28e74f7554523fee177eb76c7377d41c65acdaf5ee47` passes against package commit `42824cb69eb15a9124fb80d042c0c8f90d5197d0`. Authorization `0f4837282f952a38b53d1ec99dd940594b52203cc0e830f48ca0e98058e847b5` permits one candidate boot and one helper only, requires the persistent observer, forbids same-boot retry and mandates immediate Golden return after any helper result. The sole differential is suppression of the Windows-unmatched post-RUP front IPP `+0x18` command; no new register write/value is authorized.

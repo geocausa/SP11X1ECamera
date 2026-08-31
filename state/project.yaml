@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0051-package-installed-unarmed-authorization-review-next
+status: e003h-0051-one-shot-authorized-unarmed
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: linux-0051-package-installed-unarmed-authorization-review-next
+  status: linux-0051-one-shot-authorized-unarmed
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -189,7 +189,7 @@ e003h:
   linux_0051_new_register_values: 0
   linux_0051_suppressed_mmio_path: front-mode0 IPP RUP_DONE software-shadow clear no longer writes CSID +0x18
   linux_0051_rdi_rup_done_behavior_retained: true
-  linux_0051_runtime_authorized: false
+  linux_0051_runtime_authorized: true
   linux_0051_package_boot_id: sp11-camera-e003h-rupclear-0051-one-shot
   linux_0051_package_cmdline_marker: sp11_camera_e003h_rupclear_0051=1
   linux_0051_package_asset_manifest_sha256: 3f802bfc48327ec402ab2e84ad6ad11f613998f4c16cd3f82e5b737b8191c592
@@ -197,7 +197,13 @@ e003h:
   linux_0051_package_inspection_sha256: be455f237db0864af6a667c36968ae1055add607716c1eec9368c2a831786009
   linux_0051_package_installed: true
   linux_0051_package_armed: false
-  linux_0051_package_authorization_present: false
+  linux_0051_package_authorization_present: true
+  linux_0051_authorization_review_sha256: f364d91485f5103cbfea28e74f7554523fee177eb76c7377d41c65acdaf5ee47
+  linux_0051_authorization_sha256: 0f4837282f952a38b53d1ec99dd940594b52203cc0e830f48ca0e98058e847b5
+  linux_0051_authorization_inspection_sha256: 4189a33a62e1a07cbecfbfdda69f40f872314a7617433b4dc4b2cf1efcf06121
+  linux_0051_authorized_boot_count: 1
+  linux_0051_authorized_root_helper_invocations: 1
+  linux_0051_same_boot_retry_authorized: false
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac
@@ -205,8 +211,8 @@ e003h:
   linux_0050_authorized_boot_count: 1
   linux_0050_authorized_root_helper_invocations: 1
   linux_0050_same_boot_retry_authorized: false
-  runtime_authorized: false
-  sensor_stream_authorized: false
+  runtime_authorized: true
+  sensor_stream_authorized: true
   sensor_stream_on: 0x0100=0x01
   sensor_stream_off: 0x0100=0x00
   csid1_rx_cfg0_windows: 288358400
