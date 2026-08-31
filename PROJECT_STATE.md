@@ -1,3 +1,9 @@
+## E003h ACTIVE — one 0061 UBWC-static causal run authorized, unarmed — 2026-08-31
+
+Fresh authorization against public package `ae29aa203f80d7544ae186fd6286df05b6eb3253` permits exactly one 0061 candidate boot and one root-helper invocation. The only programming delta is the published X1E80100 VFE1 BUS common `+0xc58=0x00001046` write; existing 0060 telemetry remains. Authorization SHA `5bf4122dffb20e378d2a0c1a243509e8f1ece71c5a53fa1ae5a80a14bca8093d`; authorization inspection SHA `dda75aa193737314e0b926e0d273dc2357bbef85ad730aabedac8d8a5aedde37`.
+
+The contract forbids every additional register write, IRQ-event substitution, sensor/CSID/CSIPHY/clock/BUS-client/RT-CDM/DT change, second helper and same-boot retry. Production parity is not authorized. Golden remains saved and `next_entry` is empty.
+
 ## E003h ACTIVE — 0061 package installed/inspected, Golden-safe and unarmed — 2026-08-31
 
 The distinct 0061 UBWC-static one-shot is installed under `/boot/sp11-7.1.5-camera-e003h-vfeubwc-0061` with GRUB ID `sp11-camera-e003h-vfeubwc-0061-one-shot`. CAMSS module `6b23dc7f41cd675107d81d89d61ae341807954b6649df03e7e1ac7a465d827b3` contains exactly the statically accepted X1E80100 VFE1 BUS `+0xc58=0x00001046` write; mode2 IMX681, helper, front-only DT and RT-CDM observer remain frozen.

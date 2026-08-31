@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0061-package-installed-unarmed-authorization-next
+status: linux-0061-authorized-unarmed-one-run-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2485,5 +2485,21 @@ linux_0061_package:
   mandatory_golden_reboot: true
   runtime_authorized: false
 
+linux_0061_authorization:
+  accepted: true
+  package_commit: ae29aa203f80d7544ae186fd6286df05b6eb3253
+  authorization_review_sha256: a0d35dbd92be98a26cbfafd05260db33c976f35f78fe4d9575d636ce7955148b
+  authorization_sha256: 5bf4122dffb20e378d2a0c1a243509e8f1ece71c5a53fa1ae5a80a14bca8093d
+  authorization_inspection_sha256: dda75aa193737314e0b926e0d273dc2357bbef85ad730aabedac8d8a5aedde37
+  runtime_authorized: true
+  production_parity_authorized: false
+  boot_count: 1
+  root_helper_invocation_count: 1
+  same_boot_retry: false
+  persistent_rtcdm_observer_required: true
+  post_run_reboot: immediate Golden
+  hardware_delta: VFE1_UBWC_STATIC_0061_ONLY
+  candidate_boot_armed: false
+
 next_action: >-
-  Publish the installed/unarmed 0061 package checkpoint, then perform a fresh authorization review against that exact public package commit. Do not arm or run before the authorization checkpoint is public.
+  Publish this 0061 authorization checkpoint. Only after HEAD equals origin, arm exactly sp11-camera-e003h-vfeubwc-0061-one-shot, run one helper with the persistent RT-CDM observer, never retry, and verify immediate Golden return.
