@@ -1,0 +1,73 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_VFE1_CGC_COLD_ENTRY_20260831_2494_2026-08-31_23-29-29-806.log'
+nt!DebugService2+0x8:
+fffff802`44401408 d43e0000 brk         #0xF000
+1: kd> .lastevent; lm m qccamisp*
+Last event: Load module qccamisp8380.sys at fffff802`48490000
+  debugger time: Mon Aug 31 23:29:41.378 2026 (UTC + 1:00)
+Browse full module list
+start             end                 module name
+fffff802`48490000 fffff802`48508000   qccamisp8380   (deferred)             
+
+Unloaded modules:
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+fffff802`48490000 fffff802`4850d000   qccamisp8380.sys
+1: kd> sxd ld:qccamisp8380; bp fffff802`484abe80; bl; g
+     0 e Disable Clear  fffff802`484abe80     0001 (0001) qccamisp8380+0x1be80
+
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff802`444013b0 d43e0000 brk         #0xF000
+0: kd> g
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff802`444013b0 d43e0000 brk         #0xF000
+1: kd> dq fffff802`484dae88 L1
+fffff802`484dae88  ffffb588`6f7c6000
+1: kd> dq ffffb588`6f7c6030 L1
+ffffb588`6f7c6030  ffffb588`6bb97880
+1: kd> dq ffffb588`6bb978d8 L1; dq poi(ffffb588`6bb978d8)+150 L1
+ffffb588`6bb978d8  ffffb588`72202000
+ffffb588`72202150  ffffc880`f5d97c00
+1: kd> dd ffffc880`f5d97c08 L1
+ffffc880`f5d97c08  00000000
+1: kd> .logclose; bc *; g
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_VFE1_CGC_COLD_ENTRY_20260831_2494_2026-08-31_23-29-29-806.log
