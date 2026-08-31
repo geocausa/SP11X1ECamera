@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0060-bus-progress-readonly-static-pass-package-next
+status: linux-0060-package-installed-unarmed-authorization-review-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2340,5 +2340,25 @@ linux_0060_static:
   runtime_authorized: false
   next_gate: build/install/inspect distinct Golden-safe 0060 one-shot package; no runtime until separate public package and fresh authorization
 
+linux_0060_package:
+  accepted: true
+  package_dir: experiments/E003-front-imx681-cphy/e003h-vfe1-bus-progress-readonly-0060-candidate
+  boot_id: sp11-camera-e003h-vfebus-0060-one-shot
+  cmdline_marker: sp11_camera_e003h_vfebus_0060=1
+  asset_manifest_sha256: 1289c995e3518eeb57657c598d8da7d0491a1cdc501aa843197e1a02143390cd
+  package_inspector_sha256: d596dc7823547c691249967b6a1ca9c92f57040f7d69a55f9361ea75bbb7d10d
+  package_inspection_sha256: a9f3cde346731b641a9bd4121d2b80cac8f46329068fe5fba4969fcaa6436ac9
+  camss_sha256: 00da9fd6510ed01455f4b2349d6730fcf8ce81571e94dbbdbade526b77cae8d6
+  sensor_sha256: a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc
+  dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  candidate_boot_installed: true
+  candidate_boot_armed: false
+  authorization_present: false
+  prior_run_present: false
+  new_direct_mmio_read_callsites: 14
+  new_mmio_writes: 0
+  camera_programming_changed: false
+  runtime_authorized: false
+
 next_action: >-
-  Build/install/inspect a distinct 0060 read-only BUS-progression one-shot package while keeping Golden saved and next_entry empty. Publish the unarmed package before any fresh runtime authorization.
+  Publish the installed/unarmed 0060 package checkpoint, then perform a fresh authorization review against that public package. Only then may exactly one bounded read-only telemetry boot be armed.

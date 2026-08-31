@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0060 BUS-progression package installed/inspected, unarmed — 2026-08-31
+
+The distinct 0060 one-shot is installed under `/boot/sp11-7.1.5-camera-e003h-vfebus-0060` with GRUB ID `sp11-camera-e003h-vfebus-0060-one-shot`. It uses CAMSS `00da9fd6510ed01455f4b2349d6730fcf8ce81571e94dbbdbade526b77cae8d6` and freezes the consumed-0059 mode2 sensor, front-only DT, helper, capsule and RT-CDM observer. Camera programming is unchanged; 0060 adds only 14 timeout-path MMIO read callsites for BUS common/client progression state.
+
+Package-only Golden preflight and independent installed inspection pass. Manifest SHA `1289c995e3518eeb57657c598d8da7d0491a1cdc501aa843197e1a02143390cd`; package inspection SHA `a9f3cde346731b641a9bd4121d2b80cac8f46329068fe5fba4969fcaa6436ac9`. Golden remains saved, `next_entry` is empty, camera modules are absent, authorization is absent, no 0060 RUN exists, one helper/no retry is enforced, and the wrapper mandates Golden reboot.
+
+Runtime remains unauthorized. Publish this package checkpoint first; only a fresh authorization review against the public package may permit one read-only telemetry boot.
+
 ## E003h ACTIVE — 0060 static PASS; VFE1 BUS progression telemetry only — 2026-08-31
 
 The post-0059 BUS audit corrects one misleading inference: the bounded Linux PIX path already allocates, configures and enables all nine Windows-active VFE1 BUS clients (`0,1,2,3,11,18,12,14,13`). Earlier timeout telemetry printed only FULL0/FULL1. Qualcomm VFE680 also leaves BUS composite-group configuration disabled (`comp_cfg_needed=false`), so neither "missing seven clients" nor speculative composite-group writes are justified.
