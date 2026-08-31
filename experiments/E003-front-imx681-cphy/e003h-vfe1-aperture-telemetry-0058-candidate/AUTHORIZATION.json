@@ -1,0 +1,47 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "dfe91e78a3b0ec8fba66ff31be77ccec10309e6a184333c32bf07f34434cb49c",
+  "authorization_review_sha256": "02cb5e93178eba87e8a2eb59244d12a21e07f1fe7562435d04132f246d9144b2",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_vfeap_0058=1",
+    "id": "sp11-camera-e003h-vfeap-0058-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camera_programming_delta": "none_vs_0057",
+    "camss_sha256": "3fd0ebdc8a3f17fdc49e117d77fa10e03711dfbd27bc552e79230540f1cef80c",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc",
+    "vfe_aperture_access": "read_only",
+    "vfe_aperture_base": "0x0ac71000",
+    "vfe_aperture_size": "0x4000",
+    "vfe_watcher_sha256": "b997ceedf1b5b70d44292e58fce33608bc89d1a3a67e87e5afa701628d25eee5"
+  },
+  "execution_contract": {
+    "boot_count": 1,
+    "hardware_delta": "NONE_VS_CONSUMED_0057_READ_ONLY_VFE_APERTURE_TELEMETRY",
+    "persistent_rtcdm_observer_required": true,
+    "persistent_vfe_aperture_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "package_commit": "cc0abdbac4d0adc0066efa3dbd627f2be68a69d6",
+  "package_inspection_sha256": "08cf6b7d81460b366a1a90e5e6863860a69575a9271af2ff227e3f94afea18aa",
+  "production_parity_authorized": false,
+  "purpose": "single bounded 0058 telemetry differential: run the unchanged consumed-0057 camera path while persistently sampling VFE1 physical 0x0ac71000..0x0ac74fff read-only, then compare Linux powered state with preserved successful Windows live snapshots",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-vfeap-0058-runtime-authorization-v1",
+  "success_observations": {
+    "then_evaluate": [
+      "VFE1 aperture samples captured while CAMSS powered",
+      "Linux vs Windows low-TOP config deltas",
+      "full 0x4000 stable non-address register deltas",
+      "VFE1 raw Epoch0/QC10C remains diagnostic only",
+      "CSID remains healthy 3840x2160",
+      "RT-CDM completes without fault"
+    ]
+  }
+}

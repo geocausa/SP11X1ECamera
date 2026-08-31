@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-camnoc-300mhz-parity-noncausal-vfe-ingress-static-next
+status: linux-0058-vfe-aperture-authorized-unarmed
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2297,26 +2297,4 @@ linux_0049_runtime:
   runtime_authorized: false
 
 next_action: >-
-  Use exact qccamisp/CSID680 sources and existing same-machine traces to close vertical-crop active/shadow/update semantics. Linux 0049 reads Windows-exact crop registers but measures 3840x2640 at ERROR_LINE_COUNT, whereas bounded Windows reaches 3840x2160 with no qccamisp IPP-error branch across three normal starts. Do not change the sensor mode or authorize another Linux runtime until the missing crop activation/update semantic is mechanically proven.
-
-windows_csid1_bit14_history_dynamic:
-  accepted: true
-  date: 2026-08-30
-  tested_front_starts: 3
-  selector_proven: 5
-  csid_index_proven: 1
-  qccamisp_ipp_error_branch_rva: 0x1ba04
-  qccamisp_ipp_error_branch_hits: 0
-  windows_expected_frame_end: 0x08700f00
-  windows_actual_frame_end: 0x08700f00
-  windows_ipp_status_end: 0x00e11ff8
-  windows_bit14_end: false
-  linux_0049_error_actual_frame: 0x0a500f00
-  linux_0049_extra_lines: 480
-  universal_windows_bit14_absence_proven: false
-  linux_0049_line_count_error_is_concrete_parity_fault: true
-  kd_log_sha256: 7ba4a32a14a3a1ae44ca13425de6115b00ce7a35cf0d65bdb4fed43f6c43fdec
-  cycles_log_sha256: 45fd5b2d70581d0822c0dd5c965b0c35c09b440a442a575b0f638c2b914aa628
-  extractor_sha256: 3cbaa94282531aed45c29835ef150f40642cc80f2a7a5382d2be918a92578fe2
-  oracle_sha256: f7523499e06332e588418218bb4eac71069e01c237c0c35f27c3bec6968f3db5
-  runtime_authorized: false
+  Publish the 0058 authorization checkpoint; then arm exactly one sp11-camera-e003h-vfeap-0058-one-shot boot, require both persistent observers READY, invoke the frozen helper once, return immediately to Golden, and mechanically compare the captured Linux VFE1 0x4000 aperture against preserved successful Windows live snapshots.

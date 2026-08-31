@@ -1,3 +1,9 @@
+## E003h ACTIVE — one 0058 read-only VFE1 aperture telemetry run authorized, unarmed — 2026-08-31
+
+Public package commit `cc0abdbac4d0adc0066efa3dbd627f2be68a69d6` has passed a fresh authorization review for exactly one 0058 diagnostic. Camera binaries/programming are byte-identical to consumed 0057; the only new behavior is persistent read-only sampling of physical VFE1 `0x0ac71000..0x0ac74fff` alongside the existing RT-CDM observer. Authorization SHA `eb9d37a7982e0e991f053ecac9a705494665d21b50a74b76b5e08f44b76734f6`; authorization inspection SHA `747c3b5ff9fe22221f4846083db46f13af286dc2d3e5e89ee69c1365a5fcc7b4`.
+
+The contract permits one candidate boot, one root-helper invocation, no same-boot retry, mandatory RT-CDM + VFE-aperture observers, and immediate Golden reboot. Production parity is not authorized. At this checkpoint `saved_entry` is Golden and `next_entry` is empty. Next gate: publish this authorization checkpoint, then arm only `sp11-camera-e003h-vfeap-0058-one-shot`.
+
 ## E003h ACTIVE — 0058 read-only VFE1 aperture package installed/inspected, Golden-safe and unarmed — 2026-08-31
 
 The distinct 0058 one-shot package is installed with GRUB ID `sp11-camera-e003h-vfeap-0058-one-shot` and marker `sp11_camera_e003h_vfeap_0058=1`. It reuses the exact consumed 0057 CAMSS module `3fd0ebdc8a3f17fdc49e117d77fa10e03711dfbd27bc552e79230540f1cef80c` and mode2 IMX681 `a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc`; camera programming is therefore byte-identical to 0057. The only new runtime component is the statically accepted read-only VFE1 aperture observer.
