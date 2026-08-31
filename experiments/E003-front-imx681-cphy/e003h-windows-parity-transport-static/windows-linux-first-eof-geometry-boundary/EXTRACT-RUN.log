@@ -1,0 +1,114 @@
+{
+  "accepted": true,
+  "classification": {
+    "epoch_side_bit_difference_is_proven_causal": false,
+    "geometry_divergence_boundary": "first completed EOF/frame-size measurement: Windows 3840x2160 versus Linux 3840x2640 + ERROR_LINE_COUNT",
+    "height_is_incomplete_in_both_os_before_eof": true,
+    "irq_status_side_bits_may_coalesce_between_full-status clears": true,
+    "linux_first_epoch_sample_is_pre_eof": true,
+    "prior_first_epoch_geometry_divergence_boundary_superseded": true,
+    "speculative_crop_register_write_justified": false,
+    "vertical_crop_failure_at_completed_frame_remains_proven": true,
+    "windows_first_complete_sample_is_eof_bearing": true
+  },
+  "final_ipp_irq_mask": "0x3cbc601c",
+  "linux_0051": {
+    "first_complete_eof_sample": {
+      "actual": "0x0a500f00",
+      "contains_camif_eof": true,
+      "contains_error_line_count": true,
+      "geometry": "3840x2640",
+      "masked_bits": [
+        "CAMIF_EOF",
+        "ERROR_LINE_COUNT"
+      ],
+      "status": "0x00004ee8",
+      "status_bits": [
+        "CAMIF_EOF",
+        "FRAME_DROP_EOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "ERROR_LINE_COUNT"
+      ]
+    },
+    "first_epoch_sample": {
+      "actual": "0x00000f00",
+      "contains_camif_eof": false,
+      "geometry": "3840 x incomplete-height",
+      "masked_bits": [
+        "CAMIF_EPOCH0"
+      ],
+      "status": "0x00600cc0",
+      "status_bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "CAMIF_EPOCH0",
+        "CAMIF_EPOCH1"
+      ]
+    }
+  },
+  "next_gate": "Audit completed-frame timing/active-crop semantics rather than pre-EOF Epoch sampling. The strongest remaining same-machine delta is completed-frame timing telemetry: Windows HBI=0x03b203ad versus Linux error-time HBI=0x02c502c0 despite identical 3840 input width and sensor mode. First statically decode FORMAT_MEASURE1/HBI semantics and determine whether that delta identifies a clock/timing or path-latch mismatch; no runtime yet.",
+  "qccamisp_irq_snapshot_clear": {
+    "anchors": {
+      "0x1b65c": "ldr w8, [x8, #0xac]",
+      "0x1b748": "ldr w9, [x20, #0x10]",
+      "0x1b750": "str w9, [x8, #0xb4]"
+    },
+    "reads_ipp_status_then_clears_full_snapshot": true
+  },
+  "schema": "sp11-e003h-first-eof-geometry-boundary-v1",
+  "source_sha256": {
+    "driver": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "linux": "2e1fbd740073b98e9e86ef477f1986d9b7e94a26a5e486f4386197b8e331f9d1",
+    "linux_source": "683c0d5c042d3a8f24be211cda7dc02d06befe31e42aeb29fcd14f117397c81c",
+    "win_geom": "0276623cbf63290bad79afb5ce6ce3acf3f7981c6502bbcfcb629e092c545fe6",
+    "win_start": "01960da41376809d694c6aa2336ecef6ff4c010abfa29e4674b1a68d303c3cda"
+  },
+  "windows": {
+    "checkpoint_provenance_fail_closed": true,
+    "first_complete_checkpoint": {
+      "actual": "0x08700f00",
+      "contains_camif_eof": true,
+      "contains_epoch0": true,
+      "geometry": "3840x2160",
+      "masked_bits": [
+        "CAMIF_EOF",
+        "CAMIF_EPOCH0"
+      ],
+      "status": "0x00600228",
+      "status_bits": [
+        "CAMIF_EOF",
+        "FRAME_DROP_EOF",
+        "INFO_INPUT_EOF",
+        "CAMIF_EPOCH0",
+        "CAMIF_EPOCH1"
+      ]
+    },
+    "pre_complete": {
+      "actual": "0x00000f00",
+      "geometry": "3840 x incomplete-height",
+      "masked_bits": [
+        "CAMIF_SOF",
+        "RUP_DONE"
+      ],
+      "status": "0x00811dd0",
+      "status_bits": [
+        "CAMIF_SOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "FRAME_DROP_SOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "INFO_INPUT_SOF",
+        "VCDT_GRP1_SEL",
+        "RUP_DONE"
+      ]
+    },
+    "raw_kd_bytes_local_present": false
+  }
+}

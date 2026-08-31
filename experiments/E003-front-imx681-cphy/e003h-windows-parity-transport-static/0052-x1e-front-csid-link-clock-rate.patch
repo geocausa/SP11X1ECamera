@@ -1,0 +1,22 @@
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -553,11 +553,18 @@
+ 
+ 	for (i = 0; i < csid->nclocks; i++) {
+ 		struct camss_clock *clock = &csid->clock[i];
++		bool x1e_front_link_clock =
++			csid->camss->res->version == CAMSS_X1E80100 &&
++			csid->id == 1 && csid->phy.csiphy_id == 2 &&
++			cphy && csid->phy.lane_cnt == 1 &&
++			(!strcmp(clock->name, "csid") ||
++			 !strcmp(clock->name, "csid_csiphy_rx"));
+ 
+ 		if (!strcmp(clock->name, "csi0") ||
+ 		    !strcmp(clock->name, "csi1") ||
+ 		    !strcmp(clock->name, "csi2") ||
+-		    !strcmp(clock->name, "csi3")) {
++		    !strcmp(clock->name, "csi3") ||
++		    x1e_front_link_clock) {
+ 			u64 min_rate = link_freq / 4;
+ 			long rate;
+ 

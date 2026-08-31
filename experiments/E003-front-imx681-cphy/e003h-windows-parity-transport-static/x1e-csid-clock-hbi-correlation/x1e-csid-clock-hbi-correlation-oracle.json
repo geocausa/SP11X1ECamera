@@ -1,0 +1,80 @@
+{
+  "accepted": true,
+  "classification": {
+    "clock_rate_delta_is_plausibly_causal_for_completed_frame_crop_failure": true,
+    "direct_windows_400mhz_clock_vote_observed": false,
+    "hardware_runtime_authorized": false,
+    "hbi_ratio_matches_400_to_300_within_three_ticks": true,
+    "linux_link_derived_required_rate_is_400mhz": true,
+    "linux_x1e_front_csid_300mhz_request_proven": true,
+    "speculative_crop_register_write_justified": false,
+    "windows_400mhz_is_strongly_correlated_not_directly_proven": true,
+    "x1e_clock_name_mismatch_bypasses_link_scaling": true
+  },
+  "front_transport": {
+    "cphy_trios": 1,
+    "link_freq_hz": 1200000000,
+    "raw_bpp": 10
+  },
+  "hbi_correlation": {
+    "absolute_tick_error_to_windows": [
+      0.6666666666666288,
+      2.3333333333333712
+    ],
+    "both_half_ranges_preserve_width_5": true,
+    "linux_halves": [
+      709,
+      704
+    ],
+    "linux_halves_scaled_400_over_300": [
+      945.3333333333334,
+      938.6666666666666
+    ],
+    "linux_raw": "0x02c502c0",
+    "target_400_over_300_ratio": 1.3333333333333333,
+    "windows_halves": [
+      946,
+      941
+    ],
+    "windows_over_linux_ratio": [
+      1.3342736248236953,
+      1.3366477272727273
+    ],
+    "windows_raw": "0x03b203ad"
+  },
+  "linux_clock_selection": {
+    "camcc_has_distinct_300_400_480_rates": true,
+    "generic_branch_sets_first_rate": true,
+    "link_derived_unmargined_hz": 300000000,
+    "link_derived_with_5pct_margin_hz": 315000000,
+    "proven_programmed_request_hz": 300000000,
+    "rate_algorithm_would_select_hz": 400000000,
+    "scaled_branch_recognized_names": [
+      "csi0",
+      "csi1",
+      "csi2",
+      "csi3"
+    ],
+    "x1e_clock_names": [
+      "csid",
+      "csid_csiphy_rx"
+    ],
+    "x1e_names_enter_scaled_branch": false,
+    "x1e_rate_table_hz": [
+      300000000,
+      400000000,
+      480000000
+    ]
+  },
+  "next_gate": "Represent and inspect the smallest X1E front-only clock correction that causes CSID1 core/RX clocks to select 400MHz for the proven 1.2GHz one-trio C-PHY link, without touching crop/RUP/VFE/sensor programming. Do not execute hardware until package + separate authorization. Direct Windows clock-vote proof remains desirable but is not required to establish the Linux internal rate-selection defect.",
+  "schema": "sp11-e003h-x1e-csid-clock-hbi-correlation-v1",
+  "source_sha256": {
+    "camcc": "c9d0c54bbfd4de4d27e814a06332c950f23b75dbaac327180a3a245628c01477",
+    "camss": "5a920032e138eee1154c4b9ae1846a445e02fbac3e7626a4245797502e73b793",
+    "csid": "df0d2a0aa92078da7d86e1a96d2ff3b9c0876e702e14f8e172676a1f0371acd2",
+    "eof": "db4476e159872f9005a127d84ea41032191402de2709a0835d2c2c5fbc9dffde",
+    "linux": "2e1fbd740073b98e9e86ef477f1986d9b7e94a26a5e486f4386197b8e331f9d1",
+    "transport": "9796c92d718dd894248bf35926f2330c81636c531c0c8cb95b8db1d2f35aa3c8",
+    "windows": "f7523499e06332e588418218bb4eac71069e01c237c0c35f27c3bec6968f3db5"
+  }
+}
