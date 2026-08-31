@@ -1,0 +1,83 @@
+{
+  "schema": "sp11-e003h-external-vfe680-source-comparison-v1",
+  "accepted": true,
+  "runtime_authorized": false,
+  "authority": "same-machine SP11 Windows qccamisp behavior remains authoritative; external source is hypothesis/naming/ownership evidence only",
+  "sources": {
+    "oaklee": {
+      "repo": "ooaklee/linux_ms_dev_kit-sp11",
+      "branch": "sp11/integration-7.2.x",
+      "commit": "2cbd1ec3e2da385e7bd91fd65c63ba5a8fb5b865",
+      "camss_vfe680_sha256": "05da2e8f35b0f5aa9d6ee68e66fe7fdc07c77e4c9c05eeef0475ded2c5829b01"
+    },
+    "qualcomm": {
+      "repo": "qualcomm-linux/camera-driver",
+      "branch": "camera-kernel.qclinux.0.0",
+      "commit": "0f16924ff6a7f9bb56a7e958016da2ed8a174f2f",
+      "vfe680_sha256": "a31f6fe84cbd2b544fe504e9099ea6adc6bbe846628999742d9fb6024add2505",
+      "csid680_sha256": "a0eb6dca54ea3dfa11a72b9e649b350390d26e613b8d27d7640f8544c0c24882",
+      "ife_hw_mgr_sha256": "7ba1d12e7eab7ba484395dbcad77a8de9443c9b07fb336dd3dac2fabdb05dac9",
+      "vfe_bus_ver3_sha256": "dbe53691b46f912d59a5848a7c3e039601088430fd2e3efc992d9100dcc36b44"
+    }
+  },
+  "oaklee_findings": {
+    "architecture": "mainline/Linaro CAMSS VFE680 baseline, not downstream Spectra request manager",
+    "camera_issue_is_behind_current_project": true,
+    "hidden_working_sp11_pix_solution_found": false,
+    "usefulness": "upstream X1E integration baseline only"
+  },
+  "qualcomm_vfe680_findings": {
+    "x1e_build_supported": true,
+    "irq_capability": "CAM_VFE_HW_IRQ_CAP_EXT_CSID = 0x27",
+    "irq_capability_decoded": ["SOF", "EPOCH0", "EPOCH1", "EOF"],
+    "internal_vfe_rup_capability": false,
+    "internal_vfe_buf_done_capability": false,
+    "top_frame_status_register": "TOP status1",
+    "top_sof_mask": "0x00000001",
+    "top_epoch0_mask": "0x00010000",
+    "top_epoch1_mask": "0x00020000",
+    "top_eof_mask": "0x00000002",
+    "bus_irq_regs": {
+      "mask": ["0x0c18", "0x0c1c"],
+      "clear": ["0x0c20", "0x0c24"],
+      "status": ["0x0c28", "0x0c2c"],
+      "set": ["0x0c50", "0x0c54"]
+    },
+    "bus_error_mask": ["0xd0000000", "0x00000000"],
+    "bus_completion_groups": "17 groups on BUS status0 bits 0..16",
+    "public_normal_use_of_bus_status1_bit21_found": false
+  },
+  "qualcomm_csid680_findings": {
+    "rup_aup_cmd_addr": "0x18",
+    "aup_rup_supported": true,
+    "only_master_rup": true,
+    "ipp_sof_mask": "0x00000010",
+    "ipp_epoch0_mask": "0x00200000",
+    "ipp_epoch1_mask": "0x00400000",
+    "ipp_rup_done_mask": "0x00800000",
+    "ipp_rup_aup_mask": "0x00010001",
+    "ife_manager_can_route_reg_update_through_csid": true,
+    "ife_manager_forwards_csid_epoch_to_request_context": true
+  },
+  "same_machine_linux_comparison": {
+    "windows_exact_csid_rup_aup_already_replayed": "CSID1 +0x18 = 0x01f501f5 through RT-CDM before IPP enable",
+    "extra_direct_csid_reg_update_write_justified": false,
+    "linux_csid_epoch0_seen": true,
+    "linux_csid_epoch1_seen": true,
+    "linux_csid_rup_done_seen": true,
+    "0062r1_csid_irq_history_or": "0x00e11ff8",
+    "0062r1_vfe_top_status1": "0x00030003",
+    "0062r1_vfe_bus_status1": "0x00000000",
+    "windows_vfe_bus_epoch_latch": "VFE BUS +0x0c2c bit21",
+    "windows_vfe_bus_epoch_latch_seen_on_linux": false
+  },
+  "negative_findings": {
+    "do_not_add_duplicate_csid_rup_aup": true,
+    "do_not_enable_generic_old_bus_rup_status0_bit0": true,
+    "do_not_substitute_csid_or_top_epoch_for_windows_bus_epoch_without_same_machine_proof": true,
+    "vfe_bus_irq_set_c54_is_hardware_capability_but_no_captured_windows_write_found": true,
+    "qccamisp_direct_plus54_store_found_but_owned_by_cdm_object_not_vfe_bus": true
+  },
+  "working_hypothesis": "Windows VFE BUS status1 bit21 is a qccamisp/Windows lifecycle or qualification latch downstream of already-working CSID frame timing, rather than the raw VFE680 Epoch0 source. The next parity gate should trace the same-machine Windows CSID Epoch0/RUP_DONE -> IFE/BUS Epoch0 relationship and request handoff before changing Linux behavior.",
+  "next_gate": "same-machine Windows dual-event trace: correlate CSID1 IPP status bits21/23 with VFE1 BUS status1 bit21 and the BUS-address-update/replay2 boundary; no Linux runtime change is authorized by this external-source oracle"
+}
