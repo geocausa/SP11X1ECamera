@@ -1,3 +1,11 @@
+## E003h ACTIVE — one 0057 SP11 active-VFE-prefix diagnostic authorized, still unarmed — 2026-08-31
+
+Fresh authorization review against public unarmed package commit `f35f512f2313a886b08453d2dfd0416e35aae0f7` passes. Review SHA `c5973e4d59aca41db92e9ebabc3bedc31d721997387dc44602ba6090752c57a7`; authorization SHA `4dc8eb9e3e539b8ec0f1d09a6bb4e25eaa55978ccb7c7f7d0a2c0654002125c7`; independent authorization inspection SHA `a26b89c603982cebde9460ade63e0b3e4c496721b8b6fb0e18e7c161cff33737`. Golden remains the saved default, `next_entry` is empty, camera modules are absent and no 0057 RUN exists.
+
+The authorization permits exactly one candidate boot and exactly one root helper invocation, with persistent RT-CDM observation, no same-boot retry, and immediate Golden reboot. The only hardware differential is the statically accepted SP11-active IFE1 DAL prefix correction in CAMSS; sensor mode2, CSID, CSIPHY, RT-CDM bytes/order, DT, BUS-client recipe and the accepted CAMNOC 300 MHz correction remain frozen. Causality remains unproven until the bounded run.
+
+**The candidate remains unarmed at this checkpoint.** Publish this authorization first; only after origin matches may GRUB `next_entry` be set for the one-shot run.
+
 ## E003h ACTIVE — 0057 one-shot package installed/inspected, Golden-safe and unarmed — 2026-08-31
 
 The distinct 0057 SP11 active-IFE1-DAL package is installed under `/boot/sp11-7.1.5-camera-e003h-vfeactive-0057` with GRUB ID `sp11-camera-e003h-vfeactive-0057-one-shot` and marker `sp11_camera_e003h_vfeactive_0057=1`. It binds public static checkpoint `139aeb16e4296041234ae97da91cfef105ee7d46` and CAMSS module `3fd0ebdc8a3f17fdc49e117d77fa10e03711dfbd27bc552e79230540f1cef80c`; the Windows-selected mode2 IMX681, helper, media setup, RT-CDM observer, front-only DTB and capsule remain frozen exact assets.
