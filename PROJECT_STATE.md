@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0061 package installed/inspected, Golden-safe and unarmed — 2026-08-31
+
+The distinct 0061 UBWC-static one-shot is installed under `/boot/sp11-7.1.5-camera-e003h-vfeubwc-0061` with GRUB ID `sp11-camera-e003h-vfeubwc-0061-one-shot`. CAMSS module `6b23dc7f41cd675107d81d89d61ae341807954b6649df03e7e1ac7a465d827b3` contains exactly the statically accepted X1E80100 VFE1 BUS `+0xc58=0x00001046` write; mode2 IMX681, helper, front-only DT and RT-CDM observer remain frozen.
+
+Package preflight and independent installed inspection pass. Manifest SHA `9d59b44bd1c95834c1632706aba93f391eaa1f29149a932a51380c4f0fa609ab`; package inspection SHA `49eb305a989694f175676ce523a42a3deab08f8760af5c8ca9f31ed5d91391db`. Golden remains saved, `next_entry` is empty, camera modules are absent, authorization is absent, and no 0061 RUN exists. Runtime preflight precedes module load; exactly one helper is enforced; retry is refused; mandatory Golden reboot remains.
+
+Runtime is not authorized. Publish this package checkpoint first; only a fresh authorization review against the public package may permit one bounded 0061 run.
+
 ## E003h ACTIVE — 0061 static PASS; exact SP11 VFE1 UBWC static write only — 2026-08-31
 
 Static 0061 implements the directly proven same-machine qccamisp delta: in the already-bounded X1E80100 VFE1 BUS prepare path, after all DMA addresses validate and before any BUS client configuration/enable, write BUS common `+0xc58 = 0x00001046`. This is the exact Windows-computed/live value; consumed 0060 measured Linux at `0x00000006`.

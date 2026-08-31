@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0061-ubwc-static-pass-package-next
+status: linux-0061-package-installed-unarmed-authorization-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2451,5 +2451,39 @@ linux_0061_static:
   causality_for_missing_vfe_epoch0: false
   next_gate: build/install/inspect distinct Golden-safe 0061 one-shot package; no runtime until public package and separate fresh authorization
 
+linux_0061_package:
+  accepted: true
+  package_dir: experiments/E003-front-imx681-cphy/e003h-vfe1-ubwc-static-0061-candidate
+  boot_id: sp11-camera-e003h-vfeubwc-0061-one-shot
+  cmdline_marker: sp11_camera_e003h_vfeubwc_0061=1
+  asset_manifest_sha256: 9d59b44bd1c95834c1632706aba93f391eaa1f29149a932a51380c4f0fa609ab
+  package_inspector_sha256: 12f548e81317bbe7f48d0f56a151403e297154aadcc1ad4739398bd25f935e53
+  package_inspection_sha256: 49eb305a989694f175676ce523a42a3deab08f8760af5c8ca9f31ed5d91391db
+  preflight_log_sha256: 69684890f09b7db218cd08250ff10c8b64d86b7e6295ba19a52502366edb0b7d
+  install_log_sha256: 860b3d60d81dc853c11897a175cd1f2fc3a6ffe77d10e37644a01c85ab9cc60f
+  inspection_log_sha256: 1522af6a2bbc58d7abe1373b248137077f59071746d8886d523a89873d1a1d42
+  camss_sha256: 6b23dc7f41cd675107d81d89d61ae341807954b6649df03e7e1ac7a465d827b3
+  sensor_sha256: a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc
+  dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  helper_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  installed: true
+  armed: false
+  authorization_present: false
+  prior_run_present: false
+  golden_saved_default: true
+  next_entry_empty: true
+  new_mmio_writes: 1
+  new_direct_mmio_reads: 0
+  write_offset: 0x0c58
+  write_value: 0x00001046
+  retains_0060_readonly_telemetry: true
+  camera_programming_delta_only_ubwc_static: true
+  runtime_preflight_before_module_load: true
+  single_helper_invocation_enforced: true
+  same_boot_retry_refused: true
+  persistent_rtcdm_observer_required: true
+  mandatory_golden_reboot: true
+  runtime_authorized: false
+
 next_action: >-
-  Build/install/inspect a distinct 0061 UBWC-static one-shot package with Golden saved and next_entry empty. Publish the unarmed package before any runtime authorization.
+  Publish the installed/unarmed 0061 package checkpoint, then perform a fresh authorization review against that exact public package commit. Do not arm or run before the authorization checkpoint is public.
