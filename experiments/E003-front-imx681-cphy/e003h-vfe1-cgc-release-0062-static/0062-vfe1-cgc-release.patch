@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: geoca <272055834+geocausa@users.noreply.github.com>
+Date: Mon, 31 Aug 2026 23:42:00 +0100
+Subject: [PATCH] media: qcom: camss: release SP11 VFE1 CGC override
+
+A same-machine Windows cold qccamisp reload/front-stream path succeeds with
+the active 0x1be80 callback unexecuted and VFE1 BUS CGC override +0xc08 at
+zero. Remove only the private E003h 0x1ff CGC-override write; do not add a
+replacement zero write or alter any other camera programming.
+
+Signed-off-by: geoca <272055834+geocausa@users.noreply.github.com>
+---
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -1053,15 +1053,13 @@
+ 	writel_relaxed(0, vfe->base + VFE_TOP_IRQn_MASK(vfe, 1));
+ 	writel_relaxed(0, vfe->base + VFE_BUS_IRQn_MASK(vfe, 1));
+ 
+-	/* Exact active SP11 IFE1 callback RVA 0x1be80 write order. */
++	/* Retain the proven active SP11 IFE1 TOP/BUS mask writes. */
+ 	writel_relaxed(VFE680_X1E_SP11_DAL_CORE_CFG0_VALUE,
+ 		       vfe->base + VFE680_X1E_SP11_DAL_CORE_CFG0);
+ 	writel_relaxed(VFE680_X1E_SP11_DAL_CORE_CFG1_VALUE,
+ 		       vfe->base + VFE680_X1E_SP11_DAL_CORE_CFG1);
+ 	writel_relaxed(VFE680_X1E_SP11_DAL_BUS_MASK0,
+ 		       vfe->base + VFE_BUS_IRQn_MASK(vfe, 0));
+-	writel_relaxed(VFE680_X1E_SP11_DAL_BUS_CGC_OVD_VALUE,
+-		       vfe->base + VFE680_X1E_SP11_DAL_BUS_CGC_OVD);
+ 
+ 	return 0;
+ }
