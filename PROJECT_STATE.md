@@ -1,3 +1,13 @@
+## E003h ACTIVE — Linux 0050 ordered first-IPP geometry telemetry static PASS; runtime blocked — 2026-08-31
+
+Static 0050 is now built and mechanically inspected on the exact 0049 source. It retains the first eight nonzero front-mode0 IPP IRQs in order as `IRQ_STATUS/FORMAT_MEASURE0`, taking one additional read-only `+0x38c` sample before the existing IPP clear. The bound is reset at the existing front reset/history boundary. Existing 0048 OR/last/count and 0049 bit14 frame/HBI/VBI telemetry are unchanged.
+
+The delta touches only `camss-csid-680.c` and `camss-csid.h`; patch reverse reproduces exact 0049 source hashes `e207f5d8...e5c261` / `3088e001...e2f13f47`, and forward reapply reproduces 0050 exactly. New hardware access is exactly one `readl_relaxed(+0x38c)` callsite, bounded to eight samples; **new MMIO writes = 0**. IRQ masks/clear, crop programming, RUP/AUP, VFE, RT-CDM, CSIPHY, sensor and DT are unchanged.
+
+Patch SHA-256 `61440f2452badd0d01f312af4ef4e08505c2263a3557af1693f1a5e04db7020b`; Golden-ABI qcom-camss SHA-256 `b69a20b517953a96cf5ff806a26c78e52ce5e177ef8dcdf69afa0dd561e8439b`; exact vermagic `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`; zero compiler diagnostics; strict checkpatch reports 0 errors / 0 warnings / 0 checks. Inspector SHA-256 `097a1f617c6130cae086b36c1fa34897226a69d6ffd16cb90419d1f40a72e4fc`; inspection JSON SHA-256 `6ccfd7e88586721dbc1b4050e041e8b128a8409d8ee2f1dd40fd0030f70a047d`.
+
+**No runtime is authorized.** Next package 0050 as a distinct Golden-safe one-shot candidate, install/inspect it unarmed, publish that package checkpoint, then perform a separate authorization review before any camera activation. The missing Windows first-IPP raw KD bytes remain a separate fail-closed provenance item; do not reconstruct them.
+
 ## E003h ACTIVE — Windows first complete IPP frame is already 3840x2160; current sensor timing parity exact; raw KD bytes pending recovery — 2026-08-31
 
 Same-SP11 Windows first-IPP tracing materially tightens the crop failure boundary. The handed-off ordered trace reports a pre-active IRQ with zero geometry, then `0x00811dd0` with Windows-exact `CFG1=0x7241`, `HCROP=0x0eff0000`, `VCROP=0x086f0000` and expected 3840x2160 while actual height is not yet complete, followed by first Epoch-bearing status `0x00600228` with actual `0x08700f00` = **3840x2160**. Subsequent measured frames remain 3840x2160 and the bounded trace reports no bit14. Windows therefore does not first admit a complete 3840x2640 IPP frame and crop later; Linux 0049's `0x0a500f00` = 3840x2640 line-count event is a genuine failure to activate the programmed vertical crop by first complete Epoch.

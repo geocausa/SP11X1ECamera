@@ -1,0 +1,74 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -498,6 +498,7 @@
+ {
+ 	const char *why = reason ? reason : "snapshot";
+ 	u32 wrapper;
++	u32 i;
+ 
+ 	if (!csid || !csid->base || !csid->camss->csid_wrapper_base ||
+ 	    !__csid_sp11_front_ipp_mode0(csid))
+@@ -536,6 +537,12 @@
+ 		 why, csid->x1e_ipp_irq_seen_or, csid->x1e_ipp_irq_last,
+ 		 csid->x1e_ipp_irq_count, csid->x1e_ipp_line_error_frame,
+ 		 csid->x1e_ipp_line_error_hbi, csid->x1e_ipp_line_error_vbi);
++	for (i = 0; i < csid->x1e_ipp_irq_trace_count &&
++	     i < X1E_IPP_IRQ_TRACE_MAX; i++)
++		dev_info(csid->camss->dev,
++			 "E003h CSID1 %s ipp-seq[%u]=%08x/%08x\n",
++			 why, i, csid->x1e_ipp_irq_trace_status[i],
++			 csid->x1e_ipp_irq_trace_actual[i]);
+ 	dev_info(csid->camss->dev,
+ 		 "E003h CSID1 %s crop=%08x/%08x drop=%08x/%08x/%08x/%08x/%08x/%08x measure=%08x/%08x obs=%08x/%08x/%08x\n",
+ 		 why, readl_relaxed(csid->base + CSID_IPP_HCROP),
+@@ -592,6 +599,7 @@
+ 		csid->x1e_ipp_irq_seen_or = 0;
+ 		csid->x1e_ipp_irq_last = 0;
+ 		csid->x1e_ipp_irq_count = 0;
++		csid->x1e_ipp_irq_trace_count = 0;
+ 		csid->x1e_ipp_line_error_frame = 0;
+ 		csid->x1e_ipp_line_error_hbi = 0;
+ 		csid->x1e_ipp_line_error_vbi = 0;
+@@ -692,9 +700,17 @@
+ 	if (!csid_is_lite(csid)) {
+ 		ipp_val = readl(csid->base + CSID_IPP_IRQ_STATUS);
+ 		if (ipp_val && __csid_sp11_front_ipp_mode0(csid)) {
++			u32 trace_idx;
++
+ 			csid->x1e_ipp_irq_seen_or |= ipp_val;
+ 			csid->x1e_ipp_irq_last = ipp_val;
+ 			csid->x1e_ipp_irq_count++;
++			if (csid->x1e_ipp_irq_trace_count < X1E_IPP_IRQ_TRACE_MAX) {
++				trace_idx = csid->x1e_ipp_irq_trace_count++;
++				csid->x1e_ipp_irq_trace_status[trace_idx] = ipp_val;
++				csid->x1e_ipp_irq_trace_actual[trace_idx] =
++					readl_relaxed(csid->base + CSID_IPP_FORMAT_MEASURE0);
++			}
+ 			if (ipp_val & CSID_IPP_ERROR_LINE_COUNT) {
+ 				csid->x1e_ipp_line_error_frame =
+ 					readl_relaxed(csid->base + CSID_IPP_FORMAT_MEASURE0);
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -30,6 +30,9 @@
+ #define MSM_CSID_MAX_SRC_STREAMS	4
+ 
+ #define CSID_RESET_TIMEOUT_MS 500
++
++/* E003h 0050 bounded software-only first-IPP IRQ geometry history. */
++#define X1E_IPP_IRQ_TRACE_MAX 8
+ 
+ enum csid_testgen_mode {
+ 	CSID_PAYLOAD_MODE_DISABLED = 0,
+@@ -168,6 +171,10 @@
+ 	u32 x1e_ipp_irq_seen_or;
+ 	u32 x1e_ipp_irq_last;
+ 	u32 x1e_ipp_irq_count;
++	/* E003h 0050 ordered first-IRQ status/actual-geometry telemetry. */
++	u32 x1e_ipp_irq_trace_status[X1E_IPP_IRQ_TRACE_MAX];
++	u32 x1e_ipp_irq_trace_actual[X1E_IPP_IRQ_TRACE_MAX];
++	u32 x1e_ipp_irq_trace_count;
+ 	/* E003h 0049 read-only snapshot captured only on IPP line-count error. */
+ 	u32 x1e_ipp_line_error_frame;
+ 	u32 x1e_ipp_line_error_hbi;
