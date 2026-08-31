@@ -1,3 +1,11 @@
+## E003h ACTIVE — one 0050 ordered-geometry diagnostic authorized, still unarmed — 2026-08-31
+
+A fresh authorization review passed against public unarmed package commit `e8ae5eba3f91d8b0bb681fb4258c37ce82ad325d`: HEAD/origin equal, Golden current boot, package inspection exact, bounded provenance green, no prior 0050 RUN, no camera modules, no prior authorization and empty `next_entry`. Review SHA-256 `f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8`.
+
+Authorization SHA-256 `016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac` permits exactly one boot of `sp11-camera-e003h-csidseq-0050-one-shot` and one root helper invocation. Persistent RT-CDM observer is mandatory; an existing RUN log refuses execution; no same-boot retry is permitted; any helper result must be archived and followed immediately by Golden reboot. The diagnostic is restricted to the already-proven 0049 transport plus 0050 read-only ordered IRQ/geometry telemetry. No new hardware-programming delta and no production parity are authorized.
+
+The authorization checkpoint itself leaves the candidate unarmed. Publish it before setting one-shot `next_entry`.
+
 ## E003h ACTIVE — 0050 package installed/inspected unarmed; authorization review next — 2026-08-31
 
 The distinct 0050 ordered first-IPP geometry package is installed and inspected while SP11 remains on FullIO v19c Golden. It pins CAMSS `b69a20b517953a96cf5ff806a26c78e52ce5e177ef8dcdf69afa0dd561e8439b` and reuses the exact 0049 helper, IMX681 module, front-only DTB, oracle capsule, media setup and RT-CDM watcher. Boot ID is `sp11-camera-e003h-csidseq-0050-one-shot`; cmdline marker is `sp11_camera_e003h_csidseq_0050=1`.
