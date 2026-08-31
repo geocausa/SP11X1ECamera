@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0060-package-installed-unarmed-authorization-review-next
+status: linux-0060-authorized-unarmed
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2360,5 +2360,21 @@ linux_0060_package:
   camera_programming_changed: false
   runtime_authorized: false
 
+linux_0060_authorization:
+  accepted: true
+  package_commit: eb061018daea8cbb62e29449ecf4302d6a64cb1a
+  authorization_review_sha256: b1912f7ed3ab2ead0fac9e2fe9851818012b3d8098861976df6b014348db5c9e
+  authorization_sha256: ee0e63bcf8b77f7aeb7a73c05e28c2f24bc898339f6ddce5aa5a92a1c296c625
+  authorization_inspection_sha256: 53f266b876dc78ea16dd9ee1ed726c230a21381a7e5496b704322bf2bf732fe0
+  runtime_authorized: true
+  production_parity_authorized: false
+  boot_count: 1
+  root_helper_invocation_count: 1
+  same_boot_retry: false
+  persistent_rtcdm_observer_required: true
+  candidate_boot_armed: false
+  c58_write_authorized: false
+  irq_event_substitution_authorized: false
+
 next_action: >-
-  Publish the installed/unarmed 0060 package checkpoint, then perform a fresh authorization review against that public package. Only then may exactly one bounded read-only telemetry boot be armed.
+  Publish the 0060 authorization checkpoint, then arm exactly one sp11-camera-e003h-vfebus-0060-one-shot boot. Run once with the persistent RT-CDM observer and return immediately to Golden.

@@ -1,3 +1,9 @@
+## E003h ACTIVE — one 0060 BUS-progression read-only telemetry run authorized, unarmed — 2026-08-31
+
+Fresh authorization against public package `eb061018daea8cbb62e29449ecf4302d6a64cb1a` permits exactly one 0060 candidate boot and one root helper invocation. Camera programming remains unchanged; the only delta is 14 timeout-path MMIO read callsites for BUS common and nine-client progression state. Authorization SHA `ee0e63bcf8b77f7aeb7a73c05e28c2f24bc898339f6ddce5aa5a92a1c296c625`; authorization inspection SHA `53f266b876dc78ea16dd9ee1ed726c230a21381a7e5496b704322bf2bf732fe0`.
+
+The authorization explicitly forbids writing BUS `+0xc58`, changing VFE IRQ masks/clears, substituting generic TOP Epoch0 for Windows BUS1 bit21, or changing sensor/CSID/CSIPHY/RT-CDM/BUS-client programming. No retry and no production parity are authorized. Golden remains saved and `next_entry` is empty.
+
 ## E003h ACTIVE — 0060 BUS-progression package installed/inspected, unarmed — 2026-08-31
 
 The distinct 0060 one-shot is installed under `/boot/sp11-7.1.5-camera-e003h-vfebus-0060` with GRUB ID `sp11-camera-e003h-vfebus-0060-one-shot`. It uses CAMSS `00da9fd6510ed01455f4b2349d6730fcf8ce81571e94dbbdbade526b77cae8d6` and freezes the consumed-0059 mode2 sensor, front-only DT, helper, capsule and RT-CDM observer. Camera programming is unchanged; 0060 adds only 14 timeout-path MMIO read callsites for BUS common/client progression state.
