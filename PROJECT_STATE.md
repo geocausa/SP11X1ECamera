@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0057 one-shot package installed/inspected, Golden-safe and unarmed — 2026-08-31
+
+The distinct 0057 SP11 active-IFE1-DAL package is installed under `/boot/sp11-7.1.5-camera-e003h-vfeactive-0057` with GRUB ID `sp11-camera-e003h-vfeactive-0057-one-shot` and marker `sp11_camera_e003h_vfeactive_0057=1`. It binds public static checkpoint `139aeb16e4296041234ae97da91cfef105ee7d46` and CAMSS module `3fd0ebdc8a3f17fdc49e117d77fa10e03711dfbd27bc552e79230540f1cef80c`; the Windows-selected mode2 IMX681, helper, media setup, RT-CDM observer, front-only DTB and capsule remain frozen exact assets.
+
+Package preflight and independent inspection pass. Installed kernel/initrd are byte-exact Golden, the DT remains front-only with the accepted five-entry IOMMU set, `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty, camera modules are absent, authorization is absent and no 0057 RUN exists. Runtime preflight executes before module load, exactly one helper invocation is enforced, a pre-existing RUN log refuses retry, the persistent RT-CDM observer is mandatory, and the run wrapper has a mandatory reboot trap. Manifest SHA `07b7c5cc803ef09e9e5d51bf2488743b87fdaa6adbd5aeecd07f3fa39fd973f8`; accepted package inspection SHA `b710dc1036242ef4068e74c4ed499c1e88fa8e3e532e02762bb6bfa3d04d8f7a`.
+
+**The candidate is installed but unarmed and runtime is not authorized.** Publish this package checkpoint first. Only a fresh authorization review against the public package may permit exactly one candidate boot/root-helper invocation; production parity is not authorized.
+
 ## E003h ACTIVE — 0057 static PASS; SP11 active IFE1 DAL-start semantics corrected — 2026-08-31
 
 Static 0057 implements the superseding same-machine SP11 IFE1 callback oracle without changing the runner or any upstream camera block. The prior wrong-family prefix is replaced by the active selector-0 callback sequence: TOP `+0x24=0x00000007`, TOP `+0x28=0x00000010`, BUS `+0xc18=0xdc000000`, then BUS `+0xc08=0x000001ff`. The separately proven TOP IRQ masks `0x0007f051/0` and BUS mask1 `0` are retained as explicit Linux IRQ-visibility prerequisites, not attributed to the active DAL callback. The steady-state Windows BUS mask0 contract `0xd0000000` remains unchanged elsewhere.
