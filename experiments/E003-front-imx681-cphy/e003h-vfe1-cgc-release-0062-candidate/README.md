@@ -1,0 +1,3 @@
+# E003h 0062 candidate — VFE1 CGC override release differential
+
+Distinct bounded one-shot package using static 0062 CAMSS. The only programming delta versus consumed 0061 is removal of the private X1E80100 VFE1 BUS `+0xc08=0x000001ff` write. There is no replacement zero write. Windows cold-path evidence proves a successful front-stream lifecycle where the selector-zero callback is not executed and live BUS `+0xc08` remains zero. Existing UBWC `+0xc58=0x00001046`, 0060/0061 read-only BUS telemetry, mode2 IMX681, front-only DT, helper and persistent RT-CDM observer remain frozen. Package must remain unarmed until a separate public authorization checkpoint.

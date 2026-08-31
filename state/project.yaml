@@ -2518,3 +2518,57 @@ linux_front_0061_runtime:
   classification: real parity correction, noncausal for remaining VFE BUS Epoch stall
   next_gate: same-machine Windows dynamic lifecycle trace of VFE1 BUS CGC override +0xc08
   runtime_authorized: false
+
+windows_vfe1_cgc_cold_path:
+  accepted: true
+  qccamisp_sha256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
+  kd_log_sha256: 1103a45dd26584f32337a338fb7db0c5a51baa37fbe35ca21e166b557603d20f
+  holder_record_sha256: c3482698b31668771a8ad531455cd03b31e26793063415a9df0444cae8707d02
+  callback_rva: 0x1be80
+  callback_observed_in_successful_cold_front_start: false
+  live_bus_c08: 0x00000000
+  consequence: successful Windows front-start path exists without private c08=0x1ff write
+
+linux_0062_static:
+  accepted: true
+  public_commit: 322f5ac27ef05e1ead377aa3f0bdf0adbf34ca35
+  source_sha256: 36a07ad05f2ea5fdb5d1fcb168eb730cc8fe640b14a21dcb8bb22427c5398d81
+  module_sha256: 71a7338ff2aa89c69e8e695989e154120dbef07ed1b91f64417796fb92bb6e19
+  patch_sha256: 680efe0bfdeada757b6915a76ee2f6d0329c0f0706a6216bca6c65d8d83515f1
+  oracle_sha256: d3898eff4f146349c3d00e43bc1873200c760fe7c4ae52741464aec6d612e75b
+  inspection_sha256: 1f60a5b0f250d6eabf8b9afd80334f690a19f5369fd859129be65f41412fb310
+  removed_mmio_writes: 1
+  new_mmio_writes: 0
+  new_direct_mmio_reads: 0
+  removed_offset: 0x0c08
+  removed_value: 0x000001ff
+  replacement_zero_write: false
+  retains_ubwc_static_0x1046: true
+  runtime_authorized: false
+
+linux_0062_package:
+  accepted: true
+  package_dir: experiments/E003-front-imx681-cphy/e003h-vfe1-cgc-release-0062-candidate
+  boot_id: sp11-camera-e003h-vfecgc-0062-one-shot
+  cmdline_marker: sp11_camera_e003h_vfecgc_0062=1
+  asset_manifest_sha256: 81a9e173cc668801dcdd8282362384a2a9d330b69a60e3e705527c9daa6db70b
+  package_inspection_sha256: a73953fb7c82229343c90ccd2bd4c5887c96494d3a10df9b70d44ecbe25cb9c3
+  camss_sha256: 71a7338ff2aa89c69e8e695989e154120dbef07ed1b91f64417796fb92bb6e19
+  sensor_sha256: a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc
+  dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  helper_sha256: d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09
+  installed: true
+  armed: false
+  authorization_present: false
+  prior_run_present: false
+  golden_saved_default: true
+  next_entry_empty: true
+  removed_mmio_writes: 1
+  new_mmio_writes: 0
+  replacement_zero_write: false
+  persistent_rtcdm_observer_required: true
+  mandatory_golden_reboot: true
+  runtime_authorized: false
+
+next_action: >-
+  Publish the unarmed 0062 package checkpoint. Then perform a separate fresh authorization review against that exact public package; only after HEAD equals origin may one 0062 boot/helper run be armed. No same-boot retry.

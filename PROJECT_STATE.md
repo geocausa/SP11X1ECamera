@@ -1149,3 +1149,12 @@ Fresh post-provenance runtime review passed on Golden. Bounded provenance is gre
 ## E003h 0061 — VFE1 UBWC static parity consumed
 
 0061 programmed the exact qccamisp-owned SP11 VFE1 BUS `UBWC_STATIC_CTRL=0x00001046`. Linux readback matched Windows exactly, while VFE1 BUS status1 Epoch0 and QC10C remained absent. CSID1 stayed healthy at 3840x2160 and RT-CDM completed 25 submissions fault-free. Therefore the UBWC-static mismatch was real but noncausal. Next gate is a same-machine Windows dynamic lifecycle trace of BUS CGC override `+0xc08` (`0x1ff` in the active start callback, zero in stable live Windows). Runtime is blocked.
+
+
+## E003h 0062 — VFE1 CGC release package installed unarmed
+
+Same-machine Windows cold-path evidence is now pinned: after stopping user camera holders/FrameServer, restarting the Qualcomm camera device under KD, and opening Surface Camera Front successfully, the selector-zero `qccamisp+0x1be80` callback did not execute and the newly allocated IFE1 BUS mapping read `+0x08` / VFE `+0xc08 = 0x00000000`. This does not deny the statically proven `0x1ff` write in another lifecycle; it proves a successful SP11 front-start path exists without it.
+
+Static 0062 therefore removes only the private X1E80100 VFE1 `BUS +0xc08=0x000001ff` write. It adds no zero write, no other MMIO write/read, and retains the proven UBWC `+0xc58=0x00001046` plus all existing BUS telemetry. Static module SHA-256 `71a7338ff2aa89c69e8e695989e154120dbef07ed1b91f64417796fb92bb6e19`; inspection SHA-256 `1f60a5b0f250d6eabf8b9afd80334f690a19f5369fd859129be65f41412fb310`.
+
+The distinct 0062 one-shot package is installed but unarmed. Asset manifest SHA-256 `81a9e173cc668801dcdd8282362384a2a9d330b69a60e3e705527c9daa6db70b`; installed package inspection SHA-256 `a73953fb7c82229343c90ccd2bd4c5887c96494d3a10df9b70d44ecbe25cb9c3`. Golden remains saved and `next_entry` is empty. No authorization or 0062 RUN exists.
