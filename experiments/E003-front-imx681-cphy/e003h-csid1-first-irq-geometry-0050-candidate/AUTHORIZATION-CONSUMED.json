@@ -1,0 +1,40 @@
+{
+  "accepted": true,
+  "authorization_review_sha256": "f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8",
+  "boot": {
+    "candidate_was_unarmed_at_authorization": true,
+    "cmdline_marker": "sp11_camera_e003h_csidseq_0050=1",
+    "golden_saved_default": "sp11-audio-fullio-v19c",
+    "id": "sp11-camera-e003h-csidseq-0050-one-shot"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "b69a20b517953a96cf5ff806a26c78e52ce5e177ef8dcdf69afa0dd561e8439b",
+    "capsule_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "sensor_sha256": "389c4a8c8ba991e7bd4575e06cfac64090077898ef9d88949631d4f669457388"
+  },
+  "date": "2026-08-31",
+  "execution_contract": {
+    "after_any_helper_result": "archive evidence then immediately reboot to Golden",
+    "boot_count": 1,
+    "epoch0_timeout_requires_vfe1_and_csid1_snapshot": true,
+    "existing_run_log_refuses_execution": true,
+    "nonroot_pretrigger": false,
+    "normal_qbuf": false,
+    "normal_streamon": false,
+    "ordered_ipp_geometry_trace_required": true,
+    "persistent_rtcdm_observer_required": true,
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "failure_boundary": "Any preflight mismatch aborts without RUN; any helper result consumes authorization.",
+  "package_commit": "e8ae5eba3f91d8b0bb681fb4258c37ce82ad325d",
+  "package_inspection_sha256": "e28726d1c7c89d7fdb4681519752c6e2540a505155a21624b41038c02d673b49",
+  "production_parity_authorized": false,
+  "purpose": "One bounded read-only diagnostic to retain the first eight nonzero CSID1 IPP IRQ statuses with actual FORMAT_MEASURE0 geometry before the existing clear, for direct ordering comparison with the same-machine Windows first-IPP sequence. No new camera-programming behavior.",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-csid1-first-irq-geometry-0050-one-shot-authorization-v1",
+  "success_boundary": "At most one bounded diagnostic. Ordered IRQ/geometry telemetry is diagnostic evidence only, not production parity."
+}

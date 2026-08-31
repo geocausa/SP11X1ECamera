@@ -1,0 +1,136 @@
+{
+  "accepted": true,
+  "classification": {
+    "divergence_boundary": "after the matching first RUP_DONE IRQ 0x00811dd0 and by the immediately following Epoch0/1-bearing IRQ",
+    "first_irq_match_geometry_phase": true,
+    "first_irq_match_status": true,
+    "linux_first_epoch_actual": "0x00000f00",
+    "linux_first_epoch_geometry": {
+      "height": 0,
+      "width": 3840
+    },
+    "linux_first_epoch_status": "0x00600cc0",
+    "linux_later_line_error_actual": "0x0a500f00",
+    "linux_later_line_error_geometry": {
+      "height": 2640,
+      "width": 3840
+    },
+    "sensor_timing_delta_justified": false,
+    "speculative_crop_register_write_justified": false,
+    "vertical_crop_active_by_first_epoch_on_linux": false,
+    "vertical_crop_active_by_first_epoch_on_windows": true,
+    "windows_first_epoch_actual": "0x08700f00",
+    "windows_first_epoch_geometry": {
+      "height": 2160,
+      "width": 3840
+    },
+    "windows_first_epoch_status": "0x00600228"
+  },
+  "evidence_sha256": {
+    "auth": "016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac",
+    "dmesg": "6c790899e99d82e9bb35925c6286e43afb26ba0fa9c422cfdfc54f0796b63b82",
+    "post": "2b4d0fb09080f9937731c05c2d3e3421f9b621cb5061d2b21880dab62280c17d",
+    "run": "941987950cc6613be669a05c938bc0f4fa9c7db36e4fe1a5f86389a73676cbc4",
+    "stages": "336512fc2098ec1d4a913a14050bd0e024d381a3585e359f0ce375afbbabac57",
+    "static_inspection": "6ccfd7e88586721dbc1b4050e041e8b128a8409d8ee2f1dd40fd0030f70a047d",
+    "windows_checkpoint": "0276623cbf63290bad79afb5ce6ce3acf3f7981c6502bbcfcb629e092c545fe6"
+  },
+  "execution": {
+    "camss_runtime_suspended_after": true,
+    "golden_return_verified": true,
+    "helper_invocations": 1,
+    "helper_result": "ETIMEDOUT surfaced as write trigger: Connection timed out / RUN_RC=1",
+    "qc10c_output": false,
+    "rtcdm_faulted": false,
+    "rtcdm_fifo_last": 17,
+    "same_boot_retry": false,
+    "sensor_runtime_suspended_after": true
+  },
+  "linux_sequence": [
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "CAMIF_SOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "FRAME_DROP_SOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "INFO_INPUT_SOF",
+        "VCDT_GRP1_SEL",
+        "RUP_DONE"
+      ],
+      "index": 0,
+      "status_hex": "0x00811dd0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "CAMIF_EPOCH0",
+        "CAMIF_EPOCH1"
+      ],
+      "index": 1,
+      "status_hex": "0x00600cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL"
+      ],
+      "index": 2,
+      "status_hex": "0x00000cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 2640,
+        "width": 3840
+      },
+      "actual_hex": "0x0a500f00",
+      "bits": [
+        "CAMIF_EOF",
+        "FRAME_DROP_EOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "ERROR_LINE_COUNT"
+      ],
+      "index": 3,
+      "status_hex": "0x00004ee8"
+    }
+  ],
+  "next_gate": "Statically audit the exact RUP_DONE-to-first-Epoch ownership transition, especially any Linux-only CSID +0x18 REG_UPDATE_CMD write after RUP_DONE. Do not add a new crop/register command until that ownership is closed.",
+  "schema": "sp11-e003h-runtime-0050-ordered-first-ipp-geometry-v1",
+  "windows_checkpoint": {
+    "first_epoch_actual": "0x08700f00",
+    "first_epoch_geometry": {
+      "height": 2160,
+      "width": 3840
+    },
+    "first_epoch_status": "0x00600228",
+    "first_matching_geometry_state": "width 3840 initialized; height incomplete",
+    "first_matching_status": "0x00811dd0",
+    "provenance_fail_closed": true,
+    "raw_kd_bytes_local_present": false
+  }
+}

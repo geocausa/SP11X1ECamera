@@ -1,0 +1,98 @@
+{
+  "accepted": true,
+  "classification": {
+    "linux_consequence": "For the X1E80100 front IPP path whose RUP/AUP command is RT-CDM-owned, software may clear its bookkeeping shadow after RUP_DONE but must not emit a second MMIO write to CSID +0x18. Preserve existing legacy RDI/non-front behavior.",
+    "linux_generic_post_rup_zero_write_is_windows_parity": false,
+    "windows_irq_acknowledges_full_ipp_status": true,
+    "windows_rup_done_causes_reg_update_cmd_write": false,
+    "windows_rup_done_causes_zero_write_to_reg_update_cmd": false
+  },
+  "driver": {
+    "image_base": "0x140000000",
+    "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamisp8380.inf_arm64_068a5d125dcec104/qccamisp8380.sys",
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "handler": {
+    "direct_mmio_stores": [],
+    "ipp_condition_tests": [
+      {
+        "kind": "tbz",
+        "rva": "0x1b8f4",
+        "value": 12
+      },
+      {
+        "kind": "tst_mask",
+        "rva": "0x1b9fc",
+        "value": "0x3c1c6004"
+      },
+      {
+        "kind": "tbz",
+        "rva": "0x1bb14",
+        "value": 1
+      },
+      {
+        "kind": "tbz",
+        "rva": "0x1bbe4",
+        "value": 4
+      },
+      {
+        "kind": "tbz",
+        "rva": "0x1bc4c",
+        "value": 3
+      }
+    ],
+    "ipp_payload_load_rva": "0x1b8b0",
+    "reg_update_cmd_0x18_written": false,
+    "rup_done_bit": 23,
+    "rup_done_conditionally_handled": false,
+    "rva": "0x1b840..0x1bdc8"
+  },
+  "next_gate": "Represent the smallest X1E front-IPP-only Linux delta that suppresses the post-RUP_DONE +0x18 MMIO write while retaining software-shadow clear and all non-front/RDI behavior. Inspect/build before runtime.",
+  "reader": {
+    "direct_mmio_store_offsets": [
+      "0x84",
+      "0xa4",
+      "0x94",
+      "0xb4",
+      "0xd4",
+      "0x14"
+    ],
+    "direct_mmio_stores": [
+      {
+        "instruction": "str w9, [x8, #0x84]",
+        "offset": "0x84",
+        "rva": "0x1b71c"
+      },
+      {
+        "instruction": "str w9, [x8, #0xa4]",
+        "offset": "0xa4",
+        "rva": "0x1b728"
+      },
+      {
+        "instruction": "str w9, [x8, #0x94]",
+        "offset": "0x94",
+        "rva": "0x1b734"
+      },
+      {
+        "instruction": "str w9, [x8, #0xb4]",
+        "offset": "0xb4",
+        "rva": "0x1b750"
+      },
+      {
+        "instruction": "str w9, [x8, #0xd4]",
+        "offset": "0xd4",
+        "rva": "0x1b75c"
+      },
+      {
+        "instruction": "str w8, [x9, #0x14]",
+        "offset": "0x14",
+        "rva": "0x1b7b8"
+      }
+    ],
+    "ipp_irq_clear_write_rva": "0x1b750",
+    "ipp_irq_status_read_rva": "0x1b65c",
+    "reg_update_cmd_0x18_written": false,
+    "rva": "0x1b5f0..0x1b7c8"
+  },
+  "schema": "sp11-e003h-windows-csid1-rupdone-irq-ownership-v1"
+}

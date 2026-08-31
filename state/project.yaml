@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-linux-0050-one-shot-authorized-unarmed
+status: e003h-0050-consumed-rupdone-zero-write-mismatch-0051-static-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: linux-0050-one-shot-authorized-unarmed
+  status: linux-0050-consumed-rupdone-zero-write-mismatch-0051-static-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -142,7 +142,7 @@ e003h:
   linux_0049_error_actual_geometry: 3840x2640
   linux_0049_expected_geometry: 3840x2160
   linux_0050_scope: software-only ordered first-IPP IRQ status plus actual geometry; no new MMIO writes
-  linux_0050_status: static-pass-runtime-blocked
+  linux_0050_status: consumed-divergence-after-rupdone-before-first-epoch
   linux_0050_trace_max_entries: 8
   linux_0050_new_mmio_read_callsites: 1
   linux_0050_new_mmio_read_offset: 0x38c
@@ -153,7 +153,7 @@ e003h:
   linux_0050_module_sha256: b69a20b517953a96cf5ff806a26c78e52ce5e177ef8dcdf69afa0dd561e8439b
   linux_0050_inspector_sha256: 097a1f617c6130cae086b36c1fa34897226a69d6ffd16cb90419d1f40a72e4fc
   linux_0050_inspection_sha256: 6ccfd7e88586721dbc1b4050e041e8b128a8409d8ee2f1dd40fd0030f70a047d
-  linux_0050_hardware_execution_performed: false
+  linux_0050_hardware_execution_performed: true
   linux_0050_package_boot_id: sp11-camera-e003h-csidseq-0050-one-shot
   linux_0050_package_cmdline_marker: sp11_camera_e003h_csidseq_0050=1
   linux_0050_package_asset_manifest_sha256: 34ca066744c4fa6dab4fff500a6eefb59f465045088dd1c61e02168738635dd6
@@ -161,6 +161,23 @@ e003h:
   linux_0050_package_inspection_sha256: e28726d1c7c89d7fdb4681519752c6e2540a505155a21624b41038c02d673b49
   linux_0050_package_installed: true
   linux_0050_package_armed: false
+  linux_0050_helper_invocations_consumed: 1
+  linux_0050_same_boot_retry_performed: false
+  linux_0050_qc10c_output: false
+  linux_0050_rtcdm_last_fifo_seq: 17
+  linux_0050_rtcdm_faulted: false
+  linux_0050_linux_irq_sequence: 0x00811dd0/0x00000f00 -> 0x00600cc0/0x00000f00 -> 0x00000cc0/0x00000f00 -> 0x00004ee8/0x0a500f00
+  linux_0050_first_epoch_actual: 0x00000f00
+  linux_0050_divergence_boundary: after matching RUP_DONE IRQ and by immediately following Epoch0/1 IRQ
+  linux_0050_runtime_extractor_sha256: 7c736bfb37d95ea252cbcc9734321e37df396c6915423c2aea3374d22f70917c
+  linux_0050_runtime_analysis_sha256: bc8c2fd7033121592e540e3eedde134e56cab6d2525526f7771a74ec7b424459
+  linux_0050_golden_return_verified: true
+  windows_csid1_rupdone_irq_extractor_sha256: a11a4fc1ba6ed00fa69065cfae09918cace87f0e07a1bf4deb68d9fa2310806c
+  windows_csid1_rupdone_irq_oracle_sha256: 4ec65044495ea7040b8fa350bee67b83c563eae824ba6e171e7e7b8e8e9b8eb8
+  windows_csid1_rupdone_handler_writes_reg_update_0x18: false
+  windows_csid1_rupdone_conditionally_handled: false
+  linux_post_rup_reg_update_zero_write_windows_parity: false
+  linux_0051_scope: X1E front IPP only; clear software reg_update shadow after RUP_DONE but suppress MMIO write to CSID +0x18; preserve RDI/non-front behavior
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac
@@ -168,8 +185,8 @@ e003h:
   linux_0050_authorized_boot_count: 1
   linux_0050_authorized_root_helper_invocations: 1
   linux_0050_same_boot_retry_authorized: false
-  runtime_authorized: true
-  sensor_stream_authorized: true
+  runtime_authorized: false
+  sensor_stream_authorized: false
   sensor_stream_on: 0x0100=0x01
   sensor_stream_off: 0x0100=0x00
   csid1_rx_cfg0_windows: 288358400
