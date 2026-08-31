@@ -1168,3 +1168,5 @@ The first authorized 0062 boot never reached persistent journald/PiSlave or came
 ## E003h 0062r1 — diagnostic retry package installed unarmed
 
 0062r1 keeps the 0062 camera payload byte-identical: CAMSS `71a7338f...`, frozen IMX681/helper/front-only DT/firmware, and the same single camera differential versus 0061 (remove private VFE1 BUS `+0xc08=0x1ff`, add no replacement write). The only retry delta is boot diagnostics: `multi-user.target`, Plymouth disabled, visible tty0 status, no `quiet`/`splash`. PiSlave is enabled by `multi-user.target`. Installed inspection passed with Golden saved and `next_entry` empty. No runtime is authorized by this package checkpoint.
+
+0062r1 fresh authorization is bound to the public diagnostic-retry package. One boot and one root helper are permitted; no same-boot retry. Camera hardware delta remains `VFE1_CGC_RELEASE_0062_ONLY`; the retry changes only boot diagnostics.
