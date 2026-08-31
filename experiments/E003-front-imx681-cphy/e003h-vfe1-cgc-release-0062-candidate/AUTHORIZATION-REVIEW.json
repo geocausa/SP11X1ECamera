@@ -1,0 +1,41 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "81a9e173cc668801dcdd8282362384a2a9d330b69a60e3e705527c9daa6db70b",
+  "authorized_delta": {
+    "new_direct_mmio_reads": 0,
+    "new_mmio_writes": 0,
+    "removed_mmio_writes": 1,
+    "removed_offset": "0x0c08",
+    "removed_value": "0x000001ff",
+    "replacement_zero_write": false,
+    "retains_0060_0061_bus_telemetry": true,
+    "retains_ubwc_static_0x1046": true,
+    "scope": "X1E80100 VFE1 BUS common private prefix only"
+  },
+  "camera_modules_absent_verified": true,
+  "causality_at_authorization": "unproven: Windows cold-path evidence proves a successful front start without callback 0x1be80 and with live c08=0; one bounded Linux run is required to test whether removing only the private c08=0x1ff write restores BUS Epoch/QC10C",
+  "consumed_0061_analysis_sha256": "71fc27098a722bd4cab785eb706af5b9a643e42bbdc1f408d3c7ef3c3825b436",
+  "date": "2026-08-31",
+  "forbidden_programming": [
+    "replacement BUS +0xc08 zero write",
+    "any new register write",
+    "IRQ event substitution",
+    "sensor mode/timing change",
+    "CSID/CSIPHY/clock change",
+    "BUS client contract change",
+    "UBWC +0xc58 change",
+    "RT-CDM payload/order change",
+    "DT change",
+    "second helper invocation",
+    "same-boot retry"
+  ],
+  "golden_saved_default_verified": true,
+  "next_entry_empty_verified": true,
+  "package_inspection_sha256": "a73953fb7c82229343c90ccd2bd4c5887c96494d3a10df9b70d44ecbe25cb9c3",
+  "prior_0062_run_absent_verified": true,
+  "reviewed_public_package_commit": "84e26d769bb71491d69b387647e085dcbcf5a031",
+  "schema": "sp11-e003h-vfecgc-0062-authorization-review-v1",
+  "static_inspection_sha256": "1f60a5b0f250d6eabf8b9afd80334f690a19f5369fd859129be65f41412fb310",
+  "windows_cold_path_holder_sha256": "c3482698b31668771a8ad531455cd03b31e26793063415a9df0444cae8707d02",
+  "windows_cold_path_kd_sha256": "1103a45dd26584f32337a338fb7db0c5a51baa37fbe35ca21e166b557603d20f"
+}

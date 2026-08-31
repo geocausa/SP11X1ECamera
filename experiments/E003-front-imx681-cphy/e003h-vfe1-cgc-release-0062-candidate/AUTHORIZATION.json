@@ -1,0 +1,64 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "81a9e173cc668801dcdd8282362384a2a9d330b69a60e3e705527c9daa6db70b",
+  "authorization_review_sha256": "ccc208e8327505d72c612c72ad9a91d003c9334832d43458fea141075ff714a2",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_vfecgc_0062=1",
+    "id": "sp11-camera-e003h-vfecgc-0062-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camera_programming_delta_only_cgc_release": true,
+    "camss_sha256": "71a7338ff2aa89c69e8e695989e154120dbef07ed1b91f64417796fb92bb6e19",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "new_direct_mmio_reads": 0,
+    "new_mmio_writes": 0,
+    "removed_mmio_writes": 1,
+    "removed_offset": "0x0c08",
+    "removed_value": "0x000001ff",
+    "replacement_zero_write": false,
+    "retains_0060_0061_bus_telemetry": true,
+    "retains_ubwc_static_0x1046": true,
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc"
+  },
+  "execution_contract": {
+    "boot_count": 1,
+    "hardware_delta": "VFE1_CGC_RELEASE_0062_ONLY",
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "forbidden_programming": [
+    "replacement BUS +0xc08 zero write",
+    "any new register write",
+    "IRQ event substitution",
+    "sensor mode/timing change",
+    "CSID/CSIPHY/clock change",
+    "BUS client contract change",
+    "UBWC +0xc58 change",
+    "RT-CDM payload/order change",
+    "DT change",
+    "second helper invocation",
+    "same-boot retry"
+  ],
+  "package_commit": "84e26d769bb71491d69b387647e085dcbcf5a031",
+  "package_inspection_sha256": "a73953fb7c82229343c90ccd2bd4c5887c96494d3a10df9b70d44ecbe25cb9c3",
+  "production_parity_authorized": false,
+  "purpose": "single bounded causal test of removing only the private Linux VFE1 BUS CGC override +0xc08=0x1ff write, based on successful same-machine Windows cold-path evidence where callback 0x1be80 is not executed and live c08 remains zero",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-vfecgc-0062-runtime-authorization-v1",
+  "success_observations": {
+    "then_evaluate": [
+      "0060/0061 BUS telemetry cgc readback",
+      "VFE1 raw BUS Epoch0 presence or absence",
+      "BUS status/event changes",
+      "CSID remains healthy 3840x2160 with no line error",
+      "RT-CDM FIFO 25 completes without fault",
+      "UBWC remains 0x00001046",
+      "QC10C output presence/hash if produced"
+    ]
+  }
+}
