@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0061 static PASS; exact SP11 VFE1 UBWC static write only — 2026-08-31
+
+Static 0061 implements the directly proven same-machine qccamisp delta: in the already-bounded X1E80100 VFE1 BUS prepare path, after all DMA addresses validate and before any BUS client configuration/enable, write BUS common `+0xc58 = 0x00001046`. This is the exact Windows-computed/live value; consumed 0060 measured Linux at `0x00000006`.
+
+The delta is exactly one new `writel_relaxed()` call, zero new MMIO reads, and no existing write-line change. All 0060 read-only BUS telemetry remains intact. Sensor, CSID, CSIPHY, RT-CDM, DT, clocks, BUS client contracts, IRQ masks and event pacing remain frozen. Base source SHA `77544e3aa12bd9c374409ffdb436bc75f0325684c4f5046cb98704debb540527`; new source SHA `090b00419096d27214985d3b957ef7942e9455c6d8ab148af2afd25954f1cdd9`; module SHA `6b23dc7f41cd675107d81d89d61ae341807954b6649df03e7e1ac7a465d827b3`; patch SHA `55bcd54adfadb5c36a928a324d3f2c6970547a5db201aff478f9c0a056817a78`; static inspection SHA `cbdb91c8f788ba6e9b32af7de4de1f9207eb88d384ee0ffcbde768e373da51b3`; checkpatch 0/0.
+
+Causality for VFE1 Epoch0/QC10C remains unproven. Runtime is blocked. Next gate is a distinct Golden-safe 0061 one-shot package installed and independently inspected unarmed, followed only then by a fresh authorization review.
+
 ## E003h ACTIVE — 0060 consumed; BUS client progression matches Windows, UBWC static delta proven — 2026-08-31
 
 0060 executed exactly one authorized read-only telemetry run and returned to FullIO Golden. No retry occurred. RT-CDM completed FIFO 25 without fault; CSID1 remained healthy at 3840x2160 with no line-count error; VFE1 raw Epoch0 and QC10C remained absent.

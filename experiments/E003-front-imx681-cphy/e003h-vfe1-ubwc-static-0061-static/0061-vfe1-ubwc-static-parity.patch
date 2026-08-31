@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: geoca <272055834+geocausa@users.noreply.github.com>
+Date: Mon, 31 Aug 2026 15:25:00 +0100
+Subject: [PATCH] media: qcom: camss: match SP11 VFE1 UBWC static state
+
+Program the exact same-machine Windows VFE1 BUS UBWC static control value
+before configuring and enabling the bounded E003h BUS clients.
+qccamisp ownership
+and the 0x1046 computation are independently proven, while consumed 0060
+measured Linux at 0x00000006. No other camera programming changes.
+
+Signed-off-by: geoca <272055834+geocausa@users.noreply.github.com>
+---
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -56,6 +56,8 @@
+ 
+ /* 0060 read-only VFE680 BUS progression telemetry offsets. */
+ #define VFE680_X1E_BUS_UBWC_STATIC_CTRL		0x0c58
++/* Same-machine qccamisp computes and writes this exact SP11 VFE1 value. */
++#define VFE680_X1E_WINDOWS_UBWC_STATIC_CTRL	0x00001046
+ #define VFE680_X1E_BUS_PWR_ISO_CFG		0x0c5c
+ #define VFE680_X1E_BUS_DEBUG_TOP_CFG		0x0cd4
+ #define VFE680_X1E_BUS_DEBUG_TOP		0x0cd8
+@@ -483,6 +485,10 @@
+ 	if (ret)
+ 		return ret;
+ 
++	/* Exact SP11 qccamisp BUS-common UBWC static programming. */
++	writel_relaxed(VFE680_X1E_WINDOWS_UBWC_STATIC_CTRL,
++		       vfe->base + VFE680_X1E_BUS_UBWC_STATIC_CTRL);
++
+ 	for (i = 0; i < ARRAY_SIZE(vfe680_x1e_windows_bus_client_order); i++) {
+ 		const struct vfe680_x1e_windows_client_contract *c;
+ 

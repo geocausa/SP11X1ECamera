@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0060-consumed-ubwc-ownership-proven-0061-static-next
+status: linux-0061-ubwc-static-pass-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2425,5 +2425,31 @@ windows_vfe1_ubwc_static_ownership:
   bounded_linux_candidate_justified: true
   runtime_authorized: false
 
+linux_0061_static:
+  accepted: true
+  date: 2026-08-31
+  base_source_sha256: 77544e3aa12bd9c374409ffdb436bc75f0325684c4f5046cb98704debb540527
+  source_sha256: 090b00419096d27214985d3b957ef7942e9455c6d8ab148af2afd25954f1cdd9
+  module_sha256: 6b23dc7f41cd675107d81d89d61ae341807954b6649df03e7e1ac7a465d827b3
+  patch_sha256: 55bcd54adfadb5c36a928a324d3f2c6970547a5db201aff478f9c0a056817a78
+  oracle_sha256: 24c38ae92d1f381e2eca6976964cf80ac7438c0d159782115370ceedc3f28eb8
+  inspector_sha256: f45f8b3e184b0e73135a8df719a714925423dffa230d16dcda8a71cbda087989
+  inspection_sha256: cbdb91c8f788ba6e9b32af7de4de1f9207eb88d384ee0ffcbde768e373da51b3
+  windows_ownership_oracle_sha256: 75793cf42014bb8719c3831c78b116c632a68c20d07ec91aa9fda1a3edef2fe0
+  consumed_0060_analysis_sha256: ff128b88779294b33a1ab2de79b7805d71173bb5c1880cdfc3440e7c0fc0c871
+  new_mmio_writes: 1
+  new_direct_mmio_reads: 0
+  write_offset: 0x0c58
+  write_value: 0x00001046
+  write_before_bus_client_config_and_enable: true
+  bounded_x1e80100_vfe1_only: true
+  retains_0060_telemetry: true
+  camera_programming_delta_only_ubwc_static: true
+  checkpatch_errors: 0
+  checkpatch_warnings: 0
+  runtime_authorized: false
+  causality_for_missing_vfe_epoch0: false
+  next_gate: build/install/inspect distinct Golden-safe 0061 one-shot package; no runtime until public package and separate fresh authorization
+
 next_action: >-
-  Implement and statically inspect bounded 0061: X1E80100 VFE1 only, write BUS common +0xc58=0x00001046 before BUS client enable, retain 0060 telemetry, no other programming delta. Publish static gate before packaging or runtime authorization.
+  Build/install/inspect a distinct 0061 UBWC-static one-shot package with Golden saved and next_entry empty. Publish the unarmed package before any runtime authorization.
