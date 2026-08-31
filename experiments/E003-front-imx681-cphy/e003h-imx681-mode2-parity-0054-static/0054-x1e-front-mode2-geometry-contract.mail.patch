@@ -1,0 +1,54 @@
+From b598536cc5b77db85a18db3d4e198497b45d959f Mon Sep 17 00:00:00 2001
+From: geoca <272055834+geocausa@users.noreply.github.com>
+Date: Mon, 31 Aug 2026 09:30:00 +0100
+Subject: [PATCH] media: qcom: camss: accept proven IMX681 mode2 geometry
+
+The same-machine Windows oracle proves the front IMX681 source is
+3840x2160. Update only the three X1E front-mode gates.
+Change their height contract from 2640 to 2160. CSID programming values
+remain unchanged.
+
+Signed-off-by: geoca <272055834+geocausa@users.noreply.github.com>
+---
+ drivers/media/platform/qcom/camss/camss-csid-680.c | 2 +-
+ drivers/media/platform/qcom/camss/camss.c          | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+index 47f5b0b..48b1e9a 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -304,7 +304,7 @@ static bool __csid_sp11_front_ipp_mode0(struct csid_device *csid)
+ 	       csid->phy.phy_sel == CSID_PHY_SEL_CPHY &&
+ 	       csid->phy.lane_cnt == 1 &&
+ 	       fmt->code == MEDIA_BUS_FMT_SRGGB10_1X10 &&
+-	       fmt->width == 3840 && fmt->height == 2640;
++	       fmt->width == 3840 && fmt->height == 2160;
+ }
+ 
+ static void __csid_ctrl_ipp(struct csid_device *csid, int enable)
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 2da7a15..8637668 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5856,7 +5856,7 @@ static int camss_x1e_front_start_validate(struct camss *camss,
+ 
+ 	fmt = &csid->fmt[MSM_CSID_PAD_PIX];
+ 	if (fmt->code != MEDIA_BUS_FMT_SRGGB10_1X10 ||
+-	    fmt->width != 3840 || fmt->height != 2640)
++	    fmt->width != 3840 || fmt->height != 2160)
+ 		return -EINVAL;
+ 
+ 	/* 0021 keeps the two period values opaque and validates all corpus holes. */
+@@ -7527,7 +7527,7 @@ static int camss_x1e_pix_runner_validate(struct camss *camss,
+ 		return -EINVAL;
+ 	if (csid->fmt[MSM_CSID_PAD_PIX].code != MEDIA_BUS_FMT_SRGGB10_1X10 ||
+ 	    csid->fmt[MSM_CSID_PAD_PIX].width != 3840 ||
+-	    csid->fmt[MSM_CSID_PAD_PIX].height != 2640)
++	    csid->fmt[MSM_CSID_PAD_PIX].height != 2160)
+ 		return -EINVAL;
+ 	if (vfe->line[VFE_LINE_PIX].fmt[MSM_VFE_PAD_SINK].code !=
+ 	    MEDIA_BUS_FMT_SRGGB10_1X10)
+-- 
+2.53.0
+

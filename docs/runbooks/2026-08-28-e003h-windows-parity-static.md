@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0054 static PASS; Linux now matches Windows-selected IMX681 mode2 contract — 2026-08-31
+
+Static 0054 is accepted without hardware execution. The generated Linux sensor table matches all **68/68** address/value pairs from the same-machine Windows selected-resolution packet and differs from prior Linux mode0 at exactly seven firmware-proven values. Sensor output becomes 3840x2160@30 while RAW10, C-PHY rate, line length, frame length, pixel clock and PLL stay unchanged. IMX681 module SHA `a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc`.
+
+CAMSS changes only three X1E front-path geometry gates from 2640 to 2160; **zero new MMIO writes** and no CSID programming value change. CAMSS module SHA `0dc8e3a3318a4b68fc968ce6ff3c68e93bf2931502063b4469ed093cb0002be1`. Both modules have exact Golden vermagic. Fail-closed inspection SHA `19f6fddf77d323507bfe4ad390c5f1ae3e70ed983dd574a6ecfec0bd83645231`; sensor/CAMSS patches reverse and forward exactly and strict checkpatch is clean (sensor ignores only the out-of-tree table-rename `FILE_PATH_CHANGES` notice).
+
+**Runtime remains blocked.** Next gate: publish this static checkpoint, then create a separate unarmed 0054 one-shot package and perform a fresh authorization review before any module load or sensor stream.
+
 # E003h Windows-parity transport static handoff — 2026-08-28
 
 ## Resume point
