@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0059 static PASS; powered VFE1 low-TOP telemetry only — 2026-08-31
+
+Static 0059 adds exactly 13 `readl_relaxed()` calls to the existing bounded X1E80100 VFE1 timeout dump for `core_cfg0/1/2`, `diag_config`, `core_cfg3`, the three stats-throttle registers, `core_cfg4/5/6`, `period_cfg`, and `epoch_height_cfg`. It freezes successful same-machine Windows LIVE1 values for the comparison. Existing marker `+0x90/+0x94/+0x98` reads remain unchanged.
+
+No `writel*()` line changes, no new MMIO write, and no camera programming/order change. Sensor, CSID, CSIPHY, RT-CDM, DT, BUS clients, accepted CAMNOC 300MHz correction and corrected SP11 active DAL prefix are unchanged. Base source SHA `204162bf1296f41a7e0999fd37b243ef0944fd9edd3c3fba93f37037e3974a12`; new source SHA `bcc889a8e91627c670dda14d371eb037c1a5833aa41d333ca0174223fb492310`; module SHA `e714330b3f2d32a18d51e5fb7577242b7e34f96f9af889afaf1e658d4bf752f0`; patch SHA `45b8a4bf72d513b29cc0634539957c4507e1f2193b560e8f8122ecd666626931`; inspection SHA `54929b52fcab03084ba1b849ee809a310c71f10bb8a2006f35e6d5474e174e94`; checkpatch 0/0.
+
+No runtime is authorized. Next gate is a distinct Golden-safe 0059 one-shot package, installed and independently inspected unarmed.
+
 ## E003h ACTIVE — 0058 consumed; external /dev/mem VFE aperture transport invalid — 2026-08-31
 
 0058 executed the byte-identical consumed-0057 camera path exactly once and returned to FullIO Golden. RT-CDM completed FIFO 25 without fault; CSID1 remained healthy at 3840x2160 with no line/ECC/CRC error; VFE1 raw Epoch0 and QC10C remained absent. Camera programming delta was zero.

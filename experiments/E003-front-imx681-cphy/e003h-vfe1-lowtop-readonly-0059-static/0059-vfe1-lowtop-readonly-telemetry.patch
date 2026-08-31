@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: geoca <272055834+geocausa@users.noreply.github.com>
+Date: Mon, 31 Aug 2026 13:50:00 +0100
+Subject: [PATCH] media: qcom: camss: add bounded VFE680 low-TOP telemetry
+
+Add read-only diagnostic sampling for the unresolved X1E80100 VFE1
+low-TOP configuration cluster in the existing bounded E003h timeout dump.
+No MMIO write or camera programming order changes.
+
+Signed-off-by: geoca <272055834+geocausa@users.noreply.github.com>
+---
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -42,6 +42,18 @@
+ #define VFE680_X1E_STARTUP_MARKER1		0x0094
+ #define VFE680_X1E_STARTUP_MARKER2		0x0098
+ 
++/* 0059 read-only VFE680 low-TOP parity telemetry offsets. */
++#define VFE680_X1E_CORE_CFG2			0x002c
++#define VFE680_X1E_CORE_CFG3			0x0068
++#define VFE680_X1E_STATS_THROTTLE0		0x0070
++#define VFE680_X1E_STATS_THROTTLE1		0x0074
++#define VFE680_X1E_STATS_THROTTLE2		0x0078
++#define VFE680_X1E_CORE_CFG4			0x0080
++#define VFE680_X1E_CORE_CFG5			0x0084
++#define VFE680_X1E_CORE_CFG6			0x0088
++#define VFE680_X1E_PERIOD_CFG			0x008c
++#define VFE680_X1E_EPOCH_HEIGHT_CFG		0x009c
++
+ #define VFE_BUS_WRITE_CLIENT_CFG(vfe, c)	((vfe_is_lite(vfe) ? 0x400 : 0xe00) + (c) * 0x100)
+ #define		VFE_BUS_WRITE_CLIENT_CFG_EN	BIT(0)
+ #define VFE_BUS_IMAGE_ADDR(vfe, c)		((vfe_is_lite(vfe) ? 0x404 : 0xe04) + (c) * 0x100)
+@@ -1107,6 +1119,23 @@
+ 		 readl_relaxed(vfe->base + VFE680_X1E_STARTUP_MARKER1),
+ 		 readl_relaxed(vfe->base + VFE680_X1E_STARTUP_MARKER2));
+ 	dev_info(vfe->camss->dev,
++		 "E003h VFE1 %s cfg=%08x/%08x/%08x diag=%08x core3=%08x throttle=%08x/%08x/%08x\n",
++		 why, readl_relaxed(vfe->base + VFE680_X1E_SP11_DAL_CORE_CFG0),
++		 readl_relaxed(vfe->base + VFE680_X1E_SP11_DAL_CORE_CFG1),
++		 readl_relaxed(vfe->base + VFE680_X1E_CORE_CFG2),
++		 readl_relaxed(vfe->base + VFE_TOP_DIAG_CONFIG),
++		 readl_relaxed(vfe->base + VFE680_X1E_CORE_CFG3),
++		 readl_relaxed(vfe->base + VFE680_X1E_STATS_THROTTLE0),
++		 readl_relaxed(vfe->base + VFE680_X1E_STATS_THROTTLE1),
++		 readl_relaxed(vfe->base + VFE680_X1E_STATS_THROTTLE2));
++	dev_info(vfe->camss->dev,
++		 "E003h VFE1 %s core456=%08x/%08x/%08x period=%08x epoch_height=%08x\n",
++		 why, readl_relaxed(vfe->base + VFE680_X1E_CORE_CFG4),
++		 readl_relaxed(vfe->base + VFE680_X1E_CORE_CFG5),
++		 readl_relaxed(vfe->base + VFE680_X1E_CORE_CFG6),
++		 readl_relaxed(vfe->base + VFE680_X1E_PERIOD_CFG),
++		 readl_relaxed(vfe->base + VFE680_X1E_EPOCH_HEIGHT_CFG));
++	dev_info(vfe->camss->dev,
+ 		 "E003h VFE1 %s full0=%08x addr=%08x/%08x meta=%08x/%08x incr=%08x cfg0=%08x cfg2=%08x pack=%08x mode=%08x\n",
+ 		 why, readl_relaxed(c0 + VFE680_X1E_BUS_CFG),
+ 		 readl_relaxed(c0 + VFE680_X1E_BUS_IMAGE_ADDR), expected.image[0],

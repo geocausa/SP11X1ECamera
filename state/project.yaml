@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0058-consumed-0059-readonly-static-next
+status: linux-0059-lowtop-readonly-static-pass-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2297,4 +2297,4 @@ linux_0049_runtime:
   runtime_authorized: false
 
 next_action: >-
-  Build static-only 0059 by adding read-only in-driver VFE680 low-TOP config telemetry at the existing powered Epoch0-timeout path. Do not add any MMIO write or alter camera programming; compare the resulting Linux values to the preserved same-machine Windows live oracle before considering a programming candidate.
+  Build/install/inspect a distinct Golden-safe 0059 one-shot package using module e714330b3f2d32a18d51e5fb7577242b7e34f96f9af889afaf1e658d4bf752f0. Keep saved_entry Golden and next_entry empty. Only a later fresh authorization may permit one read-only telemetry runtime.
