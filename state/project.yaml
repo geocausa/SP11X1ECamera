@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-windows-imx681-mode-selection-oracle-next
+status: e003h-camnoc-rate-mismatch-proven-0056-static-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: windows-imx681-mode-selection-oracle-next
+  status: camnoc-rate-mismatch-proven-0056-static-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -420,6 +420,41 @@ e003h:
   linux_0054_qc10c_output: false
   linux_0054_remaining_failure_boundary: after healthy CSID1 3840x2160 frame reception and before VFE1 raw Epoch0 / FULL output
   linux_0054_next_gate: downstream static Windows/Linux VFE1/IFE startup-state analysis; no runtime until a concrete delta is proven
+  windows_ife_generic_blob_extractor_sha256: 3e938570b61aac65d46bd8ecc0971af91e0b1f7fcb5ff62136cc88bc844e1a88
+  windows_ife_generic_blob_oracle_sha256: e376a017d1eafea673ec379eb337100ff215cf33ba54ca8ecfc3d799f7039ce4
+  windows_camnoc_rate_kd_sha256: 237e5c7ba0eeef73e0b7452a61778003d3364471ec1560e2649fdd35ac2e15f3
+  windows_camnoc_live_cfg: 0x00000203
+  windows_camnoc_live_branch: 0x00000001
+  windows_camnoc_live_rate_hz: 300000000
+  windows_camnoc_live_repeat_identical: true
+  linux_0055_status: consumed-camnoc-rate-mismatch-proven
+  linux_0055_scope: telemetry-only; frozen 0054 camera programming plus read-only CAM_CC CAMNOC RT MMIO sampling
+  linux_0055_package_commit: 594d776b6b02faa6e3afc2930a9e7edb043efc77
+  linux_0055_authorization_commit: 5f35fe723dd7cc8c38e08bbf65da8a45958b7b9c
+  linux_0055_authorization_sha256: 2527d991fca75c3cdf52f372f2da31308bf1ce8332dffb69b3062bedd4c58fb7
+  linux_0055_runtime_authorized: false
+  linux_0055_authorization_consumed: true
+  linux_0055_hardware_execution_performed: true
+  linux_0055_helper_invocations_consumed: 1
+  linux_0055_same_boot_retry_performed: false
+  linux_0055_camera_programming_delta: 0
+  linux_0055_live_camnoc_cfg: 0x00000000
+  linux_0055_live_camnoc_branch: 0x00000001
+  linux_0055_live_camnoc_parent: P_BI_TCXO
+  linux_0055_live_camnoc_rate_hz: 19200000
+  linux_0055_clock_samples: 1285
+  linux_0055_seen_live_300mhz: false
+  linux_0055_rtcdm_last_fifo_seq: 25
+  linux_0055_rtcdm_faulted: false
+  linux_0055_qc10c_output: false
+  linux_0055_runtime_extractor_sha256: 3e6545a05086e2649c0f6afd5ce130a5044dbd7add79d372be320499221b1ccc
+  linux_0055_runtime_analysis_sha256: 9fdba6fad49d493d8eafb4a97a658323e70e09b20f2a110a06457bb9496d96b0
+  linux_0055_authorization_consumed_sha256: f17427ac59e5fb07683a3a819ec0df640c7585ba821a3424d0b16d4e4d5c0a19
+  linux_0055_golden_return_sha256: 6f6cadf75f9782068c2b28a3190ec72fd03c83ccd0ed2483d9aee604261b3eac
+  linux_0055_golden_return_verified: true
+  linux_0055_camnoc_rate_parity_mismatch_proven: true
+  linux_0055_camnoc_rate_causality_for_vfe1_stall: unresolved
+  linux_0055_next_gate: static 0056 front IFE1-only 300 MHz camnoc_rt_axi CCF request; freeze all sensor/CSID/VFE/RT-CDM programming and verify no unrelated clock-rate changes before runtime
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac
