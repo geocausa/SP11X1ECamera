@@ -1,0 +1,51 @@
+From: SP11 Camera Parity <sp11-camera-parity@localhost>
+Subject: [PATCH] media: qcom: camss: correct SP11 IFE1 DAL start prefix
+
+The exact installed Windows qccamisp generation selector is now closed on
+the same SP11: IFE1 index 1 is below the live threshold 2 and therefore
+selects RVA 0x1be80 followed by the no-op RVA 0x1c0e0.
+
+Retain the separately proven Windows-live TOP IRQ masks and BUS mask1 used
+by the bounded Linux observer, but replace the wrong-generation DAL writes
+with the active SP11 callback sequence: TOP core_cfg_0=7, core_cfg_1=0x10,
+BUS mask0=0xdc000000 and BUS CGC override=0x1ff. The steady-state Windows
+BUS mask0 contract 0xd0000000 remains a distinct value and is unchanged.
+
+No sensor, CSID, RT-CDM, CSIPHY, DT, BUS-client or clock programming is
+changed.
+
+Signed-off-by: SP11 Camera Parity <sp11-camera-parity@localhost>
+---
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -155 +155,7 @@
+-#define VFE680_X1E_DAL_START_TOP_ZERO  0x00000024
++#define VFE680_X1E_SP11_DAL_CORE_CFG0   0x00000024
++#define VFE680_X1E_SP11_DAL_CORE_CFG1   0x00000028
++#define VFE680_X1E_SP11_DAL_BUS_CGC_OVD 0x00000c08
++#define VFE680_X1E_SP11_DAL_CORE_CFG0_VALUE 0x00000007
++#define VFE680_X1E_SP11_DAL_CORE_CFG1_VALUE 0x00000010
++#define VFE680_X1E_SP11_DAL_BUS_MASK0   0xdc000000
++#define VFE680_X1E_SP11_DAL_BUS_CGC_OVD_VALUE 0x000001ff
+@@ -1009 +1015,5 @@
+-	/* Exact same-machine Windows VFE680 DAL_ife_start first-start prefix. */
++	/*
++	 * Retain the separately proven Windows-live IRQ visibility masks. They are
++	 * not owned by the active SP11 IFE1 DAL callback, whose generation selector
++	 * is now proven to be zero.
++	 */
+@@ -1013,2 +1022,0 @@
+-	writel_relaxed(VFE680_X1E_WINDOWS_BUS_MASK0,
+-		       vfe->base + VFE_BUS_IRQn_MASK(vfe, 0));
+@@ -1016 +1024,10 @@
+-	writel_relaxed(0, vfe->base + VFE680_X1E_DAL_START_TOP_ZERO);
++
++	/* Exact active SP11 IFE1 callback RVA 0x1be80 write order. */
++	writel_relaxed(VFE680_X1E_SP11_DAL_CORE_CFG0_VALUE,
++		       vfe->base + VFE680_X1E_SP11_DAL_CORE_CFG0);
++	writel_relaxed(VFE680_X1E_SP11_DAL_CORE_CFG1_VALUE,
++		       vfe->base + VFE680_X1E_SP11_DAL_CORE_CFG1);
++	writel_relaxed(VFE680_X1E_SP11_DAL_BUS_MASK0,
++		       vfe->base + VFE_BUS_IRQn_MASK(vfe, 0));
++	writel_relaxed(VFE680_X1E_SP11_DAL_BUS_CGC_OVD_VALUE,
++		       vfe->base + VFE680_X1E_SP11_DAL_BUS_CGC_OVD);
