@@ -1,3 +1,15 @@
+## E003h ACTIVE — 0060 consumed; BUS client progression matches Windows, UBWC static delta proven — 2026-08-31
+
+0060 executed exactly one authorized read-only telemetry run and returned to FullIO Golden. No retry occurred. RT-CDM completed FIFO 25 without fault; CSID1 remained healthy at 3840x2160 with no line-count error; VFE1 raw Epoch0 and QC10C remained absent.
+
+All nine Windows-active VFE1 BUS clients are enabled and their `ADDR_STATUS0/3` values equal the programmed image address, with `ADDR_STATUS1/2` and both debug-status registers zero — the same relation as successful Windows. Therefore missing clients and absent BUS address latching are disproven.
+
+The concrete BUS-common delta is `UBWC_STATIC_CTRL +0xc58`: Linux `0x00000006`, successful same-machine Windows `0x00001046`, exact missing bits `0x00001040`. Runtime analysis SHA `ff128b88779294b33a1ab2de79b7805d71173bb5c1880cdfc3440e7c0fc0c871`.
+
+Static qccamisp reversal now proves direct Windows ownership. The exact binary initializes the BUS-common relative-offset field to `0x58`, computes the SP11 value as `0x1000 | 0x40 | 0x6 = 0x1046`, and stores it through the previously proven VFE BUS sub-base. This computed value independently matches the two-pass Windows live value. Ownership oracle SHA `75793cf42014bb8719c3831c78b116c632a68c20d07ec91aa9fda1a3edef2fe0`.
+
+0060 authorization is consumed and runtime is blocked. A bounded 0061 Linux candidate is now justified: X1E80100 VFE1 only, program BUS common `+0xc58=0x00001046` before BUS client enable, retain all 0060 telemetry, and change nothing else. Causality for the missing VFE1 Epoch0 remains unproven until a separately gated run.
+
 ## E003h ACTIVE — one 0060 BUS-progression read-only telemetry run authorized, unarmed — 2026-08-31
 
 Fresh authorization against public package `eb061018daea8cbb62e29449ecf4302d6a64cb1a` permits exactly one 0060 candidate boot and one root helper invocation. Camera programming remains unchanged; the only delta is 14 timeout-path MMIO read callsites for BUS common and nine-client progression state. Authorization SHA `ee0e63bcf8b77f7aeb7a73c05e28c2f24bc898339f6ddce5aa5a92a1c296c625`; authorization inspection SHA `53f266b876dc78ea16dd9ee1ed726c230a21381a7e5496b704322bf2bf732fe0`.

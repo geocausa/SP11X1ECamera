@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0060-authorized-unarmed
+status: linux-0060-consumed-ubwc-ownership-proven-0061-static-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2376,5 +2376,54 @@ linux_0060_authorization:
   c58_write_authorized: false
   irq_event_substitution_authorized: false
 
+linux_0060_runtime:
+  accepted: true
+  date: 2026-08-31
+  authorization_consumed: true
+  helper_invocations: 1
+  same_boot_retry: false
+  run_rc: 1
+  qc10c_output: false
+  golden_return_verified: true
+  rtcdm_fifo_bl_completed: 25
+  rtcdm_faulted: false
+  csid_geometry: 3840x2160
+  csid_line_error: false
+  vfe_raw_epoch0_seen: false
+  nine_bus_clients_programmed: true
+  nine_bus_clients_addr_status0_matches_image: true
+  nine_bus_clients_addr_status3_matches_image: true
+  nine_bus_clients_debug_zero: true
+  linux_ubwc_static_ctrl: 0x00000006
+  windows_ubwc_static_ctrl: 0x00001046
+  ubwc_static_ctrl_xor_delta: 0x00001040
+  runtime_run_sha256: 1b3ae2ce4fc1e6022e709b4c7bb3957192eb779f5a5c957eafda2cff3dd1bc00
+  runtime_post_sha256: fd07d773fb22a96a03eb1a02fbddf75e772a2a7f9a9b2effb61a4b8994d99257
+  runtime_dmesg_sha256: 977f0c56ea3d4180a157ad693aa3487ef23f07b68d5ca931e9cfa583be86ff08
+  runtime_rtcdm_stages_sha256: 1cf2b2b91d80acf62b5c0a8e1412fe2b08c3afd1151a411785523c90026845df
+  runtime_extractor_sha256: b8221820fdb34132b27681d8673abf4e2ab519de07daa58534094941133219f4
+  runtime_analysis_sha256: ff128b88779294b33a1ab2de79b7805d71173bb5c1880cdfc3440e7c0fc0c871
+  golden_return_sha256: 82b7adcb6a1ee5e5a24d32bb36cc8d522b40ae3497e3f4eb62ab4c0e97d865b4
+  runtime_authorized: false
+  classification: missing BUS clients and address latching disproven; UBWC_STATIC_CTRL mismatch proven; write causality not yet tested
+
+windows_vfe1_ubwc_static_ownership:
+  accepted: true
+  qccamisp_sha256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
+  oracle_sha256: 75793cf42014bb8719c3831c78b116c632a68c20d07ec91aa9fda1a3edef2fe0
+  extractor_sha256: 93ebeb0949e79767c3afbcab55ded416f5d28e5a6c79b97681feb5181b5724fe
+  decisive_disassembly_sha256: a25a23a08732ec3315c69b6e3987b6e25ccef16f893fb32bbf0c90f089063910
+  bus_subbase_object_field: 0x150
+  ubwc_offset_object_field: 0x3458
+  ubwc_relative_offset: 0x58
+  sp11_value_formula: 0x1000 | 0x40 | 0x6
+  sp11_computed_value: 0x00001046
+  qccamisp_direct_write_rva: 0x1e5e0
+  qccamisp_owns_bus_ubwc_static_write: true
+  linux_programming_delta_proven: true
+  causality_for_missing_vfe_epoch0: false
+  bounded_linux_candidate_justified: true
+  runtime_authorized: false
+
 next_action: >-
-  Publish the 0060 authorization checkpoint, then arm exactly one sp11-camera-e003h-vfebus-0060-one-shot boot. Run once with the persistent RT-CDM observer and return immediately to Golden.
+  Implement and statically inspect bounded 0061: X1E80100 VFE1 only, write BUS common +0xc58=0x00001046 before BUS client enable, retain 0060 telemetry, no other programming delta. Publish static gate before packaging or runtime authorization.

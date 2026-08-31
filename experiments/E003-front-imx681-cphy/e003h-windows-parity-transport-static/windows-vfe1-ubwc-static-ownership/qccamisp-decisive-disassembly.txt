@@ -1,0 +1,74 @@
+14001be80:     	pacibsp
+14001be84:     	stp	x29, x30, [sp, #-0x10]!
+14001be88:     	mov	x29, sp
+14001be8c:     	mov	w8, #-0x24000000        // =-603979776
+14001be90:     	str	w8, [x0, #0x164]
+14001be94:     	ldr	x8, [x0, #0x140]
+14001be98:     	mov	w9, #0x7                // =7
+14001be9c:     	str	w9, [x0, #0x15c]
+14001bea0:     	mov	x1, #0x24               // =36
+14001bea4:     	str	w9, [x8, #0x24]
+14001bea8:     	ldr	w2, [x0, #0x15c]
+14001beac:     	bl	0x14001c958 <.text+0x1b958>
+14001beb0:     	ldr	x9, [x0, #0x140]
+14001beb4:     	mov	x1, #0x28               // =40
+14001beb8:     	ldr	w8, [x0, #0x160]
+14001bebc:     	str	w8, [x9, #0x28]
+14001bec0:     	ldr	w2, [x0, #0x15c]
+14001bec4:     	bl	0x14001c958 <.text+0x1b958>
+14001bec8:     	ldr	x9, [x0, #0x150]
+14001becc:     	ldr	w8, [x0, #0x164]
+14001bed0:     	str	w8, [x9, #0x18]
+14001bed4:     	ldr	x9, [x0, #0x150]
+14001bed8:     	mov	w8, #0x1ff              // =511
+14001bedc:     	str	w8, [x9, #0x8]
+14001bee0:     	ldp	x29, x30, [sp], #0x10
+14001bee4:     	autibsp
+14001bee8:     	ret
+14001d570:     	str	w8, [x0, #0x3464]
+14001d574:     	mov	x9, #0x3454             // =13396
+14001d578:     	ldr	x8, 0x14001d608 <.text+0x1c608>
+14001d57c:     	str	x8, [x0, x9]
+14001d580:     	ldr	x8, 0x14001d610 <.text+0x1c610>
+14001d584:     	str	x8, [x0, #0x3468]
+14001e550:     	cmp	w0, #0x27b
+14001e554:     	b.ne	0x14001e5b0 <.text+0x1d5b0>
+14001e558:     	cmp	w2, #0x8
+14001e55c:     	mov	w8, #0x1000             // =4096
+14001e560:     	csel	w8, wzr, w8, ne
+14001e564:     	cmp	w3, #0xd
+14001e568:     	b.eq	0x14001e5a8 <.text+0x1d5a8>
+14001e56c:     	cmp	w3, #0xe
+14001e570:     	b.eq	0x14001e5a4 <.text+0x1d5a4>
+14001e574:     	cmp	w3, #0xf
+14001e578:     	b.eq	0x14001e59c <.text+0x1d59c>
+14001e57c:     	cmp	w3, #0x10
+14001e580:     	b.eq	0x14001e594 <.text+0x1d594>
+14001e584:     	cmp	w3, #0x11
+14001e588:     	b.ne	0x14001e5a8 <.text+0x1d5a8>
+14001e58c:     	orr	w8, w8, #0x40
+14001e590:     	b	0x14001e5a8 <.text+0x1d5a8>
+14001e594:     	orr	w8, w8, #0x30
+14001e598:     	b	0x14001e5a8 <.text+0x1d5a8>
+14001e59c:     	orr	w8, w8, #0x20
+14001e5a0:     	b	0x14001e5a8 <.text+0x1d5a8>
+14001e5a4:     	orr	w8, w8, #0x10
+14001e5a8:     	orr	w4, w8, #0x6
+14001e5ac:     	str	w4, [sp, #0x10]
+14001e5b0:     	adrp	x22, 0x140043000
+14001e5b4:     	add	x22, x22, #0x388
+14001e5b8:     	ldr	w4, [sp, #0x10]
+14001e5bc:     	adrp	x8, 0x140037000 <.text+0x36000>
+14001e5c0:     	add	x1, x8, #0x60
+14001e5c4:     	add	x0, x22, #0x18
+14001e5c8:     	bl	0x140029ad8 <.text+0x28ad8>
+14001e5cc:     	ldr	x8, [x19, #0x150]
+14001e5d0:     	mov	x0, x19
+14001e5d4:     	ldr	w9, [x19, #0x3458]
+14001e5d8:     	ldr	w4, [sp, #0x10]
+14001e5dc:     	ldr	x11, [sp, #0x40]
+14001e5e0:     	str	w4, [x8, w9, uxtw]
+14001e5e4:     	ldr	w8, [x19, #0x3458]
+14001e5e8:     	mov	w2, w4
+14001e5ec:     	add	x1, x11, w8, uxtw
+14001e5f0:     	bl	0x14001c990 <.text+0x1b990>
