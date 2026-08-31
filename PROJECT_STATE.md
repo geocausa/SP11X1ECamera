@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0051 package installed/inspected unarmed; authorization review next — 2026-08-31
+
+The distinct 0051 RUP_DONE ownership package is installed while SP11 remains on FullIO v19c Golden. It pins CAMSS `6b7287e6eb96c44060d58691333b82f4e4103df929f98ad39ec50347b379f020` and reuses the exact consumed-0050 helper, IMX681 module, front-only DTB, capsule, media setup and persistent RT-CDM observer. Boot ID `sp11-camera-e003h-rupclear-0051-one-shot`; marker `sp11_camera_e003h_rupclear_0051=1`.
+
+Package preflight and inspection are PASS. Golden remains `saved_entry=sp11-audio-fullio-v19c` with empty `next_entry`; camera modules are absent; authorization is absent; bounded provenance is green. Runtime preflight is before module load, a single helper invocation is enforced, and an existing RUN log blocks retry. Asset manifest `3f802bfc48327ec402ab2e84ad6ad11f613998f4c16cd3f82e5b737b8191c592`; inspector `ed534bfd75486fbd9e41999f8ecb46392fd4664c57081622b96292245357a5ab`; package inspection `be455f237db0864af6a667c36968ae1055add607716c1eec9368c2a831786009`.
+
+**Package installation is not runtime authorization.** Publish this unarmed package checkpoint first; only a separate fresh authorization review may permit one bounded diagnostic.
+
 ## E003h ACTIVE — 0051 front RUP_DONE no-REG_UPDATE write static PASS; runtime blocked — 2026-08-31
 
 Static 0051 implements only the ownership correction proven by 0050 + exact Windows IRQ reversal. At IPP RUP_DONE, the exact X1E80100 front-mode0 branch now clears `reg_update_ipp()` from the Linux software shadow but does not call generic `csid_reg_update_clear()`, so it emits no post-RUP `REG_UPDATE_CMD +0x18` write. Every other path still uses the existing helper, including RDI RUP_DONE. IPP IRQ clear `+0xb4` and global clear remain unchanged.
