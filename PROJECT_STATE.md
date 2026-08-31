@@ -1164,3 +1164,7 @@ Fresh 0062 runtime authorization review passed against public package `84e26d769
 ## E003h 0062 first boot attempt — pre-runtime freeze, no camera result
 
 The first authorized 0062 boot never reached persistent journald/PiSlave or camera activation. A solid blue framebuffer/Plymouth-like screen remained until manual reboot. Recovery is Golden; `next_entry` is empty. No 0062 RUN/WATCHER/output exists and qcom-camss was never manually loaded, so the CGC-release camera differential remains untested. The 0062 authorization boot count is consumed with helper count zero. Any retry requires a distinct package and fresh authorization; use a byte-identical camera payload with text/multi-user boot diagnostics and Plymouth disabled.
+
+## E003h 0062r1 — diagnostic retry package installed unarmed
+
+0062r1 keeps the 0062 camera payload byte-identical: CAMSS `71a7338f...`, frozen IMX681/helper/front-only DT/firmware, and the same single camera differential versus 0061 (remove private VFE1 BUS `+0xc08=0x1ff`, add no replacement write). The only retry delta is boot diagnostics: `multi-user.target`, Plymouth disabled, visible tty0 status, no `quiet`/`splash`. PiSlave is enabled by `multi-user.target`. Installed inspection passed with Golden saved and `next_entry` empty. No runtime is authorized by this package checkpoint.
