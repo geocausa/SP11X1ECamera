@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-camnoc-rate-mismatch-proven-0056-static-next
+status: e003h-camnoc-300mhz-0056-static-accepted-package-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: camnoc-rate-mismatch-proven-0056-static-next
+  status: camnoc-300mhz-0056-static-accepted-package-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -455,6 +455,24 @@ e003h:
   linux_0055_camnoc_rate_parity_mismatch_proven: true
   linux_0055_camnoc_rate_causality_for_vfe1_stall: unresolved
   linux_0055_next_gate: static 0056 front IFE1-only 300 MHz camnoc_rt_axi CCF request; freeze all sensor/CSID/VFE/RT-CDM programming and verify no unrelated clock-rate changes before runtime
+  linux_0056_static_status: accepted
+  linux_0056_scope: validated E003h X1E80100 front one-shot runner; IFE1 id=1 camnoc_rt_axi only
+  linux_0056_clock_request_hz: 300000000
+  linux_0056_base_camss_sha256: c5e01fbf9b4e9ae6c687e1adbbb64e1450a9a677ac2ae15d2b5779ffc3a6a24c
+  linux_0056_camss_sha256: 945a5765667ab6a2bada9395079cd519e7afc038afaa8d57d99926dd38c50795
+  linux_0056_patch_sha256: 73ad65c3a95ea151d2174ab411ff6c49a423d6cd496bab186fff60c021acc7bf
+  linux_0056_module_sha256: 072aae4359a77e3eb41847cda2f34a9355bc1a9e68e8c0fd2a0a422bf4e18f05
+  linux_0056_static_inspector_sha256: 751db1195af78110c8b4056508199f46fb533041f909f6ff48592dab2554f2b6
+  linux_0056_static_inspection_sha256: a971108097f87354032f9b13765ea5b6dc775f89c8fece214e6bd36472593ee1
+  linux_0056_static_manifest_sha256: e14d25f7cdaafa8c3399e4f14cdf2e93e2b74a8a5734f8628dac4a65984815b5
+  linux_0056_new_direct_mmio_reads: 0
+  linux_0056_new_direct_mmio_writes: 0
+  linux_0056_new_camera_register_values: 0
+  linux_0056_new_clock_rate_requests: 1
+  linux_0056_clock_api: clk_round_rate -> clk_set_rate
+  linux_0056_order: front validate -> pipeline PM/power -> CAMNOC 300 MHz CCF request -> PIX alloc -> RT-CDM/startup
+  linux_0056_runtime_authorized: false
+  linux_0056_next_gate: build/install distinct unarmed 0056 one-shot package with frozen 0054 sensor/DT/helper and 0055 CAMNOC telemetry; separate fresh authorization required before hardware execution
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac

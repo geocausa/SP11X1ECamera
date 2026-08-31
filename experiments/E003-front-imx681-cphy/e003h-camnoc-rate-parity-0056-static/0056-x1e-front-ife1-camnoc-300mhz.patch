@@ -1,0 +1,50 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7552,6 +7552,36 @@
+ 	return 0;
+ }
+ 
++#define CAMSS_X1E_FRONT_CAMNOC_RT_RATE 300000000UL
++
++static int camss_x1e_front_camnoc_rt_set_rate(struct vfe_device *vfe)
++{
++	int i;
++
++	if (!vfe || !vfe->camss || !vfe->camss->res ||
++	    vfe->camss->res->version != CAMSS_X1E80100 || vfe->id != 1)
++		return -EINVAL;
++
++	for (i = 0; i < vfe->nclocks; i++) {
++		struct camss_clock *clock = &vfe->clock[i];
++		long rounded;
++
++		if (strcmp(clock->name, "camnoc_rt_axi"))
++			continue;
++
++		rounded = clk_round_rate(clock->clk,
++					 CAMSS_X1E_FRONT_CAMNOC_RT_RATE);
++		if (rounded < 0)
++			return rounded;
++		if (rounded != CAMSS_X1E_FRONT_CAMNOC_RT_RATE)
++			return -EINVAL;
++
++		return clk_set_rate(clock->clk, rounded);
++	}
++
++	return -ENOENT;
++}
++
+ static int camss_x1e_pix_runner_once(struct camss *camss,
+ 				     const struct camss_x1e_pix_runner_request *req,
+ 				     struct camss_x1e_pix_runner_result *result)
+@@ -7607,6 +7637,10 @@
+ 	if (ret)
+ 		goto out_materialized;
+ 	pipeline_powered = true;
++
++	ret = camss_x1e_front_camnoc_rt_set_rate(vfe);
++	if (ret)
++		goto out_unwind;
+ 	csid_configured = true;
+ 
+ 	ret = vfe680_x1e_pix_runtime_alloc(vfe, req->video[0], req->video[1], &pix);
