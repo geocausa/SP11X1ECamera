@@ -1,0 +1,60 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "9d59b44bd1c95834c1632706aba93f391eaa1f29149a932a51380c4f0fa609ab",
+  "authorization_review_sha256": "a0d35dbd92be98a26cbfafd05260db33c976f35f78fe4d9575d636ce7955148b",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_vfeubwc_0061=1",
+    "id": "sp11-camera-e003h-vfeubwc-0061-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camera_programming_delta_only_ubwc_static": true,
+    "camss_sha256": "6b23dc7f41cd675107d81d89d61ae341807954b6649df03e7e1ac7a465d827b3",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "new_direct_mmio_reads": 0,
+    "new_mmio_writes": 1,
+    "retains_0060_readonly_telemetry": true,
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc",
+    "write_offset": "0x0c58",
+    "write_value": "0x00001046"
+  },
+  "consumed": true,
+  "consumed_by": "single 0061 helper invocation",
+  "execution_contract": {
+    "boot_count": 1,
+    "hardware_delta": "VFE1_UBWC_STATIC_0061_ONLY",
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "forbidden_programming": [
+    "any register write other than published BUS +0xc58=0x00001046",
+    "IRQ event substitution",
+    "sensor mode/timing change",
+    "CSID/CSIPHY/clock change",
+    "BUS client contract change",
+    "RT-CDM payload/order change",
+    "DT change",
+    "second helper invocation",
+    "same-boot retry"
+  ],
+  "package_commit": "ae29aa203f80d7544ae186fd6286df05b6eb3253",
+  "package_inspection_sha256": "49eb305a989694f175676ce523a42a3deab08f8760af5c8ca9f31ed5d91391db",
+  "production_parity_authorized": false,
+  "purpose": "single bounded causal test of the directly proven qccamisp VFE1 BUS UBWC_STATIC_CTRL +0xc58=0x00001046 delta on raw Epoch0, BUS-side events and QC10C while keeping the rest of the 0060 camera path frozen",
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-vfeubwc-0061-runtime-authorization-v1",
+  "success_observations": {
+    "then_evaluate": [
+      "0060 telemetry readback ubwc=00001046",
+      "VFE1 raw Epoch0 presence or absence",
+      "BUS status/event changes",
+      "CSID remains healthy 3840x2160 with no line error",
+      "RT-CDM FIFO 25 completes without fault",
+      "QC10C output presence/hash if produced"
+    ]
+  }
+}

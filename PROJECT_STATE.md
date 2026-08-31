@@ -1144,3 +1144,8 @@ Post-provenance package refresh is now complete and still unarmed. The candidate
 
 
 Fresh post-provenance runtime review passed on Golden. Bounded provenance is green; the package is v3 with Windows-proven RT-CDM1 requester SID 0x18a0, corrected Linux five-entry CAMSS IOMMU domain, persistent RT-CDM observer, exact four-FIFO IRQ acknowledgement, and all hashes pinned. Review JSON SHA-256 `73cec6f240c8c20f54eca1dfa141dc8330564e763fd6d9fc2cb43709a723d6d6`. **Exactly one third diagnostic candidate boot and one root `RUN` are authorized.** No non-root pre-trigger, no same-boot retry, and immediate Golden reboot after success/failure/reset recovery.
+
+
+## E003h 0061 — VFE1 UBWC static parity consumed
+
+0061 programmed the exact qccamisp-owned SP11 VFE1 BUS `UBWC_STATIC_CTRL=0x00001046`. Linux readback matched Windows exactly, while VFE1 BUS status1 Epoch0 and QC10C remained absent. CSID1 stayed healthy at 3840x2160 and RT-CDM completed 25 submissions fault-free. Therefore the UBWC-static mismatch was real but noncausal. Next gate is a same-machine Windows dynamic lifecycle trace of BUS CGC override `+0xc08` (`0x1ff` in the active start callback, zero in stable live Windows). Runtime is blocked.
