@@ -2,6 +2,15 @@
 
 ## Resume point
 
+## E003h ACTIVE — 0052 clock-rate package installed/inspected unarmed — 2026-08-31
+
+A distinct Golden-safe 0052 package is installed under `/boot/sp11-7.1.5-camera-e003h-csidclk-0052` with GRUB ID `sp11-camera-e003h-csidclk-0052-one-shot`. It binds static checkpoint `23ea4ce8b6ddc2bc76e15f2121087eeef34b8484` and CAMSS `42662121c848d863b06e3aba737e0f80a35fc047faf8cf5b0f47e2554ba3e92a`; helper, IMX681, front-only DTB, capsule, media setup and RT-CDM observer remain byte-identical to consumed 0051.
+
+Package-only preflight and independent inspection are green. Golden kernel/initrd and saved default are exact, `next_entry` remains empty, camera modules are absent, DT is front-only with the accepted IOMMU set, no authorization exists, runtime preflight precedes module loading, one helper invocation is enforced, and a pre-existing RUN log refuses retry. The package inspection preserves the provenance distinction: Linux's old request is proven 300MHz, the bounded correction uses its existing link-derived 400MHz selection, HBI 400/300 correlation is proven, but a direct Windows 400MHz vote is not claimed.
+
+Asset manifest `18d65aa6734ca1634a19607e1c377ac7b281bb26f1891bcf758e4594fea06974`; package inspector `03e1a86778462e1ed2fa58b31b32d1bb6ed7f2df78154fd0d132ffe35cd858c1`; inspection `b62e9ef8e9e1854bb4153872405b2761f04ec27a6ef93bc5eaee59e27005b1da`. **The candidate is installed but unarmed and runtime is not authorized.** Publish this package checkpoint before a fresh authorization review.
+
+
 ## E003h ACTIVE — first-Epoch boundary corrected; X1E CSID clock bug yields 0052 static PASS — 2026-08-31
 
 0050/0051's earlier "by first Epoch" geometry wording compared unlike sampling points and is superseded. Windows `0x00600228` already contains CAMIF EOF while Linux `0x00600cc0` does not; both systems are width-only before EOF. The corrected divergence is the first completed frame/EOF measurement: Windows is 3840x2160, while Linux's first EOF completion is 3840x2640 with bit14 `ERROR_LINE_COUNT`. Fail-closed EOF oracle `db4476e159872f9005a127d84ea41032191402de2709a0835d2c2c5fbc9dffde` pins qccamisp read/clear semantics, both traces and the raw-Windows-log provenance warning.
