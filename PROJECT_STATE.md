@@ -1,3 +1,11 @@
+## E003h ACTIVE — one 0052 X1E CSID clock-rate diagnostic authorized, still unarmed — 2026-08-31
+
+Fresh review passed against public unarmed package commit `0c6db59601d9dd2bb27842927a0cb8fbac7e01f4`: package/provenance hashes exact, Golden current, empty `next_entry`, no camera modules, no prior 0052 RUN and no prior authorization. Review SHA `44f3a8aeee715b96c27e64226a9a6755ae1a026ec91c55d5002ca13ffc7a3a2e`.
+
+Authorization `c56294a7eea290d8e9ee37c19bd0c5da9734209d81afbddbb26266feab64f28b` permits exactly one boot of `sp11-camera-e003h-csidclk-0052-one-shot` and one root helper invocation. Persistent RT-CDM observation is mandatory, an existing RUN log refuses retry, and any helper result must be archived followed immediately by Golden reboot. The sole hardware-behavior delta is the bounded X1E front CSID1/CSIPHY2 one-trio C-PHY clock request moving from the generic 300MHz first entry to the existing link-derived 400MHz selection; no camera register programming delta and no production parity are authorized. A direct Windows 400MHz vote remains unproven.
+
+The authorization checkpoint remains unarmed until published.
+
 ## E003h ACTIVE — 0052 clock-rate package installed/inspected unarmed — 2026-08-31
 
 A distinct Golden-safe 0052 package is installed under `/boot/sp11-7.1.5-camera-e003h-csidclk-0052` with GRUB ID `sp11-camera-e003h-csidclk-0052-one-shot`. It binds static checkpoint `23ea4ce8b6ddc2bc76e15f2121087eeef34b8484` and CAMSS `42662121c848d863b06e3aba737e0f80a35fc047faf8cf5b0f47e2554ba3e92a`; helper, IMX681, front-only DTB, capsule, media setup and RT-CDM observer remain byte-identical to consumed 0051.
