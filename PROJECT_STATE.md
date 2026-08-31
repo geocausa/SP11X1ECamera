@@ -1,3 +1,9 @@
+## E003h ACTIVE — one 0059 read-only VFE low-TOP telemetry run authorized, unarmed — 2026-08-31
+
+Fresh authorization against public package `d97d3aa97cee2f470f948dc4781b4ef4afe4d190` permits exactly one 0059 candidate boot/helper invocation. The delta remains 13 in-driver MMIO reads, zero writes and no camera-programming change. Authorization SHA `c6cd7e067fefeeaac332cb6a2af2ab7a4e41df424eaf24a0a3806a66276357b1`; inspection SHA `71edebd0456caa6fc0ed0521c5153eff347655476da5535f614aaef6d23aaf15`.
+
+No retry and no production parity are authorized. Golden remains saved and `next_entry` is empty.
+
 ## E003h ACTIVE — 0059 read-only VFE low-TOP package installed/inspected, unarmed — 2026-08-31
 
 The distinct 0059 one-shot package is installed under `/boot/sp11-7.1.5-camera-e003h-vfelowtop-0059` with GRUB ID `sp11-camera-e003h-vfelowtop-0059-one-shot`. It uses CAMSS `e714330b3f2d32a18d51e5fb7577242b7e34f96f9af889afaf1e658d4bf752f0` and the frozen Windows-selected mode2 IMX681/helper/front-only DT/RT-CDM assets. Static delta is exactly 13 new VFE1 timeout-path reads, zero new writes and no camera-programming change.
