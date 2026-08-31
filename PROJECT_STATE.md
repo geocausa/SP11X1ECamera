@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0052 consumed; X1E CSID clock bug fixes HBI exactly but is non-causal for crop — 2026-08-31
+
+The single authorized 0052 differential executed exactly once under public authorization commit `73847668047aa120ee0e5966e458d641135fff07` and returned immediately to FullIO v19c Golden. There was no same-boot retry, no QC10C output, RT-CDM reached FIFO sequence 17 without fault, IMX681/CAMSS runtime PM returned to suspended, `saved_entry` remains Golden, `next_entry` is empty, and candidate camera modules are absent.
+
+0052 moved only the exact X1E80100 front CSID1 + CSIPHY2 one-trio C-PHY `csid`/`csid_csiphy_rx` requests from the generic 300MHz first entry to Linux's existing link-derived 400MHz selection. This causally fixes the timing-domain mismatch: error-time HBI changed from 0051 `0x02c502c0` to **`0x03b203ad`**, exactly matching the bounded Windows normal sample `0x03b203ad`. Direct Windows 400MHz voting is still not claimed.
+
+The crop fault is unchanged. Ordered CSID status/actual remains `00811dd0/00000f00 -> 00600cc0/00000f00 -> 00000cc0/00000f00 -> 00004ee8/0a500f00`; first completed EOF is still 3840x2640 with `ERROR_LINE_COUNT`, VFE1 raw Epoch0 remains absent, and QC10C remains absent despite crop readback `0x0eff0000/0x086f0000` and expected frame `0x08700f00`. Therefore keep 0052 as a real X1E clock fix but retire clock rate as the vertical-crop cause.
+
+Fail-closed runtime extractor `988f7f38a627e20d813eb28bb68990f9a969ef6ce8579046b5b110674b77338b`; accepted analysis `4367b9fe31552baf59cd7212743585fc990a07638794a81da178a22e1591ddba`. **Runtime is blocked again.** Next gate: statically close CSID680 active vertical-crop/latch semantics—IPP CFG0/VCROP/CTRL order, RUP/AUP/update commands, and LUT/active-bank selection—before any new hardware candidate.
+
 ## E003h ACTIVE — one 0052 X1E CSID clock-rate diagnostic authorized, still unarmed — 2026-08-31
 
 Fresh review passed against public unarmed package commit `0c6db59601d9dd2bb27842927a0cb8fbac7e01f4`: package/provenance hashes exact, Golden current, empty `next_entry`, no camera modules, no prior 0052 RUN and no prior authorization. Review SHA `44f3a8aeee715b96c27e64226a9a6755ae1a026ec91c55d5002ca13ffc7a3a2e`.

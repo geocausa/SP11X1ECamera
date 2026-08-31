@@ -746,3 +746,11 @@ Fresh review `f364d91485f5103cbfea28e74f7554523fee177eb76c7377d41c65acdaf5ee47` 
 ## 2026-08-31 — one 0052 X1E CSID clock-rate diagnostic authorized, unarmed
 
 Fresh review `44f3a8aeee715b96c27e64226a9a6755ae1a026ec91c55d5002ca13ffc7a3a2e` passes against public package commit `0c6db59601d9dd2bb27842927a0cb8fbac7e01f4`: frozen package/provenance hashes exact, no prior 0052 RUN, Golden current, no camera modules, and empty `next_entry`. Authorization `c56294a7eea290d8e9ee37c19bd0c5da9734209d81afbddbb26266feab64f28b` permits one candidate boot and one root helper only, requires the persistent RT-CDM observer, forbids same-boot retry and mandates immediate Golden return after any helper result. The bounded differential is only the exact front-route CSID core/RX request changing 300MHz to Linux's existing link-derived 400MHz selection. Direct Windows 400MHz voting is still not claimed; no camera register write/value or production parity is authorized. The checkpoint remains unarmed until pushed.
+
+## 2026-08-31 — 0052 consumed: clock correction normalizes HBI exactly, crop remains broken
+
+The single authorized 0052 helper executed once and returned immediately to FullIO v19c Golden with no retry. RT-CDM reached FIFO sequence 17 without fault, sensor/CAMSS runtime PM suspended cleanly, and no QC10C buffer was produced. The exact X1E front-route CSID core/RX request changed from 300MHz to Linux's existing link-derived 400MHz selection.
+
+That correction is causally validated by the measurement it predicted: error-time HBI changed from 0051 `0x02c502c0` to `0x03b203ad`, bit-for-bit equal to the bounded Windows normal HBI `0x03b203ad`. However the complete CSID IRQ/geometry sequence is identical to 0051 and first completed EOF remains `0x00004ee8/0x0a500f00` = 3840x2640 with `ERROR_LINE_COUNT`; VFE1 raw Epoch0 and QC10C remain absent. Keep 0052 as a real X1E clock/timing fix, but clock rate is not the vertical-crop cause. Direct Windows 400MHz voting remains unproven.
+
+Runtime extractor `988f7f38a627e20d813eb28bb68990f9a969ef6ce8579046b5b110674b77338b`; analysis `4367b9fe31552baf59cd7212743585fc990a07638794a81da178a22e1591ddba`. Runtime is blocked. Next gate is static active-crop/latch semantics: Windows/Linux ordering and values for IPP CFG0/VCROP/CTRL, RUP/AUP/update commands, and LUT/active-bank selection.

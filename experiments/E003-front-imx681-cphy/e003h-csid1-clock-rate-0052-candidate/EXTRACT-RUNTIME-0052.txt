@@ -1,0 +1,143 @@
+{
+  "accepted": true,
+  "classification": {
+    "0052_behavior_executed": "exact X1E80100 front CSID1 + CSIPHY2 + one-trio C-PHY clocks csid/csid_csiphy_rx use existing link-derived rate selection, changing request 300MHz -> 400MHz",
+    "clock_correction_is_causal_for_hbi_mismatch": true,
+    "clock_correction_is_causal_for_vertical_crop_failure": false,
+    "direct_windows_400mhz_vote_proven": false,
+    "first_completed_eof_geometry_improved": false,
+    "hbi_normalized_exactly_to_windows_sample": true,
+    "line_count_error_removed": false,
+    "speculative_crop_register_write_justified": false,
+    "vertical_crop_failure_remains": "CSID readback crop=0x0eff0000/0x086f0000 and expected=0x08700f00, but first completed EOF remains actual=0x0a500f00 (3840x2640) with ERROR_LINE_COUNT",
+    "vfe1_raw_epoch0_advanced": false,
+    "x1e_300mhz_clock_selection_was_real_bug": true
+  },
+  "comparison_0051": {
+    "critical_csid_geometry_identical": true,
+    "hbi_0051": "0x02c502c0",
+    "hbi_0052": "0x03b203ad",
+    "hbi_0052_exact_windows_sample": true,
+    "hbi_changed": true,
+    "sequence_identical": true,
+    "vfe_epoch0_boundary_identical": true
+  },
+  "evidence_sha256": {
+    "auth": "c56294a7eea290d8e9ee37c19bd0c5da9734209d81afbddbb26266feab64f28b",
+    "clock_oracle": "f913e0dd3766077cfa9cf6875f77d7494bfe60a1bceea0ffe9f9c928d7d00dd0",
+    "dmesg": "f485f4de07df1fd69414a0176d45a9e061f3209513bd657f32ef00e38c23f98f",
+    "dmesg0051": "b65b5869238f072bed4a1aab8c1ee6c0c1933f7ae49ec1790e2e4e8c6a3c8df4",
+    "eof_oracle": "db4476e159872f9005a127d84ea41032191402de2709a0835d2c2c5fbc9dffde",
+    "post": "e908b1ac89f8b8914c1c7daf8b0228e16f82664685615877fda889c58811eaef",
+    "run": "c4789f028cc07ab996cb580fb791737d379416fb2496bfaca7c94d8f6e16962a",
+    "runtime0051": "2e1fbd740073b98e9e86ef477f1986d9b7e94a26a5e486f4386197b8e331f9d1",
+    "stages": "49d30540c8094c14a4d19365f36685a31e0323ef18df6c1259533619014a6569",
+    "static_inspection": "e20bf446fde42298988c586b941e4c96ec8017f8c67bc4a396b824f359f676ad",
+    "windows_hbi": "f7523499e06332e588418218bb4eac71069e01c237c0c35f27c3bec6968f3db5"
+  },
+  "execution": {
+    "camss_runtime_suspended_after": true,
+    "golden_return_verified": true,
+    "helper_invocations": 1,
+    "helper_result": "ETIMEDOUT surfaced as Connection timed out / RUN_RC=1",
+    "qc10c_output": false,
+    "rtcdm_faulted": false,
+    "rtcdm_fifo_last": 17,
+    "same_boot_retry": false,
+    "sensor_runtime_suspended_after": true
+  },
+  "line_error": {
+    "0051": {
+      "actual": "0x0a500f00",
+      "hbi": "0x02c502c0",
+      "history_count": 4,
+      "history_last": "0x00004ee8",
+      "history_or": "0x00e15ff8",
+      "vbi": "0x00000000"
+    },
+    "0052": {
+      "actual": "0x0a500f00",
+      "hbi": "0x03b203ad",
+      "history_count": 4,
+      "history_last": "0x00004ee8",
+      "history_or": "0x00e15ff8",
+      "vbi": "0x00000000"
+    },
+    "windows_bounded_normal_hbi": "0x03b203ad"
+  },
+  "linux_sequence": [
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "CAMIF_SOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "FRAME_DROP_SOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "INFO_INPUT_SOF",
+        "VCDT_GRP1_SEL",
+        "RUP_DONE"
+      ],
+      "index": 0,
+      "status_hex": "0x00811dd0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "CAMIF_EPOCH0",
+        "CAMIF_EPOCH1"
+      ],
+      "index": 1,
+      "status_hex": "0x00600cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 0,
+        "width": 3840
+      },
+      "actual_hex": "0x00000f00",
+      "bits": [
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL"
+      ],
+      "index": 2,
+      "status_hex": "0x00000cc0"
+    },
+    {
+      "actual_geometry": {
+        "height": 2640,
+        "width": 3840
+      },
+      "actual_hex": "0x0a500f00",
+      "bits": [
+        "CAMIF_EOF",
+        "FRAME_DROP_EOF",
+        "FRAME_DROP_EOL",
+        "FRAME_DROP_SOL",
+        "INFO_INPUT_EOF",
+        "INFO_INPUT_EOL",
+        "INFO_INPUT_SOL",
+        "ERROR_LINE_COUNT"
+      ],
+      "index": 3,
+      "status_hex": "0x00004ee8"
+    }
+  ],
+  "next_gate": "Keep the 0052 X1E clock correction because it causally fixes the HBI timing-domain mismatch, but retire clock rate as the crop cause. Statically close CSID680 active vertical-crop/latch semantics: compare Windows qccamisp ordering and values for IPP CFG0/VCROP/CTRL, RUP/AUP/update commands and LUT/active-bank selection against Linux. The strongest remaining fact is identical programmed/readback crop and expected size while Linux completed-frame measurement ignores the 480-line vertical crop. No further runtime until a concrete active-bank/update/lifecycle delta is proven.",
+  "schema": "sp11-e003h-runtime-0052-x1e-csid-clock-rate-v1"
+}
