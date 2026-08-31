@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0054 mode2 package installed/inspected unarmed; authorization review next — 2026-08-31
+
+The Windows-selected IMX681 mode2 0054 bounded package is installed under `/boot/sp11-7.1.5-camera-e003h-mode2-0054` with GRUB ID `sp11-camera-e003h-mode2-0054-one-shot` and marker `sp11_camera_e003h_mode2_0054=1`. Package assets bind public static checkpoint `c690f67548dcce57ba6f017d98be836233a575e7`: CAMSS `0dc8e3a3318a4b68fc968ce6ff3c68e93bf2931502063b4469ed093cb0002be1`, IMX681 `a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc`, and media setup 3840x2160. Helper, front-only DTB, capsule and persistent RT-CDM observer remain inherited exact assets.
+
+Package-only preflight and independent inspection pass. Installed kernel/initrd are byte-exact Golden, `saved_entry` remains `sp11-audio-fullio-v19c`, `next_entry` is empty, camera modules are absent, no authorization or RUN exists, runtime preflight precedes the first module load, one helper invocation is encoded, and an existing RUN log refuses retry. Asset manifest SHA `de2220e8bb570f13878c31c78371d75fb6fa8eaaf05d03a699e93b66a4b4c0da`; accepted package inspection SHA `1d1039e5b02b762955f443ad8a1cb42d9aedb6a664f74035075b222e741d6b37`.
+
+**The package is installed but unarmed and runtime is not authorized.** Publish this checkpoint before creating a fresh 0054 authorization.
+
 ## E003h ACTIVE — 0054 static PASS; Linux now matches Windows-selected IMX681 mode2 contract — 2026-08-31
 
 Static 0054 is accepted without hardware execution. The generated Linux sensor table matches all **68/68** address/value pairs from the same-machine Windows selected-resolution packet and differs from prior Linux mode0 at exactly seven firmware-proven values. Sensor output becomes 3840x2160@30 while RAW10, C-PHY rate, line length, frame length, pixel clock and PLL stay unchanged. IMX681 module SHA `a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc`.
