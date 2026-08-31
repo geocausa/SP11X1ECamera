@@ -7,3 +7,7 @@ Relative to consumed 0053, exactly three runtime assets change: `imx681.ko` swit
 The sensor table equals all 68 address/value pairs captured from Windows and differs from prior Linux mode0 in exactly seven values. CSID programming values remain unchanged; the already-derived Windows CSID configuration expects 3840x2160.
 
 Installation cannot arm the boot. Runtime is not authorized by this package and requires a separately committed authorization. Any authorized run permits exactly one helper invocation, refuses same-boot retry when the RUN log exists, requires the persistent RT-CDM observer, archives the result and immediately reboots to Golden.
+
+## Consumed runtime result
+
+The single authorized run has completed and authorization is consumed. The mode2 correction removed the CSID1 `ERROR_LINE_COUNT` fault and changed the first completed measured frame from 3840x2640 to exact 3840x2160, with subsequent healthy 2160 samples. VFE1 Epoch0 still times out and QC10C remains absent. See `RESULT.md` and accepted `runtime-0054-analysis.json`.

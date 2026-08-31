@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0054 consumed: sensor/CSID fault fixed; remaining boundary is healthy CSID -> missing VFE1 Epoch0 — 2026-08-31
+
+The single authorized 0054 mode2 run executed exactly once and returned immediately to FullIO Golden. No retry occurred; RT-CDM completed FIFO sequence 25 without fault; IMX681/CAMSS returned suspended; QC10C output is absent; Golden `saved_entry` remains intact and `next_entry` is empty.
+
+0054 **causally fixes the old CSID fault**. The first three pre-complete IPP samples are identical to 0053, but the first completed frame changes from `00004ee8/0a500f00` (3840x2640 + `ERROR_LINE_COUNT`) to `00000ee8/08700f00` (3840x2160, no bit14). Subsequent retained samples remain 3840x2160, `ipp-history` contains no bit14, line-error telemetry is zero and RX has no ECC/CRC error. Thus the prior Linux IMX681 record-0 mismatch was causal for the line-count/geometry fault.
+
+VFE1 still times out before raw Epoch0 and QC10C remains absent. Therefore the old CSID line-count failure was **not** causal for the VFE1 Epoch0 stall. The new remaining boundary is downstream: **after healthy CSID1 3840x2160 reception and before VFE1 raw Epoch0/FULL output**. Accepted runtime analysis SHA `a77d1ec6876710ce3d885dcdf3063969558643555b72534f09cef11d6ffd7d6e`.
+
+**0054 authorization is consumed and runtime is blocked again.** Next gate is exact downstream Windows/Linux VFE1/IFE startup-state analysis; do not authorize another hardware candidate until a concrete mismatch is mechanically proven.
+
 ## E003h ACTIVE — one 0054 Windows-selected IMX681 mode2 diagnostic authorized, still unarmed — 2026-08-31
 
 Fresh review passed against public unarmed package commit `95ee1d3feddf623004f92375de80f20f30822236`: HEAD/origin exact, tracked worktree clean, package preflight/reinspection accepted, Golden current, empty `next_entry`, no camera modules, no prior 0054 RUN and no authorization before review. Review SHA `b03f8c43eee969bc5d1d31d892e8ee1d5de899d43be28dd116170976d863b674`.
