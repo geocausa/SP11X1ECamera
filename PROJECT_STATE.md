@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0058 static telemetry PASS; no camera programming delta — 2026-08-31
+
+After consumed 0057 left the VFE1 timeout byte-for-byte unchanged, the next gate is read-only state localization rather than another programming change. Static 0058 freezes the exact stock-Windows VFE1 live aperture source and a persistent Linux `/dev/mem` sampler for physical VFE1 `0x0ac71000..0x0ac74fff`. The sampler opens `/dev/mem` `O_RDONLY|O_SYNC`, maps `PROT_READ`, performs no mapped-memory write, captures the full 0x4000 aperture plus low-register transitions, and changes no sensor/CAMSS/CSID/VFE/BUS/RT-CDM/clock/DT programming.
+
+The immediate unresolved Windows-live low-TOP cluster is `diag_config +0x50=0x00400000`, `core_cfg_3 +0x68=0x000aaaa0`, stats throttle `+0x70=0x0f150f0f/+0x74=0x0f0f1503/+0x78=0x00000f07`, and `core_cfg_4..6 +0x80=0x000aaaa0/+0x84=0x00012491/+0x88=0x00040001`. Linux already matches the `+0x90/+0x94/+0x98` marker trio. Static watcher SHA `b997ceedf1b5b70d44292e58fce33608bc89d1a3a67e87e5afa701628d25eee5`; oracle SHA `53c47139b9f24a10aafdbc0224b6c8dcce4a6444563ee3cbf32cbc6d71a9c35a`; inspection SHA `e8fda40b8f560e577c3fcbba5ef55df8c826991a1380298405956c5551732224`.
+
+**Runtime remains blocked.** Next build/install/inspect a distinct 0058 Golden-safe one-shot that reuses exact 0057 camera modules/behavior and adds only this persistent read-only VFE aperture observer.
+
 ## E003h ACTIVE — 0057 consumed negative differential; corrected active prefix retained, VFE1 stall remains — 2026-08-31
 
 The single authorized 0057 active-SP11-IFE1-DAL run executed exactly once and returned immediately to FullIO Golden. No retry occurred. RT-CDM completed FIFO sequence 25 without fault, IMX681/CAMSS suspended afterward, CSID1 remained healthy at 3840x2160 with no line-count/ECC/CRC error, and QC10C output is absent. Golden remains `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty and camera modules are absent.
