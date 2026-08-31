@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0058 consumed; external /dev/mem VFE aperture transport invalid — 2026-08-31
+
+0058 executed the byte-identical consumed-0057 camera path exactly once and returned to FullIO Golden. RT-CDM completed FIFO 25 without fault; CSID1 remained healthy at 3840x2160 with no line/ECC/CRC error; VFE1 raw Epoch0 and QC10C remained absent. Camera programming delta was zero.
+
+The read-only external sampler targeted the DT-confirmed Linux/Windows VFE1 physical base `0x0ac71000`, but 3854 samples observed zero active samples and the captured 0x4000 aperture was entirely zero while in-driver VFE reads during the same powered run were live. Therefore `/dev/mem` is not a usable observation transport on this kernel/device; the VFE1 address itself is not disproven. Runtime analysis SHA `422f84e06a3ac2156a147bbe3518e61cbf4f0de0202cb0c5e899f7c98ad62fa5`.
+
+The authorization is consumed. No programming write is justified. Next gate: static-only 0059 in-driver read-only telemetry for the unresolved VFE680 low-TOP config cluster (`+0x50,+0x68,+0x70..0x78,+0x80..0x88`, plus adjacent phase/epoch config) at the existing powered Epoch0-timeout path.
+
 ## E003h ACTIVE — one 0058 read-only VFE1 aperture telemetry run authorized, unarmed — 2026-08-31
 
 Public package commit `cc0abdbac4d0adc0066efa3dbd627f2be68a69d6` has passed a fresh authorization review for exactly one 0058 diagnostic. Camera binaries/programming are byte-identical to consumed 0057; the only new behavior is persistent read-only sampling of physical VFE1 `0x0ac71000..0x0ac74fff` alongside the existing RT-CDM observer. Authorization SHA `eb9d37a7982e0e991f053ecac9a705494665d21b50a74b76b5e08f44b76734f6`; authorization inspection SHA `747c3b5ff9fe22221f4846083db46f13af286dc2d3e5e89ee69c1365a5fcc7b4`.

@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: linux-0058-vfe-aperture-authorized-unarmed
+status: linux-0058-consumed-0059-readonly-static-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2297,4 +2297,4 @@ linux_0049_runtime:
   runtime_authorized: false
 
 next_action: >-
-  Publish the 0058 authorization checkpoint; then arm exactly one sp11-camera-e003h-vfeap-0058-one-shot boot, require both persistent observers READY, invoke the frozen helper once, return immediately to Golden, and mechanically compare the captured Linux VFE1 0x4000 aperture against preserved successful Windows live snapshots.
+  Build static-only 0059 by adding read-only in-driver VFE680 low-TOP config telemetry at the existing powered Epoch0-timeout path. Do not add any MMIO write or alter camera programming; compare the resulting Linux values to the preserved same-machine Windows live oracle before considering a programming candidate.
