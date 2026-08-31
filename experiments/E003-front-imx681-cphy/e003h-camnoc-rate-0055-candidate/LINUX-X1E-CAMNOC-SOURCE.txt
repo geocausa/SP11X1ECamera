@@ -1,0 +1,46 @@
+--- lines 434-440 ---
+434: static const struct parent_map cam_cc_parent_map_0[] = {
+435: 	{ P_BI_TCXO, 0 },
+436: 	{ P_CAM_CC_PLL0_OUT_MAIN, 1 },
+437: 	{ P_CAM_CC_PLL0_OUT_EVEN, 2 },
+438: 	{ P_CAM_CC_PLL0_OUT_ODD, 3 },
+439: 	{ P_CAM_CC_PLL8_OUT_EVEN, 5 },
+440: };
+--- lines 542-560 ---
+542: static const struct freq_tbl ftbl_cam_cc_camnoc_axi_rt_clk_src[] = {
+543: 	F(240000000, P_CAM_CC_PLL0_OUT_EVEN, 2.5, 0, 0),
+544: 	F(300000000, P_CAM_CC_PLL0_OUT_EVEN, 2, 0, 0),
+545: 	F(400000000, P_CAM_CC_PLL0_OUT_ODD, 1, 0, 0),
+546: 	{ }
+547: };
+548:
+549: static struct clk_rcg2 cam_cc_camnoc_axi_rt_clk_src = {
+550: 	.cmd_rcgr = 0x138f8,
+551: 	.mnd_width = 0,
+552: 	.hid_width = 5,
+553: 	.parent_map = cam_cc_parent_map_0,
+554: 	.freq_tbl = ftbl_cam_cc_camnoc_axi_rt_clk_src,
+555: 	.clkr.hw.init = &(const struct clk_init_data) {
+556: 		.name = "cam_cc_camnoc_axi_rt_clk_src",
+557: 		.parent_data = cam_cc_parent_data_0,
+558: 		.num_parents = ARRAY_SIZE(cam_cc_parent_data_0),
+559: 		.flags = CLK_SET_RATE_PARENT,
+560: 		.ops = &clk_rcg2_shared_ops,
+--- lines 1238-1254 ---
+1238: static struct clk_branch cam_cc_camnoc_axi_rt_clk = {
+1239: 	.halt_reg = 0x13910,
+1240: 	.halt_check = BRANCH_HALT,
+1241: 	.clkr = {
+1242: 		.enable_reg = 0x13910,
+1243: 		.enable_mask = BIT(0),
+1244: 		.hw.init = &(const struct clk_init_data) {
+1245: 			.name = "cam_cc_camnoc_axi_rt_clk",
+1246: 			.parent_hws = (const struct clk_hw*[]) {
+1247: 				&cam_cc_camnoc_axi_rt_clk_src.clkr.hw,
+1248: 			},
+1249: 			.num_parents = 1,
+1250: 			.flags = CLK_SET_RATE_PARENT,
+1251: 			.ops = &clk_branch2_ops,
+1252: 		},
+1253: 	},
+1254: };
