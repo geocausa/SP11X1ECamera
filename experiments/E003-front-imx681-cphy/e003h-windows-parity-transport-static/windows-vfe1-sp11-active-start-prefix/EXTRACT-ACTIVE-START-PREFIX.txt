@@ -1,0 +1,296 @@
+{
+  "accepted": true,
+  "active_callback_pair": {
+    "second_callback_semantics": "ret/no MMIO",
+    "slot_0x6b690": "0x1be80",
+    "slot_0x6b698": "0x1c0e0"
+  },
+  "active_first_callback": {
+    "rva": "0x1be80",
+    "writes_in_order": [
+      {
+        "offset": "context+0x164",
+        "space": "software shadow",
+        "value": "0xdc000000"
+      },
+      {
+        "offset": "context+0x15c",
+        "space": "software shadow",
+        "value": "0x00000007"
+      },
+      {
+        "name": "core_cfg_0",
+        "offset": "0x24",
+        "space": "VFE1 TOP",
+        "value": "0x00000007"
+      },
+      {
+        "name": "core_cfg_1",
+        "offset": "0x28",
+        "resolution": "sole active direct KMD store + two stable stock-Windows readbacks; initial IFE CDM packets do not own +0x28",
+        "space": "VFE1 TOP",
+        "value": "0x00000010"
+      },
+      {
+        "name": "bus_irq_mask0",
+        "offset": "0xc18",
+        "space": "VFE1 BUS",
+        "value": "0xdc000000"
+      },
+      {
+        "name": "bus_cgc_ovd",
+        "offset": "0xc08",
+        "space": "VFE1 BUS",
+        "value": "0x000001ff"
+      }
+    ]
+  },
+  "date": "2026-08-31",
+  "driver": {
+    "bytes": 376560,
+    "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+  },
+  "initial_ife_packet_relevant_writes": {
+    "0": [
+      {
+        "address": "0x0ac71024",
+        "name": "top_24",
+        "stream_offset": "0x0e70",
+        "value": "0x00006000"
+      }
+    ],
+    "1": [
+      {
+        "address": "0x0ac71024",
+        "name": "top_24",
+        "stream_offset": "0x0e10",
+        "value": "0x00006000"
+      }
+    ],
+    "2": [
+      {
+        "address": "0x0ac71024",
+        "name": "top_24",
+        "stream_offset": "0x08e0",
+        "value": "0x00006000"
+      }
+    ],
+    "3": [
+      {
+        "address": "0x0ac71024",
+        "name": "top_24",
+        "stream_offset": "0x04c4",
+        "value": "0x00006000"
+      }
+    ]
+  },
+  "instruction_anchors": [
+    {
+      "mnemonic": "ldr",
+      "operands": "w8, [x20, #0x349c]",
+      "rva": "0x22464"
+    },
+    {
+      "mnemonic": "cmp",
+      "operands": "w24, w8",
+      "rva": "0x2246c"
+    },
+    {
+      "mnemonic": "cset",
+      "operands": "w9, hs",
+      "rva": "0x22474"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w9, [x8, #0x678]",
+      "rva": "0x22478"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "w8, [x8, #0x678]",
+      "rva": "0x19fac"
+    },
+    {
+      "mnemonic": "cmp",
+      "operands": "w8, #0",
+      "rva": "0x19fb0"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x9, x8, #0xe80",
+      "rva": "0x19ff0"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x2b0",
+      "rva": "0x19ff8"
+    },
+    {
+      "mnemonic": "csel",
+      "operands": "x9, x9, x8, ne",
+      "rva": "0x19ffc"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "x9, [x8, #0x690]",
+      "rva": "0x1a004"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x9, x8, #0xe0",
+      "rva": "0x1a00c"
+    },
+    {
+      "mnemonic": "add",
+      "operands": "x8, x8, #0x820",
+      "rva": "0x1a014"
+    },
+    {
+      "mnemonic": "csel",
+      "operands": "x9, x9, x8, ne",
+      "rva": "0x1a018"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "x9, [x8, #0x698]",
+      "rva": "0x1a020"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "w8, #-0x24000000",
+      "rva": "0x1be8c"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x0, #0x164]",
+      "rva": "0x1be90"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "w9, #7",
+      "rva": "0x1be98"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w9, [x0, #0x15c]",
+      "rva": "0x1be9c"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w9, [x8, #0x24]",
+      "rva": "0x1bea4"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "w8, [x0, #0x160]",
+      "rva": "0x1beb8"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x9, #0x28]",
+      "rva": "0x1bebc"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "w8, [x0, #0x164]",
+      "rva": "0x1becc"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x9, #0x18]",
+      "rva": "0x1bed0"
+    },
+    {
+      "mnemonic": "mov",
+      "operands": "w8, #0x1ff",
+      "rva": "0x1bed8"
+    },
+    {
+      "mnemonic": "str",
+      "operands": "w8, [x9, #8]",
+      "rva": "0x1bedc"
+    },
+    {
+      "mnemonic": "ret",
+      "operands": "",
+      "rva": "0x1c0e0"
+    },
+    {
+      "mnemonic": "ldrb",
+      "operands": "w8, [x20, x25]",
+      "rva": "0x270d4"
+    },
+    {
+      "mnemonic": "cbnz",
+      "operands": "w8, #0x140027128",
+      "rva": "0x270d8"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x690]",
+      "rva": "0x270e8"
+    },
+    {
+      "mnemonic": "blr",
+      "operands": "x15",
+      "rva": "0x27100"
+    },
+    {
+      "mnemonic": "ldr",
+      "operands": "x8, [x8, #0x698]",
+      "rva": "0x27110"
+    },
+    {
+      "mnemonic": "blr",
+      "operands": "x15",
+      "rva": "0x27124"
+    },
+    {
+      "mnemonic": "bl",
+      "operands": "#0x1400274c8",
+      "rva": "0x27130"
+    }
+  ],
+  "linux_next_gate": {
+    "allowed": "replace/correct the private SP11 IFE1 DAL-start semantics while preserving separately proven IRQ-mask availability if Linux still depends on it",
+    "forbidden": [
+      "sensor timing changes",
+      "CSID crop changes",
+      "new speculative values",
+      "0056 rerun"
+    ]
+  },
+  "runtime_authorized": false,
+  "runtime_selector_proof": {
+    "ife1_instance_index": 1,
+    "raw_kd_source_sha256": "58759b789a84b30fa5189f4641f1146d7c3ef63d4207fcc2ba603de2f1945af4",
+    "selector": 0,
+    "threshold": 2,
+    "threshold_rva": "0x670fc"
+  },
+  "schema": "sp11-e003h-windows-vfe1-sp11-active-start-prefix-v1",
+  "source_hashes": {
+    "crossorder_oracle": "b495cc833c45e97b1467749bf094bb3035c5e6070bd0ea13d26a99ceec6acce6",
+    "dispatch_oracle": "63f2ef14cff98f3f97b8bcbe6f6aed9a9ce0cbaefa011952ca7d985489af1acd",
+    "kd_raw_on_sp7": "58759b789a84b30fa5189f4641f1146d7c3ef63d4207fcc2ba603de2f1945af4",
+    "route_raw": "fd8edcee46e794dffa0e2305331f19d4e9d2cd5b9ba5197484aa1cc7fa6c6fca"
+  },
+  "stock_windows_live_core_cfg_1": {
+    "physical": "0x0ac71028",
+    "route_raw_sha256": "fd8edcee46e794dffa0e2305331f19d4e9d2cd5b9ba5197484aa1cc7fa6c6fca",
+    "successful_passes": 2,
+    "value": "0x00000010"
+  },
+  "supersedes_for_sp11_ife1": {
+    "old_linux_effect": [
+      "TOP +0x34=0x0007f051",
+      "TOP +0x38=0",
+      "BUS +0xc18=0xd0000000",
+      "BUS +0xc1c=0",
+      "TOP +0x24=0"
+    ],
+    "reason": "runtime threshold 2 and IFE1 index 1 select zero callback family",
+    "wrong_family": "0x1d2b0 -> 0x1d820"
+  }
+}
+PASS: active SP11 IFE1 callback pair and core_cfg_1 ownership pinned

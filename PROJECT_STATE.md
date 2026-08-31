@@ -1,3 +1,11 @@
+## E003h ACTIVE — SP11 IFE1 uses zero-generation DAL callback family; prior 0047 prefix assumption superseded — 2026-08-31
+
+Exact installed `qccamisp8380.sys` SHA-256 `64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c` plus a same-machine KD read now closes the VFE1 generation selector. qccamisp stores selector `IFE index >= runtime threshold` at context `+0x6b678`; live runtime table RVA `0x670fc` is `2`. The proven front route is IFE1/VFE1 (index 1), therefore selector=0. ARM64 `csel` then selects callback slot `+0x6b690 -> RVA 0x1be80` and `+0x6b698 -> RVA 0x1c0e0`; the latter is a bare `ret`. This supersedes the old assumption that SP11 IFE1 used `0x1d2b0 -> 0x1d820`.
+
+The active `0x1be80` callback writes TOP `+0x24=0x00000007`, TOP `+0x28=context+0x160`, BUS `+0xc18=0xdc000000`, and BUS `+0xc08=0x000001ff`. Two successful stock-Windows front-camera passes read TOP `+0x28=0x00000010`; the four initial IFE startup packets write only TOP `+0x24=0x6000` among these registers and never own `+0x28`. Fail-closed oracle `aeac1c99783427fc0bafdda7e57df73ecedf02f63881c6118871288aea9e6b02` pins the dispatch, live threshold provenance, exact callback instructions, startup packet ownership, and stock-Windows readback.
+
+Linux currently implements the wrong-family start prefix: TOP masks `0x7f051/0`, BUS mask `0xd0000000/0`, then TOP `+0x24=0`. **Runtime remains blocked.** Next gate is a static-only correction of the private SP11 VFE1 start semantics. Preserve separately proven IRQ-mask availability rather than deleting it blindly; add/change only values justified by the active callback oracle. Sensor, CSID geometry/crop, RT-CDM command bytes, CSIPHY and DT remain closed.
+
 ## E003h ACTIVE — 0054 consumed: sensor/CSID fault fixed; remaining boundary is healthy CSID -> missing VFE1 Epoch0 — 2026-08-31
 
 The single authorized 0054 mode2 run executed exactly once and returned immediately to FullIO Golden. No retry occurred; RT-CDM completed FIFO sequence 25 without fault; IMX681/CAMSS returned suspended; QC10C output is absent; Golden `saved_entry` remains intact and `next_entry` is empty.
