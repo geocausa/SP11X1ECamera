@@ -1,0 +1,61 @@
+{
+  "accepted": true,
+  "capture": {
+    "callsite": "surfacecamfrontsensor8380.sys +0x54c4",
+    "event_counts": {
+      "E003H_RES_PACKET_A": 1,
+      "E003H_RES_PACKET_B": 0,
+      "E003H_SENSORCROP_A": 0,
+      "E003H_SENSORCROP_B": 0,
+      "E003H_SENSORCROP_C": 0
+    },
+    "packet_data": "ffffcf89c48b3730",
+    "packet_descriptor": "ffffcf89d10711e0",
+    "packet_length_bytes": 552,
+    "packet_sha256": "1479e58f2f04164b56ded885305a8849f080bdd09ca256c173e53122bf90a4f6",
+    "pair_count": 68
+  },
+  "classification": {
+    "prior_linux_csid_vertical_crop_failure_interpretation_superseded": true,
+    "prior_windows_mode0_3840x2640_selection_assumption": false,
+    "reason": "same-machine Windows stock Camera submits the exact 68-pair firmware resolution record 2, which programs IMX681 output and digital crop to 3840x2160; Linux test path used record 0 3840x2640",
+    "windows_selected_resolution_index_2_proven": true,
+    "windows_sensor_output_is_3840x2160_before_csid_proven": true
+  },
+  "full_firmware_match": {
+    "all_68_address_value_pairs_exact": true,
+    "matching_resolution_indices": [
+      2
+    ],
+    "selected_resolution_index": 2
+  },
+  "next_gate": "derive an exact static Linux IMX681 mode2 parity delta from the same firmware record; do not add a CSID crop write. Package/authorize a bounded one-shot only after static inspection.",
+  "raw_kd_log": {
+    "bytes": 16162,
+    "clean_logclose": true,
+    "encoding": "UTF-16LE",
+    "name": "E003H_IMX681_MODE_SELECTION_20260831.log",
+    "sha256": "341df7c5cf0d80456d9d74242878bb4561911a37d76d288e74b2a489ae2ed0ec"
+  },
+  "runtime_authorized": false,
+  "same_machine_windows": {
+    "camera_app": "Microsoft.WindowsCamera_2026.2605.7.0_arm64__8wekyb3d8bbwe",
+    "sensor_blob_sha256": "f7dd81be64153fd3f0da8e6288ee1b9906b7bf51b773a98496934d76dc96a45c",
+    "sensor_driver_sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03"
+  },
+  "schema": "sp11-e003h-windows-imx681-mode-selection-capture-v1",
+  "selected_mode": {
+    "digital_crop_size_regs": "0x040c..0x040f = 0x0f 0x00 0x08 0x70",
+    "fps": 30.0,
+    "frame_length": 3554,
+    "geometry": "3840x2160",
+    "line_length": 6752,
+    "output_size_regs": "0x034c..0x034f = 0x0f 0x00 0x08 0x70",
+    "pixel_rate_hz": 548570000
+  },
+  "sensorcrop": {
+    "actual_hits": 0,
+    "breakpoints_armed": true,
+    "required_for_mode_selection_proof": false
+  }
+}
