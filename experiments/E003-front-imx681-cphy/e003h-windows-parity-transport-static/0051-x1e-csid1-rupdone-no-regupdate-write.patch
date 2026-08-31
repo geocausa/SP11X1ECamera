@@ -1,0 +1,17 @@
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -723,8 +723,12 @@
+ 		if (ipp_val)
+ 			writel(ipp_val, csid->base + CSID_IPP_IRQ_CLEAR);
+ 
+-		if (ipp_val & CSID_IPP_RUP_DONE)
+-			csid_reg_update_clear(csid, MSM_CSID_STREAM_PIX);
++		if (ipp_val & CSID_IPP_RUP_DONE) {
++			if (csid->phy.en_ipp && __csid_sp11_front_ipp_mode0(csid))
++				csid->reg_update &= ~reg_update_ipp();
++			else
++				csid_reg_update_clear(csid, MSM_CSID_STREAM_PIX);
++		}
+ 	}
+ 
+ 	/* Process state for each RDI channel */

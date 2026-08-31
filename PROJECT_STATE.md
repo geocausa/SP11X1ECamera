@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0051 front RUP_DONE no-REG_UPDATE write static PASS; runtime blocked — 2026-08-31
+
+Static 0051 implements only the ownership correction proven by 0050 + exact Windows IRQ reversal. At IPP RUP_DONE, the exact X1E80100 front-mode0 branch now clears `reg_update_ipp()` from the Linux software shadow but does not call generic `csid_reg_update_clear()`, so it emits no post-RUP `REG_UPDATE_CMD +0x18` write. Every other path still uses the existing helper, including RDI RUP_DONE. IPP IRQ clear `+0xb4` and global clear remain unchanged.
+
+Patch `7d658f5a0c57aa5749aaa76078cce0fb05b35918ec62430786b4d9bd20c7952d`; source `683c0d5c042d3a8f24be211cda7dc02d06befe31e42aeb29fcd14f117397c81c`; Golden-ABI qcom-camss `6b7287e6eb96c44060d58691333b82f4e4103df929f98ad39ec50347b379f020`. Inspector `b2c72a59fcf6c926a91bff4e9337ed0c92129af73aebc4d4b5b1078220ea0c01` emits inspection `a0595d75392871542812ec185e632af37e8da889d6758e61cea794f25517d132`. Reverse patch reproduces exact 0050 source, forward patch reproduces 0051, compiler diagnostics are zero, and code/style checkpatch is 0/0/0.
+
+No crop/CFG/mask/RT-CDM/VFE/CSIPHY/sensor/DT programming changes and no new register value exist in 0051. **Runtime is not authorized by this checkpoint.** Package/install/inspect a distinct unarmed 0051 candidate, publish it, then perform a fresh one-shot authorization review.
+
 ## E003h ACTIVE — 0050 consumed; divergence is after matching RUP_DONE, Windows proves Linux post-RUP +0x18 write is extra — 2026-08-31
 
 The single authorized 0050 helper executed once, reached the existing bounded VFE1 Epoch0 timeout, archived evidence and returned immediately to FullIO v19c Golden with no retry. QC10C output is absent; RT-CDM completed FIFO sequence 17 without fault; sensor/CAMSS PM returned to suspended. Runtime extractor `7c736bfb37d95ea252cbcc9734321e37df396c6915423c2aea3374d22f70917c` emits analysis `bc8c2fd7033121592e540e3eedde134e56cab6d2525526f7771a74ec7b424459`.
