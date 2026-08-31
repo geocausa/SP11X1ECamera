@@ -1,0 +1,57 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "07b7c5cc803ef09e9e5d51bf2488743b87fdaa6adbd5aeecd07f3fa39fd973f8",
+  "authorization_review_sha256": "c5973e4d59aca41db92e9ebabc3bedc31d721997387dc44602ba6090752c57a7",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_vfeactive_0057=1",
+    "id": "sp11-camera-e003h-vfeactive-0057-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "3fd0ebdc8a3f17fdc49e117d77fa10e03711dfbd27bc552e79230540f1cef80c",
+    "capsule_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "changed_existing_write_values": {
+      "0x24": [
+        "0",
+        "7"
+      ],
+      "0xc18": [
+        "0xd0000000",
+        "0xdc000000"
+      ]
+    },
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "new_direct_mmio_reads": 0,
+    "new_direct_mmio_write_calls": 2,
+    "new_write_offsets": [
+      "0x28",
+      "0xc08"
+    ],
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc"
+  },
+  "execution_contract": {
+    "boot_count": 1,
+    "hardware_delta": "VFE1_SP11_ACTIVE_DAL_PREFIX_0057_ONLY",
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false
+  },
+  "package_commit": "f35f512f2313a886b08453d2dfd0416e35aae0f7",
+  "package_inspection_sha256": "b710dc1036242ef4068e74c4ed499c1e88fa8e3e532e02762bb6bfa3d04d8f7a",
+  "production_parity_authorized": false,
+  "purpose": "single bounded 0057 differential: reproduce the same-machine active SP11 IFE1 DAL callback core/input programming while retaining already-proven IRQ visibility prerequisites",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-vfeactive-0057-runtime-authorization-v1",
+  "success_observations": {
+    "then_evaluate": [
+      "VFE1 raw Epoch0",
+      "QC10C output",
+      "CSID remains healthy 3840x2160 without bit14/ECC/CRC",
+      "RT-CDM completes without fault"
+    ]
+  },
+  "user_authority_basis": "Current continuation preserves the project authorization model for one bounded SP11 diagnostic with fail-closed packaging, no retry, and Golden rollback."
+}

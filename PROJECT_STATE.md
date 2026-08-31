@@ -1,3 +1,13 @@
+## E003h ACTIVE — 0057 consumed negative differential; corrected active prefix retained, VFE1 stall remains — 2026-08-31
+
+The single authorized 0057 active-SP11-IFE1-DAL run executed exactly once and returned immediately to FullIO Golden. No retry occurred. RT-CDM completed FIFO sequence 25 without fault, IMX681/CAMSS suspended afterward, CSID1 remained healthy at 3840x2160 with no line-count/ECC/CRC error, and QC10C output is absent. Golden remains `saved_entry=sp11-audio-fullio-v19c`, `next_entry` is empty and camera modules are absent.
+
+0057 **does not advance VFE1**: raw Epoch0 remains absent and BUS raw status remains zero. The four stable VFE1 timeout records (TOP/BUS status+masks, violation markers, FULL0 and FULL1 configuration) are byte-for-byte identical to 0056 despite correcting the wrong-generation DAL prefix to the proven SP11 selector-0 callback semantics. Therefore the old wrong-family prefix was a real Windows/Linux parity bug but is **not causal for the remaining VFE1 stall**. Retain the 0057 prefix correction; do not rerun 0057.
+
+Accepted runtime analysis SHA `dadecae0345c921c9152a4d9c7451c30e6f3d71096d6cd75f3d960990948c55f`; extractor SHA `32d057b1c055a8daa27dc9036ec028a80ba2cb3990f58fded7eb0ad8e53ad043`; RUN `f88027ccec398751a4c0fa49eef7b12dcc04a346d738892157205ee7d735f3c5`; POST `f60eb641f0c98db5bedc542f6db54dc17a4f52ae21fb70b0a26bbfb3f0edaeb7`; DMESG `cb5886f40f54f6195d6985e0bb979a29a85fc2314110d12eb85c30476fcd011b`; RT-CDM stages `40c12f36f328581a08f1642453f862e27f0ef3a9388dd8559835028d126c5aec`; Golden return `c5155f23dce3061d96afefbde397dfc7e1950afff124a6b3aca5bcbca2260b46`.
+
+**0057 authorization is consumed and runtime is blocked again.** Remaining boundary: healthy IMX681 mode2/CSID1 + parity CSID/CAMNOC clocks + corrected active IFE1 DAL prefix + configured BUS clients -> missing VFE1 raw Epoch0/FULL output. Next gate is static/dynamic ownership analysis of VFE680 ingress/core state beyond the now-closed DAL prefix.
+
 ## E003h ACTIVE — one 0057 SP11 active-VFE-prefix diagnostic authorized, still unarmed — 2026-08-31
 
 Fresh authorization review against public unarmed package commit `f35f512f2313a886b08453d2dfd0416e35aae0f7` passes. Review SHA `c5973e4d59aca41db92e9ebabc3bedc31d721997387dc44602ba6090752c57a7`; authorization SHA `4dc8eb9e3e539b8ec0f1d09a6bb4e25eaa55978ccb7c7f7d0a2c0654002125c7`; independent authorization inspection SHA `a26b89c603982cebde9460ade63e0b3e4c496721b8b6fb0e18e7c161cff33737`. Golden remains the saved default, `next_entry` is empty, camera modules are absent and no 0057 RUN exists.
