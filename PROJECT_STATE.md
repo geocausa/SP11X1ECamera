@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0050 package installed/inspected unarmed; authorization review next — 2026-08-31
+
+The distinct 0050 ordered first-IPP geometry package is installed and inspected while SP11 remains on FullIO v19c Golden. It pins CAMSS `b69a20b517953a96cf5ff806a26c78e52ce5e177ef8dcdf69afa0dd561e8439b` and reuses the exact 0049 helper, IMX681 module, front-only DTB, oracle capsule, media setup and RT-CDM watcher. Boot ID is `sp11-camera-e003h-csidseq-0050-one-shot`; cmdline marker is `sp11_camera_e003h_csidseq_0050=1`.
+
+Package-only preflight is green, installation preserved `saved_entry=sp11-audio-fullio-v19c` and empty `next_entry`, and package inspection proves the candidate is installed but not armed, camera modules are absent, authorization is absent, bounded provenance is green, runtime preflight executes before any module load, one helper call is enforced, and the run wrapper mandates immediate reboot after the result. Asset manifest SHA-256 `34ca066744c4fa6dab4fff500a6eefb59f465045088dd1c61e02168738635dd6`; inspector `a2e816a588652e5f5e79be990e0f8ffec29d8cc83db564258e50a2481b5242af`; package inspection `e28726d1c7c89d7fdb4681519752c6e2540a505155a21624b41038c02d673b49`.
+
+**Package installation is not runtime authorization.** Publish this unarmed checkpoint first. A subsequent fresh authorization review may permit exactly one candidate boot/root helper invocation with the persistent observer and no same-boot retry; no new hardware-programming delta is part of 0050.
+
 ## E003h ACTIVE — Linux 0050 ordered first-IPP geometry telemetry static PASS; runtime blocked — 2026-08-31
 
 Static 0050 is now built and mechanically inspected on the exact 0049 source. It retains the first eight nonzero front-mode0 IPP IRQs in order as `IRQ_STATUS/FORMAT_MEASURE0`, taking one additional read-only `+0x38c` sample before the existing IPP clear. The bound is reset at the existing front reset/history boundary. Existing 0048 OR/last/count and 0049 bit14 frame/HBI/VBI telemetry are unchanged.
