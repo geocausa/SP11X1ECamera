@@ -1,3 +1,11 @@
+## E003h ACTIVE — 0053 package installed/inspected unarmed; authorization review next — 2026-08-31
+
+The distinct 0053 startup-CSID companion RT-CDM package is installed under `/boot/sp11-7.1.5-camera-e003h-csidcomp-0053` with GRUB ID `sp11-camera-e003h-csidcomp-0053-one-shot` and marker `sp11_camera_e003h_csidcomp_0053=1`. It binds public static checkpoint `d977480aa80c4b5a115d263c15e5c79caa810e69` and CAMSS `f04189d766f478083e09fd38b26e73c99c03306ce1f2fb81d68b2ebd0d2be876`; helper, IMX681, front-only DTB, capsule, media setup and persistent RT-CDM observer remain byte-identical to 0052.
+
+Package-only preflight and independent inspection pass. The installed kernel/initrd are byte-exact Golden, the DT remains front-only with the accepted IOMMU/resource set, `saved_entry` remains `sp11-audio-fullio-v19c`, `next_entry` is empty, camera modules are absent, no 0053 authorization or RUN exists, runtime preflight precedes module loading, exactly one helper invocation is encoded, and an existing RUN log refuses retry. The package preserves the static evidence boundary: exact Windows startup companion CDM transport is now reproduced, but crop/latch causality remains unproven.
+
+Asset manifest `7c113067728a99c46f8a01dd6e68d60fa77a09e810077e05c9ffab5dcf409d52`; package inspector `3986c3877aee498f4101204725b4543cd87083c18b7e8b3261fee8c7f6c8ee17`; accepted package inspection `d283bbe2884aa1a31189c3cbb5c65fdeb9ee7c50e59190b3f55da0bce45bcedb`. **The package is installed but unarmed and runtime is not authorized.** Publish this checkpoint before a fresh authorization review.
+
 ## E003h ACTIVE — 0053 static PASS; startup CSID companion transport now matches Windows RT-CDM ownership — 2026-08-31
 
 The post-0052 latch audit found one concrete, previously untested parity delta without inventing a register value. Same-machine Windows submits each `0x803` descriptor-1 CSID1 companion as CDM bytes after `CHANGE_BASE 0x00057000`; Linux 0052 sent the matching values through CPU `writel()` after the VFE startup BL. The fail-closed 0053 oracle reconstructs Windows packet0 as 60 bytes SHA `1872731e...e2a2` and packets1..3 as 16 bytes SHA `45d059ec...5c7`, exactly matching the captured descriptor hashes.

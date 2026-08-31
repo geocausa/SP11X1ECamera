@@ -2,6 +2,10 @@
 
 ## Resume point
 
+## E003h ACTIVE — 0053 package installed/inspected unarmed — 2026-08-31
+
+0053 is installed as `sp11-camera-e003h-csidcomp-0053-one-shot` but remains unarmed. Static public anchor `d977480...`; CAMSS `f04189d7...e876`; manifest `7c113067...09d52`; package inspector `3986c387...ee17`; accepted inspection `d283bbe2...cedb`. Golden saved/default remains exact, `next_entry` is empty, modules are absent, and no authorization/RUN exists. Runtime remains blocked pending a fresh review after this package checkpoint is public.
+
 ## E003h ACTIVE — 0053 static PASS; startup companion transport parity — 2026-08-31
 
 Windows descriptor-1 startup companion bytes are now hash-reconstructed exactly and prove RT-CDM ownership after `CHANGE_BASE 0x00057000`. Linux 0052 used CPU MMIO for the same values. 0053 changes only transport: `VFE base -> startup main -> CSID base -> exact companion` through FIFO0, removing four active CPU-companion calls. Patch `dba1d21f...cfd6`, module `f04189d7...e876`, accepted inspection `72ceb088...20fea`, strict checkpatch 0/0/0. No new register/value and no causal crop claim. Runtime remains unauthorized; package unarmed next.
