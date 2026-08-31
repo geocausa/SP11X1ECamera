@@ -1,3 +1,11 @@
+## E003h ACTIVE — IMX681 six-mode correction invalidates prior mode0-selection assumption — 2026-08-31
+
+The exact current Windows `com.surface.sensormodule.ffc_imx681.bin` contains **six** resolution records, not one. Record 2 is **3840x2160 @ 30 fps** and has the exact same line length 6752, frame length 3554, and 548.57 MHz output pixel clock as record 0 (3840x2640 @ 30 fps). Record 2 programs `0x034c..0x034f = 0x0f000870`. Therefore the prior timing-parity argument does **not** prove Windows selected record 0. Existing Windows CSID completed geometry 3840x2160 is consistent with record 2, but selection is not yet proven.
+
+Exact `surfacecamfrontsensor8380.sys` reversal also proves Windows keeps a distinct archived `CSLPacketOpcodesSensorCrop` command at object `+0x330`; its helper at RVA `0x9860` executes opaque sensor address/value pairs directly. Those crop-packet pairs were never captured. Meanwhile a complete qccamisp Gen2 IPP-builder disassembly finds exactly 16 direct path stores, all already mirrored in Linux; no missing Windows builder register remains.
+
+**No Linux mode change or camera runtime is authorized.** Next gate: same-machine Windows-only capture of the SensorCrop register pairs (or equivalent live IMX681 output-size registers) to prove the selected sensor resolution.
+
 ## E003h ACTIVE — 0053 consumed; exact Windows startup-companion RT-CDM transport is non-causal for crop — 2026-08-31
 
 The single authorized 0053 differential executed exactly once under public authorization commit `d7fb66a16f9788d4f0f5d9dd302a64bb6f8b6c34` and returned immediately to FullIO v19c Golden. No retry occurred, no QC10C output was produced, IMX681/CAMSS returned suspended, `saved_entry` remains Golden, `next_entry` is empty, and camera modules are absent.

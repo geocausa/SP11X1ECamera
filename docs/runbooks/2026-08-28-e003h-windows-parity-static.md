@@ -2,6 +2,10 @@
 
 ## Resume point
 
+## E003h ACTIVE — IMX681 mode-selection oracle is next — 2026-08-31
+
+The exact sensor module has six modes. Mode 2 is 3840x2160@30 with the same 6752/3554/548.57MHz timing as the previously assumed 3840x2640 mode0, so timing parity cannot identify Windows mode selection. Sensor KMD reversal proves a distinct SensorCrop packet at object +0x330 executed as direct address/value pairs. Capture those pairs or live output-size registers on Windows before any Linux mode change. Runtime on Linux remains blocked.
+
 ## E003h ACTIVE — 0053 consumed; startup companion RT-CDM transport is non-causal — 2026-08-31
 
 One authorized 0053 run completed and returned to Golden. The transport change executed exactly (`fifo_seq 17 -> 25`, +8 expected BL submissions, no RT-CDM fault), but CSID geometry/error/HBI and the VFE1 timeout boundary are identical to 0052. Analysis `7ae66c8...a3e22`; no QC10C; no retry. Runtime blocked. Resume with static CSID1 active-state/lifecycle analysis only.

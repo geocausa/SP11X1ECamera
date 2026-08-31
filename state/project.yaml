@@ -5,7 +5,7 @@ updated: 2026-08-31
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E003h-windows-parity-transport-static
 phase: front-imx681-cphy-bringup
-status: e003h-0053-consumed-transport-noncausal-static-next
+status: e003h-windows-imx681-mode-selection-oracle-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: linux-0053-consumed-transport-noncausal-static-next
+  status: windows-imx681-mode-selection-oracle-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -352,7 +352,29 @@ e003h:
   linux_0053_authorization_consumed_sha256: 8d7f964f774c1e40d125bed0c52959f68981b37209685d0a218580b8a006b284
   linux_0053_golden_return_sha256: b9cd017b29d94b927d6391ac0b216c12f0edccd5c81d29626968d76ff3803987
   linux_0053_golden_return_verified: true
-  linux_0053_next_gate: static CSID1 active-state/lifecycle analysis; startup companion transport is retired as crop cause; no runtime until a new concrete Windows/Linux delta is proven
+  linux_0053_next_gate: superseded by IMX681 six-mode correction; no Linux runtime until Windows selected sensor resolution is proven
+  windows_imx681_resolution_count: 6
+  windows_imx681_six_mode_oracle_sha256: 82ba7144845e873dcb4f537e557bdde95383baf7078eb6c152be309912f56ac2
+  windows_imx681_mode0_geometry: 3840x2640@30
+  windows_imx681_mode0_line_length: 6752
+  windows_imx681_mode0_frame_length: 3554
+  windows_imx681_mode0_pixel_rate_hz: 548570000
+  windows_imx681_mode2_geometry: 3840x2160@30
+  windows_imx681_mode2_line_length: 6752
+  windows_imx681_mode2_frame_length: 3554
+  windows_imx681_mode2_pixel_rate_hz: 548570000
+  windows_imx681_mode2_output_regs: 0x034c..0x034f=0x0f000870
+  windows_imx681_prior_mode0_only_assumption_valid: false
+  windows_imx681_timing_parity_proves_mode0_selected: false
+  windows_imx681_selected_resolution_index: unknown
+  windows_imx681_mode2_selected_proven: false
+  windows_sensor_crop_packet_captured: false
+  csid1_full_builder_complete_audit_sha256: fc74bf8ff2d8742a9335762bf3191f96182ffa8a4220c5ef0c5528eafe8040a2
+  csid1_full_builder_direct_store_count: 16
+  csid1_missing_windows_builder_store_in_linux: false
+  linux_0054_runtime_authorized: false
+  linux_0054_hardware_execution_performed: false
+  linux_0054_next_gate: same-machine Windows-only SensorCrop packet/register-pair capture or equivalent live IMX681 output-size proof; no Linux sensor-mode change before selection is proven
   linux_0050_package_authorization_present: true
   linux_0050_authorization_review_sha256: f4b643320e444dc34a6db5ea5793f35a109eb6b7768d526c4ba3b8e682ea08c8
   linux_0050_authorization_sha256: 016ede970efbc7653ab390fbdc5bc72d503cc2dc5068059dd2c5ca72968039ac
