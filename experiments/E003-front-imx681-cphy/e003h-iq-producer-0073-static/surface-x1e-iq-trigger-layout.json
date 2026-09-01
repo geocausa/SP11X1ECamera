@@ -1,0 +1,57 @@
+{
+  "schema": "sp11-surface-x1e-ispiqtriggerdata-layout-v1",
+  "accepted": true,
+  "source_authority": {
+    "binary": "QcDeviceMFT8380.dll",
+    "check_update_trigger_rva": "0x94d6c0",
+    "check_update_trigger_end_rva": "0x94d8db",
+    "dump_trigger_condition_rva": "0x9a3fe0",
+    "dump_trigger_condition_end_rva": "0x9a4763",
+    "decompiler": "Ghidra exact Surface binary",
+    "public_camx_role": "structural naming/reference only"
+  },
+  "fields": {
+    "AECexposureTime": {"offset": "0x00", "type": "float"},
+    "AECexposureGainRatio": {"offset": "0x04", "type": "float"},
+    "AECSensitivity": {"offset": "0x2c", "type": "float"},
+    "AECGain": {"offset": "0x30", "type": "float"},
+    "AECLuxIndex": {"offset": "0x38", "type": "float"},
+    "AWBleftGGainWB": {"offset": "0x3c", "type": "float"},
+    "AWBleftBGainWB": {"offset": "0x40", "type": "float"},
+    "AWBleftRGainWB": {"offset": "0x44", "type": "float"},
+    "AWBColorTemperature": {"offset": "0x48", "type": "float"},
+    "DRCGain": {"offset": "0x74", "type": "float"},
+    "lensPosition": {"offset": "0x7c", "type": "float"},
+    "lensZoom": {"offset": "0x80", "type": "float"},
+    "postScaleRatio": {"offset": "0x84", "type": "float"},
+    "preScaleRatio": {"offset": "0x88", "type": "float"},
+    "LEDSensitivity": {"offset": "0x98", "type": "float"},
+    "LEDFirstEntryRatio": {"offset": "0x9c", "type": "float", "source": "exact IFELinearization33 CheckUpdateTrigger decompile"},
+    "bayerPattern": {"offset": "0xb8", "type": "u8"},
+    "sensorImageWidth": {"offset": "0xbc", "type": "u32"},
+    "sensorImageHeight": {"offset": "0xc0", "type": "u32"},
+    "CAMIFWidth": {"offset": "0xc4", "type": "u32"},
+    "CAMIFHeight": {"offset": "0xc8", "type": "u32"},
+    "numberOfLED": {"offset": "0xe4", "type": "u16"},
+    "sensorOffsetX": {"offset": "0xe8", "type": "u32"},
+    "sensorOffsetY": {"offset": "0xec", "type": "u32"},
+    "blackLevelOffset": {"offset": "0xf0", "type": "u32"}
+  },
+  "exact_check_update_mapping": {
+    "luxIndex": "input+0x38",
+    "realGain": "input+0x30",
+    "DRCGain": "input+0x74",
+    "AECSensitivity": "input+0x2c",
+    "exposureTime": "input+0x00",
+    "exposureGainRatio": "input+0x04",
+    "CCTTrigger": "input+0x48",
+    "LEDTrigger": "input+0x98",
+    "LEDFirstEntryRatio": "input+0x9c",
+    "numberOfLED": "input+0xe4"
+  },
+  "policy": {
+    "offline_only_at_checkpoint": true,
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false
+  }
+}
