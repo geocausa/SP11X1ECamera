@@ -1,0 +1,262 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-four-frame-steady-0069-static/preimage/camss.c	2026-09-01 12:52:42.973199395 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss.c	2026-09-01 12:53:50.794009521 +0100
+@@ -7464,22 +7464,27 @@
+ 	const void *capsule;
+ 	size_t capsule_size;
+ 	struct v4l2_subdev *sensor;
+-	struct camss_buffer *video[3];
++	struct camss_buffer *video[4];
+ };
+ 
+ struct camss_x1e_pix_runner_result {
+ 	struct camss_buffer *video_done;
+ 	struct camss_buffer *video_done_next;
+ 	struct camss_buffer *video_done_third;
++	struct camss_buffer *video_done_fourth;
+ 	bool epoch0_seen;
+ 	bool epoch0_next_seen;
++	bool epoch0_steady_seen;
+ 	bool video_seen;
+ 	bool video_next_seen;
+ 	bool video_third_seen;
++	bool video_fourth_seen;
+ 	bool slot0_reusable;
+ 	bool slot1_reusable;
+ 	bool slot0_reused;
++	bool slot1_reused;
+ 	bool slot0_reusable_again;
++	bool slot1_reusable_again;
+ 	bool teardown_safe;
+ };
+ 
+@@ -7618,16 +7623,21 @@
+ 	int stop_ret;
+ 	int ret;
+ 
+-	if (!result || (frame_limit != 1 && frame_limit != 2 && frame_limit != 3))
++	if (!result || (frame_limit != 1 && frame_limit != 2 &&
++			frame_limit != 3 && frame_limit != 4))
+ 		return -EINVAL;
+ 	memset(result, 0, sizeof(*result));
+ 
+ 	ret = camss_x1e_pix_runner_validate(camss, req);
+ 	if (ret)
+ 		return ret;
+-	if (frame_limit == 3 && (!req->video[2] || req->video[2] == req->video[0] ||
++	if (frame_limit >= 3 && (!req->video[2] || req->video[2] == req->video[0] ||
+ 				 req->video[2] == req->video[1]))
+ 		return -EINVAL;
++	if (frame_limit == 4 && (!req->video[3] || req->video[3] == req->video[0] ||
++				 req->video[3] == req->video[1] ||
++				 req->video[3] == req->video[2]))
++		return -EINVAL;
+ 
+ 	vfe = &camss->vfe[1];
+ 	csid = &camss->csid[1];
+@@ -7763,12 +7773,13 @@
+ 	 * performs one complete BUS retarget before replay3/request3. Rebind only
+ 	 * software ownership here; the two hardware actions remain explicitly below.
+ 	 */
+-	if (frame_limit == 3) {
++	if (frame_limit >= 3) {
+ 		ret = csid680_x1e_front_poll_next_epoch0(csid, epoch0_seq,
+ 						       CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
+ 		if (ret)
+ 			goto out_unwind;
+ 		result->epoch0_next_seen = true;
++		epoch0_seq = csid680_x1e_front_epoch0_seq(csid);
+ 		ret = vfe680_x1e_pix_runtime_rebind(pix, 0, req->video[2]);
+ 		if (ret)
+ 			goto out_unwind;
+@@ -7828,7 +7839,34 @@
+ 		result->slot1_reusable = true;
+ 	}
+ 
+-	if (frame_limit == 3) {
++	/*
++	 * 0069 bounded first-steady proof. Windows' first steady request follows
++	 * replay3 as request4. After slot1's five groups retire, the next Epoch0
++	 * performs one complete BUS refill to that reusable slot, then consumes the
++	 * 0x958 five-BL steady batch. The capsule binds the captured steady sample
++	 * to request_id 4; no variant-selection or production IQ rule is invented.
++	 */
++	if (frame_limit == 4) {
++		ret = csid680_x1e_front_poll_next_epoch0(csid, epoch0_seq,
++						       CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
++		if (ret)
++			goto out_unwind;
++		result->epoch0_steady_seen = true;
++		epoch0_seq = csid680_x1e_front_epoch0_seq(csid);
++		ret = vfe680_x1e_pix_runtime_rebind(pix, 1, req->video[3]);
++		if (ret)
++			goto out_unwind;
++		result->slot1_reused = true;
++		ret = vfe680_x1e_pix_runtime_bus_update(vfe, pix, 1);
++		if (ret)
++			goto out_unwind;
++		ret = camss_x1e_pix_rtcdm_submit_epoch0_batch(camss,
++							 &materialized->steady);
++		if (ret)
++			goto out_unwind;
++	}
++
++	if (frame_limit >= 3) {
+ 		u32 third_seq = csid680_x1e_front_video_seq(csid);
+ 		u32 delta = third_seq - video_seq;
+ 
+@@ -7863,6 +7901,41 @@
+ 		result->slot0_reusable_again = true;
+ 	}
+ 
++	if (frame_limit == 4) {
++		u32 fourth_seq = csid680_x1e_front_video_seq(csid);
++		u32 delta = fourth_seq - video_seq;
++
++		if (delta > 4) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		if (delta < 4) {
++			ret = csid680_x1e_front_poll_video(csid, fourth_seq,
++						      CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++			if (ret)
++				goto out_unwind;
++			fourth_seq = csid680_x1e_front_video_seq(csid);
++			delta = fourth_seq - video_seq;
++		}
++		if (delta != 4) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		result->video_fourth_seen = true;
++		ret = vfe680_x1e_pix_runtime_retire_video(pix, 1,
++						   &result->video_done_fourth);
++		if (ret)
++			goto out_unwind;
++		ret = csid680_x1e_front_poll_all_done(csid, video_seq + 4,
++						       CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++		if (ret)
++			goto out_unwind;
++		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 1);
++		if (ret)
++			goto out_unwind;
++		result->slot1_reusable_again = true;
++	}
++
+ out_unwind:
+ 	if (frame_done) {
+ 		/* Proven normal host stop prefix: CSID1 -> BUS/IFE -> RT-CDM. */
+@@ -7937,6 +8010,7 @@
+ 		result->video_done = NULL;
+ 		result->video_done_next = NULL;
+ 		result->video_done_third = NULL;
++		result->video_done_fourth = NULL;
+ 		dev_err(camss->dev,
+ 			"E003h PIX teardown failed; DMA/power intentionally pinned until reboot\n");
+ 		return ret ? ret : -EIO;
+@@ -8227,7 +8301,8 @@
+ {
+ 	struct camss_x1e_pix_runner_result result = { 0 };
+ 	struct camss_x1e_pix_runner_request req = { 0 };
+-	struct camss_buffer *video0 = NULL, *video1 = NULL, *video2 = NULL;
++	struct camss_buffer *video0 = NULL, *video1 = NULL;
++	struct camss_buffer *video2 = NULL, *video3 = NULL;
+ 	const struct firmware *fw = NULL;
+ 	struct media_pad *sensor_pad;
+ 	struct vfe_output *output;
+@@ -8237,7 +8312,7 @@
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 3)
++	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 4)
+ 		return -EPERM;
+ 	camss = video->camss;
+ 	if (!camss->res || camss->res->version != CAMSS_X1E80100 ||
+@@ -8261,8 +8336,9 @@
+ 	video0 = vfe_buf_get_pending(output);
+ 	video1 = vfe_buf_get_pending(output);
+ 	video2 = vfe_buf_get_pending(output);
++	video3 = vfe_buf_get_pending(output);
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
+-	if (!video0 || !video1 || !video2) {
++	if (!video0 || !video1 || !video2 || !video3) {
+ 		ret = -ENOBUFS;
+ 		goto out_restore;
+ 	}
+@@ -8275,6 +8351,9 @@
+ 	ret = camss_x1e_pix_v4l2_buffer(video, video2);
+ 	if (ret)
+ 		goto out_restore;
++	ret = camss_x1e_pix_v4l2_buffer(video, video3);
++	if (ret)
++		goto out_restore;
+ 
+ 	sensor_pad = media_pad_remote_pad_first(&camss->csiphy[2].pads[MSM_CSIPHY_PAD_SINK]);
+ 	if (!sensor_pad || !is_media_entity_v4l2_subdev(sensor_pad->entity)) {
+@@ -8288,11 +8367,12 @@
+ 	req.video[0] = video0;
+ 	req.video[1] = video1;
+ 	req.video[2] = video2;
++	req.video[3] = video3;
+ 	ret = camss_x1e_pix_runner_validate(camss, &req);
+ 	if (ret)
+ 		goto out_restore;
+ 
+-	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 3);
++	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 4);
+ 	if (!result.teardown_safe) {
+ 		video->x1e_pix_runner_pinned = true;
+ 		dev_err(camss->dev,
+@@ -8302,14 +8382,16 @@
+ 		video0 = NULL;
+ 		video1 = NULL;
+ 		video2 = NULL;
++		video3 = NULL;
+ 		goto out_fw;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+-	    result.video_done_third != video2 || !result.epoch0_seen ||
+-	    !result.epoch0_next_seen || !result.video_seen || !result.video_next_seen ||
+-	    !result.video_third_seen || !result.slot0_reusable ||
+-	    !result.slot1_reusable || !result.slot0_reused ||
+-	    !result.slot0_reusable_again) {
++	    result.video_done_third != video2 || result.video_done_fourth != video3 ||
++	    !result.epoch0_seen || !result.epoch0_next_seen || !result.epoch0_steady_seen ||
++	    !result.video_seen || !result.video_next_seen || !result.video_third_seen ||
++	    !result.video_fourth_seen || !result.slot0_reusable ||
++	    !result.slot1_reusable || !result.slot0_reused || !result.slot1_reused ||
++	    !result.slot0_reusable_again || !result.slot1_reusable_again) {
+ 		if (!ret)
+ 			ret = -EIO;
+ 		goto out_restore;
+@@ -8322,6 +8404,8 @@
+ 	video1->vb.sequence = 1;
+ 	video2->vb.vb2_buf.timestamp = ktime_get_ns();
+ 	video2->vb.sequence = 2;
++	video3->vb.vb2_buf.timestamp = ktime_get_ns();
++	video3->vb.sequence = 3;
+ 	video->x1e_pix_runner_stopped = true;
+ 	vb2_buffer_done(&video0->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ 	video0 = NULL;
+@@ -8329,8 +8413,10 @@
+ 	video1 = NULL;
+ 	vb2_buffer_done(&video2->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ 	video2 = NULL;
++	vb2_buffer_done(&video3->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	video3 = NULL;
+ 	dev_info(camss->dev,
+-		 "E003h 0068 V4L2 completed three frames; slot0 reused safely\n");
++		 "E003h 0069 V4L2 completed four frames; first steady request4 validated\n");
+ 	ret = 0;
+ 	goto out_fw;
+ 
+@@ -8343,6 +8429,8 @@
+ 		vfe_buf_add_pending(output, video1);
+ 	if (video2)
+ 		vfe_buf_add_pending(output, video2);
++	if (video3)
++		vfe_buf_add_pending(output, video3);
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
+ out_fw:
+ 	release_firmware(fw);

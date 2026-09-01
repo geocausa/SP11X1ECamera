@@ -1,0 +1,110 @@
+{
+  "accepted": true,
+  "base_0068_analysis_sha256": "3edd9e68d7c3716aad3c9e9a9b936b58c9d9c3023daa59d1ab5d315d6b7ceac6",
+  "base_runtime_commit": "5df18403fafddee9d969ca36841e95142e9ee956",
+  "build_log_sha256": "b60f8dccadc64ca83283b878633d1d88eb1f2c95956691b750bc214f335c2565",
+  "capsule": {
+    "all_section_payload_bytes_unchanged": true,
+    "byte_diff_positions": [
+      "0x2c"
+    ],
+    "bytes": 41088,
+    "new_request_id": 4,
+    "old_0068_sha256": "6aed028d1caaf0366b004038aee3e954ca95a95c117e2619555bdd9605746a20",
+    "old_request_id": 2,
+    "sha256": "1d1b118796dea2e62910e48fff5c18a51cbc0d53c609229828db908000b96505",
+    "subrequest": 0,
+    "variant": "0x958"
+  },
+  "delta": {
+    "asynchronous_streamon_not_authorized": true,
+    "continuous_requeue_not_authorized": true,
+    "existing_bus_update_calls": [
+      2,
+      3
+    ],
+    "existing_rebind_calls": [
+      1,
+      2
+    ],
+    "existing_steady_submit_calls": [
+      1,
+      2
+    ],
+    "four_buffers_queued_up_front": true,
+    "new_hardware_actions": [
+      "one existing nine-client BUS update targeting proven-reusable slot1",
+      "one existing five-BL steady 0x958/request4 submission"
+    ],
+    "new_mmio_primitive_calls": 0,
+    "new_register_literals": 0,
+    "slot1_rebind_requires_prior_five_group_retirement": true
+  },
+  "module_sha256": "9e5a9b31a56b5c92694e46da3580fbd52d0087907626a6b9886c259d7deaee1a",
+  "next": "Only after immutable package inspection/authorization, run one bounded four-buffer session. Continuous requeue remains a later gate.",
+  "ordering": [
+    "slot1 five-group retirement",
+    "next CSID Epoch0 software generation",
+    "rebind slot1 to queued buffer3",
+    "existing nine-client BUS update slot1",
+    "existing five-BL steady submit request4",
+    "fourth VIDEO + all five completion groups",
+    "retire slot1"
+  ],
+  "patch_sha256": "d787c45efd2e23615e5ea8e16a8e8e0fd6285b145a5d5edd097e57839e4fe20e",
+  "primitive_counts": {
+    "camss_rtcdm1_windows_fifo0_commit(": [
+      7,
+      7
+    ],
+    "camss_x1e_pix_rtcdm_submit_epoch0_batch(": [
+      1,
+      2
+    ],
+    "camss_x1e_pix_submit_prime(": [
+      5,
+      5
+    ],
+    "clk_set_rate(": [
+      1,
+      1
+    ],
+    "readl(": [
+      0,
+      0
+    ],
+    "readl_relaxed(": [
+      11,
+      11
+    ],
+    "vfe680_x1e_pix_runtime_bus_update(": [
+      2,
+      3
+    ],
+    "vfe680_x1e_pix_runtime_rebind(": [
+      1,
+      2
+    ],
+    "writel(": [
+      0,
+      0
+    ],
+    "writel_relaxed(": [
+      17,
+      17
+    ]
+  },
+  "runtime_authorized": false,
+  "runtime_contract": "one 4-buffer V4L2 STREAMON session; expect DQBUF seq 0/1/2/3; no QBUF requeue; no fifth frame; no retry; mandatory Golden reboot",
+  "schema": "sp11-e003h-four-frame-first-steady-0069-static-v1",
+  "v4l2_helper_sha256": "db656ba190a11c19aad44b1e273bf654cd53bc031113f6bf917a3949c45e7a7b",
+  "v4l2_helper_source_sha256": "41b4451f08bbf3fa5e1341da684946367bdfbbf7e58833bd07e7e812062b8ed2",
+  "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+  "windows_oracles": {
+    "closed_total_order": "replay3/request3 -> first steady 0x958/request4",
+    "epoch0_batch_sha256": "3bcf4efe34c891dcc6bc78c3cefc94d916ffd71e27dab81e75493f9ed320dce4",
+    "epoch0_module_materializer_sha256": "ae60274a57a0b95d1a56f074daa90f98f9c672ef60a6f4af5028fef0ca041b46",
+    "genirq_request_tag_sha256": "ddbc97e3213287a7d02f879bd8b9ee81e5b2d3a1d7338a2d6d9b002067535ab6",
+    "startup_priming_interleave_sha256": "849b6cc2d9e49c3cf912e1b1c6041b68cc1a76c8ba05496e278dc763f1a24032"
+  }
+}
