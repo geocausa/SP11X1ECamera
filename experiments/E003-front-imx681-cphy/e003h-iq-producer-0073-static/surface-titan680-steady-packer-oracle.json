@@ -13,6 +13,13 @@
   },
   "base_commit": "7dea5d2cb114932f69a7188b5abf7789488f85cb",
   "demux_bls141": {
+    "hw_setting": {
+      "equation": "For Bayer 0/1, four calculated channel values are round(1024 * normalized_channel), where normalized_channel is built from ISP gain, four interpolated BLS terms, four channel terms, and 16383/(16383-BLS). If max channel exceeds 31.99900055, all four are scaled together.",
+      "max_normalized_channel": 31.999000549316406,
+      "name": "exact Surface Demux141/BLS14 common HW setting",
+      "q_gain": 1024,
+      "rva": "0x998e70"
+    },
     "packer": {
       "create_cmd_list_rva": "0xb41ff0",
       "name": "CamX::IFEDemuxBLS141Titan680::PackIQRegisterSetting",
@@ -23,7 +30,7 @@
       "0x3b74": "((calc_u16[9] & 0x7fff) << 16) | (calc_u16[8] & 0x7fff)"
     },
     "register_layout": "isolated first register plus 12-dword range 0x3b68..0x3b94; calculated ushort array is packed into register buffer.",
-    "remaining": "derive calc_u16[6..9] from exact Demux/BLS common calculation + Chromatix/trigger inputs.",
+    "remaining": "Recover the exact request-time ISP gain and the eight interpolated Demux/BLS inputs (four BLS terms + four channel terms) from decoded Chromatix/interpolation; packing itself is closed.",
     "request6": {
       "recovered_calculated_values": {
         "p6_high15": 1064,
@@ -62,20 +69,27 @@
   },
   "offline_only": true,
   "pdpc311": {
+    "classification": "CLOSED: all four true dynamic PDPC steady fields are exact Q12 AWB channel ratios; request5\u21926 PDPC DMI remains stable.",
     "create_cmd_list": "six dwords 0x3d78..0x3d8c are emitted from register-buffer +0x14; DMI selector 1 writes 0x200 bytes.",
+    "hw_setting": {
+      "interpolation_rva": "0x943e80",
+      "name": "exact Surface PDPC311 common interpolation/HW setting",
+      "rva": "0x9c07c0"
+    },
     "packer": {
       "create_cmd_list_rva": "0xb3bd10",
       "name": "CamX::IFEPDPC311Titan680::PackIQRegisterSetting",
       "rva": "0xb3c7d0"
     },
     "packing": {
-      "0x3d78": "calc_u32@+0x24 & 0x1ffff",
-      "0x3d7c": "calc_u32@+0x28 & 0x1ffff",
-      "0x3d80": "calc_u32@+0x2c & 0x1ffff",
-      "0x3d84": "calc_u32@+0x30 & 0x1ffff"
+      "0x3d78": "round((AWBR/AWBG) * 4096), clamped to HW bounds",
+      "0x3d7c": "round((AWBB/AWBG) * 4096), clamped to HW bounds",
+      "0x3d80": "round((AWBG/AWBR) * 4096), clamped to HW bounds",
+      "0x3d84": "round((AWBG/AWBB) * 4096), clamped to HW bounds"
     },
-    "remaining": "derive the four calculated 17-bit values from exact PDPC common calculation + Chromatix/trigger inputs; its 0x200 DMI payload is stable request5->6.",
+    "remaining": "No scalar PDPC math remains for this steady shape. A future general producer still needs the static/other PDPC fields and DMI path for modes where they change.",
     "request6": {
+      "byte_exact_dynamic_match": true,
       "recovered_calculated_values": {
         "calc_u32_0x24": "0x00001c80",
         "calc_u32_0x28": "0x00001efc",
@@ -87,6 +101,17 @@
         "0x3d7c": "0x00001efc",
         "0x3d80": "0x000008fc",
         "0x3d84": "0x00000843"
+      },
+      "reproduced_registers": {
+        "0x3d78": "0x00001c80",
+        "0x3d7c": "0x00001efc",
+        "0x3d80": "0x000008fc",
+        "0x3d84": "0x00000843"
+      },
+      "trigger": {
+        "AWBB": 1.936495065689087,
+        "AWBG": 1.0,
+        "AWBR": 1.7811671495437622
       }
     }
   },
@@ -97,13 +122,36 @@
     "raw_proprietary_bytes_committed": false
   },
   "schema": "sp11-e003h-surface-titan680-steady-packer-oracle-v1",
+  "summary": {
+    "bank_parity_fields": 16,
+    "closed": [
+      "WB 0x456c/0x4570",
+      "PDPC 0x3d78/0x3d7c/0x3d80/0x3d84"
+    ],
+    "closed_scalar_fields": 6,
+    "remaining": [
+      "Demux/BLS 0x3b70/0x3b74"
+    ],
+    "true_scalar_fields_total": 8
+  },
   "wb201": {
     "calculated_input": {
-      "b_q10": "round(AWBB * 1024)",
-      "g_q10": "round(AWBG * 1024)",
-      "r_q10": "round(AWBR * 1024)"
+      "b_q10": "round(AWBB * predictiveGain * 1024)",
+      "g_q10": "round(AWBG * predictiveGain * 1024)",
+      "r_q10": "round(AWBR * predictiveGain * 1024)"
     },
-    "classification": "CLOSED: both frame-varying WB steady fields are reproduced exactly from the matched trigger vector.",
+    "classification": "CLOSED PACKING/MATH: WB G/B/R are exact Q10(AWB channel gain \u00d7 predictiveGain), then shifted left 17. Matched request6 is reproduced with effective predictiveGain 1.0.",
+    "hw_setting": {
+      "formula": {
+        "b_q10": "round(AWBB * predictiveGain * 1024)",
+        "g_q10": "round(AWBG * predictiveGain * 1024)",
+        "r_q10": "round(AWBR * predictiveGain * 1024)"
+      },
+      "input_mapping": "IFEWB201 dependence data maps G/B/R gains and AEC predictiveGain into this routine before Titan680 packing.",
+      "name": "exact Surface WB201 common HW setting",
+      "q_gain": 1024,
+      "rva": "0x995e60"
+    },
     "packer": {
       "create_cmd_list_rva": "0xb559f0",
       "name": "CamX::IFEWB201Titan680::PackIQRegisterSetting",
@@ -117,6 +165,7 @@
     "register_range": "CreateCmdList writes 12 dwords at VFE1 0x4568 from register-buffer +4; isolated enable at 0x4560.",
     "request6": {
       "byte_exact_dynamic_match": true,
+      "effective_predictive_gain": "1.0 reproduces all three matched Q10 fields exactly; future producer must carry predictiveGain explicitly rather than hard-code it.",
       "q10": {
         "b_q10": 1983,
         "g_q10": 1024,
