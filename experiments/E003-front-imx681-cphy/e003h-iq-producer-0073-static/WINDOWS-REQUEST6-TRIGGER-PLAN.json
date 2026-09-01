@@ -1,0 +1,31 @@
+{
+  "accepted": true,
+  "base_commit": "5b684f09eb2b390213f34902c9f3e41c5483b36c",
+  "boot": {
+    "count": 1,
+    "persistent_default": "sp11-audio-fullio-v19c",
+    "target": "Windows Boot Manager"
+  },
+  "kernel_correlation": {
+    "binary": "qccamisp8380.sys",
+    "hook": "qccamisp8380+0x26838",
+    "stop_condition": "request_id == 6"
+  },
+  "post": "clear breakpoints, close log, let Camera finish/close, reboot once to Golden, verify saved_entry/next_entry/modules",
+  "runtime_policy": {
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false,
+    "read_only_debugger_oracle": true,
+    "same_windows_stream_main_dmi_already_closed": true
+  },
+  "schema": "sp11-e003h-request6-trigger-oracle-plan-v1",
+  "user_oracle": {
+    "binary": "QcDeviceMFT8380.dll",
+    "capture": "request id plus complete trigger dwords for requests through 6",
+    "frame_num": "qwo(x26+0x3ef0)",
+    "function_context": "IFENode::ExecuteProcessRequest after UpdateActiveSensorDataInTriggerData",
+    "hook_rva": "0x746f18",
+    "module_input": "x26+0x1ef8",
+    "trigger": "x26+0x3f78"
+  }
+}
