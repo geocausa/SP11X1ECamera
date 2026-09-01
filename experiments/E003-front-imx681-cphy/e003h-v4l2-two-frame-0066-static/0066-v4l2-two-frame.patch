@@ -1,0 +1,150 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-v4l2-two-frame-0066-static/preimage/camss.c	2026-09-01 11:28:21.696629051 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss.c	2026-09-01 11:33:20.071862889 +0100
+@@ -7469,8 +7469,10 @@
+ 
+ struct camss_x1e_pix_runner_result {
+ 	struct camss_buffer *video_done;
++	struct camss_buffer *video_done_next;
+ 	bool epoch0_seen;
+ 	bool video_seen;
++	bool video_next_seen;
+ 	bool teardown_safe;
+ };
+ 
+@@ -7583,9 +7585,10 @@
+ 	return -ENOENT;
+ }
+ 
+-static int camss_x1e_pix_runner_once(struct camss *camss,
+-				     const struct camss_x1e_pix_runner_request *req,
+-				     struct camss_x1e_pix_runner_result *result)
++static int camss_x1e_pix_runner_frames(struct camss *camss,
++				       const struct camss_x1e_pix_runner_request *req,
++				       struct camss_x1e_pix_runner_result *result,
++				       unsigned int frame_limit)
+ {
+ 	struct camss_x1e_pix_capsule_materialized *materialized;
+ 	struct camss_x1e_pix_capsule_inputs *inputs;
+@@ -7607,7 +7610,7 @@
+ 	int stop_ret;
+ 	int ret;
+ 
+-	if (!result)
++	if (!result || (frame_limit != 1 && frame_limit != 2))
+ 		return -EINVAL;
+ 	memset(result, 0, sizeof(*result));
+ 
+@@ -7726,8 +7729,48 @@
+ 		goto out_unwind;
+ 	result->video_seen = true;
+ 	ret = vfe680_x1e_pix_runtime_retire_video(pix, 0, &result->video_done);
+-	if (!ret)
+-		frame_done = true;
++	if (ret)
++		goto out_unwind;
++	frame_done = true;
++
++	/*
++	 * 0066 bounded second-frame proof: slot1 and replay2 were already
++	 * programmed before slot0 completed. Add no hardware operation here;
++	 * simply wait for the next Windows-proven CSID VIDEO generation and
++	 * retire the already-queued slot1 before the same proven teardown.
++	 */
++	if (frame_limit == 2) {
++		u32 next_seq = csid680_x1e_front_video_seq(csid);
++		u32 delta = next_seq - video_seq;
++
++		/*
++		 * Do not lose frame 2 if it lands between the first wait and this
++		 * check. The original pre-replay2 generation is our fixed baseline:
++		 * delta==1 means wait once more; delta==2 means it already arrived.
++		 * Any larger jump is outside the bounded two-frame experiment.
++		 */
++		if (delta > 2) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		if (delta < 2) {
++			ret = csid680_x1e_front_poll_video(csid, next_seq,
++						      CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++			if (ret)
++				goto out_unwind;
++			next_seq = csid680_x1e_front_video_seq(csid);
++			delta = next_seq - video_seq;
++		}
++		if (delta != 2) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		result->video_next_seen = true;
++		ret = vfe680_x1e_pix_runtime_retire_video(pix, 1,
++						   &result->video_done_next);
++		if (ret)
++			goto out_unwind;
++	}
+ 
+ out_unwind:
+ 	if (frame_done) {
+@@ -7801,6 +7844,7 @@
+ 	result->teardown_safe = teardown_safe;
+ 	if (!teardown_safe) {
+ 		result->video_done = NULL;
++		result->video_done_next = NULL;
+ 		dev_err(camss->dev,
+ 			"E003h PIX teardown failed; DMA/power intentionally pinned until reboot\n");
+ 		return ret ? ret : -EIO;
+@@ -7820,6 +7864,13 @@
+ 	return ret;
+ }
+ 
++static int camss_x1e_pix_runner_once(struct camss *camss,
++				     const struct camss_x1e_pix_runner_request *req,
++				     struct camss_x1e_pix_runner_result *result)
++{
++	return camss_x1e_pix_runner_frames(camss, req, result, 1);
++}
++
+ struct camss_x1e_pix_runner_static_ops {
+ 	int (*run_once)(struct camss *camss,
+ 			const struct camss_x1e_pix_runner_request *req,
+@@ -8144,7 +8195,7 @@
+ 	if (ret)
+ 		goto out_restore;
+ 
+-	ret = camss_x1e_pix_runner_once(camss, &req, &result);
++	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 2);
+ 	if (!result.teardown_safe) {
+ 		video->x1e_pix_runner_pinned = true;
+ 		dev_err(camss->dev,
+@@ -8155,8 +8206,8 @@
+ 		video1 = NULL;
+ 		goto out_fw;
+ 	}
+-	if (ret || result.video_done != video0 || !result.epoch0_seen ||
+-	    !result.video_seen) {
++	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
++	    !result.epoch0_seen || !result.video_seen || !result.video_next_seen) {
+ 		if (!ret)
+ 			ret = -EIO;
+ 		goto out_restore;
+@@ -8165,15 +8216,15 @@
+ 	/* Hardware is already stopped by the bounded runner before vb2 completion. */
+ 	video0->vb.vb2_buf.timestamp = ktime_get_ns();
+ 	video0->vb.sequence = 0;
+-	spin_lock_irqsave(&vfe->output_lock, flags);
+-	vfe_buf_add_pending(output, video1);
+-	spin_unlock_irqrestore(&vfe->output_lock, flags);
+-	video1 = NULL;
++	video1->vb.vb2_buf.timestamp = ktime_get_ns();
++	video1->vb.sequence = 1;
+ 	video->x1e_pix_runner_stopped = true;
+ 	vb2_buffer_done(&video0->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ 	video0 = NULL;
++	vb2_buffer_done(&video1->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	video1 = NULL;
+ 	dev_info(camss->dev,
+-		 "E003h 0065 V4L2 QBUF/STREAMON completed one full VIDEO frame\n");
++		 "E003h 0066 V4L2 completed two full VIDEO frames in one session\n");
+ 	ret = 0;
+ 	goto out_fw;
+ 

@@ -1,0 +1,50 @@
+{
+  "accepted": true,
+  "base_0065_analysis_sha256": "4e0f8cf682a23ab47056bfe870a00ea9f07beefa7b23c0c60b6548d3fbfdc96d",
+  "base_project_head": "8aebcbed966f53c02f37219b30269fd8679f76cb",
+  "build": {
+    "success": true,
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+  },
+  "build_log_sha256": "bd054db43deebe788085e81dd66d9b8b1e09a47c1474169a7f3200f9fd17a18a",
+  "checks": {
+    "both_vb2_done": true,
+    "no_added_hw_primitives": true,
+    "one_existing_bus_slot1_call_retained": true,
+    "one_existing_prime2_call_retained": true,
+    "one_frame_wrapper_retained": true,
+    "only_camss_c_changed": true,
+    "second_frame_is_wait_plus_retire_only": true,
+    "v4l2_calls_two_frame_runner": true
+  },
+  "date": "2026-09-01",
+  "delta": {
+    "existing_bus_slot1_retarget_retained": true,
+    "existing_prime2_retained": true,
+    "hardware_delta": "NONE",
+    "new_bus_retarget": false,
+    "new_irq_programming": false,
+    "new_mmio_reads": 0,
+    "new_mmio_writes": 0,
+    "new_register_values": 0,
+    "new_rtcdm_submission": false,
+    "new_sensor_programming": false,
+    "race_handling": "fixed original pre-replay2 VIDEO generation baseline; accept exact delta 2, wait only when delta 1; fail closed if delta >2",
+    "software_delta": "WAIT_FOR_SECOND_EXISTING_CSID_VIDEO_GENERATION_AND_RETIRE_SLOT1",
+    "v4l2_path": "QBUFx2 -> STREAMON -> DQBUF0 -> DQBUF1 -> STREAMOFF"
+  },
+  "forbidden_added_hits": {},
+  "helper_sha256": "80609e40d18baac73f926296ab133e35c4e870e3668c4759cbfa65819fdc1046",
+  "helper_source_sha256": "28be4252f583fc6eec3225fb5908d8db5663a1bd0a01703ca3cb982b46d98c66",
+  "module_sha256": "088c608512b19fd5116108bf4815776bfac7f45a606555aa8389971b33eb85db",
+  "next": "Package Golden-safe 0066 and execute exactly once only if installed-state inspection remains green.",
+  "patch_sha256": "d699cbe664fad78df035676e760ae2e95711e4dd1e2b8386e7a0a851a6d72a16",
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-v4l2-two-frame-0066-static-v1",
+  "unchanged_hardware_sources": {
+    "camss-csid-680.c": "753799beba3d91e6654c62f961a5ab4e652da2775320be7c4c0b8de86e0a3410",
+    "camss-csid.h": "435230872a2284006f1c4db76ee31b67bb6188f1b4be643de1eedba363d0a48e",
+    "camss-vfe-680.c": "36a07ad05f2ea5fdb5d1fcb168eb730cc8fe640b14a21dcb8bb22427c5398d81",
+    "camss-vfe.c": "98474729d5036a4e1770e3ab7d275ccaaba143b22202468e4ad8b93c0cbec2cb"
+  }
+}
