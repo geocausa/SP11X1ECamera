@@ -1,0 +1,29 @@
+{
+  "schema": "sp11-e003h-0073-windows-request6-oracle-plan-v1",
+  "accepted_for_windows_oracle": true,
+  "linux_runtime_authorized": false,
+  "windows_boot_count": 1,
+  "windows_front_stream_count": 1,
+  "persistent_linux_default": "sp11-audio-fullio-v19c",
+  "windows_grub_id": "osprober-efi-2A36-6A1E",
+  "device_mft": {
+    "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "linearization33_check_update_trigger_rva": "0x94d6c0",
+    "iq_dump_trigger_condition_rva": "0x9a3fe0"
+  },
+  "capture": {
+    "trigger_vector": "Capture exact X1E ISPIQTriggerData values around requests 4,5,6; correlate by order with qccamisp request IDs in the same KD session.",
+    "qccamisp_request_producer_rva": "0x26838",
+    "request6_main_consumer_rva": "0x287e4",
+    "request6_dmi_slot_bytes": 32768,
+    "request6_dmi_slot_rule": "At request6 producer, ring_base is the CPU pointer in the DMI descriptor; exact request6 slot is ring_base + 6*0x8000.",
+    "request6_main_bytes": 2392
+  },
+  "forbidden": [
+    "Linux request6 submission",
+    "Linux request6 candidate packaging or authorization",
+    "same-Windows-stream retry after an ambiguous capture",
+    "inventing missing DMI or IQ values"
+  ],
+  "postcondition": "Reboot back to Golden Linux after the single Windows oracle stream and archive/hash evidence."
+}
