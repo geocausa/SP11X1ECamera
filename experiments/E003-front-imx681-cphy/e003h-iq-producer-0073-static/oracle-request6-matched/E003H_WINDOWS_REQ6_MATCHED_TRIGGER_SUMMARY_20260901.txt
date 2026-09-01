@@ -1,0 +1,56 @@
+E003h Windows request6 matched trigger oracle
+Date: 2026-09-01
+
+Target phase:
+- Initial/precompute FrameServer phase, before steady replacement FrameServer.
+- qccamisp steady packet sequence observed: req4 -> req5 -> req6, each 0x958 bytes / 14 DMI entries.
+
+DeviceMFT load for this stream:
+- image base: 0x00007ffdac0a0000
+- initial FrameServer EPROCESS: ffff8c88ac0dd080
+- PID: 0x24ac
+
+IQSetupTriggerData:
+- RVA: 0x88a4e8
+- Four stable caller return RVAs per steady request:
+  1. 0x7f441c
+  2. 0x7befc8
+  3. 0x746e70
+  4. 0x7580d0
+- Calls repeat in that order immediately before req4, req5, and req6 packet emission.
+- Calls 3 and 4 operate on the same IFE moduleInput object for each request.
+- Completed trigger block is moduleInput + 0x2080.
+
+Matched final trigger vectors (raw 32-bit fields):
+REQ4:
+  ET=3f800000 RATIO=3f800000 SENS=3f800000 GAIN=407578b2 LUX=43bb1a17
+  AWBG=3f800000 AWBB=3ff5543e AWBR=3fe63f28 CCT=459c3800
+  DRC=3f800000 LENS=00000000 BLACK=00001980
+REQ5:
+  ET=3f800000 RATIO=3f800000 SENS=3f800000 GAIN=416b8602 LUX=43bb1698
+  AWBG=3f800000 AWBB=3ff7df12 AWBR=3fe3fd49 CCT=459c3800
+  DRC=3f800000 LENS=00000000 BLACK=00001980
+REQ6:
+  ET=3f800000 RATIO=3f800000 SENS=3f800000 GAIN=422d31a0 LUX=43bb18b2
+  AWBG=3f800000 AWBB=3ff7df12 AWBR=3fe3fd49 CCT=459c3800
+  DRC=3f800000 LENS=00000000 BLACK=00001980
+
+Matched request6 artifacts from the same stream:
+- E003H_REQ6_DMI_SLOT_MATCHED_TRIGGER_20260901.bin
+  bytes=32768
+  SHA256=FF5F0F04BEE8491C76451838743A28E3793EE5D2A0ECBFF8F6589DCA5C92F955
+- E003H_REQ6_MAIN_0958_MATCHED_TRIGGER_20260901.bin
+  bytes=2392
+  SHA256=2277AEBAE7559227B0CE745B7D73B464B57B4B5E62BAF8033940EE7F7180E4B4
+- E003H_REQ6_INIT_PRODUCER_0073_2254_2026-09-01_20-32-05-818.log
+  bytes=13052
+  SHA256=A6FAB1472792828C00144B372D69F1A10386CC278FF2AA1E04808520C6B25522
+
+Earlier request6 capture (different stream; not trigger-matched):
+- DMI SHA256=841D6F993ACF392E8C4B0766EF0E55E3085CE96D2BEF13C3830A221BB2223C8B
+- MAIN SHA256=20C24428B61F59A28441228307556A18F9C350E3D1BCD4F74C95EF2BA31B57C3
+
+Conclusion:
+- Request6 trigger inputs and request6 0x958/DMI bytes are now matched within one camera stream.
+- The matched bytes differ from the earlier cross-stream request6 capture, confirming per-stream/per-request IQ state matters.
+- No Linux request6 runtime has been executed.
