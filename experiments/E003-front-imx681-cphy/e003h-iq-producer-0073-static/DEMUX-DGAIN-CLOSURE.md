@@ -8,6 +8,6 @@ The exact Surface Demux141 common calculation at RVA `0x998e70`, the Titan680 pa
 
 For request6 this produces Q10 `1064,1064,1064,1064`, hence `0x3b70=0x04280428` and `0x3b74=0x04280428`. The independently captured same-stream request6 main contains exactly those values.
 
-This closes all **8/8** genuinely calculated steady scalar fields. The remaining producer work is the changing LUT side: LSC, GIC and GTM. Bank-select/update fields remain separate state parity, not IQ math.
+This closes all **8/8** genuinely calculated steady scalar fields. The scalar side is closed. Subsequent exact-binary proof in `GIC-WIRE-ALIAS-CLOSURE.md` reduces the independent changing Windows wire-LUT producer work to LSC and GTM; the Windows GIC DMI payload is an LSC alias. Bank-select/update fields remain separate state parity, not IQ math.
 
 Raw Windows bytes/logs remain local/untracked. Derived oracle SHA-256: `6750e4d872f5d987ba3f7599b5dc4903d22d860d8104cd896498ef0739708539`.

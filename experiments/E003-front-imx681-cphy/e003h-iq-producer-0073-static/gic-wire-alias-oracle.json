@@ -1,0 +1,121 @@
+{
+  "schema": "sp11-e003h-gic-wire-alias-v1",
+  "status": "PASS",
+  "policy": "Same-machine Windows wire behavior is authoritative for Linux parity.",
+  "surface_devicemft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "request5_dmi_sha256": "fb172ee2e4e407d823a255e84427e68f1c3ef6a985ba2e00f32c4c4dea4997f8",
+  "request6_matched_dmi_sha256": "ff5f0f04bee8491c76451838743a28e3793ee5d2a0ecbff8f6589dca5c92f955",
+  "exact_rvas": {
+    "lsc_create": "0xb3cda0",
+    "gic_create": "0xb4ab10",
+    "gtm_create": "0xb5a970",
+    "packet_write_dmi": "0x85f108",
+    "cmd_add_nested": "0x5e3180",
+    "packet_add_cmd_buffer_reference": "0x5e35d0"
+  },
+  "code_byte_proofs": {
+    "0xb3cde0": "17751e53",
+    "0xb4ab28": "570040b9",
+    "0xb4ab84": "e403172a",
+    "0xb5a9c0": "c4761e53",
+    "0x5e3a10": "893140f9",
+    "0x5e3a18": "2b01080b",
+    "0x5e3a50": "0b7d00b9"
+  },
+  "offset_semantics": {
+    "ife_node_gic_offset_unit": "UINT32/dword",
+    "gic_offset_dwords": "0x62e",
+    "gic_logical_output_byte_offset": "0x18b8",
+    "gic_create_cmd_list_write_dmi_offset": "0x62e raw (no x4)",
+    "lsc_create_cmd_list": "converts dword offset to bytes with x4",
+    "gtm_create_cmd_list": "converts dword offset to bytes with <<2",
+    "packet_patch_serialization": "adds child CmdBuffer base offset to raw nested offset; no scaling"
+  },
+  "wire_alias": {
+    "gic_register": "0x4708",
+    "selector": 1,
+    "payload_bytes": 512,
+    "windows_source_offset": "0x62e",
+    "logical_gic_source_offset": "0x18b8",
+    "overlaps": [
+      {
+        "module": "LSC0",
+        "bytes": 326,
+        "source_range": "0x62e..0x774"
+      },
+      {
+        "module": "LSC1",
+        "bytes": 186,
+        "source_range": "0x774..0x82e"
+      }
+    ],
+    "conclusion": "Windows VFE GIC DMI consumes a 512-byte alias spanning the tail of LSC0 and head of LSC1; the separately calculated GIC311 table at 0x18b8 is not the wire payload for this path."
+  },
+  "request5_to_request6": {
+    "lsc0": {
+      "offset": "0x400",
+      "bytes": 884,
+      "request5_sha256": "8a4199b0decafe91eb1a1453c21b97189416d292c05e9a90bb477de14497bd22",
+      "request6_sha256": "c1c7f6e7ad075d528f0019b9b21326ed0c77d0d84e1dff5d042dffe97dc63c32",
+      "identical": false,
+      "changed_byte_count": 628
+    },
+    "lsc1": {
+      "offset": "0x774",
+      "bytes": 884,
+      "request5_sha256": "b256ab26adfbf400174397bac798ac7f0eedffaa8c228cefebc6f7be62588b2a",
+      "request6_sha256": "675812962f491f7b8ce6c4bcdb2b566b0a11786b68c295e54f24f412170aea70",
+      "identical": false,
+      "changed_byte_count": 606
+    },
+    "lsc2": {
+      "offset": "0xae8",
+      "bytes": 884,
+      "request5_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e",
+      "request6_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e",
+      "identical": true,
+      "changed_byte_count": 0
+    },
+    "gic_wire_alias": {
+      "offset": "0x62e",
+      "bytes": 512,
+      "request5_sha256": "8f941467ed7a572d7bf99cd9aa574e74cf5cb282dac14fb5a7c5dc1d133b9cb2",
+      "request6_sha256": "ab9ed5d9dcdc9312051e1131783102cf81b2eb35bd26eaa1c8f244a8f0920fac",
+      "identical": false,
+      "changed_byte_count": 363
+    },
+    "gic_logical_output": {
+      "offset": "0x18b8",
+      "bytes": 512,
+      "request5_sha256": "74a0d130b13fbcfdcb7d40c641cd82604dac239447660cb15f41381386afd16e",
+      "request6_sha256": "74a0d130b13fbcfdcb7d40c641cd82604dac239447660cb15f41381386afd16e",
+      "identical": true,
+      "changed_byte_count": 0
+    },
+    "bpc": {
+      "offset": "0x1ab8",
+      "bytes": 256,
+      "request5_sha256": "c48a9ca4c0431ee4d98b78f9c59858a53adacd5604c88bd0c7f591ff2858e6ed",
+      "request6_sha256": "c48a9ca4c0431ee4d98b78f9c59858a53adacd5604c88bd0c7f591ff2858e6ed",
+      "identical": true,
+      "changed_byte_count": 0
+    },
+    "gtm": {
+      "offset": "0x34cc",
+      "bytes": 2048,
+      "request5_sha256": "6e28af5d51d3a42c34f3ee3eadad0951f85af83e4ab937b2acaa608ba8705e99",
+      "request6_sha256": "074564f99a45d29a5dbe800c18bc0436735f70740cb8f42cd9a5c7b636ffcdfa",
+      "identical": false,
+      "changed_byte_count": 391
+    }
+  },
+  "producer_reduction": {
+    "independent_dynamic_wire_lut_producers_remaining": [
+      "LSC",
+      "GTM"
+    ],
+    "gic_wire_payload_dependency": "derived automatically from the LSC source bytes through the exact Windows alias",
+    "logical_unused_gic_table_changed": false
+  },
+  "runtime_authorized": false
+}

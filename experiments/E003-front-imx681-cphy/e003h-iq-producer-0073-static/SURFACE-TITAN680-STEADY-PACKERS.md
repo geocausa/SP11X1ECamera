@@ -25,6 +25,6 @@ All four reproduce matched Windows request6 byte-for-byte from the matched AWB t
 
 ## Changing DMI packers
 
-Exact Titan680 packers remain pinned for GIC311 (`0xb4b500`), GTM131 (`0xb5b3d0`) and LSC411 (`0xb3d8a0`). Their bank selection/output layout is known; their interpolation/calculation inputs are the remaining DMI-producer work.
+Exact Titan680 packers remain pinned for GIC311 (`0xb4b500`), GTM131 (`0xb5b3d0`) and LSC411 (`0xb3d8a0`). Their bank selection/output layout is known. Exact follow-up proof shows the Windows GIC wire payload aliases LSC rather than the logical GIC table, so independent wire-producer work is now LSC and GTM.
 
 No new MMIO, RT-CDM submission, sensor operation or Linux camera runtime was performed.

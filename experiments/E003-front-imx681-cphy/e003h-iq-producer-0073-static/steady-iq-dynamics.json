@@ -329,7 +329,7 @@
     "GIC0",
     "GTM0"
   ],
-  "conclusion": "Continuous producer does not need to derive 16 bank fields from Chromatix. They are request-parity state. True per-frame scalar math is eight fields in DEMUX_BLS, PDPC and WB; request5->6 LUT changes are LSC0/LSC1/GIC0/GTM0.",
+  "conclusion": "Continuous producer does not need to derive 16 bank fields from Chromatix. They are request-parity state. All eight true per-frame scalar fields in DEMUX_BLS, PDPC and WB are closed. At the Windows wire level request5->6 changes LSC0/LSC1/GIC0/GTM0, but exact Surface binary proof shows GIC0 is not an independent GIC-calculation payload: it aliases DMI source bytes 0x62e..0x82e across LSC0/LSC1. Independent changing wire-LUT producers remaining are LSC and GTM.",
   "dmi_payloads": [
     {
       "bytes": 512,
@@ -479,5 +479,21 @@
       "sha256": "3679ec10529ba1c4a76c80f04d3cc74506fb3aaac4614c7b01b7677ef1e8142b"
     }
   },
-  "steady_variant": "0x958"
+  "steady_variant": "0x958",
+  "gic_wire_alias_correction": {
+    "accepted": true,
+    "surface_devicemft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "gic_offset_dwords": "0x62e",
+    "logical_gic_byte_offset": "0x18b8",
+    "windows_wire_gic_byte_offset": "0x62e",
+    "windows_wire_gic_bytes": 512,
+    "wire_overlap_lsc0_bytes": 326,
+    "wire_overlap_lsc1_bytes": 186,
+    "logical_gic_request5_request6_identical": true,
+    "independent_dynamic_wire_lut_producers_remaining": [
+      "LSC",
+      "GTM"
+    ],
+    "proof": "gic-wire-alias-oracle.json"
+  }
 }
