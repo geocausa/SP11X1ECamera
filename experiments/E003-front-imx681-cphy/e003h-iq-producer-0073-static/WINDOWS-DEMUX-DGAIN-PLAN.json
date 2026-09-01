@@ -1,0 +1,31 @@
+{
+  "accepted": true,
+  "base_commit": "32b106610a51815ea777b2b8c5bbf2c2cb4d0bf1",
+  "correlation": {
+    "kernel_consumer": "qccamisp8380+0x26838",
+    "requests": [
+      4,
+      5,
+      6
+    ]
+  },
+  "expected_offline_consequence": "Use exact dGain with decoded Demux/BLS14 Chromatix black-level region and exact Titan680 Demux141 setting/packer math; reproduce request6 0x3b70/0x3b74 without using captured output as an input.",
+  "policy": {
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false,
+    "return_to_golden_after_capture": true,
+    "windows_capture_only": true
+  },
+  "purpose": "Close the last Demux/BLS scalar input by observing the exact Surface post-sensor/ISP digital gain for the already-matched request4/5/6 producer phase.",
+  "schema": "sp11-e003h-demux-dgain-windows-oracle-plan-v1",
+  "windows": {
+    "boot": "one-shot only; persistent Golden remains sp11-audio-fullio-v19c",
+    "camera_stream": "one normal bounded Windows camera stream",
+    "complete_trigger": "x26+0x3f78",
+    "debug": "read-only KD/user-process observation; no code patching or register write",
+    "frame_num": "qwo(x26+0x3ef0)",
+    "ife_primary_iqsetup_return_rva": "0x746e70",
+    "isp_input_data": "x26+0x1ef8",
+    "sensor_dgain": "dwo(x26+0x1f7c)"
+  }
+}
