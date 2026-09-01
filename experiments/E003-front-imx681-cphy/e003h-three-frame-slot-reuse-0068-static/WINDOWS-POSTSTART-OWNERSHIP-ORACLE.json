@@ -1,0 +1,189 @@
+{
+  "accepted": true,
+  "completion_policy": {
+    "cross_group_order_required": false,
+    "observed_first_cycle": [
+      "0x3",
+      "0xd",
+      "0xe",
+      "0x10",
+      "0x12"
+    ],
+    "reason": "do not require the five observed groups to arrive in one fixed cross-group order; preserve FIFO order independently within each group",
+    "slot_reuse": "a frame bundle containing VIDEO plus auxiliary buffers must not be reused until all five active completion groups have completed"
+  },
+  "driver_call_graph": {
+    "cdm_add_bl_selector": 1,
+    "cdm_add_bl_wrapper_rva": "0x22200",
+    "cdm_dispatcher_rva": "0x28480",
+    "cdm_epoch_consume_call_rva": "0x25ec8",
+    "cdm_epoch_consume_selector": 2,
+    "cdm_fifo0_commit_register_offsets": [
+      "+0x50",
+      "+0x54",
+      "+0x58"
+    ],
+    "cdm_queue_selector": 0,
+    "completion_dispatch_first_compare_rva": "0x1f438",
+    "epoch0_bus_update_call_rva": "0x25a38",
+    "epoch0_bus_update_wrapper_rva": "0x28380",
+    "epoch0_handler_rva": "0x25268",
+    "epoch0_isr_diagnostic_rva": "0x37a60",
+    "instruction_anchors": {
+      "0x1a048": "adrp x8, #0x14001d000",
+      "0x1a04c": "add x8, x8, #0xd20",
+      "0x1a058": "str x9, [x8, #0x6a8]",
+      "0x1f3f4": "ldr w2, [x19, #0x120]",
+      "0x1f3fc": "add x1, x8, #0xa60",
+      "0x1f408": "ldr w1, [x23, #0x2c]",
+      "0x1f410": "bl #0x140025268",
+      "0x1f438": "cmp w8, #3",
+      "0x2222c": "ldr x8, [x0]",
+      "0x22254": "mov w1, #1",
+      "0x22268": "blr x15",
+      "0x25a34": "mov x0, x21",
+      "0x25a38": "bl #0x140028380",
+      "0x25eac": "ldr x0, [x21, #0x98]",
+      "0x25ec0": "mov x2, #0",
+      "0x25ec4": "mov w1, #2",
+      "0x25ec8": "bl #0x140028480",
+      "0x25ef8": "add x1, x8, #0x728",
+      "0x283c8": "ldr x8, [x24, #0x6a8]",
+      "0x28524": "cmp w1, #2",
+      "0x28528": "b.eq #0x140028664",
+      "0x28884": "str w22, [x8, #0x50]",
+      "0x2888c": "str w20, [x8, #0x54]",
+      "0x28894": "str w9, [x8, #0x58]",
+      "0x28998": "add x11, x19, #0x890",
+      "0x28a14": "cbnz x2, #0x140028a58",
+      "0x28a5c": "add x1, x19, #0x890",
+      "0x28a60": "ldr x0, [x19, #0x50]",
+      "0x28a70": "bl #0x14002bef8"
+    },
+    "isr_epoch0_call_rva": "0x1f410",
+    "x1e_bus_address_writer_rva": "0x1dd20",
+    "x1e_bus_writer_callback_slot": "IFE context +0x6a8"
+  },
+  "linux_consequence": {
+    "bus_addresses": "use queued Linux DMA IOVAs only; never freeze Windows addresses or Windows allocator strides",
+    "live_registers": "do not create periodic Linux rewrites for +0x3b70/+0x3d78..+0x3d84 or period_cfg +0x8c; preserve their already-closed startup-template ownership and treat live mutation as observation",
+    "pipeline": "model two initially primed frame bundles: program a second Linux-owned IOVA bundle before the first completion, retire the oldest bundle through five independent completion-group FIFOs, then replenish a reusable slot on a later Epoch0 update",
+    "rtcdm": "Epoch0 requires a queued command batch in the Windows behavior, but this oracle does not authorize Linux FIFO0 submission",
+    "runtime_gate": "remain fail-closed: no caller may arm RT-CDM, enable VFE1 PIX, start CSID1 IPP/MIPI, transmit IMX681, or attempt a frame"
+  },
+  "ownership": {
+    "bounded_live_stable_no_post_start_write_proven": [
+      "VFE1 +0x3b70"
+    ],
+    "hardware_live_mutable_observation_only": [
+      "VFE1 +0x3d78",
+      "VFE1 +0x3d7c",
+      "VFE1 +0x3d80",
+      "VFE1 +0x3d84"
+    ],
+    "period_cfg_live_readback": "zero in the prior bounded same-machine stream samples; startup command value is not a post-start MMIO target",
+    "software_owned_post_start": [
+      "IFE Epoch0 request-consumption scheduling",
+      "complete nine-client VFE1 BUS IOVA update through the existing writer callback",
+      "RT-CDM queued-BL consume/program operation",
+      "completion-group FIFO retirement"
+    ],
+    "startup_template_not_post_start_rewrite": [
+      "VFE1 +0x3b70",
+      "VFE1 +0x3d78",
+      "VFE1 +0x3d7c",
+      "VFE1 +0x3d80",
+      "VFE1 +0x3d84",
+      "VFE1 period_cfg +0x8c"
+    ]
+  },
+  "runtime_timeline": {
+    "address_bundle_clients": 9,
+    "address_bundle_order": [
+      "0x3000:0",
+      "0x3000:1",
+      "0x3001:0",
+      "0x3002:0",
+      "0x301c:0",
+      "0x3010:0",
+      "0x300f:0",
+      "0x300e:0",
+      "0x300c:0"
+    ],
+    "complete_windows_sessions": 2,
+    "observed_refill": "a new complete address bundle is written after the first five-group completion cycle",
+    "observed_startup_prime": "one complete bundle before ISP_START_DONE plus one complete bundle after ISP_START_DONE before the first completion cycle",
+    "sessions": [
+      {
+        "first_completion_cycle": {
+          "first_seq": 19,
+          "last_seq": 23,
+          "observed_event_ids": [
+            "0x3",
+            "0xd",
+            "0xe",
+            "0x10",
+            "0x12"
+          ]
+        },
+        "first_post_start_bundle": {
+          "first_seq": 10,
+          "last_seq": 18
+        },
+        "isp_start_done_seq": 9,
+        "observed_initial_prime_depth_bundles": 2,
+        "post_completion_refill_bundle": {
+          "first_seq": 24,
+          "last_seq": 32
+        },
+        "pre_start_bundle": {
+          "first_seq": 0,
+          "last_seq": 8
+        },
+        "session": 1
+      },
+      {
+        "first_completion_cycle": {
+          "first_seq": 61,
+          "last_seq": 65,
+          "observed_event_ids": [
+            "0x3",
+            "0xd",
+            "0xe",
+            "0x10",
+            "0x12"
+          ]
+        },
+        "first_post_start_bundle": {
+          "first_seq": 52,
+          "last_seq": 60
+        },
+        "isp_start_done_seq": 51,
+        "observed_initial_prime_depth_bundles": 2,
+        "post_completion_refill_bundle": {
+          "first_seq": 66,
+          "last_seq": 74
+        },
+        "pre_start_bundle": {
+          "first_seq": 42,
+          "last_seq": 50
+        },
+        "session": 2
+      }
+    ]
+  },
+  "schema": "sp11-e003h-windows-vfe1-post-start-ownership-v1",
+  "source_evidence": {
+    "completion_groups_oracle_sha256": "696f476a18bbfe4d6a30e06198c744d6495048b85399d22ff1bfe6c6176763f9",
+    "driver": {
+      "bytes": 376560,
+      "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
+    },
+    "dynamic_address_oracle_sha256": "925028750e8be60c65a69f24349bb540b0ba0776726f40d59273b0be7f464282",
+    "raw_log": {
+      "bytes": 8616,
+      "encoding": "UTF-16LE KD text",
+      "sha256": "81aa7b23e2434dd89ddea21868917e23a2ce3abc1220a19b53805324c37825b5"
+    }
+  }
+}

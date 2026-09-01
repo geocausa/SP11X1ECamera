@@ -1,0 +1,53 @@
+{
+  "accepted": true,
+  "address_bundles": [
+    {
+      "epoch0": 0,
+      "indices": "0x0..0x8",
+      "writer_hits": 9
+    },
+    {
+      "epoch0": 1,
+      "indices": "0x9..0x11",
+      "writer_hits": 9
+    }
+  ],
+  "first_video_relation": "replay2/request2 completes before first observed VIDEO; next Epoch0 follows that VIDEO",
+  "later_epoch0_observation": "Epoch0 #2..#7 occurred in the bounded debugger window without another captured BUS writer or selector-2 consume; this absence is not used to infer steady-state production timing because breakpoint overhead and the 3-second holder bound are intrusive.",
+  "linux_consequence": "For the first bounded QC10C frame, do not submit replay2/replay3 immediately after sensor-on. Wait Epoch0 #0, update the complete BUS address bundle, submit replay2/request2, then wait VIDEO and stop. Replay3 belongs to the next Epoch0 and is not required before returning/stopping the first VIDEO buffer.",
+  "proven_prefix": [
+    "IMX681 sensor-on",
+    "Epoch0 #0",
+    "complete nine-client BUS address update",
+    "priming replay2 (0x904 bytes)",
+    "selector-2 consume requestId=2 subRequest=0",
+    "VIDEO completion",
+    "Epoch0 #1",
+    "complete nine-client BUS address update",
+    "priming replay3 (0x4e8 bytes)",
+    "selector-2 consume requestId=3 subRequest=0"
+  ],
+  "replays": [
+    {
+      "bytes": "0x904",
+      "encoded_length": "0x903",
+      "epoch0": 0,
+      "request_id": 2,
+      "subrequest": 0
+    },
+    {
+      "bytes": "0x4e8",
+      "encoded_length": "0x4e7",
+      "epoch0": 1,
+      "request_id": 3,
+      "subrequest": 0
+    }
+  ],
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-replay-epoch0-pacing-v1",
+  "source": {
+    "bytes": 2008,
+    "encoding": "UTF-16LE KD log",
+    "sha256": "db0d038625843d77428633fcd229a0818a8dc9aafa0af06bc63c06cc6b949b35"
+  }
+}

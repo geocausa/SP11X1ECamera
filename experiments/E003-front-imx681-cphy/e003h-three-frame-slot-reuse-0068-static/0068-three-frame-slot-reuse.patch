@@ -1,0 +1,370 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-three-frame-slot-reuse-0068-static/preimage/camss.c	2026-09-01 12:24:09.627742778 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss.c	2026-09-01 12:31:36.964995748 +0100
+@@ -7464,17 +7464,22 @@
+ 	const void *capsule;
+ 	size_t capsule_size;
+ 	struct v4l2_subdev *sensor;
+-	struct camss_buffer *video[2];
++	struct camss_buffer *video[3];
+ };
+ 
+ struct camss_x1e_pix_runner_result {
+ 	struct camss_buffer *video_done;
+ 	struct camss_buffer *video_done_next;
++	struct camss_buffer *video_done_third;
+ 	bool epoch0_seen;
++	bool epoch0_next_seen;
+ 	bool video_seen;
+ 	bool video_next_seen;
++	bool video_third_seen;
+ 	bool slot0_reusable;
+ 	bool slot1_reusable;
++	bool slot0_reused;
++	bool slot0_reusable_again;
+ 	bool teardown_safe;
+ };
+ 
+@@ -7608,17 +7613,21 @@
+ 	bool bus_started = false;
+ 	bool frame_done = false;
+ 	bool teardown_safe = true;
++	u32 epoch0_seq;
+ 	u32 video_seq;
+ 	int stop_ret;
+ 	int ret;
+ 
+-	if (!result || (frame_limit != 1 && frame_limit != 2))
++	if (!result || (frame_limit != 1 && frame_limit != 2 && frame_limit != 3))
+ 		return -EINVAL;
+ 	memset(result, 0, sizeof(*result));
+ 
+ 	ret = camss_x1e_pix_runner_validate(camss, req);
+ 	if (ret)
+ 		return ret;
++	if (frame_limit == 3 && (!req->video[2] || req->video[2] == req->video[0] ||
++				 req->video[2] == req->video[1]))
++		return -EINVAL;
+ 
+ 	vfe = &camss->vfe[1];
+ 	csid = &camss->csid[1];
+@@ -7717,6 +7726,11 @@
+ 		goto out_unwind;
+ 	}
+ 	result->epoch0_seen = true;
++	epoch0_seq = csid680_x1e_front_epoch0_seq(csid);
++	if (!epoch0_seq) {
++		ret = -EPROTO;
++		goto out_unwind;
++	}
+ 	/* Ignore the first VIDEO bit0 co-latched with Epoch0; wait for the next. */
+ 	video_seq = csid680_x1e_front_video_seq(csid);
+ 	ret = vfe680_x1e_pix_runtime_bus_update(vfe, pix, 1);
+@@ -7744,12 +7758,36 @@
+ 	frame_done = true;
+ 
+ 	/*
++	 * 0068 bounded refill proof. Windows refills the oldest two-slot bundle
++	 * only after all five completion groups retire it. The next Epoch0 then
++	 * performs one complete BUS retarget before replay3/request3. Rebind only
++	 * software ownership here; the two hardware actions remain explicitly below.
++	 */
++	if (frame_limit == 3) {
++		ret = csid680_x1e_front_poll_next_epoch0(csid, epoch0_seq,
++						       CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
++		if (ret)
++			goto out_unwind;
++		result->epoch0_next_seen = true;
++		ret = vfe680_x1e_pix_runtime_rebind(pix, 0, req->video[2]);
++		if (ret)
++			goto out_unwind;
++		result->slot0_reused = true;
++		ret = vfe680_x1e_pix_runtime_bus_update(vfe, pix, 0);
++		if (ret)
++			goto out_unwind;
++		ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 3);
++		if (ret)
++			goto out_unwind;
++	}
++
++	/*
+ 	 * 0066 bounded second-frame proof: slot1 and replay2 were already
+ 	 * programmed before slot0 completed. Add no hardware operation here;
+ 	 * simply wait for the next Windows-proven CSID VIDEO generation and
+ 	 * retire the already-queued slot1 before the same proven teardown.
+ 	 */
+-	if (frame_limit == 2) {
++	if (frame_limit >= 2) {
+ 		u32 next_seq = csid680_x1e_front_video_seq(csid);
+ 		u32 delta = next_seq - video_seq;
+ 
+@@ -7790,6 +7828,41 @@
+ 		result->slot1_reusable = true;
+ 	}
+ 
++	if (frame_limit == 3) {
++		u32 third_seq = csid680_x1e_front_video_seq(csid);
++		u32 delta = third_seq - video_seq;
++
++		if (delta > 3) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		if (delta < 3) {
++			ret = csid680_x1e_front_poll_video(csid, third_seq,
++						      CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++			if (ret)
++				goto out_unwind;
++			third_seq = csid680_x1e_front_video_seq(csid);
++			delta = third_seq - video_seq;
++		}
++		if (delta != 3) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		result->video_third_seen = true;
++		ret = vfe680_x1e_pix_runtime_retire_video(pix, 0,
++						   &result->video_done_third);
++		if (ret)
++			goto out_unwind;
++		ret = csid680_x1e_front_poll_all_done(csid, video_seq + 3,
++						       CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++		if (ret)
++			goto out_unwind;
++		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 0);
++		if (ret)
++			goto out_unwind;
++		result->slot0_reusable_again = true;
++	}
++
+ out_unwind:
+ 	if (frame_done) {
+ 		/* Proven normal host stop prefix: CSID1 -> BUS/IFE -> RT-CDM. */
+@@ -7863,6 +7936,7 @@
+ 	if (!teardown_safe) {
+ 		result->video_done = NULL;
+ 		result->video_done_next = NULL;
++		result->video_done_third = NULL;
+ 		dev_err(camss->dev,
+ 			"E003h PIX teardown failed; DMA/power intentionally pinned until reboot\n");
+ 		return ret ? ret : -EIO;
+@@ -8153,7 +8227,7 @@
+ {
+ 	struct camss_x1e_pix_runner_result result = { 0 };
+ 	struct camss_x1e_pix_runner_request req = { 0 };
+-	struct camss_buffer *video0 = NULL, *video1 = NULL;
++	struct camss_buffer *video0 = NULL, *video1 = NULL, *video2 = NULL;
+ 	const struct firmware *fw = NULL;
+ 	struct media_pad *sensor_pad;
+ 	struct vfe_output *output;
+@@ -8163,7 +8237,7 @@
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 2)
++	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 3)
+ 		return -EPERM;
+ 	camss = video->camss;
+ 	if (!camss->res || camss->res->version != CAMSS_X1E80100 ||
+@@ -8186,8 +8260,9 @@
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	video0 = vfe_buf_get_pending(output);
+ 	video1 = vfe_buf_get_pending(output);
++	video2 = vfe_buf_get_pending(output);
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
+-	if (!video0 || !video1) {
++	if (!video0 || !video1 || !video2) {
+ 		ret = -ENOBUFS;
+ 		goto out_restore;
+ 	}
+@@ -8197,6 +8272,9 @@
+ 	ret = camss_x1e_pix_v4l2_buffer(video, video1);
+ 	if (ret)
+ 		goto out_restore;
++	ret = camss_x1e_pix_v4l2_buffer(video, video2);
++	if (ret)
++		goto out_restore;
+ 
+ 	sensor_pad = media_pad_remote_pad_first(&camss->csiphy[2].pads[MSM_CSIPHY_PAD_SINK]);
+ 	if (!sensor_pad || !is_media_entity_v4l2_subdev(sensor_pad->entity)) {
+@@ -8209,11 +8287,12 @@
+ 	req.sensor = sensor;
+ 	req.video[0] = video0;
+ 	req.video[1] = video1;
++	req.video[2] = video2;
+ 	ret = camss_x1e_pix_runner_validate(camss, &req);
+ 	if (ret)
+ 		goto out_restore;
+ 
+-	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 2);
++	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 3);
+ 	if (!result.teardown_safe) {
+ 		video->x1e_pix_runner_pinned = true;
+ 		dev_err(camss->dev,
+@@ -8222,11 +8301,15 @@
+ 			ret = -EIO;
+ 		video0 = NULL;
+ 		video1 = NULL;
++		video2 = NULL;
+ 		goto out_fw;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+-	    !result.epoch0_seen || !result.video_seen || !result.video_next_seen ||
+-	    !result.slot0_reusable || !result.slot1_reusable) {
++	    result.video_done_third != video2 || !result.epoch0_seen ||
++	    !result.epoch0_next_seen || !result.video_seen || !result.video_next_seen ||
++	    !result.video_third_seen || !result.slot0_reusable ||
++	    !result.slot1_reusable || !result.slot0_reused ||
++	    !result.slot0_reusable_again) {
+ 		if (!ret)
+ 			ret = -EIO;
+ 		goto out_restore;
+@@ -8237,13 +8320,17 @@
+ 	video0->vb.sequence = 0;
+ 	video1->vb.vb2_buf.timestamp = ktime_get_ns();
+ 	video1->vb.sequence = 1;
++	video2->vb.vb2_buf.timestamp = ktime_get_ns();
++	video2->vb.sequence = 2;
+ 	video->x1e_pix_runner_stopped = true;
+ 	vb2_buffer_done(&video0->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ 	video0 = NULL;
+ 	vb2_buffer_done(&video1->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ 	video1 = NULL;
++	vb2_buffer_done(&video2->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	video2 = NULL;
+ 	dev_info(camss->dev,
+-		 "E003h 0067 V4L2 completed two frames; both five-group slots reusable\n");
++		 "E003h 0068 V4L2 completed three frames; slot0 reused safely\n");
+ 	ret = 0;
+ 	goto out_fw;
+ 
+@@ -8254,6 +8341,8 @@
+ 		vfe_buf_add_pending(output, video0);
+ 	if (video1)
+ 		vfe_buf_add_pending(output, video1);
++	if (video2)
++		vfe_buf_add_pending(output, video2);
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
+ out_fw:
+ 	release_firmware(fw);
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-three-frame-slot-reuse-0068-static/preimage/camss-csid-680.c	2026-09-01 12:24:09.637063876 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss-csid-680.c	2026-09-01 12:31:36.968446869 +0100
+@@ -540,9 +540,10 @@
+ 		 readl_relaxed(csid->base + CSID_IPP_SP11_PARITY_ZERO1),
+ 		 readl_relaxed(csid->base + CSID_IPP_EPOCH_IRQ_CFG));
+ 	dev_info(csid->camss->dev,
+-		 "E003h CSID1 %s ipp-history=%08x/%08x/%u buf=%08x gen=%u/%u/%u/%u/%u line-error=%08x/%08x/%08x\n",
++		 "E003h CSID1 %s ipp-history=%08x/%08x/%u epoch=%u buf=%08x gen=%u/%u/%u/%u/%u line-error=%08x/%08x/%08x\n",
+ 		 why, csid->x1e_ipp_irq_seen_or, csid->x1e_ipp_irq_last,
+-		 csid->x1e_ipp_irq_count, csid->x1e_buf_done_last,
++		 csid->x1e_ipp_irq_count, csid->x1e_ipp_epoch0_count,
++		 csid->x1e_buf_done_last,
+ 		 csid->x1e_buf_done_video_count, csid->x1e_buf_done_aec_bhist_count,
+ 		 csid->x1e_buf_done_tintless_count, csid->x1e_buf_done_awb_count,
+ 		 csid->x1e_buf_done_rs_count, csid->x1e_ipp_line_error_frame,
+@@ -609,6 +610,7 @@
+ 		csid->x1e_ipp_irq_seen_or = 0;
+ 		csid->x1e_ipp_irq_last = 0;
+ 		csid->x1e_ipp_irq_count = 0;
++		csid->x1e_ipp_epoch0_count = 0;
+ 		csid->x1e_buf_done_last = 0;
+ 		csid->x1e_buf_done_video_count = 0;
+ 		csid->x1e_buf_done_aec_bhist_count = 0;
+@@ -678,6 +680,36 @@
+ 				 false, csid->x1e_ipp_irq_seen_or);
+ }
+ 
++u32 csid680_x1e_front_epoch0_seq(struct csid_device *csid)
++{
++	if (!csid || !__csid_sp11_front_ipp_mode0(csid))
++		return 0;
++
++	return READ_ONCE(csid->x1e_ipp_epoch0_count);
++}
++
++int csid680_x1e_front_poll_next_epoch0(struct csid_device *csid, u32 after_seq,
++				       unsigned long timeout_us)
++{
++	u32 seq;
++	int ret;
++
++	if (!csid || !after_seq || !timeout_us ||
++	    !__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
++
++	/*
++	 * Windows paces replay3 from the next CSID Epoch0 after the first VIDEO.
++	 * The ISR already reads IPP status, so wait only on its software generation.
++	 */
++	ret = read_poll_timeout(READ_ONCE, seq, seq != after_seq, 10, timeout_us,
++				false, csid->x1e_ipp_epoch0_count);
++	if (ret)
++		return ret;
++
++	return seq == after_seq + 1 ? 0 : -EPROTO;
++}
++
+ u32 csid680_x1e_front_video_seq(struct csid_device *csid)
+ {
+ 	if (!csid || !__csid_sp11_front_ipp_mode0(csid))
+@@ -814,6 +846,9 @@
+ 			csid->x1e_ipp_irq_seen_or |= ipp_val;
+ 			csid->x1e_ipp_irq_last = ipp_val;
+ 			csid->x1e_ipp_irq_count++;
++			if (ipp_val & CSID_IPP_CAMIF_EPOCH0)
++				WRITE_ONCE(csid->x1e_ipp_epoch0_count,
++					   READ_ONCE(csid->x1e_ipp_epoch0_count) + 1);
+ 			if (csid->x1e_ipp_irq_trace_count < X1E_IPP_IRQ_TRACE_MAX) {
+ 				trace_idx = csid->x1e_ipp_irq_trace_count++;
+ 				csid->x1e_ipp_irq_trace_status[trace_idx] = ipp_val;
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-three-frame-slot-reuse-0068-static/preimage/camss-csid.h	2026-09-01 12:24:09.639611433 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss-csid.h	2026-09-01 12:31:36.976589430 +0100
+@@ -171,6 +171,7 @@
+ 	u32 x1e_ipp_irq_seen_or;
+ 	u32 x1e_ipp_irq_last;
+ 	u32 x1e_ipp_irq_count;
++	u32 x1e_ipp_epoch0_count;
+ 	/* Windows-proven CSID BUF_DONE completion generations for VFE1 PIX. */
+ 	u32 x1e_buf_done_last;
+ 	u32 x1e_buf_done_video_count;
+@@ -269,6 +270,9 @@
+ int csid680_x1e_front_ipp_enable(struct csid_device *csid);
+ int csid680_x1e_front_ipp_poll_epoch0(struct csid_device *csid,
+ 				       unsigned long timeout_us);
++u32 csid680_x1e_front_epoch0_seq(struct csid_device *csid);
++int csid680_x1e_front_poll_next_epoch0(struct csid_device *csid, u32 after_seq,
++				       unsigned long timeout_us);
+ u32 csid680_x1e_front_video_seq(struct csid_device *csid);
+ int csid680_x1e_front_poll_video(struct csid_device *csid, u32 after_seq,
+ 				 unsigned long timeout_us);
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-three-frame-slot-reuse-0068-static/preimage/camss-vfe-680.c	2026-09-01 12:24:09.641648177 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss-vfe-680.c	2026-09-01 12:31:36.978253847 +0100
+@@ -1269,6 +1269,18 @@
+ 	return reusable ? 0 : -EPROTO;
+ }
+ 
++int vfe680_x1e_pix_runtime_rebind(struct vfe680_x1e_pix_runtime *runtime,
++				    unsigned int slot,
++				    struct camss_buffer *video)
++{
++	if (!runtime || !video || slot >= VFE680_X1E_PIX_SLOT_COUNT)
++		return -EINVAL;
++
++	/* Pure ownership/DMA-address rebinding; BUS MMIO remains caller-owned. */
++	return vfe680_x1e_pix_ownership_begin(&runtime->ownership, slot, video,
++					     &runtime->iovas[slot]);
++}
++
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+ 	/* VFE680 has no global reset, simply report a completion */
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-three-frame-slot-reuse-0068-static/preimage/camss-vfe.h	2026-09-01 12:24:09.643100517 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss-vfe.h	2026-09-01 12:31:36.979995188 +0100
+@@ -347,5 +347,8 @@
+ 					struct camss_buffer **video_done);
+ int vfe680_x1e_pix_runtime_retire_aux(struct vfe680_x1e_pix_runtime *runtime,
+ 				      unsigned int expected_slot);
++int vfe680_x1e_pix_runtime_rebind(struct vfe680_x1e_pix_runtime *runtime,
++				    unsigned int slot,
++				    struct camss_buffer *video);
+ 
+ #endif /* QC_MSM_CAMSS_VFE_H */
