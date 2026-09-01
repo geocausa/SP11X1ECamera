@@ -1,0 +1,15 @@
+{
+  "schema": "sp11-e003h-windows-csid-epoch-lifecycle-v1",
+  "captured": "2026-09-01",
+  "accepted": true,
+  "driver": {"name":"qccamisp8380.sys","sha256":"64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"},
+  "live_trace": {"file":"E003H_CSID_VFE_TRUE_DUAL_EVENT_20260901.log","sha256":"B4FA4BA079B28045D4C30A2E900216BEF5D55DF32AC432826BDCC2B62F6D9676","true_vfe_raw_epoch_hits":0,"bus_retarget_hits":44,"epoch_cdm_consume_hits":44},
+  "proof": {
+    "successful_stream_with_one_shot_vfe_reader_breakpoint": "front WinRT 5s stream completed successfully while qccamisp+0x1dc20 never executed",
+    "retarget_stack": ["qccamisp+0x25a38","qccamisp+0x1f414","qccamisp+0x239c0","nt!PspSystemThreadStartup"],
+    "epoch_message_snapshot": {"field0":"0x00000001","field1":"0x00000010","field2":"0x00000000","field3":"0x00000017","field4":"0x00611dd0","field6":"0x00000000"},
+    "dispatcher_static": "FUN_14001ef90 type-1/CSID_IST path tests bit21 of field4 and calls the IFE Epoch0 handler"
+  },
+  "conclusion": "Windows front Epoch lifecycle is driven by CSID IST bit21, not raw VFE BUS bit21. Linux already latches the corresponding CSID1 IPP Epoch0 status; bridge that existing software event into the bounded runner lifecycle.",
+  "runtime_authorized": false
+}

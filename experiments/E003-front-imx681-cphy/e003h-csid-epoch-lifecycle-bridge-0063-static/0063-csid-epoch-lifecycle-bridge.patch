@@ -1,0 +1,66 @@
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -7,6 +7,7 @@
+ #include <linux/completion.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ 
+ #include "camss.h"
+@@ -132,6 +133,7 @@
+ #define CSID_IPP_IRQ_STATUS					0xac
+ #define CSID_IPP_IRQ_MASK					0xb0
+ #define CSID_IPP_IRQ_CLEAR					0xb4
++#define		CSID_IPP_CAMIF_EPOCH0			BIT(21)
+ #define		CSID_IPP_RUP_DONE				BIT(23)
+ 
+ #define CSID_IPP_CFG0						0x300
+@@ -643,6 +645,25 @@
+ 	return 0;
+ }
+ 
++int csid680_x1e_front_ipp_poll_epoch0(struct csid_device *csid,
++				       unsigned long timeout_us)
++{
++	u32 status;
++
++	if (!csid || !timeout_us || !__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
++
++	/*
++	 * Windows advances the front IFE Epoch lifecycle from its CSID IST
++	 * message bit21. Linux already latches that same IPP IRQ status in the
++	 * ISR before clearing hardware, so consume the software latch here.
++	 * This intentionally performs no MMIO read or write.
++	 */
++	return read_poll_timeout(READ_ONCE, status,
++				 status & CSID_IPP_CAMIF_EPOCH0, 10, timeout_us,
++				 false, csid->x1e_ipp_irq_seen_or);
++}
++
+ int csid680_x1e_front_ipp_stop(struct csid_device *csid)
+ {
+ 	unsigned long time;
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -260,6 +260,8 @@
+ 
+ int csid680_x1e_front_ipp_companion(struct csid_device *csid, unsigned int packet);
+ int csid680_x1e_front_ipp_enable(struct csid_device *csid);
++int csid680_x1e_front_ipp_poll_epoch0(struct csid_device *csid,
++				       unsigned long timeout_us);
+ int csid680_x1e_front_ipp_stop(struct csid_device *csid);
+ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason);
+ 
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7702,7 +7702,7 @@
+ 	sensor_streaming = true;
+ 
+ 	/* First-frame pacing: Epoch0 #0 -> BUS slot1 -> replay2/request2 -> VIDEO. */
+-	ret = vfe680_x1e_pix_runtime_poll_epoch0(vfe,
++	ret = csid680_x1e_front_ipp_poll_epoch0(csid,
+ 						 CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
+ 	if (ret) {
+ 		vfe680_x1e_pix_runtime_dump(vfe, pix, "epoch0-timeout");
