@@ -1,0 +1,546 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7467,6 +7467,8 @@
+ 	size_t capsule_next_size;
+ 	struct v4l2_subdev *sensor;
+ 	struct camss_buffer *video[5];
++	struct camss_video *live_video;
++	bool live_requeue;
+ };
+ 
+ struct camss_x1e_pix_runner_result {
+@@ -7492,6 +7494,9 @@
+ 	bool slot0_reusable_again;
+ 	bool slot1_reusable_again;
+ 	bool slot0_reusable_third;
++	struct camss_buffer *video_requeued;
++	unsigned int live_completed;
++	bool live_requeue_acquired;
+ 	bool teardown_safe;
+ };
+ 
+@@ -7574,6 +7579,60 @@
+ 	return 0;
+ }
+ 
++static int camss_x1e_pix_v4l2_buffer(struct camss_video *video,
++				     struct camss_buffer *buffer);
++
++static void camss_x1e_pix_v4l2_complete_live(struct camss_x1e_pix_runner_result *result,
++					      struct camss_buffer *buffer,
++					      unsigned int sequence)
++{
++	buffer->vb.vb2_buf.timestamp = ktime_get_ns();
++	buffer->vb.sequence = sequence;
++	vb2_buffer_done(&buffer->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	result->live_completed++;
++}
++
++static bool camss_x1e_pix_v4l2_pending(struct camss_video *video)
++{
++	struct vfe_output *output;
++	struct vfe_device *vfe;
++	unsigned long flags;
++	bool pending;
++
++	vfe = &video->camss->vfe[1];
++	output = &vfe->line[VFE_LINE_PIX].output;
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	pending = !list_empty(&output->pending_bufs);
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++	return pending;
++}
++
++static struct camss_buffer *
++camss_x1e_pix_v4l2_wait_pending(struct camss_video *video, unsigned int timeout_us)
++{
++	struct vfe_output *output;
++	struct camss_buffer *buffer;
++	struct vfe_device *vfe;
++	unsigned long flags;
++	long left;
++
++	left = wait_event_timeout(video->x1e_pix_buf_wait,
++				  READ_ONCE(video->x1e_pix_stop_requested) ||
++				  camss_x1e_pix_v4l2_pending(video),
++				  usecs_to_jiffies(timeout_us));
++	if (READ_ONCE(video->x1e_pix_stop_requested))
++		return ERR_PTR(-ECANCELED);
++	if (!left)
++		return ERR_PTR(-ETIMEDOUT);
++
++	vfe = &video->camss->vfe[1];
++	output = &vfe->line[VFE_LINE_PIX].output;
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	buffer = vfe_buf_get_pending(output);
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++	return buffer ? buffer : ERR_PTR(-EAGAIN);
++}
++
+ #define CAMSS_X1E_FRONT_CAMNOC_RT_RATE 300000000UL
+ 
+ static int camss_x1e_front_camnoc_rt_set_rate(struct vfe_device *vfe)
+@@ -7618,6 +7677,7 @@
+ 	struct csiphy_device *csiphy;
+ 	struct csid_device *csid;
+ 	struct vfe_device *vfe;
++	struct camss_buffer *fifth = req ? req->video[4] : NULL;
+ 	bool sensor_streaming = false;
+ 	bool csiphy_streaming = false;
+ 	bool csid_streaming = false;
+@@ -7636,6 +7696,8 @@
+ 			frame_limit != 3 && frame_limit != 4 && frame_limit != 5))
+ 		return -EINVAL;
+ 	memset(result, 0, sizeof(*result));
++	/* Pre-hardware failures are safe; only a failed unwind clears this. */
++	result->teardown_safe = true;
+ 
+ 	ret = camss_x1e_pix_runner_validate(camss, req);
+ 	if (ret)
+@@ -7647,11 +7709,17 @@
+ 				 req->video[3] == req->video[1] ||
+ 				 req->video[3] == req->video[2]))
+ 		return -EINVAL;
+-	if (frame_limit == 5 && (!req->video[4] || req->video[4] == req->video[0] ||
+-				 req->video[4] == req->video[1] || req->video[4] == req->video[2] ||
+-				 req->video[4] == req->video[3] || !req->capsule_next ||
+-				 !req->capsule_next_size))
++	if (frame_limit == 5 && (!req->capsule_next || !req->capsule_next_size))
++		return -EINVAL;
++	if (frame_limit == 5 && req->live_requeue) {
++		if (!req->live_video || req->video[4])
++			return -EINVAL;
++	} else if (frame_limit == 5 &&
++		   (!req->video[4] || req->video[4] == req->video[0] ||
++		    req->video[4] == req->video[1] || req->video[4] == req->video[2] ||
++		    req->video[4] == req->video[3])) {
+ 		return -EINVAL;
++	}
+ 
+ 	vfe = &camss->vfe[1];
+ 	csid = &camss->csid[1];
+@@ -7801,6 +7869,8 @@
+ 		goto out_unwind;
+ 	result->slot0_reusable = true;
+ 	frame_done = true;
++	if (req->live_requeue)
++		camss_x1e_pix_v4l2_complete_live(result, req->video[0], 0);
+ 
+ 	/*
+ 	 * 0068 bounded refill proof. Windows refills the oldest two-slot bundle
+@@ -7872,6 +7942,8 @@
+ 		if (ret)
+ 			goto out_unwind;
+ 		result->slot1_reusable = true;
++		if (req->live_requeue)
++			camss_x1e_pix_v4l2_complete_live(result, req->video[1], 1);
+ 	}
+ 
+ 	/*
+@@ -7934,6 +8006,27 @@
+ 		if (ret)
+ 			goto out_unwind;
+ 		result->slot0_reusable_again = true;
++		if (req->live_requeue)
++			camss_x1e_pix_v4l2_complete_live(result, req->video[2], 2);
++	}
++
++	if (frame_limit == 5 && req->live_requeue) {
++		fifth = camss_x1e_pix_v4l2_wait_pending(req->live_video,
++						 CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++		if (IS_ERR(fifth)) {
++			ret = PTR_ERR(fifth);
++			fifth = NULL;
++			goto out_unwind;
++		}
++		ret = camss_x1e_pix_v4l2_buffer(req->live_video, fifth);
++		if (ret)
++			goto out_unwind;
++		if (fifth != req->video[0]) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		result->video_requeued = fifth;
++		result->live_requeue_acquired = true;
+ 	}
+ 
+ 	/*
+@@ -7949,7 +8042,7 @@
+ 			goto out_unwind;
+ 		result->epoch0_steady_next_seen = true;
+ 		epoch0_seq = csid680_x1e_front_epoch0_seq(csid);
+-		ret = vfe680_x1e_pix_runtime_rebind(pix, 0, req->video[4]);
++		ret = vfe680_x1e_pix_runtime_rebind(pix, 0, fifth);
+ 		if (ret)
+ 			goto out_unwind;
+ 		result->slot0_reused_again = true;
+@@ -7995,6 +8088,8 @@
+ 		if (ret)
+ 			goto out_unwind;
+ 		result->slot1_reusable_again = true;
++		if (req->live_requeue)
++			camss_x1e_pix_v4l2_complete_live(result, req->video[3], 3);
+ 	}
+ 
+ 	if (frame_limit == 5) {
+@@ -8030,6 +8125,8 @@
+ 		if (ret)
+ 			goto out_unwind;
+ 		result->slot0_reusable_third = true;
++		if (req->live_requeue)
++			camss_x1e_pix_v4l2_complete_live(result, fifth, 4);
+ 	}
+ 
+ out_unwind:
+@@ -8398,12 +8495,43 @@
+ 	return 0;
+ }
+ 
+-int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count)
++static void camss_x1e_pix_v4l2_error_buffer(struct camss_buffer *buffer)
+ {
++	if (buffer && buffer->vb.vb2_buf.state == VB2_BUF_STATE_ACTIVE)
++		vb2_buffer_done(&buffer->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++}
++
++int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
++				     struct camss_buffer *buffer)
++{
++	struct vfe_output *output;
++	struct vfe_device *vfe;
++	unsigned long flags;
++
++	if (!video || !buffer || !video->camss || !video->camss->res ||
++	    video->camss->res->version != CAMSS_X1E80100 ||
++	    video->camss->res->vfe_num <= 1 ||
++	    video != &video->camss->vfe[1].line[VFE_LINE_PIX].video_out)
++		return -EINVAL;
++
++	vfe = &video->camss->vfe[1];
++	output = &vfe->line[VFE_LINE_PIX].output;
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	vfe_buf_add_pending(output, buffer);
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++
++	if (READ_ONCE(video->x1e_pix_worker_started))
++		wake_up_all(&video->x1e_pix_buf_wait);
++	return 0;
++}
++
++static void camss_x1e_pix_v4l2_live_work(struct work_struct *work)
++{
++	struct camss_video *video = container_of(work, struct camss_video, x1e_pix_work);
+ 	struct camss_x1e_pix_runner_result result = { 0 };
+ 	struct camss_x1e_pix_runner_request req = { 0 };
+ 	struct camss_buffer *video0 = NULL, *video1 = NULL;
+-	struct camss_buffer *video2 = NULL, *video3 = NULL, *video4 = NULL;
++	struct camss_buffer *video2 = NULL, *video3 = NULL;
+ 	const struct firmware *fw = NULL, *fw5 = NULL;
+ 	struct media_pad *sensor_pad;
+ 	struct vfe_output *output;
+@@ -8411,21 +8539,16 @@
+ 	struct vfe_device *vfe;
+ 	struct camss *camss;
+ 	unsigned long flags;
++	bool runner_called = false;
+ 	int ret;
+ 
+-	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 5)
+-		return -EPERM;
+ 	camss = video->camss;
+-	if (!camss->res || camss->res->version != CAMSS_X1E80100 ||
+-	    camss->res->vfe_num <= 1 ||
+-	    video != &camss->vfe[1].line[VFE_LINE_PIX].video_out)
+-		return -ENODEV;
+-	if (atomic_cmpxchg(&camss_x1e_pix_gate_once, 0, 1))
+-		return -EALREADY;
++	vfe = &camss->vfe[1];
++	output = &vfe->line[VFE_LINE_PIX].output;
+ 
+ 	ret = request_firmware_direct(&fw, CAMSS_X1E_PIX_TRIGGER_FW, camss->dev);
+ 	if (ret)
+-		return ret;
++		goto out_done;
+ 	if (fw->size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES) {
+ 		ret = -EINVAL;
+ 		goto out_fw;
+@@ -8438,39 +8561,33 @@
+ 		goto out_fw5;
+ 	}
+ 
+-	vfe = &camss->vfe[1];
+-	output = &vfe->line[VFE_LINE_PIX].output;
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	video0 = vfe_buf_get_pending(output);
+ 	video1 = vfe_buf_get_pending(output);
+ 	video2 = vfe_buf_get_pending(output);
+ 	video3 = vfe_buf_get_pending(output);
+-	video4 = vfe_buf_get_pending(output);
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);
+-	if (!video0 || !video1 || !video2 || !video3 || !video4) {
++	if (!video0 || !video1 || !video2 || !video3) {
+ 		ret = -ENOBUFS;
+-		goto out_restore;
++		goto out_error_buffers;
+ 	}
+ 	ret = camss_x1e_pix_v4l2_buffer(video, video0);
+ 	if (ret)
+-		goto out_restore;
++		goto out_error_buffers;
+ 	ret = camss_x1e_pix_v4l2_buffer(video, video1);
+ 	if (ret)
+-		goto out_restore;
++		goto out_error_buffers;
+ 	ret = camss_x1e_pix_v4l2_buffer(video, video2);
+ 	if (ret)
+-		goto out_restore;
++		goto out_error_buffers;
+ 	ret = camss_x1e_pix_v4l2_buffer(video, video3);
+ 	if (ret)
+-		goto out_restore;
+-	ret = camss_x1e_pix_v4l2_buffer(video, video4);
+-	if (ret)
+-		goto out_restore;
++		goto out_error_buffers;
+ 
+ 	sensor_pad = media_pad_remote_pad_first(&camss->csiphy[2].pads[MSM_CSIPHY_PAD_SINK]);
+ 	if (!sensor_pad || !is_media_entity_v4l2_subdev(sensor_pad->entity)) {
+ 		ret = -ENOLINK;
+-		goto out_restore;
++		goto out_error_buffers;
+ 	}
+ 	sensor = media_entity_to_v4l2_subdev(sensor_pad->entity);
+ 	req.capsule = fw->data;
+@@ -8482,86 +8599,98 @@
+ 	req.video[1] = video1;
+ 	req.video[2] = video2;
+ 	req.video[3] = video3;
+-	req.video[4] = video4;
++	req.live_video = video;
++	req.live_requeue = true;
+ 	ret = camss_x1e_pix_runner_validate(camss, &req);
+ 	if (ret)
+-		goto out_restore;
++		goto out_error_buffers;
+ 
++	runner_called = true;
+ 	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 5);
+ 	if (!result.teardown_safe) {
+ 		video->x1e_pix_runner_pinned = true;
+ 		dev_err(camss->dev,
+-			"E003h 0065 teardown unsafe; DMA ownership pinned until reboot\n");
++			"E003h 0071 teardown unsafe; live-requeue DMA ownership pinned until reboot\n");
+ 		if (!ret)
+ 			ret = -EIO;
+-		video0 = NULL;
+-		video1 = NULL;
+-		video2 = NULL;
+-		video3 = NULL;
+-		video4 = NULL;
+ 		goto out_fw5;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+ 	    result.video_done_third != video2 || result.video_done_fourth != video3 ||
+-	    result.video_done_fifth != video4 || !result.epoch0_seen ||
+-	    !result.epoch0_next_seen || !result.epoch0_steady_seen ||
+-	    !result.epoch0_steady_next_seen ||
+-	    !result.video_seen || !result.video_next_seen || !result.video_third_seen ||
+-	    !result.video_fourth_seen || !result.video_fifth_seen || !result.slot0_reusable ||
+-	    !result.slot1_reusable || !result.slot0_reused || !result.slot1_reused ||
+-	    !result.slot0_reused_again || !result.slot0_reusable_again ||
+-	    !result.slot1_reusable_again || !result.slot0_reusable_third) {
++	    result.video_done_fifth != video0 || result.video_requeued != video0 ||
++	    result.live_completed != 5 || !result.live_requeue_acquired ||
++	    !result.epoch0_seen || !result.epoch0_next_seen || !result.epoch0_steady_seen ||
++	    !result.epoch0_steady_next_seen || !result.video_seen ||
++	    !result.video_next_seen || !result.video_third_seen ||
++	    !result.video_fourth_seen || !result.video_fifth_seen ||
++	    !result.slot0_reusable || !result.slot1_reusable || !result.slot0_reused ||
++	    !result.slot1_reused || !result.slot0_reused_again ||
++	    !result.slot0_reusable_again || !result.slot1_reusable_again ||
++	    !result.slot0_reusable_third) {
+ 		if (!ret)
+ 			ret = -EIO;
+-		goto out_restore;
++		goto out_error_buffers;
+ 	}
+ 
+-	/* Hardware is already stopped by the bounded runner before vb2 completion. */
+-	video0->vb.vb2_buf.timestamp = ktime_get_ns();
+-	video0->vb.sequence = 0;
+-	video1->vb.vb2_buf.timestamp = ktime_get_ns();
+-	video1->vb.sequence = 1;
+-	video2->vb.vb2_buf.timestamp = ktime_get_ns();
+-	video2->vb.sequence = 2;
+-	video3->vb.vb2_buf.timestamp = ktime_get_ns();
+-	video3->vb.sequence = 3;
+-	video4->vb.vb2_buf.timestamp = ktime_get_ns();
+-	video4->vb.sequence = 4;
+ 	video->x1e_pix_runner_stopped = true;
+-	vb2_buffer_done(&video0->vb.vb2_buf, VB2_BUF_STATE_DONE);
+-	video0 = NULL;
+-	vb2_buffer_done(&video1->vb.vb2_buf, VB2_BUF_STATE_DONE);
+-	video1 = NULL;
+-	vb2_buffer_done(&video2->vb.vb2_buf, VB2_BUF_STATE_DONE);
+-	video2 = NULL;
+-	vb2_buffer_done(&video3->vb.vb2_buf, VB2_BUF_STATE_DONE);
+-	video3 = NULL;
+-	vb2_buffer_done(&video4->vb.vb2_buf, VB2_BUF_STATE_DONE);
+-	video4 = NULL;
+ 	dev_info(camss->dev,
+-		 "E003h 0070 V4L2 completed five frames; exact steady request5 validated\n");
++		 "E003h 0071 completed bounded live DQBUF/QBUF requeue; request5 used requeued buffer0\n");
+ 	ret = 0;
+-	goto out_fw;
++	goto out_fw5;
+ 
+-out_restore:
+-	/* No producer is running after a teardown-safe runner return/failure. */
+-	spin_lock_irqsave(&vfe->output_lock, flags);
+-	if (video0)
+-		vfe_buf_add_pending(output, video0);
+-	if (video1)
+-		vfe_buf_add_pending(output, video1);
+-	if (video2)
+-		vfe_buf_add_pending(output, video2);
+-	if (video3)
+-		vfe_buf_add_pending(output, video3);
+-	if (video4)
+-		vfe_buf_add_pending(output, video4);
+-	spin_unlock_irqrestore(&vfe->output_lock, flags);
++out_error_buffers:
++	/* Hardware is stopped (or never started) before returning any held buffer. */
++	if (!runner_called || result.teardown_safe) {
++		if (result.live_completed < 1)
++			camss_x1e_pix_v4l2_error_buffer(video0);
++		if (result.live_completed < 2)
++			camss_x1e_pix_v4l2_error_buffer(video1);
++		if (result.live_completed < 3)
++			camss_x1e_pix_v4l2_error_buffer(video2);
++		if (result.live_completed < 4)
++			camss_x1e_pix_v4l2_error_buffer(video3);
++		if (result.live_requeue_acquired && result.live_completed < 5)
++			camss_x1e_pix_v4l2_error_buffer(result.video_requeued);
++		video->x1e_pix_runner_stopped = true;
++	}
+ out_fw5:
+ 	release_firmware(fw5);
+ out_fw:
+ 	release_firmware(fw);
+-	return ret;
++out_done:
++	video->x1e_pix_worker_ret = ret;
++	WRITE_ONCE(video->x1e_pix_live_active, false);
++}
++
++int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count)
++{
++	struct camss *camss;
++
++	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 4)
++		return -EPERM;
++	camss = video->camss;
++	if (!camss->res || camss->res->version != CAMSS_X1E80100 ||
++	    camss->res->vfe_num <= 1 ||
++	    video != &camss->vfe[1].line[VFE_LINE_PIX].video_out)
++		return -ENODEV;
++	if (atomic_cmpxchg(&camss_x1e_pix_gate_once, 0, 1))
++		return -EALREADY;
++
++	init_waitqueue_head(&video->x1e_pix_buf_wait);
++	INIT_WORK(&video->x1e_pix_work, camss_x1e_pix_v4l2_live_work);
++	video->x1e_pix_runner_stopped = false;
++	video->x1e_pix_runner_pinned = false;
++	video->x1e_pix_stop_requested = false;
++	video->x1e_pix_worker_ret = -EINPROGRESS;
++	WRITE_ONCE(video->x1e_pix_live_active, true);
++	WRITE_ONCE(video->x1e_pix_worker_started, true);
++	if (!schedule_work(&video->x1e_pix_work)) {
++		WRITE_ONCE(video->x1e_pix_worker_started, false);
++		WRITE_ONCE(video->x1e_pix_live_active, false);
++		return -EBUSY;
++	}
++
++	return 0;
+ }
+ 
+ static ssize_t e003h_pix_rtcdm_diag_show(struct device *dev,
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -210,5 +210,7 @@
+ void camss_reg_update(struct camss *camss, int hw_id,
+ 		      int port_id, bool is_clear);
+ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
++int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
++				     struct camss_buffer *buffer);
+ 
+ #endif /* QC_MSM_CAMSS_H */
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -212,6 +212,8 @@
+ 	return 0;
+ }
+ 
++static bool video_is_x1e_front_pix(struct camss_video *video);
++
+ static void video_buf_queue(struct vb2_buffer *vb)
+ {
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+@@ -219,6 +221,16 @@
+ 	struct camss_buffer *buffer = container_of(vbuf, struct camss_buffer,
+ 						   vb);
+ 
++	/*
++	 * E003h 0071: front PIX QBUF is software ownership only. Never let a
++	 * live requeue fall into the generic VFE680 one-WM update path.
++	 */
++	if (video_is_x1e_front_pix(video)) {
++		if (camss_x1e_pix_v4l2_queue_buffer(video, buffer))
++			vb2_buffer_done(vb, VB2_BUF_STATE_ERROR);
++		return;
++	}
++
+ 	video->ops->queue_buffer(video, buffer);
+ }
+ 
+@@ -462,6 +474,15 @@
+ 	if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_pinned)
+ 		return;
+ 
++	if (video_is_x1e_front_pix(video) && video->x1e_pix_worker_started) {
++		WRITE_ONCE(video->x1e_pix_stop_requested, true);
++		wake_up_all(&video->x1e_pix_buf_wait);
++		flush_work(&video->x1e_pix_work);
++		video->x1e_pix_worker_started = false;
++		if (video->x1e_pix_runner_pinned)
++			return;
++	}
++
+ 	if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_stopped) {
+ 		/* 0065 one-frame runner already performed the proven hardware stop. */
+ 		video->x1e_pix_runner_stopped = false;
+--- a/drivers/media/platform/qcom/camss/camss-video.h
++++ b/drivers/media/platform/qcom/camss/camss-video.h
+@@ -12,6 +12,8 @@
+ 
+ #include <linux/mutex.h>
+ #include <linux/videodev2.h>
++#include <linux/wait.h>
++#include <linux/workqueue.h>
+ #include <media/media-entity.h>
+ #include <media/v4l2-dev.h>
+ #include <media/v4l2-device.h>
+@@ -49,6 +51,13 @@
+ 	/* E003h bounded V4L2 bridge state; software ownership only. */
+ 	bool x1e_pix_runner_stopped;
+ 	bool x1e_pix_runner_pinned;
++	/* E003h 0071 bounded asynchronous live-requeue state. */
++	struct work_struct x1e_pix_work;
++	wait_queue_head_t x1e_pix_buf_wait;
++	bool x1e_pix_worker_started;
++	bool x1e_pix_live_active;
++	bool x1e_pix_stop_requested;
++	int x1e_pix_worker_ret;
+ 	const struct camss_format_info *formats;
+ 	unsigned int nformats;
+ };

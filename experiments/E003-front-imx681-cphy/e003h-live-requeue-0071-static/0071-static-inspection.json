@@ -1,0 +1,101 @@
+{
+  "accepted": true,
+  "added_lines_contain_hardware_programming_calls": false,
+  "base_runtime_commit": "67154ffe9ba2c866b3b5a972de3cde542dbce701",
+  "buffer_contract": {
+    "dqbuf_indices": [
+      0,
+      1,
+      2,
+      3,
+      0
+    ],
+    "frame_count": 5,
+    "initial_indices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "live_requeue": "index0 immediately after sequence0",
+    "request4": "existing exact capsule; index3",
+    "request5": "existing exact capsule; requeued index0",
+    "request6": false,
+    "vb2_buffer_count": 4
+  },
+  "changed_camss_files": [
+    "camss.c",
+    "camss.h",
+    "camss-video.c",
+    "camss-video.h"
+  ],
+  "hardware_call_count_deltas": {
+    "camss_x1e_pix_rtcdm_submit_epoch0_batch(": {
+      "delta": 0,
+      "post": 3,
+      "pre": 3
+    },
+    "camss_x1e_pix_submit_prime(": {
+      "delta": 0,
+      "post": 5,
+      "pre": 5
+    },
+    "camss_x1e_pix_submit_startup(": {
+      "delta": 0,
+      "post": 5,
+      "pre": 5
+    },
+    "csid680_x1e_front_ipp_enable(": {
+      "delta": 0,
+      "post": 1,
+      "pre": 1
+    },
+    "csid680_x1e_front_ipp_stop(": {
+      "delta": 0,
+      "post": 2,
+      "pre": 2
+    },
+    "readl(": {
+      "delta": 0,
+      "post": 0,
+      "pre": 0
+    },
+    "vfe680_x1e_pix_runtime_bus_update(": {
+      "delta": 0,
+      "post": 4,
+      "pre": 4
+    },
+    "vfe680_x1e_pix_runtime_rebind(": {
+      "delta": 0,
+      "post": 3,
+      "pre": 3
+    },
+    "writel(": {
+      "delta": 0,
+      "post": 0,
+      "pre": 0
+    }
+  },
+  "helper_sha256": "9a00aa83219018ec76b3fd97b269fccd586aaacf59b36f1b54ae0ab585817bd5",
+  "helper_source_sha256": "1168202eca6410d040c1448af694308f7594731b93a7b3833c77293a80700451",
+  "module_sha256": "12d3e2e68a7acbf817287a47f73e7fd0056eefc2286adf5e994639d4ca24bcc7",
+  "new_direct_mmio": false,
+  "new_irq_programming": false,
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-live-v4l2-requeue-0071-static-v1",
+  "software_delta": [
+    "front PIX QBUF bypasses generic VFE680 WM path and appends only to pending FIFO",
+    "STREAMON schedules bounded work and returns",
+    "vb2 DONE emitted after each five-group slot retirement while hardware remains live",
+    "worker waits for requeued index0 before existing request5 BUS refill/steady submit",
+    "STREAMOFF joins worker and uses existing stopped/pinned fail-closed semantics"
+  ],
+  "unchanged_hardware_sources": {
+    "camss-csid-680.c": "9c79fec22fc63738dd05b33aa7d43f4a68be4935b522fa35354a0170c498ae90",
+    "camss-csid.h": "bd8f68b623f2e8e5a2c624fdd8ce7a901c7fc11fa35a2efbd04f8273fca3aee2",
+    "camss-vfe-680.c": "99b7f9c18456e1926a5ad82b56a9b025a798add797c09490b645d9907b3a3208",
+    "camss-vfe.c": "98474729d5036a4e1770e3ab7d275ccaaba143b22202468e4ad8b93c0cbec2cb",
+    "camss-vfe.h": "440b03e1d2701c311cddc6beeae70bccfea5f472f75790a1879167d66395e857"
+  },
+  "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+}
