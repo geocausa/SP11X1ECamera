@@ -1,0 +1,257 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-v4l2-one-frame-0065-static/preimage/camss.c	2026-09-01 11:08:08.383055728 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss.c	2026-09-01 11:11:16.539931213 +0100
+@@ -16,6 +16,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/ioport.h>
+ #include <linux/jiffies.h>
++#include <linux/ktime.h>
+ #include <linux/media-bus-format.h>
+ #include <linux/media.h>
+ #include <linux/module.h>
+@@ -8049,6 +8050,146 @@
+ 	return 0;
+ }
+ 
++static int camss_x1e_pix_v4l2_buffer(struct camss_video *video,
++				     struct camss_buffer *buffer)
++{
++	const struct v4l2_pix_format_mplane *fmt;
++	struct vb2_buffer *vb;
++	u64 end;
++
++	if (!video || !buffer)
++		return -EINVAL;
++	fmt = &video->active_fmt.fmt.pix_mp;
++	vb = &buffer->vb.vb2_buf;
++	if (fmt->pixelformat != V4L2_PIX_FMT_QC10C ||
++	    fmt->width != CAMSS_X1E_PIX_GATE_QC10C_WIDTH ||
++	    fmt->height != CAMSS_X1E_PIX_GATE_QC10C_HEIGHT || fmt->num_planes != 1 ||
++	    fmt->plane_fmt[0].bytesperline != CAMSS_X1E_PIX_GATE_QC10C_STRIDE ||
++	    fmt->plane_fmt[0].sizeimage != CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++		return -EINVAL;
++	if (vb->vb2_queue != &video->vb2_q || vb->num_planes != 1 ||
++	    vb->state != VB2_BUF_STATE_ACTIVE ||
++	    vb2_plane_size(vb, 0) < CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++		return -EBUSY;
++	if (!buffer->addr[0] || !IS_ALIGNED(buffer->addr[0], PAGE_SIZE))
++		return -EINVAL;
++	end = (u64)buffer->addr[0] + CAMSS_X1E_PIX_GATE_QC10C_BYTES - 1;
++	if (end > U32_MAX)
++		return -ERANGE;
++
++	return 0;
++}
++
++int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count)
++{
++	struct camss_x1e_pix_runner_result result = { 0 };
++	struct camss_x1e_pix_runner_request req = { 0 };
++	struct camss_buffer *video0 = NULL, *video1 = NULL;
++	const struct firmware *fw = NULL;
++	struct media_pad *sensor_pad;
++	struct vfe_output *output;
++	struct v4l2_subdev *sensor;
++	struct vfe_device *vfe;
++	struct camss *camss;
++	unsigned long flags;
++	int ret;
++
++	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 2)
++		return -EPERM;
++	camss = video->camss;
++	if (!camss->res || camss->res->version != CAMSS_X1E80100 ||
++	    camss->res->vfe_num <= 1 ||
++	    video != &camss->vfe[1].line[VFE_LINE_PIX].video_out)
++		return -ENODEV;
++	if (atomic_cmpxchg(&camss_x1e_pix_gate_once, 0, 1))
++		return -EALREADY;
++
++	ret = request_firmware_direct(&fw, CAMSS_X1E_PIX_TRIGGER_FW, camss->dev);
++	if (ret)
++		return ret;
++	if (fw->size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES) {
++		ret = -EINVAL;
++		goto out_fw;
++	}
++
++	vfe = &camss->vfe[1];
++	output = &vfe->line[VFE_LINE_PIX].output;
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	video0 = vfe_buf_get_pending(output);
++	video1 = vfe_buf_get_pending(output);
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++	if (!video0 || !video1) {
++		ret = -ENOBUFS;
++		goto out_restore;
++	}
++	ret = camss_x1e_pix_v4l2_buffer(video, video0);
++	if (ret)
++		goto out_restore;
++	ret = camss_x1e_pix_v4l2_buffer(video, video1);
++	if (ret)
++		goto out_restore;
++
++	sensor_pad = media_pad_remote_pad_first(&camss->csiphy[2].pads[MSM_CSIPHY_PAD_SINK]);
++	if (!sensor_pad || !is_media_entity_v4l2_subdev(sensor_pad->entity)) {
++		ret = -ENOLINK;
++		goto out_restore;
++	}
++	sensor = media_entity_to_v4l2_subdev(sensor_pad->entity);
++	req.capsule = fw->data;
++	req.capsule_size = fw->size;
++	req.sensor = sensor;
++	req.video[0] = video0;
++	req.video[1] = video1;
++	ret = camss_x1e_pix_runner_validate(camss, &req);
++	if (ret)
++		goto out_restore;
++
++	ret = camss_x1e_pix_runner_once(camss, &req, &result);
++	if (!result.teardown_safe) {
++		video->x1e_pix_runner_pinned = true;
++		dev_err(camss->dev,
++			"E003h 0065 teardown unsafe; DMA ownership pinned until reboot\n");
++		if (!ret)
++			ret = -EIO;
++		video0 = NULL;
++		video1 = NULL;
++		goto out_fw;
++	}
++	if (ret || result.video_done != video0 || !result.epoch0_seen ||
++	    !result.video_seen) {
++		if (!ret)
++			ret = -EIO;
++		goto out_restore;
++	}
++
++	/* Hardware is already stopped by the bounded runner before vb2 completion. */
++	video0->vb.vb2_buf.timestamp = ktime_get_ns();
++	video0->vb.sequence = 0;
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	vfe_buf_add_pending(output, video1);
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++	video1 = NULL;
++	video->x1e_pix_runner_stopped = true;
++	vb2_buffer_done(&video0->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	video0 = NULL;
++	dev_info(camss->dev,
++		 "E003h 0065 V4L2 QBUF/STREAMON completed one full VIDEO frame\n");
++	ret = 0;
++	goto out_fw;
++
++out_restore:
++	/* No producer is running after a teardown-safe runner return/failure. */
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	if (video0)
++		vfe_buf_add_pending(output, video0);
++	if (video1)
++		vfe_buf_add_pending(output, video1);
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++out_fw:
++	release_firmware(fw);
++	return ret;
++}
++
+ static ssize_t e003h_pix_rtcdm_diag_show(struct device *dev,
+ 					 struct device_attribute *attr, char *buf)
+ {
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-v4l2-one-frame-0065-static/preimage/camss-video.c	2026-09-01 11:08:08.384852009 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss-video.c	2026-09-01 11:10:47.610207945 +0100
+@@ -222,6 +222,18 @@
+ 	video->ops->queue_buffer(video, buffer);
+ }
+ 
++static bool video_is_x1e_front_pix(struct camss_video *video)
++{
++	struct camss *camss;
++
++	if (!video || !video->camss || !video->camss->res)
++		return false;
++	camss = video->camss;
++
++	return camss->res->version == CAMSS_X1E80100 && camss->res->vfe_num > 1 &&
++	       video == &camss->vfe[1].line[VFE_LINE_PIX].video_out;
++}
++
+ static int video_check_format(struct camss_video *video)
+ {
+ 	struct v4l2_pix_format_mplane *pix = &video->active_fmt.fmt.pix_mp;
+@@ -385,6 +397,21 @@
+ 		goto flush_buffers;
+ 	}
+ 
++	/*
++	 * E003h 0065: the exact X1E front PIX node uses the already-proven
++	 * 9-client bounded runner instead of the invalid generic one-WM VFE680
++	 * path. This remains diagnostic-arm-only and completes one frame.
++	 */
++	if (video_is_x1e_front_pix(video)) {
++		ret = camss_x1e_pix_v4l2_start(video, count);
++		if (ret < 0) {
++			if (video->x1e_pix_runner_pinned)
++				goto error_pinned;
++			goto error;
++		}
++		return 0;
++	}
++
+ 	ret = video_check_format(video);
+ 	if (ret < 0)
+ 		goto error;
+@@ -416,6 +443,11 @@
+ 	video->ops->flush_buffers(video, VB2_BUF_STATE_QUEUED);
+ 
+ 	return ret;
++
++error_pinned:
++	/* Hardware/DMA ownership is intentionally pinned until candidate reboot. */
++	video_device_pipeline_stop(vdev);
++	return ret;
+ }
+ 
+ static void video_stop_streaming(struct vb2_queue *q)
+@@ -427,7 +459,13 @@
+ 	struct v4l2_subdev *subdev;
+ 	int ret;
+ 
+-	if (video->camss->res->version == CAMSS_X1E80100) {
++	if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_pinned)
++		return;
++
++	if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_stopped) {
++		/* 0065 one-frame runner already performed the proven hardware stop. */
++		video->x1e_pix_runner_stopped = false;
++	} else if (video->camss->res->version == CAMSS_X1E80100) {
+ 		ret = video_stop_streaming_x1e(video);
+ 		if (ret)
+ 			return;
+@@ -461,6 +499,8 @@
+ 	struct camss_video *video = vb2_get_drv_priv(q);
+ 	struct video_device *vdev = &video->vdev;
+ 
++	if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_pinned)
++		return;
+ 	v4l2_pipeline_pm_put(&vdev->entity);
+ }
+ 
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-v4l2-one-frame-0065-static/preimage/camss-video.h	2026-09-01 11:08:08.386517202 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss-video.h	2026-09-01 11:10:47.609844521 +0100
+@@ -46,6 +46,9 @@
+ 	struct mutex q_lock;
+ 	unsigned int bpl_alignment;
+ 	unsigned int line_based;
++	/* E003h bounded V4L2 bridge state; software ownership only. */
++	bool x1e_pix_runner_stopped;
++	bool x1e_pix_runner_pinned;
+ 	const struct camss_format_info *formats;
+ 	unsigned int nformats;
+ };
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-v4l2-one-frame-0065-static/preimage/camss.h	2026-09-01 11:08:08.388419104 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/platform/qcom/camss/camss.h	2026-09-01 11:09:12.431593408 +0100
+@@ -209,5 +209,6 @@
+ void camss_buf_done(struct camss *camss, int hw_id, int port_id);
+ void camss_reg_update(struct camss *camss, int hw_id,
+ 		      int port_id, bool is_clear);
++int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
+ 
+ #endif /* QC_MSM_CAMSS_H */
