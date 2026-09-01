@@ -1,0 +1,33 @@
+{
+  "accepted": true,
+  "boot": {
+    "candidate_marker": "sp11_camera_e003h_frame4_0069=1",
+    "golden_return_verified": true,
+    "one_shot_consumed": true
+  },
+  "classification": {
+    "camera_code_result": "NOT_TESTED",
+    "camera_transaction_not_started": true,
+    "failure": "ac16000.cci standard driver probe timed out before IMX681 entity registration",
+    "helper_invocation_count": 0,
+    "production_driver_not_yet_complete": true,
+    "retry_policy": "new separately authorized candidate boot only; no same-boot CCI rebind/reset invented",
+    "rtcdm_remained_idle": true,
+    "streamon_count": 0,
+    "sysfs_trigger_invocations": 0
+  },
+  "evidence": {
+    "arm_sha256": "59953e11692f65f92c5fca10601ce96b1d3568093eb51cc658d0056dc146e587",
+    "dmesg_sha256": "bc3d17a28af618212854e4085996a647d764aa3daed21f6adadc8e7ee63c31e4",
+    "media_sha256": "1b4e6cdf803317c6936775a4c38e7836f0eaa7596ac948b25249bc9542097e99",
+    "pre_capture_status_sha256": "352cb04120c1255a0550026b4f3e0795399f1405ad1f04b21d651a66a40c1058"
+  },
+  "next": "Create 0069r1 with byte-identical camera assets and separately authorized one-shot. Do not add a CCI reset/rebind operation; if standard probe fails again, stop and investigate boot-level CCI dependency.",
+  "observations": {
+    "cci_error": "i2c-qcom-cci ac16000.cci: CCI reset timeout; probe failed -110",
+    "forced_sysfs_cci_rebind_performed": false,
+    "imx681_entity_count": 0,
+    "rtcdm_diag": "seq=0 stage=0 idle; fifo_seq=0; faulted=0"
+  },
+  "schema": "sp11-e003h-four-frame-0069-pre-capture-failure-v1"
+}
