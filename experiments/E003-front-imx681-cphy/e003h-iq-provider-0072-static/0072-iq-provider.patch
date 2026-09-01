@@ -1,0 +1,377 @@
+--- a/camss.c
++++ b/camss.c
+@@ -8417,6 +8417,222 @@
+ #define CAMSS_X1E_PIX_TRIGGER_FW "sp11/e003h/E003H_PIX_ORACLE_CAPSULE.bin"
+ #define CAMSS_X1E_PIX_TRIGGER_FW_R5 "sp11/e003h/E003H_PIX_ORACLE_CAPSULE_R5.bin"
+ 
++
++/*
++ * E003h 0072 steady-IQ provider FIFO.
++ *
++ * This is deliberately a software-only ownership boundary between an upstream
++ * per-request IQ producer and the already-proven steady materializer/runner.
++ * Queue entries own a private copy of the existing capsule ABI so producer
++ * lifetime cannot race the camera worker. The queue enforces request5+ strict
++ * monotonic ordering and bounded depth. It has no MMIO, RT-CDM submission,
++ * IRQ, sensor, CSID or VFE operation.
++ */
++#define CAMSS_X1E_PIX_IQ_QUEUE_DEPTH_MAX	8
++#define CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST	5
++#define CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US	500000
++
++struct camss_x1e_pix_iq_packet {
++	struct list_head node;
++	u64 request_id;
++	size_t capsule_size;
++	u8 capsule[];
++};
++
++static void camss_x1e_pix_iq_packet_release(struct camss_x1e_pix_iq_packet *packet)
++{
++	if (!packet)
++		return;
++	memzero_explicit(packet->capsule, packet->capsule_size);
++	kfree(packet);
++}
++
++static void camss_x1e_pix_iq_provider_purge(struct camss_video *video)
++{
++	struct camss_x1e_pix_iq_packet *packet, *tmp;
++
++	if (!video)
++		return;
++
++	mutex_lock(&video->x1e_pix_iq_lock);
++	list_for_each_entry_safe(packet, tmp, &video->x1e_pix_iq_pending, node) {
++		list_del(&packet->node);
++		camss_x1e_pix_iq_packet_release(packet);
++	}
++	video->x1e_pix_iq_depth = 0;
++	mutex_unlock(&video->x1e_pix_iq_lock);
++	wake_up_all(&video->x1e_pix_iq_wait);
++}
++
++static int camss_x1e_pix_iq_provider_open(struct camss_video *video,
++					  u64 first_request_id)
++{
++	if (!video || first_request_id < CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST)
++		return -EINVAL;
++
++	mutex_lock(&video->x1e_pix_iq_lock);
++	if (!list_empty(&video->x1e_pix_iq_pending) || video->x1e_pix_iq_depth) {
++		mutex_unlock(&video->x1e_pix_iq_lock);
++		return -EBUSY;
++	}
++	video->x1e_pix_iq_last_enqueued = first_request_id - 1;
++	video->x1e_pix_iq_last_dequeued = first_request_id - 1;
++	video->x1e_pix_iq_closed = false;
++	mutex_unlock(&video->x1e_pix_iq_lock);
++	return 0;
++}
++
++static void camss_x1e_pix_iq_provider_close(struct camss_video *video)
++{
++	if (!video)
++		return;
++	mutex_lock(&video->x1e_pix_iq_lock);
++	video->x1e_pix_iq_closed = true;
++	mutex_unlock(&video->x1e_pix_iq_lock);
++	wake_up_all(&video->x1e_pix_iq_wait);
++}
++
++static int camss_x1e_pix_iq_provider_enqueue(struct camss_video *video,
++					     const void *capsule, size_t capsule_size)
++{
++	struct camss_x1e_pix_capsule_inputs *inputs;
++	struct camss_x1e_pix_iq_packet *packet;
++	u64 request_id;
++	int ret;
++
++	if (!video || !capsule || capsule_size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES)
++		return -EINVAL;
++
++	packet = kmalloc(struct_size(packet, capsule, capsule_size), GFP_KERNEL);
++	inputs = kzalloc_obj(*inputs, GFP_KERNEL);
++	if (!packet || !inputs) {
++		ret = -ENOMEM;
++		goto out_free;
++	}
++	INIT_LIST_HEAD(&packet->node);
++	packet->capsule_size = capsule_size;
++	memcpy(packet->capsule, capsule, capsule_size);
++
++	ret = camss_x1e_pix_capsule_parse(packet->capsule, packet->capsule_size,
++					   inputs);
++	if (ret)
++		goto out_free;
++	request_id = inputs->steady.request_id;
++	if (inputs->steady.subrequest ||
++	    request_id < CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST) {
++		ret = -EINVAL;
++		goto out_free;
++	}
++	packet->request_id = request_id;
++
++	mutex_lock(&video->x1e_pix_iq_lock);
++	if (video->x1e_pix_iq_closed) {
++		ret = -ESHUTDOWN;
++	} else if (video->x1e_pix_iq_depth >= CAMSS_X1E_PIX_IQ_QUEUE_DEPTH_MAX) {
++		ret = -ENOSPC;
++	} else if (request_id != video->x1e_pix_iq_last_enqueued + 1) {
++		ret = -EPROTO;
++	} else {
++		list_add_tail(&packet->node, &video->x1e_pix_iq_pending);
++		video->x1e_pix_iq_last_enqueued = request_id;
++		video->x1e_pix_iq_depth++;
++		ret = 0;
++	}
++	mutex_unlock(&video->x1e_pix_iq_lock);
++	if (!ret) {
++		wake_up_all(&video->x1e_pix_iq_wait);
++		kfree(inputs);
++		return 0;
++	}
++
++out_free:
++	kfree(inputs);
++	camss_x1e_pix_iq_packet_release(packet);
++	return ret;
++}
++
++static int camss_x1e_pix_iq_provider_next(struct camss_video *video,
++					  u64 expected_request_id,
++					  unsigned int timeout_us,
++					  struct camss_x1e_pix_iq_packet **out)
++{
++	struct camss_x1e_pix_iq_packet *packet;
++	long waited;
++	int ret = 0;
++
++	if (!video || !out || expected_request_id < CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST)
++		return -EINVAL;
++	*out = NULL;
++
++	waited = wait_event_timeout(video->x1e_pix_iq_wait,
++		READ_ONCE(video->x1e_pix_iq_depth) ||
++		READ_ONCE(video->x1e_pix_iq_closed) ||
++		READ_ONCE(video->x1e_pix_stop_requested),
++		usecs_to_jiffies(timeout_us));
++	if (!waited && !READ_ONCE(video->x1e_pix_iq_depth))
++		return -ETIMEDOUT;
++	if (READ_ONCE(video->x1e_pix_stop_requested))
++		return -ECANCELED;
++
++	mutex_lock(&video->x1e_pix_iq_lock);
++	if (list_empty(&video->x1e_pix_iq_pending)) {
++		ret = video->x1e_pix_iq_closed ? -ESHUTDOWN : -EAGAIN;
++		goto out_unlock;
++	}
++	packet = list_first_entry(&video->x1e_pix_iq_pending,
++				  struct camss_x1e_pix_iq_packet, node);
++	list_del(&packet->node);
++	video->x1e_pix_iq_depth--;
++	if (packet->request_id != expected_request_id ||
++	    packet->request_id != video->x1e_pix_iq_last_dequeued + 1) {
++		ret = -EPROTO;
++		camss_x1e_pix_iq_packet_release(packet);
++		goto out_unlock;
++	}
++	video->x1e_pix_iq_last_dequeued = packet->request_id;
++	*out = packet;
++
++out_unlock:
++	mutex_unlock(&video->x1e_pix_iq_lock);
++	return ret;
++}
++
++static int camss_x1e_pix_iq_provider_seed_firmware(struct camss_video *video,
++						    const char *name)
++{
++	const struct firmware *fw;
++	int ret;
++
++	if (!video || !video->camss || !name)
++		return -EINVAL;
++	ret = request_firmware_direct(&fw, name, video->camss->dev);
++	if (ret)
++		return ret;
++	ret = camss_x1e_pix_iq_provider_enqueue(video, fw->data, fw->size);
++	release_firmware(fw);
++	return ret;
++}
++
++struct camss_x1e_pix_iq_provider_static_ops {
++	int (*open)(struct camss_video *video, u64 first_request_id);
++	int (*enqueue)(struct camss_video *video, const void *capsule, size_t capsule_size);
++	int (*next)(struct camss_video *video, u64 expected_request_id,
++		    unsigned int timeout_us, struct camss_x1e_pix_iq_packet **out);
++	void (*close)(struct camss_video *video);
++	void (*purge)(struct camss_video *video);
++	void (*release)(struct camss_x1e_pix_iq_packet *packet);
++};
++
++static const struct camss_x1e_pix_iq_provider_static_ops
++camss_x1e_pix_iq_provider_recipe __used = {
++	.open = camss_x1e_pix_iq_provider_open,
++	.enqueue = camss_x1e_pix_iq_provider_enqueue,
++	.next = camss_x1e_pix_iq_provider_next,
++	.close = camss_x1e_pix_iq_provider_close,
++	.purge = camss_x1e_pix_iq_provider_purge,
++	.release = camss_x1e_pix_iq_packet_release,
++};
++
+ static int camss_x1e_pix_trigger_buffer(struct camss_video *video,
+ 					unsigned int index,
+ 					struct camss_buffer **buffer)
+@@ -8532,7 +8748,9 @@
+ 	struct camss_x1e_pix_runner_request req = { 0 };
+ 	struct camss_buffer *video0 = NULL, *video1 = NULL;
+ 	struct camss_buffer *video2 = NULL, *video3 = NULL;
+-	const struct firmware *fw = NULL, *fw5 = NULL;
++	struct camss_x1e_pix_iq_packet *iq5 = NULL;
++	const struct firmware *fw = NULL;
++	bool iq_provider_open = false;
+ 	struct media_pad *sensor_pad;
+ 	struct vfe_output *output;
+ 	struct v4l2_subdev *sensor;
+@@ -8546,20 +8764,29 @@
+ 	vfe = &camss->vfe[1];
+ 	output = &vfe->line[VFE_LINE_PIX].output;
+ 
+-	ret = request_firmware_direct(&fw, CAMSS_X1E_PIX_TRIGGER_FW, camss->dev);
++	ret = camss_x1e_pix_iq_provider_open(video,
++					 CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST);
+ 	if (ret)
+ 		goto out_done;
++	iq_provider_open = true;
++
++	ret = request_firmware_direct(&fw, CAMSS_X1E_PIX_TRIGGER_FW, camss->dev);
++	if (ret)
++		goto out_iq;
+ 	if (fw->size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES) {
+ 		ret = -EINVAL;
+ 		goto out_fw;
+ 	}
+-	ret = request_firmware_direct(&fw5, CAMSS_X1E_PIX_TRIGGER_FW_R5, camss->dev);
++
++	/* 0072 compatibility producer: feed exact request5 through the provider FIFO. */
++	ret = camss_x1e_pix_iq_provider_seed_firmware(video,
++						   CAMSS_X1E_PIX_TRIGGER_FW_R5);
++	if (ret)
++		goto out_fw;
++	ret = camss_x1e_pix_iq_provider_next(video, 5,
++					 CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq5);
+ 	if (ret)
+ 		goto out_fw;
+-	if (fw5->size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES) {
+-		ret = -EINVAL;
+-		goto out_fw5;
+-	}
+ 
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	video0 = vfe_buf_get_pending(output);
+@@ -8592,8 +8819,8 @@
+ 	sensor = media_entity_to_v4l2_subdev(sensor_pad->entity);
+ 	req.capsule = fw->data;
+ 	req.capsule_size = fw->size;
+-	req.capsule_next = fw5->data;
+-	req.capsule_next_size = fw5->size;
++	req.capsule_next = iq5->capsule;
++	req.capsule_next_size = iq5->capsule_size;
+ 	req.sensor = sensor;
+ 	req.video[0] = video0;
+ 	req.video[1] = video1;
+@@ -8613,7 +8840,10 @@
+ 			"E003h 0071 teardown unsafe; live-requeue DMA ownership pinned until reboot\n");
+ 		if (!ret)
+ 			ret = -EIO;
+-		goto out_fw5;
++		/* Keep provider-owned bytes pinned with the failed hardware state. */
++		iq5 = NULL;
++		iq_provider_open = false;
++		goto out_fw;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+ 	    result.video_done_third != video2 || result.video_done_fourth != video3 ||
+@@ -8636,7 +8866,7 @@
+ 	dev_info(camss->dev,
+ 		 "E003h 0071 completed bounded live DQBUF/QBUF requeue; request5 used requeued buffer0\n");
+ 	ret = 0;
+-	goto out_fw5;
++	goto out_iq_packet;
+ 
+ out_error_buffers:
+ 	/* Hardware is stopped (or never started) before returning any held buffer. */
+@@ -8653,10 +8883,16 @@
+ 			camss_x1e_pix_v4l2_error_buffer(result.video_requeued);
+ 		video->x1e_pix_runner_stopped = true;
+ 	}
+-out_fw5:
+-	release_firmware(fw5);
++out_iq_packet:
++	camss_x1e_pix_iq_packet_release(iq5);
++	iq5 = NULL;
+ out_fw:
+ 	release_firmware(fw);
++out_iq:
++	if (iq_provider_open) {
++		camss_x1e_pix_iq_provider_close(video);
++		camss_x1e_pix_iq_provider_purge(video);
++	}
+ out_done:
+ 	video->x1e_pix_worker_ret = ret;
+ 	WRITE_ONCE(video->x1e_pix_live_active, false);
+--- a/camss-video.c
++++ b/camss-video.c
+@@ -477,6 +477,7 @@
+ 	if (video_is_x1e_front_pix(video) && video->x1e_pix_worker_started) {
+ 		WRITE_ONCE(video->x1e_pix_stop_requested, true);
+ 		wake_up_all(&video->x1e_pix_buf_wait);
++		wake_up_all(&video->x1e_pix_iq_wait);
+ 		flush_work(&video->x1e_pix_work);
+ 		video->x1e_pix_worker_started = false;
+ 		if (video->x1e_pix_runner_pinned)
+@@ -894,6 +895,13 @@
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
++	mutex_init(&video->x1e_pix_iq_lock);
++	INIT_LIST_HEAD(&video->x1e_pix_iq_pending);
++	init_waitqueue_head(&video->x1e_pix_iq_wait);
++	video->x1e_pix_iq_last_enqueued = 0;
++	video->x1e_pix_iq_last_dequeued = 0;
++	video->x1e_pix_iq_depth = 0;
++	video->x1e_pix_iq_closed = true;
+ 
+ 	q = &video->vb2_q;
+ 	q->drv_priv = video;
+--- a/camss-video.h
++++ b/camss-video.h
+@@ -10,10 +10,11 @@
+ #ifndef QC_MSM_CAMSS_VIDEO_H
+ #define QC_MSM_CAMSS_VIDEO_H
+ 
++#include <linux/list.h>
+ #include <linux/mutex.h>
+-#include <linux/videodev2.h>
+ #include <linux/wait.h>
+ #include <linux/workqueue.h>
++#include <linux/videodev2.h>
+ #include <media/media-entity.h>
+ #include <media/v4l2-dev.h>
+ #include <media/v4l2-device.h>
+@@ -58,6 +59,14 @@
+ 	bool x1e_pix_live_active;
+ 	bool x1e_pix_stop_requested;
+ 	int x1e_pix_worker_ret;
++	/* E003h 0072 provider-owned steady IQ packet FIFO; software only. */
++	struct list_head x1e_pix_iq_pending;
++	struct mutex x1e_pix_iq_lock;
++	wait_queue_head_t x1e_pix_iq_wait;
++	u64 x1e_pix_iq_last_enqueued;
++	u64 x1e_pix_iq_last_dequeued;
++	unsigned int x1e_pix_iq_depth;
++	bool x1e_pix_iq_closed;
+ 	const struct camss_format_info *formats;
+ 	unsigned int nformats;
+ };
