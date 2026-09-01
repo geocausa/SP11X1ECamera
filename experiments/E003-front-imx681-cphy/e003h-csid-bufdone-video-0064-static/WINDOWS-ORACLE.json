@@ -1,0 +1,44 @@
+{
+  "schema": "sp11-e003h-windows-csid-bufdone-video-oracle-v1",
+  "date": "2026-09-01",
+  "same_machine": "SP11 Windows qccamisp8380",
+  "windows_proof_sha256": "dac3337993da3796a478b071f30728502ab215b24c67aa4df9d7b5ce05da83be",
+  "producer": {
+    "function": "qccamisp8380+0x1b5f0",
+    "source": "CSID MMIO base + 0x8c",
+    "mask": "0x07ffffff",
+    "record_field": "CSID IST source +0x0c"
+  },
+  "dispatcher": {
+    "copy_function": "qccamisp8380+0x1b7d0",
+    "consumer_function": "qccamisp8380+0x1ef90",
+    "bit0_mapping": "IFE VIDEO event 3",
+    "log": "IFE%d IFE VIDEO buf done Irq occured."
+  },
+  "first_stream_order": [
+    {
+      "n": 1,
+      "top": "0x00000001",
+      "rx": "0x00000000",
+      "buf_done": "0x00000000",
+      "ipp": "0x00000000"
+    },
+    {
+      "n": 2,
+      "top": "0x00000010",
+      "rx": "0x00000017",
+      "buf_done": "0x00000000",
+      "ipp": "0x00811dd0",
+      "meaning": "first RUP/reg-update ACK"
+    },
+    {
+      "n": 3,
+      "top": "0x00002010",
+      "rx": "0x00000017",
+      "buf_done": "0x00000271",
+      "ipp": "0x00600ee8",
+      "meaning": "first Epoch0 and VIDEO bit0 co-latched"
+    }
+  ],
+  "qualification": "Because VIDEO bit0 is co-latched with first Epoch0, Linux must snapshot the VIDEO generation after consuming Epoch0 and wait for a later generation after BUS retarget + replay2; an ever-seen bit latch would be stale."
+}

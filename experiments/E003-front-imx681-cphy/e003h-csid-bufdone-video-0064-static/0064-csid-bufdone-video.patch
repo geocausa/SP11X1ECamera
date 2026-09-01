@@ -1,0 +1,130 @@
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -79,6 +79,7 @@
+ #define		CSID_TOP_IRQ_BUF_DONE				BIT(13)
+ 
+ #define CSID_BUF_DONE_IRQ_STATUS				0x8c
++#define		CSID_BUF_DONE_VIDEO				BIT(0)
+ #define	BUF_DONE_IRQ_STATUS_RDI_OFFSET				(csid_is_lite(csid) ? 1 : 14)
+ #define CSID_BUF_DONE_IRQ_MASK					0x90
+ #define CSID_BUF_DONE_IRQ_CLEAR					0x94
+@@ -535,9 +536,10 @@
+ 		 readl_relaxed(csid->base + CSID_IPP_SP11_PARITY_ZERO1),
+ 		 readl_relaxed(csid->base + CSID_IPP_EPOCH_IRQ_CFG));
+ 	dev_info(csid->camss->dev,
+-		 "E003h CSID1 %s ipp-history=%08x/%08x/%u line-error=%08x/%08x/%08x\n",
++		 "E003h CSID1 %s ipp-history=%08x/%08x/%u video-buf=%08x/%u line-error=%08x/%08x/%08x\n",
+ 		 why, csid->x1e_ipp_irq_seen_or, csid->x1e_ipp_irq_last,
+-		 csid->x1e_ipp_irq_count, csid->x1e_ipp_line_error_frame,
++		 csid->x1e_ipp_irq_count, csid->x1e_buf_done_last,
++		 csid->x1e_buf_done_video_count, csid->x1e_ipp_line_error_frame,
+ 		 csid->x1e_ipp_line_error_hbi, csid->x1e_ipp_line_error_vbi);
+ 	for (i = 0; i < csid->x1e_ipp_irq_trace_count &&
+ 	     i < X1E_IPP_IRQ_TRACE_MAX; i++)
+@@ -601,6 +603,8 @@
+ 		csid->x1e_ipp_irq_seen_or = 0;
+ 		csid->x1e_ipp_irq_last = 0;
+ 		csid->x1e_ipp_irq_count = 0;
++		csid->x1e_buf_done_last = 0;
++		csid->x1e_buf_done_video_count = 0;
+ 		csid->x1e_ipp_irq_trace_count = 0;
+ 		csid->x1e_ipp_line_error_frame = 0;
+ 		csid->x1e_ipp_line_error_hbi = 0;
+@@ -664,6 +668,33 @@
+ 				 false, csid->x1e_ipp_irq_seen_or);
+ }
+ 
++u32 csid680_x1e_front_video_seq(struct csid_device *csid)
++{
++	if (!csid || !__csid_sp11_front_ipp_mode0(csid))
++		return 0;
++
++	return READ_ONCE(csid->x1e_buf_done_video_count);
++}
++
++int csid680_x1e_front_poll_video(struct csid_device *csid, u32 after_seq,
++				 unsigned long timeout_us)
++{
++	u32 seq;
++
++	if (!csid || !timeout_us || !__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
++
++	/*
++	 * Same-machine Windows maps CSID BUF_DONE_IRQ_STATUS bit0 directly to
++	 * IFE VIDEO event 3. The first bit0 is co-latched with first Epoch0, so
++	 * the bounded runner snapshots that generation at Epoch0 and waits for
++	 * the next bit0 after BUS retarget + replay2. No MMIO access is added.
++	 */
++	return read_poll_timeout(READ_ONCE, seq, seq != after_seq, 10,
++				 timeout_us, false,
++				 csid->x1e_buf_done_video_count);
++}
++
+ int csid680_x1e_front_ipp_stop(struct csid_device *csid)
+ {
+ 	unsigned long time;
+@@ -717,6 +748,12 @@
+ 	/* Latch and clear top level BUF_DONE status */
+ 	buf_done_val = readl(csid->base + CSID_BUF_DONE_IRQ_STATUS);
+ 	writel(buf_done_val, csid->base + CSID_BUF_DONE_IRQ_CLEAR);
++	if (buf_done_val && __csid_sp11_front_ipp_mode0(csid)) {
++		WRITE_ONCE(csid->x1e_buf_done_last, buf_done_val);
++		if (buf_done_val & CSID_BUF_DONE_VIDEO)
++			WRITE_ONCE(csid->x1e_buf_done_video_count,
++				   READ_ONCE(csid->x1e_buf_done_video_count) + 1);
++	}
+ 
+ 	if (!csid_is_lite(csid)) {
+ 		ipp_val = readl(csid->base + CSID_IPP_IRQ_STATUS);
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -171,6 +171,9 @@
+ 	u32 x1e_ipp_irq_seen_or;
+ 	u32 x1e_ipp_irq_last;
+ 	u32 x1e_ipp_irq_count;
++	/* Windows-proven CSID BUF_DONE bit0 VIDEO completion generations. */
++	u32 x1e_buf_done_last;
++	u32 x1e_buf_done_video_count;
+ 	/* E003h 0050 ordered first-IRQ status/actual-geometry telemetry. */
+ 	u32 x1e_ipp_irq_trace_status[X1E_IPP_IRQ_TRACE_MAX];
+ 	u32 x1e_ipp_irq_trace_actual[X1E_IPP_IRQ_TRACE_MAX];
+@@ -262,6 +265,9 @@
+ int csid680_x1e_front_ipp_enable(struct csid_device *csid);
+ int csid680_x1e_front_ipp_poll_epoch0(struct csid_device *csid,
+ 				       unsigned long timeout_us);
++u32 csid680_x1e_front_video_seq(struct csid_device *csid);
++int csid680_x1e_front_poll_video(struct csid_device *csid, u32 after_seq,
++				 unsigned long timeout_us);
+ int csid680_x1e_front_ipp_stop(struct csid_device *csid);
+ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason);
+ 
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7602,6 +7602,7 @@
+ 	bool bus_started = false;
+ 	bool frame_done = false;
+ 	bool teardown_safe = true;
++	u32 video_seq;
+ 	int stop_ret;
+ 	int ret;
+ 
+@@ -7710,14 +7711,16 @@
+ 		goto out_unwind;
+ 	}
+ 	result->epoch0_seen = true;
++	/* Ignore the first VIDEO bit0 co-latched with Epoch0; wait for the next. */
++	video_seq = csid680_x1e_front_video_seq(csid);
+ 	ret = vfe680_x1e_pix_runtime_bus_update(vfe, pix, 1);
+ 	if (ret)
+ 		goto out_unwind;
+ 	ret = camss_x1e_pix_submit_prime(camss, &materialized->prime, 2);
+ 	if (ret)
+ 		goto out_unwind;
+-	ret = vfe680_x1e_pix_runtime_poll_video(vfe,
+-						CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++	ret = csid680_x1e_front_poll_video(csid, video_seq,
++					      CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
+ 	if (ret)
+ 		goto out_unwind;
+ 	result->video_seen = true;

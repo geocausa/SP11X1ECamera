@@ -1,0 +1,44 @@
+{
+  "schema": "sp11-e003h-csid-bufdone-video-0064-static-v1",
+  "date": "2026-09-01",
+  "accepted": true,
+  "runtime_authorized": false,
+  "base_project_head": "2928e8dded97f5077e5fa7ad5206e34c7834983e",
+  "base": "0063 runtime accepted; first Linux QC10C DMA completion but premature 80Y/40C line-equivalent retirement",
+  "windows_oracle_sha256": "a5c90a6b2c13096e807f95be209f6f87b6baec1152d6c009eb08be5f3eaefd47",
+  "windows_proof_sha256": "dac3337993da3796a478b071f30728502ab215b24c67aa4df9d7b5ce05da83be",
+  "patch_sha256": "dd6c08dfa889d911ddba83d89e5d509ec3fd0a1b9cd87cde25c60ff796609628",
+  "module_sha256": "8dc7007adbd7e4d8ba4dd6021502cbe0bf9763a0477ce65227150215db85b64f",
+  "build_log_sha256": "4d9dfc5484eb2d97687d31db251f8c437af4f2790b6386dc2e61de2a435c5799",
+  "preimage_sha256": {
+    "camss-csid-680.c": "c154e15bfff83eb34c21b25526c52f82b1b84fd670b98379e2204a2455aa7ae7",
+    "camss-csid.h": "4a37b4115b92e394df2863860de47501286aed2be27159e214c8cdeb41917792",
+    "camss.c": "0f03966bdcba8ce41d749ac3d163e73b8a6420b477566cdaddd55f71e8d0ea43"
+  },
+  "delta": {
+    "hardware_delta": "NONE",
+    "new_hardware_programming": false,
+    "new_mmio_reads": 0,
+    "new_mmio_writes": 0,
+    "new_register_values": 0,
+    "new_irq_mask_programming": false,
+    "new_sensor_programming": false,
+    "new_bus_programming": false,
+    "new_rtcdm_payload": false,
+    "existing_csid_buf_done_read_reused": true,
+    "buf_done_status_offset": "0x8c",
+    "windows_video_bit": "bit0",
+    "software_state_fields_added": 2,
+    "video_generation_snapshot_point": "immediately after first Epoch0 is consumed",
+    "video_wait": "next CSID BUF_DONE bit0 generation after BUS slot1 retarget + replay2",
+    "old_vfe_video_poll_removed_from_runner": true,
+    "epoch_bridge_0063_retained": true,
+    "bus_slot1_retarget_retained": true,
+    "prime2_retained": true
+  },
+  "build": {
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "success": true
+  },
+  "next": "Package unarmed Golden-safe 0064 candidate; execute exactly once, archive QC10C/RT-CDM/dmesg, and return to Golden."
+}
