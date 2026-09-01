@@ -1,0 +1,44 @@
+{
+  "accepted": true,
+  "binary": {
+    "name": "QcDeviceMFT8380.dll",
+    "producer": "CamX::IQInterface::IQSetupTriggerData",
+    "producer_rva": "0x88a4e8"
+  },
+  "capture_policy": {
+    "capture_requests": "log request IDs through 6; correlate with kernel qccamisp request6 producer in same KD session",
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false,
+    "preferred_breakpoint": "runtime_QcDeviceMFT_base + 0x746f18"
+  },
+  "frame_num_proof": {
+    "byte_offset": "0x1ff8",
+    "exact_log_context": "CamX::IFENode::ProgramIQConfig ... %s_req%d",
+    "exact_surface_program_iq_config_expression": "param_2[0x3ff]",
+    "public_struct_order_corroboration": true
+  },
+  "geometry_proof": {
+    "function": "CamX::IFENode::UpdateActiveSensorDataInTriggerData",
+    "returns_at_primary_hook": "0x746f18",
+    "rva": "0x76cde0"
+  },
+  "offline_only": true,
+  "primary_ife_path": {
+    "complete_trigger_hook_rva": "0x746f18",
+    "frame_num_expression": "qwo(x26 + 0x3ef0)",
+    "frame_num_offset": "0x1ff8",
+    "function": "CamX::IFENode::ExecuteProcessRequest",
+    "function_rva": "0x7453d0",
+    "geometry_update_call_rva": "0x746f14",
+    "iq_setup_call_rva": "0x746e6c",
+    "iq_setup_return_rva": "0x746e70",
+    "module_input_base_expression": "x26 + 0x1ef8",
+    "trigger_data_expression": "x26 + 0x3f78",
+    "trigger_data_offset": "0x2080"
+  },
+  "schema": "sp11-e003h-surface-ife-trigger-producer-boundary-v1",
+  "source": {
+    "exact_ghidra_project": "/home/geoca/.cache/ghidra0073/DeviceMFT",
+    "public_camx_used_as_structural_corroboration_only": true
+  }
+}
