@@ -1,0 +1,75 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "f96697b2b34b53886af9a37dc7146d8ebc420e609481297c89ddc1b8842bd4a6",
+  "authorization_review_sha256": "c4324fc6f80df9d70f64eeeacdef3fca29d8e4698db3e5d564f800d3f6d4b9a8",
+  "base_0066_analysis_sha256": "df7b75c9e75f3248b03501627c32720f8ab336c4f86903d5089afb0b89e8d7e5",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_slotlife_0067=1",
+    "diagnostic_mode": "multi-user, Plymouth disabled, visible tty0",
+    "id": "sp11-camera-e003h-slotlife-0067-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "ad3ce13db77ccd3b223f36a23e4e158df03635017ca1a0ab2158f0d376aa628c",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "hardware_delta": "NONE",
+    "helper_sha256": "80609e40d18baac73f926296ab133e35c4e870e3668c4759cbfa65819fdc1046",
+    "new_mmio_reads": 0,
+    "new_mmio_writes": 0,
+    "new_register_values": 0,
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc",
+    "software_delta": "COUNT_EXISTING_BUF_DONE_BITS_0_4_5_6_9_AND_RETIRE_FIVE_GROUP_SLOT_OWNERSHIP"
+  },
+  "execution_contract": {
+    "boot_count": 1,
+    "expected_dqbuf_count": 2,
+    "hardware_delta": "NONE",
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "same_boot_retry": false,
+    "slot_reuse": false,
+    "software_delta": "COUNT_EXISTING_BUF_DONE_BITS_0_4_5_6_9_AND_RETIRE_FIVE_GROUP_SLOT_OWNERSHIP",
+    "sysfs_trigger_invocations": 0,
+    "third_frame": false,
+    "unsafe_helper_behavior": "leave helper/fd/mappings alive and reboot externally",
+    "v4l2_helper_invocation_count": 1
+  },
+  "forbidden_programming": [
+    "new register/MMIO access",
+    "sensor/CSIPHY/CSID/VFE hardware programming changes",
+    "RT-CDM payload/order changes",
+    "BUS retarget beyond existing 0066 slot1 retarget",
+    "priming replay3",
+    "third frame",
+    "slot reuse",
+    "sysfs RUN trigger",
+    "second V4L2 helper invocation",
+    "same-boot retry",
+    "persistent default change",
+    "killing a pinned helper before reboot"
+  ],
+  "installed_inspection_commit": "ebd8d236ff5871789fc6e3707923e69a35fac1fe",
+  "package_commit": "fc6fd6cbcf50c234cb368e4f553b344d8fc43cbe",
+  "package_inspection_sha256": "f1965a41dd1e11159a00fc160f3ce206bbca21d538906901981a0b53dd46a955",
+  "production_parity_authorized": false,
+  "purpose": "prove that both two-slot VFE1 PIX bundles reach the Windows-proven five-group completion lifetime boundary during the already-working ordinary two-frame V4L2 session, without changing hardware behavior",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-slot-lifetime-0067-runtime-authorization-v1",
+  "static_inspection_sha256": "affe0bb8011f657a6da664676d786f1997526e4ca98046d63859eabbc49e2105",
+  "success_observations": {
+    "primary": [
+      "QBUF_COUNT=2",
+      "STREAMON_OK",
+      "DQBUF0 sequence0 full QC10C",
+      "DQBUF1 sequence1 full QC10C",
+      "0067 both five-group slots reusable log",
+      "STREAMOFF_OK"
+    ],
+    "secondary": [
+      "both QC10C surfaces complete and distinct",
+      "RT-CDM fault-free FIFO30 stopped",
+      "Golden return verified"
+    ]
+  }
+}
