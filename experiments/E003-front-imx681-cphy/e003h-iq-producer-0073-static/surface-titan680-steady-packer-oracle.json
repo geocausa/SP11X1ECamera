@@ -1,0 +1,137 @@
+{
+  "accepted": true,
+  "authorities": {
+    "device_mft": {
+      "analysis": "exact Surface binary; Ghidra decompile",
+      "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+    },
+    "matched_request6_main": {
+      "bytes": 2392,
+      "sha256": "2277aebae7559227b0ce745b7d73b464b57b4b5e62baf8033940ee7f7180e4b4"
+    },
+    "matched_trigger_oracle_sha256": "44b00c41094a5bdb6206b41394accd5420c50b1298ab6aa5a2d0a7f3b04107af"
+  },
+  "base_commit": "7dea5d2cb114932f69a7188b5abf7789488f85cb",
+  "demux_bls141": {
+    "packer": {
+      "create_cmd_list_rva": "0xb41ff0",
+      "name": "CamX::IFEDemuxBLS141Titan680::PackIQRegisterSetting",
+      "rva": "0xb42840"
+    },
+    "packing": {
+      "0x3b70": "((calc_u16[6] & 0x7fff) << 16) | (calc_u16[7] & 0x7fff)",
+      "0x3b74": "((calc_u16[9] & 0x7fff) << 16) | (calc_u16[8] & 0x7fff)"
+    },
+    "register_layout": "isolated first register plus 12-dword range 0x3b68..0x3b94; calculated ushort array is packed into register buffer.",
+    "remaining": "derive calc_u16[6..9] from exact Demux/BLS common calculation + Chromatix/trigger inputs.",
+    "request6": {
+      "recovered_calculated_values": {
+        "p6_high15": 1064,
+        "p7_low15": 1064,
+        "p8_low15": 1064,
+        "p9_high15": 1064
+      },
+      "registers": {
+        "0x3b70": "0x04280428",
+        "0x3b74": "0x04280428"
+      }
+    }
+  },
+  "dmi_packers": {
+    "gic311": {
+      "bank": "calc byte +0x0c",
+      "name": "CamX::IFEGIC311Titan680::PackIQRegisterSetting",
+      "payload": "copies 0x200 bytes from calc + 0x10 + bank*0x200",
+      "request5_to_6": "changed",
+      "rva": "0xb4b500"
+    },
+    "gtm131": {
+      "bank": "calc u16[1]",
+      "name": "CamX::IFEGTM131Titan680::PackIQRegisterSetting",
+      "payload": "builds 256 64-bit entries from selected-bank calculated arrays; emits 0x800 bytes",
+      "request5_to_6": "changed",
+      "rva": "0xb5b3d0"
+    },
+    "lsc411": {
+      "bank": "calc u16[4]",
+      "name": "CamX::IFELSC411Titan680::PackIQRegisterSetting",
+      "payload": "builds three DMI table outputs from selected-bank calculated mesh arrays",
+      "request5_to_6": "LSC0/LSC1 changed; LSC2 stable",
+      "rva": "0xb3d8a0"
+    }
+  },
+  "offline_only": true,
+  "pdpc311": {
+    "create_cmd_list": "six dwords 0x3d78..0x3d8c are emitted from register-buffer +0x14; DMI selector 1 writes 0x200 bytes.",
+    "packer": {
+      "create_cmd_list_rva": "0xb3bd10",
+      "name": "CamX::IFEPDPC311Titan680::PackIQRegisterSetting",
+      "rva": "0xb3c7d0"
+    },
+    "packing": {
+      "0x3d78": "calc_u32@+0x24 & 0x1ffff",
+      "0x3d7c": "calc_u32@+0x28 & 0x1ffff",
+      "0x3d80": "calc_u32@+0x2c & 0x1ffff",
+      "0x3d84": "calc_u32@+0x30 & 0x1ffff"
+    },
+    "remaining": "derive the four calculated 17-bit values from exact PDPC common calculation + Chromatix/trigger inputs; its 0x200 DMI payload is stable request5->6.",
+    "request6": {
+      "recovered_calculated_values": {
+        "calc_u32_0x24": "0x00001c80",
+        "calc_u32_0x28": "0x00001efc",
+        "calc_u32_0x2c": "0x000008fc",
+        "calc_u32_0x30": "0x00000843"
+      },
+      "registers": {
+        "0x3d78": "0x00001c80",
+        "0x3d7c": "0x00001efc",
+        "0x3d80": "0x000008fc",
+        "0x3d84": "0x00000843"
+      }
+    }
+  },
+  "safety": {
+    "hardware_delta": false,
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false,
+    "raw_proprietary_bytes_committed": false
+  },
+  "schema": "sp11-e003h-surface-titan680-steady-packer-oracle-v1",
+  "wb201": {
+    "calculated_input": {
+      "b_q10": "round(AWBB * 1024)",
+      "g_q10": "round(AWBG * 1024)",
+      "r_q10": "round(AWBR * 1024)"
+    },
+    "classification": "CLOSED: both frame-varying WB steady fields are reproduced exactly from the matched trigger vector.",
+    "packer": {
+      "create_cmd_list_rva": "0xb559f0",
+      "name": "CamX::IFEWB201Titan680::PackIQRegisterSetting",
+      "rva": "0xb560c0"
+    },
+    "packing": {
+      "0x4568": "g_q10 << 17",
+      "0x456c": "b_q10 << 17",
+      "0x4570": "r_q10 << 17"
+    },
+    "register_range": "CreateCmdList writes 12 dwords at VFE1 0x4568 from register-buffer +4; isolated enable at 0x4560.",
+    "request6": {
+      "byte_exact_dynamic_match": true,
+      "q10": {
+        "b_q10": 1983,
+        "g_q10": 1024,
+        "r_q10": 1824
+      },
+      "registers": {
+        "0x4568": "0x08000000",
+        "0x456c": "0x0f7e0000",
+        "0x4570": "0x0e400000"
+      },
+      "trigger": {
+        "AWBB": 1.936495065689087,
+        "AWBG": 1.0,
+        "AWBR": 1.7811671495437622
+      }
+    }
+  }
+}
