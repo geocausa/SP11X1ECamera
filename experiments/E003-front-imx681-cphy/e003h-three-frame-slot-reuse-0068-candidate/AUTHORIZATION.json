@@ -1,0 +1,78 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "ad55535e11d7414824b1705f8b2475f507f6c6cc87d42f2dcca4a7046170e605",
+  "authorization_review_sha256": "0f4113f2d2ee6459856c54a2fec9d5f05d2371ab1fe4d53ddbce6100934312de",
+  "base_0067_analysis_sha256": "4f454aba3d444bd003a463650a61e99e37275894835dbb3bad12a90a7c4dbf12",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_frame3_0068=1",
+    "diagnostic_mode": "multi-user, Plymouth disabled, visible tty0",
+    "id": "sp11-camera-e003h-frame3-0068-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "27ce7f002699b368461136a60e8731cb6d905e44c74090037e275b94faa48953",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "hardware_delta": "ONE_WINDOWS_PROVEN_SLOT0_BUS_RETARGET_PLUS_REPLAY3_REQUEST3_ONLY",
+    "helper_sha256": "133010fbd505e593a24c6a1eb58a36813953033f9bbd9cfc27883b5b2c5b80e8",
+    "new_mmio_primitive_calls": 0,
+    "new_register_literals": 0,
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc"
+  },
+  "execution_contract": {
+    "authorized_hardware_actions": [
+      "one existing complete nine-client BUS retarget to proven-reusable slot0",
+      "one existing priming replay3/request3 submission"
+    ],
+    "boot_count": 1,
+    "continuous_requeue": false,
+    "expected_dqbuf_count": 3,
+    "fourth_frame": false,
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "same_boot_retry": false,
+    "slot_reuse": true,
+    "sysfs_trigger_invocations": 0,
+    "unsafe_helper_behavior": "leave helper/fd/mappings alive and reboot externally",
+    "v4l2_helper_invocation_count": 1
+  },
+  "forbidden_programming": [
+    "new MMIO primitive or register value",
+    "new sensor/CSIPHY/CSID/VFE programming recipe",
+    "RT-CDM payload other than already-captured replay3/request3",
+    "BUS retarget other than single proven slot0 refill",
+    "replay beyond packet3/request3",
+    "QBUF requeue after DQBUF",
+    "fourth frame",
+    "continuous streaming loop",
+    "sysfs RUN trigger",
+    "second helper invocation",
+    "same-boot retry",
+    "persistent default change",
+    "killing a pinned helper before reboot"
+  ],
+  "installed_inspection_commit": "d8d27839fdf04fce096d6f2467bd6525b25f36fa",
+  "package_commit": "53205325acf092c3b157bdf569854ee355a3d599",
+  "package_inspection_sha256": "a8d50d42521d5c3077a0bb4ac63bbff04922bc7d74d30edfeaeaf2c94978176f",
+  "production_parity_authorized": false,
+  "purpose": "prove one bounded third front-camera frame by reusing 0067-proven free slot0 with the same-machine Windows Epoch0 -> BUS refill -> replay3/request3 sequence",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-three-frame-slot-reuse-0068-runtime-authorization-v1",
+  "static_inspection_sha256": "c4051329572afd6fdad0330b4eff73a7d0a583f7035d172fdb4ee7d9f6109bb1",
+  "success_observations": {
+    "primary": [
+      "QBUF_COUNT=3",
+      "STREAMON_OK",
+      "DQBUF0 sequence0 full QC10C",
+      "DQBUF1 sequence1 full QC10C",
+      "DQBUF2 sequence2 full QC10C",
+      "0068 slot0 reused safely log",
+      "STREAMOFF_OK"
+    ],
+    "secondary": [
+      "three QC10C surfaces complete; frame2 distinct from earlier frames",
+      "RT-CDM fault-free and stopped",
+      "Golden return verified"
+    ]
+  }
+}
