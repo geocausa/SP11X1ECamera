@@ -1,0 +1,65 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "16c83afd1230c0001f30008c267ec767a4a06feb69abd4f75123fe208d8c6638",
+  "authorization_review_sha256": "56832caf8f6fa91227817b1f8e3f9192742546b03b74b4ae2f66897f8cb2d471",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_csidvideo_0064=1",
+    "diagnostic_mode": "multi-user, Plymouth disabled, visible tty0",
+    "id": "sp11-camera-e003h-csidvideo-0064-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "8dc7007adbd7e4d8ba4dd6021502cbe0bf9763a0477ce65227150215db85b64f",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "hardware_delta": "NONE",
+    "helper_sha256": "d13ab2d324516c28507ee41aa468b2b98bdfc5402a93c00cc3cea2172036ac09",
+    "new_mmio_reads": 0,
+    "new_mmio_writes": 0,
+    "new_register_values": 0,
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc",
+    "software_delta": "CSID_BUFDONE_VIDEO_GENERATION_0064_ONLY"
+  },
+  "execution_contract": {
+    "boot_count": 1,
+    "hardware_delta": "NONE",
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "root_helper_invocation_count": 1,
+    "same_boot_retry": false,
+    "software_delta": "CSID_BUFDONE_VIDEO_GENERATION_0064_ONLY"
+  },
+  "forbidden_programming": [
+    "new register writes",
+    "new MMIO reads",
+    "sensor/CSIPHY/CSID/VFE programming changes",
+    "RT-CDM payload/order changes",
+    "DT changes",
+    "second helper invocation",
+    "same-boot retry",
+    "persistent default change"
+  ],
+  "installed_inspection_commit": "3f4425024408c6ac6ef69a2a3109db8e307b608e",
+  "package_commit": "c9fc74e6fbd66b47c8f41627d1ebd84e61274066",
+  "package_inspection_sha256": "8ff6446fbdb7a9ff5f923d92abd25fdd8b2a3b86d93278cdd4c4b18d84379f1a",
+  "production_parity_authorized": false,
+  "purpose": "test whether waiting for the next Windows-proven CSID1 BUF_DONE bit0 generation after first Epoch0 and retained BUS retarget/replay2 prevents premature 0063 retirement and yields a complete first QC10C frame without hardware programming changes",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-csid-bufdone-video-0064-runtime-authorization-v1",
+  "success_observations": {
+    "primary": [
+      "first CSID Epoch0 consumed",
+      "BUS slot1 retarget executes",
+      "prime/replay2 executes",
+      "CSID BUF_DONE VIDEO generation advances beyond Epoch0 snapshot"
+    ],
+    "secondary": [
+      "QC10C output exceeds 0063 80Y/40C partial surface and preferably reaches full 2560x1440 contract",
+      "RT-CDM remains fault-free",
+      "CSID remains 3840x2160",
+      "Golden return verified"
+    ]
+  },
+  "windows_oracle_sha256": "a5c90a6b2c13096e807f95be209f6f87b6baec1152d6c009eb08be5f3eaefd47",
+  "windows_proof_sha256": "dac3337993da3796a478b071f30728502ab215b24c67aa4df9d7b5ce05da83be"
+}
