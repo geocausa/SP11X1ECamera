@@ -1,0 +1,68 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "1ee59fd1c189f6cebe9210c5f15bac496e700ef5e35c68872d074b6045830133",
+  "authorization_review_sha256": "485fbab5b2d382a68b47c78c991f2802f732a38790aee661bb6145feddf8c942",
+  "base_0064_analysis_sha256": "ce8f5f30cb0af6304352004c8a1c5f162289f1348b0556cd48c547c01f26b4ba",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_v4l2one_0065=1",
+    "diagnostic_mode": "multi-user, Plymouth disabled, visible tty0",
+    "id": "sp11-camera-e003h-v4l2one-0065-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "503e2eff54e70c4c8147ecaad2a7d1cfa1c2130b61bfb4eea317293a9e98f343",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "hardware_delta": "NONE",
+    "helper_sha256": "8afee5d4bc8cd15416f5e2962c9d4d7d6cbbbb9391394fed075f1a5467c49184",
+    "new_mmio_reads": 0,
+    "new_mmio_writes": 0,
+    "new_register_values": 0,
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc",
+    "software_delta": "V4L2_VB2_ONE_FRAME_BRIDGE_0065_ONLY"
+  },
+  "execution_contract": {
+    "boot_count": 1,
+    "hardware_delta": "NONE",
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "same_boot_retry": false,
+    "software_delta": "V4L2_VB2_ONE_FRAME_BRIDGE_0065_ONLY",
+    "sysfs_trigger_invocations": 0,
+    "unsafe_helper_behavior": "leave helper/fd/mappings alive and reboot externally",
+    "v4l2_helper_invocation_count": 1
+  },
+  "forbidden_programming": [
+    "new register/MMIO access",
+    "sensor/CSIPHY/CSID/VFE hardware programming changes",
+    "RT-CDM payload/order changes",
+    "DT changes",
+    "sysfs RUN trigger",
+    "second V4L2 helper invocation",
+    "same-boot retry",
+    "persistent default change",
+    "killing a pinned helper before reboot"
+  ],
+  "installed_inspection_commit": "c19ed7dddd9d26249d44c0f26f6b3e898febc28b",
+  "package_commit": "d1db2a3df371bccb57c7e378a4e5c22f97e4cd23",
+  "package_inspection_sha256": "e14052d54a5d142f692307cea206354661084845f173c63670cc81ce958b8dcf",
+  "production_parity_authorized": false,
+  "purpose": "test one standard Linux V4L2 QBUF/STREAMON/DQBUF/STREAMOFF transaction while reusing the already-proven 0064 complete-frame hardware lifecycle without any camera/ISP programming change",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-v4l2-one-frame-0065-runtime-authorization-v1",
+  "static_inspection_sha256": "f405aaebc0e4ed09e338e58803eae90c6400e671641cc62027560b1c7a2b0b3b",
+  "success_observations": {
+    "primary": [
+      "QBUF_COUNT=2",
+      "STREAMON_OK",
+      "DQBUF index0 bytesused 0x76b000",
+      "STREAMOFF_OK"
+    ],
+    "secondary": [
+      "full QC10C 1440 Y / 720 C span",
+      "RT-CDM fault-free FIFO 30",
+      "0065 V4L2 completion log present",
+      "Golden return verified"
+    ]
+  }
+}
