@@ -1,0 +1,112 @@
+{
+  "accepted": true,
+  "chromatix_default": {
+    "bayer_branch": 0,
+    "black_level_terms": [
+      602,
+      593,
+      592,
+      596
+    ],
+    "channel_terms": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "source": "decoded Surface default demuxblklevel14_ife_v2 trigger/region tree; no Sensor2/usecase override"
+  },
+  "classification": "CLOSED: 0x3b70 and 0x3b74 are independently reproduced from request-time PropertyIDPostSensorGainId/dGain plus decoded Surface Demux/BLS14 tuning and exact Surface common/Titan680 math.",
+  "offline_only": true,
+  "policy": {
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false,
+    "raw_windows_bytes_committed": false
+  },
+  "request6_reproduction": {
+    "byte_exact": true,
+    "calculated": {
+      "calc6": {
+        "normalized": 1.038717941825642,
+        "q10": 1064
+      },
+      "calc7": {
+        "normalized": 1.0389153291586044,
+        "q10": 1064
+      },
+      "calc8": {
+        "normalized": 1.0386521627146406,
+        "q10": 1064
+      },
+      "calc9": {
+        "normalized": 1.039310328966915,
+        "q10": 1064
+      }
+    },
+    "formula": "q10 = round(1024 * dGain * channelTerm * 16383/(16383-blackLevel)); Bayer0 mapping calc6=p2[1]*p3[1], calc7=p2[3]*p3[0], calc8=p2[2]*p3[2], calc9=p2[0]*p3[3]",
+    "observed_registers": {
+      "0x3b70": "0x04280428",
+      "0x3b74": "0x04280428"
+    },
+    "predicted_registers": {
+      "0x3b70": "0x04280428",
+      "0x3b74": "0x04280428"
+    }
+  },
+  "schema": "sp11-e003h-demux-dgain-oracle-v1",
+  "source": {
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "windows_kd_log_sha256": "541b950aafbd7fff8a90c935c76ada9a7aa00865aafc1ade080c7a5d33061662",
+    "windows_main_bytes": 2392,
+    "windows_main_sha256": "86f7634d11aa9af24339bb3c5446ff2ee7c799feab003f1246d203b2844856da",
+    "windows_summary_sha256": "d4cfdcb9f6f975bacf6556c26a02b2f8b106e56a48f3cab65c60d51c8bb9eb25"
+  },
+  "surface_code": {
+    "demux_common_hw_setting_rva": "0x998e70",
+    "demux_create_cmd_list_rva": "0xb41ff0",
+    "demux_titan680_packer_rva": "0xb42840",
+    "ife_primary_iqsetup_return_rva": "0x746e70",
+    "isp_input_sensor_dgain_offset": "ISPInputData + 0x84",
+    "max_14bit": 16383,
+    "normalization_limit": 31.999000549316406,
+    "q_gain": 1024
+  },
+  "windows_frames": {
+    "4": {
+      "awbb_float": 1.9166333675384521,
+      "awbb_raw": "0x3ff5543e",
+      "awbr_float": 1.798802375793457,
+      "awbr_raw": "0x3fe63f28",
+      "dgain_float": 1.0000745058059692,
+      "dgain_raw": "0x3f800271",
+      "lux_float": 374.23114013671875,
+      "lux_raw": "0x43bb1d96",
+      "trigger_gain_float": 3.83549165725708,
+      "trigger_gain_raw": "0x407578b2"
+    },
+    "5": {
+      "awbb_float": 1.936495065689087,
+      "awbb_raw": "0x3ff7df12",
+      "awbr_float": 1.7811671495437622,
+      "awbr_raw": "0x3fe3fd49",
+      "dgain_float": 1.0062648057937622,
+      "dgain_raw": "0x3f80cd49",
+      "lux_float": 373.97943115234375,
+      "lux_raw": "0x43bafd5e",
+      "trigger_gain_float": 14.720216751098633,
+      "trigger_gain_raw": "0x416b8602"
+    },
+    "6": {
+      "awbb_float": 1.936495065689087,
+      "awbb_raw": "0x3ff7df12",
+      "awbr_float": 1.7811671495437622,
+      "awbr_raw": "0x3fe3fd49",
+      "dgain_float": 1.0011204481124878,
+      "dgain_raw": "0x3f8024b7",
+      "lux_float": 373.9503173828125,
+      "lux_raw": "0x43baf9a4",
+      "trigger_gain_float": 43.2984619140625,
+      "trigger_gain_raw": "0x422d31a0"
+    }
+  }
+}

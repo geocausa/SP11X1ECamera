@@ -13,6 +13,7 @@
   },
   "base_commit": "7dea5d2cb114932f69a7188b5abf7789488f85cb",
   "demux_bls141": {
+    "classification": "CLOSED: 0x3b70 and 0x3b74 are independently reproduced from request-time PropertyIDPostSensorGainId/dGain plus decoded Surface Demux/BLS14 tuning and exact Surface common/Titan680 math.",
     "hw_setting": {
       "equation": "For Bayer 0/1, four calculated channel values are round(1024 * normalized_channel), where normalized_channel is built from ISP gain, four interpolated BLS terms, four channel terms, and 16383/(16383-BLS). If max channel exceeds 31.99900055, all four are scaled together.",
       "max_normalized_channel": 31.999000549316406,
@@ -30,8 +31,24 @@
       "0x3b74": "((calc_u16[9] & 0x7fff) << 16) | (calc_u16[8] & 0x7fff)"
     },
     "register_layout": "isolated first register plus 12-dword range 0x3b68..0x3b94; calculated ushort array is packed into register buffer.",
-    "remaining": "Recover the exact request-time ISP gain and the eight interpolated Demux/BLS inputs (four BLS terms + four channel terms) from decoded Chromatix/interpolation; packing itself is closed.",
+    "remaining": "No true dynamic Demux/BLS scalar math remains for the accepted 0x958 path. Future producer must supply per-request post-sensor dGain and follow the same tuning/interpolation path.",
     "request6": {
+      "byte_exact_dynamic_match": true,
+      "decoded_black_level_terms": [
+        602,
+        593,
+        592,
+        596
+      ],
+      "decoded_channel_terms": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "demux_dgain_oracle_sha256": "6750e4d872f5d987ba3f7599b5dc4903d22d860d8104cd896498ef0739708539",
+      "post_sensor_dgain": 1.0011204481124878,
+      "post_sensor_dgain_raw": "0x3f8024b7",
       "recovered_calculated_values": {
         "p6_high15": 1064,
         "p7_low15": 1064,
@@ -39,6 +56,10 @@
         "p9_high15": 1064
       },
       "registers": {
+        "0x3b70": "0x04280428",
+        "0x3b74": "0x04280428"
+      },
+      "reproduced_registers": {
         "0x3b70": "0x04280428",
         "0x3b74": "0x04280428"
       }
@@ -123,15 +144,15 @@
   },
   "schema": "sp11-e003h-surface-titan680-steady-packer-oracle-v1",
   "summary": {
+    "all_true_scalar_fields_closed": true,
     "bank_parity_fields": 16,
     "closed": [
       "WB 0x456c/0x4570",
-      "PDPC 0x3d78/0x3d7c/0x3d80/0x3d84"
-    ],
-    "closed_scalar_fields": 6,
-    "remaining": [
+      "PDPC 0x3d78/0x3d7c/0x3d80/0x3d84",
       "Demux/BLS 0x3b70/0x3b74"
     ],
+    "closed_scalar_fields": 8,
+    "remaining": [],
     "true_scalar_fields_total": 8
   },
   "wb201": {
