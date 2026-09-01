@@ -1,0 +1,79 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "1b120db84c35d9ad31a987fbaff45f0decd1d99c772ee35560fe79c806a6eb57",
+  "authorization_review_sha256": "6469d60b6534eda85f05ecdd69a6fbf47c4d52ca2027476bab25c975077d356d",
+  "base_0068_analysis_sha256": "3edd9e68d7c3716aad3c9e9a9b936b58c9d9c3023daa59d1ab5d315d6b7ceac6",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_frame4_0069=1",
+    "diagnostic_mode": "multi-user, Plymouth disabled, visible tty0",
+    "id": "sp11-camera-e003h-frame4-0069-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "candidate": {
+    "camss_sha256": "9e5a9b31a56b5c92694e46da3580fbd52d0087907626a6b9886c259d7deaee1a",
+    "capsule_request_id": 4,
+    "capsule_sha256": "1d1b118796dea2e62910e48fff5c18a51cbc0d53c609229828db908000b96505",
+    "capsule_variant": "0x958",
+    "dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "hardware_delta": "ONE_PROVEN_SLOT1_REFILL_PLUS_ONE_PROVEN_STEADY_REQUEST4_BATCH",
+    "helper_sha256": "db656ba190a11c19aad44b1e273bf654cd53bc031113f6bf917a3949c45e7a7b",
+    "new_mmio_primitive_calls": 0,
+    "new_register_literals": 0,
+    "sensor_sha256": "a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc"
+  },
+  "execution_contract": {
+    "asynchronous_streamon": false,
+    "authorized_hardware_actions": [
+      "one existing complete nine-client BUS retarget to proven-reusable slot1",
+      "one existing five-BL steady 0x958/request4 submission"
+    ],
+    "boot_count": 1,
+    "continuous_requeue": false,
+    "expected_dqbuf_count": 4,
+    "fifth_frame": false,
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "same_boot_retry": false,
+    "slot_reuse": true,
+    "sysfs_trigger_invocations": 0,
+    "unsafe_helper_behavior": "leave helper/fd/mappings alive and reboot externally on ambiguous/unsafe failure",
+    "v4l2_helper_invocation_count": 1
+  },
+  "forbidden_programming": [
+    "new register/MMIO primitive or register literal",
+    "sensor/CSIPHY/CSID/VFE programming changes beyond accepted 0068",
+    "RT-CDM payload synthesis outside hash-pinned request4 capsule",
+    "second BUS refill beyond authorized slot1 update",
+    "fifth frame",
+    "post-DQBUF QBUF requeue",
+    "asynchronous STREAMON worker",
+    "sysfs RUN trigger",
+    "second V4L2 helper invocation",
+    "same-boot retry",
+    "persistent default change",
+    "killing a pinned helper before reboot"
+  ],
+  "installed_inspection_commit": "9c6b2e8b80a1bbc6c0b4b9582fc85d617889fadd",
+  "package_commit": "29a7ed3491b89abce1076f790070a1e06b9b1bdd",
+  "package_inspection_sha256": "f530cc3d7534abbb002045f2b82009ec9426ba16d99e35cd96e58bd545e6771d",
+  "production_parity_authorized": false,
+  "purpose": "prove first Windows-shaped steady-state request4 after the already-working replay3 path by reusing five-group-retired slot1 for a fourth ordinary V4L2 frame",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-four-frame-first-steady-0069-runtime-authorization-v1",
+  "static_inspection_sha256": "202041759a5e0a8a5c77615eb5296431d06ea9d82c94152bcd888b77f6fa7009",
+  "success_observations": {
+    "primary": [
+      "QBUF_COUNT=4",
+      "STREAMON_OK",
+      "DQBUF sequences 0,1,2,3 with full QC10C bytes",
+      "0069 first steady request4 completion log",
+      "STREAMOFF_OK"
+    ],
+    "secondary": [
+      "all four QC10C surfaces complete and distinct",
+      "RT-CDM reaches fault-free FIFO40 stopped with last_userdata=0x4",
+      "Golden return verified"
+    ]
+  }
+}
