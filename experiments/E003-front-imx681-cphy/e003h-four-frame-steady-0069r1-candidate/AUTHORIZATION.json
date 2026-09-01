@@ -1,0 +1,67 @@
+{
+  "accepted": true,
+  "asset_manifest_sha256": "447522c5f5f6c3a29c4db69d74af86a2dd2479b67d3135df819cf8ba16a55e34",
+  "authorization_review_sha256": "5b7c6f5c21416a9b7fe03e4d7924782b137d5f105ece4a9c5bce88efd5b76e3c",
+  "boot": {
+    "cmdline_marker": "sp11_camera_e003h_frame4_0069r1=1",
+    "diagnostic_mode": "multi-user, Plymouth disabled, visible tty0",
+    "id": "sp11-camera-e003h-frame4-0069r1-one-shot",
+    "saved_default": "sp11-audio-fullio-v19c"
+  },
+  "bounded_provenance_sha256": "803d09be7a18b321b07db7dac5a81d837dd09b1f6dfd883b2f27daefa7e8ffb6",
+  "execution_contract": {
+    "asynchronous_streamon": false,
+    "authorized_hardware_actions": [
+      "one existing complete nine-client BUS retarget to proven-reusable slot1",
+      "one existing five-BL steady 0x958/request4 submission"
+    ],
+    "boot_count": 1,
+    "cci_failure_policy": "if ac16000.cci standard probe fails or IMX681 entity is absent, do not invoke helper; archive and return Golden",
+    "continuous_requeue": false,
+    "expected_dqbuf_count": 4,
+    "fifth_frame": false,
+    "forced_cci_rebind_or_reset": false,
+    "persistent_rtcdm_observer_required": true,
+    "post_run_reboot": "immediate Golden",
+    "same_boot_retry": false,
+    "slot_reuse": true,
+    "sysfs_trigger_invocations": 0,
+    "v4l2_helper_invocation_count": 1
+  },
+  "forbidden_programming": [
+    "forced CCI bind/reset/reprobe workaround",
+    "new register/MMIO primitive or value",
+    "fifth frame",
+    "post-DQBUF QBUF requeue",
+    "asynchronous STREAMON",
+    "sysfs RUN trigger",
+    "second helper invocation",
+    "same-boot retry",
+    "persistent default change"
+  ],
+  "installed_inspection_commit": "05f9115e3e9fa5509d880059d28b9472ba570d5f",
+  "package_commit": "a28b267d28de702076509b073a62c3f88f980320",
+  "package_inspection_sha256": "6172d77270f71755643f65c505624160be94d0ca26de444a9960cde653911560",
+  "previous_0069_failure_analysis_sha256": "bd540c52f87374eb95398f3d51e4a3a56de511770bb3e9084e475af8b8ec910d",
+  "production_parity_authorized": false,
+  "purpose": "retry the byte-identical 0069 four-frame first-steady transaction after a pre-capture CCI probe failure; no CCI workaround is authorized",
+  "runtime_authorized": true,
+  "schema": "sp11-e003h-four-frame-first-steady-0069r1-runtime-authorization-v1",
+  "static_inspection_sha256": "202041759a5e0a8a5c77615eb5296431d06ea9d82c94152bcd888b77f6fa7009",
+  "success_observations": {
+    "primary": [
+      "standard ac16000.cci probe succeeds without intervention",
+      "IMX681 entity appears",
+      "QBUF_COUNT=4",
+      "STREAMON_OK",
+      "DQBUF sequences 0,1,2,3",
+      "0069 first steady request4 completion",
+      "STREAMOFF_OK"
+    ],
+    "secondary": [
+      "four complete distinct QC10C surfaces",
+      "RT-CDM FIFO40 stopped error=0 faulted=0 last_userdata=0x4",
+      "Golden return verified"
+    ]
+  }
+}
