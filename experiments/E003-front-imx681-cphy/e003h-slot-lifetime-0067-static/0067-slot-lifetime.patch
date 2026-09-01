@@ -1,0 +1,242 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+index 9a779fe..91f6fd5 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -80,6 +80,10 @@
+ 
+ #define CSID_BUF_DONE_IRQ_STATUS				0x8c
+ #define		CSID_BUF_DONE_VIDEO				BIT(0)
++#define		CSID_BUF_DONE_AEC_BE_BHIST			BIT(4)
++#define		CSID_BUF_DONE_TINTLESS_BG			BIT(5)
++#define		CSID_BUF_DONE_AWB_BG				BIT(6)
++#define		CSID_BUF_DONE_RS				BIT(9)
+ #define	BUF_DONE_IRQ_STATUS_RDI_OFFSET				(csid_is_lite(csid) ? 1 : 14)
+ #define CSID_BUF_DONE_IRQ_MASK					0x90
+ #define CSID_BUF_DONE_IRQ_CLEAR					0x94
+@@ -536,10 +540,12 @@ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason
+ 		 readl_relaxed(csid->base + CSID_IPP_SP11_PARITY_ZERO1),
+ 		 readl_relaxed(csid->base + CSID_IPP_EPOCH_IRQ_CFG));
+ 	dev_info(csid->camss->dev,
+-		 "E003h CSID1 %s ipp-history=%08x/%08x/%u video-buf=%08x/%u line-error=%08x/%08x/%08x\n",
++		 "E003h CSID1 %s ipp-history=%08x/%08x/%u buf=%08x gen=%u/%u/%u/%u/%u line-error=%08x/%08x/%08x\n",
+ 		 why, csid->x1e_ipp_irq_seen_or, csid->x1e_ipp_irq_last,
+ 		 csid->x1e_ipp_irq_count, csid->x1e_buf_done_last,
+-		 csid->x1e_buf_done_video_count, csid->x1e_ipp_line_error_frame,
++		 csid->x1e_buf_done_video_count, csid->x1e_buf_done_aec_bhist_count,
++		 csid->x1e_buf_done_tintless_count, csid->x1e_buf_done_awb_count,
++		 csid->x1e_buf_done_rs_count, csid->x1e_ipp_line_error_frame,
+ 		 csid->x1e_ipp_line_error_hbi, csid->x1e_ipp_line_error_vbi);
+ 	for (i = 0; i < csid->x1e_ipp_irq_trace_count &&
+ 	     i < X1E_IPP_IRQ_TRACE_MAX; i++)
+@@ -605,6 +611,10 @@ static int csid_reset(struct csid_device *csid)
+ 		csid->x1e_ipp_irq_count = 0;
+ 		csid->x1e_buf_done_last = 0;
+ 		csid->x1e_buf_done_video_count = 0;
++		csid->x1e_buf_done_aec_bhist_count = 0;
++		csid->x1e_buf_done_tintless_count = 0;
++		csid->x1e_buf_done_awb_count = 0;
++		csid->x1e_buf_done_rs_count = 0;
+ 		csid->x1e_ipp_irq_trace_count = 0;
+ 		csid->x1e_ipp_line_error_frame = 0;
+ 		csid->x1e_ipp_line_error_hbi = 0;
+@@ -695,6 +705,35 @@ int csid680_x1e_front_poll_video(struct csid_device *csid, u32 after_seq,
+ 				 csid->x1e_buf_done_video_count);
+ }
+ 
++static bool csid680_x1e_front_all_done_at_least(struct csid_device *csid,
++						u32 target_seq)
++{
++	return READ_ONCE(csid->x1e_buf_done_video_count) >= target_seq &&
++	       READ_ONCE(csid->x1e_buf_done_aec_bhist_count) >= target_seq &&
++	       READ_ONCE(csid->x1e_buf_done_tintless_count) >= target_seq &&
++	       READ_ONCE(csid->x1e_buf_done_awb_count) >= target_seq &&
++	       READ_ONCE(csid->x1e_buf_done_rs_count) >= target_seq;
++}
++
++int csid680_x1e_front_poll_all_done(struct csid_device *csid, u32 target_seq,
++				    unsigned long timeout_us)
++{
++	bool done;
++
++	if (!csid || !target_seq || !timeout_us ||
++	    !__csid_sp11_front_ipp_mode0(csid))
++		return -EINVAL;
++
++	/*
++	 * Windows proves BUF_DONE +0x8c bits 0/4/5/6/9 are the independent
++	 * VIDEO/AEC-BHIST/TINTLESS/AWB/RS completion groups. The ISR already
++	 * reads and clears that register, so this is software-only lifetime
++	 * accounting with no additional MMIO access or hardware programming.
++	 */
++	return read_poll_timeout(csid680_x1e_front_all_done_at_least, done, done,
++				 10, timeout_us, false, csid, target_seq);
++}
++
+ int csid680_x1e_front_ipp_stop(struct csid_device *csid)
+ {
+ 	unsigned long time;
+@@ -753,6 +792,18 @@ static irqreturn_t csid_isr(int irq, void *dev)
+ 		if (buf_done_val & CSID_BUF_DONE_VIDEO)
+ 			WRITE_ONCE(csid->x1e_buf_done_video_count,
+ 				   READ_ONCE(csid->x1e_buf_done_video_count) + 1);
++		if (buf_done_val & CSID_BUF_DONE_AEC_BE_BHIST)
++			WRITE_ONCE(csid->x1e_buf_done_aec_bhist_count,
++				   READ_ONCE(csid->x1e_buf_done_aec_bhist_count) + 1);
++		if (buf_done_val & CSID_BUF_DONE_TINTLESS_BG)
++			WRITE_ONCE(csid->x1e_buf_done_tintless_count,
++				   READ_ONCE(csid->x1e_buf_done_tintless_count) + 1);
++		if (buf_done_val & CSID_BUF_DONE_AWB_BG)
++			WRITE_ONCE(csid->x1e_buf_done_awb_count,
++				   READ_ONCE(csid->x1e_buf_done_awb_count) + 1);
++		if (buf_done_val & CSID_BUF_DONE_RS)
++			WRITE_ONCE(csid->x1e_buf_done_rs_count,
++				   READ_ONCE(csid->x1e_buf_done_rs_count) + 1);
+ 	}
+ 
+ 	if (!csid_is_lite(csid)) {
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index 6492172..0b6a728 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -171,9 +171,13 @@ struct csid_device {
+ 	u32 x1e_ipp_irq_seen_or;
+ 	u32 x1e_ipp_irq_last;
+ 	u32 x1e_ipp_irq_count;
+-	/* Windows-proven CSID BUF_DONE bit0 VIDEO completion generations. */
++	/* Windows-proven CSID BUF_DONE completion generations for VFE1 PIX. */
+ 	u32 x1e_buf_done_last;
+ 	u32 x1e_buf_done_video_count;
++	u32 x1e_buf_done_aec_bhist_count;
++	u32 x1e_buf_done_tintless_count;
++	u32 x1e_buf_done_awb_count;
++	u32 x1e_buf_done_rs_count;
+ 	/* E003h 0050 ordered first-IRQ status/actual-geometry telemetry. */
+ 	u32 x1e_ipp_irq_trace_status[X1E_IPP_IRQ_TRACE_MAX];
+ 	u32 x1e_ipp_irq_trace_actual[X1E_IPP_IRQ_TRACE_MAX];
+@@ -268,6 +272,8 @@ int csid680_x1e_front_ipp_poll_epoch0(struct csid_device *csid,
+ u32 csid680_x1e_front_video_seq(struct csid_device *csid);
+ int csid680_x1e_front_poll_video(struct csid_device *csid, u32 after_seq,
+ 				 unsigned long timeout_us);
++int csid680_x1e_front_poll_all_done(struct csid_device *csid, u32 target_seq,
++				    unsigned long timeout_us);
+ int csid680_x1e_front_ipp_stop(struct csid_device *csid);
+ void csid680_x1e_front_runtime_dump(struct csid_device *csid, const char *reason);
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-680.c b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+index d4bbc16..14a1b05 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -1236,6 +1236,39 @@ int vfe680_x1e_pix_runtime_retire_video(struct vfe680_x1e_pix_runtime *runtime,
+ 	return 0;
+ }
+ 
++int vfe680_x1e_pix_runtime_retire_aux(struct vfe680_x1e_pix_runtime *runtime,
++				      unsigned int expected_slot)
++{
++	static const u32 event_id[] = { 0x0d, 0x0e, 0x10, 0x12 };
++	struct camss_buffer *done;
++	bool reusable = false;
++	unsigned int index;
++	unsigned int i;
++	int ret;
++
++	if (!runtime || expected_slot >= VFE680_X1E_PIX_SLOT_COUNT)
++		return -EINVAL;
++
++	/*
++	 * Hardware arrival order is intentionally unconstrained. The caller waits
++	 * until all five CSID completion generations have arrived, then this only
++	 * retires one FIFO entry from each remaining independent ownership group.
++	 */
++	for (i = 0; i < ARRAY_SIZE(event_id); i++) {
++		done = NULL;
++		reusable = false;
++		ret = vfe680_x1e_pix_ownership_complete(&runtime->ownership, event_id[i],
++						&index, &done, &reusable);
++		if (ret)
++			return ret;
++		if (index != expected_slot || done ||
++		    (i + 1 < ARRAY_SIZE(event_id) && reusable))
++			return -EPROTO;
++	}
++
++	return reusable ? 0 : -EPROTO;
++}
++
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+ 	/* VFE680 has no global reset, simply report a completion */
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+index 10bdd07..45b76f5 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -345,5 +345,7 @@ int vfe680_x1e_pix_runtime_poll_video(struct vfe_device *vfe,
+ int vfe680_x1e_pix_runtime_retire_video(struct vfe680_x1e_pix_runtime *runtime,
+ 					unsigned int expected_slot,
+ 					struct camss_buffer **video_done);
++int vfe680_x1e_pix_runtime_retire_aux(struct vfe680_x1e_pix_runtime *runtime,
++				      unsigned int expected_slot);
+ 
+ #endif /* QC_MSM_CAMSS_VFE_H */
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 85ce786..921f787 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7473,6 +7473,8 @@ struct camss_x1e_pix_runner_result {
+ 	bool epoch0_seen;
+ 	bool video_seen;
+ 	bool video_next_seen;
++	bool slot0_reusable;
++	bool slot1_reusable;
+ 	bool teardown_safe;
+ };
+ 
+@@ -7731,6 +7733,14 @@ static int camss_x1e_pix_runner_frames(struct camss *camss,
+ 	ret = vfe680_x1e_pix_runtime_retire_video(pix, 0, &result->video_done);
+ 	if (ret)
+ 		goto out_unwind;
++	ret = csid680_x1e_front_poll_all_done(csid, video_seq + 1,
++					       CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++	if (ret)
++		goto out_unwind;
++	ret = vfe680_x1e_pix_runtime_retire_aux(pix, 0);
++	if (ret)
++		goto out_unwind;
++	result->slot0_reusable = true;
+ 	frame_done = true;
+ 
+ 	/*
+@@ -7770,6 +7780,14 @@ static int camss_x1e_pix_runner_frames(struct camss *camss,
+ 						   &result->video_done_next);
+ 		if (ret)
+ 			goto out_unwind;
++		ret = csid680_x1e_front_poll_all_done(csid, video_seq + 2,
++						       CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++		if (ret)
++			goto out_unwind;
++		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 1);
++		if (ret)
++			goto out_unwind;
++		result->slot1_reusable = true;
+ 	}
+ 
+ out_unwind:
+@@ -8207,7 +8225,8 @@ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count)
+ 		goto out_fw;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+-	    !result.epoch0_seen || !result.video_seen || !result.video_next_seen) {
++	    !result.epoch0_seen || !result.video_seen || !result.video_next_seen ||
++	    !result.slot0_reusable || !result.slot1_reusable) {
+ 		if (!ret)
+ 			ret = -EIO;
+ 		goto out_restore;
+@@ -8224,7 +8243,7 @@ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count)
+ 	vb2_buffer_done(&video1->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ 	video1 = NULL;
+ 	dev_info(camss->dev,
+-		 "E003h 0066 V4L2 completed two full VIDEO frames in one session\n");
++		 "E003h 0067 V4L2 completed two frames; both five-group slots reusable\n");
+ 	ret = 0;
+ 	goto out_fw;
+ 
