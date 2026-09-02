@@ -54,6 +54,8 @@ The live producer capture closes two previously unresolved boundaries:
 
 Exact binary analysis further bounds the only live adaptive stats object. `stats+4` must equal `0x300`; bit1 of `stats+0` selects 0x32- or 0x64-byte records; both exact readers cover indices 0..767 through per-record end `+0x50`. Therefore the request-local Tintless stats read is exactly bounded to **0x961e bytes** (ordinary) or **0x12bec bytes** (bit1 layout). See `LSC-LIVE-TINTLESS-BOUNDARY.md`.
 
-The remaining harder independent wire transform is now LSC: same-device calibration/config + exact **4048×3152 / (104,496) → 3840×2160, scale 1** geometry + **sequential Tintless stats/state** must regenerate **LSC0 + LSC1** byte-for-byte. Wire GIC then derives automatically from the already-proven LSC alias at source bytes `0x62e..0x82e`.
+The LSC post-calculation wire transform is now closed too. Exact Surface `IFELSC411Titan680::PackIQRegisterSetting` at RVA `0xb3d8a0` packs the captured **0x18a0-byte** staging into 13×17 LSC0/LSC1/LSC2 targets; LSC2 is all-zero for requests4/5/6, and wire GIC derives automatically from the already-proven alias at source bytes `0x62e..0x82e`. See `LSC-LIVE-STAGING-WIRE-TARGET.md`.
+
+The remaining harder transform is therefore upstream of the packer: same-device calibration/config + exact **4048×3152 / (104,496) → 3840×2160, scale 1** geometry + **sequential Tintless config/stats/state** must regenerate the captured **0x18a0 LSC staging** byte-for-byte.
 
 Because the new live producer session is not the earlier matched-trigger request4/5/6 stream, do not mix producer inputs from one with wire output from the other. Build or use one atomic Windows producer/output capsule and reproduce that stream offline. Linux request6 remains forbidden until that comparison passes.

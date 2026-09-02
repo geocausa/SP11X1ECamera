@@ -41,7 +41,7 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "GTM TMC->GTM0 is closed byte-for-byte on the independent 2026-09-02 live session; LSC geometry is exact; that session is Tintless-only and its request-local stats object is bounded to 0x961e or 0x12bec after exact layout validation. Do not combine independent producer and wire streams. Use one atomic Windows producer/output stream, preserve same-device calibration/config and sequential Tintless state/stats, reproduce LSC0/LSC1 and GTM0 offline byte-for-byte, derive wire GIC from the proven LSC alias, and only then perform a separate runtime authorization review. Linux request6 remains forbidden.",
+  "next_gate": "GTM TMC->GTM0 and LSC post-calculation staging->wire packing are closed byte-for-byte on the independent 2026-09-02 live session. The remaining hard transform is upstream LSC: same-device calibration/config plus exact geometry and sequential validated Tintless config/stats/state must reproduce the captured 0x18a0 LSC staging byte-for-byte in one atomic Windows stream. LSC0/LSC1 and wire GIC then follow deterministically. Linux request6 remains forbidden.",
   "gtm_tmc_read_boundary_proof": {
     "oracle": "gtm-tmc-read-boundary-oracle.json",
     "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
@@ -122,5 +122,21 @@
   "windows_live_producer_capture_performed": true,
   "linux_camera_runtime_performed": false,
   "linux_request6_executed": false,
-  "request6_executed_scope": "Linux experimental request6; Windows oracle request6 was observed in the native Windows camera stream."
+  "request6_executed_scope": "Linux experimental request6; Windows oracle request6 was observed in the native Windows camera stream.",
+  "lsc_live_staging_wire_proof": {
+    "oracle": "lsc-live-staging-pack-oracle.json",
+    "oracle_sha256": "377b95ae4e820fe262e2755ecdedfb735f2de975366dd9ce64ec08bd637f3225",
+    "proof": "prove-lsc-live-staging-pack.py",
+    "doc": "LSC-LIVE-STAGING-WIRE-TARGET.md",
+    "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
+    "packer_rva": "0xb3d8a0",
+    "staging_bytes": "0x18a0",
+    "mesh": "13x17 / 221 dwords / 0x374 bytes per LSC LUT",
+    "lsc2_all_zero_requests": [
+      4,
+      5,
+      6
+    ],
+    "classification": "CLOSED LIVE/OFFLINE POST-CALCULATION WIRE TARGET: exact Surface Titan680 packing deterministically converts captured request4/5/6 LSC staging into LSC0/LSC1/LSC2 and the proven GIC alias."
+  }
 }

@@ -299,7 +299,7 @@
       6
     ]
   },
-  "acceptance_gate": "Use one atomic Windows producer/output stream. GTM TMC->GTM0 transform is independently validated byte-for-byte; exact LSC geometry and a Tintless-only live branch are closed. Replay same-device LSC calibration/config plus sequential validated Tintless stats/state and reproduce LSC0/LSC1 byte-for-byte; reproduce GTM0 from the same atomic stream; derive wire GIC from the proven LSC alias; then run a separate authorization review before any Linux request6 runtime.",
+  "acceptance_gate": "Use one atomic Windows producer/output stream. GTM TMC->GTM0 and LSC staging->Titan680 wire packing are independently closed. Replay same-device LSC calibration/config plus sequential validated Tintless config/stats/state and reproduce the captured 0x18a0 LSC staging byte-for-byte; LSC0/LSC1/GIC then derive deterministically, and GTM0 must match the same atomic stream. Only then run a separate authorization review before Linux request6 runtime.",
   "live_validation_20260902": {
     "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
     "same_as_prior_matched_trigger_session": false,
@@ -346,6 +346,8 @@
       "x4_output_meshes": "four 0x374-byte arrays; 0xdf0 total post-call validation payload",
       "persistent_state": "0x1090 wrapper context plus non-null 0x126e8 lazy core state for validation shortcut; final model must evolve state sequentially",
       "capture_window": "stream creation through target request"
-    }
+    },
+    "lsc_post_calculation_wire_status": "CLOSED: exact Titan680 PackIQRegisterSetting RVA 0xb3d8a0 converts the captured 0x18a0 staging into deterministic 13x17 LSC0/LSC1/LSC2; LSC2 is zero for requests4/5/6 and wire GIC derives from the proven LSC alias.",
+    "remaining_lsc_transform": "same-device calibration/config + exact geometry + sequential validated Tintless config/stats/state -> exact captured 0x18a0 staging"
   }
 }
