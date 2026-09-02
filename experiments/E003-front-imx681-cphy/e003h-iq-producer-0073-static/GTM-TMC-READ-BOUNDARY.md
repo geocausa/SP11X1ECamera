@@ -23,3 +23,9 @@ Those sparse ranges total only **`0x108c` bytes**, versus the full published **`
 The capture must fail closed if the selected TMC pointer is null, `tmc+0x10` is zero, or `tmc+0x08` is not generation 5. In that case we stop and revise the branch-specific contract instead of treating a different TMC layout as v5.
 
 After the hardware-setting call, the IFE path copies exactly `0x800` bytes into cached staging at `IFEGTM131 module+0x138`. That staging is the correlation target for requests 4/5/6 and must reproduce the matched Windows request6 GTM0 bytes offline before Linux request6 is reconsidered.
+
+## Live replay closure
+
+The 2026-09-02 producer capture validates this static boundary end-to-end. The target is generation 5, hardware `0x60800`, valid=1, mode=2. Requests4/5/6 change only the source knots, target knots and cubic-coefficient block among the bounded inputs. Both blend scalars are exactly zero, so the large tone-domain content is output-irrelevant for this session; the replay deliberately fills the uncaptured tail with non-zero finite sentinel values and still matches Windows.
+
+Executing the exact Surface ARM64 helpers at RVAs `0x9a4f38`, `0x9a55c8` and `0x9aa3a8` offline, followed by the exact hardware-version-specific GTM131/Titan680 setting math, reproduces **256/256 qwords** for each captured request. See `GTM-LIVE-EXACT-REPLAY.md` and `gtm-live-exact-replay-oracle.json`. This closes the TMC->GTM wire transform; it does not conflate this live session with the older matched-trigger stream.

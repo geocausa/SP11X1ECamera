@@ -1,7 +1,7 @@
 {
-  "schema": "sp11-e003h-iq-producer-0073-static-oracle-v1",
+  "schema": "sp11-e003h-iq-producer-0073-oracle-v2",
   "accepted": true,
-  "offline_only": true,
+  "offline_only": false,
   "request6_generated": false,
   "request6_executed": false,
   "runtime_authorized": false,
@@ -41,7 +41,7 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "The common trigger trees/vectors, static EEPROM LSC descriptor, exact embedded IFELSC411 Tintless/ALSC algorithm boundary, and exact GTM131 generation-5 TMC read boundary are now bounded. Recover/capture the same-device LSC calibration and geometry, then capture/replay Tintless/ALSC dynamic inputs sequentially from Windows stream creation through request6 (or use an exact pre-request context only for validation) and capture the GTM common/aux inputs plus seven sparse generation-5 TMC ranges. Reproduce LSC0/LSC1/GTM0 offline byte-for-byte and derive wire GIC from the proven LSC alias. Do not execute Linux request6 until the offline oracle matches and a separate runtime authorization review passes.",
+  "next_gate": "GTM TMC->GTM0 is closed byte-for-byte on the independent 2026-09-02 live session; LSC geometry is exact; that session is Tintless-only and its request-local stats object is bounded to 0x961e or 0x12bec after exact layout validation. Do not combine independent producer and wire streams. Use one atomic Windows producer/output stream, preserve same-device calibration/config and sequential Tintless state/stats, reproduce LSC0/LSC1 and GTM0 offline byte-for-byte, derive wire GIC from the proven LSC alias, and only then perform a separate runtime authorization review. Linux request6 remains forbidden.",
   "gtm_tmc_read_boundary_proof": {
     "oracle": "gtm-tmc-read-boundary-oracle.json",
     "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
@@ -64,5 +64,63 @@
     "tintless_previous_mesh_block_bytes": "0xdf0",
     "alsc_safe_max_stats_read_bytes": "0x54020",
     "classification": "CLOSED STATIC ALGORITHM BOUNDARY: exact IFELSC411 uses embedded Tintless/ALSC interfaces and cores; remaining LSC oracle inputs are dynamic calibration/geometry/stats plus sequential adaptive state, not missing algorithm code."
-  }
+  },
+  "gtm_live_exact_replay_proof": {
+    "oracle": "gtm-live-exact-replay-oracle.json",
+    "oracle_sha256": "14a16be7c08fcf8592d56a3d6a791d0106433339ec67c8ee83e7d247c11e876c",
+    "proof": "prove-gtm-live-exact-replay.py",
+    "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
+    "capture_session_equals_prior_matched_trigger_session": false,
+    "tmc_generation": 5,
+    "hardware_version": "0x60800",
+    "mode": 2,
+    "exact_qwords_per_request": 256,
+    "exact_bytes_per_request": "0x800",
+    "requests": {
+      "4": "656d35c87e95b376f3d6b4eac7624c3387e1857100cf5529f5ae7e2a87ec7f43",
+      "5": "9e54b3b16a6a146f9f1f448150a88a929c2ffe3cd4c8aa93e98e5498afb0216e",
+      "6": "89bc45b890f6508912bad1b543c7f7ad56e20b6794fdc908455e9f47c967cf95"
+    },
+    "lsc_geometry": {
+      "full": "4048x3152",
+      "crop_offset": [
+        104,
+        496
+      ],
+      "output": "3840x2160",
+      "scale": 1
+    },
+    "classification": "CLOSED LIVE/OFFLINE TRANSFORM: exact Surface ARM64 dynamic GTM helpers plus setting/packing reproduce independent Windows request4/5/6 GTM0 byte-for-byte."
+  },
+  "lsc_live_tintless_boundary_proof": {
+    "oracle": "lsc-live-tintless-boundary-oracle.json",
+    "oracle_sha256": "9d0fb70681afe323b8b5e1c8b3601fc9388bfb9b4c979477283281033170769d",
+    "proof": "prove-lsc-live-tintless-boundary.py",
+    "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
+    "geometry": {
+      "full": "4048x3152",
+      "crop_offset": [
+        104,
+        496
+      ],
+      "output": "3840x2160",
+      "scale": 1
+    },
+    "tintless_enabled": true,
+    "alsc_enabled": false,
+    "required_stats_records": 768,
+    "ordinary_stats_max_bytes": "0x961e",
+    "bit1_stats_max_bytes": "0x12bec",
+    "classification": "CLOSED LIVE/STATIC INPUT BOUNDARY: this live IFELSC411 path is Tintless-only; geometry, request-local stats sizing, and the narrow Tintless wrapper-entry config/mesh ABI are exact.",
+    "wrapper_entry_rva": "0xc95fd0",
+    "wrapper_config_bytes": "0x130",
+    "input_mesh_descriptor_bytes": "0x28",
+    "input_mesh_payload_bytes": "0xdf0",
+    "output_mesh_descriptor_bytes": "0x28",
+    "output_mesh_payload_bytes": "0xdf0"
+  },
+  "windows_live_producer_capture_performed": true,
+  "linux_camera_runtime_performed": false,
+  "linux_request6_executed": false,
+  "request6_executed_scope": "Linux experimental request6; Windows oracle request6 was observed in the native Windows camera stream."
 }

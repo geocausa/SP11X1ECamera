@@ -34,10 +34,10 @@
     "capture_at_calculate_setting_entry": {
       "geometry_fields_from_isp_input": {
         "output_width": "ISPInputData+0x213c",
-        "output_height": "ISPInputData+0x10a0",
+        "output_height": "ISPInputData+0x2140",
         "full_width": "ISPInputData+0x214c",
-        "full_height": "ISPInputData+0x10a8",
-        "offset_x": "ISPInputData+0x10b4",
+        "full_height": "ISPInputData+0x2150",
+        "offset_x": "ISPInputData+0x2168",
         "offset_y": "ISPInputData+0x216c",
         "scale": "ISPInputData+0x217c"
       },
@@ -299,5 +299,53 @@
       6
     ]
   },
-  "acceptance_gate": "Offline producer must replay the exact embedded IFELSC411 Tintless/ALSC path with preserved sequential state and reproduce matched Windows LSC0/LSC1, plus reproduce GTM0 from the bounded generation-5 TMC inputs, all byte-for-byte; derive wire GIC from the proven LSC alias; then run a separate authorization review before any Linux request6 runtime."
+  "acceptance_gate": "Use one atomic Windows producer/output stream. GTM TMC->GTM0 transform is independently validated byte-for-byte; exact LSC geometry and a Tintless-only live branch are closed. Replay same-device LSC calibration/config plus sequential validated Tintless stats/state and reproduce LSC0/LSC1 byte-for-byte; reproduce GTM0 from the same atomic stream; derive wire GIC from the proven LSC alias; then run a separate authorization review before any Linux request6 runtime.",
+  "live_validation_20260902": {
+    "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
+    "same_as_prior_matched_trigger_session": false,
+    "gtm_transform_status": "CLOSED on this independent session: exact Surface ARM64 replay is 256/256 qwords and 0x800/0x800 bytes for requests4/5/6.",
+    "lsc_geometry": {
+      "full": [
+        4048,
+        3152
+      ],
+      "offset": [
+        104,
+        496
+      ],
+      "output": [
+        3840,
+        2160
+      ],
+      "scale": 1
+    },
+    "lsc_live_adaptive_branch": {
+      "tintless_enabled": true,
+      "alsc_enabled": false,
+      "alsc_awbbg_pointer_present": false,
+      "alsc_interface_present": false
+    },
+    "tintless_stats_contract": {
+      "required_record_count_at_stats_plus_4": 768,
+      "layout_selector": "bit1 at stats+0",
+      "ordinary_stride": "0x32",
+      "ordinary_capture_bytes": "0x961e",
+      "bit1_stride": "0x64",
+      "bit1_capture_bytes": "0x12bec",
+      "highest_per_record_read_end": "0x50"
+    },
+    "capture_policy_update": "For this proven live branch, do not capture ALSC/AWB-BG stats. Hook TintlessAlgorithmWrapper::Process at RVA 0xc95fd0 and capture only the proven 0x130 config, validated 0x961e/0x12bec stats object, 0x28 input/output mesh descriptors plus four 0x374-byte meshes, and sequential persistent state. Do not mix this producer state with the older matched-trigger wire oracle.",
+    "tintless_wrapper_entry_capture": {
+      "rva": "0xc95fd0",
+      "x0": "Tintless interface object; wrapper context = poi(x0+0x18)",
+      "x1_config_bytes": "0x130",
+      "x2_stats_bytes": "0x961e or 0x12bec after exact 0x300-record/bit1 validation",
+      "x3_input_descriptor_bytes": "0x28",
+      "x3_input_meshes": "four pointers at +0x08/+0x10/+0x18/+0x20; each 221 float32 = 0x374 bytes; 0xdf0 total",
+      "x4_output_descriptor_bytes": "0x28",
+      "x4_output_meshes": "four 0x374-byte arrays; 0xdf0 total post-call validation payload",
+      "persistent_state": "0x1090 wrapper context plus non-null 0x126e8 lazy core state for validation shortcut; final model must evolve state sequentially",
+      "capture_window": "stream creation through target request"
+    }
+  }
 }

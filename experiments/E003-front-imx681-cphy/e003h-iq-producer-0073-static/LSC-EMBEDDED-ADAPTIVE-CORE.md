@@ -51,3 +51,11 @@ Chromatix base mesh + per-device EEPROM calibration + exact LSC geometry + **emb
 The preferred Windows validation capture is now adaptive inputs from stream start through request6 rather than only requests 4/5/6. A pre-request4 Tintless context checkpoint can be used as a validation shortcut, but the final Linux implementation must evolve the same state itself.
 
 `prove-lsc-embedded-adaptive-core.py` pins the Surface DeviceMFT SHA and all critical ARM64 instructions for the constructor/dispatch, state-history, and ALSC read-boundary claims above.
+
+## 2026-09-02 live branch validation
+
+The subsequent Windows producer capture narrows the active IFELSC411 path for requests4/5/6: Tintless is enabled (`common+0xc0 == 1`), its request-local stats pointer at `common+0xa0` is non-null, and the stable Tintless interface at `common+0xb0` is present. In the same requests, `common+0xa8 == 0`, `common+0xb8 == 0`, and `common+0x10c == 0`; the captured ALSC state fields are also zero. **ALSC is therefore disabled in this live session.**
+
+Exact analysis of `TintlessAlgorithmWrapper::Process` (`0xc95fd0`), its preprocessor (`0xc9f438`) and embedded core (`0xca01b0`) reduces the request-local Tintless stats object to a fail-closed conditional bound. `u32(stats+4)` must equal `0x300`; bit1 of `u32(stats+0)` selects 0x32- or 0x64-byte records; the readers cover records 0..767 and their highest per-record access ends at +0x50. The resulting maximum reads are **0x961e** or **0x12bec** bytes. See `LSC-LIVE-TINTLESS-BOUNDARY.md` and `lsc-live-tintless-boundary-oracle.json`.
+
+The same capture also closes geometry as full 4048×3152, offset (104,496), output 3840×2160, scale 1. The remaining live LSC parity work is therefore calibration/config plus sequential Tintless state/stats, not ALSC and not unknown geometry.

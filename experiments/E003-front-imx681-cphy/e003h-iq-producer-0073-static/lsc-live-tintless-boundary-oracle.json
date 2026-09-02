@@ -1,0 +1,233 @@
+{
+  "accepted": true,
+  "capture_abi_code_byte_proofs": {
+    "0xc95ff4": "f50301aa",
+    "0xc95ff8": "e20f00f9",
+    "0xc95ffc": "f90303aa",
+    "0xc96000": "f80304aa",
+    "0xc9600c": "160c40f9",
+    "0xc9609c": "b4720091",
+    "0xc960ac": "820780d2",
+    "0xc96160": "b4620191",
+    "0xc96170": "021b80d2",
+    "0xc96358": "88d640b9",
+    "0xc96d78": "c09640f9",
+    "0xc96d80": "e80f40f9",
+    "0xc96d98": "e81300f9",
+    "0xc96d9c": "080540b9",
+    "0xc96db0": "28034079",
+    "0xc96db8": "29a340a9",
+    "0xc96dc0": "29a341a9",
+    "0xc96dc8": "08034079",
+    "0xc96dd0": "09a340a9",
+    "0xc96dd8": "09a341a9",
+    "0xc96de0": "f4240094",
+    "0xc9f47c": "0d608052",
+    "0xc9f488": "880c80d2",
+    "0xc9f490": "3f011f72",
+    "0xc9f494": "490680d2",
+    "0xc9f4a8": "48914079",
+    "0xc9f4bc": "480d42a9",
+    "0xc9f4cc": "48994079",
+    "0xc9f4dc": "481543a9",
+    "0xc9f4f0": "489d4079",
+    "0xc9f510": "48954079",
+    "0xc9f560": "2df9ff35",
+    "0xca02b8": "080b40b9",
+    "0xca02bc": "1f010c71",
+    "0xca0318": "4f0680d2",
+    "0xca0324": "8e0c80d2",
+    "0xca0330": "080340f9",
+    "0xca0338": "0d0140b9",
+    "0xca033c": "ad011f12",
+    "0xca034c": "19018052",
+    "0xca0364": "459c4079",
+    "0xca0370": "431443a9",
+    "0xca0390": "45984079",
+    "0xca0518": "ff600071"
+  },
+  "classification": "CLOSED LIVE/STATIC INPUT BOUNDARY: the 2026-09-02 IFELSC411 adaptive path is Tintless-only (ALSC disabled), and the exact request-local Tintless stats object is bounded to 0x961e or 0x12bec bytes after a 0x300-record/bit1 layout check.",
+  "exact_functions": {
+    "embedded_tintless_core_rva": "0xca01b0",
+    "embedded_tintless_fuse_stats_rva": "0xca1410",
+    "tintless_stats_preprocess_rva": "0xc9f438",
+    "tintless_wrapper_process_rva": "0xc95fd0"
+  },
+  "gate": "Tintless input sizing and the ALSC-disabled branch are closed. The next parity gate is one atomic same-stream LSC capture/replay: calibration/config + exact 4048x3152/(104,496)->3840x2160 geometry + sequential Tintless state/stats must reproduce LSC0/LSC1 byte-for-byte. Wire GIC follows the proven LSC alias. Linux request6 remains forbidden.",
+  "live_path": {
+    "alsc_awbbg_pointer_present": false,
+    "alsc_enabled": false,
+    "alsc_interface_present": false,
+    "correction_table_pointers_stable": true,
+    "geometry": {
+      "full_height": 3152,
+      "full_width": 4048,
+      "offset_x": 104,
+      "offset_y": 496,
+      "output_height": 2160,
+      "output_width": 3840,
+      "scale": 1
+    },
+    "req4_correction_table_snapshots": {
+      "0": {
+        "bytes": 884,
+        "max_float": 1.0219894647598267,
+        "min_float": 0.9840372204780579,
+        "sha256": "9002f20bedf10461e010f9afd9fcd158a24904883cc714b065473c01c19a7906"
+      },
+      "1": {
+        "bytes": 884,
+        "max_float": 1.0000001192092896,
+        "min_float": 1.0,
+        "sha256": "70d1f77698110e092263bca78317b84c703b75c5f9419c9425c7f31037aac26a"
+      },
+      "2": {
+        "bytes": 884,
+        "max_float": 1.0000001192092896,
+        "min_float": 1.0,
+        "sha256": "70d1f77698110e092263bca78317b84c703b75c5f9419c9425c7f31037aac26a"
+      },
+      "3": {
+        "bytes": 884,
+        "max_float": 1.0321649312973022,
+        "min_float": 0.9751049876213074,
+        "sha256": "9675845e633fc2ea807e1e586a4ea423ef5226684e6f2edc17ae0bc4fe1e02e1"
+      }
+    },
+    "tintless_enabled": true,
+    "tintless_interface_stable": true,
+    "tintless_stats_request_local": true
+  },
+  "next_capture": {
+    "also_preserve": "For full pre-wrapper reconstruction, preserve upstream calibration/config state separately. For isolating Tintless itself, the exact wrapper-entry x1 bound is now 0x130 and the four input meshes total 0xdf0 bytes; do not infer bytes from process pointers alone.",
+    "not_needed_in_this_session": "ALSC/AWB-BG stats, because common+0xa8/common+0xb8 are null and common+0x10c is zero for requests4/5/6.",
+    "preferred": "In one Windows stream, hook TintlessAlgorithmWrapper::Process at RVA 0xc95fd0 from stream creation through the target request. Per call capture x1[0:0x130], validated x2 stats at 0x961e/0x12bec, x3[0:0x28] plus its four 0x374 input meshes, and same-stream output meshes/wire LSC correlation.",
+    "validation_shortcut": "Capture a pre-request wrapper context (0x1090) and non-null lazy core state (0x126e8), then capture validated request-local Tintless stats for requests4/5/6."
+  },
+  "requests": {
+    "request4": {
+      "alsc_awbbg_pointer_null": true,
+      "alsc_enable": 0,
+      "alsc_interface_pointer_null": true,
+      "alsc_state_zero": true,
+      "common_sha256": "646e62de0d5192129ba03bcc285cc5928c231ab24bf1d83ed236513c59c20535",
+      "correction_table_pointers_nonzero": true,
+      "geometry": {
+        "full_height": 3152,
+        "full_width": 4048,
+        "offset_x": 104,
+        "offset_y": 496,
+        "output_height": 2160,
+        "output_width": 3840,
+        "scale": 1
+      },
+      "staging_dynamic_prefix_sha256": "8f24964b06a5ea5c2d57ab882edb2d8ef4689a32fa58d08ba70c5cf72cc5ebf7",
+      "staging_sha256": "c67b893c5b32b6fdf343875cd4f2921f97429d98922d2b4d555c5bb36f4602bc",
+      "staging_static_tail_sha256": "a7ea28b03efe841cadedba0e31ae1e9d503320063acd5338c9e66099245e59c2",
+      "tintless_enable": 1,
+      "tintless_interface_pointer_nonzero": true,
+      "tintless_stats_pointer_nonzero": true
+    },
+    "request5": {
+      "alsc_awbbg_pointer_null": true,
+      "alsc_enable": 0,
+      "alsc_interface_pointer_null": true,
+      "alsc_state_zero": true,
+      "common_sha256": "39c51103c2a92c566ff4493ede1a25a594d089b2e79a46857105f84f15ca2798",
+      "correction_table_pointers_nonzero": true,
+      "geometry": {
+        "full_height": 3152,
+        "full_width": 4048,
+        "offset_x": 104,
+        "offset_y": 496,
+        "output_height": 2160,
+        "output_width": 3840,
+        "scale": 1
+      },
+      "staging_dynamic_prefix_sha256": "fd7efa22a005891b1e72aa908e58b91ed4d06cede8f708182e0c27d321d14dc0",
+      "staging_sha256": "5c07dca5e0e44e1fc3df026396643a255fc7fb1445a70e27934e9e6c6c49d766",
+      "staging_static_tail_sha256": "a7ea28b03efe841cadedba0e31ae1e9d503320063acd5338c9e66099245e59c2",
+      "tintless_enable": 1,
+      "tintless_interface_pointer_nonzero": true,
+      "tintless_stats_pointer_nonzero": true
+    },
+    "request6": {
+      "alsc_awbbg_pointer_null": true,
+      "alsc_enable": 0,
+      "alsc_interface_pointer_null": true,
+      "alsc_state_zero": true,
+      "common_sha256": "038c2d066873604fd0c1003e897c8d63159e14fd9b5f9680be5fd0fb0dc5fd9d",
+      "correction_table_pointers_nonzero": true,
+      "geometry": {
+        "full_height": 3152,
+        "full_width": 4048,
+        "offset_x": 104,
+        "offset_y": 496,
+        "output_height": 2160,
+        "output_width": 3840,
+        "scale": 1
+      },
+      "staging_dynamic_prefix_sha256": "ecf3e90962a86b5ba2c7c682cc912e1df49b10db9f767c71a5c225c93f6be0d7",
+      "staging_sha256": "e8526f3f3676802b9596fadd0bc479df2a6e531bf587c9278e8729a10e2daa6e",
+      "staging_static_tail_sha256": "a7ea28b03efe841cadedba0e31ae1e9d503320063acd5338c9e66099245e59c2",
+      "tintless_enable": 1,
+      "tintless_interface_pointer_nonzero": true,
+      "tintless_stats_pointer_nonzero": true
+    }
+  },
+  "safety": {
+    "linux_camera_runtime_executed": false,
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false,
+    "raw_windows_captures_tracked": false
+  },
+  "schema": "sp11-e003h-0073-lsc-live-tintless-boundary-v1",
+  "source_authority": {
+    "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
+    "capture_zip_sha256": "429102b00ca808bd9680ae9f1d309610c701ff541763f1236fd2a0dea342cb71",
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+  },
+  "stats_contract": {
+    "fail_closed_sequence": [
+      "Read stats+4 first and require exactly 0x300 records.",
+      "Read stats word0 and inspect bit1.",
+      "If bit1 is clear, capture exactly 0x961e bytes from stats base.",
+      "If bit1 is set, capture exactly 0x12bec bytes from stats base.",
+      "Do not classify or replay an object that fails those checks as this Surface Tintless layout."
+    ],
+    "highest_per_record_read_end": "0x50",
+    "layout_selector": "bit1 of first dword at stats+0",
+    "ordinary_max_read_bytes": 38430,
+    "ordinary_max_read_hex": "0x961e",
+    "ordinary_stride_bytes": 50,
+    "records_covered": "indices 0..767",
+    "required_record_count": 768,
+    "saturated_max_read_bytes": 76780,
+    "saturated_max_read_hex": "0x12bec",
+    "saturated_stride_bytes": 100,
+    "stats_record_count_dword_offset": "0x4"
+  },
+  "validation_shortcut_state": {
+    "lazy_core_state_bytes_when_nonnull": "0x126e8",
+    "lazy_core_state_pointer": "poi(wrapper_context+0x128)",
+    "policy": "A pre-request context snapshot is validation-only. Final Linux parity must evolve the same Tintless state sequentially.",
+    "previous_mesh_history_bytes": "0xdf0 within wrapper context",
+    "tintless_interface_source": "common+0xb0",
+    "wrapper_context_bytes": "0x1090",
+    "wrapper_context_pointer": "poi(tintless_interface+0x18)"
+  },
+  "wrapper_entry_capture_contract": {
+    "capture_use": "At wrapper entry this isolates the exact adaptive transform from earlier Chromatix/calibration interpolation. Capture x1, validated x2, x3 descriptor+four input meshes and persistent wrapper/core state; after return hash/dump the four x4 output meshes.",
+    "entry_rva": "0xc95fd0",
+    "input_mesh_payload_bytes": "0xdf0 total across four 0x374 arrays",
+    "mesh_arrays": "four pointers per descriptor at +0x08,+0x10,+0x18,+0x20; each points to 221 float32 values = 0x374 bytes",
+    "mesh_count_required": 221,
+    "post_call_validation_payload_bytes": "0xdf0 total across four output arrays",
+    "x0": "Tintless interface object; wrapper context pointer is poi(x0+0x18)",
+    "x1_config_bytes": "0x130",
+    "x1_config_proof": "wrapper compares/copies chunks through final x1+0x58 length 0xd8 and directly reads through x1+0x12c; end-exclusive bound is 0x130",
+    "x2_stats_bytes": "conditional 0x961e or 0x12bec after record-count/bit1 validation",
+    "x3_input_mesh_descriptor_bytes": "0x28",
+    "x4_output_mesh_descriptor_bytes": "0x28"
+  }
+}
