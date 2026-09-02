@@ -299,7 +299,7 @@
       6
     ]
   },
-  "acceptance_gate": "Use one atomic Windows producer/output stream. Capture the single 0xdf0 copied LSC calibration slot after live count==1, then reproduce LSC41 trigger interpolation, golden/EEPROM calibration including Windows green averaging, exact geometry, sequential Tintless and Q10 staging byte-for-byte. LSC staging->wire/GIC and GTM are already closed. Only then review Linux request6 authorization.",
+  "acceptance_gate": "Use one atomic Windows producer/output stream. Sequential Tintless request5->request6 is now byte-exact offline; calibration math, geometry and staging->wire/GIC are closed. Capture the exact LSC411 interpolation/calibration output immediately before geometry to resolve live tuning trigger/region selection, then chain it through the already-exact geometry + Tintless + staging path. Only after complete byte parity review Linux request6 authorization.",
   "live_validation_20260902": {
     "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
     "same_as_prior_matched_trigger_session": false,
@@ -348,7 +348,7 @@
       "capture_window": "stream creation through target request"
     },
     "lsc_post_calculation_wire_status": "CLOSED: exact Titan680 PackIQRegisterSetting RVA 0xb3d8a0 converts the captured 0x18a0 staging into deterministic 13x17 LSC0/LSC1/LSC2; LSC2 is zero for requests4/5/6 and wire GIC derives from the proven LSC alias.",
-    "remaining_lsc_transform": "exact LSC41 trigger interpolation + the single same-device formatted calibration slot/golden ratios + exact geometry + sequential validated Tintless config/stats/state -> exact captured 0x18a0 staging",
+    "remaining_lsc_transform": "exact live LSC41 trigger/region selection + calibration output -> already-exact geometry -> already-exact sequential Tintless -> staging",
     "lsc_calibration_application_status": "CLOSED: common+0x10 is exact lscgolden41_ife_v2; formatted EEPROM is translated into up to five 0xdf0 slots, but requests4/5/6 all prove common+0x68==1 and +0x6c/+0x80==1. LSC411Interpolation applies golden/EEPROM ratios before geometry and Tintless and averages the two corrected green meshes.",
     "minimal_next_windows_calibration_capture": {
       "condition": "after IFELSC411 translation with common+0x68 == 1",
@@ -356,6 +356,7 @@
       "bytes": "0xdf0",
       "reason": "first/only copied formatted slot consumed by interpolation; avoids ISPInputData pointer-unit ambiguity",
       "do_not_dump": "full 0x45b0 five-slot store unless live count changes from 1"
-    }
+    },
+    "tintless_sequential_replay_status": "CLOSED BYTE-EXACT: native DeviceMFT RVA 0xc95fd0 replay of request5 then request6 reproduces wrapper state, captured persistent context and both 0xdf0 output meshes exactly. Request5 post-state == request6 pre-state. Context extension through +0x126e8 is derived scratch, proven by 0x00 vs 0xa5 hostile-fill invariance."
   }
 }
