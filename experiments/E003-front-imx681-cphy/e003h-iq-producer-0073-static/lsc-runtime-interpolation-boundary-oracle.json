@@ -1,0 +1,377 @@
+{
+  "schema": "sp11-e003h-lsc-runtime-interpolation-boundary-v1",
+  "accepted": true,
+  "classification": "OPEN RUNTIME-CHROMATIX REPRESENTATION BOUNDARY: live x22 is conclusively the generic pre-calibration LSC41 interpolation result, but it is not reproducible from the five serialized 0xdf0 region payloads under the current raw-container interpretation.",
+  "source_authority": {
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "archived_imx681_tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+    "installed_windows_imx681_tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+    "capture_session": "E003H_20260902_LSCTRIGSRC",
+    "raw_capture_committed": false
+  },
+  "exact_abi": {
+    "lsc411_interpolation_rva": "0x93c1b0",
+    "post_capture_rva": "0x93c8e8",
+    "x23": "RunInterpolation x1 destination argument retained from prologue; calibrated destination after calibration stage",
+    "x22": "generic interpolation result loaded from interpolation scratch [x20+0x38] at RVA 0x93c55c before calibration",
+    "code_byte_proofs": {
+      "0x93c1f4": "f70301aa",
+      "0x93c398": "549c0194",
+      "0x93c3b4": "559e0194",
+      "0x93c55c": "961e40f9"
+    }
+  },
+  "requests": {
+    "request5": {
+      "capture_hashes": {
+        "common_trigger": "f2147ee801b13be417107ad982890e5594e2216bff2f46de277862e0e15e31a1",
+        "isp_input": "437979139dae97e74284504ce5458b038df99df81c9e9d5e5c007505941983c5",
+        "lsc_common": "7e0426b1cf23dbb60d8378256b704265fb7acd10275314cf9ebd5b086cbe933e",
+        "trigger_vector_object": "f7f3c24a1953de94b38cd050bb35a062519ab456461b19dfb4dbd950c822146a",
+        "trigger_vector_data": "d12322da10d8f38bb360171f535521d198a27dd30c83db3eef405f03d57e8d78",
+        "x22_precal": "e35ad052a2d219bcded1283c72922fd0c5722431ad511c496ab1ab4ec03dc9de",
+        "x23_calibrated": "94cbaac591fabf97ebff4a005b02fbcfa7a2bfff5783134794e1c52f0bcead71"
+      },
+      "trigger_vector_count": 42,
+      "trigger_vector_capacity": 42,
+      "trigger_vector_42": [
+        400.93280029296875,
+        18.924766540527344,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        4999.0,
+        0.0,
+        370.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "lsc_controls": [
+        8,
+        2,
+        5,
+        100,
+        0,
+        6
+      ],
+      "lsc_vector_indices": [
+        8,
+        2,
+        5,
+        19,
+        20,
+        21,
+        0,
+        6
+      ],
+      "lsc_mapped_values": {
+        "8": 370.0,
+        "2": 1.0,
+        "5": 1.0,
+        "19": 1.0,
+        "20": 0.0,
+        "21": 0.0,
+        "0": 400.93280029296875,
+        "6": 4999.0
+      },
+      "x22_precal_first8": [
+        2.0819318294525146,
+        1.8498822450637817,
+        1.7244867086410522,
+        1.5737576484680176,
+        1.4800301790237427,
+        1.4135680198669434,
+        1.363700270652771,
+        1.3328559398651123
+      ],
+      "x23_calibrated_first8": [
+        1.9511297941207886,
+        1.7265567779541016,
+        1.5761438608169556,
+        1.4410310983657837,
+        1.4010952711105347,
+        1.3629629611968994,
+        1.2781000137329102,
+        1.2702933549880981
+      ],
+      "x23_over_x22": {
+        "min": 0.9111111164093018,
+        "mean": 0.9927938580513,
+        "max": 1.0524344444274902
+      },
+      "serialized_leaf_test": {
+        "nearest_direct": {
+          "i": 4,
+          "rms": 0.4087044665504399,
+          "max_abs": 1.3425419330596924
+        },
+        "best_convex_pair": {
+          "i": 3,
+          "j": 4,
+          "t_unclamped": 0.7931054279770228,
+          "t": 0.7931054279770228,
+          "rms": 0.0710198192351586,
+          "max_abs": 0.543342649300115
+        },
+        "best_affine_five_leaf": {
+          "weights": [
+            -0.22532885423305737,
+            0.2132181049876911,
+            -0.24309561683587438,
+            0.49235693229305505,
+            0.7543292285701763
+          ],
+          "weight_sum": 0.9914797947819907,
+          "rms": 0.06716552055074262,
+          "max_abs": 0.5510915556033993
+        },
+        "classification": "FAILS: live x22 is not a direct, convex-pair, or exact affine combination of the five serialized 0xdf0 LSC payloads as currently decoded"
+      }
+    },
+    "request6": {
+      "capture_hashes": {
+        "common_trigger": "dad1ef4be1a70d96469639dd31af705fb22fb6ee3083dce6586226b0921137c4",
+        "isp_input": "a04ac2974552fd0071cc1f5a98a9e479e0dc98a3bf8a6246d493cbb8a2c978db",
+        "lsc_common": "6641c5c645810793e30b8c50a0838ae39a9cf48c51d2f2fbbd3c83178d3615bb",
+        "trigger_vector_object": "e0410fbb5d782ef7adc919586f1df1e6aea18397f8bbe50fcb4c0c9164b506ff",
+        "trigger_vector_data": "5cac4b3f5d9bb76989aaf85c2945c53473b80850160280fe9b0671c49a60910e",
+        "x22_precal": "3acd68d81103656463b65b448f3a6106c907a48f1f08acb4c3132d30c1b28ca8",
+        "x23_calibrated": "62b39d4ee8f66dc4931c0a99bf4c51cc7069ea4829f78df6c80dbfa82b48ad15"
+      },
+      "trigger_vector_count": 42,
+      "trigger_vector_capacity": 42,
+      "trigger_vector_42": [
+        400.27227783203125,
+        27.208637237548828,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        4999.0,
+        0.0,
+        370.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "lsc_controls": [
+        8,
+        2,
+        5,
+        100,
+        0,
+        6
+      ],
+      "lsc_vector_indices": [
+        8,
+        2,
+        5,
+        19,
+        20,
+        21,
+        0,
+        6
+      ],
+      "lsc_mapped_values": {
+        "8": 370.0,
+        "2": 1.0,
+        "5": 1.0,
+        "19": 1.0,
+        "20": 0.0,
+        "21": 0.0,
+        "0": 400.27227783203125,
+        "6": 4999.0
+      },
+      "x22_precal_first8": [
+        2.1065175533294678,
+        1.8691949844360352,
+        1.7409498691558838,
+        1.586795687675476,
+        1.4909383058547974,
+        1.4229658842086792,
+        1.371964931488037,
+        1.3404197692871094
+      ],
+      "x23_calibrated_first8": [
+        1.9741709232330322,
+        1.744581937789917,
+        1.5911908149719238,
+        1.4529695510864258,
+        1.411421537399292,
+        1.372024416923523,
+        1.2858459949493408,
+        1.2775020599365234
+      ],
+      "x23_over_x22": {
+        "min": 0.9111111164093018,
+        "mean": 0.9927938580513,
+        "max": 1.0524344444274902
+      },
+      "serialized_leaf_test": {
+        "nearest_direct": {
+          "i": 4,
+          "rms": 0.41799183523882477,
+          "max_abs": 1.3730497360229492
+        },
+        "best_convex_pair": {
+          "i": 3,
+          "j": 4,
+          "t_unclamped": 0.7884039717410096,
+          "t": 0.7884039717410096,
+          "rms": 0.07263366830498937,
+          "max_abs": 0.5556895096165468
+        },
+        "best_affine_five_leaf": {
+          "weights": [
+            -0.23044920974414207,
+            0.21806315114505018,
+            -0.2486195825845653,
+            0.5035452007429775,
+            0.7487466212505617
+          ],
+          "weight_sum": 0.991286180809882,
+          "rms": 0.06869178476958421,
+          "max_abs": 0.5636145002346571
+        },
+        "classification": "FAILS: live x22 is not a direct, convex-pair, or exact affine combination of the five serialized 0xdf0 LSC payloads as currently decoded"
+      }
+    }
+  },
+  "serialized_lsc_corpus": {
+    "serialized_region_records_0xdf0": 25,
+    "unique_payloads": 5,
+    "payloads": [
+      {
+        "sha256": "29408fb91e76b9c4b3fa3c044f9dbc8ff7b3563a62f836191b337f666a4a1644",
+        "data_abs_offset": 3301034,
+        "sids": [
+          1013,
+          1209,
+          9304,
+          23868,
+          38697
+        ]
+      },
+      {
+        "sha256": "8defd46dbc1881d7f22cbdf3c8e1b52c4a89cc2718c394afced8d44b1452af52",
+        "data_abs_offset": 3304602,
+        "sids": [
+          1015,
+          1211,
+          9306,
+          23870,
+          38699
+        ]
+      },
+      {
+        "sha256": "bdcf62f46070513ca0d343dda341336fe3953891a2643581e8ee455b77f37a3e",
+        "data_abs_offset": 3308170,
+        "sids": [
+          1017,
+          1213,
+          9308,
+          23872,
+          38701
+        ]
+      },
+      {
+        "sha256": "afc02261b98c3e2655039e29ace838f5780ac26202beda08db74dbd876822a11",
+        "data_abs_offset": 3311738,
+        "sids": [
+          1019,
+          1215,
+          9310,
+          23874,
+          38703
+        ]
+      },
+      {
+        "sha256": "f0c84bd42df54e3b18abb41d787e922d98f82f0aa72230c90aaea48f94994ee8",
+        "data_abs_offset": 3315330,
+        "sids": [
+          1023,
+          1219,
+          9314,
+          23878,
+          38707
+        ]
+      }
+    ]
+  },
+  "closed_exclusions": [
+    "wrong Windows tuning revision: installed and archived tuning SHA256 are identical",
+    "hidden alternate serialized 0xdf0 LSC payload: 25 records collapse to exactly five unique payloads",
+    "wrong x22/x23 live label: exact ARM64 prologue/result-load semantics pin x22 pre-calibration and x23 destination/calibrated",
+    "missing live trigger values: complete 42/42 float vector captured for requests5/6",
+    "EEPROM calibration as cause of x22 discrepancy: x22 is pre-calibration; x23/x22 calibration ratio is stable across the pair",
+    "Tintless/GTM/geometry/packer causes: those stages are downstream and independently closed"
+  ],
+  "next_gate": "Resolve how the exact Surface runtime Chromatix object represents/materializes the LSC41 leaf data consumed by generic interpolation. Prefer static tracing of runtime object construction/leaf pointers; if one live observation is needed, capture the actual leaf pointers/data handed to the generic interpolation engine at request5/6 rather than broad state dumps. Do not run Linux request6.",
+  "safety": {
+    "linux_camera_runtime": false,
+    "linux_request6_executed": false,
+    "linux_request6_authorized": false
+  }
+}

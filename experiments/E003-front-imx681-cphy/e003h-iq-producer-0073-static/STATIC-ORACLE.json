@@ -41,7 +41,7 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "Close the live LSC41 tuning trigger/region selection that produces the captured pre-Tintless input mesh. Calibration application, exact geometry, sequential Tintless, staging-to-wire, GIC alias and GTM are already closed/bounded. Prefer one narrow Windows capture of LSC411 interpolation output immediately before geometry rather than guessing enum mapping. Linux request6 remains forbidden.",
+  "next_gate": "Resolve the runtime Chromatix LSC41 leaf representation/materialization consumed by generic interpolation. The live 42-float trigger source and pre-calibration x22 are captured exactly; installed Windows tuning matches the archived blob, and all 25 serialized 0xdf0 regions collapse to the same five unique leaves, yet live x22 is outside their exact affine span under the current interpretation. Prefer static runtime-object/leaf-pointer tracing; if needed, capture only the actual runtime leaf pointer(s)/0xdf0 data. Do not run Linux request6.",
   "gtm_tmc_read_boundary_proof": {
     "oracle": "gtm-tmc-read-boundary-oracle.json",
     "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
@@ -165,5 +165,20 @@
     "request5_output_mesh_sha256": "1978d282a472117a2b28a3fb1c4b41295e1b8190c4737b448373e5571f381490",
     "request6_output_mesh_sha256": "547d96e50a6775eff44c1af3085905c6c45705d1c59121a2b0eac7be58566824",
     "classification": "CLOSED BYTE-EXACT STATEFUL TINTLESS PRODUCER: request5 post-state carries exactly into request6 and native ARM64 replay reproduces both Windows output meshes with zero differing bytes; context extension above 0x4000 is scratch by hostile-fill invariance."
-  }
+  },
+  "lsc_runtime_interpolation_boundary": {
+    "oracle": "lsc-runtime-interpolation-boundary-oracle.json",
+    "oracle_sha256": "27956401ebf79b61720c8e3e90b408340b0c325bbed3b7a02d0c925748b7ddd1",
+    "proof": "prove-lsc-runtime-interpolation-boundary.py",
+    "doc": "LSC-RUNTIME-INTERPOLATION-BOUNDARY.md",
+    "capture_session": "E003H_20260902_LSCTRIGSRC",
+    "post_capture_rva": "0x93c8e8",
+    "x22": "generic pre-calibration LSC41 interpolation result",
+    "x23": "calibrated destination",
+    "trigger_vector_floats": 42,
+    "serialized_0xdf0_region_records": 25,
+    "unique_serialized_0xdf0_payloads": 5,
+    "classification": "OPEN RUNTIME-CHROMATIX REPRESENTATION BOUNDARY: exact live trigger vector and x22/x23 semantics are closed, but live x22 is not reproducible from the five serialized LSC leaf payloads under the current raw-container interpretation."
+  },
+  "continuation_handoff": "CONTINUATION-HANDOFF.md"
 }
