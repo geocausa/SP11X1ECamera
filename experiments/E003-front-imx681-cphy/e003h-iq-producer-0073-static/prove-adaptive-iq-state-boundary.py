@@ -64,9 +64,55 @@ REQUIRED_BINARY_STRINGS = [
     b"ALSC is disabled as the AWB BG stats are not present",
 ]
 
+# Exact ARM64 instructions pinning the capture ABI/call boundaries used by
+# WINDOWS-ADAPTIVE-IQ-STATE-PLAN.json. The full DLL SHA is already pinned;
+# these short proofs make the register contracts independently auditable.
+ABI_CODE_PROOFS = {
+    0xA037B4: bytes.fromhex("f40301aa"),  # mov x20,x1 : ISPInputData
+    0xA037C0: bytes.fromhex("f30300aa"),  # mov x19,x0 : IFELSC411 module
+    0xA03B0C: bytes.fromhex("005040f9"),  # ldr x0,[x0,#0xa0] : LSC common input
+    0xA03B2C: bytes.fromhex("e10314aa"),  # mov x1,x20 : ISPInputData
+    0xA03B30: bytes.fromhex("ae29fa97"),  # bl IQInterface::LSC411CalculateSetting
+    0xA28B3C: bytes.fromhex("f30301aa"),  # mov x19,x1 : ISPInputData
+    0xA28B44: bytes.fromhex("f40300aa"),  # mov x20,x0 : IFEGTM131 module
+    0xA28E40: bytes.fromhex("819a40f9"),  # ldr x1,[x20,#0x130] : selected TMC state
+    0xA28E44: bytes.fromhex("010100f9"),  # str x1,[x8] where x8 == module+0xf8
+    0xA28E7C: bytes.fromhex("9ba20291"),  # add x27,x20,#0xa8 : GTM common input
+    0xA29094: bytes.fromhex("80e20491"),  # add x0,x20,#0x138 : cached final GTM staging
+    0xA290A0: bytes.fromhex("02008152"),  # mov w2,#0x800 : exact GTM result bytes
+}
+
 
 def sha_bytes(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
+
+
+def rva_to_off(pe: bytes, rva: int) -> int:
+    if pe[:2] != b"MZ":
+        raise ValueError("not PE/MZ")
+    peoff = struct.unpack_from("<I", pe, 0x3C)[0]
+    if pe[peoff:peoff + 4] != b"PE\0\0":
+        raise ValueError("bad PE signature")
+    nsec = struct.unpack_from("<H", pe, peoff + 6)[0]
+    optsz = struct.unpack_from("<H", pe, peoff + 20)[0]
+    sh = peoff + 24 + optsz
+    for i in range(nsec):
+        o = sh + i * 40
+        vsize, va, rawsz, raw = struct.unpack_from("<IIII", pe, o + 8)
+        if va <= rva < va + max(vsize, rawsz):
+            return raw + rva - va
+    raise ValueError(f"RVA 0x{rva:x} not mapped")
+
+
+def assert_abi_code(pe: bytes) -> dict[str, str]:
+    out = {}
+    for rva, want in ABI_CODE_PROOFS.items():
+        off = rva_to_off(pe, rva)
+        got = pe[off:off + len(want)]
+        if got != want:
+            raise ValueError(f"ABI code proof mismatch RVA 0x{rva:x}: {got.hex()} != {want.hex()}")
+        out[f"0x{rva:x}"] = got.hex()
+    return out
 
 
 def load_decoder(path: Path):
@@ -134,6 +180,7 @@ def main() -> None:
     missing = [x.decode("ascii", "replace") for x in REQUIRED_BINARY_STRINGS if x not in pe]
     if missing:
         raise SystemExit(f"required exact-binary adaptive strings missing: {missing}")
+    abi_code = assert_abi_code(pe)
 
     tuning = args.tuning.read_bytes()
     if sha_bytes(tuning) != TUNING_SHA:
@@ -220,6 +267,7 @@ def main() -> None:
             "windows_selected_sensor_geometry": "3840x2160",
         },
         "exact_rvas": {k: f"0x{v:x}" for k, v in EXACT_RVAS.items()},
+        "capture_abi_code_byte_proofs": abi_code,
         "tuning_control_vectors": controls,
         "trigger_ranges": {k: [[a, b] for a, b in v] for k, v in ranges.items()},
         "matched_request5_request6": matched,

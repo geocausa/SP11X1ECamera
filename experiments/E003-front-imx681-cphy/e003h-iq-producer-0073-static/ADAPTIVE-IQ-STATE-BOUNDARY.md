@@ -31,11 +31,15 @@ The exact binary contains explicit `IFE Store Tintless`, `IFE Store ALSC`, `BPS 
 
 The Windows-selected IMX681 mode itself is already exact: firmware resolution index **2**, **3840×2160@30**. What remains to be captured is the exact LSC calculator's per-request output/crop offsets and scale plus its adaptive/calibration state, not the sensor mode selection.
 
+The static EEPROM side is now independently decoded as well. The Surface sensor-module descriptor enables one 221-point calibration light table whose four unsigned 16-bit channel arrays occupy one contiguous **0x6e8-byte** physical EEPROM window at `0x103d..0x1724`. `FormatLSCData` materializes that data into the exact `0xdf0` OTP-table layout consumed by IFELSC411. See `EEPROM-LSC-BOUNDARY.md` and `eeprom-lsc-boundary-oracle.json`.
+
 ## Exact GTM adaptive path
 
 The default GTM13 region is a flat 257-point `4096.0` curve. Exact Surface `GTM131Interpolation` produces a `0x404`-byte 257-float region, but the downstream GTM hardware calculation has a separate TMC path selected through `IQInterface::IsModuleEnabledInTMCPath`.
 
 When TMC is active, the hardware calculation consumes dynamic tone-mapping-control state and builds/reshapes the 257-point curve before the Titan680 `0x800`-byte LUT is packed. This cleanly explains why solving the static GTM Chromatix tree alone is not a sufficient producer model.
+
+A separate byte-level output proof confirms both adaptive requirements directly: all 24 possible assignments of the exact base LSC channels fail to reproduce matched Windows LSC0+LSC1 (best case still 1,496 byte differences), while the exact static GTM region is 257×4096 but matched Windows GTM base values span 4097..4442 with no 4096 entries. See `ADAPTIVE-IQ-OUTPUT-BOUNDARY.md`.
 
 ## Revised next gate
 

@@ -1,0 +1,164 @@
+{
+  "schema": "sp11-e003h-eeprom-lsc-boundary-v1",
+  "status": "PASS",
+  "surface_sensor_module_sha256": "f7dd81be64153fd3f0da8e6288ee1b9906b7bf51b773a98496934d76dc96a45c",
+  "surface_devicemft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "serialized_eeprom_driver": {
+    "symbol_id": 3,
+    "bytes": 1162,
+    "sha256": "9928dd5b36aad01d5d191a76d2832770c7b1697832aac129f551238043499ae1",
+    "lsc_runtime_format_pair": [
+      1,
+      1
+    ],
+    "lsc_light_count": 1,
+    "lsc_light_symbol_id": 3010,
+    "mesh_hw_rolloff_size": 221,
+    "per_channel_byte_stride": [
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  "lsc_light_info": {
+    "symbol_id": 3010,
+    "bytes": 100,
+    "sha256": "bbe16d1678d41c05bb885d4b1680b6be9b86e32e20a67d15576b5a6e764d4599",
+    "light_type": 3,
+    "byte_descriptors": [
+      {
+        "index": 0,
+        "offset": "0x103e",
+        "mask": "0xff",
+        "signed": 0
+      },
+      {
+        "index": 1,
+        "offset": "0x103d",
+        "mask": "0xff",
+        "signed": 0
+      },
+      {
+        "index": 2,
+        "offset": "0x11f8",
+        "mask": "0xff",
+        "signed": 0
+      },
+      {
+        "index": 3,
+        "offset": "0x11f7",
+        "mask": "0xff",
+        "signed": 0
+      },
+      {
+        "index": 4,
+        "offset": "0x13b2",
+        "mask": "0xff",
+        "signed": 0
+      },
+      {
+        "index": 5,
+        "offset": "0x13b1",
+        "mask": "0xff",
+        "signed": 0
+      },
+      {
+        "index": 6,
+        "offset": "0x156c",
+        "mask": "0xff",
+        "signed": 0
+      },
+      {
+        "index": 7,
+        "offset": "0x156b",
+        "mask": "0xff",
+        "signed": 0
+      }
+    ],
+    "decoded_raw_eeprom_geometry": {
+      "samples_per_channel": 221,
+      "sample_encoding": "u16 little-endian assembled from two 0xff byte descriptors",
+      "channel_count": 4,
+      "channel_start_offsets": [
+        "0x103d",
+        "0x11f7",
+        "0x13b1",
+        "0x156b"
+      ],
+      "bytes_per_channel": 442,
+      "contiguous_range": "0x103d..0x1724",
+      "total_bytes": 1768
+    }
+  },
+  "runtime_otp_lsc_layout": {
+    "max_slots": 5,
+    "slot_offsets_from_potpdata": [
+      "0x168",
+      "0xf58",
+      "0x1d48",
+      "0x2b38",
+      "0x3928"
+    ],
+    "slot_bytes": "0xdf0",
+    "availability_field": "slot +0x0 == 1",
+    "light_type_field": "slot +0x4",
+    "mesh_size_field": "slot +0x8",
+    "channel_float_offsets": [
+      "0x0c",
+      "0x380",
+      "0x6f4",
+      "0xa68"
+    ],
+    "channel_float_samples": 221,
+    "common_pointer_record_bytes": "0x20",
+    "common_available_count_offset": "0x68",
+    "common_calibration_enable_offsets": [
+      "0x6c",
+      "0x80"
+    ]
+  },
+  "capture_abi_code_byte_proofs": {
+    "0xa02b18": "883a50f9",
+    "0xa02b1c": "01a10591",
+    "0xa02b30": "02be8152",
+    "0xa02b40": "09a12991",
+    "0xa02b54": "09310091",
+    "0xa02b68": "09d11b91",
+    "0xa02b7c": "09010e91",
+    "0xa02b94": "01613d91",
+    "0xa02c40": "08a983d2",
+    "0xa02cf0": "086785d2",
+    "0xa02da0": "082587d2",
+    "0xa02e50": "156900b9",
+    "0x72406c": "1f050071",
+    "0x724074": "68ba40f9",
+    "0x72407c": "686a41b9",
+    "0x724084": "69f24279",
+    "0x7240ec": "a91b8052",
+    "0x724150": "0bbe81d2",
+    "0x724188": "6a2940b9",
+    "0x72418c": "826f80d2",
+    "0x724300": "6af64279",
+    "0x724318": "6afa4279",
+    "0x724324": "65fe4279",
+    "0x724340": "6c024379"
+  },
+  "producer_reduction": {
+    "static_eeprom_descriptor_closed": true,
+    "physical_device_eeprom_bytes_captured": false,
+    "raw_lsc_calibration_bytes_needed": "0x6e8 bytes at EEPROM 0x103d..0x1724",
+    "remaining_lsc_dynamic_inputs": [
+      "same-device physical EEPROM calibration bytes (unless recovered from an existing Windows cache/capture)",
+      "request-local Tintless/ALSC adaptive state",
+      "request-local LSC geometry/scale"
+    ],
+    "remaining_gtm_dynamic_input": "request-local TMC state"
+  },
+  "policy": {
+    "offline_only": true,
+    "camera_runtime_performed": false,
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false
+  }
+}

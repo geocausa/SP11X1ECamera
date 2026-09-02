@@ -16,7 +16,10 @@
       "iqinterface_lsc411_calculate_setting_rva": "0x88e1e8",
       "lsc411_interpolation_rva": "0x93c1b0",
       "lsc411_hw_setting_rva": "0x9b4ba0",
-      "titan680_packer_rva": "0xb3d8a0"
+      "titan680_packer_rva": "0xb3d8a0",
+      "ife_lsc411_run_calculation_rva": "0xa03790",
+      "call_iqinterface_lsc411_calculate_setting_rva": "0xa03b30",
+      "post_iqinterface_lsc411_calculate_setting_rva": "0xa03b34"
     },
     "capture_at_calculate_setting_entry": {
       "geometry_fields_from_isp_input": {
@@ -34,19 +37,97 @@
         "Tintless input/result state if present",
         "ALSC/AWB-BG statistics state if present",
         "final common LSC output before Titan680 packing"
+      ],
+      "common_input_fields": {
+        "adaptive_pointer_or_state_a0": "x0+0xa0",
+        "alsc_awb_bg_state_pointer": "x0+0xa8",
+        "auxiliary_state_pointer_b8": "x0+0xb8",
+        "tintless_enable": "dwo(x0+0xc0)",
+        "channel_correction_gr": "poi(x0+0xd0), 0x374 bytes when non-null",
+        "channel_correction_gb": "poi(x0+0xd8), 0x374 bytes when non-null",
+        "channel_correction_b": "poi(x0+0xe0), 0x374 bytes when non-null",
+        "channel_correction_r": "poi(x0+0xe8), 0x374 bytes when non-null",
+        "alsc_scratch_pointer": "poi(x0+0xf8)",
+        "alsc_scratch_size": "dwo(x0+0x100), exact implementation requires at least 0xc000 when used",
+        "alsc_enable": "dwo(x0+0x10c)",
+        "alsc_grid_pixels": "dwo(x0+0x110)",
+        "alsc_geometry_aux": "x0+0x114..0x120",
+        "alsc_meta": "x0+0x128..0x12a"
+      },
+      "capture_sequence": [
+        "For each request 4/5/6, log frame id and the seven geometry fields before any local dump.",
+        "Dump/hash the 0x1e8-byte common input itself.",
+        "If the calibration input is not already present in an existing artifact, capture/hash only the proven runtime OTP table(s) or the bounded physical EEPROM 0x103d..0x1724 window; do not dump an unbounded EEPROM object.",
+        "If channel-correction pointers +0xd0/+0xd8/+0xe0/+0xe8 are non-null, dump exactly 0x374 bytes from each.",
+        "Record +0xa0/+0xa8/+0xb8/+0xf8 pointer identities and enable flags; inspect type/size before following unknown-size objects.",
+        "At caller RVA 0xa03b34, dump/hash x19+0xac for 0x18a0 bytes and the three DMI destinations before Titan680 packing."
       ]
     },
     "target_wire_outputs": [
-      {"name": "LSC0", "dmi_source_offset": "0x400", "bytes": "0x374"},
-      {"name": "LSC1", "dmi_source_offset": "0x774", "bytes": "0x374"}
-    ]
+      {
+        "name": "LSC0",
+        "dmi_source_offset": "0x400",
+        "bytes": "0x374"
+      },
+      {
+        "name": "LSC1",
+        "dmi_source_offset": "0x774",
+        "bytes": "0x374"
+      }
+    ],
+    "exact_abi_contract": {
+      "ife_run_calculation_entry": {
+        "rva": "0xa03790",
+        "x0": "IFELSC411 module object",
+        "x1": "ISPInputData"
+      },
+      "iqinterface_calculate_setting_entry": {
+        "rva": "0x88e1e8",
+        "x0": "LSC common input (loaded from module+0xa0)",
+        "x1": "ISPInputData",
+        "x2": "caller output/packer descriptor",
+        "x3": "ISPInputData+0x17190 trigger-source block",
+        "x4": "module+0x88 dependency state",
+        "x5": "module+0x61c60 auxiliary interpolation state",
+        "x6": "module+0x61c78 auxiliary interpolation state",
+        "request_frame": "qwo(x1+0x1ff8)"
+      },
+      "post_calculate_caller_state": {
+        "rva": "0xa03b34",
+        "x19": "IFELSC411 module object",
+        "x20": "ISPInputData",
+        "request_frame": "qwo(x20+0x1ff8)",
+        "final_lsc_staging": "x19+0xac, dump 0x18a0 bytes (exact Titan680 packer reads through at least +0x1896)",
+        "lsc0_dmi_destination": "poi(sp+0x10)",
+        "lsc1_dmi_destination": "poi(sp+0x18)",
+        "lsc2_dmi_destination": "poi(sp+0x20)"
+      }
+    },
+    "static_eeprom_boundary": {
+      "proof": "EEPROM-LSC-BOUNDARY.md / eeprom-lsc-boundary-oracle.json",
+      "configured_light_tables": 1,
+      "mesh_samples_per_channel": 221,
+      "raw_physical_eeprom_window": "0x103d..0x1724",
+      "raw_physical_eeprom_bytes": "0x6e8",
+      "runtime_otp_slot_bytes": "0xdf0",
+      "runtime_channel_float_offsets": [
+        "0x0c",
+        "0x380",
+        "0x6f4",
+        "0xa68"
+      ],
+      "capture_preference": "Prefer the already-materialized runtime OTP slot/common calibration state at the same request. Only capture the bounded physical 0x6e8 EEPROM window if an offline copy cannot be recovered and the runtime OTP table is unavailable."
+    }
   },
   "gtm": {
     "exact_functions": {
       "ife_execute_run_calculation_rva": "0xa28b00",
       "interpolation_rva": "0x93bf30",
       "hw_setting_rva": "0x9aa6e0",
-      "titan680_packer_rva": "0xb5b3d0"
+      "titan680_packer_rva": "0xb5b3d0",
+      "ife_common_state_ready_rva": "0xa28e6c",
+      "post_hw_calculation_result_rva": "0xa2908c",
+      "post_final_staging_copy_rva": "0xa290a8"
     },
     "preferred_capture_boundary": {
       "rva": "0x9aa6e0",
@@ -55,17 +136,59 @@
         "0x404-byte interpolated GTM region input",
         "TMC enable/type/mode and the TMC object referenced through the common input +0x50 pointer (bounded local dump sized only after pointer/type validation)",
         "post-calculation GTM staging/output used for the 0x800-byte Titan680 LUT"
+      ],
+      "capture_sequence": [
+        "At RVA 0xa28e6c, log request id, common-input address, TMC pointer, TMC type/version fields and mode before following the pointer.",
+        "If TMC is null, record that explicitly and do not invent a dynamic input.",
+        "If TMC type is 4, a small header/state dump is sufficient initially; if type is 5, validate readability then bound the local dump to 0x6300 bytes because the exact setting path reads through +0x6228.",
+        "At RVA 0xa2908c or 0xa290a8, hash/dump the exact 0x800-byte result for correlation with the request DMI oracle.",
+        "Keep all raw memory dumps local/untracked; commit only hashes and bounded decoded metadata."
       ]
     },
-    "target_wire_output": {"name": "GTM0", "dmi_source_offset": "0x34cc", "bytes": "0x800"}
+    "target_wire_output": {
+      "name": "GTM0",
+      "dmi_source_offset": "0x34cc",
+      "bytes": "0x800"
+    },
+    "exact_abi_contract": {
+      "ife_execute_entry": {
+        "rva": "0xa28b00",
+        "x0": "IFEGTM131 module object",
+        "x1": "ISPInputData"
+      },
+      "common_state_ready": {
+        "rva": "0xa28e6c",
+        "x20": "IFEGTM131 module object",
+        "x19": "ISPInputData",
+        "common_input": "x20+0xa8",
+        "tmc_pointer": "poi(x20+0xf8) == poi((x20+0xa8)+0x50)",
+        "request_frame": "qwo(x19+0x1ff8)"
+      },
+      "post_hw_calculation": {
+        "rva": "0xa2908c",
+        "result_dmi_pointer": "poi(x26+0x30)",
+        "result_bytes": "0x800",
+        "request_frame": "qwo(x19+0x1ff8)"
+      },
+      "post_staging_copy": {
+        "rva": "0xa290a8",
+        "cached_final_gtm_staging": "x20+0x138, 0x800 bytes",
+        "request_frame": "qwo(x19+0x1ff8)"
+      }
+    }
   },
   "capture_policy": {
-    "requests": [4, 5, 6],
+    "requests": [
+      4,
+      5,
+      6
+    ],
     "same_windows_stream_required": true,
     "raw_memory_artifacts": "local/untracked only",
     "committed_artifacts": "hashes, decoded bounded metadata, scripts and conclusions only",
     "do_not_submit_linux_request6": true,
-    "do_not_modify_camera_hardware_from_this_plan": true
+    "do_not_modify_camera_hardware_from_this_plan": true,
+    "atomicity": "Use frame id from the exact ISPInputData in the same function context; do not correlate adaptive state to DMI across separate Windows streams."
   },
   "acceptance_gate": "Offline producer must reproduce matched Windows LSC0, LSC1 and GTM0 byte-for-byte; derive wire GIC from the proven LSC alias; then run a separate authorization review before any Linux request6 runtime."
 }

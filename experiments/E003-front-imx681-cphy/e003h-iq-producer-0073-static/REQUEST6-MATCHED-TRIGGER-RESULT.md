@@ -41,6 +41,8 @@ The matched request6 Windows bytes can be normalized/materialized by the existin
 
 Subsequent exact-binary work closes an important ambiguity: the remaining LSC/GTM problem is **not** just missing AEC/AWB trigger labels. LSC41 and GTM13 stay in the same relevant Chromatix trigger zones across the matched request5/request6 trigger vectors, while the exact Surface implementation has additional adaptive producer state after base interpolation. LSC411 can consume sensor calibration plus Tintless/ALSC state; GTM131 can consume dynamic TMC state. See `ADAPTIVE-IQ-STATE-BOUNDARY.md` and `adaptive-iq-state-boundary-oracle.json`.
 
+The static LSC calibration descriptor is now reduced further to one 221-point table sourced from exactly 0x6e8 physical EEPROM bytes at `0x103d..0x1724`; the exact runtime OTP table layout is also pinned. A separate output proof rejects all pure-Chromatix LSC channel orderings and proves the dynamic GTM path materially changes the flat base curve.
+
 ## Next gate
 
-Capture the missing LSC calibration/Tintless/ALSC state, LSC calculator offsets/scale, and GTM TMC state for requests 4/5/6 in one Windows stream. Then reproduce LSC0, LSC1 and GTM0 offline byte-for-byte and derive the Windows GIC wire payload from the proven LSC alias. Linux request6 remains forbidden until that comparison passes and a separate runtime authorization review succeeds.
+Recover the bounded LSC calibration bytes from an existing local artifact if possible; otherwise capture the exact runtime OTP/calibration state together with Tintless/ALSC state, LSC calculator offsets/scale, and GTM TMC state for requests 4/5/6 in one Windows stream. Then reproduce LSC0, LSC1 and GTM0 offline byte-for-byte and derive the Windows GIC wire payload from the proven LSC alias. Linux request6 remains forbidden until that comparison passes and a separate runtime authorization review succeeds.
