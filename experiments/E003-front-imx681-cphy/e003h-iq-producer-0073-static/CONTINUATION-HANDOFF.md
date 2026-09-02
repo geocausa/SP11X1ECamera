@@ -14,12 +14,12 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - persistent Golden GRUB: `sp11-audio-fullio-v19c`
 - SP11 Linux/Windows can be rebooted and instrumented as needed.
 - Use the normal **GRUB one-shot Windows entry**; do not repeat the temporary offline BCD experiments from 2026-09-02.
-- SP7 has a faulty cooling fan. Use it only as a lightweight/passive KDNET host when needed; do not give it heavy compute jobs.
+- SP7 has a faulty cooling fan. Use it only for lightweight/passive analysis or KDNET hosting; do not give it heavy compute jobs.
 - Same-machine Windows/QcDeviceMFT is the authoritative oracle.
 
 ## Safety gate
 
-**Do not run Linux request6 yet.** The gate remains fail-closed until the remaining runtime LSC interpolation representation is reproduced byte-for-byte and the full atomic Windows producer/output capsule matches offline.
+**Do not run Linux request6 yet.** Runtime LSC interpolation is now byte-exactly reproduced, but the gate remains fail-closed until the complete request5/request6 producer chain is replayed against one atomic Windows capsule and a separate runtime authorization review passes.
 
 ## Latest accepted closures
 
@@ -27,9 +27,35 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - Windows GIC wire anomaly/alias: closed.
 - LSC calibration application: bounded/closed.
 - LSC geometry/resampling: closed.
-- LSC post-calculation `0x18a0` staging -> Titan680 LSC0/LSC1/LSC2: closed.
+- LSC post-calculation `0x18a0` staging -> Titan680 LSC0/LSC1/LSC2: closed; LSC2 is zero on the validated live requests.
 - sequential embedded Tintless request5 -> request6 at DeviceMFT RVA `0xc95fd0`: byte-exact, including persistent state; see `LSC-TINTLESS-SEQUENTIAL-REPLAY.md`.
-- latest runtime interpolation/trigger boundary: see `LSC-RUNTIME-INTERPOLATION-BOUNDARY.md` and its oracle/proof.
+- exact 42-float live LSC trigger vector and `x22/x23` ABI: closed; see `LSC-RUNTIME-INTERPOLATION-BOUNDARY.md`.
+- **runtime LSC41 tuning source and generic interpolation: closed byte-exact**; see `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md` and `prove-lsc-runtime-tuning-source.py`.
+
+## Latest LSC source closure
+
+The old hypothesis that runtime Chromatix transforms the five serialized IMX681 LSC leaves is superseded.
+
+The exact first runtime leaf consumed by generic interpolation is SHA256:
+
+`d5b6ba5acb7c6e29935a455896d433debec9203800b77899cdf64bc17f02791d`
+
+It is absent from `com.surface.tuned.ffc_imx681.bin` and exists byte-for-byte in Surface rear tuning `com.surface.tuned.rfc_ov13858.bin` as region symbol `0x2a0`, absolute offset `1008426`.
+
+The second runtime leaf is SHA256:
+
+`f0c84bd42df54e3b18abb41d787e922d98f82f0aa72230c90aaea48f94994ee8`
+
+and is rear region `0x2a4`, absolute offset `1012018`, the all-ones mesh.
+
+Rear Default `lsc41_ife_v2` symbol `0x29` uses the exact live control vector `[8,2,5,100,0,6]`. At selector 0, its two bands are `[1,340]` and `[430,900]`. With live trigger-vector index0:
+
+- request5 `400.93280029296875` -> float32 ratio `0.6770310997962952` -> exact x22 SHA `e35ad052a2d219bcded1283c72922fd0c5722431ad511c496ab1ab4ec03dc9de`;
+- request6 `400.27227783203125` -> float32 ratio `0.6696919798851013` -> exact x22 SHA `3acd68d81103656463b65b448f3a6106c907a48f1f08acb4c3132d30c1b28ca8`.
+
+The replay matches both accepted Windows `x22` buffers byte-for-byte using the exact DeviceMFT RVA `0x93c940` arithmetic. The raw exploratory `E003H_20260902_LSCCALLBACK` capture independently records those exact A/B runtime leaf bytes.
+
+Do **not** interpret this as proof that Windows configures the rear physical sensor for the front stream. It proves the byte provenance of the LSC41 object resolved by the front stream. Why the tuning loader/overlay exposes the rear/default LSC branch remains a provenance question and should be documented, because it may matter to other IQ modules.
 
 ## Latest live oracle
 
@@ -54,8 +80,12 @@ Exact 42-float trigger vector is captured for both requests. LSC control vector 
 
 ## Current open problem / immediate action
 
-The Windows-installed tuning blob is byte-identical to the archived blob. The entire container has 25 serialized `0xdf0` LSC regions but only five unique payloads—the known effective front `sid41` leaves. Live `x22` is not an exact direct, two-leaf, or affine combination of those five under the current raw serialization interpretation. Channel permutations and simple gain-domain transforms were ruled out.
+The previous upstream LSC interpolation bottleneck is **closed**. Do not spend more time fitting the five IMX681 LSC leaves or looking for a hidden numerical materialization transform.
 
-Therefore the next task is **not more trigger fitting**. Trace how the runtime Chromatix object materializes/represents LSC41 leaves before Qualcomm generic interpolation. Two nearby helpers are already closed and should not be repeated without new evidence: RVA `0x89d368` only rebuilds the control-enum vector / interpolation scratch sizing, and RVA `0x6f39f8` walks/selects the tuning hierarchy; neither shows a leaf-mesh transform. Focus deeper on runtime leaf pointer/data construction. If static tracing cannot close it, do one narrow Windows capture of the actual runtime leaf pointer(s)/`0xdf0` leaf data handed to the interpolation engine at request5/6 and compare directly with the serialized regions and `x22`.
+Immediate work is now:
 
-Then chain the resolved interpolation through already-closed calibration -> geometry -> exact sequential Tintless -> staging -> Titan680/GIC and demand byte parity. Only afterward reconsider Linux request6.
+1. build one integrated offline request5 -> request6 LSC replay beginning with the newly closed rear/default LSC41 source;
+2. chain it through the already-closed golden/EEPROM calibration -> geometry -> exact sequential Tintless -> staging -> Titan680 LSC0/LSC1/LSC2 -> GIC path and demand byte parity against one atomic Windows capsule;
+3. independently trace the tuning-loader/overlay provenance that makes the front stream resolve the rear/default LSC41 branch, and check whether the same overlay rule affects other IQ modules;
+4. keep GTM/TMC as the already byte-exact parallel path;
+5. only after the integrated producer/output capsule passes, conduct a separate review before Linux request6.

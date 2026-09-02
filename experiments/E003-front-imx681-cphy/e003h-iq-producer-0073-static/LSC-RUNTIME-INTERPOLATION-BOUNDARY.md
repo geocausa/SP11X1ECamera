@@ -1,6 +1,8 @@
 # E003h 0073 — LSC41 runtime interpolation boundary
 
-Status: **accepted Windows-live/static boundary checkpoint; upstream representation still open**. No Linux camera runtime or Linux request6 is authorized by this checkpoint.
+Status: **accepted historical Windows-live/static boundary checkpoint; its upstream representation question is now superseded/closed by `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md`**. No Linux camera runtime or Linux request6 is authorized by either checkpoint.
+
+> Superseding result: the unexplained runtime A leaf is not a transformed IMX681 payload. It is byte-identical to Surface rear/default OV13858 LSC41 region `0x2a0`, and exact rear-tree interpolation reproduces request5/request6 `x22` byte-for-byte. Keep the analysis below as the evidence that ruled out the incorrect front-only hypothesis.
 
 ## What the latest Windows pass closed
 
