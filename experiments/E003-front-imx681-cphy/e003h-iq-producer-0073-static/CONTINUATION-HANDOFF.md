@@ -12,8 +12,8 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - branch: `experiment/e003-front-imx681-cphy`
 - persistent Golden kernel: `7.1.5-sp11-render-parity-v4+`
 - persistent Golden GRUB: `sp11-audio-fullio-v19c`
-- SP11 Linux/Windows can be rebooted and instrumented as needed.
-- Use the normal **GRUB one-shot Windows entry**; do not repeat the temporary offline BCD experiments from 2026-09-02.
+- SP11 is currently in Golden Linux. The existing Windows installation fails very early in boot and is being treated as a **frozen evidence source**, not an active oracle. Mine Linux/VSS/NTFS/static evidence first; repair/reinstall Windows only when a genuinely new dynamic oracle becomes necessary.
+- If Windows is eventually rebuilt, use the normal **GRUB one-shot Windows entry** only; do not repeat the temporary offline BCD experiments from 2026-09-02.
 - SP7 has a faulty cooling fan. Use it only for lightweight/passive analysis or KDNET hosting; do not give it heavy compute jobs.
 - Same-machine Windows/QcDeviceMFT is the authoritative oracle.
 
@@ -28,9 +28,10 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - LSC calibration application: bounded/closed.
 - LSC geometry/resampling: closed.
 - LSC post-calculation `0x18a0` staging -> Titan680 LSC0/LSC1/LSC2: closed; LSC2 is zero on the validated live requests.
-- sequential embedded Tintless request5 -> request6 at DeviceMFT RVA `0xc95fd0`: byte-exact, including persistent state; see `LSC-TINTLESS-SEQUENTIAL-REPLAY.md`.
+- sequential embedded Tintless request5 -> request6 at DeviceMFT RVA `0xc95fd0`: byte-exact, including persistent state, **but the TINTCTX capture is now mechanically identified as OV13858 rear mode 1**. It is a rear/shared-algorithm oracle and must not satisfy the front gate; see `LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md` and `LSC-TINTLESS-SEQUENTIAL-REPLAY.md`.
 - exact 42-float live LSC trigger vector and `x22/x23` ABI: closed; see `LSC-RUNTIME-INTERPOLATION-BOUNDARY.md`.
 - **runtime LSC41 tuning source and generic interpolation: closed byte-exact**; see `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md` and `prove-lsc-runtime-tuning-source.py`.
+- **live LSC golden authority: closed byte-exact** from carved verified-front x22/x23. Rear/default OV13858 `lscgolden41_ife_v2` region `0x2ae` (SHA `f771e54d…`) uniquely satisfies 442/442 red+blue request5/6 calibration equations; nominal IMX681 golden satisfies only 9/442. See `LSC-LIVE-GOLDEN-AUTHORITY.md`.
 - LSC request-time tuning-manager ownership is statically closed through CaptureDevice private DataManager -> CapturePipe -> common context -> `ISPInputData+0x1fe8`; see `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md`. The rear-only A leaf crossover itself is still open upstream at the live private DataManager source-buffer/tree identity.
 
 ## Latest LSC source closure
@@ -58,6 +59,8 @@ The replay matches both accepted Windows `x22` buffers byte-for-byte using the e
 
 Do **not** interpret this as proof that Windows configures the rear physical sensor for the front stream. It proves the byte provenance of the LSC41 object resolved by the front stream.
 
+The recovered calibrated x23 buffers also close the live golden side independently. Across all 10 installed tuning blobs containing `lscgolden41_ife_v2`, only rear/default OV13858 region `0x2ae` can reproduce both front req5/req6 direct red/blue calibration transforms for all 442 points using one u16 EEPROM value per point. It passes 442/442 uniquely; nominal IMX681 golden passes 9/442. This is a tuning-tree crossover, not a physical-sensor identity change.
+
 ## Latest tuning provenance boundary
 
 `LSC-TUNING-PROVENANCE-BOUNDARY.md` now rules out the simple file-selection explanations. Exact front `SCFG_FRONT_MSHW0490.bin` names only `com.surface.sensormodule.ffc_imx681.bin` and `com.surface.tuned.ffc_imx681.bin`. Whole-file scanning proves the discriminating runtime A mesh is absent from the exact front IMX681 tuning and both tested `com.qti.tuned.default.bin` fallbacks; it occurs exactly once in rear `com.surface.tuned.rfc_ov13858.bin` at offset `1008426`.
@@ -68,17 +71,13 @@ The later `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md` closes the request-time mana
 
 Therefore the remaining provenance question is narrower still: **what exact bytes back the live verified-front DataManager at `+0x38/+0x30`?** The next Windows oracle should correlate selected Sensor ID, DataManager `+0x38/+0x30`, DataManager `+0x28`, context `+0x2460`, and request `+0x1fe8` in one front stream. If the source hash is front IMX681, investigate parsing/tree mutation; if it is rear OV13858, investigate the live InitParams payload. Do not assume a global CamX manager swap or a bad front SCFG without new evidence.
 
-## Latest live oracle
+## Latest live/front oracle and recovered raw evidence
 
-Raw/untracked Windows capture directory:
+System Restore removed the later `SP11CameraOracle` directories from the live Windows profile. Do **not** depend on `/mnt/windows/.../E003H_20260902_LSCTRIGSRC` or `TINTCTX` existing. Read-only NTFS carving recovered the authoritative LSCTRIGSRC req5/6 x22+x23 buffers and a subset of TINTCTX under:
 
-`C:\Users\Geoca\Documents\SP11CameraOracle\E003H_20260902_LSCTRIGSRC`
+`experiments/E003-front-imx681-cphy/e003h-iq-producer-0073-static/oracle-carved-20260902/`
 
-On Linux after mounting the Windows volume read-only:
-
-`/mnt/windows/Users/Geoca/Documents/SP11CameraOracle/E003H_20260902_LSCTRIGSRC`
-
-At LSC411Interpolation post RVA `0x93c8e8`:
+The front LSCTRIGSRC capture at LSC411Interpolation post RVA `0x93c8e8` remains valid:
 
 - `x22` = generic pre-calibration LSC41 interpolation result.
 - `x23` = calibrated destination.
@@ -91,12 +90,17 @@ Exact 42-float trigger vector is captured for both requests. LSC control vector 
 
 ## Current open problem / immediate action
 
-The previous upstream LSC interpolation bottleneck is **closed**. Do not spend more time fitting the five IMX681 LSC leaves or looking for a hidden numerical materialization transform.
+The previous upstream front LSC interpolation bottleneck is **closed**, and the calibrated x23 req5/6 buffers have been raw-carved back from NTFS. Do not reopen the five-IMX681-leaf fitting or invent a hidden x23 materialization transform: `IQInterface::LSC411CalculateSetting` passes the calibrated interpolation destination directly into `LSC411Setting::CalculateHWSetting`.
+
+A correction changes the integrated gate: `E003H_20260902_TINTCTX` is **OV13858 rear mode 1 (4064x2286)**, not the verified IMX681 front stream. Its exact sequential replay cannot be spliced into front LSCTRIGSRC/adaptive-live evidence.
 
 Immediate work is now:
 
-1. build one integrated offline request5 -> request6 LSC replay beginning with the newly closed rear/default LSC41 source;
-2. chain it through the already-closed golden/EEPROM calibration -> geometry -> exact sequential Tintless -> staging -> Titan680 LSC0/LSC1/LSC2 -> GIC path and demand byte parity against one atomic Windows capsule;
-3. capture the exact live source-buffer identity of the verified front CaptureDevice private DataManager/TuningDataManager and correlate it through context `+0x2460` to request `+0x1fe8`;
-4. keep GTM/TMC as the already byte-exact parallel path;
-5. only after the integrated producer/output capsule passes, conduct a separate review before Linux request6.
+1. mine the existing verified-front `windows-adaptive-live-20260902` capsule and exact DeviceMFT for a same-session bridge from front geometry/pre-Tintless state to the captured front `0x18a0` staging; use the captured post-Tintless correction/state tables if and only if their producer semantics can be closed mechanically;
+2. preserve and use the carved front LSCTRIGSRC x22/x23 as front calibration/tuning evidence, but do not assume its request state equals the independent adaptive-live stream;
+3. keep the TINTCTX request5->request6 replay as a rear OV13858/shared-Tintless oracle and fold it into rear parity work;
+4. continue static/private-DataManager provenance mining; the one live front DataManager source-buffer hash remains the eventual dynamic oracle if static evidence cannot close it;
+5. keep GTM/TMC as the already byte-exact front parallel path;
+6. only after a **front-specific** integrated producer/output capsule passes, conduct a separate review before Linux request6.
+
+Windows is not required for the current mining phase. If the remaining front gap eventually becomes irreducibly dynamic, rebuild/repair the Windows oracle then rather than delaying this offline work now.

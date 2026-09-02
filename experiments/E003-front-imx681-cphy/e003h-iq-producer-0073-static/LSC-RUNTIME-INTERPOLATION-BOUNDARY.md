@@ -33,7 +33,7 @@ Because `x22` is conclusively **before** OTP calibration, EEPROM/OTP cannot expl
 
 ## What is already closed downstream
 
-Do not reopen without new contrary evidence: GTM/TMC request4/5/6 replay is byte-exact (256/256 qwords); sequential Tintless request5→request6 is byte-exact including state; LSC calibration application and geometry/resampling are closed/bounded; `0x18a0` staging → Titan680 LSC0/LSC1/LSC2 is exact; LSC2 is zero on the validated stream; Windows GIC wire alias derives deterministically from LSC0/LSC1.
+Do not reopen without new contrary evidence: GTM/TMC request4/5/6 replay is byte-exact (256/256 qwords); the historical TINTCTX sequential Tintless request5→request6 replay is byte-exact including state but is now identified as **OV13858 rear mode 1**, not front evidence; LSC calibration application and geometry/resampling are closed/bounded; `0x18a0` staging → Titan680 LSC0/LSC1/LSC2 is exact; LSC2 is zero on the validated front stream; Windows GIC wire alias derives deterministically from LSC0/LSC1. See `LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md`.
 
 ## Next gate
 

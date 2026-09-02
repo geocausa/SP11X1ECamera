@@ -7,7 +7,7 @@ ARM64 Tintless callback under Unicorn, and requires byte-for-byte Windows parity
 for request5, the persistent carry into request6, and request6 itself.
 """
 from __future__ import annotations
-import argparse, hashlib, importlib.util, json
+import argparse, hashlib, importlib.util, json, struct
 from pathlib import Path
 from unicorn import UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE
 from unicorn.arm64_const import UC_ARM64_REG_X0, UC_ARM64_REG_X18
@@ -19,6 +19,13 @@ CONTEXT_CAPTURE_BYTES = 0x4000
 CONTEXT_MAP_BYTES = 0x20000
 EXPECTED_CONTEXT_READ_HI = 0x12694
 EXPECTED_CONTEXT_WRITE_HI = 0x126E8
+# Raw NTFS recovery later established that this capture is OV13858 rear mode 1,
+# not the verified IMX681 front stream.  Preserve this identity on every rerun.
+CAPTURE_CAMERA_IDENTITY = {
+    "sensor": "ov13858", "mode_index": 1, "width": 4064, "height": 2286,
+    "cells_x": 126, "cells_y": 94, "cell_width": 32, "cell_height": 24,
+    "correction_proof": "LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md",
+}
 
 EXPECTED = {
     "REQ5_CB_OBJ_PRE_0100.bin": "5f15af83e81c6147104aff1fbad702851d8fbebb3bc0904ac4d26f4f849d0d2a",
@@ -70,6 +77,11 @@ def verify_captures(cap: Path) -> None:
         if not p.is_file(): raise RuntimeError(f"missing capture {p}")
         got=sha_file(p)
         if got!=want: raise RuntimeError(f"capture SHA mismatch {name}: {got} != {want}")
+    x1=(cap/'REQ5_CB_X1_PRE_0400.bin').read_bytes()
+    geom=struct.unpack_from('<7I',x1,0x1c)
+    expected=(4064,2286,126,94,32,24,0)
+    if geom != expected:
+        raise RuntimeError(f"TINTCTX camera-identity geometry drift: {geom!r} != {expected!r}")
 
 def load_surface_emu(here: Path):
     p=here/'prove-gtm-live-exact-replay.py'
@@ -136,13 +148,13 @@ def main() -> int:
     runs=[replay_once(mod,args.device_mft,args.capture_dir,0x00),replay_once(mod,args.device_mft,args.capture_dir,0xA5)]
     oracle={
       'schema':'sp11-e003h-lsc-tintless-sequential-replay-v1','accepted':True,
-      'source_authority':{'device_mft_sha256':DEVICE_MFT_SHA256,'windows_capture_session':'E003H_20260902_TINTCTX','raw_capture_sha256':EXPECTED},
+      'source_authority':{'device_mft_sha256':DEVICE_MFT_SHA256,'windows_capture_session':'E003H_20260902_TINTCTX','camera_identity':CAPTURE_CAMERA_IDENTITY,'raw_capture_sha256':EXPECTED},
       'exact_functions':{'tintless_algorithm_wrapper_process_rva':hex(CALLBACK_RVA),'deeper_stateful_core_rva':hex(DEEP_RVA)},
       'bounded_state':{'captured_persistent_context_bytes':hex(CONTEXT_CAPTURE_BYTES),'dynamic_context_read_hi_exclusive':hex(EXPECTED_CONTEXT_READ_HI),'dynamic_context_write_hi_exclusive':hex(EXPECTED_CONTEXT_WRITE_HI),'extension_scratch_independence':'PASS for both 0x00 and hostile 0xa5 initial fill'},
       'sequential_replays':runs,
       'request5_output_mesh_sha256':EXPECTED['REQ5_CB_OUT_MESH_POST_0DF0.bin'],'request6_output_mesh_sha256':EXPECTED['REQ6_CB_OUT_MESH_POST_0DF0.bin'],
-      'classification':'CLOSED BYTE-EXACT STATEFUL TINTLESS PRODUCER: exact Surface ARM64 request5 then request6 replay reproduces Windows persistent state and 0xdf0 output meshes with zero differing bytes. The context extension above captured 0x4000 is scratch, proven by hostile-fill invariance.',
-      'next_gate':'Close the immediately-upstream LSC41 tuning-region selection/interpolation that produces each captured Tintless input mesh; calibration application, geometry, Tintless, staging-to-wire, GIC alias and GTM are otherwise bounded/closed. Linux request6 remains forbidden.',
+      'classification':'CLOSED BYTE-EXACT OV13858 REAR MODE-1 STATEFUL TINTLESS PRODUCER: exact Surface ARM64 request5 then request6 replay reproduces Windows persistent state and 0xdf0 output meshes with zero differing bytes. The algorithm/state proof remains valid; camera identity correction withdraws it as front IMX681 sequential-state evidence.',
+      'next_gate':'Use this replay for rear/shared Tintless parity only. The verified IMX681 front path still requires a same-front-stream sequential Tintless capsule before integrated front producer parity can close. Linux request6 remains forbidden.',
       'safety':{'linux_camera_runtime':False,'linux_request6_executed':False,'raw_windows_captures_committed':False}}
     args.out.write_text(json.dumps(oracle,indent=2)+'\n')
     print('PASS exact sequential Tintless request5 -> request6 replay'); print('  request5 output',oracle['request5_output_mesh_sha256']); print('  request6 output',oracle['request6_output_mesh_sha256']); print('  context read/write hi',hex(EXPECTED_CONTEXT_READ_HI),hex(EXPECTED_CONTEXT_WRITE_HI)); print('  scratch fills tested: 0x00, 0xa5'); print('  oracle',args.out)

@@ -93,7 +93,7 @@ GTM/TMC is independently byte-exact.
 
 ## Remaining gate
 
-The immediate next gate is an **integrated same-stream replay**, not more LSC trigger fitting: feed this now-byte-exact `x22` source through the already-closed downstream stages and compare one atomic request5/request6 capsule through Titan680/GIC. Separately document the tuning-loader/overlay provenance that causes the front stream to resolve this rear/default LSC branch, because that may matter elsewhere in the full stack.
+The immediate front gate is **not** to splice this LSCTRIGSRC stream into the historical TINTCTX replay: raw recovery later proved TINTCTX is OV13858 rear mode1. Keep this front x22 source with the front calibration/geometry/staging evidence and mine a same-front-stream Tintless bridge before any integrated request5/request6 claim. Separately continue the tuning-loader/overlay provenance that causes the front stream to resolve rear/default LSC objects. See `LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md` and `LSC-LIVE-GOLDEN-AUTHORITY.md`.
 
 Linux request6 remains fail-closed until the integrated parity proof passes and a separate runtime authorization review is made.
 

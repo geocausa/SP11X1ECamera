@@ -196,8 +196,15 @@
     "new_exact_required_bytes_for_this_physical_stream": "0xdf0 = one valid formatted slot",
     "preferred_capture": "After IFELSC411 calibration translation has established common+0x68==1, dump module+0x1978 for exactly 0xdf0 bytes. This avoids pointer-unit ambiguity at ISPInputData+0x2070 and captures the exact copied slot consumed by interpolation."
   },
-  "classification": "CLOSED STATIC/LIVE LSC CALIBRATION-APPLICATION BOUNDARY: exact Surface code proves lscgolden41_ife_v2, one valid formatted EEPROM slot, golden/EEPROM ratio direction, two-green averaging, and pre-geometry/pre-Tintless placement.",
-  "next_gate": "Acquire only the single 0xdf0 copied formatted calibration slot from the same Windows stream, then replay exact LSC interpolation + calibration + geometry + sequential Tintless + Q10 staging. Staging-to-wire and GTM are already closed. Linux request6 remains forbidden.",
+  "live_golden_authority_correction": {
+    "status": "superseded by recovered x22/x23 discriminator",
+    "proof": "prove-lsc-live-golden-authority.py",
+    "doc": "LSC-LIVE-GOLDEN-AUTHORITY.md",
+    "nominal_front_golden_sha256": "b0023db8b7254a9922c60506db58fd9bf2d717e09a8f088d31f33b2316538f6e",
+    "live_rear_default_golden_sha256": "f771e54d183281251bf0ef6d94e94a0d439c641f8b8ed9a3ad60ead4094487d6"
+  },
+  "classification": "CLOSED CALIBRATION ALGORITHM/LIVE-SLOT BOUNDARY: exact Surface code proves one valid formatted EEPROM slot, golden/EEPROM ratio direction, two-green averaging, and pre-geometry/pre-Tintless placement. The parsed IMX681 golden is nominal-package metadata; live golden authority is separately pinned to rear/default OV13858.",
+  "next_gate": "For front parity, keep this calibration algorithm with the recovered front x22/x23/live-golden evidence, then mine a same-front-stream Tintless bridge into the captured front staging. Do not use the rear TINTCTX sequential state as front evidence. Linux request6 remains forbidden.",
   "safety": {
     "linux_camera_runtime": false,
     "linux_request6_executed": false,

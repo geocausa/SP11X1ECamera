@@ -32,6 +32,17 @@
       "REQ6_CB_X2_POST_14000.bin": "9311d082d6a6f6f59afeded7202b1e46c8f63137d6ce5c4f0188fcb8cf7523c2",
       "REQ6_CB_IN_MESH_POST_0DF0.bin": "c7597c16f3d496555a6e7a3c2364e71cdf21b1476700f6043c0e43bb0fa71ed1",
       "REQ6_CB_OUT_MESH_POST_0DF0.bin": "547d96e50a6775eff44c1af3085905c6c45705d1c59121a2b0eac7be58566824"
+    },
+    "camera_identity": {
+      "sensor": "ov13858",
+      "mode_index": 1,
+      "width": 4064,
+      "height": 2286,
+      "cells_x": 126,
+      "cells_y": 94,
+      "cell_width": 32,
+      "cell_height": 24,
+      "correction_proof": "LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md"
     }
   },
   "exact_functions": {
@@ -108,8 +119,8 @@
   ],
   "request5_output_mesh_sha256": "1978d282a472117a2b28a3fb1c4b41295e1b8190c4737b448373e5571f381490",
   "request6_output_mesh_sha256": "547d96e50a6775eff44c1af3085905c6c45705d1c59121a2b0eac7be58566824",
-  "classification": "CLOSED BYTE-EXACT STATEFUL TINTLESS PRODUCER: exact Surface ARM64 request5 then request6 replay reproduces Windows persistent state and 0xdf0 output meshes with zero differing bytes. The context extension above captured 0x4000 is scratch, proven by hostile-fill invariance.",
-  "next_gate": "Close the immediately-upstream LSC41 tuning-region selection/interpolation that produces each captured Tintless input mesh; calibration application, geometry, Tintless, staging-to-wire, GIC alias and GTM are otherwise bounded/closed. Linux request6 remains forbidden.",
+  "classification": "CLOSED BYTE-EXACT OV13858 REAR MODE-1 STATEFUL TINTLESS PRODUCER: exact Surface ARM64 request5 then request6 replay reproduces Windows persistent state and 0xdf0 output meshes with zero differing bytes. The algorithm/state proof remains valid; camera identity correction withdraws it as front IMX681 sequential-state evidence.",
+  "next_gate": "Use this replay for rear/shared Tintless parity only. The verified IMX681 front path still requires a same-front-stream sequential Tintless capsule before integrated front producer parity can close. Linux request6 remains forbidden.",
   "safety": {
     "linux_camera_runtime": false,
     "linux_request6_executed": false,

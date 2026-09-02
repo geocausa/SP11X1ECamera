@@ -113,7 +113,7 @@ The next useful question is now narrow:
 
 The request-time handoff is now statically closed by `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md`. The next Windows observation should be deliberately tiny: in one verified front-stream session capture selected Sensor ID, DataManager `+0x38/+0x30` source-buffer identity, DataManager `+0x28`, common-context `+0x2460`, and request `ISPInputData+0x1fe8`. Do not repeat broad state dumps or LSC trigger fitting.
 
-This provenance investigation is separate from the output-parity gate: request5/request6 `x22` is already byte-exact and the downstream calibration/geometry/Tintless/staging/packer chain is independently closed. The next main parity milestone remains one integrated same-stream request5 -> request6 offline replay.
+This provenance investigation is separate from the output-parity gate. Request5/request6 front `x22` is byte-exact, and recovered x23 now uniquely pins the live golden to rear/default OV13858 too. Geometry/staging/packer are front-closed, but the historical sequential TINTCTX replay is rear mode1 and therefore does **not** close front Tintless state. The next front parity milestone is a same-front-stream Tintless bridge and then an integrated offline replay.
 
 Linux request6 remains fail-closed.
 

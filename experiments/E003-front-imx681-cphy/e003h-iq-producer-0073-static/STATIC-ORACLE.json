@@ -41,7 +41,7 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "Build the integrated request5->request6 LSC producer replay from the now-byte-exact rear/default x22 source through closed calibration, geometry, sequential Tintless, staging and Titan680/GIC. In parallel, finish the selected-sensor provider / IFELSC411 tuning-manager provenance trace; if static tracing cannot distinguish it, use one narrow Windows front-stream observation. Do not run Linux request6.",
+  "next_gate": "Mine the verified-front adaptive-live capsule for a same-front-stream bridge from calibrated/geometry state through Tintless into the captured 0x18a0 staging. The historical TINTCTX sequential replay is OV13858 rear mode1 and must not be spliced into front evidence. In parallel continue private-DataManager source provenance. Do not run Linux request6.",
   "gtm_tmc_read_boundary_proof": {
     "oracle": "gtm-tmc-read-boundary-oracle.json",
     "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
@@ -141,22 +141,22 @@
   },
   "lsc_calibration_application_proof": {
     "oracle": "lsc-calibration-application-oracle.json",
-    "oracle_sha256": "f7446ae61287d9b826c3ee256b5133f5b9bb0738f7a7c685cf3e32a6f5fbfd59",
+    "oracle_sha256": "619f4338031c00cd50cbb8f6dfd652bfe8428db35ad0583dff45352c7cb63275",
     "proof": "prove-lsc-calibration-application-boundary.py",
     "doc": "LSC-CALIBRATION-APPLICATION-BOUNDARY.md",
     "check_update_chromatix_rva": "0xa02420",
     "check_dependence_change_rva": "0xa028b0",
     "interpolation_rva": "0x93c1b0",
     "golden_module": "lscgolden41_ife_v2",
-    "golden_region_symbol_id": 1229,
-    "golden_region_sha256": "b0023db8b7254a9922c60506db58fd9bf2d717e09a8f088d31f33b2316538f6e",
     "live_valid_calibration_slots": 1,
     "minimal_same_stream_calibration_capture_bytes": "0xdf0",
-    "classification": "CLOSED STATIC/LIVE LSC CALIBRATION-APPLICATION BOUNDARY: Surface uses golden/formatted-EEPROM ratios before geometry/Tintless, averages the two calibrated greens, and this physical live stream has exactly one valid calibration slot."
+    "classification": "CLOSED CALIBRATION ALGORITHM/LIVE-SLOT BOUNDARY: ratio direction, green averaging, one-live-slot branch and pre-geometry/pre-Tintless placement are closed. The originally parsed IMX681 golden is nominal-package metadata only; live LSCTRIGSRC golden authority is superseded by lsc_live_golden_authority.",
+    "nominal_package_golden_region_symbol_id": 1229,
+    "nominal_package_golden_region_sha256": "b0023db8b7254a9922c60506db58fd9bf2d717e09a8f088d31f33b2316538f6e"
   },
   "lsc_tintless_sequential_replay": {
     "oracle": "lsc-tintless-sequential-replay-oracle.json",
-    "oracle_sha256": "ab2ab9831bff7d88cbd3c78001c3e7d209d257c9a71458037bf9a668d2bc8d0d",
+    "oracle_sha256": "ea7453eb8af5f2f1de950dc383face5adc50c901ee400150357e51c7be247e76",
     "proof": "prove-lsc-tintless-sequential-replay.py",
     "doc": "LSC-TINTLESS-SEQUENTIAL-REPLAY.md",
     "capture_session": "E003H_20260902_TINTCTX",
@@ -164,7 +164,9 @@
     "deep_core_rva": "0xca01b0",
     "request5_output_mesh_sha256": "1978d282a472117a2b28a3fb1c4b41295e1b8190c4737b448373e5571f381490",
     "request6_output_mesh_sha256": "547d96e50a6775eff44c1af3085905c6c45705d1c59121a2b0eac7be58566824",
-    "classification": "CLOSED BYTE-EXACT STATEFUL TINTLESS PRODUCER: request5 post-state carries exactly into request6 and native ARM64 replay reproduces both Windows output meshes with zero differing bytes; context extension above 0x4000 is scratch by hostile-fill invariance."
+    "classification": "CLOSED BYTE-EXACT OV13858 REAR MODE-1 STATEFUL TINTLESS PRODUCER: exact sequential state/output replay remains valid for rear/shared Tintless, but is withdrawn as front IMX681 sequential-state evidence.",
+    "camera_identity": "OV13858 rear mode1, 4064x2286; corrected by lsc_tintctx_camera_identity_correction",
+    "front_gate_use": false
   },
   "lsc_runtime_interpolation_boundary": {
     "oracle": "lsc-runtime-interpolation-boundary-oracle.json",
@@ -183,7 +185,7 @@
   "continuation_handoff": "CONTINUATION-HANDOFF.md",
   "lsc_runtime_tuning_source_closure": {
     "oracle": "lsc-runtime-tuning-source-oracle.json",
-    "oracle_sha256": "8b8812100fc68229ea2a503e4d7bd7713f30272771b69df1ea41db2cb79e69f0",
+    "oracle_sha256": "c96ce087c38a0ff8b56aa50c11a5cc92fce6934603ff97226c6c0e3ec085dfa9",
     "proof": "prove-lsc-runtime-tuning-source.py",
     "doc": "LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md",
     "rear_tuning_sha256": "4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635",
@@ -230,5 +232,30 @@
     "request_tuning_manager": "ISPInputData+0x1fe8",
     "classification": "CLOSED STATIC OWNERSHIP: request-time tuning manager is derived from the same CaptureDevice private DataManager; random/global rear-manager injection is excluded on the normal path.",
     "remaining": "live identity/hash of the verified-front DataManager+0x38/+0x30 source tuning buffer and resulting tree contents"
+  },
+  "lsc_tintctx_camera_identity_correction": {
+    "oracle": "lsc-tintctx-camera-identity-oracle.json",
+    "oracle_sha256": "21a2b46597c45ea99d03db0fc5f297c731ec99ab586a464e5cdf1fe80f864ab5",
+    "proof": "prove-lsc-tintctx-camera-identity.py",
+    "proof_sha256": "f80c478c403452fab300625d886bf541a561b3492703b8957899332ebce49a1f",
+    "doc": "LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md",
+    "doc_sha256": "d6f2905b63937c991f24a793fc8823813c9bc01c4d93a4b234512ab4343f15d4",
+    "classification": "CLOSED CORRECTION: E003H_20260902_TINTCTX is uniquely OV13858 rear mode1 by exact wrapper geometry 4064x2286 and exhaustive installed sensor-module decode; front use revoked."
+  },
+  "lsc_live_golden_authority": {
+    "oracle": "lsc-live-golden-authority-oracle.json",
+    "oracle_sha256": "2c6cc37d1742ea599551f0eaba09cd5b760b2b95863b55851834eb50c4d1ece0",
+    "proof": "prove-lsc-live-golden-authority.py",
+    "proof_sha256": "f353ea71eb9e474f26c122700b9cbe4fa9392a7430844c9a2d32570f729d3bcd",
+    "doc": "LSC-LIVE-GOLDEN-AUTHORITY.md",
+    "doc_sha256": "7805c3000227b6d24c97e2d296254554d15edb26746c9c64103ecd40bfbb519b",
+    "rear_tuning_sha256": "4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635",
+    "golden_region_sid": "0x2ae",
+    "golden_region_sha256": "f771e54d183281251bf0ef6d94e94a0d439c641f8b8ed9a3ad60ead4094487d6",
+    "direct_constraints_passed": 442,
+    "direct_constraints_failed": 0,
+    "nominal_imx681_passed": 9,
+    "nominal_imx681_failed": 433,
+    "classification": "CLOSED BYTE-EXACT LIVE GOLDEN AUTHORITY: recovered verified-front x22/x23 direct-channel equations uniquely select rear/default OV13858 lscgolden41 among all 10 installed candidates."
   }
 }

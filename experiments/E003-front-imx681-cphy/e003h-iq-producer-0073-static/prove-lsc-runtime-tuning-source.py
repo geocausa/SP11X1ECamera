@@ -267,7 +267,12 @@ def main() -> int:
         "callback_observation": callback_observation,
         "supersedes": "The prior hypothesis that runtime Chromatix must numerically transform the five serialized IMX681 LSC leaves. The missing A leaf is exact serialized data from the rear/default Surface LSC41 package, not a transformed IMX681 mesh.",
         "remaining_provenance_question": "Why the front stream's resolved tuning root exposes the rear/default LSC41 branch is still an object-loader/overlay provenance question. It no longer blocks reproducing LSC41 x22 byte-for-byte.",
-        "next_gate": "Replay the now-closed x22 source through the already-closed calibration, geometry, sequential Tintless, staging, Titan680 and GIC stages against one atomic Windows request5/request6 capsule. Keep Linux request6 fail-closed until that integrated parity proof passes.",
+        "cross_session_correction": {
+            "tintctx_camera_identity": "OV13858 rear mode1, not verified front",
+            "proof": "prove-lsc-tintctx-camera-identity.py",
+            "live_golden_proof": "prove-lsc-live-golden-authority.py",
+        },
+        "next_gate": "Keep this byte-exact front x22 source with recovered front x23/geometry/staging evidence and mine a same-front-stream Tintless bridge. Do not splice the rear-mode1 TINTCTX sequential replay into front LSCTRIGSRC. Keep Linux request6 fail-closed.",
         "safety": {"linux_camera_runtime": False, "linux_request6_executed": False, "linux_request6_authorized": False},
     }
     args.out.write_text(json.dumps(oracle, indent=2) + "\n")

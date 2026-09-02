@@ -1,10 +1,14 @@
 # E003h 0073 — exact sequential Tintless request5 → request6 replay
 
-Status: **accepted Windows-live + offline ARM64 replay checkpoint**. Raw Windows captures remain local/untracked. No Linux camera runtime or Linux request6 is performed or authorized.
+Status: **accepted Windows-live + offline ARM64 replay checkpoint, camera identity corrected to OV13858 rear mode 1**. No Linux camera runtime or Linux request6 is performed or authorized. See `LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md`.
+
+## Camera-identity correction
+
+The original capture was initially described as front-camera state. Raw NTFS recovery later recovered request5 `x1`, whose Tintless geometry is uniquely **4064×2286**. Exact wrapper code consumes that as image width/height, and exhaustive decoding of the installed Surface sensor modules shows that only **OV13858 mode 1** has 4064×2286. None of the IMX681 modes does. This replay therefore remains byte-exact but is a **rear/shared-Tintless oracle, not front sequential-state evidence**.
 
 ## Exact live callback and state boundary
 
-The active front-camera stream reaches the embedded Surface Tintless callback at DeviceMFT RVA **`0xc95fd0`**. The deeper stateful core is RVA **`0xca01b0`**. The exact SHA-pinned `QcDeviceMFT8380.dll` is executed offline under ARM64 Unicorn; no reimplementation of the Tintless math is used for parity.
+The captured OV13858 rear mode-1 stream reaches the embedded Surface Tintless callback at DeviceMFT RVA **`0xc95fd0`**. The deeper stateful core is RVA **`0xca01b0`**. The exact SHA-pinned `QcDeviceMFT8380.dll` is executed offline under ARM64 Unicorn; no reimplementation of the Tintless math is used for parity.
 
 For both request5 and request6 the callback ABI is:
 
@@ -53,12 +57,10 @@ Only the first `0x4000` bytes were captured from Windows. The extension above `0
 
 The emulator also models the normal Windows ARM64 large-stack helper at DeviceMFT RVA `0x1440` with a minimal synthetic TEB (`x18`, stack-limit at `TEB+0x10`). This is runtime infrastructure only; no DeviceMFT instructions are patched.
 
-## Remaining LSC boundary
+## Boundary after camera-identity correction
 
-Tintless is no longer an unresolved producer. The immediately-upstream input mesh is now the only hard LSC IQ transform left to close for this stream:
+For the **rear OV13858 path represented by this capture**, sequential Tintless is closed byte-exactly and remains directly useful to rear parity.
 
-`LSC41 live trigger-region selection/interpolation -> golden/EEPROM calibration -> exact geometry -> [CLOSED sequential Tintless] -> [CLOSED staging/Titan680 pack] -> [CLOSED GIC alias]`.
-
-A first offline attempt using the previously assumed live LSC region selection does not match the captured callback input mesh. Exact calibration code confirms the EEPROM ratio direction and green averaging are correct, so the remaining ambiguity is the **live tuning trigger/region selection**, not Tintless, EEPROM translation or geometry. The next Windows observation should capture the LSC411 interpolation output immediately before geometry, rather than guessing the trigger enum mapping.
+For **front IMX681 parity**, this replay cannot satisfy the integrated producer gate. The front stream has independent 3840×2160 geometry and front-specific request state; it still needs a same-front-stream sequential Tintless capsule bridging the verified front calibrated/geometry input to the verified front staging output. Do not mix this TINTCTX state with LSCTRIGSRC or `E003H_ADAPTIVE_0073_LIVE_20260902`.
 
 Proof artifacts: `prove-lsc-tintless-sequential-replay.py` and `lsc-tintless-sequential-replay-oracle.json`.

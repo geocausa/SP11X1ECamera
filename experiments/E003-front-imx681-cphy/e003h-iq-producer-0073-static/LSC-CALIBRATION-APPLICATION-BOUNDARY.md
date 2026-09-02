@@ -2,6 +2,8 @@
 
 Status: **accepted static + Windows-live boundary proof**. This checkpoint does not run the Linux camera or Linux request6. It narrows the remaining Windows oracle requirement from a conservative five-slot calibration blob to the single `0xdf0` slot actually consumed by this physical SP11 front-camera stream.
 
+> **Live-authority correction (2026-09-02):** this document proves the calibration algorithm, slot layout, ratio direction, green averaging, and pre-geometry/pre-Tintless placement. Its decoded `com.surface.tuned.ffc_imx681.bin` golden object is the **nominal front-package golden**, not the live LSCTRIGSRC golden authority. Recovered front x22/x23 equations now uniquely select rear/default OV13858 `lscgolden41_ife_v2` region `0x2ae`, SHA `f771e54d183281251bf0ef6d94e94a0d439c641f8b8ed9a3ad60ead4094487d6`. See `LSC-LIVE-GOLDEN-AUTHORITY.md`.
+
 ## Surface golden LSC is explicit and separate from EEPROM
 
 `IFELSC411::CheckAndUpdateChromatixData` at RVA `0xa02420` resolves three independent Surface tuning modules: `lsc41_ife_v2`, `tintless23_sw_v2`, and **`lscgolden41_ife_v2`**. The golden module is published at LSC common input `+0x10`.
