@@ -1,0 +1,51 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_DEMUX_DGAIN_0073_2254_2026-09-01_21-50-22-681.log'
+Unable to load image qccamisp8380.sys, Win32 error 0n2
+REQ0 proc=ffffac0f47f73100 x1=ffff96030e80f000 used=e94 n=12
+qccamisp8380+0x26838:
+fffff800`c7996838 d503237f pacibsp
+0: kd> .process /p /r ffffac0f47f73100; lm m QcDeviceMFT8380
+Implicit process is now ffffac0f`47f73100
+.cache forcedecodeuser done
+Loading User Symbols
+................................................................
+......................
+
+************* Symbol Loading Error Summary **************
+Module name            Error
+qccamisp8380           The system cannot find the file specified
+
+You can troubleshoot most symbol related issues by turning on symbol loading diagnostics (!sym noisy) and repeating the command that caused symbols to be loaded.
+You should also verify that your symbol search path (.sympath) is correct.
+Browse full module list
+start             end                 module name
+00007ffd`42660000 00007ffd`441d4000   QcDeviceMFT8380   (deferred)             
+0: kd> bc 0; bp /p ffffac0f47f73100 00007ffd`42da6e70 ".if ((qwo(@x26+0x3ef0)>=4) & (qwo(@x26+0x3ef0)<=6)) { .printf \"DGAIN frame=%I64x dgain=%08x gain=%08x lux=%08x awbb=%08x awbr=%08x\\n\",qwo(@x26+0x3ef0),dwo(@x26+0x1f7c),dwo(@x26+0x3fa8),dwo(@x26+0x3fb0),dwo(@x26+0x3fb8),dwo(@x26+0x3fbc); } .if (qwo(@x26+0x3ef0)==6) { } .else { gc }"; bl; g
+     0 e Disable Clear  00007ffd`42da6e70     0001 (0001) Unable to load image C:\WINDOWS\System32\DriverStore\FileRepository\surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342\QcDeviceMFT8380.dll, Win32 error 0n2
+QcDeviceMFT8380!gettimeofday+0x1c5e0 ".if ((qwo(@x26+0x3ef0)>=4) & (qwo(@x26+0x3ef0)<=6)) { .printf \"DGAIN frame=%I64x dgain=%08x gain=%08x lux=%08x awbb=%08x awbr=%08x\\n\",qwo(@x26+0x3ef0),dwo(@x26+0x1f7c),dwo(@x26+0x3fa8),dwo(@x26+0x3fb0),dwo(@x26+0x3fb8),dwo(@x26+0x3fbc); } .if (qwo(@x26+0x3ef0)==6) { } .else { gc }"
+     Match process data ffffac0f`47f73100
+
+DGAIN frame=4 dgain=3f800271 gain=407578b2 lux=43bb1d96 awbb=3ff5543e awbr=3fe63f28
+                                                                                                                                                                                                                                                      ^ Extra character error in '.if ((qwo(@x26+0x3ef0)>=4) & (qwo(@x26+0x3ef0)<=6)) { .printf "DGAIN frame=%I64x dgain=%08x gain=%08x lux=%08x awbb=%08x awbr=%08x\n",qwo(@x26+0x3ef0),dwo(@x26+0x1f7c),dwo(@x26+0x3fa8),dwo(@x26+0x3fb0),dwo(@x26+0x3fb8),dwo(@x26+0x3fbc); } .if (qwo(@x26+0x3ef0)==6) { } .else { gc }'
+QcDeviceMFT8380!gettimeofday+0x1c5e0:
+00007ffd`42da6e70 914ac268 add         x8,x19,#0x2B0,lsl #0xC
+1: kd> g
+DGAIN frame=5 dgain=3f80cd49 gain=416b8602 lux=43bafd5e awbb=3ff7df12 awbr=3fe3fd49
+                                                                                                                                                                                                                                                      ^ Extra character error in '.if ((qwo(@x26+0x3ef0)>=4) & (qwo(@x26+0x3ef0)<=6)) { .printf "DGAIN frame=%I64x dgain=%08x gain=%08x lux=%08x awbb=%08x awbr=%08x\n",qwo(@x26+0x3ef0),dwo(@x26+0x1f7c),dwo(@x26+0x3fa8),dwo(@x26+0x3fb0),dwo(@x26+0x3fb8),dwo(@x26+0x3fbc); } .if (qwo(@x26+0x3ef0)==6) { } .else { gc }'
+QcDeviceMFT8380!gettimeofday+0x1c5e0:
+00007ffd`42da6e70 914ac268 add         x8,x19,#0x2B0,lsl #0xC
+3: kd> g
+DGAIN frame=6 dgain=3f8024b7 gain=422d31a0 lux=43baf9a4 awbb=3ff7df12 awbr=3fe3fd49
+                                                                                                                                                                                                                                                      ^ Extra character error in '.if ((qwo(@x26+0x3ef0)>=4) & (qwo(@x26+0x3ef0)<=6)) { .printf "DGAIN frame=%I64x dgain=%08x gain=%08x lux=%08x awbb=%08x awbr=%08x\n",qwo(@x26+0x3ef0),dwo(@x26+0x1f7c),dwo(@x26+0x3fa8),dwo(@x26+0x3fb0),dwo(@x26+0x3fb8),dwo(@x26+0x3fbc); } .if (qwo(@x26+0x3ef0)==6) { } .else { gc }'
+QcDeviceMFT8380!gettimeofday+0x1c5e0:
+00007ffd`42da6e70 914ac268 add         x8,x19,#0x2B0,lsl #0xC
+3: kd> bc *; bp qccamisp8380+0x26838 ".if (dwo(@x1+8)==6) { .printf \"REQ6_DGAIN_STREAM x1=%p used=%x n=%x\\n\",@x1,dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c); } .else { gc }"; g
+REQ6_DGAIN_STREAM x1=ffff96030e863000 used=958 n=e
+qccamisp8380+0x26838:
+fffff800`c7996838 d503237f pacibsp
+1: kd> bc *; bp qccamisp8380+0x287e4 ".if (dwo(@sp+0x30)==0x957) { .printf \"REQ6_DGAIN_MAIN cpu=%p dma=%x lenenc=%x\\n\",poi(@sp+0x28),dwo(@sp+0x20),dwo(@sp+0x30); } .else { gc }"; g
+REQ6_DGAIN_MAIN cpu=ffff96030e91d000 dma=17a9c000 lenenc=957
+qccamisp8380+0x287e4:
+fffff800`c79987e4 b94023f6 ldr         w22,[sp,#0x20]
+0: kd> .writemem C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_REQ6_MAIN_DEMUX_DGAIN_20260901.bin ffff96030e91d000 ffff96030e91d957; bc *; .logclose; g
+Writing 958 bytes..
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_DEMUX_DGAIN_0073_2254_2026-09-01_21-50-22-681.log

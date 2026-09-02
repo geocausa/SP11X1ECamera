@@ -1,0 +1,38 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_WINDOWS_REQ6_TRIGGER_ORACLE_20260901_2254_2026-09-01_18-07-24-819.log'
+     0 e Disable Clear  00007fff`c546d6c0     0001 (0001)  "r @$t9=@$t9+1; .printf \"TRIG n=%x x0=%p ET=%08x RATIO=%08x SENS=%08x GAIN=%08x LUX=%08x AWBG=%08x AWBB=%08x AWBR=%08x CCT=%08x DRC=%08x LENS=%08x LED=%08x LEDR=%08x NLED=%04x\\n\",@$t9,@x0,dwo(@x0),dwo(@x0+4),dwo(@x0+0x2c),dwo(@x0+0x30),dwo(@x0+0x38),dwo(@x0+0x3c),dwo(@x0+0x40),dwo(@x0+0x44),dwo(@x0+0x48),dwo(@x0+0x74),dwo(@x0+0x7c),dwo(@x0+0x98),dwo(@x0+0x9c),wo(@x0+0xe4); gc"
+     Match process data ffffa708`fb542080
+     1 e Disable Clear  fffff803`91b16838     0001 (0001) Unable to load image qccamisp8380.sys, Win32 error 0n2
+qccamisp8380+0x26838 ".if (dwo(@x1+8)<=6) { .printf \"IQ req=%x used=%x n=%x x1=%p\\n\",dwo(@x1+8),dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c),@x1; } .if (dwo(@x1+8)!=6) { gc }"
+
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+IQ req=0 used=e94 n=12 x1=ffff9281ee580000
+                                                                                                                                  ^ Extra character error in '.if (dwo(@x1+8)<=6) { .printf "IQ req=%x used=%x n=%x x1=%p\n",dwo(@x1+8),dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c),@x1; } .if (dwo(@x1+8)!=6) { gc }'
+qccamisp8380+0x26838:
+fffff803`91b16838 d503237f pacibsp
+0: kd> bc 1; bp qccamisp8380+0x26838 ".if (dwo(@x1+8)==6) { .printf \"REQ6_IQ req=%x used=%x n=%x x1=%p\\n\",dwo(@x1+8),dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c),@x1; } .else { .if (dwo(@x1+8)<6) { .printf \"IQ req=%x used=%x n=%x x1=%p\\n\",dwo(@x1+8),dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c),@x1; }; gc }"; bl; g
+     0 e Disable Clear  00007fff`c546d6c0     0001 (0001)  "r @$t9=@$t9+1; .printf \"TRIG n=%x x0=%p ET=%08x RATIO=%08x SENS=%08x GAIN=%08x LUX=%08x AWBG=%08x AWBB=%08x AWBR=%08x CCT=%08x DRC=%08x LENS=%08x LED=%08x LEDR=%08x NLED=%04x\\n\",@$t9,@x0,dwo(@x0),dwo(@x0+4),dwo(@x0+0x2c),dwo(@x0+0x30),dwo(@x0+0x38),dwo(@x0+0x3c),dwo(@x0+0x40),dwo(@x0+0x44),dwo(@x0+0x48),dwo(@x0+0x74),dwo(@x0+0x7c),dwo(@x0+0x98),dwo(@x0+0x9c),wo(@x0+0xe4); gc"
+     Match process data ffffa708`fb542080
+     1 e Disable Clear  fffff803`91b16838     0001 (0001) qccamisp8380+0x26838 ".if (dwo(@x1+8)==6) { .printf \"REQ6_IQ req=%x used=%x n=%x x1=%p\\n\",dwo(@x1+8),dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c),@x1; } .else { .if (dwo(@x1+8)<6) { .printf \"IQ req=%x used=%x n=%x x1=%p\\n\",dwo(@x1+8),dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c),@x1; }; gc }"
+
+IQ req=1 used=e34 n=10 x1=ffff9281ee58e000
+IQ req=2 used=904 n=b x1=ffff9281ee59c000
+IQ req=3 used=4e8 n=1 x1=ffff9281ee5aa000
+IQ req=4 used=958 n=e x1=ffff9281ee5b8000
+IQ req=5 used=958 n=e x1=ffff9281ee5c6000
+REQ6_IQ req=6 used=958 n=e x1=ffff9281ee5d4000
+qccamisp8380+0x26838:
+fffff803`91b16838 d503237f pacibsp
+1: kd> r x1; .printf "REQ6=%x USED=%x N=%x\n",dwo(@x1+8),dwo(@x1+0x84+dwo(@x1+0x18)),dwo(@x1+0x2c); dq poi(@x1+0x74+dwo(@x1+0x28)+0xc) L2; ? poi(poi(@x1+0x74+dwo(@x1+0x28)+0xc)+8)
+x1=ffff9281ee5d4000
+REQ6=6 USED=958 N=e
+ffffa708`ec5c5c60  00000000`17af8000 ffff9281`ee6e8000
+Evaluate expression: -120388228055040 = ffff9281`ee6e8000
+1: kd> .writemem C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_REQ6_DMI_SLOT_EXACT_20260901.bin ffff9281ee718000 ffff9281ee71ffff; bc *; bp qccamisp8380+0x287e4 ".if (dwo(@sp+0x30)==0x957) { .printf \"REQ6_MAIN cpu=%p dma=%x lenenc=%x\\n\",poi(@sp+0x28),dwo(@sp+0x20),dwo(@sp+0x30); } .else { gc }"; g
+Writing 8000 bytes................
+REQ6_MAIN cpu=ffff9281ee68e000 dma=17a9c000 lenenc=957
+qccamisp8380+0x287e4:
+fffff803`91b187e4 b94023f6 ldr         w22,[sp,#0x20]
+10: kd> .writemem C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_REQ6_MAIN_0958_EXACT_20260901.bin ffff9281ee68e000 ffff9281ee68e957; bc *; .logclose; g
+Writing 958 bytes..
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E003H_WINDOWS_REQ6_TRIGGER_ORACLE_20260901_2254_2026-09-01_18-07-24-819.log
