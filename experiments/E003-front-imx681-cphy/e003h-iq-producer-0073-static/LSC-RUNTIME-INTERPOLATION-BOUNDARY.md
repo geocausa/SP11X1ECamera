@@ -37,7 +37,9 @@ Do not reopen without new contrary evidence: GTM/TMC request4/5/6 replay is byte
 
 The remaining upstream problem is specifically: **how does the exact Surface runtime Chromatix object represent/materialize the LSC41 leaf data consumed by Qualcomm's generic interpolation engine?**
 
-Continue static tracing of runtime object construction and leaf pointers supplied to generic interpolation. If one more Windows observation is justified, capture the **actual runtime leaf pointer(s) and the `0xdf0` data they reference at request5/6**, not another broad ISP/Tintless dump. Compare those bytes directly to the serialized tuning leaves and live `x22`.
+Static tracing has already checked two nearby helpers: DeviceMFT RVA `0x89d368` rebuilds the control-enum vector / interpolation scratch sizing and does not transform the 0xdf0 region payload; RVA `0x6f39f8` walks/selects the tuning object hierarchy and likewise shows no leaf-mesh transform. Do not repeat those two checks unless new evidence contradicts them.
+
+Continue deeper static tracing of runtime object construction and the actual leaf pointers supplied to generic interpolation. If one more Windows observation is justified, capture the **actual runtime leaf pointer(s) and the `0xdf0` data they reference at request5/6**, not another broad ISP/Tintless dump. Compare those bytes directly to the serialized tuning leaves and live `x22`.
 
 Only after runtime LSC interpolation is reproduced byte-for-byte should the full closed downstream chain be replayed against one atomic Windows oracle. **Linux request6 remains forbidden until that parity gate passes and a separate runtime authorization review is made.**
 
