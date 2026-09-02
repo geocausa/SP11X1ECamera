@@ -206,7 +206,7 @@
     "proof": "prove-lsc-tuning-provenance-boundary.py",
     "proof_sha256": "5565477f0cab6f7d0a86f83ebb1a20ca0378ed6bf428881b8c32e5cc37730222",
     "doc": "LSC-TUNING-PROVENANCE-BOUNDARY.md",
-    "doc_sha256": "2f3bfbd183c796a05f36827c177b4c7ba41983a230d1927e0080fb50c54f094a",
+    "doc_sha256": "a65bdf19b663b19352d04ed762629fc445895ef5d5e44e9e3197a29d3ea7a492",
     "front_scfg_sha256": "e6e3d828a1e4f5bc94c545848a091c20be399a4b22c938ed4a3df072dd033d99",
     "front_kmd_sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03",
     "runtime_A_rear_only": true,
@@ -214,6 +214,21 @@
     "runtime_A_rear_offset": 1008426,
     "per_capturedevice_datamanager": true,
     "sensor_tuning_handoff": "front KMD +0x80/+0x88 -> InitParams/SensorTuningData -> DeviceMFT DataManager +0x38/+0x30 -> tuned-mode tree",
-    "classification": "BOUNDED STATIC PROVENANCE: front SCFG/default/global-DataManager explanations excluded; selected-sensor provider / IFELSC411 tuning-manager identity remains open."
+    "classification": "BOUNDED STATIC PROVENANCE: front SCFG/default/global-DataManager explanations excluded; request-time manager ownership is superseded/closed by lsc_tuning_manager_ownership_closure; live private DataManager source-buffer identity remains open."
+  },
+  "lsc_tuning_manager_ownership_closure": {
+    "oracle": "lsc-tuning-manager-ownership-oracle.json",
+    "oracle_sha256": "ab62e4230394b387d3ead2c458aea41283f022f2e3aaa24da4319a0642264c99",
+    "proof": "prove-lsc-tuning-manager-ownership.py",
+    "proof_sha256": "307f68cf8b3dd9dac7fbfbc1462c09d8f3513054fe879015700223e3324d5375",
+    "doc": "LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md",
+    "doc_sha256": "51da19d8c62365a6d87fc0df95f72e711bd7814973e8ac638546a7c2eefb96ef",
+    "capturedevice_datamanager": "CaptureDevice+0x60, private per CaptureDevice",
+    "capturepipe_datamanager": "CapturePipe+0x163488 copied from CapturePipe config+0x10 = CaptureDevice+0x60",
+    "datamanager_tuning_accessor": "vtable+0x30 (VA 0x18133b7b0) -> VA 0x1800517c0 -> return DataManager+0x28",
+    "common_context_tuning_manager": "context+0x2460",
+    "request_tuning_manager": "ISPInputData+0x1fe8",
+    "classification": "CLOSED STATIC OWNERSHIP: request-time tuning manager is derived from the same CaptureDevice private DataManager; random/global rear-manager injection is excluded on the normal path.",
+    "remaining": "live identity/hash of the verified-front DataManager+0x38/+0x30 source tuning buffer and resulting tree contents"
   }
 }

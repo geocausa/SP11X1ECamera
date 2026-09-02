@@ -31,7 +31,7 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - sequential embedded Tintless request5 -> request6 at DeviceMFT RVA `0xc95fd0`: byte-exact, including persistent state; see `LSC-TINTLESS-SEQUENTIAL-REPLAY.md`.
 - exact 42-float live LSC trigger vector and `x22/x23` ABI: closed; see `LSC-RUNTIME-INTERPOLATION-BOUNDARY.md`.
 - **runtime LSC41 tuning source and generic interpolation: closed byte-exact**; see `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md` and `prove-lsc-runtime-tuning-source.py`.
-- LSC tuning-manager provenance is statically bounded through front SCFG -> front KMD `SensorTuningData` -> per-CaptureDevice DataManager/TuningDataManager; see `LSC-TUNING-PROVENANCE-BOUNDARY.md`. The rear-only A leaf crossover itself is still open.
+- LSC request-time tuning-manager ownership is statically closed through CaptureDevice private DataManager -> CapturePipe -> common context -> `ISPInputData+0x1fe8`; see `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md`. The rear-only A leaf crossover itself is still open upstream at the live private DataManager source-buffer/tree identity.
 
 ## Latest LSC source closure
 
@@ -64,7 +64,9 @@ Do **not** interpret this as proof that Windows configures the rear physical sen
 
 The static ownership chain is also pinned. Front `surfacecamfrontsensor8380.sys` loads its selected sensor tuning into device `+0x80/+0x88` and publishes those exact bytes as `InitParams/SensorTuningData`. DeviceMFT `DataManager::LoadDataFromDriver` copies that payload to DataManager `+0x38/+0x30`, and `DataManager::Construct` builds the tuned-mode tree from that exact buffer. `CaptureDevice::ConstructReal` allocates a fresh DataManager per CaptureDevice at `CaptureDevice+0x60`; the DataManager and the earlier selected-Sensor-ID query use the same provider object at `CaptureDevice+0x10`.
 
-Therefore the remaining provenance question is narrower: trace the selected-sensor provider and the exact TuningDataManager/module pointer that reaches IFELSC411. Do not assume a global CamX manager swap or a bad front SCFG without new evidence.
+The later `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md` closes the request-time manager path. `CaptureDevice+0x60` is copied into CapturePipe config `+0x10`, lands at `CapturePipe+0x163488`, DataManager vtable `+0x30` returns its private `DataManager+0x28` TuningDataManager, CapturePipe stores it at common context `+0x2460`, BPS/IFE inject that manager into request `ISPInputData+0x1fe8`, and IFELSC411 consumes that one tree. A random/global rear-manager swap is excluded on the normal path.
+
+Therefore the remaining provenance question is narrower still: **what exact bytes back the live verified-front DataManager at `+0x38/+0x30`?** The next Windows oracle should correlate selected Sensor ID, DataManager `+0x38/+0x30`, DataManager `+0x28`, context `+0x2460`, and request `+0x1fe8` in one front stream. If the source hash is front IMX681, investigate parsing/tree mutation; if it is rear OV13858, investigate the live InitParams payload. Do not assume a global CamX manager swap or a bad front SCFG without new evidence.
 
 ## Latest live oracle
 
@@ -95,6 +97,6 @@ Immediate work is now:
 
 1. build one integrated offline request5 -> request6 LSC replay beginning with the newly closed rear/default LSC41 source;
 2. chain it through the already-closed golden/EEPROM calibration -> geometry -> exact sequential Tintless -> staging -> Titan680 LSC0/LSC1/LSC2 -> GIC path and demand byte parity against one atomic Windows capsule;
-3. independently trace the tuning-loader/overlay provenance that makes the front stream resolve the rear/default LSC41 branch, and check whether the same overlay rule affects other IQ modules;
+3. capture the exact live source-buffer identity of the verified front CaptureDevice private DataManager/TuningDataManager and correlate it through context `+0x2460` to request `+0x1fe8`;
 4. keep GTM/TMC as the already byte-exact parallel path;
 5. only after the integrated producer/output capsule passes, conduct a separate review before Linux request6.

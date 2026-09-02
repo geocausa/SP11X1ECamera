@@ -1,0 +1,90 @@
+{
+  "schema": "sp11-e003h-lsc-tuning-manager-ownership-v1",
+  "accepted": true,
+  "classification": "CLOSED STATIC OWNERSHIP CHAIN: the tuning manager consumed by IFELSC411 is derived from the same CaptureDevice private DataManager through CapturePipe/common-context wiring; random/global rear-manager request injection is excluded on the normal path.",
+  "device_mft": {
+    "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/QcDeviceMFT8380.dll",
+    "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+  },
+  "dependency": {
+    "oracle": "lsc-tuning-provenance-boundary-oracle.json",
+    "oracle_sha256": "814777dc3f049b444f30f1f2ffa013edbf6a29cf46f848948f304117fe987e92",
+    "proof": "prove-lsc-tuning-provenance-boundary.py",
+    "proof_sha256": "5565477f0cab6f7d0a86f83ebb1a20ca0378ed6bf428881b8c32e5cc37730222",
+    "accepted_invariant": "CaptureDevice+0x60 is a fresh per-CaptureDevice DataManager; DataManager+0x28 is the CamX TuningDataManager built from that DataManager SensorTuningData."
+  },
+  "ownership_chain": [
+    {
+      "stage": "CaptureDevice private DataManager",
+      "source": "CaptureDevice+0x60"
+    },
+    {
+      "stage": "CapturePipe config",
+      "source": "config+0x10 = CaptureDevice+0x60",
+      "rva": "0x293b14"
+    },
+    {
+      "stage": "CapturePipe stored config",
+      "source": "CapturePipe+0x163488 = copied config+0x10",
+      "construct_rva": "0x2acb60",
+      "copy_base": "CapturePipe+0x163478",
+      "copy_bytes": "0x1c8"
+    },
+    {
+      "stage": "private tuning manager accessor",
+      "source": "DataManager vtable+0x30 -> VA 0x1800517c0 -> DataManager+0x28",
+      "vtable_va": "0x18133b780",
+      "slot_va": "0x18133b7b0"
+    },
+    {
+      "stage": "common node context",
+      "source": "CapturePipe::ConfigureMetadata stores returned manager at context+0x2460",
+      "rva": "0x2c2250"
+    },
+    {
+      "stage": "BPS request ISPInputData",
+      "source": "owner+0x2460 -> request local corresponding to ISPInputData+0x1fe8",
+      "rva": "0x780070",
+      "assignment_va": "0x180780950"
+    },
+    {
+      "stage": "IFELSC411",
+      "source": "loads ISPInputData+0x1fe8 and performs one-tree lsc41_ife_v2 lookup",
+      "rva": "0xa02420"
+    }
+  ],
+  "ife_independent_corrob": {
+    "rva": "0x73c298",
+    "source": "IFENode::UpdateInitSettings copies owner+0x2460 into IFE input state"
+  },
+  "bps_layout_proof": {
+    "manager_stack_offset": "0x21a0",
+    "tuning_mode_changed_stack_offset": "0x2220",
+    "stack_delta": "0x80",
+    "isp_manager_offset": "0x1fe8",
+    "isp_tuning_mode_changed_offset": "0x2068",
+    "struct_delta": "0x80"
+  },
+  "exact_signatures": {
+    "0x180293b14": "683240f9880a00f9",
+    "0x1802acbe4": "7b8e459102398052e10314aa60e3119123c23294",
+    "0x1802c22d8": "004542f9080040f9081940f9ef0308aaf165009031de43f920023fd6e0013fd6",
+    "0x1802c2394": "68024ff9283112f9",
+    "0x1800517c0": "001440f9c0035fd6",
+    "0x18073c31c": "680242f969d24191083152f9281d05f9",
+    "0x18078094c": "6b0242f9683152f948d310f9",
+    "0x180a02448": "97f64ff9f30300aa"
+  },
+  "closed_exclusions": [
+    "unconditional global TuningDataManager is injected into all CaptureDevices",
+    "CapturePipe chooses a tuning manager independently from its CaptureDevice DataManager",
+    "IFE/BPS substitutes a different manager while constructing the request",
+    "IFELSC411 module lookup falls back to a second tuning package/tree"
+  ],
+  "remaining_provenance_gate": "Capture the exact live front private DataManager source tuning buffer identity (DataManager+0x38/+0x30) and correlate its DataManager+0x28 manager with context+0x2460 and ISPInputData+0x1fe8. If source hash is front IMX681, investigate parser/tree mutation; if rear OV13858, investigate live InitParams payload inconsistency.",
+  "safety": {
+    "linux_camera_runtime": false,
+    "linux_request6_executed": false,
+    "linux_request6_authorized": false
+  }
+}

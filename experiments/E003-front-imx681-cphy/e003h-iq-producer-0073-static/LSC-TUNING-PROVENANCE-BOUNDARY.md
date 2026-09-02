@@ -1,6 +1,6 @@
 # E003h 0073 — LSC tuning-manager provenance boundary
 
-Status: **accepted static provenance checkpoint**. This follows the byte-exact runtime-source closure in `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md`. It does not yet explain why the live front IMX681 stream resolves one rear OV13858 LSC41 leaf, but it sharply bounds where that crossover can occur. No Linux camera runtime or Linux request6 is performed or authorized.
+Status: **accepted static provenance checkpoint; request-time manager ownership superseded/closed by `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md`**. This follows the byte-exact runtime-source closure in `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md`. It does not yet explain why the live front IMX681 stream resolves one rear OV13858 LSC41 leaf, but it sharply bounds where that crossover can occur. No Linux camera runtime or Linux request6 is performed or authorized.
 
 ## Discriminating leaf provenance
 
@@ -92,7 +92,7 @@ and
 
 `CaptureDevice+0x10 -> InitParams -> SensorTuningData -> private DataManager -> tuned-mode tree`.
 
-This makes a random CamX-side global-manager substitution substantially less likely. It does **not** yet prove that the provider returns mutually consistent sensor ID and tuning bytes in the live front session, nor does it yet pin the exact tuning-manager pointer consumed by `IFELSC411`.
+The later ownership closure proves the exact request-time path from this private DataManager through CapturePipe/common context into `ISPInputData+0x1fe8`, so random/global manager substitution is now excluded on the normal path. This checkpoint still does **not** prove that the live provider returns mutually consistent sensor ID and tuning bytes.
 
 ## What is now excluded
 
@@ -109,9 +109,9 @@ The front stream itself remains mechanically identified as IMX681: the already-c
 
 The next useful question is now narrow:
 
-**Which selected-sensor provider/tuning-manager object reaches `IFELSC411` in the live front stream, and what exact source buffer/file backs that object?**
+**What exact source buffer/file backs the verified live front CaptureDevice's private DataManager/TuningDataManager?**
 
-Continue statically through the `CaptureDevice+0x10` provider and the IFELSC411 tuning-manager handoff. If static ownership cannot distinguish it, the next Windows observation should be deliberately tiny: in one front-stream session capture the selected Sensor ID, the relevant TuningDataManager pointer/source-buffer identity, and the IFELSC411-resolved LSC module pointer. Do not repeat broad state dumps or LSC trigger fitting.
+The request-time handoff is now statically closed by `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md`. The next Windows observation should be deliberately tiny: in one verified front-stream session capture selected Sensor ID, DataManager `+0x38/+0x30` source-buffer identity, DataManager `+0x28`, common-context `+0x2460`, and request `ISPInputData+0x1fe8`. Do not repeat broad state dumps or LSC trigger fitting.
 
 This provenance investigation is separate from the output-parity gate: request5/request6 `x22` is already byte-exact and the downstream calibration/geometry/Tintless/staging/packer chain is independently closed. The next main parity milestone remains one integrated same-stream request5 -> request6 offline replay.
 
