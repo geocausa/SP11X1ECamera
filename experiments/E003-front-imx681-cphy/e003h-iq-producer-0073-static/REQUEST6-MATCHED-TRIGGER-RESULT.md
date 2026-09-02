@@ -43,6 +43,8 @@ Subsequent exact-binary work closes an important ambiguity: the remaining LSC/GT
 
 The static LSC calibration descriptor is now reduced further to one 221-point table sourced from exactly 0x6e8 physical EEPROM bytes at `0x103d..0x1724`; the exact runtime OTP table layout is also pinned. A separate output proof rejects all pure-Chromatix LSC channel orderings and proves the dynamic GTM path materially changes the flat base curve.
 
+The exact GTM/TMC read boundary is now reduced too. The published TMC/ADRC state is a `0x8278`-byte object, but IFE GTM converts it to the internal layout and generation-5 GTM131 reads only seven bounded ranges totaling at most `0x108c` bytes. The exact HW-setting entry is RVA `0x9aa6e0`; IFE calls are uniquely filterable by LR `0x180a28f2c`. This removes the previous need for a coarse contiguous TMC dump.
+
 ## Next gate
 
-Recover the bounded LSC calibration bytes from an existing local artifact if possible; otherwise capture the exact runtime OTP/calibration state together with Tintless/ALSC state, LSC calculator offsets/scale, and GTM TMC state for requests 4/5/6 in one Windows stream. Then reproduce LSC0, LSC1 and GTM0 offline byte-for-byte and derive the Windows GIC wire payload from the proven LSC alias. Linux request6 remains forbidden until that comparison passes and a separate runtime authorization review succeeds.
+Recover the bounded LSC calibration bytes from an existing local artifact if possible; otherwise capture the exact runtime OTP/calibration state together with Tintless/ALSC state and LSC calculator offsets/scale. In the same Windows request4/5/6 sequence, capture the GTM common/aux inputs plus the seven exact generation-5 sparse TMC ranges, then reproduce LSC0, LSC1 and GTM0 offline byte-for-byte and derive the Windows GIC wire payload from the proven LSC alias. Linux request6 remains forbidden until that comparison passes and a separate runtime authorization review succeeds.

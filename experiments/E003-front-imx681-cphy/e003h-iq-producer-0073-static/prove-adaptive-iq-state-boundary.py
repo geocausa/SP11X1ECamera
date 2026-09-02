@@ -312,6 +312,7 @@ def main() -> None:
                 "interpolated_points": 257,
                 "wire_lut_bytes": "0x800",
                 "adaptive_input": "TMC (tone-mapping-control) state selected by IsModuleEnabledInTMCPath",
+                "read_boundary": "Generation-5 GTM consumes seven sparse internal TMC ranges totaling at most 0x108c bytes; see the dedicated GTM TMC read-boundary proof.",
                 "conclusion": "Exact Surface GTM131 hardware calculation can replace/reshape the flat Chromatix curve using dynamic TMC state before Titan680 packing.",
             },
         },
@@ -324,10 +325,10 @@ def main() -> None:
             ],
             "remaining_exact_inputs": [
                 "LSC calibration/adaptive Tintless/ALSC state at the exact request",
-                "GTM TMC state at the exact request",
+                "GTM common/aux inputs plus the seven generation-5 sparse internal TMC ranges at the exact request",
                 "LSC calculator geometry offsets/scale at the exact request (sensor mode geometry itself is already 3840x2160)",
             ],
-            "next_gate": "Capture the adaptive LSC/TMC producer state on Windows for requests 4/5/6, then reproduce LSC0/LSC1 and GTM0 offline byte-for-byte. Derive wire GIC from the proven LSC alias. Only then reconsider Linux request6 runtime.",
+            "next_gate": "Capture the adaptive LSC producer state plus the exact GTM common/aux inputs and generation-5 sparse internal TMC ranges on Windows for requests 4/5/6, then reproduce LSC0/LSC1 and GTM0 offline byte-for-byte. Derive wire GIC from the proven LSC alias. Only then reconsider Linux request6 runtime.",
         },
         "policy": {
             "linux_request6_generated_by_this_proof": False,

@@ -1,0 +1,143 @@
+{
+  "schema": "sp11-e003h-gtm-tmc-read-boundary-v1",
+  "status": "PASS",
+  "accepted": true,
+  "offline_only": true,
+  "devicemft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "exact_rvas": {
+    "ife_gtm_execute": "0xa28b00",
+    "published_to_internal_tmc_copy": "0x898738",
+    "gtm_interpolation": "0x93bf30",
+    "gtm_hw_setting": "0x9aa6e0",
+    "gtm_titan680_packer": "0xb5b3d0",
+    "ife_gtm_hw_call_return": "0xa28f2c",
+    "bps_tmc_metadata_post": "0x78e0f0"
+  },
+  "code_byte_proofs": {
+    "0xa28e40": "819a40f9",
+    "0xa28e44": "010100f9",
+    "0xa28e48": "60ea50f9",
+    "0xa28e4c": "080c40b9",
+    "0xa28e50": "1f050071",
+    "0xa28e58": "38bef997",
+    "0xa28f10": "085d42f9",
+    "0xa28f28": "e0013fd6",
+    "0x9aa920": "8b2a40f9",
+    "0x9aa928": "681140b9",
+    "0x9aa93c": "680940b9",
+    "0x9aa940": "1f150071",
+    "0x9aa948": "687540b9",
+    "0x9aa94c": "8a208ad2",
+    "0x9aa950": "09248ad2",
+    "0x9aa964": "08368ad2",
+    "0x9aa998": "08458cd2",
+    "0x9a55f4": "080f40b9",
+    "0x9a5644": "080f40b9",
+    "0x9a5664": "3601881a",
+    "0x9a56e0": "149f50bd",
+    "0x9a56ec": "14a350bd",
+    "0x78e14c": "024f90d2"
+  },
+  "dispatch_pointer_proofs": {
+    "0x1620320": "0x18093bf30",
+    "0x1620328": "0x1809aa6e0"
+  },
+  "producer_flow": [
+    "ISPInputData+0x21d0 is the published TMC/ADRC output pointer.",
+    "IFE GTM selects module+0x130 as its internal TMC buffer and stores that pointer into GTM common-input +0x50.",
+    "When published TMC +0x0c == 1, RVA 0x898738 converts/copies the published 0x8278-byte layout into the internal layout before GTM calculation.",
+    "IFE GTM calls the exact GTM131 hardware setting through dispatch slot +0x4b8; the slot resolves to RVA 0x9aa6e0."
+  ],
+  "preferred_windows_capture": {
+    "breakpoint_rva": "0x9aa6e0",
+    "ife_caller_filter_lr": "0x180a28f2c",
+    "arguments": {
+      "x0": "GTM common input; capture 0x7c bytes locally and decode only the proven fields",
+      "x1": "0x404-byte / 257-float interpolated GTM region input",
+      "x2": "capture first dword (GTM calculation flags)",
+      "x3": "capture halfword at +0x4 used by the exact setting output",
+      "x4": "GTM unpacked output destination; save pointer for post-return validation"
+    },
+    "selected_internal_tmc": "poi(x0+0x50)",
+    "fail_closed_checks": [
+      "selected_internal_tmc is non-null",
+      "dwo(selected_internal_tmc+0x10) is non-zero",
+      "dwo(selected_internal_tmc+0x08) == 5 before applying the v5 sparse-range contract",
+      "if the generation is not 5, stop and revise the static capture contract rather than over-reading an assumed layout"
+    ]
+  },
+  "gtm_common_input_reads": {
+    "bank_or_lut_selector": "0x14",
+    "pipeline_format_halfword": "0x2a",
+    "titan_hw_version": "0x34",
+    "curve_postprocess_enable": "0x70",
+    "curve_postprocess_strength": "0x74",
+    "curve_postprocess_limit": "0x78",
+    "selected_internal_tmc_pointer": "0x50"
+  },
+  "tmc_v5_internal_read_ranges": [
+    {
+      "offset": "0x8",
+      "bytes": "0xc",
+      "purpose": "generation/hardware-version/valid header dwords"
+    },
+    {
+      "offset": "0x74",
+      "bytes": "0x4",
+      "purpose": "curve interpolation mode"
+    },
+    {
+      "offset": "0x109c",
+      "bytes": "0x8",
+      "purpose": "two GTM blend scalars"
+    },
+    {
+      "offset": "0x5104",
+      "bytes": "0x1c",
+      "purpose": "seven-float source knot array"
+    },
+    {
+      "offset": "0x5120",
+      "bytes": "0x1c",
+      "purpose": "seven-float target knot array"
+    },
+    {
+      "offset": "0x51b0",
+      "bytes": "0x3c",
+      "purpose": "15-float cubic coefficient block (mode 2)"
+    },
+    {
+      "offset": "0x6228",
+      "bytes": "0x1000",
+      "purpose": "maximum 1024-float dynamic tone-curve domain"
+    }
+  ],
+  "tmc_v5_branch_details": {
+    "mode_field": "dwo(tmc+0x74)",
+    "mode_2": "uses the two seven-float knot arrays plus the 15-float coefficient block",
+    "other_mode": "uses the two seven-float knot arrays and derives its interpolation internally",
+    "domain_selection": "tmc+0x0c == 0x60400 selects 256 floats; otherwise the exact helper selects 1024 floats",
+    "capture_policy": "capture the maximum 0x1000 bytes at tmc+0x6228 regardless, so no target-version assumption is required"
+  },
+  "size_reduction": {
+    "published_tmc_object_bytes": "0x8278",
+    "max_sparse_internal_tmc_bytes": "0x108c",
+    "max_sparse_internal_tmc_percent_of_full": 12.682634730538922,
+    "common_input_plus_sparse_tmc_bytes": "0x1108",
+    "common_plus_sparse_plus_interpolated_plus_aux_input_bytes": "0x1512"
+  },
+  "post_return_validation": {
+    "ife_post_hw_result_rva": "0xa2908c",
+    "cached_final_gtm_staging_rva": "0xa290a8",
+    "cached_final_gtm_staging": "IFEGTM131 module+0x138, exactly 0x800 bytes",
+    "requirement": "hash/dump the 0x800-byte staging for requests 4/5/6 and compare request6 to the matched Windows GTM0 oracle; raw memory remains local/untracked"
+  },
+  "gate": "Capture the exact request4/5/6 v5 sparse TMC ranges plus GTM common/aux inputs at the GTM131 HW-setting entry, port the exact v5 math, and reproduce GTM0 byte-for-byte offline. Linux request6 remains blocked.",
+  "policy": {
+    "windows_camera_runtime_performed_by_this_proof": false,
+    "linux_camera_runtime_performed": false,
+    "linux_request6_generated": false,
+    "linux_request6_executed": false,
+    "linux_request6_authorized": false
+  }
+}

@@ -39,6 +39,8 @@ The default GTM13 region is a flat 257-point `4096.0` curve. Exact Surface `GTM1
 
 When TMC is active, the hardware calculation consumes dynamic tone-mapping-control state and builds/reshapes the 257-point curve before the Titan680 `0x800`-byte LUT is packed. This cleanly explains why solving the static GTM Chromatix tree alone is not a sufficient producer model.
 
+The exact generation-5 GTM read boundary is now closed as well. IFE GTM obtains the published TMC/ADRC object from `ISPInputData+0x21d0`, converts it into the internal layout consumed through GTM common-input `+0x50`, and calls the exact GTM131 hardware setting at RVA `0x9aa6e0`. The IFE call returns at `0x180a28f2c`, giving an exact future Windows breakpoint filter. For generation 5, GTM consumes only seven bounded internal TMC ranges totaling at most **0x108c bytes**, rather than requiring an opaque dump of the full published **0x8278-byte** object. See `GTM-TMC-READ-BOUNDARY.md` and `gtm-tmc-read-boundary-oracle.json`.
+
 A separate byte-level output proof confirms both adaptive requirements directly: all 24 possible assignments of the exact base LSC channels fail to reproduce matched Windows LSC0+LSC1 (best case still 1,496 byte differences), while the exact static GTM region is 257×4096 but matched Windows GTM base values span 4097..4442 with no 4096 entries. See `ADAPTIVE-IQ-OUTPUT-BOUNDARY.md`.
 
 ## Revised next gate
@@ -46,7 +48,7 @@ A separate byte-level output proof confirms both adaptive requirements directly:
 The remaining independent Windows-wire producer inputs are now bounded to:
 
 1. exact per-request **LSC calibration + Tintless/ALSC adaptive state**, plus its calculator geometry offsets/scale;
-2. exact per-request **GTM TMC state**.
+2. exact per-request **GTM common/aux inputs plus the seven generation-5 sparse internal TMC ranges**.
 
 After those inputs are captured for the same Windows request sequence, regenerate **LSC0 + LSC1 + GTM0** offline and require byte-for-byte equality with the Windows oracle. The Windows GIC wire payload is then derived automatically from the already-proven LSC alias at source bytes `0x62e..0x82e`.
 

@@ -41,5 +41,14 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "The common trigger trees/vectors and static EEPROM LSC descriptor are now bounded. Recover the 0x6e8 same-device EEPROM calibration window from an existing artifact if possible; otherwise capture the exact runtime OTP/calibration state together with Tintless/ALSC state, LSC calculator offsets/scale, and GTM TMC state for Windows requests 4/5/6. Reproduce LSC0/LSC1/GTM0 offline byte-for-byte and derive wire GIC from the proven LSC alias. Do not execute Linux request6 until the offline oracle matches and a separate runtime authorization review passes."
+  "next_gate": "The common trigger trees/vectors, static EEPROM LSC descriptor, and exact GTM131 generation-5 TMC read boundary are now bounded. Recover the 0x6e8 same-device EEPROM calibration window from an existing artifact if possible; otherwise capture the exact Windows LSC calibration/Tintless/ALSC state and geometry plus the GTM common/aux inputs and seven sparse generation-5 TMC ranges for requests 4/5/6. Reproduce LSC0/LSC1/GTM0 offline byte-for-byte and derive wire GIC from the proven LSC alias. Do not execute Linux request6 until the offline oracle matches and a separate runtime authorization review passes.",
+  "gtm_tmc_read_boundary_proof": {
+    "oracle": "gtm-tmc-read-boundary-oracle.json",
+    "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
+    "ife_gtm_hw_setting_rva": "0x9aa6e0",
+    "ife_caller_filter_lr": "0x180a28f2c",
+    "full_published_tmc_bytes": "0x8278",
+    "max_sparse_internal_tmc_bytes": "0x108c",
+    "classification": "CLOSED STATIC READ BOUNDARY: generation-5 GTM consumes seven bounded internal TMC ranges rather than an opaque full TMC object."
+  }
 }

@@ -127,22 +127,73 @@
       "titan680_packer_rva": "0xb5b3d0",
       "ife_common_state_ready_rva": "0xa28e6c",
       "post_hw_calculation_result_rva": "0xa2908c",
-      "post_final_staging_copy_rva": "0xa290a8"
+      "post_final_staging_copy_rva": "0xa290a8",
+      "published_to_internal_tmc_copy_rva": "0x898738",
+      "ife_gtm_hw_call_return_rva": "0xa28f2c"
     },
     "preferred_capture_boundary": {
       "rva": "0x9aa6e0",
-      "reason": "Clean hardware-setting boundary after the 257-float Chromatix interpolation and before Titan680 packing.",
+      "ife_caller_filter_lr": "0x180a28f2c",
+      "reason": "Exact GTM131 hardware-setting entry after the 257-float interpolation and after published TMC state has been converted into the internal layout consumed by GTM.",
       "capture_locally": [
-        "0x404-byte interpolated GTM region input",
-        "TMC enable/type/mode and the TMC object referenced through the common input +0x50 pointer (bounded local dump sized only after pointer/type validation)",
-        "post-calculation GTM staging/output used for the 0x800-byte Titan680 LUT"
+        "x0 GTM common input: 0x7c bytes (pointer-bearing raw bytes local only; decode proven fields at +0x14/+0x2a/+0x34/+0x50/+0x70/+0x74/+0x78)",
+        "x1: exact 0x404-byte / 257-float interpolated GTM region input",
+        "x2: first dword of GTM calculation flags",
+        "x3: halfword at +0x4 used by the exact GTM setting output",
+        "poi(x0+0x50): generation-5 sparse internal TMC ranges totaling at most 0x108c bytes",
+        "post-calculation 0x800-byte GTM staging/output for request correlation"
+      ],
+      "tmc_v5_sparse_ranges": [
+        {
+          "offset": "0x8",
+          "bytes": "0xc",
+          "purpose": "generation/hardware-version/valid header dwords"
+        },
+        {
+          "offset": "0x74",
+          "bytes": "0x4",
+          "purpose": "curve interpolation mode"
+        },
+        {
+          "offset": "0x109c",
+          "bytes": "0x8",
+          "purpose": "two GTM blend scalars"
+        },
+        {
+          "offset": "0x5104",
+          "bytes": "0x1c",
+          "purpose": "seven-float source knot array"
+        },
+        {
+          "offset": "0x5120",
+          "bytes": "0x1c",
+          "purpose": "seven-float target knot array"
+        },
+        {
+          "offset": "0x51b0",
+          "bytes": "0x3c",
+          "purpose": "15-float cubic coefficient block used when mode==2"
+        },
+        {
+          "offset": "0x6228",
+          "bytes": "0x1000",
+          "purpose": "fail-safe maximum dynamic tone-curve domain; exact helper uses 0x400 bytes only for hw-version 0x60400, otherwise 0x1000"
+        }
+      ],
+      "fail_closed_checks": [
+        "Filter RVA 0x9aa6e0 hits to LR == 0x180a28f2c so only the IFE GTM call is accepted.",
+        "poi(x0+0x50) must be non-null.",
+        "dwo(poi(x0+0x50)+0x10) must be non-zero.",
+        "dwo(poi(x0+0x50)+0x08) must equal 5 before using the generation-5 sparse-layout contract; otherwise stop and revise the static branch contract.",
+        "Raw pointer-bearing/common/TMC dumps stay local/untracked; commit only hashes and decoded bounded metadata."
       ],
       "capture_sequence": [
-        "At RVA 0xa28e6c, log request id, common-input address, TMC pointer, TMC type/version fields and mode before following the pointer.",
-        "If TMC is null, record that explicitly and do not invent a dynamic input.",
-        "If TMC type is 4, a small header/state dump is sufficient initially; if type is 5, validate readability then bound the local dump to 0x6300 bytes because the exact setting path reads through +0x6228.",
-        "At RVA 0xa2908c or 0xa290a8, hash/dump the exact 0x800-byte result for correlation with the request DMI oracle.",
-        "Keep all raw memory dumps local/untracked; commit only hashes and bounded decoded metadata."
+        "For each request 4/5/6, break at RVA 0x9aa6e0 and accept only LR 0x180a28f2c.",
+        "Log request/frame correlation, x0..x4, the selected TMC pointer poi(x0+0x50), and the fail-closed generation/valid fields before any range dump.",
+        "Dump the seven exact generation-5 sparse TMC ranges only; do not dump an assumed contiguous 0x6300/0x8278 object.",
+        "Hash/dump x1 for 0x404 bytes, x2 for 4 bytes, x3+4 for 2 bytes, and the x0 common input for 0x7c bytes.",
+        "After return, at RVA 0xa2908c or 0xa290a8, hash/dump the exact 0x800-byte result/cached staging and correlate it to the matched request DMI oracle.",
+        "Keep all raw memory dumps local/untracked; commit only hashes, exact range metadata, and offline reconstruction results."
       ]
     },
     "target_wire_output": {
@@ -174,6 +225,23 @@
         "rva": "0xa290a8",
         "cached_final_gtm_staging": "x20+0x138, 0x800 bytes",
         "request_frame": "qwo(x19+0x1ff8)"
+      },
+      "tmc_conversion": {
+        "rva": "0xa28e40..0xa28e5c",
+        "published_tmc": "poi(x19+0x21d0)",
+        "internal_tmc_buffer": "poi(x20+0x130)",
+        "common_input_tmc_slot": "(x20+0xa8)+0x50",
+        "conversion_rva": "0x898738 when dwo(published_tmc+0x0c)==1"
+      },
+      "gtm_hw_setting_entry": {
+        "rva": "0x9aa6e0",
+        "ife_caller_return": "0x180a28f2c",
+        "x0": "GTM common input",
+        "x1": "0x404-byte interpolated GTM region",
+        "x2": "GTM calculation flags; first dword is consumed",
+        "x3": "aux setting input; halfword at +0x4 is consumed",
+        "x4": "unpacked GTM output destination",
+        "selected_internal_tmc": "poi(x0+0x50)"
       }
     }
   },
