@@ -1,0 +1,117 @@
+{
+  "schema": "sp11-e003h-lsc-embedded-adaptive-core-v1",
+  "status": "PASS",
+  "accepted": true,
+  "offline_only": true,
+  "surface_devicemft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "exact_rvas": {
+    "ifel_lsc411_create_rva": "0xa01a20",
+    "tintless_interface_ctor_rva": "0xc97258",
+    "alsc_interface_ctor_rva": "0xc97428",
+    "shared_adaptive_context_ctor_rva": "0xc97508",
+    "tintless_process_rva": "0xc95fd0",
+    "tintless_fuse_stats_rva": "0xc97110",
+    "tintless_core_rva": "0xca01b0",
+    "tintless_fusion_core_rva": "0xca1410",
+    "alsc_process_rva": "0xc972e0",
+    "alsc_core_rva": "0xc975f0",
+    "lsc_run_calculation_rva": "0xa03790",
+    "lsc_hw_setting_rva": "0x9b4ba0"
+  },
+  "code_byte_proofs": {
+    "0xa01ae4": "083483d2",
+    "0xa01aec": "db550a94",
+    "0xa01b38": "083383d2",
+    "0xa01b40": "3a560a94",
+    "0xc97284": "a1000094",
+    "0xc972a0": "692200a9",
+    "0xc972ac": "680a00f9",
+    "0xc97464": "29000094",
+    "0xc97480": "692200a9",
+    "0xc97304": "bb000094",
+    "0xc96de0": "f4240094",
+    "0xc97140": "b4280094",
+    "0xa0384c": "68d24cf9",
+    "0xa03850": "285900f9",
+    "0xa03a64": "68064ef9",
+    "0xa03a78": "68ce4cf9",
+    "0xa03a7c": "285d00f9",
+    "0x9b5570": "605e40f9",
+    "0x9b5578": "615640f9",
+    "0x9b557c": "03088052",
+    "0x9b5580": "0306a072",
+    "0xc97518": "001282d2",
+    "0xc96480": "00dd84d2",
+    "0xc96484": "2000a0f2",
+    "0xc96e50": "c83a50b9",
+    "0xc96e58": "cca20991",
+    "0xc96e5c": "ca721791",
+    "0xc96e60": "cb422591",
+    "0xc96e64": "c9123391",
+    "0xc97728": "693e0053",
+    "0xc977ac": "687e1053",
+    "0xc977b4": "337d081b",
+    "0xc97800": "0c050153",
+    "0xc9783c": "0c0e80d2",
+    "0xc978dc": "ac1d4179",
+    "0xc97908": "0c0780d2",
+    "0xc97958": "acad4079"
+  },
+  "embedded_interface_proof": {
+    "ifelsc411_tintless_member": "module+0x19a0",
+    "ifelsc411_alsc_member": "module+0x1998",
+    "run_calculation_common_tintless_interface": "common+0xb0 <- module+0x19a0",
+    "run_calculation_common_alsc_interface": "common+0xb8 <- module+0x1998",
+    "run_calculation_alsc_awb_bg_stats": "common+0xa8 <- module+0x1c08 when ALSC is enabled and stats are present",
+    "shared_wrapper_context_bytes": "0x1090",
+    "tintless_lazy_core_state_bytes": "0x126e8",
+    "classification": "Exact IFELSC411 constructs and dispatches embedded Tintless/ALSC interfaces from QcDeviceMFT8380.dll. Older dynamic libcamxtintlessalgo paths present elsewhere in the image are not the IFELSC411 Create path."
+  },
+  "tintless_statefulness": {
+    "previous_mesh_offsets": [
+      "0x268",
+      "0x5dc",
+      "0x950",
+      "0xcc4"
+    ],
+    "mesh_bytes_each": "0x374",
+    "contiguous_previous_mesh_bytes": "0xdf0",
+    "previous_output_valid_flag_offset": "0x1038",
+    "consequence": "Request6 offline reproduction must preserve Tintless history from stream start or begin from an exact pre-request context checkpoint; request6 cannot be treated as a stateless one-frame calculation."
+  },
+  "alsc_awb_bg_read_boundary": {
+    "geometry_word": "0x00300040",
+    "width": 64,
+    "height": 48,
+    "regions": 3072,
+    "format_select": "stats word0 bit1",
+    "ordinary": {
+      "record_stride": "0x38",
+      "highest_read_end_within_record_addressing": "0x58",
+      "bounded_bytes_from_stats_base": "0x2a020"
+    },
+    "saturated_info": {
+      "record_stride": "0x70",
+      "highest_read_end_within_record_addressing": "0x90",
+      "bounded_bytes_from_stats_base": "0x54020"
+    },
+    "capture_rule": "Validate stats word0 bit1, then capture the corresponding exact bound; 0x54020 is a safe fail-closed maximum for this 64x48 Surface path."
+  },
+  "revised_offline_strategy": {
+    "algorithm_implementation": "Recoverable from the exact embedded Surface DeviceMFT; no external Tintless/ALSC DLL oracle is required for IFELSC411.",
+    "dynamic_inputs_still_required": [
+      "Tintless config/stats and prior-frame state (or stream-start sequence)",
+      "ALSC 64x48 AWB-BG parsed stats when enabled",
+      "per-device LSC EEPROM calibration",
+      "LSC request geometry"
+    ],
+    "preferred_validation": "Capture adaptive inputs from stream start through Windows request6, port/replay the embedded cores offline, and require byte-for-byte LSC0/LSC1 equality. A pre-request4 context checkpoint is an acceptable validation shortcut but not a substitute for the final Linux implementation."
+  },
+  "policy": {
+    "windows_camera_runtime_performed": false,
+    "linux_camera_runtime_performed": false,
+    "linux_request6_generated": false,
+    "linux_request6_executed": false,
+    "linux_request6_authorized": false
+  }
+}

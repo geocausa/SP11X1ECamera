@@ -19,7 +19,17 @@
       "titan680_packer_rva": "0xb3d8a0",
       "ife_lsc411_run_calculation_rva": "0xa03790",
       "call_iqinterface_lsc411_calculate_setting_rva": "0xa03b30",
-      "post_iqinterface_lsc411_calculate_setting_rva": "0xa03b34"
+      "post_iqinterface_lsc411_calculate_setting_rva": "0xa03b34",
+      "ife_lsc411_create_rva": "0xa01a20",
+      "embedded_tintless_interface_ctor_rva": "0xc97258",
+      "embedded_tintless_process_rva": "0xc95fd0",
+      "embedded_tintless_core_rva": "0xca01b0",
+      "embedded_tintless_fuse_stats_rva": "0xc97110",
+      "embedded_tintless_fusion_core_rva": "0xca1410",
+      "embedded_alsc_interface_ctor_rva": "0xc97428",
+      "embedded_alsc_process_rva": "0xc972e0",
+      "embedded_alsc_core_rva": "0xc975f0",
+      "embedded_shared_adaptive_context_ctor_rva": "0xc97508"
     },
     "capture_at_calculate_setting_entry": {
       "geometry_fields_from_isp_input": {
@@ -34,14 +44,16 @@
       "adaptive_state_to_hash_and_dump_locally": [
         "LSC common input enable/state flags including Tintless and ALSC",
         "sensor calibration table inputs referenced by LSC411",
-        "Tintless input/result state if present",
-        "ALSC/AWB-BG statistics state if present",
+        "Tintless configuration/stats plus sequential prior-frame state (algorithm code itself is embedded and statically recoverable)",
+        "ALSC 64x48 AWB-BG parsed stats when enabled (algorithm code itself is embedded and statically recoverable)",
         "final common LSC output before Titan680 packing"
       ],
       "common_input_fields": {
-        "adaptive_pointer_or_state_a0": "x0+0xa0",
-        "alsc_awb_bg_state_pointer": "x0+0xa8",
-        "auxiliary_state_pointer_b8": "x0+0xb8",
+        "tintless_config_pointer": "poi(x0+0x98), exact module+0x19a8-backed Tintless configuration",
+        "tintless_stats_pointer": "poi(x0+0xa0), request-local Tintless stats/input selected by IFELSC411",
+        "alsc_awb_bg_state_pointer": "poi(x0+0xa8), request-local parsed AWB-BG stats when ALSC is enabled",
+        "tintless_interface": "poi(x0+0xb0), exact embedded interface from IFELSC411 module+0x19a0",
+        "alsc_interface": "poi(x0+0xb8), exact embedded interface from IFELSC411 module+0x1998",
         "tintless_enable": "dwo(x0+0xc0)",
         "channel_correction_gr": "poi(x0+0xd0), 0x374 bytes when non-null",
         "channel_correction_gb": "poi(x0+0xd8), 0x374 bytes when non-null",
@@ -55,13 +67,36 @@
         "alsc_meta": "x0+0x128..0x12a"
       },
       "capture_sequence": [
-        "For each request 4/5/6, log frame id and the seven geometry fields before any local dump.",
+        "Preserve one Windows stream. For LSC state validation, begin adaptive-input capture at stream creation and continue through request6; request4/5/6 remain the wire-output comparison points.",
+        "For each relevant request, log frame id and the seven geometry fields before any local dump.",
         "Dump/hash the 0x1e8-byte common input itself.",
         "If the calibration input is not already present in an existing artifact, capture/hash only the proven runtime OTP table(s) or the bounded physical EEPROM 0x103d..0x1724 window; do not dump an unbounded EEPROM object.",
+        "Tintless: capture the exact request config/stats inputs and preserve sequential state. For validation-only shortcut, a pre-request4 0x1090 wrapper-context checkpoint plus the separately allocated Tintless core state may be recorded after pointer/size validation.",
+        "ALSC: when common+0xa8 is non-null and ALSC is enabled, inspect stats word0 bit1 and capture exactly 0x2a020 bytes for ordinary layout or 0x54020 bytes for saturated-info layout.",
         "If channel-correction pointers +0xd0/+0xd8/+0xe0/+0xe8 are non-null, dump exactly 0x374 bytes from each.",
-        "Record +0xa0/+0xa8/+0xb8/+0xf8 pointer identities and enable flags; inspect type/size before following unknown-size objects.",
         "At caller RVA 0xa03b34, dump/hash x19+0xac for 0x18a0 bytes and the three DMI destinations before Titan680 packing."
-      ]
+      ],
+      "embedded_adaptive_state_boundary": {
+        "proof": "LSC-EMBEDDED-ADAPTIVE-CORE.md / lsc-embedded-adaptive-core-oracle.json",
+        "algorithm_implementation": "Embedded in the exact Surface QcDeviceMFT8380.dll for IFELSC411; no external libcamxtintlessalgo DLL is required by this exact path.",
+        "shared_wrapper_context_bytes": "0x1090",
+        "tintless_lazy_core_state_bytes": "0x126e8",
+        "tintless_previous_mesh_offsets": [
+          "0x268",
+          "0x5dc",
+          "0x950",
+          "0xcc4"
+        ],
+        "tintless_previous_mesh_bytes_each": "0x374",
+        "tintless_previous_mesh_block_bytes": "0xdf0",
+        "tintless_previous_output_valid_flag_offset": "0x1038",
+        "state_model": "Sequential: replay from stream creation through request6, or use an exact pre-request context only as a validation shortcut.",
+        "alsc_geometry": "64x48 parsed AWB-BG regions (3072 regions)",
+        "alsc_stats_format_select": "stats word0 bit1",
+        "alsc_ordinary_stats_read_bytes": "0x2a020",
+        "alsc_saturated_stats_read_bytes": "0x54020",
+        "alsc_safe_max_stats_read_bytes": "0x54020"
+      }
     },
     "target_wire_outputs": [
       {
@@ -256,7 +291,13 @@
     "committed_artifacts": "hashes, decoded bounded metadata, scripts and conclusions only",
     "do_not_submit_linux_request6": true,
     "do_not_modify_camera_hardware_from_this_plan": true,
-    "atomicity": "Use frame id from the exact ISPInputData in the same function context; do not correlate adaptive state to DMI across separate Windows streams."
+    "atomicity": "Use frame id from the exact ISPInputData in the same function context; do not correlate adaptive state to DMI across separate Windows streams.",
+    "lsc_stateful_capture_window": "stream creation through request6 preferred; exact pre-request4 Tintless context checkpoint allowed only as an offline validation shortcut",
+    "lsc_wire_comparison_requests": [
+      4,
+      5,
+      6
+    ]
   },
-  "acceptance_gate": "Offline producer must reproduce matched Windows LSC0, LSC1 and GTM0 byte-for-byte; derive wire GIC from the proven LSC alias; then run a separate authorization review before any Linux request6 runtime."
+  "acceptance_gate": "Offline producer must replay the exact embedded IFELSC411 Tintless/ALSC path with preserved sequential state and reproduce matched Windows LSC0/LSC1, plus reproduce GTM0 from the bounded generation-5 TMC inputs, all byte-for-byte; derive wire GIC from the proven LSC alias; then run a separate authorization review before any Linux request6 runtime."
 }

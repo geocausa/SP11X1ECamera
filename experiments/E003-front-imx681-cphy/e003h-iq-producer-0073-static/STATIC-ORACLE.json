@@ -41,7 +41,7 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "The common trigger trees/vectors, static EEPROM LSC descriptor, and exact GTM131 generation-5 TMC read boundary are now bounded. Recover the 0x6e8 same-device EEPROM calibration window from an existing artifact if possible; otherwise capture the exact Windows LSC calibration/Tintless/ALSC state and geometry plus the GTM common/aux inputs and seven sparse generation-5 TMC ranges for requests 4/5/6. Reproduce LSC0/LSC1/GTM0 offline byte-for-byte and derive wire GIC from the proven LSC alias. Do not execute Linux request6 until the offline oracle matches and a separate runtime authorization review passes.",
+  "next_gate": "The common trigger trees/vectors, static EEPROM LSC descriptor, exact embedded IFELSC411 Tintless/ALSC algorithm boundary, and exact GTM131 generation-5 TMC read boundary are now bounded. Recover/capture the same-device LSC calibration and geometry, then capture/replay Tintless/ALSC dynamic inputs sequentially from Windows stream creation through request6 (or use an exact pre-request context only for validation) and capture the GTM common/aux inputs plus seven sparse generation-5 TMC ranges. Reproduce LSC0/LSC1/GTM0 offline byte-for-byte and derive wire GIC from the proven LSC alias. Do not execute Linux request6 until the offline oracle matches and a separate runtime authorization review passes.",
   "gtm_tmc_read_boundary_proof": {
     "oracle": "gtm-tmc-read-boundary-oracle.json",
     "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
@@ -50,5 +50,19 @@
     "full_published_tmc_bytes": "0x8278",
     "max_sparse_internal_tmc_bytes": "0x108c",
     "classification": "CLOSED STATIC READ BOUNDARY: generation-5 GTM consumes seven bounded internal TMC ranges rather than an opaque full TMC object."
+  },
+  "lsc_embedded_adaptive_core_proof": {
+    "oracle": "lsc-embedded-adaptive-core-oracle.json",
+    "oracle_sha256": "f9dd23a72f6c8885ea5b773d9894b4edb052b565551809b900605c150132a803",
+    "ife_lsc411_create_rva": "0xa01a20",
+    "embedded_tintless_process_rva": "0xc95fd0",
+    "embedded_tintless_core_rva": "0xca01b0",
+    "embedded_alsc_process_rva": "0xc972e0",
+    "embedded_alsc_core_rva": "0xc975f0",
+    "shared_wrapper_context_bytes": "0x1090",
+    "tintless_lazy_core_state_bytes": "0x126e8",
+    "tintless_previous_mesh_block_bytes": "0xdf0",
+    "alsc_safe_max_stats_read_bytes": "0x54020",
+    "classification": "CLOSED STATIC ALGORITHM BOUNDARY: exact IFELSC411 uses embedded Tintless/ALSC interfaces and cores; remaining LSC oracle inputs are dynamic calibration/geometry/stats plus sequential adaptive state, not missing algorithm code."
   }
 }

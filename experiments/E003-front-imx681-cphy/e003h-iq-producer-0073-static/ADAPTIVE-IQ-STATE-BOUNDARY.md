@@ -27,7 +27,9 @@ The implementation can combine the interpolated 4×221 mesh with:
 - ALSC state driven by AWB-BG statistics;
 - previous adaptive LSC state where the pipeline selects reuse.
 
-The exact binary contains explicit `IFE Store Tintless`, `IFE Store ALSC`, `BPS UsePrevious Tintless` and `BPS UsePrevious ALSC` paths. The hardware setting then scales four 221-point channels by Q10 `1024.0`, clamps to the 14-bit range, and the Titan680 packer emits the two changing `0x374`-byte LSC wire LUTs. Therefore a pure Chromatix+AEC/AWB producer is incomplete for Windows parity.
+The exact binary contains explicit `IFE Store Tintless`, `IFE Store ALSC`, `BPS UsePrevious Tintless` and `BPS UsePrevious ALSC` paths. More importantly, the exact IFELSC411 creation path now proves that its Tintless and ALSC implementations are **embedded in the same SHA-pinned DeviceMFT**: IFELSC411 constructs the Tintless interface at RVA `0xc97258` and ALSC interface at `0xc97428`, which dispatch to embedded cores at `0xca01b0` and `0xc975f0`. Older LSC variants in the image contain a dynamic `libcamxtintlessalgo` loader, but that is not the IFELSC411 path. The adaptive algorithm code itself is therefore no longer an opaque Windows-only dependency. See `LSC-EMBEDDED-ADAPTIVE-CORE.md` and `lsc-embedded-adaptive-core-oracle.json`.
+
+The embedded Tintless wrapper is explicitly stateful: it retains four previous 221-float meshes as a contiguous `0xdf0`-byte history block ending at a previous-output-valid flag at `+0x1038`. Exact request6 replay must therefore preserve the stream sequence (or use an exact pre-request context only as a validation shortcut). The embedded ALSC call is also bounded precisely: Surface passes a `64x48` grid, and the parsed AWB-BG stats read is `0x2a020` bytes for the ordinary record format or `0x54020` bytes when saturated-info records are present. The hardware setting then scales four 221-point channels by Q10 `1024.0`, clamps to the 14-bit range, and the Titan680 packer emits the two changing `0x374`-byte LSC wire LUTs.
 
 The Windows-selected IMX681 mode itself is already exact: firmware resolution index **2**, **3840×2160@30**. What remains to be captured is the exact LSC calculator's per-request output/crop offsets and scale plus its adaptive/calibration state, not the sensor mode selection.
 
@@ -47,9 +49,9 @@ A separate byte-level output proof confirms both adaptive requirements directly:
 
 The remaining independent Windows-wire producer inputs are now bounded to:
 
-1. exact per-request **LSC calibration + Tintless/ALSC adaptive state**, plus its calculator geometry offsets/scale;
+1. exact LSC calibration + geometry plus **sequential Tintless/ALSC dynamic inputs/state**; the Tintless/ALSC algorithm implementation itself is now statically recovered from the exact DeviceMFT, and ALSC AWB-BG reads are bounded to at most `0x54020` bytes;
 2. exact per-request **GTM common/aux inputs plus the seven generation-5 sparse internal TMC ranges**.
 
-After those inputs are captured for the same Windows request sequence, regenerate **LSC0 + LSC1 + GTM0** offline and require byte-for-byte equality with the Windows oracle. The Windows GIC wire payload is then derived automatically from the already-proven LSC alias at source bytes `0x62e..0x82e`.
+Replay the LSC adaptive inputs from stream creation through the same Windows request sequence (request4/5/6 remain the comparison outputs), regenerate **LSC0 + LSC1 + GTM0** offline and require byte-for-byte equality with the Windows oracle. The Windows GIC wire payload is then derived automatically from the already-proven LSC alias at source bytes `0x62e..0x82e`.
 
 Linux request6 remains forbidden until that offline comparison passes.
