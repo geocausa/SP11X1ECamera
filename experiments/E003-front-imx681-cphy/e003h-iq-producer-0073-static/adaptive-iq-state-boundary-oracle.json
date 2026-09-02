@@ -1,0 +1,241 @@
+{
+  "schema": "sp11-e003h-adaptive-iq-state-boundary-v1",
+  "status": "PASS",
+  "accepted": true,
+  "offline_only": true,
+  "surface_inputs": {
+    "devicemft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "imx681_tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+    "matched_trigger_oracle": "experiments/E003-front-imx681-cphy/e003h-iq-producer-0073-static/windows-request4-6-matched-triggers.json",
+    "windows_selected_sensor_mode": 2,
+    "windows_selected_sensor_geometry": "3840x2160"
+  },
+  "exact_rvas": {
+    "iq_trigger_vector_builder": "0x890208",
+    "control_var_to_trigger_map": "0x9a3708",
+    "lsc_calculate_setting": "0x88e1e8",
+    "lsc_interpolation": "0x93c1b0",
+    "lsc_hw_setting": "0x9b4ba0",
+    "lsc_titan680_packer": "0xb3d8a0",
+    "gtm_ife_execute_run_calculation": "0xa28b00",
+    "gtm_interpolation": "0x93bf30",
+    "gtm_hw_setting": "0x9aa6e0",
+    "gtm_titan680_packer": "0xb5b3d0"
+  },
+  "tuning_control_vectors": {
+    "lsc41_ife_v2": [
+      8,
+      2,
+      5,
+      100,
+      0,
+      6
+    ],
+    "gtm13_ife_v2": [
+      2,
+      5,
+      0
+    ]
+  },
+  "trigger_ranges": {
+    "lsc_aec": [
+      [
+        1.0,
+        390.0
+      ],
+      [
+        490.0,
+        1000.0
+      ]
+    ],
+    "lsc_cct": [
+      [
+        1.0,
+        2500.0
+      ],
+      [
+        2700.0,
+        3200.0
+      ],
+      [
+        3400.0,
+        4500.0
+      ],
+      [
+        5000.0,
+        10000.0
+      ]
+    ],
+    "gtm_aec": [
+      [
+        1.0,
+        900.0
+      ]
+    ]
+  },
+  "matched_request5_request6": {
+    "request5": {
+      "gain": 14.720216751098633,
+      "lux": 374.176513671875,
+      "cct": 4999.0,
+      "drc": 1.0,
+      "lens": 0.0
+    },
+    "request6": {
+      "gain": 43.2984619140625,
+      "lux": 374.19293212890625,
+      "cct": 4999.0,
+      "drc": 1.0,
+      "lens": 0.0
+    }
+  },
+  "matched_zone_proof": {
+    "lsc_aec": {
+      "request5_gain": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          390.0
+        ]
+      },
+      "request6_gain": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          390.0
+        ]
+      },
+      "request5_lux": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          390.0
+        ]
+      },
+      "request6_lux": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          390.0
+        ]
+      }
+    },
+    "gtm_aec": {
+      "request5_gain": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          900.0
+        ]
+      },
+      "request6_gain": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          900.0
+        ]
+      },
+      "request5_lux": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          900.0
+        ]
+      },
+      "request6_lux": {
+        "kind": "inside",
+        "zone": 0,
+        "range": [
+          1.0,
+          900.0
+        ]
+      }
+    },
+    "lsc_cct": {
+      "request5": {
+        "kind": "gap",
+        "between": [
+          2,
+          3
+        ],
+        "range": [
+          4500.0,
+          5000.0
+        ],
+        "ratio": 0.998
+      },
+      "request6": {
+        "kind": "gap",
+        "between": [
+          2,
+          3
+        ],
+        "range": [
+          4500.0,
+          5000.0
+        ],
+        "ratio": 0.998
+      }
+    },
+    "invariant_dimensions": [
+      "DRCGain",
+      "lensPosition",
+      "CCT"
+    ]
+  },
+  "exact_binary_adaptive_paths": {
+    "lsc": {
+      "interpolation_region_bytes": "0xdf0",
+      "mesh_points_per_channel": 221,
+      "titan_wire_bytes_per_lsc_lut": "0x374",
+      "adaptive_inputs": [
+        "sensor lens-shading calibration tables",
+        "Tintless state/results",
+        "ALSC AWB-BG statistics/state",
+        "previous-frame adaptive LSC state where selected by the exact pipeline"
+      ],
+      "binary_evidence_strings": [
+        "IFE Store Tintless camera",
+        "IFE Store ALSC camera",
+        "BPS UsePrevious Tintless camera",
+        "BPS UsePrevious ALSC camera",
+        "ALSC is disabled as the AWB BG stats are not present"
+      ],
+      "conclusion": "Chromatix trigger interpolation is only the base mesh; exact Surface LSC411 can apply calibration, Tintless and ALSC state before Titan680 packing."
+    },
+    "gtm": {
+      "interpolated_region_bytes": "0x404",
+      "interpolated_points": 257,
+      "wire_lut_bytes": "0x800",
+      "adaptive_input": "TMC (tone-mapping-control) state selected by IsModuleEnabledInTMCPath",
+      "conclusion": "Exact Surface GTM131 hardware calculation can replace/reshape the flat Chromatix curve using dynamic TMC state before Titan680 packing."
+    }
+  },
+  "producer_boundary": {
+    "closed": [
+      "all 8/8 steady calculated scalar fields",
+      "16 deterministic ping-pong bank fields",
+      "GIC Windows wire alias dependency on LSC",
+      "LSC/GTM base Chromatix control vectors and trigger zones"
+    ],
+    "remaining_exact_inputs": [
+      "LSC calibration/adaptive Tintless/ALSC state at the exact request",
+      "GTM TMC state at the exact request",
+      "LSC calculator geometry offsets/scale at the exact request (sensor mode geometry itself is already 3840x2160)"
+    ],
+    "next_gate": "Capture the adaptive LSC/TMC producer state on Windows for requests 4/5/6, then reproduce LSC0/LSC1 and GTM0 offline byte-for-byte. Derive wire GIC from the proven LSC alias. Only then reconsider Linux request6 runtime."
+  },
+  "policy": {
+    "linux_request6_generated_by_this_proof": false,
+    "linux_request6_executed": false,
+    "linux_request6_authorized": false,
+    "camera_runtime_performed": false
+  }
+}

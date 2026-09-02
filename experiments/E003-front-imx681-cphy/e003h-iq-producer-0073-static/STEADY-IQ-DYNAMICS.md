@@ -12,4 +12,6 @@ Therefore Windows `0x4708` consumes bytes `0x62e..0x82e`: 326 bytes from the tai
 
 For Windows 1:1 parity, the remaining **independent** dynamic wire-LUT producer problem is now **LSC + GTM**, plus deterministic bank parity. The GIC wire payload follows automatically from the reconstructed LSC source alias. The unused logical GIC calculation can be reconstructed later for internal producer completeness, but it is not a hardware-wire parity gate.
 
+Exact follow-up analysis further bounds LSC/GTM themselves. The matched request5/request6 gain and lux values remain within the same LSC/GTM AEC trigger regions, and DRC/lens/CCT remain invariant. The exact Surface code then shows additional post-interpolation producer inputs: LSC sensor calibration plus Tintless/ALSC adaptive state, and GTM dynamic TMC state. Therefore the remaining parity gate is to capture/reproduce those adaptive inputs, not to infer a new Chromatix region transition. See `ADAPTIVE-IQ-STATE-BOUNDARY.md`.
+
 No request6 Linux runtime is authorized by this checkpoint.
