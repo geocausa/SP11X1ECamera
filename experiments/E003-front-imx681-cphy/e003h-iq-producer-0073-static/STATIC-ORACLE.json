@@ -41,7 +41,7 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "Build one integrated offline request5->request6 LSC replay from the now-byte-exact rear/default LSC41 source through already-closed golden/EEPROM calibration, geometry, sequential Tintless, staging, Titan680 and GIC, and compare against one atomic Windows capsule. Separately trace why the front tuning root resolves the rear/default LSC41 branch and whether that overlay rule affects other IQ modules. Do not run Linux request6 until integrated parity and a separate authorization review pass.",
+  "next_gate": "Build the integrated request5->request6 LSC producer replay from the now-byte-exact rear/default x22 source through closed calibration, geometry, sequential Tintless, staging and Titan680/GIC. In parallel, finish the selected-sensor provider / IFELSC411 tuning-manager provenance trace; if static tracing cannot distinguish it, use one narrow Windows front-stream observation. Do not run Linux request6.",
   "gtm_tmc_read_boundary_proof": {
     "oracle": "gtm-tmc-read-boundary-oracle.json",
     "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
@@ -199,5 +199,21 @@
     "request6_x22_sha256": "3acd68d81103656463b65b448f3a6106c907a48f1f08acb4c3132d30c1b28ca8",
     "classification": "CLOSED BYTE-EXACT: live front x22 is reproduced from Surface rear/default OV13858 LSC41 regions 0x2a0/0x2a4 using the exact live trigger vector and DeviceMFT interpolation arithmetic.",
     "loader_overlay_provenance_closed": false
+  },
+  "lsc_tuning_provenance_boundary": {
+    "oracle": "lsc-tuning-provenance-boundary-oracle.json",
+    "oracle_sha256": "814777dc3f049b444f30f1f2ffa013edbf6a29cf46f848948f304117fe987e92",
+    "proof": "prove-lsc-tuning-provenance-boundary.py",
+    "proof_sha256": "5565477f0cab6f7d0a86f83ebb1a20ca0378ed6bf428881b8c32e5cc37730222",
+    "doc": "LSC-TUNING-PROVENANCE-BOUNDARY.md",
+    "doc_sha256": "2f3bfbd183c796a05f36827c177b4c7ba41983a230d1927e0080fb50c54f094a",
+    "front_scfg_sha256": "e6e3d828a1e4f5bc94c545848a091c20be399a4b22c938ed4a3df072dd033d99",
+    "front_kmd_sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03",
+    "runtime_A_rear_only": true,
+    "runtime_A_sha256": "d5b6ba5acb7c6e29935a455896d433debec9203800b77899cdf64bc17f02791d",
+    "runtime_A_rear_offset": 1008426,
+    "per_capturedevice_datamanager": true,
+    "sensor_tuning_handoff": "front KMD +0x80/+0x88 -> InitParams/SensorTuningData -> DeviceMFT DataManager +0x38/+0x30 -> tuned-mode tree",
+    "classification": "BOUNDED STATIC PROVENANCE: front SCFG/default/global-DataManager explanations excluded; selected-sensor provider / IFELSC411 tuning-manager identity remains open."
   }
 }

@@ -299,7 +299,7 @@
       6
     ]
   },
-  "acceptance_gate": "LSC41 x22 source is now byte-exactly closed from the Surface rear/default OV13858 LSC tree. Next, chain that source through already-closed calibration, geometry, sequential Tintless, staging/Titan680/GIC and the independently closed GTM path in one atomic Windows request5/request6 oracle. Separately resolve tuning-loader/overlay provenance. Only after integrated parity conduct a separate authorization review before Linux request6.",
+  "acceptance_gate": "LSC41 x22 source is byte-exactly closed. Next, chain that source through already-closed calibration, geometry, sequential Tintless, staging/Titan680/GIC and the independently closed GTM path in one atomic Windows request5/request6 oracle. Tuning provenance is statically bounded through front SCFG -> front KMD SensorTuningData -> per-CaptureDevice DataManager; only the selected-sensor provider / IFELSC411 manager identity remains open. Only after integrated parity conduct a separate authorization review before Linux request6.",
   "live_validation_20260902": {
     "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
     "same_as_prior_matched_trigger_session": false,
@@ -420,5 +420,14 @@
     "request5_x22_sha256": "e35ad052a2d219bcded1283c72922fd0c5722431ad511c496ab1ab4ec03dc9de",
     "request6_x22_sha256": "3acd68d81103656463b65b448f3a6106c907a48f1f08acb4c3132d30c1b28ca8",
     "linux_request6_authorized": false
+  },
+  "latest_lsc_tuning_provenance_boundary": {
+    "oracle": "lsc-tuning-provenance-boundary-oracle.json",
+    "proof": "prove-lsc-tuning-provenance-boundary.py",
+    "doc": "LSC-TUNING-PROVENANCE-BOUNDARY.md",
+    "runtime_A_rear_only": true,
+    "front_scfg_selects_imx681": true,
+    "per_capturedevice_datamanager": true,
+    "remaining": "selected-sensor provider / exact TuningDataManager and IFELSC411 module-pointer identity"
   }
 }

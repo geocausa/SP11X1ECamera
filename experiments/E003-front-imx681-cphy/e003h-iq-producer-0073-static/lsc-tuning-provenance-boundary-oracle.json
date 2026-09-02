@@ -1,0 +1,101 @@
+{
+  "schema": "sp11-e003h-lsc-tuning-provenance-boundary-v1",
+  "accepted": true,
+  "classification": "STATIC PROVENANCE BOUNDARY: live LSC A is rear-OV13858-only among the exact front/rear/default tuning authorities, while the front SCFG explicitly selects IMX681. DeviceMFT and front KMD statically pin the SensorTuningData handoff; the remaining question is which selected-sensor provider/tuning manager instance reaches IFELSC411 in the live front stream.",
+  "source_authority": {
+    "device_mft": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/QcDeviceMFT8380.dll",
+      "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+    },
+    "front_kmd": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamfrontsensor8380.inf_arm64_747e2ddb5eb5a22b/surfacecamfrontsensor8380.sys",
+      "sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03"
+    },
+    "front_tuning": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamfrontsensor_extension8380.inf_arm64_5a4c66ce4812274e/com.surface.tuned.ffc_imx681.bin",
+      "sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d"
+    },
+    "rear_tuning": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamrearsensor_extension8380.inf_arm64_9e667d808f1a7021/com.surface.tuned.rfc_ov13858.bin",
+      "sha256": "4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635"
+    },
+    "platform_default": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamplatform8380.inf_arm64_16d44e9aca3becfb/com.qti.tuned.default.bin",
+      "sha256": "aa685fb55e528e717eaf115112dd08bffb5d15c7cd00c4570282163667008150"
+    },
+    "rear_default": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamrearsensor_extension8380.inf_arm64_9e667d808f1a7021/com.qti.tuned.default.bin",
+      "sha256": "ca620fbcfd9bde3c25157289ac7172244fb39744b36d293ea53ab94422eea634"
+    },
+    "front_scfg": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamfrontsensor_extension8380.inf_arm64_5a4c66ce4812274e/SCFG_FRONT_MSHW0490.bin",
+      "sha256": "e6e3d828a1e4f5bc94c545848a091c20be399a4b22c938ed4a3df072dd033d99"
+    }
+  },
+  "runtime_leaf_identity": {
+    "A_sha256": "d5b6ba5acb7c6e29935a455896d433debec9203800b77899cdf64bc17f02791d",
+    "A_size": 3568,
+    "A_rear_offset": 1008426,
+    "B_sha256": "f0c84bd42df54e3b18abb41d787e922d98f82f0aa72230c90aaea48f94994ee8",
+    "B_size": 3568,
+    "B_rear_offset": 1012018,
+    "full_blob_occurrences": {
+      "front_imx681": {
+        "A": [],
+        "B": [
+          3315330
+        ]
+      },
+      "rear_ov13858": {
+        "A": [
+          1008426
+        ],
+        "B": [
+          1012018
+        ]
+      },
+      "platform_default": {
+        "A": [],
+        "B": [
+          4754578
+        ]
+      },
+      "rear_default": {
+        "A": [],
+        "B": [
+          4509298
+        ]
+      }
+    }
+  },
+  "front_configuration": {
+    "sensor_module": "com.surface.sensormodule.ffc_imx681.bin",
+    "tuning": "com.surface.tuned.ffc_imx681.bin",
+    "rear_name_present": false
+  },
+  "static_flow": {
+    "front_kmd_init_rva": "0x8a50",
+    "front_kmd_get_init_params_rva": "0xa350",
+    "front_kmd_tuning_storage": "device+0x80 pointer, device+0x88 size",
+    "front_kmd_tuning_filename": "device+0x21a within the copied sensor init configuration",
+    "front_kmd_fallback": "com.qti.tuned.default.bin only if the selected sensor tuning binary load fails",
+    "devicemft_load_data_from_driver_rva": "0x7165a8",
+    "devicemft_sensor_tuning_storage": "DataManager+0x38 pointer, DataManager+0x30 size",
+    "devicemft_create_tuning_manager": "DataManager::Construct passes +0x38/+0x30 into a per-CaptureDevice TuningDataManager and creates its tuned-mode tree",
+    "capturedevice_construct_real_rva": "0x291c00",
+    "capturedevice_datamanager_storage": "CaptureDevice+0x60 (param_1[0xc])",
+    "capturedevice_provider": "CaptureDevice+0x10 is passed to the DataManager and is also used by CaptureDevice::Construct for selected Sensor ID/platform queries"
+  },
+  "closed_exclusions": [
+    "front SCFG directly points at rear OV13858 tuning",
+    "runtime A is hidden elsewhere in the exact front IMX681 tuning file",
+    "runtime A comes from either tested com.qti.tuned.default.bin fallback",
+    "one global TuningDataManager is unconditionally shared by all CaptureDevice instances: ConstructReal allocates a DataManager per CaptureDevice"
+  ],
+  "next_gate": "Trace the CaptureDevice+0x10 selected-sensor provider through its InitParams response and the IFELSC411 tuning-manager handoff. Prefer static ownership/call tracing. If static proof cannot distinguish the live provider, capture only selected Sensor ID plus the exact TuningDataManager/source-buffer identity in one Windows front-stream session. Do not run Linux request6.",
+  "safety": {
+    "linux_camera_runtime": false,
+    "linux_request6_executed": false,
+    "linux_request6_authorized": false
+  }
+}

@@ -31,6 +31,7 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - sequential embedded Tintless request5 -> request6 at DeviceMFT RVA `0xc95fd0`: byte-exact, including persistent state; see `LSC-TINTLESS-SEQUENTIAL-REPLAY.md`.
 - exact 42-float live LSC trigger vector and `x22/x23` ABI: closed; see `LSC-RUNTIME-INTERPOLATION-BOUNDARY.md`.
 - **runtime LSC41 tuning source and generic interpolation: closed byte-exact**; see `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md` and `prove-lsc-runtime-tuning-source.py`.
+- LSC tuning-manager provenance is statically bounded through front SCFG -> front KMD `SensorTuningData` -> per-CaptureDevice DataManager/TuningDataManager; see `LSC-TUNING-PROVENANCE-BOUNDARY.md`. The rear-only A leaf crossover itself is still open.
 
 ## Latest LSC source closure
 
@@ -55,7 +56,15 @@ Rear Default `lsc41_ife_v2` symbol `0x29` uses the exact live control vector `[8
 
 The replay matches both accepted Windows `x22` buffers byte-for-byte using the exact DeviceMFT RVA `0x93c940` arithmetic. The raw exploratory `E003H_20260902_LSCCALLBACK` capture independently records those exact A/B runtime leaf bytes.
 
-Do **not** interpret this as proof that Windows configures the rear physical sensor for the front stream. It proves the byte provenance of the LSC41 object resolved by the front stream. Why the tuning loader/overlay exposes the rear/default LSC branch remains a provenance question and should be documented, because it may matter to other IQ modules.
+Do **not** interpret this as proof that Windows configures the rear physical sensor for the front stream. It proves the byte provenance of the LSC41 object resolved by the front stream.
+
+## Latest tuning provenance boundary
+
+`LSC-TUNING-PROVENANCE-BOUNDARY.md` now rules out the simple file-selection explanations. Exact front `SCFG_FRONT_MSHW0490.bin` names only `com.surface.sensormodule.ffc_imx681.bin` and `com.surface.tuned.ffc_imx681.bin`. Whole-file scanning proves the discriminating runtime A mesh is absent from the exact front IMX681 tuning and both tested `com.qti.tuned.default.bin` fallbacks; it occurs exactly once in rear `com.surface.tuned.rfc_ov13858.bin` at offset `1008426`.
+
+The static ownership chain is also pinned. Front `surfacecamfrontsensor8380.sys` loads its selected sensor tuning into device `+0x80/+0x88` and publishes those exact bytes as `InitParams/SensorTuningData`. DeviceMFT `DataManager::LoadDataFromDriver` copies that payload to DataManager `+0x38/+0x30`, and `DataManager::Construct` builds the tuned-mode tree from that exact buffer. `CaptureDevice::ConstructReal` allocates a fresh DataManager per CaptureDevice at `CaptureDevice+0x60`; the DataManager and the earlier selected-Sensor-ID query use the same provider object at `CaptureDevice+0x10`.
+
+Therefore the remaining provenance question is narrower: trace the selected-sensor provider and the exact TuningDataManager/module pointer that reaches IFELSC411. Do not assume a global CamX manager swap or a bad front SCFG without new evidence.
 
 ## Latest live oracle
 
