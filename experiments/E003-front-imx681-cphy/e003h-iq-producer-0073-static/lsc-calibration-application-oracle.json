@@ -1,0 +1,206 @@
+{
+  "schema": "sp11-e003h-lsc-calibration-application-boundary-v1",
+  "accepted": true,
+  "source_authority": {
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "front_tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+    "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
+    "same_stream_required": true
+  },
+  "exact_functions": {
+    "ife_lsc411_check_update_chromatix_rva": "0xa02420",
+    "ife_lsc411_check_dependence_change_rva": "0xa028b0",
+    "lsc411_interpolation_rva": "0x93c1b0",
+    "eeprom_format_lsc_data_rva": "0x723e40"
+  },
+  "code_byte_proofs": {
+    "0xa0252c": "884b00f0",
+    "0xa02530": "01610c91",
+    "0xa02534": "31c5f397",
+    "0xa026b4": "6a0940f9",
+    "0xa026d0": "6c0900f9",
+    "0xa02b18": "883a50f9",
+    "0xa02b1c": "01a10591",
+    "0xa02b30": "02be8152",
+    "0xa02b40": "09a12991",
+    "0xa02b54": "09310091",
+    "0xa02b68": "09d11b91",
+    "0xa02b7c": "09010e91",
+    "0xa02b94": "01613d91",
+    "0xa02c40": "08a983d2",
+    "0xa02cf0": "086785d2",
+    "0xa02da0": "082587d2",
+    "0xa02e50": "156900b9",
+    "0xa02ec4": "096d00b9",
+    "0xa02ecc": "098100b9",
+    "0x93c3c0": "a86e40b9",
+    "0x93c3d0": "a88240b9",
+    "0x93c3dc": "ab0a40f9",
+    "0x93c46c": "ac3240f9",
+    "0x93c494": "907543bd",
+    "0x93c498": "101a311e",
+    "0x93c4c8": "900140bd",
+    "0x93c4cc": "101a311e",
+    "0x93c4f8": "d0696dbc",
+    "0x93c4fc": "101a311e",
+    "0x93c530": "900140bd",
+    "0x93c534": "101a311e",
+    "0x93c6dc": "11102c1e",
+    "0x93c7d0": "720a321e",
+    "0x93c7d4": "522a341e",
+    "0x93c7d8": "520a311e",
+    "0x93c7dc": "12692cbc",
+    "0x93c7e4": "d2682ebc",
+    "0x7241e8": "f001221e",
+    "0x72423c": "5001221e",
+    "0x724294": "b001221e",
+    "0x7242e8": "b001221e"
+  },
+  "golden_chromatix": {
+    "root": {
+      "symbol_id": 42,
+      "type": "lscgolden41_ife_v2",
+      "version_raw": 65540,
+      "mode_id": 1,
+      "mode_symbol_id": 2,
+      "data_abs_offset": 6189808,
+      "data_bytes": 44,
+      "data_sha256": "ff88c8bee7a23f82aced465d148e960ba12d4c2e8c30db32c8b78edf259f01a7"
+    },
+    "root_refs": [
+      {
+        "at": 16,
+        "symbol_id": 1225,
+        "type": "revision"
+      },
+      {
+        "at": 24,
+        "symbol_id": 1226,
+        "type": "control_var_type"
+      },
+      {
+        "at": 40,
+        "symbol_id": 1227,
+        "type": "mod_lscgolden41_trigger_data"
+      }
+    ],
+    "trigger_refs": [
+      {
+        "at": 12,
+        "symbol_id": 1228,
+        "type": "trigger"
+      },
+      {
+        "at": 20,
+        "symbol_id": 1229,
+        "type": "region"
+      }
+    ],
+    "region": {
+      "symbol_id": 1229,
+      "type": "region",
+      "version_raw": 0,
+      "mode_id": 0,
+      "mode_symbol_id": 4294967295,
+      "data_abs_offset": 3318926,
+      "data_bytes": 3536,
+      "data_sha256": "b0023db8b7254a9922c60506db58fd9bf2d717e09a8f088d31f33b2316538f6e",
+      "float32_values": 884,
+      "mesh": "4x221",
+      "integer_valued": true,
+      "min_float": 133.0,
+      "max_float": 1023.0,
+      "first_12": [
+        133.0,
+        161.0,
+        175.0,
+        182.0,
+        209.0,
+        252.0,
+        296.0,
+        316.0,
+        327.0,
+        323.0,
+        293.0,
+        257.0
+      ]
+    }
+  },
+  "formatted_eeprom_contract": {
+    "isp_input_formatted_eeprom_pointer_byte_offset": "0x2070",
+    "candidate_slot_offsets": [
+      "0x168",
+      "0xf58",
+      "0x1d48",
+      "0x2b38",
+      "0x3928"
+    ],
+    "candidate_slot_stride": "0xdf0",
+    "candidate_slots": 5,
+    "valid_slot_test": "first dword == 1",
+    "copied_slot_bytes": "0xdf0",
+    "module_copy_base": "IFELSC411 module+0x1978",
+    "descriptor_base": "common+0x60",
+    "descriptor_capacity_byte": "common+0x58 == 5",
+    "per_slot_descriptor_bytes": "0x20",
+    "channel_pointer_offsets_within_copied_slot": [
+      "0x0c",
+      "0x380",
+      "0x6f4",
+      "0xa68"
+    ],
+    "channel_bytes": "0x374 = 221 float32",
+    "valid_slot_count": "common+0x68",
+    "calibration_enable": "common+0x6c",
+    "calibration_apply": "common+0x80",
+    "formatter_numeric_contract": "FormatLSCData converts extracted integer channel values directly with SCVTF into float32; no gain-scale multiply is present at the asserted conversion sites."
+  },
+  "live_branch": {
+    "requests": {
+      "request4": {
+        "common_sha256": "646e62de0d5192129ba03bcc285cc5928c231ab24bf1d83ed236513c59c20535",
+        "calibration_descriptor_capacity": 5,
+        "valid_calibration_slots": 1,
+        "calibration_enabled": 1,
+        "calibration_applied": 1
+      },
+      "request5": {
+        "common_sha256": "39c51103c2a92c566ff4493ede1a25a594d089b2e79a46857105f84f15ca2798",
+        "calibration_descriptor_capacity": 5,
+        "valid_calibration_slots": 1,
+        "calibration_enabled": 1,
+        "calibration_applied": 1
+      },
+      "request6": {
+        "common_sha256": "038c2d066873604fd0c1003e897c8d63159e14fd9b5f9680be5fd0fb0dc5fd9d",
+        "calibration_descriptor_capacity": 5,
+        "valid_calibration_slots": 1,
+        "calibration_enabled": 1,
+        "calibration_applied": 1
+      }
+    },
+    "classification": "ONE VALID SLOT ONLY: request4/5/6 all report capacity=5, valid count=1, calibration enable=1 and calibration apply=1.",
+    "multi_slot_interpolation_required_for_this_stream": false
+  },
+  "calibration_application_math": {
+    "ratio_direction": "golden / formatted_EEPROM",
+    "channel0": "ratio0 * interpolated LSC channel0",
+    "channel3": "ratio3 * interpolated LSC channel3",
+    "green_rule": "channel1 and channel2 are both replaced by 0.5 * (ratio1*tuning_ch1 + ratio2*tuning_ch2)",
+    "green_output_equal_after_calibration": true,
+    "application_precedes_geometry_resample": true,
+    "application_precedes_tintless": true
+  },
+  "capture_reduction": {
+    "old_conservative_calibration_bytes": "0x45b0 = five candidate slots",
+    "new_exact_required_bytes_for_this_physical_stream": "0xdf0 = one valid formatted slot",
+    "preferred_capture": "After IFELSC411 calibration translation has established common+0x68==1, dump module+0x1978 for exactly 0xdf0 bytes. This avoids pointer-unit ambiguity at ISPInputData+0x2070 and captures the exact copied slot consumed by interpolation."
+  },
+  "classification": "CLOSED STATIC/LIVE LSC CALIBRATION-APPLICATION BOUNDARY: exact Surface code proves lscgolden41_ife_v2, one valid formatted EEPROM slot, golden/EEPROM ratio direction, two-green averaging, and pre-geometry/pre-Tintless placement.",
+  "next_gate": "Acquire only the single 0xdf0 copied formatted calibration slot from the same Windows stream, then replay exact LSC interpolation + calibration + geometry + sequential Tintless + Q10 staging. Staging-to-wire and GTM are already closed. Linux request6 remains forbidden.",
+  "safety": {
+    "linux_camera_runtime": false,
+    "linux_request6_executed": false,
+    "raw_windows_capture_committed": false
+  }
+}

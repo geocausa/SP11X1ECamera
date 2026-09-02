@@ -41,7 +41,7 @@
     "active_usecase_resolution_needed_for_these_nine_modules": false,
     "active_usecase_still_globally_unresolved": true
   },
-  "next_gate": "GTM TMC->GTM0 and LSC post-calculation staging->wire packing are closed byte-for-byte on the independent 2026-09-02 live session. The remaining hard transform is upstream LSC: same-device calibration/config plus exact geometry and sequential validated Tintless config/stats/state must reproduce the captured 0x18a0 LSC staging byte-for-byte in one atomic Windows stream. LSC0/LSC1 and wire GIC then follow deterministically. Linux request6 remains forbidden.",
+  "next_gate": "Capture the single 0xdf0 copied formatted LSC calibration slot from the same Windows producer stream, then replay exact LSC41 trigger interpolation -> golden/EEPROM calibration -> geometry -> sequential Tintless -> Q10 staging. Titan680 staging-to-wire and GTM are already closed. Linux request6 remains forbidden.",
   "gtm_tmc_read_boundary_proof": {
     "oracle": "gtm-tmc-read-boundary-oracle.json",
     "oracle_sha256": "0c4cd0d3ffc0449f2ad072dd11d44b2fa2ebc7bfd86eada636ee9cfe0dfde001",
@@ -138,5 +138,20 @@
       6
     ],
     "classification": "CLOSED LIVE/OFFLINE POST-CALCULATION WIRE TARGET: exact Surface Titan680 packing deterministically converts captured request4/5/6 LSC staging into LSC0/LSC1/LSC2 and the proven GIC alias."
+  },
+  "lsc_calibration_application_proof": {
+    "oracle": "lsc-calibration-application-oracle.json",
+    "oracle_sha256": "f7446ae61287d9b826c3ee256b5133f5b9bb0738f7a7c685cf3e32a6f5fbfd59",
+    "proof": "prove-lsc-calibration-application-boundary.py",
+    "doc": "LSC-CALIBRATION-APPLICATION-BOUNDARY.md",
+    "check_update_chromatix_rva": "0xa02420",
+    "check_dependence_change_rva": "0xa028b0",
+    "interpolation_rva": "0x93c1b0",
+    "golden_module": "lscgolden41_ife_v2",
+    "golden_region_symbol_id": 1229,
+    "golden_region_sha256": "b0023db8b7254a9922c60506db58fd9bf2d717e09a8f088d31f33b2316538f6e",
+    "live_valid_calibration_slots": 1,
+    "minimal_same_stream_calibration_capture_bytes": "0xdf0",
+    "classification": "CLOSED STATIC/LIVE LSC CALIBRATION-APPLICATION BOUNDARY: Surface uses golden/formatted-EEPROM ratios before geometry/Tintless, averages the two calibrated greens, and this physical live stream has exactly one valid calibration slot."
   }
 }

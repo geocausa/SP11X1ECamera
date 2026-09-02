@@ -56,6 +56,8 @@ Exact binary analysis further bounds the only live adaptive stats object. `stats
 
 The LSC post-calculation wire transform is now closed too. Exact Surface `IFELSC411Titan680::PackIQRegisterSetting` at RVA `0xb3d8a0` packs the captured **0x18a0-byte** staging into 13×17 LSC0/LSC1/LSC2 targets; LSC2 is all-zero for requests4/5/6, and wire GIC derives automatically from the already-proven alias at source bytes `0x62e..0x82e`. See `LSC-LIVE-STAGING-WIRE-TARGET.md`.
 
-The remaining harder transform is therefore upstream of the packer: same-device calibration/config + exact **4048×3152 / (104,496) → 3840×2160, scale 1** geometry + **sequential Tintless config/stats/state** must regenerate the captured **0x18a0 LSC staging** byte-for-byte.
+The calibration part of that upstream transform is now statically/live closed as well: Surface `lscgolden41_ife_v2` is divided by the formatted EEPROM per channel, those ratios multiply the interpolated LSC41 tuning, and Windows averages the two corrected green channels before geometry. The live requests4/5/6 all prove exactly **one** valid formatted calibration slot, so the remaining Windows calibration oracle is only **0xdf0 bytes**, not the full five-slot `0x45b0` store. See `LSC-CALIBRATION-APPLICATION-BOUNDARY.md`.
+
+The remaining harder transform is therefore: capture that one same-stream `0xdf0` slot, then exact LSC41 interpolation + calibration + **4048×3152 / (104,496) → 3840×2160, scale 1** geometry + **sequential Tintless config/stats/state** must regenerate the captured **0x18a0 LSC staging** byte-for-byte.
 
 Because the new live producer session is not the earlier matched-trigger request4/5/6 stream, do not mix producer inputs from one with wire output from the other. Build or use one atomic Windows producer/output capsule and reproduce that stream offline. Linux request6 remains forbidden until that comparison passes.

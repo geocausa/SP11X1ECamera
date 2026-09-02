@@ -299,7 +299,7 @@
       6
     ]
   },
-  "acceptance_gate": "Use one atomic Windows producer/output stream. GTM TMC->GTM0 and LSC staging->Titan680 wire packing are independently closed. Replay same-device LSC calibration/config plus sequential validated Tintless config/stats/state and reproduce the captured 0x18a0 LSC staging byte-for-byte; LSC0/LSC1/GIC then derive deterministically, and GTM0 must match the same atomic stream. Only then run a separate authorization review before Linux request6 runtime.",
+  "acceptance_gate": "Use one atomic Windows producer/output stream. Capture the single 0xdf0 copied LSC calibration slot after live count==1, then reproduce LSC41 trigger interpolation, golden/EEPROM calibration including Windows green averaging, exact geometry, sequential Tintless and Q10 staging byte-for-byte. LSC staging->wire/GIC and GTM are already closed. Only then review Linux request6 authorization.",
   "live_validation_20260902": {
     "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
     "same_as_prior_matched_trigger_session": false,
@@ -348,6 +348,14 @@
       "capture_window": "stream creation through target request"
     },
     "lsc_post_calculation_wire_status": "CLOSED: exact Titan680 PackIQRegisterSetting RVA 0xb3d8a0 converts the captured 0x18a0 staging into deterministic 13x17 LSC0/LSC1/LSC2; LSC2 is zero for requests4/5/6 and wire GIC derives from the proven LSC alias.",
-    "remaining_lsc_transform": "same-device calibration/config + exact geometry + sequential validated Tintless config/stats/state -> exact captured 0x18a0 staging"
+    "remaining_lsc_transform": "exact LSC41 trigger interpolation + the single same-device formatted calibration slot/golden ratios + exact geometry + sequential validated Tintless config/stats/state -> exact captured 0x18a0 staging",
+    "lsc_calibration_application_status": "CLOSED: common+0x10 is exact lscgolden41_ife_v2; formatted EEPROM is translated into up to five 0xdf0 slots, but requests4/5/6 all prove common+0x68==1 and +0x6c/+0x80==1. LSC411Interpolation applies golden/EEPROM ratios before geometry and Tintless and averages the two corrected green meshes.",
+    "minimal_next_windows_calibration_capture": {
+      "condition": "after IFELSC411 translation with common+0x68 == 1",
+      "preferred_address": "IFELSC411 module+0x1978",
+      "bytes": "0xdf0",
+      "reason": "first/only copied formatted slot consumed by interpolation; avoids ISPInputData pointer-unit ambiguity",
+      "do_not_dump": "full 0x45b0 five-slot store unless live count changes from 1"
+    }
   }
 }
