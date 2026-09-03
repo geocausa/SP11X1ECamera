@@ -13,7 +13,7 @@ There are two normal branches, selected by the option byte carried through AVS c
 
 Both routes converge on the same camera-local raw-data object **before** `CamX::EEPROMData::FormatLSCData`.
 
-Therefore the already-proven rear/default-equivalent front LSC calibration payload cannot be explained by an ordinary rear-camera0 raw-OTP pointer/buffer being injected into camera2. The remaining crossover has moved later, to **EEPROM formatting / library / golden-reference selection**.
+Therefore the already-proven rear/default-equivalent front LSC calibration payload cannot be explained by an ordinary rear-camera0 raw-OTP pointer/buffer being injected into camera2. `LSC-FRONT-CALIBRATION-TUNING-CONVERGENCE.md` subsequently proves that generic EEPROM formatting is not a second crossover either: the rear/default LSC41 and golden authorities both come from the same request-private tuning tree.
 
 Reproducer:
 
@@ -178,19 +178,12 @@ Excluded on the pinned normal path:
 
 Not closed here:
 
-- which EEPROM formatting library/callback is selected for camera2;
-- how `FormatLSCData` chooses the golden/reference object used to materialize its formatted slot;
-- why the verified-front formatted calibration payload is byte-equivalent to the preserved rear/default OV13858 authority;
-- the separate live private-DataManager tuning-tree source-buffer identity;
+- the exact source buffer/tree backing the verified-front private DataManager/TuningDataManager;
+- the three physical front averaged-green raw EEPROM pairs that remain two-way ambiguous (8 raw candidates total, parity-equivalent at x23);
 - genuine verified-front sequential Tintless state/stats/output.
 
-## Next provenance target
+## Superseding convergence result / next provenance target
 
-Trace the **post-raw-OTP formatting boundary**:
+`LSC-FRONT-CALIBRATION-TUNING-CONVERGENCE.md` closes the post-raw formatting question. Front `gt24p128f_imx681` and rear `st_m24c64` both miss DeviceMFT's custom EEPROM-plugin table and use generic `FormatLSCData`; their LSC descriptors are byte-identical, and the generic formatter contains no tuning/golden lookup. IFELSC411 later resolves `lsc41_ife_v2` and `lscgolden41_ife_v2` from the same request-private manager/root.
 
-1. identify the exact EEPROM driver/library selected for front camera2;
-2. trace its callback ownership into the `Format*` sequence;
-3. determine where the LSC golden/reference mesh comes from;
-4. explain mechanically why `FormatLSCData` produces the rear/default-equivalent calibration authority even though its raw input and physical stream are front IMX681.
-
-The existing byte-exact result already tells us what this stage must explain: rear/default OV13858 `lscgolden41_ife_v2` region `0x2ae` plus the recovered rear-equivalent formatted slot reproduces the verified-front x23 exactly. Raw physical EEPROM ownership is no longer the candidate crossover point.
+The next provenance target is therefore the **verified-front private DataManager source buffer/tree identity**, not another EEPROM formatter path. If static parsing cannot close it, use the bounded live oracle correlating selected Sensor ID, DataManager `+0x38/+0x30`, DataManager `+0x28`, context `+0x2460`, and request `ISPInputData+0x1fe8`.

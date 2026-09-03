@@ -6,7 +6,7 @@ Status: **accepted offline/static + preserved-capture evidence**. No Linux camer
 
 The normal Surface DeviceMFT path from formatted EEPROM LSC data to the front IFELSC411 request is **camera-local**. A rear-camera0 formatted OTP object/pointer cannot ordinarily alias the verified-front camera2 object.
 
-This closes **object/pointer ownership only**. It does **not** explain why the verified-front calibration payload is byte-equivalent to the previously recovered rear/default authority. That byte-source question moves one stage earlier: what raw OTP / `InitParams` content populates camera2's own `EEPROMData` object before `FormatLSCData`?
+This document closes **object/pointer ownership**. Subsequent proofs close both normal raw-source branches to the front physical EEPROM and then show that generic EEPROM formatting is not an independent rear/front crossover. The remaining rear/default authority question now belongs to the verified-front private tuning-tree provenance boundary.
 
 Authority binary:
 
@@ -159,13 +159,12 @@ The subsequent `LSC-FRONT-RAW-OTP-PROVENANCE.md` closes the first two items that
 
 Still not closed:
 
-- why camera2's formatted LSC payload is byte-equivalent to the preserved rear/default calibration authority;
-- which EEPROM formatting library/callback and golden/reference object are selected for camera2;
-- the separate live front private-DataManager tuning-buffer identity;
+- the live verified-front private-DataManager tuning-buffer/tree identity;
+- three two-way physical-front averaged-green raw EEPROM pairs (8 parity-equivalent raw candidates);
 - genuine verified-front sequential Tintless state/stats/output.
 
 ## Next provenance target
 
-Trace `EEPROMData` **at and after the formatting boundary**: identify the selected front EEPROM library/callback and the golden/reference source that `FormatLSCData` consumes. Raw physical EEPROM ownership is no longer a plausible rear/front crossover point.
+The formatting boundary is superseded by `LSC-FRONT-CALIBRATION-TUNING-CONVERGENCE.md`: front/rear use generic `FormatLSCData`, and LSC41 plus golden are selected later from the same request-private tuning tree. Continue at the **private DataManager source-buffer/tree identity** rather than searching for an EEPROM plugin crossover.
 
 Do not reinterpret the rear-equivalent calibration bytes as rear physical-sensor routing. Front IMX681 sensor/mode/geometry remain independently verified.

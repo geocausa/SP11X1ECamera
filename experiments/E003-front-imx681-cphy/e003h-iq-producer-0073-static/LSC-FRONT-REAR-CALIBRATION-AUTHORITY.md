@@ -43,7 +43,9 @@ This removes the prior need to infer the generic LSC selector values by field na
 
 `LSC-FRONT-CALIBRATION-OBJECT-OWNERSHIP.md` closes the downstream pointer/object path. The formatted EEPROM object consumed by a request is camera-local: `cameraId * 0xebe8` storage -> `FormatLSCData` -> pOTPData -> SensorStaticCapability -> IFENode -> `ISPInputData+0x2070`. Verified front uses camera ID 2 while the preserved rear VSS uses camera ID 0. Therefore this payload-authority crossover is **not explained by ordinary rear-camera0 formatted-object pointer reuse**.
 
-`LSC-FRONT-RAW-OTP-PROVENANCE.md` now closes the upstream raw input too. AVS command `0x801` resolves to the live front sensor KMD; option zero publishes that KMD's physical front-EEPROM cache as `SensorCalibrationData`, while nonzero intentionally drops the cache and DeviceMFT performs its own camera-local physical EEPROM reread. Both routes converge before `FormatLSCData`. The remaining calibration provenance question is therefore **post-raw-source**: EEPROM formatting/library/golden-reference selection.
+`LSC-FRONT-RAW-OTP-PROVENANCE.md` closes the upstream raw input too. AVS command `0x801` resolves to the live front sensor KMD; option zero publishes that KMD's physical front-EEPROM cache as `SensorCalibrationData`, while nonzero intentionally drops the cache and DeviceMFT performs its own camera-local physical EEPROM reread. Both routes converge before `FormatLSCData`.
+
+`LSC-FRONT-CALIBRATION-TUNING-CONVERGENCE.md` then closes the post-raw formatting question: both Surface modules use the same generic formatter, their LSC descriptors are byte-identical, and generic `FormatLSCData` contains no tuning/golden lookup. The rear/default `lsc41_ife_v2` and `lscgolden41_ife_v2` authorities are instead resolved from the same request-private tuning tree. The older rear slot still closes parity bytes, but its three selected green pairs must not be reinterpreted as physical-front EEPROM identity; current front evidence leaves 8 parity-equivalent raw candidates.
 
 ## Provenance scope
 

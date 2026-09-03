@@ -157,13 +157,26 @@
       "status": "closed camera-local",
       "proof": "prove-lsc-front-calibration-object-ownership.py",
       "normal_path_rear_object_alias_excluded": true,
-      "next": "raw source subsequently closed to front physical EEPROM; trace EEPROM formatting/library/golden-reference selection at/after FormatLSCData"
+      "next": "raw source and generic formatting subsequently closed; continue at private DataManager tuning-tree source identity"
     },
     "front_raw_otp_provenance": {
       "status": "closed front physical EEPROM on both normal branches",
       "proof": "prove-lsc-front-raw-otp-provenance.py",
       "normal_rear_raw_otp_alias_excluded": true,
-      "next": "trace EEPROM formatting/library/golden-reference selection at/after FormatLSCData"
+      "next": "generic formatter subsequently excluded as crossover; lsc41+golden converge on the same request-private tuning tree"
+    },
+    "front_calibration_tuning_convergence": {
+      "status": "closed one-tree convergence",
+      "proof": "prove-lsc-front-calibration-tuning-convergence.py",
+      "front_read_bytes": "0x1762",
+      "rear_read_bytes": "0x174a",
+      "generic_formatter_for_both": true,
+      "custom_plugin_for_front": false,
+      "custom_plugin_for_rear": false,
+      "same_tree_for_lsc41_and_golden": true,
+      "aug4_cache_is_rear": true,
+      "front_raw_lsc_candidates_remaining": 8,
+      "next": "trace verified-front private DataManager source buffer/tree; retain independent front sequential Tintless gate"
     }
   },
   "gtm": {
@@ -311,7 +324,7 @@
       6
     ]
   },
-  "acceptance_gate": "Front x22 source, live golden, calibration payload bytes, request4 native pre-Tintless mesh (839cae7d...), geometry/ABI, staging/Titan680/GIC, GTM/TMC and request-time tuning-manager ownership are closed/bounded. Historical TINTCTX is OV13858 rear mode1, so front still needs a genuine same-front-stream sequential Tintless replay from the pinned pre-Tintless input into captured front staging plus the private DataManager/source-buffer provenance. Only after a front-specific atomic producer proof conduct a separate authorization review before Linux request6.",
+  "acceptance_gate": "Front x22 source, live golden, calibration application/payload parity, raw physical-OTP source class, generic EEPROM formatting boundary, request4 native pre-Tintless mesh (839cae7d...), geometry/ABI, staging/Titan680/GIC, GTM/TMC and request-time tuning-manager ownership are closed/bounded. Rear/default x22 and golden are now proven to resolve from the same request-private tuning tree; the Aug-4 raw EEPROM cache is conclusively rear and cannot resolve the three physical-front green ambiguities. Historical TINTCTX is OV13858 rear mode1, so front still needs a genuine same-front-stream sequential Tintless replay and the private DataManager/source-tree provenance. Only after a front-specific atomic producer proof conduct a separate authorization review before Linux request6.",
   "live_validation_20260902": {
     "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
     "same_as_prior_matched_trigger_session": false,
@@ -505,7 +518,7 @@
     "ispinput_potp_offset": "0x2070",
     "formatted_lsc_slot0_offset": "0x168",
     "classification": "CLOSED NORMAL-PATH CAMERA-LOCAL CALIBRATION OBJECT OWNERSHIP: cameraId-strided pOTPData is carried through SensorStaticCapability -> IFENode -> ISPInputData+0x2070 -> IFELSC411; verified front camera2 and rear camera0 cannot normally alias. The subsequent raw-OTP provenance proof also closes pre-format input to front physical EEPROM.",
-    "remaining": "superseded raw-source gate is closed by prove-lsc-front-raw-otp-provenance.py; next is EEPROM formatting/library/golden-reference selection"
+    "remaining": "raw source and generic formatting subsequently closed/bounded; remaining authority crossover has converged on private tuning-tree source identity"
   },
   "latest_lsc_front_raw_otp_provenance": {
     "status": "closed normal raw-OTP source class",
@@ -521,6 +534,26 @@
     "nonzero_option_route": "front KMD drops cache -> DeviceMFT camera-local CreateAndReadEEPROMData/ReadEEPROMDevice physical reread",
     "convergence": "EEPROMData raw input before FormatLSCData",
     "excluded": "normal rear-camera0 raw OTP pointer/buffer injection into camera2",
-    "remaining": "EEPROM formatting/library/golden-reference selection at or after FormatLSCData"
+    "remaining": "superseded by calibration/tuning convergence: generic formatting is not a crossover; trace the private DataManager tuning source/tree"
+  },
+  "latest_lsc_front_calibration_tuning_convergence": {
+    "status": "closed calibration/tuning convergence",
+    "proof": "prove-lsc-front-calibration-tuning-convergence.py",
+    "proof_sha256": "106a2beace6e96800a9e8f22cb7cd71d1f65911e8fb0eb0856fcf8eddcc1f354",
+    "oracle": "lsc-front-calibration-tuning-convergence-oracle.json",
+    "oracle_sha256": "00b74b83e658ac6e2d66600d664f5d510519eb9cb7799cbfc2891c159f35c387",
+    "doc": "LSC-FRONT-CALIBRATION-TUNING-CONVERGENCE.md",
+    "doc_sha256": "05a757161508b9328f7fd7b70004208a198e2128c1ca39b42003bc0d81a24cdc",
+    "front_eeprom_name": "gt24p128f_imx681",
+    "rear_eeprom_name": "st_m24c64",
+    "front_read_bytes": "0x1762",
+    "rear_read_bytes": "0x174a",
+    "shared_lsc_descriptor_sha256": "bbe16d1678d41c05bb885d4b1680b6be9b86e32e20a67d15576b5a6e764d4599",
+    "same_request_tree_lookup_rva": "0x6f39f8",
+    "aug4_cache_classification": "conclusively rear OV13858; rear KMD RVA 0x1f7e8 + heap tuple raw pointer/0x174a + rear tuning filename",
+    "aug4_evidence_dir": "oracle-aug4-rear-eeprom",
+    "front_raw_lsc_candidates_remaining": 8,
+    "classification": "EEPROM formatting is not a separate crossover; rear/default live LSC41 and golden authorities resolve from the same verified-front request-private tuning tree",
+    "remaining": "live verified-front private DataManager source-buffer/tree identity plus genuine front sequential Tintless capsule"
   }
 }

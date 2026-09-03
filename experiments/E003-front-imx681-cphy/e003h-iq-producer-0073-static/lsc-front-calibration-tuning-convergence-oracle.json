@@ -1,0 +1,425 @@
+{
+  "schema": "sp11-e003h-lsc-front-calibration-tuning-convergence-v1",
+  "status": "PASS",
+  "classification": "CLOSED CALIBRATION/TUNING CONVERGENCE: verified-front raw OTP remains physical front-module EEPROM; both front and rear use the generic EEPROM formatter with byte-identical LSC decoding descriptors; the historical Aug-4 raw cache is conclusively OV13858 rear and is excluded as front raw evidence; and IFELSC411 resolves lsc41_ife_v2 plus lscgolden41_ife_v2 from the same request-private tuning manager/root. Therefore the observed rear/default x22 and rear/default golden authorities are one remaining live front tuning-tree provenance problem, not a separate EEPROM-formatting crossover.",
+  "binaries": {
+    "front_sensor_module_sha256": "f7dd81be64153fd3f0da8e6288ee1b9906b7bf51b773a98496934d76dc96a45c",
+    "rear_sensor_module_sha256": "f8f60e79b77bd3d5896cb04167ee428455e1a241f1ff9e50abee6b4dacfe6b14",
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "rear_sensor_kmd_sha256": "b7d7a278c5e7b92ebf35f870a7e06cbad670ffb35bfaf40106e27b09bf33fabb"
+  },
+  "eeprom_contracts": {
+    "front": {
+      "eeprom_name": "gt24p128f_imx681",
+      "eeprom_name_symbol": 3000,
+      "memory_map_regsetting_symbol": 3003,
+      "regsetting_sha256": "afb2b4e1b081905729bba87177d50b2f75c3b1a245c4161276f0561b7f617c50",
+      "entry_count": 1,
+      "slave_addr": "0xa0",
+      "register_addr": "0x0",
+      "register_addr_type": 2,
+      "register_data_type": 1,
+      "operation": 3,
+      "read_bytes": "0x1762",
+      "delay_us": 0,
+      "lsc_light_symbol": 3010,
+      "lsc_light_sha256": "bbe16d1678d41c05bb885d4b1680b6be9b86e32e20a67d15576b5a6e764d4599",
+      "lsc_mesh": 221,
+      "lsc_strides": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "wb_light_symbol": 3009,
+      "wb_light_sha256": "747eda7709d4c829b93adbc224aa61dce1a85a9b0dc6526598da7722eb7a9a9c",
+      "lsc_descriptors": [
+        [
+          "0x103e",
+          "0xff",
+          0
+        ],
+        [
+          "0x103d",
+          "0xff",
+          0
+        ],
+        [
+          "0x11f8",
+          "0xff",
+          0
+        ],
+        [
+          "0x11f7",
+          "0xff",
+          0
+        ],
+        [
+          "0x13b2",
+          "0xff",
+          0
+        ],
+        [
+          "0x13b1",
+          "0xff",
+          0
+        ],
+        [
+          "0x156c",
+          "0xff",
+          0
+        ],
+        [
+          "0x156b",
+          "0xff",
+          0
+        ]
+      ]
+    },
+    "rear": {
+      "eeprom_name": "st_m24c64",
+      "eeprom_name_symbol": 2082,
+      "memory_map_regsetting_symbol": 2085,
+      "regsetting_sha256": "c9389e85f8f84181a9a0788282434269e1ae65a74a4c5a453a332cbc580d5644",
+      "entry_count": 1,
+      "slave_addr": "0xa0",
+      "register_addr": "0x0",
+      "register_addr_type": 2,
+      "register_data_type": 1,
+      "operation": 3,
+      "read_bytes": "0x174a",
+      "delay_us": 0,
+      "lsc_light_symbol": 2092,
+      "lsc_light_sha256": "bbe16d1678d41c05bb885d4b1680b6be9b86e32e20a67d15576b5a6e764d4599",
+      "lsc_mesh": 221,
+      "lsc_strides": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "wb_light_symbol": 2091,
+      "wb_light_sha256": "747eda7709d4c829b93adbc224aa61dce1a85a9b0dc6526598da7722eb7a9a9c",
+      "lsc_descriptors": [
+        [
+          "0x103e",
+          "0xff",
+          0
+        ],
+        [
+          "0x103d",
+          "0xff",
+          0
+        ],
+        [
+          "0x11f8",
+          "0xff",
+          0
+        ],
+        [
+          "0x11f7",
+          "0xff",
+          0
+        ],
+        [
+          "0x13b2",
+          "0xff",
+          0
+        ],
+        [
+          "0x13b1",
+          "0xff",
+          0
+        ],
+        [
+          "0x156c",
+          "0xff",
+          0
+        ],
+        [
+          "0x156b",
+          "0xff",
+          0
+        ]
+      ]
+    }
+  },
+  "custom_eeprom_plugin_table": {
+    "table_va": "0x181151f60",
+    "entries": [
+      {
+        "name": "sunny_gt24p64b_imx519",
+        "function_va": "0x180857ba0"
+      },
+      {
+        "name": "ofilm_ohs0443_ov12a10",
+        "function_va": "0x180857ba0"
+      },
+      {
+        "name": "gt24c64a_qtech",
+        "function_va": "0x180857ca0"
+      },
+      {
+        "name": "a16n21b_imx481",
+        "function_va": "0x180857bb0"
+      },
+      {
+        "name": "a48n01e_imx586",
+        "function_va": "0x180857bb0"
+      },
+      {
+        "name": "a13s07a_s5k3m5",
+        "function_va": "0x180857bb0"
+      },
+      {
+        "name": "p24c64e_imx563",
+        "function_va": "0x180857bb0"
+      },
+      {
+        "name": "gt24p64b_ov2740",
+        "function_va": "0x180857fa0"
+      },
+      {
+        "name": "cat24c64_ov5675",
+        "function_va": "0x1808581a0"
+      },
+      {
+        "name": "gt24p64b_ShineTech_ov2740",
+        "function_va": "0x180857d60"
+      },
+      {
+        "name": "fm24c64c_shinetech_ov08x",
+        "function_va": "0x180858070"
+      }
+    ],
+    "front_match": false,
+    "rear_match": false,
+    "classification": "both modules fall through to generic EEPROMData formatters"
+  },
+  "generic_formatter": {
+    "format_lsc_rva": "0x723e40",
+    "direct_tuning_lookup_calls": 0,
+    "call_targets": [
+      [
+        "0x723e80",
+        "0xf5e600"
+      ],
+      [
+        "0x723ed8",
+        "0xcae740"
+      ],
+      [
+        "0x723eec",
+        "0xf5e600"
+      ],
+      [
+        "0x723f40",
+        "0xcae740"
+      ],
+      [
+        "0x723f54",
+        "0xf5e600"
+      ],
+      [
+        "0x723f60",
+        "0xce7c98"
+      ],
+      [
+        "0x723f8c",
+        "0x1aca8"
+      ],
+      [
+        "0x723fa8",
+        "0xf5d480"
+      ],
+      [
+        "0x724000",
+        "0xce7c98"
+      ],
+      [
+        "0x724028",
+        "0x1aca8"
+      ],
+      [
+        "0x724030",
+        "0xcae730"
+      ],
+      [
+        "0x724048",
+        "0xce7c98"
+      ],
+      [
+        "0x7240bc",
+        "0xce7c98"
+      ],
+      [
+        "0x7240e4",
+        "0x1aca8"
+      ],
+      [
+        "0x724110",
+        "0xcae740"
+      ],
+      [
+        "0x724124",
+        "0xf5e600"
+      ],
+      [
+        "0x72413c",
+        "0xf5d480"
+      ],
+      [
+        "0x724370",
+        "0xcae730"
+      ],
+      [
+        "0x724380",
+        "0xce7c98"
+      ],
+      [
+        "0x7243a8",
+        "0x1aca8"
+      ]
+    ],
+    "lsc_raw_range": "0x103d..0x1724",
+    "front_rear_lsc_descriptor_sha256": "bbe16d1678d41c05bb885d4b1680b6be9b86e32e20a67d15576b5a6e764d4599",
+    "front_rear_wb_descriptor_sha256": "747eda7709d4c829b93adbc224aa61dce1a85a9b0dc6526598da7722eb7a9a9c"
+  },
+  "same_request_tuning_tree": {
+    "manager_field": "ISPInputData+0x1fe8",
+    "lookup_rva": "0x6f39f8",
+    "lsc41_lookup_call_rva": "0xa024b4",
+    "golden_lookup_call_rva": "0xa02534",
+    "lsc41_name": "lsc41_ife_v2",
+    "golden_name": "lscgolden41_ife_v2",
+    "same_manager_root": true,
+    "exact_code_bytes": {
+      "0x714384": "680a40f9",
+      "0x71438c": "095140b9",
+      "0x714394": "082d40f9",
+      "0x71439c": "0a1140b9",
+      "0x7143a0": "5f0d0071",
+      "0x7143a8": "0a0140f9",
+      "0x7143b0": "94422a8b",
+      "0x714420": "748203b9",
+      "0xa02448": "97f64ff9",
+      "0xa02464": "ea0240f9",
+      "0xa0246c": "480140f9",
+      "0xa024a0": "400140f9",
+      "0xa024a8": "01410e91",
+      "0xa024b4": "51c5f397",
+      "0xa0250c": "e80240f9",
+      "0xa02514": "000140f9",
+      "0xa02520": "883250f9",
+      "0xa02530": "01610c91",
+      "0xa02534": "31c5f397"
+    }
+  },
+  "aug4_rear_cache": {
+    "source_dump_sha256": "2ca55e2a058df20936068bd5dfe4c111769ee2d0758c96072adbd3c71a27db40",
+    "source_dump_bytes": 3230249008,
+    "sdmp": {
+      "filebase": "0x483000",
+      "pages": 787224,
+      "bits": 12582912,
+      "dtb": "0x8182b000"
+    },
+    "raw_va": "0xffff94826f130000",
+    "raw_pa": "0x9b2330000",
+    "source_file_offset": "0x2f78b000",
+    "raw_bytes": 5962,
+    "raw_sha256": "1d6297455b1afd0184089668020a3b2d99e2758dea30bec1fbda4980a317cd21",
+    "lsc_subrange_sha256": "679fc75878367f717cea2dbd99f704109adcc48c86b82e7b8ba260cc7eb260fe",
+    "heap_reference": {
+      "va": "0xffff94825fccf330",
+      "source_file_offset": "0x6b94b330",
+      "size": "0x174a",
+      "rear_tuning_filename_coresident": true
+    },
+    "kmd_reference": {
+      "va": "0xfffff8003945f7e8",
+      "source_file_offset": "0x6b3c77e8",
+      "owner": "surfacecamrearsensor8380.sys",
+      "owner_rva": "0x1f7e8"
+    },
+    "loaded_rear_kmd": {
+      "base": "0xfffff80039440000",
+      "size": "0x42000"
+    },
+    "loaded_front_kmd": {
+      "base": "0xfffff80039490000",
+      "size": "0x3d000"
+    },
+    "classification": "conclusively rear OV13858 cache; forbidden as a front physical-EEPROM discriminator"
+  },
+  "front_raw_lsc_boundary": {
+    "physical_source_class": "front physical EEPROM (accepted upstream proof)",
+    "direct_red_blue_points_unique": 442,
+    "averaged_green_two_solution_points": {
+      "19": {
+        "equation_candidates": [
+          [
+            335,
+            335
+          ],
+          [
+            336,
+            334
+          ]
+        ],
+        "rear_slot_pair": [
+          336,
+          334
+        ],
+        "selected_index": 1
+      },
+      "57": {
+        "equation_candidates": [
+          [
+            751,
+            753
+          ],
+          [
+            752,
+            752
+          ]
+        ],
+        "rear_slot_pair": [
+          751,
+          753
+        ],
+        "selected_index": 0
+      },
+      "94": {
+        "equation_candidates": [
+          [
+            967,
+            968
+          ],
+          [
+            970,
+            965
+          ]
+        ],
+        "rear_slot_pair": [
+          970,
+          965
+        ],
+        "selected_index": 1
+      }
+    },
+    "remaining_raw_byte_candidates": 8,
+    "parity_effect": "all 8 candidates are equivalent at the accepted Windows x23 averaged-green boundary; do not select the rear candidate as physical-front bytes without new evidence"
+  },
+  "remaining_gates": [
+    "live verified-front private DataManager source buffer/tree identity (+0x38/+0x30; manager +0x28) if static parsing cannot close it",
+    "genuine verified-front sequential Tintless state/stats/output bridging request4 pre-Tintless into front staging",
+    "one atomic front integrated producer/output capsule before any Linux request6 review"
+  ],
+  "safety": {
+    "offline_only": true,
+    "camera_runtime_performed": false,
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false
+  }
+}
