@@ -70,7 +70,7 @@
         "Preserve one Windows stream. For LSC state validation, begin adaptive-input capture at stream creation and continue through request6; request4/5/6 remain the wire-output comparison points.",
         "For each relevant request, log frame id and the seven geometry fields before any local dump.",
         "Dump/hash the 0x1e8-byte common input itself.",
-        "If the calibration input is not already present in an existing artifact, capture/hash only the proven runtime OTP table(s) or the bounded physical EEPROM 0x103d..0x1724 window; do not dump an unbounded EEPROM object.",
+        "Calibration payload values are now closed from the rear VSS runtime slot. Capture a live front calibration pointer/object only if needed to settle provenance; do not recapture values merely for reconstruction.",
         "Tintless: capture the exact request config/stats inputs and preserve sequential state. For validation-only shortcut, a pre-request4 0x1090 wrapper-context checkpoint plus the separately allocated Tintless core state may be recorded after pointer/size validation.",
         "ALSC: when common+0xa8 is non-null and ALSC is enabled, inspect stats word0 bit1 and capture exactly 0x2a020 bytes for ordinary layout or 0x54020 bytes for saturated-info layout.",
         "If channel-correction pointers +0xd0/+0xd8/+0xe0/+0xe8 are non-null, dump exactly 0x374 bytes from each.",
@@ -299,7 +299,7 @@
       6
     ]
   },
-  "acceptance_gate": "Front x22 source, live golden authority, calibration algorithm, geometry/ABI, staging/Titan680/GIC, GTM/TMC and request-time tuning-manager ownership are closed/bounded. Historical TINTCTX is OV13858 rear mode1, so front still needs a same-front-stream sequential Tintless bridge into the captured front staging plus the private DataManager source-buffer identity. Only after a front-specific atomic producer proof conduct a separate authorization review before Linux request6.",
+  "acceptance_gate": "Front x22 source, live golden, calibration payload bytes, request4 native pre-Tintless mesh (839cae7d...), geometry/ABI, staging/Titan680/GIC, GTM/TMC and request-time tuning-manager ownership are closed/bounded. Historical TINTCTX is OV13858 rear mode1, so front still needs a genuine same-front-stream sequential Tintless replay from the pinned pre-Tintless input into captured front staging plus the private DataManager/source-buffer provenance. Only after a front-specific atomic producer proof conduct a separate authorization review before Linux request6.",
   "live_validation_20260902": {
     "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
     "same_as_prior_matched_trigger_session": false,
@@ -348,14 +348,12 @@
       "capture_window": "stream creation through target request"
     },
     "lsc_post_calculation_wire_status": "CLOSED: exact Titan680 PackIQRegisterSetting RVA 0xb3d8a0 converts the captured 0x18a0 staging into deterministic 13x17 LSC0/LSC1/LSC2; LSC2 is zero for requests4/5/6 and wire GIC derives from the proven LSC alias.",
-    "remaining_lsc_transform": "verified-front calibrated/geometry input -> same-front-stream sequential Tintless stats/state/output -> captured front staging; do not use rear TINTCTX as this bridge",
-    "lsc_calibration_application_status": "CLOSED algorithm/slot boundary: one valid formatted EEPROM slot; golden/EEPROM direction, green averaging and pre-geometry/pre-Tintless placement are exact. Live LSCTRIGSRC golden authority is rear/default OV13858 region 0x2ae, not the nominal IMX681 golden.",
+    "remaining_lsc_transform": "verified-front request4 pre-Tintless mesh SHA 839cae7d... -> same-front-stream sequential Tintless stats/state/output -> captured front staging; do not use rear TINTCTX",
+    "lsc_calibration_application_status": "CLOSED algorithm + byte payload authority: rear/default golden plus exact rear VSS runtime slot reproduces verified-front req5/req6 x23 byte-for-byte; live slot pointer/loader provenance remains separate.",
     "minimal_next_windows_calibration_capture": {
-      "condition": "after IFELSC411 translation with common+0x68 == 1",
-      "preferred_address": "IFELSC411 module+0x1978",
-      "bytes": "0xdf0",
-      "reason": "first/only copied formatted slot consumed by interpolation; avoids ISPInputData pointer-unit ambiguity",
-      "do_not_dump": "full 0x45b0 five-slot store unless live count changes from 1"
+      "status": "no longer required for payload reconstruction",
+      "reason": "rear VSS runtime slot SHA fb14d234... reproduces full verified-front req5/req6 x23 and resolves all EEPROM ambiguity",
+      "only_if_provenance_needed": "capture live front slot pointer/object only to close source provenance, not to recover calibration values"
     },
     "tintless_sequential_replay_status": "RECLASSIFIED REAR: E003H_20260902_TINTCTX exact request5->request6 replay is OV13858 rear mode1 (4064x2286). It remains a byte-exact shared/rear Tintless state proof but does not close front IMX681 sequential state.",
     "tintctx_camera_identity_correction": {
@@ -472,5 +470,13 @@
     "doc": "LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md",
     "identity": "OV13858 rear mode1 4064x2286",
     "front_use_revoked": true
+  },
+  "lsc_front_request4_pretintless_bridge": {
+    "proof": "prove-lsc-front-request4-pretintless-bridge.py",
+    "x22_sha256": "99bf4e1dd6d500aa81cdb4f6e0f6e0b1f23bb953748be84ff451f6a71fe3d84f",
+    "x23_sha256": "a24bba7c3d9cd6db545f65801006defd154f2da412bb101805cf9b45e23dfcde",
+    "pre_tintless_sha256": "839cae7d7b1c884b77068f0cb76d6ce34fbed562ac1328a59ea4373a30ab88c9",
+    "native_resampler_rva": "0x9b6048",
+    "capture_timing_correction": "REQ4 CAL0..3 are entry/pre-request snapshots; REQ4 staging is post-request and must not be treated as same-frame ratio data"
   }
 }

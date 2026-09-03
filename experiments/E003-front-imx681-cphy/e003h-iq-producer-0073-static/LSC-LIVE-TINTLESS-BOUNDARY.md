@@ -52,7 +52,7 @@ The wrapper-entry capture ABI is now exact too. At `TintlessAlgorithmWrapper::Pr
 
 The preferred parity capture is therefore sequential: in one Windows stream, validate and capture each request-local Tintless stats object from stream creation through the target request using the conditional `0x961e/0x12bec` bound, while capturing the same stream's LSC wire outputs. A pre-request wrapper/core snapshot is acceptable only as a validation shortcut; the final Linux model must evolve state itself.
 
-The four captured request4 correction-table buffers are each exactly `0x374` bytes and are SHA-pinned in the oracle. Their pointers remain stable across requests4/5/6, but pointer stability alone does not prove the contents stay constant, so replay must not assume that without same-stream evidence.
+The four captured request4 correction-table buffers are each exactly `0x374` bytes and are SHA-pinned in the oracle. The original capture plan places those dumps at `IQInterface::LSC411CalculateSetting` **entry**, while request4 staging was dumped later after the calculation at caller RVA `0xa03b34`. They are therefore **pre-request adaptive state**, not same-request final `Tintless/base` ratios. Their pointers remain stable across requests4/5/6, but replay must not combine these entry snapshots mathematically with post-request staging. The verified-front request4 calibrated/geometry input is now derived independently by `LSC-FRONT-REQUEST4-PRETINTLESS-BRIDGE.md`.
 
 ## Revised parity gate
 

@@ -345,6 +345,9 @@ def main() -> int:
             "alsc_interface_present": False,
             "correction_table_pointers_stable": True,
             "req4_correction_table_snapshots": cal,
+            "req4_correction_snapshot_timing": "captured at IQInterface::LSC411CalculateSetting entry; pre-request adaptive state, not same-request final ratios",
+            "req4_staging_timing": "captured later after calculation at caller RVA 0xa03b34; post-request output",
+            "timing_rule": "Do not combine request4 entry-time CAL snapshots mathematically with post-request staging as if they were same-frame Tintless/base ratios.",
         },
         "requests": public_requests,
         "validation_shortcut_state": {
@@ -362,7 +365,7 @@ def main() -> int:
             "also_preserve": "For full pre-wrapper reconstruction, preserve upstream calibration/config state separately. For isolating Tintless itself, the exact wrapper-entry x1 bound is now 0x130 and the four input meshes total 0xdf0 bytes; do not infer bytes from process pointers alone.",
             "not_needed_in_this_session": "ALSC/AWB-BG stats, because common+0xa8/common+0xb8 are null and common+0x10c is zero for requests4/5/6.",
         },
-        "gate": "Tintless input sizing and the ALSC-disabled branch are closed. The next parity gate is one atomic same-stream LSC capture/replay: calibration/config + exact 4048x3152/(104,496)->3840x2160 geometry + sequential Tintless state/stats must reproduce LSC0/LSC1 byte-for-byte. Wire GIC follows the proven LSC alias. Linux request6 remains forbidden.",
+        "gate": "Tintless input sizing and ALSC-disabled branch are closed, and verified-front request4 pre-Tintless mesh is independently pinned as SHA 839cae7d... by native Surface replay. The remaining front gate is genuine same-front-stream sequential Tintless config/stats/state/output -> captured staging; wire GIC follows the proven LSC alias. Linux request6 remains forbidden.",
     }
 
     args.out.write_text(json.dumps(oracle, indent=2, sort_keys=True) + "\n")

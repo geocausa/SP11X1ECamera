@@ -53,7 +53,7 @@
     "tintless_stats_preprocess_rva": "0xc9f438",
     "tintless_wrapper_process_rva": "0xc95fd0"
   },
-  "gate": "Tintless input sizing and the ALSC-disabled branch are closed. The next parity gate is one atomic same-stream LSC capture/replay: calibration/config + exact 4048x3152/(104,496)->3840x2160 geometry + sequential Tintless state/stats must reproduce LSC0/LSC1 byte-for-byte. Wire GIC follows the proven LSC alias. Linux request6 remains forbidden.",
+  "gate": "Tintless input sizing and ALSC-disabled branch are closed, and verified-front request4 pre-Tintless mesh is independently pinned as SHA 839cae7d... by native Surface replay. The remaining front gate is genuine same-front-stream sequential Tintless config/stats/state/output -> captured staging; wire GIC follows the proven LSC alias. Linux request6 remains forbidden.",
   "live_path": {
     "alsc_awbbg_pointer_present": false,
     "alsc_enabled": false,
@@ -68,6 +68,7 @@
       "output_width": 3840,
       "scale": 1
     },
+    "req4_correction_snapshot_timing": "captured at IQInterface::LSC411CalculateSetting entry; pre-request adaptive state, not same-request final ratios",
     "req4_correction_table_snapshots": {
       "0": {
         "bytes": 884,
@@ -94,6 +95,8 @@
         "sha256": "9675845e633fc2ea807e1e586a4ea423ef5226684e6f2edc17ae0bc4fe1e02e1"
       }
     },
+    "req4_staging_timing": "captured later after calculation at caller RVA 0xa03b34; post-request output",
+    "timing_rule": "Do not combine request4 entry-time CAL snapshots mathematically with post-request staging as if they were same-frame Tintless/base ratios.",
     "tintless_enabled": true,
     "tintless_interface_stable": true,
     "tintless_stats_request_local": true

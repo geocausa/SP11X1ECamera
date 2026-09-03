@@ -32,6 +32,8 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - exact 42-float live LSC trigger vector and `x22/x23` ABI: closed; see `LSC-RUNTIME-INTERPOLATION-BOUNDARY.md`.
 - **runtime LSC41 tuning source and generic interpolation: closed byte-exact**; see `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md` and `prove-lsc-runtime-tuning-source.py`.
 - **live LSC golden authority: closed byte-exact** from carved verified-front x22/x23. Rear/default OV13858 `lscgolden41_ife_v2` region `0x2ae` (SHA `f771e54d…`) uniquely satisfies 442/442 red+blue request5/6 calibration equations; nominal IMX681 golden satisfies only 9/442. See `LSC-LIVE-GOLDEN-AUTHORITY.md`.
+- **verified-front calibration payload authority: closed byte-exact**. The older rear OV13858 VSS runtime slot (SHA `fb14d234…`) plus rear/default golden reproduces the complete front req5/req6 calibrated x23 payloads byte-for-byte, including all 884 floats and tail; the slot also resolves the three green inverse ambiguities. This closes payload bytes, not the upstream live pointer/loader provenance. See `LSC-FRONT-REAR-CALIBRATION-AUTHORITY.md`.
+- **verified-front request4 pre-Tintless bridge: closed offline/native**. Exact request4 lux `355.14508` and CCT `4712` generate x22 `99bf4e1d…`; rear/default golden+rear slot generate x23 `a24bba7c…`; native Surface resampler RVA `0x9b6048` produces pre-Tintless mesh `839cae7d…`. See `LSC-FRONT-REQUEST4-PRETINTLESS-BRIDGE.md`.
 - LSC request-time tuning-manager ownership is statically closed through CaptureDevice private DataManager -> CapturePipe -> common context -> `ISPInputData+0x1fe8`; see `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md`. The rear-only A leaf crossover itself is still open upstream at the live private DataManager source-buffer/tree identity.
 
 ## Latest LSC source closure
@@ -59,7 +61,7 @@ The replay matches both accepted Windows `x22` buffers byte-for-byte using the e
 
 Do **not** interpret this as proof that Windows configures the rear physical sensor for the front stream. It proves the byte provenance of the LSC41 object resolved by the front stream.
 
-The recovered calibrated x23 buffers also close the live golden side independently. Across all 10 installed tuning blobs containing `lscgolden41_ife_v2`, only rear/default OV13858 region `0x2ae` can reproduce both front req5/req6 direct red/blue calibration transforms for all 442 points using one u16 EEPROM value per point. It passes 442/442 uniquely; nominal IMX681 golden passes 9/442. This is a tuning-tree crossover, not a physical-sensor identity change.
+The recovered calibrated x23 buffers close the live golden side independently. Across all 10 installed tuning blobs containing `lscgolden41_ife_v2`, only rear/default OV13858 region `0x2ae` can reproduce both front req5/req6 direct red/blue calibration transforms for all 442 points using one u16 EEPROM value per point. It passes 442/442 uniquely; nominal IMX681 golden passes 9/442. The exact older rear VSS runtime slot then reproduces the complete verified-front req5/req6 x23 payloads byte-for-byte and resolves the three averaged-green inverse ambiguities. This is a byte-authority crossover, not a physical-sensor identity change; the live pointer/loader mechanism remains a separate provenance question.
 
 ## Latest tuning provenance boundary
 
@@ -96,7 +98,7 @@ A correction changes the integrated gate: `E003H_20260902_TINTCTX` is **OV13858 
 
 Immediate work is now:
 
-1. mine the existing verified-front `windows-adaptive-live-20260902` capsule and exact DeviceMFT for a same-session bridge from front geometry/pre-Tintless state to the captured front `0x18a0` staging; use the captured post-Tintless correction/state tables if and only if their producer semantics can be closed mechanically;
+1. use the now-closed verified-front request4 pre-Tintless target (`839cae7d…`) and mine/recover a genuine same-front-stream sequential Tintless wrapper capsule that bridges it into captured front `0x18a0` staging; do not treat the request4 entry-time correction snapshots as same-frame post-request ratios;
 2. preserve and use the carved front LSCTRIGSRC x22/x23 as front calibration/tuning evidence, but do not assume its request state equals the independent adaptive-live stream;
 3. keep the TINTCTX request5->request6 replay as a rear OV13858/shared-Tintless oracle and fold it into rear parity work;
 4. continue static/private-DataManager provenance mining; the one live front DataManager source-buffer hash remains the eventual dynamic oracle if static evidence cannot close it;
