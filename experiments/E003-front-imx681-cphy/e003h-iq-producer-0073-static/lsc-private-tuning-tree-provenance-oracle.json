@@ -1,0 +1,145 @@
+{
+  "schema": "sp11-e003h-lsc-private-tuning-tree-provenance-v1",
+  "accepted": true,
+  "status": "PASS",
+  "classification": "CLOSED NORMAL-PATH PARSER/MUTATION BOUNDARY: Aug-4 live kernel memory contains distinct front IMX681 and rear OV13858 KMD module+tuning caches whose complete mapped bytes hash exactly to their installed authorities, and a serialized SensorTuningData record carries the exact front tuning length/identity. DeviceMFT normal construction copies the private DataManager source into a fresh TuningDataManager, allocates a fresh parser/tree object, and stores tree/root state in instance-local +0x430/+0x428. The only external caller of the tree-graft helper is DataManager::LoadTuningBin. That reload is reached only through the explicit EnableLiveTuning/request-mod-10 path; AVS defaults enableLiveTuning to zero when its registry value is absent. Therefore ordinary parser cache reuse/global rear-tree injection is excluded. The exact Sep-2 verified-front DataManager+0x38/+0x30 source bytes (and capture-time override bit, if any) remain the narrow unresolved provenance oracle.",
+  "source_authority": {
+    "device_mft": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/QcDeviceMFT8380.dll",
+      "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+    },
+    "avs": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/surfacecamavs8380.sys",
+      "sha256": "b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed"
+    },
+    "front_kmd": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamfrontsensor8380.inf_arm64_747e2ddb5eb5a22b/surfacecamfrontsensor8380.sys",
+      "sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03"
+    },
+    "front_module": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamfrontsensor_extension8380.inf_arm64_5a4c66ce4812274e/com.surface.sensormodule.ffc_imx681.bin",
+      "sha256": "f7dd81be64153fd3f0da8e6288ee1b9906b7bf51b773a98496934d76dc96a45c"
+    },
+    "front_tuning": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamfrontsensor_extension8380.inf_arm64_5a4c66ce4812274e/com.surface.tuned.ffc_imx681.bin",
+      "sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d"
+    },
+    "rear_module": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamrearsensor_extension8380.inf_arm64_9e667d808f1a7021/com.surface.sensormodule.rfc_ov13858.bin",
+      "sha256": "f8f60e79b77bd3d5896cb04167ee428455e1a241f1ff9e50abee6b4dacfe6b14"
+    },
+    "rear_tuning": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamrearsensor_extension8380.inf_arm64_9e667d808f1a7021/com.surface.tuned.rfc_ov13858.bin",
+      "sha256": "4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635"
+    }
+  },
+  "aug4_dump": {
+    "path": "/mnt/windows/Windows/LiveKernelReports/NetAdapterCx-20260804-1913.dmp",
+    "sha256": "2ca55e2a058df20936068bd5dfe4c111769ee2d0758c96072adbd3c71a27db40",
+    "bytes": 3230249008,
+    "cache_page": {
+      "file_offset": "0x6b94b000",
+      "sha256": "8308296a82e4d4c3da184029a6ecb4f2948bcbe12a97655305df7f89a542bf24"
+    },
+    "front_sensor_tuning_record_page": {
+      "file_offset": "0x6359000",
+      "sha256": "120e164ac5e6986daec13dc0ae5f43f68e6730faa948ba45fa2ed388375072eb",
+      "record_offset_in_page": "0x1fc",
+      "payload_offset_in_page": "0x224",
+      "record_total_bytes": "0x62a61b",
+      "record_header_bytes": "0x2c"
+    },
+    "kmd_cache": {
+      "front_sensor_id": "0x0aff",
+      "rear_sensor_id": "0xd855",
+      "front": {
+        "module_ptr": 18446625886407278592,
+        "module_size": 212272,
+        "tuning_ptr": 18446625886412800000,
+        "tuning_size": 6465007
+      },
+      "rear": {
+        "module_ptr": 18446625886406975488,
+        "module_size": 148262,
+        "tuning_ptr": 18446625886410178560,
+        "tuning_size": 2595518
+      }
+    },
+    "complete_live_cache_hashes": {
+      "front_module": {
+        "va": "0xffff94825fd4c000",
+        "bytes": 212272,
+        "sha256": "f7dd81be64153fd3f0da8e6288ee1b9906b7bf51b773a98496934d76dc96a45c",
+        "head_file_offset": "0x6b9c8000"
+      },
+      "front_tuning": {
+        "va": "0xffff948260290000",
+        "bytes": 6465007,
+        "sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+        "head_file_offset": "0x649ae000"
+      },
+      "rear_module": {
+        "va": "0xffff94825fd02000",
+        "bytes": 148262,
+        "sha256": "f8f60e79b77bd3d5896cb04167ee428455e1a241f1ff9e50abee6b4dacfe6b14",
+        "head_file_offset": "0x6b97e000"
+      },
+      "rear_tuning": {
+        "va": "0xffff948260010000",
+        "bytes": 2595518,
+        "sha256": "4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635",
+        "head_file_offset": "0x6bc8c000"
+      }
+    }
+  },
+  "private_tree_mechanics": {
+    "normal_datamanager_construct": "RVA 0x7133ac: fresh manager; DataManager+0x38/+0x30 copied into manager source +0x8/+0x10; CreateTunedModeTree called",
+    "fresh_parser": "RVA 0x6f52f4 allocates/zeros 0x1640 parser before generic parser call",
+    "instance_tree_storage": [
+      "parser+0x430 node-array/storage",
+      "parser+0x428 root"
+    ],
+    "graft_helper_rva": "0x6f3780",
+    "graft_callsites": [
+      "0x6f39c0 recursive",
+      "0x716134 DataManager::LoadTuningBin"
+    ],
+    "create_tuned_mode_tree_callsites": [
+      "0x71308c",
+      "0x7133d8"
+    ],
+    "generic_parser_callsites": [
+      "0x6f534c tuned-mode tree",
+      "0x716110 live-tuning temp tree",
+      "0x721a8c sensor-module manager",
+      "0xe0df3c FD tuning"
+    ]
+  },
+  "live_tuning_gate": {
+    "avs_registry_path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Qualcomm\\Camera",
+    "avs_registry_value": "enableLiveTuning",
+    "avs_missing_value_default": 0,
+    "avs_field": "CCaptureFilter+0x6d8 = DeviceConfigInfo+0xc0 (payload base +0x618)",
+    "devicemft_transport": "DeviceConfigInfo -> DataManager+0xe8 -> CaptureDevice block -> CaptureDevice+0x464 -> SetStaticSettings[0x15] -> bit29",
+    "request_gate": "CaptureDevice::IsTuningBinChanged checks bit29, only nonzero request numbers divisible by 10, then vtable +0x20 CheckForTuningBinUpdate and +0x28 LoadTuningBin",
+    "reload_path": "C:\\Data\\test\\Livetuning\\...",
+    "current_recovered_windows_observation": {
+      "live_tuning_directory_exists": false,
+      "camx_override_file_exists": false
+    },
+    "capture_time_sep2_value_observed": false
+  },
+  "closed_exclusions": [
+    "normal TuningDataManager parser/tree is a global singleton shared across cameras",
+    "normal CreateTunedModeTree silently reuses another camera parser/root rather than building from its own source",
+    "an untracked second external tree-graft call mutates the private manager after construction",
+    "Aug-4 front KMD cache contains rear module/tuning bytes",
+    "Aug-4 serialized SensorTuningData record is rear tuning by length/identity"
+  ],
+  "remaining_provenance_gate": "Recover or capture the exact Sep-2 verified-front private DataManager+0x38/+0x30 source buffer and, if needed, its capture-time EnableLiveTuning state. If the source is rear OV13858, investigate the live InitParams source inconsistency. If the source is front IMX681 while live tuning was disabled, ordinary parser/reuse/graft explanations are exhausted and the remaining hypothesis class is abnormal memory corruption or an as-yet-unseen write that must be proven directly.",
+  "safety": {
+    "linux_camera_runtime": false,
+    "linux_request6_executed": false,
+    "linux_request6_authorized": false
+  }
+}

@@ -82,6 +82,14 @@ The later `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md` closes the request-time mana
 
 Therefore the remaining provenance question is narrower still: **what exact bytes back the live verified-front DataManager at `+0x38/+0x30`?** The next Windows oracle should correlate selected Sensor ID, DataManager `+0x38/+0x30`, DataManager `+0x28`, context `+0x2460`, and request `+0x1fe8` in one front stream. If the source hash is front IMX681, investigate parsing/tree mutation; if it is rear OV13858, investigate the live InitParams payload. Do not assume a global CamX manager swap or a bad front SCFG without new evidence.
 
+### Private parser / mutation closure
+
+`LSC-PRIVATE-TUNING-TREE-PROVENANCE.md` now closes the ordinary downstream mutation theories. The Aug-4 active dump revalidates complete front/rear KMD module+tuning buffers byte-for-byte against their installed authorities and contains a serialized front `SensorTuningData` record with exact front length/identity. Normal DeviceMFT construction creates a fresh manager and fresh `0x1640` parser with instance-local tree storage/root at `+0x430/+0x428`. A decoded BL scan finds only two calls to the tree-graft helper `0x6f3780`: its own recursion and `DataManager::LoadTuningBin`. Live reload is behind CamX EnableLiveTuning bit29 and the nonzero request-mod-10 gate; AVS sources that bit from `DeviceConfigInfo+0xc0` / `CCaptureFilter+0x6d8` and defaults it to zero when `HKLM\SYSTEM\CurrentControlSet\Control\Qualcomm\Camera\enableLiveTuning` is absent.
+
+This does **not** retroactively prove the September capture-time override value. It means that if the September private DataManager source was front IMX681 and live tuning was disabled, normal parser/cache/graft mechanisms are exhausted. The decisive remaining source oracle is still the exact September `DataManager+0x38/+0x30` identity.
+
+**Restore-side evidence note:** after Windows System Restore, the original `E003H_20260902_LSCTRIGSRC` trigger-vector files are no longer present at their Windows path. The durable x22/x23 carves and accepted runtime-source oracle remain, but `prove-lsc-runtime-tuning-source.py` is not currently rerunnable from its default capture directory. Do not synthesize replacement trigger-vector files; recover them from NTFS/VSS if possible or recapture only when Windows is intentionally used as an oracle again.
+
 ## Latest live/front oracle and recovered raw evidence
 
 System Restore removed the later `SP11CameraOracle` directories from the live Windows profile. Do **not** depend on `/mnt/windows/.../E003H_20260902_LSCTRIGSRC` or `TINTCTX` existing. Read-only NTFS carving recovered the authoritative LSCTRIGSRC req5/6 x22+x23 buffers and a subset of TINTCTX under:
@@ -110,7 +118,7 @@ Immediate work is now:
 1. use the now-closed verified-front request4 pre-Tintless target (`839cae7d…`) and mine/recover a genuine same-front-stream sequential Tintless wrapper capsule that bridges it into captured front `0x18a0` staging; do not treat the request4 entry-time correction snapshots as same-frame post-request ratios;
 2. preserve and use the carved front LSCTRIGSRC x22/x23 as front calibration/tuning evidence, but do not assume its request state equals the independent adaptive-live stream;
 3. keep the TINTCTX request5->request6 replay as a rear OV13858/shared-Tintless oracle and fold it into rear parity work;
-4. continue static/private-DataManager tuning provenance mining: the formatting/golden boundary has converged into this same tree, so focus on why the verified-front private DataManager tree contains rear/default LSC41+golden objects; the one live front DataManager source-buffer hash remains the eventual dynamic oracle if static evidence cannot close it;
+4. static parser/reuse/graft mining is now closed on the normal path; use remaining offline stale-memory/NTFS evidence only to try to recover the September private DataManager source hash, otherwise defer that one identity to a tiny Windows oracle;
 5. preserve the Aug-4 rear EEPROM carve only as rear evidence; do not use it to select the three unresolved physical-front averaged-green pairs;
 6. keep GTM/TMC as the already byte-exact front parallel path;
 7. only after a **front-specific** integrated producer/output capsule passes, conduct a separate review before Linux request6.
