@@ -35,6 +35,7 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - **verified-front calibration payload authority: closed byte-exact**. The older rear OV13858 VSS runtime slot (SHA `fb14d234…`) plus rear/default golden reproduces the complete front req5/req6 calibrated x23 payloads byte-for-byte, including all 884 floats and tail; the slot also resolves the three green inverse ambiguities. This closes payload bytes, not the upstream live pointer/loader provenance. See `LSC-FRONT-REAR-CALIBRATION-AUTHORITY.md`.
 - **verified-front request4 pre-Tintless bridge: closed offline/native**. Exact request4 lux `355.14508` and CCT `4712` generate x22 `99bf4e1d…`; rear/default golden+rear slot generate x23 `a24bba7c…`; native Surface resampler RVA `0x9b6048` produces pre-Tintless mesh `839cae7d…`. See `LSC-FRONT-REQUEST4-PRETINTLESS-BRIDGE.md`.
 - LSC request-time tuning-manager ownership is statically closed through CaptureDevice private DataManager -> CapturePipe -> common context -> `ISPInputData+0x1fe8`; see `LSC-TUNING-MANAGER-OWNERSHIP-CLOSURE.md`. The rear-only A leaf crossover itself is still open upstream at the live private DataManager source-buffer/tree identity.
+- **front calibration object ownership is statically closed camera-local**. `DataManager::Construct` uses `cameraId*0xebe8`; `FormatLSCData` lands slot0 at camera-local `pOTPData+0x168`; `GetSensorStaticCapability` copies that camera-local OTP object to capability `+0x3e60`; IFENode binds it at `+0x3638`; `ExecuteProcessRequest` stores it at `ISPInputData+0x2070`; IFELSC411 consumes `+0x168`. Verified front is camera2, rear VSS is camera0, so normal-path rear-object pointer alias is excluded. The remaining calibration provenance question is now upstream raw OTP/InitParams population of camera2. See `LSC-FRONT-CALIBRATION-OBJECT-OWNERSHIP.md`.
 
 ## Latest LSC source closure
 
@@ -62,6 +63,8 @@ The replay matches both accepted Windows `x22` buffers byte-for-byte using the e
 Do **not** interpret this as proof that Windows configures the rear physical sensor for the front stream. It proves the byte provenance of the LSC41 object resolved by the front stream.
 
 The recovered calibrated x23 buffers close the live golden side independently. Across all 10 installed tuning blobs containing `lscgolden41_ife_v2`, only rear/default OV13858 region `0x2ae` can reproduce both front req5/req6 direct red/blue calibration transforms for all 442 points using one u16 EEPROM value per point. It passes 442/442 uniquely; nominal IMX681 golden passes 9/442. The exact older rear VSS runtime slot then reproduces the complete verified-front req5/req6 x23 payloads byte-for-byte and resolves the three averaged-green inverse ambiguities. This is a byte-authority crossover, not a physical-sensor identity change; the live pointer/loader mechanism remains a separate provenance question.
+
+Static ownership now excludes a simple stale rear formatted-OTP object as the mechanism. Camera-local storage is strided by `0xebe8`; the verified-front ISP inputs carry camera ID 2 and the preserved rear VSS carries camera ID 0. `FormatLSCData` writes camera-local `pOTPData+0x168`, and that same camera-local object is carried through SensorStaticCapability -> IFENode -> `ISPInputData+0x2070` -> IFELSC411. Therefore the rear-equivalent front calibration bytes must arise **before/while camera2's own OTP store is populated**, not by ordinary camera0 pointer aliasing. The next static target is the hardware-EEPROM versus `InitParams` raw-OTP branch in `EEPROMData`.
 
 ## Latest tuning provenance boundary
 
@@ -101,8 +104,9 @@ Immediate work is now:
 1. use the now-closed verified-front request4 pre-Tintless target (`839cae7d…`) and mine/recover a genuine same-front-stream sequential Tintless wrapper capsule that bridges it into captured front `0x18a0` staging; do not treat the request4 entry-time correction snapshots as same-frame post-request ratios;
 2. preserve and use the carved front LSCTRIGSRC x22/x23 as front calibration/tuning evidence, but do not assume its request state equals the independent adaptive-live stream;
 3. keep the TINTCTX request5->request6 replay as a rear OV13858/shared-Tintless oracle and fold it into rear parity work;
-4. continue static/private-DataManager provenance mining; the one live front DataManager source-buffer hash remains the eventual dynamic oracle if static evidence cannot close it;
-5. keep GTM/TMC as the already byte-exact front parallel path;
-6. only after a **front-specific** integrated producer/output capsule passes, conduct a separate review before Linux request6.
+4. trace camera2 raw OTP population upstream of `FormatLSCData`: close the hardware EEPROM-read versus explicit `Retrieve OTP from InitPramas.` path and identify the exact source owner/bytes; normal-path rear-camera0 formatted-object alias is already excluded;
+5. continue static/private-DataManager tuning provenance mining; the one live front DataManager source-buffer hash remains the eventual dynamic oracle if static evidence cannot close it;
+6. keep GTM/TMC as the already byte-exact front parallel path;
+7. only after a **front-specific** integrated producer/output capsule passes, conduct a separate review before Linux request6.
 
 Windows is not required for the current mining phase. If the remaining front gap eventually becomes irreducibly dynamic, rebuild/repair the Windows oracle then rather than delaying this offline work now.

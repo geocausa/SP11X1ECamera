@@ -39,6 +39,10 @@ For every other green point the pair is unique. Therefore the rear VSS slot matc
 
 This removes the prior need to infer the generic LSC selector values by field name.
 
+## Camera-local object ownership refinement
+
+`LSC-FRONT-CALIBRATION-OBJECT-OWNERSHIP.md` now closes the downstream pointer/object path. The formatted EEPROM object consumed by a request is camera-local: `cameraId * 0xebe8` storage -> `FormatLSCData` -> pOTPData -> SensorStaticCapability -> IFENode -> `ISPInputData+0x2070`. Verified front uses camera ID 2 while the preserved rear VSS uses camera ID 0. Therefore this payload-authority crossover is **not explained by ordinary rear-camera0 formatted-object pointer reuse**. The remaining provenance question is earlier: what raw OTP / `InitParams` bytes populate camera2's own `EEPROMData` object?
+
 ## Provenance scope
 
 This is a **calibration-payload byte-authority** result. It proves that the exact rear runtime slot is the payload needed to reproduce the verified physical-front IMX681 calibration transform. It does not by itself prove which live front pointer/loader object supplied those bytes. The separate private-DataManager/tuning-tree provenance question remains upstream.

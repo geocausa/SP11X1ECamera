@@ -1,0 +1,105 @@
+{
+  "classification": "CLOSED NORMAL-PATH CAMERA-LOCAL CALIBRATION OBJECT OWNERSHIP: the SHA-pinned Surface DeviceMFT formats LSC slot0 into a cameraId-strided pOTPData object, copies that camera-local object into SensorStaticCapability, binds IFENode to its +0x3e60 OTP payload, stores the same pointer at ISPInputData+0x2070, and IFELSC411 consumes +0x168. Verified-front request4/5/6 ISPInputData uses camera=2 while preserved rear VSS uses camera=0, so ordinary rear-camera0 formatted-OTP object/pointer aliasing into the front-camera2 request is excluded on the normal path. This does not identify why camera2's calibration bytes are byte-equivalent to the rear/default authority.",
+  "excluded": [
+    "normal-path camera0 formatted pOTPData object pointer being reused as camera2 pOTPData",
+    "previous-Tintless global cache alias between preserved rear key1 and verified-front key5"
+  ],
+  "layout": {
+    "camera0_potp_relative_to_hwenv": "0x13888",
+    "camera2_minus_camera0": "0x1d7d0",
+    "camera2_potp_relative_to_hwenv": "0x31058",
+    "camera_slot_stride": "0xebe8",
+    "eepromdata_field3_camera_slot_offset": "0xfa18",
+    "format_lsc_camera_slot_absolute": "0x139f0",
+    "format_lsc_destination_from_field3": "0x3fd8",
+    "ispinput_potp_offset": "0x2070",
+    "potp_camera_slot_absolute": "0x13888",
+    "potp_lsc_slot0_offset": "0x168",
+    "potp_object_copy_bytes": "0xac90",
+    "request_local_object_base": "0x1ef8",
+    "request_local_potp_store": "0x3f68",
+    "request_object_zeroed_bytes": "0x17e60",
+    "static_caps_otp_offset": "0x3e60",
+    "static_caps_potp_source_camera_slot_offset": "0xfa28"
+  },
+  "machine_code": {
+    "functions": {
+      "CamX::EEPROMData::FormatLSCData": "0x180723e40",
+      "CamX::IFELSC411::CheckAndUpdateChromatixData": "0x180a02420",
+      "CamX::IFENode::ExecuteProcessRequest": "0x1807453d0",
+      "CamX::IFENode::FetchSensorInfo": "0x18075dcf8",
+      "CamX::ImageSensorData::GetSensorStaticCapability": "0x18071b270",
+      "DataManager::Construct": "0x180712f50"
+    },
+    "signatures": {
+      "0x180713734": "087d9dd25f2300b93503a89b08439fd25b5700b919244e91a97700f036c10791b702088ba84a4091591700f9b87a4091570b00f9",
+      "0x1807139e8": "482741a97fae01f95fcb00b95fdf00b9692201a9",
+      "0x18071b304": "087d9dd2c902a89b08459fd22901088b08cc87d22101088b6002088b810000b4600000b4029295d255082194",
+      "0x180723e64": "b32641a908fb87d23401088bb40000b4",
+      "0x180745aac": "11df83d24003118b02cc8fd22200a0f201008052080540f909090012",
+      "0x180745cc0": "550340f9a84a4191087140f9483700f9a81e5bf948b71ff9",
+      "0x18075e920": "681e5bf9e80200b5080594d2696a68f8a90000b408cc87d22801088b681e1bf9",
+      "0x180a02448": "97f64ff9f30300aa",
+      "0x180a02b18": "883a50f901a10591280040b9"
+    }
+  },
+  "next_gate": "Trace the camera2 EEPROMData raw input selection/population upstream of FormatLSCData: distinguish physical EEPROM read from InitParams-provided OTP/default/fallback content and pin the source bytes/owner. In parallel retain the genuine-front sequential Tintless gate. Linux request6 remains forbidden.",
+  "not_proven": [
+    "the upstream raw OTP/InitParams bytes used to populate camera2",
+    "why camera2's formatted LSC payload is byte-equivalent to the preserved rear/default calibration authority",
+    "the live verified-front private DataManager tuning source-buffer identity",
+    "verified-front sequential Tintless config/stats/state/output"
+  ],
+  "schema": "sp11-e003h-lsc-front-calibration-object-ownership-v1",
+  "source_authority": {
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "front_ispinput": {
+      "request4": {
+        "camera": 2,
+        "file": "REQ4_ISPINPUT.bin",
+        "previous_tintless_cache_key": 5,
+        "sensor_ar": 1,
+        "sha256": "775adcc5fe378bcd4105c8abdef5c5a745c155f58a4bd5c27de4f55fc09a60d3"
+      },
+      "request5": {
+        "camera": 2,
+        "file": "REQ5_ISPINPUT.bin",
+        "previous_tintless_cache_key": 5,
+        "sensor_ar": 1,
+        "sha256": "7328b1902709ad981ae180ddf600288890399987547ad7b338a0ba298b12886b"
+      },
+      "request6": {
+        "camera": 2,
+        "file": "REQ6_ISPINPUT.bin",
+        "previous_tintless_cache_key": 5,
+        "sensor_ar": 1,
+        "sha256": "c51a7b54cf03683fd86df0967c82f358e2332d00d382c2f5cdb1c020b6cca874"
+      }
+    },
+    "prerequisites": {
+      "lsc-calibration-application-oracle.json": "619f4338031c00cd50cbb8f6dfd652bfe8428db35ad0583dff45352c7cb63275",
+      "lsc-front-rear-calibration-authority-oracle.json": "7da1adc5acfcb266a5167ffbbcb5b0b788b6bacff390fa907ba9c3b051722042",
+      "lsc-front-request4-pretintless-bridge-oracle.json": "d3dcb3eebfdf1f6bda13ab220c27573c5cd2308577214721c49ffa84fdc0926b",
+      "prove-lsc-calibration-application-boundary.py": "5a5d5ef6534298c1c71f1b18344d75ac31af92b0d87e82a6fcb52fc50f18b48f",
+      "prove-lsc-front-rear-calibration-authority.py": "eb3f0738b5eeafca67bcac0b32eeb1b77d782935aa2ffb20d14adf01d7d7f575",
+      "prove-lsc-front-request4-pretintless-bridge.py": "677ed7834bdefe4d8d1f3548038475586a8f3130cdacb67c048003bb135d9093"
+    },
+    "rear_vss_ispinput": {
+      "request1": {
+        "camera": 0,
+        "file": "REQ1_ISPINPUT_2400.bin",
+        "previous_tintless_cache_key": 1,
+        "sensor_ar": 1,
+        "sha256": "14637c3eb118ff284cfae31206d311557f1fc4b62e233ccf9698a2761ad1a1b5"
+      },
+      "request6": {
+        "camera": 0,
+        "file": "REQ6_ISPINPUT_PRE_2400.bin",
+        "previous_tintless_cache_key": 1,
+        "sensor_ar": 1,
+        "sha256": "1cf44712660479d7f5d2ac131e068d146f213be44dd726176d8b1266d54a4606"
+      }
+    }
+  },
+  "status": "PASS"
+}

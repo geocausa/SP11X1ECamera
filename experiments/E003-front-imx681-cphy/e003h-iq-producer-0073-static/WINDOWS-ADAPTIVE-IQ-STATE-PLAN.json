@@ -152,6 +152,12 @@
         "0xa68"
       ],
       "capture_preference": "Prefer the already-materialized runtime OTP slot/common calibration state at the same request. Only capture the bounded physical 0x6e8 EEPROM window if an offline copy cannot be recovered and the runtime OTP table is unavailable."
+    },
+    "front_calibration_object_ownership": {
+      "status": "closed camera-local",
+      "proof": "prove-lsc-front-calibration-object-ownership.py",
+      "normal_path_rear_object_alias_excluded": true,
+      "next": "trace camera2 raw OTP population before FormatLSCData (hardware EEPROM versus InitParams/default)"
     }
   },
   "gtm": {
@@ -478,5 +484,21 @@
     "pre_tintless_sha256": "839cae7d7b1c884b77068f0cb76d6ce34fbed562ac1328a59ea4373a30ab88c9",
     "native_resampler_rva": "0x9b6048",
     "capture_timing_correction": "REQ4 CAL0..3 are entry/pre-request snapshots; REQ4 staging is post-request and must not be treated as same-frame ratio data"
+  },
+  "latest_lsc_front_calibration_object_ownership": {
+    "proof": "prove-lsc-front-calibration-object-ownership.py",
+    "proof_sha256": "e6b5f5e4641073289bc42be90630d44592d68b6562a277ddc13a3912dd16b9d9",
+    "oracle": "lsc-front-calibration-object-ownership-oracle.json",
+    "oracle_sha256": "155d137b285c38b1ea9db451be0257c184722cfdae7fa60d073d0c0e07480676",
+    "doc": "LSC-FRONT-CALIBRATION-OBJECT-OWNERSHIP.md",
+    "camera_slot_stride": "0xebe8",
+    "front_camera_id": 2,
+    "rear_vss_camera_id": 0,
+    "front_potp_relative_hwenv": "0x31058",
+    "rear_potp_relative_hwenv": "0x13888",
+    "ispinput_potp_offset": "0x2070",
+    "formatted_lsc_slot0_offset": "0x168",
+    "classification": "CLOSED NORMAL-PATH CAMERA-LOCAL CALIBRATION OBJECT OWNERSHIP: cameraId-strided pOTPData is carried through SensorStaticCapability -> IFENode -> ISPInputData+0x2070 -> IFELSC411; verified front camera2 and rear camera0 cannot normally alias. Rear-equivalent front bytes remain an upstream raw OTP/InitParams population question.",
+    "remaining": "trace camera2 raw OTP source before FormatLSCData: hardware EEPROM read versus InitParams/default/fallback content"
   }
 }
