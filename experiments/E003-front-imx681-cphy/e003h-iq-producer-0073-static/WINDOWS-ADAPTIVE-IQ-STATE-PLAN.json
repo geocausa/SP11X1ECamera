@@ -157,7 +157,13 @@
       "status": "closed camera-local",
       "proof": "prove-lsc-front-calibration-object-ownership.py",
       "normal_path_rear_object_alias_excluded": true,
-      "next": "trace camera2 raw OTP population before FormatLSCData (hardware EEPROM versus InitParams/default)"
+      "next": "raw source subsequently closed to front physical EEPROM; trace EEPROM formatting/library/golden-reference selection at/after FormatLSCData"
+    },
+    "front_raw_otp_provenance": {
+      "status": "closed front physical EEPROM on both normal branches",
+      "proof": "prove-lsc-front-raw-otp-provenance.py",
+      "normal_rear_raw_otp_alias_excluded": true,
+      "next": "trace EEPROM formatting/library/golden-reference selection at/after FormatLSCData"
     }
   },
   "gtm": {
@@ -498,7 +504,23 @@
     "rear_potp_relative_hwenv": "0x13888",
     "ispinput_potp_offset": "0x2070",
     "formatted_lsc_slot0_offset": "0x168",
-    "classification": "CLOSED NORMAL-PATH CAMERA-LOCAL CALIBRATION OBJECT OWNERSHIP: cameraId-strided pOTPData is carried through SensorStaticCapability -> IFENode -> ISPInputData+0x2070 -> IFELSC411; verified front camera2 and rear camera0 cannot normally alias. Rear-equivalent front bytes remain an upstream raw OTP/InitParams population question.",
-    "remaining": "trace camera2 raw OTP source before FormatLSCData: hardware EEPROM read versus InitParams/default/fallback content"
+    "classification": "CLOSED NORMAL-PATH CAMERA-LOCAL CALIBRATION OBJECT OWNERSHIP: cameraId-strided pOTPData is carried through SensorStaticCapability -> IFENode -> ISPInputData+0x2070 -> IFELSC411; verified front camera2 and rear camera0 cannot normally alias. The subsequent raw-OTP provenance proof also closes pre-format input to front physical EEPROM.",
+    "remaining": "superseded raw-source gate is closed by prove-lsc-front-raw-otp-provenance.py; next is EEPROM formatting/library/golden-reference selection"
+  },
+  "latest_lsc_front_raw_otp_provenance": {
+    "status": "closed normal raw-OTP source class",
+    "proof": "prove-lsc-front-raw-otp-provenance.py",
+    "proof_sha256": "7b43a7b0ac91f50108d419f454929ec4d11e7929a653462b9076d6fe5f1cdf1a",
+    "oracle": "lsc-front-raw-otp-provenance-oracle.json",
+    "oracle_sha256": "418115745f2f159af372951f7a993d7d19ead893e9e3984de1703a4961a03e67",
+    "doc": "LSC-FRONT-RAW-OTP-PROVENANCE.md",
+    "front_sensor_kmd_sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03",
+    "avs_sha256": "b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed",
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "zero_option_route": "front KMD physical EEPROM cache +0x320/+0x328 -> SensorCalibrationData -> DataManager+0xc8/+0xd0",
+    "nonzero_option_route": "front KMD drops cache -> DeviceMFT camera-local CreateAndReadEEPROMData/ReadEEPROMDevice physical reread",
+    "convergence": "EEPROMData raw input before FormatLSCData",
+    "excluded": "normal rear-camera0 raw OTP pointer/buffer injection into camera2",
+    "remaining": "EEPROM formatting/library/golden-reference selection at or after FormatLSCData"
   }
 }

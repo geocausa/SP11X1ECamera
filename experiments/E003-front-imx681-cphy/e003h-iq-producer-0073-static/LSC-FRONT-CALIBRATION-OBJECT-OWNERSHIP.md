@@ -155,16 +155,17 @@ Excluded on the SHA-pinned normal path:
 - rear camera0 formatted pOTPData object pointer being reused directly as front camera2 pOTPData;
 - a same-key previous-Tintless global-cache collision between the preserved rear and verified-front streams.
 
-Not closed by this proof:
+The subsequent `LSC-FRONT-RAW-OTP-PROVENANCE.md` closes the first two items that were originally left open here: both normal pre-format branches source camera2 raw OTP from the **front physical EEPROM**. Option zero carries the front KMD physical cache through `SensorCalibrationData`; option nonzero intentionally drops that cache and causes DeviceMFT to perform its own camera-local physical reread. Both converge before `FormatLSCData`.
 
-- the raw OTP bytes selected for camera2 before `FormatLSCData`;
-- whether those bytes arrive from physical EEPROM read, `InitParams`, a default/fallback, or another pre-format source;
+Still not closed:
+
 - why camera2's formatted LSC payload is byte-equivalent to the preserved rear/default calibration authority;
+- which EEPROM formatting library/callback and golden/reference object are selected for camera2;
 - the separate live front private-DataManager tuning-buffer identity;
 - genuine verified-front sequential Tintless state/stats/output.
 
 ## Next provenance target
 
-Trace `EEPROMData` **upstream of `FormatLSCData`**. The native constructor contains both a hardware EEPROM-read path and an explicit `Retrieve OTP from InitPramas.` path. The next static proof must identify the branch conditions and exact raw-data owner for camera2, then determine whether the verified front uses physical EEPROM bytes or `InitParams`-provided/default content.
+Trace `EEPROMData` **at and after the formatting boundary**: identify the selected front EEPROM library/callback and the golden/reference source that `FormatLSCData` consumes. Raw physical EEPROM ownership is no longer a plausible rear/front crossover point.
 
 Do not reinterpret the rear-equivalent calibration bytes as rear physical-sensor routing. Front IMX681 sensor/mode/geometry remain independently verified.
