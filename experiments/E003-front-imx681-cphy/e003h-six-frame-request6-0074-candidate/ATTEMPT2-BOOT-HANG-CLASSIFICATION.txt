@@ -1,0 +1,48 @@
+SP11 E003h request6 0074 — Attempt 2 candidate boot-hang classification
+Date: 2026-09-04
+
+Observed state
+- Candidate boot identity: sp11-camera-e003h-request6-0074-one-shot.
+- Kernel: 7.1.5-sp11-render-parity-v4+ (same kernel image family as Golden).
+- Boot command line selected multi-user.target, disabled Plymouth, and blacklisted qcom_camss, imx681, ov13858.
+- PiSlave never started on this boot; no pislave.service journal entries exist.
+- /sys/fs/pstore was empty after forced reboot.
+- Current persistent Golden boot returned successfully; saved_entry=sp11-audio-fullio-v19c and next_entry is empty.
+
+Camera runtime disposition
+- ATTEMPT2 helper invocation count: 0.
+- No Attempt-2 runtime/preflight/media/helper/result evidence files were created after ARM-0074-ATTEMPT2.txt.
+- AUTHORIZATION-ATTEMPT2.json remained byte-preserved after the forced reboot.
+- qcom_camss, imx681 and ov13858 were blacklisted at candidate boot and no camera runtime/STREAMON/request6 execution is evidenced.
+- Therefore this is NOT a request6 runtime result and NOT evidence of a qcom_camss/imx681 stream fault.
+- The authorization allowed boot_count=1, so Attempt 2 is consumed at the candidate-boot level and MUST NOT be reused. A future runtime requires a fresh authorization.
+
+Bad-boot kernel failure domain
+- arm-smmu 15000000.iommu repeatedly reported: TLB sync timed out -- SMMU may be deadlocked.
+- Same SMMU repeatedly reported TBU/TCU power/sync/progress read failures (-22).
+- msm_dpu ae01000.display-controller repeatedly timed out waiting for vblank/commit/frame completion.
+- DPU recovery reported ctl reset failure -22 and frame-done timeout.
+- rpmh/interconnect warning path included qcom_icc_bcm_voter_commit -> qcom_icc_set -> icc_set_bw -> DPU core-perf bus update.
+- Later the machine produced multi-CPU soft lockups and an arm64 Oops/data-abort in the DRM framebuffer damage-work path.
+- Final udev workers were blocked in load_module -> kick_all_cpus_sync -> smp_call_function_many_cond; this is classified as secondary fallout after CPUs were already wedged, not the initial cause.
+
+Cross-boot comparison
+- Attempt 1, same 0074 candidate entry: tlb=0, tbu=0, vblank=0, softlock=0, oops=0; PiSlave healthy; clean shutdown.
+- Golden immediately after Attempt 1: all above counts zero; clean shutdown.
+- Attempt 2, same 0074 candidate entry: tlb=673, tbu=673, vblank=378, softlock=16, oops=1; PiSlave absent; no clean shutdown.
+- Current Golden after forced reboot: all above counts zero; PiSlave healthy.
+
+Relationship to Camera project
+- Direct relationship to request6/helper execution: NO.
+- Direct camera-driver runtime fault: NO evidence.
+- Relationship to disposable camera candidate boot environment: PLAUSIBLE but not proven causal.
+- The front-only candidate DT enables CAMCC/CCI/CAMSS infrastructure including acb7000.isp with IOMMU/interconnect/power-domain dependencies; that device is attached to IOMMU group 8 even while qcom_camss is blacklisted.
+- The same platform/IOMMU attachment existed on clean Attempt 1, so it is not a deterministic failure by itself.
+- Candidate cmdline also omits Golden's clk_ignore_unused and pd_ignore_unused. Attempt 1 still booted cleanly without them, so omission is not a proven root cause, but it remains a boot-power-state/race variable.
+
+Disposition / next gate
+1. Do not reuse Attempt-2 authorization.
+2. Do not alter request6 kernel/IQ logic based on this crash.
+3. Harden candidate boot first: inherit Golden clk_ignore_unused/pd_ignore_unused and perform a boot-only control with camera modules still blacklisted and helper forbidden.
+4. Before any future helper invocation require a clean boot-health gate: zero SMMU TLB-sync timeout, zero DPU vblank timeout, zero Oops/soft-lockup, PiSlave/control plane healthy, camera modules still unloaded.
+5. Only after that gate passes may a fresh Attempt-3 authorization allow the exact one-shot request6 helper.
