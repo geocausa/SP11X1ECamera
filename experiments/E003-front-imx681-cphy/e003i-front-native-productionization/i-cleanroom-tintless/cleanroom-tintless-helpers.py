@@ -531,3 +531,62 @@ def final_application_mode2(u,state,ref_desc,out_desc):
         for i in range(n):
             if ceiling < rf32(u,base+i*4): return 0xfffffffc
     return 0
+
+
+
+def core_mode2(u,state,stats_obj,ref_desc,out_desc):
+    """Active mode-2 clean-room parent for RVA 0xca01b0."""
+    if not state or not stats_obj or not ref_desc or not out_desc:
+        return 0xfffffffe
+    if ru16(u,state) != 2 or ru16(u,state+2) != 2 or ru8(u,state+0x12) != 0:
+        raise ValueError('unsupported inactive Tintless core mode')
+    n=ru8(u,state+0x20)*ru8(u,state+0x21)
+    if ru16(u,ref_desc) != n or ru16(u,out_desc) != n:
+        return 0xfffffff8
+    if ru32(u,stats_obj+8) != REGIONS:
+        return 0xfffffffd
+
+    wu8(u,state+0x74,0)
+    preprocess_stats(u,state,stats_obj)
+    ln_float_field(u,state+0x2e64,state+0x2e64)
+    ln_float_field(u,state+0x3a64,state+0x3a64)
+
+    # Build the active mode-2 solver class map. Native uses the middle two
+    # reference planes interpolated to 32x24, and adjusted B/GR stats counts.
+    ref1=ru64(u,ref_desc+0x10); ref2=ru64(u,ref_desc+0x18)
+    t1=state+0x8e64; t2=state+0xae64
+    u.mem_write(t1,bytes(u.mem_read(ref2,n*4)))
+    u.mem_write(t2,bytes(u.mem_read(ref1,n*4)))
+    interpolate_mesh_to_stats(u,state,t1,t1)
+    interpolate_mesh_to_stats(u,state,t2,t2)
+
+    raw=ru64(u,stats_obj)
+    area=(ru16(u,state+0x0a)>>1)*(ru16(u,state+0x08)>>1)
+    off=ru32(u,state+0x70); sb=ru16(u,state+0x1c); sgr=ru16(u,state+0x1e)
+    stride=0x64 if (ru32(u,raw)&2) else 0x32
+    mode=ru8(u,stats_obj+0x0c)
+    if mode==1:
+        sa=rf32(u,stats_obj+0x10); sb_scale=rf32(u,stats_obj+0x14)
+        base_scale=f32(sa*sb_scale)
+    else:
+        base_scale=f32(1.0)
+    shift=ru32(u,state+0x14)&0x1f
+    quant=(1<<shift)//16
+    scale=f32(f32(float(quant))*base_scale)
+    uns=[]
+    for i in range(REGIONS):
+        rec=raw+i*stride
+        b=ru64(u,rec+0x30)+((area-ru16(u,rec+0x4c))&0xffffffff)*sb+off
+        gr=ru64(u,rec+0x38)+((area-ru16(u,rec+0x4e))&0xffffffff)*sgr+off
+        if b<2:b=1
+        if gr<2:gr=1
+        g2=rf32(u,t1+i*4); g1=rf32(u,t2+i*4)
+        vb=int(f32(g1*f32(float(b))))
+        vg=int(f32(g2*f32(float(gr))))
+        half=((vb+vg)&0xffffffffffffffff)>>1
+        q=f32(float(half)); q=f32(q/f32(float(area))); q=f32(q/scale)
+        v=15 if q>f32(15.0) else int(q)
+        uns.append(v)
+    u.mem_write(t1,struct.pack('<768i',*uns))
+    smooth_stats_map(u,state,t1,state+0x78)
+    return final_application_mode2(u,state,ref_desc,out_desc)
