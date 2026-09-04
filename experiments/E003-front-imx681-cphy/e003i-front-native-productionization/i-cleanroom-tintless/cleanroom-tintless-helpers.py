@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import ctypes,struct
+import ctypes,struct,math
+from pathlib import Path
 GRID_W=32; GRID_H=24; REGIONS=GRID_W*GRID_H
 G_STATS_SCALE_A=0x18160AD58; G_STATS_SCALE_B=0x18160A468; G_STATS_MODE=0x1817959A4
 
@@ -590,3 +591,199 @@ def core_mode2(u,state,stats_obj,ref_desc,out_desc):
     u.mem_write(t1,struct.pack('<768i',*uns))
     smooth_stats_map(u,state,t1,state+0x78)
     return final_application_mode2(u,state,ref_desc,out_desc)
+
+
+
+def update_wrapper_config_front(u,wrap,cfg):
+    """Validated front config-cache mapping from RVA 0xc95fd0."""
+    # Segment A: 0x00..0x1b
+    a=bytes(u.mem_read(cfg,0x1c))
+    if bytes(u.mem_read(wrap+0x130,0x1c)) != a:
+        u.mem_write(wrap+0x130,a); wu32(u,wrap+0x260,1)
+        wu32(u,wrap+0x68,ru32(u,cfg+0x14)); wu32(u,wrap+0x6c,ru32(u,cfg+0x18))
+        wu32(u,wrap+0x70,ru32(u,cfg+0x0c)); wu32(u,wrap+0x74,ru32(u,cfg+0x08))
+        wu32(u,wrap+0x64,ru32(u,cfg+0x00)); wu32(u,wrap+0x60,ru32(u,cfg+0x04)); wu32(u,wrap+0x78,ru32(u,cfg+0x10))
+    # Segment B: 0x1c..0x57
+    b=bytes(u.mem_read(cfg+0x1c,0x3c))
+    if bytes(u.mem_read(wrap+0x224,0x3c)) != b:
+        u.mem_write(wrap+0x224,b); wu32(u,wrap+0x260,1)
+        mapping={0x28:0x34,0x14:0x20,0x10:0x1c,0x30:0x38,0x34:0x3c,0x38:0x40,0x3c:0x44,
+                 0x18:0x24,0x1c:0x28,0x24:0x2c,0x20:0x30,0x2c:0x48,0x1048:0x4c,0x104c:0x50,0x1050:0x54}
+        for wo,co in mapping.items(): wu32(u,wrap+wo,ru32(u,cfg+co))
+    # Segment C: 0x58..0x12f (216 bytes)
+    c=bytes(u.mem_read(cfg+0x58,0xd8))
+    if bytes(u.mem_read(wrap+0x14c,0xd8)) != c:
+        u.mem_write(wrap+0x14c,c); wu32(u,wrap+0x260,1)
+        u.mem_write(wrap+0x41,bytes(u.mem_read(cfg+0x59,0x10)))
+        wu8(u,wrap+0x51,ru8(u,cfg+0x69)); wu8(u,wrap+0x40,ru8(u,cfg+0x58)); wu8(u,wrap+0x52,ru8(u,cfg+0x6a))
+        wu32(u,wrap+0x54,ru32(u,cfg+0x6c)); wu32(u,wrap+0x58,ru32(u,cfg+0x70)); wu32(u,wrap+0x5c,ru32(u,cfg+0x74))
+        wu32(u,wrap+0x08,ru32(u,cfg+0x7c)); wu32(u,wrap+0x0c,ru32(u,cfg+0x80)); wu32(u,wrap+0x120,ru32(u,cfg+0x84))
+        # Two interleaved 16-float blocks and trailing scalar groups.
+        for i in range(16):
+            wu32(u,wrap+0x7c+i*4,ru32(u,cfg+0x88+i*4))
+            wu32(u,wrap+0xbc+i*4,ru32(u,cfg+0xc8+i*4))
+        wu32(u,wrap+0xfc,ru32(u,cfg+0x108)); wu32(u,wrap+0x100,ru32(u,cfg+0x10c)); wu32(u,wrap+0x104,ru32(u,cfg+0x110)); wu32(u,wrap+0x108,ru32(u,cfg+0x114)); wu32(u,wrap+0x10c,ru32(u,cfg+0x118)); wu32(u,wrap+0x110,ru32(u,cfg+0x11c)); wu32(u,wrap+0x114,ru32(u,cfg+0x120)); wu32(u,wrap+0x118,ru32(u,cfg+0x124)); wu32(u,wrap+0x11c,ru32(u,cfg+0x128)); wu32(u,wrap+0x124,ru32(u,cfg+0x12c))
+    dirty=(ru32(u,wrap+0x260)==1)
+    if dirty:
+        wu32(u,wrap+0x260,0)
+        # Active front wrapper controls are sourced from config and become persistent.
+        wf32(u,wrap+0x160,rf32(u,cfg+0x6c))
+        wu8(u,wrap+0x16c,1 if rf32(u,wrap+0x160)!=0.0 else 0)
+    return dirty
+
+
+_libm.cosf.argtypes=[ctypes.c_float]
+_libm.cosf.restype=ctypes.c_float
+_libm.sinf.argtypes=[ctypes.c_float]
+_libm.sinf.restype=ctypes.c_float
+CORE_BYTES=0x126e8
+KERNEL_QUADRANT_SHA256='51d59c5eda5fdb21dd3185562269f747092c95aa64cf52e82f833f25f6a35a30'
+
+
+def _build_swap_schedule(n:int)->bytes:
+    """Clean-room translation of RVA 0xca1c40's permutation schedule."""
+    a=list(range(n)); j=0
+    for i in range(1,n-1):
+        bit=n>>1
+        while j>=bit:
+            j-=bit; bit>>=1
+        j+=bit
+        if i<j: a[i]=j
+    return bytes(a)
+
+
+def _write_fft_tables(u,state):
+    for n,off in ((32,0xc84),(64,0xd04)):
+        step=f32(2.0*math.pi/n)
+        vals=[]
+        for k in range(n//2):
+            ang=f32(f32(float(k))*step)
+            vals.append(f32(_libm.cosf(ctypes.c_float(ang))))
+            vals.append(f32(-_libm.sinf(ctypes.c_float(ang))))
+        u.mem_write(state+off,struct.pack('<%df'%n,*vals))
+    u.mem_write(state+0xe04,_build_swap_schedule(32))
+    u.mem_write(state+0xe24,_build_swap_schedule(64))
+
+
+def _write_solver_kernel(u,state):
+    p=Path(__file__).with_name('solver-kernel-quadrant-33x17-f32le.bin')
+    raw=p.read_bytes()
+    import hashlib
+    if len(raw)!=33*17*4 or hashlib.sha256(raw).hexdigest()!=KERNEL_QUADRANT_SHA256:
+        raise ValueError('Tintless solver-kernel quadrant drift')
+    q=struct.unpack('<561f',raw); full=[]
+    for y in range(64):
+        sy=y if y<=32 else 64-y
+        row=list(q[sy*17:(sy+1)*17])
+        full.extend(row+row[15:0:-1])
+    u.mem_write(state+0xe64,struct.pack('<2048f',*full))
+
+
+def initialize_core_front_mode2(u,state,wrap):
+    """Clean-room request-4 core initializer for the validated front mode-2 path."""
+    u.mem_write(state,b'\0'*CORE_BYTES)
+    # Primary modes / geometry.
+    u.mem_write(state+0x00,struct.pack('<H',ru16(u,wrap+0x08)))
+    u.mem_write(state+0x02,struct.pack('<H',ru16(u,wrap+0x0c)))
+    u.mem_write(state+0x04,struct.pack('<H',ru16(u,wrap+0x10)))
+    u.mem_write(state+0x06,struct.pack('<H',ru16(u,wrap+0x14)))
+    cx=ru16(u,wrap+0x18); cy=ru16(u,wrap+0x1c)
+    u.mem_write(state+0x08,struct.pack('<H',cx));u.mem_write(state+0x0a,struct.pack('<H',cy))
+    wu8(u,state+0x0c,ru8(u,wrap+0x24));wu8(u,state+0x0d,ru8(u,wrap+0x20))
+    sx=(ru16(u,wrap+0x10)-ru8(u,wrap+0x24)*cx)//2
+    sy=(ru16(u,wrap+0x14)-ru8(u,wrap+0x20)*cy)//2
+    u.mem_write(state+0x0e,struct.pack('<H',sy&0xffff));u.mem_write(state+0x10,struct.pack('<H',sx&0xffff))
+    wu8(u,state+0x12,ru8(u,wrap+0x28));wu32(u,state+0x14,ru32(u,wrap+0x2c))
+    for i,wo in enumerate((0x30,0x34,0x38,0x3c)):
+        u.mem_write(state+0x18+i*2,struct.pack('<H',ru16(u,wrap+wo)))
+    wu8(u,state+0x20,ru8(u,wrap+0x60));wu8(u,state+0x21,ru8(u,wrap+0x64))
+    for so,wo in ((0x22,0x68),(0x24,0x6c),(0x26,0x70),(0x28,0x74)):
+        u.mem_write(state+so,struct.pack('<H',ru16(u,wrap+wo)))
+    wu8(u,state+0x2a,ru8(u,wrap+0x78))
+    # Noise/threshold controls.
+    q=f32(f32(float(ru8(u,wrap+0x40)))/f32(100.0));wf32(u,state+0x2c,f32(q*q))
+    for i in range(16):wf32(u,state+0x30+i*4,f32(float(ru8(u,wrap+0x41+i))))
+    area=(cy>>1)*(cx>>1)
+    offs=f32(f32(f32(float(ru8(u,wrap+0x51)))*f32(0.0625))*f32(float(cy>>1)))
+    offs=f32(offs*f32(float(cx>>1)));wi32(u,state+0x70,int(offs))
+    wu8(u,state+0x74,0)
+    wf32(u,state+0xc78,rf32(u,wrap+0x58));wf32(u,state+0xc7c,rf32(u,wrap+0x5c));wf32(u,state+0xc80,rf32(u,wrap+0x120))
+    _write_fft_tables(u,state);_write_solver_kernel(u,state)
+
+
+
+def _wrapper_temporal_blend(u,wrap,ref_desc,out_desc):
+    """Active four-plane temporal tail of RVA 0xc95fd0."""
+    if ru8(u,wrap+0x16c)==0:
+        return
+    n=ru16(u,out_desc)
+    if n<=0: return
+    blend=rf32(u,wrap+0x160); om=f32(f32(1.0)-blend)
+    # Native persistent history order is descriptor planes 0,3,1,2.
+    # Keep the logical per-plane mapping explicit rather than treating the four
+    # wrapper ranges as descriptor order.
+    desc_offs=(8,0x10,0x18,0x20)
+    refs=[ru64(u,ref_desc+o) for o in desc_offs]
+    outs=[ru64(u,out_desc+o) for o in desc_offs]
+    hist_for_plane=[wrap+0x268,wrap+0x950,wrap+0xcc4,wrap+0x5dc]
+    fresh=(ru32(u,wrap+0x1038)==0)
+    for plane in range(4):
+        hist=hist_for_plane[plane]
+        src=refs[plane] if fresh else hist
+        dst=outs[plane]
+        for i in range(n):
+            hv=rf32(u,src+i*4); ov=rf32(u,dst+i*4)
+            v=f32(f32(hv*om)+f32(blend*ov))
+            wf32(u,dst+i*4,v); wf32(u,hist+i*4,v)
+    if fresh: wu32(u,wrap+0x1038,1)
+
+
+def _build_core_call_adapters(u,scratch,wrap,raw_stats,raw_ref,raw_out):
+    """Build the three small stack-local objects used by native c95fd0.
+
+    The callback receives the 768-record stats buffer directly and descriptor
+    wrappers whose low u16 is the 221-sample count. ca01b0 instead receives a
+    stats object {raw_ptr,count,...} plus compact descriptors with only count
+    and four plane pointers populated.
+    """
+    if not scratch: raise ValueError('Tintless wrapper adapter scratch required')
+    stats_obj=scratch
+    ref_desc=scratch+0x20
+    out_desc=scratch+0x50
+    u.mem_write(stats_obj,b'\0'*0x20)
+    u.mem_write(stats_obj,struct.pack('<Q',raw_stats))
+    wu32(u,stats_obj+8,ru32(u,raw_stats+4))
+    # Native local_c0/uStack_bc/local_c4 occupy +0x10.. but are not consumed
+    # by the active ca01b0 mode-2 path. Preserve the observed wrapper values.
+    wu32(u,stats_obj+0x10,ru32(u,wrap+0x1048))
+    wu32(u,stats_obj+0x14,ru32(u,wrap+0x104c))
+    wu8(u,stats_obj+0x18,ru8(u,wrap+0x1050))
+    for src,dst in ((raw_ref,ref_desc),(raw_out,out_desc)):
+        u.mem_write(dst,b'\0'*0x28)
+        u.mem_write(dst,struct.pack('<H',ru16(u,src)))
+        for off in (8,0x10,0x18,0x20):
+            u.mem_write(dst+off,struct.pack('<Q',ru64(u,src+off)))
+    return stats_obj,ref_desc,out_desc
+
+
+def wrapper_front_mode2(u,wrap,cfg,raw_stats,raw_ref,raw_out,new_core=0,scratch=0):
+    """Clean-room active front outer wrapper for RVA 0xc95fd0.
+
+    `new_core` is supplied only when the caller has honored the native lazy
+    allocation contract. Existing requests reuse wrapper+0x128. `scratch`
+    supplies the native-equivalent stack-local ABI adapter storage.
+    """
+    if not wrap or not cfg or not raw_stats or not raw_ref or not raw_out:
+        return 5
+    dirty=update_wrapper_config_front(u,wrap,cfg)
+    core=ru64(u,wrap+0x128)
+    if core==0:
+        if not new_core: return 5
+        core=new_core; u.mem_write(wrap+0x128,struct.pack('<Q',core)); dirty=True
+    if dirty:
+        initialize_core_front_mode2(u,core,wrap)
+    stats_obj,ref_desc,out_desc=_build_core_call_adapters(u,scratch,wrap,raw_stats,raw_ref,raw_out)
+    rc=core_mode2(u,core,stats_obj,ref_desc,out_desc)
+    if rc!=0: return 1
+    _wrapper_temporal_blend(u,wrap,ref_desc,out_desc)
+    return 0
