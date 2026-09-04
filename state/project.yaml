@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-08-31
+updated: 2026-09-04
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003h-0073-front-atomic-upstream-lsc
+state_id: E003h-0076-request6-runtime-closed
 phase: front-imx681-cphy-bringup
-status: linux-0061-ubwc-parity-achieved-noncausal-windows-cgc-lifecycle-next
+status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003h-Windows-parity-transport-static
+current_gate: E003h-request6-runtime-closed-productionization-next
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -124,7 +124,7 @@ e003g:
   golden_return_verified: true
   linux_vfe680_constraint: RDI output only
 e003h:
-  status: lowtop-16of16-windows-match-vfe-ingress-event-static-next
+  status: request6-six-frame-runtime-closed-productionization-next
   windows_first_ipp_raw_log_expected_name: E003H_CSID1_FIRST_IPP_IRQ_GEOMETRY_20260831.log
   windows_first_ipp_raw_log_reported_sha256: 0f69735727efd5fb37fb04fe561d1948279d343624f3305259e23e5f400e4932
   windows_first_ipp_raw_log_local_present: false
@@ -2696,5 +2696,33 @@ front_atomic_tintless_0073:
   linux_request6_authorized: false
   remaining_gate: same-stream upstream LSC generation of atomic pre-Tintless input meshes
 
+e003h_0076_request6_runtime:
+  status: pass
+  date: 2026-09-04
+  classification: REQUEST6_SIX_FRAME_RUNTIME_CLOSED_WITH_EXACT_0074_KERNEL_IQ
+  boot_hardening_required: [clk_ignore_unused, pd_ignore_unused]
+  qcom_camss_sha256: 002076d1a0d13e098963415bc76bacf1eff35ec31cd12ef2b751f98f28cfdf3f
+  imx681_sha256: a12693a18bf2e4108dd309af68da189a2ea394a734a0c6a3c1d624ac44dea3dc
+  dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  atomic_r4_sha256: 1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa
+  atomic_r5_sha256: 8e447a662a47e47db7dd211d6a109d590531309f944e52b729a4351b5a00da11
+  atomic_r6_sha256: c88e7a75f228fac7b69a4a122fd618aa054bdbf98e83ff541be9c20177844583
+  helper_sha256: f54003cb906c82d40f9287370aeab8f40c1a5746150880cea734b0741f5aecdd
+  helper_dqbuf_watchdog_ms: 5000
+  expected_indices: [0, 1, 2, 3, 0, 1]
+  expected_sequences: [0, 1, 2, 3, 4, 5]
+  qc10c_bytes_each: 7778304
+  rtcdm_final_seq: 108
+  rtcdm_final_fifo_seq: 50
+  rtcdm_last_userdata: 6
+  rtcdm_error: 0
+  rtcdm_faulted: false
+  linux_request6_executed: true
+  same_boot_retry: false
+  golden_return_verified: true
+  a3_prior_classification_superseded: true
+  a3_correction: named msm_vfe1 /proc/interrupts counter is not a valid frame-completion discriminator; A3 was a fragile 1-second userspace DQBUF watchdog timeout, not a deterministic kernel/IQ failure
+  production_parity_authorized: false
+
 next_action: >-
-  Keep Linux request6 forbidden. Mine existing evidence first, then if necessary make one minimal Windows oracle capture, to reproduce the 2026-09-04 atomic stream pre-Tintless meshes (req4 SHA 71fdf640..., req5/req6 SHA 6499164c...) from same-stream request-local LSC interpolation/calibration/geometry. Do not splice the older independent 839cae7d... request4 mesh. After native upstream replay closes, perform a separate runtime-authorization review.
+  Linux request4->5->6 executor transport is closed with the exact 0074 kernel and atomic Windows R4/R5/R6 IQ under the hardened Golden power flags. Keep Golden protected. Inspect the canonical front-camera source-integration/productionization path and promote only the proven executor plus producer behavior out of disposable one-shot/replay plumbing, preserving exact Windows-derived request ordering and dynamic IQ semantics. Run bounded regressions before sustained streaming, controls, switching, suspend/resume and reliability work. Captured capsule replay is evidence and a bounded oracle, not the final production IQ generator.

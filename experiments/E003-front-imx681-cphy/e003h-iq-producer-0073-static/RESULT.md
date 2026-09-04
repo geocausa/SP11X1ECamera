@@ -2,6 +2,13 @@
 
 Status: **accepted static + Windows-live producer checkpoint**. A read-only Windows producer capture was performed on the native camera stream and is replayed offline here. No Linux camera runtime, Linux request6 submission, Linux MMIO/sensor experiment, or new kernel module was performed by this checkpoint.
 
+## Post-checkpoint runtime supersession — 0076
+
+The statement above remains historically true for the 0073 checkpoint itself. Subsequent bounded Linux work on 2026-09-04 completed the separate runtime gate: 0075a preserved accepted 0072 under hardened Golden power flags, 0075b cleared fresh atomic R4/R5 on that five-frame runtime, and 0076 completed six frames/request6 with the exact 0074 kernel/module/DT and atomic R4/R5/R6. Final V4L2 order was `[0,1,2,3,0,1]`, sequences `[0,1,2,3,4,5]`, RT-CDM stopped at userdata 6 with no error/fault, and SP11 returned cleanly to persistent Golden.
+
+A3's earlier first-DQBUF timeout is superseded as a test-harness watchdog issue: the named `msm_vfe1` interrupt counter is not a valid completion discriminator, and extending only the helper watchdog from 1 s to 5 s allowed the byte-identical 0074 kernel/IQ assets to complete. The active next gate is productionization/source integration, not another request6 proof.
+
+
 ## What is now decoded
 
 The exact Surface IMX681 tuning blob is QTI Chromatix Parameter Parser V3.4.0. Its container is decoded as three contiguous sections. Section 0 is a fixed 56-byte `ParameterFileSymbolTableEntry` table; section 1 is serialized object data; section 2 is a 20-byte selector/mode index with 55 groups × 17 tuned-module slots.

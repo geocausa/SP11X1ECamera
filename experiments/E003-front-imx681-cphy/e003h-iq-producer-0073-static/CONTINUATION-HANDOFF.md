@@ -21,6 +21,12 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 
 **Atomic upstream producer gate CLOSED on 2026-09-04.** SP11 Linux now reproduces the fresh verified-front atomic request4 pre-Tintless input byte-for-byte from the repaired Windows authority: IMX681 LSC leaves `0x4bd -> 0x4bf` at float32 ratio `0.342`, nominal IMX681 golden, physical front-camera OTP slot and native DeviceMFT RVA `0x9b6048` geometry resampling produce full input SHA `71fdf640...` with 0 byte differences. The same proof first validates request5 end-to-end and reproduces `6499164c...` exactly. The prerequisite for the separate Linux request6 runtime-authorization review is therefore satisfied; request6 hardware execution still requires that review and a bounded candidate.
 
+### Runtime supersession — 0076 request6 closed
+
+That separate Linux runtime gate is now complete. 0075a proved the accepted 0072 five-frame runtime under the required Golden `clk_ignore_unused pd_ignore_unused` boot flags; 0075b proved fresh atomic R4/R5 on the exact accepted 0072 runtime; and 0076 used the exact 0074 kernel/module/DT plus atomic R4/R5/R6 to deliver six QC10C frames `[0,1,2,3,0,1]` / sequences `[0,1,2,3,4,5]`, each 7,778,304 bytes, with clean RT-CDM stop at userdata 6 and no boot faults. The only 0076 functional helper delta from A3 was the DQBUF watchdog from 1 s to 5 s plus monotonic telemetry. A3 is therefore reclassified as a fragile harness timeout, not a kernel/IQ failure. SP11 returned to persistent Golden cleanly after 0076.
+
+The next gate is productionization/source integration of the now-proven producer + executor semantics; captured capsules remain bounded oracle evidence rather than the final dynamic IQ generator.
+
 ## Latest accepted closures
 
 - GTM/TMC exact replay: closed, 256/256 qwords.
@@ -113,15 +119,13 @@ Exact 42-float trigger vector is captured for both requests. LSC control vector 
 
 ## Current open problem / immediate action
 
-The fresh 2026-09-04 verified-front producer chain is now closed end-to-end offline through the request-local LSC/Tintless boundary. The decisive repaired/current path is front-local: IMX681 tuning leaves, nominal IMX681 golden, physical front-camera OTP and native Surface geometry resampling. Atomic request4 is reproduced byte-exactly at float32 LSC interpolation ratio `0.342`; atomic request5/6 steady pre-Tintless input `6499164c...` is also reproduced exactly. The old independent rear/default crossover evidence must not be substituted into this current stream.
+The atomic producer proof and bounded Linux request4/5/6 executor are both closed. Immediate work is now **productionization/source integration**:
 
-Immediate work is now the **separate Linux request6 runtime-authorization/parity gate**:
+1. keep SP11 on protected Golden except for explicit bounded candidates; all camera candidate boot entries must inherit `clk_ignore_unused pd_ignore_unused`;
+2. inspect the canonical front-camera source/integration path and identify which 0074 executor pieces are still experiment-only one-shot plumbing versus reusable driver behavior;
+3. promote the proven request ordering, V4L2 ownership/requeue semantics and producer contract into the canonical source without hardcoding captured request4/5/6 replay as the production IQ engine;
+4. connect the already-closed repaired-Windows producer semantics to dynamic Linux request generation, preserving exact Windows-derived tuning/calibration/Tintless/GTM materialization and request-local state;
+5. run bounded regression first (request4/5/6, clean teardown, Golden return), then extend toward sustained streaming, controls/modes, camera switching, suspend/resume and reliability;
+6. use Windows/SP7 only when a genuinely missing oracle is encountered; otherwise continue from Linux and the existing byte-exact proofs.
 
-1. use Golden SP11 Linux as the primary workbench; mount the Windows partition read-only or transfer only missing KDNET captures from SP7;
-2. preserve accepted 0072 runtime behavior as the hardware baseline: five distinct QC10C frames `[0,1,2,3,0]`, live V4L2 requeue, request5 through the owned monotonic IQ-provider FIFO, clean RT-CDM stop and mandatory Golden return;
-3. extend that bounded path statically for exactly one additional steady request6 packet/frame, with no unrelated MMIO/sensor/CSID/VFE changes, strict request-ID `5 -> 6` FIFO ordering, no same-boot retry and fail-closed teardown;
-4. prove the request6 materialized IQ bytes against the accepted Windows atomic/staging/wire oracle before hardware execution;
-5. perform an explicit package/runtime authorization review; only after all static/hash/preflight gates pass may one bounded six-frame Golden-Linux run be consumed;
-6. after any runtime attempt, archive evidence and reboot externally to persistent Golden before further work.
-
-Windows is still the oracle, but another Windows boot is not currently required. If a new unknown appears, arm the normal GRUB one-shot Windows entry, use SP7 only as the lightweight KDNET host, capture the minimum missing evidence, then return SP11 to default Ubuntu.
+Do not reopen the old request6-authorization gate unless a productionization change alters the proven hardware contract.
