@@ -53,7 +53,7 @@ def build_front_x1():
  def wf(o,v):struct.pack_into('<f',out,o,float(v))
  # Tintless rolloff ABI: 17x13 table, 30x24 subgrid, 8 subgrids, offsets 0/72.
  for o,v in zip(range(0,0x1c,4),(17,13,30,24,8,0,72)):w32(o,v)
- # Front Tintless-BG config: 3840x2160, 120x90 regions, 32x24 cells, 18-bit, postBayer=0.
+ # Front Tintless-BG config: 3840x2160, 32x24 regions of 120x90 pixels, 18-bit, postBayer=0.
  for o,v in zip(range(0x1c,0x58,4),(3840,2160,120,90,32,24,0,0x3fffe,0x3fffe,0x3fffe,0x3fffe,18,0,0,0)):w32(o,v)
  # Surface Tintless23 active-region mapping. First 16 threshold floats become uint8.
  for i in range(16):out[0x58+i]=int(rv[i]+0.5)&0xff
