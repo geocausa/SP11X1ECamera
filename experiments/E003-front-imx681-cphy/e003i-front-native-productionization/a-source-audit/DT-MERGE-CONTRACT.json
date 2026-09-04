@@ -1,0 +1,77 @@
+{
+  "schema": "sp11-e003i-dual-camera-dt-contract-v1",
+  "accepted": true,
+  "rear": {
+    "enabled": true,
+    "cci": "cci0/CCI master1 @ ac15000",
+    "sensor": "ovti,ov13858@0x10",
+    "bus": "4-lane D-PHY",
+    "sensor_data_lanes": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "camss_port": 1,
+    "camss_data_lanes": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "link_frequency_hz": 592800000,
+    "xclk": "CAM_CC_MCLK1_CLK",
+    "reset_gpio": 110,
+    "supplies": {
+      "dovdd": "PM8010-M LDO6",
+      "dvdd": "PM8010-M LDO1",
+      "avdd": "PM8010-M LDO5"
+    }
+  },
+  "front": {
+    "enabled": true,
+    "cci": "cci1/CCI master1 @ ac16000",
+    "sensor": "sony,imx681@0x10",
+    "bus": "1-trio C-PHY",
+    "sensor_data_lanes": [
+      0
+    ],
+    "camss_port": 2,
+    "camss_data_lanes": [
+      0
+    ],
+    "xclk": "CAM_CC_MCLK4_CLK",
+    "mclk_gpio": 100,
+    "mclk_function": "cam_aon",
+    "reset_gpio": 237,
+    "supplies": {
+      "dovdd": "PM8010-M LDO3 1.8V",
+      "avdd": "PMIC-B LDO7 2.8V"
+    }
+  },
+  "camss_union": {
+    "ports": [
+      1,
+      2
+    ],
+    "must_add_from_front_0074": [
+      "CSIPHY2 aperture 0x2000",
+      "VFE0 aperture 0xf000",
+      "VFE1 aperture 0xf000",
+      "RT-CDM1 reg resource @ 0xac26000 size 0x1000",
+      "RT-CDM1 IRQ SPI 0x11f"
+    ],
+    "must_preserve_from_rear_r3": [
+      "rear port@1 endpoint",
+      "rear IOMMU coverage until compatibility is mechanically proven",
+      "accepted rear PM8010-M LDO1/LDO5/LDO6"
+    ],
+    "front_0074_experiment_iommus_not_automatically_authoritative_for_dual_camera": true
+  },
+  "forbidden": [
+    "rear status=disabled",
+    "front-only CAMSS ports list",
+    "rear-only CAMSS ports list",
+    "guessing a reduced dual-camera IOMMU list"
+  ]
+}
