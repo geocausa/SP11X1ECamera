@@ -17,7 +17,12 @@ Closed clean-room stages:
 - radix-2 complex FFT and matrix-transpose leaves (`0xca1d98`, `0xca1ed0`);
 - complete 64×32 forward and inverse 2-D FFT parents (`0xca1fb0`, `0xca2310`), including exact inverse `1/2048` scaling;
 - exponential Q16 postprocess (`0xc9ed88`);
-- correction-map→mesh stage (`0xc9c868`), including exact 29×37 persistent core-state writeback and Surface corner extrapolation.
+- correction-map→mesh stage (`0xc9c868`), including exact 29×37 persistent core-state writeback and Surface corner extrapolation;
+- solver state re-layout (`0xc9a288`);
+- periodic forward gradients (`0xc98270`);
+- active mode-2 complex spectral threshold (`0xc989d0`);
+- periodic zero-mean projection (`0xc998b8`), including Surface's mixed NEON-reciprocal/scalar-FDIV row rounding;
+- periodic divergence / gradient adjoint (`0xc99130`).
 
 Once the interpolation and 2-D FFT parents are substituted, their native pad/bicubic/FFT/transpose leaves are no longer reached on the validated front path. The `0xc9c868` substitution is differential-exact for both all 221 output floats and every persistent core-state byte it mutates. `ACTIVE-PATH.json` records the remaining native solver/state boundary and observed call counts.
 

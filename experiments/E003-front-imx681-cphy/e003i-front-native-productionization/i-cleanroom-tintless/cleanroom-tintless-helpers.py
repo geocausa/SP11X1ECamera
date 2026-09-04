@@ -288,3 +288,106 @@ def map_correction_to_mesh(u,state,src,dst):
             top=f32(f32(f32(float(g[iy][ix]))*omx)+f32(f32(float(g[iy][ix+1]))*fx))
             bot=f32(f32(f32(float(g[iy+1][ix]))*omx)+f32(f32(float(g[iy+1][ix+1]))*fx))
             wf32(u,dst+(y*mesh_w+x)*4,f32(f32(top*omy)+f32(bot*fy)))
+
+
+def solver_prepare_layout(u,state):
+    """Clean-room translation of RVA 0xc9a288.
+
+    Re-layout two 0x600-byte state planes around a zeroed 0x800-byte
+    workspace. This helper performs no arithmetic.
+    """
+    a=bytes(u.mem_read(state,0x600))
+    b=bytes(u.mem_read(state+0x600,0x600))
+    u.mem_write(state+0xc00,a)
+    u.mem_write(state+0x1200,b'\0'*0x800)
+    u.mem_write(state+0x1a00,b)
+
+
+def periodic_forward_gradients(u,mode,src,dx,dy):
+    """Active mode-2 clean-room translation of RVA 0xc98270.
+
+    Compute periodic forward differences on the 24x32 float field.
+    """
+    if (mode & 0xffff) not in (1,2):
+        raise ValueError('unsupported inactive Tintless gradient mode')
+    a=[rf32(u,src+i*4) for i in range(REGIONS)]
+    for yy in range(GRID_H):
+        for xx in range(GRID_W):
+            i=yy*GRID_W+xx
+            rx=yy*GRID_W+((xx+1)%GRID_W)
+            ry=((yy+1)%GRID_H)*GRID_W+xx
+            wf32(u,dx+i*4,f32(a[rx]-a[i]))
+            wf32(u,dy+i*4,f32(a[ry]-a[i]))
+
+
+def spectral_threshold_active(u,state):
+    """Active (mode0=2, mode1=2) clean-room branch of RVA 0xc989d0."""
+    mode0=ru16(u,state); mode1=ru16(u,state+2)
+    if mode0!=2 or mode1 not in (1,2):
+        raise ValueError('unsupported inactive Tintless threshold mode')
+    levels=[rf32(u,state+0x30+i*4) for i in range(16)]
+    thresholds=[]
+    hundred=f32(100.0)
+    for v in levels:
+        q=f32(v/hundred)
+        thresholds.append(f32(q*q))
+    classes=[int(rf32(u,state+0x78+i*4)) for i in range(REGIONS)]
+    for c in classes:
+        if not 0<=c<16: raise ValueError('Tintless threshold class out of range')
+    def apply(re_base,im_base,ys,xs):
+        for yy in ys:
+            for xx in xs:
+                i=yy*GRID_W+xx
+                re=rf32(u,re_base+i*4); im=rf32(u,im_base+i*4)
+                mag=f32(f32(re*re)+f32(im*im))
+                if thresholds[classes[i]] < mag:
+                    wf32(u,re_base+i*4,0.0); wf32(u,im_base+i*4,0.0)
+    apply(state+0x5e64,state+0x6a64,range(GRID_H),range(GRID_W-1))
+    apply(state+0x7664,state+0x8264,range(GRID_H-1),range(GRID_W))
+
+
+def project_periodic_zero_mean(u,mode,a,b,c,d):
+    """Active mode-2 clean-room branch of RVA 0xc998b8."""
+    if (mode & 0xffffffff)!=2:
+        raise ValueError('unsupported inactive Tintless projection mode')
+    def rows(base):
+        vals=[rf32(u,base+i*4) for i in range(REGIONS)]
+        for yy in range(GRID_H):
+            off=yy*GRID_W
+            total=f32(0.0)
+            for xx in range(GRID_W-1): total=f32(total+vals[off+xx])
+            mean_vec=struct.unpack('<f',struct.pack('<I',0x3d042108))[0]
+            mean16=f32(total*mean_vec)
+            mean_scalar=f32(total/f32(31.0))
+            for xx in range(16): vals[off+xx]=f32(vals[off+xx]-mean16)
+            for xx in range(16,GRID_W-1): vals[off+xx]=f32(vals[off+xx]-mean_scalar)
+            vals[off+GRID_W-1]=f32(0.0)
+        u.mem_write(base,struct.pack('<768f',*vals))
+    def cols(base):
+        vals=[rf32(u,base+i*4) for i in range(REGIONS)]
+        for xx in range(GRID_W):
+            total=f32(0.0)
+            for yy in range(GRID_H-1): total=f32(total+vals[yy*GRID_W+xx])
+            mean=f32(total/f32(23.0))
+            for yy in range(GRID_H-1): vals[yy*GRID_W+xx]=f32(vals[yy*GRID_W+xx]-mean)
+            vals[(GRID_H-1)*GRID_W+xx]=f32(0.0)
+        u.mem_write(base,struct.pack('<768f',*vals))
+    rows(a); rows(b); cols(c); cols(d)
+
+
+def periodic_divergence(u,mode,a,b,out):
+    """Active mode-2 clean-room branch of RVA 0xc99130."""
+    if (mode & 0xffff) not in (1,2):
+        raise ValueError('unsupported inactive Tintless divergence mode')
+    av=[rf32(u,a+i*4) for i in range(REGIONS)]
+    bv=[rf32(u,b+i*4) for i in range(REGIONS)]
+    ov=[]
+    for yy in range(GRID_H):
+        for xx in range(GRID_W):
+            i=yy*GRID_W+xx
+            left=yy*GRID_W+((xx-1)%GRID_W)
+            up=((yy-1)%GRID_H)*GRID_W+xx
+            da=f32(av[left]-av[i])
+            db=f32(bv[up]-bv[i])
+            ov.append(f32(da+db))
+    u.mem_write(out,struct.pack('<768f',*ov))
