@@ -23,6 +23,7 @@ Closed clean-room stages:
 - active mode-2 complex spectral threshold (`0xc989d0`);
 - periodic zero-mean projection (`0xc998b8`), including Surface's mixed NEON-reciprocal/scalar-FDIV row rounding;
 - periodic divergence / gradient adjoint (`0xc99130`).
+- complete solver orchestration parent (`0xc9a630`): gradients → threshold → projection → divergence → state layout → forward 2-D FFT → 2,048-coefficient spectral weighting → DC zero → inverse 2-D FFT.
 
 Once the interpolation and 2-D FFT parents are substituted, their native pad/bicubic/FFT/transpose leaves are no longer reached on the validated front path. The `0xc9c868` substitution is differential-exact for both all 221 output floats and every persistent core-state byte it mutates. `ACTIVE-PATH.json` records the remaining native solver/state boundary and observed call counts.
 

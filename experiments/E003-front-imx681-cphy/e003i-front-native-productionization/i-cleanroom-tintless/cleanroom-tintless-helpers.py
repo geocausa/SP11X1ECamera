@@ -391,3 +391,27 @@ def periodic_divergence(u,mode,a,b,out):
             db=f32(bv[up]-bv[i])
             ov.append(f32(da+db))
     u.mem_write(out,struct.pack('<768f',*ov))
+
+
+def solver_orchestration(u,state,field_a,field_b):
+    """Clean-room active front translation of RVA 0xc9a630."""
+    mode=ru16(u,state+2)
+    periodic_forward_gradients(u,mode,field_a,state+0x5e64,state+0x7664)
+    periodic_forward_gradients(u,mode,field_b,state+0x6a64,state+0x8264)
+    spectral_threshold_active(u,state)
+    project_periodic_zero_mean(u,mode,state+0x5e64,state+0x6a64,state+0x7664,state+0x8264)
+    periodic_divergence(u,mode,state+0x5e64,state+0x7664,state+0x8e64)
+    periodic_divergence(u,mode,state+0x6a64,state+0x8264,state+0xae64)
+    solver_prepare_layout(u,state+0x8e64)
+    solver_prepare_layout(u,state+0xae64)
+    fft2d_forward_64x32(u,state+0x8e64,state+0xae64,state+0x5e64,
+                        state+0xc84,state+0xd04,state+0xe24,state+0xe04)
+    for i in range(0x800):
+        off=i*4
+        w=rf32(u,state+0xe64+off)
+        wf32(u,state+0x8e64+off,f32(rf32(u,state+0x8e64+off)*w))
+        wf32(u,state+0xae64+off,f32(rf32(u,state+0xae64+off)*w))
+    wf32(u,state+0x8e64,0.0)
+    wf32(u,state+0xae64,0.0)
+    fft2d_inverse_64x32(u,state+0x8e64,state+0xae64,state+0x5e64,
+                        state+0xc84,state+0xd04,state+0xe24,state+0xe04)
