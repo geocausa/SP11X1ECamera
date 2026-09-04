@@ -1,0 +1,226 @@
+--- a/arch/arm64/boot/dts/qcom/hamoa.dtsi
++++ b/arch/arm64/boot/dts/qcom/hamoa.dtsi
+@@ -9775,6 +9775,34 @@
+ 		};
+ 	};
+ 
++	cci1: cci@ac16000 {
++		compatible = "qcom,x1e80100-cci", "qcom,msm8996-cci";
++		reg = <0 0x0ac16000 0 0x1000>;
++		interrupts = <GIC_SPI 271 IRQ_TYPE_EDGE_RISING>;
++		clocks = <&camcc CAM_CC_CAMNOC_AXI_RT_CLK>,
++			 <&camcc CAM_CC_CPAS_AHB_CLK>,
++			 <&camcc CAM_CC_CCI_1_CLK>;
++		clock-names = "camnoc_axi", "cpas_ahb", "cci";
++		power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		cci1_i2c0: i2c-bus@0 {
++			reg = <0>;
++			clock-frequency = <1000000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		cci1_i2c1: i2c-bus@1 {
++			reg = <1>;
++			clock-frequency = <1000000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++	};
++
+ 	camss: isp@acb7000 {
+ 		compatible = "qcom,x1e80100-camss";
+ 		reg = <0 0x0acb7000 0 0x2000>,
+@@ -9785,7 +9813,7 @@
+ 		      <0 0x0acb6000 0 0x1000>,
+ 		      <0 0x0ace4000 0 0x1000>,
+ 		      <0 0x0ace6000 0 0x2000>,
+-		      <0 0x0ace8000 0 0x1000>,
++		      <0 0x0ace8000 0 0x2000>,
+ 		      <0 0x0acec000 0 0x4000>,
+ 		      <0 0x0acf6000 0 0x1000>,
+ 		      <0 0x0acf7000 0 0x1000>,
+@@ -9850,10 +9878,11 @@
+ 				<&mmss_noc MASTER_CAMNOC_ICP QCOM_ICC_TAG_ALWAYS
+ 				 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
+ 		interconnect-names = "ahb", "hf_mnoc", "sf_mnoc", "sf_icp_mnoc";
+-		iommus = <&apps_smmu 0x800 0x60>, <&apps_smmu 0x860 0x60>,
+-			 <&apps_smmu 0x1800 0x60>, <&apps_smmu 0x1860 0x60>,
+-			 <&apps_smmu 0x18e0 0x00>, <&apps_smmu 0x1980 0x20>,
+-			 <&apps_smmu 0x1900 0x00>, <&apps_smmu 0x19a0 0x20>;
++		iommus = <&apps_smmu 0x800 0x60>,
++			 <&apps_smmu 0x820 0x60>,
++			 <&apps_smmu 0x840 0x60>,
++			 <&apps_smmu 0x860 0x60>,
++			 <&apps_smmu 0x18a0 0x00>;
+ 		power-domains = <&camcc CAM_CC_IFE_0_GDSC>, <&camcc CAM_CC_IFE_1_GDSC>,
+ 				<&camcc CAM_CC_TITAN_TOP_GDSC>;
+ 		power-domain-names = "ife0", "ife1", "top";
+--- a/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi
+@@ -527,6 +527,13 @@
+ 			regulator-name = "vreg_l6b_1p8";
+ 			regulator-min-microvolt = <1800000>;
+ 			regulator-max-microvolt = <2960000>;
++			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
++		};
++
++		vreg_l7b_2p8: ldo7 {
++			regulator-name = "vreg_l7b_2p8";
++			regulator-min-microvolt = <2800000>;
++			regulator-max-microvolt = <2800000>;
+ 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+ 		};
+ 
+@@ -1450,6 +1457,12 @@
+ 			regulator-max-microvolt = <1260000>;
+ 		};
+ 
++		vreg_l3m_camera: ldo3 {
++			regulator-name = "vreg_l3m_camera";
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
+ 		vreg_l5m_camera: ldo5 {
+ 			regulator-name = "vreg_l5m_camera";
+ 			regulator-min-microvolt = <2800000>;
+@@ -1469,6 +1482,41 @@
+ };
+ 
+ &camss {
++        /* Same-machine Windows IFE startup reaches VFE +0xbe70; Denali baseline spans are 0xf000. */
++        reg = <0 0x0acb7000 0 0x2000>,
++              <0 0x0acb9000 0 0x2000>,
++              <0 0x0acbb000 0 0x2000>,
++              <0 0x0acc6000 0 0x1000>,
++              <0 0x0acca000 0 0x1000>,
++              <0 0x0acb6000 0 0x1000>,
++              <0 0x0ace4000 0 0x1000>,
++              <0 0x0ace6000 0 0x2000>,
++              <0 0x0ace8000 0 0x2000>,
++              <0 0x0acec000 0 0x4000>,
++              <0 0x0acf6000 0 0x1000>,
++              <0 0x0acf7000 0 0x1000>,
++              <0 0x0acf8000 0 0x1000>,
++              <0 0x0ac62000 0 0xf000>,
++              <0 0x0ac71000 0 0xf000>,
++              <0 0x0acc7000 0 0x2000>,
++              <0 0x0accb000 0 0x2000>,
++              <0 0x0ac26000 0 0x1000>;
++	reg-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1",
++		    "csid_wrapper", "csiphy0", "csiphy1", "csiphy2", "csiphy4",
++		    "csitpg0", "csitpg1", "csitpg2", "vfe0", "vfe1",
++		    "vfe_lite0", "vfe_lite1", "rt_cdm1";
++
++	interrupts = <GIC_SPI 464 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 466 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 431 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 468 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 359 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 477 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 478 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 479 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 122 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 465 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 467 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 469 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 360 IRQ_TYPE_EDGE_RISING>, <GIC_SPI 287 IRQ_TYPE_EDGE_RISING>;
++	interrupt-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1",
++			 "csiphy0", "csiphy1", "csiphy2", "csiphy4", "vfe0",
++			 "vfe1", "vfe_lite0", "vfe_lite1", "rt_cdm1";
++
+ 	vdd-csiphy-0p8-supply = <&vreg_l2c_0p8>;
+ 	vdd-csiphy-1p2-supply = <&vreg_l1c_1p2>;
+ 	status = "okay";
+@@ -1481,6 +1529,16 @@
+ 				bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
+ 				data-lanes = <0 1 2 3>;
+ 				remote-endpoint = <&ov13858_ep>;
++			};
++		};
++
++		port@2 {
++			reg = <2>;
++
++			camss_csiphy2_ep: endpoint {
++				bus-type = <MEDIA_BUS_TYPE_CSI2_CPHY>;
++				data-lanes = <0>;
++				remote-endpoint = <&imx681_ep>;
+ 			};
+ 		};
+ 	};
+@@ -1519,6 +1577,37 @@
+ 	};
+ };
+ 
++&cci1 {
++	pinctrl-0 = <&cci1_master1_default>;
++	pinctrl-1 = <&cci1_master1_sleep>;
++	pinctrl-names = "default", "sleep";
++	status = "okay";
++};
++
++&cci1_i2c1 {
++	clock-frequency = <400000>;
++
++	camera@10 {
++		compatible = "sony,imx681";
++		reg = <0x10>;
++		clocks = <&camcc CAM_CC_MCLK4_CLK>;
++		clock-names = "xclk";
++		reset-gpios = <&tlmm 237 GPIO_ACTIVE_LOW>;
++		pinctrl-0 = <&front_imx681_default>;
++		pinctrl-names = "default";
++		dovdd-supply = <&vreg_l3m_camera>;
++		avdd-supply = <&vreg_l7b_2p8>;
++
++		port {
++			imx681_ep: endpoint {
++				bus-type = <MEDIA_BUS_TYPE_CSI2_CPHY>;
++				data-lanes = <0>;
++				remote-endpoint = <&camss_csiphy2_ep>;
++			};
++		};
++	};
++};
++
+ &tlmm {
+ 	cci0_default: cci0-default-state {
+ 		cci0-i2c1-pins {
+@@ -1538,6 +1627,37 @@
+ 		};
+ 	};
+ 
++	cci1_master1_default: cci1-master1-default-state {
++		pins = "gpio235", "gpio236";
++		function = "aon_cci";
++		drive-strength = <2>;
++		bias-pull-up;
++	};
++
++	cci1_master1_sleep: cci1-master1-sleep-state {
++		pins = "gpio235", "gpio236";
++		function = "aon_cci";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	front_imx681_default: front-imx681-default-state {
++		mclk-pins {
++			pins = "gpio100";
++			function = "cam_aon";
++			drive-strength = <4>;
++			bias-disable;
++			output-enable;
++		};
++
++		reset-pins {
++			pins = "gpio237";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
+ 	rear_mclk1_default: rear-mclk1-default-state {
+ 		pins = "gpio97";
+ 		function = "cam_mclk";

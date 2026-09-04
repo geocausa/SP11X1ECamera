@@ -1,0 +1,57 @@
+{
+  "schema": "sp11-e003i-dual-source-foundation-v1",
+  "accepted": true,
+  "runtime_authorized": false,
+  "source_workspace": "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src",
+  "base": "true Golden + exact accepted E002k rear five-patch replay",
+  "patches": [
+    "0006-arm64-dts-qcom-denali-add-dual-front-imx681.patch",
+    "0007-media-i2c-add-sp11-imx681-mode2.patch"
+  ],
+  "camss": {
+    "source": "exact 0074 14-file oracle imported unchanged for this foundation",
+    "srcversion": "65BADF7392020B5A70B6DC0",
+    "module_sha256": "863ef4f9936f9ba1bba032292ed64ca219afc47064639dc5eb6b0615c8d08657",
+    "expected_oracle_srcversion": "65BADF7392020B5A70B6DC0"
+  },
+  "imx681": {
+    "source_sha256": "0f05fc8d368456921939f71d96fc3f5ada80f6e62c5275c6bc24a3d7f8083b35",
+    "regs_sha256": "6f3bac866a16b9bfff5927084ad9b6e144fe9c9df4fec63e26ea11048467b6ab",
+    "srcversion": "73D75FCC1F2120C9E6D11B3",
+    "module_sha256": "1d7c506826369fd42e7f49e1243bc5601062f7d0628210c0e46c3b328be84dcc",
+    "expected_oracle_srcversion": "73D75FCC1F2120C9E6D11B3"
+  },
+  "dual_dtb": {
+    "sha256": "333e3c81c8a490f1b8b444e9a8d8005539799c438f2d03ebc6acfc366074b14e",
+    "rear_enabled": true,
+    "front_enabled": true,
+    "camss_ports": [
+      1,
+      2
+    ],
+    "iommu_set": [
+      "0x800/0x60",
+      "0x820/0x60",
+      "0x840/0x60",
+      "0x860/0x60",
+      "0x18a0/0"
+    ],
+    "rtcdm1": true,
+    "vfe_aperture": "0xf000",
+    "csiphy2_aperture": "0x2000"
+  },
+  "iommu_status": "five-entry set is the Windows/public-X1E-correct front CAMSS candidate; accepted rear R3 used older eight-entry set, so rear regression is mandatory before production acceptance",
+  "next_gate": "remove E003h module-param/sysfs/fixed-firmware/one-shot terminal control from CAMSS while preserving runner, VB2 ownership and provider FIFO semantics; then add a real per-request producer ingress contract",
+  "patch_replay": {
+    "fuzz": 0,
+    "accepted": true,
+    "replayed_files": {
+      "arch/arm64/boot/dts/qcom/hamoa.dtsi": "2f7688c37cf9bd13a08123d4404aac66fb5ed5621274d479f9a8a6945ca6e241",
+      "arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi": "858935c1f0d889f82037b7278d7fa6ef0cd9887ffe3389ff6c1a911f9ecc100f",
+      "drivers/media/i2c/Kconfig": "26a6db877bb8c0e13cbad663fe9ba665c612bab255ad7b4ca2249463f3cae32a",
+      "drivers/media/i2c/Makefile": "b221e46b897165be67587964b13d8d76d91e349da9d0cc9fe1cbc151f97bfbf4",
+      "drivers/media/i2c/imx681.c": "0f05fc8d368456921939f71d96fc3f5ada80f6e62c5275c6bc24a3d7f8083b35",
+      "drivers/media/i2c/imx681-sp11-mode2-regs.h": "6f3bac866a16b9bfff5927084ad9b6e144fe9c9df4fec63e26ea11048467b6ab"
+    }
+  }
+}

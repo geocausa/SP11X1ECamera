@@ -66,7 +66,15 @@
       "rear IOMMU coverage until compatibility is mechanically proven",
       "accepted rear PM8010-M LDO1/LDO5/LDO6"
     ],
-    "front_0074_experiment_iommus_not_automatically_authoritative_for_dual_camera": true
+    "five_entry_iommu_candidate": [
+      "0x800/0x60",
+      "0x820/0x60",
+      "0x840/0x60",
+      "0x860/0x60",
+      "0x18a0/0"
+    ],
+    "five_entry_iommu_authority": "same-machine Windows IORT/qcsmmu + public X1E Linux implementation; includes RT-CDM1 requester SID 0x18a0",
+    "rear_regression_required_before_five_entry_acceptance": true
   },
   "forbidden": [
     "rear status=disabled",
