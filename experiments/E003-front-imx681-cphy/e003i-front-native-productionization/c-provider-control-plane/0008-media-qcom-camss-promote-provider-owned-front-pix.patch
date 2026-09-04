@@ -1,0 +1,611 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -11,7 +11,6 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/dma-mapping.h>
+-#include <linux/firmware.h>
+ #include <linux/interconnect.h>
+ #include <linux/interrupt.h>
+ #include <linux/ioport.h>
+@@ -51,12 +50,6 @@
+ #define CAMSS_CPHY_DIVISOR 7
+ #define CAMSS_DPHY_DIVISOR 16
+ 
+-/* Disposable E003h PIX trigger. False by default and read-only after load. */
+-static bool camss_x1e_pix_runtime_arm;
+-module_param_named(e003h_pix_runtime_arm, camss_x1e_pix_runtime_arm, bool, 0400);
+-MODULE_PARM_DESC(e003h_pix_runtime_arm,
+-		 "Arm the disposable SP11 E003h one-shot PIX sysfs trigger");
+-
+ static const struct parent_dev_ops vfe_parent_dev_ops;
+ 
+ static const struct camss_subdev_resources csiphy_res_8x16[] = {
+@@ -5103,9 +5096,8 @@
+ 	}
+ 
+ 	seq = READ_ONCE(rt->diag_transition_seq) + 1;
+-	/* Pairs with e003h_pix_rtcdm_diag_show() acquire load. */
++	/* Publish the diagnostic transition after all fields above are visible. */
+ 	smp_store_release(&rt->diag_transition_seq, seq);
+-	sysfs_notify(&camss->dev->kobj, NULL, "e003h_pix_rtcdm_diag");
+ 
+ 	if (!error)
+ 		return;
+@@ -8370,178 +8362,12 @@
+ 	.run_once = camss_x1e_pix_runner_once,
+ };
+ 
+-/*
+- * E003h one-shot PIX caller/preflight gate, retained and unreferenced.
+- *
+- * This is the final in-kernel boundary before a disposable runtime trigger is
+- * allowed to exist. It does not discover, allocate, queue, or start vb2
+- * buffers. A later experiment must hand it exactly two caller-owned QC10C
+- * buffers that are still under userspace control, plus the separately
+- * SHA-verified local oracle capsule. The latch is intentionally irreversible
+- * until module reload/reboot, including on validation or runner failure.
+- */
++/* X1E80100 front PIX production ABI constraints. */
+ #define CAMSS_X1E_PIX_GATE_CAPSULE_BYTES	41088
+ #define CAMSS_X1E_PIX_GATE_QC10C_WIDTH		2560
+ #define CAMSS_X1E_PIX_GATE_QC10C_HEIGHT	1440
+ #define CAMSS_X1E_PIX_GATE_QC10C_STRIDE	3584
+ #define CAMSS_X1E_PIX_GATE_QC10C_BYTES		0x0076b000
+-#define CAMSS_X1E_PIX_GATE_VFE1_BASE		0x0ac71000
+-#define CAMSS_X1E_PIX_GATE_VFE1_BYTES		0x0000f000
+-#define CAMSS_X1E_PIX_GATE_RTCDM1_BASE		0x0ac26000
+-#define CAMSS_X1E_PIX_GATE_RTCDM1_BYTES	SZ_4K
+-
+-static const u8 camss_x1e_pix_gate_capsule_sha256[32] = {
+-	0x6a, 0xed, 0x02, 0x8d, 0x1c, 0xaa, 0xf0, 0x36,
+-	0x6b, 0x00, 0x40, 0x38, 0xae, 0xe3, 0xe9, 0x54,
+-	0xca, 0x95, 0xa9, 0x5c, 0x11, 0x7e, 0x26, 0x19,
+-	0x55, 0x5b, 0xdd, 0x96, 0x05, 0x74, 0x6a, 0x20,
+-};
+-
+-struct camss_x1e_pix_gate_request {
+-	struct camss_x1e_pix_runner_request runner;
+-	u8 capsule_sha256[ARRAY_SIZE(camss_x1e_pix_gate_capsule_sha256)];
+-};
+-
+-static atomic_t camss_x1e_pix_gate_once = ATOMIC_INIT(0);
+-
+-static int camss_x1e_pix_gate_buffer(struct camss_video *video,
+-				     struct camss_buffer *buffer)
+-{
+-	const struct v4l2_pix_format_mplane *fmt;
+-	struct vb2_buffer *vb;
+-	u64 end;
+-
+-	if (!video || !buffer)
+-		return -EINVAL;
+-	fmt = &video->active_fmt.fmt.pix_mp;
+-	vb = &buffer->vb.vb2_buf;
+-
+-	if (fmt->pixelformat != V4L2_PIX_FMT_QC10C ||
+-	    fmt->width != CAMSS_X1E_PIX_GATE_QC10C_WIDTH ||
+-	    fmt->height != CAMSS_X1E_PIX_GATE_QC10C_HEIGHT ||
+-	    fmt->num_planes != 1 ||
+-	    fmt->plane_fmt[0].bytesperline != CAMSS_X1E_PIX_GATE_QC10C_STRIDE ||
+-	    fmt->plane_fmt[0].sizeimage != CAMSS_X1E_PIX_GATE_QC10C_BYTES)
+-		return -EINVAL;
+-	if (vb->vb2_queue != &video->vb2_q || vb->num_planes != 1 ||
+-	    vb->state != VB2_BUF_STATE_DEQUEUED || vb2_plane_size(vb, 0) <
+-	    CAMSS_X1E_PIX_GATE_QC10C_BYTES)
+-		return -EBUSY;
+-	if (!buffer->addr[0] || !IS_ALIGNED(buffer->addr[0], PAGE_SIZE))
+-		return -EINVAL;
+-	end = (u64)buffer->addr[0] + CAMSS_X1E_PIX_GATE_QC10C_BYTES - 1;
+-	if (end > U32_MAX)
+-		return -ERANGE;
+-
+-	return 0;
+-}
+-
+-static int camss_x1e_pix_gate_resources(struct camss *camss)
+-{
+-	struct platform_device *pdev;
+-	struct resource *vfe1;
+-	struct resource *rtcdm1;
+-
+-	if (!camss || !camss->dev || !camss->rtcdm1.present)
+-		return -ENODEV;
+-	pdev = to_platform_device(camss->dev);
+-	vfe1 = platform_get_resource_byname(pdev, IORESOURCE_MEM, "vfe1");
+-	rtcdm1 = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rt_cdm1");
+-	if (!vfe1 || vfe1->start != CAMSS_X1E_PIX_GATE_VFE1_BASE ||
+-	    resource_size(vfe1) != CAMSS_X1E_PIX_GATE_VFE1_BYTES)
+-		return -ENODEV;
+-	if (!rtcdm1 || rtcdm1->start != CAMSS_X1E_PIX_GATE_RTCDM1_BASE ||
+-	    resource_size(rtcdm1) != CAMSS_X1E_PIX_GATE_RTCDM1_BYTES)
+-		return -ENODEV;
+-	if (!camss->rtcdm1.base)
+-		return -ENODEV;
+-
+-	return 0;
+-}
+-
+-static int camss_x1e_pix_gate_validate(struct camss *camss,
+-				       const struct camss_x1e_pix_gate_request *req)
+-{
+-	struct camss_video *video;
+-	u64 a0, a1;
+-	int ret;
+-
+-	if (!req || req->runner.capsule_size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES ||
+-	    memcmp(req->capsule_sha256, camss_x1e_pix_gate_capsule_sha256,
+-		   sizeof(camss_x1e_pix_gate_capsule_sha256)))
+-		return -EINVAL;
+-	ret = camss_x1e_pix_runner_validate(camss, &req->runner);
+-	if (ret)
+-		return ret;
+-	ret = camss_x1e_pix_gate_resources(camss);
+-	if (ret)
+-		return ret;
+-
+-	video = &camss->vfe[1].line[VFE_LINE_PIX].video_out;
+-	if (video->vb2_q.streaming || video->vb2_q.start_streaming_called ||
+-	    atomic_read(&video->vb2_q.owned_by_drv_count))
+-		return -EBUSY;
+-	ret = camss_x1e_pix_gate_buffer(video, req->runner.video[0]);
+-	if (ret)
+-		return ret;
+-	ret = camss_x1e_pix_gate_buffer(video, req->runner.video[1]);
+-	if (ret)
+-		return ret;
+-	if (req->runner.video[0]->vb.vb2_buf.index ==
+-	    req->runner.video[1]->vb.vb2_buf.index)
+-		return -EINVAL;
+-
+-	a0 = req->runner.video[0]->addr[0];
+-	a1 = req->runner.video[1]->addr[0];
+-	if (a0 < a1 + CAMSS_X1E_PIX_GATE_QC10C_BYTES &&
+-	    a1 < a0 + CAMSS_X1E_PIX_GATE_QC10C_BYTES)
+-		return -EINVAL;
+-
+-	/* The disposable front-only DT must not have a rear sensor link. */
+-	if (media_pad_remote_pad_first(&camss->csiphy[1].pads[MSM_CSIPHY_PAD_SINK]))
+-		return -EBUSY;
+-
+-	return 0;
+-}
+-
+-static int camss_x1e_pix_gate_run_once(struct camss *camss,
+-				       const struct camss_x1e_pix_gate_request *req,
+-				       struct camss_x1e_pix_runner_result *result)
+-{
+-	int ret;
+-
+-	if (atomic_cmpxchg(&camss_x1e_pix_gate_once, 0, 1))
+-		return -EALREADY;
+-	ret = camss_x1e_pix_gate_validate(camss, req);
+-	if (ret)
+-		return ret;
+-
+-	return camss_x1e_pix_runner_once(camss, &req->runner, result);
+-}
+-
+-struct camss_x1e_pix_gate_static_ops {
+-	int (*run_once)(struct camss *camss,
+-			const struct camss_x1e_pix_gate_request *req,
+-			struct camss_x1e_pix_runner_result *result);
+-};
+-
+-/* Retention only: no probe, vb2, ioctl, debugfs or firmware path references it. */
+-static const struct camss_x1e_pix_gate_static_ops
+-camss_x1e_pix_gate_recipe __used = {
+-	.run_once = camss_x1e_pix_gate_run_once,
+-};
+-
+-/*
+- * E003h disposable sysfs trigger. The attribute is created only when the module
+- * is explicitly loaded with e003h_pix_runtime_arm=1 on X1E80100. It accepts
+- * exactly "RUN", discovers only the two preallocated DEQUEUED buffers 0/1,
+- * loads the fixed local capsule firmware, and invokes the irreversible 0034
+- * gate. It never QBUFs or STREAMONs the normal vb2 path.
+- */
+-#define CAMSS_X1E_PIX_TRIGGER_FW "sp11/e003h/E003H_PIX_ORACLE_CAPSULE.bin"
+-#define CAMSS_X1E_PIX_TRIGGER_FW_R5 "sp11/e003h/E003H_PIX_ORACLE_CAPSULE_R5.bin"
+-#define CAMSS_X1E_PIX_TRIGGER_FW_R6 "sp11/e003h/E003H_PIX_ORACLE_CAPSULE_R6.bin"
+-
+ 
+ /*
+  * E003h 0072 steady-IQ provider FIFO.
+@@ -8549,12 +8375,12 @@
+  * This is deliberately a software-only ownership boundary between an upstream
+  * per-request IQ producer and the already-proven steady materializer/runner.
+  * Queue entries own a private copy of the existing capsule ABI so producer
+- * lifetime cannot race the camera worker. The queue enforces request5+ strict
++ * lifetime cannot race the camera worker. The queue enforces request4+ strict
+  * monotonic ordering and bounded depth. It has no MMIO, RT-CDM submission,
+  * IRQ, sensor, CSID or VFE operation.
+  */
+ #define CAMSS_X1E_PIX_IQ_QUEUE_DEPTH_MAX	8
+-#define CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST	5
++#define CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST	4
+ #define CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US	500000
+ 
+ struct camss_x1e_pix_iq_packet {
+@@ -8722,22 +8548,6 @@
+ 	return ret;
+ }
+ 
+-static int camss_x1e_pix_iq_provider_seed_firmware(struct camss_video *video,
+-						    const char *name)
+-{
+-	const struct firmware *fw;
+-	int ret;
+-
+-	if (!video || !video->camss || !name)
+-		return -EINVAL;
+-	ret = request_firmware_direct(&fw, name, video->camss->dev);
+-	if (ret)
+-		return ret;
+-	ret = camss_x1e_pix_iq_provider_enqueue(video, fw->data, fw->size);
+-	release_firmware(fw);
+-	return ret;
+-}
+-
+ struct camss_x1e_pix_iq_provider_static_ops {
+ 	int (*open)(struct camss_video *video, u64 first_request_id);
+ 	int (*enqueue)(struct camss_video *video, const void *capsule, size_t capsule_size);
+@@ -8758,54 +8568,6 @@
+ 	.release = camss_x1e_pix_iq_packet_release,
+ };
+ 
+-static int camss_x1e_pix_trigger_buffer(struct camss_video *video,
+-					unsigned int index,
+-					struct camss_buffer **buffer)
+-{
+-	struct vb2_v4l2_buffer *vbuf;
+-	struct vb2_buffer *vb;
+-
+-	if (!video || !buffer || index >= video->vb2_q.max_num_buffers ||
+-	    !video->vb2_q.bufs || !video->vb2_q.bufs[index])
+-		return -EINVAL;
+-	vb = video->vb2_q.bufs[index];
+-	if (vb->vb2_queue != &video->vb2_q)
+-		return -EINVAL;
+-	vbuf = to_vb2_v4l2_buffer(vb);
+-	*buffer = container_of(vbuf, struct camss_buffer, vb);
+-	return 0;
+-}
+-
+-static int camss_x1e_pix_trigger_sync(struct camss *camss,
+-				      struct camss_buffer *buffer, bool for_device)
+-{
+-	struct vb2_buffer *vb = &buffer->vb.vb2_buf;
+-	struct sg_table *sgt;
+-	struct scatterlist *sg;
+-	dma_addr_t next;
+-	u64 total = 0;
+-	unsigned int i;
+-
+-	sgt = vb2_dma_sg_plane_desc(vb, 0);
+-	if (!sgt || !sgt->nents)
+-		return -EFAULT;
+-	next = buffer->addr[0];
+-	for_each_sg(sgt->sgl, sg, sgt->nents, i) {
+-		if (sg_dma_address(sg) != next || !sg_dma_len(sg))
+-			return -ERANGE;
+-		next += sg_dma_len(sg);
+-		total += sg_dma_len(sg);
+-	}
+-	if (total < CAMSS_X1E_PIX_GATE_QC10C_BYTES)
+-		return -ERANGE;
+-
+-	if (for_device)
+-		dma_sync_sgtable_for_device(camss->dev, sgt, DMA_FROM_DEVICE);
+-	else
+-		dma_sync_sgtable_for_cpu(camss->dev, sgt, DMA_FROM_DEVICE);
+-	return 0;
+-}
+-
+ static int camss_x1e_pix_v4l2_buffer(struct camss_video *video,
+ 				     struct camss_buffer *buffer)
+ {
+@@ -8873,9 +8635,7 @@
+ 	struct camss_x1e_pix_runner_request req = { 0 };
+ 	struct camss_buffer *video0 = NULL, *video1 = NULL;
+ 	struct camss_buffer *video2 = NULL, *video3 = NULL;
+-	struct camss_x1e_pix_iq_packet *iq5 = NULL, *iq6 = NULL;
+-	const struct firmware *fw = NULL;
+-	bool iq_provider_open = false;
++	struct camss_x1e_pix_iq_packet *iq4 = NULL, *iq5 = NULL, *iq6 = NULL;
+ 	struct media_pad *sensor_pad;
+ 	struct vfe_output *output;
+ 	struct v4l2_subdev *sensor;
+@@ -8883,43 +8643,24 @@
+ 	struct camss *camss;
+ 	unsigned long flags;
+ 	bool runner_called = false;
++	bool provider_owned = true;
+ 	int ret;
+ 
+ 	camss = video->camss;
+ 	vfe = &camss->vfe[1];
+ 	output = &vfe->line[VFE_LINE_PIX].output;
+ 
+-	ret = camss_x1e_pix_iq_provider_open(video,
+-					 CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST);
+-	if (ret)
+-		goto out_done;
+-	iq_provider_open = true;
+-
+-	ret = request_firmware_direct(&fw, CAMSS_X1E_PIX_TRIGGER_FW, camss->dev);
++	/* Production path: all proven per-request IQ bytes are producer-owned. */
++	ret = camss_x1e_pix_iq_provider_next(video, 4,
++					 CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq4);
+ 	if (ret)
+ 		goto out_iq;
+-	if (fw->size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES) {
+-		ret = -EINVAL;
+-		goto out_fw;
+-	}
+-
+-	/* 0072 compatibility producer: feed exact request5 through the provider FIFO. */
+-	ret = camss_x1e_pix_iq_provider_seed_firmware(video,
+-						   CAMSS_X1E_PIX_TRIGGER_FW_R5);
+-	if (ret)
+-		goto out_fw;
+ 	ret = camss_x1e_pix_iq_provider_next(video, 5,
+ 					 CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq5);
+ 	if (ret)
+-		goto out_fw;
+-
+-	/* 0074: strict FIFO continuation, exact request6 follows request5. */
+-	ret = camss_x1e_pix_iq_provider_seed_firmware(video,
+-						      CAMSS_X1E_PIX_TRIGGER_FW_R6);
+-	if (ret)
+ 		goto out_iq_packet;
+ 	ret = camss_x1e_pix_iq_provider_next(video, 6,
+-					     CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq6);
++					 CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq6);
+ 	if (ret)
+ 		goto out_iq_packet;
+ 
+@@ -8952,8 +8693,8 @@
+ 		goto out_error_buffers;
+ 	}
+ 	sensor = media_entity_to_v4l2_subdev(sensor_pad->entity);
+-	req.capsule = fw->data;
+-	req.capsule_size = fw->size;
++	req.capsule = iq4->capsule;
++	req.capsule_size = iq4->capsule_size;
+ 	req.capsule_next = iq5->capsule;
+ 	req.capsule_next_size = iq5->capsule_size;
+ 	req.capsule_next_next = iq6->capsule;
+@@ -8974,14 +8715,15 @@
+ 	if (!result.teardown_safe) {
+ 		video->x1e_pix_runner_pinned = true;
+ 		dev_err(camss->dev,
+-			"E003h 0071 teardown unsafe; live-requeue DMA ownership pinned until reboot\n");
++			"X1E front PIX teardown unsafe; DMA/provider ownership pinned until reboot\n");
+ 		if (!ret)
+ 			ret = -EIO;
+-		/* Keep provider-owned bytes pinned with the failed hardware state. */
++		/* Keep producer-owned bytes pinned with the failed hardware state. */
++		iq4 = NULL;
+ 		iq5 = NULL;
+ 		iq6 = NULL;
+-		iq_provider_open = false;
+-		goto out_fw;
++		provider_owned = false;
++		goto out_done;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+ 	    result.video_done_third != video2 || result.video_done_fourth != video3 ||
+@@ -9004,7 +8746,7 @@
+ 
+ 	video->x1e_pix_runner_stopped = true;
+ 	dev_info(camss->dev,
+-		 "E003h 0074 completed bounded six-frame live requeue; request5/6 used buffers0/1\n");
++		 "X1E front PIX completed provider-owned bounded six-frame live requeue\n");
+ 	ret = 0;
+ 	goto out_iq_packet;
+ 
+@@ -9027,13 +8769,10 @@
+ 	}
+ out_iq_packet:
+ 	camss_x1e_pix_iq_packet_release(iq6);
+-	iq6 = NULL;
+ 	camss_x1e_pix_iq_packet_release(iq5);
+-	iq5 = NULL;
+-out_fw:
+-	release_firmware(fw);
++	camss_x1e_pix_iq_packet_release(iq4);
+ out_iq:
+-	if (iq_provider_open) {
++	if (provider_owned) {
+ 		camss_x1e_pix_iq_provider_close(video);
+ 		camss_x1e_pix_iq_provider_purge(video);
+ 	}
+@@ -9045,16 +8784,25 @@
+ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count)
+ {
+ 	struct camss *camss;
++	int ret = 0;
+ 
+-	if (!camss_x1e_pix_runtime_arm || !video || !video->camss || count != 4)
+-		return -EPERM;
++	if (!video || !video->camss || count != 4)
++		return -EINVAL;
+ 	camss = video->camss;
+ 	if (!camss->res || camss->res->version != CAMSS_X1E80100 ||
+ 	    camss->res->vfe_num <= 1 ||
+ 	    video != &camss->vfe[1].line[VFE_LINE_PIX].video_out)
+ 		return -ENODEV;
+-	if (atomic_cmpxchg(&camss_x1e_pix_gate_once, 0, 1))
+-		return -EALREADY;
++
++	/* Fail closed until a producer opens request4 and primes exact R4/R5/R6. */
++	mutex_lock(&video->x1e_pix_iq_lock);
++	if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth < 3 ||
++	    video->x1e_pix_iq_last_enqueued < 6 ||
++	    video->x1e_pix_iq_last_dequeued != 3)
++		ret = -EAGAIN;
++	mutex_unlock(&video->x1e_pix_iq_lock);
++	if (ret)
++		return ret;
+ 
+ 	init_waitqueue_head(&video->x1e_pix_buf_wait);
+ 	INIT_WORK(&video->x1e_pix_work, camss_x1e_pix_v4l2_live_work);
+@@ -9073,125 +8821,6 @@
+ 	return 0;
+ }
+ 
+-static ssize_t e003h_pix_rtcdm_diag_show(struct device *dev,
+-					 struct device_attribute *attr, char *buf)
+-{
+-	struct camss *camss = dev_get_drvdata(dev);
+-	struct camss_rtcdm *rt;
+-	u32 seq;
+-
+-	if (!camss || !camss->res || camss->res->version != CAMSS_X1E80100)
+-		return -ENODEV;
+-	rt = &camss->rtcdm1;
+-	/* Pairs with camss_rtcdm1_diag_set() release store. */
+-	seq = smp_load_acquire(&rt->diag_transition_seq);
+-
+-	return sysfs_emit(buf,
+-		"seq=%u stage=%u name=%s fifo_seq=%u base=%#x len=%#x required=%#x error=%d irq_armed=%u faulted=%u last_status=%#x/%#x/%#x/%#x last_userdata=%#x\n",
+-		seq, READ_ONCE(rt->diag_stage),
+-		camss_rtcdm1_diag_stage_name(READ_ONCE(rt->diag_stage)),
+-		READ_ONCE(rt->diag_fifo_seq), READ_ONCE(rt->diag_base),
+-		READ_ONCE(rt->diag_len_low20), READ_ONCE(rt->diag_required_irq),
+-		READ_ONCE(rt->diag_last_error), READ_ONCE(rt->irq_armed),
+-		READ_ONCE(rt->faulted), READ_ONCE(rt->last_irq_status),
+-		READ_ONCE(rt->last_irq_status1), READ_ONCE(rt->last_irq_status2),
+-		READ_ONCE(rt->last_irq_status3), READ_ONCE(rt->last_user_data));
+-}
+-static DEVICE_ATTR_RO(e003h_pix_rtcdm_diag);
+-
+-static ssize_t e003h_pix_run_once_store(struct device *dev,
+-					struct device_attribute *attr,
+-					const char *buf, size_t count)
+-{
+-	struct camss_x1e_pix_runner_result result = { 0 };
+-	struct camss_x1e_pix_gate_request req = { 0 };
+-	struct camss_buffer *video0 = NULL;
+-	struct camss_buffer *video1 = NULL;
+-	const struct firmware *fw = NULL;
+-	struct media_pad *sensor_pad;
+-	struct camss_video *video;
+-	struct v4l2_subdev *sensor;
+-	struct camss *camss;
+-	bool synced0 = false;
+-	bool synced1 = false;
+-	int ret;
+-
+-	if (!camss_x1e_pix_runtime_arm || !sysfs_streq(buf, "RUN"))
+-		return -EPERM;
+-	camss = dev_get_drvdata(dev);
+-	if (!camss || !camss->res || camss->res->version != CAMSS_X1E80100)
+-		return -ENODEV;
+-
+-	ret = request_firmware_direct(&fw, CAMSS_X1E_PIX_TRIGGER_FW, dev);
+-	if (ret)
+-		return ret;
+-	if (fw->size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES) {
+-		ret = -EINVAL;
+-		goto out_fw;
+-	}
+-
+-	video = &camss->vfe[1].line[VFE_LINE_PIX].video_out;
+-	mutex_lock(&video->lock);
+-	mutex_lock(&video->q_lock);
+-	if (vb2_get_num_buffers(&video->vb2_q) != 2) {
+-		ret = -EINVAL;
+-		goto out_unlock;
+-	}
+-	ret = camss_x1e_pix_trigger_buffer(video, 0, &video0);
+-	if (ret)
+-		goto out_unlock;
+-	ret = camss_x1e_pix_trigger_buffer(video, 1, &video1);
+-	if (ret)
+-		goto out_unlock;
+-
+-	sensor_pad = media_pad_remote_pad_first(&camss->csiphy[2].pads[MSM_CSIPHY_PAD_SINK]);
+-	if (!sensor_pad || !is_media_entity_v4l2_subdev(sensor_pad->entity)) {
+-		ret = -ENOLINK;
+-		goto out_unlock;
+-	}
+-	sensor = media_entity_to_v4l2_subdev(sensor_pad->entity);
+-
+-	ret = camss_x1e_pix_trigger_sync(camss, video0, true);
+-	if (ret)
+-		goto out_unlock;
+-	synced0 = true;
+-	ret = camss_x1e_pix_trigger_sync(camss, video1, true);
+-	if (ret)
+-		goto out_sync_cpu;
+-	synced1 = true;
+-
+-	req.runner.capsule = fw->data;
+-	req.runner.capsule_size = fw->size;
+-	req.runner.sensor = sensor;
+-	req.runner.video[0] = video0;
+-	req.runner.video[1] = video1;
+-	memcpy(req.capsule_sha256, camss_x1e_pix_gate_capsule_sha256,
+-	       sizeof(req.capsule_sha256));
+-	ret = camss_x1e_pix_gate_run_once(camss, &req, &result);
+-	if (!result.teardown_safe)
+-		goto out_unlock;
+-
+-out_sync_cpu:
+-	if (synced1)
+-		camss_x1e_pix_trigger_sync(camss, video1, false);
+-	if (synced0)
+-		camss_x1e_pix_trigger_sync(camss, video0, false);
+-out_unlock:
+-	mutex_unlock(&video->q_lock);
+-	mutex_unlock(&video->lock);
+-out_fw:
+-	release_firmware(fw);
+-	if (ret)
+-		return ret;
+-	if (result.video_done != video0 || !result.epoch0_seen || !result.video_seen ||
+-	    !result.teardown_safe)
+-		return -EIO;
+-
+-	dev_info(dev, "E003h PIX one-shot completed: VIDEO slot0 returned safely\n");
+-	return count;
+-}
+-static DEVICE_ATTR_WO(e003h_pix_run_once);
+-
+ /*
+  * Allocate a caller-sized coherent arena from the CAMSS DMA domain. The CAMSS
+  * probe already installs a 32-bit coherent DMA mask. This helper independently
+@@ -9446,20 +9075,6 @@
+ 		goto err_media_device_unregister;
+ 	}
+ 
+-	if (camss_x1e_pix_runtime_arm && camss->res->version == CAMSS_X1E80100) {
+-		ret = device_create_file(dev, &dev_attr_e003h_pix_rtcdm_diag);
+-		if (ret) {
+-			v4l2_async_nf_unregister(&camss->notifier);
+-			goto err_media_device_unregister;
+-		}
+-		ret = device_create_file(dev, &dev_attr_e003h_pix_run_once);
+-		if (ret) {
+-			device_remove_file(dev, &dev_attr_e003h_pix_rtcdm_diag);
+-			v4l2_async_nf_unregister(&camss->notifier);
+-			goto err_media_device_unregister;
+-		}
+-	}
+-
+ 	return 0;
+ 
+ err_media_device_unregister:
+@@ -9498,10 +9113,6 @@
+ {
+ 	struct camss *camss = platform_get_drvdata(pdev);
+ 
+-	if (camss_x1e_pix_runtime_arm && camss->res->version == CAMSS_X1E80100) {
+-		device_remove_file(&pdev->dev, &dev_attr_e003h_pix_run_once);
+-		device_remove_file(&pdev->dev, &dev_attr_e003h_pix_rtcdm_diag);
+-	}
+ 	v4l2_async_nf_unregister(&camss->notifier);
+ 	v4l2_async_nf_cleanup(&camss->notifier);
+ 	camss_unregister_entities(camss);
