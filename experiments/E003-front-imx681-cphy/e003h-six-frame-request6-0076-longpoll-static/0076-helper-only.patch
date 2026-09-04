@@ -1,0 +1,60 @@
+--- /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-static/e003h-v4l2-six-frame.c	2026-09-04 15:25:46.079499670 +0100
++++ /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0076-longpoll-static/e003h-v4l2-six-frame-longpoll.c	2026-09-04 18:10:01.414962377 +0100
+@@ -11,6 +11,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <unistd.h>
++#include <time.h>
+ 
+ #define QC10C_WIDTH 2560U
+ #define QC10C_HEIGHT 1440U
+@@ -18,6 +19,7 @@
+ #define QC10C_BYTES 0x76b000U
+ #define BUFFER_COUNT 4U
+ #define FRAME_COUNT 6U
++#define DQBUF_POLL_TIMEOUT_MS 5000
+ 
+ static int xioctl(int fd, unsigned long req, void *arg)
+ {
+@@ -34,6 +36,15 @@
+ 		pause();
+ }
+ 
++static uint64_t mono_ns(void)
++{
++	struct timespec ts;
++
++	if (clock_gettime(CLOCK_MONOTONIC, &ts))
++		return 0;
++	return (uint64_t)ts.tv_sec * 1000000000ULL + (uint64_t)ts.tv_nsec;
++}
++
+ static int save_file(const char *path, const void *data, size_t bytes)
+ {
+ 	const uint8_t *p = data;
+@@ -124,13 +135,23 @@
+ 		perror("VIDIOC_STREAMON");
+ 		pin_until_reboot("STREAMON failed; preserve driver-owned DMA");
+ 	}
+-	printf("STREAMON_OK_ASYNC\n"); fflush(stdout);
++	{
++		uint64_t t = mono_ns();
++		printf("STREAMON_OK_ASYNC MONO_NS=%llu\n", (unsigned long long)t);
++		fflush(stdout);
++	}
+ 
+ 	for (i = 0; i < FRAME_COUNT; i++) {
+ 		struct pollfd pfd = { .fd = vfd, .events = POLLIN };
+ 		struct v4l2_plane plane = { 0 };
+ 		struct v4l2_buffer b = { 0 };
+-		int pr = poll(&pfd, 1, 1000);
++		uint64_t poll_start = mono_ns();
++		int pr = poll(&pfd, 1, DQBUF_POLL_TIMEOUT_MS);
++		uint64_t poll_end = mono_ns();
++		printf("POLL%u_START_NS=%llu END_NS=%llu ELAPSED_NS=%llu RC=%d REVENTS=0x%x\n",
++			i, (unsigned long long)poll_start, (unsigned long long)poll_end,
++			(unsigned long long)(poll_end - poll_start), pr, pfd.revents);
++		fflush(stdout);
+ 		if (pr <= 0)
+ 			pin_until_reboot(pr == 0 ? "DQBUF poll timeout" : "DQBUF poll error");
+ 		b.type = type; b.memory = V4L2_MEMORY_MMAP; b.length = 1; b.m.planes = &plane;
