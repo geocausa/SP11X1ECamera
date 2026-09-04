@@ -1,0 +1,290 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -8363,7 +8363,6 @@
+ };
+ 
+ /* X1E80100 front PIX production ABI constraints. */
+-#define CAMSS_X1E_PIX_GATE_CAPSULE_BYTES	41088
+ #define CAMSS_X1E_PIX_GATE_QC10C_WIDTH		2560
+ #define CAMSS_X1E_PIX_GATE_QC10C_HEIGHT	1440
+ #define CAMSS_X1E_PIX_GATE_QC10C_STRIDE	3584
+@@ -8451,7 +8450,7 @@
+ 	u64 request_id;
+ 	int ret;
+ 
+-	if (!video || !capsule || capsule_size != CAMSS_X1E_PIX_GATE_CAPSULE_BYTES)
++	if (!video || !capsule || capsule_size != CAMSS_X1E_PIX_CAPSULE_BYTES)
+ 		return -EINVAL;
+ 
+ 	packet = kmalloc(struct_size(packet, capsule, capsule_size), GFP_KERNEL);
+@@ -8568,6 +8567,79 @@
+ 	.release = camss_x1e_pix_iq_packet_release,
+ };
+ 
++static bool camss_x1e_pix_iq_video(struct camss_video *video)
++{
++	struct camss *camss;
++
++	if (!video || !video->camss || !video->camss->res)
++		return false;
++	camss = video->camss;
++
++	return camss->res->version == CAMSS_X1E80100 && camss->res->vfe_num > 1 &&
++	       video == &camss->vfe[1].line[VFE_LINE_PIX].video_out;
++}
++
++int camss_x1e_pix_iq_session_open(struct camss_video *video)
++{
++	if (!camss_x1e_pix_iq_video(video))
++		return -ENODEV;
++	if (READ_ONCE(video->x1e_pix_runner_pinned) ||
++	    READ_ONCE(video->x1e_pix_worker_started) ||
++	    READ_ONCE(video->x1e_pix_live_active))
++		return -EBUSY;
++
++	/* A new exclusive fd always begins with an empty, closed producer FIFO. */
++	camss_x1e_pix_iq_provider_close(video);
++	camss_x1e_pix_iq_provider_purge(video);
++	return 0;
++}
++
++void camss_x1e_pix_iq_session_close(struct camss_video *video)
++{
++	if (!camss_x1e_pix_iq_video(video) ||
++	    READ_ONCE(video->x1e_pix_runner_pinned) ||
++	    READ_ONCE(video->x1e_pix_worker_started) ||
++	    READ_ONCE(video->x1e_pix_live_active))
++		return;
++
++	camss_x1e_pix_iq_provider_close(video);
++	camss_x1e_pix_iq_provider_purge(video);
++}
++
++int camss_x1e_pix_iq_submit(struct camss_video *video,
++			    const u8 *capsule, size_t capsule_size)
++{
++	bool closed;
++	int ret;
++
++	if (!camss_x1e_pix_iq_video(video) || !capsule ||
++	    capsule_size != CAMSS_X1E_PIX_CAPSULE_BYTES)
++		return -EINVAL;
++	if (READ_ONCE(video->x1e_pix_runner_pinned) ||
++	    READ_ONCE(video->x1e_pix_worker_started) ||
++	    READ_ONCE(video->x1e_pix_live_active) || video->vb2_q.streaming)
++		return -EBUSY;
++
++	mutex_lock(&video->x1e_pix_iq_lock);
++	closed = video->x1e_pix_iq_closed;
++	mutex_unlock(&video->x1e_pix_iq_lock);
++
++	if (closed) {
++		ret = camss_x1e_pix_iq_provider_open(video,
++						 CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST);
++		if (ret)
++			return ret;
++	}
++
++	ret = camss_x1e_pix_iq_provider_enqueue(video, capsule, capsule_size);
++	if (ret) {
++		/* Any producer protocol error invalidates the partial sequence. */
++		camss_x1e_pix_iq_provider_close(video);
++		camss_x1e_pix_iq_provider_purge(video);
++	}
++	return ret;
++}
++
+ static int camss_x1e_pix_v4l2_buffer(struct camss_video *video,
+ 				     struct camss_buffer *buffer)
+ {
+@@ -8796,8 +8868,8 @@
+ 
+ 	/* Fail closed until a producer opens request4 and primes exact R4/R5/R6. */
+ 	mutex_lock(&video->x1e_pix_iq_lock);
+-	if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth < 3 ||
+-	    video->x1e_pix_iq_last_enqueued < 6 ||
++	if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth != 3 ||
++	    video->x1e_pix_iq_last_enqueued != 6 ||
+ 	    video->x1e_pix_iq_last_dequeued != 3)
+ 		ret = -EAGAIN;
+ 	mutex_unlock(&video->x1e_pix_iq_lock);
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -45,6 +45,7 @@
+ 
+ #define CAMSS_RES_MAX 17
+ #define CAMSS_INIT_BUF_COUNT 2
++#define CAMSS_X1E_PIX_CAPSULE_BYTES 41088
+ 
+ struct camss_subdev_resources {
+ 	struct regulator_bulk_data regulators[CAMSS_RES_MAX];
+@@ -209,6 +210,10 @@
+ void camss_buf_done(struct camss *camss, int hw_id, int port_id);
+ void camss_reg_update(struct camss *camss, int hw_id,
+ 		      int port_id, bool is_clear);
++int camss_x1e_pix_iq_session_open(struct camss_video *video);
++void camss_x1e_pix_iq_session_close(struct camss_video *video);
++int camss_x1e_pix_iq_submit(struct camss_video *video,
++			    const u8 *capsule, size_t capsule_size);
+ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
+ int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
+ 				     struct camss_buffer *buffer);
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -20,6 +20,8 @@
+ #include "camss-vfe.h"
+ #include "camss.h"
+ 
++#define V4L2_CID_QCOM_CAMSS_X1E_IQ_CAPSULE	(V4L2_CID_USER_BASE + 0x1240)
++
+ #define CAMSS_FRAME_MIN_WIDTH		1
+ #define CAMSS_FRAME_MAX_WIDTH		8191
+ #define CAMSS_FRAME_MIN_HEIGHT		1
+@@ -246,6 +248,36 @@
+ 	       video == &camss->vfe[1].line[VFE_LINE_PIX].video_out;
+ }
+ 
++static int video_x1e_iq_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct camss_video *video = container_of(ctrl->handler,
++						 struct camss_video, ctrl_handler);
++
++	if (ctrl->id != V4L2_CID_QCOM_CAMSS_X1E_IQ_CAPSULE ||
++	    !video_is_x1e_front_pix(video))
++		return -EINVAL;
++
++	return camss_x1e_pix_iq_submit(video, ctrl->p_new.p_u8,
++				       CAMSS_X1E_PIX_CAPSULE_BYTES);
++}
++
++static const struct v4l2_ctrl_ops video_x1e_iq_ctrl_ops = {
++	.s_ctrl = video_x1e_iq_s_ctrl,
++};
++
++static const struct v4l2_ctrl_config video_x1e_iq_ctrl = {
++	.ops = &video_x1e_iq_ctrl_ops,
++	.id = V4L2_CID_QCOM_CAMSS_X1E_IQ_CAPSULE,
++	.name = "X1E Front IQ Capsule",
++	.type = V4L2_CTRL_TYPE_U8,
++	.min = 0,
++	.max = 255,
++	.step = 1,
++	.def = 0,
++	.dims = { CAMSS_X1E_PIX_CAPSULE_BYTES },
++	.flags = V4L2_CTRL_FLAG_WRITE_ONLY | V4L2_CTRL_FLAG_EXECUTE_ON_WRITE,
++};
++
+ static int video_check_format(struct camss_video *video)
+ {
+ 	struct v4l2_pix_format_mplane *pix = &video->active_fmt.fmt.pix_mp;
+@@ -816,11 +848,46 @@
+  * V4L2 file operations
+  */
+ 
++static int msm_video_open(struct file *file)
++{
++	struct camss_video *video;
++	int ret;
++
++	ret = v4l2_fh_open(file);
++	if (ret)
++		return ret;
++
++	video = video_drvdata(file);
++	if (!video_is_x1e_front_pix(video))
++		return 0;
++	if (!v4l2_fh_is_singular_file(file)) {
++		v4l2_fh_release(file);
++		return -EBUSY;
++	}
++
++	ret = camss_x1e_pix_iq_session_open(video);
++	if (ret)
++		v4l2_fh_release(file);
++	return ret;
++}
++
++static int msm_video_release_file(struct file *file)
++{
++	struct camss_video *video = video_drvdata(file);
++	bool x1e_front = video_is_x1e_front_pix(video);
++	int ret;
++
++	ret = vb2_fop_release(file);
++	if (x1e_front)
++		camss_x1e_pix_iq_session_close(video);
++	return ret;
++}
++
+ static const struct v4l2_file_operations msm_vid_fops = {
+ 	.owner          = THIS_MODULE,
+ 	.unlocked_ioctl = video_ioctl2,
+-	.open           = v4l2_fh_open,
+-	.release        = vb2_fop_release,
++	.open           = msm_video_open,
++	.release        = msm_video_release_file,
+ 	.poll           = vb2_fop_poll,
+ 	.mmap		= vb2_fop_mmap,
+ 	.read		= vb2_fop_read,
+@@ -835,6 +902,7 @@
+ 	struct camss_video *video = video_get_drvdata(vdev);
+ 
+ 	media_entity_cleanup(&vdev->entity);
++	v4l2_ctrl_handler_free(&video->ctrl_handler);
+ 
+ 	mutex_destroy(&video->q_lock);
+ 	mutex_destroy(&video->lock);
+@@ -903,6 +971,18 @@
+ 	video->x1e_pix_iq_depth = 0;
+ 	video->x1e_pix_iq_closed = true;
+ 
++	ret = v4l2_ctrl_handler_init(&video->ctrl_handler,
++				     video_is_x1e_front_pix(video) ? 1 : 0);
++	if (ret)
++		goto error_ctrl_init;
++	if (video_is_x1e_front_pix(video)) {
++		v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_iq_ctrl, NULL);
++		if (video->ctrl_handler.error) {
++			ret = video->ctrl_handler.error;
++			goto error_vb2_init;
++		}
++	}
++
+ 	q = &video->vb2_q;
+ 	q->drv_priv = video;
+ 	q->mem_ops = &vb2_dma_sg_memops;
+@@ -944,6 +1024,7 @@
+ 	vdev->vfl_dir = VFL_DIR_RX;
+ 	vdev->queue = &video->vb2_q;
+ 	vdev->lock = &video->lock;
++	vdev->ctrl_handler = &video->ctrl_handler;
+ 	strscpy(vdev->name, name, sizeof(vdev->name));
+ 
+ 	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
+@@ -962,6 +1043,8 @@
+ 	media_entity_cleanup(&vdev->entity);
+ 	mutex_destroy(&video->lock);
+ error_vb2_init:
++	v4l2_ctrl_handler_free(&video->ctrl_handler);
++error_ctrl_init:
+ 	mutex_destroy(&video->q_lock);
+ 
+ 	return ret;
+--- a/drivers/media/platform/qcom/camss/camss-video.h
++++ b/drivers/media/platform/qcom/camss/camss-video.h
+@@ -16,6 +16,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/videodev2.h>
+ #include <media/media-entity.h>
++#include <media/v4l2-ctrls.h>
+ #include <media/v4l2-dev.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fh.h>
+@@ -45,6 +46,7 @@
+ 	enum v4l2_buf_type type;
+ 	struct media_pipeline pipe;
+ 	const struct camss_video_ops *ops;
++	struct v4l2_ctrl_handler ctrl_handler;
+ 	struct mutex lock;
+ 	struct mutex q_lock;
+ 	unsigned int bpl_alignment;
