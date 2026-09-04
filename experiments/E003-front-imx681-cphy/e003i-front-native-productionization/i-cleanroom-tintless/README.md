@@ -13,8 +13,12 @@ Closed clean-room stages:
 - float→Q16 integer quantizer (`0xc97f40`), independently differential-tested;
 - linear-extrapolation mesh padding (`0xc9c4b0`);
 - Catmull–Rom row kernel (`0xc9e398`);
-- complete active mesh→32×24 interpolation parent (`0xc9e590`).
+- complete active mesh→32×24 interpolation parent (`0xc9e590`);
+- radix-2 complex FFT and matrix-transpose leaves (`0xca1d98`, `0xca1ed0`);
+- complete 64×32 forward and inverse 2-D FFT parents (`0xca1fb0`, `0xca2310`), including exact inverse `1/2048` scaling;
+- exponential Q16 postprocess (`0xc9ed88`);
+- correction-map→mesh stage (`0xc9c868`), including exact 29×37 persistent core-state writeback and Surface corner extrapolation.
 
-Once `0xc9e590` is substituted, the native `0xc9c4b0` and `0xc9e398` bodies are no longer reached on the validated front path. `ACTIVE-PATH.json` records the remaining native solver/state boundary and observed call counts.
+Once the interpolation and 2-D FFT parents are substituted, their native pad/bicubic/FFT/transpose leaves are no longer reached on the validated front path. The `0xc9c868` substitution is differential-exact for both all 221 output floats and every persistent core-state byte it mutates. `ACTIVE-PATH.json` records the remaining native solver/state boundary and observed call counts.
 
 This remains an **offline differential proof**. DeviceMFT is still required for the unported solver/final-application stages. No Linux camera runtime, module load, STREAMON, sensor operation, or MMIO is performed by this checkpoint.

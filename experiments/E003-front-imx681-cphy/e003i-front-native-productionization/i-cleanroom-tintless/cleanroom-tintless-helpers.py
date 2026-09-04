@@ -134,3 +134,157 @@ def interpolate_mesh_to_stats(u,state,src,dst):
             top=f32(f32(rf32(u,temp+(hi+1)*4)*fx)+f32(rf32(u,temp+hi*4)*omx))
             bot=f32(f32(rf32(u,temp+(lo+1)*4)*fx)+f32(rf32(u,temp+lo*4)*omx))
             wf32(u,dst+(y*out_w+x)*4,f32(f32(top*fy)+f32(bot*omy)))
+
+def fft_radix2_inplace(u,n,real_ptr,imag_ptr,twiddle_ptr,perm_ptr):
+    """Clean-room translation of active solver FFT leaf RVA 0xca1d98."""
+    n=int(n)
+    if n>1:
+        for i in range(1,n):
+            j=ru8(u,perm_ptr+i)
+            rb=bytes(u.mem_read(real_ptr+i*4,4)); rj=bytes(u.mem_read(real_ptr+j*4,4))
+            ib=bytes(u.mem_read(imag_ptr+i*4,4)); ij=bytes(u.mem_read(imag_ptr+j*4,4))
+            u.mem_write(real_ptr+i*4,rj);u.mem_write(real_ptr+j*4,rb)
+            u.mem_write(imag_ptr+i*4,ij);u.mem_write(imag_ptr+j*4,ib)
+    levels=1
+    if n>2:
+        while (1<<levels)<n: levels+=1
+    stride=1; half=n//2; butterflies=n
+    for _ in range(levels):
+        twstep=half//stride if stride else 0
+        butterflies >>= 1
+        for group in range(stride):
+            ti=group*twstep*2
+            wr=rf32(u,twiddle_ptr+ti*4); wi=rf32(u,twiddle_ptr+(ti+1)*4)
+            idx=group
+            for __ in range(butterflies):
+                j=idx+stride
+                br=rf32(u,real_ptr+j*4); bi=rf32(u,imag_ptr+j*4)
+                tr=f32(f32(br*wr)-f32(bi*wi))
+                tii=f32(f32(bi*wr)+f32(br*wi))
+                ar=rf32(u,real_ptr+idx*4); ai=rf32(u,imag_ptr+idx*4)
+                wf32(u,real_ptr+j*4,f32(ar-tr)); wf32(u,imag_ptr+j*4,f32(ai-tii))
+                wf32(u,real_ptr+idx*4,f32(ar+tr)); wf32(u,imag_ptr+idx*4,f32(ai+tii))
+                idx += stride*2
+        stride <<= 1
+
+def transpose_u32_matrix(u,rows,cols,src,dst):
+    rows=int(rows);cols=int(cols)
+    for r in range(rows):
+        for c in range(cols):
+            u.mem_write(dst+(c*rows+r)*4,bytes(u.mem_read(src+(r*cols+c)*4,4)))
+
+def _negate_float_bits(u,ptr,count):
+    for i in range(int(count)):
+        b=ru32(u,ptr+i*4)^0x80000000
+        wu32(u,ptr+i*4,b)
+
+def fft2d_forward_64x32(u,real_ptr,imag_ptr,temp_ptr,tw32,tw64,perm64,perm32):
+    """Clean-room translation of RVA 0xca1fb0."""
+    total=0x800
+    for off in range(0,total,0x20):
+        fft_radix2_inplace(u,0x20,real_ptr+off*4,imag_ptr+off*4,tw32,perm32)
+    transpose_u32_matrix(u,0x40,0x20,real_ptr,temp_ptr)
+    transpose_u32_matrix(u,0x40,0x20,imag_ptr,real_ptr)
+    for off in range(0,total,0x40):
+        fft_radix2_inplace(u,0x40,temp_ptr+off*4,real_ptr+off*4,tw64,perm64)
+    transpose_u32_matrix(u,0x20,0x40,real_ptr,imag_ptr)
+    transpose_u32_matrix(u,0x20,0x40,temp_ptr,real_ptr)
+
+def fft2d_inverse_64x32(u,real_ptr,imag_ptr,temp_ptr,tw32,tw64,perm64,perm32):
+    """Clean-room translation of RVA 0xca2310 (conjugate/FFT/conjugate/2048)."""
+    total=0x800
+    _negate_float_bits(u,imag_ptr,total)
+    for off in range(0,total,0x20):
+        fft_radix2_inplace(u,0x20,real_ptr+off*4,imag_ptr+off*4,tw32,perm32)
+    transpose_u32_matrix(u,0x40,0x20,real_ptr,temp_ptr)
+    transpose_u32_matrix(u,0x40,0x20,imag_ptr,real_ptr)
+    for off in range(0,total,0x40):
+        fft_radix2_inplace(u,0x40,temp_ptr+off*4,real_ptr+off*4,tw64,perm64)
+    transpose_u32_matrix(u,0x20,0x40,real_ptr,imag_ptr)
+    transpose_u32_matrix(u,0x20,0x40,temp_ptr,real_ptr)
+    _negate_float_bits(u,imag_ptr,total)
+    scale=f32(1.0/2048.0)
+    for i in range(total):
+        wf32(u,real_ptr+i*4,f32(rf32(u,real_ptr+i*4)*scale))
+        wf32(u,imag_ptr+i*4,f32(rf32(u,imag_ptr+i*4)*scale))
+_libm.expf.argtypes=[ctypes.c_float]
+_libm.expf.restype=ctypes.c_float
+
+def exp_q16_postprocess(u,ptr):
+    """Clean-room translation of RVA 0xc9ed88."""
+    inv=f32(1.0/65536.0); scale=f32(131072.0)
+    for i in range(REGIONS):
+        x=ri32(u,ptr+i*4)
+        arg=f32(-f32(float(x))*inv)
+        ev=f32(_libm.expf(ctypes.c_float(arg)))
+        y=f32(f32(ev*scale)+f32(1.0)); y=f32(y*f32(0.5))
+        wi32(u,ptr+i*4,int(y))
+
+def map_correction_to_mesh(u,state,src,dst):
+    """Clean-room structural translation of RVA 0xc9c868.
+
+    Source is 24x32 int32. Surface embeds it at [2:26,2:34] of a 29x37
+    field and repeatedly linearly extrapolates two cells top/left and three
+    cells bottom/right, then bilinearly samples the padded field to the
+    configured Tintless mesh.
+    """
+    sh,sw=24,32; ph,pw=29,37
+    g=[[0]*pw for _ in range(ph)]
+    for y in range(sh):
+        for x in range(sw): g[y+2][x+2]=ri32(u,src+(y*sw+x)*4)
+    # horizontal extrapolation on source-bearing rows
+    for y in range(2,26):
+        g[y][1]=2*g[y][2]-g[y][3]; g[y][0]=2*g[y][1]-g[y][2]
+        g[y][34]=2*g[y][33]-g[y][32]; g[y][35]=2*g[y][34]-g[y][33]; g[y][36]=2*g[y][35]-g[y][34]
+    # First build ordinary separable extrapolation. Surface then overrides
+    # 25 extended-corner cells with diagonal rules; those assignments are
+    # represented structurally below.
+    for x in range(pw):
+        g[1][x]=2*g[2][x]-g[3][x]; g[0][x]=2*g[1][x]-g[2][x]
+        g[26][x]=2*g[25][x]-g[24][x]; g[27][x]=2*g[26][x]-g[25][x]; g[28][x]=2*g[27][x]-g[26][x]
+    # top-left / top-right first diagonal corners
+    g[1][1]=2*g[2][2]-g[3][3]
+    g[1][34]=2*g[2][33]-g[3][32]
+    g[0][1]=2*g[1][1]-g[2][1]
+    g[0][34]=2*g[1][34]-g[2][34]
+    g[1][0]=2*g[1][1]-g[1][2]
+    g[1][35]=2*g[1][34]-g[1][33]
+    g[0][0]=2*g[1][1]-g[2][2]
+    g[0][35]=2*g[1][34]-g[2][33]
+    g[0][36]=2*g[0][35]-g[0][34]
+    g[1][36]=2*g[1][35]-g[1][34]
+    # bottom-left / bottom-right first diagonal corners
+    g[26][1]=2*g[25][2]-g[24][3]
+    g[26][34]=2*g[25][33]-g[24][32]
+    g[26][0]=2*g[26][1]-g[26][2]
+    g[26][35]=2*g[26][34]-g[26][33]
+    g[26][36]=2*g[26][35]-g[26][34]
+    g[27][0]=2*g[26][1]-g[25][2]
+    g[27][1]=2*g[26][1]-g[25][1]
+    g[27][34]=2*g[26][34]-g[25][34]
+    g[27][35]=2*g[26][34]-g[25][33]
+    g[27][36]=2*g[27][35]-g[27][34]
+    g[28][0]=2*g[27][0]-g[26][0]
+    g[28][1]=2*g[27][1]-g[26][1]
+    g[28][34]=2*g[27][34]-g[26][34]
+    g[28][35]=2*g[27][35]-g[26][35]
+    g[28][36]=2*g[27][35]-g[26][34]
+    # Surface persists the entire 29x37 padded int32 map in Tintless core
+    # state at +0x5e64; later requests consume this state.
+    for yy in range(ph):
+        for xx in range(pw):
+            wi32(u,state+0x5e64+(yy*pw+xx)*4,g[yy][xx])
+    cell_x=ru16(u,state+0x08); cell_y=ru16(u,state+0x0a)
+    mesh_h=ru8(u,state+0x20); mesh_w=ru8(u,state+0x21); factor=ru8(u,state+0x2a)
+    off_y=ru16(u,state+0x0e); off_x=ru16(u,state+0x10); add_x=ru16(u,state+0x22); add_y=ru16(u,state+0x24)
+    den_y=ru16(u,state+0x26); den_x=ru16(u,state+0x28)
+    start_x=f32(1.5-f32(f32(add_x+off_x)/f32(cell_x))); start_x=f32(max(0.0,start_x))
+    start_y=f32(1.5-f32(f32(add_y+off_y)/f32(cell_y))); start_y=f32(max(0.0,start_y))
+    step_x=f32(f32(den_x*factor)/f32(cell_x)); step_y=f32(f32(den_y*factor)/f32(cell_y))
+    for y in range(mesh_h):
+        yf=f32(f32(f32(float(y))*step_y)+start_y); iy=int(yf); fy=f32(yf-f32(iy)); omy=f32(1.0-fy)
+        for x in range(mesh_w):
+            xf=f32(f32(f32(float(x))*step_x)+start_x); ix=int(xf); fx=f32(xf-f32(ix)); omx=f32(1.0-fx)
+            top=f32(f32(f32(float(g[iy][ix]))*omx)+f32(f32(float(g[iy][ix+1]))*fx))
+            bot=f32(f32(f32(float(g[iy+1][ix]))*omx)+f32(f32(float(g[iy+1][ix+1]))*fx))
+            wf32(u,dst+(y*mesh_w+x)*4,f32(f32(top*omy)+f32(bot*fy)))
