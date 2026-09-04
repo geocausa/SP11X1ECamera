@@ -1,0 +1,30 @@
+{
+  "schema": "sp11-e003i-cleanroom-gtm-v1",
+  "accepted": true,
+  "validated_requests": [4, 5, 6],
+  "capture_session": "E003H_ADAPTIVE_0073_LIVE_20260902",
+  "equals_0076_compatibility_session": false,
+  "cleanroom_substitutions": {
+    "0x9a4f38": {"name": "mode2_cubic_map", "validated_float32_outputs_per_request": 257, "native_child_calls": 0},
+    "0x9a55c8": {"name": "tmc_domain_map_active_zero_blend", "validated_float32_outputs_per_request": 257, "validated_power": 1.0, "validated_blend_scalars": [0.0, 0.0]},
+    "0x9aa3a8": {"name": "final_adaptive_map_power1", "validated_float64_outputs_per_request": 257, "validated_power": 1.0, "validated_strength": 0.8500000238418579}
+  },
+  "static_algorithm_constants": {
+    "mode2_domain": {"file": "mode2-domain-257-f32le.bin", "bytes": 1028, "sha256": "b33525b102690e0894d55245a0af56e655f10615fe6b144cbfca2cb9e5836325"},
+    "titan_x_grid": {"stored_table_required": false, "rule": "max(0, int(float32(float32(domain*16384)+0.5))-1)", "validated_entries": 257}
+  },
+  "clean_generator": {
+    "implementation": "generate-cleanroom-gtm-wire.py",
+    "device_mft_required": false,
+    "unicorn_required": false,
+    "captured_gtm_out_role": "validation only",
+    "outputs": {
+      "4": "656d35c87e95b376f3d6b4eac7624c3387e1857100cf5529f5ae7e2a87ec7f43",
+      "5": "9e54b3b16a6a146f9f1f448150a88a929c2ffe3cd4c8aa93e98e5498afb0216e",
+      "6": "89bc45b890f6508912bad1b543c7f7ad56e20b6794fdc908455e9f47c967cf95"
+    }
+  },
+  "unsupported_inactive_branches": ["nonzero TMC blend scalars", "final adaptive power other than 1.0", "TMC generation other than 5", "hardware version other than 0x60800", "curve mode other than 2"],
+  "remaining_production_boundary": "acquire/construct live Linux internal TMC/ADRC request state; GTM transform and Titan680 LUT packing are clean-room",
+  "safety": {"offline_only": true, "linux_camera_runtime_executed": false, "production_runtime_authorized": false}
+}
