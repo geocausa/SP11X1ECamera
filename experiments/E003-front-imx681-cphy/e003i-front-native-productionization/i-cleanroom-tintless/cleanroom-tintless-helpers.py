@@ -451,3 +451,83 @@ def box3x3_preserve_two_cell_border(u,state,src,dst):
         return -q if v<0 else q
     out=[div9(v) for v in b]
     u.mem_write(dst,struct.pack('<768i',*out))
+
+
+
+def final_application_mode2(u,state,ref_desc,out_desc):
+    """Active mode-2 clean-room parent for RVA 0xc9f568.
+
+    Validated front path: rebuild cached reference log-ratios, accumulate them
+    into the two working fields, execute one solver pass, quantize/reconstruct,
+    exponentiate/map the two correction planes, then apply the reference mesh,
+    minimum-gain normalization, strength, and ceiling checks.
+    """
+    if ru16(u,state+2) != 2:
+        raise ValueError('unsupported inactive Tintless final-application mode')
+    if ru8(u,state+0x12) != 0:
+        raise ValueError('unsupported active-path cache-source mode')
+    mh=ru8(u,state+0x20); mw=ru8(u,state+0x21); n=mh*mw
+    if n <= 0:
+        raise ValueError('invalid Tintless mesh geometry')
+    ref=[ru64(u,ref_desc+o) for o in (8,0x10,0x18,0x20)]
+    out=[ru64(u,out_desc+o) for o in (8,0x10,0x18,0x20)]
+    if not all(ref) or not all(out):
+        raise ValueError('null Tintless descriptor plane')
+
+    # Active cache path: Surface rebuilds these every validated request because
+    # core preparation presents +0x74 clear at c9f568 entry.
+    if ru8(u,state+0x74) == 0:
+        a=state+0x4664; b=state+0x5264
+        for i in range(n):
+            p0=rf32(u,ref[0]+i*4); p1=rf32(u,ref[1]+i*4)
+            p2=rf32(u,ref[2]+i*4); p3=rf32(u,ref[3]+i*4)
+            den=f32(p2+p1)
+            wf32(u,a+i*4,f32(f32(p0+p0)/den))
+            wf32(u,b+i*4,f32(f32(p3+p3)/den))
+        interpolate_mesh_to_stats(u,state,a,a)
+        interpolate_mesh_to_stats(u,state,b,b)
+        ln_float_field(u,a,a); ln_float_field(u,b,b)
+        wu8(u,state+0x74,1)
+
+    accumulate_float_fields(u,state+0x2e64,state+0x3a64,state+0x4664,state+0x5264)
+    solver_orchestration(u,state,state+0x2e64,state+0x3a64)
+    quantize_float_field_q16(u,state+0x8e64,state+0x8e64)
+    quantize_float_field_q16(u,state+0xae64,state+0xae64)
+    box3x3_preserve_two_cell_border(u,state,state+0x8e64,state+0x2e64)
+    box3x3_preserve_two_cell_border(u,state,state+0xae64,state+0x3a64)
+    exp_q16_postprocess(u,state+0x2e64); exp_q16_postprocess(u,state+0x3a64)
+    map_correction_to_mesh(u,state,state+0x2e64,out[0])
+    map_correction_to_mesh(u,state,state+0x3a64,out[3])
+
+    q16=f32(struct.unpack('<f',struct.pack('<I',0x37800000))[0]) # 1/65536
+    floor=f32(struct.unpack('<f',struct.pack('<I',0x3f8020c5))[0])
+    minv=floor
+    for i in range(n):
+        r0=rf32(u,ref[0]+i*4); r3=rf32(u,ref[3]+i*4)
+        d0=rf32(u,out[0]+i*4); d3=rf32(u,out[3]+i*4)
+        v0=f32(f32(r0*q16)*d0); v3=f32(f32(r3*q16)*d3)
+        wf32(u,out[0]+i*4,v0); wf32(u,out[3]+i*4,v3)
+        # Middle Bayer planes are reference passthrough before optional global normalization.
+        u.mem_write(out[1]+i*4,bytes(u.mem_read(ref[1]+i*4,4)))
+        u.mem_write(out[2]+i*4,bytes(u.mem_read(ref[2]+i*4,4)))
+        if v0 < minv: minv=v0
+        if v3 < minv: minv=v3
+    if not (minv > f32(0.0)):
+        return 0xfffffffc
+    if minv < floor:
+        scale=f32(floor/minv)
+        for base in out:
+            for i in range(n): wf32(u,base+i*4,f32(rf32(u,base+i*4)*scale))
+
+    strength=rf32(u,state+0xc7c)
+    one=f32(1.0)
+    for base in out:
+        for i in range(n):
+            v=rf32(u,base+i*4)
+            wf32(u,base+i*4,f32(f32(f32(v-one)*strength)+one))
+
+    ceiling=f32(rf32(u,state+0xc80)-struct.unpack('<f',struct.pack('<I',0x3a83126f))[0])
+    for base in out:
+        for i in range(n):
+            if ceiling < rf32(u,base+i*4): return 0xfffffffc
+    return 0

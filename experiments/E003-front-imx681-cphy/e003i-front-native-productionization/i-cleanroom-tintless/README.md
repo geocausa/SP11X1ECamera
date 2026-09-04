@@ -25,7 +25,8 @@ Closed clean-room stages:
 - periodic divergence / gradient adjoint (`0xc99130`).
 - complete solver orchestration parent (`0xc9a630`): gradients → threshold → projection → divergence → state layout → forward 2-D FFT → 2,048-coefficient spectral weighting → DC zero → inverse 2-D FFT.
 - solver apply/reconstruction (`0xc9a9b8`): exact signed-int 3×3 box reconstruction with a preserved two-cell border, including both persistent 24×32 scratch planes (`horizontal 3-tap`, `3×3 sum/source×9`) and truncating `/9` output.
+- complete active mode-2 final application (`0xc9f568`): reference-ratio cache rebuild → interpolation/log → accumulation → one clean solver pass → Q16/reconstruction/exp/map → reference-plane application → exact R5/R6 minimum-gain normalization → strength/ceiling checks.
 
 Once the interpolation and 2-D FFT parents are substituted, their native pad/bicubic/FFT/transpose leaves are no longer reached on the validated front path. The `0xc9c868` substitution is differential-exact for both all 221 output floats and every persistent core-state byte it mutates. `ACTIVE-PATH.json` records the remaining native solver/state boundary and observed call counts.
 
-This remains an **offline differential proof**. DeviceMFT is still required for the unported final-application/core-wrapper stages. No Linux camera runtime, module load, STREAMON, sensor operation, or MMIO is performed by this checkpoint.
+This remains an **offline differential proof**. DeviceMFT is still required only for the unported core/outer wrapper stages. No Linux camera runtime, module load, STREAMON, sensor operation, or MMIO is performed by this checkpoint.
