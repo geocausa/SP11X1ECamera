@@ -1,0 +1,399 @@
+--- a/camss.c
++++ b/camss.c
+@@ -7465,8 +7465,10 @@
+ 	size_t capsule_size;
+ 	const void *capsule_next;
+ 	size_t capsule_next_size;
++	const void *capsule_next_next;
++	size_t capsule_next_next_size;
+ 	struct v4l2_subdev *sensor;
+-	struct camss_buffer *video[5];
++	struct camss_buffer *video[6];
+ 	struct camss_video *live_video;
+ 	bool live_requeue;
+ };
+@@ -7477,26 +7479,33 @@
+ 	struct camss_buffer *video_done_third;
+ 	struct camss_buffer *video_done_fourth;
+ 	struct camss_buffer *video_done_fifth;
++	struct camss_buffer *video_done_sixth;
+ 	bool epoch0_seen;
+ 	bool epoch0_next_seen;
+ 	bool epoch0_steady_seen;
+ 	bool epoch0_steady_next_seen;
++	bool epoch0_steady_third_seen;
+ 	bool video_seen;
+ 	bool video_next_seen;
+ 	bool video_third_seen;
+ 	bool video_fourth_seen;
+ 	bool video_fifth_seen;
++	bool video_sixth_seen;
+ 	bool slot0_reusable;
+ 	bool slot1_reusable;
+ 	bool slot0_reused;
+ 	bool slot1_reused;
+ 	bool slot0_reused_again;
++	bool slot1_reused_again;
+ 	bool slot0_reusable_again;
+ 	bool slot1_reusable_again;
+ 	bool slot0_reusable_third;
++	bool slot1_reusable_third;
+ 	struct camss_buffer *video_requeued;
++	struct camss_buffer *video_requeued_next;
+ 	unsigned int live_completed;
+ 	bool live_requeue_acquired;
++	bool live_requeue_next_acquired;
+ 	bool teardown_safe;
+ };
+ 
+@@ -7670,14 +7679,17 @@
+ {
+ 	struct camss_x1e_pix_capsule_materialized *materialized;
+ 	struct camss_x1e_pix_capsule_materialized *materialized_next = NULL;
++	struct camss_x1e_pix_capsule_materialized *materialized_next_next = NULL;
+ 	struct camss_x1e_pix_capsule_inputs *inputs;
+ 	struct camss_x1e_pix_capsule_inputs *inputs_next = NULL;
++	struct camss_x1e_pix_capsule_inputs *inputs_next_next = NULL;
+ 	struct vfe680_x1e_pix_runtime *pix = NULL;
+ 	struct media_entity *video_entity;
+ 	struct csiphy_device *csiphy;
+ 	struct csid_device *csid;
+ 	struct vfe_device *vfe;
+ 	struct camss_buffer *fifth = req ? req->video[4] : NULL;
++	struct camss_buffer *sixth = req ? req->video[5] : NULL;
+ 	bool sensor_streaming = false;
+ 	bool csiphy_streaming = false;
+ 	bool csid_streaming = false;
+@@ -7693,7 +7705,8 @@
+ 	int ret;
+ 
+ 	if (!result || (frame_limit != 1 && frame_limit != 2 &&
+-			frame_limit != 3 && frame_limit != 4 && frame_limit != 5))
++			frame_limit != 3 && frame_limit != 4 && frame_limit != 5 &&
++			frame_limit != 6))
+ 		return -EINVAL;
+ 	memset(result, 0, sizeof(*result));
+ 	/* Pre-hardware failures are safe; only a failed unwind clears this. */
+@@ -7709,17 +7722,24 @@
+ 				 req->video[3] == req->video[1] ||
+ 				 req->video[3] == req->video[2]))
+ 		return -EINVAL;
+-	if (frame_limit == 5 && (!req->capsule_next || !req->capsule_next_size))
++	if (frame_limit >= 5 && (!req->capsule_next || !req->capsule_next_size))
+ 		return -EINVAL;
+-	if (frame_limit == 5 && req->live_requeue) {
+-		if (!req->live_video || req->video[4])
++	if (frame_limit == 6 && (!req->capsule_next_next || !req->capsule_next_next_size))
++		return -EINVAL;
++	if (frame_limit >= 5 && req->live_requeue) {
++		if (!req->live_video || req->video[4] || (frame_limit == 6 && req->video[5]))
+ 			return -EINVAL;
+-	} else if (frame_limit == 5 &&
++	} else if (frame_limit >= 5 &&
+ 		   (!req->video[4] || req->video[4] == req->video[0] ||
+ 		    req->video[4] == req->video[1] || req->video[4] == req->video[2] ||
+ 		    req->video[4] == req->video[3])) {
+ 		return -EINVAL;
+ 	}
++	if (frame_limit == 6 && !req->live_requeue &&
++	    (!req->video[5] || req->video[5] == req->video[0] ||
++	     req->video[5] == req->video[1] || req->video[5] == req->video[2] ||
++	     req->video[5] == req->video[3] || req->video[5] == req->video[4]))
++		return -EINVAL;
+ 
+ 	vfe = &camss->vfe[1];
+ 	csid = &camss->csid[1];
+@@ -7728,12 +7748,17 @@
+ 
+ 	inputs = kzalloc_obj(*inputs, GFP_KERNEL);
+ 	materialized = kzalloc_obj(*materialized, GFP_KERNEL);
+-	if (frame_limit == 5) {
++	if (frame_limit >= 5) {
+ 		inputs_next = kzalloc_obj(*inputs_next, GFP_KERNEL);
+ 		materialized_next = kzalloc_obj(*materialized_next, GFP_KERNEL);
+ 	}
++	if (frame_limit == 6) {
++		inputs_next_next = kzalloc_obj(*inputs_next_next, GFP_KERNEL);
++		materialized_next_next = kzalloc_obj(*materialized_next_next, GFP_KERNEL);
++	}
+ 	if (!inputs || !materialized ||
+-	    (frame_limit == 5 && (!inputs_next || !materialized_next))) {
++	    (frame_limit >= 5 && (!inputs_next || !materialized_next)) ||
++	    (frame_limit == 6 && (!inputs_next_next || !materialized_next_next))) {
+ 		ret = -ENOMEM;
+ 		goto out_free_inputs;
+ 	}
+@@ -7748,7 +7773,7 @@
+ 	ret = camss_x1e_pix_capsule_materialize(camss, materialized, inputs);
+ 	if (ret)
+ 		goto out_free_inputs;
+-	if (frame_limit == 5) {
++	if (frame_limit >= 5) {
+ 		ret = camss_x1e_pix_capsule_parse(req->capsule_next,
+ 					       req->capsule_next_size, inputs_next);
+ 		if (ret || inputs_next->steady.request_id != 5) {
+@@ -7760,6 +7785,19 @@
+ 		if (ret)
+ 			goto out_materialized;
+ 	}
++	if (frame_limit == 6) {
++		ret = camss_x1e_pix_capsule_parse(req->capsule_next_next,
++						  req->capsule_next_next_size, inputs_next_next);
++		if (ret || inputs_next_next->steady.request_id != 6) {
++			if (!ret)
++				ret = -EINVAL;
++			goto out_materialized;
++		}
++		ret = camss_x1e_pix_capsule_materialize(camss, materialized_next_next,
++							inputs_next_next);
++		if (ret)
++			goto out_materialized;
++	}
+ 
+ 	/* Same power owner used by the already-proven RDI video prepare path. */
+ 	ret = v4l2_pipeline_pm_get(video_entity);
+@@ -8010,7 +8048,7 @@
+ 			camss_x1e_pix_v4l2_complete_live(result, req->video[2], 2);
+ 	}
+ 
+-	if (frame_limit == 5 && req->live_requeue) {
++	if (frame_limit >= 5 && req->live_requeue) {
+ 		fifth = camss_x1e_pix_v4l2_wait_pending(req->live_video,
+ 						 CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
+ 		if (IS_ERR(fifth)) {
+@@ -8035,7 +8073,7 @@
+ 	 * and DMI payloads. After frame3 fully retires slot0, refill that freed
+ 	 * slot at the next Epoch0 and submit exactly one request5 0x958 batch.
+ 	 */
+-	if (frame_limit == 5) {
++	if (frame_limit >= 5) {
+ 		ret = csid680_x1e_front_poll_next_epoch0(csid, epoch0_seq,
+ 						       CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
+ 		if (ret)
+@@ -8092,7 +8130,52 @@
+ 			camss_x1e_pix_v4l2_complete_live(result, req->video[3], 3);
+ 	}
+ 
+-	if (frame_limit == 5) {
++	if (frame_limit == 6 && req->live_requeue) {
++		sixth = camss_x1e_pix_v4l2_wait_pending(req->live_video,
++							CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++		if (IS_ERR(sixth)) {
++			ret = PTR_ERR(sixth);
++			sixth = NULL;
++			goto out_unwind;
++		}
++		ret = camss_x1e_pix_v4l2_buffer(req->live_video, sixth);
++		if (ret)
++			goto out_unwind;
++		if (sixth != req->video[1]) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		result->video_requeued_next = sixth;
++		result->live_requeue_next_acquired = true;
++	}
++
++	/*
++	 * 0074 bounded third-steady proof. After frame4 retires slot1, consume
++	 * exactly request6 from the monotonic IQ FIFO, retarget only reusable
++	 * slot1 to the second live-requeued V4L2 buffer, and submit one 0x958
++	 * steady batch. No startup, sensor, CSID, VFE or unrelated MMIO changes.
++	 */
++	if (frame_limit == 6) {
++		ret = csid680_x1e_front_poll_next_epoch0(csid, epoch0_seq,
++							 CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
++		if (ret)
++			goto out_unwind;
++		result->epoch0_steady_third_seen = true;
++		epoch0_seq = csid680_x1e_front_epoch0_seq(csid);
++		ret = vfe680_x1e_pix_runtime_rebind(pix, 1, sixth);
++		if (ret)
++			goto out_unwind;
++		result->slot1_reused_again = true;
++		ret = vfe680_x1e_pix_runtime_bus_update(vfe, pix, 1);
++		if (ret)
++			goto out_unwind;
++		ret = camss_x1e_pix_rtcdm_submit_epoch0_batch(camss,
++							      &materialized_next_next->steady);
++		if (ret)
++			goto out_unwind;
++	}
++
++	if (frame_limit >= 5) {
+ 		u32 fifth_seq = csid680_x1e_front_video_seq(csid);
+ 		u32 delta = fifth_seq - video_seq;
+ 
+@@ -8129,6 +8212,43 @@
+ 			camss_x1e_pix_v4l2_complete_live(result, fifth, 4);
+ 	}
+ 
++	if (frame_limit == 6) {
++		u32 sixth_seq = csid680_x1e_front_video_seq(csid);
++		u32 delta = sixth_seq - video_seq;
++
++		if (delta > 6) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		if (delta < 6) {
++			ret = csid680_x1e_front_poll_video(csid, sixth_seq,
++							   CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++			if (ret)
++				goto out_unwind;
++			sixth_seq = csid680_x1e_front_video_seq(csid);
++			delta = sixth_seq - video_seq;
++		}
++		if (delta != 6) {
++			ret = -EPROTO;
++			goto out_unwind;
++		}
++		result->video_sixth_seen = true;
++		ret = vfe680_x1e_pix_runtime_retire_video(pix, 1,
++							  &result->video_done_sixth);
++		if (ret)
++			goto out_unwind;
++		ret = csid680_x1e_front_poll_all_done(csid, video_seq + 6,
++						      CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
++		if (ret)
++			goto out_unwind;
++		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 1);
++		if (ret)
++			goto out_unwind;
++		result->slot1_reusable_third = true;
++		if (req->live_requeue)
++			camss_x1e_pix_v4l2_complete_live(result, sixth, 5);
++	}
++
+ out_unwind:
+ 	if (frame_done) {
+ 		/* Proven normal host stop prefix: CSID1 -> BUS/IFE -> RT-CDM. */
+@@ -8205,6 +8325,7 @@
+ 		result->video_done_third = NULL;
+ 		result->video_done_fourth = NULL;
+ 		result->video_done_fifth = NULL;
++		result->video_done_sixth = NULL;
+ 		dev_err(camss->dev,
+ 			"E003h PIX teardown failed; DMA/power intentionally pinned until reboot\n");
+ 		return ret ? ret : -EIO;
+@@ -8217,9 +8338,12 @@
+ 		v4l2_pipeline_pm_put(video_entity);
+ 
+ out_materialized:
++	camss_x1e_pix_capsule_materialized_release(camss, materialized_next_next);
+ 	camss_x1e_pix_capsule_materialized_release(camss, materialized_next);
+ 	camss_x1e_pix_capsule_materialized_release(camss, materialized);
+ out_free_inputs:
++	kfree(materialized_next_next);
++	kfree(inputs_next_next);
+ 	kfree(materialized_next);
+ 	kfree(inputs_next);
+ 	kfree(materialized);
+@@ -8416,6 +8540,7 @@
+  */
+ #define CAMSS_X1E_PIX_TRIGGER_FW "sp11/e003h/E003H_PIX_ORACLE_CAPSULE.bin"
+ #define CAMSS_X1E_PIX_TRIGGER_FW_R5 "sp11/e003h/E003H_PIX_ORACLE_CAPSULE_R5.bin"
++#define CAMSS_X1E_PIX_TRIGGER_FW_R6 "sp11/e003h/E003H_PIX_ORACLE_CAPSULE_R6.bin"
+ 
+ 
+ /*
+@@ -8748,7 +8873,7 @@
+ 	struct camss_x1e_pix_runner_request req = { 0 };
+ 	struct camss_buffer *video0 = NULL, *video1 = NULL;
+ 	struct camss_buffer *video2 = NULL, *video3 = NULL;
+-	struct camss_x1e_pix_iq_packet *iq5 = NULL;
++	struct camss_x1e_pix_iq_packet *iq5 = NULL, *iq6 = NULL;
+ 	const struct firmware *fw = NULL;
+ 	bool iq_provider_open = false;
+ 	struct media_pad *sensor_pad;
+@@ -8788,6 +8913,16 @@
+ 	if (ret)
+ 		goto out_fw;
+ 
++	/* 0074: strict FIFO continuation, exact request6 follows request5. */
++	ret = camss_x1e_pix_iq_provider_seed_firmware(video,
++						      CAMSS_X1E_PIX_TRIGGER_FW_R6);
++	if (ret)
++		goto out_iq_packet;
++	ret = camss_x1e_pix_iq_provider_next(video, 6,
++					     CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq6);
++	if (ret)
++		goto out_iq_packet;
++
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	video0 = vfe_buf_get_pending(output);
+ 	video1 = vfe_buf_get_pending(output);
+@@ -8821,6 +8956,8 @@
+ 	req.capsule_size = fw->size;
+ 	req.capsule_next = iq5->capsule;
+ 	req.capsule_next_size = iq5->capsule_size;
++	req.capsule_next_next = iq6->capsule;
++	req.capsule_next_next_size = iq6->capsule_size;
+ 	req.sensor = sensor;
+ 	req.video[0] = video0;
+ 	req.video[1] = video1;
+@@ -8833,7 +8970,7 @@
+ 		goto out_error_buffers;
+ 
+ 	runner_called = true;
+-	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 5);
++	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 6);
+ 	if (!result.teardown_safe) {
+ 		video->x1e_pix_runner_pinned = true;
+ 		dev_err(camss->dev,
+@@ -8842,21 +8979,24 @@
+ 			ret = -EIO;
+ 		/* Keep provider-owned bytes pinned with the failed hardware state. */
+ 		iq5 = NULL;
++		iq6 = NULL;
+ 		iq_provider_open = false;
+ 		goto out_fw;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+ 	    result.video_done_third != video2 || result.video_done_fourth != video3 ||
+-	    result.video_done_fifth != video0 || result.video_requeued != video0 ||
+-	    result.live_completed != 5 || !result.live_requeue_acquired ||
+-	    !result.epoch0_seen || !result.epoch0_next_seen || !result.epoch0_steady_seen ||
+-	    !result.epoch0_steady_next_seen || !result.video_seen ||
+-	    !result.video_next_seen || !result.video_third_seen ||
+-	    !result.video_fourth_seen || !result.video_fifth_seen ||
++	    result.video_done_fifth != video0 || result.video_done_sixth != video1 ||
++	    result.video_requeued != video0 || result.video_requeued_next != video1 ||
++	    result.live_completed != 6 || !result.live_requeue_acquired ||
++	    !result.live_requeue_next_acquired || !result.epoch0_seen ||
++	    !result.epoch0_next_seen || !result.epoch0_steady_seen ||
++	    !result.epoch0_steady_next_seen || !result.epoch0_steady_third_seen ||
++	    !result.video_seen || !result.video_next_seen || !result.video_third_seen ||
++	    !result.video_fourth_seen || !result.video_fifth_seen || !result.video_sixth_seen ||
+ 	    !result.slot0_reusable || !result.slot1_reusable || !result.slot0_reused ||
+-	    !result.slot1_reused || !result.slot0_reused_again ||
++	    !result.slot1_reused || !result.slot0_reused_again || !result.slot1_reused_again ||
+ 	    !result.slot0_reusable_again || !result.slot1_reusable_again ||
+-	    !result.slot0_reusable_third) {
++	    !result.slot0_reusable_third || !result.slot1_reusable_third) {
+ 		if (!ret)
+ 			ret = -EIO;
+ 		goto out_error_buffers;
+@@ -8864,7 +9004,7 @@
+ 
+ 	video->x1e_pix_runner_stopped = true;
+ 	dev_info(camss->dev,
+-		 "E003h 0071 completed bounded live DQBUF/QBUF requeue; request5 used requeued buffer0\n");
++		 "E003h 0074 completed bounded six-frame live requeue; request5/6 used buffers0/1\n");
+ 	ret = 0;
+ 	goto out_iq_packet;
+ 
+@@ -8881,9 +9021,13 @@
+ 			camss_x1e_pix_v4l2_error_buffer(video3);
+ 		if (result.live_requeue_acquired && result.live_completed < 5)
+ 			camss_x1e_pix_v4l2_error_buffer(result.video_requeued);
++		if (result.live_requeue_next_acquired && result.live_completed < 6)
++			camss_x1e_pix_v4l2_error_buffer(result.video_requeued_next);
+ 		video->x1e_pix_runner_stopped = true;
+ 	}
+ out_iq_packet:
++	camss_x1e_pix_iq_packet_release(iq6);
++	iq6 = NULL;
+ 	camss_x1e_pix_iq_packet_release(iq5);
+ 	iq5 = NULL;
+ out_fw:

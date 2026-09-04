@@ -1,0 +1,65 @@
+{
+  "accepted": true,
+  "atomic_capsules_sha256": {
+    "4": "1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa",
+    "5": "8e447a662a47e47db7dd211d6a109d590531309f944e52b729a4351b5a00da11",
+    "6": "c88e7a75f228fac7b69a4a122fd618aa054bdbf98e83ff541be9c20177844583"
+  },
+  "base": "accepted E003h 0072 five-frame IQ-provider runtime",
+  "expected_indices": [
+    0,
+    1,
+    2,
+    3,
+    0,
+    1
+  ],
+  "expected_sequences": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "failure_policy": "No same-boot retry. Any runtime ambiguity, timeout, ordering mismatch, RT-CDM fault or teardown uncertainty consumes the one-shot and requires external Golden reboot.",
+  "forbidden_delta": {
+    "csid_recipe": false,
+    "csiphy": false,
+    "dt": false,
+    "sensor": false,
+    "startup_priming": false,
+    "unrelated_mmio": false,
+    "vfe_recipe": false
+  },
+  "hardware_delta": "EXACTLY_ONE_STEADY_REQUEST6_PLUS_SLOT1_REBIND_AND_SECOND_LIVE_REQUEUE",
+  "helper_sha256": "d25168fbfb15184b544815339f62c8f67f1b6436019936d74722be5accd6361a",
+  "helper_source_sha256": "d7da96fc720650e79344889d0cf2a6e16b9a7c19c0bf5e3bb4cbfc29fb5965f2",
+  "kernel_checks": {
+    "fifo_5_then_6": true,
+    "frame_limit_6": true,
+    "no_same_boot_loop": true,
+    "r6_firmware": true,
+    "request_ids_4_5_6": true,
+    "second_requeue": true,
+    "sixth_retire": true,
+    "slot1_request6": true
+  },
+  "provider_dequeue_ids": [
+    5,
+    6
+  ],
+  "qcom_camss_sha256": "002076d1a0d13e098963415bc76bacf1eff35ec31cd12ef2b751f98f28cfdf3f",
+  "request6_runtime_authorized": false,
+  "request_ids": [
+    4,
+    5,
+    6
+  ],
+  "runtime_authorized": false,
+  "schema": "sp11-e003h-six-frame-request6-0074-static-v1",
+  "source_delta_files": [
+    "camss.c"
+  ],
+  "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+}
