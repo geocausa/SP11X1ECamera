@@ -1,0 +1,55 @@
+{
+  "schema": "sp11-e003i-template-free-request-state-v1",
+  "accepted_runtime_regression": "0076",
+  "capsule": {
+    "magic": "E3HPIX01",
+    "bytes": 41088,
+    "header_bytes": 1024,
+    "alignment": 64,
+    "section_count": 36,
+    "capsule_template_is_input": false
+  },
+  "section_partition": {
+    "invariant_count": 31,
+    "request_generated_count": 5,
+    "request_generated": [
+      {"type": 4, "index": 0, "name": "nine-module value/mask record", "bytes": 288},
+      {"type": 5, "index": 1, "name": "LSC0", "bytes": 884},
+      {"type": 5, "index": 2, "name": "LSC1", "bytes": 884},
+      {"type": 5, "index": 4, "name": "GIC0 Windows wire alias from LSC0+LSC1", "bytes": 512},
+      {"type": 5, "index": 6, "name": "GTM0", "bytes": 2048}
+    ],
+    "request_id_header_field": "u64 at capsule +0x2c"
+  },
+  "module_record": {
+    "modules": ["DEMUX_BLS", "PDPC", "LSC", "WB", "GIC", "BPC_ABF", "GTM", "GAMMA", "DSX"],
+    "calculated_scalar_count": 8,
+    "bank_selector_count": 16,
+    "bank_selectors": "deterministic request parity state",
+    "calculated_scalars": "DEMUX/BLS 2 + PDPC 4 + WB 2"
+  },
+  "dmi": {
+    "independent_dynamic_producers": ["LSC", "GTM"],
+    "gic_wire_rule": "GIC0 = (LSC0 || LSC1)[0x22e:0x42e]",
+    "validated_constant_payloads": ["PDPC0", "BPC_ABF0", "GAMMA0", "GAMMA1", "GAMMA2", "DSX0", "DSX1", "DSX2", "DSX3"],
+    "lsc2_validated_zero_for_0076": true
+  },
+  "0076_compatibility_fixture": {
+    "purpose": "byte-exact regression only; scalar records preserve the historical accepted R4/R5/R6 source sessions used by 0076",
+    "request4_module_state": "accepted 0x958 Windows batch used by the original R4 builder",
+    "request5_module_state": "exact request5 Windows raw main/DMI pair from 0070",
+    "request6_module_state": "exact request6 Windows raw main/DMI pair from 0073",
+    "lsc_refresh": "fresh 2026-09-04 atomic front staging -> exact Titan680 packer",
+    "warning": "do not call these mixed historical module records fresh-atomic same-stream 3A state"
+  },
+  "next_producer_layer": {
+    "input": "live request trigger/3A + sensor calibration + Tintless/ALSC state + GTM/TMC state",
+    "output": "the five request-generated section inputs above",
+    "must_not_change": "capsule framing, provider FIFO ABI, or V4L2 ingress"
+  },
+  "safety": {
+    "offline_only": true,
+    "linux_camera_runtime_executed": false,
+    "production_runtime_authorized": false
+  }
+}
