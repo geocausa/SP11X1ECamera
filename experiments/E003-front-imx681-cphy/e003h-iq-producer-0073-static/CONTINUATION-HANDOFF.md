@@ -19,7 +19,7 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 
 ## Safety gate
 
-**Do not run Linux request6 yet.** Verified-front Tintless request4 -> request5 -> request6 is now byte-exactly replayed from one atomic Windows capsule through captured staging/wire output. The gate remains fail-closed until that same capsule's pre-Tintless input meshes are reproduced from same-stream upstream LSC tuning/calibration/geometry (or an exact upstream request/x22/x23 capsule is captured), followed by a separate runtime authorization review.
+**Atomic upstream producer gate CLOSED on 2026-09-04.** SP11 Linux now reproduces the fresh verified-front atomic request4 pre-Tintless input byte-for-byte from the repaired Windows authority: IMX681 LSC leaves `0x4bd -> 0x4bf` at float32 ratio `0.342`, nominal IMX681 golden, physical front-camera OTP slot and native DeviceMFT RVA `0x9b6048` geometry resampling produce full input SHA `71fdf640...` with 0 byte differences. The same proof first validates request5 end-to-end and reproduces `6499164c...` exactly. The prerequisite for the separate Linux request6 runtime-authorization review is therefore satisfied; request6 hardware execution still requires that review and a bounded candidate.
 
 ## Latest accepted closures
 
@@ -31,6 +31,7 @@ The project goal is the **entire Surface Pro 11 camera stack with Windows behavi
 - **verified-front atomic Tintless request4 -> request5 -> request6: closed byte-exact** on the fresh 2026-09-04 IMX681 `3840x2160` capsule. Request4 lazy-allocates the exact `0x126e8` persistent core; zero-filled and hostile `0xA5` fresh-core replays both reproduce Windows wrapper/core/output state exactly. See `LSC-FRONT-ATOMIC-TINTLESS-REPLAY.md`.
 - **fresh atomic Tintless output -> captured staging -> wire: closed**. Exact Q10 output channels agree with the captured `0x18a0` staging and exact Titan680 packer for req4/5/6. The separately captured LSC0/LSC1 raw files are zero placeholders and are explicitly rejected; staging-derived nonzero wire hashes are authoritative.
 - **fresh current DataManager source identity: closed for the 2026-09-03 instance**. `DataManager+0x38/+0x30` is exact `com.surface.tuned.ffc_imx681.bin` (6,465,007 bytes, SHA `2c1c7fd9...`), excluding rear-blob source substitution before normal tree construction for this current instance. This does not retroactively identify the exact 2026-09-02 instance. See `LSC-LIVE-CURRENT-DATAMANAGER-SOURCE.md`.
+- **current repaired-Windows front LSC authority + fresh atomic upstream generator: CLOSED byte-exact on 2026-09-04**. Hardware KD breakpoints mechanically establish `INTERP1 -> INTERP2 -> INTERP3 -> INTERP4 -> Tintless request4 -> INTERP5 -> Tintless request5`. Current request4 x22 is exact IMX681 leaf interpolation `0x4bd -> 0x4bf` at float32 `0.212`; request5 is exact leaf `0x4bd`. Current physical front OTP + nominal IMX681 golden reproduce current request5 x23 with all 884 floats exact. On SP11 Linux, float32 ratio `0.342` through those same front leaves, front golden/OTP calibration and native DeviceMFT geometry resampler RVA `0x9b6048` reproduces atomic req4 full input SHA `71fdf640...` with **0 byte differences**; req5 independently reproduces `6499164c...` exactly. See `prove-lsc-current-repaired-atomic-request4.py` and `lsc-current-repaired-atomic-request4-oracle.json`. Historical rear/default x22/golden evidence remains valid only for its older independent stream and is not authority for this repaired/current oracle.
 - sequential embedded Tintless request5 -> request6 at DeviceMFT RVA `0xc95fd0`: byte-exact, including persistent state, **but the TINTCTX capture is now mechanically identified as OV13858 rear mode 1**. It is a rear/shared-algorithm oracle and must not satisfy the front gate; see `LSC-TINTCTX-CAMERA-IDENTITY-CORRECTION.md` and `LSC-TINTLESS-SEQUENTIAL-REPLAY.md`.
 - exact 42-float live LSC trigger vector and `x22/x23` ABI: closed; see `LSC-RUNTIME-INTERPOLATION-BOUNDARY.md`.
 - **runtime LSC41 tuning source and generic interpolation: closed byte-exact**; see `LSC-RUNTIME-TUNING-SOURCE-CLOSURE.md` and `prove-lsc-runtime-tuning-source.py`.
@@ -112,24 +113,15 @@ Exact 42-float trigger vector is captured for both requests. LSC control vector 
 
 ## Current open problem / immediate action
 
-The old front Tintless gap is **closed**. Do not reopen the OV13858 TINTCTX identity issue or try to splice its state into front work. The fresh 2026-09-04 capsule is one continuous verified-front IMX681 stream and native replay reproduces request4 initialization, request5/request6 persistent state and all four output meshes exactly.
+The fresh 2026-09-04 verified-front producer chain is now closed end-to-end offline through the request-local LSC/Tintless boundary. The decisive repaired/current path is front-local: IMX681 tuning leaves, nominal IMX681 golden, physical front-camera OTP and native Surface geometry resampling. Atomic request4 is reproduced byte-exactly at float32 LSC interpolation ratio `0.342`; atomic request5/6 steady pre-Tintless input `6499164c...` is also reproduced exactly. The old independent rear/default crossover evidence must not be substituted into this current stream.
 
-The fresh capsule is an **independent stream** from the older verified-front request4 bridge. Its pre-Tintless input meshes are:
+Immediate work is now the **separate Linux request6 runtime-authorization/parity gate**:
 
-- req4 `71fdf640e68b5e63cbbf84464a54de3b66f8f2df51cd273c2a9468c868d51879`;
-- req5 `6499164c635e70f58a950c0024ea0f35ba9f9d5be1821790fc42b9735700af2a`;
-- req6 `6499164c635e70f58a950c0024ea0f35ba9f9d5be1821790fc42b9735700af2a`.
+1. use Golden SP11 Linux as the primary workbench; mount the Windows partition read-only or transfer only missing KDNET captures from SP7;
+2. preserve accepted 0072 runtime behavior as the hardware baseline: five distinct QC10C frames `[0,1,2,3,0]`, live V4L2 requeue, request5 through the owned monotonic IQ-provider FIFO, clean RT-CDM stop and mandatory Golden return;
+3. extend that bounded path statically for exactly one additional steady request6 packet/frame, with no unrelated MMIO/sensor/CSID/VFE changes, strict request-ID `5 -> 6` FIFO ordering, no same-boot retry and fail-closed teardown;
+4. prove the request6 materialized IQ bytes against the accepted Windows atomic/staging/wire oracle before hardware execution;
+5. perform an explicit package/runtime authorization review; only after all static/hash/preflight gates pass may one bounded six-frame Golden-Linux run be consumed;
+6. after any runtime attempt, archive evidence and reboot externally to persistent Golden before further work.
 
-Do **not** substitute the older request4 `839cae7d...` target into this stream. The remaining fail-closed producer gate is upstream of Tintless: explain/reproduce those exact atomic input meshes from the same stream's request-local LSC interpolation, calibration and geometry.
-
-Immediate work is now:
-
-1. first mine existing local Windows/raw/debug evidence for the 2026-09-04 atomic stream's upstream LSC request state (generic triggers, interpolation x22, calibrated x23, geometry-resampler input/output, request-local tuning manager/root); avoid another Windows boot if the bytes are already present;
-2. correlate that upstream state with the fresh current DataManager source proof: the 2026-09-03 fresh manager starts from exact front IMX681 tuning, so any rear/default LSC leaf authority in the current stream must arise after this source boundary, not from simple rear-blob substitution;
-3. require native Surface replay to reproduce atomic req4 input SHA `71fdf640...` and req5/6 input SHA `6499164c...`; only then is the same-stream LSC producer chain complete;
-4. keep the fresh atomic Tintless replay and staging-derived wire hashes as the accepted downstream oracle. Ignore the raw zero LSC0/LSC1 placeholder dumps except as a recorded capture defect;
-5. keep the old TINTCTX replay solely as OV13858 rear/shared-algorithm evidence;
-6. GTM/TMC remains byte-exactly closed in the parallel front path;
-7. after the atomic upstream input generator closes, conduct a separate Linux request6 runtime-authorization review before touching the Golden camera runtime.
-
-If existing evidence cannot close item 1, one-shot boot SP11 Windows and use SP7 only as lightweight KDNET host to capture the minimal missing upstream capsule. Then return SP11 to Golden Linux and replay offline before any request6 runtime.
+Windows is still the oracle, but another Windows boot is not currently required. If a new unknown appears, arm the normal GRUB one-shot Windows entry, use SP7 only as the lightweight KDNET host, capture the minimum missing evidence, then return SP11 to default Ubuntu.
