@@ -1,0 +1,49 @@
+{
+  "schema": "sp11-e003i-cleanroom-front-lsc-backend-v1",
+  "accepted": true,
+  "validated_sequence": [4, 5, 6],
+  "generator": "generate-cleanroom-front-lsc-wire.py",
+  "device_mft_required": false,
+  "unicorn_required": false,
+  "inputs": {
+    "generated": [
+      "installed front IMX681 tuning",
+      "front lscgolden41",
+      "physical front OTP slot",
+      "request LSC interpolation ratio",
+      "clean-room geometry transform",
+      "clean-room Tintless persistent state"
+    ],
+    "remaining_captured_request_state": [
+      "x1 Tintless geometry/config",
+      "x2 Tintless 768-record statistics",
+      "x3 reference descriptor metadata/pointers",
+      "x4 output descriptor metadata/pointers"
+    ],
+    "not_inputs": [
+      "captured pre-Tintless mesh",
+      "captured output pre-mesh",
+      "captured LSC staging",
+      "captured request5/request6 wrapper state",
+      "captured request5/request6 core state"
+    ]
+  },
+  "validation": {
+    "wrapper_carry_exact": true,
+    "core_carry_exact": true,
+    "output_abi_exact": true,
+    "output_initializations": ["zero", "0xa5", "float1+tail0x5a"],
+    "core_initial_fills": ["0x00", "0xa5"],
+    "wire_sha256": {
+      "4": {"lsc0": "eb41b13a2049ecfe835266fefedd2d41c3e15564a8826ee06437f48a533234e5", "lsc1": "c140edeb7b40eaefa5f904116cc4ce25478494bc9508160742cdc18881bfc676", "gic": "f25ba0e9841133d7505cc3c34bef7c8a5b5c0e79f9f53b8163eb8a5d2ed63a94"},
+      "5": {"lsc0": "1033e0732a1f2edf2263351be7ad213a98864ba0b9feb0a1d2eb27fbcf31953c", "lsc1": "eab65d435c04a768bc53009c0cfdf05055168213b50c83385459679dfc790590", "gic": "25882eeae1fe0a61a9f4feb08c2387d32f83c17b1592155995a6d730875ac86c"},
+      "6": {"lsc0": "94dda0dd0c221da88a1087b13305c1cbe440cd314b3f0f6e324504494aab758e", "lsc1": "5322633904bc97e2d647cf27c9f4f21a92b532272d063a4175028b3a8ad90076", "gic": "fea286613a8dd7ad4445effa63479efef71fc52ce539220928e135a0894bdc44"}
+    }
+  },
+  "remaining_production_boundary": "acquire x1/x2/x3/x4 Tintless request state from the live Linux pipeline instead of proof fixtures",
+  "safety": {
+    "offline_only": true,
+    "linux_camera_runtime_executed": false,
+    "production_runtime_authorized": false
+  }
+}
