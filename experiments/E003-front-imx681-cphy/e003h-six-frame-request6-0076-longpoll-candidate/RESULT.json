@@ -1,0 +1,100 @@
+{
+  "schema": "sp11-e003h-request6-0076-longpoll-result-v1",
+  "accepted": true,
+  "classification": "REQUEST6_SIX_FRAME_RUNTIME_CLOSED_WITH_EXACT_0074_KERNEL_IQ",
+  "base_runtime_assets": "byte-identical to 0074 A3 kernel/module/DT/R4/R5/R6",
+  "functional_delta": "userspace DQBUF watchdog 1000ms -> 5000ms plus monotonic timing only",
+  "helper_rc": 0,
+  "request6_executed": true,
+  "same_boot_retry": false,
+  "dqbuf_indices": [
+    0,
+    1,
+    2,
+    3,
+    0,
+    1
+  ],
+  "dqbuf_sequences": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "dqbuf_bytesused": [
+    7778304,
+    7778304,
+    7778304,
+    7778304,
+    7778304,
+    7778304
+  ],
+  "polls": [
+    {
+      "frame": 0,
+      "start_ns": 118753633010,
+      "end_ns": 118977353478,
+      "elapsed_ns": 223720468,
+      "rc": 1,
+      "revents": 1
+    },
+    {
+      "frame": 1,
+      "start_ns": 118980716512,
+      "end_ns": 119010608041,
+      "elapsed_ns": 29891529,
+      "rc": 1,
+      "revents": 1
+    },
+    {
+      "frame": 2,
+      "start_ns": 119014446218,
+      "end_ns": 119043928696,
+      "elapsed_ns": 29482478,
+      "rc": 1,
+      "revents": 1
+    },
+    {
+      "frame": 3,
+      "start_ns": 119043964163,
+      "end_ns": 119077262475,
+      "elapsed_ns": 33298312,
+      "rc": 1,
+      "revents": 1
+    },
+    {
+      "frame": 4,
+      "start_ns": 119077298255,
+      "end_ns": 119110643753,
+      "elapsed_ns": 33345498,
+      "rc": 1,
+      "revents": 1
+    },
+    {
+      "frame": 5,
+      "start_ns": 119110668128,
+      "end_ns": 119143928003,
+      "elapsed_ns": 33259875,
+      "rc": 1,
+      "revents": 1
+    }
+  ],
+  "max_poll_elapsed_ns": 223720468,
+  "rtcdm_final": "seq=108 stage=10 name=stopped fifo_seq=50 base=0xfdfb2a80 len=0x13 required=0x0 error=0 irq_armed=0 faulted=0 last_status=0x6/0x0/0x0/0x0 last_userdata=0x6",
+  "output_sha256": {
+    "0": "592f1deb1f2c38a25bf20bb119bb9a228784f44ad4034f61aa96afdf14d164ee",
+    "1": "c60a47241655e262e581fea2502aaccda8c599aa81917853846e5a011a1164da",
+    "2": "3818178e1ea384d7221478daf1f36da3079ce9ef3a01c3c9e61238b958e3ad88",
+    "3": "a9f804e9a16afa034ca076ee62d10ad951d046e5b5a8531710a9fdcb93044ea4",
+    "4": "1509b15359b95a003f5320a945269fd0f7ae0a817d93cbc204d8e1d28ab7a1bd",
+    "5": "996f541f15fd453d4b6de71668c307b046ce8d4a5af4d68ce6fac77e9762f577"
+  },
+  "a3_correction": {
+    "named_vfe1_irq_counter_is_not_valid_completion_discriminator": true,
+    "reason": "0075a known-good five-frame runtime also showed zero named msm_vfe1 IRQ count.",
+    "reclassified_failure": "A3 helper hit its 1000ms DQBUF watchdog before the first userspace completion on that run; because it pinned without requeueing buffer0/1, request5/request6 could not be fed. This does not indicate a deterministic 0074 kernel or IQ failure."
+  },
+  "conclusion": "Exact 0074 kernel plus atomic R4/R5/R6 completes request4->request5->request6 and six V4L2 frames when the bounded helper uses a non-fragile 5-second DQBUF watchdog. No kernel/IQ fix is required for the A3 failure; the harness watchdog was too tight for worst-case startup jitter."
+}
