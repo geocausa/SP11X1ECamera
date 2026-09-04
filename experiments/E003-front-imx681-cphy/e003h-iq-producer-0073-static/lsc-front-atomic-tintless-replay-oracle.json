@@ -1,0 +1,249 @@
+{
+  "accepted": true,
+  "allocator_initial_contents_independence": {
+    "fills_tested": [
+      "0x00",
+      "0xa5"
+    ],
+    "result": "both produce the same exact captured request4 post-state and exact request5/request6 sequence"
+  },
+  "capture_abi_code_byte_proofs": {
+    "0xc9600c": "160c40f9",
+    "0xcb16ec": "681600b0",
+    "0xcb16f0": "084141f9",
+    "0xcb16f4": "e20313aa",
+    "0xcb16f8": "01008052",
+    "0xcb16fc": "00013fd6"
+  },
+  "capture_defect": {
+    "authority": "captured 0x18a0 staging -> exact Titan680 packer -> nonzero LSC0/LSC1; LSC2 remains legitimately zero",
+    "raw_req4_5_6_lsc0_lsc1_files": "rejected as zero placeholders"
+  },
+  "classification": "CLOSED VERIFIED-FRONT ATOMIC TINTLESS STATE MACHINE: exact Surface ARM64 request4 initialization then request5/request6 sequential replay reproduces Windows wrapper state, full 0x126e8 persistent core and four-channel output meshes byte-for-byte; captured staging independently converts those outputs to exact nonzero LSC0/LSC1 wire targets.",
+  "closed_gate": "The historical OV13858 rear TINTCTX evidence is no longer needed for front Tintless parity. This 2026-09-04 capsule is verified IMX681 3840x2160 and proves request4 lazy initialization plus request5/request6 state evolution natively.",
+  "exact_functions": {
+    "allocator_iat_rva_emulator_shim": "0xf7e280",
+    "tintless_wrapper_process_rva": "0xc95fd0",
+    "titan680_lsc_packer_rva": "0xb3d8a0"
+  },
+  "native_sequential_replays": [
+    {
+      "allocation_fill": "0x00",
+      "allocator_calls": [
+        "0x126e8"
+      ],
+      "requests": {
+        "request4": {
+          "core_access_hi": {
+            "r": 75412,
+            "w": 75496
+          },
+          "core_sha256": "2f605b3381b929a381e28d1f7ba9cfacf3287187cf6b01a196070cc5547b0a53",
+          "output_abi_payload_sha256": "7a07b0cd8a4166893ec82809992db1800f1e401cd66faad6e67227d4951c28e0",
+          "output_capture_sha256": "afbe1edb7193b9ee8f653e4079f5d65f4a21211f6f38cf9ae099a7fba295f9fe",
+          "output_capture_tail_unchanged": true,
+          "return": 0,
+          "wrapper_sha256": "d6a20cb2984d71072348692d1c3a717a54489f47dfe20b49e0d8709a41402282"
+        },
+        "request5": {
+          "core_access_hi": {
+            "r": 75412,
+            "w": 75496
+          },
+          "core_sha256": "8cd4af9b1774d1a0f7c15e6a4b757d93912b4d115331b594488902e100a5f426",
+          "output_abi_payload_sha256": "009e829e3c872396833786cc8806118a14fc0321e32a5cd0cc6fe84cdf9a9dbd",
+          "output_capture_sha256": "1758e20ec2c91348a2688297557a13db152e3fd0151825575c3d0500145199b1",
+          "output_capture_tail_unchanged": true,
+          "return": 0,
+          "wrapper_sha256": "1acaed0e64ce1df973a019ebbf4cc040989721640e70dfdcb0e9c91fe0447616"
+        },
+        "request6": {
+          "core_access_hi": {
+            "r": 75412,
+            "w": 75496
+          },
+          "core_sha256": "968873d354b755f51c6c57f6c8b64597223b248dadc25591b70bb05e472b7319",
+          "output_abi_payload_sha256": "0c368d77a59db21ae1b871498a5a0365154472dae30ff783607ca1317c9bc60b",
+          "output_capture_sha256": "3d3423b717c9dcf7a5e336355dde73e35b8f60862a0d29d2b23d6034fe7619c1",
+          "output_capture_tail_unchanged": true,
+          "return": 0,
+          "wrapper_sha256": "78a8a1703b51806303dcc6a928de4c22290db1fed1eacb99221187b13aeb8e9b"
+        }
+      },
+      "synthetic_interface_reads": [
+        [
+          24,
+          8
+        ],
+        [
+          24,
+          8
+        ],
+        [
+          24,
+          8
+        ]
+      ]
+    },
+    {
+      "allocation_fill": "0xa5",
+      "allocator_calls": [
+        "0x126e8"
+      ],
+      "requests": {
+        "request4": {
+          "core_access_hi": {
+            "r": 75412,
+            "w": 75496
+          },
+          "core_sha256": "2f605b3381b929a381e28d1f7ba9cfacf3287187cf6b01a196070cc5547b0a53",
+          "output_abi_payload_sha256": "7a07b0cd8a4166893ec82809992db1800f1e401cd66faad6e67227d4951c28e0",
+          "output_capture_sha256": "afbe1edb7193b9ee8f653e4079f5d65f4a21211f6f38cf9ae099a7fba295f9fe",
+          "output_capture_tail_unchanged": true,
+          "return": 0,
+          "wrapper_sha256": "d6a20cb2984d71072348692d1c3a717a54489f47dfe20b49e0d8709a41402282"
+        },
+        "request5": {
+          "core_access_hi": {
+            "r": 75412,
+            "w": 75496
+          },
+          "core_sha256": "8cd4af9b1774d1a0f7c15e6a4b757d93912b4d115331b594488902e100a5f426",
+          "output_abi_payload_sha256": "009e829e3c872396833786cc8806118a14fc0321e32a5cd0cc6fe84cdf9a9dbd",
+          "output_capture_sha256": "1758e20ec2c91348a2688297557a13db152e3fd0151825575c3d0500145199b1",
+          "output_capture_tail_unchanged": true,
+          "return": 0,
+          "wrapper_sha256": "1acaed0e64ce1df973a019ebbf4cc040989721640e70dfdcb0e9c91fe0447616"
+        },
+        "request6": {
+          "core_access_hi": {
+            "r": 75412,
+            "w": 75496
+          },
+          "core_sha256": "968873d354b755f51c6c57f6c8b64597223b248dadc25591b70bb05e472b7319",
+          "output_abi_payload_sha256": "0c368d77a59db21ae1b871498a5a0365154472dae30ff783607ca1317c9bc60b",
+          "output_capture_sha256": "3d3423b717c9dcf7a5e336355dde73e35b8f60862a0d29d2b23d6034fe7619c1",
+          "output_capture_tail_unchanged": true,
+          "return": 0,
+          "wrapper_sha256": "78a8a1703b51806303dcc6a928de4c22290db1fed1eacb99221187b13aeb8e9b"
+        }
+      },
+      "synthetic_interface_reads": [
+        [
+          24,
+          8
+        ],
+        [
+          24,
+          8
+        ],
+        [
+          24,
+          8
+        ]
+      ]
+    }
+  ],
+  "next_gate": "Before Linux request6, reproduce this atomic stream's pre-Tintless input meshes from same-stream upstream LSC tuning/calibration/geometry (req4 input SHA 71fdf640..., req5/req6 input SHA 6499164c...) or capture the exact upstream request/x22/x23 capsule that generated them. Then perform a fresh runtime-authorization review. This proof does not authorize Linux request6.",
+  "output_to_captured_staging_wire": {
+    "request4": {
+      "accepted_channel_orders": [
+        [
+          0,
+          1,
+          3,
+          2
+        ],
+        [
+          0,
+          2,
+          3,
+          1
+        ]
+      ],
+      "bank": 1,
+      "derived_lsc0_sha256": "eb41b13a2049ecfe835266fefedd2d41c3e15564a8826ee06437f48a533234e5",
+      "derived_lsc1_sha256": "c140edeb7b40eaefa5f904116cc4ce25478494bc9508160742cdc18881bfc676",
+      "derived_lsc2_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e",
+      "raw_lsc0_lsc1_zero_placeholders_rejected": true,
+      "staging_sha256": "1a085983c3e1b09249514e26a9f449deffd9af3c343a0ce12f3de24f5cba1e33",
+      "tintless_output_sha256": "afbe1edb7193b9ee8f653e4079f5d65f4a21211f6f38cf9ae099a7fba295f9fe"
+    },
+    "request5": {
+      "accepted_channel_orders": [
+        [
+          0,
+          1,
+          3,
+          2
+        ],
+        [
+          0,
+          2,
+          3,
+          1
+        ]
+      ],
+      "bank": 0,
+      "derived_lsc0_sha256": "1033e0732a1f2edf2263351be7ad213a98864ba0b9feb0a1d2eb27fbcf31953c",
+      "derived_lsc1_sha256": "eab65d435c04a768bc53009c0cfdf05055168213b50c83385459679dfc790590",
+      "derived_lsc2_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e",
+      "raw_lsc0_lsc1_zero_placeholders_rejected": true,
+      "staging_sha256": "09bec0160fd78bee6a7d23e5fe440b4ca4e6ea0ce51561865e6b9f19a511df7d",
+      "tintless_output_sha256": "1758e20ec2c91348a2688297557a13db152e3fd0151825575c3d0500145199b1"
+    },
+    "request6": {
+      "accepted_channel_orders": [
+        [
+          0,
+          1,
+          3,
+          2
+        ],
+        [
+          0,
+          2,
+          3,
+          1
+        ]
+      ],
+      "bank": 1,
+      "derived_lsc0_sha256": "94dda0dd0c221da88a1087b13305c1cbe440cd314b3f0f6e324504494aab758e",
+      "derived_lsc1_sha256": "5322633904bc97e2d647cf27c9f4f21a92b532272d063a4175028b3a8ad90076",
+      "derived_lsc2_sha256": "6ca83adefc47fc9ab71637c150b95b33083e61e507dff2ee5f2692aa27e1453e",
+      "raw_lsc0_lsc1_zero_placeholders_rejected": true,
+      "staging_sha256": "be1ca980a7e486c1b245f226c1827d0eecefb14f5b065ad4845917a30989e218",
+      "tintless_output_sha256": "3d3423b717c9dcf7a5e336355dde73e35b8f60862a0d29d2b23d6034fe7619c1"
+    }
+  },
+  "safety": {
+    "linux_camera_runtime_executed": false,
+    "linux_request6_authorized": false,
+    "linux_request6_executed": false,
+    "windows_target_modified": false
+  },
+  "schema": "sp11-e003h-front-atomic-tintless-native-replay-v1",
+  "source_authority": {
+    "camera": "IMX681 front",
+    "capture_manifest": "FRONT-ATOMIC-TINTLESS-STAGING-20260904.json",
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "geometry": [
+      3840,
+      2160,
+      120,
+      90,
+      32,
+      24,
+      0
+    ],
+    "raw_capture_files": 44,
+    "raw_captures_tracked": false
+  },
+  "state_continuity": {
+    "req4_core_post.bin==req5_core_pre.bin": true,
+    "req4_wrapper_post.bin==req5_wrapper_pre.bin": true,
+    "req5_core_post.bin==req6_core_pre.bin": true,
+    "req5_wrapper_post.bin==req6_wrapper_pre.bin": true
+  },
+  "status": "PASS"
+}
