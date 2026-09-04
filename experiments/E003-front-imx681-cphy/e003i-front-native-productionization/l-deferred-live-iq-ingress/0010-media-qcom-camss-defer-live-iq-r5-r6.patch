@@ -1,0 +1,257 @@
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7664,6 +7664,15 @@
+ 	return -ENOENT;
+ }
+ 
++/*
++ * Deferred live-IQ handoff.  The provider implementation lives below the
++ * runner; this wrapper consumes exactly one monotonic capsule and materializes
++ * only its steady Epoch0 payload at the point the hardware will use it.
++ */
++static int camss_x1e_pix_iq_provider_next_steady(
++	struct camss *camss, struct camss_video *video, u64 expected_request_id,
++	struct camss_x1e_epoch0_materialized *steady);
++
+ static int camss_x1e_pix_runner_frames(struct camss *camss,
+ 				       const struct camss_x1e_pix_runner_request *req,
+ 				       struct camss_x1e_pix_runner_result *result,
+@@ -7691,6 +7700,7 @@
+ 	bool bus_started = false;
+ 	bool frame_done = false;
+ 	bool teardown_safe = true;
++	bool deferred_live_iq;
+ 	u32 epoch0_seq;
+ 	u32 video_seq;
+ 	int stop_ret;
+@@ -7714,9 +7724,14 @@
+ 				 req->video[3] == req->video[1] ||
+ 				 req->video[3] == req->video[2]))
+ 		return -EINVAL;
+-	if (frame_limit >= 5 && (!req->capsule_next || !req->capsule_next_size))
++	deferred_live_iq = frame_limit >= 5 && req->live_requeue && req->live_video &&
++			   !req->capsule_next && !req->capsule_next_size &&
++			   !req->capsule_next_next && !req->capsule_next_next_size;
++	if (frame_limit >= 5 && !deferred_live_iq &&
++	    (!req->capsule_next || !req->capsule_next_size))
+ 		return -EINVAL;
+-	if (frame_limit == 6 && (!req->capsule_next_next || !req->capsule_next_next_size))
++	if (frame_limit == 6 && !deferred_live_iq &&
++	    (!req->capsule_next_next || !req->capsule_next_next_size))
+ 		return -EINVAL;
+ 	if (frame_limit >= 5 && req->live_requeue) {
+ 		if (!req->live_video || req->video[4] || (frame_limit == 6 && req->video[5]))
+@@ -7765,7 +7780,7 @@
+ 	ret = camss_x1e_pix_capsule_materialize(camss, materialized, inputs);
+ 	if (ret)
+ 		goto out_free_inputs;
+-	if (frame_limit >= 5) {
++	if (frame_limit >= 5 && !deferred_live_iq) {
+ 		ret = camss_x1e_pix_capsule_parse(req->capsule_next,
+ 					       req->capsule_next_size, inputs_next);
+ 		if (ret || inputs_next->steady.request_id != 5) {
+@@ -7777,7 +7792,7 @@
+ 		if (ret)
+ 			goto out_materialized;
+ 	}
+-	if (frame_limit == 6) {
++	if (frame_limit == 6 && !deferred_live_iq) {
+ 		ret = camss_x1e_pix_capsule_parse(req->capsule_next_next,
+ 						  req->capsule_next_next_size, inputs_next_next);
+ 		if (ret || inputs_next_next->steady.request_id != 6) {
+@@ -8066,6 +8081,12 @@
+ 	 * slot at the next Epoch0 and submit exactly one request5 0x958 batch.
+ 	 */
+ 	if (frame_limit >= 5) {
++		if (deferred_live_iq) {
++			ret = camss_x1e_pix_iq_provider_next_steady(
++				camss, req->live_video, 5, &materialized_next->steady);
++			if (ret)
++				goto out_unwind;
++		}
+ 		ret = csid680_x1e_front_poll_next_epoch0(csid, epoch0_seq,
+ 						       CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
+ 		if (ret)
+@@ -8148,6 +8169,12 @@
+ 	 * steady batch. No startup, sensor, CSID, VFE or unrelated MMIO changes.
+ 	 */
+ 	if (frame_limit == 6) {
++		if (deferred_live_iq) {
++			ret = camss_x1e_pix_iq_provider_next_steady(
++				camss, req->live_video, 6, &materialized_next_next->steady);
++			if (ret)
++				goto out_unwind;
++		}
+ 		ret = csid680_x1e_front_poll_next_epoch0(csid, epoch0_seq,
+ 							 CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
+ 		if (ret)
+@@ -8547,6 +8574,64 @@
+ 	return ret;
+ }
+ 
++static int camss_x1e_pix_iq_provider_next_steady(
++	struct camss *camss, struct camss_video *video, u64 expected_request_id,
++	struct camss_x1e_epoch0_materialized *steady)
++{
++	struct camss_x1e_pix_capsule_inputs *inputs;
++	struct camss_x1e_pix_iq_packet *packet = NULL;
++	int ret;
++
++	if (!camss || !video || !steady || steady->materialized)
++		return -EINVAL;
++	inputs = kzalloc_obj(*inputs, GFP_KERNEL);
++	if (!inputs)
++		return -ENOMEM;
++
++	/*
++	 * Do not sleep across a live Epoch0 boundary. The producer must have the
++	 * next request ready before this gate; otherwise fail closed and unwind.
++	 */
++	if (READ_ONCE(video->x1e_pix_stop_requested)) {
++		ret = -ECANCELED;
++		goto out_free;
++	}
++	mutex_lock(&video->x1e_pix_iq_lock);
++	if (list_empty(&video->x1e_pix_iq_pending)) {
++		ret = video->x1e_pix_iq_closed ? -ESHUTDOWN : -EAGAIN;
++		mutex_unlock(&video->x1e_pix_iq_lock);
++		goto out_free;
++	}
++	packet = list_first_entry(&video->x1e_pix_iq_pending,
++				  struct camss_x1e_pix_iq_packet, node);
++	list_del(&packet->node);
++	video->x1e_pix_iq_depth--;
++	if (packet->request_id != expected_request_id ||
++	    packet->request_id != video->x1e_pix_iq_last_dequeued + 1) {
++		ret = -EPROTO;
++		mutex_unlock(&video->x1e_pix_iq_lock);
++		goto out_packet;
++	}
++	video->x1e_pix_iq_last_dequeued = packet->request_id;
++	mutex_unlock(&video->x1e_pix_iq_lock);
++	ret = camss_x1e_pix_capsule_parse(packet->capsule, packet->capsule_size, inputs);
++	if (ret)
++		goto out_packet;
++	if (inputs->steady.subrequest || inputs->steady.request_id != expected_request_id) {
++		ret = -EPROTO;
++		goto out_packet;
++	}
++
++	/* R5/R6 consume only the steady section; startup/priming stay R4-owned. */
++	ret = camss_x1e_epoch0_materialize(camss, steady, &inputs->steady);
++
++out_packet:
++	camss_x1e_pix_iq_packet_release(packet);
++out_free:
++	kfree(inputs);
++	return ret;
++}
++
+ struct camss_x1e_pix_iq_provider_static_ops {
+ 	int (*open)(struct camss_video *video, u64 first_request_id);
+ 	int (*enqueue)(struct camss_video *video, const void *capsule, size_t capsule_size);
+@@ -8615,9 +8700,16 @@
+ 	if (!camss_x1e_pix_iq_video(video) || !capsule ||
+ 	    capsule_size != CAMSS_X1E_PIX_CAPSULE_BYTES)
+ 		return -EINVAL;
+-	if (READ_ONCE(video->x1e_pix_runner_pinned) ||
+-	    READ_ONCE(video->x1e_pix_worker_started) ||
+-	    READ_ONCE(video->x1e_pix_live_active) || video->vb2_q.streaming)
++	if (READ_ONCE(video->x1e_pix_runner_pinned))
++		return -EBUSY;
++	/*
++	 * During the production live session, R5/R6 arrive through this same
++	 * standard control after STREAMON.  The queue remains monotonic and the
++	 * runner consumes them only at their proven Epoch0 gates.
++	 */
++	if (video->vb2_q.streaming &&
++	    (!READ_ONCE(video->x1e_pix_worker_started) ||
++	     !READ_ONCE(video->x1e_pix_live_active)))
+ 		return -EBUSY;
+ 
+ 	mutex_lock(&video->x1e_pix_iq_lock);
+@@ -8625,6 +8717,8 @@
+ 	mutex_unlock(&video->x1e_pix_iq_lock);
+ 
+ 	if (closed) {
++		if (video->vb2_q.streaming)
++			return -ESHUTDOWN;
+ 		ret = camss_x1e_pix_iq_provider_open(video,
+ 						 CAMSS_X1E_PIX_IQ_FIRST_STEADY_REQUEST);
+ 		if (ret)
+@@ -8707,7 +8801,7 @@
+ 	struct camss_x1e_pix_runner_request req = { 0 };
+ 	struct camss_buffer *video0 = NULL, *video1 = NULL;
+ 	struct camss_buffer *video2 = NULL, *video3 = NULL;
+-	struct camss_x1e_pix_iq_packet *iq4 = NULL, *iq5 = NULL, *iq6 = NULL;
++	struct camss_x1e_pix_iq_packet *iq4 = NULL;
+ 	struct media_pad *sensor_pad;
+ 	struct vfe_output *output;
+ 	struct v4l2_subdev *sensor;
+@@ -8727,15 +8821,6 @@
+ 					 CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq4);
+ 	if (ret)
+ 		goto out_iq;
+-	ret = camss_x1e_pix_iq_provider_next(video, 5,
+-					 CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq5);
+-	if (ret)
+-		goto out_iq_packet;
+-	ret = camss_x1e_pix_iq_provider_next(video, 6,
+-					 CAMSS_X1E_PIX_IQ_WAIT_TIMEOUT_US, &iq6);
+-	if (ret)
+-		goto out_iq_packet;
+-
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	video0 = vfe_buf_get_pending(output);
+ 	video1 = vfe_buf_get_pending(output);
+@@ -8767,10 +8852,11 @@
+ 	sensor = media_entity_to_v4l2_subdev(sensor_pad->entity);
+ 	req.capsule = iq4->capsule;
+ 	req.capsule_size = iq4->capsule_size;
+-	req.capsule_next = iq5->capsule;
+-	req.capsule_next_size = iq5->capsule_size;
+-	req.capsule_next_next = iq6->capsule;
+-	req.capsule_next_next_size = iq6->capsule_size;
++	/* R5/R6 are intentionally deferred to their steady Epoch0 gates. */
++	req.capsule_next = NULL;
++	req.capsule_next_size = 0;
++	req.capsule_next_next = NULL;
++	req.capsule_next_next_size = 0;
+ 	req.sensor = sensor;
+ 	req.video[0] = video0;
+ 	req.video[1] = video1;
+@@ -8792,8 +8878,6 @@
+ 			ret = -EIO;
+ 		/* Keep producer-owned bytes pinned with the failed hardware state. */
+ 		iq4 = NULL;
+-		iq5 = NULL;
+-		iq6 = NULL;
+ 		provider_owned = false;
+ 		goto out_done;
+ 	}
+@@ -8840,8 +8924,6 @@
+ 		video->x1e_pix_runner_stopped = true;
+ 	}
+ out_iq_packet:
+-	camss_x1e_pix_iq_packet_release(iq6);
+-	camss_x1e_pix_iq_packet_release(iq5);
+ 	camss_x1e_pix_iq_packet_release(iq4);
+ out_iq:
+ 	if (provider_owned) {
+@@ -8866,10 +8948,13 @@
+ 	    video != &camss->vfe[1].line[VFE_LINE_PIX].video_out)
+ 		return -ENODEV;
+ 
+-	/* Fail closed until a producer opens request4 and primes exact R4/R5/R6. */
++	/*
++	 * Live-adaptive production starts from R4 only. R5/R6 are supplied after
++	 * STREAMON and consumed at their proven steady Epoch0 boundaries.
++	 */
+ 	mutex_lock(&video->x1e_pix_iq_lock);
+-	if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth != 3 ||
+-	    video->x1e_pix_iq_last_enqueued != 6 ||
++	if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth != 1 ||
++	    video->x1e_pix_iq_last_enqueued != 4 ||
+ 	    video->x1e_pix_iq_last_dequeued != 3)
+ 		ret = -EAGAIN;
+ 	mutex_unlock(&video->x1e_pix_iq_lock);

@@ -1,0 +1,38 @@
+{
+  "schema": "sp11-e003i-deferred-live-iq-ingress-v1",
+  "accepted_static": true,
+  "base": "E003i-D V4L2 IQ ingress source",
+  "base_camss_sha256": "4853d30191aec19d9b814ade0aac3c2384074ee0972a72fcc1618e849dfdfed1",
+  "deferred_camss_sha256": "590b0594ce6d041fb6663440b8342d22420d238cba1434d129e6579103c3633a",
+  "patch_sha256": "27ce0928fd466f86d2cef52fd370ee63ff8396aa37376928b2ca0793c3cf8489",
+  "module_sha256": "9ac7de72041aa78dd64a7312ac692120a81a1ff813fc1d9e7ffec0bc5b3b018c",
+  "module_srcversion": "835CDD0D85CD3D0A573FEFE",
+  "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+  "checkpatch": {"errors": 0, "warnings": 0},
+  "producer_sequence": {
+    "before_streamon": [4],
+    "while_live_worker_active": [5, 6],
+    "steady_gate_consumption": [5, 6],
+    "gate_wait_policy": "nonblocking; missing request fails closed"
+  },
+  "v4l2_lock_contract": {
+    "streamon": "INFO_FL_QUEUE -> vb2_q.lock -> video->q_lock",
+    "s_ext_ctrls": "INFO_FL_CTRL -> vdev->lock -> video->lock",
+    "locks_distinct": true,
+    "private_ioctl_added": false
+  },
+  "compatibility": {
+    "upfront_capsule_next_mode_retained": true,
+    "capsule_bytes": 41088,
+    "capsule_format_changed": false,
+    "hardware_submit_order_changed": false
+  },
+  "not_yet_production_runtime": [
+    "live Linux Tintless statistics/config acquisition not wired",
+    "live Linux TMC/ADRC/3A state acquisition not wired",
+    "late steady DMA materialization has not been runtime-latency validated",
+    "continuous request7+ scheduling is not defined"
+  ],
+  "runtime_authorized": false,
+  "hardware_runtime_executed": false
+}
