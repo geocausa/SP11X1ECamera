@@ -1,0 +1,52 @@
+{
+  "schema": "sp11-e003i-native-iq-backends-v1",
+  "classes": {
+    "bank_state": {
+      "fields": 16,
+      "input": "request_id",
+      "rule": "regular banks R4=1/R5=0/R6=1; GTM/Gamma inverse",
+      "implementation": "generate-steady-scalar-state.py"
+    },
+    "scalar_state": {
+      "fields": 8,
+      "input": ["AWB G/B/R", "predictiveGain", "post-sensor dGain", "Demux/BLS tuning terms"],
+      "output_registers": ["0x3b70", "0x3b74", "0x3d78", "0x3d7c", "0x3d80", "0x3d84", "0x456c", "0x4570"],
+      "validation": "matched request6 8/8 byte-exact"
+    },
+    "lsc": {
+      "input": ["request4 constructor/pre-state", "x1 geometry/config", "x2 Tintless stats", "x3/x4 descriptors", "pre-Tintless input mesh", "generated sequential wrapper/core carry"],
+      "native_authority": "DeviceMFT TintlessAlgorithmWrapper::Process RVA 0xc95fd0",
+      "output": ["LSC0", "LSC1", "LSC2", "GIC wire alias"],
+      "captured_post_output_role": "validation only",
+      "captured_lsc_staging_role": "not an input",
+      "0076_exact": true,
+      "allocator_initial_contents_independent": ["0x00", "0xa5"]
+    },
+    "gtm": {
+      "input": ["TMC state", "trigger/geometry state", "static Surface mode2 domain/grid"],
+      "native_authority": "exact DeviceMFT adaptive helpers plus Titan680 setting math",
+      "output": "GTM0 0x800 bytes",
+      "captured_GTM_OUT_role": "validation only",
+      "validation": "0073 adaptive-live R4/R5/R6 256/256 qwords exact",
+      "same_session_as_0076_compatibility": false
+    }
+  },
+  "composition": {
+    "template_free_composer_commit": "301d40a860883b6726e37e5e918cfdd3e0be19b8",
+    "native_lsc_to_0076_capsule": "R4/R5/R6 exact SHA256",
+    "gtm_in_0076_regression": "historical 0076 compatibility DMI state, because the native GTM proof fixture is a distinct Windows session"
+  },
+  "not_yet_production_runtime": {
+    "reasons": [
+      "LSC backend still consumes captured pre-Tintless request input meshes rather than a live upstream LSC/calibration producer",
+      "LSC and GTM proof backends execute exact proprietary DeviceMFT ARM64 routines under Unicorn",
+      "live Linux 3A/Tintless/TMC state acquisition is not wired to the V4L2 IQ control"
+    ],
+    "next_boundary": "live state -> clean-room request state (16 bank + 8 scalar + LSC + GTM) -> existing template-free composer -> existing V4L2 ingress"
+  },
+  "safety": {
+    "offline_only": true,
+    "linux_camera_runtime_executed": false,
+    "production_runtime_authorized": false
+  }
+}
