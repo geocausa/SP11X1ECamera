@@ -1,0 +1,38 @@
+{
+  "schema": "sp11-e003i-tintless-active-path-v1",
+  "validated_sequence": [4,5,6],
+  "cleanroom_substitutions": {
+    "0xc9f438": {"name": "stats_preprocess", "native_calls_bypassed": 3},
+    "0xc9bb48": {"name": "box3x3_integer_smoothing", "native_calls_bypassed": 3},
+    "0xc9f078": {"name": "float_field_accumulation", "native_calls_bypassed": 3},
+    "0xc9ebc8": {"name": "ln_float_field", "native_calls_bypassed": 12},
+    "0xc97f40": {"name": "q16_float_to_int_quantizer", "native_calls_bypassed": 6},
+    "0xc9e590": {"name": "mesh_to_32x24_interpolation", "native_calls_bypassed": 12},
+    "0xc9c4b0": {"name": "linear_extrapolation_pad", "native_calls_after_parent_substitution": 0},
+    "0xc9e398": {"name": "catmull_rom_row_kernel", "native_calls_after_parent_substitution": 0}
+  },
+  "remaining_native_active": {
+    "0xc95fd0": {"name": "wrapper", "calls": 3},
+    "0xca01b0": {"name": "core", "calls": 3},
+    "0xc9f568": {"name": "final_application_temporal", "calls": 3},
+    "0xc9a630": {"name": "solver_orchestration", "calls": 3},
+    "0xc9a9b8": {"name": "solver_apply", "calls": 6},
+    "0xc9ed88": {"name": "solver_postprocess", "calls": 6},
+    "0xc9c868": {"name": "map_output", "calls": 6},
+    "0xc98270": {"name": "solver_prepare_1", "calls": 6},
+    "0xc989d0": {"name": "solver_prepare_2", "calls": 3},
+    "0xc998b8": {"name": "solver_prepare_3", "calls": 3},
+    "0xc99130": {"name": "solver_prepare_4", "calls": 6},
+    "0xc9a288": {"name": "solver_prepare_5", "calls": 6},
+    "0xca1fb0": {"name": "solver_stage_1", "calls": 3},
+    "0xca2310": {"name": "solver_stage_2", "calls": 3},
+    "0xca1d98": {"name": "solver_leaf_1", "calls": 576},
+    "0xca1ed0": {"name": "solver_leaf_2", "calls": 21}
+  },
+  "inactive_on_validated_front_path": {
+    "0xca1410": "stats fusion",
+    "0xc9e8d0": "alternate interpolation"
+  },
+  "device_mft_still_required": true,
+  "linux_camera_runtime": false
+}
