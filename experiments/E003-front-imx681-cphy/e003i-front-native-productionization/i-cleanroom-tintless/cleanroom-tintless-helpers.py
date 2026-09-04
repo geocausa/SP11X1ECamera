@@ -415,3 +415,39 @@ def solver_orchestration(u,state,field_a,field_b):
     wf32(u,state+0xae64,0.0)
     fft2d_inverse_64x32(u,state+0x8e64,state+0xae64,state+0x5e64,
                         state+0xc84,state+0xd04,state+0xe24,state+0xe04)
+
+
+def box3x3_preserve_two_cell_border(u,state,src,dst):
+    """Clean-room translation of RVA 0xc9a9b8, including persistent scratch.
+
+    Native scratch plane A is the clamped horizontal 3-tap sum. Scratch plane
+    B is source*9 on the outer two-cell border and the unscaled 3x3 box sum in
+    the 20x28 interior. The visible output is signed B/9 with truncation toward
+    zero. This compact form is differential-exact to the native recurrence.
+    """
+    a=[ri32(u,src+i*4) for i in range(REGIONS)]
+    def i32(v):
+        v &= 0xffffffff
+        return v-0x100000000 if v & 0x80000000 else v
+    h=[]
+    for yy in range(GRID_H):
+        for xx in range(GRID_W):
+            v=a[yy*GRID_W+max(0,xx-1)] + a[yy*GRID_W+xx] + a[yy*GRID_W+min(GRID_W-1,xx+1)]
+            h.append(i32(v))
+    b=[]
+    for yy in range(GRID_H):
+        for xx in range(GRID_W):
+            if yy<2 or yy>=GRID_H-2 or xx<2 or xx>=GRID_W-2:
+                v=i32(a[yy*GRID_W+xx]*9)
+            else:
+                v=0
+                for sy in range(yy-1,yy+2):
+                    for sx in range(xx-1,xx+2): v=i32(v+a[sy*GRID_W+sx])
+            b.append(v)
+    u.mem_write(state+0x5e64,struct.pack('<768i',*h))
+    u.mem_write(state+0x6a64,struct.pack('<768i',*b))
+    def div9(v):
+        q=abs(v)//9
+        return -q if v<0 else q
+    out=[div9(v) for v in b]
+    u.mem_write(dst,struct.pack('<768i',*out))
