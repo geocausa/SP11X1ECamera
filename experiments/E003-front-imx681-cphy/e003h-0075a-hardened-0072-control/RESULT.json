@@ -1,0 +1,66 @@
+{
+  "schema": "sp11-e003h-0075a-hardened-0072-control-result-v1",
+  "accepted": true,
+  "classification": "ACCEPTED_0072_FIVE_FRAME_RUNTIME_PRESERVED_UNDER_GOLDEN_POWER_FLAGS",
+  "boot_flags": [
+    "clk_ignore_unused",
+    "pd_ignore_unused"
+  ],
+  "request6": false,
+  "helper_rc": 0,
+  "expected_indices": [
+    0,
+    1,
+    2,
+    3,
+    0
+  ],
+  "expected_sequences": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "rtcdm_final": "seq=98 stage=10 name=stopped fifo_seq=45 last_userdata=5 error=0 faulted=0",
+  "outputs": [
+    {
+      "index": 0,
+      "control_sha256": "6c53e0adbb8725f0e7e05f7790588e1b3a6afaad0970a80bdb0471eb766d08fb",
+      "accepted_0072_sha256": "02060136bfddead0f9615767975e83e6fcfd8746faa1e42ad7f7ae9d0830fd14",
+      "byte_equal": false,
+      "bytes": 7778304
+    },
+    {
+      "index": 1,
+      "control_sha256": "c706edf36babae45738aade890fbe1944e4acc36a94a07fc2474d621cb18d2a4",
+      "accepted_0072_sha256": "d9687bbd71920c2c7167c820d900caf71430f8ad7abbc856d9c81556f812a3f2",
+      "byte_equal": false,
+      "bytes": 7778304
+    },
+    {
+      "index": 2,
+      "control_sha256": "5772378f63f9181855c9355a2754e16f08192585ddd820904ae7ebb31ddb1c87",
+      "accepted_0072_sha256": "d83be1294f3276def22ca6804bea935725a1128fcc694944462e44dd28a600a8",
+      "byte_equal": false,
+      "bytes": 7778304
+    },
+    {
+      "index": 3,
+      "control_sha256": "c09abdb4acafa4d5559cc8042019e968beb2ee20686860357fc15414ee64c78d",
+      "accepted_0072_sha256": "9fc0dc340a3202d0cc94e60561e672e301f5f2f8f58fc430add13185db693e6a",
+      "byte_equal": false,
+      "bytes": 7778304
+    },
+    {
+      "index": 4,
+      "control_sha256": "a894cfe701f00d1d1dbf5b84fb74ee8aec5f7fb03d63257d244ddc5ed8a70291",
+      "accepted_0072_sha256": "85f676460e7fdd405ca9db983b853095283a83c2c8c2f9999f7058e297732f7f",
+      "byte_equal": false,
+      "bytes": 7778304
+    }
+  ],
+  "important_correction": "Named msm_vfe1 IRQ counter remained zero even in this known-good control; do not use /proc/interrupts msm_vfe1 count as proof of VFE frame completion for this path.",
+  "pixel_byte_repeatability_required": false,
+  "pixel_hash_comparison_interpretation": "Live sensor payload hashes differ from the archived September 1 run and are not a deterministic runtime invariant. Acceptance is based on exact buffer indices/sequences, five 7,778,304-byte deliveries, successful STREAMOFF, clean RT-CDM stop at userdata5, and zero boot-fault counters."
+}
