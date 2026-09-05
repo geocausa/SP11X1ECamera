@@ -1,6 +1,6 @@
-## E003i current continuation — corrected live TL_BG runtime closed — 2026-09-05
+## E003i current continuation — live stats reach clean LSC offline — 2026-09-05
 
-E003i-U is PASS. One corrected-ABI one-shot produced six QC10C frames and six generation-tagged TL_BG snapshots of exactly `0xF020` bytes (32-byte header + `0xF000` Titan680 raw authority), with generations/source sequences `[1..6]`, slots `[0,1,0,1,0,1]`, live same-fd R5/R6 ingress, clean STREAMOFF and mandatory Golden return. Offline stage-N parsing consumed every complete raw payload; all 768 records were populated in each generation, all six raw payloads were unique, and the legacy oversized zero tail is gone. Source generation is still not a request ID. The next gate is offline live-evidence integration through stage N -> stage M clean stats-only LSC, then template-free capsule composition; dynamic substitution into R5/R6 remains fail-closed until selection/mapping is proved.
+E003i-V is PASS offline. The six corrected U source generations parse through stage N and drive the clean stage-M/K sequential Tintless-LSC backend. Both explicit trigger fixtures (`0.342`, `0.0`) produce six distinct LSC0 outputs; hostile initial-state/output-seed counterfactuals converge identically; reversing source-generation order changes final temporal LSC; and changing trigger state changes all six outputs. Therefore live TL_BG statistics and trigger/interpolation state are proven separate, effective clean-room inputs. Source generation is not a request ID and dynamic R5/R6 substitution remains forbidden. The next gate is exact request/statistics selection plus live trigger-state acquisition.
 
 ## E003h ACTIVE — Linux request6 six-frame executor closed; productionization next — 2026-09-04
 

@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-u-corrected-live-tlbg-runtime-pass
+state_id: E003i-v-live-stats-clean-lsc-offline-pass
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-v-live-stats-to-clean-lsc-offline
+current_gate: E003i-w-request-stats-selection-and-trigger-state
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2857,7 +2857,23 @@ e003i_u_corrected_tlbg_runtime:
   candidate_critical_fault_scan: pass-none
   golden_return_verified: true
 
+e003i_v_live_stats_clean_lsc_offline:
+  status: pass
+  date: 2026-09-05
+  source_runtime_commit: bfc9ac0c9554d8bc37b933c26acd057592ffe544
+  raw_authority_bytes: 61440
+  parsed_bytes: 76832
+  source_generations: [1, 2, 3, 4, 5, 6]
+  source_generation_is_request_id: false
+  trigger_fixtures: [0.342, 0.0]
+  unique_lsc0_outputs_per_fixture: 6
+  hostile_state_counterfactuals: pass
+  source_order_sensitivity: pass
+  trigger_state_separate_effective_input: true
+  dynamic_r5_r6_substitution_authorized: false
+  runtime_performed: false
+
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/u-corrected-tlbg-runtime/RESULT.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/v-live-stats-clean-lsc-offline/README.md
 next_action: >-
-  Feed corrected generation-tagged 0xF000 TL_BG payloads through stage-N parsing into the stage-M clean stats-only LSC backend and prove deterministic Linux-generated LSC state from live U evidence offline first. Preserve source generation separately from request identity; do not dynamically replace R5/R6 oracle IQ until an explicit mapping/selection policy is proven. Then compose generated LSC through the template-free capsule path. GTM live TMC/ADRC remains separately open.
+  Close exact request/statistics selection without equating source_seq with request ID, and acquire the ordinary LSC trigger/interpolation state from the live Linux request path. Use V only as proof that corrected live TL_BG stats and trigger state independently drive the clean LSC backend. Do not replace runtime R5/R6 oracle IQ until both selection and trigger state are proven.
