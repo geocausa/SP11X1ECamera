@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-generation-tagged-tlbg-static-pass
+state_id: E003i-deferred-iq-tlbg-reconciled-static-pass
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -2760,7 +2760,24 @@ e003i_q_generation_tagged_tlbg:
   checkpatch: 0-errors-0-warnings-0-checks
   runtime_performed: false
 
+e003i_r_deferred_iq_tlbg_reconciliation:
+  status: static-pass-runtime-not-performed
+  date: 2026-09-05
+  base_q_camss_sha256: a23cde566e0e7db3adf35a7c4a9496ddc6b22a444125665029f2d5b784dbbc2f
+  reconciled_camss_sha256: fd4dd2ff26ea93b68484135c01019700880ee90e348d7cdab2f710ff1abe7dfd
+  patch_sha256: 83d3e685f8e7cce9b8bcd2ebb69a33e9303d305fdf968f8a2abdab5e3f2915f3
+  qcom_camss_sha256: e422c3e250c8c4dfaa37a75404947530e7455416a901497a5ee1c78493457b08
+  qcom_camss_srcversion: BA92EA0B32A82441904E995
+  iq_before_streamon: [4]
+  iq_while_live: [5, 6]
+  tlbg_publication_count: 6
+  tlbg_latest_generation_semantics: true
+  new_direct_mmio_accesses: 0
+  patch_roundtrip: pass
+  checkpatch: 0-errors-0-warnings
+  runtime_performed: false
+
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/q-generation-tagged-tlbg-snapshot/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/r-deferred-iq-tlbg-reconciliation/README.md
 next_action: >-
-  Package the exact E003i-Q module as a distinct Golden-safe one-shot, inspect it unarmed, publish the package checkpoint, then perform only a separately gated bounded runtime. Read the generation-tagged TL_BG control through the existing exclusive front-PIX fd and verify source generations plus Titan680 parsing before any live R5/R6 IQ use. Do not infer request IDs from parser count or source_seq. Live TMC/ADRC state remains separately open.
+  Package the reconciled E003i-R module as a distinct Golden-safe one-shot. The runtime helper must submit only R4 before STREAMON, submit exact oracle R5/R6 on the same fd while the worker is live, and read the generation-tagged TL_BG control without changing the proven six-frame buffer sequence. Publish the package checkpoint before arming. Do not infer request IDs from parser count or source_seq. Live TMC/ADRC state remains separately open.
