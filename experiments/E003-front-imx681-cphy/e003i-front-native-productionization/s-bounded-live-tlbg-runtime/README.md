@@ -1,6 +1,6 @@
 # E003i-S — bounded live TL_BG runtime package
 
-Status: **prepared and unarmed**.
+Status: **runtime transport PASS; TL_BG ABI size correction required; Golden returned**.
 
 This package is the first bounded runtime composition of E003i-R. It preserves the accepted 0076 six-frame QC10C buffer order and front-only DT/sensor assets while replacing the old captured-IQ CAMSS module with the reconciled production module.
 
@@ -16,3 +16,7 @@ Runtime contract:
 - one helper invocation only; no same-boot retry; unexpected live failure pins state until mandatory Golden reboot.
 
 After return to Golden, the six saved TL_BG controls are parsed offline with the accepted Titan680 stage-N parser. Runtime success does not establish a request-number delay; `source_seq` remains a hardware/source completion generation only.
+
+## Runtime outcome
+
+See `RESULT.md`, `RESULT.json`, `TLBG-OFFLINE-ANALYSIS.json` and `GOLDEN-RETURN.txt`. The one-shot succeeded, but offline validation found the inherited `0x25800` size arithmetic error; parser authority is `0xF000`. E003i-S is not a clean production ABI checkpoint until that zero-tail oversize is corrected.

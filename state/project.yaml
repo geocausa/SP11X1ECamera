@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-live-tlbg-runtime-package-prepared-unarmed
+state_id: E003i-live-tlbg-runtime-pass-size-correction-required
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-bounded-live-tlbg-runtime
+current_gate: E003i-tlbg-size-correction
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2778,7 +2778,7 @@ e003i_r_deferred_iq_tlbg_reconciliation:
   runtime_performed: false
 
 e003i_s_bounded_live_tlbg_runtime:
-  status: package-prepared-unarmed
+  status: pass-transport-tlbg-size-correction-required
   date: 2026-09-05
   base_commit: e05109b2597d9cdc753605db0d6b5830b30a980e
   boot_entry_id: sp11-camera-e003i-s-live-tlbg-one-shot
@@ -2795,10 +2795,20 @@ e003i_s_bounded_live_tlbg_runtime:
   tlbg_snapshot_bytes: 153632
   tlbg_expected_final_generation: 6
   installed: true
-  armed: false
-  runtime_performed: false
+  armed: consumed
+  runtime_performed: true
+  helper_rc: 0
+  streamoff_ok: true
+  golden_return_verified: true
+  observed_generations: [1, 2, 3, 4, 5, 6]
+  observed_source_seq: [1, 2, 3, 4, 5, 6]
+  observed_slots: [0, 1, 0, 1, 0, 1]
+  parser_raw_authority_bytes: 61440
+  inherited_advertised_raw_bytes: 153600
+  oversized_zero_tail_bytes: 92160
+  size_correction_required: true
 
 handoff:
   latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/s-bounded-live-tlbg-runtime/README.md
 next_action: >-
-  Publish E003i-S while unarmed, then install its unique Golden-safe boot entry and perform exactly one bounded helper invocation. Require six-frame QC10C order, live R5/R6 same-fd control writes, generation-tagged TL_BG reads with final generation 6, archive evidence, and mandatory Golden return. Parse saved raw TL_BG offline after return. No same-boot retry and no request-ID inference from source_seq.
+  Correct the inherited TL_BG raw-size arithmetic from 0x25800 to the stage-N-proven 0xF000 (768 x 0x50). Preserve the accepted E003i-S generation/ownership semantics and make no hardware programming change. Rebuild/checkpatch/roundtrip first; do not infer request IDs from source_seq.
