@@ -2,6 +2,10 @@
 
 This file is the durable restart point for a fresh ChatGPT conversation. It intentionally distinguishes **proved**, **implemented but not runtime-tested**, and **still open** items.
 
+## Size erratum — E003i-T
+
+This handoff contained an arithmetic typo in the TL_BG raw-size summary: `768 × 0x50` is **`0xF000` (61,440)**, not `0x25800` (153,600). The stage-N parser code and `PARSER-PROOF.json` were already correct. E003i-S later proved bytes `0xF000..0x25800` are zero in all six Linux live generations and both preserved Windows live dumps. E003i-T therefore corrects the production snapshot ABI to `0xF000` raw / `0xF020` including the 32-byte generation header. Historical `0x25800` lines below describe the superseded mistaken assumption.
+
 ## Repository / machine state
 
 - Branch: `experiment/e003-front-imx681-cphy`

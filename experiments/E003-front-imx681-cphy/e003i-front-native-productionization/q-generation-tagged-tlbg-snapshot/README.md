@@ -39,3 +39,7 @@ The control is latest-only by design. A userspace consumer compares `generation`
 ## Safety boundary / next gate
 
 This checkpoint does **not** install the module, arm GRUB or authorize/claim a camera runtime. The next step is a distinct Golden-safe one-shot package using this exact module, followed by package inspection and a separate bounded runtime checkpoint. Runtime should read the new control through the existing exclusive front-PIX fd and verify generation/source sequence plus Linux Titan680 parsing before any live R5/R6 IQ use.
+
+## Superseded size note
+
+Q accurately records the oversized `0x25800` ABI that was built at this checkpoint, but that size came from a handoff arithmetic error. E003i-T supersedes **size only** with the stage-N-proven `0xF000` raw authority; Q's ownership/generation semantics remain accepted.

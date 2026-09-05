@@ -41,4 +41,8 @@ Breakpoints were cleared, the KD log was closed, SP11 was rebooted through the u
 
 ## Next gate
 
-Implement a bounded Linux read-only TL_BG snapshot on the existing front PIX V4L2 surface. Copy exactly `0x25800` bytes only after the corresponding TL_BG completion generation is observed and while the owning aux slot is still pinned, then publish explicit snapshot/source generations. Do not claim request-number mapping from this checkpoint.
+Implement a bounded Linux read-only TL_BG snapshot on the existing front PIX V4L2 surface. Copy exactly the stage-N-proven `0xF000` bytes only after the corresponding TL_BG completion generation is observed and while the owning aux slot is still pinned, then publish explicit snapshot/source generations. Do not claim request-number mapping from this checkpoint.
+
+## E003i-T size correction
+
+The historical `0x25800` size came from a later arithmetic typo. Stage-N authority is `768 × 0x50 = 0xF000`; E003i-S proved the extra bytes in the oversized Windows/Linux dumps are zero.
