@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-x-native-live-lsc-deadline-pass
+state_id: E003i-y-generation-tagged-3a-static-pass
 phase: front-imx681-cphy-bringup
-status: linux-live-lsc-producer-deadline-closed-trigger-acquisition-next
+status: linux-generation-tagged-3a-stats-static-closed-runtime-validation-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-x-linux-live-lsc-producer-timing
+current_gate: E003i-z-live-3a-snapshot-runtime
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2930,3 +2930,27 @@ handoff:
   latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/x-native-live-lsc-deadline/README.md
 next_action: >-
   Acquire Linux request-local AEC lux index and CCT early enough to select the repaired front IMX681 LSC tree. Prefer an existing standard V4L2/libcamera request or metadata surface. Then prove one bounded producer-to-existing-V4L2-IQ-FIFO integration using the already-proven R5<-G2 and R6<-G3 selection law. Do not perform dynamic R5/R6 substitution until trigger availability and request association are proven; do not infer request IDs from source generation.
+
+e003i_y_generation_tagged_3a_stats:
+  status: pass_static
+  runtime_executed: false
+  raw_authority:
+    aec_be_bytes: 0x14000
+    aec_be_regions: 1024
+    bhist_bytes: 0x1000
+    bhist_bins: 1024
+    awb_bg_bytes: 0x3c000
+    awb_bg_regions: 3072
+    bundle_bytes: 0x51000
+  v4l2_snapshot:
+    control_offset: 0x1242
+    header_bytes: 64
+    total_bytes: 0x51040
+    identity: source_seq
+  module_sha256: 42538dce9a27eadbf95ed09cd07ca526b006598a0263b0f2b3b953b973aad32b
+  safety:
+    new_direct_mmio: 0
+    bus_allocation_changes: 0
+    completion_order_changes: 0
+    golden_untouched: true
+  next: bounded Golden-safe six-generation TLBG+3A paired runtime validation

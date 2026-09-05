@@ -1,3 +1,15 @@
+## E003i current continuation — generation-tagged 3A stats transport static PASS — 2026-09-05
+
+E003i-Y is PASS statically. The existing Windows startup CDM and SHA-pinned Surface DeviceMFT close the active single-IFE front statistics raw authority without another oracle boot: AEC_BE is 32x32 regions at 0x50 bytes each (`0x14000`), BHist is 1024 32-bit bins (`0x1000`), and AWB_BG is 64x48 regions at 0x50 bytes each (`0x3c000`). The compact raw bundle is `0x51000`; the larger existing BUS allocations remain unchanged ceilings.
+
+Linux now has a separate read-only volatile compound V4L2 3A snapshot (`USER_BASE+0x1242`) with a 64-byte generation/source header plus exact AEC/BHist/AWB prefixes (`0x51040` total). It reuses the proven TL_BG ownership boundary: for each of six source generations the runner executes `poll_all_done -> TL_BG copy -> 3A copy -> retire_aux`, preserving the exact same `source_seq` while the slot is still pinned. The VFE accessor independently requires AEC/BHist and AWB completion bits still pending. Source generation remains distinct from request ID.
+
+The five-file patch reverses/reapplies byte-exact, strict checkpatch is 0 errors/0 warnings, Golden-ABI CAMSS builds as SHA `42538dce...aad32b`, and the patch adds zero direct MMIO accesses and changes no auxiliary allocation, BUS programming or completion semantics. No Linux camera runtime was executed by Y.
+
+**Next:** create a distinct Golden-safe one-shot from this immutable checkpoint and prove six live `0x51040` 3A snapshots pair exactly with the six TL_BG source sequences/generations, contain valid nonzero/dynamic AEC/BHist/AWB payloads, and return to Golden. Only then use those live inputs to reconstruct Lux/CCT; do not synthesize trigger metadata.
+
+Primary artifacts: `experiments/E003-front-imx681-cphy/e003i-front-native-productionization/y-generation-tagged-3a-stats/README.md`, `RAW-AUTHORITY.json`, `prove-3a-raw-authority.py`, `0014-media-qcom-camss-expose-generation-tagged-3a-stats.patch`, `BUILD-MANIFEST.json`, `INSPECTION.json`, and `inspect-generation-tagged-3a.py`.
+
 ## E003i current continuation — live LSC producer deadline closed — 2026-09-05
 
 E003i-X is PASS offline. The W pointer-labelled law remains authoritative: `request_frame = source_generation + 3`, so request5 consumes G2 and request6 G3. Static Linux runner inspection proves those generations are already published before the corresponding steady IQ-provider dequeue gates. The repaired 2026-09-04 **front IMX681** tuning authority remains canonical for this production path; the older independent rear/default runtime-tree stream is not mixed into it. W lux/CCT values keep requests4/5/6 in the front tree's lower AEC branch and direct CCT leaf `0x4bf`, yielding pre-Tintless SHA `ec60c6de…`.

@@ -1,0 +1,417 @@
+--- a/drivers/media/platform/qcom/camss/camss-video.h
++++ b/drivers/media/platform/qcom/camss/camss-video.h
+@@ -27,6 +27,14 @@
+ #define CAMSS_X1E_TLBG_SNAPSHOT_HEADER_BYTES	32
+ #define CAMSS_X1E_TLBG_SNAPSHOT_BYTES		\
+ 	(CAMSS_X1E_TLBG_SNAPSHOT_HEADER_BYTES + CAMSS_X1E_TLBG_RAW_BYTES)
++
++#define CAMSS_X1E_3A_AEC_BE_RAW_BYTES		0x00014000
++#define CAMSS_X1E_3A_BHIST_RAW_BYTES		0x00001000
++#define CAMSS_X1E_3A_AWB_BG_RAW_BYTES		0x0003c000
++#define CAMSS_X1E_3A_RAW_BYTES			0x00051000
++#define CAMSS_X1E_3A_SNAPSHOT_HEADER_BYTES	64
++#define CAMSS_X1E_3A_SNAPSHOT_BYTES		\
++	(CAMSS_X1E_3A_SNAPSHOT_HEADER_BYTES + CAMSS_X1E_3A_RAW_BYTES)
+ 
+ struct camss_buffer {
+ 	struct vb2_v4l2_buffer vb;
+@@ -81,6 +89,13 @@
+ 	u32 x1e_tlbg_source_seq;
+ 	u32 x1e_tlbg_slot;
+ 	bool x1e_tlbg_valid;
++	/* E003i-Y latest completed AEC/BHist/AWB bundle; source-sequence tagged. */
++	struct mutex x1e_3a_lock;
++	u8 *x1e_3a_snapshot;
++	u64 x1e_3a_generation;
++	u32 x1e_3a_source_seq;
++	u32 x1e_3a_slot;
++	bool x1e_3a_valid;
+ 	const struct camss_format_info *formats;
+ 	unsigned int nformats;
+ };
+@@ -92,5 +107,11 @@
+ void camss_x1e_tlbg_reset(struct camss_video *video);
+ int camss_x1e_tlbg_publish(struct camss_video *video, const void *raw,
+ 			   size_t raw_size, u32 source_seq, u32 slot);
++void camss_x1e_3a_reset(struct camss_video *video);
++int camss_x1e_3a_publish(struct camss_video *video,
++			 const void *aec_be, size_t aec_be_size,
++			 const void *bhist, size_t bhist_size,
++			 const void *awb_bg, size_t awb_bg_size,
++			 u32 source_seq, u32 slot);
+ 
+ #endif /* QC_MSM_CAMSS_VIDEO_H */
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -22,6 +22,7 @@
+ 
+ #define V4L2_CID_QCOM_CAMSS_X1E_IQ_CAPSULE	(V4L2_CID_USER_BASE + 0x1240)
+ #define V4L2_CID_QCOM_CAMSS_X1E_TLBG_SNAPSHOT	(V4L2_CID_USER_BASE + 0x1241)
++#define V4L2_CID_QCOM_CAMSS_X1E_3A_SNAPSHOT	(V4L2_CID_USER_BASE + 0x1242)
+ 
+ #define CAMSS_X1E_TLBG_SNAPSHOT_MAGIC		0x47424c54 /* "TLBG" */
+ #define CAMSS_X1E_TLBG_SNAPSHOT_VERSION	1
+@@ -40,6 +41,30 @@
+ 
+ static_assert(sizeof(struct camss_x1e_tlbg_snapshot_header) ==
+ 	      CAMSS_X1E_TLBG_SNAPSHOT_HEADER_BYTES);
++
++#define CAMSS_X1E_3A_SNAPSHOT_MAGIC		0x54534133 /* "3AST" */
++#define CAMSS_X1E_3A_SNAPSHOT_VERSION		1
++#define CAMSS_X1E_3A_SNAPSHOT_F_LATEST	BIT(0)
++
++struct camss_x1e_3a_snapshot_header {
++	__le32 magic;
++	__le16 version;
++	__le16 header_bytes;
++	__le64 generation;
++	__le32 source_seq;
++	__le32 slot;
++	__le32 aec_be_offset;
++	__le32 aec_be_bytes;
++	__le32 bhist_offset;
++	__le32 bhist_bytes;
++	__le32 awb_bg_offset;
++	__le32 awb_bg_bytes;
++	__le32 flags;
++	__le32 reserved[3];
++} __packed;
++
++static_assert(sizeof(struct camss_x1e_3a_snapshot_header) ==
++	      CAMSS_X1E_3A_SNAPSHOT_HEADER_BYTES);
+ 
+ #define CAMSS_FRAME_MIN_WIDTH		1
+ #define CAMSS_FRAME_MAX_WIDTH		8191
+@@ -346,6 +371,106 @@
+ 	.step = 1,
+ 	.def = 0,
+ 	.dims = { CAMSS_X1E_TLBG_SNAPSHOT_BYTES },
++	.flags = V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE,
++};
++
++void camss_x1e_3a_reset(struct camss_video *video)
++{
++	if (!video || !video->x1e_3a_snapshot)
++		return;
++
++	mutex_lock(&video->x1e_3a_lock);
++	memzero_explicit(video->x1e_3a_snapshot, CAMSS_X1E_3A_RAW_BYTES);
++	video->x1e_3a_source_seq = 0;
++	video->x1e_3a_slot = 0;
++	video->x1e_3a_valid = false;
++	mutex_unlock(&video->x1e_3a_lock);
++}
++
++int camss_x1e_3a_publish(struct camss_video *video,
++			 const void *aec_be, size_t aec_be_size,
++			 const void *bhist, size_t bhist_size,
++			 const void *awb_bg, size_t awb_bg_size,
++			 u32 source_seq, u32 slot)
++{
++	u8 *out;
++
++	if (!video || !aec_be || !bhist || !awb_bg || !video->x1e_3a_snapshot ||
++	    aec_be_size != CAMSS_X1E_3A_AEC_BE_RAW_BYTES ||
++	    bhist_size != CAMSS_X1E_3A_BHIST_RAW_BYTES ||
++	    awb_bg_size != CAMSS_X1E_3A_AWB_BG_RAW_BYTES || !source_seq)
++		return -EINVAL;
++
++	mutex_lock(&video->x1e_3a_lock);
++	out = video->x1e_3a_snapshot;
++	memcpy(out, aec_be, CAMSS_X1E_3A_AEC_BE_RAW_BYTES);
++	out += CAMSS_X1E_3A_AEC_BE_RAW_BYTES;
++	memcpy(out, bhist, CAMSS_X1E_3A_BHIST_RAW_BYTES);
++	out += CAMSS_X1E_3A_BHIST_RAW_BYTES;
++	memcpy(out, awb_bg, CAMSS_X1E_3A_AWB_BG_RAW_BYTES);
++	video->x1e_3a_generation++;
++	if (!video->x1e_3a_generation)
++		video->x1e_3a_generation = 1;
++	video->x1e_3a_source_seq = source_seq;
++	video->x1e_3a_slot = slot;
++	video->x1e_3a_valid = true;
++	mutex_unlock(&video->x1e_3a_lock);
++	return 0;
++}
++
++static int video_x1e_3a_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct camss_video *video = container_of(ctrl->handler,
++						 struct camss_video, ctrl_handler);
++	struct camss_x1e_3a_snapshot_header header = {};
++	u8 *out;
++
++	if (ctrl->id != V4L2_CID_QCOM_CAMSS_X1E_3A_SNAPSHOT ||
++	    !video_is_x1e_front_pix(video) || !video->x1e_3a_snapshot)
++		return -EINVAL;
++
++	mutex_lock(&video->x1e_3a_lock);
++	if (!video->x1e_3a_valid) {
++		mutex_unlock(&video->x1e_3a_lock);
++		return -EAGAIN;
++	}
++
++	header.magic = cpu_to_le32(CAMSS_X1E_3A_SNAPSHOT_MAGIC);
++	header.version = cpu_to_le16(CAMSS_X1E_3A_SNAPSHOT_VERSION);
++	header.header_bytes = cpu_to_le16(sizeof(header));
++	header.generation = cpu_to_le64(video->x1e_3a_generation);
++	header.source_seq = cpu_to_le32(video->x1e_3a_source_seq);
++	header.slot = cpu_to_le32(video->x1e_3a_slot);
++	header.aec_be_offset = cpu_to_le32(0);
++	header.aec_be_bytes = cpu_to_le32(CAMSS_X1E_3A_AEC_BE_RAW_BYTES);
++	header.bhist_offset = cpu_to_le32(CAMSS_X1E_3A_AEC_BE_RAW_BYTES);
++	header.bhist_bytes = cpu_to_le32(CAMSS_X1E_3A_BHIST_RAW_BYTES);
++	header.awb_bg_offset = cpu_to_le32(CAMSS_X1E_3A_AEC_BE_RAW_BYTES +
++					  CAMSS_X1E_3A_BHIST_RAW_BYTES);
++	header.awb_bg_bytes = cpu_to_le32(CAMSS_X1E_3A_AWB_BG_RAW_BYTES);
++	header.flags = cpu_to_le32(CAMSS_X1E_3A_SNAPSHOT_F_LATEST);
++	out = ctrl->p_new.p_u8;
++	memcpy(out, &header, sizeof(header));
++	memcpy(out + sizeof(header), video->x1e_3a_snapshot,
++	       CAMSS_X1E_3A_RAW_BYTES);
++	mutex_unlock(&video->x1e_3a_lock);
++	return 0;
++}
++
++static const struct v4l2_ctrl_ops video_x1e_3a_ctrl_ops = {
++	.g_volatile_ctrl = video_x1e_3a_g_volatile_ctrl,
++};
++
++static const struct v4l2_ctrl_config video_x1e_3a_ctrl = {
++	.ops = &video_x1e_3a_ctrl_ops,
++	.id = V4L2_CID_QCOM_CAMSS_X1E_3A_SNAPSHOT,
++	.name = "X1E Front 3A Stats Snapshot",
++	.type = V4L2_CTRL_TYPE_U8,
++	.min = 0,
++	.max = 255,
++	.step = 1,
++	.def = 0,
++	.dims = { CAMSS_X1E_3A_SNAPSHOT_BYTES },
+ 	.flags = V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE,
+ };
+ 
+@@ -972,6 +1097,7 @@
+ 		return ret;
+ 	}
+ 	camss_x1e_tlbg_reset(video);
++	camss_x1e_3a_reset(video);
+ 	return 0;
+ }
+ 
+@@ -985,6 +1111,7 @@
+ 	if (x1e_front) {
+ 		camss_x1e_pix_iq_session_close(video);
+ 		camss_x1e_tlbg_reset(video);
++		camss_x1e_3a_reset(video);
+ 	}
+ 	return ret;
+ }
+@@ -1012,6 +1139,9 @@
+ 	kvfree(video->x1e_tlbg_snapshot);
+ 	video->x1e_tlbg_snapshot = NULL;
+ 	mutex_destroy(&video->x1e_tlbg_lock);
++	kvfree(video->x1e_3a_snapshot);
++	video->x1e_3a_snapshot = NULL;
++	mutex_destroy(&video->x1e_3a_lock);
+ 
+ 	mutex_destroy(&video->q_lock);
+ 	mutex_destroy(&video->lock);
+@@ -1078,9 +1208,20 @@
+ 	video->x1e_tlbg_source_seq = 0;
+ 	video->x1e_tlbg_slot = 0;
+ 	video->x1e_tlbg_valid = false;
++	mutex_init(&video->x1e_3a_lock);
++	video->x1e_3a_snapshot = NULL;
++	video->x1e_3a_generation = 0;
++	video->x1e_3a_source_seq = 0;
++	video->x1e_3a_slot = 0;
++	video->x1e_3a_valid = false;
+ 	if (video_is_x1e_front_pix(video)) {
+ 		video->x1e_tlbg_snapshot = kvzalloc(CAMSS_X1E_TLBG_RAW_BYTES, GFP_KERNEL);
+ 		if (!video->x1e_tlbg_snapshot) {
++			ret = -ENOMEM;
++			goto error_ctrl_init;
++		}
++		video->x1e_3a_snapshot = kvzalloc(CAMSS_X1E_3A_RAW_BYTES, GFP_KERNEL);
++		if (!video->x1e_3a_snapshot) {
+ 			ret = -ENOMEM;
+ 			goto error_ctrl_init;
+ 		}
+@@ -1094,12 +1235,13 @@
+ 	video->x1e_pix_iq_closed = true;
+ 
+ 	ret = v4l2_ctrl_handler_init(&video->ctrl_handler,
+-				     video_is_x1e_front_pix(video) ? 2 : 0);
++				     video_is_x1e_front_pix(video) ? 3 : 0);
+ 	if (ret)
+ 		goto error_ctrl_init;
+ 	if (video_is_x1e_front_pix(video)) {
+ 		v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_iq_ctrl, NULL);
+ 		v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_tlbg_ctrl, NULL);
++		v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_3a_ctrl, NULL);
+ 		if (video->ctrl_handler.error) {
+ 			ret = video->ctrl_handler.error;
+ 			goto error_vb2_init;
+@@ -1171,6 +1313,9 @@
+ 	kvfree(video->x1e_tlbg_snapshot);
+ 	video->x1e_tlbg_snapshot = NULL;
+ 	mutex_destroy(&video->x1e_tlbg_lock);
++	kvfree(video->x1e_3a_snapshot);
++	video->x1e_3a_snapshot = NULL;
++	mutex_destroy(&video->x1e_3a_lock);
+ 	mutex_destroy(&video->q_lock);
+ 
+ 	return ret;
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -348,6 +348,11 @@
+ int vfe680_x1e_pix_runtime_tlbg_data(struct vfe680_x1e_pix_runtime *runtime,
+ 				     unsigned int expected_slot,
+ 				     const void **data, size_t *size);
++int vfe680_x1e_pix_runtime_3a_data(struct vfe680_x1e_pix_runtime *runtime,
++				   unsigned int expected_slot,
++				   const void **aec_be, size_t *aec_be_size,
++				   const void **bhist, size_t *bhist_size,
++				   const void **awb_bg, size_t *awb_bg_size);
+ int vfe680_x1e_pix_runtime_retire_aux(struct vfe680_x1e_pix_runtime *runtime,
+ 				      unsigned int expected_slot);
+ int vfe680_x1e_pix_runtime_rebind(struct vfe680_x1e_pix_runtime *runtime,
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -1260,6 +1260,41 @@
+ 	return 0;
+ }
+ 
++int vfe680_x1e_pix_runtime_3a_data(struct vfe680_x1e_pix_runtime *runtime,
++				   unsigned int expected_slot,
++				   const void **aec_be, size_t *aec_be_size,
++				   const void **bhist, size_t *bhist_size,
++				   const void **awb_bg, size_t *awb_bg_size)
++{
++	struct vfe680_x1e_pix_slot *slot;
++	struct vfe680_x1e_aux_buffer *aec, *hist, *awb;
++	u8 required = VFE680_X1E_DONE_AEC_BE_BHIST | VFE680_X1E_DONE_AWB_BG;
++
++	if (!runtime || !aec_be || !aec_be_size || !bhist || !bhist_size ||
++	    !awb_bg || !awb_bg_size || expected_slot >= VFE680_X1E_PIX_SLOT_COUNT)
++		return -EINVAL;
++
++	slot = &runtime->ownership.slot[expected_slot];
++	if (!runtime->ownership.allocated || !slot->in_use ||
++	    (slot->pending_mask & required) != required)
++		return -EPROTO;
++	aec = &slot->aux[VFE680_X1E_AUX_AEC_BE];
++	hist = &slot->aux[VFE680_X1E_AUX_BHIST];
++	awb = &slot->aux[VFE680_X1E_AUX_AWB_BG];
++	if (!aec->cpu || aec->size < CAMSS_X1E_3A_AEC_BE_RAW_BYTES ||
++	    !hist->cpu || hist->size < CAMSS_X1E_3A_BHIST_RAW_BYTES ||
++	    !awb->cpu || awb->size < CAMSS_X1E_3A_AWB_BG_RAW_BYTES)
++		return -EPROTO;
++
++	*aec_be = aec->cpu;
++	*aec_be_size = CAMSS_X1E_3A_AEC_BE_RAW_BYTES;
++	*bhist = hist->cpu;
++	*bhist_size = CAMSS_X1E_3A_BHIST_RAW_BYTES;
++	*awb_bg = awb->cpu;
++	*awb_bg_size = CAMSS_X1E_3A_AWB_BG_RAW_BYTES;
++	return 0;
++}
++
+ int vfe680_x1e_pix_runtime_retire_aux(struct vfe680_x1e_pix_runtime *runtime,
+ 				      unsigned int expected_slot)
+ {
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -7629,6 +7629,33 @@
+ 	return camss_x1e_tlbg_publish(video, raw, raw_size, source_seq, slot);
+ }
+ 
++static int camss_x1e_pix_publish_3a(struct camss_video *video,
++				    struct vfe680_x1e_pix_runtime *runtime,
++				    unsigned int slot, u32 source_seq)
++{
++	const void *aec_be, *bhist, *awb_bg;
++	size_t aec_be_size, bhist_size, awb_bg_size;
++	int ret;
++
++	if (!video)
++		return 0;
++	ret = vfe680_x1e_pix_runtime_3a_data(runtime, slot,
++					     &aec_be, &aec_be_size,
++					     &bhist, &bhist_size,
++					     &awb_bg, &awb_bg_size);
++	if (ret)
++		return ret;
++
++	/*
++	 * poll_all_done() has observed AEC/BHist and AWB completion for this
++	 * source generation. Ownership still pins all three DMA buffers until
++	 * retire_aux(), so copy their exact active prefixes before slot reuse.
++	 */
++	return camss_x1e_3a_publish(video, aec_be, aec_be_size,
++				    bhist, bhist_size, awb_bg, awb_bg_size,
++				    source_seq, slot);
++}
++
+ static struct camss_buffer *
+ camss_x1e_pix_v4l2_wait_pending(struct camss_video *video, unsigned int timeout_us)
+ {
+@@ -7933,6 +7960,9 @@
+ 	ret = camss_x1e_pix_publish_tlbg(req->live_video, pix, 0, video_seq + 1);
+ 	if (ret)
+ 		goto out_unwind;
++	ret = camss_x1e_pix_publish_3a(req->live_video, pix, 0, video_seq + 1);
++	if (ret)
++		goto out_unwind;
+ 	ret = vfe680_x1e_pix_runtime_retire_aux(pix, 0);
+ 	if (ret)
+ 		goto out_unwind;
+@@ -8008,6 +8038,9 @@
+ 		if (ret)
+ 			goto out_unwind;
+ 		ret = camss_x1e_pix_publish_tlbg(req->live_video, pix, 1, video_seq + 2);
++		if (ret)
++			goto out_unwind;
++		ret = camss_x1e_pix_publish_3a(req->live_video, pix, 1, video_seq + 2);
+ 		if (ret)
+ 			goto out_unwind;
+ 		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 1);
+@@ -8077,6 +8110,9 @@
+ 		ret = camss_x1e_pix_publish_tlbg(req->live_video, pix, 0, video_seq + 3);
+ 		if (ret)
+ 			goto out_unwind;
++		ret = camss_x1e_pix_publish_3a(req->live_video, pix, 0, video_seq + 3);
++		if (ret)
++			goto out_unwind;
+ 		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 0);
+ 		if (ret)
+ 			goto out_unwind;
+@@ -8168,6 +8204,9 @@
+ 		ret = camss_x1e_pix_publish_tlbg(req->live_video, pix, 1, video_seq + 4);
+ 		if (ret)
+ 			goto out_unwind;
++		ret = camss_x1e_pix_publish_3a(req->live_video, pix, 1, video_seq + 4);
++		if (ret)
++			goto out_unwind;
+ 		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 1);
+ 		if (ret)
+ 			goto out_unwind;
+@@ -8259,6 +8298,9 @@
+ 		ret = camss_x1e_pix_publish_tlbg(req->live_video, pix, 0, video_seq + 5);
+ 		if (ret)
+ 			goto out_unwind;
++		ret = camss_x1e_pix_publish_3a(req->live_video, pix, 0, video_seq + 5);
++		if (ret)
++			goto out_unwind;
+ 		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 0);
+ 		if (ret)
+ 			goto out_unwind;
+@@ -8297,6 +8339,9 @@
+ 		if (ret)
+ 			goto out_unwind;
+ 		ret = camss_x1e_pix_publish_tlbg(req->live_video, pix, 1, video_seq + 6);
++		if (ret)
++			goto out_unwind;
++		ret = camss_x1e_pix_publish_3a(req->live_video, pix, 1, video_seq + 6);
+ 		if (ret)
+ 			goto out_unwind;
+ 		ret = vfe680_x1e_pix_runtime_retire_aux(pix, 1);
