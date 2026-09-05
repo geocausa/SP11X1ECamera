@@ -1,0 +1,69 @@
+{
+  "schema": "sp11-e003i-aa-aec-awb-trigger-oracle-plan-v1",
+  "status": "PREPARED_UNEXECUTED",
+  "base_commit": "c42a4ed",
+  "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "goal": "produce request-labelled raw/parsed AEC+BHist -> AECLuxIndex and raw/parsed AWB_BG -> CCT fixtures for clean Linux 3A reconstruction",
+  "rvas": {
+    "titan680_aec_raw_single": "0x5f6600",
+    "titan680_aec_high_level": "0x5f6158",
+    "titan680_bhist_high_level": "0x5f3c60",
+    "titan680_awb_raw_single": "0x5f1d70",
+    "titan680_awb_high_level": "0x5efa00",
+    "aec_frame_control_publish": "0x83a0c0",
+    "awb_frame_control_publish_observe": "0x830464"
+  },
+  "entry_abi": {
+    "aec_raw_single": {
+      "raw": "x1",
+      "parsed": "x3",
+      "raw_bytes": 81920,
+      "parsed_bytes_ceiling": 458760,
+      "raw_record_bytes": 80
+    },
+    "bhist_high_level": {
+      "parser_input": "x1",
+      "raw": "qword[x1+0x10]",
+      "raw_bytes": 4096,
+      "parsed_bytes": 4120,
+      "bins": 1024
+    },
+    "awb_raw_single": {
+      "parsed": "x1",
+      "raw": "x2",
+      "raw_bytes": 245760,
+      "parsed_bytes_ceiling": 435496,
+      "raw_record_bytes": 80
+    },
+    "aec_frame_control_publish": {
+      "request_frame": "qword[x0+0x6008]",
+      "frame_control": "x2",
+      "lux_index": "float[x2+0x48]"
+    },
+    "awb_frame_control_publish_observe": {
+      "request_frame": "qword[x23+0x8]",
+      "frame_control": "x20",
+      "red_gain": "float[x20+0x0]",
+      "green_gain": "float[x20+0x4]",
+      "blue_gain": "float[x20+0x8]",
+      "cct": "uint32[x20+0x0c]"
+    }
+  },
+  "oracle_phases": [
+    "AEC raw/parsed + request-labelled LuxIndex",
+    "BHist raw/parsed + request-labelled LuxIndex",
+    "AWB raw/parsed + request-labelled CCT"
+  ],
+  "constraints": {
+    "hardware_execute_breakpoints_max": 2,
+    "same_windows_boot_multiple_gated_cycles_allowed": true,
+    "dump_only_camera_stats_buffers": true,
+    "request_id_from_source_generation_forbidden": true,
+    "dynamic_linux_r5_r6_substitution_authorized": false
+  },
+  "safety": {
+    "windows_direct_bootnext": "Boot0006",
+    "golden_saved_entry": "sp11-audio-fullio-v19c",
+    "golden_return_required": true
+  }
+}
