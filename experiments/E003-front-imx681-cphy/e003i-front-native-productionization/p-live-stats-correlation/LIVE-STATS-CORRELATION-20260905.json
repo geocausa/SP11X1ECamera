@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "raw": {
+    "location": "SP7 lab disk; intentionally outside Git",
+    "filename": "E003I-P-CORRELATION2-20260905_1908_2026-09-05_01-42-24-701.log",
+    "sha256": "00e1ed5aa588f9fc1d3723ada477ccdda92c8558419a8ef2637ceffc0573a789",
+    "bytes": 85407
+  },
+  "live_context": {
+    "frameserver_pid": 9948,
+    "eprocess": "ffffb70759e6e080",
+    "device_mft_base": "0x00007ff8ac430000",
+    "parser_rva": "0x5f09d0",
+    "parser_va": "0x00007ff8aca209d0",
+    "tintless_rva": "0xc95fd0",
+    "tintless_va": "0x00007ff8ad0c5fd0"
+  },
+  "trace": {
+    "parser_hits": 153,
+    "tintless_hits": 150,
+    "immediate_pointer_matches": 150,
+    "same_process_pairs": 150,
+    "same_thread_pairs": 150,
+    "first_tintless_parser_count": 1,
+    "last_tintless_parser_count": 153,
+    "superseded_parser_generations": [
+      82,
+      84,
+      104
+    ]
+  },
+  "proved": [
+    "Every observed Tintless call consumed the immediately preceding Titan680 parser output pointer.",
+    "All 150 producer/consumer pairs were in the same FrameServer process and same thread.",
+    "Parser generations 82, 84 and 104 were superseded by a newer parser output before any Tintless call consumed them.",
+    "A parser hit counter is therefore not a valid request identifier or FIFO-consumption contract."
+  ],
+  "not_proved": [
+    "No numerical request-to-statistics delay is promoted to authority by this trace.",
+    "The previously inferred four-request delay remains unproven."
+  ],
+  "linux_consequence": "Expose completed TL_BG as an explicitly generation-tagged latest snapshot; consumers must detect generation changes/skips and must not infer request identity from parser count."
+}
