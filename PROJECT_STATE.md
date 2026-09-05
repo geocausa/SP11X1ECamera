@@ -1,6 +1,6 @@
-## E003i current continuation — 2026-09-05
+## E003i current continuation — corrected live TL_BG runtime closed — 2026-09-05
 
-E003i-U is prepared and **unarmed** at `experiments/E003-front-imx681-cphy/e003i-front-native-productionization/u-corrected-tlbg-runtime/README.md`. E003i-T corrected the TL_BG authority to `0xF000` raw / `0xF020` snapshot without touching hardware programming. U is a separate Golden-safe one-shot using module SHA256 `22276dffea8bec752b3a7ee3bdb5c77d2cbeee65e299b1697891dc5f31a4a403` and helper SHA256 `d6d534c7a4db6fe1278eb39d6baccfa32bc3f3a86181652cf6fc509753daa64e`. It preserves the S-proven six-frame order and live same-fd R5/R6 timing, but requires each read-only TL_BG control to advertise exactly 61,440 raw bytes and persist a 61,472-byte snapshot. One invocation only, no same-boot retry, mandatory Golden return.
+E003i-U is PASS. One corrected-ABI one-shot produced six QC10C frames and six generation-tagged TL_BG snapshots of exactly `0xF020` bytes (32-byte header + `0xF000` Titan680 raw authority), with generations/source sequences `[1..6]`, slots `[0,1,0,1,0,1]`, live same-fd R5/R6 ingress, clean STREAMOFF and mandatory Golden return. Offline stage-N parsing consumed every complete raw payload; all 768 records were populated in each generation, all six raw payloads were unique, and the legacy oversized zero tail is gone. Source generation is still not a request ID. The next gate is offline live-evidence integration through stage N -> stage M clean stats-only LSC, then template-free capsule composition; dynamic substitution into R5/R6 remains fail-closed until selection/mapping is proved.
 
 ## E003h ACTIVE — Linux request6 six-frame executor closed; productionization next — 2026-09-04
 

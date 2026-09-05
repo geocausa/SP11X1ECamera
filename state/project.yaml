@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-corrected-tlbg-runtime-package-prepared-unarmed
+state_id: E003i-u-corrected-live-tlbg-runtime-pass
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-corrected-tlbg-runtime-validation
+current_gate: E003i-v-live-stats-to-clean-lsc-offline
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2832,22 +2832,32 @@ e003i_t_tlbg_size_correction:
   runtime_performed: false
 
 e003i_u_corrected_tlbg_runtime:
-  status: package-prepared-unarmed
+  status: pass
   date: 2026-09-05
   base_commit: a35f2cc5c37b42ba9f60f959b5379e28e1156051
-  boot_entry_id: sp11-camera-e003i-u-corrected-tlbg-one-shot
+  prearm_commit: cb24f9955101ad5ff525f67ddfb826b29920f2c1
   qcom_camss_sha256: 22276dffea8bec752b3a7ee3bdb5c77d2cbeee65e299b1697891dc5f31a4a403
   helper_sha256: d6d534c7a4db6fe1278eb39d6baccfa32bc3f3a86181652cf6fc509753daa64e
   raw_bytes: 61440
   snapshot_bytes: 61472
   helper_invocations: 1
   same_boot_retry: false
-  mandatory_golden_reboot: true
-  installed: true
-  armed: false
-  runtime_performed: false
+  runtime_performed: true
+  helper_rc: 0
+  streamoff_ok: true
+  observed_indices: [0, 1, 2, 3, 0, 1]
+  observed_sequences: [0, 1, 2, 3, 4, 5]
+  observed_generations: [1, 2, 3, 4, 5, 6]
+  observed_source_seq: [1, 2, 3, 4, 5, 6]
+  observed_slots: [0, 1, 0, 1, 0, 1]
+  all_768_records_nonzero_each_generation: true
+  all_raw_generations_unique: true
+  legacy_zero_tail_present: false
+  request_id_inference_authorized: false
+  candidate_critical_fault_scan: pass-none
+  golden_return_verified: true
 
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/u-corrected-tlbg-runtime/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/u-corrected-tlbg-runtime/RESULT.md
 next_action: >-
-  Publish E003i-U unarmed, install its unique one-shot while preserving Golden and empty next_entry, then perform exactly one bounded helper invocation. Require 0xF020 snapshots for generations 1..6, S-accepted six-frame order/live R5-R6 timing, archive evidence, and mandatory Golden return.
+  Feed corrected generation-tagged 0xF000 TL_BG payloads through stage-N parsing into the stage-M clean stats-only LSC backend and prove deterministic Linux-generated LSC state from live U evidence offline first. Preserve source generation separately from request identity; do not dynamically replace R5/R6 oracle IQ until an explicit mapping/selection policy is proven. Then compose generated LSC through the template-free capsule path. GTM live TMC/ADRC remains separately open.
