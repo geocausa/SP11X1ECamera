@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-v-live-stats-clean-lsc-offline-pass
+state_id: E003i-w-request-stats-selection-trigger-oracle-prepared
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -2873,7 +2873,21 @@ e003i_v_live_stats_clean_lsc_offline:
   dynamic_r5_r6_substitution_authorized: false
   runtime_performed: false
 
+e003i_w_request_stats_selection_trigger_oracle:
+  status: prepared-unexecuted
+  date: 2026-09-05
+  parser_rva: 0x5f09d0
+  lsc_calculate_setting_rva: 0x88e1e8
+  tintless_wrapper_rva: 0xc95fd0
+  request_frame_source: ISPInputData+0x1ff8
+  selected_stats_source: LSC-common+0xa0
+  trigger_block_source: ISPInputData+0x2080
+  pointer_identity_required: true
+  parser_count_is_request_id: false
+  dynamic_r5_r6_substitution_authorized: false
+  runtime_performed: false
+
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/v-live-stats-clean-lsc-offline/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/w-request-stats-selection-trigger-oracle/README.md
 next_action: >-
-  Close exact request/statistics selection without equating source_seq with request ID, and acquire the ordinary LSC trigger/interpolation state from the live Linux request path. Use V only as proof that corrected live TL_BG stats and trigger state independently drive the clean LSC backend. Do not replace runtime R5/R6 oracle IQ until both selection and trigger state are proven.
+  Execute one direct-Windows gated oracle. Match LSC-selected Tintless stats pointers to parser output pointers while logging exact request frame and same-call trigger state. Derive any request/statistics delay only from pointer-labelled request evidence, then return SP11 to Golden.
