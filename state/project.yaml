@@ -1,9 +1,9 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-09-04
+updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-live-stats-correlation-prepared
+state_id: E003i-generation-tagged-tlbg-static-pass
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-live-stats-request-correlation
+current_gate: E003i-generation-tagged-tlbg-runtime-package
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2724,7 +2724,43 @@ e003h_0076_request6_runtime:
   a3_correction: named msm_vfe1 /proc/interrupts counter is not a valid frame-completion discriminator; A3 was a fragile 1-second userspace DQBUF watchdog timeout, not a deterministic kernel/IQ failure
   production_parity_authorized: false
 
+e003i_p_live_stats_correlation:
+  status: pass-producer-consumer-correlation-request-delay-open
+  date: 2026-09-05
+  raw_log_sha256: 00e1ed5aa588f9fc1d3723ada477ccdda92c8558419a8ef2637ceffc0573a789
+  raw_log_bytes: 85407
+  parser_hits: 153
+  tintless_hits: 150
+  immediate_parser_output_pointer_matches: 150
+  same_process_pairs: 150
+  same_thread_pairs: 150
+  superseded_parser_generations: [82, 84, 104]
+  parser_count_is_request_id: false
+  four_request_delay_proven: false
+  golden_return_verified: true
+
+e003i_q_generation_tagged_tlbg:
+  status: static-pass-runtime-not-performed
+  date: 2026-09-05
+  patch_sha256: ef451a01e1d2712ff3fc9876a58c65957633987e37293385e2e35790cff18179
+  qcom_camss_sha256: ed027c0c1632a7cb16f7449134be40fa00ff53d469f23431a203940920673a24
+  qcom_camss_srcversion: 27658434020B2FE51CBB0DA
+  qcom_camss_vermagic: 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+  raw_tlbg_bytes: 153600
+  snapshot_header_bytes: 32
+  snapshot_total_bytes: 153632
+  latest_generation_semantics: true
+  source_completion_sequence_is_request_id: false
+  publication_slots: [0, 1, 0, 1, 0, 1]
+  publication_source_generations: [1, 2, 3, 4, 5, 6]
+  publish_before_aux_retirement: true
+  new_direct_mmio_reads: 0
+  new_direct_mmio_writes: 0
+  patch_roundtrip: pass
+  checkpatch: 0-errors-0-warnings-0-checks
+  runtime_performed: false
+
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/o-live-stats-handoff/CONTINUATION-HANDOFF-20260905.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/q-generation-tagged-tlbg-snapshot/README.md
 next_action: >-
-  Execute E003i-P Windows live TL_BG parser/Tintless correlation with persistent SP7 KD logs. Preserve exact request identity and do not assume a four-request delay. Return to Golden, then implement generation-tagged Linux TL_BG delivery and native producer integration only to the extent supported by the evidence. Live TMC/ADRC state remains separately open.
+  Package the exact E003i-Q module as a distinct Golden-safe one-shot, inspect it unarmed, publish the package checkpoint, then perform only a separately gated bounded runtime. Read the generation-tagged TL_BG control through the existing exclusive front-PIX fd and verify source generations plus Titan680 parsing before any live R5/R6 IQ use. Do not infer request IDs from parser count or source_seq. Live TMC/ADRC state remains separately open.
