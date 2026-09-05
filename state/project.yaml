@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-aa-aec-awb-trigger-reconstruction
+current_gate: E003i-ab-clean-3a-trigger-replay
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2927,9 +2927,9 @@ e003i_x_native_live_lsc_deadline:
   next_gate: linux-request-local-aec-lux-cct-acquisition
 
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/z-live-3a-runtime/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/aa-aec-awb-trigger-reconstruction/README.md
 next_action: >-
-  Reconstruct request-local AECLuxIndex and CCT from the proven live Linux AEC_BE/BHist/AWB_BG buffers. Use a bounded Windows oracle boot when it materially closes parser or 3A-algorithm boundaries faster than static inference, then return to Golden. Dynamic R5/R6 LSC substitution remains blocked until Lux/CCT semantics and request association are proven; source generation is not a request ID.
+  Replay the SHA-pinned AA AEC_BE/AWB_BG raw+parsed fixtures offline and reconstruct the minimum clean Lux/CCT producer needed to reproduce the direct Windows request-labelled outputs. BHist parser participation was not observed at the probed front-stream boundary, so do not make BHist mandatory without a new proven consumer. Dynamic R5/R6 LSC substitution remains blocked until clean Lux/CCT replay matches; source generation is not a request ID.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -2981,3 +2981,27 @@ e003i_z_paired_live_3a_runtime:
   source_generation_is_request_id: false
   dynamic_r5_r6_substitution_authorized: false
   next_gate: aec-awb-to-lux-cct-semantic-reconstruction
+
+e003i_aa_aec_awb_trigger_oracle:
+  status: pass_fixture_acquisition
+  date: 2026-09-05
+  windows_oracle_only: true
+  device_mft_sha256: c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+  aec_fixture1_request: 4
+  aec_fixture1_lux_index: 229.6752471923828
+  aec_fixture1_raw_sha256: c44c57ec17ac9fad7875589addf5878b91dc9f9824dfc387bde3340c7f7633f7
+  aec_fixture2_request: 3653
+  aec_fixture2_lux_index: 363.6280517578125
+  aec_fixture2_raw_sha256: dac4a912bcb9ed229c6ca9531af75d75bf799cc2248b1a5a79dd657b66452331
+  aec_fixture2_parsed_sha256: e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8
+  awb_fixture_request: 1894
+  awb_fixture_cct: 4452
+  awb_fixture_rgb_gains: [1.6758220195770264, 1.0, 2.1812174320220947]
+  awb_raw_sha256: dca2454b7a32b3b7266f15cc3451b16cfee250f6f3efe3a951a6baff91e09638
+  awb_parsed_sha256: 5b9ae831b1f5d796dba775d5d6a14bb5b75a80e8b4a4a6aed6ae2cec0b864d46
+  bhist_parser_hits_observed: 0
+  bhist_mandatory_for_first_clean_replay: false
+  request_id_from_source_generation: false
+  golden_return_verified: true
+  dynamic_r5_r6_substitution_authorized: false
+  next_gate: clean-aec-awb-parser-and-lux-cct-reconstruction-against-aa-fixtures

@@ -1,3 +1,15 @@
+## E003i current continuation — Windows AEC/AWB trigger oracle fixture acquisition PASS — 2026-09-05
+
+E003i-AA fixture acquisition is PASS. One bounded direct-Windows oracle boot captured request-labelled front-camera 3A fixtures from the same SHA-pinned Surface `QcDeviceMFT8380.dll`. Fresh AEC_BE raw `0x14000` SHA `c44c57ec…633f7` is followed by Windows request 4 with `AECLuxIndex=229.6752472`. A later complete AEC raw+parsed pair (`dac4a912…52331` / `e3e4bdf0…7dcc8`) publishes request `0xe45` with Lux `363.6280518`. A complete AWB_BG raw+parsed pair (`dca2454b…09638` / `5b9ae831…64d46`) publishes request `0x766` with CCT `4452 K` and RGB gains `1.6758220 / 1.0 / 2.1812174`. These request IDs are direct Windows labels; they are not inferred from Linux source generation.
+
+The Titan680 BHist high-level parser hook remained armed through live front-stream windows in which AWB/AEC and their publishers fired, but no BHist parser hit was observed. A follow-up BHist probe again observed AEC publication and no BHist hit. Therefore the first clean Lux replay will not make BHist mandatory unless another proven consumer boundary requires it. Raw/parsed fixtures remain SHA-pinned on SP7; compact KD logs and semantic manifests are tracked under `aa-aec-awb-trigger-reconstruction`.
+
+SP11 returned to persistent FullIO Golden: kernel `7.1.5-sp11-render-parity-v4+`, saved entry `sp11-audio-fullio-v19c`, empty `next_entry`, camera modules absent.
+
+**Next:** replay the AA AEC/AWB fixtures offline, reconstruct the minimum clean Titan680 parser + Lux/CCT producer, and require exact agreement with the request-labelled Windows outputs before any Linux dynamic R5/R6 LSC substitution.
+
+Primary artifacts: `experiments/E003-front-imx681-cphy/e003i-front-native-productionization/aa-aec-awb-trigger-reconstruction/README.md`, `RESULT.json`, `FIXTURE-MANIFEST.json`, `KD-ORACLE.log`, `KD-BHIST.log`, and `GOLDEN-RETURN.txt`.
+
 ## E003i current continuation — paired live 3A statistics runtime PASS — 2026-09-05
 
 E003i-Z is PASS. One bounded Golden-safe Linux run used the public Stage-Y CAMSS module and the accepted U six-frame transport. For every DQBUF, same-fd TL_BG and 3A reads matched `(generation, source_seq, slot)` exactly: generations/source sequences `1..6`, slots `0,1,0,1,0,1`. Every 3A snapshot was `0x51040` bytes with exact active AEC_BE `0x14000`, BHist `0x1000`, and AWB_BG `0x3c000` payloads. All three payload types were nonzero and generation-unique across all six frames. TL_BG remained `0xF020` and generation-unique.

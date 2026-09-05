@@ -1,0 +1,71 @@
+{
+  "schema": "sp11-e003i-aa-aec-awb-trigger-oracle-result-v1",
+  "status": "PASS_FIXTURE_ACQUISITION_CLEAN_REPLAY_REQUIRED",
+  "date": "2026-09-05",
+  "base_commit": "3a19770",
+  "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "request_id_from_source_generation": false,
+  "aec": {
+    "fixture1": {
+      "raw_file_sp7": "E003I-AA-AECBE.raw",
+      "raw_bytes": 81920,
+      "raw_sha256": "c44c57ec17ac9fad7875589addf5878b91dc9f9824dfc387bde3340c7f7633f7",
+      "request_frame": 4,
+      "lux_index_bits": "0x4365acdd",
+      "lux_index": 229.6752471923828,
+      "parsed_dump": false
+    },
+    "fixture2": {
+      "raw_file_sp7": "E003I-AA-AECBE2.raw",
+      "raw_bytes": 81920,
+      "raw_sha256": "dac4a912bcb9ed229c6ca9531af75d75bf799cc2248b1a5a79dd657b66452331",
+      "parsed_file_sp7": "E003I-AA-AECBE2.parsed",
+      "parsed_bytes": 458760,
+      "parsed_sha256": "e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8",
+      "request_frame": 3653,
+      "request_frame_hex": "0xe45",
+      "lux_index_bits": "0x43b5d064",
+      "lux_index": 363.6280517578125
+    }
+  },
+  "awb": {
+    "raw_file_sp7": "E003I-AA-AWBBG.raw",
+    "raw_bytes": 245760,
+    "raw_sha256": "dca2454b7a32b3b7266f15cc3451b16cfee250f6f3efe3a951a6baff91e09638",
+    "parsed_file_sp7": "E003I-AA-AWBBG.parsed",
+    "parsed_bytes": 435496,
+    "parsed_sha256": "5b9ae831b1f5d796dba775d5d6a14bb5b75a80e8b4a4a6aed6ae2cec0b864d46",
+    "request_frame": 1894,
+    "request_frame_hex": "0x766",
+    "red_gain_bits": "0x3fd68156",
+    "red_gain": 1.6758220195770264,
+    "green_gain_bits": "0x3f800000",
+    "green_gain": 1.0,
+    "blue_gain_bits": "0x400b9911",
+    "blue_gain": 2.1812174320220947,
+    "cct": 4452,
+    "cct_hex": "0x1164"
+  },
+  "bhist": {
+    "parser_rva": "0x5f3c60",
+    "raw_authority_bytes": 4096,
+    "observed_parser_hits": 0,
+    "interpretation": "The high-level BHist hook remained armed through live front-stream intervals in which AWB, AEC and request-labelled publications fired. No BHist parser hit was observed. Treat BHist as not dynamically proven to participate in this front 3A path; do not require it for the first clean replay unless later evidence shows a different consumer boundary."
+  },
+  "logs": {
+    "primary_sha256": "9086493659e6f3c82e0defff9b82a6147f5d20d2404cd4bcc378b2c553d8c715",
+    "primary_bytes": 12529,
+    "bhist_probe_sha256": "4f936598ba859ef0954a6d389c155dfbc3dae07410c8c1ec8fd0b80318532283",
+    "bhist_probe_bytes": 1986
+  },
+  "safety": {
+    "windows_oracle_only": true,
+    "golden_return_verified": true,
+    "golden_kernel": "7.1.5-sp11-render-parity-v4+",
+    "golden_saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry_empty": true,
+    "camera_modules_absent": true
+  },
+  "dynamic_r5_r6_substitution_authorized": false,
+  "next_gate": "clean-aec-awb-parser-and-lux-cct-reconstruction-against-aa-fixtures"
+}

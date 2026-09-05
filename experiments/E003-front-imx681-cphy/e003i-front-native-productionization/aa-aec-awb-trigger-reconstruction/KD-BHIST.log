@@ -1,0 +1,38 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AA-BHIST_0ae0_2026-09-05_12-03-43-775.log'
+1: kd> bc *
+1: kd> ba e 4 00007ffa`e94c3c60
+1: kd> ba e 4 00007ffa`e970a0c0
+1: kd> g
+Breakpoint 1 hit
+QcDeviceMFT8380!gettimeofday+0x10f830:
+00007ffa`e970a0c0 d503237f pacibsp
+1: kd> r x0,x2
+x0=000001ccf46b80d0 x2=000001ccf46befe8
+1: kd> dq @x0+0x6008 L1
+000001cc`f46be0d8  00000000`00003c4e
+1: kd> dd @x2+0x48 L1
+000001cc`f46bf030  43b5de21
+1: kd> bd 1
+1: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`02a013b0 d43e0000 brk         #0xF000
+0: kd> bc *
+0: kd> .logclose
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AA-BHIST_0ae0_2026-09-05_12-03-43-775.log
