@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-w-request-stats-selection-trigger-oracle-pass
+state_id: E003i-x-native-live-lsc-deadline-pass
 phase: front-imx681-cphy-bringup
-status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
+status: linux-live-lsc-producer-deadline-closed-trigger-acquisition-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2895,7 +2895,38 @@ e003i_w_request_stats_selection_trigger_oracle:
   golden_return_verified: true
   runtime_performed: windows-oracle-only
 
+e003i_x_native_live_lsc_deadline:
+  status: pass
+  date: 2026-09-05
+  runtime_performed: false
+  scheduling_only: true
+  w_request_stats_delay: 3
+  request4_source_generation: 1
+  request5_source_generation: 2
+  request6_source_generation: 3
+  front_tuning_authority: repaired-20260904-imx681
+  historical_rear_default_authority_used: false
+  w_selected_front_leaf: 0x4bf
+  w_request4_lux_cct: [358.0217, 5096.0]
+  w_request5_lux_cct: [358.097046, 5082.0]
+  w_request6_lux_cct: [357.9939, 5098.0]
+  w_pretintless_sha256: ec60c6de7557b24493fdeaa8cefe464601e8c383e111985b1ebf99a434b88201
+  native_source_sha256: b8bf660680dc342ec0431007e024876135ab92bf3c841be21a56050c6dabfa3d
+  native_library_sha256: dad4c1150aababec4d9c87601aa62be421253f20eb0bcbd74ad3004f8cdb0411
+  resampler_ratio_cases: 9
+  resampler_byte_exact: true
+  g1_g3_outputs_byte_exact: true
+  wrapper_state_byte_exact: true
+  core_state_byte_exact: true
+  frame_budget_ms: 33.333333
+  w_cached_conservative_p95_ms: 5.387049
+  dynamic_ratio_conservative_p95_ms: 7.13136
+  deadline_pass: true
+  source_generation_is_request_id: false
+  dynamic_r5_r6_substitution_authorized: false
+  next_gate: linux-request-local-aec-lux-cct-acquisition
+
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/w-request-stats-selection-trigger-oracle/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/x-native-live-lsc-deadline/README.md
 next_action: >-
-  Prove the Linux live-LSC producer schedule against the now-proven +3 request/statistics law: request5 must consume source generation2 and request6 source generation3. Inspect the stage-L steady IQ consumption gates versus TL_BG publication/DQBUF timing, then add the smallest standard V4L2 trigger-state surface needed to generate clean LSC before those gates. Do not perform runtime substitution until timing and trigger availability are statically and bounded-runtime proven.
+  Acquire Linux request-local AEC lux index and CCT early enough to select the repaired front IMX681 LSC tree. Prefer an existing standard V4L2/libcamera request or metadata surface. Then prove one bounded producer-to-existing-V4L2-IQ-FIFO integration using the already-proven R5<-G2 and R6<-G3 selection law. Do not perform dynamic R5/R6 substitution until trigger availability and request association are proven; do not infer request IDs from source generation.
