@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-y-generation-tagged-3a-static-pass
+state_id: E003i-z-live-3a-runtime-pass
 phase: front-imx681-cphy-bringup
-status: linux-generation-tagged-3a-stats-static-closed-runtime-validation-next
+status: linux-live-3a-statistics-transport-closed-lux-cct-reconstruction-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-z-live-3a-snapshot-runtime
+current_gate: E003i-aa-aec-awb-trigger-reconstruction
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2927,9 +2927,9 @@ e003i_x_native_live_lsc_deadline:
   next_gate: linux-request-local-aec-lux-cct-acquisition
 
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/x-native-live-lsc-deadline/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/z-live-3a-runtime/README.md
 next_action: >-
-  Acquire Linux request-local AEC lux index and CCT early enough to select the repaired front IMX681 LSC tree. Prefer an existing standard V4L2/libcamera request or metadata surface. Then prove one bounded producer-to-existing-V4L2-IQ-FIFO integration using the already-proven R5<-G2 and R6<-G3 selection law. Do not perform dynamic R5/R6 substitution until trigger availability and request association are proven; do not infer request IDs from source generation.
+  Reconstruct request-local AECLuxIndex and CCT from the proven live Linux AEC_BE/BHist/AWB_BG buffers. Use a bounded Windows oracle boot when it materially closes parser or 3A-algorithm boundaries faster than static inference, then return to Golden. Dynamic R5/R6 LSC substitution remains blocked until Lux/CCT semantics and request association are proven; source generation is not a request ID.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -2954,3 +2954,30 @@ e003i_y_generation_tagged_3a_stats:
     completion_order_changes: 0
     golden_untouched: true
   next: bounded Golden-safe six-generation TLBG+3A paired runtime validation
+
+
+e003i_z_paired_live_3a_runtime:
+  status: pass
+  date: 2026-09-05
+  candidate_arm_commit: a8c4ebaf02c4837e59d31868789d1f639ddf5a41
+  helper_invocations: 1
+  same_boot_retry: false
+  golden_return_verified: true
+  observed_indices: [0, 1, 2, 3, 0, 1]
+  observed_sequences: [0, 1, 2, 3, 4, 5]
+  generations: [1, 2, 3, 4, 5, 6]
+  source_sequences: [1, 2, 3, 4, 5, 6]
+  slots: [0, 1, 0, 1, 0, 1]
+  tlbg_snapshot_bytes: 0xF020
+  stats3a_snapshot_bytes: 0x51040
+  paired_identity_exact: true
+  aec_be_all_nonzero: true
+  bhist_all_nonzero: true
+  awb_bg_all_nonzero: true
+  aec_be_all_generation_unique: true
+  bhist_all_generation_unique: true
+  awb_bg_all_generation_unique: true
+  critical_fault_scan: pass_none
+  source_generation_is_request_id: false
+  dynamic_r5_r6_substitution_authorized: false
+  next_gate: aec-awb-to-lux-cct-semantic-reconstruction

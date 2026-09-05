@@ -1,3 +1,13 @@
+## E003i current continuation — paired live 3A statistics runtime PASS — 2026-09-05
+
+E003i-Z is PASS. One bounded Golden-safe Linux run used the public Stage-Y CAMSS module and the accepted U six-frame transport. For every DQBUF, same-fd TL_BG and 3A reads matched `(generation, source_seq, slot)` exactly: generations/source sequences `1..6`, slots `0,1,0,1,0,1`. Every 3A snapshot was `0x51040` bytes with exact active AEC_BE `0x14000`, BHist `0x1000`, and AWB_BG `0x3c000` payloads. All three payload types were nonzero and generation-unique across all six frames. TL_BG remained `0xF020` and generation-unique.
+
+The six QC10C regression remained `[0,1,2,3,0,1]` / sequences `[0..5]`, R4/R5/R6 timing was unchanged, `STREAMOFF_OK` completed, and the candidate critical-fault scan was clean. SP11 returned to persistent FullIO Golden with `next_entry` empty and camera modules absent. Source generation is still not a request ID.
+
+**Next:** reconstruct Linux `AECLuxIndex` and CCT from the now-live AEC/BHist/AWB buffers. A Windows one-shot oracle is authorized when it can directly close parser/algorithm boundaries; always return to Golden afterwards. Do not enable dynamic R5/R6 LSC substitution until Lux/CCT semantics and request association are proven.
+
+Primary artifacts: `experiments/E003-front-imx681-cphy/e003i-front-native-productionization/z-live-3a-runtime/README.md`, `RESULT.json`, `PAIRED-STATS-ANALYSIS.json`, `RUN.txt`, and `GOLDEN-RETURN.txt`.
+
 ## E003i current continuation — generation-tagged 3A stats transport static PASS — 2026-09-05
 
 E003i-Y is PASS statically. The existing Windows startup CDM and SHA-pinned Surface DeviceMFT close the active single-IFE front statistics raw authority without another oracle boot: AEC_BE is 32x32 regions at 0x50 bytes each (`0x14000`), BHist is 1024 32-bit bins (`0x1000`), and AWB_BG is 64x48 regions at 0x50 bytes each (`0x3c000`). The compact raw bundle is `0x51000`; the larger existing BUS allocations remain unchanged ceilings.
