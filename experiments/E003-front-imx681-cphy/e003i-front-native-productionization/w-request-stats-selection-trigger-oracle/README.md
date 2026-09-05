@@ -1,22 +1,11 @@
 # E003i-W — request/statistics selection + LSC trigger oracle
 
-Status: **prepared; Windows oracle not yet executed**.
+Status: **PASS; Golden return verified**.
 
-Purpose: close the two remaining inputs before any dynamic Linux-generated R5/R6 LSC substitution:
+One direct-Windows gated cycle dynamically closed the exact request/statistics selection law without treating parser count as a request ID. The trace logged Titan680 parser output pointers at RVA `0x5f09d0` and, on the same live process, `IQInterface::LSC411CalculateSetting` request frame, selected Tintless stats pointer and request trigger block at RVA `0x88e1e8`.
 
-1. exact request-frame -> selected Tintless statistics identity;
-2. the ordinary request-local LSC trigger/interpolation state.
+Across **104 non-null LSC calls, 104/104 selected-stats pointers matched a preceding parser output pointer exactly**. Every match obeyed one invariant: **`request_frame = source_generation + 3`**. Warm-up LSC frames 1/2 had null stats; frame 3 was absent. Fourteen parser generations were not selected, and their `generation + 3` values exactly equal all later missing request frames, independently confirming the selection law. Thus request4 selects source generation1, request5 selects generation2, and request6 selects generation3. Source generation remains a source identity, not a request ID.
 
-The oracle deliberately does **not** use parser hit count as request identity. It uses pointer identity.
+The same LSC calls captured the raw request-local `ISPIQTriggerData` block. `ANALYSIS.json` preserves exact request4/5/6 raw words and decoded AEC gain/lux, AWB/CCT, DRC, geometry and black-level fields. The full 74,198-byte KD log remains SHA-pinned on SP7.
 
-On one gated SP11 Windows cycle, the exact SHA-pinned `QcDeviceMFT8380.dll` is observed at:
-
-- `TitanStatsParser::ParseTintlessBGStats` RVA `0x5f09d0`: log parsed output pointer (`x3`) and raw pointer (`x1`);
-- `IQInterface::LSC411CalculateSetting` RVA `0x88e1e8`: log request frame `qwo(x1+0x1ff8)`, selected Tintless stats pointer `poi(x0+0xa0)`, and the request trigger block at `x1+0x2080`;
-- optional redundant `TintlessAlgorithmWrapper::Process` RVA `0xc95fd0`: log `x2` stats pointer.
-
-A request/statistics mapping is accepted only when the LSC-selected stats pointer exactly equals a parser output pointer from the same live process. Numerical delay is derived from those request-labelled matches, never assumed from priming order.
-
-Trigger fields use the already-proven Surface `ISPIQTriggerData` layout, including AEC gain/lux, CCT, DRC, lens position, LED state, geometry and black level. The Windows stream is kept atomic: no values from an older matched-trigger stream are spliced into this oracle.
-
-Safety: direct-Windows EFI BootNext only; persistent Golden remains unchanged. SP11 returns to Golden after the oracle. No Linux camera runtime is performed by W.
+This checkpoint still does **not** authorize Linux R5/R6 substitution. The next gate is Linux producer timing and live trigger-state acquisition: R5 needs source generation2 and R6 needs source generation3, so userspace/kernel scheduling must prove those generations and the corresponding trigger state are available before the respective steady IQ consumption gates.
