@@ -103,3 +103,7 @@ Independently derive the Denali board graph, power rails, GPIOs, clocks, sensor 
 Transport parity and image-quality parity are separate milestones.
 
 First achieve stable native RAW capture with correct power, reset, link, mode, exposure/gain and lifecycle. Only then work on ISP/libcamera processing, tuning and Windows-like image quality.
+
+## User authorization — 2026-09-05
+
+The user explicitly authorizes installation of useful missing tools on the project machines/OSes, discretionary Linux/Windows reboots, KD, ETW/ETL, Ghidra and static/dynamic analysis, and saving/committing/pushing meaningful progress. Proceed without repeatedly asking for these routine project actions. Scope remains SP11, SP7 and PiMaster. Preserve Golden and checkpoint exact hardware experiments.

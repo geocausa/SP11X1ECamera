@@ -1,3 +1,7 @@
+## E003i current continuation — 2026-09-05
+
+The newest restart point is `experiments/E003-front-imx681-cphy/e003i-front-native-productionization/o-live-stats-handoff/CONTINUATION-HANDOFF-20260905.md`; it supersedes historical ACTIVE headings below. Native LSC/Tintless/GTM productionization and raw TL_BG parser exist with offline proofs. Six-frame 0076 transport is accepted. Exact live statistics-to-request correlation and Linux statistics delivery remain open; GTM still needs live TMC/ADRC request state. E003i-P prepares the next Windows correlation experiment; no new runtime result is claimed.
+
 ## E003h ACTIVE — Linux request6 six-frame executor closed; productionization next — 2026-09-04
 
 The bounded Linux front-camera request path is now closed through **request4 -> request5 -> request6** on SP11. The successful 0076 run used the exact 0074 `qcom-camss.ko`, IMX681 module, front-only DT and atomic Windows-derived R4/R5/R6 firmware; the only functional change from the failed A3 harness was the userspace DQBUF watchdog from 1 second to 5 seconds plus monotonic timing telemetry. It delivered six 7,778,304-byte QC10C frames with V4L2 indices `[0,1,2,3,0,1]`, sequences `[0,1,2,3,4,5]`, `STREAMOFF_OK`, and clean RT-CDM stop at `seq=108`, `fifo_seq=50`, `last_userdata=6`, `error=0`, `faulted=0`. Kernel log confirms the bounded six-frame request5/request6 live-requeue path completed.

@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-04
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003h-0076-request6-runtime-closed
+state_id: E003i-live-stats-correlation-prepared
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003h-request6-runtime-closed-productionization-next
+current_gate: E003i-live-stats-request-correlation
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2724,5 +2724,7 @@ e003h_0076_request6_runtime:
   a3_correction: named msm_vfe1 /proc/interrupts counter is not a valid frame-completion discriminator; A3 was a fragile 1-second userspace DQBUF watchdog timeout, not a deterministic kernel/IQ failure
   production_parity_authorized: false
 
+handoff:
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/o-live-stats-handoff/CONTINUATION-HANDOFF-20260905.md
 next_action: >-
-  Linux request4->5->6 executor transport is closed with the exact 0074 kernel and atomic Windows R4/R5/R6 IQ under the hardened Golden power flags. Keep Golden protected. Inspect the canonical front-camera source-integration/productionization path and promote only the proven executor plus producer behavior out of disposable one-shot/replay plumbing, preserving exact Windows-derived request ordering and dynamic IQ semantics. Run bounded regressions before sustained streaming, controls, switching, suspend/resume and reliability work. Captured capsule replay is evidence and a bounded oracle, not the final production IQ generator.
+  Execute E003i-P Windows live TL_BG parser/Tintless correlation with persistent SP7 KD logs. Preserve exact request identity and do not assume a four-request delay. Return to Golden, then implement generation-tagged Linux TL_BG delivery and native producer integration only to the extent supported by the evidence. Live TMC/ADRC state remains separately open.
