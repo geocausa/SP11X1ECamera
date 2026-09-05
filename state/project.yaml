@@ -2927,9 +2927,9 @@ e003i_x_native_live_lsc_deadline:
   next_gate: linux-request-local-aec-lux-cct-acquisition
 
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/aa-aec-awb-trigger-reconstruction/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ab-clean-lux-reconstruction/README.md
 next_action: >-
-  Replay the SHA-pinned AA AEC_BE/AWB_BG raw+parsed fixtures offline and reconstruct the minimum clean Lux/CCT producer needed to reproduce the direct Windows request-labelled outputs. BHist parser participation was not observed at the probed front-stream boundary, so do not make BHist mandatory without a new proven consumer. Dynamic R5/R6 LSC substitution remains blocked until clean Lux/CCT replay matches; source generation is not a request ID.
+  Finish clean AEC_BE-to-measuredLuma reconstruction through CAECXCoreGridStatsOut::ComputeLuma and CAECXStatsGridProcessor::GetWeightedROIInterpLuma, then reproduce the AA request-3653 Lux output end-to-end. The active Titan680 AEC_BE parser and CAnalyzerAlgorithm001 final Lux adjustment are already byte/bit exact. After Lux closes, reconstruct AWB-to-CCT. Dynamic R5/R6 LSC substitution remains blocked until both truthful Lux and CCT pass; source generation is not a request ID.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3005,3 +3005,38 @@ e003i_aa_aec_awb_trigger_oracle:
   golden_return_verified: true
   dynamic_r5_r6_substitution_authorized: false
   next_gate: clean-aec-awb-parser-and-lux-cct-reconstruction-against-aa-fixtures
+
+
+e003i_ab_clean_lux_reconstruction:
+  status: pass_intermediate_measured_luma_open
+  date: 2026-09-05
+  windows_oracle_only: true
+  aecbe_parser:
+    raw_bytes: 0x14000
+    regions: 1024
+    raw_stride: 0x50
+    parsed_record_stride: 0x70
+    parsed_active_plane_bytes: 0x1c008
+    parsed_allocation_bytes: 0x70008
+    parsed_byte_exact: true
+    parsed_sha256: e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8
+  lux_algorithm001:
+    producer_rva: 0x3fb7f0
+    writer_return_rva: 0x3fbad0
+    bank: [9, 8]
+    tuning_exposure_type: 3
+    exposure_type_table_index: 3
+    baseline_bits: 0x4365acdd
+    k_bits: 0x429bcc0c
+    alpha_bits: 0x00000000
+    ab2_iter1_expected_bits: 0x4392d14d
+    ab2_iter1_replay_bits: 0x4392d14d
+    ab2_iter2_expected_bits: 0x4392d09e
+    ab2_iter2_replay_bits: 0x4392d09e
+    bit_exact: true
+  measured_luma:
+    status: open
+    path: [CAECXCoreGridStatsOut::ComputeLuma, CAECXStatsGridProcessor::GetWeightedROIInterpLuma]
+  golden_return_verified: true
+  dynamic_r5_r6_substitution_authorized: false
+  next_gate: clean-aecbe-to-measured-luma-replay-then-aa-lux-match

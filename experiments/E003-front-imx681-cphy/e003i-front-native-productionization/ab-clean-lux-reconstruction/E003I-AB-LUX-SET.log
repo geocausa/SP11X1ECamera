@@ -1,0 +1,333 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AB-LUX-SET_2af4_2026-09-05_13-20-44-665.log'
+0: kd> u 00007ffd2d846700 L40
+QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29c00:
+00007ffd`2d846700 ?? ???
+                            ^ Memory access error in 'u 00007ffd2d846700 l40'
+0: kd> bc *; sxe ld:QcDeviceMFT8380.dll; g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`c02013b0 d43e0000 brk         #0xF000
+0: kd> !process 277c 0
+Searching for Process with Cid == 277c
+PROCESS ffffe2041e85c080
+    SessionId: none  Cid: 277c    Peb: 4cb5cd6000  ParentCid: 05ac
+    DirBase: 8aae6e000  ObjectTable: ffffb884f7866900  HandleCount: 1140.
+    Image: svchost.exe
+
+0: kd> .process /p /r ffffe2041e85c080
+Implicit process is now ffffe204`1e85c080
+.cache forcedecodeuser done
+Loading User Symbols
+................................................................
+................................
+0: kd> u 00007ffd2dcc6700 L60
+QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29c00:
+00007ffd`2dcc6700 d503237f pacibsp
+00007ffd`2dcc6704 a9be53f3 stp         x19,x20,[sp,#-0x20]!
+00007ffd`2dcc6708 f9000bf5 str         x21,[sp,#0x10]
+00007ffd`2dcc670c a9bf7bfd stp         fp,lr,[sp,#-0x10]!
+00007ffd`2dcc6710 910003fd mov         fp,sp
+00007ffd`2dcc6714 d10043ff sub         sp,sp,#0x10
+00007ffd`2dcc6718 f9400433 ldr         x19,[x1,#8]
+00007ffd`2dcc671c aa0003e8 mov         x8,x0
+00007ffd`2dcc6720 52800000 mov         w0,#0
+00007ffd`2dcc6724 b9400269 ldr         w9,[x19]
+00007ffd`2dcc6728 710f9d3f cmp         w9,#0x3E7
+00007ffd`2dcc672c 540000a8 bhi         QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29c40 (00007ffd`2dcc6740)
+00007ffd`2dcc6730 3dc00270 ldr         q16,[x19]
+00007ffd`2dcc6734 8b29d108 add         x8,x8,w9,sxtw #4
+00007ffd`2dcc6738 3c808110 stur        q16,[x8,#8]
+00007ffd`2dcc673c 14000025 b           QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29cd0 (00007ffd`2dcc67d0)
+00007ffd`2dcc6740 b0009668 adrp        x8,QcDeviceMFT8380!IPEStripingLibraryContextDestroy+0x852a60 (00007ffd`2ef93000)
+00007ffd`2dcc6744 b9474109 ldr         w9,[x8,#0x740]
+00007ffd`2dcc6748 f9402e48 ldr         x8,[xpr,#0x58]
+00007ffd`2dcc674c f8695915 ldr         x21,[x8,w9,uxtw #3]
+00007ffd`2dcc6750 914002a8 add         x8,x21,#0,lsl #0xC
+00007ffd`2dcc6754 39405108 ldrb        w8,[x8,#0x14]
+00007ffd`2dcc6758 35000048 cbnz        w8,QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29c60 (00007ffd`2dcc6760)
+00007ffd`2dcc675c 94249fa9 bl          QcDeviceMFT8380!gettimeofday+0x5d3d70 (00007ffd`2e5ee600)
+00007ffd`2dcc6760 d0007f54 adrp        x20,QcDeviceMFT8380!IPEStripingLibraryContextDestroy+0x56fa60 (00007ffd`2ecb0000)
+00007ffd`2dcc6764 911ec280 add         x0,x20,#0x7B0
+00007ffd`2dcc6768 52800b81 mov         w1,#0x5C
+00007ffd`2dcc676c 9424454b bl          QcDeviceMFT8380!gettimeofday+0x5bd408 (00007ffd`2e5d7c98)
+00007ffd`2dcc6770 914002a9 add         x9,x21,#0,lsl #0xC
+00007ffd`2dcc6774 b9400267 ldr         w7,[x19]
+00007ffd`2dcc6778 aa0003e8 mov         x8,x0
+00007ffd`2dcc677c f100011f cmp         x8,#0
+00007ffd`2dcc6780 b9413126 ldr         w6,[x9,#0x130]
+00007ffd`2dcc6784 911ec280 add         x0,x20,#0x7B0
+00007ffd`2dcc6788 9a880400 csinceq     x0,x0,x8
+00007ffd`2dcc678c 52807d08 mov         w8,#0x3E8
+00007ffd`2dcc6790 b90003e8 str         w8,[sp]
+00007ffd`2dcc6794 d0007f48 adrp        x8,QcDeviceMFT8380!IPEStripingLibraryContextDestroy+0x56fa60 (00007ffd`2ecb0000)
+00007ffd`2dcc6798 91384105 add         x5,x8,#0xE10
+00007ffd`2dcc679c d0007f48 adrp        x8,QcDeviceMFT8380!IPEStripingLibraryContextDestroy+0x56fa60 (00007ffd`2ecb0000)
+00007ffd`2dcc67a0 9139c102 add         x2,x8,#0xE70
+00007ffd`2dcc67a4 d0009668 adrp        x8,QcDeviceMFT8380!IPEStripingLibraryContextDestroy+0x853a60 (00007ffd`2ef94000)
+00007ffd`2dcc67a8 f9411908 ldr         x8,[x8,#0x230]
+00007ffd`2dcc67ac 52800044 mov         w4,#2
+00007ffd`2dcc67b0 52800043 mov         w3,#2
+00007ffd`2dcc67b4 5280a881 mov         w1,#0x544
+00007ffd`2dcc67b8 aa0803ef mov         x15,x8
+00007ffd`2dcc67bc 90005d51 adrp        xip1,QcDeviceMFT8380!IPEStripingLibraryContextDestroy+0x12da60 (00007ffd`2e86e000)
+00007ffd`2dcc67c0 f943de31 ldr         xip1,[xip1,#0x7B8]
+00007ffd`2dcc67c4 d63f0220 blr         xip1
+00007ffd`2dcc67c8 d63f01e0 blr         x15
+00007ffd`2dcc67cc 52800080 mov         w0,#4
+00007ffd`2dcc67d0 910043ff add         sp,sp,#0x10
+00007ffd`2dcc67d4 a8c17bfd ldp         fp,lr,[sp],#0x10
+00007ffd`2dcc67d8 f9400bf5 ldr         x21,[sp,#0x10]
+00007ffd`2dcc67dc a8c253f3 ldp         x19,x20,[sp],#0x20
+00007ffd`2dcc67e0 d50323ff autibsp
+00007ffd`2dcc67e4 d65f03c0 ret
+00007ffd`2dcc67e8 d503237f pacibsp
+00007ffd`2dcc67ec a9bc53f3 stp         x19,x20,[sp,#-0x40]!
+00007ffd`2dcc67f0 a9015bf5 stp         x21,x22,[sp,#0x10]
+00007ffd`2dcc67f4 a90263f7 stp         x23,x24,[sp,#0x20]
+00007ffd`2dcc67f8 f9001bf9 str         x25,[sp,#0x30]
+00007ffd`2dcc67fc f9001ffb str         x27,[sp,#0x38]
+00007ffd`2dcc6800 a9be7bfd stp         fp,lr,[sp,#-0x20]!
+00007ffd`2dcc6804 910003fd mov         fp,sp
+00007ffd`2dcc6808 92800030 mov         xip0,#-2
+00007ffd`2dcc680c aa0003f3 mov         x19,x0
+00007ffd`2dcc6810 f9000bb0 str         xip0,[fp,#0x10]
+00007ffd`2dcc6814 aa0103f8 mov         x24,x1
+00007ffd`2dcc6818 d289cf0a mov         x10,#0x4E78
+00007ffd`2dcc681c b9400309 ldr         w9,[x24]
+00007ffd`2dcc6820 b86a6a68 ldr         w8,[x19,x10]
+00007ffd`2dcc6824 6b08013f cmp         w9,w8
+00007ffd`2dcc6828 54001b40 beq         QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x2a090 (00007ffd`2dcc6b90)
+00007ffd`2dcc682c b82a6a69 str         w9,[x19,x10]
+00007ffd`2dcc6830 940000e0 bl          QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x2a0b0 (00007ffd`2dcc6bb0)
+00007ffd`2dcc6834 b940fb16 ldr         w22,[x24,#0xF8]
+00007ffd`2dcc6838 d2809408 mov         x8,#0x4A0
+00007ffd`2dcc683c 9ba87ec8 umull       x8,w22,w8
+00007ffd`2dcc6840 b9000a76 str         w22,[x19,#8]
+00007ffd`2dcc6844 91002117 add         x23,x8,#8
+00007ffd`2dcc6848 f10002ff cmp         x23,#0
+00007ffd`2dcc684c 9a9f82f7 cselhi      x23,x23,xzr
+00007ffd`2dcc6850 d503229f csdb
+00007ffd`2dcc6854 aa1703e0 mov         x0,x23
+00007ffd`2dcc6858 94235fba bl          QcDeviceMFT8380!gettimeofday+0x583eb0 (00007ffd`2e59e740)
+00007ffd`2dcc685c aa0003f5 mov         x21,x0
+00007ffd`2dcc6860 b4000095 cbz         x21,QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29d70 (00007ffd`2dcc6870)
+00007ffd`2dcc6864 aa1703e2 mov         x2,x23
+00007ffd`2dcc6868 52800001 mov         w1,#0
+00007ffd`2dcc686c 942e1f65 bl          QcDeviceMFT8380!IPEStripingLibraryContextDestroy+0x10e060 (00007ffd`2e84e600)
+00007ffd`2dcc6870 f9000fb5 str         x21,[fp,#0x18]
+00007ffd`2dcc6874 b4000195 cbz         x21,QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29da4 (00007ffd`2dcc68a4)
+00007ffd`2dcc6878 d00000c8 adrp        x8,QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x43500 (00007ffd`2dce0000)
+00007ffd`2dcc687c 913a4104 add         x4,x8,#0xE90
+0: kd> sxd ld:QcDeviceMFT8380.dll; r @$t0=0; r @$t1=0; ba0 e 4 00007ffd2dcc6700 ".if (dwo(poi(@x1+8))==8) { r @$t0=@$t0+1; .printf \"ABS n=%u id=%08x d1=%08x d2=%08x d3=%08x rec=%p x0=%p x1=%p lr=%p proc=%p thread=%p\\n\", @$t0, dwo(poi(@x1+8)), dwo(poi(@x1+8)+4), dwo(poi(@x1+8)+8), dwo(poi(@x1+8)+0xc), poi(@x1+8), @x0, @x1, @lr, @$proc, @$thread } ; gc"; ba1 e 4 00007ffd2e12a0c0 "r @$t1=@$t1+1; .printf \"ABQ n=%u frame=%I64x luxbits=%08x proc=%p thread=%p lr=%p\\n\", @$t1, poi(@x0+0x6008), dwo(@x2+0x48), @$proc, @$thread, @lr; gc"; bl
+ 0 e 00007ffd`2dcc6700 e 4 0001 (0001) ".if (dwo(poi(@x1+8))==8) { r @$t0=@$t0+1; .printf \"ABS n=%u id=%08x d1=%08x d2=%08x d3=%08x rec=%p x0=%p x1=%p lr=%p proc=%p thread=%p\\n\", @$t0, dwo(poi(@x1+8)), dwo(poi(@x1+8)+4), dwo(poi(@x1+8)+8), dwo(poi(@x1+8)+0xc), poi(@x1+8), @x0, @x1, @lr, @$proc, @$thread } ; gc"
+ 1 e 00007ffd`2e12a0c0 e 4 0001 (0001) "r @$t1=@$t1+1; .printf \"ABQ n=%u frame=%I64x luxbits=%08x proc=%p thread=%p lr=%p\\n\", @$t1, poi(@x0+0x6008), dwo(@x2+0x48), @$proc, @$thread, @lr; gc"
+
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`c02013b0 d43e0000 brk         #0xF000
+0: kd> !process 2cd0 0
+Searching for Process with Cid == 2cd0
+PROCESS ffffe2041e85e080
+    SessionId: none  Cid: 2cd0    Peb: 100327000  ParentCid: 187c
+    DirBase: 92b198000  ObjectTable: ffffb884f7844080  HandleCount: 868.
+    Image: powershell.exe
+
+0: kd> !ipconfig
+ipconfig is not extension gallery command
+No export ipconfig found
+0: kd> !ndiskd.netadapter
+The call to LoadLibrary(ndiskd) failed, Win32 error 0n2
+    "The system cannot find the file specified."
+Please check your debugger configuration and/or network access.
+Extension DLL search Path:
+    C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\WINXP;C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\winext;C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\winext\arcade;C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\pri;C:\Program Files (x86)\Windows Kits\10\Debuggers\x64;C:\Users\SurfacePro7\AppData\Local\Dbg\EngineExtensions;C:\Program Files (x86)\Windows Kits\10\Debuggers\x64;C:\Program Files\Eclipse Adoptium\jdk-21.0.11.10-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\usbipd-win\;C:\Program Files\Git\cmd;C:\Program Files (x86)\cloudflared\;C:\Program Files\Go\bin;C:\Program Files\GitHub CLI\;C:\Users\SurfacePro7\.local\bin;C:\Users\SurfacePro7\.grok\bin;C:\Users\SurfacePro7\AppData\Local\Microsoft\WindowsApps;C:\Users\SurfacePro7\AppData\Local\Python\bin;C:\Users\SurfacePro7\AppData\Roaming\npm;C:\Users\SurfacePro7\AppData\Local\Microsoft\WinGet\Links;C:\Users\SurfacePro7\go\bin
+You may also consider deploying your extension to the UserExtensions extension gallery repository
+located at %LOCALAPPDATA%\dbg\UserExtensions folder. It would require an extension manifest.
+Error: Failed to load extension ndiskd
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+ABQ n=1 frame=1 luxbits=4365b24a proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABQ n=2 frame=2 luxbits=4365acdd proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABQ n=3 frame=3 luxbits=4365acdd proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=1 id=00000008 d1=439e5e13 d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=4 frame=4 luxbits=4365acdd proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=2 id=00000008 d1=439e6099 d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=5 frame=5 luxbits=439e5e13 proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABS n=3 id=00000008 d1=439e5827 d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=6 frame=6 luxbits=439e6099 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=4 id=00000008 d1=43a05092 d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=7 frame=7 luxbits=439e5827 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=5 id=00000008 d1=43a1d3dd d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=8 frame=8 luxbits=43a05092 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=6 id=00000008 d1=43aac02d d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=9 frame=9 luxbits=43a1d3dd proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=7 id=00000008 d1=43a3656f d2=aada8630 d3=00000163 rec=0000004cb6efccc8 x0=00000163b6402040 x1=0000004cb6efccd8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204262ac080
+ABQ n=10 frame=a luxbits=43aac02d proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABS n=8 id=00000008 d1=43a36cbd d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=11 frame=b luxbits=43a3656f proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=9 id=00000008 d1=43a36dbe d2=aada8630 d3=00000163 rec=0000004cb617ca68 x0=00000163b6402040 x1=0000004cb617ca78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042911b080
+ABQ n=12 frame=c luxbits=43a36cbd proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABS n=10 id=00000008 d1=43a35ec5 d2=aada8630 d3=00000163 rec=0000004cb5bdcc28 x0=00000163b6402040 x1=0000004cb5bdcc38 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2041ed03080
+ABQ n=13 frame=d luxbits=43a36dbe proc=ffffe2041e85c080 thread=ffffe2041ed03080 lr=00007ffd2e126300
+ABS n=11 id=00000008 d1=43a351ef d2=aada8630 d3=00000163 rec=0000004cb6efccc8 x0=00000163b6402040 x1=0000004cb6efccd8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204262ac080
+ABQ n=14 frame=e luxbits=43a35ec5 proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABS n=12 id=00000008 d1=43a35dfe d2=aada8630 d3=00000163 rec=0000004cb6afce68 x0=00000163b6402040 x1=0000004cb6afce78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe20427590080
+ABQ n=15 frame=f luxbits=43a351ef proc=ffffe2041e85c080 thread=ffffe20427590080 lr=00007ffd2e126300
+ABS n=13 id=00000008 d1=43a3554d d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=16 frame=10 luxbits=43a35dfe proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=14 id=00000008 d1=43a36235 d2=aada8630 d3=00000163 rec=0000004cb5bdcc28 x0=00000163b6402040 x1=0000004cb5bdcc38 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2041ed03080
+ABQ n=17 frame=11 luxbits=43a3554d proc=ffffe2041e85c080 thread=ffffe2041ed03080 lr=00007ffd2e126300
+ABS n=15 id=00000008 d1=43a36504 d2=aada8630 d3=00000163 rec=0000004cb617ca68 x0=00000163b6402040 x1=0000004cb617ca78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042911b080
+ABQ n=18 frame=12 luxbits=43a36235 proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABS n=16 id=00000008 d1=43a37c1f d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=19 frame=13 luxbits=43a36504 proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABS n=17 id=00000008 d1=43a37682 d2=aada8630 d3=00000163 rec=0000004cb65fc858 x0=00000163b6402040 x1=0000004cb65fc868 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe20429d5a080
+ABQ n=20 frame=14 luxbits=43a37c1f proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABS n=18 id=00000008 d1=43a3745e d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=21 frame=15 luxbits=43a37682 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=19 id=00000008 d1=43a37c97 d2=aada8630 d3=00000163 rec=0000004cb617ca68 x0=00000163b6402040 x1=0000004cb617ca78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042911b080
+ABQ n=22 frame=16 luxbits=43a3745e proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABS n=20 id=00000008 d1=43a36ad8 d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=23 frame=17 luxbits=43a37c97 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=21 id=00000008 d1=43a3665c d2=aada8630 d3=00000163 rec=0000004cb697cc78 x0=00000163b6402040 x1=0000004cb697cc88 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a0d6080
+ABQ n=24 frame=18 luxbits=43a36ad8 proc=ffffe2041e85c080 thread=ffffe2042a0d6080 lr=00007ffd2e126300
+ABQ n=25 frame=19 luxbits=43a3665c proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABS n=22 id=00000008 d1=43a35113 d2=aada8630 d3=00000163 rec=0000004cb65fc858 x0=00000163b6402040 x1=0000004cb65fc868 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe20429d5a080
+ABQ n=26 frame=1a luxbits=43a3665c proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABQ n=27 frame=1b luxbits=43a35113 proc=ffffe2041e85c080 thread=ffffe2042a0d6080 lr=00007ffd2e126300
+ABS n=23 id=00000008 d1=43a340f6 d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=28 frame=1c luxbits=43a35113 proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABQ n=29 frame=1d luxbits=43a340f6 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=24 id=00000008 d1=43a33b25 d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=30 frame=1e luxbits=43a340f6 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABQ n=31 frame=1f luxbits=43a33b25 proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABS n=25 id=00000008 d1=43a33049 d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=32 frame=20 luxbits=43a33b25 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABQ n=33 frame=21 luxbits=43a33049 proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABS n=26 id=00000008 d1=43a32157 d2=aada8630 d3=00000163 rec=0000004cb5bdcc28 x0=00000163b6402040 x1=0000004cb5bdcc38 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2041ed03080
+ABQ n=34 frame=22 luxbits=43a33049 proc=ffffe2041e85c080 thread=ffffe2041ed03080 lr=00007ffd2e126300
+ABQ n=35 frame=23 luxbits=43a32157 proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABS n=27 id=00000008 d1=43a31c18 d2=aada8630 d3=00000163 rec=0000004cb5bdcc28 x0=00000163b6402040 x1=0000004cb5bdcc38 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2041ed03080
+ABQ n=36 frame=24 luxbits=43a32157 proc=ffffe2041e85c080 thread=ffffe2041ed03080 lr=00007ffd2e126300
+ABQ n=37 frame=25 luxbits=43a31c18 proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABS n=28 id=00000008 d1=43a30a71 d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=38 frame=26 luxbits=43a31c18 proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABQ n=39 frame=27 luxbits=43a30a71 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=29 id=00000008 d1=43a2fed4 d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=40 frame=28 luxbits=43a30a71 proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABQ n=41 frame=29 luxbits=43a2fed4 proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABS n=30 id=00000008 d1=43a2f444 d2=aada8630 d3=00000163 rec=0000004cb5b5cc08 x0=00000163b6402040 x1=0000004cb5b5cc18 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2041df11100
+ABQ n=42 frame=2a luxbits=43a2fed4 proc=ffffe2041e85c080 thread=ffffe2041df11100 lr=00007ffd2e126300
+ABQ n=43 frame=2b luxbits=43a2f444 proc=ffffe2041e85c080 thread=ffffe2042a0d6080 lr=00007ffd2e126300
+ABS n=31 id=00000008 d1=43a2e479 d2=aada8630 d3=00000163 rec=0000004cb6afce68 x0=00000163b6402040 x1=0000004cb6afce78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe20427590080
+ABQ n=44 frame=2c luxbits=43a2f444 proc=ffffe2041e85c080 thread=ffffe20427590080 lr=00007ffd2e126300
+ABQ n=45 frame=2d luxbits=43a2e479 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=32 id=00000008 d1=43a2c9ef d2=aada8630 d3=00000163 rec=0000004cb5bdcc28 x0=00000163b6402040 x1=0000004cb5bdcc38 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2041ed03080
+ABQ n=46 frame=2e luxbits=43a2e479 proc=ffffe2041e85c080 thread=ffffe2041ed03080 lr=00007ffd2e126300
+ABQ n=47 frame=2f luxbits=43a2c9ef proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABS n=33 id=00000008 d1=43a2c5be d2=aada8630 d3=00000163 rec=0000004cb65fc858 x0=00000163b6402040 x1=0000004cb65fc868 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe20429d5a080
+ABQ n=48 frame=30 luxbits=43a2c9ef proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABQ n=49 frame=31 luxbits=43a2c5be proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=34 id=00000008 d1=43a2bfd9 d2=aada8630 d3=00000163 rec=0000004cb6efccc8 x0=00000163b6402040 x1=0000004cb6efccd8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204262ac080
+ABQ n=50 frame=32 luxbits=43a2c5be proc=ffffe2041e85c080 thread=ffffe204262ac080 lr=00007ffd2e126300
+ABQ n=51 frame=33 luxbits=43a2bfd9 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=35 id=00000008 d1=43a2a0f1 d2=aada8630 d3=00000163 rec=0000004cb5b5cc08 x0=00000163b6402040 x1=0000004cb5b5cc18 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2041df11100
+ABQ n=52 frame=34 luxbits=43a2bfd9 proc=ffffe2041e85c080 thread=ffffe2041df11100 lr=00007ffd2e126300
+ABQ n=53 frame=35 luxbits=43a2a0f1 proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABS n=36 id=00000008 d1=43a29471 d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=54 frame=36 luxbits=43a2a0f1 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABQ n=55 frame=37 luxbits=43a29471 proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABS n=37 id=00000008 d1=43a28716 d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=56 frame=38 luxbits=43a29471 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABQ n=57 frame=39 luxbits=43a28716 proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABS n=38 id=00000008 d1=43a28004 d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=58 frame=3a luxbits=43a28716 proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABQ n=59 frame=3b luxbits=43a28004 proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABS n=39 id=00000008 d1=43a27f75 d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=60 frame=3c luxbits=43a28004 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABQ n=61 frame=3d luxbits=43a27f75 proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABS n=40 id=00000008 d1=43a27fb4 d2=aada8630 d3=00000163 rec=0000004cb617ca68 x0=00000163b6402040 x1=0000004cb617ca78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042911b080
+ABQ n=62 frame=3e luxbits=43a27f75 proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABQ n=63 frame=3f luxbits=43a27fb4 proc=ffffe2041e85c080 thread=ffffe2042a0d6080 lr=00007ffd2e126300
+ABS n=41 id=00000008 d1=43a2671b d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=64 frame=40 luxbits=43a27fb4 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABQ n=65 frame=41 luxbits=43a2671b proc=ffffe2041e85c080 thread=ffffe20427590080 lr=00007ffd2e126300
+ABS n=42 id=00000008 d1=43a2596c d2=aada8630 d3=00000163 rec=0000004cb60fcf38 x0=00000163b6402040 x1=0000004cb60fcf48 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe204281d3080
+ABQ n=66 frame=42 luxbits=43a2671b proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABQ n=67 frame=43 luxbits=43a2596c proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABS n=43 id=00000008 d1=43a25516 d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=68 frame=44 luxbits=43a2596c proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABQ n=69 frame=45 luxbits=43a25516 proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABS n=44 id=00000008 d1=43a24f84 d2=aada8630 d3=00000163 rec=0000004cb65fc858 x0=00000163b6402040 x1=0000004cb65fc868 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe20429d5a080
+ABQ n=70 frame=46 luxbits=43a25516 proc=ffffe2041e85c080 thread=ffffe20429d5a080 lr=00007ffd2e126300
+ABQ n=71 frame=47 luxbits=43a24f84 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=45 id=00000008 d1=43a24439 d2=aada8630 d3=00000163 rec=0000004cb63fcda8 x0=00000163b6402040 x1=0000004cb63fcdb8 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042b4ca180
+ABQ n=72 frame=48 luxbits=43a24f84 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABQ n=73 frame=49 luxbits=43a24439 proc=ffffe2041e85c080 thread=ffffe2042b4ca180 lr=00007ffd2e126300
+ABS n=46 id=00000008 d1=43a23b08 d2=aada8630 d3=00000163 rec=0000004cb617ca68 x0=00000163b6402040 x1=0000004cb617ca78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042911b080
+ABQ n=74 frame=4a luxbits=43a24439 proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABQ n=75 frame=4b luxbits=43a23b08 proc=ffffe2041e85c080 thread=ffffe2042a0d6080 lr=00007ffd2e126300
+ABS n=47 id=00000008 d1=43a23ac2 d2=aada8630 d3=00000163 rec=0000004cb617ca68 x0=00000163b6402040 x1=0000004cb617ca78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042911b080
+ABQ n=76 frame=4c luxbits=43a23b08 proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABQ n=77 frame=4d luxbits=43a23ac2 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+ABS n=48 id=00000008 d1=43a231a0 d2=aada8630 d3=00000163 rec=0000004cb617ca68 x0=00000163b6402040 x1=0000004cb617ca78 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042911b080
+ABQ n=78 frame=4e luxbits=43a23ac2 proc=ffffe2041e85c080 thread=ffffe2042911b080 lr=00007ffd2e126300
+ABQ n=79 frame=4f luxbits=43a231a0 proc=ffffe2041e85c080 thread=ffffe20427590080 lr=00007ffd2e126300
+ABS n=49 id=00000008 d1=43a22b97 d2=aada8630 d3=00000163 rec=0000004cb607ca58 x0=00000163b6402040 x1=0000004cb607ca68 lr=00007ffd2dcc6318 proc=ffffe2041e85c080 thread=ffffe2042a042080
+ABQ n=80 frame=50 luxbits=43a231a0 proc=ffffe2041e85c080 thread=ffffe2042a042080 lr=00007ffd2e126300
+ABQ n=81 frame=51 luxbits=43a22b97 proc=ffffe2041e85c080 thread=ffffe204281d3080 lr=00007ffd2e126300
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`c02013b0 d43e0000 brk         #0xF000
+2: kd> r @$t0; r @$t1; bc *; .logclose; g
+$t0=0000000000000031
+$t1=0000000000000051
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AB-LUX-SET_2af4_2026-09-05_13-20-44-665.log

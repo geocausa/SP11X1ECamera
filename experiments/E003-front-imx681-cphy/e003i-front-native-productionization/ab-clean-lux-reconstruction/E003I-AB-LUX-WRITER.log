@@ -1,0 +1,128 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AB-LUX-WRITER_2af4_2026-09-05_13-17-15-362.log'
+0: kd> r @$t0=0; r @$t1=0
+0: kd> ba0 e 4 00007ffd2d86c1a4 "r @$t0=@$t0+1; .printf \"ABW n=%u proc=%p thread=%p x19=%p bank=%p id=%08x num=%08x bankbits=%08x lr=%p\\n\", @$t0, @$proc, @$thread, @x19, @x0, dwo(poi(@x19+0x28)), dwo(poi(@x19+0x28)+4), dwo(@x0+4), @lr; r s9; gc"
+0: kd> ba1 e 4 00007ffd2dcaa0c0 "r @$t1=@$t1+1; .printf \"ABP n=%u frame=%I64x luxbits=%08x proc=%p thread=%p lr=%p\\n\", @$t1, poi(@x0+0x6008), dwo(@x2+0x48), @$proc, @$thread, @lr; gc"
+0: kd> bl
+ 0 e 00007ffd`2d86c1a4 e 4 0001 (0001) "r @$t0=@$t0+1; .printf \"ABW n=%u proc=%p thread=%p x19=%p bank=%p id=%08x num=%08x bankbits=%08x lr=%p\\n\", @$t0, @$proc, @$thread, @x19, @x0, dwo(poi(@x19+0x28)), dwo(poi(@x19+0x28)+4), dwo(@x0+4), @lr; r s9; gc"
+ 1 e 00007ffd`2dcaa0c0 e 4 0001 (0001) "r @$t1=@$t1+1; .printf \"ABP n=%u frame=%I64x luxbits=%08x proc=%p thread=%p lr=%p\\n\", @$t1, poi(@x0+0x6008), dwo(@x2+0x48), @$proc, @$thread, @lr; gc"
+
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+ABP n=1 frame=1 luxbits=4365b24a proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=2 frame=2 luxbits=4365acdd proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=3 frame=3 luxbits=4365acdd proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=4 frame=4 luxbits=4365acdd proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=5 frame=5 luxbits=43a07ade proc=ffffe204238b3080 thread=ffffe2041b8ea080 lr=00007ffd2dca6300
+ABP n=6 frame=6 luxbits=43a07c6b proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=7 frame=7 luxbits=43a07ba0 proc=ffffe204238b3080 thread=ffffe2041b8ea080 lr=00007ffd2dca6300
+ABP n=8 frame=8 luxbits=43a2d097 proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=9 frame=9 luxbits=43a45ad8 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=10 frame=a luxbits=43ae03c4 proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=11 frame=b luxbits=43a5e9e6 proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=12 frame=c luxbits=43a62def proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=13 frame=d luxbits=43a7489a proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=14 frame=e luxbits=43a73595 proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=15 frame=f luxbits=43a725d9 proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=16 frame=10 luxbits=43a6fdd7 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=17 frame=11 luxbits=43a6d70b proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=18 frame=12 luxbits=43a6ca7f proc=ffffe204238b3080 thread=ffffe2041b8ea080 lr=00007ffd2dca6300
+ABP n=19 frame=13 luxbits=43a6b92e proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=20 frame=14 luxbits=43a69f42 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=21 frame=15 luxbits=43a692bd proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=22 frame=16 luxbits=43a6917f proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=23 frame=17 luxbits=43a6836a proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=24 frame=18 luxbits=43a68030 proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=25 frame=19 luxbits=43a684c7 proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=26 frame=1a luxbits=43a684c7 proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=27 frame=1b luxbits=43a68a9e proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=28 frame=1c luxbits=43a68a9e proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=29 frame=1d luxbits=43a6910b proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=30 frame=1e luxbits=43a6910b proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=31 frame=1f luxbits=43a69080 proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=32 frame=20 luxbits=43a69080 proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=33 frame=21 luxbits=43a688a3 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=34 frame=22 luxbits=43a688a3 proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=35 frame=23 luxbits=43a686ea proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=36 frame=24 luxbits=43a686ea proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=37 frame=25 luxbits=43a68a14 proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=38 frame=26 luxbits=43a68a14 proc=ffffe204238b3080 thread=ffffe2041b8ea080 lr=00007ffd2dca6300
+ABP n=39 frame=27 luxbits=43a686d8 proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=40 frame=28 luxbits=43a686d8 proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=41 frame=29 luxbits=43a687c8 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=42 frame=2a luxbits=43a687c8 proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=43 frame=2b luxbits=43a68823 proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=44 frame=2c luxbits=43a68823 proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=45 frame=2d luxbits=43a68c7e proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=46 frame=2e luxbits=43a68c7e proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=47 frame=2f luxbits=43a681af proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=48 frame=30 luxbits=43a681af proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=49 frame=31 luxbits=43a6802c proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=50 frame=32 luxbits=43a6802c proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=51 frame=33 luxbits=43a68413 proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=52 frame=34 luxbits=43a68413 proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=53 frame=35 luxbits=43a6893e proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=54 frame=36 luxbits=43a6893e proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=55 frame=37 luxbits=43a6847b proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=56 frame=38 luxbits=43a6847b proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=57 frame=39 luxbits=43a68c34 proc=ffffe204238b3080 thread=ffffe2041b8ea080 lr=00007ffd2dca6300
+ABP n=58 frame=3a luxbits=43a68c34 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=59 frame=3b luxbits=43a68915 proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=60 frame=3c luxbits=43a68915 proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=61 frame=3d luxbits=43a68555 proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=62 frame=3e luxbits=43a68555 proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=63 frame=3f luxbits=43a68bce proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=64 frame=40 luxbits=43a68bce proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=65 frame=41 luxbits=43a6853e proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=66 frame=42 luxbits=43a6853e proc=ffffe204238b3080 thread=ffffe2041b8ea080 lr=00007ffd2dca6300
+ABP n=67 frame=43 luxbits=43a68609 proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=68 frame=44 luxbits=43a68609 proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=69 frame=45 luxbits=43a6844c proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=70 frame=46 luxbits=43a6844c proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=71 frame=47 luxbits=43a68a56 proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=72 frame=48 luxbits=43a68a56 proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=73 frame=49 luxbits=43a69177 proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=74 frame=4a luxbits=43a69177 proc=ffffe204238b3080 thread=ffffe20429b5f080 lr=00007ffd2dca6300
+ABP n=75 frame=4b luxbits=43a68ad1 proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=76 frame=4c luxbits=43a68ad1 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=77 frame=4d luxbits=43a68ad4 proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=78 frame=4e luxbits=43a68ad4 proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=79 frame=4f luxbits=43a68b32 proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=80 frame=50 luxbits=43a68b32 proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=81 frame=51 luxbits=43a69023 proc=ffffe204238b3080 thread=ffffe204274e9080 lr=00007ffd2dca6300
+ABP n=82 frame=52 luxbits=43a69023 proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=83 frame=53 luxbits=43a68fbc proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=84 frame=54 luxbits=43a68fbc proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=85 frame=55 luxbits=43a695b0 proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=86 frame=56 luxbits=43a695b0 proc=ffffe204238b3080 thread=ffffe20426806080 lr=00007ffd2dca6300
+ABP n=87 frame=57 luxbits=43a69156 proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=88 frame=58 luxbits=43a69156 proc=ffffe204238b3080 thread=ffffe2042a2dd080 lr=00007ffd2dca6300
+ABP n=89 frame=59 luxbits=43a693f8 proc=ffffe204238b3080 thread=ffffe204276e5080 lr=00007ffd2dca6300
+ABP n=90 frame=5a luxbits=43a693f8 proc=ffffe204238b3080 thread=ffffe20428285080 lr=00007ffd2dca6300
+ABP n=91 frame=5b luxbits=43a6956c proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=92 frame=5c luxbits=43a6956c proc=ffffe204238b3080 thread=ffffe204276e5080 lr=00007ffd2dca6300
+ABP n=93 frame=5d luxbits=43a6977e proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+ABP n=94 frame=5e luxbits=43a6977e proc=ffffe204238b3080 thread=ffffe204276e5080 lr=00007ffd2dca6300
+ABP n=95 frame=5f luxbits=43a694e8 proc=ffffe204238b3080 thread=ffffe2042a25e080 lr=00007ffd2dca6300
+ABP n=96 frame=60 luxbits=43a694e8 proc=ffffe204238b3080 thread=ffffe2041b8ea080 lr=00007ffd2dca6300
+ABP n=97 frame=61 luxbits=43a696ba proc=ffffe204238b3080 thread=ffffe20427bc4080 lr=00007ffd2dca6300
+ABP n=98 frame=62 luxbits=43a696ba proc=ffffe204238b3080 thread=ffffe20428d32080 lr=00007ffd2dca6300
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`c02013b0 d43e0000 brk         #0xF000
+0: kd> bc 0; .logclose; .logopen /t C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AB-LUX-SET.log; r @$t0=0; r @$t1=0
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AB-LUX-WRITER_2af4_2026-09-05_13-17-15-362.log

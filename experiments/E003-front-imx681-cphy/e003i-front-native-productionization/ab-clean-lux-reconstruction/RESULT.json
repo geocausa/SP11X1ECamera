@@ -1,0 +1,75 @@
+{
+  "schema": "sp11-e003i-ab-clean-lux-reconstruction-result-v1",
+  "status": "PASS_INTERMEDIATE_MEASURED_LUMA_REPLAY_OPEN",
+  "date": "2026-09-05",
+  "base_commit": "63f2616fea4889122d828574bbffe7775cf8004e",
+  "aecbe_parser": {
+    "status": "PASS_BYTE_EXACT",
+    "raw_bytes": 81920,
+    "raw_stride": 80,
+    "regions": 1024,
+    "parsed_record_stride": 112,
+    "parsed_allocation_bytes": 458760,
+    "active_plane_bytes": 114696,
+    "active_plane_hex": "0x1c008",
+    "flags": 3,
+    "generated_sha256": "e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8",
+    "windows_sha256": "e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8",
+    "byte_exact": true,
+    "remaining_three_planes_zero_in_fixture": true
+  },
+  "lux_algorithm001": {
+    "producer": "CAnalyzerAlgorithm001::RunAlgorithm",
+    "rva": "0x3fb7f0",
+    "writer_return_rva": "0x3fbad0",
+    "bank": [9, 8],
+    "formula": "baseline + f32(log10(f32(target/measured)) * K), clamped >= 0; optional previous-Lux blend",
+    "k_bits": "0x429bcc0c",
+    "k": 77.89852905273438,
+    "alpha_bits": "0x00000000",
+    "alpha": 0.0,
+    "exposure_type_tuning": 3,
+    "exposure_type_table_index": 3,
+    "baseline_bits": "0x4365acdd",
+    "baseline_lux": 229.6752471923828,
+    "ab2_cases": [
+      {
+        "measured_bits": "0x40f19357",
+        "target_bits": "0x42480000",
+        "previous_bits": "0x00000000",
+        "expected_bits": "0x4392d14d",
+        "replayed_bits": "0x4392d14d",
+        "pass": true
+      },
+      {
+        "measured_bits": "0x40f19d1a",
+        "target_bits": "0x42480000",
+        "previous_bits": "0x4392d14d",
+        "expected_bits": "0x4392d09e",
+        "replayed_bits": "0x4392d09e",
+        "pass": true
+      }
+    ]
+  },
+  "measured_luma": {
+    "status": "OPEN",
+    "known_windows_path": [
+      "CAECXCoreGridStatsOut::ComputeLuma",
+      "CAECXStatsGridProcessor::GetWeightedROIInterpLuma",
+      "CAnalyzerAlgorithm001::RunAlgorithm"
+    ],
+    "blocking_unknowns": [
+      "active normalized RGB-to-luma coefficient triplet",
+      "active ROI/interpolation weighting and any frame-history scale"
+    ]
+  },
+  "safety": {
+    "latest_windows_oracle_returned_to_golden": true,
+    "golden_kernel": "7.1.5-sp11-render-parity-v4+",
+    "golden_saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry_empty": true,
+    "camera_modules_absent": true
+  },
+  "dynamic_r5_r6_substitution_authorized": false,
+  "next_gate": "clean-aecbe-to-measured-luma-replay-then-aa-lux-match"
+}

@@ -1,0 +1,14 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AB-CALLER-ID_0608_2026-09-05_14-44-29-864.log'
+0: kd> bc *; r @$t0=0; ba0 e 4 00007ffe19626208 ".if ((dwo(@x1)==9) && (dwo(@x1+4)==8)) { r @$t0=@$t0+1; .printf \"ABC n=%u lr=%p x0=%p tuple=%p name=%p\\n\", @$t0, @lr, @x0, @x1, @x2; r s0; } ; gc"; g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Numeric expression missing from '& (dwo(@x1+4)==8)) { r @$t0=@$t0+1; .printf "ABC n=%u lr=%p x0=%p tuple=%p name=%p\n", @$t0, @lr, @x0, @x1, @x2; r s0; } ; gc'
+QcDeviceMFT8380!ROIChangeChecker::ROIChangeCheck+0x29708:
+00007ffe`19626208 d503237f pacibsp
+0: kd> dd @x1 L2; r lr; r s0; r x2
+0000006a`d55fccf0  00000009 00000008
+lr=00007ffe1964bad0
+s0=               296.394 (0:087:143263)
+x2=0000023540a819a0
+0: kd> bc *; .logclose; g
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-AB-CALLER-ID_0608_2026-09-05_14-44-29-864.log
