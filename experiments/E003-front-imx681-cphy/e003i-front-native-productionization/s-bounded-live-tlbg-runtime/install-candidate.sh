@@ -18,7 +18,7 @@ sudo -n cp /boot/sp11-7.1.5-audio-fullio-v19c/initrd.img-7.1.5-sp11-fullio-v19c 
 sudo -n cp "$B/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb" "$BOOT/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb"
 sudo -n install -m 0755 "$D/99z_sp11_camera_e003i_s_live_tlbg" "$ENTRY"
 sudo -n update-grub >/dev/null
-grep -Fq "menuentry 'SP11 Camera E003i-S — bounded live TL_BG diagnostic'" /boot/grub/grub.cfg
+sudo -n grep -Fq "menuentry 'SP11 Camera E003i-S — bounded live TL_BG diagnostic'" /boot/grub/grub.cfg
 ENV=$(sudo -n grub-editenv /boot/grub/grubenv list 2>/dev/null || true)
 grep -qx 'saved_entry=sp11-audio-fullio-v19c' <<<"$ENV"
 ! grep -q '^next_entry=.' <<<"$ENV"
