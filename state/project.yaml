@@ -3008,7 +3008,7 @@ e003i_aa_aec_awb_trigger_oracle:
 
 
 e003i_ab_clean_lux_reconstruction:
-  status: pass_intermediate_measured_luma_open
+  status: pass_intermediate_measured_luma_closed_history_target_open
   date: 2026-09-05
   windows_oracle_only: true
   aecbe_parser:
@@ -3035,8 +3035,52 @@ e003i_ab_clean_lux_reconstruction:
     ab2_iter2_replay_bits: 0x4392d09e
     bit_exact: true
   measured_luma:
-    status: open
-    path: [CAECXCoreGridStatsOut::ComputeLuma, CAECXStatsGridProcessor::GetWeightedROIInterpLuma]
+    status: pass_static_replay
+    path: [CAECXCoreGridStatsOut::ComputeLuma, LumaBE16x16, FrameSA, FrameLumaBE16x16]
+    input_grid: [32, 32]
+    output_grid: [16, 16]
+    pixels_per_channel: 1980
+    rgb_coeff_bits: [0x3e991687, 0x3f1645a2, 0x3de978d5]
+    scale_bits: 0x3504655e
+    meter_bank_id: 1
+    meter_name: Equally Weighted
+    aa_request: 3653
+    aa_measured_luma_bits: 0x41f4042b
+    aa_measured_luma: 30.50203514099121
   golden_return_verified: true
   dynamic_r5_r6_substitution_authorized: false
-  next_gate: clean-aecbe-to-measured-luma-replay-then-aa-lux-match
+  next_gate: request-local-history-target-association-then-aa-lux-match
+
+
+e003i_ab3_luma_config_reconciliation:
+  status: pass_measured_luma_closed
+  date: 2026-09-05
+  ab3_log_sha256: eabc4f77f04db2e079c6a9546655d9aa8ddc77484d164b9099047e2fe28a4367
+  ab3_points: 49
+  normal_analyzer_id: 2
+  normal_analyzer_name: FrameSA
+  stats_calculator_id: 2
+  stats_calculator_name: FrameLumaBE16x16
+  meter_bank_id: 1
+  meter_name: Equally Weighted
+  input_grid: [32, 32]
+  output_grid: [16, 16]
+  input_bit_depth: 18
+  output_bit_depth: 8
+  pixels_per_channel: 1980
+  rgb_coeff_bits: [0x3e991687, 0x3f1645a2, 0x3de978d5]
+  scale_bits: 0x3504655e
+  aa_request: 3653
+  aa_measured_luma_bits: 0x41f4042b
+  aa_measured_luma: 30.50203514099121
+  direct_1024_average_rejected_bits: 0x41f40433
+  algorithm001_history_baseline_dynamic: true
+  ab3_target_bits_all: 0x42480000
+  ab3_target_all: 50.0
+  ab3_baseline_start_approx: 229.675
+  ab3_baseline_settled_approx: 281.675
+  exposure_coordinate: K_times_log10_exposure_over_indexZeroExposure
+  index_zero_exposure_source: sensor_runtime_exposure_table
+  aa_history_target_association_closed: false
+  dynamic_r5_r6_substitution_authorized: false
+  next_gate: request-local-history-target-association-then-aa-lux-match

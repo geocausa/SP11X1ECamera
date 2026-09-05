@@ -1,6 +1,6 @@
 {
-  "schema": "sp11-e003i-ab-clean-lux-reconstruction-result-v1",
-  "status": "PASS_INTERMEDIATE_MEASURED_LUMA_REPLAY_OPEN",
+  "schema": "sp11-e003i-ab-clean-lux-reconstruction-result-v2",
+  "status": "PASS_INTERMEDIATE_MEASURED_LUMA_CLOSED_HISTORY_TARGET_OPEN",
   "date": "2026-09-05",
   "base_commit": "63f2616fea4889122d828574bbffe7775cf8004e",
   "aecbe_parser": {
@@ -22,16 +22,16 @@
     "producer": "CAnalyzerAlgorithm001::RunAlgorithm",
     "rva": "0x3fb7f0",
     "writer_return_rva": "0x3fbad0",
-    "bank": [9, 8],
+    "bank": [
+      9,
+      8
+    ],
     "formula": "baseline + f32(log10(f32(target/measured)) * K), clamped >= 0; optional previous-Lux blend",
     "k_bits": "0x429bcc0c",
     "k": 77.89852905273438,
     "alpha_bits": "0x00000000",
     "alpha": 0.0,
     "exposure_type_tuning": 3,
-    "exposure_type_table_index": 3,
-    "baseline_bits": "0x4365acdd",
-    "baseline_lux": 229.6752471923828,
     "ab2_cases": [
       {
         "measured_bits": "0x40f19357",
@@ -49,19 +49,64 @@
         "replayed_bits": "0x4392d09e",
         "pass": true
       }
-    ]
+    ],
+    "history_baseline": {
+      "source": "CAECXHistory::GetInternalFrameHistory selected exposure record +0x20",
+      "ab2_observed_bits": "0x4365acdd",
+      "ab2_observed_lux": 229.6752471923828,
+      "fixed_tuning_baseline": false,
+      "ab3_points": 49,
+      "ab3_target_bits_all": "0x42480000",
+      "ab3_target_all": 50.0,
+      "ab3_baseline_start_approx": 229.675,
+      "ab3_baseline_settled_approx": 281.675,
+      "ab3_log_sha256": "eabc4f77f04db2e079c6a9546655d9aa8ddc77484d164b9099047e2fe28a4367"
+    },
+    "exposure_coordinate": {
+      "formula": "K * log10((gain * exposureTime) / indexZeroExposure)",
+      "index_zero_exposure_source": "sensor/runtime exposure table",
+      "aec_tuning_control_table_is_index_zero_reference": false
+    }
   },
   "measured_luma": {
-    "status": "OPEN",
-    "known_windows_path": [
+    "status": "PASS_STATIC_REPLAY",
+    "normal_path": [
+      "AEC_BE 32x32",
       "CAECXCoreGridStatsOut::ComputeLuma",
-      "CAECXStatsGridProcessor::GetWeightedROIInterpLuma",
-      "CAnalyzerAlgorithm001::RunAlgorithm"
+      "LumaBE16x16",
+      "FrameSA analyzer ID 2",
+      "FrameLumaBE16x16 calculator ID 2",
+      "2-D meter bank ID 1 Equally Weighted"
     ],
-    "blocking_unknowns": [
-      "active normalized RGB-to-luma coefficient triplet",
-      "active ROI/interpolation weighting and any frame-history scale"
-    ]
+    "input_grid": [
+      32,
+      32
+    ],
+    "output_grid": [
+      16,
+      16
+    ],
+    "input_bit_depth": 18,
+    "output_bit_depth": 8,
+    "pixels_per_channel": 1980,
+    "rgb_coeff_bits": [
+      "0x3e991687",
+      "0x3f1645a2",
+      "0x3de978d5"
+    ],
+    "rgb_coeff": [
+      0.29899999499320984,
+      0.5870000123977661,
+      0.11400000005960464
+    ],
+    "scale_bits": "0x3504655e",
+    "meter_bank_id": 1,
+    "meter_name": "Equally Weighted",
+    "aa_request": 3653,
+    "aa_measured_luma_bits": "0x41f4042b",
+    "aa_measured_luma": 30.50203514099121,
+    "direct_1024_average_rejected_bits": "0x41f40433",
+    "rounding": "double ComputeLuma -> float32; 2x2 float32 running mean; float32 weighted sum/divide"
   },
   "safety": {
     "latest_windows_oracle_returned_to_golden": true,
@@ -71,5 +116,9 @@
     "camera_modules_absent": true
   },
   "dynamic_r5_r6_substitution_authorized": false,
-  "next_gate": "clean-aecbe-to-measured-luma-replay-then-aa-lux-match"
+  "next_gate": "request-local-history-target-association-then-aa-lux-match",
+  "remaining_lux_operands": [
+    "AA request-3653 FrameSA target",
+    "AA request-3653 history Lux baseline or equivalent exposure state + sensor indexZeroExposure"
+  ]
 }

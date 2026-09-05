@@ -1,28 +1,50 @@
 # E003i-AB — clean Lux reconstruction
 
-Status: **intermediate PASS**. The active Titan680 AEC_BE raw parser and the final Windows Lux adjustment are both reproduced exactly. The remaining open bridge is the clean derivation of the Algorithm001 `measuredLuma` input from parsed AEC_BE statistics.
+Status: **intermediate PASS — AEC_BE parser and normal FrameSA measured-luma path closed; request-local Lux history/target association remains open.**
 
-## Closed in AB
+## Closed parser path
 
-`CamX::TitanStatsParser::ParseAECBEStats` uses the active single-IFE parser `FUN_1805f6600`. For the accepted front stream the raw payload is 1024 regions × `0x50` bytes. The parsed object begins with `flags=3, regions=1024`; each active parsed region is exactly `0x70` bytes. The active plane therefore occupies `0x1c008` bytes including the header. The full Windows allocation is `0x70008`, and the other three `0x1c000` planes are zero in the AA fixture.
+`CamX::TitanStatsParser::ParseAECBEStats` uses the active single-IFE parser `FUN_1805f6600`. The accepted front payload is 1024 regions × `0x50` bytes. The parsed object begins with `flags=3, regions=1024`; each active parsed region is `0x70` bytes. The active plane is therefore `0x1c008` bytes including the header inside the full `0x70008` Windows allocation.
 
-`replay-aecbe-parser.py` reproduces all `0x70008` captured Windows bytes from the SHA-pinned AA raw fixture. Generated and captured SHA-256 are both `e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8`. `CAECXProcessISPGridHWStats::SetStats` independently requires a `0x70` region size, confirming the active ABI.
+`replay-aecbe-parser.py` reproduces the complete captured AA parsed allocation byte-for-byte from the SHA-pinned raw fixture. Generated and Windows SHA-256 are both `e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8`.
 
-The live `(bank=9, data=8)` Lux writer was identified from its return address as `CAnalyzerAlgorithm001::RunAlgorithm` (`RVA 0x3fb7f0`). The current front tuning uses tuning exposure type `3`; `UtilExposureTypeTuning2Enum` maps that to table index `3`. The selected `0x28`-byte table record has baseline Lux at `+0x20`, bits `0x4365acdd` = `229.6752472`.
+## Closed normal measured-luma path
 
-The adjustment path computes the target/measured ratio in float32, promotes it to double for `log10`, multiplies by float32 constant bits `0x429bcc0c` promoted to double, converts the delta back to float32, and adds the baseline in float32. The current front smoothing coefficient is zero. `replay-lux-adjustment.py` reproduces the two AB2 live outputs bit-exactly: `0x4392d14d` and `0x4392d09e`.
+Static code, front tuning, and AB3 live configuration now close the normal-preview path as:
 
-The compact AB2 KD log is SHA-256 `dd28cfef64fa46e67577617857b1209c8d7dd6293513ff43e682fdfacdfbf5ad`. Proprietary/oracle raw fixtures remain local-only and are SHA-pinned in `FIXTURE-MANIFEST.json`.
+`AEC_BE 32x32 -> CAECXCoreGridStatsOut::ComputeLuma -> LumaBE16x16 -> FrameSA analyzer ID 2 -> stats calculator ID 2 (FrameLumaBE16x16) -> 2-D meter bank ID 1 (Equally Weighted)`.
+
+AB3 captured coefficient bits are `0x3e991687`, `0x3f1645a2`, `0x3de978d5`, exactly `0.299f / 0.587f / 0.114f`. `ConfigureSS` gives the active normalization `1 / 2^(18-8) / 1980`, float bits `0x3504655e`. The AA fixture reports 1980 valid samples for every R/B/Gr/Gb channel in all 1024 regions, so no saturation-fill branch is active.
+
+ARM64 disassembly is important for exact rounding: `ComputeLuma` promotes coefficients and sums to double, combines them with separate operations, multiplies by the float32 scale promoted to double, then rounds once to float32. It then converts the 32×32 field to `LumaBE16x16` using a four-sample float32 running mean per 2×2 cell. The FrameLuma calculator performs separate float32 multiply/add accumulation; the active equal weight is exactly 1.0.
+
+`replay-measured-luma.py` therefore reconstructs the AA request-3653 fixture's normal FrameSA measured input as **30.50203514099121**, bits **`0x41f4042b`**. The simpler direct average of all 1024 region lumas is `0x41f40433`; it is intentionally rejected because it skips the real 16×16 intermediate rounding.
+
+## Corrected Algorithm001 baseline provenance
+
+The live `(bank=9, data=8)` Lux writer is `CAnalyzerAlgorithm001::RunAlgorithm` at RVA `0x3fb7f0`. Its final arithmetic remains bit-exactly reproduced by `replay-lux-adjustment.py`:
+
+`Lux = historyBaseline + f32(log10(f32(target/measured)) * K)`, clamped at zero, followed by the optional previous-Lux blend. Live `K` is bits `0x429bcc0c` = `77.89852905273438`; the observed blend coefficient is zero.
+
+The earlier AB wording that treated `0x4365acdd = 229.6752472` as a fixed tuning-table Lux baseline was incorrect. `UtilExposureTypeTuning2Enum` chooses an exposure type; Algorithm001 then reads the selected exposure record's Lux field at `+0x20` from `CAECXHistory::GetInternalFrameHistory`. AB3 proves this state is dynamic: across 49 live points the baseline moves from about 229.675 through 245.675, 262.175, 270.175, and settles at about 281.675, while the target remains `0x42480000` = 50.0. The AB3 source log is SHA-256 `eabc4f77f04db2e079c6a9546655d9aa8ddc77484d164b9099047e2fe28a4367` on SP7.
+
+Independent static analysis also closes the canonical exposure coordinate used by Qualcomm AEC: **Lux index = `K * log10((gain * exposureTime) / indexZeroExposure)`**, where `indexZeroExposure` is a sensor/runtime exposure-table reference, not the AEC tuning control records previously inspected.
 
 ## Still open
 
-A production Linux Lux producer cannot use the Windows `measuredLuma` as an oracle input. Static analysis identifies the upstream path as `CAECXCoreGridStatsOut::ComputeLuma` followed by `CAECXStatsGridProcessor::GetWeightedROIInterpLuma`. The per-region RGB/Bayer luma calculation is understood structurally, but the active normalized coefficient triplet plus ROI/interpolation/history scaling must still be recovered and replayed from the AA AEC_BE fixture. Only then can the AA request-3653 Lux value `363.6280518` be considered cleanly reproduced end-to-end.
+The stats side is no longer the blocker. To reproduce the AA request-3653 Windows Lux `363.6280518` end-to-end, the remaining operands must be request-associated truthfully:
 
-Dynamic R5/R6 LSC substitution remains **unauthorized** until clean Lux and CCT reconstruction both pass.
+- the FrameSA target selected for that exact request/scene; and
+- the historical exposure-record Lux baseline (or equivalently the request-local exposure state plus the sensor `indexZeroExposure`) used by Algorithm001 for that request.
+
+AB3's target=50 and history evolution are a separate live sequence and must not simply be transplanted onto AA request 3653 without request association. Dynamic R5/R6 LSC substitution remains unauthorized until clean Lux and CCT reconstruction both pass.
 
 ## Reproduce
 
 ```sh
 ./replay-aecbe-parser.py fixtures/E003I-AA-AECBE2.raw --expected fixtures/E003I-AA-AECBE2.parsed
+./replay-measured-luma.py fixtures/E003I-AA-AECBE2.raw
 ./replay-lux-adjustment.py
 ```
+
+Proprietary/oracle raw fixtures remain local-only and SHA-pinned in `FIXTURE-MANIFEST.json`.
