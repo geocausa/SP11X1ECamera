@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-deferred-iq-tlbg-reconciled-static-pass
+state_id: E003i-live-tlbg-runtime-package-prepared-unarmed
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-generation-tagged-tlbg-runtime-package
+current_gate: E003i-bounded-live-tlbg-runtime
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2777,7 +2777,28 @@ e003i_r_deferred_iq_tlbg_reconciliation:
   checkpatch: 0-errors-0-warnings
   runtime_performed: false
 
+e003i_s_bounded_live_tlbg_runtime:
+  status: package-prepared-unarmed
+  date: 2026-09-05
+  base_commit: e05109b2597d9cdc753605db0d6b5830b30a980e
+  boot_entry_id: sp11-camera-e003i-s-live-tlbg-one-shot
+  qcom_camss_sha256: e422c3e250c8c4dfaa37a75404947530e7455416a901497a5ee1c78493457b08
+  helper_sha256: f015b7edc85260ca27009cea158fcacef2e0f6e8da47256edc2c29742fa35e8d
+  helper_invocations: 1
+  same_boot_retry: false
+  mandatory_golden_reboot: true
+  expected_indices: [0, 1, 2, 3, 0, 1]
+  expected_sequences: [0, 1, 2, 3, 4, 5]
+  iq_r4: before-streamon
+  iq_r5: after-dqbuf0-live
+  iq_r6: after-dqbuf1-live
+  tlbg_snapshot_bytes: 153632
+  tlbg_expected_final_generation: 6
+  installed: false
+  armed: false
+  runtime_performed: false
+
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/r-deferred-iq-tlbg-reconciliation/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/s-bounded-live-tlbg-runtime/README.md
 next_action: >-
-  Package the reconciled E003i-R module as a distinct Golden-safe one-shot. The runtime helper must submit only R4 before STREAMON, submit exact oracle R5/R6 on the same fd while the worker is live, and read the generation-tagged TL_BG control without changing the proven six-frame buffer sequence. Publish the package checkpoint before arming. Do not infer request IDs from parser count or source_seq. Live TMC/ADRC state remains separately open.
+  Publish E003i-S while unarmed, then install its unique Golden-safe boot entry and perform exactly one bounded helper invocation. Require six-frame QC10C order, live R5/R6 same-fd control writes, generation-tagged TL_BG reads with final generation 6, archive evidence, and mandatory Golden return. Parse saved raw TL_BG offline after return. No same-boot retry and no request-ID inference from source_seq.
