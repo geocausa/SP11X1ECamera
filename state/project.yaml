@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-05
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-tlbg-size-corrected-static-pass
+state_id: E003i-corrected-tlbg-runtime-package-prepared-unarmed
 phase: front-imx681-cphy-bringup
 status: linux-request6-six-frame-runtime-closed-exact-0074-kernel-iq
 golden:
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-tlbg-size-corrected-runtime-validation
+current_gate: E003i-corrected-tlbg-runtime-validation
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2831,7 +2831,23 @@ e003i_t_tlbg_size_correction:
   checkpatch: 0-errors-0-warnings
   runtime_performed: false
 
+e003i_u_corrected_tlbg_runtime:
+  status: package-prepared-unarmed
+  date: 2026-09-05
+  base_commit: a35f2cc5c37b42ba9f60f959b5379e28e1156051
+  boot_entry_id: sp11-camera-e003i-u-corrected-tlbg-one-shot
+  qcom_camss_sha256: 22276dffea8bec752b3a7ee3bdb5c77d2cbeee65e299b1697891dc5f31a4a403
+  helper_sha256: d6d534c7a4db6fe1278eb39d6baccfa32bc3f3a86181652cf6fc509753daa64e
+  raw_bytes: 61440
+  snapshot_bytes: 61472
+  helper_invocations: 1
+  same_boot_retry: false
+  mandatory_golden_reboot: true
+  installed: false
+  armed: false
+  runtime_performed: false
+
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/t-tlbg-size-correction/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/u-corrected-tlbg-runtime/README.md
 next_action: >-
-  Package the E003i-T corrected module as a distinct Golden-safe bounded one-shot and validate the corrected 0xF020 V4L2 snapshot ABI while preserving S-accepted six-frame order and live R5/R6 timing. Publish the package before arming; one invocation only, no same-boot retry, mandatory Golden return. Do not infer request IDs from source_seq.
+  Publish E003i-U unarmed, install its unique one-shot while preserving Golden and empty next_entry, then perform exactly one bounded helper invocation. Require 0xF020 snapshots for generations 1..6, S-accepted six-frame order/live R5-R6 timing, archive evidence, and mandatory Golden return.
