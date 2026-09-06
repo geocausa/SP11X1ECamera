@@ -1,8 +1,8 @@
 {
-  "schema": "sp11-e003i-ab-clean-lux-reconstruction-result-v2",
-  "status": "PASS_INTERMEDIATE_MEASURED_LUMA_CLOSED_HISTORY_TARGET_OPEN",
-  "date": "2026-09-05",
-  "base_commit": "63f2616fea4889122d828574bbffe7775cf8004e",
+  "schema": "sp11-e003i-ab-clean-lux-reconstruction-result-v3",
+  "status": "PASS_LIVE_REQUEST_LOCAL_LUX_REPLAY_CLOSED",
+  "date": "2026-09-06",
+  "base_commit": "d43969f6729ce3aeb889d9d93a916b4743ea2e93",
   "aecbe_parser": {
     "status": "PASS_BYTE_EXACT",
     "raw_bytes": 81920,
@@ -11,71 +11,21 @@
     "parsed_record_stride": 112,
     "parsed_allocation_bytes": 458760,
     "active_plane_bytes": 114696,
-    "active_plane_hex": "0x1c008",
     "flags": 3,
     "generated_sha256": "e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8",
     "windows_sha256": "e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8",
     "byte_exact": true,
-    "remaining_three_planes_zero_in_fixture": true
-  },
-  "lux_algorithm001": {
-    "producer": "CAnalyzerAlgorithm001::RunAlgorithm",
-    "rva": "0x3fb7f0",
-    "writer_return_rva": "0x3fbad0",
-    "bank": [
-      9,
-      8
-    ],
-    "formula": "baseline + f32(log10(f32(target/measured)) * K), clamped >= 0; optional previous-Lux blend",
-    "k_bits": "0x429bcc0c",
-    "k": 77.89852905273438,
-    "alpha_bits": "0x00000000",
-    "alpha": 0.0,
-    "exposure_type_tuning": 3,
-    "ab2_cases": [
-      {
-        "measured_bits": "0x40f19357",
-        "target_bits": "0x42480000",
-        "previous_bits": "0x00000000",
-        "expected_bits": "0x4392d14d",
-        "replayed_bits": "0x4392d14d",
-        "pass": true
-      },
-      {
-        "measured_bits": "0x40f19d1a",
-        "target_bits": "0x42480000",
-        "previous_bits": "0x4392d14d",
-        "expected_bits": "0x4392d09e",
-        "replayed_bits": "0x4392d09e",
-        "pass": true
-      }
-    ],
-    "history_baseline": {
-      "source": "CAECXHistory::GetInternalFrameHistory selected exposure record +0x20",
-      "ab2_observed_bits": "0x4365acdd",
-      "ab2_observed_lux": 229.6752471923828,
-      "fixed_tuning_baseline": false,
-      "ab3_points": 49,
-      "ab3_target_bits_all": "0x42480000",
-      "ab3_target_all": 50.0,
-      "ab3_baseline_start_approx": 229.675,
-      "ab3_baseline_settled_approx": 281.675,
-      "ab3_log_sha256": "eabc4f77f04db2e079c6a9546655d9aa8ddc77484d164b9099047e2fe28a4367"
-    },
-    "exposure_coordinate": {
-      "formula": "K * log10((gain * exposureTime) / indexZeroExposure)",
-      "index_zero_exposure_source": "sensor/runtime exposure table",
-      "aec_tuning_control_table_is_index_zero_reference": false
-    }
+    "ab23_raw_to_parsed_semantic_mismatches": 0,
+    "ab23_producer_first_cell_is_parsed_plus_8": true
   },
   "measured_luma": {
-    "status": "PASS_STATIC_REPLAY",
+    "status": "PASS_LIVE_BIT_EXACT",
     "normal_path": [
       "AEC_BE 32x32",
       "CAECXCoreGridStatsOut::ComputeLuma",
-      "LumaBE16x16",
+      "checkerboard selected cells",
+      "FrameLumaBE16x16",
       "FrameSA analyzer ID 2",
-      "FrameLumaBE16x16 calculator ID 2",
       "2-D meter bank ID 1 Equally Weighted"
     ],
     "input_grid": [
@@ -94,31 +44,217 @@
       "0x3f1645a2",
       "0x3de978d5"
     ],
-    "rgb_coeff": [
-      0.29899999499320984,
-      0.5870000123977661,
-      0.11400000005960464
-    ],
     "scale_bits": "0x3504655e",
-    "meter_bank_id": 1,
-    "meter_name": "Equally Weighted",
-    "aa_request": 3653,
-    "aa_measured_luma_bits": "0x41f4042b",
-    "aa_measured_luma": 30.50203514099121,
-    "direct_1024_average_rejected_bits": "0x41f40433",
-    "rounding": "double ComputeLuma -> float32; 2x2 float32 running mean; float32 weighted sum/divide"
+    "selected_cell_mask": "0xf000003c",
+    "selected_zero_mask": "0x00000000",
+    "selected_cells": 512,
+    "unselected_cells": 512,
+    "selected_parity": "(row + column) % 2 == 0",
+    "frame_luma_descriptor_mask": "0x00000010",
+    "other_descriptor_mask": "0x00000002",
+    "selected_mask_intersects_frame_luma": true,
+    "selected_mask_intersects_other_descriptor": false,
+    "selected_cells_per_output_bin": 2,
+    "producer_bin_update": "float32 incremental mean",
+    "frame_sa_reduction": "sequential float32 weighted sum then float32 divide",
+    "ab23_live_bits": "0x3f5d179f",
+    "ab23_replay_bits": "0x3f5d179f",
+    "ab23_opposite_parity_bits": "0x3f5bec6a",
+    "ab26_live_bits": "0x3f26a3f7",
+    "ab26_replay_bits": "0x3f26a3f7",
+    "ab6_local_fixture_checks": [
+      {
+        "fixture": "S0",
+        "raw_sha256": "3951328e2cfd3d7e97f0c58cb1139465bf9497b11598b3ad39ba61905da02e4a",
+        "expected_bits": "0x3f83b78d",
+        "replay_bits": "0x3f83b78d",
+        "pass": true
+      },
+      {
+        "fixture": "S1",
+        "raw_sha256": "3d197f07369efc513073e691c162d1981147cb3b0cd76f2a5b57394f40985b96",
+        "expected_bits": "0x3f8323e6",
+        "replay_bits": "0x3f8323e6",
+        "pass": true
+      },
+      {
+        "fixture": "S2",
+        "raw_sha256": "811ca899daae920644d229997a1af44679f5e9c3c077988e30a58d2a5e9a66d6",
+        "expected_bits": "0x3f832191",
+        "replay_bits": "0x3f832191",
+        "pass": true
+      }
+    ],
+    "ab8_live_cases": [
+      {
+        "raw": "R1",
+        "expected_bits": "0x3f1e9ed8",
+        "replay_bits": "0x3f1e9ed8",
+        "pass": true
+      },
+      {
+        "raw": "R2",
+        "expected_bits": "0x3f1fc97f",
+        "replay_bits": "0x3f1fc97f",
+        "pass": true
+      },
+      {
+        "raw": "R3",
+        "expected_bits": "0x3f1fbfcb",
+        "replay_bits": "0x3f1fbfcb",
+        "pass": true
+      },
+      {
+        "raw": "R4",
+        "expected_bits": "0x3f1a1d84",
+        "replay_bits": "0x3f1a1d84",
+        "pass": true
+      },
+      {
+        "raw": "R5",
+        "expected_bits": "0x3f1a139b",
+        "replay_bits": "0x3f1a139b",
+        "pass": true
+      },
+      {
+        "raw": "R6",
+        "expected_bits": "0x3f83aab3",
+        "replay_bits": "0x3f83aab3",
+        "pass": true
+      },
+      {
+        "raw": "R7",
+        "expected_bits": "0x4023e477",
+        "replay_bits": "0x4023e477",
+        "pass": true
+      },
+      {
+        "raw": "R8",
+        "expected_bits": "0x3ffc32ff",
+        "replay_bits": "0x3ffc32ff",
+        "pass": true
+      }
+    ],
+    "historical_aa_parser_fixture": {
+      "raw_sha256": "dac4a912bcb9ed229c6ca9531af75d75bf799cc2248b1a5a79dd657b66452331",
+      "corrected_measured_luma_bits": "0x41f486db",
+      "corrected_measured_luma": 30.565847396850586,
+      "request_3653_association_valid": false,
+      "note": "The raw/parsed fixture is valid for parser replay, but adjacency to publisher request 0xe45 is not a request-local raw association."
+    }
+  },
+  "lux_algorithm001": {
+    "status": "PASS_LIVE_REQUEST_LOCAL_BIT_EXACT",
+    "producer": "CAnalyzerAlgorithm001::RunAlgorithm",
+    "rva": "0x3fb7f0",
+    "bank": [
+      9,
+      8
+    ],
+    "formula": "baseline + f32(log10(f32(target/measured)) * K), clamped >= 0; optional previous-Lux blend",
+    "k_bits": "0x429bcc0c",
+    "k": 77.89852905273438,
+    "target_bits": "0x42480000",
+    "target": 50.0,
+    "history_baseline_source": "CAECXHistory::GetInternalFrameHistory selected exposure record +0x20",
+    "history_baseline_dynamic": true,
+    "publication_law": "Algorithm result appears at the second subsequent publication",
+    "ab7_algorithm_outputs_checked": 233,
+    "ab7_all_match_second_subsequent_publication": true,
+    "ab8_cases": [
+      {
+        "raw": "R1",
+        "measured_bits": "0x3f1e9ed8",
+        "baseline_bits": "0x4365acdd",
+        "live_output_bits": "0x43bd1baa",
+        "replay_output_bits": "0x43bd1baa",
+        "publication_request": 5,
+        "pass": true
+      },
+      {
+        "raw": "R2",
+        "measured_bits": "0x3f1fc97f",
+        "baseline_bits": "0x4365acdd",
+        "live_output_bits": "0x43bcfbee",
+        "replay_output_bits": "0x43bcfbee",
+        "publication_request": 6,
+        "pass": true
+      },
+      {
+        "raw": "R3",
+        "measured_bits": "0x3f1fbfcb",
+        "baseline_bits": "0x4365acdd",
+        "live_output_bits": "0x43bcfcf5",
+        "replay_output_bits": "0x43bcfcf5",
+        "publication_request": 7,
+        "pass": true
+      },
+      {
+        "raw": "R4",
+        "measured_bits": "0x3f1a1d84",
+        "baseline_bits": "0x438a566e",
+        "live_output_bits": "0x43d5186f",
+        "replay_output_bits": "0x43d5186f",
+        "publication_request": 8,
+        "pass": true
+      },
+      {
+        "raw": "R5",
+        "measured_bits": "0x3f1a139b",
+        "baseline_bits": "0x43a1d66f",
+        "live_output_bits": "0x43ec9986",
+        "replay_output_bits": "0x43ec9986",
+        "publication_request": 9,
+        "pass": true
+      },
+      {
+        "raw": "R6",
+        "measured_bits": "0x3f83aab3",
+        "baseline_bits": "0x43b4966f",
+        "live_output_bits": "0x43f64894",
+        "replay_output_bits": "0x43f64894",
+        "publication_request": 10,
+        "pass": true
+      },
+      {
+        "raw": "R7",
+        "measured_bits": "0x4023e477",
+        "baseline_bits": "0x43cb0fac",
+        "live_output_bits": "0x43fd542c",
+        "replay_output_bits": "0x43fd542c",
+        "publication_request": 11,
+        "pass": true
+      },
+      {
+        "raw": "R8",
+        "measured_bits": "0x3ffc32ff",
+        "baseline_bits": "0x43cb0fac",
+        "live_output_bits": "0x4400e1a9",
+        "replay_output_bits": "0x4400e1a9",
+        "publication_request": 12,
+        "pass": true
+      }
+    ]
+  },
+  "evidence": {
+    "ab8_pair_log_sha256": "37fdc506953e8b5fc35a7da7d3c833b2673617b4b150c41a90f017382fe1078d",
+    "ab23_chain_log_sha256": "30c59b83a9669396c4c7e438200394ec069edd2de6f24dbddde95db972bcb6a3",
+    "ab26_mask_log_sha256": "c0585690eea2f2d76c114318bca226c2821753710d3a304226d50a1b53783411",
+    "ab26_mask_dump_sha256": "feefaa53176a9cc4a30c6adc917c3d0d6cded90cbe9f0bc1e71e9e970017d02c",
+    "windows_closure_note_sha256": "74ddf53b00fea31df28131dc154b3dccfe7e1fb9ba81440a2b22e88e97923a7d",
+    "ab21_source_provenance_sha256": "86b485fea0d16a2fcbf5e1abb9a824347388cf7937f7428738ce6f509f2a319b",
+    "ab22_request_association_sha256": "cc760d1a785932c8b8119758cf5050115cd86096e322ae30d012752c6c5bdf56",
+    "tracked_ab26_closure_sha256": "2e5fadd9167d7f68ba5feb7a2100e8b70de074e9f07ecd8b68b22479a652685b"
   },
   "safety": {
     "latest_windows_oracle_returned_to_golden": true,
     "golden_kernel": "7.1.5-sp11-render-parity-v4+",
     "golden_saved_entry": "sp11-audio-fullio-v19c",
     "next_entry_empty": true,
-    "camera_modules_absent": true
+    "candidate_camera_modules_absent": true
   },
+  "lux_gate_closed": true,
+  "cct_gate_closed": false,
   "dynamic_r5_r6_substitution_authorized": false,
-  "next_gate": "request-local-history-target-association-then-aa-lux-match",
-  "remaining_lux_operands": [
-    "AA request-3653 FrameSA target",
-    "AA request-3653 history Lux baseline or equivalent exposure state + sensor indexZeroExposure"
-  ]
+  "next_gate": "clean-request-local-awb-to-cct-reconstruction"
 }

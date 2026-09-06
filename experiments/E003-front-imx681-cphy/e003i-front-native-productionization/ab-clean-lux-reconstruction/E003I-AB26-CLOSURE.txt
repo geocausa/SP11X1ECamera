@@ -1,0 +1,63 @@
+E003i measured-luma Windows oracle closure
+Date: 2026-09-06
+
+AB23 chain proof:
+- Raw parser output is the same producer input buffer: producer cell pointer == parsed + 8.
+- Parser semantic comparison across all 1024 cells: 0 mismatches.
+- Live source[1] == Algorithm001 input: 0x3f5d179f.
+- Correct Windows replay using the checkerboard spatial mask and 16x16 reduction: 0x3f5d179f bit-exact.
+
+AB26 mask proof:
+- Producer selected-mask mode: 0; selected mask pointer == maskA.
+- Mask array: 1024 uint32 entries; exactly 512 x 0xf000003c and 512 x 0x00000000.
+- Spatial layout is checkerboard, selected when (row + col) % 2 == 0.
+- Active FrameLuma descriptor: dmask 0x10, dims 16x16, scale 0x3504655e, mode 0.
+- Other descriptor dmask 0x02 does not intersect selected cell mask 0xf000003c.
+- Each 2x2 source block therefore contributes exactly two selected cells to one 16x16 bin.
+- Per-bin update is float32 incremental mean; final FrameSA equal-weight reduction is sequential float32 sum of 256 bins / 256.
+- AB26 live source[1] == Algorithm001 input: 0x3f26a3f7.
+- Replay result: 0x3f26a3f7 bit-exact.
+
+AB8 correctly paired fixtures, bit-exact raw -> measured input replay:
+R1 3f1e9ed8 == 3f1e9ed8
+R2 3f1fc97f == 3f1fc97f
+R3 3f1fbfcb == 3f1fbfcb
+R4 3f1a1d84 == 3f1a1d84
+R5 3f1a139b == 3f1a139b
+R6 3f83aab3 == 3f83aab3
+R7 4023e477 == 4023e477
+R8 3ffc32ff == 3ffc32ff
+
+AB8 Algorithm001 formula replay, bit-exact live outputs and publication requests:
+R1 baseline 4365acdd -> live/replay 43bd1baa -> publication req 0x5
+R2 baseline 4365acdd -> live/replay 43bcfbee -> publication req 0x6
+R3 baseline 4365acdd -> live/replay 43bcfcf5 -> publication req 0x7
+R4 baseline 438a566e -> live/replay 43d5186f -> publication req 0x8
+R5 baseline 43a1d66f -> live/replay 43ec9986 -> publication req 0x9
+R6 baseline 43b4966f -> live/replay 43f64894 -> publication req 0xa
+R7 baseline 43cb0fac -> live/replay 43fd542c -> publication req 0xb
+R8 baseline 43cb0fac -> live/replay 4400e1a9 -> publication req 0xc
+
+Evidence hashes:
+E003I-AB8-PAIR_27a8_2026-09-05_21-28-26-898.log|212314|37FDC506953E8B5FC35A7DA7D3C833B2673617B4B150C41A90F017382FE1078D
+E003I-AB23-CHAIN_0754_2026-09-05_23-24-49-625.log|198869|30C59B83A9669396C4C7E438200394EC069EDD2DE6F24DBDDDE95DB972BCB6A3
+UsersGeocaDocumentsE003I-AB23.raw|81921|C56677BD1DA64FFA3376637AC655E451798B3B5E50738C892564A1B346700A8A
+UsersGeocaDocumentsE003I-AB23.parsed|114713|D2199DF3DAFA629A8ABE229612B655AF10913D7E377BD076BAA479A6688EFD74
+E003I-AB26-MASK_2a74_2026-09-05_23-30-16-739.log|333313|C0585690EEA2F2D76C114318BCA226C2821753710D3A304226D50A1B53783411
+UsersGeocaDocumentsE003I-AB26.raw|81920|D7E84DCFBD0998750AE0897564C530C3271F17DFCD61752B62CF6744E67806DB
+UsersGeocaDocumentsE003I-AB26.parsed|114712|F6DF99E3B3B56E88EB91889A12E8829CC1721DCA4ABB8996241B8B991A3701A6
+UsersGeocaDocumentsE003I-AB26-mask.bin|4096|FEEFAA53176A9CC4A30C6ADC917C3D0D6CDED90CBE9F0BC1E71E9E970017D02C
+
+Historical AA correction:
+- E003I-AA-AECBE2.raw remains a valid parser fixture.
+- Its adjacency to publisher request 0xe45 is not a request-local raw->Lux association under the AB7/AB8 latency law.
+- Correct mask-aware measured luma for that raw is 0x41f486db (30.565847396850586), but it is not used as request-3653 evidence.
+
+Safety:
+- Windows oracle returned to Golden Linux.
+- kernel 7.1.5-sp11-render-parity-v4+
+- saved_entry=sp11-audio-fullio-v19c
+- next_entry empty
+- no candidate camera modules loaded
+
+This closes the measured-luma/request-association Lux arithmetic edge only. CCT remains open; dynamic R5/R6 substitution remains unauthorized.

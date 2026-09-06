@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-09-05
+updated: 2026-09-06
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-z-live-3a-runtime-pass
+state_id: E003i-ab-live-request-local-lux-pass
 phase: front-imx681-cphy-bringup
-status: linux-live-3a-statistics-transport-closed-lux-cct-reconstruction-next
+status: linux-live-3a-statistics-and-request-local-lux-closed-cct-reconstruction-next
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -2983,7 +2983,7 @@ e003i_z_paired_live_3a_runtime:
   next_gate: aec-awb-to-lux-cct-semantic-reconstruction
 
 e003i_aa_aec_awb_trigger_oracle:
-  status: pass_fixture_acquisition
+  status: pass_fixture_acquisition_adjacency_not_request_local
   date: 2026-09-05
   windows_oracle_only: true
   device_mft_sha256: c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
@@ -2992,11 +2992,14 @@ e003i_aa_aec_awb_trigger_oracle:
   aec_fixture1_raw_sha256: c44c57ec17ac9fad7875589addf5878b91dc9f9824dfc387bde3340c7f7633f7
   aec_fixture2_request: 3653
   aec_fixture2_lux_index: 363.6280517578125
+  aec_fixture2_raw_to_request_association_valid: false
+  aec_fixture2_role: parser_fixture_only
   aec_fixture2_raw_sha256: dac4a912bcb9ed229c6ca9531af75d75bf799cc2248b1a5a79dd657b66452331
   aec_fixture2_parsed_sha256: e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8
   awb_fixture_request: 1894
   awb_fixture_cct: 4452
   awb_fixture_rgb_gains: [1.6758220195770264, 1.0, 2.1812174320220947]
+  awb_request_local_association_proven: false
   awb_raw_sha256: dca2454b7a32b3b7266f15cc3451b16cfee250f6f3efe3a951a6baff91e09638
   awb_parsed_sha256: 5b9ae831b1f5d796dba775d5d6a14bb5b75a80e8b4a4a6aed6ae2cec0b864d46
   bhist_parser_hits_observed: 0
@@ -3004,12 +3007,12 @@ e003i_aa_aec_awb_trigger_oracle:
   request_id_from_source_generation: false
   golden_return_verified: true
   dynamic_r5_r6_substitution_authorized: false
-  next_gate: clean-aec-awb-parser-and-lux-cct-reconstruction-against-aa-fixtures
+  next_gate: clean-request-local-awb-to-cct-reconstruction
 
 
 e003i_ab_clean_lux_reconstruction:
-  status: pass_intermediate_measured_luma_closed_history_target_open
-  date: 2026-09-05
+  status: pass_live_request_local_lux_replay_closed
+  date: 2026-09-06
   windows_oracle_only: true
   aecbe_parser:
     raw_bytes: 0x14000
@@ -3020,40 +3023,73 @@ e003i_ab_clean_lux_reconstruction:
     parsed_allocation_bytes: 0x70008
     parsed_byte_exact: true
     parsed_sha256: e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8
-  lux_algorithm001:
-    producer_rva: 0x3fb7f0
-    writer_return_rva: 0x3fbad0
-    bank: [9, 8]
-    tuning_exposure_type: 3
-    exposure_type_table_index: 3
-    baseline_bits: 0x4365acdd
-    k_bits: 0x429bcc0c
-    alpha_bits: 0x00000000
-    ab2_iter1_expected_bits: 0x4392d14d
-    ab2_iter1_replay_bits: 0x4392d14d
-    ab2_iter2_expected_bits: 0x4392d09e
-    ab2_iter2_replay_bits: 0x4392d09e
-    bit_exact: true
+    ab23_raw_to_parsed_semantic_mismatches: 0
+    ab23_producer_first_cell_is_parsed_plus_8: true
   measured_luma:
-    status: pass_static_replay
-    path: [CAECXCoreGridStatsOut::ComputeLuma, LumaBE16x16, FrameSA, FrameLumaBE16x16]
+    status: pass_live_bit_exact
+    path: [CAECXCoreGridStatsOut::ComputeLuma, checkerboard_selection, FrameLumaBE16x16, FrameSA]
     input_grid: [32, 32]
     output_grid: [16, 16]
     pixels_per_channel: 1980
     rgb_coeff_bits: [0x3e991687, 0x3f1645a2, 0x3de978d5]
     scale_bits: 0x3504655e
-    meter_bank_id: 1
-    meter_name: Equally Weighted
-    aa_request: 3653
-    aa_measured_luma_bits: 0x41f4042b
-    aa_measured_luma: 30.50203514099121
+    selected_cell_mask: 0xf000003c
+    zero_cell_mask: 0x00000000
+    selected_cells: 512
+    unselected_cells: 512
+    selected_parity: row_plus_column_even
+    frame_luma_descriptor_mask: 0x00000010
+    other_descriptor_mask: 0x00000002
+    selected_cells_per_output_bin: 2
+    producer_bin_update: float32_incremental_mean
+    frame_sa_reduction: sequential_float32_equal_weight_sum_divide
+    ab23_live_bits: 0x3f5d179f
+    ab23_replay_bits: 0x3f5d179f
+    ab26_live_bits: 0x3f26a3f7
+    ab26_replay_bits: 0x3f26a3f7
+    ab8_measured_inputs: [0x3f1e9ed8, 0x3f1fc97f, 0x3f1fbfcb, 0x3f1a1d84, 0x3f1a139b, 0x3f83aab3, 0x4023e477, 0x3ffc32ff]
+    ab8_replay_bit_exact_count: 8
+    ab8_replay_total: 8
+    ab6_local_inputs: [0x3f83b78d, 0x3f8323e6, 0x3f832191]
+    ab6_local_replay_bit_exact_count: 3
+    historical_aa_raw_sha256: dac4a912bcb9ed229c6ca9531af75d75bf799cc2248b1a5a79dd657b66452331
+    historical_aa_corrected_measured_luma_bits: 0x41f486db
+    historical_aa_corrected_measured_luma: 30.565847396850586
+    historical_aa_request3653_association_valid: false
+  lux_algorithm001:
+    producer_rva: 0x3fb7f0
+    bank: [9, 8]
+    baseline_source: CAECXHistory_selected_exposure_record_plus_0x20
+    baseline_dynamic: true
+    k_bits: 0x429bcc0c
+    target_bits_ab8: 0x42480000
+    formula: baseline_plus_f32_log10_f32_target_over_measured_times_K
+    ab7_algorithm_outputs_checked: 233
+    ab7_all_match_second_subsequent_publication: true
+    ab8_baseline_bits: [0x4365acdd, 0x4365acdd, 0x4365acdd, 0x438a566e, 0x43a1d66f, 0x43b4966f, 0x43cb0fac, 0x43cb0fac]
+    ab8_live_output_bits: [0x43bd1baa, 0x43bcfbee, 0x43bcfcf5, 0x43d5186f, 0x43ec9986, 0x43f64894, 0x43fd542c, 0x4400e1a9]
+    ab8_replay_output_bits: [0x43bd1baa, 0x43bcfbee, 0x43bcfcf5, 0x43d5186f, 0x43ec9986, 0x43f64894, 0x43fd542c, 0x4400e1a9]
+    ab8_publication_requests: [5, 6, 7, 8, 9, 10, 11, 12]
+    ab8_bit_exact_count: 8
+    ab8_total: 8
+  evidence:
+    ab8_pair_log_sha256: 37fdc506953e8b5fc35a7da7d3c833b2673617b4b150c41a90f017382fe1078d
+    ab23_chain_log_sha256: 30c59b83a9669396c4c7e438200394ec069edd2de6f24dbddde95db972bcb6a3
+    ab26_mask_log_sha256: c0585690eea2f2d76c114318bca226c2821753710d3a304226d50a1b53783411
+    ab26_mask_dump_sha256: feefaa53176a9cc4a30c6adc917c3d0d6cded90cbe9f0bc1e71e9e970017d02c
   golden_return_verified: true
+  golden_kernel: 7.1.5-sp11-render-parity-v4+
+  golden_saved_entry: sp11-audio-fullio-v19c
+  golden_next_entry_empty: true
+  golden_candidate_camera_modules_loaded: false
+  lux_gate_closed: true
+  cct_gate_closed: false
   dynamic_r5_r6_substitution_authorized: false
-  next_gate: request-local-history-target-association-then-aa-lux-match
-
+  next_gate: clean-request-local-awb-to-cct-reconstruction
 
 e003i_ab3_luma_config_reconciliation:
-  status: pass_measured_luma_closed
+  status: pass_measured_luma_closed_historical_superseded
+  superseded_by: e003i_ab_clean_lux_reconstruction
   date: 2026-09-05
   ab3_log_sha256: eabc4f77f04db2e079c6a9546655d9aa8ddc77484d164b9099047e2fe28a4367
   ab3_points: 49
@@ -3082,5 +3118,6 @@ e003i_ab3_luma_config_reconciliation:
   exposure_coordinate: K_times_log10_exposure_over_indexZeroExposure
   index_zero_exposure_source: sensor_runtime_exposure_table
   aa_history_target_association_closed: false
+  historical_aa_adjacency_request_association_valid: false
   dynamic_r5_r6_substitution_authorized: false
-  next_gate: request-local-history-target-association-then-aa-lux-match
+  next_gate: superseded-live-request-local-lux-closed

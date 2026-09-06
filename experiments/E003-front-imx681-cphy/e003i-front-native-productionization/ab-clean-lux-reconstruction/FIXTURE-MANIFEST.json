@@ -1,18 +1,44 @@
 {
-  "schema": "sp11-e003i-ab-lux-fixtures-v1",
+  "schema": "sp11-e003i-ab-lux-fixtures-v2",
   "policy": "SHA-pinned oracle fixtures are local-only and are not committed",
   "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
-  "aec_fixture2": {
+  "aa_aecbe_parser_fixture": {
     "raw_local": "fixtures/E003I-AA-AECBE2.raw",
     "raw_bytes": 81920,
     "raw_sha256": "dac4a912bcb9ed229c6ca9531af75d75bf799cc2248b1a5a79dd657b66452331",
     "parsed_local": "fixtures/E003I-AA-AECBE2.parsed",
     "parsed_bytes": 458760,
     "parsed_sha256": "e3e4bdf0bf804eedf1870e895951692564737c43a760278660a94e476737dcc8",
-    "windows_request": 3653,
-    "windows_lux_bits": "0x43b5d064",
-    "windows_lux": 363.6280517578125
+    "corrected_measured_luma_bits": "0x41f486db",
+    "adjacent_published_request": 3653,
+    "adjacent_published_lux_bits": "0x43b5d064",
+    "adjacent_published_lux": 363.6280517578125,
+    "raw_to_adjacent_request_association_valid": false,
+    "note": "AB7/AB8 proved publication latency; this historical pair remains a parser fixture only and must not be used as request-3653 raw-to-Lux evidence."
   },
+  "ab6_measured_luma_fixtures": [
+    {
+      "name": "S0",
+      "raw_local": "fixtures/E003I-AB6-S0.raw",
+      "raw_bytes": 81920,
+      "raw_sha256": "3951328e2cfd3d7e97f0c58cb1139465bf9497b11598b3ad39ba61905da02e4a",
+      "live_measured_bits": "0x3f83b78d"
+    },
+    {
+      "name": "S1",
+      "raw_local": "fixtures/E003I-AB6-S1.raw",
+      "raw_bytes": 81920,
+      "raw_sha256": "3d197f07369efc513073e691c162d1981147cb3b0cd76f2a5b57394f40985b96",
+      "live_measured_bits": "0x3f8323e6"
+    },
+    {
+      "name": "S2",
+      "raw_local": "fixtures/E003I-AB6-S2.raw",
+      "raw_bytes": 81920,
+      "raw_sha256": "811ca899daae920644d229997a1af44679f5e9c3c077988e30a58d2a5e9a66d6",
+      "live_measured_bits": "0x3f832191"
+    }
+  ],
   "ab2_operands": {
     "log": "E003I-AB2-LUX-OPERANDS.log",
     "bytes": 4331,
@@ -25,5 +51,11 @@
     "lux_points": 49,
     "target_bits_all": "0x42480000",
     "baseline_dynamic": true
+  },
+  "live_closure_evidence": {
+    "ab8_pair_log_sha256": "37fdc506953e8b5fc35a7da7d3c833b2673617b4b150c41a90f017382fe1078d",
+    "ab23_chain_log_sha256": "30c59b83a9669396c4c7e438200394ec069edd2de6f24dbddde95db972bcb6a3",
+    "ab26_mask_log_sha256": "c0585690eea2f2d76c114318bca226c2821753710d3a304226d50a1b53783411",
+    "ab26_mask_dump_sha256": "feefaa53176a9cc4a30c6adc917c3d0d6cded90cbe9f0bc1e71e9e970017d02c"
   }
 }
