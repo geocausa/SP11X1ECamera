@@ -1,0 +1,29 @@
+{
+  "schema": "sp11-e003i-am-imx681-exposure-cluster-fix-result-v1",
+  "status": "PASS",
+  "al_failure_closed_offline": true,
+  "v4l2_root_cause": "__v4l2_ctrl_modify_range calls cur_to_new(exposure), clobbering an in-flight exposure when invoked from the old four-control cluster callback",
+  "topology": {
+    "vblank": "standalone",
+    "cluster_master": "exposure",
+    "cluster": [
+      "exposure",
+      "analogue_gain",
+      "digital_gain"
+    ]
+  },
+  "cache_regression": {
+    "current_before": 3546,
+    "requested": 3500,
+    "old_result": 3546,
+    "am_result": 3500
+  },
+  "windows_dynamic_byte_cases": 20000,
+  "module_sha256": "c2b63b747176d3e8a7f8ee658833e0c1806fad9e03185840208ff5e466ce6ba8",
+  "source_sha256": "50c0612d8c4ce0fed5ce2d36f909ec9f3f193241611766aedc24272328e79e19",
+  "proof_sha256": "423b8464d02312f4c420c9083ba9f8c39505177d131b2998116e78a955764834",
+  "windows_oracle_sha256": "2dffc0370dbc19345bbfc09d80bd7ea6919259a371fc7f35e6b4cf65fe5fad9f",
+  "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+  "live_sensor_write_claimed": false,
+  "next_gate": "fresh AN one-shot live control cache + exact AM transaction + unchanged six-frame/R5/R6 + Golden return"
+}

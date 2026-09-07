@@ -1,0 +1,68 @@
+E003I AJ — SP11 Windows IMX681 exposure/register oracle closure
+Date: 2026-09-07
+Status: CLOSED / PASS
+
+Run-local live evidence (addresses are process-run local):
+- FrameServer PID: 1028
+- QcDeviceMFT8380.dll base: 0x7ffd1ab30000
+- segment heap: 0x2c83e000000
+- active sensorDriverData root: 0x2c8424ac180
+- ImageSensorData wrapper: 0x2c83e9f0e80
+- custom sensor-info base: 0x2c842efbc30
+
+Live wrapper callback pointers -> stable DLL RVAs:
+- wrapper +0x18 = 0x7ffd1b3a0ee0 -> RVA 0x870ee0 CalculateExposure
+- wrapper +0x20 = 0x7ffd1b3a1000 -> RVA 0x871000 FillExposureSettings
+- wrapper +0x50 = 0x7ffd1b3a12f0 -> RVA 0x8712f0 GetSensorModeIndex
+
+This proves active IMX681 uses custom sensorlib callbacks. The generic ImageSensorData::FillExposureArray fallback helper at RVA 0x718f78 and its four per-color digital-address slots are NOT the active IMX681 path.
+
+Live register-base evidence:
+- root +0x88 / custom-info +0x330 = 0x033d : frame length lines
+- root +0x90 / custom-info +0x334 = 0x0229 : long coarse integration
+- root +0xa8 / custom-info +0x338 = 0x0224 : short coarse integration (present but not emitted by the active single-exposure callback)
+- root +0xac / custom-info +0x33c = 0x0204 : analog gain
+- root +0xd0 / custom-info +0x344 = 0x020e : digital GLOBAL gain
+
+Active custom FillExposureSettings (RVA 0x871000) emits exactly these 10 dynamic writes between any configured pre/post lists:
+1. 0x033d..0x033f : low 24 bits of FLL, MSB->LSB
+2. clears line_count bit0 (line_count &= ~1)
+3. 0x0229..0x022b : low 24 bits of even long coarse integration, MSB->LSB
+4. 0x0204..0x0205 : 16-bit analog gain register, MSB->LSB
+5. 0x020e..0x020f : 16-bit GLOBAL digital gain register, MSB->LSB
+Generated dynamic records use addrType=2, dataType=1, delay=0. Count must remain < 0x32.
+
+Therefore active IMX681 writes ONE global digital-gain pair 0x020e/0x020f, not four color-channel gain pairs.
+
+Active custom CalculateExposure (RVA 0x870ee0):
+- analog scale constant: double 1024.0 (RVA 0x870fe8)
+- digital scale constant: float 256.0 (RVA 0x870ff0)
+- inverse digital scale: float 1/256 = 0.00390625 (RVA 0x870ff4)
+- analog target clamp [1,16]
+- analog_reg = FCVTZU(1024 - 1024/analog_target)
+- optional special flag caps analog_reg to 0x380; otherwise max clamp 0x3c0
+- actual analog gain = float32(1024/(1024-analog_reg))
+- requested gain <=16 -> desired digital=1; otherwise desired digital=float32(requested/actualAnalog)
+- desired digital cap 15
+- digital_reg = FCVTZU(float32(desiredDigital*256))
+- actual digital gain = float32(digital_reg/256)
+- ISP residual = float32(requested / float32(actualAnalog*actualDigital))
+
+Offline oracle:
+C:\Users\Geoca\Documents\E003I-AJ-IMX681-exposure-oracle.py
+Self-test: IMX681_AJ_SELFTEST=PASS
+
+Example gain=32, line_count=0x6789, FLL=0x12345:
+- analog_reg=0x03c0, analog_gain=16
+- digital_reg=0x0200, digital_gain=2
+- isp_gain=1
+- writes: 033d=01 033e=23 033f=45; 0229=00 022a=67 022b=88; 0204=03 0205=c0; 020e=02 020f=00
+
+Final Windows oracle regression, 2026-09-07:
+- E003I-AC2-full-replay.py: ALL_PUBLISHED_MATCH True (R1 5652, R2 5915, R3 6019, R4 5733; default lux values remain FITTED_DEMO, not observed historical samples)
+- E003I-DAV1-replay.py: LIVE_DAV1_REPLAY=BIT_EXACT
+- E003I-AC31-CCT-replay.py: ALL_MATCH True
+- E003I-AJ-IMX681-exposure-oracle.py --self-test: IMX681_AJ_SELFTEST=PASS
+
+Windows oracle closure decision:
+All currently required Windows-oracle closure criteria for front IMX681 startup/CCT/exposure-register parity are satisfied. Historical exact AC2 lux remains unavailable by provenance, but it is an explicit oracle input and does not block conditional replay closure. DAV1 general steady-state SA remains partially reconstructable but is not a blocker for AC2 R1-R4 startup closure. Dynamic R5/R6 LSC remains a separate authorization boundary and is not touched by this closure.
