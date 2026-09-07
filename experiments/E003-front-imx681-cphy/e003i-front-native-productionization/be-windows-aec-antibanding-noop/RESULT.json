@@ -1,0 +1,47 @@
+{
+  "schema": "E003i-BE-v1",
+  "status": "PASS_STATIC_PINNED_PATH",
+  "claim": "All ten aecxmetering variants in the pinned IMX681 tuning select identity through the metering antibanding postprocess because both top-level tuning gates are disabled.",
+  "dll_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+  "aecxmetering": {
+    "variant_count": 10,
+    "entry_ids": [
+      159,
+      330,
+      354,
+      380,
+      422,
+      450,
+      481,
+      524,
+      548,
+      574
+    ],
+    "compact_size": 248,
+    "loader_store": "core+0xff0 = lookup('aecxmetering')+0x120"
+  },
+  "adrc_priority": {
+    "compact_enable_offset": "0x84",
+    "compact_enable": 0,
+    "compact_factor_bits": "0x3f266666",
+    "native_enable_offset": "0xc0",
+    "native_factor_offset": "0xc4"
+  },
+  "luma_priority": {
+    "compact_enable_offset": "0xb8",
+    "compact_enable": 0,
+    "compact_clamp_bits": "0x3f70a3d7",
+    "compact_exit_bits": "0x3f59999a",
+    "native_enable_offset": "0x100",
+    "native_clamp_offset": "0x104",
+    "native_exit_offset": "0x108"
+  },
+  "abi": {
+    "adrc_compact_to_native": "0x34 -> 0x40",
+    "luma_compact_to_native": "0x38 -> 0x48",
+    "native_tail_offset": "0x148"
+  },
+  "safety": "static/read-only; no camera modules loaded; no live camera operation",
+  "next_gate": "continue from unchanged metering target tuple into the next Windows AEC post-metering/convergence boundary"
+}
