@@ -1,0 +1,60 @@
+{
+  "schema": "sp11-e003i-ag-live-r5-r6-runtime-result-v1",
+  "status": "FAIL_LIVE_G1_CCT_SELECTOR_RANGE",
+  "time_archived": "2026-09-07T08:15:34+01:00",
+  "executed_head": "a6a40da96ce0d0be86dd5ad51a19053ac18bd99c",
+  "boot_entry_id": "sp11-camera-e003i-ag-live-iq-one-shot",
+  "camera_stream_executed": true,
+  "producer_ready": true,
+  "streamon_count": 1,
+  "streamoff_count": 0,
+  "r5_submitted": false,
+  "r6_submitted": false,
+  "failure": {
+    "stage": "producer G1 LSC trigger selection",
+    "message": "bounded lower-CCT selector outside 5000..10000",
+    "reason": "actual live temporal CCT was below the retained-Z direct lower-CCT band assumption",
+    "live_trigger_sequence": [
+      {"generation": 1, "lux": 487.4676513671875, "published_cct": 4875},
+      {"generation": 2, "lux": 487.66632080078125, "published_cct": 4808},
+      {"generation": 3, "lux": 487.688720703125, "published_cct": 4784}
+    ],
+    "required_tuning_path": "lower-AEC child CCT gap 0x4bd->0x4bf across 4500->5000, then outer AEC gap to 0x4c3 across 390->490"
+  },
+  "captured_parent_snapshots": {
+    "generations": [1, 2, 3],
+    "stats3a_sha256": [
+      "61d1890aaf16b5bb5d31712d0fe2ad94878e04abead7ba74c22ccec29e7f2f8b",
+      "d9a8f5eb88f1282e9d98d396baba8d711f5725d0714b66d0d6be12f6c8e77290",
+      "865b1bdfca72a304c809e3e4e070fe198076478cf8949a41467f4bfc507aae24"
+    ],
+    "tlbg_sha256": [
+      "f4a34cc542d5d48a1304423f98a0a49e77734acf9a60cc2dfd782d5ceffe63b4",
+      "25d2812fb9b114f18a2a459c58a27eb773a09669af7935c3bde2504c0ce9b67d",
+      "4c13b9f63b8b2c569fce60f0ec086ca248b9ce86a16a438715dede5a9e9aaf40"
+    ]
+  },
+  "evidence_sha256": {
+    "RUN.txt": "1d0ebf62fa16c8c08c41755618802549af1f05c768651d8e4818957ae88828be",
+    "POST.txt": "3c0834b138b5274edefb045a6aef444cf7f3b8d994c6f940b7a4ed6eaa9377b8",
+    "DMESG.txt": "f25aa6770e054eb0915d57989721f6d68f1a58e3f92553a15a441dc995d1a0b1"
+  },
+  "kernel_health": {
+    "tlb_sync_timeout": false,
+    "vblank_timeout": false,
+    "oops": false,
+    "soft_lockup": false
+  },
+  "safety": {
+    "same_boot_retry_performed": false,
+    "helper_pinned_for_reboot": true,
+    "golden_return_required": true,
+    "golden_return": {
+      "status": "PASS",
+      "kernel": "7.1.5-sp11-render-parity-v4+",
+      "saved_entry": "sp11-audio-fullio-v19c",
+      "next_entry_empty": true,
+      "camera_modules_absent": true
+    }
+  }
+}
