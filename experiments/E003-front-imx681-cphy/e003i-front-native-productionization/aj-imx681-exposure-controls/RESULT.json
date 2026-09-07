@@ -1,0 +1,65 @@
+{
+  "schema": "sp11-e003i-aj-imx681-exposure-controls-result-v1",
+  "status": "PASS_STATIC_OFFLINE",
+  "base_head": "f054f0c037a64bb2717eb8eab0fa960244a55272",
+  "camera_stream_executed": false,
+  "claims": {
+    "active_windows_custom_exposure_path_carried": true,
+    "global_digital_gain_only": true,
+    "four_control_cluster_implemented": true,
+    "group_hold_transaction_implemented": true,
+    "mode2_default_identity_preserved": true,
+    "live_control_runtime_closed": false,
+    "ai_dynamic_lsc_modified": false
+  },
+  "windows_oracle": {
+    "calculate_exposure_rva": "0x870ee0",
+    "fill_exposure_settings_rva": "0x871000",
+    "get_sensor_mode_index_rva": "0x8712f0",
+    "oracle_sha256": "2dffc0370dbc19345bbfc09d80bd7ea6919259a371fc7f35e6b4cf65fe5fad9f",
+    "results_sha256": "86b063443cdc30b1ebc585b15d3abb7ae30dabb4b95be50cb256482a480d7f19"
+  },
+  "registers": {
+    "group_hold": "0x0104",
+    "frame_length": "0x033d",
+    "coarse_integration": "0x0229",
+    "analogue_gain": "0x0204",
+    "global_digital_gain": "0x020e"
+  },
+  "control_defaults": {
+    "frame_length": 3554,
+    "vblank": 1394,
+    "exposure": 3546,
+    "analogue_gain_code": 0,
+    "digital_gain_code": 256
+  },
+  "linux_policy": {
+    "exposure_even_step": 2,
+    "exposure_margin_lines": 4,
+    "exposure_margin_provenance": "PUBLIC_RFC_SAFETY_POLICY_NOT_NEW_WINDOWS_CALLBACK_CLAIM",
+    "analogue_code_max": 960,
+    "digital_code_min": 256,
+    "digital_code_max": 3840
+  },
+  "proof": {
+    "windows_oracle_self_test": true,
+    "source_transaction": true,
+    "mode2_default_identity": true,
+    "windows_linux_dynamic_byte_matches": 20000,
+    "windows_linux_dynamic_byte_cases": 20000
+  },
+  "build": {
+    "w1": "PASS",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "module_sha256": "15855b65512a15e66a732b1bf023fa8935a86b937426e2f590e161d25944bd54",
+    "source_sha256": "143b2eb661331f0e4aa1717f7b71f607465890e2b01b306fffc7b9e85c0e13de",
+    "mode_header_sha256": "6f3bac866a16b9bfff5927084ad9b6e144fe9c9df4fec63e26ea11048467b6ab",
+    "build_log_sha256": "b0681293ea929569d517fa854e5c995c80e3ed119bf30afcc26171ed685fa5e5"
+  },
+  "safety": {
+    "golden_kernel": "7.1.5-sp11-render-parity-v4+",
+    "runtime_not_attempted_in_aj": true,
+    "preexisting_untracked_repo_artifacts_untouched": true
+  },
+  "next_gate": "fresh isolated one-shot live control enumeration + non-default clustered request using proven AI transport assets, then mandatory Golden return"
+}
