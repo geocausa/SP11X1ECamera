@@ -13,3 +13,11 @@ At STREAMON, AJ must restore mode2 and publish that cached cluster under group h
 `AJ request controls: FLL=3554 exposure=3500 again=0x040 dgain=0x0110 ret=0`
 
 The unchanged AI six-frame/R5/R6 helper must then close normally with QC10C sequences 0..5, paired TL_BG+3A generations 1..6, successful live R5 and R6 submissions, no kernel-health regression, no same-boot retry, and mandatory Golden return.
+
+## AL consumed result
+
+AL executed exactly one candidate boot. Privileged discovery worked: the dynamic sensor was `imx681 6-0010` on `/dev/v4l-subdev25`, and all four controls enumerated correctly. The requested pre-stream values were exposure `3500`, analogue gain `64`, and digital gain `272`; analogue and digital cached correctly, but exposure remained at its previous/default `3546`. No STREAMON or six-frame helper invocation occurred.
+
+The V4L2 core explains this exactly: AJ's clustered `s_ctrl` unconditionally called `__v4l2_ctrl_modify_range()` on exposure. That helper begins with `cur_to_new(exposure)`, which overwrote the in-flight requested exposure (`3500`) with the current value (`3546`) before `try_or_set_cluster()` reached `new_to_cur()`. This is a driver control-cluster bug, not a sensor or I2C failure.
+
+AL was not retried. Golden return passed with an empty `next_entry` and no camera modules. The correction is to keep VBLANK standalone for range updates and cluster only exposure + analogue gain + global digital gain.

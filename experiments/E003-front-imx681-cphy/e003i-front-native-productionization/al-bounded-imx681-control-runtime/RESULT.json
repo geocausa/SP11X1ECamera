@@ -1,9 +1,40 @@
 {
   "schema": "sp11-e003i-al-bounded-imx681-control-runtime-result-v1",
-  "status": "READY_UNEXECUTED",
+  "status": "FAIL_PRESTREAM_EXPOSURE_CACHE_CLOBBER",
   "camera_stream_executed": false,
   "live_control_runtime_closed": false,
   "same_boot_retry_performed": false,
   "mandatory_golden_return": true,
-  "next_gate": "execute exactly one fresh AL candidate boot; require privileged control enumeration/cache plus exact live AJ CCI transaction and unchanged six-frame/R5-R6 pass, then return Golden"
+  "next_gate": "AM static cluster fix: leave VBLANK standalone and cluster exposure+analogue+digital; then fresh runtime package.",
+  "helper_invoked": false,
+  "failure": {
+    "phase": "prepare_control_cache",
+    "sensor_entity": "imx681 6-0010",
+    "subdev": "/dev/v4l-subdev25",
+    "requested": {
+      "exposure": 3500,
+      "analogue_gain": 64,
+      "digital_gain": 272
+    },
+    "observed": {
+      "exposure": 3546,
+      "analogue_gain": 64,
+      "digital_gain": 272
+    },
+    "streamon_reached": false,
+    "classification": "AJ_CLUSTER_CALLBACK_CLOBBERS_EXPOSURE_NEW_VALUE",
+    "root_cause": "__v4l2_ctrl_modify_range(exposure,...) calls cur_to_new(exposure) inside the cluster s_ctrl callback, replacing requested p_new exposure with current 3546 before new_to_cur commits the cluster."
+  },
+  "safety": {
+    "one_shot_consumed": true,
+    "same_boot_retry_performed": false,
+    "mandatory_golden_return": true,
+    "golden_return": {
+      "status": "PASS",
+      "kernel": "7.1.5-sp11-render-parity-v4+",
+      "saved_entry": "sp11-audio-fullio-v19c",
+      "next_entry_empty": true,
+      "camera_modules_absent": true
+    }
+  }
 }
