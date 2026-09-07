@@ -1,0 +1,14 @@
+DLL_SHA256=c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+TUNING_SHA256=2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d
+ANALYZER_RECORDS=52x0x8c
+TUNING_TO_INTERNAL=0,2,1,3,4,5,6,3
+INTERNAL_NAMES=Short,Long,Safe,S1,S2,S3,S4
+NORMAL_ANALYZERS=FrameSA:Safe<-S1,SafeAggSA:Safe<-S1,ShortAggSA:Short<-S1,LongAggSA:Long<-S1
+HDR_CROSSCHECK=Safe<-Safe,Short<-Short,Long<-Long
+RESULT_EXPOSURE_TYPE=CAnalyzer+0x28 -> result+0x20 -> UtilExposureTypeTuning2Enum
+SOURCE_TYPE=CAnalyzer+0x2c -> UtilExposureTypeTuning2Enum -> source exposure lane
+SI=FCVTZU(double(sourceExposure)*double(f32(targetLow/max(measured,eps))))
+EPS_BITS=0x33d6bf95
+AB_FRAMESA_LUMA_JOIN=PASS_LIVE_BIT_EXACT
+DOWNSTREAM_JOIN=BC PASS
+BD_VERIFY=PASS
