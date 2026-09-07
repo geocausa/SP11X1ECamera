@@ -17,4 +17,4 @@ rc=$?; printf 'HELPER_RC=%d\n' "$rc" >> "$O/RUN.txt"
 set -e
 "$D/archive.sh" "helper_rc_$rc"
 if [ "$rc" -ne 0 ]; then exit "$rc"; fi
-python3 "$D/verify-live.py"
+sudo -n python3 "$D/verify-live.py"

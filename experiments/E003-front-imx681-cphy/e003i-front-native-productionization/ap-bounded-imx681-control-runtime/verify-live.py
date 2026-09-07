@@ -14,7 +14,7 @@ for i in range(6):
 need('vertical_blanking: 1394' in ctl and 'exposure: 3500' in ctl and 'analogue_gain: 64' in ctl and 'digital_gain: 272' in ctl,'cached controls')
 needle='AM request controls: FLL=3554 exposure=3500 again=0x040 dgain=0x0110 ret=0'; need(needle in tx,'exact AM transaction')
 for bad in ('TLB sync timed out -- SMMU may be deadlocked','vblank wait timed out','Internal error: Oops','soft lockup'): need(bad.lower() not in dmesg.lower(),f'kernel health: {bad}')
-p=json.loads((O/'producer/RESULT.json').read_text()); need(p['status']=='PASS','producer status'); need([(r['generation'],r['request_target']) for r in p['rows']]==[(1,None),(2,5),(3,6)],'producer association'); need(p['r5_submitted'] and p['r6_submitted'],'R5/R6 submitted')
+p=json.loads((O/'producer/RESULT.json').read_text()); need(p['status']=='PASS','producer status'); need([(r['generation'],r['request_target']) for r in p['rows']]==[(1,None),(2,5),(3,6)],'producer association'); need(p['rows'][1].get('submitted_live') is True and p['rows'][2].get('submitted_live') is True,'R5/R6 submitted')
 frames=[]
 for i in range(6):
     f=O/f'QC10C-{i}.bin'; need(f.is_file() and f.stat().st_size==7778304,f'frame file {i}'); frames.append(sh(f))

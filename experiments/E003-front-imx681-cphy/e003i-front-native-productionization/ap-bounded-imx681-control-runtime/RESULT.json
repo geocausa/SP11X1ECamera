@@ -1,1 +1,41 @@
-{"schema":"sp11-e003i-ap-bounded-imx681-control-runtime-result-v1","status":"READY_UNEXECUTED","camera_stream_executed":false,"live_control_runtime_closed":false,"paired_audit_runtime_closed":false,"same_boot_retry_performed":false,"mandatory_golden_return":true,"next_gate":"execute exactly one AP candidate; require exact AM transaction + AO generations1..6 + six-frame/R5/R6 pass + Golden return"}
+{
+  "schema": "sp11-e003i-ap-bounded-imx681-control-runtime-result-v1",
+  "status": "PASS_LIVE_CONTROLS_AND_PAIRED_AUDIT",
+  "camera_stream_executed": true,
+  "live_control_runtime_closed": true,
+  "paired_audit_runtime_closed": true,
+  "same_boot_retry_performed": false,
+  "mandatory_golden_return": true,
+  "golden_return": "PASS",
+  "control_transaction": "AM request controls: FLL=3554 exposure=3500 again=0x040 dgain=0x0110 ret=0",
+  "controls": {
+    "vertical_blanking": 1394,
+    "frame_length": 3554,
+    "exposure": 3500,
+    "analogue_gain_code": 64,
+    "digital_gain_code": 272
+  },
+  "frames": 6,
+  "paired_generations": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "r5_sha256": "93096dc3091acfc1e0f4e27e039e5341a4ea6265336a379dc89f13673831073f",
+  "r6_sha256": "4c13fefaa49ef245d7abcee6dab239970ee170ca8973b4678b91a3aef9a89c15",
+  "frame_sha256": [
+    "031121ae62174f95ed3b4e2f958c07e94c349ca403226e2e2eaaeef9db2550dc",
+    "d2f6185398d24e15e17b694a1dba90883526292b7d67c35763f1a31aaa60f79a",
+    "f0426404b894989ec80f52c9fc0f97c8d60fc59a34a69ca795a0dec32c6623bb",
+    "265dd489d548a84ce6ebf0ecb00a11aa060b902702a8a11e81b1016ffa509187",
+    "cf99ff37dc2a7f9ab9c5d9b9a5a0457c4426a5e7438d5d8dc128dd9bd0d49c1f",
+    "89bad031972f4aeee8c8d5a56c72ecedcc9f0e3604c6ee7d46bad33cd0639d21"
+  ],
+  "kernel_health": "PASS",
+  "verifier_schema_fix": "producer records submitted_live on G2/G3 rows; original AP post-run verifier incorrectly expected top-level r5_submitted/r6_submitted",
+  "continuous_aec_claimed": false,
+  "next_gate": "replace bounded fixed Lux-history seed with real per-request AEC history/output and drive AM sensor controls continuously"
+}
