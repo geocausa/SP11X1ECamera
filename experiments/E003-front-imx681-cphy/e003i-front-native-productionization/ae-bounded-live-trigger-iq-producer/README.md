@@ -1,6 +1,6 @@
 # E003i-AE — bounded live trigger → dynamic IQ producer
 
-Status: **PASS offline; live one-shot is the next gate.**
+Status: **PASS offline, including the expanded two-dimensional LSC selector; AG reached live STREAMON but was consumed by the old narrow CCT guard before R5. A fresh corrected live one-shot is the next gate.**
 
 AE connects the closed Linux statistics/trigger work to the existing template-free IQ transport without adding a kernel ABI. The producer consumes the paired generation-tagged TL_BG (`0x1241`) and 3A (`0x1242`) controls on the same front PIX fd, preserves W's `request = source_generation + 3` law, and generates only the dynamic LSC/GIC payloads for R5<-G2 and R6<-G3.
 
@@ -14,7 +14,7 @@ G1 is processed only to establish the live Tintless/AWB temporal state. R4 is a 
 
 The bounded Linux stream does not issue per-frame IMX681 exposure/gain controls. Algorithm001 therefore uses the authoritative W request4 Lux `0x43b302c7` as a fixed history-baseline seed for this one-shot proof. This is not a complete continuous-AEC claim.
 
-The retained Linux G1/G2/G3 triggers fall in the front AEC interpolation gap `390..490`; their temporally published CCT stays in the direct `5000..10000` lower-CCT band. The producer therefore interpolates the validated lower front leaf `0x4bf` with upper front leaf `0x4c3`, calibrates with the physical front OTP/golden mesh, and runs the stateful Tintless chain.
+The LSC selector now follows the serialized two-dimensional tuning tree rather than assuming one lower-CCT leaf. The lower-AEC child selects/interpolates the CCT leaves `0x4b9`, `0x4bb`, `0x4bd`, `0x4bf` across the ranges/gaps `1..2500`, `2500..2700`, `2700..3200`, `3200..3400`, `3400..4500`, `4500..5000`, and `5000+`; that lower result is then selected/interpolated through the outer AEC tree, including the `390..490` gap toward upper leaf `0x4c3`. The selected mesh is calibrated with the physical front OTP/golden mesh and then enters the stateful Tintless chain.
 
 ## Offline acceptance
 
@@ -26,6 +26,13 @@ The retained Linux G1/G2/G3 triggers fall in the front AEC interpolation gap `39
 Against the template-free compatibility capsules, every changed byte belongs to steady DMI payloads LSC0, LSC1 or GIC0. No full 41,088-byte captured capsule is an input.
 
 Accepted p95 on Golden SP11 is about 7.63 ms for each G2->R5/G3->R6 hot path, comfortably below 33.333 ms.
+
+`prove-expanded-selector.py` adds the live-AG selector regression. It requires retained Z to keep the original R5/R6 identities and the actual AG G1-G3 captures to exercise `gap_4500_5000` inside the lower-AEC child followed by outer `gap_390_490`. `SELECTOR-EXPANSION.json` records the accepted actual-AG dynamic identities:
+
+- R5 SHA256 `b05698889f607d5786a441a7c85ef07b6f61852d20a1894ff8f4919b07051d94`
+- R6 SHA256 `f694734412fe7cf4669fd1bfadb0f7eecc4d8f4b34f94f60a4a9068537dc546e`
+
+On the actual AG evidence the expanded selector remains comfortably inside budget at roughly 7.56/7.57 ms p95 for G2->R5/G3->R6. `RESULT.json` remains the retained-Z offline proof; `SELECTOR-EXPANSION.json` is the additional actual-live-trigger selector proof.
 
 ## Live architecture
 

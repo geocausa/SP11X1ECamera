@@ -78,21 +78,40 @@ class NativeTrigger:
 class DynamicLsc:
     def __init__(self,so:pathlib.Path):
         self.X=load(XFILE,'ae_x');self.N=load(NFILE,'ae_n');self.M=load(MFILE,'ae_m');self.K=load(KFILE,'ae_k');self.C=load(IFILE,'ae_i');self.CL=load(GFILE,'ae_g');self.DEC=load(self.X.DECFILE,'ae_dec');self.GOLD=load(self.X.GOLDFILE,'ae_gold')
-        _,lower,gold,otp=self.X.front_authority(self.DEC,self.CL,self.GOLD);blob=self.X.TUNING.read_bytes();h=self.DEC.parse_header(blob);recs,_=self.DEC.parse_symbol_table(blob,h['sections'][0],h['sections'][1]);upper=self.DEC.data_bytes(blob,h['sections'][1],recs[0x4c3]);need(sha(upper)==UPPER_LEAF_SHA,'upper front LSC leaf drift')
-        self.lower,self.upper,self.gold,self.otp=lower,upper,gold,otp
+        leaf_4bd,leaf_4bf,gold,otp=self.X.front_authority(self.DEC,self.CL,self.GOLD)
+        blob=self.X.TUNING.read_bytes();h=self.DEC.parse_header(blob);recs,_=self.DEC.parse_symbol_table(blob,h['sections'][0],h['sections'][1]);obj=h['sections'][1]
+        leaf_4b9=self.DEC.data_bytes(blob,obj,recs[0x4b9]);leaf_4bb=self.DEC.data_bytes(blob,obj,recs[0x4bb]);upper=self.DEC.data_bytes(blob,obj,recs[0x4c3]);need(sha(upper)==UPPER_LEAF_SHA,'upper front LSC leaf drift')
+        self.lower_cct_leaves=(leaf_4b9,leaf_4bb,leaf_4bd,leaf_4bf);self.upper=upper;self.gold,self.otp=gold,otp
         self.core,self.res=self.X.api(so);self.x1,_=self.M.build_front_x1();self.reset()
     def reset(self):
         self.mem=self.X.mem0(self.K,self.C,self.M,self.x1);self.state=None
+    def _lower_cct(self,cct:float):
+        c=f32(cct);a,b,cold,warm=self.lower_cct_leaves
+        if c < f32(2500.0): return a,{'mode':'leaf_0x4b9','ratio':None}
+        if c < f32(2700.0):
+            r=f32((c-f32(2500.0))/f32(200.0));return self.CL.interpolate_leaf(a,b,r),{'mode':'gap_2500_2700','ratio':r}
+        if c < f32(3200.0): return b,{'mode':'leaf_0x4bb','ratio':None}
+        if c < f32(3400.0):
+            r=f32((c-f32(3200.0))/f32(200.0));return self.CL.interpolate_leaf(b,cold,r),{'mode':'gap_3200_3400','ratio':r}
+        if c < f32(4500.0): return cold,{'mode':'leaf_0x4bd','ratio':None}
+        if c < f32(5000.0):
+            r=f32((c-f32(4500.0))/f32(500.0));return self.CL.interpolate_leaf(cold,warm,r),{'mode':'gap_4500_5000','ratio':r}
+        return warm,{'mode':'leaf_0x4bf','ratio':None}
+    def _select_x22(self,lux:float,cct:float):
+        lower,cd=self._lower_cct(cct);L=f32(lux)
+        if L < f32(390.0): return lower,cd,{'mode':'lower_aec','ratio':None}
+        if L < f32(490.0):
+            r=f32((L-f32(390.0))/f32(100.0));return self.CL.interpolate_leaf(lower,self.upper,r),cd,{'mode':'gap_390_490','ratio':r}
+        return self.upper,cd,{'mode':'upper_aec','ratio':None}
     def run(self,tlbg_raw:bytes,lux:float,cct:float):
-        need(390.0 < float(lux) < 490.0,'bounded AEC selector outside 390..490 gap')
-        need(5000.0 <= float(cct) <= 10000.0,'bounded lower-CCT selector outside 5000..10000')
-        t0=time.perf_counter_ns();ratio=f32((f32(lux)-f32(390.0))/f32(100.0));x22=self.CL.interpolate_leaf(self.lower,self.upper,ratio);x23=self.CL.calibrate(x22,self.gold,self.otp);pre=self.X.resample(self.res,x23);parsed=self.N.parse_titan680_tlbg(tlbg_raw);t1=time.perf_counter_ns()
+        t0=time.perf_counter_ns();x22,csel,asel=self._select_x22(lux,cct);x23=self.CL.calibrate(x22,self.gold,self.otp);pre=self.X.resample(self.res,x23);parsed=self.N.parse_titan680_tlbg(tlbg_raw);t1=time.perf_counter_ns()
         m=self.mem;dirty=self.C.update_wrapper_config_front(m,self.X.WRAP,self.X.X1);ca=struct.unpack('<Q',m.mem_read(self.X.WRAP+0x128,8))[0]
         if ca==0:ca=self.X.CORE;m.mem_write(self.X.WRAP+0x128,struct.pack('<Q',ca));dirty=True
         if dirty:self.C.initialize_core_front_mode2(m,self.X.CORE,self.X.WRAP);self.state=bytearray(m.mem_read(self.X.CORE,self.C.CORE_BYTES))
         seed=self.K.output_seed('zero');outb=bytearray(seed[:0xdd0]);SA=(ctypes.c_ubyte*len(self.state)).from_buffer(self.state);PA=(ctypes.c_ubyte*len(parsed)).from_buffer_copy(parsed);FA=(ctypes.c_float*884).from_buffer_copy(pre);OA=(ctypes.c_float*884).from_buffer(outb);need(self.core(SA,len(self.state),PA,len(parsed),FA,OA)==0,'native Tintless rc')
         m.mem_write(self.X.IN,pre+bytes(0x20));m.mem_write(self.X.OUT,outb+seed[0xdd0:]);self.C._wrapper_temporal_blend(m,self.X.WRAP,self.X.D3,self.X.D4);got=m.mem_read(self.X.OUT,0xdf0);wire=self.K.wire_from_output(got);t2=time.perf_counter_ns()
-        return wire,{'aec_ratio_bits':f'0x{bits(ratio):08x}','aec_ratio':float(ratio),'x22_sha256':sha(x22),'pretintless_sha256':sha(pre),'tintless_output_sha256':sha(got[:0xdd0]),'lsc0_sha256':sha(wire[0]),'lsc1_sha256':sha(wire[1]),'lsc2_sha256':sha(wire[2]),'gic_sha256':sha(wire[3]),'pre_parse_ms':(t1-t0)/1e6,'tintless_wire_ms':(t2-t1)/1e6}
+        cr,ar=csel['ratio'],asel['ratio']
+        return wire,{'cct_selector_mode':csel['mode'],'cct_ratio_bits':None if cr is None else f'0x{bits(cr):08x}','cct_ratio':None if cr is None else float(cr),'aec_selector_mode':asel['mode'],'aec_ratio_bits':None if ar is None else f'0x{bits(ar):08x}','aec_ratio':None if ar is None else float(ar),'x22_sha256':sha(x22),'pretintless_sha256':sha(pre),'tintless_output_sha256':sha(got[:0xdd0]),'lsc0_sha256':sha(wire[0]),'lsc1_sha256':sha(wire[1]),'lsc2_sha256':sha(wire[2]),'gic_sha256':sha(wire[3]),'pre_parse_ms':(t1-t0)/1e6,'tintless_wire_ms':(t2-t1)/1e6}
 
 class Composer:
     def __init__(self):
