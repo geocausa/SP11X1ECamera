@@ -4,6 +4,8 @@ This checkpoint removes the **41,088-byte captured capsule as a production input
 
 `build-template-free-0076-capsules.py` reconstructs requests 4, 5 and 6 from the individual normalized startup/steady command sources, individual DMI source state, the exact historical module-value sources used by the accepted 0076 regression, and the fresh atomic LSC staging/Titan680 packing proof. It never opens an existing full capsule.
 
+The production composition path is also disassembler-free. `parse-epoch0-log.py` contains only the standard-library parser needed to recover the SHA-pinned static Epoch0 batches; the composer no longer imports the broader Capstone-based driver/extractor analysis module. This matters for the bounded live producer because the root runtime Python environment intentionally does not need Capstone.
+
 The generated binaries are not tracked. In a clean run they land under `/tmp/e003i-template-free-0076` and reproduce the accepted 0076 identities exactly:
 
 - R4 `1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa`

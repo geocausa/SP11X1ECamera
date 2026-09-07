@@ -59,8 +59,8 @@ def static_recipe(root:Path):
     corpus=json.loads((e/'rtcdm-corpus-materializer-oracle.json').read_text())
     prime=json.loads((e/'vfe1-epoch0-priming-replay-oracle.json').read_text())
     batch=json.loads((e/'vfe1-epoch0-cdm-batches-oracle.json').read_text())
-    ext=load_py(e/'extract_vfe1_epoch0_cdm_batches.py','e003i_epoch0_extract')
-    _,batches=ext.parse_log(e/'windows-vfe1-epoch0-cdm-batches/E003H_VFE1_EPOCH0_CDM_BATCHES_CLEAN_20260829.log')
+    parser=load_py(Path(__file__).resolve().parent/'parse-epoch0-log.py','e003i_epoch0_raw_parser')
+    _,batches=parser.parse_log(e/'windows-vfe1-epoch0-cdm-batches/E003H_VFE1_EPOCH0_CDM_BATCHES_CLEAN_20260829.log')
 
     dmi_by={i:[] for i in range(4)}
     for d in corpus['dmi_references']:

@@ -8,8 +8,14 @@ if contract['capsule']['capsule_template_is_input']:
 if contract['section_partition']['invariant_count'] != 31 or contract['section_partition']['request_generated_count'] != 5:
     raise SystemExit('section partition drift')
 builder=(here/'build-template-free-0076-capsules.py').read_text()
+parser=(here/'parse-epoch0-log.py').read_text()
 for bad in ('E003H_PIX_ORACLE_CAPSULE','atomic-runtime-capsules','read_bytes() # capsule'):
     if bad in builder: raise SystemExit('full capsule source dependency: '+bad)
+if 'extract_vfe1_epoch0_cdm_batches.py' in builder:
+    raise SystemExit('production composer reintroduced disassembly extractor dependency')
+for bad in ('from capstone', 'import capstone'):
+    if bad in builder or bad in parser:
+        raise SystemExit('production composer parser reintroduced Capstone dependency')
 expected={4:'1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa',5:'8e447a662a47e47db7dd211d6a109d590531309f944e52b729a4351b5a00da11',6:'c88e7a75f228fac7b69a4a122fd618aa054bdbf98e83ff541be9c20177844583'}
 tmp=Path(tempfile.mkdtemp(prefix='e003i-e-'))
 try:
