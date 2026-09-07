@@ -1,9 +1,40 @@
 {
   "schema": "sp11-e003i-ak-bounded-imx681-control-runtime-result-v1",
-  "status": "READY_UNEXECUTED",
+  "status": "FAIL_PRESTREAM_DISCOVERY_EACCES",
   "camera_stream_executed": false,
+  "helper_invoked": false,
   "live_control_runtime_closed": false,
   "same_boot_retry_performed": false,
-  "mandatory_golden_return": true,
-  "next_gate": "execute exactly one AK candidate boot, require exact AJ CCI-success transaction plus six-frame/paired-stats/R5-R6 pass, then return Golden"
+  "failure": {
+    "phase": "prepare_sensor_subdevice_discovery",
+    "sensor_entity": "imx681 3-0010",
+    "media_graph_setup_passed": true,
+    "r4_template_free_passed": true,
+    "control_enumeration_reached": false,
+    "command": "media-ctl -d /dev/media0 -e <sensor entity>",
+    "effective_privilege": "non-root",
+    "diagnostic": "Failed to enumerate /dev/media0 (-13)",
+    "classification": "PACKAGING_PERMISSION_BUG_NOT_SENSOR_OR_CONTROL_FAILURE",
+    "streamon_reached": false
+  },
+  "evidence_sha256": {
+    "ARM.txt": "8bccf85c8b1da6603196723942308d89396a33c0785929c04de003645956ee29",
+    "POST.txt": "12425c92953f1f7c70dc41113795e1446ba41d55d0f3847815c95cb7a6c16339",
+    "DMESG.txt": "e7a5139f4d2ce0cd9e1149829c4d256bd490a0a644dd058471318cf750631e8c",
+    "GOLDEN-RETURN.txt": "5e58fc957fd86cde18018b6baa7a3a51da315eb99655c51ed7b1fa3220afe719",
+    "runtime-output/MEDIA.txt": "794e818525030f4e76b073a5a6d1b17b76558a6b6d43cda38e45743bfb312211"
+  },
+  "safety": {
+    "one_shot_consumed": true,
+    "same_boot_retry_performed": false,
+    "mandatory_golden_return": true,
+    "golden_return": {
+      "status": "PASS",
+      "kernel": "7.1.5-sp11-render-parity-v4+",
+      "saved_entry": "sp11-audio-fullio-v19c",
+      "next_entry_empty": true,
+      "camera_modules_absent": true
+    }
+  },
+  "next_gate": "fresh AL one-shot with root media/subdevice control discovery; do not reuse AK"
 }
