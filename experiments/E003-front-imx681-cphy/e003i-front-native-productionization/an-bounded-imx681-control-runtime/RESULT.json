@@ -1,9 +1,42 @@
 {
-  "schema":"sp11-e003i-an-bounded-imx681-control-runtime-result-v1",
-  "status":"READY_UNEXECUTED",
-  "camera_stream_executed":false,
-  "live_control_runtime_closed":false,
-  "same_boot_retry_performed":false,
-  "mandatory_golden_return":true,
-  "next_gate":"execute exactly one AN candidate boot; require cached exposure=3500, exact AM CCI-success transaction, six-frame/R5/R6 pass, then Golden return"
+  "schema": "sp11-e003i-an-bounded-imx681-control-runtime-result-v1",
+  "status": "FAIL_LIVE_PARENT_PAIRED_SNAPSHOT_RACE",
+  "camera_stream_executed": true,
+  "live_control_runtime_closed": true,
+  "same_boot_retry_performed": false,
+  "mandatory_golden_return": true,
+  "next_gate": "AO parent audit helper: retrying 3A->TL_BG target-generation pairing identical to producer; fresh runtime after offline proof.",
+  "exact_sensor_transaction_pass": true,
+  "exact_sensor_transaction": "AM request controls: FLL=3554 exposure=3500 again=0x040 dgain=0x0110 ret=0",
+  "exact_sensor_transaction_count": 2,
+  "producer": {
+    "status": "PASS",
+    "r5_submitted": true,
+    "r6_submitted": true,
+    "r5_sha256": "1050e1e869e77dacc513b44b8e988b33e03145e5709f3e73d0fb47d8fa2fe18b",
+    "r6_sha256": "abcf96db27d25dada6e353d89e026aa2b57c38fa0b6c65487baaeeac5e52b88e"
+  },
+  "failure": {
+    "phase": "parent_frame0_stats_audit",
+    "frame_sequence": 0,
+    "tlbg_identity": {
+      "generation": 1,
+      "source_seq": 1,
+      "slot": 0
+    },
+    "classification": "NONATOMIC_LATEST_CONTROL_READ_RACE",
+    "root_cause": "Kernel publishes TL_BG then 3A for each source sequence under separate mutexes. Parent helper reads TL_BG once then 3A once, so a publication boundary between reads can produce different identities. Live producer already uses a retrying 3A->TL_BG matching loop."
+  },
+  "safety": {
+    "one_shot_consumed": true,
+    "same_boot_retry_performed": false,
+    "mandatory_golden_return": true,
+    "golden_return": {
+      "status": "PASS",
+      "kernel": "7.1.5-sp11-render-parity-v4+",
+      "saved_entry": "sp11-audio-fullio-v19c",
+      "next_entry_empty": true,
+      "camera_modules_absent": true
+    }
+  }
 }

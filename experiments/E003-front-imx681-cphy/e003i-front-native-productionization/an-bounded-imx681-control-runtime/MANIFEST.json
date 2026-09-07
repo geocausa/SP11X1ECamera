@@ -1,6 +1,6 @@
 {
   "schema": "sp11-e003i-an-bounded-imx681-control-runtime-package-v1",
-  "status": "READY_ONE_SHOT_UNEXECUTED",
+  "status": "EXECUTED_LIVE_SENSOR_CONTROL_PASS_PARENT_AUDIT_FAIL",
   "base_head": "da2888c",
   "prior_al_status": "FAIL_PRESTREAM_EXPOSURE_CACHE_CLOBBER",
   "prior_al_streamon_reached": false,
@@ -11,11 +11,29 @@
   "reused_dtb_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
   "am_imx681_sha256": "c2b63b747176d3e8a7f8ee658833e0c1806fad9e03185840208ff5e466ce6ba8",
   "am_source_sha256": "50c0612d8c4ce0fed5ce2d36f909ec9f3f193241611766aedc24272328e79e19",
-  "target_controls": {"vertical_blanking":1394,"frame_length":3554,"exposure":3500,"analogue_gain_code":64,"digital_gain_code":272},
+  "target_controls": {
+    "vertical_blanking": 1394,
+    "frame_length": 3554,
+    "exposure": 3500,
+    "analogue_gain_code": 64,
+    "digital_gain_code": 272
+  },
   "expected_live_debug": "AM request controls: FLL=3554 exposure=3500 again=0x040 dgain=0x0110 ret=0",
   "expected_frames": 6,
-  "expected_generations": [1,2,3,4,5,6],
+  "expected_generations": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
   "same_boot_retry": false,
   "mandatory_golden_return": true,
-  "camera_stream_executed": false
+  "camera_stream_executed": true,
+  "executed_head": "9c0d1818b984a87d7faba16bb5b9a8b4e8a751a5",
+  "sensor_control_live_pass": true,
+  "failure_class": "PARENT_NONATOMIC_TLBG_3A_AUDIT_RACE",
+  "golden_return_pass": true,
+  "next_stage": "AO generation-matched parent pair reader"
 }
