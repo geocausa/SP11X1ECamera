@@ -1,0 +1,84 @@
+{
+  "schema": "sp11-e003i-ah-live-r5-r6-runtime-result-v1",
+  "status": "FAIL_LIVE_R5_SUBMIT_EBUSY_AFTER_DEADLINE",
+  "time_archived": "2026-09-07T08:38:27+01:00",
+  "executed_head": "a3f5753f42d1490691f9bdf1faf5bf4afd06accb",
+  "boot_entry_id": "sp11-camera-e003i-ah-live-iq-one-shot",
+  "camera_stream_executed": true,
+  "producer_ready": true,
+  "streamon_count": 1,
+  "streamoff_count": 0,
+  "r5_computed": true,
+  "r5_submitted": false,
+  "r6_computed": false,
+  "r6_submitted": false,
+  "live_rows_before_failure": [
+    {
+      "generation": 1,
+      "lux": 488.3194274902344,
+      "published_cct": 4823,
+      "cct_selector_mode": "gap_4500_5000",
+      "aec_selector_mode": "gap_390_490",
+      "total_process_ms": 47.562314,
+      "pre_parse_ms": 22.454955,
+      "tintless_wire_ms": 15.908478
+    },
+    {
+      "generation": 2,
+      "lux": 488.5162658691406,
+      "published_cct": 4771,
+      "total_process_ms": 26.3911,
+      "r5_sha256": "493117d029bac7910b41292e738685fdfe5a22ec52676fb415a27bfbb3c46ca5",
+      "submit_errno": -16
+    }
+  ],
+  "failure": {
+    "message": "IQ submit rc=-16",
+    "errno_name": "EBUSY",
+    "classification": "producer missed deferred live-IQ provider window",
+    "source_diagnosis": {
+      "submit_guard": "while vb2 streaming, camss_x1e_pix_iq_submit accepts only while x1e_pix_worker_started && x1e_pix_live_active and runner not pinned",
+      "steady_gate": "camss_x1e_pix_iq_provider_next_steady is non-blocking at the live steady Epoch0 boundary and returns EAGAIN if the packet is not already queued",
+      "interpretation": "R5 was computed only after the runner had already failed/unwound the missing-R5 gate; submit then observed inactive/pinned live-runner state and returned EBUSY"
+    }
+  },
+  "offline_replay_of_exact_ah_snapshots": {
+    "r5_sha256": "493117d029bac7910b41292e738685fdfe5a22ec52676fb415a27bfbb3c46ca5",
+    "r6_predicted_sha256": "dac798043c9d14e8118bbed803bb2b3aa7f1a7532d2e4838ee88790c69c18115",
+    "note": "R6 was not computed or submitted in the live AH run; this identity is offline replay of the exact captured AH G1-G3 evidence."
+  },
+  "evidence_sha256": {
+    "RUN.txt": "a833680b30fd71ba5a2d6af44a3adea7f97fdd3691a0a4d5b163f4ca674404c0",
+    "POST.txt": "07eaf310ddf20d2a339f4ef4ae8baa279b9f44c703476b2616f8dd3705aa1316",
+    "DMESG.txt": "fecabd39783a439535fe35e12d5f7f9ce9bca494dc0ba939e4b0d81fca227fd6"
+  },
+  "captured_parent_snapshots": {
+    "stats3a_sha256": [
+      "9df1b384a8cedf9dd1eb09a644d186f0b5458844410df5beb1851c5dde0275cc",
+      "05efbe907f527d27bacb58b388ba5e6a51faab22def18f3b127571997da4a70a",
+      "b0fbfb45c87d9a883ff705d5c1a56be51018bc31f16bfbad937feba4725209b5"
+    ],
+    "tlbg_sha256": [
+      "101031708a7d4c704b8265f30272071e14683ffb2af8bbc179d4d62d1ccc8efb",
+      "143141b56fad0539db39dce92f6ff32c407535727af78eef6b7860c5a0144b36",
+      "4d5d6c9794654750431c6b88336e97456d5fd93060baf7d239dfe811e8f168bb"
+    ]
+  },
+  "kernel_health": {
+    "tlb_sync_timeout": false,
+    "vblank_timeout": false,
+    "oops": false,
+    "soft_lockup": false
+  },
+  "safety": {
+    "same_boot_retry_performed": false,
+    "helper_pinned_for_reboot": true,
+    "golden_return": {
+      "status": "PASS",
+      "kernel": "7.1.5-sp11-render-parity-v4+",
+      "saved_entry": "sp11-audio-fullio-v19c",
+      "next_entry_empty": true,
+      "camera_modules_absent": true
+    }
+  }
+}
