@@ -1,0 +1,47 @@
+{
+  "schema": "sp11-e003i-af-bounded-live-r5-r6-runtime-result-v1",
+  "status": "FAIL_PRESTREAM_PRODUCER_DEPENDENCY",
+  "date": "2026-09-07",
+  "package_commit": "0edab62b26bc23dcb11b4a08e60c1d026f9c0925",
+  "one_shot_boot_executed": true,
+  "camera_stream_executed": false,
+  "streamon_ok_count": 0,
+  "r5_live_submit_count": 0,
+  "r6_live_submit_count": 0,
+  "helper_rc": 1,
+  "failure": {
+    "type": "ModuleNotFoundError",
+    "module": "capstone",
+    "location": "template-free composer static_recipe -> extract_vfe1_epoch0_cdm_batches.py",
+    "classification": "userspace initialization dependency failure before producer READY and before STREAMON"
+  },
+  "outputs": {
+    "qc10c_frames": 0,
+    "tlbg_snapshots": 0,
+    "stats3a_snapshots": 0,
+    "r5_dynamic_capsule": false,
+    "r6_dynamic_capsule": false
+  },
+  "local_evidence_sha256": {
+    "runtime_output_RUN.txt": "04d57f25bf6ed239cea8e9a758148a69c8ad6d21dead7267efdf04f6e0cdbb69",
+    "POST.txt": "226eccceb07ea12252d4217a952e90ccf47a7aa22297c2652406e887a725050e",
+    "DMESG.txt": "2c7e914c88817656eaa272b0742c2f988ffacdea2440ba256d1cf70902c9dff1"
+  },
+  "kernel_health": {
+    "smmu_tlb_sync_timeout": false,
+    "vblank_timeout": false,
+    "oops": false,
+    "soft_lockup": false
+  },
+  "same_boot_retry_performed": false,
+  "golden_return": {
+    "status": "PASS",
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "",
+    "qcom_camss": "absent",
+    "imx681": "absent",
+    "ov13858": "absent"
+  },
+  "root_cause_fix": "Replace production composer's import of the broad Capstone-based extractor with a standard-library-only SHA-pinned Epoch0 raw-log parser, then prove full producer operation under root Python with Capstone absent before any new runtime boot."
+}
