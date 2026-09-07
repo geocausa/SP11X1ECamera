@@ -1,0 +1,29 @@
+{
+  "schema": "sp11-e003i-ao-paired-stats-audit-helper-proof-v1",
+  "status": "PASS",
+  "an_old_race_reproduced": true,
+  "kernel_publish_order": "TLBG then 3A for same source sequence/slot",
+  "producer_pair_order": "3A then TLBG, full (generation,source_seq,slot) equality",
+  "ao": {
+    "collector_started_before_streamon": true,
+    "pair_order": "3A then TLBG",
+    "targets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "poll_us": 2000,
+    "dqbuf_coupled_snapshot_reads": false,
+    "missed_generation_fail_closed": true
+  },
+  "timing_model": {
+    "frame_ms": 33.333333333333336,
+    "poll_ms": 2.0,
+    "copy_budget_ms": 5.0,
+    "randomized_trials": 20000
+  },
+  "helper_source_sha256": "b3a8969ec93575118acc43fd3ba6c39ace3a23d66f9bddb9caa714df58f7b91b"
+}
