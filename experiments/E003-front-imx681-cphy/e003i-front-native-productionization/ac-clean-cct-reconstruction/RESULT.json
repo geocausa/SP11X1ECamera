@@ -1,0 +1,68 @@
+{
+  "schema": "sp11-e003i-ac-clean-cct-reconstruction-result-v1",
+  "status": "PASS",
+  "golden_kernel": "7.1.5-sp11-render-parity-v4+",
+  "pipeline": [
+    "AWB_BG raw",
+    "P01 StatScr",
+    "P03 CCT/distance",
+    "P04 DistWV",
+    "P05 IlluWV",
+    "P09",
+    "AGW",
+    "startup temporal 60/40",
+    "P03 final CCT",
+    "FCVTZU publication"
+  ],
+  "live_component_proofs": {
+    "p04_ac60_bit_exact": "168/168",
+    "p05_ac41_bit_exact": "259/259",
+    "p05_ac60_bit_exact": "168/168",
+    "agw_final_weight_ac60_bit_exact": "168/168",
+    "observed_request_lux_bits": "0x4406bb30",
+    "observed_request_lux": 538.9248046875,
+    "mlc_late_gates_active": false
+  },
+  "temporal": {
+    "startup_fresh_weight": 0.6,
+    "startup_previous_weight": 0.4,
+    "previous_default_xy_bits": [
+      "0x3f1129ca",
+      "0x3f00e486"
+    ]
+  },
+  "publication": {
+    "conversion": "FCVTZU",
+    "semantics": "truncate_toward_zero"
+  },
+  "ac2_regression": {
+    "raw_to_publication_latency": 3,
+    "expected_published_cct": [
+      5652,
+      5915,
+      6019,
+      5733
+    ],
+    "replayed_published_cct": [
+      5652,
+      5915,
+      6019,
+      5733
+    ],
+    "all_published_match": true,
+    "lux_provenance": "FITTED_CONSISTENCY_VALUES_NOT_HISTORICAL_OBSERVATIONS",
+    "fitted_lux": [
+      238.6585693359375,
+      263.858642578125,
+      262.83251953125,
+      374.9688720703125
+    ]
+  },
+  "gates": {
+    "lux_gate_closed": true,
+    "cct_gate_closed": true,
+    "bounded_dynamic_r5_r6_integration_proof_authorized": true,
+    "unrestricted_continuous_dynamic_lsc_claimed": false
+  },
+  "next_gate": "bounded live Linux AEC-lux + AWB-CCT producer -> existing V4L2 IQ FIFO proof using proven source/request association"
+}

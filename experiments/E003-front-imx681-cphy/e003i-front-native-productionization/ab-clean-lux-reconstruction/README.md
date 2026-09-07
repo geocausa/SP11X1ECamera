@@ -1,6 +1,6 @@
 # E003i-AB — clean Lux reconstruction
 
-Status: **PASS — live request-local raw AEC_BE → measured luma → Algorithm001 Lux → publication association is bit-exact. CCT remains open.**
+Status: **PASS — live request-local raw AEC_BE → measured luma → Algorithm001 Lux → publication association is bit-exact. Stage AC subsequently closes request-local CCT.**
 
 ## What is closed
 
@@ -90,7 +90,7 @@ The Windows oracle was returned to protected Golden Linux. Verified kernel: `7.1
 
 ## Remaining gate
 
-Lux reconstruction for a correctly paired live sequence is closed. **CCT reconstruction is still open**, including truthful request association on the AWB side. Dynamic R5/R6 LSC substitution therefore remains unauthorized until CCT passes its equivalent clean request-local proof.
+Lux reconstruction for a correctly paired live sequence is closed. **Stage AC now closes the equivalent request-local AWB/CCT reconstruction.** The next authorized step is a bounded R5/R6 live producer→existing-IQ-FIFO integration proof; unrestricted continuous dynamic LSC is not yet claimed.
 
 ## Reproduce locally
 
