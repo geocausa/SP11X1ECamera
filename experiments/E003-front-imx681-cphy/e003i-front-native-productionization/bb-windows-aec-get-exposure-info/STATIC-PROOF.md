@@ -1,0 +1,26 @@
+# BB static proof anchors
+
+- function `GetExposureInfo`: `0x1803d18a0`.
+- entry helper mode 4: `0x1803d3024..3044`; `targetSafe(+30)-targetLane(+20+8*type)`.
+- history(1): `0x1803d1910..1918`.
+- history Safe qword `+0x78`: `0x1803d1984`.
+- lane record stride `0x28`, selected qword `(type+1)*0x28`: `0x1803d1998..19ac`.
+- history DRC gain `+0x178`; type-0-only adjustment: `0x1803d19bc..19e8`.
+- `targetRelative-historyRelative`: `0x1803d1a98`.
+- exact relative-change threshold at `0x1803d2140`: double bits `0x3e7ad7f2a0000000`.
+- history selectors 1 and 2: `0x1803d1ac4..1ae0`.
+- adjusted history lane motion: `0x1803d1b8c`.
+- current target motion from history: `0x1803d1c48..1c4c`.
+- direction sign product: `0x1803d1d24`.
+- ConvBase tolerance `+0x14`: `0x1803d1e78..1e88`.
+- state[type] address `(type+0xab)*4`: `0x1803d1e90..1ea0`.
+- current DRC Safe baseline `+0xf8`: `0x1803d1ea4`.
+- carry candidate `drcSafe-historyRelative`: `0x1803d1eac`.
+- drcSpeed smoothing: `0x1803d1f34..1f3c`.
+- runtime minimum-step clamp: `0x1803d1f40..1f68`.
+- residual target snap uses inline float `0x3f800001`: `0x1803d1f78..1fac`.
+- final direction product: `0x1803d207c..2090`.
+- target overshoot bounds: `0x1803d2094..20ac`.
+- max relative magnitude: `0x1803d20b0..20c8`.
+- DRC-Safe distance cap: `0x1803d20d0..2100`.
+- destination `+e8+8*type`: `0x1803d2104..2108`.

@@ -1,0 +1,10 @@
+DLL_SHA256=c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+FUNCTION=CAECXConvergence::GetExposureInfo@0x1803d18a0
+NORMAL_TYPES=0->DRC Short(+e8),1->DRC Long(+f0)
+TARGET_RELATIVE=targetSafe-targetLane
+HISTORY_RELATIVE=historySafe-adjustedHistoryLane
+TYPE0_HISTORY_ADJUST=+log1.03(historyDRCGain) when gain>1
+SMOOTH=historyRelative + drcSpeed*(targetRelative-historyRelative), minimum-step-clamped
+FINAL_GUARDS=history direction,target overshoot,DRC-Safe max-relative-distance
+RELATIVE_EQUAL_EPS_D=0x3e7ad7f2a0000000
+BB_VERIFY=PASS
