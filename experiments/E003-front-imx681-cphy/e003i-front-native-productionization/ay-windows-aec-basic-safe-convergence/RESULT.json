@@ -1,0 +1,17 @@
+{
+  "stage": "E003i-AY",
+  "status": "PASS",
+  "scope": "static/offline non-null steady-state CAECXConvergence::ComputeBasicSafeConvergence",
+  "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+  "function_va": "0x1803ce400",
+  "log_base_f32_bits": "0x3f83d70a",
+  "capping_modes": {
+    "0": "baseCapping * delayedDelta",
+    "1": "sign(targetDelta) * baseCapping",
+    "other": "delayedDelta / pipelineDelay"
+  },
+  "direction_gate": "(previousSafeLog - previous2SafeLog) * (targetSafeLog - previousSafeLog) >= 0",
+  "output_lanes": 7,
+  "next": "ConvStretch / AggregateStretchOutput / GetExposureInfo / DRCStretchAggregator"
+}
