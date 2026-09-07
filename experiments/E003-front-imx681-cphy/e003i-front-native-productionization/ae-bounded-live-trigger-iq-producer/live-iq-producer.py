@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, ctypes, errno, hashlib, importlib.util, json, os, pathlib, struct, subprocess, sys, tempfile, time
+import argparse, ctypes, errno, gc, hashlib, importlib.util, json, os, pathlib, struct, subprocess, sys, tempfile, time
 
 HERE=pathlib.Path(__file__).resolve().parent
 BASE=HERE.parent
@@ -143,6 +143,18 @@ class Producer:
         if gen in (2,3):req=gen+3;cap,desc,comp_ms=self.composer.compose(req,wire)
         row={'generation':gen,'source_seq':seq,'slot':slot,'request_target':req,'measured_luma_bits':f'0x{bits(tr.measured_luma):08x}','lux_bits':f'0x{bits(tr.lux):08x}','lux':float(tr.lux),'fresh_cct_bits':f'0x{bits(tr.fresh_cct):08x}','fresh_cct':float(tr.fresh_cct),'final_xy_bits':[f'0x{bits(fx):08x}',f'0x{bits(fy):08x}'],'final_cct_bits':f'0x{bits(fc):08x}','final_cct':float(fc),'published_cct':int(fc),'p01':tr.p01,'valid':tr.valid,'trigger_ms':tr_ms,'lsc':ls,'compose_ms':comp_ms,'capsule_sha256':None if cap is None else sha(cap),'total_process_ms':(time.perf_counter_ns()-t0)/1e6}
         self.rows.append(row);return row,cap,desc
+    def reset_sequence(self):
+        self.trigger.prev_x=frombits(INITIAL_PREV_X_BITS);self.trigger.prev_y=frombits(INITIAL_PREV_Y_BITS);self.lsc.reset();self.rows=[]
+    def prewarm(self):
+        # Warm only the expensive deterministic LSC/Tintless/composer machinery.
+        # A synthetic all-zero TL_BG payload is valid for the parser and cannot
+        # be mistaken for production 3A. No captured runtime fixture is consumed.
+        # The chosen triggers exercise both the 4500->5000 CCT gap and 390->490
+        # outer AEC gap observed live. All Tintless/temporal state is then reset.
+        raw=bytes(0xf000)
+        for req in (5,5,6):
+            wire,_=self.lsc.run(raw,488.0,4800.0);self.composer.compose(req,wire)
+        self.reset_sequence()
 
 class LiveControl:
     def __init__(self,fd:int,so:pathlib.Path):
@@ -170,30 +182,57 @@ class LiveControl:
     def submit(self,cap:bytes):
         b=(ctypes.c_ubyte*len(cap)).from_buffer_copy(cap);r=self.si(self.fd,b,len(cap));need(r==0,f'IQ submit rc={r}')
 
-def write_manifest(path,mode,rows,extra=None):
-    d={'schema':'sp11-e003i-ae-bounded-live-trigger-iq-producer-v1','mode':mode,'status':'PASS','source_generation_is_request_id':False,'selection_law':'R5<-G2, R6<-G3','bounded_baseline_bits':f'0x{BASELINE_BITS:08x}','continuous_aec_claimed':False,'rows':rows};
+def write_manifest(path,mode,rows,extra=None,status='PASS'):
+    d={'schema':'sp11-e003i-ae-bounded-live-trigger-iq-producer-v1','mode':mode,'status':status,'source_generation_is_request_id':False,'selection_law':'R5<-G2, R6<-G3','bounded_baseline_bits':f'0x{BASELINE_BITS:08x}','continuous_aec_claimed':False,'rows':rows};
     if extra:d.update(extra)
     path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix(path.suffix+'.tmp');tmp.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n');tmp.replace(path)
+
+def configure_live_scheduler():
+    cpus=sorted(os.sched_getaffinity(0));need(11 in cpus,'CPU11 unavailable for bounded live producer')
+    os.sched_setaffinity(0,{11});os.setpriority(os.PRIO_PROCESS,0,-20);gc.disable()
+    return {'cpu':11,'nice':os.getpriority(os.PRIO_PROCESS,0),'scheduler':os.sched_getscheduler(0)}
+
+def flush_live_evidence(outdir,pairs,caps):
+    outdir.mkdir(parents=True,exist_ok=True)
+    for gen,(s,t) in pairs.items():
+        (outdir/f'STATS3A-G{gen}.bin').write_bytes(s);(outdir/f'TLBG-G{gen}.bin').write_bytes(t)
+    for req,cap in caps.items():(outdir/f'R{req}-dynamic.bin').write_bytes(cap)
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=('offline','live'),required=True);ap.add_argument('--snapshot-dir',type=pathlib.Path);ap.add_argument('--output-dir',type=pathlib.Path,required=True);ap.add_argument('--manifest',type=pathlib.Path,required=True);ap.add_argument('--fd',type=int);ap.add_argument('--ready-fd',type=int);a=ap.parse_args();a.output_dir.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='e003i-ae-') as td:
-        p=Producer(pathlib.Path(td));control=None
+        sched=None
+        if a.mode=='live':sched=configure_live_scheduler()
+        p=Producer(pathlib.Path(td));control=None;pairs={};caps={};deferred_log=[]
         if a.mode=='live':
-            need(a.fd is not None and a.ready_fd is not None,'live fd args');shim=pathlib.Path(td)/'libctrl.so';compile_so(HERE/'v4l2-control-shim.c',shim);control=LiveControl(a.fd,shim);os.write(a.ready_fd,b'R');os.close(a.ready_fd);print('AE_PRODUCER_READY',flush=True)
-        for gen in (1,2,3):
-            if a.mode=='offline':
-                need(a.snapshot_dir is not None,'snapshot dir');s=(a.snapshot_dir/f'STATS3A-{gen-1}.bin').read_bytes();t=(a.snapshot_dir/f'TLBG-{gen-1}.bin').read_bytes()
-            else:s,t=control.get_pair(gen)
-            (a.output_dir/f'STATS3A-G{gen}.bin').write_bytes(s);(a.output_dir/f'TLBG-G{gen}.bin').write_bytes(t)
-            row,cap,desc=p.process(s,t);print(f"AE_G{gen} lux={row['lux']:.9f} cct={row['published_cct']} total_ms={row['total_process_ms']:.4f}",flush=True)
-            if cap is not None:
-                req=gen+3;(a.output_dir/f'R{req}-dynamic.bin').write_bytes(cap)
-                if control is not None:
-                    ts=time.perf_counter_ns();control.submit(cap);row['submit_ms']=(time.perf_counter_ns()-ts)/1e6;row['submitted_live']=True;print(f"AE_R{req}_SUBMITTED_FROM_G{gen} sha={row['capsule_sha256']}",flush=True)
-                else:row['submitted_live']=False
-            write_manifest(a.manifest,a.mode,p.rows,{'runtime_performed':a.mode=='live'})
-        print('E003I_AE_PRODUCER=PASS',flush=True)
+            need(a.fd is not None and a.ready_fd is not None,'live fd args');warm0=time.perf_counter_ns();p.prewarm();warm_ms=(time.perf_counter_ns()-warm0)/1e6;shim=pathlib.Path(td)/'libctrl.so';compile_so(HERE/'v4l2-control-shim.c',shim);control=LiveControl(a.fd,shim);os.write(a.ready_fd,b'R');os.close(a.ready_fd);print(f"AE_PRODUCER_READY CPU={sched['cpu']} NICE={sched['nice']} PREWARM_MS={warm_ms:.4f}",flush=True)
+        try:
+            for gen in (1,2,3):
+                if a.mode=='offline':
+                    need(a.snapshot_dir is not None,'snapshot dir');s=(a.snapshot_dir/f'STATS3A-{gen-1}.bin').read_bytes();t=(a.snapshot_dir/f'TLBG-{gen-1}.bin').read_bytes()
+                else:s,t=control.get_pair(gen);pairs[gen]=(s,t)
+                row,cap,desc=p.process(s,t);deferred_log.append(f"AE_G{gen} lux={row['lux']:.9f} cct={row['published_cct']} total_ms={row['total_process_ms']:.4f}")
+                if cap is not None:
+                    req=gen+3;caps[req]=cap
+                    if control is not None:
+                        ts=time.perf_counter_ns();control.submit(cap);row['submit_ms']=(time.perf_counter_ns()-ts)/1e6;row['submitted_live']=True;deferred_log.append(f"AE_R{req}_SUBMITTED_FROM_G{gen} sha={row['capsule_sha256']} submit_ms={row['submit_ms']:.4f}")
+                    else:
+                        row['submitted_live']=False;(a.output_dir/f'R{req}-dynamic.bin').write_bytes(cap)
+                if a.mode=='offline':
+                    (a.output_dir/f'STATS3A-G{gen}.bin').write_bytes(s);(a.output_dir/f'TLBG-G{gen}.bin').write_bytes(t);write_manifest(a.manifest,a.mode,p.rows,{'runtime_performed':False})
+            if a.mode=='live':
+                # All deadline-sensitive submissions are complete before any child evidence I/O.
+                flush_live_evidence(a.output_dir,pairs,caps);write_manifest(a.manifest,a.mode,p.rows,{'runtime_performed':True,'live_scheduler':sched,'prewarm_ms':warm_ms})
+                for line in deferred_log:print(line,flush=True)
+            print('E003I_AE_PRODUCER=PASS',flush=True)
+        except Exception as e:
+            if a.mode=='live':
+                # Failure evidence is emitted only after the deadline has already been lost.
+                try:
+                    flush_live_evidence(a.output_dir,pairs,caps);write_manifest(a.manifest,a.mode,p.rows,{'runtime_performed':True,'live_scheduler':sched,'prewarm_ms':warm_ms,'failure':f'{type(e).__name__}: {e}'},status='FAIL')
+                    for line in deferred_log:print(line,flush=True)
+                except Exception:pass
+            raise
 if __name__=='__main__':
     try:main()
     except Exception as e:

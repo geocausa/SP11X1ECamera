@@ -34,6 +34,12 @@ Accepted p95 on Golden SP11 is about 7.63 ms for each G2->R5/G3->R6 hot path, co
 
 On the actual AG evidence the expanded selector remains comfortably inside budget at roughly 7.56/7.57 ms p95 for G2->R5/G3->R6. `RESULT.json` remains the retained-Z offline proof; `SELECTOR-EXPANSION.json` is the additional actual-live-trigger selector proof.
 
+## Live deadline hardening
+
+AH proved the expanded selector live but missed the deferred R5 Epoch0 handoff: the first two live generations took about 47.6 ms and 26.4 ms, so request5 reached the V4L2 IQ ingress only after the runner had already unwound. The producer now hardens only the live scheduling path: it pins itself to CPU11 at nice -20, performs a fixture-free synthetic LSC/Tintless/composer prewarm before signaling READY, resets all temporal/Tintless sequence state exactly, disables cyclic GC, and defers snapshot/capsule/manifest writes plus per-generation logging until both R5 and R6 submissions have completed. No RT scheduler policy is used.
+
+`prove-live-deadline-hardening.py` exercises the expensive path without captured runtime fixtures and repeats it while all CPUs are under normal-priority synthetic load. The acceptance gate requires both G2->R5 and G3->R6 p95 and maximum latency to remain below one 30 fps frame (33.333 ms).
+
 ## Live architecture
 
 `e003i-ae-six-frame-live-iq.c` forks `live-iq-producer.py` on the same inherited video fd and waits for a READY byte **before STREAMON**. The child then polls the read-only latest-generation controls, requires exact TL_BG/3A `(generation, source_seq, slot)` identity, processes G1/G2/G3, and submits the generated R5/R6 capsules through the existing `0x1240` V4L2 control. The parent independently DQBUFs/saves all six frames and stats for audit.
