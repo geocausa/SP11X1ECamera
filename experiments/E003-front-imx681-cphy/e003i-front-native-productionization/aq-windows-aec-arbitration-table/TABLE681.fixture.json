@@ -1,0 +1,46 @@
+{
+  "schema": "sp11-e003i-aq-windows-aec-arbitration-table-fixture-v1",
+  "sensor": "imx681",
+  "tuning_identity": "com.surface.tune.d.ffc_imx681",
+  "device_mft": {
+    "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "apply_core_table_rva": "0x3c35f8",
+    "make_table_exposure_fit_rva": "0x3c31f8"
+  },
+  "tuned_blob": {
+    "filename": "com.surface.tuned.ffc_imx681.bin",
+    "sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+    "active_symbol_id": 681,
+    "description": "DefaultExpTable",
+    "correction_factor_f32": 1.0,
+    "exp_knees_raw_hex": "010000000000803f8c92000000000000010000000000864255a0fc01000000000100000000008642aa40f90300000000000000000000b842aa40f90300000000"
+  },
+  "decoded_knees": [
+    {"increment_priority": 1, "gain_f32": 1.0, "exposure_time_ns": 37516},
+    {"increment_priority": 1, "gain_f32": 67.0, "exposure_time_ns": 33333333},
+    {"increment_priority": 1, "gain_f32": 67.0, "exposure_time_ns": 66666666},
+    {"increment_priority": 0, "gain_f32": 92.0, "exposure_time_ns": 66666666}
+  ],
+  "truncated_knee_products": [37516, 2233333311, 4466666622, 6133333272],
+  "priority_semantics": {
+    "zero": "gain first, then time",
+    "nonzero": "time first, then gain"
+  },
+  "live_selector_proof": {
+    "candidate_count": 5,
+    "active_candidate": "T5",
+    "active_candidate_knee_count": 4,
+    "active_candidate_databank_reference_count": 3,
+    "active_candidate_header_reference_count": 1,
+    "other_candidates_databank_reference_count": 1,
+    "other_candidates_header_reference_count": 0,
+    "consecutive_matching_scans": 2,
+    "debugger_process_count": 0
+  },
+  "corroborative_pair": {
+    "gain_f32_bits": "0x40e7b95b",
+    "gain": 7.2413763999938965,
+    "exposure_time_ns": 33333332,
+    "note": "Observed live output pair; AQ does not claim that the nearby 241379204 qword is semantically proven to be the arbitration input target."
+  }
+}
