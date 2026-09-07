@@ -1,0 +1,39 @@
+{
+  "schema": "e003i-bh-native-aec-request-state-v1",
+  "status": "PASS_STATIC_OFFLINE_WITH_PRIOR_LIVE_REPLAY",
+  "dll_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "history_layout": {
+    "payload_size": 432,
+    "node_size": 448,
+    "node_payload_offset": 16,
+    "payload_header_size": 16,
+    "lane0_payload_offset": 16,
+    "lane_stride": 40,
+    "algorithm001_read": "payload + 0x20 + 0x28*lane == lane + 0x10"
+  },
+  "correction": "AB's old history lane +0x20 Lux label is superseded; numeric replay and F-3 selection remain valid",
+  "steady_state_lux": {
+    "producer": "CAnalyzerAlgorithm001::RunAlgorithm",
+    "trigger_key": [9, 8],
+    "internal_update": "same request after current FrameSA target evaluation",
+    "external_publication_delay_requests": 2
+  },
+  "request_state": {
+    "entry": "current trigger(9,8) Lux",
+    "target": "BG FrameSA target curve with linear gap interpolation",
+    "si": "BD Safe<-S1 scalar",
+    "algorithm001_history": "explicit F-3 history_reference commit seam",
+    "next_lux": "AB bit-exact Algorithm001 formula; pinned alpha 0",
+    "convergence_history": "separate explicit F-1 seven-lane exposure commit seam"
+  },
+  "fail_closed": [
+    "missing F-3 history_reference",
+    "invalid seven-lane exposure history",
+    "negative/non-finite SI inputs"
+  ],
+  "excluded": [
+    "semantic producer identity of history_reference",
+    "full autonomous AY/AZ/BA/BB convergence state",
+    "live camera/module/sensor mutation"
+  ]
+}
