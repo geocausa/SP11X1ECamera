@@ -1,6 +1,6 @@
 # E003i-AE — bounded live trigger → dynamic IQ producer
 
-Status: **PASS offline, including the expanded two-dimensional LSC selector; AG reached live STREAMON but was consumed by the old narrow CCT guard before R5. A fresh corrected live one-shot is the next gate.**
+Status: **PASS offline and PASS bounded live. AI closed producer-derived R5<-G2 and R6<-G3 through the deferred V4L2 IQ ingress with a six-frame parent capture and clean Golden return.**
 
 AE connects the closed Linux statistics/trigger work to the existing template-free IQ transport without adding a kernel ABI. The producer consumes the paired generation-tagged TL_BG (`0x1241`) and 3A (`0x1242`) controls on the same front PIX fd, preserves W's `request = source_generation + 3` law, and generates only the dynamic LSC/GIC payloads for R5<-G2 and R6<-G3.
 
@@ -40,6 +40,11 @@ AH proved the expanded selector live but missed the deferred R5 Epoch0 handoff: 
 
 `prove-live-deadline-hardening.py` exercises the expensive path without captured runtime fixtures and repeats it while all CPUs are under normal-priority synthetic load. The acceptance gate requires both G2->R5 and G3->R6 p95 and maximum latency to remain below one 30 fps frame (33.333 ms).
 
+
+## Bounded live closure
+
+AI executed the hardened producer exactly once and passed. The live stream generated R5 from G2 and R6 from G3, submitted both before their deferred Epoch0 gates, captured all six QC10C frames plus paired generation-tagged TL_BG/3A evidence, and returned cleanly to Golden. Live G2->R5 processing was 21.641 ms with a 0.088 ms submit; G3->R6 was 28.185 ms with a 0.050 ms submit. The actual live capsule hashes were `9a2ce3ae…30a89` for R5 and `62cd797e…5f74a` for R6.
+
 ## Live architecture
 
 `e003i-ae-six-frame-live-iq.c` forks `live-iq-producer.py` on the same inherited video fd and waits for a READY byte **before STREAMON**. The child then polls the read-only latest-generation controls, requires exact TL_BG/3A `(generation, source_seq, slot)` identity, processes G1/G2/G3, and submits the generated R5/R6 capsules through the existing `0x1240` V4L2 control. The parent independently DQBUFs/saves all six frames and stats for audit.
@@ -52,4 +57,4 @@ Any missed generation, unsupported bounded trigger branch, producer error or pro
 ./prove-offline-producer.py --snapshot-dir /tmp/e003i-live3a-bench --iterations 200
 ```
 
-`RESULT.json` is offline evidence only; it does not claim the live run has happened yet.
+`RESULT.json` remains the retained-Z offline evidence. The bounded hardware closure is recorded separately in `../ai-deadline-hardened-live-r5-r6-runtime/RESULT.json`; continuous AEC and unbounded continuous dynamic LSC remain outside this claim.
