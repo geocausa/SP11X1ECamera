@@ -1,0 +1,29 @@
+{
+  "schema": "e003i-cm-native-aec-self-fed-lux-framesa-v1",
+  "status": "PASS",
+  "scope": "warmed-up ordinary DefaultSequence front AEC recurrence",
+  "public_request": [
+    "frame_id",
+    "measured_luma",
+    "SatPrev",
+    "DarkPrev",
+    "Brighten",
+    "ExtremeColor",
+    "Illuminance",
+    "ShortSatPrev",
+    "LongDarkPrev"
+  ],
+  "lux_source": "internal request-entry trigger, updated after current request by Algorithm001",
+  "frame_target": "BG/BK Lux curve",
+  "frame_adjratio": "float32(FrameSA target / measured_luma)",
+  "frame_confidence_bits": "0x3a83126f",
+  "source_s1": "history[F-3].S1",
+  "algorithm001_alpha": "initialization seam; captured ordinary front value 0 but not globally fixed",
+  "runtime_side_effects": "none",
+  "verification_domain": {
+    "remaining_analyzer_value": "0.72..1.45 (CL ordinary domain)",
+    "measured_luma": "0.55..2.75 (covers AB live range)",
+    "framesa_adjratio": "not artificially bounded; exact target/luma with 0.001f confidence",
+    "request_cases": 2048
+  }
+}
