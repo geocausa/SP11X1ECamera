@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "scope": "uninterrupted ordinary DefaultSequence AEC ADRC/dark-boost tail",
+  "trigger_control_enum": {
+    "8": "Lux",
+    "14": "Gyro"
+  },
+  "bank9_data14_scope": "method2 primary descriptor; writer-level semantic not required because selected outer table has one region",
+  "default_adrc_cap": "method2(Gyro, Lux); single ordinary Gyro region; Lux curve 1.6/1.5/1.4 with Windows gap interpolation",
+  "short": {
+    "adj_ratio_short": "3:66 = 3:9 / 3:10",
+    "adrc_gain": "3:67 = MIN(WindowsMethod2(Lux,3:66;3747/3748), Triggers 9:54 ADRCLuxFaceCap)",
+    "final_adj_ratio": "3:11 = 3:9 / 3:67"
+  },
+  "long": {
+    "drc_gain_remainder": "3:157 = 8.0 / 3:67",
+    "adj_ratio_long": "3:68 = 3:12 / 3:9",
+    "dark_boost": "3:69 = WindowsMethod2(Lux,3:68;3829..3832); competing remainder branch dominated",
+    "final_adj_ratio": "3:13 = 3:9 * 3:69"
+  },
+  "floating_point_traps": [
+    "short nominal identity ramp: 123.5 -> 0x42f70001, direct 0x42f70000",
+    "long equal-child outer gap: lux260.9975 ratio1.1 -> 0x3f8ccccc, child 0x3f8ccccd"
+  ],
+  "runtime_side_effects": "none"
+}
