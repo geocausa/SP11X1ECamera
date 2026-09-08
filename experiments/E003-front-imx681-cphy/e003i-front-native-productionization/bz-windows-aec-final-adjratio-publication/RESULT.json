@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "scope": "ordinary/default AEC arithmetic publication",
+  "serialized_layout": "0xd0 = header12 + 4*operand44 + output20",
+  "runtime_layout": "0x108 = header16 + 4*operand56 + output24",
+  "operation_enum": {
+    "0": "ADD", "1": "SUB", "2": "MUL", "3": "DIV", "4": "MAX", "5": "MIN",
+    "6": "Smallest", "7": "SecondSmallest", "8": "Largest", "9": "SecondLargest",
+    "10": "FlashHighLuma", "11": "LinearInterpolation", "12": "CondLarger",
+    "13": "CondSmaller", "14": "CondEqual", "15": "Sqrt"
+  },
+  "formulas": {
+    "FrameSA": "3:7 = 3:5 / 3:4",
+    "SafeAggSA": "3:9 = 3:8",
+    "ShortAggSA": "3:11 = 3:9 / 3:67",
+    "LongAggSA": "3:13 = 3:9 * 3:69"
+  },
+  "data_67": "ADRCGain",
+  "data_69": "DarkBoostGain",
+  "semantic_correction": "bank3 data 7/9/11/13 are AdjRatio float publications, not final qword exposure SI",
+  "qword_si": "sourceExposure * AdjRatio, FCVTZU",
+  "runtime_side_effects": "none"
+}
