@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "scope": "finite-positive ordinary/default native AEC ADRC/dark-boost tail",
+  "inputs": ["lux_index", "safe_adj_ratio_3_9", "short_target_3_10", "long_target_3_12"],
+  "outputs": ["adrc_lux_cap_9_54", "adj_ratio_short_3_66", "adrc_gain_3_67", "short_adj_ratio_3_11", "drc_gain_remainder_3_157", "adj_ratio_long_3_68", "dark_boost_gain_3_69", "long_adj_ratio_3_13"],
+  "edge_cases": 4536,
+  "differential_cases": 16384,
+  "native_match": "bit-exact",
+  "known_traps": {
+    "short_ramp": "input 0x3fbe7879 -> 0x3fbe787a",
+    "long_equal_child_gap": "child 0x3f8ccccd -> output 0x3f8ccccc"
+  },
+  "long_remainder_branch": "implemented in full; dominated under committed CB ordinary/default scope",
+  "runtime_side_effects": "none"
+}
