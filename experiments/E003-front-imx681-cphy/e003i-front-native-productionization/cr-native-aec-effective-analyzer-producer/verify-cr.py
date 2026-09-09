@@ -279,6 +279,13 @@ sr_edges=[0,.49,.5,.5001,.65,.7999,.8,1,1.2]
 for i,lux in enumerate(lux_edges):
     check((lux, f32(.55+(i%8)*.3), f32(30+(i%6)*5), 33333332-(i%7)*12345,
            sr_edges[i%len(sr_edges)], f32(40+(i*7)%180), dark_edges[i%len(dark_edges)], f32(50+(i*11)%190)))
+# CT proves ordinary cold-start flag1 BhistY can publish exact +0.0f for
+# Bank4:7/:8 when synthetic history PredGain is +0.0f. Windows analyzer math
+# accepts those values: SatPrev's divide reaches +inf then method2 saturates,
+# while DarkPrev floors zero luma to 0.25f. Keep this domain exact.
+with np.errstate(divide='ignore', invalid='ignore'):
+    check((f32(229.69644165039062), f32(1.9809207916259766), f32(50.0),
+           33333332, f32(0.0), f32(0.0), f32(0.0), f32(19.913551330566406)))
 rng=np.random.default_rng(0xC0DE)
 for _ in range(8192):
     check((f32(rng.uniform(0,1000)),f32(rng.uniform(.5,80)),f32(rng.uniform(30,55)),
@@ -288,6 +295,8 @@ for _ in range(8192):
 # Invalid-domain guard smoke tests.
 o=Final(); assert fn(None,ctypes.byref(o))==-1
 bad=Raw(100,0,40,33333332,.5,100,100,100); assert fn(ctypes.byref(bad),ctypes.byref(o))==-1
+bad=Raw(100,1,40,33333332,.5,-.01,100,100); assert fn(ctypes.byref(bad),ctypes.byref(o))==-1
+bad=Raw(100,1,40,33333332,.5,100,-.01,100); assert fn(ctypes.byref(bad),ctypes.byref(o))==-1
 
 result={
  'dll_sha256':DLL_SHA,'tuning_sha256':TUNING_SHA,
@@ -296,7 +305,7 @@ result={
  'trigger_9_28':'selected retained-history Short uint64 converted to float32',
  'trigger_9_63_ordinary_bits':'0x00000000',
  'component_aggregation_method3':'lane-wise minimum',
- 'boundary_cases':len(lux_edges),'random_cases':8192,'status':'PASS'
+ 'boundary_cases':len(lux_edges),'cold_start_zero_b7_b8':True,'random_cases':8192,'status':'PASS'
 }
 (HERE/'RESULT.json').write_text(json.dumps(result,indent=2)+"\n")
 print('DLL_SHA256='+DLL_SHA)
@@ -306,5 +315,5 @@ print('DEAD_ZERO_CONF=BrightenImgSA,ExtremeColorSA,LongDarkPrevSA')
 print('TRIGGER_9_28=selected retained-history Short -> f32')
 print('TRIGGER_9_63_ORDINARY=+0.0f bits=0x00000000')
 print('COMPONENT_AGG_METHOD3=lane-wise-min')
-print(f'NATIVE_DIFFERENTIAL=boundary:{len(lux_edges)} random:8192 bit-exact')
+print(f'NATIVE_DIFFERENTIAL=boundary:{len(lux_edges)} cold-start-zero-b7-b8:1 random:8192 bit-exact')
 print('CR_VERIFY=PASS')

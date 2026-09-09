@@ -69,6 +69,16 @@ struct e003i_request_loop_output {
  */
 int e003i_request_loop_init(struct e003i_request_loop_state *state);
 
+/*
+ * Read one Windows-selected retained-history record for the current request
+ * without mutating recurrence state.  CU uses offset 3 to feed raw-stat
+ * history-dependent BhistY calculations from the same selector CP owns.
+ */
+int e003i_request_loop_get_history_offset(
+    const struct e003i_request_loop_state *state,
+    uint64_t current_frame, unsigned offset,
+    struct e003i_request_history_entry *out);
+
 /* Sequential ordinary DefaultSequence request, valid starting at frame 0. */
 int e003i_request_loop_process(struct e003i_request_loop_state *state,
                                const struct e003i_request_loop_input *in,

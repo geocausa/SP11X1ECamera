@@ -236,8 +236,8 @@ static int valid_input(const struct e003i_effective_analyzer_input *in)
         !isfinite(in->short_sat_prev_high_pctl_luma))
         return 0;
     if (!(in->frame_luma > 0.0f) || !(in->frame_target > 0.0f) ||
-        !(in->sat_prev_high_pctl_luma > 0.0f) ||
-        !(in->dark_prev_low_pctl_luma > 0.0f) ||
+        in->sat_prev_high_pctl_luma < 0.0f ||
+        in->dark_prev_low_pctl_luma < 0.0f ||
         !(in->short_sat_prev_high_pctl_luma > 0.0f) ||
         in->delayed_short_exposure == 0)
         return 0;

@@ -13,7 +13,11 @@ The four non-Frame StatsCalculator values are:
 - `4:8` DarkPrevLowPCTLLuma,
 - `4:19` ShortSatPrevHighPCTLLuma.
 
-`FrameSA` is reproduced in the same adapter because its target/luma pair is already present at this boundary.  `SatPrevSA`, `DarkPrevSA`, `ShortSatPrevSA`, and `IlluminanceSA` are evaluated with the exact Windows tuning trees and float32 arithmetic order.  `BrightenImgSA`, `ExtremeColorSA`, and `LongDarkPrevSA` are canonicalized to zero because their ordinary DefaultSequence confidence trees are exact `+0.0f`; Windows method-11 therefore ignores their values.
+`FrameSA` is reproduced in the same adapter because its target/luma pair is already present at this boundary. `SatPrevSA`, `DarkPrevSA`, `ShortSatPrevSA`, and `IlluminanceSA` are evaluated with the exact Windows tuning trees and float32 arithmetic order. `BrightenImgSA`, `ExtremeColorSA`, and `LongDarkPrevSA` are canonicalized to zero because their ordinary DefaultSequence confidence trees are exact `+0.0f`; Windows method-11 therefore ignores their values.
+
+### Cold-start zero-domain extension
+
+CT subsequently proved that the ordinary synthetic cold-start history can drive Bank4:7 and Bank4:8 to exact `+0.0f`. The Windows analyzer arithmetic accepts that domain: SatPrev divides by zero and saturates through method-2, while DarkPrev applies its configured `0.25f` luma floor. The native input guard therefore accepts zero for 4:7/4:8 while continuing to reject negative values. This extends CR to the exact cold-start domain without changing any previously accepted positive-path arithmetic.
 
 No Linux camera module load, STREAMON, sensor write, MMIO or new Linux camera runtime is performed by CR.  A bounded same-machine Windows oracle was used only to close the otherwise data-driven ordinary value of trigger `9:63`; SP11 returned to the unchanged Golden Linux boot afterward.
 

@@ -1,0 +1,129 @@
+{
+  "schema": "sp11-e003i-cu-native-aec-raw-stats-request-loop-v1",
+  "status": "PASS",
+  "parent_ct_commit": "9a3b9fa",
+  "pipeline": [
+    "generation-tagged STATS3A envelope",
+    "AEC_BE -> FrameLumaBE16x16 -> FrameSA measured luma",
+    "BHist -> CT Bank4 {6,7,8,19}",
+    "CR effective analyzers",
+    "CP self-contained request recurrence"
+  ],
+  "stats3a": {
+    "bytes": 331840,
+    "header_bytes": 64,
+    "aec_bytes": 81920,
+    "bhist_bytes": 4096,
+    "awb_bytes": 245760,
+    "cold_generation_law": "generation == source_seq == frame_id + 1",
+    "slot_range": [
+      0,
+      1
+    ]
+  },
+  "frame_luma": {
+    "reference": "AB Windows-backed replay-measured-luma.py",
+    "generated_differential_cases": 12,
+    "bit_exact": true
+  },
+  "cold_start": {
+    "ct_bank4_7_8_exact_zero_supported_by_cr": true,
+    "cp_history_accessor_non_mutating": true
+  },
+  "composition": {
+    "generated_frames": 4,
+    "wrapper_matches_independent_steps_byte_exact": true,
+    "frames": [
+      {
+        "frame": 0,
+        "generation": 1,
+        "luma_bits": "0x42480000",
+        "bank4_bits": [
+          "0x00000000",
+          "0x00000000",
+          "0x00000000",
+          "0x423c8081"
+        ],
+        "lux_in_bits": "0x4365b24a",
+        "next_lux_bits": "0x4365b24a",
+        "pred_gain_bits": "0x3f800000",
+        "retained_short_safe_s1": [
+          197890639,
+          211553009,
+          197890639
+        ]
+      },
+      {
+        "frame": 1,
+        "generation": 2,
+        "luma_bits": "0x42380000",
+        "bank4_bits": [
+          "0x00000000",
+          "0x423c807f",
+          "0x423c8080",
+          "0x423c8081"
+        ],
+        "lux_in_bits": "0x4365b24a",
+        "next_lux_bits": "0x43926342",
+        "pred_gain_bits": "0x3f800000",
+        "retained_short_safe_s1": [
+          315897325,
+          347299339,
+          315897325
+        ]
+      },
+      {
+        "frame": 2,
+        "generation": 3,
+        "luma_bits": "0x4233ecaa",
+        "bank4_bits": [
+          "0x00000000",
+          "0x423c807f",
+          "0x423c8080",
+          "0x423c8080"
+        ],
+        "lux_in_bits": "0x43926342",
+        "next_lux_bits": "0x4392c441",
+        "pred_gain_bits": "0x3f800000",
+        "retained_short_safe_s1": [
+          504230670,
+          563178231,
+          504230670
+        ]
+      },
+      {
+        "frame": 3,
+        "generation": 4,
+        "luma_bits": "0x42318ea5",
+        "bank4_bits": [
+          "0x00000000",
+          "0x423c807f",
+          "0x423c8080",
+          "0x423c8080"
+        ],
+        "lux_in_bits": "0x4392c441",
+        "next_lux_bits": "0x4392fd9b",
+        "pred_gain_bits": "0x3f800000",
+        "retained_short_safe_s1": [
+          723655354,
+          820289070,
+          723655354
+        ]
+      }
+    ]
+  },
+  "failure_atomicity": {
+    "state_unchanged_on_wrong_frame": true,
+    "state_unchanged_on_bad_size": true,
+    "state_unchanged_on_generation_mismatch": true,
+    "state_unchanged_on_bad_aec_counts": true,
+    "state_unchanged_on_empty_bhist_cr_rejection": true
+  },
+  "safety": {
+    "linux_camera_runtime": false,
+    "sensor_control_writes": false,
+    "cq_invoked": false,
+    "fixture_type": "deterministic generated STATS3A only"
+  },
+  "scope_limit": "offline raw-stat to CP request recurrence; no CQ/IMX681 programming"
+}

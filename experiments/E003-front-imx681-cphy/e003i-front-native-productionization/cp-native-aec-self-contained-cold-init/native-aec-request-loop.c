@@ -95,6 +95,24 @@ static const struct e003i_request_history_entry *history_get_offset(
     return selected;
 }
 
+int e003i_request_loop_get_history_offset(
+    const struct e003i_request_loop_state *state,
+    uint64_t current_frame, unsigned offset,
+    struct e003i_request_history_entry *out)
+{
+    const struct e003i_request_history_entry *selected;
+
+    if (state == NULL || out == NULL || offset == 0)
+        return -1;
+    if (current_frame != state->next_frame_id)
+        return -2;
+    selected = history_get_offset(state, current_frame, offset);
+    if (selected == NULL)
+        return -3;
+    *out = *selected;
+    return 0;
+}
+
 int e003i_request_loop_process(struct e003i_request_loop_state *state,
                                const struct e003i_request_loop_input *in,
                                struct e003i_request_loop_output *out)

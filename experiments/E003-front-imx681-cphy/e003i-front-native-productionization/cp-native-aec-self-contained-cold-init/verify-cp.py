@@ -115,6 +115,7 @@ class ROut(ctypes.Structure):
 
 lib.e003i_request_loop_init.argtypes=[ctypes.POINTER(State)];lib.e003i_request_loop_init.restype=ctypes.c_int
 lib.e003i_request_loop_process.argtypes=[ctypes.POINTER(State),ctypes.POINTER(RIn),ctypes.POINTER(ROut)];lib.e003i_request_loop_process.restype=ctypes.c_int
+lib.e003i_request_loop_get_history_offset.argtypes=[ctypes.POINTER(State),ctypes.c_uint64,ctypes.c_uint,ctypes.POINTER(HE)];lib.e003i_request_loop_get_history_offset.restype=ctypes.c_int
 lib.e003i_aec_default_final_exposures.argtypes=[ctypes.POINTER(FIn),ctypes.POINTER(FOut)];lib.e003i_aec_default_final_exposures.restype=ctypes.c_int
 lib.e003i_converge_front_preview_unlocked_qword_history.argtypes=[ctypes.POINTER(CIn),ctypes.POINTER(COut)];lib.e003i_converge_front_preview_unlocked_qword_history.restype=ctypes.c_int
 lib.e003i_t681_preview_arbitrate.argtypes=[ctypes.c_uint64,ctypes.POINTER(AOut)];lib.e003i_t681_preview_arbitrate.restype=ctypes.c_int
@@ -153,6 +154,16 @@ assert fbits(s.lux_trigger)==0x4365b24a and fbits(s.algorithm001_alpha)==0x00000
 assert s.next_frame_id==0 and s.start_history.valid==1 and s.start_history.frame_id==0
 assert (s.start_history.short_exposure,s.start_history.long_exposure,s.start_history.safe_exposure,s.start_history.s1_exposure)==START[:4]
 assert fbits(s.start_history.pred_gain)==0
+# CU integration seam: the exported accessor is a read-only copy of CP's
+# existing Windows history selector, including the synthetic cold-start F-3 case.
+hsel=HE(); before=bytesof(s)
+assert lib.e003i_request_loop_get_history_offset(ctypes.byref(s),0,3,ctypes.byref(hsel))==0
+assert bytesof(s)==before
+assert hsel.valid==1 and hsel.frame_id==0
+assert (hsel.short_exposure,hsel.long_exposure,hsel.safe_exposure,hsel.s1_exposure)==START[:4]
+assert fbits(hsel.pred_gain)==0
+assert lib.e003i_request_loop_get_history_offset(ctypes.byref(s),1,3,ctypes.byref(hsel))==-2
+assert lib.e003i_request_loop_get_history_offset(ctypes.byref(s),0,0,ctypes.byref(hsel))==-1
 assert all(not x.valid for x in s.history)
 
 # Rejected non-sequential requests are side-effect free.
