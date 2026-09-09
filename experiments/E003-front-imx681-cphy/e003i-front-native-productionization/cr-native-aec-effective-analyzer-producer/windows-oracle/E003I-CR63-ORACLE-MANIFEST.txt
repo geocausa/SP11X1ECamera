@@ -1,0 +1,46 @@
+E003i CR ordinary default trigger 9:63 Windows oracle
+UTC_CAPTURE=2026-09-09T07:16:39.7524567Z
+DeviceMFT preferred SHA256=c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+Scope=ordinary front Color preview; read-only debugger; no process patching
+Bank9 getter geometry: scalar(dataID)=bank9_base + dataID*16 + 0xC
+Observed BANK9_BASE=0000023e19cde040
+Observed SLOT63=0000023e19cde43c
+Observed 9:63 bits=00000000 (+0.0f)
+Observed Lux 9:8 bits=43b31228
+Hardware watchpoint on SLOT63 saw no write from first read through bounded stream Stop/Dispose
+Holder StartAsync=Success and Stop=PASS
+BANK9_LOG=C:\Users\Geoca\Documents\E003I-CR63-bank9-cdb_1e5c_2026-09-09_08-15-00-316.log
+BANK9_LOG_SHA256=a6bbc52f1b64d2a23070bf96dc27482c3f97b87434bc892c94fa32c452ee4fad
+HOLDER_LOG=C:\Users\Geoca\Documents\E003I-CR63C-holder.log
+HOLDER_LOG_SHA256=7d5a625b8b2ca8e93ab6c93a39311ba93058bc4650f9659b69a819f9eb427928
+
+Key debugger evidence:
+0:020> bp 0x7FF9507C5F84 ".if (dwo(@x20+4) == 0x3f) { .echo CR63_BANK9_READ; .printf \"BANK9_BASE=%p SLOT63=%p LUX8=%p\\n\", @x0, @x0+0x3fc, @x0+0x8c; .echo SLOT63_BITS; dd @x0+0x3fc L1; .echo LUX8_BITS; dd @x0+0x8c L1; .echo GETTER_DESCRIPTOR; dd @x20 L4; .echo READ_STACK; kP 20; ba w4 @x0+0x3fc \".echo CR63_BANK9_WRITE; .echo WRITE_PC; r pc; .echo WRITE_REGS; r; .echo WRITE_STACK; kP 28; .echo WRITE_NEAR_PC; ub @pc L10; u @pc L10; bc *; .detach; q\"; bc 0; gc } .else { gc }"
+0:020> g
+[mep::vcam::AugmentedMediaSource::KsProperty(1558)] [enter: Set={1cb79112-c0d2-4213-9ca6-cd4fdb927972} | id=4 | flags=0x00000001] 
+[mep::vcam::AugmentedMediaSource::KsProperty(1563)] Extended Control 4 Passed  
+[mep::vcam::AugmentedMediaSource::KsEvent(3562)] [enter] 
+[mep::vcam::AugmentedMediaSource::KsEvent(3607)] Handling profile set KsEvent, created profile KsEvent handle for driver: 0000000000000544 
+[mep::vcam::AugmentedMediaSource::KsProperty(1558)] [enter: Set={1cb79112-c0d2-4213-9ca6-cd4fdb927972} | id=34 | flags=0x00000002] 
+[mep::vcam::AugmentedMediaSource::KsProperty(1563)] Extended Control 34 Passed  
+[mep::vcam::AugmentedMediaSource::KsProperty(1569)] Profile DDI queried 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4448)] Profile DDI Set, profile type={b4894d81-62b7-4eec-8740-80658c4a9d3e} 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4511)] Profile DDI Set, profile type={b4894d81-62b7-4eec-8740-80658c4a9d3e}, EnableAiEffects=1 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4618)] Waiting for driver profile KsEvent handle: 0000000000000544 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4633)] [Completed SET] 
+[mep::vcam::AugmentedMediaSource::Start(750)] [enter] 
+[mep::vcam::AugmentedMediaSource::_Start(762)] [enter] 
+[mep::vcam::AugmentedMediaSource::LazyInitPerceptionCore(528)] [enter: scenariosToInitialize=0x00004060, waitAsyncInitCompletion=-1] 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(333)] [enter] 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(350)] Loading PerceptionCore DLL from path=C:\WINDOWS\System32\DriverStore\FileRepository\microsofteffectpack_extension.inf_arm64_8881111f8f333d4e\PerceptionCore.dll 
+ModLoad: 00007ff9`4c9e0000 00007ff9`4d06c000   C:\WINDOWS\System32\DriverStore\FileRepository\microsofteffectpack_extension.inf_arm64_8881111f8f333d4e\PerceptionCore.dll
+ModLoad: 00007ff9`4c2d0000 00007ff9`4c9e0000   C:\WINDOWS\System32\DriverStore\FileRepository\microsofteffectpack_extension.inf_arm64_8881111f8f333d4e\SNPE.dll
+ModLoad: 00007ff9`cbe00000 00007ff9`cccd4000   C:\WINDOWS\System32\SHELL32.dll
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(356)] Loaded PerceptionCore DLL 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(367)] Obtained proc address for PerceptionCore factory 
+ModLoad: 00007ff9`78b00000 00007ff9`78bd2000   C:\Windows\System32\Windows.Energy.dll
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(375)] Created PerceptionCore instance 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(385)] Obtained proc address for GetAllPerceptionScenarios 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(407)] Supported Perception scenarios=3883895 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(423)] PERCEPTIONCOREPROPKEY_CREATIVEFILTER_SUPPORTED: ILLUSTRATED,WATERCOLOR,ANIMATED 
+[mep::vcam::AugmentedMediaSource::_SetPerceptionCoreWorkQueue(1491)] SetPropertyInteger PERCEPTIONCOREPROPVAL_WORKQUEUEID with queue ID=327681 
