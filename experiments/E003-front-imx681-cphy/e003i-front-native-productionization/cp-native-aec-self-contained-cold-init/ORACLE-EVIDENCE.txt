@@ -1,0 +1,56 @@
+E003i CP ordinary front cold-start Windows oracle
+Oracle UTC: 2026-09-09T05:06:40Z
+DeviceMFT SHA256: c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+DeviceMFT base: 0x7FFA95360000
+FrameServer PID: 5348
+
+QueryControlStartExposure common Lux join RVA: 0x37385c
+Algorithm001 post-alpha-load RVA: 0x3fbaa0
+
+CDB live evidence:
+CP_LUX 000000d8`dc7ddeb0  4365b24a
+000000d8`dc7dd3cc  00000000 00000000
+000000d8`dc7dd3a0  00000000`01fca055
+0000026b`1df24ed0  4365b24a
+CP_ALPHA 0000026b`2d4caaa0  00000000
+s18=                     0 (0:000:000000)
+
+Interpretation:
+INITIAL_LUX_BITS=0x4365b24a
+INITIAL_LUX_FLOAT32=229.69644165039062
+DIRECT_STARTUP_LUX_BITS=0x00000000
+DIRECT_STARTUP_LUX_VALID=0
+CALCULATE_START_LUX_PATH=TAKEN
+CALCULATE_START_LUX_INPUT_BITS=0x4365b24a
+CALCULATE_START_LUX_OUTPUT_BITS=0x4365b24a
+STARTUP_EXPOSURE_OPERAND_QWORD=0x0000000001fca055
+STARTUP_EXPOSURE_OPERAND_DECIMAL=33333333
+ALGORITHM001_ALPHA_MEMORY_BITS=0x00000000
+ALGORITHM001_ALPHA_REGISTER=+0.0f
+
+The 33,333,333 startup-exposure operand belongs to QueryControlStartExposure's
+cold-start Lux calculation and is distinct from CN's synthetic retained-history
+lanes, which are exactly 33,333,332. They are not aliased or conflated.
+
+The oracle proves the exact ordinary cold-profile result and path selection. It
+does not claim why CalculateStartLuxIndex returned the same bits as its input in
+this call (for example, which internal tuning-reference branch was selected).
+
+Holder lifecycle:
+INIT_PASS
+READER_CREATED
+WAIT_START
+START_STATUS=Success
+STOP_PASS
+CP_HOLDER_END
+
+Raw Windows evidence:
+E003I-CP-cdb.log SHA256=91705836c0569781b8f4e6757943c13bd62c2d2a6b5b8aff70f0bfface618396 size=12444
+E003I-CP-holder.log SHA256=f6c99f8a2412083f23d0e137115f099839f6cfe2b9ba1929f1bc1e61390534f size=431
+
+Boot safety:
+One-shot EFI BootNext 0006 only; persistent BootOrder unchanged.
+Returned to Golden Linux kernel 7.1.5-sp11-render-parity-v4+.
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+No Linux camera module load/STREAMON/sensor/MMIO runtime was performed.
