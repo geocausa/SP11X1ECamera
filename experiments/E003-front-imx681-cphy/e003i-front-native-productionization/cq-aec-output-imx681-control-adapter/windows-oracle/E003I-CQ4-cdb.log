@@ -1,0 +1,96 @@
+Opened log file 'C:\Users\Geoca\Documents\E003I-CQ4-cdb.log'
+0:020> bp 0x7FF9DE5A9F88 ".printf \"CQ4_HIT\\nFINAL_PAIR\\n\"; dd @x20+0x10 L2; .printf \"GAIN_TIME_RAW\\n\"; dd @x20 L4; bc 0; .detach; q"
+0:020> g
+[mep::vcam::AugmentedMediaSource::KsProperty(1558)] [enter: Set={1cb79112-c0d2-4213-9ca6-cd4fdb927972} | id=4 | flags=0x00000001] 
+[mep::vcam::AugmentedMediaSource::KsProperty(1563)] Extended Control 4 Passed  
+[mep::vcam::AugmentedMediaSource::KsEvent(3562)] [enter] 
+[mep::vcam::AugmentedMediaSource::KsEvent(3607)] Handling profile set KsEvent, created profile KsEvent handle for driver: 0000000000000854 
+[mep::vcam::AugmentedMediaSource::KsProperty(1558)] [enter: Set={1cb79112-c0d2-4213-9ca6-cd4fdb927972} | id=34 | flags=0x00000002] 
+[mep::vcam::AugmentedMediaSource::KsProperty(1563)] Extended Control 34 Passed  
+[mep::vcam::AugmentedMediaSource::KsProperty(1569)] Profile DDI queried 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4448)] Profile DDI Set, profile type={b4894d81-62b7-4eec-8740-80658c4a9d3e} 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4511)] Profile DDI Set, profile type={b4894d81-62b7-4eec-8740-80658c4a9d3e}, EnableAiEffects=1 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4618)] Waiting for driver profile KsEvent handle: 0000000000000854 
+[mep::vcam::ProfileAwareAugmentedMediaSource::ProfilePropertyHandler(4633)] [Completed SET] 
+[mep::vcam::AugmentedMediaSource::Start(750)] [enter] 
+[mep::vcam::AugmentedMediaSource::_Start(762)] [enter] 
+[mep::vcam::AugmentedMediaSource::LazyInitPerceptionCore(528)] [enter: scenariosToInitialize=0x00004060, waitAsyncInitCompletion=-1] 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(333)] [enter] 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(350)] Loading PerceptionCore DLL from path=C:\WINDOWS\System32\DriverStore\FileRepository\microsofteffectpack_extension.inf_arm64_8881111f8f333d4e\PerceptionCore.dll 
+ModLoad: 00007ff9`dbe50000 00007ff9`dc4dc000   C:\WINDOWS\System32\DriverStore\FileRepository\microsofteffectpack_extension.inf_arm64_8881111f8f333d4e\PerceptionCore.dll
+ModLoad: 00007ff9`d9a20000 00007ff9`da130000   C:\WINDOWS\System32\DriverStore\FileRepository\microsofteffectpack_extension.inf_arm64_8881111f8f333d4e\SNPE.dll
+ModLoad: 00007ffa`5a8f0000 00007ffa`5b7c4000   C:\WINDOWS\System32\SHELL32.dll
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(356)] Loaded PerceptionCore DLL 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(367)] Obtained proc address for PerceptionCore factory 
+ModLoad: 00007ffa`08d60000 00007ffa`08e32000   C:\Windows\System32\Windows.Energy.dll
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(375)] Created PerceptionCore instance 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(385)] Obtained proc address for GetAllPerceptionScenarios 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(407)] Supported Perception scenarios=3883895 
+[mep::vcam::AugmentedMediaSource::_LoadPerceptionCore(423)] PERCEPTIONCOREPROPKEY_CREATIVEFILTER_SUPPORTED: ILLUSTRATED,WATERCOLOR,ANIMATED 
+[mep::vcam::AugmentedMediaSource::_SetPerceptionCoreWorkQueue(1491)] SetPropertyInteger PERCEPTIONCOREPROPVAL_WORKQUEUEID with queue ID=327681 
+[mep::vcam::AugmentedMediaSource::LazyInitPerceptionCore(577)] GetInitializedScenarios succeeded, Perception scenarios=0x00000000 
+[mep::vcam::AugmentedMediaSource::LazyInitPerceptionCore(632)] Not waiting to validate when AsyncInit completes 
+[mep::vcam::AugmentedMediaSource::LazyInitPerceptionCore(685)] [exit: hr=0x00000000, result=0, Perception scenarios=0x00000000] 
+[mep::vcam::AugmentedMediaSource::_Start(870)] Selected base camera stream Id=2, vcam stream Id: 2 
+Selected MediaType on vcam streamIndex=2: inW=1920 | inH=1080 | outW=1920 | outH=1080 | framerate: fps=30 num=30 den=1 | subtype=NV12 | preproc:0 | postproc:0 | isCompliant:0 | index=4294967295
+[mep::vcam::AugmentedMediaSource::_ConfigureAiStreamPipeline(1002)] [enter] 
+[mep::vcam::AugmentedMediaStream::GetMatchingMediaType(1654)] [enter] 
+[mep::vcam::AugmentedMediaStream::_GetMatchingMediaType(1666)] [enter] 
+New MediaType to set on the stream: inW=2560 | inH=1440 | outW=1920 | outH=1080 | framerate: fps=30 num=30 den=1 | subtype=NV12 | preproc:0 | postproc:1 | isCompliant:1 | index=0
+[mep::vcam::AugmentedMediaStream::ConfigurePreprocessingXVP(1547)] [enter pinputMediaType:0000000000000000] 
+[mep::vcam::AugmentedMediaStream::ConfigurePreprocessingXVP(1555)] [stream:2] Skipping preprocessing xvp configuration, not required 
+[mep::vcam::HighResBackedAugmentedMediaStream::ConfigurePostprocessingXVP(1858)] [enter, stream:2 | pinputMediaType:000001A08E4EAC90 | pOutputMediaType:000001A08E4EB1D0] 
+[mep::vcam::HighResBackedAugmentedMediaStream::_ConfigurePostprocessingXVP(1870)] [enter pinputMediaType:000001A08E4EAC90 | pOutputMediaType:000001A08E4EB1D0] 
+ModLoad: 00007ff9`dba30000 00007ff9`dbe48000   C:\WINDOWS\System32\msvproc.dll
+ModLoad: 00007ffa`22290000 00007ffa`22368000   C:\WINDOWS\System32\SensorsApi.dll
+Configuring XVP with input Mediatype: inW=2560 | inH=1440 | outW=2560 | outH=1440 | framerate: fps=30 num=30 den=1 | subtype=NV12 | preproc:0 | postproc:0 | isCompliant:0 | index=4294967295
+Configuring XVP with output Mediatype: inW=1920 | inH=1080 | outW=1920 | outH=1080 | framerate: fps=30 num=30 den=1 | subtype=NV12 | preproc:0 | postproc:0 | isCompliant:0 | index=4294967295
+ModLoad: 00007ffa`51f60000 00007ffa`52422000   C:\WINDOWS\System32\d3d11.dll
+ModLoad: 00007ffa`534c0000 00007ffa`536fb000   C:\WINDOWS\System32\dxgi.dll
+ModLoad: 00007ffa`223e0000 00007ffa`2243b000   C:\Windows\System32\PortableDeviceTypes.dll
+ModLoad: 00007ff9`d7960000 00007ff9`d84b5000   C:\WINDOWS\System32\D3D10Warp.dll
+ModLoad: 00007ffa`22200000 00007ffa`22280000   C:\Windows\System32\deviceaccess.dll
+ModLoad: 00007ffa`537e0000 00007ffa`5386b000   C:\WINDOWS\SYSTEM32\dxcore.dll
+ModLoad: 00007ffa`4ef90000 00007ffa`4f049000   C:\WINDOWS\SYSTEM32\directxdatabasehelper.dll
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EFB67F0) ReturnHr(1) tid(2d38) 80070002 The system cannot find the file specified.
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EF97AA0) ReturnHr(2) tid(2d38) 80070002 The system cannot find the file specified.
+onecoreuap\drivers\mobilepc\sensors\convergence\api\native\v2\simpledeviceorientationsensor.cpp(650)\SensorsNativeApi.V2.dll!00007FFA229245F0: (caller: 00007FFA22922E48) Exception(1) tid(2cec) 80070057 The parameter is incorrect.
+(15e0.2cec): C++ EH exception - code e06d7363 (first chance)
+(15e0.2cec): C++ EH exception - code e06d7363 (first chance)
+onecoreuap\drivers\mobilepc\sensors\convergence\api\native\v2\simpledeviceorientationsensor.cpp(650)\SensorsNativeApi.V2.dll!00007FFA229245F0: (caller: 00007FFA22922E48) Exception(2) tid(16e8) 80070057 The parameter is incorrect.
+(15e0.16e8): C++ EH exception - code e06d7363 (first chance)
+(15e0.16e8): C++ EH exception - code e06d7363 (first chance)
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EFB67F0) ReturnHr(3) tid(2d38) 80070002 The system cannot find the file specified.
+onecore\windows\directx\database\helperlibrary\lib\directxdatabasehelper.cpp(2290)\directxdatabasehelper.dll!00007FFA4EFB56A0: (caller: 00007FFA534D444C) ReturnHr(4) tid(2d38) 80070002 The system cannot find the file specified.
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EF97AA0) ReturnHr(5) tid(2d38) 80070002 The system cannot find the file specified.
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EFB67F0) ReturnHr(6) tid(2d38) 80070002 The system cannot find the file specified.
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EFB67F0) ReturnHr(7) tid(2d38) 80070002 The system cannot find the file specified.
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EF97AA0) ReturnHr(8) tid(2d38) 80070002 The system cannot find the file specified.
+onecore\windows\directx\database\helperlibrary\lib\perappusersettingsqueryimpl.cpp(135)\directxdatabasehelper.dll!00007FFA4EF97BF4: (caller: 00007FFA4EF97AA0) ReturnHr(9) tid(2d38) 80070002 The system cannot find the file specified.
+[mep::vcam::AugmentedMediaSource::_Start(911)] Setting MediaType on base camera streamId=2: inW=2560 | inH=1440 | outW=1920 | outH=1080 | framerate: fps=30 num=30 den=1 | subtype=NV12 | preproc:0 | postproc:1 | isCompliant:1 | index=0
+ModLoad: 00007ffa`42b30000 00007ffa`42b42000   C:\WINDOWS\System32\QcSoCServiceUtils.dll
+ModLoad: 00007ffa`10020000 00007ffa`100b7000   C:\WINDOWS\System32\DriverStore\FileRepository\qcnspmcdm8380.inf_arm64_553f7b0d71497f2c\libcdsprpc.dll
+ModLoad: 00007ffa`4e390000 00007ffa`4e47a000   C:\WINDOWS\SYSTEM32\WINTRUST.dll
+ModLoad: 00007ffa`576b0000 00007ffa`576d6000   C:\WINDOWS\SYSTEM32\MSASN1.dll
+ModLoad: 00007ffa`42b30000 00007ffa`42b4c000   C:\WINDOWS\System32\DriverStore\FileRepository\microsofteffectpack_extension.inf_arm64_8881111f8f333d4e\SnpeHtpV73Stub.dll
+ModLoad: 00007ffa`575e0000 00007ffa`57610000   C:\WINDOWS\System32\CRYPTSP.dll
+ModLoad: 00007ffa`56740000 00007ffa`567a7000   C:\WINDOWS\system32\rsaenh.dll
+ModLoad: 00007ffa`571d0000 00007ffa`5720d000   C:\WINDOWS\SYSTEM32\gpapi.dll
+CQ4_HIT
+FINAL_PAIR
+00000030`f6dfe458  00000de0 00000de8
+GAIN_TIME_RAW
+00000030`f6dfe448  3f800000 00000000 01fc4ec4 00000000
+Detached
+quit:
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files\WindowsApps\Microsoft.WinDbg_1.2606.22001.0_arm64__8wekyb3d8bbwe\arm64\Visualizers\winrt.natvis'
