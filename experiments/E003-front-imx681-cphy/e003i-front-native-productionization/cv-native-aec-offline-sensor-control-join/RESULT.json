@@ -1,0 +1,107 @@
+{
+  "schema": "sp11-e003i-cv-native-aec-offline-sensor-control-join-v1",
+  "status": "PASS",
+  "parent_cu_commit": "8c660bf",
+  "pipeline": [
+    "CU generation-tagged STATS3A -> native AEC request",
+    "CQ Short T681 -> IMX681 controls"
+  ],
+  "ownership": {
+    "cu_cold_sequence_law": "stats_generation == source_seq == aec_sequence_frame + 1",
+    "windows_request_stats_law": "stats_owned_request_frame = source_generation + 3",
+    "w_oracle_matches": 104,
+    "ap_live_examples": [
+      "R5<-G2",
+      "R6<-G3"
+    ],
+    "source_generation_is_request_id": false
+  },
+  "sensor_delay": {
+    "linecount_frames": 2,
+    "gain_frames": 2,
+    "fll_frames": 2,
+    "max_pipeline_frames": 2,
+    "frame_skip": 0,
+    "camx_history_realign_frames": 0,
+    "optical_latch_frame_claimed": false
+  },
+  "composition": {
+    "generated_frames": 4,
+    "wrapper_vs_independent_cu_plus_cq": "byte-exact",
+    "rows": [
+      {
+        "aec_sequence_frame": 0,
+        "stats_generation": 1,
+        "stats_owned_request_frame": 4,
+        "sensor_pipeline_delay_frames": 2,
+        "camx_history_realign_frames": 0,
+        "controls": {
+          "frame_length_lines": 3562,
+          "vertical_blanking": 1402,
+          "exposure_lines": 3554,
+          "analogue_gain_code": "0x353",
+          "digital_gain_code": "0x0100",
+          "isp_gain_bits": "0x3f8061ae"
+        }
+      },
+      {
+        "aec_sequence_frame": 1,
+        "stats_generation": 2,
+        "stats_owned_request_frame": 5,
+        "sensor_pipeline_delay_frames": 2,
+        "camx_history_realign_frames": 0,
+        "controls": {
+          "frame_length_lines": 3562,
+          "vertical_blanking": 1402,
+          "exposure_lines": 3554,
+          "analogue_gain_code": "0x393",
+          "digital_gain_code": "0x0100",
+          "isp_gain_bits": "0x3f811f80"
+        }
+      },
+      {
+        "aec_sequence_frame": 2,
+        "stats_generation": 3,
+        "stats_owned_request_frame": 6,
+        "sensor_pipeline_delay_frames": 2,
+        "camx_history_realign_frames": 0,
+        "controls": {
+          "frame_length_lines": 3562,
+          "vertical_blanking": 1402,
+          "exposure_lines": 3554,
+          "analogue_gain_code": "0x3bc",
+          "digital_gain_code": "0x0100",
+          "isp_gain_bits": "0x3f80942e"
+        }
+      },
+      {
+        "aec_sequence_frame": 3,
+        "stats_generation": 4,
+        "stats_owned_request_frame": 7,
+        "sensor_pipeline_delay_frames": 2,
+        "camx_history_realign_frames": 0,
+        "controls": {
+          "frame_length_lines": 3562,
+          "vertical_blanking": 1402,
+          "exposure_lines": 3554,
+          "analogue_gain_code": "0x3c0",
+          "digital_gain_code": "0x015b",
+          "isp_gain_bits": "0x3f80217c"
+        }
+      }
+    ]
+  },
+  "failure_atomicity": {
+    "shadow_state_commit_after_cq": true,
+    "bad_stats_state_unchanged": true
+  },
+  "safety": {
+    "device_open": false,
+    "ioctl": false,
+    "cci_i2c": false,
+    "streamon": false,
+    "sensor_control_writes": false,
+    "runtime_performed": false
+  },
+  "next_gate": "join CV tuple to AM group-held Linux control transport and frame-boundary/latch semantics in a bounded no-write/offline proof before any new live runtime"
+}
