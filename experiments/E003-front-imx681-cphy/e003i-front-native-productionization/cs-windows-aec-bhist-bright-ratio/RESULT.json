@@ -1,0 +1,88 @@
+{
+  "schema": "sp11-e003i-cs-windows-aec-bhist-bright-ratio-v1",
+  "accepted": true,
+  "dll_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+  "fixed_calculators": [
+    {
+      "id": 1,
+      "description": "AvgLumaBE16x16",
+      "api": 1,
+      "channel": "LumaBE16x16",
+      "bank4": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": 2,
+      "description": "FrameLuma",
+      "api": 1,
+      "channel": "LumaBE16x16",
+      "bank4": [
+        2,
+        2
+      ]
+    },
+    {
+      "id": 3,
+      "description": "DarkRatio",
+      "api": 5,
+      "channel": "BhistY",
+      "bank4": [
+        3,
+        4
+      ],
+      "range": [
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "id": 4,
+      "description": "BrightRatio",
+      "api": 5,
+      "channel": "BhistY",
+      "bank4": [
+        5,
+        6
+      ],
+      "range": [
+        255.0,
+        256.0
+      ]
+    }
+  ],
+  "bank4_6": {
+    "name": "SaturateStatsRatio",
+    "producer": "fixed calculator 4 BrightRatio API5 output lane 1",
+    "range": [
+      255.0,
+      256.0
+    ]
+  },
+  "bhist_raw": {
+    "bins": 1024,
+    "word_bytes": 4,
+    "raw_bytes": 4096,
+    "parser_mask": "0x01ffffff"
+  },
+  "cdf": {
+    "input": "record+0x38 uint32 counts",
+    "storage": "per-source +0x148 float32 cumulative array",
+    "denominator": "max(1.0f, final cumulative count)",
+    "normalization": "SIMD reciprocal-estimate/Newton body plus scalar FDIV tail"
+  },
+  "value_axis": {
+    "input": "record+0x40 float32 per-bin value/luma coordinate array",
+    "consumer_proven": true,
+    "producer_proven": false,
+    "status": "DEFERRED_TO_CT"
+  },
+  "safety": {
+    "offline_only": true,
+    "linux_camera_runtime": false,
+    "windows_oracle_new": false
+  },
+  "status": "PASS"
+}
