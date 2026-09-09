@@ -1,0 +1,39 @@
+E003i CT offline real-fixture replay
+
+Purpose: prove the native raw-STATS3A Bhist adapter on previously captured Golden-safe Linux producer data.
+These values are NOT same-frame Windows Bank4 output oracles.
+
+LuxIndex input: 358.141845703125f
+History input for these adapter fixtures only: Safe=1000, S1=1000, PredGain=1.0 (neutral ratio -> Windows base scale 0.98f)
+Stats3A BHist offset: 0x14040
+BHist length: 0x1000
+Per-word parser mask: 0x01ffffff
+
+Note: Bank4:7/:8 depend on retained F-3 Safe/S1/PredGain in the real continuous path. Their values below therefore specifically describe the neutral-history fixture. Bank4:6 is CDF-mass invariant to that cap and Bank4:19 uses runtime flag0/fixed 0.98f.
+
+G1
+FILE_SHA256=ac3d527b95d36b422d314cb6921b697e7dc48f1d15700eaf27eab06de4497e4a
+BHIST_SHA256=42325c63ba6d7f05cc27523eb18684f09fed96186ed000a2f9d9eb7d399a6889
+MASKED_SUM=2073600 NZ=922 PEAK_BIN=400
+BANK4_6=0x00000000
+BANK4_7=0x41079b60
+BANK4_8=0x3f127b0e
+BANK4_19=0x4197267d
+
+G2
+FILE_SHA256=fe0d8b22ab4d6a7092b2e55dd8102acd45608ada5f575e23a389df170c6e8da4
+BHIST_SHA256=638717265e0d2f288dc64df854b10e77a892c75f96aef045e8fb109f4bdf98e6
+MASKED_SUM=2073600 NZ=936 PEAK_BIN=400
+BANK4_6=0x00000000
+BANK4_7=0x41078f1e
+BANK4_8=0x3f1059a5
+BANK4_19=0x4196e518
+
+G3
+FILE_SHA256=3e5bb2e3b5da20723cff2bf7f56485ce71ccebb849326ef72b5273207d0e3628
+BHIST_SHA256=ff6c6245a7822f195ee80083e60d66cb78abf9860ce2bdbe3567097566251129
+MASKED_SUM=2073600 NZ=944 PEAK_BIN=400
+BANK4_6=0x00000000
+BANK4_7=0x4107a647
+BANK4_8=0x3f108b96
+BANK4_19=0x4196ca33

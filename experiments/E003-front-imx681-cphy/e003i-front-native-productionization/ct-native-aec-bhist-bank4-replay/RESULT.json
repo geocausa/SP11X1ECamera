@@ -1,0 +1,72 @@
+{
+  "schema": "sp11-e003i-ct-native-aec-bhist-bank4-replay-v1",
+  "accepted": true,
+  "dll_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "tuning_sha256": "2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d",
+  "windows_axis_sha256": "f552e96271ad0737af14ab0272aa31c628dbf6b9d8b11d7ddcb8dd0d510e39f9",
+  "windows_s1_oracle_sha256": "21f4cd87bf24333aa717dfdbeea0e57bf49b29aa949adf7dc9dd45814decbf46",
+  "windows_runtime_flags_oracle_sha256": "04addcfd69a3ef2b2a37016c3cb63bf33c14d4d8fb61157a05b02fd6786a8e40",
+  "bhist": {
+    "bins": 1024,
+    "raw_word_mask": "0x01ffffff",
+    "record_source_tag": 3,
+    "record_source_lane": "S1",
+    "bit_depth": 8
+  },
+  "value_axis": {
+    "entries": 1024,
+    "bytes": 4096,
+    "native_matches_windows_bytes": true,
+    "last_value": 255.5
+  },
+  "runtime_flags": {
+    "bank4_6_BrightRatio": 1,
+    "bank4_7_SatPrevHighPCTLLuma": 1,
+    "bank4_8_DarkPrevLowPCTLLuma": 1,
+    "bank4_19_ShortSatPrevHighPCTLLuma": 0
+  },
+  "cap_scale": {
+    "literal_bits": "0x3f7ae148",
+    "literal": 0.98,
+    "flag1_formula_for_source_S1": "ratio=float(Safe)/float(S1)/PredGain; scale=(ratio>1)?0.98f/ratio:0.98f; PredGain=+0 -> +inf then scale +0",
+    "history_required_for_outputs": [
+      7,
+      8
+    ],
+    "bank4_6_note": "BrightRatio flag=1 but Bank4:6 is CDF-mass lane and does not consume weighted-luma cap",
+    "bank4_19_note": "runtime flag=0, fixed 0.98f cap",
+    "bit_depth_cap": "(2^8 - 1) * selected_scale"
+  },
+  "history_input": {
+    "temporal_source": "ordinary retained F-3 history",
+    "fields": [
+      "safe_exposure",
+      "s1_exposure",
+      "pred_gain"
+    ],
+    "already_carried_by": "cl-native-aec-self-fed-s1-history/native-aec-request-loop.h"
+  },
+  "bank4": {
+    "6": "BrightRatio API5 normalized CDF mass over value range [255,256]",
+    "7": "SatPrevHighPCTLLuma API6 percentile-weighted luma with flag1 S1 history cap",
+    "8": "DarkPrevLowPCTLLuma API6 percentile-weighted luma with flag1 S1 history cap",
+    "19": "ShortSatPrevHighPCTLLuma API6 percentile-weighted luma with fixed cap"
+  },
+  "native": {
+    "source": "native-bhist-bank4.c",
+    "axis_exact": true,
+    "cdf_reciprocal": "ARM FRECPE + two FRECPS/Newton refinements",
+    "synthetic_fixture_count": 9,
+    "real_stats3a_fixture_count": 3,
+    "mask_equivalence_checked": true,
+    "history_branch_checked": true,
+    "cold_start_zero_pred_gain_checked": true
+  },
+  "safety": {
+    "windows_oracles": "read-only KDNET plus read-only FrameServer process-memory scan; returned to Golden Linux",
+    "linux_camera_runtime": false,
+    "golden_saved_entry": "sp11-audio-fullio-v19c"
+  },
+  "scope_limit": "ordinary raw BhistY + LuxIndex + retained F-3 Safe/S1/PredGain -> Bank4 {6,7,8,19}; not full continuous AEC/convergence",
+  "status": "PASS"
+}

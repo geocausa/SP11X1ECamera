@@ -1,0 +1,45 @@
+E003I CT runtime descriptor flags oracle — 2026-09-09
+Read-only SP11 Windows FrameServer process-memory observation; no process writes/breakpoints.
+
+FrameServer PID: 4176
+QcDeviceMFT8380.dll live base: 00007FFA20A90000
+QcDeviceMFT8380.dll SHA256: C241B7FBB2EC54E439752A1EA7AD25DA10CA740012A54BD0E7A87EA94A141C35
+
+Front ordinary expanded runtime calculator block (fingerprinted by exact calculator names/channels/output ranges and BrightRatio [255,256] trigger):
+
+BrightRatio runtime descriptor @ 0000021DA2D25B10
+  id=4 api=5 name=BrightRatio channel=BhistY
+  runtime +0x38 flag = 1
+  runtime +0x3c outputStart = 5
+  runtime +0x40 outputEnd = 6
+  trigger bytes at referenced range: 00000000 447A0000 437F0000 43800000 = [0,1000,255,256]
+
+SatPrevHighPCTLLuma runtime descriptor @ 0000021DA2D25BD0
+  id=11 api=6 name=SatPrevHighPCTLLuma channel=BhistY
+  runtime +0x38 flag = 1
+  runtime +0x3c outputStart = 7
+  runtime +0x40 outputEnd = 7
+
+DarkPrevLowPCTLLuma runtime descriptor @ 0000021DA2D25C48
+  id=12 api=6 name=DarkPrevLowPCTLLuma channel=BhistY
+  runtime +0x38 flag = 1
+  runtime +0x3c outputStart = 8
+  runtime +0x40 outputEnd = 8
+
+ShortSatPrevHighPCTLLuma runtime descriptor @ 0000021DA2D26080
+  id=23 api=6 name=ShortSatPrevHighPCTLLuma channel=BhistY
+  runtime +0x38 flag = 0
+  runtime +0x3c outputStart = 19
+  runtime +0x40 outputEnd = 19
+
+Disambiguation evidence:
+A separate expanded fixed descriptor block at 0000021D9FC3B648 had calc4 channel string BhistY_short and flag=0. The front ordinary block above has exact channel BhistY and BrightRatio range [255,256], matching the pinned IMX681 front tuning. This prevents selecting a short/alternate profile merely by matching output IDs.
+
+Static helper semantics (SHA-pinned DLL):
+0x1803eac78 helper starts with scale 0x3f7ae148 = 0.98f.
+If runtime +0x38 flag != 1, returns 0.98f unchanged.
+If flag == 1 and source tag=3 (separately retained CT oracle proves ordinary BhistY tag=3=S1), computes ratio = float(Safe)/float(S1)/PredGain; if ratio>1, scale=0.98f/ratio, else scale=0.98f.
+
+Conclusion:
+Bank4 6,7,8 use the history-normalized cap path for ordinary BhistY.
+Bank4 19 uses fixed 0.98f cap path.

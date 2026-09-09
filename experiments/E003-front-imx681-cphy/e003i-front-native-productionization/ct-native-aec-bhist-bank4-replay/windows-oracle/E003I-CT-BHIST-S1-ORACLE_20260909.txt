@@ -1,0 +1,27 @@
+E003I CT BhistY history/source-lane oracle — 2026-09-09
+
+Target: SP11 Windows 10 26100 ARM64 via KDNET from SP7
+FrameServer: PID 4392 / CID 0x1128, EPROCESS ffff9788dd64e080
+QcDeviceMFT8380.dll live base: 0x00007ff858d30000
+Pinned DLL SHA256: c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+
+Live disassembly after .process /r /p ffff9788dd64e080:
+00007ff8`5911a500 d2800909 mov         x9,#0x48
+00007ff8`5911a504 9ba92141 umaddl      x1,w10,w9,x8
+00007ff8`5911a508 d2865808 mov         x8,#0x32C0
+00007ff8`5911a50c 8b0802d5 add         x21,x22,x8
+00007ff8`5911a510 aa1503e0 mov         x0,x21
+00007ff8`5911a514 b940303a ldr         w26,[x1,#0x30]
+00007ff8`5911a518 94003c90 bl          00007ff8`59129758
+
+Breakpoint condition/logging: only records with dwo(x1+0x14)==0x400 (1024 bins).
+Representative live hits copied verbatim from the KD terminal output:
+CT_BHIST rec=0000021539a7f2e0 tag=3 type0=610 bins=400 f18=8 f1c=0 f20=1 f24=0 f28=00000215356c25f0 f30=3 f34=0 f38=0000021547db9558
+CT_BHIST rec=0000021539a7f2e0 tag=3 type0=612 bins=400 f18=8 f1c=0 f20=1 f24=0 f28=00000215356c25f0 f30=3 f34=0 f38=0000021547ab9298
+CT_BHIST rec=0000021539a7f2e0 tag=3 type0=614 bins=400 f18=8 f1c=0 f20=1 f24=0 f28=00000215356c25f0 f30=3 f34=0 f38=0000021547e5fd18
+CT_BHIST rec=0000021539a7f2e0 tag=3 type0=640 bins=400 f18=8 f1c=0 f20=1 f24=0 f28=00000215356c25f0 f30=3 f34=0 f38=000002154746dd48
+CT_BHIST rec=0000021539a7f2e0 tag=3 type0=642 bins=400 f18=8 f1c=0 f20=1 f24=0 f28=00000215356c25f0 f30=3 f34=0 f38=000002154d1dae58
+
+The same tag=3 value repeated many times between these request IDs. Breakpoint was cleared (bc 0; bl returned empty) before resuming and closing Camera.
+
+Mechanical interpretation joined to previously accepted AEC history/source enum proof: tag/sourceType 3 == S1. Therefore ordinary 1024-bin BhistY enters the AEC histogram path with S1 history/source exposure lane provenance.
