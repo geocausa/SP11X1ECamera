@@ -1,0 +1,127 @@
+{
+  "schema": "sp11-e003i-dl-exact-g4-failure-replay-v1",
+  "status": "PASS_OFFLINE_FAILURE_LOCALIZATION",
+  "runtime_base_commit": "8bc6598440f5ddeb36587e140bf64f48eaee38bf",
+  "archive": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-db/attempt4-live-g4-fail-20260910T181907",
+  "pairs": [
+    {
+      "generation": 1,
+      "source_seq": 1,
+      "slot": 0,
+      "stats3a_sha256": "630551efdaf54c18909caab9cff7d252ce2c59e3eb9638a37a06520291504f76",
+      "tlbg_sha256": "80157f0ee3d8f27b6a8d97cb4e6ace26d534f6a0747c81d9af48786151ca7080"
+    },
+    {
+      "generation": 2,
+      "source_seq": 2,
+      "slot": 1,
+      "stats3a_sha256": "cb5c776e6467c5891a0c5e4266a65cf446048e7f89da78e245a0a849e145204a",
+      "tlbg_sha256": "fbfcabf3b4d46490ff52cd29f1a979990886391fbdc6696573c0d79f6a42fe58"
+    },
+    {
+      "generation": 3,
+      "source_seq": 3,
+      "slot": 0,
+      "stats3a_sha256": "aa0aeae802fae4a3bf1a8246f3bca83546c593fdb4ec271c9a583ddaaa109c59",
+      "tlbg_sha256": "43e8d45c244d84f7680c34f7cf6214da88cbe6b0d95d310a372a517981fb325e"
+    },
+    {
+      "generation": 4,
+      "source_seq": 4,
+      "slot": 1,
+      "stats3a_sha256": "f9ac87f147edd0272f2f8f107383aa5ed25a0caff6b7bc143eed40fdaa1160a9",
+      "tlbg_sha256": "d1328aa789806b770dd6e4bba0ce0ffdb3b0967ff4f94680083329f24875c7fa"
+    }
+  ],
+  "live_sensor_writes": [
+    {
+      "source": 1,
+      "after_generation": 2,
+      "request": 4,
+      "claimed_effect_generation": 4,
+      "fll": 3562,
+      "exposure": 3554,
+      "again": 851,
+      "dgain": 256,
+      "start_ns": 109326329164,
+      "end_ns": 109346934517,
+      "elapsed_ns": 20605353,
+      "completed_generation": 2
+    },
+    {
+      "source": 2,
+      "after_generation": 3,
+      "request": 5,
+      "claimed_effect_generation": 5,
+      "fll": 3562,
+      "exposure": 3554,
+      "again": 960,
+      "dgain": 556,
+      "start_ns": 109359557267,
+      "end_ns": 109382778003,
+      "elapsed_ns": 23220736,
+      "completed_generation": 3
+    },
+    {
+      "source": 3,
+      "after_generation": 4,
+      "request": 6,
+      "claimed_effect_generation": 6,
+      "fll": 7116,
+      "exposure": 7108,
+      "again": 960,
+      "dgain": 1111,
+      "start_ns": 109392422094,
+      "end_ns": 109410180558,
+      "elapsed_ns": 17758464,
+      "completed_generation": 4
+    }
+  ],
+  "g4": {
+    "cu_rc": -132,
+    "cv_rc": -142,
+    "short_convergence_target": 24819566146,
+    "table_maximum": 6133333272,
+    "target_over_table_maximum": 4.04666843383625,
+    "delayed_s1_request": 4,
+    "delayed_s1_retained_exposure": 197553039,
+    "short_metering_target": 32233622719,
+    "safe_metering_target": 45127069396,
+    "caller_state_unchanged_on_error": true,
+    "caller_control_output_unchanged_on_error": true
+  },
+  "measurement": {
+    "frame_luma": [
+      0.898956835,
+      0.886852384,
+      0.886802614,
+      0.883978605
+    ],
+    "bhist_means": [
+      0.886698773238,
+      0.874317314116,
+      0.874494332552,
+      0.871284052118
+    ],
+    "bhist_g4_over_g1": 0.9826156056766502,
+    "g4_brightness_increase_observed": false
+  },
+  "timing_comparison": {
+    "cy_single_exposure_step_elapsed_ns": 1802121,
+    "db_first_full_tuple_elapsed_ns": 20605353,
+    "db_over_cy_duration": 11.433945334414283,
+    "exact_group_hold_release_time_observed": false,
+    "exact_optical_latch_frame_proven_by_db": false
+  },
+  "golden_return": "PASS",
+  "candidate_retired": true,
+  "aec_math_changed": false,
+  "hardware_tests_started_by_dl": 0,
+  "missing_windows_stage": "PopulateOutput -> CapExposure; see CAP-STAGE-RESULT.json",
+  "next_gate": "Recover and replay the omitted Windows internal CapExposure stage, including exact request-local bounds and branch inputs, before CH arbitration. Sensor-control-to-statistics timing remains a separate unresolved association.",
+  "limitations": [
+    "G5/G6 raw pairs were not retained by the consumed helper after G4 failure.",
+    "Near-constant luma and a slower ioctl are evidence of an unresolved feedback association, not proof of an exact replacement delay.",
+    "T681 regular policy-0 rejection remains authoritative; no clamp is introduced."
+  ]
+}

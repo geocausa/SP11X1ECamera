@@ -1,6 +1,6 @@
 # DB handoff — bounded native AEC sensor loop
 
-Current intended state: **Attempt3 returned safely to Golden after all three allowed writes and a G4 fail-closed; DK failure-pair preservation is being prepared for one diagnostic retry**.
+Current state: **Attempt4 reproduced G4 -142, preserved the failure pair, and returned to Golden. DL reproduces the failure offline and proves the native loop omits Windows internal CapExposure.**
 
 ## Preconditions
 
@@ -54,3 +54,7 @@ Windows DG/DH confirms the policy-0 T681 rejection is correct. DJ fixes the upst
 Attempt3 proved DJ live through all three permitted sensor writes, then failed native AEC at G4 with `RC=-142`. Error composition is Short-lane T681 out-of-range. No fourth write occurred, the IQ producer passed, camera-fatal kernel markers were absent, Golden return passed, and the disposable boot entry/bundle are removed.
 
 The exact G4 stats pair was lost because the old helper persisted raw pairs only after six-generation success. DK changes only failure evidence: schedule fail is latched before the already validated failing pair is fsync-saved as `TLBG-FAIL-GN.bin` and `STATS3A-FAIL-GN.bin`. Do not change AEC math until an exact G4 failure pair is captured and replayed offline. Before that diagnostic retry, commit/push DK + attempt3 evidence, require a clean-tree root prearm, and use a persistent job for the one-shot invocation.
+
+## Fourth candidate disposition / DL
+
+The persistent attempt4 reproduced G4 -142 after all three permitted writes. DK saved the exact G4 pair. The helper was left pinned until normal whole-machine Golden reboot; no kill or retry occurred. DL reproduces the same control tuples and error offline. Windows internal PopulateOutput calls CapExposure before publishing; native CG/DJ omit this stage. Recover exact request-local bounds and branch inputs before correcting native math or staging another runtime. Golden return passed and the candidate entry/bundle were retired.

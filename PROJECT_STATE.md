@@ -1,3 +1,17 @@
+## Current continuation — E003i DL, 2026-09-10
+
+**Current authority:** [DL handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dl-native-aec-g4-failure-replay/HANDOFF.md). Sections below are historical milestones and do not override this continuation.
+
+DB attempt4 reproduced G4 native AEC -142 after exactly three sensor writes. DK successfully preserved the failing statistics pair. The helper remained pinned until a normal Golden reboot, with no same-boot retry or kill. Golden return passed, camera modules are absent, saved FullIO v19c is intact, next_entry is empty, and the disposable DB candidate is retired. Runtime archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-db/attempt4-live-g4-fail-20260910T181907.
+
+DL exactly replays G1..G4 through the unchanged runtime sources: first three control tuples match live, and G4 Short convergence is 24,819,566,146 versus T681's serialized maximum 6,133,333,272. Caller state and control output remain unchanged on failure.
+
+**New concrete parity gap:** Windows PopulateOutput unconditionally calls internal CapExposure before publishing convergence; native CG/DJ omit that stage. The internal cap reads seven request-local min/max records and also performs conditional rescaling, lane ordering and a predictive-gain limit. DC's separate controller cap flag and DG's later post-convergence injection did not cover this stage.
+
+**Next action:** recover exact ordinary request-local bounds and cap branch inputs from the pinned Windows oracle, implement/replay the complete cap offline before CH arbitration, then reconsider a bounded live candidate. Keep regular table rejection unchanged. DB full-tuple write-to-statistics visibility is a separate unresolved issue: G4 brightness stayed baseline-like and the first ioctl took 20.605 ms versus CY's 1.802 ms isolated step. Do not invent a delay from those observations.
+
+Front sensor control transport, bounded image processing, and exact failure replay are proven in their recorded scopes. Full continuous automatic exposure and production camera-stack parity are not yet closed.
+
 ## E003i current continuation — live request-local Lux reconstruction PASS — 2026-09-06
 
 E003i-AB now closes the **live request-local Lux path bit-exactly**. AB23 proves the Windows measured-luma producer consumes the exact Titan680 AEC_BE parser output (`producer first cell == parsed + 8`) and source[1] is exactly the subsequent Algorithm001 measured input. AB26 closes the missing spatial-selection rule: the 32×32 mask array is a checkerboard with exactly 512 cells `0xf000003c` and 512 zero; the active FrameLuma descriptor mask is `0x10`, so each 2×2 block contributes two selected cells to one 16×16 bin. The producer uses float32 incremental means per bin and FrameSA performs sequential float32 equal-weight accumulation over 256 bins.

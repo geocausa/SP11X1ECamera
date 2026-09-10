@@ -1,6 +1,6 @@
 {
   "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v4",
-  "status": "READY_DIAGNOSTIC_RETRY_UNEXECUTED_AFTER_G4_FAIL_SNAPSHOT_HARDENING",
+  "status": "FAIL_CLOSED_G4_ATTEMPT4_GOLDEN_RETURNED_INTERNAL_CAP_STAGE_MISSING",
   "parent_range_commit": "c094198",
   "parent_db_commit": "ec8ffa2",
   "scope": "bounded six-generation sensor-side native AEC; G1-G3 sensor tuples released, G4-G6 compute/observe only",
@@ -91,7 +91,7 @@
     "dj_offline": "PASS",
     "full_root_prearm_after_request4_rebase": "PASS_BEFORE_ATTEMPT3",
     "dk_fail_snapshot_offline": "PASS",
-    "full_root_prearm_after_dk": "PENDING_CLEAN_COMMIT",
+    "full_root_prearm_after_dk": "NOT_RETAINED_SEPARATELY_ATTEMPT4_EXECUTED",
     "dk_integrated_helper_sha256": "92397a54e8467f10f8d9ed7d2181643aeea1321253fdd7c085d5656b916e055d"
   },
   "runtime": {
@@ -99,8 +99,8 @@
     "historical_attempt2_sensor_writes": 2,
     "historical_attempt3_streamon": true,
     "historical_attempt3_sensor_writes": 3,
-    "post_dk_live_executed": false,
-    "post_dk_sensor_writes": 0,
+    "post_dk_live_executed": true,
+    "post_dk_sensor_writes": 3,
     "grub_candidate_installed": false,
     "one_shot_armed": false,
     "same_boot_retry_permitted": false
@@ -119,7 +119,9 @@
     "return_after_second_candidate": "PASS",
     "db_candidate_removed_after_second_candidate": true,
     "return_after_third_candidate": "PASS",
-    "db_candidate_removed_after_third_candidate": true
+    "db_candidate_removed_after_third_candidate": true,
+    "return_after_fourth_candidate": "PASS",
+    "db_candidate_removed_after_fourth_candidate": true
   },
   "second_candidate_attempt": {
     "date": "2026-09-10",
@@ -230,5 +232,27 @@
     "on_aec_failure": "latch schedule failed, then fsync current validated TLBG/STATS3A pair as *-FAIL-GN.bin, then return failed",
     "success_path_per_generation_io_added": false,
     "remote_invoke_requirement": "persistent PiMaster job; never finite execute timeout for pin-capable helper"
+  },
+  "fourth_candidate_attempt": {
+    "date": "2026-09-10",
+    "base_commit": "8bc6598440f5ddeb36587e140bf64f48eaee38bf",
+    "invocation": "persistent PiMaster job",
+    "sensor_writes_succeeded": 3,
+    "generation4_native_aec_rc": -142,
+    "fourth_sensor_write_performed": false,
+    "iq_producer": "PASS",
+    "failure_pair_saved": true,
+    "failure_pair_sha256": {
+      "tlbg": "d1328aa789806b770dd6e4bba0ce0ffdb3b0967ff4f94680083329f24875c7fa",
+      "stats3a": "f9ac87f147edd0272f2f8f107383aa5ed25a0caff6b7bc143eed40fdaa1160a9"
+    },
+    "helper_disposition": "deliberately pinned until whole-machine reboot; no stop/kill/retry",
+    "same_boot_retry_performed": false,
+    "archive": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-db/attempt4-live-g4-fail-20260910T181907",
+    "golden_return": "PASS",
+    "candidate_removed_after_return": true,
+    "full_six_generation_aec_pass": false,
+    "offline_failure_replay": "DL PASS",
+    "missing_stage": "Windows internal PopulateOutput/CapExposure omitted by native CG/DJ; exact bounds still to recover"
   }
 }

@@ -1,5 +1,7 @@
 # E003i DB — bounded native AEC sensor loop
 
+> Current disposition (2026-09-10): attempt4 failed closed at G4 after three writes; failure evidence archived, Golden restored, candidate retired. DL proves an omitted internal Windows CapExposure stage. The earlier readiness/protocol text below is historical and does not authorize a repeat of this consumed candidate. See ../dl-native-aec-g4-failure-replay/HANDOFF.md.
+
 Status: **ATTEMPT3 FAIL-CLOSED AT G4 AFTER ALL THREE ALLOWED WRITES; DK DIAGNOSTIC HARDENING OFFLINE**.
 
 DB is the first bounded Linux integration of the self-contained native AEC request path with the live-proven IMX681 clustered/group-held sensor-control transport. It is deliberately not an unrestricted continuous-AEC claim.
@@ -67,3 +69,7 @@ Attempt3 passed preparation and STREAMON once. All three bounded writes complete
 The old helper saved paired raw snapshots only after all six AEC generations succeeded. Consequently the already identity-validated G4 pair remained in RAM and was lost at reboot. DK fixes only that evidence gap: after an AEC error, it first permanently fails the schedule, then fsync-saves the current validated TLBG/STATS3A pair as `*-FAIL-GN.bin`. Successful generations still perform no per-generation disk writes, so the live control timing path is unchanged. No AEC/T681/sensor arithmetic is modified.
 
 One orchestration error is preserved explicitly: attempt3 was launched through a finite 180-second command call. The helper intentionally pins after post-STREAMON failure, so the command layer eventually SIGTERM'd that pinned process. There was no retry; afterward no helper process or video opener remained and no camera-fatal kernel marker appeared. Future pin-capable invocations must use a persistent PiMaster job and be terminated only by the planned whole-machine reboot.
+
+## Fourth candidate disposition / DL
+
+The persistent attempt4 reproduced G4 -142 after all three permitted writes. DK saved the exact G4 pair. The helper was left pinned until normal whole-machine Golden reboot; no kill or retry occurred. DL reproduces the same control tuples and error offline. Windows internal PopulateOutput calls CapExposure before publishing; native CG/DJ omit this stage. Recover exact request-local bounds and branch inputs before correcting native math or staging another runtime. Golden return passed and the candidate entry/bundle were retired.

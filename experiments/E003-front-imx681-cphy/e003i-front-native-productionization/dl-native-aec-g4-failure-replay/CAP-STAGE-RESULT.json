@@ -1,0 +1,66 @@
+{
+  "schema": "sp11-e003i-dl-missing-cap-stage-v1",
+  "status": "PASS_STATIC_OMISSION_PROOF",
+  "dll_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "call_chain": [
+    "RunConvProcesss 0x3b63f0 -> PopulateOutput 0x3cdf50",
+    "PopulateOutput 0x3ce03c -> CapExposure 0x3d33e0"
+  ],
+  "bounds_provenance": [
+    "runConvergence bridge return stored controller+0x14ca8 (input+8)",
+    "RunConvProcesss input+8 stored convergence+0x98",
+    "bridge returns child+0x688 with seven 0x50-byte min/max records"
+  ],
+  "bounds_offsets": [
+    {
+      "lane": 0,
+      "min": "0x18",
+      "max": "0x40"
+    },
+    {
+      "lane": 1,
+      "min": "0x68",
+      "max": "0x90"
+    },
+    {
+      "lane": 2,
+      "min": "0xb8",
+      "max": "0xe0"
+    },
+    {
+      "lane": 3,
+      "min": "0x108",
+      "max": "0x130"
+    },
+    {
+      "lane": 4,
+      "min": "0x158",
+      "max": "0x180"
+    },
+    {
+      "lane": 5,
+      "min": "0x1a8",
+      "max": "0x1d0"
+    },
+    {
+      "lane": 6,
+      "min": "0x1f8",
+      "max": "0x220"
+    }
+  ],
+  "additional_semantics": [
+    "conditional Safe-over-maximum Short rescaling and history snapping",
+    "per-lane integer min/max",
+    "Short/Long/Safe and S1..S4 ordering",
+    "PredGain <= float32(Safe)/float32(Short)"
+  ],
+  "native_stage_present": false,
+  "production_fix_implemented": false,
+  "dc_controller_cap_flag_does_not_disable_this_internal_cap": true,
+  "dg_postconvergence_injection_occurs_after_this_stage": true,
+  "unresolved": [
+    "exact ordinary request-local seven min/max values and common +0x230 limit",
+    "ordinary branch inputs for internal cap and bound preparation",
+    "differential full-stage replay against matching Windows pre/post values"
+  ]
+}

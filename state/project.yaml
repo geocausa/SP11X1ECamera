@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-09-06
+updated: 2026-09-10
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-ab-live-request-local-lux-pass
+state_id: E003i-dl-exact-g4-failure-and-internal-cap-omission
 phase: front-imx681-cphy-bringup
-status: linux-live-3a-statistics-and-request-local-lux-closed-cct-reconstruction-next
+status: golden-restored-native-aec-internal-cap-stage-missing
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-ab-clean-3a-trigger-replay
+current_gate: E003i-dl-native-aec-g4-failure-replay
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003h-iq-producer-0073-static
+next_experiment: E003i-internal-cap-bounds-oracle
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2927,9 +2927,9 @@ e003i_x_native_live_lsc_deadline:
   next_gate: linux-request-local-aec-lux-cct-acquisition
 
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ab-clean-lux-reconstruction/README.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dl-native-aec-g4-failure-replay/HANDOFF.md
 next_action: >-
-  Finish clean AEC_BE-to-measuredLuma reconstruction through CAECXCoreGridStatsOut::ComputeLuma and CAECXStatsGridProcessor::GetWeightedROIInterpLuma, then reproduce the AA request-3653 Lux output end-to-end. The active Titan680 AEC_BE parser and CAnalyzerAlgorithm001 final Lux adjustment are already byte/bit exact. After Lux closes, reconstruct AWB-to-CCT. Dynamic R5/R6 LSC substitution remains blocked until both truthful Lux and CCT pass; source generation is not a request ID.
+  Recover ordinary request-local bounds and conditional inputs for Windows internal PopulateOutput/CapExposure, then replay and integrate the complete native pre-publication cap offline before CH arbitration. DL proves the native stage is omitted; DC controller cap and DG post-convergence injection did not cover it. Preserve CH policy-0 rejection. Do not repeat the consumed DB candidate or infer a replacement sensor delay from DQBUF timing. See handoff.latest.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3121,3 +3121,30 @@ e003i_ab3_luma_config_reconciliation:
   historical_aa_adjacency_request_association_valid: false
   dynamic_r5_r6_substitution_authorized: false
   next_gate: superseded-live-request-local-lux-closed
+
+
+# Current continuation; preceding experiment-specific sections are historical.
+e003i_dl_current:
+  date: 2026-09-10
+  status: pass-offline-failure-localization-and-static-cap-omission-proof
+  runtime_base_commit: 8bc6598440f5ddeb36587e140bf64f48eaee38bf
+  latest_handoff: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dl-native-aec-g4-failure-replay/HANDOFF.md
+  db_attempt: 4
+  sensor_writes: 3
+  g4_native_aec_rc: -142
+  g4_short_convergence: 24819566146
+  serialized_t681_maximum: 6133333272
+  exact_failure_pair_saved: true
+  g1_g3_control_tuples_replayed: true
+  missing_windows_stage: PopulateOutput internal CapExposure
+  windows_cap_call_rva: 0x3ce03c
+  windows_cap_target_rva: 0x3d33e0
+  exact_request_local_bounds_closed: false
+  production_fix_implemented: false
+  golden_return_verified: true
+  camera_modules_loaded: false
+  saved_entry: sp11-audio-fullio-v19c
+  next_entry: ""
+  db_candidate_retired: true
+  full_continuous_aec_closed: false
+  live_sensor_effect_association_closed_for_db: false
