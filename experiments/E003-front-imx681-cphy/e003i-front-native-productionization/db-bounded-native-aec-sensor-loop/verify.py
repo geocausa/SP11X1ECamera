@@ -77,17 +77,25 @@ static int failures(void){
 }
 int main(void){ int rc=normal(); if(rc) return rc; rc=failures(); if(rc) return rc; puts("DB_SCHEDULE_NORMAL=queueG1,releaseG1@G2,queueG2,releaseG2@G3,queueG3,releaseG3@G4"); puts("DB_SCHEDULE_EFFECT=G4,G5,G6"); puts("DB_SCHEDULE_FAILURE_LATCH=PASS"); puts("DB_SCHEDULE_TEST=PASS"); return 0; }
 '''
+bootstrap_src=(HERE/'bootstrap-controls.c').read_text()
+for x in ['VIDIOC_S_EXT_CTRLS','.count = 4','V4L2_CID_VBLANK','V4L2_CID_EXPOSURE','V4L2_CID_ANALOGUE_GAIN','V4L2_CID_DIGITAL_GAIN','DB_BOOTSTRAP_EXT_PASS']:
+    need(x in bootstrap_src,'bootstrap ext transport '+x)
+need('VIDIOC_S_CTRL' not in bootstrap_src,'bootstrap must not use piecemeal S_CTRL')
+
 with tempfile.TemporaryDirectory(prefix='e003i-db-verify-') as td:
-    td=Path(td); hp=td/'h.c'; hp.write_text(harness); exe=td/'sched'; helper=td/'helper'
+    td=Path(td); hp=td/'h.c'; hp.write_text(harness); exe=td/'sched'; helper=td/'helper'; bootstrap=td/'bootstrap'
     subprocess.run(['cc','-O2','-std=c11','-Wall','-Wextra','-Werror','-fno-fast-math','-ffp-contract=off','-I',str(HERE),'-I',str(CQ),'-I',str(CH),str(HERE/'native-db-schedule.c'),str(hp),'-lm','-o',str(exe)],check=True)
     out=subprocess.check_output([str(exe)],text=True); need('DB_SCHEDULE_TEST=PASS' in out,'scheduler harness')
     subprocess.run([str(HERE/'build-helper.sh'),str(helper)],check=True); need(helper.is_file() and helper.stat().st_size>0,'integrated helper build')
+    subprocess.run([str(HERE/'build-bootstrap.sh'),str(bootstrap)],check=True); need(bootstrap.is_file() and bootstrap.stat().st_size>0,'bootstrap helper build')
 
 prepare=(HERE/'prepare.sh').read_text(); prearm=(HERE/'prearm-check.sh').read_text(); runpre=(HERE/'runtime-preflight.sh').read_text(); invoke=(HERE/'invoke-once.sh').read_text(); entry=(HERE/'99zh_sp11_camera_e003i_db_native_aec').read_text()
-need('--set-ctrl=vertical_blanking=1402,exposure=3554,analogue_gain=0,digital_gain=256' in prepare,'exact DA bootstrap set')
+need('e003i-db-bootstrap-controls' in prepare and 'BOOTSTRAP-EXT.txt' in prepare,'atomic DA bootstrap invocation')
+need('--set-ctrl=' not in prepare,'piecemeal v4l2-ctl bootstrap forbidden')
 for stale in ['vertical_blanking=1394,exposure=3500','STEP_EXPOSURE=1000','BASE_AGAIN=64','BASE_DGAIN=272']:
     need(stale not in prepare,'stale bootstrap '+stale)
 need('build-helper.sh' in prepare and 'build-helper.sh' in prearm,'canonical helper build')
+need('build-bootstrap.sh' in prepare and 'build-bootstrap.sh' in prearm,'canonical bootstrap build')
 need('python3 "$D/verify.py"' in prearm and 'python3 "$D/verify.py"' in runpre,'offline verifier in gates')
 need('HELPER-CONSUMED.marker' in invoke and 'DB_SUBDEV=' in invoke,'one-shot invocation guard')
 need('sp11-camera-e003i-db-native-aec-one-shot' in entry and 'sp11_camera_e003i_db_native_aec=1' in entry and 'modprobe.blacklist=qcom_camss,imx681,ov13858' in entry,'candidate entry')

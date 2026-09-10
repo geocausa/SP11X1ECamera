@@ -32,3 +32,9 @@ The pure scheduler separately models `queue` and `release`. Verification covers 
 ## Scope
 
 DB applies sensor controls only. CQ's residual ISP gain is retained in the native output but is not written by DB. Full unrestricted/native image-pipeline AEC parity remains outside this checkpoint.
+
+## Bootstrap transport correction after first candidate
+
+The first candidate did not enter streaming. Preparation exposed that `v4l2-ctl` was issuing piecemeal `VIDIOC_S_CTRL` for the cold tuple. This is incompatible with the four-control CW cluster contract even though the tuple itself is valid (`3554 <= even(3562-4)=3558`). The failed state was VBLANK 1402 / exposure 3546 / analogue 0 / digital 256, helper unconsumed, STREAMON not attempted.
+
+The corrected DB bootstrap uses one `VIDIOC_S_EXT_CTRLS` with count 4 and control order VBLANK, EXPOSURE, ANALOGUE_GAIN, DIGITAL_GAIN, then requires exact `VIDIOC_G_EXT_CTRLS` readback. The runtime boundary write path already used the same extended-control mechanism, so no scheduler or sensor-driver arithmetic changed.

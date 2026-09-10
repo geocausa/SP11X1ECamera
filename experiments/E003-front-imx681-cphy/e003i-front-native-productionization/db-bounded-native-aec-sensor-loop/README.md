@@ -45,3 +45,9 @@ The IQ producer remains a separate state machine for the already-proven R5/R6 im
 `prearm-check.sh` additionally reruns the inherited AI live-safety gate, rebuilds CW with `W=1`, requires CW module SHA-256 `72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1`, checks vermagic, and reruns DB verification.
 
 No DB STREAMON or sensor write has occurred at this checkpoint.
+
+## 2026-09-10 first candidate preparation failure and retry fix
+
+The first DB candidate boot reached preparation only. No STREAMON, DQBUF, native AEC helper execution, or DB sensor write occurred. `v4l2-ctl --set-ctrl=...` attempted the four clustered bootstrap values through piecemeal `VIDIOC_S_CTRL`; VBLANK advanced to 1402 but exposure remained 3546 and the exposure set returned `ERANGE`. The helper-consumed marker was absent. The boot was archived, no same-boot retry was made, SP11 returned to Golden, and the disposable candidate was removed.
+
+CW's Linux 7.1.5 core proof already establishes the required transaction law: an extended-control set copies all caller values for a master cluster before one `try_ctrl`/`s_ctrl` callback. DB therefore now bootstraps with `bootstrap-controls.c`, one four-member `VIDIOC_S_EXT_CTRLS` containing VBLANK=1402, exposure=3554, analogue=0, digital=256, followed by an extended-control readback. The streaming helper and scheduler are unchanged. `prepare.sh` no longer contains any `--set-ctrl=` path.

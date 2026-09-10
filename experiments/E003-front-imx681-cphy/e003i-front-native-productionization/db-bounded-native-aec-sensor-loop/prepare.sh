@@ -7,6 +7,7 @@ D=$BASE/db-bounded-native-aec-sensor-loop
 O=$D/runtime-output
 mkdir -p "$O/producer"
 "$D/build-helper.sh" "$O/e003i-db-six-frame-native-aec"
+"$D/build-bootstrap.sh" "$O/e003i-db-bootstrap-controls"
 T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
 python3 "$BASE/e-template-free-capsule/build-template-free-0076-capsules.py" --output-dir "$T/caps" --manifest "$T/manifest.json" > "$O/TEMPLATE-FREE-R4.log"
 cp "$T/caps/E003I_TEMPLATE_FREE_R4.bin" "$O/R4-bootstrap.bin"
@@ -18,7 +19,8 @@ SENSOR=$(sed -n 's/^SENSOR=//p' "$O/MEDIA.txt" | tail -1); test -n "$SENSOR"
 SUBDEV=$(sudo -n media-ctl -d /dev/media0 -e "$SENSOR" | tail -1); test -c "$SUBDEV"
 sudo -n v4l2-ctl -d "$SUBDEV" --list-ctrls > "$O/CONTROLS-BEFORE.txt"
 for n in vertical_blanking exposure analogue_gain digital_gain; do grep -q "$n" "$O/CONTROLS-BEFORE.txt" || { echo "FAIL: missing control $n" >&2; exit 1; }; done
-sudo -n v4l2-ctl -d "$SUBDEV" --set-ctrl=vertical_blanking=1402,exposure=3554,analogue_gain=0,digital_gain=256
+sudo -n "$O/e003i-db-bootstrap-controls" "$SUBDEV" > "$O/BOOTSTRAP-EXT.txt"
+grep -Fxq 'DB_BOOTSTRAP_EXT_PASS VB=1402 EXP=3554 AGAIN=0 DGAIN=256' "$O/BOOTSTRAP-EXT.txt"
 sudo -n v4l2-ctl -d "$SUBDEV" --get-ctrl=vertical_blanking,exposure,analogue_gain,digital_gain > "$O/CONTROLS-AFTER.txt"
 for e in 'vertical_blanking: 1402' 'exposure: 3554' 'analogue_gain: 0' 'digital_gain: 256'; do grep -Fxq "$e" "$O/CONTROLS-AFTER.txt"; done
 printf 'STATUS=PASS\nVIDEO=%s\nSENSOR=%s\nSUBDEV=%s\nBOOTSTRAP_FLL=3562\nBOOTSTRAP_VBLANK=1402\nBOOTSTRAP_EXPOSURE=3554\nBOOTSTRAP_AGAIN=0\nBOOTSTRAP_DGAIN=256\n' "$V" "$SENSOR" "$SUBDEV" > "$O/CAPTURE-PREFLIGHT.txt"

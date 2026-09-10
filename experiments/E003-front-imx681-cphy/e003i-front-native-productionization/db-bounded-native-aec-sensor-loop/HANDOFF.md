@@ -36,3 +36,9 @@ A PASS requires six exact AEC generations, exact G→G+3 ownership, three and on
 ## Scope warning
 
 DB is sensor-side only. CQ computes residual ISP gain, but DB does not apply it. Do not call DB full/continuous AEC parity. G4-G6 controls are compute/observe only and are not released to the sensor in this gate.
+
+## First candidate disposition / retry gate
+
+First DB candidate on 2026-09-10 failed during cold-bootstrap preparation only: piecemeal `VIDIOC_S_CTRL` rejected exposure 3554 after VBLANK moved to 1402. No stream or native AEC helper ran, and no same-boot retry was performed. `PREPARE-FAILURE.txt` preserves the compact evidence. Golden return passed and the first disposable boot entry/directory were removed.
+
+Retry code uses `bootstrap-controls.c` + `build-bootstrap.sh` and one four-field `VIDIOC_S_EXT_CTRLS`, with exact readback. Before another candidate boot, require a clean-tree full `prearm-check.sh` after committing this correction. On the retry candidate, do not bypass `prepare.sh`, and do not run twice in one boot.

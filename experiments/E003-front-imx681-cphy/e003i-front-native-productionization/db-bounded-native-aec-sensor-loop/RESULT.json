@@ -1,7 +1,8 @@
 {
-  "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v1",
-  "status": "READY_UNEXECUTED",
+  "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v2",
+  "status": "READY_RETRY_UNEXECUTED_AFTER_ATOMIC_BOOTSTRAP_FIX",
   "parent_range_commit": "c094198",
+  "parent_db_commit": "ec8ffa2",
   "scope": "bounded six-generation sensor-side native AEC; G1-G3 sensor tuples released, G4-G6 compute/observe only",
   "windows_preview_range": {
     "min_gain": 1.0,
@@ -17,7 +18,28 @@
     "exposure_lines": 3554,
     "analogue_gain_code": 0,
     "digital_gain_code": 256,
-    "isp_gain": 1.0
+    "isp_gain": 1.0,
+    "transport": "single VIDIOC_S_EXT_CTRLS with four clustered controls",
+    "readback_required": true
+  },
+  "first_candidate_attempt": {
+    "date": "2026-09-10",
+    "candidate_booted": true,
+    "prepare_status": "FAIL_ERANGE_NO_STREAM",
+    "failed_transport": "v4l2-ctl piecemeal VIDIOC_S_CTRL bootstrap",
+    "observed_after_failure": {
+      "vertical_blanking": 1402,
+      "exposure_lines": 3546,
+      "analogue_gain_code": 0,
+      "digital_gain_code": 256
+    },
+    "helper_consumed": false,
+    "streamon": false,
+    "dqbuf": false,
+    "native_aec_sensor_writes": 0,
+    "same_boot_retry_performed": false,
+    "golden_return": "PASS",
+    "candidate_removed_after_return": true
   },
   "schedule": {
     "stats_to_request_frames": 3,
@@ -34,21 +56,23 @@
   },
   "transport": {
     "cluster_controls": ["VBLANK", "EXPOSURE", "ANALOGUE_GAIN", "DIGITAL_GAIN"],
+    "bootstrap_and_runtime_use_extended_control_sets": true,
     "single_runtime_ioctl_call_site": true,
     "cw_group_hold_parent": true,
     "cw_module_sha256": "72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1"
   },
   "verification": {
-    "offline_verifier": "PASS",
-    "full_root_prearm": "PASS",
+    "offline_verifier_after_fix": "PASS",
+    "bootstrap_helper_werror": "PASS",
+    "full_root_prearm_after_fix": "PENDING_CLEAN_COMMIT",
     "helper_werror": "PASS",
     "scheduler_failure_corpus": "PASS",
-    "inherited_ai_safety_gate": "PASS"
+    "inherited_ai_safety_gate": "PASS_BEFORE_TRACKED_DIRTY_CHECK"
   },
   "runtime": {
-    "executed": false,
+    "native_aec_executed": false,
     "streamon": false,
-    "sensor_writes": 0,
+    "native_aec_sensor_writes": 0,
     "grub_candidate_installed": false,
     "one_shot_armed": false,
     "same_boot_retry_permitted": false
@@ -62,6 +86,7 @@
     "kernel": "7.1.5-sp11-render-parity-v4+",
     "saved_entry": "sp11-audio-fullio-v19c",
     "next_entry": "",
-    "camera_modules_loaded": false
+    "camera_modules_loaded": false,
+    "return_after_first_candidate": "PASS"
   }
 }
