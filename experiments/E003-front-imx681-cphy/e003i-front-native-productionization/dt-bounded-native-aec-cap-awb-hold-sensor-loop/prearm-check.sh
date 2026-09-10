@@ -12,7 +12,7 @@ CW=$BASE/cw-imx681-atomic-dynamic-control-cluster
 K=/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
 fail(){ echo "FAIL: $*" >&2; exit 1; }
 "$BASE/ai-deadline-hardened-live-r5-r6-runtime/prearm-check.sh"
-T=$(mktemp); trap 'rm -f "$T" /tmp/e003i-dt-helper-prearm /tmp/e003i-dt-bootstrap-prearm /tmp/e003i-dr-prearm.json /tmp/e003i-ds-prearm.json' EXIT
+T=$(mktemp); trap 'rm -f "$T" /tmp/e003i-dt-helper-prearm /tmp/e003i-dt-bootstrap-prearm; sudo -n rm -f /tmp/e003i-dr-prearm.json /tmp/e003i-ds-prearm.json' EXIT
 make -C "$K" M="$CW" clean >/dev/null
 make -C "$K" M="$CW" W=1 -j4 >"$T" 2>&1 || { cat "$T"; fail cw_build; }
 H=$(sha256sum "$CW/imx681.ko" | awk '{print $1}')
