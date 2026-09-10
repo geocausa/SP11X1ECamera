@@ -11,3 +11,5 @@ If the user says **“continue the camera work on SP11”**, do not ask them to 
 7. When stopping or when context becomes unreliable, update `PROJECT_STATE.md`, `state/project.yaml`, and the current experiment record, then commit/push the handoff.
 
 The repository, not chat history, is the durable source of project continuity.
+
+Current checkpoint: [DN internal cap handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md). The saved G4 failure now passes offline; bind the remaining cap branch input before a fresh bounded live candidate.

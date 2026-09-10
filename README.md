@@ -15,13 +15,11 @@ The project goal is **not** to cargo-cult an existing Surface patchset. We use W
 
 ## Current milestone
 
-Front IMX681 native capture, bounded image processing and grouped sensor control updates have been demonstrated. The current gate is **E003i DL: exact automatic-exposure failure replay and an omitted Windows internal exposure-cap stage**.
+Front IMX681 native capture, bounded image processing and grouped sensor control updates have been demonstrated. **E003i DN now closes the saved G4 exposure overflow offline** by restoring Windows' internal exposure-cap stage.
 
-The latest DB attempt completed three sensor updates, then failed closed at statistics generation4. Its snapshots are archived; DL reproduces the failure exactly offline. Windows caps convergence output before publication, but native CG/DJ omit that stage. Recovering its exact request-local bounds and conditional behavior is the next task. Full continuous automatic exposure remains unproven.
+The independent native cap matches 18 Windows input/output pairs and 423 ARM64 arithmetic cases. G1..G3 controls remain unchanged; G4 produces valid sensor controls. The preview adapter still guards a conditional branch whose native input remains unbound. Continuous live automatic exposure and control-to-statistics timing remain open.
 
-SP11 has returned to protected FullIO v19c Golden, with no camera modules loaded or pending experimental boot. The consumed DB candidate was retired.
-
-See [current handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dl-native-aec-g4-failure-replay/HANDOFF.md), [project state](PROJECT_STATE.md), and [static proof](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dl-native-aec-g4-failure-replay/STATIC-PROOF.md). Older experiment records retain their historical findings.
+SP11 is back on protected FullIO v19c Golden with camera modules absent and no pending experimental boot. See [current handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md) and [verification scope](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/README.md).
 
 ## Start here
 

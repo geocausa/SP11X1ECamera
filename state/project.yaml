@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-10
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-dl-exact-g4-failure-and-internal-cap-omission
+state_id: E003i-dn-scoped-internal-cap-g4-replay-pass
 phase: front-imx681-cphy-bringup
-status: golden-restored-native-aec-internal-cap-stage-missing
+status: golden-restored-scoped-native-cap-offline-pass
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-dl-native-aec-g4-failure-replay
+current_gate: E003i-dn-native-aec-internal-cap
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2927,9 +2927,9 @@ e003i_x_native_live_lsc_deadline:
   next_gate: linux-request-local-aec-lux-cct-acquisition
 
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dl-native-aec-g4-failure-replay/HANDOFF.md
+  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md
 next_action: >-
-  Recover ordinary request-local bounds and conditional inputs for Windows internal PopulateOutput/CapExposure, then replay and integrate the complete native pre-publication cap offline before CH arbitration. DL proves the native stage is omitted; DC controller cap and DG post-convergence injection did not cover it. Preserve CH policy-0 rejection. Do not repeat the consumed DB candidate or infer a replacement sensor delay from DQBUF timing. See handoff.latest.
+  Bind internal-cap bank9:data10 and compact+0x98 to ordinary producers before removing DN preview guard. Generic cap arithmetic and exact saved G4 replay pass offline. Then prepare a fresh disposable bounded Linux candidate; preserve Golden and CH rejection. Keep control-to-statistics association as a separate timing gate with no guessed delay. See handoff.latest.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3148,3 +3148,24 @@ e003i_dl_current:
   db_candidate_retired: true
   full_continuous_aec_closed: false
   live_sensor_effect_association_closed_for_db: false
+
+# Current authority: DN supersedes the preceding DL continuation.
+e003i_dn_current:
+  status: pass-offline-scoped-cap
+  latest_handoff: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md
+  windows_live_pairs: 18
+  windows_changed_pairs: 11
+  ordinary_minimum: 37516
+  ordinary_maximum: 6133333088
+  arm64_arithmetic_cases: 423
+  rescale_cases: 30
+  history_snap_cases: 5
+  g1_g3_controls_unchanged: true
+  g4_offline_rc: 0
+  g4_retained_exposure: 6133332579
+  g4_controls: [7116, 7108, 960, 1471]
+  bank9_data10_bound: false
+  conditional_preview_guard: true
+  linux_hardware_runs: 0
+  golden_return_verified: true
+  full_continuous_aec_closed: false

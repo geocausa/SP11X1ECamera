@@ -1,16 +1,14 @@
-## Current continuation — E003i DL, 2026-09-10
+## Current continuation - E003i DN, 2026-09-10
 
-**Current authority:** [DL handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dl-native-aec-g4-failure-replay/HANDOFF.md). Sections below are historical milestones and do not override this continuation.
+**Current authority:** [DN handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md). Earlier sections are historical.
 
-DB attempt4 reproduced G4 native AEC -142 after exactly three sensor writes. DK successfully preserved the failing statistics pair. The helper remained pinned until a normal Golden reboot, with no same-boot retry or kill. Golden return passed, camera modules are absent, saved FullIO v19c is intact, next_entry is empty, and the disposable DB candidate is retired. Runtime archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-db/attempt4-live-g4-fail-20260910T181907.
+DM observed 18 matched Windows internal CapExposure pairs, including 11 actual clamps. All seven ordinary bounds were 37,516..6,133,333,088, distinct from the serialized T681 maximum. The camera stopped, CDB detached, and SP11 returned to protected FullIO v19c Golden with no camera modules or pending candidate.
 
-DL exactly replays G1..G4 through the unchanged runtime sources: first three control tuples match live, and G4 Short convergence is 24,819,566,146 versus T681's serialized maximum 6,133,333,272. Caller state and control output remain unchanged on failure.
+DN independently implements internal cap arithmetic and adds a scoped request-loop integration. All 18 live pairs and 423 ARM64 arithmetic comparisons pass, including rescaling and history snapping. The exact archived DB G1..G3 control tuples are unchanged; G4 now succeeds offline with FLL7116/EXP7108/AG960/DG1471. CH overrange rejection remains unchanged.
 
-**New concrete parity gap:** Windows PopulateOutput unconditionally calls internal CapExposure before publishing convergence; native CG/DJ omit that stage. The internal cap reads seven request-local min/max records and also performs conditional rescaling, lane ordering and a predictive-gain limit. DC's separate controller cap flag and DG's later post-convergence injection did not cover this stage.
+**Next action:** bind bank9:data10 and compact+0x98 to their ordinary producers. The generic cap arithmetic is implemented, but the preview adapter rejects eligible rescaling-prelude requests until the missing branch input is proven. Then prepare a new disposable bounded Linux experiment with exact source/boot hashes. The consumed DB candidate remains retired. Full-tuple control-to-statistics timing is a separate unresolved gate; do not invent a new delay.
 
-**Next action:** recover exact ordinary request-local bounds and cap branch inputs from the pinned Windows oracle, implement/replay the complete cap offline before CH arbitration, then reconsider a bounded live candidate. Keep regular table rejection unchanged. DB full-tuple write-to-statistics visibility is a separate unresolved issue: G4 brightness stayed baseline-like and the first ioctl took 20.605 ms versus CY's 1.802 ms isolated step. Do not invent a delay from those observations.
-
-Front sensor control transport, bounded image processing, and exact failure replay are proven in their recorded scopes. Full continuous automatic exposure and production camera-stack parity are not yet closed.
+No new Linux camera run occurred in DN. Continuous automatic exposure and full camera-stack parity remain unproven.
 
 ## E003i current continuation — live request-local Lux reconstruction PASS — 2026-09-06
 
