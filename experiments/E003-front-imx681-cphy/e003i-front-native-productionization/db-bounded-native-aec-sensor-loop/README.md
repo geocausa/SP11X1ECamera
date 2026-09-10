@@ -1,6 +1,6 @@
 # E003i DB — bounded native AEC sensor loop
 
-Status: **READY_UNEXECUTED**.
+Status: **READY FOR CLEAN-COMMIT PREARM; post-DJ live retry not yet executed**.
 
 DB is the first bounded Linux integration of the self-contained native AEC request path with the live-proven IMX681 clustered/group-held sensor-control transport. It is deliberately not an unrestricted continuous-AEC claim.
 
@@ -44,10 +44,18 @@ The IQ producer remains a separate state machine for the already-proven R5/R6 im
 
 `prearm-check.sh` additionally reruns the inherited AI live-safety gate, rebuilds CW with `W=1`, requires CW module SHA-256 `72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1`, checks vermagic, and reruns DB verification.
 
-No DB STREAMON or sensor write has occurred at this checkpoint.
+At the original unexecuted DB checkpoint no STREAMON had occurred. Attempt2 later performed one bounded STREAMON and two fail-closed sensor writes; the post-DJ code has not yet run live.
 
 ## 2026-09-10 first candidate preparation failure and retry fix
 
 The first DB candidate boot reached preparation only. No STREAMON, DQBUF, native AEC helper execution, or DB sensor write occurred. `v4l2-ctl --set-ctrl=...` attempted the four clustered bootstrap values through piecemeal `VIDIOC_S_CTRL`; VBLANK advanced to 1402 but exposure remained 3546 and the exposure set returned `ERANGE`. The helper-consumed marker was absent. The boot was archived, no same-boot retry was made, SP11 returned to Golden, and the disposable candidate was removed.
 
 CW's Linux 7.1.5 core proof already establishes the required transaction law: an extended-control set copies all caller values for a master cluster before one `try_ctrl`/`s_ctrl` callback. DB therefore now bootstraps with `bootstrap-controls.c`, one four-member `VIDIOC_S_EXT_CTRLS` containing VBLANK=1402, exposure=3554, analogue=0, digital=256, followed by an extended-control readback. The streaming helper and scheduler are unchanged. `prepare.sh` no longer contains any `--set-ctrl=` path.
+
+## 2026-09-10 second candidate G3 fail-closed and DJ correction
+
+The corrected bootstrap allowed the second DB candidate to STREAMON once and capture all six frames. G1/request4 and G2/request5 completed and exactly two scheduled sensor writes succeeded. G3 then failed native AEC with `-142`; DB latched failure, issued no third sensor write, stopped the stream, performed no same-boot retry, returned to Golden, and the disposable candidate was removed. `LIVE-FAILURE.txt` and the external attempt2 archive preserve the hashes.
+
+DG and DH proved the `-142` endpoint is not a Linux T681 defect: Windows ordinary post-convergence policy 0 also rejects the same over-range G3 Short target. The root cause is earlier temporal state. W maps stats G1 to Windows request4, but CP initialized local G1 as request1, replacing Windows real requests1..3 with one synthetic start record. DC pins requests1..3 compact/retained exposure to 33,312,452 in every lane; DI pins their PredGain to exact `1.0f`; AB22 pins request4 entry Lux to `0x4365acdd`.
+
+DJ preserves CU's local `G1 == frame_id 0` API and rebases only internal history by +3. It seeds those three real warm-up records and the request4 entry Lux. Replaying the exact archived failing G1/G2/G3 STATS3A bytes through the complete CU→CV chain now passes all three, including a valid G3/request6 IMX681 tuple, with CH unchanged. DB's canonical helper now compiles against DJ rather than CP. A new live attempt remains forbidden until the integrated change is committed cleanly and full root `prearm-check.sh` passes.

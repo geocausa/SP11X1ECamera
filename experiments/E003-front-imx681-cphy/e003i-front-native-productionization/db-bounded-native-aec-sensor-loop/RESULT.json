@@ -1,6 +1,6 @@
 {
-  "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v2",
-  "status": "READY_RETRY_UNEXECUTED_AFTER_ATOMIC_BOOTSTRAP_FIX",
+  "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v3",
+  "status": "READY_RETRY_UNEXECUTED_AFTER_REQUEST4_WARMUP_REBASE",
   "parent_range_commit": "c094198",
   "parent_db_commit": "ec8ffa2",
   "scope": "bounded six-generation sensor-side native AEC; G1-G3 sensor tuples released, G4-G6 compute/observe only",
@@ -46,16 +46,36 @@
     "write_to_first_effect_generations": 2,
     "release_before_current_generation_aec": true,
     "writes": [
-      {"source_generation": 1, "write_after_generation": 2, "logical_request_frame": 4, "expected_effect_generation": 4},
-      {"source_generation": 2, "write_after_generation": 3, "logical_request_frame": 5, "expected_effect_generation": 5},
-      {"source_generation": 3, "write_after_generation": 4, "logical_request_frame": 6, "expected_effect_generation": 6}
+      {
+        "source_generation": 1,
+        "write_after_generation": 2,
+        "logical_request_frame": 4,
+        "expected_effect_generation": 4
+      },
+      {
+        "source_generation": 2,
+        "write_after_generation": 3,
+        "logical_request_frame": 5,
+        "expected_effect_generation": 5
+      },
+      {
+        "source_generation": 3,
+        "write_after_generation": 4,
+        "logical_request_frame": 6,
+        "expected_effect_generation": 6
+      }
     ],
     "dqbuf_exact_window_gate": true,
     "late_write_policy": "fail closed",
     "maximum_live_sensor_writes": 3
   },
   "transport": {
-    "cluster_controls": ["VBLANK", "EXPOSURE", "ANALOGUE_GAIN", "DIGITAL_GAIN"],
+    "cluster_controls": [
+      "VBLANK",
+      "EXPOSURE",
+      "ANALOGUE_GAIN",
+      "DIGITAL_GAIN"
+    ],
     "bootstrap_and_runtime_use_extended_control_sets": true,
     "single_runtime_ioctl_call_site": true,
     "cw_group_hold_parent": true,
@@ -64,15 +84,18 @@
   "verification": {
     "offline_verifier_after_fix": "PASS",
     "bootstrap_helper_werror": "PASS",
-    "full_root_prearm_after_fix": "PENDING_CLEAN_COMMIT",
+    "full_root_prearm_after_fix": "PASS_BEFORE_ATTEMPT2",
     "helper_werror": "PASS",
     "scheduler_failure_corpus": "PASS",
-    "inherited_ai_safety_gate": "PASS_BEFORE_TRACKED_DIRTY_CHECK"
+    "inherited_ai_safety_gate": "PASS_BEFORE_ATTEMPT2",
+    "dj_offline": "PASS",
+    "full_root_prearm_after_request4_rebase": "PENDING_CLEAN_COMMIT"
   },
   "runtime": {
-    "native_aec_executed": false,
-    "streamon": false,
-    "native_aec_sensor_writes": 0,
+    "historical_attempt2_streamon": true,
+    "historical_attempt2_sensor_writes": 2,
+    "post_request4_rebase_live_executed": false,
+    "post_request4_rebase_sensor_writes": 0,
     "grub_candidate_installed": false,
     "one_shot_armed": false,
     "same_boot_retry_permitted": false
@@ -87,6 +110,51 @@
     "saved_entry": "sp11-audio-fullio-v19c",
     "next_entry": "",
     "camera_modules_loaded": false,
-    "return_after_first_candidate": "PASS"
+    "return_after_first_candidate": "PASS",
+    "return_after_second_candidate": "PASS",
+    "db_candidate_removed_after_second_candidate": true
+  },
+  "second_candidate_attempt": {
+    "date": "2026-09-10",
+    "candidate_booted": true,
+    "prepare_status": "PASS",
+    "streamon": true,
+    "six_frame_capture": true,
+    "native_aec_generations_completed": [
+      1,
+      2
+    ],
+    "native_aec_generation3_rc": -142,
+    "sensor_writes_succeeded": 2,
+    "third_sensor_write_performed": false,
+    "same_boot_retry_performed": false,
+    "stream_stopped": true,
+    "kernel_fatal_marker": false,
+    "golden_return": "PASS",
+    "candidate_removed_after_return": true,
+    "run_sha256": "bb010a0bd447e0ab28952c70256e2f5a3fbe0fc889415648f11b34dfc8957ce6",
+    "stats3a_sha256": [
+      "c040530a44201cd4ffb9b78749166523f03c44ea1f4474da0b5992344b8664e9",
+      "51d101ca1fb8d6fb2c38254e0bc82e7663d34b8fe3b2f545499ea9b68df4ec25",
+      "06346e9f34bec70b976a76c4e72e0fb76ec21d7acb6d5f09f4417edef052fd64"
+    ]
+  },
+  "request4_warmup_rebase": {
+    "checkpoint": "DJ",
+    "di_zip_sha256": "5155e355b08b8c65153d3548568c5223a230e1d88c85711b47f8eef7b11e27b0",
+    "root_cause": "DB local G1 maps to Windows request4 but CP initialized it as request1, omitting real requests1..3 history and request4 entry Lux",
+    "warmup_requests": [
+      1,
+      2,
+      3
+    ],
+    "warmup_retained_exposure_all_lanes": 33312452,
+    "warmup_pred_gain_bits": "0x3f800000",
+    "request4_entry_lux_bits": "0x4365acdd",
+    "history_frame_bias": 3,
+    "external_local_frame_law_unchanged": true,
+    "prior_exact_g1_g3_stats_replay": "PASS",
+    "prior_g3_minus142_eliminated_offline": true,
+    "ch_t681_changed": false
   }
 }

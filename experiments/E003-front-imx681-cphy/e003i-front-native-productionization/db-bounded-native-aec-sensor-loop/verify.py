@@ -9,6 +9,7 @@ AQ=BASE/'aq-windows-aec-arbitration-table'
 CH=BASE/'ch-native-aec-t681-preview-arbitration'
 CQ=BASE/'cq-aec-output-imx681-control-adapter'
 CV=BASE/'cv-native-aec-offline-sensor-control-join'
+DJ=BASE/'dj-native-aec-request4-warmup-rebase'
 DA=BASE/'da-native-aec-delayed-sensor-schedule'
 CW=BASE/'cw-imx681-atomic-dynamic-control-cluster'
 PARENT='c094198'
@@ -19,13 +20,17 @@ def load(p): return json.loads(p.read_text())
 
 need(subprocess.run(['git','merge-base','--is-ancestor',PARENT,'HEAD'],cwd=REPO).returncode==0,'corrected range parent missing')
 need(subprocess.check_output(['git','rev-parse','--abbrev-ref','HEAD'],cwd=REPO,text=True).strip()=='experiment/e003-front-imx681-cphy','branch')
-aq=load(AQ/'RESULT.json'); ch=load(CH/'RESULT.json'); cq=load(CQ/'RESULT.json'); cv=load(CV/'RESULT.json'); da=load(DA/'RESULT.json'); cw=load(CW/'RESULT.json')
+aq=load(AQ/'RESULT.json'); ch=load(CH/'RESULT.json'); cq=load(CQ/'RESULT.json'); cv=load(CV/'RESULT.json'); dj=load(DJ/'RESULT.json'); da=load(DA/'RESULT.json'); cw=load(CW/'RESULT.json')
 need(aq['status']=='PASS' and aq['windows_oracle']['active_preview_range_recap']['max_time_ns']==66666664,'AQ corrected preview range')
 need(aq['windows_oracle']['active_preview_range_recap']['max_gain']==92.0 and aq['windows_oracle']['active_preview_range_recap']['policy']==0,'AQ gain/policy')
 need(ch['status']=='PASS' and ch['preview_limits']['max_time_ns']==66666664 and ch['preview_limits']['max_gain']==92.0,'CH corrected range')
 need(cq['status'].startswith('PASS_') and cq['gain']['actual_t681_postfit_output_max']==92.0,'CQ corrected gain domain')
 need(cq['windows']['active_preview_range']['max_time_ns']==66666664,'CQ corrected time domain')
 need(cv['status']=='PASS' and cv['sensor_delay']['max_pipeline_frames']==2,'CV sensor delay')
+need(dj['status']=='PASS_OFFLINE' and dj['windows']['warmup_compact_and_retained_exposure']==33312452,'DJ warmup exposure')
+need(dj['windows']['warmup_pred_gain_bits']=='0x3f800000' and dj['windows']['request2_request3_request4_entry_lux_bits']=='0x4365acdd','DJ warmup pred/lux')
+need(dj['local_mapping']['history_frame_bias']==3 and dj['local_mapping']['generation1_windows_request']==4,'DJ local request rebase')
+need(dj['prior_live_failure']['rc']==-142 and dj['prior_live_failure']['eliminated_offline'] is True,'DJ prior G3 failure replay')
 need(da['status']=='PASS_OFFLINE' and da['windows_stats_to_request_frames']==3 and da['cy_write_to_first_effect_generations']==2,'DA timing law')
 need(da['write_after_generation_offset']==1 and da['first_effect_generation_offset']==3,'DA offsets')
 need(da['cold_bootstrap']=={'frame_length_lines':3562,'vertical_blanking':1402,'exposure_lines':3554,'analogue_gain_code':0,'digital_gain_code':256,'isp_gain':1.0},'DA cold bootstrap')
@@ -90,6 +95,10 @@ with tempfile.TemporaryDirectory(prefix='e003i-db-verify-') as td:
     subprocess.run([str(HERE/'build-bootstrap.sh'),str(bootstrap)],check=True); need(bootstrap.is_file() and bootstrap.stat().st_size>0,'bootstrap helper build')
 
 prepare=(HERE/'prepare.sh').read_text(); prearm=(HERE/'prearm-check.sh').read_text(); runpre=(HERE/'runtime-preflight.sh').read_text(); invoke=(HERE/'invoke-once.sh').read_text(); entry=(HERE/'99zh_sp11_camera_e003i_db_native_aec').read_text()
+build=(HERE/'build-helper.sh').read_text()
+need('dj-native-aec-request4-warmup-rebase' in build and '$DJ/native-aec-request-loop.c' in build,'DB integrated helper must use DJ')
+need('cp-native-aec-self-contained-cold-init' not in build and '$CP/native-aec-request-loop.c' not in build,'DB integrated helper must not use CP request1 state')
+need('verify-dj.py' in prearm,'DJ verifier in root prearm')
 need('e003i-db-bootstrap-controls' in prepare and 'BOOTSTRAP-EXT.txt' in prepare,'atomic DA bootstrap invocation')
 need('--set-ctrl=' not in prepare,'piecemeal v4l2-ctl bootstrap forbidden')
 for stale in ['vertical_blanking=1394,exposure=3500','STEP_EXPOSURE=1000','BASE_AGAIN=64','BASE_DGAIN=272']:
@@ -102,9 +111,11 @@ need('sp11-camera-e003i-db-native-aec-one-shot' in entry and 'sp11_camera_e003i_
 
 print('DB_PARENT_RANGE=c094198 maxGain92 maxTime66666664 policy0')
 print('DB_BOOTSTRAP=FLL3562_VB1402_EXP3554_AGAIN0_DGAIN256_ISP1')
+print('DB_AEC_START=DJ localG1/request4 warmup33312452 pred1 lux0x4365acdd PASS')
+print('DB_ATTEMPT2=G3_RC_MINUS142_ROOT_CAUSE_REQUEST1_STATE_REBASE_FIXED_OFFLINE')
 print('DB_SCHEDULE=releaseG1@G2->G4,releaseG2@G3->G5,releaseG3@G4->G6')
 print('DB_DQBUF_COMPLETION_GATE=exact-window release-before-current-AEC PASS')
 print('DB_FAILURE_ATOMICITY=permanent-no-further-writes PASS')
 print('DB_HELPER_WERROR=PASS')
-print('DB_RUNTIME=0 SENSOR_WRITES=0')
+print('DB_POST_DJ_RUNTIME=0 SENSOR_WRITES=0')
 print('DB_VERIFY=PASS')

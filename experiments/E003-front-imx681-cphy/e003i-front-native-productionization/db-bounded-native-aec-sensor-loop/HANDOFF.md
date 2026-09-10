@@ -1,6 +1,6 @@
 # DB handoff — bounded native AEC sensor loop
 
-Current intended state: **READY_UNEXECUTED** on Golden Linux.
+Current intended state: **DJ integrated offline; clean-commit root prearm required before another live candidate** on Golden Linux.
 
 ## Preconditions
 
@@ -42,3 +42,9 @@ DB is sensor-side only. CQ computes residual ISP gain, but DB does not apply it.
 First DB candidate on 2026-09-10 failed during cold-bootstrap preparation only: piecemeal `VIDIOC_S_CTRL` rejected exposure 3554 after VBLANK moved to 1402. No stream or native AEC helper ran, and no same-boot retry was performed. `PREPARE-FAILURE.txt` preserves the compact evidence. Golden return passed and the first disposable boot entry/directory were removed.
 
 Retry code uses `bootstrap-controls.c` + `build-bootstrap.sh` and one four-field `VIDIOC_S_EXT_CTRLS`, with exact readback. Before another candidate boot, require a clean-tree full `prearm-check.sh` after committing this correction. On the retry candidate, do not bypass `prepare.sh`, and do not run twice in one boot.
+
+## Second candidate disposition / DJ retry gate
+
+Attempt2 reached STREAMON once, captured six frames, released G1@G2 and G2@G3, then failed closed at native AEC G3 with `RC=-142`. No G3 sensor tuple was written and no same-boot retry occurred. Golden return passed and the disposable candidate is absent.
+
+Windows DG/DH confirms the policy-0 T681 rejection is correct. DJ fixes the upstream startup-coordinate mismatch: local G1 remains frame0 externally but maps to Windows request4/internal history frame3; requests1..3 are preseeded as real history with all exposure lanes 33,312,452 and PredGain 1.0, and request4 starts with Lux `0x4365acdd`. Exact archived attempt2 G1..G3 stats now pass offline through CU→CV. Before another candidate, commit/push DJ + DB integration explicitly, require a clean tree, then require full `prearm-check.sh` PASS.

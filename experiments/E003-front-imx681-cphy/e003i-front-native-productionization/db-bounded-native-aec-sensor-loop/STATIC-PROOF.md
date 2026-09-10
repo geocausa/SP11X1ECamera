@@ -38,3 +38,9 @@ DB applies sensor controls only. CQ's residual ISP gain is retained in the nativ
 The first candidate did not enter streaming. Preparation exposed that `v4l2-ctl` was issuing piecemeal `VIDIOC_S_CTRL` for the cold tuple. This is incompatible with the four-control CW cluster contract even though the tuple itself is valid (`3554 <= even(3562-4)=3558`). The failed state was VBLANK 1402 / exposure 3546 / analogue 0 / digital 256, helper unconsumed, STREAMON not attempted.
 
 The corrected DB bootstrap uses one `VIDIOC_S_EXT_CTRLS` with count 4 and control order VBLANK, EXPOSURE, ANALOGUE_GAIN, DIGITAL_GAIN, then requires exact `VIDIOC_G_EXT_CTRLS` readback. The runtime boundary write path already used the same extended-control mechanism, so no scheduler or sensor-driver arithmetic changed.
+
+## Request-4 warm-up rebase after second candidate
+
+Attempt2's `-142` maps exactly to CV(-10) + CU(-100) + CP Short-T681(-32), with CH returning `-2` because G3 Short convergence was over the ordinary table. DG/DH independently prove Windows policy-0 post-convergence T681 rejects that same forced target, so no clamp is permitted.
+
+The missing state is the W `G -> request G+3` warm-up. DC shows real Windows requests1..3 each converge all seven lanes to 33,312,452; CH maps that coordinate back to the same retained exposure exactly. DI pins PredGain `0x3f800000` for requests1..3. AB22 pins the cold request4 entry Lux `0x4365acdd`. DJ installs exactly those values behind a +3 internal history coordinate while leaving CU's public local frame identity unchanged. Its verifier replays the byte-pinned attempt2 G1..G3 STATS3A corpus and eliminates the G3 `-142` with no sensor/device access.
