@@ -23,6 +23,9 @@ def main():
     assert 'if (target <= 3U)' in src
     assert src.index('e003i_db_schedule_queue(&ctx->schedule') < src.index('e003i_gain_feed_publish(ctx->gain_fd')
     assert '--aec-gain-fd' in src and 'signal(SIGPIPE, SIG_IGN)' in src
+    cleanup=src.index('out:')
+    assert src.index('pthread_cancel(audit_thread)',cleanup) < src.index('close(gain_pipe[1])',cleanup)
+    assert src.index('close(gain_pipe[1])',cleanup) < src.index('kill(producer_pid, SIGTERM)',cleanup)
 
     with tempfile.TemporaryDirectory(prefix='e003i-dx-proof-') as td:
         td=Path(td)

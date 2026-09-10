@@ -658,12 +658,14 @@ int main(int argc, char **argv)
 	printf("PASS: six-frame regression plus producer-derived R5/R6 and paired TL_BG/3A generations 1..6 (AO collector)\n");
 	ret = 0;
 out:
+	/* The audit thread owns the gain-pipe writer. Stop that owner before
+	 * closing shared descriptors so pre-stream failures cannot race EBADF. */
+	if (audit_started && !audit_joined) { pthread_cancel(audit_thread); pthread_join(audit_thread, NULL); audit_joined = 1; }
 	if (ready_pipe[0] >= 0) close(ready_pipe[0]);
 	if (ready_pipe[1] >= 0) close(ready_pipe[1]);
 	if (gain_pipe[0] >= 0) close(gain_pipe[0]);
 	if (gain_pipe[1] >= 0) close(gain_pipe[1]);
-	if (producer_pid > 0 && !producer_reaped) { kill(producer_pid, SIGTERM); waitpid(producer_pid, NULL, 0); }
-	if (audit_started && !audit_joined) { pthread_cancel(audit_thread); pthread_join(audit_thread, NULL); }
+	if (producer_pid > 0 && !producer_reaped) { kill(producer_pid, SIGTERM); waitpid(producer_pid, NULL, 0); producer_reaped = 1; }
 	if (iq) memset(iq, 0, IQ_BYTES);
 	free(audit_stats3a); free(audit_tlbg); free(iq); free(second_snapshot); free(first_snapshot);
 	for (i = 0; i < BUFFER_COUNT; i++) if (map[i] != MAP_FAILED) munmap(map[i], map_len[i]);
