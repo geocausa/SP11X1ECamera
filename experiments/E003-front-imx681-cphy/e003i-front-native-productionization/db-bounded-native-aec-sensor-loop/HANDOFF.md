@@ -1,6 +1,6 @@
 # DB handoff — bounded native AEC sensor loop
 
-Current intended state: **DJ integrated offline; clean-commit root prearm required before another live candidate** on Golden Linux.
+Current intended state: **Attempt3 returned safely to Golden after all three allowed writes and a G4 fail-closed; DK failure-pair preservation is being prepared for one diagnostic retry**.
 
 ## Preconditions
 
@@ -22,8 +22,8 @@ Current intended state: **DJ integrated offline; clean-commit root prearm requir
 6. On candidate reconnect, identify it by `sp11_camera_e003i_db_native_aec=1` in `/proc/cmdline`; the kernel version intentionally matches Golden.
 7. Run `load.sh` (which re-runs runtime preflight), then `prepare.sh`.
 8. Before STREAMON inspect `CAPTURE-PREFLIGHT.txt`, `CONTROLS-AFTER.txt`, media identity, module load dmesg, and kernel health. Required bootstrap: FLL3562/VB1402/EXP3554/AGAIN0/DGAIN256.
-9. Invoke `invoke-once.sh` exactly once. Never retry in the same candidate boot, regardless of success or failure.
-10. Preserve/archive all outputs. If helper pins after STREAMON, do not kill/restart the camera path; reboot to Golden.
+9. Invoke `invoke-once.sh` exactly once using a **persistent PiMaster job**. Never use a finite command timeout for this pin-capable helper, and never retry in the same candidate boot.
+10. Preserve/archive all outputs. If helper pins after STREAMON, inspect it from a separate command, do not stop/kill/restart it, and reboot the whole machine to Golden.
 11. Reboot normally to saved Golden after the single run.
 12. Run `golden-return-check.sh` and require candidate tag absent, saved Golden intact, next empty, camera modules absent.
 13. Promote `RESULT.json` only after both live verification and Golden return are proven. Commit capture hashes/metadata, not multi-megabyte raw payloads.
@@ -48,3 +48,9 @@ Retry code uses `bootstrap-controls.c` + `build-bootstrap.sh` and one four-field
 Attempt2 reached STREAMON once, captured six frames, released G1@G2 and G2@G3, then failed closed at native AEC G3 with `RC=-142`. No G3 sensor tuple was written and no same-boot retry occurred. Golden return passed and the disposable candidate is absent.
 
 Windows DG/DH confirms the policy-0 T681 rejection is correct. DJ fixes the upstream startup-coordinate mismatch: local G1 remains frame0 externally but maps to Windows request4/internal history frame3; requests1..3 are preseeded as real history with all exposure lanes 33,312,452 and PredGain 1.0, and request4 starts with Lux `0x4365acdd`. Exact archived attempt2 G1..G3 stats now pass offline through CU→CV. Before another candidate, commit/push DJ + DB integration explicitly, require a clean tree, then require full `prearm-check.sh` PASS.
+
+## Third candidate disposition / DK diagnostic gate
+
+Attempt3 proved DJ live through all three permitted sensor writes, then failed native AEC at G4 with `RC=-142`. Error composition is Short-lane T681 out-of-range. No fourth write occurred, the IQ producer passed, camera-fatal kernel markers were absent, Golden return passed, and the disposable boot entry/bundle are removed.
+
+The exact G4 stats pair was lost because the old helper persisted raw pairs only after six-generation success. DK changes only failure evidence: schedule fail is latched before the already validated failing pair is fsync-saved as `TLBG-FAIL-GN.bin` and `STATS3A-FAIL-GN.bin`. Do not change AEC math until an exact G4 failure pair is captured and replayed offline. Before that diagnostic retry, commit/push DK + attempt3 evidence, require a clean-tree root prearm, and use a persistent job for the one-shot invocation.

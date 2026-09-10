@@ -1,6 +1,6 @@
 {
-  "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v3",
-  "status": "READY_RETRY_UNEXECUTED_AFTER_REQUEST4_WARMUP_REBASE",
+  "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v4",
+  "status": "READY_DIAGNOSTIC_RETRY_UNEXECUTED_AFTER_G4_FAIL_SNAPSHOT_HARDENING",
   "parent_range_commit": "c094198",
   "parent_db_commit": "ec8ffa2",
   "scope": "bounded six-generation sensor-side native AEC; G1-G3 sensor tuples released, G4-G6 compute/observe only",
@@ -89,13 +89,18 @@
     "scheduler_failure_corpus": "PASS",
     "inherited_ai_safety_gate": "PASS_BEFORE_ATTEMPT2",
     "dj_offline": "PASS",
-    "full_root_prearm_after_request4_rebase": "PENDING_CLEAN_COMMIT"
+    "full_root_prearm_after_request4_rebase": "PASS_BEFORE_ATTEMPT3",
+    "dk_fail_snapshot_offline": "PASS",
+    "full_root_prearm_after_dk": "PENDING_CLEAN_COMMIT",
+    "dk_integrated_helper_sha256": "92397a54e8467f10f8d9ed7d2181643aeea1321253fdd7c085d5656b916e055d"
   },
   "runtime": {
     "historical_attempt2_streamon": true,
     "historical_attempt2_sensor_writes": 2,
-    "post_request4_rebase_live_executed": false,
-    "post_request4_rebase_sensor_writes": 0,
+    "historical_attempt3_streamon": true,
+    "historical_attempt3_sensor_writes": 3,
+    "post_dk_live_executed": false,
+    "post_dk_sensor_writes": 0,
     "grub_candidate_installed": false,
     "one_shot_armed": false,
     "same_boot_retry_permitted": false
@@ -112,7 +117,9 @@
     "camera_modules_loaded": false,
     "return_after_first_candidate": "PASS",
     "return_after_second_candidate": "PASS",
-    "db_candidate_removed_after_second_candidate": true
+    "db_candidate_removed_after_second_candidate": true,
+    "return_after_third_candidate": "PASS",
+    "db_candidate_removed_after_third_candidate": true
   },
   "second_candidate_attempt": {
     "date": "2026-09-10",
@@ -156,5 +163,72 @@
     "prior_exact_g1_g3_stats_replay": "PASS",
     "prior_g3_minus142_eliminated_offline": true,
     "ch_t681_changed": false
+  },
+  "third_candidate_attempt": {
+    "date": "2026-09-10",
+    "base_commit": "60335dec0e85da0f6de3855481dbfc3387824e49",
+    "prepare_status": "PASS",
+    "streamon": true,
+    "sensor_writes_succeeded": 3,
+    "writes": [
+      {
+        "source_generation": 1,
+        "write_after_generation": 2,
+        "logical_request_frame": 4,
+        "expected_effect_generation": 4,
+        "fll": 3562,
+        "exposure": 3554,
+        "analogue_gain": 847,
+        "digital_gain": 256
+      },
+      {
+        "source_generation": 2,
+        "write_after_generation": 3,
+        "logical_request_frame": 5,
+        "expected_effect_generation": 5,
+        "fll": 3562,
+        "exposure": 3554,
+        "analogue_gain": 960,
+        "digital_gain": 528
+      },
+      {
+        "source_generation": 3,
+        "write_after_generation": 4,
+        "logical_request_frame": 6,
+        "expected_effect_generation": 6,
+        "fll": 6807,
+        "exposure": 6798,
+        "analogue_gain": 960,
+        "digital_gain": 1072
+      }
+    ],
+    "generation4_native_aec_rc": -142,
+    "rc_mapping": "Short-lane T681 out-of-range: CV(-10)+CU(-100)+DJ(-32), CH=-2",
+    "fourth_sensor_write_performed": false,
+    "iq_producer": "PASS",
+    "same_boot_retry_performed": false,
+    "old_failure_pair_persistence": "missing: current validated G4 pair remained RAM-only because normal raw save required all six AEC generations",
+    "invoke_orchestration": "finite execute command timed out after 180s and SIGTERM was sent to the deliberately pinned helper; this was an orchestration mistake, not a camera retry",
+    "post_timeout_helper_process": false,
+    "post_timeout_video_openers": false,
+    "kernel_fatal_marker": false,
+    "post_controls": {
+      "vertical_blanking": 4647,
+      "exposure_lines": 6798,
+      "analogue_gain_code": 960,
+      "digital_gain_code": 1072
+    },
+    "run_sha256": "fd4ae763e35d1aad7c9d20609b73da1622c286a947a89d72b5e07c137a7533f4",
+    "external_archive_summary_sha256": "522c0d4ed20c82c2cb9b58c035a802cbd2c6de8fe233d665e2647e7c5dc0f065",
+    "golden_return": "PASS",
+    "candidate_removed_after_return": true
+  },
+  "failure_evidence_hardening": {
+    "checkpoint": "DK",
+    "aec_math_changed": false,
+    "sensor_write_path_changed": false,
+    "on_aec_failure": "latch schedule failed, then fsync current validated TLBG/STATS3A pair as *-FAIL-GN.bin, then return failed",
+    "success_path_per_generation_io_added": false,
+    "remote_invoke_requirement": "persistent PiMaster job; never finite execute timeout for pin-capable helper"
   }
 }

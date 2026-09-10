@@ -4,6 +4,7 @@ R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
 BASE=$R/experiments/E003-front-imx681-cphy/e003i-front-native-productionization
 D=$BASE/db-bounded-native-aec-sensor-loop
 DJ=$BASE/dj-native-aec-request4-warmup-rebase
+DK=$BASE/dk-native-aec-fail-snapshot-preservation
 CW=$BASE/cw-imx681-atomic-dynamic-control-cluster
 K=/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
 fail(){ echo "FAIL: $*" >&2; exit 1; }
@@ -15,6 +16,7 @@ H=$(sha256sum "$CW/imx681.ko" | awk '{print $1}')
 [ "$H" = '72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1' ] || fail "cw_module_sha_$H"
 python3 "$CW/prove-cw.py" >/dev/null
 python3 "$DJ/verify-dj.py"
+python3 "$DK/verify-dk.py"
 "$D/build-helper.sh" /tmp/e003i-db-helper-prearm
 "$D/build-bootstrap.sh" /tmp/e003i-db-bootstrap-prearm
 python3 "$D/verify.py"

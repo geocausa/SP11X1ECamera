@@ -44,3 +44,9 @@ The corrected DB bootstrap uses one `VIDIOC_S_EXT_CTRLS` with count 4 and contro
 Attempt2's `-142` maps exactly to CV(-10) + CU(-100) + CP Short-T681(-32), with CH returning `-2` because G3 Short convergence was over the ordinary table. DG/DH independently prove Windows policy-0 post-convergence T681 rejects that same forced target, so no clamp is permitted.
 
 The missing state is the W `G -> request G+3` warm-up. DC shows real Windows requests1..3 each converge all seven lanes to 33,312,452; CH maps that coordinate back to the same retained exposure exactly. DI pins PredGain `0x3f800000` for requests1..3. AB22 pins the cold request4 entry Lux `0x4365acdd`. DJ installs exactly those values behind a +3 internal history coordinate while leaving CU's public local frame identity unchanged. Its verifier replays the byte-pinned attempt2 G1..G3 STATS3A corpus and eliminates the G3 `-142` with no sensor/device access.
+
+## Attempt3 G4 boundary and DK failure persistence
+
+Attempt3 completed all three allowed sensor transactions before native AEC G4 returned `-142`. The return-code chain is exact: CH Short T681 `-2` → DJ request loop `-32` → CU raw loop `-132` → CV control join `-142`. Thus the failure is upstream Short exposure arbitration, not the sensor ioctl path. No fourth sensor write is authorized by the scheduler.
+
+The old full-run persistence loop was unreachable after this failure, so the validated G4 TLBG/STATS3A buffers were lost from RAM at reboot. DK adds a failure-only persistence function. In the AEC-error branch, `e003i_db_schedule_fail()` executes first; only then are the already generation/source/slot-validated current buffers written through `save_file()`, which fsyncs before close. If either evidence write fails, the error is logged while the original AEC failure and failed schedule remain authoritative. The normal success save loop and the single sensor-apply call site are unchanged.

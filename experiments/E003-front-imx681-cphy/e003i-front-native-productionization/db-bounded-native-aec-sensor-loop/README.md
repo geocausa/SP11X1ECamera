@@ -1,6 +1,6 @@
 # E003i DB — bounded native AEC sensor loop
 
-Status: **READY FOR CLEAN-COMMIT PREARM; post-DJ live retry not yet executed**.
+Status: **ATTEMPT3 FAIL-CLOSED AT G4 AFTER ALL THREE ALLOWED WRITES; DK DIAGNOSTIC HARDENING OFFLINE**.
 
 DB is the first bounded Linux integration of the self-contained native AEC request path with the live-proven IMX681 clustered/group-held sensor-control transport. It is deliberately not an unrestricted continuous-AEC claim.
 
@@ -44,7 +44,7 @@ The IQ producer remains a separate state machine for the already-proven R5/R6 im
 
 `prearm-check.sh` additionally reruns the inherited AI live-safety gate, rebuilds CW with `W=1`, requires CW module SHA-256 `72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1`, checks vermagic, and reruns DB verification.
 
-At the original unexecuted DB checkpoint no STREAMON had occurred. Attempt2 later performed one bounded STREAMON and two fail-closed sensor writes; the post-DJ code has not yet run live.
+At the original unexecuted DB checkpoint no STREAMON had occurred. Attempt2 later performed one bounded STREAMON and two fail-closed sensor writes. Attempt3 ran DJ live and completed all three allowed sensor writes, then failed closed at G4; DK has not run live.
 
 ## 2026-09-10 first candidate preparation failure and retry fix
 
@@ -58,4 +58,12 @@ The corrected bootstrap allowed the second DB candidate to STREAMON once and cap
 
 DG and DH proved the `-142` endpoint is not a Linux T681 defect: Windows ordinary post-convergence policy 0 also rejects the same over-range G3 Short target. The root cause is earlier temporal state. W maps stats G1 to Windows request4, but CP initialized local G1 as request1, replacing Windows real requests1..3 with one synthetic start record. DC pins requests1..3 compact/retained exposure to 33,312,452 in every lane; DI pins their PredGain to exact `1.0f`; AB22 pins request4 entry Lux to `0x4365acdd`.
 
-DJ preserves CU's local `G1 == frame_id 0` API and rebases only internal history by +3. It seeds those three real warm-up records and the request4 entry Lux. Replaying the exact archived failing G1/G2/G3 STATS3A bytes through the complete CU→CV chain now passes all three, including a valid G3/request6 IMX681 tuple, with CH unchanged. DB's canonical helper now compiles against DJ rather than CP. A new live attempt remains forbidden until the integrated change is committed cleanly and full root `prearm-check.sh` passes.
+DJ preserves CU's local `G1 == frame_id 0` API and rebases only internal history by +3. It seeds those three real warm-up records and the request4 entry Lux. Replaying the exact archived failing G1/G2/G3 STATS3A bytes through the complete CU→CV chain passes all three, with CH unchanged. Attempt3 then validated that correction live by completing the G1/request4, G2/request5 and G3/request6 sensor writes.
+
+## 2026-09-10 third candidate G4 fail-closed and DK evidence hardening
+
+Attempt3 passed preparation and STREAMON once. All three bounded writes completed behind exact DQBUF gates: G1@G2→R4/G4, G2@G3→R5/G5, and G3@G4→R6/G6. The third control tuple was FLL6807 / exposure6798 / analogue960 / digital1072. G4 then returned `RC=-142`; exact error composition identifies this as Short-lane CH/T681 range failure. Because the bounded schedule had already released its third and final permitted write, no fourth write was possible or attempted. The IQ producer passed. Kernel camera-fatal markers remained absent, Golden return passed, and the disposable candidate was removed.
+
+The old helper saved paired raw snapshots only after all six AEC generations succeeded. Consequently the already identity-validated G4 pair remained in RAM and was lost at reboot. DK fixes only that evidence gap: after an AEC error, it first permanently fails the schedule, then fsync-saves the current validated TLBG/STATS3A pair as `*-FAIL-GN.bin`. Successful generations still perform no per-generation disk writes, so the live control timing path is unchanged. No AEC/T681/sensor arithmetic is modified.
+
+One orchestration error is preserved explicitly: attempt3 was launched through a finite 180-second command call. The helper intentionally pins after post-STREAMON failure, so the command layer eventually SIGTERM'd that pinned process. There was no retry; afterward no helper process or video opener remained and no camera-fatal kernel marker appeared. Future pin-capable invocations must use a persistent PiMaster job and be terminated only by the planned whole-machine reboot.

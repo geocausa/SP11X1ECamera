@@ -204,6 +204,8 @@ struct pair_audit_ctx {
 	int sensor_fd;
 	uint8_t *tlbg;
 	uint8_t *stats3a;
+	const char *tlbg_prefix;
+	const char *stats3a_prefix;
 	struct e003i_request_loop_state aec_state;
 	struct e003i_db_schedule_state schedule;
 	struct e003i_raw_control_output aec_output[FRAME_COUNT];
@@ -212,6 +214,34 @@ struct pair_audit_ctx {
 	int status;
 	unsigned int completed;
 };
+
+static int persist_failure_pair(const struct pair_audit_ctx *ctx,
+				unsigned int generation,
+				const uint8_t *tlbg, const uint8_t *stats3a)
+{
+	char tlbg_path[4096], stats3a_path[4096];
+	int n1, n2, rc1, rc2;
+
+	if (ctx->tlbg_prefix == NULL || ctx->stats3a_prefix == NULL)
+		return -EINVAL;
+	n1 = snprintf(tlbg_path, sizeof(tlbg_path), "%s-FAIL-G%u.bin",
+		      ctx->tlbg_prefix, generation);
+	n2 = snprintf(stats3a_path, sizeof(stats3a_path), "%s-FAIL-G%u.bin",
+		      ctx->stats3a_prefix, generation);
+	if (n1 < 0 || (size_t)n1 >= sizeof(tlbg_path) ||
+	    n2 < 0 || (size_t)n2 >= sizeof(stats3a_path))
+		return -ENAMETOOLONG;
+
+	rc1 = save_file(tlbg_path, tlbg, TLBG_BYTES);
+	rc2 = save_file(stats3a_path, stats3a, STATS3A_BYTES);
+	if (rc1 || rc2)
+		return rc1 ? rc1 : rc2;
+	fprintf(stderr,
+		"DB_FAIL_PAIR_SAVED G=%u TLBG=%s STATS3A=%s BYTES=%u/%u\n",
+		generation, tlbg_path, stats3a_path, TLBG_BYTES, STATS3A_BYTES);
+	fflush(stderr);
+	return 0;
+}
 
 static int release_control_at_video_boundary(struct pair_audit_ctx *ctx,
 					     unsigned int after_generation)
@@ -350,11 +380,20 @@ static void *pair_audit_thread(void *opaque)
 				int rc = e003i_raw_request_to_imx681_controls(&ctx->aec_state, &rin, aout);
 
 				if (rc) {
+					int evidence_rc;
+
 					ctx->status = rc;
 					e003i_db_schedule_fail(&ctx->schedule);
 					fprintf(stderr, "DB_AEC_FAIL G=%u RC=%d WRITES=%u\n",
 						target, rc, ctx->schedule.released_writes);
 					fflush(stderr);
+					evidence_rc = persist_failure_pair(ctx, target, tlbg, stats);
+					if (evidence_rc) {
+						fprintf(stderr,
+							"DB_FAIL_PAIR_SAVE_ERROR G=%u RC=%d\n",
+							target, evidence_rc);
+						fflush(stderr);
+					}
 					return NULL;
 				}
 				if (aout->raw.stats_generation != (uint64_t)target ||
@@ -497,6 +536,7 @@ int main(int argc, char **argv)
 	}
 	printf("AE_PRODUCER_CHILD_READY PID=%d\n", (int)producer_pid); fflush(stdout);
 	audit.fd = vfd; audit.sensor_fd = sfd; audit.tlbg = audit_tlbg; audit.stats3a = audit_stats3a;
+	audit.tlbg_prefix = tlbg_prefix; audit.stats3a_prefix = stats3a_prefix;
 	atomic_init(&audit.video_completed_generation, 0U);
 	if (e003i_request_loop_init(&audit.aec_state)) {
 		fprintf(stderr, "native AEC state init failed\n"); goto out;
