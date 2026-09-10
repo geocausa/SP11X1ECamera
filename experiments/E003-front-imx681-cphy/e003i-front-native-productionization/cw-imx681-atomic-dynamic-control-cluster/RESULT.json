@@ -1,0 +1,255 @@
+{
+  "schema": "sp11-e003i-cw-imx681-atomic-dynamic-control-cluster-v1",
+  "status": "PASS_OFFLINE",
+  "parent_cv_commit": "6df82d7",
+  "topology": {
+    "cluster": [
+      "vertical_blanking",
+      "exposure",
+      "analogue_gain",
+      "digital_gain"
+    ],
+    "master": "vertical_blanking",
+    "s_ctrl_callbacks_per_changed_cluster": 1,
+    "modify_range_in_callback": false,
+    "dynamic_guard": "exposure <= even(FLL - 4)",
+    "declared_exposure_max": "even(0x00ffffff - 4)"
+  },
+  "v4l2_core_proof": {
+    "version": "Linux 7.1.5 Golden source",
+    "caller_values_before_try_ctrl": true,
+    "missing_cluster_members_cur_to_new_before_try_ctrl": true,
+    "try_ctrl_before_s_ctrl": true,
+    "s_ctrl_before_new_to_cur": true,
+    "constructor_calls_try_ctrl": false
+  },
+  "sensor_transaction": {
+    "am_apply_body_source_exact": true,
+    "group_hold": "0x0104 1 -> fields -> 0",
+    "dynamic_register_bytes": 10,
+    "cv_rows": [
+      {
+        "generation": 1,
+        "request": 4,
+        "frame_length_lines": 3562,
+        "vertical_blanking": 1402,
+        "exposure_lines": 3554,
+        "analogue_gain_code": "0x353",
+        "digital_gain_code": "0x0100",
+        "dynamic_writes": [
+          [
+            "0x033d",
+            "0x00"
+          ],
+          [
+            "0x033e",
+            "0x0d"
+          ],
+          [
+            "0x033f",
+            "0xea"
+          ],
+          [
+            "0x0229",
+            "0x00"
+          ],
+          [
+            "0x022a",
+            "0x0d"
+          ],
+          [
+            "0x022b",
+            "0xe2"
+          ],
+          [
+            "0x0204",
+            "0x03"
+          ],
+          [
+            "0x0205",
+            "0x53"
+          ],
+          [
+            "0x020e",
+            "0x01"
+          ],
+          [
+            "0x020f",
+            "0x00"
+          ]
+        ]
+      },
+      {
+        "generation": 2,
+        "request": 5,
+        "frame_length_lines": 3562,
+        "vertical_blanking": 1402,
+        "exposure_lines": 3554,
+        "analogue_gain_code": "0x393",
+        "digital_gain_code": "0x0100",
+        "dynamic_writes": [
+          [
+            "0x033d",
+            "0x00"
+          ],
+          [
+            "0x033e",
+            "0x0d"
+          ],
+          [
+            "0x033f",
+            "0xea"
+          ],
+          [
+            "0x0229",
+            "0x00"
+          ],
+          [
+            "0x022a",
+            "0x0d"
+          ],
+          [
+            "0x022b",
+            "0xe2"
+          ],
+          [
+            "0x0204",
+            "0x03"
+          ],
+          [
+            "0x0205",
+            "0x93"
+          ],
+          [
+            "0x020e",
+            "0x01"
+          ],
+          [
+            "0x020f",
+            "0x00"
+          ]
+        ]
+      },
+      {
+        "generation": 3,
+        "request": 6,
+        "frame_length_lines": 3562,
+        "vertical_blanking": 1402,
+        "exposure_lines": 3554,
+        "analogue_gain_code": "0x3bc",
+        "digital_gain_code": "0x0100",
+        "dynamic_writes": [
+          [
+            "0x033d",
+            "0x00"
+          ],
+          [
+            "0x033e",
+            "0x0d"
+          ],
+          [
+            "0x033f",
+            "0xea"
+          ],
+          [
+            "0x0229",
+            "0x00"
+          ],
+          [
+            "0x022a",
+            "0x0d"
+          ],
+          [
+            "0x022b",
+            "0xe2"
+          ],
+          [
+            "0x0204",
+            "0x03"
+          ],
+          [
+            "0x0205",
+            "0xbc"
+          ],
+          [
+            "0x020e",
+            "0x01"
+          ],
+          [
+            "0x020f",
+            "0x00"
+          ]
+        ]
+      },
+      {
+        "generation": 4,
+        "request": 7,
+        "frame_length_lines": 3562,
+        "vertical_blanking": 1402,
+        "exposure_lines": 3554,
+        "analogue_gain_code": "0x3c0",
+        "digital_gain_code": "0x015b",
+        "dynamic_writes": [
+          [
+            "0x033d",
+            "0x00"
+          ],
+          [
+            "0x033e",
+            "0x0d"
+          ],
+          [
+            "0x033f",
+            "0xea"
+          ],
+          [
+            "0x0229",
+            "0x00"
+          ],
+          [
+            "0x022a",
+            "0x0d"
+          ],
+          [
+            "0x022b",
+            "0xe2"
+          ],
+          [
+            "0x0204",
+            "0x03"
+          ],
+          [
+            "0x0205",
+            "0xc0"
+          ],
+          [
+            "0x020e",
+            "0x01"
+          ],
+          [
+            "0x020f",
+            "0x5b"
+          ]
+        ]
+      }
+    ]
+  },
+  "relation_corpus": {
+    "cases": 50000,
+    "valid": 24961,
+    "invalid": 25039
+  },
+  "build": {
+    "W": 1,
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "module_sha256": "72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1",
+    "warnings": 0
+  },
+  "safety": {
+    "runtime_performed": false,
+    "module_loaded": false,
+    "sensor_write": false,
+    "streamon": false
+  },
+  "open_issue": "final optical-frame latch/effect label remains unclaimed; requires frame-boundary proof/live gate"
+}
