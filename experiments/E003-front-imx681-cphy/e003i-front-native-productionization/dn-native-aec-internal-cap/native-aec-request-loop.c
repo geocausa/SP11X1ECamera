@@ -225,6 +225,7 @@ int e003i_request_loop_process(struct e003i_request_loop_state *state,
 
     rc = e003i_internal_cap_preview_observed(out->convergence.linear,
                                               out->convergence.pred_gain,
+                                              h1->short_exposure,
                                               &out->capped);
     if (rc != 0)
         return -80 + rc;

@@ -1,5 +1,5 @@
 {
-  "status": "PASS_OFFLINE_SCOPED_CAP",
+  "status": "PASS_OFFLINE_ORDINARY_CAP_BOUND",
   "windows_live_pairs": 18,
   "windows_changed_pairs": 11,
   "instruction_differential_cases": 423,
@@ -18,9 +18,13 @@
   "error_output_atomic": true,
   "table_rejection_unchanged": true,
   "hardware_runs": 0,
+  "windows_branch_oracle_calls": 18,
+  "ordinary_bank9_data10_lookup_absent": true,
+  "ordinary_compact_98_bits": "0x00000000",
+  "ordinary_snap_steps_bits": "0x3f000000",
   "limitations": [
-    "Preview adapter rejects conditional-prelude-eligible requests until bank9:data10 is bound.",
-    "Compact +0x98=0 and fixed limits cover the observed ordinary preview domain.",
+    "DO proves ordinary bank9:data10 lookup rc=0 and resulting w12=0 on 18/18 cap calls.",
+    "DO proves compact +0x98=0 and snap step 0.5 on 18/18 ordinary preview cap calls.",
     "ARM64 differential models external history lookup, log10f and the proven runtime log scale; it executes original cap arithmetic.",
     "Sensor write-to-statistics timing remains unproven; no delay change or live success claimed."
   ]

@@ -19,8 +19,10 @@ struct e003i_cap_output {
 };
 /* Parameterized arithmetic from the pinned Windows internal cap, atomic on error. */
 int e003i_internal_cap(const struct e003i_cap_input *, struct e003i_cap_output *);
-/* DM observed preview domain. Rejects an eligible conditional prelude because
- * its bank9:data10 value has not yet been observed in this reduced runtime. */
+/* Ordinary Windows preview binding. DO proves bank9:data10 lookup is absent,
+ * hence rescale_disabled=0, and compact+0x98=0; BO proves snap_steps=0.5.
+ * history1_short is the request-loop H1 selected by the same Windows offset 1. */
 int e003i_internal_cap_preview_observed(const uint64_t linear[7], float pred_gain,
+                                      uint64_t history1_short,
                                       struct e003i_cap_output *);
 #endif

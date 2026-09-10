@@ -57,19 +57,19 @@ int e003i_internal_cap(const struct e003i_cap_input *in,struct e003i_cap_output 
     return 0;
 }
 int e003i_internal_cap_preview_observed(const uint64_t linear[7],float pred_gain,
+                                      uint64_t history1_short,
                                       struct e003i_cap_output *out){
     struct e003i_cap_input in;
     unsigned i;
-    if(!linear || !out)return -1;
-    /* Do not invent the missing bank9:data10 branch input. All 18 DM samples
-     * and DB G1..G4 bypass this prelude independently of that value. */
-    if(linear[2]>E003I_PREVIEW_CAP_MAX && linear[0]<E003I_PREVIEW_CAP_MAX &&
-       linear[0]<linear[2])return -2;
+    if(!linear || !out || !history1_short)return -1;
     memset(&in,0,sizeof(in));
     memcpy(in.linear,linear,sizeof(in.linear));
     for(i=0;i<7;i++){in.minimum[i]=E003I_PREVIEW_CAP_MIN;in.maximum[i]=E003I_PREVIEW_CAP_MAX;}
+    in.history1_short=history1_short;
     in.pred_gain=pred_gain;
-    in.compact_98=0.0f; /* DM ordinary compact field, all 18 observations. */
-    in.snap_steps=0.5f; /* BO global aecxconvergence +0x2c. */
+    in.compact_98=0.0f; /* DO ordinary compact+0x98, 18/18 observations. */
+    in.snap_steps=0.5f; /* BO/DO global aecxconvergence +0x2c. */
+    in.rescale_disabled=0; /* DO bank9:data10 lookup rc=0 -> Windows w12=0, 18/18. */
+    in.history1_valid=1; /* Windows cap calls history selector offset 1; request loop owns H1. */
     return e003i_internal_cap(&in,out);
 }

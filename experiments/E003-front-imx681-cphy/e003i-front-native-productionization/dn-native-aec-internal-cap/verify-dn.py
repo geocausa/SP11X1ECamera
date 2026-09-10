@@ -81,13 +81,13 @@ with tempfile.TemporaryDirectory(prefix='e003i-dn-') as td:
     td=Path(td);so=td/'cap.so'
     subprocess.run(['cc',*FLAGS,'-shared','-fPIC',str(HERE/'native-internal-cap.c'),'-lm','-o',str(so)],check=True)
     cap=C.CDLL(str(so));cap.e003i_internal_cap.argtypes=[C.POINTER(CapIn),C.POINTER(CapOut)]
-    cap.e003i_internal_cap_preview_observed.argtypes=[C.POINTER(C.c_uint64),C.c_float,C.POINTER(CapOut)]
+    cap.e003i_internal_cap_preview_observed.argtypes=[C.POINTER(C.c_uint64),C.c_float,C.c_uint64,C.POINTER(CapOut)]
     cases=[]
     for sample in dm['samples']:
         p=inp(sample['pre']);r=CapOut()
         assert cap.e003i_internal_cap(C.byref(p),C.byref(r))==0
         assert list(r.linear)==sample['post'] and fbits(r.pred_gain)==sample['pred_gain_bits']
-        assert cap.e003i_internal_cap_preview_observed(p.linear,p.pred_gain,C.byref(r))==0
+        assert cap.e003i_internal_cap_preview_observed(p.linear,p.pred_gain,p.linear[0],C.byref(r))==0
         assert list(r.linear)==sample['post'];cases.append(p)
     rng=random.Random(0xD003)
     # Boundary values and deliberately eligible preludes with/without history snap.
@@ -121,9 +121,17 @@ with tempfile.TemporaryDirectory(prefix='e003i-dn-') as td:
         rescaled+=bool(r.rescaled);snapped+=bool(r.history_snapped)
     print("COVERAGE",len(cases),rescaled,snapped)
     assert rescaled>10 and snapped>2
-    # Missing branch binding fails before any output mutation.
-    p=cases[18];r=CapOut();C.memset(C.byref(r),0xa5,C.sizeof(r));before=bytes(r)
-    assert cap.e003i_internal_cap_preview_observed(p.linear,p.pred_gain,C.byref(r))==-2 and bytes(r)==before
+    # DO ordinary-preview binding exercises the formerly guarded rescale path
+    # using the request-loop H1 record and must match the generic cap exactly.
+    p=inp([4000000000,9000000000,8000000000,5000000000,4500000000,4200000000,4100000000])
+    p.history1_valid=1;p.history1_short=3066666544;p.snap_steps=0.5;p.pred_gain=8
+    expected=CapOut();adapter=CapOut()
+    assert cap.e003i_internal_cap(C.byref(p),C.byref(expected))==0
+    assert cap.e003i_internal_cap_preview_observed(p.linear,p.pred_gain,p.history1_short,C.byref(adapter))==0
+    assert bytes(adapter)==bytes(expected) and adapter.rescaled==1
+    # Missing H1 is rejected atomically.
+    r=CapOut();C.memset(C.byref(r),0xa5,C.sizeof(r));before=bytes(r)
+    assert cap.e003i_internal_cap_preview_observed(p.linear,p.pred_gain,0,C.byref(r))==-1 and bytes(r)==before
     p.minimum[0]=0
     assert cap.e003i_internal_cap(C.byref(p),C.byref(r))==-1 and bytes(r)==before
     mp=json.loads((HERE/'SOURCE-MAP.json').read_text())
@@ -145,13 +153,15 @@ with tempfile.TemporaryDirectory(prefix='e003i-dn-') as td:
     assert 'G4_CAP_REPLAY=PASS STATE_ADVANCES_ON_SUCCESS=PASS' in replay
     assert 'G4_CAPPED_CONTROL FLL=7116 EXP=7108 AG=960 DG=1471 retained=6133332579' in replay
     (HERE/'REPLAY.txt').write_text(replay)
-result=dict(status='PASS_OFFLINE_SCOPED_CAP',windows_live_pairs=18,windows_changed_pairs=11,
+result=dict(status='PASS_OFFLINE_ORDINARY_CAP_BOUND',windows_live_pairs=18,windows_changed_pairs=11,
             instruction_differential_cases=len(cases),rescaled_cases=rescaled,history_snapped_cases=snapped,
             g1_g3_controls_unchanged=True,g4_rc=0,g4_cap=6133333088,g4_retained=6133332579,
             g4_controls=dict(fll=7116,exposure=7108,analogue_gain=960,digital_gain=1471),
             error_output_atomic=True,table_rejection_unchanged=True,hardware_runs=0,
-            limitations=['Preview adapter rejects conditional-prelude-eligible requests until bank9:data10 is bound.',
-                         'Compact +0x98=0 and fixed limits cover the observed ordinary preview domain.',
+            windows_branch_oracle_calls=18,ordinary_bank9_data10_lookup_absent=True,
+            ordinary_compact_98_bits='0x00000000',ordinary_snap_steps_bits='0x3f000000',
+            limitations=['DO proves ordinary bank9:data10 lookup rc=0 and resulting w12=0 on 18/18 cap calls.',
+                         'DO proves compact +0x98=0 and snap step 0.5 on 18/18 ordinary preview cap calls.',
                          'ARM64 differential models external history lookup, log10f and the proven runtime log scale; it executes original cap arithmetic.',
                          'Sensor write-to-statistics timing remains unproven; no delay change or live success claimed.'])
 (HERE/'RESULT.json').write_text(json.dumps(result,indent=2)+'\n')
