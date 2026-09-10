@@ -1,0 +1,1418 @@
+===== /etc/grub.d/77_sp11_camera_e002a_infra =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002a — CAMSS + CCI0 infrastructure only' --id 'sp11-camera-e002a-infra' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002a-infra/x1e80100-microsoft-denali-sp11-e002a-infra.dtb
+ linux /boot/sp11-7.1.5-camera-e002a-infra/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002a sp11_camera_e002a=1
+ initrd /boot/sp11-7.1.5-camera-e002a-infra/initrd.img-7.1.5-sp11-camera-e002a
+}
+
+===== /etc/grub.d/78_sp11_camera_e002b_probe =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b — rear OV13858 identity probe only' --id 'sp11-camera-e002b-probe' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-probe/x1e80100-microsoft-denali-sp11-e002b-probe.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-probe/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b sp11_camera_e002b=1
+ initrd /boot/sp11-7.1.5-camera-e002b-probe/initrd.img-7.1.5-sp11-camera-e002b
+}
+
+===== /etc/grub.d/79_sp11_camera_e002b_r1_isolated_rails =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r1 — isolated camera RPMh providers only' --id 'sp11-camera-e002b-r1-isolated-rails' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r1-isolated-rails/x1e80100-microsoft-denali-sp11-e002b-r1-isolated-rails.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r1-isolated-rails/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r1 sp11_camera_e002b_r1=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r1-isolated-rails/initrd.img-7.1.5-sp11-camera-e002b-r1
+}
+
+===== /etc/grub.d/80_sp11_camera_e002b_r2_probe =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r2 — rear OV13858 identity probe only' --id 'sp11-camera-e002b-r2-probe' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r2-probe/x1e80100-microsoft-denali-sp11-e002b-r2-probe.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r2-probe/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r2 sp11_camera_e002b_r2=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r2-probe/initrd.img-7.1.5-sp11-camera-e002b-r2
+}
+
+===== /etc/grub.d/81_sp11_camera_e002b_r2a_maxonly =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r2a — max-only camera regulator permission gate' --id 'sp11-camera-e002b-r2a-maxonly' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r2a-maxonly/x1e80100-microsoft-denali-sp11-e002b-r2a-maxonly.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r2a-maxonly/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r2a sp11_camera_e002b_r2a=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r2a-maxonly/initrd.img-7.1.5-sp11-camera-e002b-r2a
+}
+
+===== /etc/grub.d/82_sp11_camera_e002b_r3a_provider =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r3a — camera-only RPMh provider gate' --id 'sp11-camera-e002b-r3a-provider' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r3a-provider/x1e80100-microsoft-denali-sp11-e002b-r3a-provider.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r3a-provider/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r3a sp11_camera_e002b_r3a=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r3a-provider/initrd.img-7.1.5-sp11-camera-e002b-r3a
+}
+
+===== /etc/grub.d/83_sp11_camera_e002b_r3b_ov13858_id =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r3b — OV13858 identity probe' --id 'sp11-camera-e002b-r3b-ov13858-id' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r3b-ov13858-id/x1e80100-microsoft-denali-sp11-e002b-r3b-probe.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r3b-ov13858-id/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r3b sp11_camera_e002b_r3b=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r3b-ov13858-id/initrd.img-7.1.5-sp11-camera-e002b-r3b
+}
+
+===== /etc/grub.d/84_sp11_camera_e002b_r3d_mclk =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r3d — corrected CAMCC MCLK no-power gate' --id 'sp11-camera-e002b-r3d-mclk' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r3d-mclk/x1e80100-microsoft-denali-sp11-e002b-r3d.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r3d-mclk/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r3d sp11_camera_e002b_r3d=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r3d-mclk/initrd.img-7.1.5-sp11-camera-e002b-r3d
+}
+
+===== /etc/grub.d/85_sp11_camera_e002b_r3e_ov13858_id =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r3e — OV13858 ID on corrected CAMCC' --id 'sp11-camera-e002b-r3e-ov13858-id' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r3e-ov13858-id/x1e80100-microsoft-denali-sp11-e002b-r3d.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r3e-ov13858-id/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r3e sp11_camera_e002b_r3e=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r3e-ov13858-id/initrd.img-7.1.5-sp11-camera-e002b-r3e
+}
+
+===== /etc/grub.d/86_sp11_camera_e002b_r3f_windows_exact_id =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r3f — Windows-exact OV13858 ID' --id 'sp11-camera-e002b-r3f-windows-id' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r3f/x1e80100-microsoft-denali-sp11-e002b-r3f.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r3f/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r3f sp11_camera_e002b_r3f=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r3f/initrd.img-7.1.5-sp11-camera-e002b-r3f
+}
+
+===== /etc/grub.d/87_sp11_camera_e002b_r3g_gpio97_mclk1 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r3g — GPIO97 MCLK1' --id 'sp11-camera-e002b-r3g-gpio97-mclk1' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r3g/x1e80100-microsoft-denali-sp11-e002b-r3g.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r3g/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r3g sp11_camera_e002b_r3g=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r3g/initrd.img-7.1.5-sp11-camera-e002b-r3g
+}
+
+===== /etc/grub.d/88_sp11_camera_e002b_r3g_strict =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002b-r3g STRICT — GPIO97 MCLK1' --id 'sp11-camera-e002b-r3g-strict' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002b-r3g/x1e80100-microsoft-denali-sp11-e002b-r3g.dtb
+ linux /boot/sp11-7.1.5-camera-e002b-r3g/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002b-r3g sp11_camera_e002b_r3g=1
+ initrd /boot/sp11-7.1.5-camera-e002b-r3g/initrd.img-7.1.5-sp11-camera-e002b-r3g
+}
+
+===== /etc/grub.d/89_sp11_camera_e002c_native_bind =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002c — native OV13858 bind' --id 'sp11-camera-e002c-native-bind' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002c-native/x1e80100-microsoft-denali-sp11-e002c-native.dtb
+ linux /boot/sp11-7.1.5-camera-e002c-native/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002c-native sp11_camera_e002c=1
+ initrd /boot/sp11-7.1.5-camera-e002c-native/initrd.img-7.1.5-sp11-camera-e002c-native
+}
+
+===== /etc/grub.d/90_sp11_camera_e002c_r1_native_bind =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002c-r1 — native OV13858 bind' --id 'sp11-camera-e002c-r1-native-bind' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002c-r1/x1e80100-microsoft-denali-sp11-e002c-r1.dtb
+ linux /boot/sp11-7.1.5-camera-e002c-r1/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002c-r1 sp11_camera_e002c_r1=1
+ initrd /boot/sp11-7.1.5-camera-e002c-r1/initrd.img-7.1.5-sp11-camera-e002c-r1
+}
+
+===== /etc/grub.d/91_sp11_camera_e002d_graph =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002d — rear CSIPHY1 graph' --id 'sp11-camera-e002d-graph' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002d-graph/x1e80100-microsoft-denali-sp11-e002d-graph.dtb
+ linux /boot/sp11-7.1.5-camera-e002d-graph/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002d-graph sp11_camera_e002d=1
+ initrd /boot/sp11-7.1.5-camera-e002d-graph/initrd.img-7.1.5-sp11-camera-e002d-graph
+}
+
+===== /etc/grub.d/92_sp11_camera_e002e_linkfreq =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002e — rear 592.8MHz metadata' --id 'sp11-camera-e002e-linkfreq' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002e-linkfreq/x1e80100-microsoft-denali-sp11-e002e-linkfreq.dtb
+ linux /boot/sp11-7.1.5-camera-e002e-linkfreq/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002e-linkfreq sp11_camera_e002e=1
+ initrd /boot/sp11-7.1.5-camera-e002e-linkfreq/initrd.img-7.1.5-sp11-camera-e002e-linkfreq
+}
+
+===== /etc/grub.d/93_sp11_camera_e002f_mode0 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002f — Surface mode0 standby' --id 'sp11-camera-e002f-mode0' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002f-mode0/x1e80100-microsoft-denali-sp11-e002f-mode0.dtb
+ linux /boot/sp11-7.1.5-camera-e002f-mode0/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002f-mode0 sp11_camera_e002f=1
+ initrd /boot/sp11-7.1.5-camera-e002f-mode0/initrd.img-7.1.5-sp11-camera-e002f-mode0
+}
+
+===== /etc/grub.d/94_sp11_camera_e002g_mode0 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002g — native Surface mode0 semantics' --id 'sp11-camera-e002g-mode0' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002g-mode0/x1e80100-microsoft-denali-sp11-e002g-mode0.dtb
+ linux /boot/sp11-7.1.5-camera-e002g-mode0/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002g-mode0 sp11_camera_e002g=1
+ initrd /boot/sp11-7.1.5-camera-e002g-mode0/initrd.img-7.1.5-sp11-camera-e002g-mode0
+}
+
+===== /etc/grub.d/95_sp11_camera_e002h_stream =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002h — first controlled rear stream' --id 'sp11-camera-e002h-stream' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002h-stream/x1e80100-microsoft-denali-sp11-e002h-stream.dtb
+ linux /boot/sp11-7.1.5-camera-e002h-stream/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002h-stream sp11_camera_e002h=1
+ initrd /boot/sp11-7.1.5-camera-e002h-stream/initrd.img-7.1.5-sp11-camera-e002h-stream
+}
+
+===== /etc/grub.d/96_sp11_camera_e002h_r1 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002h-r1 — CSIPHY1 8K window' --id 'sp11-camera-e002h-r1' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002h-r1/x1e80100-microsoft-denali-sp11-e002h-r1.dtb
+ linux /boot/sp11-7.1.5-camera-e002h-r1/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002h-r1 sp11_camera_e002h_r1=1
+ initrd /boot/sp11-7.1.5-camera-e002h-r1/initrd.img-7.1.5-sp11-camera-e002h-r1
+}
+
+===== /etc/grub.d/97_sp11_camera_e002k_a_no_vaf =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002k-A — rear sensor no VAF' --id 'sp11-camera-e002k-a' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002k-a/x1e80100-microsoft-denali-sp11-e002k-a.dtb
+ linux /boot/sp11-7.1.5-camera-e002k-a/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-a sp11_camera_e002k_a=1
+ initrd /boot/sp11-7.1.5-camera-e002k-a/initrd.img-7.1.5-sp11-camera-e002k-a
+}
+
+===== /etc/grub.d/98_sp11_camera_e002k_b_standard_supplies =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002k-B — standard rear supplies' --id 'sp11-camera-e002k-b' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002k-b/x1e80100-microsoft-denali-sp11-e002k-b.dtb
+ linux /boot/sp11-7.1.5-camera-e002k-b/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-b sp11_camera_e002k_b=1
+ initrd /boot/sp11-7.1.5-camera-e002k-b/initrd.img-7.1.5-sp11-camera-e002k-b
+}
+
+===== /etc/grub.d/99a_sp11_camera_e002k_d_r1_native_pm8010 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002k-D-R1 — native PM8010 provider' --id 'sp11-camera-e002k-d-r1-native-pm8010' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002k-d-r1-native-pm8010/x1e80100-microsoft-denali-sp11-e002k-d-r1.dtb
+ linux /boot/sp11-7.1.5-camera-e002k-d-r1-native-pm8010/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-d-r1-native-pm8010 sp11_camera_e002k_d_r1=1
+ initrd /boot/sp11-7.1.5-camera-e002k-d-r1-native-pm8010/initrd.img-7.1.5-sp11-camera-e002k-d-r1
+}
+
+===== /etc/grub.d/99b_sp11_camera_e002k_d_r2_native_pm8010 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002k-D-R2 — native PM8010 camera' --id 'sp11-camera-e002k-d-r2-native-pm8010' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002k-d-r2-native-pm8010/x1e80100-microsoft-denali-sp11-e002k-d-r2.dtb
+ linux /boot/sp11-7.1.5-camera-e002k-d-r2-native-pm8010/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-d-r2-native-pm8010 sp11_camera_e002k_d_r2=1
+ initrd /boot/sp11-7.1.5-camera-e002k-d-r2-native-pm8010/initrd.img-7.1.5-sp11-camera-e002k-d-r2
+}
+
+===== /etc/grub.d/99c_sp11_camera_e002k_d_r3_source_integrated =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002k-D-R3 — source-integrated production camera' --id 'sp11-camera-e002k-d-r3-source-integrated' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002k-d-r3-source-integrated/x1e80100-microsoft-denali-sp11-e002k-d-r3.dtb
+ linux /boot/sp11-7.1.5-camera-e002k-d-r3-source-integrated/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-d-r3-source-integrated sp11_camera_e002k_d_r3=1
+ initrd /boot/sp11-7.1.5-camera-e002k-d-r3-source-integrated/initrd.img-7.1.5-sp11-camera-e002k-d-r3
+}
+
+===== /etc/grub.d/99d_sp11_camera_e003b_imx681_identity =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003b — IMX681 electrical identity only' --id 'sp11-camera-e003b-imx681-identity' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003b-imx681-identity/x1e80100-microsoft-denali-sp11-e003b-identity.dtb
+ linux /boot/sp11-7.1.5-camera-e003b-imx681-identity/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003b-imx681-identity sp11_camera_e003b_imx681_identity=1
+ initrd /boot/sp11-7.1.5-camera-e003b-imx681-identity/initrd.img-7.1.5-sp11-camera-e003b-imx681-identity
+}
+
+===== /etc/grub.d/99e_sp11_camera_e003c_imx681_bind =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003c — native IMX681 bind only' --id 'sp11-camera-e003c-imx681-bind' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003c-imx681-bind/x1e80100-microsoft-denali-sp11-e003c-native-bind.dtb
+ linux /boot/sp11-7.1.5-camera-e003c-imx681-bind/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003c-imx681-bind sp11_camera_e003c_imx681_bind=1
+ initrd /boot/sp11-7.1.5-camera-e003c-imx681-bind/initrd.img-7.1.5-sp11-camera-e003c-imx681-bind
+}
+
+===== /etc/grub.d/99f_sp11_camera_e003d_cphy_graph =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003d — IMX681 C-PHY idle graph' --id 'sp11-camera-e003d-cphy-graph' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003d-cphy-graph/x1e80100-microsoft-denali-sp11-e003d-cphy-graph.dtb
+ linux /boot/sp11-7.1.5-camera-e003d-cphy-graph/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003d-cphy-graph sp11_camera_e003d_cphy_graph=1
+ initrd /boot/sp11-7.1.5-camera-e003d-cphy-graph/initrd.img-7.1.5-sp11-camera-e003d-cphy-graph
+}
+
+===== /etc/grub.d/99g_sp11_camera_e003e_mode0_standby =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003e — IMX681 mode0 standby' --id 'sp11-camera-e003e-mode0-standby' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003e-mode0-standby/x1e80100-microsoft-denali-sp11-e003e-mode0-standby.dtb
+ linux /boot/sp11-7.1.5-camera-e003e-mode0-standby/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003e-mode0-standby sp11_camera_e003e_mode0_standby=1
+ initrd /boot/sp11-7.1.5-camera-e003e-mode0-standby/initrd.img-7.1.5-sp11-camera-e003e-mode0-standby
+}
+
+===== /etc/grub.d/99h_sp11_camera_e003f_cphy_receiver =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003f — receiver-only C-PHY electrical' --id 'sp11-camera-e003f-cphy-receiver' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003f-cphy-receiver/x1e80100-microsoft-denali-sp11-e003f-cphy-receiver.dtb
+ linux /boot/sp11-7.1.5-camera-e003f-cphy-receiver/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003f-cphy-receiver sp11_camera_e003f_cphy_receiver=1
+ initrd /boot/sp11-7.1.5-camera-e003f-cphy-receiver/initrd.img-7.1.5-sp11-camera-e003f-cphy-receiver
+}
+
+===== /etc/grub.d/99i_sp11_camera_e003f_r2_cphy_receiver =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003f-R2 — receiver-only C-PHY electrical' --id 'sp11-camera-e003f-r2-cphy-receiver' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003f-r2-cphy-receiver/x1e80100-microsoft-denali-sp11-e003f-r2-cphy-receiver.dtb
+ linux /boot/sp11-7.1.5-camera-e003f-r2-cphy-receiver/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003f-r2-cphy-receiver sp11_camera_e003f_r2_cphy_receiver=1
+ initrd /boot/sp11-7.1.5-camera-e003f-r2-cphy-receiver/initrd.img-7.1.5-sp11-camera-e003f-r2-cphy-receiver
+}
+
+===== /etc/grub.d/99j_sp11_camera_e003f_r2_dt_smoke =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003f-R2 — DT-only smoke' --id 'sp11-camera-e003f-r2-dt-smoke' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003f-r2-dt-smoke/x1e80100-microsoft-denali-sp11-e003f-r2-dt-smoke.dtb
+ linux /boot/sp11-7.1.5-camera-e003f-r2-dt-smoke/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003f-r2-dt-smoke sp11_camera_e003f_r2_dt_smoke=1
+ initrd /boot/sp11-7.1.5-camera-e003f-r2-dt-smoke/initrd.img-7.1.5-sp11-camera-e003f-r2-dt-smoke
+}
+
+===== /etc/grub.d/99j_sp11_camera_e003f_r3_cphy_receiver =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003f-R3 — host-powered receiver C-PHY electrical' --id 'sp11-camera-e003f-r3-cphy-receiver' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003f-r3-cphy-receiver/x1e80100-microsoft-denali-sp11-e003f-r3-cphy-receiver.dtb
+ linux /boot/sp11-7.1.5-camera-e003f-r3-cphy-receiver/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003f-r3-cphy-receiver sp11_camera_e003f_r3_cphy_receiver=1
+ initrd /boot/sp11-7.1.5-camera-e003f-r3-cphy-receiver/initrd.img-7.1.5-sp11-camera-e003f-r3-cphy-receiver
+}
+
+===== /etc/grub.d/99k_sp11_camera_e003f_r2_initrd_smoke =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003f-R2 — initrd-only smoke' --id 'sp11-camera-e003f-r2-initrd-smoke' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003f-r2-initrd-smoke/x1e80100-microsoft-denali-sp11-e003f-r2-initrd-smoke.dtb
+ linux /boot/sp11-7.1.5-camera-e003f-r2-initrd-smoke/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003f-r2-initrd-smoke sp11_camera_e003f_r2_initrd_smoke=1
+ initrd /boot/sp11-7.1.5-camera-e003f-r2-initrd-smoke/initrd.img-7.1.5-sp11-camera-e003f-r2-initrd-smoke
+}
+
+===== /etc/grub.d/99k_sp11_camera_e003h_rdi_first_frame =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — bounded front RDI first frame' --id 'sp11-camera-e003h-rdi-first-frame' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-rdi-first-frame/x1e80100-microsoft-denali-sp11-e003h-rdi-first-frame.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-rdi-first-frame/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e003h-rdi-first-frame sp11_camera_e003h_rdi_first_frame=1 modprobe.blacklist=qcom_camss,imx681,ov13858
+ initrd /boot/sp11-7.1.5-audio-fullio-v19c/initrd.img-7.1.5-sp11-fullio-v19c
+}
+
+===== /etc/grub.d/99l_sp11_camera_e003h_pix_one_shot =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — bounded VFE1 PIX one-shot' --id 'sp11-camera-e003h-pix-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-pix-one-shot/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-pix-one-shot/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-pix-one-shot sp11_camera_e003h_pix_one_shot=1
+ initrd /boot/sp11-7.1.5-camera-e003h-pix-one-shot/initrd.img-7.1.5-sp11-camera-e003h-pix-one-shot
+}
+
+===== /etc/grub.d/99m_sp11_camera_e003h_csid1_0042 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 IPP 0042 bounded one-shot' --id 'sp11-camera-e003h-csid1-0042-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csid1-0042/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csid1-0042/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csid1-0042 sp11_camera_e003h_csid1_0042=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csid1-0042/initrd.img-7.1.5-sp11-camera-e003h-csid1-0042
+}
+
+===== /etc/grub.d/99n_sp11_camera_e003h_csid1_0043 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 IPP 0043 bounded one-shot' --id 'sp11-camera-e003h-csid1-0043-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csid1-0043/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csid1-0043/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csid1-0043 sp11_camera_e003h_csid1_0043=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csid1-0043/initrd.img-7.1.5-sp11-camera-e003h-csid1-0043
+}
+
+===== /etc/grub.d/99n_sp11_camera_e003h_csid1_0044 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 common lifecycle 0044 bounded one-shot' --id 'sp11-camera-e003h-csid1-0044-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csid1-0044/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csid1-0044/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csid1-0044 sp11_camera_e003h_csid1_0044=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csid1-0044/initrd.img-7.1.5-sp11-camera-e003h-csid1-0044
+}
+
+===== /etc/grub.d/99n_sp11_camera_e003h_ife_base_0045 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — IFE startup base wrapper 0045 bounded one-shot' --id 'sp11-camera-e003h-ife-base-0045-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-ife-base-0045/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-ife-base-0045/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-ife-startup-base-wrapper-0045-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-ife-base-0045 sp11_camera_e003h_ife_base_0045=1
+ initrd /boot/sp11-7.1.5-camera-e003h-ife-base-0045/initrd.img-7.1.5-sp11-camera-e003h-ife-base-0045
+}
+
+===== /etc/grub.d/99n_sp11_camera_e003h_vfe1_0046 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — VFE1 timeout telemetry 0046 bounded one-shot' --id 'sp11-camera-e003h-vfe1-0046-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfe1-0046/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfe1-0046/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-timeout-readonly-0046-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfe1-0046 sp11_camera_e003h_vfe1_0046=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfe1-0046/initrd.img-7.1.5-sp11-camera-e003h-vfe1-0046
+}
+
+===== /etc/grub.d/99n_sp11_camera_e003h_vfe1_0047 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — VFE1 DAL start prefix 0047 bounded one-shot' --id 'sp11-camera-e003h-vfe1-0047-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfe1-0047/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfe1-0047/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-dal-start-prefix-0047-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfe1-0047 sp11_camera_e003h_vfe1_0047=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfe1-0047/initrd.img-7.1.5-sp11-camera-e003h-vfe1-0047
+}
+
+===== /etc/grub.d/99o_sp11_camera_e003h_csidirq_0048 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 IPP IRQ history 0048 bounded one-shot' --id 'sp11-camera-e003h-csidirq-0048-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csidirq-0048/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csidirq-0048/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-csid1-ipp-irq-history-0048-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csidirq-0048 sp11_camera_e003h_csidirq_0048=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csidirq-0048/initrd.img-7.1.5-sp11-camera-e003h-csidirq-0048
+}
+
+===== /etc/grub.d/99p_sp11_camera_e003h_csidclk_0052 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 clock-rate correction 0052 bounded one-shot' --id 'sp11-camera-e003h-csidclk-0052-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csidclk-0052/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csidclk-0052/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-csid1-clock-rate-0052-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csidclk-0052 sp11_camera_e003h_csidclk_0052=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csidclk-0052/initrd.img-7.1.5-sp11-camera-e003h-csidclk-0052
+}
+
+===== /etc/grub.d/99p_sp11_camera_e003h_csidframe_0049 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 line-error frame telemetry 0049 bounded one-shot' --id 'sp11-camera-e003h-csidframe-0049-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csidframe-0049/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csidframe-0049/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-csid1-line-error-frame-0049-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csidframe-0049 sp11_camera_e003h_csidframe_0049=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csidframe-0049/initrd.img-7.1.5-sp11-camera-e003h-csidframe-0049
+}
+
+===== /etc/grub.d/99p_sp11_camera_e003h_csidseq_0050 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 first-IRQ geometry telemetry 0050 bounded one-shot' --id 'sp11-camera-e003h-csidseq-0050-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csidseq-0050/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csidseq-0050/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-csid1-first-irq-geometry-0050-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csidseq-0050 sp11_camera_e003h_csidseq_0050=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csidseq-0050/initrd.img-7.1.5-sp11-camera-e003h-csidseq-0050
+}
+
+===== /etc/grub.d/99p_sp11_camera_e003h_rupclear_0051 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID1 RUP_DONE ownership 0051 bounded one-shot' --id 'sp11-camera-e003h-rupclear-0051-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-rupclear-0051/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-rupclear-0051/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-csid1-rupdone-no-regupdate-0051-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-rupclear-0051 sp11_camera_e003h_rupclear_0051=1
+ initrd /boot/sp11-7.1.5-camera-e003h-rupclear-0051/initrd.img-7.1.5-sp11-camera-e003h-rupclear-0051
+}
+
+===== /etc/grub.d/99q_sp11_camera_e003h_csidcomp_0053 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID startup companion RT-CDM transport 0053 bounded one-shot' --id 'sp11-camera-e003h-csidcomp-0053-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csidcomp-0053/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csidcomp-0053/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-startup-csid-companion-rtcdm-0053-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csidcomp-0053 sp11_camera_e003h_csidcomp_0053=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csidcomp-0053/initrd.img-7.1.5-sp11-camera-e003h-csidcomp-0053
+}
+
+===== /etc/grub.d/99r_sp11_camera_e003h_mode2_0054 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — Windows-selected IMX681 mode2 0054 bounded one-shot' --id 'sp11-camera-e003h-mode2-0054-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-mode2-0054/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-mode2-0054/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-imx681-mode2-parity-0054-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-mode2-0054 sp11_camera_e003h_mode2_0054=1
+ initrd /boot/sp11-7.1.5-camera-e003h-mode2-0054/initrd.img-7.1.5-sp11-camera-e003h-mode2-0054
+}
+
+===== /etc/grub.d/99_sp11_camera_e002k_c_firmware_profile =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E002k-C — firmware-selected rear profile' --id 'sp11-camera-e002k-c' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e002k-c/x1e80100-microsoft-denali-sp11-e002k-c.dtb
+ linux /boot/sp11-7.1.5-camera-e002k-c/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-camera-e002k-c sp11_camera_e002k_c=1
+ initrd /boot/sp11-7.1.5-camera-e002k-c/initrd.img-7.1.5-sp11-camera-e002k-c
+}
+
+===== /etc/grub.d/99s_sp11_camera_e003h_camnoc_0055 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CAMNOC RT rate telemetry 0055 bounded one-shot' --id 'sp11-camera-e003h-camnoc-0055-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-camnoc-0055/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-camnoc-0055/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-camnoc-rate-0055-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-camnoc-0055 sp11_camera_e003h_camnoc_0055=1
+ initrd /boot/sp11-7.1.5-camera-e003h-camnoc-0055/initrd.img-7.1.5-sp11-camera-e003h-camnoc-0055
+}
+
+===== /etc/grub.d/99t_sp11_camera_e003h_camnoc300_0056 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — IFE1 CAMNOC RT 300 MHz parity 0056 bounded one-shot' --id 'sp11-camera-e003h-camnoc300-0056-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-camnoc300-0056/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-camnoc300-0056/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-camnoc-rate-parity-0056-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-camnoc300-0056 sp11_camera_e003h_camnoc300_0056=1
+ initrd /boot/sp11-7.1.5-camera-e003h-camnoc300-0056/initrd.img-7.1.5-sp11-camera-e003h-camnoc300-0056
+}
+
+===== /etc/grub.d/99u_sp11_camera_e003h_vfeactive_0057 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — active IFE1 DAL prefix 0057 bounded one-shot' --id 'sp11-camera-e003h-vfeactive-0057-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfeactive-0057/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfeactive-0057/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-sp11-active-start-prefix-0057-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfeactive-0057 sp11_camera_e003h_vfeactive_0057=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfeactive-0057/initrd.img-7.1.5-sp11-camera-e003h-vfeactive-0057
+}
+
+===== /etc/grub.d/99v_sp11_camera_e003h_vfeap_0058 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — read-only VFE1 aperture telemetry 0058' --id 'sp11-camera-e003h-vfeap-0058-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video; set gfxpayload=keep; insmod gzio; insmod part_gpt; insmod ext2; insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfeap-0058/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfeap-0058/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-aperture-telemetry-0058-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfeap-0058 sp11_camera_e003h_vfeap_0058=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfeap-0058/initrd.img-7.1.5-sp11-camera-e003h-vfeap-0058
+}
+
+===== /etc/grub.d/99w_sp11_camera_e003h_vfebus_0060 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — VFE1 BUS progress read-only telemetry 0060 bounded one-shot' --id 'sp11-camera-e003h-vfebus-0060-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfebus-0060/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfebus-0060/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-bus-progress-readonly-0060-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfebus-0060 sp11_camera_e003h_vfebus_0060=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfebus-0060/initrd.img-7.1.5-sp11-camera-e003h-vfebus-0060
+}
+
+===== /etc/grub.d/99w_sp11_camera_e003h_vfelowtop_0059 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — VFE1 low-TOP read-only telemetry 0059 bounded one-shot' --id 'sp11-camera-e003h-vfelowtop-0059-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfelowtop-0059/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfelowtop-0059/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-lowtop-readonly-0059-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfelowtop-0059 sp11_camera_e003h_vfelowtop_0059=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfelowtop-0059/initrd.img-7.1.5-sp11-camera-e003h-vfelowtop-0059
+}
+
+===== /etc/grub.d/99w_sp11_camera_e003h_vfeubwc_0061 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — VFE1 UBWC-static parity 0061 bounded one-shot' --id 'sp11-camera-e003h-vfeubwc-0061-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfeubwc-0061/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfeubwc-0061/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-ubwc-static-0061-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfeubwc-0061 sp11_camera_e003h_vfeubwc_0061=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfeubwc-0061/initrd.img-7.1.5-sp11-camera-e003h-vfeubwc-0061
+}
+
+===== /etc/grub.d/99x_sp11_camera_e003h_vfecgc_0062 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — VFE1 CGC release 0062 bounded one-shot' --id 'sp11-camera-e003h-vfecgc-0062-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfecgc-0062/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfecgc-0062/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime quiet splash console=tty0 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-cgc-release-0062-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfecgc-0062 sp11_camera_e003h_vfecgc_0062=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfecgc-0062/initrd.img-7.1.5-sp11-camera-e003h-vfecgc-0062
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_0075a_hardened_0072_control =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — 0075a hardened 0072 control' --id 'sp11-camera-e003h-0075a-hardened-0072-control-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-iq-provider-0072-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-0075a-hardened-0072-control sp11_camera_e003h_0075a=1
+ initrd /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/initrd.img-7.1.5-sp11-camera-e003h-iqfifo-0072
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_0075b_atomic_r45_on_0072 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — 0075b atomic R4/R5 on accepted 0072' --id 'sp11-camera-e003h-0075b-atomic-r45-on-0072-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-0075b-atomic-r45-on-0072/firmware sp11_entry=7.1.5-sp11-camera-e003h-0075b-atomic-r45-on-0072 sp11_camera_e003h_0075b=1
+ initrd /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/initrd.img-7.1.5-sp11-camera-e003h-iqfifo-0072
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_csidepoch_0063 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID Epoch lifecycle bridge 0063 bounded one-shot' --id 'sp11-camera-e003h-csidepoch-0063-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csidepoch-0063/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csidepoch-0063/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-csid-epoch-lifecycle-bridge-0063-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csidepoch-0063 sp11_camera_e003h_csidepoch_0063=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csidepoch-0063/initrd.img-7.1.5-sp11-camera-e003h-csidepoch-0063
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_csidvideo_0064 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — CSID BUF_DONE VIDEO generation 0064 bounded one-shot' --id 'sp11-camera-e003h-csidvideo-0064-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-csidvideo-0064/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-csidvideo-0064/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-csid-bufdone-video-0064-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-csidvideo-0064 sp11_camera_e003h_csidvideo_0064=1
+ initrd /boot/sp11-7.1.5-camera-e003h-csidvideo-0064/initrd.img-7.1.5-sp11-camera-e003h-csidvideo-0064
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_frame3_0068 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — frame3 slot reuse 0068 bounded one-shot' --id 'sp11-camera-e003h-frame3-0068-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-frame3-0068/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-frame3-0068/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-three-frame-slot-reuse-0068-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-frame3-0068 sp11_camera_e003h_frame3_0068=1
+ initrd /boot/sp11-7.1.5-camera-e003h-frame3-0068/initrd.img-7.1.5-sp11-camera-e003h-frame3-0068
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_frame4_0069 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — frame4 first steady 0069 bounded one-shot' --id 'sp11-camera-e003h-frame4-0069-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-frame4-0069/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-frame4-0069/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-four-frame-steady-0069-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-frame4-0069 sp11_camera_e003h_frame4_0069=1
+ initrd /boot/sp11-7.1.5-camera-e003h-frame4-0069/initrd.img-7.1.5-sp11-camera-e003h-frame4-0069
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_frame4_0069r1 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — frame4 first steady 0069r1 bounded one-shot' --id 'sp11-camera-e003h-frame4-0069r1-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-frame4-0069r1/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-frame4-0069r1/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-four-frame-steady-0069r1-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-frame4-0069r1 sp11_camera_e003h_frame4_0069r1=1
+ initrd /boot/sp11-7.1.5-camera-e003h-frame4-0069r1/initrd.img-7.1.5-sp11-camera-e003h-frame4-0069r1
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_frame5_0070 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — exact request5 frame5 0070 bounded one-shot' --id 'sp11-camera-e003h-frame5-0070-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-frame5-0070/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-frame5-0070/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-five-frame-request5-0070-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-frame5-0070 sp11_camera_e003h_frame5_0070=1
+ initrd /boot/sp11-7.1.5-camera-e003h-frame5-0070/initrd.img-7.1.5-sp11-camera-e003h-frame5-0070
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_frame5_0070r1 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — exact request5 frame5 0070r1 bounded one-shot' --id 'sp11-camera-e003h-frame5-0070r1-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-frame5-0070r1/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-frame5-0070r1/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-five-frame-request5-0070r1-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-frame5-0070r1 sp11_camera_e003h_frame5_0070r1=1
+ initrd /boot/sp11-7.1.5-camera-e003h-frame5-0070r1/initrd.img-7.1.5-sp11-camera-e003h-frame5-0070r1
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_iqfifo_0072 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — IQ provider FIFO 0072 bounded one-shot' --id 'sp11-camera-e003h-iqfifo-0072-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-iq-provider-0072-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-iqfifo-0072 sp11_camera_e003h_iqfifo_0072=1
+ initrd /boot/sp11-7.1.5-camera-e003h-iqfifo-0072/initrd.img-7.1.5-sp11-camera-e003h-iqfifo-0072
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_request6_0074 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — request6 0074 bounded one-shot' --id 'sp11-camera-e003h-request6-0074-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-request6-0074/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-request6-0074/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-request6-0074 sp11_camera_e003h_request6_0074=1
+ initrd /boot/sp11-7.1.5-camera-e003h-request6-0074/initrd.img-7.1.5-sp11-camera-e003h-request6-0074
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_request6_0074_attempt3_pwrkeep =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — request6 0074 A3 hardened one-shot' --id 'sp11-camera-e003h-request6-0074-attempt3-pwrkeep-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-request6-0074/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-request6-0074/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-request6-0074-attempt3-pwrkeep sp11_camera_e003h_request6_0074_attempt3_pwrkeep=1
+ initrd /boot/sp11-7.1.5-camera-e003h-request6-0074/initrd.img-7.1.5-sp11-camera-e003h-request6-0074
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_request6_0074_bootdiag_pwrkeep =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — 0074 bootdiag Golden clock/PD keep' --id 'sp11-camera-e003h-request6-0074-bootdiag-pwrkeep-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-request6-0074/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-request6-0074/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-request6-0074-bootdiag-pwrkeep sp11_camera_e003h_request6_0074_bootdiag_pwrkeep=1
+ initrd /boot/sp11-7.1.5-camera-e003h-request6-0074/initrd.img-7.1.5-sp11-camera-e003h-request6-0074
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_request6_0076_longpoll =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — request6 0076 long-poll diagnostic' --id 'sp11-camera-e003h-request6-0076-longpoll-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-request6-0074/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-request6-0074/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-request6-0076-longpoll sp11_camera_e003h_request6_0076=1
+ initrd /boot/sp11-7.1.5-camera-e003h-request6-0074/initrd.img-7.1.5-sp11-camera-e003h-request6-0074
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_requeue_0071 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — live V4L2 requeue 0071 bounded one-shot' --id 'sp11-camera-e003h-requeue-0071-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-requeue-0071/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-requeue-0071/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-live-requeue-0071-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-requeue-0071 sp11_camera_e003h_requeue_0071=1
+ initrd /boot/sp11-7.1.5-camera-e003h-requeue-0071/initrd.img-7.1.5-sp11-camera-e003h-requeue-0071
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_slotlife_0067 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — slot lifetime 0067 bounded one-shot' --id 'sp11-camera-e003h-slotlife-0067-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-slotlife-0067/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-slotlife-0067/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-slot-lifetime-0067-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-slotlife-0067 sp11_camera_e003h_slotlife_0067=1
+ initrd /boot/sp11-7.1.5-camera-e003h-slotlife-0067/initrd.img-7.1.5-sp11-camera-e003h-slotlife-0067
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_v4l2one_0065 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — V4L2 one-frame 0065 bounded one-shot' --id 'sp11-camera-e003h-v4l2one-0065-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-v4l2one-0065/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-v4l2one-0065/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-v4l2-one-frame-0065-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-v4l2one-0065 sp11_camera_e003h_v4l2one_0065=1
+ initrd /boot/sp11-7.1.5-camera-e003h-v4l2one-0065/initrd.img-7.1.5-sp11-camera-e003h-v4l2one-0065
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_v4l2two_0066 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — V4L2 two-frame 0066 bounded one-shot' --id 'sp11-camera-e003h-v4l2two-0066-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-v4l2two-0066/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-v4l2two-0066/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-v4l2-two-frame-0066-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-v4l2two-0066 sp11_camera_e003h_v4l2two_0066=1
+ initrd /boot/sp11-7.1.5-camera-e003h-v4l2two-0066/initrd.img-7.1.5-sp11-camera-e003h-v4l2two-0066
+}
+
+===== /etc/grub.d/99y_sp11_camera_e003h_vfecgc_0062r1 =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003h — VFE1 CGC release 0062r1 diagnostic bounded one-shot' --id 'sp11-camera-e003h-vfecgc-0062r1-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003h-vfecgc-0062r1/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003h-vfecgc-0062r1/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-vfe1-cgc-release-0062r1-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003h-vfecgc-0062r1 sp11_camera_e003h_vfecgc_0062r1=1
+ initrd /boot/sp11-7.1.5-camera-e003h-vfecgc-0062r1/initrd.img-7.1.5-sp11-camera-e003h-vfecgc-0062r1
+}
+
+===== /etc/grub.d/99za_sp11_camera_e003i_u_tlbg =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-U — corrected TL_BG bounded diagnostic' --id 'sp11-camera-e003i-u-corrected-tlbg-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-u-tlbg/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-u-tlbg/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-u-tlbg sp11_camera_e003i_u_tlbg=1
+ initrd /boot/sp11-7.1.5-camera-e003i-u-tlbg/initrd.img-7.1.5-sp11-camera-e003i-u-tlbg
+}
+
+===== /etc/grub.d/99za_sp11_camera_e003i_z_3a =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-Z — paired TL_BG and 3A bounded diagnostic' --id 'sp11-camera-e003i-z-3a-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-z-3a/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-z-3a/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-z-3a sp11_camera_e003i_z_3a=1
+ initrd /boot/sp11-7.1.5-camera-e003i-z-3a/initrd.img-7.1.5-sp11-camera-e003i-z-3a
+}
+
+===== /etc/grub.d/99zb_sp11_camera_e003i_af_live_iq =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AF — bounded live trigger IQ producer' --id 'sp11-camera-e003i-af-live-iq-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-af-live-iq/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-af-live-iq/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-af-live-iq sp11_camera_e003i_af_live_iq=1
+ initrd /boot/sp11-7.1.5-camera-e003i-af-live-iq/initrd.img-7.1.5-sp11-camera-e003i-af-live-iq
+}
+
+===== /etc/grub.d/99zc_sp11_camera_e003i_ag_live_iq =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AG — bounded live trigger IQ producer' --id 'sp11-camera-e003i-ag-live-iq-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-ag-live-iq/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-ag-live-iq/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-ag-live-iq sp11_camera_e003i_ag_live_iq=1
+ initrd /boot/sp11-7.1.5-camera-e003i-ag-live-iq/initrd.img-7.1.5-sp11-camera-e003i-ag-live-iq
+}
+
+===== /etc/grub.d/99zd_sp11_camera_e003i_ah_live_iq =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AH — bounded live trigger IQ producer' --id 'sp11-camera-e003i-ah-live-iq-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-ah-live-iq/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-ah-live-iq/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-ah-live-iq sp11_camera_e003i_ah_live_iq=1
+ initrd /boot/sp11-7.1.5-camera-e003i-ah-live-iq/initrd.img-7.1.5-sp11-camera-e003i-ah-live-iq
+}
+
+===== /etc/grub.d/99zd_sp11_camera_e003i_ai_live_iq =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AI — bounded live trigger IQ producer' --id 'sp11-camera-e003i-ai-live-iq-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-ai-live-iq/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-ai-live-iq/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-ai-live-iq sp11_camera_e003i_ai_live_iq=1
+ initrd /boot/sp11-7.1.5-camera-e003i-ai-live-iq/initrd.img-7.1.5-sp11-camera-e003i-ai-live-iq
+}
+
+===== /etc/grub.d/99ze_sp11_camera_e003i_ak_exposure =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AK — AJ exposure controls one-shot' --id 'sp11-camera-e003i-ak-exposure-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-ak-exposure/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-ak-exposure/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-ak-exposure sp11_camera_e003i_ak_exposure=1
+ initrd /boot/sp11-7.1.5-camera-e003i-ak-exposure/initrd.img-7.1.5-sp11-camera-e003i-ak-exposure
+}
+
+===== /etc/grub.d/99zf_sp11_camera_e003i_al_exposure =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AL — AJ exposure controls one-shot' --id 'sp11-camera-e003i-al-exposure-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-al-exposure/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-al-exposure/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-al-exposure sp11_camera_e003i_al_exposure=1
+ initrd /boot/sp11-7.1.5-camera-e003i-al-exposure/initrd.img-7.1.5-sp11-camera-e003i-al-exposure
+}
+
+===== /etc/grub.d/99zg_sp11_camera_e003i_an_exposure =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AN — AM exposure cluster one-shot' --id 'sp11-camera-e003i-an-exposure-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-an-exposure/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-an-exposure/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-an-exposure sp11_camera_e003i_an_exposure=1
+ initrd /boot/sp11-7.1.5-camera-e003i-an-exposure/initrd.img-7.1.5-sp11-camera-e003i-an-exposure
+}
+
+===== /etc/grub.d/99zh_sp11_camera_e003i_ap_exposure =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-AP — AM controls + AO audit one-shot' --id 'sp11-camera-e003i-ap-exposure-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-ap-exposure/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-ap-exposure/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-ap-exposure sp11_camera_e003i_ap_exposure=1
+ initrd /boot/sp11-7.1.5-camera-e003i-ap-exposure/initrd.img-7.1.5-sp11-camera-e003i-ap-exposure
+}
+
+===== /etc/grub.d/99zh_sp11_camera_e003i_cy_latch =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-CY — CW mid-stream latch one-shot' --id 'sp11-camera-e003i-cy-latch-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-cy-latch/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-cy-latch/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-cy-latch sp11_camera_e003i_cy_latch=1
+ initrd /boot/sp11-7.1.5-camera-e003i-cy-latch/initrd.img-7.1.5-sp11-camera-e003i-cy-latch
+}
+
+===== /etc/grub.d/99z_sp11_camera_e003i_s_live_tlbg =====
+#!/bin/sh
+exec tail -n +3 $0
+menuentry 'SP11 Camera E003i-S — bounded live TL_BG diagnostic' --id 'sp11-camera-e003i-s-live-tlbg-one-shot' --class ubuntu --class gnu-linux --class gnu --class os {
+ load_video
+ set gfxpayload=keep
+ insmod gzio
+ insmod part_gpt
+ insmod ext2
+ insmod fdt
+ search --no-floppy --fs-uuid --set=root 33e842b7-0434-4749-b03a-299bdcdb8b9f
+ devicetree /boot/sp11-7.1.5-camera-e003i-s-live-tlbg/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb
+ linux /boot/sp11-7.1.5-camera-e003i-s-live-tlbg/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-s-live-tlbg sp11_camera_e003i_s_live_tlbg=1
+ initrd /boot/sp11-7.1.5-camera-e003i-s-live-tlbg/initrd.img-7.1.5-sp11-camera-e003i-s-live-tlbg
+}
