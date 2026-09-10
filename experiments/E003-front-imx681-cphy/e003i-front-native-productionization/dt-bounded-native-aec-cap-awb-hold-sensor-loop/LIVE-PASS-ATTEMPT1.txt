@@ -1,0 +1,57 @@
+E003i DT attempt1 — PASS_SIX_FRAME_CAP_AEC_AWB_HOLD
+Date: 2026-09-10
+Base commit: e6980d36c640d04f378b51314b6b627cb2c1341a
+
+Live result:
+- one candidate boot, one helper invocation, no same-boot retry;
+- runtime preflight clean before module load;
+- six exact V4L2 completions: sequence 0,1,2,3,4,5;
+- six paired TLBG/STATS3A generations: 1..6;
+- three group-held IMX681 sensor writes completed;
+- helper rc=0, STREAMOFF PASS, kernel health PASS;
+- mandatory whole-machine return to Golden PASS;
+- consumed DT GRUB entry/boot bundle retired after Golden return.
+
+Native AEC:
+G1 request4: FLL=3562 EXP=3554 AGAIN=874 DGAIN=256
+G2 request5: FLL=3562 EXP=3554 AGAIN=960 DGAIN=757
+G3 request6: FLL=7116 EXP=7108 AGAIN=960 DGAIN=1471
+G4 request7: FLL=7116 EXP=7108 AGAIN=960 DGAIN=1471
+G5 request8: FLL=7116 EXP=7108 AGAIN=960 DGAIN=1471
+G6 request9: FLL=7116 EXP=7108 AGAIN=960 DGAIN=1471
+
+Sensor release points:
+- source G1 written after completed G2, scheduler effect label G4
+- source G2 written after completed G3, scheduler effect label G5
+- source G3 written after completed G4, scheduler effect label G6
+
+DS producer:
+- G1/G2/G3 all took DQ/DR Windows-valid HOLD_PREVIOUS AWB branch.
+- held XY = 0x3f1129ca / 0x3f00e486
+- held CCT float bits = 0x459c3ffb, published 4999
+- R5 submitted from G2: 6e6eaa1ab014a1c9c86b669452f7cd64c64040b74186ae357c8ef6daf357d802
+- R6 submitted from G3: d6bea8a77e7d67a3e9e082b8a092e201e5c9f2419658b061326c63295966107e
+- producer PASS
+
+Measured-luma replay over saved 3A:
+G1 0x3f1f3d24 = 0.622026682
+G2 0x3f1d7924 = 0.615129709
+G3 0x3f1d79d1 = 0.615140021
+G4 0x3f0c4516 = 0.547929168
+G5 0x3e9b4c09 = 0.303314477
+G6 0x3f2287b5 = 0.634883225
+
+Timing:
+- write G1 after G2: 2,581,356 ns
+- write G2 after G3: 15,035,906 ns
+- write G3 after G4: 5,490,310 ns
+- kernel transactions matched bootstrap + 3 writes exactly.
+
+Optical visibility classification:
+DT itself is a multi-control, scene-dependent integration run and is not used alone to infer optical latency. CY is the dedicated one-step optical experiment: write after G1, G2 remains baseline-like, G3 first strong exposure-dependent BHist change. DU combines that measured N -> N+2 boundary with DT release points and validates effect labels G4/G5/G6.
+
+Preservation:
+External raw archive:
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-dt/attempt1-six-frame-pass-20260910T2052
+
+Continuous automatic-exposure parity is not claimed. CQ residual ISP gain is still computed but not applied by this bounded sensor-side loop.
