@@ -1,16 +1,16 @@
 {
   "file_sha256": {
     ".gitattributes": "9fb635b5498ff3dfcc77c62bc8646d0f313b4ab24baf27114141c57284681b1e",
-    "README.md": "8d0e2e3de23480072dd9809ddf8297a3beb230fcebcd0d59b3e28770cc4a4664",
-    "STATIC-PROOF.md": "15a80bc99fdab5aaad18505c6cdef0791e40e81212ef66a229630f5042dea652",
-    "VERIFY-RESULT.txt": "66de48837b23b444374b329b275a1e3b2ccbe4c55685fcb19d43609f60fddf49",
-    "native-imx681-control.c": "59b1e93e2b4b4b20f32f8119b928b5db720cbae079ae828f2e96584fdfbc08a5",
+    "README.md": "e27d7b5da8dcb11ff04b27c747aa17dddcd9bd06285874fc2e23850141221905",
+    "STATIC-PROOF.md": "dddba811b1030e135d5927e2647d640a389c1b78ce895b33ee7cc48df4ace674",
+    "VERIFY-RESULT.txt": "f03dc86a7fec078354668a1c286e3681c007262098806bbf62fcfcd0621d0a18",
+    "native-imx681-control.c": "53ce8cee8b36ea3283c1f341f6e0b1d4cde1eba5b049a7334d1d4313b9dbd233",
     "native-imx681-control.h": "299d781eddd6b673f9278ea7eef22b4545d6623993b33831472d4c8426d282ea",
-    "verify-cq.py": "df7bb68addf4a6f9a05c590249fa69ff97c33dcf6145ab7bc5ac1c6c6cf65d55",
+    "verify-cq.py": "a134446f6428b42e1c23542a193cbbfa3ed8b9851598eda0691181b096a737d8",
     "windows-oracle/SHA256SUMS.txt": "819bfc785815298577a30aa12fbbe2c18d40a8401412022f80eece00c91e0a68"
   },
   "gain": {
-    "actual_t681_postfit_output_max": 184.0,
+    "actual_t681_postfit_output_max": 92.0,
     "analogue_register_max": "0x03c0",
     "configured_prefit_max": 92.0,
     "global_digital_real_max": 15.0,
@@ -41,17 +41,17 @@
     "returned_to_golden_linux": true,
     "windows_oracle_streams_bounded": true
   },
-  "schema": "sp11-e003i-cq-aec-output-imx681-control-adapter-v1",
+  "schema": "sp11-e003i-cq-aec-output-imx681-control-adapter-v2",
   "scope": "ordinary unlocked activeExposureCount==1 front preview; CP Short T681 result to IMX681 request controls",
   "status": "PASS_WINDOWS_ORACLE_AND_OFFLINE_NATIVE_DIFFERENTIAL",
   "verification": {
     "actual_ch_to_cq_seam_cases": 16384,
     "ap_retained_live_control_evidence": "PASS",
-    "fixed_cases": 64,
+    "fixed_cases": 81,
     "native_vs_aj": "bit-exact controls and ISP-gain float bits",
     "random_gain_time_cases": 65536,
     "two_fresh_runs_identical": true,
-    "verify_result_sha256": "66de48837b23b444374b329b275a1e3b2ccbe4c55685fcb19d43609f60fddf49"
+    "verify_result_sha256": "f03dc86a7fec078354668a1c286e3681c007262098806bbf62fcfcd0621d0a18"
   },
   "windows": {
     "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
@@ -72,6 +72,13 @@
     "ordinary_fll_policy": 8,
     "sensor_blob_sha256": "f7dd81be64153fd3f0da8e6288ee1b9906b7bf51b773a98496934d76dc96a45c",
     "vert_offset_lines": 8,
-    "vt_clock_hz": 719898240
+    "vt_clock_hz": 719898240,
+    "active_preview_range": {
+      "min_gain": 1.0,
+      "min_time_ns": 37516,
+      "max_gain": 92.0,
+      "max_time_ns": 66666664,
+      "range_oracle_zip_sha256": "809e7d58ba5605cbd5f98bcc2e2b41c12843dcc79e91cf2fd86e43647a9e8c67"
+    }
   }
 }

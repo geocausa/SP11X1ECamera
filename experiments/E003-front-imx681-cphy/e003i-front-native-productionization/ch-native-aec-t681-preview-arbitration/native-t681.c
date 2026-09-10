@@ -69,7 +69,7 @@ int e003i_t681_preview_arbitrate(uint64_t target,
     const float min_gain = 1.0f;
     const float max_gain = 92.0f;
     const uint64_t min_time = 37516ULL;
-    const uint64_t max_time = 33333332ULL;
+    const uint64_t max_time = 66666664ULL;
     const float correction = 1.0f;
     uint64_t products[4];
     uint32_t upper;

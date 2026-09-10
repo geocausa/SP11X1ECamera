@@ -18,10 +18,10 @@
 #define E003I_IMX681_DIGITAL_INV_SCALE_F   (1.0f / 256.0f)
 #define E003I_IMX681_DIGITAL_REAL_MAX_F    15.0f
 #define E003I_T681_GAIN_MIN_F              1.0f
-/* CH/AQ preview fit can trade the 66.7 ms tuned knee for gain, reaching 184x. */
-#define E003I_T681_GAIN_OUTPUT_MAX_F       184.0f
+/* AQ 2026-09-10 live controller recapture pins the active preview range. */
+#define E003I_T681_GAIN_OUTPUT_MAX_F       92.0f
 #define E003I_T681_TIME_MIN_NS             UINT64_C(37516)
-#define E003I_T681_TIME_MAX_NS             UINT64_C(33333332)
+#define E003I_T681_TIME_MAX_NS             UINT64_C(66666664)
 
 static double e003i_imx681_line_readout_ns(void)
 {

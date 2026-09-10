@@ -13,7 +13,7 @@ struct e003i_t681_result {
 
 /*
  * Ordinary front-preview T681 arbitration for a positive in-table target.
- * Applies the pinned preview range fit (time maximum 33,333,332 ns) and
+ * Applies the pinned preview range fit (time maximum 66,666,664 ns) and
  * returns the exact retained exposure qword persisted by runEndOfFrame.
  */
 int e003i_t681_preview_arbitrate(uint64_t target_exposure,

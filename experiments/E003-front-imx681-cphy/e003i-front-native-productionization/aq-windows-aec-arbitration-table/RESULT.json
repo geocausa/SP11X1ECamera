@@ -1,5 +1,5 @@
 {
-  "schema": "sp11-e003i-aq-windows-aec-arbitration-table-result-v1",
+  "schema": "sp11-e003i-aq-windows-aec-arbitration-table-result-v2",
   "status": "PASS",
   "prior_live_sensor_control_closure_commit": "911c7cea48217a2b5f8d2c9c68bb2ed44d1b6152",
   "windows_oracle": {
@@ -13,17 +13,51 @@
     "active_candidate_signature": "T5 knees=4 dbrefs=3 hrefs=1",
     "passive_candidate_signature": "T1-T4 dbrefs=1 hrefs=0",
     "debugger_used_for_final_selector_capture": false,
-    "holder_exit_clean": true
+    "holder_exit_clean": true,
+    "active_preview_range_recap": {
+      "date": "2026-09-10",
+      "controller_t5_header_offset": "0x190",
+      "controller_policy_offset": "0x1a0",
+      "min_gain": 1.0,
+      "min_time_ns": 37516,
+      "max_gain": 92.0,
+      "max_time_ns": 66666664,
+      "policy": 0,
+      "zip_sha256": "809e7d58ba5605cbd5f98bcc2e2b41c12843dcc79e91cf2fd86e43647a9e8c67",
+      "read_only_user_mode": true,
+      "golden_return_verified": true
+    }
   },
   "table681": {
     "correction_factor": 1.0,
     "decoded_knees": [
-      [1, 1.0, 37516],
-      [1, 67.0, 33333333],
-      [1, 67.0, 66666666],
-      [0, 92.0, 66666666]
+      [
+        1,
+        1.0,
+        37516
+      ],
+      [
+        1,
+        67.0,
+        33333333
+      ],
+      [
+        1,
+        67.0,
+        66666666
+      ],
+      [
+        0,
+        92.0,
+        66666666
+      ]
     ],
-    "truncated_knee_products": [37516, 2233333311, 4466666622, 6133333272],
+    "truncated_knee_products": [
+      37516,
+      2233333311,
+      4466666622,
+      6133333272
+    ],
     "priority_zero": "gain first then time",
     "priority_nonzero": "time first then gain"
   },
@@ -31,24 +65,37 @@
     "normal_default_exp_table_path_only": true,
     "util_make_table_exposure_fit_included": true,
     "deterministic_and_random_cases": 100017,
-    "segment_case_counts": {"1": 36133, "2": 36635, "3": 27249},
+    "segment_case_counts": {
+      "1": 36133,
+      "2": 36635,
+      "3": 27249
+    },
     "live_output_pair_corroboration": {
       "gain_f32_bits": "0x40e7b95b",
       "exposure_time_ns": 33333332
     },
     "selftest": "PASS",
-    "reproducibility_verifier": "PASS"
+    "reproducibility_verifier": "PASS",
+    "active_preview_fit_limits": {
+      "min_gain": 1.0,
+      "min_time_ns": 37516,
+      "max_gain": 92.0,
+      "max_time_ns": 66666664
+    },
+    "upper_knee_gain_compensation_184_retired": true
   },
   "file_sha256": {
-    "E003I-AQ-aec-arbitration-replay.py": "40523cea10aee14122559c7f721048674e90150462f0172aff27d0125c3aa482",
-    "E003I-AQ-REPLAY-RESULT.txt": "ad949c61b89e5c5ecca814014a55bab74aedde6ad394f3d08e5fdcece78a87cf",
+    "E003I-AQ-aec-arbitration-replay.py": "45a4da2f993e7c5e224fd8592602a3226fc6bbad54936aab87c110fd60fff068",
+    "E003I-AQ-REPLAY-RESULT.txt": "3d8db95a02bad1e4eb032fdd57f4eafd7af062b5935d0714d78d00e426dae4a5",
     "TABLE681.fixture.json": "c6fbbde763c94593f9f839bea6c1f547c812bfef5b7511232c5cb09c0b7e95b1",
-    "verify-aq.py": "daa3a94a583d99ba0b71f5c7ad67c6c8c138568301aac93913b3f36c36753195",
-    "E003I-AQ-VERIFY-RESULT.txt": "16e0fe9e5927254d1d2eed3849a09c6927c5517c44168c78cc8deecf7182493f",
-    "README.md": "a082d1ac17029b53e81767e94431437a2e7b9df08bf203669d9c7e2c0a828e16",
+    "verify-aq.py": "20f437d16f0aeee1d0a84390ced596d7e2b606e227fb5c75947b1a3d0a952b33",
+    "E003I-AQ-VERIFY-RESULT.txt": "025a96749661e2f1ffe31a3abb1e26a3c77cbaff1a4554674992e6e7df956db9",
+    "README.md": "11a2be9f640ab442a6b4c428e7c3dbf448cae418c8fefcbc45c4c9f4f8f0287e",
     "windows-evidence/E003I-AQ-FINAL-LIVE-EVIDENCE.txt": "ea742dbb36d9f89fd52a1cfc19a49659678eeef0b7160f48c1d1c9cd3ed72250",
     "windows-evidence/E003I-AQ-SelectedTableScan.ps1": "b3054394f9ac02ff2ec092aa68cd5ec39df71e6209590cd6df4c1bc27e654e3c",
-    "windows-evidence/E003I-AQ-FinalHolder90.ps1": "7a0a618117b250f7e6dedad1aa0bf256a831f72e5671468f7d7aacffeb9ded31"
+    "windows-evidence/E003I-AQ-FinalHolder90.ps1": "7a0a618117b250f7e6dedad1aa0bf256a831f72e5671468f7d7aacffeb9ded31",
+    "windows-evidence/range-recapture-20260910/E003I-CH-RANGE-RECAPTURE.zip": "809e7d58ba5605cbd5f98bcc2e2b41c12843dcc79e91cf2fd86e43647a9e8c67",
+    ".gitattributes": "0a237e1dc300af97f08954d34a47296509754b5455190e358cc066d393757f65"
   },
   "golden_return_verified": true,
   "live_linux_continuous_aec_claimed": false,

@@ -7,7 +7,7 @@ BASE=HERE.parent
 REPO=HERE.parents[3]
 AQ=BASE/'aq-windows-aec-arbitration-table'
 AX=BASE/'ax-windows-aec-convergence-history-loop'
-DLL=Path('/tmp/sp11-aec-oracle/QcDeviceMFT8380.dll')
+DLL=REPO.parent.parent/'00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/QcDeviceMFT8380.dll'
 SHA='c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd9de785509c1fbebc975facc5286f12865cf675f1d'
 # Replace the hash from a committed checkpoint rather than trust hand transcription.
 SHA=[x.split('=',1)[1] for x in (BASE/'cg-native-aec-qword-convergence-input'/'VERIFY-RESULT.txt').read_text().splitlines() if x.startswith('DLL_SHA256=')][0]
@@ -38,6 +38,15 @@ aq=importlib.util.module_from_spec(spec); spec.loader.exec_module(aq)
 assert aq.KNEES==[(1,1.0,37516),(1,67.0,33333333),(1,67.0,66666666),(0,92.0,66666666)]
 prods=[aq.exposure_product(g,t) for _,g,t in aq.KNEES]
 assert prods==[37516,2233333311,4466666622,6133333272]
+
+# AQ's later same-machine read-only range recapture is the active controller
+# source for preview limits; do not regress to the old nearby 33.333 ms value.
+rr=AQ/'windows-evidence/range-recapture-20260910'
+assert hashlib.sha256((rr/'E003I-CH-RANGE-RECAPTURE.zip').read_bytes()).hexdigest()=='809e7d58ba5605cbd5f98bcc2e2b41c12843dcc79e91cf2fd86e43647a9e8c67'
+ctrl=(rr/'controller-plus-0100.bin').read_bytes(); assert len(ctrl)==0xe0
+assert struct.unpack_from('<f',ctrl,0x28)[0]==1.0 and struct.unpack_from('<Q',ctrl,0x30)[0]==37516
+assert struct.unpack_from('<f',ctrl,0x50)[0]==92.0 and struct.unpack_from('<Q',ctrl,0x58)[0]==66666664
+assert struct.unpack_from('<Q',ctrl,0xa0)[0]==0
 
 # Final post-fit retained exposure path mechanically uses the fit gain/time,
 # correction, FRINTA, then stores qword at table result +0x18.
@@ -71,7 +80,7 @@ assert lib.e003i_t681_preview_arbitrate(prods[-1]+1,ctypes.byref(r))==-2
 # Independent expected result = AQ table + AQ preview fit + AX final retained FRINTA.
 def reference(target):
     tab=aq.apply_core_table(int(target))
-    fit=aq.make_table_exposure_fit(tab,1.0,37516,92.0,33333332)
+    fit=aq.make_table_exposure_fit(tab,1.0,37516,92.0,66666664)
     assert fit['ok']
     product=(float(fit['gain'])*float(fit['time']))*float(fit['corr'])
     return fbits(fit['gain']),int(fit['time']),fbits(fit['corr']),frinta_pos(product),int(tab['upper']),int(fit['desired'])
@@ -85,7 +94,7 @@ tests=set()
 for p in prods:
     for d in range(-4,5):
         if prods[0] <= p+d <= prods[-1]: tests.add(p+d)
-for p in (33333332,33333333,241379190,241379203,241379204,241379210,2233333311,4466666622):
+for p in (33333332,33333333,66666664,66666665,241379190,241379203,241379204,241379210,2233333311,4466666622):
     if prods[0]<=p<=prods[-1]: tests.add(p)
 rng=random.Random(0x681C8)
 for _ in range(65536): tests.add(rng.randrange(prods[0],prods[-1]+1))
@@ -106,7 +115,7 @@ for target in (37516,241379204,2233333311,4466666622,6133333272):
 
 print('DLL_SHA256='+SHA)
 print('TABLE681=1@37516;67@33333333;67@66666666;92@66666666')
-print('PREVIEW_LIMITS=minGain1,minTime37516,maxGain92,maxTime33333332')
+print('PREVIEW_LIMITS=minGain1,minTime37516,maxGain92,maxTime66666664')
 print('RETAINED_EXPOSURE=FRINTA(double(f32 gain)*double(time)*double(f32 correction))')
 print('DIFFERENTIAL_CASES='+str(len(tests)))
 print('SEGMENT_COUNTS='+str(seg))

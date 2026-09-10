@@ -32,6 +32,12 @@ After table interpolation, `UtilMakeTableExposureFit` adjusts gain/time to the c
 
 The deterministic self-test covers every knee +/-2, fixed boundary/observed-pair neighborhoods, and 100,000 seeded random targets across all three table segments. On Golden Linux it reports **100,017 cases PASS**, with segment coverage `{1: 36133, 2: 36635, 3: 27249}`. A corroborative target in the observed pair neighborhood reproduces the live Windows output pair exactly: gain bits `0x40e7b95b` and exposure time `33,333,332 ns`.
 
+## 2026-09-10 active preview-range correction
+
+The original AQ selector closure proved which `DefaultExpTable` is active, but its `33,333,332 ns` preview-fit maximum was inherited from a nearby runtime value rather than from an address-proven range field. A later same-machine read-only FrameServer recapture closes that missing identity. The active T5 header appears at controller `+0x190`; in the same controller slice the ordinary preview range is `minGain=1.0`, `minTime=37,516 ns`, `maxGain=92.0`, `maxTime=66,666,664 ns`, and controller `+0x1a0` is zero. The live T5 knee bytes independently match tuned symbol 681.
+
+The replay therefore now fits T681 against **92x / 66,666,664 ns**, not 92x / 33,333,332 ns. This removes the earlier artificial 92->184 gain compensation at the upper table knees. The previously observed `7.2413764x / 33,333,332 ns` pair remains valid because it lies below the corrected maximum; only the interpretation of the active range endpoint was wrong. Exact recapture bytes and hashes are preserved under `windows-evidence/range-recapture-20260910/`.
+
 ## Evidence and scope
 
 `windows-evidence/E003I-AQ-FINAL-LIVE-EVIDENCE.txt` pins the final two selector scans and SHA-256 values for the DeviceMFT, tuned blob, read-only scanner and holder. `DEBUGGER_PROCESS_COUNT=0`; the holder exited normally after the evidence capture. SP11 was then returned to Golden Linux before repository changes.

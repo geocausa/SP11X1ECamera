@@ -91,8 +91,10 @@ assert re.search(r'CQ4_HIT.*?FINAL_PAIR.*?00000de0 00000de8.*?GAIN_TIME_RAW.*?3f
 
 # Parent closures: self-contained AEC and exact IMX681 gain/register callback.
 cp_out = run_parent(CP, 'verify-cp.py', 'CP_VERIFY=PASS')
+ch_out = run_parent(CH, 'verify-ch.py', 'CH_VERIFY=PASS')
 aj_out = run_parent(AJ, 'prove-aj.py', 'AJ_PROOF=PASS')
 assert 'PUBLIC_STARTUP_ARGS=none' in cp_out and 'REQUEST_CASES=2304' in cp_out
+assert 'PREVIEW_LIMITS=minGain1,minTime37516,maxGain92,maxTime66666664' in ch_out
 assert 'AJ_WINDOWS_DYNAMIC_BYTES=20000/20000' in aj_out
 
 # AP retained live hardware evidence, without touching root-owned capture binaries.
@@ -149,7 +151,7 @@ with tempfile.TemporaryDirectory(prefix='e003i-cq-') as td:
     o=Controls(); assert lib.e003i_imx681_controls_from_t681(None,ctypes.byref(o)) == -1
     good=T681(1.0,37516,1.0,0,0)
     assert lib.e003i_imx681_controls_from_t681(ctypes.byref(good),None) == -1
-    for g,t,rc in [(0.5,37516,-2),(185.0,37516,-2),(1.0,37515,-3),(1.0,33333333,-3)]:
+    for g,t,rc in [(0.5,37516,-2),(93.0,37516,-2),(1.0,37515,-3),(1.0,66666665,-3)]:
         x=T681(f32(g),t,1.0,0,0); assert lib.e003i_imx681_controls_from_t681(ctypes.byref(x),ctypes.byref(o)) == rc
 
     line_len=6752; default_fll=3554; fps=30.0; height=2160
@@ -173,14 +175,15 @@ with tempfile.TemporaryDirectory(prefix='e003i-cq-') as td:
 
     # Deterministic boundaries plus live/oracle-correlated values.
     fixed=[(1.0,37516),(1.0,33312452),(1.0,33333332),(16.0,33333332),
-           (32.0,33333332),(92.0,33333332),(184.0,33333332),(300.0/4.0,1000000)]
+           (32.0,33333332),(92.0,33333332),(1.0,66666664),(67.0,66666664),
+           (92.0,66666664),(300.0/4.0,1000000)]
     # Exact integer-ns neighborhoods around every line transition in a useful range.
-    for k in (4,5,6,100,1000,3545,3546,3547,3551,3552,3553,3554):
+    for k in (4,5,6,100,1000,3545,3546,3547,3551,3552,3553,3554,7106,7107,7108):
         center=(k+0.5)*line_ns
         n=int(math.floor(center))
         for dt in (-2,-1,0,1,2):
             t=n+dt
-            if 37516 <= t <= 33333332: fixed.append((1.0,t))
+            if 37516 <= t <= 66666664: fixed.append((1.0,t))
     aq_gain=struct.unpack('<f',struct.pack('<I',0x40e7b95b))[0]
     fixed.append((aq_gain,33333332))
     for g,t in fixed:
@@ -191,6 +194,8 @@ with tempfile.TemporaryDirectory(prefix='e003i-cq-') as td:
     assert live[0] == 3552 and live[1] == 3560 and live[2] == 1400 and live[3] == 3552, live
     maxv=native(1.0,33333332)
     assert maxv[0] == 3554 and maxv[1] == 3562 and maxv[2] == 1402 and maxv[3] == 3554, maxv
+    max_time=native(1.0,66666664)
+    assert max_time[0] == 7108 and max_time[1] == 7116 and max_time[2] == 4956 and max_time[3] == 7108, max_time
 
     rng=random.Random(0xE0031C0)
     random_cases=65536
@@ -199,8 +204,8 @@ with tempfile.TemporaryDirectory(prefix='e003i-cq-') as td:
         if i % 16 == 0:
             g=f32(16.0 + rng.uniform(-0.02,0.02))
         else:
-            g=f32(rng.uniform(1.0,184.0))
-        t=rng.randrange(37516,33333333)
+            g=f32(rng.uniform(1.0,92.0))
+        t=rng.randrange(37516,66666665)
         a=native(g,t); b=reference(g,t)
         assert a==b,(i,g,t,a,b)
 
@@ -229,7 +234,7 @@ print('LINE_READOUT_NS_BITS=0x40c2518d3ad36374')
 print('LINECOUNT_ROUNDING=FRINTA nearest ties-away')
 print('FLL_RULE=3554 when linecount<=3546 else linecount+8')
 print('SINGLE_EXPOSURE_SENSOR_LANE=Short (BC count1 Short->S1..S4)')
-print('T681_POST_FIT_GAIN_DOMAIN=1..184 (configured pre-fit max=92)')
+print('T681_ACTIVE_PREVIEW_DOMAIN=gain1..92,time37516..66666664')
 print('AP_LIVE_CONTROL_EVIDENCE=retained PASS')
 print('FIXED_CASES=%d' % len(fixed))
 print('RANDOM_CASES=65536')

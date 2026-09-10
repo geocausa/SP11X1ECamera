@@ -4,7 +4,7 @@ Pinned DLL SHA256: `c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd9de785509c1fb
 
 ## Table and fit
 
-AQ mechanically closes `ApplyCoreTable@0x1803c35f8`, `UtilMakeTableExposureFit@0x1803c31f8`, the active T681 knee bytes and the positive normal-preview float32/truncation ordering. CH uses that exact arithmetic and the pinned preview limits.
+AQ mechanically closes `ApplyCoreTable@0x1803c35f8`, `UtilMakeTableExposureFit@0x1803c31f8`, the active T681 knee bytes and the positive normal-preview float32/truncation ordering. CH uses that exact arithmetic. The active preview limits are no longer inferred from a nearby qword: AQ's 2026-09-10 read-only controller recapture pins controller `+0x190` to the active T5 header and the same controller object to min gain 1.0, min time 37,516 ns, max gain 92.0, max time 66,666,664 ns, with policy `+0x1a0=0`. The recapture ZIP SHA-256 is `809e7d58ba5605cbd5f98bcc2e2b41c12843dcc79e91cf2fd86e43647a9e8c67`.
 
 ## Final retained qword
 
@@ -22,4 +22,4 @@ AX further proves result `+0x18` becomes rich arbitration record `+0x20` and is 
 
 ## Differential verification
 
-`verify-ch.py` compares native gain bits, time, correction bits, final retained qword and selected segment against the independent AQ replay plus the AX retained-product rule over 65,569 deterministic cases spanning every knee neighborhood and all three table segments.
+`verify-ch.py` compares native gain bits, time, correction bits, final retained qword and selected segment against the independent AQ replay plus the AX retained-product rule over 65,571 deterministic cases spanning every knee neighborhood and all three table segments.

@@ -47,18 +47,18 @@ The live CQ4 sample supplied gain `1.0f` and exposure time `33,312,452 ns`; Wind
 - `FLL = 3554` when rounded linecount `<= 3546`,
 - `FLL = linecount + 8` otherwise.
 
-Only after SensorNode finalizes that pair does the active IMX681 `FillExposureSettings` callback clear linecount bit 0.  CQ therefore exposes both the pre-even Windows linecount and the actual even sensor coarse-integration value.  At T681's maximum ordinary time (`33,333,332 ns`) the result is linecount `3554`, FLL `3562`, VBLANK `1402`, exposure `3554`.
+Only after SensorNode finalizes that pair does the active IMX681 `FillExposureSettings` callback clear linecount bit 0.  CQ therefore exposes both the pre-even Windows linecount and the actual even sensor coarse-integration value.  At the **cold bootstrap** time (`33,333,332 ns`) the result is linecount `3554`, FLL `3562`, VBLANK `1402`, exposure `3554`. AQ's later same-machine range recapture pins the actual active preview maximum to `66,666,664 ns`; at gain 1 this maps to linecount `7108`, FLL `7116`, VBLANK `4956`, exposure `7108`.
 
-## Gain conversion and the 92 → 184 integration detail
+## Gain conversion and corrected active T681 domain
 
-AJ already mechanically closes the active IMX681 custom `CalculateExposure` and `FillExposureSettings` callbacks.  CQ reuses that exact ordinary path:
+AJ already mechanically closes the active IMX681 custom `CalculateExposure` and `FillExposureSettings` callbacks. CQ reuses that exact ordinary path:
 
 - analogue code = truncation of `1024 - 1024/gain`, with the active `0x3c0` cap,
 - analogue real gain reconstructed from that code,
-- remaining gain assigned to Q8.8 global digital gain and capped at 15×,
+- remaining gain assigned to Q8.8 global digital gain and capped at 15x,
 - residual ISP gain retained exactly as float32.
 
-A subtle but important integration result surfaced while testing the real CH→CQ ABI.  T681 tuning has configured preview `maxGain=92` and `maxTime=33,333,332 ns`, but Windows' preview-fit arithmetic can first preserve exposure from the `66.7 ms` table knees and then compensate for the time cap with more gain.  CH's already-proven AQ reference therefore legitimately emits up to **184.0×** at the final knee.  CQ accepts the actual post-fit T681 output domain `1..184`; it does not incorrectly reject values above the configured pre-fit 92× bound.
+AQ's 2026-09-10 read-only controller recapture corrects the old CQ integration assumption. The active preview range is **gain 1..92 and time 37,516..66,666,664 ns**. The earlier apparent 184x post-fit domain was created only because CH was fitting the 66.7 ms table knees against a stale 33.333 ms maximum and compensating with gain. With the address-proven active range, CH never needs that artificial compensation and CQ rejects gain above 92 or time above 66,666,664 ns.
 
 ## Verification
 

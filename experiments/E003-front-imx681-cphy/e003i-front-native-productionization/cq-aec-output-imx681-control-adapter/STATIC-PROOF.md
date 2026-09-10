@@ -96,3 +96,7 @@ AP's retained result is `PASS_LIVE_CONTROLS_AND_PAIRED_AUDIT` and contains the a
 `AM request controls: FLL=3554 exposure=3500 again=0x040 dgain=0x0110 ret=0`
 
 CQ does not rerun AP or modify permissions on AP's root-owned capture binaries.
+
+## Active T681 range correction
+
+AQ's 2026-09-10 same-machine read-only FrameServer recapture pins the active T5 header at controller `+0x190` and, in the same controller object, min gain `1.0`, min time `37,516 ns`, max gain `92.0`, max time `66,666,664 ns`, and policy `+0x1a0=0`. The recapture ZIP SHA-256 is `809e7d58ba5605cbd5f98bcc2e2b41c12843dcc79e91cf2fd86e43647a9e8c67`. CQ therefore accepts CH's corrected active range directly; it no longer accepts the artificial 184x gain domain produced by the superseded 33.333 ms cap.

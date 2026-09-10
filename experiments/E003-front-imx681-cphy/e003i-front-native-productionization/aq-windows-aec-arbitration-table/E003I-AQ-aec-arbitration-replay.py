@@ -137,15 +137,15 @@ def check():
         assert min(t0,t1)-1 <= out['time'] <= max(t0,t1)+1
         full=make_table_exposure_fit(out,1.0,37516,92.0,66666666)
         assert full['ok'] and 37516 <= full['time'] <= 66666666 and 1.0-1e-6 <= full['gain'] <= 92.0+1e-6
-        preview=make_table_exposure_fit(out,1.0,37516,92.0,33333332)
-        assert preview['ok'] and 37516 <= preview['time'] <= 33333332 and preview['gain'] >= 1.0-1e-6
+        preview=make_table_exposure_fit(out,1.0,37516,92.0,66666664)
+        assert preview['ok'] and 37516 <= preview['time'] <= 66666664 and 1.0-1e-6 <= preview['gain'] <= 92.0+1e-6
     print('FUZZ_CASES',len(tests),'SEGMENTS',seg,'PASS')
     for t in [prods[0],33333333,241379204,prods[1],prods[2],prods[3]]:
         if prods[0] <= t <= prods[-1]:
-            o=apply_core_table(t); p=make_table_exposure_fit(o,1.0,37516,92.0,33333332)
+            o=apply_core_table(t); p=make_table_exposure_fit(o,1.0,37516,92.0,66666664)
             print('FIX',t,'table',hex(f32_bits(o['gain'])),o['gain'],o['time'],o['desired'],'preview',hex(f32_bits(p['gain'])),p['gain'],p['time'],p['desired'])
     # Corroborative Windows live pair seen in active controller memory.
-    o=apply_core_table(241379204); p=make_table_exposure_fit(o,1.0,37516,92.0,33333332)
+    o=apply_core_table(241379204); p=make_table_exposure_fit(o,1.0,37516,92.0,66666664)
     print('OBSERVED_PAIR_CHECK',hex(f32_bits(p['gain'])),p['time'])
     assert f32_bits(p['gain'])==0x40e7b95b and p['time']==33333332
     print('AQ_REPLAY_SELFTEST=PASS')
