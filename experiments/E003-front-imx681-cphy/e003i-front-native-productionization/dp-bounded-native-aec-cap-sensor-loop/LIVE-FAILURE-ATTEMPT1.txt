@@ -1,0 +1,65 @@
+E003i DP attempt1 — FAIL_CLOSED_IQ_AWB_ZERO_WEIGHT
+Date: 2026-09-10
+Base commit: d2194ead915bbee9f6f1e5a1ea33332c566bfb2e
+
+Safety/result:
+- One DP candidate boot and one helper invocation only.
+- Persistent PiMaster job used; no finite command timeout.
+- Helper failed closed and pinned; no kill and no same-boot retry.
+- Whole-machine reboot returned to Golden successfully.
+- Consumed DP GRUB entry and boot bundle were retired after Golden return.
+- Kernel camera-fatal markers were absent.
+
+Native AEC progress:
+- G1/request4 accepted.
+- G2/request5 accepted.
+- G3/request6 accepted with the newly bound DN internal CapExposure stage.
+- G3 controls: FLL=7116 EXP=7108 AGAIN=960 DGAIN=1471.
+- The former pre-cap G4-range blocker was therefore not reached in this run.
+- Exactly two sensor writes completed; no third write was released.
+
+Downstream symptom:
+- The userspace helper pinned at loop i=3 on "unexpected completed buffer ordering".
+- Non-destructive gdb attach recovered:
+  b.index=3 (expected 3)
+  plane.bytesused=7778304 (expected)
+  b.sequence=0 (expected 3)
+- This was an error buffer after the kernel's bounded six-frame worker safely unwound; it is not a DN/AEC arithmetic failure.
+
+Root cause:
+- The live IQ producer failed on its first captured G1 pair with
+  RuntimeError: native trigger rc=-30.
+- AD maps rc=-30 to zero accumulated AGW weight.
+- Offline diagnostic replay of the exact saved G1 AWB stats:
+  measured_luma=0.631426513
+  lux=505.923523
+  P01 basic survivors=8
+  P04-zero survivors=8
+  P05-zero survivors=0
+  final valid weighted regions=0
+  sum weight=0
+- By comparison, historical DB attempt4 G1 had measured_luma=0.898956835,
+  P01=180, valid=77, sum_weight=17.262985 and passed.
+- Because the producer exited before R5 was queued, the kernel worker's
+  request5 deferred-IQ fetch failed and the worker safely unwound the camera
+  pipeline. Sensor MODE_SELECT went 0, incomplete buffer 3 was returned as an
+  error buffer with sequence 0, and the userspace ordering guard pinned.
+
+Preservation:
+- External archive:
+  /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-dp/attempt1-iq-awb-zero-weight-20260910T2020
+- RUN.txt SHA256:
+  a0125047559a3bd71d06d915fd475a65c86200066c157b69b65fa90824a05462
+- producer/STATS3A-G1.bin SHA256:
+  1344836e819a28d4a9aef5f9d91908ca6806d59b08bec0f2c185fb56149087ea
+- producer/TLBG-G1.bin SHA256:
+  23fc2d68996c4b0aa5722a1041e71641aa5e3bc0c49dc29243cdf0bd41a0877d
+- GDB-PINNED-G4-SEQUENCE.txt SHA256:
+  7e5d0eba8a8ef4e8983fe52c3e675d22ca284206639cfefa1e2ab58d7e072b08
+
+Next gate:
+Recover the exact Windows CSAAGWV1/temporal-AWB behavior when all candidates
+are rejected / aggregate AGW weight is zero. Do not invent a fallback. Use
+static QcDeviceMFT8380.dll analysis first and a bounded Windows oracle if the
+static branch is ambiguous. Verify the exact DP G1 pair offline against that
+behavior before staging a fresh live candidate.

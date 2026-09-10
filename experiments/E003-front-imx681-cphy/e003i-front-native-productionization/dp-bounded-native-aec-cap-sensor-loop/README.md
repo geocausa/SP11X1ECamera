@@ -1,8 +1,10 @@
 # E003i DP — bounded native AEC cap sensor loop
 
-Status: PREPARED_UNEXECUTED.
+Status: FAIL_CLOSED_IQ_AWB_ZERO_WEIGHT; GOLDEN_RETURNED; CANDIDATE_RETIRED.
 
 DP is a fresh disposable live candidate after DO/DN closed the missing Windows CapExposure branch inputs. It does not reuse the consumed DB candidate identity or runtime directory.
+
+Attempt 1 reached G1-G3 native AEC successfully and proved the DN cap integration live through G3. The run then failed closed because the live IQ producer encountered a legitimate G1 AWB sample with zero aggregate AGW weight (all eight P01 survivors were rejected by P04). With no R5 queued, the kernel six-frame worker safely unwound and returned the fourth V4L2 buffer as an error buffer with sequence 0; the userspace ordering guard then pinned. See LIVE-FAILURE-ATTEMPT1.txt. Do not repeat this consumed candidate. The next gate is the exact Windows zero-weight AWB fallback.
 
 Single variable under test: the live six-frame helper, three-write fail-closed schedule, and atomic IMX681 bootstrap are byte-identical copies of DB attempt4's proven machinery. The compile graph changes only the request recurrence from DJ to DN and adds DN's native internal-cap implementation.
 
