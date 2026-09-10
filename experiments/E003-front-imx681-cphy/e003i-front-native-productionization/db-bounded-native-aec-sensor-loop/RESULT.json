@@ -1,0 +1,67 @@
+{
+  "schema": "sp11-e003i-db-bounded-native-aec-sensor-loop-v1",
+  "status": "READY_UNEXECUTED",
+  "parent_range_commit": "c094198",
+  "scope": "bounded six-generation sensor-side native AEC; G1-G3 sensor tuples released, G4-G6 compute/observe only",
+  "windows_preview_range": {
+    "min_gain": 1.0,
+    "min_time_ns": 37516,
+    "max_gain": 92.0,
+    "max_time_ns": 66666664,
+    "policy": 0,
+    "oracle_zip_sha256": "809e7d58ba5605cbd5f98bcc2e2b41c12843dcc79e91cf2fd86e43647a9e8c67"
+  },
+  "bootstrap": {
+    "frame_length_lines": 3562,
+    "vertical_blanking": 1402,
+    "exposure_lines": 3554,
+    "analogue_gain_code": 0,
+    "digital_gain_code": 256,
+    "isp_gain": 1.0
+  },
+  "schedule": {
+    "stats_to_request_frames": 3,
+    "write_to_first_effect_generations": 2,
+    "release_before_current_generation_aec": true,
+    "writes": [
+      {"source_generation": 1, "write_after_generation": 2, "logical_request_frame": 4, "expected_effect_generation": 4},
+      {"source_generation": 2, "write_after_generation": 3, "logical_request_frame": 5, "expected_effect_generation": 5},
+      {"source_generation": 3, "write_after_generation": 4, "logical_request_frame": 6, "expected_effect_generation": 6}
+    ],
+    "dqbuf_exact_window_gate": true,
+    "late_write_policy": "fail closed",
+    "maximum_live_sensor_writes": 3
+  },
+  "transport": {
+    "cluster_controls": ["VBLANK", "EXPOSURE", "ANALOGUE_GAIN", "DIGITAL_GAIN"],
+    "single_runtime_ioctl_call_site": true,
+    "cw_group_hold_parent": true,
+    "cw_module_sha256": "72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1"
+  },
+  "verification": {
+    "offline_verifier": "PASS",
+    "full_root_prearm": "PASS",
+    "helper_werror": "PASS",
+    "scheduler_failure_corpus": "PASS",
+    "inherited_ai_safety_gate": "PASS"
+  },
+  "runtime": {
+    "executed": false,
+    "streamon": false,
+    "sensor_writes": 0,
+    "grub_candidate_installed": false,
+    "one_shot_armed": false,
+    "same_boot_retry_permitted": false
+  },
+  "isp_gain": {
+    "computed_by_cq": true,
+    "applied_by_db": false,
+    "full_aec_parity_claimed": false
+  },
+  "golden": {
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "",
+    "camera_modules_loaded": false
+  }
+}
