@@ -1,0 +1,25 @@
+{
+  "schema": "sp11-e003i-cx-windows-imx681-sof-i2c-apply-boundary-v1",
+  "status": "PASS",
+  "frontsensor_sys_sha256": "80a8e4a1ef8f0dacfbc2e8c6919cb269993057ffd3133c2ef7016ff742e46f03",
+  "windows": {
+    "notify_sof_state": {
+      "request": "+0x430",
+      "subrequest": "+0x438",
+      "hdr_mode": "+0x440"
+    },
+    "hdrmode1_selection_law": "queued_request - current_SOF_request == 1",
+    "packet_apply_coordinate": "packet F selected while current SOF request is F-1",
+    "selected_apply_call": "0x140008488 -> 0x140009860",
+    "register_pair_submit": "0x1400099b4/0x1400099b8 -> 0x14000abc8",
+    "transport_call_chain": "0x14000abc8 -> 0x14000b7a8 -> 0x140003aa0 -> callback -> return",
+    "consumed_bookkeeping": "after selected packet apply path"
+  },
+  "linux_cw": {
+    "group_hold_register": "0x0104",
+    "cluster_controls": 4,
+    "one_s_ctrl_transaction": true
+  },
+  "optical_frame_label_claimed": false,
+  "open_issue": "sensor-side group-hold release to first optically affected frame remains unproven"
+}
