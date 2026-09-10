@@ -18,6 +18,20 @@ need(ap.get('status')=='PASS_LIVE_CONTROLS_AND_PAIRED_AUDIT','AP tracked status'
 need(ap.get('golden_return')=='PASS','AP tracked Golden return')
 need(ap.get('same_boot_retry_performed') is False,'AP no same-boot retry')
 s=H.read_text()
+
+res=json.loads((D/'RESULT.json').read_text())
+if res.get('status')=='PASS_LIVE_LATCH_BOUNDARY':
+    need(res['runtime']['executed'] is True,'CY live executed')
+    need(res['runtime']['same_boot_retry_performed'] is False,'CY no retry')
+    need(res['runtime']['hardware_step_transaction_count']==1,'CY one hw step transaction')
+    need(res['measurement']['first_significant_drop_generation']==3,'CY G3 first drop')
+    need(res['measurement']['optical_frame_label_claimed'] is False,'CY no premature Windows optical label')
+    need(res['golden_return']['status']=='PASS','CY Golden return')
+    need(res['golden_return']['saved_entry']=='sp11-audio-fullio-v19c','CY Golden saved')
+    need(res['golden_return']['next_entry']=='','CY next empty')
+    need(res['golden_return']['camera_modules']=='absent','CY camera modules absent')
+    for group in ('stats3a','tlbg','qc10c'):
+        need(len(res['capture_sha256'][group])==6 and all(re.fullmatch(r'[0-9a-f]{64}',x) for x in res['capture_sha256'][group]),f'CY {group} hashes')
 for x in ['CY_STEP_EXPOSURE 1000','CY_BASE_VBLANK 1394','CY_FIXED_AGAIN 64','CY_FIXED_DGAIN 272','if (i == 0)','set_sensor_step(sfd)','VIDIOC_S_EXT_CTRLS']:
     need(x in s,x)
 need(s.count('set_sensor_step(sfd)')==1,'one live step call')
@@ -35,5 +49,5 @@ print('CY_PARENT_CW=b767514')
 print('CY_BASELINE=FLL3554_EXP3500_AGAIN64_DGAIN272')
 print('CY_STEP=after_DQBUF0_FLL3554_EXP1000_AGAIN64_DGAIN272')
 print('CY_HELPER_WERROR=PASS')
-print('CY_ONE_SHOT_UNARMED=1')
+print('CY_LIVE_RESULT=PASS' if json.loads((D/'RESULT.json').read_text()).get('status')=='PASS_LIVE_LATCH_BOUNDARY' else 'CY_ONE_SHOT_UNARMED=1')
 print('CY_VERIFY=PASS')

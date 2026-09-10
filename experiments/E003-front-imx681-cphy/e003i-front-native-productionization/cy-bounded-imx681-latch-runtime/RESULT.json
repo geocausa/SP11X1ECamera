@@ -1,39 +1,100 @@
 {
-  "schema": "sp11-e003i-cy-bounded-imx681-latch-runtime-prearm-v1",
-  "status": "READY_UNEXECUTED_UNARMED",
+  "schema": "sp11-e003i-cy-bounded-imx681-latch-runtime-result-v1",
+  "status": "PASS_LIVE_LATCH_BOUNDARY",
   "parent_cx_commit": "b16015bff6c2a96c2fdfe07054470e64a9b20094",
   "parent_cw_commit": "b7675147916ef3d2991011d645c7a5348b1e1f34",
   "cw_module_sha256": "72a5d1fd09cfc472520f4ddcf2eccac7f8b42b04d146882feeda6ba8027923d1",
-  "baseline": {
-    "frame_length": 3554,
-    "vertical_blanking": 1394,
-    "exposure": 3500,
-    "analogue_gain": 64,
-    "digital_gain": 272
+  "runtime": {
+    "executed": true,
+    "same_boot_retry_performed": false,
+    "frames": 6,
+    "paired_generations": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "step_after_v4l2_sequence": 0,
+    "step_ioctl_elapsed_ns": 1802121,
+    "hardware_step_transaction_count": 1,
+    "baseline": {
+      "frame_length": 3554,
+      "vertical_blanking": 1394,
+      "exposure": 3500,
+      "analogue_gain": 64,
+      "digital_gain": 272
+    },
+    "step": {
+      "frame_length": 3554,
+      "vertical_blanking": 1394,
+      "exposure": 1000,
+      "analogue_gain": 64,
+      "digital_gain": 272
+    },
+    "control_transactions": [
+      "[Thu Sep 10 08:24:51 2026] imx681 3-0010: AM request controls: FLL=3554 exposure=3500 again=0x040 dgain=0x0110 ret=0",
+      "[Thu Sep 10 08:24:51 2026] imx681 3-0010: AM request controls: FLL=3554 exposure=1000 again=0x040 dgain=0x0110 ret=0"
+    ]
   },
-  "single_step": {
-    "after_v4l2_sequence": 0,
-    "frame_length": 3554,
-    "vertical_blanking": 1394,
-    "exposure": 1000,
-    "analogue_gain": 64,
-    "digital_gain": 272
+  "measurement": {
+    "bhist_total_pixels": 2073600,
+    "bhist_means": [
+      1.3199154986924828,
+      1.3140260800460457,
+      0.8189116033139182,
+      0.8211695456518804,
+      0.5196625461786935,
+      0.5209337908009725
+    ],
+    "bhist_peak_bins": [
+      308,
+      312,
+      279,
+      284,
+      261,
+      262
+    ],
+    "first_significant_drop_generation": 3,
+    "drop_threshold_ratio": 0.65,
+    "observed_boundary": "G2 baseline-like; G3 first strong exposure-dependent BHist drop",
+    "optical_frame_label_claimed": false,
+    "interpretation": "Measured Linux sensor-side visibility boundary only; combine with CX Windows SOF scheduling before assigning a Windows request/frame label."
   },
-  "capture_frames": 6,
-  "paired_stats_generations": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "g2_collector_waits_for_step_completion": true,
-  "full_prearm": "PASS",
-  "runtime_executed": false,
-  "grub_armed": false,
-  "camera_modules_loaded": false,
-  "same_boot_retry_allowed": false,
-  "mandatory_golden_return": true,
-  "optical_frame_label_claimed": false
+  "capture_sha256": {
+    "stats3a": [
+      "6a45614caea8d3507cce360916ca36ad793d3d4a87135ea6d0c384c91a92486f",
+      "5a141f333da5b8a09a011404b402620da33ca60c779a248fe8616e6b1a0b60bc",
+      "daa12346f3abc7d2a0fc21204c55970b701a7c0a88348fe72cc34be2f3815694",
+      "d57dabaf6bc223ba55687e61c2b9365f8ce34dc9380a0c103065ac25fb205c0d",
+      "18254580a56f64d706b0fd28ca933ef9972fe088c841e2ff618b0790bd9dd234",
+      "b4712c57332ebff1a74c75e4e116719f39cbab1fef602558e21d4addc47e4985"
+    ],
+    "tlbg": [
+      "150e3a38a4ccf5ebc2db436e1ee27b1474b51b945127b180a535006531a68885",
+      "1896829bd71c1c903a35f106501520590d8703d26178e703dcfa5a732e130d90",
+      "03396d56773ab9692fb3c712f4ddd1875c6cfd6ad3768b66ff18814656af6b64",
+      "f007485633f6ef48ec0ee7b5ddc6341b557a95e816e08b0c64d4472c17c7752a",
+      "bf825c319e17888b924e821db1d796d156f6ef43448468da7865f5226794c522",
+      "b27e4032da5914cf8f0ccd555f03f03fe0de3430b94899136dc5e3a1e9755d67"
+    ],
+    "qc10c": [
+      "419fc5c5252f274c569bb373595ef269d3834643768dc2d73e4dc16643cbea31",
+      "24efe60acf2bd48a4691168a2d020a26f18284338e4149e7d28dc14df3842f52",
+      "b148c164712e4f5260a75f26235aaaeff2b7d6ad7dc26fbfc458a9e6957b2d13",
+      "176b9b20819eba717899296c1cff99ef1370bcbaa4e8008eb46416007089f64e",
+      "aea69b9bc0f0300714c6c8d8f0b79ba9f9359cba7b6926ae0591b0430eff1217",
+      "834b3a011a184be86530b5f739044a6bd38d828f00030a494c6d559697364bc0"
+    ]
+  },
+  "golden_return": {
+    "status": "PASS",
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "boot_id": "dcb71a88-a1ba-4b4b-8f33-08cfe4ee7425",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "",
+    "camera_modules": "absent"
+  },
+  "kernel_health": "PASS"
 }

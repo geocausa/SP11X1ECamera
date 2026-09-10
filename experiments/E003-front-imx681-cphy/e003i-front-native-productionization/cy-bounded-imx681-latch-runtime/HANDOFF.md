@@ -1,6 +1,6 @@
 # CY handoff
 
-Status: READY / UNEXECUTED / UNARMED.
+Status: PASS LIVE LATCH BOUNDARY / GOLDEN RETURN PASS.
 
 Parent facts:
 - AP: live group-held IMX681 controls and paired generations 1..6 passed, Golden return passed.
@@ -17,3 +17,12 @@ Runtime protocol:
 7. only then interpret `runtime-output/LIVE-RESULT.json` together with CX.
 
 Control step: sequence0 completed -> one atomic S_EXT_CTRLS -> FLL3554 / exposure1000 / again64 / dgain272.
+
+
+Final runtime result:
+- one-shot invoked exactly once; no same-boot retry;
+- exposure 3500 -> 1000 after DQBUF sequence 0; ioctl 1,802,121 ns; one hardware step transaction;
+- G1/G2 baseline-like, G3 first strong BHist drop;
+- STREAMOFF and kernel-health checks passed;
+- mandatory return to `sp11-audio-fullio-v19c` passed with `next_entry` empty and camera modules absent;
+- do not yet equate G3 directly to a Windows request optical label; reconcile with CX first.
