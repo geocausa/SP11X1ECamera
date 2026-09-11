@@ -71,9 +71,10 @@ with tempfile.TemporaryDirectory(prefix='e003i-fd-') as td0:
       'r5_r6_live_regression':'2/2 exact EZ live capsule hashes',
       'r7_r11_correction_isolation':isolation,
       'dynamic_calibration_slots':{str(r['request_target']):r['awb_calibration_slot'] for r in f['rows'] if r['request_target']},
-      'r12_capsule_sha256':sha(fo/'R12-dynamic.bin'),'r12_total_process_ms':r12['total_process_ms'],
+      'r12_capsule_sha256':sha(fo/'R12-dynamic.bin'),
       'r12_awb_triangle':r12['awb_triangle'],'r12_awb_slot':r12['awb_calibration_slot'],
-      'r12_awb_regs':r12['demux_bls']['awb_regs'],'r12_lsc':r12['lsc'],'cq_gain_bits_g1_g9':g,
+      'r12_awb_regs':r12['demux_bls']['awb_regs'],
+      'r12_lsc':{k:v for k,v in r12['lsc'].items() if not k.endswith('_ms')},'cq_gain_bits_g1_g9':g,
       'windows_component_authority':'EB GTM through R12 + ED LSC through R12 + FB dynamic AWB through R12',
       'whole_capsule_windows_r12_byte_oracle':False,'linux_camera_runtime_performed_by_fd':False,'continuous_aec_claimed':False}
  (HERE/'RESULT.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
