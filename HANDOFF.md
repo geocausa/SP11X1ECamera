@@ -6,16 +6,16 @@ Continue SP11 Camera from this HANDOFF on branch `experiment/e003-front-imx681-c
 
 Current durable live-result checkpoint immediately before this handoff:
 
-`492cf97b153fa4785448568aee123a9bf8abc8c9`
-(camera: record FN bounded fifteen-frame live pass)
+`aeb1b0df8876f54714380a028104dd50eddc6d2e`
+(camera: record FU eighteen-frame live pass)
 
 First verify the exact Git + Golden state below.
 
 SP11 is reserved for Camera. Do not touch HostFabric work.
 
-Do not reuse consumed one-shot identities. FN is consumed and retired.
+Do not reuse consumed one-shot identities. FU is consumed and retired.
 
-Do not jump directly to unrestricted continuous streaming. The new frontier is bounded authority/work beyond R15.
+Do not jump directly to unrestricted continuous streaming. The new frontier is bounded authority/work beyond R18.
 
 ---
 
@@ -31,18 +31,19 @@ Branch:
 
 Durable live-result checkpoint:
 
-`492cf97b153fa4785448568aee123a9bf8abc8c9`
+`aeb1b0df8876f54714380a028104dd50eddc6d2e`
 
 Origin matched this checkpoint immediately before rewriting HANDOFF.
 
 Important recent checkpoints:
 
-- `45c6c52` — close Windows R15 Tintless/LSC authority
-- `6c2e142` — authorize bounded R13–R15 IQ content
-- `bf9e631` — stage G12 publisher and R15 producer
-- `600056f` — stage authorized fifteen-frame R15 transport
-- `597770a` — stage FN fifteen-frame live candidate
-- `492cf97` — record FN bounded fifteen-frame live pass
+- `c30a37a` — close Windows R18 Tintless/LSC authority
+- `6328e59` — authorize bounded R16–R18 IQ content
+- `7ed9347` — stage G15 publisher and R18 producer
+- `767248e` — stage authorized eighteen-frame R18 transport
+- `d572679` — stage FU eighteen-frame live candidate
+- `9718a59` — make FT result repeatable
+- `aeb1b0d` — record FU eighteen-frame live pass
 
 Many old untracked historical artifacts across E002/E003 remain intentionally. Do not mass-clean them.
 
@@ -62,9 +63,9 @@ OS/kernel:
 
 Current boot is protected persistent Golden Linux.
 
-Golden boot ID after FN:
+Golden boot ID after FU:
 
-`bcdcc155-15d8-4fe1-853d-65526affc4d8`
+`5c74a60a-e805-45b6-bdd5-983d66aaad6a`
 
 Golden kernel cmdline boots from:
 
@@ -83,137 +84,155 @@ Current Golden state:
 - no /dev/video*
 - no /dev/media*
 
-FN candidate boot artifacts are retired:
+FU candidate boot artifacts are retired:
 
-- `/etc/grub.d/99zu_sp11_camera_e003i_fn_fifteen_frame_r5_r15` absent
-- `/boot/sp11-7.1.5-camera-e003i-fn-fifteen-frame-r5-r15` absent
-- FN menu ID absent from generated grub.cfg
+- `/etc/grub.d/99zv_sp11_camera_e003i_fu_eighteen_frame_r5_r18` absent
+- `/boot/sp11-7.1.5-camera-e003i-fu-eighteen-frame-r5-r18` absent
+- FU menu ID absent from generated grub.cfg
 - Golden saved_entry unchanged
 
 ---
 
-## 3. Windows authority work that closed R13–R15
+## 3. Windows/component authority through R18
 
-### FH — recovered Windows AWB authority
-
-FH recovered same-stream Windows AWB/GainAdj evidence through R18 without another Windows stream.
+### FH — recovered Windows AWB authority through R18
 
 Status:
 
 `PASS_RECOVERED_WINDOWS_R4_R18_AWB_15_OF_15_BIT_EXACT`
 
-This provides AWB/GainAdj differential authority through R18.
+FH provides AWB/GainAdj differential authority through R18.
 
-### FI — fresh Windows R4–R15 Tintless/LSC oracle
+### FP — fresh Windows R4–R18 Tintless/LSC oracle
 
-FI performed exactly one fresh Windows front-camera stream and captured R4..R15:
+FP performed exactly one fresh Windows front-camera stream and captured R4..R18:
 
 - Tintless stats: 0x12bec bytes/request
 - trigger: 0x100 bytes/request
 - final LSC staging: 0x18a0 bytes/request
+- 15 entry hooks
+- 15 post-stage hooks
 
-Sequential clean-room replay through the native Tintless/DX DynamicLsc path:
+Sequential native clean-room replay:
 
-`12/12 byte-exact LSC0/LSC1/LSC2/GIC`
+`15/15 byte-exact LSC0/LSC1/LSC2/GIC`
 
 Bank parity:
 
-`1,0,1,0,1,0,1,0,1,0,1,0`
+`1,0,1,0,1,0,1,0,1,0,1,0,1,0,1`
 
-FI returned Golden cleanly.
+FP returned Golden cleanly.
 
-FI external archive:
+FP Windows evidence ZIP SHA256:
 
-`/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-fi/windows-r4-r15-20260911`
+`f20d931b92cabb2533aaeea9cd205b63af21ee9cbc7791c91a07a52961393197`
 
-Final FI archive MANIFEST.sha256 file SHA256:
+FP Linux archive:
 
-`eda7b5339be0788c0505be7ae77f530f7f73475ca56579efd7f1c3f20296242d`
+`/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-fp/windows-r4-r18-20260911`
 
-### FJ — R13–R15 authority join
+FP final archive MANIFEST.sha256 file SHA256:
 
-FJ combines:
+`290c0b238ff26e6f21f42626a6b40f8e18154a9ae18b1a22890eba8448c028a2`
 
-- FG deterministic R13–R15 composition from immutable FF continuation inputs
+### FQ — R16–R18 authority join
+
+FQ combines:
+
+- FO deterministic R16–R18 composition from immutable FN G13/G14/G15 continuation inputs
 - FH Windows AWB authority through R18
-- FI Windows Tintless/LSC authority through R15
+- FP Windows Tintless/LSC authority through R18
 - EB post-R6 stable GTM law
 
 Status:
 
-`PASS_OFFLINE_R13_R15_CONTENT_AUTHORIZED`
+`PASS_OFFLINE_R16_R18_CONTENT_AUTHORIZED`
+
+This is component differential authority, not a same-scene whole-capsule Windows oracle.
 
 ---
 
-## 4. Offline bounded R15 stack
+## 4. Offline bounded R18 stack
 
-### FK — G1..G12 compiled C gain publisher
+### FR — G1..G15 compiled C gain publisher
 
 Status:
 
-`PASS_OFFLINE_G1_G12_C_PUBLISHER`
+`PASS_OFFLINE_G1_G15_C_PUBLISHER`
 
 Properties:
 
 - exact existing 24-byte ABI
 - request = generation + 3
-- G1..G12 accepted
-- G13 rejected
-- only source delta from FC is upper bound 9 -> 12
+- G1..G15 accepted
+- G16 rejected
+- only source delta from FK is upper bound 12 -> 15
 
 gain-feed.c SHA256:
 
-`93e284bca519366817324962278d5403c05cdc7fd0454b8a4e8fe683d2b90b2e`
+`c8b03597649ec5e1a6e5b62110eb61ab7cd6a29073a3ecdcf9194f439b410627`
 
-### FL — live-capable R5..R15 producer
+### FS — live-capable R5..R18 producer
 
 Status:
 
-`PASS_OFFLINE_R5_R15_AUTHORIZED_INTEGRATION`
+`PASS_OFFLINE_R5_R18_AUTHORIZED_INTEGRATION`
 
 Offline proof:
 
-- source: immutable FF G1..G12 paired stats + CQ gains
-- R5..R12 reproduce the real FF live capsules 8/8 byte-exact plus key metadata
-- R13..R15 match FJ-authorized hashes exactly
-- two independent FL runs are deterministic
+- source: immutable FN G1..G15 paired stats + CQ gains
+- R5..R15 reproduce the real FN live capsules 11/11 byte-exact plus key metadata
+- R16..R18 match FQ-authorized hashes exactly
+- two independent FS runs are deterministic
 - live-capable scheduler/control/submission path preserved
 
-### FM — fifteen-frame transport
+Authorized R16–R18 capsule hashes:
+
+- R16: `78b40962f9eb72a27a674050278c5cf309eff4f2d635952bd7e3e52e83188588`
+- R17: `553803b3575bcebdd1dbbdf71bf68db8a82326a8a3dea3706cf2f674af120012`
+- R18: `0b8e01730173acd8efe18ff4f459d450a98e436531b29c486531862eeaac9427`
+
+### FT — eighteen-frame transport
 
 Status:
 
-`PASS_OFFLINE_FIFTEEN_FRAME_TRANSPORT`
+`PASS_OFFLINE_EIGHTEEN_FRAME_TRANSPORT`
 
 Proof:
 
 - CAMSS W=1 PASS
 - helper Werror PASS
-- 15-frame buffer cycle:
-  `0,1,2,3,0,1,2,3,0,1,2,3,0,1,2`
-- paired AEC/stats generations G1..G15
-- CQ gain publisher generations G1..G12
-- IQ consumption requests R5..R15
+- 18-frame buffer cycle:
+  `0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1`
+- paired AEC/stats generations G1..G18
+- CQ gain publisher generations G1..G15
+- IQ consumption requests R5..R18
 - physical sensor-write schedule remains exactly sources G1/G2/G3 at boundaries G2/G3/G4
-- scheduler unit test PASS
-- no FM camera runtime
+- scheduler unit test PASS G1..G18 with exactly 3 writes
+- no FT camera runtime
 
 Pinned generated source hashes:
 
 - CAMSS:
-  `592f31d591ff9542f8f67d8228e5f45808afb63088368107ce56422b4d8e34d6`
+  `a096493ae74fc3a22945f71f670f8777f0ea375bd3ad667c7451c96116d2ef6c`
 - helper:
-  `f68413ae23cdfbfb84ee39129582e40ecee2fd4b3a37ee242a5bceb4997fb4b4`
+  `24c87150ae6ee447440fe544cb8af1cec27e33d70fc0f70b198b4b7d9f5f23ce`
 - schedule header:
-  `b080113d1a07a2600eb8a06b3e5b045422debe0858577d84ab7d61fae03ff54d`
+  `092c1b1dfaaa09ede3b9b492fc4173915d64f7b6c3d7e7439576314129e3c6cf`
+
+Important verifier note:
+
+FT originally recorded a temporary-path-dependent qcom-camss.ko hash in RESULT.json. That non-authoritative field was removed. Two consecutive FT verifier runs now produce byte-identical RESULT.json with SHA256:
+
+`915acb4d3130abb7a2cd2606ab13738f1c71f9734523d25516bbcd6cef7a5aa5`
 
 ---
 
-## 5. FN live result — consumed PASS, never reuse
+## 5. FU live result — consumed PASS, never reuse
 
 Directory:
 
-`experiments/E003-front-imx681-cphy/e003i-front-native-productionization/fn-fifteen-frame-live-r5-r15`
+`experiments/E003-front-imx681-cphy/e003i-front-native-productionization/fu-eighteen-frame-live-r5-r18`
 
 Durable pass record:
 
@@ -225,21 +244,21 @@ Retirement record:
 
 Status:
 
-`PASS_CAPTURE_FN_FIFTEEN_FRAME_R5_R15`
+`PASS_CAPTURE_FU_EIGHTEEN_FRAME_R5_R18`
 
 Candidate HEAD:
 
-`597770a1df9521116f68b8b977cb9c91030edede`
+`9718a59497a4b0783e358857167bbba4eba6cc28`
 
 Candidate boot ID:
 
-`263d0c11-6eac-484c-bccd-faf08a88fd08`
+`3bb74578-1f93-4125-9b11-9b1a75efa4a2`
 
-Exactly one FN camera stream attempt occurred.
+Exactly one FU camera stream attempt occurred.
 
 No same-boot stream retry occurred.
 
-Helper-consumed guard was present before streaming.
+The helper-consumed guard was created before streaming.
 
 Helper result:
 
@@ -247,14 +266,15 @@ Helper result:
 
 Transport result:
 
-- exactly 15 QC10C frames
-- DQBUF order 0,1,2,3,0,1,2,3,0,1,2,3,0,1,2
-- native AEC accepted G1..G15
-- paired TLBG + STATS3A captured G1..G15
-- R5..R15 composed and submitted live
-- kernel IQ consumption observed through R15/F15/S0
+- exactly 18 QC10C frames
+- DQBUF order:
+  `0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1`
+- native AEC accepted G1..G18
+- paired TLBG + STATS3A captured G1..G18
+- R5..R18 composed and submitted live
+- kernel IQ consumption observed through R18
 - STREAMOFF_OK
-- bounded fifteen-frame kernel completion observed
+- bounded eighteen-frame kernel completion observed
 
 Physical sensor writes:
 
@@ -269,16 +289,16 @@ Schedule:
 
 Producer deadline:
 
-all R5..R15 pipelines < 33.333333 ms
+all R5..R18 pipelines < 33.333333 ms
 
 Maximum:
 
-`27.722582 ms`
+`28.516746 ms`
 
-R15 live:
+R18 live:
 
 - capsule SHA256:
-  `d0675afea740b46070ef4864ec12cea8ab72771ddc47984c65aa5a067962503c`
+  `6714b533f3c866d41ceda8de69b1fd29ca3da6fa28d6ff775851c02ed2dc6ca2`
 - AWB calibration slot 5
 - AWB triangle 25
 
@@ -286,114 +306,119 @@ Kernel health:
 
 PASS
 
-FN does not claim unrestricted continuous AEC or an infinite scheduler.
+FU does not claim unrestricted continuous AEC or an infinite scheduler.
 
 ---
 
-## 6. FN external evidence
+## 6. FU external evidence
 
 Archive:
 
-`/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-fn/attempt1-pass-fifteen-frame-20260911T1735`
+`/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-fu/attempt1-pass-eighteen-frame-20260911T1822`
 
 Final archive MANIFEST.sha256 file SHA256:
 
-`a12e84d235f5b4af5e313cd36f0f2952356a34ff1e80468ebd89c29355551a62`
+`a02b7b0916c1a5b56e2ce2d0555ff1ccd2904193bf63d7edf9448a54868a6d9b`
 
 Compact evidence hashes:
 
 - ATTEMPT1-PASS.json:
-  `9b850a9cfcc401acd9b5f7f6b24efba40909b75438427cdf69fd9d9cda834348`
+  `2ba823f10acb589ad4c849072a9b8b0be6ae17654675f83453d23098bd09c1a4`
 - RUN.txt:
-  `49ffcebb59b38118d3a6656814962416bb2f9b1b2c3a2ad77592123b3b937c47`
+  `86186682b8f9c1bbef70436506979c01ca3cba9b1d5984ef9bf9602051b3cffb`
 - LIVE-RESULT.json:
-  `00407b6cea78511a0eec7bb8ae01919f9ac6178f3ddbdb99f3e17a07c7fc89cd`
+  `89d415282c23c0b5fbcdcd46f248b6c359c1839c24e6c0824e46f416033b0189`
 - producer RESULT.json:
-  `eed4d99df47d97b8de9fdd7bdd2cc71689a4bf0c1bb49160cc437a74027f14e8`
+  `cbd3cb7f8c39f1f46fcfef91e5cdb446ae98cc8292c180e6df17e44c35c6465d`
 - DMESG.txt:
-  `a7910203d29730113ed9bc21fe95931becbc417137de119b4a602e1730f26c9f`
+  `0d31c7f8296c4c2e685d13166314c923f38c160e8dd012ebcb94e35d397e66b4`
+- HELPER-CONSUMED.marker:
+  `063171e5d17ed7b2889cf78eeec394a6c110e88a1b70a5d3eb5aa02c16b4d73f`
 - GOLDEN-RETURN.txt:
-  `64edf02c9fd1d05847ddf63ae804b6a6f60972520422b4d4ab51f6a2e118e0ad`
+  `02bcd593c27c4c4b843dbb326399fff584e0fc025b86ffc4a36cdda6478bd659`
 - RETIRE.txt:
-  `0e2bd19e71cf5d08effb3dfa69362b54f6fa867ae4e79d5fe0b2936676d93b9f`
+  `37edcf38af1ba7cd632d47478eb08f398dad6db2421e4bf9a3975ff6c6928c12`
 
 ---
 
 ## 7. Fresh continuation inputs now available
 
-FN captured paired Linux statistics through G15.
+FU captured paired Linux statistics through G18.
 
-FL consumed G1..G12 for R5..R15.
+FS consumed G1..G15 for R5..R18.
 
-Therefore FN preserves fresh continuation inputs that have never been consumed by the live IQ producer:
+Therefore FU preserves fresh continuation inputs not yet consumed by the live IQ producer:
 
-- G13 STATS3A/TLBG
-- G14 STATS3A/TLBG
-- G15 STATS3A/TLBG
+- G16 STATS3A/TLBG -> natural source for R19
+- G17 STATS3A/TLBG -> natural source for R20
+- G18 STATS3A/TLBG -> natural source for R21
 
-Native AEC also produced CQ residual ISP gain observations through G15 in RUN.txt.
+Native AEC also produced CQ residual ISP gain observations through G18 in RUN.txt.
 
-These are the natural offline inputs for:
-
-- G13 -> R16
-- G14 -> R17
-- G15 -> R18
-
-Use the immutable external FN archive as the source. Do not modify archived evidence in place.
+Use the immutable external FU archive as the source. Do not modify archived evidence in place.
 
 ---
 
-## 8. Current authority boundary
+## 8. Current authority boundary beyond R18
 
 AWB/GainAdj:
 
-- FH Windows authority already extends through R18.
-
-GTM:
-
-- EB's post-R6 stable output law remains available, but any new use should record that inference explicitly.
+- FH Windows differential authority stops at R18.
+- R19..R21 are not yet Windows-authorized.
 
 Tintless/LSC:
 
-- FI Windows clean-room differential authority currently stops at R15.
+- FP Windows clean-room differential authority stops at R18.
+- R19..R21 are not yet Windows-authorized.
 
-Therefore the main blocker to a safe R16..R18 Linux live extension is Tintless/LSC authority beyond R15, not the producer mechanics or AWB.
+GTM:
 
-Do not silently extrapolate FI past R15.
+- EB's post-R6 stable output law remains available, but any new use must record that inference explicitly.
+
+Producer mechanics:
+
+- fresh Linux continuation inputs G16..G18 exist.
+- the current production algorithms can be exercised offline.
+- this does not authorize R19..R21 content by itself.
+
+Therefore **both AWB/GainAdj and Tintless/LSC authority must be extended beyond R18 before any R19..R21 Linux live candidate is created.**
+
+Do not silently extrapolate FH or FP past R18.
 
 ---
 
-## 9. Recommended next frontier — bounded R16..R18 offline first
+## 9. Recommended next frontier — bounded R19..R21 offline/Windows authority first
 
 Suggested sequence:
 
-1. Create an offline-only continuation stage from immutable FN G13/G14/G15:
-   - G13 -> R16
-   - G14 -> R17
-   - G15 -> R18
-2. Prove deterministic composition and deadline feasibility with the current production algorithms.
-3. Use FH as AWB/GainAdj differential authority through R18.
-4. Obtain fresh Tintless/LSC authority through R18 before Linux live.
-   Preferred path:
-   - one fresh bounded Windows R4..R18 Tintless/trigger/final-LSC-staging oracle using FI's already-proven debugger hooks and one-stream holder.
-5. Join the component authority explicitly.
+1. Create an offline-only continuation/composability stage from immutable FU G16/G17/G18:
+   - G16 -> R19
+   - G17 -> R20
+   - G18 -> R21
+2. Prove deterministic composition and preserve exact regression to the real FU R5..R18 live capsules.
+3. Extend Windows AWB/GainAdj authority through R21.
+4. Extend Windows Tintless/LSC authority through R21.
+   - Prefer one fresh bounded Windows stream only if the existing proven hooks can safely collect the needed evidence together.
+   - Otherwise keep AWB and Tintless/LSC as separate bounded one-stream authority captures.
+5. Join R19..R21 component authority explicitly.
 6. Only after authority closes:
-   - extend compiled C gain publisher through G15
-   - extend live-capable producer through R18
-   - extend bounded transport to 18 frames
-   - verify all offline
+   - extend compiled C gain publisher through G18
+   - extend live-capable producer through R21
+   - extend bounded transport to 21 frames
+   - verify everything offline
    - create a fresh one-shot Linux live identity
 7. Still do not jump directly to unrestricted continuous/infinite streaming.
 
-Suggested next stage labels if free:
+Suggested next labels if free:
 
-- FO — offline R16..R18 continuation/composability
-- FP — Windows R4..R18 Tintless/LSC oracle
-- FQ — R16..R18 authority join
-- FR — G1..G15 compiled publisher
-- FS — R5..R18 producer
-- FT — eighteen-frame transport
-- FU — fresh one-shot eighteen-frame Linux live candidate
+- FV — offline R19..R21 continuation/composability
+- FW — Windows AWB authority through R21
+- FX — Windows Tintless/LSC authority through R21
+- FY — R19..R21 authority join
+- FZ — G1..G18 compiled publisher
+- GA — R5..R21 producer
+- GB — twenty-one-frame transport
+- GC — fresh one-shot twenty-one-frame Linux live candidate
 
 Verify labels are unused before creating them.
 
@@ -417,10 +442,17 @@ Important closed stages include:
 - FL — R5..R15 producer
 - FM — fifteen-frame transport
 - FN — consumed live PASS through R15
+- FO — R16–R18 continuation/composability
+- FP — consumed Windows R4–R18 Tintless/LSC PASS
+- FQ — R16–R18 content authority join
+- FR — G1..G15 C publisher
+- FS — R5..R18 producer
+- FT — eighteen-frame transport
+- FU — consumed live PASS through R18
 
 Consumed Linux one-shot identities include:
 
-EA / EO / EQ / ER / ET / EV / EZ / FF / FN
+EA / EO / EQ / ER / ET / EV / EZ / FF / FN / FU
 
 Never reuse a consumed identity.
 
@@ -439,14 +471,16 @@ Never reuse a consumed identity.
 - do not mass-clean historical untracked artifacts
 - do not claim continuous AEC from bounded tests
 - do not touch HostFabric work in this continuation
-- do not extend Linux live IQ past the proven content-authority boundary without a fresh offline gate
+- do not extend Linux live IQ past the proven content-authority boundary without a fresh offline/Windows authority gate
 
 ---
 
 ## 12. Human summary
 
-The Linux front-camera stack now has a successful bounded live run through R15.
+The Linux front-camera stack now has a successful bounded live run through **R18**.
 
-FN completed fifteen real QC10C frames, captured paired 3A/TLBG through G15, submitted dynamic IQ R5..R15, performed only the original three delayed physical IMX681 writes, cleanly STREAMOFF'd, passed kernel-health validation, and returned to Golden. The consumed candidate was retired.
+FU completed eighteen real QC10C frames, captured paired 3A/TLBG through G18, submitted dynamic IQ R5..R18, performed only the original three delayed physical IMX681 writes, cleanly STREAMOFF'd, passed kernel-health validation, and returned to Golden. The consumed candidate was retired.
 
-The next useful frontier is R16..R18. Linux already has fresh continuation inputs G13..G15 from FN, and Windows AWB authority through R18 already exists via FH. The remaining content-authority gap is Tintless/LSC beyond R15. Close that offline/with a bounded Windows oracle before creating another Linux live candidate.
+Fresh continuation inputs G16/G17/G18 now exist for natural R19/R20/R21 work. The blocker is no longer Linux transport or producer mechanics; it is authority beyond R18. Both Windows AWB/GainAdj and Windows Tintless/LSC differential authority currently stop at R18.
+
+The next safe move is therefore offline R19..R21 continuation plus bounded Windows authority extension before another Linux live candidate.
