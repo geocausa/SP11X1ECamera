@@ -9,3 +9,5 @@ The first clean replay mismatch was diagnostic: raw AWB `(RG,BG)` is not the mes
 With that runtime calibration transform, the EF clean core reproduces for all eight requests, bit-for-bit: triangle 5 / vertices (22,12,28), barycentric weights, nested Lux/CCT RGB multiplier, final GA RGB adjustment, final published RGB gain triplet, and CCT integer publication. Publisher CCT is the pre-GA RG/BG temperature result truncated to integer; RGB is derived from GA-adjusted ratios.
 
 The algorithm is therefore closed for the normal contained-triangle path. The remaining productionization gate is **where Linux obtains the same per-device RG/BG calibration pair**. Those values are not literal constants in the static tuning or sensor-module blobs and must not be hard-coded into the reusable clean core. Windows' rare out-of-mesh two-vertex fallback is also intentionally still fail-closed.
+
+EL now consumes this publication path without oracle triangle hints, reproduces Windows stateful triangle identity R4..R11 8/8, and packs the resulting gains into the exact Titan680 PDPC/WB scalar words.

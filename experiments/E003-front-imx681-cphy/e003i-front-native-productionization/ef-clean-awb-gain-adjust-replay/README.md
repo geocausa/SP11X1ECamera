@@ -1,6 +1,6 @@
 # E003i-EF — clean CTrigleAdjV1 AWB gain-adjust replay
 
-Status: **OFFLINE STATIC CORE — Windows same-request differential still required.**
+Status: **PASS clean contained-triangle core; Windows same-request differential closed by EG, production stateful selection closed by EL.**
 
 This stage reconstructs the normal contained-triangle path of the Surface front-camera `CamX::CTrigleAdjV1` AWB GainAdj engine without embedding proprietary tuning data. It parses the SHA-pinned shipped `com.surface.tuned.ffc_imx681.bin` through the repository QTI parameter parser at runtime.
 
@@ -12,4 +12,4 @@ The IMX681 `triglGAV1` tuning contains exactly **44 triangles**, **32 RG/BG vert
 
 `verify-ef.py` pins the tuning SHA, validates topology/neighbor reciprocity, checks all 44 triangle centroids, and exercises unity, per-vertex non-unity, nested CCT, and Lux-gap interpolation fixtures directly from the vendor table.
 
-Next gate: capture same-request Windows `(RG,BG, Lux, converted CCT, GA final RGB)` plus the request-labelled AWB frame-control publication and differential-test this core. Only after that proof may final AWB gains be wired into the existing WB/PDPC scalar backend.
+Superseding gates are closed by EG/EJ/EK/EL: Windows same-request GainAdj + publisher differential is 8/8, per-device calibration is reconstructed from the Linux-read physical OTP, and EL reproduces Windows stateful triangle selection before wiring published gains into the exact PDPC/WB scalar packer. `find_triangle()` remains a geometry/unit-test helper; production boundary/tie behavior must use the EL stateful selector.
