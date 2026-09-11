@@ -87,8 +87,22 @@ def main():
     post=[x for x in rows if x['request']>=6]
     dynamic_seq=[x['tmc_dynamic_sha256'] for x in post]
     output_seq=[x['gtm_out_sha256'] for x in post]
+    region_seq=[x['region_sha256'] for x in post]
+    flags_seq=[x['flags_sha256'] for x in post]
+    aux_seq=[x['aux_sha256'] for x in post]
     state_law=classify(dynamic_seq)
     output_law=classify(output_seq)
+    region_law=classify(region_seq)
+    flags_law=classify(flags_seq)
+    aux_law=classify(aux_seq)
+    common_blocks=[get(a.capture_dir,r,'GTM_COMMON') for r in range(6,13)]
+    bank_values=[b[0x14] for b in common_blocks]
+    if bank_values != [0,1,0,1,0,1,0]:
+        raise RuntimeError(f'post-R6 GTM bank parity drift {bank_values!r}')
+    base=bytearray(common_blocks[0]); base[0x14]=0
+    for r,b in zip(range(6,13),common_blocks):
+        t=bytearray(b); t[0x14]=0
+        if t!=base: raise RuntimeError(f'R{r} GTM common changed outside bank selector +0x14')
     result={
       'schema':'sp11-e003i-eb-windows-r4-r12-gtm-state-oracle-v1',
       'status':'PASS_WINDOWS_ORACLE',
@@ -97,12 +111,18 @@ def main():
       'clean_gtm_replay':'9/9 PASS',
       'post_r6_tmc_state_law':state_law,
       'post_r6_gtm_output_law':output_law,
+      'post_r6_gtm_region_law':region_law,
+      'post_r6_gtm_flags_law':flags_law,
+      'post_r6_gtm_aux_law':aux_law,
+      'post_r6_common_law':'bank_parity_only',
+      'gtm_common_bank_selector_offset':'0x14',
+      'post_r6_bank_selector_values':bank_values,
       'post_r6_distinct_tmc_states':len(set(dynamic_seq)),
       'post_r6_distinct_gtm_outputs':len(set(output_seq)),
       'rows':rows,
-      'next_gate':('R6 carry-forward may be considered only after checking all other IQ scalars/LSC state'
-                   if state_law=='stable' and output_law=='stable' else
-                   'derive request7+ TMC recurrence/producer inputs; do not freeze R6'),
+      'next_gate':('GTM/TMC post-R6 carry-forward is proven for this steady stream apart from deterministic bank parity; now close request7+ LSC and remaining scalar/AWB producer state'
+                   if state_law=='stable' and output_law=='stable' and region_law=='stable' else
+                   'derive request7+ GTM/TMC recurrence/producer inputs; do not freeze R6'),
       'linux_camera_runtime':False,
       'continuous_aec_claimed':False
     }
@@ -112,6 +132,7 @@ def main():
     print('EB_POST_R6_GTM_LAW='+output_law)
     print('EB_DISTINCT_TMC='+str(result['post_r6_distinct_tmc_states']))
     print('EB_DISTINCT_GTM='+str(result['post_r6_distinct_gtm_outputs']))
+    print('EB_GTM_COMMON_BANK_PARITY=0,1,0,1,0,1,0 PASS')
     print('EB_ANALYZE=PASS')
 
 if __name__=='__main__':main()
