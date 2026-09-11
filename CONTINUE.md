@@ -10,8 +10,10 @@ If the user says **“continue the camera work on SP11”**, do not ask them to 
 6. One fresh candidate identity, one candidate boot, one camera stream. No same-boot retry.
 7. After any live result: archive evidence, reboot Golden, verify Golden, retire candidate, then commit/push.
 
-Current durable live frontier: **GO R5..R27 consumed PASS / Golden return PASS / candidate retired**. GL/GM/GN are the closed offline prerequisites and GJ/GK close content authority through R27.
+Current durable live frontier: **GO R5..R27 consumed PASS / Golden return PASS / candidate retired**.
 
-Next action: **continuous delayed sensor-control feedback**, starting offline/read-only. Use GO's immutable G1..G27 statistics/control evidence to prove control-to-statistics timing, design the scheduler extension beyond the three startup writes, and build deterministic offline regressions before authorizing another runtime candidate.
+The continuous-control pivot has now closed three offline gates: **GP** GO timing authority PASS, **GQ** two-slot fail-closed continuous scheduler PASS (100,000-generation stress), and **GR** live-helper integration compile PASS with exact DQBUF boundary checks preserved.
 
-Do not resume the +3-frame bounded ladder mechanically. Any future live control experiment needs a fresh identity, explicit authority, one-shot boot and no same-boot retry.
+A fresh **GS continuous-scheduler shadow candidate** is now PREPARED / UNARMED / prearm PASS. GS releases the continuous scheduler at every G2..G27 boundary but permits real sensor ioctls only for the already-proven G1..G3 sources; G4..G26 are shadow-log only.
+
+Next action: install GS unarmed, rerun prearm, arm exactly one GRUB one-shot, run at most one 27-frame stream, archive immediately and return Golden. No same-boot retry. A GS PASS proves live continuous boundary ownership, not continuous physical writes.

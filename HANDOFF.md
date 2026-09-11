@@ -16,7 +16,11 @@ GL, GM and GN are durably closed and pushed. GO then completed exactly one fresh
 
 After a GO PASS, stop mechanically extending R30/R33/etc. Pivot to continuous delayed sensor-control feedback, control-to-statistics timing, repeated/long streaming, production integration, then VD55G0 IR bring-up.
 
-Current next action: pivot to **continuous delayed sensor-control feedback**. Start offline/read-only from immutable GO evidence: prove control-to-statistics timing, design the scheduler extension for real writes after G3, and build deterministic regressions before any new runtime authorization. Do not extend directly to R30/R33/R36.
+Continuous-control offline work is now closed through three gates: GP timing authority PASS, GQ continuous two-slot ring scheduler PASS, and GR continuous helper integration PASS. The exact pre/write/post DQBUF fail-closed gate is preserved.
+
+A fresh GS shadow one-shot is PREPARED / UNARMED / prearm PASS. It will exercise releases G1..G26 at live boundaries while physically writing only the already-proven G1..G3 controls; G4..G26 are shadow-only.
+
+Current next action: install/arm GS once, run at most one R27 stream, archive, return Golden and retire. Do not authorize continuous physical writes merely from GS preparation; require the live shadow result first.
 
 Before every meaningful mutation run `tools/camera-overlap-guard.sh` and inspect the intended stage path. If unexpected evidence exists, audit it first. Any one-shot attempt that may have started is consumed until proven otherwise. Never same-boot retry and never reuse a consumed identity.
 

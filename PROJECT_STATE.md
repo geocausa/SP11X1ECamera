@@ -8,7 +8,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **Current bounded chain:** GL G1..G24 publisher PASS; GM R5..R27 producer PASS; GN 27-frame transport PASS; GO R5..R27 consumed live PASS. GO completed exactly 27 frames with 23 live IQ submissions, exactly three physical sensor writes, clean STREAMOFF, Golden return and candidate retirement.
 
-**Next action:** continuous delayed sensor-control feedback, beginning offline/read-only with GO evidence. Prove control-to-statistics timing and build a safe scheduler extension/regression suite before any fresh live authorization.
+**Continuous-control pivot:** GP timing authority PASS; GQ fail-closed two-slot continuous scheduler PASS; GR helper integration PASS with exact DQBUF gate preserved. GS shadow candidate is PREPARED / UNARMED / prearm PASS.
+
+**Next action:** one fresh GS shadow boot and one stream maximum. Only G1..G3 may cause physical sensor writes; G4..G26 must be shadow releases. Archive and return Golden immediately on any result.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
