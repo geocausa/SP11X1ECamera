@@ -6,7 +6,7 @@ GT limited redundant-write policy and GU helper integration are durable. GV then
 
 The initial verifier expected one hardware transaction per successful ioctl and stopped on that incorrect assertion. After immediate archive, protected Golden return and candidate retirement, the verifier was corrected offline. The immutable evidence passes as `PASS_CAPTURE_GV_REDUNDANT_IOCTL_DEDUPE_R27`. No same-boot retry occurred.
 
-Current next action: **GW minimal changed-post-G3 control authority offline**. Prove a deliberately tiny, safe changed tuple and exact timing before any new candidate.
+Current next action: **GY minimal changed post-G3 sentinel one-shot**. GW authority and GX integration both PASS offline. GY is prepared/unarmed and prearm PASS. It can perform one synthetic G4 digital-gain +1-LSB transaction only when native G4 equals G3; G5..G26 remain shadow. Commit/push exact candidate before install/arm.
 
 ---
 

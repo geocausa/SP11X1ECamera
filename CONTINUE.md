@@ -16,4 +16,6 @@ GV executed exactly one 27-frame stream. The helper made six successful control 
 
 The continuous scheduler is live-proven through G26, redundant control-ioctl lifecycle is live-proven, and unchanged-cluster dedupe is now explicit authority. **Changed post-G3 sensor feedback remains unproven.**
 
-Next action: build **GW minimal changed-post-G3 control authority offline**. Bound the first changed later write as tightly as possible, prove the exact tuple/delta and timing against Windows/native constraints, and keep all later controls shadow-only. Do not prepare another live candidate until that authority closes.
+**GW minimal changed-post-G3 authority PASS and GX helper integration PASS. GY is PREPARED / UNARMED / prearm PASS.** GY permits exactly one new changed post-G3 sensor transaction: source G4 only, and only if native G4 still equals last-applied G3; it then changes digital gain 1471→1472 (+1 LSB, +0.06798%) with no frame-timing change. G5..G26 remain shadow-only.
+
+Next action: commit/push the exact GY candidate, rerun prearm, then one fresh GY boot and one stream maximum. Archive immediately, return Golden and retire. No same-boot retry.

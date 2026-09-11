@@ -10,7 +10,7 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **Continuous-control pivot:** GP/GQ/GR are closed; GS live shadow scheduler PASS; GT/GU limited redundant policy/integration PASS; **GV consumed live PASS after offline verifier adjudication**. GV made successful G4..G6 redundant control ioctls, but V4L2 deduped their unchanged clusters before IMX681 `.s_ctrl`; sensor hardware transactions remained bootstrap + G1..G3 only. Golden return and retirement passed.
 
-**Next action:** GW offline minimal changed-post-G3 control authority. A real later hardware write now requires a changed control tuple; prove one tightly bounded safe delta/timing before preparing another live one-shot.
+**Next action:** GY one-shot after durable checkpoint. GW minimal changed-post-G3 authority and GX helper integration PASS offline. GY is prepared/unarmed/prearm PASS and permits exactly one guarded G4 +1 digital-gain-LSB sentinel; G5..G26 remain shadow-only.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
