@@ -9,7 +9,7 @@ SRC=PROJ/'02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss
 K=PROJ/'02-kernel/build-runtime-v4-headers-20260826'
 EN=BASE/'en-r5-r9-live-producer-integration'
 BASE_CAMSS_SHA='b9de92306b4d386274968dcab3f1a96ec13359f1eb22c27fda43bb15b0af7abb'
-PATCHED_CAMSS_SHA='d888dc4937b32c7438ac7985a1def3467c3c2992b693aed1a87f436b7b5127e2'
+PATCHED_CAMSS_SHA='683255664a320bf63b1c852c56a8c0373014d6723b6d48a69a277bd02d18706f'
 BASE_HELPER_SHA='3788ca6a05747961f523942117925d28b4a2edb91f76a06bb001071ffd238b08'
 PATCHED_HELPER_SHA='6d4268fb5e6c637de78f62079719eaa3c107efcca48578c125a58a17d74c565d'
 BASE_SCHED_H_SHA='50bbb9c59538167241245ea60b57f76e3b7e8979135c88c9ff4a363318ca328f'
@@ -36,7 +36,7 @@ with tempfile.TemporaryDirectory(prefix='e003i-es-') as td0:
     for tok in ['frame_limit > 9','camss_x1e_pix_runner_frames(camss, &req, &result, 9)',
                 'frame_number < 7 || frame_number > 9','request_id != frame_number',
                 '7, 7, 0, req->video[2]','8, 8, 1, req->video[3]','9, 9, 0, req->video[0]',
-                'bounded nine-frame live requeue']:
+                'bounded nine-frame live requeue','E003I_ES_IQ_CONSUMED R=%llu FRAME=%u SLOT=%u']:
         need(tok in cs,'CAMSS contract '+tok)
     need(cs.count('camss_x1e_pix_iq_provider_next_steady(camss, req->live_video,')>=1,'provider helper absent')
     # Userspace transport: 9 DQBUFs, exact 4-buffer cycle, recycle first five completions only.

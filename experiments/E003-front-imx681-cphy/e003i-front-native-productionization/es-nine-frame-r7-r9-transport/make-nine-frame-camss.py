@@ -67,6 +67,8 @@ static int camss_x1e_pix_runner_live_steady_frame(
 						     request_id, &materialized->steady);
 	if (ret)
 		return ret;
+	dev_info(camss->dev, "E003I_ES_IQ_CONSUMED R=%llu FRAME=%u SLOT=%u\n",
+		 (unsigned long long)request_id, frame_number, slot);
 	ret = csid680_x1e_front_poll_next_epoch0(csid, *epoch0_seq,
 						      CAMSS_X1E_PIX_RUNNER_EPOCH0_TIMEOUT_US);
 	if (ret)
