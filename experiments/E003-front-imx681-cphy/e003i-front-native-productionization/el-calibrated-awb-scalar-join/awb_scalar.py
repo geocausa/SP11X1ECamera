@@ -90,11 +90,27 @@ class CalibratedAWB:
             if _inside_cross(self.tuning,ti,x,y):
                 self.current_triangle=ti; return ti
             crossed=_crossed_edges(self.tuning,ti,x,y)
-            nxt=[self.tuning.triangles[ti].neighbors[e] for e in crossed if self.tuning.triangles[ti].neighbors[e]!=255]
-            if not nxt: break
-            # Ordinary contained-mesh path crosses one side. Multiple-side/out-of-zone remains fail-closed.
-            if len(set(nxt))!=1: raise ValueError('GainAdj point crosses multiple triangle sides; Windows two-vertex fallback not ported')
-            ti=nxt[0]
+            if not crossed: break
+            tr=self.tuning.triangles[ti]
+            if len(crossed)==1:
+                ti=tr.neighbors[crossed[0]]
+                if ti==255: break
+            else:
+                # GetCurrentTriangle's multi-side branch (RVA 0x6bfcc0): when more
+                # than one side is crossed it resolves neighbor sentinels in n0->n1->n2
+                # order and continues with n2 when present, else the last surviving
+                # prior neighbor.  It does not immediately collapse to the 2-vertex
+                # out-of-zone fallback.  EO G6 exercises this exact path: 10 -> 8 -> 16.
+                n0,n1,n2=tr.neighbors
+                cur=ti
+                a=cur if n0 in (255,-1) else n0
+                b=a if n1 in (255,-1) else n1
+                c=b if n2 in (255,-1) else n2
+                boundary_count=sum(1 for n in (n0,n1,n2) if n==255)
+                if boundary_count==2:
+                    break  # Windows proceeds to its true two-vertex boundary fallback.
+                ti=c
+                if ti in (255,-1): break
         raise ValueError('RG/BG point outside stateful CTrigleAdjV1 mesh; fail closed')
     def publish(self,rg,bg,lux,cct):
         rg,bg,lux,cct=map(f32,(rg,bg,lux,cct))
@@ -103,7 +119,10 @@ class CalibratedAWB:
         tri=self._select_triangle(rg,bg)
         z=GA.adjust(self.tuning,rg,bg,lux,cct,self.cal_rg,self.cal_bg,triangle_hint=tri)
         ar,ag,ab=z['final_rgb']
-        if bits(ag)!=0x3f800000: raise RuntimeError('unproven non-unity G GainAdj')
+        # Single-camera Windows publication uses only GA_R/GA_B to transform the
+        # decision ratios: adjustedRG=rawRG/GA_R, adjustedBG=rawBG/GA_B.  GA_G is
+        # retained in shared state (and used by dual-camera mixing) but is not part
+        # of this ratio-to-gain normalization.  The final triplet uses M=max(1,RG,BG).
         arg=GA.div(rg,ar);abg=GA.div(bg,ab);M=GA.f32(max(GA.f32(1.0),arg,abg))
         R=GA.div(M,arg);G=M;B=GA.div(M,abg)
         if not all(math.isfinite(x) and x>0.0 for x in (R,G,B)): raise RuntimeError('invalid published gains')

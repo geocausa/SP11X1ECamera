@@ -34,10 +34,22 @@ for r in ea['rows']:
  o=core.run(fb(r['decision_bits'][0]),fb(r['decision_bits'][1]),fb(r['lux_bits']),fb(r['cct_bits']),1.0)
  need(o['registers']==expected,f"EA G{r['generation']} scalars")
  need({f'0x{k:04x}':f'0x{v:08x}' for k,v in sorted(expected.items())}==r['registers'],f"EA G{r['generation']} summary")
+
+# 3) Consumed EO attempt1 G6/R9 regression.  The old implementation stopped on a
+# two-side crossing in triangle 10.  Windows GetCurrentTriangle keeps walking
+# 10 -> 8 -> 16; triangle 16 contains the point.  GA_G is one ULP below unity
+# internally, but single-camera publication uses adjusted RG/BG only.
+eo=EL.CalibratedAWB(); eo.current_triangle=10
+g6=eo.run(fb('3f2146a9'),fb('3ee089b0'),fb('43b4acde'),fb('4584f583'),1.0)
+need(g6['gain_adjust']['triangle']==16,'EO G6 triangle 10->8->16')
+need([int(x,16) for x in g6['gain_adjust']['final_bits']]==[0x3f8147ae,0x3f7fffff,0x3f7ae148],'EO G6 GA RGB')
+need([EL.bits(g6[k]) for k in ('R','G','B')]==[0x3fcd361f,0x3f800000,0x400f0441],'EO G6 published gains')
+eo_regs={0x3d78:0x19a7,0x3d7c:0x23c1,0x3d80:0x09fb,0x3d84:0x0729,0x4568:0x08000000,0x456c:0x11e00000,0x4570:0x0cd40000}
+need(g6['registers']==eo_regs,'EO G6 PDPC/WB regs')
 out={'schema':'sp11-e003i-el-calibrated-awb-scalar-join-v1','status':'PASS_OFFLINE_JOIN',
  'windows_gain_differential':'8/8','triangle_state_differential':'8/8','windows_requests':list(range(4,12)),'scalar_pack_crosscheck':'8/8',
  'ea_live_generations_replayed':6,'ea_g1_g6_awb_hold':'6/6','ea_scalar_regression':'7/7 words x 6 generations',
  'predictive_gain_profile':'exact 1.0 normal-preview authority BM/BP','calibration_source':'EJ <- EK Linux physical EEPROM',
- 'out_of_mesh_fallback_proven':False,'linux_camera_runtime_performed_by_el':False,'continuous_aec_claimed':False,
+ 'eo_g6_multiside_traversal':'10->8->16','eo_g6_triangle':16,'eo_g6_regression':'PASS','eo_g6_internal_ga_g_bits':'0x3f7fffff','true_two_vertex_fallback_proven':False,'linux_camera_runtime_performed_by_el':False,'continuous_aec_claimed':False,
  'windows_rows':wr}
 (HERE/'RESULT.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
