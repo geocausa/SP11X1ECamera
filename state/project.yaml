@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-09-10
+updated: 2026-09-11
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-dn-scoped-internal-cap-g4-replay-pass
-phase: front-imx681-cphy-bringup
-status: golden-restored-scoped-native-cap-offline-pass
+state_id: E003i-gk-r27-offline-authority-closed
+phase: front-imx681-r27-bounded-closure
+status: golden-restored-r27-windows-and-offline-authority-closed
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-dn-native-aec-internal-cap
+current_gate: E003i-gk-r25-r27-continuation-authority
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-internal-cap-bounds-oracle
+next_experiment: E003i-GL-r27-gain-feed-publisher
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2927,9 +2927,9 @@ e003i_x_native_live_lsc_deadline:
   next_gate: linux-request-local-aec-lux-cct-acquisition
 
 handoff:
-  latest: experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md
+  latest: HANDOFF.md
 next_action: >-
-  Bind internal-cap bank9:data10 and compact+0x98 to ordinary producers before removing DN preview guard. Generic cap arithmetic and exact saved G4 replay pass offline. Then prepare a fresh disposable bounded Linux candidate; preserve Golden and CH rejection. Keep control-to-statistics association as a separate timing gate with no guessed delay. See handoff.latest.
+  Build GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport offline. If all pass and the overlap guard confirms clean protected Golden, prepare exactly one fresh GO R5..R27 live candidate. After GO PASS pivot to continuous sensor-control feedback instead of extending the bounded ladder.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3169,3 +3169,27 @@ e003i_dn_current:
   linux_hardware_runs: 0
   golden_return_verified: true
   full_continuous_aec_closed: false
+
+
+# Current authority: GK supersedes earlier DN/FU/R21/R24 continuation pointers.
+e003i_gk_current:
+  date: 2026-09-11
+  status: pass-offline-r25-r27-authority-closed
+  durable_commit: 6985bb6f5993232df3483000581196e2a370acdc
+  branch: experiment/e003-front-imx681-cphy
+  golden_saved_entry: sp11-audio-fullio-v19c
+  golden_next_entry_empty: true
+  gc_live_r21_pass: true
+  gi_live_r24_pass: true
+  gj_windows_combined_r27_pass: true
+  gk_r5_r24_live_regression: 20/20
+  gk_r25_r27_deterministic: 3/3
+  awb_windows_authority_through_request: 27
+  lsc_windows_authority_through_request: 27
+  current_linux_live_boundary_request: 24
+  current_content_authority_boundary_request: 27
+  continuous_aec_closed: false
+  front_ir_linux_closed: false
+  next_bounded_chain: [GL, GM, GN, GO]
+  post_go_strategy: continuous-sensor-control-feedback-and-robustness
+  overlap_guard: tools/camera-overlap-guard.sh

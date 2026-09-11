@@ -1,3 +1,17 @@
+## Current continuation — reconciled R27 authority frontier — 2026-09-11
+
+**Authoritative durable checkpoint:** `6985bb6` (`camera: close R25-R27 offline authority`) on `experiment/e003-front-imx681-cphy`; local and origin matched at reconciliation.
+
+The DN-era continuation below is historical. Since then FU R18, GC R21 and GI R24 bounded Linux live passes closed; GJ closed combined Windows AWB + Tintless/LSC authority through R27; GK closes deterministic R25/R26/R27 composition while regressing R5..R24 against real GI live capsules 20/20.
+
+SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes/modules and no running camera experiment. GC/GI/GJ archive manifests were revalidated.
+
+**Next action:** GL G1..G24 publisher -> GM R5..R27 producer -> GN 27-frame transport, all offline. Then one fresh GO R5..R27 live candidate only if the overlap guard passes. One boot, one stream, no same-boot retry.
+
+**After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
+
+**Concurrency rule:** Git/machine/evidence state outranks chat chronology. Run `tools/camera-overlap-guard.sh` before mutations and audit unexpected existing evidence.
+
 ## Current continuation - E003i DN, 2026-09-10
 
 **Current authority:** [DN handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md). Earlier sections are historical.

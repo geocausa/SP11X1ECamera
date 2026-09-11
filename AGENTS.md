@@ -107,3 +107,14 @@ First achieve stable native RAW capture with correct power, reset, link, mode, e
 ## User authorization — 2026-09-05
 
 The user explicitly authorizes installation of useful missing tools on the project machines/OSes, discretionary Linux/Windows reboots, KD, ETW/ETL, Ghidra and static/dynamic analysis, and saving/committing/pushing meaningful progress. Proceed without repeatedly asking for these routine project actions. Scope remains SP11, SP7 and PiMaster. Preserve Golden and checkpoint exact hardware experiments.
+
+
+## Concurrent-turn / UI-disconnect safety
+
+The user-facing UI can disconnect while a backend command or another turn remains active. Never assume a missing response means the operation stopped.
+
+Before every meaningful mutation run `tools/camera-overlap-guard.sh`, compare local HEAD/origin, inspect tracked status and active camera/build processes, verify Golden/`next_entry` for boot work, and inspect the proposed stage/evidence path.
+
+If unexpected stage or attempt evidence exists, audit it first. For a one-shot runtime, evidence that a stream may have started makes that identity consumed until proven otherwise. Never same-boot retry and never reuse a consumed candidate.
+
+Do not mass-clean historical untracked evidence and do not use `git add -A`; stage explicit intended paths only.

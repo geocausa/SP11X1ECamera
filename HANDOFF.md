@@ -1,4 +1,26 @@
-# SP11 Camera Linux Parity Handover — 2026-09-11
+# SP11 Camera Linux Parity Handover — 2026-09-11 reconciled R27 frontier
+
+## RECONCILED CURRENT FRONTIER — authoritative over the historical handoff below
+
+Reconciled 2026-09-11 after a possible UI/turn overlap. Machine/Git/evidence state is authoritative, not visible chat chronology.
+
+- durable checkpoint: `6985bb6f5993232df3483000581196e2a370acdc` (`camera: close R25-R27 offline authority`)
+- branch: `experiment/e003-front-imx681-cphy`; local and origin matched at reconciliation
+- GC: consumed Linux R5-R21 live PASS; archive manifest revalidated
+- GI: consumed Linux R5-R24 live PASS; 24 QC10C frames; archive manifest revalidated
+- GJ: consumed one-stream Windows R4-R27 combined AWB + Tintless/LSC PASS; 24/24 AWB bit-exact and 24/24 LSC byte-exact; archive manifest revalidated
+- GK: offline R25-R27 PASS at `6985bb6`; R5-R24 regresses 20/20 against GI and R25-R27 is deterministic 3/3
+- safe machine state at reconciliation: protected FullIO v19c Golden, empty `next_entry`, no camera nodes/modules, no camera process
+
+Next bounded closure: GL G1..G24 publisher -> GM R5..R27 producer -> GN 27-frame transport, all offline first. Only then prepare a fresh GO one-shot R5..R27 live candidate.
+
+After a GO PASS, stop mechanically extending R30/R33/etc. Pivot to continuous delayed sensor-control feedback, control-to-statistics timing, repeated/long streaming, production integration, then VD55G0 IR bring-up.
+
+Before every meaningful mutation run `tools/camera-overlap-guard.sh` and inspect the intended stage path. If unexpected evidence exists, audit it first. Any one-shot attempt that may have started is consumed until proven otherwise. Never same-boot retry and never reuse a consumed identity.
+
+The older FU/R18 handoff below is retained as historical evidence only.
+
+---
 
 ## Resume command / first instruction for the next chat
 

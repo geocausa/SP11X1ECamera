@@ -1,15 +1,17 @@
 # Resume contract
 
-If the user says **“continue the camera work on SP11”**, do not ask them to repeat the machine access, project goal, hardware list or workflow.
+If the user says **“continue the camera work on SP11”**, do not ask them to repeat the project context.
 
-1. Read `AGENTS.md`, the current continuation at the top of `PROJECT_STATE.md`, `state/project.yaml`, and the `handoff.latest` file named there before historical experiment records.
-2. Run `tools/project-status.sh` on SP11 Linux when that OS is online.
-3. Discover current PiMaster client status. SP11 Linux and SP11 Windows are the same physical machine and are normally mutually exclusive; SP7 is the Windows debugger/oracle companion.
-4. Compare live state with the repository state before modifying anything.
-5. Resume the `next_action` in `state/project.yaml` unless fresh evidence makes it obsolete.
-6. Before a risky boot/kernel/DT experiment, create/update the experiment record and preserve the current Golden rollback.
-7. When stopping or when context becomes unreliable, update `PROJECT_STATE.md`, `state/project.yaml`, and the current experiment record, then commit/push the handoff.
+1. Read `HANDOFF.md`, `AGENTS.md`, and `state/project.yaml`.
+2. Run `./tools/camera-overlap-guard.sh --require-clean-tracked --require-golden --require-no-camera-process` before meaningful mutation.
+3. Compare local HEAD/origin and inspect the intended stage path before creating or changing it.
+4. Treat machine state, Git history and immutable archives as authoritative over chat chronology. Audit unexpected existing work; do not repeat it.
+5. Before a risky boot/runtime mutation, checkpoint and push the exact prepared candidate.
+6. One fresh candidate identity, one candidate boot, one camera stream. No same-boot retry.
+7. After any live result: archive evidence, reboot Golden, verify Golden, retire candidate, then commit/push.
 
-The repository, not chat history, is the durable source of project continuity.
+Current durable frontier: **GK R25-R27 offline authority closed at `6985bb6`**.
 
-Current checkpoint: [DN internal cap handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md). The saved G4 failure now passes offline; bind the remaining cap branch input before a fresh bounded live candidate.
+Next action: offline-only **GL publisher -> GM producer -> GN 27-frame transport**. Only after all pass and Golden is clean should fresh **GO R5-R27 one-shot live** be prepared.
+
+After GO PASS, pivot to continuous delayed sensor-control feedback and robustness; do not keep extending the bounded ladder mechanically.

@@ -15,12 +15,13 @@ The project goal is **not** to cargo-cult an existing Surface patchset. We use W
 
 ## Current milestone
 
-Front IMX681 native capture, bounded image processing and grouped sensor control updates have been demonstrated. **E003i DN now closes the saved G4 exposure overflow offline** by restoring Windows' internal exposure-cap stage.
+Front IMX681 has a consumed bounded Linux live PASS through **R24**, combined Windows AWB + Tintless/LSC differential authority through **R27**, and deterministic offline R25..R27 composition closed at `6985bb6`.
 
-The independent native cap matches 18 Windows input/output pairs and 423 ARM64 arithmetic cases. G1..G3 controls remain unchanged; G4 produces valid sensor controls. The preview adapter still guards a conditional branch whose native input remains unbound. Continuous live automatic exposure and control-to-statistics timing remain open.
+The immediate final bounded ladder is **GL/GM/GN/GO**: G1..G24 publisher, R5..R27 producer, 27-frame transport, then one fresh one-shot R27 live candidate. After GO, the project pivots to continuous sensor-control feedback and robustness rather than adding another three frames.
 
-SP11 is back on protected FullIO v19c Golden with camera modules absent and no pending experimental boot. See [current handoff](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/HANDOFF.md) and [verification scope](experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dn-native-aec-internal-cap/README.md).
+Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
 
+SP11 is on protected FullIO v19c Golden. Bounded success does **not** yet claim unrestricted continuous AEC or full Windows camera parity. See [current handoff](HANDOFF.md).
 ## Start here
 
 If resuming after a new chat/session, read in this order:
@@ -34,10 +35,11 @@ If resuming after a new chat/session, read in this order:
 Then run:
 
 ```bash
+./tools/camera-overlap-guard.sh --require-clean-tracked --require-golden --require-no-camera-process
 ./tools/project-status.sh
 ```
 
-The repository is deliberately structured so the instruction **“continue the camera work on SP11”** is enough to recover the project state without reconstructing prior chat context.
+The repository and live machine state, not visible chat chronology, are the durable continuity source.
 
 ## Ground rules
 
