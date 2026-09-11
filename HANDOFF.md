@@ -4,13 +4,17 @@
 
 Continue SP11 Camera from this HANDOFF on branch experiment/e003-front-imx681-cphy.
 
-Result checkpoint immediately before this handoff:
-f4bba70c070bd4a52a81dd652657b30ccae044af
-(camera: record ET gain-feed failure and EU fix)
+Current live-result checkpoint immediately before this handoff:
+e8362499abf9cb7d6416c23d0eb70e5d7e2998fa
+(camera: record FF bounded twelve-frame live pass)
 
-First verify the exact live state below. Do not redo EM/EN/EL/ES work. ET is consumed and retired; never reuse its one-shot identity. EU is an offline correction only and has performed no camera runtime. The next live attempt must use a fresh candidate identity derived from ET/ES transport but source the corrected G1..G6 C gain-feed publisher from EU.
+First verify the exact Git + Golden live state below.
 
 SP11 is reserved for Camera. Do not touch HostFabric work.
+
+Do not reuse any consumed one-shot identity. In particular FF is consumed and retired.
+
+Do not create or arm an R13+ Linux live candidate yet. The next frontier is offline authority work beyond R12.
 
 ---
 
@@ -22,22 +26,35 @@ Repository:
 Branch:
 experiment/e003-front-imx681-cphy
 
-Durable result checkpoint:
-f4bba70c070bd4a52a81dd652657b30ccae044af
+Durable live-result checkpoint:
+e8362499abf9cb7d6416c23d0eb70e5d7e2998fa
+
+Origin matched this checkpoint immediately before rewriting HANDOFF.
+
+Important recent checkpoints:
+
+07a4bb6
+camera: close FA R12 AWB oracle with dynamic calibration slot
+
+e2f8ead
+camera: stage corrected R12 producer and twelve-frame transport
+
+3084da4
+camera: stage fresh twelve-frame R12 live successor
+
+99e2b54
+camera: make FD offline result deterministic
+
+e836249
+camera: record FF bounded twelve-frame live pass
 
 The repository still contains many old untracked historical artifacts across E002/E003. They predate this frontier. Do not mass-clean or delete them.
 
-The result checkpoint modifies only:
-- ET compact failure/retirement evidence + README
-- new EU offline publisher proof
-
-Closed EM/EN/EL/ES files were not modified.
-
 ---
 
-## 2. Exact machine state after ET
+## 2. Exact current SP11 machine state
 
-SP11 hostname:
+Hostname:
 SP11X1e
 
 OS/kernel:
@@ -45,186 +62,293 @@ Ubuntu 26.04 LTS
 7.1.5-sp11-render-parity-v4+
 ARM64 / aarch64
 
-Current boot is persistent Golden Linux.
+Current boot is protected persistent Golden Linux.
 
-Golden-return boot ID from ET:
-32193d8d-31ae-4147-b2e3-8be4e1fb6752
+Golden boot ID after FF:
+4627eb33-da49-491d-a664-eff098e4b3e4
 
-GRUB environment after return:
+Golden kernel cmdline boots from:
+/boot/sp11-7.1.5-audio-fullio-v19c/
+
+GRUB environment:
 saved_entry=sp11-audio-fullio-v19c
 next_entry=
 
-After Golden return:
-- no qcom_camss candidate module loaded
-- no imx681 candidate module loaded
-- no ov13858 candidate module loaded
+Current Golden state:
+- qcom_camss candidate module absent
+- imx681 candidate module absent
+- ov13858 candidate module absent
 - no /dev/video*
 - no /dev/media*
 
-ET Golden-return authority:
-experiments/E003-front-imx681-cphy/e003i-front-native-productionization/et-nine-frame-live-r5-r9-runtime/GOLDEN-RETURN.txt
+FF Golden-return record:
+experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ff-twelve-frame-live-r5-r12/GOLDEN-RETURN.txt
 
-Status:
-ET_GOLDEN_RETURN=PASS
+Golden-return SHA256:
+4620e5ca2ade4ef6bc74734617dc374bb891ed42975ffd2d8cbf7a8dad1cfe81
 
-ET candidate boot artifacts are retired:
-- /etc/grub.d/99zq_sp11_camera_e003i_et_nine_frame_r5_r9 is absent
-- /boot/sp11-7.1.5-camera-e003i-et-nine-frame-r5-r9 is absent
-- ET menu ID is absent from generated grub.cfg
+FF candidate boot artifacts are retired:
+- /etc/grub.d/99zt_sp11_camera_e003i_ff_twelve_frame_r5_r12 is absent
+- /boot/sp11-7.1.5-camera-e003i-ff-twelve-frame-r5-r12 is absent
+- FF menu ID is absent from generated grub.cfg
 - Golden saved_entry is unchanged
 
 ---
 
-## 3. ET live result — consumed failure, do not reuse
+## 3. Progress from ET to FF
+
+ET exposed the stale gain-feed publisher bound and failed closed at G4/request7.
+
+EU corrected the C publisher offline without rewriting closed EN.
+
+EV then performed one bounded nine-frame live PASS through R9:
+- R5..R9 live
+- exactly nine QC10C frames
+- exactly three physical sensor writes
+- Golden return PASS
+- candidate retired
+
+EW / EX / EY extended the bounded path offline through R11:
+- EW compiled gain publisher G1..G8
+- EX producer R5..R11
+- EY eleven-frame transport
+
+EZ then performed one bounded eleven-frame live PASS through R11:
+- R5..R11 live
+- exactly eleven frames
+- exactly three physical sensor writes
+- Golden return PASS
+- candidate retired
+
+FA performed one bounded Windows front-camera oracle stream through R12.
+
+FB recovered the missing Windows calibration-slot selector and proved:
+- historical EG: 8/8 bit-exact
+- FA: 9/9 bit-exact
+- FA transition R4 slot3 high -> R5..R12 slot5 midpoint
+- selector is scene-dependent, not a globally fixed slot
+
+FC / FD / FE then extended the corrected path offline:
+- FC compiled gain publisher G1..G9, G10 rejected
+- FD producer R5..R12 using FB dynamic calibration-slot selection
+- FE twelve-frame transport
+- FE CAMSS W=1 PASS
+- FE helper Werror PASS
+- FE scheduler G1..G12 PASS
+- physical sensor write schedule remains exactly G1/G2/G3
+
+FF was the fresh live successor and is now consumed.
+
+---
+
+## 4. FF live result — consumed PASS, never reuse
 
 Directory:
-experiments/E003-front-imx681-cphy/e003i-front-native-productionization/et-nine-frame-live-r5-r9-runtime
+experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ff-twelve-frame-live-r5-r12
 
-ET performed exactly one real camera stream attempt.
-
-No same-boot stream retry was performed. The consumed marker blocked re-entry before a second stream could occur.
-
-Durable failure record:
-ATTEMPT1-FAILURE.json
+Durable pass record:
+ATTEMPT1-PASS.json
 
 Retirement record:
 RETIRE.txt
 
 Status:
-CONSUMED_FAIL_G4_GAIN_FEED_PUBLISHER_BOUND
+CONSUMED_PASS_BOUNDED_TWELVE_FRAME_R5_R12
 
-What passed before the failure:
-- Golden -> one-shot ET boot transition
-- ET cmdline marker present
-- next_entry consumed
-- ET runtime preflight PASS
-- ES-nine-frame CAMSS + CW IMX681 load PASS
-- media + R4 bootstrap preparation PASS
-- STREAMON succeeded
-- G1/G2/G3 native AEC accepted
-- R5 from G2 submitted successfully
-- R6 from G3 submitted successfully
-- six completed video frames validated before the later pin
-- G1 and G2 physical sensor releases occurred at completed G2/G3
-- Golden return PASS
-- ET candidate retirement PASS
+Candidate HEAD:
+99e2b5447fc6f4a8b240b38188048ddfb461c7cf
 
-Observed live failure:
-EN_GAIN_FEED_FAIL G=4 REQUEST=7 RC=-22
+Exactly one FF camera stream attempt occurred.
 
-Producer then reported:
-RuntimeError: gain feed timeout/hup
+No same-boot stream retry occurred.
 
-The runner later pinned while handling the seventh dequeue:
-PINNED_FOR_REBOOT: unexpected completed buffer ordering
+Helper result:
+HELPER_RC=0
 
-Important interpretation:
-The seventh-buffer ordering pin is secondary fallout after producer loss. The first causal defect is the G4/request7 gain-feed publication failure.
+Transport result:
+- exactly 12 QC10C frames
+- DQBUF order 0,1,2,3,0,1,2,3,0,1,2,3
+- native AEC accepted G1..G12
+- paired TLBG + STATS3A captured G1..G12
+- R5..R12 composed and submitted live
+- STREAMOFF_OK
+- bounded twelve-frame kernel completion observed
 
-R5 live capsule SHA256:
-f7d4adbe3b83472d9994aad01ffd40f66ede1d620257fc696be949a59a789f0b
+Kernel IQ consumption observed:
+- R7 / frame7 / slot0
+- R8 / frame8 / slot1
+- R9 / frame9 / slot0
+- R10 / frame10 / slot1
+- R11 / frame11 / slot0
+- R12 / frame12 / slot1
 
-R6 live capsule SHA256:
-bed48bbfa4af03c1444c81063bc78f551445b8492e158b686c99b453f23ef94f
+Physical sensor writes:
+exactly 3
 
-R7 was never composed/submitted in ET because the C gain publisher rejected G4 before the producer could consume it.
+Schedule:
+- G1 released after completed G2 -> expected effect G4
+- G2 released after completed G3 -> expected effect G5
+- G3 released after completed G4 -> expected effect G6
+- no later physical writes
 
-Only two delayed AEC sensor writes were released in this failed run. The G3 release at completed G4 was not reached because the gain-feed failure occurs earlier in the audit-thread ordering.
+Producer deadline:
+all R5..R12 pipelines < 33.333333 ms
 
----
+Maximum:
+26.872330 ms
 
-## 4. ET root cause
+Kernel health:
+PASS
 
-ET helper logic correctly publishes CQ residual gain for:
-target <= 6U
-
-But the copied C publisher inherited the older DZ validation:
-generation > 3U -> -EINVAL
-
-Therefore:
-- G1 -> request4 passes
-- G2 -> request5 passes
-- G3 -> request6 passes
-- G4 -> request7 returns -EINVAL
-- producer sees pipe timeout/HUP
-- R7/R8/R9 path is never reached
-
-This is a harness/integration-bound defect, not evidence that EM R7-R9 IQ content is wrong.
-
-The closed EN stage stated G1..G6 publication in its README/helper source, but its verifier accidentally:
-- required gain-feed.c to remain byte-identical to DZ
-- tested six records by writing directly into the pipe from Python
-- therefore bypassed the actual C publisher function that still rejected G4+
-
-Do not modify/reopen EN just to erase history. Preserve EN as the closed stage that exposed this latent verifier gap.
+FF does not claim unrestricted continuous AEC or an infinite scheduler.
 
 ---
 
-## 5. EU — fresh offline correction, PASS
+## 5. FF dynamic AWB result and verifier false-negative
 
-Directory:
-experiments/E003-front-imx681-cphy/e003i-front-native-productionization/eu-six-generation-gain-feed-publisher
+Live FB/FD calibration-slot sequence across producer generations G1..G9:
 
-Status:
-PASS_OFFLINE_G1_G6_C_PUBLISHER
+5,5,7,5,5,5,5,5,5
 
-EU copies the gain-feed wire ABI without changing closed EN and changes only:
-generation validation upper bound 3 -> 6
+R12 live:
+- calibration slot 5
+- AWB triangle 25
 
-EU compiled C proof verifies:
-- G1 accepted
-- G2 accepted
-- G3 accepted
-- G4 accepted
-- G5 accepted
-- G6 accepted
-- G7 rejected
-- malformed request identity rejected
-- request remains generation + 3
-- wire ABI remains 24 bytes
+The helper completed successfully with RC=0.
 
-EU gain-feed.h SHA256:
-60adc6456b9806f50e14c0e3158a74dc49995549af1627e1604ad0496212de79
+The first post-run verifier then produced a false negative because the verifier incorrectly required calibration slot 5 for every live generation. It rejected legitimate G3 slot 7.
 
-EU gain-feed.c SHA256:
-2dbd4856294fe3aceecc1f7027643b6a0c559e7ce5469d902846b9073a466b3c
+This was a verifier assumption defect, not a runtime failure.
 
-EU has performed no camera runtime.
+Important safety result:
+- no second stream was executed
+- raw runtime evidence was externally archived before correcting the verifier
+
+The corrected verifier independently replays FB DynamicCalibratedAWB over the exact live trigger sequence and proves:
+FB_DYNAMIC_AWB_REPLAY=PASS_9_OF_9
+
+Corrected complete capture status:
+PASS_CAPTURE_FF_TWELVE_FRAME_R5_R12
+
+The tracked verify-live.py now validates scene-dependent slot/region/triangle/published-gain replay rather than hard-coding slot 5.
 
 ---
 
-## 6. External ET evidence
+## 6. FF external evidence
 
 Pinned raw archive:
-/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-et/attempt1-fail-pinned-gainfeed-order-20260911T1324
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-ff/attempt1-pass-twelve-frame-20260911T1630
 
-Final archive manifest SHA256:
-22cc2500fa5ae667e742a2f2d1a45c5697f100bf2bd574525291dd47479e88a7
+Final archive MANIFEST.sha256 file SHA256:
+e8c7d8d01265cd596a42da0b512fa34ee0c05cc03610fe6d5ac98bff166aeae5
 
 Compact evidence hashes:
-- RUN.txt
-  5667610d80a39bc9a8dce556afd3ec1c9f94ba1a61c13cab364f8c062aae8ba3
-- producer RESULT.json
-  580988199d1464ef420da5eaa7b6e14181985920bf4a4c56c0b6ed4aeafc590b
-- DMESG.txt
-  5369102caef1972264b501fb8ffa837fd497385fd229602a343cf65b18cef2a7
-- GOLDEN-RETURN.txt
-  7957617f6d8043881fc3792f01b84377cbff3d7955d5bbc00e4acf035b3e7aea
-- RETIRE.txt
-  05e81dfe767b24239bbea834e3def28a2a37a64c949854c6b7eda1b8a102e5bc
+
+RUN.txt:
+a6e2d55b9aa39768d480d5a916bb17beeff9d1f3bc76e44c5accecce806328cc
+
+producer RESULT.json:
+cf07e8ecea8be388ac6faedf02fbc38cb1f25a1182872ffa242e3a9d01669461
+
+LIVE-RESULT.json:
+69ac7ff9539cb52f1029a33ce2d83e1a4c4b981b471adde05ae0987829ce3a01
+
+DMESG.txt:
+7eaedfa017355d8845492f364608edf399db20ce78fb40a501c731e31ba7a6cf
+
+GOLDEN-RETURN.txt:
+4620e5ca2ade4ef6bc74734617dc374bb891ed42975ffd2d8cbf7a8dad1cfe81
+
+RETIRE.txt:
+ebb8279c049628821b90f64da68678ec9495bf007dcf11f29efa579644975514
+
+Corrected verify-live.py archive SHA256:
+aa3ae9b09bb5b786aea6dc3de467f4e5d255169afc2cf6d57338ffc518f2f7e7
 
 ---
 
-## 7. Closed work — do not redo
+## 7. Current component authority boundary
+
+GTM:
+
+EB Windows R4..R12 authority:
+PASS_WINDOWS_ORACLE
+
+EB proves:
+post_r6_gtm_output_law = stable
+
+LSC / Tintless:
+
+ED Windows R4..R12 authority:
+PASS_WINDOWS_ORACLE_CLEANROOM_REPLAY
+
+ED clean LSC replay:
+9/9 byte-exact LSC0/LSC1/LSC2/GIC
+
+AWB / GainAdj:
+
+FB authority:
+PASS_EG_8_OF_8_FA_9_OF_9_BIT_EXACT
+
+FA Windows same-stream evidence extends through R12.
+
+FB proves dynamic calibration-slot selection through the available EG + FA Windows samples.
+
+Integrated producer:
+
+FD:
+PASS_OFFLINE_R5_R12_DYNAMIC_CAL_SLOT_INTEGRATION
+
+FD explicitly does not claim a whole-capsule Windows R12 byte oracle.
+
+Transport:
+
+FE:
+PASS_OFFLINE_TWELVE_FRAME_TRANSPORT
+
+Live:
+
+FF:
+CONSUMED_PASS_BOUNDED_TWELVE_FRAME_R5_R12
+
+Critical boundary:
+the Windows-backed content authority currently stops at R12.
+
+Do not silently assume AWB or LSC/Tintless behavior for R13+ merely because the Linux algorithms can keep running.
+
+---
+
+## 8. Useful FF data for the next offline stage
+
+FF captured paired Linux statistics through G12.
+
+The producer consumed G1..G9 for R5..R12.
+
+Therefore FF also preserves fresh, unused continuation inputs:
+- G10 STATS3A/TLBG
+- G11 STATS3A/TLBG
+- G12 STATS3A/TLBG
+
+Native AEC also produced CQ residual ISP gain observations through G12.
+
+These can be used offline to explore R13..R15 composition without another Linux camera stream.
+
+Use the external FF archive as the immutable authority source.
+
+Do not modify the archived evidence in place.
+
+---
+
+## 9. Closed / historical stages — do not rewrite history
 
 EM:
 PASS_OFFLINE_R7_R9_COMPOSITION
 
 EN:
-closed R5-R9 producer integration; preserve its historical result and verifier gap as evidence
+closed R5-R9 producer integration; preserve its historical stale-publisher verifier gap
 
 EL:
-PASS_OFFLINE_JOIN
+PASS_OFFLINE_JOIN; historical fixed-calibration behavior was sufficient for EG but is superseded for dynamic selection by FB
 
 ES:
 PASS_OFFLINE_NINE_FRAME_TRANSPORT
@@ -233,55 +357,93 @@ EJ/EK:
 front AWB OTP source proven natively on Linux
 
 EB:
-post-R6 GTM stable authority preserved
+Windows GTM authority through R12
 
 ED:
-sequential LSC/Tintless replay proven
+Windows LSC/Tintless authority through R12
 
-EO/EQ/ER/ET:
-consumed identities; never reuse
+FA:
+consumed Windows R12 AWB oracle stream; preserve raw evidence
+
+FB:
+dynamic calibration-slot replay authority
+
+FC:
+PASS_OFFLINE_G1_G9_C_PUBLISHER
+
+FD:
+PASS_OFFLINE_R5_R12_DYNAMIC_CAL_SLOT_INTEGRATION
+
+FE:
+PASS_OFFLINE_TWELVE_FRAME_TRANSPORT
+
+Consumed one-shot Linux identities include:
+EA / EO / EQ / ER / ET / EV / EZ / FF
+
+Never reuse a consumed identity.
 
 ---
 
-## 8. Safety rules that remain mandatory
+## 10. Safety rules that remain mandatory
 
 - Golden default is sacred:
   saved_entry=sp11-audio-fullio-v19c
-- candidate boots must be one-shot via next_entry/grub-reboot
+- candidate boots must be one-shot via next_entry / grub-reboot
 - one camera stream attempt per candidate boot maximum
 - on any failure: preserve evidence, no same-boot stream retry, whole-machine reboot to Golden
-- consumed EA/EO/EQ/ER/ET identities must never be reused
-- any new live retry needs a fresh identity
+- never reuse consumed candidate identities
+- every new live attempt needs a fresh identity
 - preserve raw external evidence and checksums
 - do not mass-clean historical untracked artifacts
 - do not claim continuous AEC from bounded tests
 - do not touch HostFabric work in this continuation
+- do not extend Linux live IQ past the proven content-authority boundary without a fresh offline gate
 
 ---
 
-## 9. Recommended next step
+## 11. Recommended next frontier — FG offline only first
 
-Create a fresh live successor identity after ET, suggested next label EV if no conflicting stage is introduced.
+No FG directory existed at the time of this handoff, so FG is available as the suggested next label.
 
-The successor should:
-1. inherit ET/ES nine-frame transport unchanged
-2. keep the already-proven EN/EP producer and EM/EL/ED/EB content path
-3. source gain-feed.c + gain-feed.h from EU rather than the stale EN/DZ publisher
-4. add an offline prearm assertion that calls the actual compiled C publisher for G1..G6
-5. improve the DQBUF failure log to print actual index/bytesused/sequence before pinning
-6. build and verify offline
-7. install unarmed
-8. reconfirm Golden + deterministic prearm
-9. arm exactly one fresh boot
-10. perform at most one nine-frame stream attempt
-11. preserve evidence and reboot to Golden regardless of PASS/FAIL
+Create an offline-only stage such as:
+fg-r13-r15-continuation-authority
 
-Do not jump directly to a continuous/infinite stream candidate yet.
+Goal:
+determine whether R13..R15 IQ content can be justified before another Linux live stream.
+
+Recommended sequence:
+
+1. Use immutable FF archived G10/G11/G12 STATS3A + TLBG and AEC gain observations.
+2. Extend the producer in scratch/offline form only:
+   - G10 -> R13
+   - G11 -> R14
+   - G12 -> R15
+3. Prove deterministic composition and deadline feasibility offline.
+4. Audit component authority separately:
+   - GTM may inherit EB's proven post-R6 stable output law, but record the inference explicitly.
+   - do not assume LSC/Tintless beyond ED R12.
+   - do not assume AWB/GainAdj differential parity beyond FA/FB R12.
+5. For any component without a defensible post-R12 law, obtain fresh authority before Linux live:
+   - preferred: a fresh bounded same-machine Windows oracle extending the relevant sequence to at least R15/R16
+   - alternative: a clean recovered-code/tuning proof that establishes the post-R12 state law strongly enough to replace another Windows stream
+6. Only after R13..R15 content authority is closed:
+   - create a fresh gain publisher extension through the required source generation
+   - create a fresh R5..R15 producer
+   - create a fresh 15-frame transport
+   - verify all offline
+   - then create a fresh one-shot Linux live identity
+7. Still do not jump directly to an unbounded/infinite stream.
+
+The next work should therefore be offline analysis first, not another immediate camera boot.
 
 ---
 
-## 10. Human summary
+## 12. Human summary
 
-ET was useful even though it failed. The nine-frame candidate got through startup and R5/R6 live, then exposed a simple but important integration bug: the C gain publisher still thought only G1-G3 were legal even though the new producer needs G1-G6.
+The project has moved well past the old ET failure.
 
-That bug is now isolated and proven fixed offline in EU without rewriting the already-closed EN stage. SP11 is safely back on Golden, ET is retired, and the raw failure evidence is pinned. The next live move is a fresh one-shot successor using EU's six-generation publisher.
+The Linux camera stack now has a successful bounded live run through R12: twelve real frames, dynamic IQ through R12, three correctly delayed physical sensor writes, clean STREAMOFF, and Golden recovery.
+
+The new useful discovery from FF is that Windows-style AWB calibration selection is genuinely scene-dependent: one live generation selected slot 7 while the others selected slot 5. FB replay independently confirmed this was correct, and the first verifier failure was only a bad hard-coded test assumption.
+
+The remaining blocker to safely extending live parity is no longer the 12-frame transport. It is content authority beyond R12. The next useful progress is to consume FF's already-captured G10..G12 stats offline and close R13..R15 AWB/LSC authority before another live candidate is allowed.
