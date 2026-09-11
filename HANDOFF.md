@@ -1,5 +1,11 @@
 # SP11 Camera Linux Parity Handover — 2026-09-11 reconciled R27 frontier
 
+## Current limited-write frontier — GV prepared
+
+GT limited redundant-write policy PASS and GU helper integration PASS are durable. GV is prepared/unarmed and prearm PASS. It can physically write G4..G6 only on complete bit-identical equality to the last successful tuple, with a hard maximum of six total writes; changed G4..G6 and G7..G26 remain shadow. No GV runtime has occurred yet.
+
+---
+
 ## RECONCILED CURRENT FRONTIER — authoritative over the historical handoff below
 
 Reconciled 2026-09-11 after a possible UI/turn overlap. Machine/Git/evidence state is authoritative, not visible chat chronology.

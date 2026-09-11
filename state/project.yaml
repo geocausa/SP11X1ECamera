@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-11
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-gs-shadow-live-pass-retired
-phase: front-imx681-continuous-control-limited-write
-status: golden-restored-gs-shadow-live-pass-candidate-retired
+state_id: E003i-gv-limited-write-prepared-unarmed
+phase: front-imx681-continuous-control-limited-redundant-live
+status: golden-restored-gv-prepared-unarmed-prearm-pass
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-gs-continuous-shadow-scheduler-r27-pass
+current_gate: E003i-gv-limited-redundant-write-live-r27
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-GT-limited-redundant-write-authority
+next_experiment: E003i-GV-limited-redundant-write-one-shot
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  GS live shadow scheduling is consumed PASS: G1..G26 release ownership proved with only G1..G3 physical writes. Build GT offline limited redundant-write policy and helper integration: permit only a tiny post-G3 write window and only when the tuple equals the last proven applied controls; block changed controls. No live candidate until that closes.
+  GT and GU are closed offline. GV is prepared and unarmed. Install GV unarmed, rerun prearm, arm exactly one one-shot, and execute at most one R27 stream. G4..G6 may physically write only on exact equality to last applied controls; changed G4..G6 and G7..G26 remain shadow. Archive, return Golden and retire.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3244,3 +3244,16 @@ e003i_gs_current:
   golden_return_pass: true
   candidate_retired: true
   archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-gs/attempt1-pass-continuous-shadow-20260911T221117
+
+
+e003i_gv_current:
+  status: prepared-unarmed-prearm-pass
+  parent_authority: [GS, GT, GU]
+  max_physical_write_sources: [G1, G2, G3, G4, G5, G6]
+  conditional_redundant_sources: [G4, G5, G6]
+  changed_conditional_action: shadow-only
+  later_sources: G7-G26-shadow-only
+  candidate_runtime_performed: false
+  candidate_armed: false
+  same_boot_retry_allowed: false
+  changed_post_g3_controls_authorized: false

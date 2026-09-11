@@ -17,3 +17,7 @@ The continuous-control pivot has now closed **GP timing authority**, **GQ contin
 **GS shadow live validation also PASSed and is consumed/retired.** In exactly one 27-frame stream the continuous scheduler released G1..G26 at the correct live boundaries. Only G1..G3 performed physical sensor ioctls; G4..G26 produced 23 shadow releases. Kernel evidence shows exactly one bootstrap + three real sensor transactions, clean STREAMOFF, Golden return, and no retry.
 
 Next action: build **GT limited redundant-write authority offline**. Permit only a very small number of post-G3 physical writes and only when the control tuple is byte-equivalent to the last proven applied tuple; any changed control remains no-write/fail-closed. Prove this policy and helper integration offline before preparing another candidate.
+
+Current prepared frontier: **GT policy PASS, GU helper integration PASS, GV limited redundant-write candidate PREPARED / UNARMED / prearm PASS.** GV allows at most six physical writes total: G1..G3 proven startup plus G4..G6 only when the full runtime control tuple exactly equals the last successful applied tuple; changed G4..G6 and all G7..G26 remain shadow-only.
+
+Next action: one fresh GV one-shot boot and one stream maximum, then archive, Golden return and retirement. No same-boot retry.
