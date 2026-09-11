@@ -1,13 +1,14 @@
 # E003i-FA — Windows R12 AWB GainAdj same-request oracle
 
-Status: **STAGED OFFLINE / NO FA WINDOWS STREAM YET.**
+Status: **PASS — one Windows stream captured R4–R12; Golden return complete.**
 
-EZ proved bounded Linux integration through R11. EB already proves GTM/TMC through R12 and ED proves sequential Tintless/LSC staging through R12. The remaining R12 component seam is AWB GainAdj/publication: EG/EL have same-request Windows differential only through R11.
+FA extends the same-machine Windows AWB GainAdj/publication oracle through request R12. The holder performed exactly one front-camera stream; it initialized successfully, started once, stopped normally, and exited 0. CDB emitted extra R13–R18 command-file lines after the R12 terminal marker, but those were debugger control-flow artifacts from the same holder stream, not additional camera streams. The compact oracle deliberately keeps only paired R4–R12 rows.
 
-FA uses one gated, read-only Windows front-camera stream. The holder initializes Surface Camera Front and stops before MediaFrameReader.StartAsync; CDB attaches to the live FrameServer and arms two SHA-pinned DeviceMFT hooks before START.GO is created.
+The longer capture exposed a real historical EL limitation rather than a GainAdj mesh failure. EL had fixed EJ's slot-0/high reciprocal calibration because that was sufficient for the older EG sequence. Static reconstruction in FB recovered Windows' CAWBCtrlV1-to-CSFStatDistV1 calibration-slot selector from the pinned DeviceMFT and shipped tuning. The accepted same-run sequence is:
 
-Static hook authority comes from the pinned same-machine QcDeviceMFT8380.dll SHA c241b7... and the preserved Ghidra analysis. CTrigleAdjV1::Run is RVA 0x6bf1a0; at RVA 0x6bfa68, x19 still owns the completed GA object. CAWBMain::PopulateOutput publishes at RVA 0x68fa00; x23+0x128 is the request/frame label and x13+8..+0x14 contains published RGB/CCT.
+- R4: calibration slot 3, EJ high factor.
+- R5–R12: calibration slot 5, EJ midpoint factor.
 
-The GA breakpoint only caches state. The publication breakpoint binds that latest state to the actual request label and emits paired R4..R12 records. R12 self-detaches CDB. Acceptance is same-run, not scene-equality to the historical EG capture. verify-fa.py advances EL's stateful calibrated selector over the new R4..R12 sequence and requires triangle, vertices, barycentric weights, nested CCT multiplier, final GA RGB, published RGB and integer CCT to be bit-exact for all nine requests. Only R12 is new authority.
+With that dynamic selector, FB replays EG 8/8 and FA 9/9 bit-exact for triangle/vertices, barycentric weights, nested CCT multiplier, final GainAdj RGB and published RGB. Published integer CCT remains recorded as observed output; it is not conflated with the internal GainAdj CCT trigger.
 
-Safety: direct Windows EFI BootNext=0006 once, persistent GRUB Golden unchanged, one holder stream, no camera register/IQ injection, normal holder stop, then reboot to Golden Linux. Raw debugger evidence stays outside Git.
+Safety/result: no register or IQ injection, no second Windows stream, normal holder stop, reboot to Golden Linux, persistent Golden GRUB unchanged, camera modules/nodes absent afterward. Raw Windows evidence is preserved outside Git under /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-fa/windows-r12-20260911.
