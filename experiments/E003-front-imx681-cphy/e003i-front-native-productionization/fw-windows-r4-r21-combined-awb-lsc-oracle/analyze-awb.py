@@ -4,7 +4,7 @@ import argparse,hashlib,importlib.util,json,re,struct,sys
 
 HERE=Path(__file__).resolve().parent
 BASE=HERE.parent
-FBP=BASE/'fb-dynamic-awb-cal-slot-replay'/'dynamic_awb.py'
+FBP=BASE/'fy-calibrated-awb-selector-replay'/'dynamic_awb.py'
 
 def need(v,m):
     if not v:

@@ -28,7 +28,7 @@ need(ar['status']=='PASS_WINDOWS_AWB_R4_R21_18_OF_18_BIT_EXACT','AWB status')
 need(ar['requests']==list(range(4,22)) and ar['bit_exact']=='18/18','AWB coverage')
 
 log=a.oracle_log.read_text(errors='replace').replace('\r','')
-need(log.count('FW_BREAKPOINTS_ARMED R4_R21 COMBINED_AWB_LSC')==1,'armed marker')
+need(len(re.findall(r'^FW_BREAKPOINTS_ARMED R4_R21 COMBINED_AWB_LSC$',log,re.M))==1,'armed marker')
 need(log.count('FW_CAPTURE_COMPLETE R=21 AWB=YES LSC=YES')==1,'combined completion')
 need(len(re.findall(r'^FW_GA req=',log,re.M))==18,'18 GA rows')
 need(len(re.findall(r'^FW_PUB req=',log,re.M))==18,'18 PUB rows')

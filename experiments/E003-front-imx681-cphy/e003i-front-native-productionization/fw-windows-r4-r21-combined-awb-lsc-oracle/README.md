@@ -1,6 +1,6 @@
 # E003i-FW — combined Windows R4–R21 AWB + Tintless/LSC oracle
 
-Status: **staged offline / unarmed / no FW Windows stream yet.**
+Status: **PASS / consumed — one bounded Windows stream captured combined AWB + Tintless/LSC authority through R21.**
 
 FW combines the already-proven FA/FH AWB GainAdj/publication hooks with the already-proven FI/FP Tintless/trigger/final-LSC-staging hooks in one bounded Windows holder stream.
 
@@ -18,3 +18,5 @@ R21 completion is two-sided: AWB publication sets a completion bit in $t18 and f
 The holder still contains exactly one StartAsync and one StopAsync and waits for an explicit START.GO file after debugger attachment. Boot to Windows is armed only through UEFI BootNext; persistent Golden GRUB is unchanged.
 
 No Windows stream is allowed until verify-fw.py passes from a clean pushed commit.
+
+Post-capture clean analysis is closed: FY replays AWB R4..R21 18/18 bit-exact, the clean Tintless/LSC chain replays R4..R21 18/18 byte-exact for LSC0/LSC1/LSC2/GIC, and the two-sided R21 completion handshake occurred in the same single Windows stream. RESULT.json is the durable combined authority record.
