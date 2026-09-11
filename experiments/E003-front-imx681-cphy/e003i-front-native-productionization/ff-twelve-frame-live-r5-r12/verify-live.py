@@ -8,6 +8,7 @@ O=D/'runtime-output'
 DVFILE=BASE/'dv-live-residual-isp-demux/demux_bls.py'
 EFILE=BASE/'e-template-free-capsule/build-template-free-0076-capsules.py'
 FFILE=BASE/'f-native-iq-backends/generate-steady-scalar-state.py'
+FBFILE=BASE/'fb-dynamic-awb-cal-slot-replay/dynamic_awb.py'
 FD_RESULT=BASE/'fd-r5-r12-producer-integration'/'RESULT.json'
 GTM_SHA='074564f99a45d29a5dbe800c18bc0436735f70740cb8f42cd9a5c7b636ffcdfa'
 OFFLINE_R12_SHA='ee3dabc5519c8c4851cabc321ef2925824b13a6471c0a7e3bd72223544ecd373'
@@ -23,6 +24,7 @@ def load(p,n):
 DV=load(DVFILE,'ff_dv')
 E=load(EFILE,'ff_e')
 F=load(FFILE,'ff_f')
+FB=load(FBFILE,'ff_fb')
 
 fd=json.loads(FD_RESULT.read_text())
 need(fd['status']=='PASS_OFFLINE_R5_R12_DYNAMIC_CAL_SLOT_INTEGRATION','FD offline authority')
@@ -97,7 +99,22 @@ for r in rows:
     need(r['cq_isp_gain_bits']==e==r['gain_feed']['isp_gain_bits'],f'gain bits G{g}')
     need((r['gain_feed']['generation'],r['gain_feed']['request'])==(g,g+3),f'gain identity G{g}')
     need(0<=r['gain_wait_ms']<5000,f'gain wait G{g}')
-    need(r.get('awb_calibration_slot')==5,f'dynamic AWB slot G{g}')
+
+# Calibration slot/triangle are scene-dependent. Independently replay FB's
+# Windows-derived selector + stateful GainAdj on the exact live trigger sequence.
+awb_replay=FB.DynamicCalibratedAWB()
+live_awb_slots=[]
+for r in rows:
+    x,y=[FB.frombits(int(v,16)) for v in r['final_xy_bits']]
+    lux=FB.frombits(int(r['lux_bits'],16))
+    cct=FB.frombits(int(r['final_cct_bits'],16))
+    z=awb_replay.run(x,y,lux,cct,1.0)
+    expect_gain=[f'0x{FB.bits(z[k]):08x}' for k in ('R','G','B')]
+    need(z['calibration_slot']==r['awb_calibration_slot'],f"AWB slot G{r['generation']}")
+    need(z['calibration_region']==r['awb_calibration_region'],f"AWB region G{r['generation']}")
+    need(z['gain_adjust']['triangle']==r['awb_triangle'],f"AWB triangle G{r['generation']}")
+    need(expect_gain==r['awb_published_gain_bits'],f"AWB published gain G{r['generation']}")
+    live_awb_slots.append(r['awb_calibration_slot'])
 
 def sections(b):
     n=struct.unpack_from('<I',b,20)[0];out={}
@@ -129,7 +146,6 @@ for g,req in ((2,5),(3,6),(4,7),(5,8),(6,9),(7,10),(8,11),(9,12)):
         regs.update({0x3b70:dm['reg_3b70'],0x3b74:dm['reg_3b74']})
         regs.update({int(k,16):int(v,16) for k,v in meta['awb_regs'].items()})
         need(meta['awb_triangle']==r['awb_triangle'],'AWB triangle meta')
-        need(r['awb_calibration_slot']==5,f'R{req} AWB slot')
         for reg,val in regs.items():
             mi,si=E.REG_SLOT[reg]
             got=struct.unpack_from('<I',module,mi*32+4+si*4)[0]
@@ -151,7 +167,7 @@ for g,req in ((2,5),(3,6),(4,7),(5,8),(6,9),(7,10),(8,11),(9,12)):
     }
 
 r12=rows[8]
-need(r12['request_target']==12 and r12['awb_calibration_slot']==5 and r12['awb_triangle']==19,'R12 live AWB identity')
+need(r12['request_target']==12,'R12 live request identity')
 
 pre=(O/'CONTROLS-AFTER.txt').read_text(errors='replace')
 for x in ('vertical_blanking: 1402','exposure: 3554','analogue_gain: 0','digital_gain: 256'):
@@ -190,8 +206,9 @@ result={
         'expected_effect_generation':r[3],
         'elapsed_ns':r[10],
     } for r in writes],
-    'r12_dynamic_awb_slot':5,
-    'r12_awb_triangle':19,
+    'live_dynamic_awb_slots':live_awb_slots,
+    'r12_dynamic_awb_slot':r12['awb_calibration_slot'],
+    'r12_awb_triangle':r12['awb_triangle'],
     'streamoff':True,
     'kernel_health':'PASS',
     'golden_return_required':True,
