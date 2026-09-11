@@ -12,8 +12,8 @@ If the user says **“continue the camera work on SP11”**, do not ask them to 
 
 Current durable live frontier: **GO R5..R27 consumed PASS / Golden return PASS / candidate retired**.
 
-The continuous-control pivot has now closed three offline gates: **GP** GO timing authority PASS, **GQ** two-slot fail-closed continuous scheduler PASS (100,000-generation stress), and **GR** live-helper integration compile PASS with exact DQBUF boundary checks preserved.
+The continuous-control pivot has now closed **GP timing authority**, **GQ continuous ring scheduler**, and **GR helper integration** offline.
 
-A fresh **GS continuous-scheduler shadow candidate** is now PREPARED / UNARMED / prearm PASS. GS releases the continuous scheduler at every G2..G27 boundary but permits real sensor ioctls only for the already-proven G1..G3 sources; G4..G26 are shadow-log only.
+**GS shadow live validation also PASSed and is consumed/retired.** In exactly one 27-frame stream the continuous scheduler released G1..G26 at the correct live boundaries. Only G1..G3 performed physical sensor ioctls; G4..G26 produced 23 shadow releases. Kernel evidence shows exactly one bootstrap + three real sensor transactions, clean STREAMOFF, Golden return, and no retry.
 
-Next action: install GS unarmed, rerun prearm, arm exactly one GRUB one-shot, run at most one 27-frame stream, archive immediately and return Golden. No same-boot retry. A GS PASS proves live continuous boundary ownership, not continuous physical writes.
+Next action: build **GT limited redundant-write authority offline**. Permit only a very small number of post-G3 physical writes and only when the control tuple is byte-equivalent to the last proven applied tuple; any changed control remains no-write/fail-closed. Prove this policy and helper integration offline before preparing another candidate.

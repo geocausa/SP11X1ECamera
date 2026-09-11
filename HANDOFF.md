@@ -16,11 +16,11 @@ GL, GM and GN are durably closed and pushed. GO then completed exactly one fresh
 
 After a GO PASS, stop mechanically extending R30/R33/etc. Pivot to continuous delayed sensor-control feedback, control-to-statistics timing, repeated/long streaming, production integration, then VD55G0 IR bring-up.
 
-Continuous-control offline work is now closed through three gates: GP timing authority PASS, GQ continuous two-slot ring scheduler PASS, and GR continuous helper integration PASS. The exact pre/write/post DQBUF fail-closed gate is preserved.
+Continuous-control work is now closed through GP timing authority PASS, GQ continuous two-slot ring scheduler PASS, GR continuous helper integration PASS, and **GS live shadow scheduler PASS**.
 
-A fresh GS shadow one-shot is PREPARED / UNARMED / prearm PASS. It will exercise releases G1..G26 at live boundaries while physically writing only the already-proven G1..G3 controls; G4..G26 are shadow-only.
+GS consumed exactly one R27 stream: G1..G26 scheduler releases all hit their exact live boundaries, only G1..G3 performed physical sensor ioctls, G4..G26 produced 23 shadow releases, and kernel evidence contains exactly one bootstrap plus three real control transactions. STREAMOFF, Golden return and candidate retirement all passed.
 
-Current next action: install/arm GS once, run at most one R27 stream, archive, return Golden and retire. Do not authorize continuous physical writes merely from GS preparation; require the live shadow result first.
+Current next action: build **GT limited redundant-write authority offline**. The first post-G3 physical-write expansion should be tiny and must require the candidate control tuple to equal the last proven applied tuple; changed controls remain blocked. Only after that policy and helper integration pass offline should another fresh one-shot be prepared.
 
 Before every meaningful mutation run `tools/camera-overlap-guard.sh` and inspect the intended stage path. If unexpected evidence exists, audit it first. Any one-shot attempt that may have started is consumed until proven otherwise. Never same-boot retry and never reuse a consumed identity.
 
