@@ -11,7 +11,7 @@ function Await-Action($op){$m=[System.WindowsRuntimeSystemExtensions].GetMethods
 function Stamp($s){"{0:O} {1}" -f [DateTime]::UtcNow,$s}
 $base='C:\Users\Geoca\Documents\E003I-FP';$go="$base-START.GO";$ready="$base-READY";$done="$base-DONE"
 New-Item $base -ItemType Directory -Force|Out-Null
-Remove-Item $ready,$done -Force -ErrorAction SilentlyContinue
+Remove-Item $go,$ready,$done -Force -ErrorAction SilentlyContinue
 Stamp 'FP_HOLDER_BEGIN'
 $groups=Await-Op ([Windows.Media.Capture.Frames.MediaFrameSourceGroup]::FindAllAsync()) ([System.Collections.Generic.IReadOnlyList[Windows.Media.Capture.Frames.MediaFrameSourceGroup]])
 $group=$groups|Where-Object DisplayName -eq 'Surface Camera Front'|Select-Object -First 1;if(-not $group){throw 'front group missing'}
