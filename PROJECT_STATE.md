@@ -6,9 +6,9 @@ The DN-era continuation below is historical. Since then FU R18, GC R21 and GI R2
 
 SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes/modules and no running camera experiment. GC/GI/GJ archive manifests were revalidated.
 
-**Current bounded chain:** GL G1..G24 publisher PASS; GM R5..R27 producer PASS; GN 27-frame transport PASS. GO R5..R27 is PREPARED / UNARMED and its prearm gate passes.
+**Current bounded chain:** GL G1..G24 publisher PASS; GM R5..R27 producer PASS; GN 27-frame transport PASS; GO R5..R27 consumed live PASS. GO completed exactly 27 frames with 23 live IQ submissions, exactly three physical sensor writes, clean STREAMOFF, Golden return and candidate retirement.
 
-**Next action:** install GO unarmed, prearm again, then one fresh candidate boot and one stream maximum. On any result archive evidence and return Golden immediately; no same-boot retry.
+**Next action:** continuous delayed sensor-control feedback, beginning offline/read-only with GO evidence. Prove control-to-statistics timing and build a safe scheduler extension/regression suite before any fresh live authorization.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

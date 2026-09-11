@@ -10,8 +10,8 @@ If the user says **“continue the camera work on SP11”**, do not ask them to 
 6. One fresh candidate identity, one candidate boot, one camera stream. No same-boot retry.
 7. After any live result: archive evidence, reboot Golden, verify Golden, retire candidate, then commit/push.
 
-Current durable offline frontier: **GL G1..G24 publisher PASS, GM R5..R27 producer PASS, GN 27-frame transport PASS**. GO is now **PREPARED / UNARMED / prearm PASS**; no GO camera runtime has occurred.
+Current durable live frontier: **GO R5..R27 consumed PASS / Golden return PASS / candidate retired**. GL/GM/GN are the closed offline prerequisites and GJ/GK close content authority through R27.
 
-Next action: install GO unarmed, rerun prearm, arm exactly one GRUB one-shot, reboot the fresh candidate and perform at most one camera stream. On any result preserve/archive evidence and immediately return Golden. No same-boot retry.
+Next action: **continuous delayed sensor-control feedback**, starting offline/read-only. Use GO's immutable G1..G27 statistics/control evidence to prove control-to-statistics timing, design the scheduler extension beyond the three startup writes, and build deterministic offline regressions before authorizing another runtime candidate.
 
-After GO PASS, pivot to continuous delayed sensor-control feedback and robustness; do not keep extending the bounded ladder mechanically.
+Do not resume the +3-frame bounded ladder mechanically. Any future live control experiment needs a fresh identity, explicit authority, one-shot boot and no same-boot retry.

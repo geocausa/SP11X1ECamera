@@ -12,11 +12,11 @@ Reconciled 2026-09-11 after a possible UI/turn overlap. Machine/Git/evidence sta
 - GK: offline R25-R27 PASS at `6985bb6`; R5-R24 regresses 20/20 against GI and R25-R27 is deterministic 3/3
 - safe machine state at reconciliation: protected FullIO v19c Golden, empty `next_entry`, no camera nodes/modules, no camera process
 
-GL, GM and GN are now durably closed and pushed: GL G1..G24 publisher PASS, GM R5..R27 producer integration PASS, GN 27-frame transport PASS. A fresh GO one-shot R5..R27 live candidate is PREPARED and UNARMED. Its local prearm gate passes; no GO camera runtime has occurred.
+GL, GM and GN are durably closed and pushed. GO then completed exactly one fresh R5..R27 Linux stream and **PASSed**: 27 QC10C frames, native AEC G1..G27, producer/IQ R5..R27, exactly three physical sensor writes, clean STREAMOFF and kernel health. SP11 returned to protected Golden and the GO candidate was retired.
 
 After a GO PASS, stop mechanically extending R30/R33/etc. Pivot to continuous delayed sensor-control feedback, control-to-statistics timing, repeated/long streaming, production integration, then VD55G0 IR bring-up.
 
-Current next action: install GO unarmed, re-run its prearm gate, arm exactly one GRUB one-shot, reboot candidate, and perform at most one camera stream. On any result preserve/archive evidence and immediately return Golden; no same-boot retry.
+Current next action: pivot to **continuous delayed sensor-control feedback**. Start offline/read-only from immutable GO evidence: prove control-to-statistics timing, design the scheduler extension for real writes after G3, and build deterministic regressions before any new runtime authorization. Do not extend directly to R30/R33/R36.
 
 Before every meaningful mutation run `tools/camera-overlap-guard.sh` and inspect the intended stage path. If unexpected evidence exists, audit it first. Any one-shot attempt that may have started is consumed until proven otherwise. Never same-boot retry and never reuse a consumed identity.
 

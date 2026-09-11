@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-11
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-go-r27-prepared-unarmed
-phase: front-imx681-r27-live-closure
-status: golden-restored-go-prepared-unarmed-prearm-pass
+state_id: E003i-go-r27-live-pass-retired
+phase: front-imx681-continuous-control-pivot
+status: golden-restored-go-r27-live-pass-candidate-retired
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-go-twentyseven-frame-live-r5-r27
+current_gate: E003i-go-twentyseven-frame-live-r5-r27-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-GO-r27-one-shot-live
+next_experiment: E003i-continuous-control-feedback
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  GO R5..R27 is prepared and unarmed after GL/GM/GN offline PASS. Install GO unarmed, rerun prearm, arm exactly one GRUB one-shot, then perform at most one camera stream. Preserve/archive any result and immediately return Golden with no same-boot retry. After a GO PASS pivot to continuous sensor-control feedback.
+  Use immutable GO G1..G27 evidence to prove control-to-statistics timing and design a deterministic safe delayed sensor-write scheduler beyond the three startup writes. Build offline regressions first; only then authorize a fresh one-shot runtime. Do not resume mechanical R30/R33 frame-count extension.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3195,9 +3195,9 @@ e003i_gk_current:
   overlap_guard: tools/camera-overlap-guard.sh
 
 
-# Fresh final bounded live closure. No GO hardware runtime at this checkpoint.
+# Final bounded live closure; GO hardware runtime consumed exactly once and retired.
 e003i_go_current:
-  status: prepared-unarmed-prearm-pass
+  status: pass-live-r27-consumed-retired
   parent_authority: [GJ, GK, GL, GM, GN]
   gl_publisher_pass: true
   gm_producer_pass: true
@@ -3207,7 +3207,15 @@ e003i_go_current:
   publisher_generations: G1-G24
   collector_generations: G1-G27
   physical_sensor_write_sources: [G1, G2, G3]
-  candidate_runtime_performed: false
-  candidate_armed: false
+  candidate_runtime_performed: true
+  candidate_armed: consumed-one-shot
   same_boot_retry_allowed: false
+  live_frames: 27
+  live_iq_requests: 23
+  max_pipeline_ms: 28.760817
+  streamoff_pass: true
+  kernel_health_pass: true
+  golden_return_pass: true
+  candidate_retired: true
+  archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-go/attempt1-pass-twentyseven-frame-20260911T2145
   post_pass_strategy: continuous-sensor-control-feedback-and-robustness

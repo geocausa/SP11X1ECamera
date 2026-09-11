@@ -15,9 +15,11 @@ The project goal is **not** to cargo-cult an existing Surface patchset. We use W
 
 ## Current milestone
 
-Front IMX681 has a consumed bounded Linux live PASS through **R24**, combined Windows AWB + Tintless/LSC differential authority through **R27**, and deterministic offline R25..R27 composition closed at `6985bb6`.
+Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed by combined Windows AWB + Tintless/LSC differential authority through R27 and deterministic offline composition authority.
 
-The final bounded offline chain is now closed: **GL** G1..G24 publisher PASS, **GM** R5..R27 producer PASS, and **GN** 27-frame transport PASS. **GO** is prepared as a fresh unarmed one-shot R27 live candidate. After GO, the project pivots to continuous sensor-control feedback and robustness rather than adding another three frames.
+The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
+
+The project now pivots to continuous delayed sensor-control feedback, control-to-statistics timing, repeated/long streaming and production integration rather than adding another three frames.
 
 Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
 
