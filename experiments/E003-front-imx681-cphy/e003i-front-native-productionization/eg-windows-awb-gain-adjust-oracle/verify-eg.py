@@ -8,9 +8,11 @@ def need(x,m):
     if not x: raise AssertionError(m)
 def frombits(h): return struct.unpack('<f',struct.pack('<I',int(h,16)))[0]
 def kv(line): return dict(re.findall(r'(\w+)=([0-9A-Fa-f]+)',line))
-# Unique float32 calibration reciprocal scales solved from R4's authoritative Windows
-# mesh weights, then independently verified unchanged over R5..R11.
-CAL_RG_BITS=0x3f80a277; CAL_BG_BITS=0x3f83427b
+# Device calibration now comes from EI's independent same-device OTP/factor-table oracle.
+EI=HERE.parent/'ei-front-awb-otp-oracle'/'RESULT.json'
+ei=json.loads(EI.read_text())
+need(ei.get('status')=='PASS_SAME_DEVICE_OTP_AND_FACTOR_TABLE','EI calibration authority')
+CAL_RG_BITS=int(ei['eg_active_scale_bits']['rg'],16); CAL_BG_BITS=int(ei['eg_active_scale_bits']['bg'],16)
 CAL_RG=frombits(f'{CAL_RG_BITS:08x}'); CAL_BG=frombits(f'{CAL_BG_BITS:08x}')
 lines=[x.strip() for x in (HERE/'ORACLE-PAIRS.txt').read_text().splitlines() if x.strip()]
 ga_rows=[kv(x) for x in lines if x.startswith('EG_GA ')]
@@ -55,7 +57,7 @@ out={'schema':'sp11-e003i-eg-windows-awb-gain-adjust-oracle-v1','status':'PASS_8
      'windows_full_log_sha256':'2601f5da6d7f87439253ea9315111f43af1fcac386a206771d5e57395cf6ffe9',
      'windows_pairs_sha256_reported':'2f36240441984d38ebfac776128bd1cc620cf6be8b2c1a600e16866b5db48c5a',
      'windows_differential_same_request':True,'contained_triangle_path_proven':True,
-     'runtime_calibration_source_linux_bound':False,'out_of_mesh_fallback_proven':False,'continuous_aec':False,
+     'runtime_calibration_source':'EI_same_device_OTP_and_Windows_factor_table','runtime_calibration_source_linux_bound':False,'out_of_mesh_fallback_proven':False,'continuous_aec':False,
      'rows':rows}
 (HERE/'RESULT.json').write_text(json.dumps(out,indent=2)+"\n")
 print(json.dumps(out,indent=2))

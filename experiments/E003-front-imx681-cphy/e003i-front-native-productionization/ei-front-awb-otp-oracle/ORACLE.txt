@@ -1,0 +1,35 @@
+E003I-EI same-device front IMX681 AWB calibration oracle, 2026-09-11
+Pinned QcDeviceMFT8380.dll SHA256 c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+
+FormatWBData raw EEPROM hit, offset 0x941..0x94c:
+56 03 71 01 ff 03 5d 02 4d 02 fc 03
+u16 LE: 854, 369, 1023, 605, 589, 1020
+
+Formatted OTP input at ComputeCalFactors:
+count=2
+record0 avail=1 cct=2850 rg_bits=3f55b56d bg_bits=3eb8ae2c
+record1 avail=1 cct=5000 rg_bits=3f1765d9 bg_bits=3f1364d9
+
+Final 10 stored calibration-factor pairs (Windows stores factor; GainAdj uses reciprocal):
+0 3f7ebcac 3f79a47c
+1 3f7ebcac 3f79a47c
+2 3f7ebcac 3f79a47c
+3 3f7ebcac 3f79a47c
+4 3f7f2038 3f7a40d6
+5 3f7f2038 3f7a40d6
+6 3f7f2038 3f7a40d6
+7 3f7f66ed 3f7b3bff
+8 3f7f66ed 3f7b3bff
+9 3f7f66ed 3f7b3bff
+
+Reciprocal pairs:
+slots0..3: 3f80a277 3f83427b
+slots4..6: 3f807046 3f82f079
+slots7..9: 3f804cb7 3f826d93
+
+The slots0..3 reciprocal pair is bit-identical to the calibration pair independently solved from the R4 Windows GainAdj barycentric oracle in EG.
+Raw read occurred pre-stream. A bounded Windows stream was then released only to invoke ComputeCalFactors; holder reported START_STATUS=Success then STOP_PASS. FrameServer was stopped before reboot. Golden Linux returned cleanly.
+
+SP7 independent evidence copy:
+C:\Users\SurfacePro7\Documents\KDNET\Codex\E003I-EI-AWB-OTP-CAPTURE-20260911.txt
+SHA256 F6BB4331AA306A7D36BDD37293C82EDBF35F4F3990881F77089DD6D22864AA68
