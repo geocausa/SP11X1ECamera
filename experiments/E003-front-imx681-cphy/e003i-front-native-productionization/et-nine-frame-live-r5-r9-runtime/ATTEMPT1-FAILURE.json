@@ -1,0 +1,43 @@
+{
+  "schema": "sp11-e003i-et-attempt1-failure-v1",
+  "status": "CONSUMED_FAIL_G4_GAIN_FEED_PUBLISHER_BOUND",
+  "candidate_head": "5f701077713be6c25de6fc22ea00bbee1fb3c5a1",
+  "camera_runtime_performed": true,
+  "stream_attempts": 1,
+  "same_boot_stream_retry_performed": false,
+  "helper_consumed_guard_blocked_reentry": true,
+  "golden_return": true,
+  "candidate_retired": true,
+  "frames_completed_validated": 6,
+  "seventh_poll_ready": true,
+  "seventh_dequeue_ordering_pin": true,
+  "sensor_writes_released": 2,
+  "producer": {
+    "g1": "PASS_NO_IQ_SUBMIT",
+    "r5_from_g2": "PASS",
+    "r6_from_g3": "PASS",
+    "r7_from_g4": "NOT_REACHED_GAIN_FEED_REJECTED",
+    "r8_from_g5": "NOT_REACHED",
+    "r9_from_g6": "NOT_REACHED",
+    "r5_capsule_sha256": "f7d4adbe3b83472d9994aad01ffd40f66ede1d620257fc696be949a59a789f0b",
+    "r6_capsule_sha256": "bed48bbfa4af03c1444c81063bc78f551445b8492e158b686c99b453f23ef94f",
+    "failure": "RuntimeError: gain feed timeout/hup"
+  },
+  "root_cause": {
+    "classification": "STALE_GAIN_FEED_PUBLISHER_GENERATION_BOUND",
+    "helper_publish_window": "target <= 6U",
+    "publisher_reject_rule": "generation > 3U -> -EINVAL",
+    "failure_boundary": "G4 / request7",
+    "observed_helper_error": "EN_GAIN_FEED_FAIL G=4 REQUEST=7 RC=-22",
+    "interpretation": "ET/EN correctly requests CQ residual-gain publication through G6, but the copied C gain-feed publisher still enforces the older DZ G1..G3 limit. G4 is rejected before the G3 sensor release and before R7 composition. The later seventh-buffer ordering pin is secondary fallout after producer loss, not evidence of an R7-R9 IQ-content defect."
+  },
+  "closed_stages_not_reopened": ["EM", "EN", "EL", "ES"],
+  "next": "new successor identity using an independently verified G1..G6 C gain-feed publisher; no reuse of ET",
+  "external_archive": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-et/attempt1-fail-pinned-gainfeed-order-20260911T1324",
+  "external_archive_manifest_sha256": "22cc2500fa5ae667e742a2f2d1a45c5697f100bf2bd574525291dd47479e88a7",
+  "run_sha256": "5667610d80a39bc9a8dce556afd3ec1c9f94ba1a61c13cab364f8c062aae8ba3",
+  "producer_result_sha256": "580988199d1464ef420da5eaa7b6e14181985920bf4a4c56c0b6ed4aeafc590b",
+  "dmesg_sha256": "5369102caef1972264b501fb8ffa837fd497385fd229602a343cf65b18cef2a7",
+  "golden_return_sha256": "7957617f6d8043881fc3792f01b84377cbff3d7955d5bbc00e4acf035b3e7aea",
+  "retire_sha256": "05e81dfe767b24239bbea834e3def28a2a37a64c949854c6b7eda1b8a102e5bc"
+}
