@@ -49,5 +49,5 @@ em=json.loads((EM/'RESULT.json').read_text());need(em['status']=='PASS_OFFLINE_R
 out={'schema':'sp11-e003i-en-r5-r9-live-producer-integration-v1','status':'PASS_OFFLINE_R5_R9_INTEGRATION','helper_strict_build':True,
  'parent_delta':'gain-feed publish bound G1..G3 -> G1..G6 only; sensor release schedule unchanged','gain_feed_records':'6/6',
  'r5_r6_regression':'2/2 byte-identical to EA live accepted capsules','r7_r9_regression':'3/3 exact EM deterministic hashes',
- 'live_runtime_performed':False,'six_frame_video_loop_unchanged':True,'post_g6_application_observed':False,'continuous_aec_claimed':False,'rows':rows}
+ 'producer_manifest_schema':'sp11-e003i-en-r5-r9-live-producer-v1','live_runtime_performed':False,'six_frame_video_loop_unchanged':True,'post_g6_application_observed':False,'continuous_aec_claimed':False,'rows':rows}
 (HERE/'RESULT.json').write_text(json.dumps(out,indent=2)+"\n");print(json.dumps(out,indent=2))

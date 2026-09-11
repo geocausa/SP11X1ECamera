@@ -230,7 +230,7 @@ class LiveControl:
         b=(ctypes.c_ubyte*len(cap)).from_buffer_copy(cap);r=self.si(self.fd,b,len(cap));need(r==0,f'IQ submit rc={r}')
 
 def write_manifest(path,mode,rows,extra=None,status='PASS'):
-    d={'schema':'sp11-e003i-dx-parent-cq-gain-feed-v1','mode':mode,'status':status,'source_generation_is_request_id':False,'selection_law':'R5<-G2, R6<-G3, R7<-G4, R8<-G5, R9<-G6','bounded_baseline_bits':f'0x{BASELINE_BITS:08x}','continuous_aec_claimed':False,'rows':rows};
+    d={'schema':'sp11-e003i-en-r5-r9-live-producer-v1','mode':mode,'status':status,'source_generation_is_request_id':False,'selection_law':'R5<-G2, R6<-G3, R7<-G4, R8<-G5, R9<-G6','bounded_baseline_bits':f'0x{BASELINE_BITS:08x}','continuous_aec_claimed':False,'rows':rows};
     if extra:d.update(extra)
     path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix(path.suffix+'.tmp');tmp.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n');tmp.replace(path)
 
