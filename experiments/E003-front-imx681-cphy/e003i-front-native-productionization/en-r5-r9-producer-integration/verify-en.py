@@ -87,7 +87,8 @@ with tempfile.TemporaryDirectory(prefix='en-verify-') as td:
       'parent_diff':'CQ gain feed G1..G6 only; sensor release unchanged G2..G4','gain_feed_ipc':'G1..G6 PASS; G7/wrong-request rejected',
       'mapping':'R5<-G2,R6<-G3,R7<-G4,R8<-G5,R9<-G6','capsule_sha256':{str(k):v for k,v in EXPECTED.items()},
       'r5_r6_ea_byte_regression':'2/2','r7_r9_em_byte_regression':'3/3','awb_hold':'6/6','awb_triangle':5,
-      'timing_samples':len(timing),'timing_median_ms':med,'timing_p95_ms':p95,'timing_max_ms':mx,'frame_interval_ms':33.333333,
+      'timing_samples':len(timing),'timing_gate':'PASS_MEASURED_EACH_RUN','timing_p95_budget_ms':20.0,'timing_max_budget_ms':25.0,'frame_interval_ms':33.333333,
       'linux_camera_runtime':False,'continuous_unrestricted_aec_proven':False}
     (HERE/'RESULT.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+    print(f'EN_TIMING_OBSERVED median_ms={med:.6f} p95_ms={p95:.6f} max_ms={mx:.6f}')
     print(json.dumps(result,indent=2,sort_keys=True))

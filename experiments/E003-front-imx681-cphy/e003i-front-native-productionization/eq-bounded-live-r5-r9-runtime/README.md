@@ -1,6 +1,6 @@
 # E003i-EQ — corrected bounded live R5–R9 one-shot
 
-Status: **fresh unexecuted successor; offline/prearm verification required before any arm.**
+Status: **BOOT1 CONSUMED at runtime preflight only; no camera module/stream; Golden returned; identity retired.**
 
 EQ is the fresh successor to **consumed EO attempt1**. It does not reuse EO's boot entry, helper filename, marker, output directory, or one-shot identity. The bounded schedule is otherwise intentionally unchanged so the single corrected variable is the GainAdj selector/publication logic closed by EP.
 
@@ -13,3 +13,7 @@ Safety remains six completed video/statistics generations, exactly three possibl
 The mandatory new authority is **EP**. EP reruns the real EN producer over EO's archived live snapshots, proves R5–R8 remain byte-identical to the capsules EO actually submitted, and proves corrected G6/R9 follows GainAdj triangle `10 -> 8 -> 16` with capsule SHA256 `209961646647ec9a2747a553c10139f1cd303dc3a5b6cf302deca6636f173191`. EQ prearm refuses to proceed unless EP passes.
 
 A live PASS would prove this bounded five-IQ-request integration only. It would **not** prove unrestricted continuous AEC or the still-unproven true GainAdj two-vertex out-of-mesh fallback.
+
+## Boot1 preflight-only result
+
+The one-shot boot reached EQ correctly, consumed `next_entry`, and then `runtime-preflight.sh` stopped on `tracked_dirty` **before any camera module was loaded or any stream/helper ran**. The only dirty file was EN `RESULT.json`, whose verifier embedded nondeterministic measured timing values. That harness defect is fixed separately by retaining the measured timing gate but writing only deterministic budgets/pass state to tracked JSON. EQ is retired and must not be reused; the actual corrected live attempt requires a fresh successor identity.
