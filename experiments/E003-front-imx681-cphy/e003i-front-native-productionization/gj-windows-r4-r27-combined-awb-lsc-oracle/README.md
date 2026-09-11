@@ -1,20 +1,24 @@
 # E003i-GJ — combined Windows R4–R27 AWB + Tintless/LSC oracle
 
-Status: **staged offline / unarmed / no GJ Windows stream yet.**
+Status: **PASS / consumed — one bounded Windows stream captured combined AWB + Tintless/LSC authority through R27; Golden returned.**
 
-GJ is a strict three-request extension of the closed GD combined oracle. It reuses the same pinned DeviceMFT and the same four proven hooks:
+GJ is the strict R27 successor to the closed GD combined oracle. It reused the same pinned DeviceMFT and the same four proven hooks:
 
 - AWB GainAdj RVA 0x6bfa68
 - AWB publication RVA 0x68fa00
 - Tintless/trigger entry RVA 0x88e1e8
 - final LSC staging RVA 0xa03b34
 
-Pseudo-register ownership remains disjoint: AWB retains $t0..$t17; Tintless/LSC uses only $t18/$t19 and direct expressions.
+Pseudo-register ownership remained disjoint: AWB used $t0..$t17; Tintless/LSC used only $t18/$t19 and direct expressions.
 
-The bounded capture range is R4..R27. R27 completion is two-sided: AWB publication sets the high completion bit in $t18, LSC staging records request 27 in $t19, and either terminal hook detaches only after observing the other side complete.
+Exactly one Windows holder stream captured R4..R27. The R27 terminal handshake was two-sided, both debugger and holder exited 0, 72 raw dumps were produced with the expected sizes, and no GJ_FAIL marker occurred.
 
-The holder still performs exactly one StartAsync and one StopAsync and waits for explicit START.GO after debugger attachment. Windows is entered only through one-shot UEFI BootNext; persistent Golden GRUB is unchanged.
+Post-capture clean analysis closes the new authority tail:
 
-The GJ analyzers have already regression-passed against GD's sealed R4..R24 evidence: AWB 21/21 bit-exact and Tintless/LSC 21/21 byte-exact.
+- FY-based AWB replay: R4..R27 **24/24 bit-exact**
+- clean Tintless/LSC replay: R4..R27 **24/24 byte-exact** for LSC0/LSC1/LSC2/GIC
+- shared R27 AWB+LSC completion: PASS in the same stream
 
-No GJ Windows stream is allowed until verify-gj.py passes from a clean pushed commit.
+The sealed Windows evidence ZIP SHA256 is `0e6dd761bf85fb39de25bc62a93003912b77d7a0c0385220c1eb9b9ab001faeb`.
+
+SP11 returned to protected Golden after the capture. GJ proves bounded Windows differential authority through R27; it does not claim unrestricted continuous AEC.
