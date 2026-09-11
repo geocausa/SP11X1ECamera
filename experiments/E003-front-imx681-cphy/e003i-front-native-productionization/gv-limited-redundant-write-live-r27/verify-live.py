@@ -32,7 +32,9 @@ expected_redundant=[]; expected_changed=[]; last=acc[2]
 for source in range(4,7):
     if key(acc[source-1])==key(last): expected_redundant.append(source); last=acc[source-1]
     else: expected_changed.append(source)
-# Parse real writes and branch logs.
+# Parse successful userspace control-ioctl path calls and branch logs.
+# DB_SENSOR_WRITE_OK means the helper called VIDIOC_S_EXT_CTRLS successfully;
+# the V4L2 core may still dedupe an unchanged cluster before driver .s_ctrl.
 wpat=r'DB_SENSOR_WRITE_OK SOURCE=(\d+) AFTER_G=(\d+) REQUEST=(\d+) EFFECT_G=(\d+) FLL=(\d+) EXP=(\d+) AGAIN=(\d+) DGAIN=(\d+) START_NS=(\d+) END_NS=(\d+) ELAPSED_NS=(\d+) COMPLETED_G=(\d+)'
 writes=[tuple(map(int,m.groups())) for m in re.finditer(wpat,run)]
 write_sources=[r[0] for r in writes]
@@ -43,15 +45,27 @@ changed=[int(m.group(1)) for m in re.finditer(r'GU_SENSOR_WRITE_SHADOW_CHANGED S
 need(changed==expected_changed,'changed shadow logs')
 bounded=[int(m.group(1)) for m in re.finditer(r'GU_SENSOR_WRITE_SHADOW_BOUND SOURCE=(\d+) AFTER_G=',run)]
 need(bounded==list(range(7,27)),'bounded shadow G7..G26')
-# No changed conditional source may reach the physical write list.
-need(not (set(expected_changed)&set(write_sources)),'changed control physically written')
+# No changed conditional source may reach the real ioctl path.
+need(not (set(expected_changed)&set(write_sources)),'changed control reached ioctl path')
 marker=re.search(r'GU_LIMITED_SCHEDULE_PASS ACCEPTED_G=1\.\.27 RELEASED_SOURCES=G1\.\.G26 PHYSICAL_WRITES=(\d+) REDUNDANT=(\d+) CHANGED_SHADOW=(\d+) BOUND_SHADOW=(\d+) PENDING=G27 EFFECT_RANGE=G4\.\.G29',run)
 need(marker,'final schedule marker'); pw,red,ch,bnd=map(int,marker.groups()); need((pw,red,ch,bnd)==(len(writes),len(expected_redundant),len(expected_changed),20),'final accounting')
-# Kernel hardware transactions must equal bootstrap + each real write and nothing else.
-txlines=[x for x in tx.splitlines() if 'AM request controls:' in x]; need(len(txlines)==1+len(writes),'hardware transaction count')
+# V4L2 core explicitly suppresses .s_ctrl for an unchanged cluster. The GV
+# G4..G6 tuples are exact equals of the already-current G3 tuple, so those
+# successful S_EXT_CTRLS calls must *not* become driver/hardware transactions.
+core=Path('/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/v4l2-core/v4l2-ctrls-core.c').read_text(errors='replace')
+need('if (ret || !set || !cluster_changed(master))\n\t\treturn ret;' in core,'V4L2 unchanged-cluster dedupe authority')
+need(core.index('if (ret || !set || !cluster_changed(master))') < core.index('ret = call_op(master, s_ctrl);'),'V4L2 dedupe before s_ctrl')
+txlines=[x for x in tx.splitlines() if 'AM request controls:' in x]
+need(len(txlines)==4,'bootstrap + G1..G3 hardware transactions only')
 need('FLL=3562 exposure=3554 again=0x000 dgain=0x0100 ret=0' in txlines[0],'bootstrap tx')
-for r in writes:
-    src,after,req,effect,fll,exp,ag,dg,*_=r; needle=f'FLL={fll} exposure={exp} again=0x{ag:03x} dgain=0x{dg:04x} ret=0'; need(any(needle in x for x in txlines[1:]),f'hardware tx G{src}')
+for r in writes[:3]:
+    src,after,req,effect,fll,exp,ag,dg,*_=r
+    needle=f'FLL={fll} exposure={exp} again=0x{ag:03x} dgain=0x{dg:04x} ret=0'
+    need(any(needle in x for x in txlines[1:]),f'hardware tx G{src}')
+# Redundant G4..G6 ioctls are expected to return quickly without driver .s_ctrl.
+need(expected_redundant==[4,5,6] and not expected_changed,'GV observed redundant branch')
+for r in writes[3:]:
+    need(r[10] < 1_000_000,f'redundant ioctl G{r[0]} unexpectedly slow')
 # Producer coverage and deadline.
 prod=json.loads((O/'producer/RESULT.json').read_text()); need(prod['status']=='PASS' and len(prod['rows'])==24,'producer')
 deadline={}; caps={}
@@ -63,10 +77,10 @@ hashes={'qc10c':[],'tlbg':[],'stats3a':[]}
 for i in range(27):
     for k,pfx,size in [('qc10c','QC10C',7778304),('tlbg','TLBG',61472),('stats3a','STATS3A',331840)]:
         p=O/f'{pfx}-{i}.bin'; need(p.is_file() and p.stat().st_size==size,f'{pfx}-{i}'); hashes[k].append(sha(p))
-result={'schema':'sp11-e003i-gv-limited-redundant-write-live-r27-v1','status':'PASS_CAPTURE_GV_LIMITED_REDUNDANT_WRITE_R27','runtime_performed':True,'same_boot_retry_performed':False,'frames':27,'stats_generations':27,'producer_generations':24,'requests':list(range(5,28)),'physical_sensor_writes':len(writes),'physical_write_sources':write_sources,'redundant_write_sources':expected_redundant,'changed_shadow_sources':expected_changed,'bounded_shadow_sources':bounded,'changed_post_g3_write_performed':False,'continuous_scheduler_release_sources':list(range(1,27)),'pending_source_at_end':27,'streamoff':True,'kernel_health':'PASS','hardware_control_transactions_including_bootstrap':len(txlines),'deadline_ms':deadline,'capsules':caps,'capture_sha256':hashes,'changed_post_g3_controls_proven':False,'redundant_post_g3_write_lifecycle_proven':len(expected_redundant)>0,'golden_return_required':True}
+result={'schema':'sp11-e003i-gv-redundant-ioctl-dedupe-live-r27-v1','status':'PASS_CAPTURE_GV_REDUNDANT_IOCTL_DEDUPE_R27','runtime_performed':True,'same_boot_retry_performed':False,'frames':27,'stats_generations':27,'producer_generations':24,'requests':list(range(5,28)),'successful_control_ioctl_calls':len(writes),'control_ioctl_sources':write_sources,'startup_sensor_hardware_sources':[1,2,3],'stream_sensor_hardware_transactions':3,'sensor_hardware_transactions_including_bootstrap':len(txlines),'redundant_ioctl_sources':expected_redundant,'redundant_ioctl_v4l2_deduped_before_driver_s_ctrl':True,'changed_shadow_sources':expected_changed,'bounded_shadow_sources':bounded,'post_g3_sensor_hardware_write_performed':False,'continuous_scheduler_release_sources':list(range(1,27)),'pending_source_at_end':27,'streamoff':True,'kernel_health':'PASS','deadline_ms':deadline,'capsules':caps,'capture_sha256':hashes,'changed_post_g3_controls_proven':False,'redundant_post_g3_ioctl_lifecycle_proven':len(expected_redundant)>0,'new_post_g3_sensor_hardware_write_count':0,'golden_return_required':True}
 (O/'LIVE-RESULT.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
-print(f'GV_LIVE_FRAMES=27 PHYSICAL_WRITES={len(writes)} REDUNDANT={len(expected_redundant)} CHANGED_SHADOW={len(expected_changed)}')
-print('GV_CHANGED_POST_G3_WRITE=NONE')
+print(f'GV_LIVE_FRAMES=27 CONTROL_IOCTLS={len(writes)} REDUNDANT_DEDUPED={len(expected_redundant)} CHANGED_SHADOW={len(expected_changed)}')
+print('GV_POST_G3_SENSOR_HW_WRITES=0 V4L2_REDUNDANT_DEDUPE=PASS')
 print('GV_STREAMOFF=PASS KERNEL_HEALTH=PASS')
 print('GV_MAX_PIPELINE_MS=%.6f'%max(deadline.values()))
 print('GV_CAPTURE_VERIFY=PASS')

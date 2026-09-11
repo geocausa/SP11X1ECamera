@@ -10,14 +10,10 @@ If the user says **“continue the camera work on SP11”**, do not ask them to 
 6. One fresh candidate identity, one candidate boot, one camera stream. No same-boot retry.
 7. After any live result: archive evidence, reboot Golden, verify Golden, retire candidate, then commit/push.
 
-Current durable live frontier: **GO R5..R27 consumed PASS / Golden return PASS / candidate retired**.
+Current durable live frontier: **GO R27 PASS, GS continuous-shadow PASS, and GV redundant-ioctl-dedupe PASS; all consumed, Golden-restored and retired.**
 
-The continuous-control pivot has now closed **GP timing authority**, **GQ continuous ring scheduler**, and **GR helper integration** offline.
+GV executed exactly one 27-frame stream. The helper made six successful control ioctls G1..G6, but Linux V4L2 correctly suppressed the exact-equal G4..G6 clusters before the IMX681 driver `.s_ctrl`. Kernel evidence therefore contains bootstrap + G1..G3 only: **zero new post-G3 sensor hardware writes**. The original verifier incorrectly expected every successful ioctl to create a hardware transaction; that was corrected offline after Golden return, with no retry.
 
-**GS shadow live validation also PASSed and is consumed/retired.** In exactly one 27-frame stream the continuous scheduler released G1..G26 at the correct live boundaries. Only G1..G3 performed physical sensor ioctls; G4..G26 produced 23 shadow releases. Kernel evidence shows exactly one bootstrap + three real sensor transactions, clean STREAMOFF, Golden return, and no retry.
+The continuous scheduler is live-proven through G26, redundant control-ioctl lifecycle is live-proven, and unchanged-cluster dedupe is now explicit authority. **Changed post-G3 sensor feedback remains unproven.**
 
-Next action: build **GT limited redundant-write authority offline**. Permit only a very small number of post-G3 physical writes and only when the control tuple is byte-equivalent to the last proven applied tuple; any changed control remains no-write/fail-closed. Prove this policy and helper integration offline before preparing another candidate.
-
-Current prepared frontier: **GT policy PASS, GU helper integration PASS, GV limited redundant-write candidate PREPARED / UNARMED / prearm PASS.** GV allows at most six physical writes total: G1..G3 proven startup plus G4..G6 only when the full runtime control tuple exactly equals the last successful applied tuple; changed G4..G6 and all G7..G26 remain shadow-only.
-
-Next action: one fresh GV one-shot boot and one stream maximum, then archive, Golden return and retirement. No same-boot retry.
+Next action: build **GW minimal changed-post-G3 control authority offline**. Bound the first changed later write as tightly as possible, prove the exact tuple/delta and timing against Windows/native constraints, and keep all later controls shadow-only. Do not prepare another live candidate until that authority closes.

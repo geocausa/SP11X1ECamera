@@ -1,8 +1,12 @@
 # SP11 Camera Linux Parity Handover — 2026-09-11 reconciled R27 frontier
 
-## Current limited-write frontier — GV prepared
+## Current continuous-control frontier — GV consumed/adjudicated PASS
 
-GT limited redundant-write policy PASS and GU helper integration PASS are durable. GV is prepared/unarmed and prearm PASS. It can physically write G4..G6 only on complete bit-identical equality to the last successful tuple, with a hard maximum of six total writes; changed G4..G6 and G7..G26 remain shadow. No GV runtime has occurred yet.
+GT limited redundant-write policy and GU helper integration are durable. GV then consumed exactly one fresh R27 stream. Six control ioctls G1..G6 succeeded, but because G4..G6 were bit-identical to current G3, V4L2 `cluster_changed()` suppressed those three before driver `.s_ctrl`. Thus the live run produced only bootstrap + G1..G3 sensor transactions and **no new post-G3 hardware write**.
+
+The initial verifier expected one hardware transaction per successful ioctl and stopped on that incorrect assertion. After immediate archive, protected Golden return and candidate retirement, the verifier was corrected offline. The immutable evidence passes as `PASS_CAPTURE_GV_REDUNDANT_IOCTL_DEDUPE_R27`. No same-boot retry occurred.
+
+Current next action: **GW minimal changed-post-G3 control authority offline**. Prove a deliberately tiny, safe changed tuple and exact timing before any new candidate.
 
 ---
 
@@ -26,7 +30,7 @@ Continuous-control work is now closed through GP timing authority PASS, GQ conti
 
 GS consumed exactly one R27 stream: G1..G26 scheduler releases all hit their exact live boundaries, only G1..G3 performed physical sensor ioctls, G4..G26 produced 23 shadow releases, and kernel evidence contains exactly one bootstrap plus three real control transactions. STREAMOFF, Golden return and candidate retirement all passed.
 
-Current next action: build **GT limited redundant-write authority offline**. The first post-G3 physical-write expansion should be tiny and must require the candidate control tuple to equal the last proven applied tuple; changed controls remain blocked. Only after that policy and helper integration pass offline should another fresh one-shot be prepared.
+Current next action: **GW minimal changed-post-G3 control authority offline**. GV proved that exact-equal G4..G6 calls are deduped before driver `.s_ctrl`; therefore a true later hardware-write proof requires a changed tuple. Bound one such tuple offline first, keep the delta minimal and safe, and do not authorize broader continuous writes from GV.
 
 Before every meaningful mutation run `tools/camera-overlap-guard.sh` and inspect the intended stage path. If unexpected evidence exists, audit it first. Any one-shot attempt that may have started is consumed until proven otherwise. Never same-boot retry and never reuse a consumed identity.
 

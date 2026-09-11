@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-11
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-gv-limited-write-prepared-unarmed
-phase: front-imx681-continuous-control-limited-redundant-live
-status: golden-restored-gv-prepared-unarmed-prearm-pass
+state_id: E003i-gv-redundant-ioctl-dedupe-live-pass-retired
+phase: front-imx681-continuous-control-changed-post-g3-authority
+status: golden-restored-gv-adjudicated-pass-candidate-retired
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-gv-limited-redundant-write-live-r27
+current_gate: E003i-gv-redundant-ioctl-dedupe-r27-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-GV-limited-redundant-write-one-shot
+next_experiment: E003i-GW-minimal-changed-post-g3-control-authority
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  GT and GU are closed offline. GV is prepared and unarmed. Install GV unarmed, rerun prearm, arm exactly one one-shot, and execute at most one R27 stream. G4..G6 may physically write only on exact equality to last applied controls; changed G4..G6 and G7..G26 remain shadow. Archive, return Golden and retire.
+  GV is consumed/adjudicated PASS: six control ioctls G1-G6 succeeded, but unchanged G4-G6 clusters were deduped by V4L2 before IMX681 s_ctrl, so no new post-G3 sensor hardware write occurred. Build GW offline authority for one minimal changed post-G3 tuple and prove safety/timing before another live candidate.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3246,14 +3246,29 @@ e003i_gs_current:
   archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-gs/attempt1-pass-continuous-shadow-20260911T221117
 
 
+
 e003i_gv_current:
-  status: prepared-unarmed-prearm-pass
+  status: pass-live-redundant-ioctl-dedupe-consumed-retired
   parent_authority: [GS, GT, GU]
-  max_physical_write_sources: [G1, G2, G3, G4, G5, G6]
-  conditional_redundant_sources: [G4, G5, G6]
-  changed_conditional_action: shadow-only
-  later_sources: G7-G26-shadow-only
-  candidate_runtime_performed: false
-  candidate_armed: false
+  candidate_runtime_performed: true
+  candidate_armed: consumed-one-shot
+  stream_attempts: 1
   same_boot_retry_allowed: false
+  frames: 27
+  continuous_release_sources: G1-G26
+  successful_control_ioctl_sources: [G1, G2, G3, G4, G5, G6]
+  redundant_ioctl_sources: [G4, G5, G6]
+  v4l2_unchanged_cluster_dedupe: true
+  stream_sensor_hardware_sources: [G1, G2, G3]
+  sensor_hardware_transactions_including_bootstrap: 4
+  new_post_g3_sensor_hardware_write_count: 0
+  bounded_shadow_sources: G7-G26
   changed_post_g3_controls_authorized: false
+  max_pipeline_ms: 29.517331
+  streamoff_pass: true
+  kernel_health_pass: true
+  corrected_verifier_pass: true
+  golden_return_pass: true
+  candidate_retired: true
+  archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-gv/attempt1-helper-pass-verifier-audit-20260911T222625
+  next_gate: GW-minimal-changed-post-g3-control-authority
