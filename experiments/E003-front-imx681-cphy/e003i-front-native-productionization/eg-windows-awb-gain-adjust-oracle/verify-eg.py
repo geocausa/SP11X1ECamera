@@ -57,7 +57,7 @@ out={'schema':'sp11-e003i-eg-windows-awb-gain-adjust-oracle-v1','status':'PASS_8
      'windows_full_log_sha256':'2601f5da6d7f87439253ea9315111f43af1fcac386a206771d5e57395cf6ffe9',
      'windows_pairs_sha256_reported':'2f36240441984d38ebfac776128bd1cc620cf6be8b2c1a600e16866b5db48c5a',
      'windows_differential_same_request':True,'contained_triangle_path_proven':True,
-     'runtime_calibration_source':'EJ_clean_tuning_plus_same_device_OTP_reconstruction','runtime_calibration_source_linux_bound':False,'out_of_mesh_fallback_proven':False,'continuous_aec':False,
+     'runtime_calibration_source':'EJ_clean_tuning_plus_same_device_OTP_reconstruction','runtime_calibration_source_linux_bound':bool(ej.get('linux_runtime_eeprom_read_bound')), 'out_of_mesh_fallback_proven':False,'continuous_aec':False,
      'rows':rows}
 (HERE/'RESULT.json').write_text(json.dumps(out,indent=2)+"\n")
 print(json.dumps(out,indent=2))

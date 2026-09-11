@@ -29,9 +29,26 @@ need(ko.exists(),'module absent; build EK first')
 need(sha(ko)==KO_SHA,'EK module SHA drift')
 ver=subprocess.check_output(['modinfo','-F','vermagic',str(ko)],text=True).strip()
 need(ver==VER,'vermagic drift')
-out={'schema':'sp11-e003i-ek-linux-front-awb-otp-read-gate-v1','status':'PASS_OFFLINE_PREARM',
+live=HERE/'LIVE-EVIDENCE.txt'
+live_ok=False
+if live.exists():
+    lt=live.read_text()
+    for token in [
+        'status=PASS_LINUX_PHYSICAL_OTP_READ',
+        'candidate_head=84e13b472465ad8a84780d2d9a0052f277af446b',
+        'candidate_consumed=true',
+        'stream_requested=false',
+        'linux_otp_hex=56 03 71 01 ff 03 5d 02 4d 02 fc 03',
+        'linux_otp_sha256=e09038cb54497e6309cd1e213d0e0a5f02e1c460ffa9a4ee9ef00ecc326ed7e1',
+        'windows_ei_match=byte_exact_12_of_12',
+        'golden_saved_entry=sp11-audio-fullio-v19c',
+        'golden_next_entry=EMPTY',
+        'candidate_boot_artifacts=RETIRED',
+    ]: need(token in lt,'live evidence '+token)
+    live_ok=True
+out={'schema':'sp11-e003i-ek-linux-front-awb-otp-read-gate-v1','status':'PASS_LIVE_LINUX_PHYSICAL_OTP' if live_ok else 'PASS_OFFLINE_PREARM',
      'cw_source_sha256':CW_SHA,'ek_source_sha256':SRC_SHA,'ek_module_sha256':KO_SHA,'vermagic':ver,
      'eeprom_contract':{'i2c_7bit':'0x50','offset':'0x0941','address_bytes':2,'read_bytes':12,'write_payload_bytes':0},
-     'expected_ei_sha256':hashlib.sha256(EXPECTED).hexdigest(),'live_read_proven':False,'stream_required':False}
+     'expected_ei_sha256':hashlib.sha256(EXPECTED).hexdigest(),'live_read_proven':live_ok,'windows_ei_byte_exact':live_ok,'stream_required':False,'candidate_consumed':live_ok,'golden_returned':live_ok}
 (HERE/'RESULT.json').write_text(json.dumps(out,indent=2)+'\n')
 print(json.dumps(out,indent=2))

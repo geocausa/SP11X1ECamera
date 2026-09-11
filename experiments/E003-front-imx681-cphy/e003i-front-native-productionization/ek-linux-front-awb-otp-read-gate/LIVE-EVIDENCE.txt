@@ -1,0 +1,29 @@
+schema=sp11-e003i-ek-live-evidence-v1
+status=PASS_LINUX_PHYSICAL_OTP_READ
+candidate_head=84e13b472465ad8a84780d2d9a0052f277af446b
+candidate_consumed=true
+stream_requested=false
+linux_otp_hex=56 03 71 01 ff 03 5d 02 4d 02 fc 03
+linux_otp_sha256=e09038cb54497e6309cd1e213d0e0a5f02e1c460ffa9a4ee9ef00ecc326ed7e1
+windows_ei_match=byte_exact_12_of_12
+runtime_result_sha256=af218325da9f6bf51f0e4811e35c76bc60279b477bffe19fd5310ebc6e8a9b38
+runtime_otp_line_sha256=9bb697060ac600ad93045e8cd2467b664d898f77a78713058e566b37b17a644f
+runtime_full_dmesg_sha256=015d6e2f11f3dcbd7a8cb25e5a691b7972b6be66856047f22e3f2e341697d3aa
+golden_return_kernel=7.1.5-sp11-render-parity-v4+
+golden_saved_entry=sp11-audio-fullio-v19c
+golden_next_entry=EMPTY
+golden_camera_modules=ABSENT
+golden_camera_nodes=ABSENT
+candidate_boot_artifacts=RETIRED
+
+[OTP]
+[   69.819294] imx681 3-0010: SP11 EK AWB OTP 0x0941..0x094c: 56 03 71 01 ff 03 5d 02 4d 02 fc 03
+
+[RELEVANT_KERNEL_LINES]
+[    0.000000] Kernel command line: BOOT_IMAGE=/boot/sp11-7.1.5-camera-e003i-ek-awb-otp/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-ek-awb-otp sp11_camera_e003i_ek_awb_otp=1
+[   69.817819] imx681 3-0010: SP11 E003c: runtime power-on complete
+[   69.818536] imx681 3-0010: SP11 E003c PASS: IMX681 Windows ID 0x0aff, Sony ID 0x0681
+[   69.819294] imx681 3-0010: SP11 EK AWB OTP 0x0941..0x094c: 56 03 71 01 ff 03 5d 02 4d 02 fc 03
+[   70.304579] imx681 3-0010: SP11 E003h PASS: Windows init=364 + selected mode2=68 programmed in standby; MODE_SELECT=0; C-PHY symbol=2400MHz link=1200MHz
+[   70.315015] imx681 3-0010: SP11 E003c: runtime power-off complete
+[   70.315028] imx681 3-0010: SP11 E003h bounded-runtime V4L2 bind complete; stream requests enabled only in disposable candidate

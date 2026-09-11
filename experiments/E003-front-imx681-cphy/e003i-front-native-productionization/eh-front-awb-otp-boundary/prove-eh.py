@@ -5,6 +5,9 @@ HERE=Path(__file__).resolve().parent
 REPO=HERE.parents[3]
 PROJECT=Path('/home/geoca/Documents/SP11-PROJECT')
 STATIC=REPO/'experiments/E003-front-imx681-cphy/e003h-iq-producer-0073-static'
+EI=HERE.parent/'ei-front-awb-otp-oracle'/'AWB-OTP-RAW.bin'
+EJ=HERE.parent/'ej-clean-awb-cal-factor-replay'/'RESULT.json'
+EK=HERE.parent/'ek-linux-front-awb-otp-read-gate'/'LIVE-EVIDENCE.txt'
 sys.path.insert(0,str(STATIC))
 from decode_imx681_chromatix import parse_header,parse_symbol_table,data_bytes
 SENSOR=PROJECT/'00-RE-archive/sp11-driverdump/surfacecamfrontsensor_extension8380.inf_arm64_5a4c66ce4812274e/com.surface.sensormodule.ffc_imx681.bin'
@@ -72,6 +75,8 @@ def main():
         got=pe.at(rva,4).hex(); need(got==hx,f'code {rva:#x}: {got}!={hx}'); code[hex(rva)]=got
     # Explicitly prove format=1 + 0xffff mask means a two-byte reverse walk that yields LE u16.
     example=bytes([0x34,0x12]); need(decode_u16_le(example,0)==0x1234,'LE model')
+    physical=(EI.exists() and EI.read_bytes()==bytes.fromhex('56 03 71 01 ff 03 5d 02 4d 02 fc 03') and EK.exists() and 'status=PASS_LINUX_PHYSICAL_OTP_READ' in EK.read_text())
+    replay=(EJ.exists() and json.loads(EJ.read_text()).get('compute_cal_factors_clean_replay') is True)
     out={'schema':'sp11-e003i-eh-front-awb-otp-boundary-v1','status':'PASS_STATIC_BOUNDARY',
          'sensor_module_sha256':SENSOR_SHA,'device_mft_sha256':DLL_SHA,'eeprom_name':'gt24p128f_imx681',
          'eeprom_i2c':{'descriptor_slave_8bit':'0xa0','linux_7bit':'0x50','full_read_bytes':'0x1762'},
@@ -79,7 +84,7 @@ def main():
          'raw_window':{'start':'0x941','end_inclusive':'0x94c','bytes':12,'encoding':'six consecutive little-endian u16 fields'},
          'format_formula':{'ratioRG':'u16_le(source)/1023.0f','ratioBG':'u16_le(source)/1023.0f','third':'u16_le(source)/1023.0f then reciprocal because invert_third=1','awb_factor_input_uses':['ratioRG','ratioBG']},
          'cct_mapping':{'2':2850,'3':5000},'code_byte_proofs':code,
-         'physical_same_device_bytes_captured':False,'runtime_calibration_factors_replayed_from_otp':False}
+         'physical_same_device_bytes_captured':physical,'linux_physical_read_proven':physical,'runtime_calibration_factors_replayed_from_otp':replay}
     (HERE/'RESULT.json').write_text(json.dumps(out,indent=2)+"\n")
     print(json.dumps(out,indent=2))
 if __name__=='__main__': main()

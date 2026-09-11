@@ -3,10 +3,13 @@ from pathlib import Path
 import importlib.util,json
 HERE=Path(__file__).resolve().parent
 EI=HERE.parent/'ei-front-awb-otp-oracle'
+EK=HERE.parent/'ek-linux-front-awb-otp-read-gate'/'LIVE-EVIDENCE.txt'
 s=importlib.util.spec_from_file_location('cf',HERE/'cal_factors.py'); cf=importlib.util.module_from_spec(s); s.loader.exec_module(cf)
 def need(x,m):
     if not x: raise AssertionError(m)
 ei=json.loads((EI/'RESULT.json').read_text()); need(ei['status']=='PASS_SAME_DEVICE_OTP_AND_FACTOR_TABLE','EI authority')
+need(EK.exists(),'EK live evidence absent')
+ekt=EK.read_text(); need('status=PASS_LINUX_PHYSICAL_OTP_READ' in ekt and 'windows_ei_match=byte_exact_12_of_12' in ekt,'EK Linux OTP authority')
 z=cf.compute((EI/'AWB-OTP-RAW.bin').read_bytes())
 exp=[(int(x['rg'],16),int(x['bg'],16)) for x in ei['windows_factor_bits']]
 got=[(cf.bits(a),cf.bits(b)) for a,b in z['table']]
@@ -26,6 +29,6 @@ out={'schema':'sp11-e003i-ej-clean-awb-cal-factor-replay-v1','status':'PASS_10_O
      'active_reciprocal_scale_bits':{'rg':f'0x{rec[0][0]:08x}','bg':f'0x{rec[0][1]:08x}'},
      'windows_factor_table_bit_exact':'10/10','compute_cal_factors_clean_replay':True,
      'profile_scope':'SP11_front_IMX681_two_anchor_sensorCalV1','generic_other_profiles':False,
-     'linux_runtime_eeprom_read_bound':False}
+     'linux_runtime_eeprom_read_bound':True,'linux_runtime_source':'EK_CCI1_master1_EEPROM_0x50_offset_0x0941_12_bytes'}
 (HERE/'RESULT.json').write_text(json.dumps(out,indent=2)+"\n")
 print(json.dumps(out,indent=2))
