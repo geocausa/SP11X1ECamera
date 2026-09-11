@@ -1,6 +1,6 @@
 # E003i-GD — combined Windows R4–R24 AWB + Tintless/LSC oracle
 
-Status: **staged offline / unarmed / no GD Windows stream yet.**
+Status: **PASS / consumed — one bounded Windows stream captured combined AWB + Tintless/LSC authority through R24; Golden returned.**
 
 GD is a strict three-request extension of the closed FW combined oracle. It reuses the same pinned DeviceMFT and the same four proven hooks:
 
@@ -15,4 +15,8 @@ The bounded capture range is R4..R24. R24 completion is two-sided: AWB publicati
 
 The holder still performs exactly one StartAsync and one StopAsync and waits for explicit START.GO after debugger attachment. Windows is entered only through one-shot UEFI BootNext; persistent Golden GRUB is unchanged.
 
-No GD Windows stream is allowed until verify-gd.py passes from a clean pushed commit.
+The GD stream was armed only after verify-gd.py passed from a clean pushed commit.
+
+GD completed with one Windows stream. The pushed scripts used on Windows match semantically after CRLF normalization. Post-capture clean analysis passes AWB R4..R24 21/21 bit-exact using FY and Tintless/LSC R4..R24 21/21 byte-exact for LSC0/LSC1/LSC2/GIC. The two-sided R24 completion handshake fired once, both jobs exited 0, and SP11 returned to protected Golden.
+
+The sealed Windows evidence ZIP SHA256 is 3bcc24b109de30922fc7547e072044313cdcc82f6838a8bfae6a269336a66593.
