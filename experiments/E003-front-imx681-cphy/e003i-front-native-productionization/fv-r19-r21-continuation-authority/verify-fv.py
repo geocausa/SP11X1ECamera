@@ -6,8 +6,8 @@ HERE=Path(__file__).resolve().parent
 BASE=HERE.parent
 A=Path('/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-fu/attempt1-pass-eighteen-frame-20260911T1822')
 FU=BASE/'fu-eighteen-frame-live-r5-r18'
-FH=BASE/'fh-recovered-windows-r18-awb-oracle'/'RESULT.json'
-FP=BASE/'fp-windows-r4-r18-tintless-lsc-oracle'/'RESULT.json'
+FY=BASE/'fy-calibrated-awb-selector-replay'/'RESULT.json'
+FW=BASE/'fw-windows-r4-r21-combined-awb-lsc-oracle'/'RESULT.json'
 GTM_SHA='074564f99a45d29a5dbe800c18bc0436735f70740cb8f42cd9a5c7b636ffcdfa'
 ARCHIVE_MANIFEST_SHA='a02b7b0916c1a5b56e2ce2d0555ff1ccd2904193bf63d7edf9448a54868a6d9b'
 
@@ -29,14 +29,17 @@ need(fu['status']=='PASS_CAPTURE_FU_EIGHTEEN_FRAME_R5_R18','FU authority')
 need(fu['stream_attempts']==1 and fu['same_boot_stream_retry_performed'] is False,'FU retry invariant')
 need(fu['golden_return'] is True and fu['candidate_retired'] is True,'FU closure invariant')
 
-fh=json.loads(FH.read_text())
-need(fh['status']=='PASS_RECOVERED_WINDOWS_R4_R18_AWB_15_OF_15_BIT_EXACT','FH AWB authority')
-need(fh['requests']==list(range(4,19)),'FH R4-R18 coverage')
+fy=json.loads(FY.read_text())
+need(fy['status']=='PASS_FX_SELECTOR_OBJECT_AND_EG_FA_FH_FW_BIT_EXACT','FY AWB selector authority')
+need(fy['windows_replays']['FW']['requests']==list(range(4,22)),'FY FW R4-R21 coverage')
+need(fy['windows_replays']['FW']['bit_exact']=='18/18','FY FW AWB replay authority')
 
-fp=json.loads(FP.read_text())
-need(fp['status']=='PASS_WINDOWS_ORACLE_CLEANROOM_REPLAY','FP LSC authority')
-need(fp['requests']==list(range(4,19)),'FP R4-R18 coverage')
-need(fp['clean_lsc_replay']=='15/15 byte-exact LSC0/LSC1/LSC2/GIC','FP replay authority')
+fw=json.loads(FW.read_text())
+need(fw['status']=='PASS_WINDOWS_COMBINED_R4_R21_AWB_LSC','FW combined authority')
+need(fw['requests']==list(range(4,22)) and fw['windows_stream_count']==1,'FW R4-R21 one-stream coverage')
+need(fw['same_stream_awb_and_lsc'] is True and fw['combined_r21_completion'] is True,'FW same-stream R21 closure')
+need(fw['awb_result']['bit_exact']=='18/18','FW AWB authority')
+need(fw['lsc_result']['clean_lsc_replay']=='18/18 byte-exact LSC0/LSC1/LSC2/GIC','FW LSC authority')
 
 src=(HERE/'offline-iq-probe.py').read_text()
 need("choices=('offline',)" in src,'probe must be CLI-offline-only')
@@ -149,23 +152,24 @@ with tempfile.TemporaryDirectory(prefix='e003i-fv-snapshot-') as ts:
 
         result={
             'schema':'sp11-e003i-fv-r19-r21-continuation-authority-v1',
-            'status':'PASS_OFFLINE_R19_R21_COMPOSABLE_AUTHORITY_OPEN',
+            'status':'PASS_OFFLINE_R19_R21_COMPOSABLE_AUTHORITY_CLOSED',
             'source':'immutable FU attempt1 archive G1..G18 stats + AEC gain observations',
             'fu_archive_manifest_sha256':ARCHIVE_MANIFEST_SHA,
             'r5_r18_live_regression':'14/14 exact FU live capsule hashes',
             'r19_r21_deterministic':'3/3 two-run capsule hashes exact',
             'r19_r21_capsule_sha256':new_hash,
             'gtm_post_r6_stable_through_probe':True,
-            'awb_windows_authority_through_request':18,
-            'awb_windows_authority_source':'FH recovered Windows R4-R18 15/15 bit-exact',
-            'lsc_windows_authority_through_request':18,
-            'lsc_windows_authority_source':'FP Windows R4-R18 clean-room 15/15 byte-exact',
-            'r19_r21_awb_windows_differential':False,
-            'r19_r21_lsc_windows_differential':False,
+            'awb_windows_authority_through_request':21,
+            'awb_windows_authority_source':'FY calibrated selector + FW Windows R4-R21 18/18 bit-exact',
+            'lsc_windows_authority_through_request':21,
+            'lsc_windows_authority_source':'FW Windows R4-R21 clean-room 18/18 byte-exact',
+            'r19_r21_awb_windows_differential':True,
+            'r19_r21_lsc_windows_differential':True,
             'awb_evolving_r18_r21':len(set(awb_regs))>1,
             'tintless_evolving_r18_r21':len(set(tint))>1,
             'lsc_gic_evolving_r18_r21':len(set(lsc0))>1 or len(set(lsc1))>1 or len(set(gic))>1,
-            'linux_live_r19_plus_allowed':False,
+            'linux_live_r19_plus_allowed':True,
+            'linux_live_scope':'bounded fresh R5-R21 successor only; one stream; no continuous/unrestricted AEC claim',
             'camera_runtime_performed':False,
             'continuous_aec_claimed':False,
             'rows_r18_r21':rows,

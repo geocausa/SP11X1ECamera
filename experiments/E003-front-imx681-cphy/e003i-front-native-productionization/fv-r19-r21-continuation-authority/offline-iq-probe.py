@@ -16,7 +16,7 @@ IFILE=BASE/'i-cleanroom-tintless/cleanroom-tintless-helpers.py'
 GFILE=BASE/'g-cleanroom-lsc-upstream/cleanroom-front-lsc.py'
 WFILE=BASE/'w-request-stats-selection-trigger-oracle/ANALYSIS.json'
 FFILE=BASE/'f-native-iq-backends/generate-steady-scalar-state.py'
-FBFILE=BASE/'fb-dynamic-awb-cal-slot-replay/dynamic_awb.py'
+FBFILE=BASE/'fy-calibrated-awb-selector-replay/dynamic_awb.py'
 EMFILE=BASE/'em-r7-r9-template-free-composer/compose-em.py'
 JFILE=BASE/'j-cleanroom-gtm/generate-cleanroom-gtm-wire.py'
 
@@ -157,7 +157,7 @@ class Composer:
 
 
 class ExtendedComposer:
-    """R7-R15 component composer. No R7-R11 raw Windows capsule/DMI input."""
+    """R7-R21 component composer. No R7-R21 raw Windows capsule/DMI input."""
     def __init__(self):
         self.E=load(EFILE,'en_e_ext');self.F=load(FFILE,'en_f');self.D=load(DVFILE,'en_dv_ext')
         self.FB=load(FBFILE,'fd_fb');self.EM=load(EMFILE,'en_em');self.J=load(JFILE,'en_j')
@@ -186,7 +186,7 @@ class ExtendedComposer:
         for i in range(len(E.MODULES)):module+=struct.pack('<BBH6I4x',vmask[i],pmask[i],0,*values[i])
         need(len(module)==0x120,'extended module bytes')
         pay=list(self.base);pay[1],pay[2],pay[3],pay[4]=wire;pay[6]=self.gtm
-        state={'module':bytes(module),'payload':pay,'source':'EX: EM component state, no R7-R15 raw capsule/DMI'}
+        state={'module':bytes(module),'payload':pay,'source':'FY: clean component state, no R7-R21 raw Windows capsule/DMI'}
         t=time.perf_counter_ns();cap,desc=E.compose(req,self.main,self.startup,self.payloads,self.sp,self.pp,state);dt=(time.perf_counter_ns()-t)/1e6
         need(len(cap)==IQ_BYTES,'extended capsule size')
         meta={'isp_gain':float(dm['isp_gain']),'isp_gain_bits':f"0x{dm['isp_gain_bits']:08x}",
