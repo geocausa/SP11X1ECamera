@@ -30,7 +30,7 @@ saved_entry="$(printf '%s\n' "$grubenv" | sed -n 's/^saved_entry=//p' | head -1)
 next_entry="$(printf '%s\n' "$grubenv" | sed -n 's/^next_entry=//p' | head -1)"
 nodes="$(compgen -G '/dev/video*' || true; compgen -G '/dev/media*' || true)"
 mods="$(lsmod 2>/dev/null | awk '$1 ~ /^(qcom_camss|imx681|ov13858)$/ {print $1}' || true)"
-procs="$(ps -eo pid=,cmd= | grep -E 'libcamera|v4l2-ctl|ffmpeg|gst-launch|e003i-|camera-e003|make-twenty|make-twentyseven|live-iq-producer' | grep -v -E 'grep -E|camera-overlap-guard' || true)"
+procs="$(ps -eo pid=,cmd= | grep -E 'libcamera|v4l2-ctl|ffmpeg|gst-launch|e003i-[a-z0-9-]*native-aec|camera-e003|make-(nine|eleven|twelve|fifteen|eighteen|twentyone|twentyfour|twentyseven)-frame|live-iq-producer.py' | grep -v -E 'grep -E|camera-overlap-guard' || true)"
 printf 'OVERLAP_GUARD branch=%s head=%s upstream=%s origin=%s tracked_dirty=%s untracked=%s\n' "$branch" "$head" "${upstream:-none}" "${origin:-none}" "$tracked_dirty" "$untracked"
 printf 'OVERLAP_GUARD boot_id=%s kernel=%s saved_entry=%s next_entry=%s nodes=%s modules=%s active_processes=%s\n' "${boot_id:-unknown}" "${kernel:-unknown}" "${saved_entry:-unknown}" "${next_entry:-}" "$( [[ -n "$nodes" ]] && echo yes || echo no )" "$( [[ -n "$mods" ]] && echo "$mods" | tr '\n' ',' || echo none )" "$( [[ -n "$procs" ]] && echo yes || echo no )"
 fail=0
