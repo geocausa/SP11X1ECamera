@@ -158,8 +158,16 @@ def find_triangle(t:GainAdjustTuning, rg,bg):
             return i,tr,exact_weights(rg,bg,*pts)
     raise ValueError('RG/BG point outside CTrigleAdjV1 mesh; fail closed (Windows two-vertex fallback not yet ported)')
 
-def adjust(t:GainAdjustTuning, rg,bg,lux,cct):
-    ti,tr,w=find_triangle(t,rg,bg)
+def adjust(t:GainAdjustTuning, rg,bg,lux,cct,cal_rg_scale=1.0,cal_bg_scale=1.0,triangle_hint=None):
+    # CTrigleAdjV1::GetCurrentTriangle first applies the selected runtime calibration
+    # reciprocal factors to the raw AWB decision point, then locates/interpolates the mesh.
+    mesh_rg=mul(rg,cal_rg_scale); mesh_bg=mul(bg,cal_bg_scale)
+    if triangle_hint is None:
+        ti,tr,w=find_triangle(t,mesh_rg,mesh_bg)
+    else:
+        ti=int(triangle_hint); tr=t.triangles[ti]
+        pts=[(t.vertices[v].rg,t.vertices[v].bg) for v in tr.v]
+        w=exact_weights(mesh_rg,mesh_bg,*pts)
     vv=[eval1d(t.vertices[v].lux,lux) for v in tr.v]
     tri=[]
     for ch in range(3):
@@ -168,6 +176,7 @@ def adjust(t:GainAdjustTuning, rg,bg,lux,cct):
     cctmul=eval_outer(t,lux,cct)
     final=tuple(mul(cctmul[i],tri[i]) for i in range(3))
     return {'triangle':ti,'vertices':list(tr.v),'weights':list(w),'vertex_rgb':[list(x) for x in vv],
+            'mesh_point':[mesh_rg,mesh_bg],'mesh_point_bits':[f'0x{bits(mesh_rg):08x}',f'0x{bits(mesh_bg):08x}'],
             'cct_rgb':list(cctmul),'triangle_rgb':tri,'final_rgb':list(final),
             'final_bits':[f'0x{bits(x):08x}' for x in final]}
 

@@ -6,9 +6,9 @@ This stage reconstructs the normal contained-triangle path of the Surface front-
 
 Static authority is SHA-pinned `QcDeviceMFT8380.dll`. `CTrigleAdjV1::Run` reads the same AWB state field `+0x4f5dc` that `CSAAGWV1::Analyze` explicitly logs as `LUX_index`. It converts current decision `(RG,BG)` through the already-closed temperature converter and passes request-local **Lux + CCT** into the top-level GA trigger object.
 
-The IMX681 `triglGAV1` tuning contains exactly **44 triangles**, **32 RG/BG vertices**, per-vertex Lux-index RGB curves, and a separate nested Lux/CCT RGB multiplier. Runtime `GetTriangleRatio` uses 24-byte triangle records (first three int32 are vertex IDs), 32-byte runtime vertex records, absolute-area barycentric weights, and componentwise float32 interpolation. The final GA vector is the triangle RGB vector multiplied by the nested Lux/CCT RGB vector.
+The IMX681 `triglGAV1` tuning contains exactly **44 triangles**, **32 RG/BG vertices**, per-vertex Lux-index RGB curves, and a separate nested Lux/CCT RGB multiplier. Runtime `GetCurrentTriangle` first multiplies raw RG/BG by the selected per-device calibration reciprocal factors; `GetTriangleRatio` then uses 24-byte triangle records (first three int32 are vertex IDs), 32-byte runtime vertex records, absolute-area barycentric weights, and componentwise float32 interpolation. The final GA vector is the triangle RGB vector multiplied by the nested Lux/CCT RGB vector.
 
-`gain_adjust.py` implements that contained-triangle path and fails closed for out-of-mesh decisions. Windows' rare two-vertex out-of-zone fallback is intentionally not guessed here.
+`gain_adjust.py` implements that contained-triangle path, takes the runtime RG/BG calibration scales explicitly as inputs, and fails closed for out-of-mesh decisions. It does not bake device-specific calibration into the clean core. Windows' rare two-vertex out-of-zone fallback is intentionally not guessed here.
 
 `verify-ef.py` pins the tuning SHA, validates topology/neighbor reciprocity, checks all 44 triangle centroids, and exercises unity, per-vertex non-unity, nested CCT, and Lux-gap interpolation fixtures directly from the vendor table.
 
