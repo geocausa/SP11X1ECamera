@@ -1,14 +1,13 @@
 # E003i-ER — corrected bounded live R5–R9 one-shot
 
-Status: **fresh unexecuted live successor; EP-gated and prearm-clean.**
+Status: **ATTEMPT1 CONSUMED / FAIL-CLOSED at the R9 transport window; Golden return PASS; candidate retired.**
 
-ER is the fresh runtime identity after two consumed predecessors:
+ER proved the corrected EP GainAdj path live through G6 and composed R9 successfully, but the final R9 userspace submission returned `-EBUSY`. This is now closed as a **transport/runner-boundary failure, not an IQ-content failure**.
 
-- **EO attempt1:** real camera run; R5–R8 submitted, then fail-closed at R9 because the first EL selector rejected a valid multi-side traversal. EP closes that bug and proves corrected `10 -> 8 -> 16` plus R9 capsule SHA256 `209961646647ec9a2747a553c10139f1cd303dc3a5b6cf302deca6636f173191`.
-- **EQ boot1:** consumed at runtime preflight only because EN's verifier wrote nondeterministic timing observations into tracked JSON. No camera module loaded, helper did not run, and no stream started. The verifier now measures/enforces timing every run but writes deterministic budgets/pass state.
+The exact production CAMSS source only consumes deferred steady requests **R5 and R6** inside its six-frame hardware runner. ER successfully enqueued R7 and R8 into the depth-8 monotonic software FIFO, but there are no R7/R8 consumption gates in that runner. After the sixth hardware frame, the runner stops the sensor, reports `X1E front PIX completed provider-owned bounded six-frame live requeue`, closes/purges the provider and clears `live_active`. G6 then finishes the already-proven R9 composition (`c65242e4...`), but the outer V4L2 IQ ingress correctly rejects it with `-EBUSY` because the bounded worker is no longer live.
 
-ER does not reuse EO or EQ boot entries, helper filenames, markers, output directories, or one-shot identities. Its bounded ownership remains `R5<-G2, R6<-G3, R7<-G4, R8<-G5, R9<-G6` with six completed generations, exactly three possible sensor writes, current-first CQ publication, one helper invocation, no same-boot retry, fail-closed producer/parent behavior, and persistent Golden `sp11-audio-fullio-v19c` fallback.
+This means optimization of the ~20.6 ms G6 producer path cannot solve ER. The next valid experiment is a **fresh nine-frame transport successor** that keeps the hardware runner alive and explicitly consumes R7, R8 and R9 at their subsequent Epoch0 boundaries. ER must never be reused.
 
-Prearm requires CW exact module authority, deterministic EN R5–R9 verification, EP's full archived EO replay, helper/bootstrap `-Werror` builds, Golden saved-entry integrity and no loaded camera stack.
+Run facts: six video/statistics generations completed; the G1–G3 sensor-write schedule passed and affected G4–G6; R5/R6 were consumed by the existing runner; R7/R8 were FIFO-enqueued only; R9 was composed but not enqueued. No same-boot retry occurred. Full raw evidence is checksummed under `/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-er/attempt1-fail-r9-transport-20260911T1157`. Golden Linux returned with camera modules/nodes absent, and ER's one-shot GRUB/boot artifacts were retired.
 
-A live PASS proves this bounded five-IQ-request path only. It does not claim unrestricted continuous AEC or the true GainAdj two-vertex out-of-mesh fallback.
+See `ATTEMPT1-FAILURE.json` and `RETIRE.txt`.

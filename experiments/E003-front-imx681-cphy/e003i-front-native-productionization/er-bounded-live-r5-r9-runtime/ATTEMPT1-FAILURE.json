@@ -1,0 +1,53 @@
+{
+  "schema": "sp11-e003i-er-attempt1-failure-v1",
+  "status": "CONSUMED_FAIL_R9_TRANSPORT_WINDOW",
+  "candidate_head": "eb56c829e4ccd4b23b53ad3f542cd41c38158600",
+  "same_boot_retry_performed": false,
+  "golden_return": true,
+  "candidate_retired": true,
+  "camera_runtime_performed": true,
+  "frames_completed": 6,
+  "stats_generations_completed": 6,
+  "sensor_writes": 3,
+  "aec_schedule": "PASS_G1_G6_WRITES_G1_G3_EFFECT_G4_G6",
+  "producer": {
+    "r5_submit": "PASS",
+    "r6_submit": "PASS",
+    "r7_enqueue": "PASS_BUT_NOT_CONSUMED_BY_SIX_FRAME_RUNNER",
+    "r8_enqueue": "PASS_BUT_NOT_CONSUMED_BY_SIX_FRAME_RUNNER",
+    "r9_compose": "PASS",
+    "r9_capsule_sha256": "c65242e4a4917aa6aec913c35bb346b58e401a28942e82b1d1498dc4bbc62be1",
+    "r9_submit": "FAIL_EBUSY"
+  },
+  "r5_r8_capsule_sha256": {
+    "5": "16df79ae5811a302317f4b13c90b044303cc6371cf5a85ce63a1726eb5f63dc5",
+    "6": "4289aac9aa777e15048ee7207213dfc26014b965d4e02b1864fc0706f73c9c0f",
+    "7": "91a157499e1bb3ce74550bc3446659fe68b6af973128cda08370cd17bf619903",
+    "8": "6d3842f521f252892148df150ae5df6b1d7ae8b5ff334cdeb441e01542c1a8d2"
+  },
+  "g6": {
+    "gain_wait_ms": 0.177859,
+    "total_process_ms": 20.580713,
+    "isp_gain_bits": "0x3f801646",
+    "awb_triangle": 16
+  },
+  "root_cause": {
+    "classification": "BOUNDED_RUNNER_REQUEST_CONSUMPTION_WINDOW",
+    "current_camss_c_sha256": "b9de92306b4d386274968dcab3f1a96ec13359f1eb22c27fda43bb15b0af7abb",
+    "current_camss_video_c_sha256": "2eb92e872b4bc4f0aaa2e17197707ca270e3f5f8b8d8460952599631c9b76df4",
+    "provider_queue_depth": 8,
+    "provider_internal_ebusy_ruled_out": true,
+    "runner_frame_limit": 6,
+    "runner_consumes_steady_requests": [5, 6],
+    "runner_does_not_consume": [7, 8, 9],
+    "outer_submit_ebusy_rule": "streaming && (!worker_started || !live_active), or runner_pinned",
+    "kernel_completion_log": "X1E front PIX completed provider-owned bounded six-frame live requeue",
+    "interpretation": "R7 and R8 entered the software FIFO but the six-frame runner has no request7/request8 consumption gates. After frame6 the runner stops hardware, closes/purges the provider and clears live_active. G6-derived R9 is then rejected by the outer V4L2 IQ submit gate with -EBUSY. This cannot be fixed by changing R9 content or merely reducing its ~20.6 ms compute time; the hardware runner must remain active through request9 consumption."
+  },
+  "next_gate": "fresh bounded nine-frame runner consuming R7/R8/R9 at Epoch0 gates, with no reuse of ER identity",
+  "external_archive": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-er/attempt1-fail-r9-transport-20260911T1157",
+  "external_archive_manifest_sha256": "b69f9739fe206b95df572d22914a604fef76c5eb872ca6999b6796199a1c1d67",
+  "run_sha256": "f650a76cc47aa1f8fff394dfeab7936c79a0f1f291722838f8d7427419ba52bc",
+  "producer_result_sha256": "3b3fba00b3dea983ba1e65cac57cc369acbed9e1c4c3bd33849debe018fc5d75",
+  "dmesg_sha256": "8baaa69ec254b1a1257f05e2ae11b4de44ffffad9c41065c27a5d887e010d1e3"
+}
