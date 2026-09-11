@@ -1,0 +1,107 @@
+{
+  "schema": "sp11-e003i-eh-front-awb-otp-boundary-v1",
+  "status": "PASS_STATIC_BOUNDARY",
+  "sensor_module_sha256": "f7dd81be64153fd3f0da8e6288ee1b9906b7bf51b773a98496934d76dc96a45c",
+  "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "eeprom_name": "gt24p128f_imx681",
+  "eeprom_i2c": {
+    "descriptor_slave_8bit": "0xa0",
+    "linux_7bit": "0x50",
+    "full_read_bytes": "0x1762"
+  },
+  "wb_root": {
+    "enabled": 1,
+    "integer_format": 1,
+    "method": 1,
+    "light_count": 2,
+    "light_symbol": 3009,
+    "q_value": 1023.0,
+    "invert_third": 1
+  },
+  "lights": [
+    {
+      "index": 0,
+      "illuminant_enum": 2,
+      "color_temperature": 2850,
+      "descriptors": [
+        {
+          "offset": 2369,
+          "mask": 65535,
+          "signed": 0
+        },
+        {
+          "offset": 2371,
+          "mask": 65535,
+          "signed": 0
+        },
+        {
+          "offset": 2373,
+          "mask": 65535,
+          "signed": 0
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "illuminant_enum": 3,
+      "color_temperature": 5000,
+      "descriptors": [
+        {
+          "offset": 2375,
+          "mask": 65535,
+          "signed": 0
+        },
+        {
+          "offset": 2377,
+          "mask": 65535,
+          "signed": 0
+        },
+        {
+          "offset": 2379,
+          "mask": 65535,
+          "signed": 0
+        }
+      ]
+    }
+  ],
+  "raw_window": {
+    "start": "0x941",
+    "end_inclusive": "0x94c",
+    "bytes": 12,
+    "encoding": "six consecutive little-endian u16 fields"
+  },
+  "format_formula": {
+    "ratioRG": "u16_le(source)/1023.0f",
+    "ratioBG": "u16_le(source)/1023.0f",
+    "third": "u16_le(source)/1023.0f then reciprocal because invert_third=1",
+    "awb_factor_input_uses": [
+      "ratioRG",
+      "ratioBG"
+    ]
+  },
+  "cct_mapping": {
+    "2": 2850,
+    "3": 5000
+  },
+  "code_byte_proofs": {
+    "0x7233c8": "5f040071",
+    "0x7233cc": "40020054",
+    "0x723420": "0bbc41f9",
+    "0x723428": "29050051",
+    "0x723448": "b321132a",
+    "0x723bb0": "682a41b9",
+    "0x723bbc": "622641b9",
+    "0x723bf0": "080b80d2",
+    "0x723c10": "01010191",
+    "0x723c24": "301a301e",
+    "0x723c38": "01d10091",
+    "0x723c4c": "301a301e",
+    "0x723c60": "01310191",
+    "0x846754": "56648152",
+    "0x84675c": "16718252",
+    "0x846774": "90c25fbc",
+    "0x846780": "900240bd"
+  },
+  "physical_same_device_bytes_captured": false,
+  "runtime_calibration_factors_replayed_from_otp": false
+}
