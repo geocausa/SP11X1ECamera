@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-11
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-gk-r27-offline-authority-closed
-phase: front-imx681-r27-bounded-closure
-status: golden-restored-r27-windows-and-offline-authority-closed
+state_id: E003i-go-r27-prepared-unarmed
+phase: front-imx681-r27-live-closure
+status: golden-restored-go-prepared-unarmed-prearm-pass
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-gk-r25-r27-continuation-authority
+current_gate: E003i-go-twentyseven-frame-live-r5-r27
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-GL-r27-gain-feed-publisher
+next_experiment: E003i-GO-r27-one-shot-live
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  Build GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport offline. If all pass and the overlap guard confirms clean protected Golden, prepare exactly one fresh GO R5..R27 live candidate. After GO PASS pivot to continuous sensor-control feedback instead of extending the bounded ladder.
+  GO R5..R27 is prepared and unarmed after GL/GM/GN offline PASS. Install GO unarmed, rerun prearm, arm exactly one GRUB one-shot, then perform at most one camera stream. Preserve/archive any result and immediately return Golden with no same-boot retry. After a GO PASS pivot to continuous sensor-control feedback.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3193,3 +3193,21 @@ e003i_gk_current:
   next_bounded_chain: [GL, GM, GN, GO]
   post_go_strategy: continuous-sensor-control-feedback-and-robustness
   overlap_guard: tools/camera-overlap-guard.sh
+
+
+# Fresh final bounded live closure. No GO hardware runtime at this checkpoint.
+e003i_go_current:
+  status: prepared-unarmed-prearm-pass
+  parent_authority: [GJ, GK, GL, GM, GN]
+  gl_publisher_pass: true
+  gm_producer_pass: true
+  gn_transport_pass: true
+  frames: 27
+  iq_requests: R5-R27
+  publisher_generations: G1-G24
+  collector_generations: G1-G27
+  physical_sensor_write_sources: [G1, G2, G3]
+  candidate_runtime_performed: false
+  candidate_armed: false
+  same_boot_retry_allowed: false
+  post_pass_strategy: continuous-sensor-control-feedback-and-robustness
