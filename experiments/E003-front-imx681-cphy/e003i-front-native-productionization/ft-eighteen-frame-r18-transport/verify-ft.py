@@ -263,7 +263,6 @@ with tempfile.TemporaryDirectory(prefix='e003i-ft-') as td0:
         'base_transport':'FM fifteen-frame',
         'patched_camss_sha256':CAM18,
         'camss_build':'PASS_W1',
-        'camss_module_sha256':sha(ko),
         'vermagic':ver,
         'patched_helper_sha256':HELP18,
         'helper_build':'PASS_WERROR',
