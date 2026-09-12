@@ -1,0 +1,101 @@
+{
+  "schema": "e004-windows-oracle-v1",
+  "captured_date": "2026-09-12",
+  "machine": "SP11 / DESKTOP-AQ4SMTC",
+  "windows_kernel": "26100 ARM64",
+  "ir_source": {
+    "name": "Surface IR Camera Front",
+    "source_kind": "Infrared",
+    "subtype": "NV12",
+    "width": 644,
+    "height": 604,
+    "fps_num": 60,
+    "fps_den": 1
+  },
+  "mipi": {
+    "lane_count": 1,
+    "data_rate_bps": 840000000,
+    "settle_count": 16,
+    "ctx_offset_0x4c": 0,
+    "ctx_offset_0x54": 0,
+    "lane_mask": "0x81",
+    "lane_mask_interpretation": "Clk + Lane0",
+    "mask_family": {
+      "1_data_lane": "0x81",
+      "2_data_lanes": "0x85",
+      "4_data_lanes": "0xd5"
+    },
+    "wait_status_names": [
+      "Lane0",
+      "Lane2",
+      "Lane4",
+      "Lane6",
+      "Clk"
+    ],
+    "polarity_inversion_proven": false
+  },
+  "csiphy0": {
+    "physical_base": "0x0ace4000",
+    "bytes": 8192,
+    "dwords": 2048,
+    "live1_dwords": 2048,
+    "live2_dwords": 2048,
+    "live_diff_count": 1,
+    "live_differences": [
+      {
+        "address": "0xace4ef4",
+        "live1": "000000c1",
+        "live2": "000000c0"
+      }
+    ],
+    "idle_dwords": 2048,
+    "idle_0x80000000_count": 2048
+  },
+  "first_ir_initial_config": {
+    "sequential_call_rva": "0x4c74",
+    "packet_bytes": 4880,
+    "packet_sha256": "81e96e0470cbfa58065eba12ea1a998349b306111f2edee296d7044a69146cdd",
+    "patch_offset": "0x1c",
+    "patch_start": "0x2000",
+    "patch_end": "0x2227",
+    "patch_bytes": 552,
+    "patch_addresses_contiguous": true,
+    "patch_sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321"
+  },
+  "raw_evidence": [
+    {
+      "name": "E004_IR_MIPI_CONTEXT_20260912.log",
+      "bytes": 11696,
+      "sha256": "97b6f23898d8d4d5ba1ef840fc0da0fbbfb787145dc1531e5b1b216dd1f658ca"
+    },
+    {
+      "name": "E004_IR_LIVE_20260912.log",
+      "bytes": 29219,
+      "sha256": "add3797f0592203ee18c18d00d3f330f91f0ee183dd0d9bd07cf0b4aa9bd1279"
+    },
+    {
+      "name": "E004_IR_LIVE2_20260912.log",
+      "bytes": 28922,
+      "sha256": "22e785474bd6857af52ab50a2039e8488a3328cbd8bf4a66a69d6e2d6fe2ac9d"
+    },
+    {
+      "name": "E004_IR_IDLE_20260912.log",
+      "bytes": 28918,
+      "sha256": "ac754900942c7ccfe16dbbd0e231a766ed3a2f5cd3377707d189a9512ff21424"
+    },
+    {
+      "name": "E004_IR_COLDBOOT2_20260912.log",
+      "bytes": 94667,
+      "sha256": "b912fbf3635edac0ab22b37b1d7f485ad822ca5a71373a4754ee547c50b5aa5d"
+    },
+    {
+      "name": "E004_IR_4C74_PACKET_20260912.bin",
+      "bytes": 4880,
+      "sha256": "81e96e0470cbfa58065eba12ea1a998349b306111f2edee296d7044a69146cdd"
+    }
+  ],
+  "windows_driver_hashes": {
+    "qccammipicsi8380": "033f5b1431ad4c76a12ac3b7f0a5be42e460a03bcff40d249511b3034786d407",
+    "surfacecamauxsensor8380": "e5b6b064f39cf239ab07e22ca2434e3c08c93b691dc7d27cebb90861226efa75"
+  }
+}

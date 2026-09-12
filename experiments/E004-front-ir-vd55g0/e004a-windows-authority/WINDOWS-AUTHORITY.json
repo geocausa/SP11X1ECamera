@@ -1,0 +1,176 @@
+{
+  "schema": "sp11-camera-e004a-vd55g0-windows-authority-v2",
+  "sensor": "vd55g0",
+  "acpi_id": "SMO55F0",
+  "surface_subsystem": "MSHW0492",
+  "sensor_package": "com.surface.sensormodule.aux_vd55g0_MSHW0492.bin",
+  "sensor_package_size": 136411,
+  "sensor_package_sha256": "e574db7eb28231d3fa4f5eee5c1861919125d8ec7a753fc7a0708606e1f1a794",
+  "i2c": {
+    "qti_address_8bit": 192,
+    "linux_address_7bit": 96,
+    "controller": "CCI0",
+    "master": 0,
+    "frequency": "FAST",
+    "address_width_bytes": 2,
+    "id_register": 0,
+    "qti_expected_id": 12359,
+    "qti_expected_id_hex": "0x3047",
+    "st_driver_expected_model_id_le16_hex": "0x4730",
+    "byte_order_consistent": true
+  },
+  "routing": {
+    "csiphy_index": 0,
+    "direction": "front",
+    "face_authentication": true,
+    "physical_data_lane_mapping": "Lane0",
+    "lane_polarity": "NO_INVERSION_PROVEN",
+    "clock_lane": "Clk",
+    "windows_lane_mask": "0x81",
+    "windows_lane_mask_family": {
+      "1_data_lane": "0x81",
+      "2_data_lanes": "0x85",
+      "4_data_lanes": "0xd5"
+    },
+    "lane_mapping_evidence": "exact qccammipicsi8380 ARM64 branch + WaitforRx Lane0/Lane2/Lane4/Lane6/Clk status naming"
+  },
+  "power": {
+    "mclk_resource": "cam_cc_mclk0_clk",
+    "mclk_hz": 19200000,
+    "reset_gpio": 109,
+    "rails": [
+      {
+        "windows_resource": "LDO4_M",
+        "role": "VDDIO",
+        "microvolts": 1800000
+      },
+      {
+        "windows_resource": "LDO2_M",
+        "role": "VCORE",
+        "microvolts": 1150000
+      },
+      {
+        "windows_resource": "LDO7_M",
+        "role": "VANA",
+        "microvolts": 2800000
+      }
+    ]
+  },
+  "mode": {
+    "width": 644,
+    "height": 604,
+    "raw_bits": 10,
+    "csi_data_type_hex": "0x2b",
+    "virtual_channel": 0,
+    "fps": 60.0,
+    "line_length": 1200,
+    "frame_length": 1955,
+    "min_horizontal_blanking": 64,
+    "min_vertical_blanking": 64,
+    "output_pixel_clock_hz": 84000000,
+    "mipi_data_rate_bps": 840000000,
+    "derived_data_lanes": 1,
+    "derived_link_frequency_hz": 420000000,
+    "phy_type": "CSI2_DPHY",
+    "windows_observed_data_lanes": 1,
+    "windows_observed_settle_count": 16,
+    "transport_authority": "WINDOWS_LIVE_CONTEXT_PLUS_EXACT_QTI_DRIVER"
+  },
+  "lifecycle": {
+    "stream_on": [
+      {
+        "address_hex": "0x0201",
+        "data_hex": "0x01",
+        "operation": 0,
+        "delay_us": 0
+      },
+      {
+        "address_hex": "0x0020",
+        "data_hex": "0x00",
+        "operation": 4,
+        "delay_us": 4000
+      },
+      {
+        "address_hex": "0x0201",
+        "data_hex": "0x00",
+        "operation": 4,
+        "delay_us": 14000
+      },
+      {
+        "address_hex": "0x002c",
+        "data_hex": "0x03",
+        "operation": 4,
+        "delay_us": 4000
+      }
+    ],
+    "stream_off": [
+      {
+        "address_hex": "0x0202",
+        "data_hex": "0x01",
+        "operation": 0,
+        "delay_us": 0
+      }
+    ],
+    "group_hold_on": [
+      {
+        "address_hex": "0x0448",
+        "data_hex": "0x01"
+      }
+    ],
+    "group_hold_off": [
+      {
+        "address_hex": "0x0448",
+        "data_hex": "0x00"
+      }
+    ],
+    "operation_4_semantics": "POLL_WAIT_DO_NOT_FLATTEN"
+  },
+  "windows_init": {
+    "ext_clock_register_hex": "0x0220",
+    "ext_clock_value_hz": 19200000,
+    "mipi_rate_register_hex": "0x0224",
+    "mipi_rate_value_bps": 840000000,
+    "line_length_register_hex": "0x0300",
+    "line_length_value": 1200,
+    "firmware_patch_start_hex": "0x2000",
+    "firmware_patch_end_hex": "0x2227",
+    "firmware_patch_bytes": 552,
+    "firmware_patch_sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321"
+  },
+  "illumination_authorized": false,
+  "linux_live_probe_performed": false,
+  "linux_stream_performed": false,
+  "windows_drivers": {
+    "qccammipicsi8380_sha256": "033f5b1431ad4c76a12ac3b7f0a5be42e460a03bcff40d249511b3034786d407",
+    "surfacecamauxsensor8380_sha256": "e5b6b064f39cf239ab07e22ca2434e3c08c93b691dc7d27cebb90861226efa75"
+  },
+  "windows_first_ir_start": {
+    "captured_on_actual_sp11": true,
+    "source_name": "Surface IR Camera Front",
+    "source_kind": "Infrared",
+    "format": "NV12 644x604 60fps",
+    "surface_auxsensor_sequential_call_rva": "0x4c74",
+    "packet_bytes": 4880,
+    "packet_sha256": "81e96e0470cbfa58065eba12ea1a998349b306111f2edee296d7044a69146cdd",
+    "patch_transmitted": true,
+    "patch_packet_offset_hex": "0x1c",
+    "patch_start_hex": "0x2000",
+    "patch_end_hex": "0x2227",
+    "patch_bytes": 552,
+    "patch_sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321",
+    "patch_equals_exact_surface_package": true,
+    "revision_read_before_patch_observed_in_poweron_path": false
+  },
+  "csiphy0_live_oracle": {
+    "physical_base_hex": "0x0ace4000",
+    "aperture_bytes": 8192,
+    "dwords": 2048,
+    "repeat_live_diff_count": 1,
+    "repeat_live_diff_address_hex": "0x0ace4ef4",
+    "repeat_live_values_hex": [
+      "0x000000c1",
+      "0x000000c0"
+    ],
+    "idle_0x80000000_sentinel_dwords": 2048
+  }
+}

@@ -1,0 +1,189 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004_IR_MIPI_CONTEXT_20260912.log'
+ 0 e fffff800`b3b36028     /1 0001 (0001) qccammipicsi8380+0x6028 ".echo ===E004_MIPI_6028_HIT===; r x0,x1,x2,x3; dd @x0 L40; gc"
+
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+===E004_MIPI_6028_HIT===
+x0=ffffc5023bf29580 x1=0000000000000000 x2=fffff800b3b3c148 x3=ffffc40cf38a6e90
+ffffc502`3bf29580  00000401 00000000 00000028 00000000
+ffffc502`3bf29590  00000000 00000010 32116200 00000000
+ffffc502`3bf295a0  00000000 00000000 00000000 00000000
+ffffc502`3bf295b0  00000000 00000000 00000000 00000000
+ffffc502`3bf295c0  00000000 00000000 00000000 00000000
+ffffc502`3bf295d0  00000000 00000000 00000000 00000000
+ffffc502`3bf295e0  00000000 00000000 abb7e000 ffff9a80
+ffffc502`3bf295f0  00000000 00000000 00000000 00000000
+ffffc502`3bf29600  00000000 00000000 00000000 00000000
+ffffc502`3bf29610  00000000 00000000 00000000 00000000
+ffffc502`3bf29620  00000000 00000000 00000000 00000000
+ffffc502`3bf29630  00000000 00000000 00000000 00000000
+ffffc502`3bf29640  00000000 00000000 00000000 00000000
+ffffc502`3bf29650  00000000 00000000 00000000 00000000
+ffffc502`3bf29660  020f0000 44485353 00000000 00000000
+ffffc502`3bf29670  3bf29670 ffffc502 3b591cd0 ffffc502
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`b46013b0 d43e0000 brk         #0xF000
+1: kd> .echo ===E004_CTX_RECHECK===; dd ffffc502`3bf29580 L40; .echo ===E004_6028_TAIL===; u fffff800`b3b36080 L80; .logclose
+===E004_CTX_RECHECK===
+ffffc502`3bf29580  00000401 00000000 00000028 00000000
+ffffc502`3bf29590  00000000 00000010 32116200 00000000
+ffffc502`3bf295a0  00000000 00000000 00000000 00000000
+ffffc502`3bf295b0  00000000 00000000 00000000 00000000
+ffffc502`3bf295c0  00000000 00000000 00000000 00000000
+ffffc502`3bf295d0  00000000 00000000 00000001 00000000
+ffffc502`3bf295e0  00000000 00000000 abb7e000 ffff9a80
+ffffc502`3bf295f0  00000000 00000000 00000000 00000000
+ffffc502`3bf29600  00000000 00000000 00000000 00000000
+ffffc502`3bf29610  00000000 00000000 00000000 00000000
+ffffc502`3bf29620  00000000 00000000 00000000 00000000
+ffffc502`3bf29630  00000000 00000000 00000000 00000000
+ffffc502`3bf29640  00000000 00000000 00000000 00000000
+ffffc502`3bf29650  00000000 00000000 00000000 00000000
+ffffc502`3bf29660  020f0000 44485353 00000000 00000000
+ffffc502`3bf29670  3bf29670 ffffc502 3b591cd0 ffffc502
+===E004_6028_TAIL===
+qccammipicsi8380+0x6080:
+fffff800`b3b36080 b9404e69 ldr         w9,[x19,#0x4C]
+fffff800`b3b36084 34000389 cbz         w9,qccammipicsi8380+0x60f4 (fffff800`b3b360f4)
+fffff800`b3b36088 7100053f cmp         w9,#1
+fffff800`b3b3608c 54000100 beq         qccammipicsi8380+0x60ac (fffff800`b3b360ac)
+fffff800`b3b36090 d0000028 adrp        x8,qccammipicsi8380+0xc000 (fffff800`b3b3c000)
+fffff800`b3b36094 91090101 add         x1,x8,#0x240
+fffff800`b3b36098 f0000028 adrp        x8,qccammipicsi8380+0xd000 (fffff800`b3b3d000)
+fffff800`b3b3609c 91314100 add         x0,x8,#0xC50
+fffff800`b3b360a0 94000438 bl          qccammipicsi8380+0x7180 (fffff800`b3b37180)
+fffff800`b3b360a4 52800040 mov         w0,#2
+fffff800`b3b360a8 1400002c b           qccammipicsi8380+0x6158 (fffff800`b3b36158)
+fffff800`b3b360ac b9405669 ldr         w9,[x19,#0x54]
+fffff800`b3b360b0 7100053f cmp         w9,#1
+fffff800`b3b360b4 54000061 bne         qccammipicsi8380+0x60c0 (fffff800`b3b360c0)
+fffff800`b3b360b8 52800053 mov         w19,#2
+fffff800`b3b360bc 14000020 b           qccammipicsi8380+0x613c (fffff800`b3b3613c)
+fffff800`b3b360c0 35000154 cbnz        w20,qccammipicsi8380+0x60e8 (fffff800`b3b360e8)
+fffff800`b3b360c4 f9403660 ldr         x0,[x19,#0x68]
+fffff800`b3b360c8 f0000048 adrp        x8,qccammipicsi8380+0x11000 (fffff800`b3b41000)
+fffff800`b3b360cc d2800142 mov         x2,#0xA
+fffff800`b3b360d0 91080101 add         x1,x8,#0x200
+fffff800`b3b360d4 97ffff0b bl          qccammipicsi8380+0x5d00 (fffff800`b3b35d00)
+fffff800`b3b360d8 52800001 mov         w1,#0
+fffff800`b3b360dc aa1303e0 mov         x0,x19
+fffff800`b3b360e0 97ffff3e bl          qccammipicsi8380+0x5dd8 (fffff800`b3b35dd8)
+fffff800`b3b360e4 2a0003e8 mov         w8,w0
+fffff800`b3b360e8 2a0803f3 mov         w19,w8
+fffff800`b3b360ec 34000348 cbz         w8,qccammipicsi8380+0x6154 (fffff800`b3b36154)
+fffff800`b3b360f0 14000013 b           qccammipicsi8380+0x613c (fffff800`b3b3613c)
+fffff800`b3b360f4 b9405668 ldr         w8,[x19,#0x54]
+fffff800`b3b360f8 d2800149 mov         x9,#0xA
+fffff800`b3b360fc f9403660 ldr         x0,[x19,#0x68]
+fffff800`b3b36100 7100051f cmp         w8,#1
+fffff800`b3b36104 d28000c8 mov         x8,#6
+fffff800`b3b36108 9a881122 cselne      x2,x9,x8
+fffff800`b3b3610c f0000048 adrp        x8,qccammipicsi8380+0x11000 (fffff800`b3b41000)
+fffff800`b3b36110 91080109 add         x9,x8,#0x200
+fffff800`b3b36114 f0000048 adrp        x8,qccammipicsi8380+0x11000 (fffff800`b3b41000)
+fffff800`b3b36118 910e8108 add         x8,x8,#0x3A0
+fffff800`b3b3611c 9a881121 cselne      x1,x9,x8
+fffff800`b3b36120 97fffef8 bl          qccammipicsi8380+0x5d00 (fffff800`b3b35d00)
+fffff800`b3b36124 b9405668 ldr         w8,[x19,#0x54]
+fffff800`b3b36128 7100051f cmp         w8,#1
+fffff800`b3b3612c 54fffd69 bls         qccammipicsi8380+0x60d8 (fffff800`b3b360d8)
+fffff800`b3b36130 52800073 mov         w19,#3
+fffff800`b3b36134 14000002 b           qccammipicsi8380+0x613c (fffff800`b3b3613c)
+fffff800`b3b36138 52800093 mov         w19,#4
+fffff800`b3b3613c d0000028 adrp        x8,qccammipicsi8380+0xc000 (fffff800`b3b3c000)
+fffff800`b3b36140 910a8101 add         x1,x8,#0x2A0
+fffff800`b3b36144 f0000028 adrp        x8,qccammipicsi8380+0xd000 (fffff800`b3b3d000)
+fffff800`b3b36148 911bc100 add         x0,x8,#0x6F0
+fffff800`b3b3614c 2a1303e2 mov         w2,w19
+fffff800`b3b36150 9400040c bl          qccammipicsi8380+0x7180 (fffff800`b3b37180)
+fffff800`b3b36154 2a1303e0 mov         w0,w19
+fffff800`b3b36158 a8c17bfd ldp         fp,lr,[sp],#0x10
+fffff800`b3b3615c a8c153f3 ldp         x19,x20,[sp],#0x10
+fffff800`b3b36160 d50323ff autibsp
+fffff800`b3b36164 d65f03c0 ret
+fffff800`b3b36168 d503237f pacibsp
+fffff800`b3b3616c a9bb53f3 stp         x19,x20,[sp,#-0x50]!
+fffff800`b3b36170 a9015bf5 stp         x21,x22,[sp,#0x10]
+fffff800`b3b36174 a90263f7 stp         x23,x24,[sp,#0x20]
+fffff800`b3b36178 a9036bf9 stp         x25,x26,[sp,#0x30]
+fffff800`b3b3617c f90023fb str         x27,[sp,#0x40]
+fffff800`b3b36180 a9bf7bfd stp         fp,lr,[sp,#-0x10]!
+fffff800`b3b36184 910003fd mov         fp,sp
+fffff800`b3b36188 f0000028 adrp        x8,qccammipicsi8380+0xd000 (fffff800`b3b3d000)
+fffff800`b3b3618c 91180117 add         x23,x8,#0x600
+fffff800`b3b36190 aa0003f5 mov         x21,x0
+fffff800`b3b36194 52800013 mov         w19,#0
+fffff800`b3b36198 b4004b75 cbz         x21,qccammipicsi8380+0x6b04 (fffff800`b3b36b04)
+fffff800`b3b3619c b9404ea8 ldr         w8,[x21,#0x4C]
+fffff800`b3b361a0 34002008 cbz         w8,qccammipicsi8380+0x65a0 (fffff800`b3b365a0)
+fffff800`b3b361a4 7100051f cmp         w8,#1
+fffff800`b3b361a8 54004ba1 bne         qccammipicsi8380+0x6b1c (fffff800`b3b36b1c)
+fffff800`b3b361ac b94056a8 ldr         w8,[x21,#0x54]
+fffff800`b3b361b0 35004b68 cbnz        w8,qccammipicsi8380+0x6b1c (fffff800`b3b36b1c)
+fffff800`b3b361b4 794146a9 ldrh        w9,[x21,#0xA2]
+fffff800`b3b361b8 528000a8 mov         w8,#5
+fffff800`b3b361bc 6a08013f tst         w9,w8
+fffff800`b3b361c0 54001180 beq         qccammipicsi8380+0x63f0 (fffff800`b3b363f0)
+fffff800`b3b361c4 d0000048 adrp        x8,qccammipicsi8380+0x10000 (fffff800`b3b40000)
+fffff800`b3b361c8 9105011a add         x26,x8,#0x140
+fffff800`b3b361cc 52800014 mov         w20,#0
+fffff800`b3b361d0 910052b9 add         x25,x21,#0x14
+fffff800`b3b361d4 d0000038 adrp        x24,qccammipicsi8380+0xc000 (fffff800`b3b3c000)
+fffff800`b3b361d8 d2800193 mov         x19,#0xC
+fffff800`b3b361dc 9bb37e9b umull       x27,w20,w19
+fffff800`b3b361e0 91001348 add         x8,x26,#4
+fffff800`b3b361e4 8b080376 add         x22,x27,x8
+fffff800`b3b361e8 b87a6b68 ldr         w8,[x27,x26]
+fffff800`b3b361ec 7138211f cmp         w8,#0xE08
+fffff800`b3b361f0 54000101 bne         qccammipicsi8380+0x6210 (fffff800`b3b36210)
+fffff800`b3b361f4 b94016a8 ldr         w8,[x21,#0x14]
+fffff800`b3b361f8 9112c301 add         x1,x24,#0x4B0
+fffff800`b3b361fc 9100c2e0 add         x0,x23,#0x30
+fffff800`b3b36200 b90002c8 str         w8,[x22]
+fffff800`b3b36204 b94016a2 ldr         w2,[x21,#0x14]
+fffff800`b3b36208 940003de bl          qccammipicsi8380+0x7180 (fffff800`b3b37180)
+fffff800`b3b3620c 910052b9 add         x25,x21,#0x14
+fffff800`b3b36210 b87a6b68 ldr         w8,[x27,x26]
+fffff800`b3b36214 7100211f cmp         w8,#8
+fffff800`b3b36218 54000121 bne         qccammipicsi8380+0x623c (fffff800`b3b3623c)
+fffff800`b3b3621c b9400328 ldr         w8,[x25]
+fffff800`b3b36220 911762e0 add         x0,x23,#0x5D8
+fffff800`b3b36224 b90002c8 str         w8,[x22]
+fffff800`b3b36228 b9400322 ldr         w2,[x25]
+fffff800`b3b3622c d0000028 adrp        x8,qccammipicsi8380+0xc000 (fffff800`b3b3c000)
+fffff800`b3b36230 9113a101 add         x1,x8,#0x4E8
+fffff800`b3b36234 940003d3 bl          qccammipicsi8380+0x7180 (fffff800`b3b37180)
+fffff800`b3b36238 14000002 b           qccammipicsi8380+0x6240 (fffff800`b3b36240)
+fffff800`b3b3623c 910052b9 add         x25,x21,#0x14
+fffff800`b3b36240 b87a6b68 ldr         w8,[x27,x26]
+fffff800`b3b36244 7110211f cmp         w8,#0x408
+fffff800`b3b36248 54000101 bne         qccammipicsi8380+0x6268 (fffff800`b3b36268)
+fffff800`b3b3624c b9400328 ldr         w8,[x25]
+fffff800`b3b36250 911a02e0 add         x0,x23,#0x680
+fffff800`b3b36254 b90002c8 str         w8,[x22]
+fffff800`b3b36258 b9400322 ldr         w2,[x25]
+fffff800`b3b3625c d0000028 adrp        x8,qccammipicsi8380+0xc000 (fffff800`b3b3c000)
+fffff800`b3b36260 91148101 add         x1,x8,#0x520
+fffff800`b3b36264 940003c7 bl          qccammipicsi8380+0x7180 (fffff800`b3b37180)
+fffff800`b3b36268 11000694 add         w20,w20,#1
+fffff800`b3b3626c 71011e9f cmp         w20,#0x47
+fffff800`b3b36270 54fffb63 blo         qccammipicsi8380+0x61dc (fffff800`b3b361dc)
+fffff800`b3b36274 b9404ea8 ldr         w8,[x21,#0x4C]
+fffff800`b3b36278 52800014 mov         w20,#0
+fffff800`b3b3627c 340004a8 cbz         w8,qccammipicsi8380+0x6310 (fffff800`b3b36310)
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E004_IR_MIPI_CONTEXT_20260912.log
