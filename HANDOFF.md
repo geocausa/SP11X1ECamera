@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV/HW are PASS. **HX closes the first production-stream policy offline:** exactly one 27-frame production stream, fresh output directory, generation 1 stats start, 24 producer generations, 23 submitted R5..R27 requests, startup sensor writes G1..G3 only, post-G3 `shadow` with zero later native writes, four sensor-control hardware transactions including bootstrap, exact QC10C/TLBG/STATS3A sizes, STREAMOFF + kernel health PASS, no retry, mandatory Golden return + retirement. HX performs no runtime and does not itself authorize a stream.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV/HW/HX are PASS. **HY is prepared but not installed:** fresh ID `sp11-camera-e003i-hy-prod-stream-r27-one-shot`, exact Golden kernel/initrd, HV merged DTB, HN modules and current production package. Golden cmdline semantics are preserved, historical `firmware_class.path` is absent, `shadow` is explicit, the launcher has exactly one invocation site, and the attempt is marked consumed immediately before that invocation. Static verification + prearm PASS; no HY runtime exists.
 
-**Next gate: HY fresh one-shot production stream candidate prep.** Use unchanged HW/HV/HN/package authorities and checkpoint before install or arm. The brighter-scene native-feedback gate stays parked.
+**Next gate: checkpoint/push HY prep, then install-unarmed and checkpoint again.** Do not arm until installed-bundle verification passes. The brighter-scene native-feedback gate stays parked.
 
 ---
 

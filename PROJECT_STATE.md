@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT/HU/HV/HW:** production handoff, exact-Golden DT and activation PASS. **HX:** one-stream production acceptance policy PASS offline — 1×27 frames, fresh G1, 24 producer generations / 23 requests, G1..G3 native startup writes only, post-G3 shadow/zero later native writes, exact frame/stats sizes, STREAMOFF/health/Golden return/retirement required, no retry.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT/HU/HV/HW/HX:** production handoff, exact-Golden DT, activation and one-stream policy PASS. **HY:** fresh one-shot production-stream candidate PREPARED NOT INSTALLED — exact Golden kernel/initrd + HV DTB + HN modules + current package; explicit shadow policy; single launcher site; consume-before-invoke; no retry; prearm PASS; no runtime.
 
-**Next action:** HY fresh one-shot production stream candidate preparation; checkpoint before install/arm. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** commit/push HY prep, install unarmed, verify exact installed bundle, checkpoint again before any one-shot stream boot. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
