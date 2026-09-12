@@ -1,0 +1,563 @@
+{
+  "schema": "sp11-camera-e004d-windows-initialconfig-decode-v1",
+  "authority": "same-machine Windows exact package + live captured InitialConfig packet",
+  "sensor_package": {
+    "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamauxsensor_extension8380.inf_arm64_84ddd55dc933cac9/com.surface.sensormodule.aux_vd55g0_MSHW0492.bin",
+    "sha256": "e574db7eb28231d3fa4f5eee5c1861919125d8ec7a753fc7a0708606e1f1a794",
+    "largest_regsetting_id": 37,
+    "rows": 601
+  },
+  "live_initialconfig_packet": {
+    "path": "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E004-front-ir-vd55g0/e004a-windows-authority/E004_IR_4C74_PACKET_20260912.bin",
+    "sha256": "81e96e0470cbfa58065eba12ea1a998349b306111f2edee296d7044a69146cdd",
+    "bytes": 4880,
+    "commands": 7,
+    "poll_commands": 4,
+    "write_commands": 3,
+    "write_entries": 597
+  },
+  "packet_command_format_observed": {
+    "poll": {
+      "fixed_bytes": 20,
+      "signature_bytes_2_3": [
+        "0x01",
+        "0x09"
+      ],
+      "fields_used_by_exact_driver": "data_type byte0; addr_type byte1; timeout_ms u16@+4; register u16@+8; expected u32@+12"
+    },
+    "write": {
+      "signature_bytes_2_3": [
+        "0x01",
+        "0x05"
+      ],
+      "header_bytes": 8,
+      "count": "u16@+0",
+      "data_type": "byte@+4",
+      "addr_type": "byte@+5",
+      "entry_bytes": 8,
+      "entry_fields_used_by_exact_driver": "register u16@+0; data u16@+4"
+    }
+  },
+  "commands": [
+    {
+      "kind": "poll",
+      "offset": 0,
+      "length": 20,
+      "data_type": 1,
+      "addr_type": 2,
+      "command_type": 1,
+      "opcode": 9,
+      "timeout_ms": 6,
+      "reserved0": 0,
+      "address": 44,
+      "address_upper": 0,
+      "expected": 1,
+      "tail": 65535,
+      "command_index": 0,
+      "packet_offset": "0x0000",
+      "packet_length": 20,
+      "package_row_start": 0,
+      "package_row_end": 0,
+      "package_rows": 1
+    },
+    {
+      "kind": "write",
+      "offset": 20,
+      "length": 4432,
+      "count": 553,
+      "command_type": 1,
+      "opcode": 5,
+      "data_type": 1,
+      "addr_type": 2,
+      "reserved": 0,
+      "first_write": {
+        "address": "0x2000",
+        "data": "0x7c"
+      },
+      "last_write": {
+        "address": "0x0200",
+        "data": "0x02"
+      },
+      "command_index": 1,
+      "packet_offset": "0x0014",
+      "packet_length": 4432,
+      "package_row_start": 1,
+      "package_row_end": 553,
+      "package_rows": 553
+    },
+    {
+      "kind": "poll",
+      "offset": 4452,
+      "length": 20,
+      "data_type": 1,
+      "addr_type": 2,
+      "command_type": 1,
+      "opcode": 9,
+      "timeout_ms": 28,
+      "reserved0": 0,
+      "address": 512,
+      "address_upper": 0,
+      "expected": 0,
+      "tail": 65535,
+      "command_index": 2,
+      "packet_offset": "0x1164",
+      "packet_length": 20,
+      "package_row_start": 554,
+      "package_row_end": 554,
+      "package_rows": 1
+    },
+    {
+      "kind": "write",
+      "offset": 4472,
+      "length": 16,
+      "count": 1,
+      "command_type": 1,
+      "opcode": 5,
+      "data_type": 1,
+      "addr_type": 2,
+      "reserved": 0,
+      "first_write": {
+        "address": "0x0200",
+        "data": "0x01"
+      },
+      "last_write": {
+        "address": "0x0200",
+        "data": "0x01"
+      },
+      "command_index": 3,
+      "packet_offset": "0x1178",
+      "packet_length": 16,
+      "package_row_start": 555,
+      "package_row_end": 555,
+      "package_rows": 1
+    },
+    {
+      "kind": "poll",
+      "offset": 4488,
+      "length": 20,
+      "data_type": 1,
+      "addr_type": 2,
+      "command_type": 1,
+      "opcode": 9,
+      "timeout_ms": 6,
+      "reserved0": 0,
+      "address": 512,
+      "address_upper": 0,
+      "expected": 0,
+      "tail": 65535,
+      "command_index": 4,
+      "packet_offset": "0x1188",
+      "packet_length": 20,
+      "package_row_start": 556,
+      "package_row_end": 556,
+      "package_rows": 1
+    },
+    {
+      "kind": "poll",
+      "offset": 4508,
+      "length": 20,
+      "data_type": 1,
+      "addr_type": 2,
+      "command_type": 1,
+      "opcode": 9,
+      "timeout_ms": 4,
+      "reserved0": 0,
+      "address": 44,
+      "address_upper": 0,
+      "expected": 2,
+      "tail": 65535,
+      "command_index": 5,
+      "packet_offset": "0x119c",
+      "packet_length": 20,
+      "package_row_start": 557,
+      "package_row_end": 557,
+      "package_rows": 1
+    },
+    {
+      "kind": "write",
+      "offset": 4528,
+      "length": 352,
+      "count": 43,
+      "command_type": 1,
+      "opcode": 5,
+      "data_type": 1,
+      "addr_type": 2,
+      "reserved": 0,
+      "first_write": {
+        "address": "0x0220",
+        "data": "0x00"
+      },
+      "last_write": {
+        "address": "0x045d",
+        "data": "0x02"
+      },
+      "command_index": 6,
+      "packet_offset": "0x11b0",
+      "packet_length": 352,
+      "package_row_start": 558,
+      "package_row_end": 600,
+      "package_rows": 43
+    }
+  ],
+  "package_replay": {
+    "rows_matched_exactly": 601,
+    "rows_unmatched": 0,
+    "packet_extra_operations": 0,
+    "partition": [
+      {
+        "command_index": 0,
+        "kind": "poll",
+        "packet_offset": "0x0000",
+        "packet_length": 20,
+        "package_row_start": 0,
+        "package_row_end": 0,
+        "package_rows": 1
+      },
+      {
+        "command_index": 1,
+        "kind": "write",
+        "packet_offset": "0x0014",
+        "packet_length": 4432,
+        "package_row_start": 1,
+        "package_row_end": 553,
+        "package_rows": 553
+      },
+      {
+        "command_index": 2,
+        "kind": "poll",
+        "packet_offset": "0x1164",
+        "packet_length": 20,
+        "package_row_start": 554,
+        "package_row_end": 554,
+        "package_rows": 1
+      },
+      {
+        "command_index": 3,
+        "kind": "write",
+        "packet_offset": "0x1178",
+        "packet_length": 16,
+        "package_row_start": 555,
+        "package_row_end": 555,
+        "package_rows": 1
+      },
+      {
+        "command_index": 4,
+        "kind": "poll",
+        "packet_offset": "0x1188",
+        "packet_length": 20,
+        "package_row_start": 556,
+        "package_row_end": 556,
+        "package_rows": 1
+      },
+      {
+        "command_index": 5,
+        "kind": "poll",
+        "packet_offset": "0x119c",
+        "packet_length": 20,
+        "package_row_start": 557,
+        "package_row_end": 557,
+        "package_rows": 1
+      },
+      {
+        "command_index": 6,
+        "kind": "write",
+        "packet_offset": "0x11b0",
+        "packet_length": 352,
+        "package_row_start": 558,
+        "package_row_end": 600,
+        "package_rows": 43
+      }
+    ]
+  },
+  "surface_patch": {
+    "start": "0x2000",
+    "end": "0x2227",
+    "bytes": 552,
+    "sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321",
+    "followed_immediately_by": "write 0x0200=0x02 in same 553-write Windows command"
+  },
+  "timeline": [
+    {
+      "step": 1,
+      "windows_fact": "poll 0x002c == 0x01",
+      "timeout_ms": 6,
+      "package_rows": [
+        0,
+        0
+      ],
+      "reference_name_only": "ST calls state 0x01 READY_TO_BOOT"
+    },
+    {
+      "step": 2,
+      "windows_fact": "write 0x2000..0x2227 (552 bytes), then write 0x0200=0x02",
+      "package_rows": [
+        1,
+        553
+      ],
+      "write_count": 553,
+      "surface_patch_sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321",
+      "reference_name_only": "ST calls 0x0200=2 PATCH_SETUP"
+    },
+    {
+      "step": 3,
+      "windows_fact": "poll 0x0200 == 0x00",
+      "timeout_ms": 28,
+      "package_rows": [
+        554,
+        554
+      ]
+    },
+    {
+      "step": 4,
+      "windows_fact": "write 0x0200=0x01",
+      "package_rows": [
+        555,
+        555
+      ],
+      "write_count": 1,
+      "reference_name_only": "ST calls 0x0200=1 BOOT"
+    },
+    {
+      "step": 5,
+      "windows_fact": "poll 0x0200 == 0x00",
+      "timeout_ms": 6,
+      "package_rows": [
+        556,
+        556
+      ]
+    },
+    {
+      "step": 6,
+      "windows_fact": "poll 0x002c == 0x02",
+      "timeout_ms": 4,
+      "package_rows": [
+        557,
+        557
+      ],
+      "reference_name_only": "ST calls state 0x02 SW_STBY"
+    },
+    {
+      "step": 7,
+      "windows_fact": "write 43 post-boot timing/config registers",
+      "package_rows": [
+        558,
+        600
+      ],
+      "write_count": 43
+    }
+  ],
+  "post_boot_config": {
+    "writes": 43,
+    "raw_writes": [
+      {
+        "address": "0x0220",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0221",
+        "data": "0xf8"
+      },
+      {
+        "address": "0x0222",
+        "data": "0x24"
+      },
+      {
+        "address": "0x0223",
+        "data": "0x01"
+      },
+      {
+        "address": "0x0224",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0225",
+        "data": "0x62"
+      },
+      {
+        "address": "0x0226",
+        "data": "0x11"
+      },
+      {
+        "address": "0x0227",
+        "data": "0x32"
+      },
+      {
+        "address": "0x0300",
+        "data": "0xb0"
+      },
+      {
+        "address": "0x0301",
+        "data": "0x04"
+      },
+      {
+        "address": "0x0302",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0303",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0416",
+        "data": "0x40"
+      },
+      {
+        "address": "0x0458",
+        "data": "0xa3"
+      },
+      {
+        "address": "0x0459",
+        "data": "0x07"
+      },
+      {
+        "address": "0x044c",
+        "data": "0x02"
+      },
+      {
+        "address": "0x044e",
+        "data": "0x64"
+      },
+      {
+        "address": "0x044f",
+        "data": "0x00"
+      },
+      {
+        "address": "0x044d",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0450",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0451",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0467",
+        "data": "0x01"
+      },
+      {
+        "address": "0x0468",
+        "data": "0x02"
+      },
+      {
+        "address": "0x0469",
+        "data": "0x01"
+      },
+      {
+        "address": "0x046a",
+        "data": "0x01"
+      },
+      {
+        "address": "0x046d",
+        "data": "0x00"
+      },
+      {
+        "address": "0x046e",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0476",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0477",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0478",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0479",
+        "data": "0x00"
+      },
+      {
+        "address": "0x045e",
+        "data": "0x00"
+      },
+      {
+        "address": "0x045f",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0460",
+        "data": "0x83"
+      },
+      {
+        "address": "0x0461",
+        "data": "0x02"
+      },
+      {
+        "address": "0x0462",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0463",
+        "data": "0x00"
+      },
+      {
+        "address": "0x0464",
+        "data": "0x5b"
+      },
+      {
+        "address": "0x0465",
+        "data": "0x02"
+      },
+      {
+        "address": "0x045a",
+        "data": "0x00"
+      },
+      {
+        "address": "0x045b",
+        "data": "0x00"
+      },
+      {
+        "address": "0x045c",
+        "data": "0x5b"
+      },
+      {
+        "address": "0x045d",
+        "data": "0x02"
+      }
+    ],
+    "decoded_windows_values": {
+      "ext_clock_hz": 19200000,
+      "mipi_data_rate_bps": 840000000,
+      "line_length": 1200,
+      "orientation": 0,
+      "darkcal_pedestal": 64,
+      "frame_length": 1955,
+      "exposure_mode": 2,
+      "manual_analog_gain": 0,
+      "manual_coarse_exposure": 100,
+      "manual_digital_gain": 0,
+      "gpio_ctrl": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "roi_x_start": 0,
+      "roi_x_end": 643,
+      "roi_y_start": 0,
+      "roi_y_end": 603,
+      "y_start": 0,
+      "y_end": 603
+    },
+    "reference_only_interpretation": {
+      "source": "public ST driver naming only; not SP11 parity authority",
+      "0x0200=0x02": "PATCH_SETUP",
+      "0x0200=0x01": "BOOT",
+      "0x002c=0x01": "READY_TO_BOOT",
+      "0x002c=0x02": "SW_STBY",
+      "0x044c=0x02": "manual exposure mode",
+      "gpio_ctrl_1_2_1_1": "GPIO1 uses ST's STROBE selector value 0x02; GPIO0/2/3 use DISABLED selector value 0x01"
+    }
+  },
+  "linux_authorization": {
+    "sensor_data_write_authorized": false,
+    "reason": "E004d is Windows sequence reconstruction only; Linux write experiment requires a separately checkpointed bounded plan."
+  }
+}

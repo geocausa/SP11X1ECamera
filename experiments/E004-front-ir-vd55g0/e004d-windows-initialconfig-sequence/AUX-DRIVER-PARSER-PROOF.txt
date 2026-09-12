@@ -1,0 +1,466 @@
+schema=sp11-camera-e004d-exact-aux-driver-parser-proof-v1
+driver_sha256=e5b6b064f39cf239ab07e22ca2434e3c08c93b691dc7d27cebb90861226efa75
+
+=== command parser / wait handler helper RVA 0x70f8 ===
+
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamauxsensor8380.inf_arm64_7d23cd8fdfa9b39f/surfacecamauxsensor8380.sys:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+1400070f8:     	pacibsp
+1400070fc:     	stp	x19, x20, [sp, #-0x30]!
+140007100:     	stp	x21, x22, [sp, #0x10]
+140007104:     	str	x23, [sp, #0x20]
+140007108:     	stp	x29, x30, [sp, #-0x20]!
+14000710c:     	mov	x29, sp
+140007110:     	mov	x19, x0
+140007114:     	ldrb	w10, [x19, #0x2]
+140007118:     	mov	w0, #0x0                // =0
+14000711c:     	add	x9, x19, #0x3
+140007120:     	cmp	w10, #0x1
+140007124:     	b.ne	0x140007208 <.text+0x6208>
+140007128:     	ldrb	w8, [x19, #0x3]
+14000712c:     	cmp	w8, #0x9
+140007130:     	b.ne	0x140007208 <.text+0x6208>
+140007134:     	ldr	w9, [x19, #0xc]
+140007138:     	adrp	x22, 0x140019000
+14000713c:     	ldrh	w5, [x19, #0x4]
+140007140:     	add	x2, x22, #0x1a0
+140007144:     	ldrh	w3, [x19, #0x8]
+140007148:     	mvn	w8, w9
+14000714c:     	and	w8, w8, #0xffff
+140007150:     	str	w8, [sp, #0x10]
+140007154:     	mov	w8, #0x14               // =20
+140007158:     	strh	w8, [x1]
+14000715c:     	adrp	x8, 0x14000e000 <.text+0xd000>
+140007160:     	add	x1, x8, #0xb78
+140007164:     	adrp	x8, 0x140017000
+140007168:     	add	x0, x8, #0x3a0
+14000716c:     	uxth	w4, w9
+140007170:     	bl	0x1400033e8 <.text+0x23e8>
+140007174:     	ldrb	w9, [x19, #0x1]
+140007178:     	adrp	x8, 0x140019000
+14000717c:     	mov	w21, #0x0               // =0
+140007180:     	strb	w9, [x8, #0x7be]
+140007184:     	ldrb	w9, [x19]
+140007188:     	adrp	x8, 0x140019000
+14000718c:     	strb	w9, [x8, #0x7bb]
+140007190:     	ldrh	w8, [x19, #0x4]
+140007194:     	cbz	w8, 0x1400072a4 <.text+0x62a4>
+140007198:     	adrp	x8, 0x140016000
+14000719c:     	add	x20, x8, #0x1f8
+1400071a0:     	adrp	x23, 0x14000e000 <.text+0xd000>
+1400071a4:     	ldrh	w0, [x19, #0x8]
+1400071a8:     	add	x1, sp, #0x10
+1400071ac:     	bl	0x14000a4f0 <.text+0x94f0>
+1400071b0:     	ldr	w9, [x19, #0xc]
+1400071b4:     	add	x2, x22, #0x1a0
+1400071b8:     	ldr	w8, [sp, #0x10]
+1400071bc:     	cmp	w8, w9
+1400071c0:     	b.eq	0x1400071f4 <.text+0x61f4>
+1400071c4:     	ldrh	w3, [x19, #0x8]
+1400071c8:     	uxth	w4, w8
+1400071cc:     	add	x1, x23, #0xc28
+1400071d0:     	add	x0, x20, #0xe60
+1400071d4:     	bl	0x1400033e8 <.text+0x23e8>
+1400071d8:     	mov	w0, #0x1                // =1
+1400071dc:     	bl	0x140003840 <.text+0x2840>
+1400071e0:     	ldrh	w8, [x19, #0x4]
+1400071e4:     	add	w21, w21, #0x1
+1400071e8:     	cmp	w21, w8
+1400071ec:     	b.lt	0x1400071a4 <.text+0x61a4>
+1400071f0:     	b	0x1400072a4 <.text+0x62a4>
+1400071f4:     	adrp	x8, 0x14000e000 <.text+0xd000>
+1400071f8:     	add	x1, x8, #0xbe8
+1400071fc:     	mov	x0, x20
+140007200:     	bl	0x1400033e8 <.text+0x23e8>
+140007204:     	b	0x1400072a4 <.text+0x62a4>
+140007208:     	cmp	w10, #0x2
+14000720c:     	b.ne	0x14000725c <.text+0x625c>
+140007210:     	ldrb	w8, [x9]
+140007214:     	cmp	w8, #0x9
+140007218:     	b.ne	0x1400072a8 <.text+0x62a8>
+14000721c:     	mov	w8, #0x4                // =4
+140007220:     	ldrh	w3, [x19]
+140007224:     	strh	w8, [x1]
+140007228:     	adrp	x8, 0x140019000
+14000722c:     	add	x2, x8, #0x1a0
+140007230:     	adrp	x8, 0x14000e000 <.text+0xd000>
+140007234:     	add	x1, x8, #0xc88
+140007238:     	adrp	x8, 0x140016000
+14000723c:     	add	x8, x8, #0x1f8
+140007240:     	add	x0, x8, #0x600
+140007244:     	bl	0x1400033e8 <.text+0x23e8>
+140007248:     	ldrh	w0, [x19]
+14000724c:     	adrp	x8, 0x140015000
+140007250:     	ldr	x8, [x8]
+140007254:     	blr	x8
+140007258:     	b	0x1400072a4 <.text+0x62a4>
+14000725c:     	cmp	w10, #0x3
+140007260:     	b.ne	0x1400072a8 <.text+0x62a8>
+140007264:     	ldrb	w8, [x9]
+140007268:     	cmp	w8, #0x9
+14000726c:     	b.ne	0x1400072a8 <.text+0x62a8>
+140007270:     	mov	w8, #0x4                // =4
+140007274:     	ldrh	w3, [x19]
+140007278:     	strh	w8, [x1]
+14000727c:     	adrp	x8, 0x140019000
+140007280:     	add	x2, x8, #0x1a0
+140007284:     	adrp	x8, 0x14000e000 <.text+0xd000>
+140007288:     	add	x1, x8, #0xcd8
+14000728c:     	adrp	x8, 0x140017000
+140007290:     	add	x0, x8, #0xd0
+140007294:     	mov	x4, x19
+140007298:     	bl	0x1400033e8 <.text+0x23e8>
+14000729c:     	ldrh	w0, [x19]
+1400072a0:     	bl	0x140003840 <.text+0x2840>
+1400072a4:     	mov	w0, #0x1                // =1
+1400072a8:     	ldp	x29, x30, [sp], #0x20
+1400072ac:     	ldr	x23, [sp, #0x20]
+1400072b0:     	ldp	x21, x22, [sp, #0x10]
+1400072b4:     	ldp	x19, x20, [sp], #0x30
+1400072b8:     	autibsp
+1400072bc:     	ret
+
+=== millisecond relative-delay helper RVA 0x3840 ===
+
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamauxsensor8380.inf_arm64_7d23cd8fdfa9b39f/surfacecamauxsensor8380.sys:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+140003840:     	pacibsp
+140003844:     	stp	x29, x30, [sp, #-0x20]!
+140003848:     	mov	x29, sp
+14000384c:     	add	x2, sp, #0x10
+140003850:     	mov	w1, #0x0                // =0
+140003854:     	ubfx	x9, x0, #0, #32
+140003858:     	mov	w0, #0x0                // =0
+14000385c:     	mov	x8, #-0x2710            // =-10000
+140003860:     	mul	x8, x9, x8
+140003864:     	str	x8, [sp, #0x10]
+140003868:     	adrp	x8, 0x140015000
+14000386c:     	ldr	x8, [x8, #0xb0]
+140003870:     	blr	x8
+140003874:     	ldp	x29, x30, [sp], #0x20
+140003878:     	autibsp
+14000387c:     	ret
+
+=== SubmitSeqCmd RVA 0x9220 ===
+
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamauxsensor8380.inf_arm64_7d23cd8fdfa9b39f/surfacecamauxsensor8380.sys:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+140009220:     	pacibsp
+140009224:     	stp	x19, x20, [sp, #-0x50]!
+140009228:     	stp	x21, x22, [sp, #0x10]
+14000922c:     	stp	x23, x24, [sp, #0x20]
+140009230:     	stp	x25, x26, [sp, #0x30]
+140009234:     	str	x27, [sp, #0x40]
+140009238:     	stp	x29, x30, [sp, #-0x40]!
+14000923c:     	mov	x29, sp
+140009240:     	mov	x22, x1
+140009244:     	ldr	w21, [x22, #0x8]
+140009248:     	mov	x19, x0
+14000924c:     	ldr	x8, [x22]
+140009250:     	mov	w23, #0x0               // =0
+140009254:     	mov	x24, #0x0               // =0
+140009258:     	cbnz	x8, 0x14000927c <.text+0x827c>
+14000925c:     	adrp	x8, 0x140019000
+140009260:     	add	x2, x8, #0x1a0
+140009264:     	adrp	x8, 0x140010000 <.text+0xf000>
+140009268:     	add	x1, x8, #0xe68
+14000926c:     	adrp	x8, 0x140017000
+140009270:     	add	x0, x8, #0xe8
+140009274:     	bl	0x1400033e8 <.text+0x23e8>
+140009278:     	b	0x140009510 <.text+0x8510>
+14000927c:     	ldr	w0, [x19]
+140009280:     	bl	0x14000ae40 <.text+0x9e40>
+140009284:     	mov	w8, #0x1                // =1
+140009288:     	movi	v16.16b, #0x0
+14000928c:     	adrp	x9, 0x140019000
+140009290:     	strb	w8, [x9, #0x7af]
+140009294:     	adrp	x8, 0x140019000
+140009298:     	add	x20, x8, #0x5f0
+14000929c:     	stp	q16, q16, [x20]
+1400092a0:     	adrp	x26, 0x140019000
+1400092a4:     	strb	wzr, [x26, #0x7be]
+1400092a8:     	stp	q16, q16, [x20, #0x20]
+1400092ac:     	str	s16, [x20, #0x40]
+1400092b0:     	movi	v16.16b, #0x0
+1400092b4:     	adrp	x25, 0x140019000
+1400092b8:     	strb	wzr, [x25, #0x7bb]
+1400092bc:     	stp	q16, q16, [x20, #0xa0]
+1400092c0:     	stp	q16, q16, [x20, #0xc0]
+1400092c4:     	ldr	w10, [x19]
+1400092c8:     	adrp	x8, 0x140035000
+1400092cc:     	ldr	w11, [x19, #0x8]
+1400092d0:     	str	w10, [x8, #0xaf0]
+1400092d4:     	sub	w10, w11, #0x64
+1400092d8:     	cmp	w10, #0xce4
+1400092dc:     	b.hi	0x1400092e8 <.text+0x82e8>
+1400092e0:     	adrp	x10, 0x140019000
+1400092e4:     	str	w11, [x10, #0x21c]
+1400092e8:     	ldrb	w10, [x19, #0x4]
+1400092ec:     	adrp	x27, 0x140019000
+1400092f0:     	strb	w10, [x27, #0x7bd]
+1400092f4:     	cbz	w21, 0x1400094cc <.text+0x84cc>
+1400092f8:     	str	w21, [sp, #0x18]
+1400092fc:     	str	x19, [sp, #0x30]
+140009300:     	ldr	x8, [x22]
+140009304:     	add	x1, sp, #0x10
+140009308:     	strh	wzr, [sp, #0x10]
+14000930c:     	add	x20, x8, w23, uxtw
+140009310:     	mov	x0, x20
+140009314:     	bl	0x1400070f8 <.text+0x60f8>
+140009318:     	uxtb	w8, w0
+14000931c:     	cbnz	w8, 0x140009494 <.text+0x8494>
+140009320:     	cbz	x24, 0x140009330 <.text+0x8330>
+140009324:     	mov	x1, x24
+140009328:     	mov	w0, #0x59               // =89
+14000932c:     	bl	0x140003af8 <.text+0x2af8>
+140009330:     	ldrh	w8, [x20]
+140009334:     	mov	w0, #0x59               // =89
+140009338:     	lsl	w1, w8, #3
+14000933c:     	add	w8, w1, #0x8
+140009340:     	uxth	w19, w8
+140009344:     	strh	w19, [sp, #0x10]
+140009348:     	bl	0x140003a80 <.text+0x2a80>
+14000934c:     	ldrb	w10, [x20, #0x5]
+140009350:     	adrp	x8, 0x140019000
+140009354:     	strb	w10, [x8, #0x7be]
+140009358:     	ldrb	w9, [x20, #0x4]
+14000935c:     	adrp	x8, 0x140019000
+140009360:     	strb	w9, [x8, #0x7bb]
+140009364:     	ldrh	w25, [x20]
+140009368:     	mov	x24, x0
+14000936c:     	cbz	x24, 0x140009498 <.text+0x8498>
+140009370:     	mov	w21, #0x0               // =0
+140009374:     	cbz	w25, 0x1400093e8 <.text+0x83e8>
+140009378:     	strh	w25, [sp, #0x14]
+14000937c:     	adrp	x25, 0x140019000
+140009380:     	str	x22, [sp, #0x20]
+140009384:     	adrp	x26, 0x140010000 <.text+0xf000>
+140009388:     	adrp	x27, 0x140015000
+14000938c:     	add	x22, x20, w21, sxtw #3
+140009390:     	mov	w3, w21
+140009394:     	add	x2, x25, #0x1a0
+140009398:     	ldp	w4, w5, [x22, #0x8]
+14000939c:     	add	x1, x26, #0xec0
+1400093a0:     	add	x0, x27, #0xf28
+1400093a4:     	bl	0x1400033e8 <.text+0x23e8>
+1400093a8:     	ldrh	w8, [x22, #0x8]
+1400093ac:     	add	x9, x24, w21, sxtw #3
+1400093b0:     	add	w21, w21, #0x1
+1400093b4:     	strh	w8, [x9]
+1400093b8:     	ldrh	w8, [x22, #0xc]
+1400093bc:     	str	wzr, [x9, #0x4]
+1400093c0:     	strh	w8, [x9, #0x2]
+1400093c4:     	ldrh	w8, [x20]
+1400093c8:     	cmp	w21, w8
+1400093cc:     	b.lt	0x14000938c <.text+0x838c>
+1400093d0:     	adrp	x8, 0x140019000
+1400093d4:     	ldrb	w10, [x8, #0x7be]
+1400093d8:     	adrp	x8, 0x140019000
+1400093dc:     	ldrb	w9, [x8, #0x7bb]
+1400093e0:     	ldr	x22, [sp, #0x20]
+1400093e4:     	ldrh	w25, [sp, #0x14]
+1400093e8:     	mov	w20, #0x0               // =0
+1400093ec:     	cbz	w9, 0x140009498 <.text+0x8498>
+1400093f0:     	cbz	w10, 0x140009498 <.text+0x8498>
+1400093f4:     	bl	0x1400031b0 <.text+0x21b0>
+1400093f8:     	cmp	w0, #0xc
+1400093fc:     	b.ne	0x140009534 <.text+0x8534>
+140009400:     	mov	w19, #0x0               // =0
+140009404:     	mov	x27, #-0xa              // =-10
+140009408:     	adrp	x21, 0x140015000
+14000940c:     	adrp	x20, 0x140015000
+140009410:     	cmp	w19, w25
+140009414:     	b.hs	0x140009494 <.text+0x8494>
+140009418:     	mov	x19, x19
+14000941c:     	add	x26, x24, x19, lsl #3
+140009420:     	ldrh	w1, [x26, #0x2]
+140009424:     	ldrh	w0, [x26]
+140009428:     	bl	0x14000a350 <.text+0x9350>
+14000942c:     	uxtb	w9, w0
+140009430:     	cmp	w9, #0x1
+140009434:     	b.ne	0x140009488 <.text+0x8488>
+140009438:     	ldr	w0, [x26, #0x4]
+14000943c:     	cbz	w0, 0x140009488 <.text+0x8488>
+140009440:     	cmp	w0, #0x32
+140009444:     	b.ls	0x140009470 <.text+0x8470>
+140009448:     	mul	x8, x0, x27
+14000944c:     	add	x2, sp, #0x28
+140009450:     	mov	w1, #0x0                // =0
+140009454:     	mov	w0, #0x0                // =0
+140009458:     	str	x8, [sp, #0x28]
+14000945c:     	ldr	x8, [x21, #0xb0]
+140009460:     	blr	x8
+140009464:     	add	w8, w19, #0x1
+140009468:     	uxth	w19, w8
+14000946c:     	b	0x140009410 <.text+0x8410>
+140009470:     	cmp	w0, #0x32
+140009474:     	csel	w0, w0, wzr, ls
+140009478:     	csdb
+14000947c:     	ldr	x8, [x20]
+140009480:     	blr	x8
+140009484:     	b	0x140009464 <.text+0x8464>
+140009488:     	add	w8, w19, #0x1
+14000948c:     	uxth	w19, w8
+140009490:     	cbnz	w9, 0x140009410 <.text+0x8410>
+140009494:     	ldrh	w19, [sp, #0x10]
+140009498:     	ldr	w8, [sp, #0x18]
+14000949c:     	add	w23, w19, w23
+1400094a0:     	cmp	w19, #0x0
+1400094a4:     	ccmp	w23, w8, #0xe, ne
+1400094a8:     	b.lo	0x140009300 <.text+0x8300>
+1400094ac:     	adrp	x20, 0x140019000
+1400094b0:     	add	x20, x20, #0x5f0
+1400094b4:     	ldr	x19, [sp, #0x30]
+1400094b8:     	adrp	x26, 0x140019000
+1400094bc:     	adrp	x25, 0x140019000
+1400094c0:     	adrp	x9, 0x140019000
+1400094c4:     	adrp	x8, 0x140035000
+1400094c8:     	adrp	x27, 0x140019000
+1400094cc:     	movi	v16.16b, #0x0
+1400094d0:     	strb	wzr, [x27, #0x7bd]
+1400094d4:     	strb	wzr, [x26, #0x7be]
+1400094d8:     	strb	wzr, [x25, #0x7bb]
+1400094dc:     	stp	q16, q16, [x20]
+1400094e0:     	stp	q16, q16, [x20, #0x20]
+1400094e4:     	str	s16, [x20, #0x40]
+1400094e8:     	movi	v16.16b, #0x0
+1400094ec:     	str	wzr, [x8, #0xaf0]
+1400094f0:     	strb	wzr, [x9, #0x7af]
+1400094f4:     	stp	q16, q16, [x20, #0xa0]
+1400094f8:     	stp	q16, q16, [x20, #0xc0]
+1400094fc:     	ldr	w0, [x19]
+140009500:     	bl	0x14000aea8 <.text+0x9ea8>
+140009504:     	mov	x1, x24
+140009508:     	mov	w0, #0x59               // =89
+14000950c:     	bl	0x140003af8 <.text+0x2af8>
+140009510:     	mov	w0, #0x0                // =0
+140009514:     	ldp	x29, x30, [sp], #0x40
+140009518:     	ldr	x27, [sp, #0x40]
+14000951c:     	ldp	x25, x26, [sp, #0x30]
+140009520:     	ldp	x23, x24, [sp, #0x20]
+140009524:     	ldp	x21, x22, [sp, #0x10]
+140009528:     	ldp	x19, x20, [sp], #0x50
+14000952c:     	autibsp
+
+=== register write helper RVA 0xa350 ===
+
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamauxsensor8380.inf_arm64_7d23cd8fdfa9b39f/surfacecamauxsensor8380.sys:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+14000a350:     	pacibsp
+14000a354:     	stp	x29, x30, [sp, #-0x10]!
+14000a358:     	mov	x29, sp
+14000a35c:     	adrp	x9, 0x140019000
+14000a360:     	ldrb	w9, [x9, #0x7af]
+14000a364:     	mov	w8, w0
+14000a368:     	uxth	w11, w1
+14000a36c:     	cbz	w9, 0x14000a4d8 <.text+0x94d8>
+14000a370:     	adrp	x9, 0x140019000
+14000a374:     	ldrb	w10, [x9, #0x7be]
+14000a378:     	adrp	x9, 0x140019000
+14000a37c:     	ldrb	w9, [x9, #0x7bb]
+14000a380:     	cmp	w10, #0x2
+14000a384:     	b.ne	0x14000a400 <.text+0x9400>
+14000a388:     	cmp	w9, #0x2
+14000a38c:     	b.ne	0x14000a454 <.text+0x9454>
+14000a390:     	adrp	x9, 0x140019000
+14000a394:     	add	x10, x9, #0x538
+14000a398:     	adrp	x9, 0x140019000
+14000a39c:     	add	x0, x9, #0x640
+14000a3a0:     	adrp	x9, 0x140019000
+14000a3a4:     	ldrb	w9, [x9, #0x7bd]
+14000a3a8:     	str	wzr, [x0]
+14000a3ac:     	rev16	w11, w11
+14000a3b0:     	strh	w11, [x10, #0xb0]
+14000a3b4:     	strb	w9, [x0, #0x8]
+14000a3b8:     	mov	w9, #0x2                // =2
+14000a3bc:     	str	w9, [x0, #0xc]
+14000a3c0:     	strh	w8, [x0, #0x28]
+14000a3c4:     	add	x8, x10, #0xb0
+14000a3c8:     	str	x8, [x0, #0x18]
+14000a3cc:     	ldr	w8, 0x14000a4e8 <.text+0x94e8>
+14000a3d0:     	stur	w8, [x0, #0x2a]
+14000a3d4:     	adrp	x8, 0x140035000
+14000a3d8:     	ldr	w8, [x8, #0xaf0]
+14000a3dc:     	str	w8, [x0, #0x3c]
+14000a3e0:     	adrp	x8, 0x140019000
+14000a3e4:     	ldr	w8, [x8, #0x21c]
+14000a3e8:     	str	w8, [x0, #0x4]
+14000a3ec:     	bl	0x14000af08 <.text+0x9f08>
+14000a3f0:     	uxtb	w8, w0
+14000a3f4:     	cmp	w8, #0x0
+14000a3f8:     	cset	w0, ne
+14000a3fc:     	b	0x14000a4dc <.text+0x94dc>
+14000a400:     	cmp	w10, #0x1
+14000a404:     	b.ne	0x14000a44c <.text+0x944c>
+14000a408:     	cmp	w9, #0x1
+14000a40c:     	b.ne	0x14000a494 <.text+0x9494>
+14000a410:     	adrp	x9, 0x140019000
+14000a414:     	add	x10, x9, #0x51c
+14000a418:     	adrp	x9, 0x140019000
+14000a41c:     	add	x0, x9, #0x640
+14000a420:     	adrp	x9, 0x140019000
+14000a424:     	ldrb	w9, [x9, #0x7bd]
+14000a428:     	str	wzr, [x0]
+14000a42c:     	strb	w9, [x0, #0x8]
+14000a430:     	mov	w9, #0x4                // =4
+14000a434:     	str	w9, [x0, #0xc]
+14000a438:     	strb	w8, [x0, #0x28]
+14000a43c:     	strb	w11, [x10]
+14000a440:     	mov	w8, #0x10001            // =65537
+14000a444:     	str	x10, [x0, #0x18]
+14000a448:     	b	0x14000a3d0 <.text+0x93d0>
+14000a44c:     	cmp	w10, #0x2
+14000a450:     	b.ne	0x14000a48c <.text+0x948c>
+14000a454:     	cmp	w9, #0x1
+14000a458:     	b.ne	0x14000a4d8 <.text+0x94d8>
+14000a45c:     	adrp	x9, 0x140019000
+14000a460:     	add	x10, x9, #0x7ae
+14000a464:     	adrp	x9, 0x140019000
+14000a468:     	add	x0, x9, #0x640
+14000a46c:     	adrp	x9, 0x140019000
+14000a470:     	ldrb	w9, [x9, #0x7bd]
+14000a474:     	str	wzr, [x0]
+14000a478:     	strb	w9, [x0, #0x8]
+14000a47c:     	mov	w9, #0x2                // =2
+14000a480:     	str	w9, [x0, #0xc]
+14000a484:     	strh	w8, [x0, #0x28]
+14000a488:     	b	0x14000a43c <.text+0x943c>
+14000a48c:     	cmp	w10, #0x1
+14000a490:     	b.ne	0x14000a4d8 <.text+0x94d8>
+14000a494:     	cmp	w9, #0x2
+14000a498:     	b.ne	0x14000a4d8 <.text+0x94d8>
+14000a49c:     	adrp	x9, 0x140019000
+14000a4a0:     	add	x10, x9, #0x538
+14000a4a4:     	adrp	x9, 0x140019000
+14000a4a8:     	add	x0, x9, #0x640
+14000a4ac:     	adrp	x9, 0x140019000
+14000a4b0:     	ldrb	w9, [x9, #0x7bd]
+14000a4b4:     	str	wzr, [x0]
+14000a4b8:     	rev16	w11, w11
+14000a4bc:     	strh	w11, [x10]
+14000a4c0:     	strb	w9, [x0, #0x8]
+14000a4c4:     	mov	w9, #0x4                // =4
+14000a4c8:     	str	w9, [x0, #0xc]
+14000a4cc:     	strb	w8, [x0, #0x28]
+14000a4d0:     	str	x10, [x0, #0x18]
+14000a4d4:     	b	0x14000a3cc <.text+0x93cc>
+14000a4d8:     	mov	w0, #0x0                // =0
+14000a4dc:     	ldp	x29, x30, [sp], #0x10
+14000a4e0:     	autibsp
+14000a4e4:     	ret
+
+=== exact import proof ===
+  Symbol: KeDelayExecutionThread (1171)
+  Symbol: KeWaitForSingleObject (1402)

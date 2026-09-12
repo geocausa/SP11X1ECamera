@@ -1,0 +1,64 @@
+{
+  "actual_linux_proven_sensor_revision": "0x1111 CUT1",
+  "authority": "same-machine Windows exact Surface package + exact live first-start InitialConfig packet + exact installed aux driver",
+  "aux_driver_sha256": "e5b6b064f39cf239ab07e22ca2434e3c08c93b691dc7d27cebb90861226efa75",
+  "linux_sensor_data_write_authorized": false,
+  "live_packet_sha256": "81e96e0470cbfa58065eba12ea1a998349b306111f2edee296d7044a69146cdd",
+  "next_gate": "Design and checkpoint a bounded Linux Surface-patch/setup/boot experiment that preserves this exact Windows ordering and polls, while still prohibiting streaming and external illumination.",
+  "package_rows_replayed_exactly": 601,
+  "packet_bytes": 4880,
+  "packet_commands": 7,
+  "polls": [
+    {
+      "expected": "0x01",
+      "reg": "0x002c",
+      "timeout_ms": 6
+    },
+    {
+      "expected": "0x00",
+      "reg": "0x0200",
+      "timeout_ms": 28
+    },
+    {
+      "expected": "0x00",
+      "reg": "0x0200",
+      "timeout_ms": 6
+    },
+    {
+      "expected": "0x02",
+      "reg": "0x002c",
+      "timeout_ms": 4
+    }
+  ],
+  "post_boot_windows_config": {
+    "ext_clock_hz": 19200000,
+    "frame_length": 1955,
+    "gpio_ctrl_raw": [
+      1,
+      2,
+      1,
+      1
+    ],
+    "line_length": 1200,
+    "mipi_data_rate_bps": 840000000
+  },
+  "reference_only_interpretation": {
+    "0x002c=1": "READY_TO_BOOT",
+    "0x002c=2": "SW_STBY",
+    "0x0200=1": "BOOT",
+    "0x0200=2": "PATCH_SETUP",
+    "gpio_ctrl_1_2_1_1": "ST naming maps GPIO1 value 2 to STROBE and values 1 to DISABLED"
+  },
+  "schema": "sp11-camera-e004d-windows-initialconfig-authority-v1",
+  "status": "PASS_OFFLINE_WINDOWS_INITIALCONFIG_SEQUENCE_RECONSTRUCTED",
+  "surface_package_sha256": "e574db7eb28231d3fa4f5eee5c1861919125d8ec7a753fc7a0708606e1f1a794",
+  "surface_patch": {
+    "bytes": 552,
+    "sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321"
+  },
+  "write_blocks": [
+    553,
+    1,
+    43
+  ]
+}
