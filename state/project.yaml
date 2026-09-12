@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hw-production-activation-pass-golden-retired
-phase: front-imx681-production-one-stream-acceptance-policy
-status: golden-hw-activation-pass-retired-native-feedback-environment-blocked
+state_id: E003i-hx-production-one-stream-policy-pass
+phase: front-imx681-production-one-stream-candidate-prep
+status: golden-hx-offline-one-stream-policy-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hw-production-activation-pass
+current_gate: E003i-hx-production-one-stream-policy-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HX-production-one-stream-acceptance-policy
+next_experiment: E003i-HY-production-one-stream-candidate-prep
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HW PASS live activation smoke: one fresh current-Golden/HV candidate boot, runtime preflight PASS, exactly one activation invocation, exact HN qcom-camss + imx681 modules loaded, production discovery resolved imx681 1-0010 -> msm_csiphy2 -> msm_csid1 -> msm_vfe1_pix -> msm_vfe1_video3 at /dev/media0 and /dev/video7, zero stream execution, kernel health PASS, no same-boot/activation retry, Golden return PASS, candidate retired. Candidate boot 2e35316b-ff57-489e-b7b0-d0ef661b530b; Golden return 6f2ce528-10bf-4eba-a0f6-68e9d8b7d556; archive manifest c8c30d6269ab89c90d68ac98687f783a9845ca1982734c9d2e75868741bf67fd. Next HX offline one-stream acceptance policy; do not create live stream candidate until policy checkpointed. Native-feedback proof remains parked.
+  HX PASS offline: future first production stream is exactly one 27-frame attempt using HW current-Golden activation authority and current package. Fresh output directory, snapshot generation 1, producer G1..G24, 23 R5..R27 submissions, exactly startup writes G1..G3, post-G3 shadow and zero later native writes, four sensor-control hardware transactions including bootstrap, exact QC10C/TLBG/STATS3A sizes, STREAMOFF and kernel health PASS are required. No same-stream/same-boot retry; Golden return and candidate retirement mandatory. HX performs no runtime and authorizes no stream. Next HY prepares a fresh one-shot candidate and checkpoints before install/arm. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3829,3 +3829,30 @@ e003i_hw_current:
   golden_return: PASS
   kernel_health: PASS
   archive_manifest_sha256: c8c30d6269ab89c90d68ac98687f783a9845ca1982734c9d2e75868741bf67fd
+
+
+e003i_hx_current:
+  status: pass-offline-production-one-stream-acceptance-policy
+  parent: HW-production-activation-pass-plus-HQ-four-stream-shadow-pass
+  camera_runtime_performed: false
+  stream_authorized_by_this_stage: false
+  future_candidate_stream_count: 1
+  frames: 27
+  frame_bytes: 7782400
+  tlbg_bytes: 61472
+  stats3a_bytes: 331840
+  fresh_snapshot_generation: 1
+  producer_generations: 24
+  producer_requests: 23
+  post_g3_policy: shadow
+  startup_native_writes: 3
+  post_g3_native_writes: 0
+  hardware_control_transactions_including_bootstrap: 4
+  fresh_output_directory_required: true
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  golden_return_required: true
+  candidate_retirement_required: true
+  production_package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
+  hv_dtb_sha256: 34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7
+  next_gate: HY-production-one-stream-candidate-prep
