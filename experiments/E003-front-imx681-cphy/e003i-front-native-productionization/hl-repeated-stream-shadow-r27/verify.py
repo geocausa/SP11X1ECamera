@@ -23,6 +23,30 @@ for forbidden in ('sp11-camera-e003i-hk-repeat-shadow-r27-one-shot','sp11_camera
 launcher=(REPO/'src/front-imx681/bin/front-imx681-launcher.py').read_text();need("default='shadow'" in launcher,'launcher default shadow')
 need('cap-release-one-shot' in launcher and '--allow-one-native-write' in launcher,'one-shot gate')
 need(not (D/'runtime-output').exists(),'runtime output exists before arm')
-result={'schema':'sp11-e003i-hl-repeated-stream-shadow-r27-prep-v1','status':'PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27','parent':'HJ package/install staging','predecessor':'HK consumed prestream harness failure; never reuse','candidate_id':'sp11-camera-e003i-hl-repeat-shadow-r27-one-shot','candidate_marker':'sp11_camera_e003i_hl_repeat_shadow_r27=1','streams_authorized_per_candidate':2,'frames_per_stream':27,'post_g3_policy':'shadow','post_g3_native_writes_authorized':0,'same_stream_retry_authorized':False,'production_artifacts':hj['build']['hashes'],'package_manifest_sha256':hj['package']['manifest_sha256'],'harness_repair':'stream number assigned before dependent expansions under set -u','harness_shellcheck':'PASS','harness_selftest':'PASS_STREAM1_STREAM2_MARKERS_DISPATCH_NO_CAMERA','harness_repeat_marker_rc':91,'camera_runtime_performed':False,'candidate_installed':False,'candidate_armed':False,'golden_return_required':True,'next_gate':'commit/push exact prep, install candidate unarmed, checkpoint installed state, then one-shot arm/reboot and exactly two sequential shadow streams'}
-(D/'RESULT.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
-print('HL_PREP_VERIFY=PASS POLICY=shadow STREAMS=2 INSTALLED=NO ARMED=NO RUNTIME=NO')
+result=json.loads((D/'RESULT.json').read_text())
+static_expected={
+ 'schema':'sp11-e003i-hl-repeated-stream-shadow-r27-prep-v1',
+ 'parent':'HJ package/install staging',
+ 'predecessor':'HK consumed prestream harness failure; never reuse',
+ 'candidate_id':'sp11-camera-e003i-hl-repeat-shadow-r27-one-shot',
+ 'candidate_marker':'sp11_camera_e003i_hl_repeat_shadow_r27=1',
+ 'streams_authorized_per_candidate':2,
+ 'frames_per_stream':27,
+ 'post_g3_policy':'shadow',
+ 'post_g3_native_writes_authorized':0,
+ 'same_stream_retry_authorized':False,
+ 'production_artifacts':hj['build']['hashes'],
+ 'package_manifest_sha256':hj['package']['manifest_sha256'],
+ 'harness_repair':'stream number assigned before dependent expansions under set -u',
+ 'harness_repeat_marker_rc':91,
+ 'harness_selftest':'PASS_STREAM1_STREAM2_MARKERS_DISPATCH_NO_CAMERA',
+ 'harness_shellcheck':'PASS',
+ 'camera_runtime_performed':False,
+ 'candidate_armed':False,
+ 'golden_return_required':True,
+}
+for k,v in static_expected.items(): need(result.get(k)==v,'RESULT '+k)
+need(result.get('status') in ('PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27','INSTALLED_UNARMED_REPEAT_SHADOW_R27'),'RESULT status')
+if result['status']=='PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27': need(result.get('candidate_installed') is False,'prep installed flag')
+if result['status']=='INSTALLED_UNARMED_REPEAT_SHADOW_R27': need(result.get('candidate_installed') is True,'installed flag')
+print('HL_STATIC_VERIFY=PASS POLICY=shadow STREAMS=2 INSTALLED=%s ARMED=NO RUNTIME=NO' % ('YES' if result.get('candidate_installed') else 'NO'))

@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hl-repeat-shadow-prepared-not-installed
-phase: front-imx681-repeated-stream-shadow-candidate-prearm
-status: golden-hl-prepared-not-installed-native-feedback-environment-blocked
+state_id: E003i-hl-repeat-shadow-installed-unarmed
+phase: front-imx681-repeated-stream-shadow-installed-unarmed
+status: golden-hl-installed-unarmed-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hl-repeat-shadow-prepared-not-installed
+current_gate: E003i-hl-repeat-shadow-installed-unarmed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HL-install-unarmed-checkpoint
+next_experiment: E003i-HL-one-shot-two-stream-shadow-runtime
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HL fresh repeated-stream shadow candidate is PREPARED but NOT INSTALLED. It uses the HJ production package, a fresh identity, exactly two sequential 27-frame streams, post-G3 shadow with zero later native writes, and no same-stream retry. The HK nounset bug is fixed by assigning the stream number before dependent expansions; ShellCheck and an exact run_one two-stream marker/dispatch self-test pass without camera access. Commit/push this prep, install HL unarmed, checkpoint installed state, then fresh-reconcile before one-shot arm. Native-feedback proof remains parked.
+  HL corrected repeated-stream shadow candidate is INSTALLED but UNARMED. Fresh GRUB/boot identity, Golden-derived boot artifacts, HJ package hashes, ShellCheck and exact run_one harness self-test are verified; Golden remains current, saved_entry is Golden and next_entry is empty. Exactly two sequential 27-frame streams are authorized after one one-shot boot, with post-G3 shadow, zero later native writes and no same-stream retry. Checkpoint/push this state, then fresh-reconcile and arm once. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3538,11 +3538,11 @@ e003i_hk_current:
 
 
 e003i_hl_current:
-  status: prepared-not-installed-repeat-shadow-r27
+  status: installed-unarmed-repeat-shadow-r27
   predecessor: HK-prestream-harness-failure-retired
   candidate_id: sp11-camera-e003i-hl-repeat-shadow-r27-one-shot
   candidate_marker: sp11_camera_e003i_hl_repeat_shadow_r27=1
-  candidate_installed: false
+  candidate_installed: true
   candidate_armed: false
   streams_authorized: 2
   frames_per_stream: 27
@@ -3559,4 +3559,4 @@ e003i_hl_current:
   camera_runtime_performed: false
   repeated_stream_live_robustness_proven: false
   post_g3_native_feedback_proven: false
-  next_gate: HL-install-unarmed-checkpoint
+  next_gate: HL-one-shot-two-stream-shadow-runtime

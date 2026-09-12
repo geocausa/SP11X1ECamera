@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK remains consumed/retired after its pre-stream shell failure. **HL is prepared offline as the fresh successor** with new GRUB/cmdline identity, identical HJ production artifact hashes, two sequential R27 streams, explicit post-G3 `shadow`, zero later physical writes authorized and no same-stream retry. The harness repair is regression-tested through the exact `run_one` path for both streams with no camera access, and ShellCheck passes.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK remains consumed/retired. **HL is installed but unarmed** under its fresh GRUB/cmdline identity. Its HJ production artifact hashes, corrected harness, package manifest, Golden kernel/initrd and accepted front-only DTB are all pinned; Golden remains current with empty `next_entry`, camera modules absent and no HL runtime evidence.
 
-**HL is not installed or armed yet.** Next commit/push this exact prep, install it unarmed, checkpoint installed state, then fresh-reconcile before the one-shot boot. Never reuse HK. The brighter-scene native-feedback gate stays parked.
+Next checkpoint/push this installed-unarmed state, then arm once only after another full Golden/origin/package prearm reconciliation. Exactly two shadow streams are authorized; no same-stream retry. The brighter-scene native-feedback gate stays parked.
 
 ---
 
