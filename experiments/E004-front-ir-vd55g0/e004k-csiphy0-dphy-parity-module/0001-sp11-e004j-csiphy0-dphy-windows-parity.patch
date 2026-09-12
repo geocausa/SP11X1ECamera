@@ -1,0 +1,79 @@
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -15,6 +15,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/media-bus-format.h>
++#include <linux/module.h>
+ 
+ #define CSIPHY_3PH_LNn_CFG1(n)			(0x000 + 0x100 * (n))
+ #define CSIPHY_3PH_LNn_CFG1_SWI_REC_DLY_PRG	(BIT(7) | BIT(6))
+@@ -59,6 +60,20 @@
+ #define CSIPHY_3PH_REGS			6
+ #define CSIPHY_SKEW_CAL			7
+ 
++/*
++ * Disposable E004j same-machine Windows IR receiver parity gate.
++ * False by default; only X1E80100 CSIPHY0 D-PHY consults it.
++ */
++static bool csiphy_x1e_ir_dphy_windows_parity;
++module_param_named(e004j_ir_dphy_windows_parity,
++		   csiphy_x1e_ir_dphy_windows_parity, bool, 0400);
++MODULE_PARM_DESC(e004j_ir_dphy_windows_parity,
++		 "Arm SP11 E004j CSIPHY0 D-PHY same-machine Windows receiver parity");
++
++static const u8 x1e_ir_dphy_windows_common_ctrl11_21[] = {
++	0xff, 0xfe, 0xe6, 0xdf, 0xdf, 0xfc, 0xfb, 0x9b, 0x7f, 0xbf, 0xff,
++};
++
+ struct csiphy_lane_regs {
+ 	s32 reg_addr;
+ 	s32 reg_data;
+@@ -1172,6 +1187,10 @@
+ 	struct csiphy_device_regs *regs = csiphy->regs;
+ 	const bool x1e_cphy = csiphy->camss->res->version == CAMSS_X1E80100 &&
+ 			      c->phy_cfg == V4L2_MBUS_CSI2_CPHY;
++	const bool x1e_ir_dphy = csiphy_x1e_ir_dphy_windows_parity &&
++				 csiphy->camss->res->version == CAMSS_X1E80100 &&
++				 csiphy->id == 0 &&
++				 c->phy_cfg == V4L2_MBUS_CSI2_DPHY;
+ 	u8 settle_cnt;
+ 	u8 val;
+ 	int i;
+@@ -1187,6 +1206,8 @@
+ 	}
+ 
+ 	settle_cnt = csiphy_settle_cnt_calc(link_freq, csiphy->timer_clk_rate);
++	if (x1e_ir_dphy)
++		settle_cnt = 0x10;
+ 
+ 	val = csiphy_get_lane_mask(c);
+ 	writel_relaxed(val, csiphy->base +
+@@ -1216,8 +1237,26 @@
+ 	 * The X1E80100 C-PHY Windows table includes the final values for
+ 	 * common CTRL11..CTRL21 (0x102c..0x1054). Do not clobber those
+ 	 * exact receiver values with the generic interrupt-mask zeroing.
++	 *
++	 * E004j found the same requirement for the SP11 front-IR D-PHY path.
++	 * The X1E D-PHY table also hard-codes CTRL5=0xd5 after the dynamic
++	 * lane-mask write. Restore the exact dynamic one-lane mask and the
++	 * live Windows common-control state only under the disposable gate.
+ 	 */
+-	if (!x1e_cphy) {
++	if (x1e_ir_dphy) {
++		writel_relaxed(lane_mask, csiphy->base +
++			       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 5));
++
++		for (i = 0; i < ARRAY_SIZE(x1e_ir_dphy_windows_common_ctrl11_21); i++)
++			writel_relaxed(x1e_ir_dphy_windows_common_ctrl11_21[i],
++				       csiphy->base +
++				       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 11 + i));
++
++		dev_info(csiphy->camss->dev,
++			 "E004J_CSIPHY0_DPHY_WINDOWS_PARITY link_freq=%lld timer=%u lane_mask=0x%02x settle=0x%02x ctrl11_21=ff,fe,e6,df,df,fc,fb,9b,7f,bf,ff\n",
++			 (long long)link_freq, csiphy->timer_clk_rate,
++			 lane_mask, settle_cnt);
++	} else if (!x1e_cphy) {
+ 		/* IRQ_MASK registers - disable all interrupts */
+ 		for (i = 11; i < 22; i++) {
+ 			writel_relaxed(0, csiphy->base +
