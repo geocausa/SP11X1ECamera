@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** repeat-session generation root cause and package fix PASS offline. **HO prepared-not-installed:** fresh two-stream shadow-only R27 one-shot candidate using HN CAMSS/package hashes; corrected harness and archive ownership self-checks pass; zero post-G3 native writes; no retry; no runtime.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** repeat-session generation root cause and package fix PASS offline. **HO installed-unarmed:** fresh two-stream shadow-only R27 one-shot candidate using HN CAMSS/package hashes; corrected harness and archive ownership self-checks pass; zero post-G3 native writes; no retry; no runtime.
 
-**Next action:** commit/push HO prep, prearm on the clean tree, install unarmed and checkpoint before any one-shot runtime. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** checkpoint/push installed-unarmed HO, then fresh-reconcile before the one-shot runtime. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
