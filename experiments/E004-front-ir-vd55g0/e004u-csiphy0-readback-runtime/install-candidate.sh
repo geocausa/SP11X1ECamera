@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
+D=$R/experiments/E004-front-ir-vd55g0/e004u-csiphy0-readback-runtime
+O=$R/experiments/E004-front-ir-vd55g0/e004o-ir-only-graph-authority
+BOOT=/boot/sp11-7.1.5-camera-e004u-csiphy0-readback
+ENTRY=/etc/grub.d/99zzzzzz_sp11_camera_e004u_csiphy0_readback
+"$D/prearm-check.sh"
+sudo -n mkdir -p "$BOOT"
+sudo -n cp /boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+ "$BOOT/vmlinuz-7.1.5-sp11-render-parity-v4+"
+sudo -n cp /boot/sp11-7.1.5-audio-fullio-v19c/initrd.img-7.1.5-sp11-fullio-v19c "$BOOT/initrd.img-7.1.5-sp11-camera-e004u-csiphy0-readback"
+sudo -n cp "$O/x1e80100-microsoft-denali-sp11-e004o-ir-only.dtb" "$BOOT/x1e80100-microsoft-denali-sp11-e004o-ir-only.dtb"
+sudo -n install -m 0755 "$D/99zzzzzz_sp11_camera_e004u_csiphy0_readback" "$ENTRY"
+sudo -n update-grub >/dev/null
+"$D/verify-installed.sh"
+{
+ echo 'schema=sp11-camera-e004u-install-v1'; echo 'status=INSTALLED_UNARMED'; echo "time=$(date -Ins)"
+ echo "head=$(git -C "$R" rev-parse HEAD)"
+ sudo -n sha256sum "$ENTRY" "$BOOT/vmlinuz-7.1.5-sp11-render-parity-v4+" "$BOOT/initrd.img-7.1.5-sp11-camera-e004u-csiphy0-readback" "$BOOT/x1e80100-microsoft-denali-sp11-e004o-ir-only.dtb"
+ sha256sum "$D/build/sp11-vd55g0.ko" "$D/build/e004t_csiphy_readback_test.ko"
+} > "$D/INSTALL.txt"
+echo 'E004U_INSTALL=PASS ARMED=NO'
