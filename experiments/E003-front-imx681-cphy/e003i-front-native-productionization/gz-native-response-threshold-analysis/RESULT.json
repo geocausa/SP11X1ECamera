@@ -1,0 +1,64 @@
+{
+  "archive_manifest_sha256": {
+    "GS": "dd6fdefdbdb1b17163213007f7922e3035c44db2e4b7ad842b0e1344db6651c3",
+    "GV": "4987dab15cbabc255125515e76ccaa66a74f09bf981db4d095c35d7d248cf20e",
+    "GY": "3f92e0864ab8d0b50cccdaab18ca33306047012cb775b8cb9d7d885ce3b1dda8"
+  },
+  "effect_observation": {
+    "gs_g7_frame_luma": 0.4702779948711395,
+    "gv_g7_frame_luma": 0.5157814621925354,
+    "gy_g7_frame_luma": 0.5156921148300171,
+    "gy_g7_vs_local_g6_g8_midpoint_percent": 1.0572144678781425,
+    "gy_vs_gs_g7_percent": 9.656866886004622,
+    "gy_vs_gv_g7_percent": -0.01732271690000342,
+    "minimum_baseline_cv_percent": 1.2306466099555269,
+    "minimum_cv_to_sentinel_step_ratio": 18.102811632443323,
+    "reason": "0.06798% sentinel is far below ordinary frame-luma variability and cross-run pre-effect trajectories differ",
+    "single_run_signal_resolved": false,
+    "steady_luma_cv_percent_g8_g23": {
+      "GS": 1.2306466099555269,
+      "GV": 2.690550423996206,
+      "GY": 3.5092615995498004
+    }
+  },
+  "native_control_censoring": {
+    "cap_active_generations": "G3..G27",
+    "g7_unconstrained_short": 51512344222,
+    "g7_unconstrained_to_cap_ratio": 8.398752111276172,
+    "gy_luma_peak_to_peak_percent_g7_g23": 21.059026762369747,
+    "interpretation": "output is hard-censored by the Windows-derived preview cap, not demonstrably held by a small deadband/quantizer",
+    "maximum_unconstrained_to_cap_ratio_g3_g27": 8.406349672721378,
+    "minimum_unconstrained_to_cap_ratio_g3_g27": 1.1852313231157747,
+    "native_sensor_tuple_g3_g27": {
+      "analogue_gain_code": 960,
+      "digital_gain_code": 1471,
+      "exposure": 7108,
+      "fll": 7116
+    },
+    "preview_cap_max": 6133333088,
+    "unconstrained_convergence_above_cap_generations": "G3..G27"
+  },
+  "native_replay": {
+    "binary_sha256": "6547ab7174f978bff56b42c7d90f62a286ff9d9fbde47ba550f3a7e6eda6d639",
+    "camera_runtime_performed": false,
+    "live_control_tuples_exact": "27/27",
+    "rows": 27
+  },
+  "schema": "sp11-e003i-gz-native-response-threshold-analysis-v1",
+  "sentinel": {
+    "digital_gain_code": [
+      1471,
+      1472
+    ],
+    "expected_effect_generation": 7,
+    "relative_gain_delta_percent": 0.06798096532971698,
+    "source_generation": 4
+  },
+  "status": "PASS_OFFLINE_RESPONSE_THRESHOLD_CENSORED_BY_PREVIEW_CAP",
+  "threshold_conclusion": {
+    "larger_synthetic_gain_step_authorized": false,
+    "production_native_control_change_threshold_identifiable_from_GY": false,
+    "safe_next_step": "design an offline controlled cap-release/bright-scene acceptance plan that detects when native convergence falls below E003I_PREVIEW_CAP_MAX; do not guess a larger live sentinel",
+    "why": "the controller is already cap-saturated; GY cannot reveal the uncapped response threshold, and the tiny photometric perturbation is below observed luma variability"
+  }
+}
