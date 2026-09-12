@@ -1,0 +1,264 @@
+{
+  "archive_manifest_sha256": {
+    "GO": "7a8d4aa4d649d0a8ea64efbc382aa4e40276ada3127e73c7e8f5d20cdf3c5a59",
+    "GS": "dd6fdefdbdb1b17163213007f7922e3035c44db2e4b7ad842b0e1344db6651c3",
+    "GV": "4987dab15cbabc255125515e76ccaa66a74f09bf981db4d095c35d7d248cf20e",
+    "GY": "3f92e0864ab8d0b50cccdaab18ca33306047012cb775b8cb9d7d885ce3b1dda8",
+    "HC": "48444de6fafc7efbab9c71fa0947c193c6c4477a918846e6d787c8095c2c549d"
+  },
+  "camera_runtime_performed": false,
+  "interpretation": {
+    "numeric_scene_brightness_threshold_identifiable": false,
+    "real_scene_change_required_for_next_feedback_proof": true,
+    "same_static_scene_longer_observation_supported": false,
+    "synthetic_sensor_control_delta_authorized": false,
+    "why_not_just_wait": "all five real Linux R27 runs end more than 8x above cap and are steady/censored; no run trends toward release by G27",
+    "why_not_numeric": "HC and DM are different live captures with different scene and history; exposure convergence is recurrent and not linearly invertible to illuminance from these records alone",
+    "windows_proves_cap_release_reachable": true
+  },
+  "linux_observation": {
+    "all_runs_cap_active_g3_g27": true,
+    "all_runs_final_ratio_above_8x_cap": true,
+    "final_ratio_to_cap": {
+      "GO": 8.392118488999957,
+      "GS": 8.404664129664827,
+      "GV": 8.403258631565128,
+      "GY": 8.404901182174308,
+      "HC": 8.389988501306062
+    },
+    "hc_eligible_g4_g24_cap_active": true,
+    "hc_post_g3_native_write_count": 0,
+    "runs": [
+      "GO",
+      "GS",
+      "GV",
+      "GY",
+      "HC"
+    ]
+  },
+  "linux_r27_runs": {
+    "GO": {
+      "cap_release_observed": false,
+      "g27_ratio_to_cap": 8.392118488999957,
+      "g3_ratio_to_cap": 1.1830280328645997,
+      "g4_ratio_to_cap": 6.675481130823593,
+      "g5_ratio_to_cap": 7.550038001947172,
+      "maximum_ratio_g3_g27": 8.58747371947721,
+      "minimum_ratio_g3_g27": 1.1830280328645997,
+      "steady_luma_cv_percent_g8_g24": 1.644774794812442,
+      "steady_luma_mean_g8_g24": 0.6205238067647059
+    },
+    "GS": {
+      "cap_release_observed": false,
+      "g27_ratio_to_cap": 8.404664129664827,
+      "g3_ratio_to_cap": 1.1826757074700718,
+      "g4_ratio_to_cap": 6.598757171395939,
+      "g5_ratio_to_cap": 6.954140054524298,
+      "maximum_ratio_g3_g27": 8.405133692292305,
+      "minimum_ratio_g3_g27": 1.1826757074700718,
+      "steady_luma_cv_percent_g8_g24": 1.2542440282048977,
+      "steady_luma_mean_g8_g24": 0.44984223735294115
+    },
+    "GV": {
+      "cap_release_observed": false,
+      "g27_ratio_to_cap": 8.403258631565128,
+      "g3_ratio_to_cap": 1.1835124114165834,
+      "g4_ratio_to_cap": 6.686962128837181,
+      "g5_ratio_to_cap": 7.0845497217515545,
+      "maximum_ratio_g3_g27": 8.404209250244456,
+      "minimum_ratio_g3_g27": 1.1835124114165834,
+      "steady_luma_cv_percent_g8_g24": 2.605639138130117,
+      "steady_luma_mean_g8_g24": 0.4622844054117647
+    },
+    "GY": {
+      "cap_release_observed": false,
+      "g27_ratio_to_cap": 8.404901182174308,
+      "g3_ratio_to_cap": 1.1852313231157747,
+      "g4_ratio_to_cap": 6.603620162133937,
+      "g5_ratio_to_cap": 6.976961197611057,
+      "maximum_ratio_g3_g27": 8.406349672721378,
+      "minimum_ratio_g3_g27": 1.1852313231157747,
+      "steady_luma_cv_percent_g8_g24": 3.449918885243614,
+      "steady_luma_mean_g8_g24": 0.4408829387647059
+    },
+    "HC": {
+      "cap_release_observed": false,
+      "g27_ratio_to_cap": 8.389988501306062,
+      "g3_ratio_to_cap": 1.1740624565277156,
+      "g4_ratio_to_cap": 6.6003486621661205,
+      "g5_ratio_to_cap": 7.214710507012334,
+      "maximum_ratio_g3_g27": 8.486171351077289,
+      "minimum_ratio_g3_g27": 1.1740624565277156,
+      "steady_luma_cv_percent_g8_g24": 2.5673386135159375,
+      "steady_luma_mean_g8_g24": 0.6868064192941177
+    }
+  },
+  "native_replay_binary_sha256": "6547ab7174f978bff56b42c7d90f62a286ff9d9fbde47ba550f3a7e6eda6d639",
+  "next_live_acceptance": {
+    "base_policy": "HA/HB one-native-write gate, exact DQBUF boundary",
+    "eligible_native_write_sources": "G4..G24 for a 27-frame stream",
+    "fresh_identity_required": true,
+    "horizon_shadow_sources": [
+      "G25",
+      "G26"
+    ],
+    "physical_user_or_environment_action_needed": true,
+    "reuse_hc_identity_forbidden": true,
+    "scene_precondition": "front RGB camera aimed at a substantially brighter diffuse real scene before the one-shot; avoid direct sun/laser into the sensor",
+    "synthetic_control_delta": "none",
+    "valid_outcomes": [
+      "PASS_NO_CAP_RELEASE",
+      "PASS_CAP_RELEASE_ONE_NATIVE_WRITE"
+    ]
+  },
+  "request_number_comparison_hc_vs_windows_dm": [
+    {
+      "hc_convergence": 227801362,
+      "hc_generation": 1,
+      "hc_ratio_to_cap": 0.0371415278987046,
+      "hc_to_windows_pre_ratio": 1.729893322566647,
+      "request": 4,
+      "windows_dm_pre_short": 131685208,
+      "windows_dm_ratio_to_cap": 0.021470415206642696
+    },
+    {
+      "hc_convergence": 1567022640,
+      "hc_generation": 2,
+      "hc_ratio_to_cap": 0.2554928319588437,
+      "hc_to_windows_pre_ratio": 3.0102868949839148,
+      "request": 5,
+      "windows_dm_pre_short": 520555912,
+      "windows_dm_ratio_to_cap": 0.08487324991666913
+    },
+    {
+      "hc_convergence": 7200916112,
+      "hc_generation": 3,
+      "hc_ratio_to_cap": 1.1740624565277156,
+      "hc_to_windows_pre_ratio": 4.565884213431337,
+      "request": 6,
+      "windows_dm_pre_short": 1577113167,
+      "windows_dm_ratio_to_cap": 0.2571380266442167
+    },
+    {
+      "hc_convergence": 40482136842,
+      "hc_generation": 4,
+      "hc_ratio_to_cap": 6.6003486621661205,
+      "hc_to_windows_pre_ratio": 7.201126285430384,
+      "request": 7,
+      "windows_dm_pre_short": 5621639621,
+      "windows_dm_ratio_to_cap": 0.9165717139998251
+    },
+    {
+      "hc_convergence": 44250222673,
+      "hc_generation": 5,
+      "hc_ratio_to_cap": 7.214710507012334,
+      "hc_to_windows_pre_ratio": 2.8117007632390796,
+      "request": 8,
+      "windows_dm_pre_short": 15737884789,
+      "windows_dm_ratio_to_cap": 2.5659595791057743
+    },
+    {
+      "hc_convergence": 52048515538,
+      "hc_generation": 6,
+      "hc_ratio_to_cap": 8.486171351077289,
+      "hc_to_windows_pre_ratio": 3.381756398523741,
+      "request": 9,
+      "windows_dm_pre_short": 15390971260,
+      "windows_dm_ratio_to_cap": 2.509397588419382
+    },
+    {
+      "hc_convergence": 51435544550,
+      "hc_generation": 7,
+      "hc_ratio_to_cap": 8.38623042512313,
+      "hc_to_windows_pre_ratio": 4.714402454274464,
+      "request": 10,
+      "windows_dm_pre_short": 10910299884,
+      "windows_dm_ratio_to_cap": 1.7788533131106543
+    },
+    {
+      "hc_convergence": 51446990679,
+      "hc_generation": 8,
+      "hc_ratio_to_cap": 8.388096641882562,
+      "hc_to_windows_pre_ratio": 4.8247525058364875,
+      "request": 11,
+      "windows_dm_pre_short": 10663135698,
+      "windows_dm_ratio_to_cap": 1.7385548029117572
+    },
+    {
+      "hc_convergence": 51446791123,
+      "hc_generation": 9,
+      "hc_ratio_to_cap": 8.388064105576913,
+      "hc_to_windows_pre_ratio": 4.784070347448341,
+      "request": 12,
+      "windows_dm_pre_short": 10753769779,
+      "windows_dm_ratio_to_cap": 1.7533320993180666
+    },
+    {
+      "hc_convergence": 51458858672,
+      "hc_generation": 10,
+      "hc_ratio_to_cap": 8.390031640818657,
+      "hc_to_windows_pre_ratio": 4.684104454440989,
+      "request": 13,
+      "windows_dm_pre_short": 10985847812,
+      "windows_dm_ratio_to_cap": 1.7911709105598799
+    },
+    {
+      "hc_convergence": 51459800988,
+      "hc_generation": 11,
+      "hc_ratio_to_cap": 8.390185279303063,
+      "hc_to_windows_pre_ratio": 4.586150043449243,
+      "request": 14,
+      "windows_dm_pre_short": 11220697208,
+      "windows_dm_ratio_to_cap": 1.8294615744828109
+    },
+    {
+      "hc_convergence": 51460636554,
+      "hc_generation": 12,
+      "hc_ratio_to_cap": 8.390321512895468,
+      "hc_to_windows_pre_ratio": 4.536996354643815,
+      "request": 15,
+      "windows_dm_pre_short": 11342446088,
+      "windows_dm_ratio_to_cap": 1.8493119361463906
+    },
+    {
+      "hc_convergence": 51460313157,
+      "hc_generation": 13,
+      "hc_ratio_to_cap": 8.390268785121622,
+      "hc_to_windows_pre_ratio": 4.504160484000773,
+      "request": 16,
+      "windows_dm_pre_short": 11425062082,
+      "windows_dm_ratio_to_cap": 1.8627819357069295
+    },
+    {
+      "hc_convergence": 51459584362,
+      "hc_generation": 14,
+      "hc_ratio_to_cap": 8.390149959845129,
+      "hc_to_windows_pre_ratio": 4.488083112761701,
+      "request": 17,
+      "windows_dm_pre_short": 11465826962,
+      "windows_dm_ratio_to_cap": 1.8694283837988745
+    },
+    {
+      "hc_convergence": 51458439354,
+      "hc_generation": 15,
+      "hc_ratio_to_cap": 8.389963273750705,
+      "hc_to_windows_pre_ratio": 4.474746999659992,
+      "request": 18,
+      "windows_dm_pre_short": 11499742747,
+      "windows_dm_ratio_to_cap": 1.8749581315744122
+    }
+  ],
+  "safe_parallel_work": "while waiting for a brighter real scene, continue repeated-stream/production-integration work that does not require post-G3 native cap release",
+  "schema": "sp11-e003i-hd-real-scene-cap-release-envelope-v1",
+  "status": "PASS_OFFLINE_REAL_SCENE_CAP_RELEASE_STRATEGY",
+  "windows_dm": {
+    "first_clamped_request": 8,
+    "last_unclamped_request": 7,
+    "ordinary_preview_below_cap_state_proven": true,
+    "request7_pre_short": 5621639621,
+    "request7_ratio_to_cap": 0.9165717139998251,
+    "request8_pre_short": 15737884789,
+    "request8_ratio_to_cap": 2.5659595791057743,
+    "status": "PASS"
+  }
+}

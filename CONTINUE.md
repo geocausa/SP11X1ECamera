@@ -24,4 +24,8 @@ GY closes changed post-G3 **transport/lifecycle**, but not production-native fee
 
 **HA one-native-write policy PASS; HB exact-boundary integration PASS; HC consumed live PASS_NO_CAP_RELEASE.** HC executed one 27-frame stream with no retry. Every eligible G4..G24 native request remained cap-censored, G25/G26 were evidence-horizon shadow-only, and exactly zero post-G3 native writes reached hardware. Only bootstrap + G1..G3 transactions occurred. STREAMOFF, kernel health, Golden return and candidate retirement all PASSed.
 
-Next action: **offline cap-release observation strategy**. Use immutable HC/GY stats plus Windows/native AEC authority to determine what scene/observation horizon can actually release the preview cap. Do not rerun HC and do not guess a larger synthetic sensor-control delta.
+**HD real-scene cap-release envelope PASS.** Exact replay of GO/GS/GV/GY/HC shows every Linux R27 run remains cap-active through G27 and ends >8× above the preview cap. Windows DM independently proves ordinary preview can be below cap through R7 before clamping at R8. Therefore a real below-cap regime exists, but these different captures do not provide a defensible numeric lux threshold.
+
+The post-G3 native feedback proof is now **environment-blocked**: it needs a fresh identity under a substantially brighter diffuse real scene, using the existing HA/HB gate and no synthetic control delta. Do not rerun HC, do not just wait longer in the same dark/static scene, and do not guess a larger sensor step.
+
+Parallel next action while that physical condition is unavailable: **production-integration inventory and repeated-stream robustness planning** from the closed R27/continuous-control authorities.

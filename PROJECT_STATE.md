@@ -14,7 +14,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **GZ/HA/HB/HC:** GZ proves the GY +1-LSB perturbation is below ordinary luma variability and native AEC is preview-cap-censored. HA defines one fail-closed native later-write gate and HB integrates it at the exact live boundary. HC then consumed one R27 stream and PASSed with **no cap release**: G4..G24 remained capped, G25/G26 were horizon-shadowed, and no post-G3 native hardware write occurred. Golden return and candidate retirement passed.
 
-**Next action:** offline cap-release observation strategy from immutable HC/GY evidence; determine the scene/horizon needed to leave the cap before any fresh live candidate.
+**HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
+
+**Next action:** keep the native-feedback live gate parked until the front RGB camera can face a substantially brighter diffuse real scene. In parallel, advance production integration and repeated-stream robustness planning without claiming continuous native feedback closed.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

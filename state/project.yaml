@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hc-no-cap-release-live-pass-retired
-phase: front-imx681-cap-release-observation-strategy
-status: golden-restored-hc-no-cap-release-pass-candidate-retired
+state_id: E003i-hd-real-scene-cap-release-envelope-pass
+phase: front-imx681-production-integration-parallel
+status: golden-hd-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hc-native-cap-release-observer-no-release-pass
+current_gate: E003i-hd-real-scene-cap-release-envelope-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HD-offline-cap-release-observation-strategy
+next_experiment: E003i-HE-production-integration-inventory
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HC consumed one R27 observer stream and PASSed with no cap release: G4-G24 stayed preview-cap-censored, G25-G26 were horizon-shadowed, zero post-G3 native writes occurred, and Golden return/retirement passed. Build HD offline cap-release observation strategy from immutable HC/GY evidence; do not rerun HC or guess a larger synthetic sensor-control delta.
+  HD proves all five Linux R27 runs remain deeply cap-censored while Windows DM proves a legitimate below-cap regime. Park the next native-feedback live attempt until a substantially brighter diffuse real scene is available; never reuse HC or inject a guessed synthetic delta. In parallel, perform HE production-integration inventory and repeated-stream robustness planning.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3364,3 +3364,21 @@ e003i_hc_current:
   archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-hc/attempt1-pass-no-cap-release-20260912T060723
   archive_manifest_sha256: 48444de6fafc7efbab9c71fa0947c193c6c4477a918846e6d787c8095c2c549d
   next_gate: HD-offline-cap-release-observation-strategy
+
+
+e003i_hd_current:
+  status: pass-offline-real-scene-cap-release-envelope
+  linux_runs_replayed: [GO, GS, GV, GY, HC]
+  all_linux_runs_cap_active_g3_g27: true
+  all_linux_runs_final_ratio_above_8x_cap: true
+  windows_dm_last_unclamped_request: R7
+  windows_dm_r7_ratio_to_cap: 0.916572
+  windows_dm_first_clamped_request: R8
+  numeric_scene_brightness_threshold_identifiable: false
+  same_static_scene_longer_observation_supported: false
+  synthetic_sensor_control_delta_authorized: false
+  real_scene_change_required_for_next_feedback_proof: true
+  physical_condition: substantially-brighter-diffuse-real-scene
+  camera_runtime_performed: false
+  blocked_live_gate: production-native-changed-post-g3-feedback
+  parallel_next_gate: HE-production-integration-inventory

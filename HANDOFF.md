@@ -12,7 +12,9 @@ GZ then closed offline response-threshold analysis: the tiny GY signal is below 
 
 HC then consumed exactly one fresh R27 observer stream and returned **PASS_NO_CAP_RELEASE**. All eligible G4..G24 sources remained cap-active; G25/G26 were forced shadow by the evidence horizon; no post-G3 native write was issued. Hardware evidence is exactly bootstrap + startup G1..G3. STREAMOFF, kernel health, Golden return and candidate retirement passed with no retry.
 
-Current next action: **offline cap-release observation strategy** using immutable HC/GY evidence. Determine a defensible scene/observation horizon that can release the preview cap before authorizing another fresh live identity. Never rerun HC and do not substitute a guessed synthetic gain delta.
+HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8× cap at G27), so merely extending the same static scene is not evidence-based. Windows DM proves a genuine below-cap ordinary preview regime (R7 ~0.917× cap; R8 first clamp), but not a transferable numeric lux threshold.
+
+The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
 ---
 
