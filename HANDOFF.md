@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8�
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS, HO is consumed/PASS, and HP soak policy is PASS. **HQ is prepared but not installed** under fresh ID `sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot`, unchanged HN CAMSS/package authority, and a bounded four-stream harness. Exactly 4×27 frames are authorized; every session must restart at generation 1, use post-G3 `shadow`, make zero later native writes, and STREAMOFF cleanly. The harness aborts on first failure and leaves later markers untouched; archive ownership and free-space policy are enforced.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS, HO is consumed/PASS, and HP soak policy is PASS. **HQ is installed but unarmed** under fresh ID `sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot`, unchanged HN CAMSS/package authority, and a bounded four-stream harness. Exactly 4×27 frames are authorized; every session must restart at generation 1, use post-G3 `shadow`, make zero later native writes, and STREAMOFF cleanly. The harness aborts on first failure and leaves later markers untouched; archive ownership and free-space policy are enforced.
 
-**Next gate: HQ install-unarmed checkpoint.** Commit/push prep, run clean-tree prearm, install unarmed, verify hashes/GRUB/Golden safety, and checkpoint before runtime. The brighter-scene native-feedback gate stays parked.
+**Next gate: HQ one-shot runtime after installed checkpoint.** Checkpoint/push the installed-unarmed state, then arm only after another full Golden/origin/package/free-space reconciliation. The brighter-scene native-feedback gate stays parked.
 
 ---
 
