@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE production-integration inventory is PASS, and HF now closes the first consolidation step. `src/front-imx681/` contains a stable byte-identical source bundle with 82-file provenance: final R27 CAMSS, HC helper, CW IMX681, native AEC/CQ, scheduler/gain-feed/cap-release policy and frozen GM producer. The helper rebuilds to the exact accepted HC binary hash and both kernel modules build with the protected SP11 vermagic. No camera runtime occurred.
+HE/HF/HG production consolidation is PASS through a relocatable stable IQ runtime. HF provides the stable kernel/runtime source bundle. HG moves the GM producer onto `src/front-imx681/userspace/iq/`, vendors the runtime code closure, provisions all runtime data through a SHA-pinned ignored authority cache, and proves R5..R27 23/23 byte-exact in two independent runs. `strace` confirms no project-local runtime opens outside the stable IQ root. No camera runtime occurred.
 
-**Next parallel gate: HG hermetic IQ producer relocation.** Remove the 16 experiment-directory imports/assets from the stable producer packaging without changing its algorithm, then prove R5..R27 output byte-exact against accepted authorities.
+The cache still intentionally contains the local proprietary IMX681 tuning blob and local oracle data, so HG is not yet a redistributable clean-room package. **Next parallel gate: HH clean-room authority-cache reduction**, preserving byte-exact R5..R27 behavior while eliminating raw/proprietary runtime cache dependencies.
 
 ---
 

@@ -3,8 +3,9 @@ from __future__ import annotations
 import argparse, ctypes, errno, gc, hashlib, importlib.util, json, os, pathlib, select, struct, subprocess, sys, tempfile, time
 
 HERE=pathlib.Path(__file__).resolve().parent
-BASE=HERE.parent
-REPO=HERE.parents[3]
+VENDOR=HERE/'vendor'
+BASE=VENDOR/'experiments/E003-front-imx681-cphy/e003i-front-native-productionization'
+REPO=VENDOR
 AB=BASE/'ab-clean-lux-reconstruction'; AC=BASE/'ac-clean-cct-reconstruction'; DR=BASE/'dr-native-awb-zero-weight-hold'; DV=BASE/'dv-live-residual-isp-demux'
 EFILE=BASE/'e-template-free-capsule/build-template-free-0076-capsules.py'
 DVFILE=DV/'demux_bls.py'

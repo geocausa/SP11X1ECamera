@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hf-stable-front-imx681-source-bundle-pass
-phase: front-imx681-hermetic-userspace-consolidation
-status: golden-hf-pass-native-feedback-environment-blocked
+state_id: E003i-hg-relocatable-iq-runtime-pass
+phase: front-imx681-cleanroom-runtime-asset-reduction
+status: golden-hg-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hf-stable-front-imx681-source-bundle-pass
+current_gate: E003i-hg-relocatable-iq-runtime-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HG-hermetic-iq-producer-relocation
+next_experiment: E003i-HH-cleanroom-authority-cache-reduction
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HF stable source bundle PASS: src/front-imx681 directly tracks 82 proven authority files, exact HC helper source/binary, final R27 CAMSS, CW IMX681 and native runtime stack. HG must relocate the GM IQ producer and its 16 experiment-local dependencies into the stable bundle with no algorithm change and prove R5-R27 byte-exact offline. Keep post-G3 native feedback parked until a brighter diffuse real scene is available.
+  HG relocatable IQ runtime PASS: stable producer path binding only, 23 vendored runtime source files, SHA-pinned ignored authority cache (79 repo data inputs + one local proprietary tuning blob), two independent R5-R27 runs 23/23 byte-exact, and no project-local path escape. HH must replace raw/proprietary cache inputs with the minimum clean decoded/derived runtime state while preserving byte-exact output. Keep post-G3 native feedback parked until a brighter diffuse real scene is available.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3420,3 +3420,23 @@ e003i_hf_current:
   camera_runtime_performed: false
   post_g3_native_feedback_proven: false
   next_gate: HG-hermetic-iq-producer-relocation
+
+
+e003i_hg_current:
+  status: pass-offline-relocatable-iq-runtime-local-authority-cache
+  stable_iq_root: src/front-imx681/userspace/iq
+  vendor_source_files: 23
+  vendor_path_only_patched_files: 6
+  authority_cache_repo_entries: 79
+  authority_cache_external_entries: 1
+  authority_cache_manifest_sha256: 381ba4649894a0c391c22b86e7c6836b658b416be97db57b39a4584a28ce815c
+  proprietary_tuning_committed: false
+  authority_cache_committed: false
+  r5_r27_capsules_byte_exact: 23
+  independent_runs: 2
+  deterministic: true
+  runtime_project_local_opens_outside_stable_iq_root: 0
+  camera_runtime_performed: false
+  post_g3_native_feedback_proven: false
+  fully_redistributable_cleanroom_iq_runtime: false
+  next_gate: HH-cleanroom-authority-cache-reduction
