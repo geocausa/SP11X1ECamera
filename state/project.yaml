@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hz-production-handoff-decision-pass
-phase: camera-stack-unified-rear-front-camss-authority
-status: golden-hz-handoff-decision-pass-full-stack-dtb-blocked
+state_id: IA-unified-rear-front-shared-camss-authority-pass
+phase: camera-stack-unified-rear-front-dtb-construction
+status: golden-ia-shared-camss-authority-pass-runtime-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hz-production-handoff-decision-pass
+current_gate: IA-unified-rear-front-shared-camss-authority-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: IA-unified-rear-front-shared-camss-authority
+next_experiment: IB-unified-current-golden-rear-front-dtb
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HZ PASS offline: front HY and rear E002k-D-R3 are independently production-stream proven, but neither DTB is a safe whole-camera default. Front authority disables rear and exposes CAMSS port@2; rear exposes port@1. Shared CAMSS differs in IOMMU fwspec and RT-CDM1 register/IRQ authority, so naive concatenation and Golden-default replacement are blocked. Golden remains protected default; front post-G3 policy remains shadow. Next IA derives unified rear+front shared-CAMSS authority on exact current Golden before any combined DTB or live candidate.
+  IA PASS offline: unified module candidate is exact front production qcom-camss + IMX681 plus accepted rear OV13858, all Golden-vermagic. X1E CSIPHY/CSID/ICC/wrapper static CAMSS tables remain Golden-exact and VFE static delta is only VFE1 PIX format pointer, preserving RDI static authority. Conservative IOMMU union preserves all 11 distinct accepted rear/front SID-mask specifiers; exact Golden ARM-SMMU allocation accepts both rear-first/front-first ordering with no partial-overlap conflict and six hardware mapping groups in one CAMSS domain. Runtime remains unauthorized; rear live regression is mandatory. Next IB constructs deterministic exact-Golden unified rear+front DTB offline using both ports, rear enabled, front RT-CDM1 resources and union fwspec.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3932,3 +3932,26 @@ e003i_hz_current:
   camera_runtime_performed: false
   front_post_g3_write_policy: shadow
   next_gate: IA-unified-rear-front-shared-camss-authority
+
+
+ia_current:
+  status: pass-offline-unified-rear-front-shared-camss-authority
+  qcom_camss_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  imx681_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
+  module_vermagic_matches_golden: true
+  x1e_csiphy_static_table_golden_exact: true
+  x1e_csid_static_table_golden_exact: true
+  x1e_icc_static_table_golden_exact: true
+  x1e_csid_wrapper_static_golden_exact: true
+  x1e_vfe_static_delta_only_vfe1_pix_format_pointer: true
+  rdi_static_authority_preserved: true
+  iommu_union_specifier_count: 11
+  iommu_union_mapping_groups: 6
+  iommu_union_partial_overlap_conflict: false
+  all_accepted_front_rear_iommu_specifiers_preserved: true
+  runtime_authorized: false
+  rear_live_regression_required: true
+  golden_system_modified: false
+  camera_runtime_performed: false
+  next_gate: IB-unified-current-golden-rear-front-dtb

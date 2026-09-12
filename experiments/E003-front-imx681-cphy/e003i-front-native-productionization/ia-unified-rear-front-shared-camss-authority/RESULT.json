@@ -1,0 +1,178 @@
+{
+  "camera_runtime_performed": false,
+  "camss_static_regression": {
+    "csid_wrapper_x1e_byte_exact": true,
+    "csid_x1e_table_byte_exact": true,
+    "csiphy_x1e_table_byte_exact": true,
+    "icc_x1e_table_byte_exact": true,
+    "rear_live_regression_still_required": true,
+    "vfe0_rdi_static_authority_preserved": true,
+    "vfe_static_delta_only": "VFE1 PIX format pointer 845 -> x1e80100"
+  },
+  "golden_system_modified": false,
+  "iommu": {
+    "all_entries_same_camss_domain": true,
+    "arm_smmu_mapping_group_count": 6,
+    "candidate_kind": "conservative accepted-set union; no accepted specifier removed or weakened",
+    "conservative_union": [
+      [
+        2048,
+        96
+      ],
+      [
+        2144,
+        96
+      ],
+      [
+        6144,
+        96
+      ],
+      [
+        6240,
+        96
+      ],
+      [
+        6368,
+        0
+      ],
+      [
+        6528,
+        32
+      ],
+      [
+        6400,
+        0
+      ],
+      [
+        6560,
+        32
+      ],
+      [
+        2080,
+        96
+      ],
+      [
+        2112,
+        96
+      ],
+      [
+        6304,
+        0
+      ]
+    ],
+    "front_first_allocation_indices": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      2,
+      2,
+      3,
+      4,
+      5,
+      4
+    ],
+    "front_set": [
+      [
+        2048,
+        96
+      ],
+      [
+        2080,
+        96
+      ],
+      [
+        2112,
+        96
+      ],
+      [
+        2144,
+        96
+      ],
+      [
+        6304,
+        0
+      ]
+    ],
+    "partial_overlap_conflict": false,
+    "rear_first_allocation_indices": [
+      0,
+      0,
+      1,
+      1,
+      2,
+      3,
+      4,
+      3,
+      0,
+      0,
+      5
+    ],
+    "rear_set": [
+      [
+        2048,
+        96
+      ],
+      [
+        2144,
+        96
+      ],
+      [
+        6144,
+        96
+      ],
+      [
+        6240,
+        96
+      ],
+      [
+        6368,
+        0
+      ],
+      [
+        6528,
+        32
+      ],
+      [
+        6400,
+        0
+      ],
+      [
+        6560,
+        32
+      ]
+    ],
+    "union_specifier_count": 11
+  },
+  "module_set": {
+    "imx681_sha256": "ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6",
+    "ov13858_sha256": "13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309",
+    "qcom_camss_sha256": "7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+  },
+  "next_gate": "IB construct deterministic exact-Golden unified rear+front DTB with conservative IOMMU union; offline semantic regression only",
+  "parents": [
+    "HZ production handoff decision",
+    "E003i-B dual-source foundation",
+    "E002k-D-R3 rear production pass",
+    "HY front production pass"
+  ],
+  "production_default_authorized": false,
+  "reason_runtime_still_blocked": "generic front CAMSS runtime code differs from Golden; rear VFE0 RDI must be live-regressed under the private front CAMSS module and unified fwspec before front regression",
+  "runtime_authorized": false,
+  "schema": "sp11-camera-ia-unified-rear-front-shared-camss-authority-v1",
+  "status": "PASS_OFFLINE_UNIFIED_REAR_FRONT_SHARED_CAMSS_AUTHORITY",
+  "unified_camss_candidate": {
+    "base": "exact current Golden + HV front resource superset",
+    "front_post_g3_policy": "shadow",
+    "front_sensor_enabled": true,
+    "iommu_policy": "conservative_union",
+    "ports": [
+      1,
+      2
+    ],
+    "rear_sensor_enabled": true,
+    "rt_cdm1_resource": true
+  }
+}

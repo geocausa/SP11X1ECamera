@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY are PASS. **HZ closes the production handoff decision offline.** Front HY and rear E002k-D-R3 are both independently production-stream proven, but there is not yet one safe full-stack DTB. The front authority intentionally disables rear OV13858 and owns CAMSS `port@2`; rear authority owns `port@1`. Shared CAMSS also conflicts in IOMMU fwspec and RT-CDM1 resources. Therefore direct front-DTB promotion, rear/front node concatenation, and replacement of Golden as saved default are all blocked.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ are PASS. **IA closes shared rear+front CAMSS authority offline.** The production module set is exact front CAMSS + IMX681 plus accepted rear OV13858, all Golden-vermagic. X1E CSIPHY/CSID/ICC/wrapper static tables remain Golden-exact; the only X1E VFE static change is the VFE1 PIX format pointer, preserving RDI tables. The conservative rear-first IOMMU union contains all 11 distinct accepted specifiers and is accepted by Golden ARM-SMMU stream-match allocation with six hardware mapping groups and zero overlap conflict.
 
-**Next gate: IA offline unified rear+front shared-CAMSS authority analysis.** Derive one evidence-backed common CAMSS authority on exact current Golden before building a combined DTB. The brighter-scene native-feedback gate stays parked.
+**Next gate: IB offline unified current-Golden rear+front DTB construction/semantic regression.** Build only; no live runtime until rear regression is separately checkpointed. The brighter-scene native-feedback gate stays parked.
 
 ---
 
