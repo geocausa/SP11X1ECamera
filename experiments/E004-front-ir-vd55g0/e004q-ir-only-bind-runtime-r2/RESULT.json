@@ -1,30 +1,45 @@
 {
-  "schema": "sp11-camera-e004q-ir-only-bind-r2-prep-v1",
-  "status": "READY_UNINSTALLED_UNARMED",
-  "parent_e004p_evidence_commit": "bd94246",
-  "parent_e004o_commit": "47c17e7",
-  "candidate_id": "sp11-camera-e004q-ir-only-bind-r2-one-shot",
-  "boot_marker": "sp11_camera_e004q_ir_only_bind_r2=1",
-  "dtb_sha256": "fffacde38934d1baa8392f6b5687827cf0490d7af9e20fd37858347c157f5742",
-  "sensor_module_sha256": "4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72",
-  "camss_module_sha256": "bc574b2027eee19fc07f12cb1c7efbd86ec1be38e09715878d035d89cb169eba",
-  "harness_source_sha256": "632d783dde3b5d24c4a1941264a7879637d66b3e13701ee74483ccd0740ecd99",
-  "harness_module_sha256": "a7eeb50a78e50f758d716d875cd01af46ca2e2da6e6cf1c7b38384d49a7b7869",
+  "schema": "sp11-camera-e004q-ir-only-bind-r2-result-v2",
+  "status": "FAIL_HARNESS_ACCESSOR_WARN_GRAPH_AND_STREAM_BLOCK_PASS_GOLDEN_RETURN_RETIRED",
+  "package_commit": "0b37885238421a23bf077d8420fbf71bd5462f8a",
+  "attempt_count": 1,
   "attempt_limit": 1,
+  "retry_performed": false,
   "retry_authorized": false,
-  "notifier_wait": {
-    "max_iterations": 100,
-    "sleep_seconds": 0.1,
-    "max_wait_seconds": 10,
-    "read_only": true,
-    "requires_subdev": true,
-    "requires_sensor_entity_one_link": true,
-    "requires_enabled_immutable_link_to_csiphy0": true
+  "sensor_windows_state_pass": true,
+  "sensor_data_writes": 596,
+  "sensor_runtime_pm": "suspended",
+  "media_graph_pass": true,
+  "sensor_entity_links": 1,
+  "immutable_enabled_link_to_csiphy0": true,
+  "sensor_subdev_registered": true,
+  "sensor_format": "Y10_1X10/644x604",
+  "userspace_controls": {
+    "link_frequency_hz": 420000000,
+    "pixel_rate_hz": 84000000,
+    "hblank": 556,
+    "vblank": 1351
   },
+  "direct_sensor_stream_callback_performed": true,
+  "direct_sensor_stream_result": "-EOPNOTSUPP",
+  "harness_mbus_contract": {
+    "ret": 0,
+    "type": 5,
+    "phy": "V4L2_MBUS_CSI2_DPHY",
+    "lanes": 1,
+    "link_frequency_hz": 420000000
+  },
+  "harness_control_reads": {
+    "link_frequency_hz": 0,
+    "pixel_rate_hz": 84000000,
+    "hblank": 0,
+    "vblank": 0
+  },
+  "kernel_warns_from_wrong_accessor": true,
+  "camss_receiver_programming_invoked": false,
   "capture_stream_performed": false,
   "illumination_performed": false,
-  "installed": false,
-  "armed": false,
-  "runtime_performed": false,
-  "next_gate": "Checkpoint/push; install unarmed; arm one-shot; wait for notifier completion; run direct blocked stream callback; return Golden and retire."
+  "golden_return_pass": true,
+  "candidate_retired": true,
+  "next_gate": "Fresh E004r with correct V4L2 accessors only; no other camera behavior change."
 }

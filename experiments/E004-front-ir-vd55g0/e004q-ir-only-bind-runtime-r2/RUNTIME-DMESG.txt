@@ -1,0 +1,131 @@
+[   54.868012] mc: Linux media interface: v0.10
+[   54.890991] videodev: Linux video capture interface: v2.00
+[   55.018559] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_VDDIO_uV=1800000 expected_uV=1800000
+[   55.018567] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_VCORE_uV=1152000 expected_uV=1152000
+[   55.018569] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_VANA_uV=2800000 expected_uV=2800000
+[   55.024781] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_ID model_raw=30,47 model_be=0x3047 revision_raw=11,11 revision=0x1111
+[   55.024784] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_ID_GATE=PASS model_be=0x3047 revision=0x1111_CUT1 writes=0
+[   55.025054] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_POLL name=READY_TO_BOOT reg=0x002c expected=0x01 timeout_ms=6 reads=1 result=PASS
+[   55.025055] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_PATCH_BEGIN start=0x2000 bytes=552 sha256=5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321
+[   55.211924] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_POLL name=PATCH_SETUP_COMPLETE reg=0x0200 expected=0x00 timeout_ms=28 reads=2 result=PASS
+[   55.214595] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_POLL name=BOOT_COMPLETE reg=0x0200 expected=0x00 timeout_ms=6 reads=2 result=PASS
+[   55.214922] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_POLL name=SW_STBY reg=0x002c expected=0x02 timeout_ms=4 reads=1 result=PASS
+[   55.215288] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_STROBE_BASELINE=PASS reg=0x0468 value=0x02 write_authorized=0
+[   55.247101] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_WINDOWS_STATE=PASS writes=596 patch=552 safe_config=42 extclk=19200000 mipi=840000000 link_freq=420000000 pixel_rate=84000000 line=1200 frame=1955 roi=644x604 gpio=01,02,01,01 final_state=SW_STBY stream=0 illumination=0
+[   55.247119] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_POWER_ON=PASS xclk=19200000 initialized=1 final_state=SW_STBY stream=0 illumination=0
+[   55.266562] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_POWER_OFF reset_asserted=1 stream=0 illumination=0
+[   55.266573] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_BIND=PASS format=Y10_1X10 size=644x604 link_freq=420000000 pixel_rate=84000000 line=1200 frame=1955 stream_capable=0 illumination_capable=0
+[   55.325761] ------------[ cut here ]------------
+[   55.325768] WARNING: drivers/media/v4l2-core/v4l2-ctrls-api.c:901 at v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev], CPU#5: insmod/6205
+[   55.325787] Modules linked in: e004q_stream_block_test(OE+) sp11_vd55g0(OE) qcom_camss(OE) videobuf2_dma_sg videobuf2_memops videobuf2_v4l2 videobuf2_common v4l2_fwnode v4l2_async videodev mc aes_ce_ccm snd_seq_dummy snd_hrtimer rfcomm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device nf_tables nfnetlink algif_hash algif_skcipher af_alg bnep qrtr_mhi binfmt_misc reset_gpio gpio_shared_proxy ath12k_wifi7 ath12k mac80211 q6prm_clocks cfg80211 aes_ce_blk qcrypto ghash_ce nls_iso8859_1 mhi authenc qcom_spmi_temp_alarm gf128mul libarc4 sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher sm4 surface_aggregator_tabletsw pm8941_pwrkey industrialio snd_soc_hdmi_codec q6prm fastrpc qcom_edac pci_pwrctrl_pwrseq libdes qcom_rng input_leds joydev sch_fq_codel nvme_fabrics efi_pstore dmi_sysfs autofs4 snd_soc_wcd938x snd_soc_wcd_classh snd_soc_wcd938x_sdw snd_soc_wcd_common snd_soc_wcd_mbhc snd_soc_x1e80100 snd_soc_qcom_common snd_soc_qcom_sdw snd_soc_wsa884x(O) regmap_sdw q6apm_lpass_dais snd_q6dsp_common q6apm_dai
+[   55.325847]  hid_multitouch hid_generic surface_hid hci_uart surface_hid_core hid surface_battery surface_aggregator_hub surface_charger nvme snd_q6apm(O) btqca surface_aggregator_registry nvme_core btrtl btbcm surface_aggregator btintel nvme_keyring nvme_auth apr qrtr_smd rpmsg_ctrl bluetooth panel_samsung_atna33xc20 crc_itu_t ps883x qcom_pd_mapper qcom_pon mshw0485_touch(O) reboot_mode nvmem_qcom_spmi_sdam rtc_pm8xxx soundwire_qcom(O) slimbus soundwire_bus snd_soc_lpass_rx_macro snd_soc_lpass_tx_macro(E) snd_soc_lpass_wsa_macro(OE) snd_soc_lpass_va_macro(E) snd_soc_lpass_macro_common(E) qcom_spmi_pmic i2c_qcom_geni snd_soc_core msm dispcc_x1e80100 snd_compress phy_qcom_edp spi_geni_qcom(O) qcom_stats qcom_q6v5_pas ac97_bus qcom_geni_serial snd_pcm_dmaengine qcom_pil_info ubwc_config qcom_q6v5 qcom_sysmon ocmem videocc_sm8550 snd_pcm i2c_qcom_cci drm_gpuvm qcom_common pinctrl_sm8550_lpass_lpi ucsi_glink gpi(O) qcom_glink_smem drm_exec gpucc_x1e80100 gpu_sched snd_timer pinctrl_lpass_lpi lpasscc_sc8280xp mdt_loader
+[   55.325905]  tcsrcc_x1e80100 sbsa_gwdt qcom_cpucp_mbox icc_bwmon snd typec_ucsi arm_smccc_trng pwrseq_qcom_wcn socinfo soundcore gpio_keys fixed qrtr
+[   55.325918] CPU: 5 UID: 0 PID: 6205 Comm: insmod Tainted: G           OE       7.1.5-sp11-render-parity-v4+ #5 PREEMPT(full) 
+[   55.325922] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   55.325923] Hardware name: Microsoft Corporation Microsoft Surface Pro, 11th Edition/Microsoft Surface Pro, 11th Edition, BIOS 175.222.235 02/23/2026
+[   55.325925] pstate: 21400005 (nzCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[   55.325928] pc : v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev]
+[   55.325937] lr : e004q_test_init+0x108/0xf88 [e004q_stream_block_test]
+[   55.325941] sp : ffff8000892fb8c0
+[   55.325942] x29: ffff8000892fb8e0 x28: 0000aaaac0b1cf78 x27: ffffd33750038660
+[   55.325945] x26: 0000000000000001 x25: 000000000000000c x24: ffff0008015d8a00
+[   55.325949] x23: ffff000900c2fe00 x22: ffff0008015d9500 x21: ffff0008023f9020
+[   55.325952] x20: ffff0008138bcc90 x19: ffff0008015d9a00 x18: 0000000000000000
+[   55.325955] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaaac0b1cf78
+[   55.325958] x14: 0000000000000000 x13: 64692d646c697562 x12: 0000000000000000
+[   55.325961] x11: 0000000000000000 x10: 0000000000000000 x9 : ffffd3372edea180
+[   55.325964] x8 : ffff8000892fb948 x7 : 0000000000000000 x6 : 0000000000000000
+[   55.325967] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[   55.325970] x2 : 0000000000000000 x1 : 0000000000000009 x0 : ffff0008015d8a00
+[   55.325973] Call trace:
+[   55.325975]  v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev] (P)
+[   55.325985]  e004q_test_init+0x108/0xf88 [e004q_stream_block_test]
+[   55.325988]  do_one_initcall+0x5c/0x4e0
+[   55.325994]  do_init_module+0x9c/0x2f0
+[   55.325998]  load_module+0x1da0/0x2738
+[   55.326001]  init_module_from_file+0x104/0x178
+[   55.326003]  __arm64_sys_finit_module+0x210/0x3a8
+[   55.326006]  invoke_syscall.constprop.0+0xac/0x128
+[   55.326010]  el0_svc_common.constprop.0+0x40/0x138
+[   55.326012]  do_el0_svc+0x24/0x50
+[   55.326014]  el0_svc+0x44/0x230
+[   55.326019]  el0t_64_sync_handler+0xb8/0x100
+[   55.326022]  el0t_64_sync+0x1b0/0x1b8
+[   55.326024] ---[ end trace 0000000000000000 ]---
+[   55.326033] ------------[ cut here ]------------
+[   55.326035] WARNING: drivers/media/v4l2-core/v4l2-ctrls-api.c:901 at v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev], CPU#5: insmod/6205
+[   55.326045] Modules linked in: e004q_stream_block_test(OE+) sp11_vd55g0(OE) qcom_camss(OE) videobuf2_dma_sg videobuf2_memops videobuf2_v4l2 videobuf2_common v4l2_fwnode v4l2_async videodev mc aes_ce_ccm snd_seq_dummy snd_hrtimer rfcomm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device nf_tables nfnetlink algif_hash algif_skcipher af_alg bnep qrtr_mhi binfmt_misc reset_gpio gpio_shared_proxy ath12k_wifi7 ath12k mac80211 q6prm_clocks cfg80211 aes_ce_blk qcrypto ghash_ce nls_iso8859_1 mhi authenc qcom_spmi_temp_alarm gf128mul libarc4 sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher sm4 surface_aggregator_tabletsw pm8941_pwrkey industrialio snd_soc_hdmi_codec q6prm fastrpc qcom_edac pci_pwrctrl_pwrseq libdes qcom_rng input_leds joydev sch_fq_codel nvme_fabrics efi_pstore dmi_sysfs autofs4 snd_soc_wcd938x snd_soc_wcd_classh snd_soc_wcd938x_sdw snd_soc_wcd_common snd_soc_wcd_mbhc snd_soc_x1e80100 snd_soc_qcom_common snd_soc_qcom_sdw snd_soc_wsa884x(O) regmap_sdw q6apm_lpass_dais snd_q6dsp_common q6apm_dai
+[   55.326095]  hid_multitouch hid_generic surface_hid hci_uart surface_hid_core hid surface_battery surface_aggregator_hub surface_charger nvme snd_q6apm(O) btqca surface_aggregator_registry nvme_core btrtl btbcm surface_aggregator btintel nvme_keyring nvme_auth apr qrtr_smd rpmsg_ctrl bluetooth panel_samsung_atna33xc20 crc_itu_t ps883x qcom_pd_mapper qcom_pon mshw0485_touch(O) reboot_mode nvmem_qcom_spmi_sdam rtc_pm8xxx soundwire_qcom(O) slimbus soundwire_bus snd_soc_lpass_rx_macro snd_soc_lpass_tx_macro(E) snd_soc_lpass_wsa_macro(OE) snd_soc_lpass_va_macro(E) snd_soc_lpass_macro_common(E) qcom_spmi_pmic i2c_qcom_geni snd_soc_core msm dispcc_x1e80100 snd_compress phy_qcom_edp spi_geni_qcom(O) qcom_stats qcom_q6v5_pas ac97_bus qcom_geni_serial snd_pcm_dmaengine qcom_pil_info ubwc_config qcom_q6v5 qcom_sysmon ocmem videocc_sm8550 snd_pcm i2c_qcom_cci drm_gpuvm qcom_common pinctrl_sm8550_lpass_lpi ucsi_glink gpi(O) qcom_glink_smem drm_exec gpucc_x1e80100 gpu_sched snd_timer pinctrl_lpass_lpi lpasscc_sc8280xp mdt_loader
+[   55.326142]  tcsrcc_x1e80100 sbsa_gwdt qcom_cpucp_mbox icc_bwmon snd typec_ucsi arm_smccc_trng pwrseq_qcom_wcn socinfo soundcore gpio_keys fixed qrtr
+[   55.326152] CPU: 5 UID: 0 PID: 6205 Comm: insmod Tainted: G        W  OE       7.1.5-sp11-render-parity-v4+ #5 PREEMPT(full) 
+[   55.326155] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   55.326156] Hardware name: Microsoft Corporation Microsoft Surface Pro, 11th Edition/Microsoft Surface Pro, 11th Edition, BIOS 175.222.235 02/23/2026
+[   55.326157] pstate: 81400005 (Nzcv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[   55.326159] pc : v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev]
+[   55.326168] lr : e004q_test_init+0x120/0xf88 [e004q_stream_block_test]
+[   55.326170] sp : ffff8000892fb8c0
+[   55.326171] x29: ffff8000892fb8e0 x28: 0000aaaac0b1cf78 x27: ffffd33750038660
+[   55.326174] x26: 0000000000000001 x25: 0000000000000000 x24: 000000000501bd00
+[   55.326177] x23: ffff000900c2fe00 x22: ffff0008015d9500 x21: ffff0008023f9020
+[   55.326181] x20: ffff0008138bcc90 x19: ffff0008015d9a00 x18: 0000000000000000
+[   55.326184] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaaac0b1cf78
+[   55.326187] x14: 0000000000000000 x13: 64692d646c697562 x12: 0000000000000000
+[   55.326190] x11: 0000000000000000 x10: 0000000000000000 x9 : ffffd3372edea198
+[   55.326193] x8 : ffff8000892fb948 x7 : 0000000000000000 x6 : 0000000000000000
+[   55.326196] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[   55.326199] x2 : 0000000000000000 x1 : 0000000000000001 x0 : ffff0008015d9500
+[   55.326202] Call trace:
+[   55.326203]  v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev] (P)
+[   55.326212]  e004q_test_init+0x120/0xf88 [e004q_stream_block_test]
+[   55.326214]  do_one_initcall+0x5c/0x4e0
+[   55.326216]  do_init_module+0x9c/0x2f0
+[   55.326219]  load_module+0x1da0/0x2738
+[   55.326221]  init_module_from_file+0x104/0x178
+[   55.326223]  __arm64_sys_finit_module+0x210/0x3a8
+[   55.326226]  invoke_syscall.constprop.0+0xac/0x128
+[   55.326228]  el0_svc_common.constprop.0+0x40/0x138
+[   55.326230]  do_el0_svc+0x24/0x50
+[   55.326232]  el0_svc+0x44/0x230
+[   55.326235]  el0t_64_sync_handler+0xb8/0x100
+[   55.326238]  el0t_64_sync+0x1b0/0x1b8
+[   55.326240] ---[ end trace 0000000000000000 ]---
+[   55.326247] ------------[ cut here ]------------
+[   55.326248] WARNING: drivers/media/v4l2-core/v4l2-ctrls-api.c:901 at v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev], CPU#5: insmod/6205
+[   55.326258] Modules linked in: e004q_stream_block_test(OE+) sp11_vd55g0(OE) qcom_camss(OE) videobuf2_dma_sg videobuf2_memops videobuf2_v4l2 videobuf2_common v4l2_fwnode v4l2_async videodev mc aes_ce_ccm snd_seq_dummy snd_hrtimer rfcomm snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device nf_tables nfnetlink algif_hash algif_skcipher af_alg bnep qrtr_mhi binfmt_misc reset_gpio gpio_shared_proxy ath12k_wifi7 ath12k mac80211 q6prm_clocks cfg80211 aes_ce_blk qcrypto ghash_ce nls_iso8859_1 mhi authenc qcom_spmi_temp_alarm gf128mul libarc4 sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher sm4 surface_aggregator_tabletsw pm8941_pwrkey industrialio snd_soc_hdmi_codec q6prm fastrpc qcom_edac pci_pwrctrl_pwrseq libdes qcom_rng input_leds joydev sch_fq_codel nvme_fabrics efi_pstore dmi_sysfs autofs4 snd_soc_wcd938x snd_soc_wcd_classh snd_soc_wcd938x_sdw snd_soc_wcd_common snd_soc_wcd_mbhc snd_soc_x1e80100 snd_soc_qcom_common snd_soc_qcom_sdw snd_soc_wsa884x(O) regmap_sdw q6apm_lpass_dais snd_q6dsp_common q6apm_dai
+[   55.326307]  hid_multitouch hid_generic surface_hid hci_uart surface_hid_core hid surface_battery surface_aggregator_hub surface_charger nvme snd_q6apm(O) btqca surface_aggregator_registry nvme_core btrtl btbcm surface_aggregator btintel nvme_keyring nvme_auth apr qrtr_smd rpmsg_ctrl bluetooth panel_samsung_atna33xc20 crc_itu_t ps883x qcom_pd_mapper qcom_pon mshw0485_touch(O) reboot_mode nvmem_qcom_spmi_sdam rtc_pm8xxx soundwire_qcom(O) slimbus soundwire_bus snd_soc_lpass_rx_macro snd_soc_lpass_tx_macro(E) snd_soc_lpass_wsa_macro(OE) snd_soc_lpass_va_macro(E) snd_soc_lpass_macro_common(E) qcom_spmi_pmic i2c_qcom_geni snd_soc_core msm dispcc_x1e80100 snd_compress phy_qcom_edp spi_geni_qcom(O) qcom_stats qcom_q6v5_pas ac97_bus qcom_geni_serial snd_pcm_dmaengine qcom_pil_info ubwc_config qcom_q6v5 qcom_sysmon ocmem videocc_sm8550 snd_pcm i2c_qcom_cci drm_gpuvm qcom_common pinctrl_sm8550_lpass_lpi ucsi_glink gpi(O) qcom_glink_smem drm_exec gpucc_x1e80100 gpu_sched snd_timer pinctrl_lpass_lpi lpasscc_sc8280xp mdt_loader
+[   55.326354]  tcsrcc_x1e80100 sbsa_gwdt qcom_cpucp_mbox icc_bwmon snd typec_ucsi arm_smccc_trng pwrseq_qcom_wcn socinfo soundcore gpio_keys fixed qrtr
+[   55.326363] CPU: 5 UID: 0 PID: 6205 Comm: insmod Tainted: G        W  OE       7.1.5-sp11-render-parity-v4+ #5 PREEMPT(full) 
+[   55.326366] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   55.326367] Hardware name: Microsoft Corporation Microsoft Surface Pro, 11th Edition/Microsoft Surface Pro, 11th Edition, BIOS 175.222.235 02/23/2026
+[   55.326368] pstate: 81400005 (Nzcv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[   55.326370] pc : v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev]
+[   55.326378] lr : e004q_test_init+0x12c/0xf88 [e004q_stream_block_test]
+[   55.326380] sp : ffff8000892fb8c0
+[   55.326382] x29: ffff8000892fb8e0 x28: 0000aaaac0b1cf78 x27: ffffd33750038660
+[   55.326385] x26: 0000000000000001 x25: 0000000000000000 x24: 000000000501bd00
+[   55.326388] x23: 0000000000000000 x22: ffff0008015d9500 x21: ffff0008023f9020
+[   55.326391] x20: ffff0008138bcc90 x19: ffff0008015d9a00 x18: 0000000000000000
+[   55.326394] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaaac0b1cf78
+[   55.326397] x14: 0000000000000000 x13: 64692d646c697562 x12: 0000000000000000
+[   55.326400] x11: 0000000000000000 x10: 0000000000000000 x9 : ffffd3372edea1a4
+[   55.326403] x8 : ffff8000892fb948 x7 : 0000000000000000 x6 : 0000000000000000
+[   55.326406] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[   55.326409] x2 : 0000000000000000 x1 : 0000000000000001 x0 : ffff0008015d9a00
+[   55.326412] Call trace:
+[   55.326413]  v4l2_ctrl_g_ctrl_int64+0x48/0xb0 [videodev] (P)
+[   55.326421]  e004q_test_init+0x12c/0xf88 [e004q_stream_block_test]
+[   55.326424]  do_one_initcall+0x5c/0x4e0
+[   55.326426]  do_init_module+0x9c/0x2f0
+[   55.326428]  load_module+0x1da0/0x2738
+[   55.326430]  init_module_from_file+0x104/0x178
+[   55.326433]  __arm64_sys_finit_module+0x210/0x3a8
+[   55.326435]  invoke_syscall.constprop.0+0xac/0x128
+[   55.326437]  el0_svc_common.constprop.0+0x40/0x138
+[   55.326440]  do_el0_svc+0x24/0x50
+[   55.326442]  el0_svc+0x44/0x230
+[   55.326444]  el0t_64_sync_handler+0xb8/0x100
+[   55.326447]  el0t_64_sync+0x1b0/0x1b8
+[   55.326449] ---[ end trace 0000000000000000 ]---
+[   55.326450] E004Q_V4L2_CONTRACT: link_freq=0 pixel_rate=84000000 hblank=0 vblank=0 mbus_ret=0 type=5 lanes=1 mbus_link_freq=420000000
+[   55.326455] sp11-vd55g0 2-0060: SP11_VD55G0_NATIVE_STREAM_BLOCK=PASS requested=1 reason=E004l_bind_only stream=0 illumination=0
+[   55.326457] E004Q_STREAM_BLOCK_TEST: s_stream(1) ret=-95 expected=-95
