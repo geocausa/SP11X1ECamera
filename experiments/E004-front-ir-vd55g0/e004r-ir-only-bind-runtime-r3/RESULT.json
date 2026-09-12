@@ -1,0 +1,43 @@
+{
+  "schema": "sp11-camera-e004r-ir-only-bind-r3-prep-v1",
+  "status": "READY_UNINSTALLED_UNARMED",
+  "parent_e004q_evidence_commit": "72d49f3f4b81b9c0a313bd3d4b7cb0acdb5a7d1f",
+  "parent_e004o_commit": "47c17e7",
+  "candidate_id": "sp11-camera-e004r-ir-only-bind-r3-one-shot",
+  "boot_marker": "sp11_camera_e004r_ir_only_bind_r3=1",
+  "dtb_sha256": "fffacde38934d1baa8392f6b5687827cf0490d7af9e20fd37858347c157f5742",
+  "sensor_module_sha256": "4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72",
+  "camss_module_sha256": "bc574b2027eee19fc07f12cb1c7efbd86ec1be38e09715878d035d89cb169eba",
+  "harness_source_sha256": "47992c23009b6fa2a4894243e04c3ad34dfb7392cfb435506c3205f0e0601e84",
+  "harness_makefile_sha256": "5a4b7ccf4c237243d3ee595eaf15b99175df6776b6efe4f25014843ecbb9c73c",
+  "harness_module_sha256": "2cacc5e1336ac77b32c7e67e8c6f05cfdbaf6d54e9424cede1168f69c25f3303",
+  "attempt_limit": 1,
+  "retry_authorized": false,
+  "only_behavioral_delta": "typed V4L2 control accessors in verification harness",
+  "notifier_wait": {
+    "max_iterations": 100,
+    "sleep_seconds": 0.1,
+    "max_wait_seconds": 10,
+    "read_only": true
+  },
+  "expected_contract": {
+    "link_menu_index": 0,
+    "link_frequency_hz": 420000000,
+    "pixel_rate_hz": 84000000,
+    "hblank": 556,
+    "vblank": 1351,
+    "mbus_type": "V4L2_MBUS_CSI2_DPHY",
+    "mbus_type_enum": 5,
+    "lanes": 1,
+    "mbus_link_frequency_hz": 420000000,
+    "direct_stream_result": "-EOPNOTSUPP"
+  },
+  "kernel_warns_expected": 0,
+  "camss_receiver_programming_expected": false,
+  "capture_stream_performed": false,
+  "illumination_performed": false,
+  "installed": false,
+  "armed": false,
+  "runtime_performed": false,
+  "next_gate": "Checkpoint/push; install unarmed; arm fresh one-shot; require warning-free typed V4L2 contract and direct stream refusal; return Golden and retire."
+}
