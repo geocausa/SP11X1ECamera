@@ -14,6 +14,6 @@ It contains:
 
 The production launcher does not hard-code the IMX681 I2C bus, `/dev/videoN`, or sensor subdev number. The proven route identities remain pinned (`msm_csiphy2 -> msm_csid1 -> msm_vfe1_pix -> msm_vfe1_video3`) until a different route is separately proven.
 
-`cap-release-one-shot` is not the default and requires explicit launcher acknowledgement. Repeated-stream live robustness and production-native changed post-G3 feedback are still unproven.
+`cap-release-one-shot` is not the default and requires explicit launcher acknowledgement. Bounded repeated-open robustness is proven through four sequential 27-frame production streams (HQ); production-native changed post-G3 feedback remains unproven. Each launcher invocation now defaults to a fresh timestamp/PID session directory, and `--execute` refuses an already-existing output directory so evidence cannot be silently overwritten or mixed between sessions.
 
 `PROVENANCE.json` remains the HF source-authority provenance record.
