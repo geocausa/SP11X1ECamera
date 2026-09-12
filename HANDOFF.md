@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI production consolidation is PASS through a clean stable IQ runtime and offline production launcher. HI's capture helper is a deterministic transform of frozen HC; absent policy means `shadow`, while `cap-release-one-shot` requires an explicit launcher acknowledgement before execution. Media discovery resolves the IMX681 entity and `/dev` nodes dynamically while retaining the already-proven X1E route identities. GO/GS/GV/GY/HC archived topologies all pass, including real `imx681 3-0010` -> `4-0010` drift, plus a synthetic bus/subdev/video renumber. No HI camera runtime occurred.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS through a relocatable staged install image. HJ builds production userspace and both camera modules twice with byte-identical outputs, normalizes module build paths, verifies protected-kernel vermagic, stages only committed runtime assets plus binaries/modules, and reproduces R5..R27 23/23 byte-exact from the staged `/usr/lib/sp11-front-imx681` tree with zero source-repo runtime opens. No HJ camera runtime occurred.
 
-**Next parallel gate: HJ package/install staging and a fresh bounded repeated-stream shadow-mode candidate.** Keep the brighter-scene native-feedback live gate parked separately; HI does not prove repeated streaming or production-native post-G3 feedback.
+**Next parallel gate: HK fresh bounded repeated-stream shadow-mode candidate preparation.** The runtime identity must be new and disposable; keep post-G3 policy at `shadow`, preserve Golden rollback, and keep the brighter-scene native-feedback gate parked separately.
 
 ---
 

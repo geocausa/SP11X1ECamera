@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI production consolidation:** PASS. HI adds deterministic production userspace build, dynamic IMX681/media-node discovery and a dry-run-by-default launcher. Post-G3 physical writes are shadowed by default; one native cap-release write requires explicit opt-in. Five real archived topologies plus a synthetic node renumber pass, with no hard-coded I2C bus/video/subdev identity and no camera runtime.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. HJ closes offline packaging: userspace and both modules build byte-identically twice, module vermagic matches Golden, package staging is deterministic, and the staged IQ producer remains R5..R27 23/23 byte-exact outside the repo. Ignored local authority cache data is excluded.
 
-**Next action:** keep the native-feedback live gate parked for a brighter diffuse scene; in parallel, build HJ package/install staging and prepare a fresh bounded repeated-stream shadow-mode runtime candidate with Golden rollback.
+**Next action:** keep the native-feedback live gate parked for a brighter diffuse scene; in parallel, prepare HK as a fresh bounded repeated-stream **shadow-mode** runtime candidate with a new boot identity and explicit Golden rollback evidence.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
