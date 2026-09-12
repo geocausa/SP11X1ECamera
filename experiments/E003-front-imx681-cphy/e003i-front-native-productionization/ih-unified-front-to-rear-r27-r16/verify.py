@@ -114,5 +114,17 @@ if r['status']=='PREPARED_NOT_INSTALLED_FRONT_TO_REAR_R27_R16':
     need(r.get('candidate_installed') is False and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'prep lifecycle')
 if r['status']=='INSTALLED_UNARMED_FRONT_TO_REAR_R27_R16':
     need(r.get('candidate_installed') is True and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'installed lifecycle')
+if r['status']=='PASS_CAPTURE_IH_FRONT_TO_REAR_R27_R16_GOLDEN_RESTORED_RETIRED':
+    need(r.get('candidate_installed') is False and r.get('candidate_retired') is True and r.get('candidate_boot_consumed') is True,'pass lifecycle')
+    need(r.get('camera_runtime_performed') is True and r.get('neutral_handoff')=='PASS','pass handoff')
+    need(r.get('front_frames')==27 and r.get('front_first_snapshot_generation')==1 and r.get('front_producer_generations')==24 and r.get('front_producer_requests')==23,'front pass')
+    need(r.get('front_startup_native_writes')==3 and r.get('front_post_g3_native_writes')==0 and r.get('front_hardware_control_transactions_including_bootstrap')==4,'front writes')
+    need(r.get('front_streamoff_count')==1 and r.get('front_runtime_status')=='suspended','front close')
+    need(r.get('rear_colorbar_frames')==1 and r.get('rear_normal_frames')==16 and r.get('rear_sequences')==list(range(16)),'rear pass')
+    need(r.get('rear_runtime_status')=='suspended' and r.get('final_route_state')=='rear-only','rear close/route')
+    need(r.get('kernel_health')=='PASS' and r.get('golden_return')=='PASS','health/golden')
+    need(r.get('same_stream_retry_performed') is False and r.get('same_boot_retry_performed') is False,'retry')
+    need(r.get('bidirectional_same_boot_route_handoff_proven_with_ig') is True,'bidirectional closure')
+    need(r.get('archive_manifest_sha256')=='4c988c514992ec69e92449aaf66e7eb90cc35365d735c54ae2d2fda5fcd4c0ea','archive')
 
 print('IH_STATIC_VERIFY=PASS DIRECTION=front-to-neutral-to-rear FRONT=R27 REAR=R16 POLICY=shadow RETRY=NO')
