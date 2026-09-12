@@ -1,6 +1,6 @@
 # Camera IH — same-boot front -> neutral -> rear R27/R16
 
-Status: **prepared / not installed / not armed / no runtime**.
+Status: **installed / not armed / no runtime**.
 
 IH is the independent reverse-direction companion to passed IG. It uses the same exact IB unified DTB and module authority under a fresh one-shot identity.
 
@@ -15,3 +15,5 @@ One consumed attempt is permitted:
 8. No same-stream or same-boot retry; return directly to Golden, archive, retire.
 
 Passing IH together with IG closes the bidirectional same-boot route-handoff proof. It does not by itself prove indefinite camera switching or the parked brighter-scene post-G3 native-feedback gate.
+
+The exact IH candidate is now installed under /boot/sp11-7.1.5-camera-ih-front-to-rear-r27-r16. Golden remains the saved default and next_entry is empty. Installed-unarmed state must be committed and pushed before arming.
