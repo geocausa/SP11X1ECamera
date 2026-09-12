@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID + IE:** rear and front unified live regressions PASS/retired. **IF:** same-boot handoff/reset analysis PASS offline. **IG:** rear-to-front same-boot candidate installed-unarmed and exact-hash verified; Golden saved entry intact, next_entry empty, no runtime.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID + IE:** rear and front unified live regressions PASS/retired. **IF:** same-boot handoff analysis PASS offline. **IG:** rear -> neutral -> front same-boot handoff PASS live/retired; exact rear R16 acceptance, neutral route handoff, front R27 shadow acceptance, no retry, Golden restored.
 
-**Next action:** commit/push IG installed-unarmed, then arm one-shot and reboot. Runtime remains rear accepted R16 -> neutral -> front R27 shadow, with no retry. IH reverse-direction proof remains required.
+**Next action:** IH fresh front-to-rear same-boot candidate prep and independent reverse-direction proof. Only after IH passes should bidirectional same-boot switching/default promotion be considered.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

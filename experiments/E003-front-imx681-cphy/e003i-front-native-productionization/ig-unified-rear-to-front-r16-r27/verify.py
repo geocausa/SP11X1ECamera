@@ -114,5 +114,16 @@ if r['status']=='PREPARED_NOT_INSTALLED_REAR_TO_FRONT_R16_R27':
     need(r.get('candidate_installed') is False and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'prep lifecycle')
 if r['status']=='INSTALLED_UNARMED_REAR_TO_FRONT_R16_R27':
     need(r.get('candidate_installed') is True and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'installed lifecycle')
+if r['status']=='PASS_CAPTURE_IG_REAR_TO_FRONT_R16_R27_GOLDEN_RESTORED_RETIRED':
+    need(r.get('candidate_installed') is False and r.get('candidate_retired') is True and r.get('candidate_boot_consumed') is True,'pass lifecycle')
+    need(r.get('camera_runtime_performed') is True and r.get('neutral_handoff')=='PASS','pass handoff')
+    need(r.get('rear_colorbar_frames')==1 and r.get('rear_normal_frames')==16 and r.get('rear_sequences')==list(range(16)),'rear pass')
+    need(r.get('rear_runtime_status')=='suspended','rear suspend')
+    need(r.get('front_frames')==27 and r.get('front_first_snapshot_generation')==1 and r.get('front_producer_generations')==24 and r.get('front_producer_requests')==23,'front pass')
+    need(r.get('front_startup_native_writes')==3 and r.get('front_post_g3_native_writes')==0 and r.get('front_hardware_control_transactions_including_bootstrap')==4,'front writes')
+    need(r.get('front_streamoff_count')==1 and r.get('front_runtime_status')=='suspended' and r.get('final_route_state')=='front-only','front close/route')
+    need(r.get('kernel_health')=='PASS' and r.get('golden_return')=='PASS','health/golden')
+    need(r.get('same_stream_retry_performed') is False and r.get('same_boot_retry_performed') is False,'retry')
+    need(r.get('archive_manifest_sha256')=='09c8e7d29d34c8084125fc3a62fa2340d7db3e5366ac0a7d644f79865ae0a9a3','archive')
 
 print('IG_STATIC_VERIFY=PASS DIRECTION=rear-to-neutral-to-front REAR=R16 FRONT=R27 POLICY=shadow RETRY=NO')

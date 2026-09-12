@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified-DTB regressions are both PASS live and retired; IF same-boot handoff/reset analysis is PASS offline. **IG rear -> neutral -> front is installed-unarmed and exact-hash verified.** Golden saved entry is intact and next_entry is empty. The harness consumes before first route mutation, proves rear-only, runs accepted rear color-bar + R16, requires rear suspend, disables both rear links, verifies neutral, then invokes one front R27 shadow stream and requires final front-only routing.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified regressions are PASS live/retired; IF handoff analysis is PASS offline. **IG rear -> neutral -> front is PASS live and retired.** Rear exact color-bar + R16 passed, rear runtime suspended, explicit link disable produced verified neutral, front R27 passed 27/27 with fresh generation 1 and zero post-G3 native writes, final route was front-only, kernel health/GOLDEN return passed, and no retry occurred. Final IG archive manifest is `09c8e7d29d34c8084125fc3a62fa2340d7db3e5366ac0a7d644f79865ae0a9a3`.
 
-**Next gate: checkpoint/push IG installed-unarmed, then arm one-shot.** Any consumed result returns directly to Golden and retires the candidate. IH reverse direction remains required; brighter-scene native-feedback stays parked.
+**Next gate: IH fresh front -> neutral -> rear one-shot.** Reverse direction remains independently required before bidirectional same-boot acceptance/default promotion. Brighter-scene native-feedback stays parked.
 
 ---
 
