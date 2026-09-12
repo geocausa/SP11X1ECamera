@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: IC-prestream-harness-failure-golden-retired
-phase: camera-stack-unified-rear-regression-harness-fix
-status: golden-ic-prestream-failure-retired-no-camera-runtime
+state_id: ID-unified-rear-regression-prepared
+phase: camera-stack-unified-rear-regression-prepared-not-installed
+status: golden-id-prepared-not-installed-no-runtime
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: IC-prestream-harness-failure-closed
+current_gate: ID-unified-rear-regression-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: ID-fresh-unified-rear-regression-candidate-prep
+next_experiment: ID-installed-unarmed-checkpoint
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  IC candidate boot 534de488-d5c9-44bc-aee1-c5fc2ce3ef90 is consumed/retired as FAIL_HARNESS_PRE_STREAM_NO_CAMERA_STREAM. Modules loaded and both sensors bound, but discover-unified.py rejected media-ctl entity headers containing route counts; read-only graph also showed mutable rear links msm_csiphy1:1->msm_csid0:0 and msm_csid0:1->msm_vfe0_rdi0:0 disabled while invoke helper did not enable them. No attempt marker, STREAMON, dequeue, runtime-output or front stream occurred. Golden return boot 137a4a6c-bfb2-4370-9201-8cd5d86e45b5 PASS; candidate retired; archive manifest 90392180610bbed064718631fb84d2aaa9912136874b02abe056d0117c683b90. Next ID must use fresh identity, fix/parser-test against IC real graph, explicitly enable/verify rear links, then checkpoint before install.
+  ID fresh candidate prepared offline on protected Golden. New identity sp11-camera-id-unified-rear-r16-one-shot; IC identity is never reused. Discovery parser regression passes on hash-pinned normalized real IC media graph fixture SHA256 24309fb97c68bbfc5c4874864a2f100e148f7cfc152fb88ee8abcda021ee7814. Route verifier proves real pre-state has rear mutable links disabled and front mutable route disabled; synthetic exact-two-link enabled state passes. Invoke helper consumes before any route mutation, then enables/verifies only msm_csiphy1:1->msm_csid0:0 and msm_csid0:1->msm_vfe0_rdi0:0. Root prearm PASS. No install/arm/runtime yet. Next commit/push prep, install unarmed, verify and checkpoint again before arm.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4021,3 +4021,32 @@ ic_current:
   same_boot_retry_performed: false
   golden_return: PASS
   archive_manifest_sha256: 90392180610bbed064718631fb84d2aaa9912136874b02abe056d0117c683b90
+
+
+id_current:
+  status: prepared-not-installed-unified-rear-regression-r16
+  candidate_id: sp11-camera-id-unified-rear-r16-one-shot
+  candidate_marker: sp11_camera_id_unified_rear_r16=1
+  candidate_boot_dir: /boot/sp11-7.1.5-camera-id-unified-rear-r16
+  parent_ic_retired: true
+  ic_identity_reused: false
+  unified_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321
+  qcom_camss_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  imx681_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
+  rear_colorbar_sha256: 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346
+  real_ic_graph_fixture_sha256: 24309fb97c68bbfc5c4874864a2f100e148f7cfc152fb88ee8abcda021ee7814
+  discovery_real_graph_regression: PASS
+  rear_route_real_pre_regression: PASS
+  rear_route_synthetic_enabled_regression: PASS
+  explicit_rear_link_enable_count: 2
+  front_link_enable_count: 0
+  attempt_consumed_before_route_mutation: true
+  front_stream_authorized: false
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  candidate_installed: false
+  candidate_armed: false
+  camera_runtime_performed: false
+  root_prearm: PASS
+  next_gate: ID-installed-unarmed-checkpoint

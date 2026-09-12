@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS. **IC is consumed/retired as a pre-stream harness failure.** Modules and unified graph bound, but the discovery regex rejected entity headers containing route counts; no attempt marker, STREAMON or camera frame occurred. The same read-only graph proved IC also omitted explicit enabling of the two mutable rear route links. Golden return passed and archive manifest is `90392180610bbed064718631fb84d2aaa9912136874b02abe056d0117c683b90`.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS. **IC remains retired as a pre-stream harness failure; ID is the fresh repaired candidate and is prepared offline only.** The real IC media graph is now a hash-pinned fixture. ID discovery passes on it, the rear-route verifier passes both real pre-state and synthetic exact-two-link post-state, and the new invoke helper consumes before route mutation, enables only `csiphy1->csid0` and `csid0->vfe0_rdi0`, verifies them, and never enables front routing. Root prearm passes on protected Golden.
 
-**Next gate: ID fresh rear-regression candidate.** Fix/parser-test against the real IC graph, add explicit rear-link setup/verification, checkpoint under a new boot identity, and only then install/arm. The brighter-scene native-feedback gate stays parked.
+**Next gate: durable ID prep checkpoint, then installed-unarmed checkpoint.** Only after both pass may the fresh ID boot be armed. The brighter-scene native-feedback gate stays parked.
 
 ---
 

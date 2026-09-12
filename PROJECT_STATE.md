@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **IC:** consumed pre-stream harness failure — unified modules bound, but discovery parser failed and rear mutable links were not explicitly enabled. No STREAMON/frame/runtime occurred; Golden return, archive and retirement PASS.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **IC:** retired pre-stream harness failure, no camera runtime. **ID:** fresh rear-first unified-DTB candidate prepared offline with new identity; real IC graph discovery regression PASS, rear route pre-state PASS, synthetic exact-two-link enabled-state PASS, consumed-before-route-mutation enforced, root prearm PASS. No ID install/arm/runtime yet.
 
-**Next action:** ID fresh candidate prep with parser regression against the IC real graph plus explicit rear-link setup/verification; never reuse IC identity. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** commit/push ID prep, install unarmed, verify and checkpoint/push installed-unarmed before arming. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
