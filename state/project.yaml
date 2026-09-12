@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hj-package-install-staging-pass
-phase: front-imx681-repeated-stream-shadow-candidate-prep
-status: golden-hj-pass-native-feedback-environment-blocked
+state_id: E003i-hk-repeat-shadow-prepared-not-installed
+phase: front-imx681-repeated-stream-shadow-candidate-prearm
+status: golden-hk-prepared-not-installed-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hj-package-install-staging-pass
+current_gate: E003i-hk-repeat-shadow-prepared-not-installed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HK-repeated-stream-shadow-candidate
+next_experiment: E003i-HK-install-unarmed-checkpoint
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HJ package/install staging PASS: production userspace and CAMSS/IMX681 modules build byte-identically twice, module vermagic matches protected Golden, package manifests are deterministic, and the staged IQ runtime reproduces R5-R27 23/23 byte-exact outside the source repo with no ignored local authority cache. Prepare HK under a fresh disposable boot identity for exactly bounded repeated-stream shadow-mode validation; keep post-G3 writes at shadow, preserve Golden rollback, and do not reuse consumed runtime identities. The production-native feedback gate remains parked until a brighter diffuse real scene is available.
+  HK repeated-stream shadow candidate PREPARED but NOT INSTALLED: fresh identity sp11-camera-e003i-hk-repeat-shadow-r27-one-shot, HJ package hashes verified, exactly two 27-frame streams authorized, post-G3 policy shadow with zero later native writes authorized, no same-stream retry, and no camera runtime. Commit/push this prep, install the disposable boot entry unarmed, checkpoint installed state, then fresh-reconcile before any one-shot arm. Native-feedback live proof remains parked until a brighter diffuse real scene.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3508,3 +3508,23 @@ e003i_hj_current:
   repeated_stream_live_robustness_proven: false
   post_g3_native_feedback_proven: false
   next_gate: HK-repeated-stream-shadow-candidate
+
+
+e003i_hk_current:
+  status: prepared-not-installed-repeat-shadow-r27
+  candidate_id: sp11-camera-e003i-hk-repeat-shadow-r27-one-shot
+  candidate_marker: sp11_camera_e003i_hk_repeat_shadow_r27=1
+  candidate_installed: false
+  candidate_armed: false
+  streams_authorized: 2
+  frames_per_stream: 27
+  post_g3_policy: shadow
+  post_g3_native_writes_authorized: 0
+  same_stream_retry_authorized: false
+  package_manifest_sha256: 70ccff8551ec7d34b0005bc1abfc0ec90471b5da9757cbbdf2b2d23f509ca0d6
+  qcom_camss_module_sha256: eacf0d171ffde41803bb877852065e6537ae5ea9b6801fa4a8034c7ceea075d8
+  imx681_module_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  camera_runtime_performed: false
+  repeated_stream_live_robustness_proven: false
+  post_g3_native_feedback_proven: false
+  next_gate: HK-install-unarmed-checkpoint

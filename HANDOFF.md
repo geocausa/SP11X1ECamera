@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS through a relocatable staged install image. HJ builds production userspace and both camera modules twice with byte-identical outputs, normalizes module build paths, verifies protected-kernel vermagic, stages only committed runtime assets plus binaries/modules, and reproduces R5..R27 23/23 byte-exact from the staged `/usr/lib/sp11-front-imx681` tree with zero source-repo runtime opens. No HJ camera runtime occurred.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS and HK is prepared offline under a fresh disposable identity. The HK package is the HJ staged runtime, its CAMSS/IMX681/userspace hashes match HJ exactly, post-G3 policy is fixed to `shadow`, exactly two 27-frame streams are authorized, and no same-stream retry is allowed. Golden/origin/module/package prearm passes with no camera runtime.
 
-**Next parallel gate: HK fresh bounded repeated-stream shadow-mode candidate preparation.** The runtime identity must be new and disposable; keep post-G3 policy at `shadow`, preserve Golden rollback, and keep the brighter-scene native-feedback gate parked separately.
+**HK is not installed or armed at this checkpoint.** Next commit/push the prep, install the boot entry unarmed, checkpoint that exact installed state, then arm once only after another prearm reconciliation. The brighter-scene native-feedback gate stays parked.
 
 ---
 
