@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hy-production-one-stream-pass-golden-retired
-phase: front-imx681-production-handoff-decision
-status: golden-hy-one-stream-pass-retired-native-feedback-environment-blocked
+state_id: E003i-hz-production-handoff-decision-pass
+phase: camera-stack-unified-rear-front-camss-authority
+status: golden-hz-handoff-decision-pass-full-stack-dtb-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hy-production-one-stream-pass
+current_gate: E003i-hz-production-handoff-decision-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HZ-production-handoff-decision
+next_experiment: IA-unified-rear-front-shared-camss-authority
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HY PASS live one-stream production acceptance on exact current-Golden/HV authority: one attempt, 27 frames, snapshot G1, producer G1..G24, 23 R5..R27 submissions, startup writes G1..G3 only, post-G3 shadow with zero later native writes, four hardware control transactions including bootstrap, exact QC10C/TLBG/STATS3A sizes, STREAMOFF and kernel health PASS, no same-stream/same-boot retry. Candidate boot 7334effd-92e9-4cfc-a200-d047bdbabcb7; Golden return 56e2bbd9-e975-4e4e-86fe-b362288cbab9; candidate retired; archive manifest e411c04ad30f9b4c9816aa6743ccf137e4a8e552dec4ef2f34a761755008ca63. Next HZ production handoff decision; do not broaden write policy. Native-feedback proof remains parked.
+  HZ PASS offline: front HY and rear E002k-D-R3 are independently production-stream proven, but neither DTB is a safe whole-camera default. Front authority disables rear and exposes CAMSS port@2; rear exposes port@1. Shared CAMSS differs in IOMMU fwspec and RT-CDM1 register/IRQ authority, so naive concatenation and Golden-default replacement are blocked. Golden remains protected default; front post-G3 policy remains shadow. Next IA derives unified rear+front shared-CAMSS authority on exact current Golden before any combined DTB or live candidate.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3902,3 +3902,33 @@ e003i_hy_current:
   archive_manifest_sha256: e411c04ad30f9b4c9816aa6743ccf137e4a8e552dec4ef2f34a761755008ca63
   production_stream_on_current_golden_merge_proven: true
   production_native_changed_post_g3_feedback_proven: false
+
+
+e003i_hz_current:
+  status: pass-offline-production-handoff-decision
+  front_stage: HY-production-one-stream-pass
+  rear_stage: E002k-D-R3-source-integrated-production-pass
+  front_stream_proven: true
+  rear_stream_proven: true
+  golden_nodes: 1402
+  front_nodes: 1433
+  rear_nodes: 1422
+  front_added_nodes: 31
+  rear_added_nodes: 20
+  shared_camera_added_nodes: 16
+  front_only_camera_nodes: 15
+  rear_only_camera_nodes: 4
+  front_rear_sensor_status: disabled
+  front_camss_port: 2
+  rear_camss_port: 1
+  front_camss_rt_cdm1: true
+  rear_camss_rt_cdm1: false
+  front_camss_iommu_entries: 5
+  rear_camss_iommu_entries: 8
+  naive_front_dtb_as_full_stack_authorized: false
+  naive_rear_front_node_concatenation_authorized: false
+  persistent_golden_default_replacement_authorized: false
+  golden_system_modified: false
+  camera_runtime_performed: false
+  front_post_g3_write_policy: shadow
+  next_gate: IA-unified-rear-front-shared-camss-authority

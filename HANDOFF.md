@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV/HW/HX are PASS. **HY is consumed/PASS, Golden-restored and retired.** Fresh candidate boot `7334effd-...bcb7` executed exactly one 27-frame production `shadow` stream: G1 stats start, producer G1..G24 / 23 submissions, G1..G3 startup writes only, zero later native writes, four hardware control transactions including bootstrap, exact evidence sizes, STREAMOFF/kernel health PASS. No retry. Golden returned as boot `56e2bbd9-...cbab9`; candidate removed. Archive manifest SHA256 `e411c04ad30f9b4c9816aa6743ccf137e4a8e552dec4ef2f34a761755008ca63`.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY are PASS. **HZ closes the production handoff decision offline.** Front HY and rear E002k-D-R3 are both independently production-stream proven, but there is not yet one safe full-stack DTB. The front authority intentionally disables rear OV13858 and owns CAMSS `port@2`; rear authority owns `port@1`. Shared CAMSS also conflicts in IOMMU fwspec and RT-CDM1 resources. Therefore direct front-DTB promotion, rear/front node concatenation, and replacement of Golden as saved default are all blocked.
 
-**Next gate: HZ production handoff decision.** Integrate proven current-Golden DT/activation/stream authority durably without broadening post-G3 writes. The brighter-scene native-feedback gate stays parked.
+**Next gate: IA offline unified rear+front shared-CAMSS authority analysis.** Derive one evidence-backed common CAMSS authority on exact current Golden before building a combined DTB. The brighter-scene native-feedback gate stays parked.
 
 ---
 

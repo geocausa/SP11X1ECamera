@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT/HU/HV/HW/HX:** production handoff, exact-Golden DT, activation and stream policy PASS. **HY:** one production stream on current-Golden merged DTB PASS — 27 frames, fresh G1, 24 producer generations / 23 requests, startup writes G1..G3 only, zero later native writes, four total control transactions including bootstrap, clean STREAMOFF/health, no retry, Golden return and retirement PASS.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY:** production packaging, exact-Golden front DT, activation and one-stream acceptance PASS. **HZ:** production handoff decision PASS offline — front and rear are independently proven, but full-stack promotion is blocked because front authority disables rear and shared CAMSS differs in route children, IOMMU fwspec and RT-CDM1 resources. Golden stays default.
 
-**Next action:** HZ production handoff decision: durable integration of current-Golden DT/activation/stream authority without broadening write policy. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** IA offline unified rear+front shared-CAMSS authority analysis on exact current Golden; no combined DTB or live candidate until common authority is proven. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
