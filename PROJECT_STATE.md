@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE production-integration inventory:** PASS. Final CAMSS/helper behavior is reproducible, but the final sources are transform-generated, GM imports 16 experiment-local components, and no stable production tree/package exists.
+**HE/HF production consolidation:** HE inventory PASS; HF stable source bundle PASS. `src/front-imx681/` now holds the byte-identical proven kernel/runtime sources with an 82-file provenance manifest. The consolidated HC helper rebuilds to the exact accepted binary hash; CAMSS and IMX681 modules build with the protected kernel vermagic. No runtime occurred.
 
-**Next action:** keep the native-feedback live gate parked for a brighter diffuse scene; in parallel, build HF as a byte-identical consolidated front-IMX681 source bundle with provenance and no camera runtime.
+**Next action:** keep the native-feedback live gate parked for a brighter diffuse scene; in parallel, make the stable GM IQ producer hermetic in HG and prove R5..R27 byte-exact before adding production launcher/install lifecycle.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

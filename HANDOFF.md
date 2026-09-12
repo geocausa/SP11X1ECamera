@@ -16,7 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE production-integration inventory is now PASS. The final CAMSS source and final capture helper are reproducible but generated through experiment chains; GM carries 16 experiment-local dependencies; no stable production source/package tree exists. **Next parallel gate: HF consolidated byte-identical source bundle plus provenance, no runtime.**
+HE production-integration inventory is PASS, and HF now closes the first consolidation step. `src/front-imx681/` contains a stable byte-identical source bundle with 82-file provenance: final R27 CAMSS, HC helper, CW IMX681, native AEC/CQ, scheduler/gain-feed/cap-release policy and frozen GM producer. The helper rebuilds to the exact accepted HC binary hash and both kernel modules build with the protected SP11 vermagic. No camera runtime occurred.
+
+**Next parallel gate: HG hermetic IQ producer relocation.** Remove the 16 experiment-directory imports/assets from the stable producer packaging without changing its algorithm, then prove R5..R27 output byte-exact against accepted authorities.
 
 ---
 

@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-he-production-integration-inventory-pass
-phase: front-imx681-production-source-consolidation
-status: golden-he-pass-native-feedback-environment-blocked
+state_id: E003i-hf-stable-front-imx681-source-bundle-pass
+phase: front-imx681-hermetic-userspace-consolidation
+status: golden-hf-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-he-production-integration-inventory-pass
+current_gate: E003i-hf-stable-front-imx681-source-bundle-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HF-stable-front-imx681-source-bundle
+next_experiment: E003i-HG-hermetic-iq-producer-relocation
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HE inventory PASS: final CAMSS/helper authorities are reproducible but transform-generated, GM imports 16 experiment-local dependencies, and no stable production tree exists. Build HF as a byte-identical consolidated front-IMX681 source bundle with provenance and no camera runtime; keep post-G3 native feedback parked until a brighter diffuse real scene is available.
+  HF stable source bundle PASS: src/front-imx681 directly tracks 82 proven authority files, exact HC helper source/binary, final R27 CAMSS, CW IMX681 and native runtime stack. HG must relocate the GM IQ producer and its 16 experiment-local dependencies into the stable bundle with no algorithm change and prove R5-R27 byte-exact offline. Keep post-G3 native feedback parked until a brighter diffuse real scene is available.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3399,3 +3399,24 @@ e003i_he_current:
   repeated_stream_live_robustness: false
   camera_runtime_performed: false
   next_gate: HF-stable-front-imx681-source-bundle
+
+
+e003i_hf_current:
+  status: pass-offline-stable-front-imx681-source-bundle
+  bundle_root: src/front-imx681
+  provenance_authority_files: 82
+  camss_source_sha256: 117136b2c624de5ef3f4c081cdcf9c363cda9f6db5c752b7ade5f5e11b1b3e95
+  capture_helper_source_sha256: 578f41d5cc0935aff327f500d38c095ed64f7428d2e245adc1f8196e9b3c99a3
+  capture_helper_binary_sha256: fc305c89c9d7ff62fa85c58d987b5738c5ad53ee850e2c74903aa822180adb67
+  imx681_source_sha256: 6e14f6d345759eb61a2a54129437e04f747e64d59d3bfc264069a0ecddeeb78e
+  iq_producer_sha256: fa2f6f8c912a5ea5ab031ab149d1da45809ef24b79a111a5a64e3784c4af6ed1
+  final_camss_source_directly_tracked: true
+  final_helper_source_directly_tracked: true
+  helper_binary_byte_exact: true
+  kernel_modules_buildable_offline: true
+  absolute_workspace_path_coupling_in_build_sources: false
+  iq_producer_source_frozen_byte_exact: true
+  iq_producer_hermetic: false
+  camera_runtime_performed: false
+  post_g3_native_feedback_proven: false
+  next_gate: HG-hermetic-iq-producer-relocation
