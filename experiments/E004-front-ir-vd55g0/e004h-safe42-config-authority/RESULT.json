@@ -1,0 +1,32 @@
+{
+  "camss": false,
+  "dtb_sha256": "e29c787acf9e2f1330a4e73fd8014aba118a2f0a59be51c86859a9ab7fed4ef2",
+  "expected_total_sensor_data_writes": 596,
+  "external_illumination": false,
+  "isolated_strobe": {
+    "register": "0x0468",
+    "windows_value": "0x02",
+    "writes_authorized": false
+  },
+  "linux_runtime_performed": false,
+  "module_sha256": "75eccb1ac7a8a5f247ec03a9f56339527d2dcd7cfab77450b3ba1f8efe563c5c",
+  "module_two_builds_byte_reproducible": true,
+  "next_gate": "Package/checkpoint a one-shot E004i runtime for the exact safe42 subset; one attempt only; success powers off and returns Golden.",
+  "parent": "E004f proven patch/boot prefix + E004g illumination isolation",
+  "runtime_authorized": false,
+  "runtime_guards": [
+    "read 0x0468 before safe42",
+    "reject any safe42 table entry at 0x0468",
+    "read 0x0468 after safe42 and require unchanged",
+    "read back Windows transport/timing/exposure/ROI and GPIO0/2/3 settings",
+    "remain in SW_STBY"
+  ],
+  "safe42_sequence_sha256": "159647774f45331210044d0680e50bf16e8aaeeb8c3e98449d2cef7adeffacb2",
+  "safe_final_config_writes": 42,
+  "schema": "sp11-camera-e004h-safe42-config-authority-v1",
+  "status": "PASS_OFFLINE_SAFE42_WINDOWS_CONFIG_AUTHORITY",
+  "stream": false,
+  "surface_patch_sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321",
+  "v4l2": false,
+  "windows_full43_sequence_sha256": "9664529aab0c65d6f3ae9778c8c31f54fa1675bde748fdaafc8e2d2ab4ea387c"
+}
