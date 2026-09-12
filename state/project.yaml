@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: IF-unified-production-handoff-reset-analysis-pass
-phase: camera-stack-unified-rear-to-front-same-boot-candidate-prep
-status: golden-if-handoff-reset-analysis-pass-no-runtime
+state_id: IG-unified-rear-to-front-prepared
+phase: camera-stack-unified-rear-to-front-prepared-not-installed
+status: golden-ig-prepared-not-installed-no-runtime
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: IF-unified-production-handoff-reset-analysis-pass
+current_gate: IG-unified-rear-to-front-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: IG-unified-rear-to-front-same-boot-r16-r27-prep
+next_experiment: IG-installed-unarmed-checkpoint
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  IF offline handoff/reset analysis PASS. ID + IE prove rear and front separately under the exact unified IB DTB. Front repeated-open/reset is proven by HQ/HR and current source resets TLBG/3A generations plus CSID epoch/buffer counters. Accepted rear and front helpers enable mutable media links but do not disable them, so STREAMOFF/file close is not sufficient route ownership transfer. Same-boot switching requires source close/suspend, explicit source-route disable, neutral all-four-mutable-links verification, then target-route enable/verify. Whole-stack default promotion remains unauthorized. Next IG prepares a fresh rear-to-neutral-to-front one-shot; IH later proves the reverse direction.
+  IG fresh rear-to-front candidate is prepared offline on protected Golden. Contract: neutral pre-state; consume before first route mutation; accepted rear color-bar + 16 normal frames; rear runtime suspend; explicit disable of both rear mutable links; verified neutral all-four-link handoff; exactly one front 27-frame production stream with shadow post-G3 policy; final front-only route; no retry. Static transition verifier and root prearm PASS. Next commit/push prep, install unarmed, verify and checkpoint again before arm. IH reverse direction remains required.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4138,3 +4138,30 @@ if_current:
   second_live_direction: front-to-rear
   second_live_gate: IH-unified-front-to-rear-same-boot-r27-r16
   next_gate: IG-unified-rear-to-front-same-boot-r16-r27-prep
+
+ig_current:
+  status: prepared-not-installed-rear-to-front-r16-r27
+  candidate_id: sp11-camera-ig-rear-to-front-r16-r27-one-shot
+  candidate_marker: sp11_camera_ig_rear_to_front_r16_r27=1
+  candidate_boot_dir: /boot/sp11-7.1.5-camera-ig-rear-to-front-r16-r27
+  direction: rear-to-front
+  rear_colorbar_frames: 1
+  rear_normal_frames: 16
+  front_frames: 27
+  front_post_g3_policy: shadow
+  front_post_g3_native_writes_authorized: 0
+  handoff_neutral_required: true
+  consume_before_first_route_mutation: true
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  unified_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321
+  qcom_camss_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  imx681_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
+  rear_colorbar_sha256: 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346
+  production_package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
+  candidate_installed: false
+  candidate_armed: false
+  camera_runtime_performed: false
+  root_prearm: PASS
+  next_gate: IG-installed-unarmed-checkpoint

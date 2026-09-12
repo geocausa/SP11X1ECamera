@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified-DTB regressions are both PASS live and retired. **IF same-boot handoff/reset analysis is PASS offline.** Front repeated-open is already proven by HQ/HR and current source resets snapshot generations plus front CSID software counters. The blocker is explicit route ownership: neither accepted rear helper nor front launcher disables its mutable media links, so a cross-camera switch must pass through a verified neutral topology rather than relying on STREAMOFF.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified-DTB regressions are both PASS live and retired; IF same-boot handoff/reset analysis is PASS offline. **IG rear -> neutral -> front is now prepared offline, not installed or armed.** The harness consumes before the first route mutation, proves rear-only, runs exact accepted rear color-bar + R16, requires rear runtime suspend, explicitly disables both rear links, verifies neutral, then invokes one front R27 shadow stream and requires front-only final routing. Root prearm and static verifier PASS.
 
-**Next gate: IG rear -> neutral -> front same-boot one-shot.** Consume before route mutation, no retry, Golden return/archive/retire. IH must later prove the reverse direction before default promotion. The brighter-scene native-feedback gate stays parked.
+**Next gate: durable IG prep checkpoint, then installed-unarmed checkpoint.** Only then may the fresh IG one-shot be armed. IH reverse direction remains required; brighter-scene native-feedback stays parked.
 
 ---
 
