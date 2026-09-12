@@ -18,20 +18,25 @@ HEAD=$(git -C "$R" rev-parse HEAD); ORIGIN=$(git -C "$R" rev-parse '@{u}')
 python3 "$L/verify_e004l.py" >/tmp/e004m-e004l.txt || fail e004l_authority
 python3 "$K/verify_e004k.py" >/tmp/e004m-e004k.txt || fail e004k_authority
 
-rm -rf "$D/build"; mkdir -p "$D/build"
 python3 "$N/generate_windows_header.py" >/dev/null
 make -C "$B" M="$N" clean >/dev/null
 make -C "$B" M="$N" modules V=0 >/tmp/e004m-native-build.txt
-cp "$N/sp11-vd55g0.ko" "$D/build/sp11-vd55g0.ko"
-[ "$(sha256sum "$D/build/sp11-vd55g0.ko"|awk '{print $1}')" = '4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72' ] || fail sensor_hash
+cp "$N/sp11-vd55g0.ko" /tmp/e004m-sp11-vd55g0.ko
+[ "$(sha256sum /tmp/e004m-sp11-vd55g0.ko|awk '{print $1}')" = '4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72' ] || fail sensor_hash
 make -C "$B" M="$N" clean >/dev/null
 rm -f "$N/surface-windows.generated.h"
 
 make -C "$B" M="$D" clean >/dev/null
 make -C "$B" M="$D" modules V=0 >/tmp/e004m-harness-build.txt
-cp "$D/e004m_stream_block_test.ko" "$D/build/e004m_stream_block_test.ko"
-[ "$(sha256sum "$D/build/e004m_stream_block_test.ko"|awk '{print $1}')" = '93f947e9737c1472cf11df15b62223d07cae8adb330ebb359d27952172e5a926' ] || fail harness_hash
+cp "$D/e004m_stream_block_test.ko" /tmp/e004m-stream-block-test.ko
+[ "$(sha256sum /tmp/e004m-stream-block-test.ko|awk '{print $1}')" = '93f947e9737c1472cf11df15b62223d07cae8adb330ebb359d27952172e5a926' ] || fail harness_hash
 make -C "$B" M="$D" clean >/dev/null
+
+rm -rf "$D/build"; mkdir -p "$D/build"
+cp /tmp/e004m-sp11-vd55g0.ko "$D/build/sp11-vd55g0.ko"
+cp /tmp/e004m-stream-block-test.ko "$D/build/e004m_stream_block_test.ko"
+[ "$(sha256sum "$D/build/sp11-vd55g0.ko"|awk '{print $1}')" = '4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72' ] || fail packaged_sensor_hash
+[ "$(sha256sum "$D/build/e004m_stream_block_test.ko"|awk '{print $1}')" = '93f947e9737c1472cf11df15b62223d07cae8adb330ebb359d27952172e5a926' ] || fail packaged_harness_hash
 
 [ "$(sha256sum "$K/qcom-camss.ko"|awk '{print $1}')" = 'bc574b2027eee19fc07f12cb1c7efbd86ec1be38e09715878d035d89cb169eba' ] || fail camss_hash
 [ "$(sha256sum "$L/x1e80100-microsoft-denali-sp11-e004l-native-bind.dtb"|awk '{print $1}')" = 'dd54d71226b354e68164db7ad0d0985fb2d63fe584c4d0e1f647eb69ee3fe96b' ] || fail dtb_hash
