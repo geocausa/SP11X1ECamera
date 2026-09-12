@@ -1,17 +1,50 @@
 {
-  "schema": "sp11-camera-e004c-bounded-idprobe-prep-v1",
-  "status": "READY_UNINSTALLED_UNARMED",
-  "parent_commit": "339aade",
-  "candidate_id": "sp11-camera-e004c-ir-idprobe-one-shot",
+  "schema": "sp11-camera-e004c-bounded-idprobe-result-v2",
+  "status": "PASS_BOUNDED_LINUX_IDENTITY_REVISION_GOLDEN_RETURN_RETIRED",
+  "candidate_commit": "22721add1fd3bf0d96111eda42300aadd6837b9f",
+  "attempt_count": 1,
+  "attempt_limit": 1,
+  "retry_performed": false,
   "dtb_sha256": "2b9ff2265606aa95006e3c952597c496367106e00aa1e2d1ec1e75b8f9e485e6",
   "module_sha256": "d749fb549ff7c03e0ebcd1690b78b795d985d6d37083ab938a2a2663c397daed",
-  "attempt_limit": 1,
-  "retry_authorized": false,
+  "i2c_client": "3-0060",
+  "model": {
+    "raw_bytes": [
+      "0x30",
+      "0x47"
+    ],
+    "big_endian_hex": "0x3047",
+    "little_endian_hex": "0x4730",
+    "windows_qti_match": true
+  },
+  "revision": {
+    "raw_bytes": [
+      "0x11",
+      "0x11"
+    ],
+    "hex": "0x1111",
+    "classification": "CUT1"
+  },
+  "observed_power": {
+    "mclk_hz": 19200000,
+    "VDDIO_uV": 1800000,
+    "VCORE_uV": 1152000,
+    "VANA_uV": 2800000
+  },
+  "sensor_data_register_writes": 0,
   "patch_upload": false,
+  "sensor_boot": false,
+  "sensor_configure": false,
   "stream": false,
   "illumination": false,
-  "installed": false,
-  "armed": false,
-  "linux_probe_performed": false,
-  "next_gate": "checkpoint package, install unarmed, arm one-shot, perform one manual identity/revision probe, return Golden and retire"
+  "powered_off_before_module_unload": true,
+  "golden_return_pass": true,
+  "candidate_retired": true,
+  "windows_cross_evidence": {
+    "windows_first_start_surface_patch_bytes": 552,
+    "windows_first_start_surface_patch_sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321",
+    "actual_silicon_revision": "0x1111 CUT1",
+    "conclusion": "This CUT1 sensor is driven by Windows with the Surface-specific 552-byte patch; do not substitute the ST generic CUT1 patch."
+  },
+  "next_gate": "E004d mechanically reconstruct the complete same-machine Windows first-start post-identity patch/boot/config sequence from the captured 0x1310 packet and exact Surface package before authorizing any Linux sensor-data write."
 }
