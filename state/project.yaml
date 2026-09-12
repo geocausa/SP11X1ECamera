@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hp-four-stream-soak-policy-pass
-phase: front-imx681-four-stream-shadow-candidate-prep
-status: golden-hp-offline-soak-policy-pass-native-feedback-environment-blocked
+state_id: E003i-hq-four-stream-shadow-prepared-not-installed
+phase: front-imx681-four-stream-shadow-candidate-prearm
+status: golden-hq-prepared-not-installed-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hp-four-stream-shadow-soak-policy-pass
+current_gate: E003i-hq-four-stream-shadow-prepared-not-installed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HQ-four-stream-shadow-candidate
+next_experiment: E003i-HQ-install-unarmed-checkpoint
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HP PASS offline: next bounded lifecycle soak is exactly 4 sequential R27 streams (108 frames), post-G3 shadow with zero later native writes. Each stream must begin at snapshot generation G1, complete 24 producer generations / 23 R5..R27 submissions, use exactly three startup sensor writes and end STREAMOFF. Abort on first failure; no later stream/retry; archive immediately and return Golden. Projected evidence is <1 GiB with 8 GiB free-space prearm floor. Prepare HQ fresh one-shot identity using unchanged HN package; install unarmed and checkpoint before runtime. Native-feedback proof remains parked.
+  HQ fresh four-stream shadow candidate is PREPARED but NOT INSTALLED. Fresh ID sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot uses unchanged HN CAMSS/package authority. Exactly 4 sequential 27-frame streams (108 frames), each fresh G1, post-G3 shadow, zero later native writes, abort on first failure, no same-stream/same-boot retry. Harness self-test, ShellCheck and static identity/policy verification pass. Commit/push prep, run clean-tree prearm including 8 GiB free-space floor, install unarmed and checkpoint before runtime. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3645,3 +3645,26 @@ e003i_hp_current:
   projected_evidence_bytes: 924338528
   camera_runtime_performed: false
   next_gate: HQ-four-stream-shadow-candidate
+
+
+e003i_hq_current:
+  status: prepared-not-installed-four-stream-shadow-r27
+  parent: HP-four-stream-shadow-soak-policy
+  candidate_id: sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot
+  candidate_marker: sp11_camera_e003i_hq_four_stream_shadow_r27=1
+  candidate_installed: false
+  candidate_armed: false
+  stream_count: 4
+  frames_per_stream: 27
+  total_frames: 108
+  post_g3_policy: shadow
+  post_g3_native_writes_authorized: 0
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  abort_on_first_failure: true
+  minimum_free_bytes_before_arm: 8589934592
+  hn_camss_module_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  hn_package_manifest_sha256: 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf
+  camera_runtime_performed: false
+  four_stream_live_robustness_proven: false
+  next_gate: HQ-install-unarmed-checkpoint

@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired; HM/HN are PASS; HO is consumed/PASS with two sequential streams. **HP now PASSes the offline soak policy:** next runtime is bounded to 4 sequential R27 streams (108 frames), `shadow`, zero post-G3 native writes, 4 clean STREAMOFFs required, fresh generation-1 session start each time, abort-on-first-failure, no retry, immediate archive + Golden return. Evidence budget is below 1 GiB from HO measurements with an 8 GiB prearm free-space floor.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS, HO is consumed/PASS, and HP soak policy is PASS. **HQ is prepared but not installed** under fresh ID `sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot`, unchanged HN CAMSS/package authority, and a bounded four-stream harness. Exactly 4Ã—27 frames are authorized; every session must restart at generation 1, use post-G3 `shadow`, make zero later native writes, and STREAMOFF cleanly. The harness aborts on first failure and leaves later markers untouched; archive ownership and free-space policy are enforced.
 
-**Next gate: HQ fresh four-stream shadow candidate.** New one-shot identity, unchanged HN package, prepare/install unarmed and checkpoint before runtime. The brighter-scene native-feedback gate stays parked.
+**Next gate: HQ install-unarmed checkpoint.** Commit/push prep, run clean-tree prearm, install unarmed, verify hashes/GRUB/Golden safety, and checkpoint before runtime. The brighter-scene native-feedback gate stays parked.
 
 ---
 
