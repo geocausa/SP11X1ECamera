@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: ID-unified-rear-regression-prepared
-phase: camera-stack-unified-rear-regression-prepared-not-installed
-status: golden-id-prepared-not-installed-no-runtime
+state_id: ID-unified-rear-regression-installed-unarmed
+phase: camera-stack-unified-rear-regression-installed-unarmed
+status: golden-id-installed-unarmed-no-runtime
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: ID-unified-rear-regression-prepared
+current_gate: ID-unified-rear-regression-installed-unarmed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: ID-installed-unarmed-checkpoint
+next_experiment: ID-one-shot-unified-rear-regression-runtime
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  ID fresh candidate prepared offline on protected Golden. New identity sp11-camera-id-unified-rear-r16-one-shot; IC identity is never reused. Discovery parser regression passes on hash-pinned normalized real IC media graph fixture SHA256 24309fb97c68bbfc5c4874864a2f100e148f7cfc152fb88ee8abcda021ee7814. Route verifier proves real pre-state has rear mutable links disabled and front mutable route disabled; synthetic exact-two-link enabled state passes. Invoke helper consumes before any route mutation, then enables/verifies only msm_csiphy1:1->msm_csid0:0 and msm_csid0:1->msm_vfe0_rdi0:0. Root prearm PASS. No install/arm/runtime yet. Next commit/push prep, install unarmed, verify and checkpoint again before arm.
+  ID fresh candidate installed-unarmed and verify-installed PASS. Entry SHA256 158a97f8ec9e4b470c3fdc1007c2dd7a3479a8df575caf91b5eb19264fc783e2; Golden kernel/initrd exact; IB unified DTB exact; CAMSS/IMX681/OV13858 exact; saved_entry remains sp11-audio-fullio-v19c and next_entry empty. Parser and route regressions PASS; attempt consumed before any route mutation. No runtime yet. Commit/push installed-unarmed checkpoint, then arm exactly once. Runtime contract: rear only, exact accepted color-bar SHA then 16 normal frames; front stream forbidden; no retry; Golden return/archive/retirement mandatory.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4024,7 +4024,7 @@ ic_current:
 
 
 id_current:
-  status: prepared-not-installed-unified-rear-regression-r16
+  status: installed-unarmed-unified-rear-regression-r16
   candidate_id: sp11-camera-id-unified-rear-r16-one-shot
   candidate_marker: sp11_camera_id_unified_rear_r16=1
   candidate_boot_dir: /boot/sp11-7.1.5-camera-id-unified-rear-r16
@@ -4045,8 +4045,13 @@ id_current:
   front_stream_authorized: false
   same_stream_retry_authorized: false
   same_boot_retry_authorized: false
-  candidate_installed: false
+  candidate_installed: true
   candidate_armed: false
   camera_runtime_performed: false
   root_prearm: PASS
-  next_gate: ID-installed-unarmed-checkpoint
+  next_gate: ID-one-shot-unified-rear-regression-runtime
+  install_source_head: f3fad03d28bdbd49dfaddc70f7314b9d6c1eb6cc
+  installed_entry_sha256: 158a97f8ec9e4b470c3fdc1007c2dd7a3479a8df575caf91b5eb19264fc783e2
+  installed_kernel_sha256: bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
+  installed_initrd_sha256: ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d
+  installed_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321
