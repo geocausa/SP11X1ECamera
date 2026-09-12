@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hy-production-one-stream-prepared-not-installed
-phase: front-imx681-production-one-stream-prepared-not-installed
-status: golden-hy-prepared-not-installed-native-feedback-environment-blocked
+state_id: E003i-hy-production-one-stream-installed-unarmed
+phase: front-imx681-production-one-stream-installed-unarmed
+status: golden-hy-installed-unarmed-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hy-production-one-stream-prepared-not-installed
+current_gate: E003i-hy-production-one-stream-installed-unarmed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HY-production-one-stream-install-unarmed
+next_experiment: E003i-HY-production-one-stream-one-shot
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HY PREPARED NOT INSTALLED: fresh one-shot ID sp11-camera-e003i-hy-prod-stream-r27-one-shot freezes exact Golden kernel/initrd, HV DTB 34880dc2..., HN modules and current production package 57aa9cc2.... Golden cmdline preserved except sp11_entry replacement plus camera-module blacklist and fresh token; no firmware_class.path. Explicit shadow policy, exactly one launcher invocation site, consume marker before invoke, exactly one 27-frame stream, no same-stream/same-boot retry, mandatory Golden return/retirement. Static verify + prearm PASS, no runtime. Commit/push prep, then install unarmed and checkpoint again before arm. Native-feedback proof remains parked.
+  HY INSTALLED UNARMED: exact candidate bundle under /boot/sp11-7.1.5-camera-e003i-hy-prod-stream-r27 verifies Golden kernel bca0a336..., Golden initrd ac3ba64b..., HV DTB 34880dc2..., HN modules, current package 57aa9cc2..., and GRUB entry 072eb313.... saved_entry remains Golden, next_entry empty, no camera modules/nodes/processes, no runtime. Commit/push installed checkpoint, then fresh reconcile before one one-shot 27-frame shadow stream boot. No retry; Golden return and retirement mandatory. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3859,11 +3859,11 @@ e003i_hx_current:
 
 
 e003i_hy_current:
-  status: prepared-not-installed-production-one-stream-r27
+  status: installed-unarmed-production-one-stream-r27
   parent: HX-production-one-stream-policy-pass
   candidate_id: sp11-camera-e003i-hy-prod-stream-r27-one-shot
   candidate_marker: sp11_camera_e003i_hy_prod_stream_r27=1
-  candidate_installed: false
+  candidate_installed: true
   candidate_armed: false
   camera_runtime_performed: false
   stream_count: 1
@@ -3879,4 +3879,6 @@ e003i_hy_current:
   hv_merged_dtb_sha256: 34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7
   production_package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
   prearm_pass: true
-  next_gate: HY-production-one-stream-install-unarmed
+  next_gate: HY-production-one-stream-one-shot
+  install_source_head: 897a7b6fd99aacbc9cbb5ccae08e7c3240a53c85
+  installed_grub_entry_sha256: 072eb313f972fd0022d9ca617b9120c931f6e05822d1c2802ea80236419da725

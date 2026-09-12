@@ -29,5 +29,9 @@ need('ATTEMPT1-CONSUMED.marker' in (D/'invoke-one.sh').read_text(),'consumed mar
 static={'candidate_id':'sp11-camera-e003i-hy-prod-stream-r27-one-shot','candidate_marker':'sp11_camera_e003i_hy_prod_stream_r27=1','stream_count':1,'frames':27,'post_g3_policy':'shadow','post_g3_native_writes_authorized':0,'same_stream_retry_authorized':False,'same_boot_retry_authorized':False,'hv_merged_dtb_sha256':'34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7','production_package_manifest_sha256':'57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757'}
 for k,v in static.items():need(r.get(k)==v,'RESULT '+k)
 need(r.get('status') in ('PREPARED_NOT_INSTALLED_PRODUCTION_ONE_STREAM_R27','INSTALLED_UNARMED_PRODUCTION_ONE_STREAM_R27','PASS_CAPTURE_HY_PRODUCTION_ONE_STREAM_R27_GOLDEN_RESTORED_RETIRED','FAIL_HY_GOLDEN_RESTORED_RETIRED'),'status')
-if r['status']=='PREPARED_NOT_INSTALLED_PRODUCTION_ONE_STREAM_R27':need(r.get('candidate_installed') is False and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'prep lifecycle')
+if r['status']=='PREPARED_NOT_INSTALLED_PRODUCTION_ONE_STREAM_R27':
+    need(r.get('candidate_installed') is False and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'prep lifecycle')
+if r['status']=='INSTALLED_UNARMED_PRODUCTION_ONE_STREAM_R27':
+    need(r.get('candidate_installed') is True and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'installed lifecycle')
+    need((D/'INSTALL.txt').is_file() and not (D/'ARM.txt').exists() and not (D/'runtime-output').exists(),'installed evidence')
 print('HY_STATIC_VERIFY=PASS STATUS='+r['status']+' STREAMS=1 POLICY=shadow RETRY=NO')
