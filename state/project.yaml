@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hl-repeat-state-failure-golden-retired
-phase: front-imx681-repeated-stream-reset-analysis
-status: golden-hl-repeat-state-failure-archived-retired-native-feedback-environment-blocked
+state_id: E003i-hm-repeat-reset-root-cause-pass
+phase: front-imx681-repeated-stream-reset-fix
+status: golden-hm-offline-root-cause-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hl-repeat-state-failure-closed
+current_gate: E003i-hm-repeat-stream-reset-ownership-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HM-repeat-stream-reset-ownership-analysis
+next_experiment: E003i-HN-snapshot-generation-reset-package
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HL attempt 1 is closed: stream 1 passed 27/27 with clean STREAMOFF, while stream 2 observed stale 3A generation 28 instead of 1 and then DQBUF sequence 0,1,2,0 rather than 0,1,2,3, causing fail-closed pinning. Zero post-G3 native writes, no retry, Golden restored, HL retired. Final archive manifest SHA256 ecd96ac7390a8bb873f57555bcdefb70dce92773ff4eaadb0dd954c4b85aebb5. Perform HM offline repeat-stream reset-ownership analysis and regression proof before any successor live candidate. Native-feedback proof remains parked.
+  HM PASS offline: 3A/TLBG snapshot reset clears payload/source/valid state but not generation counters, so after stream1 G27 the next session first publishes G28 while producer expects G1. The DQBUF 0,1,2,0 symptom is secondary error-buffer fallout after producer failure prevents R5; no independent stale CSID counter defect is proven. HN must set both snapshot generations to zero under existing locks, prove two logical sessions restart at G1, then rebuild deterministically and revalidate the production package offline before any successor live identity. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3568,3 +3568,17 @@ e003i_hl_current:
   same_boot_retry_performed: false
   archive_manifest_sha256: ecd96ac7390a8bb873f57555bcdefb70dce92773ff4eaadb0dd954c4b85aebb5
   golden_return: PASS
+
+
+e003i_hm_current:
+  status: pass-offline-repeat-stream-reset-ownership
+  parent: HL-repeat-state-failure-retired
+  root_cause: snapshot-generation-counters-not-reset
+  stream1_last_generation: 27
+  stream2_first_generation_observed: 28
+  producer_expected_generation: 1
+  dqbuf_sequence_mismatch_independent_bug: false
+  dqbuf_secondary_cause: missing-R5-causes-error-buffer-with-unassigned-sequence
+  csid_stale_counter_evidence: false
+  camera_runtime_performed: false
+  next_gate: HN-snapshot-generation-reset-package

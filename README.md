@@ -19,7 +19,7 @@ Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed 
 
 The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
 
-The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD leave native-feedback environment-blocked; HE/HF/HG/HH/HI/HJ provide the stable packaged stack. HL then proved one full stream works from that package but exposed repeat-stream state that is not reset before stream 2.** HL is archived/retired with Golden restored; the current work is offline lifecycle-reset analysis.
+The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD leave native-feedback environment-blocked; HE/HF/HG/HH/HI/HJ provide the stable packaged stack. HL proved one full stream works from that package; HM then traced stream 2's failure to snapshot generation counters not being reset between sessions.** HL remains archived/retired; HN will implement and repackage that reset fix offline before any new runtime.
 
 Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
 

@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK remains retired; **HL is now consumed and retired after exposing repeat-stream reset state**. Stream 1 passed 27 frames and clean STREAMOFF. Stream 2 began, but its producer read 3A generation 28 instead of 1; the video path then delivered sequences 0/1/2 followed by 0 rather than 3, triggering fail-closed pinning. No retry occurred. Archive manifest SHA256 is `ecd96ac7390a8bb873f57555bcdefb70dce92773ff4eaadb0dd954c4b85aebb5`; Golden return and candidate retirement pass.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired. **HM closes the HL failure causally offline:** `camss_x1e_3a_reset()` and `camss_x1e_tlbg_reset()` do not zero their generation counters, so stream 2's first snapshot becomes 28 instead of 1. The DQBUF 0/1/2/0 symptom is secondary fail-closed cleanup after the producer exits before R5; it is not evidence of a separate proven CSID/vb2 sequence-reset defect. Existing CSID software counters are explicitly zeroed by `csid_reset`, and HL supplies no independent evidence that they were stale.
 
-**Next gate: HM offline lifecycle reset analysis.** Do not prepare a successor runtime until the stats-generation and video/provider reset invariants are closed. The brighter-scene native-feedback gate stays parked.
+**Next gate: HN.** Implement generation reset under the existing snapshot locks, add an offline two-session regression, then rebuild and revalidate the deterministic production module/package. No live successor until HN passes. The brighter-scene native-feedback gate stays parked.
 
 ---
 

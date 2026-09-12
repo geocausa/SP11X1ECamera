@@ -1,0 +1,43 @@
+{
+  "camera_runtime_performed": false,
+  "csid_counter_conclusion": "source has explicit software-counter zeroing in csid_reset; HL supplies no independent evidence of stale CSID completion generations",
+  "hl_archive_manifest_sha256": "ecd96ac7390a8bb873f57555bcdefb70dce92773ff4eaadb0dd954c4b85aebb5",
+  "next_gate": "HN implement snapshot-generation reset and prove rebuilt production package offline",
+  "parent": "HL repeat-stream attempt 1 failure",
+  "required_fix": [
+    "set x1e_3a_generation=0 in camss_x1e_3a_reset under its lock",
+    "set x1e_tlbg_generation=0 in camss_x1e_tlbg_reset under its lock"
+  ],
+  "required_regression": [
+    "two logical sessions each publish first snapshot as generation1",
+    "reset preserves invalid-until-publish behavior",
+    "producer strict generation contract unchanged",
+    "no live runtime until rebuilt module/package authority passes"
+  ],
+  "root_cause": {
+    "bug": "camss_x1e_3a_reset and camss_x1e_tlbg_reset clear payload/source/slot/valid but leave generation counters unchanged",
+    "component": "CAMSS front PIX exported 3A/TLBG snapshot generation state",
+    "producer_expected_generation": 1,
+    "stream1_last_generation": 27,
+    "stream2_first_generation_observed": 28
+  },
+  "schema": "sp11-e003i-hm-repeat-stream-reset-ownership-v1",
+  "secondary_failure": {
+    "causal_chain": [
+      "producer rejects stale G28 while waiting for G1",
+      "no R5 capsule is submitted",
+      "runner completes frames 1..3 then blocks/fails waiting for request5 before frame4 completion",
+      "uncompleted video3 is returned with VB2_BUF_STATE_ERROR without assigning sequence",
+      "capture sees buffer index3 sequence0 and pins fail-closed"
+    ],
+    "dqbuf_sequence_mismatch_is_independent_reset_bug": false
+  },
+  "source_sha256": {
+    "camss-csid-680.c": "9c79fec22fc63738dd05b33aa7d43f4a68be4935b522fa35354a0170c498ae90",
+    "camss-video.c": "2eb92e872b4bc4f0aaa2e17197707ca270e3f5f8b8d8460952599631c9b76df4",
+    "camss.c": "117136b2c624de5ef3f4c081cdcf9c363cda9f6db5c752b7ade5f5e11b1b3e95",
+    "front-imx681-production-capture.c": "950350d72a3ec6f3d1e3c4ebede10b81c2fc648f4d23b4da5a7531adb25b30b4",
+    "live-iq-producer.py": "f9748676b69085c95b0662102f9f2fd1a5126c776e870d0c6c0c066bbee2863e"
+  },
+  "status": "PASS_OFFLINE_REPEAT_STREAM_RESET_OWNERSHIP"
+}
