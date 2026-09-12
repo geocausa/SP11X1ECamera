@@ -1,0 +1,35 @@
+{
+  "schema": "sp11-camera-if-unified-production-handoff-v1",
+  "status": "PASS_OFFLINE_UNIFIED_HANDOFF_RESET_ANALYSIS",
+  "camera_runtime_performed": false,
+  "parents": {
+    "id_rear": "PASS_CAPTURE_ID_UNIFIED_REAR_R16_GOLDEN_RESTORED_RETIRED",
+    "ie_front": "PASS_CAPTURE_IE_UNIFIED_FRONT_R27_GOLDEN_RESTORED_RETIRED",
+    "hq_front_four_stream": "PASS_CAPTURE_HQ_FOUR_STREAM_SHADOW_R27_GOLDEN_RESTORED_RETIRED",
+    "hr_front_repeated_open": "PASS_OFFLINE_PRODUCTION_REPEATED_OPEN_HANDOFF"
+  },
+  "front_repeated_open_proven": true,
+  "front_repeated_streams_proven": 4,
+  "front_repeated_frames_proven": 108,
+  "front_snapshot_generation_reset_source_proven": true,
+  "front_csid_epoch_counter_reset_source_proven": true,
+  "rear_repeated_open_live_proven": false,
+  "rear_route_auto_disable_proven": false,
+  "front_route_auto_disable_proven": false,
+  "same_boot_cross_camera_switch_proven": false,
+  "production_default_promotion_authorized": false,
+  "route_handoff_contract": {
+    "source_streamoff_and_close": true,
+    "source_sensor_suspend_check": true,
+    "explicit_source_route_disable": true,
+    "neutral_all_mutable_links_disabled": true,
+    "target_route_enable_after_neutral": true,
+    "target_only_route_verify": true,
+    "no_retry_after_consumption": true
+  },
+  "first_live_direction": "rear-to-front",
+  "first_live_gate": "IG-unified-rear-to-front-same-boot-r16-r27",
+  "second_live_direction": "front-to-rear",
+  "second_live_gate": "IH-unified-front-to-rear-same-boot-r27-r16",
+  "next_gate": "IG fresh one-shot rear-to-neutral-to-front candidate prep"
+}

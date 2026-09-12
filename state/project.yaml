@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: IE-unified-front-production-pass-golden-retired
-phase: camera-stack-unified-handoff-same-boot-analysis
-status: golden-id-rear-ie-front-unified-pass-both-retired
+state_id: IF-unified-production-handoff-reset-analysis-pass
+phase: camera-stack-unified-rear-to-front-same-boot-candidate-prep
+status: golden-if-handoff-reset-analysis-pass-no-runtime
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: IE-unified-front-production-pass
+current_gate: IF-unified-production-handoff-reset-analysis-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: IF-unified-production-handoff-same-boot-reset-analysis
+next_experiment: IG-unified-rear-to-front-same-boot-r16-r27-prep
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  IE unified front production regression PASS. Candidate boot ac146025-d952-47e5-9625-6c1db7691f4b delivered 27/27 frames, fresh generation 1 stats, 24 producer generations / 23 requests, startup writes G1..G3 only, zero post-G3 native writes, four hardware control transactions, STREAMOFF and kernel health PASS. Rear route remained disabled, rear stream false, no retry. Golden return boot 3c716d5b-7f1e-4fa8-a370-e4814150b2b3 PASS; candidate retired; final archive manifest 9ad7fa2649d688a23105d99dc1782d7b3b8eeb14cfe894c2fc435e5c21c9496e. ID + IE now prove rear and front separately under the same unified IB DTB. Next IF analyzes production handoff and same-boot arbitration/reset ownership before authorizing any combined live switch.
+  IF offline handoff/reset analysis PASS. ID + IE prove rear and front separately under the exact unified IB DTB. Front repeated-open/reset is proven by HQ/HR and current source resets TLBG/3A generations plus CSID epoch/buffer counters. Accepted rear and front helpers enable mutable media links but do not disable them, so STREAMOFF/file close is not sufficient route ownership transfer. Same-boot switching requires source close/suspend, explicit source-route disable, neutral all-four-mutable-links verification, then target-route enable/verify. Whole-stack default promotion remains unauthorized. Next IG prepares a fresh rear-to-neutral-to-front one-shot; IH later proves the reverse direction.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4118,3 +4118,23 @@ ie_current:
   same_boot_retry_performed: false
   golden_return: PASS
   archive_manifest_sha256: 9ad7fa2649d688a23105d99dc1782d7b3b8eeb14cfe894c2fc435e5c21c9496e
+
+if_current:
+  status: pass-offline-unified-handoff-reset-analysis
+  camera_runtime_performed: false
+  front_repeated_open_proven: true
+  front_repeated_streams_proven: 4
+  front_repeated_frames_proven: 108
+  front_snapshot_generation_reset_source_proven: true
+  front_csid_epoch_counter_reset_source_proven: true
+  rear_repeated_open_live_proven: false
+  rear_route_auto_disable_proven: false
+  front_route_auto_disable_proven: false
+  same_boot_cross_camera_switch_proven: false
+  production_default_promotion_authorized: false
+  neutral_route_required: true
+  first_live_direction: rear-to-front
+  first_live_gate: IG-unified-rear-to-front-same-boot-r16-r27
+  second_live_direction: front-to-rear
+  second_live_gate: IH-unified-front-to-rear-same-boot-r27-r16
+  next_gate: IG-unified-rear-to-front-same-boot-r16-r27-prep

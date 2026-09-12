@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; **ID rear and IE front unified-DTB regressions are both PASS live and retired.** IE reproduced the HY one-stream R27 shadow contract under the exact IB unified DTB: 27/27 frames, fresh generation 1, 24 producer generations / 23 requests, startup writes G1..G3 only, zero post-G3 native writes, clean STREAMOFF/kernel health, rear route disabled and no rear stream. Golden return passed; final IE archive manifest is `9ad7fa2649d688a23105d99dc1782d7b3b8eeb14cfe894c2fc435e5c21c9496e`.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified-DTB regressions are both PASS live and retired. **IF same-boot handoff/reset analysis is PASS offline.** Front repeated-open is already proven by HQ/HR and current source resets snapshot generations plus front CSID software counters. The blocker is explicit route ownership: neither accepted rear helper nor front launcher disables its mutable media links, so a cross-camera switch must pass through a verified neutral topology rather than relying on STREAMOFF.
 
-**Next gate: IF unified production handoff + same-boot arbitration/reset analysis.** Do not authorize a combined rear/front live switch until reset ownership is proved offline. The brighter-scene native-feedback gate stays parked.
+**Next gate: IG rear -> neutral -> front same-boot one-shot.** Consume before route mutation, no retry, Golden return/archive/retire. IH must later prove the reverse direction before default promotion. The brighter-scene native-feedback gate stays parked.
 
 ---
 
