@@ -1,0 +1,53 @@
+{
+  "schema": "sp11-camera-e004p-ir-only-native-bind-prep-v1",
+  "status": "READY_UNINSTALLED_UNARMED",
+  "parent_e004o_commit": "47c17e7",
+  "parent_e004n_evidence_commit": "0d8e5f3",
+  "candidate_id": "sp11-camera-e004p-ir-only-bind-one-shot",
+  "boot_marker": "sp11_camera_e004p_ir_only_bind=1",
+  "dtb_sha256": "fffacde38934d1baa8392f6b5687827cf0490d7af9e20fd37858347c157f5742",
+  "sensor_module_sha256": "4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72",
+  "camss_module_sha256": "bc574b2027eee19fc07f12cb1c7efbd86ec1be38e09715878d035d89cb169eba",
+  "harness_source_sha256": "85ed4e2c021beb1562ce5404d1e7dc12a693aea0787ffc04db43104cb5940ed3",
+  "harness_module_sha256": "674e1a79b2fb51046387643716db4d23642134ca8f30600adb30fca8c3ce0a4b",
+  "attempt_limit": 1,
+  "retry_authorized": false,
+  "graph_contract": {
+    "camss_external_ports": [
+      "port@0"
+    ],
+    "expected_sensor_entity_links": 1,
+    "expected_target": "msm_csiphy0",
+    "expected_link_flags": [
+      "ENABLED",
+      "IMMUTABLE"
+    ],
+    "subdev_node_required": true
+  },
+  "sensor_contract": {
+    "model": "0x3047",
+    "revision": "0x1111 CUT1",
+    "windows_state_writes": 596,
+    "final_state": "SW_STBY",
+    "runtime_pm_after_bind": "suspended"
+  },
+  "v4l2_contract": {
+    "format": "Y10_1X10",
+    "width": 644,
+    "height": 604,
+    "link_freq_hz": 420000000,
+    "pixel_rate_hz": 84000000,
+    "hblank": 556,
+    "vblank": 1351,
+    "mbus": "V4L2_MBUS_CSI2_DPHY",
+    "lanes": 1,
+    "direct_stream_result": "-EOPNOTSUPP"
+  },
+  "camss_receiver_programming_expected": false,
+  "capture_stream_performed": false,
+  "illumination_performed": false,
+  "installed": false,
+  "armed": false,
+  "runtime_performed": false,
+  "next_gate": "Checkpoint/push; install unarmed; arm fresh one-shot; prove notifier completion + immutable IR->CSIPHY0 link + V4L2 contract + direct stream refusal; return Golden and retire."
+}
