@@ -1,20 +1,50 @@
 {
-  "schema": "sp11-camera-e004f-prefix-runtime-prep-v1",
-  "status": "READY_UNINSTALLED_UNARMED",
-  "parent_commit": "f10de81733ad5c02e017ddd05e32b10aacb31bbc",
-  "candidate_id": "sp11-camera-e004f-prefixprobe-one-shot",
+  "schema": "sp11-camera-e004f-prefix-runtime-result-v2",
+  "status": "PASS_WINDOWS_SURFACE_PATCH_BOOT_PREFIX_TO_SW_STBY_GOLDEN_RETURN_RETIRED",
+  "candidate_commit": "2dacf56d44e3116862a20fe4549fd3b851ade914",
+  "attempt_count": 1,
+  "attempt_limit": 1,
+  "retry_performed": false,
   "dtb_sha256": "d05c4d50a4e2aaaff2216aa765802578c78551d97217cd3e422c9eda6a9c95e9",
   "module_sha256": "b257ca820cface72f4d2d28836f3621d8620c2284e23405ce519c26dd3160b1b",
   "surface_patch_sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321",
-  "attempt_limit": 1,
-  "retry_authorized": false,
-  "expected_sensor_data_writes": 554,
+  "model_be": "0x3047",
+  "revision": "0x1111 CUT1",
+  "sensor_data_writes": 554,
+  "surface_patch_writes": 552,
+  "patch_setup_writes": 1,
+  "boot_writes": 1,
+  "polls": {
+    "READY_TO_BOOT": {
+      "timeout_ms": 6,
+      "reads": 1,
+      "pass": true
+    },
+    "PATCH_SETUP_COMPLETE": {
+      "timeout_ms": 28,
+      "reads": 2,
+      "pass": true
+    },
+    "BOOT_COMPLETE": {
+      "timeout_ms": 6,
+      "reads": 2,
+      "pass": true
+    },
+    "SW_STBY": {
+      "timeout_ms": 4,
+      "reads": 1,
+      "pass": true
+    }
+  },
+  "final_state": "SW_STBY",
   "final_43_windows_config_writes": false,
   "sensor_gpio1_strobe_configured": false,
+  "camss": false,
+  "v4l2": false,
   "stream": false,
   "illumination": false,
-  "installed": false,
-  "armed": false,
-  "linux_prefix_runtime_performed": false,
-  "next_gate": "checkpoint package; install unarmed; arm one-shot; perform one manual prefix attempt; return Golden and retire"
+  "powered_off_before_module_unload": true,
+  "golden_return_pass": true,
+  "candidate_retired": true,
+  "next_gate": "E004g reconstruct and stage only the final 43 Windows configuration writes as a separate no-stream/no-CAMSS experiment; keep GPIO1 strobe implications explicit and external illumination disabled."
 }

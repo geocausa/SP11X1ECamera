@@ -16,3 +16,22 @@ Acceptance contract:
 - immediately reboot to Golden and retire the candidate.
 
 The runtime package itself is committed and pushed before installation or arming.
+
+## Runtime outcome
+
+The single authorized E004f attempt passed, then returned immediately to Golden and retired the candidate.
+
+Observed result:
+
+- model 0x3047 / physical revision 0x1111 CUT1 revalidated before writes;
+- 552 Surface patch writes completed;
+- PATCH_SETUP was write 553 and reached 0x0200==0 on the second poll read;
+- BOOT was write 554 and reached 0x0200==0 on the second poll read;
+- FSM SW_STBY 0x02 was observed on the first poll read;
+- total sensor-data writes: exactly 554;
+- final 43 Windows configuration writes: zero;
+- sensor GPIO1 strobe selector: not configured;
+- CAMSS/V4L2/stream/external illumination: absent;
+- reset was asserted and sensor resources powered off before module unload.
+
+The experiment therefore proves that the exact Surface Windows patch is accepted by this actual CUT1 sensor and that the Windows patch-setup/boot prefix reaches software standby under Linux with the same command ordering and bounded polls.
