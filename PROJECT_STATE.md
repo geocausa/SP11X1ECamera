@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID + IE:** rear and front unified live regressions PASS/retired. **IF:** same-boot handoff/reset analysis PASS offline. **IG:** fresh rear-to-front same-boot candidate prepared offline, not installed/armed; exact rear color-bar + R16, rear suspend, explicit neutral-route handoff, then one front R27 shadow stream; no retry. Root prearm PASS.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID + IE:** rear and front unified live regressions PASS/retired. **IF:** same-boot handoff/reset analysis PASS offline. **IG:** rear-to-front same-boot candidate installed-unarmed and exact-hash verified; Golden saved entry intact, next_entry empty, no runtime.
 
-**Next action:** commit/push IG prep, install unarmed, verify and checkpoint/push installed-unarmed before arming. IH reverse-direction proof remains required. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** commit/push IG installed-unarmed, then arm one-shot and reboot. Runtime remains rear accepted R16 -> neutral -> front R27 shadow, with no retry. IH reverse-direction proof remains required.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: IG-unified-rear-to-front-prepared
-phase: camera-stack-unified-rear-to-front-prepared-not-installed
-status: golden-ig-prepared-not-installed-no-runtime
+state_id: IG-unified-rear-to-front-installed-unarmed
+phase: camera-stack-unified-rear-to-front-installed-unarmed
+status: golden-ig-installed-unarmed-no-runtime
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: IG-unified-rear-to-front-prepared
+current_gate: IG-unified-rear-to-front-installed-unarmed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: IG-installed-unarmed-checkpoint
+next_experiment: IG-one-shot-rear-to-front-runtime
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  IG fresh rear-to-front candidate is prepared offline on protected Golden. Contract: neutral pre-state; consume before first route mutation; accepted rear color-bar + 16 normal frames; rear runtime suspend; explicit disable of both rear mutable links; verified neutral all-four-link handoff; exactly one front 27-frame production stream with shadow post-G3 policy; final front-only route; no retry. Static transition verifier and root prearm PASS. Next commit/push prep, install unarmed, verify and checkpoint again before arm. IH reverse direction remains required.
+  IG candidate installed-unarmed and verify-installed PASS. Entry SHA256 28ed126195247c1b46b87b283af79654706b86d7a1b3ee12dbcfc26ef8aa94f2; Golden kernel/initrd exact; IB unified DTB exact; CAMSS/IMX681/OV13858 exact; saved_entry remains sp11-audio-fullio-v19c and next_entry empty. No runtime yet. Commit/push installed-unarmed checkpoint, then arm exactly once. Runtime contract: rear accepted color-bar + R16, rear suspend, explicit rear link disable, neutral verify, one front R27 shadow stream, no retry; Golden return/archive/retirement mandatory.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4140,7 +4140,7 @@ if_current:
   next_gate: IG-unified-rear-to-front-same-boot-r16-r27-prep
 
 ig_current:
-  status: prepared-not-installed-rear-to-front-r16-r27
+  status: installed-unarmed-rear-to-front-r16-r27
   candidate_id: sp11-camera-ig-rear-to-front-r16-r27-one-shot
   candidate_marker: sp11_camera_ig_rear_to_front_r16_r27=1
   candidate_boot_dir: /boot/sp11-7.1.5-camera-ig-rear-to-front-r16-r27
@@ -4160,8 +4160,13 @@ ig_current:
   ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
   rear_colorbar_sha256: 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346
   production_package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
-  candidate_installed: false
+  candidate_installed: true
   candidate_armed: false
   camera_runtime_performed: false
   root_prearm: PASS
-  next_gate: IG-installed-unarmed-checkpoint
+  next_gate: IG-one-shot-rear-to-front-runtime
+  install_source_head: 34ef9f85f905b3ed56a01ea849d1cb7d5f363bf3
+  installed_entry_sha256: 28ed126195247c1b46b87b283af79654706b86d7a1b3ee12dbcfc26ef8aa94f2
+  installed_kernel_sha256: bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
+  installed_initrd_sha256: ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d
+  installed_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321

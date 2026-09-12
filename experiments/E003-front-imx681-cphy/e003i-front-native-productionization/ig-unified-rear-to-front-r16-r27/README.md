@@ -1,6 +1,6 @@
 # Camera IG — same-boot rear -> neutral -> front R16/R27
 
-Status: **prepared / not installed / not armed / no runtime**.
+Status: **installed / not armed / no runtime**.
 
 IG is the first cross-camera same-boot proof under the unified IB DTB. It follows IF's neutral-route ownership contract and uses a fresh one-shot identity.
 
@@ -15,3 +15,5 @@ One consumed attempt is permitted:
 8. No same-stream or same-boot retry; return directly to Golden, archive, retire.
 
 Passing IG proves rear -> front switching only. The reverse front -> rear direction still requires a separate IH one-shot before whole-stack/default promotion.
+
+The exact IG candidate is now installed under /boot/sp11-7.1.5-camera-ig-rear-to-front-r16-r27. Golden remains the saved default and next_entry is empty. Installed-unarmed state must be committed and pushed before arming.
