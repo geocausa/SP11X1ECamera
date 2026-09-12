@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired; HM/HN are PASS offline. **HO is installed but unarmed** under fresh identity `sp11-camera-e003i-ho-repeat-shadow-r27-one-shot`. It pins HN CAMSS SHA256 `7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95` and HN package manifest SHA256 `8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf`, with exactly two 27-frame `shadow` streams and zero post-G3 native writes authorized. The harness and archive paths are regression-checked offline.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired; HM/HN are PASS. **HO is consumed and PASS:** two sequential R27 streams completed with producer PASS, clean STREAMOFF twice, exactly three startup sensor writes per stream and zero post-G3 native writes. Kernel health and Golden return pass; no retry occurred; the candidate is retired. Final archive manifest SHA256 is `35975ea08e695d69d8ff69cf530b1236230cb43fb0d9bc739c0538dec2d2c57c`.
 
-**Next gate: HO install-unarmed checkpoint.** Commit/push the HO prep, run prearm on a clean tree, install unarmed, and checkpoint the installed state before one-shot runtime. The brighter-scene native-feedback gate stays parked.
+**Next gate: HP offline soak/loop policy design.** Preserve `shadow` and zero post-G3 native-write authority while designing a bounded longer lifecycle test. The brighter-scene native-feedback gate stays parked.
 
 ---
 

@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-ho-repeat-shadow-installed-unarmed
-phase: front-imx681-repeated-stream-shadow-installed-unarmed
-status: golden-ho-installed-unarmed-native-feedback-environment-blocked
+state_id: E003i-ho-two-stream-shadow-pass-golden-retired
+phase: front-imx681-repeated-stream-soak-design
+status: golden-ho-two-stream-pass-archived-retired-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-ho-repeat-shadow-installed-unarmed
+current_gate: E003i-ho-two-stream-shadow-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HO-one-shot-two-stream-shadow-runtime
+next_experiment: E003i-HP-repeat-stream-soak-policy
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HO corrected repeated-stream shadow candidate is INSTALLED but UNARMED. HN package hashes, fresh GRUB/boot identity, corrected two-stream harness and Golden safety are verified; Golden remains current and next_entry is empty. Exactly two sequential 27-frame streams, post-G3 shadow, zero later native writes, no same-stream/same-boot retry. Checkpoint/push this state, then fresh-reconcile and arm once. Native-feedback proof remains parked.
+  HO PASS live: two sequential 27-frame streams completed with producer PASS twice, STREAMOFF twice, exactly three startup sensor writes per stream, post-G3 shadow and zero later native writes. No retry; kernel health PASS; Golden restored; candidate retired. Final archive manifest SHA256 35975ea08e695d69d8ff69cf530b1236230cb43fb0d9bc739c0538dec2d2c57c. Next design HP offline for a bounded repeated-stream soak/loop with explicit stream count/duration, per-stream generation restart, fail-closed teardown and evidence limits. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3599,11 +3599,11 @@ e003i_hn_current:
 
 
 e003i_ho_current:
-  status: installed-unarmed-repeat-shadow-r27
+  status: pass-two-stream-shadow-golden-restored-retired
   parent: HN-snapshot-generation-reset-package
   candidate_id: sp11-camera-e003i-ho-repeat-shadow-r27-one-shot
   candidate_marker: sp11_camera_e003i_ho_repeat_shadow_r27=1
-  candidate_installed: true
+  candidate_installed: false
   candidate_armed: false
   streams_authorized: 2
   frames_per_stream: 27
@@ -3613,6 +3613,15 @@ e003i_ho_current:
   same_boot_retry_authorized: false
   hn_camss_module_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
   hn_package_manifest_sha256: 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf
-  camera_runtime_performed: false
-  repeated_stream_live_robustness_proven: false
-  next_gate: HO-one-shot-two-stream-shadow-runtime
+  camera_runtime_performed: true
+  repeated_stream_live_robustness_proven: true
+  next_gate: HP-repeat-stream-soak-policy
+  candidate_retired: true
+  streams_started: 2
+  streams_completed: 2
+  streamoff_count: 2
+  post_g3_native_write_count_total: 0
+  same_stream_retry_performed: false
+  same_boot_retry_performed: false
+  archive_manifest_sha256: 35975ea08e695d69d8ff69cf530b1236230cb43fb0d9bc739c0538dec2d2c57c
+  golden_return: PASS

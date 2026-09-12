@@ -25,4 +25,11 @@ allowed=('PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27','INSTALLED_UNARMED_REPEAT_SH
 need(r.get('status') in allowed,'status')
 if r['status']=='PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27': need(r.get('candidate_installed') is False and r.get('camera_runtime_performed') is False and not (D/'runtime-output').exists(),'prep lifecycle')
 if r['status']=='INSTALLED_UNARMED_REPEAT_SHADOW_R27': need(r.get('candidate_installed') is True and r.get('camera_runtime_performed') is False and not (D/'runtime-output').exists(),'installed lifecycle')
+if r['status']=='PASS_CAPTURE_HO_TWO_STREAM_SHADOW_R27_GOLDEN_RESTORED_RETIRED':
+    need(r.get('candidate_installed') is False and r.get('candidate_retired') is True and r.get('camera_runtime_performed') is True,'pass lifecycle')
+    need(r.get('streams_started')==2 and r.get('streams_completed')==2 and r.get('streamoff_count')==2,'pass streams')
+    need(r.get('post_g3_native_write_count_total')==0 and r.get('repeated_stream_live_robustness_proven') is True,'pass authority')
+    need(r.get('golden_return')=='PASS' and r.get('archive_manifest_sha256')=='35975ea08e695d69d8ff69cf530b1236230cb43fb0d9bc739c0538dec2d2c57c','pass closure')
+    for f in ('ATTEMPT1-PASS.json','GOLDEN-RETURN.txt','RETIRE.txt','POST.txt'):
+        need((D/f).is_file(),'pass evidence '+f)
 print('HO_STATIC_VERIFY=PASS STATUS='+r['status'])
