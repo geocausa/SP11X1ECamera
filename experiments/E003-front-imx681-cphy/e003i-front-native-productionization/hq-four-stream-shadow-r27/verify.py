@@ -38,4 +38,12 @@ if r['status']=='PREPARED_NOT_INSTALLED_FOUR_STREAM_SHADOW_R27':
     need(r.get('candidate_installed') is False and r.get('camera_runtime_performed') is False and not (D/'runtime-output').exists(),'prep lifecycle')
 if r['status']=='INSTALLED_UNARMED_FOUR_STREAM_SHADOW_R27':
     need(r.get('candidate_installed') is True and r.get('camera_runtime_performed') is False and not (D/'runtime-output').exists(),'installed lifecycle')
+if r['status']=='PASS_CAPTURE_HQ_FOUR_STREAM_SHADOW_R27_GOLDEN_RESTORED_RETIRED':
+    need(r.get('candidate_installed') is False and r.get('candidate_retired') is True and r.get('camera_runtime_performed') is True,'pass lifecycle')
+    need(r.get('streams_started')==4 and r.get('streams_completed')==4 and r.get('streamoff_count')==4,'pass streams')
+    need(r.get('total_frames')==108 and r.get('first_snapshot_generation_each_stream')==1,'pass frame/session contract')
+    need(r.get('post_g3_native_write_count_total')==0 and r.get('four_stream_live_robustness_proven') is True,'pass authority')
+    need(r.get('golden_return')=='PASS' and r.get('archive_manifest_sha256')=='a1358953c9dc545c5b5125f4ea4f71d35402391c00c52fe163f98d81822ef545','pass closure')
+    for f in ('ATTEMPT1-PASS.json','GOLDEN-RETURN.txt','RETIRE.txt','POST.txt'):
+        need((D/f).is_file(),'pass evidence '+f)
 print('HQ_STATIC_VERIFY=PASS STATUS='+r['status'])

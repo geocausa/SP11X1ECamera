@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS, HO is consumed/PASS, and HP soak policy is PASS. **HQ is installed but unarmed** under fresh ID `sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot`, unchanged HN CAMSS/package authority, and a bounded four-stream harness. Exactly 4Ã—27 frames are authorized; every session must restart at generation 1, use post-G3 `shadow`, make zero later native writes, and STREAMOFF cleanly. The harness aborts on first failure and leaves later markers untouched; archive ownership and free-space policy are enforced.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO and HQ are both consumed/PASS. **HQ proves four sequential production R27 streams** after the generation-reset fix: 108 total frames, fresh generation 1 each session, producer PASS four times, 4 clean STREAMOFFs, exactly 3 startup sensor writes per stream, zero post-G3 native writes, expected 16 total hardware control transactions, kernel health PASS, no retry, Golden return PASS and candidate retirement PASS. Final archive manifest SHA256 is `a1358953c9dc545c5b5125f4ea4f71d35402391c00c52fe163f98d81822ef545`.
 
-**Next gate: HQ one-shot runtime after installed checkpoint.** Checkpoint/push the installed-unarmed state, then arm only after another full Golden/origin/package/free-space reconciliation. The brighter-scene native-feedback gate stays parked.
+**Next gate: HR offline production repeated-open lifecycle handoff.** Consolidate the bounded repeated-open proof without broadening sensor-write authority. The brighter-scene native-feedback gate stays parked.
 
 ---
 

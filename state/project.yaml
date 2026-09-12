@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hq-four-stream-shadow-installed-unarmed
-phase: front-imx681-four-stream-shadow-installed-unarmed
-status: golden-hq-installed-unarmed-native-feedback-environment-blocked
+state_id: E003i-hq-four-stream-shadow-pass-golden-retired
+phase: front-imx681-production-repeated-open-handoff
+status: golden-hq-four-stream-pass-archived-retired-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hq-four-stream-shadow-installed-unarmed
+current_gate: E003i-hq-four-stream-shadow-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HQ-four-stream-shadow-one-shot-runtime
+next_experiment: E003i-HR-production-repeated-open-handoff
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HQ four-stream shadow candidate is INSTALLED but UNARMED. Fresh GRUB/boot identity, unchanged HN package hashes, HP four-stream policy, 8 GiB free-space floor, Golden saved entry and empty next_entry are verified. Exactly four sequential 27-frame streams, fresh G1 each session, post-G3 shadow, zero later native writes, abort on first failure, no same-stream/same-boot retry. Checkpoint/push this state, then fresh-reconcile and arm once. Native-feedback proof remains parked.
+  HQ PASS live: exactly four sequential 27-frame streams (108 frames) completed in one candidate boot. Every session restarted snapshot generation at G1; producer PASSed 24 generations / 23 R5..R27 submissions; exactly three startup sensor writes per stream; post-G3 shadow with zero later native writes; STREAMOFF x4; expected 16 total control transactions; kernel health PASS; no retry; Golden restored; candidate retired. Final archive manifest SHA256 a1358953c9dc545c5b5125f4ea4f71d35402391c00c52fe163f98d81822ef545. Next HR offline production repeated-open lifecycle handoff; do not broaden native-write authority. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3648,11 +3648,11 @@ e003i_hp_current:
 
 
 e003i_hq_current:
-  status: installed-unarmed-four-stream-shadow-r27
+  status: pass-four-stream-shadow-golden-restored-retired
   parent: HP-four-stream-shadow-soak-policy
   candidate_id: sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot
   candidate_marker: sp11_camera_e003i_hq_four_stream_shadow_r27=1
-  candidate_installed: true
+  candidate_installed: false
   candidate_armed: false
   stream_count: 4
   frames_per_stream: 27
@@ -3665,6 +3665,16 @@ e003i_hq_current:
   minimum_free_bytes_before_arm: 8589934592
   hn_camss_module_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
   hn_package_manifest_sha256: 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf
-  camera_runtime_performed: false
-  four_stream_live_robustness_proven: false
-  next_gate: HQ-four-stream-shadow-one-shot-runtime
+  camera_runtime_performed: true
+  four_stream_live_robustness_proven: true
+  next_gate: HR-production-repeated-open-handoff
+  candidate_retired: true
+  streams_started: 4
+  streams_completed: 4
+  streamoff_count: 4
+  first_snapshot_generation_each_stream: 1
+  post_g3_native_write_count_total: 0
+  same_stream_retry_performed: false
+  same_boot_retry_performed: false
+  archive_manifest_sha256: a1358953c9dc545c5b5125f4ea4f71d35402391c00c52fe163f98d81822ef545
+  golden_return: PASS
