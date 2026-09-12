@@ -32,6 +32,7 @@ grep -qx 'saved_entry=sp11-audio-fullio-v19c' <<<"$ENV"
  echo 'status=INSTALLED_UNARMED'
  echo "time=$(date -Ins)"
  echo "head=$(git -C "$R" rev-parse HEAD)"
- sha256sum "$ENTRY" "$BOOT"/* "$D/build/qcom-camss-hc.ko"
+ sudo -n sha256sum "$ENTRY" "$BOOT"/*
+ sha256sum "$D/build/qcom-camss-hc.ko"
 } > "$D/INSTALL.txt"
 echo "PASS: installed $ID; remains unarmed"
