@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: ID-unified-rear-regression-installed-unarmed
-phase: camera-stack-unified-rear-regression-installed-unarmed
-status: golden-id-installed-unarmed-no-runtime
+state_id: ID-unified-rear-regression-pass-golden-retired
+phase: camera-stack-unified-front-regression-candidate-prep
+status: golden-id-rear-pass-retired
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: ID-unified-rear-regression-installed-unarmed
+current_gate: ID-unified-rear-regression-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: ID-one-shot-unified-rear-regression-runtime
+next_experiment: IE-fresh-unified-front-production-regression-prep
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  ID fresh candidate installed-unarmed and verify-installed PASS. Entry SHA256 158a97f8ec9e4b470c3fdc1007c2dd7a3479a8df575caf91b5eb19264fc783e2; Golden kernel/initrd exact; IB unified DTB exact; CAMSS/IMX681/OV13858 exact; saved_entry remains sp11-audio-fullio-v19c and next_entry empty. Parser and route regressions PASS; attempt consumed before any route mutation. No runtime yet. Commit/push installed-unarmed checkpoint, then arm exactly once. Runtime contract: rear only, exact accepted color-bar SHA then 16 normal frames; front stream forbidden; no retry; Golden return/archive/retirement mandatory.
+  ID live rear regression PASS under the exact IB unified DTB. Accepted color-bar frame SHA256 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346, 16/16 normal frames sequences 0..15 at mean 29.8393449667 fps, rear runtime suspended, kernel health PASS, front stream false, no retry. Candidate boot b0b1c159-094e-4db0-a43a-9f068aff2910 consumed; Golden return boot 1b77c56c-b54b-4c4a-a860-487c291ea83b PASS; candidate retired; final archive manifest 72c9c085e4e1960c185aa0672d9eac162d8487cea3a3c235bb716267c1110dad. Next IE prepares a fresh unified front production regression based on proven HY R27 shadow contract with rear streaming forbidden.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4024,7 +4024,7 @@ ic_current:
 
 
 id_current:
-  status: installed-unarmed-unified-rear-regression-r16
+  status: pass-capture-id-unified-rear-r16-golden-restored-retired
   candidate_id: sp11-camera-id-unified-rear-r16-one-shot
   candidate_marker: sp11_camera_id_unified_rear_r16=1
   candidate_boot_dir: /boot/sp11-7.1.5-camera-id-unified-rear-r16
@@ -4045,13 +4045,29 @@ id_current:
   front_stream_authorized: false
   same_stream_retry_authorized: false
   same_boot_retry_authorized: false
-  candidate_installed: true
+  candidate_installed: false
   candidate_armed: false
-  camera_runtime_performed: false
+  camera_runtime_performed: true
   root_prearm: PASS
-  next_gate: ID-one-shot-unified-rear-regression-runtime
+  next_gate: IE-fresh-unified-front-production-regression-prep
   install_source_head: f3fad03d28bdbd49dfaddc70f7314b9d6c1eb6cc
   installed_entry_sha256: 158a97f8ec9e4b470c3fdc1007c2dd7a3479a8df575caf91b5eb19264fc783e2
   installed_kernel_sha256: bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
   installed_initrd_sha256: ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d
   installed_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321
+  candidate_retired: true
+  candidate_boot_consumed: true
+  candidate_boot_id: b0b1c159-094e-4db0-a43a-9f068aff2910
+  golden_return_boot_id: 1b77c56c-b54b-4c4a-a860-487c291ea83b
+  camera_stream_started: true
+  streams_completed: 2
+  colorbar_frames: 1
+  normal_frames: 16
+  mean_fps: 29.839344966699517
+  rear_runtime_status: suspended
+  front_stream_executed: false
+  same_stream_retry_performed: false
+  same_boot_retry_performed: false
+  kernel_health: PASS
+  golden_return: PASS
+  archive_manifest_sha256: 72c9c085e4e1960c185aa0672d9eac162d8487cea3a3c235bb716267c1110dad
