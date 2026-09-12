@@ -1,0 +1,38 @@
+{
+  "camss_activation": false,
+  "dtb_sha256": "d05c4d50a4e2aaaff2216aa765802578c78551d97217cd3e422c9eda6a9c95e9",
+  "external_illumination": false,
+  "final_43_windows_config_writes": false,
+  "generated_patch_header_sha256": "2578a382a5ffd1785c4df4e2ae5cb1c3d7923970840dbafdcaad9e71a85d1f6d",
+  "identity_gate": {
+    "model_be": "0x3047",
+    "required_before_first_write": true,
+    "revision": "0x1111 CUT1"
+  },
+  "linux_runtime_performed": false,
+  "module_sha256": "b257ca820cface72f4d2d28836f3621d8620c2284e23405ce519c26dd3160b1b",
+  "module_two_builds_byte_reproducible": true,
+  "next_gate": "Package/checkpoint a one-shot manual-load E004f runtime using this exact DTB/module; one attempt only; success ends at SW_STBY then powers off and returns Golden.",
+  "parent": "E004d exact Windows InitialConfig sequence + E004c physical CUT1 identity",
+  "runtime_authorized": false,
+  "schema": "sp11-camera-e004e-linux-prefixprobe-authority-v1",
+  "sensor_data_write_count_if_successful": 554,
+  "sensor_gpio1_strobe_configured": false,
+  "status": "PASS_OFFLINE_E004E_SURFACE_PATCH_BOOT_PREFIX_AUTHORITY",
+  "stream": false,
+  "surface_patch": {
+    "bytes": 552,
+    "committed_patch_bytes": false,
+    "sha256": "5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321"
+  },
+  "v4l2_registration": false,
+  "windows_prefix": [
+    "poll 0x002c==1, 6 x 1ms",
+    "write 552 Surface patch bytes one transaction per register",
+    "write 0x0200=2 PATCH_SETUP",
+    "poll 0x0200==0, 28 x 1ms",
+    "write 0x0200=1 BOOT",
+    "poll 0x0200==0, 6 x 1ms",
+    "poll 0x002c==2 SW_STBY, 4 x 1ms"
+  ]
+}
