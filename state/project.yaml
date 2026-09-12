@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hl-repeat-shadow-installed-unarmed
-phase: front-imx681-repeated-stream-shadow-installed-unarmed
-status: golden-hl-installed-unarmed-native-feedback-environment-blocked
+state_id: E003i-hl-repeat-state-failure-golden-retired
+phase: front-imx681-repeated-stream-reset-analysis
+status: golden-hl-repeat-state-failure-archived-retired-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hl-repeat-shadow-installed-unarmed
+current_gate: E003i-hl-repeat-state-failure-closed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HL-one-shot-two-stream-shadow-runtime
+next_experiment: E003i-HM-repeat-stream-reset-ownership-analysis
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HL corrected repeated-stream shadow candidate is INSTALLED but UNARMED. Fresh GRUB/boot identity, Golden-derived boot artifacts, HJ package hashes, ShellCheck and exact run_one harness self-test are verified; Golden remains current, saved_entry is Golden and next_entry is empty. Exactly two sequential 27-frame streams are authorized after one one-shot boot, with post-G3 shadow, zero later native writes and no same-stream retry. Checkpoint/push this state, then fresh-reconcile and arm once. Native-feedback proof remains parked.
+  HL attempt 1 is closed: stream 1 passed 27/27 with clean STREAMOFF, while stream 2 observed stale 3A generation 28 instead of 1 and then DQBUF sequence 0,1,2,0 rather than 0,1,2,3, causing fail-closed pinning. Zero post-G3 native writes, no retry, Golden restored, HL retired. Final archive manifest SHA256 ecd96ac7390a8bb873f57555bcdefb70dce92773ff4eaadb0dd954c4b85aebb5. Perform HM offline repeat-stream reset-ownership analysis and regression proof before any successor live candidate. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3538,11 +3538,11 @@ e003i_hk_current:
 
 
 e003i_hl_current:
-  status: installed-unarmed-repeat-shadow-r27
+  status: fail-stream2-repeat-state-golden-restored-retired
   predecessor: HK-prestream-harness-failure-retired
   candidate_id: sp11-camera-e003i-hl-repeat-shadow-r27-one-shot
   candidate_marker: sp11_camera_e003i_hl_repeat_shadow_r27=1
-  candidate_installed: true
+  candidate_installed: false
   candidate_armed: false
   streams_authorized: 2
   frames_per_stream: 27
@@ -3556,7 +3556,15 @@ e003i_hl_current:
   package_manifest_sha256: 70ccff8551ec7d34b0005bc1abfc0ec90471b5da9757cbbdf2b2d23f509ca0d6
   qcom_camss_module_sha256: eacf0d171ffde41803bb877852065e6537ae5ea9b6801fa4a8034c7ceea075d8
   imx681_module_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
-  camera_runtime_performed: false
+  camera_runtime_performed: true
   repeated_stream_live_robustness_proven: false
   post_g3_native_feedback_proven: false
-  next_gate: HL-one-shot-two-stream-shadow-runtime
+  next_gate: HM-repeat-stream-reset-ownership-analysis
+  candidate_retired: true
+  streams_started: 2
+  streams_completed: 1
+  stream1_result: PASS_27_FRAME_SHADOW_STREAMOFF
+  stream2_failure: STALE_3A_GEN28_AND_DQBUF_0_1_2_0
+  same_boot_retry_performed: false
+  archive_manifest_sha256: ecd96ac7390a8bb873f57555bcdefb70dce92773ff4eaadb0dd954c4b85aebb5
+  golden_return: PASS

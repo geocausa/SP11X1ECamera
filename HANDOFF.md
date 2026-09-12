@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK remains consumed/retired. **HL is installed but unarmed** under its fresh GRUB/cmdline identity. Its HJ production artifact hashes, corrected harness, package manifest, Golden kernel/initrd and accepted front-only DTB are all pinned; Golden remains current with empty `next_entry`, camera modules absent and no HL runtime evidence.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK remains retired; **HL is now consumed and retired after exposing repeat-stream reset state**. Stream 1 passed 27 frames and clean STREAMOFF. Stream 2 began, but its producer read 3A generation 28 instead of 1; the video path then delivered sequences 0/1/2 followed by 0 rather than 3, triggering fail-closed pinning. No retry occurred. Archive manifest SHA256 is `ecd96ac7390a8bb873f57555bcdefb70dce92773ff4eaadb0dd954c4b85aebb5`; Golden return and candidate retirement pass.
 
-Next checkpoint/push this installed-unarmed state, then arm once only after another full Golden/origin/package prearm reconciliation. Exactly two shadow streams are authorized; no same-stream retry. The brighter-scene native-feedback gate stays parked.
+**Next gate: HM offline lifecycle reset analysis.** Do not prepare a successor runtime until the stats-generation and video/provider reset invariants are closed. The brighter-scene native-feedback gate stays parked.
 
 ---
 

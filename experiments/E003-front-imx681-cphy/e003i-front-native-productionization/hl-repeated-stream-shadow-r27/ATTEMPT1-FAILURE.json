@@ -1,0 +1,40 @@
+{
+  "candidate_boot_id": "62bc9fa9-6f2d-43b8-82c0-afd460f057ae",
+  "candidate_id": "sp11-camera-e003i-hl-repeat-shadow-r27-one-shot",
+  "head": "8cd7453e443a3182aa46189c16b6627ea516f2f4",
+  "interpretation": "repeat-stream lifecycle state is not cleanly reset between STREAMOFF and the next STREAMON; exact producer/statistics and video-buffer reset ownership requires offline analysis",
+  "kernel": {
+    "panic_count": 0,
+    "sensor_control_transaction_count": 5,
+    "stream1_27frame_completion_count": 1
+  },
+  "one_shot_boot_consumed": true,
+  "post_g3_native_writes_authorized": 0,
+  "post_g3_policy": "shadow",
+  "required_next_action": "archive current boot evidence; reboot Golden immediately; verify rollback; retire HL; do not retry HL; analyze repeat-stream reset ownership offline before any successor runtime",
+  "same_boot_retry_performed": false,
+  "same_stream_retry_authorized": false,
+  "schema": "sp11-e003i-hl-attempt1-repeat-stream-failure-v1",
+  "status": "FAIL_STREAM2_REPEAT_STATE_NOT_RESET",
+  "stream1": {
+    "consumed": true,
+    "frames": 27,
+    "launcher_rc": 0,
+    "producer_pass": true,
+    "schedule_pass": true,
+    "streamoff": true,
+    "streamon": true
+  },
+  "stream2": {
+    "consumed": true,
+    "dqbuf_events": 3,
+    "dqbuf_mismatch": true,
+    "dqbuf_mismatch_detail": "expected sequence 3, actual sequence 0 at loop 3",
+    "pinned_for_reboot": true,
+    "producer_failure": "missed 3A generation 1, now 28",
+    "producer_pass": false,
+    "saved_stream2_files": [],
+    "streamoff": false,
+    "streamon": true
+  }
+}

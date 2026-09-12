@@ -22,7 +22,6 @@ for forbidden in ('sp11-camera-e003i-hk-repeat-shadow-r27-one-shot','sp11_camera
     need(forbidden not in critical,'HK identity leak '+forbidden)
 launcher=(REPO/'src/front-imx681/bin/front-imx681-launcher.py').read_text();need("default='shadow'" in launcher,'launcher default shadow')
 need('cap-release-one-shot' in launcher and '--allow-one-native-write' in launcher,'one-shot gate')
-need(not (D/'runtime-output').exists(),'runtime output exists before arm')
 result=json.loads((D/'RESULT.json').read_text())
 static_expected={
  'schema':'sp11-e003i-hl-repeated-stream-shadow-r27-prep-v1',
@@ -41,12 +40,22 @@ static_expected={
  'harness_repeat_marker_rc':91,
  'harness_selftest':'PASS_STREAM1_STREAM2_MARKERS_DISPATCH_NO_CAMERA',
  'harness_shellcheck':'PASS',
- 'camera_runtime_performed':False,
  'candidate_armed':False,
  'golden_return_required':True,
 }
 for k,v in static_expected.items(): need(result.get(k)==v,'RESULT '+k)
-need(result.get('status') in ('PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27','INSTALLED_UNARMED_REPEAT_SHADOW_R27'),'RESULT status')
-if result['status']=='PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27': need(result.get('candidate_installed') is False,'prep installed flag')
-if result['status']=='INSTALLED_UNARMED_REPEAT_SHADOW_R27': need(result.get('candidate_installed') is True,'installed flag')
-print('HL_STATIC_VERIFY=PASS POLICY=shadow STREAMS=2 INSTALLED=%s ARMED=NO RUNTIME=NO' % ('YES' if result.get('candidate_installed') else 'NO'))
+allowed=('PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27','INSTALLED_UNARMED_REPEAT_SHADOW_R27','FAIL_STREAM2_REPEAT_STATE_NOT_RESET_GOLDEN_RESTORED_RETIRED')
+need(result.get('status') in allowed,'RESULT status')
+if result['status']=='PREPARED_NOT_INSTALLED_REPEAT_SHADOW_R27':
+    need(result.get('candidate_installed') is False and result.get('camera_runtime_performed') is False,'prep lifecycle')
+    need(not (D/'runtime-output').exists(),'runtime output exists before arm')
+if result['status']=='INSTALLED_UNARMED_REPEAT_SHADOW_R27':
+    need(result.get('candidate_installed') is True and result.get('camera_runtime_performed') is False,'installed lifecycle')
+    need(not (D/'runtime-output').exists(),'runtime output exists before arm')
+if result['status']=='FAIL_STREAM2_REPEAT_STATE_NOT_RESET_GOLDEN_RESTORED_RETIRED':
+    need(result.get('candidate_installed') is False and result.get('candidate_retired') is True,'retired state')
+    need(result.get('camera_runtime_performed') is True and result.get('streams_started')==2 and result.get('streams_completed')==1,'runtime closure')
+    need((D/'runtime-output').is_dir(),'runtime evidence missing')
+    for f in ('ATTEMPT1-FAILURE.json','POST.txt','GOLDEN-RETURN.txt','RETIRE.txt'):
+        need((D/f).is_file(),'closure evidence '+f)
+print('HL_STATIC_VERIFY=PASS POLICY=shadow STREAMS=2 STATUS='+result['status'])

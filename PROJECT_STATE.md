@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HK:** consumed/retired pre-stream harness failure. **HL installed-unarmed:** corrected repeat-shadow R27 candidate and HJ package are installed under a fresh boot identity; Golden remains current with empty `next_entry`, camera modules absent, two streams only, `shadow` policy, zero post-G3 native writes authorized, no same-stream retry, no HL runtime.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HL attempt 1:** stream 1 passed 27/27 + clean STREAMOFF; stream 2 exposed stale stats generation (28 vs expected 1) and video sequence restart/mismatch (0,1,2,0), then pinned fail-closed. Zero post-G3 native writes; no retry. HL is archived, Golden-restored and retired.
 
-**Next action:** checkpoint/push installed-unarmed HL, then fresh-reconcile before the one-shot boot. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** HM offline repeat-stream reset ownership analysis. No successor live candidate until the reset contract is explicit and regression-proven. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
