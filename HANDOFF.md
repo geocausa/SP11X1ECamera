@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified regressions are PASS live/retired; IF handoff analysis is PASS offline. **IG rear -> neutral -> front is PASS live and retired.** Rear exact color-bar + R16 passed, rear runtime suspended, explicit link disable produced verified neutral, front R27 passed 27/27 with fresh generation 1 and zero post-G3 native writes, final route was front-only, kernel health/GOLDEN return passed, and no retry occurred. Final IG archive manifest is `09c8e7d29d34c8084125fc3a62fa2340d7db3e5366ac0a7d644f79865ae0a9a3`.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified regressions are PASS; IF handoff analysis is PASS; IG rear -> neutral -> front is PASS live/retired. **IH front -> neutral -> rear is now prepared offline, not installed or armed.** The fresh harness consumes before the front launch, requires front-only + front suspend, explicitly disables both front links and verifies neutral, then enables rear-only and runs exact color-bar + R16 with rear suspend. Static verifier and root prearm PASS.
 
-**Next gate: IH fresh front -> neutral -> rear one-shot.** Reverse direction remains independently required before bidirectional same-boot acceptance/default promotion. Brighter-scene native-feedback stays parked.
+**Next gate: durable IH prep checkpoint, then installed-unarmed checkpoint.** Only after both pass may the fresh reverse-direction one-shot be armed. Brighter-scene native-feedback stays parked.
 
 ---
 
