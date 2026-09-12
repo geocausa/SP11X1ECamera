@@ -1,7 +1,11 @@
 # Stable front-IMX681 IQ runtime
 
-`live-iq-producer.py` is the GM R5..R27 producer with **path binding only** relocated into this stable tree. The live V4L2 shim is byte-identical to GM.
+`live-iq-producer.py` is the production-consolidation form of the proven GM R5..R27 producer. HF froze the source, HG relocated its runtime path, and HH removed the runtime dependency on HG's raw/local authority cache.
 
-HG adds a miniature vendored source root and an explicit SHA-pinned authority-cache contract. `prepare-authority-cache.py` copies the 79 required repo-local data inputs plus the one local IMX681 tuning blob into an ignored cache after verifying every byte. The cache is **not committed**, and the proprietary tuning blob remains local.
+The runtime now consumes `authority/authority.json`, a 250,690-byte clean decoded/derived authority file. It contains the normalized composer state, selected LSC/Tintless state, decoded GainAdj/AWB topology and the small CCT/AGW tables needed by the proven algorithms. It does **not** contain the proprietary IMX681 tuning blob, raw Windows trace, or raw request DMI slots.
 
-After cache provisioning, two independent offline replays reproduce R5..R27 23/23 byte-exact and `strace` proves the producer opens no project-local path outside this stable IQ root. This makes the runtime path-relocatable, but not yet a fully redistributable clean-room package. HH will reduce the local cache to clean decoded/derived runtime authority.
+HH physically hides all 80 former HG cache inputs and still reproduces R5..R27 23/23 byte-exact in two independent runs. A traced clean run opens no raw/local authority path, no project-local path outside this IQ tree, and no camera device.
+
+`prepare-authority-cache.py` remains only as a historical/regeneration bridge for HG. `hh-cleanroom-authority-cache-reduction/build-clean-authority.py` regenerates the clean authority from the canonical reverse-engineering evidence. Neither is required by the shipped IQ runtime.
+
+The clean authority is currently pinned to the proven SP11 unit/profile. Generalizing physical per-device calibration acquisition for other SP11 units is separate production work.

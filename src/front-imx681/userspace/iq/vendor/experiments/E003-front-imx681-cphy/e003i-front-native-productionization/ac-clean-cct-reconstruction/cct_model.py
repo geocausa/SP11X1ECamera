@@ -14,10 +14,12 @@ The model accepts request-local lux explicitly. Historical AC2 fitted lux values
 are kept only in regress-ac2.py and are not model defaults.
 """
 from pathlib import Path
-import argparse, contextlib, io, runpy, struct
+import argparse, base64, contextlib, io, json, os, runpy, struct
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent
+_AUTH=json.loads(Path(os.environ['E003I_IQ_AUTHORITY']).read_text())['cct_tables']
+def _ab(name): return base64.b64decode(_AUTH[name]['b64'])
 MASK=(1<<34)-1
 SHIFT=10
 EXPECTED=[5652,5915,6019,5733]
@@ -55,11 +57,11 @@ def leaf(curve,x):
 P04_ROOTS=[(f32(a),f32(b)) for a,b in [(0,91),(160,180),(305,859)]]
 P04=[]
 for ci in range(3):
-    b=(ROOT/'fixtures'/f'E003I-AC36-P04-C{ci}.bin').read_bytes()
+    b=_ab(f'E003I-AC36-P04-C{ci}.bin')
     cct=[tuple(f32(z) for z in struct.unpack_from('<ff',b,j*0x18)) for j in range(6)]
     rows=[]
     for ri in range(6):
-        d=(ROOT/'fixtures'/f'E003I-AC36-P04-C{ci}-R{ri}.bin').read_bytes()
+        d=_ab(f'E003I-AC36-P04-C{ci}-R{ri}.bin')
         rows.append([tuple(f32(z) for z in struct.unpack_from('<fff',d,j*12)) for j in range(5)])
     P04.append((cct,rows))
 def p04_boundary(curve,metric):
@@ -96,7 +98,7 @@ def p04(lux,cct,metric):
 P05_ROOTS=[(f32(a),f32(b)) for a,b in [(0,69),(82,91),(96,110),(120,140),(170,190),(197,207),(225,260),(270,290),(300,350),(360,450)]]
 P05=[]
 for ci in range(10):
-    b=(ROOT/'fixtures'/f'E003I-AC36-P05-C{ci}.bin').read_bytes()
+    b=_ab(f'E003I-AC36-P05-C{ci}.bin')
     P05.append([tuple(f32(z) for z in struct.unpack_from('<fff',b,j*12)) for j in range(10)])
 def p05(lux,cct):
     L=f32(lux)

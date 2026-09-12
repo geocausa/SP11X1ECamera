@@ -2,15 +2,14 @@
 """Clean calibrated AWB decision -> published RGB gains -> Titan680 PDPC/WB scalars.
 
 Scope is the proven SP11 front normal-preview contained-triangle GainAdj path.
-Per-device calibration is read from EJ, which is backed by EK's native Linux EEPROM read.
+Per-device calibration is read from HH clean runtime authority, derived from the proven physical OTP.
 """
 from __future__ import annotations
-import importlib.util,json,math,struct,sys
+import importlib.util,json,math,os,struct,sys
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 BASE=HERE.parent
 EF=BASE/'ef-clean-awb-gain-adjust-replay'/'gain_adjust.py'
-EJ=BASE/'ej-clean-awb-cal-factor-replay'/'RESULT.json'
 
 def _load(p,n):
     s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);sys.modules[n]=m;s.loader.exec_module(m);return m
@@ -23,11 +22,8 @@ def q_round_positive(v): return int(math.floor(float(v)+0.5))
 def clamp(v,lo,hi): return max(lo,min(hi,v))
 
 def calibration():
-    o=json.loads(EJ.read_text())
-    if o.get('status')!='PASS_10_OF_10_BIT_EXACT' or not o.get('linux_runtime_eeprom_read_bound'):
-        raise RuntimeError('EJ/EK calibration authority not live-bound')
-    p=o['active_reciprocal_scale_bits']
-    return frombits(int(p['rg'],16)),frombits(int(p['bg'],16))
+    a=json.loads(Path(os.environ['E003I_IQ_AUTHORITY']).read_text())['awb']
+    p=a['active_reciprocal_bits'];return frombits(int(p[0],16)),frombits(int(p[1],16))
 
 SEED_TRIANGLES=(5,19,38,41)
 
@@ -66,10 +62,8 @@ def _crossed_edges(t,ti,x,y):
 class CalibratedAWB:
     def __init__(self):
         self.tuning=GA.GainAdjustTuning();self.cal_rg,self.cal_bg=calibration();self.current_triangle=-1
-        # Serialized triglGAV1 seed block is [count=4, 5,19,38,41].
-        raw=bytes.fromhex(next(e for e in self.tuning.parsed['entries'] if e['name']=='triglGAV1')['raw_hex'])
-        words=struct.unpack('<19I',raw)
-        if words[10]!=4 or tuple(words[11:15])!=SEED_TRIANGLES: raise RuntimeError('GainAdj seed topology drift')
+        a=json.loads(Path(os.environ['E003I_IQ_AUTHORITY']).read_text())['awb']
+        if tuple(a['seed_triangles'])!=SEED_TRIANGLES: raise RuntimeError('GainAdj seed topology drift')
     def reset(self): self.current_triangle=-1
     def _seed(self,x,y):
         candidates=[]

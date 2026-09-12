@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hg-relocatable-iq-runtime-pass
-phase: front-imx681-cleanroom-runtime-asset-reduction
-status: golden-hg-pass-native-feedback-environment-blocked
+state_id: E003i-hh-clean-runtime-authority-pass
+phase: front-imx681-production-launcher-integration
+status: golden-hh-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hg-relocatable-iq-runtime-pass
+current_gate: E003i-hh-clean-runtime-authority-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HH-cleanroom-authority-cache-reduction
+next_experiment: E003i-HI-production-launcher-device-discovery
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HG relocatable IQ runtime PASS: stable producer path binding only, 23 vendored runtime source files, SHA-pinned ignored authority cache (79 repo data inputs + one local proprietary tuning blob), two independent R5-R27 runs 23/23 byte-exact, and no project-local path escape. HH must replace raw/proprietary cache inputs with the minimum clean decoded/derived runtime state while preserving byte-exact output. Keep post-G3 native feedback parked until a brighter diffuse real scene is available.
+  HH clean runtime authority PASS: 10.7 MB HG raw/local cache reduced to 250690 bytes (97.659% reduction), all 80 former cache files hidden during proof, and two independent R5-R27 runs remain 23/23 byte-exact with no raw/local authority or camera-device opens. Build HI production launcher/stable media discovery and install lifecycle offline first, with post-G3 native writes fail-closed. Keep the production-native feedback live gate parked until a brighter diffuse real scene is available.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3440,3 +3440,27 @@ e003i_hg_current:
   post_g3_native_feedback_proven: false
   fully_redistributable_cleanroom_iq_runtime: false
   next_gate: HH-cleanroom-authority-cache-reduction
+
+
+e003i_hh_current:
+  status: pass-offline-clean-runtime-authority-r5-r27
+  authority_path: src/front-imx681/userspace/iq/authority/authority.json
+  authority_bytes: 250690
+  authority_sha256: dcb42bf9fd2f4d4a224bc339db947938d1e0202f1ccb6fca6af4d69de4f432d8
+  hg_raw_cache_bytes: 10706762
+  byte_reduction_percent: 97.65858249207369
+  former_cache_files_hidden_during_proof: 80
+  proprietary_tuning_required_at_runtime: false
+  raw_windows_log_required_at_runtime: false
+  raw_request_slot_required_at_runtime: false
+  r5_r27_capsules_byte_exact: 23
+  independent_runs: 2
+  deterministic: true
+  raw_local_authority_open_count: 0
+  project_local_path_escape_count: 0
+  camera_device_open_count: 0
+  current_sp11_unit_profile: true
+  other_unit_per_device_otp_generalization: false
+  camera_runtime_performed: false
+  post_g3_native_feedback_proven: false
+  next_gate: HI-production-launcher-device-discovery

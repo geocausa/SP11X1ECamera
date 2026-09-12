@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import ctypes,struct,math
+import base64,ctypes,json,os,struct,math
 from pathlib import Path
 GRID_W=32; GRID_H=24; REGIONS=GRID_W*GRID_H
 G_STATS_SCALE_A=0x18160AD58; G_STATS_SCALE_B=0x18160A468; G_STATS_MODE=0x1817959A4
@@ -666,8 +666,8 @@ def _write_fft_tables(u,state):
 
 
 def _write_solver_kernel(u,state):
-    p=Path(__file__).with_name('solver-kernel-quadrant-33x17-f32le.bin')
-    raw=p.read_bytes()
+    auth=json.loads(Path(os.environ['E003I_IQ_AUTHORITY']).read_text())['lsc']
+    raw=base64.b64decode(auth['solver_kernel_b64'])
     import hashlib
     if len(raw)!=33*17*4 or hashlib.sha256(raw).hexdigest()!=KERNEL_QUADRANT_SHA256:
         raise ValueError('Tintless solver-kernel quadrant drift')

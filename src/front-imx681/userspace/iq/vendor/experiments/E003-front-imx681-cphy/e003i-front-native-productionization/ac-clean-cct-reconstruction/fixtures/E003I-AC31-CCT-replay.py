@@ -1,9 +1,10 @@
 from pathlib import Path
-import struct, math, json
+import base64, os, struct, math, json
 
 ROOT = Path(__file__).resolve().parent
-ENGINE = (ROOT / "E003I-AC31-CCTENGINE.bin").read_bytes()
-ANCHORS = (ROOT / "E003I-AC31-CCTANCHORS.bin").read_bytes()
+_AUTH=json.loads(Path(os.environ['E003I_IQ_AUTHORITY']).read_text())['cct_tables']
+ENGINE=base64.b64decode(_AUTH['E003I-AC31-CCTENGINE.bin']['b64'])
+ANCHORS=base64.b64decode(_AUTH['E003I-AC31-CCTANCHORS.bin']['b64'])
 
 def f32(x):
     return struct.unpack('<f', struct.pack('<f', float(x)))[0]
@@ -105,21 +106,22 @@ def replay(x,y):
     else: raise ValueError(cls)
     return {'classifier':cls,'metric':m,'ratio':fr,'cct':c,'state':s,'trace':trace}
 
-CASES=[
- {'name':'activeA','x':0x3f1a37e8,'y':0x3efc1044,'metric':0x3d0b2485,'ratio':0x3e813e8f,'cct':0x45945c8e,'state':3},
- {'name':'activeB','x':0x3f18ef71,'y':0x3f00896d,'metric':0x3cf60e57,'ratio':0x3e27a9d9,'cct':0x45972221,'state':3},
- {'name':'default3','x':0x3f000000,'y':0x3ecccccd,'metric':0xbd9f3b49,'ratio':0x3ec8286e,'cct':0x45900888,'state':3},
- {'name':'default5','x':0x3f19999a,'y':0x3e99999a,'metric':0xbd8d1568,'ratio':0x3e8af2df,'cct':0x45667e88,'state':5},
- {'name':'default3b','x':0x3efebcac,'y':0x3ec7b6ca,'metric':0xbda66f63,'ratio':0x3eeac8d2,'cct':0x458deb7e,'state':3},
- {'name':'default2','x':0x3f000000,'y':0x3f0a3d71,'metric':0xbcf380a8,'ratio':0x3f197d48,'cct':0x45af052f,'state':3},
-]
-results=[]
-for case in CASES:
-    out=replay(frombits(case['x']),frombits(case['y']))
-    got={'classifier':out['classifier'],'metric':bits(out['metric']),'ratio':None if out['ratio'] is None else bits(out['ratio']),'cct':bits(out['cct']),'state':out['state']}
-    exp={k:case[k] for k in ('metric','ratio','cct','state')}
-    ok=all(got[k]==exp[k] for k in exp)
-    row={'name':case['name'],'ok':ok,'got':{k:(f'{v:08x}' if isinstance(v,int) and k not in ('classifier','state') else v) for k,v in got.items()},'expected':{k:(f'{v:08x}' if isinstance(v,int) and k not in ('state',) else v) for k,v in exp.items()}}
-    results.append(row); print(row)
-print('ALL_MATCH',all(r['ok'] for r in results))
-(ROOT/'E003I-AC31-CCT-replay-results.json').write_text(json.dumps(results,indent=2))
+if __name__=='__main__':
+    CASES=[
+     {'name':'activeA','x':0x3f1a37e8,'y':0x3efc1044,'metric':0x3d0b2485,'ratio':0x3e813e8f,'cct':0x45945c8e,'state':3},
+     {'name':'activeB','x':0x3f18ef71,'y':0x3f00896d,'metric':0x3cf60e57,'ratio':0x3e27a9d9,'cct':0x45972221,'state':3},
+     {'name':'default3','x':0x3f000000,'y':0x3ecccccd,'metric':0xbd9f3b49,'ratio':0x3ec8286e,'cct':0x45900888,'state':3},
+     {'name':'default5','x':0x3f19999a,'y':0x3e99999a,'metric':0xbd8d1568,'ratio':0x3e8af2df,'cct':0x45667e88,'state':5},
+     {'name':'default3b','x':0x3efebcac,'y':0x3ec7b6ca,'metric':0xbda66f63,'ratio':0x3eeac8d2,'cct':0x458deb7e,'state':3},
+     {'name':'default2','x':0x3f000000,'y':0x3f0a3d71,'metric':0xbcf380a8,'ratio':0x3f197d48,'cct':0x45af052f,'state':3},
+    ]
+    results=[]
+    for case in CASES:
+        out=replay(frombits(case['x']),frombits(case['y']))
+        got={'classifier':out['classifier'],'metric':bits(out['metric']),'ratio':None if out['ratio'] is None else bits(out['ratio']),'cct':bits(out['cct']),'state':out['state']}
+        exp={k:case[k] for k in ('metric','ratio','cct','state')}
+        ok=all(got[k]==exp[k] for k in exp)
+        row={'name':case['name'],'ok':ok,'got':{k:(f'{v:08x}' if isinstance(v,int) and k not in ('classifier','state') else v) for k,v in got.items()},'expected':{k:(f'{v:08x}' if isinstance(v,int) and k not in ('state',) else v) for k,v in exp.items()}}
+        results.append(row); print(row)
+    print('ALL_MATCH',all(r['ok'] for r in results))
+    (ROOT/'E003I-AC31-CCT-replay-results.json').write_text(json.dumps(results,indent=2))

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, ctypes, errno, gc, hashlib, importlib.util, json, os, pathlib, select, struct, subprocess, sys, tempfile, time
+import argparse, base64, ctypes, errno, gc, hashlib, importlib.util, json, os, pathlib, select, struct, subprocess, sys, tempfile, time
 
 HERE=pathlib.Path(__file__).resolve().parent
 VENDOR=HERE/'vendor'
@@ -20,6 +20,13 @@ FFILE=BASE/'f-native-iq-backends/generate-steady-scalar-state.py'
 FBFILE=BASE/'fy-calibrated-awb-selector-replay/dynamic_awb.py'
 EMFILE=BASE/'em-r7-r9-template-free-composer/compose-em.py'
 JFILE=BASE/'j-cleanroom-gtm/generate-cleanroom-gtm-wire.py'
+AUTHFILE=HERE/'authority/authority.json'
+AUTH=json.loads(AUTHFILE.read_text())
+need_auth_schema=AUTH.get('schema')=='sp11-front-imx681-clean-runtime-authority-v1'
+if not need_auth_schema: raise RuntimeError('clean runtime authority schema drift')
+os.environ['E003I_IQ_AUTHORITY']=str(AUTHFILE)
+
+def auth_bytes(v:str)->bytes:return base64.b64decode(v.encode('ascii'))
 
 STATS3A_BYTES=0x51040; TLBG_BYTES=0xf020; IQ_BYTES=41088
 GAIN_MAGIC=0x31464749; GAIN_VERSION=1; GAIN_RECORD=struct.Struct('<IHHIIII')
@@ -60,22 +67,21 @@ class NativeTrigger:
     def __init__(self,so:pathlib.Path):
         self.CCT=load(AC/'cct_model.py','ae_cct'); self.prev_x=frombits(INITIAL_PREV_X_BITS);self.prev_y=frombits(INITIAL_PREV_Y_BITS)
         def fa(v):return (ctypes.c_float*len(v))(*[float(x) for x in v])
-        p04n=[];p04r=[];p05r=[]
+        p04n=[];p04r=[];p05r=[];ca=AUTH['cct_tables']
         for ci in range(3):
-            b=(AC/'fixtures'/f'E003I-AC36-P04-C{ci}.bin').read_bytes()
+            b=auth_bytes(ca[f'E003I-AC36-P04-C{ci}.bin']['b64'])
             for j in range(6):p04n+=list(struct.unpack_from('<ff',b,j*0x18))
             for ri in range(6):
-                d=(AC/'fixtures'/f'E003I-AC36-P04-C{ci}-R{ri}.bin').read_bytes()
+                d=auth_bytes(ca[f'E003I-AC36-P04-C{ci}-R{ri}.bin']['b64'])
                 for j in range(5):p04r+=list(struct.unpack_from('<fff',d,j*12))
         for ci in range(10):
-            b=(AC/'fixtures'/f'E003I-AC36-P05-C{ci}.bin').read_bytes()
+            b=auth_bytes(ca[f'E003I-AC36-P05-C{ci}.bin']['b64'])
             for j in range(10):p05r+=list(struct.unpack_from('<fff',b,j*12))
         self.p04n,self.p04r,self.p05r=fa(p04n),fa(p04r),fa(p05r)
-        eng=(AC/'fixtures/E003I-AC31-CCTENGINE.bin').read_bytes();anc=(AC/'fixtures/E003I-AC31-CCTANCHORS.bin').read_bytes();self.engb,self.ancb=eng,anc
+        eng=auth_bytes(ca['E003I-AC31-CCTENGINE.bin']['b64']);anc=auth_bytes(ca['E003I-AC31-CCTANCHORS.bin']['b64']);self.engb,self.ancb=eng,anc
         self.eng=(ctypes.c_ubyte*len(eng)).from_buffer_copy(eng);self.anc=(ctypes.c_ubyte*len(anc)).from_buffer_copy(anc)
         lib=ctypes.CDLL(str(so));self.fn=lib.e003i_trigger_native
         self.fn.argtypes=[ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_float,ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t,ctypes.POINTER(ctypes.c_float),ctypes.POINTER(ctypes.c_float),ctypes.POINTER(ctypes.c_float),ctypes.POINTER(TriggerResult)];self.fn.restype=ctypes.c_int
-        w=json.loads(WFILE.read_text());r4=w['request4_6_trigger_oracle'][0];need(int(r4['raw']['aec_lux_index'],16)==BASELINE_BITS,'W R4 baseline authority drift')
     def run(self,aec:bytes,awb:bytes):
         aa=(ctypes.c_ubyte*len(aec)).from_buffer_copy(aec);ww=(ctypes.c_ubyte*len(awb)).from_buffer_copy(awb);o=TriggerResult();t=time.perf_counter_ns()
         rc=self.fn(aa,len(aec),ww,len(awb),ctypes.c_float(frombits(BASELINE_BITS)),self.eng,len(self.engb),self.anc,len(self.ancb),self.p04n,self.p04r,self.p05r,ctypes.byref(o))
@@ -95,12 +101,11 @@ class NativeTrigger:
 
 class DynamicLsc:
     def __init__(self,so:pathlib.Path):
-        self.X=load(XFILE,'ae_x');self.N=load(NFILE,'ae_n');self.M=load(MFILE,'ae_m');self.K=load(KFILE,'ae_k');self.C=load(IFILE,'ae_i');self.CL=load(GFILE,'ae_g');self.DEC=load(self.X.DECFILE,'ae_dec');self.GOLD=load(self.X.GOLDFILE,'ae_gold')
-        leaf_4bd,leaf_4bf,gold,otp=self.X.front_authority(self.DEC,self.CL,self.GOLD)
-        blob=self.X.TUNING.read_bytes();h=self.DEC.parse_header(blob);recs,_=self.DEC.parse_symbol_table(blob,h['sections'][0],h['sections'][1]);obj=h['sections'][1]
-        leaf_4b9=self.DEC.data_bytes(blob,obj,recs[0x4b9]);leaf_4bb=self.DEC.data_bytes(blob,obj,recs[0x4bb]);upper=self.DEC.data_bytes(blob,obj,recs[0x4c3]);need(sha(upper)==UPPER_LEAF_SHA,'upper front LSC leaf drift')
-        self.lower_cct_leaves=(leaf_4b9,leaf_4bb,leaf_4bd,leaf_4bf);self.upper=upper;self.gold,self.otp=gold,otp
-        self.core,self.res=self.X.api(so);self.x1,_=self.M.build_front_x1();self.reset()
+        self.X=load(XFILE,'ae_x');self.N=load(NFILE,'ae_n');self.M=load(MFILE,'ae_m');self.K=load(KFILE,'ae_k');self.C=load(IFILE,'ae_i');self.CL=load(GFILE,'ae_g')
+        la=AUTH['lsc'];leaves={k:auth_bytes(v) for k,v in la['leaf_b64'].items()}
+        self.lower_cct_leaves=(leaves['0x4b9'],leaves['0x4bb'],leaves['0x4bd'],leaves['0x4bf']);self.upper=leaves['0x4c3'];need(sha(self.upper)==UPPER_LEAF_SHA,'upper front LSC leaf drift')
+        self.gold=tuple(float(x) for x in la['golden_int']);self.otp=[tuple(float(x) for x in ch) for ch in la['otp_int_channels']]
+        self.core,self.res=self.X.api(so);self.x1=auth_bytes(la['x1_b64']);need(sha(self.x1)==la['x1_sha256'],'clean X1 drift');self.reset()
     def reset(self):
         self.mem=self.X.mem0(self.K,self.C,self.M,self.x1);self.state=None
     def _lower_cct(self,cct:float):
@@ -133,9 +138,11 @@ class DynamicLsc:
 
 class Composer:
     def __init__(self):
-        self.E=load(EFILE,'dw_e');self.D=load(DVFILE,'dw_dv');E=self.E
-        _e,self.variant,self.main,self.raw4,self.slot4,self.startup,self.payloads,self.sp,self.pp=E.static_recipe(REPO)
-        self.base={req:self._base_state(req) for req in (5,6)}
+        self.E=load(EFILE,'dw_e');self.D=load(DVFILE,'dw_dv');ca=AUTH['composer']
+        self.main=auth_bytes(ca['main_b64']);self.startup=[auth_bytes(x) for x in ca['startup_b64']];self.payloads=[auth_bytes(x) for x in ca['startup_payloads_b64']];self.sp=tuple(ca['startup_period']);self.pp=tuple(ca['priming_period'])
+        self.base={}
+        for req in (5,6):
+            b=ca['base_states'][str(req)];self.base[req]={'module':auth_bytes(b['module_b64']),'payload':[auth_bytes(x) for x in b['payload_b64']],'source':b['source']}
     def _base_state(self,req):
         E=self.E;raw,slot,source=E.raw_request(REPO,req,self.raw4,self.slot4);values=[[0]*6 for _ in E.MODULES];vmask=[0]*len(E.MODULES)
         for r in self.variant['dynamic_register_fields']:
@@ -160,14 +167,10 @@ class Composer:
 class ExtendedComposer:
     """R7-R21 component composer. No R7-R21 raw Windows capsule/DMI input."""
     def __init__(self):
-        self.E=load(EFILE,'en_e_ext');self.F=load(FFILE,'en_f');self.D=load(DVFILE,'en_dv_ext')
-        self.FB=load(FBFILE,'fd_fb');self.EM=load(EMFILE,'en_em');self.J=load(JFILE,'en_j')
-        E=self.E
-        _e,self.variant,self.main,self.raw4,self.slot4,self.startup,self.payloads,self.sp,self.pp=E.static_recipe(REPO)
-        self.base=self.EM.base_payloads(E,self.raw4,self.slot4)
-        self.gtm,self.tmc_sha=self.EM.build_gtm(self.J)
-        self.awb=self.FB.DynamicCalibratedAWB()
-        self.pmask=self.EM.PMASK
+        self.E=load(EFILE,'en_e_ext');self.F=load(FFILE,'en_f');self.D=load(DVFILE,'en_dv_ext');self.FB=load(FBFILE,'fd_fb')
+        ca=AUTH['composer'];self.main=auth_bytes(ca['main_b64']);self.startup=[auth_bytes(x) for x in ca['startup_b64']];self.payloads=[auth_bytes(x) for x in ca['startup_payloads_b64']];self.sp=tuple(ca['startup_period']);self.pp=tuple(ca['priming_period'])
+        self.base=[auth_bytes(x) for x in ca['extended_base_payloads_b64']];self.gtm=auth_bytes(ca['gtm_b64']);self.tmc_sha=ca['tmc_dynamic_sha256'];self.dynamic_register_offsets=list(ca['dynamic_register_offsets'])
+        self.awb=self.FB.DynamicCalibratedAWB();self.pmask={int(k):list(v) for k,v in ca['pmask'].items()}
     def reset(self):
         self.awb.reset()
     def advance_awb(self,fx,fy,lux,cct):
@@ -178,8 +181,8 @@ class ExtendedComposer:
         regs.update({k:v for k,v in awb_output['registers'].items() if k in E.REG_SLOT})
         need(set(regs)==set(E.REG_SLOT),f'R{req} dynamic register ownership')
         values=[[0]*6 for _ in E.MODULES];vmask=[0]*len(E.MODULES)
-        for r in self.variant['dynamic_register_fields']:
-            ro=int(r['register_offset'],16);mi,si=E.REG_SLOT[ro];values[mi][si]=regs[ro];vmask[mi]|=1<<si
+        for ro in self.dynamic_register_offsets:
+            mi,si=E.REG_SLOT[ro];values[mi][si]=regs[ro];vmask[mi]|=1<<si
         pmask=[0]*len(E.MODULES)
         for mi,indices in self.pmask.items():
             for j,_ in enumerate(indices):pmask[mi]|=1<<j

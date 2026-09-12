@@ -2,31 +2,20 @@
 """SP11 front IMX681 OTP-calibrated AWB selector + EL replay.
 
 Profile-specific clean reconstruction of the CAWBCtrlV1 -> CSFStatDistV1 slot
-selection consumed by CTrigleAdjV1. The geometry is recovered from the pinned
-Windows DeviceMFT and the shipped refPtV1 tuning payload. EL's already-proven
-GainAdj mesh/publication implementation remains unchanged.
+selection consumed by CTrigleAdjV1. HH supplies the decoded selector points,
+calibration scales and GainAdj topology; EL's proven publication math remains unchanged.
 """
 from __future__ import annotations
-import hashlib,importlib.util,json,math,struct,sys
+import importlib.util,json,math,os,struct,sys
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 BASE=HERE.parent
 ELP=BASE/'el-calibrated-awb-scalar-join'/'awb_scalar.py'
-EJ=BASE/'ej-clean-awb-cal-factor-replay'/'RESULT.json'
-EJCAL=BASE/'ej-clean-awb-cal-factor-replay'/'cal_factors.py'
-EK=BASE/'ek-linux-front-awb-otp-read-gate'/'RESULT.json'
-EKOTP=BASE/'ek-linux-front-awb-otp-read-gate'/'runtime-output'/'OTP-LINE.txt'
-REPO=HERE.parents[3]
-TUNING=REPO/'local-authority/project-root/00-RE-archive/sp11-driverdump/surfacecamfrontsensor_extension8380.inf_arm64_5a4c66ce4812274e/com.surface.tuned.ffc_imx681.bin'
-TUNING_SHA256='2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d'
-REFPT_SHA256='0cb86433c9f33101f104aeb1071d6ed0a73c11bba6818cb69149e361dbf9bcc5'
-SFDIST_SHA256='1e77f04b2ccf89f944d19ec28214fc26ad73907f8aea76076b25060669462076'
 
 def _load(p,n):
     s=importlib.util.spec_from_file_location(n,p);m=importlib.util.module_from_spec(s);sys.modules[n]=m;s.loader.exec_module(m);return m
 EL=_load(ELP,'fy_el')
-EJC=_load(EJCAL,'fy_ej_cal')
 GA=EL.GA
 
 def f32(x): return GA.f32(x)
@@ -37,31 +26,9 @@ def div(a,b): return GA.div(a,b)
 def bits(x): return EL.bits(x)
 def frombits(u): return EL.frombits(u)
 
+def _awb_authority(): return json.loads(Path(os.environ['E003I_IQ_AUTHORITY']).read_text())['awb']
 def stored_calibration_table():
-    ek=json.loads(EK.read_text())
-    if (ek.get('status')!='PASS_LIVE_LINUX_PHYSICAL_OTP' or
-        not ek.get('live_read_proven') or not ek.get('windows_ei_byte_exact')):
-        raise RuntimeError('EK Linux physical OTP authority missing')
-    line=EKOTP.read_text().strip()
-    marker='SP11 EK AWB OTP 0x0941..0x094c:'
-    if marker not in line:
-        raise RuntimeError('EK OTP line format drift')
-    raw=bytes(int(x,16) for x in line.split(marker,1)[1].strip().split())
-    if len(raw)!=12 or hashlib.sha256(raw).hexdigest()!=ek.get('expected_ei_sha256'):
-        raise RuntimeError('EK OTP bytes drift')
-    z=EJC.compute(raw,TUNING)
-    table=tuple((f32(a),f32(b)) for a,b in z['table'])
-    ej=json.loads(EJ.read_text())
-    if ej.get('status')!='PASS_10_OF_10_BIT_EXACT' or not ej.get('linux_runtime_eeprom_read_bound'):
-        raise RuntimeError('EJ clean calibration authority missing')
-    expected=[]
-    for name in ('high','midpoint','low'):
-        rec=ej['factor_regions'][name]
-        pair=tuple(frombits(int(x,16)) for x in rec['bits'])
-        expected.extend([pair]*len(rec['slots']))
-    if tuple((bits(a),bits(b)) for a,b in table)!=tuple((bits(a),bits(b)) for a,b in expected):
-        raise RuntimeError('EJ clean factor table drift')
-    return table
+    a=_awb_authority();return tuple((frombits(int(x[0],16)),frombits(int(x[1],16))) for x in a['selector_scales_bits'])
 
 class Line:
     __slots__=('m','c','sign','length')
@@ -77,48 +44,22 @@ class CalibrationSlotSelector:
     SEARCH_BOUNDARY=(0,1,2,2,3,5,6,7)
     SLOT_PAIRS=((0,1),(1,2),(2,3),(3,5),(4,6),(5,7),(7,8),(8,9))
 
-    def __init__(self,parsed):
-        if hashlib.sha256(TUNING.read_bytes()).hexdigest()!=TUNING_SHA256:
-            raise RuntimeError('front tuning SHA drift')
-        ref=next(e for e in parsed['entries'] if e['name']=='refPtV1')
-        raw=bytes.fromhex(ref['raw_hex'])
-        if len(raw)!=144 or hashlib.sha256(raw).hexdigest()!=REFPT_SHA256:
-            raise RuntimeError('refPtV1 payload drift')
-        vals=struct.unpack_from('<20f',raw,0x18)
-        raw_points=[(f32(vals[i]),f32(vals[i+1])) for i in range(0,20,2)]
-        # Windows CAWBCtrlV1 applies the same-device stored ComputeCalFactors
-        # table to refPtV1 before CSFStatDistV1 constructs any boundary/search
-        # geometry.  FX captured this configured object directly.
-        factors=stored_calibration_table()
-        self.points=[(mul(p[0],f[0]),mul(p[1],f[1])) for p,f in zip(raw_points,factors)]
-        self.boundaries=[self._segment(a,b) for a,b in self.BOUNDARY_PAIRS]
+    def __init__(self,parsed=None):
+        a=_awb_authority();self.points=[(frombits(int(x[0],16)),frombits(int(x[1],16))) for x in a['selector_points_bits']]
+        self.boundaries=[self._segment(a0,b0) for a0,b0 in self.BOUNDARY_PAIRS]
         self.search=[]
         for pi,bi in zip(self.SEARCH_POINT,self.SEARCH_BOUNDARY):
             p=self.points[pi];b=self.boundaries[bi]
             m=f32(1000.0) if abs(float(b.m))<1e-9 else div(-1.0,b.m)
             self.search.append(Line(m,sub(p[1],mul(p[0],m)),b.sign))
-        # Windows Configure always replaces search line 4 with its F-bound:
-        # intersection(perp(B3)@P3, perp(B5)@P7) -> line through P5.
         p3,p5,p7=self.points[3],self.points[5],self.points[7]
         b3,b5=self.boundaries[3],self.boundaries[5]
         m3=div(-1.0,b3.m); c3=sub(p3[1],mul(p3[0],m3))
         m5=div(-1.0,b5.m); c5=sub(p7[1],mul(p7[0],m5))
-        den=sub(m5,m3)
-        ix=div(sub(c3,c5),den)
-        iy=div(sub(mul(m5,c3),mul(c5,m3)),den)
-        fm=div(sub(iy,p5[1]),sub(ix,p5[0]))
-        fc=sub(p5[1],mul(fm,p5[0]))
-        self.search[4]=Line(fm,fc,self.search[4].sign)
-        self.f_intersection=(ix,iy)
-        sf=next(e for e in parsed['entries'] if e['name']=='SFDistWVV1')
-        sfraw=bytes.fromhex(sf['raw_hex'])
-        if len(sfraw)!=40 or hashlib.sha256(sfraw).hexdigest()!=SFDIST_SHA256:
-            raise RuntimeError('SFDistWVV1 payload drift')
-        dist=f32(math.sqrt(float(add(mul(sub(ix,p5[0]),sub(ix,p5[0])),
-                                      mul(sub(iy,p5[1]),sub(iy,p5[1]))))))
-        self.f_distance=dist
-        if not (dist > f32(0.30)):
-            raise RuntimeError('F-bound distance left pinned no-shift regime')
+        den=sub(m5,m3);ix=div(sub(c3,c5),den);iy=div(sub(mul(m5,c3),mul(c5,m3)),den)
+        fm=div(sub(iy,p5[1]),sub(ix,p5[0]));fc=sub(p5[1],mul(fm,p5[0]));self.search[4]=Line(fm,fc,self.search[4].sign)
+        self.f_intersection=(ix,iy);dist=f32(math.sqrt(float(add(mul(sub(ix,p5[0]),sub(ix,p5[0])),mul(sub(iy,p5[1]),sub(iy,p5[1]))))));self.f_distance=dist
+        if bits(dist)!=int(a['f_distance_bits'],16): raise RuntimeError('clean F-bound distance drift')
 
     def _segment(self,a,b):
         ax,ay=self.points[a];bx,by=self.points[b]
@@ -185,23 +126,12 @@ class CalibrationSlotSelector:
         return {'slot':s,'region':region,'ratio':t}
 
 def calibration_scales():
-    o=json.loads(EJ.read_text())
-    if o.get('status')!='PASS_10_OF_10_BIT_EXACT' or not o.get('linux_runtime_eeprom_read_bound'):
-        raise RuntimeError('EJ/EK calibration authority not live-bound')
-    groups=o['factor_regions']
-    def rec(name):
-        rb,bb=[int(x,16) for x in groups[name]['bits']]
-        return div(1.0,frombits(rb)),div(1.0,frombits(bb))
-    hi,mid,lo=rec('high'),rec('midpoint'),rec('low')
-    active=o['active_reciprocal_scale_bits']
-    if (bits(hi[0]),bits(hi[1]))!=(int(active['rg'],16),int(active['bg'],16)):
-        raise RuntimeError('EJ active reciprocal drift')
-    return (hi,)*4+(mid,)*3+(lo,)*3
+    a=_awb_authority();return tuple((frombits(int(x[0],16)),frombits(int(x[1],16))) for x in a['selector_scales_bits'])
 
 class DynamicCalibratedAWB:
     def __init__(self):
         self.core=EL.CalibratedAWB()
-        self.selector=CalibrationSlotSelector(self.core.tuning.parsed)
+        self.selector=CalibrationSlotSelector()
         self.scales=calibration_scales()
     def reset(self): self.core.reset()
     def run(self,rg,bg,lux,cct,predictive_gain=1.0):

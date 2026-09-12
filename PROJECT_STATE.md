@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG production consolidation:** PASS. HF supplies the stable proven kernel/runtime tree. HG relocates the GM IQ runtime into that tree with a vendored code closure plus SHA-pinned ignored authority cache, proves two independent R5..R27 runs 23/23 byte-exact, and proves no project-local runtime path escapes the stable IQ root. No camera runtime occurred.
+**HE/HF/HG/HH production consolidation:** PASS. HH replaces HG's runtime dependence on 10.7 MB of raw/local authority with one 250,690-byte clean derived authority. All 80 former cache inputs were hidden during proof; two independent R5..R27 runs stayed 23/23 byte-exact and the traced runtime opened no raw/local authority, no project path outside the stable IQ root, and no camera device.
 
-**Next action:** keep the native-feedback live gate parked for a brighter diffuse scene; in parallel, reduce HG's local authority cache in HH to clean decoded/derived runtime state so the IQ package no longer requires proprietary/raw oracle cache inputs.
+**Next action:** keep the native-feedback live gate parked for a brighter diffuse scene; in parallel, build HI production launcher/stable media discovery and install lifecycle with post-G3 writes fail-closed by default.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

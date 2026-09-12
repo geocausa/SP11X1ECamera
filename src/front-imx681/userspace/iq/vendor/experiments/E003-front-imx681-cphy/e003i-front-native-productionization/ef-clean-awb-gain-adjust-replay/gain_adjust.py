@@ -1,20 +1,14 @@
 #!/usr/bin/env python3
 """Clean replay of the normal contained-triangle CTrigleAdjV1 AWB gain-adjust path.
 
-Authority is the shipped IMX681 QTI tuning blob plus the SHA-pinned Surface DeviceMFT
-static implementation.  No proprietary tuning payload is copied into this directory.
+Authority is the HH decoded clean runtime authority derived from the pinned IMX681 profile.
+No proprietary tuning payload is required at runtime.
 """
 from __future__ import annotations
-import argparse, importlib.util, json, math, struct
+import argparse, json, math, os, struct
 from dataclasses import dataclass
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[4]
-QP = REPO / 'tools' / 'qti_parameter_bin.py'
-_spec = importlib.util.spec_from_file_location('qti_parameter_bin', QP)
-_qti = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_qti)
-DEFAULT_TUNING = REPO/'local-authority/project-root/00-RE-archive/sp11-driverdump/surfacecamfrontsensor_extension8380.inf_arm64_5a4c66ce4812274e/com.surface.tuned.ffc_imx681.bin'
-TUNING_SHA256 = '2c1c7fd9090e0bf338f44bd9de785509c1fbebc975facc5286f12865cf675f1d'
 
 
 def f32(x): return struct.unpack('<f', struct.pack('<f', float(x)))[0]
@@ -48,25 +42,17 @@ class Triangle:
     v: tuple[int,int,int]; neighbors: tuple[int,int,int]
 
 class GainAdjustTuning:
-    def __init__(self, tuning_path=DEFAULT_TUNING):
-        self.path=Path(tuning_path)
-        import hashlib
-        sha=hashlib.sha256(self.path.read_bytes()).hexdigest()
-        if sha != TUNING_SHA256:
-            raise ValueError(f'tuning SHA mismatch: {sha}')
-        parsed=_qti.parse(self.path); self.parsed=parsed
-        self.byid={e['id']:e for e in parsed['entries']}
-        top=next(e for e in parsed['entries'] if e['name']=='triglGAV1')
-        u=struct.unpack('<19I', bytes.fromhex(top['raw_hex']))
-        self.enable=u[2]
-        self.triangle_count,self.triangle_ref=u[6],u[7]
-        self.vertex_count,self.vertex_ref=u[8],u[9]
-        self.outer_count,self.outer_ref=u[17],u[18]
-        if (self.triangle_count,self.vertex_count,self.outer_count)!=(44,32,2):
-            raise ValueError('unexpected triglGAV1 topology')
-        self.triangles=self._triangles()
-        self.vertices=self._vertices()
-        self.outer=self._outer()
+    def __init__(self, tuning_path=None):
+        a=json.loads(Path(os.environ['E003I_IQ_AUTHORITY']).read_text())['awb']
+        def fb(v): return struct.unpack('<f',struct.pack('<I',int(v,16)))[0]
+        def rr(d): return Rec3(fb(d['start_bits']),fb(d['end_bits']),tuple(fb(x) for x in d['value_bits']))
+        self.path=Path(os.environ['E003I_IQ_AUTHORITY'])
+        self.enable=int(a['enable']);self.triangle_count=int(a['triangle_count']);self.vertex_count=int(a['vertex_count']);self.outer_count=int(a['outer_count'])
+        self.triangle_ref=self.vertex_ref=self.outer_ref=0;self.parsed={'entries':[]};self.byid={}
+        self.triangles=tuple(Triangle(tuple(int(x) for x in d['v']),tuple(int(x) for x in d['neighbors'])) for d in a['triangles'])
+        self.vertices=tuple(Vertex(fb(d['rg_bits']),fb(d['bg_bits']),tuple(rr(r) for r in d['lux'])) for d in a['vertices'])
+        self.outer=tuple((fb(d['start_bits']),fb(d['end_bits']),tuple(rr(r) for r in d['table'])) for d in a['outer'])
+        if (len(self.triangles),len(self.vertices),len(self.outer))!=(44,32,2): raise ValueError('clean GainAdjust authority topology drift')
 
     def _raw(self,sid): return bytes.fromhex(self.byid[sid]['raw_hex'])
     def _table3(self,sid,count=None):
@@ -181,7 +167,7 @@ def adjust(t:GainAdjustTuning, rg,bg,lux,cct,cal_rg_scale=1.0,cal_bg_scale=1.0,t
             'final_bits':[f'0x{bits(x):08x}' for x in final]}
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument('--tuning',type=Path,default=DEFAULT_TUNING)
+    ap=argparse.ArgumentParser()
     ap.add_argument('--rg',type=float,required=True); ap.add_argument('--bg',type=float,required=True)
     ap.add_argument('--lux',type=float,required=True); ap.add_argument('--cct',type=float,required=True)
     a=ap.parse_args(); t=GainAdjustTuning(a.tuning); print(json.dumps(adjust(t,a.rg,a.bg,a.lux,a.cct),indent=2,sort_keys=True))
