@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: IB-unified-current-golden-rear-front-dtb-pass
-phase: camera-stack-unified-rear-regression-candidate-prep
-status: golden-ib-unified-dtb-pass-runtime-blocked
+state_id: IC-unified-dtb-rear-regression-prepared
+phase: camera-stack-unified-rear-regression-prepared-not-installed
+status: golden-ic-prepared-not-installed-no-runtime
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: IB-unified-current-golden-rear-front-dtb-pass
+current_gate: IC-unified-dtb-rear-regression-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: IC-unified-dtb-rear-regression-candidate-prep
+next_experiment: IC-installed-unarmed-checkpoint
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  IB PASS offline: deterministic exact-current-Golden unified rear+front DTB SHA256 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321. It contains 1437 nodes, all 1402 Golden nodes/properties byte-exact, enables accepted rear OV13858, adds rear CAMSS port@1 beside preserved front port@2, retains front RT-CDM1/resources, and installs IA conservative 11-entry IOMMU union. Both graph pairs/symbols resolve; rebuild deterministic; no DTC warning regression. Runtime/default promotion remain unauthorized. Next IC prepares rear-first unified-DTB live regression, checkpoint before install/arm.
+  IC prepared offline on protected Golden with root prearm PASS. Candidate ID sp11-camera-ic-unified-rear-r16-one-shot uses IB unified DTB SHA256 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321, exact front production CAMSS + IMX681 and accepted rear OV13858. Runtime contract is rear only: one 14321824-byte deterministic color-bar frame requiring SHA256 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346, then 16 normal frames at ~30 fps. Front streaming forbidden; attempt consumed before first rear stream; no same-stream/same-boot retry. Next commit/push prep, install unarmed, verify and checkpoint again before arm.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3980,3 +3980,26 @@ ib_current:
   golden_system_modified: false
   camera_runtime_performed: false
   next_gate: IC-unified-dtb-rear-regression-candidate-prep
+
+
+ic_current:
+  status: prepared-not-installed-unified-rear-regression-r16
+  candidate_id: sp11-camera-ic-unified-rear-r16-one-shot
+  candidate_marker: sp11_camera_ic_unified_rear_r16=1
+  candidate_boot_dir: /boot/sp11-7.1.5-camera-ic-unified-rear-r16
+  unified_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321
+  qcom_camss_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  imx681_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
+  rear_colorbar_sha256: 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346
+  rear_frame_bytes: 14321824
+  rear_colorbar_frames: 1
+  rear_normal_frames: 16
+  front_stream_authorized: false
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  candidate_installed: false
+  candidate_armed: false
+  camera_runtime_performed: false
+  root_prearm: PASS
+  next_gate: IC-installed-unarmed-checkpoint

@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA are PASS. **IB closes the unified current-Golden rear+front DTB offline.** Output `5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321` keeps every Golden property byte-exact, preserves the entire proven front CAMSS authority except the intentional IOMMU-union replacement, enables rear OV13858, adds accepted rear `port@1` alongside front `port@2`, and resolves both graph pairs. Deterministic rebuild and DTC-warning regression pass; no live authority yet.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS. **IC rear-first unified-DTB candidate is prepared offline and remains uninstalled/unarmed.** It pins IB DTB `5e919d6b...d162321`, front CAMSS `7afe6ed0...7e95`, IMX681 `ef57ed06...63d6`, rear OV13858 `13a8ad95...1309`, and accepted rear color-bar SHA `6987a736...f09346`. Contract: exactly one color-bar frame plus one 16-frame normal rear stream; no front stream; no retry; attempt consumed before first rear stream.
 
-**Next gate: IC rear-first unified-DTB regression candidate prep.** Prepare/checkpoint before install or arm; first live unified test must exercise rear only. The brighter-scene native-feedback gate stays parked.
+**Next gate: durable IC prep checkpoint, then installed-unarmed checkpoint.** Only after both pass may IC be armed one-shot. The brighter-scene native-feedback gate stays parked.
 
 ---
 
