@@ -32,7 +32,10 @@ grep -qx 'saved_entry=sp11-audio-fullio-v19c' <<<"$ENV"
  echo 'status=INSTALLED_UNARMED'
  echo "time=$(date -Ins)"
  echo "head=$(git -C "$R" rev-parse HEAD)"
- sudo -n sha256sum "$ENTRY" "$BOOT"/*
+ sudo -n sha256sum "$ENTRY" \
+   "$BOOT/vmlinuz-7.1.5-sp11-render-parity-v4+" \
+   "$BOOT/initrd.img-7.1.5-sp11-camera-e003i-hc-caprelease-r27" \
+   "$BOOT/x1e80100-microsoft-denali-sp11-e003h-pix-frontonly.dtb"
  sha256sum "$D/build/qcom-camss-hc.ko"
 } > "$D/INSTALL.txt"
 echo "PASS: installed $ID; remains unarmed"
