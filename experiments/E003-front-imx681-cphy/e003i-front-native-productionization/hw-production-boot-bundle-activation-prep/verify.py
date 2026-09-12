@@ -33,6 +33,13 @@ for stale in ('sp11-camera-e003i-hq-four-stream-shadow-r27-one-shot','sp11_camer
     need(stale not in critical,'stale identity/path '+stale)
 need('front-imx681-discover.py" --json' in (D/'load.sh').read_text(),'discovery activation')
 need('front-imx681-launcher.py' not in (D/'load.sh').read_text(),'stream launcher must not execute')
-need(r['status']=='PREPARED_NOT_INSTALLED_PRODUCTION_ACTIVATION' and r['candidate_installed'] is False and r['candidate_armed'] is False,'prep lifecycle')
-need(r['stream_authorized'] is False and r['camera_runtime_performed'] is False and r['same_boot_retry_authorized'] is False,'authority')
+allowed=('PREPARED_NOT_INSTALLED_PRODUCTION_ACTIVATION','INSTALLED_UNARMED_PRODUCTION_ACTIVATION','PASS_ACTIVATION_SMOKE_GOLDEN_RESTORED_RETIRED','FAIL_ACTIVATION_SMOKE_GOLDEN_RESTORED_RETIRED')
+need(r['status'] in allowed,'status')
+if r['status']=='PREPARED_NOT_INSTALLED_PRODUCTION_ACTIVATION':
+    need(r['candidate_installed'] is False and r['candidate_armed'] is False and not (D/'INSTALL.txt').exists(),'prep lifecycle')
+if r['status']=='INSTALLED_UNARMED_PRODUCTION_ACTIVATION':
+    need(r['candidate_installed'] is True and r['candidate_armed'] is False and (D/'INSTALL.txt').is_file() and not (D/'ARM.txt').exists(),'installed lifecycle')
+need(r['stream_authorized'] is False and r['same_boot_retry_authorized'] is False,'authority')
+if r['status'] in ('PREPARED_NOT_INSTALLED_PRODUCTION_ACTIVATION','INSTALLED_UNARMED_PRODUCTION_ACTIVATION'):
+    need(r['camera_runtime_performed'] is False,'pre-runtime lifecycle')
 print('HW_STATIC_VERIFY=PASS STATUS='+r['status']+' GOLDEN_CMDLINE_PRESERVED=YES STREAM_AUTHORIZED=NO')

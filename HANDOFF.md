@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV are PASS. **HW is prepared but not installed:** fresh ID `sp11-camera-e003i-hw-prod-activation-one-shot`, exact Golden kernel/initrd, HV merged DTB, HN modules and current production package `57aa9cc2...66a5a757`. The candidate command line preserves Golden semantics, adds only module blacklist + fresh token, replaces only `sp11_entry`, and contains no `firmware_class.path`. Runtime preflight negative-tested on Golden, static/shell checks pass, and full prearm passes. Activation scope is module bind + production discovery only; streaming and same-boot retry are forbidden.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV are PASS. **HW is installed but unarmed:** fresh ID `sp11-camera-e003i-hw-prod-activation-one-shot`; exact Golden kernel/initrd + HV DTB + HN modules + current production package verified byte-for-byte; installed GRUB entry SHA256 `bf5154e8aaf651de63395a268d8431f59ca9f6a0183d4e2921a982515ffb40b5`; `saved_entry` remains Golden and `next_entry` is empty. No camera runtime has occurred.
 
-**Next gate: checkpoint/push HW prep, then install-unarmed and checkpoint again.** Do not arm until installed-bundle verification passes. The brighter-scene native-feedback gate stays parked.
+**Next gate: checkpoint/push installed-unarmed HW, then one fresh reconcile before arm.** The live boot may only bind modules and run production topology discovery; no streaming/retry. The brighter-scene native-feedback gate stays parked.
 
 ---
 

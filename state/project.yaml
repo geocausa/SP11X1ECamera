@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hw-production-activation-prepared-not-installed
-phase: front-imx681-production-activation-prepared-not-installed
-status: golden-hw-prepared-not-installed-native-feedback-environment-blocked
+state_id: E003i-hw-production-activation-installed-unarmed
+phase: front-imx681-production-activation-installed-unarmed
+status: golden-hw-installed-unarmed-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hw-production-activation-prepared-not-installed
+current_gate: E003i-hw-production-activation-installed-unarmed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HW-production-activation-install-unarmed
+next_experiment: E003i-HW-production-activation-one-shot
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HW PREPARED NOT INSTALLED: fresh candidate sp11-camera-e003i-hw-prod-activation-one-shot freezes exact Golden kernel/initrd, HV merged DTB 34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7, HN CAMSS/IMX681 modules and current production package manifest 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757. Candidate cmdline preserves Golden tokens except sp11_entry replacement plus qcom_camss/imx681/ov13858 blacklist and fresh activation marker; no firmware_class.path. Runtime gate fails closed on Golden; eventual activation authorizes module bind + topology discovery only, no stream and no same-boot retry. Prearm PASS, candidate absent. Commit/push prep, then install unarmed and checkpoint again before any arm. Native-feedback proof remains parked.
+  HW INSTALLED UNARMED: exact candidate bundle under /boot/sp11-7.1.5-camera-e003i-hw-prod-activation verifies Golden kernel bca0a336..., Golden initrd ac3ba64b..., HV DTB 34880dc2..., HN CAMSS/IMX681 modules, current package 57aa9cc2..., and GRUB entry bf5154e8.... saved_entry remains sp11-audio-fullio-v19c, next_entry empty, no camera modules/nodes/processes, no runtime. Commit/push this installed checkpoint, then fresh reconcile before one one-shot activation-only boot. Authorized live action: module bind + production topology discovery only; no stream and no same-boot retry. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3791,11 +3791,11 @@ e003i_hv_current:
 
 
 e003i_hw_current:
-  status: prepared-not-installed-production-activation
+  status: installed-unarmed-production-activation
   parent: HV-current-golden-camera-dtb-merge-pass
   candidate_id: sp11-camera-e003i-hw-prod-activation-one-shot
   candidate_marker: sp11_camera_e003i_hw_prod_activation=1
-  candidate_installed: false
+  candidate_installed: true
   candidate_armed: false
   camera_runtime_performed: false
   stream_authorized: false
@@ -3812,4 +3812,6 @@ e003i_hw_current:
   same_boot_retry_authorized: false
   same_activation_retry_authorized: false
   prearm_pass: true
-  next_gate: HW-production-activation-install-unarmed
+  next_gate: HW-production-activation-one-shot
+  install_source_head: d78f8325e5076e6aac64eedaa30a2b0d188e011e
+  installed_grub_entry_sha256: bf5154e8aaf651de63395a268d8431f59ca9f6a0183d4e2921a982515ffb40b5
