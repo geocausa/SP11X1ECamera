@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear-first unified-DTB regression is PASS live and retired. **IE front unified-DTB candidate is installed-unarmed and verified.** Exact boot and module hashes match the pinned contract; Golden saved entry is intact and next_entry is empty. HY one-stream R27 shadow semantics are frozen; rear route must stay disabled and rear streaming remains forbidden.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; **ID rear and IE front unified-DTB regressions are both PASS live and retired.** IE reproduced the HY one-stream R27 shadow contract under the exact IB unified DTB: 27/27 frames, fresh generation 1, 24 producer generations / 23 requests, startup writes G1..G3 only, zero post-G3 native writes, clean STREAMOFF/kernel health, rear route disabled and no rear stream. Golden return passed; final IE archive manifest is `9ad7fa2649d688a23105d99dc1782d7b3b8eeb14cfe894c2fc435e5c21c9496e`.
 
-**Next gate: checkpoint/push IE installed-unarmed, then arm one-shot.** After any attempt return directly to Golden, archive and retire before further work. The brighter-scene native-feedback gate stays parked.
+**Next gate: IF unified production handoff + same-boot arbitration/reset analysis.** Do not authorize a combined rear/front live switch until reset ownership is proved offline. The brighter-scene native-feedback gate stays parked.
 
 ---
 

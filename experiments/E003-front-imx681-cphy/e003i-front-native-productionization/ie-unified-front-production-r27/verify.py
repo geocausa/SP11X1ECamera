@@ -48,4 +48,13 @@ if r['status']=='PREPARED_NOT_INSTALLED_UNIFIED_FRONT_PRODUCTION_R27':
     need(r.get('candidate_installed') is False and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'prep lifecycle')
 if r['status']=='INSTALLED_UNARMED_UNIFIED_FRONT_PRODUCTION_R27':
     need(r.get('candidate_installed') is True and r.get('candidate_armed') is False and r.get('camera_runtime_performed') is False,'installed lifecycle')
+if r['status']=='PASS_CAPTURE_IE_UNIFIED_FRONT_R27_GOLDEN_RESTORED_RETIRED':
+    need(r.get('candidate_installed') is False and r.get('candidate_retired') is True and r.get('candidate_boot_consumed') is True,'pass lifecycle')
+    need(r.get('camera_runtime_performed') is True and r.get('streams_completed')==1 and r.get('frames')==27,'pass stream')
+    need(r.get('first_snapshot_generation')==1 and r.get('producer_generations')==24 and r.get('producer_requests')==23,'pass producer')
+    need(r.get('startup_native_writes')==3 and r.get('post_g3_native_writes')==0 and r.get('hardware_control_transactions_including_bootstrap')==4,'pass writes')
+    need(r.get('streamoff_count')==1 and r.get('kernel_health')=='PASS' and r.get('golden_return')=='PASS','pass health')
+    need(r.get('rear_stream_executed') is False and r.get('rear_route_post_stream')=='disabled','rear isolation')
+    need(r.get('same_stream_retry_performed') is False and r.get('same_boot_retry_performed') is False,'pass retry')
+    need(r.get('archive_manifest_sha256')=='9ad7fa2649d688a23105d99dc1782d7b3b8eeb14cfe894c2fc435e5c21c9496e','pass archive')
 print('IE_STATIC_VERIFY=PASS STATUS='+r['status']+' STREAMS=1 POLICY=shadow REAR_STREAM=NO RETRY=NO')
