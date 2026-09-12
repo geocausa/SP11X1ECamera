@@ -1,45 +1,72 @@
 {
-  "schema": "sp11-camera-e004s-dynamic-ir-bind-r4-prep-v1",
-  "status": "READY_UNINSTALLED_UNARMED",
-  "parent_e004r_evidence_commit": "6d55d4e",
-  "parent_e004q_evidence_commit": "72d49f3",
-  "parent_e004o_commit": "47c17e7",
-  "candidate_id": "sp11-camera-e004s-dynamic-ir-bind-r4-one-shot",
-  "boot_marker": "sp11_camera_e004s_dynamic_ir_bind_r4=1",
-  "dtb_sha256": "fffacde38934d1baa8392f6b5687827cf0490d7af9e20fd37858347c157f5742",
-  "sensor_module_sha256": "4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72",
-  "camss_module_sha256": "bc574b2027eee19fc07f12cb1c7efbd86ec1be38e09715878d035d89cb169eba",
-  "harness_source_sha256": "a2a9fd22285cffeb8bb31c71319debc76a6128d8dccc5c7b1b0ead02b9ff26b3",
-  "harness_makefile_sha256": "79feb96cf22395cfaa95e23d26086d91d250ae4a6e669b094a08ec073781cd35",
-  "harness_module_sha256": "f1cd5f44504251224253939f509c95c1ef86c603ba19002c0dce1f3314cfab57",
+  "schema": "sp11-camera-e004s-dynamic-ir-bind-r4-result-v2",
+  "status": "PASS_DYNAMIC_ID_NATIVE_BIND_GRAPH_CONTROLS_STREAM_BLOCK_GOLDEN_RETURN_RETIRED",
+  "package_commit": "d5408e30b15003efe327fd4f3902144f5638fef3",
+  "attempt_count": 1,
   "attempt_limit": 1,
+  "retry_performed": false,
   "retry_authorized": false,
-  "only_behavioral_delta": "adapter-independent physical IR device discovery",
-  "identity_contract": {
+  "discovered_i2c_client": "2-0060",
+  "identity_authority": {
     "of_compatible": "microsoft,sp11-vd55g0",
     "i2c_address": "0x60",
-    "adapter_number_stable": false,
-    "shell_requires_unique_match": true,
-    "kernel_resolves_by_of_node": true,
-    "same_discovered_client_required_end_to_end": true
+    "adapter_number": "non-authoritative/dynamic",
+    "shell_kernel_same_client": true
   },
-  "expected_contract": {
+  "sensor": {
+    "model": "0x3047",
+    "revision": "0x1111 CUT1",
+    "windows_state_pass": true,
+    "sensor_data_writes": 596,
+    "surface_patch_writes": 552,
+    "safe_config_writes": 42,
+    "isolated_strobe_writes": 0,
+    "final_state": "SW_STBY",
+    "runtime_pm": "suspended",
+    "runtime_usage": 0
+  },
+  "graph": {
+    "pass": true,
+    "sensor_entity_links": 1,
+    "target": "msm_csiphy0:0",
+    "flags": [
+      "ENABLED",
+      "IMMUTABLE"
+    ],
+    "subdev_registered": true,
+    "format": "Y10_1X10/644x604"
+  },
+  "v4l2_contract": {
     "link_menu_index": 0,
     "link_frequency_hz": 420000000,
     "pixel_rate_hz": 84000000,
     "hblank": 556,
     "vblank": 1351,
-    "mbus_type": "V4L2_MBUS_CSI2_DPHY",
     "mbus_type_enum": 5,
-    "lanes": 1,
-    "direct_stream_result": "-EOPNOTSUPP"
+    "mbus_type": "V4L2_MBUS_CSI2_DPHY",
+    "data_lanes": 1,
+    "mbus_link_frequency_hz": 420000000
   },
-  "kernel_warns_expected": 0,
-  "camss_receiver_programming_expected": false,
+  "direct_sensor_stream_callback_performed": true,
+  "direct_sensor_stream_result": "-EOPNOTSUPP",
+  "kernel_fault_or_warning": false,
+  "camss_parity_parameter_armed": true,
+  "camss_receiver_programming_invoked": false,
   "capture_stream_performed": false,
+  "sensor_stream_register_write_performed": false,
   "illumination_performed": false,
-  "installed": false,
-  "armed": false,
-  "runtime_performed": false,
-  "next_gate": "Checkpoint/push; install unarmed; arm one-shot; dynamically identify OF-compatible address-0x60 client; run warning-free native bind/graph/typed-control/direct-stream-refusal gate; return Golden and retire."
+  "golden_return_pass": true,
+  "candidate_retired": true,
+  "evidence_sha256": {
+    "RUNTIME-PREFLIGHT.txt": "beb68df23dc45ea46393e3fb0113a079433dd36ba9c523c574a1e0f3d8312be5",
+    "ATTEMPT1-CONSUMED.marker": "bd574ff720005b9c8d765dc47612c4d825c743e29a626c28297b33c89eaa220b",
+    "RUNTIME-DMESG.txt": "d58be41be8b33c069b334de32650085ff4d2c7eb5b78e6bff9b30ad49d6a4330",
+    "MEDIA.txt": "90f9b5890b72bd19f40a9b859e1ffac016eec26171d56c3316b822851ba09972",
+    "CONTROLS.txt": "ab88635fe37b11e71c2e762a99e400e47738f7815965a0ebeb3d0e4dd6d5bf12",
+    "STREAM-BLOCK.txt": "a3b78026ffbad4f2d896c070fefed72c1cf7dec96fb4580f72becd433d218b09",
+    "ATTEMPT1-PASS.json": "3ff1805ce7d160b290899c1bf9afca954c4fa45c6b812533831fac6bfdcd7aed",
+    "GOLDEN-RETURN.txt": "bc124e038fb6437323b0e96ac9575b6816036f62c4321ed6317366f3a8c3ffec",
+    "RETIRE.txt": "704ad7a4edbccbd332fe73f2cc5865ee9a0f4c2fca38db51c3cd65540b98983c"
+  },
+  "next_gate": "Bind-only/native-graph stage closed. Next: bounded CSIPHY0 receiver-programming gate using E004k 96/96 Windows register model while keeping sensor stream and illumination disabled."
 }

@@ -36,3 +36,17 @@ All camera behavior remains unchanged from the already-proven chain:
 - zero CAMSS receiver programming, capture and illumination.
 
 One attempt only. No same-boot retry.
+
+## Runtime outcome
+
+The single E004s attempt passed completely.
+
+The shell preflight dynamically identified the physical sensor by compatible + address and recorded client `2-0060` for this boot. The kernel harness independently resolved the same OF node on the I2C bus and matched the same generated client name. The adapter number itself is not part of the authority and remains intentionally unpinned.
+
+The native sensor reached the exact already-proven Windows state with 596 sensor-data writes and returned to runtime suspend. CAMSS notifier completion produced one enabled+immutable link from the sensor to `msm_csiphy0`, with a registered subdevice and Y10 644x604 format.
+
+The typed in-kernel V4L2 checks passed: 420 MHz link frequency, 84 MHz pixel rate, HBLANK 556, VBLANK 1351, D-PHY one lane and 420 MHz mbus link. Direct `.s_stream(1)` returned `-EOPNOTSUPP` as designed.
+
+There were no kernel warnings or faults, no E004j receiver-programming marker, no capture request and no illumination. SP11 returned immediately to Golden and the disposable candidate was retired.
+
+This closes the native VD55G0 bind/graph/control stage. The next gate can move to bounded CSIPHY0 receiver programming while keeping sensor streaming and illumination disabled.
