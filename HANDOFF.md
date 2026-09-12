@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ are PASS. **IA closes shared rear+front CAMSS authority offline.** The production module set is exact front CAMSS + IMX681 plus accepted rear OV13858, all Golden-vermagic. X1E CSIPHY/CSID/ICC/wrapper static tables remain Golden-exact; the only X1E VFE static change is the VFE1 PIX format pointer, preserving RDI tables. The conservative rear-first IOMMU union contains all 11 distinct accepted specifiers and is accepted by Golden ARM-SMMU stream-match allocation with six hardware mapping groups and zero overlap conflict.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA are PASS. **IB closes the unified current-Golden rear+front DTB offline.** Output `5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321` keeps every Golden property byte-exact, preserves the entire proven front CAMSS authority except the intentional IOMMU-union replacement, enables rear OV13858, adds accepted rear `port@1` alongside front `port@2`, and resolves both graph pairs. Deterministic rebuild and DTC-warning regression pass; no live authority yet.
 
-**Next gate: IB offline unified current-Golden rear+front DTB construction/semantic regression.** Build only; no live runtime until rear regression is separately checkpointed. The brighter-scene native-feedback gate stays parked.
+**Next gate: IC rear-first unified-DTB regression candidate prep.** Prepare/checkpoint before install or arm; first live unified test must exercise rear only. The brighter-scene native-feedback gate stays parked.
 
 ---
 

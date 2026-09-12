@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ:** production packaging, exact-Golden front DT, activation/stream acceptance and handoff decision PASS. **IA:** shared rear+front CAMSS authority PASS offline — exact front CAMSS/IMX681 + rear OV13858 module set, Golden-vermagic, static rear RDI resource authority preserved, and conservative 11-entry accepted-set IOMMU union mechanically valid under Golden ARM-SMMU with six mapping groups. Runtime still blocked pending rear regression.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA:** production packaging, exact-Golden front path and shared-CAMSS authority PASS. **IB:** unified current-Golden rear+front DTB PASS offline — 1,437 nodes, zero Golden nodes removed, all pre-existing Golden properties byte-exact, rear OV13858 enabled, CAMSS ports 1+2 present, front resources preserved, conservative 11-entry IOMMU union installed, deterministic SHA `5e919d6b...d162321`, no new DTC warnings. Runtime remains blocked pending rear-first regression.
 
-**Next action:** IB offline unified exact-Golden rear+front DTB construction + semantic regression. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** IC offline rear-first unified-DTB live-regression candidate prep; checkpoint before install/arm. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
