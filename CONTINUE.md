@@ -20,4 +20,8 @@ The continuous scheduler is live-proven through G26, redundant control-ioctl lif
 
 GY closes changed post-G3 **transport/lifecycle**, but not production-native feedback: the synthetic +1-LSB perturbation did not move any later native AEC tuple (G5..G27 stayed saturated at the G3 controls).
 
-Next action: **GZ offline response-threshold analysis** using immutable GY stats/captures. Quantify the measured effect around G7 and the native controller deadband/quantization before choosing any larger perturbation. Do not guess a bigger live step.
+**GZ response-threshold analysis PASS:** the +0.06798% GY sentinel is below ordinary luma variability, and exact replay proves native Short output is hard-censored by the Windows-derived preview cap from G3 through G27. At G7 unconstrained Short is ~8.40x the cap. A larger synthetic sentinel is explicitly not authorized.
+
+**HA native cap-release one-write policy PASS and HB exact-boundary helper integration PASS. HC native cap-release observer is PREPARED / UNARMED / prearm PASS.** HC adds no synthetic delta. It can apply at most one production-native post-G3 tuple, only if Short convergence is truly below the cap, the cap output equals unconstrained convergence, and the native tuple changed. G25/G26 are forced shadow so any allowed N+2 optical effect remains inside the 27-frame evidence window.
+
+Next action: commit/push the exact HC candidate, rerun prearm, then exactly one HC candidate boot and one stream. Both `PASS_NO_CAP_RELEASE` and `PASS_CAP_RELEASE_ONE_NATIVE_WRITE` are valid consumed outcomes. Archive immediately, return Golden, retire, no same-boot retry.

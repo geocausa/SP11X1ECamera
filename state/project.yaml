@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-09-11
+updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-gy-minimal-changed-sentinel-live-pass-retired
-phase: front-imx681-native-feedback-response-threshold-analysis
-status: golden-restored-gy-live-pass-candidate-retired
+state_id: E003i-hc-native-cap-release-observer-prepared-unarmed
+phase: front-imx681-production-native-cap-release-observer
+status: golden-restored-hc-prepared-unarmed-prearm-pass
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-gy-minimal-changed-post-g3-r27-pass
+current_gate: E003i-hc-native-cap-release-observer-r27
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-GZ-native-response-threshold-analysis
+next_experiment: E003i-HC-native-cap-release-observer-one-shot
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  GY consumed PASS proved exactly one changed post-G3 sensor transaction at G4 using a +1 digital-gain-LSB sentinel; G5-G26 stayed shadow, Golden return and retirement passed. Later native AEC tuples did not move. Build GZ offline response-threshold analysis from immutable GY stats/captures before selecting any larger live perturbation.
+  GZ proves native output is preview-cap-censored and forbids a guessed larger synthetic sentinel. HA one-native-write policy and HB exact-boundary integration pass offline. HC is prepared/unarmed and prearm PASS: commit/push exact HC, then one fresh R27 observer stream only. Valid outcomes are no cap release or exactly one native later write from G4-G24; G25-G26 are forced shadow.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3303,3 +3303,46 @@ e003i_gy_current:
   candidate_retired: true
   archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-gy/attempt1-pass-minimal-changed-sentinel-20260911T224155
   next_gate: GZ-native-response-threshold-analysis
+
+
+e003i_gz_current:
+  status: pass-offline-response-threshold-cap-censored
+  sentinel_relative_gain_delta_percent: 0.067981
+  minimum_steady_luma_cv_percent: 1.230647
+  g7_unconstrained_to_preview_cap_ratio: 8.398752
+  cap_active_generations: G3-G27
+  larger_synthetic_gain_step_authorized: false
+  camera_runtime_performed: false
+
+e003i_ha_current:
+  status: pass-offline-native-cap-release-one-write-policy
+  maximum_post_g3_native_writes: 1
+  synthetic_control_delta_added: false
+  require_convergence_strictly_below_cap: true
+  require_cap_output_equals_unconstrained: true
+  require_native_tuple_changed: true
+  one_write_latch: true
+  camera_runtime_performed: false
+
+e003i_hb_current:
+  status: pass-offline-native-cap-release-helper-integration
+  exact_boundary_fail_closed_preserved: true
+  maximum_post_g3_native_writes: 1
+  synthetic_control_delta_added: false
+  camera_runtime_performed: false
+
+e003i_hc_current:
+  status: prepared-unarmed-prearm-pass
+  parent_authority: [GY, GZ, HA, HB]
+  frames: 27
+  startup_native_sources: [G1, G2, G3]
+  post_g3_observed_sources: G4-G26
+  native_write_eligible_sources: G4-G24
+  horizon_forced_shadow_sources: [G25, G26]
+  maximum_post_g3_native_writes: 1
+  maximum_effect_generation: G27
+  synthetic_control_delta_added: false
+  valid_live_outcomes: [PASS_NO_CAP_RELEASE, PASS_CAP_RELEASE_ONE_NATIVE_WRITE]
+  candidate_runtime_performed: false
+  candidate_armed: false
+  same_boot_retry_allowed: false

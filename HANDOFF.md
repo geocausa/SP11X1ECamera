@@ -8,7 +8,9 @@ The initial verifier expected one hardware transaction per successful ioctl and 
 
 GY then consumed exactly one fresh R27 one-shot and **PASSed**. A guarded G4 sentinel changed only digital gain 1471→1472 (+0.06798%), produced exactly one new post-G3 IMX681 hardware transaction, and G5..G26 stayed shadow-only. Golden return and retirement passed; no retry. The later native AEC tuples G5..G27 did not move, so GY proves transport/lifecycle but not production-native changed feedback.
 
-Current next action: **GZ offline response-threshold analysis** on the immutable GY evidence. Measure the stats/control response around expected effect G7 and derive a defensible next bound before any larger live perturbation.
+GZ then closed offline response-threshold analysis: the tiny GY signal is below normal luma variability, and the production native control is cap-censored G3..G27. G7 unconstrained Short is ~8.40x `E003I_PREVIEW_CAP_MAX`; therefore no larger synthetic gain step is authorized. HA closes a fail-closed one-native-write policy and HB integrates it at the exact DQBUF release boundary.
+
+Current next action: **HC native cap-release observer one-shot**. HC is prepared/unarmed and prearm PASS. It adds no synthetic delta; G4..G24 may produce at most one real native post-G3 write only after proven cap release and a changed native tuple. G25/G26 are forced shadow to keep any N+2 effect inside G27. Commit/push exact HC before install/arm.
 
 ---
 
@@ -32,7 +34,7 @@ Continuous-control work is now closed through GP timing authority PASS, GQ conti
 
 GS consumed exactly one R27 stream: G1..G26 scheduler releases all hit their exact live boundaries, only G1..G3 performed physical sensor ioctls, G4..G26 produced 23 shadow releases, and kernel evidence contains exactly one bootstrap plus three real control transactions. STREAMOFF, Golden return and candidate retirement all passed.
 
-Current next action: **GW minimal changed-post-G3 control authority offline**. GV proved that exact-equal G4..G6 calls are deduped before driver `.s_ctrl`; therefore a true later hardware-write proof requires a changed tuple. Bound one such tuple offline first, keep the delta minimal and safe, and do not authorize broader continuous writes from GV.
+Current frontier beyond the historical block: GY changed-transport PASS; GZ cap-censor analysis PASS; HA one-native-write policy PASS; HB helper integration PASS; HC prepared/unarmed/prearm PASS. The next live action is one HC observer stream only after its exact candidate is durably committed/pushed.
 
 Before every meaningful mutation run `tools/camera-overlap-guard.sh` and inspect the intended stage path. If unexpected evidence exists, audit it first. Any one-shot attempt that may have started is consumed until proven otherwise. Never same-boot retry and never reuse a consumed identity.
 
