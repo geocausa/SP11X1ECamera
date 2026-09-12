@@ -8,9 +8,11 @@ The initial verifier expected one hardware transaction per successful ioctl and 
 
 GY then consumed exactly one fresh R27 one-shot and **PASSed**. A guarded G4 sentinel changed only digital gain 1471→1472 (+0.06798%), produced exactly one new post-G3 IMX681 hardware transaction, and G5..G26 stayed shadow-only. Golden return and retirement passed; no retry. The later native AEC tuples G5..G27 did not move, so GY proves transport/lifecycle but not production-native changed feedback.
 
-GZ then closed offline response-threshold analysis: the tiny GY signal is below normal luma variability, and the production native control is cap-censored G3..G27. G7 unconstrained Short is ~8.40x `E003I_PREVIEW_CAP_MAX`; therefore no larger synthetic gain step is authorized. HA closes a fail-closed one-native-write policy and HB integrates it at the exact DQBUF release boundary.
+GZ then closed offline response-threshold analysis: the tiny GY signal is below normal luma variability, and production native control is cap-censored G3..G27. HA closes a fail-closed one-native-write policy and HB integrates it at the exact DQBUF release boundary.
 
-Current next action: **HC native cap-release observer one-shot**. HC is prepared/unarmed and prearm PASS. It adds no synthetic delta; G4..G24 may produce at most one real native post-G3 write only after proven cap release and a changed native tuple. G25/G26 are forced shadow to keep any N+2 effect inside G27. Commit/push exact HC before install/arm.
+HC then consumed exactly one fresh R27 observer stream and returned **PASS_NO_CAP_RELEASE**. All eligible G4..G24 sources remained cap-active; G25/G26 were forced shadow by the evidence horizon; no post-G3 native write was issued. Hardware evidence is exactly bootstrap + startup G1..G3. STREAMOFF, kernel health, Golden return and candidate retirement passed with no retry.
+
+Current next action: **offline cap-release observation strategy** using immutable HC/GY evidence. Determine a defensible scene/observation horizon that can release the preview cap before authorizing another fresh live identity. Never rerun HC and do not substitute a guessed synthetic gain delta.
 
 ---
 

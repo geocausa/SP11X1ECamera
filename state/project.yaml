@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hc-native-cap-release-observer-prepared-unarmed
-phase: front-imx681-production-native-cap-release-observer
-status: golden-restored-hc-prepared-unarmed-prearm-pass
+state_id: E003i-hc-no-cap-release-live-pass-retired
+phase: front-imx681-cap-release-observation-strategy
+status: golden-restored-hc-no-cap-release-pass-candidate-retired
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hc-native-cap-release-observer-r27
+current_gate: E003i-hc-native-cap-release-observer-no-release-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HC-native-cap-release-observer-one-shot
+next_experiment: E003i-HD-offline-cap-release-observation-strategy
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  GZ proves native output is preview-cap-censored and forbids a guessed larger synthetic sentinel. HA one-native-write policy and HB exact-boundary integration pass offline. HC is prepared/unarmed and prearm PASS: commit/push exact HC, then one fresh R27 observer stream only. Valid outcomes are no cap release or exactly one native later write from G4-G24; G25-G26 are forced shadow.
+  HC consumed one R27 observer stream and PASSed with no cap release: G4-G24 stayed preview-cap-censored, G25-G26 were horizon-shadowed, zero post-G3 native writes occurred, and Golden return/retirement passed. Build HD offline cap-release observation strategy from immutable HC/GY evidence; do not rerun HC or guess a larger synthetic sensor-control delta.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3332,17 +3332,35 @@ e003i_hb_current:
   camera_runtime_performed: false
 
 e003i_hc_current:
-  status: prepared-unarmed-prearm-pass
+  status: pass-live-no-cap-release-consumed-retired
   parent_authority: [GY, GZ, HA, HB]
+  candidate_head: 8aee1d15179fd8b7c25d133d80bf8c4f02f78ee4
+  candidate_runtime_performed: true
+  candidate_armed: consumed-one-shot
+  stream_attempts: 1
+  same_boot_retry_allowed: false
+  same_boot_retry_performed: false
   frames: 27
+  stats_generations: 27
+  producer_generations: 24
   startup_native_sources: [G1, G2, G3]
   post_g3_observed_sources: G4-G26
   native_write_eligible_sources: G4-G24
+  cap_active_shadow_sources: G4-G24
   horizon_forced_shadow_sources: [G25, G26]
+  post_g3_native_write_count: 0
   maximum_post_g3_native_writes: 1
-  maximum_effect_generation: G27
+  sensor_hardware_transactions_including_bootstrap: 4
   synthetic_control_delta_added: false
-  valid_live_outcomes: [PASS_NO_CAP_RELEASE, PASS_CAP_RELEASE_ONE_NATIVE_WRITE]
-  candidate_runtime_performed: false
-  candidate_armed: false
-  same_boot_retry_allowed: false
+  outcome: PASS_NO_CAP_RELEASE
+  production_native_changed_post_g3_feedback_proven: false
+  continuous_native_feedback_proven: false
+  max_pipeline_ms: 28.526506
+  streamoff_pass: true
+  kernel_health_pass: true
+  golden_return_pass: true
+  golden_boot_id: f7758c89-cc63-462c-bf17-2bc459016757
+  candidate_retired: true
+  archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-hc/attempt1-pass-no-cap-release-20260912T060723
+  archive_manifest_sha256: 48444de6fafc7efbab9c71fa0947c193c6c4477a918846e6d787c8095c2c549d
+  next_gate: HD-offline-cap-release-observation-strategy

@@ -19,7 +19,7 @@ Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed 
 
 The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
 
-The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ then showed the native controller is preview-cap-censored, not merely sitting behind a tiny deadband; HA/HB now provide a fail-closed one-native-write gate after real cap release. HC is the prepared bounded observer.** No larger synthetic gain step is authorized.
+The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ showed the native controller is preview-cap-censored; HA/HB provide a fail-closed one-native-write gate; HC consumed one bounded live observer and PASSed with no cap release and no post-G3 native hardware write.** The next work is an offline cap-release observation strategy, not a larger synthetic gain step.
 
 Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
 

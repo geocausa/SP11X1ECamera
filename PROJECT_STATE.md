@@ -12,9 +12,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **GY live result:** consumed PASS. Exactly one changed post-G3 sensor transaction was proven at G4 (digital gain 1471→1472, +0.06798%); G5..G26 stayed shadow-only; Golden return/retirement passed. Native AEC G5..G27 remained unchanged, so production changed-feedback is still open.
 
-**GZ/HA/HB:** GZ proves the GY +1-LSB perturbation is below ordinary luma variability and, more importantly, native AEC is preview-cap-censored from G3..G27 (G7 unconstrained Short ~8.40x cap). No larger synthetic sentinel is authorized. HA defines one fail-closed production-native later-write gate after real cap release; HB integrates it at the exact live boundary.
+**GZ/HA/HB/HC:** GZ proves the GY +1-LSB perturbation is below ordinary luma variability and native AEC is preview-cap-censored. HA defines one fail-closed native later-write gate and HB integrates it at the exact live boundary. HC then consumed one R27 stream and PASSed with **no cap release**: G4..G24 remained capped, G25/G26 were horizon-shadowed, and no post-G3 native hardware write occurred. Golden return and candidate retirement passed.
 
-**Next action:** HC prepared/unarmed/prearm PASS. One 27-frame observer stream may either safely report no cap release or apply exactly one native changed tuple from G4..G24; G25/G26 are evidence-horizon shadow-only.
+**Next action:** offline cap-release observation strategy from immutable HC/GY evidence; determine the scene/horizon needed to leave the cap before any fresh live candidate.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
