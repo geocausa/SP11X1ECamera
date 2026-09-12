@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV are PASS. **HW is installed but unarmed:** fresh ID `sp11-camera-e003i-hw-prod-activation-one-shot`; exact Golden kernel/initrd + HV DTB + HN modules + current production package verified byte-for-byte; installed GRUB entry SHA256 `bf5154e8aaf651de63395a268d8431f59ca9f6a0183d4e2921a982515ffb40b5`; `saved_entry` remains Golden and `next_entry` is empty. No camera runtime has occurred.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV are PASS. **HW is consumed/PASS, Golden-restored and retired.** Fresh candidate boot `2e35316b-...530b` preserved Golden cmdline semantics and HV DTB, runtime preflight passed, and exactly one activation invocation loaded exact HN CAMSS/IMX681 modules. Production discovery resolved the accepted route at `/dev/media0` / `/dev/video7`; no stream executed. Kernel health passed, no retry occurred, Golden returned as boot `6f2ce528-...d556`, and the candidate identity was removed. Archive manifest SHA256 `c8c30d6269ab89c90d68ac98687f783a9845ca1982734c9d2e75868741bf67fd`.
 
-**Next gate: checkpoint/push installed-unarmed HW, then one fresh reconcile before arm.** The live boot may only bind modules and run production topology discovery; no streaming/retry. The brighter-scene native-feedback gate stays parked.
+**Next gate: HX offline one-stream production acceptance policy.** Do not broaden write authority or create a live candidate until the first-stream contract is closed. The brighter-scene native-feedback gate stays parked.
 
 ---
 

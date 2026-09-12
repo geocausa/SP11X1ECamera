@@ -39,6 +39,14 @@ if r['status']=='PREPARED_NOT_INSTALLED_PRODUCTION_ACTIVATION':
     need(r['candidate_installed'] is False and r['candidate_armed'] is False and not (D/'INSTALL.txt').exists(),'prep lifecycle')
 if r['status']=='INSTALLED_UNARMED_PRODUCTION_ACTIVATION':
     need(r['candidate_installed'] is True and r['candidate_armed'] is False and (D/'INSTALL.txt').is_file() and not (D/'ARM.txt').exists(),'installed lifecycle')
+if r['status']=='PASS_ACTIVATION_SMOKE_GOLDEN_RESTORED_RETIRED':
+    need(r['candidate_installed'] is False and r.get('candidate_retired') is True and r.get('one_shot_boot_consumed') is True,'pass lifecycle')
+    need(r.get('activation_attempts')==1 and r.get('same_boot_retry_performed') is False and r.get('same_activation_retry_performed') is False,'pass attempts')
+    need(r.get('activation_runtime_performed') is True and r.get('stream_executed') is False and r.get('production_activation_path_proven') is True,'pass scope')
+    need(r.get('golden_return')=='PASS' and r.get('kernel_health')=='PASS','pass health')
+    need(r.get('archive_manifest_sha256')=='c8c30d6269ab89c90d68ac98687f783a9845ca1982734c9d2e75868741bf67fd','pass archive')
+    for f in ('ATTEMPT1-PASS.json','ATTEMPT1-CONSUMED.marker','ACTIVATION.txt','DISCOVERY.json','POST-ACTIVATION.txt','GOLDEN-RETURN.txt','RETIRE.txt'):
+        need((D/f).is_file(),'pass evidence '+f)
 need(r['stream_authorized'] is False and r['same_boot_retry_authorized'] is False,'authority')
 if r['status'] in ('PREPARED_NOT_INSTALLED_PRODUCTION_ACTIVATION','INSTALLED_UNARMED_PRODUCTION_ACTIVATION'):
     need(r['camera_runtime_performed'] is False,'pre-runtime lifecycle')

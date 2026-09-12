@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hw-production-activation-installed-unarmed
-phase: front-imx681-production-activation-installed-unarmed
-status: golden-hw-installed-unarmed-native-feedback-environment-blocked
+state_id: E003i-hw-production-activation-pass-golden-retired
+phase: front-imx681-production-one-stream-acceptance-policy
+status: golden-hw-activation-pass-retired-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hw-production-activation-installed-unarmed
+current_gate: E003i-hw-production-activation-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HW-production-activation-one-shot
+next_experiment: E003i-HX-production-one-stream-acceptance-policy
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HW INSTALLED UNARMED: exact candidate bundle under /boot/sp11-7.1.5-camera-e003i-hw-prod-activation verifies Golden kernel bca0a336..., Golden initrd ac3ba64b..., HV DTB 34880dc2..., HN CAMSS/IMX681 modules, current package 57aa9cc2..., and GRUB entry bf5154e8.... saved_entry remains sp11-audio-fullio-v19c, next_entry empty, no camera modules/nodes/processes, no runtime. Commit/push this installed checkpoint, then fresh reconcile before one one-shot activation-only boot. Authorized live action: module bind + production topology discovery only; no stream and no same-boot retry. Native-feedback proof remains parked.
+  HW PASS live activation smoke: one fresh current-Golden/HV candidate boot, runtime preflight PASS, exactly one activation invocation, exact HN qcom-camss + imx681 modules loaded, production discovery resolved imx681 1-0010 -> msm_csiphy2 -> msm_csid1 -> msm_vfe1_pix -> msm_vfe1_video3 at /dev/media0 and /dev/video7, zero stream execution, kernel health PASS, no same-boot/activation retry, Golden return PASS, candidate retired. Candidate boot 2e35316b-ff57-489e-b7b0-d0ef661b530b; Golden return 6f2ce528-10bf-4eba-a0f6-68e9d8b7d556; archive manifest c8c30d6269ab89c90d68ac98687f783a9845ca1982734c9d2e75868741bf67fd. Next HX offline one-stream acceptance policy; do not create live stream candidate until policy checkpointed. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3791,13 +3791,13 @@ e003i_hv_current:
 
 
 e003i_hw_current:
-  status: installed-unarmed-production-activation
+  status: pass-activation-smoke-golden-restored-retired
   parent: HV-current-golden-camera-dtb-merge-pass
   candidate_id: sp11-camera-e003i-hw-prod-activation-one-shot
   candidate_marker: sp11_camera_e003i_hw_prod_activation=1
-  candidate_installed: true
+  candidate_installed: false
   candidate_armed: false
-  camera_runtime_performed: false
+  camera_runtime_performed: true
   stream_authorized: false
   activation_scope: module-bind-plus-production-topology-discovery-only
   golden_kernel_sha256: bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
@@ -3812,6 +3812,20 @@ e003i_hw_current:
   same_boot_retry_authorized: false
   same_activation_retry_authorized: false
   prearm_pass: true
-  next_gate: HW-production-activation-one-shot
+  next_gate: HX-production-one-stream-acceptance-policy
   install_source_head: d78f8325e5076e6aac64eedaa30a2b0d188e011e
   installed_grub_entry_sha256: bf5154e8aaf651de63395a268d8431f59ca9f6a0183d4e2921a982515ffb40b5
+  candidate_retired: true
+  activation_runtime_performed: true
+  one_shot_boot_consumed: true
+  activation_attempts: 1
+  same_boot_retry_performed: false
+  same_activation_retry_performed: false
+  stream_executed: false
+  production_activation_path_proven: true
+  production_stream_on_current_golden_merge_proven: false
+  candidate_boot_id: 2e35316b-ff57-489e-b7b0-d0ef661b530b
+  golden_return_boot_id: 6f2ce528-10bf-4eba-a0f6-68e9d8b7d556
+  golden_return: PASS
+  kernel_health: PASS
+  archive_manifest_sha256: c8c30d6269ab89c90d68ac98687f783a9845ca1982734c9d2e75868741bf67fd
