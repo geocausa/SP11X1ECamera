@@ -1,0 +1,64 @@
+{
+  "current_linux": {
+    "computed_settle_count": "0x12",
+    "dynamic_lane_mask": "0x81",
+    "mismatch_classes": [
+      "five per-lane settle registers 0x12 vs Windows 0x10",
+      "lane_regs_x1e80100 overwrites dynamic 0x81 with hardcoded 0xD5",
+      "generic DPHY cleanup zeros common CTRL11..CTRL21 that Windows leaves programmed"
+    ],
+    "modeled_registers": 96,
+    "receiver_endpoint_data_lanes": [
+      0
+    ],
+    "windows_matches": 79,
+    "windows_mismatches": 17
+  },
+  "next_gate": "Implement the scoped CAMSS correction in a disposable kernel candidate, prove source/build/DT isolation, then inspect receiver registers before authorizing first IR stream.",
+  "polarity": {
+    "electrical_polarity_claim": "not separately asserted",
+    "explicit_linux_override_needed": false,
+    "reason": "X1E gen2 CSIPHY source parses lane polarity but does not consume it; the full modeled programmed register set reaches 96/96 Windows matches without a polarity override."
+  },
+  "runtime_authorized": false,
+  "schema": "sp11-camera-e004j-csiphy0-dphy-authority-v1",
+  "scoped_correction": {
+    "force_settle_count": "0x10",
+    "front_rgb_cphy_affected": false,
+    "modeled_windows_matches": 96,
+    "modeled_windows_mismatches": 0,
+    "rear_csiphy1_affected": false,
+    "restore_dynamic_lane_mask_after_gen2_table": true,
+    "retain_windows_common_ctrl11_21": true,
+    "scope": "CAMSS_X1E80100 && csiphy->id == 0 && DPHY only"
+  },
+  "status": "PASS_OFFLINE_WINDOWS_LINUX_CSIPHY0_DPHY_DIFF_AUTHORITY",
+  "windows_raw_sp7_log": {
+    "dwords": 2048,
+    "live_aperture": "0x0ace4000..0x0ace5fff",
+    "normalized_sha256": "fc3994ea2a2d607d8028ed0881b8056e510287d5831fe22b5ea635f1ec109a26",
+    "path": "C:\\Users\\SurfacePro7\\Documents\\KDNET\\Codex\\E004_IR_LIVE2_20260912.log",
+    "sha256": "22e785474bd6857af52ab50a2039e8488a3328cbd8bf4a66a69d6e2d6fe2ac9d"
+  },
+  "windows_receiver": {
+    "clock_enable_bit": 7,
+    "common_ctrl11_21": [
+      "0xff",
+      "0xfe",
+      "0xe6",
+      "0xdf",
+      "0xdf",
+      "0xfc",
+      "0xfb",
+      "0x9b",
+      "0x7f",
+      "0xbf",
+      "0xff"
+    ],
+    "data_lane_position_linux": 0,
+    "lane_mask": "0x81",
+    "num_data_lanes": 1,
+    "phy": "TwoPhase/DPHY",
+    "settle_count": "0x10"
+  }
+}
