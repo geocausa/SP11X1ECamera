@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID + IE:** rear/front unified live regressions PASS. **IF:** handoff analysis PASS. **IG + IH:** both bounded same-boot directions PASS live/retired through explicit neutral-route handoff, with clean suspend/STREAMOFF/kernel health and no retries.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID/IE/IF/IG/IH:** rear/front unified regressions, neutral-route ownership and both bounded same-boot RGB directions PASS. **IJ:** bounded bidirectional rear-RGB + front-RGB production handoff ACCEPTED; protected-Golden/default promotion remains denied.
 
-**Next action:** IJ decides the exact production/default-promotion boundary. Bounded bidirectional rear/RGB handoff is proven; indefinite alternating-switch soak, front IR/VD55G0 and brighter-scene native feedback are not.
+**Next action:** E004 VD55G0 front-IR authority and Linux bring-up foundation. Whole-stack/default promotion still needs IR, plus later alternating RGB soak and the separately parked brighter-scene native-feedback proof.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear and IE front unified regressions are PASS; IF handoff analysis is PASS; IG rear -> neutral -> front and **IH front -> neutral -> rear are both PASS live/retired**. IH reproduced the accepted front R27 shadow contract, front suspend, explicit neutral handoff, exact rear color-bar + R16, rear suspend, final rear-only routing, clean kernel health and no retry. Golden return passed; final IH archive manifest is `4c988c514992ec69e92449aaf66e7eb90cc35365d735c54ae2d2fda5fcd4c0ea`.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID/IE prove rear/front separately, IF defines neutral ownership, and IG + IH prove both bounded same-boot RGB handoff directions. **IJ accepts the unified rear-RGB + front-RGB handoff as bounded production authority, while explicitly refusing protected-Golden/default promotion.** Neutral-route transfer is mandatory. Default/full-stack promotion remains blocked by unproven front IR/VD55G0, parked brighter-scene post-G3 native feedback, and lack of repeated alternating switch soak.
 
-**Next gate: IJ production-handoff acceptance/default-promotion decision.** Bounded bidirectional switching is now proven, but indefinite switch soak, front IR/VD55G0 and the brighter-scene native-feedback gate remain distinct unresolved boundaries.
+**Next gate: E004 VD55G0 front-IR offline authority / Linux bring-up foundation.** Keep illumination/privacy/security paths off until independently proven; do not disturb protected Golden.
 
 ---
 

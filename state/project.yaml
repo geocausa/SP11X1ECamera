@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: IH-front-to-rear-pass-golden-retired
-phase: camera-stack-unified-bidirectional-handoff-acceptance-decision
-status: golden-ig-ih-bidirectional-handoff-pass-both-retired
+state_id: IJ-bidirectional-rgb-handoff-accepted
+phase: camera-stack-front-ir-vd55g0-offline-authority
+status: golden-ij-rgb-handoff-accepted-default-not-promoted
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: IH-front-to-rear-same-boot-pass
+current_gate: IJ-bounded-bidirectional-rgb-handoff-accepted
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: IJ-unified-bidirectional-production-handoff-acceptance-decision
+next_experiment: E004-VD55G0-front-IR-offline-authority
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  IH front-to-rear same-boot handoff PASS. Candidate boot d55aca5c-519c-42a6-afcf-b24da423a80f started neutral, consumed before route mutation, ran front R27 shadow with 27/27 frames, generation 1, 24 producer generations / 23 requests, startup writes G1..G3 only, zero post-G3 native writes, four hardware control transactions, STREAMOFF and front suspend; explicitly disabled both front links; verified fully neutral handoff; enabled rear-only; ran exact rear color-bar + 16 normal frames at mean 30.0662057851 fps; rear suspended; final route rear-only; kernel health PASS; no retry. Golden return boot c19b139c-41a7-431c-9ca8-09773203a9ca PASS; candidate retired; final archive manifest 4c988c514992ec69e92449aaf66e7eb90cc35365d735c54ae2d2fda5fcd4c0ea. IG + IH now prove both bounded same-boot handoff directions. Next IJ decides the production/default-promotion boundary without changing Golden.
+  IJ accepts the exact unified IB-DTB CAMSS/IMX681/OV13858 authority for bounded bidirectional rear-RGB/front-RGB production handoff. IG and IH prove both directions through mandatory explicit neutral routing with source/target suspend, clean kernel health and no retries. Protected Golden/default promotion remains unauthorized because front IR VD55G0 is unproven on Linux, front post-G3 native feedback remains brighter-scene environment-blocked with production policy shadow, and repeated alternating RGB switch soak is not yet proven. Next E004 builds the VD55G0 offline authority and Linux bring-up foundation with illumination/privacy/security paths kept off until separately proven.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4243,3 +4243,20 @@ ih_current:
   golden_return: PASS
   archive_manifest_sha256: 4c988c514992ec69e92449aaf66e7eb90cc35365d735c54ae2d2fda5fcd4c0ea
   bidirectional_same_boot_route_handoff_proven_with_ig: true
+
+ij_current:
+  status: pass-offline-bidirectional-handoff-acceptance-decision
+  camera_runtime_performed: false
+  rear_rgb_front_rgb_bounded_bidirectional_handoff_accepted: true
+  neutral_route_transaction_mandatory: true
+  persistent_replacement_of_golden_default_authorized: false
+  full_camera_stack_default_authorized: false
+  front_ir_vd55g0_linux_proven: false
+  front_post_g3_native_feedback_proven: false
+  repeated_alternating_rgb_switch_soak_proven: false
+  unified_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321
+  qcom_camss_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  imx681_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
+  front_post_g3_policy: shadow
+  next_gate: E004-VD55G0-front-IR-offline-authority
