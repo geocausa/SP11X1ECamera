@@ -1,0 +1,49 @@
+{
+  "authority": "same-machine exact Surface PCFG + exact installed qccamplatform/qccamflash + E004d Windows sensor packet",
+  "flash_driver_trigger_branches": {
+    "other": "CameraWhiteLEDSetSWStrobe fallback and low-level control 0,0,0",
+    "trigger_type_0": "distinct hardware-strobe configuration branch; programs flash/PMIC state and calls low-level control with arguments 1,1,0",
+    "trigger_type_1": "installs IRLED_CCI_Trigger_Callback and uses CameraIRLED_Trigger path",
+    "trigger_type_2": "target-current plus safety-timer branch"
+  },
+  "front_ir_descriptor": {
+    "csi_phy_index": 0,
+    "direction": 1,
+    "face_authentication": 1,
+    "flash_cci_timer_index": 0,
+    "flash_index": 0,
+    "flash_presence": 1,
+    "flash_shutter_type": 0,
+    "flash_trigger_type": 0,
+    "i2c_master_index": 0,
+    "orientation": 0,
+    "packed": "0x01000110"
+  },
+  "linux_policy": {
+    "next_safe_subset": "42 final Windows writes excluding 0x0468, no CAMSS, no V4L2, no stream, no external illumination",
+    "write_0x0468_0x02_authorized": false
+  },
+  "not_proven": [
+    "Whether writing 0x0468=0x02 while the sensor remains in SW_STBY can itself emit a physical IR light pulse.",
+    "Exact physical emitter current/timing for the face-authentication illumination path."
+  ],
+  "pcfg_sha256": "0933a645ea55c95953ac3f0b6829e01c27133d52f369596f62fb3c5e99f5807f",
+  "proven": [
+    "Windows marks the VD55G0 slot flash-present with flash index 0 and trigger type 0.",
+    "Trigger type 0 is a distinct flash hardware configuration path, not trigger type 1 CCI callback and not software-strobe fallback.",
+    "The Windows sensor final block sets GPIO1 selector register 0x0468 to 0x02."
+  ],
+  "qccamflash_sha256": "6bc1d698bc3b6da16974cd6f3ea89dc1ba6a8ea102eebe1a5d41129b4eb9ba2b",
+  "qccamplatform_sha256": "836714ec41f92f45af363d7bf3c9b9cfc2cccdbd19a1c57f355b471068648049",
+  "schema": "sp11-camera-e004g-windows-ir-strobe-authority-v1",
+  "sensor_final_config": {
+    "illumination_coupled_write": {
+      "address": "0x0468",
+      "data": "0x02",
+      "reference_only_name": "GPIO1 STROBE selector"
+    },
+    "non_strobe_writes": 42,
+    "windows_writes": 43
+  },
+  "status": "PASS_OFFLINE_WINDOWS_IR_STROBE_TRIGGER_AUTHORITY"
+}
