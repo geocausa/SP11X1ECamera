@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: ID-unified-rear-regression-pass-golden-retired
-phase: camera-stack-unified-front-regression-candidate-prep
-status: golden-id-rear-pass-retired
+state_id: IE-unified-front-production-prepared
+phase: camera-stack-unified-front-regression-prepared-not-installed
+status: golden-ie-prepared-not-installed-no-runtime
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: ID-unified-rear-regression-pass
+current_gate: IE-unified-front-production-prepared
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: IE-fresh-unified-front-production-regression-prep
+next_experiment: IE-installed-unarmed-checkpoint
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  ID live rear regression PASS under the exact IB unified DTB. Accepted color-bar frame SHA256 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346, 16/16 normal frames sequences 0..15 at mean 29.8393449667 fps, rear runtime suspended, kernel health PASS, front stream false, no retry. Candidate boot b0b1c159-094e-4db0-a43a-9f068aff2910 consumed; Golden return boot 1b77c56c-b54b-4c4a-a860-487c291ea83b PASS; candidate retired; final archive manifest 72c9c085e4e1960c185aa0672d9eac162d8487cea3a3c235bb716267c1110dad. Next IE prepares a fresh unified front production regression based on proven HY R27 shadow contract with rear streaming forbidden.
+  IE fresh candidate prepared offline on protected Golden. Fresh identity sp11-camera-ie-unified-front-r27-one-shot; exact IB unified DTB SHA256 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321; exact front production CAMSS + IMX681 plus accepted OV13858 for unified graph bind. Offline production discovery resolves imx681 -> csiphy2 -> csid1 -> vfe1_pix -> video3 on the real unified graph. Runtime contract is exactly one 27-frame shadow-policy production stream, rear mutable route disabled before/after, rear streaming forbidden, no retry. Root prearm PASS. Next commit/push prep, install unarmed, verify and checkpoint again before arm.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4071,3 +4071,26 @@ id_current:
   kernel_health: PASS
   golden_return: PASS
   archive_manifest_sha256: 72c9c085e4e1960c185aa0672d9eac162d8487cea3a3c235bb716267c1110dad
+
+ie_current:
+  status: prepared-not-installed-unified-front-production-r27
+  candidate_id: sp11-camera-ie-unified-front-r27-one-shot
+  candidate_marker: sp11_camera_ie_unified_front_r27=1
+  candidate_boot_dir: /boot/sp11-7.1.5-camera-ie-unified-front-r27
+  unified_dtb_sha256: 5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321
+  qcom_camss_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  imx681_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
+  production_package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
+  stream_count: 1
+  frames: 27
+  post_g3_policy: shadow
+  post_g3_native_writes_authorized: 0
+  rear_stream_authorized: false
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  candidate_installed: false
+  candidate_armed: false
+  camera_runtime_performed: false
+  root_prearm: PASS
+  next_gate: IE-installed-unarmed-checkpoint

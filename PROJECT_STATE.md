@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **IC:** retired pre-stream harness failure. **ID:** unified-DTB rear regression PASS live — exact accepted color bar, 16/16 normal frames, 29.8393 fps, no front stream/retry, runtime suspend + kernel health PASS, Golden restored and candidate retired.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID:** unified-DTB rear regression PASS live and retired. **IE:** fresh unified-DTB front production candidate prepared offline, not installed/armed; HY-equivalent one-stream R27 shadow contract, exact IB DTB, unified graph bind with rear route disabled and rear streaming forbidden. Root prearm PASS.
 
-**Next action:** IE fresh unified front production regression candidate prep using HY's proven one-stream R27 shadow contract on the IB unified DTB; rear streaming forbidden. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** commit/push IE prep, install unarmed, verify and checkpoint/push installed-unarmed before arming. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
