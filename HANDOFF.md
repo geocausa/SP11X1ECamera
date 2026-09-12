@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO and HQ are both consumed/PASS. **HQ proves four sequential production R27 streams** after the generation-reset fix: 108 total frames, fresh generation 1 each session, producer PASS four times, 4 clean STREAMOFFs, exactly 3 startup sensor writes per stream, zero post-G3 native writes, expected 16 total hardware control transactions, kernel health PASS, no retry, Golden return PASS and candidate retirement PASS. Final archive manifest SHA256 is `a1358953c9dc545c5b5125f4ea4f71d35402391c00c52fe163f98d81822ef545`.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS. **HR closes the production repeated-open handoff offline:** launcher default output is now a fresh timestamp+PID session path, execute mode rejects an existing output directory, source and staged launchers each pass 4/4 unique dry-run sessions with no output creation, staged dry-run opens zero camera devices and zero source-workspace files, and all production binaries/modules remain byte-identical to HN. New deterministic package manifest SHA256 is `57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757`. No HR camera runtime occurred.
 
-**Next gate: HR offline production repeated-open lifecycle handoff.** Consolidate the bounded repeated-open proof without broadening sensor-write authority. The brighter-scene native-feedback gate stays parked.
+**Next gate: HS offline install-image transaction/rollback contract.** Prove install and rollback mechanics without modifying the protected Golden system. The brighter-scene native-feedback gate stays parked.
 
 ---
 

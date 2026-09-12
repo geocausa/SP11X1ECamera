@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hq-four-stream-shadow-pass-golden-retired
-phase: front-imx681-production-repeated-open-handoff
-status: golden-hq-four-stream-pass-archived-retired-native-feedback-environment-blocked
+state_id: E003i-hr-production-repeated-open-handoff-pass
+phase: front-imx681-production-install-rollback-contract
+status: golden-hr-offline-repeated-open-handoff-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hq-four-stream-shadow-pass
+current_gate: E003i-hr-production-repeated-open-handoff-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HR-production-repeated-open-handoff
+next_experiment: E003i-HS-production-install-rollback-contract
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HQ PASS live: exactly four sequential 27-frame streams (108 frames) completed in one candidate boot. Every session restarted snapshot generation at G1; producer PASSed 24 generations / 23 R5..R27 submissions; exactly three startup sensor writes per stream; post-G3 shadow with zero later native writes; STREAMOFF x4; expected 16 total control transactions; kernel health PASS; no retry; Golden restored; candidate retired. Final archive manifest SHA256 a1358953c9dc545c5b5125f4ea4f71d35402391c00c52fe163f98d81822ef545. Next HR offline production repeated-open lifecycle handoff; do not broaden native-write authority. Native-feedback proof remains parked.
+  HR PASS offline: repeated production launcher invocations now default to fresh timestamp+PID session directories and execute mode refuses an existing output directory. Source and staged launcher each pass 4/4 unique dry-run sessions with zero output creation; staged dry-run has zero source-workspace opens and zero camera-device opens; production binaries/modules are unchanged from HN; deterministic package manifest SHA256 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757. Next HS offline install-image transaction and rollback contract with no Golden mutation. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3678,3 +3678,24 @@ e003i_hq_current:
   same_boot_retry_performed: false
   archive_manifest_sha256: a1358953c9dc545c5b5125f4ea4f71d35402391c00c52fe163f98d81822ef545
   golden_return: PASS
+
+
+e003i_hr_current:
+  status: pass-offline-production-repeated-open-handoff
+  parent: HQ-four-stream-shadow-live-pass
+  bounded_repeated_open_live_proven_streams: 4
+  bounded_repeated_open_live_proven_frames: 108
+  launcher_default_session_paths_unique_dry_runs: 4
+  staged_default_session_paths_unique_dry_runs: 4
+  execute_existing_output_dir_fail_closed: true
+  dry_run_output_directories_created: 0
+  staged_source_repo_opens: 0
+  staged_camera_device_opens: 0
+  production_artifacts_unchanged_from_hn: true
+  package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
+  post_g3_policy: shadow
+  post_g3_native_writes_authorized: 0
+  indefinite_soak_proven: false
+  production_native_changed_post_g3_feedback_proven: false
+  camera_runtime_performed: false
+  next_gate: HS-production-install-rollback-contract
