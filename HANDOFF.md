@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear-first unified-DTB regression is PASS live and retired. **IE fresh front unified-DTB candidate is now prepared offline, not installed or armed.** It pins the exact IB DTB and HY production front contract, adds accepted OV13858 only for unified graph bind, proves front discovery on the real unified topology offline, requires the rear mutable route disabled before and after the front stream, and forbids any rear stream.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID rear-first unified-DTB regression is PASS live and retired. **IE front unified-DTB candidate is installed-unarmed and verified.** Exact boot and module hashes match the pinned contract; Golden saved entry is intact and next_entry is empty. HY one-stream R27 shadow semantics are frozen; rear route must stay disabled and rear streaming remains forbidden.
 
-**Next gate: durable IE prep checkpoint, then installed-unarmed checkpoint.** Only after both pass may the fresh IE one-shot be armed. The brighter-scene native-feedback gate stays parked.
+**Next gate: checkpoint/push IE installed-unarmed, then arm one-shot.** After any attempt return directly to Golden, archive and retire before further work. The brighter-scene native-feedback gate stays parked.
 
 ---
 
