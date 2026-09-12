@@ -1,0 +1,111 @@
+{
+  "activation": {
+    "hq_boot_token_fail_closed_preflight_proven": true,
+    "module_internal_boot_token_gate": false,
+    "production_equivalent_fail_closed_activation_gate_required": true
+  },
+  "camera_runtime_performed": false,
+  "conclusion": "do not overwrite or directly reuse the historical front-only DTB on Golden; construct a new camera-capable DTB from the exact current Golden DTB plus proven camera additions, then regress all Golden common-node semantics before runtime",
+  "dtb": {
+    "candidate_only_node_paths": 31,
+    "candidate_only_nodes": [
+      "/soc@0/cci@ac15000",
+      "/soc@0/cci@ac15000/i2c-bus@0",
+      "/soc@0/cci@ac15000/i2c-bus@1",
+      "/soc@0/cci@ac15000/i2c-bus@1/camera@10",
+      "/soc@0/cci@ac16000",
+      "/soc@0/cci@ac16000/i2c-bus@0",
+      "/soc@0/cci@ac16000/i2c-bus@1",
+      "/soc@0/cci@ac16000/i2c-bus@1/camera@10",
+      "/soc@0/cci@ac16000/i2c-bus@1/camera@10/port",
+      "/soc@0/cci@ac16000/i2c-bus@1/camera@10/port/endpoint",
+      "/soc@0/clock-controller@ade0000",
+      "/soc@0/isp@acb7000",
+      "/soc@0/isp@acb7000/ports",
+      "/soc@0/isp@acb7000/ports/port@2",
+      "/soc@0/isp@acb7000/ports/port@2/endpoint",
+      "/soc@0/pinctrl@f100000/cci0-default-state",
+      "/soc@0/pinctrl@f100000/cci0-default-state/cci0-i2c1-pins",
+      "/soc@0/pinctrl@f100000/cci0-sleep-state",
+      "/soc@0/pinctrl@f100000/cci0-sleep-state/cci0-i2c1-pins",
+      "/soc@0/pinctrl@f100000/cci1-master1-default-state",
+      "/soc@0/pinctrl@f100000/cci1-master1-sleep-state",
+      "/soc@0/pinctrl@f100000/front-imx681-default-state",
+      "/soc@0/pinctrl@f100000/front-imx681-default-state/mclk-pins",
+      "/soc@0/pinctrl@f100000/front-imx681-default-state/reset-pins",
+      "/soc@0/pinctrl@f100000/rear-mclk1-default-state",
+      "/soc@0/rsc@17500000/regulators-0/ldo7",
+      "/soc@0/rsc@17500000/regulators-8",
+      "/soc@0/rsc@17500000/regulators-8/ldo1",
+      "/soc@0/rsc@17500000/regulators-8/ldo3",
+      "/soc@0/rsc@17500000/regulators-8/ldo5",
+      "/soc@0/rsc@17500000/regulators-8/ldo6"
+    ],
+    "common_node_paths": 1402,
+    "cphy_bus_type": 1,
+    "data_lanes": [
+      0
+    ],
+    "direct_reuse_on_protected_golden_authorized": false,
+    "front_camss_ports": [
+      "port@2"
+    ],
+    "front_iommus": [
+      "0x800/0x60",
+      "0x820/0x60",
+      "0x840/0x60",
+      "0x860/0x60",
+      "0x18a0/0"
+    ],
+    "front_only_node_paths": 1433,
+    "front_sensor": "sony,imx681@0x10",
+    "golden_node_paths": 1402,
+    "golden_only_node_paths": 0,
+    "golden_sha256": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00",
+    "proven_front_only_builder_base_sha256": "333e3c81c8a490f1b8b444e9a8d8005539799c438f2d03ebc6acfc366074b14e",
+    "proven_front_only_derived_from_current_golden": false,
+    "proven_front_only_sha256": "019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f",
+    "rear_sensor_status": "disabled",
+    "structural_superset_only": true
+  },
+  "firmware": {
+    "current_iq_authority": "packaged r4-bootstrap.bin + live-iq-producer.py",
+    "current_module_firmware_metadata_entries": 0,
+    "current_module_firmware_unresolved_symbols": 0,
+    "current_source_functional_firmware_loader_calls": 0,
+    "historical_candidate_firmware_class_path_present": true,
+    "historical_firmware_class_path_required_by_current_production_runtime": false
+  },
+  "golden_system_modified": false,
+  "modules": {
+    "candidate_boot_token_enforced_by_modules": false,
+    "imx681_depends": [
+      "v4l2-async",
+      "videodev",
+      "v4l2-cci",
+      "mc",
+      "v4l2-fwnode"
+    ],
+    "imx681_sha256": "ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6",
+    "proven_load_order": [
+      "dependency modules",
+      "qcom-camss.ko",
+      "imx681.ko"
+    ],
+    "qcom_camss_depends": [
+      "videobuf2-v4l2",
+      "videobuf2-dma-sg",
+      "videodev",
+      "mc",
+      "v4l2-async",
+      "videobuf2-common",
+      "v4l2-fwnode"
+    ],
+    "qcom_camss_sha256": "7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+  },
+  "next_gate": "HV current-Golden camera-DTB merge construction and semantic regression offline",
+  "parent": "HT production deployment boundary",
+  "schema": "sp11-e003i-hu-production-boot-module-firmware-authority-v1",
+  "status": "PASS_OFFLINE_PRODUCTION_BOOT_MODULE_FIRMWARE_AUTHORITY"
+}

@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS:** session isolation + install/rollback PASS offline. **HT:** deployment boundary PASS — protected Golden has zero camera nodes/modules, userspace discovery fails closed, and the runtime package owns no DTB/firmware/module/boot/service integration; proven HQ runtime required all of those separately. Real-root install remains blocked.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT:** session/install/deployment boundary PASS offline. **HU:** boot/module/firmware authority PASS — historical front-only DTB is a 31-node structural superset but derives from an older base, so direct reuse on current Golden is blocked; front route/IOMMU authority is frozen; HN modules remain exact Golden-vermagic with no firmware-loader or internal boot-token coupling.
 
-**Next action:** HU offline production boot/module/firmware integration authority. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** HV offline current-Golden camera-DTB merge construction + common-node semantic regression. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

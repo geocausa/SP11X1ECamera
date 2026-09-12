@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-ht-production-deployment-boundary-pass
-phase: front-imx681-production-boot-module-firmware-integration
-status: golden-ht-offline-deployment-boundary-pass-native-feedback-environment-blocked
+state_id: E003i-hu-production-boot-module-firmware-authority-pass
+phase: front-imx681-current-golden-camera-dtb-merge
+status: golden-hu-offline-boot-module-firmware-authority-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-ht-production-deployment-boundary-pass
+current_gate: E003i-hu-production-boot-module-firmware-authority-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HU-production-boot-module-firmware-authority
+next_experiment: E003i-HV-current-golden-camera-dtb-merge
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HT PASS offline/read-only: protected Golden has no camera modules or media/video/subdev nodes, production discovery fails closed with zero matches, and the runtime package/installer own no /boot, /etc, /lib/modules, systemd, depmod/module activation or GRUB integration. Proven HQ runtime separately required front-only DTB/graph, firmware search path, exact qcom-camss + imx681 load sequence and a fail-closed boot token. Therefore real-root package install is not ready and Golden remains untouched. Next HU derives production boot/module/firmware integration authority. Native-feedback proof remains parked.
+  HU PASS offline: historical proven front-only DTB 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f contains all current Golden node paths plus exactly 31 camera additions, but its builder base 333e3c81c8a490f1b8b444e9a8d8005539799c438f2d03ebc6acfc366074b14e differs from current Golden DTB 2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00, so direct reuse is forbidden. Front CAMSS port@2, IMX681 0x10, C-PHY lane0 and five-entry IOMMU authority are frozen. HN CAMSS/IMX681 modules are unchanged, Golden-vermagic, firmware-loader-free and boot-token-agnostic. Historical firmware_class.path is unnecessary; an external fail-closed activation gate remains required. Next HV builds a camera-capable DTB from exact current Golden and semantically regresses all common nodes. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3735,3 +3735,30 @@ e003i_ht_current:
   golden_system_modified: false
   camera_runtime_performed: false
   next_gate: HU-production-boot-module-firmware-authority
+
+
+e003i_hu_current:
+  status: pass-offline-production-boot-module-firmware-authority
+  parent: HT-production-deployment-boundary-pass
+  golden_dtb_sha256: 2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00
+  historical_front_only_dtb_sha256: 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f
+  historical_front_builder_base_sha256: 333e3c81c8a490f1b8b444e9a8d8005539799c438f2d03ebc6acfc366074b14e
+  direct_historical_front_dtb_reuse_authorized: false
+  golden_node_paths: 1402
+  historical_front_node_paths: 1433
+  historical_front_candidate_only_nodes: 31
+  historical_front_golden_only_nodes: 0
+  front_camss_port: 2
+  front_sensor: sony-imx681-0x10
+  front_cphy_bus_type: 1
+  front_data_lane: 0
+  qcom_camss_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  imx681_sha256: ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6
+  module_vermagic_matches_golden: true
+  current_module_firmware_loader: false
+  historical_firmware_class_path_required: false
+  module_internal_boot_token_gate: false
+  external_fail_closed_activation_gate_required: true
+  golden_system_modified: false
+  camera_runtime_performed: false
+  next_gate: HV-current-golden-camera-dtb-merge
