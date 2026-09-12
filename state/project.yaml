@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hy-production-one-stream-installed-unarmed
-phase: front-imx681-production-one-stream-installed-unarmed
-status: golden-hy-installed-unarmed-native-feedback-environment-blocked
+state_id: E003i-hy-production-one-stream-pass-golden-retired
+phase: front-imx681-production-handoff-decision
+status: golden-hy-one-stream-pass-retired-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hy-production-one-stream-installed-unarmed
+current_gate: E003i-hy-production-one-stream-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HY-production-one-stream-one-shot
+next_experiment: E003i-HZ-production-handoff-decision
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HY INSTALLED UNARMED: exact candidate bundle under /boot/sp11-7.1.5-camera-e003i-hy-prod-stream-r27 verifies Golden kernel bca0a336..., Golden initrd ac3ba64b..., HV DTB 34880dc2..., HN modules, current package 57aa9cc2..., and GRUB entry 072eb313.... saved_entry remains Golden, next_entry empty, no camera modules/nodes/processes, no runtime. Commit/push installed checkpoint, then fresh reconcile before one one-shot 27-frame shadow stream boot. No retry; Golden return and retirement mandatory. Native-feedback proof remains parked.
+  HY PASS live one-stream production acceptance on exact current-Golden/HV authority: one attempt, 27 frames, snapshot G1, producer G1..G24, 23 R5..R27 submissions, startup writes G1..G3 only, post-G3 shadow with zero later native writes, four hardware control transactions including bootstrap, exact QC10C/TLBG/STATS3A sizes, STREAMOFF and kernel health PASS, no same-stream/same-boot retry. Candidate boot 7334effd-92e9-4cfc-a200-d047bdbabcb7; Golden return 56e2bbd9-e975-4e4e-86fe-b362288cbab9; candidate retired; archive manifest e411c04ad30f9b4c9816aa6743ccf137e4a8e552dec4ef2f34a761755008ca63. Next HZ production handoff decision; do not broaden write policy. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3859,13 +3859,13 @@ e003i_hx_current:
 
 
 e003i_hy_current:
-  status: installed-unarmed-production-one-stream-r27
+  status: pass-production-one-stream-golden-restored-retired
   parent: HX-production-one-stream-policy-pass
   candidate_id: sp11-camera-e003i-hy-prod-stream-r27-one-shot
   candidate_marker: sp11_camera_e003i_hy_prod_stream_r27=1
-  candidate_installed: true
+  candidate_installed: false
   candidate_armed: false
-  camera_runtime_performed: false
+  camera_runtime_performed: true
   stream_count: 1
   frames: 27
   post_g3_policy: shadow
@@ -3879,6 +3879,26 @@ e003i_hy_current:
   hv_merged_dtb_sha256: 34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7
   production_package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
   prearm_pass: true
-  next_gate: HY-production-one-stream-one-shot
+  next_gate: HZ-production-handoff-decision
   install_source_head: 897a7b6fd99aacbc9cbb5ccae08e7c3240a53c85
   installed_grub_entry_sha256: 072eb313f972fd0022d9ca617b9120c931f6e05822d1c2802ea80236419da725
+  candidate_retired: true
+  one_shot_boot_consumed: true
+  stream_attempts: 1
+  streams_completed: 1
+  first_snapshot_generation: 1
+  producer_generations: 24
+  producer_requests: 23
+  startup_native_writes: 3
+  post_g3_native_writes: 0
+  hardware_control_transactions_including_bootstrap: 4
+  streamoff_count: 1
+  kernel_health: PASS
+  same_stream_retry_performed: false
+  same_boot_retry_performed: false
+  candidate_boot_id: 7334effd-92e9-4cfc-a200-d047bdbabcb7
+  golden_return_boot_id: 56e2bbd9-e975-4e4e-86fe-b362288cbab9
+  golden_return: PASS
+  archive_manifest_sha256: e411c04ad30f9b4c9816aa6743ccf137e4a8e552dec4ef2f34a761755008ca63
+  production_stream_on_current_golden_merge_proven: true
+  production_native_changed_post_g3_feedback_proven: false

@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT/HU/HV/HW/HX:** production handoff, exact-Golden DT, activation and one-stream policy PASS. **HY:** production one-stream candidate INSTALLED UNARMED — exact installed kernel/initrd/HV-DTB/module/package hashes verified, Golden saved entry preserved, empty next entry, no active camera state, no runtime.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT/HU/HV/HW/HX:** production handoff, exact-Golden DT, activation and stream policy PASS. **HY:** one production stream on current-Golden merged DTB PASS — 27 frames, fresh G1, 24 producer generations / 23 requests, startup writes G1..G3 only, zero later native writes, four total control transactions including bootstrap, clean STREAMOFF/health, no retry, Golden return and retirement PASS.
 
-**Next action:** checkpoint/push installed-unarmed HY, then fresh verify and arm one 27-frame `shadow` stream boot; no retry. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** HZ production handoff decision: durable integration of current-Golden DT/activation/stream authority without broadening write policy. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

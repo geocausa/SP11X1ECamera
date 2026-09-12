@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV/HW/HX are PASS. **HY is installed but unarmed:** fresh ID `sp11-camera-e003i-hy-prod-stream-r27-one-shot`; exact Golden kernel/initrd + HV DTB + HN modules + current package verified byte-for-byte; installed GRUB entry SHA256 `072eb313f972fd0022d9ca617b9120c931f6e05822d1c2802ea80236419da725`; `saved_entry` remains Golden and `next_entry` is empty. No camera runtime has occurred.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV/HW/HX are PASS. **HY is consumed/PASS, Golden-restored and retired.** Fresh candidate boot `7334effd-...bcb7` executed exactly one 27-frame production `shadow` stream: G1 stats start, producer G1..G24 / 23 submissions, G1..G3 startup writes only, zero later native writes, four hardware control transactions including bootstrap, exact evidence sizes, STREAMOFF/kernel health PASS. No retry. Golden returned as boot `56e2bbd9-...cbab9`; candidate removed. Archive manifest SHA256 `e411c04ad30f9b4c9816aa6743ccf137e4a8e552dec4ef2f34a761755008ca63`.
 
-**Next gate: checkpoint/push installed-unarmed HY, then one fresh reconcile before arm.** The live boot authorizes one 27-frame `shadow` stream only; no same-stream/same-boot retry. The brighter-scene native-feedback gate stays parked.
+**Next gate: HZ production handoff decision.** Integrate proven current-Golden DT/activation/stream authority durably without broadening post-G3 writes. The brighter-scene native-feedback gate stays parked.
 
 ---
 
