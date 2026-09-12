@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hm-repeat-reset-root-cause-pass
-phase: front-imx681-repeated-stream-reset-fix
-status: golden-hm-offline-root-cause-pass-native-feedback-environment-blocked
+state_id: E003i-hn-snapshot-reset-package-pass
+phase: front-imx681-repeated-stream-shadow-successor-prep
+status: golden-hn-offline-package-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hm-repeat-stream-reset-ownership-pass
+current_gate: E003i-hn-snapshot-generation-reset-package-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HN-snapshot-generation-reset-package
+next_experiment: E003i-HO-repeat-shadow-fresh-candidate
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HM PASS offline: 3A/TLBG snapshot reset clears payload/source/valid state but not generation counters, so after stream1 G27 the next session first publishes G28 while producer expects G1. The DQBUF 0,1,2,0 symptom is secondary error-buffer fallout after producer failure prevents R5; no independent stale CSID counter defect is proven. HN must set both snapshot generations to zero under existing locks, prove two logical sessions restart at G1, then rebuild deterministically and revalidate the production package offline before any successor live identity. Native-feedback proof remains parked.
+  HN PASS offline: both 3A/TLBG snapshot generation counters reset to zero under existing locks; two logical sessions each first publish G1. Production builds are byte-identical, only qcom-camss.ko changes to SHA256 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95, package manifest SHA256 is 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf, and staged R5..R27 remains 23/23 byte-exact. Prepare HO under a fresh one-shot identity with two sequential shadow streams and zero post-G3 native writes; install unarmed and checkpoint before runtime. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3582,3 +3582,17 @@ e003i_hm_current:
   csid_stale_counter_evidence: false
   camera_runtime_performed: false
   next_gate: HN-snapshot-generation-reset-package
+
+
+e003i_hn_current:
+  status: pass-offline-snapshot-generation-reset-package
+  parent: HM-repeat-stream-reset-ownership-pass
+  camss_module_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  package_manifest_sha256: 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf
+  two_session_first_generation: [1, 1]
+  production_builds_byte_identical: true
+  unrelated_artifacts_unchanged_from_hj: true
+  r5_r27_byte_exact: 23
+  post_g3_native_write_authorization_changed: false
+  camera_runtime_performed: false
+  next_gate: HO-repeat-shadow-fresh-candidate

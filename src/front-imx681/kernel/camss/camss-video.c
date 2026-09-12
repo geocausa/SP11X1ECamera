@@ -299,6 +299,7 @@ void camss_x1e_tlbg_reset(struct camss_video *video)
 
 	mutex_lock(&video->x1e_tlbg_lock);
 	memzero_explicit(video->x1e_tlbg_snapshot, CAMSS_X1E_TLBG_RAW_BYTES);
+	video->x1e_tlbg_generation = 0;
 	video->x1e_tlbg_source_seq = 0;
 	video->x1e_tlbg_slot = 0;
 	video->x1e_tlbg_valid = false;
@@ -381,6 +382,7 @@ void camss_x1e_3a_reset(struct camss_video *video)
 
 	mutex_lock(&video->x1e_3a_lock);
 	memzero_explicit(video->x1e_3a_snapshot, CAMSS_X1E_3A_RAW_BYTES);
+	video->x1e_3a_generation = 0;
 	video->x1e_3a_source_seq = 0;
 	video->x1e_3a_slot = 0;
 	video->x1e_3a_valid = false;

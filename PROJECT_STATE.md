@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HL:** archived/retired after stream 2 stale-generation failure. **HM:** PASS offline — 3A/TLBG reset functions omit generation=0, producing G28 at the start of stream 2; the DQBUF sequence mismatch is secondary error-buffer fallout after missing R5, not a separately proven reset bug.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HL:** archived/retired. **HM:** root cause PASS. **HN:** snapshot-generation reset + rebuilt package PASS offline. Two-session generation restart is 1/1, production builds are deterministic, CAMSS module is `7afe6ed0...2697e95`, package manifest is `8a2bf311...07c32cf`, and R5..R27 stays 23/23 byte-exact.
 
-**Next action:** HN implement/reset-test the snapshot generations and rebuild/revalidate the production package offline. No successor live candidate until HN passes. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** prepare HO as a fresh two-stream shadow-only one-shot candidate using HN package authority, install unarmed and checkpoint before any runtime. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 
