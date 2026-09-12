@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT/HU:** session/install/deployment authority PASS offline. **HV:** current-Golden camera-DTB merge PASS — exact Golden base, 31 camera-only nodes added, zero Golden nodes removed, every pre-existing Golden property byte-exact, route/IOMMU unchanged, deterministic merged DTB `34880dc2...69e04c7`, zero new DTC warnings.
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS/HT/HU/HV:** production handoff/DT authority PASS offline. **HW:** fresh production-activation boot bundle PREPARED NOT INSTALLED — exact Golden kernel/initrd + HV DTB + HN modules + current package; Golden cmdline preserved apart from `sp11_entry` replacement, module blacklist and fresh token; no firmware path; activation-only, no stream, no retry. Prearm PASS.
 
-**Next action:** HW offline production boot-bundle + fail-closed activation preparation; checkpoint before any install or arm. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** commit/push HW prep, install unarmed, verify exact installed bundle, checkpoint again before any one-shot boot. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

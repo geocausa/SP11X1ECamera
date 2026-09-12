@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU are PASS. **HV closes the current-Golden DT merge offline:** exact protected Golden is the base; exactly 31 camera-only nodes are added; all pre-existing Golden properties remain byte-exact; only camera aliases are added under `/__symbols__`; camera phandles are collision-free and provider-path remapped; front route/IOMMU authority is unchanged. Merged DTB SHA256 is `34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7`. Rebuild is deterministic and DTC adds no new warning. No boot candidate exists yet and Golden remains untouched.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU/HV are PASS. **HW is prepared but not installed:** fresh ID `sp11-camera-e003i-hw-prod-activation-one-shot`, exact Golden kernel/initrd, HV merged DTB, HN modules and current production package `57aa9cc2...66a5a757`. The candidate command line preserves Golden semantics, adds only module blacklist + fresh token, replaces only `sp11_entry`, and contains no `firmware_class.path`. Runtime preflight negative-tested on Golden, static/shell checks pass, and full prearm passes. Activation scope is module bind + production discovery only; streaming and same-boot retry are forbidden.
 
-**Next gate: HW offline production boot-bundle/fail-closed activation prep.** Package exact Golden kernel/initrd identity + HV DTB + HN modules under a fresh non-installed identity, then checkpoint before any install/arm. The brighter-scene native-feedback gate stays parked.
+**Next gate: checkpoint/push HW prep, then install-unarmed and checkpoint again.** Do not arm until installed-bundle verification passes. The brighter-scene native-feedback gate stays parked.
 
 ---
 
