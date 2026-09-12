@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT are PASS. **HU closes boot/module/firmware authority offline:** accepted front-only DTB SHA `019c062a...df77f` has all 1402 current-Golden node paths plus exactly 31 camera-only paths, but it was built from older base `333e3c81...b14e`, not current Golden `2fcfa738...6d00`, so direct reuse is blocked. Exact front route/IOMMU authority is frozen. HN CAMSS/IMX681 modules remain byte-exact with Golden vermagic, have no firmware-loader dependency and do not enforce the candidate token internally; historical firmware search-path boot args are unnecessary for the current packaged IQ runtime. Production still needs an external fail-closed activation gate. Golden remains untouched.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR/HS/HT/HU are PASS. **HV closes the current-Golden DT merge offline:** exact protected Golden is the base; exactly 31 camera-only nodes are added; all pre-existing Golden properties remain byte-exact; only camera aliases are added under `/__symbols__`; camera phandles are collision-free and provider-path remapped; front route/IOMMU authority is unchanged. Merged DTB SHA256 is `34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7`. Rebuild is deterministic and DTC adds no new warning. No boot candidate exists yet and Golden remains untouched.
 
-**Next gate: HV offline current-Golden camera-DTB merge + semantic regression.** Construct from exact current Golden rather than transplanting the historical DTB wholesale. The brighter-scene native-feedback gate stays parked.
+**Next gate: HW offline production boot-bundle/fail-closed activation prep.** Package exact Golden kernel/initrd identity + HV DTB + HN modules under a fresh non-installed identity, then checkpoint before any install/arm. The brighter-scene native-feedback gate stays parked.
 
 ---
 

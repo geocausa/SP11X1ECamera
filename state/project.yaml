@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hu-production-boot-module-firmware-authority-pass
-phase: front-imx681-current-golden-camera-dtb-merge
-status: golden-hu-offline-boot-module-firmware-authority-pass-native-feedback-environment-blocked
+state_id: E003i-hv-current-golden-camera-dtb-merge-pass
+phase: front-imx681-production-boot-bundle-activation-prep
+status: golden-hv-current-golden-dtb-merge-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hu-production-boot-module-firmware-authority-pass
+current_gate: E003i-hv-current-golden-camera-dtb-merge-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HV-current-golden-camera-dtb-merge
+next_experiment: E003i-HW-production-boot-bundle-activation-prep
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HU PASS offline: historical proven front-only DTB 019c062a718e58d0e303afbb7d454ed6674cf39a287ed453fb2cd4dd0dfdf77f contains all current Golden node paths plus exactly 31 camera additions, but its builder base 333e3c81c8a490f1b8b444e9a8d8005539799c438f2d03ebc6acfc366074b14e differs from current Golden DTB 2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00, so direct reuse is forbidden. Front CAMSS port@2, IMX681 0x10, C-PHY lane0 and five-entry IOMMU authority are frozen. HN CAMSS/IMX681 modules are unchanged, Golden-vermagic, firmware-loader-free and boot-token-agnostic. Historical firmware_class.path is unnecessary; an external fail-closed activation gate remains required. Next HV builds a camera-capable DTB from exact current Golden and semantically regresses all common nodes. Native-feedback proof remains parked.
+  HV PASS offline: exact protected Golden DTB 2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00 is copied and exactly 31 proven camera-only nodes plus camera symbol aliases are imported. Every pre-existing Golden property remains byte-exact, zero Golden nodes are removed, camera references are remapped by provider path with collision-free new phandles, front-only CAMSS port@2 / IMX681 0x10 / C-PHY lane0 / five-entry IOMMU authority is preserved, rebuild is deterministic, and DTC adds zero warnings. Merged DTB SHA256 34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7. No boot candidate exists and Golden is untouched. Next HW packages an offline boot bundle + fail-closed activation prep and checkpoints before install/arm. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3762,3 +3762,29 @@ e003i_hu_current:
   golden_system_modified: false
   camera_runtime_performed: false
   next_gate: HV-current-golden-camera-dtb-merge
+
+
+e003i_hv_current:
+  status: pass-offline-current-golden-camera-dtb-merge
+  parent: HU-production-boot-module-firmware-authority-pass
+  golden_dtb_sha256: 2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00
+  merged_dtb_sha256: 34880dc20d349bf966ebf62d6d8bb3f0130f436c88d9e4838585624a869e04c7
+  golden_nodes: 1402
+  merged_nodes: 1433
+  camera_nodes_added: 31
+  golden_nodes_removed: 0
+  all_preexisting_golden_properties_byte_exact: true
+  new_common_properties_only_camera_symbols: true
+  camera_reference_properties_semantically_remapped_by_provider_path: true
+  rebuild_deterministic: true
+  dtc_new_warnings: 0
+  graph_warnings: 0
+  front_camss_port: 2
+  front_sensor: sony-imx681-0x10
+  front_cphy_bus_type: 1
+  front_data_lane: 0
+  boot_candidate_created: false
+  boot_candidate_armed: false
+  golden_system_modified: false
+  camera_runtime_performed: false
+  next_gate: HW-production-boot-bundle-activation-prep
