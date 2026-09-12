@@ -16,6 +16,8 @@ GV executed exactly one 27-frame stream. The helper made six successful control 
 
 The continuous scheduler is live-proven through G26, redundant control-ioctl lifecycle is live-proven, and unchanged-cluster dedupe is now explicit authority. **Changed post-G3 sensor feedback remains unproven.**
 
-**GW minimal changed-post-G3 authority PASS and GX helper integration PASS. GY is PREPARED / UNARMED / prearm PASS.** GY permits exactly one new changed post-G3 sensor transaction: source G4 only, and only if native G4 still equals last-applied G3; it then changes digital gain 1471→1472 (+1 LSB, +0.06798%) with no frame-timing change. G5..G26 remain shadow-only.
+**GY minimal changed post-G3 sentinel live PASS is consumed/retired.** One fresh R27 stream applied exactly one changed post-G3 sensor transaction at G4: digital gain 1471→1472 (+1 LSB, +0.06798%) after completed G5 for expected effect G7. Kernel evidence shows exactly bootstrap + G1..G3 + sentinel G4; G5..G26 remained shadow-only. STREAMOFF, kernel health, Golden return and retirement all PASSed with no retry.
 
-Next action: commit/push the exact GY candidate, rerun prearm, then one fresh GY boot and one stream maximum. Archive immediately, return Golden and retire. No same-boot retry.
+GY closes changed post-G3 **transport/lifecycle**, but not production-native feedback: the synthetic +1-LSB perturbation did not move any later native AEC tuple (G5..G27 stayed saturated at the G3 controls).
+
+Next action: **GZ offline response-threshold analysis** using immutable GY stats/captures. Quantify the measured effect around G7 and the native controller deadband/quantization before choosing any larger perturbation. Do not guess a bigger live step.

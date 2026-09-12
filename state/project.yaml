@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-11
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-gy-minimal-changed-sentinel-prepared-unarmed
-phase: front-imx681-continuous-control-minimal-changed-live
-status: golden-restored-gy-prepared-unarmed-prearm-pass
+state_id: E003i-gy-minimal-changed-sentinel-live-pass-retired
+phase: front-imx681-native-feedback-response-threshold-analysis
+status: golden-restored-gy-live-pass-candidate-retired
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-gy-minimal-changed-post-g3-live-r27
+current_gate: E003i-gy-minimal-changed-post-g3-r27-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-GY-minimal-changed-post-g3-one-shot
+next_experiment: E003i-GZ-native-response-threshold-analysis
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  GW authority and GX helper integration are PASS. GY is prepared/unarmed and prearm PASS. Commit/push the exact GY candidate, then run one fresh one-shot only: native G1-G3, one conditional G4 digital-gain +1-LSB sentinel if G4 equals G3, G5-G26 shadow. Archive, Golden return, retire, no same-boot retry.
+  GY consumed PASS proved exactly one changed post-G3 sensor transaction at G4 using a +1 digital-gain-LSB sentinel; G5-G26 stayed shadow, Golden return and retirement passed. Later native AEC tuples did not move. Build GZ offline response-threshold analysis from immutable GY stats/captures before selecting any larger live perturbation.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3274,18 +3274,32 @@ e003i_gv_current:
   next_gate: GW-minimal-changed-post-g3-control-authority
 
 
+
 e003i_gy_current:
-  status: prepared-unarmed-prearm-pass
+  status: pass-live-minimal-changed-sentinel-consumed-retired
   parent_authority: [GV, GW, GX]
+  candidate_runtime_performed: true
+  candidate_armed: consumed-one-shot
+  stream_attempts: 1
+  same_boot_retry_allowed: false
+  frames: 27
   sentinel_source: G4
   write_after_generation: G5
   expected_effect_generation: G7
-  native_precondition: G4-bit-identical-to-last-applied-G3
   sentinel_change: digital_gain_code-1471-to-1472
   relative_digital_gain_delta_percent: 0.067981
   frame_timing_changed: false
+  new_post_g3_sensor_hardware_transaction_count: 1
+  sensor_hardware_transactions_including_bootstrap: 5
   later_sources: G5-G26-shadow-only
-  candidate_runtime_performed: false
-  candidate_armed: false
-  same_boot_retry_allowed: false
-  production_native_changed_post_g3_feedback_authorized: false
+  sentinel_elicited_native_control_change: false
+  later_native_control_change_generations: []
+  changed_post_g3_sensor_transport_proven: true
+  production_native_changed_post_g3_feedback_proven: false
+  max_pipeline_ms: 29.180471
+  streamoff_pass: true
+  kernel_health_pass: true
+  golden_return_pass: true
+  candidate_retired: true
+  archive: /home/geoca/Documents/SP11-PROJECT/00-RE-archive/e003i-gy/attempt1-pass-minimal-changed-sentinel-20260911T224155
+  next_gate: GZ-native-response-threshold-analysis
