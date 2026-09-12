@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS. **HR closes the production repeated-open handoff offline:** launcher default output is now a fresh timestamp+PID session path, execute mode rejects an existing output directory, source and staged launchers each pass 4/4 unique dry-run sessions with no output creation, staged dry-run opens zero camera devices and zero source-workspace files, and all production binaries/modules remain byte-identical to HN. New deterministic package manifest SHA256 is `57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757`. No HR camera runtime occurred.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HM/HN are PASS; HO/HQ are consumed/PASS; HR is PASS. **HS closes the offline install/rollback contract:** manifest verification occurs before target mutation, real `/` install requires explicit `--allow-real-root`, installs are pre-staged then switched with a rollback backup and receipt, an existing install round-trips byte-exactly, a fresh install rolls back to absent, and a corrupt package is rejected without target mutation. Runtime package remains the HR image at manifest SHA256 `57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757`. Golden was untouched and no camera runtime occurred.
 
-**Next gate: HS offline install-image transaction/rollback contract.** Prove install and rollback mechanics without modifying the protected Golden system. The brighter-scene native-feedback gate stays parked.
+**Next gate: HT offline deployment smoke-plan/distro integration boundary.** Specify real-system install prerequisites and post-install validation before any Golden deployment. The brighter-scene native-feedback gate stays parked.
 
 ---
 

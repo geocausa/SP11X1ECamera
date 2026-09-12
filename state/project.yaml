@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hr-production-repeated-open-handoff-pass
-phase: front-imx681-production-install-rollback-contract
-status: golden-hr-offline-repeated-open-handoff-pass-native-feedback-environment-blocked
+state_id: E003i-hs-production-install-rollback-contract-pass
+phase: front-imx681-production-deployment-smoke-boundary
+status: golden-hs-offline-install-rollback-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hr-production-repeated-open-handoff-pass
+current_gate: E003i-hs-production-install-rollback-contract-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HS-production-install-rollback-contract
+next_experiment: E003i-HT-production-deployment-smoke-boundary
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HR PASS offline: repeated production launcher invocations now default to fresh timestamp+PID session directories and execute mode refuses an existing output directory. Source and staged launcher each pass 4/4 unique dry-run sessions with zero output creation; staged dry-run has zero source-workspace opens and zero camera-device opens; production binaries/modules are unchanged from HN; deterministic package manifest SHA256 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757. Next HS offline install-image transaction and rollback contract with no Golden mutation. Native-feedback proof remains parked.
+  HS PASS offline: deployment tool verifies runtime package manifest before target mutation, requires explicit --allow-real-root for TARGET_ROOT=/, pre-stages prefix/wrappers, preserves previous install for one-step rollback and records package manifest in the install receipt. Existing install rollback is byte-exact; fresh install rollback removes package; corrupt package is rejected before target mutation; zero camera-device opens; runtime package remains HR manifest 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757; Golden untouched. Next HT offline production deployment smoke-plan/distro integration boundary. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3699,3 +3699,21 @@ e003i_hr_current:
   production_native_changed_post_g3_feedback_proven: false
   camera_runtime_performed: false
   next_gate: HS-production-install-rollback-contract
+
+
+e003i_hs_current:
+  status: pass-offline-production-install-rollback-contract
+  parent: HR-production-repeated-open-handoff-pass
+  runtime_package_manifest_sha256: 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757
+  real_root_requires_explicit_allow: true
+  manifest_verified_before_target_mutation: true
+  existing_install_roundtrip_byte_exact: true
+  fresh_install_rollback_removes_package: true
+  corrupt_package_rejected_before_target_mutation: true
+  install_receipt_records_package_manifest: true
+  one_step_rollback_supported: true
+  installer_camera_device_opens: 0
+  runtime_package_changed_from_hr: false
+  golden_system_modified: false
+  camera_runtime_performed: false
+  next_gate: HT-production-deployment-smoke-boundary
