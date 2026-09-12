@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS. **IC rear-first unified-DTB candidate is prepared offline and remains uninstalled/unarmed.** It pins IB DTB `5e919d6b...d162321`, front CAMSS `7afe6ed0...7e95`, IMX681 `ef57ed06...63d6`, rear OV13858 `13a8ad95...1309`, and accepted rear color-bar SHA `6987a736...f09346`. Contract: exactly one color-bar frame plus one 16-frame normal rear stream; no front stream; no retry; attempt consumed before first rear stream.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS. **IC rear-first unified-DTB candidate is installed-unarmed and verified.** Exact boot artifact hashes and all three camera module hashes match the pinned contract; Golden remains saved default and `next_entry` is empty. Contract is still exactly one rear color-bar frame plus one 16-frame normal rear stream, no front stream and no retry.
 
-**Next gate: durable IC prep checkpoint, then installed-unarmed checkpoint.** Only after both pass may IC be armed one-shot. The brighter-scene native-feedback gate stays parked.
+**Next gate: checkpoint/push installed-unarmed, then arm one-shot.** After any candidate invocation, return directly to Golden, archive and retire before further work. The brighter-scene native-feedback gate stays parked.
 
 ---
 
