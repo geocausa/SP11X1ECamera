@@ -1,14 +1,19 @@
-# Front IMX681 stable source bundle
+# Front IMX681 stable source/runtime bundle
 
-This tree is the first **stable, non-experiment-path source snapshot** of the proven SP11 front RGB stack. HF intentionally makes no algorithmic or runtime change.
+This tree is the stable, non-experiment-path form of the proven SP11 front RGB stack. HF froze the accepted source bundle; HG/HH made the IQ runtime relocatable and removed its proprietary/raw cache dependency; HI adds deterministic production userspace build, dynamic media-node discovery and a dry-run-by-default launcher.
 
 It contains:
 
-- `kernel/camss/`: the SP11 CAMSS production base with the final R27 `camss.c` authority substituted directly;
-- `kernel/imx681/`: the CW atomic clustered IMX681 driver authority and mode register table;
-- `userspace/runtime/`: the final HC capture helper, native AEC/CQ stack, continuous scheduler, gain-feed publisher and fail-closed cap-release policy;
-- `userspace/iq/`: the exact GM R5..R27 IQ producer source snapshot. Its experiment-local Python dependencies are intentionally still unresolved here and are the next hermeticization gate.
+- `kernel/camss/`: the final R27 CAMSS authority;
+- `kernel/imx681/`: the CW atomic clustered IMX681 driver and mode table;
+- `userspace/runtime/`: frozen HC/native AEC/CQ/scheduler sources plus the HI production capture helper and write-policy gate;
+- `userspace/iq/`: the clean R5..R27 IQ runtime, derived clean authority, and accepted template-free R4 bootstrap asset;
+- `bin/front-imx681-discover.py`: dynamic sensor and `/dev` discovery while pinning the proven X1E pipeline entity route;
+- `bin/front-imx681-launcher.py`: dry-run by default, with post-G3 writes defaulting to `shadow`;
+- `build-userspace.sh`: deterministic production userspace build without camera access.
 
-`build-offline.sh` compiles the C helper and both kernel modules without touching camera hardware. The production post-G3 sensor-write path remains fail-closed: this bundle does not claim the HD brighter-scene native-feedback gate is complete.
+The production launcher does not hard-code the IMX681 I2C bus, `/dev/videoN`, or sensor subdev number. The proven route identities remain pinned (`msm_csiphy2 -> msm_csid1 -> msm_vfe1_pix -> msm_vfe1_video3`) until a different route is separately proven.
 
-`PROVENANCE.json` is generated and verified by the HF experiment and pins every copied authority by source path and SHA256.
+`cap-release-one-shot` is not the default and requires explicit launcher acknowledgement. Repeated-stream live robustness and production-native changed post-G3 feedback are still unproven.
+
+`PROVENANCE.json` remains the HF source-authority provenance record.

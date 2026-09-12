@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hh-clean-runtime-authority-pass
-phase: front-imx681-production-launcher-integration
-status: golden-hh-pass-native-feedback-environment-blocked
+state_id: E003i-hi-production-launcher-discovery-pass
+phase: front-imx681-package-install-repeated-stream-prep
+status: golden-hi-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hh-clean-runtime-authority-pass
+current_gate: E003i-hi-production-launcher-device-discovery-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HI-production-launcher-device-discovery
+next_experiment: E003i-HJ-package-install-repeated-stream-shadow-prep
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HH clean runtime authority PASS: 10.7 MB HG raw/local cache reduced to 250690 bytes (97.659% reduction), all 80 former cache files hidden during proof, and two independent R5-R27 runs remain 23/23 byte-exact with no raw/local authority or camera-device opens. Build HI production launcher/stable media discovery and install lifecycle offline first, with post-G3 native writes fail-closed. Keep the production-native feedback live gate parked until a brighter diffuse real scene is available.
+  HI production launcher/device discovery PASS: production helper is a deterministic transform of frozen HC, post-G3 writes default to shadow, one-shot cap release requires explicit opt-in, five archived topologies plus synthetic bus/subdev/video renumber resolve without hard-coded live node identities, and dry-run opens no camera device. Build HJ package/install staging offline, then prepare a fresh bounded repeated-stream shadow-mode runtime candidate with explicit Golden rollback. Keep the native-feedback live gate parked until a brighter diffuse real scene is available.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3464,3 +3464,27 @@ e003i_hh_current:
   camera_runtime_performed: false
   post_g3_native_feedback_proven: false
   next_gate: HI-production-launcher-device-discovery
+
+
+e003i_hi_current:
+  status: pass-offline-production-launcher-device-discovery
+  production_capture_source: src/front-imx681/userspace/runtime/front-imx681-production-capture.c
+  default_post_g3_write_policy: shadow
+  explicit_post_g3_write_policy: cap-release-one-shot
+  explicit_one_native_write_ack_required: true
+  production_capture_binary_sha256: 70f407f5fd70e6657f9647a33eecde744ac9e1bd19fa9e901a4faf52508e354d
+  bootstrap_binary_sha256: 4721ff6510d806ed63ffcb70d9a88441220047ef734ca760cc40bdc5719cd7ce
+  r4_bootstrap_sha256: 1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa
+  real_archived_topologies_passed: 5
+  real_sensor_entity_variants:
+    - imx681 3-0010
+    - imx681 4-0010
+  synthetic_bus_devnode_renumber_pass: true
+  hardcoded_i2c_bus: false
+  hardcoded_video_node: false
+  hardcoded_sensor_subdev: false
+  dry_run_camera_device_opens: 0
+  camera_runtime_performed: false
+  repeated_stream_live_robustness_proven: false
+  post_g3_native_feedback_proven: false
+  next_gate: HJ-package-install-repeated-stream-shadow-prep

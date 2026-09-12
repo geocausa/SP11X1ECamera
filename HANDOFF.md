@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH production consolidation is PASS through a clean stable IQ runtime. HH distills HG's 10.7 MB local/raw authority cache into `src/front-imx681/userspace/iq/authority/authority.json` (250,690 bytes; SHA256 `dcb42bf9fd2f4d4a224bc339db947938d1e0202f1ccb6fca6af4d69de4f432d8`). With all 80 former cache files physically hidden, two independent R5..R27 replays remain 23/23 byte-exact. `strace` shows no raw/local-authority open, no project-local escape outside the stable IQ root, and no camera device open. The proprietary tuning blob is no longer a runtime dependency and is not committed.
+HE/HF/HG/HH/HI production consolidation is PASS through a clean stable IQ runtime and offline production launcher. HI's capture helper is a deterministic transform of frozen HC; absent policy means `shadow`, while `cap-release-one-shot` requires an explicit launcher acknowledgement before execution. Media discovery resolves the IMX681 entity and `/dev` nodes dynamically while retaining the already-proven X1E route identities. GO/GS/GV/GY/HC archived topologies all pass, including real `imx681 3-0010` -> `4-0010` drift, plus a synthetic bus/subdev/video renumber. No HI camera runtime occurred.
 
-**Next parallel gate: HI production launcher and stable media-device discovery.** Keep post-G3 native writes fail-closed and keep the brighter-scene native-feedback live gate parked separately.
+**Next parallel gate: HJ package/install staging and a fresh bounded repeated-stream shadow-mode candidate.** Keep the brighter-scene native-feedback live gate parked separately; HI does not prove repeated streaming or production-native post-G3 feedback.
 
 ---
 
