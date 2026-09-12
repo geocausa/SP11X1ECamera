@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK attempt 1 is consumed and retired after a **pre-stream shell harness failure**: line 10 of `invoke-twice.sh` expanded `$n` before assignment inside a single `local` declaration under `set -u`. Neither stream consumed marker existed, no launcher log existed, and kernel evidence showed zero stream/control transactions. No same-boot retry was performed. Archive manifest SHA256 is `229543fb0a04eaa2b71708ae6d29ddc1a31c6338d39b2d7e7f4e67b44fdb8055`. Golden return and candidate retirement both pass.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK remains consumed/retired after its pre-stream shell failure. **HL is prepared offline as the fresh successor** with new GRUB/cmdline identity, identical HJ production artifact hashes, two sequential R27 streams, explicit post-G3 `shadow`, zero later physical writes authorized and no same-stream retry. The harness repair is regression-tested through the exact `run_one` path for both streams with no camera access, and ShellCheck passes.
 
-**Next: HL fresh repeat-shadow candidate only.** Fix and regression-test the harness offline, then use a new boot identity. Never reuse HK. The brighter-scene native-feedback gate stays parked.
+**HL is not installed or armed yet.** Next commit/push this exact prep, install it unarmed, checkpoint installed state, then fresh-reconcile before the one-shot boot. Never reuse HK. The brighter-scene native-feedback gate stays parked.
 
 ---
 
