@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired. **HM root cause is closed and HN PASS offline.** The snapshot generation counters now reset to zero under their existing locks; two logical sessions each first publish generation 1. The rebuilt production artifacts are deterministic; the only changed artifact is `qcom-camss.ko` SHA256 `7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95`, while capture/bootstrap/IMX681 are unchanged from HJ. Package manifest SHA256 is `8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf`; staged R5..R27 is 23/23 byte-exact. No HN camera runtime occurred.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired; HM/HN are PASS offline. **HO is prepared but not installed** under fresh identity `sp11-camera-e003i-ho-repeat-shadow-r27-one-shot`. It pins HN CAMSS SHA256 `7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95` and HN package manifest SHA256 `8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf`, with exactly two 27-frame `shadow` streams and zero post-G3 native writes authorized. The harness and archive paths are regression-checked offline.
 
-**Next gate: HO fresh repeat-shadow candidate.** New boot identity only; exactly two sequential 27-frame streams, `shadow`, zero post-G3 native writes, no same-stream retry. Prepare/install unarmed and checkpoint before any runtime. The brighter-scene native-feedback gate stays parked.
+**Next gate: HO install-unarmed checkpoint.** Commit/push the HO prep, run prearm on a clean tree, install unarmed, and checkpoint the installed state before one-shot runtime. The brighter-scene native-feedback gate stays parked.
 
 ---
 

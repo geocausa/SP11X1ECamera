@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hn-snapshot-reset-package-pass
-phase: front-imx681-repeated-stream-shadow-successor-prep
-status: golden-hn-offline-package-pass-native-feedback-environment-blocked
+state_id: E003i-ho-repeat-shadow-prepared-not-installed
+phase: front-imx681-repeated-stream-shadow-candidate-prearm
+status: golden-ho-prepared-not-installed-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hn-snapshot-generation-reset-package-pass
+current_gate: E003i-ho-repeat-shadow-prepared-not-installed
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HO-repeat-shadow-fresh-candidate
+next_experiment: E003i-HO-install-unarmed-checkpoint
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HN PASS offline: both 3A/TLBG snapshot generation counters reset to zero under existing locks; two logical sessions each first publish G1. Production builds are byte-identical, only qcom-camss.ko changes to SHA256 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95, package manifest SHA256 is 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf, and staged R5..R27 remains 23/23 byte-exact. Prepare HO under a fresh one-shot identity with two sequential shadow streams and zero post-G3 native writes; install unarmed and checkpoint before runtime. Native-feedback proof remains parked.
+  HO fresh repeated-stream shadow candidate is PREPARED but NOT INSTALLED. It uses HN CAMSS SHA256 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95 and package manifest SHA256 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf under a fresh one-shot identity. Exactly two sequential 27-frame streams, post-G3 shadow, zero later native writes, no same-stream/same-boot retry. Commit/push prep, run clean-tree prearm, install unarmed and checkpoint before runtime. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3596,3 +3596,23 @@ e003i_hn_current:
   post_g3_native_write_authorization_changed: false
   camera_runtime_performed: false
   next_gate: HO-repeat-shadow-fresh-candidate
+
+
+e003i_ho_current:
+  status: prepared-not-installed-repeat-shadow-r27
+  parent: HN-snapshot-generation-reset-package
+  candidate_id: sp11-camera-e003i-ho-repeat-shadow-r27-one-shot
+  candidate_marker: sp11_camera_e003i_ho_repeat_shadow_r27=1
+  candidate_installed: false
+  candidate_armed: false
+  streams_authorized: 2
+  frames_per_stream: 27
+  post_g3_policy: shadow
+  post_g3_native_writes_authorized: 0
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  hn_camss_module_sha256: 7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95
+  hn_package_manifest_sha256: 8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf
+  camera_runtime_performed: false
+  repeated_stream_live_robustness_proven: false
+  next_gate: HO-install-unarmed-checkpoint
