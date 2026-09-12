@@ -16,7 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**Next action:** keep the native-feedback live gate parked until the front RGB camera can face a substantially brighter diffuse real scene. In parallel, advance production integration and repeated-stream robustness planning without claiming continuous native feedback closed.
+**HE production-integration inventory:** PASS. Final CAMSS/helper behavior is reproducible, but the final sources are transform-generated, GM imports 16 experiment-local components, and no stable production tree/package exists.
+
+**Next action:** keep the native-feedback live gate parked for a brighter diffuse scene; in parallel, build HF as a byte-identical consolidated front-IMX681 source bundle with provenance and no camera runtime.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

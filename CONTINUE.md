@@ -28,4 +28,6 @@ GY closes changed post-G3 **transport/lifecycle**, but not production-native fee
 
 The post-G3 native feedback proof is now **environment-blocked**: it needs a fresh identity under a substantially brighter diffuse real scene, using the existing HA/HB gate and no synthetic control delta. Do not rerun HC, do not just wait longer in the same dark/static scene, and do not guess a larger sensor step.
 
-Parallel next action while that physical condition is unavailable: **production-integration inventory and repeated-stream robustness planning** from the closed R27/continuous-control authorities.
+**HE production-integration inventory PASS.** The technical authorities are stronger than the repo shape: final R27 CAMSS and capture-helper sources are still generated through experiment transforms, GM imports 16 experiment-local dependencies, and there is no stable `src/`/production package. This is now the main software-integration debt.
+
+Parallel next action while the brighter-scene native-feedback gate is unavailable: **HF stable front-IMX681 source bundle**. Byte-copy the proven kernel/userspace authorities into a consolidated tree with a provenance manifest, without changing behavior or running the camera.

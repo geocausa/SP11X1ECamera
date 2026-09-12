@@ -16,6 +16,8 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
+HE production-integration inventory is now PASS. The final CAMSS source and final capture helper are reproducible but generated through experiment chains; GM carries 16 experiment-local dependencies; no stable production source/package tree exists. **Next parallel gate: HF consolidated byte-identical source bundle plus provenance, no runtime.**
+
 ---
 
 ## RECONCILED CURRENT FRONTIER â€” authoritative over the historical handoff below

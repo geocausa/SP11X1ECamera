@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hd-real-scene-cap-release-envelope-pass
-phase: front-imx681-production-integration-parallel
-status: golden-hd-pass-native-feedback-environment-blocked
+state_id: E003i-he-production-integration-inventory-pass
+phase: front-imx681-production-source-consolidation
+status: golden-he-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hd-real-scene-cap-release-envelope-pass
+current_gate: E003i-he-production-integration-inventory-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HE-production-integration-inventory
+next_experiment: E003i-HF-stable-front-imx681-source-bundle
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HD proves all five Linux R27 runs remain deeply cap-censored while Windows DM proves a legitimate below-cap regime. Park the next native-feedback live attempt until a substantially brighter diffuse real scene is available; never reuse HC or inject a guessed synthetic delta. In parallel, perform HE production-integration inventory and repeated-stream robustness planning.
+  HE inventory PASS: final CAMSS/helper authorities are reproducible but transform-generated, GM imports 16 experiment-local dependencies, and no stable production tree exists. Build HF as a byte-identical consolidated front-IMX681 source bundle with provenance and no camera runtime; keep post-G3 native feedback parked until a brighter diffuse real scene is available.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3382,3 +3382,20 @@ e003i_hd_current:
   camera_runtime_performed: false
   blocked_live_gate: production-native-changed-post-g3-feedback
   parallel_next_gate: HE-production-integration-inventory
+
+
+e003i_he_current:
+  status: pass-offline-production-integration-inventory
+  final_camss_source_sha256: 117136b2c624de5ef3f4c081cdcf9c363cda9f6db5c752b7ade5f5e11b1b3e95
+  final_helper_source_sha256: 578f41d5cc0935aff327f500d38c095ed64f7428d2e245adc1f8196e9b3c99a3
+  imx681_source_sha256: 6e14f6d345759eb61a2a54129437e04f747e64d59d3bfc264069a0ecddeeb78e
+  gm_producer_sha256: fa2f6f8c912a5ea5ab031ab149d1da45809ef24b79a111a5a64e3784c4af6ed1
+  native_aec_source_files: 32
+  gm_experiment_local_dependencies: 16
+  helper_transform_steps: 13
+  consolidated_source_tree: false
+  hermetic_userspace_build: false
+  kernel_tree_integration: false
+  repeated_stream_live_robustness: false
+  camera_runtime_performed: false
+  next_gate: HF-stable-front-imx681-source-bundle

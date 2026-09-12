@@ -19,7 +19,7 @@ Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed 
 
 The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
 
-The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD now establish that the remaining native-feedback gate is not a software timing mystery: the current Linux scene stays deeply preview-cap-censored, while Windows DM proves a below-cap regime exists.** The next native-feedback live proof needs a brighter diffuse real scene; meanwhile production integration and robustness work can continue.
+The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD establish the remaining native-feedback gate is environment-blocked by a deeply cap-censored scene. HE then shows the main software debt is production consolidation: final authorities exist, but they are scattered through experiment transforms/imports rather than a stable source package.** The next parallel step is a byte-identical consolidated front-IMX681 source bundle.
 
 Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
 
