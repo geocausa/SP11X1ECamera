@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS and HK is now installed under a fresh disposable identity. The HJ package's CAMSS/IMX681/userspace hashes are pinned exactly, post-G3 policy is `shadow`, exactly two 27-frame streams are authorized, and no same-stream retry is allowed. The candidate boot directory and GRUB entry are hash-verified; Golden remains the current boot with empty `next_entry`, camera modules absent, and no HK runtime evidence.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK attempt 1 is consumed and retired after a **pre-stream shell harness failure**: line 10 of `invoke-twice.sh` expanded `$n` before assignment inside a single `local` declaration under `set -u`. Neither stream consumed marker existed, no launcher log existed, and kernel evidence showed zero stream/control transactions. No same-boot retry was performed. Archive manifest SHA256 is `229543fb0a04eaa2b71708ae6d29ddc1a31c6338d39b2d7e7f4e67b44fdb8055`. Golden return and candidate retirement both pass.
 
-**HK is installed but unarmed.** Next checkpoint/push this exact state, then arm once only after another full Golden/origin prearm reconciliation. The brighter-scene native-feedback gate stays parked.
+**Next: HL fresh repeat-shadow candidate only.** Fix and regression-test the harness offline, then use a new boot identity. Never reuse HK. The brighter-scene native-feedback gate stays parked.
 
 ---
 

@@ -19,7 +19,7 @@ Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed 
 
 The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
 
-The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD leave native-feedback environment-blocked; HE/HF/HG/HH/HI/HJ provide the stable packaged stack, and HK is now installed but unarmed as a fresh two-stream R27 shadow-only lifecycle candidate.** Golden remains current and no HK camera runtime has occurred yet.
+The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD leave native-feedback environment-blocked; HE/HF/HG/HH/HI/HJ provide the stable packaged stack. HK's first repeated-stream candidate was consumed by a pre-stream shell-harness bug before any camera stream, then cleanly archived/retired with Golden restored.** HL will be the fresh successor after offline harness regression.
 
 Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
 
