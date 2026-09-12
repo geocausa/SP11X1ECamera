@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS. **IC rear-first unified-DTB candidate is installed-unarmed and verified.** Exact boot artifact hashes and all three camera module hashes match the pinned contract; Golden remains saved default and `next_entry` is empty. Contract is still exactly one rear color-bar frame plus one 16-frame normal rear stream, no front stream and no retry.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS. **IC is consumed/retired as a pre-stream harness failure.** Modules and unified graph bound, but the discovery regex rejected entity headers containing route counts; no attempt marker, STREAMON or camera frame occurred. The same read-only graph proved IC also omitted explicit enabling of the two mutable rear route links. Golden return passed and archive manifest is `90392180610bbed064718631fb84d2aaa9912136874b02abe056d0117c683b90`.
 
-**Next gate: checkpoint/push installed-unarmed, then arm one-shot.** After any candidate invocation, return directly to Golden, archive and retire before further work. The brighter-scene native-feedback gate stays parked.
+**Next gate: ID fresh rear-regression candidate.** Fix/parser-test against the real IC graph, add explicit rear-link setup/verification, checkpoint under a new boot identity, and only then install/arm. The brighter-scene native-feedback gate stays parked.
 
 ---
 

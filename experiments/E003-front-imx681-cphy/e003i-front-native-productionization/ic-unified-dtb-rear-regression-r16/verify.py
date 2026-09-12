@@ -22,8 +22,9 @@ cp2=subprocess.run(['shellcheck','-x','-S','warning',*[str(p) for p in sorted(D.
 for f in ('verify.py','verify-installed.py','verify-live.py','discover-unified.py'):
  cp2=subprocess.run(['python3','-m','py_compile',str(D/f)],text=True,capture_output=True); need(cp2.returncode==0,f+' compile '+cp2.stderr)
 t=(D/'invoke-rear-once.sh').read_text(); need(len(re.findall(r'--stream-count=1(?:\s|$)',t))==1 and len(re.findall(r'--stream-count=16(?:\s|$)',t))==1,'stream sites'); need('front_video_forbidden' in t,'front prohibition'); need('ATTEMPT1-CONSUMED.marker' in t,'consume marker'); need('on_fail()' in t and 'ATTEMPT1-FAILURE.json' in t,'failure archive guard')
-need(r.get('status') in ('PREPARED_NOT_INSTALLED_UNIFIED_REAR_REGRESSION_R16','INSTALLED_UNARMED_UNIFIED_REAR_REGRESSION_R16'),'RESULT status')
+need(r.get('status') in ('PREPARED_NOT_INSTALLED_UNIFIED_REAR_REGRESSION_R16','INSTALLED_UNARMED_UNIFIED_REAR_REGRESSION_R16','FAIL_HARNESS_PRE_STREAM_NO_CAMERA_STREAM_GOLDEN_RESTORED_RETIRED'),'RESULT status')
 for k,v in {'candidate_armed':False,'camera_runtime_performed':False,'front_stream_authorized':False,'same_stream_retry_authorized':False,'same_boot_retry_authorized':False,'unified_dtb_sha256':'5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321'}.items(): need(r.get(k)==v,'RESULT '+k)
 if r['status']=='PREPARED_NOT_INSTALLED_UNIFIED_REAR_REGRESSION_R16': need(r.get('candidate_installed') is False,'prepared installed')
-else: need(r.get('candidate_installed') is True,'installed flag'); need(r.get('install_source_head') is not None,'install source head')
+elif r['status']=='INSTALLED_UNARMED_UNIFIED_REAR_REGRESSION_R16': need(r.get('candidate_installed') is True,'installed flag'); need(r.get('install_source_head') is not None,'install source head')
+else: need(r.get('candidate_retired') is True and r.get('camera_stream_started') is False and r.get('golden_return')=='PASS','final prestream failure closure')
 print('IC_STATIC_VERIFY=PASS STATUS='+r['status']+' REAR=COLORBAR+R16 FRONT_STREAM=NO RETRY=NO')

@@ -19,7 +19,7 @@ Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed 
 
 The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
 
-The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD leave native-feedback environment-blocked; HE..HY close the front production path, HZ/IA reconcile shared rear+front CAMSS authority, IB builds the deterministic exact-Golden unified DTB, and IC is now installed-unarmed for a rear-first live regression with front streaming forbidden.** Golden remains saved default; IC has not run yet.
+The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD leave native-feedback environment-blocked; HE..HY close the front production path, HZ/IA reconcile shared rear+front CAMSS authority, IB builds the deterministic exact-Golden unified DTB, and IC reached unified module bind but was retired before streaming after two harness defects were found.** Golden is restored; ID will use a fresh identity after offline parser/link fixes.
 
 Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
 
