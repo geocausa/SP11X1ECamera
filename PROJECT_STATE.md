@@ -16,9 +16,9 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR:** session-isolated production handoff PASS. **HS:** install/rollback contract PASS offline — real-root explicit opt-in, manifest-before-mutation, existing-install byte-exact rollback, fresh-install removal, corrupt-package rejection before target mutation, zero camera opens; runtime package unchanged (`57aa9cc2...66a5a757`).
+**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HM/HN:** reset bug isolated/fixed. **HO/HQ:** repeated-open live PASS through four streams / 108 frames. **HR/HS:** session isolation + install/rollback PASS offline. **HT:** deployment boundary PASS — protected Golden has zero camera nodes/modules, userspace discovery fails closed, and the runtime package owns no DTB/firmware/module/boot/service integration; proven HQ runtime required all of those separately. Real-root install remains blocked.
 
-**Next action:** HT offline production deployment smoke-plan and distro integration boundary before any protected-Golden install. Native-feedback live proof stays parked for a brighter diffuse scene.
+**Next action:** HU offline production boot/module/firmware integration authority. Native-feedback live proof stays parked for a brighter diffuse scene.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
 

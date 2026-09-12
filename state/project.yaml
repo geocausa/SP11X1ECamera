@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-hs-production-install-rollback-contract-pass
-phase: front-imx681-production-deployment-smoke-boundary
-status: golden-hs-offline-install-rollback-pass-native-feedback-environment-blocked
+state_id: E003i-ht-production-deployment-boundary-pass
+phase: front-imx681-production-boot-module-firmware-integration
+status: golden-ht-offline-deployment-boundary-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-hs-production-install-rollback-contract-pass
+current_gate: E003i-ht-production-deployment-boundary-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HT-production-deployment-smoke-boundary
+next_experiment: E003i-HU-production-boot-module-firmware-authority
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HS PASS offline: deployment tool verifies runtime package manifest before target mutation, requires explicit --allow-real-root for TARGET_ROOT=/, pre-stages prefix/wrappers, preserves previous install for one-step rollback and records package manifest in the install receipt. Existing install rollback is byte-exact; fresh install rollback removes package; corrupt package is rejected before target mutation; zero camera-device opens; runtime package remains HR manifest 57aa9cc2ad85131881416d7795603ab777a70e7c5877828986ff279266a5a757; Golden untouched. Next HT offline production deployment smoke-plan/distro integration boundary. Native-feedback proof remains parked.
+  HT PASS offline/read-only: protected Golden has no camera modules or media/video/subdev nodes, production discovery fails closed with zero matches, and the runtime package/installer own no /boot, /etc, /lib/modules, systemd, depmod/module activation or GRUB integration. Proven HQ runtime separately required front-only DTB/graph, firmware search path, exact qcom-camss + imx681 load sequence and a fail-closed boot token. Therefore real-root package install is not ready and Golden remains untouched. Next HU derives production boot/module/firmware integration authority. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3717,3 +3717,21 @@ e003i_hs_current:
   golden_system_modified: false
   camera_runtime_performed: false
   next_gate: HT-production-deployment-smoke-boundary
+
+
+e003i_ht_current:
+  status: pass-offline-production-deployment-boundary
+  parent: HS-production-install-rollback-contract-pass
+  golden_camera_modules_loaded: 0
+  golden_camera_nodes: 0
+  golden_production_install_present: false
+  golden_live_discovery_fail_closed: true
+  runtime_package_owns_boot_integration: false
+  runtime_package_owns_module_activation: false
+  runtime_package_owns_systemd_integration: false
+  installer_owns_boot_or_module_activation: false
+  real_root_package_install_ready: false
+  blocker: boot-graph-firmware-module-activation-separate-from-userspace-package
+  golden_system_modified: false
+  camera_runtime_performed: false
+  next_gate: HU-production-boot-module-firmware-authority
