@@ -1,0 +1,59 @@
+{
+  "camera_runtime_performed": false,
+  "evidence_budget": {
+    "current_free_bytes_at_verification": 80334745600,
+    "ho_stream_bytes": [
+      231084613,
+      231084632
+    ],
+    "minimum_free_bytes_before_arm": 8589934592,
+    "projected_four_stream_bytes_upper_bound_from_ho_max": 924338528
+  },
+  "expected_hardware_control_transactions_including_bootstrap_total": 16,
+  "expected_startup_native_writes_per_stream": 3,
+  "expected_streamoff_count": 4,
+  "failure_policy": [
+    "capture dmesg and partial runtime evidence",
+    "archive immediately",
+    "do not launch any later stream",
+    "reboot directly to protected Golden",
+    "retire candidate after Golden verification"
+  ],
+  "frames_per_stream": 27,
+  "fresh_session_contract": {
+    "first_snapshot_generation": 1,
+    "last_producer_generation": 24,
+    "reset_required_between_streams": true
+  },
+  "next_gate": "HQ fresh four-stream shadow one-shot candidate preparation/install-unarmed checkpoint",
+  "package_authority": {
+    "manifest_sha256": "8a2bf3116a9b37fbe4b213dae51cb0ff33968e591ff54c8235c36341607c32cf",
+    "qcom_camss_sha256": "7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95"
+  },
+  "parent": "HO two-stream shadow live PASS",
+  "post_g3_native_writes_authorized": 0,
+  "post_g3_policy": "shadow",
+  "producer_generations_per_stream": 24,
+  "producer_requests_per_stream": 23,
+  "retry_policy": {
+    "abort_on_first_failure": true,
+    "same_boot_retry": false,
+    "same_stream_retry": false
+  },
+  "schema": "sp11-e003i-hp-four-stream-shadow-soak-policy-v1",
+  "status": "PASS_OFFLINE_FOUR_STREAM_SHADOW_SOAK_POLICY",
+  "stream_count": 4,
+  "success_gate": [
+    "4 consumed markers",
+    "4 launcher rc=0",
+    "4 producer PASS",
+    "4 x 27 DQBUF exact",
+    "4 schedule PASS",
+    "4 STREAMOFF_OK",
+    "16 kernel sensor control transactions including four bootstraps",
+    "zero post-G3 native writes",
+    "kernel health PASS",
+    "Golden return PASS"
+  ],
+  "total_frames": 108
+}

@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-12
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E003i-ho-two-stream-shadow-pass-golden-retired
-phase: front-imx681-repeated-stream-soak-design
-status: golden-ho-two-stream-pass-archived-retired-native-feedback-environment-blocked
+state_id: E003i-hp-four-stream-soak-policy-pass
+phase: front-imx681-four-stream-shadow-candidate-prep
+status: golden-hp-offline-soak-policy-pass-native-feedback-environment-blocked
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E003-front-imx681-cphy
-current_gate: E003i-ho-two-stream-shadow-pass
+current_gate: E003i-hp-four-stream-shadow-soak-policy-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E003i-HP-repeat-stream-soak-policy
+next_experiment: E003i-HQ-four-stream-shadow-candidate
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  HO PASS live: two sequential 27-frame streams completed with producer PASS twice, STREAMOFF twice, exactly three startup sensor writes per stream, post-G3 shadow and zero later native writes. No retry; kernel health PASS; Golden restored; candidate retired. Final archive manifest SHA256 35975ea08e695d69d8ff69cf530b1236230cb43fb0d9bc739c0538dec2d2c57c. Next design HP offline for a bounded repeated-stream soak/loop with explicit stream count/duration, per-stream generation restart, fail-closed teardown and evidence limits. Native-feedback proof remains parked.
+  HP PASS offline: next bounded lifecycle soak is exactly 4 sequential R27 streams (108 frames), post-G3 shadow with zero later native writes. Each stream must begin at snapshot generation G1, complete 24 producer generations / 23 R5..R27 submissions, use exactly three startup sensor writes and end STREAMOFF. Abort on first failure; no later stream/retry; archive immediately and return Golden. Projected evidence is <1 GiB with 8 GiB free-space prearm floor. Prepare HQ fresh one-shot identity using unchanged HN package; install unarmed and checkpoint before runtime. Native-feedback proof remains parked.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -3625,3 +3625,23 @@ e003i_ho_current:
   same_boot_retry_performed: false
   archive_manifest_sha256: 35975ea08e695d69d8ff69cf530b1236230cb43fb0d9bc739c0538dec2d2c57c
   golden_return: PASS
+
+
+e003i_hp_current:
+  status: pass-offline-four-stream-shadow-soak-policy
+  parent: HO-two-stream-shadow-live-pass
+  stream_count: 4
+  frames_per_stream: 27
+  total_frames: 108
+  post_g3_policy: shadow
+  post_g3_native_writes_authorized: 0
+  expected_streamoff_count: 4
+  expected_hardware_control_transactions_including_bootstrap_total: 16
+  first_snapshot_generation_each_stream: 1
+  same_stream_retry_authorized: false
+  same_boot_retry_authorized: false
+  abort_on_first_failure: true
+  minimum_free_bytes_before_arm: 8589934592
+  projected_evidence_bytes: 924338528
+  camera_runtime_performed: false
+  next_gate: HQ-four-stream-shadow-candidate

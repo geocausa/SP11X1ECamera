@@ -16,9 +16,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8Ã
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired; HM/HN are PASS. **HO is consumed and PASS:** two sequential R27 streams completed with producer PASS, clean STREAMOFF twice, exactly three startup sensor writes per stream and zero post-G3 native writes. Kernel health and Golden return pass; no retry occurred; the candidate is retired. Final archive manifest SHA256 is `35975ea08e695d69d8ff69cf530b1236230cb43fb0d9bc739c0538dec2d2c57c`.
+HE/HF/HG/HH/HI/HJ production consolidation is PASS. HK/HL remain retired; HM/HN are PASS; HO is consumed/PASS with two sequential streams. **HP now PASSes the offline soak policy:** next runtime is bounded to 4 sequential R27 streams (108 frames), `shadow`, zero post-G3 native writes, 4 clean STREAMOFFs required, fresh generation-1 session start each time, abort-on-first-failure, no retry, immediate archive + Golden return. Evidence budget is below 1 GiB from HO measurements with an 8 GiB prearm free-space floor.
 
-**Next gate: HP offline soak/loop policy design.** Preserve `shadow` and zero post-G3 native-write authority while designing a bounded longer lifecycle test. The brighter-scene native-feedback gate stays parked.
+**Next gate: HQ fresh four-stream shadow candidate.** New one-shot identity, unchanged HN package, prepare/install unarmed and checkpoint before runtime. The brighter-scene native-feedback gate stays parked.
 
 ---
 
