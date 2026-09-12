@@ -1,0 +1,28 @@
+{
+  "schema": "sp11-camera-e004b-linux-translation-v1",
+  "authority": "same-machine Windows E004a",
+  "parent_unified_dtb_sha256": "5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321",
+  "kernel_translation_sources": {
+    "drivers/regulator/qcom-rpmh-regulator.c": "036a42419906dadc79e5465286923642bc55aa68786448f270e9ed60399634c2",
+    "drivers/pinctrl/qcom/pinctrl-x1e80100.c": "e9cb954059a9d182d096c2641b6c42550225aec6048bd6ac70420b689705982b",
+    "drivers/i2c/busses/i2c-qcom-cci.c": "b7df5a44d585d0d7c9d8ed7db6353ac5a52e1464200b0d9ff25b6eb9d1af8f6c",
+    "include/dt-bindings/clock/qcom,x1e80100-camcc.h": "efd89f72f0d526c93400f62d056394fb837c314d1af778255dacb79278cdd846",
+    "include/linux/i2c.h": "f36f4c56bd2d85d314687efcc03a8451d9a4e1ac53b45834030c645672e91867"
+  },
+  "translations": {
+    "Windows CCI0/master0": "Linux /soc@0/cci@ac15000/i2c-bus@0; X1E cci_i2c GPIO101/102",
+    "Windows FAST": "Linux clock-frequency 400000; i2c-qcom-cci selects I2C_MODE_FAST",
+    "Windows cam_cc_mclk0_clk": "CAM_CC_MCLK0_CLK=71; X1E cam_mclk GPIO96",
+    "Windows reset GPIO109": "TLMM GPIO109 active-low sensor reset",
+    "Windows CSIPHY0 laneMask 0x81": "CAMSS port@0 D-PHY physical data-lanes=<0>; sensor logical data-lanes=<1>",
+    "Windows 840 Mbps": "D-PHY link-frequencies 420000000",
+    "Windows LDO4_M 1800000": "PM8010 ldo4 exact 1800000",
+    "Windows LDO2_M 1150000": "PM8010 ldo2 grid 528000+n*8000; 1150000 is not representable; use 1152000",
+    "Windows LDO7_M 2800000": "PM8010 ldo7 exact 2800000"
+  },
+  "unresolved": {
+    "windows_aeob_delay_unit": "UNKNOWN; preserve ordering, do not claim timing parity",
+    "polarity": "NO_INVERSION_PROVEN; no lane-polarities DT property added",
+    "silicon_revision": "UNKNOWN until bounded Linux identity/revision probe"
+  }
+}
