@@ -1,0 +1,112 @@
+E004bf STATIC SEMANTIC LABELS FOR DYNAMIC WINDOWS EVENTS
+
+--- DeviceStart case ---
+  case 0x804:
+    pcVar24 = "SecureISPDriver_DeviceStart";
+    puVar18 = &DAT_14000d478;
+    uVar16 = 0xd;
+    FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_DeviceStart",param_6,param_7,param_8);
+    if (param_3 != (ulonglong *)0x0) {
+      if (*(int *)(param_1 + 0x28) != 2) {
+        FUN_140006a20(0,0x14000c230,0xd,"SecureISPDevice is not in PowerState_ON state\n",pcVar24,
+                      param_6,param_7,param_8);
+        return 0xd;
+      }
+      if (*(int *)(param_1 + 0x2c) != 1) {
+        uVar11 = FUN_140004b88(param_1,1,uVar16,puVar18,pcVar24,param_6,param_7,param_8);
+        if ((int)uVar11 < 0) {
+          if (-1 < (int)uVar11) {
+            uVar11 = 0;
+          }
+          pcVar17 = "Failed to configure secure camera, status = 0x%08x \n";
+        }
+        else {
+          FUN_140006a20(3,0x14000c230,0xd,"Successfully configured secure camera\n",pcVar24,param_6,
+                        param_7,param_8);
+          param_7 = &local_1a8;
+          local_1a8 = (ulonglong *)((ulonglong)local_1a8 & 0xffffffff00000000);
+          uVar11 = FUN_140004a90(2,0,param_3,8,param_5,puVar35,param_7,param_8);
+          if (-1 < (int)uVar11) {
+            FUN_140006a20(3,0x14000c230,0xd,"SendTask - ISPTRUSTLET_START Succeeded\n",param_5,
+                          puVar35,param_7,param_8);
+            *(undefined4 *)(param_1 + 0x2c) = 1;
+            FUN_140006a20(3,0x14000c230,0xd,"m_StreamState - Stream_STARTED\n",param_5,puVar35,
+                          param_7,param_8);
+            return 0;
+          }
+          if (-1 < (int)uVar11) {
+            uVar11 = 0;
+          }
+          pcVar17 = "SendTask - ISPTRUSTLET_START Failed, status = 0x%08x \n";
+          param_6 = puVar35;
+        }
+        FUN_140006a20(0,0x14000c230,0xd,pcVar17,(ulonglong)uVar11,param_6,param_7,param_8);
+
+--- DeviceStop helper ---
+//// FUN_140005208 @140005208 ////
+
+undefined8
+FUN_140005208(ulonglong param_1,undefined8 param_2,undefined4 param_3,char *param_4,uint param_5,
+             undefined8 *param_6,undefined4 *param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 uVar2;
+  undefined8 uVar3;
+  undefined *puVar4;
+  char *pcVar5;
+  char *pcVar6;
+  undefined8 *puVar7;
+  undefined4 local_40 [4];
+  
+  puVar7 = (undefined8 *)(ulonglong)param_5;
+  pcVar6 = "SecureISPDriver_DeviceStop";
+  puVar4 = &DAT_14000d478;
+  uVar3 = 0xd;
+  FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_DeviceStop",param_6,param_7,param_8);
+  if (param_1 == 0) {
+    FUN_140006a20(0,0x14000c230,0xd,"Invalid input parameters\n",pcVar6,param_6,param_7,param_8);
+    uVar3 = 0xe;
+  }
+  else {
+    FUN_140009260(*(longlong *)(param_1 + 0xf0),extraout_x1,uVar3,puVar4,pcVar6,param_6,param_7,
+                  param_8);
+    if (*(int *)(param_1 + 0x2c) == 0) {
+      pcVar5 = "SecureISPDevice already in Stream_STOPPED state\n";
+      uVar3 = 0xd;
+      FUN_140006a20(3,0x14000c230,0xd,"SecureISPDevice already in Stream_STOPPED state\n",pcVar6,
+                    param_6,param_7,param_8);
+      uVar2 = extraout_x1_00;
+      param_4 = pcVar6;
+      puVar7 = param_6;
+    }
+    else {
+      param_7 = local_40;
+      *(undefined4 *)(param_1 + 0x28) = 0;
+      local_40[0] = 0;
+      uVar1 = FUN_140004a90(3,0,param_2,param_3,param_4,puVar7,param_7,param_8);
+      if ((int)uVar1 < 0) {
+        if (-1 < (int)uVar1) {
+          uVar1 = 0;
+        }
+        pcVar5 = "SendTask - ISPTRUSTLET_STOP Failed, status = 0x%08x \n";
+        param_4 = (char *)(ulonglong)uVar1;
+        uVar3 = 0xd;
+        FUN_140006a20(0,0x14000c230,0xd,"SendTask - ISPTRUSTLET_STOP Failed, status = 0x%08x \n",
+                      param_4,puVar7,param_7,param_8);
+      }
+      else {
+        pcVar5 = "SendTask - ISPTRUSTLET_STOP Succeeded\n";
+        uVar3 = 0xd;
+        FUN_140006a20(3,0x14000c230,0xd,"SendTask - ISPTRUSTLET_STOP Succeeded\n",param_4,puVar7,
+                      param_7,param_8);
+      }
+      FUN_140004b88(param_1,0,uVar3,pcVar5,param_4,puVar7,param_7,param_8);
+      *(undefined4 *)(param_1 + 0x2c) = 0;
+      uVar2 = extraout_x1_01;
+    }
+    FUN_1400092b0(*(longlong *)(param_1 + 0xf0),uVar2,uVar3,pcVar5,param_4,puVar7,param_7,param_8);
+    uVar3 = 0;

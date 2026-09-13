@@ -1,0 +1,36 @@
+{
+  "schema": "sp11-camera-e004bf-windows-secure-lane-order-oracle-v1",
+  "status": "PASS_WINDOWS_PROTECT_START_STOP_UNPROTECT_ORDER",
+  "date": "2026-09-13",
+  "authority": "accepted E004aq same-machine Windows dynamic trace",
+  "dynamic_start": [
+    "op_0x804",
+    "lane_enable_0x2e_mask_0x8",
+    "config_secure_camera_protect_1",
+    "task_2"
+  ],
+  "dynamic_stop": [
+    "op_0x805",
+    "task_3",
+    "lane_disable_0x2f_mask_0x8",
+    "config_secure_camera_protect_0",
+    "op_0x80e"
+  ],
+  "static_labels": {
+    "op_0x804": "DeviceStart",
+    "task_2": "ISPTRUSTLET_START",
+    "op_0x805": "DeviceStop",
+    "task_3": "ISPTRUSTLET_STOP"
+  },
+  "parity_order": {
+    "start": "protect_before_protected_worker_start",
+    "stop": "protected_worker_stop_before_unprotect"
+  },
+  "physical_csiphy_state_at_protect": "unobserved",
+  "new_windows_boot": false,
+  "linux_runtime_executed": false,
+  "secure_csi_state_changed_linux": false,
+  "camera_memory_reassigned": false,
+  "qcomtee_loaded": false,
+  "next_gate": "Map Windows protected-worker start/stop onto Linux CAMSS lifecycle without assuming unresolved physical-CSIPHY timing."
+}

@@ -1,0 +1,23 @@
+E004bf ACCEPTED WINDOWS DYNAMIC ORDER
+source_checkpoint=E004aq
+raw_trace_sha256=5dfac22112c9d0cf2ae9cb1f1ef9cb43a00084aabba6d8e0a8da7c9440086ad3
+raw_trace_bytes=1169714
+
+START TRANSITION (accepted dynamic line order):
+1638 SecureISP_OpDispatcher command=0x804
+1639 SecureISP_LaneDispatch command=0x2e mask=0x8
+1640 SecureISP_ConfigSecureCamera mask=0x8 protect=1
+1641 SecureISP_TaskSend task=2 selector=0
+
+STOP TRANSITION (accepted dynamic line order):
+1543 SecureISP_OpDispatcher command=0x805
+1544 SecureISP_TaskSend task=3 selector=0
+1546 SecureISP_LaneDispatch command=0x2f mask=0x8
+1547 SecureISP_ConfigSecureCamera mask=0x8 protect=0
+1548 SecureISP_OpDispatcher command=0x80e
+
+Dynamic-only conclusions:
+protect_occurs_before_task2=yes
+task3_occurs_before_unprotect=yes
+same_lane_mask_both_sides=0x8
+physical_csiphy_programming_state_at_transition=unobserved
