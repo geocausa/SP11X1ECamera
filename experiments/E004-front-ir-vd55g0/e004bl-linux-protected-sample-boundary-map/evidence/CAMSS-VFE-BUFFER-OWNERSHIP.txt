@@ -1,0 +1,123 @@
+E004bl CAMSS VFE DMA PROGRAMMING / COMPLETION / TEARDOWN
+
+--- queue to hardware/pending list ---
+   578	 * vfe_queue_buffer_v2 - Add empty buffer
+   579	 * @vid: Video device structure
+   580	 * @buf: Buffer to be enqueued
+   581	 *
+   582	 * Add an empty buffer - depending on the current number of buffers it will be
+   583	 * put in pending buffer queue or directly given to the hardware to be filled.
+   584	 *
+   585	 * Return 0 on success or a negative error code otherwise
+   586	 */
+   587	int vfe_queue_buffer_v2(struct camss_video *vid,
+   588				struct camss_buffer *buf)
+   589	{
+   590		struct vfe_line *line = container_of(vid, struct vfe_line, video_out);
+   591		struct vfe_device *vfe = to_vfe(line);
+   592		const struct vfe_hw_ops *ops = vfe->res->hw_ops;
+   593		struct vfe_output *output;
+   594		unsigned long flags;
+   595	
+   596		output = &line->output;
+   597	
+   598		spin_lock_irqsave(&vfe->output_lock, flags);
+   599	
+   600		if (output->state == VFE_OUTPUT_ON &&
+   601		    output->gen2.active_num < 2) {
+   602			output->buf[output->gen2.active_num++] = buf;
+   603			ops->vfe_wm_update(vfe, output->wm_idx[0],
+   604					   buf->addr[0], line);
+   605			ops->reg_update(vfe, line->id);
+   606		} else {
+   607			vfe_buf_add_pending(output, buf);
+   608		}
+   609	
+   610		spin_unlock_irqrestore(&vfe->output_lock, flags);
+   611	
+   612		return 0;
+   613	}
+
+--- output state owns active buffers ---
+    59	struct vfe_output {
+    60		u8 wm_num;
+    61		u8 wm_idx[3];
+    62	
+    63		struct camss_buffer *buf[2];
+    64		struct camss_buffer *last_buffer;
+    65		struct list_head pending_bufs;
+    66	
+    67		unsigned int drop_update_idx;
+    68	
+    69		union {
+    70			struct {
+    71				int active_buf;
+    72				int wait_sof;
+    73			} gen1;
+    74			struct {
+    75				int active_num;
+    76			} gen2;
+    77		};
+    78		enum vfe_output_state state;
+    79		unsigned int sequence;
+    80	
+    81		int wait_reg_update;
+    82		struct completion sof;
+    83		struct completion reg_update;
+    84	};
+
+--- flush returns pending/active/last buffers to vb2 ---
+  1194	/*
+  1195	 * vfe_flush_buffers - Return all vb2 buffers
+  1196	 * @vid: Video device structure
+  1197	 * @state: vb2 buffer state of the returned buffers
+  1198	 *
+  1199	 * Return all buffers to vb2. This includes queued pending buffers (still
+  1200	 * unused) and any buffers given to the hardware but again still not used.
+  1201	 *
+  1202	 * Return 0 on success or a negative error code otherwise
+  1203	 */
+  1204	int vfe_flush_buffers(struct camss_video *vid,
+  1205			      enum vb2_buffer_state state)
+  1206	{
+  1207		struct vfe_line *line = container_of(vid, struct vfe_line, video_out);
+  1208		struct vfe_device *vfe = to_vfe(line);
+  1209		struct vfe_output *output;
+  1210		unsigned long flags;
+  1211	
+  1212		output = &line->output;
+  1213	
+  1214		spin_lock_irqsave(&vfe->output_lock, flags);
+  1215	
+  1216		vfe_buf_flush_pending(output, state);
+  1217	
+  1218		if (output->buf[0])
+  1219			vb2_buffer_done(&output->buf[0]->vb.vb2_buf, state);
+  1220	
+  1221		if (output->buf[1])
+  1222			vb2_buffer_done(&output->buf[1]->vb.vb2_buf, state);
+  1223	
+  1224		if (output->last_buffer) {
+  1225			vb2_buffer_done(&output->last_buffer->vb.vb2_buf, state);
+  1226			output->last_buffer = NULL;
+  1227		}
+  1228	
+  1229		spin_unlock_irqrestore(&vfe->output_lock, flags);
+  1230	
+  1231		return 0;
+  1232	}
+
+--- all direct DMA-address consumers in current source ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:501:		ops->vfe_wm_update(vfe, output->wm_idx[0],
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:511:	vb2_buffer_done(&ready_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:567:		ops->vfe_wm_update(vfe, output->wm_idx[0],
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:603:		ops->vfe_wm_update(vfe, output->wm_idx[0],
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:604:				   buf->addr[0], line);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:812:		vb2_buffer_done(&buf->vb.vb2_buf, state);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:1219:		vb2_buffer_done(&output->buf[0]->vb.vb2_buf, state);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:1222:		vb2_buffer_done(&output->buf[1]->vb.vb2_buf, state);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-vfe.c:1225:		vb2_buffer_done(&output->last_buffer->vb.vb2_buf, state);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss.c:7592:	vb2_buffer_done(&buffer->vb.vb2_buf, VB2_BUF_STATE_DONE);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss.c:8842:	if (!buffer->addr[0] || !IS_ALIGNED(buffer->addr[0], PAGE_SIZE))
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss.c:8844:	end = (u64)buffer->addr[0] + CAMSS_X1E_PIX_GATE_QC10C_BYTES - 1;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss.c:8854:		vb2_buffer_done(&buffer->vb.vb2_buf, VB2_BUF_STATE_ERROR);

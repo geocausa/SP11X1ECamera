@@ -1,0 +1,307 @@
+E004bl CAMSS VB2 ALLOCATION / QUEUE / STREAM BOUNDARIES
+
+--- queue setup + address derivation + queue handoff ---
+   183	static int video_queue_setup(struct vb2_queue *q,
+   184		unsigned int *num_buffers, unsigned int *num_planes,
+   185		unsigned int sizes[], struct device *alloc_devs[])
+   186	{
+   187		struct camss_video *video = vb2_get_drv_priv(q);
+   188		const struct v4l2_pix_format_mplane *format =
+   189							&video->active_fmt.fmt.pix_mp;
+   190		unsigned int i;
+   191	
+   192		if (*num_planes) {
+   193			if (*num_planes != format->num_planes)
+   194				return -EINVAL;
+   195	
+   196			for (i = 0; i < *num_planes; i++)
+   197				if (sizes[i] < format->plane_fmt[i].sizeimage)
+   198					return -EINVAL;
+   199	
+   200			return 0;
+   201		}
+   202	
+   203		*num_planes = format->num_planes;
+   204	
+   205		for (i = 0; i < *num_planes; i++)
+   206			sizes[i] = format->plane_fmt[i].sizeimage;
+   207	
+   208		return 0;
+   209	}
+   210	
+   211	static int video_buf_init(struct vb2_buffer *vb)
+   212	{
+   213		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+   214		struct camss_video *video = vb2_get_drv_priv(vb->vb2_queue);
+   215		struct camss_buffer *buffer = container_of(vbuf, struct camss_buffer,
+   216							   vb);
+   217		const struct v4l2_pix_format_mplane *format =
+   218							&video->active_fmt.fmt.pix_mp;
+   219		struct sg_table *sgt;
+   220		unsigned int i;
+   221	
+   222		for (i = 0; i < format->num_planes; i++) {
+   223			sgt = vb2_dma_sg_plane_desc(vb, i);
+   224			if (!sgt)
+   225				return -EFAULT;
+   226	
+   227			buffer->addr[i] = sg_dma_address(sgt->sgl);
+   228		}
+   229	
+   230		if (format->pixelformat == V4L2_PIX_FMT_NV12 ||
+   231				format->pixelformat == V4L2_PIX_FMT_NV21 ||
+   232				format->pixelformat == V4L2_PIX_FMT_NV16 ||
+   233				format->pixelformat == V4L2_PIX_FMT_NV61)
+   234			buffer->addr[1] = buffer->addr[0] +
+   235					format->plane_fmt[0].bytesperline *
+   236					format->height;
+   237	
+   238		return 0;
+   239	}
+   240	
+   241	static int video_buf_prepare(struct vb2_buffer *vb)
+   242	{
+   243		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+   244		struct camss_video *video = vb2_get_drv_priv(vb->vb2_queue);
+   245		const struct v4l2_pix_format_mplane *format =
+   246							&video->active_fmt.fmt.pix_mp;
+   247		unsigned int i;
+   248	
+   249		for (i = 0; i < format->num_planes; i++) {
+   250			if (format->plane_fmt[i].sizeimage > vb2_plane_size(vb, i))
+   251				return -EINVAL;
+   252	
+   253			vb2_set_plane_payload(vb, i, format->plane_fmt[i].sizeimage);
+   254		}
+   255	
+   256		vbuf->field = V4L2_FIELD_NONE;
+   257	
+   258		return 0;
+   259	}
+   260	
+   261	static bool video_is_x1e_front_pix(struct camss_video *video);
+   262	
+   263	static void video_buf_queue(struct vb2_buffer *vb)
+   264	{
+   265		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+   266		struct camss_video *video = vb2_get_drv_priv(vb->vb2_queue);
+   267		struct camss_buffer *buffer = container_of(vbuf, struct camss_buffer,
+   268							   vb);
+   269	
+   270		/*
+   271		 * E003h 0071: front PIX QBUF is software ownership only. Never let a
+   272		 * live requeue fall into the generic VFE680 one-WM update path.
+   273		 */
+   274		if (video_is_x1e_front_pix(video)) {
+   275			if (camss_x1e_pix_v4l2_queue_buffer(video, buffer))
+   276				vb2_buffer_done(vb, VB2_BUF_STATE_ERROR);
+   277			return;
+   278		}
+   279	
+   280		video->ops->queue_buffer(video, buffer);
+   281	}
+
+--- start/stop/flush ordering ---
+   640	static int video_prepare_streaming(struct vb2_queue *q)
+   641	{
+   642		struct camss_video *video = vb2_get_drv_priv(q);
+   643		struct video_device *vdev = &video->vdev;
+   644		int ret;
+   645	
+   646		ret = v4l2_pipeline_pm_get(&vdev->entity);
+   647		if (ret < 0) {
+   648			dev_err(video->camss->dev, "Failed to power up pipeline: %d\n",
+   649				ret);
+   650		}
+   651	
+   652		return ret;
+   653	}
+   654	
+   655	static int video_start_streaming(struct vb2_queue *q, unsigned int count)
+   656	{
+   657		struct camss_video *video = vb2_get_drv_priv(q);
+   658		struct video_device *vdev = &video->vdev;
+   659		struct media_entity *entity;
+   660		struct media_pad *pad;
+   661		struct v4l2_subdev *subdev;
+   662		int ret;
+   663	
+   664		ret = video_device_pipeline_alloc_start(vdev);
+   665		if (ret < 0) {
+   666			dev_err(video->camss->dev, "Failed to start media pipeline: %d\n", ret);
+   667			goto flush_buffers;
+   668		}
+   669	
+   670		/*
+   671		 * E003h 0065: the exact X1E front PIX node uses the already-proven
+   672		 * 9-client bounded runner instead of the invalid generic one-WM VFE680
+   673		 * path. This remains diagnostic-arm-only and completes one frame.
+   674		 */
+   675		if (video_is_x1e_front_pix(video)) {
+   676			ret = camss_x1e_pix_v4l2_start(video, count);
+   677			if (ret < 0) {
+   678				if (video->x1e_pix_runner_pinned)
+   679					goto error_pinned;
+   680				goto error;
+   681			}
+   682			return 0;
+   683		}
+   684	
+   685		ret = video_check_format(video);
+   686		if (ret < 0)
+   687			goto error;
+   688	
+   689		entity = &vdev->entity;
+   690		while (1) {
+   691			pad = &entity->pads[0];
+   692			if (!(pad->flags & MEDIA_PAD_FL_SINK))
+   693				break;
+   694	
+   695			pad = media_pad_remote_pad_first(pad);
+   696			if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+   697				break;
+   698	
+   699			entity = pad->entity;
+   700			subdev = media_entity_to_v4l2_subdev(entity);
+   701	
+   702			ret = v4l2_subdev_call(subdev, video, s_stream, 1);
+   703			if (ret < 0 && ret != -ENOIOCTLCMD)
+   704				goto error;
+   705		}
+   706	
+   707		return 0;
+   708	
+   709	error:
+   710		video_device_pipeline_stop(vdev);
+   711	
+   712	flush_buffers:
+   713		video->ops->flush_buffers(video, VB2_BUF_STATE_QUEUED);
+   714	
+   715		return ret;
+   716	
+   717	error_pinned:
+   718		/* Hardware/DMA ownership is intentionally pinned until candidate reboot. */
+   719		video_device_pipeline_stop(vdev);
+   720		return ret;
+   721	}
+   722	
+   723	static void video_stop_streaming(struct vb2_queue *q)
+   724	{
+   725		struct camss_video *video = vb2_get_drv_priv(q);
+   726		struct video_device *vdev = &video->vdev;
+   727		struct media_entity *entity;
+   728		struct media_pad *pad;
+   729		struct v4l2_subdev *subdev;
+   730		int ret;
+   731	
+   732		if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_pinned)
+   733			return;
+   734	
+   735		if (video_is_x1e_front_pix(video) && video->x1e_pix_worker_started) {
+   736			WRITE_ONCE(video->x1e_pix_stop_requested, true);
+   737			wake_up_all(&video->x1e_pix_buf_wait);
+   738			wake_up_all(&video->x1e_pix_iq_wait);
+   739			flush_work(&video->x1e_pix_work);
+   740			video->x1e_pix_worker_started = false;
+   741			if (video->x1e_pix_runner_pinned)
+   742				return;
+   743		}
+   744	
+   745		if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_stopped) {
+   746			/* 0065 one-frame runner already performed the proven hardware stop. */
+   747			video->x1e_pix_runner_stopped = false;
+   748		} else if (video->camss->res->version == CAMSS_X1E80100) {
+   749			ret = video_stop_streaming_x1e(video);
+   750			if (ret)
+   751				return;
+   752		} else {
+   753			entity = &vdev->entity;
+   754			while (1) {
+   755				pad = &entity->pads[0];
+   756				if (!(pad->flags & MEDIA_PAD_FL_SINK))
+   757					break;
+   758	
+   759				pad = media_pad_remote_pad_first(pad);
+   760				if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+   761					break;
+   762	
+   763				entity = pad->entity;
+   764				subdev = media_entity_to_v4l2_subdev(entity);
+   765	
+   766				ret = video_stop_subdev(video, subdev);
+   767				if (ret)
+   768					return;
+   769			}
+   770		}
+   771	
+   772		video_device_pipeline_stop(vdev);
+   773	
+   774		video->ops->flush_buffers(video, VB2_BUF_STATE_ERROR);
+   775	}
+   776	
+   777	static void video_unprepare_streaming(struct vb2_queue *q)
+   778	{
+   779		struct camss_video *video = vb2_get_drv_priv(q);
+   780		struct video_device *vdev = &video->vdev;
+   781	
+   782		if (video_is_x1e_front_pix(video) && video->x1e_pix_runner_pinned)
+   783			return;
+   784		v4l2_pipeline_pm_put(&vdev->entity);
+   785	}
+   786	
+   787	static const struct vb2_ops msm_video_vb2_q_ops = {
+   788		.queue_setup     = video_queue_setup,
+   789		.buf_init        = video_buf_init,
+   790		.buf_prepare     = video_buf_prepare,
+   791		.buf_queue       = video_buf_queue,
+   792		.prepare_streaming = video_prepare_streaming,
+   793		.start_streaming = video_start_streaming,
+   794		.stop_streaming  = video_stop_streaming,
+   795		.unprepare_streaming = video_unprepare_streaming,
+   796	};
+
+--- queue backend registration ---
+  1251		q = &video->vb2_q;
+  1252		q->drv_priv = video;
+  1253		q->mem_ops = &vb2_dma_sg_memops;
+  1254		q->ops = &msm_video_vb2_q_ops;
+  1255		q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+  1256		q->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ;
+  1257		q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+  1258		q->buf_struct_size = sizeof(struct camss_buffer);
+  1259		q->dev = video->camss->dev;
+  1260		q->lock = &video->q_lock;
+  1261		ret = vb2_queue_init(q);
+  1262		if (ret < 0) {
+  1263			dev_err(v4l2_dev->dev, "Failed to init vb2 queue: %d\n", ret);
+  1264			goto error_vb2_init;
+
+--- camss_buffer shape ---
+    39	struct camss_buffer {
+    40		struct vb2_v4l2_buffer vb;
+    41		dma_addr_t addr[3];
+    42		struct list_head queue;
+    43	};
+    44	
+    45	struct camss_video;
+    46	
+    47	struct camss_video_ops {
+    48		int (*queue_buffer)(struct camss_video *vid, struct camss_buffer *buf);
+    49		int (*flush_buffers)(struct camss_video *vid,
+    50				     enum vb2_buffer_state state);
+    51	};
+    52	
+    53	struct camss_video {
+    54		struct camss *camss;
+    55		struct vb2_queue vb2_q;
+    56		struct video_device vdev;
+    57		struct media_pad pad;
+    58		struct v4l2_format active_fmt;
+    59		enum v4l2_buf_type type;
+    60		struct media_pipeline pipe;
+    61		const struct camss_video_ops *ops;
+    62		struct v4l2_ctrl_handler ctrl_handler;
+    63		struct mutex lock;
+    64		struct mutex q_lock;
+    65		unsigned int bpl_alignment;
+    66		unsigned int line_based;

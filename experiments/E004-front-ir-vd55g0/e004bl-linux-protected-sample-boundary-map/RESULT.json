@@ -1,0 +1,55 @@
+{
+  "schema": "sp11-camera-e004bl-linux-protected-sample-boundary-map-v1",
+  "status": "PASS_STATIC_LINUX_PROTECTED_SAMPLE_BOUNDARY_MAPPED",
+  "date": "2026-09-13",
+  "authority_policy": "Static mapping only; Windows contract from E004bh/E004bi/E004bj/E004bk plus current Linux production CAMSS source.",
+  "linux_source": {
+    "camss_video_c_sha256": "2eb92e872b4bc4f0aaa2e17197707ca270e3f5f8b8d8460952599631c9b76df4",
+    "camss_video_h_sha256": "69fdbb6364a772d5b9fe50114878bbc7a1a1ffc61e62af1e71c79fd16e94c982",
+    "camss_vfe_c_sha256": "98474729d5036a4e1770e3ab7d275ccaaba143b22202468e4ad8b93c0cbec2cb",
+    "camss_vfe_h_sha256": "b2a39f1d2310e072eccd50db00fb0aae13357a99807be778b4edd4cc7f429374",
+    "camss_c_sha256": "b9de92306b4d386274968dcab3f1a96ec13359f1eb22c27fda43bb15b0af7abb",
+    "vd55g0_c_sha256": "7d268c6204f1d85fe6047af5204693a428dc396667ee68ec12785462540cff03"
+  },
+  "current_path": {
+    "queue_memops": "vb2_dma_sg_memops",
+    "queue_io_modes": [
+      "VB2_DMABUF",
+      "VB2_MMAP",
+      "VB2_READ"
+    ],
+    "address_derivation": "vb2_dma_sg_plane_desc -> sg_dma_address -> camss_buffer.addr[]",
+    "hardware_consumer": "vfe_queue_buffer_v2 -> vfe_wm_update",
+    "completion": "vb2_buffer_done",
+    "buffer_cleanup_callback_present": false
+  },
+  "proposed_boundaries": {
+    "policy_selection": "msm_video_register before vb2_queue_init",
+    "per_buffer_state": "struct camss_buffer optional protected-sample subobject",
+    "protected_address_resolution": "video_buf_init equivalent/backend hook",
+    "hardware_programming": "VFE remains consumer only; no secure allocator in VFE",
+    "lifecycle_start": "video_start_streaming",
+    "lifecycle_stop": "video_stop_streaming / flush then independent secure-lane release",
+    "backing_release": "new vb2 .buf_cleanup hook"
+  },
+  "sensor_boundary": {
+    "driver": "vd55g0.c",
+    "protected_memory_owner": false,
+    "keep_security_policy_out_of_sensor": true
+  },
+  "invariants": {
+    "normal_path_unchanged": true,
+    "protected_path_no_mmap_read": true,
+    "protected_path_no_ordinary_sg_fallback": true,
+    "external_sample_separate_from_secureisp_internal_buffer": true,
+    "sample_lifetime_separate_from_lane_ownership": true,
+    "fail_closed": true
+  },
+  "windows_runtime_executed": false,
+  "linux_secure_runtime_executed": false,
+  "linux_memory_reassignment": false,
+  "protected_mmio_access_linux": false,
+  "qcomtee_loaded": false,
+  "source_code_modified": false,
+  "next_gate": "Compile-only disabled-by-default CAMSS protected-sample scaffold with no secure backend or runtime activation."
+}

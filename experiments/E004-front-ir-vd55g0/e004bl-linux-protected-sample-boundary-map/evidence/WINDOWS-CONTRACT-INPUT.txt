@@ -1,0 +1,20 @@
+E004bl WINDOWS CONTRACT INPUT
+--- experiments/E004-front-ir-vd55g0/e004bh-windows-secure-buffer-lifecycle-static/RESULT.json
+schema=sp11-camera-e004bh-windows-secure-buffer-lifecycle-static-v1
+status=PASS_WINDOWS_VTL1_GUID_SECURE_BUFFER_DISTINCT_FROM_LANE_LIFETIME
+next_gate=Windows-first owner map for secure capture-surface selection and MIPI external secure-section allocation.
+--- experiments/E004-front-ir-vd55g0/e004bi-windows-secure-capture-surface-owner-static/RESULT.json
+schema=sp11-camera-e004bi-windows-secure-capture-surface-owner-static-v1
+status=PASS_MFCORE_OWNS_SECURE_SURFACE_AND_REQUESTS_SECURE_ALLOCATOR
+next_gate=Map the implementation behind MFCreateSecureBufferAllocator and its VTL1 section lifetime; keep Linux secure runtime disabled.
+ownership_conclusion={"lower_level_secure_section_implementation_resolved": false, "secure_allocator_request_owner": "MFCore / CKsBasePin", "secure_surface_transition_owner": "MFCore / CKsBasePin"}
+--- experiments/E004-front-ir-vd55g0/e004bj-mfplat-secure-buffer-implementation-static/RESULT.json
+schema=sp11-camera-e004bj-mfplat-secure-buffer-implementation-static-v1
+status=PASS_MFPLAT_SECURE_BUFFER_OWNER_IS_FSISO_RPC
+next_gate=Bounded Windows dynamic observation of FsIso process creation/command line/lifetime during protected Surface IR streaming.
+camera_secureisp_external_buffer_owner=FsIso/MFPlat secure allocator path
+--- experiments/E004-front-ir-vd55g0/e004bk-windows-fsiso-ium-secure-section-static/RESULT.json
+schema=sp11-camera-e004bk-windows-fsiso-ium-secure-section-static-v1
+status=PASS_FSISO_SERVER_CREATES_SECURE_CAMERA_IUM_SECTION
+next_gate=Map the complete Windows protected-sample contract onto Linux camera allocator/queue/teardown boundaries without secure runtime.
+ownership_conclusion={"external_protected_sample_server": "FsIso", "external_sample_distinct_from_secure_lane_ownership": true, "external_sample_distinct_from_secureisp_internal_cp_camera_buffer": true, "lifetime_key": "per-buffer GUID", "secure_section_creator": "IumSdk!CreateSecureSection"}
