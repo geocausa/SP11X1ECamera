@@ -1,0 +1,61 @@
+# Same-machine Windows IR SecureISP resource proof — 2026-09-13
+
+Source machine: SP11 / DESKTOP-AQ4SMTC, Windows 11 ARM64.
+IR source active during resource query: Surface IR Camera Front / Infrared / NV12 / 644x604 / 60fps.
+
+## Service identity
+
+CameraSecureISP
+- image: qccamsecureisp8380.sys
+- Enum instance: ACPI\\QCOM0CCC\\19
+
+qcISP
+- image: qccamisp8380.sys
+- Enum instance: ACPI\\VEN_QCOM&DEV_0C25&SUBSYS_CRD08380&REV_0000\\16
+
+QCCamAvs
+- image: surfacecamavs8380.sys
+- Enum instance: DISPLAY\\QCOM_AVStream_8380\\3&a0c4df9&0&UID32768
+
+qcCameraMipiCsi
+- image: qccammipicsi8380.sys
+- Enum instance: ACPI\\VEN_QCOM&DEV_0C98&SUBSYS_CRD08380&REV_0000\\18
+
+## pnputil /resources — SecureISP
+
+Instance ID: ACPI\\QCOM0CCC\\19
+Device Description: Qualcomm(R) Spectra(TM) 395 SecureISP Device
+Class Name: System
+Manufacturer Name: Qualcomm Inc.
+Status: Started
+Driver Name: oem103.inf
+Extension Driver Names: oem104.inf
+IRQ Resources:
+- 0x00000188 (392)
+- 0x00000187 (391)
+Memory Resources:
+- 0x000000000ACCA000 - 0x000000000ACCDFFF
+
+## pnputil /resources — normal ISP
+
+Instance ID: ACPI\\VEN_QCOM&DEV_0C25&SUBSYS_CRD08380&REV_0000\\16
+Device Description: Qualcomm(R) Spectra(TM) 695 ISP Camera Device
+Class Name: Camera
+Manufacturer Name: Qualcomm Inc.
+Status: Started
+Driver Name: oem97.inf
+Extension Driver Names: oem98.inf
+IRQ resources observed: 488,319,495,497,499,501,496,498,500,721,796,797.
+
+## KD module state during LIVE2
+
+Loaded:
+- qccamplatform8380
+- qccamflash8380
+- qccammipicsi8380
+- qccamisp8380
+- qccamsecureisp8380
+- surfacecamauxsensor8380
+- surfacecamavs8380
+
+The SecureISP physical window 0x0acca000..0x0accdfff rejected both normal KD physical reads and explicit [uc] uncached reads while 12 real IR frames were being acquired.

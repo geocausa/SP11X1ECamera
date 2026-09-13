@@ -1,0 +1,77 @@
+{
+  "schema": "sp11-camera-e004y-windows-ir-secure-route-result-v1",
+  "status": "PASS_WINDOWS_IR_STANDARD_CAMSS_BYPASSED_SECUREISP_PRESENT_PROTECTED",
+  "acquisition_date": "2026-09-13",
+  "machine": "SP11 / DESKTOP-AQ4SMTC",
+  "windows_source": {
+    "name": "Surface IR Camera Front",
+    "kind": "Infrared",
+    "stream": "VideoPreview",
+    "subtype": "NV12",
+    "width": 644,
+    "height": 604,
+    "fps": "60/1",
+    "start_async": "Success",
+    "acquired_frames": 12,
+    "stop_async": "Success"
+  },
+  "raw_kd_log": {
+    "bytes": 1483526,
+    "sha256": "d63a755a97acfbb0b4a5f51cdcd557df0da482332fbd556a742d1a8c06101787"
+  },
+  "standard_camss": {
+    "live1_equals_live2": true,
+    "wrapper_io_path_cfg0": {
+      "csid0": "0x00000001",
+      "csid1": "0x00000001",
+      "csid2": "0x00000001",
+      "output_ife_en_any": false
+    },
+    "csid0_equals_known_windows_inactive_default": true,
+    "csid1_equals_known_windows_inactive_default": true,
+    "csid2_equals_known_windows_inactive_default": true,
+    "inactive_csid_image_sha256_le32": "f4cdd9594c9e63600c087a6bc653ebce05468e1d6ce0f9a20b7d10cd81afc60a",
+    "vfe0_all_zero_live": true,
+    "vfe1_all_zero_live": true,
+    "post1_all_powered_off_sentinel": true,
+    "post2_all_powered_off_sentinel": true
+  },
+  "secureisp": {
+    "device": "Qualcomm(R) Spectra(TM) 395 SecureISP Device",
+    "acpi_instance": "ACPI\\QCOM0CCC\\19",
+    "driver": "qccamsecureisp8380.sys",
+    "status": "Started",
+    "physical_window": "0x0acca000..0x0accdfff",
+    "size_bytes": 16384,
+    "irq_resources": [
+      392,
+      391
+    ],
+    "loaded_during_live_ir": true,
+    "direct_kd_readable": false,
+    "uncached_kd_readable": false,
+    "internal_route_proven": false
+  },
+  "parity_boundary": {
+    "windows_uses_observable_standard_camss_route": false,
+    "linux_normal_camss_ir_may_be_diagnostic_only": true,
+    "linux_normal_camss_ir_is_windows_1_to_1_parity": false,
+    "exact_secure_internal_route_unresolved": true
+  },
+  "golden_return": {
+    "pass": true,
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry_empty": true,
+    "camera_modules_absent": true,
+    "media_video_nodes_absent": true
+  },
+  "evidence_sha256": {
+    "holder": "d2a987cfb441f12d775cf711ff9585290ce04f81842b6dedeb0fc7230a124652",
+    "transcript": "b7854a0bdfb56c229d2e0ef5a3e6fc507cfe03ecaf07e9d264d72e9c57d8128c",
+    "resource_proof": "3934dea5013db9ecfe1c855dd6c52507a68f4c961be7b4afa3bcc71a667ea89b",
+    "extractor": "2970f6823053f8c094930c0a7ce91eed85d66c0aa863c1d721690436ce3d2bcd",
+    "summary": "66c111bba4a9b24376fccc995477224fdcc67124e51efad8176855ee2edf5c0b"
+  },
+  "next_gate": "Static reverse engineering of the exact same-machine qccamsecureisp8380.sys and surfacecamavs8380.sys command/control path, preserving the protected-route boundary and making no Linux SecureISP runtime change yet."
+}
