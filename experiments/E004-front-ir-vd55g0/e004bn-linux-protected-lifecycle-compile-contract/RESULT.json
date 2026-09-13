@@ -1,0 +1,42 @@
+{
+  "schema": "sp11-camera-e004bn-linux-protected-lifecycle-compile-contract-v1",
+  "status": "PASS_COMPILE_ONLY_THREE_DOMAIN_PROTECTED_LIFECYCLE_CONTRACT",
+  "date": "2026-09-13",
+  "base_checkpoint": "4a05b86",
+  "domains": {
+    "queue_policy": "camss_protected_queue_contract",
+    "sample_lifetime": "camss_protected_sample_ops",
+    "lane_lifetime": "camss_secure_lane_ops",
+    "represented_separately": true
+  },
+  "sample_contract": {
+    "identifier_bytes": 16,
+    "max_planes": 3,
+    "opaque_backend_handle": true,
+    "prepare_release_only": true
+  },
+  "runtime": {
+    "contract_instance_present": false,
+    "sample_ops_instance_present": false,
+    "lane_ops_instance_present": false,
+    "queue_selector_present": false,
+    "v4l2_control_present": false,
+    "secure_backend_present": false
+  },
+  "build": {
+    "baseline_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "scaffold_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "text_byte_identical": true,
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+  },
+  "safety": {
+    "production_source_unchanged": true,
+    "module_loaded": false,
+    "linux_secure_runtime_executed": false,
+    "scm_call": false,
+    "memory_assignment": false,
+    "qcomtee_dependency": false,
+    "protected_mmio": false
+  },
+  "next_gate": "Static protected-memory primitive inventory against current kernel source; no invocation."
+}
