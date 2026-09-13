@@ -1,0 +1,1475 @@
+STRING 18135ce20 = CPinConfigurer::Initialize
+  XREF 18001188c type=DATA function=FUN_180011000@180011000
+  XREF 18001197c type=PARAM function=FUN_180011000@180011000
+  XREF 1800119a8 type=DATA function=FUN_180011000@180011000
+  XREF 180011a24 type=PARAM function=FUN_180011000@180011000
+  XREF 180011a50 type=DATA function=FUN_180011000@180011000
+  XREF 180011ab4 type=PARAM function=FUN_180011000@180011000
+  XREF 180012a40 type=PARAM function=FUN_180011000@180011000
+  XREF 180012a70 type=DATA function=FUN_180011000@180011000
+  XREF 180011afc type=PARAM function=FUN_180011000@180011000
+  XREF 180012ac0 type=DATA function=FUN_180011000@180011000
+  XREF 180011b70 type=PARAM function=FUN_180011000@180011000
+  XREF 180012844 type=PARAM function=FUN_180011000@180011000
+  XREF 180012430 type=PARAM function=FUN_180011000@180011000
+  XREF 1800129bc type=PARAM function=FUN_180011000@180011000
+  XREF 1800128ac type=PARAM function=FUN_180011000@180011000
+  XREF 180012938 type=PARAM function=FUN_180011000@180011000
+  XREF 180011e98 type=PARAM function=FUN_180011000@180011000
+STRING 18135cff8 = CPinConfigurer::KsEvent
+  XREF 18004d748 type=PARAM function=FUN_18004d680@18004d680
+STRING 18135d0c0 = CPinConfigurer::KsProperty
+  XREF 18004d614 type=PARAM function=FUN_18004d540@18004d540
+
+=== FUNCTION REFS ===
+TARGET 180011000 FUN_180011000
+  REF 181b35b58 type=DATA caller=<none>
+  REF 180f7fd13 type=DATA caller=<none>
+  REF 181330808 type=DATA caller=<none>
+TARGET 18004d680 FUN_18004d680
+  REF 181b36c00 type=DATA caller=<none>
+  REF 180f8071d type=DATA caller=<none>
+  REF 181330ce0 type=DATA caller=<none>
+  REF 181331118 type=DATA caller=<none>
+  REF 181334318 type=DATA caller=<none>
+  REF 181334a10 type=DATA caller=<none>
+TARGET 18004d540 FUN_18004d540
+  REF 181b36bf8 type=DATA caller=<none>
+  REF 180f80718 type=DATA caller=<none>
+  REF 181330cd0 type=DATA caller=<none>
+  REF 181331108 type=DATA caller=<none>
+  REF 181334308 type=DATA caller=<none>
+  REF 181334a00 type=DATA caller=<none>
+
+=== DECOMPILATIONS ===
+
+//// FUN_180011000 @180011000 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+int FUN_180011000(longlong param_1,longlong *param_2,undefined8 param_3,undefined8 param_4)
+
+{
+  uint uVar1;
+  char cVar2;
+  int iVar3;
+  longlong *plVar4;
+  DWORD DVar5;
+  undefined4 uVar6;
+  int iVar7;
+  HRESULT HVar8;
+  longlong *plVar9;
+  undefined8 *puVar10;
+  longlong lVar11;
+  longlong *plVar12;
+  undefined1 *puVar13;
+  ulonglong uVar14;
+  undefined8 uVar15;
+  char *pcVar16;
+  char *pcVar17;
+  char *pcVar18;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  code *extraout_x15_06;
+  code *extraout_x15_07;
+  code *extraout_x15_08;
+  code *extraout_x15_09;
+  code *extraout_x15_10;
+  code *extraout_x15_11;
+  code *extraout_x15_12;
+  code *extraout_x15_13;
+  code *extraout_x15_14;
+  code *extraout_x15_15;
+  code *extraout_x15_16;
+  code *extraout_x15_17;
+  code *extraout_x15_18;
+  code *extraout_x15_19;
+  code *extraout_x15_20;
+  code *extraout_x15_21;
+  code *extraout_x15_22;
+  code *extraout_x15_23;
+  code *extraout_x15_24;
+  code *extraout_x15_25;
+  code *extraout_x15_26;
+  code *extraout_x15_27;
+  code *extraout_x15_28;
+  code *extraout_x15_29;
+  code *extraout_x15_30;
+  code *extraout_x15_31;
+  code *extraout_x15_32;
+  code *extraout_x15_33;
+  code *extraout_x15_34;
+  code *extraout_x15_35;
+  code *extraout_x15_36;
+  code *extraout_x15_37;
+  code *extraout_x15_38;
+  code *extraout_x15_39;
+  code *extraout_x15_40;
+  code *extraout_x15_41;
+  code *extraout_x15_42;
+  code *extraout_x15_43;
+  code *extraout_x15_44;
+  code *extraout_x15_45;
+  code *extraout_x15_46;
+  code *extraout_x15_47;
+  code *extraout_x15_48;
+  code *extraout_x15_49;
+  code *extraout_x15_50;
+  code *extraout_x15_51;
+  code *extraout_x15_52;
+  code *extraout_x15_53;
+  code *extraout_x15_54;
+  code *extraout_x15_55;
+  code *extraout_x15_56;
+  code *extraout_x15_57;
+  code *extraout_x15_58;
+  code *extraout_x15_59;
+  longlong lVar19;
+  ulonglong uVar20;
+  LPSTR lpMultiByteStr;
+  HRESULT HVar21;
+  int iVar22;
+  LPSTR pCVar23;
+  longlong *plVar24;
+  int local_640;
+  uint local_63c;
+  longlong *local_638;
+  longlong *local_630;
+  longlong *local_628;
+  longlong *local_620;
+  uint local_618;
+  undefined4 local_614;
+  int local_610;
+  undefined4 local_60c;
+  longlong local_608;
+  longlong *local_600;
+  longlong *local_5f8;
+  longlong *local_5f0;
+  LPOLESTR local_5e8;
+  longlong *local_5e0;
+  longlong *local_5d8;
+  longlong *local_5d0;
+  longlong *local_5c8;
+  longlong *local_5c0;
+  longlong local_5b8;
+  longlong *local_5b0;
+  undefined1 auStack_5a8 [8];
+  longlong *local_5a0;
+  longlong local_598;
+  longlong *local_590;
+  longlong local_588;
+  undefined4 local_580;
+  IID local_570;
+  IID local_560;
+  undefined8 local_550;
+  undefined8 uStack_548;
+  undefined1 auStack_540 [16];
+  char *local_530;
+  int local_528;
+  undefined4 uStack_524;
+  char *local_510;
+  int local_508;
+  undefined4 uStack_504;
+  char *local_4f0;
+  int local_4e8;
+  undefined4 uStack_4e4;
+  char *local_4d0;
+  int local_4c8;
+  undefined4 uStack_4c4;
+  char *local_4b0;
+  int local_4a8;
+  undefined4 uStack_4a4;
+  char *local_490;
+  int local_488;
+  undefined4 uStack_484;
+  char *local_470;
+  int local_468;
+  undefined4 uStack_464;
+  char *local_450;
+  int local_448;
+  undefined4 uStack_444;
+  char *local_430;
+  int local_428;
+  undefined4 uStack_424;
+  char *local_410;
+  int local_408;
+  undefined4 uStack_404;
+  char *local_3f0;
+  int local_3e8;
+  undefined4 uStack_3e4;
+  char *local_3d0;
+  int local_3c8;
+  undefined4 uStack_3c4;
+  char *local_3b0;
+  int local_3a8;
+  undefined4 uStack_3a4;
+  char *local_390;
+  int local_388;
+  undefined4 uStack_384;
+  char *local_370;
+  int local_368;
+  undefined4 uStack_364;
+  char *local_350;
+  int local_348;
+  undefined4 uStack_344;
+  char *local_330;
+  int local_328;
+  undefined4 uStack_324;
+  char *local_310;
+  int local_308;
+  undefined4 uStack_304;
+  char *local_2f0;
+  int local_2e8;
+  undefined4 uStack_2e4;
+  char *local_2d0;
+  int local_2c8;
+  undefined4 uStack_2c4;
+  char *local_2b0;
+  int local_2a8;
+  undefined4 uStack_2a4;
+  char *local_290;
+  int local_288;
+  undefined4 uStack_284;
+  undefined1 auStack_280 [544];
+  
+  pcVar16 = "CDeviceMFT::InitializeTransform";
+  local_60c = 0;
+  local_608 = param_1;
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar16 = pcVar16 + 1;
+    } while (*pcVar16 != '\0');
+    local_530 = "CDeviceMFT::InitializeTransform";
+    local_528 = (int)pcVar16 + 0x7ecaffd1;
+    uStack_524 = 0;
+    FUN_18001a7f8(param_1,&DAT_181014d30,param_3,param_4,auStack_540);
+  }
+  DVar5 = GetCurrentProcessId();
+  FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### Process id of DMFT is %d \n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                ,0x15e,DVar5);
+  local_5c0 = (longlong *)0x0;
+  local_620 = (longlong *)0x0;
+  if (param_2 == (longlong *)0x0) {
+    uVar15 = 0x162;
+    local_640 = DAT_180012e60;
+  }
+  else {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*param_2 + 0x88),param_2,&DAT_181014bb0,&DAT_181350d10,&local_5c0);
+    local_640 = (*extraout_x15)();
+    if (-1 < local_640) {
+      if (local_620 != (longlong *)0x0) {
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*local_620 + 0x10));
+        (*extraout_x15_00)();
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)*local_5c0,local_5c0,&DAT_181350d20,&local_620);
+      local_640 = (*extraout_x15_01)();
+      if (local_640 < 0) {
+        if (-1 < local_640) {
+          local_640 = 0;
+        }
+        uVar15 = 0x16b;
+        goto LAB_180012d80;
+      }
+      plVar9 = *(longlong **)(local_608 + 0xb0);
+      if (plVar9 != (longlong *)0x0) {
+        *(undefined8 *)(local_608 + 0xb0) = 0;
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+        (*extraout_x15_02)();
+      }
+      lVar11 = local_608;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)*local_620,local_620,&DAT_181350d30,local_608 + 0xb0);
+      local_640 = (*extraout_x15_03)();
+      if (local_640 < 0) {
+        if (-1 < local_640) {
+          local_640 = 0;
+        }
+        uVar15 = 0x16c;
+        goto LAB_180012d80;
+      }
+      puVar10 = (undefined8 *)FUN_180ca2838(0xa8,&DAT_180f8a150);
+      if (puVar10 == (undefined8 *)0x0) {
+        *(undefined8 *)(lVar11 + 0xe8) = 0;
+        uVar15 = 0x170;
+        local_640 = DAT_180012e68;
+        goto LAB_180012d80;
+      }
+      *puVar10 = &PTR_FUN_1813345a8;
+      *(undefined4 *)(puVar10 + 1) = 1;
+      puVar10[2] = 0;
+      puVar10[3] = 0;
+      puVar10[4] = 0;
+      puVar10[5] = 0;
+      puVar10[6] = 0;
+      puVar10[7] = 0;
+      puVar10[8] = 0;
+      puVar10[9] = 0;
+      puVar10[10] = 0;
+      puVar10[0xb] = 0;
+      puVar10[0xc] = 0;
+      puVar10[0xd] = 0;
+      puVar10[0xe] = 0;
+      puVar10[0xf] = &PTR_FUN_181330a68;
+      InitializeCriticalSection((LPCRITICAL_SECTION)(puVar10 + 0x10));
+      uVar15 = FUN_18001aca8(5,0xffff,"%s:%d ### VERBOSE ### INITIALIZED critical section: 0x%p\n",
+                             "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfUtils\\src\\CCritSec.cpp"
+                             ,0x1b,puVar10 + 0x10);
+      pcVar16 = "CInterfaceAccessor::CInterfaceAccessor";
+      pcVar17 = pcVar16;
+      if ((DAT_1817a1180 >> 3 & 1) != 0) {
+        do {
+          pcVar17 = pcVar17 + 1;
+        } while (*pcVar17 != '\0');
+        local_510 = "CInterfaceAccessor::CInterfaceAccessor";
+        local_508 = (int)pcVar17 + 0x7eca2959;
+        uStack_504 = 0;
+        uVar15 = FUN_18001a7f8(uVar15,&DAT_181014d30);
+      }
+      if ((DAT_1817a1180 >> 3 & 1) != 0) {
+        do {
+          pcVar16 = pcVar16 + 1;
+        } while (*pcVar16 != '\0');
+        local_4f0 = "CInterfaceAccessor::CInterfaceAccessor";
+        local_4e8 = (int)pcVar16 + 0x7eca2959;
+        uStack_4e4 = 0;
+        FUN_18001a7f8(uVar15,&DAT_181014c80);
+      }
+      lVar11 = local_608;
+      *(undefined8 **)(local_608 + 0xe8) = puVar10;
+      puVar10 = (undefined8 *)FUN_180ca2838(0x48,&DAT_180f8a150);
+      if (puVar10 == (undefined8 *)0x0) {
+        *(undefined8 *)(lVar11 + 0xd0) = 0;
+        FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                      ,0x174,"CDeviceMFT::InitializeTransform",DAT_180012e68);
+        local_640 = DAT_180012e68;
+        goto LAB_180012da0;
+      }
+      *puVar10 = &PTR_FUN_1813346a0;
+      puVar10[1] = 0;
+      *(undefined4 *)(puVar10 + 3) = 1;
+      puVar10[2] = &PTR_FUN_1813346b8;
+      puVar10[4] = 0;
+      puVar10[5] = 0;
+      lVar11 = thunk_FUN_180cb16c0(0x48);
+      if (lVar11 != 0) {
+        *(undefined8 *)(lVar11 + 0x1a) = 0;
+        *(undefined8 *)(lVar11 + 0x22) = 0;
+        *(undefined8 *)(lVar11 + 0x2a) = 0;
+        *(undefined8 *)(lVar11 + 0x32) = 0;
+        *(undefined8 *)(lVar11 + 0x3a) = 0;
+        *(undefined4 *)(lVar11 + 0x42) = 0;
+        *(undefined2 *)(lVar11 + 0x46) = 0;
+      }
+      *(longlong *)lVar11 = lVar11;
+      *(longlong *)(lVar11 + 8) = lVar11;
+      *(longlong *)(lVar11 + 0x10) = lVar11;
+      puVar10[4] = lVar11;
+      *(undefined2 *)(lVar11 + 0x18) = 0x101;
+      puVar10[6] = 0;
+      puVar10[7] = 0;
+      lVar11 = thunk_FUN_180cb16c0(0x48);
+      if (lVar11 != 0) {
+        *(undefined8 *)(lVar11 + 0x1a) = 0;
+        *(undefined8 *)(lVar11 + 0x22) = 0;
+        *(undefined8 *)(lVar11 + 0x2a) = 0;
+        *(undefined8 *)(lVar11 + 0x32) = 0;
+        *(undefined8 *)(lVar11 + 0x3a) = 0;
+        *(undefined4 *)(lVar11 + 0x42) = 0;
+        *(undefined2 *)(lVar11 + 0x46) = 0;
+      }
+      puVar10[6] = lVar11;
+      *puVar10 = &PTR_FUN_181330b48;
+      *(longlong *)lVar11 = lVar11;
+      *(longlong *)(lVar11 + 8) = lVar11;
+      puVar10[2] = &PTR_FUN_181330ab0;
+      *(longlong *)(lVar11 + 0x10) = lVar11;
+      *(undefined2 *)(lVar11 + 0x18) = 0x101;
+      pcVar16 = "CItemFactory_QC::CItemFactory_QC";
+      puVar10[8] = 0;
+      pcVar17 = pcVar16;
+      if ((DAT_1817a1180 >> 3 & 1) != 0) {
+        do {
+          pcVar17 = pcVar17 + 1;
+        } while (*pcVar17 != '\0');
+        local_4d0 = "CItemFactory_QC::CItemFactory_QC";
+        local_4c8 = (int)pcVar17 + 0x7ecad941;
+        uStack_4c4 = 0;
+        lVar11 = FUN_18001a7f8(lVar11,&DAT_181014d30);
+      }
+      if ((DAT_1817a1180 >> 3 & 1) != 0) {
+        do {
+          pcVar16 = pcVar16 + 1;
+        } while (*pcVar16 != '\0');
+        local_4b0 = "CItemFactory_QC::CItemFactory_QC";
+        local_4a8 = (int)pcVar16 + 0x7ecad941;
+        uStack_4a4 = 0;
+        FUN_18001a7f8(lVar11,&DAT_181014c80);
+      }
+      lVar11 = local_608;
+      *(undefined8 **)(local_608 + 0xd0) = puVar10;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(puVar10[2] + 0x18),puVar10 + 2,*(undefined8 *)(local_608 + 0xe8));
+      local_640 = (*extraout_x15_04)();
+      if (local_640 < 0) {
+        if (-1 < local_640) {
+          local_640 = 0;
+        }
+        uVar15 = 0x175;
+        goto LAB_180012d80;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x28),
+                 *(longlong **)(lVar11 + 0xe8),*(undefined8 *)(lVar11 + 0xc0));
+      (*extraout_x15_05)();
+      lVar19 = 0;
+      if (*(longlong *)(lVar11 + 0xd8) != 0) {
+        lVar19 = *(longlong *)(lVar11 + 0xd8) + 8;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x30),
+                 *(longlong **)(lVar11 + 0xe8),lVar19);
+      (*extraout_x15_06)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x38),
+                 *(longlong **)(lVar11 + 0xe8),*(undefined8 *)(lVar11 + 0xe0));
+      (*extraout_x15_07)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x20),
+                 *(longlong **)(lVar11 + 0xe8),local_620);
+      (*extraout_x15_08)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(*(longlong *)(*(longlong *)(lVar11 + 0xd0) + 0x10) + 0x30),
+                 *(longlong *)(lVar11 + 0xd0) + 0x10,&DAT_181350080,lVar11 + 200);
+      local_640 = (*extraout_x15_09)();
+      if (local_640 < 0) {
+        if (-1 < local_640) {
+          local_640 = 0;
+        }
+        uVar15 = 0x17e;
+        goto LAB_180012d80;
+      }
+      local_5c8 = (longlong *)0x0;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(*(longlong *)(*(longlong *)(lVar11 + 0xd0) + 0x10) + 0x50),
+                 *(longlong *)(lVar11 + 0xd0) + 0x10,&local_5c8);
+      local_640 = (*extraout_x15_10)();
+      if (-1 < local_640) {
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                  (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x58),
+                   *(longlong **)(lVar11 + 0xe8),local_5c8);
+        (*extraout_x15_11)();
+        local_5d0 = (longlong *)0x0;
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                  (*(undefined8 *)(*(longlong *)(*(longlong *)(lVar11 + 0xd0) + 0x10) + 0x48),
+                   *(longlong *)(lVar11 + 0xd0) + 0x10,&local_5d0);
+        local_640 = (*extraout_x15_12)();
+        if (-1 < local_640) {
+          (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                    (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x40),
+                     *(longlong **)(lVar11 + 0xe8),local_5d0);
+          (*extraout_x15_13)();
+          local_5d8 = (longlong *)0x0;
+          (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                    (*(undefined8 *)(*(longlong *)(*(longlong *)(lVar11 + 0xd0) + 0x10) + 0x60),
+                     *(longlong *)(lVar11 + 0xd0) + 0x10,*(undefined8 *)(lVar11 + 200),&local_5d8);
+          local_640 = (*extraout_x15_14)();
+          if (-1 < local_640) {
+            (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                      (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x48),
+                       *(longlong **)(lVar11 + 0xe8),local_5d8);
+            (*extraout_x15_15)();
+            local_5f0 = (longlong *)0x0;
+            (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                      (*(undefined8 *)(*(longlong *)(*(longlong *)(lVar11 + 0xd0) + 0x10) + 0x68),
+                       *(longlong *)(lVar11 + 0xd0) + 0x10,&local_5f0);
+            local_640 = (*extraout_x15_16)();
+            if (-1 < local_640) {
+              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                        (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x50),
+                         *(longlong **)(lVar11 + 0xe8),local_5f0);
+              (*extraout_x15_17)();
+              local_5f8 = (longlong *)0x0;
+              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                        (*(undefined8 *)(**(longlong **)(lVar11 + 0xd0) + 8),
+                         *(longlong **)(lVar11 + 0xd0),&DAT_181350080,&local_5f8);
+              local_640 = (*extraout_x15_18)();
+              if (local_640 < 0) {
+                if (-1 < local_640) {
+                  local_640 = 0;
+                }
+                uVar15 = 0x196;
+                goto LAB_180012b38;
+              }
+              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                        (*(undefined8 *)(**(longlong **)(lVar11 + 0xe8) + 0x60),
+                         *(longlong **)(lVar11 + 0xe8),local_5f8);
+              (*extraout_x15_19)();
+              plVar9 = local_5f0;
+              lVar19 = *local_5f0;
+              (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*local_5f8 + 0xa8));
+              uVar6 = (*extraout_x15_20)();
+              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                        (*(undefined8 *)(lVar19 + 0x40),plVar9,uVar6);
+              uVar15 = (*extraout_x15_21)();
+              plVar24 = local_620;
+              local_600 = *(longlong **)(lVar11 + 200);
+              plVar9 = (longlong *)0x0;
+              if (*(longlong *)(lVar11 + 0xd0) != 0) {
+                plVar9 = (longlong *)(*(longlong *)(lVar11 + 0xd0) + 0x10);
+              }
+              pcVar16 = "CPinConfigurer::Initialize";
+              pcVar17 = pcVar16;
+              if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                do {
+                  pcVar17 = pcVar17 + 1;
+                } while (*pcVar17 != '\0');
+                local_490 = "CPinConfigurer::Initialize";
+                local_488 = (int)pcVar17 + 0x7eca31e1;
+                uStack_484 = 0;
+                FUN_18001a7f8(uVar15,&DAT_181014d30);
+              }
+              local_618 = 0;
+              local_63c = 0;
+              local_570.Data4[0] = (uchar)DAT_181350d48;
+              local_570.Data4[1] = DAT_181350d48._1_1_;
+              local_570.Data4[2] = DAT_181350d48._2_1_;
+              local_570.Data4[3] = DAT_181350d48._3_1_;
+              local_570.Data4[4] = (uchar)DAT_181350d4c;
+              local_570.Data4[5] = DAT_181350d4c._1_1_;
+              local_570.Data4[6] = DAT_181350d4c._2_1_;
+              local_570.Data4[7] = DAT_181350d4c._3_1_;
+              local_570.Data1 = _DAT_181350d40;
+              local_570.Data2 = (ushort)DAT_181350d44;
+              local_570.Data3 = DAT_181350d44._2_2_;
+              if ((longlong *)local_600[3] != plVar9) {
+                if (plVar9 != (longlong *)0x0) {
+                  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 8),plVar9);
+                  (*extraout_x15_22)();
+                }
+                plVar12 = (longlong *)local_600[3];
+                local_600[3] = (longlong)plVar9;
+                if (plVar12 != (longlong *)0x0) {
+                  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar12 + 0x10));
+                  (*extraout_x15_23)();
+                }
+              }
+              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                        (*(undefined8 *)(*plVar24 + 0x20),plVar24,&local_618,&local_63c);
+              local_640 = (*extraout_x15_24)();
+              if (local_640 < 0) {
+                if (-1 < local_640) {
+                  local_640 = 0;
+                }
+                uVar15 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                       "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                       ,0x4f,"CPinConfigurer::Initialize",local_640);
+                if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                  do {
+                    pcVar16 = pcVar16 + 1;
+                  } while (*pcVar16 != '\0');
+                  local_470 = "CPinConfigurer::Initialize";
+                  local_468 = (int)pcVar16 + 0x7eca31e1;
+                  uStack_464 = 0;
+                  goto LAB_180012a84;
+                }
+              }
+              else {
+                FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### Input stream count: %d\n",
+                              "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                              ,0x53,local_63c);
+                if (local_63c != 0) {
+                  uVar1 = local_618;
+                  if (local_618 == 0) {
+                    uVar1 = 1;
+                  }
+                  lVar11 = thunk_FUN_180ca2838((ulonglong)uVar1 << 2,&DAT_180f8a150);
+                  local_598 = lVar11;
+                  if (lVar11 != 0) {
+                    local_5b8 = thunk_FUN_180ca2838((ulonglong)local_63c << 2,&DAT_180f8a150);
+                    if (local_5b8 == 0) {
+                      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                    ,0x61,"CPinConfigurer::Initialize",DAT_180012e68);
+                      local_640 = DAT_180012e68;
+                    }
+                    else {
+                      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                (*(undefined8 *)(*plVar24 + 0x28),plVar24,local_618,lVar11,local_63c
+                                 ,local_5b8);
+                      local_640 = (*extraout_x15_25)();
+                      lVar11 = local_5b8;
+                      if (-1 < local_640) {
+                        local_640 = 0;
+                        if (local_63c != 0) {
+                          local_640 = 0;
+                          uVar20 = 0;
+                          do {
+                            local_628 = (longlong *)0x0;
+                            (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                      (*(undefined8 *)(*plVar24 + 0x50),plVar24,
+                                       *(undefined4 *)(lVar11 + uVar20 * 4),&local_628);
+                            iVar7 = (*extraout_x15_26)();
+                            if (iVar7 < 0) {
+                              if (-1 < iVar7) {
+                                iVar7 = 0;
+                              }
+                              uVar15 = 0x6a;
+                              local_640 = iVar7;
+LAB_180011e8c:
+                              FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                            "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                            ,uVar15,"CPinConfigurer::Initialize",local_640);
+                              plVar9 = local_628;
+                              if (local_628 != (longlong *)0x0) {
+                                local_628 = (longlong *)0x0;
+                                (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                          (*(undefined8 *)(*plVar9 + 0x10));
+                                (*extraout_x15_29)();
+                              }
+                              break;
+                            }
+                            (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                      (*(undefined8 *)(*local_628 + 0x50),local_628,&DAT_181330470,
+                                       &local_570);
+                            iVar7 = (*extraout_x15_27)();
+                            if (iVar7 < 0) {
+                              if (-1 < iVar7) {
+                                iVar7 = 0;
+                              }
+                              uVar15 = 0x6b;
+                              local_640 = iVar7;
+                              goto LAB_180011e8c;
+                            }
+                            local_5e8 = (LPCWSTR)0x0;
+                            lpMultiByteStr = (LPSTR)0x0;
+                            HVar8 = StringFromCLSID(&local_570,&local_5e8);
+                            if (HVar8 < 0) {
+LAB_180011cf8:
+                              pCVar23 = "";
+                            }
+                            else {
+                              iVar7 = WideCharToMultiByte(0,0x400,local_5e8,-1,(LPSTR)0x0,0,
+                                                          (LPCSTR)0x0,(LPBOOL)0x0);
+                              HVar21 = HVar8;
+                              if (0 < iVar7) {
+                                if (iVar7 < 1) {
+                                  iVar7 = 0;
+                                }
+                                lpMultiByteStr = (LPSTR)thunk_FUN_180cb16c0((longlong)iVar7);
+                                HVar21 = DAT_180012e68;
+                                if (lpMultiByteStr != (LPSTR)0x0) {
+                                  WideCharToMultiByte(0,0x400,local_5e8,-1,lpMultiByteStr,iVar7,
+                                                      (LPCSTR)0x0,(LPBOOL)0x0);
+                                  lpMultiByteStr[(longlong)iVar7 + -1] = '\0';
+                                  HVar21 = HVar8;
+                                }
+                              }
+                              CoTaskMemFree(local_5e8);
+                              if ((lpMultiByteStr == (LPSTR)0x0) ||
+                                 (pCVar23 = lpMultiByteStr, HVar21 < 0)) goto LAB_180011cf8;
+                            }
+                            iVar7 = FUN_180f5e7c0(&local_570,&DAT_181350d50,0x10);
+                            if (iVar7 == 0) {
+                              pcVar16 = "IMAGE";
+                            }
+                            else {
+                              iVar7 = FUN_180f5e7c0(&local_570,&DAT_181350e98,0x10);
+                              if (iVar7 == 0) {
+                                pcVar16 = "VIDEO_PREVIEW";
+                              }
+                              else {
+                                iVar7 = FUN_180f5e7c0(&local_570,&DAT_181350e78,0x10);
+                                if (iVar7 == 0) {
+                                  pcVar16 = "VIDEO_CAPTURE";
+                                }
+                                else {
+                                  iVar7 = FUN_180f5e7c0(&local_570,&DAT_181350e88,0x10);
+                                  pcVar16 = "STATS";
+                                  if (iVar7 != 0) {
+                                    pcVar16 = "UNKNOWN";
+                                  }
+                                }
+                              }
+                            }
+                            FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### Output stream %d: %s (%s)\n",
+                                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                          ,0x6d,uVar20,pCVar23,pcVar16);
+                            thunk_FUN_180cb1650(lpMultiByteStr);
+                            plVar9 = local_628;
+                            if (local_628 != (longlong *)0x0) {
+                              local_628 = (longlong *)0x0;
+                              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                        (*(undefined8 *)(*plVar9 + 0x10));
+                              (*extraout_x15_28)();
+                            }
+                            uVar1 = (int)uVar20 + 1;
+                            uVar20 = (ulonglong)uVar1;
+                          } while (uVar1 < local_63c);
+                        }
+                        if (local_63c != 0) {
+                          pcVar16 = "CInPin::Initialize";
+                          uVar20 = 0;
+LAB_180011ef8:
+                          pcVar17 = "CInPin::GenerateMFMediaTypeListFromDevice";
+                          local_630 = (longlong *)0x0;
+                          local_614 = *(undefined4 *)(local_5b8 + uVar20 * 4);
+                          (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                    (*(undefined8 *)(*plVar24 + 0x50),plVar24,local_614,&local_630);
+                          iVar7 = (*extraout_x15_30)();
+                          if (iVar7 < 0) {
+                            local_640 = iVar7;
+                            if (-1 < iVar7) {
+                              local_640 = 0;
+                            }
+                            local_610 = iVar7;
+                            FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                          ,0x76,"CPinConfigurer::Initialize",local_640);
+                            plVar9 = local_630;
+                            if (local_630 != (longlong *)0x0) {
+                              local_630 = (longlong *)0x0;
+                              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                        (*(undefined8 *)(*plVar9 + 0x10));
+                              (*extraout_x15_45)();
+                            }
+                            goto LAB_1800123c8;
+                          }
+                          lVar11 = FUN_180ca2838(0xf0,&DAT_180f8a150);
+                          if (lVar11 == 0) {
+                            local_5b0 = (longlong *)0x0;
+LAB_18001288c:
+                            FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                          ,0x79,"CPinConfigurer::Initialize",DAT_180012e68);
+                            plVar9 = local_630;
+                            local_640 = DAT_180012e68;
+                            if (local_630 != (longlong *)0x0) {
+                              local_630 = (longlong *)0x0;
+                              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                        (*(undefined8 *)(*plVar9 + 0x10));
+                              (*extraout_x15_44)();
+                            }
+                            goto LAB_1800123c8;
+                          }
+                          plVar9 = (longlong *)FUN_18004c388(lVar11,local_630,local_614);
+                          local_5b0 = plVar9;
+                          if (plVar9 == (longlong *)0x0) goto LAB_18001288c;
+                          lVar11 = local_600[1];
+                          if (lVar11 == 0) {
+                            lVar11 = 0;
+                          }
+                          pcVar18 = pcVar16;
+                          if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                            do {
+                              pcVar18 = pcVar18 + 1;
+                            } while (*pcVar18 != '\0');
+                            local_430 = "CInPin::Initialize";
+                            local_428 = (int)pcVar18 + 0x7eca3459;
+                            uStack_424 = 0;
+                            FUN_18001a7f8(plVar9,&DAT_181014d30);
+                          }
+                          local_560.Data4[0] = (uchar)DAT_181350d48;
+                          local_560.Data4[1] = DAT_181350d48._1_1_;
+                          local_560.Data4[2] = DAT_181350d48._2_1_;
+                          local_560.Data4[3] = DAT_181350d48._3_1_;
+                          local_560.Data4[4] = (uchar)DAT_181350d4c;
+                          local_560.Data4[5] = DAT_181350d4c._1_1_;
+                          local_560.Data4[6] = DAT_181350d4c._2_1_;
+                          local_560.Data4[7] = DAT_181350d4c._3_1_;
+                          local_560.Data1 = _DAT_181350d40;
+                          local_560.Data2 = (ushort)DAT_181350d44;
+                          local_560.Data3 = DAT_181350d44._2_2_;
+                          iVar7 = FUN_180054fb0(plVar9,lVar11);
+                          if (iVar7 < 0) {
+                            iVar22 = iVar7;
+                            if (-1 < iVar7) {
+                              iVar22 = 0;
+                            }
+                            uVar15 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                  ,0x50,"CInPin::Initialize",iVar22);
+                            local_640 = iVar7;
+                            if ((DAT_1817a1180 >> 3 & 1) != 0) goto LAB_1800127fc;
+                            goto LAB_18001282c;
+                          }
+                          FUN_180027c00(plVar9 + 0x16,plVar24);
+                          (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                    (*(undefined8 *)(plVar9[6] + 0x50),plVar9 + 6,&DAT_181330470,
+                                     &local_560);
+                          iVar7 = (*extraout_x15_31)();
+                          if (-1 < iVar7) {
+                            puVar13 = CreateEventW((LPSECURITY_ATTRIBUTES)0x0,0,0,(LPCWSTR)0x0);
+                            plVar9[0x1b] = (longlong)puVar13;
+                            if (puVar13 == (undefined1 *)0x0) {
+                              uVar15 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                  ,0x5d,"CInPin::Initialize",DAT_180012e68);
+                              local_640 = DAT_180012e68;
+                              if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                                do {
+                                  pcVar16 = pcVar16 + 1;
+                                } while (*pcVar16 != '\0');
+                                local_330 = "CInPin::Initialize";
+                                local_328 = (int)pcVar16 + 0x7eca3459;
+                                uStack_324 = 0;
+                                FUN_18001a7f8(uVar15,&DAT_181014c80);
+                                local_640 = DAT_180012e68;
+                              }
+                            }
+                            else if (puVar13 == &DAT_ffffffffffffffff) {
+                              uVar15 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                  ,0x61,"CInPin::Initialize",DAT_180012e64);
+                              local_640 = DAT_180012e64;
+                              if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                                do {
+                                  pcVar16 = pcVar16 + 1;
+                                } while (*pcVar16 != '\0');
+                                local_350 = "CInPin::Initialize";
+                                local_348 = (int)pcVar16 + 0x7eca3459;
+                                uStack_344 = 0;
+                                FUN_18001a7f8(uVar15,&DAT_181014c80);
+                                local_640 = DAT_180012e64;
+                              }
+                            }
+                            else {
+                              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                        (*(undefined8 *)(*plVar9 + 0x80),plVar9);
+                              uVar14 = (*extraout_x15_32)();
+                              pcVar18 = pcVar17;
+                              if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                                do {
+                                  pcVar18 = pcVar18 + 1;
+                                } while (*pcVar18 != '\0');
+                                local_410 = "CInPin::GenerateMFMediaTypeListFromDevice";
+                                local_408 = (int)pcVar18 + 0x7eca3331;
+                                uStack_404 = 0;
+                                FUN_18001a7f8(uVar14,&DAT_181014d30);
+                              }
+                              uStack_548 = 0;
+                              local_550 = 0;
+                              if (plVar9[0x16] == 0) {
+                                uVar15 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                  ,0x98,"CInPin::GenerateMFMediaTypeListFromDevice",
+                                                  DAT_180012e70);
+                                if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                                  do {
+                                    pcVar17 = pcVar17 + 1;
+                                  } while (*pcVar17 != '\0');
+                                  local_390 = "CInPin::GenerateMFMediaTypeListFromDevice";
+                                  local_388 = (int)pcVar17 + 0x7eca3331;
+                                  uStack_384 = 0;
+                                  FUN_18001a7f8(uVar15,&DAT_181014c80);
+                                }
+                                local_640 = DAT_180012e70;
+                                iVar7 = local_640;
+                              }
+                              else {
+                                local_610 = (int)uVar20;
+                                iVar22 = 0;
+                                local_5a0 = plVar24;
+                                while( true ) {
+                                  local_638 = (longlong *)0x0;
+                                  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                            (*(undefined8 *)(*(longlong *)plVar9[0x16] + 0x70),
+                                             (longlong *)plVar9[0x16],uVar14 & 0xffffffff,iVar22,
+                                             &local_638);
+                                  iVar7 = (*extraout_x15_33)();
+                                  plVar24 = local_5a0;
+                                  iVar3 = local_610;
+                                  plVar12 = local_638;
+                                  if (iVar7 != 0) break;
+                                  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                            (*(undefined8 *)(*local_638 + 0x50),local_638,
+                                             &DAT_181330708,&local_550);
+                                  iVar7 = (*extraout_x15_34)();
+                                  if (iVar7 < 0) {
+                                    pcVar17 = "CInPin::GenerateMFMediaTypeListFromDevice";
+                                    iVar22 = iVar7;
+                                    if (-1 < iVar7) {
+                                      iVar22 = 0;
+                                    }
+                                    FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                  ,0xa1,"CInPin::GenerateMFMediaTypeListFromDevice",
+                                                  iVar22);
+                                    plVar9 = local_638;
+                                    uVar15 = 0;
+                                    if (local_638 != (longlong *)0x0) {
+                                      local_638 = (longlong *)0x0;
+                                      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                                (*(undefined8 *)(*plVar9 + 0x10));
+                                      uVar15 = (*extraout_x15_42)();
+                                    }
+                                    if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                                      do {
+                                        pcVar17 = pcVar17 + 1;
+                                      } while (*pcVar17 != '\0');
+                                      local_3b0 = "CInPin::GenerateMFMediaTypeListFromDevice";
+                                      local_3a8 = (int)pcVar17 + 0x7eca3331;
+                                      uStack_3a4 = 0;
+                                      FUN_18001a7f8(uVar15,&DAT_181014c80);
+                                    }
+                                    goto LAB_1800125c0;
+                                  }
+                                  local_580 = 0;
+                                  local_590 = local_638;
+                                  local_588 = 0;
+                                  uVar15 = FUN_1800d0548(&local_590);
+                                  FUN_18001aca8(4,0xffff,
+                                                "%s:%d ### INFO ### Supported input media type: %s\n"
+                                                ,
+                                                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                ,0xb7,uVar15);
+                                  FUN_180059f70(plVar9,auStack_5a8,local_638);
+                                  if (local_588 != 0) {
+                                    thunk_FUN_180cb1650();
+                                  }
+                                  plVar24 = local_638;
+                                  plVar12 = (longlong *)0x0;
+                                  if (local_638 != (longlong *)0x0) {
+                                    local_638 = (longlong *)0x0;
+                                    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                              (*(undefined8 *)(*plVar24 + 0x10));
+                                    (*extraout_x15_35)();
+                                    plVar12 = local_638;
+                                  }
+                                  if (plVar12 != (longlong *)0x0) {
+                                    local_638 = (longlong *)0x0;
+                                    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                              (*(undefined8 *)(*plVar12 + 0x10));
+                                    (*extraout_x15_36)();
+                                  }
+                                  iVar22 = iVar22 + 1;
+                                }
+                                pcVar17 = "CInPin::GenerateMFMediaTypeListFromDevice";
+                                uVar15 = 0;
+                                if (local_638 != (longlong *)0x0) {
+                                  local_638 = (longlong *)0x0;
+                                  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                            (*(undefined8 *)(*plVar12 + 0x10));
+                                  uVar15 = (*extraout_x15_37)();
+                                }
+                                if (iVar7 == DAT_180012e6c) {
+                                  iVar7 = 0;
+                                }
+                                if (iVar7 < 0) {
+                                  if (-1 < iVar7) {
+                                    iVar7 = 0;
+                                  }
+                                  uVar15 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                  ,0xc3,"CInPin::GenerateMFMediaTypeListFromDevice",
+                                                  iVar7);
+                                }
+                                if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                                  do {
+                                    pcVar17 = pcVar17 + 1;
+                                  } while (*pcVar17 != '\0');
+                                  local_3f0 = "CInPin::GenerateMFMediaTypeListFromDevice";
+                                  local_3e8 = (int)pcVar17 + 0x7eca3331;
+                                  uStack_3e4 = 0;
+                                  FUN_18001a7f8(uVar15,&DAT_181014c80);
+                                }
+                                if (-1 < iVar7) goto code_r0x0001800122a0;
+                              }
+LAB_1800125c0:
+                              local_640 = iVar7;
+                              iVar7 = local_640;
+                              if (-1 < local_640) {
+                                iVar7 = 0;
+                              }
+                              uVar15 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                  ,100,"CInPin::Initialize",iVar7);
+                              if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                                do {
+                                  pcVar16 = pcVar16 + 1;
+                                } while (*pcVar16 != '\0');
+                                local_370 = "CInPin::Initialize";
+                                local_368 = (int)pcVar16 + 0x7eca3459;
+                                uStack_364 = 0;
+                                goto LAB_18001281c;
+                              }
+                            }
+                            goto LAB_18001282c;
+                          }
+                          iVar22 = iVar7;
+                          if (-1 < iVar7) {
+                            iVar22 = 0;
+                          }
+                          uVar15 = FUN_18001aca8(2,0xffff,
+                                                 "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                 "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInPin.cpp"
+                                                 ,0x56,"CInPin::Initialize",iVar22);
+                          local_640 = iVar7;
+                          if ((DAT_1817a1180 >> 3 & 1) == 0) goto LAB_18001282c;
+                          do {
+                            pcVar16 = pcVar16 + 1;
+                          } while (*pcVar16 != '\0');
+                          local_310 = "CInPin::Initialize";
+                          local_308 = (int)pcVar16 + 0x7eca3459;
+                          uStack_304 = 0;
+                          goto LAB_18001281c;
+                        }
+                        goto LAB_1800123c8;
+                      }
+                      if (-1 < local_640) {
+                        local_640 = 0;
+                      }
+                      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                    ,0x65,"CPinConfigurer::Initialize",local_640);
+                    }
+                    goto LAB_180012a0c;
+                  }
+                  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                ,0x5e,"CPinConfigurer::Initialize",DAT_180012e68);
+                  local_640 = DAT_180012e68;
+                  goto LAB_180012a28;
+                }
+                FUN_18001aca8(2,0xffff,
+                              "%s:%d ### ERROR ### Source transform has no output streams\n",
+                              "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                              ,0x57);
+                uVar15 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                       "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                                       ,0x58,"CPinConfigurer::Initialize",DAT_180012e64);
+                local_640 = DAT_180012e64;
+                if ((DAT_1817a1180 >> 3 & 1) != 0) {
+                  do {
+                    pcVar16 = pcVar16 + 1;
+                  } while (*pcVar16 != '\0');
+                  local_450 = "CPinConfigurer::Initialize";
+                  local_448 = (int)pcVar16 + 0x7eca31e1;
+                  uStack_444 = 0;
+                  FUN_18001a7f8(uVar15,&DAT_181014c80);
+                  local_640 = DAT_180012e64;
+                }
+              }
+              goto LAB_180012a90;
+            }
+            if (-1 < local_640) {
+              local_640 = 0;
+            }
+            FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                          ,0x191,"CDeviceMFT::InitializeTransform",local_640);
+            goto LAB_180012ca0;
+          }
+          if (-1 < local_640) {
+            local_640 = 0;
+          }
+          FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                        "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                        ,0x18c,"CDeviceMFT::InitializeTransform",local_640);
+          goto LAB_180012cc8;
+        }
+        if (-1 < local_640) {
+          local_640 = 0;
+        }
+        FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                      ,0x187,"CDeviceMFT::InitializeTransform",local_640);
+        goto LAB_180012cf0;
+      }
+      if (-1 < local_640) {
+        local_640 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                    ,0x182,"CDeviceMFT::InitializeTransform",local_640);
+      goto LAB_180012d18;
+    }
+    if (-1 < local_640) {
+      local_640 = 0;
+    }
+    uVar15 = 0x169;
+  }
+LAB_180012d80:
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                ,uVar15,"CDeviceMFT::InitializeTransform",local_640);
+  goto LAB_180012da0;
+code_r0x0001800122a0:
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x98),plVar9,&local_560);
+  uVar15 = (*extraout_x15_38)();
+  pcVar17 = pcVar16;
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar17 = pcVar17 + 1;
+    } while (*pcVar17 != '\0');
+    local_3d0 = "CInPin::Initialize";
+    local_3c8 = (int)pcVar17 + 0x7eca3459;
+    uStack_3c4 = 0;
+    FUN_18001a7f8(uVar15,&DAT_181014c80);
+  }
+  plVar4 = local_600;
+  plVar12 = (longlong *)FUN_18004ec80(local_600 + 6,&local_614);
+  *plVar12 = (longlong)plVar9;
+  plVar12 = (longlong *)plVar4[0xc];
+  if (plVar12 == (longlong *)plVar4[0xd]) {
+    FUN_18003e7c8(plVar4 + 0xb,plVar12,&local_5b0);
+  }
+  else {
+    *plVar12 = (longlong)plVar9;
+    plVar4[0xc] = plVar4[0xc] + 8;
+  }
+  FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### InPin %d created, stream id: %d\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                ,0x80,iVar3,local_614);
+  plVar9 = local_630;
+  if (local_630 != (longlong *)0x0) {
+    local_630 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_39)();
+  }
+  uVar1 = iVar3 + 1;
+  uVar20 = (ulonglong)uVar1;
+  if (local_63c <= uVar1) goto LAB_1800123c8;
+  goto LAB_180011ef8;
+LAB_1800127fc:
+  do {
+    pcVar16 = pcVar16 + 1;
+  } while (*pcVar16 != '\0');
+  local_2f0 = "CInPin::Initialize";
+  local_2e8 = (int)pcVar16 + 0x7eca3459;
+  uStack_2e4 = 0;
+LAB_18001281c:
+  FUN_18001a7f8(uVar15,&DAT_181014c80);
+LAB_18001282c:
+  if (-1 < local_640) {
+    local_640 = 0;
+  }
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                ,0x7b,"CPinConfigurer::Initialize",local_640);
+  plVar9 = local_630;
+  if (local_630 != (longlong *)0x0) {
+    local_630 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_43)();
+  }
+LAB_1800123c8:
+  plVar24 = local_600;
+  plVar9 = (longlong *)local_600[1];
+  if (plVar9 == (longlong *)0x0) {
+    plVar9 = (longlong *)0x0;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0xb8));
+  plVar9 = (longlong *)(*extraout_x15_40)();
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x18));
+  iVar7 = (*extraout_x15_41)();
+  if (iVar7 < 0) {
+    if (-1 < iVar7) {
+      iVar7 = 0;
+    }
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                  ,0x84,"CPinConfigurer::Initialize",iVar7);
+    local_640 = iVar7;
+  }
+  else {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar24 + 0x30),plVar24);
+    iVar7 = (*extraout_x15_46)();
+    if (iVar7 < 0) {
+      if (-1 < iVar7) {
+        iVar7 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                    ,0x87,"CPinConfigurer::Initialize",iVar7);
+      local_640 = iVar7;
+    }
+    else {
+      FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### Input pin count: %d, output pin count: %d\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                    ,0x89,plVar24[7],plVar24[5]);
+    }
+  }
+LAB_180012a0c:
+  pcVar16 = "CPinConfigurer::Initialize";
+  thunk_FUN_180cb1650(local_598);
+  uVar15 = 0;
+  if (local_5b8 != 0) {
+    uVar15 = thunk_FUN_180cb1650();
+  }
+  if (local_640 < 0) {
+LAB_180012a28:
+    pcVar16 = "CPinConfigurer::Initialize";
+    if (-1 < local_640) {
+      local_640 = 0;
+    }
+    uVar15 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                           "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                           ,0x92,"CPinConfigurer::Initialize",local_640);
+    if ((DAT_1817a1180 >> 3 & 1) != 0) {
+      do {
+        pcVar16 = pcVar16 + 1;
+      } while (*pcVar16 != '\0');
+      local_2d0 = "CPinConfigurer::Initialize";
+      local_2c8 = (int)pcVar16 + 0x7eca31e1;
+      uStack_2c4 = 0;
+LAB_180012a84:
+      FUN_18001a7f8(uVar15,&DAT_181014c80);
+    }
+LAB_180012a90:
+    if (-1 < local_640) {
+      local_640 = 0;
+    }
+    uVar15 = 0x19d;
+LAB_180012b38:
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                  ,uVar15,"CDeviceMFT::InitializeTransform",local_640);
+  }
+  else {
+    if ((DAT_1817a1180 >> 3 & 1) != 0) {
+      do {
+        pcVar16 = pcVar16 + 1;
+      } while (*pcVar16 != '\0');
+      local_2b0 = "CPinConfigurer::Initialize";
+      local_2a8 = (int)pcVar16 + 0x7eca31e1;
+      uStack_2a4 = 0;
+      FUN_18001a7f8(uVar15,&DAT_181014c80);
+    }
+    lVar11 = local_608;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(**(longlong **)(local_608 + 0xe8) + 200));
+    plVar9 = (longlong *)(*extraout_x15_47)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x28));
+    local_640 = (*extraout_x15_48)();
+    if (local_640 < 0) {
+      if (-1 < local_640) {
+        local_640 = 0;
+      }
+      uVar15 = 0x1a0;
+      goto LAB_180012b38;
+    }
+    local_5e0 = (longlong *)0x0;
+    local_60c = 0x104;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*local_620 + 0x40),local_620,&local_5e0);
+    local_640 = (*extraout_x15_49)();
+    if (local_640 < 0) {
+      if (-1 < local_640) {
+        local_640 = 0;
+      }
+      uVar15 = 0x1a7;
+LAB_180012c28:
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\DeviceMFT\\src\\CDeviceMFT.cpp"
+                    ,uVar15,"CDeviceMFT::InitializeTransform",local_640);
+    }
+    else {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(*local_5e0 + 0x60),local_5e0,&DAT_181330310,auStack_280,0x105,
+                 &local_60c);
+      local_640 = (*extraout_x15_50)();
+      if (local_640 < 0) {
+        if (-1 < local_640) {
+          local_640 = 0;
+        }
+        uVar15 = 0x1ac;
+        goto LAB_180012c28;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(**(longlong **)(lVar11 + 0xb8) + 200),*(longlong **)(lVar11 + 0xb8)
+                 ,&DAT_181330310,auStack_280);
+      local_640 = (*extraout_x15_51)();
+      if (local_640 < 0) {
+        if (-1 < local_640) {
+          local_640 = 0;
+        }
+        uVar15 = 0x1ad;
+        goto LAB_180012c28;
+      }
+      local_640 = 0;
+    }
+    plVar9 = local_5e0;
+    if (local_5e0 != (longlong *)0x0) {
+      local_5e0 = (longlong *)0x0;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+      (*extraout_x15_52)();
+    }
+  }
+  plVar9 = local_5f8;
+  if (local_5f8 != (longlong *)0x0) {
+    local_5f8 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_53)();
+  }
+LAB_180012ca0:
+  plVar9 = local_5f0;
+  if (local_5f0 != (longlong *)0x0) {
+    local_5f0 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_54)();
+  }
+LAB_180012cc8:
+  plVar9 = local_5d8;
+  if (local_5d8 != (longlong *)0x0) {
+    local_5d8 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_55)();
+  }
+LAB_180012cf0:
+  plVar9 = local_5d0;
+  if (local_5d0 != (longlong *)0x0) {
+    local_5d0 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_56)();
+  }
+LAB_180012d18:
+  plVar9 = local_5c8;
+  if (local_5c8 != (longlong *)0x0) {
+    local_5c8 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_57)();
+  }
+LAB_180012da0:
+  plVar9 = local_620;
+  pcVar16 = "CDeviceMFT::InitializeTransform";
+  if (local_620 != (longlong *)0x0) {
+    local_620 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    (*extraout_x15_58)();
+  }
+  plVar9 = local_5c0;
+  uVar15 = 0;
+  if (local_5c0 != (longlong *)0x0) {
+    local_5c0 = (longlong *)0x0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar9 + 0x10));
+    uVar15 = (*extraout_x15_59)();
+  }
+  cVar2 = s_CDeviceMFT__InitializeTransform_181350030[0];
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    while (cVar2 != '\0') {
+      pcVar16 = pcVar16 + 1;
+      cVar2 = *pcVar16;
+    }
+    local_290 = "CDeviceMFT::InitializeTransform";
+    local_288 = (int)pcVar16 + 0x7ecaffd1;
+    uStack_284 = 0;
+    FUN_18001a7f8(uVar15,&DAT_181014c80);
+  }
+  return local_640;
+}
+
+
+
+//// FUN_18004d680 @18004d680 ////
+
+int FUN_18004d680(longlong param_1,undefined8 param_2,undefined8 param_3)
+
+{
+  int iVar1;
+  longlong lVar2;
+  longlong *plVar3;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  
+  plVar3 = *(longlong **)(param_1 + 8);
+  if (plVar3 == (longlong *)0x0) {
+    plVar3 = (longlong *)0x0;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 0xb8));
+  lVar2 = (*extraout_x15)();
+  if (lVar2 != 0) {
+    plVar3 = *(longlong **)(param_1 + 8);
+    if (plVar3 == (longlong *)0x0) {
+      plVar3 = (longlong *)0x0;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 0xb8));
+    plVar3 = (longlong *)(*extraout_x15_00)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar3 + 0x28),plVar3,param_2,param_3);
+    iVar1 = (*extraout_x15_01)();
+    if (iVar1 < 0) {
+      if (-1 < iVar1) {
+        iVar1 = 0;
+      }
+      if (iVar1 != DAT_18004d7a0) {
+        if (-1 < iVar1) {
+          iVar1 = 0;
+        }
+        FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                      ,0x247,"CPinConfigurer::KsEvent",iVar1);
+      }
+      return iVar1;
+    }
+  }
+  return 0;
+}
+
+
+
+//// FUN_18004d540 @18004d540 ////
+
+int FUN_18004d540(longlong param_1,undefined8 param_2,undefined8 param_3)
+
+{
+  int iVar1;
+  longlong lVar2;
+  longlong *plVar3;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  
+  plVar3 = *(longlong **)(param_1 + 8);
+  if (plVar3 == (longlong *)0x0) {
+    plVar3 = (longlong *)0x0;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 0xb8));
+  lVar2 = (*extraout_x15)();
+  if (lVar2 != 0) {
+    plVar3 = *(longlong **)(param_1 + 8);
+    if (plVar3 == (longlong *)0x0) {
+      plVar3 = (longlong *)0x0;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 0xb8));
+    plVar3 = (longlong *)(*extraout_x15_00)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar3 + 0x20),plVar3,param_2,param_3);
+    iVar1 = (*extraout_x15_01)();
+    if (iVar1 < 0) {
+      if (-1 < iVar1) {
+        iVar1 = 0;
+      }
+      if (iVar1 != DAT_18004d670 && iVar1 != -0x7ff8ffce) {
+        if (-1 < iVar1) {
+          iVar1 = 0;
+        }
+        FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CPinConfigurer.cpp"
+                      ,0x229,"CPinConfigurer::KsProperty",iVar1);
+      }
+      return iVar1;
+    }
+  }
+  return 0;
+}
+
+

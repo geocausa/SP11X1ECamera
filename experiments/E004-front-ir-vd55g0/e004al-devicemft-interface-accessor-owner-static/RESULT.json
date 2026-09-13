@@ -1,0 +1,49 @@
+{
+  "schema": "sp11-camera-e004al-devicemft-internal-ks-owner-v1",
+  "status": "PASS_STATIC_DEVICEMFT_INTERNAL_KS_OWNER_CHAIN",
+  "acquisition_date": "2026-09-13",
+  "binary": {
+    "name": "QcDeviceMFT8380.dll",
+    "bytes": 23998368,
+    "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+  },
+  "camera_controls": {
+    "set_camera_controls": "0x180050d40",
+    "accessor_storage_offset": "0x70",
+    "accessor_vtable": "0x1813345a8",
+    "camera_controls_getter_slot": "0xb8",
+    "camera_controls_getter": "0x180051830",
+    "camera_controls_vtable": "0x1813311b8",
+    "ksproperty_slot": "0x20",
+    "camera_controls_ksproperty": "0x18002d0d0"
+  },
+  "pin_configurer": {
+    "ksproperty": "0x18004d540",
+    "interface_accessor_member_offset": "0x8",
+    "calls_camera_controls_getter": true,
+    "calls_camera_controls_ksproperty": true
+  },
+  "device_mft": {
+    "ksproperty": "0x180018250",
+    "internal_handler_offset": "0xb0",
+    "driver_forwarder_offset": "0x98",
+    "source_transform_ks_storage_offset_in_accessor": "0x30",
+    "camera_controls_storage_offset_in_accessor": "0x70",
+    "paths_are_distinct": true
+  },
+  "guid_constants": {
+    "unknown_service": "6a2c4fa6-d179-41cd-9523-822371ea40e5",
+    "iunknown": "00000000-0000-0000-c000-000000000046",
+    "source_transform_interface": "bf94c121-5b05-4e6f-8000-ba598961414d",
+    "ks_control_interface": "28f54685-06fd-11d2-b27a-00a0c9223196"
+  },
+  "interpretation": {
+    "pinconfigurer_to_camera_controls_chain_resolved": true,
+    "camera_controls_to_securemode_chain_resolved_by_e004ak": true,
+    "outer_devicemft_internal_and_driver_paths_separated": true,
+    "trusted_external_trigger_resolved": false,
+    "new_windows_runtime_required_now": false,
+    "linux_secureisp_runtime_authorized": false
+  },
+  "next_gate": "Identify a trusted Windows trigger that enters CDeviceMFT/CPinConfigurer KsProperty; if dynamic proof is needed, trace these DeviceMFT user-mode functions before kernel SecureMode/qccam breakpoints."
+}

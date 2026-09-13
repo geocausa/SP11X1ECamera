@@ -1,0 +1,368 @@
+program=QcDeviceMFT8380.dll
+=== REFERENCES ===
+TARGET 1813552e0 <none>
+  REF 180052054 type=PARAM caller=FUN_180052020@180052020
+  REF 18005198c type=PARAM caller=FUN_180051860@180051860
+  REF 180051fc4 type=PARAM caller=FUN_180051f90@180051f90
+  REF 18002d914 type=PARAM caller=FUN_18002d8f0@18002d8f0
+  REF 18002d9c4 type=PARAM caller=FUN_18002d9a0@18002d9a0
+  REFCOUNT 5
+TARGET 180051860 FUN_180051860@180051860
+  REF 181b36d28 type=DATA caller=<none>
+  REF 180f8083f type=DATA caller=<none>
+  REF 181334678 type=DATA caller=<none>
+  REFCOUNT 3
+TARGET 180050d40 FUN_180050d40@180050d40
+  REF 181b36ce0 type=DATA caller=<none>
+  REF 180f807d1 type=DATA caller=<none>
+  REF 1813345f8 type=DATA caller=<none>
+  REFCOUNT 3
+TARGET 180051830 FUN_180051830@180051830
+  REF 180f80830 type=DATA caller=<none>
+  REF 181334660 type=DATA caller=<none>
+  REFCOUNT 2
+TARGET 180021cf0 FUN_180021cf0@180021cf0
+  REF 181b35e58 type=DATA caller=<none>
+  REF 180f7fed5 type=DATA caller=<none>
+  REF 181330b18 type=DATA caller=<none>
+  REF 181330d88 type=DATA caller=<none>
+  REFCOUNT 4
+TARGET 18002d0d0 FUN_18002d0d0@18002d0d0
+  REF 181b35fa0 type=DATA caller=<none>
+  REF 180f7ff6b type=DATA caller=<none>
+  REF 1813311d8 type=DATA caller=<none>
+  REFCOUNT 3
+
+=== DECOMPILATIONS ===
+
+//// FUN_180052020 @180052020 ////
+
+undefined8 FUN_180052020(longlong param_1,undefined8 param_2)
+
+{
+  int iVar1;
+  code *extraout_x15;
+  
+  iVar1 = FUN_180f5e7c0(param_2,&DAT_181355840,0x10);
+  if ((iVar1 != 0) && (iVar1 = FUN_180f5e7c0(param_2,&DAT_1813552e0,0x10), iVar1 != 0)) {
+    return 1;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+            (*(undefined8 *)(*(longlong *)(param_1 + 0x78) + 0x10),param_1 + 0x78);
+  (*extraout_x15)();
+  return 0;
+}
+
+
+
+//// FUN_180051860 @180051860 ////
+
+undefined4 FUN_180051860(longlong *param_1,undefined8 param_2,longlong *param_3)
+
+{
+  int iVar1;
+  longlong lVar2;
+  longlong *plVar3;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  code *extraout_x15_06;
+  code *extraout_x15_07;
+  code *extraout_x15_08;
+  code *extraout_x15_09;
+  code *extraout_x15_10;
+  code *extraout_x15_11;
+  code *extraout_x15_12;
+  code *extraout_x15_13;
+  code *extraout_x15_14;
+  code *extraout_x15_15;
+  code *extraout_x15_16;
+  code *extraout_x15_17;
+  code *extraout_x15_18;
+  code *extraout_x15_19;
+  code *extraout_x15_20;
+  code *extraout_x15_21;
+  code *extraout_x15_22;
+  code *extraout_x15_23;
+  code *extraout_x15_24;
+  code *extraout_x15_25;
+  code *extraout_x15_26;
+  code *extraout_x15_27;
+  code *extraout_x15_28;
+  code *extraout_x15_29;
+  code *extraout_x15_30;
+  code *extraout_x15_31;
+  code *extraout_x15_32;
+  code *extraout_x15_33;
+  code *extraout_x15_34;
+  code *extraout_x15_35;
+  code *extraout_x15_36;
+  code *extraout_x15_37;
+  code *extraout_x15_38;
+  code *extraout_x15_39;
+  
+  if (param_3 == (longlong *)0x0) {
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CInterfaceAccessor.cpp"
+                  ,0x120,"CInterfaceAccessor::GetInterface",DAT_180051f88);
+    return DAT_180051f88;
+  }
+  *param_3 = 0;
+  iVar1 = FUN_180f5e7c0(param_2,&DAT_1813559b0,0x10);
+  if (iVar1 == 0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xc0),param_1);
+    lVar2 = (*extraout_x15)();
+    *param_3 = lVar2;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xc0),param_1);
+    lVar2 = (*extraout_x15_00)();
+    if (lVar2 == 0) {
+      return 0;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xc0),param_1);
+    plVar3 = (longlong *)(*extraout_x15_01)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+    (*extraout_x15_02)();
+    return 0;
+  }
+  iVar1 = FUN_180f5e7c0(param_2,&DAT_18135d8f0,0x10);
+  if (iVar1 != 0) {
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_1813552e0,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb8),param_1);
+      lVar2 = (*extraout_x15_03)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb8),param_1);
+      lVar2 = (*extraout_x15_04)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb8),param_1);
+      plVar3 = (longlong *)(*extraout_x15_05)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_06)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_181355840,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb0),param_1);
+      lVar2 = (*extraout_x15_07)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb0),param_1);
+      lVar2 = (*extraout_x15_08)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb0),param_1);
+      plVar3 = (longlong *)(*extraout_x15_09)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_10)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_18135d900,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa8),param_1);
+      lVar2 = (*extraout_x15_11)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa8),param_1);
+      lVar2 = (*extraout_x15_12)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa8),param_1);
+      plVar3 = (longlong *)(*extraout_x15_13)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_14)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_181350d20,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x78),param_1);
+      lVar2 = (*extraout_x15_15)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x78),param_1);
+      lVar2 = (*extraout_x15_16)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x78),param_1);
+      plVar3 = (longlong *)(*extraout_x15_17)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_18)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_181350da0,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x80),param_1);
+      lVar2 = (*extraout_x15_19)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x80),param_1);
+      lVar2 = (*extraout_x15_20)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x80),param_1);
+      plVar3 = (longlong *)(*extraout_x15_21)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_22)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_181350d30,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x88),param_1);
+      lVar2 = (*extraout_x15_23)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x88),param_1);
+      lVar2 = (*extraout_x15_24)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x88),param_1);
+      plVar3 = (longlong *)(*extraout_x15_25)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_26)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_18135c7f8,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x90),param_1);
+      lVar2 = (*extraout_x15_27)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x90),param_1);
+      lVar2 = (*extraout_x15_28)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x90),param_1);
+      plVar3 = (longlong *)(*extraout_x15_29)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_30)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_18135d5c8,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x98),param_1);
+      lVar2 = (*extraout_x15_31)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x98),param_1);
+      lVar2 = (*extraout_x15_32)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x98),param_1);
+      plVar3 = (longlong *)(*extraout_x15_33)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_34)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_18135d3f0,0x10);
+    if (iVar1 == 0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa0),param_1);
+      lVar2 = (*extraout_x15_35)();
+      *param_3 = lVar2;
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa0),param_1);
+      lVar2 = (*extraout_x15_36)();
+      if (lVar2 == 0) {
+        return 0;
+      }
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa0),param_1);
+      plVar3 = (longlong *)(*extraout_x15_37)();
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 8));
+      (*extraout_x15_38)();
+      return 0;
+    }
+    iVar1 = FUN_180f5e7c0(param_2,&DAT_18135d8e0,0x10);
+    if (iVar1 != 0) {
+      return DAT_180051f8c;
+    }
+  }
+  *param_3 = (longlong)param_1;
+  if (param_1 != (longlong *)0x0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 8),param_1);
+    (*extraout_x15_39)();
+  }
+  return 0;
+}
+
+
+
+//// FUN_180051f90 @180051f90 ////
+
+undefined8 FUN_180051f90(longlong param_1,undefined8 param_2)
+
+{
+  int iVar1;
+  code *extraout_x15;
+  
+  iVar1 = FUN_180f5e7c0(param_2,&DAT_181355840,0x10);
+  if ((iVar1 != 0) && (iVar1 = FUN_180f5e7c0(param_2,&DAT_1813552e0,0x10), iVar1 != 0)) {
+    return 1;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+            (*(undefined8 *)(*(longlong *)(param_1 + 0x78) + 8),param_1 + 0x78);
+  (*extraout_x15)();
+  return 0;
+}
+
+
+
+//// FUN_18002d8f0 @18002d8f0 ////
+
+int FUN_18002d8f0(longlong param_1)
+
+{
+  int iVar1;
+  longlong *plVar2;
+  code *extraout_x15;
+  
+  plVar2 = *(longlong **)(param_1 + 0x10);
+  if (plVar2 == (longlong *)0x0) {
+    plVar2 = (longlong *)0x0;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar2 + 0xd8),plVar2,&DAT_1813552e0);
+  iVar1 = (*extraout_x15)();
+  if (-1 < iVar1) {
+    return 0;
+  }
+  if (-1 < iVar1) {
+    iVar1 = 0;
+  }
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CCameraControls.cpp"
+                ,0x100,"CCameraControls::Lock",iVar1);
+  return iVar1;
+}
+
+
+
+//// FUN_18002d9a0 @18002d9a0 ////
+
+int FUN_18002d9a0(longlong param_1)
+
+{
+  int iVar1;
+  longlong *plVar2;
+  code *extraout_x15;
+  
+  plVar2 = *(longlong **)(param_1 + 0x10);
+  if (plVar2 == (longlong *)0x0) {
+    plVar2 = (longlong *)0x0;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar2 + 0xe0),plVar2,&DAT_1813552e0);
+  iVar1 = (*extraout_x15)();
+  if (-1 < iVar1) {
+    return 0;
+  }
+  if (-1 < iVar1) {
+    iVar1 = 0;
+  }
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CCameraControls.cpp"
+                ,0x106,"CCameraControls::Unlock",iVar1);
+  return iVar1;
+}
+
+

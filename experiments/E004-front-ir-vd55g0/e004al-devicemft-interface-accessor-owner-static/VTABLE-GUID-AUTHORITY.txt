@@ -1,0 +1,63 @@
+E004al DeviceMFT internal KS owner authority
+Date: 2026-09-13
+Binary: QcDeviceMFT8380.dll
+Image base: 0x180000000
+
+Decoded GUID constants from the binary:
+- DAT_181350d10 = 00000000-0000-0000-c000-000000000046
+- DAT_181350d20 = bf94c121-5b05-4e6f-8000-ba598961414d
+- DAT_181350d30 = 28f54685-06fd-11d2-b27a-00a0c9223196
+- service GUID DAT_181014bb0 = 6a2c4fa6-d179-41cd-9523-822371ea40e5
+
+CInterfaceAccessor vtable:
+base = 0x1813345a8
++0x50 -> 0x180050d40 = CInterfaceAccessor::SetCameraControls
++0xb8 -> 0x180051830 = simple getter
+
+Disassembly of getter 0x180051830:
+  ldr x0,[x0,#0x70]
+  ret
+
+CInterfaceAccessor::SetCameraControls 0x180050d40 stores its argument at accessor +0x70.
+
+Therefore accessor vtable +0xb8 returns the exact camera-controls pointer stored by
+SetCameraControls.
+
+CPinConfigurer::KsProperty:
+- function 0x18004d540
+- obtains CInterfaceAccessor through its member at +0x8
+- calls accessor vtable +0xb8
+- if non-null, calls returned object's vtable +0x20
+
+CCameraControls:
+- primary vtable base = 0x1813311b8
+- +0x20 -> 0x18002d0d0 = CCameraControls::KsProperty
+
+Thus the direct-pointer chain is:
+CPinConfigurer::KsProperty
+ -> CInterfaceAccessor::CameraControls() [vtable +0xb8]
+ -> accessor field +0x70
+ -> CCameraControls object
+ -> CCameraControls vtable +0x20
+ -> CCameraControls::KsProperty
+ -> E004ak CProperty broker
+ -> SecureMode SetProperty
+ -> NotifySetObservers
+ -> CaptureProperties::OnSetSecureMode
+
+Separate outer CDeviceMFT KS routing:
+CDeviceMFT::KsProperty = 0x180018250.
+InitializeTransform obtains an internal KS-control face through:
+service GUID 6a2c4fa6-d179-41cd-9523-822371ea40e5
+ -> IUnknown GUID
+ -> bf94c121-5b05-4e6f-8000-ba598961414d
+ -> 28f54685-06fd-11d2-b27a-00a0c9223196
+and stores the final pointer at CDeviceMFT +0xb0.
+CDeviceMFT::KsProperty first asks that internal DMFT/source-transform handler to consume
+the request; only if it reports not handled does CDeviceMFT forward to the driver at +0x98.
+
+This is distinct from the CInterfaceAccessor camera-controls field +0x70. Do not conflate
+the two internal paths.
+
+No Windows runtime is claimed by E004al.
+Linux SecureISP runtime remains unauthorized.
