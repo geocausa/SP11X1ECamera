@@ -1,0 +1,37 @@
+{
+  "schema": "sp11-camera-e004bk-windows-fsiso-ium-secure-section-static-v1",
+  "status": "PASS_FSISO_SERVER_CREATES_SECURE_CAMERA_IUM_SECTION",
+  "date": "2026-09-13",
+  "authority_policy": "Static Windows oracle with exact matching Microsoft PDB; no Windows or Linux secure runtime.",
+  "prerequisite_checkpoint": "7a62c19",
+  "fsiso": {
+    "binary_sha256": "bb8908c6abc4655e96dc8b01eac86dd39839f6df1cd6730f913d182e492ce288",
+    "pdb_sha256": "d937099b26149a071af629b1f9b055645c1a58d6cce68a600425a01de01a34c1",
+    "pdb_guid": "93B68425-0001-BB52-0629-3C9D979A1351",
+    "create_handler": "RpcCreateSecureSection",
+    "close_handler": "RpcCloseSecureSection",
+    "connection_handler": "RpcEstablishFsIsoConnection",
+    "connection_teardown": "RpcDestroyFsIsoConnection / FSISO_CONNECTION_rundown",
+    "scenario_guid": "AE53FC6E-8D89-4488-9D2E-4D008731C5FD",
+    "tpolicy_contains_same_scenario": true,
+    "create_import": "IumSdk!CreateSecureSection",
+    "create_import_slot_offset": "0x8",
+    "close_import": "CloseHandle",
+    "close_import_slot_offset": "0x88",
+    "guid_indexed_server_state": true
+  },
+  "ownership_conclusion": {
+    "external_protected_sample_server": "FsIso",
+    "secure_section_creator": "IumSdk!CreateSecureSection",
+    "lifetime_key": "per-buffer GUID",
+    "external_sample_distinct_from_secureisp_internal_cp_camera_buffer": true,
+    "external_sample_distinct_from_secure_lane_ownership": true
+  },
+  "windows_volume_read_only": true,
+  "windows_runtime_executed": false,
+  "linux_secure_runtime_executed": false,
+  "linux_memory_reassignment": false,
+  "protected_mmio_access_linux": false,
+  "qcomtee_loaded": false,
+  "next_gate": "Map the complete Windows protected-sample contract onto Linux camera allocator/queue/teardown boundaries without secure runtime."
+}

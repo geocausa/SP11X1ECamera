@@ -1,0 +1,150 @@
+E004bj FSISO SERVER-SIDE VTL1 SECURE SECTION
+
+FsIso is the RPC server launched by MFPlat for secure camera buffers.
+
+--- exact secure-camera scenario GUID from installed FsIso ---
+scenario_guid_bytes_le=6efc53ae898d88449d2e4d008731c5fd
+scenario_guid=AE53FC6E-8D89-4488-9D2E-4D008731C5FD
+tPolicy_scenario={AE53FC6E-8D89-4488-9D2E-4D008731C5FD}
+
+--- PDB import mapping ---
+           flags = function, addr = 0001:4628
+    9012 | S_PUB32 [size = 40] `__imp_CreateSecureSection`
+           flags = none, addr = 0003:0008
+--
+           flags = none, addr = 0004:0141
+   17816 | S_PUB32 [size = 40] `RpcCreateSecureSection`
+           flags = function, addr = 0001:6000
+--
+           flags = none, addr = 0003:23700
+   24220 | S_PUB32 [size = 32] `__imp_CloseHandle`
+           flags = none, addr = 0003:0136
+--
+           flags = function, addr = 0001:21936
+   27236 | S_PUB32 [size = 44] `SECURE_CAMERA_SCENARIO_GUID`
+           flags = none, addr = 0003:1496
+--
+           flags = function, addr = 0001:4664
+   28844 | S_PUB32 [size = 36] `RpcCloseSecureSection`
+           flags = function, addr = 0001:5232
+
+--- RpcCreateSecureSection embeds scenario GUID and calls IUM CreateSecureSection ---
+
+/mnt/windows/Windows/System32/FsIso.exe:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+140002840: 9b14314a    	madd	x10, x10, x20, x12
+140002844: b5fffde9    	cbnz	x9, 0x140002800 <.text+0x1800>
+140002848: 52800488    	mov	w8, #0x24               // =36
+14000284c: f90006aa    	str	x10, [x21, #0x8]
+140002850: b90013e8    	str	w8, [sp, #0x10]
+140002854: d0000068    	adrp	x8, 0x140010000
+140002858: 91176108    	add	x8, x8, #0x5d8
+14000285c: 3c8143f0    	stur	q16, [sp, #0x14]
+140002860: 3dc00110    	ldr	q16, [x8]
+140002864: 52800004    	mov	w4, #0x0                // =0
+140002868: aa1303e3    	mov	x3, x19
+14000286c: 52800082    	mov	w2, #0x4                // =4
+140002870: 52800081    	mov	w1, #0x4                // =4
+140002874: 3c8243f0    	stur	q16, [sp, #0x24]
+140002878: d0000068    	adrp	x8, 0x140010000
+14000287c: f9400508    	ldr	x8, [x8, #0x8]
+140002880: 910043e0    	add	x0, sp, #0x10
+140002884: d63f0100    	blr	x8
+140002888: f90012a0    	str	x0, [x21, #0x20]
+14000288c: b5000180    	cbnz	x0, 0x1400028bc <.text+0x18bc>
+140002890: d0000068    	adrp	x8, 0x140010000
+140002894: f9403908    	ldr	x8, [x8, #0x70]
+140002898: d63f0100    	blr	x8
+14000289c: 7100001f    	cmp	w0, #0x0
+1400028a0: 5400008d    	b.le	0x1400028b0 <.text+0x18b0>
+1400028a4: 12003c09    	and	w9, w0, #0xffff
+1400028a8: 52b000e8    	mov	w8, #-0x7ff90000        // =-2147024896
+1400028ac: 2a080120    	orr	w0, w9, w8
+1400028b0: 2a0003f6    	mov	w22, w0
+1400028b4: 36f810a0    	tbz	w0, #0x1f, 0x140002ac8 <.text+0x1ac8>
+
+--- RpcCloseSecureSection removes GUID entry then closes the secure-section handle ---
+
+/mnt/windows/Windows/System32/FsIso.exe:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+140002620: d3483d49    	ubfx	x9, x10, #8, #8
+140002624: 9b13258c    	madd	x12, x12, x19, x9
+140002628: d3505d49    	ubfx	x9, x10, #16, #8
+14000262c: 9b13258c    	madd	x12, x12, x19, x9
+140002630: d3587d49    	ubfx	x9, x10, #24, #8
+140002634: 9b13258c    	madd	x12, x12, x19, x9
+140002638: d3609d49    	ubfx	x9, x10, #32, #8
+14000263c: 9b13258c    	madd	x12, x12, x19, x9
+140002640: d368bd49    	ubfx	x9, x10, #40, #8
+140002644: 9b13258c    	madd	x12, x12, x19, x9
+140002648: d370dd49    	ubfx	x9, x10, #48, #8
+14000264c: 9b13258c    	madd	x12, x12, x19, x9
+140002650: d378fd49    	lsr	x9, x10, #56
+140002654: 5100056a    	sub	w10, w11, #0x1
+140002658: 9b13258c    	madd	x12, x12, x19, x9
+14000265c: d3407d89    	ubfx	x9, x12, #0, #32
+140002660: 8a090149    	and	x9, x10, x9
+140002664: 8b090f0a    	add	x10, x24, x9, lsl #3
+140002668: 580006c9    	ldr	x9, 0x140002740 <.text+0x1740>
+14000266c: ea280128    	bics	x8, x9, x8
+140002670: 54000061    	b.ne	0x14000267c <.text+0x167c>
+140002674: d2800008    	mov	x8, #0x0                // =0
+140002678: f9400108    	ldr	x8, [x8]
+14000267c: f940014b    	ldr	x11, [x10]
+140002680: 370001cb    	tbnz	w11, #0x0, 0x1400026b8 <.text+0x16b8>
+140002684: eb14017f    	cmp	x11, x20
+140002688: 54000060    	b.eq	0x140002694 <.text+0x1694>
+14000268c: aa0b03ea    	mov	x10, x11
+140002690: 17fffffb    	b	0x14000267c <.text+0x167c>
+140002694: f9400288    	ldr	x8, [x20]
+140002698: f9000148    	str	x8, [x10]
+14000269c: b94552c8    	ldr	w8, [x22, #0x550]
+1400026a0: 51000508    	sub	w8, w8, #0x1
+1400026a4: b90552c8    	str	w8, [x22, #0x550]
+1400026a8: f9400288    	ldr	x8, [x20]
+1400026ac: aa090108    	orr	x8, x8, x9
+1400026b0: f9000288    	str	x8, [x20]
+1400026b4: 14000003    	b	0x1400026c0 <.text+0x16c0>
+1400026b8: d2800008    	mov	x8, #0x0                // =0
+1400026bc: f9400108    	ldr	x8, [x8]
+1400026c0: f9401280    	ldr	x0, [x20, #0x20]
+1400026c4: d0000068    	adrp	x8, 0x140010000
+1400026c8: f9404508    	ldr	x8, [x8, #0x88]
+1400026cc: d63f0100    	blr	x8
+1400026d0: d0000068    	adrp	x8, 0x140010000
+1400026d4: f9405108    	ldr	x8, [x8, #0xa0]
+1400026d8: d63f0100    	blr	x8
+1400026dc: d0000068    	adrp	x8, 0x140010000
+1400026e0: f9405508    	ldr	x8, [x8, #0xa8]
+1400026e4: aa1403e2    	mov	x2, x20
+1400026e8: 52800001    	mov	w1, #0x0                // =0
+1400026ec: d63f0100    	blr	x8
+1400026f0: 14000002    	b	0x1400026f8 <.text+0x16f8>
+1400026f4: 12affff5    	mov	w21, #-0x7fff0001       // =-2147418113
+1400026f8: b00000a8    	adrp	x8, 0x140017000
+1400026fc: 91152100    	add	x0, x8, #0x548
+140002700: d0000068    	adrp	x8, 0x140010000
+140002704: f9409d08    	ldr	x8, [x8, #0x138]
+140002708: d63f0100    	blr	x8
+14000270c: 2a1503e0    	mov	w0, w21
+
+--- executable trustlet policy carries exact secure-camera scenario ---
+
+/mnt/windows/Windows/System32/FsIso.exe:	file format coff-arm64
+Contents of section .tPolicy:
+ 140019000 7b414535 33464336 452d3844 38392d34  {AE53FC6E-8D89-4
+ 140019010 3438382d 39443245 2d344430 30383733  488-9D2E-4D00873
+ 140019020 31433546 447d0000 00000000 00000000  1C5FD}..........
+ 140019030 01000000 00000000 05000000 00000000  ................
+ 140019040 09000000 0a000000 00000000 00000000  ................
+ 140019050 07000000 02000000 00000000 00000000  ................
+ 140019060 07000000 01000000 01000000 00000000  ................
+ 140019070 07000000 03000000 00000000 00000000  ................
+ 140019080 0a000000 0b000000 00900140 01000000  ...........@....
+ 140019090 00000000 00000000 00000000 00000000  ................
