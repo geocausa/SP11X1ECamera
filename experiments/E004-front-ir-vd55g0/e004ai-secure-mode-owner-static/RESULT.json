@@ -1,0 +1,41 @@
+{
+  "schema": "sp11-camera-e004ai-windows-securemode-owner-static-v1",
+  "status": "PASS_WINDOWS_SECUREMODE_OWNER_AND_SECURE_CSI_GATE_MAPPED",
+  "binary": {
+    "name": "surfacecamavs8380.sys",
+    "image_base": "0x140000000",
+    "sha256": "b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed"
+  },
+  "secure_mode": {
+    "set_rva": "0x83120",
+    "get_rva": "0x83040",
+    "set_wrapper_rva": "0xb460",
+    "get_wrapper_rva": "0xb490",
+    "state_object_offset": "0x2ad",
+    "enabled_extended_property_value": 2,
+    "disabled_extended_property_value": 1
+  },
+  "aux_policy": {
+    "helper_rva": "0x1ebb0",
+    "camera_discriminator_object_offset": "0x18",
+    "aux_discriminator_literal": "0x65528936",
+    "secure_registration_literal": "0x2a851ba1",
+    "non_aux_secure_request_forced_false": true
+  },
+  "secure_csi_dispatch": {
+    "send_packet_internal_rva": "0x9b18",
+    "packet_major_opcode": 5,
+    "packet_subopcode": 0,
+    "requires_secure_mode_state": true,
+    "secure_kmdisp_vtable_offset": "0x48",
+    "operation": 2,
+    "payload_object_offset": "0x2b4",
+    "payload_length": 12
+  },
+  "interpretation": {
+    "explains_e004ah_zero_hits": true,
+    "unmodified_winrt_holder_is_secure_trigger": false,
+    "linux_secureisp_runtime_authorized": false
+  },
+  "next_gate": "Same-machine Windows: explicitly enable KSCAMERA_EXTENDEDPROP_SECUREMODE on the AUX/IR camera, prove the surfacecamavs setter/state transition, then trace secure KMDISP/qccamsecureisp boundary with real frames."
+}

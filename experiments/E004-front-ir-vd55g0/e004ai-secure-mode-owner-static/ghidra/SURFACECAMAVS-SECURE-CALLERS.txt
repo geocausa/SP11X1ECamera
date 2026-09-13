@@ -1,0 +1,845 @@
+TARGET 14001ebb0 FUN_14001ebb0
+  REF 140073700 type=DATA
+  REF 14002c6b8 type=DATA
+  REF 14002fd70 type=DATA
+TARGET 140083120 FUN_140083120
+  REF 140073d28 type=DATA
+  REF 14002c7d4 type=DATA
+  REF 14000b474 type=PARAM caller=FUN_14000b460 entry=14000b460
+TARGET 140083040 FUN_140083040
+  REF 140073d20 type=DATA
+  REF 14002c7d0 type=DATA
+  REF 14000b4a4 type=PARAM caller=FUN_14000b490 entry=14000b490
+TARGET 140009b18 FUN_140009b18
+  REF 1400731e8 type=DATA
+  REF 14000a688 type=UNCONDITIONAL_CALL caller=FUN_14000a540 entry=14000a540
+  REF 1400080c0 type=UNCONDITIONAL_CALL caller=FUN_140007fa8 entry=140007fa8
+
+=== DECOMPILATIONS ===
+
+//// FUN_14001ebb0 @14001ebb0 ////
+
+undefined8
+FUN_14001ebb0(longlong param_1,char param_2,ulonglong param_3,undefined8 param_4,undefined8 param_5,
+             char *param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  int iVar2;
+  
+  *(char *)(param_1 + 0x2b4) = param_2;
+  iVar1 = DAT_14001ec54;
+  if (param_2 == '\x01') {
+    if (DAT_14001ec50 == *(int *)(param_1 + 0x18)) {
+      iVar2 = FUN_140020b60(*(char **)(param_1 + 0x48),DAT_14001ec54,
+                            (longlong *)
+                            (param_1 + (longlong)*(int *)(param_1 + 0x298) * 0x10 + 0x1d8),param_4,
+                            param_5,param_6,param_7,param_8);
+      if (iVar2 == 0) {
+        *(int *)(((longlong)*(int *)(param_1 + 0x298) + 0x1d) * 0x10 + param_1) = iVar1;
+        *(int *)(param_1 + 0x298) = *(int *)(param_1 + 0x298) + 1;
+      }
+    }
+    else {
+      FUN_14001ce70(&DAT_140030e20,
+                    "SecureMode is only available for AUX camera, setting SecureMode to false",
+                    param_3,param_4,param_5,param_6,param_7,param_8);
+      *(undefined1 *)(param_1 + 0x2b4) = 0;
+    }
+  }
+  return 0;
+}
+
+
+
+//// FUN_14000b460 @14000b460 ////
+
+void FUN_14000b460(longlong param_1,uint *param_2,undefined8 param_3)
+
+{
+  FUN_140081630(param_1,param_2,param_3,0x140083120);
+  return;
+}
+
+
+
+//// FUN_140083120 @140083120 ////
+
+ulonglong FUN_140083120(longlong param_1,longlong param_2,ulonglong *param_3,int *param_4,
+                       undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  char *pcVar1;
+  undefined *puVar2;
+  bool bVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  int *piVar6;
+  ulonglong uVar7;
+  
+  uVar5 = 0x24;
+  piVar6 = param_4;
+  uVar4 = FUN_1400827d8(param_2,param_3,0x24,(longlong)param_4);
+  uVar7 = (ulonglong)uVar4;
+  if (-1 < (int)uVar4) {
+    if (*param_4 == 1) {
+      if (param_4[1] == 0) {
+        if ((*(ulonglong *)(param_4 + 4) & 3) == 0) {
+          uVar7 = (ulonglong)DAT_140083210;
+        }
+        else {
+          bVar3 = *(ulonglong *)(param_4 + 4) == 2;
+          *(bool *)(param_1 + 0x2ad) = bVar3;
+          pcVar1 = "SetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_DISABLED";
+          if (bVar3) {
+            pcVar1 = "SetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_ENABLED";
+          }
+          puVar2 = &DAT_140030398;
+          if (bVar3) {
+            puVar2 = &DAT_140030360;
+          }
+          FUN_14001ce70(puVar2,pcVar1,uVar5,piVar6,param_5,param_6,param_7,param_8);
+          param_4[2] = 0x28;
+          *(undefined8 *)(param_2 + 0x38) = 0x28;
+        }
+      }
+      else {
+        uVar7 = (ulonglong)DAT_14008320c;
+      }
+    }
+    else {
+      uVar7 = (ulonglong)DAT_140083208;
+    }
+    param_4[3] = (int)uVar7;
+  }
+  FUN_14001ce70(&DAT_1400303d8,"SetExtendedSecureMode, status = 0x%08x ",uVar7,piVar6,param_5,
+                param_6,param_7,param_8);
+  return uVar7;
+}
+
+
+
+//// FUN_14000b490 @14000b490 ////
+
+void FUN_14000b490(longlong param_1,uint *param_2,undefined8 param_3)
+
+{
+  FUN_140081568(param_1,param_2,param_3,0x140083040);
+  return;
+}
+
+
+
+//// FUN_140083040 @140083040 ////
+
+int FUN_140083040(longlong param_1,longlong param_2,ulonglong *param_3,int *param_4,
+                 undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined8 uVar1;
+  char *pcVar2;
+  undefined *puVar3;
+  bool bVar4;
+  int iVar5;
+  ulonglong uVar6;
+  int *piVar7;
+  int iVar8;
+  
+  uVar6 = 0x24;
+  piVar7 = param_4;
+  iVar5 = FUN_1400827d8(param_2,param_3,0x24,(longlong)param_4);
+  iVar8 = iVar5;
+  if ((((-1 < iVar5) && (*param_4 == 1)) && (*(int *)(param_1 + 0x68) == DAT_140083110)) &&
+     (iVar8 = DAT_140083114, param_4[1] == 0)) {
+    param_4[2] = 0x28;
+    param_4[3] = 0;
+    param_4[6] = 3;
+    param_4[7] = 0;
+    *(undefined8 *)(param_2 + 0x38) = 0x28;
+    bVar4 = *(char *)(param_1 + 0x2ad) != '\0';
+    uVar1 = 1;
+    if (bVar4) {
+      uVar1 = 2;
+    }
+    *(undefined8 *)(param_4 + 4) = uVar1;
+    pcVar2 = "GetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_DISABLED";
+    if (bVar4) {
+      pcVar2 = "GetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_ENABLED";
+    }
+    puVar3 = &DAT_1400303c0;
+    if (bVar4) {
+      puVar3 = &DAT_1400303f0;
+    }
+    FUN_14001ce70(puVar3,pcVar2,uVar6,piVar7,param_5,param_6,param_7,param_8);
+    iVar8 = iVar5;
+  }
+  return iVar8;
+}
+
+
+
+//// FUN_14000a540 @14000a540 ////
+
+ulonglong FUN_14000a540(ulonglong param_1,undefined8 param_2,ulonglong *param_3,undefined8 param_4,
+                       ulonglong param_5,undefined8 param_6,ulonglong param_7,ulonglong param_8)
+
+{
+  ulonglong uVar1;
+  uint uVar2;
+  uint uVar3;
+  ulonglong uVar4;
+  ulonglong uVar5;
+  undefined8 uVar6;
+  undefined8 uVar7;
+  char *pcVar8;
+  undefined1 auVar9 [16];
+  
+  if (param_3 == (ulonglong *)0x0) {
+LAB_14000a690:
+    pcVar8 = "{CCaptureFilter::SetSendPacket} Invalid Parameter.\n";
+  }
+  else {
+    uVar6 = 0x10;
+    uVar7 = param_4;
+    auVar9 = FUN_140023e60(param_3,(ulonglong *)&DAT_140030408,0x10);
+    if ((auVar9._0_4_ != 0) || ((int)param_3[2] != 6)) goto LAB_14000a690;
+    if (param_1 == 0xffffffffffffffd0) {
+      FUN_14001c1d8(0,0x140024290,0,
+                    "{CCaptureFilter::SetSendPacket} Failed on invalid device state.\n",param_5,
+                    param_6,param_7,param_8);
+      return (ulonglong)DAT_14000a6c8;
+    }
+    uVar5 = param_3[4];
+    uVar1 = param_3[5];
+    uVar4 = FUN_140007cf0(param_1,uVar5,uVar6,uVar7,param_5,param_6,param_7,param_8);
+    if ((uVar4 & 0xff) != 0) {
+      if (uVar5 != 0) {
+        uVar2 = *(uint *)(*(longlong *)(uVar5 + 8) + uVar1);
+        uVar3 = uVar2 >> 0x18;
+        if (((uVar3 == 0xf) ||
+            ((uVar3 == 0x10 && (uVar2 & 0xffffff) < 2 || uVar3 == 0x11) || uVar3 == 8)) &&
+           (1 < *(int *)(param_1 + 0x90) - 2U)) {
+          uVar5 = FUN_1400203f0(*(longlong **)(param_1 + 0x830),param_3);
+          if ((int)uVar5 == 0) {
+            FUN_14001c1d8(3,0x140024290,0,
+                          "{CCaptureFilter::SetSendPacket} Enqueued CSL packet with deviceType = %d to pendingQueue\n"
+                          ,(ulonglong)uVar3,param_6,param_7,param_8);
+          }
+          else {
+            FUN_14001c1d8(0,0x140024290,0,
+                          "{CCaptureFilter::SetSendPacket} CameraQueueEnqueue() failed to pending queue with result %d \n"
+                          ,uVar5 & 0xffffffff,param_6,param_7,param_8);
+          }
+          return 0;
+        }
+        uVar5 = FUN_140009b18(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+        return uVar5;
+      }
+      goto LAB_14000a6ac;
+    }
+    pcVar8 = "{CCaptureFilter::SetSendPacket} Invalid Packet.\n";
+  }
+  FUN_14001c1d8(0,0x140024290,0,pcVar8,param_5,param_6,param_7,param_8);
+LAB_14000a6ac:
+  return (ulonglong)DAT_14000a6cc;
+}
+
+
+
+//// FUN_140007fa8 @140007fa8 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+void FUN_140007fa8(ulonglong param_1)
+
+{
+  uint uVar1;
+  uint uVar2;
+  code *pcVar3;
+  undefined1 uVar4;
+  ulonglong uVar5;
+  undefined8 in_x5;
+  ulonglong in_x6;
+  ulonglong in_x7;
+  longlong *plVar6;
+  uint uVar7;
+  longlong lVar8;
+  ulonglong auStack_a0 [10];
+  
+  lVar8 = *(longlong *)(param_1 + 0x830);
+  uVar7 = 0;
+  if (lVar8 != 0) {
+    uVar7 = *(uint *)(lVar8 + 0x18);
+  }
+  FUN_14001c1d8(3,0x140024290,0,
+                "{CCaptureFilter::SubmitPendingPackets} Submitting  %d pending packets\n",
+                (ulonglong)uVar7,in_x5,in_x6,in_x7);
+  if (lVar8 != 0) {
+    while (uVar7 != 0) {
+      plVar6 = *(longlong **)(param_1 + 0x830);
+      uVar5 = 0xe;
+      if (plVar6 == (longlong *)0x0) {
+LAB_1400080cc:
+        FUN_14001c1d8(0,0x140024290,0,
+                      "{CCaptureFilter::SubmitPendingPackets} CameraQueueDequeue() failed from frame pending queue with result %d \n"
+                      ,uVar5,in_x5,in_x6,in_x7);
+      }
+      else {
+        uVar4 = KeAcquireSpinLockRaiseToDpc(plVar6 + 4);
+        *(undefined1 *)(plVar6 + 5) = uVar4;
+        if ((int)plVar6[3] == 0) {
+          uVar5 = 0x16;
+        }
+        else {
+          uVar1 = *(uint *)((longlong)plVar6 + 0x14);
+          FUN_140022750(auStack_a0,(longlong)(int)uVar1,
+                        (undefined8 *)
+                        (*plVar6 + (ulonglong)uVar1 * (ulonglong)*(uint *)((longlong)plVar6 + 0x2c))
+                        ,(longlong)(int)uVar1);
+          *(int *)(plVar6 + 3) = (int)plVar6[3] + -1;
+          *(int *)((longlong)plVar6 + 0x2c) = *(int *)((longlong)plVar6 + 0x2c) + 1;
+          uVar1 = *(uint *)(plVar6 + 2);
+          if (uVar1 == 0) {
+                    /* WARNING: Does not return */
+            pcVar3 = (code *)SoftwareBreakpoint(0xf004,0x140008080);
+            (*pcVar3)();
+          }
+          uVar2 = 0;
+          if (uVar1 != 0) {
+            uVar2 = *(uint *)((longlong)plVar6 + 0x2c) / uVar1;
+          }
+          uVar5 = 0;
+          *(uint *)((longlong)plVar6 + 0x2c) = *(uint *)((longlong)plVar6 + 0x2c) - uVar2 * uVar1;
+        }
+        KeReleaseSpinLock(plVar6 + 4,(char)plVar6[5]);
+        if ((int)uVar5 != 0) goto LAB_1400080cc;
+        FUN_140009b18(param_1,0,auStack_a0,0,uVar5,in_x5,in_x6,in_x7);
+        uVar7 = uVar7 - 1;
+      }
+    }
+  }
+  return;
+}
+
+
+
+//// FUN_140009b18 @140009b18 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Type propagation algorithm not settling */
+
+ulonglong FUN_140009b18(ulonglong param_1,undefined8 param_2,ulonglong *param_3,undefined8 param_4,
+                       ulonglong param_5,undefined8 param_6,ulonglong param_7,ulonglong param_8)
+
+{
+  undefined2 *puVar1;
+  uint *puVar2;
+  uint uVar3;
+  uint uVar4;
+  longlong *plVar5;
+  uint uVar6;
+  int iVar7;
+  longlong *plVar8;
+  longlong *plVar9;
+  undefined8 uVar10;
+  ulonglong *puVar11;
+  undefined8 *puVar12;
+  char *pcVar13;
+  ulonglong uVar14;
+  ulonglong uVar15;
+  longlong lVar16;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  code *extraout_x15_06;
+  ulonglong uVar17;
+  longlong lVar18;
+  ulonglong uVar19;
+  undefined1 auVar20 [16];
+  uint local_4a0 [4];
+  uint *local_490;
+  undefined4 local_488;
+  undefined8 local_480;
+  undefined4 local_478;
+  undefined8 local_470;
+  undefined4 local_468;
+  undefined8 local_460;
+  undefined8 uStack_458;
+  undefined8 uStack_450;
+  undefined8 local_448;
+  undefined8 local_440;
+  undefined8 uStack_438;
+  undefined8 uStack_430;
+  undefined8 uStack_428;
+  undefined8 local_420;
+  undefined8 uStack_418;
+  undefined8 uStack_410;
+  undefined8 uStack_408;
+  undefined8 local_400;
+  undefined4 local_3f8;
+  undefined1 auStack_3f0 [252];
+  undefined8 auStack_2f4 [82];
+  
+  if (((param_3 == (ulonglong *)0x0) ||
+      (auVar20 = FUN_140023e60(param_3,(ulonglong *)&DAT_140030408,0x10), auVar20._0_4_ != 0)) ||
+     ((int)param_3[2] != 6)) {
+    FUN_14001c1d8(0,0x140024290,0,"{CCaptureFilter::SendPacketInternal} Invalid Parameter.\n",
+                  param_5,param_6,param_7,param_8);
+switchD_140009bfc_caseD_3:
+    return (ulonglong)DAT_14000a53c;
+  }
+  plVar8 = (longlong *)(param_1 + 0x30);
+  if (plVar8 == (longlong *)0x0) {
+    FUN_14001c1d8(0,0x140024290,0,
+                  "{CCaptureFilter::SendPacketInternal} Failed on invalid device state.\n",param_5,
+                  param_6,param_7,param_8);
+    return (ulonglong)DAT_14000a528;
+  }
+  uVar19 = param_3[4];
+  if (uVar19 == 0) goto switchD_140009bfc_caseD_3;
+  uVar17 = param_3[5];
+  pcVar13 = "{CCaptureFilter::SendPacketInternal} handle = %#p, offset = %d\n";
+  puVar11 = (ulonglong *)0x0;
+  uVar14 = uVar19;
+  uVar15 = uVar17;
+  FUN_14001c1d8(4,0x140024290,0,"{CCaptureFilter::SendPacketInternal} handle = %#p, offset = %d\n",
+                uVar19,uVar17,param_7,param_8);
+  uVar4 = DAT_14000a534;
+  puVar2 = (uint *)(*(longlong *)(uVar19 + 8) + uVar17);
+  uVar3 = *(uint *)(*(longlong *)(uVar19 + 8) + uVar17);
+  uVar6 = uVar3 & 0xffffff;
+  switch(uVar3 >> 0x18) {
+  case 1:
+  case 2:
+  case 4:
+  case 6:
+  case 0x15:
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    uVar10 = 0;
+    break;
+  default:
+    goto switchD_140009bfc_caseD_3;
+  case 5:
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    if ((uVar6 == 0) && (*(char *)(param_1 + 0x2ad) == '\x01')) {
+      FUN_140022c00(auStack_3f0,0,0x388);
+      uVar19 = 0x388;
+      uStack_458 = 0;
+      local_460 = 0;
+      local_448 = 0;
+      uStack_450 = 0;
+      uStack_438 = 0;
+      local_440 = 0;
+      uStack_428 = 0;
+      uStack_430 = 0;
+      uStack_418 = 0;
+      local_420 = 0;
+      uStack_408 = 0;
+      uStack_410 = 0;
+      local_400 = 0;
+      local_3f8 = 0;
+      uVar10 = FUN_14001e250();
+      if ((int)uVar10 < 0) {
+        FUN_14001c1d8(0,0x140024290,0,"{CCaptureFilter::SendCSIPhyInfo} Unable to get CSIPHYId\n",
+                      uVar19,uVar15,param_7,param_8);
+      }
+      else {
+        FUN_140022750(&local_460,0x6c,auStack_2f4,0x6c);
+        *(undefined4 *)(param_1 + 700) = (undefined4)local_448;
+        if (0 < (int)puVar2[7]) {
+          iVar7 = 0;
+          do {
+            lVar18 = (ulonglong)puVar2[6] + (longlong)iVar7 * 0x20;
+            if (*(int *)((longlong)puVar2 + lVar18 + 0x8c) == 0) {
+              lVar16 = *(longlong *)((longlong)puVar2 + lVar18 + 0x74);
+              if (lVar16 == 0) {
+                pcVar13 = 
+                "{CCaptureFilter::SendCSIPhyInfo} Invalid inputs for CameraSensorDriver_CSIPhyConfig.\n"
+                ;
+              }
+              else {
+                puVar1 = (undefined2 *)
+                         (*(longlong *)(lVar16 + 8) +
+                         (ulonglong)*(uint *)((longlong)puVar2 + lVar18 + 0x7c));
+                if (*(int *)((longlong)puVar2 + lVar18 + 0x84) == 0x18) {
+                  *(undefined2 *)(param_1 + 0x2b4) = *puVar1;
+                  *(undefined2 *)(param_1 + 0x2b6) = puVar1[1];
+                  *(undefined1 *)(param_1 + 0x2b8) = *(undefined1 *)(puVar1 + 2);
+                  *(undefined1 *)(param_1 + 0x2b9) = *(undefined1 *)((longlong)puVar1 + 5);
+                  *(undefined1 *)(param_1 + 0x2ba) = *(undefined1 *)(puVar1 + 3);
+                  (*(code *)PTR__guard_check_icall_14002c3b8)
+                            (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x48),*plVar8 + 0x10,2,
+                             param_1 + 0x2b4,0xc);
+                  uVar6 = (*extraout_x15_00)();
+                  if (uVar6 == 0x16) {
+                    uVar19 = 0x16;
+                  }
+                  else {
+                    uVar3 = 0;
+                    if (uVar6 != 0) {
+                      uVar3 = uVar6 | 0xe8010000;
+                    }
+                    uVar19 = (ulonglong)uVar3;
+                    if (uVar3 == 0) goto LAB_140009ddc;
+                  }
+                  FUN_14001c1d8(0,0x140024290,0,
+                                "{CCaptureFilter::SendCSIPhyInfo} Unable to send CSIInfo to secure KMDISP, status is %d\n"
+                                ,uVar19,uVar15,param_7,param_8);
+                  goto LAB_140009ddc;
+                }
+                pcVar13 = 
+                "{CCaptureFilter::SendCSIPhyInfo} Invalid payload size for CameraSensorDriver_CSIPhyConfig.\n"
+                ;
+              }
+              FUN_14001c1d8(0,0x140024290,0,pcVar13,uVar19,uVar15,param_7,param_8);
+            }
+LAB_140009ddc:
+            iVar7 = iVar7 + 1;
+          } while (iVar7 < (int)puVar2[7]);
+        }
+      }
+    }
+    uVar10 = 0;
+LAB_140009f94:
+    (*(code *)PTR__guard_check_icall_14002c3b8)
+              (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x20),*plVar8 + 0x10,uVar10,puVar2,
+               0x7c);
+    uVar6 = (*extraout_x15_02)();
+    if (uVar6 == 0x16) goto LAB_140009c44;
+    goto LAB_140009c54;
+  case 7:
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    uVar10 = 1;
+    break;
+  case 8:
+    if (uVar6 == 0) {
+      if (*(longlong *)(param_1 + 0x878) != 0) {
+        local_470 = (longlong *)0x0;
+        *(undefined4 *)(*(longlong *)(param_1 + 0x878) + 0x298) = 1;
+        puVar12 = &local_470;
+        FUN_140093e00(*(longlong *)(param_1 + 0x878),6,puVar12);
+        uVar19 = (ulonglong)local_470;
+        if (local_470 != (longlong *)0x0) {
+          FUN_140009438(param_1,(ulonglong)puVar2,puVar12,pcVar13,uVar14,uVar15,param_7,param_8);
+          uVar6 = FUN_140095cd0(uVar19,puVar2);
+          return (ulonglong)uVar6;
+        }
+        return 0;
+      }
+      pcVar13 = "{CCaptureFilter::SendPacketInternal} Failed to get FD Node.\n";
+    }
+    else {
+      pcVar13 = "{CCaptureFilter::SendPacketInternal} Invalid FD opcode.\n";
+    }
+    FUN_14001c1d8(0,0x140024290,0,pcVar13,uVar14,uVar15,param_7,param_8);
+LAB_14000a3f0:
+    return (ulonglong)DAT_14000a538;
+  case 0xd:
+  case 0xf:
+    if ((uVar6 - 1 & 0xfffffffd) != 0) {
+      if ((uVar3 & 0xfffffd) != 0) goto LAB_14000a3f0;
+      local_470 = (longlong *)0x0;
+      local_468 = 0;
+      puVar12 = (undefined8 *)0xc;
+      (*(code *)PTR__guard_check_icall_14002c3b8)
+                (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x18),*plVar8 + 0x10,&local_470);
+      uVar6 = (*extraout_x15_01)();
+      if (uVar6 != 0x16) {
+        uVar3 = 0;
+        if (uVar6 != 0) {
+          uVar3 = uVar6 | 0xe8010000;
+        }
+        if ((int)uVar3 < 0) {
+          if (-1 < (int)uVar3) {
+            uVar3 = 0;
+          }
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CCaptureFilter::SendPacketInternal} Failed to get Enabled IFE Info.\n",
+                        uVar14,uVar15,param_7,param_8);
+          return (ulonglong)uVar3;
+        }
+      }
+      *(undefined4 *)(param_1 + 0x6c) = (undefined4)local_470;
+      *(undefined4 *)(param_1 + 0x70) = local_470._4_4_;
+      *(undefined4 *)(param_1 + 0x74) = local_468;
+      FUN_140009438(param_1,(ulonglong)puVar2,puVar12,pcVar13,uVar14,uVar15,param_7,param_8);
+      uVar10 = 2;
+      goto LAB_140009f94;
+    }
+    lVar18 = *(longlong *)(param_1 + 0x878);
+    if (lVar18 == 0) goto LAB_14000a3f0;
+    FUN_140096438(lVar18,(longlong)puVar2);
+    *(bool *)(lVar18 + 0x21) = *(int *)(param_1 + 0x6a4) == 1;
+    uVar6 = FUN_140096a10(lVar18,puVar2);
+    if ((int)uVar6 < 0) {
+      return (ulonglong)uVar6;
+    }
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    uVar10 = 2;
+    break;
+  case 0x10:
+    if (uVar6 == 0) {
+      pcVar13 = *(char **)(puVar2 + 0x10);
+      uVar15 = *(ulonglong *)(puVar2 + 0x12);
+      uVar6 = (uint)pcVar13;
+      if (*(char *)(param_1 + 0x2ac) == '\0') {
+LAB_14000a158:
+        if (uVar6 != 0) {
+LAB_14000a15c:
+          if (1 < uVar6 - 0x12 && uVar6 != 5) goto LAB_14000a248;
+        }
+        if (*(int *)(param_1 + 0x828) != 0) {
+LAB_14000a248:
+          local_470 = (longlong *)0x0;
+          plVar5 = *(longlong **)(param_1 + 0x820);
+          plVar9 = (longlong *)0x0;
+          do {
+            plVar8 = plVar5;
+            if (plVar8 == (longlong *)0x0) {
+              return 0;
+            }
+            (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*plVar8 + 8),plVar8);
+            iVar7 = (*extraout_x15_04)();
+            if (iVar7 == (int)*(undefined8 *)(puVar2 + 0xe)) goto joined_r0x00014000a110;
+            pcVar13 = (char *)0x0;
+            plVar5 = plVar9;
+            if (*(char *)((longlong)plVar8 + 9) != '\0') {
+              do {
+                puVar11 = &local_470;
+                FUN_140093e00((longlong)plVar8,(uint)pcVar13,puVar11);
+                plVar5 = local_470;
+                plVar9 = local_470;
+                if (local_470 != (longlong *)0x0) break;
+                uVar6 = (int)pcVar13 + 1;
+                pcVar13 = (char *)(ulonglong)uVar6;
+              } while ((int)uVar6 < (int)(uint)*(byte *)((longlong)plVar8 + 9));
+            }
+          } while( true );
+        }
+        if (*(longlong *)(param_1 + 0x878) == 0) {
+          return 0;
+        }
+        uVar6 = 0;
+        plVar8 = (longlong *)0x0;
+        do {
+          if (plVar8 != (longlong *)0x0) goto LAB_14000a118;
+          plVar9 = plVar8;
+          if ((uVar6 < 0x16) && ((uVar4 >> (ulonglong)(uVar6 & 0x1f) & 1) != 0)) {
+            puVar11 = &local_470;
+            local_470 = (longlong *)0x0;
+            FUN_140093e00(*(longlong *)(param_1 + 0x878),uVar6,puVar11);
+            plVar9 = local_470;
+joined_r0x00014000a1b0:
+            plVar5 = plVar9;
+            plVar9 = plVar8;
+            if (plVar5 != (longlong *)0x0) {
+              (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*plVar5 + 8),plVar5);
+              iVar7 = (*extraout_x15_03)();
+              plVar9 = plVar5;
+              if (iVar7 == (int)*(undefined8 *)(puVar2 + 0xe)) goto LAB_14000a230;
+              pcVar13 = (char *)0x0;
+              if (*(char *)((longlong)plVar5 + 9) != '\0') {
+                do {
+                  puVar11 = &local_470;
+                  FUN_140093e00((longlong)plVar5,(uint)pcVar13,puVar11);
+                  plVar9 = local_470;
+                  if (local_470 != (longlong *)0x0) break;
+                  uVar3 = (int)pcVar13 + 1;
+                  pcVar13 = (char *)(ulonglong)uVar3;
+                } while ((int)uVar3 < (int)(uint)*(byte *)((longlong)plVar5 + 9));
+              }
+              goto joined_r0x00014000a1b0;
+            }
+          }
+LAB_14000a230:
+          uVar6 = uVar6 + 1;
+          plVar8 = plVar9;
+        } while ((int)uVar6 < 0x18);
+      }
+      else {
+        if ((0x15 < uVar6) || ((DAT_14000a530 >> (ulonglong)(uVar6 & 0x1f) & 1) == 0))
+        goto LAB_14000a15c;
+        if (*(longlong *)(puVar2 + 0x14) != 1) goto LAB_14000a158;
+        local_470 = (longlong *)0x0;
+        plVar8 = *(longlong **)(param_1 + 0x878);
+        while( true ) {
+          if (plVar8 == (longlong *)0x0) {
+            return 0;
+          }
+          if ((*(int *)(param_1 + 0x678) != 0) &&
+             (*(int *)(param_1 + 0x680) != 0 && (int)uVar15 == 0xb)) break;
+          if (*(int *)((longlong)plVar8 + 0xc) == 1) {
+            uVar6 = *(uint *)(plVar8 + 0x420);
+            uVar14 = (ulonglong)uVar6;
+            if ((uint)pcVar13 == uVar6) {
+              uVar15 = (ulonglong)*(uint *)((longlong)plVar8 + 0x2104);
+              pcVar13 = 
+              "{CCaptureFilter::SendPacketInternal}  profile id and processing type and sending packet  %d  %d\n"
+              ;
+              puVar11 = (ulonglong *)0x0;
+              FUN_14001c1d8(3,0x140024290,0,
+                            "{CCaptureFilter::SendPacketInternal}  profile id and processing type and sending packet  %d  %d\n"
+                            ,uVar14,uVar15,param_7,param_8);
+              goto joined_r0x00014000a110;
+            }
+            if (uVar6 == 9) {
+              uVar6 = 2;
+            }
+            else {
+              if ((uVar6 != 10) && (1 < uVar6 - 0x14)) goto LAB_14000a0bc;
+              uVar6 = 1;
+            }
+          }
+          else {
+LAB_14000a0bc:
+            uVar6 = 0;
+          }
+          FUN_140093e00((longlong)plVar8,uVar6,&local_470);
+          plVar8 = local_470;
+        }
+        puVar11 = &local_470;
+        FUN_140093e00(*(longlong *)(param_1 + 0x878),6,puVar11);
+        plVar8 = local_470;
+      }
+joined_r0x00014000a110:
+      if (plVar8 == (longlong *)0x0) {
+        return 0;
+      }
+LAB_14000a118:
+      uVar6 = FUN_140098730((longlong)plVar8,puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+      if (-1 < (int)uVar6) {
+        return (ulonglong)uVar6;
+      }
+      if (-1 < (int)uVar6) {
+        uVar6 = 0;
+      }
+      pcVar13 = 
+      "{CCaptureFilter::SendPacketInternal}  IpeNode::ProcessRequest() failed for reqID = %d\n";
+LAB_14000a13c:
+      FUN_14001c1d8(1,0x140024290,0,pcVar13,*(ulonglong *)(puVar2 + 2),uVar15,param_7,param_8);
+      return (ulonglong)uVar6;
+    }
+    if (uVar6 == 1) {
+      if (((int)*(undefined8 *)(puVar2 + 0x10) == 0) && (*(int *)(param_1 + 0x828) == 0)) {
+        puVar11 = &local_470;
+        local_470 = (longlong *)0x0;
+        FUN_140093e00(*(longlong *)(param_1 + 0x878),7,puVar11);
+        plVar9 = local_470;
+        while (plVar9 != (longlong *)0x0) {
+          local_470 = plVar9;
+          if (*(int *)((longlong)plVar9 + 0xc) == 4) goto LAB_14000a3bc;
+          puVar11 = &local_470;
+          FUN_140093e00((longlong)plVar9,0,puVar11);
+          plVar9 = local_470;
+        }
+      }
+      else {
+        local_470 = (longlong *)0x0;
+        plVar8 = *(longlong **)(param_1 + 0x820);
+joined_r0x00014000a330:
+        plVar9 = plVar8;
+        if (plVar9 != (longlong *)0x0) {
+          if (*(int *)((longlong)plVar9 + 0xc) == 4) {
+            (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*plVar9 + 8),plVar9);
+            iVar7 = (*extraout_x15_05)();
+            if (iVar7 == (int)*(undefined8 *)(puVar2 + 0xe)) {
+              if (plVar9 == (longlong *)0x0) {
+                return 0xc0000001;
+              }
+              goto LAB_14000a3bc;
+            }
+          }
+          pcVar13 = (char *)0x0;
+          plVar8 = plVar9;
+          if (*(char *)((longlong)plVar9 + 9) != '\0') {
+            do {
+              puVar11 = &local_470;
+              uVar10 = FUN_140093e00((longlong)plVar9,(uint)pcVar13,puVar11);
+              if ((-1 < (int)uVar10) && (plVar8 = local_470, local_470 != (longlong *)0x0)) break;
+              uVar6 = (int)pcVar13 + 1;
+              pcVar13 = (char *)(ulonglong)uVar6;
+              plVar8 = plVar9;
+            } while ((int)uVar6 < (int)(uint)*(byte *)((longlong)plVar9 + 9));
+          }
+          goto joined_r0x00014000a330;
+        }
+      }
+      return 0xc0000001;
+    }
+    if (1 < uVar6 - 2) goto LAB_14000a3f0;
+    if ((*(longlong *)(param_1 + 0x878) == 0) && (*(longlong *)(param_1 + 0x820) == 0)) {
+      FUN_14001c1d8(1,0x140024290,0,"{CCaptureFilter::SendPacketInternal} No Active topology \n",
+                    uVar14,uVar15,param_7,param_8);
+    }
+    local_4a0[0] = puVar2[0xe];
+    local_480 = 0;
+    local_478 = 0;
+    local_488 = 0x7c;
+    local_490 = puVar2;
+    (*(code *)PTR__guard_check_icall_14002c3b8)
+              (*(undefined8 *)(*(longlong *)(*(longlong *)(param_1 + 0x30) + 0x10) + 0x28),
+               *(longlong *)(param_1 + 0x30) + 0x10,0x1f,local_4a0,0x30,0,0);
+    uVar6 = (*extraout_x15_06)();
+    if (uVar6 == 0) {
+      return 0;
+    }
+    if (uVar6 != 0x16) {
+      return (ulonglong)(uVar6 | 0xe8010000);
+    }
+    goto LAB_140009c44;
+  case 0x11:
+    if (uVar6 != 0) {
+      return 0;
+    }
+    local_470 = (longlong *)0x0;
+    if (*(longlong *)(param_1 + 0x878) != 0) {
+      puVar12 = &local_470;
+      uVar19 = FUN_140093e00(*(longlong *)(param_1 + 0x878),0x14,puVar12);
+      if (local_470 != (longlong *)0x0) {
+        uVar6 = FUN_14009a040((ulonglong)local_470,puVar2,puVar12,pcVar13,uVar14,uVar15,param_7,
+                              param_8);
+        return (ulonglong)uVar6;
+      }
+      return uVar19 & 0xffffffff;
+    }
+    return 0;
+  }
+  (*(code *)PTR__guard_check_icall_14002c3b8)
+            (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x20),*plVar8 + 0x10,uVar10,puVar2,0x7c
+            );
+  uVar6 = (*extraout_x15)();
+  if (uVar6 == 0x16) {
+LAB_140009c44:
+    uVar19 = 0x16;
+  }
+  else {
+LAB_140009c54:
+    uVar3 = 0;
+    if (uVar6 != 0) {
+      uVar3 = uVar6 | 0xe8010000;
+    }
+    uVar19 = (ulonglong)uVar3;
+  }
+  return uVar19;
+LAB_14000a3bc:
+  uVar19 = FUN_140093358((ulonglong)plVar9,puVar2,(longlong *)puVar11,pcVar13,uVar14,uVar15,param_7,
+                         param_8);
+  uVar6 = (uint)uVar19;
+  if (-1 < (int)uVar6) {
+    return uVar19 & 0xffffffff;
+  }
+  if (-1 < (int)uVar6) {
+    uVar6 = 0;
+  }
+  pcVar13 = 
+  "{CCaptureFilter::SendPacketInternal}  BpsNode::ProcessRequest() failed for reqID = %d\n";
+  goto LAB_14000a13c;
+}
+
+

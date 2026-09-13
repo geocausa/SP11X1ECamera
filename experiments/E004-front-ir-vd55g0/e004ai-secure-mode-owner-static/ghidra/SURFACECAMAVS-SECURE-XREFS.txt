@@ -1,0 +1,1770 @@
+program=surfacecamavs8380.sys
+image_base=140000000
+
+STRING @140027140 = {CCaptureFilter::SendCSIPhyInfo} Unable to send CSIInfo to secure KMDISP, status is %d\n
+  XREF 140009dc8 function=FUN_140009b18 entry=140009b18
+STRING @1400282d8 = {CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP0_SECURE_IMAGE: pPacket: %#p, requestId = %d\n
+  XREF 1400178c4 function=FUN_140017798 entry=140017798
+STRING @14002ab48 = SecureCamsupported is TRUE
+  XREF 14001e3ec function=FUN_14001e2e0 entry=14001e2e0
+STRING @14002abe0 = SecureCamsupported is FALSE
+  XREF 14001e444 function=FUN_14001e2e0 entry=14001e2e0
+  XREF 14001e490 function=FUN_14001e2e0 entry=14001e2e0
+  XREF 14001e4dc function=FUN_14001e2e0 entry=14001e2e0
+  XREF 14001e4f0 function=FUN_14001e2e0 entry=14001e2e0
+STRING @14002b0d0 = SecureMode is only available for AUX camera, setting SecureMode to false
+  XREF 14001ebe8 function=FUN_14001ebb0 entry=14001ebb0
+STRING @14009eac8 = GetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_ENABLED
+  XREF 1400830d4 function=FUN_140083040 entry=140083040
+STRING @14009eb10 = GetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_DISABLED
+  XREF 1400830d4 function=FUN_140083040 entry=140083040
+STRING @14009eb58 = SetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_ENABLED
+  XREF 1400831ac function=FUN_140083120 entry=140083120
+STRING @14009eba0 = SetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_DISABLED
+  XREF 1400831ac function=FUN_140083120 entry=140083120
+STRING @14009ebe8 = SetExtendedSecureMode, status = 0x%08x 
+  XREF 1400831dc function=FUN_140083120 entry=140083120
+STRING @1400a22b0 = IFE_MSG_ID_GROUP0_SECURE_IMAGE Frame Done - TimeStamp in QTimer = %llu
+  XREF 14008ab80 function=FUN_14008a988 entry=14008a988
+STRING @1400a36e8 = SECURE_BUFFER
+  XREF 14008d468 function=FUN_14008d430 entry=14008d430
+
+=== DECOMPILATIONS ===
+
+//// FUN_140009b18 @140009b18 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Type propagation algorithm not settling */
+
+ulonglong FUN_140009b18(ulonglong param_1,undefined8 param_2,ulonglong *param_3,undefined8 param_4,
+                       ulonglong param_5,undefined8 param_6,ulonglong param_7,ulonglong param_8)
+
+{
+  undefined2 *puVar1;
+  uint *puVar2;
+  uint uVar3;
+  uint uVar4;
+  longlong *plVar5;
+  uint uVar6;
+  int iVar7;
+  longlong *plVar8;
+  longlong *plVar9;
+  undefined8 uVar10;
+  ulonglong *puVar11;
+  undefined8 *puVar12;
+  char *pcVar13;
+  ulonglong uVar14;
+  ulonglong uVar15;
+  longlong lVar16;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  code *extraout_x15_06;
+  ulonglong uVar17;
+  longlong lVar18;
+  ulonglong uVar19;
+  undefined1 auVar20 [16];
+  uint local_4a0 [4];
+  uint *local_490;
+  undefined4 local_488;
+  undefined8 local_480;
+  undefined4 local_478;
+  undefined8 local_470;
+  undefined4 local_468;
+  undefined8 local_460;
+  undefined8 uStack_458;
+  undefined8 uStack_450;
+  undefined8 local_448;
+  undefined8 local_440;
+  undefined8 uStack_438;
+  undefined8 uStack_430;
+  undefined8 uStack_428;
+  undefined8 local_420;
+  undefined8 uStack_418;
+  undefined8 uStack_410;
+  undefined8 uStack_408;
+  undefined8 local_400;
+  undefined4 local_3f8;
+  undefined1 auStack_3f0 [252];
+  undefined8 auStack_2f4 [82];
+  
+  if (((param_3 == (ulonglong *)0x0) ||
+      (auVar20 = FUN_140023e60(param_3,(ulonglong *)&DAT_140030408,0x10), auVar20._0_4_ != 0)) ||
+     ((int)param_3[2] != 6)) {
+    FUN_14001c1d8(0,0x140024290,0,"{CCaptureFilter::SendPacketInternal} Invalid Parameter.\n",
+                  param_5,param_6,param_7,param_8);
+switchD_140009bfc_caseD_3:
+    return (ulonglong)DAT_14000a53c;
+  }
+  plVar8 = (longlong *)(param_1 + 0x30);
+  if (plVar8 == (longlong *)0x0) {
+    FUN_14001c1d8(0,0x140024290,0,
+                  "{CCaptureFilter::SendPacketInternal} Failed on invalid device state.\n",param_5,
+                  param_6,param_7,param_8);
+    return (ulonglong)DAT_14000a528;
+  }
+  uVar19 = param_3[4];
+  if (uVar19 == 0) goto switchD_140009bfc_caseD_3;
+  uVar17 = param_3[5];
+  pcVar13 = "{CCaptureFilter::SendPacketInternal} handle = %#p, offset = %d\n";
+  puVar11 = (ulonglong *)0x0;
+  uVar14 = uVar19;
+  uVar15 = uVar17;
+  FUN_14001c1d8(4,0x140024290,0,"{CCaptureFilter::SendPacketInternal} handle = %#p, offset = %d\n",
+                uVar19,uVar17,param_7,param_8);
+  uVar4 = DAT_14000a534;
+  puVar2 = (uint *)(*(longlong *)(uVar19 + 8) + uVar17);
+  uVar3 = *(uint *)(*(longlong *)(uVar19 + 8) + uVar17);
+  uVar6 = uVar3 & 0xffffff;
+  switch(uVar3 >> 0x18) {
+  case 1:
+  case 2:
+  case 4:
+  case 6:
+  case 0x15:
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    uVar10 = 0;
+    break;
+  default:
+    goto switchD_140009bfc_caseD_3;
+  case 5:
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    if ((uVar6 == 0) && (*(char *)(param_1 + 0x2ad) == '\x01')) {
+      FUN_140022c00(auStack_3f0,0,0x388);
+      uVar19 = 0x388;
+      uStack_458 = 0;
+      local_460 = 0;
+      local_448 = 0;
+      uStack_450 = 0;
+      uStack_438 = 0;
+      local_440 = 0;
+      uStack_428 = 0;
+      uStack_430 = 0;
+      uStack_418 = 0;
+      local_420 = 0;
+      uStack_408 = 0;
+      uStack_410 = 0;
+      local_400 = 0;
+      local_3f8 = 0;
+      uVar10 = FUN_14001e250();
+      if ((int)uVar10 < 0) {
+        FUN_14001c1d8(0,0x140024290,0,"{CCaptureFilter::SendCSIPhyInfo} Unable to get CSIPHYId\n",
+                      uVar19,uVar15,param_7,param_8);
+      }
+      else {
+        FUN_140022750(&local_460,0x6c,auStack_2f4,0x6c);
+        *(undefined4 *)(param_1 + 700) = (undefined4)local_448;
+        if (0 < (int)puVar2[7]) {
+          iVar7 = 0;
+          do {
+            lVar18 = (ulonglong)puVar2[6] + (longlong)iVar7 * 0x20;
+            if (*(int *)((longlong)puVar2 + lVar18 + 0x8c) == 0) {
+              lVar16 = *(longlong *)((longlong)puVar2 + lVar18 + 0x74);
+              if (lVar16 == 0) {
+                pcVar13 = 
+                "{CCaptureFilter::SendCSIPhyInfo} Invalid inputs for CameraSensorDriver_CSIPhyConfig.\n"
+                ;
+              }
+              else {
+                puVar1 = (undefined2 *)
+                         (*(longlong *)(lVar16 + 8) +
+                         (ulonglong)*(uint *)((longlong)puVar2 + lVar18 + 0x7c));
+                if (*(int *)((longlong)puVar2 + lVar18 + 0x84) == 0x18) {
+                  *(undefined2 *)(param_1 + 0x2b4) = *puVar1;
+                  *(undefined2 *)(param_1 + 0x2b6) = puVar1[1];
+                  *(undefined1 *)(param_1 + 0x2b8) = *(undefined1 *)(puVar1 + 2);
+                  *(undefined1 *)(param_1 + 0x2b9) = *(undefined1 *)((longlong)puVar1 + 5);
+                  *(undefined1 *)(param_1 + 0x2ba) = *(undefined1 *)(puVar1 + 3);
+                  (*(code *)PTR__guard_check_icall_14002c3b8)
+                            (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x48),*plVar8 + 0x10,2,
+                             param_1 + 0x2b4,0xc);
+                  uVar6 = (*extraout_x15_00)();
+                  if (uVar6 == 0x16) {
+                    uVar19 = 0x16;
+                  }
+                  else {
+                    uVar3 = 0;
+                    if (uVar6 != 0) {
+                      uVar3 = uVar6 | 0xe8010000;
+                    }
+                    uVar19 = (ulonglong)uVar3;
+                    if (uVar3 == 0) goto LAB_140009ddc;
+                  }
+                  FUN_14001c1d8(0,0x140024290,0,
+                                "{CCaptureFilter::SendCSIPhyInfo} Unable to send CSIInfo to secure KMDISP, status is %d\n"
+                                ,uVar19,uVar15,param_7,param_8);
+                  goto LAB_140009ddc;
+                }
+                pcVar13 = 
+                "{CCaptureFilter::SendCSIPhyInfo} Invalid payload size for CameraSensorDriver_CSIPhyConfig.\n"
+                ;
+              }
+              FUN_14001c1d8(0,0x140024290,0,pcVar13,uVar19,uVar15,param_7,param_8);
+            }
+LAB_140009ddc:
+            iVar7 = iVar7 + 1;
+          } while (iVar7 < (int)puVar2[7]);
+        }
+      }
+    }
+    uVar10 = 0;
+LAB_140009f94:
+    (*(code *)PTR__guard_check_icall_14002c3b8)
+              (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x20),*plVar8 + 0x10,uVar10,puVar2,
+               0x7c);
+    uVar6 = (*extraout_x15_02)();
+    if (uVar6 == 0x16) goto LAB_140009c44;
+    goto LAB_140009c54;
+  case 7:
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    uVar10 = 1;
+    break;
+  case 8:
+    if (uVar6 == 0) {
+      if (*(longlong *)(param_1 + 0x878) != 0) {
+        local_470 = (longlong *)0x0;
+        *(undefined4 *)(*(longlong *)(param_1 + 0x878) + 0x298) = 1;
+        puVar12 = &local_470;
+        FUN_140093e00(*(longlong *)(param_1 + 0x878),6,puVar12);
+        uVar19 = (ulonglong)local_470;
+        if (local_470 != (longlong *)0x0) {
+          FUN_140009438(param_1,(ulonglong)puVar2,puVar12,pcVar13,uVar14,uVar15,param_7,param_8);
+          uVar6 = FUN_140095cd0(uVar19,puVar2);
+          return (ulonglong)uVar6;
+        }
+        return 0;
+      }
+      pcVar13 = "{CCaptureFilter::SendPacketInternal} Failed to get FD Node.\n";
+    }
+    else {
+      pcVar13 = "{CCaptureFilter::SendPacketInternal} Invalid FD opcode.\n";
+    }
+    FUN_14001c1d8(0,0x140024290,0,pcVar13,uVar14,uVar15,param_7,param_8);
+LAB_14000a3f0:
+    return (ulonglong)DAT_14000a538;
+  case 0xd:
+  case 0xf:
+    if ((uVar6 - 1 & 0xfffffffd) != 0) {
+      if ((uVar3 & 0xfffffd) != 0) goto LAB_14000a3f0;
+      local_470 = (longlong *)0x0;
+      local_468 = 0;
+      puVar12 = (undefined8 *)0xc;
+      (*(code *)PTR__guard_check_icall_14002c3b8)
+                (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x18),*plVar8 + 0x10,&local_470);
+      uVar6 = (*extraout_x15_01)();
+      if (uVar6 != 0x16) {
+        uVar3 = 0;
+        if (uVar6 != 0) {
+          uVar3 = uVar6 | 0xe8010000;
+        }
+        if ((int)uVar3 < 0) {
+          if (-1 < (int)uVar3) {
+            uVar3 = 0;
+          }
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CCaptureFilter::SendPacketInternal} Failed to get Enabled IFE Info.\n",
+                        uVar14,uVar15,param_7,param_8);
+          return (ulonglong)uVar3;
+        }
+      }
+      *(undefined4 *)(param_1 + 0x6c) = (undefined4)local_470;
+      *(undefined4 *)(param_1 + 0x70) = local_470._4_4_;
+      *(undefined4 *)(param_1 + 0x74) = local_468;
+      FUN_140009438(param_1,(ulonglong)puVar2,puVar12,pcVar13,uVar14,uVar15,param_7,param_8);
+      uVar10 = 2;
+      goto LAB_140009f94;
+    }
+    lVar18 = *(longlong *)(param_1 + 0x878);
+    if (lVar18 == 0) goto LAB_14000a3f0;
+    FUN_140096438(lVar18,(longlong)puVar2);
+    *(bool *)(lVar18 + 0x21) = *(int *)(param_1 + 0x6a4) == 1;
+    uVar6 = FUN_140096a10(lVar18,puVar2);
+    if ((int)uVar6 < 0) {
+      return (ulonglong)uVar6;
+    }
+    FUN_140009438(param_1,(ulonglong)puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+    uVar10 = 2;
+    break;
+  case 0x10:
+    if (uVar6 == 0) {
+      pcVar13 = *(char **)(puVar2 + 0x10);
+      uVar15 = *(ulonglong *)(puVar2 + 0x12);
+      uVar6 = (uint)pcVar13;
+      if (*(char *)(param_1 + 0x2ac) == '\0') {
+LAB_14000a158:
+        if (uVar6 != 0) {
+LAB_14000a15c:
+          if (1 < uVar6 - 0x12 && uVar6 != 5) goto LAB_14000a248;
+        }
+        if (*(int *)(param_1 + 0x828) != 0) {
+LAB_14000a248:
+          local_470 = (longlong *)0x0;
+          plVar5 = *(longlong **)(param_1 + 0x820);
+          plVar9 = (longlong *)0x0;
+          do {
+            plVar8 = plVar5;
+            if (plVar8 == (longlong *)0x0) {
+              return 0;
+            }
+            (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*plVar8 + 8),plVar8);
+            iVar7 = (*extraout_x15_04)();
+            if (iVar7 == (int)*(undefined8 *)(puVar2 + 0xe)) goto joined_r0x00014000a110;
+            pcVar13 = (char *)0x0;
+            plVar5 = plVar9;
+            if (*(char *)((longlong)plVar8 + 9) != '\0') {
+              do {
+                puVar11 = &local_470;
+                FUN_140093e00((longlong)plVar8,(uint)pcVar13,puVar11);
+                plVar5 = local_470;
+                plVar9 = local_470;
+                if (local_470 != (longlong *)0x0) break;
+                uVar6 = (int)pcVar13 + 1;
+                pcVar13 = (char *)(ulonglong)uVar6;
+              } while ((int)uVar6 < (int)(uint)*(byte *)((longlong)plVar8 + 9));
+            }
+          } while( true );
+        }
+        if (*(longlong *)(param_1 + 0x878) == 0) {
+          return 0;
+        }
+        uVar6 = 0;
+        plVar8 = (longlong *)0x0;
+        do {
+          if (plVar8 != (longlong *)0x0) goto LAB_14000a118;
+          plVar9 = plVar8;
+          if ((uVar6 < 0x16) && ((uVar4 >> (ulonglong)(uVar6 & 0x1f) & 1) != 0)) {
+            puVar11 = &local_470;
+            local_470 = (longlong *)0x0;
+            FUN_140093e00(*(longlong *)(param_1 + 0x878),uVar6,puVar11);
+            plVar9 = local_470;
+joined_r0x00014000a1b0:
+            plVar5 = plVar9;
+            plVar9 = plVar8;
+            if (plVar5 != (longlong *)0x0) {
+              (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*plVar5 + 8),plVar5);
+              iVar7 = (*extraout_x15_03)();
+              plVar9 = plVar5;
+              if (iVar7 == (int)*(undefined8 *)(puVar2 + 0xe)) goto LAB_14000a230;
+              pcVar13 = (char *)0x0;
+              if (*(char *)((longlong)plVar5 + 9) != '\0') {
+                do {
+                  puVar11 = &local_470;
+                  FUN_140093e00((longlong)plVar5,(uint)pcVar13,puVar11);
+                  plVar9 = local_470;
+                  if (local_470 != (longlong *)0x0) break;
+                  uVar3 = (int)pcVar13 + 1;
+                  pcVar13 = (char *)(ulonglong)uVar3;
+                } while ((int)uVar3 < (int)(uint)*(byte *)((longlong)plVar5 + 9));
+              }
+              goto joined_r0x00014000a1b0;
+            }
+          }
+LAB_14000a230:
+          uVar6 = uVar6 + 1;
+          plVar8 = plVar9;
+        } while ((int)uVar6 < 0x18);
+      }
+      else {
+        if ((0x15 < uVar6) || ((DAT_14000a530 >> (ulonglong)(uVar6 & 0x1f) & 1) == 0))
+        goto LAB_14000a15c;
+        if (*(longlong *)(puVar2 + 0x14) != 1) goto LAB_14000a158;
+        local_470 = (longlong *)0x0;
+        plVar8 = *(longlong **)(param_1 + 0x878);
+        while( true ) {
+          if (plVar8 == (longlong *)0x0) {
+            return 0;
+          }
+          if ((*(int *)(param_1 + 0x678) != 0) &&
+             (*(int *)(param_1 + 0x680) != 0 && (int)uVar15 == 0xb)) break;
+          if (*(int *)((longlong)plVar8 + 0xc) == 1) {
+            uVar6 = *(uint *)(plVar8 + 0x420);
+            uVar14 = (ulonglong)uVar6;
+            if ((uint)pcVar13 == uVar6) {
+              uVar15 = (ulonglong)*(uint *)((longlong)plVar8 + 0x2104);
+              pcVar13 = 
+              "{CCaptureFilter::SendPacketInternal}  profile id and processing type and sending packet  %d  %d\n"
+              ;
+              puVar11 = (ulonglong *)0x0;
+              FUN_14001c1d8(3,0x140024290,0,
+                            "{CCaptureFilter::SendPacketInternal}  profile id and processing type and sending packet  %d  %d\n"
+                            ,uVar14,uVar15,param_7,param_8);
+              goto joined_r0x00014000a110;
+            }
+            if (uVar6 == 9) {
+              uVar6 = 2;
+            }
+            else {
+              if ((uVar6 != 10) && (1 < uVar6 - 0x14)) goto LAB_14000a0bc;
+              uVar6 = 1;
+            }
+          }
+          else {
+LAB_14000a0bc:
+            uVar6 = 0;
+          }
+          FUN_140093e00((longlong)plVar8,uVar6,&local_470);
+          plVar8 = local_470;
+        }
+        puVar11 = &local_470;
+        FUN_140093e00(*(longlong *)(param_1 + 0x878),6,puVar11);
+        plVar8 = local_470;
+      }
+joined_r0x00014000a110:
+      if (plVar8 == (longlong *)0x0) {
+        return 0;
+      }
+LAB_14000a118:
+      uVar6 = FUN_140098730((longlong)plVar8,puVar2,puVar11,pcVar13,uVar14,uVar15,param_7,param_8);
+      if (-1 < (int)uVar6) {
+        return (ulonglong)uVar6;
+      }
+      if (-1 < (int)uVar6) {
+        uVar6 = 0;
+      }
+      pcVar13 = 
+      "{CCaptureFilter::SendPacketInternal}  IpeNode::ProcessRequest() failed for reqID = %d\n";
+LAB_14000a13c:
+      FUN_14001c1d8(1,0x140024290,0,pcVar13,*(ulonglong *)(puVar2 + 2),uVar15,param_7,param_8);
+      return (ulonglong)uVar6;
+    }
+    if (uVar6 == 1) {
+      if (((int)*(undefined8 *)(puVar2 + 0x10) == 0) && (*(int *)(param_1 + 0x828) == 0)) {
+        puVar11 = &local_470;
+        local_470 = (longlong *)0x0;
+        FUN_140093e00(*(longlong *)(param_1 + 0x878),7,puVar11);
+        plVar9 = local_470;
+        while (plVar9 != (longlong *)0x0) {
+          local_470 = plVar9;
+          if (*(int *)((longlong)plVar9 + 0xc) == 4) goto LAB_14000a3bc;
+          puVar11 = &local_470;
+          FUN_140093e00((longlong)plVar9,0,puVar11);
+          plVar9 = local_470;
+        }
+      }
+      else {
+        local_470 = (longlong *)0x0;
+        plVar8 = *(longlong **)(param_1 + 0x820);
+joined_r0x00014000a330:
+        plVar9 = plVar8;
+        if (plVar9 != (longlong *)0x0) {
+          if (*(int *)((longlong)plVar9 + 0xc) == 4) {
+            (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*plVar9 + 8),plVar9);
+            iVar7 = (*extraout_x15_05)();
+            if (iVar7 == (int)*(undefined8 *)(puVar2 + 0xe)) {
+              if (plVar9 == (longlong *)0x0) {
+                return 0xc0000001;
+              }
+              goto LAB_14000a3bc;
+            }
+          }
+          pcVar13 = (char *)0x0;
+          plVar8 = plVar9;
+          if (*(char *)((longlong)plVar9 + 9) != '\0') {
+            do {
+              puVar11 = &local_470;
+              uVar10 = FUN_140093e00((longlong)plVar9,(uint)pcVar13,puVar11);
+              if ((-1 < (int)uVar10) && (plVar8 = local_470, local_470 != (longlong *)0x0)) break;
+              uVar6 = (int)pcVar13 + 1;
+              pcVar13 = (char *)(ulonglong)uVar6;
+              plVar8 = plVar9;
+            } while ((int)uVar6 < (int)(uint)*(byte *)((longlong)plVar9 + 9));
+          }
+          goto joined_r0x00014000a330;
+        }
+      }
+      return 0xc0000001;
+    }
+    if (1 < uVar6 - 2) goto LAB_14000a3f0;
+    if ((*(longlong *)(param_1 + 0x878) == 0) && (*(longlong *)(param_1 + 0x820) == 0)) {
+      FUN_14001c1d8(1,0x140024290,0,"{CCaptureFilter::SendPacketInternal} No Active topology \n",
+                    uVar14,uVar15,param_7,param_8);
+    }
+    local_4a0[0] = puVar2[0xe];
+    local_480 = 0;
+    local_478 = 0;
+    local_488 = 0x7c;
+    local_490 = puVar2;
+    (*(code *)PTR__guard_check_icall_14002c3b8)
+              (*(undefined8 *)(*(longlong *)(*(longlong *)(param_1 + 0x30) + 0x10) + 0x28),
+               *(longlong *)(param_1 + 0x30) + 0x10,0x1f,local_4a0,0x30,0,0);
+    uVar6 = (*extraout_x15_06)();
+    if (uVar6 == 0) {
+      return 0;
+    }
+    if (uVar6 != 0x16) {
+      return (ulonglong)(uVar6 | 0xe8010000);
+    }
+    goto LAB_140009c44;
+  case 0x11:
+    if (uVar6 != 0) {
+      return 0;
+    }
+    local_470 = (longlong *)0x0;
+    if (*(longlong *)(param_1 + 0x878) != 0) {
+      puVar12 = &local_470;
+      uVar19 = FUN_140093e00(*(longlong *)(param_1 + 0x878),0x14,puVar12);
+      if (local_470 != (longlong *)0x0) {
+        uVar6 = FUN_14009a040((ulonglong)local_470,puVar2,puVar12,pcVar13,uVar14,uVar15,param_7,
+                              param_8);
+        return (ulonglong)uVar6;
+      }
+      return uVar19 & 0xffffffff;
+    }
+    return 0;
+  }
+  (*(code *)PTR__guard_check_icall_14002c3b8)
+            (*(undefined8 *)(*(longlong *)(*plVar8 + 0x10) + 0x20),*plVar8 + 0x10,uVar10,puVar2,0x7c
+            );
+  uVar6 = (*extraout_x15)();
+  if (uVar6 == 0x16) {
+LAB_140009c44:
+    uVar19 = 0x16;
+  }
+  else {
+LAB_140009c54:
+    uVar3 = 0;
+    if (uVar6 != 0) {
+      uVar3 = uVar6 | 0xe8010000;
+    }
+    uVar19 = (ulonglong)uVar3;
+  }
+  return uVar19;
+LAB_14000a3bc:
+  uVar19 = FUN_140093358((ulonglong)plVar9,puVar2,(longlong *)puVar11,pcVar13,uVar14,uVar15,param_7,
+                         param_8);
+  uVar6 = (uint)uVar19;
+  if (-1 < (int)uVar6) {
+    return uVar19 & 0xffffffff;
+  }
+  if (-1 < (int)uVar6) {
+    uVar6 = 0;
+  }
+  pcVar13 = 
+  "{CCaptureFilter::SendPacketInternal}  BpsNode::ProcessRequest() failed for reqID = %d\n";
+  goto LAB_14000a13c;
+}
+
+
+
+//// FUN_140017798 @140017798 ////
+
+uint FUN_140017798(longlong *param_1,int *param_2,uint *param_3,undefined8 param_4,
+                  undefined8 param_5,ulonglong param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  longlong *plVar2;
+  uint extraout_w0;
+  uint uVar3;
+  longlong lVar4;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  undefined8 extraout_x1_04;
+  undefined8 extraout_x1_05;
+  undefined8 uVar5;
+  longlong *plVar6;
+  char *pcVar7;
+  ulonglong *puVar8;
+  ulonglong uVar9;
+  int *piVar10;
+  ulonglong uVar11;
+  int *piVar12;
+  longlong *plVar13;
+  undefined8 *puVar14;
+  longlong lVar16;
+  longlong *plVar17;
+  uint *puVar18;
+  uint *puVar19;
+  undefined8 uVar20;
+  longlong lVar21;
+  undefined8 uVar22;
+  uint local_240;
+  uint local_238;
+  longlong local_230;
+  longlong alStack_1f0 [26];
+  undefined8 local_120 [28];
+  undefined8 *puVar15;
+  
+  uVar3 = DAT_1400185c0;
+  if ((param_1[0x25] == 0) ||
+     (lVar4 = ExInterlockedRemoveHeadList(param_1[0x25] + 8), uVar3 = DAT_1400185c4, lVar4 == 0)) {
+    uVar9 = (ulonglong)uVar3;
+  }
+  else {
+    uVar9 = 0;
+    local_230 = lVar4;
+  }
+  local_240 = (uint)uVar9;
+  if (((int)local_240 < 0) || (*param_1 == 0)) {
+    local_120[0]._0_4_ = 7;
+    puVar14 = local_120;
+    do {
+      piVar10 = param_2;
+      puVar15 = puVar14;
+      puVar14 = puVar15 + 4;
+      uVar22 = *puVar15;
+      uVar20 = puVar15[3];
+      uVar5 = puVar15[2];
+      *(undefined8 *)(piVar10 + 2) = puVar15[1];
+      *(undefined8 *)piVar10 = uVar22;
+      *(undefined8 *)(piVar10 + 6) = uVar20;
+      *(undefined8 *)(piVar10 + 4) = uVar5;
+      param_2 = piVar10 + 8;
+    } while (puVar14 != local_120 + 0x18);
+    uVar5 = *puVar14;
+    *(undefined8 *)(piVar10 + 10) = puVar15[5];
+    *(undefined8 *)(piVar10 + 8) = uVar5;
+    *(undefined8 *)(piVar10 + 0xc) = puVar15[6];
+    if (DAT_1400185c4 != local_240) {
+      FUN_14001c1d8(0,0x140024290,0,
+                    "{CDispatchHandler::GetIspNotification} InterlockedQueue_Dequeue() failed: %#x\n"
+                    ,uVar9,param_6,param_7,param_8);
+    }
+    goto LAB_140018554;
+  }
+  puVar19 = *(uint **)(local_230 + 0x10);
+  piVar10 = param_2;
+  do {
+    piVar12 = piVar10;
+    piVar10 = piVar12 + 8;
+    piVar12[2] = 0;
+    piVar12[3] = 0;
+    piVar12[0] = 0;
+    piVar12[1] = 0;
+    piVar12[6] = 0;
+    piVar12[7] = 0;
+    piVar12[4] = 0;
+    piVar12[5] = 0;
+  } while (piVar10 != param_2 + 0x30);
+  piVar12[10] = 0;
+  piVar12[0xb] = 0;
+  piVar10[0] = 0;
+  piVar10[1] = 0;
+  piVar12[0xc] = 0;
+  piVar12[0xd] = 0;
+  param_3[0] = 0;
+  param_3[1] = 0;
+  param_3[2] = 0;
+  FUN_14008a988(param_1,(ulonglong)*puVar19,puVar19[1],(ulonglong *)(puVar19 + 2),param_2,param_6,
+                param_7,param_8);
+  if (extraout_w0 == 0x16) {
+    local_240 = 0x16;
+  }
+  else {
+    local_240 = 0;
+    if (extraout_w0 != 0) {
+      local_240 = extraout_w0 | 0xe8010000;
+    }
+  }
+  if (*param_2 == 2) {
+    if (*puVar19 == 0x1d) {
+      puVar18 = *(uint **)(puVar19 + 0xe8);
+      if (puVar18 != (uint *)0x0) {
+        if (param_2[5] == *(int *)(*param_1 + 0x290)) {
+          pcVar7 = 
+          "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP0_SECURE_IMAGE: pPacket: %#p, requestId = %d\n"
+          ;
+          goto LAB_140017924;
+        }
+LAB_1400178cc:
+        FUN_14001c1d8(0,0x140024290,0,
+                      "{CDispatchHandler::GetIspNotification} invalid IFE packet = %p\n",
+                      (ulonglong)puVar18,param_6,param_7,param_8);
+      }
+    }
+    else if ((*puVar19 == 0x1e) && (puVar18 = *(uint **)(puVar19 + 0xe8), puVar18 != (uint *)0x0)) {
+      if (param_2[5] != *(int *)(*param_1 + 0x290)) goto LAB_1400178cc;
+      pcVar7 = 
+      "{CDispatchHandler::GetIspNotification} IFE_LITE_SECURE_MSG_ID_PREPROCESSED_RAW: pPacket: %#p, requestId = %d\n"
+      ;
+LAB_140017924:
+      param_6 = *(ulonglong *)(puVar18 + 2);
+      FUN_14001c1d8(4,0x140024290,0,pcVar7,(ulonglong)puVar18,param_6,param_7,param_8);
+      FUN_140005c30(*param_1,puVar18,*puVar19,(longlong)(puVar19 + 2),*(ulonglong *)(puVar18 + 0x10)
+                    ,param_6,param_7,param_8);
+    }
+    if (*(int *)(*param_1 + 0x6c8) != 0) {
+      if (*puVar19 == 0x15) {
+        puVar18 = *(uint **)(puVar19 + 0xe8);
+        FUN_14001c1d8(4,0x140024290,0,
+                      "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP0_IMAGE: pPacket: %#p\n"
+                      ,(ulonglong)puVar18,param_6,param_7,param_8);
+        if (puVar18 != (uint *)0x0) {
+          if (param_2[5] == *(int *)(*param_1 + 0x290)) {
+            pcVar7 = 
+            "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP0_IMAGE: pPacket: %#p, requestId = %d\n"
+            ;
+LAB_140017a3c:
+            param_6 = *(ulonglong *)(puVar18 + 2);
+            FUN_14001c1d8(4,0x140024290,0,pcVar7,(ulonglong)puVar18,param_6,param_7,param_8);
+            FUN_140005c30(*param_1,puVar18,*puVar19,(longlong)(puVar19 + 2),
+                          *(ulonglong *)(puVar18 + 0x10),param_6,param_7,param_8);
+          }
+          else {
+LAB_1400179d8:
+            FUN_14001c1d8(0,0x140024290,0,
+                          "{CDispatchHandler::GetIspNotification} invalid IFE packet = %p\n",
+                          (ulonglong)puVar18,param_6,param_7,param_8);
+          }
+        }
+      }
+      else if (*puVar19 == 0x16) {
+        puVar18 = *(uint **)(puVar19 + 0xe8);
+        FUN_14001c1d8(4,0x140024290,0,
+                      "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP0_IMAGE: pPacket: % #p\n"
+                      ,(ulonglong)puVar18,param_6,param_7,param_8);
+        if (puVar18 != (uint *)0x0) {
+          if (param_2[5] != *(int *)(*param_1 + 0x290)) goto LAB_1400179d8;
+          pcVar7 = 
+          "{CDispatchHandler::GetIspNotification} IFE_LITE_MSG_ID_PREPROCESSED_RAW: pPacket: %#p, requestId = %d\n"
+          ;
+          goto LAB_140017a3c;
+        }
+      }
+    }
+  }
+  if (*param_2 == 3) {
+    local_238 = 0;
+    puVar18 = *(uint **)(puVar19 + 0x1a);
+    FUN_14001c1d8(3,0x140024290,0,
+                  "{CDispatchHandler::GetIspNotification} Received DATA_PATH_EVENT_RDI_READY for MsgId=%d\n"
+                  ,(ulonglong)*puVar19,param_6,param_7,param_8);
+    if (*puVar19 == 10 && puVar18 != (uint *)0x0) {
+      for (uVar3 = 0; uVar3 < puVar18[9]; uVar3 = uVar3 + 1) {
+        lVar4 = (ulonglong)uVar3 * 0x130 + (ulonglong)puVar18[8];
+        puVar8 = (ulonglong *)((longlong)puVar18 + lVar4 + 0x74);
+        if (((puVar8 != (ulonglong *)0x0) && (*(int *)((longlong)puVar18 + lVar4 + 0x13c) == 0x3008)
+            ) && (param_6 = *puVar8, param_6 != 0)) {
+          param_7 = *(undefined8 *)(puVar18 + 2);
+          uVar9 = 0x3008;
+          pcVar7 = 
+          "{CDispatchHandler::GetIspNotification} Flush RDI2 buffer handle = %x reqid = %d\n\n";
+          uVar5 = 0;
+          FUN_14001c1d8(4,0x140024290,0,
+                        "{CDispatchHandler::GetIspNotification} Flush RDI2 buffer handle = %x reqid = %d\n\n"
+                        ,0x3008,param_6,param_7,param_8);
+          FUN_140007c18((undefined8 *)*puVar8,0,uVar5,pcVar7,uVar9,param_6,param_7,param_8);
+          break;
+        }
+      }
+    }
+    if (*puVar19 == 0x17) {
+      if (puVar18 != (uint *)0x0) {
+        lVar4 = (longlong)puVar18 + (ulonglong)puVar18[8] + 0x74;
+        for (uVar3 = 0; uVar3 < puVar18[9]; uVar3 = uVar3 + 1) {
+          if (*(int *)(lVar4 + 200) == 0x3006) {
+            if (*(int *)(lVar4 + 0x10c) == 0) {
+              local_238 = 1;
+            }
+            break;
+          }
+          lVar4 = lVar4 + 0x130;
+        }
+      }
+      FUN_14001c1d8(4,0x140024290,0,
+                    "{CDispatchHandler::GetIspNotification} RDI: KMD alloc buffer = %d\n",
+                    (ulonglong)local_238,param_6,param_7,param_8);
+      if (local_238 != 0) {
+        uVar5 = 0;
+        if (param_2[5] == *(int *)(*param_1 + 0x290)) {
+          param_6 = *(ulonglong *)(puVar18 + 2);
+          FUN_14001c1d8(4,0x140024290,0,
+                        "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP1_IMAGE: pPacket: %#p, requestId = %d\n"
+                        ,(ulonglong)puVar18,param_6,param_7,param_8);
+          if (*(int *)(*param_1 + 0x61c) != 0) {
+            FUN_140005938(*param_1,(longlong)puVar18);
+          }
+          if (*(int *)(*param_1 + 0x240) != 0x10) {
+            FUN_140006188(*param_1,(longlong)puVar18,uVar5,(undefined8 *)(puVar19 + 2),
+                          *(ulonglong *)(puVar18 + 0x10),param_6,param_7,param_8);
+          }
+          FUN_140005c30(*param_1,puVar18,*puVar19,(longlong)(puVar19 + 2),
+                        *(ulonglong *)(puVar18 + 0x10),param_6,param_7,param_8);
+        }
+        else {
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CDispatchHandler::GetIspNotification} invalid IFE packet = %p\n",
+                        (ulonglong)puVar18,param_6,param_7,param_8);
+        }
+      }
+    }
+  }
+  if (*param_2 == 4) {
+    if ((*puVar19 - 0x15 < 2) && (puVar18 = *(uint **)(puVar19 + 0xe8), puVar18 != (uint *)0x0)) {
+      if (param_2[5] == *(int *)(*param_1 + 0x290)) {
+        param_6 = *(ulonglong *)(puVar18 + 2);
+        FUN_14001c1d8(4,0x140024290,0,
+                      "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP0_IMAGE: pPacket: %#p, requestId = %d\n"
+                      ,(ulonglong)puVar18,param_6,param_7,param_8);
+        FUN_140005c30(*param_1,puVar18,*puVar19,(longlong)(puVar19 + 2),
+                      *(ulonglong *)(puVar18 + 0x10),param_6,param_7,param_8);
+      }
+      else {
+        FUN_14001c1d8(0,0x140024290,0,
+                      "{CDispatchHandler::GetIspNotification} invalid IFE packet = %p\n",
+                      (ulonglong)puVar18,param_6,param_7,param_8);
+      }
+    }
+    uVar3 = *puVar19;
+    if (uVar3 == 7) {
+      puVar18 = *(uint **)(puVar19 + 0x1a);
+      if (puVar18 != (uint *)0x0) {
+        if (param_2[5] == *(int *)(*param_1 + 0x290)) {
+          param_6 = *(ulonglong *)(puVar18 + 2);
+          FUN_14001c1d8(4,0x140024290,0,
+                        "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_DUAL_PD_STATS: pPacket: %#p, requestId = %d\n"
+                        ,(ulonglong)puVar18,param_6,param_7,param_8);
+          FUN_140005c30(*param_1,puVar18,*puVar19,(longlong)(puVar19 + 2),
+                        *(ulonglong *)(puVar18 + 0x10),param_6,param_7,param_8);
+        }
+        else {
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CDispatchHandler::GetIspNotification} invalid IFE packet = %p\n",
+                        (ulonglong)puVar18,param_6,param_7,param_8);
+        }
+        for (uVar3 = 0; uVar3 < puVar18[9]; uVar3 = uVar3 + 1) {
+          lVar4 = (ulonglong)uVar3 * 0x130 + (ulonglong)puVar18[8];
+          puVar8 = (ulonglong *)((longlong)puVar18 + lVar4 + 0x74);
+          if (((puVar8 != (ulonglong *)0x0) &&
+              (*(int *)((longlong)puVar18 + lVar4 + 0x13c) == 0x3016)) &&
+             (param_6 = *puVar8, param_6 != 0)) {
+            param_7 = *(undefined8 *)(puVar18 + 2);
+            uVar9 = 0x3016;
+            pcVar7 = 
+            "{CDispatchHandler::GetIspNotification} Flush DualPD Stats buffer handle = %x reqid = %d\n\n"
+            ;
+            uVar5 = 0;
+            FUN_14001c1d8(4,0x140024290,0,
+                          "{CDispatchHandler::GetIspNotification} Flush DualPD Stats buffer handle = %x reqid = %d\n\n"
+                          ,0x3016,param_6,param_7,param_8);
+            FUN_140007c18((undefined8 *)*puVar8,0,uVar5,pcVar7,uVar9,param_6,param_7,param_8);
+            break;
+          }
+        }
+      }
+    }
+    else if (uVar3 == 0x19) {
+      puVar18 = *(uint **)(puVar19 + 0x62);
+      if (puVar18 != (uint *)0x0) {
+        if (param_2[5] == *(int *)(*param_1 + 0x290)) {
+          pcVar7 = 
+          "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP3_STATS: pPacket: %#p, requestId = %d\n"
+          ;
+          goto LAB_140017e54;
+        }
+LAB_140017e7c:
+        FUN_14001c1d8(0,0x140024290,0,
+                      "{CDispatchHandler::GetIspNotification} invalid IFE packet = %p\n",
+                      (ulonglong)puVar18,param_6,param_7,param_8);
+      }
+    }
+    else if ((uVar3 == 0x1a) && (puVar18 = *(uint **)(puVar19 + 0x62), puVar18 != (uint *)0x0)) {
+      if (param_2[5] != *(int *)(*param_1 + 0x290)) goto LAB_140017e7c;
+      pcVar7 = 
+      "{CDispatchHandler::GetIspNotification} IFE_MSG_ID_GROUP4_STATS: pPacket: %#p, requestId = %d\n"
+      ;
+LAB_140017e54:
+      param_6 = *(ulonglong *)(puVar18 + 2);
+      FUN_14001c1d8(4,0x140024290,0,pcVar7,(ulonglong)puVar18,param_6,param_7,param_8);
+      FUN_140005c30(*param_1,puVar18,*puVar19,(longlong)(puVar19 + 2),*(ulonglong *)(puVar18 + 0x10)
+                    ,param_6,param_7,param_8);
+    }
+  }
+  uVar3 = puVar19[0x1fe];
+  plVar6 = (longlong *)(ulonglong)uVar3;
+  if (uVar3 == 2) {
+    puVar18 = *(uint **)(puVar19 + 0x204);
+    if (puVar18 != (uint *)0x0) {
+      lVar4 = *param_1;
+      if ((puVar19[0x202] == *(uint *)(lVar4 + 0x290)) ||
+         (puVar19[0x202] == *(uint *)(lVar4 + 0x294))) {
+        piVar10 = *(int **)(puVar18 + 0x10);
+        puVar8 = (ulonglong *)(puVar19 + 0x200);
+        plVar6 = (longlong *)0x2;
+        uVar5 = FUN_140005c30(lVar4,puVar18,2,(longlong)puVar8,(ulonglong)piVar10,param_6,param_7,
+                              param_8);
+        if ((*(int *)(*param_1 + 0x28c) == 0) || (*(uint *)(*param_1 + 0x294) != puVar18[0x1c])) {
+          uVar5 = FUN_14008b2c0(uVar5,puVar19[0x1fe],(ulonglong)plVar6,
+                                (ulonglong *)(puVar19 + 0x200),param_2,param_6,param_7,param_8);
+          uVar3 = (uint)uVar5;
+          if (uVar3 == 0x16) {
+            local_240 = 0x16;
+          }
+          else {
+            local_240 = 0;
+            if (uVar3 != 0) {
+              local_240 = uVar3 | 0xe8010000;
+            }
+          }
+        }
+        else if ((*(char *)((longlong)puVar18 + 3) == '\x10' && (*puVar18 & 0xffffff) == 1) &&
+                (lVar4 = *(longlong *)(puVar18 + 0x10), lVar4 != 0)) {
+          if (*(int *)(lVar4 + 0x54) == 1) {
+            puVar8 = (ulonglong *)(puVar19 + 0x200);
+            piVar10 = param_2;
+            uVar5 = FUN_14008b2c0(uVar5,puVar19[0x1fe],(ulonglong)plVar6,puVar8,param_2,param_6,
+                                  param_7,param_8);
+            uVar3 = (uint)uVar5;
+            if (uVar3 == 0x16) {
+              local_240 = 0x16;
+            }
+            else {
+              local_240 = 0;
+              if (uVar3 != 0) {
+                local_240 = uVar3 | 0xe8010000;
+              }
+            }
+          }
+          if (*(int *)(lVar4 + 0x54) - 2U < 2) {
+            uVar5 = FUN_14001ce70(&DAT_140030548,"MFNR CASE Frame",(ulonglong)plVar6,puVar8,piVar10,
+                                  param_6,param_7,param_8);
+            puVar8 = (ulonglong *)(puVar19 + 0x200);
+            piVar10 = param_2;
+            uVar5 = FUN_14008b2c0(uVar5,puVar19[0x1fe],(ulonglong)plVar6,puVar8,param_2,param_6,
+                                  param_7,param_8);
+            uVar3 = (uint)uVar5;
+            if (uVar3 == 0x16) {
+              local_240 = 0x16;
+            }
+            else {
+              local_240 = 0;
+              if (uVar3 != 0) {
+                local_240 = uVar3 | 0xe8010000;
+              }
+            }
+            if (*param_2 == 2) {
+              *(undefined4 *)(param_1 + 0xd) = DAT_1400185c8;
+              plVar6 = param_1 + 0xb;
+              FUN_1400057c0(*param_1,extraout_x1,plVar6,puVar8,(ulonglong)piVar10,param_6,param_7,
+                            param_8);
+            }
+          }
+        }
+      }
+      else {
+LAB_14001803c:
+        plVar6 = (longlong *)0x0;
+        FUN_14001c1d8(0,0x140024290,0,
+                      "{CDispatchHandler::GetIspNotification} invalid BPS packet = %p\n",
+                      (ulonglong)puVar18,param_6,param_7,param_8);
+      }
+    }
+  }
+  else if ((uVar3 == 4) && (puVar18 = *(uint **)(puVar19 + 0x202), puVar18 != (uint *)0x0)) {
+    lVar4 = *param_1;
+    if ((puVar19[0x201] != *(uint *)(lVar4 + 0x290)) && (puVar19[0x201] != *(uint *)(lVar4 + 0x294))
+       ) goto LAB_14001803c;
+    FUN_140005c30(lVar4,puVar18,4,(longlong)(puVar19 + 0x200),*(ulonglong *)(puVar18 + 0x10),param_6
+                  ,param_7,param_8);
+  }
+  if (puVar19[0x16c] == 1) {
+    uVar5 = FUN_14008b160((longlong)param_1,1,(ulonglong)plVar6,(ulonglong *)(puVar19 + 0x16e),
+                          param_2,param_6,param_7,param_8);
+    uVar3 = (uint)uVar5;
+    if (uVar3 == 0x16) {
+      local_240 = 0x16;
+    }
+    else {
+      local_240 = 0;
+      if (uVar3 != 0) {
+        local_240 = uVar3 | 0xe8010000;
+      }
+    }
+    if (*param_2 == 2) {
+      if (puVar19[0x1fa] - 2 < 0xb) {
+        uVar3 = puVar19[0x176];
+        uVar9 = 0;
+        while (uVar11 = uVar9 + 1, uVar11 < puVar19[0x1fa]) {
+          plVar6 = (longlong *)(param_2 + 2);
+          plVar2 = alStack_1f0;
+          do {
+            plVar17 = plVar2;
+            plVar13 = plVar6;
+            plVar6 = plVar13 + 4;
+            lVar21 = *plVar13;
+            lVar16 = plVar13[3];
+            lVar4 = plVar13[2];
+            plVar17[1] = plVar13[1];
+            *plVar17 = lVar21;
+            plVar17[3] = lVar16;
+            plVar17[2] = lVar4;
+            plVar2 = plVar17 + 4;
+          } while (plVar6 != (longlong *)(param_2 + 0x32));
+          lVar4 = *plVar6;
+          plVar17[5] = plVar13[5];
+          plVar17[4] = lVar4;
+          plVar6 = alStack_1f0;
+          plVar2 = param_1 + uVar9 * 0x1a + 0x26;
+          do {
+            plVar17 = plVar2;
+            plVar13 = plVar6;
+            plVar6 = plVar13 + 4;
+            lVar21 = *plVar13;
+            lVar16 = plVar13[3];
+            lVar4 = plVar13[2];
+            plVar17[1] = plVar13[1];
+            *plVar17 = lVar21;
+            plVar17[3] = lVar16;
+            plVar17[2] = lVar4;
+            plVar2 = plVar17 + 4;
+          } while (plVar6 != alStack_1f0 + 0x18);
+          lVar4 = *plVar6;
+          plVar17[5] = plVar13[5];
+          plVar17[4] = lVar4;
+          *(uint *)((longlong)param_1 + uVar9 * 0xd0 + 0x18c) = puVar19[(uVar9 + 0x27) * 2 + 0x16e];
+          *(uint *)((longlong)param_1 + uVar9 * 0xd0 + 0x19c) = puVar19[uVar9 * 2 + 0x1bd];
+          *(uint *)(param_1 + uVar9 * 0x1a + 0x2b) = puVar19[(uVar9 + 0x37) * 2 + 0x16e];
+          *(uint *)((longlong)param_1 + uVar9 * 0xd0 + 0x16c) = puVar19[uVar9 * 2 + 0x1dd];
+          param_1[uVar9 * 0x1a + 0x29] =
+               (longlong)((DAT_1400185b8 / (double)((ulonglong)uVar3 * 0x1e)) * (double)uVar11) +
+               param_1[uVar9 * 0x1a + 0x29];
+          uVar9 = uVar11;
+        }
+      }
+      *param_3 = puVar19[0x1fa];
+      puVar18 = *(uint **)(puVar19 + 0x172);
+      uVar9 = *(ulonglong *)(puVar18 + 0x10);
+      lVar4 = *param_1;
+      if (*(longlong *)(lVar4 + 0x878) != 0) {
+        if ((param_2[5] == *(int *)(lVar4 + 0x290)) || (param_2[5] == *(int *)(lVar4 + 0x294))) {
+          pcVar7 = (char *)(puVar19 + 0x16e);
+          uVar11 = uVar9;
+          FUN_140005c30(lVar4,puVar18,puVar19[0x16c],(longlong)pcVar7,uVar9,param_6,param_7,param_8)
+          ;
+          uVar5 = extraout_x1_00;
+          if (*(int *)(uVar9 + 0x2104) == 0xb) {
+            *(undefined4 *)(param_1 + 0xd) = DAT_1400185cc;
+            pcVar7 = "{CDispatchHandler::GetIspNotification} PPSLTM IPE Sending Umd Notification\n";
+            FUN_14001c1d8(3,0x140024290,0,
+                          "{CDispatchHandler::GetIspNotification} PPSLTM IPE Sending Umd Notification\n"
+                          ,uVar11,param_6,param_7,param_8);
+            FUN_1400057c0(*param_1,extraout_x1_01,param_1 + 0xb,pcVar7,uVar11,param_6,param_7,
+                          param_8);
+            uVar5 = extraout_x1_02;
+          }
+          if (*(int *)(uVar9 + 0x2104) == 9) {
+            *(undefined4 *)(param_1 + 0xd) = DAT_1400185d0;
+            FUN_14001c1d8(3,0x140024290,0,
+                          "{CDispatchHandler::GetIspNotification} MFHDR IPE Sending Umd Notification\n"
+                          ,uVar11,param_6,param_7,param_8);
+            uVar11 = (ulonglong)*(uint *)(uVar9 + 0x2100);
+            param_6 = (ulonglong)*(uint *)(uVar9 + 0x2104);
+            pcVar7 = 
+            "{CDispatchHandler::GetIspNotification}  profile id and processing type and config packet  before oem check %d  %d\n"
+            ;
+            FUN_14001c1d8(3,0x140024290,0,
+                          "{CDispatchHandler::GetIspNotification}  profile id and processing type and config packet  before oem check %d  %d\n"
+                          ,uVar11,param_6,param_7,param_8);
+            FUN_1400057c0(*param_1,extraout_x1_03,param_1 + 0xb,pcVar7,uVar11,param_6,param_7,
+                          param_8);
+            uVar5 = extraout_x1_04;
+          }
+          lVar4 = *param_1;
+          if ((*(int *)(lVar4 + 0x28c) == 0) || (*(uint *)(lVar4 + 0x294) != puVar18[0x1c])) {
+            if (((*(int *)(lVar4 + 0x2a8) != 0) || (*(char *)(lVar4 + 0x2b0) == '\x01')) &&
+               ((((*(char *)(lVar4 + 0x748) == '\0' &&
+                  (*(char *)((longlong)puVar18 + 3) == '\x10' && (*puVar18 & 0xffffff) == 0)) &&
+                 (lVar4 = *(longlong *)(puVar18 + 0x10), lVar4 != 0)) &&
+                (((*(uint *)(lVar4 + 0x2104) & 0xffffffef) == 0 ||
+                 ((*(int *)(lVar4 + 0x2100) - 0x12U & 0xfffffffd) == 0)))))) {
+              *(undefined4 *)(param_1 + 0xd) = DAT_1400185d8;
+              uVar11 = (ulonglong)*(uint *)(lVar4 + 0x2100);
+              param_6 = (ulonglong)*(uint *)(lVar4 + 0x2104);
+              pcVar7 = 
+              "{CDispatchHandler::GetIspNotification}  profile id and processing type and config packet inside oem check %d  %d\n"
+              ;
+              FUN_14001c1d8(3,0x140024290,0,
+                            "{CDispatchHandler::GetIspNotification}  profile id and processing type and config packet inside oem check %d  %d\n"
+                            ,uVar11,param_6,param_7,param_8);
+              lVar4 = *param_1;
+              uVar5 = extraout_x1_05;
+              goto LAB_140018398;
+            }
+          }
+          else if (((*(char *)((longlong)puVar18 + 3) == '\x10' && (*puVar18 & 0xffffff) == 0) &&
+                   (lVar16 = *(longlong *)(puVar18 + 0x10), lVar16 != 0)) &&
+                  ((*(int *)(lVar16 + 0x2100) - 0xcU < 3 || (*(int *)(lVar16 + 0x2104) == 1)))) {
+            *(undefined4 *)(param_1 + 0xd) = DAT_1400185d4;
+LAB_140018398:
+            FUN_1400057c0(lVar4,uVar5,param_1 + 0xb,pcVar7,uVar11,param_6,param_7,param_8);
+          }
+        }
+        else {
+LAB_1400181e0:
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CDispatchHandler::GetIspNotification} invalid IPE packet = %p\n",
+                        (ulonglong)puVar18,param_6,param_7,param_8);
+        }
+      }
+    }
+  }
+  else if (puVar19[0x16c] == 3) {
+    puVar18 = *(uint **)(puVar19 + 0x170);
+    if (puVar18 != (uint *)0x0) {
+      lVar4 = *param_1;
+      if ((puVar19[0x16f] != *(uint *)(lVar4 + 0x290)) &&
+         (puVar19[0x16f] != *(uint *)(lVar4 + 0x294))) goto LAB_1400181e0;
+      FUN_140005c30(lVar4,puVar18,3,(longlong)(puVar19 + 0x16e),*(ulonglong *)(puVar18 + 0x10),
+                    param_6,param_7,param_8);
+    }
+  }
+  else {
+    if (puVar19[0x290] == 1) {
+      *param_2 = 4;
+      *(undefined8 *)(param_2 + 8) = *(undefined8 *)(puVar19 + 0x296);
+      *(undefined8 *)(param_2 + 2) = *(undefined8 *)(puVar19 + 0x292);
+      param_2[5] = puVar19[0x294];
+      param_2[6] = 0x800;
+      param_2[7] = puVar19[0x295];
+    }
+    else {
+      if (puVar19[0x29c] != 1000) goto LAB_1400184b4;
+      *param_2 = 4;
+      *(undefined8 *)(param_2 + 8) = *(undefined8 *)(puVar19 + 0x2a2);
+      *(undefined8 *)(param_2 + 2) = *(undefined8 *)(puVar19 + 0x29e);
+      iVar1 = DAT_1400185dc;
+      uVar3 = puVar19[0x2a0];
+      param_2[5] = uVar3;
+      param_2[6] = iVar1;
+      param_2[7] = puVar19[0x2a1];
+      puVar18 = *(uint **)(puVar19 + 0x2a4);
+      if (puVar18 != (uint *)0x0) {
+        if (uVar3 == *(uint *)(*param_1 + 0x290)) {
+          FUN_140005c30(*param_1,puVar18,puVar19[0x29c],(longlong)(puVar19 + 0x29e),
+                        *(ulonglong *)(puVar18 + 0x10),param_6,param_7,param_8);
+        }
+        else {
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CDispatchHandler::GetIspNotification} invalid LRME packet = %p\n",
+                        (ulonglong)puVar18,param_6,param_7,param_8);
+        }
+      }
+    }
+    local_240 = 0;
+  }
+LAB_1400184b4:
+  if ((int)local_240 < 0) {
+    FUN_14001c1d8(0,0x140024290,0,
+                  "{CDispatchHandler::GetIspNotification} ISP ParseIFEMessage() failed: %#x\n",
+                  (ulonglong)local_240,param_6,param_7,param_8);
+  }
+  if (local_230 != 0) {
+    *(undefined4 *)(local_230 + 0x18) = 1;
+    DataMemoryBarrier(2,3);
+  }
+LAB_140018554:
+  if ((*(char *)((longlong)param_1 + 0xbc1) != '\0') && (DAT_1400185c4 == local_240)) {
+    KeSetEvent(param_1 + 0x179,0,0);
+  }
+  return local_240;
+}
+
+
+
+//// FUN_14001e2e0 @14001e2e0 ////
+
+undefined8 FUN_14001e2e0(void)
+
+{
+  int iVar1;
+  uint uVar2;
+  undefined8 *puVar3;
+  ulonglong *puVar4;
+  longlong lVar5;
+  undefined *puVar6;
+  ulonglong uVar7;
+  ulonglong uVar8;
+  ulonglong uVar9;
+  char *pcVar10;
+  int *piVar11;
+  ulonglong uVar12;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  undefined8 uVar13;
+  int local_60 [2];
+  undefined8 *local_58;
+  
+  uVar13 = 0;
+  local_60[0] = 0;
+  iVar1 = FUN_14009a890();
+  if (-1 < iVar1) {
+    piVar11 = local_60;
+    pcVar10 = (char *)0x0;
+    uVar8 = 0;
+    FUN_14009a768(s_SDEVIPCAveds_14001e530._4_4_,s_SDEVIPCAveds_14001e530._0_4_,(undefined8 *)0x0,0,
+                  piVar11);
+    if (local_60[0] == 0) {
+      puVar6 = &DAT_14002e980;
+    }
+    else {
+      puVar3 = (undefined8 *)ExAllocatePool2(0x40,local_60[0],s_SDEVIPCAveds_14001e530._8_4_);
+      if (puVar3 != (undefined8 *)0x0) {
+        piVar11 = local_60;
+        uVar2 = FUN_14009a768(s_SDEVIPCAveds_14001e530._4_4_,s_SDEVIPCAveds_14001e530._0_4_,puVar3,
+                              local_60[0],piVar11);
+        if ((int)uVar2 < 0) {
+          if (-1 < (int)uVar2) {
+            uVar2 = 0;
+          }
+          pcVar10 = 
+          "{CameraPlatform_checksecurecamsupport} AuxKlibGetSystemFirmwareTable is unable to read sdev table, returned error %d\n"
+          ;
+          uVar12 = (ulonglong)uVar2;
+          uVar8 = 0;
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CameraPlatform_checksecurecamsupport} AuxKlibGetSystemFirmwareTable is unable to read sdev table, returned error %d\n"
+                        ,uVar12,in_x5,in_x6,in_x7);
+          FUN_14001ce70(&DAT_14002eab8,"SecureCamsupported is FALSE",uVar8,pcVar10,uVar12,in_x5,
+                        in_x6,in_x7);
+        }
+        else {
+          uVar12 = (longlong)puVar3 + 0x24;
+          uVar8 = (longlong)puVar3 + (ulonglong)*(uint *)((longlong)puVar3 + 4);
+          if (uVar12 < uVar8) {
+            local_58 = puVar3;
+            if (uVar8 <= uVar12) {
+              uVar12 = 0;
+            }
+            do {
+              puVar4 = (ulonglong *)
+                       ExAllocatePool2(0x40,*(undefined2 *)(uVar12 + 6),
+                                       s_SDEVIPCAveds_14001e530._8_4_);
+              if (puVar4 == (ulonglong *)0x0) {
+                pcVar10 = 
+                "{CameraPlatform_checksecurecamsupport} AuxKlibGetSystemFirmwareTable is unable to read sdev table, returned error %d\n"
+                ;
+                uVar7 = 0;
+                piVar11 = (int *)(ulonglong)uVar2;
+                FUN_14001c1d8(0,0x140024290,0,
+                              "{CameraPlatform_checksecurecamsupport} AuxKlibGetSystemFirmwareTable is unable to read sdev table, returned error %d\n"
+                              ,(ulonglong)uVar2,in_x5,in_x6,in_x7);
+                FUN_14001ce70(&DAT_14002e9c8,"SecureCamsupported is FALSE",uVar7,pcVar10,piVar11,
+                              in_x5,in_x6,in_x7);
+              }
+              else {
+                uVar7 = (ulonglong)*(ushort *)(uVar12 + 6);
+                FUN_140022750(puVar4,uVar7,(undefined8 *)(*(ushort *)(uVar12 + 4) + uVar12),uVar7);
+                uVar9 = (ulonglong)*(ushort *)(uVar12 + 6);
+                lVar5 = FUN_140022a40(puVar4,(ulonglong *)"\\_SB.SISP",uVar9);
+                if ((int)lVar5 == 0) {
+                  uVar13 = 1;
+                  FUN_14001ce70(&DAT_14002eb18,"SecureCamsupported is TRUE",uVar9,uVar7,piVar11,
+                                in_x5,in_x6,in_x7);
+                  uVar12 = uVar8;
+                }
+                else {
+                  uVar12 = *(ushort *)(uVar12 + 2) + uVar12;
+                }
+                ExFreePoolWithTag(puVar4,s_SDEVIPCAveds_14001e530._8_4_);
+              }
+              puVar3 = local_58;
+            } while (uVar12 < uVar8);
+          }
+        }
+        ExFreePoolWithTag(puVar3,s_SDEVIPCAveds_14001e530._8_4_);
+        return uVar13;
+      }
+      pcVar10 = 
+      "{CameraPlatform_checksecurecamsupport} Unable to allocate buffer for reading sdev table\n";
+      uVar8 = 0;
+      FUN_14001c1d8(0,0x140024290,0,
+                    "{CameraPlatform_checksecurecamsupport} Unable to allocate buffer for reading sdev table\n"
+                    ,(ulonglong)piVar11,in_x5,in_x6,in_x7);
+      puVar6 = &DAT_14002e928;
+    }
+    FUN_14001ce70(puVar6,"SecureCamsupported is FALSE",uVar8,pcVar10,piVar11,in_x5,in_x6,in_x7);
+  }
+  return 0;
+}
+
+
+
+//// FUN_14001ebb0 @14001ebb0 ////
+
+undefined8
+FUN_14001ebb0(longlong param_1,char param_2,ulonglong param_3,undefined8 param_4,undefined8 param_5,
+             char *param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  int iVar2;
+  
+  *(char *)(param_1 + 0x2b4) = param_2;
+  iVar1 = DAT_14001ec54;
+  if (param_2 == '\x01') {
+    if (DAT_14001ec50 == *(int *)(param_1 + 0x18)) {
+      iVar2 = FUN_140020b60(*(char **)(param_1 + 0x48),DAT_14001ec54,
+                            (longlong *)
+                            (param_1 + (longlong)*(int *)(param_1 + 0x298) * 0x10 + 0x1d8),param_4,
+                            param_5,param_6,param_7,param_8);
+      if (iVar2 == 0) {
+        *(int *)(((longlong)*(int *)(param_1 + 0x298) + 0x1d) * 0x10 + param_1) = iVar1;
+        *(int *)(param_1 + 0x298) = *(int *)(param_1 + 0x298) + 1;
+      }
+    }
+    else {
+      FUN_14001ce70(&DAT_140030e20,
+                    "SecureMode is only available for AUX camera, setting SecureMode to false",
+                    param_3,param_4,param_5,param_6,param_7,param_8);
+      *(undefined1 *)(param_1 + 0x2b4) = 0;
+    }
+  }
+  return 0;
+}
+
+
+
+//// FUN_140083040 @140083040 ////
+
+int FUN_140083040(longlong param_1,longlong param_2,ulonglong *param_3,int *param_4,
+                 undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined8 uVar1;
+  char *pcVar2;
+  undefined *puVar3;
+  bool bVar4;
+  int iVar5;
+  ulonglong uVar6;
+  int *piVar7;
+  int iVar8;
+  
+  uVar6 = 0x24;
+  piVar7 = param_4;
+  iVar5 = FUN_1400827d8(param_2,param_3,0x24,(longlong)param_4);
+  iVar8 = iVar5;
+  if ((((-1 < iVar5) && (*param_4 == 1)) && (*(int *)(param_1 + 0x68) == DAT_140083110)) &&
+     (iVar8 = DAT_140083114, param_4[1] == 0)) {
+    param_4[2] = 0x28;
+    param_4[3] = 0;
+    param_4[6] = 3;
+    param_4[7] = 0;
+    *(undefined8 *)(param_2 + 0x38) = 0x28;
+    bVar4 = *(char *)(param_1 + 0x2ad) != '\0';
+    uVar1 = 1;
+    if (bVar4) {
+      uVar1 = 2;
+    }
+    *(undefined8 *)(param_4 + 4) = uVar1;
+    pcVar2 = "GetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_DISABLED";
+    if (bVar4) {
+      pcVar2 = "GetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_ENABLED";
+    }
+    puVar3 = &DAT_1400303c0;
+    if (bVar4) {
+      puVar3 = &DAT_1400303f0;
+    }
+    FUN_14001ce70(puVar3,pcVar2,uVar6,piVar7,param_5,param_6,param_7,param_8);
+    iVar8 = iVar5;
+  }
+  return iVar8;
+}
+
+
+
+//// FUN_140083120 @140083120 ////
+
+ulonglong FUN_140083120(longlong param_1,longlong param_2,ulonglong *param_3,int *param_4,
+                       undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  char *pcVar1;
+  undefined *puVar2;
+  bool bVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  int *piVar6;
+  ulonglong uVar7;
+  
+  uVar5 = 0x24;
+  piVar6 = param_4;
+  uVar4 = FUN_1400827d8(param_2,param_3,0x24,(longlong)param_4);
+  uVar7 = (ulonglong)uVar4;
+  if (-1 < (int)uVar4) {
+    if (*param_4 == 1) {
+      if (param_4[1] == 0) {
+        if ((*(ulonglong *)(param_4 + 4) & 3) == 0) {
+          uVar7 = (ulonglong)DAT_140083210;
+        }
+        else {
+          bVar3 = *(ulonglong *)(param_4 + 4) == 2;
+          *(bool *)(param_1 + 0x2ad) = bVar3;
+          pcVar1 = "SetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_DISABLED";
+          if (bVar3) {
+            pcVar1 = "SetExtendedSecureMode => KSCAMERA_EXTENDEDPROP_SECUREMODE_ENABLED";
+          }
+          puVar2 = &DAT_140030398;
+          if (bVar3) {
+            puVar2 = &DAT_140030360;
+          }
+          FUN_14001ce70(puVar2,pcVar1,uVar5,piVar6,param_5,param_6,param_7,param_8);
+          param_4[2] = 0x28;
+          *(undefined8 *)(param_2 + 0x38) = 0x28;
+        }
+      }
+      else {
+        uVar7 = (ulonglong)DAT_14008320c;
+      }
+    }
+    else {
+      uVar7 = (ulonglong)DAT_140083208;
+    }
+    param_4[3] = (int)uVar7;
+  }
+  FUN_14001ce70(&DAT_1400303d8,"SetExtendedSecureMode, status = 0x%08x ",uVar7,piVar6,param_5,
+                param_6,param_7,param_8);
+  return uVar7;
+}
+
+
+
+//// FUN_14008a988 @14008a988 ////
+
+undefined8
+FUN_14008a988(longlong *param_1,ulonglong param_2,int param_3,ulonglong *param_4,undefined4 *param_5
+             ,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  undefined *puVar2;
+  longlong lVar3;
+  char *pcVar4;
+  ulonglong uVar5;
+  ulonglong *puVar6;
+  undefined4 *puVar7;
+  undefined4 uVar8;
+  undefined4 uVar9;
+  undefined8 unaff_x23;
+  ulonglong uVar10;
+  ulonglong uVar11;
+  
+  uVar8 = (undefined4)param_2;
+  if (param_3 != 0x3a0 || param_4 == (ulonglong *)0x0) {
+    return unaff_x23;
+  }
+  uVar5 = 0xd8;
+  puVar6 = param_4;
+  puVar7 = param_5;
+  FUN_14001cd78((undefined1 *)param_5,param_2,0xd8);
+  switch(uVar8) {
+  case 1:
+    *param_5 = 5;
+    FUN_14001ce70(&DAT_1400304d0,"RECEIVED VFE_MSG_ID_UPDATE_ACK",uVar5,puVar6,puVar7,param_6,
+                  param_7,param_8);
+    break;
+  default:
+    FUN_14001ce70(&DAT_140030590,"Unrecognized IFE Message ID: %d (0x%x)",param_2 & 0xffffffff,
+                  param_2 & 0xffffffff,puVar7,param_6,param_7,param_8);
+    break;
+  case 7:
+    *param_5 = 4;
+    *(ulonglong *)(param_5 + 8) = param_4[2];
+    *(ulonglong *)(param_5 + 2) = *param_4;
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    uVar8 = DAT_14008b154;
+    goto LAB_14008ace4;
+  case 10:
+    *param_5 = 3;
+    *(ulonglong *)(param_5 + 8) = param_4[2];
+    *(ulonglong *)(param_5 + 2) = *param_4;
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    uVar8 = DAT_14008b150;
+    goto LAB_14008ace4;
+  case 0x15:
+    uVar8 = 4;
+    if (*(int *)(*param_1 + 0x6c8) != 0) {
+      uVar8 = 2;
+    }
+    *param_5 = uVar8;
+    FUN_14001ce70(&DAT_140030560,"Frame Done - TimeStamp in QTimer = %llu",param_4[2],puVar6,puVar7,
+                  param_6,param_7,param_8);
+    lVar3 = FUN_140076500(param_4[2]);
+    *(longlong *)(param_5 + 8) = lVar3;
+    uVar5 = *param_4;
+    *(ulonglong *)(param_5 + 2) = uVar5;
+    param_5[4] = (int)param_4[0xf];
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    param_5[0x11] = *(undefined4 *)((longlong)param_4 + 0x1c);
+    *(ulonglong *)(param_5 + 0xe) = param_4[5];
+    *(ulonglong *)(param_5 + 0x12) = param_4[6];
+    param_5[0x19] = (int)param_4[4];
+    param_5[0x1d] = *(undefined4 *)((longlong)param_4 + 0x24);
+    uVar11 = param_4[0xe];
+    uVar10 = param_4[0xd];
+    param_5[6] = DAT_14008b140;
+    pcVar4 = "Frame Done IFE -%requestId = %d, TimeStamp in 100 ns = %llu";
+    puVar2 = &DAT_140030518;
+    goto LAB_14008aabc;
+  case 0x16:
+    uVar8 = 4;
+    if (*(int *)(*param_1 + 0x6c8) != 0) {
+      uVar8 = 2;
+    }
+    *param_5 = uVar8;
+    FUN_14001ce70(&DAT_140030428,"Frame Done - TimeStamp in QTimer = %llu",param_4[2],puVar6,puVar7,
+                  param_6,param_7,param_8);
+    lVar3 = FUN_140076500(param_4[2]);
+    *(longlong *)(param_5 + 8) = lVar3;
+    uVar5 = *param_4;
+    *(ulonglong *)(param_5 + 2) = uVar5;
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    param_5[0x11] = *(undefined4 *)((longlong)param_4 + 0x1c);
+    *(ulonglong *)(param_5 + 0xe) = param_4[5];
+    *(ulonglong *)(param_5 + 0x12) = param_4[6];
+    param_5[0x19] = (int)param_4[4];
+    param_5[0x1d] = *(undefined4 *)((longlong)param_4 + 0x24);
+    uVar11 = param_4[0xe];
+    uVar10 = param_4[0xd];
+    param_5[6] = DAT_14008b144;
+    pcVar4 = "Frame Done IFELITE -%requestId = %d, TimeStamp in 100 ns = %llu";
+    puVar2 = &DAT_1400305c0;
+    goto LAB_14008aabc;
+  case 0x17:
+    *param_5 = 3;
+    uVar5 = param_4[2];
+    if (*(int *)(*param_1 + 0x240) == 0x10) {
+      uVar5 = FUN_140076500(uVar5);
+    }
+    *(ulonglong *)(param_5 + 8) = uVar5;
+    *(ulonglong *)(param_5 + 2) = *param_4;
+    param_5[4] = (int)param_4[0xf];
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    uVar8 = DAT_14008b148;
+    goto LAB_14008ace4;
+  case 0x18:
+    *param_5 = 3;
+    *(ulonglong *)(param_5 + 8) = param_4[2];
+    *(ulonglong *)(param_5 + 2) = *param_4;
+    param_5[4] = (int)param_4[0xf];
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    uVar8 = DAT_14008b14c;
+    goto LAB_14008ace4;
+  case 0x19:
+    *param_5 = 4;
+    uVar5 = 0;
+    do {
+      puVar6 = param_4 + uVar5 * 8;
+      if ((char)*puVar6 == '\x01') {
+        lVar3 = FUN_140076500(puVar6[3]);
+        *(longlong *)(param_5 + 8) = lVar3;
+        *(ulonglong *)(param_5 + 2) = puVar6[5];
+        param_5[4] = (int)puVar6[7];
+        param_5[5] = (int)puVar6[6];
+        param_5[6] = 0;
+        param_5[7] = (int)puVar6[2];
+        param_5[0xc] = *(undefined4 *)((longlong)puVar6 + 4);
+        break;
+      }
+      uVar1 = (int)uVar5 + 1;
+      uVar5 = (ulonglong)(byte)uVar1;
+    } while ((uVar1 & 0xff) < 6);
+    if ((int)uVar5 == 6) {
+      FUN_14001c1d8(0,0x14009a938,0,
+                    "{CDispatchHandler::ParseIFEMessage} Unexpected Error: No stats are enbaled\n",
+                    (ulonglong)puVar7,param_6,param_7,param_8);
+    }
+    break;
+  case 0x1a:
+    *param_5 = 4;
+    *(ulonglong *)(param_5 + 8) = param_4[0xb];
+    *(ulonglong *)(param_5 + 2) = param_4[0xd];
+    param_5[5] = (int)param_4[0xe];
+    param_5[4] = (int)param_4[0xf];
+    param_5[6] = *(undefined4 *)((longlong)param_4 + 0x74);
+    param_5[7] = (int)param_4[10];
+    param_5[0xc] = *(undefined4 *)((longlong)param_4 + 0x44);
+    break;
+  case 0x1b:
+    uVar5 = 4;
+    *param_5 = 4;
+    do {
+      puVar6 = param_4 + uVar5 * 8;
+      if ((char)*puVar6 == '\x01') {
+        lVar3 = FUN_140076500(puVar6[3]);
+        *(longlong *)(param_5 + 8) = lVar3;
+        *(ulonglong *)(param_5 + 2) = puVar6[5];
+        param_5[5] = (int)puVar6[6];
+        param_5[6] = 0;
+        param_5[7] = (int)puVar6[2];
+        param_5[0xc] = *(undefined4 *)((longlong)puVar6 + 4);
+        *(ulonglong *)(param_5 + 0x32) = param_4[0x71];
+        *(ulonglong *)(param_5 + 0x34) = param_4[0x72];
+        return unaff_x23;
+      }
+      uVar1 = (int)uVar5 + 1;
+      uVar5 = (ulonglong)(byte)uVar1;
+    } while ((uVar1 & 0xff) < 5);
+    break;
+  case 0x1c:
+    FUN_14001ce70(&DAT_140030470,"FD Frame Done - TimeStamp in QTimer = %llu",param_4[2],puVar6,
+                  puVar7,param_6,param_7,param_8);
+    *param_5 = 4;
+    lVar3 = FUN_140076500(param_4[99]);
+    *(longlong *)(param_5 + 8) = lVar3;
+    *(ulonglong *)(param_5 + 2) = param_4[0x61];
+    param_5[5] = (int)param_4[0x62];
+    uVar8 = *(undefined4 *)((longlong)param_4 + 0x314);
+    param_5[6] = DAT_14008b158;
+    param_5[7] = uVar8;
+    break;
+  case 0x1d:
+    *param_5 = 2;
+    FUN_14001ce70(&DAT_140030530,
+                  "IFE_MSG_ID_GROUP0_SECURE_IMAGE Frame Done - TimeStamp in QTimer = %llu",
+                  param_4[2],puVar6,puVar7,param_6,param_7,param_8);
+    lVar3 = FUN_140076500(param_4[2]);
+    *(longlong *)(param_5 + 8) = lVar3;
+    uVar5 = *param_4;
+    *(ulonglong *)(param_5 + 2) = uVar5;
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    param_5[0x11] = *(undefined4 *)((longlong)param_4 + 0x1c);
+    *(ulonglong *)(param_5 + 0xe) = param_4[5];
+    *(ulonglong *)(param_5 + 0x12) = param_4[6];
+    param_5[0x19] = (int)param_4[4];
+    param_5[0x1d] = *(undefined4 *)((longlong)param_4 + 0x24);
+    pcVar4 = "Frame Done SECURE IFE -%requestId = %d, TimeStamp in 100 ns = %llu";
+    puVar2 = &DAT_140030488;
+    uVar11 = param_4[0xe];
+    uVar10 = param_4[0xd];
+    goto LAB_14008aabc;
+  case 0x1e:
+    *param_5 = 2;
+    FUN_14001ce70(&DAT_140030578,
+                  "IFE_LITE_SECURE_MSG_ID_PREPROCESSED_RAW Frame Done - TimeStamp in QTimer = %llu",
+                  param_4[2],puVar6,puVar7,param_6,param_7,param_8);
+    lVar3 = FUN_140076500(param_4[2]);
+    *(longlong *)(param_5 + 8) = lVar3;
+    uVar5 = *param_4;
+    *(ulonglong *)(param_5 + 2) = uVar5;
+    param_5[5] = (int)param_4[1];
+    param_5[7] = *(undefined4 *)((longlong)param_4 + 0xc);
+    param_5[0xc] = (int)param_4[3];
+    param_5[0x11] = *(undefined4 *)((longlong)param_4 + 0x1c);
+    *(ulonglong *)(param_5 + 0xe) = param_4[5];
+    *(ulonglong *)(param_5 + 0x12) = param_4[6];
+    param_5[0x19] = (int)param_4[4];
+    param_5[0x1d] = *(undefined4 *)((longlong)param_4 + 0x24);
+    pcVar4 = "Frame Done SECURE IFE_LITE -%requestId = %d, TimeStamp in 100 ns = %llu";
+    puVar2 = &DAT_1400304a0;
+    uVar11 = param_4[0xe];
+    uVar10 = param_4[0xd];
+LAB_14008aabc:
+    *(ulonglong *)(param_5 + 0x27) = uVar11;
+    *(ulonglong *)(param_5 + 0x25) = uVar10;
+    FUN_14001ce70(puVar2,pcVar4,uVar5,lVar3,puVar7,param_6,param_7,param_8);
+    break;
+  case 0x25:
+    *param_5 = 0;
+    param_5[2] = (int)*param_4;
+    *(ulonglong *)(param_5 + 8) = param_4[3];
+    *(ulonglong *)(param_5 + 4) = param_4[1];
+    break;
+  case 0x26:
+    *param_5 = 1;
+    param_5[2] = (int)*param_4;
+    *(ulonglong *)(param_5 + 4) = param_4[1];
+    param_5[3] = (int)param_4[2];
+    uVar8 = *(undefined4 *)((longlong)param_4 + 0x14);
+LAB_14008ace4:
+    param_5[6] = uVar8;
+    break;
+  case 0x2e:
+  case 0x2f:
+  case 0x30:
+  case 0x31:
+  case 0x32:
+  case 0x33:
+  case 0x34:
+  case 0x35:
+  case 0x36:
+  case 0x37:
+    *param_5 = 7;
+    uVar9 = 2;
+    goto LAB_14008af90;
+  case 0x38:
+  case 0x39:
+  case 0x3a:
+  case 0x3b:
+  case 0x3c:
+  case 0x3d:
+  case 0x3e:
+  case 0x3f:
+  case 0x40:
+    *param_5 = 7;
+    uVar9 = 3;
+    goto LAB_14008af90;
+  case 0x49:
+    param_5[2] = 0;
+    *param_5 = 7;
+    break;
+  case 0x4b:
+    *param_5 = 7;
+    uVar9 = 5;
+LAB_14008af90:
+    param_5[2] = uVar9;
+    param_5[3] = uVar8;
+    break;
+  case 0x4c:
+    param_5[3] = uVar8;
+    *param_5 = 7;
+  }
+  return unaff_x23;
+}
+
+
+
+//// FUN_14008d430 @14008d430 ////
+
+char * FUN_14008d430(int param_1)
+
+{
+  char *pcVar1;
+  
+  if (param_1 == 0) {
+    pcVar1 = "INVALID";
+  }
+  else if (param_1 == 1) {
+    pcVar1 = "SYSTEM";
+  }
+  else if (param_1 == 2) {
+    pcVar1 = "VRAM";
+  }
+  else if (param_1 == 4) {
+    pcVar1 = "SYSTEM_AGP";
+  }
+  else if (param_1 == 8) {
+    pcVar1 = "VRAM_MAPPED";
+  }
+  else {
+    pcVar1 = "???";
+    if (param_1 == 0x10) {
+      pcVar1 = "SECURE_BUFFER";
+    }
+  }
+  return pcVar1;
+}
+
+
