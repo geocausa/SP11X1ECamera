@@ -1,0 +1,262 @@
+E004bj SECUREMEDIABUFFER GUID LIFETIME
+
+CreateInstance: GUID generation and construction:
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+180236cd0: 14000104    	b	0x1802370e0 <MFCreateVideoDecryptorContext+0x69d60>
+180236cd4: 910083e0    	add	x0, sp, #0x20
+180236cd8: 97f90710    	bl	0x180078918 <MFCreateTransformActivate+0x304a8>
+180236cdc: 2a0003f9    	mov	w25, w0
+180236ce0: b90017f9    	str	w25, [sp, #0x14]
+180236ce4: 36f80960    	tbz	w0, #0x1f, 0x180236e10 <MFCreateVideoDecryptorContext+0x69a90>
+180236ce8: b0001748    	adrp	x8, 0x18051f000
+180236cec: 912f8115    	add	x21, x8, #0xbe0
+180236cf0: b0001728    	adrp	x8, 0x18051b000
+180236cf4: 9133c11a    	add	x26, x8, #0xcf0
+180236cf8: f0001753    	adrp	x19, 0x180521000
+180236cfc: f9456a74    	ldr	x20, [x19, #0xad0]
+180236d00: b50001f4    	cbnz	x20, 0x180236d3c <MFCreateVideoDecryptorContext+0x699bc>
+180236d04: 910782a8    	add	x8, x21, #0x1e0
+180236d08: f9056a68    	str	x8, [x19, #0xad0]
+180236d0c: f940f2a8    	ldr	x8, [x21, #0x1e0]
+180236d10: 5280fe01    	mov	w1, #0x7f0              // =2032
+180236d14: 910782a0    	add	x0, x21, #0x1e0
+180236d18: f9400508    	ldr	x8, [x8, #0x8]
+180236d1c: aa0803ef    	mov	x15, x8
+180236d20: 9409a4c8    	bl	0x1804a0040
+180236d24: d63f01e0    	blr	x15
+180236d28: 35000080    	cbnz	w0, 0x180236d38 <MFCreateVideoDecryptorContext+0x699b8>
+180236d2c: aa1a03f4    	mov	x20, x26
+180236d30: f9056a74    	str	x20, [x19, #0xad0]
+180236d34: 14000002    	b	0x180236d3c <MFCreateVideoDecryptorContext+0x699bc>
+180236d38: f9456a74    	ldr	x20, [x19, #0xad0]
+180236d3c: 39402288    	ldrb	w8, [x20, #0x8]
+180236d40: 340005e8    	cbz	w8, 0x180236dfc <MFCreateVideoDecryptorContext+0x69a7c>
+180236d44: 91034296    	add	x22, x20, #0xd0
+180236d48: 53001d08    	uxtb	w8, w8
+180236d4c: 34000468    	cbz	w8, 0x180236dd8 <MFCreateVideoDecryptorContext+0x69a58>
+180236d50: 940025b2    	bl	0x180240418 <MFCreateVideoDecryptorContext+0x73098>
+180236d54: 2a0003fb    	mov	w27, w0
+180236d58: b9400e80    	ldr	w0, [x20, #0xc]
+180236d5c: 940025b2    	bl	0x180240424 <MFCreateVideoDecryptorContext+0x730a4>
+180236d60: b4000060    	cbz	x0, 0x180236d6c <MFCreateVideoDecryptorContext+0x699ec>
+180236d64: aa0003f6    	mov	x22, x0
+180236d68: 1400001a    	b	0x180236dd0 <MFCreateVideoDecryptorContext+0x69a50>
+180236d6c: 940025ab    	bl	0x180240418 <MFCreateVideoDecryptorContext+0x73098>
+180236d70: 35000300    	cbnz	w0, 0x180236dd0 <MFCreateVideoDecryptorContext+0x69a50>
+180236d74: f9456a60    	ldr	x0, [x19, #0xad0]
+180236d78: b50001e0    	cbnz	x0, 0x180236db4 <MFCreateVideoDecryptorContext+0x69a34>
+180236d7c: 910782a8    	add	x8, x21, #0x1e0
+180236d80: f9056a68    	str	x8, [x19, #0xad0]
+180236d84: f940f2a8    	ldr	x8, [x21, #0x1e0]
+180236d88: 5280fe01    	mov	w1, #0x7f0              // =2032
+180236d8c: 910782a0    	add	x0, x21, #0x1e0
+180236d90: f9400508    	ldr	x8, [x8, #0x8]
+180236d94: aa0803ef    	mov	x15, x8
+180236d98: 9409a4aa    	bl	0x1804a0040
+180236d9c: d63f01e0    	blr	x15
+180236da0: 35000080    	cbnz	w0, 0x180236db0 <MFCreateVideoDecryptorContext+0x69a30>
+180236da4: aa1a03e0    	mov	x0, x26
+180236da8: f9056a60    	str	x0, [x19, #0xad0]
+180236dac: 14000002    	b	0x180236db4 <MFCreateVideoDecryptorContext+0x69a34>
+180236db0: f9456a60    	ldr	x0, [x19, #0xad0]
+180236db4: f9400008    	ldr	x8, [x0]
+180236db8: f9400108    	ldr	x8, [x8]
+180236dbc: aa0803ef    	mov	x15, x8
+180236dc0: 9409a4a0    	bl	0x1804a0040
+180236dc4: d63f01e0    	blr	x15
+180236dc8: f100001f    	cmp	x0, #0x0
+180236dcc: 9a961016    	csel	x22, x0, x22, ne
+180236dd0: 2a1b03e0    	mov	w0, w27
+180236dd4: 9400258e    	bl	0x18024040c <MFCreateVideoDecryptorContext+0x7308c>
+180236dd8: 36f80139    	tbz	w25, #0x1f, 0x180236dfc <MFCreateVideoDecryptorContext+0x69a7c>
+180236ddc: b947cec8    	ldr	w8, [x22, #0x7cc]
+180236de0: 6b19011f    	cmp	w8, w25
+180236de4: 540000c0    	b.eq	0x180236dfc <MFCreateVideoDecryptorContext+0x69a7c>
+180236de8: 2a1903e3    	mov	w3, w25
+180236dec: 52800482    	mov	w2, #0x24               // =36
+180236df0: 91152301    	add	x1, x24, #0x548
+180236df4: aa1603e0    	mov	x0, x22
+180236df8: 97f797ce    	bl	0x18001cd30 <MFCreateMuxStreamMediaType+0xc00>
+180236dfc: d0001748    	adrp	x8, 0x180520000
+180236e00: 39782108    	ldrb	w8, [x8, #0xe08]
+180236e04: 340017e8    	cbz	w8, 0x180237100 <MFCreateVideoDecryptorContext+0x69d80>
+180236e08: 52800181    	mov	w1, #0xc                // =12
+180236e0c: 140000b5    	b	0x1802370e0 <MFCreateVideoDecryptorContext+0x69d60>
+180236e10: d2802700    	mov	x0, #0x138              // =312
+180236e14: 9400b905    	bl	0x180265228 <MFPlatformLittleEndian+0x20c08>
+180236e18: b4000d20    	cbz	x0, 0x180236fbc <MFCreateVideoDecryptorContext+0x69c3c>
+180236e1c: 910053e8    	add	x8, sp, #0x14
+180236e20: 2a1603e7    	mov	w7, w22
+180236e24: f90003e8    	str	x8, [sp]
+180236e28: 2a1a03e6    	mov	w6, w26
+180236e2c: 2a1503e5    	mov	w5, w21
+180236e30: 2a1303e4    	mov	w4, w19
+180236e34: 2a1403e3    	mov	w3, w20
+180236e38: 910083e2    	add	x2, sp, #0x20
+180236e3c: aa1703e1    	mov	x1, x23
+180236e40: 97fffd3e    	bl	0x180236338 <MFCreateVideoDecryptorContext+0x68fb8>
+180236e44: aa0003f4    	mov	x20, x0
+180236e48: b4000bb4    	cbz	x20, 0x180236fbc <MFCreateVideoDecryptorContext+0x69c3c>
+180236e4c: b94017f9    	ldr	w25, [sp, #0x14]
+0x180078918 = CoCreateGuid
+0x180236338 = SecureMediaBuffer constructor
+
+Constructor stores GUID + allocator state:
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+180236338: d503237f    	pacibsp
+18023633c: a9bb53f3    	stp	x19, x20, [sp, #-0x50]!
+180236340: a9015bf5    	stp	x21, x22, [sp, #0x10]
+180236344: a90263f7    	stp	x23, x24, [sp, #0x20]
+180236348: a9036bf9    	stp	x25, x26, [sp, #0x30]
+18023634c: f90023fb    	str	x27, [sp, #0x40]
+180236350: a9be7bfd    	stp	x29, x30, [sp, #-0x20]!
+180236354: 910003fd    	mov	x29, sp
+180236358: aa0103f5    	mov	x21, x1
+18023635c: 2a0303e1    	mov	w1, w3
+180236360: 2a0503e3    	mov	w3, w5
+180236364: f9403be5    	ldr	x5, [sp, #0x70]
+180236368: aa0203fa    	mov	x26, x2
+18023636c: 2a0403e2    	mov	w2, w4
+180236370: 2a0603e4    	mov	w4, w6
+180236374: aa0003f6    	mov	x22, x0
+180236378: 2a0703f9    	mov	w25, w7
+18023637c: 97f8aaa7    	bl	0x180060e18 <MFCreateTransformActivate+0x189a8>
+180236380: b90017ff    	str	wzr, [sp, #0x14]
+180236384: b0001428    	adrp	x8, 0x1804bb000
+180236388: 912c4109    	add	x9, x8, #0xb10
+18023638c: b0001428    	adrp	x8, 0x1804bb000
+180236390: 9129e108    	add	x8, x8, #0xa78
+180236394: a90022c9    	stp	x9, x8, [x22]
+180236398: b0001428    	adrp	x8, 0x1804bb000
+18023639c: 91274108    	add	x8, x8, #0x9d0
+1802363a0: f9000ac8    	str	x8, [x22, #0x10]
+1802363a4: b0001428    	adrp	x8, 0x1804bb000
+1802363a8: 91286109    	add	x9, x8, #0xa18
+1802363ac: b0001428    	adrp	x8, 0x1804bb000
+1802363b0: 912b4108    	add	x8, x8, #0xad0
+1802363b4: a906a2c9    	stp	x9, x8, [x22, #0x68]
+1802363b8: b0001428    	adrp	x8, 0x1804bb000
+1802363bc: 912aa109    	add	x9, x8, #0xaa8
+1802363c0: b0001428    	adrp	x8, 0x1804bb000
+1802363c4: 912da108    	add	x8, x8, #0xb68
+1802363c8: a907a2c9    	stp	x9, x8, [x22, #0x78]
+1802363cc: b0001428    	adrp	x8, 0x1804bb000
+1802363d0: 91268108    	add	x8, x8, #0x9a0
+1802363d4: f90046c8    	str	x8, [x22, #0x88]
+1802363d8: b0001428    	adrp	x8, 0x1804bb000
+1802363dc: 912bc108    	add	x8, x8, #0xaf0
+1802363e0: f9008ac8    	str	x8, [x22, #0x110]
+1802363e4: 3dc00347    	ldr	q7, [x26]
+1802363e8: 910462c8    	add	x8, x22, #0x118
+1802363ec: f0001578    	adrp	x24, 0x1804e5000
+1802363f0: 9115c301    	add	x1, x24, #0x570
+1802363f4: 52800862    	mov	w2, #0x43               // =67
+1802363f8: 3d800107    	str	q7, [x8]
+1802363fc: 910043e0    	add	x0, sp, #0x10
+180236400: f90096df    	str	xzr, [x22, #0x128]
+180236404: b90132d9    	str	w25, [x22, #0x130]
+180236408: 97f75c3c    	bl	0x18000d4f8 <MFScheduleWorkItem+0x1f38>
+18023640c: d0001757    	adrp	x23, 0x180520000
+180236410: 397822e8    	ldrb	w8, [x23, #0xe08]
+
+Destructor calls allocator vtable slot +0x20 with stored 16-byte GUID:
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+1802368d0: d503237f    	pacibsp
+1802368d4: f81f0ff3    	str	x19, [sp, #-0x10]!
+1802368d8: a9be7bfd    	stp	x29, x30, [sp, #-0x20]!
+1802368dc: 910003fd    	mov	x29, sp
+1802368e0: b0001428    	adrp	x8, 0x1804bb000
+1802368e4: 912c4109    	add	x9, x8, #0xb10
+1802368e8: b0001428    	adrp	x8, 0x1804bb000
+1802368ec: 9129e108    	add	x8, x8, #0xa78
+1802368f0: aa0003f3    	mov	x19, x0
+1802368f4: 52800c82    	mov	w2, #0x64               // =100
+1802368f8: a9002269    	stp	x9, x8, [x19]
+1802368fc: b0001428    	adrp	x8, 0x1804bb000
+180236900: 91274108    	add	x8, x8, #0x9d0
+180236904: f9000a68    	str	x8, [x19, #0x10]
+180236908: b0001428    	adrp	x8, 0x1804bb000
+18023690c: 91286109    	add	x9, x8, #0xa18
+180236910: b0001428    	adrp	x8, 0x1804bb000
+180236914: 912b4108    	add	x8, x8, #0xad0
+180236918: a906a269    	stp	x9, x8, [x19, #0x68]
+18023691c: b0001428    	adrp	x8, 0x1804bb000
+180236920: 912aa109    	add	x9, x8, #0xaa8
+180236924: b0001428    	adrp	x8, 0x1804bb000
+180236928: 912da108    	add	x8, x8, #0xb68
+18023692c: a907a269    	stp	x9, x8, [x19, #0x78]
+180236930: b0001428    	adrp	x8, 0x1804bb000
+180236934: 91268108    	add	x8, x8, #0x9a0
+180236938: f9004668    	str	x8, [x19, #0x88]
+18023693c: b0001428    	adrp	x8, 0x1804bb000
+180236940: 912bc108    	add	x8, x8, #0xaf0
+180236944: f9008a68    	str	x8, [x19, #0x110]
+180236948: f0001568    	adrp	x8, 0x1804e5000
+18023694c: 91170101    	add	x1, x8, #0x5c0
+180236950: 910043e0    	add	x0, sp, #0x10
+180236954: 97f75ae9    	bl	0x18000d4f8 <MFScheduleWorkItem+0x1f38>
+180236958: d0001748    	adrp	x8, 0x180520000
+18023695c: 39782108    	ldrb	w8, [x8, #0xe08]
+180236960: 7100211f    	cmp	w8, #0x8
+180236964: 54000123    	b.lo	0x180236988 <MFCreateVideoDecryptorContext+0x69608>
+180236968: d0001708    	adrp	x8, 0x180518000
+18023696c: f942a509    	ldr	x9, [x8, #0x548]
+180236970: f0001568    	adrp	x8, 0x1804e5000
+180236974: 9119a102    	add	x2, x8, #0x668
+180236978: aa1303e3    	mov	x3, x19
+18023697c: f9400920    	ldr	x0, [x9, #0x10]
+180236980: 52800261    	mov	w1, #0x13               // =19
+180236984: 97f92f13    	bl	0x1800825d0 <MFEndCreateFile+0x5e0>
+180236988: f9409660    	ldr	x0, [x19, #0x128]
+18023698c: b40000e0    	cbz	x0, 0x1802369a8 <MFCreateVideoDecryptorContext+0x69628>
+180236990: f9400008    	ldr	x8, [x0]
+180236994: a9518a61    	ldp	x1, x2, [x19, #0x118]
+180236998: f9401108    	ldr	x8, [x8, #0x20]
+18023699c: aa0803ef    	mov	x15, x8
+1802369a0: 9409a5a8    	bl	0x1804a0040
+1802369a4: d63f01e0    	blr	x15
+1802369a8: 910043e0    	add	x0, sp, #0x10
+1802369ac: 97f75b11    	bl	0x18000d5f0 <MFScheduleWorkItem+0x2030>
+
+GetIdentifier copies stored GUID to caller:
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+1802372c0: 9119a102    	add	x2, x8, #0x668
+1802372c4: 2a1503e4    	mov	w4, w21
+1802372c8: f9400920    	ldr	x0, [x9, #0x10]
+1802372cc: d1044303    	sub	x3, x24, #0x110
+1802372d0: 528002e1    	mov	w1, #0x17               // =23
+1802372d4: 97f92d3b    	bl	0x1800827c0 <MFEndCreateFile+0x7d0>
+1802372d8: 14000003    	b	0x1802372e4 <MFCreateVideoDecryptorContext+0x69f64>
+1802372dc: 3cc08307    	ldur	q7, [x24, #0x8]
+1802372e0: 3d800347    	str	q7, [x26]
+1802372e4: 910043e0    	add	x0, sp, #0x10
+1802372e8: 97f758c2    	bl	0x18000d5f0 <MFScheduleWorkItem+0x2030>
+1802372ec: 2a1503e0    	mov	w0, w21
+1802372f0: a8c27bfd    	ldp	x29, x30, [sp], #0x20
+1802372f4: f94023fb    	ldr	x27, [sp, #0x40]
+1802372f8: a9436bf9    	ldp	x25, x26, [sp, #0x30]
+1802372fc: a94263f7    	ldp	x23, x24, [sp, #0x20]
+180237300: a9415bf5    	ldp	x21, x22, [sp, #0x10]
+180237304: a8c553f3    	ldp	x19, x20, [sp], #0x50
+180237308: d50323ff    	autibsp
+18023730c: d65f03c0    	ret

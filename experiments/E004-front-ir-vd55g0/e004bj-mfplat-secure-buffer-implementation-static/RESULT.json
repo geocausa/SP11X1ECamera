@@ -1,0 +1,46 @@
+{
+  "schema": "sp11-camera-e004bj-mfplat-secure-buffer-implementation-static-v1",
+  "status": "PASS_MFPLAT_SECURE_BUFFER_OWNER_IS_FSISO_RPC",
+  "date": "2026-09-13",
+  "authority_policy": "Windows installed binary + matching Microsoft PDB; dynamic Windows confirmation is next.",
+  "mfplat": {
+    "sha256": "4384d4ca9e1ed8ae3033eb0812460081c89f71a9dd2550438c9ec0e1e24d05e6",
+    "pdb_sha256": "9a85634d558d94546acd05a557b4c7b30abb2f3c1df1b6faf09a9c414e0de206",
+    "pdb_guid": "378BD674-3DCB-DA18-5F23-A355C5740851",
+    "export": "MFCreateSecureBufferAllocator",
+    "implementation_factory": "CameraTrustletConnectionImpl::CreateInstance"
+  },
+  "allocator": {
+    "create": "CameraTrustletConnectionImpl::CreateSecureBuffer -> CameraTrustlet::CreateSecureSection",
+    "destroy": "CameraTrustletConnectionImpl::DestroySecureBuffer -> CameraTrustlet::CloseSecureSection"
+  },
+  "fsiso": {
+    "transport": "ncalrpc",
+    "endpoint_format": "FsIso_%u_%I64u",
+    "process": "FsIso.exe",
+    "connect_order": [
+      "GenerateEndpointName",
+      "LaunchProcess",
+      "EstablishRpcConnection"
+    ],
+    "endpoint_random_bytes": 8,
+    "endpoint_includes_current_process_id": true,
+    "launched_with_CreateProcessW": true,
+    "rpc_client_uses_NdrClientCall3": true
+  },
+  "secure_media_buffer": {
+    "guid_generated_with": "CoCreateGuid",
+    "guid_retained_in_object": true,
+    "get_identifier_returns_same_guid": true,
+    "destructor_calls_allocator_destroy_with_guid": true,
+    "lifetime_semantic": "SecureMediaBuffer lifetime owns remote FsIso secure-section lifetime by GUID."
+  },
+  "camera_secureisp_external_buffer_owner": "FsIso/MFPlat secure allocator path",
+  "camera_secureisp_internal_cp_camera_buffer_is_separate": true,
+  "windows_volume_read_only": true,
+  "linux_secure_runtime_executed": false,
+  "linux_memory_reassignment": false,
+  "protected_mmio_access_linux": false,
+  "qcomtee_loaded": false,
+  "next_gate": "Bounded Windows dynamic observation of FsIso process creation/command line/lifetime during protected Surface IR streaming."
+}

@@ -1,0 +1,205 @@
+E004bj CAMERATRUSTLET RPC OWNER
+
+Static strings:
+ 4e3e50 ncalrpc
+ 4e3e60 FsIso_%u_%I64u
+ 4e3e80 %s\FsIso.exe %s
+ 4e3ea0 \FsIso.exe
+
+Imported APIs:
+    Symbol: BCryptGenRandom (31)
+  Symbol: CreateProcessW (3)
+  Symbol: GetCurrentProcessId (13)
+      Symbol: NdrClientCall3 (143)
+    Symbol: NdrClientCall3 (164)
+      Symbol: RpcBindingFree (349)
+    Symbol: RpcBindingFree (372)
+      Symbol: RpcBindingFromStringBindingW (351)
+    Symbol: RpcBindingFromStringBindingW (374)
+      Symbol: RpcStringBindingComposeW (507)
+    Symbol: RpcStringBindingComposeW (529)
+      Symbol: RpcStringFreeW (511)
+    Symbol: RpcStringFreeW (533)
+
+CameraTrustlet::Connect call order:
+18023b61c: 9400015d    	bl	0x18023bb90 <MFCreateVideoDecryptorContext+0x6e810>
+18023b63c: 940001a7    	bl	0x18023bcd8 <MFCreateVideoDecryptorContext+0x6e958>
+18023b65c: 940000af    	bl	0x18023b918 <MFCreateVideoDecryptorContext+0x6e598>
+18023b6dc: d65f03c0    	ret
+0x18023bb90 = GenerateEndpointName
+0x18023bcd8 = LaunchProcess
+0x18023b918 = EstablishRpcConnection
+
+GenerateEndpointName relevant calls:
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+18023bbe0: 52800043    	mov	w3, #0x2                // =2
+18023bbe4: f9000bff    	str	xzr, [sp, #0x10]
+18023bbe8: 52800102    	mov	w2, #0x8                // =8
+18023bbec: 910043e1    	add	x1, sp, #0x10
+18023bbf0: d2800000    	mov	x0, #0x0                // =0
+18023bbf4: 97f8f7c5    	bl	0x180079b08 <MFCreateTransformActivate+0x31698>
+18023bbf8: 32040013    	orr	w19, w0, #0x10000000
+18023bbfc: 36f80193    	tbz	w19, #0x1f, 0x18023bc2c <MFCreateVideoDecryptorContext+0x6e8ac>
+18023bc00: 39400328    	ldrb	w8, [x25]
+18023bc04: 34000108    	cbz	w8, 0x18023bc24 <MFCreateVideoDecryptorContext+0x6e8a4>
+18023bc08: 528004e1    	mov	w1, #0x27               // =39
+18023bc0c: f942a6c8    	ldr	x8, [x22, #0x548]
+18023bc10: 913922a2    	add	x2, x21, #0xe48
+18023bc14: aa1403e3    	mov	x3, x20
+18023bc18: 2a1303e4    	mov	w4, w19
+18023bc1c: f9400900    	ldr	x0, [x8, #0x10]
+18023bc20: 97f91ae8    	bl	0x1800827c0 <MFEndCreateFile+0x7d0>
+18023bc24: 91008289    	add	x9, x20, #0x20
+18023bc28: 14000012    	b	0x18023bc70 <MFCreateVideoDecryptorContext+0x6e8f0>
+18023bc2c: f9400bf3    	ldr	x19, [sp, #0x10]
+18023bc30: 940011b2    	bl	0x1802402f8 <MFCreateVideoDecryptorContext+0x72f78>
+18023bc34: d0001548    	adrp	x8, 0x1804e5000
+18023bc38: 2a0003e3    	mov	w3, w0
+18023bc3c: 91218102    	add	x2, x8, #0x860
+18023bc40: 91008280    	add	x0, x20, #0x20
+18023bc44: aa1303e4    	mov	x4, x19
+18023bc48: d2800c81    	mov	x1, #0x64               // =100
+18023bc4c: 97f73817    	bl	0x180009ca8 <MFStartup+0x4f78>
+18023bc50: 2a0003f3    	mov	w19, w0
+18023bc54: 36f800b3    	tbz	w19, #0x1f, 0x18023bc68 <MFCreateVideoDecryptorContext+0x6e8e8>
+0x180079b08 = BCryptGenRandom
+0x1802402f8 = GetCurrentProcessId
+
+LaunchProcess relevant slice:
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+18023bd30: 910283e0    	add	x0, sp, #0xa0
+18023bd34: d2804102    	mov	x2, #0x208              // =520
+18023bd38: 52800001    	mov	w1, #0x0                // =0
+18023bd3c: 94001346    	bl	0x180240a54 <MFCreateVideoDecryptorContext+0x736d4>
+18023bd40: 910aa3e0    	add	x0, sp, #0x2a8
+18023bd44: d2804102    	mov	x2, #0x208              // =520
+18023bd48: 52800001    	mov	w1, #0x0                // =0
+18023bd4c: 94001342    	bl	0x180240a54 <MFCreateVideoDecryptorContext+0x736d4>
+18023bd50: 4f00e407    	movi	v7.16b, #0x0
+18023bd54: 52802081    	mov	w1, #0x104              // =260
+18023bd58: 910283e0    	add	x0, sp, #0xa0
+18023bd5c: 3d8007e7    	str	q7, [sp, #0x10]
+18023bd60: fd0013e7    	str	d7, [sp, #0x20]
+18023bd64: 4f00e407    	movi	v7.16b, #0x0
+18023bd68: ad019fe7    	stp	q7, q7, [sp, #0x30]
+18023bd6c: ad029fe7    	stp	q7, q7, [sp, #0x50]
+18023bd70: ad039fe7    	stp	q7, q7, [sp, #0x70]
+18023bd74: fd004be7    	str	d7, [sp, #0x90]
+18023bd78: 9400131f    	bl	0x1802409f4 <MFCreateVideoDecryptorContext+0x73674>
+18023bd7c: 51000408    	sub	w8, w0, #0x1
+18023bd80: 71040d1f    	cmp	w8, #0x103
+18023bd84: 540000e9    	b.ls	0x18023bda0 <MFCreateVideoDecryptorContext+0x6ea20>
+18023bd88: 12affff3    	mov	w19, #-0x7fff0001       // =-2147418113
+18023bd8c: 394002c8    	ldrb	w8, [x22]
+18023bd90: 340007a8    	cbz	w8, 0x18023be84 <MFCreateVideoDecryptorContext+0x6eb04>
+18023bd94: 12afffe4    	mov	w4, #-0x7fff0001        // =-2147418113
+18023bd98: 52800581    	mov	w1, #0x2c               // =44
+18023bd9c: 14000035    	b	0x18023be70 <MFCreateVideoDecryptorContext+0x6eaf0>
+18023bda0: 52800d08    	mov	w8, #0x68               // =104
+18023bda4: b90033e8    	str	w8, [sp, #0x30]
+18023bda8: d0001548    	adrp	x8, 0x1804e5000
+18023bdac: 91220102    	add	x2, x8, #0x880
+18023bdb0: 91008284    	add	x4, x20, #0x20
+18023bdb4: 910283e3    	add	x3, sp, #0xa0
+18023bdb8: d2802081    	mov	x1, #0x104              // =260
+18023bdbc: 910aa3e0    	add	x0, sp, #0x2a8
+18023bdc0: 97f737ba    	bl	0x180009ca8 <MFStartup+0x4f78>
+18023bdc4: 2a0003f3    	mov	w19, w0
+18023bdc8: 36f800b3    	tbz	w19, #0x1f, 0x18023bddc <MFCreateVideoDecryptorContext+0x6ea5c>
+18023bdcc: 394002c8    	ldrb	w8, [x22]
+18023bdd0: 340005a8    	cbz	w8, 0x18023be84 <MFCreateVideoDecryptorContext+0x6eb04>
+18023bdd4: 528005a1    	mov	w1, #0x2d               // =45
+18023bdd8: 14000025    	b	0x18023be6c <MFCreateVideoDecryptorContext+0x6eaec>
+18023bddc: d0001548    	adrp	x8, 0x1804e5000
+18023bde0: 91228102    	add	x2, x8, #0x8a0
+18023bde4: d2802081    	mov	x1, #0x104              // =260
+18023bde8: 910283e0    	add	x0, sp, #0xa0
+18023bdec: 97f96c3f    	bl	0x180096ee8 <MFGetAdaptersAddresses+0xcfb8>
+18023bdf0: 2a0003f3    	mov	w19, w0
+18023bdf4: 36f800b3    	tbz	w19, #0x1f, 0x18023be08 <MFCreateVideoDecryptorContext+0x6ea88>
+18023bdf8: 394002c8    	ldrb	w8, [x22]
+18023bdfc: 34000448    	cbz	w8, 0x18023be84 <MFCreateVideoDecryptorContext+0x6eb04>
+18023be00: 528005c1    	mov	w1, #0x2e               // =46
+18023be04: 1400001a    	b	0x18023be6c <MFCreateVideoDecryptorContext+0x6eaec>
+18023be08: 910043e8    	add	x8, sp, #0x10
+18023be0c: f90007e8    	str	x8, [sp, #0x8]
+18023be10: 9100c3e8    	add	x8, sp, #0x30
+18023be14: d2800007    	mov	x7, #0x0                // =0
+18023be18: f90003e8    	str	x8, [sp]
+18023be1c: d2800006    	mov	x6, #0x0                // =0
+18023be20: 180006c5    	ldr	w5, 0x18023bef8 <MFCreateVideoDecryptorContext+0x6eb78>
+18023be24: 52800004    	mov	w4, #0x0                // =0
+18023be28: d2800003    	mov	x3, #0x0                // =0
+18023be2c: d2800002    	mov	x2, #0x0                // =0
+18023be30: 910aa3e1    	add	x1, sp, #0x2a8
+18023be34: 910283e0    	add	x0, sp, #0xa0
+18023be38: 940012f2    	bl	0x180240a00 <MFCreateVideoDecryptorContext+0x73680>
+18023be3c: 350002c0    	cbnz	w0, 0x18023be94 <MFCreateVideoDecryptorContext+0x6eb14>
+18023be40: 94001176    	bl	0x180240418 <MFCreateVideoDecryptorContext+0x73098>
+18023be44: 7100001f    	cmp	w0, #0x0
+18023be48: 1a93d013    	csel	w19, w0, w19, le
+0x1802409f4 = GetSystemDirectoryW
+0x180240a00 = CreateProcessW
+
+EstablishRpcConnection relevant slice:
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+18023b978: f9000fbf    	str	xzr, [x29, #0x18]
+18023b97c: 910063a5    	add	x5, x29, #0x18
+18023b980: d2800004    	mov	x4, #0x0                // =0
+18023b984: 91008283    	add	x3, x20, #0x20
+18023b988: d2800002    	mov	x2, #0x0                // =0
+18023b98c: d0001553    	adrp	x19, 0x1804e5000
+18023b990: 91214261    	add	x1, x19, #0x850
+18023b994: d2800000    	mov	x0, #0x0                // =0
+18023b998: 97f8f84a    	bl	0x180079ac0 <MFCreateTransformActivate+0x31650>
+18023b99c: 350009a0    	cbnz	w0, 0x18023bad0 <MFCreateVideoDecryptorContext+0x6e750>
+18023b9a0: aa1403e1    	mov	x1, x20
+18023b9a4: f9400fa0    	ldr	x0, [x29, #0x18]
+18023b9a8: 97f8f84c    	bl	0x180079ad8 <MFCreateTransformActivate+0x31668>
+18023b9ac: 35000800    	cbnz	w0, 0x18023baac <MFCreateVideoDecryptorContext+0x6e72c>
+18023b9b0: 52800013    	mov	w19, #0x0               // =0
+18023b9b4: 52800008    	mov	w8, #0x0                // =0
+18023b9b8: b90013bf    	str	wzr, [x29, #0x10]
+18023b9bc: 7103e91f    	cmp	w8, #0xfa
+18023b9c0: 540006c2    	b.hs	0x18023ba98 <MFCreateVideoDecryptorContext+0x6e718>
+18023b9c4: f9400283    	ldr	x3, [x20]
+18023b9c8: d2800002    	mov	x2, #0x0                // =0
+18023b9cc: 52800081    	mov	w1, #0x4                // =4
+18023b9d0: f0001548    	adrp	x8, 0x1804e6000
+18023b9d4: 9133a100    	add	x0, x8, #0xce8
+18023b9d8: 97f8f80e    	bl	0x180079a10 <MFCreateTransformActivate+0x315a0>
+18023b9dc: f9000680    	str	x0, [x20, #0x8]
+18023b9e0: b50001a0    	cbnz	x0, 0x18023ba14 <MFCreateVideoDecryptorContext+0x6e694>
+18023b9e4: 18000d33    	ldr	w19, 0x18023bb88 <MFCreateVideoDecryptorContext+0x6e808>
+18023b9e8: b90017b3    	str	w19, [x29, #0x14]
+18023b9ec: 39400328    	ldrb	w8, [x25]
+18023b9f0: 34000108    	cbz	w8, 0x18023ba10 <MFCreateVideoDecryptorContext+0x6e690>
+18023b9f4: f94002c8    	ldr	x8, [x22]
+18023b9f8: 2a1303e4    	mov	w4, w19
+18023b9fc: aa1403e3    	mov	x3, x20
+18023ba00: aa1503e2    	mov	x2, x21
+18023ba04: 52800421    	mov	w1, #0x21               // =33
+18023ba08: f9400900    	ldr	x0, [x8, #0x10]
+18023ba0c: 97f91b6d    	bl	0x1800827c0 <MFEndCreateFile+0x7d0>
+18023ba10: 14000042    	b	0x18023bb18 <MFCreateVideoDecryptorContext+0x6e798>
+18023ba14: 52800013    	mov	w19, #0x0               // =0
+18023ba18: b90017bf    	str	wzr, [x29, #0x14]
+18023ba1c: 1400001f    	b	0x18023ba98 <MFCreateVideoDecryptorContext+0x6e718>
+0x180079ac0 = RpcStringBindingComposeW
+0x180079ad8 = RpcBindingFromStringBindingW
+0x180079a10 = NdrClientCall3

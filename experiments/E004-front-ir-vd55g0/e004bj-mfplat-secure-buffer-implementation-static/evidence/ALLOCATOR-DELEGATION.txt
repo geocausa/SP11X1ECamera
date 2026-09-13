@@ -1,0 +1,89 @@
+E004bj SECURE BUFFER FACTORY/DELEGATION
+
+--- MFCreateSecureBufferAllocator export thunk ---
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001800e2c70 <MFCreateSecureBufferAllocator>:
+1800e2c70: 14050048    	b	0x180222d90 <MFCreateVideoDecryptorContext+0x55a10>
+1800e2c74: d503201f    	nop
+1800e2c78: d503201f    	nop
+1800e2c7c: 00000000    	udf	#0x0
+
+--- CameraTrustletConnectionImpl::CreateSecureBuffer ---
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+180223260: d503237f    	pacibsp
+180223264: a9bb53f3    	stp	x19, x20, [sp, #-0x50]!
+180223268: a9015bf5    	stp	x21, x22, [sp, #0x10]
+18022326c: a90263f7    	stp	x23, x24, [sp, #0x20]
+180223270: a9036bf9    	stp	x25, x26, [sp, #0x30]
+180223274: f90023fb    	str	x27, [sp, #0x40]
+180223278: a9be7bfd    	stp	x29, x30, [sp, #-0x20]!
+18022327c: 910003fd    	mov	x29, sp
+180223280: aa0003f8    	mov	x24, x0
+180223284: aa0103fa    	mov	x26, x1
+180223288: f00015f7    	adrp	x23, 0x1804e2000
+18022328c: 911062e1    	add	x1, x23, #0x418
+180223290: aa0203f5    	mov	x21, x2
+180223294: 52800d82    	mov	w2, #0x6c               // =108
+180223298: 910043e0    	add	x0, sp, #0x10
+18022329c: 2a0303fb    	mov	w27, w3
+1802232a0: 97f7a896    	bl	0x18000d4f8 <MFScheduleWorkItem+0x1f38>
+1802232a4: f9400b00    	ldr	x0, [x24, #0x10]
+1802232a8: b5000060    	cbnz	x0, 0x1802232b4 <MFCreateVideoDecryptorContext+0x55f34>
+1802232ac: 18000c79    	ldr	w25, 0x180223438 <MFCreateVideoDecryptorContext+0x560b8>
+1802232b0: 14000007    	b	0x1802232cc <MFCreateVideoDecryptorContext+0x55f4c>
+1802232b4: 2a1b03e3    	mov	w3, w27
+1802232b8: aa1503e2    	mov	x2, x21
+1802232bc: aa1a03e1    	mov	x1, x26
+1802232c0: 94006108    	bl	0x18023b6e0 <MFCreateVideoDecryptorContext+0x6e360>
+1802232c4: 2a0003f9    	mov	w25, w0
+1802232c8: 36f80a39    	tbz	w25, #0x1f, 0x18022340c <MFCreateVideoDecryptorContext+0x5608c>
+1802232cc: 900017e8    	adrp	x8, 0x18051f000
+
+--- CameraTrustletConnectionImpl::DestroySecureBuffer ---
+
+/mnt/windows/Windows/System32/mfplat.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+00000001801cd380 <MFCreateVideoDecryptorContext>:
+180223440: d503237f    	pacibsp
+180223444: a9bb53f3    	stp	x19, x20, [sp, #-0x50]!
+180223448: a9015bf5    	stp	x21, x22, [sp, #0x10]
+18022344c: a90263f7    	stp	x23, x24, [sp, #0x20]
+180223450: a9036bf9    	stp	x25, x26, [sp, #0x30]
+180223454: f90023fb    	str	x27, [sp, #0x40]
+180223458: a9be7bfd    	stp	x29, x30, [sp, #-0x20]!
+18022345c: 910003fd    	mov	x29, sp
+180223460: aa0003f8    	mov	x24, x0
+180223464: aa0103f5    	mov	x21, x1
+180223468: f00015f7    	adrp	x23, 0x1804e2000
+18022346c: 911142e1    	add	x1, x23, #0x450
+180223470: aa0203fa    	mov	x26, x2
+180223474: 52800ec2    	mov	w2, #0x76               // =118
+180223478: 910043e0    	add	x0, sp, #0x10
+18022347c: 97f7a81f    	bl	0x18000d4f8 <MFScheduleWorkItem+0x1f38>
+180223480: f9400b00    	ldr	x0, [x24, #0x10]
+180223484: b5000060    	cbnz	x0, 0x180223490 <MFCreateVideoDecryptorContext+0x56110>
+180223488: 18000c59    	ldr	w25, 0x180223610 <MFCreateVideoDecryptorContext+0x56290>
+18022348c: 14000006    	b	0x1802234a4 <MFCreateVideoDecryptorContext+0x56124>
+180223490: aa1a03e2    	mov	x2, x26
+180223494: aa1503e1    	mov	x1, x21
+180223498: 94005fc2    	bl	0x18023b3a0 <MFCreateVideoDecryptorContext+0x6e020>
+18022349c: 2a0003f9    	mov	w25, w0
+1802234a0: 36f80a39    	tbz	w25, #0x1f, 0x1802235e4 <MFCreateVideoDecryptorContext+0x56264>
+1802234a4: 900017e8    	adrp	x8, 0x18051f000
+1802234a8: 912f8116    	add	x22, x8, #0xbe0
+1802234ac: 900017c8    	adrp	x8, 0x18051b000
+
+Delegation target symbols from matching PDB:
+0x18023b6e0 = CameraTrustlet::CreateSecureSection
+0x18023b3a0 = CameraTrustlet::CloseSecureSection
