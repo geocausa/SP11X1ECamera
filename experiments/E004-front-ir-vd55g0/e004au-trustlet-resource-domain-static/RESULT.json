@@ -1,0 +1,40 @@
+{
+  "schema": "sp11-camera-e004au-trustlet-resource-domain-static-v1",
+  "status": "PASS_TRUSTLET_RESOURCE_AND_CP_CAMERA_DOMAIN_STATIC",
+  "date": "2026-09-13",
+  "trustlet_sha256": "55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606",
+  "secure_hardware": {
+    "callback": "EvtCompanionPrePrepareHardware",
+    "mapping_api": "MapSecureIo",
+    "resource_selector": "first memory resource",
+    "mapping_mode_literal": "0x12",
+    "windows_device": "CameraSecureISP",
+    "physical_window": "0x0acca000..0x0accdfff",
+    "size": "0x4000",
+    "kd_direct_readable": false,
+    "correlation": "unique_single_memory_resource"
+  },
+  "secure_internal_buffer": {
+    "page_size": "0x1000",
+    "domain_va_seed": "0x18000000",
+    "domain_va_rollover_threshold": "0x19000000",
+    "domain_id": "0x0d",
+    "protection_literal": "0x04",
+    "api": "AssignMemoryToSocDomain"
+  },
+  "linux_crosscheck": {
+    "vmid_symbol": "QCOM_SCM_VMID_CP_CAMERA",
+    "vmid_value": "0x0d",
+    "exact_domain_id_match": true,
+    "qcom_scm_assign_mem_present": true,
+    "windows_protection_equals_linux_perm_flags": "unproven"
+  },
+  "runtime": {
+    "linux_secure_io_map": false,
+    "linux_memory_reassignment": false,
+    "qcomtee_loaded": false,
+    "secure_lane_call": false
+  },
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Statically map secure IFE/CSID register use and task-0 initialization inside the Windows trustlet."
+}
