@@ -1,0 +1,65 @@
+{
+  "schema": "sp11-camera-e004bi-windows-secure-capture-surface-owner-static-v1",
+  "status": "PASS_MFCORE_OWNS_SECURE_SURFACE_AND_REQUESTS_SECURE_ALLOCATOR",
+  "date": "2026-09-13",
+  "authority_policy": "Static Windows oracle with exact matching Microsoft PDBs; no Linux secure runtime.",
+  "binaries": {
+    "mfcore_sha256": "109d8cfce13890f2c514f9454228ce733c2e6e6c236f5adeac39220660a26c3e",
+    "ksproxy_sha256": "33cb0d6087bd20811fc1b59253d4fee3f3687a11d3dd890017282bd90cf447fc",
+    "frameserver_sha256": "9eb9a9d1061b2fe614a14d9ba30e235c4d052ae79297027b216f7bc122b7d886"
+  },
+  "mfcore": {
+    "matching_pdb_guid": "F9995886-3ED3-A0AE-EE79-5948132AE60F",
+    "set_capture_stream_mode": "CKsBasePin::SetCaptureStreamMode",
+    "secure_predicate": "CKsBasePin::IsSecureBufferEnabled",
+    "preferred_surface_get": "CKsBasePin::GetPreferredCaptureSurface",
+    "current_surface_set": "CKsBasePin::SetCurrentCaptureSurfaceType",
+    "allocator_init": "CKsBasePin::InitAndCreateAllocator",
+    "allocator_factory": "CKsBasePin::CreateAllocator",
+    "secure_surface": "0x10",
+    "secure_surface_set_when_enabled": true,
+    "current_surface_stored_and_reused_for_allocator": true,
+    "secure_allocator_api": "MFCreateSecureBufferAllocator",
+    "secure_allocator_api_invoked_for_surface_0x10": true
+  },
+  "property_contract": {
+    "guid": "KSPROPSETID_VramCapture",
+    "guid_le_bytes": "e3ac3fe780280249b79988d0cd634e0f",
+    "preferred_get": {
+      "id": 2,
+      "flags": 1
+    },
+    "current_set": {
+      "id": 3,
+      "flags": 2
+    }
+  },
+  "ksproxy": {
+    "interface": "IKsD3DPin",
+    "iid": "4f432174-8284-4d40-9497-aeeae0cf2fd4",
+    "ordinary_supported_surfaces": [
+      "0x1 SYSTEM",
+      "0x2 VRAM"
+    ],
+    "secure_surface_0x10_supported_by_decide_transport": false,
+    "conclusion": "ordinary DirectShow/KSProxy allocator negotiation is not the protected 0x10 path"
+  },
+  "frameserver": {
+    "direct_vramcapture_reference_property_id": 1,
+    "direct_vramcapture_reference_flags": 1,
+    "direct_reference_meaning": "KSPROPERTY_DISPLAY_ADAPTER_GUID GET",
+    "direct_secure_surface_set_proven": false
+  },
+  "ownership_conclusion": {
+    "secure_surface_transition_owner": "MFCore / CKsBasePin",
+    "secure_allocator_request_owner": "MFCore / CKsBasePin",
+    "lower_level_secure_section_implementation_resolved": false
+  },
+  "windows_volume_read_only": true,
+  "windows_runtime_executed": false,
+  "linux_secure_runtime_executed": false,
+  "linux_memory_reassignment": false,
+  "protected_mmio_access_linux": false,
+  "qcomtee_loaded": false,
+  "next_gate": "Map the implementation behind MFCreateSecureBufferAllocator and its VTL1 section lifetime; keep Linux secure runtime disabled."
+}

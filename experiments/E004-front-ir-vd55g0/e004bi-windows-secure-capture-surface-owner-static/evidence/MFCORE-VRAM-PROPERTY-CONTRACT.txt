@@ -1,0 +1,55 @@
+E004bi MFCORE VRAM CAPTURE PROPERTY CONTRACT
+mfcore_sha256=109d8cfce13890f2c514f9454228ce733c2e6e6c236f5adeac39220660a26c3e
+KSPROPSETID_VramCapture_expected_le=e3ac3fe780280249b79988d0cd634e0f
+mfcore_guid_at_0x18074a438=e3ac3fe780280249b79988d0cd634e0f
+GetPreferred_literal_0x1802a6cd8=0200000001000000
+GetPreferred_decoded=Id=2 KSPROPERTY_PREFERRED_CAPTURE_SURFACE; Flags=1 GET
+SetCurrent_literal_0x18009e0c8=0300000002000000
+SetCurrent_decoded=Id=3 KSPROPERTY_CURRENT_CAPTURE_SURFACE; Flags=2 SET
+
+--- method disassembly: GetPreferredCaptureSurface ---
+
+/mnt/windows/Windows/System32/mfcore.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+000000018027aa40 <MFCreateMFMetadataOnPropertyStore>:
+1802a6be0: 90002528    	adrp	x8, 0x18074a000
+1802a6be4: 9110e108    	add	x8, x8, #0x438
+1802a6be8: b90002ff    	str	wzr, [x23]
+1802a6bec: 3dc00110    	ldr	q16, [x8]
+1802a6bf0: 58000748    	ldr	x8, 0x1802a6cd8 <MFCreateMFMetadataOnPropertyStore+0x2c298>
+1802a6bf4: f9405e60    	ldr	x0, [x19, #0xb8]
+1802a6bf8: 910043e6    	add	x6, sp, #0x10
+1802a6bfc: 52800085    	mov	w5, #0x4                // =4
+1802a6c00: f9001be8    	str	x8, [sp, #0x30]
+1802a6c04: aa1703e4    	mov	x4, x23
+1802a6c08: 52800303    	mov	w3, #0x18               // =24
+1802a6c0c: 3d800bf0    	str	q16, [sp, #0x20]
+1802a6c10: 910083e2    	add	x2, sp, #0x20
+1802a6c14: 180006a1    	ldr	w1, 0x1802a6ce8 <MFCreateMFMetadataOnPropertyStore+0x2c2a8>
+1802a6c18: 97f7adf8    	bl	0x1800923f8 <MFGetService+0x6b9f8>
+1802a6c1c: 2a0003f4    	mov	w20, w0
+
+--- method disassembly: SetCurrentCaptureSurfaceType ---
+
+/mnt/windows/Windows/System32/mfcore.dll:	file format coff-arm64x
+
+Disassembly of section .text:
+
+0000000180026a00 <MFGetService>:
+18009dffc: b0003568    	adrp	x8, 0x18074a000
+18009e000: 9110e108    	add	x8, x8, #0x438
+18009e004: 3dc00110    	ldr	q16, [x8]
+18009e008: 58000608    	ldr	x8, 0x18009e0c8 <MFGetService+0x776c8>
+18009e00c: 910053e6    	add	x6, sp, #0x14
+18009e010: 52800085    	mov	w5, #0x4                // =4
+18009e014: f9001be8    	str	x8, [sp, #0x30]
+18009e018: 910043e4    	add	x4, sp, #0x10
+18009e01c: 52800303    	mov	w3, #0x18               // =24
+18009e020: 3d800bf0    	str	q16, [sp, #0x20]
+18009e024: 910083e2    	add	x2, sp, #0x20
+18009e028: 18000561    	ldr	w1, 0x18009e0d4 <MFGetService+0x776d4>
+18009e02c: 97ffd0f3    	bl	0x1800923f8 <MFGetService+0x6b9f8>
+18009e030: 2a0003f4    	mov	w20, w0
+18009e034: b94013e7    	ldr	w7, [sp, #0x10]
