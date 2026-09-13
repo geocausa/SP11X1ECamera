@@ -1,0 +1,64 @@
+E004av WINDOWS KMD INIT RETURN CONSUMER
+          param_6 = (undefined8 *)(ulonglong)*DAT_140012500;
+          uVar16 = 0;
+          uVar21 = 9;
+          FUN_140006a20(3,0x14000e818,9,"-->DeviceActivate. CompId = %d nRefCount = %d\n",0,param_6,
+                        param_7,param_8);
+          FUN_140009260(DAT_1400124e8,extraout_x1_04,uVar21,pcVar17,uVar16,param_6,param_7,param_8);
+          puVar23 = DAT_140012500;
+          do {
+            uVar11 = *puVar23;
+            cVar3 = '\x01';
+            bVar6 = (bool)ExclusiveMonitorPass(puVar23,0x10);
+            if (bVar6) {
+              *puVar23 = uVar11 + 1;
+              cVar3 = ExclusiveMonitorsStatus();
+            }
+          } while (cVar3 != '\0');
+          DataMemoryBarrier(2,3);
+          uVar13 = extraout_x1_05;
+          if (uVar11 + 1 == 1) {
+            uVar21 = 1;
+            PoFxActivateComponent(DAT_1400124f0,0);
+            uVar13 = extraout_x1_06;
+          }
+          FUN_1400092b0(DAT_1400124e8,uVar13,uVar21,pcVar17,uVar16,param_6,param_7,param_8);
+        }
+        *(undefined4 *)(param_1 + 0x28) = 2;
+        FUN_140006a20(3,0x14000c230,0xd,"m_PowerState - PowerState_ON\n",uVar16,param_6,param_7,
+                      param_8);
+        puVar22 = &local_168;
+        uVar16 = 4;
+        local_168 = 0;
+        puVar23 = &local_164;
+        uVar11 = FUN_140004a90(0,0,*(undefined8 *)(param_1 + 0x38),*(undefined4 *)(param_1 + 0x40),
+                               puVar23,(undefined8 *)0x4,puVar22,param_8);
+        if ((undefined8 *)param_3[3] == (undefined8 *)0x0) {
+          FUN_140006a20(0,0x14000c230,0xd,"pDeviceResource->pReturnParams is NULL\n",puVar23,uVar16,
+                        puVar22,param_8);
+        }
+        else {
+          uStack_84 = 0;
+          uStack_7c = 0x100000000;
+          local_90 = 8;
+          local_88 = 1;
+          FUN_140009d60((undefined8 *)param_3[3],0x1c,&local_90,0x1c);
+        }
+        if (-1 < (int)uVar11) {
+          FUN_140006a20(3,0x14000c230,0xd,
+                        "Successfully initialized ISPTrustlet, IFE_HW_VERSION -  0x%08x\n",
+                        (ulonglong)local_164,uVar16,puVar22,param_8);
+          return 0;
+        }
+        if (-1 < (int)uVar11) {
+          uVar11 = 0;
+        }
+        FUN_140006a20(0,0x14000c230,0xd,"Failed to initialize ISPTrustlet, status = 0x%08x....\n\n",
+                      (ulonglong)uVar11,uVar16,puVar22,param_8);
+        return 1;
+      }
+      uVar12 = 2;
+    }
+    pcVar17 = "Failed to initialize packetQueue, result = 0x%08x....\n\n";
+LAB_14000460c:
+    FUN_140006a20(0,0x14000c230,0xd,pcVar17,uVar12,param_6,param_7,param_8);

@@ -1,0 +1,38 @@
+{
+  "schema": "sp11-camera-e004av-trustlet-secure-ife-bootstrap-static-v1",
+  "status": "PASS_SECURE_IFE_BOOTSTRAP_AND_HW_VERSION_STATIC",
+  "date": "2026-09-13",
+  "init": {
+    "task_class": 1,
+    "task_id": 0,
+    "secure_base_source": "MapSecureIo result / SECUREIFE_BASE_ADDRESS",
+    "task_output_bytes": 4,
+    "task_output_source": "first 32-bit value at secure mapped base",
+    "kmd_label": "IFE_HW_VERSION",
+    "runtime_value": "not-captured-in-e004av"
+  },
+  "trustlet_internal_commands": {
+    "device_config": "0x802",
+    "send_csl_packet": "0x803",
+    "device_start": "0x804",
+    "device_stop": "0x805"
+  },
+  "secure_worker": {
+    "secure_ife_manager": true,
+    "secure_csid_logic": true,
+    "csl_iq_packet_processing": true,
+    "secure_output_buffer_handling": true,
+    "active_surface_ir_core_id": "unproven"
+  },
+  "base_topology": {
+    "mapped_resource_size": "0x4000",
+    "core_0_1_csid_offset": "0x4000",
+    "core_0_1_bus_writer_offset": "0x0c00",
+    "core_2_3_csid_offset": "0x0000",
+    "core_2_3_bus_writer_offset": "0x1200",
+    "active_core_inference": "none"
+  },
+  "runtime_executed": false,
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Recover secure IFE hardware-version/HAL selection statically; do not map or access protected hardware on Linux."
+}
