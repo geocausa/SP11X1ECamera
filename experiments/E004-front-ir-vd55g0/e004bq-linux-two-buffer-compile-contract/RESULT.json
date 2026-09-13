@@ -1,0 +1,56 @@
+{
+  "schema": "sp11-camera-e004bq-linux-two-buffer-compile-contract-v1",
+  "status": "PASS_COMPILE_ONLY_TWO_BUFFER_PROTECTED_PIPELINE_ZERO_TEXT_DIFF",
+  "date": "2026-09-13",
+  "base_checkpoint": "18bc392",
+  "domains": {
+    "queue_policy": "camss_protected_queue_contract",
+    "internal_capture_target": "camss_secure_capture_target",
+    "external_protected_sample": "camss_external_protected_sample",
+    "transfer_boundary": "camss_protected_transfer_ops",
+    "lane_lifetime": "camss_secure_lane_ops",
+    "all_separate": true
+  },
+  "internal_target": {
+    "physical_ownership_field": true,
+    "camss_iova_field": true,
+    "physical_and_iova_separate": true,
+    "vmid_encoded": false,
+    "backend_instance_present": false
+  },
+  "external_sample": {
+    "stable_identity": true,
+    "camss_iova_field": false,
+    "backend_instance_present": false
+  },
+  "transfer": {
+    "source_type": "camss_secure_capture_target",
+    "destination_type": "camss_external_protected_sample",
+    "implementation_present": false
+  },
+  "runtime": {
+    "contract_instance_present": false,
+    "queue_selector_present": false,
+    "v4l2_control_present": false,
+    "ioctl_present": false,
+    "callback_call_sites_present": false
+  },
+  "build": {
+    "baseline_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "scaffold_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "text_byte_identical": true,
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "baseline_build_pass": true,
+    "scaffold_build_pass": true
+  },
+  "safety": {
+    "production_source_unchanged": true,
+    "module_loaded": false,
+    "scm_call_executed": false,
+    "memory_assignment_executed": false,
+    "linux_secure_runtime_executed": false,
+    "qcomtee_loaded": false,
+    "protected_mmio_access": false
+  },
+  "next_gate": "Static requirements map for protected internal-to-external transfer backend; no runtime."
+}

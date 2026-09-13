@@ -1,0 +1,59 @@
+E004bq BUILD COMPARISON
+baseline_module=968e2efff814cf50eed297cf0ba3a8d46025425da289ac3595ed23fc8b3f3dd7
+scaffold_module=c9e1d42e300b59f4d08be32fbdef53e55d1280a38d35cb58f3402b287503fcba
+baseline_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+scaffold_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+TEXT_BYTE_IDENTICAL=1
+baseline_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+scaffold_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+--- explicit ownership domains ---
+26:struct camss_protected_queue_contract {
+43:struct camss_secure_capture_target {
+60:struct camss_external_protected_sample {
+69:struct camss_secure_capture_target_ops {
+71:		       struct camss_secure_capture_target *target);
+73:			struct camss_secure_capture_target *target);
+77:struct camss_external_protected_sample_ops {
+79:		      struct camss_external_protected_sample *sample);
+81:			struct camss_external_protected_sample *sample);
+88:struct camss_protected_transfer_ops {
+90:			struct camss_secure_capture_target *source,
+91:			struct camss_external_protected_sample *destination);
+95:struct camss_secure_lane_ops {
+100:struct camss_protected_pipeline_contract {
+101:	struct camss_protected_queue_contract queue;
+102:	const struct camss_secure_capture_target_ops *capture_target_ops;
+103:	const struct camss_external_protected_sample_ops *external_sample_ops;
+104:	const struct camss_protected_transfer_ops *transfer_ops;
+105:	const struct camss_secure_lane_ops *lane_ops;
+
+--- external sample has no CAMSS IOVA field ---
+struct camss_external_protected_sample {
+	u8 id[CAMSS_PROTECTED_ID_BYTES];
+	size_t plane_size[CAMSS_PROTECTED_MAX_PLANES];
+	unsigned int num_planes;
+	void *backend_handle;
+	bool prepared;
+};
+
+--- internal target physical/IOVA split ---
+struct camss_secure_capture_target {
+	u8 id[CAMSS_PROTECTED_ID_BYTES];
+	phys_addr_t ownership_phys;
+	size_t ownership_size;
+	dma_addr_t camss_iova[CAMSS_PROTECTED_MAX_PLANES];
+	size_t plane_size[CAMSS_PROTECTED_MAX_PLANES];
+	unsigned int num_planes;
+	void *backend_handle;
+	bool prepared;
+};
+
+--- forbidden runtime primitive scan (must be empty) ---
+/tmp/e004bq-camss-scaffold/camss-protected-pipeline.h:5: * No backend, runtime selector, control, ioctl, SCM call, VMID choice,
+/tmp/e004bq-camss-scaffold/camss-protected-pipeline.h:41: * No VMID or permission value is encoded here.
+
+--- callback invocations outside declarations (must be empty) ---
+
+--- exact implementation-symbol scan ---
+FORBIDDEN_IMPLEMENTATION_SYMBOL_MATCHES=0
