@@ -1,0 +1,51 @@
+{
+  "schema": "sp11-camera-e004am-devicemft-external-ks-face-v1",
+  "status": "PASS_STATIC_DEVICEMFT_EXTERNAL_KS_FACE",
+  "acquisition_date": "2026-09-13",
+  "registration": {
+    "clsid": "4C2331F0-66BE-4177-9841-2FCBA8CCF5CA",
+    "inproc_server": "QcDeviceMFT8380.dll",
+    "threading_model": "Both",
+    "inf_sha256": "4db3acab414e344dc460478b54d964c9c7b5d3d648ee0c19db13523431262fcb"
+  },
+  "binary": {
+    "name": "QcDeviceMFT8380.dll",
+    "bytes": 23998368,
+    "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+  },
+  "query_interface": {
+    "function": "0x180010a70",
+    "ks_guid_constant": "0x181350d30",
+    "ks_guid": "28f54685-06fd-11d2-b27a-00a0c9223196",
+    "returned_subobject_offset": "0x18",
+    "ks_vtable": "0x181330980"
+  },
+  "ks_vtable": {
+    "ksproperty_slot": "0x18",
+    "ksproperty": "0x180018250",
+    "ksmethod_slot": "0x20",
+    "ksmethod": "0x1800186f0",
+    "ksevent_slot": "0x28",
+    "ksevent": "0x180018a50"
+  },
+  "routing": {
+    "internal_handler_offset": "0xb0",
+    "driver_forwarder_offset": "0x98",
+    "handled_in_dmft_before_driver_forward": true
+  },
+  "package_scan": {
+    "securemode_components": [
+      "QcDeviceMFT8380.dll",
+      "surfacecamavs8380.sys"
+    ],
+    "separate_qualcomm_securemode_client_found": false
+  },
+  "interpretation": {
+    "devicemft_has_distinct_ks_face": true,
+    "public_source_ks_face_from_e004aj_is_sufficiently_explained": false,
+    "trusted_windows_trigger_resolved": false,
+    "bounded_windows_host_trace_justified": true,
+    "linux_secureisp_runtime_authorized": false
+  },
+  "next_gate": "On a one-shot Windows boot, identify the process hosting QcDeviceMFT8380.dll and trace CDeviceMFT::KsProperty / CPinConfigurer::KsProperty during a trusted FaceAuth-oriented trigger before returning to Golden."
+}
