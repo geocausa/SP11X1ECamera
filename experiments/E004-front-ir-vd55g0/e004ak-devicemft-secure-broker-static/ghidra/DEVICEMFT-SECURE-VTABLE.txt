@@ -1,0 +1,395 @@
+
+//// FUN_180046fd0 @180046fd0 ////
+
+bool FUN_180046fd0(longlong *param_1,longlong *param_2)
+
+{
+  int iVar1;
+  int iVar2;
+  undefined8 uVar3;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  longlong lVar4;
+  
+  if (*param_2 != 0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x80));
+    uVar3 = (*extraout_x15)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x90),param_1);
+    iVar1 = (*extraout_x15_00)();
+    lVar4 = *param_2;
+    iVar2 = FUN_180f5e7c0(uVar3,lVar4,0x10);
+    if ((iVar2 == 0) || (iVar2 = FUN_180f5e7c0(uVar3,&DAT_181350d40,0x10), iVar2 == 0)) {
+      if (iVar1 != *(int *)(lVar4 + 0x10)) {
+        return iVar1 == -1;
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+
+
+//// FUN_180047690 @180047690 ////
+
+int FUN_180047690(longlong *param_1,longlong *param_2,undefined8 param_3)
+
+{
+  uint uVar1;
+  uint uVar2;
+  uint uVar3;
+  int iVar4;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x98));
+  uVar1 = (*extraout_x15)();
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa0),param_1);
+  uVar2 = (*extraout_x15_00)();
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa8),param_1);
+  uVar3 = (*extraout_x15_01)();
+  if ((uVar1 != 0) && (*(uint *)(param_2 + 1) < uVar1)) {
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                  ,0xb6,"CProperty::Handle",DAT_180047b48);
+    return DAT_180047b48;
+  }
+  if (uVar2 != 0) {
+    if (((*(uint *)(param_2 + 3) == 0) && (param_2[2] == 0)) &&
+       ((*(uint *)(*param_2 + 0x14) & 1) != 0)) {
+      FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### Need more data, required size: %d\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xba,uVar2);
+      if ((uint *)param_2[4] == (uint *)0x0) {
+        FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                      ,0xbd,"CProperty::Handle",DAT_180047b48);
+        return DAT_180047b48;
+      }
+      *(uint *)param_2[4] = uVar2;
+      return DAT_180047b4c;
+    }
+    if (((*(uint *)(param_2 + 3) < uVar2) || (param_2[2] == 0)) &&
+       ((*(uint *)(*param_2 + 0x14) & 1) != 0)) {
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xc4,"CProperty::Handle",DAT_180047b50);
+      return DAT_180047b50;
+    }
+  }
+  if (((uVar3 != 0) && ((*(uint *)(param_2 + 3) < uVar3 || (param_2[2] == 0)))) &&
+     ((*(uint *)(*param_2 + 0x14) >> 1 & 1) != 0)) {
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                  ,200,"CProperty::Handle",DAT_180047b50);
+    return DAT_180047b50;
+  }
+  if ((*(uint *)(*param_2 + 0x14) & 1) != 0) {
+    if ((undefined4 *)param_2[4] == (undefined4 *)0x0) {
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xcf,"CProperty::Handle",DAT_180047b48);
+      return DAT_180047b48;
+    }
+    *(undefined4 *)param_2[4] = 0;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x68),param_1,param_3);
+    iVar4 = (*extraout_x15_02)();
+    if (iVar4 < 0) {
+      if (-1 < iVar4) {
+        iVar4 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xd5,"CProperty::Handle",iVar4);
+      return iVar4;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*param_1 + 0xc0),param_1,param_2,param_3);
+    iVar4 = (*extraout_x15_03)();
+    if (iVar4 == -0x7ff8ffce) {
+      FUN_18001aca8(3,0xffff,"%s:%d ### WARN ### Property not supported\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xdb);
+      return DAT_180047b54;
+    }
+    if (iVar4 < 0) {
+      if (-1 < iVar4) {
+        iVar4 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xe0,"CProperty::Handle",iVar4);
+      return iVar4;
+    }
+    if (*(uint *)param_2[4] == 0) {
+      *(uint *)param_2[4] = uVar2;
+    }
+  }
+  if ((*(uint *)(*param_2 + 0x14) >> 1 & 1) != 0) {
+    if ((undefined4 *)param_2[4] != (undefined4 *)0x0) {
+      *(undefined4 *)param_2[4] = 0;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*param_1 + 0xb8),param_1,param_2,param_3);
+    iVar4 = (*extraout_x15_04)();
+    if (iVar4 < 0) {
+      if (-1 < iVar4) {
+        iVar4 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xf2,"CProperty::Handle",iVar4);
+      return iVar4;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0x60),param_1,param_3);
+    iVar4 = (*extraout_x15_05)();
+    if (iVar4 < 0) {
+      if (-1 < iVar4) {
+        iVar4 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                    ,0xf5,"CProperty::Handle",iVar4);
+      return iVar4;
+    }
+  }
+  return 0;
+}
+
+
+
+//// FUN_180047b60 @180047b60 ////
+
+void FUN_180047b60(longlong *param_1,longlong *param_2)
+
+{
+  longlong *plVar1;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  
+  if ((longlong *)param_1[2] != param_2) {
+    if (param_2 != (longlong *)0x0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_2 + 8),param_2);
+      (*extraout_x15)();
+    }
+    plVar1 = (longlong *)param_1[2];
+    param_1[2] = (longlong)param_2;
+    if (plVar1 != (longlong *)0x0) {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar1 + 0x10));
+      (*extraout_x15_00)();
+    }
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 200),param_1);
+  (*extraout_x15_01)();
+  return;
+}
+
+
+
+//// FUN_180047c60 @180047c60 ////
+
+int FUN_180047c60(undefined8 param_1,undefined8 param_2)
+
+{
+  int iVar1;
+  
+  iVar1 = FUN_180047d40(param_1,param_2,1);
+  if (iVar1 < 0) {
+    if (-1 < iVar1) {
+      iVar1 = 0;
+    }
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                  ,0x12e,"CProperty::NotifySetObservers",iVar1);
+  }
+  return iVar1;
+}
+
+
+
+//// FUN_180043f60 @180043f60 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+undefined4 FUN_180043f60(longlong *param_1,longlong param_2,undefined8 param_3,undefined8 param_4)
+
+{
+  int iVar1;
+  undefined8 in_x7;
+  char *pcVar2;
+  longlong *plVar3;
+  char *pcVar4;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  undefined4 uVar5;
+  int *piVar6;
+  undefined8 uVar7;
+  char *pcVar8;
+  undefined1 auStack_70 [16];
+  char *local_60;
+  int local_58;
+  undefined4 uStack_54;
+  
+  pcVar4 = "CProperty_SecureMode::SetProperty";
+  uVar7 = 0xfffffffffffffffe;
+  pcVar8 = "CProperty_SecureMode::SetProperty";
+  pcVar2 = pcVar4;
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar2 = pcVar2 + 1;
+    } while (*pcVar2 != '\0');
+    local_60 = "CProperty_SecureMode::SetProperty";
+    local_58 = (int)pcVar2 + 0x7eca4e39;
+    uStack_54 = 0;
+    FUN_18001a7f8(param_1,&DAT_181014d30,param_3,param_4,auStack_70);
+  }
+  piVar6 = *(int **)(param_2 + 0x10);
+  if (param_1[2] == 0) {
+    FUN_18001aca8(1,0xffff,"%s:%d ### CRITICAL ### ASSERT !! %s():%d\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CGlobalInterfaceAccess.cpp"
+                  ,0x45,"CGlobalInterfaceAccess::ProcessorMediator",0x45,in_x7,uVar7,pcVar8);
+  }
+  plVar3 = (longlong *)0x0;
+  if ((longlong *)param_1[2] != (longlong *)0x0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*(longlong *)param_1[2] + 0xb0));
+    plVar3 = (longlong *)(*extraout_x15)();
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar3 + 0x18),plVar3,&DAT_181350e98);
+  iVar1 = (*extraout_x15_00)();
+  if (((piVar6[1] == iVar1) && (*piVar6 == 1)) && (piVar6[2] == 0x28)) {
+    param_1[0xe] = *(longlong *)(*(longlong *)(param_2 + 0x10) + 0x10);
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb0),param_1,param_2);
+    plVar3 = (longlong *)(*extraout_x15_01)();
+    param_1[0x10] = *plVar3;
+    uVar5 = 0;
+  }
+  else {
+    FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### SecureMode property invalid input parameters.\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\Properties\\Property.ExtendedSecureMode.cpp"
+                  ,0x4a);
+    plVar3 = (longlong *)
+             FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                           "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\Properties\\Property.ExtendedSecureMode.cpp"
+                           ,0x4b,"CProperty_SecureMode::SetProperty",DAT_180044168);
+    uVar5 = DAT_180044168;
+  }
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar4 = pcVar4 + 1;
+    } while (*pcVar4 != '\0');
+    local_60 = "CProperty_SecureMode::SetProperty";
+    local_58 = (int)pcVar4 + 0x7eca4e39;
+    uStack_54 = 0;
+    FUN_18001a7f8(plVar3,&DAT_181014c80);
+  }
+  return uVar5;
+}
+
+
+
+//// FUN_180043ce0 @180043ce0 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+undefined4 FUN_180043ce0(longlong *param_1,longlong param_2,undefined8 param_3,undefined8 param_4)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  undefined8 uVar3;
+  char *pcVar4;
+  longlong *plVar5;
+  char *pcVar6;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  int *piVar7;
+  longlong lVar8;
+  longlong lVar9;
+  longlong lVar10;
+  undefined1 auStack_80 [16];
+  char *local_70;
+  int local_68;
+  undefined4 uStack_64;
+  
+  pcVar6 = "CProperty_SecureMode::GetProperty";
+  pcVar4 = pcVar6;
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar4 = pcVar4 + 1;
+    } while (*pcVar4 != '\0');
+    local_70 = "CProperty_SecureMode::GetProperty";
+    local_68 = (int)pcVar4 + 0x7eca4f21;
+    uStack_64 = 0;
+    FUN_18001a7f8(param_1,&DAT_181014d30,param_3,param_4,auStack_80);
+  }
+  piVar7 = *(int **)(param_2 + 0x10);
+  if (param_1[2] == 0) {
+    FUN_18001aca8(1,0xffff,"%s:%d ### CRITICAL ### ASSERT !! %s():%d\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessingFramework\\src\\CGlobalInterfaceAccess.cpp"
+                  ,0x45,"CGlobalInterfaceAccess::ProcessorMediator",0x45);
+  }
+  plVar5 = (longlong *)0x0;
+  if ((longlong *)param_1[2] != (longlong *)0x0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*(longlong *)param_1[2] + 0xb0));
+    plVar5 = (longlong *)(*extraout_x15)();
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar5 + 0x18),plVar5,&DAT_181350e98);
+  iVar1 = (*extraout_x15_00)();
+  if (((piVar7[1] == iVar1) && (*piVar7 == 1)) && (piVar7[2] == 0x28)) {
+    plVar5 = *(longlong **)(param_2 + 0x10);
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xa0),param_1);
+    uVar2 = (*extraout_x15_01)();
+    *(undefined4 *)(param_1 + 0xd) = uVar2;
+    *(undefined4 *)((longlong)param_1 + 100) = *(undefined4 *)((longlong)plVar5 + 4);
+    *(int *)(param_1 + 0xc) = (int)*plVar5;
+    lVar10 = param_1[0xc];
+    lVar9 = param_1[0xf];
+    lVar8 = param_1[0xe];
+    plVar5[1] = param_1[0xd];
+    *plVar5 = lVar10;
+    plVar5[3] = lVar9;
+    plVar5[2] = lVar8;
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*param_1 + 0xb0),param_1,param_2);
+    plVar5 = (longlong *)(*extraout_x15_02)();
+    *plVar5 = param_1[0x10];
+    uVar3 = FUN_18001aca8(4,0xffff,
+                          "%s:%d ### INFO ### Version: %d, PinId: %d, Size: %d, Result: %d, Flags: %d, Capability: %d\n"
+                          ,
+                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\Properties\\Property.ExtendedSecureMode.cpp"
+                          ,0x3c,*piVar7,piVar7[1],piVar7[2],piVar7[3],*(undefined8 *)(piVar7 + 4),
+                          *(undefined8 *)(piVar7 + 6));
+    uVar2 = 0;
+  }
+  else {
+    FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### SecureMode property invalid input parameters.\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\Properties\\Property.ExtendedSecureMode.cpp"
+                  ,0x2f);
+    uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\Properties\\Property.ExtendedSecureMode.cpp"
+                          ,0x30,"CProperty_SecureMode::GetProperty",DAT_180043f58);
+    uVar2 = DAT_180043f58;
+  }
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar6 = pcVar6 + 1;
+    } while (*pcVar6 != '\0');
+    local_70 = "CProperty_SecureMode::GetProperty";
+    local_68 = (int)pcVar6 + 0x7eca4f21;
+    uStack_64 = 0;
+    FUN_18001a7f8(uVar3,&DAT_181014c80);
+  }
+  return uVar2;
+}
+
+

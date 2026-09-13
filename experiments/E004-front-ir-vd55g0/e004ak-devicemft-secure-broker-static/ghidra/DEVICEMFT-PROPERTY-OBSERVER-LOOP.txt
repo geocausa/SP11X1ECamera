@@ -1,0 +1,263 @@
+
+//// FUN_180047cd0 @180047cd0 ////
+
+int FUN_180047cd0(undefined8 param_1,undefined8 param_2)
+
+{
+  int iVar1;
+  
+  iVar1 = FUN_180047d40(param_1,param_2,0);
+  if (iVar1 < 0) {
+    if (-1 < iVar1) {
+      iVar1 = 0;
+    }
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                  ,0x135,"CProperty::NotifyGetObservers",iVar1);
+  }
+  return iVar1;
+}
+
+
+
+//// FUN_180047d40 @180047d40 ////
+
+int FUN_180047d40(longlong param_1,undefined8 param_2,int param_3)
+
+{
+  int iVar1;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  longlong *plVar2;
+  
+  plVar2 = (longlong *)**(longlong **)(param_1 + 0x50);
+  if (plVar2 != *(longlong **)(param_1 + 0x50)) {
+    do {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*(longlong *)plVar2[2] + 0x18));
+      iVar1 = (*extraout_x15)();
+      if (iVar1 == param_3) {
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                  (*(undefined8 *)(*(longlong *)plVar2[2] + 8),(longlong *)plVar2[2],param_2);
+        iVar1 = (*extraout_x15_00)();
+        if (iVar1 < 0) {
+          if (-1 < iVar1) {
+            iVar1 = 0;
+          }
+          FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                        "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.cpp"
+                        ,0x141,"CProperty::NotifyObservers",iVar1);
+          return iVar1;
+        }
+      }
+      plVar2 = (longlong *)*plVar2;
+    } while (plVar2 != (longlong *)*(longlong *)(param_1 + 0x50));
+  }
+  return 0;
+}
+
+
+
+//// FUN_180309760 @180309760 ////
+
+undefined4
+FUN_180309760(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+             undefined4 param_5)
+
+{
+  longlong lVar1;
+  undefined8 *puVar2;
+  longlong *plVar3;
+  
+  puVar2 = (undefined8 *)FUN_180ca2838(0x28,&DAT_180f8a150);
+  if (puVar2 != (undefined8 *)0x0) {
+    *puVar2 = &PTR_FUN_1813372f0;
+    puVar2[1] = param_2;
+    *(undefined4 *)(puVar2 + 4) = param_5;
+    puVar2[3] = param_4;
+    puVar2[2] = param_3;
+    if (puVar2 != (undefined8 *)0x0) {
+      lVar1 = *(longlong *)(param_1 + 0x50);
+      if (*(longlong *)(param_1 + 0x58) != DAT_180309870) {
+        plVar3 = (longlong *)thunk_FUN_180cb16c0(0x18);
+        if (plVar3 != (longlong *)0x0) {
+          *plVar3 = 0;
+          plVar3[1] = 0;
+        }
+        plVar3[2] = (longlong)puVar2;
+        *(longlong *)(param_1 + 0x58) = *(longlong *)(param_1 + 0x58) + 1;
+        puVar2 = *(undefined8 **)(lVar1 + 8);
+        *plVar3 = lVar1;
+        plVar3[1] = (longlong)puVar2;
+        *(longlong **)(lVar1 + 8) = plVar3;
+        *puVar2 = plVar3;
+        return 0;
+      }
+                    /* WARNING: Subroutine does not return */
+      FUN_180ca2790("list too long");
+    }
+  }
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.h"
+                ,0xe5,"CProperty::RegisterPropertyObserver",DAT_180309878);
+  return DAT_180309878;
+}
+
+
+
+//// FUN_180309880 @180309880 ////
+
+undefined4
+FUN_180309880(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+             undefined4 param_5)
+
+{
+  int iVar1;
+  undefined8 *puVar2;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  longlong *plVar3;
+  undefined8 local_30;
+  undefined8 uStack_28;
+  
+  plVar3 = (longlong *)**(longlong **)(param_1 + 0x50);
+  local_30 = param_3;
+  uStack_28 = param_4;
+  if (plVar3 != *(longlong **)(param_1 + 0x50)) {
+    do {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(*(longlong *)plVar3[2] + 0x10),(longlong *)plVar3[2],param_2,
+                 &local_30,param_5);
+      iVar1 = (*extraout_x15)();
+      if (iVar1 != 0) {
+        puVar2 = (undefined8 *)plVar3[2];
+        if (puVar2 != (undefined8 *)0x0) {
+          (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)*puVar2,puVar2,1);
+          (*extraout_x15_00)();
+        }
+        *(longlong *)plVar3[1] = *plVar3;
+        *(longlong *)(*plVar3 + 8) = plVar3[1];
+        *(longlong *)(param_1 + 0x58) = *(longlong *)(param_1 + 0x58) + -1;
+        FUN_180ca2830(plVar3,0x18);
+        return 0;
+      }
+      plVar3 = (longlong *)*plVar3;
+    } while (plVar3 != *(longlong **)(param_1 + 0x50));
+  }
+  return DAT_180309978;
+}
+
+
+
+//// FUN_180302d20 @180302d20 ////
+
+undefined4 FUN_180302d20(longlong param_1)
+
+{
+  longlong *plVar1;
+  longlong lVar2;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  undefined4 uVar3;
+  
+  if (*(longlong **)(param_1 + 0x10) == (longlong *)0x0) {
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                  ,0xa6f,"CaptureProperties::OnSetSecureMode",DAT_180302f30);
+    return DAT_180302f30;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+            (*(undefined8 *)(**(longlong **)(param_1 + 0x10) + 0xb8));
+  plVar1 = (longlong *)(*extraout_x15)();
+  uVar3 = DAT_180302f30;
+  if (plVar1 != (longlong *)0x0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar1[1] + 8),plVar1 + 1);
+    (*extraout_x15_00)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar1 + 0x38),plVar1,"SecureMode");
+    lVar2 = (*extraout_x15_01)();
+    uVar3 = DAT_180302f34;
+    if (lVar2 != 0) {
+      FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### OnSetSecureMode, Flags = 0x%x\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                    ,0xa72,*(undefined8 *)(lVar2 + 0x70));
+      if (*(longlong *)(lVar2 + 0x70) == 2) {
+        FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### SecureMode Enabled\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                      ,0xa76);
+        *(undefined4 *)(param_1 + 0x13578) = 1;
+      }
+      else if (*(longlong *)(lVar2 + 0x70) == 1) {
+        FUN_18001aca8(4,0xffff,"%s:%d ### INFO ### SecureMode Disabled\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                      ,0xa7b);
+        *(undefined4 *)(param_1 + 0x13578) = 0;
+      }
+      else {
+        FUN_18001aca8(2,0xffff,"%s:%d ### ERROR ### Unknown flag in Set SecureMode, Flags = 0x%x\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                      ,0xa80);
+      }
+      uVar3 = 0;
+      goto LAB_180302ee4;
+    }
+  }
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                ,0xa6f,"CaptureProperties::OnSetSecureMode",uVar3);
+LAB_180302ee4:
+  if ((plVar1 != (longlong *)0x0) && (plVar1 != (longlong *)0x0)) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar1[1] + 0x10),plVar1 + 1);
+    (*extraout_x15_02)();
+  }
+  return uVar3;
+}
+
+
+
+//// FUN_180302f40 @180302f40 ////
+
+undefined4 FUN_180302f40(longlong param_1)
+
+{
+  longlong *plVar1;
+  longlong lVar2;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  undefined4 uVar3;
+  
+  if (*(longlong **)(param_1 + 0x10) == (longlong *)0x0) {
+    FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                  ,0xa87,"CaptureProperties::OnGetSecureMode",DAT_1803030b8);
+    return DAT_1803030b8;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+            (*(undefined8 *)(**(longlong **)(param_1 + 0x10) + 0xb8));
+  plVar1 = (longlong *)(*extraout_x15)();
+  uVar3 = DAT_1803030b8;
+  if (plVar1 != (longlong *)0x0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar1[1] + 8),plVar1 + 1);
+    (*extraout_x15_00)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar1 + 0x38),plVar1,"SecureMode");
+    lVar2 = (*extraout_x15_01)();
+    uVar3 = DAT_1803030bc;
+    if (lVar2 != 0) {
+      uVar3 = 0;
+      goto LAB_180303070;
+    }
+  }
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                ,0xa87,"CaptureProperties::OnGetSecureMode",uVar3);
+LAB_180303070:
+  if ((plVar1 != (longlong *)0x0) && (plVar1 != (longlong *)0x0)) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar1[1] + 0x10),plVar1 + 1);
+    (*extraout_x15_02)();
+  }
+  return uVar3;
+}
+
+

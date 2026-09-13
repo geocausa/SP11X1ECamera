@@ -1,0 +1,1762 @@
+program=QcDeviceMFT8380.dll
+STRING 1813551d0 = CCameraControls::KsProperty
+  XREF 18002d220 type=PARAM function=FUN_18002d0d0@18002d0d0
+STRING 181355280 = CCameraControls::NotifyAllObservers
+  XREF 18002d5f8 type=DATA function=FUN_18002d5c0@18002d5c0
+  XREF 18002d61c type=DATA function=FUN_18002d5c0@18002d5c0
+  XREF 18002d6f8 type=DATA function=FUN_18002d5c0@18002d5c0
+  XREF 18002d760 type=PARAM function=FUN_18002d5c0@18002d5c0
+STRING 18138c398 = CaptureProperties::Initialize
+  XREF 180293294 type=PARAM function=FUN_180292f20@180292f20
+STRING 18138c468 = CaptureProperties::RegisterPropertyObservers
+  XREF 1802f7490 type=DATA function=FUN_1802f7458@1802f7458
+  XREF 1802f74b4 type=DATA function=FUN_1802f7458@1802f7458
+  XREF 1802f74f0 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f94f4 type=DATA function=FUN_1802f7458@1802f7458
+  XREF 1802f7d30 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f7dbc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f7e68 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f7edc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8b94 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f7f6c type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8010 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f80b4 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8158 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f81fc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f82a0 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8344 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f83e8 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f848c type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8530 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f85d4 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8658 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f86dc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8760 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f87e4 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8868 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f88ec type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8970 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f89f4 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8a78 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8afc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f93bc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8c18 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8c94 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8d18 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8d9c type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8e20 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8ea4 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8f28 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f8fbc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f9040 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f90bc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f9140 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f91c4 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f9248 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f92cc type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f9350 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f9400 type=PARAM function=FUN_1802f7458@1802f7458
+  XREF 1802f9464 type=PARAM function=FUN_1802f7458@1802f7458
+STRING 181391060 = CProperty::RegisterPropertyObserver
+  XREF 18030981c type=PARAM function=FUN_180309760@180309760
+
+=== DECOMPILATIONS ===
+
+//// FUN_18002d0d0 @18002d0d0 ////
+
+int FUN_18002d0d0(longlong param_1,undefined8 param_2,longlong param_3)
+
+{
+  char cVar1;
+  longlong *plVar2;
+  int iVar3;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  longlong *plVar4;
+  longlong *plVar5;
+  
+  plVar4 = (longlong *)**(longlong **)(param_1 + 0x28);
+  if (plVar4 != *(longlong **)(param_1 + 0x28)) {
+    do {
+      plVar5 = (longlong *)plVar4[8];
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar5 + 0x30),plVar5,param_2);
+      iVar3 = (*extraout_x15)();
+      if (iVar3 != 0) {
+        *(undefined4 *)(param_3 + 4) = 1;
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                  (*(undefined8 *)(*plVar5 + 0x50),plVar5,param_2,param_3);
+        iVar3 = (*extraout_x15_00)();
+        if (iVar3 < 0) {
+          if (-1 < iVar3) {
+            iVar3 = 0;
+          }
+          if (iVar3 == DAT_18002d250 || iVar3 == -0x7ff8ffce) {
+            return iVar3;
+          }
+          if (-1 < iVar3) {
+            iVar3 = 0;
+          }
+          FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                        "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CCameraControls.cpp"
+                        ,0xa9,"CCameraControls::KsProperty",iVar3);
+          return iVar3;
+        }
+      }
+      plVar5 = (longlong *)plVar4[2];
+      if (*(char *)((longlong)plVar5 + 0x19) == '\0') {
+        cVar1 = *(char *)(*plVar5 + 0x19);
+        plVar4 = plVar5;
+        plVar5 = (longlong *)*plVar5;
+        while (cVar1 == '\0') {
+          cVar1 = *(char *)(*plVar5 + 0x19);
+          plVar4 = plVar5;
+          plVar5 = (longlong *)*plVar5;
+        }
+      }
+      else {
+        cVar1 = *(char *)(plVar4[1] + 0x19);
+        plVar2 = (longlong *)plVar4[1];
+        plVar5 = plVar4;
+        while ((plVar4 = plVar2, cVar1 == '\0' && (plVar5 == (longlong *)plVar4[2]))) {
+          cVar1 = *(char *)(plVar4[1] + 0x19);
+          plVar2 = (longlong *)plVar4[1];
+          plVar5 = plVar4;
+        }
+      }
+    } while (plVar4 != *(longlong **)(param_1 + 0x28));
+  }
+  return 0;
+}
+
+
+
+//// FUN_18002d5c0 @18002d5c0 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+int FUN_18002d5c0(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4)
+
+{
+  char cVar1;
+  longlong *plVar2;
+  int iVar3;
+  longlong lVar4;
+  char *pcVar5;
+  longlong *plVar6;
+  char *pcVar7;
+  code *extraout_x15;
+  longlong *plVar8;
+  undefined1 auStack_80 [16];
+  char *local_70;
+  int local_68;
+  undefined4 uStack_64;
+  
+  pcVar7 = "CCameraControls::NotifyAllObservers";
+  lVar4 = param_1;
+  pcVar5 = pcVar7;
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar5 = pcVar5 + 1;
+    } while (*pcVar5 != '\0');
+    local_70 = "CCameraControls::NotifyAllObservers";
+    local_68 = (int)pcVar5 + 0x7ecaad81;
+    uStack_64 = 0;
+    lVar4 = FUN_18001a7f8(param_1,&DAT_181014d30,param_3,param_4,auStack_80);
+  }
+  plVar8 = (longlong *)**(longlong **)(param_1 + 0x28);
+  if (plVar8 != *(longlong **)(param_1 + 0x28)) {
+    do {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(*(longlong *)plVar8[8] + 0x60),(longlong *)plVar8[8],param_2);
+      lVar4 = (*extraout_x15)();
+      iVar3 = (int)lVar4;
+      if (iVar3 < 0) {
+        if (-1 < iVar3) {
+          iVar3 = 0;
+        }
+        lVar4 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                              "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CCameraControls.cpp"
+                              ,0xed,"CCameraControls::NotifyAllObservers",iVar3);
+        goto LAB_18002d6e0;
+      }
+      plVar6 = (longlong *)plVar8[2];
+      if (*(char *)((longlong)plVar6 + 0x19) == '\0') {
+        cVar1 = *(char *)(*plVar6 + 0x19);
+        plVar8 = plVar6;
+        plVar6 = (longlong *)*plVar6;
+        while (cVar1 == '\0') {
+          cVar1 = *(char *)(*plVar6 + 0x19);
+          plVar8 = plVar6;
+          plVar6 = (longlong *)*plVar6;
+        }
+      }
+      else {
+        cVar1 = *(char *)(plVar8[1] + 0x19);
+        plVar2 = (longlong *)plVar8[1];
+        plVar6 = plVar8;
+        while ((plVar8 = plVar2, cVar1 == '\0' && (plVar6 == (longlong *)plVar8[2]))) {
+          cVar1 = *(char *)(plVar8[1] + 0x19);
+          plVar2 = (longlong *)plVar8[1];
+          plVar6 = plVar8;
+        }
+      }
+    } while (plVar8 != *(longlong **)(param_1 + 0x28));
+  }
+  iVar3 = 0;
+LAB_18002d6e0:
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar7 = pcVar7 + 1;
+    } while (*pcVar7 != '\0');
+    local_70 = "CCameraControls::NotifyAllObservers";
+    local_68 = (int)pcVar7 + 0x7ecaad81;
+    uStack_64 = 0;
+    FUN_18001a7f8(lVar4,&DAT_181014c80);
+  }
+  return iVar3;
+}
+
+
+
+//// FUN_180292f20 @180292f20 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+undefined8 FUN_180292f20(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4)
+
+{
+  uint uVar1;
+  int iVar2;
+  int *piVar3;
+  int iVar4;
+  undefined8 uVar5;
+  longlong *plVar6;
+  uint *puVar7;
+  int *piVar8;
+  longlong lVar9;
+  undefined8 *puVar10;
+  char *pcVar12;
+  char *pcVar13;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  longlong lVar14;
+  undefined2 uVar15;
+  double dVar16;
+  undefined8 uVar17;
+  undefined8 uVar18;
+  double dVar19;
+  int local_170 [2];
+  uint local_168 [2];
+  undefined8 auStack_160 [5];
+  int local_138 [18];
+  int local_f0;
+  char *local_c0;
+  int local_b8;
+  undefined4 uStack_b4;
+  longlong *local_b0;
+  undefined4 local_a8;
+  char *local_a0;
+  int local_98;
+  undefined4 uStack_94;
+  undefined1 auStack_90 [16];
+  char *local_80;
+  int local_78;
+  undefined4 uStack_74;
+  undefined8 *puVar11;
+  
+  lVar14 = *(longlong *)(param_1 + 0x4d8);
+  if (lVar14 != 0) {
+    pcVar13 = "CaptureProperties::SetupRoiConfigCaps";
+    pcVar12 = pcVar13;
+    if ((DAT_1817a1180 >> 3 & 1) != 0) {
+      do {
+        pcVar12 = pcVar12 + 1;
+      } while (*pcVar12 != '\0');
+      local_80 = "CaptureProperties::SetupRoiConfigCaps";
+      local_78 = (int)pcVar12 + 0x7ec6f8c1;
+      uStack_74 = 0;
+      FUN_18001a7f8(param_1,&DAT_181014d30,param_3,param_4,auStack_90);
+    }
+    iVar4 = *(int *)(lVar14 + 0x2c);
+    if (*(longlong **)(lVar14 + 0x10) == (longlong *)0x0) {
+      uVar5 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                            "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                            ,0x15b4,"CaptureProperties::SetupRoiConfigCaps",DAT_180293630);
+      if ((DAT_1817a1180 >> 3 & 1) == 0) goto LAB_1802931f8;
+      do {
+        pcVar13 = pcVar13 + 1;
+      } while (*pcVar13 != '\0');
+      local_a0 = "CaptureProperties::SetupRoiConfigCaps";
+      local_98 = (int)pcVar13 + 0x7ec6f8c1;
+      uStack_94 = 0;
+    }
+    else {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                (*(undefined8 *)(**(longlong **)(lVar14 + 0x10) + 0xb8));
+      plVar6 = (longlong *)(*extraout_x15)();
+      local_a8 = 0;
+      local_b0 = plVar6;
+      if (plVar6 == (longlong *)0x0) {
+        uVar5 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                              "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                              ,0x15b4,"CaptureProperties::SetupRoiConfigCaps",DAT_180293630);
+        if ((DAT_1817a1180 >> 3 & 1) == 0) goto LAB_1802931f8;
+        do {
+          pcVar13 = pcVar13 + 1;
+        } while (*pcVar13 != '\0');
+      }
+      else {
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar6[1] + 8),plVar6 + 1);
+        (*extraout_x15_00)();
+        local_a8 = 1;
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                  (*(undefined8 *)(*plVar6 + 0x38),plVar6,"RoiConfigCaps");
+        lVar14 = (*extraout_x15_01)();
+        if (lVar14 == 0) {
+          FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                        "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                        ,0x15b4,"CaptureProperties::SetupRoiConfigCaps",DAT_180293634);
+          (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar6[1] + 0x10),plVar6 + 1);
+          uVar5 = (*extraout_x15_02)();
+          if ((DAT_1817a1180 >> 3 & 1) == 0) goto LAB_1802931f8;
+          do {
+            pcVar13 = pcVar13 + 1;
+          } while (*pcVar13 != '\0');
+        }
+        else {
+          *(undefined1 *)(lVar14 + 0x80) = 0;
+          *(undefined1 *)(lVar14 + 0x81) = 0;
+          *(undefined1 *)(lVar14 + 0x82) = 0;
+          *(undefined1 *)(lVar14 + 0x83) = 0;
+          *(undefined1 *)(lVar14 + 0x84) = 0;
+          *(undefined1 *)(lVar14 + 0x85) = 0;
+          *(undefined1 *)(lVar14 + 0x86) = 0;
+          *(undefined1 *)(lVar14 + 0x87) = 0;
+          *(undefined1 *)(lVar14 + 0x88) = 0;
+          *(undefined1 *)(lVar14 + 0x89) = 0;
+          *(undefined1 *)(lVar14 + 0x8a) = 0;
+          *(undefined1 *)(lVar14 + 0x8b) = 0;
+          *(undefined1 *)(lVar14 + 0x8c) = 0;
+          *(undefined1 *)(lVar14 + 0x8d) = 0;
+          *(undefined1 *)(lVar14 + 0x8e) = 0;
+          *(undefined1 *)(lVar14 + 0x8f) = 0;
+          iVar2 = *(int *)(lVar14 + 0x84);
+          *(int *)(lVar14 + 0x84) = iVar2 + 1;
+          if (iVar4 == 0) {
+            *(int *)(lVar14 + 0x84) = iVar2 + 2;
+          }
+          (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar6[1] + 0x10),plVar6 + 1);
+          uVar5 = (*extraout_x15_03)();
+          if ((DAT_1817a1180 >> 3 & 1) == 0) goto LAB_1802931f8;
+          do {
+            pcVar13 = pcVar13 + 1;
+          } while (*pcVar13 != '\0');
+        }
+      }
+      local_c0 = "CaptureProperties::SetupRoiConfigCaps";
+      local_b8 = (int)pcVar13 + 0x7ec6f8c1;
+      uStack_b4 = 0;
+    }
+    FUN_18001a7f8(uVar5,&DAT_181014c80);
+  }
+LAB_1802931f8:
+  if (*(longlong **)(param_1 + 0x60) != (longlong *)0x0) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(**(longlong **)(param_1 + 0x60) + 0x30));
+    uVar5 = (*extraout_x15_04)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(**(longlong **)(param_1 + 0x60) + 0x38));
+    puVar7 = (uint *)(*extraout_x15_05)();
+    lVar14 = *(longlong *)(param_1 + 0x4d8);
+    iVar4 = FUN_1802f7458(lVar14);
+    if (iVar4 < 0) {
+      if (-1 < iVar4) {
+        iVar4 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### ERROR ### Registration of properties failed - 0x%x\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                    ,0xd4,iVar4);
+      if (-1 < iVar4) {
+        iVar4 = 0;
+      }
+      FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                    ,0xd5,"CaptureProperties::Initialize",iVar4);
+    }
+    else {
+      if (puVar7 != (uint *)0x0) {
+        uVar15 = 0;
+        if (*(longlong *)(*(longlong *)(puVar7 + 0xc) + 0x20) == 0) {
+          lVar9 = FUN_180ce7c98("C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\SensorDataManager\\src\\camximagesensormoduledata.cpp"
+                                ,0x5c);
+          pcVar13 = 
+          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\SensorDataManager\\src\\camximagesensormoduledata.cpp"
+          ;
+          if (lVar9 != 0) {
+            pcVar13 = (char *)(lVar9 + 1);
+          }
+          FUN_18001aca8(2,0xffff,
+                        "[ERROR]%s %s:433 %s() m_pCameraModuleData->moduleGroup.moduleConfiguration is NULL\n"
+                        ,"[SENSOR ]",pcVar13,"CamX::ImageSensorModuleData::GetCameraId");
+        }
+        else {
+          uVar15 = *(undefined2 *)
+                    ((ulonglong)*puVar7 * 0x170 + *(longlong *)(*(longlong *)(puVar7 + 0xc) + 0x20))
+          ;
+        }
+        FUN_180717d48(puVar7,lVar14 + 0x108,uVar5,uVar15);
+        if (*(longlong *)(puVar7 + 8) != 0) {
+          *(undefined4 *)(lVar14 + 0xecdc) = 0;
+        }
+        *(int *)(lVar14 + 0xf2a0) = *(int *)(lVar14 + 0x2f64) - *(int *)(lVar14 + 0x2f5c);
+        *(int *)(lVar14 + 0xf2a4) = *(int *)(lVar14 + 0x2f68) - *(int *)(lVar14 + 0x2f60);
+        FUN_18001aca8(4,0xffff,
+                      "%s:%d ### INFO ### Actuator Fixed focus - %d width - %d height - %d\n",
+                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                      ,0xe6,*(undefined4 *)(lVar14 + 0xecdc));
+        lVar9 = 0;
+        if (*(longlong *)(*(longlong *)(puVar7 + 0xc) + 0x20) != 0) {
+          lVar9 = *(longlong *)(*(longlong *)(puVar7 + 0xc) + 0x20) + (ulonglong)*puVar7 * 0x170 +
+                  0xe0;
+        }
+        piVar3 = local_170;
+        puVar10 = (undefined8 *)(lVar14 + 0x3f68);
+        do {
+          puVar11 = puVar10;
+          piVar8 = piVar3;
+          puVar10 = puVar11 + 4;
+          uVar18 = *puVar11;
+          uVar17 = puVar11[3];
+          uVar5 = puVar11[2];
+          *(undefined8 *)(piVar8 + 2) = puVar11[1];
+          *(undefined8 *)piVar8 = uVar18;
+          *(undefined8 *)(piVar8 + 6) = uVar17;
+          *(undefined8 *)(piVar8 + 4) = uVar5;
+          piVar3 = piVar8 + 8;
+        } while (puVar10 != (undefined8 *)(lVar14 + 0x3fe8));
+        uVar17 = *puVar10;
+        uVar5 = puVar11[6];
+        *(undefined8 *)(piVar8 + 10) = puVar11[5];
+        *(undefined8 *)(piVar8 + 8) = uVar17;
+        *(undefined8 *)(piVar8 + 0xc) = uVar5;
+        piVar8[0xe] = *(int *)(puVar11 + 7);
+        if (lVar9 == 0) {
+          FUN_18001aca8(2,0xffff,"%s:%d ### ERROR ### Lens information not available\n",
+                        "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                        ,0x1444);
+        }
+        else {
+          dVar16 = *(double *)(lVar9 + 0x18);
+          dVar19 = dVar16;
+          if (((*(int *)(lVar14 + 0xecdc) == 0) && (local_170[0] != 0)) && (local_f0 != 0)) {
+            uVar1 = local_168[(ulonglong)(local_f0 - 1) * 3];
+            if (local_168[(ulonglong)(local_f0 - 1) * 3] <= local_168[0]) {
+              uVar1 = local_168[0];
+            }
+            dVar19 = (double)uVar1;
+            if (dVar19 < dVar16 * DAT_180293610 && (dVar19 < dVar16 * DAT_180293610 && uVar1 != 0))
+            {
+              dVar16 = dVar19 / DAT_180293610;
+            }
+            dVar19 = DAT_180293628;
+            if (dVar16 * DAT_180293618 <= DAT_180293620) {
+              dVar19 = dVar16;
+            }
+          }
+          *(float *)(lVar14 + 0xed1c) = (float)(1.0 / *(double *)(lVar9 + 0x10));
+          *(float *)(lVar14 + 0xed20) = (float)(1.0 / dVar19);
+          FUN_18001aca8(4,0xffff,
+                        "%s:%d ### INFO ### Min Focus Distance(m) - %d Hyper focal distance(m) - %d\n"
+                        ,
+                        "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                        ,0x1469,*(undefined8 *)(lVar9 + 0x10),dVar19);
+        }
+        *(undefined4 *)(lVar14 + 0xece0) = *(undefined4 *)(lVar14 + 0x34e4);
+        if (*(int *)(lVar14 + 0x334c) == 0) {
+          *(undefined4 *)(lVar14 + 0xed58) = 0;
+          *(undefined4 *)(lVar14 + 0x13508) = 0;
+          *(undefined1 *)(lVar14 + 0xd0) = 1;
+        }
+        else {
+          *(undefined4 *)(lVar14 + 0xed58) = 1;
+        }
+      }
+      FUN_18001aca8(4,0xffff,
+                    "%s:%d ### INFO ### Min Focus Distance - %f Hyper focal distance - %f\n",
+                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                    ,0xf7,(double)*(float *)(lVar14 + 0xed1c),(double)*(float *)(lVar14 + 0xed20));
+      lVar9 = FUN_1805b80a8();
+      *(undefined4 *)(lVar14 + 0x135b8) = *(undefined4 *)(lVar9 + 0x1998);
+      lVar9 = FUN_1805b80a8();
+      *(undefined4 *)(lVar14 + 0x135bc) = *(undefined4 *)(lVar9 + 0x1968);
+      lVar9 = FUN_1805b80a8();
+      *(undefined4 *)(lVar14 + 0x135c0) = *(undefined4 *)(lVar9 + 0x1980);
+      lVar9 = FUN_1805b80a8();
+      *(undefined4 *)(lVar14 + 0x135c4) = *(undefined4 *)(lVar9 + 0x1c20);
+      lVar9 = FUN_1805b80a8();
+      *(undefined4 *)(lVar14 + 0x135c8) = *(undefined4 *)(lVar9 + 0x6d8);
+      FUN_1805b7aa8("com.qti.chi.WBValue","WBValue",lVar14 + 0x135cc);
+      lVar9 = FUN_1805b80a8();
+      *(undefined4 *)(lVar14 + 0x135d0) = *(undefined4 *)(lVar9 + 0x1e00);
+      lVar9 = FUN_1805b80a8();
+      *(undefined4 *)(lVar14 + 0x135d4) = *(undefined4 *)(lVar9 + 0x1e60);
+      FUN_1805b7aa8("com.qti.chi.FocusLock","FocusLock",lVar14 + 0x135d8);
+    }
+  }
+  return 0;
+}
+
+
+
+//// FUN_1802f7458 @1802f7458 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+int FUN_1802f7458(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4)
+
+{
+  bool bVar1;
+  int iVar2;
+  undefined8 uVar3;
+  longlong *plVar4;
+  longlong lVar5;
+  undefined8 in_x7;
+  char *pcVar6;
+  longlong *plVar7;
+  char *pcVar8;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  code *extraout_x15_06;
+  code *extraout_x15_07;
+  code *extraout_x15_08;
+  code *extraout_x15_09;
+  code *extraout_x15_10;
+  code *extraout_x15_11;
+  code *extraout_x15_12;
+  code *extraout_x15_13;
+  code *extraout_x15_14;
+  code *extraout_x15_15;
+  code *extraout_x15_16;
+  code *extraout_x15_17;
+  code *extraout_x15_18;
+  code *extraout_x15_19;
+  code *extraout_x15_20;
+  code *extraout_x15_21;
+  code *extraout_x15_22;
+  code *extraout_x15_23;
+  code *extraout_x15_24;
+  code *extraout_x15_25;
+  code *extraout_x15_26;
+  code *extraout_x15_27;
+  code *extraout_x15_28;
+  code *extraout_x15_29;
+  code *extraout_x15_30;
+  uint uStack_94;
+  undefined1 auStack_80 [16];
+  char *local_70;
+  int local_68;
+  undefined4 uStack_64;
+  
+  pcVar8 = "CaptureProperties::RegisterPropertyObservers";
+  pcVar6 = pcVar8;
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar6 = pcVar6 + 1;
+    } while (*pcVar6 != '\0');
+    local_70 = "CaptureProperties::RegisterPropertyObservers";
+    local_68 = (int)pcVar6 + 0x7ec73b99;
+    uStack_64 = 0;
+    FUN_18001a7f8(param_1,&DAT_181014d30,param_3,param_4,auStack_80);
+  }
+  if (*(longlong **)(param_1 + 0x10) == (longlong *)0x0) {
+    uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                          ,0x13b,"CaptureProperties::RegisterPropertyObservers",DAT_1802f9538);
+    iVar2 = DAT_1802f9538;
+    goto LAB_1802f94dc;
+  }
+  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+            (*(undefined8 *)(**(longlong **)(param_1 + 0x10) + 0xb8));
+  plVar4 = (longlong *)(*extraout_x15)();
+  bVar1 = plVar4 != (longlong *)0x0;
+  plVar7 = plVar4;
+  if (bVar1) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar4[1] + 8),plVar4 + 1);
+    (*extraout_x15_00)();
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar4 + 0x38),plVar4,"FocusPriority");
+    lVar5 = (*extraout_x15_01)();
+    if (lVar5 == 0) {
+      uVar3 = 0x13c;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fca60,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x13c;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar4 + 0x38),plVar4,"FocusPriority");
+    lVar5 = (*extraout_x15_02)();
+    if (lVar5 == 0) {
+      uVar3 = 0x13d;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fccb0,(ulonglong)uStack_94 << 0x20,0);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x13d;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"FocusMode");
+    lVar5 = (*extraout_x15_03)();
+    if (lVar5 == 0) {
+      uVar3 = 0x13e;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fcee0,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x13e;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"FocusMode");
+    lVar5 = (*extraout_x15_04)();
+    if (lVar5 == 0) {
+      uVar3 = 0x13f;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fd5d0,(ulonglong)uStack_94 << 0x20,0);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x13f;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"FocusState");
+    lVar5 = (*extraout_x15_05)();
+    iVar2 = DAT_1802f953c;
+    if (lVar5 == 0) {
+LAB_1802f782c:
+      uVar3 = 0x140;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fd9c0,(ulonglong)uStack_94 << 0x20,0);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      goto LAB_1802f782c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"PhotoMode");
+    lVar5 = (*extraout_x15_06)();
+    if (lVar5 == 0) {
+      uVar3 = 0x141;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802ff780,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x141;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar4 + 0x38),plVar4,"WhiteBalanceMode");
+    lVar5 = (*extraout_x15_07)();
+    if (lVar5 == 0) {
+      uVar3 = 0x142;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fdd40,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x142;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar4 + 0x38),plVar4,"WhiteBalanceMode");
+    lVar5 = (*extraout_x15_08)();
+    if (lVar5 == 0) {
+      uVar3 = 0x143;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fe140,(ulonglong)uStack_94 << 0x20,0);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x143;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"FlashMode");
+    lVar5 = (*extraout_x15_09)();
+    if (lVar5 == 0) {
+      uVar3 = 0x144;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fec30,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x144;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"FlashMode");
+    lVar5 = (*extraout_x15_10)();
+    if (lVar5 == 0) {
+      uVar3 = 0x145;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fef20,(ulonglong)uStack_94 << 0x20,0);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x145;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"TorchMode");
+    lVar5 = (*extraout_x15_11)();
+    if (lVar5 == 0) {
+      uVar3 = 0x146;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802ff250,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x146;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"TorchMode");
+    lVar5 = (*extraout_x15_12)();
+    if (lVar5 == 0) {
+      uVar3 = 0x147;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802ff4e0,(ulonglong)uStack_94 << 0x20,0);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x147;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar4 + 0x38),plVar4,&DAT_181355004);
+    lVar5 = (*extraout_x15_13)();
+    if (lVar5 == 0) {
+      uVar3 = 0x148;
+      iVar2 = DAT_1802f953c;
+      goto LAB_1802f7d1c;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802feb80,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x148;
+      goto LAB_1802f7d1c;
+    }
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+              (*(undefined8 *)(*plVar4 + 0x38),plVar4,"TemporalDenoising");
+    lVar5 = (*extraout_x15_14)();
+    iVar2 = DAT_1802f953c;
+    if (lVar5 == 0) {
+      uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                            "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                            ,0x14a,"CaptureProperties::RegisterPropertyObservers",DAT_1802f953c);
+      goto LAB_1802f94b0;
+    }
+    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802ffae0,(ulonglong)uStack_94 << 0x20,1);
+    if (iVar2 < 0) {
+      if (-1 < iVar2) {
+        iVar2 = 0;
+      }
+      uVar3 = 0x14a;
+LAB_1802f7e50:
+      uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                            "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                            ,uVar3,"CaptureProperties::RegisterPropertyObservers",iVar2);
+    }
+    else {
+      (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(*plVar4 + 0x38),plVar4,"SceneMode")
+      ;
+      lVar5 = (*extraout_x15_15)();
+      if (lVar5 == 0) {
+        uVar3 = 0x14c;
+        iVar2 = DAT_1802f953c;
+        goto LAB_1802f7e50;
+      }
+      iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fe630,(ulonglong)uStack_94 << 0x20,1);
+      if (iVar2 < 0) {
+        if (-1 < iVar2) {
+          iVar2 = 0;
+        }
+        uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                              "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                              ,0x14c,"CaptureProperties::RegisterPropertyObservers");
+      }
+      else {
+        (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                  (*(undefined8 *)(*plVar4 + 0x38),plVar4,"SceneMode");
+        lVar5 = (*extraout_x15_16)();
+        if (lVar5 == 0) {
+          uVar3 = 0x14e;
+LAB_1802f8b80:
+          uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                ,uVar3,"CaptureProperties::RegisterPropertyObservers",DAT_1802f953c)
+          ;
+          iVar2 = DAT_1802f953c;
+        }
+        else {
+          iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fea80,(ulonglong)uStack_94 << 0x20,0);
+          if (iVar2 < 0) {
+            if (-1 < iVar2) {
+              iVar2 = 0;
+            }
+            uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                  ,0x14e,"CaptureProperties::RegisterPropertyObservers",iVar2);
+          }
+          else {
+            (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                      (*(undefined8 *)(*plVar4 + 0x38),plVar4,"IsoAdvanced");
+            lVar5 = (*extraout_x15_17)();
+            if (lVar5 == 0) {
+              uVar3 = 0x150;
+              goto LAB_1802f8b80;
+            }
+            iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fc030,(ulonglong)uStack_94 << 0x20,1);
+            if (iVar2 < 0) {
+              if (-1 < iVar2) {
+                iVar2 = 0;
+              }
+              uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                    "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                    ,0x150,"CaptureProperties::RegisterPropertyObservers",iVar2);
+            }
+            else {
+              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                        (*(undefined8 *)(*plVar4 + 0x38),plVar4,"IsoAdvanced");
+              lVar5 = (*extraout_x15_18)();
+              if (lVar5 == 0) {
+                uVar3 = 0x151;
+                goto LAB_1802f8b80;
+              }
+              iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fbd50,(ulonglong)uStack_94 << 0x20,0);
+              if (iVar2 < 0) {
+                if (-1 < iVar2) {
+                  iVar2 = 0;
+                }
+                uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                      "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                      ,0x151,"CaptureProperties::RegisterPropertyObservers",iVar2);
+              }
+              else {
+                (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                          (*(undefined8 *)(*plVar4 + 0x38),plVar4,"ExposureCompensation");
+                lVar5 = (*extraout_x15_19)();
+                if (lVar5 == 0) {
+                  uVar3 = 0x152;
+                  goto LAB_1802f8b80;
+                }
+                iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fb8c0,(ulonglong)uStack_94 << 0x20,1);
+                if (iVar2 < 0) {
+                  if (-1 < iVar2) {
+                    iVar2 = 0;
+                  }
+                  uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                        "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                        ,0x152,"CaptureProperties::RegisterPropertyObservers",iVar2)
+                  ;
+                }
+                else {
+                  (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                            (*(undefined8 *)(*plVar4 + 0x38),plVar4,"ExposureCompensation");
+                  lVar5 = (*extraout_x15_20)();
+                  if (lVar5 == 0) {
+                    uVar3 = 0x153;
+                    goto LAB_1802f8b80;
+                  }
+                  iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fbb40,(ulonglong)uStack_94 << 0x20,0);
+                  if (iVar2 < 0) {
+                    if (-1 < iVar2) {
+                      iVar2 = 0;
+                    }
+                    uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                          ,0x153,"CaptureProperties::RegisterPropertyObservers",
+                                          iVar2);
+                  }
+                  else {
+                    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                              (*(undefined8 *)(*plVar4 + 0x38),plVar4,"ExposureMode");
+                    lVar5 = (*extraout_x15_21)();
+                    if (lVar5 == 0) {
+                      uVar3 = 0x154;
+                      goto LAB_1802f8b80;
+                    }
+                    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fc710,(ulonglong)uStack_94 << 0x20,1
+                                         );
+                    if (iVar2 < 0) {
+                      if (-1 < iVar2) {
+                        iVar2 = 0;
+                      }
+                      uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                            "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                            ,0x154,"CaptureProperties::RegisterPropertyObservers",
+                                            iVar2);
+                    }
+                    else {
+                      (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                (*(undefined8 *)(*plVar4 + 0x38),plVar4,"ExposureMode");
+                      lVar5 = (*extraout_x15_22)();
+                      if (lVar5 == 0) {
+                        uVar3 = 0x155;
+                        goto LAB_1802f8b80;
+                      }
+                      iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fc400,(ulonglong)uStack_94 << 0x20
+                                            ,0);
+                      if (iVar2 < 0) {
+                        if (-1 < iVar2) {
+                          iVar2 = 0;
+                        }
+                        uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n"
+                                              ,
+                                              "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                              ,0x155,"CaptureProperties::RegisterPropertyObservers",
+                                              iVar2);
+                      }
+                      else {
+                        (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                  (*(undefined8 *)(*plVar4 + 0x38),plVar4,"RoiIspControl");
+                        lVar5 = (*extraout_x15_23)();
+                        if (lVar5 == 0) {
+                          uVar3 = 0x157;
+                          goto LAB_1802f8b80;
+                        }
+                        iVar2 = FUN_180309760(lVar5,param_1,FUN_1802ffe40,
+                                              (ulonglong)uStack_94 << 0x20,1);
+                        if (iVar2 < 0) {
+                          if (-1 < iVar2) {
+                            iVar2 = 0;
+                          }
+                          uVar3 = FUN_18001aca8(2,0xffff,
+                                                "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                ,0x157,
+                                                "CaptureProperties::RegisterPropertyObservers",iVar2
+                                               );
+                        }
+                        else {
+                          (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                    (*(undefined8 *)(*plVar4 + 0x38),plVar4,"PowerlineFrequency");
+                          lVar5 = (*extraout_x15_24)();
+                          if (lVar5 == 0) {
+                            uVar3 = 0x158;
+                            goto LAB_1802f8b80;
+                          }
+                          iVar2 = FUN_180309760(lVar5,param_1,FUN_1803021f0,
+                                                (ulonglong)uStack_94 << 0x20,1);
+                          if (iVar2 < 0) {
+                            if (-1 < iVar2) {
+                              iVar2 = 0;
+                            }
+                            uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x158,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                          }
+                          else {
+                            (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                      (*(undefined8 *)(*plVar4 + 0x38),plVar4,"PowerlineFrequency");
+                            lVar5 = (*extraout_x15_25)();
+                            if (lVar5 == 0) {
+                              uVar3 = 0x159;
+                              goto LAB_1802f8b80;
+                            }
+                            iVar2 = FUN_180309760(lVar5,param_1,FUN_180302420,
+                                                  (ulonglong)uStack_94 << 0x20,0);
+                            if (iVar2 < 0) {
+                              if (-1 < iVar2) {
+                                iVar2 = 0;
+                              }
+                              uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x159,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                            }
+                            else {
+                              (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                        (*(undefined8 *)(*plVar4 + 0x38),plVar4,
+                                         "PerFrameSettingCapability");
+                              lVar5 = (*extraout_x15_26)();
+                              if (lVar5 == 0) {
+                                uVar3 = 0x15a;
+                                goto LAB_1802f8b80;
+                              }
+                              iVar2 = FUN_180309760(lVar5,param_1,FUN_180300d90,
+                                                    (ulonglong)uStack_94 << 0x20,0);
+                              if (iVar2 < 0) {
+                                if (-1 < iVar2) {
+                                  iVar2 = 0;
+                                }
+                                uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x15a,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                              }
+                              else {
+                                lVar5 = FUN_180309320(plVar4);
+                                if (lVar5 == 0) {
+                                  uVar3 = 0x15b;
+                                  goto LAB_1802f8b80;
+                                }
+                                iVar2 = FUN_180309760(lVar5,param_1,FUN_180301020,
+                                                      (ulonglong)uStack_94 << 0x20,1);
+                                if (iVar2 < 0) {
+                                  if (-1 < iVar2) {
+                                    iVar2 = 0;
+                                  }
+                                  uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x15b,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                }
+                                else {
+                                  lVar5 = FUN_180309360(plVar4);
+                                  if (lVar5 == 0) {
+                                    uVar3 = 0x15c;
+                                    goto LAB_1802f8b80;
+                                  }
+                                  iVar2 = FUN_180309760(lVar5,param_1,FUN_1803016d0,
+                                                        (ulonglong)uStack_94 << 0x20,1);
+                                  if (iVar2 < 0) {
+                                    if (-1 < iVar2) {
+                                      iVar2 = 0;
+                                    }
+                                    uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x15c,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                  }
+                                  else {
+                                    lVar5 = FUN_1803093a0(plVar4);
+                                    if (lVar5 == 0) {
+                                      uVar3 = 0x15d;
+                                      goto LAB_1802f8b80;
+                                    }
+                                    iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fb0c0,
+                                                          (ulonglong)uStack_94 << 0x20,1);
+                                    if (iVar2 < 0) {
+                                      if (-1 < iVar2) {
+                                        iVar2 = 0;
+                                      }
+                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x15d,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                    }
+                                    else {
+                                      lVar5 = FUN_1803093a0(plVar4);
+                                      if (lVar5 == 0) {
+                                        uVar3 = 0x15e;
+                                        goto LAB_1802f8b80;
+                                      }
+                                      iVar2 = FUN_180309760(lVar5,param_1,FUN_1802faf20,
+                                                            (ulonglong)uStack_94 << 0x20,0);
+                                      if (iVar2 < 0) {
+                                        if (-1 < iVar2) {
+                                          iVar2 = 0;
+                                        }
+                                        uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x15e,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                      }
+                                      else {
+                                        lVar5 = FUN_1803093e0(plVar4);
+                                        if (lVar5 == 0) {
+                                          uVar3 = 0x15f;
+                                          goto LAB_1802f8b80;
+                                        }
+                                        iVar2 = FUN_180309760(lVar5,param_1,FUN_180301800,
+                                                              (ulonglong)uStack_94 << 0x20,1);
+                                        if (iVar2 < 0) {
+                                          if (-1 < iVar2) {
+                                            iVar2 = 0;
+                                          }
+                                          uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x15f,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                        }
+                                        else {
+                                          lVar5 = FUN_180309420(plVar4);
+                                          if (lVar5 == 0) {
+                                            uVar3 = 0x160;
+                                            goto LAB_1802f8b80;
+                                          }
+                                          iVar2 = FUN_180309760(lVar5,param_1,FUN_180301bf0,
+                                                                (ulonglong)uStack_94 << 0x20,0);
+                                          if (iVar2 < 0) {
+                                            if (-1 < iVar2) {
+                                              iVar2 = 0;
+                                            }
+                                            uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x160,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                          }
+                                          else {
+                                            lVar5 = FUN_180309420(plVar4);
+                                            if (lVar5 == 0) {
+                                              uVar3 = 0x161;
+                                              goto LAB_1802f8b80;
+                                            }
+                                            iVar2 = FUN_180309760(lVar5,param_1,FUN_180301cf0,
+                                                                  (ulonglong)uStack_94 << 0x20,1);
+                                            if (iVar2 < 0) {
+                                              if (-1 < iVar2) {
+                                                iVar2 = 0;
+                                              }
+                                              uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x161,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                            }
+                                            else {
+                                              lVar5 = FUN_180309460(plVar4);
+                                              if (lVar5 == 0) {
+                                                uVar3 = 0x162;
+                                                goto LAB_1802f8b80;
+                                              }
+                                              iVar2 = FUN_180309760(lVar5,param_1,FUN_180301f80,
+                                                                    (ulonglong)uStack_94 << 0x20,1);
+                                              if (iVar2 < 0) {
+                                                if (-1 < iVar2) {
+                                                  iVar2 = 0;
+                                                }
+                                                uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x162,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                              }
+                                              else {
+                                                lVar5 = FUN_1803094a0(plVar4);
+                                                if (lVar5 == 0) {
+                                                  uVar3 = 0x163;
+                                                  goto LAB_1802f8b80;
+                                                }
+                                                iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fb360,
+                                                                      (ulonglong)uStack_94 << 0x20,1
+                                                                     );
+                                                if (iVar2 < 0) {
+                                                  if (-1 < iVar2) {
+                                                    iVar2 = 0;
+                                                  }
+                                                  uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x163,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                                }
+                                                else {
+                                                  lVar5 = FUN_1803094a0(plVar4);
+                                                  if (lVar5 == 0) {
+                                                    uVar3 = 0x164;
+                                                    goto LAB_1802f8b80;
+                                                  }
+                                                  iVar2 = FUN_180309760(lVar5,param_1,FUN_1802fb580,
+                                                                        (ulonglong)uStack_94 << 0x20
+                                                                        ,0);
+                                                  if (iVar2 < 0) {
+                                                    if (-1 < iVar2) {
+                                                      iVar2 = 0;
+                                                    }
+                                                    uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x164,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                                  }
+                                                  else {
+                                                    plVar7 = *(longlong **)(param_1 + 0x10);
+                                                    if (plVar7 == (longlong *)0x0) {
+                                                      plVar7 = (longlong *)0x0;
+                                                    }
+                                                    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                                              (*(undefined8 *)(*plVar7 + 0xb8));
+                                                    plVar7 = (longlong *)(*extraout_x15_27)();
+                                                    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                                              (*(undefined8 *)(*plVar7 + 0x50));
+                                                    iVar2 = (*extraout_x15_28)();
+                                                    if (iVar2 == 0) {
+                                                      lVar5 = FUN_1803094e0(plVar4);
+                                                      if (lVar5 != 0) {
+                                                        iVar2 = FUN_180309760(lVar5,param_1,
+                                                                              FUN_1803065e0,
+                                                                              (ulonglong)uStack_94
+                                                                              << 0x20,1);
+                                                        if (iVar2 < 0) {
+                                                          if (-1 < iVar2) {
+                                                            iVar2 = 0;
+                                                          }
+                                                          uVar3 = 0x169;
+                                                        }
+                                                        else {
+                                                          lVar5 = FUN_1803094e0(plVar4);
+                                                          if (lVar5 == 0) {
+                                                            uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x16a,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  goto LAB_1802f94b0;
+                                                  }
+                                                  iVar2 = FUN_180309760(lVar5,param_1,FUN_1803067b0,
+                                                                        (ulonglong)uStack_94 << 0x20
+                                                                        ,0);
+                                                  if (-1 < iVar2) goto LAB_1802f8c74;
+                                                  if (-1 < iVar2) {
+                                                    iVar2 = 0;
+                                                  }
+                                                  uVar3 = 0x16a;
+                                                  }
+                                                  goto LAB_1802f93a8;
+                                                  }
+                                                  uVar3 = 0x169;
+                                                  goto LAB_1802f8b80;
+                                                  }
+LAB_1802f8c74:
+                                                  lVar5 = FUN_180309520(plVar4);
+                                                  if (lVar5 == 0) {
+                                                    uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x16d,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180302910,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,1);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x16d;
+LAB_1802f93a8:
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,uVar3,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                                  }
+                                                  else {
+                                                    lVar5 = FUN_180309520(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x16e,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180302b30,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,0);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x16e;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_180309560(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x16f,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180302650,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,1);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x16f;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_1803095a0(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x171,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180306e50,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,1);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x171;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_1803095a0(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x172,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180306c50,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,0);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x172;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_1803095e0(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x173,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180306b30,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,0);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x173;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    if (*(int *)(param_1 + 0x1357c) == 1) {
+                                                      lVar5 = FUN_180309620(plVar4);
+                                                      if (lVar5 != 0) {
+                                                        iVar2 = FUN_180309760(lVar5,param_1,
+                                                                              FUN_180302d20,
+                                                                              (ulonglong)uStack_94
+                                                                              << 0x20,1);
+                                                        if (iVar2 < 0) {
+                                                          if (-1 < iVar2) {
+                                                            iVar2 = 0;
+                                                          }
+                                                          uVar3 = 0x177;
+                                                        }
+                                                        else {
+                                                          lVar5 = FUN_180309620(plVar4);
+                                                          if (lVar5 == 0) {
+                                                            uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x178,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  goto LAB_1802f94b0;
+                                                  }
+                                                  iVar2 = FUN_180309760(lVar5,param_1,FUN_180302f40,
+                                                                        (ulonglong)uStack_94 << 0x20
+                                                                        ,0);
+                                                  if (-1 < iVar2) goto LAB_1802f909c;
+                                                  if (-1 < iVar2) {
+                                                    iVar2 = 0;
+                                                  }
+                                                  uVar3 = 0x178;
+                                                  }
+                                                  goto LAB_1802f93a8;
+                                                  }
+                                                  uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x177,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+LAB_1802f909c:
+                                                    lVar5 = FUN_180309660(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x17a,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_1803030c0,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,0);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x17a;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_180309660(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x17b,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180303280,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,2);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x17b;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_1803096a0(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x183,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_1803088e0,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,1);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x183;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_1803096a0(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x184,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180308d30,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,0);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x184;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_1803096e0(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x185,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180308e30,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,0);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x185;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_180309720(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x188,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180309030,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,1);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = 0x188;
+                                                      goto LAB_1802f93a8;
+                                                    }
+                                                    lVar5 = FUN_180309720(plVar4);
+                                                    if (lVar5 == 0) {
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x189,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  DAT_1802f953c);
+                                                  iVar2 = DAT_1802f953c;
+                                                  }
+                                                  else {
+                                                    iVar2 = FUN_180309760(lVar5,param_1,
+                                                                          FUN_180308f30,
+                                                                          (ulonglong)uStack_94 <<
+                                                                          0x20,0);
+                                                    if (iVar2 < 0) {
+                                                      if (-1 < iVar2) {
+                                                        iVar2 = 0;
+                                                      }
+                                                      uVar3 = FUN_18001aca8(2,0xffff,
+                                                  "%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                                                  "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                                                  ,0x189,
+                                                  "CaptureProperties::RegisterPropertyObservers",
+                                                  iVar2);
+                                                  }
+                                                  else {
+                                                    (*(code *)PTR__ROIChangeChecker_180f7e7b8)
+                                                              (*(undefined8 *)(plVar4[1] + 0x10),
+                                                               plVar4 + 1);
+                                                    uVar3 = (*extraout_x15_29)();
+                                                    bVar1 = false;
+                                                    iVar2 = 0;
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  else {
+    uVar3 = 0x13b;
+    iVar2 = DAT_1802f9538;
+LAB_1802f7d1c:
+    uVar3 = FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                          "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CaptureDevice\\src\\CaptureProperties.cpp"
+                          ,uVar3,"CaptureProperties::RegisterPropertyObservers",iVar2,in_x7,plVar7);
+  }
+LAB_1802f94b0:
+  if ((bVar1) && (plVar4 != (longlong *)0x0)) {
+    (*(code *)PTR__ROIChangeChecker_180f7e7b8)(*(undefined8 *)(plVar4[1] + 0x10),plVar4 + 1);
+    uVar3 = (*extraout_x15_30)();
+  }
+LAB_1802f94dc:
+  if ((DAT_1817a1180 >> 3 & 1) != 0) {
+    do {
+      pcVar8 = pcVar8 + 1;
+    } while (*pcVar8 != '\0');
+    local_70 = "CaptureProperties::RegisterPropertyObservers";
+    local_68 = (int)pcVar8 + 0x7ec73b99;
+    uStack_64 = 0;
+    FUN_18001a7f8(uVar3,&DAT_181014c80);
+  }
+  return iVar2;
+}
+
+
+
+//// FUN_180309760 @180309760 ////
+
+undefined4
+FUN_180309760(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+             undefined4 param_5)
+
+{
+  longlong lVar1;
+  undefined8 *puVar2;
+  longlong *plVar3;
+  
+  puVar2 = (undefined8 *)FUN_180ca2838(0x28,&DAT_180f8a150);
+  if (puVar2 != (undefined8 *)0x0) {
+    *puVar2 = &PTR_FUN_1813372f0;
+    puVar2[1] = param_2;
+    *(undefined4 *)(puVar2 + 4) = param_5;
+    puVar2[3] = param_4;
+    puVar2[2] = param_3;
+    if (puVar2 != (undefined8 *)0x0) {
+      lVar1 = *(longlong *)(param_1 + 0x50);
+      if (*(longlong *)(param_1 + 0x58) != DAT_180309870) {
+        plVar3 = (longlong *)thunk_FUN_180cb16c0(0x18);
+        if (plVar3 != (longlong *)0x0) {
+          *plVar3 = 0;
+          plVar3[1] = 0;
+        }
+        plVar3[2] = (longlong)puVar2;
+        *(longlong *)(param_1 + 0x58) = *(longlong *)(param_1 + 0x58) + 1;
+        puVar2 = *(undefined8 **)(lVar1 + 8);
+        *plVar3 = lVar1;
+        plVar3[1] = (longlong)puVar2;
+        *(longlong **)(lVar1 + 8) = plVar3;
+        *puVar2 = plVar3;
+        return 0;
+      }
+                    /* WARNING: Subroutine does not return */
+      FUN_180ca2790("list too long");
+    }
+  }
+  FUN_18001aca8(2,0xffff,"%s:%d ### FAILED HRESULT ### in %s (0x%X)\n",
+                "C:\\a\\_work\\1\\s\\WP\\src\\Camera\\CamZ\\DeviceMFT\\MfProcessors\\src\\CProperty.h"
+                ,0xe5,"CProperty::RegisterPropertyObserver",DAT_180309878);
+  return DAT_180309878;
+}
+
+

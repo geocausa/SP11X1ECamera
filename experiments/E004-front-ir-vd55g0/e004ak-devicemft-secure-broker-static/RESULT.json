@@ -1,0 +1,57 @@
+{
+  "schema": "sp11-camera-e004ak-devicemft-secure-broker-static-v1",
+  "status": "PASS_STATIC_DEVICEMFT_SECUREMODE_BROKER_CHAIN",
+  "acquisition_date": "2026-09-13",
+  "binary": {
+    "name": "QcDeviceMFT8380.dll",
+    "bytes": 23998368,
+    "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+  },
+  "broker": {
+    "create_camera_controls": "0x180021cf0",
+    "capture_properties_initialize": "0x180292f20",
+    "register_property_observers": "0x1802f7458",
+    "camera_controls_ksproperty": "0x18002d0d0",
+    "property_handle": "0x180047690",
+    "register_property_observer": "0x180309760",
+    "notify_observers": "0x180047d40"
+  },
+  "securemode": {
+    "property_vtable": "0x1813336e8",
+    "vtable_handle_offset": "0x50",
+    "vtable_notify_set_offset": "0x60",
+    "vtable_notify_get_offset": "0x68",
+    "vtable_set_offset": "0xb8",
+    "vtable_get_offset": "0xc0",
+    "set_property": "0x180043f60",
+    "get_property": "0x180043ce0",
+    "on_set": "0x180302d20",
+    "on_get": "0x180302f40",
+    "support_flag_offset": "0x1357c",
+    "active_state_offset": "0x13578",
+    "enable_flag": 2,
+    "disable_flag": 1
+  },
+  "downstream": {
+    "capture_usecase_helper": "0x180293ad8",
+    "create_capture_pipe_caller": "0x1802941a0",
+    "secure_mode_name": "IFE_LITE_SECURE_MODE",
+    "securebio_bypasses_ipe": true
+  },
+  "interface_boundary": {
+    "camera_controls_query_interface": "0x18002dae0",
+    "only_explicit_qi_guid": "00000000-0000-0000-C000-000000000046",
+    "only_explicit_qi_guid_name": "IID_IUnknown",
+    "public_camera_source_ikscontrol_is_same_object": false,
+    "next_owner": "direct DeviceMFT factory/interface-accessor pointer consumer"
+  },
+  "interpretation": {
+    "devicemft_securemode_write_chain_resolved": true,
+    "trusted_external_trigger_resolved": false,
+    "e004z_static_abi_invalidated": false,
+    "e004aj_negative_boundary_invalidated": false,
+    "linux_secureisp_runtime_authorized": false,
+    "new_windows_runtime_required_now": false
+  },
+  "next_gate": "Map CreateCameraControls/psCInterfaceAccessor direct-pointer wiring to the caller of internal CCameraControls::KsProperty before another Windows trace."
+}
