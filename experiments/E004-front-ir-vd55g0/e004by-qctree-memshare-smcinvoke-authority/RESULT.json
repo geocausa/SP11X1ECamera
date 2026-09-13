@@ -1,0 +1,54 @@
+{
+  "experiment": "E004by",
+  "status": "PASS_QCTREE_TRANSPORTS_MAP_TO_EXISTING_LINUX_ABIS_NO_CAMERA_PROVIDER_IDENTITY",
+  "mode": "windows-linux-static-only",
+  "windows_qctree": {
+    "sha256": "9cd8252c1b501c1d58e4c49d020d526a5b9bc41a3f5de2ec08e866c3a26c16a2",
+    "memshare": {
+      "ops": {
+        "alloc": 0,
+        "free": 1,
+        "shm_bridge_create": 2,
+        "shm_bridge_delete": 3
+      },
+      "create_smc": "0x02000c1e",
+      "delete_smc": "0x02000c1d",
+      "explicit_vmid_permission_list": true,
+      "opaque_bridge_handle": true
+    },
+    "smcinvoke": {
+      "modern_smc": "0x32000602",
+      "legacy_smc": "0x32000600",
+      "owner": "ARM_SMCCC_OWNER_TRUSTED_OS (50)",
+      "service": "0x06",
+      "generic_object_transport": true,
+      "camera_service_identity_found": false
+    }
+  },
+  "linux_equivalence": {
+    "memshare_create": "qcom_scm_shm_bridge_create / QCOM_SCM_MP_SHM_BRIDGE_CREATE 0x1e",
+    "memshare_delete": "qcom_scm_shm_bridge_delete / QCOM_SCM_MP_SHM_BRIDGE_DELETE 0x1d",
+    "smcinvoke": "qcom_scm_qtee_invoke_smc / service 0x06 command 0x02",
+    "transport_equivalence_proven": true,
+    "camera_provider_equivalence_proven": false
+  },
+  "driverdump_guid_scan": {
+    "memsharing_hits": 6,
+    "invoke_hits": 3,
+    "camera_memsharing_client_found": false,
+    "camera_invoke_client_found": false,
+    "camera_passthrough_clients": [
+      "qccamsecureisp8380.sys",
+      "qccamisp8380.sys"
+    ]
+  },
+  "runtime_actions": {
+    "qcomtee_enable_or_load": false,
+    "smc_invocation": false,
+    "shm_bridge_create": false,
+    "qtee_service_probe": false,
+    "scm_assign_mem": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004bz SHM-bridge ACL capability versus protected-camera requirements, static first"
+}
