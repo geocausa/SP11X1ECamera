@@ -1,0 +1,214 @@
+E004bz SHM BRIDGE IS DISTINCT FROM OWNERSHIP ASSIGNMENT
+
+--- bridge functions ---
+int qcom_scm_shm_bridge_create(u64 pfn_and_ns_perm_flags,
+			       u64 ipfn_and_s_perm_flags, u64 size_and_flags,
+			       u64 ns_vmids, u64 *handle)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_MP,
+		.cmd = QCOM_SCM_MP_SHM_BRIDGE_CREATE,
+		.owner = ARM_SMCCC_OWNER_SIP,
+		.args[0] = pfn_and_ns_perm_flags,
+		.args[1] = ipfn_and_s_perm_flags,
+		.args[2] = size_and_flags,
+		.args[3] = ns_vmids,
+		.arginfo = QCOM_SCM_ARGS(4, QCOM_SCM_VAL, QCOM_SCM_VAL,
+					 QCOM_SCM_VAL, QCOM_SCM_VAL),
+	};
+
+	struct qcom_scm_res res;
+	int ret;
+
+	ret = qcom_scm_call(__scm->dev, &desc, &res);
+
+	if (handle && !ret)
+		*handle = res.result[1];
+
+	return ret ?: res.result[0];
+}
+EXPORT_SYMBOL_GPL(qcom_scm_shm_bridge_create);
+
+int qcom_scm_shm_bridge_delete(u64 handle)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_MP,
+		.cmd = QCOM_SCM_MP_SHM_BRIDGE_DELETE,
+		.owner = ARM_SMCCC_OWNER_SIP,
+		.args[0] = handle,
+		.arginfo = QCOM_SCM_ARGS(1, QCOM_SCM_VAL),
+	};
+
+	return qcom_scm_call(__scm->dev, &desc, NULL);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_shm_bridge_delete);
+
+int qcom_scm_lmh_profile_change(u32 profile_id)
+
+--- ownership assignment is separate SCM MP command/API ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/firmware/qcom/qcom_scm.h:123:#define QCOM_SCM_MP_ASSIGN			0x16
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/firmware/qcom/qcom_scm.c:1323:		.cmd = QCOM_SCM_MP_ASSIGN,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/firmware/qcom/qcom_scm.c:1355:int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+	int ret;
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_MP,
+		.cmd = QCOM_SCM_MP_ASSIGN,
+		.arginfo = QCOM_SCM_ARGS(7, QCOM_SCM_RO, QCOM_SCM_VAL,
+					 QCOM_SCM_RO, QCOM_SCM_VAL, QCOM_SCM_RO,
+					 QCOM_SCM_VAL, QCOM_SCM_VAL),
+		.args[0] = mem_region,
+		.args[1] = mem_sz,
+		.args[2] = src,
+		.args[3] = src_sz,
+		.args[4] = dest,
+		.args[5] = dest_sz,
+		.args[6] = 0,
+		.owner = ARM_SMCCC_OWNER_SIP,
+	};
+	struct qcom_scm_res res;
+
+	ret = qcom_scm_call(dev, &desc, &res);
+
+	return ret ? : res.result[0];
+}
+
+/**
+ * qcom_scm_assign_mem() - Make a secure call to reassign memory ownership
+ * @mem_addr: mem region whose ownership need to be reassigned
+ * @mem_sz:   size of the region.
+ * @srcvm:    vmid for current set of owners, each set bit in
+ *            flag indicate a unique owner
+ * @newvm:    array having new owners and corresponding permission
+ *            flags
+ * @dest_cnt: number of owners in next set.
+ *
+ * Return negative errno on failure or 0 on success with @srcvm updated.
+ */
+int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+			u64 *srcvm,
+			const struct qcom_scm_vmperm *newvm,
+			unsigned int dest_cnt)
+{
+	struct qcom_scm_current_perm_info *destvm;
+	struct qcom_scm_mem_map_info *mem_to_map;
+	phys_addr_t mem_to_map_phys;
+	phys_addr_t dest_phys;
+	phys_addr_t ptr_phys;
+	size_t mem_to_map_sz;
+	size_t dest_sz;
+	size_t src_sz;
+	size_t ptr_sz;
+	int next_vm;
+	__le32 *src;
+	int ret, i, b;
+	u64 srcvm_bits = *srcvm;
+
+	src_sz = hweight64(srcvm_bits) * sizeof(*src);
+	mem_to_map_sz = sizeof(*mem_to_map);
+	dest_sz = dest_cnt * sizeof(*destvm);
+	ptr_sz = ALIGN(src_sz, SZ_64) + ALIGN(mem_to_map_sz, SZ_64) +
+			ALIGN(dest_sz, SZ_64);
+
+	void *ptr __free(qcom_tzmem) = qcom_tzmem_alloc(__scm->mempool,
+							ptr_sz, GFP_KERNEL);
+	if (!ptr)
+		return -ENOMEM;
+
+	ptr_phys = qcom_tzmem_to_phys(ptr);
+
+	/* Fill source vmid detail */
+	src = ptr;
+	i = 0;
+	for (b = 0; b < BITS_PER_TYPE(u64); b++) {
+		if (srcvm_bits & BIT(b))
+			src[i++] = cpu_to_le32(b);
+	}
+
+	/* Fill details of mem buff to map */
+	mem_to_map = ptr + ALIGN(src_sz, SZ_64);
+	mem_to_map_phys = ptr_phys + ALIGN(src_sz, SZ_64);
+	mem_to_map->mem_addr = cpu_to_le64(mem_addr);
+	mem_to_map->mem_size = cpu_to_le64(mem_sz);
+
+	next_vm = 0;
+	/* Fill details of next vmid detail */
+	destvm = ptr + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+	dest_phys = ptr_phys + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+	for (i = 0; i < dest_cnt; i++, destvm++, newvm++) {
+		destvm->vmid = cpu_to_le32(newvm->vmid);
+		destvm->perm = cpu_to_le32(newvm->perm);
+		destvm->ctx = 0;
+		destvm->ctx_size = 0;
+		next_vm |= BIT(newvm->vmid);
+	}
+
+	ret = __qcom_scm_assign_mem(__scm->dev, mem_to_map_phys, mem_to_map_sz,
+				    ptr_phys, src_sz, dest_phys, dest_sz);
+	if (ret) {
+		dev_err(__scm->dev,
+			"Assign memory protection call failed %d\n", ret);
+		return ret;
+	}
+
+	*srcvm = next_vm;
+	return 0;
+}
+EXPORT_SYMBOL_GPL(qcom_scm_assign_mem);
+
+/**
+ * qcom_scm_ocmem_lock_available() - is OCMEM lock/unlock interface available
+ */
+bool qcom_scm_ocmem_lock_available(void)
+{
+	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_OCMEM,
+					    QCOM_SCM_OCMEM_LOCK_CMD);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ocmem_lock_available);
+
+/**
+ * qcom_scm_ocmem_lock() - call OCMEM lock interface to assign an OCMEM
+ * region to the specified initiator
+ *
+ * @id:     tz initiator id
+ * @offset: OCMEM offset
+ * @size:   OCMEM size
+ * @mode:   access mode (WIDE/NARROW)
+ */
+int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
+			u32 mode)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_OCMEM,
+		.cmd = QCOM_SCM_OCMEM_LOCK_CMD,
+		.args[0] = id,
+		.args[1] = offset,
+		.args[2] = size,
+		.args[3] = mode,
+		.arginfo = QCOM_SCM_ARGS(4),
+	};
+
+	return qcom_scm_call(__scm->dev, &desc, NULL);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ocmem_lock);
+
+/**
+ * qcom_scm_ocmem_unlock() - call OCMEM unlock interface to release an OCMEM
+ * region from the specified initiator
+ *
+ * @id:     tz initiator id
+ * @offset: OCMEM offset
+ * @size:   OCMEM size
+ */
+int qcom_scm_ocmem_unlock(enum qcom_scm_ocmem_client id, u32 offset, u32 size)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_OCMEM,
+		.cmd = QCOM_SCM_OCMEM_UNLOCK_CMD,
+		.args[0] = id,
+		.args[1] = offset,
+		.args[2] = size,
+		.arginfo = QCOM_SCM_ARGS(3),
+	};
+
+
+--- no ownership-assignment primitive in MemShare decomp ---

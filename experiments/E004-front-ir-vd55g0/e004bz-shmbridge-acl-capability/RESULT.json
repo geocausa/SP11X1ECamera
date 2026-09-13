@@ -1,0 +1,40 @@
+{
+  "experiment": "E004bz",
+  "status": "PASS_SHMBRIDGE_ACL_FLEXIBLE_BUT_NOT_MEMORY_OWNERSHIP_PROTECTION",
+  "mode": "windows-linux-static-only",
+  "windows_memshare": {
+    "input_size": "0x30",
+    "output_size": "0x10",
+    "vmid_count_range": [
+      1,
+      4
+    ],
+    "hlos_vmid": 3,
+    "hlos_required_in_bridge_list": false,
+    "returns_opaque_bridge_handle": true,
+    "allocation_returns_host_virtual_address": true,
+    "physical_address_derived_with": "MmGetPhysicalAddress",
+    "ownership_assign_operation_present": false
+  },
+  "linux": {
+    "tzmem_wrapper_hlos_rw": true,
+    "raw_shm_bridge_four_argument_transport": true,
+    "raw_custom_acl_mechanically_possible": true,
+    "camera_specific_bridge_acl_authority": false,
+    "ownership_assign_is_separate_api": true
+  },
+  "parity": {
+    "bridge_handle_can_be_backend_lifetime_handle": true,
+    "bridge_handle_is_external_sample_identity_by_itself": false,
+    "shm_bridge_alone_protects_from_hlos": false,
+    "windows_external_sample_is_memshare_object": false
+  },
+  "runtime_actions": {
+    "shm_bridge_create": false,
+    "scm_assign_mem": false,
+    "qcomtee_enable_or_load": false,
+    "qtee_qsee_call": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004ca external VTL1 secure-section protection semantics versus Linux primitives, static first"
+}
