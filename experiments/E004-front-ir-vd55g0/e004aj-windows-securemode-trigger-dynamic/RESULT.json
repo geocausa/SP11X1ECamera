@@ -1,0 +1,74 @@
+{
+  "schema": "sp11-camera-e004aj-securemode-client-boundary-v1",
+  "status": "PASS_VALID_NEGATIVE_GENERIC_CLIENT_SET_REJECTED_BEFORE_KMD",
+  "acquisition_date": "2026-09-13",
+  "machine": "SP11 / DESKTOP-AQ4SMTC",
+  "securemode_property": {
+    "set_guid": "1CB79112-C0D2-4213-9CA6-CD4FDB927972",
+    "property_id": 36,
+    "enabled_flag": 2,
+    "disabled_flag": 1,
+    "payload_size": 40
+  },
+  "successful_get": {
+    "hresult": "0x00000000",
+    "reported_bytes": 56,
+    "version": 1,
+    "pin_id": 0,
+    "size": 40,
+    "result": 0,
+    "flags": 1,
+    "capability": 3,
+    "value": 0
+  },
+  "set_attempts": {
+    "before_reader_hresult": "0xc00d36b3",
+    "after_reader_hresult": "0xc00d36b3",
+    "exact_get_template_capability_preserved_hresult": "0xc00d36b3",
+    "kmd_setter_reached": false
+  },
+  "runtime_hits": {
+    "surfacecamavs_securemode_get": 3,
+    "surfacecamavs_securemode_set_enter": 0,
+    "surfacecamavs_securemode_set_post": 0,
+    "surfacecamavs_secure_kmdisp": 0,
+    "qccamsecureisp_outer_op": 0,
+    "qccamsecureisp_task_helper": 0,
+    "qccamsecureisp_lane_dispatch": 0,
+    "qccamsecureisp_config_secure_camera": 0
+  },
+  "faceauth_control": {
+    "start": "Success",
+    "frames": 12,
+    "stop": "Success",
+    "securemode_videodevicecontroller": "NotSupported",
+    "equivalent_to_securemode": false
+  },
+  "code_integrity": {
+    "unsigned_probe_blocked": true,
+    "policy_weakened": false,
+    "testsigning_enabled": false
+  },
+  "evidence": {
+    "r2_kd_log_bytes": 12935,
+    "r2_kd_log_sha256": "f495dae75e017e001146cc2317ef96cf4f4fba0921e60481753bf82d5b96b37f",
+    "devicemft_static_sha256": "fb9336fa5b42d9892fa3dc4dac5a73eb819242e88188191b1eec1d69933fd499"
+  },
+  "interpretation": {
+    "securemode_successfully_enabled": false,
+    "generic_mf_or_winrt_client_is_write_owner": false,
+    "device_mft_or_trusted_broker_is_next_owner_candidate": true,
+    "e004z_static_abi_invalidated": false,
+    "linux_secureisp_runtime_authorized": false
+  },
+  "golden_return": {
+    "pass": true,
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry_empty": true,
+    "bootcurrent": "0005",
+    "camera_modules_absent": true,
+    "media_video_nodes_absent": true
+  },
+  "next_gate": "Statically map the DeviceMFT/protected-capture broker that writes SecureMode; do not repeat generic camera-source SET attempts."
+}

@@ -1,0 +1,124 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AJ_SECUREMODE_R2_20260913\E004AJ_R2_TRACE_2484_2026-09-13_13-04-01-451.log'
+===E004AJ_R2_TRAPS_ARMED===
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`d42013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AJ_R2_BASE_CHECK===; lm m surfacecamavs8380; lm m qccamsecureisp8380
+===E004AJ_R2_BASE_CHECK===
+start             end                 module name
+fffff803`d7e50000 fffff803`d7efd000   surfacecamavs8380   (deferred)             
+start             end                 module name
+fffff803`d8040000 fffff803`d8076000   qccamsecureisp8380   (deferred)             
+0: kd> bc *; bp fffff803d7ed3120 ".printf \"E004AJ_R2_SM_SET_ENTER obj=%p disc=0x%x requested=0x%I64x oldstate=0x%x\\n\", @x0,dwo(@x0+0x18),qwo(@x3+0x10),by(@x0+0x2ad); gc"; bp fffff803d7ed319c ".printf \"E004AJ_R2_SM_SET_POST obj=%p disc=0x%x requested=0x%I64x newstate=0x%x\\n\", @x22,dwo(@x22+0x18),qwo(@x20+0x10),by(@x22+0x2ad); gc"; bp fffff803d7ed3040 ".printf \"E004AJ_R2_SM_GET obj=%p disc=0x%x state=0x%x\\n\", @x0,dwo(@x0+0x18),by(@x0+0x2ad); gc"; bp fffff803d7e6ebb0 ".printf \"E004AJ_R2_AUX_POLICY obj=%p disc=0x%x requested=0x%x\\n\", @x0,dwo(@x0+0x18),@x1; gc"; bp fffff803d7e59da0 ".printf \"E004AJ_R2_SECURE_KMDISP op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"; bp fffff803d8043350 ".printf \"E004AJ_R2_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"; bp fffff803d8044a90 ".printf \"E004AJ_R2_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"; bp fffff803d80424f0 ".printf \"E004AJ_R2_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"; bp fffff803d8041b08 ".printf \"E004AJ_R2_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"; .echo ===E004AJ_R2_BP_ARMED===; bl; g
+===E004AJ_R2_BP_ARMED===
+ 0 e fffff803`d7ed3120     0001 (0001) surfacecamavs8380+0x83120 ".printf \"E004AJ_R2_SM_SET_ENTER obj=%p disc=0x%x requested=0x%I64x oldstate=0x%x\\n\", @x0,dwo(@x0+0x18),qwo(@x3+0x10),by(@x0+0x2ad); gc"
+ 1 e fffff803`d7ed319c     0001 (0001) surfacecamavs8380+0x8319c ".printf \"E004AJ_R2_SM_SET_POST obj=%p disc=0x%x requested=0x%I64x newstate=0x%x\\n\", @x22,dwo(@x22+0x18),qwo(@x20+0x10),by(@x22+0x2ad); gc"
+ 2 e fffff803`d7ed3040     0001 (0001) surfacecamavs8380+0x83040 ".printf \"E004AJ_R2_SM_GET obj=%p disc=0x%x state=0x%x\\n\", @x0,dwo(@x0+0x18),by(@x0+0x2ad); gc"
+ 3 e fffff803`d7e6ebb0     0001 (0001) surfacecamavs8380+0x1ebb0 ".printf \"E004AJ_R2_AUX_POLICY obj=%p disc=0x%x requested=0x%x\\n\", @x0,dwo(@x0+0x18),@x1; gc"
+ 4 e fffff803`d7e59da0     0001 (0001) surfacecamavs8380+0x9da0 ".printf \"E004AJ_R2_SECURE_KMDISP op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"
+ 5 e fffff803`d8043350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AJ_R2_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 6 e fffff803`d8044a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AJ_R2_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 7 e fffff803`d80424f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AJ_R2_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 8 e fffff803`d8041b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AJ_R2_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+******************************************************************
+* This break indicates this binary is not signed correctly: \Device\HarddiskVolume3\Users\Geoca\Documents\E004AJ-MFKS-v4.exe
+* and does not meet the system policy.
+* The binary was attempted to be loaded in the process: \Device\HarddiskVolume3\Users\Geoca\.chatgpt-connector\runtime\node-v24.18.0-win-arm64\node.exe
+* This is not a failure in CI, but a problem with the failing binary.
+* Please contact the binary owner for getting the binary correctly signed.
+******************************************************************
+Break instruction exception - code 80000003 (first chance)
+CI!CipReportAndReprieveUMCIFailure+0x5c0:
+fffff803`ce3b5e10 d43e0000 brk         #0xF000
+1: kd> .echo ===E004AJ_R2_CI_REPRIEVE===; g
+===E004AJ_R2_CI_REPRIEVE===
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`d42013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AJ_R2_REVALIDATE===; lm m surfacecamavs8380; lm m qccamsecureisp8380; bl
+===E004AJ_R2_REVALIDATE===
+start             end                 module name
+fffff803`d7e50000 fffff803`d7efd000   surfacecamavs8380   (no symbols)           
+start             end                 module name
+fffff803`d8040000 fffff803`d8076000   qccamsecureisp8380   (no symbols)           
+ 0 e fffff803`d7ed3120     0001 (0001) surfacecamavs8380+0x83120 ".printf \"E004AJ_R2_SM_SET_ENTER obj=%p disc=0x%x requested=0x%I64x oldstate=0x%x\\n\", @x0,dwo(@x0+0x18),qwo(@x3+0x10),by(@x0+0x2ad); gc"
+ 1 e fffff803`d7ed319c     0001 (0001) surfacecamavs8380+0x8319c ".printf \"E004AJ_R2_SM_SET_POST obj=%p disc=0x%x requested=0x%I64x newstate=0x%x\\n\", @x22,dwo(@x22+0x18),qwo(@x20+0x10),by(@x22+0x2ad); gc"
+ 2 e fffff803`d7ed3040     0001 (0001) surfacecamavs8380+0x83040 ".printf \"E004AJ_R2_SM_GET obj=%p disc=0x%x state=0x%x\\n\", @x0,dwo(@x0+0x18),by(@x0+0x2ad); gc"
+ 3 e fffff803`d7e6ebb0     0001 (0001) surfacecamavs8380+0x1ebb0 ".printf \"E004AJ_R2_AUX_POLICY obj=%p disc=0x%x requested=0x%x\\n\", @x0,dwo(@x0+0x18),@x1; gc"
+ 4 e fffff803`d7e59da0     0001 (0001) surfacecamavs8380+0x9da0 ".printf \"E004AJ_R2_SECURE_KMDISP op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"
+ 5 e fffff803`d8043350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AJ_R2_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 6 e fffff803`d8044a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AJ_R2_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 7 e fffff803`d80424f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AJ_R2_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 8 e fffff803`d8041b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AJ_R2_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+E004AJ_R2_SM_GET obj=ffffd081ef326010 disc=0xef326020 state=0x0
+E004AJ_R2_SM_GET obj=ffffd081edc6c010 disc=0xedc6c020 state=0x0
+E004AJ_R2_SM_GET obj=ffffd081edc6c010 disc=0xedc6c020 state=0x0
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`d42013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AJ_R2_END_SET_REJECTED_BEFORE_KMD===; lm m surfacecamavs8380; lm m qccamsecureisp8380; bl; .logclose; bc *; .reboot
+===E004AJ_R2_END_SET_REJECTED_BEFORE_KMD===
+start             end                 module name
+fffff803`d7e50000 fffff803`d7efd000   surfacecamavs8380   (no symbols)           
+start             end                 module name
+fffff803`d8040000 fffff803`d8076000   qccamsecureisp8380   (no symbols)           
+ 0 e fffff803`d7ed3120     0001 (0001) surfacecamavs8380+0x83120 ".printf \"E004AJ_R2_SM_SET_ENTER obj=%p disc=0x%x requested=0x%I64x oldstate=0x%x\\n\", @x0,dwo(@x0+0x18),qwo(@x3+0x10),by(@x0+0x2ad); gc"
+ 1 e fffff803`d7ed319c     0001 (0001) surfacecamavs8380+0x8319c ".printf \"E004AJ_R2_SM_SET_POST obj=%p disc=0x%x requested=0x%I64x newstate=0x%x\\n\", @x22,dwo(@x22+0x18),qwo(@x20+0x10),by(@x22+0x2ad); gc"
+ 2 e fffff803`d7ed3040     0001 (0001) surfacecamavs8380+0x83040 ".printf \"E004AJ_R2_SM_GET obj=%p disc=0x%x state=0x%x\\n\", @x0,dwo(@x0+0x18),by(@x0+0x2ad); gc"
+ 3 e fffff803`d7e6ebb0     0001 (0001) surfacecamavs8380+0x1ebb0 ".printf \"E004AJ_R2_AUX_POLICY obj=%p disc=0x%x requested=0x%x\\n\", @x0,dwo(@x0+0x18),@x1; gc"
+ 4 e fffff803`d7e59da0     0001 (0001) surfacecamavs8380+0x9da0 ".printf \"E004AJ_R2_SECURE_KMDISP op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"
+ 5 e fffff803`d8043350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AJ_R2_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 6 e fffff803`d8044a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AJ_R2_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 7 e fffff803`d80424f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AJ_R2_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 8 e fffff803`d8041b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AJ_R2_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AJ_SECUREMODE_R2_20260913\E004AJ_R2_TRACE_2484_2026-09-13_13-04-01-451.log

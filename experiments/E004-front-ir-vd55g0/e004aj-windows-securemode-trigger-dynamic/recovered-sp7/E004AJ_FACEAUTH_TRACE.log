@@ -1,0 +1,54 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AJ_SECUREMODE_TRIGGER_20260913\E004AJ_FACEAUTH_TRACE_0974_2026-09-13_12-40-59-001.log'
+Couldn't resolve error at 'surfacecamavs8380.sys; sxe ld:qccamsecureisp8380.sys; sxe ud:qccamsecureisp8380.sys; .echo ===E004AJ_FACEAUTH_LOADER_TRAPS_ARMED===; g'
+0: kd> sxe ld:surfacecamavs8380.sys
+0: kd> sxe ld:qccamsecureisp8380.sys
+0: kd> .echo ===E004AJ_FACEAUTH_LOAD_TRAPS_READY===
+===E004AJ_FACEAUTH_LOAD_TRAPS_READY===
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Unload module netadaptercx.sys at fffff802`f9670000
+nt!DebugService2+0x8:
+fffff802`f5001408 d43e0000 brk         #0xF000
+2: kd> .echo ===E004AJ_FACEAUTH_LOAD_EVENT===; lm m surfacecamavs8380; lm m qccamsecureisp8380
+===E004AJ_FACEAUTH_LOAD_EVENT===
+start             end                 module name
+start             end                 module name
+2: kd> .lastevent; k L8
+Last event: Unload module netadaptercx.sys at fffff802`f9670000
+  debugger time: Sun Sep 13 12:41:30.749 2026 (UTC + 1:00)
+Child-SP          RetAddr               Call Site
+ffff830a`19f726c0 fffff802`f5336b58     nt!DebugService2+0x8
+ffff830a`19f726c0 fffff802`f5336bac     nt!DbgUnLoadImageSymbols+0x20
+ffff830a`19f726f0 fffff802`f57e3acc     nt!DbgUnLoadImageSymbolsUnicode+0x44
+ffff830a`19f72720 fffff802`f55bf560     nt!MiUnloadSystemImage+0x204
+ffff830a`19f72910 fffff802`f549baf8     nt!MmUnloadSystemImage+0x50
+ffff830a`19f72940 fffff802`f56aadc8     nt!IopDeleteDriver+0x58
+ffff830a`19f72970 fffff802`f50b9ffc     nt!ObpRemoveObjectRoutine+0xf8
+ffff830a`19f729c0 fffff802`f549c0bc     nt!ObDereferenceObject+0xec
+2: kd> sxd ud
+2: kd> .echo ===E004AJ_UNLOAD_BREAKS_DISABLED===
+===E004AJ_UNLOAD_BREAKS_DISABLED===
+2: kd> g
+Unload module WifiCx.sys at fffff802`f94e0000
+Unload module qcwlanhmt8380.sys at fffff802`f3580000
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff802`f50013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AJ_FACEAUTH_TRACE_END===; .logclose; bc *; .reboot
+===E004AJ_FACEAUTH_TRACE_END===
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AJ_SECUREMODE_TRIGGER_20260913\E004AJ_FACEAUTH_TRACE_0974_2026-09-13_12-40-59-001.log

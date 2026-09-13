@@ -1,0 +1,81 @@
+E004AJ WINDOWS PROBES — accepted summary
+Date: 2026-09-13
+Machine: SP11 / DESKTOP-AQ4SMTC
+Scope: bounded same-machine Windows experiments only
+
+1. WinRT VideoDeviceController SET
+- Exact group: Surface IR Camera Front.
+- SecureMode enable Flags=2 with PinId=0xffffffff: InvalidValue.
+- Retry with PinId=0: InvalidValue.
+- Neither attempt produced a surfacecamavs SecureMode setter breakpoint hit.
+
+2. FaceAuth capture profile observation
+- Profile: {81361B22-700B-4546-A2D4-C52E907BFC27},0
+- Infrared VideoPreview NV12 644x604 60/1.
+- StartAsync: Success.
+- 12 real frames acquired.
+- StopAsync: Success.
+- VideoDeviceController SecureMode query was NotSupported after init, after start,
+  during stream, and after stop.
+- FaceAuth mode is therefore not accepted as proof that SecureMode was enabled.
+
+3. Media Foundation source + IKsControl
+- Surface IR Camera Front source activation: success.
+- QI(IKsControl): success.
+- GET before:
+  hr=0x00000000 returned=0x38
+  version=1 pin=0 size=0x28 result=0 flags=0x1 capability=0x3
+- SET enable after selecting NV12 644x604:
+  hr=0xc00d36b3
+- A second variant attempted SET before creating the source reader:
+  hr=0xc00d36b3
+- Both failed before the surfacecamavs KMD SecureMode setter.
+
+4. Exact 40-byte in/out header check
+A signed PowerShell in-process MF/IKsControl probe initialized the GET payload exactly:
+  01000000000000002800000000000000000000000000000000000000000000000000000000000000
+GET succeeded and returned:
+  hr=0x00000000 returned=56
+  version=1 pin=0 size=40 result=0 flags=0x1 capability=0x3 value=0
+  01000000000000002800000000000000010000000000000003000000000000000000000000000000
+Using that returned blob as the SET template, changing only Flags from 1 to 2 and
+preserving Capability=3, still returned:
+  hr=0xc00d36b3
+Thus the earlier Capability=0 construction was not the reason the SET was rejected.
+
+5. Alternate interfaces
+- MF source QI(IKsPropertySet): 0x80004002 (E_NOINTERFACE).
+- MF source QI(IKsObject): 0x80004002.
+- MF source QI(IKsControl): success.
+- Source-reader service can return IKsControl but not IKsObject.
+
+6. Code-integrity boundary
+A locally built ARM64 diagnostic EXE was blocked by Windows code-integrity policy before
+execution. The policy was NOT weakened, testsigning was NOT enabled, and the result is
+diagnostic only. Subsequent probes used the already-signed PowerShell host.
+
+7. KDNET R2 authority
+Current relocated images:
+- surfacecamavs8380.sys base 0xfffff803d7e50000
+- qccamsecureisp8380.sys base 0xfffff803d8040000
+
+Armed current-image breakpoints:
+- surfacecamavs +0x83120 SecureMode SET enter
+- surfacecamavs +0x8319c SecureMode SET post
+- surfacecamavs +0x83040 SecureMode GET
+- surfacecamavs +0x1ebb0 AUX policy
+- surfacecamavs +0x9da0 secure KMDISP CSI call
+- qccamsecureisp +0x3350 / +0x4a90 / +0x24f0 / +0x1b08
+
+Accepted runtime markers:
+- SecureMode GET: 3
+- SecureMode SET enter: 0
+- SecureMode SET post: 0
+- secure KMDISP: 0
+- qccam op/task/fntable/securecfg: 0
+
+Conclusion:
+The normal MF/WinRT camera-source client can read SecureMode state but cannot drive the
+write path used by the protected route. The exact protected trigger remains unresolved.
+The next justified gate is the DeviceMFT/trusted broker call chain, not another generic
+camera-source SET attempt.

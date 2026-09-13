@@ -1,0 +1,205 @@
+program=surfacecamavs8380.sys
+image_base=140000000
+
+STRING @14009e968 = {CCaptureFilter::GetExtendedFaceAuthMode} returns NTSTATUS %#x for SensorID: %#x\n
+  XREF 140082ee8 function=FUN_140082df0 entry=140082df0
+STRING @14009e9c0 = {CCaptureFilter::SetExtendedFaceAuthMode} called for SensorID: %#x\n
+  XREF 140082f78 function=FUN_140082f40 entry=140082f40
+STRING @14009ea08 = {CCaptureFilter::SetExtendedFaceAuthMode} Error! Failed to set Extended FaceAuth mode\n
+  XREF 140082fdc function=FUN_140082f40 entry=140082f40
+STRING @1400a05d8 = {CCaptureFilter::CheckEnableIPEINFDRegistry} Inside faceauth mode\n
+  XREF 140086fdc function=FUN_140086e68 entry=140086e68
+
+=== DECOMPILATIONS ===
+
+//// FUN_140082df0 @140082df0 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+ulonglong FUN_140082df0(longlong param_1,longlong param_2,ulonglong *param_3,int *param_4,
+                       undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  uint uVar2;
+  undefined8 extraout_x1;
+  ulonglong uVar3;
+  char local_430 [112];
+  undefined1 auStack_3c0 [252];
+  undefined8 auStack_2c4 [82];
+  
+  FUN_14001cd78(local_430,param_2,0x6c);
+  FUN_14001cd78(auStack_3c0,extraout_x1,0x388);
+  uVar2 = FUN_1400827d8(param_2,param_3,0x23,(longlong)param_4);
+  uVar3 = (ulonglong)uVar2;
+  if ((int)uVar2 < 0) goto LAB_140082ee4;
+  iVar1 = *(int *)(param_1 + 0x68);
+  if (iVar1 != DAT_140082f28 && iVar1 != DAT_140082f2c) {
+    if (*param_4 != 1 || iVar1 != DAT_140082f30) {
+      uVar3 = (ulonglong)DAT_140082f38;
+      goto LAB_140082ee4;
+    }
+    if (param_4[1] != 0) {
+      uVar3 = (ulonglong)DAT_140082f34;
+      goto LAB_140082ee4;
+    }
+    uVar2 = FUN_14001e210();
+    if ((uVar2 & 0xff) == 1) {
+      FUN_14001cd90((undefined8 *)local_430,0x6c,auStack_2c4,0x6c);
+    }
+    if (local_430[0] != '\0') {
+      param_4[2] = 0x28;
+      param_4[3] = 0;
+      *(undefined8 *)(param_4 + 4) = *(undefined8 *)(param_1 + 0x220);
+      param_4[6] = 3;
+      param_4[7] = 0;
+      *(undefined8 *)(param_2 + 0x38) = 0x28;
+      goto LAB_140082ee4;
+    }
+  }
+  uVar3 = (ulonglong)DAT_140082f3c;
+LAB_140082ee4:
+  FUN_14001c1d8(3,0x14009a938,0,
+                "{CCaptureFilter::GetExtendedFaceAuthMode} returns NTSTATUS %#x for SensorID: %#x\n"
+                ,uVar3,(ulonglong)*(uint *)(param_1 + 0x68),param_7,param_8);
+  return uVar3;
+}
+
+
+
+//// FUN_140082f40 @140082f40 ////
+
+int FUN_140082f40(longlong param_1,longlong param_2,ulonglong *param_3,int *param_4,
+                 undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  int iVar2;
+  ulonglong uVar3;
+  
+  uVar3 = (ulonglong)*(uint *)(param_1 + 0x68);
+  FUN_14001c1d8(3,0x14009a938,0,
+                "{CCaptureFilter::SetExtendedFaceAuthMode} called for SensorID: %#x\n",uVar3,param_6
+                ,param_7,param_8);
+  iVar2 = FUN_1400827d8(param_2,param_3,0x23,(longlong)param_4);
+  if (-1 < iVar2) {
+    iVar1 = DAT_140083028;
+    if (((*param_4 == 1) && (iVar1 = DAT_14008302c, param_4[1] == 0)) &&
+       (iVar1 = DAT_140083030, (*(ulonglong *)(param_4 + 4) & 3) != 0)) {
+      param_4[2] = 0x28;
+      *(ulonglong *)(param_1 + 0x220) = *(ulonglong *)(param_4 + 4);
+      *(undefined8 *)(param_2 + 0x38) = 0x28;
+    }
+    else {
+      iVar2 = iVar1;
+      FUN_14001c1d8(0,0x14009a938,0,
+                    "{CCaptureFilter::SetExtendedFaceAuthMode} Error! Failed to set Extended FaceAuth mode\n"
+                    ,uVar3,param_6,param_7,param_8);
+    }
+    param_4[3] = iVar2;
+  }
+  return iVar2;
+}
+
+
+
+//// FUN_140086e68 @140086e68 ////
+
+void FUN_140086e68(longlong param_1,uint param_2)
+
+{
+  undefined8 uVar1;
+  int iVar2;
+  int iVar3;
+  longlong lVar4;
+  ulonglong uVar5;
+  int *in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  uint local_90;
+  int local_8c [3];
+  undefined8 local_80;
+  undefined1 auStack_78 [16];
+  undefined4 local_68 [2];
+  undefined8 local_60;
+  undefined1 *puStack_58;
+  undefined4 local_50;
+  undefined8 local_48;
+  undefined8 uStack_40;
+  longlong local_38;
+  undefined1 auStack_30 [16];
+  
+  local_90 = 0;
+  RtlInitUnicodeString
+            (auStack_30,
+             L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Qualcomm\\Camera\\");
+  local_48 = 0;
+  uStack_40 = 0;
+  local_68[0] = 0x30;
+  local_50 = 0x240;
+  puStack_58 = auStack_30;
+  local_60 = 0;
+  iVar2 = ZwOpenKey(&local_80,DAT_140087088,local_68);
+  uVar1 = local_80;
+  if (iVar2 < 0) {
+LAB_14008706c:
+    if (-1 < iVar2) {
+      *(uint *)(param_1 + 0x680) = local_90;
+      goto LAB_140086fb8;
+    }
+  }
+  else {
+    local_8c[0] = 0;
+    RtlInitUnicodeString(auStack_78,L"EnableIPEINFD");
+    in_x5 = local_8c;
+    iVar2 = ZwQueryValueKey(uVar1,auStack_78,2,0,0);
+    if (DAT_14008708c == iVar2 && (DAT_14008708c == iVar2 && local_8c[0] != 0)) {
+      lVar4 = ExAllocatePool2(0x100,local_8c[0],DAT_140087090);
+      iVar2 = DAT_140087094;
+      if (lVar4 == 0) goto LAB_140086f9c;
+      in_x5 = local_8c;
+      iVar3 = ZwQueryValueKey(uVar1,auStack_78,2,lVar4,local_8c[0]);
+      if (-1 < iVar3) goto LAB_140087028;
+      iVar2 = iVar3;
+      if (-1 < iVar3) {
+        iVar2 = 0;
+      }
+LAB_14008704c:
+      ExFreePool(lVar4);
+LAB_14008705c:
+      ZwClose(local_80);
+      goto LAB_14008706c;
+    }
+    local_38 = 0;
+LAB_140086f9c:
+    if (iVar2 < 0) goto LAB_14008705c;
+    lVar4 = local_38;
+    iVar3 = iVar2;
+    if (local_38 != 0) {
+LAB_140087028:
+      iVar2 = DAT_14008709c;
+      if (*(uint *)(lVar4 + 8) < 5) {
+        FUN_14001cd90((undefined8 *)&local_90,4,(undefined8 *)(lVar4 + 0xc),*(uint *)(lVar4 + 8));
+        iVar2 = iVar3;
+      }
+      goto LAB_14008704c;
+    }
+  }
+  *(undefined4 *)(param_1 + 0x680) = 0;
+LAB_140086fb8:
+  uVar5 = (ulonglong)local_90;
+  if (DAT_140087098 == **(int **)(**(longlong **)(param_1 + 0x20) + 0x18)) {
+    *(undefined4 *)(param_1 + 0x680) = 0;
+    FUN_14001c1d8(0,0x14009a938,0,
+                  "{CCaptureFilter::CheckEnableIPEINFDRegistry} Inside faceauth mode\n",uVar5,in_x5,
+                  in_x6,in_x7);
+    uVar5 = (ulonglong)local_90;
+  }
+  FUN_14001c1d8(0,0x14009a938,0,
+                "{CCaptureFilter::CheckEnableIPEINFDRegistry} [EnableIPEINFD] EnableIPEINFD in registry - %d, %d\n"
+                ,uVar5,(ulonglong)param_2,in_x6,in_x7);
+  return;
+}
+
+

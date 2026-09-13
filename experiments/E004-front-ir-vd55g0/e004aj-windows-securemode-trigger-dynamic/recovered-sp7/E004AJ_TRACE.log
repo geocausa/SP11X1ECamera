@@ -1,0 +1,430 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AJ_SECUREMODE_TRIGGER_20260913\E004AJ_TRACE.log'
+===E004AJ_KD_BEGIN===
+Couldn't resolve error at 'surfacecamavs8380.sys; sxe ld:qccamsecureisp8380.sys; sxe ud:qccamsecureisp8380.sys; .echo ===E004AJ_FILTERS_ARMED===; lm m surfacecamavs8380; lm m qccamsecureisp8380; g'
+4: kd> sxe ld:surfacecamavs8380.sys
+4: kd> sxe ud:surfacecamavs8380.sys
+Couldn't resolve error at 'surfacecamavs8380.sys'
+4: kd> sxe ld:qccamsecureisp8380.sys
+4: kd> sxe ud:qccamsecureisp8380.sys
+4: kd> .echo ===E004AJ_FILTERS_ARMED===
+===E004AJ_FILTERS_ARMED===
+4: kd> lm m surfacecamavs8380
+start             end                 module name
+4: kd> lm m qccamsecureisp8380
+start             end                 module name
+fffff802`f4090000 fffff802`f40c6000   qccamsecureisp8380   (deferred)             
+4: kd> g
+Unload module qccamsecureisp8380.sys at fffff802`f4090000
+nt!DebugService2+0x8:
+fffff802`f5001408 d43e0000 brk         #0xF000
+5: kd> .echo ===E004AJ_QCCAM_LOAD1_UNLOADED_PRETRIGGER===
+===E004AJ_QCCAM_LOAD1_UNLOADED_PRETRIGGER===
+5: kd> g
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f70e0000
+qcsp [spcomEvtDeviceAdd] device count [1] .
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f72e0000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f7980000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f4280000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f4450000
+Capacity:39912, FullChargedCapacity:49890, Voltage:8238, Rate:0
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f4280000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f4450000
+Unload module QcUsbFnSsFilter8380.sys at fffff802`f71d0000
+Unload module ufx01000.sys at fffff802`f7280000
+Unload module ufxsynopsys.sys at fffff802`f7240000
+Unload module dump_dumpfve.sys at fffff802`f2030000
+Unload module dump_stornvme.sys at fffff802`f2990000
+Unload module dump_dumpstorport.sys at fffff802`f2920000
+qccdi: WARN: Crash dump trace log buffer full
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff802`f4450000
+-successfully opened handle 00000000000003AC for Invoke driver 
+
+-SSGTZD random number generated was 0x2ca2051a from Invoke driver 
+
+-SSGServicesInvokeInit with status 0x0 
+
+Handle opened to SMCInvoke driver successfully 0x0
+
+Queue created successfully 0x0
+
+Interface published for SSGUMD successfully 0x0
+
+SSGServicesCreateDevice returned with status 0x0
+
+nt!DebugService2+0x8:
+fffff802`f5001408 d43e0000 brk         #0xF000
+5: kd> .echo ===E004AJ_QCCAM_LOAD2_CHECK===
+===E004AJ_QCCAM_LOAD2_CHECK===
+5: kd> lm m qccamsecureisp8380
+start             end                 module name
+fffff802`f8690000 fffff802`f86c6000   qccamsecureisp8380   (deferred)             
+5: kd> !lmi qccamsecureisp8380
+Loaded Module Info: [qccamsecureisp8380] 
+         Module: qccamsecureisp8380
+   Base Address: fffff802f8690000
+     Image Name: qccamsecureisp8380.sys
+   Machine Type: 43620 (ARM64)
+     Time Stamp: 67c9d686 Thu Mar  6 17:08:22 2025
+           Size: 36000
+       CheckSum: 27338
+Characteristics: 22  
+Debug Data Dirs: Type  Size     VA  Pointer
+             CODEVIEW    55, 11400,   10400 RSDS - GUID: {524FB0E0-E640-4DCC-B50A-098660BC1D12}
+               Age: 1, Pdb: Z:\b\WP\Camera\rel\10.9\ARM64\Release\qccamsecureisp8380.pdb
+                 POGO   25c, 11458,   10458 [Data not mapped]
+    Symbol Type: DEFERRED - No error - symbol load deferred
+    Load Report: no symbols loaded
+5: kd> lm m surfacecamavs8380
+start             end                 module name
+fffff802`f71f0000 fffff802`f729d000   surfacecamavs8380   (deferred)             
+5: kd> bc *
+5: kd> bp fffff802f7273120 ".printf \"E004AJ_SM_SET_ENTER obj=%p requested=0x%I64x oldstate=0x%x\\n\", @x0, qwo(@x3+0x10), by(@x0+0x2ad); gc"
+5: kd> bp fffff802f727319c ".printf \"E004AJ_SM_SET_POST obj=%p requested=0x%I64x newstate=0x%x\\n\", @x22, qwo(@x20+0x10), by(@x22+0x2ad); gc"
+5: kd> bp fffff802f7273040 ".printf \"E004AJ_SM_GET_ENTER obj=%p state=0x%x\\n\", @x0, by(@x0+0x2ad); gc"
+5: kd> bp fffff802f720ebb0 ".printf \"E004AJ_AUX_POLICY obj=%p requested=0x%x camera_disc=0x%x\\n\", @x0, @x1, dwo(@x0+0x18); gc"
+5: kd> bp fffff802f71f9da0 ".printf \"E004AJ_SECURE_KMDISP_CALL op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"
+5: kd> bp fffff802f8693350 ".printf \"E004AJ_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+5: kd> bp fffff802f8694a90 ".printf \"E004AJ_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+5: kd> bp fffff802f86924f0 ".printf \"E004AJ_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+5: kd> bp fffff802f8691b08 ".printf \"E004AJ_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+5: kd> .echo ===E004AJ_BREAKPOINTS_ARMED===
+===E004AJ_BREAKPOINTS_ARMED===
+5: kd> bl
+ 0 e fffff802`f7273120     0001 (0001) surfacecamavs8380+0x83120 ".printf \"E004AJ_SM_SET_ENTER obj=%p requested=0x%I64x oldstate=0x%x\\n\", @x0, qwo(@x3+0x10), by(@x0+0x2ad); gc"
+ 1 e fffff802`f727319c     0001 (0001) surfacecamavs8380+0x8319c ".printf \"E004AJ_SM_SET_POST obj=%p requested=0x%I64x newstate=0x%x\\n\", @x22, qwo(@x20+0x10), by(@x22+0x2ad); gc"
+ 2 e fffff802`f7273040     0001 (0001) surfacecamavs8380+0x83040 ".printf \"E004AJ_SM_GET_ENTER obj=%p state=0x%x\\n\", @x0, by(@x0+0x2ad); gc"
+ 3 e fffff802`f720ebb0     0001 (0001) surfacecamavs8380+0x1ebb0 ".printf \"E004AJ_AUX_POLICY obj=%p requested=0x%x camera_disc=0x%x\\n\", @x0, @x1, dwo(@x0+0x18); gc"
+ 4 e fffff802`f71f9da0     0001 (0001) surfacecamavs8380+0x9da0 ".printf \"E004AJ_SECURE_KMDISP_CALL op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"
+ 5 e fffff802`f8693350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AJ_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 6 e fffff802`f8694a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AJ_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 7 e fffff802`f86924f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AJ_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 8 e fffff802`f8691b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AJ_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+5: kd> g
+DriverEntry failed 0xc035001e for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\l1vhlwf
+Unload module l1vhlwf.sys at fffff802`f9890000
+DriverEntry failed 0xc00000bb for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\NetworkPrivacyPolicy
+Unload module NetworkPrivacyPolicy.sys at fffff802`f9210000
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0xC0 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff802`f50013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AJ_PRE_RETRY_VALIDATE===
+===E004AJ_PRE_RETRY_VALIDATE===
+0: kd> lm m surfacecamavs8380
+start             end                 module name
+fffff802`f71f0000 fffff802`f729d000   surfacecamavs8380   (no symbols)           
+0: kd> lm m qccamsecureisp8380
+start             end                 module name
+fffff802`f8690000 fffff802`f86c6000   qccamsecureisp8380   (no symbols)           
+0: kd> bl
+ 0 e fffff802`f7273120     0001 (0001) surfacecamavs8380+0x83120 ".printf \"E004AJ_SM_SET_ENTER obj=%p requested=0x%I64x oldstate=0x%x\\n\", @x0, qwo(@x3+0x10), by(@x0+0x2ad); gc"
+ 1 e fffff802`f727319c     0001 (0001) surfacecamavs8380+0x8319c ".printf \"E004AJ_SM_SET_POST obj=%p requested=0x%I64x newstate=0x%x\\n\", @x22, qwo(@x20+0x10), by(@x22+0x2ad); gc"
+ 2 e fffff802`f7273040     0001 (0001) surfacecamavs8380+0x83040 ".printf \"E004AJ_SM_GET_ENTER obj=%p state=0x%x\\n\", @x0, by(@x0+0x2ad); gc"
+ 3 e fffff802`f720ebb0     0001 (0001) surfacecamavs8380+0x1ebb0 ".printf \"E004AJ_AUX_POLICY obj=%p requested=0x%x camera_disc=0x%x\\n\", @x0, @x1, dwo(@x0+0x18); gc"
+ 4 e fffff802`f71f9da0     0001 (0001) surfacecamavs8380+0x9da0 ".printf \"E004AJ_SECURE_KMDISP_CALL op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"
+ 5 e fffff802`f8693350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AJ_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 6 e fffff802`f8694a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AJ_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 7 e fffff802`f86924f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AJ_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 8 e fffff802`f8691b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AJ_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+0: kd> .echo ===E004AJ_GUID_SEARCH===
+===E004AJ_GUID_SEARCH===
+0: kd> s -b fffff802f71f0000 fffff802f729d000 12 91 b7 1c d2 c0 13 42 9c a6 cd 4f db 92 79 72
+fffff802`f7220378  12 91 b7 1c d2 c0 13 42-9c a6 cd 4f db 92 79 72  .......B...O..yr
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Unload module netadaptercx.sys at fffff802`f3200000
+Unload module WifiCx.sys at fffff802`f32a0000
+Unload module qcwlanhmt8380.sys at fffff802`f3590000
+E004AJ_SM_GET_ENTER obj=ffffc40d446ee6b0 state=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d446ee6b0 state=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d41f22010 state=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d41f22010 state=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d446d9010 state=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d446d9010 state=0x0
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff802`f50013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AJ_OBJECT_DISCRIMINATORS===
+===E004AJ_OBJECT_DISCRIMINATORS===
+0: kd> dd ffffc40d446ee718 L1
+ffffc40d`446ee718  5e34e1c5
+0: kd> dd ffffc40d41f22078 L1
+ffffc40d`41f22078  f27170b8
+0: kd> dd ffffc40d446d9078 L1
+ffffc40d`446d9078  65528936
+0: kd> db ffffc40d446ee95d L1
+ffffc40d`446ee95d  00                                               .
+0: kd> db ffffc40d41f222bd L1
+ffffc40d`41f222bd  00                                               .
+0: kd> .echo ===E004AJ_OBJECT_DISCRIMINATORS===
+===E004AJ_OBJECT_DISCRIMINATORS===
+0: kd> dd ffffc40d446ee718 L1
+ffffc40d`446ee718  5e34e1c5
+0: kd> dd ffffc40d41f22078 L1
+ffffc40d`41f22078  f27170b8
+0: kd> dd ffffc40d446d9078 L1
+ffffc40d`446d9078  65528936
+0: kd> db ffffc40d446ee95d L1
+ffffc40d`446ee95d  00                                               .
+0: kd> db ffffc40d41f222bd L1
+ffffc40d`41f222bd  00                                               .
+0: kd> db ffffc40d446d92bd L1
+ffffc40d`446d92bd  00                                               .
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Unload module netadaptercx.sys at fffff802`f94e0000
+Unload module WifiCx.sys at fffff802`f9550000
+Unload module qcwlanhmt8380.sys at fffff802`f3580000
+E004AJ_SM_GET_ENTER obj=ffffc40d44a03010 state=0x0
+E004AJ_SM_SET_ENTER obj=ffffc40d44a03010 requested=0x2 oldstate=0x0
+E004AJ_SM_SET_POST obj=ffffc40d44a03010 requested=0x2 newstate=0x1
+E004AJ_SM_GET_ENTER obj=ffffc40d44a03010 state=0x1
+E004AJ_SM_GET_ENTER obj=ffffc40d42574010 state=0x0
+E004AJ_SM_SET_ENTER obj=ffffc40d44a03010 requested=0x1 oldstate=0x1
+E004AJ_SM_SET_POST obj=ffffc40d44a03010 requested=0x1 newstate=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d44a03010 state=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d42574010 state=0x0
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff802`f50013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AJ_MFKS_PREVALIDATE===; lm m surfacecamavs8380; lm m qccamsecureisp8380; bl; g
+===E004AJ_MFKS_PREVALIDATE===
+start             end                 module name
+fffff802`f71f0000 fffff802`f729d000   surfacecamavs8380   (no symbols)           
+start             end                 module name
+fffff802`f8690000 fffff802`f86c6000   qccamsecureisp8380   (no symbols)           
+ 0 e fffff802`f7273120     0001 (0001) surfacecamavs8380+0x83120 ".printf \"E004AJ_SM_SET_ENTER obj=%p requested=0x%I64x oldstate=0x%x\\n\", @x0, qwo(@x3+0x10), by(@x0+0x2ad); gc"
+ 1 e fffff802`f727319c     0001 (0001) surfacecamavs8380+0x8319c ".printf \"E004AJ_SM_SET_POST obj=%p requested=0x%I64x newstate=0x%x\\n\", @x22, qwo(@x20+0x10), by(@x22+0x2ad); gc"
+ 2 e fffff802`f7273040     0001 (0001) surfacecamavs8380+0x83040 ".printf \"E004AJ_SM_GET_ENTER obj=%p state=0x%x\\n\", @x0, by(@x0+0x2ad); gc"
+ 3 e fffff802`f720ebb0     0001 (0001) surfacecamavs8380+0x1ebb0 ".printf \"E004AJ_AUX_POLICY obj=%p requested=0x%x camera_disc=0x%x\\n\", @x0, @x1, dwo(@x0+0x18); gc"
+ 4 e fffff802`f71f9da0     0001 (0001) surfacecamavs8380+0x9da0 ".printf \"E004AJ_SECURE_KMDISP_CALL op=0x%I64x ptr=%p len=0x%I64x\\n\", @x1,@x2,@x3; db @x2 Lc; gc"
+ 5 e fffff802`f8693350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AJ_QCCAM_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 6 e fffff802`f8694a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AJ_QCCAM_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 7 e fffff802`f86924f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AJ_QCCAM_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 8 e fffff802`f8691b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AJ_QCCAM_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+... Retry sending the same data packet for 64 times.
+The transport connection between host kernel debugger and target Windows seems lost.
+please try resync with target, recycle the host debugger, or reboot the target Windows.
+... Retry sending the same data packet for 128 times.
+... Retry sending the same data packet for 192 times.
+... Retry sending the same data packet for 256 times.
+... Retry sending the same data packet for 320 times.
+... Retry sending the same data packet for 384 times.
+... Retry sending the same data packet for 448 times.
+... Retry sending the same data packet for 512 times.
+... Retry sending the same data packet for 576 times.
+... Retry sending the same data packet for 640 times.
+... Retry sending the same data packet for 704 times.
+... Retry sending the same data packet for 768 times.
+... Retry sending the same data packet for 832 times.
+... Retry sending the same data packet for 896 times.
+... Retry sending the same data packet for 960 times.
+... Retry sending the same data packet for 1024 times.
+... Retry sending the same data packet for 1088 times.
+... Retry sending the same data packet for 1152 times.
+... Retry sending the same data packet for 1216 times.
+... Retry sending the same data packet for 1280 times.
+... Retry sending the same data packet for 1344 times.
+... Retry sending the same data packet for 1408 times.
+... Retry sending the same data packet for 1472 times.
+... Retry sending the same data packet for 1536 times.
+... Retry sending the same data packet for 1600 times.
+... Retry sending the same data packet for 1664 times.
+... Retry sending the same data packet for 1728 times.
+... Retry sending the same data packet for 1792 times.
+... Retry sending the same data packet for 1856 times.
+... Retry sending the same data packet for 1920 times.
+... Retry sending the same data packet for 1984 times.
+... Retry sending the same data packet for 2048 times.
+... Retry sending the same data packet for 2112 times.
+... Retry sending the same data packet for 2176 times.
+... Retry sending the same data packet for 2240 times.
+... Retry sending the same data packet for 2304 times.
+... Retry sending the same data packet for 2368 times.
+... Retry sending the same data packet for 2432 times.
+... Retry sending the same data packet for 2496 times.
+... Retry sending the same data packet for 2560 times.
+... Retry sending the same data packet for 2624 times.
+... Retry sending the same data packet for 2688 times.
+... Retry sending the same data packet for 2752 times.
+... Retry sending the same data packet for 2816 times.
+... Retry sending the same data packet for 2880 times.
+... Retry sending the same data packet for 2944 times.
+... Retry sending the same data packet for 3008 times.
+... Retry sending the same data packet for 3072 times.
+... Retry sending the same data packet for 3136 times.
+... Retry sending the same data packet for 3200 times.
+... Retry sending the same data packet for 3264 times.
+... Retry sending the same data packet for 3328 times.
+... Retry sending the same data packet for 3392 times.
+... Retry sending the same data packet for 3456 times.
+... Retry sending the same data packet for 3520 times.
+... Retry sending the same data packet for 3584 times.
+... Retry sending the same data packet for 3648 times.
+... Retry sending the same data packet for 3712 times.
+... Retry sending the same data packet for 3776 times.
+... Retry sending the same data packet for 3840 times.
+... Retry sending the same data packet for 3904 times.
+... Retry sending the same data packet for 3968 times.
+... Retry sending the same data packet for 4032 times.
+... Retry sending the same data packet for 4096 times.
+... Retry sending the same data packet for 4160 times.
+... Retry sending the same data packet for 4224 times.
+... Retry sending the same data packet for 4288 times.
+... Retry sending the same data packet for 4352 times.
+... Retry sending the same data packet for 4416 times.
+... Retry sending the same data packet for 4480 times.
+... Retry sending the same data packet for 4544 times.
+... Retry sending the same data packet for 4608 times.
+... Retry sending the same data packet for 4672 times.
+... Retry sending the same data packet for 4736 times.
+... Retry sending the same data packet for 4800 times.
+... Retry sending the same data packet for 4864 times.
+... Retry sending the same data packet for 4928 times.
+... Retry sending the same data packet for 4992 times.
+... Retry sending the same data packet for 5056 times.
+... Retry sending the same data packet for 5120 times.
+... Retry sending the same data packet for 5184 times.
+... Retry sending the same data packet for 5248 times.
+... Retry sending the same data packet for 5312 times.
+... Retry sending the same data packet for 5376 times.
+... Retry sending the same data packet for 5440 times.
+... Retry sending the same data packet for 5504 times.
+... Retry sending the same data packet for 5568 times.
+... Retry sending the same data packet for 5632 times.
+... Retry sending the same data packet for 5696 times.
+... Retry sending the same data packet for 5760 times.
+... Retry sending the same data packet for 5824 times.
+... Retry sending the same data packet for 5888 times.
+... Retry sending the same data packet for 5952 times.
+... Retry sending the same data packet for 6016 times.
+... Retry sending the same data packet for 6080 times.
+... Retry sending the same data packet for 6144 times.
+... Retry sending the same data packet for 6208 times.
+... Retry sending the same data packet for 6272 times.
+... Retry sending the same data packet for 6336 times.
+... Retry sending the same data packet for 6400 times.
+... Retry sending the same data packet for 6464 times.
+... Retry sending the same data packet for 6528 times.
+... Retry sending the same data packet for 6592 times.
+... Retry sending the same data packet for 6656 times.
+... Retry sending the same data packet for 6720 times.
+... Retry sending the same data packet for 6784 times.
+... Retry sending the same data packet for 6848 times.
+... Retry sending the same data packet for 6912 times.
+... Retry sending the same data packet for 6976 times.
+... Retry sending the same data packet for 7040 times.
+... Retry sending the same data packet for 7104 times.
+... Retry sending the same data packet for 7168 times.
+... Retry sending the same data packet for 7232 times.
+... Retry sending the same data packet for 7296 times.
+... Retry sending the same data packet for 7360 times.
+... Retry sending the same data packet for 7424 times.
+... Retry sending the same data packet for 7488 times.
+... Retry sending the same data packet for 7552 times.
+... Retry sending the same data packet for 7616 times.
+... Retry sending the same data packet for 7680 times.
+... Retry sending the same data packet for 7744 times.
+... Retry sending the same data packet for 7808 times.
+... Retry sending the same data packet for 7872 times.
+... Retry sending the same data packet for 7936 times.
+... Retry sending the same data packet for 8000 times.
+... Retry sending the same data packet for 8064 times.
+... Retry sending the same data packet for 8128 times.
+... Retry sending the same data packet for 8192 times.
+... Retry sending the same data packet for 8256 times.
+... Retry sending the same data packet for 8320 times.
+... Retry sending the same data packet for 8384 times.
+... Retry sending the same data packet for 8448 times.
+... Retry sending the same data packet for 8512 times.
+... Retry sending the same data packet for 8576 times.
+... Retry sending the same data packet for 8640 times.
+... Retry sending the same data packet for 8704 times.
+... Retry sending the same data packet for 8768 times.
+... Retry sending the same data packet for 8832 times.
+... Retry sending the same data packet for 8896 times.
+... Retry sending the same data packet for 8960 times.
+... Retry sending the same data packet for 9024 times.
+... Retry sending the same data packet for 9088 times.
+... Retry sending the same data packet for 9152 times.
+... Retry sending the same data packet for 9216 times.
+... Retry sending the same data packet for 9280 times.
+... Retry sending the same data packet for 9344 times.
+... Retry sending the same data packet for 9408 times.
+... Retry sending the same data packet for 9472 times.
+... Retry sending the same data packet for 9536 times.
+... Retry sending the same data packet for 9600 times.
+... Retry sending the same data packet for 9664 times.
+... Retry sending the same data packet for 9728 times.
+... Retry sending the same data packet for 9792 times.
+... Retry sending the same data packet for 9856 times.
+E004AJ_SM_GET_ENTER obj=ffffc40d42b6b4f0 state=0x0
+E004AJ_SM_GET_ENTER obj=ffffc40d42b6b4f0 state=0x0
