@@ -1,0 +1,43 @@
+{
+  "schema": "sp11-camera-e004ao-devicemft-user-calltrace-v1",
+  "status": "PASS_DYNAMIC_FACEAUTH_DOES_NOT_ENTER_DEVICEMFT_SECURE_BROKER",
+  "acquisition_date": "2026-09-13",
+  "final_run": {
+    "frame_server_pid": 14784,
+    "frame_server_image": "svchost.exe",
+    "frame_server_service": "FrameServer",
+    "devicemft_base": "0x7ffd47cb0000",
+    "devicemft_module": "QcDeviceMFT8380.dll",
+    "dll_load_held_before_release": true,
+    "faceauth_profile": "{81361B22-700B-4546-A2D4-C52E907BFC27},0",
+    "format": "NV12 644x604 60fps",
+    "initialize_success": true,
+    "start_success": true,
+    "frames": 12,
+    "stop_success": true
+  },
+  "traced_rvas": {
+    "create_camera_controls": "0x21cf0",
+    "capture_properties_initialize": "0x292f20",
+    "register_property_observers": "0x2f7458",
+    "securemode_property_accessor": "0x309620",
+    "cdevicemft_ksproperty": "0x18250",
+    "cpinconfigurer_ksproperty": "0x4d540",
+    "ccameracontrols_ksproperty": "0x2d0d0",
+    "securemode_setproperty": "0x43f60",
+    "securemode_getproperty": "0x43ce0",
+    "captureproperties_onsetsecuremode": "0x302d20",
+    "captureproperties_ongetsecuremode": "0x302f40",
+    "secure_usecase_helper": "0x293ad8"
+  },
+  "dynamic_hits": [],
+  "interpretation": {
+    "faceauth_profile_loads_devicemft": true,
+    "faceauth_profile_enters_devicemft_secure_broker": false,
+    "securemode_write_runtime_hit_proven": false,
+    "secure_usecase_runtime_hit_proven": false,
+    "trusted_secure_trigger_resolved": false,
+    "linux_secureisp_runtime_authorized": false
+  },
+  "next_gate": "Identify the actual trusted Windows biometric/topology trigger that drives the DeviceMFT SecureMode path; do not repeat generic FaceAuth MediaCapture as the primary trigger."
+}

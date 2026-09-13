@@ -1,0 +1,75 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AO_DEVICEMFT_USER_TRACE_20260913\E004AO_LOADHELD_TRACE.log'
+===E004AO_LOADHELD_BPS_ARMED===
+ 0 e 00007ffd`47cd1cf0     0001 (0001)  ".printf \"E004AO_LHIT CreateCameraControls x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 1 e 00007ffd`47f42f20     0001 (0001)  ".printf \"E004AO_LHIT CaptureProperties_Initialize x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+ 2 e 00007ffd`47fa7458     0001 (0001)  ".printf \"E004AO_LHIT RegisterPropertyObservers x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+ 3 e 00007ffd`47fb9620     0001 (0001)  ".printf \"E004AO_LHIT SecureMode_PropertyAccessor x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+ 4 e 00007ffd`47cc8250     0001 (0001)  ".printf \"E004AO_LHIT CDeviceMFT_KsProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 5 e 00007ffd`47cfd540     0001 (0001)  ".printf \"E004AO_LHIT CPinConfigurer_KsProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 6 e 00007ffd`47cdd0d0     0001 (0001)  ".printf \"E004AO_LHIT CCameraControls_KsProperty x0=%p x1=%p x2=%p\\n\",@x0,@x1,@x2; gc"
+     Match process data ffffb88d`808fa080
+ 7 e 00007ffd`47cf3f60     0001 (0001)  ".printf \"E004AO_LHIT SecureMode_SetProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 8 e 00007ffd`47cf3ce0     0001 (0001)  ".printf \"E004AO_LHIT SecureMode_GetProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 9 e 00007ffd`47fb2d20     0001 (0001)  ".printf \"E004AO_LHIT CaptureProperties_OnSetSecureMode x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+10 e 00007ffd`47fb2f40     0001 (0001)  ".printf \"E004AO_LHIT CaptureProperties_OnGetSecureMode x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+11 e 00007ffd`47f43ad8     0001 (0001)  ".printf \"E004AO_LHIT SecureUsecaseBuilder x0=%p x1=%p\\n\",@x0,@x1; gc"
+     Match process data ffffb88d`808fa080
+
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`e2c013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AO_FINAL_ZERO_HITS===; bl; .logclose; bc *; sxd ld; .echo ===E004AO_TRACE_CLOSED===; g
+===E004AO_FINAL_ZERO_HITS===
+ 0 e 00007ffd`47cd1cf0     0001 (0001)  ".printf \"E004AO_LHIT CreateCameraControls x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 1 e 00007ffd`47f42f20     0001 (0001)  ".printf \"E004AO_LHIT CaptureProperties_Initialize x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+ 2 e 00007ffd`47fa7458     0001 (0001)  ".printf \"E004AO_LHIT RegisterPropertyObservers x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+ 3 e 00007ffd`47fb9620     0001 (0001)  ".printf \"E004AO_LHIT SecureMode_PropertyAccessor x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+ 4 e 00007ffd`47cc8250     0001 (0001)  ".printf \"E004AO_LHIT CDeviceMFT_KsProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 5 e 00007ffd`47cfd540     0001 (0001)  ".printf \"E004AO_LHIT CPinConfigurer_KsProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 6 e 00007ffd`47cdd0d0     0001 (0001)  ".printf \"E004AO_LHIT CCameraControls_KsProperty x0=%p x1=%p x2=%p\\n\",@x0,@x1,@x2; gc"
+     Match process data ffffb88d`808fa080
+ 7 e 00007ffd`47cf3f60     0001 (0001)  ".printf \"E004AO_LHIT SecureMode_SetProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 8 e 00007ffd`47cf3ce0     0001 (0001)  ".printf \"E004AO_LHIT SecureMode_GetProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffb88d`808fa080
+ 9 e 00007ffd`47fb2d20     0001 (0001)  ".printf \"E004AO_LHIT CaptureProperties_OnSetSecureMode x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+10 e 00007ffd`47fb2f40     0001 (0001)  ".printf \"E004AO_LHIT CaptureProperties_OnGetSecureMode x0=%p\\n\",@x0; gc"
+     Match process data ffffb88d`808fa080
+11 e 00007ffd`47f43ad8     0001 (0001)  ".printf \"E004AO_LHIT SecureUsecaseBuilder x0=%p x1=%p\\n\",@x0,@x1; gc"
+     Match process data ffffb88d`808fa080
+
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AO_DEVICEMFT_USER_TRACE_20260913\E004AO_LOADHELD_TRACE.log
