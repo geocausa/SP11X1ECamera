@@ -1,0 +1,19 @@
+E004bd WINDOWS DYNAMIC SECURE-LANE AUTHORITY
+source=accepted E004aq raw KD trace retained on SP7
+raw_path=C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AQ_HELLO_IR_CONTROLLER_20260913\E004AQ_KERNEL_TRACE.log
+raw_sha256=5dfac22112c9d0cf2ae9cb1f1ef9cb43a00084aabba6d8e0a8da7c9440086ad3
+raw_bytes=1169714
+
+ENABLE SIDE (dynamic Windows):
+SecureISP_LaneDispatch: command=0x2e lane_mask=0x8
+SecureISP_ConfigSecureCamera: lane_mask=0x8 protect=1
+
+TEARDOWN SIDE (dynamic Windows):
+SecureISP_LaneDispatch: command=0x2f lane_mask=0x8
+SecureISP_ConfigSecureCamera: lane_mask=0x8 protect=0
+
+Exact accepted trace lines:
+E004AQ_KHIT SecureISP_LaneDispatch x0=ffffc901171020d0 x1=000000000000002e x2=0000000000000008 x3=ffffa08920d81f28 x4=0000000000000001 x5=0000000000000000
+E004AQ_KHIT SecureISP_ConfigSecureCamera x0=ffffc901171020d0 x1=0000000000000008 x2=0000000000000001 x3=ffffa08920d81f28 x4=0000000000000001 x5=0000000000000000
+E004AQ_KHIT SecureISP_LaneDispatch x0=ffffc901171020d0 x1=000000000000002f x2=0000000000000008 x3=ffffa0891f837ea8 x4=0000000000000001 x5=000000000002fe40
+E004AQ_KHIT SecureISP_ConfigSecureCamera x0=ffffc901171020d0 x1=0000000000000008 x2=0000000000000000 x3=ffffa0891f837ea8 x4=0000000000000001 x5=000000000002fe40

@@ -1,0 +1,46 @@
+{
+  "schema": "sp11-camera-e004bd-windows-secure-csiphy-parity-v1",
+  "status": "PASS_WINDOWS_DYNAMIC_SECURE_LANE_MASK_MATCHES_QUALCOMM_LINUX",
+  "date": "2026-09-13",
+  "parity_authority": "Windows dynamic first; static/public Linux only as mapping cross-check",
+  "windows_dynamic": {
+    "source_checkpoint": "E004aq",
+    "raw_sha256": "5dfac22112c9d0cf2ae9cb1f1ef9cb43a00084aabba6d8e0a8da7c9440086ad3",
+    "enable": {
+      "lane_dispatch_command": "0x2e",
+      "lane_mask": "0x8",
+      "protect": 1
+    },
+    "disable": {
+      "lane_dispatch_command": "0x2f",
+      "lane_mask": "0x8",
+      "protect": 0
+    },
+    "exact_mask_same_both_sides": true
+  },
+  "windows_topology": {
+    "source_checkpoint": "E004j",
+    "csiphy_index": 0,
+    "phy": "DPHY",
+    "num_data_lanes": 1,
+    "data_lane_position": 0,
+    "receiver_lane_mask": "0x81"
+  },
+  "qualcomm_linux_crosscheck": {
+    "public_source_commit": "82ac3a671a5b",
+    "active_data_lane_bitmask": "0x1",
+    "dphy_secure_shift": 3,
+    "computed_secure_lane_mask": "0x8",
+    "calls_symbol": "qcom_scm_camera_protect_phy_lanes",
+    "exact_windows_mask_match": true
+  },
+  "local_linux_7_1_5": {
+    "generic_qcom_scm_transport": true,
+    "camera_protect_phy_lanes_wrapper": false,
+    "runtime_call_executed": false
+  },
+  "qcomtee_loaded": false,
+  "camera_memory_reassigned": false,
+  "secure_csi_state_changed_linux": false,
+  "next_gate": "Compile-only 7.1.5 camera SCM wrapper matching the Windows-observed protect + lane-mask ABI; no runtime call."
+}
