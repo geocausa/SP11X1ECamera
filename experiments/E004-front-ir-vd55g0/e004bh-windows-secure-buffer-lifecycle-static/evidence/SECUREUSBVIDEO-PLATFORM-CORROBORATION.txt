@@ -1,0 +1,614 @@
+E004bh MICROSOFT SECUREUSBVIDEO PLATFORM CORROBORATION
+role=crosscheck_of_standard_Windows_secure_capture_plumbing_only
+surface_mipi_ir_creator_proven=no
+/mnt/windows/Windows/System32/DriverStore/FileRepository/usbvideo.inf_arm64_c2e374231ba101c0/SecureUSBVideo.dll: PE32+ executable for MS Windows 10.00 (DLL), ARM64, 8 sections
+378f2830f5867f31ec5c63b95fe7e35f78d48bc139989db79590c5ac7d5d7521  /mnt/windows/Windows/System32/DriverStore/FileRepository/usbvideo.inf_arm64_c2e374231ba101c0/SecureUSBVideo.dll
+bytes=57008 mtime=2026-09-08 19:21:32.156539700 +0100
+
+This Microsoft UVC secure-capture component demonstrates the same platform model:
+- generate UUID
+- CreateSecureSection for producer buffers
+- return GUID identifiers
+- OpenSecureSection for an incoming secure frame buffer
+- unmap/close at release
+
+--- focused decomp ---
+//// FUN_180001f28 @180001f28 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Type propagation algorithm not settling */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint FUN_180001f28(void *param_1,longlong param_2,uint *param_3,uint *param_4,longlong param_5,
+                  undefined8 *param_6)
+
+{
+  undefined8 *puVar1;
+  DWORD DVar2;
+  uint uVar3;
+  HANDLE hFileMappingObject;
+  LPVOID _Dst;
+  void *pvVar4;
+  byte *pbVar5;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 uVar6;
+  undefined8 extraout_x1_02;
+  uint *puVar7;
+  uint *puVar8;
+  ULONG UVar9;
+  _EVENT_DATA_DESCRIPTOR *p_Var10;
+  uint uVar11;
+  char *pcVar12;
+  int iVar13;
+  ulonglong uVar14;
+  undefined1 auVar15 [16];
+  uint local_400;
+  uint uStack_3fc;
+  uint local_3f8;
+  uint local_3f4;
+  int local_3f0;
+  uint uStack_3ec;
+  int local_3e8;
+  uint uStack_3e4;
+  uint local_3e0;
+  uint local_3dc;
+  uint local_3d8;
+  uint auStack_3d4 [3];
+  uint uStack_3c8;
+  uint local_3c4;
+  uint uStack_3c0;
+  uint local_3bc;
+  longlong local_3b8;
+  undefined8 *puStack_3b0;
+  undefined8 local_3a8;
+  undefined8 local_3a0;
+  longlong local_398;
+  uint *puStack_390;
+  uint *local_388;
+  longlong lStack_380;
+  undefined4 local_378;
+  UUID local_374;
+  undefined8 local_364;
+  undefined8 uStack_35c;
+  _EVENT_DATA_DESCRIPTOR a_Stack_350 [2];
+  char *local_330;
+  int local_328;
+  undefined4 uStack_324;
+  longlong *local_320;
+  undefined8 uStack_318;
+  uint **local_310;
+  undefined8 uStack_308;
+  uint **local_300;
+  undefined8 uStack_2f8;
+  longlong *local_2f0;
+  undefined8 uStack_2e8;
+  uint *local_2e0;
+  undefined8 uStack_2d8;
+  _EVENT_DATA_DESCRIPTOR a_Stack_2d0 [2];
+  char *local_2b0;
+  int local_2a8;
+  undefined4 uStack_2a4;
+  uint *local_2a0;
+  undefined8 uStack_298;
+  uint *local_290;
+  undefined8 uStack_288;
+  uint *local_280;
+  undefined8 uStack_278;
+  uint *local_270;
+  undefined8 uStack_268;
+  _EVENT_DATA_DESCRIPTOR a_Stack_260 [2];
+  char *local_240;
+  int local_238;
+  undefined4 uStack_234;
+  uint *local_230;
+  undefined8 uStack_228;
+  uint *local_220;
+  undefined8 uStack_218;
+  uint *local_210;
+  undefined8 uStack_208;
+  uint *local_200;
+  undefined8 uStack_1f8;
+  _EVENT_DATA_DESCRIPTOR a_Stack_1f0 [2];
+  char *local_1d0;
+  int local_1c8;
+  undefined4 uStack_1c4;
+  undefined8 *local_1c0;
+  undefined8 uStack_1b8;
+  undefined8 *local_1b0;
+  undefined8 uStack_1a8;
+  uint *local_1a0;
+  undefined8 uStack_198;
+  _EVENT_DATA_DESCRIPTOR a_Stack_190 [2];
+  char *local_170;
+  int local_168;
+  undefined4 uStack_164;
+  undefined1 *local_160;
+  undefined8 uStack_158;
+  uint *local_150;
+  undefined8 uStack_148;
+  _EVENT_DATA_DESCRIPTOR a_Stack_140 [2];
+  char *local_120;
+  int local_118;
+  undefined4 uStack_114;
+  int *local_110;
+  undefined8 uStack_108;
+  uint *local_100;
+  undefined8 uStack_f8;
+  _EVENT_DATA_DESCRIPTOR a_Stack_f0 [2];
+  char *local_d0;
+  int local_c8;
+  undefined4 uStack_c4;
+  int *local_c0;
+  undefined8 uStack_b8;
+  uint *local_b0;
+  undefined8 uStack_a8;
+  _EVENT_DATA_DESCRIPTOR a_Stack_a0 [2];
+  char *local_80;
+  int local_78;
+  undefined4 uStack_74;
+  uint *local_70;
+  undefined8 uStack_68;
+  
+  uVar3 = DAT_180002554;
+  uVar11 = DAT_180002550;
+  if (((param_5 == 0x10 && param_3 == (uint *)0x104) && param_4 != (uint *)0x0) && param_2 != 0) {
+    if (((param_4[1] == 0x10) && (param_4[2] - 1 < 2)) && (*param_4 != 0)) {
+      if ((param_4[2] != 1) || (local_400 = param_4[3], local_400 != 0 && local_400 <= *param_4)) {
+        if (*(int *)((longlong)param_1 + 0x310) != 0) {
+          if (DAT_18000c0a0 < 3) {
+            return DAT_180002554;
+          }
+          pcVar12 = "Secure UVC buffers were already committed.";
+          do {
+            pcVar12 = pcVar12 + 1;
+          } while (*pcVar12 != '\0');
+          local_80 = "Secure UVC buffers were already committed.";
+          local_78 = (int)pcVar12 + 0x7fff7b09;
+          local_3f8 = DAT_180002554;
+          uStack_74 = 0;
+          local_70 = &local_3f8;
+          uStack_68 = 4;
+          FUN_1800011e8(param_1,&DAT_18000a95e,param_3,param_4,4,a_Stack_a0);
+          return uVar3;
+        }
+        *(undefined4 *)((longlong)param_1 + 0x310) = 1;
+        uVar14 = 0;
+        uVar11 = 0;
+        pvVar4 = param_1;
+        puVar8 = param_4;
+        uVar3 = 0;
+        if (param_4[1] != 0) {
+          local_3f4 = 0;
+          local_3b8 = param_2;
+          puStack_3b0 = param_6;
+          do {
+            uVar11 = *param_4;
+            param_3 = (uint *)(ulonglong)uVar11;
+            local_374.Data1 = 0;
+            local_374.Data2 = 0;
+            local_374.Data3 = 0;
+            local_374.Data4[0] = '\0';
+            local_374.Data4[1] = '\0';
+            local_374.Data4[2] = '\0';
+            local_374.Data4[3] = '\0';
+            local_374.Data4[4] = '\0';
+            local_374.Data4[5] = '\0';
+            local_374.Data4[6] = '\0';
+            local_374.Data4[7] = '\0';
+            local_378 = 0x24;
+            local_364 = 0;
+            uStack_35c = 0;
+            UuidCreate(&local_374);
+            puVar7 = (uint *)0x4;
+            uStack_35c = _UNK_180008e08;
+            local_364 = _DAT_180008e00;
+            puVar8 = param_3;
+            auVar15 = CreateSecureSection(&local_378,4,4,param_3,0);
+            uVar3 = DAT_180002558;
+            uVar6 = auVar15._8_8_;
+            hFileMappingObject = auVar15._0_8_;
+            iVar13 = (int)uVar14;
+            if (hFileMappingObject == (HANDLE)0x0) {
+              if (2 < DAT_18000c0a0) {
+                pcVar12 = "Failed to create secure section.";
+                do {
+                  pcVar12 = pcVar12 + 1;
+                } while (*pcVar12 != '\0');
+                local_d0 = "Failed to create secure section.";
+                local_c8 = (int)pcVar12 + 0x7fff7ad9;
+                uStack_3e4 = DAT_180002558;
+                uStack_c4 = 0;
+                local_c0 = &local_3e8;
+                uStack_b8 = 4;
+                local_b0 = &uStack_3e4;
+                uStack_a8 = 4;
+                local_3e8 = iVar13;
+                FUN_1800011e8(0,&DAT_18000980e,puVar7,puVar8,5,a_Stack_f0);
+                uVar6 = extraout_x1_02;
+              }
+              goto LAB_180002384;
+            }
+            puVar8 = (uint *)0x0;
+            puVar7 = (uint *)0x0;
+            _Dst = MapViewOfFile(hFileMappingObject,2,0,0,(SIZE_T)param_3);
+            if (_Dst == (LPVOID)0x0) {
+              DVar2 = GetLastError();
+              if ((int)DVar2 < 1) {
+                uVar3 = GetLastError();
+                uVar6 = extraout_x1;
+              }
+              else {
+                DVar2 = GetLastError();
+                uVar3 = DVar2 & 0xffff | 0xc0070000;
+                uVar6 = extraout_x1_00;
+              }
+              if (2 < DAT_18000c0a0) {
+                pcVar12 = "Failed to map secure section.";
+                do {
+                  pcVar12 = pcVar12 + 1;
+                } while (*pcVar12 != '\0');
+                local_120 = "Failed to map secure section.";
+                local_118 = (int)pcVar12 + 0x7fff7ab1;
+                uStack_114 = 0;
+                local_110 = &local_3f0;
+                uStack_108 = 4;
+                local_100 = &uStack_3ec;
+                uStack_f8 = 4;
+                local_3f0 = iVar13;
+                uStack_3ec = uVar3;
+                FUN_1800011e8((ulonglong)uVar3,&DAT_180009c5d,puVar7,puVar8,5,a_Stack_140);
+                uVar6 = extraout_x1_01;
+              }
+              if (-1 < (int)uVar3) {
+                return uVar3;
+              }
+LAB_180002384:
+              pvVar4 = (void *)FUN_180004d50((ulonglong)param_1,uVar6,puVar7,puVar8);
+              if (DAT_18000c0a0 < 3) {
+                return uVar3;
+              }
+              pcVar12 = "failed.";
+              do {
+                pcVar12 = pcVar12 + 1;
+              } while (*pcVar12 != '\0');
+              local_1d0 = "failed.";
+              local_1c8 = (int)pcVar12 + 0x7fff7a71;
+              uStack_1c4 = 0;
+              local_3a8 = 0x10;
+              local_1c0 = &local_3a8;
+              uStack_1b8 = 8;
+              local_3a0 = 0x104;
+              local_1b0 = &local_3a0;
+              uStack_1a8 = 8;
+              local_1a0 = &local_3e0;
+              uStack_198 = 4;
+              pbVar5 = &DAT_180009d69;
+              p_Var10 = a_Stack_1f0;
+              UVar9 = 6;
+              local_3e0 = uVar3;
+              goto LAB_18000224c;
+            }
+            pvVar4 = memset(_Dst,0,(size_t)param_3);
+            *(undefined8 *)((longlong)param_1 + uVar14 * 0x30 + 0x20) = 0;
+            *(undefined8 *)((longlong)param_1 + uVar14 * 0x30 + 0x28) = 0;
+            *(undefined8 *)((longlong)param_1 + uVar14 * 0x30 + 0x30) = 0;
+            *(undefined8 *)((longlong)param_1 + uVar14 * 0x30 + 0x38) = 0;
+            *(uchar (*) [8])((longlong)param_1 + uVar14 * 0x30 + 0x18) = local_374.Data4;
+            *(undefined8 *)((longlong)param_1 + uVar14 * 0x30 + 0x10) = local_374._0_8_;
+            *(HANDLE *)((longlong)param_1 + uVar14 * 0x30 + 0x20) = hFileMappingObject;
+            *(LPVOID *)((longlong)param_1 + uVar14 * 0x30 + 0x28) = _Dst;
+            *(uint *)((longlong)param_1 + uVar14 * 0x30 + 0x34) = uVar11;
+            if (param_4[2] == 1) {
+              *(uint *)((longlong)param_1 + 0x330) = param_4[3];
+            }
+            puVar1 = (undefined8 *)(local_3b8 + uVar14 * 0x10);
+            *(uchar (*) [8])(puVar1 + 1) = local_374.Data4;
+            *puVar1 = local_374._0_8_;
+            uVar11 = param_4[1];
+            uVar14 = (ulonglong)(iVar13 + 1U);
+            param_2 = local_3b8;
+            param_6 = puStack_3b0;
+            uVar3 = local_3f4;
+          } while (iVar13 + 1U < uVar11);
+        }
+        *(uint *)(param_2 + 0x100) = uVar11;
+        *(uint *)((longlong)param_1 + 0x314) = param_4[2];
+        *(uint *)((longlong)param_1 + 0x318) = param_4[1];
+        *(undefined8 *)((longlong)param_1 + 0x340) = 0;
+        *(undefined8 *)((longlong)param_1 + 0x338) = 0;
+        *(undefined8 *)((longlong)param_1 + 0x350) = 0;
+        *(undefined8 *)((longlong)param_1 + 0x348) = 0;
+        *(undefined8 *)((longlong)param_1 + 0x360) = 0;
+        *(undefined8 *)((longlong)param_1 + 0x358) = 0;
+        *param_6 = 0x104;
+        if (DAT_18000c0a0 < 6) {
+          return uVar3;
+        }
+        pcVar12 = "Secure buffers allocated.";
+        do {
+          pcVar12 = pcVar12 + 1;
+        } while (*pcVar12 != '\0');
+        local_2b0 = "Secure buffers allocated.";
+        local_2a8 = (int)pcVar12 + 0x7fff7a91;
+        auStack_3d4[1] = 0;
+        uStack_2a4 = 0;
+        auStack_3d4[0] = *param_4;
+        local_3dc = param_4[1];
+        p_Var10 = a_Stack_2d0;
+        UVar9 = 7;
+        local_2a0 = &local_3dc;
+        uStack_298 = 4;
+        local_3d8 = param_4[2];
+        local_290 = &local_3d8;
+        uStack_288 = 4;
+        local_280 = auStack_3d4;
+        uStack_278 = 4;
+        local_270 = auStack_3d4 + 1;
+        uStack_268 = 4;
+        pbVar5 = &DAT_180009992;
+        puVar7 = param_3;
+LAB_18000224c:
+        FUN_1800011e8(pvVar4,pbVar5,puVar7,puVar8,UVar9,p_Var10);
+        return uVar3;
+      }
+      if (DAT_18000c0a0 < 3) {
+        return DAT_180002550;
+      }
+      pcVar12 = "Invalid iso packet size passed.";
+      do {
+        pcVar12 = pcVar12 + 1;
+      } while (*pcVar12 != '\0');
+      uStack_3fc = DAT_180002550;
+      local_168 = (int)pcVar12 + 0x7fff7b29;
+      local_170 = "Invalid iso packet size passed.";
+      uStack_164 = 0;
+      uStack_158 = 4;
+      local_150 = &uStack_3fc;
+//// FUN_180005190 @180005190 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint FUN_180005190(undefined8 *param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4)
+
+{
+  DWORD DVar1;
+  uint uVar2;
+  HANDLE hFileMappingObject;
+  LPVOID pvVar3;
+  ulonglong uVar4;
+  byte *pbVar5;
+  _EVENT_DATA_DESCRIPTOR *p_Var6;
+  char *pcVar7;
+  uint local_130;
+  uint local_12c;
+  uint local_128 [2];
+  undefined4 local_120;
+  undefined8 local_11c;
+  undefined8 uStack_114;
+  undefined8 local_10c;
+  undefined8 uStack_104;
+  _EVENT_DATA_DESCRIPTOR a_Stack_f8 [2];
+  char *local_d8;
+  int local_d0;
+  undefined4 uStack_cc;
+  undefined1 *local_c8;
+  undefined8 uStack_c0;
+  _EVENT_DATA_DESCRIPTOR a_Stack_b8 [2];
+  char *local_98;
+  int local_90;
+  undefined4 uStack_8c;
+  uint *local_88;
+  undefined8 uStack_80;
+  _EVENT_DATA_DESCRIPTOR a_Stack_78 [2];
+  char *local_58;
+  int local_50;
+  undefined4 uStack_4c;
+  uint *local_48;
+  undefined8 uStack_40;
+  
+  uStack_114 = param_1[1];
+  local_11c = *param_1;
+  local_120 = 0x24;
+  uStack_104 = _UNK_180008df8;
+  local_10c = _DAT_180008df0;
+  hFileMappingObject = (HANDLE)OpenSecureSection(&local_120);
+  if (hFileMappingObject == (HANDLE)0x0) {
+    if (DAT_18000c0a0 < 3) {
+      return DAT_1800053b0;
+    }
+    pcVar7 = "Failed to create the secure section";
+    do {
+      pcVar7 = pcVar7 + 1;
+    } while (*pcVar7 != '\0');
+    local_d8 = "Failed to create the secure section";
+    local_d0 = (int)pcVar7 + 0x7fff7769;
+    local_130 = DAT_1800053b0;
+    uStack_cc = 0;
+    uStack_c0 = 4;
+    pbVar5 = &DAT_180009957;
+    p_Var6 = a_Stack_f8;
+    uVar4 = 0;
+    uVar2 = DAT_1800053b0;
+    local_c8 = (undefined1 *)&local_130;
+  }
+  else {
+    param_1[2] = hFileMappingObject;
+    param_1[3] = 0;
+    param_4 = 0;
+    param_3 = 0;
+    pvVar3 = MapViewOfFile(hFileMappingObject,2,0,0,
+                           (SIZE_T)*(undefined4 *)((longlong)param_1 + 0x24));
+    if (pvVar3 == (LPVOID)0x0) {
+      DVar1 = GetLastError();
+      if ((int)DVar1 < 1) {
+        uVar2 = GetLastError();
+        DVar1 = uVar2;
+      }
+      else {
+        DVar1 = GetLastError();
+        uVar2 = DVar1 & 0xffff | 0xc0070000;
+      }
+      if (2 < DAT_18000c0a0) {
+        pcVar7 = "Failed to map the section into trustlet";
+        do {
+          pcVar7 = pcVar7 + 1;
+        } while (*pcVar7 != '\0');
+        local_98 = "Failed to map the section into trustlet";
+        local_90 = (int)pcVar7 + 0x7fff7741;
+        uStack_8c = 0;
+        local_88 = &local_12c;
+        uStack_80 = 4;
+        local_12c = uVar2;
+        FUN_1800011e8((ulonglong)DVar1,&DAT_18000a5f2,param_3,param_4,4,a_Stack_b8);
+      }
+      CloseHandle(hFileMappingObject);
+      param_1[2] = 0;
+      return uVar2;
+    }
+    param_1[3] = pvVar3;
+    *(undefined4 *)((longlong)param_1 + 0x2c) = 0;
+    uVar2 = FUN_180005a88(0,(longlong)param_1,param_3,param_4);
+    uVar4 = (ulonglong)uVar2;
+    if (-1 < (int)uVar2) {
+      return uVar2;
+    }
+    if (DAT_18000c0a0 < 3) {
+      return uVar2;
+    }
+    pcVar7 = "Failed to Stamp the FrameBuffer";
+    do {
+      pcVar7 = pcVar7 + 1;
+    } while (*pcVar7 != '\0');
+    local_58 = "Failed to Stamp the FrameBuffer";
+    local_50 = (int)pcVar7 + 0x7fff7719;
+    uStack_4c = 0;
+    local_48 = local_128;
+    uStack_40 = 4;
+    pbVar5 = &DAT_180009f2a;
+    p_Var6 = a_Stack_78;
+    local_128[0] = uVar2;
+  }
+  FUN_1800011e8(uVar4,pbVar5,param_3,param_4,4,p_Var6);
+  return uVar2;
+}
+
+
+
+//// FUN_180004b90 @180004b90 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+ulonglong FUN_180004b90(undefined8 *param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4
+                       )
+
+{
+  HANDLE hObject;
+  BOOL BVar1;
+  DWORD DVar2;
+  LPCVOID lpBaseAddress;
+  ulonglong uVar3;
+  char *pcVar4;
+  ulonglong uVar5;
+  undefined4 local_e0;
+  undefined4 local_dc;
+  _EVENT_DATA_DESCRIPTOR a_Stack_d8 [2];
+  char *local_b8;
+  int local_b0;
+  undefined4 uStack_ac;
+  undefined1 *local_a8;
+  undefined8 uStack_a0;
+  _EVENT_DATA_DESCRIPTOR a_Stack_98 [2];
+  char *local_78;
+  int local_70;
+  undefined4 uStack_6c;
+  undefined4 *local_68;
+  undefined8 uStack_60;
+  
+  uVar5 = 0;
+  if (param_1 != (undefined8 *)0x0) {
+    hObject = (HANDLE)param_1[2];
+    lpBaseAddress = (LPCVOID)param_1[3];
+    if ((lpBaseAddress != (LPCVOID)0x0) &&
+       ((*(int *)((longlong)param_1 + 0x2c) == 0 ||
+        (lpBaseAddress = (LPCVOID)((longlong)lpBaseAddress + -8), lpBaseAddress != (LPCVOID)0x0))))
+    {
+      BVar1 = UnmapViewOfFile(lpBaseAddress);
+      if (BVar1 == 0) {
+        DVar2 = GetLastError();
+        if ((int)DVar2 < 1) {
+          DVar2 = GetLastError();
+          uVar3 = (ulonglong)DVar2;
+          uVar5 = uVar3;
+        }
+        else {
+          DVar2 = GetLastError();
+          uVar3 = (ulonglong)DVar2;
+          uVar5 = (ulonglong)(DVar2 & 0xffff | 0xc0070000);
+        }
+        if (2 < DAT_18000c0a0) {
+          pcVar4 = "Failed to unmap view";
+          do {
+            pcVar4 = pcVar4 + 1;
+          } while (*pcVar4 != '\0');
+          local_b8 = "Failed to unmap view";
+          local_b0 = (int)pcVar4 + 0x7fff76f9;
+          local_e0 = (undefined4)uVar5;
+          uStack_ac = 0;
+          uStack_a0 = 4;
+          local_a8 = (undefined1 *)&local_e0;
+          FUN_1800011e8(uVar3,&DAT_180009436,param_3,param_4,4,a_Stack_d8);
+        }
+      }
+    }
+    if (hObject != (HANDLE)0x0) {
+      BVar1 = CloseHandle(hObject);
+      if (BVar1 == 0) {
+        uVar3 = 0;
+        if (-1 < (int)uVar5) {
+          DVar2 = GetLastError();
+          if ((int)DVar2 < 1) {
+            DVar2 = GetLastError();
+            uVar3 = (ulonglong)DVar2;
+            uVar5 = uVar3;
+          }
+          else {
+            DVar2 = GetLastError();
+            uVar3 = (ulonglong)DVar2;
+            uVar5 = (ulonglong)(DVar2 & 0xffff | 0xc0070000);
+          }
+        }
+        if (2 < DAT_18000c0a0) {
+          pcVar4 = "Failed to close section";
+          do {
+            pcVar4 = pcVar4 + 1;
+          } while (*pcVar4 != '\0');
+          local_78 = "Failed to close section";
+          local_70 = (int)pcVar4 + 0x7fff76e1;
+          local_dc = (undefined4)uVar5;
+          uStack_6c = 0;
+          local_68 = &local_dc;
+          uStack_60 = 4;
+          FUN_1800011e8(uVar3,&DAT_180009669,param_3,param_4,4,a_Stack_98);
+        }
+      }
+    }
+    if (-1 < (int)uVar5) {
+      param_1[1] = 0;
+      *param_1 = 0;
+      param_1[3] = 0;
+      param_1[2] = 0;
+      param_1[5] = 0;
+      param_1[4] = 0;
+    }
+  }
+  return uVar5;
+}
+
+
+

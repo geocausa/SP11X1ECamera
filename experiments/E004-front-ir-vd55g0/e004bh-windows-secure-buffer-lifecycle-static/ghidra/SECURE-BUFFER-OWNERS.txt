@@ -1,0 +1,457 @@
+TARGET 180005868 FUN_180005868@180005868
+  REF 18003f280 DATA caller=<none>
+  REF 180006870 UNCONDITIONAL_CALL caller=FUN_1800060e0@1800060e0
+
+TARGET 180005968 FUN_180005968@180005968
+  REF 18003f288 DATA caller=<none>
+  REF 180006de8 UNCONDITIONAL_CALL caller=FUN_180006ce0@180006ce0
+  REF 1800044b4 UNCONDITIONAL_CALL caller=FUN_180003c90@180003c90
+  REF 18000697c UNCONDITIONAL_CALL caller=FUN_1800060e0@1800060e0
+
+//// CALLER FUN_1800060e0@1800060e0 ////
+
+uint FUN_1800060e0(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined8 *puVar1;
+  ulonglong uVar2;
+  undefined8 *local_f0;
+  ulonglong *local_e8;
+  longlong local_e0;
+  uint local_d8;
+  undefined8 *local_d0;
+  int local_c8;
+  undefined8 *local_c0;
+  int local_b8;
+  int local_b4;
+  int local_b0;
+  uint local_ac;
+  int local_a8;
+  int local_a4;
+  int local_a0;
+  int local_9c;
+  longlong local_98;
+  longlong local_90;
+  undefined8 *local_88;
+  int local_80;
+  undefined8 local_78;
+  longlong local_70;
+  undefined8 *local_68;
+  undefined8 local_60;
+  undefined8 uStack_58;
+  undefined8 local_50;
+  ulonglong local_40;
+  ulonglong uStack_38;
+  uint local_30 [2];
+  longlong local_28;
+  int local_20;
+  longlong local_18;
+  
+  local_d8 = DAT_180006a60;
+  if (param_1 != 0) {
+    local_e0 = param_1;
+    local_50 = param_2;
+    FUN_180019e00(4,"%s:%d BuildCSLPacket\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x5bc
+                  ,param_5,param_6,param_7,param_8);
+    local_d8 = 0;
+    local_c0 = (undefined8 *)0x0;
+    local_78 = 0;
+    local_d0 = (undefined8 *)0x0;
+    local_90 = 0;
+    local_70 = 0;
+    local_80 = 0;
+    *(longlong *)(local_e0 + 0x74) = local_e0 + 0x74;
+    local_b8 = 0;
+    while( true ) {
+      local_b4 = local_b8;
+      local_a4 = *(int *)(local_e0 + 0x1c);
+      if (local_a4 <= local_b8) break;
+      local_d0 = (undefined8 *)
+                 (local_e0 + 0x74 + (ulonglong)*(uint *)(local_e0 + 0x18) +
+                 (longlong)local_b8 * 0x20);
+      local_c0 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003dde0);
+      local_c0 = (undefined8 *)*local_c0;
+      FUN_1800071c0((undefined8 *)&DAT_18003dde0);
+      puVar1 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003ddf0);
+      local_78 = *puVar1;
+      FUN_1800071c0((undefined8 *)&DAT_18003ddf0);
+      local_c0[1] = local_78;
+      *local_d0 = local_c0;
+      *(undefined4 *)(local_d0 + 1) = 0;
+      if (((local_d0 != (undefined8 *)0x0) && (local_c0 != (undefined8 *)0x0)) &&
+         (*(int *)(local_d0 + 3) == 3)) {
+        local_98 = local_c0[1] + (ulonglong)*(uint *)(local_e0 + 0x34) +
+                   (ulonglong)*(uint *)(local_d0 + 1);
+        local_80 = (int)*local_c0 + *(int *)(local_e0 + 0x34) + *(int *)(local_d0 + 1);
+        local_70 = local_98;
+        if (local_98 != 0) {
+          *(ulonglong *)(local_98 + 0x28) = local_98 + (ulonglong)*(uint *)(local_98 + 0x18);
+        }
+      }
+      if (*(int *)(local_d0 + 3) != 0xc) {
+        local_30[0] = (int)*local_c0 + *(int *)(local_d0 + 1);
+        local_28 = local_c0[1] + (ulonglong)*(uint *)(local_d0 + 1);
+        local_20 = *(int *)(local_d0 + 2) + -1;
+        local_18 = local_e0;
+        FUN_180005a48(local_30);
+      }
+      local_b8 = local_b8 + 1;
+    }
+    local_c8 = 0;
+    while( true ) {
+      local_b0 = local_c8;
+      local_a0 = *(int *)(local_e0 + 0x24);
+      local_a8 = local_c8;
+      local_9c = local_a0;
+      if (local_a0 <= local_c8) break;
+      local_e8 = (ulonglong *)
+                 (local_e0 + 0x74 + (ulonglong)*(uint *)(local_e0 + 0x20) +
+                 (longlong)local_c8 * 0x130);
+      if (*local_e8 == 0) {
+        uVar2 = (ulonglong)(uint)local_e8[0x19];
+        FUN_180019e00(4,"%s:%d pIOConfig->portResourceId is 0x%x\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x608,uVar2,param_6,param_7,param_8);
+        if (((int)local_e8[0x19] != 0x3000) && ((int)local_e8[0x19] != 0x3020)) {
+          FUN_180019e00(1,"%s:%d pIOConfig->hMems[0] = NULL for portResourceId = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x646,(ulonglong)(uint)local_e8[0x19],param_6,param_7,param_8);
+          return DAT_180006a60;
+        }
+        local_f0 = malloc(0xa8);
+        if (local_f0 == (undefined8 *)0x0) {
+          FUN_180019e00(1,"%s:%d Failed to allocate secure buffer\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x63f,uVar2,param_6,param_7,param_8);
+          return DAT_180006a64;
+        }
+        uStack_58 = 0;
+        local_60 = 0;
+        local_68 = local_f0 + 0x14;
+        local_88 = local_f0;
+        do {
+          local_88[1] = 0;
+          *local_88 = 0;
+          local_88[3] = 0;
+          local_88[2] = 0;
+          local_88 = local_88 + 4;
+        } while (local_88 != local_68);
+        *local_88 = 0;
+        *local_f0 = *(undefined8 *)(local_e0 + 8);
+        *(undefined4 *)((longlong)local_f0 + 0x3c) = *(undefined4 *)((longlong)local_e8 + 0x24);
+        *(int *)(local_f0 + 8) = (int)local_e8[5];
+        *(undefined4 *)((longlong)local_f0 + 0x44) = *(undefined4 *)((longlong)local_e8 + 0x2c);
+        *(int *)(local_f0 + 7) = *(int *)((longlong)local_f0 + 0x44) * *(int *)(local_f0 + 8);
+        *(undefined4 *)((longlong)local_f0 + 0x5c) = *(undefined4 *)((longlong)local_e8 + 0x54);
+        *(int *)(local_f0 + 0xc) = (int)local_e8[0xb];
+        *(undefined4 *)((longlong)local_f0 + 100) = *(undefined4 *)((longlong)local_e8 + 0x5c);
+        *(int *)(local_f0 + 0xb) = *(int *)((longlong)local_f0 + 100) * *(int *)(local_f0 + 0xc);
+        *(int *)(local_f0 + 4) = *(int *)(local_f0 + 7) + *(int *)(local_f0 + 0xb);
+        *(undefined4 *)(local_f0 + 0xd) = *(undefined4 *)((longlong)local_e8 + 0xb4);
+        uStack_38 = local_e8[0x24];
+        local_40 = local_e8[0x23];
+        *(ulonglong *)((longlong)local_f0 + 0x74) = uStack_38;
+        *(ulonglong *)((longlong)local_f0 + 0x6c) = local_40;
+        *(int *)((longlong)local_f0 + 0x7c) = (int)local_e8[0x25];
+        *(undefined4 *)(local_f0 + 0x10) = *(undefined4 *)((longlong)local_e8 + 300);
+        *(undefined4 *)((longlong)local_f0 + 0x7c) = *(undefined4 *)(local_f0 + 0x10);
+        local_d8 = FUN_180005868((longlong)local_f0);
+        local_ac = local_d8;
+        if ((int)local_d8 < 0) {
+          FUN_180019e00(1,"%s:%d Failed to get secure image buffer, status = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x639,(ulonglong)local_d8,param_6,param_7,param_8);
+          return local_d8;
+        }
+        FUN_180007180((longlong *)&DAT_18003de00,&local_f0);
+        *local_e8 = (ulonglong)*(uint *)(local_f0 + 5);
+        local_e8[1] = (ulonglong)*(uint *)(local_f0 + 9);
+        if ((*local_e8 == 0) || (local_e8[1] == 0)) {
+          FUN_180019e00(1,"%s:%d Invalid SMMU address for HW programming\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x630,uVar2,param_6,param_7,param_8);
+          local_f0 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003de00);
+          local_f0 = (undefined8 *)*local_f0;
+          FUN_1800071c0((undefined8 *)&DAT_18003de00);
+          FUN_180005968((longlong)local_f0);
+        }
+      }
+      else {
+        local_90 = local_e0 + 0x74 + (ulonglong)*(uint *)(local_e0 + 0x20) +
+                   (longlong)local_c8 * 0x130;
+        if (*(int *)(local_90 + 0x10c) == 1) {
+          local_c0 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003dde0);
+          local_c0 = (undefined8 *)*local_c0;
+          FUN_1800071c0((undefined8 *)&DAT_18003dde0);
+          if (local_c0 != (undefined8 *)0x0) {
+            *local_e8 = (ulonglong)local_c0;
+            FUN_180019e00(4,"%s:%d pIOConfig->hMems[0] is 0x%x\n",
+                          "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                          ,0x602,*local_e8,param_6,param_7,param_8);
+          }
+        }
+      }
+      local_c8 = local_c8 + 1;
+    }
+    FUN_180007180((longlong *)&DAT_18003ddd0,&local_e0);
+  }
+  return local_d8;
+}
+
+
+
+//// CALLER FUN_180006ce0@180006ce0 ////
+
+void FUN_180006ce0(void)
+
+{
+  longlong lVar1;
+  undefined8 *puVar2;
+  longlong *plVar3;
+  
+  while (lVar1 = FUN_180007250(0x18003dde0), lVar1 != 0) {
+    puVar2 = (undefined8 *)FUN_1800071f8((longlong *)&DAT_18003dde0);
+    free((void *)*puVar2);
+    FUN_180007140((longlong *)&DAT_18003dde0);
+  }
+  while (lVar1 = FUN_180007250(0x18003ddf0), lVar1 != 0) {
+    puVar2 = (undefined8 *)FUN_1800071f8((longlong *)&DAT_18003ddf0);
+    free((void *)*puVar2);
+    FUN_180007140((longlong *)&DAT_18003ddf0);
+  }
+  while (lVar1 = FUN_180007250(0x18003ddd0), lVar1 != 0) {
+    puVar2 = (undefined8 *)FUN_1800071f8((longlong *)&DAT_18003ddd0);
+    FUN_180006a70((void *)*puVar2);
+    FUN_180007140((longlong *)&DAT_18003ddd0);
+  }
+  while (lVar1 = FUN_180007250(0x18003de00), lVar1 != 0) {
+    plVar3 = (longlong *)FUN_1800071f8((longlong *)&DAT_18003de00);
+    FUN_180005968(*plVar3);
+    FUN_180007140((longlong *)&DAT_18003de00);
+  }
+  DAT_18003c148._4_4_ = 0x18000000;
+  return;
+}
+
+
+
+//// CALLER FUN_180003c90@180003c90 ////
+
+uint FUN_180003c90(undefined8 param_1,longlong *param_2,undefined8 *param_3,longlong param_4,
+                  ulonglong param_5,ulonglong *param_6,ulonglong param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  ulonglong uVar2;
+  longlong lVar3;
+  undefined8 uVar4;
+  ulonglong uVar5;
+  ulonglong *puVar6;
+  uint local_f0;
+  ulonglong local_88;
+  void *local_80;
+  longlong *local_78;
+  longlong local_70;
+  undefined8 *local_68;
+  longlong local_60;
+  undefined4 local_58;
+  longlong local_50;
+  longlong local_48;
+  undefined8 local_40;
+  undefined8 *local_38;
+  longlong *local_30;
+  longlong *local_28;
+  undefined8 local_20;
+  
+  local_58 = (undefined4)param_7;
+  local_f0 = 0;
+  local_60 = param_4;
+  local_20 = param_1;
+  switch(param_7 & 0xffffffff) {
+  case 0:
+    if ((((param_2 == (longlong *)0x0) || (param_4 != 0x3a0)) || (param_3 == (undefined8 *)0x0)) ||
+       ((param_5 != 0x10 || (param_6 == (ulonglong *)0x0)))) {
+      local_f0 = DAT_180004548;
+    }
+    else {
+      local_70 = param_2[0x73];
+      puVar6 = param_6;
+      local_78 = param_2;
+      local_38 = param_3;
+      lVar3 = FUN_1800046f8(*(longlong *)(local_70 + 8));
+      if (lVar3 == 0) {
+        FUN_180019e00(1,"%s:%d Failed to find seucre image buffer for requestId =%d\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x370,*(undefined8 *)(local_70 + 8),puVar6,param_7,param_8);
+        local_f0 = DAT_18000454c;
+      }
+      else {
+        uVar1 = FUN_1800039f0(0,lVar3,(undefined8 *)0x0,param_4,param_5,puVar6,param_7,param_8);
+        if ((int)uVar1 < 0) {
+          FUN_180019e00(1,"%s:%d Failed to set attribute FrameBuffer, status = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x33d,(ulonglong)uVar1,puVar6,param_7,param_8);
+        }
+        else {
+          FUN_180019e00(4,"%s:%d Successfully set attribute FrameBuffer for requestID %d\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x341,*(undefined8 *)(local_70 + 8),puVar6,param_7,param_8);
+          FUN_1800037c8((undefined8 *)
+                        (*(longlong *)(lVar3 + 0x90) + (ulonglong)*(uint *)(lVar3 + 0x9c)),
+                        *(undefined8 **)(lVar3 + 0x30),*(uint *)(lVar3 + 0x3c),
+                        *(uint *)(lVar3 + 0x40),*(ulonglong *)(local_70 + 8),puVar6,param_7,param_8)
+          ;
+        }
+        local_88 = 0;
+        local_40 = 0;
+        uVar1 = ConvertAuxiliaryCounterToPerformanceCounter(local_78[2],&local_88,&local_40);
+        if ((int)uVar1 < 0) {
+          uVar5 = (ulonglong)uVar1;
+          FUN_180019e00(1,
+                        "%s:%d Failed to convert frame timestamp QTimer = % llu to QPC, status = 0x%x\n"
+                        ,
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x34f,local_78[2],uVar5,param_7,param_8);
+          uVar2 = FUN_1800038d8();
+          uVar4 = 0x351;
+          local_88 = uVar2;
+          FUN_180019e00(4,"%s:%d Using the current QPC for timestamp = % llu\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x351,uVar2,uVar5,param_7,param_8);
+        }
+        else {
+          uVar2 = local_78[2];
+          uVar4 = 0x355;
+          uVar5 = local_88;
+          FUN_180019e00(4,"%s:%d QTimer = % llu, ConvertedQPC = % llu\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x355,uVar2,local_88,param_7,param_8);
+        }
+        uVar1 = FUN_1800039f0(1,lVar3,&local_88,uVar4,uVar2,uVar5,param_7,param_8);
+        if ((int)uVar1 < 0) {
+          uVar2 = (ulonglong)uVar1;
+          uVar4 = 0x35a;
+          FUN_180019e00(1,"%s:%d Failed to set attribute TimeStamp, status = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x35a,uVar2,uVar5,param_7,param_8);
+        }
+        else {
+          uVar4 = 0x35e;
+          FUN_180019e00(4,"%s:%d Successfully set attribute TimeStamp\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x35e,uVar2,uVar5,param_7,param_8);
+        }
+        local_f0 = FUN_1800039f0(3,lVar3,(undefined8 *)0x0,uVar4,uVar2,uVar5,param_7,param_8);
+        if ((int)local_f0 < 0) {
+          FUN_180019e00(1,"%s:%d Failed to set attribute Terminator, status = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x364,(ulonglong)local_f0,uVar5,param_7,param_8);
+        }
+        else {
+          FUN_180019e00(4,"%s:%d Successfully set attribute Terminator\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x368,uVar2,uVar5,param_7,param_8);
+        }
+        uVar4 = *(undefined8 *)(lVar3 + 0x6c);
+        local_38[1] = *(undefined8 *)(lVar3 + 0x74);
+        *local_38 = uVar4;
+        *param_6 = 0x10;
+      }
+    }
+    break;
+  case 1:
+    if (((param_2 == (longlong *)0x0) || (param_4 != 0x10)) ||
+       ((param_3 == (undefined8 *)0x0 || ((param_5 == 0 || (param_6 == (ulonglong *)0x0)))))) {
+      local_f0 = DAT_180004548;
+    }
+    else {
+      puVar6 = param_6;
+      lVar3 = FUN_1800046f8(*param_2);
+      if (lVar3 == 0) {
+        FUN_180019e00(1,"%s:%d Failed to find seucre image buffer for requestId =%d\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x399,*param_2,puVar6,param_7,param_8);
+        local_f0 = DAT_18000454c;
+      }
+      else if (*(int *)((longlong)param_2 + 0xc) == 0) {
+        FUN_180019e00(4,"%s:%d Copying image from secure internal buffer, %p, size = %d\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x38a,*(longlong *)(lVar3 + 0x30) + (ulonglong)*(uint *)(param_2 + 1),param_5,
+                      param_7,param_8);
+        FUN_180028600(param_3,(undefined8 *)
+                              (*(longlong *)(lVar3 + 0x30) + (ulonglong)*(uint *)(param_2 + 1)),
+                      param_5);
+        *param_6 = param_5;
+      }
+      else if (*(int *)((longlong)param_2 + 0xc) == 1) {
+        FUN_180019e00(4,"%s:%d Copying image from secure external buffer, %p, size = %d\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x38f,*(longlong *)(lVar3 + 0x90) + (ulonglong)*(uint *)(param_2 + 1),param_5,
+                      param_7,param_8);
+        FUN_180028600(param_3,(undefined8 *)
+                              (*(longlong *)(lVar3 + 0x90) + (ulonglong)*(uint *)(lVar3 + 0x9c) +
+                              (ulonglong)*(uint *)(param_2 + 1)),param_5);
+        *param_6 = param_5;
+      }
+    }
+    break;
+  case 2:
+    if ((((param_2 == (longlong *)0x0) || (param_4 != 0x3a0)) || (param_3 == (undefined8 *)0x0)) ||
+       ((param_5 != 0x18 || (param_6 == (ulonglong *)0x0)))) {
+      local_f0 = DAT_180004548;
+    }
+    else {
+      local_48 = param_2[0x73];
+      puVar6 = param_6;
+      local_30 = param_2;
+      local_68 = (undefined8 *)FUN_1800046f8(*(longlong *)(local_48 + 8));
+      if (local_68 == (undefined8 *)0x0) {
+        FUN_180019e00(1,"%s:%d Failed to find seucre image buffer for requestId =%d\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x3ba,*(undefined8 *)(local_48 + 8),puVar6,param_7,param_8);
+        local_f0 = DAT_18000454c;
+      }
+      else {
+        *param_3 = *local_68;
+        *(undefined4 *)(param_3 + 1) = *(undefined4 *)((longlong)local_68 + 0x3c);
+        *(undefined4 *)((longlong)param_3 + 0xc) = *(undefined4 *)(local_68 + 8);
+        *(int *)(param_3 + 2) =
+             (int)((double)(uint)(*(int *)(param_3 + 1) * *(int *)((longlong)param_3 + 0xc)) * 1.5);
+        *param_6 = 0x18;
+      }
+    }
+    break;
+  case 3:
+    if ((param_2 == (longlong *)0x0) || (param_4 != 0x3a0)) {
+      local_f0 = DAT_180004548;
+    }
+    else {
+      local_80 = (void *)param_2[0x73];
+      if (local_80 != (void *)0x0) {
+        local_28 = param_2;
+        local_50 = FUN_1800046f8(*(longlong *)((longlong)local_80 + 8));
+        if (local_50 == 0) {
+          FUN_180019e00(1,"%s:%d Failed to find secure image buffer for requestId =%d\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x3d6,*(undefined8 *)((longlong)local_80 + 8),param_6,param_7,param_8);
+          local_f0 = DAT_18000454c;
+        }
+        else {
+          FUN_180005968(local_50);
+          FUN_180004558((longlong *)&DAT_18003de00,&local_50);
+        }
+        FUN_180006a70(local_80);
+        FUN_180004558((longlong *)&DAT_18003ddd0,&local_80);
+      }
+    }
+    break;
+  default:
+    local_f0 = DAT_180004548;
+  }
+  return local_f0;
+}
+
+
+

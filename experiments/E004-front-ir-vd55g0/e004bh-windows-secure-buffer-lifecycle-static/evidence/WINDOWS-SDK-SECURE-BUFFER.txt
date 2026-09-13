@@ -1,0 +1,254 @@
+E004bh INSTALLED SP11 WINDOWS SDK SECURE CAMERA BUFFER CONTRACT
+sdk=10.0.26100.0
+
+--- ksmedia.h secure capture allocation + descriptor ---
+//===========================================================================
+
+//
+// Capture MemoryAllocationFlags
+//
+typedef enum {
+        KS_CAPTURE_ALLOC_INVALID                = 0,
+        KS_CAPTURE_ALLOC_SYSTEM                 = 0x0001,  // surface in system memory
+        KS_CAPTURE_ALLOC_VRAM                   = 0x0002,  // surface in display memory
+        KS_CAPTURE_ALLOC_SYSTEM_AGP             = 0x0004,  // surface in system memory tagged as AGP accessible
+        KS_CAPTURE_ALLOC_VRAM_MAPPED            = 0x0008,  // surface in system memory mapped into VRAM address space
+        KS_CAPTURE_ALLOC_SECURE_BUFFER          = 0x0010   // secure buffer in VTL1
+}CAPTURE_MEMORY_ALLOCATION_FLAGS, *PCAPTURE_MEMORY_ALLOCATION_FLAGS;
+
+//
+//Video memory capture KSPROPSETID
+//
+#define STATIC_KSPROPSETID_VramCapture\
+    0xe73face3, 0x2880, 0x4902, 0xb7, 0x99, 0x88, 0xd0, 0xcd, 0x63, 0x4e, 0xf
+DEFINE_GUIDSTRUCT("E73FACE3-2880-4902-B799-88D0CD634E0F", KSPROPSETID_VramCapture);
+#define KSPROPSETID_VramCapture DEFINE_GUIDNAMED(KSPROPSETID_VramCapture)
+
+typedef enum {
+    //
+    // enum value '0' means an invalid KSPROPERTY request.
+    // Drivers should return an error.
+    //
+    KSPROPERTY_DISPLAY_ADAPTER_GUID = 1,                        //Returns the Adapter GUID.
+    KSPROPERTY_PREFERRED_CAPTURE_SURFACE,                       //Returns the memory surface preferred by that pin
+    KSPROPERTY_CURRENT_CAPTURE_SURFACE,                         //Sets/Gets currently selected capture surface
+    KSPROPERTY_MAP_CAPTURE_HANDLE_TO_VRAM_ADDRESS       //Maps VRAM surface handle to VRAM physical address
+} KSPROPERTY_VIDMEM_TRANSPORT;
+
+#define DEFINE_KSPROPERTY_ITEM_DISPLAY_ADAPTER_GUID(GetHandler)\
+    DEFINE_KSPROPERTY_ITEM(\
+        KSPROPERTY_DISPLAY_ADAPTER_GUID,\
+        (GetHandler),\
+        sizeof(KSPROPERTY),\
+        sizeof(GUID),\
+        NULL,\
+        NULL, 0, NULL, NULL, 0)
+#define DEFINE_KSPROPERTY_PREFERRED_CAPTURE_SURFACE(GetHandler)\
+    DEFINE_KSPROPERTY_ITEM(\
+        KSPROPERTY_PREFERRED_CAPTURE_SURFACE,\
+        (GetHandler),\
+        sizeof(KSPROPERTY),\
+        sizeof(CAPTURE_MEMORY_ALLOCATION_FLAGS),\
+        NULL,\
+        NULL, 0, NULL, NULL, 0)
+#define DEFINE_KSPROPERTY_CURRENT_CAPTURE_SURFACE(GetHandler, SetHandler)\
+    DEFINE_KSPROPERTY_ITEM(\
+        KSPROPERTY_CURRENT_CAPTURE_SURFACE,\
+        (GetHandler),\
+        sizeof(KSPROPERTY),\
+        sizeof(CAPTURE_MEMORY_ALLOCATION_FLAGS),\
+        (SetHandler),\
+        NULL, 0, NULL, NULL, 0)
+#define DEFINE_KSPROPERTY_MAP_CAPTURE_HANDLE_TO_VRAM_ADDRESS(GetHandler)\
+    DEFINE_KSPROPERTY_ITEM(\
+        KSPROPERTY_MAP_CAPTURE_HANDLE_TO_VRAM_ADDRESS,\
+        (GetHandler),\
+        sizeof(VRAM_SURFACE_INFO_PROPERTY_S),\
+        sizeof(DWORD),\
+        NULL,\
+        NULL, 0, NULL, NULL, 0)
+
+//
+//Surface info passed on to the mini driver.
+//
+typedef struct {
+    UINT_PTR hSurface;
+    LONGLONG VramPhysicalAddress;
+    DWORD cbCaptured;
+    DWORD dwWidth;
+    DWORD dwHeight;
+    DWORD dwLinearSize;
+    LONG  lPitch;
+    ULONGLONG ullReserved[16];
+} VRAM_SURFACE_INFO, *PVRAM_SURFACE_INFO;
+
+typedef struct {
+        KSPROPERTY Property;
+        PVRAM_SURFACE_INFO pVramSurfaceInfo;
+}VRAM_SURFACE_INFO_PROPERTY_S, *PVRAM_SURFACE_INFO_PROPERTY_S;
+
+//
+//Secure buffer info passed on to the mini driver.
+//
+typedef struct {
+    GUID guidBufferIdentifier;
+    DWORD cbBufferSize;
+    DWORD cbCaptured;
+    ULONGLONG ullReserved[16];
+} SECURE_BUFFER_INFO, *PSECURE_BUFFER_INFO;
+
+// Sceanrio ID for secure buffer for camera
+#define STATIC_KS_SECURE_CAMERA_SCENARIO_ID \
+    0xAE53FC6E, 0x8D89, 0x4488, 0x9D, 0x2E, 0x4D, 0x00, 0x87, 0x31, 0xC5, 0xFD
+DEFINE_GUIDSTRUCT("AE53FC6E-8D89-4488-9D2E-4D008731C5FD", KS_SECURE_CAMERA_SCENARIO_ID);
+#define KS_SECURE_CAMERA_SCENARIO_ID DEFINE_GUIDNAMED(KS_SECURE_CAMERA_SCENARIO_ID)
+
+#define STATIC_KSPROPSETID_MPEG4_MediaType_Attributes\
+    0xff6c4bfa, 0x7a9, 0x4c7b, 0xa2, 0x37, 0x67, 0x2f, 0x9d, 0x68, 0x6, 0x5f
+DEFINE_GUIDSTRUCT("FF6C4BFA-07A9-4c7b-A237-672F9D68065F", KSPROPSETID_MPEG4_MediaType_Attributes);
+#define KSPROPSETID_MPEG4_MediaType_Attributes DEFINE_GUIDNAMED(KSPROPSETID_MPEG4_MediaType_Attributes)
+
+typedef enum {
+    KSPROPERTY_MPEG4_MEDIATYPE_SD_BOX = 1
+
+--- ks.h secure transfer flag + stream header ---
+#define KSSTREAM_HEADER_OPTIONSF_PERSIST_SAMPLE     0x00008000   
+#define KSSTREAM_HEADER_OPTIONSF_SAMPLE_PERSISTED   0x00010000
+
+//
+// This flag tells the user mode to look at frame completion numbers
+//
+#define KSSTREAM_HEADER_TRACK_COMPLETION_NUMBERS   0x00020000
+
+//
+//End of MDL caching related definitions		
+#define KSSTREAM_HEADER_OPTIONSF_SECUREBUFFERTRANSFER 0x00040000
+#define KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA         0x80000000
+
+typedef struct {
+    LONGLONG    Time;
+    ULONG       Numerator;
+    ULONG       Denominator;
+} KSTIME, *PKSTIME;
+
+typedef struct {
+    ULONG       Size;
+    ULONG       TypeSpecificFlags;
+    KSTIME      PresentationTime;
+    LONGLONG    Duration;
+    ULONG       FrameExtent;
+    ULONG       DataUsed;
+    _Field_size_bytes_(FrameExtent)
+    PVOID       Data;
+    ULONG       OptionsFlags;
+#if _WIN64
+    ULONG       Reserved;
+#endif
+} KSSTREAM_HEADER, *PKSSTREAM_HEADER;
+
+typedef struct {
+    ULONG       BufferSize;
+    ULONG       UsedSize;
+    _Field_size_bytes_(BufferSize)
+    PVOID       Data;    // Metadata buffer passed down by user mode (mapped to SystemVa)
+    _Field_size_bytes_(BufferSize)
+    PVOID       SystemVa;  // Metadata buffer that driver will fill metadata to
+    ULONG       Flags;
+    ULONG       Reserved;
+} KSSTREAM_METADATA_INFO, *PKSSTREAM_METADATA_INFO;
+
+
+--- winbio secure import + secure-buffer lifetime API ---
+    _In_ SIZE_T RawBufferSize,
+    _Outptr_result_bytebuffer_maybenull_(*ResultBufferSize) PUCHAR *ResultBufferAddress,
+    _Out_opt_ SIZE_T *ResultBufferSize
+    );
+
+typedef HRESULT
+(WINAPI *PIBIO_SENSOR_ASYNC_IMPORT_SECURE_BUFFER_FN)(
+    _Inout_ PWINBIO_PIPELINE Pipeline,
+    _In_ GUID SecureBufferIdentifier,
+    _In_reads_bytes_opt_(MetadataBufferSize) PUCHAR MetadataBufferAddress,
+    _In_ SIZE_T MetadataBufferSize,
+    _Outptr_result_bytebuffer_maybenull_(*ResultBufferSize) PUCHAR *ResultBufferAddress,
+    _Out_opt_ SIZE_T *ResultBufferSize
+    );
+
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
+//
+// Additional methods available in V5.0 and later
+//
+typedef HRESULT
+(WINAPI *PIBIO_SENSOR_QUERY_PRIVATE_SENSOR_TYPE_FN)(
+    _Inout_ PWINBIO_PIPELINE Pipeline,
+
+#endif  // NTDDI_VERSION >= NTDDI_WIN10_RS2
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
+
+//
+// Methods available in V6.0 and later
+//
+typedef HRESULT
+(WINAPI *PIBIO_FRAMEWORK_LOCK_AND_VALIDATE_SECURE_BUFFER_FN)(
+    _Inout_ PWINBIO_PIPELINE Pipeline,
+    _In_ GUID SecureBufferIdentifier,
+    _Outptr_result_bytebuffer_(*SecureBufferSize) PVOID *SecureBufferAddress,
+    _Out_ SIZE_T *SecureBufferSize
+    );
+
+typedef HRESULT
+(WINAPI *PIBIO_FRAMEWORK_RELEASE_SECURE_BUFFER_FN)(
+    _Inout_ PWINBIO_PIPELINE Pipeline,
+    _In_ GUID SecureBufferIdentifier
+    );
+
+#endif // NTDDI_VERSION >= NTDDI_WIN10_RS3
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS4)
+
+//
+// Methods available in V7.0 and later
+//
+
+typedef HRESULT
+    PIBIO_SENSOR_DETACH_FN                                      VsmSensorDetach;
+    PIBIO_SENSOR_CLEAR_CONTEXT_FN                               VsmSensorClearContext;
+    PIBIO_SENSOR_PUSH_DATA_TO_ENGINE_FN                         VsmSensorPushDataToEngine;
+    PIBIO_SENSOR_NOTIFY_POWER_CHANGE_FN                         VsmSensorNotifyPowerChange;
+    PIBIO_SENSOR_PIPELINE_INIT_FN                               VsmSensorPipelineInit;
+    PIBIO_SENSOR_PIPELINE_CLEANUP_FN                            VsmSensorPipelineCleanup;
+    PIBIO_SENSOR_ACTIVATE_FN                                    VsmSensorActivate;
+    PIBIO_SENSOR_DEACTIVATE_FN                                  VsmSensorDeactivate;
+    PIBIO_SENSOR_ASYNC_IMPORT_RAW_BUFFER_FN                     VsmSensorAsyncImportRawBuffer;
+    PIBIO_SENSOR_ASYNC_IMPORT_SECURE_BUFFER_FN                  VsmSensorAsyncImportSecureBuffer;
+
+    PIBIO_FRAMEWORK_VSM_STORAGE_RESERVED_1_FN                   Reserved1;
+    PIBIO_FRAMEWORK_VSM_STORAGE_RESERVED_2_FN                   Reserved2;
+    PIBIO_FRAMEWORK_VSM_STORAGE_RESERVED_3_FN                   Reserved3;
+    PIBIO_STORAGE_RESERVED_1_FN                                 Reserved4;
+    PIBIO_STORAGE_RESERVED_2_FN                                 Reserved5;
+
+    //
+    // (Upcalls...)
+    //
+    PIBIO_FRAMEWORK_ALLOCATE_MEMORY_FN                          AllocateMemory;
+    PIBIO_FRAMEWORK_FREE_MEMORY_FN                              FreeMemory;
+    PIBIO_FRAMEWORK_GET_PROPERTY_FN                             GetProperty;
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS3)
+    //
+    // V6.0 methods begin here...
+    //
+    // (Upcalls...)
+    //
+    PIBIO_FRAMEWORK_LOCK_AND_VALIDATE_SECURE_BUFFER_FN          LockAndValidateSecureBuffer;
+    PIBIO_FRAMEWORK_RELEASE_SECURE_BUFFER_FN                    ReleaseSecureBuffer;
+#endif
+
+#if (NTDDI_VERSION >= NTDDI_WIN10_RS4)
+    //
+    // V7.0 methods begin here...

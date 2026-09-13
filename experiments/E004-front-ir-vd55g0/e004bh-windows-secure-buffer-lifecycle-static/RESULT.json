@@ -1,0 +1,79 @@
+{
+  "schema": "sp11-camera-e004bh-windows-secure-buffer-lifecycle-static-v1",
+  "status": "PASS_WINDOWS_VTL1_GUID_SECURE_BUFFER_DISTINCT_FROM_LANE_LIFETIME",
+  "date": "2026-09-13",
+  "authority_policy": "Windows dynamic first; static Windows fallback for trustlet/platform internals; Linux only as parity target.",
+  "windows_sdk": {
+    "secure_capture_surface": "0x0010",
+    "secure_capture_surface_meaning": "secure buffer in VTL1",
+    "secure_transfer_flag": "0x00040000",
+    "buffered_transfer_flag": "0x00000400",
+    "surfacecam_combined_mask": "0x00040400",
+    "secure_buffer_info": [
+      "GUID guidBufferIdentifier",
+      "DWORD cbBufferSize",
+      "DWORD cbCaptured",
+      "ULONGLONG ullReserved[16]"
+    ],
+    "biometric_import_identity": "GUID SecureBufferIdentifier"
+  },
+  "surfacecam": {
+    "recognizes_secure_surface_0x10": true,
+    "checks_combined_mask_0x40400": true,
+    "secure_descriptor_source": "KSSTREAM_HEADER.Data",
+    "descriptor_layout_matches_windows_sdk": true,
+    "forwards_external_secure_identity_into_ife_request": true
+  },
+  "trustlet": {
+    "internal_buffer": {
+      "created_with_secure_section": true,
+      "assigned_domain": "0x0d",
+      "domain_name_crosscheck": "CP_CAMERA",
+      "assignment_handle_retained": true
+    },
+    "external_buffer": {
+      "opened_with_secure_section": true,
+      "created_by_trustlet": false,
+      "identity_carried_from_external_camera_buffer": true
+    },
+    "pair_order": [
+      "internal_secure_buffer",
+      "external_secure_buffer"
+    ],
+    "per_request_release": true,
+    "deinit_sweeps_remaining_buffers": true
+  },
+  "windows_dynamic": {
+    "source": "E004aq",
+    "raw_sha256": "5dfac22112c9d0cf2ae9cb1f1ef9cb43a00084aabba6d8e0a8da7c9440086ad3",
+    "process_csl_packet_before_protected_start": true,
+    "protected_worker_stop_before_unprotect": true,
+    "final_deinit_after_unprotect": true,
+    "individual_secure_section_calls_observed_directly": false
+  },
+  "biometric_consumer": {
+    "component": "BioIso.exe",
+    "sha256": "2d1e2bb0072a935ac73702dae735961ee208e989287e50c1d3fc888825264a65",
+    "async_import_secure_buffer": true,
+    "open_secure_section": true
+  },
+  "platform_corroboration": {
+    "component": "SecureUSBVideo.dll",
+    "sha256": "378f2830f5867f31ec5c63b95fe7e35f78d48bc139989db79590c5ac7d5d7521",
+    "creates_guid_secure_sections": true,
+    "opens_incoming_secure_sections": true,
+    "surface_mipi_ir_allocator_proven": false
+  },
+  "parity_consequence": {
+    "lane_ownership_and_secure_sample_lifetime_are_distinct": true,
+    "external_secure_sample_and_cp_camera_internal_buffer_are_distinct": true,
+    "linux_single_secure_buffer_toggle_is_insufficient": true
+  },
+  "windows_volume_read_only": true,
+  "linux_secure_runtime_executed": false,
+  "linux_memory_reassignment": false,
+  "protected_mmio_access_linux": false,
+  "qcomtee_loaded": false,
+  "unresolved": "Exact Windows allocator/owner for each Surface MIPI IR external VTL1 secure section.",
+  "next_gate": "Windows-first owner map for secure capture-surface selection and MIPI external secure-section allocation."
+}

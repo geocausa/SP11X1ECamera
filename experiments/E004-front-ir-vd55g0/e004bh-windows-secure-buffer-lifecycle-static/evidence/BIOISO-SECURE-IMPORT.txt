@@ -1,0 +1,305 @@
+E004bh INSTALLED BIOISO SECURE-BUFFER CONSUMER
+/mnt/windows/Windows/System32/BioIso.exe: PE32+ executable for MS Windows 10.00 (GUI), ARM64, 12 sections
+2d1e2bb0072a935ac73702dae735961ee208e989287e50c1d3fc888825264a65  /mnt/windows/Windows/System32/BioIso.exe
+bytes=787920 mtime=2026-09-08 19:22:13.090098200 +0100
+
+Installed SDK contract: SensorAdapter AsyncImportSecureBuffer receives GUID SecureBufferIdentifier.
+BioIso strings/decomp independently expose SensorAdapterAsyncImportSecureBuffer and OpenSecureSection.
+
+--- focused BioIso decomp ---
+//// FUN_140058ad0 @140058ad0 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+ulonglong FUN_140058ad0(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+                       undefined8 param_5)
+
+{
+  uint uVar1;
+  HANDLE hFileMappingObject;
+  LPVOID lpAddress;
+  SIZE_T SVar2;
+  ulonglong uVar3;
+  undefined8 uVar4;
+  ulonglong uVar5;
+  undefined8 unaff_x30;
+  ulonglong local_90;
+  longlong lStack_88;
+  _MEMORY_BASIC_INFORMATION local_80;
+  undefined4 local_50;
+  undefined8 local_4c;
+  undefined8 uStack_44;
+  undefined8 local_3c;
+  undefined8 uStack_34;
+  
+  uStack_44 = *(undefined8 *)(param_1 + 0x18);
+  local_4c = *(undefined8 *)(param_1 + 0x10);
+  local_50 = 0x24;
+  uStack_34 = _UNK_140095900;
+  local_3c = _DAT_1400958f8;
+  hFileMappingObject = (HANDLE)OpenSecureSection(OpenSecureSection_exref,&local_50);
+  *(HANDLE *)(param_1 + 0x28) = hFileMappingObject;
+  if (hFileMappingObject == (HANDLE)0x0) {
+    uVar3 = 0x3b;
+  }
+  else {
+    param_5 = 0;
+    param_4 = 0;
+    lpAddress = MapViewOfFile(hFileMappingObject,2,0,0,0);
+    *(LPVOID *)(param_1 + 0x30) = lpAddress;
+    if (lpAddress == (LPVOID)0x0) {
+      uVar3 = 0x46;
+    }
+    else {
+      local_80.AllocationBase = (PVOID)0x0;
+      local_80.BaseAddress = (PVOID)0x0;
+      local_80.RegionSize = 0;
+      local_80.AllocationProtect = 0;
+      local_80._20_4_ = 0;
+      local_80.Type = 0;
+      local_80._44_4_ = 0;
+      local_80.State = 0;
+      local_80.Protect = 0;
+      SVar2 = VirtualQuery(lpAddress,&local_80,0x30);
+      if (SVar2 != 0) {
+        *(SIZE_T *)(param_1 + 0x38) = local_80.RegionSize;
+        *(bool *)(param_1 + 0x50) = (local_80._32_8_ & 0x400000000) != 0;
+        uVar3 = FUN_140058c48(param_1);
+        uVar5 = uVar3 & 0xffffffff;
+        if ((int)uVar3 < 0) {
+          uVar4 = 0x50;
+        }
+        else {
+          local_90 = 0;
+          lStack_88 = 0;
+          uVar1 = FUN_1400088b0(param_1,0,&local_90,&lStack_88,param_5);
+          uVar5 = (ulonglong)uVar1;
+          if (-1 < (int)uVar1) {
+            *(ulonglong *)(param_1 + 0x40) = local_90;
+            *(longlong *)(param_1 + 0x48) = lStack_88;
+            return 0;
+          }
+          uVar4 = 0x57;
+        }
+        FUN_14000f748(unaff_x30,uVar4,
+                      "onecore\\ds\\security\\biometrics\\service\\trustlet\\exe\\secureinput.cpp",
+                      uVar5,param_5);
+        goto LAB_140058c10;
+      }
+      uVar3 = 0x4b;
+    }
+  }
+  uVar1 = FUN_14000f718(unaff_x30,uVar3,
+                        "onecore\\ds\\security\\biometrics\\service\\trustlet\\exe\\secureinput.cpp"
+                        ,param_4,param_5);
+  uVar5 = (ulonglong)uVar1;
+LAB_140058c10:
+  FUN_140008ab8(param_1);
+  return uVar5;
+}
+
+
+
+//// FUN_140008ab8 @140008ab8 ////
+
+BOOL FUN_140008ab8(longlong param_1)
+
+{
+  undefined1 *puVar1;
+  BOOL BVar2;
+  longlong lVar3;
+  
+  if (*(undefined1 **)(param_1 + 0x30) != (undefined1 *)0x0) {
+    if (*(char *)(param_1 + 0x50) != '\0') {
+      puVar1 = *(undefined1 **)(param_1 + 0x30);
+      for (lVar3 = *(longlong *)(param_1 + 0x38); lVar3 != 0; lVar3 = lVar3 + -1) {
+        *puVar1 = 0;
+        puVar1 = puVar1 + 1;
+      }
+    }
+    UnmapViewOfFile(*(LPCVOID *)(param_1 + 0x30));
+  }
+  BVar2 = 0;
+  if (*(HANDLE *)(param_1 + 0x28) != (HANDLE)0x0) {
+    BVar2 = CloseHandle(*(HANDLE *)(param_1 + 0x28));
+  }
+  *(undefined8 *)(param_1 + 0x18) = 0;
+  *(undefined8 *)(param_1 + 0x10) = 0;
+  *(undefined8 *)(param_1 + 0x28) = 0;
+  *(undefined8 *)(param_1 + 0x30) = 0;
+  *(undefined8 *)(param_1 + 0x38) = 0;
+  *(undefined8 *)(param_1 + 0x40) = 0;
+  *(undefined8 *)(param_1 + 0x48) = 0;
+  *(undefined1 *)(param_1 + 0x50) = 0;
+  return BVar2;
+}
+
+
+
+//// FUN_14000cad8 @14000cad8 ////
+
+void FUN_14000cad8(HANDLE param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5)
+
+{
+  BOOL BVar1;
+  undefined8 unaff_x30;
+  
+  BVar1 = CloseHandle(param_1);
+  if (BVar1 == 0) {
+    FUN_140010dc0(unaff_x30,0x9dd,param_3,param_4,param_5);
+  }
+  return;
+}
+
+
+
+//// FUN_140009b60 @140009b60 ////
+
+BOOL FUN_140009b60(void)
+
+{
+  BOOL BVar1;
+  
+  DeleteCriticalSection((LPCRITICAL_SECTION)&DAT_1400b4a90);
+  BVar1 = 0;
+  if (DAT_1400b4a88 != 0) {
+    BVar1 = CloseHandle((HANDLE)DAT_1400b4a88);
+  }
+  return BVar1;
+}
+
+
+
+//// FUN_140012720 @140012720 ////
+
+HANDLE FUN_140012720(undefined8 *param_1)
+
+{
+  uint uVar1;
+  HANDLE hObject;
+  
+  hObject = (HANDLE)*param_1;
+  if ((longlong)hObject - 1U < 0xfffffffffffffffe) {
+    uVar1 = CloseHandle(hObject);
+    hObject = (HANDLE)(ulonglong)uVar1;
+  }
+  return hObject;
+}
+
+
+
+//// FUN_140004518 @140004518 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+undefined4 FUN_140004518(undefined8 param_1,undefined8 param_2,undefined8 param_3)
+
+{
+  undefined4 uVar1;
+  undefined4 local_b0;
+  undefined4 uStack_ac;
+  wchar_t *local_a8;
+  undefined8 local_a0;
+  wchar_t **local_98;
+  undefined8 *puStack_90;
+  undefined1 *local_88;
+  undefined8 uStack_80;
+  undefined4 *local_78;
+  undefined8 local_70;
+  undefined **local_68;
+  undefined8 **ppuStack_60;
+  undefined8 auStack_48 [5];
+  
+  local_70 = 0xfffffffffffffffe;
+  local_a8 = L"SensorAdapterAsyncImportSecureBuffer";
+  local_b0 = 0;
+  uStack_ac = 0;
+  local_a0 = param_2;
+  FUN_140012358(&local_68,L"SensorAdapterAsyncImportSecureBuffer");
+  FUN_140021478(auStack_48,(longlong *)&local_68);
+  FUN_1400126c0(&local_68);
+  local_98 = &local_a8;
+  puStack_90 = &local_a0;
+  local_78 = &uStack_ac;
+  ppuStack_60 = &local_98;
+  local_68 = &PTR_FUN_140084c58;
+  local_88 = (undefined1 *)&local_b0;
+  uStack_80 = param_3;
+  FUN_1400200c8();
+  uVar1 = local_b0;
+  FUN_140018d40(auStack_48);
+  return uVar1;
+}
+
+
+
+  undefined4 local_88;
+  undefined4 *local_80;
+  undefined1 local_78;
+  
+  local_268 = 0xfffffffffffffffe;
+  uVar12 = param_5 & 0xffffffff;
+  local_188 = "AsyncImportSecureBuffer";
+  uStack_180 = 0;
+  local_1b8 = 0;
+  local_1b4 = 0;
+  local_178 = 0;
+  local_190[0] = 0;
+  local_170 = 0;
+  local_d0 = 0;
+  uStack_c8 = 0;
+  puVar17 = auStack_168;
+  do {
+    puVar13 = puVar17;
+    puVar17 = puVar13 + 4;
+    puVar13[1] = 0;
+    *puVar13 = 0;
+    puVar13[3] = 0;
+    puVar13[2] = 0;
+  } while (puVar17 != auStack_168 + 0x10);
+  puVar13[5] = 0;
+  *puVar17 = 0;
+  puVar13[6] = 0;
+  local_c0 = 1;
+  local_b0 = &local_1b8;
+  local_b8 = 0;
+  local_98 = &local_1c0;
+  local_a8 = (uint *)0x0;
+  uStack_a0 = 0;
+  uStack_90 = 0;
+  local_80 = local_190;
+  local_88 = 0;
+  local_78 = 0;
+  local_1c0 = &PTR_FUN_140085570;
+  pcVar10 = param_3;
+  uVar11 = param_4;
+  local_278 = param_2;
+  local_270 = param_7;
+  FUN_140028b70((longlong)&local_1c0);
+  if (param_1 == (uint *)0x0) {
+    uVar11 = (ulonglong)DAT_140006008;
+    pcVar10 = "onecore\\ds\\security\\biometrics\\service\\trustlet\\exe\\bioisosrv.cpp";
+    FUN_14000f748(unaff_x30,0x1b8,
+                  "onecore\\ds\\security\\biometrics\\service\\trustlet\\exe\\bioisosrv.cpp",uVar11,
+                  param_5);
+    local_1c0 = &PTR_FUN_140085570;
+    lVar15 = 1;
+    if (local_a8 == (uint *)0x0) {
+LAB_140005a18:
+      piVar3 = local_b0;
+      if (*local_b0 == 1) {
+        iVar7 = local_b0[0x16];
+        if (-1 < local_b0[0x16]) {
+          iVar7 = DAT_14000600c;
+        }
+        piVar1 = local_b0 + 0x3e;
+        if (*piVar1 < 1) {
+          puVar17 = auStack_258;
+          do {
+            puVar13 = puVar17;
+            puVar17 = puVar13 + 4;
+            puVar13[1] = 0;

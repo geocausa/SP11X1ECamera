@@ -1,0 +1,464 @@
+E004bh SURFACECAM KS SECURE-BUFFER BRIDGE
+b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed  /home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/surfacecamavs8380.sys
+
+--- extracted constants ---
+14008d378 u32=0x00040400
+140018ea0 u32=0x00040400
+14008e2a4 u32=0x00040400
+14008d370 u32=0x8000001a
+14008d374 u32=0xc000000d
+
+--- CPin secure matching / Data descriptor ---
+  uStack_80 = param_3[0xf];
+  uStack_58 = param_3[0x14];
+  uStack_68 = (undefined4)param_3[0x12];
+  uStack_64 = (undefined4)((ulonglong)param_3[0x12] >> 0x20);
+  local_70 = (undefined4)param_3[0x11];
+  uStack_6c = (undefined4)((ulonglong)param_3[0x11] >> 0x20);
+  uStack_60 = (undefined4)param_3[0x13];
+  uStack_5c = (undefined4)((ulonglong)param_3[0x13] >> 0x20);
+  if ((*(int *)(param_1 + 0x88) == 2) || (iVar15 = -0x3fffffff, *(uint *)(param_1 + 0x10) < 3)) {
+    iVar15 = *(int *)(param_1 + 0x10);
+    uVar3 = (uint)local_d0;
+    if (iVar15 == 0) {
+      if (*(char *)(param_1 + 0x148) != '\0') goto LAB_1400188d8;
+LAB_1400188b8:
+      if (iVar15 == 1) goto LAB_1400188d0;
+    }
+    else {
+      if (iVar15 != 2) goto LAB_1400188b8;
+LAB_1400188d0:
+      if (*(char *)(param_1 + 0x148) != '\0') {
+LAB_1400188d8:
+        (*(code *)PTR__guard_check_icall_14002c3b8)
+                  (*(undefined8 *)(*(longlong *)param_1 + 0x90),param_1,local_d0 & 0xffffffff);
+        uVar3 = (*extraout_x15)();
+      }
+    }
+    plVar14 = (longlong *)KsPinGetFirstCloneStreamPointer(*(undefined8 *)(param_1 + 8));
+    uVar6 = DAT_140018ea0;
+    if (plVar14 != (longlong *)0x0) {
+      lVar1 = CONCAT44(uStack_60,uStack_64);
+      lVar5 = CONCAT44(uStack_68,uStack_6c);
+      do {
+        if (*plVar14 == 0) {
+          FUN_14001c1d8(0,0x140024290,0,
+                        "{CPin::GetMatchingExtBuffer} Invalid STREAM_POINTER_CONTEXT!!\n",param_5,
+                        param_6,param_7,param_8);
+        }
+        else {
+          lVar12 = plVar14[2];
+          if (lVar12 == 0) {
+            pcVar7 = "{CPin::GetMatchingExtBuffer} pStreamHeader is NULL\n";
+LAB_140018a60:
+            FUN_14001c1d8(0,0x140024290,0,pcVar7,param_5,param_6,param_7,param_8);
+            iVar15 = DAT_140018ea4;
+            goto LAB_1400189c4;
+          }
+          if ((uVar6 & (*(uint *)(lVar12 + 0x30) ^ 0xffffffff)) == 0) {
+            plVar13 = *(longlong **)(lVar12 + 0x28);
+            if (plVar13 == (longlong *)0x0) {
+              pcVar7 = "{CPin::GetMatchingExtBuffer} pSecureBufferInfo is NULL\n";
+              goto LAB_140018a60;
+            }
+            if (lVar5 != *plVar13) goto LAB_1400189a4;
+            bVar2 = lVar1 == plVar13[1];
+          }
+          else {
+            bVar2 = *(ulonglong *)(*plVar14 + 8) == (ulonglong)uVar3;
+          }
+          if (bVar2) {
+            iVar15 = 0;
+            goto LAB_1400189c4;
+          }
+        }
+LAB_1400189a4:
+        plVar14 = (longlong *)KsStreamPointerGetNextClone(plVar14);
+      } while (plVar14 != (longlong *)0x0);
+    }
+    plVar14 = (longlong *)0x0;
+    iVar15 = -0x3fffffff;
+  }
+LAB_1400189c4:
+  iVar11 = *(int *)(param_1 + 0x10);
+  if (iVar11 == 0) {
+    if (*(char *)(param_1 + 0x148) != '\0') goto LAB_140018a90;
+LAB_1400189d8:
+    if (iVar11 == 1) goto LAB_140018a88;
+LAB_1400189e0:
+    iVar9 = *(int *)(param_1 + 0x30);
+    iVar11 = *(int *)(param_1 + 0x34);
+  }
+  else {
+    if (iVar11 != 2) goto LAB_1400189d8;
+LAB_140018a88:
+    if (*(char *)(param_1 + 0x148) == '\0') goto LAB_1400189e0;
+LAB_140018a90:
+    iVar11 = *(int *)(param_1 + 0x68) + *(int *)(param_1 + 0x5c) + *(int *)(param_1 + 0x50);
+    iVar9 = *(int *)(param_1 + 0x44);
+  }
+  uVar3 = iVar11 + iVar9;
+  if (iVar15 < 0) {
+    (*(code *)PTR__guard_check_icall_14002c3b8)
+              (*(undefined8 *)(*(longlong *)param_1 + 0xd8),param_1);
+    uVar8 = (*extraout_x15_04)();
+    FUN_14001c1d8(0,0x140024290,0,
+                  "{CPin::CompleteFrame} CPin::CompleteFrame: %s Cannot find matching external buffer\n"
+                  ,uVar8,param_6,param_7,param_8);
+    return 0xc0000001;
+  }
+  uVar6 = uVar3;
+  if (*(int *)(param_1 + 0x88) == 1) {
+    uVar4 = KsStreamPointerGetMdl(plVar14);
+    KeFlushIoBuffers(uVar4,1,1);
+    if (*(char *)(param_1 + 0x98) != '\0') {
+      lVar5 = KsStreamPointerGetMdl(plVar14);
+      if ((*(ushort *)(lVar5 + 10) & 5) == 0) {
+        param_6 = (ulonglong)DAT_140018ea8;
+
+--- CPin secure buffer extraction ---
+//// FUN_14008d160 @14008d160 ////
+
+undefined4
+FUN_14008d160(longlong param_1,undefined8 param_2,longlong param_3,undefined8 param_4,
+             ulonglong param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  longlong *plVar3;
+  ulonglong uVar4;
+  char *pcVar5;
+  undefined8 uVar6;
+  undefined8 *puVar7;
+  longlong lVar8;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  longlong lVar9;
+  
+  uVar2 = DAT_14008d370;
+  (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*(longlong *)param_1 + 0xe0));
+  iVar1 = (*extraout_x15)();
+  if (iVar1 == 3) {
+    plVar3 = (longlong *)KsPinGetFirstCloneStreamPointer(*(undefined8 *)(param_1 + 8));
+    while (plVar3 != (longlong *)0x0) {
+      lVar9 = *plVar3;
+      if ((lVar9 != 0) && (*(char *)(lVar9 + 0x38) == '\0')) {
+        lVar8 = plVar3[2];
+        if (lVar8 == 0) {
+          pcVar5 = "{CPin::GetBuffer} pStreamHeader is NULL\n";
+LAB_14008d258:
+          FUN_14001c1d8(0,0x14009a938,0,pcVar5,param_5,param_6,param_7,param_8);
+          return DAT_14008d374;
+        }
+        if ((DAT_14008d378 & (*(uint *)(lVar8 + 0x30) ^ 0xffffffff)) == 0) {
+          puVar7 = *(undefined8 **)(lVar8 + 0x28);
+          if (puVar7 == (undefined8 *)0x0) {
+            pcVar5 = "{CPin::GetBuffer} pSecureBufferInfo is NULL\n";
+            goto LAB_14008d258;
+          }
+          uVar6 = *puVar7;
+          *(undefined8 *)(param_3 + 0x6c) = puVar7[1];
+          *(undefined8 *)(param_3 + 100) = uVar6;
+          *(undefined4 *)(param_3 + 0x74) = *(undefined4 *)(puVar7 + 2);
+          *(undefined4 *)(param_3 + 0x78) = *(undefined4 *)((longlong)puVar7 + 0x14);
+          goto LAB_14008d33c;
+        }
+        (*(code *)PTR__guard_check_icall_14002c3b8)
+                  (*(undefined8 *)(*(longlong *)param_1 + 0xd8),param_1);
+        uVar4 = (*extraout_x15_01)();
+        FUN_14001c1d8(4,0x14009a938,0,"{CPin::GetBuffer} CPin::GetBuffer: %s plane1address %#p\n",
+                      uVar4,*(undefined8 *)(lVar9 + 8),param_7,param_8);
+        iVar1 = *(int *)(param_1 + 0x10);
+        if (iVar1 == 0) {
+          if (*(char *)(param_1 + 0x148) != '\0') goto LAB_14008d364;
+LAB_14008d30c:
+          if (iVar1 == 1) goto LAB_14008d35c;
+LAB_14008d314:
+          uVar6 = *(undefined8 *)(*(longlong *)param_1 + 0x80);
+        }
+        else {
+          if (iVar1 != 2) goto LAB_14008d30c;
+LAB_14008d35c:
+          if (*(char *)(param_1 + 0x148) == '\0') goto LAB_14008d314;
+LAB_14008d364:
+          uVar6 = *(undefined8 *)(*(longlong *)param_1 + 0x88);
+        }
+        (*(code *)PTR__guard_check_icall_14002c3b8)
+                  (uVar6,param_1,param_3,*(undefined8 *)(lVar9 + 8),*(undefined8 *)(lVar9 + 0x10));
+        (*extraout_x15_02)();
+LAB_14008d33c:
+        *(undefined8 *)(lVar9 + 0x40) = param_2;
+        *(undefined1 *)(lVar9 + 0x38) = 1;
+        return 0;
+      }
+      plVar3 = (longlong *)KsStreamPointerGetNextClone();
+    }
+    (*(code *)PTR__guard_check_icall_14002c3b8)
+              (*(undefined8 *)(*(longlong *)param_1 + 0xd8),param_1);
+    uVar4 = (*extraout_x15_00)();
+    FUN_14001c1d8(1,0x14009a938,0,
+                  "{CPin::GetBuffer} CPin::GetBuffer: %s m_nExtBufferReceived = %d\n",uVar4,
+                  (ulonglong)*(uint *)(param_1 + 0xb8),param_7,param_8);
+  }
+  else {
+    uVar2 = 0xc0000001;
+  }
+  return uVar2;
+}
+
+
+
+
+--- capture surface 0x10 handling ---
+//// FUN_14008d560 @14008d560 ////
+
+undefined4 FUN_14008d560(longlong param_1,undefined8 param_2,int *param_3)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  char *pcVar3;
+  ulonglong uVar4;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  longlong *extraout_x10;
+  code *extraout_x15;
+  
+  uVar2 = DAT_14008d5e8;
+  if (param_3 != (int *)0x0) {
+    iVar1 = *(int *)(param_1 + 0x88);
+    *param_3 = iVar1;
+    pcVar3 = FUN_14008d430(iVar1);
+    (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*extraout_x10 + 0xd8),extraout_x10);
+    uVar4 = (*extraout_x15)();
+    FUN_14001c1d8(3,0x14009a938,0,
+                  "{CPin::GetCurrentCaptureSurface} PinName=%s, CurrentSurfaceType=%s\n",uVar4,
+                  pcVar3,in_x6,in_x7);
+    uVar2 = 0;
+  }
+  return uVar2;
+}
+
+
+
+//// FUN_14008d5f0 @14008d5f0 ////
+
+undefined4 FUN_14008d5f0(longlong param_1,undefined8 param_2,uint *param_3)
+
+{
+  int iVar1;
+  uint uVar2;
+  undefined4 uVar3;
+  char *pcVar4;
+  ulonglong uVar5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  code *extraout_x15;
+  
+  uVar3 = DAT_14008d728;
+  if (((param_3 != (uint *)0x0) && (uVar2 = *param_3, uVar3 = DAT_14008d738, uVar2 < 0x11)) &&
+     ((DAT_14008d72c >> (ulonglong)(uVar2 & 0x1f) & 1) != 0)) {
+    *(uint *)(param_1 + 0x88) = uVar2;
+    pcVar4 = FUN_14008d430(uVar2);
+    (*(code *)PTR__guard_check_icall_14002c3b8)
+              (*(undefined8 *)(*(longlong *)param_1 + 0xd8),param_1);
+    uVar5 = (*extraout_x15)();
+    FUN_14001c1d8(3,0x14009a938,0,
+                  "{CPin::SetCurrentCaptureSurface} CPin::SetCurrentCaptureSurface: PinName = %s, m_eCurrentSurfaceType = %s\n"
+                  ,uVar5,pcVar4,in_x6,in_x7);
+    if (*(int *)(param_1 + 0x88) == 1 || *(int *)(param_1 + 0x88) == 0x10) {
+      if (*(int *)(param_1 + 0x14) == DAT_14008d730) {
+        iVar1 = *(int *)(param_1 + 0x18);
+        uVar2 = *(int *)(param_1 + 0x1c) * iVar1;
+        *(uint *)(param_1 + 0x30) = uVar2;
+        *(uint *)(param_1 + 0x34) = uVar2 >> 1;
+        *(int *)(param_1 + 0x20) = iVar1;
+        *(int *)(param_1 + 0x24) = iVar1;
+      }
+      else if (*(int *)(param_1 + 0x14) == DAT_14008d734) {
+        uVar2 = *(int *)(param_1 + 0x1c) * *(int *)(param_1 + 0x18);
+        *(uint *)(param_1 + 0x30) = uVar2 * 2;
+        *(uint *)(param_1 + 0x34) = uVar2 & 0x7fffffff;
+        iVar1 = *(int *)(param_1 + 0x18) << 1;
+        *(int *)(param_1 + 0x20) = iVar1;
+        *(int *)(param_1 + 0x24) = iVar1;
+      }
+      FUN_14001c1d8(3,0x14009a938,0,
+                    "{CPin::SetCurrentCaptureSurface} CPin::SetCurrentCaptureSurface: nPlane1Stride = %d, nPlane2Stride = %d\n"
+                    ,(ulonglong)*(uint *)(param_1 + 0x20),(ulonglong)*(uint *)(param_1 + 0x24),in_x6
+                    ,in_x7);
+      FUN_14001c1d8(3,0x14009a938,0,
+                    "{CPin::SetCurrentCaptureSurface} CPin::SetCurrentCaptureSurface: nIspPlane1BufferSize = %d, nIspPlane2BufferSize = %d\n"
+                    ,(ulonglong)*(uint *)(param_1 + 0x30),(ulonglong)*(uint *)(param_1 + 0x34),in_x6
+                    ,in_x7);
+    }
+    uVar3 = 0;
+  }
+  return uVar3;
+}
+
+
+
+--- IFE external-buffer bridge ---
+                    FUN_140097500(param_1,uVar8,uVar4,param_4,(ulonglong)param_5,param_6,param_7,
+                                  param_8);
+                  }
+                  (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*local_190 + 0x10));
+                  (*extraout_x15_02)();
+                  (*(code *)PTR__guard_check_icall_14002c3b8)(*(undefined8 *)(*local_190 + 0x18));
+                  param_8 = (*extraout_x15_03)();
+                  param_6 = *(ulonglong *)(param_2 + 8);
+                  param_5 = (char *)(ulonglong)*(uint *)(lVar1 + 0x13c);
+                  param_4 = 
+                  "{IfeNode::GetBufferforRequestId} Get internel buffer for PortId:%x for requestId = %d, pIOConfig->hMems[%d], PhysicalAddress = %#Ix, Virtual Address = %#p\n"
+                  ;
+                  param_3 = (char *)0x0;
+                  param_7 = uVar5;
+                  FUN_14001c1d8(3,0x14009a938,0,
+                                "{IfeNode::GetBufferforRequestId} Get internel buffer for PortId:%x for requestId = %d, pIOConfig->hMems[%d], PhysicalAddress = %#Ix, Virtual Address = %#p\n"
+                                ,(ulonglong)param_5,param_6,uVar5,param_8);
+                  uVar4 = (int)uVar5 + 1;
+                  uVar5 = (ulonglong)uVar4;
+                  lVar7 = local_168;
+                  plVar11 = plVar11 + 1;
+                  plVar13 = plVar13 + 1;
+                  iVar10 = iStack_184;
+                  iVar3 = local_188;
+                } while (uVar4 < (uint)uVar6);
+              }
+            }
+            else {
+              iVar3 = -0x3fffffff;
+              local_f0[1] = 0;
+              local_f0[0] = 0;
+              local_f0[3] = 0;
+              local_f0[2] = 0;
+              local_f0[5] = 0;
+              local_f0[4] = 0;
+              local_f0[7] = 0;
+              local_f0[6] = 0;
+              local_f0[9] = 0;
+              local_f0[8] = 0;
+              local_f0[0xb] = 0;
+              local_f0[10] = 0;
+              uStack_88 = 0;
+              uStack_84 = 0;
+              local_90 = 0;
+              uStack_8c = 0;
+              uStack_78 = 0;
+              uStack_80 = 0;
+              local_7c = 0;
+              if (*(longlong *)(lVar12 + 0x88) != 0) {
+                iVar3 = FUN_14008d160(*(longlong *)(lVar12 + 0x88),*(undefined8 *)(param_2 + 8),
+                                      (longlong)local_f0,param_4,(ulonglong)param_5,param_6,param_7,
+                                      param_8);
+              }
+              if (iVar3 < 0) {
+                pcVar9 = 
+                "{IfeNode::GetBufferforRequestId} Failed to get external buffer for requestId = %d on portResourceId : 0x%x\n"
+                ;
+                goto LAB_1400969c8;
+              }
+              if (*(int *)(lVar1 + 0x128) - 0x25U < 3) {
+                param_6 = local_f0[6] >> 0x20;
+                param_7 = local_f0[8] >> 0x20;
+                *(ulonglong *)(lVar1 + 0x74) = param_6;
+                *(ulonglong *)(lVar1 + 0x7c) = param_7;
+              }
+              else {
+                param_6 = local_f0[0] & 0xffffffff;
+                param_7 = local_f0[2] >> 0x20;
+                *(ulonglong *)(lVar1 + 0x74) = param_6;
+                *(ulonglong *)(lVar1 + 0x7c) = param_7;
+                uStack_158._4_4_ =
+                     (undefined4)
+                     ((ulonglong)*(undefined8 *)(*(longlong *)(lVar12 + 0x88) + 0x1c) >> 0x20);
+                *(undefined4 *)(lVar1 + 0xa0) = uStack_158._4_4_;
+                lVar12 = *(longlong *)(lVar12 + 0x88);
+                uStack_158 = *(undefined8 *)(lVar12 + 0x1c);
+                local_160 = *(undefined8 *)(lVar12 + 0x14);
+                uStack_148 = *(undefined8 *)(lVar12 + 0x2c);
+                local_150 = *(undefined8 *)(lVar12 + 0x24);
+                uStack_138 = *(undefined8 *)(lVar12 + 0x3c);
+                local_140 = *(undefined8 *)(lVar12 + 0x34);
+                uStack_128 = *(undefined8 *)(lVar12 + 0x4c);
+                uStack_130 = *(undefined8 *)(lVar12 + 0x44);
+                uStack_118 = *(undefined8 *)(lVar12 + 0x5c);
+                local_120 = *(undefined8 *)(lVar12 + 0x54);
+                uStack_108 = *(undefined8 *)(lVar12 + 0x6c);
+                uStack_110 = *(undefined8 *)(lVar12 + 100);
+                *(undefined4 *)(lVar1 + 0xd0) = (undefined4)local_150;
+              }
+              if (param_6 == 0) {
+                *(ulonglong *)(lVar1 + 0x194) = CONCAT44(uStack_80,uStack_84);
+                *(ulonglong *)(lVar1 + 0x18c) = CONCAT44(uStack_88,uStack_8c);
+                *(undefined4 *)(lVar1 + 0x19c) = local_7c;
+                *(undefined4 *)(lVar1 + 0x1a0) = (undefined4)uStack_78;
+              }
+              param_5 = *(char **)(lVar7 + 8);
+              param_8 = *(undefined8 *)(lVar1 + 0x18c);
+              param_3 = (char *)0x0;
+              param_4 = 
+              "{IfeNode::GetBufferforRequestId} Get external buffer for requestId = %d, hMems[0] =  %#Ix, hMems[1] =  %#Ix, guid =  %#Ix\n"
+              ;
+              FUN_14001c1d8(4,0x14009a938,0,
+                            "{IfeNode::GetBufferforRequestId} Get external buffer for requestId = %d, hMems[0] =  %#Ix, hMems[1] =  %#Ix, guid =  %#Ix\n"
+                            ,(ulonglong)param_5,param_6,param_7,param_8);
+            }
+            goto LAB_1400969a0;
+          }
+        }
+        param_5 = pcVar9;
+        param_4 = "{IfeNode::GetBufferforRequestId} NULL output port, outputIndex = %d\n";
+        param_3 = (char *)0x0;
+        FUN_14001c1d8(0,0x14009a938,0,
+                      "{IfeNode::GetBufferforRequestId} NULL output port, outputIndex = %d\n",
+                      (ulonglong)param_5,param_6,param_7,param_8);
+      }
+      else {
+        FUN_140007c18(*(undefined8 **)(lVar1 + 0x74),0,param_3,param_4,(ulonglong)param_5,param_6,
+                      param_7,param_8);
+      }
+LAB_1400969a0:
+      iVar10 = iVar10 + 1;
+    } while (iVar10 < *(int *)(lVar7 + 0x24));
+  }
+  return iVar3;
+
+--- capture-surface name decoder ---
+//// FUN_14008d430 @14008d430 ////
+
+char * FUN_14008d430(int param_1)
+
+{
+  char *pcVar1;
+  
+  if (param_1 == 0) {
+    pcVar1 = "INVALID";
+  }
+  else if (param_1 == 1) {
+    pcVar1 = "SYSTEM";
+  }
+  else if (param_1 == 2) {
+    pcVar1 = "VRAM";
+  }
+  else if (param_1 == 4) {
+    pcVar1 = "SYSTEM_AGP";
+  }
+  else if (param_1 == 8) {
+    pcVar1 = "VRAM_MAPPED";
+  }
+  else {
+    pcVar1 = "???";
+    if (param_1 == 0x10) {
+      pcVar1 = "SECURE_BUFFER";
+    }
+  }
+  return pcVar1;
+}
+
+
+
