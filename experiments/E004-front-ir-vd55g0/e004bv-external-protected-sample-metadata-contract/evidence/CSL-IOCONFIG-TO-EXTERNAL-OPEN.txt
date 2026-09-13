@@ -1,0 +1,225 @@
+E004bv CSL IOCONFIG -> PROTECTED IMAGE OBJECT -> EXTERNAL OPEN
+
+--- BuildCSLPacket protected IOConfig construction ---
+      if (local_a0 <= local_c8) break;
+      local_e8 = (ulonglong *)
+                 (local_e0 + 0x74 + (ulonglong)*(uint *)(local_e0 + 0x20) +
+                 (longlong)local_c8 * 0x130);
+      if (*local_e8 == 0) {
+        uVar2 = (ulonglong)(uint)local_e8[0x19];
+        FUN_180019e00(4,"%s:%d pIOConfig->portResourceId is 0x%x\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x608,uVar2,param_6,param_7,param_8);
+        if (((int)local_e8[0x19] != 0x3000) && ((int)local_e8[0x19] != 0x3020)) {
+          FUN_180019e00(1,"%s:%d pIOConfig->hMems[0] = NULL for portResourceId = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x646,(ulonglong)(uint)local_e8[0x19],param_6,param_7,param_8);
+          return DAT_180006a60;
+        }
+        local_f0 = malloc(0xa8);
+        if (local_f0 == (undefined8 *)0x0) {
+          FUN_180019e00(1,"%s:%d Failed to allocate secure buffer\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x63f,uVar2,param_6,param_7,param_8);
+          return DAT_180006a64;
+        }
+        uStack_58 = 0;
+        local_60 = 0;
+        local_68 = local_f0 + 0x14;
+        local_88 = local_f0;
+        do {
+          local_88[1] = 0;
+          *local_88 = 0;
+          local_88[3] = 0;
+          local_88[2] = 0;
+          local_88 = local_88 + 4;
+        } while (local_88 != local_68);
+        *local_88 = 0;
+        *local_f0 = *(undefined8 *)(local_e0 + 8);
+        *(undefined4 *)((longlong)local_f0 + 0x3c) = *(undefined4 *)((longlong)local_e8 + 0x24);
+        *(int *)(local_f0 + 8) = (int)local_e8[5];
+        *(undefined4 *)((longlong)local_f0 + 0x44) = *(undefined4 *)((longlong)local_e8 + 0x2c);
+        *(int *)(local_f0 + 7) = *(int *)((longlong)local_f0 + 0x44) * *(int *)(local_f0 + 8);
+        *(undefined4 *)((longlong)local_f0 + 0x5c) = *(undefined4 *)((longlong)local_e8 + 0x54);
+        *(int *)(local_f0 + 0xc) = (int)local_e8[0xb];
+        *(undefined4 *)((longlong)local_f0 + 100) = *(undefined4 *)((longlong)local_e8 + 0x5c);
+        *(int *)(local_f0 + 0xb) = *(int *)((longlong)local_f0 + 100) * *(int *)(local_f0 + 0xc);
+        *(int *)(local_f0 + 4) = *(int *)(local_f0 + 7) + *(int *)(local_f0 + 0xb);
+        *(undefined4 *)(local_f0 + 0xd) = *(undefined4 *)((longlong)local_e8 + 0xb4);
+        uStack_38 = local_e8[0x24];
+        local_40 = local_e8[0x23];
+        *(ulonglong *)((longlong)local_f0 + 0x74) = uStack_38;
+        *(ulonglong *)((longlong)local_f0 + 0x6c) = local_40;
+        *(int *)((longlong)local_f0 + 0x7c) = (int)local_e8[0x25];
+        *(undefined4 *)(local_f0 + 0x10) = *(undefined4 *)((longlong)local_e8 + 300);
+        *(undefined4 *)((longlong)local_f0 + 0x7c) = *(undefined4 *)(local_f0 + 0x10);
+        local_d8 = FUN_180005868((longlong)local_f0);
+        local_ac = local_d8;
+        if ((int)local_d8 < 0) {
+          FUN_180019e00(1,"%s:%d Failed to get secure image buffer, status = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x639,(ulonglong)local_d8,param_6,param_7,param_8);
+          return local_d8;
+        }
+        FUN_180007180((longlong *)&DAT_18003de00,&local_f0);
+        *local_e8 = (ulonglong)*(uint *)(local_f0 + 5);
+        local_e8[1] = (ulonglong)*(uint *)(local_f0 + 9);
+        if ((*local_e8 == 0) || (local_e8[1] == 0)) {
+          FUN_180019e00(1,"%s:%d Invalid SMMU address for HW programming\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x630,uVar2,param_6,param_7,param_8);
+          local_f0 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003de00);
+
+--- external OpenSecureSection consumes object GUID + final map length ---
+//// FUN_180004828 @180004828 ////
+string @18002e930 = %s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx
+; xref @1800049c0
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint FUN_180004828(longlong param_1)
+
+{
+  DWORD DVar1;
+  HANDLE hFileMappingObject;
+  LPVOID pvVar2;
+  undefined8 in_x4;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  uint local_70;
+  uint local_6c;
+  undefined4 local_40;
+  undefined4 uStack_3c;
+  undefined4 uStack_38;
+  undefined4 uStack_34;
+  undefined4 uStack_30;
+  undefined4 local_2c;
+  undefined4 uStack_28;
+  undefined4 uStack_24;
+  undefined4 uStack_20;
+  
+  local_70 = 0;
+  uStack_34 = (undefined4)*(undefined8 *)(param_1 + 0x74);
+  uStack_30 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x74) >> 0x20);
+  uStack_3c = (undefined4)*(undefined8 *)(param_1 + 0x6c);
+  uStack_38 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x6c) >> 0x20);
+  local_40 = 0x24;
+  uStack_24 = (undefined4)_UNK_18002f5e8;
+  uStack_20 = (undefined4)((ulonglong)_UNK_18002f5e8 >> 0x20);
+  local_2c = (undefined4)_DAT_18002f5e0;
+  uStack_28 = (undefined4)((ulonglong)_DAT_18002f5e0 >> 0x20);
+  hFileMappingObject = (HANDLE)OpenSecureSection(&local_40);
+  if (hFileMappingObject == (HANDLE)0x0) {
+    local_70 = DAT_180004a08;
+    FUN_180019e00(1,"%s:%d Failed to create the secure section\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x409
+                  ,in_x4,in_x5,in_x6,in_x7);
+  }
+  else {
+    pvVar2 = MapViewOfFile(hFileMappingObject,6,0,0,(SIZE_T)*(undefined4 *)(param_1 + 0x7c));
+    if (pvVar2 == (LPVOID)0x0) {
+      DVar1 = GetLastError();
+      if ((int)DVar1 < 1) {
+        local_6c = GetLastError();
+      }
+      else {
+        DVar1 = GetLastError();
+        local_6c = DVar1 & 0xffff | 0xc0070000;
+      }
+      local_70 = local_6c;
+      FUN_180019e00(1,"%s:%d Failed to map the section into trustlet, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x411,(ulonglong)local_6c,in_x5,in_x6,in_x7);
+    }
+    else {
+      FUN_180019e00(4,
+                    "%s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x415,hFileMappingObject,pvVar2,in_x6,in_x7);
+      *(HANDLE *)(param_1 + 0x88) = hFileMappingObject;
+      *(LPVOID *)(param_1 + 0x90) = pvVar2;
+    }
+  }
+  return local_70;
+}
+
+
+
+--- pair helper order: internal first, external second ---
+
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/QcISPTrustlet8380.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000180001000 <.text>:
+180005868: d503237f    	pacibsp
+18000586c: a9bd7bfd    	stp	x29, x30, [sp, #-0x30]!
+180005870: 910003fd    	mov	x29, sp
+180005874: f90013e0    	str	x0, [sp, #0x20]
+180005878: 52800008    	mov	w8, #0x0                // =0
+18000587c: b90013e8    	str	w8, [sp, #0x10]
+180005880: f94013e0    	ldr	x0, [sp, #0x20]
+180005884: 97fffcf5    	bl	0x180004c58 <.text+0x3c58>
+180005888: 2a0003e8    	mov	w8, w0
+18000588c: b90013e8    	str	w8, [sp, #0x10]
+180005890: b94013e8    	ldr	w8, [sp, #0x10]
+180005894: b90017e8    	str	w8, [sp, #0x14]
+180005898: b94017e8    	ldr	w8, [sp, #0x14]
+18000589c: b9001fe8    	str	w8, [sp, #0x1c]
+1800058a0: b9401fe8    	ldr	w8, [sp, #0x1c]
+1800058a4: 7100011f    	cmp	w8, #0x0
+1800058a8: 540003ab    	b.lt	0x18000591c <.text+0x491c>
+1800058ac: b94017e8    	ldr	w8, [sp, #0x14]
+1800058b0: 7100011f    	cmp	w8, #0x0
+1800058b4: b94017e8    	ldr	w8, [sp, #0x14]
+1800058b8: 1a9fa108    	csel	w8, w8, wzr, ge
+1800058bc: d503229f    	csdb
+1800058c0: f94013e0    	ldr	x0, [sp, #0x20]
+1800058c4: 97fffbd9    	bl	0x180004828 <.text+0x3828>
+1800058c8: 2a0003e8    	mov	w8, w0
+1800058cc: b90013e8    	str	w8, [sp, #0x10]
+1800058d0: b94013e8    	ldr	w8, [sp, #0x10]
+1800058d4: b9001be8    	str	w8, [sp, #0x18]
+1800058d8: b9401be8    	ldr	w8, [sp, #0x18]
+1800058dc: 7100011f    	cmp	w8, #0x0
+1800058e0: 540001ca    	b.ge	0x180005918 <.text+0x4918>
+1800058e4: b9401be8    	ldr	w8, [sp, #0x18]
+1800058e8: 7100011f    	cmp	w8, #0x0
+1800058ec: b9401be8    	ldr	w8, [sp, #0x18]
+1800058f0: 1a9fb108    	csel	w8, w8, wzr, lt
+1800058f4: d503229f    	csdb
+1800058f8: b94013e4    	ldr	w4, [sp, #0x10]
+1800058fc: 52809fc3    	mov	w3, #0x4fe              // =1278
+180005900: b0000148    	adrp	x8, 0x18002e000
+180005904: 910a8102    	add	x2, x8, #0x2a0
+180005908: d0000148    	adrp	x8, 0x18002f000
+18000590c: 91046101    	add	x1, x8, #0x118
+180005910: 52800020    	mov	w0, #0x1                // =1
+180005914: 9400513b    	bl	0x180019e00 <.text+0x18e00>
+180005918: 1400000e    	b	0x180005950 <.text+0x4950>
+18000591c: b9401fe8    	ldr	w8, [sp, #0x1c]
+180005920: 7100011f    	cmp	w8, #0x0
+180005924: b9401fe8    	ldr	w8, [sp, #0x1c]
+180005928: 1a9fb108    	csel	w8, w8, wzr, lt
+18000592c: d503229f    	csdb
+180005930: b94013e4    	ldr	w4, [sp, #0x10]
+180005934: 5280a063    	mov	w3, #0x503              // =1283
+180005938: b0000148    	adrp	x8, 0x18002e000
+18000593c: 910a8102    	add	x2, x8, #0x2a0
+180005940: d0000148    	adrp	x8, 0x18002f000
+180005944: 91056101    	add	x1, x8, #0x158
+180005948: 52800020    	mov	w0, #0x1                // =1
+18000594c: 9400512d    	bl	0x180019e00 <.text+0x18e00>
+180005950: b94013e0    	ldr	w0, [sp, #0x10]
+180005954: a8c37bfd    	ldp	x29, x30, [sp], #0x30
+180005958: d50323ff    	autibsp
+18000595c: d65f03c0    	ret
+
+--- exact fixed secure-camera scenario GUID bytes in trustlet ---
+KS_SECURE_CAMERA_SCENARIO_ID=AE53FC6E-8D89-4488-9D2E-4D008731C5FD
+guid_le=6efc53ae898d88449d2e4d008731c5fd
+count=1
+file_offsets=0x2dbe0
