@@ -1,0 +1,64 @@
+{
+  "schema": "sp11-camera-e004ar-linux-qtee-static-bridge-v1",
+  "status": "PASS_STATIC_QTEE_BRIDGE_PRESENT_NO_SECUREISP_RUNTIME",
+  "date": "2026-09-13",
+  "golden": {
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "qcom_scm": "y",
+    "qcom_tzmem": "y",
+    "qcom_tzmem_mode_shmbridge": "y",
+    "qcom_qseecom": "y",
+    "tee": "m",
+    "qcomtee": "not-set",
+    "tee_device_nodes": false,
+    "qcomtee_module_loaded": false,
+    "qcomtee_module_installed": false
+  },
+  "firmware_transport": {
+    "qcomtee_platform_device_present": true,
+    "modalias": "platform:qcomtee",
+    "interpretation": "SCM registered the qcomtee platform device after its QTEE SMC-invoke capability probe did not report unsupported."
+  },
+  "reserved_memory": {
+    "camera": {
+      "base": "0x8e100000",
+      "size": "0x00800000",
+      "no_map": true
+    },
+    "qtee": {
+      "base": "0xd80e0000",
+      "size": "0x00520000",
+      "no_map": true
+    },
+    "ta": {
+      "base": "0xd8600000",
+      "size": "0x08a00000",
+      "no_map": true
+    }
+  },
+  "build": {
+    "built_only": true,
+    "installed": false,
+    "loaded": false,
+    "module": "qcomtee.ko",
+    "sha256": "3234dc1ffc24e1320356190ec4ba622b6e3a8df7659d26b61f9667d1fac9258d",
+    "srcversion": "14D13E8EB71A54453098253",
+    "alias": "platform:qcomtee",
+    "depends": [
+      "tee"
+    ],
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+  },
+  "linux_primitives": {
+    "qtee_object_transport": true,
+    "tzmem_shmbridge": true,
+    "scm_assign_mem": true,
+    "cp_camera_vmid_defined": true,
+    "cp_camera_preview_vmid_defined": true,
+    "in_tree_camera_secureisp_host": false,
+    "secure_csi_lane_service_identified": false
+  },
+  "windows_identity_4096_equals_qtee_service_uid": "unproven",
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Statically identify trustlet/service addressing and the secure CSI lane service before any Linux QTEE or SecureISP runtime."
+}
