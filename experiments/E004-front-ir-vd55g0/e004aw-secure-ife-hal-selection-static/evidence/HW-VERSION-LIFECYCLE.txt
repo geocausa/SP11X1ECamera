@@ -1,0 +1,98 @@
+E004aw HW VERSION LIFECYCLE
+
+--- POWER_ON samples selected get_hw_version callback and stores return at IFE context +0x100 ---
+    }
+    FUN_180019e00(2,"Invalid inputs for DAL_ife_process_csl_packet.",0,param_4,param_5,param_6,
+                  param_7,param_8);
+    return 0xe;
+  }
+  switch(uVar4) {
+  case 1:
+    puVar8 = param_3;
+    FUN_180019e00(2,"IFE_CMD_ID_SET_INFO start",param_3,param_4,param_5,param_6,param_7,param_8);
+    if (param_3 != (uint *)0x0) {
+      *(uint *)(lVar10 + 0x3384) = *param_3;
+      *(uint *)(lVar10 + 0x3388) = param_3[1];
+      *(char *)(lVar10 + 0x338c) = (char)param_3[2];
+      FUN_180019e00(2,"IFE_CMD_ID_SET_INFO done",puVar8,param_4,param_5,param_6,param_7,param_8);
+      return 0;
+    }
+    goto LAB_1800165f4;
+  case 2:
+    *(undefined4 *)(lVar10 + 0x2df8) = 2;
+    FUN_180019e00(4,"IFE%d: IFE powered on and clocks enabled successfully",
+                  (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+    (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(lVar10 + 0x6b570),lVar10);
+    uVar3 = (*extraout_x15)();
+    *(undefined4 *)(lVar10 + 0x100) = uVar3;
+    uVar11 = 0;
+    break;
+  case 3:
+    FUN_180019e00(4,"IFE%d: IFE powered off and clocks disabled successfully",
+                  (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+    uVar11 = 0;
+    break;
+  case 4:
+    uVar11 = (ulonglong)*(uint *)(lVar10 + 0xd0);
+    FUN_180019e00(4,"IFE%d: waiting to acknoledge Reset done from CSID",uVar11,param_4,param_5,
+                  param_6,param_7,param_8);
+    FUN_180014bb8(lVar10,extraout_x1_01,uVar11,param_4,param_5,param_6,param_7,param_8);
+    uVar11 = 0;
+    break;
+  case 5:
+    uVar7 = FUN_1800144a8((undefined8 *)(lVar10 + 0x50),param_2,param_3,param_4,param_5,param_6,
+                          param_7,param_8);
+
+--- exact dispatcher context from IFE-DISPATCH-DECOMP ---
+  switch(uVar4) {
+  case 1:
+    puVar8 = param_3;
+    FUN_180019e00(2,"IFE_CMD_ID_SET_INFO start",param_3,param_4,param_5,param_6,param_7,param_8);
+    if (param_3 != (uint *)0x0) {
+      *(uint *)(lVar10 + 0x3384) = *param_3;
+      *(uint *)(lVar10 + 0x3388) = param_3[1];
+      *(char *)(lVar10 + 0x338c) = (char)param_3[2];
+      FUN_180019e00(2,"IFE_CMD_ID_SET_INFO done",puVar8,param_4,param_5,param_6,param_7,param_8);
+      return 0;
+    }
+    goto LAB_1800165f4;
+  case 2:
+    *(undefined4 *)(lVar10 + 0x2df8) = 2;
+    FUN_180019e00(4,"IFE%d: IFE powered on and clocks enabled successfully",
+                  (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+    (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(lVar10 + 0x6b570),lVar10);
+    uVar3 = (*extraout_x15)();
+    *(undefined4 *)(lVar10 + 0x100) = uVar3;
+    uVar11 = 0;
+    break;
+  case 3:
+    FUN_180019e00(4,"IFE%d: IFE powered off and clocks disabled successfully",
+                  (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+    uVar11 = 0;
+    break;
+
+--- offset-0x100 instruction users in secure IFE control range ---
+HIT 18000e774 and w8,w8,#0x100 function=FUN_18000e6f0@18000e6f0
+HIT 18000f80c and w8,w8,#0x100 function=FUN_18000f740@18000f740
+HIT 180010554 ldr w4,[x21, #0x100] function=FUN_180010400@180010400
+HIT 180012bc0 str w9,[x8, #0x100] function=FUN_180012a80@180012a80
+HIT 1800132c8 ldr w9,[x19, #0x100] function=FUN_180012f20@180012f20
+HIT 1800132dc str w9,[x19, #0x100] function=FUN_180012f20@180012f20
+HIT 1800132ec str w9,[x19, #0x100] function=FUN_180012f20@180012f20
+HIT 1800132fc str w9,[x19, #0x100] function=FUN_180012f20@180012f20
+HIT 18001330c str w9,[x19, #0x100] function=FUN_180012f20@180012f20
+HIT 18001331c str w9,[x19, #0x100] function=FUN_180012f20@180012f20
+HIT 18001332c str w9,[x19, #0x100] function=FUN_180012f20@180012f20
+HIT 180013cec str w9,[x8, #0x100] function=FUN_180013bf0@180013bf0
+HIT 1800142a4 ldr w9,[x19, #0x100] function=FUN_180013f90@180013f90
+HIT 1800142b8 str w9,[x19, #0x100] function=FUN_180013f90@180013f90
+HIT 1800142c8 str w9,[x19, #0x100] function=FUN_180013f90@180013f90
+HIT 1800142d8 str w9,[x19, #0x100] function=FUN_180013f90@180013f90
+HIT 1800142e8 str w9,[x19, #0x100] function=FUN_180013f90@180013f90
+HIT 1800142f8 str w9,[x19, #0x100] function=FUN_180013f90@180013f90
+HIT 180015548 add x1,x8,#0x100 function=FUN_1800152c0@1800152c0
+HIT 180015574 add x1,x8,#0x100 function=FUN_1800152c0@1800152c0
+HIT 180016530 str w0,[x19, #0x100] function=FUN_180016470@180016470
+HIT 180018514 add x23,x23,#0x100 function=FUN_180017c60@180017c60
+HIT 180018a58 orr w9,w8,#0x100 function=FUN_1800189b8@1800189b8
+HIT 180018b50 add x1,x8,#0x100 function=FUN_180018b38@180018b38

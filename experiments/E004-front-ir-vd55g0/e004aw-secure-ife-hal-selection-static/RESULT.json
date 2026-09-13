@@ -1,0 +1,54 @@
+{
+  "schema": "sp11-camera-e004aw-secure-ife-hal-selection-static-v1",
+  "status": "PASS_SECURE_IFE_HAL_SELECTION_IS_CORE_INDEX_NOT_HW_VERSION",
+  "date": "2026-09-13",
+  "trustlet_sha256": "55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606",
+  "ife_hal_selection": {
+    "selector": "logical_ife_core_id",
+    "full_ife_core_ids": [
+      0,
+      1
+    ],
+    "ife_lite_core_ids": [
+      2,
+      3
+    ],
+    "full_ife_hw_version_callback": "FUN_18000f610 / HAL_ife_get_hw_version",
+    "ife_lite_hw_version_callback": "FUN_18000d000 / HAL_ife_lite_get_hw_version",
+    "selection_occurs_before_hw_version_sample": true
+  },
+  "secure_base_topology": {
+    "full_ife": {
+      "csid_offset": "0x4000",
+      "bus_writer_offset": "0x0c00"
+    },
+    "ife_lite": {
+      "csid_offset": "0x0000",
+      "bus_writer_offset": "0x1200"
+    }
+  },
+  "hw_version": {
+    "source": "first 32-bit dword through selected IFE base pointer",
+    "sampled_on": "IFE POWER_ON",
+    "stored_in_context": true,
+    "chooses_full_vs_lite": false,
+    "later_semantic_use": "not_globally_claimed"
+  },
+  "csid_hal_selection": {
+    "selector_source": "DeviceConfig input bit copied to manager state",
+    "alternate_hal_tables": true,
+    "independent_of_ife_hw_version": true,
+    "semantic_bit_name": "unresolved"
+  },
+  "surface_ir": {
+    "active_logical_ife_core": "unproven",
+    "full_or_lite": "unproven"
+  },
+  "runtime_executed": false,
+  "qcomtee_loaded": false,
+  "secure_aperture_mapped_linux": false,
+  "camera_memory_reassigned_linux": false,
+  "secure_csi_call_linux": false,
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Statically trace DeviceConfig logical IFE core-list population and resolve the Surface IR selected core/family."
+}

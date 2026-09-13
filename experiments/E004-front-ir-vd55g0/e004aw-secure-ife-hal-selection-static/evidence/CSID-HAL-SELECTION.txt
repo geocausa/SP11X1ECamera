@@ -1,0 +1,97 @@
+E004aw CSID HAL SELECTION
+
+DeviceConfig copies one input bit into manager +0xe00; CSID initialization uses that state to choose two function sets.
+
+      if (3 < (int)uVar5) {
+        return puVar40;
+      }
+      lVar33 = *(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)uVar5 * 0x30;
+      if (*(char *)(lVar33 + 0x20) != '\0') {
+        puVar9 = *(undefined8 **)(lVar33 + 8);
+        uVar44 = uVar45;
+        puVar24 = param_7;
+        (*(code *)PTR__guard_check_icall_18002b360)(*puVar9,puVar9,param_2,param_3,uVar43,param_5);
+        uVar5 = (*extraout_x15_23)();
+        puVar40 = (undefined *)(ulonglong)uVar5;
+        if (uVar5 != 0 && uVar5 != 0x1a) {
+          FUN_180019e00(2,"ISP HW Mgr :: IFE Core%x  cmd =0x%x is failed with result =0x%x",0,
+                        (ulonglong)param_2,puVar40,uVar44,puVar24,param_8);
+        }
+      }
+      uVar42 = (ulonglong)((uint)uVar42 + 1);
+    }
+    return puVar40;
+  }
+  FUN_180019e00(4,"ISP HW Manager Processing CAMERA_DEVICE_IOCTL_DEVICE_CONFIG command.",uVar44,
+                uVar22,pcVar26,param_6,pcVar31,param_8);
+  puVar11 = (undefined1 *)(param_1 + 0x78);
+  bVar3 = false;
+  *(uint *)(param_1 + 0xe00) = param_3[0x23] >> 1 & 1;
+  *(char *)(param_1 + 0x4e9) = (char)param_3[0x24];
+  *(uint **)(param_1 + 0xdc8) = param_3 + 0x22c;
+  *puVar11 = (char)param_3[1];
+  *(char *)(param_1 + 0x79) = (char)*param_3 - (char)(*param_3 / 0x4001);
+  *(char *)(param_1 + 0x84) = (char)param_3[2] + -1;
+  *(uint *)(param_1 + 0x80) = param_3[3];
+  *(uint *)(param_1 + 0x21c) = param_3[0x1a];
+  *(uint *)(param_1 + 0x210) = param_3[0x1a] * 0x1e;
+  if (param_3[0x26] == 3) {
+    *(undefined1 *)(param_1 + 0x7b) = 1;
+    *(char *)(param_1 + 0x7a) = (char)*param_3 + (char)(*param_3 / 0x4008) * -8;
+
+          pcVar21 = (code *)(ulonglong)*(uint *)(lVar38 + 0x28);
+          FUN_180019e00(4,"CSID%d: CSID device opened!",pcVar21,pcVar23,pcVar26,pcVar28,pcVar31,
+                        param_8);
+        }
+        puVar40 = param_8;
+        if ((int)pcVar41 != 0) goto LAB_18000a9ac;
+        puVar40 = *(undefined **)
+                   (*(longlong *)(DAT_18003d230 + 0x38) + (longlong)pcVar39 * 0x30 + 0x28);
+        *(undefined4 *)(puVar40 + 0xb8) = *(undefined4 *)(param_1 + 0xd94);
+        FUN_180019e00(4,"DAL_secure_ife_initialize_csid_Core csid_device_opened",pcVar21,pcVar23,
+                      pcVar26,pcVar28,pcVar31,param_8);
+        if (*(int *)(puVar40 + 0xb8) < 8) {
+          *(undefined4 *)(puVar40 + 0xbc) = 0;
+          FUN_180019e00(4,"DAL_secure_ife_initialize_csid_Core csidErrStatsConfig is 0",pcVar21,
+                        pcVar23,pcVar26,pcVar28,pcVar31,param_8);
+          *(undefined8 *)(puVar40 + 0x198) =
+               *(undefined8 *)
+                (*(longlong *)
+                  (*(longlong *)(DAT_18003d230 + 0x28) + (longlong)pcVar39 * 0x30 + 0x28) + 0x6b560)
+          ;
+          if (*(int *)(param_1 + 0xe00) == 0) {
+            pcVar46 = FUN_180011cf0;
+            pcVar15 = FUN_180012ea0;
+            pcVar18 = FUN_180011a10;
+            pcVar23 = FUN_180012f20;
+            pcVar26 = FUN_180012ce0;
+            pcVar28 = FUN_180011d40;
+            pcVar31 = FUN_180012a80;
+          }
+          else {
+            FUN_180019e00(4,"Register_secure_CSID_HAL1",pcVar21,pcVar23,pcVar26,pcVar28,pcVar31,
+                          param_8);
+            pcVar15 = FUN_180013f40;
+            pcVar18 = FUN_1800133c0;
+            pcVar23 = FUN_180013f90;
+            pcVar26 = FUN_180013dc0;
+            pcVar28 = FUN_1800134f0;
+            pcVar31 = FUN_180013bf0;
+            pcVar46 = (code *)0x0;
+          }
+          pcVar21 = FUN_1800119e0;
+          *(code **)(puVar40 + 0x1c0) = FUN_180012f00;
+          *(code **)(puVar40 + 0x1f0) = pcVar31;
+          *(code **)(puVar40 + 0x1d0) = pcVar28;
+          *(code **)(puVar40 + 0x1d8) = pcVar26;
+          *(code **)(puVar40 + 0x1e8) = pcVar23;
+          *(code **)(puVar40 + 0x1c8) = FUN_1800119e0;
+          *(code **)(puVar40 + 0x1f8) = pcVar18;
+          *(code **)(puVar40 + 0x1e0) = pcVar15;
+          *(code **)(puVar40 + 0x200) = pcVar46;
+          lVar33 = DAT_18003d230;
+          *(undefined1 *)(*(longlong *)(DAT_18003d230 + 0x38) + (longlong)pcVar39 * 0x30 + 0x20) = 0
+          ;
+          *(undefined1 *)(*(longlong *)(lVar33 + 0xe0d0) + (longlong)pcVar39 * 0x20 + 8) = 0;
+          puVar24 = puVar40;
+          goto LAB_18000a7e8;
