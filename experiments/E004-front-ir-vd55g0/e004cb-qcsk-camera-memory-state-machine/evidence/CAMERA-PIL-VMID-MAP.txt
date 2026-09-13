@@ -1,0 +1,13 @@
+E004cb VMID CROSS-CHECK
+#define QCOM_SCM_VMID_HLOS		0x3
+#define QCOM_SCM_VMID_CP_CAMERA		0xD
+#define QCOM_SCM_VMID_HLOS_FREE		0xE
+#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+
+QcSk vendor-log anchored transition identities:
+- VMID 4: source named HYP by "map to intermediate VM from HYP failed".
+- VMID 0x0e: destination of that call and source of the next call; therefore the vendor-named intermediate VM.
+- Linux public name for 0x0e: QCOM_SCM_VMID_HLOS_FREE.
+- VMID 0x39: destination of "map to subsys from intermediate VM failed" and source of the reverse "map to intermediate VM from subsys failed"; therefore camera PIL subsystem VMID in this binary.
+- VMID 3: destination of "map to HLOS from intermediate VM failed"; Linux public name QCOM_SCM_VMID_HLOS.
+- No public Linux QCOM_SCM_VMID_* definition for 0x39 exists in this tree.

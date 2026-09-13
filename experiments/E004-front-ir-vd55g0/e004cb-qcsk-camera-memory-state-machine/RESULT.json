@@ -1,0 +1,52 @@
+{
+  "experiment": "E004cb",
+  "status": "PASS_QCSK_CAMERA_PIL_STATE_MACHINE_IS_FIRMWARE_HANDOFF_NOT_FRAME_PROVIDER",
+  "mode": "windows-static-only",
+  "authority": {
+    "binary": "QcSkExt8380.exe",
+    "sha256": "618910808afafda01533f6f0decc21209521d23db950209cebe1668520dff5e3",
+    "camera_set_state": "FUN_1400138b0",
+    "pil_camera_mem_assign": "FUN_140013990"
+  },
+  "vmids": {
+    "4": "HYP (vendor-log identity)",
+    "0x0e": "intermediate VM; Linux QCOM_SCM_VMID_HLOS_FREE",
+    "0x39": "camera PIL subsystem VM; no public Linux constant name found",
+    "3": "HLOS; Linux QCOM_SCM_VMID_HLOS"
+  },
+  "forward": {
+    "accepted_state_field": 1,
+    "request_selector": 2,
+    "transitions": [
+      "HYP(4) -> HLOS_FREE/intermediate(0x0e)",
+      "HLOS_FREE/intermediate(0x0e) -> camera PIL subsystem(0x39)"
+    ],
+    "subsystem_permissions": "per-ELF-segment R/W/X bits"
+  },
+  "reverse": {
+    "accepted_state_field": 2,
+    "request_selector": 0,
+    "transitions": [
+      "camera PIL subsystem(0x39) -> HLOS_FREE/intermediate(0x0e)",
+      "HLOS_FREE/intermediate(0x0e) -> HLOS(3)"
+    ]
+  },
+  "classification": {
+    "elf_segment_processing": true,
+    "core_state_bracket": true,
+    "per_frame_guid": false,
+    "request_id": false,
+    "captured_extent": false,
+    "payload_offset": false,
+    "external_protected_sample_provider": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "camera_state_switch": false,
+    "smc": false,
+    "ium_call": false,
+    "qtee_qsee_call": false,
+    "linux_camera_runtime": false
+  },
+  "next_gate": "E004cc IUM secure-section backing/provider path below CreateSecureSection, static first; Windows one-shot if static becomes ambiguous"
+}

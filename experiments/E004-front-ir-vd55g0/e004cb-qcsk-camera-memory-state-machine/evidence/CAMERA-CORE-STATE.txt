@@ -1,0 +1,85 @@
+E004cb CAMERA SET STATE / BOOT REGISTER PATH
+//// FUN_1400138b0 @1400138b0 root=true ////
+
+undefined8 FUN_1400138b0(undefined8 param_1,int param_2)
+
+{
+  uint uVar1;
+  uint uVar2;
+  
+  if (param_2 == 0) {
+    uVar2 = 0;
+    do {
+      uVar2 = uVar2 + 1;
+      uVar1 = FUN_140007590(0xc4,0x80);
+      if (uVar1 == 1) {
+        FUN_1400074f8(0xc3,0);
+        return 0;
+      }
+      FUN_140007850(500);
+    } while (uVar2 < 0x14);
+  }
+  else {
+    if (param_2 != 1) {
+      FUN_14000a1e8();
+      return 1;
+    }
+    uVar2 = FUN_140007590(0xc3,0x200);
+    if (uVar2 == 0) {
+      FUN_140014b80();
+      return 0;
+    }
+  }
+  FUN_14000a1e8();
+  return 1;
+}
+
+
+
+
+--- resume register programming helper ---
+//// FUN_140014b80 @140014b80 root=false ////
+
+void FUN_140014b80(void)
+
+{
+  undefined8 uVar1;
+  
+  uVar1 = DAT_1400294e8;
+  FUN_1400074f8(0xbf,0x10);
+  FUN_1400074f8(0xc0,0);
+  FUN_1400074f8(0xc1,(uint)uVar1 & 0xfffffff0);
+  FUN_1400074f8(0xc2,0xa0a);
+  FUN_140007438(0xc0,1,1);
+  FUN_1400074f8(0xc3,0x200);
+  return;
+}
+
+
+
+//// FUN_140007850 @140007850 root=false ////
+
+void FUN_140007850(ulonglong param_1)
+
+{
+  longlong lVar1;
+  ulonglong uVar2;
+  LARGE_INTEGER local_20;
+  LARGE_INTEGER local_18;
+  
+  QueryPerformanceFrequency(&local_18);
+  QueryPerformanceCounter(&local_20);
+  uVar2 = 0;
+  if (DAT_1400078f0 != 0) {
+    uVar2 = ((param_1 & 0xffffffff) * local_18.QuadPart) / DAT_1400078f0;
+  }
+
+--- exact vendor log xrefs ---
+STRING @140021b70 = camera_set_state
+  XREF 140013940 function=FUN_1400138b0 entry=1400138b0
+  XREF 140013960 function=FUN_1400138b0 entry=1400138b0
+STRING @140021b88 = [CAM-PIL][%s] core must be idle before halt state= %u
+STRING @140021bc0 = [CAM-PIL][%s] cannot resume core: current state = %u
+  XREF 140013948 function=FUN_1400138b0 entry=1400138b0
+STRING @140021bf8 = [CAM-PIL][%s] setting invalid state=%u
+  XREF 14001396c function=FUN_1400138b0 entry=1400138b0
