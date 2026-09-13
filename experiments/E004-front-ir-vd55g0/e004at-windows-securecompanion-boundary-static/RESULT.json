@@ -1,0 +1,45 @@
+{
+  "schema": "sp11-camera-e004at-securecompanion-boundary-v1",
+  "status": "PASS_WINDOWS_SECURECOMPANION_IS_NOT_QTEE_UID_EVIDENCE",
+  "date": "2026-09-13",
+  "package": {
+    "kmd_service": "CameraSecureISP",
+    "kmd_binary": "qccamsecureisp8380.sys",
+    "companion_service": "SecureBioCompanion",
+    "companion_binary": "QcISPTrustlet8380.dll",
+    "service_type": "SecureCompanion",
+    "trustlet_identity": 4096,
+    "companion_configuration": true
+  },
+  "trustlet": {
+    "sha256": "55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606",
+    "imports_iumsdk": true,
+    "imports_secure_section": true,
+    "imports_secure_io_mapping": true,
+    "imports_soc_domain_assignment": true,
+    "wdf_um_entry": true,
+    "secure_bio_signer_marker": true
+  },
+  "task_transport": {
+    "api": "WdfCompanionTargetSendTaskSynchronously",
+    "target": "Windows SecureCompanion trustlet",
+    "qtee_object_transport": false
+  },
+  "lane_transport": {
+    "target": "QcTrEE PassThrough / Qualcomm SIP",
+    "separate_from_companion_tasks": true
+  },
+  "identity_4096": {
+    "namespace": "Windows SecureCompanion / trustlet registration",
+    "qtee_service_uid_equivalence": "not_proven",
+    "safe_linux_assumption": "do_not_use_as_qtee_uid"
+  },
+  "linux": {
+    "qcomtee_capability_still_present": true,
+    "qcomtee_drop_in_replacement_for_companion_target": false,
+    "secure_worker_execution_domain": "unresolved"
+  },
+  "runtime_executed": false,
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Statically map trustlet resource/memory-domain requirements before designing a Linux secure worker."
+}

@@ -1,0 +1,23 @@
+source=/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf
+82: ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+83: LoadOrderGroup = Streams Drivers ; First of all driver groups to load
+84: ServiceBinary  = %13%\qccamsecureisp8380.sys
+85: 
+86: [CameraSecureISP_Device.NT.Wdf]
+87: KmdfService = CameraSecureISP, CameraSecureISP_wdfsect
+88: UmdfService =  SecureBioCompanion, SecureBioCompanion_wdfsect
+89: CompanionConfiguration = CameraSecureISP, SecureBioCompanion_companions
+90: 
+91: [CameraSecureISP_wdfsect]
+92: KmdfLibraryVersion = 1.11
+93: 
+94: [SecureBioCompanion_wdfsect]
+95: UmdfLibraryVersion = 2.23
+96: ServiceBinary = %13%\QcISPTrustlet8380.dll
+97: ServiceType = SecureCompanion
+98: TrustletIdentity = 4096
+99: 
+100: [SecureBioCompanion_companions]
+101: CompanionServices = SecureBioCompanion
+102: 
+103: [Strings]

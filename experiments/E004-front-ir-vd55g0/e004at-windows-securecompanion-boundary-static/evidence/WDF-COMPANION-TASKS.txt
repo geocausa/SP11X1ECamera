@@ -1,0 +1,212 @@
+E004at WDF COMPANION TASK AUTHORITY
+1-program=qccamsecureisp8380.sys
+2-sha256=47c944fa497477751073ec79a27a589a55e884178c1859d6f27388ec7af2ad53
+3:regex=WdfCompanionTargetSendTaskSynchronously|ISPTRUSTLET_|SecureISPDriver_SendCSLPacket|CameraKMDSecureISPEvtIoControl|ConfigSecureCamera|AddressMapUMD2KMD
+4-
+5-//// FUN_140001b08 @140001b08 ////
+6-string @14000c3e0 = >>> ENTERING ConfigSecureCamera()
+7-; xref @140001ba4
+8-
+--
+575-                      param_8);
+576-        puVar22 = &local_168;
+577-        uVar16 = 4;
+578-        local_168 = 0;
+579-        puVar23 = &local_164;
+580:        uVar11 = FUN_140004a90(0,0,*(undefined8 *)(param_1 + 0x38),*(undefined4 *)(param_1 + 0x40),
+581-                               puVar23,(undefined8 *)0x4,puVar22,param_8);
+582-        if ((undefined8 *)param_3[3] == (undefined8 *)0x0) {
+583-          FUN_140006a20(0,0x14000c230,0xd,"pDeviceResource->pReturnParams is NULL\n",puVar23,uVar16,
+584-                        puVar22,param_8);
+585-        }
+--
+627-          if (puVar35 != (undefined8 *)0x0) {
+628-            puVar25 = (undefined8 *)(ulonglong)local_1c0;
+629-            puVar22 = &local_190;
+630-            local_190 = 0;
+631-            puVar19 = local_1a8;
+632:            uVar11 = FUN_140004a90(4,0,puVar35,0x60,local_1a8,puVar25,puVar22,param_8);
+633-            if ((int)uVar11 < 0) {
+634-              if (-1 < (int)uVar11) {
+635-                uVar11 = 0;
+636-              }
+637-              FUN_140006a20(0,0x14000c230,0xd,
+--
+645-            }
+646-            param_7 = (ulonglong **)&local_18c;
+647-            local_18c = 0;
+648-            param_6 = (undefined8 *)(ulonglong)local_1c0;
+649-            puVar19 = local_1a8;
+650:            uVar11 = FUN_140004a90(5,0,puVar35[1] + (ulonglong)*(uint *)(local_1b0 + 0x7c),
+651-                                   *(int *)(local_1b0 + 0x84) + 0x60,local_1a8,param_6,param_7,
+652-                                   param_8);
+653-            if ((int)uVar11 < 0) {
+654-              if (-1 < (int)uVar11) {
+655-                uVar11 = 0;
+--
+712-                    }
+713-                    local_188 = 0;
+714-                    puVar22 = &local_188;
+715-                    uVar21 = 0;
+716-                    uVar16 = 0;
+717:                    uVar7 = FUN_140004a90(4,0,*(undefined8 *)((longlong)param_3 + lVar14 + 0x80),
+718-                                          0x60,0,(undefined8 *)0x0,puVar22,param_8);
+719-                    if ((int)uVar7 < 0) {
+720-                      if (-1 < (int)uVar7) {
+721-                        uVar7 = 0;
+722-                      }
+--
+734-                                    ,uVar16,uVar21,puVar22,param_8);
+735-                      puVar22 = &local_184;
+736-                      uVar21 = 0;
+737-                      local_184 = 0;
+738-                      uVar16 = 0;
+739:                      uVar7 = FUN_140004a90(4,0,*(undefined8 *)((longlong)param_3 + lVar14 + 0x74),
+740-                                            0x60,0,(undefined8 *)0x0,puVar22,param_8);
+741-                      if ((int)uVar7 < 0) {
+742-                        if (-1 < (int)uVar7) {
+743-                          uVar7 = 0;
+744-                        }
+--
+765-                    if (ppuVar36 == (ulonglong **)0x0) goto LAB_140003994;
+766-                    param_7 = (ulonglong **)&local_180;
+767-                    local_180 = 0;
+768-                    param_6 = (undefined8 *)0x0;
+769-                    pcVar17 = (char *)0x0;
+770:                    uVar8 = FUN_140004a90(6,0,ppuVar36,uVar8 & 0xfffffffc,0,(undefined8 *)0x0,
+771-                                          param_7,param_8);
+772-                    if ((int)uVar8 < 0) {
+773-                      if (-1 < (int)uVar8) {
+774-                        uVar8 = 0;
+775-                      }
+--
+1040-                                ,param_7,param_8);
+1041-                  param_7 = (ulonglong **)&local_178;
+1042-                  local_178 = 0;
+1043-                  param_6 = (undefined8 *)0x0;
+1044-                  uVar16 = 0;
+1045:                  uVar9 = FUN_140004a90(9,0,puVar20,0x22,0,(undefined8 *)0x0,param_7,param_8);
+1046-                  if ((int)uVar9 < 0) {
+1047-                    pcVar17 = "ISPTRUSTLET_GET_SWABF_DATA failed\n";
+1048-LAB_140003cbc:
+1049-                    FUN_140006a20(0,0x14000c230,0xd,pcVar17,uVar16,param_6,param_7,param_8);
+1050-                  }
+--
+1059-                                ,param_7,param_8);
+1060-                  param_7 = (ulonglong **)&local_17c;
+1061-                  local_17c = 0;
+1062-                  param_6 = (undefined8 *)0x0;
+1063-                  uVar16 = 0;
+1064:                  uVar9 = FUN_140004a90(10,0,puVar20,0x804,0,(undefined8 *)0x0,param_7,param_8);
+1065-                  if ((int)uVar9 < 0) {
+1066-                    pcVar17 = "ISPTRUSTLET_GET_SWASF_DATA failed\n";
+1067-                    goto LAB_140003cbc;
+1068-                  }
+1069-                }
+--
+1089-             (lVar14 = *(longlong *)((longlong)param_3 + lVar14 + 0x74), lVar14 != 0)) {
+1090-            puVar22 = &local_174;
+1091-            local_174 = 0;
+1092-            puVar19 = (ulonglong *)param_5;
+1093-            puVar25 = puVar35;
+1094:            uVar11 = FUN_140004a90(4,0,lVar14,0x60,param_5,puVar35,puVar22,param_8);
+1095-            if ((int)uVar11 < 0) {
+1096-              if (-1 < (int)uVar11) {
+1097-                uVar11 = 0;
+1098-              }
+1099-              FUN_140006a20(0,0x14000c230,0xd,
+--
+1112-      param_7 = (ulonglong **)&local_170;
+1113-      local_160 = 0;
+1114-      param_6 = (undefined8 *)0x8;
+1115-      local_170 = 0;
+1116-      puVar35 = &local_160;
+1117:      uVar11 = FUN_140004a90(7,0,param_3,*(undefined4 *)((longlong)param_3 + 4),puVar35,
+1118-                             (undefined8 *)0x8,param_7,param_8);
+1119-      if ((int)uVar11 < 0) {
+1120-        if (-1 < (int)uVar11) {
+1121-          uVar11 = 0;
+1122-        }
+--
+1218-        else {
+1219-          FUN_140006a20(3,0x14000c230,0xd,"Successfully configured secure camera\n",pcVar24,param_6,
+1220-                        param_7,param_8);
+1221-          param_7 = &local_1a8;
+1222-          local_1a8 = (ulonglong *)((ulonglong)local_1a8 & 0xffffffff00000000);
+1223:          uVar11 = FUN_140004a90(2,0,param_3,8,param_5,puVar35,param_7,param_8);
+1224-          if (-1 < (int)uVar11) {
+1225-            FUN_140006a20(3,0x14000c230,0xd,"SendTask - ISPTRUSTLET_START Succeeded\n",param_5,
+1226-                          puVar35,param_7,param_8);
+1227-            *(undefined4 *)(param_1 + 0x2c) = 1;
+1228-            FUN_140006a20(3,0x14000c230,0xd,"m_StreamState - Stream_STARTED\n",param_5,puVar35,
+--
+1333-    param_7 = &local_1a0;
+1334-    param_6 = (undefined8 *)0x0;
+1335-    local_1a0 = (ulonglong *)((ulonglong)local_1a0 & 0xffffffff00000000);
+1336-    pcVar24 = (char *)0x0;
+1337-    local_198 = (ulonglong)local_158 & 0xffffffff00000000;
+1338:    uVar11 = FUN_140004a90(0xd,0,&local_198,8,0,(undefined8 *)0x0,param_7,param_8);
+1339-    if ((int)uVar11 < 0) {
+1340-      if (-1 < (int)uVar11) {
+1341-        uVar11 = 0;
+1342-      }
+1343-      pcVar17 = "SendTask - ISPTRUSTLET_NOTIFY_EVENT Failed, status = 0x%08x \n";
+--
+1351-}
+1352-
+1353-
+1354-
+1355-//// FUN_140004a90 @140004a90 ////
+1356:string @14000d1b0 = WdfCompanionTargetSendTaskSynchronously Failed, status = 0x%08x....
+1357-
+1358-; xref @140004b50
+1359-
+1360:uint FUN_140004a90(undefined8 param_1,int param_2,undefined8 param_3,undefined4 param_4,
+1361-                  undefined8 param_5,undefined8 *param_6,undefined8 param_7,undefined8 param_8)
+1362-
+1363-{
+1364-  uint uVar1;
+1365-  undefined8 uVar2;
+--
+1410-LAB_140004b40:
+1411-  if (-1 < (int)uVar1) {
+1412-    uVar1 = 0;
+1413-  }
+1414-  FUN_140006a20(0,0x14000c230,0xd,
+1415:                "WdfCompanionTargetSendTaskSynchronously Failed, status = 0x%08x....\n\n",
+1416-                (ulonglong)uVar1,param_6,param_7,param_8);
+1417-  return uVar1;
+1418-}
+1419-
+1420-
+--
+1469-  puVar12 = &local_60;
+1470-  local_60 = 0;
+1471-  uVar11 = 1000;
+1472-  uVar8 = 0;
+1473-  lVar10 = lVar6;
+1474:  uVar4 = FUN_140004a90(8,0,0,0,lVar6,(undefined8 *)0x3e8,puVar12,param_8);
+1475-  if (-1 < (int)uVar4) {
+1476-    FUN_140008e28(&DAT_1400105c8,"%s",lVar6,uVar8,lVar10,uVar11,puVar12,param_8);
+1477-  }
+1478-  FUN_1400093b0(0xb2,lVar6);
+1479-  puVar12 = local_5c;
+1480-  local_5c[0] = 0;
+1481:  uVar4 = FUN_140004a90(1,0,param_2,param_3,param_4,puVar14,puVar12,param_8);
+1482-  if ((int)uVar4 < 0) {
+1483-    if (-1 < (int)uVar4) {
+1484-      uVar4 = 0;
+1485-    }
+1486-    FUN_140006a20(0,0x14000c230,0xd,"SendTask - ISPTRUSTLET_DEINIT Failed, status = 0x%08x \n",
+--
+1593-    }
+1594-    else {
+1595-      param_7 = local_40;
+1596-      *(undefined4 *)(param_1 + 0x28) = 0;
+1597-      local_40[0] = 0;
+1598:      uVar1 = FUN_140004a90(3,0,param_2,param_3,param_4,puVar7,param_7,param_8);
+1599-      if ((int)uVar1 < 0) {
+1600-        if (-1 < (int)uVar1) {
+1601-          uVar1 = 0;
+1602-        }
+1603-        pcVar5 = "SendTask - ISPTRUSTLET_STOP Failed, status = 0x%08x \n";
