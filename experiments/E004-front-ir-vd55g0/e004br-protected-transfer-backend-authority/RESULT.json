@@ -1,0 +1,47 @@
+{
+  "experiment": "E004br",
+  "status": "PASS_PROTECTED_TRANSFER_AUTHORITY_MAPPED_LINUX_BACKEND_UNRESOLVED",
+  "mode": "static-only",
+  "windows_authority": {
+    "component": "QcISPTrustlet8380.dll",
+    "sha256": "55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606",
+    "service_type": "SecureCompanion",
+    "trustlet_identity": 4096,
+    "memory_api_provider": "IumSdk.dll",
+    "internal_constructor": "FUN_180004c58",
+    "external_open": "FUN_180004828",
+    "combined_constructor": "FUN_180005868",
+    "transfer_dispatch": "FUN_1800037c8",
+    "direction": "internal CP_CAMERA mapping -> external VTL1 mapping",
+    "host_task4_is_final_transfer": false,
+    "qsee_qcomtee_transport_imported": false
+  },
+  "linux": {
+    "qseecom_enabled": true,
+    "qseecom_registered_base_apps": [
+      "qcom.tz.uefisecapp"
+    ],
+    "qcomtee_enabled": false,
+    "tee_dmabuf_heaps_enabled": true,
+    "active_dma_heaps": [
+      "default_cma_region",
+      "reserved",
+      "system"
+    ],
+    "active_protected_tee_heap": false,
+    "trusted_transfer_backend_proven": false
+  },
+  "firmware_inventory": {
+    "obvious_x1e_camera_secure_app_filename_found": false,
+    "negative_result_scope": "installed firmware filenames only; does not exclude services embedded in monolithic secure firmware"
+  },
+  "runtime_actions": {
+    "linux_secureisp": false,
+    "qseecom_send": false,
+    "qcomtee_enable_or_load": false,
+    "scm_assign_mem": false,
+    "protected_mmio": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004bs Linux protected execution counterpart authority, static first"
+}
