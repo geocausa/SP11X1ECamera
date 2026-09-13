@@ -1,0 +1,49 @@
+{
+  "schema": "sp11-camera-e004be-camera-scm-wrapper-compileonly-v1",
+  "status": "PASS_COMPILE_ONLY_WINDOWS_EXACT_CAMERA_SCM_WRAPPER",
+  "date": "2026-09-13",
+  "parity_rule": "Windows dynamic/static oracle is authoritative; Qualcomm Linux source is corroboration/mapping only.",
+  "windows_abi": {
+    "call_type": "standard",
+    "convention": "SMC32",
+    "owner": "SIP",
+    "service": "0x18",
+    "command": "0x07",
+    "arginfo": "0x00000002",
+    "arg0": "protect",
+    "arg1": "lane_mask",
+    "surface_ir_mask": "0x8",
+    "reconstructed_header": "0x02001807"
+  },
+  "qualcomm_historical": {
+    "commit": "91f7f8a77d67b7fdad11392d7b379c484c7a507e",
+    "service": "0x18",
+    "command": "0x07",
+    "args": [
+      "protect",
+      "csiphy_cpas_cp_reg_mask"
+    ],
+    "sip_macro_uses_smc32_family": true
+  },
+  "local_linux": {
+    "generic_scm_negotiates_machine_convention": true,
+    "arm64_probes_smc64_first": true,
+    "exact_windows_wrapper_forces_smc32": true,
+    "wrapper_export": "qcom_scm_camera_protect_phy_lanes"
+  },
+  "compile_only": {
+    "patch_dry_run": "PASS",
+    "patch_replay": "PASS",
+    "object_build": "PASS",
+    "object_sha256": "81234fa629ef274a18e20e467935189806297686b29c38f06eb51995065cb371",
+    "object_bytes": 468024,
+    "installed": false,
+    "booted": false,
+    "runtime_invoked": false
+  },
+  "shared_kernel_source_modified": false,
+  "linux_secure_csi_state_changed": false,
+  "camera_memory_reassigned": false,
+  "qcomtee_loaded": false,
+  "next_gate": "Windows-first ordering oracle for secure-lane protect/unprotect relative to protected start/stop; then dormant CAMSS integration patch."
+}

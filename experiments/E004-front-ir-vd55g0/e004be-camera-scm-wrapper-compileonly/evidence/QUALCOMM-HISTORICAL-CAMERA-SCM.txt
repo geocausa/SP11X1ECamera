@@ -1,0 +1,41 @@
+E004be HISTORICAL QUALCOMM CAMERA SCM CORROBORATION
+source_commit=91f7f8a77d67b7fdad11392d7b379c484c7a507e
+camera_url=https://android.googlesource.com/kernel/msm.git/+/91f7f8a77d67b7fdad11392d7b379c484c7a507e/drivers/media/platform/msm/camera/cam_sensor_module/cam_csiphy/cam_csiphy_core.c?format=TEXT
+scm_header_url=https://android.googlesource.com/kernel/msm.git/+/91f7f8a77d67b7fdad11392d7b379c484c7a507e/include/soc/qcom/scm.h?format=TEXT
+
+--- camera secure-lane function excerpt ---
+17:#define SCM_SVC_CAMERASS 0x18
+18:#define SECURE_SYSCALL_ID 0x6
+19:#define SECURE_SYSCALL_ID_2 0x7
+20:
+21:#define LANE_MASK_2PH 0x1F
+22:#define LANE_MASK_3PH 0x7
+23:
+24:static int csiphy_dump;
+25:module_param(csiphy_dump, int, 0644);
+26:
+27:static int cam_csiphy_notify_secure_mode(struct csiphy_device *csiphy_dev,
+28:	bool protect, int32_t offset)
+29:{
+30:	struct scm_desc desc = {0};
+31:
+32:	if (offset >= CSIPHY_MAX_INSTANCES) {
+33:		CAM_ERR(CAM_CSIPHY, "Invalid CSIPHY offset");
+34:		return -EINVAL;
+35:	}
+36:
+37:	desc.arginfo = SCM_ARGS(2, SCM_VAL, SCM_VAL);
+38:	desc.args[0] = protect;
+39:	desc.args[1] = csiphy_dev->csiphy_cpas_cp_reg_mask[offset];
+40:
+41:	if (scm_call2(SCM_SIP_FNID(SCM_SVC_CAMERASS, SECURE_SYSCALL_ID_2),
+42:		&desc)) {
+43:		CAM_ERR(CAM_CSIPHY, "scm call to hypervisor failed");
+44:		return -EINVAL;
+45:	}
+46:
+47:	return 0;
+
+--- SIP function-ID macro ---
+42:#define SCM_SIP_FNID(s, c) (((((s) & 0xFF) << 8) | ((c) & 0xFF)) | 0x02000000)
+70:#define SCM_ARGS(...) SCM_ARGS_IMPL(__VA_ARGS__, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)

@@ -1,0 +1,66 @@
+--- a/drivers/firmware/qcom/qcom_scm.h
++++ b/drivers/firmware/qcom/qcom_scm.h
+@@ -150,6 +150,13 @@
+ #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
+ #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
+ 
++/*
++ * Camera secure-lane service used by Qualcomm camera stacks.
++ * SP11 Windows parity authority: SIP service 0x18, command 0x07.
++ */
++#define QCOM_SCM_SVC_CAMERASS			0x18
++#define QCOM_SCM_CAMERASS_PROTECT_PHY_LANES	0x07
++
+ #define QCOM_SCM_SVC_WAITQ			0x24
+ #define QCOM_SCM_WAITQ_RESUME			0x02
+ #define QCOM_SCM_WAITQ_GET_WQ_CTX		0x03
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -97,6 +97,8 @@
+ int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val);
+ int qcom_scm_io_writel(phys_addr_t addr, unsigned int val);
+ 
++int qcom_scm_camera_protect_phy_lanes(bool protect, u64 lane_mask);
++
+ bool qcom_scm_restore_sec_cfg_available(void);
+ int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare);
+ int qcom_scm_set_gpu_smmu_aperture(unsigned int context_bank);
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -1171,6 +1171,36 @@
+ }
+ EXPORT_SYMBOL_GPL(qcom_scm_io_writel);
+ 
++/*
++ * qcom_scm_camera_protect_phy_lanes() - protect/unprotect camera CSI PHY lanes
++ * @protect: true to protect lanes, false to release them
++ * @lane_mask: camera CP lane mask
++ *
++ * The SP11 Windows camera stack and historical Qualcomm camera Linux code use
++ * the 32-bit standard SIP encoding for CAMERASS service 0x18, command 0x07,
++ * even on ARM64.  Do not route this through qcom_scm_call(), whose negotiated
++ * convention can be SMC64: force the observed SMC32 ABI explicitly.
++ */
++int qcom_scm_camera_protect_phy_lanes(bool protect, u64 lane_mask)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_CAMERASS,
++		.cmd = QCOM_SCM_CAMERASS_PROTECT_PHY_LANES,
++		.arginfo = QCOM_SCM_ARGS(2),
++		.args[0] = protect,
++		.args[1] = lane_mask,
++		.owner = ARM_SMCCC_OWNER_SIP,
++	};
++	struct qcom_scm_res res;
++	int ret;
++
++	ret = __scm_smc_call(__scm->dev, &desc, SMC_CONVENTION_ARM_32,
++			     &res, false);
++
++	return ret ? : res.result[0];
++}
++EXPORT_SYMBOL_GPL(qcom_scm_camera_protect_phy_lanes);
++
+ /**
+  * qcom_scm_restore_sec_cfg_available() - Check if secure environment
+  * supports restore security config interface.

@@ -1,0 +1,27 @@
+E004be PATCH REPLAY / BUILD AUTHORITY
+date=2026-09-13
+patch_dry_run=PASS
+patch_apply=PASS
+object_build=PASS
+object_sha256=81234fa629ef274a18e20e467935189806297686b29c38f06eb51995065cb371
+object_bytes=468024
+
+compiled_symbols:
+T qcom_scm_camera_protect_phy_lanes
+U __scm_smc_call
+export=qcom_scm_camera_protect_phy_lanes
+
+overlay_upper_files:
+drivers/firmware/qcom/qcom_scm.c
+drivers/firmware/qcom/qcom_scm.h
+include/linux/firmware/qcom/qcom_scm.h
+
+overlay_unmounted=yes
+
+post_unmount_shared_hashes:
+9937c99567878507e03e213a0b89b2f2c1b31dec1ac89c0342deb387de467c33  drivers/firmware/qcom/qcom_scm.c
+efe762cdbbebf200eb18d1c70c4f5d244f74e2ee02e7bcdd4d6a1d9393619e2c  drivers/firmware/qcom/qcom_scm.h
+7c946d7e6509af94b9902f17e572153db88956a815d5897f3730a3abbe647d04  include/linux/firmware/qcom/qcom_scm.h
+
+The patch was replayed against a fresh overlay lowerdir and compiled there.
+The shared kernel source remained byte-exact and no resulting object was installed or booted.
