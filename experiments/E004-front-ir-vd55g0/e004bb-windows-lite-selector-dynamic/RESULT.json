@@ -1,0 +1,56 @@
+{
+  "schema": "sp11-camera-e004bb-windows-lite-selector-dynamic-v1",
+  "status": "PASS_WINDOWS_SURFACE_IR_SETS_CAM_ISP_CAN_USE_LITE_MODE",
+  "date": "2026-09-13",
+  "windows_trigger": {
+    "authority": "E004aq Windows Hello/source-controller sequence",
+    "format": "NV12 644x604 60fps",
+    "faceauth_enable": "Success",
+    "securemode_enable": "Success",
+    "securemode_during_stream": 2,
+    "real_frames": 12,
+    "stop": "PASS",
+    "securemode_final": 1,
+    "faceauth_final": 1
+  },
+  "device_config": {
+    "command": "0x802",
+    "observed_hits": 2,
+    "payload_sizes": [
+      "0x900",
+      "0x900"
+    ],
+    "feature_flag_dword_index": "0x23",
+    "feature_flag_byte_offset": "0x8c",
+    "observed_feature_flags": [
+      "0x00000002",
+      "0x00000002"
+    ],
+    "bit1_set_both": true
+  },
+  "semantic_crosscheck": {
+    "checkpoint": "E004ba",
+    "public_macro": "CAM_ISP_CAN_USE_LITE_MODE",
+    "public_bit": 1,
+    "conclusion": "The exact protected Surface IR DeviceConfig explicitly allows/selects the Lite-capable camera path."
+  },
+  "raw_evidence": {
+    "kd_log_sha256": "eebe5a17805316bc6f98825368b86bc1a4cf55e3df48eaa504bcf652a7b5a560",
+    "kd_log_bytes": 8334,
+    "windows_run_sha256": "31e8c706f98951b5066678942dc9fbd30ec173332031264b1706a163a06daf95",
+    "windows_run_bytes": 4867
+  },
+  "debugger_mutated_payload": false,
+  "linux_secureisp_runtime_executed": false,
+  "qcomtee_loaded_linux": false,
+  "golden_return": {
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "sp11_entry": "7.1.5-sp11-fullio-v19c",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "",
+    "boot_current": "0005",
+    "camera_nodes": false,
+    "camera_modules": false
+  },
+  "next_gate": "Static SP11 firmware/TA inventory and Linux QCOMTEE loader/session mapping; no Linux secure-camera execution yet."
+}

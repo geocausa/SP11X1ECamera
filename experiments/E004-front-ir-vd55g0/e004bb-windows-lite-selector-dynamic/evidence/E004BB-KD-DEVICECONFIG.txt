@@ -1,0 +1,38 @@
+E004bb KD read-only DeviceConfig observation
+Date: 2026-09-13
+Machine: SP11 Windows, debugger: SP7 KDNET
+Raw KD log retained on SP7:
+C:\Users\SurfacePro7\Documents\KDNET\Codex\E004BB_LITE_SELECTOR_20260913\E004BB_KD_0a1c_2026-09-13_18-30-40-456.log
+raw_bytes=8334
+raw_sha256=eebe5a17805316bc6f98825368b86bc1a4cf55e3df48eaa504bcf652a7b5a560
+
+Live CameraSecureISP image:
+qccamsecureisp8380 base=fffff802b90a0000 end=fffff802b90d6000
+
+Observed DeviceConfig hit 1:
+command=0x802
+wrapper_payload_pointer=00000215151ee028
+wrapper_payload_size=0x900
+payload +0x80 dwords:
+00000000 00000000 00000000 00000002
+00000001 00000000 00000000 00000000
+feature_flag_dword_index=0x23
+feature_flag_byte_offset=0x8c
+feature_flag=0x00000002
+
+Observed DeviceConfig hit 2:
+command=0x802
+wrapper_payload_pointer=00000215156f8498
+wrapper_payload_size=0x900
+payload +0x80 dwords:
+00000000 00000000 00000000 00000002
+00000001 00000000 00000000 00000000
+feature_flag_dword_index=0x23
+feature_flag_byte_offset=0x8c
+feature_flag=0x00000002
+
+E004ba static authority maps feature_flag bit 1 to public Qualcomm
+CAM_ISP_CAN_USE_LITE_MODE. Both independent live DeviceConfig observations therefore
+carry that bit set.
+
+Observation only: no payload or target state was changed by the debugger.

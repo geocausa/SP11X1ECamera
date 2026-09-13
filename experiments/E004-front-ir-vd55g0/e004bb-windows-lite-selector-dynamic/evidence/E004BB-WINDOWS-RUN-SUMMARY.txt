@@ -1,0 +1,37 @@
+E004bb Windows trusted-trigger authority
+Date: 2026-09-13
+Original file: C:\Users\Geoca\Documents\E004BB-WINDOWS-RUN.txt
+original_bytes=4867
+original_sha256=31e8c706f98951b5066678942dc9fbd30ec173332031264b1706a163a06daf95
+
+Trigger reused the already accepted E004aq Windows Hello / source-controller sequence.
+
+Observed:
+profile={81361B22-700B-4546-A2D4-C52E907BFC27},0
+format=NV12 644x604 60fps
+source=Surface IR Camera Front / Infrared / VideoPreview
+controller=Windows.Media.Capture.Frames.MediaFrameSourceController
+
+FaceAuthMode:
+before flags=1 capability=3
+enable request flags=2 => Success
+after enable flags=2
+
+SecureMode:
+before flags=1 capability=3
+enable request flags=2 => Success
+after enable flags=2
+during stream flags=2
+
+stream_start=Success
+real_frames=12
+stream_stop=PASS
+
+Teardown:
+SecureMode final flags=1
+FaceAuthMode final flags=1
+disable calls=Success
+script_end=E004AQ_END
+
+The PowerShell script was invoked with a process-local ExecutionPolicy Bypass only.
+The machine execution policy was not modified.
