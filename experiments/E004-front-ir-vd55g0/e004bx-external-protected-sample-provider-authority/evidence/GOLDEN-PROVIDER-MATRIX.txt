@@ -1,0 +1,32 @@
+E004bx GOLDEN PROTECTED SAMPLE PROVIDER MATRIX
+
+--- relevant config ---
+CONFIG_QCOM_SCM=y
+CONFIG_QCOM_QSEECOM=y
+CONFIG_QCOM_QSEECOM_UEFISECAPP=y
+CONFIG_TEE=m
+CONFIG_TEE_DMABUF_HEAPS=y
+CONFIG_OPTEE=m
+# CONFIG_OPTEE_INSECURE_LOAD_IMAGE is not set
+CONFIG_OPTEE_STATIC_PROTMEM_POOL=y
+# CONFIG_QCOMTEE is not set
+
+--- runtime dma heaps ---
+default_cma_region
+reserved
+system
+
+--- runtime tee/ffa/qcomtee state ---
+
+--- all secure-video-record implementation references ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:237:	case TEE_DMA_HEAP_SECURE_VIDEO_RECORD:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:238:		return "protected,secure-video-record";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/tee_core.h:41:	TEE_DMA_HEAP_SECURE_VIDEO_RECORD,
+
+--- all protected heap registration callsites ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/optee/smc_abi.c:1722:	rc = tee_device_register_dma_heap(optee->teedev, heap_id, pool);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/optee/ffa_abi.c:1046:		rc = tee_device_register_dma_heap(optee->teedev, id, pool);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:285:int tee_device_register_dma_heap(struct tee_device *teedev,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:320:EXPORT_SYMBOL_GPL(tee_device_register_dma_heap);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:367:int tee_device_register_dma_heap(struct tee_device *teedev __always_unused,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:373:EXPORT_SYMBOL_GPL(tee_device_register_dma_heap);

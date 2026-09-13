@@ -1,0 +1,60 @@
+{
+  "experiment": "E004bx",
+  "status": "PASS_NO_CURRENT_X1E_EXTERNAL_PROTECTED_SAMPLE_PROVIDER_AUTHORITY",
+  "mode": "static-and-read-only-runtime-inventory",
+  "required_contract": {
+    "source": "E004bw",
+    "opaque_identity": true,
+    "allocation_and_captured_extent_separate": true,
+    "trusted_worker_visible_without_hlos_cpu_map": true,
+    "serialization_and_payload_offset": true,
+    "independent_external_lifetime": true
+  },
+  "generic_tee_heap": {
+    "framework_present": true,
+    "ordinary_cpu_map_ops_absent": true,
+    "secure_video_record_name_present": true,
+    "secure_video_record_provider_registration_found": false
+  },
+  "optee": {
+    "config_module": true,
+    "active_on_sp11": false,
+    "x1e_dt_node_found": false,
+    "registered_protected_use_case": "secure_video_play",
+    "secure_video_record_provider": false
+  },
+  "qcomtee": {
+    "qtee_reserved_regions_present": true,
+    "golden_enabled": false,
+    "protected_dma_heap_registration_found": false,
+    "ordinary_shm_hlos_kaddr": true,
+    "external_sample_provider_authority": false
+  },
+  "live_dma_heaps": [
+    "default_cma_region",
+    "reserved",
+    "system"
+  ],
+  "reserved_cma": {
+    "cpu_access_ops": true,
+    "mmap": true,
+    "vmap": true,
+    "protected_sample_candidate": false
+  },
+  "x1e_fixed_carveouts": {
+    "camera_no_map": true,
+    "qtee_no_map": true,
+    "ta_no_map": true,
+    "per_sample_provider_semantics_found": false
+  },
+  "runtime_actions": {
+    "module_loaded": false,
+    "optee_probe": false,
+    "qcomtee_enable_or_load": false,
+    "qtee_qsee_call": false,
+    "scm_assign_mem": false,
+    "protected_heap_created": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004by QcTrEE MemShare/SMCInvoke service authority, Windows static first"
+}

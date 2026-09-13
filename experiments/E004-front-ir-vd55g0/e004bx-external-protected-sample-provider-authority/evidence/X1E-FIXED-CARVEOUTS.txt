@@ -1,0 +1,134 @@
+E004bx X1E FIXED CARVEOUTS ARE NOT SAMPLE PROVIDERS
+
+--- camera/video/qtee/ta fixed no-map regions ---
+			no-map;
+			phandle = <0x1f3>;
+		};
+
+		spss_region_mem: spss-region@86700000 {
+			reg = <0x00 0x86700000 0x00 0x400000>;
+			no-map;
+			phandle = <0x1f4>;
+		};
+
+		adsp_boot_mem: adsp-boot@86b00000 {
+			reg = <0x00 0x86b00000 0x00 0xc00000>;
+			no-map;
+			phandle = <0x1f5>;
+		};
+
+		video_mem: video@87700000 {
+			reg = <0x00 0x87700000 0x00 0x700000>;
+			no-map;
+			phandle = <0xfc>;
+		};
+
+		adspslpi_mem: adspslpi@87e00000 {
+			reg = <0x00 0x87e00000 0x00 0x3a00000>;
+			no-map;
+			phandle = <0xd1>;
+		};
+
+		q6_adsp_dtb_mem: q6-adsp-dtb@8b800000 {
+			reg = <0x00 0x8b800000 0x00 0x80000>;
+			no-map;
+			phandle = <0xd2>;
+		};
+
+		cdsp_mem: cdsp@8b900000 {
+			reg = <0x00 0x8b900000 0x00 0x2000000>;
+			no-map;
+			phandle = <0x1a4>;
+		};
+
+		q6_cdsp_dtb_mem: q6-cdsp-dtb@8d900000 {
+			reg = <0x00 0x8d900000 0x00 0x80000>;
+			no-map;
+			phandle = <0x1a5>;
+		};
+
+		gpu_microcode_mem: gpu-microcode@8d9fe000 {
+			reg = <0x00 0x8d9fe000 0x00 0x2000>;
+			no-map;
+			phandle = <0xcb>;
+		};
+
+		cvp_mem: cvp@8da00000 {
+			reg = <0x00 0x8da00000 0x00 0x700000>;
+			no-map;
+			phandle = <0x1f6>;
+		};
+
+		camera_mem: camera@8e100000 {
+			reg = <0x00 0x8e100000 0x00 0x800000>;
+			no-map;
+			phandle = <0x1f7>;
+		};
+
+		av1_encoder_mem: av1-encoder@8e900000 {
+			reg = <0x00 0x8e900000 0x00 0x700000>;
+			no-map;
+			phandle = <0x1f8>;
+		};
+
+		reserved-region@8f000000 {
+			reg = <0x00 0x8f000000 0x00 0xa00000>;
+			no-map;
+		};
+
+		wpss_mem: wpss@8fa00000 {
+			reg = <0x00 0x8fa00000 0x00 0x1900000>;
+			no-map;
+			phandle = <0x1f9>;
+		};
+
+		q6_wpss_dtb_mem: q6-wpss-dtb@91300000 {
+			reg = <0x00 0x91300000 0x00 0x80000>;
+			no-map;
+			phandle = <0x1fa>;
+		};
+
+		xbl_sc_mem: xbl-sc@d8000000 {
+			reg = <0x00 0xd8000000 0x00 0x40000>;
+			no-map;
+			phandle = <0x1fb>;
+		};
+
+		reserved-region@d8040000 {
+			reg = <0x00 0xd8040000 0x00 0xa0000>;
+			no-map;
+		};
+
+		qtee_mem: qtee@d80e0000 {
+			reg = <0x00 0xd80e0000 0x00 0x520000>;
+			no-map;
+			phandle = <0x1fc>;
+		};
+
+		ta_mem: ta@d8600000 {
+			reg = <0x00 0xd8600000 0x00 0x8a00000>;
+			no-map;
+			phandle = <0x1fd>;
+		};
+
+		tags_mem1: tags@e1000000 {
+			reg = <0x00 0xe1000000 0x00 0x26a0000>;
+			no-map;
+			phandle = <0x1fe>;
+		};
+
+
+--- explicit phandle users in source tree ---
+[camera_mem]
+[video_mem]
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:5210:			memory-region = <&video_mem>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8750.dtsi:2922:			memory-region = <&video_mem>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8250.dtsi:4343:			memory-region = <&video_mem>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/kodiak.dtsi:5009:			memory-region = <&video_mem>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/hamoa.dtsi:5482:			memory-region = <&video_mem>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/monaco.dtsi:5392:			memory-region = <&video_mem>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8550.dtsi:3317:			memory-region = <&video_mem>;
+[qtee_mem]
+[ta_mem]
+
+--- no Linux driver source references to X1E camera carveout label/address ---

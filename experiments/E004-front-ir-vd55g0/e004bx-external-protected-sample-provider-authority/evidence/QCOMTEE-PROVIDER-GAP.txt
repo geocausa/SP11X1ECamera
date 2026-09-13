@@ -1,0 +1,226 @@
+E004bx QCOMTEE PROVIDER GAP
+
+--- qcomtee Kconfig ---
+# SPDX-License-Identifier: GPL-2.0-only
+# Qualcomm Trusted Execution Environment Configuration
+config QCOMTEE
+	tristate "Qualcomm TEE Support"
+	depends on ARCH_QCOM || COMPILE_TEST
+	depends on !CPU_BIG_ENDIAN
+	select QCOM_SCM
+	select QCOM_TZMEM_MODE_SHMBRIDGE
+	help
+	  This option enables the Qualcomm Trusted Execution Environment (QTEE)
+	  driver. It provides an API to access services offered by QTEE and
+	  its loaded Trusted Applications (TAs). Additionally, it facilitates
+	  the export of userspace services provided by supplicants to QTEE.
+
+--- qcomtee has no protected-heap registration ---
+
+--- qcomtee ordinary shared memory keeps HLOS kaddr ---
+#else
+struct tee_shm *tee_shm_alloc_dma_mem(struct tee_context *ctx,
+				      size_t page_count)
+{
+	return ERR_PTR(-EINVAL);
+}
+EXPORT_SYMBOL_GPL(tee_shm_alloc_dma_mem);
+#endif
+
+int tee_dyn_shm_alloc_helper(struct tee_shm *shm, size_t size, size_t align,
+			     int (*shm_register)(struct tee_context *ctx,
+						 struct tee_shm *shm,
+						 struct page **pages,
+						 size_t num_pages,
+						 unsigned long start))
+{
+	size_t nr_pages = roundup(size, PAGE_SIZE) / PAGE_SIZE;
+	struct page **pages;
+	unsigned int i;
+	int rc = 0;
+
+	/*
+	 * Ignore alignment since this is already going to be page aligned
+	 * and there's no need for any larger alignment.
+	 */
+	shm->kaddr = alloc_pages_exact(nr_pages * PAGE_SIZE,
+				       GFP_KERNEL | __GFP_ZERO);
+	if (!shm->kaddr)
+		return -ENOMEM;
+
+	shm->paddr = virt_to_phys(shm->kaddr);
+	shm->size = nr_pages * PAGE_SIZE;
+
+	pages = kzalloc_objs(*pages, nr_pages);
+	if (!pages) {
+		rc = -ENOMEM;
+		goto err_pages;
+	}
+
+	for (i = 0; i < nr_pages; i++)
+		pages[i] = virt_to_page((u8 *)shm->kaddr + i * PAGE_SIZE);
+
+	shm->pages = pages;
+	shm->num_pages = nr_pages;
+
+	if (shm_register) {
+		rc = shm_register(shm->ctx, shm, pages, nr_pages,
+				  (unsigned long)shm->kaddr);
+		if (rc)
+			goto err_kfree;
+	}
+
+	return 0;
+err_kfree:
+	kfree(pages);
+err_pages:
+	free_pages_exact(shm->kaddr, shm->size);
+	shm->kaddr = NULL;
+	return rc;
+}
+EXPORT_SYMBOL_GPL(tee_dyn_shm_alloc_helper);
+
+void tee_dyn_shm_free_helper(struct tee_shm *shm,
+			     int (*shm_unregister)(struct tee_context *ctx,
+						   struct tee_shm *shm))
+{
+	if (shm_unregister)
+		shm_unregister(shm->ctx, shm);
+	free_pages_exact(shm->kaddr, shm->size);
+	shm->kaddr = NULL;
+	kfree(shm->pages);
+{
+	tee_shm_free(oic->in_shm);
+	tee_shm_free(oic->out_shm);
+}
+
+/* Dynamic shared memory pool based on tee_dyn_shm_alloc_helper(). */
+
+static int qcomtee_shm_register(struct tee_context *ctx, struct tee_shm *shm,
+				struct page **pages, size_t num_pages,
+				unsigned long start)
+{
+	return qcom_tzmem_shm_bridge_create(shm->paddr, shm->size,
+					    &shm->sec_world_id);
+}
+
+static int qcomtee_shm_unregister(struct tee_context *ctx, struct tee_shm *shm)
+{
+	qcom_tzmem_shm_bridge_delete(shm->sec_world_id);
+
+	return 0;
+}
+
+static int pool_op_alloc(struct tee_shm_pool *pool, struct tee_shm *shm,
+			 size_t size, size_t align)
+{
+	return tee_dyn_shm_alloc_helper(shm, size, align, qcomtee_shm_register);
+}
+
+static void pool_op_free(struct tee_shm_pool *pool, struct tee_shm *shm)
+{
+	tee_dyn_shm_free_helper(shm, qcomtee_shm_unregister);
+}
+
+static void pool_op_destroy_pool(struct tee_shm_pool *pool)
+{
+	kfree(pool);
+}
+
+static const struct tee_shm_pool_ops pool_ops = {
+	.alloc = pool_op_alloc,
+	.free = pool_op_free,
+	.destroy_pool = pool_op_destroy_pool,
+};
+
+struct tee_shm_pool *qcomtee_shm_pool_alloc(void)
+{
+	struct tee_shm_pool *pool;
+
+	pool = kzalloc_obj(*pool);
+	if (!pool)
+		return ERR_PTR(-ENOMEM);
+
+	pool->ops = &pool_ops;
+
+	return pool;
+}
+	return 0;
+}
+
+/**
+ * qcom_tzmem_shm_bridge_create() - Create a SHM bridge.
+ * @paddr: Physical address of the memory to share.
+ * @size: Size of the memory to share.
+ * @handle: Handle to the SHM bridge.
+ *
+ * On platforms that support SHM bridge, this function creates a SHM bridge
+ * for the given memory region with QTEE. The handle returned by this function
+ * must be passed to qcom_tzmem_shm_bridge_delete() to free the SHM bridge.
+ *
+ * Return: On success, returns 0; on failure, returns < 0.
+ */
+int qcom_tzmem_shm_bridge_create(phys_addr_t paddr, size_t size, u64 *handle)
+{
+	u64 pfn_and_ns_perm, ipfn_and_s_perm, size_and_flags;
+	int ret;
+
+	if (!qcom_tzmem_using_shm_bridge)
+		return 0;
+
+	pfn_and_ns_perm = paddr | QCOM_SCM_PERM_RW;
+	ipfn_and_s_perm = paddr | QCOM_SCM_PERM_RW;
+	size_and_flags = size | (1 << QCOM_SHM_BRIDGE_NUM_VM_SHIFT);
+
+	ret = qcom_scm_shm_bridge_create(pfn_and_ns_perm, ipfn_and_s_perm,
+					 size_and_flags, QCOM_SCM_VMID_HLOS,
+					 handle);
+	if (ret) {
+		dev_err(qcom_tzmem_dev,
+			"SHM Bridge failed: ret %d paddr 0x%pa, size %zu\n",
+			ret, &paddr, size);
+
+		return ret;
+	}
+
+	return 0;
+}
+EXPORT_SYMBOL_GPL(qcom_tzmem_shm_bridge_create);
+
+--- X1E QTEE / TA reserved no-map regions ---
+		};
+
+		xbl_sc_mem: xbl-sc@d8000000 {
+			reg = <0x00 0xd8000000 0x00 0x40000>;
+			no-map;
+			phandle = <0x1fb>;
+		};
+
+		reserved-region@d8040000 {
+			reg = <0x00 0xd8040000 0x00 0xa0000>;
+			no-map;
+		};
+
+		qtee_mem: qtee@d80e0000 {
+			reg = <0x00 0xd80e0000 0x00 0x520000>;
+			no-map;
+			phandle = <0x1fc>;
+		};
+
+		ta_mem: ta@d8600000 {
+			reg = <0x00 0xd8600000 0x00 0x8a00000>;
+			no-map;
+			phandle = <0x1fd>;
+		};
+
+		tags_mem1: tags@e1000000 {
+			reg = <0x00 0xe1000000 0x00 0x26a0000>;
+			no-map;
+			phandle = <0x1fe>;
+		};
+
+		llcc_lpi_mem: llcc-lpi@ff800000 {
+			reg = <0x00 0xff800000 0x00 0x600000>;
+			no-map;
+			phandle = <0x1ff>;
+		};
