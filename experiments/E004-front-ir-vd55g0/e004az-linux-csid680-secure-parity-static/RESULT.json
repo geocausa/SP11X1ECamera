@@ -1,0 +1,50 @@
+{
+  "schema": "sp11-camera-e004az-linux-csid680-secure-lite-parity-v1",
+  "status": "PASS_TRUSTLET_CSID_LITE_MATCHES_LINUX_CSID680",
+  "date": "2026-09-13",
+  "linux": {
+    "compatible": "qcom,x1e80100-camss",
+    "csid_implementation": "csid_ops_680",
+    "full_resources": [
+      "CSID0",
+      "CSID1",
+      "CSID2"
+    ],
+    "lite_resources": [
+      "CSID_LITE0",
+      "CSID_LITE1"
+    ]
+  },
+  "trustlet": {
+    "table": "CSID_Lite",
+    "active_surface_selector_proven": false,
+    "selector_state_offset": "0xe00",
+    "selector_semantics": "unresolved"
+  },
+  "exact_parity": {
+    "top_irq_status": "0x7c",
+    "top_irq_clear": "0x84",
+    "buf_done_irq_status": "0x8c",
+    "buf_done_irq_clear": "0x94",
+    "rx_irq_status": "0x9c",
+    "rx_irq_clear": "0xa4",
+    "rdi_irq_status": "0xec+0x10*n",
+    "rdi_irq_clear": "0xf4+0x10*n",
+    "rx_cfg0": "0x200",
+    "rx_cfg1": "0x204",
+    "rdi_cfg0": "0x500+0x100*n",
+    "rdi_ctrl": "0x504+0x100*n",
+    "rdi_cfg1": "0x510+0x100*n",
+    "rdi_epoch": "0x52c+0x100*n",
+    "frame_drop": "0x540/0x544+0x100*n",
+    "irq_subsample": "0x548/0x54c+0x100*n",
+    "pixel_drop": "0x558/0x55c+0x100*n",
+    "line_drop": "0x560/0x564+0x100*n"
+  },
+  "conclusion": "Linux already models the X1E CSID-Lite/680 register family; protected ownership/transport remains separate.",
+  "runtime_executed": false,
+  "qcomtee_loaded": false,
+  "protected_aperture_accessed_linux": false,
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Resolve DeviceConfig manager+0xe00 selector semantics and the exact Surface IR-selected CSID HAL table."
+}

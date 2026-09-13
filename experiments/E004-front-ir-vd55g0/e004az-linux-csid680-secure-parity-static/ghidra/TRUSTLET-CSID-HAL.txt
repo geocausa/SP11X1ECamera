@@ -1,0 +1,1668 @@
+TARGET 1800119e0 FUN_1800119e0@1800119e0
+  REF 18002b55c DATA caller=<none>
+  REF 18000a7a8 DATA caller=FUN_180009260@180009260
+  REF 18000a6f8 PARAM caller=FUN_180009260@180009260
+//// FUN_1800119e0@1800119e0 ////
+
+void FUN_1800119e0(longlong param_1,undefined4 param_2)
+
+{
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x80) = 1;
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xc) = 0x11;
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x10) = param_2;
+  return;
+}
+
+
+
+TARGET 180011a10 FUN_180011a10@180011a10
+  REF 18002b561 DATA caller=<none>
+  REF 18000a7b4 DATA caller=FUN_180009260@180009260
+//// FUN_180011a10@180011a10 ////
+
+void FUN_180011a10(longlong param_1)
+
+{
+  if (*(int *)(param_1 + 0xbc) != 0) {
+    *(undefined4 *)(param_1 + 0xc0) = *(undefined4 *)(param_1 + 0x58);
+    *(undefined4 *)(param_1 + 0xc4) = *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x240);
+    *(undefined4 *)(param_1 + 200) = *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x244);
+    *(uint *)(param_1 + 0xcc) = *(uint *)(*(longlong *)(param_1 + 8) + 0x248) & 0xffff;
+  }
+  return;
+}
+
+
+
+TARGET 180011cf0 FUN_180011cf0@180011cf0
+  REF 18002b566 DATA caller=<none>
+  REF 18000a7c0 DATA caller=FUN_180009260@180009260
+//// FUN_180011cf0@180011cf0 ////
+
+void FUN_180011cf0(longlong param_1,char param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined4 uVar1;
+  
+  uVar1 = 0x101;
+  if (param_2 != '\0') {
+    uVar1 = 0x102;
+  }
+  if (*(int *)(param_1 + 0x28) != 0) {
+    if (*(int *)(param_1 + 0x28) != 1) {
+      FUN_180019e00(2,"Invalid Core ID, core%d is not available",param_3,param_4,param_5,param_6,
+                    param_7,param_8);
+      return;
+    }
+    *(undefined4 *)(*(longlong *)(param_1 + 0x10) + 4) = uVar1;
+    return;
+  }
+  **(undefined4 **)(param_1 + 0x10) = uVar1;
+  return;
+}
+
+
+
+TARGET 180011d40 FUN_180011d40@180011d40
+  REF 18003f5a8 DATA caller=<none>
+  REF 18002b56b DATA caller=<none>
+  REF 18000a790 DATA caller=FUN_180009260@180009260
+  REF 18000a710 PARAM caller=FUN_180009260@180009260
+//// FUN_180011d40@180011d40 ////
+
+void FUN_180011d40(longlong param_1,byte *param_2,undefined8 param_3,uint *param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  code *pcVar2;
+  uint uVar3;
+  undefined4 uVar4;
+  uint uVar5;
+  uint uVar6;
+  undefined8 uVar7;
+  undefined8 uVar8;
+  undefined8 uVar9;
+  uint local_80;
+  uint local_7c;
+  uint local_78;
+  uint local_74;
+  uint local_70;
+  uint local_6c;
+  uint local_68;
+  uint local_64;
+  uint local_60;
+  uint local_5c [3];
+  
+  uVar9 = *(undefined8 *)(param_2 + 0x180);
+  uVar8 = *(undefined8 *)(param_2 + 0x198);
+  uVar7 = *(undefined8 *)(param_2 + 400);
+  *(undefined8 *)(param_1 + 0xd8) = *(undefined8 *)(param_2 + 0x188);
+  *(undefined8 *)(param_1 + 0xd0) = uVar9;
+  *(undefined8 *)(param_1 + 0xe8) = uVar8;
+  *(undefined8 *)(param_1 + 0xe0) = uVar7;
+  *(undefined8 *)(param_1 + 0xf0) = *(undefined8 *)(param_2 + 0x1a0);
+  *(uint *)(*(longlong *)(param_1 + 8) + 0x200) =
+       (param_2[2] + 1 & 3) << 0x1c |
+       (*(uint *)(param_2 + 8) & 0x3333 | (*param_2 & 1 | (param_2[3] & 1) << 3) << 0x14) << 4 |
+       (param_2[1] + 1 & 0xf) << 0x14 | param_2[0xc] & 3;
+  uVar4 = 1;
+  if ((((((3 < param_2[0x19]) && (param_2[0x10] != 0)) ||
+        ((3 < param_2[0x81] && (param_2[0x78] != 0)))) ||
+       ((3 < param_2[0xb5] && (param_2[0xac] != 0)))) ||
+      ((3 < param_2[0xe9] && (param_2[0xe0] != 0)))) ||
+     (((3 < param_2[0x11d] && (param_2[0x114] != 0)) ||
+      ((3 < param_2[0x151] && (param_2[0x148] != 0)))))) {
+    uVar4 = 5;
+  }
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x204) = uVar4;
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xa0) = 0x19fb800;
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x90) = 0x1ffff;
+  if (param_2[0x10] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID IPP.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    uVar6 = *(uint *)(param_1 + 0xf0);
+    uVar7 = 0;
+    FUN_180019e00(4,"input format for ipp/ppp path:%d",(ulonglong)uVar6,param_4,param_5,param_6,
+                  param_7,param_8);
+    switch(uVar6) {
+    case 2:
+      uVar7 = 1;
+      param_4 = (uint *)0x0;
+      uVar6 = 0x1000;
+      break;
+    case 3:
+      uVar7 = 2;
+      param_4 = (uint *)0x1;
+      uVar6 = 0x2000;
+      break;
+    case 4:
+      uVar7 = 3;
+      param_4 = (uint *)0x1;
+      uVar6 = 0x3000;
+      break;
+    case 5:
+      uVar7 = 4;
+      param_4 = (uint *)0x1;
+      uVar6 = 0x4000;
+      break;
+    case 6:
+      uVar7 = 5;
+      param_4 = (uint *)0x1;
+      uVar6 = 0x5000;
+      break;
+    case 7:
+      uVar7 = 6;
+      param_4 = (uint *)0x2;
+      uVar6 = 0x6000;
+      break;
+    default:
+      FUN_180019e00(2,"Unsupported format %d",(ulonglong)uVar6,param_4,param_5,param_6,param_7,
+                    param_8);
+      uVar6 = 0;
+      param_4 = (uint *)0x0;
+    }
+    FUN_180019e00(4,"decode_fmt:%d plain_fmt:%d",uVar7,param_4,param_5,param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x374) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x378) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x37c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x380) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x364) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x368) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x36c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x370) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x334) = 0x130013;
+    uVar5 = *(uint *)(param_1 + 0xf4);
+    uVar3 = 0xffffffff;
+    if (uVar5 != 1) {
+      if (uVar5 == 0) {
+                    /* WARNING: Does not return */
+        pcVar2 = (code *)SoftwareBreakpoint(0xf004,0x180011fcc);
+        (*pcVar2)();
+      }
+      uVar1 = 0;
+      if (uVar5 != 0) {
+        uVar1 = 0x20 / uVar5;
+      }
+      for (; uVar1 != 0; uVar1 = uVar1 - 1) {
+        uVar3 = uVar3 << (ulonglong)(uVar5 & 0x1f) | 1;
+      }
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x338) = uVar3;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x33c) = uVar3;
+    if (param_2[0x27] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x35c) = *(undefined4 *)(param_2 + 0x3c);
+    }
+    if (param_2[0x26] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x360) =
+           *(ushort *)(param_2 + 0x40) & 0x3fff | (*(ushort *)(param_2 + 0x42) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x300) =
+         uVar6 | (param_2[0x1a] & 0x3f |
+                 (param_2[0x19] & 0xfffe001f | (param_2[0x18] & 3 | (uint)param_2[0x10] << 4) << 5)
+                 << 6) << 0x10;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x310) =
+         (param_2[0x29] & 1 |
+         (param_2[0x28] & 1 | (param_2[0x27] & 1 | (param_2[0x26] & 1) << 1) << 1) << 1) << 10 |
+         0x4241;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x324) = 0;
+  }
+  if (param_2[0x44] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID PPP.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    uVar7 = 0;
+    if ((*(char *)(param_1 + 0x18) == '\0') ||
+       (*(int *)(param_1 + 0x20) == *(int *)(param_1 + 0x28))) {
+      uVar6 = *(uint *)(param_1 + 0xf0);
+      FUN_180019e00(4,"input format for ipp/ppp path:%d",(ulonglong)uVar6,param_4,param_5,param_6,
+                    param_7,param_8);
+      switch(uVar6) {
+      case 2:
+        uVar7 = 1;
+        param_4 = (uint *)0x0;
+        uVar6 = 0x1000;
+        break;
+      case 3:
+        uVar7 = 2;
+        param_4 = (uint *)0x1;
+        uVar6 = 0x2000;
+        break;
+      case 4:
+        uVar7 = 3;
+        param_4 = (uint *)0x1;
+        uVar6 = 0x3000;
+        break;
+      case 5:
+        uVar7 = 4;
+        param_4 = (uint *)0x1;
+        uVar6 = 0x4000;
+        break;
+      case 6:
+        uVar7 = 5;
+        param_4 = (uint *)0x1;
+        uVar6 = 0x5000;
+        break;
+      case 7:
+        uVar7 = 6;
+        param_4 = (uint *)0x2;
+        uVar6 = 0x6000;
+        break;
+      default:
+        FUN_180019e00(2,"Unsupported format %d",(ulonglong)uVar6,param_4,param_5,param_6,param_7,
+                      param_8);
+        uVar6 = 0;
+        param_4 = (uint *)0x0;
+      }
+      FUN_180019e00(4,"decode_fmt:%d plain_fmt:%d",uVar7,param_4,param_5,param_6,param_7,param_8);
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb74) = 0;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb78) = 1;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb7c) = 1;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb80) = 0;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb64) = 0;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb68) = 1;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb6c) = 0;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb70) = 1;
+      if (param_2[0x5b] != 0) {
+        *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb5c) = *(undefined4 *)(param_2 + 0x70);
+      }
+      if (param_2[0x5a] != 0) {
+        *(uint *)(*(longlong *)(param_1 + 8) + 0xb60) =
+             *(ushort *)(param_2 + 0x74) & 0x3fff | (*(ushort *)(param_2 + 0x76) & 0x3fff) << 0x10;
+      }
+      *(uint *)(*(longlong *)(param_1 + 8) + 0xb00) =
+           uVar6 | (param_2[0x4e] & 0x3f |
+                   (param_2[0x4d] & 0xfffe001f | (param_2[0x4c] & 3 | (uint)param_2[0x44] << 4) << 5
+                   ) << 6) << 0x10;
+      *(uint *)(*(longlong *)(param_1 + 8) + 0xb10) =
+           (param_2[0x5d] & 1 |
+           (param_2[0x5c] & 1 | (param_2[0x5b] & 1 | (param_2[0x5a] & 1) << 1) << 1) << 1) << 10 |
+           0x4241;
+      *(uint *)(*(longlong *)(param_1 + 8) + 0xb0c) =
+           (param_2[0x4e] & 0x1f |
+           (param_2[0x4d] & 0xfffffe3f | (param_2[0x4c] & 1 | (param_2[0x44] & 3) << 1) << 6) << 5)
+           << 2;
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb14) = 0;
+    }
+  }
+  if (param_2[0x78] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI0.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    param_4 = &local_7c;
+    local_80 = 0;
+    local_7c = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0x7c),&local_80,param_4,param_5,
+                  param_6,param_7,param_8);
+    uVar5 = 0xffffffff;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x540) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x544) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x548) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x54c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x558) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x55c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x560) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x564) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x52c) = 0x13;
+    uVar6 = *(uint *)(param_1 + 0xf4);
+    if (uVar6 != 1) {
+      if (uVar6 == 0) {
+                    /* WARNING: Does not return */
+        pcVar2 = (code *)SoftwareBreakpoint(0xf004,0x18001234c);
+        (*pcVar2)();
+      }
+      uVar3 = 0;
+      if (uVar6 != 0) {
+        uVar3 = 0x20 / uVar6;
+      }
+      for (; uVar3 != 0; uVar3 = uVar3 - 1) {
+        uVar5 = uVar5 << (ulonglong)(uVar6 & 0x1f) | 1;
+      }
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x530) = uVar5;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x534) = uVar5;
+    if (param_2[0x8f] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x550) = *(undefined4 *)(param_2 + 0xa4);
+    }
+    if (param_2[0x8e] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x554) =
+           *(ushort *)(param_2 + 0xa8) & 0x3fff | (*(ushort *)(param_2 + 0xaa) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x500) =
+         (local_80 & 0xf |
+         (param_2[0x82] & 0xff80003f |
+         (param_2[0x81] & 0xfffe001f | (param_2[0x80] & 3 | (uint)param_2[0x78] << 4) << 5) << 6) <<
+         4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x510) =
+         (param_2[0x91] & 1 |
+         (param_2[0x90] & 0xffffff01 |
+         (param_2[0x8f] & 1 | (param_2[0x8e] & 1 | (local_7c & 3) << 4) << 1) << 1) << 1) << 5 |
+         0x15;
+  }
+  if (param_2[0xac] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI1.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    param_4 = &local_74;
+    local_78 = 0;
+    local_74 = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0xb0),&local_78,param_4,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x640) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x644) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x648) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x64c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x658) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x65c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x660) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x664) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x62c) = 0x13;
+    uVar6 = *(uint *)(param_1 + 0xf4);
+    uVar5 = 0xffffffff;
+    if (uVar6 != 1) {
+      if (uVar6 == 0) {
+                    /* WARNING: Does not return */
+        pcVar2 = (code *)SoftwareBreakpoint(0xf004,0x1800124c8);
+        (*pcVar2)();
+      }
+      uVar3 = 0;
+      if (uVar6 != 0) {
+        uVar3 = 0x20 / uVar6;
+      }
+      for (; uVar3 != 0; uVar3 = uVar3 - 1) {
+        uVar5 = uVar5 << (ulonglong)(uVar6 & 0x1f) | 1;
+      }
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x630) = uVar5;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x634) = uVar5;
+    if (param_2[0xc3] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x650) = *(undefined4 *)(param_2 + 0xd8);
+    }
+    if (param_2[0xc2] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x654) =
+           *(ushort *)(param_2 + 0xdc) & 0x3fff | (*(ushort *)(param_2 + 0xde) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x600) =
+         (local_78 & 0xf |
+         (param_2[0xb6] & 0xff80003f |
+         (param_2[0xb5] & 0xfffe001f | (param_2[0xb4] & 3 | (uint)param_2[0xac] << 4) << 5) << 6) <<
+         4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x610) =
+         (param_2[0xc5] & 1 |
+         (param_2[0xc4] & 0xffffff01 |
+         (param_2[0xc3] & 1 | (param_2[0xc2] & 1 | (local_74 & 3) << 4) << 1) << 1) << 1) << 5 |
+         0x15;
+  }
+  if (param_2[0xe0] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI2.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    param_4 = &local_6c;
+    local_70 = 0;
+    local_6c = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0xe4),&local_70,param_4,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x740) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x744) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x748) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x74c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x758) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x75c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x760) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x764) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x72c) = 0x13;
+    uVar6 = *(uint *)(param_1 + 0xf4);
+    uVar5 = 0xffffffff;
+    if (uVar6 != 1) {
+      if (uVar6 == 0) {
+                    /* WARNING: Does not return */
+        pcVar2 = (code *)SoftwareBreakpoint(0xf004,0x180012648);
+        (*pcVar2)();
+      }
+      uVar3 = 0;
+      if (uVar6 != 0) {
+        uVar3 = 0x20 / uVar6;
+      }
+      for (; uVar3 != 0; uVar3 = uVar3 - 1) {
+        uVar5 = uVar5 << (ulonglong)(uVar6 & 0x1f) | 1;
+      }
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x730) = uVar5;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x734) = uVar5;
+    if (param_2[0xf7] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x750) = *(undefined4 *)(param_2 + 0x10c);
+    }
+    if (param_2[0xf6] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x754) =
+           *(ushort *)(param_2 + 0x110) & 0x3fff | (*(ushort *)(param_2 + 0x112) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x700) =
+         (local_70 & 0xf |
+         (param_2[0xea] & 0xff80003f |
+         (param_2[0xe9] & 0xfffe001f | (param_2[0xe8] & 3 | (uint)param_2[0xe0] << 4) << 5) << 6) <<
+         4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x710) =
+         (param_2[0xf9] & 1 |
+         (param_2[0xf8] & 0xffffff01 |
+         (param_2[0xf7] & 1 | (param_2[0xf6] & 1 | (local_6c & 3) << 4) << 1) << 1) << 1) << 5 |
+         0x15;
+  }
+  if (param_2[0x114] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI3.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    param_4 = &local_64;
+    local_68 = 0;
+    local_64 = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0x118),&local_68,param_4,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x840) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x844) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x848) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x84c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x858) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x85c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x860) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x864) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x82c) = 0x13;
+    uVar6 = *(uint *)(param_1 + 0xf4);
+    uVar5 = 0xffffffff;
+    if (uVar6 != 1) {
+      if (uVar6 == 0) {
+                    /* WARNING: Does not return */
+        pcVar2 = (code *)SoftwareBreakpoint(0xf004,0x1800127c8);
+        (*pcVar2)();
+      }
+      uVar3 = 0;
+      if (uVar6 != 0) {
+        uVar3 = 0x20 / uVar6;
+      }
+      for (; uVar3 != 0; uVar3 = uVar3 - 1) {
+        uVar5 = uVar5 << (ulonglong)(uVar6 & 0x1f) | 1;
+      }
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x830) = uVar5;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x834) = uVar5;
+    if (param_2[299] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x850) = *(undefined4 *)(param_2 + 0x140);
+    }
+    if (param_2[0x12a] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x854) =
+           *(ushort *)(param_2 + 0x144) & 0x3fff | (*(ushort *)(param_2 + 0x146) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x800) =
+         (local_68 & 0xf |
+         (param_2[0x11e] & 0xff80003f |
+         (param_2[0x11d] & 0xfffe001f | (param_2[0x11c] & 3 | (uint)param_2[0x114] << 4) << 5) << 6)
+         << 4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x810) =
+         (param_2[0x12d] & 1 |
+         (param_2[300] & 0xffffff01 |
+         (param_2[299] & 1 | (param_2[0x12a] & 1 | (local_64 & 3) << 4) << 1) << 1) << 1) << 5 |
+         0x15;
+  }
+  if (param_2[0x148] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI4.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    local_60 = 0;
+    local_5c[0] = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0x14c),&local_60,local_5c,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x940) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x944) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x948) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x94c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x958) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x95c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x960) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x964) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x92c) = 0x13;
+    uVar6 = *(uint *)(param_1 + 0xf4);
+    uVar5 = 0xffffffff;
+    if (uVar6 != 1) {
+      if (uVar6 == 0) {
+                    /* WARNING: Does not return */
+        pcVar2 = (code *)SoftwareBreakpoint(0xf004,0x18001293c);
+        (*pcVar2)();
+      }
+      uVar3 = 0;
+      if (uVar6 != 0) {
+        uVar3 = 0x20 / uVar6;
+      }
+      for (; uVar3 != 0; uVar3 = uVar3 - 1) {
+        uVar5 = uVar5 << (ulonglong)(uVar6 & 0x1f) | 1;
+      }
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x930) = uVar5;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x934) = uVar5;
+    if (param_2[0x15f] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x950) = *(undefined4 *)(param_2 + 0x174);
+    }
+    if (param_2[0x15e] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x954) =
+           *(ushort *)(param_2 + 0x178) & 0x3fff | (*(ushort *)(param_2 + 0x17a) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x900) =
+         (local_60 & 0xf |
+         (param_2[0x152] & 0xff80003f |
+         (param_2[0x151] & 0xfffe001f | (param_2[0x150] & 3 | (uint)param_2[0x148] << 4) << 5) << 6)
+         << 4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x910) =
+         (param_2[0x161] & 1 |
+         (param_2[0x160] & 0xffffff01 |
+         (param_2[0x15f] & 1 | (param_2[0x15e] & 1 | (local_5c[0] & 3) << 4) << 1) << 1) << 1) << 5
+         | 0x15;
+  }
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb0) = 0x3c1c7004;
+  return;
+}
+
+
+
+TARGET 180012a80 FUN_180012a80@180012a80
+  REF 18003f5b0 DATA caller=<none>
+  REF 18002b570 DATA caller=<none>
+  REF 18000a788 DATA caller=FUN_180009260@180009260
+  REF 18000a718 PARAM caller=FUN_180009260@180009260
+//// FUN_180012a80@180012a80 ////
+
+void FUN_180012a80(longlong param_1,byte param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  ulonglong uVar1;
+  undefined4 uVar2;
+  
+  uVar1 = (ulonglong)param_2;
+  switch(uVar1) {
+  case 0:
+    FUN_180019e00(4," CSID%d csid rdi0 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xf0) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x504) = 1;
+    return;
+  case 1:
+    FUN_180019e00(4," CSID%d csid rdi1 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x100) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x604) = 1;
+    return;
+  case 2:
+    FUN_180019e00(4," CSID%d csid rdi2 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x110) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x704) = 1;
+    return;
+  case 3:
+    FUN_180019e00(4," CSID%d csid rdi3 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x120) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x804) = 1;
+    return;
+  case 4:
+    FUN_180019e00(4," CSID%d csid rdi4 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x130) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x904) = 1;
+    return;
+  case 5:
+    FUN_180019e00(4," CSID%d csid ipp enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+    if (*(char *)(param_1 + 0x18) == '\0') {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x304) = 1;
+    }
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb0) = 0x3cbc601c;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x80) = 1;
+    return;
+  case 6:
+    FUN_180019e00(4," CSID%d csid ppp enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+    if (*(int *)(param_1 + 0x20) == *(int *)(param_1 + 0x28)) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xd0) = 0x6014;
+      uVar2 = 0x3d;
+      if (*(char *)(param_1 + 0x18) == '\0') {
+        uVar2 = 0x31;
+      }
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb04) = uVar2;
+      return;
+    }
+    break;
+  default:
+    FUN_180019e00(2,"CSID%d: Invalid Path %d",(ulonglong)*(uint *)(param_1 + 0x28),uVar1,param_5,
+                  param_6,param_7,param_8);
+  }
+  return;
+}
+
+
+
+TARGET 180012ce0 FUN_180012ce0@180012ce0
+  REF 18003f5b8 DATA caller=<none>
+  REF 18002b575 DATA caller=<none>
+  REF 18000a798 DATA caller=FUN_180009260@180009260
+  REF 18000a708 PARAM caller=FUN_180009260@180009260
+//// FUN_180012ce0@180012ce0 ////
+
+void FUN_180012ce0(longlong param_1,longlong param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  ulonglong uVar2;
+  
+  uVar2 = (ulonglong)*(uint *)(param_1 + 0x24);
+  if (*(uint *)(param_1 + 0x24) != 1) {
+    FUN_180019e00(4,"CSID%d is not in Active state. Current state = %d",
+                  (ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,param_6,param_7,param_8);
+    return;
+  }
+  *(uint *)(param_2 + 4) = *(uint *)(*(longlong *)(param_1 + 8) + 0x7c) & 0x3fff;
+  *(uint *)(param_2 + 8) = *(uint *)(*(longlong *)(param_1 + 8) + 0x9c) & 0xfffffff;
+  *(uint *)(param_2 + 0x10) = *(uint *)(*(longlong *)(param_1 + 8) + 0xac) & 0x3fffffff;
+  *(uint *)(param_2 + 0x14) = *(uint *)(*(longlong *)(param_1 + 8) + 0xcc) & 0x3fffffff;
+  *(uint *)(param_2 + 0xc) = *(uint *)(*(longlong *)(param_1 + 8) + 0x8c) & 0x7ffffff;
+  uVar1 = FUN_180011a58(param_1,0,param_3,1,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x18) = uVar1;
+  uVar1 = FUN_180011a58(param_1,1,param_3,uVar2,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x1c) = uVar1;
+  uVar1 = FUN_180011a58(param_1,2,param_3,uVar2,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x20) = uVar1;
+  uVar1 = FUN_180011a58(param_1,3,param_3,uVar2,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x24) = uVar1;
+  uVar1 = FUN_180011a58(param_1,4,param_3,uVar2,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x28) = uVar1;
+  FUN_180019e00(4,
+                "ISR CSID%d: ippIrqStatus = 0x%x, rxIrqStatus = 0x%x, topIrqStatus = 0x%x and bufDone = 0x%x"
+                ,(ulonglong)*(uint *)(param_1 + 0x28),(ulonglong)*(uint *)(param_2 + 0x10),
+                (ulonglong)*(uint *)(param_2 + 8),(ulonglong)*(uint *)(param_2 + 4),
+                (ulonglong)*(uint *)(param_2 + 0xc),param_8);
+  *(undefined4 *)(param_2 + 0x38) = 0x38;
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x84) = *(undefined4 *)(param_2 + 4);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xa4) = *(undefined4 *)(param_2 + 8);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x94) = *(undefined4 *)(param_2 + 0xc);
+  if (*(int *)(param_1 + 0x28) < 2) {
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb4) = *(undefined4 *)(param_2 + 0x10);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xd4) = *(undefined4 *)(param_2 + 0x14);
+  }
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xf4) = *(undefined4 *)(param_2 + 0x18);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x104) = *(undefined4 *)(param_2 + 0x1c);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x114) = *(undefined4 *)(param_2 + 0x20);
+  if (1 < *(int *)(param_1 + 0x28)) {
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x124) = *(undefined4 *)(param_2 + 0x24);
+  }
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x14) = 1;
+  return;
+}
+
+
+
+TARGET 180012ea0 FUN_180012ea0@180012ea0
+  REF 18002b57a DATA caller=<none>
+  REF 18000a7bc DATA caller=FUN_180009260@180009260
+//// FUN_180012ea0@180012ea0 ////
+
+void FUN_180012ea0(longlong param_1,longlong param_2,longlong param_3)
+
+{
+  undefined8 uVar1;
+  
+  *(undefined4 *)(param_3 + 4) = *(undefined4 *)(param_2 + 4);
+  *(undefined4 *)(param_3 + 0xc) = *(undefined4 *)(param_2 + 8);
+  *(undefined4 *)(param_3 + 0x10) = *(undefined4 *)(param_2 + 0x10);
+  *(undefined4 *)(param_3 + 0x14) = *(undefined4 *)(param_2 + 0x14);
+  *(undefined4 *)(param_3 + 8) = *(undefined4 *)(param_2 + 0xc);
+  *(ulonglong *)(param_3 + 0x30) =
+       (ulonglong)*(uint *)(*(longlong *)(param_1 + 8) + 0x398) |
+       ((ulonglong)*(uint *)(*(longlong *)(param_1 + 8) + 0x39c) & 0xffffff) << 0x20;
+  uVar1 = *(undefined8 *)(param_2 + 0x18);
+  *(undefined8 *)(param_3 + 0x20) = *(undefined8 *)(param_2 + 0x20);
+  *(undefined8 *)(param_3 + 0x18) = uVar1;
+  *(undefined4 *)(param_3 + 0x28) = *(undefined4 *)(param_2 + 0x28);
+  return;
+}
+
+
+
+TARGET 180012f00 FUN_180012f00@180012f00
+  REF 18002b57f DATA caller=<none>
+  REF 18000a780 DATA caller=FUN_180009260@180009260
+//// FUN_180012f00@180012f00 ////
+
+undefined4 FUN_180012f00(longlong param_1)
+
+{
+  return **(undefined4 **)(param_1 + 8);
+}
+
+
+
+TARGET 180012f20 FUN_180012f20@180012f20
+  REF 18003f5c0 DATA caller=<none>
+  REF 18002b584 DATA caller=<none>
+  REF 18000a7a0 DATA caller=FUN_180009260@180009260
+  REF 18000a700 PARAM caller=FUN_180009260@180009260
+//// FUN_180012f20@180012f20 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+void FUN_180012f20(longlong param_1,int *param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  uint uVar2;
+  uint uVar3;
+  uint uVar4;
+  char cVar5;
+  bool bVar6;
+  uint uVar7;
+  undefined4 uVar8;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  undefined8 extraout_x1_04;
+  undefined8 extraout_x1_05;
+  undefined8 extraout_x1_06;
+  undefined8 extraout_x1_07;
+  undefined8 extraout_x1_08;
+  undefined8 extraout_x1_09;
+  undefined8 extraout_x1_10;
+  undefined8 extraout_x1_11;
+  undefined8 extraout_x1_12;
+  undefined8 extraout_x1_13;
+  undefined8 extraout_x1_14;
+  undefined8 extraout_x1_15;
+  undefined8 extraout_x1_16;
+  undefined8 uVar9;
+  char *pcVar10;
+  ulonglong uVar11;
+  ulonglong uVar12;
+  ulonglong uVar13;
+  ulonglong uVar14;
+  uint uVar15;
+  ulonglong uVar16;
+  ulonglong uVar17;
+  uint local_90;
+  uint uStack_8c;
+  uint uStack_88;
+  uint uStack_84;
+  
+  if (param_2 == (int *)0x0) {
+    FUN_180019e00(2,"pData is NULL",param_3,param_4,param_5,param_6,param_7,param_8);
+    return;
+  }
+  uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+  if (*(uint *)(param_1 + 0x24) != 1) {
+    FUN_180019e00(4,"CSID%d is not in Active state. Current state = %d",uVar11,
+                  (ulonglong)*(uint *)(param_1 + 0x24),param_5,param_6,param_7,param_8);
+    return;
+  }
+  uVar15 = param_2[3];
+  uVar2 = param_2[4];
+  uVar3 = param_2[1];
+  uVar14 = (ulonglong)uVar3;
+  uVar17 = *(ulonglong *)(param_2 + 8);
+  uVar16 = *(ulonglong *)(param_2 + 6);
+  uVar4 = param_2[5];
+  uVar13 = (ulonglong)uVar15;
+  uVar12 = (ulonglong)uVar2;
+  FUN_180019e00(4,"CSID%d: ippIrqStatus = 0x%x, rxIrqStatus = 0x%x, topIrqStatus = 0x%x",uVar11,
+                uVar12,uVar13,uVar14,param_7,param_8);
+  uVar9 = extraout_x1;
+  if (((*(char *)(param_1 + 0x108) == '\0') && ((uVar2 >> 0xc & 1) != 0)) &&
+     (*(char *)(param_1 + 0x109) == '\0')) {
+    if (*(int *)(param_1 + 0x10c) == *(int *)(param_1 + 0x110)) {
+      uVar7 = FUN_180017220(param_1);
+      if (uVar7 != 0) {
+        pcVar10 = "DAL_secure_csid_start is failed with result = 0x%x";
+        uVar8 = 2;
+        goto LAB_180013388;
+      }
+      *(undefined1 *)(param_1 + 0x109) = 1;
+      uVar9 = extraout_x1_00;
+    }
+    else {
+      *(int *)(param_1 + 0x110) = *(int *)(param_1 + 0x110) + 1;
+    }
+  }
+  if ((uVar15 & 0x19fb800) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = (ulonglong)uVar15;
+    FUN_180019e00(2,"CSID%d: CSID Received error IRQs on RX side, rxIrqStatus = 0x%x.",uVar11,uVar12
+                  ,uVar13,uVar14,param_7,param_8);
+    uVar9 = extraout_x1_01;
+  }
+  if ((uVar15 >> 0x16 & 1) != 0) {
+    uVar7 = *(uint *)(*(longlong *)(param_1 + 8) + 0x210);
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar13 = (ulonglong)(uVar7 >> 0x10 & 0x3f);
+    uVar12 = (ulonglong)(uVar7 >> 0x16 & 0x1f);
+    FUN_180019e00(4,"CSID%d: Received Unmapped long packet header with vc = %d and dt = %d",uVar11,
+                  uVar12,uVar13,uVar14,param_7,param_8);
+    uVar9 = extraout_x1_02;
+  }
+  if ((uVar2 & 0x3c1c6004) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = (ulonglong)uVar2;
+    FUN_180019e00(2,"CSID%d: CSID Received error IRQs on IPP Path, ippIrqStatus = 0x%x.",uVar11,
+                  uVar12,uVar13,uVar14,param_7,param_8);
+    uVar9 = extraout_x1_03;
+  }
+  if ((uVar4 & 0x6004) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = (ulonglong)uVar4;
+    FUN_180019e00(2,"CSID%d: CSID Received error IRQs on PPP Path, pppIrqStatus = 0x%x.",uVar11,
+                  uVar12,uVar13,uVar14,param_7,param_8);
+    uVar9 = extraout_x1_04;
+  }
+  if ((uVar4 >> 8 & 1) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = (ulonglong)uVar4;
+    FUN_180019e00(4,"CSID%d: CSID Received PPP_SOF, pppIrqStatus = 0x%x.",uVar11,uVar12,uVar13,
+                  uVar14,param_7,param_8);
+    uVar9 = extraout_x1_05;
+  }
+  if ((uVar4 >> 5 & 1) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = (ulonglong)uVar4;
+    FUN_180019e00(4,"CSID%d: CSID Received PPP_EOF, pppIrqStatus = 0x%x.",uVar11,uVar12,uVar13,
+                  uVar14,param_7,param_8);
+    uVar9 = extraout_x1_06;
+  }
+  local_90 = (uint)uVar16;
+  if ((uVar16 & 0x3c1c6004) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = uVar16 & 0xffffffff;
+    FUN_180019e00(2,"CSID%d: CSID Received error IRQs on RDI0 Path, irqStatus = 0x%x.",uVar11,uVar12
+                  ,uVar13,uVar14,param_7,param_8);
+    uVar9 = extraout_x1_07;
+  }
+  uStack_8c = (uint)(uVar16 >> 0x20);
+  if ((uVar16 & 0x3c1c600400000000) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = (ulonglong)uStack_8c;
+    FUN_180019e00(2,"CSID%d: CSID Received error IRQs on RDI1 Path, irqStatus = 0x%x.",uVar11,uVar12
+                  ,uVar13,uVar14,param_7,param_8);
+    uVar9 = extraout_x1_08;
+  }
+  uStack_88 = (uint)uVar17;
+  if ((uVar17 & 0x3c1c6004) != 0) {
+    uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = uVar17 & 0xffffffff;
+    FUN_180019e00(2,"CSID%d: CSID Received error IRQs on RDI2 Path, irqStatus = 0x%x.",uVar11,uVar12
+                  ,uVar13,uVar14,param_7,param_8);
+    uVar9 = extraout_x1_09;
+  }
+  if (*(int *)(param_1 + 0x104) != 0) {
+    uVar14 = (ulonglong)uVar3;
+    if ((uVar3 & 1) != 0) {
+      uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID TOP reset irq received.",uVar11,uVar12,uVar13,uVar14,param_7,
+                    param_8);
+      *(uint *)(param_1 + 0x104) = *(uint *)(param_1 + 0x104) ^ 1;
+      uVar9 = extraout_x1_10;
+    }
+    if ((uVar2 >> 1 & 1) != 0) {
+      uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID IPP reset irq received.",uVar11,uVar12,uVar13,uVar14,param_7,
+                    param_8);
+      *(uint *)(param_1 + 0x104) = *(uint *)(param_1 + 0x104) ^ 2;
+      uVar9 = extraout_x1_11;
+    }
+    if ((uVar4 >> 1 & 1) != 0) {
+      uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID PPP reset irq received.",uVar11,uVar12,uVar13,uVar14,param_7,
+                    param_8);
+      *(uint *)(param_1 + 0x104) = *(uint *)(param_1 + 0x104) ^ 2;
+      uVar9 = extraout_x1_12;
+    }
+    if ((uVar15 >> 0x1b & 1) != 0) {
+      uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID rx reset irq received.",uVar11,uVar12,uVar13,uVar14,param_7,
+                    param_8);
+      *(uint *)(param_1 + 0x104) = *(uint *)(param_1 + 0x104) ^ 0x8000000;
+      uVar9 = extraout_x1_13;
+    }
+    if ((local_90 >> 1 & 1) != 0) {
+      uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID rdi0 reset irq received.",uVar11,uVar12,uVar13,uVar14,param_7,
+                    param_8);
+      uVar9 = extraout_x1_14;
+    }
+    if ((uStack_8c >> 1 & 1) != 0) {
+      uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID rdi1 reset irq received.",uVar11,uVar12,uVar13,uVar14,param_7,
+                    param_8);
+      uVar9 = extraout_x1_15;
+    }
+    if ((uStack_88 >> 1 & 1) != 0) {
+      uVar11 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID rdi2 reset irq received.",uVar11,uVar12,uVar13,uVar14,param_7,
+                    param_8);
+      uVar9 = extraout_x1_16;
+    }
+    if (*(int *)(param_1 + 0x104) == 0) {
+      FUN_180014388((undefined8 *)(param_1 + 0x30),uVar9,uVar11,uVar12,uVar13,uVar14,param_7,param_8
+                   );
+      FUN_180019e00(4,"CSID%d: CSID reset Complete.",(ulonglong)*(uint *)(param_1 + 0x28),uVar12,
+                    uVar13,uVar14,param_7,param_8);
+    }
+  }
+  uVar15 = *(uint *)(param_1 + 0xfc);
+  uStack_84 = (uint)(uVar17 >> 0x20);
+  if (uVar15 != 0) {
+    if (((uVar2 >> 4 & 1) != 0) && ((uVar15 >> 4 & 1) != 0)) {
+      uVar15 = uVar15 ^ 0x10;
+      *(uint *)(param_1 + 0xfc) = uVar15;
+    }
+    if (((uVar4 >> 4 & 1) != 0) && ((uVar15 >> 5 & 1) != 0)) {
+      uVar15 = uVar15 ^ 0x20;
+      *(uint *)(param_1 + 0xfc) = uVar15;
+    }
+    if (((local_90 >> 4 & 1) != 0) && ((uVar15 & 1) != 0)) {
+      uVar15 = uVar15 ^ 1;
+      *(uint *)(param_1 + 0xfc) = uVar15;
+    }
+    if (((uStack_8c >> 4 & 1) != 0) && ((uVar15 >> 1 & 1) != 0)) {
+      uVar15 = uVar15 ^ 2;
+      *(uint *)(param_1 + 0xfc) = uVar15;
+    }
+    if (((uStack_88 >> 4 & 1) != 0) && ((uVar15 >> 2 & 1) != 0)) {
+      uVar15 = uVar15 ^ 4;
+      *(uint *)(param_1 + 0xfc) = uVar15;
+    }
+    if (((uStack_84 >> 4 & 1) != 0) && ((uVar15 >> 3 & 1) != 0)) {
+      *(uint *)(param_1 + 0xfc) = uVar15 ^ 8;
+    }
+  }
+  uVar15 = *(uint *)(param_1 + 0x100);
+  if (uVar15 != 0) {
+    if (((uVar2 >> 3 & 1) != 0) && ((uVar15 >> 4 & 1) != 0)) {
+      uVar15 = uVar15 ^ 0x10;
+      *(uint *)(param_1 + 0x100) = uVar15;
+    }
+    if (((uVar4 >> 3 & 1) != 0) && ((uVar15 >> 5 & 1) != 0)) {
+      uVar15 = uVar15 ^ 0x20;
+      *(uint *)(param_1 + 0x100) = uVar15;
+    }
+    if (((local_90 >> 3 & 1) != 0) && ((uVar15 & 1) != 0)) {
+      uVar15 = uVar15 ^ 1;
+      *(uint *)(param_1 + 0x100) = uVar15;
+    }
+    if (((uStack_8c >> 3 & 1) != 0) && ((uVar15 >> 1 & 1) != 0)) {
+      uVar15 = uVar15 ^ 2;
+      *(uint *)(param_1 + 0x100) = uVar15;
+    }
+    if (((uStack_88 >> 3 & 1) != 0) && ((uVar15 >> 2 & 1) != 0)) {
+      uVar15 = uVar15 ^ 4;
+      *(uint *)(param_1 + 0x100) = uVar15;
+    }
+    if (((uStack_84 >> 3 & 1) != 0) && ((uVar15 >> 3 & 1) != 0)) {
+      uVar15 = uVar15 ^ 8;
+      *(uint *)(param_1 + 0x100) = uVar15;
+    }
+    if (uVar15 == 0) {
+      FUN_180019e00(4,"CSID%d: CSID driver completing the stop cmd sequence. ",
+                    (ulonglong)*(uint *)(param_1 + 0x28),uVar12,uVar13,uVar14,param_7,param_8);
+    }
+  }
+  do {
+    iVar1 = *param_2;
+    cVar5 = '\x01';
+    bVar6 = (bool)ExclusiveMonitorPass(param_2,0x10);
+    if (bVar6) {
+      *param_2 = iVar1 + -1;
+      cVar5 = ExclusiveMonitorsStatus();
+    }
+  } while (cVar5 != '\0');
+  DataMemoryBarrier(2,3);
+  if (iVar1 + -1 != 0) {
+    return;
+  }
+  free(param_2);
+  pcVar10 = "CSID%d deallocating IST MSG";
+  uVar7 = *(uint *)(param_1 + 0x28);
+  uVar8 = 4;
+LAB_180013388:
+  FUN_180019e00(uVar8,pcVar10,(ulonglong)uVar7,uVar12,uVar13,uVar14,param_7,param_8);
+  return;
+}
+
+
+
+TARGET 1800133c0 FUN_1800133c0@1800133c0
+  REF 18002b589 DATA caller=<none>
+  REF 18000a7b4 DATA caller=FUN_180009260@180009260
+//// FUN_1800133c0@1800133c0 ////
+
+void FUN_1800133c0(longlong param_1)
+
+{
+  if ((param_1 != 0) && (*(int *)(param_1 + 0xbc) != 0)) {
+    *(undefined4 *)(param_1 + 0xc0) = *(undefined4 *)(param_1 + 0x58);
+    *(undefined4 *)(param_1 + 0xc4) = *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x240);
+    *(undefined4 *)(param_1 + 200) = *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x244);
+    *(uint *)(param_1 + 0xcc) = *(uint *)(*(longlong *)(param_1 + 8) + 0x248) & 0xffff;
+  }
+  return;
+}
+
+
+
+TARGET 1800134f0 FUN_1800134f0@1800134f0
+  REF 18003f5d0 DATA caller=<none>
+  REF 18002b58e DATA caller=<none>
+  REF 18000a790 DATA caller=FUN_180009260@180009260
+//// FUN_1800134f0@1800134f0 ////
+
+void FUN_1800134f0(longlong param_1,byte *param_2,undefined8 param_3,uint *param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined4 uVar1;
+  uint uVar2;
+  undefined8 uVar3;
+  undefined8 uVar4;
+  undefined8 uVar5;
+  uint local_60;
+  uint local_5c;
+  uint local_58;
+  uint local_54;
+  uint local_50;
+  uint local_4c [3];
+  
+  uVar5 = *(undefined8 *)(param_2 + 0x180);
+  uVar4 = *(undefined8 *)(param_2 + 0x198);
+  uVar3 = *(undefined8 *)(param_2 + 400);
+  *(undefined8 *)(param_1 + 0xd8) = *(undefined8 *)(param_2 + 0x188);
+  *(undefined8 *)(param_1 + 0xd0) = uVar5;
+  *(undefined8 *)(param_1 + 0xe8) = uVar4;
+  *(undefined8 *)(param_1 + 0xe0) = uVar3;
+  *(undefined8 *)(param_1 + 0xf0) = *(undefined8 *)(param_2 + 0x1a0);
+  uVar1 = 1;
+  *(uint *)(*(longlong *)(param_1 + 8) + 0x200) =
+       (param_2[2] + 1 & 3) << 0x1c |
+       (*(uint *)(param_2 + 8) & 0x3333 | (*param_2 & 1 | (param_2[3] & 1) << 3) << 0x14) << 4 |
+       (param_2[1] + 1 & 0xf) << 0x14 | param_2[0xc] & 3;
+  if (((((3 < param_2[0x19]) && (param_2[0x10] != 0)) ||
+       ((3 < param_2[0x81] && (param_2[0x78] != 0)))) ||
+      ((3 < param_2[0xb5] && (param_2[0xac] != 0)))) ||
+     ((3 < param_2[0xe9] && (param_2[0xe0] != 0)))) {
+    uVar1 = 5;
+  }
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x204) = uVar1;
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xa0) = 0x19fb800;
+  if (param_2[0x10] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID IPP.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    uVar2 = *(uint *)(param_1 + 0xf0);
+    uVar3 = 0;
+    FUN_180019e00(4,"input format for ipp/ppp path:%d",(ulonglong)uVar2,param_4,param_5,param_6,
+                  param_7,param_8);
+    switch(uVar2) {
+    case 2:
+      uVar3 = 1;
+      param_4 = (uint *)0x0;
+      uVar2 = 0x1000;
+      break;
+    case 3:
+      uVar3 = 2;
+      param_4 = (uint *)0x1;
+      uVar2 = 0x2000;
+      break;
+    case 4:
+      uVar3 = 3;
+      param_4 = (uint *)0x1;
+      uVar2 = 0x3000;
+      break;
+    case 5:
+      uVar3 = 4;
+      param_4 = (uint *)0x1;
+      uVar2 = 0x4000;
+      break;
+    case 6:
+      uVar3 = 5;
+      param_4 = (uint *)0x1;
+      uVar2 = 0x5000;
+      break;
+    case 7:
+      uVar3 = 6;
+      param_4 = (uint *)0x2;
+      uVar2 = 0x6000;
+      break;
+    default:
+      FUN_180019e00(2,"Unsupported format %d",(ulonglong)uVar2,param_4,param_5,param_6,param_7,
+                    param_8);
+      uVar2 = 0;
+      param_4 = (uint *)0x0;
+    }
+    FUN_180019e00(4,"decode_fmt:%d plain_fmt:%d",uVar3,param_4,param_5,param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x374) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x378) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x37c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x380) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x364) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x368) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x36c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x370) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x334) = 0x130013;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x338) = 0xffffffff;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x33c) = 0xffffffff;
+    if (param_2[0x27] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x35c) = *(undefined4 *)(param_2 + 0x3c);
+    }
+    if (param_2[0x26] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x360) =
+           *(ushort *)(param_2 + 0x40) & 0x3fff | (*(ushort *)(param_2 + 0x42) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x300) =
+         uVar2 | (param_2[0x1a] & 0x3f |
+                 (param_2[0x19] & 0xfffe001f | (param_2[0x18] & 3 | (uint)param_2[0x10] << 4) << 5)
+                 << 6) << 0x10;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x310) =
+         (param_2[0x29] & 1 |
+         (param_2[0x28] & 1 | (param_2[0x27] & 1 | (param_2[0x26] & 1) << 1) << 1) << 1) << 10 |
+         0x4241;
+  }
+  if (param_2[0x78] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI0.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    param_4 = &local_5c;
+    local_60 = 0;
+    local_5c = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0x7c),&local_60,param_4,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x540) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x544) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x548) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x54c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x558) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x55c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x560) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x564) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x52c) = 0x13;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x530) = 0xffffffff;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x534) = 0xffffffff;
+    if (param_2[0x8f] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x550) = *(undefined4 *)(param_2 + 0xa4);
+    }
+    if (param_2[0x8e] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x554) =
+           *(ushort *)(param_2 + 0xa8) & 0x3fff | (*(ushort *)(param_2 + 0xaa) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x500) =
+         (local_60 & 0xf |
+         (param_2[0x82] & 0xff80003f |
+         (param_2[0x81] & 0xfffe001f | (param_2[0x80] & 3 | (uint)param_2[0x78] << 4) << 5) << 6) <<
+         4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x510) =
+         (param_2[0x91] & 1 |
+         (param_2[0x90] & 0xffffff01 |
+         (param_2[0x8f] & 1 | (param_2[0x8e] & 1 | (local_5c & 3) << 4) << 1) << 1) << 1) << 5 |
+         0x15;
+  }
+  if (param_2[0xac] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI2.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    param_4 = &local_54;
+    local_58 = 0;
+    local_54 = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0xb0),&local_58,param_4,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x640) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x644) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x648) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x64c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x658) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x65c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x660) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x664) = 1;
+    if (param_2[0xc3] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x650) = *(undefined4 *)(param_2 + 0xd8);
+    }
+    if (param_2[0xc2] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x654) =
+           *(ushort *)(param_2 + 0xdc) & 0x3fff | (*(ushort *)(param_2 + 0xde) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x600) =
+         (local_58 & 0xf |
+         (param_2[0xb6] & 0xff80003f |
+         (param_2[0xb5] & 0xfffe001f | (param_2[0xb4] & 3 | (uint)param_2[0xac] << 4) << 5) << 6) <<
+         4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x610) =
+         (param_2[0xc5] & 1 |
+         (param_2[0xc4] & 0xffffff01 |
+         (param_2[0xc3] & 1 | (param_2[0xc2] & 1 | (local_54 & 3) << 4) << 1) << 1) << 1) << 5 |
+         0x15;
+  }
+  if (param_2[0xe0] != 0) {
+    FUN_180019e00(4,"CSID%d: Enabling CSID RDI2.",(ulonglong)*(uint *)(param_1 + 0x28),param_4,
+                  param_5,param_6,param_7,param_8);
+    local_50 = 0;
+    local_4c[0] = 0;
+    FUN_180011b60(*(uint *)(param_1 + 0xf0),*(uint *)(param_2 + 0xe4),&local_50,local_4c,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x740) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x744) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x748) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x74c) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x758) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x75c) = 1;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x760) = 0;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x764) = 1;
+    if (param_2[0xf7] != 0) {
+      *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x750) = *(undefined4 *)(param_2 + 0x10c);
+    }
+    if (param_2[0xf6] != 0) {
+      *(uint *)(*(longlong *)(param_1 + 8) + 0x754) =
+           *(ushort *)(param_2 + 0x110) & 0x3fff | (*(ushort *)(param_2 + 0x112) & 0x3fff) << 0x10;
+    }
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x700) =
+         (local_50 & 0xf |
+         (param_2[0xea] & 0xff80003f |
+         (param_2[0xe9] & 0xfffe001f | (param_2[0xe8] & 3 | (uint)param_2[0xe0] << 4) << 5) << 6) <<
+         4) << 0xc;
+    *(uint *)(*(longlong *)(param_1 + 8) + 0x710) =
+         (param_2[0xf9] & 1 |
+         (param_2[0xf8] & 0xffffff01 |
+         (param_2[0xf7] & 1 | (param_2[0xf6] & 1 | (local_4c[0] & 3) << 4) << 1) << 1) << 1) << 5 |
+         0x15;
+  }
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb0) = 0x3c1c7004;
+  return;
+}
+
+
+
+TARGET 180013bf0 FUN_180013bf0@180013bf0
+  REF 18003f5d8 DATA caller=<none>
+  REF 18002b593 DATA caller=<none>
+  REF 18000a788 DATA caller=FUN_180009260@180009260
+//// FUN_180013bf0@180013bf0 ////
+
+void FUN_180013bf0(longlong param_1,byte param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  longlong *plVar1;
+  ulonglong uVar2;
+  
+  uVar2 = (ulonglong)param_2;
+  switch(uVar2) {
+  case 0:
+    FUN_180019e00(4," CSID%d csid rdi0 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xf0) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x504) = 1;
+    return;
+  case 1:
+    FUN_180019e00(4," CSID%d csid rdi1 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x100) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x604) = 1;
+    return;
+  case 2:
+    FUN_180019e00(4," CSID%d csid rdi2 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x110) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x704) = 1;
+    return;
+  case 3:
+    FUN_180019e00(4," CSID%d csid rdi3 enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,
+                  param_6,param_7,param_8);
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x120) = 0x3c1c6014;
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x804) = 1;
+    return;
+  default:
+    FUN_180019e00(2,"CSID%d: Invalid Path %d",(ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,
+                  param_6,param_7,param_8);
+    return;
+  case 5:
+    break;
+  }
+  FUN_180019e00(4," CSID%d csid ipp enable",(ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,
+                param_6,param_7,param_8);
+  plVar1 = (longlong *)(param_1 + 8);
+  if (*(char *)(param_1 + 0x18) == '\0') {
+    *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x304) = 1;
+  }
+  *(undefined4 *)(*plVar1 + 0xb0) = 0x3c9c601c;
+  *(undefined4 *)(*plVar1 + 0x80) = 1;
+  *(undefined4 *)(*plVar1 + 4) = 0xfff;
+  *(undefined4 *)(*plVar1 + 0x90) = 0x1f;
+  return;
+}
+
+
+
+TARGET 180013dc0 FUN_180013dc0@180013dc0
+  REF 18003f5e0 DATA caller=<none>
+  REF 18002b598 DATA caller=<none>
+  REF 18000a798 DATA caller=FUN_180009260@180009260
+//// FUN_180013dc0@180013dc0 ////
+
+void FUN_180013dc0(longlong param_1,longlong param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  ulonglong uVar2;
+  
+  uVar2 = (ulonglong)*(uint *)(param_1 + 0x24);
+  if (*(uint *)(param_1 + 0x24) != 1) {
+    FUN_180019e00(4,"CSID_Lite%d is not in Active state. Current state = %d",
+                  (ulonglong)*(uint *)(param_1 + 0x28),uVar2,param_5,param_6,param_7,param_8);
+    return;
+  }
+  *(uint *)(param_2 + 4) = *(uint *)(*(longlong *)(param_1 + 8) + 0x7c) & 0x3fff;
+  *(uint *)(param_2 + 8) = *(uint *)(*(longlong *)(param_1 + 8) + 0x9c) & 0xfffffff;
+  *(uint *)(param_2 + 0x10) = *(uint *)(*(longlong *)(param_1 + 8) + 0xac) & 0x3fffffff;
+  uVar1 = FUN_180013408(param_1,0,param_3,1,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x18) = uVar1;
+  uVar1 = FUN_180013408(param_1,1,param_3,uVar2,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x1c) = uVar1;
+  uVar1 = FUN_180013408(param_1,2,param_3,uVar2,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x20) = uVar1;
+  uVar1 = FUN_180013408(param_1,3,param_3,uVar2,param_5,param_6,param_7,param_8);
+  *(uint *)(param_2 + 0x24) = uVar1;
+  uVar1 = *(uint *)(*(longlong *)(param_1 + 8) + 0x8c) & 0x1f;
+  *(uint *)(param_2 + 0xc) = uVar1;
+  FUN_180019e00(4,
+                "ISR CSID%d: ippIrqStatus = 0x%x, rdiirqstatus = 0x%x, rxIrqStatus = 0x%x, topIrqStatus = 0x%x, bufdoneIrqStatus = 0x%x"
+                ,(ulonglong)*(uint *)(param_1 + 0x28),(ulonglong)*(uint *)(param_2 + 0x10),
+                (ulonglong)*(uint *)(param_2 + 0x18),(ulonglong)*(uint *)(param_2 + 8),
+                (ulonglong)*(uint *)(param_2 + 4),(ulonglong)uVar1);
+  *(undefined4 *)(param_2 + 0x38) = 0x30;
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x84) = *(undefined4 *)(param_2 + 4);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xa4) = *(undefined4 *)(param_2 + 8);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x94) = *(undefined4 *)(param_2 + 0xc);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xb4) = *(undefined4 *)(param_2 + 0x10);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0xf4) = *(undefined4 *)(param_2 + 0x18);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x104) = *(undefined4 *)(param_2 + 0x1c);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x114) = *(undefined4 *)(param_2 + 0x20);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x124) = *(undefined4 *)(param_2 + 0x24);
+  *(undefined4 *)(*(longlong *)(param_1 + 8) + 0x14) = 1;
+  return;
+}
+
+
+
+TARGET 180013f40 FUN_180013f40@180013f40
+  REF 18002b59d DATA caller=<none>
+  REF 18000a7bc DATA caller=FUN_180009260@180009260
+//// FUN_180013f40@180013f40 ////
+
+void FUN_180013f40(longlong param_1,longlong param_2,longlong param_3)
+
+{
+  undefined8 uVar1;
+  
+  *(undefined4 *)(param_3 + 4) = *(undefined4 *)(param_2 + 4);
+  *(undefined4 *)(param_3 + 0xc) = *(undefined4 *)(param_2 + 8);
+  *(undefined4 *)(param_3 + 0x10) = *(undefined4 *)(param_2 + 0x10);
+  *(undefined4 *)(param_3 + 8) = *(undefined4 *)(param_2 + 0xc);
+  *(ulonglong *)(param_3 + 0x28) =
+       (ulonglong)*(uint *)(*(longlong *)(param_1 + 8) + 0x398) |
+       ((ulonglong)*(uint *)(*(longlong *)(param_1 + 8) + 0x39c) & 0xffffff) << 0x20;
+  uVar1 = *(undefined8 *)(param_2 + 0x18);
+  *(undefined8 *)(param_3 + 0x1c) = *(undefined8 *)(param_2 + 0x20);
+  *(undefined8 *)(param_3 + 0x14) = uVar1;
+  return;
+}
+
+
+
+TARGET 180013f90 FUN_180013f90@180013f90
+  REF 18003f5e8 DATA caller=<none>
+  REF 18002b5a2 DATA caller=<none>
+  REF 180017574 UNCONDITIONAL_CALL caller=FUN_180017370@180017370
+  REF 18000a7a0 DATA caller=FUN_180009260@180009260
+//// FUN_180013f90@180013f90 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+void FUN_180013f90(longlong param_1,int *param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  uint uVar2;
+  uint uVar3;
+  char cVar4;
+  bool bVar5;
+  uint uVar6;
+  undefined4 uVar7;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  undefined8 extraout_x1_04;
+  undefined8 extraout_x1_05;
+  undefined8 extraout_x1_06;
+  undefined8 extraout_x1_07;
+  undefined8 extraout_x1_08;
+  undefined8 extraout_x1_09;
+  undefined8 extraout_x1_10;
+  undefined8 extraout_x1_11;
+  undefined8 extraout_x1_12;
+  undefined8 uVar8;
+  char *pcVar9;
+  ulonglong uVar10;
+  ulonglong uVar11;
+  ulonglong uVar12;
+  ulonglong uVar13;
+  uint uVar14;
+  ulonglong uVar15;
+  ulonglong uVar16;
+  uint local_80;
+  uint uStack_7c;
+  uint uStack_78;
+  uint uStack_74;
+  
+  if (param_2 == (int *)0x0) {
+    FUN_180019e00(2,"pData is NULL",param_3,param_4,param_5,param_6,param_7,param_8);
+    return;
+  }
+  uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+  if (*(uint *)(param_1 + 0x24) != 1) {
+    FUN_180019e00(4,"CSID_Lite%d is not in Active state. Current state = %d",uVar10,
+                  (ulonglong)*(uint *)(param_1 + 0x24),param_5,param_6,param_7,param_8);
+    return;
+  }
+  uVar14 = param_2[3];
+  uVar2 = param_2[4];
+  uVar3 = param_2[1];
+  uVar13 = (ulonglong)uVar3;
+  uVar16 = *(ulonglong *)(param_2 + 7);
+  uVar15 = *(ulonglong *)(param_2 + 5);
+  uVar12 = (ulonglong)uVar14;
+  uVar11 = (ulonglong)uVar2;
+  FUN_180019e00(4,"CSID_Lite%d: ippIrqStatus = 0x%x, rxIrqStatus = 0x%x, topIrqStatus = 0x%x",uVar10
+                ,uVar11,uVar12,uVar13,param_7,param_8);
+  uVar8 = extraout_x1;
+  if (((*(char *)(param_1 + 0x108) == '\0') && ((uVar2 >> 0xc & 1) != 0)) &&
+     (*(char *)(param_1 + 0x109) == '\0')) {
+    if (*(int *)(param_1 + 0x10c) == *(int *)(param_1 + 0x110)) {
+      uVar6 = FUN_180017220(param_1);
+      if (uVar6 != 0) {
+        pcVar9 = "DAL_secure_csid_start is failed with result = 0x%x";
+        uVar7 = 2;
+        goto LAB_180014350;
+      }
+      *(undefined1 *)(param_1 + 0x109) = 1;
+      uVar8 = extraout_x1_00;
+    }
+    else {
+      *(int *)(param_1 + 0x110) = *(int *)(param_1 + 0x110) + 1;
+    }
+  }
+  if ((uVar14 & 0x19fb800) != 0) {
+    uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar11 = (ulonglong)uVar14;
+    FUN_180019e00(4,"CSID%d: CSID_LITE Received error IRQs on RX side, rxIrqStatus = 0x%x.",uVar10,
+                  uVar11,uVar12,uVar13,param_7,param_8);
+    uVar8 = extraout_x1_01;
+  }
+  if ((uVar14 >> 0x16 & 1) != 0) {
+    uVar6 = *(uint *)(*(longlong *)(param_1 + 8) + 0x210);
+    uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar12 = (ulonglong)(uVar6 >> 0x10 & 0x3f);
+    uVar11 = (ulonglong)(uVar6 >> 0x16 & 0x1f);
+    FUN_180019e00(4,"CSID%d: Received Unmapped long packet header with vc = %d and dt = %d",uVar10,
+                  uVar11,uVar12,uVar13,param_7,param_8);
+    uVar8 = extraout_x1_02;
+  }
+  if ((uVar2 & 0x3c1c6004) != 0) {
+    uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar11 = (ulonglong)uVar2;
+    FUN_180019e00(2,"CSID%d: CSID_LITE Received error IRQs on IPP Path, ippIrqStatus = 0x%x.",uVar10
+                  ,uVar11,uVar12,uVar13,param_7,param_8);
+    uVar8 = extraout_x1_03;
+  }
+  local_80 = (uint)uVar15;
+  if ((uVar15 & 0x3c1c6004) != 0) {
+    uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar11 = uVar15 & 0xffffffff;
+    FUN_180019e00(2,"CSID%d: CSID_LITE Received error IRQs on RDI0 Path, irqStatus = 0x%x.",uVar10,
+                  uVar11,uVar12,uVar13,param_7,param_8);
+    uVar8 = extraout_x1_04;
+  }
+  uStack_7c = (uint)(uVar15 >> 0x20);
+  if ((uVar15 & 0x3c1c600400000000) != 0) {
+    uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar11 = (ulonglong)uStack_7c;
+    FUN_180019e00(2,"CSID%d: CSID_LITE Received error IRQs on RDI1 Path, irqStatus = 0x%x.",uVar10,
+                  uVar11,uVar12,uVar13,param_7,param_8);
+    uVar8 = extraout_x1_05;
+  }
+  uStack_78 = (uint)uVar16;
+  if ((uVar16 & 0x3c1c6004) != 0) {
+    uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+    uVar11 = uVar16 & 0xffffffff;
+    FUN_180019e00(2,"CSID%d: CSID_LITE Received error IRQs on RDI2 Path, irqStatus = 0x%x.",uVar10,
+                  uVar11,uVar12,uVar13,param_7,param_8);
+    uVar8 = extraout_x1_06;
+  }
+  if (*(int *)(param_1 + 0x104) != 0) {
+    uVar13 = (ulonglong)uVar3;
+    if ((uVar3 & 1) != 0) {
+      uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID_LITE TOP reset irq received.",uVar10,uVar11,uVar12,uVar13,
+                    param_7,param_8);
+      *(uint *)(param_1 + 0x104) = *(uint *)(param_1 + 0x104) ^ 1;
+      uVar8 = extraout_x1_07;
+    }
+    if ((uVar2 >> 1 & 1) != 0) {
+      uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID_LITE IPP reset irq received.",uVar10,uVar11,uVar12,uVar13,
+                    param_7,param_8);
+      *(uint *)(param_1 + 0x104) = *(uint *)(param_1 + 0x104) ^ 2;
+      uVar8 = extraout_x1_08;
+    }
+    if ((uVar14 >> 0x1b & 1) != 0) {
+      uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID_LITE rx reset irq received.",uVar10,uVar11,uVar12,uVar13,param_7
+                    ,param_8);
+      *(uint *)(param_1 + 0x104) = *(uint *)(param_1 + 0x104) ^ 0x8000000;
+      uVar8 = extraout_x1_09;
+    }
+    if ((local_80 >> 1 & 1) != 0) {
+      uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID_LITE rdi0 reset irq received.",uVar10,uVar11,uVar12,uVar13,
+                    param_7,param_8);
+      uVar8 = extraout_x1_10;
+    }
+    if ((uStack_7c >> 1 & 1) != 0) {
+      uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID_LITE rdi1 reset irq received.",uVar10,uVar11,uVar12,uVar13,
+                    param_7,param_8);
+      uVar8 = extraout_x1_11;
+    }
+    if ((uStack_78 >> 1 & 1) != 0) {
+      uVar10 = (ulonglong)*(uint *)(param_1 + 0x28);
+      FUN_180019e00(4,"CSID%d: CSID_LITE rdi2 reset irq received.",uVar10,uVar11,uVar12,uVar13,
+                    param_7,param_8);
+      uVar8 = extraout_x1_12;
+    }
+    if (*(int *)(param_1 + 0x104) == 0) {
+      FUN_180014388((undefined8 *)(param_1 + 0x30),uVar8,uVar10,uVar11,uVar12,uVar13,param_7,param_8
+                   );
+      FUN_180019e00(4,"CSID%d: CSID reset Complete.",(ulonglong)*(uint *)(param_1 + 0x28),uVar11,
+                    uVar12,uVar13,param_7,param_8);
+    }
+  }
+  uVar14 = *(uint *)(param_1 + 0xfc);
+  uStack_74 = (uint)(uVar16 >> 0x20);
+  if (uVar14 != 0) {
+    if (((uVar2 >> 4 & 1) != 0) && ((uVar14 >> 4 & 1) != 0)) {
+      uVar14 = uVar14 ^ 0x10;
+      *(uint *)(param_1 + 0xfc) = uVar14;
+    }
+    if (((local_80 >> 4 & 1) != 0) && ((uVar14 & 1) != 0)) {
+      uVar14 = uVar14 ^ 1;
+      *(uint *)(param_1 + 0xfc) = uVar14;
+    }
+    if (((uStack_7c >> 4 & 1) != 0) && ((uVar14 >> 1 & 1) != 0)) {
+      uVar14 = uVar14 ^ 2;
+      *(uint *)(param_1 + 0xfc) = uVar14;
+    }
+    if (((uStack_78 >> 4 & 1) != 0) && ((uVar14 >> 2 & 1) != 0)) {
+      uVar14 = uVar14 ^ 4;
+      *(uint *)(param_1 + 0xfc) = uVar14;
+    }
+    if (((uStack_74 >> 4 & 1) != 0) && ((uVar14 >> 3 & 1) != 0)) {
+      *(uint *)(param_1 + 0xfc) = uVar14 ^ 8;
+    }
+  }
+  uVar14 = *(uint *)(param_1 + 0x100);
+  if (uVar14 != 0) {
+    if (((uVar2 >> 3 & 1) != 0) && ((uVar14 >> 4 & 1) != 0)) {
+      uVar14 = uVar14 ^ 0x10;
+      *(uint *)(param_1 + 0x100) = uVar14;
+    }
+    if (((local_80 >> 3 & 1) != 0) && ((uVar14 & 1) != 0)) {
+      uVar14 = uVar14 ^ 1;
+      *(uint *)(param_1 + 0x100) = uVar14;
+    }
+    if (((uStack_7c >> 3 & 1) != 0) && ((uVar14 >> 1 & 1) != 0)) {
+      uVar14 = uVar14 ^ 2;
+      *(uint *)(param_1 + 0x100) = uVar14;
+    }
+    if (((uStack_78 >> 3 & 1) != 0) && ((uVar14 >> 2 & 1) != 0)) {
+      uVar14 = uVar14 ^ 4;
+      *(uint *)(param_1 + 0x100) = uVar14;
+    }
+    if (((uStack_74 >> 3 & 1) != 0) && ((uVar14 >> 3 & 1) != 0)) {
+      uVar14 = uVar14 ^ 8;
+      *(uint *)(param_1 + 0x100) = uVar14;
+    }
+    if (uVar14 == 0) {
+      FUN_180019e00(4,"CSID%d: CSID_LITE driver completing the stop cmd sequence. ",
+                    (ulonglong)*(uint *)(param_1 + 0x28),uVar11,uVar12,uVar13,param_7,param_8);
+    }
+  }
+  do {
+    iVar1 = *param_2;
+    cVar4 = '\x01';
+    bVar5 = (bool)ExclusiveMonitorPass(param_2,0x10);
+    if (bVar5) {
+      *param_2 = iVar1 + -1;
+      cVar4 = ExclusiveMonitorsStatus();
+    }
+  } while (cVar4 != '\0');
+  DataMemoryBarrier(2,3);
+  if (iVar1 + -1 != 0) {
+    return;
+  }
+  free(param_2);
+  pcVar9 = "CSID%d deallocating IST MSG";
+  uVar6 = *(uint *)(param_1 + 0x28);
+  uVar7 = 4;
+LAB_180014350:
+  FUN_180019e00(uVar7,pcVar9,(ulonglong)uVar6,uVar11,uVar12,uVar13,param_7,param_8);
+  return;
+}
+
+
+
