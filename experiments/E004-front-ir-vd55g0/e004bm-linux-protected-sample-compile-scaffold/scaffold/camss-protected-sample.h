@@ -1,0 +1,52 @@
+/* SPDX-License-Identifier: GPL-2.0 */
+/*
+ * Compile-only protected-sample contract for CAMSS.
+ *
+ * This file intentionally contains no backend, no runtime selector and no
+ * protected-memory operation.  It only fixes the object/lifetime interface
+ * that a future platform backend must satisfy.
+ */
+#ifndef QC_MSM_CAMSS_PROTECTED_SAMPLE_H
+#define QC_MSM_CAMSS_PROTECTED_SAMPLE_H
+
+#include <linux/build_bug.h>
+#include <linux/types.h>
+
+struct device;
+struct vb2_buffer;
+
+#define CAMSS_PROTECTED_SAMPLE_ID_BYTES 16
+#define CAMSS_PROTECTED_SAMPLE_MAX_PLANES 3
+
+enum camss_sample_backing {
+	CAMSS_SAMPLE_BACKING_STANDARD = 0,
+	CAMSS_SAMPLE_BACKING_PROTECTED = 1,
+};
+
+struct camss_protected_sample {
+	u8 id[CAMSS_PROTECTED_SAMPLE_ID_BYTES];
+	dma_addr_t addr[CAMSS_PROTECTED_SAMPLE_MAX_PLANES];
+	size_t size[CAMSS_PROTECTED_SAMPLE_MAX_PLANES];
+	unsigned int num_planes;
+	void *backend_handle;
+	bool prepared;
+};
+
+struct camss_protected_sample_ops {
+	int (*prepare)(struct device *dev, struct vb2_buffer *vb,
+		       struct camss_protected_sample *sample);
+	void (*release)(struct device *dev,
+			struct camss_protected_sample *sample);
+};
+
+/*
+ * Compile-time only: there is deliberately no ops instance, feature switch,
+ * queue selector or call to prepare/release in this checkpoint.
+ */
+static inline void camss_protected_sample_compile_contract(void)
+{
+	BUILD_BUG_ON(CAMSS_PROTECTED_SAMPLE_ID_BYTES != 16);
+	BUILD_BUG_ON(CAMSS_PROTECTED_SAMPLE_MAX_PLANES != 3);
+}
+
+#endif /* QC_MSM_CAMSS_PROTECTED_SAMPLE_H */
