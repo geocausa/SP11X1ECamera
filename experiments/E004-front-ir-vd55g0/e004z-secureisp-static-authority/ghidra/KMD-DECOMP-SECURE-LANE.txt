@@ -1,0 +1,550 @@
+
+//// 0x140004b88 -> FUN_140004b88 @140004b88 ////
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+undefined4
+FUN_140004b88(ulonglong param_1,ulonglong param_2,undefined8 param_3,undefined8 param_4,
+             undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  byte bVar1;
+  ushort uVar2;
+  uint uVar3;
+  int iVar4;
+  char *pcVar5;
+  undefined2 uVar6;
+  undefined4 uVar7;
+  uint uVar8;
+  code *extraout_x15;
+  int iVar9;
+  uint uVar10;
+  undefined8 uStack_50;
+  ulonglong local_48;
+  
+  if (param_1 == 0) {
+    return DAT_140004f08;
+  }
+  uVar10 = (uint)*(ushort *)(param_1 + 0xda);
+  local_48 = 0;
+  iVar9 = 3;
+  if (DAT_140012625 == '\0') {
+    iVar4 = FUN_1400097d0(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+    if (iVar4 < 0x1c3) {
+      if (iVar4 == 0x1c2) {
+LAB_140004c0c:
+        _DAT_140012138 = 0x40004;
+      }
+      else {
+        if (iVar4 == 0) {
+          FUN_140008e28(&DAT_140010fe0,"CHIP ID Invalid",param_3,param_4,param_5,param_6,param_7,
+                        param_8);
+        }
+        else {
+          if (iVar4 == 0x1f) {
+            uVar6 = 4;
+            goto LAB_140004c78;
+          }
+          if (iVar4 == 0x20 || iVar4 == 0x1c1) goto LAB_140004c0c;
+        }
+LAB_140004c54:
+        _DAT_140012138 = CONCAT22(DAT_140012138_2,3);
+      }
+    }
+    else if (iVar4 - 0x1e8U < 2) {
+      uVar6 = 5;
+LAB_140004c78:
+      _DAT_140012138 = CONCAT22(DAT_140012138_2,uVar6);
+    }
+    else {
+      if (iVar4 == 0x22b) {
+        uVar6 = 4;
+      }
+      else {
+        if (iVar4 != 0x27b) goto LAB_140004c54;
+        uVar6 = 2;
+      }
+      _DAT_140012138 = CONCAT22(DAT_140012138_2,uVar6);
+      DAT_14001213c = 3;
+    }
+    DAT_140012625 = '\x01';
+  }
+  FUN_140009d60(&uStack_50,6,(undefined8 *)&DAT_140012138,6);
+  uVar2 = *(ushort *)(param_1 + 0xda);
+  uVar7 = 0x2e;
+  if ((param_2 & 0xff) == 0) {
+    uVar7 = 0x2f;
+  }
+  if (uVar2 == 0) {
+    bVar1 = *(byte *)(param_1 + 0xde);
+    if (bVar1 == 1) {
+      uVar8 = *(uint *)(param_1 + 0xe0);
+      if (*(char *)(param_1 + 0xdc) != '\0') {
+        iVar9 = 0;
+      }
+      local_48 = 1L << ((ulonglong)(iVar9 + uVar8 * 7) & 0x3f);
+    }
+    else {
+      if (bVar1 == 2) {
+        uVar8 = *(uint *)(param_1 + 0xe0);
+        if (*(char *)(param_1 + 0xdc) != '\0') {
+          iVar9 = 0;
+        }
+        uVar10 = iVar9 + uVar8 * 7;
+        local_48 = 1L << ((ulonglong)(uVar10 + 1) & 0x3f);
+      }
+      else {
+        if (bVar1 == 3) {
+          uVar8 = *(uint *)(param_1 + 0xe0);
+          if (*(char *)(param_1 + 0xdc) != '\0') {
+            iVar9 = 0;
+          }
+          uVar10 = iVar9 + uVar8 * 7;
+          local_48 = 1L << ((ulonglong)(uVar10 + 2) & 0x3f);
+        }
+        else {
+          if (bVar1 != 4) {
+            pcVar5 = "Invalid lanecount value %d\n";
+            goto LAB_140004ce8;
+          }
+          uVar8 = *(uint *)(param_1 + 0xe0);
+          if (*(char *)(param_1 + 0xdc) != '\0') {
+            iVar9 = 0;
+          }
+          uVar10 = iVar9 + uVar8 * 7;
+          local_48 = 1L << ((ulonglong)(uVar10 + 3) & 0x3f) | 1L << ((ulonglong)(uVar10 + 2) & 0x3f)
+          ;
+        }
+        local_48 = local_48 | 1L << ((ulonglong)(uVar10 + 1) & 0x3f);
+      }
+      local_48 = local_48 | 1L << ((ulonglong)uVar10 & 0x3f);
+    }
+  }
+  else {
+    if (*(short *)(param_1 + 0xd8) == 0) {
+      pcVar5 = "Invalid lanemask\n";
+LAB_140004cb8:
+      FUN_140006a20(0,0x14000c230,0xd,pcVar5,param_5,param_6,param_7,param_8);
+      return DAT_140004f08;
+    }
+    bVar1 = *(byte *)(param_1 + 0xdd);
+    if (bVar1 == 0) {
+      uVar8 = *(uint *)(param_1 + 0xe0);
+      iVar4 = uVar8 * 7;
+      if (*(char *)(param_1 + 0xdc) != '\0') {
+        iVar9 = 0;
+      }
+      local_48 = 1L << ((ulonglong)((uVar2 >> 8 & 0xf) + iVar9 + iVar4) & 0x3f) |
+                 1L << ((ulonglong)((uVar2 >> 4 & 0xf) + iVar9 + iVar4) & 0x3f) |
+                 1L << ((ulonglong)(iVar9 + (uint)(uVar2 >> 0xc) + iVar4) & 0x3f) |
+                 1L << ((ulonglong)((uVar2 & 0xf) + iVar9 + iVar4) & 0x3f);
+    }
+    else {
+      if (bVar1 != 1) {
+        pcVar5 = "Invalid comboMode %d\n";
+LAB_140004ce8:
+        FUN_140006a20(0,0x14000c230,0xd,pcVar5,(ulonglong)bVar1,param_6,param_7,param_8);
+        return DAT_140004f08;
+      }
+      if (*(char *)(param_1 + 0xdc) == '\x01') {
+        pcVar5 = "CPHY does not support combo mode. Invalid value.\n";
+        param_5 = 1;
+        goto LAB_140004cb8;
+      }
+      uVar8 = *(uint *)(param_1 + 0xe0);
+      if (*(char *)(param_1 + 0xdc) != '\0') {
+        iVar9 = 0;
+      }
+      do {
+        local_48 = 1L << ((ulonglong)((uVar10 & 0xf) + iVar9 + uVar8 * 7) & 0x3f) | local_48;
+        uVar3 = uVar10 >> 4;
+        uVar10 = uVar10 >> 4;
+      } while ((uVar3 & 0xf) != 0);
+    }
+  }
+  if (3 < uVar8) {
+    local_48 = local_48 << 4;
+  }
+  if (*(longlong *)(param_1 + 0x18) != 0) {
+    (*(code *)PTR__guard_check_icall_1400102a8)(*(undefined8 *)(param_1 + 0x20),uVar7,8,&local_48);
+    (*extraout_x15)();
+  }
+  return 0;
+}
+
+
+//// 0x140001b08 -> FUN_140001b08 @140001b08 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+uint FUN_140001b08(undefined8 param_1,undefined8 param_2,byte param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  longlong lVar2;
+  undefined8 uVar3;
+  char *pcVar4;
+  ulonglong uVar5;
+  undefined8 *puVar6;
+  undefined8 *puVar7;
+  undefined8 uVar8;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  ulonglong uVar9;
+  undefined8 local_150;
+  undefined8 *puStack_148;
+  undefined8 local_140;
+  undefined8 local_130;
+  undefined8 *puStack_128;
+  undefined8 local_120;
+  undefined8 local_110;
+  ulonglong uStack_108;
+  undefined8 *local_100;
+  undefined8 uStack_f8;
+  undefined8 *local_f0;
+  undefined8 uStack_e8;
+  undefined8 local_e0;
+  undefined8 uStack_d8;
+  undefined8 local_d0;
+  ulonglong uStack_c8;
+  undefined8 local_c0;
+  undefined8 uStack_b8;
+  undefined8 local_b0;
+  undefined8 uStack_a8;
+  undefined8 uStack_a0;
+  undefined8 uStack_98;
+  undefined8 local_90;
+  undefined8 uStack_88;
+  undefined8 local_80;
+  undefined8 local_70;
+  undefined8 uStack_68;
+  undefined8 uStack_60;
+  undefined8 uStack_58;
+  
+  uVar9 = (ulonglong)param_3;
+  uStack_c8 = 0;
+  local_d0 = 0;
+  uStack_b8 = 0;
+  local_c0 = 0;
+  uStack_a8 = 0;
+  local_b0 = 0;
+  uStack_98 = 0;
+  uStack_a0 = 0;
+  uStack_88 = 0;
+  local_90 = 0;
+  local_80 = 0;
+  uStack_68 = 0;
+  local_70 = 0;
+  uStack_58 = 0;
+  uStack_60 = 0;
+  uStack_108 = 0;
+  local_110 = 0;
+  uStack_f8 = 0;
+  local_100 = (undefined8 *)0x0;
+  uStack_e8 = 0;
+  local_f0 = (undefined8 *)0x0;
+  uStack_d8 = 0;
+  local_e0 = 0;
+  (*(code *)PTR__guard_check_icall_1400102a8)
+            (*(undefined8 *)(DAT_140012478 + 0x650),DAT_1400124a8,DAT_14002e708,PTR_DAT_1400120c0);
+  lVar2 = (*extraout_x15)();
+  pcVar4 = ">>> ENTERING ConfigSecureCamera()\n";
+  uVar3 = 0xd;
+  FUN_140006a20(3,0x14000c230,0xd,">>> ENTERING ConfigSecureCamera()\n",param_5,param_6,param_7,
+                param_8);
+  local_d0 = DAT_140001d08;
+  uStack_c8 = uVar9;
+  local_c0 = param_2;
+  if (*(longlong *)(lVar2 + 0x98) == 0) {
+    FUN_140008e28(&DAT_140010450," IoTarget is NULL",uVar3,pcVar4,param_5,param_6,param_7,param_8);
+  }
+  else {
+    uStack_108 = uStack_108 & 0xffffffff;
+    local_110 = CONCAT44(local_110._4_4_,2);
+    local_100 = &local_d0;
+    uStack_f8 = 0x58;
+    local_f0 = &local_70;
+    uStack_e8 = 0x20;
+    local_130 = 1;
+    puStack_128 = &local_110;
+    local_120 = 0x30;
+    local_150 = 1;
+    puStack_148 = &local_e0;
+    local_140 = 0x10;
+    uVar8 = 0;
+    uVar3 = 0;
+    puVar7 = &local_150;
+    puVar6 = &local_130;
+    uVar5 = (ulonglong)DAT_140001d10;
+    (*(code *)PTR__guard_check_icall_1400102a8)
+              (*(undefined8 *)(DAT_140012478 + 0x5d0),DAT_1400124a8,*(undefined8 *)(lVar2 + 0x98),0)
+    ;
+    uVar1 = (*extraout_x15_00)();
+    if (-1 < (int)uVar1) {
+      FUN_140008e28(&DAT_140010528,
+                    "Successfully Config Secure Camera - SecureLaneCpCtrl = 0x%p, Protect = %d",
+                    param_2,uVar9,puVar6,puVar7,uVar3,uVar8);
+      return uVar1;
+    }
+    FUN_140008e28(&DAT_140010478,"WdfIoTargetSendIoctlSynchronously did not pass with status %d",
+                  (ulonglong)uVar1,uVar5,puVar6,puVar7,uVar3,uVar8);
+  }
+  return 0xc0000001;
+}
+
+
+//// 0x140005348 -> FUN_140005348 @140005348 ////
+
+longlong FUN_140005348(longlong param_1,undefined8 param_2,longlong param_3,undefined8 param_4,
+                      ulonglong param_5,longlong param_6,ulonglong param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  uint uVar2;
+  uint uVar3;
+  int iVar4;
+  bool bVar5;
+  code *pcVar6;
+  undefined1 uVar7;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  undefined8 extraout_x1_04;
+  undefined8 extraout_x1_05;
+  undefined8 uVar8;
+  undefined8 extraout_x1_06;
+  undefined8 extraout_x1_07;
+  undefined8 extraout_x1_08;
+  undefined8 extraout_x1_09;
+  undefined8 extraout_x1_10;
+  ulonglong *puVar9;
+  char *pcVar10;
+  int iVar11;
+  longlong *plVar12;
+  ulonglong local_70;
+  longlong lStack_68;
+  ulonglong local_60;
+  
+  iVar4 = (int)param_2;
+  bVar5 = false;
+  if (((param_1 == 0) || (*(longlong *)(param_1 + 0xe8) == 0)) || (param_3 == 0)) {
+    FUN_140006a20(0,0x14000c230,0xd,"AddressMapUMD2KMD Failed\n",param_5,param_6,param_7,param_8);
+  }
+  else {
+    lStack_68 = 0;
+    local_70 = 0;
+    local_60 = 0;
+    FUN_140009260(*(longlong *)(param_1 + 0xf0),param_2,param_3,param_4,param_5,param_6,param_7,
+                  param_8);
+    puVar9 = (ulonglong *)0xd;
+    if (*(longlong *)(param_1 + 0xe8) == 0) {
+      pcVar10 = "Failed to get m_PacketQueue Length\n";
+      FUN_140006a20(0,0x14000c230,0xd,"Failed to get m_PacketQueue Length\n",param_5,param_6,param_7
+                    ,param_8);
+      uVar8 = extraout_x1_10;
+    }
+    else {
+      uVar1 = *(uint *)(*(longlong *)(param_1 + 0xe8) + 0x18);
+      pcVar10 = "m_PacketQueue Length = %d\n";
+      param_5 = (ulonglong)uVar1;
+      FUN_140006a20(3,0x14000c230,0xd,"m_PacketQueue Length = %d\n",param_5,param_6,param_7,param_8)
+      ;
+      uVar8 = extraout_x1;
+      for (; uVar1 != 0; uVar1 = uVar1 - 1) {
+        plVar12 = *(longlong **)(param_1 + 0xe8);
+        if (plVar12 == (longlong *)0x0) {
+LAB_140005704:
+          pcVar10 = "Failed to dequeue from m_PacketQueue\n";
+          puVar9 = (ulonglong *)0xd;
+          FUN_140006a20(0,0x14000c230,0xd,"Failed to dequeue from m_PacketQueue\n",param_5,param_6,
+                        param_7,param_8);
+          uVar8 = extraout_x1_09;
+        }
+        else {
+          uVar7 = KeAcquireSpinLockRaiseToDpc(plVar12 + 4);
+          *(undefined1 *)(plVar12 + 5) = uVar7;
+          if ((int)plVar12[3] == 0) {
+            iVar11 = 0x16;
+          }
+          else {
+            uVar2 = *(uint *)((longlong)plVar12 + 0x14);
+            FUN_140009d60(&local_70,(longlong)(int)uVar2,
+                          (undefined8 *)
+                          (*plVar12 +
+                          (ulonglong)uVar2 * (ulonglong)*(uint *)((longlong)plVar12 + 0x2c)),
+                          (longlong)(int)uVar2);
+            *(int *)(plVar12 + 3) = (int)plVar12[3] + -1;
+            *(int *)((longlong)plVar12 + 0x2c) = *(int *)((longlong)plVar12 + 0x2c) + 1;
+            uVar2 = *(uint *)(plVar12 + 2);
+            if (uVar2 == 0) {
+                    /* WARNING: Does not return */
+              pcVar6 = (code *)SoftwareBreakpoint(0xf004,0x14000544c);
+              (*pcVar6)();
+            }
+            uVar3 = 0;
+            if (uVar2 != 0) {
+              uVar3 = *(uint *)((longlong)plVar12 + 0x2c) / uVar2;
+            }
+            iVar11 = 0;
+            *(uint *)((longlong)plVar12 + 0x2c) =
+                 *(uint *)((longlong)plVar12 + 0x2c) - uVar3 * uVar2;
+          }
+          KeReleaseSpinLock(plVar12 + 4,(char)plVar12[5]);
+          if (iVar11 != 0) goto LAB_140005704;
+          param_7 = local_60 & 0xffffffff;
+          pcVar10 = "Dequeue CSLPacket: In - %p, Out - %p, ref - %d\n";
+          puVar9 = (ulonglong *)0xd;
+          param_5 = local_70;
+          param_6 = lStack_68;
+          FUN_140006a20(3,0x14000c230,0xd,"Dequeue CSLPacket: In - %p, Out - %p, ref - %d\n",
+                        local_70,lStack_68,param_7,param_8);
+          if (iVar4 == 0x19) {
+            param_5 = *(ulonglong *)(param_3 + 0x180);
+            pcVar10 = "Searching for GROUP3_STATS CSLPacket: %p\n";
+            puVar9 = (ulonglong *)0xd;
+            FUN_140006a20(3,0x14000c230,0xd,"Searching for GROUP3_STATS CSLPacket: %p\n",param_5,
+                          param_6,param_7,param_8);
+            uVar8 = extraout_x1_08;
+            if (*(longlong *)(param_3 + 0x180) != lStack_68) goto LAB_1400054ec;
+            pcVar10 = "AddressMap STATS buffer, pPacketIn = %p, pPacketOut = %p\n";
+LAB_1400056ac:
+            puVar9 = (ulonglong *)0xd;
+            param_6 = lStack_68;
+            FUN_140006a20(3,0x14000c230,0xd,pcVar10,local_70,lStack_68,param_7,param_8);
+            *(ulonglong *)(param_3 + 0x180) = local_70;
+            uVar8 = extraout_x1_07;
+LAB_1400055b0:
+            iVar11 = (int)local_60 + -1;
+            local_60 = CONCAT44(local_60._4_4_,iVar11);
+            param_5 = local_70;
+            if (iVar11 == 0) {
+              pcVar10 = "Done with payload, pPacketIn = %p, pPacketOut = %p\n";
+              puVar9 = (ulonglong *)0xd;
+              param_6 = lStack_68;
+              FUN_140006a20(3,0x14000c230,0xd,"Done with payload, pPacketIn = %p, pPacketOut = %p\n"
+                            ,local_70,lStack_68,param_7,param_8);
+              uVar8 = extraout_x1_04;
+            }
+            else {
+              plVar12 = *(longlong **)(param_1 + 0xe8);
+              if (plVar12 != (longlong *)0x0) {
+                uVar7 = KeAcquireSpinLockRaiseToDpc(plVar12 + 4);
+                *(undefined1 *)(plVar12 + 5) = uVar7;
+                if (*(uint *)(plVar12 + 3) < *(uint *)(plVar12 + 2)) {
+                  puVar9 = &local_70;
+                  uVar2 = *(uint *)((longlong)plVar12 + 0x14);
+                  pcVar10 = (char *)(longlong)(int)uVar2;
+                  FUN_140009d60((undefined8 *)
+                                (*plVar12 + (ulonglong)uVar2 * (ulonglong)*(uint *)(plVar12 + 6)),
+                                (longlong)(int)uVar2,puVar9,(ulonglong)pcVar10);
+                  *(int *)(plVar12 + 3) = (int)plVar12[3] + 1;
+                  *(int *)(plVar12 + 6) = (int)plVar12[6] + 1;
+                  uVar2 = *(uint *)(plVar12 + 2);
+                  if (uVar2 == 0) {
+                    /* WARNING: Does not return */
+                    pcVar6 = (code *)SoftwareBreakpoint(0xf004,0x140005650);
+                    (*pcVar6)();
+                  }
+                  uVar3 = 0;
+                  if (uVar2 != 0) {
+                    uVar3 = *(uint *)(plVar12 + 6) / uVar2;
+                  }
+                  *(uint *)(plVar12 + 6) = *(uint *)(plVar12 + 6) - uVar3 * uVar2;
+                }
+                KeReleaseSpinLock(plVar12 + 4,(char)plVar12[5]);
+                uVar8 = extraout_x1_05;
+              }
+            }
+            bVar5 = true;
+          }
+          else {
+            if (iVar4 == 0x1b) {
+              param_5 = *(ulonglong *)(param_3 + 0x180);
+              pcVar10 = "Searching for IFE_LITE_MSG_ID_COMBO_STATS CSLPacket: %p\n";
+              puVar9 = (ulonglong *)0xd;
+              FUN_140006a20(3,0x14000c230,0xd,
+                            "Searching for IFE_LITE_MSG_ID_COMBO_STATS CSLPacket: %p\n",param_5,
+                            param_6,param_7,param_8);
+              uVar8 = extraout_x1_06;
+              if (*(longlong *)(param_3 + 0x180) == lStack_68) {
+                pcVar10 = 
+                "AddressMap IFE_LITE_COMBO_STATS buffer, pPacketIn = %p, pPacketOut = %p\n";
+                goto LAB_1400056ac;
+              }
+            }
+            else {
+              if (iVar4 != 0x1d) {
+                uVar8 = extraout_x1_00;
+                if (iVar4 == 0x1e) {
+                  pcVar10 = "Searching for IFE_LITE_SECURE_MSG_ID_PREPROCESSED_RAW CSLPacket: %p\n";
+                  goto LAB_1400054c8;
+                }
+                goto LAB_14000571c;
+              }
+              pcVar10 = "Searching for IFE_MSG_ID_GROUP0_SECURE_IMAGE CSLPacket: %p\n";
+LAB_1400054c8:
+              param_5 = *(ulonglong *)(param_3 + 0x398);
+              puVar9 = (ulonglong *)0xd;
+              FUN_140006a20(3,0x14000c230,0xd,pcVar10,param_5,param_6,param_7,param_8);
+              uVar8 = extraout_x1_01;
+              if (*(longlong *)(param_3 + 0x398) == lStack_68) {
+                pcVar10 = "AddressMap IMAGE buffer, pPacketIn = %p, pPacketOut = %p\n";
+                puVar9 = (ulonglong *)0xd;
+                param_6 = lStack_68;
+                FUN_140006a20(3,0x14000c230,0xd,
+                              "AddressMap IMAGE buffer, pPacketIn = %p, pPacketOut = %p\n",local_70,
+                              lStack_68,param_7,param_8);
+                *(ulonglong *)(param_3 + 0x398) = local_70;
+                uVar8 = extraout_x1_03;
+                goto LAB_1400055b0;
+              }
+            }
+LAB_1400054ec:
+            plVar12 = *(longlong **)(param_1 + 0xe8);
+            param_6 = lStack_68;
+            if (plVar12 != (longlong *)0x0) {
+              uVar7 = KeAcquireSpinLockRaiseToDpc(plVar12 + 4);
+              *(undefined1 *)(plVar12 + 5) = uVar7;
+              if (*(uint *)(plVar12 + 3) < *(uint *)(plVar12 + 2)) {
+                puVar9 = &local_70;
+                uVar2 = *(uint *)((longlong)plVar12 + 0x14);
+                pcVar10 = (char *)(longlong)(int)uVar2;
+                FUN_140009d60((undefined8 *)
+                              (*plVar12 + (ulonglong)uVar2 * (ulonglong)*(uint *)(plVar12 + 6)),
+                              (longlong)(int)uVar2,puVar9,(ulonglong)pcVar10);
+                *(int *)(plVar12 + 3) = (int)plVar12[3] + 1;
+                *(int *)(plVar12 + 6) = (int)plVar12[6] + 1;
+                uVar2 = *(uint *)(plVar12 + 2);
+                if (uVar2 == 0) {
+                    /* WARNING: Does not return */
+                  pcVar6 = (code *)SoftwareBreakpoint(0xf004,0x140005560);
+                  (*pcVar6)();
+                }
+                uVar3 = 0;
+                if (uVar2 != 0) {
+                  uVar3 = *(uint *)(plVar12 + 6) / uVar2;
+                }
+                *(uint *)(plVar12 + 6) = *(uint *)(plVar12 + 6) - uVar3 * uVar2;
+              }
+              KeReleaseSpinLock(plVar12 + 4,(char)plVar12[5]);
+              uVar8 = extraout_x1_02;
+            }
+          }
+        }
+LAB_14000571c:
+      }
+    }
+    FUN_1400092b0(*(longlong *)(param_1 + 0xf0),uVar8,puVar9,pcVar10,param_5,param_6,param_7,param_8
+                 );
+    if (bVar5) {
+      return param_3;
+    }
+  }
+  FUN_140006a20(0,0x14000c230,0xd,"AddressMapUMD2KMD Failed\n",param_5,param_6,param_7,param_8);
+  return 0;
+}
+

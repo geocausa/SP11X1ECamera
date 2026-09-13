@@ -1,0 +1,4622 @@
+program=QcISPTrustlet8380.dll
+sha256=55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606
+regex=ISPTRUSTLET_|DAL_secure_ife_mgr|AssignMemoryToSocDomain|CreateSecureSection|MapSecureIo|SecureInternalBuffer|SecureExternalBuffer|CSLPacket|DMI Buffer
+
+//// FUN_180002a50 @180002a50 ////
+string @18002e3b8 = %s:%d ISPTRUSTLET_PROCESS_DMI_BUFFER
+; xref @180002f78
+string @18002e3e0 = %s:%d ISPTRUSTLET_PROCESS_CSL_PACKET
+; xref @180003018
+string @18002e410 = %s:%d *((CSLPacket**)OutputBuffer) - %p, pPacket - %p, *BytesWritten - %d
+; xref @180003154
+
+uint FUN_180002a50(undefined8 param_1,int *param_2,char *param_3,ulonglong param_4,ulonglong param_5
+                  ,undefined8 *param_6,undefined8 *param_7,undefined8 *param_8)
+
+{
+  uint *puVar1;
+  ULONG UVar2;
+  undefined8 *puVar3;
+  longlong *plVar4;
+  undefined8 extraout_x1;
+  char *pcVar5;
+  ulonglong uVar6;
+  undefined8 uVar7;
+  ulonglong uVar8;
+  undefined8 *puVar9;
+  undefined8 uVar10;
+  undefined8 uVar11;
+  undefined1 auVar12 [16];
+  uint local_d0;
+  uint local_b8;
+  undefined2 local_98;
+  undefined2 uStack_96;
+  undefined2 uStack_94;
+  undefined2 uStack_92;
+  undefined8 *local_50;
+  undefined8 *local_48;
+  undefined8 *local_40;
+  longlong local_38;
+  int *local_30;
+  undefined8 *local_20;
+  undefined8 local_18;
+  
+  local_d0 = 0;
+  local_18 = param_1;
+  switch((ulonglong)param_7 & 0xffffffff) {
+  case 0:
+    local_d0 = FUN_1800086a8(DAT_18003d1f0,(undefined4 *)param_3,param_5,param_6,param_5,param_6,
+                             param_7,param_8);
+    uVar8 = (ulonglong)local_d0;
+    uVar7 = 0x148;
+    pcVar5 = "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp";
+    FUN_180019e00(4,"%s:%d ISPDriverInit, status = 0x%x\n\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x148
+                  ,uVar8,param_6,param_7,param_8);
+    if (-1 < (int)local_d0) {
+      local_d0 = FUN_180008f60((longlong)param_2,param_4);
+      uVar8 = (ulonglong)local_d0;
+      uVar7 = 0x14d;
+      pcVar5 = "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp";
+      FUN_180019e00(4,"%s:%d ISPDriverConfig, status = 0x%x\n\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x14d,uVar8,param_6,param_7,param_8);
+    }
+    local_98 = 0;
+    uStack_96 = 0;
+    uStack_94 = 0;
+    local_30 = param_2;
+    for (local_b8 = 0; local_b8 < (uint)local_30[0x1e]; local_b8 = local_b8 + 1) {
+      puVar1 = (uint *)(local_30 + (ulonglong)local_b8 * 10 + 0x22c);
+      if (*puVar1 == 0x3020) {
+        local_98 = (undefined2)puVar1[2];
+        uStack_96 = (undefined2)puVar1[3];
+        uStack_94 = (undefined2)puVar1[2];
+        DAT_18003d228 = malloc((size_t)((puVar1[2] * puVar1[3] * 3) / 2));
+        uVar8 = (ulonglong)*puVar1;
+        uVar7 = 0x15e;
+        pcVar5 = "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp";
+        FUN_180019e00(4,"%s:%d pIFEOutputResoruce->resourceType  %d\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x15e,uVar8,param_6,param_7,param_8);
+      }
+    }
+    if ((DAT_18003de80 >> 5 & 1) != 0) {
+      pcVar5 = "Init";
+      FUN_180001e48((REGHANDLE *)&DAT_18003c0d0,(PCEVENT_DESCRIPTOR)&DAT_18002f5c0,"Init");
+    }
+    FUN_180019440(1,CONCAT26(uStack_92,CONCAT24(uStack_94,CONCAT22(uStack_96,local_98))),pcVar5,
+                  uVar7,uVar8,param_6,param_7,param_8);
+    FUN_180019440(0,CONCAT26(uStack_92,CONCAT24(uStack_94,CONCAT22(uStack_96,local_98))),pcVar5,
+                  uVar7,uVar8,param_6,param_7,param_8);
+    uVar8 = FUN_1800085f0();
+    if ((int)uVar8 != 0) {
+      FUN_180019e00(1,"%s:%d Unable to create cameramutex for trustlet, result %d\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x168,uVar8 & 0xffffffff,param_6,param_7,param_8);
+    }
+    break;
+  case 1:
+    if (DAT_18003d228 != (void *)0x0) {
+      free(DAT_18003d228);
+      DAT_18003d228 = (void *)0x0;
+    }
+    FUN_180019ae0(1);
+    auVar12 = FUN_180019ae0(0);
+    if ((DAT_18003de80 >> 5 & 1) != 0) {
+      param_3 = "DeInit";
+      UVar2 = FUN_180001e48((REGHANDLE *)&DAT_18003c0d0,(PCEVENT_DESCRIPTOR)&DAT_18002f600,"DeInit")
+      ;
+      auVar12._4_4_ = 0;
+      auVar12._0_4_ = UVar2;
+      auVar12._8_8_ = extraout_x1;
+    }
+    uVar7 = FUN_1800088d0(auVar12._0_8_,auVar12._8_8_,(ulonglong)param_3,param_4,param_5,param_6,
+                          param_7,param_8);
+    local_d0 = (uint)uVar7;
+    FUN_180006ce0();
+    if (DAT_18003d220 != (HANDLE)0x0) {
+      CloseHandle(DAT_18003d220);
+    }
+    break;
+  case 2:
+    local_d0 = FUN_180008e10((longlong)param_2,param_4);
+    break;
+  case 3:
+    local_d0 = FUN_180008eb0();
+    break;
+  case 4:
+    if ((param_2 == (int *)0x0) || (param_4 != 0x60)) {
+      local_d0 = DAT_180003318;
+    }
+    else {
+      local_50 = malloc(0x60);
+      if (local_50 == (undefined8 *)0x0) {
+        local_d0 = DAT_18000331c;
+      }
+      else {
+        uVar7 = *(undefined8 *)param_2;
+        uVar11 = *(undefined8 *)(param_2 + 6);
+        uVar10 = *(undefined8 *)(param_2 + 4);
+        local_50[1] = *(undefined8 *)(param_2 + 2);
+        *local_50 = uVar7;
+        local_50[3] = uVar11;
+        local_50[2] = uVar10;
+        uVar7 = *(undefined8 *)(param_2 + 8);
+        uVar11 = *(undefined8 *)(param_2 + 0xe);
+        uVar10 = *(undefined8 *)(param_2 + 0xc);
+        local_50[5] = *(undefined8 *)(param_2 + 10);
+        local_50[4] = uVar7;
+        local_50[7] = uVar11;
+        local_50[6] = uVar10;
+        uVar7 = *(undefined8 *)(param_2 + 0x10);
+        uVar11 = *(undefined8 *)(param_2 + 0x16);
+        uVar10 = *(undefined8 *)(param_2 + 0x14);
+        local_50[9] = *(undefined8 *)(param_2 + 0x12);
+        local_50[8] = uVar7;
+        local_50[0xb] = uVar11;
+        local_50[10] = uVar10;
+        local_20 = local_50;
+        FUN_180007180((longlong *)&DAT_18003dde0,&local_50);
+      }
+    }
+    break;
+  case 5:
+    if ((param_2 == (int *)0x0) || (param_4 == 0)) {
+      local_d0 = DAT_180003318;
+    }
+    else {
+      local_48 = malloc(param_4);
+      if (local_48 == (undefined8 *)0x0) {
+        local_d0 = DAT_18000331c;
+      }
+      else {
+        FUN_180028600(local_48,(undefined8 *)param_2,param_4);
+        FUN_180007180((longlong *)&DAT_18003ddf0,&local_48);
+      }
+    }
+    break;
+  case 6:
+    FUN_180019e00(4,"%s:%d ISPTRUSTLET_PROCESS_DMI_BUFFER\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x1bc
+                  ,param_5,param_6,param_7,param_8);
+    if ((param_2 == (int *)0x0) || (param_4 == 0)) {
+      local_d0 = DAT_180003318;
+    }
+    else {
+      local_40 = malloc(param_4);
+      if (local_40 == (undefined8 *)0x0) {
+        local_d0 = DAT_18000331c;
+      }
+      else {
+        FUN_180028600(local_40,(undefined8 *)param_2,param_4);
+        FUN_180007180((longlong *)&DAT_18003ddc0,&local_40);
+      }
+    }
+    break;
+  case 7:
+    uVar7 = 0x1d4;
+    uVar8 = param_5;
+    puVar9 = param_6;
+    FUN_180019e00(4,"%s:%d ISPTRUSTLET_PROCESS_CSL_PACKET\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x1d4
+                  ,param_5,param_6,param_7,param_8);
+    puVar3 = malloc(param_4);
+    if (puVar3 == (undefined8 *)0x0) {
+      local_d0 = DAT_18000331c;
+    }
+    else {
+      if (param_2 == (int *)0x0) {
+        local_d0 = DAT_180003318;
+      }
+      else {
+        uVar6 = param_4;
+        FUN_180028600(puVar3,(undefined8 *)param_2,param_4);
+        local_d0 = FUN_1800060e0((longlong)puVar3,param_4,uVar6,uVar7,uVar8,puVar9,param_7,param_8);
+      }
+      if ((int)local_d0 < 0) {
+        FUN_180006a70(puVar3);
+      }
+      else {
+        plVar4 = (longlong *)FUN_1800071f8((longlong *)&DAT_18003ddd0);
+        local_38 = *plVar4;
+        local_d0 = FUN_180008ad0(local_38,param_4);
+        if (((param_3 != (char *)0x0) && (param_5 == 8)) && (param_6 != (undefined8 *)0x0)) {
+          *(longlong *)param_3 = local_38;
+          *param_6 = 8;
+          FUN_180019e00(4,
+                        "%s:%d *((CSLPacket**)OutputBuffer) - %p, pPacket - %p, *BytesWritten - %d\n"
+                        ,
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x1ea,*(undefined8 *)param_3,local_38,*param_6,param_8);
+        }
+      }
+    }
+    break;
+  case 8:
+    if (param_5 == 1000) {
+      FUN_180001628((undefined8 *)param_3,1000,DAT_18003de10,1000);
+      *param_6 = 1000;
+      FUN_1800290a0((undefined1 *)DAT_18003de10,0,1000);
+      DAT_18003de18 = DAT_18003de10;
+    }
+    else {
+      local_d0 = DAT_180003318;
+    }
+    break;
+  case 9:
+    if (param_2 != (int *)0x0) {
+      FUN_180008600();
+      FUN_1800196f0(1,(undefined8 *)param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+      FUN_180008600();
+    }
+    break;
+  case 10:
+    if (param_2 != (int *)0x0) {
+      FUN_180008600();
+      FUN_1800196f0(0,(undefined8 *)param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+      FUN_180008600();
+    }
+    break;
+  default:
+    local_d0 = DAT_180003318;
+    break;
+  case 0xd:
+    if ((param_2 == (int *)0x0) || (param_4 != 8)) {
+      local_d0 = DAT_180003318;
+    }
+    else if (*param_2 == 0) {
+      DAT_18003c118 = param_2[1];
+    }
+  }
+  return local_d0;
+}
+
+
+
+//// FUN_180004828 @180004828 ////
+string @18002e930 = %s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx
+; xref @1800049c0
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint FUN_180004828(longlong param_1)
+
+{
+  DWORD DVar1;
+  HANDLE hFileMappingObject;
+  LPVOID pvVar2;
+  undefined8 in_x4;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  uint local_70;
+  uint local_6c;
+  undefined4 local_40;
+  undefined4 uStack_3c;
+  undefined4 uStack_38;
+  undefined4 uStack_34;
+  undefined4 uStack_30;
+  undefined4 local_2c;
+  undefined4 uStack_28;
+  undefined4 uStack_24;
+  undefined4 uStack_20;
+  
+  local_70 = 0;
+  uStack_34 = (undefined4)*(undefined8 *)(param_1 + 0x74);
+  uStack_30 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x74) >> 0x20);
+  uStack_3c = (undefined4)*(undefined8 *)(param_1 + 0x6c);
+  uStack_38 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x6c) >> 0x20);
+  local_40 = 0x24;
+  uStack_24 = (undefined4)_UNK_18002f5e8;
+  uStack_20 = (undefined4)((ulonglong)_UNK_18002f5e8 >> 0x20);
+  local_2c = (undefined4)_DAT_18002f5e0;
+  uStack_28 = (undefined4)((ulonglong)_DAT_18002f5e0 >> 0x20);
+  hFileMappingObject = (HANDLE)OpenSecureSection(&local_40);
+  if (hFileMappingObject == (HANDLE)0x0) {
+    local_70 = DAT_180004a08;
+    FUN_180019e00(1,"%s:%d Failed to create the secure section\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x409
+                  ,in_x4,in_x5,in_x6,in_x7);
+  }
+  else {
+    pvVar2 = MapViewOfFile(hFileMappingObject,6,0,0,(SIZE_T)*(undefined4 *)(param_1 + 0x7c));
+    if (pvVar2 == (LPVOID)0x0) {
+      DVar1 = GetLastError();
+      if ((int)DVar1 < 1) {
+        local_6c = GetLastError();
+      }
+      else {
+        DVar1 = GetLastError();
+        local_6c = DVar1 & 0xffff | 0xc0070000;
+      }
+      local_70 = local_6c;
+      FUN_180019e00(1,"%s:%d Failed to map the section into trustlet, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x411,(ulonglong)local_6c,in_x5,in_x6,in_x7);
+    }
+    else {
+      FUN_180019e00(4,
+                    "%s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x415,hFileMappingObject,pvVar2,in_x6,in_x7);
+      *(HANDLE *)(param_1 + 0x88) = hFileMappingObject;
+      *(LPVOID *)(param_1 + 0x90) = pvVar2;
+    }
+  }
+  return local_70;
+}
+
+
+
+//// FUN_180004c58 @180004c58 ////
+string @18002eb20 = %s:%d Failed to CreateSecureSection, size = %d, status = 0x%x
+; xref @180004e38
+string @18002ec60 = %s:%d Failed to AssignMemoryToSocDomain, status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x
+; xref @18000527c
+string @18002ed00 = %s:%d SUCCESS..!! AssignMemoryToSocDomain hAssignHandle = 0x%llx status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x
+; xref @1800052e8
+string @18002eea0 = %s:%d GetSecureInternalBuffer successful: Address:0x%x, Size:0x%x
+; xref @1800053fc
+
+uint FUN_180004c58(longlong param_1)
+
+{
+  uint uVar1;
+  uint uVar2;
+  DWORD DVar3;
+  int iVar4;
+  int iVar5;
+  HANDLE hFileMappingObject;
+  LPVOID pvVar6;
+  void *pvVar7;
+  longlong lVar8;
+  ulonglong in_x5;
+  ulonglong uVar9;
+  undefined8 uVar10;
+  undefined8 in_x6;
+  undefined8 uVar11;
+  undefined8 in_x7;
+  void *pvVar12;
+  uint local_60;
+  uint local_58;
+  uint local_2c;
+  uint local_28;
+  uint local_20;
+  
+  local_60 = 0;
+  uVar1 = *(uint *)(param_1 + 0x20) % 0x1000;
+  if (uVar1 != 0) {
+    in_x5 = (ulonglong)uVar1;
+    FUN_180019e00(4,"%s:%d Requested buffer size = %d, 4k alignment = %d\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x455
+                  ,(ulonglong)*(uint *)(param_1 + 0x20),in_x5,in_x6,in_x7);
+    *(uint *)(param_1 + 0x20) = (*(int *)(param_1 + 0x20) + 0x1000) - uVar1;
+    FUN_180019e00(4,"%s:%d Adjusted buffer size for 4K pages, new size = %d\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x457
+                  ,(ulonglong)*(uint *)(param_1 + 0x20),in_x5,in_x6,in_x7);
+  }
+  hFileMappingObject = (HANDLE)CreateSecureSection(0,4,4,*(undefined4 *)(param_1 + 0x20),2);
+  if ((hFileMappingObject == (HANDLE)0xffffffffffffffff) || (hFileMappingObject == (HANDLE)0x0)) {
+    DVar3 = GetLastError();
+    if ((int)DVar3 < 1) {
+      local_2c = GetLastError();
+    }
+    else {
+      DVar3 = GetLastError();
+      local_2c = DVar3 & 0xffff | 0xc0070000;
+    }
+    local_60 = local_2c;
+    FUN_180019e00(1,"%s:%d Failed to CreateSecureSection, size = %d, status = 0x%x\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x460
+                  ,(ulonglong)*(uint *)(param_1 + 0x20),(ulonglong)local_2c,in_x6,in_x7);
+  }
+  else {
+    pvVar6 = MapViewOfFile(hFileMappingObject,6,0,0,(SIZE_T)*(undefined4 *)(param_1 + 0x20));
+    if (pvVar6 == (LPVOID)0x0) {
+      DVar3 = GetLastError();
+      if ((int)DVar3 < 1) {
+        local_28 = GetLastError();
+      }
+      else {
+        DVar3 = GetLastError();
+        local_28 = DVar3 & 0xffff | 0xc0070000;
+      }
+      local_60 = local_28;
+      FUN_180019e00(1,"%s:%d Failed to map the section into trustlet, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x468,(ulonglong)local_28,in_x5,in_x6,in_x7);
+    }
+    else {
+      uVar11 = 0;
+      uVar9 = (ulonglong)*(uint *)(param_1 + 0x20);
+      FUN_180019e00(4,
+                    "%s:%d SUCCESS..!! MapViewOfFile pBufferAddress = 0x%llx size = %d, status = 0x%x\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x46d,pvVar6,uVar9,0,in_x7);
+      uVar1 = *(uint *)(param_1 + 0x20) / 0x1000;
+      *(HANDLE *)(param_1 + 8) = hFileMappingObject;
+      *(uint *)(param_1 + 0x24) = uVar1;
+      *(LPVOID *)(param_1 + 0x30) = pvVar6;
+      *(ulonglong *)(param_1 + 0x50) = (longlong)pvVar6 + (ulonglong)*(uint *)(param_1 + 0x38);
+      pvVar7 = malloc((ulonglong)uVar1 * 8);
+      if (pvVar7 == (void *)0x0) {
+        DVar3 = GetLastError();
+        FUN_180019e00(1,"%s:%d Failure allocating memory to store assign handles (GLE:0x%x).\n\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x47b,(ulonglong)DVar3,uVar9,uVar11,in_x7);
+        local_60 = DAT_180005420;
+      }
+      uVar10 = 0;
+      FUN_180019e00(4,"%s:%d Total PageCount: 0x%x PageOffset: 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x47f,(ulonglong)uVar1,0,uVar11,in_x7);
+      FUN_180019e00(4,"%s:%d Total pDomainVAArray: 0x%llx\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x480,pvVar7,uVar10,uVar11,in_x7);
+      uVar2 = DAT_18003c148._4_4_;
+      iVar5 = DAT_18003c148._4_4_ + *(int *)(param_1 + 0x20);
+      iVar4 = rand();
+      DAT_18003c148._4_4_ = iVar5 + (iVar4 % 10) * 0x1000;
+      if (0x19000000 < DAT_18003c148._4_4_) {
+        DAT_18003c148._4_4_ = 0x18000000;
+      }
+      for (local_58 = 0; local_58 < uVar1; local_58 = local_58 + 1) {
+        *(ulonglong *)((longlong)pvVar7 + (ulonglong)local_58 * 8) =
+             (ulonglong)uVar2 + (ulonglong)local_58 * 0x1000;
+      }
+      lVar8 = AssignMemoryToSocDomain(hFileMappingObject,pvVar7,0,uVar1,0xd,4,0);
+      if ((lVar8 == -1) || (lVar8 == 0)) {
+        DVar3 = GetLastError();
+        if ((int)DVar3 < 1) {
+          local_20 = GetLastError();
+        }
+        else {
+          DVar3 = GetLastError();
+          local_20 = DVar3 & 0xffff | 0xc0070000;
+        }
+        local_60 = local_20;
+        FUN_180019e00(1,
+                      "%s:%d Failed to AssignMemoryToSocDomain, status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x\n"
+                      ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x494,(ulonglong)local_20,hFileMappingObject,pvVar7,0);
+      }
+      else {
+        pvVar12 = pvVar7;
+        FUN_180019e00(4,
+                      "%s:%d SUCCESS..!! AssignMemoryToSocDomain hAssignHandle = 0x%llx status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x\n"
+                      ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x499,lVar8,(ulonglong)local_60,hFileMappingObject,pvVar7);
+        iVar5 = FlushSecureSectionBuffers(hFileMappingObject,0,(ulonglong)uVar1 * 0x1000);
+        if (iVar5 == 0) {
+          uVar9 = (ulonglong)uVar1;
+          FUN_180019e00(4,
+                        "%s:%d FAILED..!! FlushSecureSectionBuffers hSectionHandle:0x%llx, PageOffset:0x%x PageCount:0x%x\n"
+                        ,
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x4a2,hFileMappingObject,0,uVar9,pvVar12);
+        }
+        else {
+          uVar9 = (ulonglong)uVar1;
+          FUN_180019e00(4,
+                        "%s:%d SUCCESS..!! FlushSecureSectionBuffers hSectionHandle:0x%llx, PageOffset:0x%x PageCount:0x%x\n"
+                        ,
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x49e,hFileMappingObject,0,uVar9,pvVar12);
+        }
+        *(longlong *)(param_1 + 0x10) = lVar8;
+        *(uint *)(param_1 + 0x28) = uVar2;
+        *(uint *)(param_1 + 0x48) = uVar2 + *(int *)(param_1 + 0x38);
+        *(void **)(param_1 + 0x18) = pvVar7;
+        FUN_180019e00(4,"%s:%d GetSecureInternalBuffer successful: Address:0x%x, Size:0x%x\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x4aa,(ulonglong)*(uint *)(param_1 + 0x28),
+                      (ulonglong)*(uint *)(param_1 + 0x20),uVar9,pvVar12);
+      }
+    }
+  }
+  return local_60;
+}
+
+
+
+//// FUN_180005430 @180005430 ////
+string @18002efa0 = %s:%d ReleaseSecureInternalBuffer successful: Address:0x%x, Size:0x%x
+; xref @1800055c0
+
+uint FUN_180005430(longlong param_1)
+
+{
+  BOOL BVar1;
+  DWORD DVar2;
+  ulonglong in_x4;
+  ulonglong in_x5;
+  undefined8 uVar3;
+  undefined8 in_x6;
+  ulonglong uVar4;
+  undefined8 in_x7;
+  uint local_20;
+  uint local_1c;
+  uint local_18;
+  uint local_14;
+  
+  local_20 = 0;
+  if ((*(longlong *)(param_1 + 0x10) == -1) || (*(longlong *)(param_1 + 0x10) == 0)) {
+    FUN_180019e00(1,"%s:%d Invalid assigned handle in secure buffer\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x4b5
+                  ,in_x4,in_x5,in_x6,in_x7);
+    local_20 = DAT_180005858;
+  }
+  else {
+    BVar1 = CloseHandle(*(HANDLE *)(param_1 + 0x10));
+    if (BVar1 == 0) {
+      DVar2 = GetLastError();
+      if ((int)DVar2 < 1) {
+        local_1c = GetLastError();
+      }
+      else {
+        DVar2 = GetLastError();
+        local_1c = DVar2 & 0xffff | 0xc0070000;
+      }
+      local_20 = local_1c;
+      FUN_180019e00(1,"%s:%d Failed to close assign hAssignHandle = 0x%llx, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4bd,*(undefined8 *)(param_1 + 0x10),(ulonglong)local_1c,in_x6,in_x7);
+    }
+    else {
+      FUN_180019e00(4,"%s:%d Successfuly closed hAssignHandle = 0x%llx\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4c1,*(undefined8 *)(param_1 + 0x10),in_x5,in_x6,in_x7);
+    }
+    if (*(longlong *)(param_1 + 0x18) != 0) {
+      free(*(void **)(param_1 + 0x18));
+    }
+    in_x5 = (ulonglong)*(uint *)(param_1 + 0x20);
+    in_x4 = (ulonglong)*(uint *)(param_1 + 0x28);
+    FUN_180019e00(4,"%s:%d ReleaseSecureInternalBuffer successful: Address:0x%x, Size:0x%x\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x4c9
+                  ,in_x4,in_x5,in_x6,in_x7);
+    *(undefined8 *)(param_1 + 0x10) = 0;
+    *(undefined4 *)(param_1 + 0x28) = 0;
+    *(undefined4 *)(param_1 + 0x48) = 0;
+    *(undefined8 *)(param_1 + 0x18) = 0;
+  }
+  if ((*(longlong *)(param_1 + 8) == 0) || (*(longlong *)(param_1 + 0x30) == 0)) {
+    FUN_180019e00(1,"%s:%d Invalid secure image buffer for release\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x4d3
+                  ,in_x4,in_x5,in_x6,in_x7);
+    local_20 = DAT_180005858;
+  }
+  else {
+    BVar1 = UnmapViewOfFile(*(LPCVOID *)(param_1 + 0x30));
+    if (BVar1 == 0) {
+      DVar2 = GetLastError();
+      if ((int)DVar2 < 1) {
+        local_18 = GetLastError();
+      }
+      else {
+        DVar2 = GetLastError();
+        local_18 = DVar2 & 0xffff | 0xc0070000;
+      }
+      local_20 = local_18;
+      uVar4 = (ulonglong)local_18;
+      uVar3 = *(undefined8 *)(param_1 + 0x30);
+      FUN_180019e00(1,
+                    "%s:%d Failed to unmap the section from trustlet, hSectionHandle:0x%llx, pBufferAddress:0x%llx, status = 0x%x\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4db,*(undefined8 *)(param_1 + 8),uVar3,uVar4,in_x7);
+    }
+    else {
+      uVar4 = (ulonglong)local_20;
+      uVar3 = *(undefined8 *)(param_1 + 0x30);
+      FUN_180019e00(4,
+                    "%s:%d Successfully unmap the section from trustlet, hSectionHandle:0x%llx, pBufferAddress:0x%llx, status = 0x%x\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4df,*(undefined8 *)(param_1 + 8),uVar3,uVar4,in_x7);
+    }
+    *(undefined8 *)(param_1 + 0x30) = 0;
+    *(undefined8 *)(param_1 + 0x50) = 0;
+    BVar1 = CloseHandle(*(HANDLE *)(param_1 + 8));
+    if (BVar1 == 0) {
+      DVar2 = GetLastError();
+      if ((int)DVar2 < 1) {
+        local_14 = GetLastError();
+      }
+      else {
+        DVar2 = GetLastError();
+        local_14 = DVar2 & 0xffff | 0xc0070000;
+      }
+      local_20 = local_14;
+      FUN_180019e00(1,"%s:%d Failed to close secure section, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4e7,(ulonglong)local_14,uVar3,uVar4,in_x7);
+    }
+    else {
+      FUN_180019e00(4,"%s:%d Successfully closed the section, hSectionHandle:0x%llx\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4eb,*(undefined8 *)(param_1 + 8),uVar3,uVar4,in_x7);
+    }
+    *(undefined8 *)(param_1 + 8) = 0;
+  }
+  return local_20;
+}
+
+
+
+//// FUN_180005a48 @180005a48 ////
+string @18002f2e0 = %s:%d %s: DMI Buffer addr 0x%x, dmiCmdIndex = 0x%x of length = %d
+; xref @180005e0c
+
+undefined4 FUN_180005a48(uint *param_1)
+
+{
+  uint *puVar1;
+  ulonglong *puVar2;
+  uint uVar3;
+  byte bVar4;
+  longlong *plVar5;
+  ulonglong *puVar6;
+  undefined8 *puVar7;
+  char *pcVar8;
+  ulonglong uVar9;
+  undefined8 uVar10;
+  ulonglong uVar11;
+  longlong lVar12;
+  uint *local_d0;
+  uint local_c8;
+  uint local_c0;
+  undefined4 local_bc;
+  uint local_b4;
+  
+  local_bc = 1;
+  local_b4 = 0;
+  local_c8 = (param_1[4] & 0xfffff) + 1 >> 2;
+  local_d0 = *(uint **)(param_1 + 2);
+  uVar11 = (ulonglong)*param_1;
+  uVar10 = *(undefined8 *)(param_1 + 2);
+  uVar9 = (ulonglong)param_1[4];
+  pcVar8 = "GetDMIPatchUpdate";
+  FUN_180019e00(4,"%s:%d Enter %s: len = %d, VA = %p & PA = 0x%x\n",
+                "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x529,
+                "GetDMIPatchUpdate",uVar9,uVar10,uVar11);
+  do {
+    if ((int)local_c8 < 1) {
+      return local_bc;
+    }
+    bVar4 = (byte)(*local_d0 >> 0x18);
+    switch(bVar4) {
+    case 1:
+    case 10:
+    case 0xb:
+      uVar3 = *local_d0;
+      puVar1 = local_d0 + 1;
+      local_d0 = local_d0 + 3;
+      local_c8 = local_c8 - 3;
+      FUN_180019e00(1,"%s:%d %s: DMI Buffer addr 0x%x, dmiCmdIndex = 0x%x of length = %d\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x57a,"GetDMIPatchUpdate",(ulonglong)*puVar1,(ulonglong)local_b4,
+                    (ulonglong)((uVar3 & 0xffff) + 1 >> 2));
+      puVar2 = (ulonglong *)
+               (*(longlong *)(param_1 + 6) + 0x74 +
+                (ulonglong)*(uint *)(*(longlong *)(param_1 + 6) + 0x28) + (ulonglong)local_b4 * 0x18
+               );
+      plVar5 = (longlong *)FUN_180007228((undefined8 *)&DAT_18003dde0);
+      lVar12 = *plVar5;
+      FUN_1800071c0((undefined8 *)&DAT_18003dde0);
+      puVar6 = (ulonglong *)FUN_180007228((undefined8 *)&DAT_18003dde0);
+      uVar9 = *puVar6;
+      FUN_1800071c0((undefined8 *)&DAT_18003dde0);
+      puVar7 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003ddc0);
+      uVar10 = *puVar7;
+      FUN_1800071c0((undefined8 *)&DAT_18003ddc0);
+      *(undefined8 *)(lVar12 + 8) = uVar10;
+      *puVar2 = uVar9;
+      *(undefined4 *)(puVar2 + 1) = 0;
+      *(undefined4 *)((longlong)puVar2 + 0x14) = 0;
+      *(longlong *)((longlong)puVar2 + 0xc) = lVar12;
+      uVar11 = *puVar2;
+      uVar10 = *(undefined8 *)(lVar12 + 8);
+      uVar9 = *(ulonglong *)((longlong)puVar2 + 0xc);
+      pcVar8 = "GetDMIPatchUpdate";
+      FUN_180019e00(1,"%s:%d %s: SrcBuffer = %p , cmdBuffer = %p and dstBuffer = %p\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x58d,"GetDMIPatchUpdate",uVar9,uVar10,uVar11);
+      local_b4 = local_b4 + 1;
+      local_bc = 0;
+      break;
+    default:
+      FUN_180019e00(1,"%s:%d CDMDrv: Invalid command cmdId=0x%x.\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x5ab,(ulonglong)bVar4,uVar9,uVar10,uVar11);
+      return 0xe;
+    case 3:
+      local_c0 = *local_d0 & 0xffff;
+      if (local_c0 == 0) {
+        FUN_180019e00(1,"%s:%d CDMDrv: Invalid REG_CONT command with 0 length.\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x553,pcVar8,uVar9,uVar10,uVar11);
+        return 0xe;
+      }
+      local_d0 = local_d0 + 2;
+      local_c8 = local_c8 - 2;
+      for (; local_c0 != 0; local_c0 = local_c0 - 1) {
+        local_d0 = local_d0 + 1;
+        local_c8 = local_c8 - 1;
+      }
+      local_bc = 0;
+      break;
+    case 4:
+      local_c0 = *local_d0 & 0xffff;
+      local_d0 = local_d0 + 1;
+      local_c8 = local_c8 - 1;
+      if (local_c0 == 0) {
+        FUN_180019e00(1,"%s:%d CDMDrv: Invalid REG_RANDOM command with 0 length.\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x53d,pcVar8,uVar9,uVar10,uVar11);
+        return 0xe;
+      }
+      for (; local_c0 != 0; local_c0 = local_c0 - 1) {
+        local_d0 = local_d0 + 2;
+        local_c8 = local_c8 - 2;
+      }
+      local_bc = 0;
+      break;
+    case 5:
+      local_d0 = local_d0 + 2;
+      local_c8 = local_c8 - 2;
+      local_bc = 0;
+      break;
+    case 6:
+      local_d0 = local_d0 + 2;
+      local_c8 = local_c8 - 2;
+      local_bc = 0;
+      break;
+    case 7:
+      local_d0 = local_d0 + 3;
+      local_c8 = local_c8 - 3;
+      break;
+    case 8:
+      local_d0 = local_d0 + 1;
+      local_c8 = local_c8 - 1;
+    }
+  } while( true );
+}
+
+
+
+//// FUN_1800060e0 @1800060e0 ////
+string @18002f398 = %s:%d BuildCSLPacket
+; xref @18000611c
+
+uint FUN_1800060e0(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined8 *puVar1;
+  ulonglong uVar2;
+  undefined8 *local_f0;
+  ulonglong *local_e8;
+  longlong local_e0;
+  uint local_d8;
+  undefined8 *local_d0;
+  int local_c8;
+  undefined8 *local_c0;
+  int local_b8;
+  int local_b4;
+  int local_b0;
+  uint local_ac;
+  int local_a8;
+  int local_a4;
+  int local_a0;
+  int local_9c;
+  longlong local_98;
+  longlong local_90;
+  undefined8 *local_88;
+  int local_80;
+  undefined8 local_78;
+  longlong local_70;
+  undefined8 *local_68;
+  undefined8 local_60;
+  undefined8 uStack_58;
+  undefined8 local_50;
+  ulonglong local_40;
+  ulonglong uStack_38;
+  uint local_30 [2];
+  longlong local_28;
+  int local_20;
+  longlong local_18;
+  
+  local_d8 = DAT_180006a60;
+  if (param_1 != 0) {
+    local_e0 = param_1;
+    local_50 = param_2;
+    FUN_180019e00(4,"%s:%d BuildCSLPacket\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x5bc
+                  ,param_5,param_6,param_7,param_8);
+    local_d8 = 0;
+    local_c0 = (undefined8 *)0x0;
+    local_78 = 0;
+    local_d0 = (undefined8 *)0x0;
+    local_90 = 0;
+    local_70 = 0;
+    local_80 = 0;
+    *(longlong *)(local_e0 + 0x74) = local_e0 + 0x74;
+    local_b8 = 0;
+    while( true ) {
+      local_b4 = local_b8;
+      local_a4 = *(int *)(local_e0 + 0x1c);
+      if (local_a4 <= local_b8) break;
+      local_d0 = (undefined8 *)
+                 (local_e0 + 0x74 + (ulonglong)*(uint *)(local_e0 + 0x18) +
+                 (longlong)local_b8 * 0x20);
+      local_c0 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003dde0);
+      local_c0 = (undefined8 *)*local_c0;
+      FUN_1800071c0((undefined8 *)&DAT_18003dde0);
+      puVar1 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003ddf0);
+      local_78 = *puVar1;
+      FUN_1800071c0((undefined8 *)&DAT_18003ddf0);
+      local_c0[1] = local_78;
+      *local_d0 = local_c0;
+      *(undefined4 *)(local_d0 + 1) = 0;
+      if (((local_d0 != (undefined8 *)0x0) && (local_c0 != (undefined8 *)0x0)) &&
+         (*(int *)(local_d0 + 3) == 3)) {
+        local_98 = local_c0[1] + (ulonglong)*(uint *)(local_e0 + 0x34) +
+                   (ulonglong)*(uint *)(local_d0 + 1);
+        local_80 = (int)*local_c0 + *(int *)(local_e0 + 0x34) + *(int *)(local_d0 + 1);
+        local_70 = local_98;
+        if (local_98 != 0) {
+          *(ulonglong *)(local_98 + 0x28) = local_98 + (ulonglong)*(uint *)(local_98 + 0x18);
+        }
+      }
+      if (*(int *)(local_d0 + 3) != 0xc) {
+        local_30[0] = (int)*local_c0 + *(int *)(local_d0 + 1);
+        local_28 = local_c0[1] + (ulonglong)*(uint *)(local_d0 + 1);
+        local_20 = *(int *)(local_d0 + 2) + -1;
+        local_18 = local_e0;
+        FUN_180005a48(local_30);
+      }
+      local_b8 = local_b8 + 1;
+    }
+    local_c8 = 0;
+    while( true ) {
+      local_b0 = local_c8;
+      local_a0 = *(int *)(local_e0 + 0x24);
+      local_a8 = local_c8;
+      local_9c = local_a0;
+      if (local_a0 <= local_c8) break;
+      local_e8 = (ulonglong *)
+                 (local_e0 + 0x74 + (ulonglong)*(uint *)(local_e0 + 0x20) +
+                 (longlong)local_c8 * 0x130);
+      if (*local_e8 == 0) {
+        uVar2 = (ulonglong)(uint)local_e8[0x19];
+        FUN_180019e00(4,"%s:%d pIOConfig->portResourceId is 0x%x\n",
+                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                      0x608,uVar2,param_6,param_7,param_8);
+        if (((int)local_e8[0x19] != 0x3000) && ((int)local_e8[0x19] != 0x3020)) {
+          FUN_180019e00(1,"%s:%d pIOConfig->hMems[0] = NULL for portResourceId = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x646,(ulonglong)(uint)local_e8[0x19],param_6,param_7,param_8);
+          return DAT_180006a60;
+        }
+        local_f0 = malloc(0xa8);
+        if (local_f0 == (undefined8 *)0x0) {
+          FUN_180019e00(1,"%s:%d Failed to allocate secure buffer\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x63f,uVar2,param_6,param_7,param_8);
+          return DAT_180006a64;
+        }
+        uStack_58 = 0;
+        local_60 = 0;
+        local_68 = local_f0 + 0x14;
+        local_88 = local_f0;
+        do {
+          local_88[1] = 0;
+          *local_88 = 0;
+          local_88[3] = 0;
+          local_88[2] = 0;
+          local_88 = local_88 + 4;
+        } while (local_88 != local_68);
+        *local_88 = 0;
+        *local_f0 = *(undefined8 *)(local_e0 + 8);
+        *(undefined4 *)((longlong)local_f0 + 0x3c) = *(undefined4 *)((longlong)local_e8 + 0x24);
+        *(int *)(local_f0 + 8) = (int)local_e8[5];
+        *(undefined4 *)((longlong)local_f0 + 0x44) = *(undefined4 *)((longlong)local_e8 + 0x2c);
+        *(int *)(local_f0 + 7) = *(int *)((longlong)local_f0 + 0x44) * *(int *)(local_f0 + 8);
+        *(undefined4 *)((longlong)local_f0 + 0x5c) = *(undefined4 *)((longlong)local_e8 + 0x54);
+        *(int *)(local_f0 + 0xc) = (int)local_e8[0xb];
+        *(undefined4 *)((longlong)local_f0 + 100) = *(undefined4 *)((longlong)local_e8 + 0x5c);
+        *(int *)(local_f0 + 0xb) = *(int *)((longlong)local_f0 + 100) * *(int *)(local_f0 + 0xc);
+        *(int *)(local_f0 + 4) = *(int *)(local_f0 + 7) + *(int *)(local_f0 + 0xb);
+        *(undefined4 *)(local_f0 + 0xd) = *(undefined4 *)((longlong)local_e8 + 0xb4);
+        uStack_38 = local_e8[0x24];
+        local_40 = local_e8[0x23];
+        *(ulonglong *)((longlong)local_f0 + 0x74) = uStack_38;
+        *(ulonglong *)((longlong)local_f0 + 0x6c) = local_40;
+        *(int *)((longlong)local_f0 + 0x7c) = (int)local_e8[0x25];
+        *(undefined4 *)(local_f0 + 0x10) = *(undefined4 *)((longlong)local_e8 + 300);
+        *(undefined4 *)((longlong)local_f0 + 0x7c) = *(undefined4 *)(local_f0 + 0x10);
+        local_d8 = FUN_180005868((longlong)local_f0);
+        local_ac = local_d8;
+        if ((int)local_d8 < 0) {
+          FUN_180019e00(1,"%s:%d Failed to get secure image buffer, status = 0x%x\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x639,(ulonglong)local_d8,param_6,param_7,param_8);
+          return local_d8;
+        }
+        FUN_180007180((longlong *)&DAT_18003de00,&local_f0);
+        *local_e8 = (ulonglong)*(uint *)(local_f0 + 5);
+        local_e8[1] = (ulonglong)*(uint *)(local_f0 + 9);
+        if ((*local_e8 == 0) || (local_e8[1] == 0)) {
+          FUN_180019e00(1,"%s:%d Invalid SMMU address for HW programming\n",
+                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                        ,0x630,uVar2,param_6,param_7,param_8);
+          local_f0 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003de00);
+          local_f0 = (undefined8 *)*local_f0;
+          FUN_1800071c0((undefined8 *)&DAT_18003de00);
+          FUN_180005968((longlong)local_f0);
+        }
+      }
+      else {
+        local_90 = local_e0 + 0x74 + (ulonglong)*(uint *)(local_e0 + 0x20) +
+                   (longlong)local_c8 * 0x130;
+        if (*(int *)(local_90 + 0x10c) == 1) {
+          local_c0 = (undefined8 *)FUN_180007228((undefined8 *)&DAT_18003dde0);
+          local_c0 = (undefined8 *)*local_c0;
+          FUN_1800071c0((undefined8 *)&DAT_18003dde0);
+          if (local_c0 != (undefined8 *)0x0) {
+            *local_e8 = (ulonglong)local_c0;
+            FUN_180019e00(4,"%s:%d pIOConfig->hMems[0] is 0x%x\n",
+                          "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+                          ,0x602,*local_e8,param_6,param_7,param_8);
+          }
+        }
+      }
+      local_c8 = local_c8 + 1;
+    }
+    FUN_180007180((longlong *)&DAT_18003ddd0,&local_e0);
+  }
+  return local_d8;
+}
+
+
+
+//// FUN_180006a70 @180006a70 ////
+string @18002f4d8 = %s:%d Freeing patch %d in CSLPacket
+; xref @180006b14
+string @18002f500 = %s:%d Done freeing patch %d in CSLPacket
+; xref @180006bcc
+
+void FUN_180006a70(void *param_1)
+
+{
+  undefined8 *puVar1;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  void *pvVar2;
+  uint local_40;
+  int local_3c;
+  
+  if (param_1 != (void *)0x0) {
+    for (local_40 = 0; (int)local_40 < *(int *)((longlong)param_1 + 0x2c); local_40 = local_40 + 1)
+    {
+      FUN_180019e00(4,"%s:%d Freeing patch %d in CSLPacket\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x65d,(ulonglong)local_40,in_x5,in_x6,in_x7);
+      puVar1 = (undefined8 *)
+               ((longlong)param_1 +
+               (longlong)(int)local_40 * 0x18 +
+               (ulonglong)*(uint *)((longlong)param_1 + 0x28) + 0x74);
+      free((void *)*puVar1);
+      pvVar2 = *(void **)((longlong)puVar1 + 0xc);
+      free(*(void **)((longlong)pvVar2 + 8));
+      free(pvVar2);
+      FUN_180019e00(4,"%s:%d Done freeing patch %d in CSLPacket\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x666,(ulonglong)local_40,in_x5,in_x6,in_x7);
+    }
+    for (local_3c = 0; local_3c < *(int *)((longlong)param_1 + 0x1c); local_3c = local_3c + 1) {
+      pvVar2 = *(void **)((longlong)param_1 +
+                         (longlong)local_3c * 0x20 +
+                         (ulonglong)*(uint *)((longlong)param_1 + 0x18) + 0x74);
+      free(*(void **)((longlong)pvVar2 + 8));
+      free(pvVar2);
+    }
+    free(param_1);
+  }
+  return;
+}
+
+
+
+//// FUN_1800088d0 @1800088d0 ////
+string @1800301a8 = %s:%d DAL_secure_ife_mgr_deinit failed with result = %d
+; xref @180008a98
+
+undefined8
+FUN_1800088d0(undefined8 param_1,undefined8 param_2,ulonglong param_3,ulonglong param_4,
+             undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  ulonglong uVar1;
+  longlong *plVar2;
+  
+  if (DAT_18003de20 != (undefined8 *)0x0) {
+    if ((DAT_18003de20[2] != 0) &&
+       (uVar1 = FUN_18000b5b8(DAT_18003de20[2],param_2,param_3,param_4,param_5,param_6,param_7,
+                              param_8), (int)uVar1 != 0)) {
+      param_3 = uVar1 & 0xffffffff;
+      FUN_180019e00(2,"DAL_ife_mgr_delete is failed with result 0x%x",param_3,param_4,param_5,
+                    param_6,param_7,param_8);
+    }
+    DAT_18003de20[2] = 0;
+    DAT_18003de20[3] = 0;
+    DAT_18003de20[1] = 0;
+    *DAT_18003de20 = 0;
+    free(DAT_18003de20);
+    DAT_18003de20 = (undefined8 *)0x0;
+  }
+  if (DAT_18003d230 == (longlong *)0x0) {
+    FUN_180019e00(2,"pHwMgrCtx is NULL",param_3,param_4,param_5,param_6,param_7,param_8);
+    FUN_180019e00(1,"%s:%d DAL_secure_ife_mgr_deinit failed with result = %d\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Core\\SecureISPDriverv2\\src\\ISPDriver.cpp",
+                  0x49,0x1d,param_6,param_7,param_8);
+  }
+  else {
+    plVar2 = DAT_18003d230;
+    if ((void *)DAT_18003d230[5] != (void *)0x0) {
+      free((void *)DAT_18003d230[5]);
+      plVar2 = DAT_18003d230;
+      DAT_18003d230[5] = 0;
+    }
+    if ((void *)plVar2[7] != (void *)0x0) {
+      free((void *)plVar2[7]);
+      DAT_18003d230[7] = 0;
+      FUN_180019e00(4,"ISP HW Mgr: deallocated csidinfo",param_3,param_4,param_5,param_6,param_7,
+                    param_8);
+      plVar2 = DAT_18003d230;
+    }
+    if ((void *)plVar2[0x1c1a] != (void *)0x0) {
+      free((void *)plVar2[0x1c1a]);
+      DAT_18003d230[0x1c1a] = 0;
+      FUN_180019e00(4,"ISP HW Mgr: deallocated cdminfo",param_3,param_4,param_5,param_6,param_7,
+                    param_8);
+      plVar2 = DAT_18003d230;
+    }
+    if ((void *)plVar2[6] != (void *)0x0) {
+      free((void *)plVar2[6]);
+      DAT_18003d230[6] = 0;
+      FUN_180019e00(4,"ISP HW Mgr: deallocated sfeinfo",param_3,param_4,param_5,param_6,param_7,
+                    param_8);
+      plVar2 = DAT_18003d230;
+    }
+    if ((HANDLE)plVar2[0x1c19] != (HANDLE)0x0) {
+      CloseHandle((HANDLE)plVar2[0x1c19]);
+      plVar2 = DAT_18003d230;
+      DAT_18003d230[0x1c19] = 0;
+    }
+    if (((*plVar2 != 0) &&
+        (FUN_180019e00(4,"ISP HW Mgr: Destroy camera signal.",param_3,param_4,param_5,param_6,
+                       param_7,param_8), plVar2 = DAT_18003d230, DAT_18003d230 != (longlong *)0x0))
+       && ((HANDLE)*DAT_18003d230 != (HANDLE)0x0)) {
+      CloseHandle((HANDLE)*DAT_18003d230);
+      *plVar2 = 0;
+      plVar2 = DAT_18003d230;
+    }
+    if (plVar2 != (longlong *)0x0) {
+      free(plVar2);
+    }
+    DAT_18003d230 = (longlong *)0x0;
+  }
+  return 0;
+}
+
+
+
+//// FUN_180008ad0 @180008ad0 ////
+string @1800301e8 = %s:%d ProcessCSLPacket failed with result = %d
+; xref @180008b58
+
+undefined4 FUN_180008ad0(longlong param_1,ulonglong param_2)
+
+{
+  uint uVar1;
+  undefined8 uVar2;
+  undefined8 uVar3;
+  undefined8 in_x7;
+  code *extraout_x15;
+  undefined4 uVar4;
+  
+  if ((param_1 != 0) && (param_2 == *(uint *)(param_1 + 4))) {
+    uVar4 = 0;
+    if (DAT_18003de20 == 0) {
+      return DAT_180008b98;
+    }
+    uVar3 = 0;
+    uVar2 = 0;
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (**(undefined8 **)(DAT_18003de20 + 0x10),*(undefined8 **)(DAT_18003de20 + 0x10),0x803,
+               param_1,0x7c,0);
+    uVar1 = (*extraout_x15)();
+    if (uVar1 != 0) {
+      FUN_180019e00(1,"%s:%d ProcessCSLPacket failed with result = %d\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Core\\SecureISPDriverv2\\src\\ISPDriver.cpp"
+                    ,0x69,(ulonglong)uVar1,uVar2,uVar3,in_x7);
+      uVar4 = 0xc0000001;
+    }
+    return uVar4;
+  }
+  return DAT_180008b9c;
+}
+
+
+
+//// FUN_180011010 @180011010 ////
+string @180033f80 = HAL_process_ife_ist NULL pointer ( pCSLPacket); xref @18001190c
+string @180035940 = IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[FD].; xref @180011670
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Removing unreachable block (ram,0x0001800113a0) */
+/* WARNING: Removing unreachable block (ram,0x000180011378) */
+/* WARNING: Removing unreachable block (ram,0x0001800113c8) */
+
+void FUN_180011010(longlong param_1,int *param_2,ulonglong *param_3,ulonglong *param_4,
+                  ulonglong *param_5,ulonglong *param_6,ulonglong *param_7,ulonglong *param_8)
+
+{
+  longlong lVar1;
+  undefined4 uVar2;
+  uint uVar3;
+  uint uVar4;
+  uint uVar5;
+  uint uVar6;
+  char cVar7;
+  bool bVar8;
+  uint uVar9;
+  uint uVar10;
+  uint uVar11;
+  uint uVar12;
+  uint uVar13;
+  uint uVar14;
+  uint uVar15;
+  code *pcVar16;
+  longlong lVar17;
+  int iVar18;
+  ulonglong *puVar19;
+  ulonglong *extraout_x1;
+  undefined8 extraout_x1_00;
+  ulonglong *extraout_x1_01;
+  undefined8 extraout_x1_02;
+  ulonglong *extraout_x1_03;
+  ulonglong *extraout_x1_04;
+  undefined8 extraout_x1_05;
+  undefined8 extraout_x1_06;
+  undefined8 extraout_x1_07;
+  char *pcVar20;
+  ulonglong *puVar21;
+  longlong lVar22;
+  ulonglong uVar23;
+  ulonglong *puVar24;
+  ulonglong *puVar25;
+  int *piVar27;
+  uint uVar28;
+  undefined8 *puVar29;
+  undefined8 *puVar30;
+  undefined8 uVar31;
+  code *extraout_x15;
+  int *piVar32;
+  longlong lVar33;
+  uint local_4a0 [236];
+  ulonglong local_f0 [18];
+  ulonglong *puVar26;
+  
+  if ((param_1 == 0) || (param_2 == (int *)0x0)) {
+    pcVar20 = "HAL_process_ife_ist NULL pointer ( pIfeCtx || ifeIstMsg)";
+LAB_1800119a8:
+    FUN_180019e00(2,pcVar20,param_3,param_4,param_5,param_6,param_7,param_8);
+  }
+  else if (*param_2 == 1) {
+    piVar32 = *(int **)(param_2 + 2);
+    uVar3 = piVar32[1];
+    uVar4 = piVar32[2];
+    uVar5 = piVar32[4];
+    lVar33 = *(longlong *)(piVar32 + 0xc);
+    uVar28 = uVar4 & 1;
+    uVar9 = uVar4 >> 1 & 1;
+    puVar19 = (ulonglong *)(ulonglong)uVar9;
+    uVar6 = piVar32[6];
+    uVar10 = uVar4 >> 2 & 1;
+    puVar21 = (ulonglong *)(ulonglong)uVar10;
+    uVar11 = uVar4 >> 4 & 1;
+    puVar24 = (ulonglong *)(ulonglong)uVar11;
+    uVar12 = uVar4 >> 5 & 1;
+    param_5 = (ulonglong *)(ulonglong)uVar12;
+    uVar13 = uVar4 >> 6 & 1;
+    param_6 = (ulonglong *)(ulonglong)uVar13;
+    uVar14 = uVar4 >> 7 & 1;
+    param_7 = (ulonglong *)(ulonglong)uVar14;
+    uVar15 = uVar4 >> 9 & 1;
+    param_8 = (ulonglong *)(ulonglong)uVar15;
+    puVar25 = local_f0;
+    do {
+      puVar26 = puVar25 + 4;
+      puVar25[1] = 0xffffffffffffffff;
+      *puVar25 = 0xffffffffffffffff;
+      puVar25[3] = 0xffffffffffffffff;
+      puVar25[2] = 0xffffffffffffffff;
+      puVar25 = puVar26;
+    } while (puVar26 != local_f0 + 0x10);
+    *puVar26 = 0xffffffffffffffff;
+    uVar2 = 3;
+    if (uVar28 == 0) {
+      uVar2 = (undefined4)local_f0[0];
+    }
+    local_f0[0]._0_4_ = uVar2;
+    if (uVar9 != 0) {
+      puVar19 = local_f0;
+      *(undefined4 *)((longlong)puVar19 + (ulonglong)uVar28 * 4) = 0x15;
+      uVar28 = uVar28 + 1;
+    }
+    if (uVar10 != 0) {
+      puVar21 = local_f0;
+      *(undefined4 *)((longlong)puVar21 + (ulonglong)uVar28 * 4) = 7;
+      uVar28 = uVar28 + 1;
+    }
+    if (uVar11 != 0) {
+      puVar24 = local_f0;
+      *(undefined4 *)((longlong)puVar24 + (ulonglong)uVar28 * 4) = 0xd;
+      uVar28 = uVar28 + 1;
+    }
+    if (uVar12 != 0) {
+      param_5 = local_f0;
+      *(undefined4 *)((longlong)param_5 + (ulonglong)uVar28 * 4) = 0xe;
+      uVar28 = uVar28 + 1;
+    }
+    if (uVar13 != 0) {
+      param_6 = local_f0;
+      *(undefined4 *)((longlong)param_6 + (ulonglong)uVar28 * 4) = 0x10;
+      uVar28 = uVar28 + 1;
+    }
+    if (uVar14 != 0) {
+      param_7 = local_f0;
+      *(undefined4 *)((longlong)param_7 + (ulonglong)uVar28 * 4) = 0xf;
+      uVar28 = uVar28 + 1;
+    }
+    if (uVar15 != 0) {
+      param_8 = local_f0;
+      *(undefined4 *)((longlong)param_8 + (ulonglong)uVar28 * 4) = 0x12;
+      uVar28 = uVar28 + 1;
+    }
+    if ((uVar4 >> 0xc & 1) != 0) {
+      *(undefined4 *)((longlong)local_f0 + (ulonglong)uVar28 * 4) = 0xc;
+      uVar28 = uVar28 + 1;
+    }
+    if ((uVar4 >> 0xd & 1) != 0) {
+      *(undefined4 *)((longlong)local_f0 + (ulonglong)uVar28 * 4) = 0xb;
+      uVar28 = uVar28 + 1;
+    }
+    if ((uVar4 >> 0xe & 1) != 0) {
+      *(undefined4 *)((longlong)local_f0 + (ulonglong)uVar28 * 4) = 0;
+      uVar28 = uVar28 + 1;
+    }
+    if ((uVar4 >> 0xf & 1) != 0) {
+      *(undefined4 *)((longlong)local_f0 + (ulonglong)uVar28 * 4) = 1;
+      uVar28 = uVar28 + 1;
+    }
+    if ((uVar4 >> 0x10 & 1) != 0) {
+      *(undefined4 *)((longlong)local_f0 + (ulonglong)uVar28 * 4) = 2;
+    }
+    if ((uVar5 >> 3 & 1) != 0) {
+      puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+      FUN_180019e00(4,"IFE%d camif_eof_irq occured",puVar21,puVar24,param_5,param_6,param_7,param_8)
+      ;
+      puVar19 = extraout_x1;
+      if (*(char *)(param_1 + 0x119) != '\0') {
+        puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+        *(undefined1 *)(param_1 + 0x119) = 0;
+        FUN_180019e00(4,"IFE%d Completing the stop process...",puVar21,puVar24,param_5,param_6,
+                      param_7,param_8);
+        FUN_180017170(param_1,extraout_x1_00,puVar21,puVar24,param_5,param_6,param_7,param_8);
+        puVar19 = extraout_x1_01;
+      }
+    }
+    if ((uVar5 >> 4 & 1) != 0) {
+      lVar22 = 0;
+      if (*(longlong *)(param_1 + 0x3398) != 0) {
+        FUN_180008540((longlong *)(param_1 + 0x33a0),puVar19,0,puVar24,param_5,param_6,param_7,
+                      param_8);
+        lVar22 = (*(longlong *)(param_1 + 0x33a0) - *(longlong *)(param_1 + 0x3398)) / 10000;
+      }
+      FUN_180019e00(4,"Timegap between SOf s %u",lVar22,puVar24,param_5,param_6,param_7,param_8);
+      FUN_180014ef8(param_1,lVar33,(longlong)param_3,param_4,(longlong)param_5,(longlong)param_6,
+                    param_7,param_8);
+      puVar24 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0x2e78);
+      puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+      FUN_180019e00(4," ife%d ifeIrqStatus0.camif_sof_irq, ifeFrameId %d",puVar21,puVar24,param_5,
+                    param_6,param_7,param_8);
+      FUN_180008540((longlong *)(param_1 + 0x3398),extraout_x1_02,puVar21,puVar24,param_5,param_6,
+                    param_7,param_8);
+      puVar19 = extraout_x1_03;
+    }
+    if ((uVar6 >> 4 & 1) != 0) {
+      uVar28 = *(int *)(param_1 + 0x2e7c) + 1;
+      puVar24 = (ulonglong *)(ulonglong)uVar28;
+      *(uint *)(param_1 + 0x2e7c) = uVar28;
+      puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+      FUN_180019e00(4," ife%d ifeIrqStatus0.rdi0_sof_irq, rdi0FrameId %d",puVar21,puVar24,param_5,
+                    param_6,param_7,param_8);
+      puVar19 = extraout_x1_04;
+    }
+    if ((uVar5 >> 0x17 & 1) != 0) {
+      if (*(char *)(param_1 + 0x118) != '\0') {
+        *(undefined1 *)(param_1 + 0x118) = 0;
+        *(undefined4 *)(param_1 + 200) = 1;
+        FUN_180014388((undefined8 *)(param_1 + 0x50),puVar19,puVar21,puVar24,param_5,param_6,param_7
+                      ,param_8);
+      }
+      puVar24 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0x2e78);
+      FUN_180019e00(4," ife%d ifeIrqStatus0.reg_update_irq, ifeFrameId %d",
+                    (ulonglong)*(uint *)(param_1 + 0xd0),puVar24,param_5,param_6,param_7,param_8);
+    }
+    if ((uVar3 & 1) != 0) {
+      uVar23 = (ulonglong)*(uint *)(param_1 + 0xd0);
+      FUN_180019e00(4,"IFE%d IFE Reset Irq occured.",uVar23,puVar24,param_5,param_6,param_7,param_8)
+      ;
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x18) = *(undefined4 *)(param_1 + 0x10c);
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x1c) = *(undefined4 *)(param_1 + 0x110);
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 8) = 0xfffffff;
+      FUN_180014388((undefined8 *)(param_1 + 0x50),extraout_x1_05,uVar23,puVar24,param_5,param_6,
+                    param_7,param_8);
+    }
+    if (((uVar5 >> 0x15 & 1) != 0) && (*(char *)(param_1 + 0x11b) == '\0')) {
+      FUN_180019e00(4,"IFE%d IFE Epoch0 Irq occured.",(ulonglong)*(uint *)(param_1 + 0xd0),puVar24,
+                    param_5,param_6,param_7,param_8);
+      FUN_1800152c0(param_1,(longlong)param_3,param_4,(ulonglong)puVar24,(ulonglong)param_5,
+                    (ulonglong)param_6,(ulonglong)param_7,param_8);
+    }
+    lVar22 = 0;
+    puVar19 = local_f0;
+    do {
+      if (*(char *)(param_1 + 0x11b) == '\0') {
+        iVar18 = (int)*puVar19;
+        if (iVar18 == 3) {
+          FUN_180019e00(4,"IFE%d IFE FULL buf done Irq occured.",
+                        (ulonglong)*(uint *)(param_1 + 0xd0),puVar24,param_5,param_6,param_7,param_8
+                       );
+          puVar24 = param_3;
+          param_5 = param_4;
+          FUN_180015938(param_1,0,lVar33,(longlong)param_3,param_4,param_6,param_7,param_8);
+        }
+        else if (iVar18 != 0x15) {
+          if (iVar18 == 7) {
+            FUN_180019e00(4,"IFE%d IFE FD buf done Irq occured.",
+                          (ulonglong)*(uint *)(param_1 + 0xd0),puVar24,param_5,param_6,param_7,
+                          param_8);
+            FUN_1800290a0((undefined1 *)(param_1 + 0x1710),0,0x3a8);
+            lVar17 = FUN_180016248(param_1,10);
+            if (lVar17 == 0) {
+              FUN_180019e00(4,"IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[FD].",
+                            (ulonglong)*(uint *)(param_1 + 0xd0),puVar24,param_5,param_6,param_7,
+                            param_8);
+            }
+            else {
+              uVar28 = 0;
+              lVar1 = lVar17 + (ulonglong)*(uint *)(lVar17 + 0x20);
+              puVar29 = (undefined8 *)(lVar1 + 0x74);
+              if (*(int *)(lVar17 + 0x24) != 0) {
+                piVar27 = (int *)(lVar1 + 0x90);
+                param_5 = (ulonglong *)0x3004;
+                do {
+                  if (piVar27[0x2b] == 0x3004) {
+                    puVar30 = (undefined8 *)*puVar29;
+                    *(undefined4 *)(param_1 + 0x1a38) = *(undefined4 *)puVar30;
+                    uVar31 = *puVar30;
+                    iVar18 = *piVar27;
+                    *(undefined4 *)(param_1 + 0x1a78) = 0x3004;
+                    *(int *)(param_1 + 0x1a3c) = (int)uVar31 + iVar18;
+                  }
+                  uVar28 = uVar28 + 1;
+                  puVar29 = puVar29 + 0x26;
+                  piVar27 = piVar27 + 0x4c;
+                } while (uVar28 < *(uint *)(lVar17 + 0x24));
+              }
+              uVar31 = FUN_1800150f0(param_1,*(longlong *)(lVar17 + 8));
+              *(undefined8 *)(param_1 + 0x1a30) = uVar31;
+              *(undefined8 *)(param_1 + 0x1a20) = *(undefined8 *)(lVar17 + 8);
+              *(undefined4 *)(param_1 + 0x1a28) = *(undefined4 *)(lVar17 + 0x70);
+              *(int *)(param_1 + 0x1a2c) = *(int *)(param_1 + 0x2e78);
+              uVar28 = *(uint *)(param_1 + 0x32c0);
+              *(longlong *)(param_1 + 0x1ab0) = lVar17;
+              *(undefined4 *)(param_1 + 0x1a74) = *(undefined4 *)(param_1 + 0xd0);
+              *(uint *)(param_1 + 0x17e4) = uVar28;
+              *(uint *)(param_1 + 0x1a6c) = uVar28;
+              if (uVar28 == 0) {
+                    /* WARNING: Does not return */
+                pcVar16 = (code *)SoftwareBreakpoint(0xf004,0x1800115f4);
+                (*pcVar16)();
+              }
+              uVar3 = 0;
+              if (uVar28 != 0) {
+                uVar3 = ((uVar28 + *(int *)(param_1 + 0x2e78)) - 1) / uVar28;
+              }
+              *(uint *)(param_1 + 0x1a70) = uVar3;
+              *(undefined4 *)(param_1 + 0x1710) = 0x1c;
+              FUN_180028600((undefined8 *)local_4a0,(undefined8 *)(param_1 + 0x1710),0x3a8);
+              uVar23 = *param_4 / 0x3a8;
+              if (uVar23 < 5) {
+                if (4 < uVar23) {
+                  uVar23 = 0;
+                }
+                puVar24 = (ulonglong *)(ulonglong)local_4a0[0];
+                FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar23,puVar24,param_5,param_6,param_7,
+                              param_8);
+                FUN_180028600(param_3 + (*param_4 / 0x3a8) * 0x75,(undefined8 *)local_4a0,0x3a8);
+                *param_4 = *param_4 + 0x3a8;
+              }
+              else {
+LAB_1800117c4:
+                if (uVar23 < 5) {
+                  uVar23 = 0;
+                }
+                puVar24 = (ulonglong *)(ulonglong)local_4a0[0];
+                FUN_180019e00(4,"Interrupt Msg[%d] -> %d, dropping due to insufficent output buffer"
+                              ,uVar23,puVar24,param_5,param_6,param_7,param_8);
+              }
+            }
+          }
+          else if (iVar18 == 0) {
+            uVar23 = (ulonglong)*(uint *)(param_1 + 0xd0);
+            FUN_180019e00(4,"IFE%d IFE bus RDI0 buf done Irq occured.",uVar23,puVar24,param_5,
+                          param_6,param_7,param_8);
+            puVar24 = param_3;
+            param_5 = param_4;
+            FUN_1800157a8(param_1,extraout_x1_06,uVar23,(longlong)param_3,param_4,param_6,param_7,
+                          param_8);
+          }
+          else if (iVar18 == 0xf) {
+            FUN_180019e00(4,"IFE%d IFE BF stats buf done Irq occured.",
+                          (ulonglong)*(uint *)(param_1 + 0xd0),puVar24,param_5,param_6,param_7,
+                          param_8);
+            FUN_1800290a0((undefined1 *)(param_1 + 0x4c8),0,0x3a8);
+            lVar17 = FUN_180016248(param_1,8);
+            if (lVar17 != 0) {
+              (*(code *)PTR__guard_check_icall_18002b360)
+                        (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,0xf);
+              (*extraout_x15)();
+              if (*(char *)(param_1 + 0x168) != '\0') {
+                *(undefined4 *)(param_1 + 0x520) = *(undefined4 *)(param_1 + 0x2e78);
+                uVar31 = FUN_1800150f0(param_1,*(longlong *)(lVar17 + 8));
+                *(undefined8 *)(param_1 + 0x528) = uVar31;
+                *(undefined4 *)(param_1 + 0x530) = *(undefined4 *)(param_1 + 0xd0);
+                *(undefined8 *)(param_1 + 0x538) = *(undefined8 *)(lVar17 + 8);
+                *(undefined4 *)(param_1 + 0x540) = *(undefined4 *)(lVar17 + 0x70);
+                *(undefined4 *)(param_1 + 0x544) = 0x300d;
+              }
+              *(longlong *)(param_1 + 0x650) = lVar17;
+              *(undefined4 *)(param_1 + 0x4c8) = 0x1a;
+              FUN_180028600((undefined8 *)local_4a0,(undefined8 *)(param_1 + 0x4c8),0x3a8);
+              uVar23 = *param_4 / 0x3a8;
+              if (4 < uVar23) goto LAB_1800117c4;
+              if (4 < uVar23) {
+                uVar23 = 0;
+              }
+              puVar24 = (ulonglong *)(ulonglong)local_4a0[0];
+              FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar23,puVar24,param_5,param_6,param_7,
+                            param_8);
+              FUN_180028600(param_3 + (*param_4 / 0x3a8) * 0x75,(undefined8 *)local_4a0,0x3a8);
+              *param_4 = *param_4 + 0x3a8;
+            }
+          }
+          else {
+            if (iVar18 == 0xd) {
+              puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+              FUN_180019e00(4,"IFE%d IFE AEC_BE stats buf done Irq occured.",puVar21,puVar24,param_5
+                            ,param_6,param_7,param_8);
+              iVar18 = 5;
+            }
+            else if (iVar18 == 0x10) {
+              puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+              FUN_180019e00(4,"IFE%d IFE AWB_BG stats buf done Irq occured.",puVar21,puVar24,param_5
+                            ,param_6,param_7,param_8);
+              iVar18 = 7;
+            }
+            else if (iVar18 == 0xe) {
+              puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+              FUN_180019e00(4,"IFE%d IFE Tintless_BG stats buf done Irq occured.",puVar21,puVar24,
+                            param_5,param_6,param_7,param_8);
+              iVar18 = 6;
+            }
+            else {
+              if (iVar18 != 0x12) goto LAB_1800118a8;
+              puVar21 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+              FUN_180019e00(4,"IFE%d IFE RS stats buf done Irq occured.",puVar21,puVar24,param_5,
+                            param_6,param_7,param_8);
+              iVar18 = 9;
+            }
+            lVar17 = FUN_180016248(param_1,iVar18);
+            if (lVar17 == 0) {
+              pcVar20 = "HAL_process_ife_ist NULL pointer ( pCSLPacket)";
+              param_3 = puVar21;
+              param_4 = puVar24;
+              goto LAB_1800119a8;
+            }
+            uVar31 = FUN_1800151e8(param_1,*(longlong *)(lVar17 + 8),puVar21,puVar24,param_5,param_6
+                                   ,param_7,param_8);
+            if (((uint)uVar31 & 0xff) == 1) {
+              puVar24 = param_3;
+              param_5 = param_4;
+              FUN_180015ea0(param_1,extraout_x1_07,puVar21,(ulonglong)param_3,param_4,param_6,
+                            param_7,param_8);
+            }
+          }
+        }
+      }
+LAB_1800118a8:
+      lVar22 = lVar22 + 1;
+      *(int *)puVar19 = -1;
+      puVar19 = (ulonglong *)((longlong)puVar19 + 4);
+    } while (lVar22 < 0x22);
+    do {
+      iVar18 = *piVar32;
+      cVar7 = '\x01';
+      bVar8 = (bool)ExclusiveMonitorPass(piVar32,0x10);
+      if (bVar8) {
+        *piVar32 = iVar18 + -1;
+        cVar7 = ExclusiveMonitorsStatus();
+      }
+    } while (cVar7 != '\0');
+    DataMemoryBarrier(2,3);
+    if (iVar18 + -1 == 0) {
+      if (*(void **)(param_2 + 2) != (void *)0x0) {
+        free(*(void **)(param_2 + 2));
+      }
+      param_2[2] = 0;
+      param_2[3] = 0;
+      FUN_180019e00(4,"IFE%d deallocating CSID IST MSG",(ulonglong)*(uint *)(param_1 + 0xd0),puVar24
+                    ,param_5,param_6,param_7,param_8);
+    }
+  }
+  else if (*param_2 == 2) {
+    lVar33 = *(longlong *)(param_2 + 2);
+    if ((*(uint *)(lVar33 + 8) & 0xc0000000) != 0) {
+      param_4 = (ulonglong *)(ulonglong)*(uint *)(*(longlong *)(param_1 + 0xf8) + 100);
+      param_5 = (ulonglong *)(ulonglong)*(uint *)(*(longlong *)(param_1 + 0xf8) + 0x70);
+      FUN_180019e00(2,
+                    "IFE%d: IFE violation occured on Bus clients violationStatus=0x%x imageSizeVioaltionStatus=0x%x"
+                    ,(ulonglong)*(uint *)(param_1 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+    }
+    piVar32 = (int *)(lVar33 + 0x10);
+    do {
+      iVar18 = *piVar32;
+      cVar7 = '\x01';
+      bVar8 = (bool)ExclusiveMonitorPass(piVar32,0x10);
+      if (bVar8) {
+        *piVar32 = iVar18 + -1;
+        cVar7 = ExclusiveMonitorsStatus();
+      }
+    } while (cVar7 != '\0');
+    DataMemoryBarrier(2,3);
+    if (iVar18 + -1 == 0) {
+      if (*(void **)(param_2 + 2) != (void *)0x0) {
+        free(*(void **)(param_2 + 2));
+      }
+      param_2[2] = 0;
+      param_2[3] = 0;
+      FUN_180019e00(4,"IFE%d deallocating IFE IST MSG",(ulonglong)*(uint *)(param_1 + 0xd0),param_4,
+                    param_5,param_6,param_7,param_8);
+    }
+  }
+  return;
+}
+
+
+
+//// FUN_180016470 @180016470 ////
+string @180034fe8 = IFE%d: IFE driver failed clear ifeCSLPacketGroupQueue %d.; xref @180016984
+string @180034fe8 = IFE%d: IFE driver failed clear ifeCSLPacketGroupQueue %d.; xref @180016cf8
+string @180035050 = IFE%d: IFE driver failed clear ifeCSLPacketInQueue.; xref @1800169fc
+string @180035050 = IFE%d: IFE driver failed clear ifeCSLPacketInQueue.; xref @180016d74
+string @180036c78 = =================== secure_CSLPacket =============; xref @18001667c
+
+ulonglong FUN_180016470(longlong param_1,undefined8 param_2,uint *param_3,ulonglong param_4,
+                       longlong param_5,undefined8 param_6,undefined4 *param_7,undefined8 param_8)
+
+{
+  bool bVar1;
+  bool bVar2;
+  undefined4 uVar3;
+  uint uVar4;
+  uint uVar5;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 uVar6;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  ulonglong uVar7;
+  uint *puVar8;
+  char *pcVar9;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  code *extraout_x15_06;
+  code *extraout_x15_07;
+  code *extraout_x15_08;
+  code *extraout_x15_09;
+  longlong lVar10;
+  ulonglong uVar11;
+  longlong *plVar12;
+  longlong lVar13;
+  int iVar14;
+  
+  uVar11 = 0;
+  if (((param_1 == 0) || (lVar10 = *(longlong *)(param_1 + 0x20), lVar10 == 0)) ||
+     (param_3 == (uint *)0x0 && 0 < (int)param_4)) goto LAB_1800165f4;
+  bVar2 = true;
+  bVar1 = true;
+  if (param_5 == 0) {
+    bVar2 = (int)param_6 < 0;
+    bVar1 = (int)param_6 == 0;
+  }
+  if (!bVar1 && !bVar2) goto LAB_1800165f4;
+  if (param_7 != (undefined4 *)0x0) {
+    *param_7 = 0;
+  }
+  uVar4 = (uint)param_2;
+  if (0x803 < uVar4) {
+    if (uVar4 == 0x804) {
+      if (param_3 == (uint *)0x0) goto LAB_1800165f4;
+      uVar4 = param_3[1];
+      *(uint *)(lVar10 + 0x337c) = uVar4;
+      uVar5 = *param_3;
+      *(uint *)(lVar10 + 0x3380) = uVar5;
+      FUN_180019e00(4,"IFE%d: Camera use case is %d, number of frames to skip is %d.",
+                    (ulonglong)*(uint *)(lVar10 + 0xd0),(ulonglong)uVar4,(ulonglong)uVar5,param_6,
+                    param_7,param_8);
+    }
+    else if (uVar4 == 0x805) {
+      uVar11 = FUN_1800144a8((undefined8 *)(lVar10 + 0x78),param_2,param_3,param_4,param_5,param_6,
+                             param_7,param_8);
+      if ((int)uVar11 != 0) {
+        FUN_180019e00(2,"IFE%d: IFE Driver failed to reset async stop cmd event.",
+                      (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+        return uVar11 & 0xffffffff;
+      }
+      *(undefined1 *)(lVar10 + 0x11b) = 1;
+      uVar11 = 0;
+      uVar7 = param_4;
+      if (*(int *)(lVar10 + 0x2f14) != 0) {
+        do {
+          uVar7 = param_4;
+          if (0x21 < (uint)uVar11) break;
+          uVar4 = *(uint *)(lVar10 + (uVar11 + 0xba3) * 4);
+          uVar7 = (ulonglong)uVar4;
+          if ((int)uVar4 < 0x3022) {
+            (*(code *)PTR__guard_check_icall_18002b360)
+                      (*(undefined8 *)(lVar10 + 0x6b578),lVar10,uVar7,0);
+            (*extraout_x15_04)();
+            uVar7 = param_4;
+          }
+          else {
+            FUN_180019e00(2,"IFE%d: Invalid ife port id 0x%x.",(ulonglong)*(uint *)(lVar10 + 0xd0),
+                          uVar7,param_5,param_6,param_7,param_8);
+          }
+          uVar4 = (uint)uVar11 + 1;
+          uVar11 = (ulonglong)uVar4;
+          param_4 = uVar7;
+        } while (uVar4 < *(uint *)(lVar10 + 0x2f14));
+      }
+      *(undefined4 *)(lVar10 + 0x104) = 0;
+      *(undefined8 *)(lVar10 + 0x10c) = 0;
+      (*(code *)PTR__guard_check_icall_18002b360)
+                (*(undefined8 *)(lVar10 + 0x6b580),lVar10,lVar10 + 0x104);
+      (*extraout_x15_05)();
+      *(undefined8 *)(lVar10 + 0x2f14) = 0;
+      *(undefined1 *)(lVar10 + 0x3378) = 0;
+      *(undefined1 *)(lVar10 + 0x338c) = 0;
+      *(undefined4 *)(lVar10 + 0x32c4) = 0;
+      *(undefined4 *)(lVar10 + 0x2e78) = 0;
+      *(undefined8 *)(lVar10 + 0x3390) = 0;
+      *(undefined1 *)(lVar10 + 0x119) = 1;
+      uVar11 = 0;
+      plVar12 = (longlong *)(lVar10 + 0x3250);
+      do {
+        lVar13 = *plVar12;
+        if (lVar13 == 0) {
+          uVar7 = uVar11;
+          FUN_180019e00(2,"IFE%d: IFE driver failed clear ifeCSLPacketGroupQueue %d.",
+                        (ulonglong)*(uint *)(lVar10 + 0xd0),uVar11,param_5,param_6,param_7,param_8);
+        }
+        else {
+          (*(code *)PTR__guard_check_icall_18002b360)
+                    (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 8));
+          (*extraout_x15_06)();
+          *(undefined4 *)(lVar13 + 0x28) = 0;
+          *(undefined4 *)(lVar13 + 0x2c) = 0;
+          *(undefined4 *)(lVar13 + 0x18) = 0;
+          (*(code *)PTR__guard_check_icall_18002b360)
+                    (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 0x10));
+          (*extraout_x15_07)();
+        }
+        uVar4 = (int)uVar11 + 1;
+        uVar11 = (ulonglong)(byte)uVar4;
+        plVar12 = plVar12 + 1;
+      } while ((uVar4 & 0xff) < 0xd);
+      lVar13 = *(longlong *)(lVar10 + 0x32b8);
+      if (lVar13 == 0) {
+        FUN_180019e00(2,"IFE%d: IFE driver failed clear ifeCSLPacketInQueue.",
+                      (ulonglong)*(uint *)(lVar10 + 0xd0),uVar7,param_5,param_6,param_7,param_8);
+        uVar11 = 0xe;
+      }
+      else {
+        (*(code *)PTR__guard_check_icall_18002b360)
+                  (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 8));
+        (*extraout_x15_08)();
+        *(undefined4 *)(lVar13 + 0x28) = 0;
+        *(undefined4 *)(lVar13 + 0x2c) = 0;
+        uVar11 = 0;
+        *(undefined4 *)(lVar13 + 0x18) = 0;
+        (*(code *)PTR__guard_check_icall_18002b360)
+                  (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 0x10));
+        (*extraout_x15_09)();
+      }
+      *(undefined8 *)(lVar10 + 0x2e94) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2e8c) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2ea4) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2e9c) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2eb4) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2eac) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2ec4) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2ebc) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2ed4) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2ecc) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2ee4) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2edc) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2ef4) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2eec) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2f04) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2efc) = 0x302200003022;
+      *(undefined8 *)(lVar10 + 0x2f0c) = 0x302200003022;
+      FUN_1800290a0((undefined1 *)(lVar10 + 0x2f1c),0,0x330);
+      *(undefined8 *)(lVar10 + 0x2e84) = 0;
+      *(undefined8 *)(lVar10 + 0x2e7c) = 0;
+      if ((int)uVar11 != 0) {
+        FUN_180019e00(2,"IFE%d: IFE Driver: DAL_secure_ife_stop failed",
+                      (ulonglong)*(uint *)(lVar10 + 0xd0),uVar7,param_5,param_6,param_7,param_8);
+        return uVar11;
+      }
+    }
+    goto switchD_1800164ec_caseD_6;
+  }
+  if (uVar4 == 0x803) {
+    if ((int)param_4 != 0x7c) {
+      return 0xe;
+    }
+    if (param_3 != (uint *)0x0) {
+      uVar5 = *param_3;
+      uVar4 = uVar5 & 0xffffff;
+      puVar8 = param_3;
+      FUN_180019e00(4,"=================== secure_CSLPacket =============",param_3,param_4,param_5,
+                    param_6,param_7,param_8);
+      FUN_180019e00(4,"-------------------- Header----------------",puVar8,param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"deviceType          = %d",(ulonglong)(uVar5 >> 0x18),param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"opcode              = %d",(ulonglong)uVar4,param_4,param_5,param_6,param_7,
+                    param_8);
+      FUN_180019e00(4,"size                = %d",(ulonglong)param_3[1],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"requestID           = %d",*(undefined8 *)(param_3 + 2),param_4,param_5,
+                    param_6,param_7,param_8);
+      FUN_180019e00(4,"flags               = %d",(ulonglong)param_3[4],param_4,param_5,param_6,
+                    param_7,param_8);
+      uVar11 = (ulonglong)param_3[1];
+      FUN_180019e00(4,"size                = %d",uVar11,param_4,param_5,param_6,param_7,param_8);
+      FUN_180019e00(4,"-------------------------------------------",uVar11,param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"cmdBuffersOffset    = %d",(ulonglong)param_3[6],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"numCmdBuffers       = %d",(ulonglong)param_3[7],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"ioConfigsOffset     = %d",(ulonglong)param_3[8],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"numBufferIOConfigs  = %d",(ulonglong)param_3[9],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"patchsetOffset      = %d",(ulonglong)param_3[10],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"numPatches          = %d",(ulonglong)param_3[0xb],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"kmdCmdBufferIndex   = %d",(ulonglong)param_3[0xc],param_4,param_5,param_6,
+                    param_7,param_8);
+      FUN_180019e00(4,"kmdCmdBufferOffset  = %d",(ulonglong)param_3[0xd],param_4,param_5,param_6,
+                    param_7,param_8);
+      pcVar9 = (char *)(param_3 + 0x1d);
+      FUN_180019e00(4,"data                = %p",pcVar9,param_4,param_5,param_6,param_7,param_8);
+      FUN_180019e00(4,"---------------------------------------------",pcVar9,param_4,param_5,param_6
+                    ,param_7,param_8);
+      FUN_180019e00(4,"------------------- Data --------------------",pcVar9,param_4,param_5,param_6
+                    ,param_7,param_8);
+      iVar14 = 0;
+      if (0 < (int)param_3[7]) {
+        pcVar9 = "IFE%d: IFE driver destroy CSID Done signal.";
+        do {
+          lVar13 = (ulonglong)param_3[6] + (longlong)iVar14 * 0x20;
+          FUN_180019e00(4,"------------------- Command Buffer ----------",pcVar9,param_4,param_5,
+                        param_6,param_7,param_8);
+          FUN_180019e00(4,"Memory handle       = %p",
+                        *(undefined8 *)((longlong)param_3 + lVar13 + 0x74),param_4,param_5,param_6,
+                        param_7,param_8);
+          FUN_180019e00(4,"offset              = %d",
+                        (ulonglong)*(uint *)((longlong)param_3 + lVar13 + 0x7c),param_4,param_5,
+                        param_6,param_7,param_8);
+          FUN_180019e00(4,"size                = %d",
+                        (ulonglong)*(uint *)((longlong)param_3 + lVar13 + 0x80),param_4,param_5,
+                        param_6,param_7,param_8);
+          FUN_180019e00(4,"length              = %d",
+                        (ulonglong)*(uint *)((longlong)param_3 + lVar13 + 0x84),param_4,param_5,
+                        param_6,param_7,param_8);
+          pcVar9 = (char *)(ulonglong)*(uint *)((longlong)param_3 + lVar13 + 0x8c);
+          FUN_180019e00(4,"metadata            = %d",pcVar9,param_4,param_5,param_6,param_7,param_8)
+          ;
+          FUN_180019e00(4,"---------------------------------------------",pcVar9,param_4,param_5,
+                        param_6,param_7,param_8);
+          iVar14 = iVar14 + 1;
+        } while (iVar14 < (int)param_3[7]);
+      }
+      if (uVar5 >> 0x18 == 0xf) {
+        switch(uVar4) {
+        case 0:
+        case 2:
+          *(uint **)(lVar10 + 0x3370) = param_3;
+          uVar11 = 0;
+          *(undefined4 *)(lVar10 + 0x6b55c) = 0;
+          plVar12 = (longlong *)(lVar10 + 0x3250);
+          do {
+            lVar13 = *plVar12;
+            if (lVar13 == 0) {
+              param_4 = uVar11;
+              FUN_180019e00(2,"IFE%d: IFE driver failed clear ifeCSLPacketGroupQueue %d.",
+                            (ulonglong)*(uint *)(lVar10 + 0xd0),uVar11,param_5,param_6,param_7,
+                            param_8);
+            }
+            else {
+              (*(code *)PTR__guard_check_icall_18002b360)
+                        (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 8));
+              (*extraout_x15_00)();
+              *(undefined4 *)(lVar13 + 0x28) = 0;
+              *(undefined4 *)(lVar13 + 0x2c) = 0;
+              *(undefined4 *)(lVar13 + 0x18) = 0;
+              (*(code *)PTR__guard_check_icall_18002b360)
+                        (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 0x10));
+              (*extraout_x15_01)();
+            }
+            uVar4 = (int)uVar11 + 1;
+            uVar11 = (ulonglong)(byte)uVar4;
+            plVar12 = plVar12 + 1;
+          } while ((uVar4 & 0xff) < 0xd);
+          lVar13 = *(longlong *)(lVar10 + 0x32b8);
+          if (lVar13 == 0) {
+            FUN_180019e00(2,"IFE%d: IFE driver failed clear ifeCSLPacketInQueue.",
+                          (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,
+                          param_8);
+          }
+          else {
+            (*(code *)PTR__guard_check_icall_18002b360)
+                      (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 8));
+            (*extraout_x15_02)();
+            *(undefined4 *)(lVar13 + 0x28) = 0;
+            *(undefined4 *)(lVar13 + 0x2c) = 0;
+            *(undefined4 *)(lVar13 + 0x18) = 0;
+            (*(code *)PTR__guard_check_icall_18002b360)
+                      (*(undefined8 *)(**(longlong **)(lVar13 + 0x20) + 0x10));
+            (*extraout_x15_03)();
+          }
+          uVar4 = FUN_180017c60(lVar10,param_3);
+          if (uVar4 == 0) {
+            *(undefined8 *)(lVar10 + 0x3370) = 0;
+            return 0;
+          }
+          FUN_180019e00(2,"IFE%d: IFE driver failed process initial packet.",
+                        (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8)
+          ;
+          return (ulonglong)uVar4;
+        case 1:
+        case 3:
+          goto switchD_180016908_caseD_1;
+        default:
+          FUN_180019e00(2,"Unsupported ifeOpCode = %d",(ulonglong)uVar4,param_4,param_5,param_6,
+                        param_7,param_8);
+          return 0x14;
+        }
+      }
+      FUN_180019e00(2,"Unsupported device Type = %d",(ulonglong)(uVar5 >> 0x18),param_4,param_5,
+                    param_6,param_7,param_8);
+      return 0x14;
+    }
+    FUN_180019e00(2,"Invalid inputs for DAL_ife_process_csl_packet.",0,param_4,param_5,param_6,
+                  param_7,param_8);
+    return 0xe;
+  }
+  switch(uVar4) {
+  case 1:
+    puVar8 = param_3;
+    FUN_180019e00(2,"IFE_CMD_ID_SET_INFO start",param_3,param_4,param_5,param_6,param_7,param_8);
+    if (param_3 != (uint *)0x0) {
+      *(uint *)(lVar10 + 0x3384) = *param_3;
+      *(uint *)(lVar10 + 0x3388) = param_3[1];
+      *(char *)(lVar10 + 0x338c) = (char)param_3[2];
+      FUN_180019e00(2,"IFE_CMD_ID_SET_INFO done",puVar8,param_4,param_5,param_6,param_7,param_8);
+      return 0;
+    }
+    goto LAB_1800165f4;
+  case 2:
+    *(undefined4 *)(lVar10 + 0x2df8) = 2;
+    FUN_180019e00(4,"IFE%d: IFE powered on and clocks enabled successfully",
+                  (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+    (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(lVar10 + 0x6b570),lVar10);
+    uVar3 = (*extraout_x15)();
+    *(undefined4 *)(lVar10 + 0x100) = uVar3;
+    uVar11 = 0;
+    break;
+  case 3:
+    FUN_180019e00(4,"IFE%d: IFE powered off and clocks disabled successfully",
+                  (ulonglong)*(uint *)(lVar10 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+    uVar11 = 0;
+    break;
+  case 4:
+    uVar11 = (ulonglong)*(uint *)(lVar10 + 0xd0);
+    FUN_180019e00(4,"IFE%d: waiting to acknoledge Reset done from CSID",uVar11,param_4,param_5,
+                  param_6,param_7,param_8);
+    FUN_180014bb8(lVar10,extraout_x1_01,uVar11,param_4,param_5,param_6,param_7,param_8);
+    uVar11 = 0;
+    break;
+  case 5:
+    uVar7 = FUN_1800144a8((undefined8 *)(lVar10 + 0x50),param_2,param_3,param_4,param_5,param_6,
+                          param_7,param_8);
+    uVar11 = uVar7 & 0xffffffff;
+    uVar6 = extraout_x1;
+    if ((int)uVar7 != 0) {
+      param_3 = (uint *)(ulonglong)*(uint *)(lVar10 + 0xd0);
+      FUN_180019e00(2,"IFE%d: IFE Driver failed to reset async signal.",param_3,param_4,param_5,
+                    param_6,param_7,param_8);
+      uVar6 = extraout_x1_00;
+    }
+    if (*(char *)(lVar10 + 0x118) != '\0') {
+      uVar7 = FUN_180014410((undefined8 *)(lVar10 + 0x50),uVar6,param_3,param_4,param_5,param_6,
+                            param_7,param_8);
+      uVar11 = uVar7 & 0xffffffff;
+      if ((int)uVar7 != 0) {
+        FUN_180019e00(2,"IFE%d: Failed to Ack start cmd",(ulonglong)*(uint *)(lVar10 + 0xd0),param_4
+                      ,param_5,param_6,param_7,param_8);
+        return uVar7 & 0xffffffff;
+      }
+    }
+  default:
+switchD_1800164ec_caseD_6:
+    break;
+  case 10:
+    if (param_5 != 0) goto switchD_1800164ec_caseD_6;
+    goto LAB_1800165f4;
+  case 0xc:
+    if (param_3 != (uint *)0x0) {
+      *(uint **)(lVar10 + 0x48) = param_3;
+      return 0;
+    }
+LAB_1800165f4:
+    uVar11 = 0x1d;
+    break;
+  case 0xd:
+    *(undefined8 *)(lVar10 + 0x48) = 0;
+    uVar11 = 0;
+  }
+  return uVar11;
+switchD_180016908_caseD_1:
+  if (*(uint **)(lVar10 + 0x3370) != (uint *)0x0) {
+    uVar4 = FUN_180017c60(lVar10,*(uint **)(lVar10 + 0x3370));
+    if (uVar4 != 0) {
+      FUN_180019e00(2,"IFE Initial packet processing failed",pcVar9,param_4,param_5,param_6,param_7,
+                    param_8);
+      return (ulonglong)uVar4;
+    }
+    *(undefined8 *)(lVar10 + 0x3370) = 0;
+  }
+  if (*(int *)(lVar10 + 0x2df8) == 2) {
+    uVar4 = FUN_180017c60(lVar10,param_3);
+    uVar11 = (ulonglong)uVar4;
+  }
+  else {
+    uVar11 = 0x14;
+    FUN_180019e00(2,"IFE cannot be updated while power is off",pcVar9,param_4,param_5,param_6,
+                  param_7,param_8);
+  }
+  if ((*(longlong *)(param_3 + 2) == 1) && (*(int *)(lVar10 + 0xd0) == *(int *)(lVar10 + 0x3388))) {
+    uVar4 = FUN_1800189b8((longlong)param_3);
+    uVar7 = (ulonglong)uVar4;
+    uVar4 = FUN_180018ab0((longlong)param_3);
+    *(undefined8 *)(lVar10 + 0x2e08) = 0;
+    *(undefined8 *)(lVar10 + 0x2e00) = 0;
+    *(undefined8 *)(lVar10 + 0x2e18) = 0;
+    *(undefined8 *)(lVar10 + 0x2e10) = 0;
+    *(undefined8 *)(lVar10 + 0x2e28) = 0;
+    *(undefined8 *)(lVar10 + 0x2e20) = 0;
+    *(undefined8 *)(lVar10 + 0x2e38) = 0;
+    *(undefined8 *)(lVar10 + 0x2e30) = 0;
+    *(undefined8 *)(lVar10 + 0x2e40) = 0;
+    *(undefined8 *)(lVar10 + 0x2e50) = 0;
+    *(undefined8 *)(lVar10 + 0x2e48) = 0;
+    *(undefined8 *)(lVar10 + 0x2e60) = 0;
+    *(undefined8 *)(lVar10 + 0x2e58) = 0;
+    *(undefined8 *)(lVar10 + 0x2e70) = 0;
+    *(undefined8 *)(lVar10 + 0x2e68) = 0;
+    uVar5 = FUN_180018b38((int)uVar7,extraout_x1_02,pcVar9,param_4,param_5,uVar7,param_7,param_8);
+    *(uint *)(lVar10 + 0x2e14) = uVar5;
+    *(undefined8 *)(lVar10 + 0x2e08) = 1;
+    uVar4 = FUN_180018b38(uVar4,extraout_x1_03,pcVar9,param_4,param_5,uVar7,param_7,param_8);
+    *(uint *)(lVar10 + 0x2e54) = uVar4;
+    *(undefined8 *)(lVar10 + 0x2e48) = 1;
+    return uVar11;
+  }
+  goto switchD_1800164ec_caseD_6;
+}
+
+
+
+//// FUN_180014bb8 @180014bb8 ////
+string @180034fe8 = IFE%d: IFE driver failed clear ifeCSLPacketGroupQueue %d.; xref @180014da8
+string @180035028 = clear ifeCSLPacketGroupQueue DONE; xref @180014d90
+string @180035050 = IFE%d: IFE driver failed clear ifeCSLPacketInQueue.; xref @180014e34
+string @180035088 = clear ifeCSLPacketInQueue done; xref @180014e1c
+
+void FUN_180014bb8(longlong param_1,undefined8 param_2,undefined8 param_3,ulonglong param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  ulonglong uVar2;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  ulonglong uVar3;
+  longlong lVar4;
+  
+  FUN_180019e00(4,"DAL_secure_ife_process_reset_irq START",param_3,param_4,param_5,param_6,param_7,
+                param_8);
+  FUN_1800290a0((undefined1 *)(param_1 + 0xc18),0,0x3a8);
+  FUN_1800290a0((undefined1 *)(param_1 + 0x2958),0,0x3a8);
+  FUN_1800290a0((undefined1 *)(param_1 + 0x870),0,0x3a8);
+  FUN_1800290a0((undefined1 *)(param_1 + 0xfc0),0,0x3a8);
+  FUN_1800290a0((undefined1 *)(param_1 + 0x1ab8),0,0xea0);
+  FUN_1800290a0((undefined1 *)(param_1 + 0x120),0,0x3a8);
+  FUN_1800290a0((undefined1 *)(param_1 + 0x4c8),0,0x3a8);
+  uVar2 = 0x330;
+  *(undefined8 *)(param_1 + 0x2da0) = 0;
+  *(undefined8 *)(param_1 + 0x2d98) = 0;
+  *(undefined8 *)(param_1 + 0x2db0) = 0;
+  *(undefined8 *)(param_1 + 0x2da8) = 0;
+  *(undefined8 *)(param_1 + 0x2dc0) = 0;
+  *(undefined8 *)(param_1 + 0x2db8) = 0;
+  *(undefined8 *)(param_1 + 0x2dd0) = 0;
+  *(undefined8 *)(param_1 + 0x2dc8) = 0;
+  *(undefined8 *)(param_1 + 0x2de0) = 0;
+  *(undefined8 *)(param_1 + 0x2dd8) = 0;
+  *(undefined8 *)(param_1 + 0x2df0) = 0;
+  *(undefined8 *)(param_1 + 0x2de8) = 0;
+  *(undefined8 *)(param_1 + 0x2e84) = 0;
+  *(undefined8 *)(param_1 + 0x2e7c) = 0;
+  FUN_1800290a0((undefined1 *)(param_1 + 0x2f1c),0,0x330);
+  *(undefined8 *)(param_1 + 0x33b0) = 0;
+  *(undefined4 *)(param_1 + 0x33b8) = 0;
+  FUN_180019e00(4,"DAL_secure_ife_reset_variables START",uVar2,param_4,param_5,param_6,param_7,
+                param_8);
+  *(undefined8 *)(param_1 + 0x2e94) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2e8c) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2ea4) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2e9c) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2eb4) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2eac) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2ec4) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2ebc) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2ed4) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2ecc) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2ee4) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2edc) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2ef4) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2eec) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2f04) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2efc) = 0x302200003022;
+  *(undefined8 *)(param_1 + 0x2f0c) = 0x302200003022;
+  FUN_180019e00(4,"DAL_secure_ife_reset_variables memset done",uVar2,param_4,param_5,param_6,param_7
+                ,param_8);
+  FUN_180019e00(4,"clear BL Queue DONE",uVar2,param_4,param_5,param_6,param_7,param_8);
+  uVar3 = 0;
+  do {
+    lVar4 = *(longlong *)(param_1 + (uVar3 + 0x64a) * 8);
+    if (lVar4 == 0) {
+      uVar2 = (ulonglong)*(uint *)(param_1 + 0xd0);
+      param_4 = uVar3;
+      FUN_180019e00(2,"IFE%d: IFE driver failed clear ifeCSLPacketGroupQueue %d.",uVar2,uVar3,
+                    param_5,param_6,param_7,param_8);
+    }
+    else {
+      (*(code *)PTR__guard_check_icall_18002b360)
+                (*(undefined8 *)(**(longlong **)(lVar4 + 0x20) + 8));
+      (*extraout_x15)();
+      *(undefined4 *)(lVar4 + 0x28) = 0;
+      *(undefined4 *)(lVar4 + 0x2c) = 0;
+      *(undefined4 *)(lVar4 + 0x18) = 0;
+      (*(code *)PTR__guard_check_icall_18002b360)
+                (*(undefined8 *)(**(longlong **)(lVar4 + 0x20) + 0x10));
+      (*extraout_x15_00)();
+      FUN_180019e00(4,"clear ifeCSLPacketGroupQueue DONE",uVar2,param_4,param_5,param_6,param_7,
+                    param_8);
+    }
+    uVar1 = (int)uVar3 + 1;
+    uVar3 = (ulonglong)(byte)uVar1;
+  } while ((uVar1 & 0xff) < 0xd);
+  lVar4 = *(longlong *)(param_1 + 0x32b8);
+  if (lVar4 == 0) {
+    uVar2 = (ulonglong)*(uint *)(param_1 + 0xd0);
+    FUN_180019e00(2,"IFE%d: IFE driver failed clear ifeCSLPacketInQueue.",uVar2,param_4,param_5,
+                  param_6,param_7,param_8);
+  }
+  else {
+    (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(**(longlong **)(lVar4 + 0x20) + 8));
+    (*extraout_x15_01)();
+    *(undefined4 *)(lVar4 + 0x28) = 0;
+    *(undefined4 *)(lVar4 + 0x2c) = 0;
+    *(undefined4 *)(lVar4 + 0x18) = 0;
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(**(longlong **)(lVar4 + 0x20) + 0x10));
+    (*extraout_x15_02)();
+    FUN_180019e00(4,"clear ifeCSLPacketInQueue done",uVar2,param_4,param_5,param_6,param_7,param_8);
+  }
+  *(undefined4 *)(param_1 + 0x32c4) = 0;
+  *(undefined8 *)(param_1 + 0x2f14) = 0;
+  *(undefined1 *)(param_1 + 0x3378) = 0;
+  *(undefined1 *)(param_1 + 0x11b) = 0;
+  *(undefined4 *)(param_1 + 200) = 0;
+  FUN_180019e00(4,"DAL_secure_ife_reset_variables done",uVar2,param_4,param_5,param_6,param_7,
+                param_8);
+  (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(param_1 + 0x6b5b8),param_1);
+  (*extraout_x15_03)();
+  *(undefined4 *)(param_1 + 0x2df8) = 2;
+  FUN_180019e00(4,"IFE%d: IFE reset completed!",(ulonglong)*(uint *)(param_1 + 0xd0),param_4,param_5
+                ,param_6,param_7,param_8);
+  (*(code *)PTR__guard_check_icall_18002b360)
+            (*(undefined8 *)(param_1 + 0x6b580),param_1,param_1 + 0x104,param_1 + 0x10c);
+  (*extraout_x15_04)();
+  *(undefined1 *)(param_1 + 0x11a) = 0;
+  *(undefined8 *)(param_1 + 0x33a8) = 0;
+  return;
+}
+
+
+
+//// FUN_1800152c0 @1800152c0 ////
+string @1800352c0 =  IFE%d: CameraQueueDequeue on ifeCSLPacketInQueue is failed with result 0x%x; xref @180015488
+string @180035310 = IFE%d ifeCSLPacketInQueue: Dequeued packet %#p with RequestId %d; xref @1800154b8
+
+uint FUN_1800152c0(longlong param_1,longlong param_2,ulonglong *param_3,ulonglong param_4,
+                  ulonglong param_5,ulonglong param_6,ulonglong param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  code *pcVar2;
+  uint uVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  undefined8 uVar6;
+  int iVar7;
+  ulonglong *puVar8;
+  longlong lVar9;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  ulonglong uVar10;
+  ulonglong uVar11;
+  longlong *plVar12;
+  ulonglong uVar13;
+  ulonglong uVar14;
+  longlong lVar15;
+  char cVar16;
+  char cVar17;
+  char cVar18;
+  ulonglong local_418;
+  uint local_410 [2];
+  longlong local_408;
+  uint local_400 [236];
+  
+  uVar4 = 0;
+  if (*(char *)(param_1 + 0x338c) == '\x01') {
+    puVar8 = *(ulonglong **)(param_1 + 0x6b560);
+    if ((*puVar8 <= puVar8[4]) || (puVar8[1] <= puVar8[4])) {
+      FUN_180019e00(4,"IFE%d: Skip IFE programming",(ulonglong)*(uint *)(param_1 + 0xd0),param_4,
+                    param_5,param_6,param_7,param_8);
+      *(undefined1 *)(*(longlong *)(param_1 + 0x6b560) + 0x2c) = 1;
+      *(undefined4 *)(*(longlong *)(param_1 + 0x6b560) + 0x28) = *(undefined4 *)(param_1 + 0x2e78);
+      goto LAB_180015740;
+    }
+    if ((*(char *)((longlong)puVar8 + 0x2c) == '\x01') &&
+       ((int)puVar8[5] == *(int *)(param_1 + 0x2e78))) {
+      *(undefined1 *)((longlong)puVar8 + 0x2c) = 0;
+      FUN_180019e00(4,"IFE%d: Skip IFE programming, packet received between epoch IRQs",
+                    (ulonglong)*(uint *)(param_1 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+      goto LAB_180015740;
+    }
+    *(undefined1 *)((longlong)puVar8 + 0x2c) = 0;
+  }
+  lVar9 = *(longlong *)(param_1 + 0x32b8);
+  local_418 = 0;
+  iVar7 = 0;
+  if (lVar9 != 0) {
+    iVar7 = *(int *)(lVar9 + 0x18);
+  }
+  uVar4 = 0xe;
+  if (lVar9 != 0) {
+    uVar4 = 0;
+  }
+  if (iVar7 == 0 || lVar9 == 0) {
+    puVar8 = param_3;
+    if (uVar4 != 0) goto LAB_180015740;
+  }
+  else {
+    plVar12 = *(longlong **)(param_1 + 0x32b8);
+    uVar4 = 0xe;
+    if (plVar12 != (longlong *)0x0) {
+      (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(*(longlong *)plVar12[4] + 8));
+      (*extraout_x15)();
+      if ((int)plVar12[3] == 0) {
+        uVar4 = 0x16;
+      }
+      else {
+        param_4 = (ulonglong)*(uint *)((longlong)plVar12 + 0x14);
+        FUN_1800179c0(&local_418,param_4,(undefined8 *)(*plVar12 + param_4 * *(uint *)(plVar12 + 5))
+                      ,param_4);
+        *(int *)(plVar12 + 3) = (int)plVar12[3] + -1;
+        *(int *)(plVar12 + 5) = (int)plVar12[5] + 1;
+        uVar3 = *(uint *)(plVar12 + 2);
+        if (uVar3 == 0) {
+                    /* WARNING: Does not return */
+          pcVar2 = (code *)SoftwareBreakpoint(0xf004,0x180015410);
+          (*pcVar2)();
+        }
+        uVar1 = 0;
+        if (uVar3 != 0) {
+          uVar1 = *(uint *)(plVar12 + 5) / uVar3;
+        }
+        uVar4 = 0;
+        *(uint *)(plVar12 + 5) = *(uint *)(plVar12 + 5) - uVar1 * uVar3;
+      }
+      (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(*(longlong *)plVar12[4] + 0x10));
+      (*extraout_x15_00)();
+    }
+    uVar11 = local_418;
+    puVar8 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+    if (uVar4 != 0) {
+      FUN_180019e00(4," IFE%d: CameraQueueDequeue on ifeCSLPacketInQueue is failed with result 0x%x"
+                    ,puVar8,(ulonglong)uVar4,param_5,param_6,param_7,param_8);
+      return uVar4;
+    }
+    if (*(uint *)(param_1 + 0xd0) == *(uint *)(param_1 + 0x3388)) {
+      param_5 = *(ulonglong *)(local_418 + 8);
+      uVar14 = *(ulonglong *)(param_1 + 0x2e08);
+      uVar13 = 0;
+      param_4 = local_418;
+      FUN_180019e00(4,"IFE%d ifeCSLPacketInQueue: Dequeued packet %#p with RequestId %d",puVar8,
+                    local_418,param_5,param_6,param_7,param_8);
+      uVar10 = 0;
+      do {
+        lVar9 = (uVar10 + 0x1eb) * 0x18;
+        uVar5 = *(ulonglong *)(lVar9 + param_1);
+        if (uVar5 == 0) {
+          uVar6 = *(undefined8 *)(uVar11 + 8);
+          lVar15 = param_1 + uVar10 * 0x18;
+          *(undefined4 *)(lVar15 + 0x2e10) = 0;
+          *(undefined8 *)(lVar9 + param_1) = uVar6;
+          local_408 = param_1 + uVar10 * 0x10;
+          *(undefined8 *)(local_408 + 0x2e48) = *(undefined8 *)(uVar11 + 8);
+          *(undefined4 *)((uVar10 + 0x2e5) * 0x10 + param_1) = 0;
+          uVar4 = FUN_180018ab0(uVar11);
+          uVar3 = FUN_1800189b8(uVar11);
+          cVar16 = POPCOUNT((char)(uVar3 >> 8));
+          cVar17 = POPCOUNT((char)(uVar3 >> 0x10));
+          cVar18 = POPCOUNT((char)(uVar3 >> 0x18));
+          uVar3 = CONCAT31((int3)(CONCAT13(cVar18,CONCAT12(cVar17,CONCAT11(cVar16,POPCOUNT((char)
+                                                  uVar3)))) >> 8),
+                           POPCOUNT((char)uVar3) + cVar16 + cVar17 + cVar18);
+          FUN_180019e00(4,"Total Consumers Count - %d ",(ulonglong)uVar3,param_4,param_5,param_6,
+                        param_7,param_8);
+          *(uint *)(lVar15 + 0x2e14) = uVar3;
+          cVar16 = POPCOUNT((char)(uVar4 >> 8));
+          cVar17 = POPCOUNT((char)(uVar4 >> 0x10));
+          cVar18 = POPCOUNT((char)(uVar4 >> 0x18));
+          uVar4 = CONCAT31((int3)(CONCAT13(cVar18,CONCAT12(cVar17,CONCAT11(cVar16,POPCOUNT((char)
+                                                  uVar4)))) >> 8),
+                           POPCOUNT((char)uVar4) + cVar16 + cVar17 + cVar18);
+          FUN_180019e00(4,"Total Consumers Count - %d ",(ulonglong)uVar4,param_4,param_5,param_6,
+                        param_7,param_8);
+          *(uint *)(local_408 + 0x2e54) = uVar4;
+          param_5 = *(ulonglong *)(uVar11 + 8);
+          puVar8 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+          param_4 = uVar10;
+          FUN_180019e00(4,"IFE%d Got TS Slot:%d for RequestId %d",puVar8,uVar10,param_5,param_6,
+                        param_7,param_8);
+          break;
+        }
+        uVar4 = (uint)uVar10 + 1;
+        uVar3 = (uint)uVar13;
+        if (uVar5 < uVar14) {
+          uVar3 = (uint)uVar10;
+        }
+        uVar13 = (ulonglong)uVar3;
+        uVar10 = (ulonglong)(ushort)uVar4;
+        if (uVar5 < uVar14) {
+          uVar14 = uVar5;
+        }
+      } while ((uVar4 & 0xffff) < 3);
+      if ((int)uVar10 == 3) {
+        param_5 = *(ulonglong *)(uVar11 + 8);
+        puVar8 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+        lVar9 = (uVar13 + 0x1eb) * 0x18;
+        param_4 = *(ulonglong *)(lVar9 + param_1);
+        FUN_180019e00(4,"IFE%d Overwrite %d reqID TS Slot RequestId %d",puVar8,param_4,param_5,
+                      param_6,param_7,param_8);
+        *(undefined8 *)(lVar9 + param_1) = *(undefined8 *)(uVar11 + 8);
+        *(undefined8 *)(param_1 + uVar13 * 0x18 + 0x2e00) = 0;
+      }
+    }
+    FUN_180018cd0(param_1,uVar11);
+  }
+  uVar4 = FUN_180014530(*(longlong *)(param_1 + 0x48),local_410,puVar8,param_4,param_5,param_6,
+                        param_7,param_8);
+  if (uVar4 == 0) {
+    uVar11 = (ulonglong)local_410[0];
+    FUN_180019e00(4," IFE%d sending the IFE CDM BL_ENQUEUE in epoch irq for request id %d ",
+                  (ulonglong)*(uint *)(param_1 + 0xd0),uVar11,param_5,param_6,param_7,param_8);
+    FUN_1800290a0((undefined1 *)(param_1 + 0xc18),0,0x3a8);
+    *(undefined4 *)(param_1 + 0xc20) = *(undefined4 *)(param_1 + 0x2e78);
+    *(ulonglong *)(param_1 + 0xc28) = uVar11;
+    *(undefined8 *)(param_1 + 0xc30) = 0x100000000;
+    *(undefined4 *)(param_1 + 0xc18) = 0x26;
+    FUN_180028600((undefined8 *)local_400,(undefined8 *)(param_1 + 0xc18),0x3a8);
+    uVar11 = *param_3 / 0x3a8;
+    if (uVar11 < 5) {
+      if (4 < uVar11) {
+        uVar11 = 0;
+      }
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar11,(ulonglong)local_400[0],param_5,param_6,
+                    param_7,param_8);
+      FUN_180028600((undefined8 *)(param_2 + (*param_3 / 0x3a8) * 0x3a8),(undefined8 *)local_400,
+                    0x3a8);
+      *param_3 = *param_3 + 0x3a8;
+    }
+    else {
+      if (uVar11 < 5) {
+        uVar11 = 0;
+      }
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d, dropping due to insufficent output buffer",uVar11,
+                    (ulonglong)local_400[0],param_5,param_6,param_7,param_8);
+    }
+    if (*(int *)(param_1 + 0xd0) == *(int *)(param_1 + 0x3388)) {
+      *(ulonglong *)(*(longlong *)(param_1 + 0x6b560) + 0x10) = (ulonglong)local_410[0];
+    }
+    else {
+      *(ulonglong *)(*(longlong *)(param_1 + 0x6b560) + 0x18) = (ulonglong)local_410[0];
+    }
+  }
+  else if (uVar4 != 0x16) {
+    FUN_180019e00(2," IFE%d submitting BL cmd failed with result %d",
+                  (ulonglong)*(uint *)(param_1 + 0xd0),(ulonglong)uVar4,param_5,param_6,param_7,
+                  param_8);
+  }
+LAB_180015740:
+  lVar9 = *(longlong *)(param_1 + 0x6b560);
+  if (*(longlong *)(lVar9 + 0x10) == *(longlong *)(lVar9 + 0x18)) {
+    *(longlong *)(lVar9 + 0x20) = *(longlong *)(lVar9 + 0x10);
+    FUN_180019e00(4,"IFE%d: Queue manager update last consumedId = %d",
+                  (ulonglong)*(uint *)(param_1 + 0xd0),
+                  *(undefined8 *)(*(longlong *)(param_1 + 0x6b560) + 0x20),param_5,param_6,param_7,
+                  param_8);
+  }
+  return uVar4;
+}
+
+
+
+//// FUN_1800157a8 @1800157a8 ////
+string @180035460 = IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[%d].; xref @1800158fc
+
+undefined8
+FUN_1800157a8(longlong param_1,undefined8 param_2,undefined8 param_3,longlong param_4,
+             ulonglong *param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined4 uVar1;
+  ulonglong uVar2;
+  longlong lVar3;
+  undefined8 uVar4;
+  ulonglong *puVar5;
+  code *extraout_x15;
+  uint local_3e0 [236];
+  
+  puVar5 = param_5;
+  FUN_1800290a0((undefined1 *)(param_1 + 0x1ab8),0,0x3a8);
+  (*(code *)PTR__guard_check_icall_18002b360)
+            (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x1ab8,0);
+  (*extraout_x15)();
+  lVar3 = FUN_180016248(param_1,2);
+  if (lVar3 == 0) {
+    FUN_180019e00(4,"IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[%d].",
+                  (ulonglong)*(uint *)(param_1 + 0xd0),2,puVar5,param_6,param_7,param_8);
+  }
+  else {
+    *(undefined4 *)(param_1 + 0x1ab8) = 0x17;
+    *(undefined4 *)(param_1 + 0x1acc) = *(undefined4 *)(param_1 + 0x2e78);
+    *(undefined4 *)(param_1 + 0x1b14) = *(undefined4 *)(param_1 + 0xd0);
+    uVar4 = FUN_1800150f0(param_1,*(longlong *)(lVar3 + 8));
+    *(undefined8 *)(param_1 + 0x1ad0) = uVar4;
+    *(undefined8 *)(param_1 + 0x1ac0) = *(undefined8 *)(lVar3 + 8);
+    uVar1 = *(undefined4 *)(lVar3 + 0x70);
+    *(longlong *)(param_1 + 0x1b20) = lVar3;
+    *(undefined4 *)(param_1 + 0x1ac8) = uVar1;
+    *(undefined4 *)(param_1 + 0x1b18) = 0x3006;
+    FUN_180028600((undefined8 *)local_3e0,(undefined8 *)(param_1 + 0x1ab8),0x3a8);
+    uVar2 = *param_5 / 0x3a8;
+    if (uVar2 < 5) {
+      if (4 < uVar2) {
+        uVar2 = 0;
+      }
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar2,(ulonglong)local_3e0[0],puVar5,param_6,param_7
+                    ,param_8);
+      FUN_180028600((undefined8 *)(param_4 + (*param_5 / 0x3a8) * 0x3a8),(undefined8 *)local_3e0,
+                    0x3a8);
+      *param_5 = *param_5 + 0x3a8;
+    }
+    else {
+      if (uVar2 < 5) {
+        uVar2 = 0;
+      }
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d, dropping due to insufficent output buffer",uVar2,
+                    (ulonglong)local_3e0[0],puVar5,param_6,param_7,param_8);
+    }
+  }
+  return 0;
+}
+
+
+
+//// FUN_180015938 @180015938 ////
+string @180035740 = IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[Full].; xref @180015e64
+
+undefined8
+FUN_180015938(longlong param_1,undefined8 param_2,undefined8 param_3,longlong param_4,
+             ulonglong *param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  longlong lVar1;
+  int iVar2;
+  uint uVar3;
+  undefined4 uVar4;
+  undefined4 uVar5;
+  code *pcVar6;
+  longlong lVar7;
+  ulonglong uVar8;
+  longlong lVar9;
+  ulonglong *puVar10;
+  int iVar11;
+  undefined8 uVar12;
+  undefined8 *puVar13;
+  int *piVar14;
+  uint *puVar15;
+  uint *puVar16;
+  uint uVar17;
+  uint local_400 [236];
+  
+  uVar8 = 0x3a8;
+  lVar9 = param_4;
+  puVar10 = param_5;
+  FUN_1800290a0((undefined1 *)(param_1 + 0xfc0),0,0x3a8);
+  lVar7 = FUN_180016248(param_1,0);
+  if (lVar7 == 0) {
+    FUN_180019e00(4,"IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[Full].",
+                  (ulonglong)*(uint *)(param_1 + 0xd0),lVar9,puVar10,param_6,param_7,param_8);
+  }
+  else {
+    uVar17 = 0;
+    lVar1 = lVar7 + (ulonglong)*(uint *)(lVar7 + 0x20);
+    puVar16 = (uint *)(lVar1 + 0x74);
+    if (*(int *)(lVar7 + 0x24) != 0) {
+      piVar14 = (int *)(lVar1 + 0x180);
+      do {
+        if (piVar14[-0x11] == 0x3000) {
+          if (*piVar14 == 0) {
+            uVar3 = *puVar16;
+            *(uint *)(param_1 + 0xfe0) = uVar3;
+            iVar11 = piVar14[-0x41];
+          }
+          else {
+            puVar13 = *(undefined8 **)puVar16;
+            if (puVar13 == (undefined8 *)0x0) {
+              FUN_180019e00(2,"IFE%d: FUll_Client, NULL memory handle, requestId = %d",uVar8,lVar9,
+                            puVar10,param_6,param_7,param_8);
+              return 1;
+            }
+            iVar2 = piVar14[-0x3d] + (int)*puVar13;
+            *(int *)(param_1 + 0xfe8) = iVar2;
+            iVar11 = piVar14[-0x3c] + (int)*puVar13;
+            *(int *)(param_1 + 0xfec) = iVar11;
+            uVar3 = piVar14[-0x35] + iVar2;
+            *(uint *)(param_1 + 0xfe0) = uVar3;
+            iVar11 = iVar11 + piVar14[-0x29];
+          }
+          *(int *)(param_1 + 0xfe4) = iVar11;
+          *(undefined4 *)(param_1 + 0x1020) = 0x3000;
+          FUN_180019e00(4,"IFE%d: FUll_Client, requestId = %d, imageAddr[0] = 0x%x.",
+                        (ulonglong)*(uint *)(param_1 + 0xd0),*(undefined8 *)(lVar7 + 8),
+                        (ulonglong)uVar3,param_6,param_7,param_8);
+          puVar10 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xfe4);
+          lVar9 = *(longlong *)(lVar7 + 8);
+          uVar8 = (ulonglong)*(uint *)(param_1 + 0xd0);
+          FUN_180019e00(4,"IFE%d: FUll_Client, requestId = %d, imageAddr[1] = 0x%x.",uVar8,lVar9,
+                        puVar10,param_6,param_7,param_8);
+        }
+        if (piVar14[-0x11] == 0x3001) {
+          if (*piVar14 == 0) {
+            puVar10 = *(ulonglong **)puVar16;
+          }
+          else {
+            if (*(undefined8 **)puVar16 == (undefined8 *)0x0) {
+              FUN_180019e00(2,"IFE%d: DS4, NULL memory handle, requestId = %d",uVar8,lVar9,puVar10,
+                            param_6,param_7,param_8);
+              return 1;
+            }
+            puVar10 = (ulonglong *)
+                      (ulonglong)
+                      (uint)(piVar14[-0x3d] + piVar14[-0x35] + (int)**(undefined8 **)puVar16);
+          }
+          *(int *)(param_1 + 0x1060) = (int)puVar10;
+          uVar8 = (ulonglong)*(uint *)(param_1 + 0xd0);
+          *(undefined4 *)(param_1 + 0x10a0) = 0x3001;
+          lVar9 = *(longlong *)(lVar7 + 8);
+          FUN_180019e00(4,"IFE%d: DS4_Client, requestId = %d, hMems[0] = 0x%x.",uVar8,lVar9,puVar10,
+                        param_6,param_7,param_8);
+        }
+        if (piVar14[-0x11] == 0x3002) {
+          if (*piVar14 == 0) {
+            puVar10 = *(ulonglong **)puVar16;
+          }
+          else {
+            if (*(undefined8 **)puVar16 == (undefined8 *)0x0) {
+              FUN_180019e00(2,"IFE%d: DS16, NULL memory handle, requestId = %d",uVar8,lVar9,puVar10,
+                            param_6,param_7,param_8);
+              return 1;
+            }
+            puVar10 = (ulonglong *)
+                      (ulonglong)
+                      (uint)(piVar14[-0x3d] + piVar14[-0x35] + (int)**(undefined8 **)puVar16);
+          }
+          *(int *)(param_1 + 0x10e0) = (int)puVar10;
+          uVar8 = (ulonglong)*(uint *)(param_1 + 0xd0);
+          *(undefined4 *)(param_1 + 0x1120) = 0x3002;
+          lVar9 = *(longlong *)(lVar7 + 8);
+          FUN_180019e00(4,"IFE%d: DS16_Client, requestId = %d, imageAddr[0] = 0x%x.",uVar8,lVar9,
+                        puVar10,param_6,param_7,param_8);
+        }
+        puVar15 = (uint *)(param_1 + 0xd0);
+        if (piVar14[-0x11] == 0x3013) {
+          uVar3 = *puVar16;
+          *(uint *)(param_1 + 0x1168) = uVar3;
+          *(int *)(param_1 + 0x116c) = piVar14[-0x41];
+          *(undefined4 *)(param_1 + 0x11a8) = 0x3013;
+          *(undefined1 *)(param_1 + 0x1148) = 1;
+          FUN_180019e00(4,"IFE%d: Display_FUll_Client, requestId = %d, hMems[0] = 0x%x.",
+                        (ulonglong)*puVar15,*(undefined8 *)(lVar7 + 8),(ulonglong)uVar3,param_6,
+                        param_7,param_8);
+          puVar10 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0x116c);
+          lVar9 = *(longlong *)(lVar7 + 8);
+          uVar8 = (ulonglong)*puVar15;
+          FUN_180019e00(4,"IFE%d: Display_FUll_Client, requestId = %d, hMems[1] = 0x%x.",uVar8,lVar9
+                        ,puVar10,param_6,param_7,param_8);
+        }
+        if (piVar14[-0x11] == 0x3014) {
+          uVar3 = *puVar16;
+          puVar10 = (ulonglong *)(ulonglong)uVar3;
+          *(undefined4 *)(param_1 + 0x1228) = 0x3014;
+          uVar8 = (ulonglong)*puVar15;
+          *(uint *)(param_1 + 0x11e8) = uVar3;
+          lVar9 = *(longlong *)(lVar7 + 8);
+          FUN_180019e00(4,"IFE%d: Display_DS4_Client, requestId = %d, hMems[0] = 0x%x.",uVar8,lVar9,
+                        puVar10,param_6,param_7,param_8);
+        }
+        if (piVar14[-0x11] == 0x3015) {
+          uVar3 = *puVar16;
+          puVar10 = (ulonglong *)(ulonglong)uVar3;
+          *(undefined4 *)(param_1 + 0x12a8) = 0x3015;
+          uVar8 = (ulonglong)*(uint *)(param_1 + 0xd0);
+          *(uint *)(param_1 + 0x1268) = uVar3;
+          lVar9 = *(longlong *)(lVar7 + 8);
+          FUN_180019e00(4,"IFE%d: Display_DS16_Client, requestId = %d, hMems[0] = 0x%x.",uVar8,lVar9
+                        ,puVar10,param_6,param_7,param_8);
+        }
+        if (piVar14[-0x11] == 0x3004) {
+          *(uint *)(param_1 + 0x12e8) = *puVar16;
+          *(int *)(param_1 + 0x12ec) = piVar14[-0x41];
+          *(undefined4 *)(param_1 + 0x1328) = 0x3004;
+        }
+        uVar17 = uVar17 + 1;
+        puVar16 = puVar16 + 0x4c;
+        piVar14 = piVar14 + 0x4c;
+      } while (uVar17 < *(uint *)(lVar7 + 0x24));
+    }
+    uVar4 = *(undefined4 *)(param_1 + 0x2e78);
+    *(undefined8 *)(param_1 + 0xfc8) = *(undefined8 *)(lVar7 + 8);
+    *(undefined8 *)(param_1 + 0x12d0) = *(undefined8 *)(lVar7 + 8);
+    *(undefined8 *)(param_1 + 0x1048) = *(undefined8 *)(lVar7 + 8);
+    *(undefined8 *)(param_1 + 0x10c8) = *(undefined8 *)(lVar7 + 8);
+    *(undefined8 *)(param_1 + 0x1150) = *(undefined8 *)(lVar7 + 8);
+    *(undefined8 *)(param_1 + 0x11d0) = *(undefined8 *)(lVar7 + 8);
+    uVar12 = *(undefined8 *)(lVar7 + 8);
+    *(longlong *)(param_1 + 0x1360) = lVar7;
+    *(undefined8 *)(param_1 + 0x1250) = uVar12;
+    *(undefined4 *)(param_1 + 0xfd0) = *(undefined4 *)(lVar7 + 0x70);
+    *(undefined4 *)(param_1 + 0x12d8) = *(undefined4 *)(lVar7 + 0x70);
+    *(undefined4 *)(param_1 + 0x1050) = *(undefined4 *)(lVar7 + 0x70);
+    *(undefined4 *)(param_1 + 0x10d0) = *(undefined4 *)(lVar7 + 0x70);
+    *(undefined4 *)(param_1 + 0x1158) = *(undefined4 *)(lVar7 + 0x70);
+    *(undefined4 *)(param_1 + 0x11d8) = *(undefined4 *)(lVar7 + 0x70);
+    uVar5 = *(undefined4 *)(lVar7 + 0x70);
+    *(undefined4 *)(param_1 + 0xfd4) = uVar4;
+    *(undefined4 *)(param_1 + 0x12dc) = uVar4;
+    *(undefined4 *)(param_1 + 0x1054) = uVar4;
+    *(undefined4 *)(param_1 + 0x10d4) = uVar4;
+    *(undefined4 *)(param_1 + 0x115c) = uVar4;
+    *(undefined4 *)(param_1 + 0x11dc) = uVar4;
+    *(undefined4 *)(param_1 + 0x1258) = uVar5;
+    *(undefined4 *)(param_1 + 0x125c) = uVar4;
+    uVar4 = *(undefined4 *)(param_1 + 0xd0);
+    *(undefined4 *)(param_1 + 0x101c) = uVar4;
+    *(undefined4 *)(param_1 + 0x1324) = uVar4;
+    *(undefined4 *)(param_1 + 0x109c) = uVar4;
+    *(undefined4 *)(param_1 + 0x111c) = uVar4;
+    *(undefined4 *)(param_1 + 0x11a4) = uVar4;
+    *(undefined4 *)(param_1 + 0x1224) = uVar4;
+    *(undefined4 *)(param_1 + 0x12a4) = uVar4;
+    uVar4 = *(undefined4 *)(param_1 + 0x32c0);
+    *(undefined4 *)(param_1 + 0x1014) = uVar4;
+    *(undefined4 *)(param_1 + 0x131c) = uVar4;
+    *(undefined4 *)(param_1 + 0x1094) = uVar4;
+    *(undefined4 *)(param_1 + 0x1114) = uVar4;
+    *(undefined4 *)(param_1 + 0x119c) = uVar4;
+    *(undefined4 *)(param_1 + 0x121c) = uVar4;
+    *(undefined4 *)(param_1 + 0x129c) = uVar4;
+    uVar12 = FUN_1800150f0(param_1,*(longlong *)(lVar7 + 8));
+    uVar17 = *(uint *)(param_1 + 0x32c0);
+    *(undefined8 *)(param_1 + 0xfd8) = uVar12;
+    *(undefined8 *)(param_1 + 0x12e0) = uVar12;
+    *(undefined8 *)(param_1 + 0x1058) = uVar12;
+    *(undefined8 *)(param_1 + 0x10d8) = uVar12;
+    *(undefined8 *)(param_1 + 0x1160) = uVar12;
+    *(undefined8 *)(param_1 + 0x11e0) = uVar12;
+    *(undefined8 *)(param_1 + 0x1260) = uVar12;
+    if (uVar17 == 0) {
+                    /* WARNING: Does not return */
+      pcVar6 = (code *)SoftwareBreakpoint(0xf004,0x180015d5c);
+      (*pcVar6)();
+    }
+    uVar3 = 0;
+    if (uVar17 != 0) {
+      uVar3 = ((uVar17 + *(int *)(param_1 + 0x2e78)) - 1) / uVar17;
+    }
+    *(uint *)(param_1 + 0x1018) = uVar3;
+    *(uint *)(param_1 + 0x1320) = uVar3;
+    *(uint *)(param_1 + 0x1098) = uVar3;
+    *(uint *)(param_1 + 0x1118) = uVar3;
+    *(uint *)(param_1 + 0x11a0) = uVar3;
+    *(uint *)(param_1 + 0x1220) = uVar3;
+    *(uint *)(param_1 + 0x12a0) = uVar3;
+    *(undefined4 *)(param_1 + 0xfc0) = 0x15;
+    FUN_180028600((undefined8 *)local_400,(undefined8 *)(param_1 + 0xfc0),0x3a8);
+    uVar8 = *param_5 / 0x3a8;
+    if (uVar8 < 5) {
+      if (4 < uVar8) {
+        uVar8 = 0;
+      }
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar8,(ulonglong)local_400[0],puVar10,param_6,
+                    param_7,param_8);
+      FUN_180028600((undefined8 *)(param_4 + (*param_5 / 0x3a8) * 0x3a8),(undefined8 *)local_400,
+                    0x3a8);
+      *param_5 = *param_5 + 0x3a8;
+    }
+    else {
+      if (uVar8 < 5) {
+        uVar8 = 0;
+      }
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d, dropping due to insufficent output buffer",uVar8,
+                    (ulonglong)local_400[0],puVar10,param_6,param_7,param_8);
+    }
+  }
+  return 0;
+}
+
+
+
+//// FUN_180015ea0 @180015ea0 ////
+string @1800357e0 = IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[Stats].; xref @180016200
+
+undefined8
+FUN_180015ea0(longlong param_1,undefined8 param_2,undefined8 param_3,ulonglong param_4,
+             ulonglong *param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  undefined4 *puVar1;
+  ulonglong uVar2;
+  longlong lVar3;
+  undefined8 uVar4;
+  char *pcVar5;
+  ulonglong uVar6;
+  ulonglong *puVar7;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  undefined4 *puVar8;
+  uint local_400 [236];
+  
+  uVar6 = param_4;
+  puVar7 = param_5;
+  FUN_1800290a0((undefined1 *)(param_1 + 0x120),0,0x3a8);
+  lVar3 = FUN_180016248(param_1,4);
+  if (lVar3 == 0) {
+    pcVar5 = "IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[Stats].";
+  }
+  else {
+    uVar4 = FUN_1800150f0(param_1,*(longlong *)(lVar3 + 8));
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,0xe);
+    (*extraout_x15)();
+    puVar1 = (undefined4 *)(param_1 + 0xd0);
+    if (*(char *)(param_1 + 0x128) != '\0') {
+      *(undefined8 *)(param_1 + 0x140) = uVar4;
+      *(undefined4 *)(param_1 + 0x138) = *(undefined4 *)(param_1 + 0x2e78);
+      *(undefined4 *)(param_1 + 0x148) = *(undefined4 *)(param_1 + 0xd0);
+      *(undefined8 *)(param_1 + 0x150) = *(undefined8 *)(lVar3 + 8);
+      *(undefined4 *)(param_1 + 0x158) = *(undefined4 *)(lVar3 + 0x70);
+      *(undefined4 *)(param_1 + 0x15c) = 0x300c;
+    }
+    puVar8 = (undefined4 *)(param_1 + 0x2e78);
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,0xf);
+    (*extraout_x15_00)();
+    if (*(char *)(param_1 + 0x168) != '\0') {
+      *(undefined4 *)(param_1 + 0x178) = *puVar8;
+      *(undefined8 *)(param_1 + 0x180) = uVar4;
+      *(undefined4 *)(param_1 + 0x188) = *puVar1;
+      *(undefined8 *)(param_1 + 400) = *(undefined8 *)(lVar3 + 8);
+      *(undefined4 *)(param_1 + 0x198) = *(undefined4 *)(lVar3 + 0x70);
+      *(undefined4 *)(param_1 + 0x19c) = 0x300d;
+    }
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,0x10);
+    (*extraout_x15_01)();
+    if (*(char *)(param_1 + 0x1a8) != '\0') {
+      *(undefined4 *)(param_1 + 0x1b8) = *puVar8;
+      *(undefined8 *)(param_1 + 0x1c0) = uVar4;
+      *(undefined4 *)(param_1 + 0x1c8) = *puVar1;
+      *(undefined8 *)(param_1 + 0x1d0) = *(undefined8 *)(lVar3 + 8);
+      *(undefined4 *)(param_1 + 0x1d8) = *(undefined4 *)(lVar3 + 0x70);
+      *(undefined4 *)(param_1 + 0x1dc) = 0x300e;
+    }
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,0x11);
+    (*extraout_x15_02)();
+    if (*(char *)(param_1 + 0x1e8) != '\0') {
+      *(undefined4 *)(param_1 + 0x1f8) = *puVar8;
+      *(undefined8 *)(param_1 + 0x200) = uVar4;
+      *(undefined4 *)(param_1 + 0x208) = *puVar1;
+      *(undefined8 *)(param_1 + 0x210) = *(undefined8 *)(lVar3 + 8);
+      *(undefined4 *)(param_1 + 0x218) = *(undefined4 *)(lVar3 + 0x70);
+      *(undefined4 *)(param_1 + 0x21c) = 0x300f;
+    }
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,0x12);
+    (*extraout_x15_03)();
+    if (*(char *)(param_1 + 0x228) != '\0') {
+      *(undefined4 *)(param_1 + 0x238) = *(undefined4 *)(param_1 + 0x2e78);
+      *(undefined8 *)(param_1 + 0x240) = uVar4;
+      *(undefined4 *)(param_1 + 0x248) = *(undefined4 *)(param_1 + 0xd0);
+      *(undefined8 *)(param_1 + 0x250) = *(undefined8 *)(lVar3 + 8);
+      *(undefined4 *)(param_1 + 600) = *(undefined4 *)(lVar3 + 0x70);
+      *(undefined4 *)(param_1 + 0x25c) = 0x3010;
+    }
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,0xd);
+    (*extraout_x15_04)();
+    if (*(char *)(param_1 + 0x268) != '\0') {
+      *(undefined8 *)(param_1 + 0x280) = uVar4;
+      *(undefined4 *)(param_1 + 0x278) = *(undefined4 *)(param_1 + 0x2e78);
+      *(undefined4 *)(param_1 + 0x288) = *(undefined4 *)(param_1 + 0xd0);
+      *(undefined8 *)(param_1 + 0x290) = *(undefined8 *)(lVar3 + 8);
+      *(undefined4 *)(param_1 + 0x298) = *(undefined4 *)(lVar3 + 0x70);
+      *(undefined4 *)(param_1 + 0x29c) = 0x301c;
+    }
+    *(longlong *)(param_1 + 0x2a8) = lVar3;
+    *(undefined4 *)(param_1 + 0x120) = 0x19;
+    FUN_180028600((undefined8 *)local_400,(undefined8 *)(param_1 + 0x120),0x3a8);
+    uVar2 = *param_5 / 0x3a8;
+    if (uVar2 < 5) {
+      if (4 < uVar2) {
+        uVar2 = 0;
+      }
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar2,(ulonglong)local_400[0],puVar7,param_6,param_7
+                    ,param_8);
+      FUN_180028600((undefined8 *)(param_4 + (*param_5 / 0x3a8) * 0x3a8),(undefined8 *)local_400,
+                    0x3a8);
+      *param_5 = *param_5 + 0x3a8;
+      pcVar5 = "IFE%d: IFE driver success to send IFE_MSG_ID_GROUP3_STATS message to Avstream";
+      uVar6 = param_4;
+    }
+    else {
+      if (uVar2 < 5) {
+        uVar2 = 0;
+      }
+      uVar6 = (ulonglong)local_400[0];
+      FUN_180019e00(4,"Interrupt Msg[%d] -> %d, dropping due to insufficent output buffer",uVar2,
+                    uVar6,puVar7,param_6,param_7,param_8);
+      pcVar5 = "IFE%d: IFE driver success to send IFE_MSG_ID_GROUP3_STATS message to Avstream";
+    }
+  }
+  FUN_180019e00(4,pcVar5,(ulonglong)*(uint *)(param_1 + 0xd0),uVar6,puVar7,param_6,param_7,param_8);
+  return 0;
+}
+
+
+
+//// FUN_18000dea0 @18000dea0 ////
+string @1800357e0 = IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[Stats].; xref @18000e5ac
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Removing unreachable block (ram,0x00018000e0c4) */
+/* WARNING: Removing unreachable block (ram,0x00018000e0ec) */
+
+void FUN_18000dea0(longlong param_1,int *param_2,ulonglong *param_3,ulonglong *param_4,
+                  ulonglong *param_5,ulonglong param_6,ulonglong param_7,ulonglong param_8)
+
+{
+  uint uVar1;
+  uint uVar2;
+  uint uVar3;
+  uint uVar4;
+  ushort uVar5;
+  char cVar6;
+  bool bVar7;
+  undefined4 uVar8;
+  undefined8 uVar9;
+  undefined8 extraout_x1;
+  int *extraout_x1_00;
+  int *extraout_x1_01;
+  int *piVar10;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  undefined8 extraout_x1_04;
+  undefined8 extraout_x1_05;
+  char *pcVar11;
+  longlong lVar12;
+  ulonglong *puVar13;
+  ulonglong uVar14;
+  ulonglong *puVar15;
+  uint uVar16;
+  int *piVar17;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  undefined4 *puVar18;
+  int iVar19;
+  int *piVar20;
+  longlong lVar21;
+  uint local_4a0 [236];
+  int local_f0 [2];
+  undefined8 auStack_e8 [15];
+  int aiStack_70 [4];
+  
+  puVar15 = param_4;
+  if (*param_2 == 1) {
+    piVar20 = *(int **)(param_2 + 2);
+    if (piVar20 == (int *)0x0) {
+      pcVar11 = "IFE_Lite%d: pData is NULL";
+      uVar8 = 2;
+      goto LAB_18000e6b0;
+    }
+    uVar1 = piVar20[1];
+    uVar3 = piVar20[2];
+    lVar21 = *(longlong *)(piVar20 + 10);
+    uVar16 = uVar3 & 1;
+    uVar2 = piVar20[4];
+    param_8 = (ulonglong)uVar2;
+    uVar4 = piVar20[5];
+    piVar10 = local_f0;
+    do {
+      piVar17 = piVar10 + 8;
+      piVar10[2] = -1;
+      piVar10[3] = -1;
+      piVar10[0] = -1;
+      piVar10[1] = -1;
+      piVar10[6] = -1;
+      piVar10[7] = -1;
+      piVar10[4] = -1;
+      piVar10[5] = -1;
+      piVar10 = piVar17;
+    } while (piVar17 != (int *)(auStack_e8 + 0xf));
+    piVar17[0] = -1;
+    piVar17[1] = -1;
+    iVar19 = 6;
+    if (uVar16 == 0) {
+      iVar19 = local_f0[0];
+    }
+    local_f0[0] = iVar19;
+    if ((uVar3 >> 1 & 1) != 0) {
+      local_f0[uVar16] = 0;
+      uVar16 = uVar16 + 1;
+    }
+    if ((uVar3 >> 2 & 1) != 0) {
+      local_f0[uVar16] = 1;
+      uVar16 = uVar16 + 1;
+    }
+    if ((uVar3 >> 3 & 1) != 0) {
+      local_f0[uVar16] = 2;
+      uVar16 = uVar16 + 1;
+    }
+    if ((uVar3 >> 4 & 1) != 0) {
+      local_f0[uVar16] = 3;
+    }
+    piVar10 = param_2;
+    puVar13 = param_3;
+    if ((uVar2 >> 4 & 1) != 0) {
+      lVar12 = 0;
+      if (*(longlong *)(param_1 + 0x3398) != 0) {
+        FUN_180008540((longlong *)(param_1 + 0x33a0),param_2,0,param_4,param_5,param_6,param_7,
+                      param_8);
+        lVar12 = (*(longlong *)(param_1 + 0x33a0) - *(longlong *)(param_1 + 0x3398)) / 10000;
+      }
+      FUN_180019e00(4,"Timegap between SOf s %u",lVar12,puVar15,param_5,param_6,param_7,param_8);
+      FUN_180014ef8(param_1,lVar21,(longlong)param_3,param_4,(longlong)param_5,param_6,param_7,
+                    param_8);
+      puVar15 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0x2e78);
+      puVar13 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+      FUN_180019e00(4,"IFE_Lite%d: ifeIrqStatus0.camif_sof_irq, ifeFrameId %d",puVar13,puVar15,
+                    param_5,param_6,param_7,param_8);
+      FUN_180008540((longlong *)(param_1 + 0x3398),extraout_x1,puVar13,puVar15,param_5,param_6,
+                    param_7,param_8);
+      piVar10 = extraout_x1_00;
+    }
+    if ((uVar4 >> 4 & 1) != 0) {
+      uVar16 = *(int *)(param_1 + 0x2e7c) + 1;
+      puVar15 = (ulonglong *)(ulonglong)uVar16;
+      *(uint *)(param_1 + 0x2e7c) = uVar16;
+      puVar13 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xd0);
+      FUN_180019e00(4,"IFE_Lite%d: ifeIrqStatus0.rdi0_sof_irq, rdi0FrameId %d",puVar13,puVar15,
+                    param_5,param_6,param_7,param_8);
+      piVar10 = extraout_x1_01;
+    }
+    if ((uVar2 >> 0x17 & 1) != 0) {
+      if (*(char *)(param_1 + 0x118) != '\0') {
+        *(undefined1 *)(param_1 + 0x118) = 0;
+        *(undefined4 *)(param_1 + 200) = 1;
+        FUN_180014388((undefined8 *)(param_1 + 0x50),piVar10,puVar13,puVar15,param_5,param_6,param_7
+                      ,param_8);
+      }
+      puVar15 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0x2e78);
+      FUN_180019e00(4,"IFE_Lite%d: ifeIrqStatus0.reg_update_irq, ifeFrameId %d",
+                    (ulonglong)*(uint *)(param_1 + 0xd0),puVar15,param_5,param_6,param_7,param_8);
+    }
+    if (((uVar2 >> 3 & 1) != 0) &&
+       (FUN_180019e00(4,"IFE_Lite%d: camif_eof_irq occured",(ulonglong)*(uint *)(param_1 + 0xd0),
+                      puVar15,param_5,param_6,param_7,param_8), *(char *)(param_1 + 0x119) != '\0'))
+    {
+      uVar14 = (ulonglong)*(uint *)(param_1 + 0xd0);
+      *(undefined1 *)(param_1 + 0x119) = 0;
+      FUN_180019e00(4,"IFE_Lite%d: Completing the stop process...",uVar14,puVar15,param_5,param_6,
+                    param_7,param_8);
+      FUN_180017170(param_1,extraout_x1_02,uVar14,puVar15,param_5,param_6,param_7,param_8);
+    }
+    if ((uVar1 & 1) != 0) {
+      uVar14 = (ulonglong)*(uint *)(param_1 + 0xd0);
+      FUN_180019e00(4,"IFE_Lite%d: IFE Reset Irq occured.",uVar14,puVar15,param_5,param_6,param_7,
+                    param_8);
+      FUN_180014bb8(param_1,extraout_x1_03,uVar14,(ulonglong)puVar15,param_5,param_6,param_7,param_8
+                   );
+      FUN_180014388((undefined8 *)(param_1 + 0x50),extraout_x1_04,uVar14,puVar15,param_5,param_6,
+                    param_7,param_8);
+    }
+    if (((uVar2 >> 0x15 & 1) != 0) && (*(char *)(param_1 + 0x11b) == '\0')) {
+      FUN_180019e00(4,"IFE_Lite%d: IFE Epoch0 Irq occured.",(ulonglong)*(uint *)(param_1 + 0xd0),
+                    puVar15,param_5,param_6,param_7,param_8);
+      FUN_1800152c0(param_1,(longlong)param_3,param_4,(ulonglong)puVar15,(ulonglong)param_5,param_6,
+                    param_7,param_8);
+    }
+    lVar21 = 0x22;
+    piVar10 = local_f0;
+    do {
+      if (*(char *)(param_1 + 0x11b) == '\0') {
+        if (*piVar10 == 6) {
+          FUN_180019e00(4,"IFE_Lite%d: IFELite combo ipp done Irq occured.",
+                        (ulonglong)*(uint *)(param_1 + 0xd0),puVar15,param_5,param_6,param_7,param_8
+                       );
+          FUN_1800290a0((undefined1 *)(param_1 + 0xfc0),0,0x3a8);
+          FUN_1800290a0((undefined1 *)(param_1 + 0x120),0,0x3a8);
+          lVar12 = FUN_180016248(param_1,0);
+          if (lVar12 == 0) {
+            FUN_180019e00(4,"IFE%d: NULL CSL packet is dequeued from ifeCSLPacketGroupQueue[Stats]."
+                          ,(ulonglong)*(uint *)(param_1 + 0xd0),puVar15,param_5,param_6,param_7,
+                          param_8);
+          }
+          else {
+            uVar9 = FUN_1800150f0(param_1,*(longlong *)(lVar12 + 8));
+            uVar16 = 0;
+            if (*(uint *)(lVar12 + 0x24) != 0) {
+              piVar17 = (int *)(lVar12 + (ulonglong)*(uint *)(lVar12 + 0x20) + 0x13c);
+              do {
+                if (*piVar17 == 0x3020) {
+                  (*(code *)PTR__guard_check_icall_18002b360)
+                            (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0xfc0,6);
+                  (*extraout_x15)();
+                  *(undefined4 *)(param_1 + 0x1020) = 0x3020;
+                  *(undefined4 *)(param_1 + 0xfd4) = *(undefined4 *)(param_1 + 0x2e78);
+                  *(undefined4 *)(param_1 + 0xfd0) = *(undefined4 *)(lVar12 + 0x70);
+                  *(undefined8 *)(param_1 + 0xfc8) = *(undefined8 *)(lVar12 + 8);
+                  uVar5 = *(ushort *)(lVar12 + 0x16);
+                  *(undefined8 *)(param_1 + 0xfd8) = uVar9;
+                  *(longlong *)(param_1 + 0x1360) = lVar12;
+                  *(uint *)(param_1 + 0x1040) = (uint)uVar5;
+                  *(undefined4 *)(param_1 + 0x101c) = *(undefined4 *)(param_1 + 0xd0);
+                  *(undefined4 *)(param_1 + 0xfc0) = 0x1e;
+                  FUN_180028600((undefined8 *)local_4a0,(undefined8 *)(param_1 + 0xfc0),0x3a8);
+                  uVar14 = *param_4 / 0x3a8;
+                  if (uVar14 < 5) {
+                    if (4 < uVar14) {
+                      uVar14 = 0;
+                    }
+                    FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar14,(ulonglong)local_4a0[0],param_5
+                                  ,param_6,param_7,param_8);
+                    FUN_180028600(param_3 + (*param_4 / 0x3a8) * 0x75,(undefined8 *)local_4a0,0x3a8)
+                    ;
+                    *param_4 = *param_4 + 0x3a8;
+                  }
+                  else {
+                    if (uVar14 < 5) {
+                      uVar14 = 0;
+                    }
+                    FUN_180019e00(4,
+                                  "Interrupt Msg[%d] -> %d, dropping due to insufficent output buffer"
+                                  ,uVar14,(ulonglong)local_4a0[0],param_5,param_6,param_7,param_8);
+                  }
+                  FUN_180019e00(4,
+                                "IFE_LITE_SECURE_MSG_ID_PREPROCESSED_RAW IFE%d: FUll_Client, requestId = %d, hMems[0] = 0x%x."
+                                ,(ulonglong)*(uint *)(param_1 + 0xd0),*(undefined8 *)(lVar12 + 8),
+                                (ulonglong)*(uint *)(param_1 + 0xfe0),param_6,param_7,param_8);
+                  param_5 = (ulonglong *)(ulonglong)*(uint *)(param_1 + 0xfe4);
+                  FUN_180019e00(4,
+                                "IFE_LITE_SECURE_MSG_ID_PREPROCESSED_RAW IFE%d: FUll_Client, requestId = %d, hMems[1] = 0x%x."
+                                ,(ulonglong)*(uint *)(param_1 + 0xd0),*(undefined8 *)(lVar12 + 8),
+                                param_5,param_6,param_7,param_8);
+                  break;
+                }
+                uVar16 = uVar16 + 1;
+                piVar17 = piVar17 + 0x4c;
+              } while (uVar16 < *(uint *)(lVar12 + 0x24));
+            }
+            iVar19 = 4;
+            puVar18 = (undefined4 *)(param_1 + 0x278);
+LAB_18000e3e8:
+            do {
+              (*(code *)PTR__guard_check_icall_18002b360)
+                        (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,iVar19);
+              (*extraout_x15_00)();
+              if (*(char *)(puVar18 + -0x14) != '\0') {
+                uVar8 = *(undefined4 *)(param_1 + 0x2e78);
+                *(undefined8 *)(puVar18 + -0xe) = uVar9;
+                puVar18[-0x10] = uVar8;
+                puVar18[-0xc] = *(undefined4 *)(param_1 + 0xd0);
+                *(undefined8 *)(puVar18 + -10) = *(undefined8 *)(lVar12 + 8);
+                puVar18[-8] = *(undefined4 *)(lVar12 + 0x70);
+                if (iVar19 == 4) {
+                  puVar18[-7] = 0x301f;
+                }
+                else if (iVar19 == 5) {
+                  puVar18[-7] = 0x3021;
+                }
+              }
+              (*(code *)PTR__guard_check_icall_18002b360)
+                        (*(undefined8 *)(param_1 + 0x6b5b0),param_1,param_1 + 0x120,iVar19 + 1);
+              (*extraout_x15_01)();
+              if (*(char *)(puVar18 + -4) != '\0') {
+                *puVar18 = *(undefined4 *)(param_1 + 0x2e78);
+                *(undefined8 *)(puVar18 + 2) = uVar9;
+                puVar18[4] = *(undefined4 *)(param_1 + 0xd0);
+                *(undefined8 *)(puVar18 + 6) = *(undefined8 *)(lVar12 + 8);
+                puVar18[8] = *(undefined4 *)(lVar12 + 0x70);
+                if (iVar19 == 3) {
+                  puVar18[9] = 0x301f;
+                  puVar18 = puVar18 + 0x20;
+                  iVar19 = 5;
+                  goto LAB_18000e3e8;
+                }
+                if (iVar19 == 4) {
+                  puVar18[9] = 0x3021;
+                  break;
+                }
+              }
+              iVar19 = iVar19 + 2;
+              puVar18 = puVar18 + 0x20;
+            } while (iVar19 < 6);
+            *(longlong *)(param_1 + 0x2a8) = lVar12;
+            *(undefined4 *)(param_1 + 0x120) = 0x1b;
+            FUN_180028600((undefined8 *)local_4a0,(undefined8 *)(param_1 + 0x120),0x3a8);
+            uVar14 = *param_4 / 0x3a8;
+            if (uVar14 < 5) {
+              if (4 < uVar14) {
+                uVar14 = 0;
+              }
+              puVar15 = (ulonglong *)(ulonglong)local_4a0[0];
+              FUN_180019e00(4,"Interrupt Msg[%d] -> %d",uVar14,puVar15,param_5,param_6,param_7,
+                            param_8);
+              uVar9 = 0x3a8;
+              FUN_180028600(param_3 + (*param_4 / 0x3a8) * 0x75,(undefined8 *)local_4a0,0x3a8);
+              *param_4 = *param_4 + 0x3a8;
+              FUN_180019e00(2,
+                            "DAL_write_secure_notification for IFE_LITE_MSG_ID_COMBO_STATS message",
+                            uVar9,puVar15,param_5,param_6,param_7,param_8);
+            }
+            else {
+              if (uVar14 < 5) {
+                uVar14 = 0;
+              }
+              puVar15 = (ulonglong *)(ulonglong)local_4a0[0];
+              FUN_180019e00(4,"Interrupt Msg[%d] -> %d, dropping due to insufficent output buffer",
+                            uVar14,puVar15,param_5,param_6,param_7,param_8);
+              FUN_180019e00(2,
+                            "DAL_write_secure_notification for IFE_LITE_MSG_ID_COMBO_STATS message",
+                            uVar14,puVar15,param_5,param_6,param_7,param_8);
+            }
+          }
+        }
+        else if (*piVar10 == 0) {
+          uVar14 = (ulonglong)*(uint *)(param_1 + 0xd0);
+          FUN_180019e00(4,"IFE_Lite%d: IFE bus RDI0 buf done Irq occured.",uVar14,puVar15,param_5,
+                        param_6,param_7,param_8);
+          puVar15 = param_3;
+          param_5 = param_4;
+          FUN_1800157a8(param_1,extraout_x1_05,uVar14,(longlong)param_3,param_4,param_6,param_7,
+                        param_8);
+        }
+      }
+      *piVar10 = -1;
+      lVar21 = lVar21 + -1;
+      piVar10 = piVar10 + 1;
+    } while (lVar21 != 0);
+    do {
+      iVar19 = *piVar20;
+      cVar6 = '\x01';
+      bVar7 = (bool)ExclusiveMonitorPass(piVar20,0x10);
+      if (bVar7) {
+        *piVar20 = iVar19 + -1;
+        cVar6 = ExclusiveMonitorsStatus();
+      }
+    } while (cVar6 != '\0');
+    DataMemoryBarrier(2,3);
+    if (iVar19 + -1 != 0) {
+      return;
+    }
+    if (*(void **)(param_2 + 2) != (void *)0x0) {
+      free(*(void **)(param_2 + 2));
+    }
+    pcVar11 = "IFE%d deallocating CSID IST MSG";
+  }
+  else {
+    if (*param_2 != 2) {
+      return;
+    }
+    lVar21 = *(longlong *)(param_2 + 2);
+    if ((*(uint *)(lVar21 + 8) & 0xc0000000) != 0) {
+      puVar15 = (ulonglong *)(ulonglong)*(uint *)(*(longlong *)(param_1 + 0xf8) + 100);
+      param_5 = (ulonglong *)(ulonglong)*(uint *)(*(longlong *)(param_1 + 0xf8) + 0x70);
+      FUN_180019e00(2,
+                    "IFE_Lite%d:: IFE violation occured on Bus clients violationStatus=0x%x imageSizeVioaltionStatus=0x%x"
+                    ,(ulonglong)*(uint *)(param_1 + 0xd0),puVar15,param_5,param_6,param_7,param_8);
+    }
+    piVar20 = (int *)(lVar21 + 0x10);
+    do {
+      iVar19 = *piVar20;
+      cVar6 = '\x01';
+      bVar7 = (bool)ExclusiveMonitorPass(piVar20,0x10);
+      if (bVar7) {
+        *piVar20 = iVar19 + -1;
+        cVar6 = ExclusiveMonitorsStatus();
+      }
+    } while (cVar6 != '\0');
+    DataMemoryBarrier(2,3);
+    if (iVar19 + -1 != 0) {
+      return;
+    }
+    if (*(void **)(param_2 + 2) != (void *)0x0) {
+      free(*(void **)(param_2 + 2));
+    }
+    pcVar11 = "IFE%d deallocating IFE IST MSG";
+  }
+  uVar8 = 4;
+  param_2[2] = 0;
+  param_2[3] = 0;
+LAB_18000e6b0:
+  FUN_180019e00(uVar8,pcVar11,(ulonglong)*(uint *)(param_1 + 0xd0),puVar15,param_5,param_6,param_7,
+                param_8);
+  return;
+}
+
+
+
+//// FUN_180016248 @180016248 ////
+string @180035a00 =  IFE%d CameraQueueDequeue on ifeCSLPacketQueue[%s] is failed with result 0x%x; xref @1800163d4
+string @180035a50 =  IFE%d ifeCSLPacketQueue[%s]: Dequeued packet %#p with RequestId %d; xref @1800163f0
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+longlong FUN_180016248(longlong param_1,int param_2)
+
+{
+  longlong lVar1;
+  uint uVar2;
+  uint uVar3;
+  code *pcVar4;
+  ulonglong uVar5;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  longlong lVar6;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  longlong lVar7;
+  longlong *plVar8;
+  uint uVar9;
+  longlong local_b0;
+  char *local_a8 [4];
+  char *local_88;
+  char *pcStack_80;
+  char *local_78;
+  char *pcStack_70;
+  undefined *local_68;
+  undefined *puStack_60;
+  undefined *local_58;
+  undefined *puStack_50;
+  char *local_48;
+  
+  local_b0 = 0;
+  local_a8[0] = "IMAGE";
+  local_a8[1] = "Display";
+  local_a8[2] = "RDI0";
+  local_a8[3] = "RDI1";
+  local_88 = "COMBO_STATS";
+  pcStack_80 = "AEC_BE_BHIST";
+  local_78 = "TINTLESS_BG";
+  pcStack_70 = "AWB_BG";
+  local_68 = &DAT_1800359dc;
+  puStack_60 = &DAT_1800359e0;
+  local_58 = &DAT_1800359e4;
+  puStack_50 = &DAT_1800359e8;
+  local_48 = "DualPD";
+  lVar1 = (longlong)param_2 + 0x64a;
+  lVar6 = *(longlong *)(param_1 + lVar1 * 8);
+  lVar7 = 0;
+  if (lVar6 != 0) {
+    if (*(int *)(lVar6 + 0x18) == 0) {
+      lVar7 = 0;
+    }
+    else {
+      plVar8 = *(longlong **)(param_1 + lVar1 * 8);
+      uVar9 = 0xe;
+      if (plVar8 != (longlong *)0x0) {
+        (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(*(longlong *)plVar8[4] + 8));
+        (*extraout_x15)();
+        if ((int)plVar8[3] == 0) {
+          uVar9 = 0x16;
+        }
+        else {
+          uVar5 = (ulonglong)*(uint *)((longlong)plVar8 + 0x14);
+          FUN_1800179c0(&local_b0,uVar5,(undefined8 *)(*plVar8 + uVar5 * *(uint *)(plVar8 + 5)),
+                        uVar5);
+          *(int *)(plVar8 + 3) = (int)plVar8[3] + -1;
+          *(int *)(plVar8 + 5) = (int)plVar8[5] + 1;
+          uVar2 = *(uint *)(plVar8 + 2);
+          if (uVar2 == 0) {
+                    /* WARNING: Does not return */
+            pcVar4 = (code *)SoftwareBreakpoint(0xf004,0x180016384);
+            (*pcVar4)();
+          }
+          uVar3 = 0;
+          if (uVar2 != 0) {
+            uVar3 = *(uint *)(plVar8 + 5) / uVar2;
+          }
+          uVar9 = 0;
+          *(uint *)(plVar8 + 5) = *(uint *)(plVar8 + 5) - uVar3 * uVar2;
+        }
+        (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(*(longlong *)plVar8[4] + 0x10));
+        (*extraout_x15_00)();
+      }
+      lVar7 = local_b0;
+      if (uVar9 == 0) {
+        FUN_180019e00(4," IFE%d ifeCSLPacketQueue[%s]: Dequeued packet %#p with RequestId %d",
+                      (ulonglong)*(uint *)(param_1 + 0xd0),local_a8[param_2],local_b0,
+                      *(undefined8 *)(local_b0 + 8),in_x6,in_x7);
+      }
+      else {
+        FUN_180019e00(4,
+                      " IFE%d CameraQueueDequeue on ifeCSLPacketQueue[%s] is failed with result 0x%x"
+                      ,(ulonglong)*(uint *)(param_1 + 0xd0),local_a8[param_2],(ulonglong)uVar9,in_x5
+                      ,in_x6,in_x7);
+        lVar7 = local_b0;
+      }
+    }
+  }
+  return lVar7;
+}
+
+
+
+//// FUN_18000bbf0 @18000bbf0 ////
+string @180035c68 = IFE%d: Created ifeCSLPacketGroupQueue[%d].; xref @18000bf10
+string @180035c98 = IFE%d: Failed to create ifeCSLPacketGroupQueue[%d].; xref @18000bf28
+string @180035cd0 = IFE%d: Created ifeCSLPacketInQueue.; xref @18000c00c
+string @180035cf8 = IFE%d: Failed to create ifeCSLPacketInQueue.; xref @18000c054
+
+ulonglong FUN_18000bbf0(longlong param_1,uint param_2,undefined8 param_3,ulonglong param_4,
+                       undefined8 *param_5,undefined8 param_6,undefined8 param_7,undefined *param_8)
+
+{
+  undefined4 uVar1;
+  uint uVar2;
+  int iVar3;
+  undefined8 *puVar4;
+  undefined8 *puVar5;
+  longlong *plVar6;
+  undefined8 *puVar7;
+  undefined8 *puVar8;
+  longlong lVar9;
+  char *pcVar10;
+  undefined8 extraout_x1;
+  ulonglong uVar11;
+  int *piVar12;
+  code *pcVar13;
+  undefined8 uVar14;
+  code *pcVar15;
+  undefined8 uVar16;
+  code *pcVar17;
+  undefined8 uVar18;
+  code *pcVar19;
+  undefined8 uVar20;
+  code *pcVar21;
+  undefined8 *puVar22;
+  code *pcVar23;
+  code *pcVar24;
+  uint *puVar25;
+  code *pcVar26;
+  code *pcVar27;
+  code *pcVar28;
+  code *pcVar29;
+  code *pcVar30;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  ulonglong uVar31;
+  longlong lVar32;
+  ulonglong uVar33;
+  longlong lVar34;
+  longlong local_88;
+  
+  local_88 = 0;
+  lVar34 = *(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)param_2 * 0x30;
+  puVar8 = (undefined8 *)(lVar34 + 8);
+  if (puVar8 == (undefined8 *)0x0) {
+    FUN_180019e00(2,"Max IFE driver are opened already, cant be opened anymore!!",param_3,param_4,
+                  param_5,param_6,param_7,param_8);
+    uVar33 = 0x1d;
+    pcVar21 = (code *)param_8;
+  }
+  else if (param_2 < 4) {
+    uVar11 = (ulonglong)DAT_18003de28;
+    if (DAT_18003de28 < 5) {
+      puVar4 = malloc(0x28);
+      if (puVar4 == (undefined8 *)0x0) {
+        uVar33 = 2;
+      }
+      else {
+        puVar4[1] = 0;
+        *puVar4 = 0;
+        puVar4[3] = 0;
+        puVar4[2] = 0;
+        puVar4[4] = 0;
+        puVar5 = malloc(0x6b5e0);
+        puVar4[4] = puVar5;
+        if (puVar5 != (undefined8 *)0x0) {
+          *puVar4 = FUN_180016470;
+          puVar4[1] = FUN_1800170c0;
+          puVar4[2] = FUN_180016430;
+          puVar7 = puVar5;
+          do {
+            puVar22 = puVar7 + 4;
+            puVar7[1] = 0;
+            *puVar7 = 0;
+            puVar7[3] = 0;
+            puVar7[2] = 0;
+            puVar7 = puVar22;
+          } while (puVar22 != puVar5 + 0x18);
+          *puVar22 = 0;
+          FUN_1800290a0((undefined1 *)((longlong)puVar5 + 0xcc),0,0x6b514);
+          *(undefined4 *)(puVar5 + 0x19) = 0;
+          lVar9 = DAT_18003d230;
+          lVar32 = puVar4[4];
+          *(uint *)(lVar32 + 0xd0) = param_2;
+          *(undefined8 *)(lVar32 + 0xe8) = *(undefined8 *)(*(longlong *)(lVar9 + 0x28) + 0x18);
+          FUN_180019e00(4,"IFE driver gets base address IFE_CORE %d",(ulonglong)param_2,param_4,
+                        param_5,param_6,param_7,param_8);
+          param_4 = *(ulonglong *)(lVar32 + 0xe8);
+          if (param_4 == 0) {
+            uVar11 = (ulonglong)*(uint *)(lVar32 + 0xd0);
+            FUN_180019e00(2,"IFE_CORE %d base pointer is NULL",uVar11,0,param_5,param_6,param_7,
+                          param_8);
+            *(undefined8 *)(lVar32 + 0x3398) = 0;
+            *(undefined8 *)(lVar32 + 0x33a0) = 0;
+          }
+          else {
+            if (param_2 < 2) {
+              lVar9 = param_4 + 0xc00;
+              uVar33 = param_4 + 0x4000;
+            }
+            else {
+              lVar9 = param_4 + 0x1200;
+              uVar33 = param_4;
+            }
+            *(uint *)(lVar32 + 0x6b568) = (uint)(param_2 >= 2);
+            *(ulonglong *)(lVar32 + 0xf0) = uVar33;
+            *(longlong *)(lVar32 + 0xf8) = lVar9;
+            FUN_180019e00(4,"IFE_CORE %d base address = %#Ix.",(ulonglong)*(uint *)(lVar32 + 0xd0),
+                          param_4,param_5,param_6,param_7,param_8);
+            FUN_180019e00(4,"IFE_CORE %d csidBaseAddr = %#Ix.",(ulonglong)*(uint *)(lVar32 + 0xd0),
+                          *(undefined8 *)(lVar32 + 0xf0),param_5,param_6,param_7,param_8);
+            param_4 = *(ulonglong *)(lVar32 + 0xf8);
+            FUN_180019e00(4,"IFE_CORE %d busWrBaseAddr = %#Ix.",(ulonglong)*(uint *)(lVar32 + 0xd0),
+                          param_4,param_5,param_6,param_7,param_8);
+            *(undefined8 *)(lVar32 + 0x3398) = 0;
+            *(undefined8 *)(lVar32 + 0x33a0) = 0;
+            uVar16 = FUN_180008628((undefined8 *)(lVar32 + 0x50));
+            uVar11 = (ulonglong)*(uint *)(lVar32 + 0xd0);
+            if ((int)uVar16 == 0) {
+              FUN_180019e00(4,"IFE%d: IFE driver created async event handle.",uVar11,param_4,param_5
+                            ,param_6,param_7,param_8);
+              uVar16 = FUN_180008628((undefined8 *)(lVar32 + 0x78));
+              uVar11 = (ulonglong)*(uint *)(lVar32 + 0xd0);
+              if ((int)uVar16 == 0) {
+                FUN_180019e00(4,"IFE%d: IFE driver created async event handle for stop command.",
+                              uVar11,param_4,param_5,param_6,param_7,param_8);
+                uVar33 = 0;
+                do {
+                  puVar5 = (undefined8 *)(lVar32 + (uVar33 + 0x64a) * 8);
+                  if ((puVar5 == (undefined8 *)0x0) ||
+                     (plVar6 = malloc(0x88), plVar6 == (longlong *)0x0)) {
+                    uVar1 = 2;
+                    pcVar10 = "IFE%d: Failed to create ifeCSLPacketGroupQueue[%d].";
+                  }
+                  else {
+                    plVar6[4] = 0;
+                    plVar6[3] = 0;
+                    plVar6[6] = 0;
+                    plVar6[5] = 0;
+                    plVar6[8] = 0;
+                    plVar6[7] = 0;
+                    plVar6[10] = 0;
+                    plVar6[9] = 0;
+                    plVar6[0xc] = 0;
+                    plVar6[0xb] = 0;
+                    plVar6[0xe] = 0;
+                    plVar6[0xd] = 0;
+                    plVar6[0x10] = 0;
+                    plVar6[0xf] = 0;
+                    *plVar6 = (longlong)(plVar6 + 7);
+                    plVar6[1] = (longlong)(plVar6 + 6);
+                    plVar6[2] = 0x80000000a;
+                    *(undefined4 *)(plVar6 + 3) = 0;
+                    *(undefined4 *)(plVar6 + 5) = 0;
+                    *(undefined4 *)((longlong)plVar6 + 0x2c) = 0;
+                    puVar7 = (undefined8 *)FUN_180020c78(0x30);
+                    *puVar7 = &PTR_FUN_1800300b0;
+                    InitializeCriticalSection((LPCRITICAL_SECTION)(puVar7 + 1));
+                    param_5 = puVar7 + 1;
+                    FUN_180019e00(5,"%s:%d INITIALIZED Trustlet critical section: 0x%p\n",
+                                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Core\\SecureISPDriverv2\\utils\\src\\CCritSec.cpp"
+                                  ,0x12,param_5,param_6,param_7,param_8);
+                    pcVar10 = "IFE%d: Created ifeCSLPacketGroupQueue[%d].";
+                    plVar6[4] = (longlong)puVar7;
+                    uVar1 = 4;
+                    *puVar5 = plVar6;
+                  }
+                  param_4 = uVar33;
+                  FUN_180019e00(uVar1,pcVar10,(ulonglong)*(uint *)(lVar32 + 0xd0),uVar33,param_5,
+                                param_6,param_7,param_8);
+                  uVar2 = (int)uVar33 + 1;
+                  uVar33 = (ulonglong)(byte)uVar2;
+                } while ((uVar2 & 0xff) < 0xd);
+                if (((undefined8 *)(lVar32 + 0x32b8) != (undefined8 *)0x0) &&
+                   (plVar6 = malloc(0x88), plVar6 != (longlong *)0x0)) {
+                  plVar6[4] = 0;
+                  plVar6[3] = 0;
+                  plVar6[6] = 0;
+                  plVar6[5] = 0;
+                  plVar6[8] = 0;
+                  plVar6[7] = 0;
+                  plVar6[10] = 0;
+                  plVar6[9] = 0;
+                  plVar6[0xc] = 0;
+                  plVar6[0xb] = 0;
+                  plVar6[0xe] = 0;
+                  plVar6[0xd] = 0;
+                  plVar6[0x10] = 0;
+                  plVar6[0xf] = 0;
+                  *plVar6 = (longlong)(plVar6 + 7);
+                  plVar6[1] = (longlong)(plVar6 + 6);
+                  plVar6[2] = 0x80000000a;
+                  *(undefined4 *)(plVar6 + 3) = 0;
+                  *(undefined4 *)(plVar6 + 5) = 0;
+                  *(undefined4 *)((longlong)plVar6 + 0x2c) = 0;
+                  puVar5 = (undefined8 *)FUN_180020c78(0x30);
+                  *puVar5 = &PTR_FUN_1800300b0;
+                  InitializeCriticalSection((LPCRITICAL_SECTION)(puVar5 + 1));
+                  param_5 = puVar5 + 1;
+                  uVar16 = 0x12;
+                  FUN_180019e00(5,"%s:%d INITIALIZED Trustlet critical section: 0x%p\n",
+                                "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Core\\SecureISPDriverv2\\utils\\src\\CCritSec.cpp"
+                                ,0x12,param_5,param_6,param_7,param_8);
+                  uVar33 = 0;
+                  *(undefined8 *)(lVar32 + 0x32b8) = plVar6;
+                  uVar2 = *(uint *)(lVar32 + 0xd0);
+                  plVar6[4] = (longlong)puVar5;
+                  FUN_180019e00(4,"IFE%d: Created ifeCSLPacketInQueue.",(ulonglong)uVar2,uVar16,
+                                param_5,param_6,param_7,param_8);
+                  *puVar8 = puVar4;
+                  *(longlong *)(lVar34 + 0x28) = lVar32;
+                  DAT_18003de28 = DAT_18003de28 + 1;
+                  FUN_180019e00(4,"IFE%d: IFE device opened!",(ulonglong)*(uint *)(lVar32 + 0xd0),
+                                uVar16,param_5,param_6,param_7,param_8);
+                  goto LAB_18000c098;
+                }
+                uVar11 = (ulonglong)*(uint *)(lVar32 + 0xd0);
+                pcVar10 = "IFE%d: Failed to create ifeCSLPacketInQueue.";
+              }
+              else {
+                pcVar10 = "IFE%d: Failed to create event handle for async stop command.";
+              }
+            }
+            else {
+              pcVar10 = "IFE%d: Failed to create event handle for async method.";
+            }
+            FUN_180019e00(2,pcVar10,uVar11,param_4,param_5,param_6,param_7,param_8);
+          }
+        }
+        FUN_180019e00(2,"IFE%d: IFE open failed, clean up now.",uVar11,param_4,param_5,param_6,
+                      param_7,param_8);
+        *puVar8 = 0;
+        uVar33 = FUN_180016e98(puVar4,extraout_x1,uVar11,param_4,param_5,param_6,param_7,param_8);
+        uVar33 = uVar33 & 0xffffffff;
+        FUN_180019e00(2,"IFE%d: IFE open failed, finished clean up.",uVar11,param_4,param_5,param_6,
+                      param_7,param_8);
+      }
+LAB_18000c098:
+      lVar34 = DAT_18003d230;
+      pcVar21 = (code *)param_8;
+      if ((int)uVar33 == 0) {
+        local_88 = *(longlong *)
+                    (*(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)param_2 * 0x30 + 0x28);
+        *(longlong *)(local_88 + 0x6b560) = param_1 + 0xdd0;
+        uVar11 = 0;
+        if (*(int *)(param_1 + 0x564) != 0) {
+          do {
+            if (*(longlong *)(param_1 + 0xdc8) == 0) break;
+            piVar12 = (int *)(*(longlong *)(param_1 + 0xdc8) + uVar11 * 0x28);
+            iVar3 = *piVar12;
+            if (iVar3 == 0x3000 || iVar3 == 0x3020) {
+              *(int *)(local_88 + 0x6b5d0) = piVar12[2];
+              *(undefined4 *)(local_88 + 0x6b5d4) =
+                   *(undefined4 *)(*(longlong *)(param_1 + 0xdc8) + uVar11 * 0x28 + 0xc);
+            }
+            else if (iVar3 == 0x3013) {
+              *(int *)(local_88 + 0x6b5d8) = piVar12[2];
+              *(undefined4 *)(local_88 + 0x6b5dc) =
+                   *(undefined4 *)(*(longlong *)(param_1 + 0xdc8) + uVar11 * 0x28 + 0xc);
+            }
+            uVar2 = (int)uVar11 + 1;
+            uVar11 = (ulonglong)uVar2;
+          } while (uVar2 < *(uint *)(param_1 + 0x564));
+        }
+        *(undefined1 *)(local_88 + 0x6b559) = 0;
+        if (*(int *)(local_88 + 0x6b568) == 0) {
+          pcVar13 = FUN_180011010;
+          pcVar15 = FUN_18000f870;
+          pcVar17 = FUN_18000f8a0;
+          pcVar19 = FUN_18000f9e0;
+          pcVar21 = FUN_18000f740;
+          pcVar30 = FUN_180010010;
+          pcVar29 = FUN_180010170;
+          pcVar28 = FUN_180010400;
+          pcVar27 = FUN_18000fbd0;
+          pcVar26 = FUN_18000f660;
+          pcVar24 = FUN_18000fbf0;
+          pcVar23 = FUN_18000f610;
+        }
+        else {
+          pcVar13 = FUN_18000dea0;
+          pcVar15 = FUN_18000d050;
+          pcVar17 = FUN_18000d080;
+          pcVar19 = FUN_18000d110;
+          pcVar21 = FUN_18000e6f0;
+          pcVar30 = FUN_18000d3d0;
+          pcVar29 = FUN_18000d510;
+          pcVar28 = FUN_18000d6d0;
+          pcVar27 = FUN_180008600;
+          pcVar26 = FUN_18000cf50;
+          pcVar24 = FUN_18000d1e0;
+          pcVar23 = FUN_18000d000;
+        }
+        *(code **)(local_88 + 0x6b570) = pcVar23;
+        *(code **)(local_88 + 0x6b578) = pcVar24;
+        *(code **)(local_88 + 0x6b580) = pcVar26;
+        *(code **)(local_88 + 0x6b588) = pcVar27;
+        *(code **)(local_88 + 0x6b590) = pcVar28;
+        *(code **)(local_88 + 0x6b598) = pcVar29;
+        *(code **)(local_88 + 0x6b5a0) = pcVar30;
+        *(code **)(local_88 + 0x6b5a8) = pcVar21;
+        *(code **)(local_88 + 0x6b5b0) = pcVar19;
+        *(code **)(local_88 + 0x6b5c0) = pcVar17;
+        *(code **)(local_88 + 0x6b5b8) = pcVar15;
+        *(code **)(local_88 + 0x6b5c8) = pcVar13;
+        *(undefined1 *)(*(longlong *)(lVar34 + 0x28) + (ulonglong)param_2 * 0x30 + 0x20) = 0;
+        goto LAB_18000c2d0;
+      }
+    }
+    else {
+      FUN_180019e00(2,"IFE: No more IFE driver can be opened. refCount = %d",uVar11,param_4,param_5,
+                    param_6,param_7,param_8);
+      *puVar8 = 0;
+      uVar33 = 0x2f;
+      pcVar21 = (code *)param_8;
+    }
+  }
+  else {
+    uVar33 = 0xe;
+    pcVar21 = (code *)param_8;
+  }
+  uVar31 = (ulonglong)param_2;
+  uVar11 = uVar33;
+  FUN_180019e00(2,"Failed to open ife device for ife%d,result %d",uVar31,uVar33,param_5,param_6,
+                param_7,pcVar21);
+  lVar9 = *(longlong *)(*(longlong *)(DAT_18003d230 + 0x28) + uVar31 * 0x30 + 8);
+  lVar34 = DAT_18003d230;
+  if ((lVar9 != 0) && (*(longlong *)(lVar9 + 8) != 0)) {
+    (*(code *)PTR__guard_check_icall_18002b360)();
+    iVar3 = (*extraout_x15_01)();
+    if (iVar3 == 0) {
+      return uVar33;
+    }
+    FUN_180019e00(2,"Failed to close ife%d",uVar31,uVar11,param_5,param_6,param_7,pcVar21);
+    return uVar33;
+  }
+LAB_18000c2d0:
+  uVar11 = (ulonglong)param_2;
+  puVar25 = (uint *)(*(longlong *)(lVar34 + 0x28) + uVar11 * 0x30);
+  if ((char)puVar25[8] == '\0') {
+    *puVar25 = param_2;
+    lVar34 = *(longlong *)(*(longlong *)(lVar34 + 0x28) + uVar11 * 0x30 + 8);
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)(lVar34 + 0x10),lVar34,FUN_18000c4c0,param_1);
+    (*extraout_x15)();
+    uVar20 = 0;
+    uVar18 = 0;
+    uVar16 = 0;
+    puVar8 = *(undefined8 **)(*(longlong *)(DAT_18003d230 + 0x28) + uVar11 * 0x30 + 8);
+    (*(code *)PTR__guard_check_icall_18002b360)(*puVar8,puVar8,2,0,0);
+    uVar2 = (*extraout_x15_00)();
+    lVar34 = DAT_18003d230;
+    if (uVar2 != 0) {
+      FUN_180019e00(2,"IFE_CMD_ID_POWER_ON cmd failed, ifeId = %d, result = %d",uVar11,
+                    (ulonglong)uVar2,uVar16,uVar18,uVar20,pcVar21);
+      return (ulonglong)uVar2;
+    }
+    *(undefined1 *)(*(longlong *)(DAT_18003d230 + 0x28) + uVar11 * 0x30 + 0x20) = 1;
+    *(undefined8 *)(*(longlong *)(lVar34 + 0x28) + uVar11 * 0x30 + 0x18) =
+         *(undefined8 *)(local_88 + 0xe8);
+    uVar14 = *(undefined8 *)(*(longlong *)(lVar34 + 0x28) + uVar11 * 0x30 + 0x18);
+    FUN_180019e00(4,"HW Manager gets base address for IFE%d: 0x%llx",uVar11,uVar14,uVar16,uVar18,
+                  uVar20,pcVar21);
+    uVar33 = 0;
+    lVar34 = DAT_18003d230;
+    if (*(longlong *)(*(longlong *)(DAT_18003d230 + 0x28) + uVar11 * 0x30 + 0x18) == 0) {
+      FUN_180019e00(2,"IFE_CORE %d base pointer is NULL",uVar11,uVar14,uVar16,uVar18,uVar20,pcVar21)
+      ;
+      return 0x1d;
+    }
+  }
+  else if ((int)uVar33 != 0) {
+    return uVar33;
+  }
+  lVar34 = *(longlong *)(lVar34 + 0x28) + uVar11 * 0x30;
+  *(int *)(lVar34 + 0x10) = *(int *)(lVar34 + 0x10) + 1;
+  return uVar33;
+}
+
+
+
+//// FUN_180016e98 @180016e98 ////
+string @180036030 = IFE %d: CameraQueueDestroy failed for ifeCSLPacketInQueue; xref @180016fc0
+string @180036098 = IFE%d: Destroyed ifeCSLPacketGroupQueue[%d].; xref @180017010
+
+ulonglong FUN_180016e98(void *param_1,undefined8 param_2,ulonglong param_3,ulonglong param_4,
+                       undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  undefined4 uVar2;
+  ulonglong uVar3;
+  ulonglong uVar4;
+  char *pcVar5;
+  longlong lVar6;
+  ulonglong uVar7;
+  undefined8 *puVar8;
+  
+  uVar7 = 0;
+  if (param_1 == (void *)0x0) {
+    pcVar5 = "Invalid device handle";
+    uVar7 = 0x2c;
+  }
+  else {
+    lVar6 = *(longlong *)((longlong)param_1 + 0x20);
+    if (lVar6 != 0) {
+      FUN_180019e00(4,"IFE%d: In ife_device_cleanup.",(ulonglong)*(uint *)(lVar6 + 0xd0),param_4,
+                    param_5,param_6,param_7,param_8);
+      if (*(longlong *)(lVar6 + 0x50) != 0) {
+        FUN_180019e00(4,"IFE%d: IFE driver destroy camera signal.",
+                      (ulonglong)*(uint *)(lVar6 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+        puVar8 = (undefined8 *)(lVar6 + 0x50);
+        if ((puVar8 != (undefined8 *)0x0) && ((HANDLE)*puVar8 != (HANDLE)0x0)) {
+          CloseHandle((HANDLE)*puVar8);
+          *puVar8 = 0;
+        }
+      }
+      if (*(longlong *)(lVar6 + 0x78) != 0) {
+        FUN_180019e00(4,"IFE%d: IFE driver destroy stop command signal.",
+                      (ulonglong)*(uint *)(lVar6 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+        puVar8 = (undefined8 *)(lVar6 + 0x78);
+        if ((puVar8 != (undefined8 *)0x0) && ((HANDLE)*puVar8 != (HANDLE)0x0)) {
+          CloseHandle((HANDLE)*puVar8);
+          *puVar8 = 0;
+        }
+      }
+      if (*(longlong *)(lVar6 + 0xa0) != 0) {
+        FUN_180019e00(4,"IFE%d: IFE driver destroy CSID Done signal.",
+                      (ulonglong)*(uint *)(lVar6 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+        puVar8 = (undefined8 *)(lVar6 + 0xa0);
+        if ((puVar8 != (undefined8 *)0x0) && ((HANDLE)*puVar8 != (HANDLE)0x0)) {
+          CloseHandle((HANDLE)*puVar8);
+          *puVar8 = 0;
+        }
+      }
+      if (*(void **)(lVar6 + 0x32b8) != (void *)0x0) {
+        uVar3 = FUN_180017aa8(*(void **)(lVar6 + 0x32b8));
+        *(undefined8 *)(lVar6 + 0x32b8) = 0;
+        uVar7 = uVar3 & 0xffffffff;
+        if ((int)uVar3 != 0) {
+          FUN_180019e00(2,"IFE %d: CameraQueueDestroy failed for ifeCSLPacketInQueue",
+                        (ulonglong)*(uint *)(lVar6 + 0xd0),param_4,param_5,param_6,param_7,param_8);
+        }
+      }
+      uVar3 = 0;
+      puVar8 = (undefined8 *)(lVar6 + 0x3250);
+      do {
+        if ((void *)*puVar8 != (void *)0x0) {
+          uVar4 = FUN_180017aa8((void *)*puVar8);
+          *puVar8 = 0;
+          uVar7 = uVar4 & 0xffffffff;
+          if ((int)uVar4 == 0) {
+            param_4 = uVar3;
+            FUN_180019e00(4,"IFE%d: Destroyed ifeCSLPacketGroupQueue[%d].",
+                          (ulonglong)*(uint *)(lVar6 + 0xd0),uVar3,param_5,param_6,param_7,param_8);
+          }
+          else {
+            FUN_180019e00(2,"IFE %d: CameraQueueDestroy failed.",(ulonglong)*(uint *)(lVar6 + 0xd0),
+                          param_4,param_5,param_6,param_7,param_8);
+          }
+        }
+        uVar1 = (int)uVar3 + 1;
+        uVar3 = (ulonglong)(byte)uVar1;
+        puVar8 = puVar8 + 1;
+      } while ((uVar1 & 0xff) < 0xd);
+      param_3 = (ulonglong)*(uint *)(lVar6 + 0xd0);
+      FUN_180019e00(4,"IFE%d: IFE driver disable clocks.",param_3,param_4,param_5,param_6,param_7,
+                    param_8);
+      if (*(void **)((longlong)param_1 + 0x20) != (void *)0x0) {
+        free(*(void **)((longlong)param_1 + 0x20));
+        *(undefined8 *)((longlong)param_1 + 0x20) = 0;
+      }
+    }
+    free(param_1);
+    if ((int)uVar7 == 0) {
+      pcVar5 = "IFE driver cleanup successful.";
+      uVar2 = 4;
+      goto LAB_180017088;
+    }
+    pcVar5 = "Failed to cleanup IFE driver.";
+  }
+  uVar2 = 2;
+LAB_180017088:
+  FUN_180019e00(uVar2,pcVar5,param_3,param_4,param_5,param_6,param_7,param_8);
+  return uVar7;
+}
+
+
+
+//// FUN_1800175c0 @1800175c0 ////
+string @1800365e8 = CSID%d DAL_csid_process_iq_packet cslPacket %#p, requestId %d; xref @180017610
+
+undefined8 FUN_1800175c0(longlong *param_1,longlong param_2)
+
+{
+  int iVar1;
+  longlong lVar2;
+  uint uVar3;
+  int iVar4;
+  uint *puVar5;
+  ulonglong uVar6;
+  ulonglong uVar7;
+  undefined8 uVar8;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  undefined8 *puVar9;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  uint *puVar10;
+  longlong lVar11;
+  int iVar12;
+  longlong *plVar13;
+  uint local_228 [2];
+  uint *local_220;
+  int local_218;
+  longlong local_210;
+  longlong *local_200;
+  longlong lStack_1f8;
+  uint local_1f0 [104];
+  
+  FUN_1800290a0((undefined1 *)local_1f0,0,0x1a0);
+  uVar8 = *(undefined8 *)(param_2 + 8);
+  FUN_180019e00(4,"CSID%d DAL_csid_process_iq_packet cslPacket %#p, requestId %d",
+                (ulonglong)*(uint *)(param_1 + 5),param_2,uVar8,in_x5,in_x6,in_x7);
+  lVar2 = (ulonglong)*(uint *)(param_2 + 0x18) + (ulonglong)*(uint *)(param_2 + 0x30) * 0x20 +
+          param_2;
+  puVar9 = *(undefined8 **)(lVar2 + 0x74);
+  uVar3 = *(uint *)(lVar2 + 0x7c);
+  iVar1 = (int)*puVar9 + uVar3 + *(uint *)(param_2 + 0x34);
+  lVar2 = puVar9[1] + (ulonglong)uVar3 + (ulonglong)*(uint *)(param_2 + 0x34);
+  if ((int)param_1[5] == (int)param_1[4]) {
+    iVar12 = *(int *)(lVar2 + 0x18) + *(uint *)(lVar2 + 8);
+    local_220 = (uint *)(*(longlong *)(lVar2 + 0x28) + (ulonglong)*(uint *)(lVar2 + 8));
+  }
+  else {
+    if ((int)param_1[5] != *(int *)((longlong)param_1 + 0x1c)) goto LAB_1800176f0;
+    iVar12 = *(int *)(lVar2 + 0x18) + *(uint *)(lVar2 + 8) + *(uint *)(lVar2 + 0x10);
+    local_220 = (uint *)(*(longlong *)(lVar2 + 0x28) + (ulonglong)*(uint *)(lVar2 + 8) +
+                        (ulonglong)*(uint *)(lVar2 + 0x10));
+  }
+  local_228[0] = iVar12 + iVar1;
+  local_218 = 3;
+  in_x6 = 0;
+  in_x5 = 0;
+  local_210 = 0;
+  uVar8 = 0;
+  (*(code *)PTR__guard_check_icall_18002b360)
+            (*(undefined8 *)*param_1,(undefined8 *)*param_1,1,local_228,0x28);
+  (*extraout_x15)();
+LAB_1800176f0:
+  iVar12 = 0;
+  lVar11 = param_2;
+  plVar13 = param_1;
+  if (0 < *(int *)(param_2 + 0x1c)) {
+    do {
+      lStack_1f8 = lVar11;
+      local_200 = plVar13;
+      lVar11 = (ulonglong)*(uint *)(param_2 + 0x18) + (longlong)iVar12 * 0x20 + param_2;
+      puVar10 = (uint *)((*(undefined8 **)(lVar11 + 0x74))[1] + (ulonglong)*(uint *)(lVar11 + 0x7c))
+      ;
+      uVar3 = (int)**(undefined8 **)(lVar11 + 0x74) + *(uint *)(lVar11 + 0x7c);
+      uVar6 = (ulonglong)uVar3;
+      puVar5 = puVar10;
+      FUN_180019e00(4," cmd buffer Va = 0x%x, PA =0x%x",puVar10,uVar6,uVar8,in_x5,in_x6,in_x7);
+      if (*(int *)(lVar11 + 0x84) != 0) {
+        iVar4 = *(int *)(lVar11 + 0x8c);
+        if (iVar4 == 0x12) {
+LAB_180017790:
+          local_218 = *(int *)(lVar11 + 0x84) + -1;
+          in_x6 = 0;
+          in_x5 = 0;
+          uVar8 = 0;
+          uVar6 = 0x28;
+          puVar5 = local_228;
+          local_228[0] = uVar3;
+          local_220 = puVar10;
+          local_210 = param_2;
+          (*(code *)PTR__guard_check_icall_18002b360)
+                    (*(undefined8 *)*param_1,(undefined8 *)*param_1,1);
+          (*extraout_x15_00)();
+        }
+        else if (iVar4 == 0x10) {
+          if ((int)param_1[4] == (int)param_1[5]) goto LAB_180017790;
+        }
+        else if ((iVar4 == 0x11) && (*(int *)((longlong)param_1 + 0x1c) == (int)param_1[5]))
+        goto LAB_180017790;
+        if (9 < local_1f0[0]) {
+          FUN_180019e00(2," IFE BL Array size is exeeding!!!",puVar5,uVar6,uVar8,in_x5,in_x6,in_x7);
+          return 2;
+        }
+      }
+      iVar12 = iVar12 + 1;
+      lVar11 = lStack_1f8;
+      plVar13 = local_200;
+    } while (iVar12 < *(int *)(param_2 + 0x1c));
+  }
+  if (*(longlong *)(param_2 + 8) != 0) {
+    in_x6 = 0;
+    in_x5 = 0;
+    local_210 = 0;
+    uVar8 = 0;
+    local_228[0] = *(int *)(lVar2 + 0x18) + *(uint *)(lVar2 + 0xc) + iVar1;
+    local_220 = (uint *)(*(longlong *)(lVar2 + 0x28) + (ulonglong)*(uint *)(lVar2 + 0xc));
+    local_218 = 0x13;
+    (*(code *)PTR__guard_check_icall_18002b360)
+              (*(undefined8 *)*param_1,(undefined8 *)*param_1,1,local_228,0x28);
+    (*extraout_x15_01)();
+  }
+  uVar7 = *(ulonglong *)(lVar11 + 8);
+  uVar6 = (ulonglong)*(uint *)(plVar13 + 5);
+  if (*(char *)((longlong)param_1 + 0x186) == '\0') {
+    FUN_180019e00(4,"CSID%d submitting BL_FIFO cmd for requestId %d",uVar6,uVar7,uVar8,in_x5,in_x6,
+                  in_x7);
+    in_x6 = 0;
+    in_x5 = 0;
+    uVar8 = 0;
+    uVar7 = 0;
+    uVar6 = 0;
+    FUN_18000ed50(*param_1,2,(uint *)0x0,0,(undefined8 *)0x0,0,0,in_x7);
+  }
+  else {
+    FUN_180019e00(4,"CSID%d Enqueuing BL_FIFO cmd for frame %d",uVar6,uVar7,uVar8,in_x5,in_x6,in_x7)
+    ;
+    if ((*param_1 != 0) && (puVar10 = *(uint **)(*param_1 + 0x20), puVar10 != (uint *)0x0)) {
+      uVar7 = (ulonglong)*puVar10;
+      if ((*puVar10 == 1) || ((char)puVar10[0x20c] != '\x01')) {
+        *(ulonglong *)(puVar10 + 0x226) = (ulonglong)*(uint *)(param_2 + 8);
+        FUN_180017b68(*(longlong **)(puVar10 + 0x14),(undefined8 *)(puVar10 + 0x224));
+        uVar6 = 0x1a0;
+        FUN_1800290a0((undefined1 *)(puVar10 + 0x224),0,0x1a0);
+      }
+      else {
+        uVar6 = (ulonglong)puVar10[0x210];
+        FUN_180019e00(2,"CDM%d is not in Active state, Current state = %d",uVar6,uVar7,uVar8,in_x5,
+                      in_x6,in_x7);
+      }
+    }
+  }
+  if ((char)param_1[0x21] != '\0') {
+    puVar9 = (undefined8 *)param_1[0x33];
+    if (puVar9 == (undefined8 *)0x0) {
+      FUN_180019e00(2,"CSID%d queue manager is NULL",uVar6,uVar7,uVar8,in_x5,in_x6,in_x7);
+      return 0xe;
+    }
+    if ((int)param_1[5] == (int)param_1[4]) {
+      *puVar9 = *(undefined8 *)(lVar11 + 8);
+    }
+    else {
+      puVar9[1] = *(undefined8 *)(lVar11 + 8);
+    }
+    FUN_180019e00(4,"CSID%d Queue Manager: Submitted %d/%d, lastConsumedId = %d and Consumed %d/%d",
+                  (ulonglong)*(uint *)(param_1 + 5),*puVar9,puVar9[1],puVar9[4],puVar9[2],puVar9[3])
+    ;
+  }
+  return 0;
+}
+
+
+
+//// FUN_180017c60 @180017c60 ////
+string @180036a10 = IFE%d DAL_secure_ife_process_iq_packet cslPacket %#p, requestId %d; xref @180017cb4
+string @180036b70 =  ife%d pIfeCtx->ifeCSLPacketGroupQueue[%d] enqueue is failed with result = 0x%x; xref @1800186b8
+string @180036bc0 = ife%d pIfeCtx->ifeCSLPacketGroupQueue[%d]: Enqueued packet %#p with RequestId %d; xref @1800185d4
+
+uint FUN_180017c60(longlong param_1,uint *param_2)
+
+{
+  longlong lVar1;
+  longlong lVar2;
+  uint uVar3;
+  int iVar4;
+  int iVar5;
+  char cVar6;
+  bool bVar7;
+  code *pcVar8;
+  uint uVar9;
+  uint uVar10;
+  ulonglong uVar11;
+  char *pcVar12;
+  uint *puVar13;
+  uint uVar14;
+  uint *puVar15;
+  uint *puVar16;
+  ulonglong in_x5;
+  ulonglong in_x6;
+  ulonglong in_x7;
+  undefined8 *puVar17;
+  int *piVar18;
+  longlong lVar19;
+  longlong lVar20;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  code *extraout_x15_06;
+  uint *puVar21;
+  int iVar22;
+  uint uVar23;
+  uint *puVar24;
+  uint *puVar25;
+  uint *puVar26;
+  longlong lVar27;
+  longlong *plVar28;
+  uint local_2bc;
+  uint *local_2b0;
+  uint *local_2a8;
+  uint local_2a0;
+  uint local_29c;
+  uint *local_298;
+  uint *local_290;
+  uint *local_288;
+  longlong local_280;
+  uint *local_278;
+  uint local_270 [2];
+  longlong local_268;
+  undefined4 local_260;
+  undefined8 local_258;
+  uint local_248 [2];
+  longlong local_240;
+  undefined4 local_238;
+  undefined8 local_230;
+  uint local_220 [2];
+  uint *local_218;
+  int local_210;
+  uint *local_208;
+  uint local_1f8 [106];
+  
+  bVar7 = false;
+  local_2b0 = param_2;
+  FUN_1800290a0((undefined1 *)local_1f8,0,0x1a0);
+  puVar16 = *(uint **)(param_2 + 2);
+  puVar13 = (uint *)(ulonglong)*(uint *)(param_1 + 0xd0);
+  puVar15 = param_2;
+  FUN_180019e00(4,"IFE%d DAL_secure_ife_process_iq_packet cslPacket %#p, requestId %d",puVar13,
+                param_2,puVar16,in_x5,in_x6,in_x7);
+  uVar23 = *param_2;
+  puVar21 = param_2 + 9;
+  local_2a8 = param_2 + 6;
+  lVar27 = (ulonglong)param_2[6] + (ulonglong)param_2[0xc] * 0x20;
+  puVar17 = *(undefined8 **)((longlong)param_2 + lVar27 + 0x74);
+  uVar9 = *(uint *)((longlong)param_2 + lVar27 + 0x7c);
+  iVar22 = (int)*puVar17 + param_2[0xd] + uVar9;
+  puVar25 = (uint *)(puVar17[1] + (ulonglong)param_2[0xd] + (ulonglong)uVar9);
+  uVar9 = param_2[9];
+  if (uVar9 != 0) {
+    uVar10 = 0;
+    plVar28 = (longlong *)((longlong)param_2 + (ulonglong)param_2[8] + 0x74);
+    if (uVar9 != 0) {
+      do {
+        puVar15 = (uint *)(ulonglong)*(uint *)(plVar28 + 0x19);
+        if ((*(uint *)(plVar28 + 0x19) - 0x3000 < 0x22) && (*plVar28 == 0)) {
+          FUN_180019e00(2,
+                        " CSL Packet IO Buffer hmem is NULL, Dropping the packet :requestId %d, portId = 0x%x"
+                        ,*(undefined8 *)(param_2 + 2),puVar15,puVar16,in_x5,in_x6,in_x7);
+          return 0;
+        }
+        uVar10 = uVar10 + 1;
+        plVar28 = plVar28 + 0x26;
+      } while (uVar10 < uVar9);
+    }
+    uVar9 = FUN_1800189b8((longlong)param_2);
+    if (*(uint *)(param_1 + 0x32c4) != uVar9) {
+      FUN_180018b88(param_1,(longlong)param_2);
+      bVar7 = true;
+      uVar10 = FUN_1800189b8((longlong)param_2);
+      *(uint *)(param_1 + 0x32c4) = uVar10;
+      puVar15 = (uint *)0x0;
+      uVar9 = *puVar21;
+      if ((uVar9 != 0) && (uVar9 != 0)) {
+        puVar13 = (uint *)((longlong)param_2 + (ulonglong)param_2[8] + 0x13c);
+        do {
+          uVar14 = (uint)puVar15;
+          uVar3 = *puVar13;
+          in_x6 = (ulonglong)uVar3;
+          if ((uVar3 == 0x301c) || (uVar3 == 0x300f)) {
+            uVar14 = uVar14 | 0x20;
+          }
+          if (uVar3 == 0x300c) {
+            uVar14 = uVar14 | 0x40;
+          }
+          if (uVar3 == 0x300e) {
+            uVar14 = uVar14 | 0x80;
+          }
+          in_x7 = (ulonglong)(uVar14 | 0x200);
+          if (uVar3 == 0x3010) {
+            uVar14 = uVar14 | 0x200;
+          }
+          puVar15 = (uint *)(ulonglong)uVar14;
+          puVar13 = puVar13 + 0x4c;
+          uVar9 = uVar9 - 1;
+        } while (uVar9 != 0);
+      }
+      *(int *)(param_1 + 0x32cc) = (int)puVar15;
+      puVar13 = (uint *)(ulonglong)uVar10;
+      FUN_180019e00(4,"pIfeCtx->ifeGroupState = %d  pIfeCtx->statsGroupState = %d",puVar13,puVar15,
+                    puVar16,in_x5,in_x6,in_x7);
+    }
+    uVar10 = *puVar21;
+    uVar9 = 0;
+    if ((uVar10 != 0) && (uVar10 != 0)) {
+      piVar18 = (int *)((longlong)param_2 + (ulonglong)param_2[8] + 0x13c);
+      in_x7 = 0x3021;
+      do {
+        iVar4 = *piVar18;
+        piVar18 = piVar18 + 0x4c;
+        uVar10 = uVar10 - 1;
+        if (iVar4 == 0x3021) {
+          uVar9 = uVar9 | 1;
+        }
+        if (iVar4 == 0x3020) {
+          uVar9 = uVar9 | 2;
+        }
+        if (iVar4 == 0x301f) {
+          uVar9 = uVar9 | 4;
+        }
+      } while (uVar10 != 0);
+    }
+    if (*(uint *)(param_1 + 13000) != uVar9 && !bVar7) {
+      FUN_180018b88(param_1,(longlong)param_2);
+      uVar9 = *puVar21;
+      puVar13 = (uint *)0x0;
+      if ((uVar9 != 0) && (uVar9 != 0)) {
+        piVar18 = (int *)((longlong)param_2 + (ulonglong)param_2[8] + 0x13c);
+        in_x7 = 0x3021;
+        do {
+          iVar4 = *piVar18;
+          piVar18 = piVar18 + 0x4c;
+          uVar9 = uVar9 - 1;
+          uVar10 = (uint)puVar13;
+          if (iVar4 == 0x3021) {
+            uVar10 = (uint)puVar13 | 1;
+          }
+          if (iVar4 == 0x3020) {
+            uVar10 = uVar10 | 2;
+          }
+          if (iVar4 == 0x301f) {
+            uVar10 = uVar10 | 4;
+          }
+          puVar13 = (uint *)(ulonglong)uVar10;
+        } while (uVar9 != 0);
+      }
+      *(int *)(param_1 + 13000) = (int)puVar13;
+      FUN_180019e00(4,"pIfeCtx->ifeLitePortState = %d",puVar13,puVar15,puVar16,in_x5,in_x6,in_x7);
+      FUN_1800187e0(param_1,(longlong)param_2,puVar13,(ulonglong)puVar15,puVar16,in_x5,in_x6,in_x7);
+    }
+  }
+  if (*(int *)(param_1 + 0xd0) == *(int *)(param_1 + 0x3388)) {
+    local_258 = 0;
+    puVar13 = local_270;
+    local_270[0] = puVar25[6] + *puVar25 + iVar22;
+    local_268 = *(longlong *)(puVar25 + 10) + (ulonglong)*puVar25;
+    local_260 = 3;
+  }
+  else {
+    if (*(int *)(param_1 + 0xd0) != *(int *)(param_1 + 0x3384)) goto LAB_180017fd8;
+    local_230 = 0;
+    puVar13 = local_248;
+    local_248[0] = puVar25[6] + *puVar25 + puVar25[4] + iVar22;
+    local_240 = *(longlong *)(puVar25 + 10) + (ulonglong)*puVar25 + (ulonglong)puVar25[4];
+    local_238 = 3;
+  }
+  in_x6 = 0;
+  in_x5 = 0;
+  puVar16 = (uint *)0x0;
+  puVar15 = (uint *)0x28;
+  (*(code *)PTR__guard_check_icall_18002b360)
+            (**(undefined8 **)(param_1 + 0x48),*(undefined8 **)(param_1 + 0x48),1);
+  (*extraout_x15)();
+LAB_180017fd8:
+  iVar22 = 0;
+  uVar9 = 0;
+  if (0 < (int)param_2[7]) {
+    local_29c = 0;
+    puVar25 = local_2a8;
+    uVar10 = local_1f8[0];
+    local_298 = (uint *)(param_1 + 0x3388);
+    local_290 = puVar21;
+    local_278 = param_2 + 7;
+    do {
+      lVar27 = (ulonglong)*puVar25 + (longlong)iVar22 * 0x20;
+      puVar17 = *(undefined8 **)((longlong)param_2 + lVar27 + 0x74);
+      uVar14 = *(uint *)((longlong)param_2 + lVar27 + 0x7c);
+      uVar9 = (int)*puVar17 + uVar14;
+      puVar21 = (uint *)(puVar17[1] + (ulonglong)uVar14);
+      puVar15 = (uint *)(ulonglong)uVar9;
+      puVar13 = puVar21;
+      FUN_180019e00(4," cmd buffer Va = 0x%x, PA =0x%x",puVar21,puVar15,puVar16,in_x5,in_x6,in_x7);
+      iVar4 = *(int *)((longlong)param_2 + lVar27 + 0x84);
+      if (iVar4 != 0) {
+        iVar5 = *(int *)((longlong)param_2 + lVar27 + 0x8c);
+        if (iVar5 == 3) {
+LAB_1800181bc:
+          local_210 = iVar4 + -1;
+          in_x6 = 0;
+          in_x5 = 0;
+          puVar16 = (uint *)0x0;
+          puVar15 = (uint *)0x28;
+          puVar13 = local_220;
+          local_220[0] = uVar9;
+          local_218 = puVar21;
+          local_208 = param_2;
+          (*(code *)PTR__guard_check_icall_18002b360)
+                    (**(undefined8 **)(param_1 + 0x48),*(undefined8 **)(param_1 + 0x48),1);
+          (*extraout_x15_00)();
+        }
+        else {
+          if (iVar5 == 1) {
+            if (*local_298 == *(uint *)(param_1 + 0xd0)) goto LAB_1800181bc;
+          }
+          else if (iVar5 == 2) {
+            if (*(int *)(param_1 + 0x3384) == *(int *)(param_1 + 0xd0)) goto LAB_1800181bc;
+            goto LAB_180018204;
+          }
+          if ((iVar5 == 9 && (uVar23 & 0xffffff) == 3) &&
+             (*(uint *)(param_1 + 0x2f18) != *local_290)) {
+            FUN_180019e00(4," Dual Config will be programmed directly!!!",puVar13,puVar15,puVar16,
+                          in_x5,in_x6,in_x7);
+            puVar21 = puVar21 + 6;
+            uVar14 = *(uint *)(param_1 + 0xd0);
+            uVar9 = 0;
+            local_280 = *(longlong *)(param_1 + 0xf8);
+            local_2a0 = 1;
+            if (*local_298 != uVar14) {
+              local_2a0 = 2;
+            }
+            local_288 = (uint *)(param_1 + 0x33b0);
+            local_2a8 = puVar25;
+            do {
+              local_2bc = 0;
+              do {
+                puVar24 = (uint *)0x0;
+                lVar27 = 0;
+                puVar26 = local_288;
+                do {
+                  puVar25 = local_2a8;
+                  if ((*(int *)(param_1 + 0x3384) != *(int *)(param_1 + 0xd0) || uVar9 != 0) &&
+                     (puVar21[3] - 0x3000 < 0x22)) {
+                    uVar10 = puVar21[3] % 0x3000;
+                    if (0x21 < uVar10) {
+                      if (uVar10 < 0x22) {
+                        uVar10 = 0;
+                      }
+                      puVar13 = (uint *)(ulonglong)uVar10;
+                      FUN_180019e00(2,"Invalid Index - %d",puVar13,puVar15,puVar16,in_x5,in_x6,in_x7
+                                   );
+                      param_2 = local_2b0;
+                      uVar10 = local_1f8[0];
+                      goto LAB_180018204;
+                    }
+                    if (0x21 < uVar10) {
+                      uVar10 = 0;
+                    }
+                    puVar13 = (uint *)(ulonglong)uVar10;
+                    uVar10 = *(uint *)(param_1 + (longlong)(puVar13 + 0x2d0) * 4);
+                    lVar1 = lVar27 + (ulonglong)uVar10;
+                    lVar20 = (longlong)puVar24 * 0x100 + (ulonglong)uVar10 + local_280;
+                    if ((puVar21[3] < 0x300a) || (puVar21[3] - 0x3013 < 3)) {
+                      *(uint *)(lVar20 + (ulonglong)*(uint *)(param_1 + 0x3300)) = puVar21[1];
+                      lVar19 = 0;
+                      uVar10 = puVar21[1];
+                      lVar2 = lVar1 + (ulonglong)*(uint *)(param_1 + 0x3300);
+                      if (*(int *)(param_1 + 0xd0) == 0) {
+                        lVar19 = lVar2 + 0xb1000;
+                      }
+                      else if (*(int *)(param_1 + 0xd0) == 1) {
+                        lVar19 = lVar2 + 0xb8000;
+                      }
+                      *(longlong *)((lVar2 + 0x233f) * 0x10 + param_1) = lVar19;
+                      puVar13 = (uint *)(ulonglong)uVar14;
+                      *(uint *)(param_1 + lVar2 * 0x10 + 0x233f8) = uVar10;
+                      puVar16 = (uint *)(ulonglong)puVar21[1];
+                      puVar15 = (uint *)(ulonglong)puVar21[3];
+                      FUN_180019e00(4,"Stripe Config: IFE %d IFEPortID %d, bufferWidth = 0x%x",
+                                    puVar13,puVar15,puVar16,in_x5,in_x6,in_x7);
+                    }
+                    uVar10 = puVar21[3];
+                    if ((uVar10 == 0x3000) || (uVar10 == 0x3013)) {
+                      if (*(int *)(param_1 + 0x3328) == 0) goto LAB_180018494;
+                      *(uint *)(lVar20 + (ulonglong)*(uint *)(param_1 + 0x332c)) = *puVar21;
+                      lVar20 = 0;
+                      uVar10 = *puVar21;
+                      lVar1 = lVar1 + (ulonglong)*(uint *)(param_1 + 0x332c);
+                      if (*(int *)(param_1 + 0xd0) == 0) {
+                        lVar20 = lVar1 + 0xb1000;
+                      }
+                      else if (*(int *)(param_1 + 0xd0) == 1) {
+                        lVar20 = lVar1 + 0xb8000;
+                      }
+                      *(longlong *)((lVar1 + 0x233f) * 0x10 + param_1) = lVar20;
+                      *(uint *)(param_1 + lVar1 * 0x10 + 0x233f8) = uVar10;
+                      FUN_180019e00(4,"Stripe Config: IFE %d IFEPortID %d, tileConfig = 0x%x",
+                                    (ulonglong)uVar14,(ulonglong)puVar21[3],(ulonglong)puVar21[2],
+                                    in_x5,in_x6,in_x7);
+                      pcVar12 = "Stripe Config: IFE %d IFEPortID %d, hInit = 0x%x";
+                    }
+                    else {
+                      if (uVar10 == 0x3004) {
+                        if (*(int *)(param_1 + 0x3384) == *(int *)(param_1 + 0xd0)) {
+                          *(uint *)(lVar20 + (ulonglong)*(uint *)(param_1 + 0x32fc)) =
+                               *puVar21 + *puVar26;
+                          uVar10 = *puVar21;
+                          uVar3 = *puVar26;
+                          lVar20 = 0;
+                          lVar1 = lVar1 + (ulonglong)*(uint *)(param_1 + 0x32fc);
+                          if (*(int *)(param_1 + 0xd0) == 0) {
+                            lVar20 = lVar1 + 0xb1000;
+                          }
+                          else if (*(int *)(param_1 + 0xd0) == 1) {
+                            lVar20 = lVar1 + 0xb8000;
+                          }
+                          *(longlong *)((lVar1 + 0x233f) * 0x10 + param_1) = lVar20;
+                          puVar13 = (uint *)(ulonglong)uVar14;
+                          *(uint *)(param_1 + lVar1 * 0x10 + 0x233f8) = uVar10 + uVar3;
+                          in_x5 = (ulonglong)*puVar26;
+                          puVar16 = (uint *)(ulonglong)*puVar21;
+                          puVar15 = puVar24;
+                          FUN_180019e00(4,
+                                        "Stripe Config: IFE %d IFEFD Port Plane %d, pStripeCfg->offset = 0x%x, fdRightOffset = 0x%x"
+                                        ,puVar13,puVar24,puVar16,in_x5,in_x6,in_x7);
+                        }
+                        goto LAB_180018504;
+                      }
+LAB_180018494:
+                      *(uint *)(lVar20 + (ulonglong)*(uint *)(param_1 + 0x32fc)) = *puVar21;
+                      lVar20 = 0;
+                      uVar10 = *puVar21;
+                      lVar1 = lVar1 + (ulonglong)*(uint *)(param_1 + 0x32fc);
+                      if (*(int *)(param_1 + 0xd0) == 0) {
+                        lVar20 = lVar1 + 0xb1000;
+                      }
+                      else if (*(int *)(param_1 + 0xd0) == 1) {
+                        lVar20 = lVar1 + 0xb8000;
+                      }
+                      *(longlong *)((lVar1 + 0x233f) * 0x10 + param_1) = lVar20;
+                      *(uint *)(param_1 + lVar1 * 0x10 + 0x233f8) = uVar10;
+                      pcVar12 = "Stripe Config: IFE %d IFEPortID %d, imageAddrOffset = 0x%x";
+                    }
+                    puVar16 = (uint *)(ulonglong)*puVar21;
+                    puVar13 = (uint *)(ulonglong)uVar14;
+                    puVar15 = (uint *)(ulonglong)puVar21[3];
+                    FUN_180019e00(4,pcVar12,puVar13,puVar15,puVar16,in_x5,in_x6,in_x7);
+                  }
+LAB_180018504:
+                  uVar10 = (int)puVar24 + 1;
+                  puVar24 = (uint *)(ulonglong)uVar10;
+                  puVar21 = puVar21 + 4;
+                  puVar26 = puVar26 + 1;
+                  lVar27 = lVar27 + 0x100;
+                } while (uVar10 < 3);
+                local_2bc = local_2bc + 1;
+              } while (local_2bc < 0x22);
+              uVar9 = uVar9 + 1;
+              param_2 = local_2b0;
+              puVar25 = local_2a8;
+              uVar10 = local_1f8[0];
+            } while (uVar9 < local_2a0);
+          }
+        }
+LAB_180018204:
+        if (9 < uVar10) {
+          FUN_180019e00(2," IFE BL Array size is exxeeding!!!",puVar13,puVar15,puVar16,in_x5,in_x6,
+                        in_x7);
+          return 2;
+        }
+      }
+      iVar22 = iVar22 + 1;
+      uVar9 = local_29c;
+    } while (iVar22 < (int)*local_278);
+  }
+  if ((((uVar23 & 0xffffff) - 1 & 0xfffffffd) == 0) &&
+     (*(int *)(param_1 + 0x3388) == *(int *)(param_1 + 0xd0))) {
+    puVar25 = (uint *)0x0;
+    do {
+      uVar23 = (uint)puVar25;
+      uVar10 = 1 << (ulonglong)(uVar23 & 0x1f);
+      if (((uVar10 & *(uint *)(param_1 + 0x32c4)) != 0) ||
+         ((*(uint *)(param_1 + 0x32cc) & uVar10) != 0)) {
+        plVar28 = *(longlong **)(param_1 + ((longlong)puVar25 + 0x64a) * 8);
+        uVar9 = 0xe;
+        if (plVar28 != (longlong *)0x0) {
+          (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(*(longlong *)plVar28[4] + 8));
+          (*extraout_x15_01)();
+          if (*(uint *)(plVar28 + 3) < *(uint *)(plVar28 + 2)) {
+            uVar11 = (ulonglong)*(uint *)((longlong)plVar28 + 0x14);
+            FUN_1800179c0((undefined8 *)(*plVar28 + uVar11 * *(uint *)((longlong)plVar28 + 0x2c)),
+                          uVar11,&local_2b0,uVar11);
+            *(int *)(plVar28 + 3) = (int)plVar28[3] + 1;
+            *(int *)((longlong)plVar28 + 0x2c) = *(int *)((longlong)plVar28 + 0x2c) + 1;
+            uVar10 = *(uint *)(plVar28 + 2);
+            if (uVar10 == 0) {
+                    /* WARNING: Does not return */
+              pcVar8 = (code *)SoftwareBreakpoint(0xf004,0x180018300);
+              (*pcVar8)();
+            }
+            uVar14 = 0;
+            if (uVar10 != 0) {
+              uVar14 = *(uint *)((longlong)plVar28 + 0x2c) / uVar10;
+            }
+            uVar9 = 0;
+            *(uint *)((longlong)plVar28 + 0x2c) =
+                 *(uint *)((longlong)plVar28 + 0x2c) - uVar14 * uVar10;
+          }
+          else {
+            uVar9 = 1;
+          }
+          (*(code *)PTR__guard_check_icall_18002b360)
+                    (*(undefined8 *)(*(longlong *)plVar28[4] + 0x10));
+          (*extraout_x15_02)();
+          param_2 = local_2b0;
+        }
+        puVar13 = (uint *)(ulonglong)*(uint *)(param_1 + 0xd0);
+        if (uVar9 != 0) {
+          FUN_180019e00(2,
+                        " ife%d pIfeCtx->ifeCSLPacketGroupQueue[%d] enqueue is failed with result = 0x%x"
+                        ,puVar13,puVar25,(ulonglong)uVar9,in_x5,in_x6,in_x7);
+          return uVar9;
+        }
+        in_x5 = *(ulonglong *)(param_2 + 2);
+        puVar16 = param_2;
+        FUN_180019e00(4,
+                      "ife%d pIfeCtx->ifeCSLPacketGroupQueue[%d]: Enqueued packet %#p with RequestId %d"
+                      ,puVar13,puVar25,param_2,in_x5,in_x6,in_x7);
+        uVar9 = 0;
+        puVar15 = puVar25;
+      }
+      uVar23 = uVar23 + 1;
+      puVar25 = (uint *)(ulonglong)(byte)uVar23;
+    } while ((uVar23 & 0xff) < 0xd);
+  }
+  cVar6 = *(char *)(param_1 + 0x3378);
+  if (bVar7) {
+    if (*(char *)(param_1 + 0x6b559) != '\0') {
+      *(undefined4 *)(param_1 + 0x2d98) = 3;
+      *(undefined8 *)(param_1 + 0x2da8) = 1700000000;
+      *(undefined8 *)(param_1 + 0x2db0) = 1700000000;
+    }
+    if (cVar6 == '\0') {
+      puVar13 = (uint *)(param_1 + 0x10c);
+      (*(code *)PTR__guard_check_icall_18002b360)
+                (*(undefined8 *)(param_1 + 0x6b580),param_1,param_1 + 0x104);
+      (*extraout_x15_03)();
+      (*(code *)PTR__guard_check_icall_18002b360)
+                (*(undefined8 *)(param_1 + 0x6b588),param_1,param_2);
+      (*extraout_x15_04)();
+    }
+    uVar11 = FUN_1800187e0(param_1,(longlong)param_2,puVar13,(ulonglong)puVar15,puVar16,in_x5,in_x6,
+                           in_x7);
+    if ((uint)uVar11 != 0) {
+      FUN_180019e00(2," DAL_secure_ife_bus_start is failed with result = 0x%x",uVar11 & 0xffffffff,
+                    puVar15,puVar16,in_x5,in_x6,in_x7);
+      FUN_180019e00(2," CDM DAL_ife_start is failed with result = 0x%x",uVar11 & 0xffffffff,puVar15,
+                    puVar16,in_x5,in_x6,in_x7);
+      return (uint)uVar11;
+    }
+    *(undefined1 *)(param_1 + 0x118) = 1;
+    uVar9 = 0;
+    *(undefined1 *)(param_1 + 0x3378) = 1;
+    *(uint *)(param_1 + 0x2f18) = param_2[9];
+  }
+  if (cVar6 == '\0') {
+    FUN_180018cd0(param_1,(longlong)param_2);
+  }
+  else {
+    plVar28 = *(longlong **)(param_1 + 0x32b8);
+    uVar9 = 0xe;
+    if (plVar28 != (longlong *)0x0) {
+      (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(*(longlong *)plVar28[4] + 8));
+      (*extraout_x15_05)();
+      if (*(uint *)(plVar28 + 3) < *(uint *)(plVar28 + 2)) {
+        uVar11 = (ulonglong)*(uint *)((longlong)plVar28 + 0x14);
+        FUN_1800179c0((undefined8 *)(*plVar28 + uVar11 * *(uint *)((longlong)plVar28 + 0x2c)),uVar11
+                      ,&local_2b0,uVar11);
+        *(int *)(plVar28 + 3) = (int)plVar28[3] + 1;
+        *(int *)((longlong)plVar28 + 0x2c) = *(int *)((longlong)plVar28 + 0x2c) + 1;
+        uVar23 = *(uint *)(plVar28 + 2);
+        if (uVar23 == 0) {
+                    /* WARNING: Does not return */
+          pcVar8 = (code *)SoftwareBreakpoint(0xf004,0x180018778);
+          (*pcVar8)();
+        }
+        uVar10 = 0;
+        if (uVar23 != 0) {
+          uVar10 = *(uint *)((longlong)plVar28 + 0x2c) / uVar23;
+        }
+        uVar9 = 0;
+        *(uint *)((longlong)plVar28 + 0x2c) = *(uint *)((longlong)plVar28 + 0x2c) - uVar10 * uVar23;
+      }
+      else {
+        uVar9 = 1;
+      }
+      (*(code *)PTR__guard_check_icall_18002b360)(*(undefined8 *)(*(longlong *)plVar28[4] + 0x10));
+      (*extraout_x15_06)();
+    }
+  }
+  return uVar9;
+}
+
+
+
+//// FUN_1800196f0 @1800196f0 ////
+string @180037868 = %s:%d ISPTRUSTLET_GET_SWASF_DATA
+; xref @180019738
+string @180037890 = %s:%d ISPTRUSTLET_GET_SWABF_DATA
+; xref @1800197ac
+
+void FUN_1800196f0(int param_1,undefined8 *param_2,undefined8 param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  if (param_1 == 0) {
+    FUN_180019e00(4,"%s:%d ISPTRUSTLET_GET_SWASF_DATA\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\PostProcess\\PostProcess.cpp",
+                  0x5b,param_5,param_6,param_7,param_8);
+    FUN_180001628((undefined8 *)&DAT_18003d240,0x400,param_2,0x400);
+    FUN_180001628((undefined8 *)&DAT_18003d640,0x400,param_2 + 0x80,0x400);
+    DAT_18003da40 = *(undefined4 *)(param_2 + 0x100);
+  }
+  else if (param_1 == 1) {
+    FUN_180019e00(4,"%s:%d ISPTRUSTLET_GET_SWABF_DATA\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\PostProcess\\PostProcess.cpp",
+                  100,param_5,param_6,param_7,param_8);
+    FUN_180001628((undefined8 *)&DAT_18003da50,0x20,param_2,0x20);
+    DAT_18003da70 = *(undefined2 *)(param_2 + 4);
+  }
+  else {
+    FUN_180019e00(1,"%s:%d ISPTRUSTLET Module Data pased for unsupported parameter\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\PostProcess\\PostProcess.cpp",
+                  0x6b,param_5,param_6,param_7,param_8);
+  }
+  return;
+}
+
+

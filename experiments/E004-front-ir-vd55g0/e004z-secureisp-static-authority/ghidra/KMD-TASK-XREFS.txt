@@ -1,0 +1,1884 @@
+program=qccamsecureisp8380.sys
+sha256=47c944fa497477751073ec79a27a589a55e884178c1859d6f27388ec7af2ad53
+regex=WdfCompanionTargetSendTaskSynchronously|ISPTRUSTLET_|SecureISPDriver_SendCSLPacket|CameraKMDSecureISPEvtIoControl|ConfigSecureCamera|AddressMapUMD2KMD
+
+//// FUN_140001b08 @140001b08 ////
+string @14000c3e0 = >>> ENTERING ConfigSecureCamera()
+; xref @140001ba4
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+uint FUN_140001b08(undefined8 param_1,undefined8 param_2,byte param_3,undefined8 param_4,
+                  undefined8 param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  longlong lVar2;
+  undefined8 uVar3;
+  char *pcVar4;
+  ulonglong uVar5;
+  undefined8 *puVar6;
+  undefined8 *puVar7;
+  undefined8 uVar8;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  ulonglong uVar9;
+  undefined8 local_150;
+  undefined8 *puStack_148;
+  undefined8 local_140;
+  undefined8 local_130;
+  undefined8 *puStack_128;
+  undefined8 local_120;
+  undefined8 local_110;
+  ulonglong uStack_108;
+  undefined8 *local_100;
+  undefined8 uStack_f8;
+  undefined8 *local_f0;
+  undefined8 uStack_e8;
+  undefined8 local_e0;
+  undefined8 uStack_d8;
+  undefined8 local_d0;
+  ulonglong uStack_c8;
+  undefined8 local_c0;
+  undefined8 uStack_b8;
+  undefined8 local_b0;
+  undefined8 uStack_a8;
+  undefined8 uStack_a0;
+  undefined8 uStack_98;
+  undefined8 local_90;
+  undefined8 uStack_88;
+  undefined8 local_80;
+  undefined8 local_70;
+  undefined8 uStack_68;
+  undefined8 uStack_60;
+  undefined8 uStack_58;
+  
+  uVar9 = (ulonglong)param_3;
+  uStack_c8 = 0;
+  local_d0 = 0;
+  uStack_b8 = 0;
+  local_c0 = 0;
+  uStack_a8 = 0;
+  local_b0 = 0;
+  uStack_98 = 0;
+  uStack_a0 = 0;
+  uStack_88 = 0;
+  local_90 = 0;
+  local_80 = 0;
+  uStack_68 = 0;
+  local_70 = 0;
+  uStack_58 = 0;
+  uStack_60 = 0;
+  uStack_108 = 0;
+  local_110 = 0;
+  uStack_f8 = 0;
+  local_100 = (undefined8 *)0x0;
+  uStack_e8 = 0;
+  local_f0 = (undefined8 *)0x0;
+  uStack_d8 = 0;
+  local_e0 = 0;
+  (*(code *)PTR__guard_check_icall_1400102a8)
+            (*(undefined8 *)(DAT_140012478 + 0x650),DAT_1400124a8,DAT_14002e708,PTR_DAT_1400120c0);
+  lVar2 = (*extraout_x15)();
+  pcVar4 = ">>> ENTERING ConfigSecureCamera()\n";
+  uVar3 = 0xd;
+  FUN_140006a20(3,0x14000c230,0xd,">>> ENTERING ConfigSecureCamera()\n",param_5,param_6,param_7,
+                param_8);
+  local_d0 = DAT_140001d08;
+  uStack_c8 = uVar9;
+  local_c0 = param_2;
+  if (*(longlong *)(lVar2 + 0x98) == 0) {
+    FUN_140008e28(&DAT_140010450," IoTarget is NULL",uVar3,pcVar4,param_5,param_6,param_7,param_8);
+  }
+  else {
+    uStack_108 = uStack_108 & 0xffffffff;
+    local_110 = CONCAT44(local_110._4_4_,2);
+    local_100 = &local_d0;
+    uStack_f8 = 0x58;
+    local_f0 = &local_70;
+    uStack_e8 = 0x20;
+    local_130 = 1;
+    puStack_128 = &local_110;
+    local_120 = 0x30;
+    local_150 = 1;
+    puStack_148 = &local_e0;
+    local_140 = 0x10;
+    uVar8 = 0;
+    uVar3 = 0;
+    puVar7 = &local_150;
+    puVar6 = &local_130;
+    uVar5 = (ulonglong)DAT_140001d10;
+    (*(code *)PTR__guard_check_icall_1400102a8)
+              (*(undefined8 *)(DAT_140012478 + 0x5d0),DAT_1400124a8,*(undefined8 *)(lVar2 + 0x98),0)
+    ;
+    uVar1 = (*extraout_x15_00)();
+    if (-1 < (int)uVar1) {
+      FUN_140008e28(&DAT_140010528,
+                    "Successfully Config Secure Camera - SecureLaneCpCtrl = 0x%p, Protect = %d",
+                    param_2,uVar9,puVar6,puVar7,uVar3,uVar8);
+      return uVar1;
+    }
+    FUN_140008e28(&DAT_140010478,"WdfIoTargetSendIoctlSynchronously did not pass with status %d",
+                  (ulonglong)uVar1,uVar5,puVar6,puVar7,uVar3,uVar8);
+  }
+  return 0xc0000001;
+}
+
+
+
+//// FUN_140002030 @140002030 ////
+string @14000c6e8 = CameraKMDSecureISPEvtIoControl: 'CAMERA_DEVICE_IRPCMD_GETFNTABLE' called with invalid parameter
+; xref @140002274
+string @14000c750 = CameraKMDSecureISPEvtIoControl: Unsupported IOCTL code %x
+; xref @140002224
+
+void FUN_140002030(undefined8 param_1,undefined8 param_2,longlong param_3,longlong param_4,
+                  undefined8 *param_5,undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  int iVar1;
+  int iVar2;
+  undefined8 *puVar3;
+  undefined8 uVar4;
+  longlong lVar5;
+  undefined4 uVar6;
+  char *pcVar7;
+  undefined8 *puVar8;
+  code *extraout_x15;
+  code *extraout_x15_00;
+  code *extraout_x15_01;
+  code *extraout_x15_02;
+  code *extraout_x15_03;
+  code *extraout_x15_04;
+  code *extraout_x15_05;
+  undefined8 *local_60;
+  undefined8 local_58;
+  undefined8 local_50;
+  undefined8 uStack_48;
+  
+  iVar1 = (int)param_5;
+  puVar8 = param_5;
+  (*(code *)PTR__guard_check_icall_1400102a8)
+            (*(undefined8 *)(DAT_140012478 + 0x650),DAT_1400124a8,param_1,PTR_DAT_1400120e8);
+  puVar3 = (undefined8 *)(*extraout_x15)();
+  (*(code *)PTR__guard_check_icall_1400102a8)
+            (*(undefined8 *)(DAT_140012478 + 0x650),DAT_1400124a8,*puVar3,PTR_DAT_1400120c0);
+  (*extraout_x15_00)();
+  local_50 = 0;
+  uStack_48 = 0;
+  local_60 = (undefined8 *)0x0;
+  local_58 = 0;
+  if (param_4 == 0) {
+LAB_140002118:
+    if (param_3 != 0) {
+      puVar8 = &uStack_48;
+      (*(code *)PTR__guard_check_icall_1400102a8)
+                (*(undefined8 *)(DAT_140012478 + 0x870),DAT_1400124a8,param_2,0,&local_60);
+      iVar2 = (*extraout_x15_02)();
+      if (iVar2 < 0) {
+        pcVar7 = "CameraKMDSecureISPUnpackRequest WdfRequestRetrieveOutputBuffer failed!\n";
+        goto LAB_140002170;
+      }
+    }
+    (*(code *)PTR__guard_check_icall_1400102a8)
+              (*(undefined8 *)(DAT_140012478 + 0x8a8),DAT_1400124a8,param_2);
+    uVar4 = (*extraout_x15_03)();
+    (*(code *)PTR__guard_check_icall_1400102a8)
+              (*(undefined8 *)(DAT_140012478 + 0x650),DAT_1400124a8,uVar4,PTR_DAT_140012110);
+    lVar5 = (*extraout_x15_04)();
+    puVar3 = local_60;
+    if (lVar5 != 0) {
+      if (iVar1 == DAT_140002340) {
+        if (local_60 != (undefined8 *)0x0) {
+          if ((undefined8 *)*local_60 == (undefined8 *)0x0) {
+            if (*(longlong *)(lVar5 + 0x18) != 0) {
+              FUN_140006760(*(longlong *)(lVar5 + 0x18));
+            }
+          }
+          else {
+            *(undefined8 *)*local_60 = *(undefined8 *)(lVar5 + 0x18);
+          }
+          *(undefined8 *)(lVar5 + 0x79020) = local_58;
+          *(undefined4 *)(puVar3 + 3) = 0;
+        }
+      }
+      else {
+        if (iVar1 == DAT_140002344) {
+          pcVar7 = "IOCTL_KMD_ISP_ACTIVATE_CLOCKS\n";
+        }
+        else {
+          if (iVar1 != DAT_140002348) {
+            if (iVar1 != DAT_14000234c) {
+              FUN_140006a20(0,0x14000c230,0xd,
+                            "CameraKMDSecureISPEvtIoControl: Unsupported IOCTL code %x\n",
+                            (ulonglong)param_5 & 0xffffffff,param_6,param_7,param_8);
+              goto LAB_140002240;
+            }
+            if (local_60 == (undefined8 *)0x0) {
+              FUN_140006a20(0,0x14000c230,0xd,
+                            "CameraKMDSecureISPEvtIoControl: \'CAMERA_DEVICE_IRPCMD_GETFNTABLE\' called with invalid parameter\n"
+                            ,puVar8,param_6,param_7,param_8);
+              uVar6 = DAT_140002350;
+              goto LAB_1400022fc;
+            }
+            *local_60 = *(undefined8 *)(lVar5 + 0x10);
+            *(undefined1 *)(local_60 + 1) = 1;
+            local_60[2] = lVar5;
+            local_60[3] = FUN_140001d20;
+            goto LAB_1400022f8;
+          }
+          pcVar7 = "IOCTL_KMD_ISP_DEACTIVATE_CLOCKS\n";
+        }
+        FUN_140006a20(3,0x14000c230,0xd,pcVar7,puVar8,param_6,param_7,param_8);
+      }
+LAB_1400022f8:
+      uVar6 = 0;
+      goto LAB_1400022fc;
+    }
+  }
+  else {
+    puVar8 = &local_50;
+    (*(code *)PTR__guard_check_icall_1400102a8)
+              (*(undefined8 *)(DAT_140012478 + 0x868),DAT_1400124a8,param_2,0,&local_58);
+    iVar2 = (*extraout_x15_01)();
+    if (-1 < iVar2) goto LAB_140002118;
+    pcVar7 = "CameraKMDSecureISPUnpackRequest WdfRequestRetrieveInputBuffer failed!\n";
+LAB_140002170:
+    FUN_140006a20(0,0x14000c230,0xd,pcVar7,puVar8,param_6,param_7,param_8);
+  }
+LAB_140002240:
+  uVar6 = 0xc0000001;
+LAB_1400022fc:
+  (*(code *)PTR__guard_check_icall_1400102a8)
+            (*(undefined8 *)(DAT_140012478 + 0x838),DAT_1400124a8,param_2,uVar6);
+  (*extraout_x15_05)();
+  return;
+}
+
+
+
+//// FUN_140003350 @140003350 ////
+string @14000ce80 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded for PatchAddr for src
+; xref @1400037c8
+string @14000ced0 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed for PatchAddr, status = 0x%08x 
+; xref @140003848
+string @14000cf28 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded for PatchAddr for dst
+; xref @140003808
+string @14000cf78 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed for PatchAddr for dst, status = 0x%08x 
+; xref @140003830
+string @14000d0e8 = SendTask - ISPTRUSTLET_PROCESS_DMI_BUFFER Succeeded for dmi buffers
+; xref @1400038e8
+string @14000d130 = SendTask - ISPTRUSTLET_PROCESS_DMI_BUFFER Failed for dmi buffers, status = 0x%08x 
+; xref @140003960
+string @14000d3d0 = ISPTRUSTLET_GET_SWABF_DATA failed
+; xref @140003cb8
+string @14000d420 = ISPTRUSTLET_GET_SWASF_DATA failed
+; xref @140003c6c
+string @14000d690 = SecureISPDriver_SendCSLPacket; xref @140003494
+string @14000d6b0 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded for cmd buffers
+; xref @140003528
+string @14000d6f8 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed for cmd buffers, status = 0x%08x 
+; xref @140003550
+string @14000d750 = SendTask - ISPTRUSTLET_PROCESS_CMD_BUFFER Succeeded for cmd buffers
+; xref @1400035a0
+string @14000d798 = SendTask - ISPTRUSTLET_PROCESS_CMD_BUFFER Failed for cmd buffers, status = 0x%08x 
+; xref @1400035c8
+string @14000d828 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded
+; xref @140003fe0
+string @14000d860 = SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed, status = 0x%08x 
+; xref @14000400c
+string @14000d8a8 = SendTask - ISPTRUSTLET_PROCESS_CSL_PACKET Succeeded
+; xref @140004068
+string @14000d938 = SendTask - ISPTRUSTLET_PROCESS_CSL_PACKET Failed, status = 0x%08x 
+; xref @1400041d4
+string @14000dc58 = SendTask - ISPTRUSTLET_START Succeeded
+; xref @140004708
+string @14000dca0 = SendTask - ISPTRUSTLET_START Failed, status = 0x%08x 
+; xref @140004750
+string @14000e638 = SendTask - ISPTRUSTLET_NOTIFY_EVENT Succeeded
+; xref @140004928
+string @14000e668 = SendTask - ISPTRUSTLET_NOTIFY_EVENT Failed, status = 0x%08x 
+; xref @140004954
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Type propagation algorithm not settling */
+
+ulonglong FUN_140003350(ulonglong param_1,undefined8 param_2,ulonglong *param_3,undefined8 param_4,
+                       char *param_5,undefined8 *param_6,ulonglong **param_7,ulonglong param_8)
+
+{
+  longlong lVar1;
+  byte bVar2;
+  char cVar3;
+  code *pcVar4;
+  undefined1 uVar5;
+  bool bVar6;
+  uint uVar7;
+  uint uVar8;
+  uint uVar9;
+  int iVar10;
+  uint uVar11;
+  ulonglong uVar12;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  undefined8 extraout_x1_04;
+  undefined8 extraout_x1_05;
+  undefined8 extraout_x1_06;
+  undefined8 uVar13;
+  longlong lVar14;
+  ulonglong **ppuVar15;
+  undefined8 uVar16;
+  char *pcVar17;
+  undefined *puVar18;
+  ulonglong *puVar19;
+  uint *puVar20;
+  undefined8 uVar21;
+  undefined4 *puVar22;
+  uint *puVar23;
+  char *pcVar24;
+  undefined8 *puVar25;
+  ulonglong uVar26;
+  longlong lVar27;
+  int iVar28;
+  undefined4 uVar29;
+  longlong lVar30;
+  longlong lVar31;
+  ulonglong extraout_x15;
+  ulonglong **ppuVar32;
+  longlong *plVar33;
+  int *piVar34;
+  undefined8 *puVar35;
+  ulonglong **ppuVar36;
+  undefined1 auVar37 [16];
+  uint local_1c0;
+  int local_1bc;
+  uint local_1b8 [2];
+  longlong local_1b0;
+  ulonglong *local_1a8;
+  ulonglong *local_1a0;
+  ulonglong local_198;
+  undefined4 local_190;
+  undefined4 local_18c;
+  undefined4 local_188;
+  undefined4 local_184;
+  undefined4 local_180;
+  undefined4 local_17c;
+  undefined4 local_178;
+  undefined4 local_174;
+  undefined4 local_170;
+  undefined4 local_16c;
+  undefined4 local_168;
+  uint local_164;
+  undefined8 local_160;
+  ulonglong *local_158;
+  ulonglong local_150;
+  ulonglong *local_148;
+  undefined8 uStack_140;
+  int local_138;
+  longlong local_130;
+  undefined8 *puStack_128;
+  ulonglong **local_120;
+  ulonglong uStack_118;
+  longlong local_110;
+  longlong lStack_108;
+  longlong local_100;
+  longlong lStack_f8;
+  longlong local_f0;
+  undefined8 uStack_e8;
+  undefined8 local_e0;
+  undefined8 uStack_d8;
+  undefined8 local_d0;
+  undefined8 uStack_c8;
+  undefined8 uStack_c0;
+  undefined8 uStack_b8;
+  undefined8 local_b0;
+  undefined8 uStack_a8;
+  longlong local_a0;
+  undefined8 *puStack_98;
+  undefined8 local_90;
+  undefined4 local_88;
+  undefined8 uStack_84;
+  undefined8 uStack_7c;
+  
+  puVar35 = (undefined8 *)((ulonglong)param_6 & 0xffffffff);
+  if ((param_1 == 0) || ((uVar11 = (uint)param_4, param_3 == (ulonglong *)0x0 && (uVar11 != 0)))) {
+    return 0x1d;
+  }
+  uVar8 = (uint)param_6;
+  if (param_5 == (char *)0x0) {
+    if (uVar8 != 0) {
+      return 0x1d;
+    }
+  }
+  else if (param_7 == (ulonglong **)0x0) {
+    return 0x1d;
+  }
+  switch((int)param_2) {
+  case 0x801:
+    FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_GetInitParams",param_6,param_7,param_8);
+    break;
+  case 0x802:
+    param_5 = "SecureISPDriver_DeviceConfig";
+    puVar18 = &DAT_14000d478;
+    uVar16 = 0xd;
+    FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_DeviceConfig",param_6,param_7,param_8);
+    if (((param_3 == (ulonglong *)0x0) || (uVar11 == 0)) || (uVar11 < 0x20)) {
+      pcVar17 = "Invalid input parameters\n";
+      goto LAB_140004988;
+    }
+    DAT_14002e718 = FUN_140005c00;
+    DAT_14002e710 = FUN_140005c50;
+    DAT_1400124d8 = param_1;
+    uVar11 = FUN_140005c98(param_1 + 0x48,extraout_x1_02,uVar16,puVar18,(longlong)param_5,
+                           (undefined *)param_6,(longlong)param_7,param_8);
+    uVar12 = (ulonglong)uVar11;
+    if (uVar11 != 0) {
+      pcVar17 = "Failed to initialize SecureISPInterruptThread, result = 0x%08x....\n\n";
+      goto LAB_14000460c;
+    }
+    uVar11 = FUN_140005c98(param_1 + 0x90,extraout_x1_03,uVar16,puVar18,(longlong)param_5,
+                           (undefined *)param_6,(longlong)param_7,param_8);
+    lVar14 = DAT_140004a10;
+    uVar12 = (ulonglong)uVar11;
+    if (uVar11 != 0) {
+      pcVar17 = "Failed to initialize SecureISPProcessThread, result = 0x%08x....\n\n";
+      goto LAB_14000460c;
+    }
+    local_e0 = 0;
+    uStack_d8 = 0;
+    local_f0 = DAT_140004a10;
+    uStack_e8 = 0;
+    if ((undefined8 *)(param_1 + 0xe8) == (undefined8 *)0x0) {
+      uVar12 = 0xe;
+    }
+    else {
+      plVar33 = (longlong *)FUN_140009338(0x1d,0x500);
+      if (plVar33 != (longlong *)0x0) {
+        FUN_14000aaa0((undefined1 *)(plVar33 + 3),0,0x4e8);
+        *plVar33 = (longlong)(plVar33 + 10);
+        plVar33[1] = (longlong)(plVar33 + 7);
+        plVar33[2] = lVar14;
+        *(undefined4 *)(plVar33 + 3) = 0;
+        *(undefined4 *)((longlong)plVar33 + 0x2c) = 0;
+        *(undefined4 *)(plVar33 + 6) = 0;
+        KeInitializeSpinLock(plVar33 + 4);
+        *(undefined8 *)(param_1 + 0xe8) = plVar33;
+        bVar6 = FUN_140009200((longlong *)(param_1 + 0xf0));
+        if (bVar6) {
+          pcVar17 = "Failed to create mutex, result = 0x%08x....\n\n";
+          uVar12 = 1;
+          goto LAB_14000460c;
+        }
+        local_1c0 = 0;
+        local_16c = 0;
+        puVar22 = &local_16c;
+        iVar10 = FUN_140031708(0x14000ca68,0x14000ca38,(undefined8 *)&local_1c0,puVar18,puVar22);
+        uVar16 = 0xd;
+        if (iVar10 < 0) {
+          pcVar17 = "EnableSecureFrameDump not present, marking it as 0\n";
+          auVar37 = FUN_140006a20(3,0x14000c230,0xd,
+                                  "EnableSecureFrameDump not present, marking it as 0\n",puVar22,
+                                  param_6,param_7,param_8);
+        }
+        else {
+          pcVar17 = "EnableSecureFrameDump = %d\n";
+          auVar37 = FUN_140006a20(3,0x14000c230,0xd,"EnableSecureFrameDump = %d\n",
+                                  (ulonglong)local_1c0,param_6,param_7,param_8);
+          puVar22 = (undefined4 *)(ulonglong)local_1c0;
+          if (local_1c0 < 4) {
+            DAT_140012670 = local_1c0;
+          }
+          else {
+            pcVar17 = "EnableSecureFrameDump %d is invalid value . It can only be between 0 to 3\n";
+            uVar16 = 0xd;
+            auVar37 = FUN_140006a20(3,0x14000c230,0xd,
+                                    "EnableSecureFrameDump %d is invalid value . It can only be between 0 to 3\n"
+                                    ,puVar22,param_6,param_7,param_8);
+          }
+        }
+        iVar10 = FUN_1400097d0(auVar37._0_8_,auVar37._8_8_,uVar16,pcVar17,puVar22,param_6,param_7,
+                               param_8);
+        piVar34 = (int *)param_3[1];
+        if (iVar10 == 0x22b) {
+          iVar10 = 0x4004;
+LAB_1400043ac:
+          if (*piVar34 == iVar10) {
+            *piVar34 = 0x4005;
+            puVar22 = (undefined4 *)0x4005;
+            FUN_140006a20(3,0x14000c230,0xd,"pIfeDeviceresourceType changed to 0x%x\n",0x4005,
+                          param_6,param_7,param_8);
+          }
+        }
+        else if (iVar10 == 0x27b) {
+          iVar10 = 0x4002;
+          goto LAB_1400043ac;
+        }
+        iVar10 = (int)param_3[2];
+        if (*(longlong *)(param_1 + 0x38) == 0) {
+          puVar35 = (undefined8 *)FUN_140009338(0xb2,iVar10);
+          *(undefined8 **)(param_1 + 0x38) = puVar35;
+          if (puVar35 == (undefined8 *)0x0) {
+            pcVar17 = "m_pISPConfig is NULL\n";
+          }
+          else {
+            uVar16 = FUN_140009d60(puVar35,(longlong)iVar10,(undefined8 *)piVar34,(longlong)iVar10);
+            if ((int)uVar16 == 0) {
+              *(int *)(param_1 + 0x40) = iVar10;
+              goto LAB_140004450;
+            }
+            pcVar17 = "memcpy Failed\n";
+          }
+          FUN_140006a20(0,0x14000c230,0xd,pcVar17,puVar22,param_6,param_7,param_8);
+          return 2;
+        }
+LAB_140004450:
+        FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_PowerOn",param_6,param_7,param_8);
+        if ((DAT_140012500 == (uint *)0x0) || (DAT_1400124f8 == 0)) {
+          uVar16 = 0;
+          FUN_140006a20(3,0x14000e818,9,"-->DeviceActivate. incorrect CompId = %d\n",0,param_6,
+                        param_7,param_8);
+        }
+        else {
+          pcVar17 = "-->DeviceActivate. CompId = %d nRefCount = %d\n";
+          param_6 = (undefined8 *)(ulonglong)*DAT_140012500;
+          uVar16 = 0;
+          uVar21 = 9;
+          FUN_140006a20(3,0x14000e818,9,"-->DeviceActivate. CompId = %d nRefCount = %d\n",0,param_6,
+                        param_7,param_8);
+          FUN_140009260(DAT_1400124e8,extraout_x1_04,uVar21,pcVar17,uVar16,param_6,param_7,param_8);
+          puVar23 = DAT_140012500;
+          do {
+            uVar11 = *puVar23;
+            cVar3 = '\x01';
+            bVar6 = (bool)ExclusiveMonitorPass(puVar23,0x10);
+            if (bVar6) {
+              *puVar23 = uVar11 + 1;
+              cVar3 = ExclusiveMonitorsStatus();
+            }
+          } while (cVar3 != '\0');
+          DataMemoryBarrier(2,3);
+          uVar13 = extraout_x1_05;
+          if (uVar11 + 1 == 1) {
+            uVar21 = 1;
+            PoFxActivateComponent(DAT_1400124f0,0);
+            uVar13 = extraout_x1_06;
+          }
+          FUN_1400092b0(DAT_1400124e8,uVar13,uVar21,pcVar17,uVar16,param_6,param_7,param_8);
+        }
+        *(undefined4 *)(param_1 + 0x28) = 2;
+        FUN_140006a20(3,0x14000c230,0xd,"m_PowerState - PowerState_ON\n",uVar16,param_6,param_7,
+                      param_8);
+        puVar22 = &local_168;
+        uVar16 = 4;
+        local_168 = 0;
+        puVar23 = &local_164;
+        uVar11 = FUN_140004a90(0,0,*(undefined8 *)(param_1 + 0x38),*(undefined4 *)(param_1 + 0x40),
+                               puVar23,(undefined8 *)0x4,puVar22,param_8);
+        if ((undefined8 *)param_3[3] == (undefined8 *)0x0) {
+          FUN_140006a20(0,0x14000c230,0xd,"pDeviceResource->pReturnParams is NULL\n",puVar23,uVar16,
+                        puVar22,param_8);
+        }
+        else {
+          uStack_84 = 0;
+          uStack_7c = 0x100000000;
+          local_90 = 8;
+          local_88 = 1;
+          FUN_140009d60((undefined8 *)param_3[3],0x1c,&local_90,0x1c);
+        }
+        if (-1 < (int)uVar11) {
+          FUN_140006a20(3,0x14000c230,0xd,
+                        "Successfully initialized ISPTrustlet, IFE_HW_VERSION -  0x%08x\n",
+                        (ulonglong)local_164,uVar16,puVar22,param_8);
+          return 0;
+        }
+        if (-1 < (int)uVar11) {
+          uVar11 = 0;
+        }
+        FUN_140006a20(0,0x14000c230,0xd,"Failed to initialize ISPTrustlet, status = 0x%08x....\n\n",
+                      (ulonglong)uVar11,uVar16,puVar22,param_8);
+        return 1;
+      }
+      uVar12 = 2;
+    }
+    pcVar17 = "Failed to initialize packetQueue, result = 0x%08x....\n\n";
+LAB_14000460c:
+    FUN_140006a20(0,0x14000c230,0xd,pcVar17,uVar12,param_6,param_7,param_8);
+    FUN_140004f10(param_1,0,0,(char *)0x0,0,param_6,(undefined4 *)param_7,param_8);
+    return uVar12;
+  case 0x803:
+    pcVar24 = "SecureISPDriver_SendCSLPacket";
+    FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_SendCSLPacket",param_6,param_7,param_8);
+    if (((param_3 != (ulonglong *)0x0) && (uVar11 != 0)) && (0x7b < uVar11)) {
+      if (0 < *(int *)((longlong)param_3 + 0x1c)) {
+        local_1bc = 0;
+        local_1c0 = uVar8;
+        local_1a8 = (ulonglong *)param_5;
+        local_1a0 = param_3;
+        local_198 = param_1;
+        do {
+          local_1b0 = (ulonglong)(uint)local_1a0[3] + (longlong)local_1bc * 0x20 +
+                      (longlong)local_1a0;
+          puVar35 = *(undefined8 **)(local_1b0 + 0x74);
+          if (puVar35 != (undefined8 *)0x0) {
+            puVar25 = (undefined8 *)(ulonglong)local_1c0;
+            puVar22 = &local_190;
+            local_190 = 0;
+            puVar19 = local_1a8;
+            uVar11 = FUN_140004a90(4,0,puVar35,0x60,local_1a8,puVar25,puVar22,param_8);
+            if ((int)uVar11 < 0) {
+              if (-1 < (int)uVar11) {
+                uVar11 = 0;
+              }
+              FUN_140006a20(0,0x14000c230,0xd,
+                            "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed for cmd buffers, status = 0x%08x \n"
+                            ,(ulonglong)uVar11,puVar25,puVar22,param_8);
+            }
+            else {
+              FUN_140006a20(3,0x14000c230,0xd,
+                            "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded for cmd buffers\n"
+                            ,puVar19,puVar25,puVar22,param_8);
+            }
+            param_7 = (ulonglong **)&local_18c;
+            local_18c = 0;
+            param_6 = (undefined8 *)(ulonglong)local_1c0;
+            puVar19 = local_1a8;
+            uVar11 = FUN_140004a90(5,0,puVar35[1] + (ulonglong)*(uint *)(local_1b0 + 0x7c),
+                                   *(int *)(local_1b0 + 0x84) + 0x60,local_1a8,param_6,param_7,
+                                   param_8);
+            if ((int)uVar11 < 0) {
+              if (-1 < (int)uVar11) {
+                uVar11 = 0;
+              }
+              FUN_140006a20(0,0x14000c230,0xd,
+                            "SendTask - ISPTRUSTLET_PROCESS_CMD_BUFFER Failed for cmd buffers, status = 0x%08x \n"
+                            ,(ulonglong)uVar11,param_6,param_7,param_8);
+            }
+            else {
+              FUN_140006a20(3,0x14000c230,0xd,
+                            "SendTask - ISPTRUSTLET_PROCESS_CMD_BUFFER Succeeded for cmd buffers\n",
+                            puVar19,param_6,param_7,param_8);
+            }
+            if (*(int *)(local_1b0 + 0x8c) != 0xc) {
+              bVar6 = true;
+              uVar12 = 0;
+              param_8 = (ulonglong)((int)*puVar35 + *(uint *)(local_1b0 + 0x7c));
+              ppuVar15 = (ulonglong **)(puVar35[1] + (ulonglong)*(uint *)(local_1b0 + 0x7c));
+              uVar11 = (*(int *)(local_1b0 + 0x84) - 1U & 0xfffff) + 1 >> 2;
+              pcVar17 = "CopyIndirectBuffer";
+              pcVar24 = "Enter %s: len = %d, VA = %p & PA = 0x%x\n";
+              param_6 = (undefined8 *)(ulonglong)(*(int *)(local_1b0 + 0x84) - 1);
+              param_7 = ppuVar15;
+              FUN_140006a20(0,0x14000c230,0xd,"Enter %s: len = %d, VA = %p & PA = 0x%x\n",
+                            "CopyIndirectBuffer",param_6,ppuVar15,param_8);
+              if (uVar11 != 0) {
+                do {
+                  bVar2 = *(byte *)((longlong)ppuVar15 + 3);
+                  switch(bVar2) {
+                  case 1:
+                  case 10:
+                  case 0xb:
+                    ppuVar32 = (ulonglong **)((longlong)ppuVar15 + 0xc);
+                    uVar11 = uVar11 - 3;
+                    ppuVar36 = (ulonglong **)0x0;
+                    uVar8 = *(ushort *)ppuVar15 + 1;
+                    uVar9 = *(uint *)((longlong)ppuVar15 + 4);
+                    lVar14 = uVar12 * 0x18 + (ulonglong)(uint)param_3[5];
+                    if ((ulonglong)((longlong)param_3 + lVar14 + 0x8c) <=
+                        (longlong)param_3 + (ulonglong)*(uint *)((longlong)param_3 + 4)) {
+                      param_8 = *(ulonglong *)((longlong)param_3 + lVar14 + 0x80);
+                      uVar26 = (ulonglong)*(uint *)((longlong)param_3 + lVar14 + 0x7c);
+                      uVar16 = *(undefined8 *)((longlong)param_3 + lVar14 + 0x74);
+                      FUN_140006a20(0,0x14000c230,0xd,
+                                    "CSLAddrPatch[%d] : hDstBuffer = %p, dstOffset = %d, hSrcBuffer = %p, srcOffset = %d\n"
+                                    ,uVar12,uVar16,uVar26,param_8);
+                      uVar7 = *(uint *)((longlong)param_3 + lVar14 + 0x7c);
+                      lVar31 = *(longlong *)(*(longlong *)((longlong)param_3 + lVar14 + 0x74) + 8);
+                      iVar10 = (int)**(undefined8 **)((longlong)param_3 + lVar14 + 0x80) +
+                               *(int *)((longlong)param_3 + lVar14 + 0x88);
+                      if (iVar10 != *(int *)(lVar31 + (ulonglong)uVar7)) {
+                        *(int *)(lVar31 + (ulonglong)uVar7) = iVar10;
+                      }
+                      ppuVar36 = (ulonglong **)
+                                 (*(longlong *)
+                                   (*(longlong *)((longlong)param_3 + lVar14 + 0x80) + 8) +
+                                 (ulonglong)*(uint *)((longlong)param_3 + lVar14 + 0x88));
+                      FUN_140006a20(0,0x14000c230,0xd,"DMIVa = %p\n",ppuVar36,uVar16,uVar26,param_8)
+                      ;
+                    }
+                    local_188 = 0;
+                    puVar22 = &local_188;
+                    uVar21 = 0;
+                    uVar16 = 0;
+                    uVar7 = FUN_140004a90(4,0,*(undefined8 *)((longlong)param_3 + lVar14 + 0x80),
+                                          0x60,0,(undefined8 *)0x0,puVar22,param_8);
+                    if ((int)uVar7 < 0) {
+                      if (-1 < (int)uVar7) {
+                        uVar7 = 0;
+                      }
+                      pcVar17 = 
+                      "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed for PatchAddr, status = 0x%08x \n"
+                      ;
+LAB_14000384c:
+                      FUN_140006a20(0,0x14000c230,0xd,pcVar17,(ulonglong)uVar7,uVar21,puVar22,
+                                    param_8);
+                      ppuVar36 = (ulonglong **)0x0;
+                    }
+                    else {
+                      FUN_140006a20(3,0x14000c230,0xd,
+                                    "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded for PatchAddr for src\n"
+                                    ,uVar16,uVar21,puVar22,param_8);
+                      puVar22 = &local_184;
+                      uVar21 = 0;
+                      local_184 = 0;
+                      uVar16 = 0;
+                      uVar7 = FUN_140004a90(4,0,*(undefined8 *)((longlong)param_3 + lVar14 + 0x74),
+                                            0x60,0,(undefined8 *)0x0,puVar22,param_8);
+                      if ((int)uVar7 < 0) {
+                        if (-1 < (int)uVar7) {
+                          uVar7 = 0;
+                        }
+                        pcVar17 = 
+                        "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed for PatchAddr for dst, status = 0x%08x \n"
+                        ;
+                        goto LAB_14000384c;
+                      }
+                      FUN_140006a20(3,0x14000c230,0xd,
+                                    "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded for PatchAddr for dst\n"
+                                    ,uVar16,uVar21,puVar22,param_8);
+                    }
+                    FUN_140006a20(3,0x14000c230,0xd,
+                                  "%s: DMI Buffer addr 0x%x, dmiCmdIndex = 0x%x of length = %d for reg addr %x\n"
+                                  ,"CopyIndirectBuffer",(ulonglong)uVar9,uVar12,
+                                  (ulonglong)(uVar8 >> 2));
+                    param_8 = (ulonglong)(uVar8 & 0xfffffffc);
+                    param_6 = (undefined8 *)(ulonglong)uVar9;
+                    pcVar17 = "CopyIndirectBuffer";
+                    param_7 = ppuVar36;
+                    FUN_140006a20(3,0x14000c230,0xd,
+                                  "%s: Copying data from original CSL packet\'s VA %p of size %d\n",
+                                  "CopyIndirectBuffer",param_6,ppuVar36,param_8);
+                    if (ppuVar36 == (ulonglong **)0x0) goto LAB_140003994;
+                    param_7 = (ulonglong **)&local_180;
+                    local_180 = 0;
+                    param_6 = (undefined8 *)0x0;
+                    pcVar17 = (char *)0x0;
+                    uVar8 = FUN_140004a90(6,0,ppuVar36,uVar8 & 0xfffffffc,0,(undefined8 *)0x0,
+                                          param_7,param_8);
+                    if ((int)uVar8 < 0) {
+                      if (-1 < (int)uVar8) {
+                        uVar8 = 0;
+                      }
+                      pcVar17 = (char *)(ulonglong)uVar8;
+                      FUN_140006a20(0,0x14000c230,0xd,
+                                    "SendTask - ISPTRUSTLET_PROCESS_DMI_BUFFER Failed for dmi buffers, status = 0x%08x \n"
+                                    ,pcVar17,param_6,param_7,param_8);
+                      goto LAB_140003994;
+                    }
+                    pcVar24 = 
+                    "SendTask - ISPTRUSTLET_PROCESS_DMI_BUFFER Succeeded for dmi buffers\n";
+                    FUN_140006a20(3,0x14000c230,0xd,
+                                  "SendTask - ISPTRUSTLET_PROCESS_DMI_BUFFER Succeeded for dmi buffers\n"
+                                  ,pcVar17,param_6,param_7,param_8);
+                    uVar12 = (ulonglong)((int)uVar12 + 1);
+                    break;
+                  default:
+                    FUN_140008e28(&DAT_1400105e0,"CDMDrv: Invalid command cmdId=0x%x.",
+                                  (ulonglong)bVar2,pcVar24,pcVar17,param_6,param_7,param_8);
+                    goto LAB_140003994;
+                  case 3:
+                    uVar8 = *(uint *)ppuVar15 & 0xffff;
+                    if (uVar8 == 0) {
+                      FUN_140006a20(0,0x14000c230,0xd,
+                                    "CDMDrv: Invalid REG_CONT command with 0 length.\n",pcVar17,
+                                    param_6,param_7,param_8);
+                      goto LAB_140003994;
+                    }
+                    ppuVar32 = (ulonglong **)((longlong)ppuVar15 + (ulonglong)uVar8 * 4 + 8);
+                    uVar11 = (uVar11 - 2) - uVar8;
+                    break;
+                  case 4:
+                    uVar8 = *(uint *)ppuVar15 & 0xffff;
+                    if (uVar8 == 0) {
+                      FUN_140008e28(&DAT_140010540,
+                                    "CDMDrv: Invalid REG_RANDOM command with 0 length.",
+                                    (ulonglong)bVar2,pcVar24,pcVar17,param_6,param_7,param_8);
+                      goto LAB_140003994;
+                    }
+                    ppuVar32 = (ulonglong **)((longlong)ppuVar15 + (ulonglong)uVar8 * 8 + 4);
+                    uVar11 = (uVar11 - 1) + uVar8 * -2;
+                    break;
+                  case 5:
+                  case 6:
+                    ppuVar32 = ppuVar15 + 1;
+                    uVar11 = uVar11 - 2;
+                    break;
+                  case 7:
+                    ppuVar32 = (ulonglong **)((longlong)ppuVar15 + 0xc);
+                    uVar11 = uVar11 - 3;
+                    goto LAB_14000390c;
+                  case 8:
+                    ppuVar32 = (ulonglong **)((longlong)ppuVar15 + 4);
+                    uVar11 = uVar11 - 1;
+                    goto LAB_14000390c;
+                  }
+                  bVar6 = false;
+LAB_14000390c:
+                  ppuVar15 = ppuVar32;
+                } while (0 < (int)uVar11);
+                if (!bVar6) goto LAB_1400039ac;
+              }
+LAB_140003994:
+              FUN_140006a20(0,0x14000c230,0xd,"Unable to copy indirect DMI buffers to trustlet\n",
+                            pcVar17,param_6,param_7,param_8);
+            }
+          }
+LAB_1400039ac:
+          if (*(int *)(local_1b0 + 0x8c) == 0xc) {
+            puVar23 = (uint *)(*(longlong *)(*(longlong *)(local_1b0 + 0x74) + 8) +
+                              (ulonglong)*(uint *)(local_1b0 + 0x7c));
+            if ((puVar23 != (uint *)0x0) && (uVar11 = 0, *(int *)(local_1b0 + 0x84) != 0)) {
+              local_1b0 = CONCAT44(local_1b0._4_4_,*(int *)(local_1b0 + 0x84));
+              local_158 = param_3;
+              do {
+                puVar20 = puVar23 + 1;
+                uVar9 = *puVar23 & 0xff;
+                uVar12 = (ulonglong)uVar9;
+                uVar8 = (int)((ulonglong)(*puVar23 >> 8) + 3 >> 2) + 1;
+                if (uVar9 < 7) {
+                  if (uVar9 == 6) {
+LAB_140003a34:
+                    uVar9 = *puVar20;
+                    uVar7 = puVar23[2];
+                    pcVar17 = "UBWCAPIVersion = 0x%x, UBWC portnum = %d\n";
+                  }
+                  else {
+                    if (uVar9 != 0) {
+                      if (uVar9 == 1) {
+                        param_7 = *(ulonglong ***)(puVar23 + 5);
+                        param_8 = (ulonglong)puVar23[2];
+                        FUN_140006a20(3,0x14000c230,0xd,
+                                      "clockConfig : usageType %d leftPixelClockHz %d rightPixelClockHz %d numRdi %d rdiClockHz %d\n"
+                                      ,(ulonglong)*puVar20,*(undefined8 *)(puVar23 + 3),param_7,
+                                      param_8);
+                        local_1b8[0] = 0;
+                        local_150 = 0;
+                        pcVar17 = (char *)FUN_140008920(0,0,0);
+                        uVar12 = 0;
+                        uVar9 = 0;
+                        if ((pcVar17 == (char *)0x0) ||
+                           (uVar16 = FUN_1400089d0(extraout_x15,pcVar17,(int *)local_1b8,&local_150)
+                           , uVar12 = local_150, uVar9 = local_1b8[0], -1 < (int)uVar16)) {
+                          pcVar17 = "IFE CLK transitioning to PState= %x ifeclk = %u\n";
+                          uVar26 = uVar12 & 0xffffffff;
+                          puVar20 = (uint *)(ulonglong)uVar9;
+                          FUN_140006a20(3,0x14000c230,0xd,
+                                        "IFE CLK transitioning to PState= %x ifeclk = %u\n",puVar20,
+                                        uVar26,param_7,param_8);
+                          FUN_140007378(0,uVar9,(uint *)0x0,pcVar17,puVar20,uVar26,
+                                        (ulonglong)param_7,param_8);
+                        }
+                        param_6 = (undefined8 *)(uVar12 & 0xffffffff);
+                        FUN_140006a20(3,0x14000c230,0xd,
+                                      "ife3 clock request: nVfeCoreClkFreq = %d, approvedClk = %d\n"
+                                      ,*(undefined8 *)(puVar23 + 3),param_6,param_7,param_8);
+                      }
+                      else {
+                        if (uVar9 != 2) {
+                          if (uVar9 != 3) goto LAB_140003c0c;
+                          goto LAB_140003a34;
+                        }
+                        param_7 = *(ulonglong ***)(puVar23 + 7);
+                        param_8 = *(ulonglong *)(puVar23 + 0xb);
+                        FUN_140006a20(3,0x14000c230,0xd,
+                                      "bwConfig : usageType %d [leftPixelVote] camnocBWbytes %llu externalBWbytes %llu [rightPixelVote] camnocBWbytes %llu externalBWbytes %llu numRdi %u [rdiVote 0] camnocBWbytes %llu externalBWbytes %llu [rdiVote 1] camnocBWbytes %llu externalBWbytes %llu [rdiVote 2] camnocBWbytes %llu externalBWbytes %llu [rdiVote 3] camnocBWbytes %llu externalBWbytes %llu\n"
+                                      ,(ulonglong)*puVar20,*(undefined8 *)(puVar23 + 5),param_7,
+                                      param_8);
+                        uVar16 = 0xd;
+                        lVar14 = *(longlong *)(puVar23 + 0x11) + *(longlong *)(puVar23 + 0x17) +
+                                 *(longlong *)(puVar23 + 5);
+                        puVar35 = (undefined8 *)
+                                  (*(longlong *)(puVar23 + 0x13) + *(longlong *)(puVar23 + 0x19) +
+                                  *(longlong *)(puVar23 + 7));
+                        pcVar17 = "ife bw request: camnocBPS = %llu, externalBPS = %llu\n";
+                        lVar31 = lVar14;
+                        param_6 = puVar35;
+                        uVar12 = FUN_140006a20(3,0x14000c230,0xd,
+                                               "ife bw request: camnocBPS = %llu, externalBPS = %llu\n"
+                                               ,lVar14,puVar35,param_7,param_8);
+                        uStack_a8 = 0;
+                        local_b0 = 0;
+                        uStack_c8 = 0;
+                        local_d0 = 0;
+                        uStack_b8 = 0;
+                        uStack_c0 = 0;
+                        local_a0 = lVar14;
+                        puStack_98 = puVar35;
+                        uVar12 = FUN_140001558(uVar12,&local_d0,uVar16,pcVar17,lVar31,param_6,
+                                               (ulonglong)param_7,param_8);
+                        if ((int)uVar12 != 0) {
+                          FUN_140006a20(0,0x14000c230,0xd,
+                                        "ife bw request: failaed with result 0x%x\n",
+                                        uVar12 & 0xffffffff,param_6,param_7,param_8);
+                        }
+                      }
+                      goto LAB_140003f38;
+                    }
+                    pcVar17 = 
+                    "HFRconfig: HFRconfig->portHFRConfig[0].subsamplePattern=%d, HFRconfig->portHFRConfig[0].framedropPattern=%d\n"
+                    ;
+                    uVar7 = puVar23[6];
+                    uVar9 = puVar23[4];
+                  }
+                  param_6 = (undefined8 *)(ulonglong)uVar7;
+                  FUN_140006a20(3,0x14000c230,0xd,pcVar17,(ulonglong)uVar9,param_6,param_7,param_8);
+                }
+                else if (uVar9 == 8) {
+                  FUN_140006a20(3,0x14000c230,0xd,"IFEGenericBlobTypeIFEOutConfig\n",8,param_6,
+                                param_7,param_8);
+                }
+                else if (uVar9 == 9) {
+                  pcVar17 = "IFEGenericBlobTypeResourceBWConfigV2\n";
+                  uVar16 = 0xd;
+                  FUN_140006a20(3,0x14000c230,0xd,"IFEGenericBlobTypeResourceBWConfigV2\n",9,param_6
+                                ,param_7,param_8);
+                  puStack_128 = (undefined8 *)0x0;
+                  local_130 = 0;
+                  uStack_118 = 0;
+                  local_120 = (ulonglong **)0x0;
+                  lStack_108 = 0;
+                  local_110 = 0;
+                  lStack_f8 = 0;
+                  local_100 = 0;
+                  if (puVar20 == (uint *)0x0) {
+                    FUN_140008e28(&DAT_1400105b0,"BW Config object is NULL",uVar16,pcVar17,uVar12,
+                                  param_6,param_7,param_8);
+                    goto LAB_140003f38;
+                  }
+                  lVar27 = 0;
+                  lVar30 = 0;
+                  lVar14 = *(longlong *)(puVar23 + 0x59b) + *(longlong *)(puVar23 + 0x58d) +
+                           *(longlong *)(puVar23 + 0x57f) + *(longlong *)(puVar23 + 0x571) +
+                           *(longlong *)(puVar23 + 0x563) + *(longlong *)(puVar23 + 0x555) +
+                           *(longlong *)(puVar23 + 0x547);
+                  lVar31 = *(longlong *)(puVar23 + 0x23) + *(longlong *)(puVar23 + 0x15);
+                  param_6 = (undefined8 *)
+                            (*(longlong *)(puVar23 + 0x69) + *(longlong *)(puVar23 + 0x5b) +
+                             *(longlong *)(puVar23 + 0x4d) + *(longlong *)(puVar23 + 0x3f));
+                  param_7 = *(ulonglong ***)(puVar23 + 0x77);
+                  param_8 = *(ulonglong *)(puVar23 + 7);
+                  lVar1 = *(longlong *)(puVar23 + 0x85) + *(longlong *)(puVar23 + 0x31);
+                  uVar9 = puVar23[2];
+                  if (uVar9 < 0x12) {
+                    lVar27 = 0;
+                    if (uVar9 != 0) goto LAB_140003e1c;
+                  }
+                  else {
+                    iVar10 = uVar9 - 0x11;
+                    puVar20 = puVar20 + (ulonglong)uVar9 * 0xe + 6;
+                    do {
+                      if (puVar20[-3] == 0) {
+                        lVar27 = *(longlong *)puVar20 + lVar27;
+                      }
+                      puVar20 = puVar20 + -0xe;
+                      iVar10 = iVar10 + -1;
+                    } while (iVar10 != 0);
+LAB_140003e1c:
+                    puVar20 = puVar23 + 9;
+                    do {
+                      uVar9 = uVar9 - 1;
+                      lVar30 = lVar30 + *(longlong *)puVar20;
+                      puVar20 = puVar20 + 0xe;
+                    } while (uVar9 != 0);
+                  }
+                  if (((DAT_140012630 == lVar31) && (DAT_140012638 == param_6)) &&
+                     ((DAT_140012640 == param_7 &&
+                      ((((DAT_140012648 == param_8 && (DAT_140012660 == lVar1)) &&
+                        (DAT_140012658 == lVar27)) &&
+                       ((DAT_140012650 == lVar14 && (DAT_140012668 == lVar30)))))))) {
+                    FUN_140006a20(3,0x14000c230,0xd,"V2 RT BW - No change in data\n",lVar31,param_6,
+                                  param_7,param_8);
+                    pcVar17 = "Already set IFE bandwidth, result %d\n";
+                    uVar12 = 0x2b;
+LAB_140003c14:
+                    FUN_140006a20(3,0x14000c230,0xd,pcVar17,uVar12,param_6,param_7,param_8);
+                  }
+                  else {
+                    uVar16 = 0xd;
+                    pcVar17 = 
+                    "V2 RT BW UBWC:%llu, RDI:%llu, PDAF:%llu, LIN:%llu, IFELITE:%llu, SFERD:%llu, SFEWR:%llu, COMP:%llu\n"
+                    ;
+                    DAT_140012630 = lVar31;
+                    DAT_140012638 = param_6;
+                    DAT_140012640 = param_7;
+                    DAT_140012648 = param_8;
+                    DAT_140012650 = lVar14;
+                    DAT_140012658 = lVar27;
+                    DAT_140012660 = lVar1;
+                    DAT_140012668 = lVar30;
+                    local_130 = lVar31;
+                    puStack_128 = param_6;
+                    local_120 = param_7;
+                    uStack_118 = param_8;
+                    local_110 = lVar14;
+                    lStack_108 = lVar27;
+                    local_100 = lVar1;
+                    lStack_f8 = lVar30;
+                    uVar12 = FUN_140006a20(3,0x14000c230,0xd,
+                                           "V2 RT BW UBWC:%llu, RDI:%llu, PDAF:%llu, LIN:%llu, IFELITE:%llu, SFERD:%llu, SFEWR:%llu, COMP:%llu\n"
+                                           ,lVar31,param_6,param_7,param_8);
+                    FUN_140001558(uVar12,&local_130,uVar16,pcVar17,lVar31,param_6,(ulonglong)param_7
+                                  ,param_8);
+                  }
+                }
+                else if (uVar9 == 0x1c) {
+                  FUN_140006a20(3,0x14000c230,0xd,"IFEGenericBlobTypeSWABFTuningData\n",0x1c,param_6
+                                ,param_7,param_8);
+                  param_7 = (ulonglong **)&local_178;
+                  local_178 = 0;
+                  param_6 = (undefined8 *)0x0;
+                  uVar16 = 0;
+                  uVar9 = FUN_140004a90(9,0,puVar20,0x22,0,(undefined8 *)0x0,param_7,param_8);
+                  if ((int)uVar9 < 0) {
+                    pcVar17 = "ISPTRUSTLET_GET_SWABF_DATA failed\n";
+LAB_140003cbc:
+                    FUN_140006a20(0,0x14000c230,0xd,pcVar17,uVar16,param_6,param_7,param_8);
+                  }
+                }
+                else {
+                  if (uVar9 != 0x1d) {
+LAB_140003c0c:
+                    pcVar17 = "Unhandled blobtype %d\n";
+                    goto LAB_140003c14;
+                  }
+                  FUN_140006a20(3,0x14000c230,0xd,"IFEGenericBlobTypeSWASFTuningData\n",0x1d,param_6
+                                ,param_7,param_8);
+                  param_7 = (ulonglong **)&local_17c;
+                  local_17c = 0;
+                  param_6 = (undefined8 *)0x0;
+                  uVar16 = 0;
+                  uVar9 = FUN_140004a90(10,0,puVar20,0x804,0,(undefined8 *)0x0,param_7,param_8);
+                  if ((int)uVar9 < 0) {
+                    pcVar17 = "ISPTRUSTLET_GET_SWASF_DATA failed\n";
+                    goto LAB_140003cbc;
+                  }
+                }
+LAB_140003f38:
+                uVar11 = uVar11 + uVar8 * 4;
+                puVar23 = puVar23 + uVar8;
+                param_3 = local_158;
+              } while (uVar11 < (uint)local_1b0);
+            }
+          }
+          local_1bc = local_1bc + 1;
+        } while (local_1bc < *(int *)((longlong)local_1a0 + 0x1c));
+        puVar35 = (undefined8 *)(ulonglong)local_1c0;
+        param_3 = local_1a0;
+        param_1 = local_198;
+        param_5 = (char *)local_1a8;
+      }
+      iVar10 = 0;
+      if (0 < *(int *)((longlong)param_3 + 0x24)) {
+        do {
+          lVar14 = (longlong)iVar10 * 0x130 + (ulonglong)(uint)param_3[4];
+          if ((*(int *)((longlong)param_3 + lVar14 + 0x180) == 1) &&
+             (lVar14 = *(longlong *)((longlong)param_3 + lVar14 + 0x74), lVar14 != 0)) {
+            puVar22 = &local_174;
+            local_174 = 0;
+            puVar19 = (ulonglong *)param_5;
+            puVar25 = puVar35;
+            uVar11 = FUN_140004a90(4,0,lVar14,0x60,param_5,puVar35,puVar22,param_8);
+            if ((int)uVar11 < 0) {
+              if (-1 < (int)uVar11) {
+                uVar11 = 0;
+              }
+              FUN_140006a20(0,0x14000c230,0xd,
+                            "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Failed, status = 0x%08x \n"
+                            ,(ulonglong)uVar11,puVar25,puVar22,param_8);
+            }
+            else {
+              FUN_140006a20(3,0x14000c230,0xd,
+                            "SendTask - ISPTRUSTLET_PROCESS_DMFT_SURFACE Succeeded\n",puVar19,
+                            puVar25,puVar22,param_8);
+            }
+          }
+          iVar10 = iVar10 + 1;
+        } while (iVar10 < *(int *)((longlong)param_3 + 0x24));
+      }
+      param_7 = (ulonglong **)&local_170;
+      local_160 = 0;
+      param_6 = (undefined8 *)0x8;
+      local_170 = 0;
+      puVar35 = &local_160;
+      uVar11 = FUN_140004a90(7,0,param_3,*(undefined4 *)((longlong)param_3 + 4),puVar35,
+                             (undefined8 *)0x8,param_7,param_8);
+      if ((int)uVar11 < 0) {
+        if (-1 < (int)uVar11) {
+          uVar11 = 0;
+        }
+        pcVar17 = "SendTask - ISPTRUSTLET_PROCESS_CSL_PACKET Failed, status = 0x%08x \n";
+LAB_140004960:
+        FUN_140006a20(0,0x14000c230,0xd,pcVar17,(ulonglong)uVar11,param_6,param_7,param_8);
+        return 0;
+      }
+      FUN_140006a20(3,0x14000c230,0xd,"SendTask - ISPTRUSTLET_PROCESS_CSL_PACKET Succeeded\n",
+                    puVar35,param_6,param_7,param_8);
+      pcVar17 = "CSLPacket In - %p, Out - %p\n";
+      ppuVar15 = (ulonglong **)0xd;
+      puVar19 = param_3;
+      uVar16 = local_160;
+      FUN_140006a20(3,0x14000c230,0xd,"CSLPacket In - %p, Out - %p\n",param_3,local_160,param_7,
+                    param_8);
+      local_138 = 0;
+      iVar28 = *(int *)((longlong)param_3 + 0x24);
+      uStack_140 = local_160;
+      iVar10 = 0;
+      if (0 < iVar28) {
+        piVar34 = (int *)((longlong)param_3 + (ulonglong)(uint)param_3[4] + 0x13c);
+        do {
+          if ((*piVar34 == 0x3020) || (*piVar34 == 0x301f)) {
+            iVar10 = iVar10 + 1;
+            local_138 = iVar10;
+          }
+          piVar34 = piVar34 + 0x4c;
+          iVar28 = iVar28 + -1;
+        } while (iVar28 != 0);
+      }
+      local_148 = param_3;
+      FUN_140009260(*(longlong *)(param_1 + 0xf0),extraout_x1,ppuVar15,pcVar17,puVar19,uVar16,
+                    param_7,param_8);
+      plVar33 = *(longlong **)(param_1 + 0xe8);
+      uVar21 = 0xe;
+      if (plVar33 != (longlong *)0x0) {
+        uVar5 = KeAcquireSpinLockRaiseToDpc(plVar33 + 4);
+        *(undefined1 *)(plVar33 + 5) = uVar5;
+        if (*(uint *)(plVar33 + 3) < *(uint *)(plVar33 + 2)) {
+          ppuVar15 = &local_148;
+          uVar11 = *(uint *)((longlong)plVar33 + 0x14);
+          pcVar17 = (char *)(longlong)(int)uVar11;
+          FUN_140009d60((undefined8 *)
+                        (*plVar33 + (ulonglong)uVar11 * (ulonglong)*(uint *)(plVar33 + 6)),
+                        (longlong)(int)uVar11,ppuVar15,(ulonglong)pcVar17);
+          *(int *)(plVar33 + 3) = (int)plVar33[3] + 1;
+          *(int *)(plVar33 + 6) = (int)plVar33[6] + 1;
+          uVar11 = *(uint *)(plVar33 + 2);
+          if (uVar11 == 0) {
+                    /* WARNING: Does not return */
+            pcVar4 = (code *)SoftwareBreakpoint(0xf004,0x140004170);
+            (*pcVar4)();
+          }
+          uVar8 = 0;
+          if (uVar11 != 0) {
+            uVar8 = *(uint *)(plVar33 + 6) / uVar11;
+          }
+          uVar21 = 0;
+          *(uint *)(plVar33 + 6) = *(uint *)(plVar33 + 6) - uVar8 * uVar11;
+        }
+        else {
+          uVar21 = 1;
+        }
+        KeReleaseSpinLock(plVar33 + 4,(char)plVar33[5]);
+        uVar13 = extraout_x1_00;
+        if ((int)uVar21 == 0) goto LAB_1400041bc;
+      }
+      pcVar17 = "Enqueue to PacketQueue Failed, result = 0x%08x \n";
+      ppuVar15 = (ulonglong **)0xd;
+      FUN_140006a20(0,0x14000c230,0xd,"Enqueue to PacketQueue Failed, result = 0x%08x \n",uVar21,
+                    uVar16,param_7,param_8);
+      uVar13 = extraout_x1_01;
+LAB_1400041bc:
+      FUN_1400092b0(*(longlong *)(param_1 + 0xf0),uVar13,ppuVar15,pcVar17,uVar21,uVar16,param_7,
+                    param_8);
+      return 0;
+    }
+    goto LAB_14000343c;
+  case 0x804:
+    pcVar24 = "SecureISPDriver_DeviceStart";
+    puVar18 = &DAT_14000d478;
+    uVar16 = 0xd;
+    FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_DeviceStart",param_6,param_7,param_8);
+    if (param_3 != (ulonglong *)0x0) {
+      if (*(int *)(param_1 + 0x28) != 2) {
+        FUN_140006a20(0,0x14000c230,0xd,"SecureISPDevice is not in PowerState_ON state\n",pcVar24,
+                      param_6,param_7,param_8);
+        return 0xd;
+      }
+      if (*(int *)(param_1 + 0x2c) != 1) {
+        uVar11 = FUN_140004b88(param_1,1,uVar16,puVar18,pcVar24,param_6,param_7,param_8);
+        if ((int)uVar11 < 0) {
+          if (-1 < (int)uVar11) {
+            uVar11 = 0;
+          }
+          pcVar17 = "Failed to configure secure camera, status = 0x%08x \n";
+        }
+        else {
+          FUN_140006a20(3,0x14000c230,0xd,"Successfully configured secure camera\n",pcVar24,param_6,
+                        param_7,param_8);
+          param_7 = &local_1a8;
+          local_1a8 = (ulonglong *)((ulonglong)local_1a8 & 0xffffffff00000000);
+          uVar11 = FUN_140004a90(2,0,param_3,8,param_5,puVar35,param_7,param_8);
+          if (-1 < (int)uVar11) {
+            FUN_140006a20(3,0x14000c230,0xd,"SendTask - ISPTRUSTLET_START Succeeded\n",param_5,
+                          puVar35,param_7,param_8);
+            *(undefined4 *)(param_1 + 0x2c) = 1;
+            FUN_140006a20(3,0x14000c230,0xd,"m_StreamState - Stream_STARTED\n",param_5,puVar35,
+                          param_7,param_8);
+            return 0;
+          }
+          if (-1 < (int)uVar11) {
+            uVar11 = 0;
+          }
+          pcVar17 = "SendTask - ISPTRUSTLET_START Failed, status = 0x%08x \n";
+          param_6 = puVar35;
+        }
+        FUN_140006a20(0,0x14000c230,0xd,pcVar17,(ulonglong)uVar11,param_6,param_7,param_8);
+        return 1;
+      }
+      pcVar17 = "SecureISPDevice already in Stream_STARTED state\n";
+      goto LAB_140004934;
+    }
+    goto LAB_14000343c;
+  case 0x805:
+    uVar12 = FUN_140005208(param_1,param_3,uVar11,param_5,uVar8,param_6,(undefined4 *)param_7,
+                           param_8);
+    return uVar12;
+  default:
+    return 0x14;
+  case 0x80c:
+    pcVar17 = "SecureISPDriver_GetDeviceInfo";
+    puVar18 = &DAT_14000d478;
+    uVar16 = 0xd;
+    auVar37 = FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_GetDeviceInfo",param_6,param_7
+                            ,param_8);
+    iVar10 = FUN_1400097d0(auVar37._0_8_,auVar37._8_8_,uVar16,puVar18,pcVar17,param_6,param_7,
+                           param_8);
+    if (iVar10 == 0x22b) {
+      uVar29 = 3;
+    }
+    else {
+      if (iVar10 != 0x27b) {
+        FUN_140006a20(0,0x14000c230,0xd,"Invalid chipId\n",pcVar17,param_6,param_7,param_8);
+        return 1;
+      }
+      uVar29 = 2;
+    }
+    param_5[0] = '\x01';
+    param_5[1] = '\0';
+    param_5[2] = '\0';
+    param_5[3] = '\0';
+    *(undefined4 *)(param_5 + 4) = uVar29;
+    param_5[8] = -1;
+    param_5[9] = -1;
+    param_5[10] = -1;
+    param_5[0xb] = '\x7f';
+    break;
+  case 0x80d:
+    pcVar24 = "SecureISPDriver_Init";
+    FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_Init",param_6,param_7,param_8);
+    if (param_3 != (ulonglong *)0x0 && uVar11 == 8) {
+      DAT_14002e6d0 = param_3;
+      *(ulonglong **)(param_1 + 0x30) = param_3;
+      return 0;
+    }
+LAB_14000343c:
+    pcVar17 = "Invalid input parameters\n";
+    param_5 = pcVar24;
+LAB_140004988:
+    FUN_140006a20(0,0x14000c230,0xd,pcVar17,param_5,param_6,param_7,param_8);
+    return 0xe;
+  case 0x80e:
+    uVar12 = FUN_140004f10(param_1,param_3,uVar11,param_5,uVar8,param_6,(undefined4 *)param_7,
+                           param_8);
+    return uVar12;
+  case 0x80f:
+    if (param_3 == (ulonglong *)0x0 || uVar11 != 0xc) {
+      pcVar17 = "SecureISPDriver_SupplementalDeviceConfig Invalid input parameters\n";
+      goto LAB_140004988;
+    }
+    uVar12 = param_3[1];
+    *(ulonglong *)(param_1 + 0xd8) = *param_3;
+    *(int *)(param_1 + 0xe0) = (int)uVar12;
+    iVar10 = FUN_1400097d0(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+    if (iVar10 == 0x22b) {
+      if (*(int *)(param_1 + 0xe0) == 3) {
+        *(undefined4 *)(param_1 + 0xe0) = 4;
+        pcVar17 = "CSIPhyID changed to 0x%d\n";
+LAB_140004888:
+        FUN_140006a20(3,0x14000c230,0xd,pcVar17,4,param_6,param_7,param_8);
+      }
+    }
+    else if (iVar10 == 0x27b && *(int *)(param_1 + 0xe0) == 1) {
+      *(undefined4 *)(param_1 + 0xe0) = 4;
+      pcVar17 = "CSIPhyID changed to 0x%d \n";
+      goto LAB_140004888;
+    }
+    FUN_140006a20(3,0x14000c230,0xd,
+                  "CSIPHYInfo : CSIPHYID: %d, laneMask: 0x%x, laneAssign: 0x%x, comboMode: %d, laneCount: %d\n"
+                  ,(ulonglong)*(uint *)(param_1 + 0xe0),(ulonglong)*(ushort *)(param_1 + 0xd8),
+                  (ulonglong)*(ushort *)(param_1 + 0xda),(ulonglong)*(byte *)(param_1 + 0xdd));
+    break;
+  case 0x810:
+    if (param_3 == (ulonglong *)0x0 || uVar11 != 8) {
+      pcVar17 = "SecureISPDriver_NotifyEvent Invalid input parameters\n";
+      goto LAB_140004988;
+    }
+    local_158 = (ulonglong *)*param_3;
+    if ((int)local_158 != 0) {
+      return 0;
+    }
+    param_7 = &local_1a0;
+    param_6 = (undefined8 *)0x0;
+    local_1a0 = (ulonglong *)((ulonglong)local_1a0 & 0xffffffff00000000);
+    pcVar24 = (char *)0x0;
+    local_198 = (ulonglong)local_158 & 0xffffffff00000000;
+    uVar11 = FUN_140004a90(0xd,0,&local_198,8,0,(undefined8 *)0x0,param_7,param_8);
+    if ((int)uVar11 < 0) {
+      if (-1 < (int)uVar11) {
+        uVar11 = 0;
+      }
+      pcVar17 = "SendTask - ISPTRUSTLET_NOTIFY_EVENT Failed, status = 0x%08x \n";
+      goto LAB_140004960;
+    }
+    pcVar17 = "SendTask - ISPTRUSTLET_NOTIFY_EVENT Succeeded\n";
+LAB_140004934:
+    FUN_140006a20(3,0x14000c230,0xd,pcVar17,pcVar24,param_6,param_7,param_8);
+  }
+  return 0;
+}
+
+
+
+//// FUN_140004a90 @140004a90 ////
+string @14000d1b0 = WdfCompanionTargetSendTaskSynchronously Failed, status = 0x%08x....
+
+; xref @140004b50
+
+uint FUN_140004a90(undefined8 param_1,int param_2,undefined8 param_3,undefined4 param_4,
+                  undefined8 param_5,undefined8 *param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  undefined8 uVar2;
+  undefined8 uVar3;
+  code *extraout_x15;
+  undefined8 local_40;
+  undefined8 uStack_38;
+  undefined4 local_30;
+  undefined4 uStack_2c;
+  undefined8 local_28;
+  undefined8 uStack_20;
+  undefined4 local_18;
+  undefined4 uStack_14;
+  
+  if (DAT_14002e6d0 == 0) {
+    return DAT_140004b80;
+  }
+  uStack_14 = 0;
+  local_28 = 1;
+  local_40 = 1;
+  local_30 = SUB84(param_6,0);
+  uStack_2c = 0;
+  uStack_38 = param_5;
+  uStack_20 = param_3;
+  local_18 = param_4;
+  if (param_2 == 0) {
+    uVar2 = 1;
+  }
+  else if (param_2 == 1) {
+    uVar2 = 2;
+  }
+  else {
+    uVar1 = DAT_140004b80;
+    if (param_2 != 2) goto LAB_140004b40;
+    uVar2 = 3;
+  }
+  uVar3 = 0;
+  param_6 = &local_40;
+  (*(code *)PTR__guard_check_icall_1400102a8)
+            (*(undefined8 *)(DAT_140012478 + 0xe08),DAT_1400124a8,DAT_14002e6d0,uVar2,
+             (undefined4)param_1,&local_28);
+  param_8 = param_7;
+  uVar1 = (*extraout_x15)();
+  param_7 = uVar3;
+  if (-1 < (int)uVar1) {
+    return uVar1;
+  }
+LAB_140004b40:
+  if (-1 < (int)uVar1) {
+    uVar1 = 0;
+  }
+  FUN_140006a20(0,0x14000c230,0xd,
+                "WdfCompanionTargetSendTaskSynchronously Failed, status = 0x%08x....\n\n",
+                (ulonglong)uVar1,param_6,param_7,param_8);
+  return uVar1;
+}
+
+
+
+//// FUN_140004f10 @140004f10 ////
+string @14000d608 = SendTask - ISPTRUSTLET_DEINIT Succeeded
+; xref @140005068
+string @14000d638 = SendTask - ISPTRUSTLET_DEINIT Failed, status = 0x%08x 
+; xref @140005090
+
+ulonglong FUN_140004f10(ulonglong param_1,undefined8 param_2,undefined4 param_3,char *param_4,
+                       uint param_5,undefined8 *param_6,undefined4 *param_7,undefined8 param_8)
+
+{
+  char cVar1;
+  bool bVar2;
+  uint *puVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  longlong lVar6;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 uVar7;
+  undefined8 uVar8;
+  char *pcVar9;
+  longlong lVar10;
+  undefined8 uVar11;
+  undefined4 *puVar12;
+  ulonglong uVar13;
+  undefined8 *puVar14;
+  undefined4 local_60;
+  undefined4 local_5c [3];
+  
+  puVar14 = (undefined8 *)(ulonglong)param_5;
+  FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_DeInit",param_6,param_7,param_8);
+  FUN_140005208(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+  uVar5 = FUN_140005f18(param_1 + 0x48);
+  if ((int)uVar5 != 0) {
+    FUN_140006a20(0,0x14000c230,0xd,
+                  "Failed to DeInitialize SecureISPInterruptThread, result = 0x%08x....\n\n",
+                  uVar5 & 0xffffffff,param_6,param_7,param_8);
+  }
+  uVar5 = FUN_140005f18(param_1 + 0x90);
+  uVar13 = uVar5 & 0xffffffff;
+  if ((int)uVar5 != 0) {
+    FUN_140006a20(0,0x14000c230,0xd,
+                  "Failed to DeInitialize SecureISPProcessThread, result = 0x%08x....\n\n",
+                  uVar5 & 0xffffffff,param_6,param_7,param_8);
+  }
+  lVar6 = FUN_140009338(0xb2,1000);
+  puVar12 = &local_60;
+  local_60 = 0;
+  uVar11 = 1000;
+  uVar8 = 0;
+  lVar10 = lVar6;
+  uVar4 = FUN_140004a90(8,0,0,0,lVar6,(undefined8 *)0x3e8,puVar12,param_8);
+  if (-1 < (int)uVar4) {
+    FUN_140008e28(&DAT_1400105c8,"%s",lVar6,uVar8,lVar10,uVar11,puVar12,param_8);
+  }
+  FUN_1400093b0(0xb2,lVar6);
+  puVar12 = local_5c;
+  local_5c[0] = 0;
+  uVar4 = FUN_140004a90(1,0,param_2,param_3,param_4,puVar14,puVar12,param_8);
+  if ((int)uVar4 < 0) {
+    if (-1 < (int)uVar4) {
+      uVar4 = 0;
+    }
+    FUN_140006a20(0,0x14000c230,0xd,"SendTask - ISPTRUSTLET_DEINIT Failed, status = 0x%08x \n",
+                  (ulonglong)uVar4,puVar14,puVar12,param_8);
+  }
+  else {
+    FUN_140006a20(3,0x14000c230,0xd,"SendTask - ISPTRUSTLET_DEINIT Succeeded\n",param_4,puVar14,
+                  puVar12,param_8);
+  }
+  FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_PowerOff",puVar14,puVar12,param_8);
+  if ((DAT_140012500 == (uint *)0x0) || (DAT_1400124f8 == 0)) {
+    FUN_140006a20(3,0x14000e818,9,"-->DeviceDeactivate. incorrect CompId = %d\n",0,puVar14,puVar12,
+                  param_8);
+  }
+  else {
+    uVar5 = (ulonglong)*DAT_140012500;
+    uVar11 = 0;
+    pcVar9 = "-->DeviceDeactivate. CompId = %d nRefCount = %d\n";
+    uVar8 = 9;
+    FUN_140006a20(3,0x14000e818,9,"-->DeviceDeactivate. CompId = %d nRefCount = %d\n",0,uVar5,
+                  puVar12,param_8);
+    FUN_140009260(DAT_1400124e8,extraout_x1,uVar8,pcVar9,uVar11,uVar5,puVar12,param_8);
+    puVar3 = DAT_140012500;
+    do {
+      uVar4 = *puVar3;
+      cVar1 = '\x01';
+      bVar2 = (bool)ExclusiveMonitorPass(puVar3,0x10);
+      if (bVar2) {
+        *puVar3 = uVar4 - 1;
+        cVar1 = ExclusiveMonitorsStatus();
+      }
+    } while (cVar1 != '\0');
+    DataMemoryBarrier(2,3);
+    uVar7 = extraout_x1_00;
+    if (uVar4 - 1 == 0) {
+      uVar8 = 2;
+      PoFxIdleComponent(DAT_1400124f0,0);
+      uVar7 = extraout_x1_01;
+    }
+    FUN_1400092b0(DAT_1400124e8,uVar7,uVar8,pcVar9,uVar11,uVar5,puVar12,param_8);
+    if ((int)*DAT_140012500 < 0) {
+      FUN_140006a20(0,0x14000e818,9,"-->DeviceDeactivate. CompId = %d nRefCount = %d\n",0,
+                    (ulonglong)*DAT_140012500,puVar12,param_8);
+    }
+  }
+  DAT_14002e718 = 0;
+  DAT_14002e710 = 0;
+  DAT_1400124d8 = 0;
+  if (*(longlong *)(param_1 + 0xf0) != 0) {
+    FUN_1400093b0(0x7b,*(longlong *)(param_1 + 0xf0));
+    *(undefined8 *)(param_1 + 0xf0) = 0;
+  }
+  if (*(longlong *)(param_1 + 0xe8) != 0) {
+    uVar5 = FUN_140009938(*(longlong *)(param_1 + 0xe8));
+    uVar13 = uVar5 & 0xffffffff;
+    if ((int)uVar5 == 0) {
+      *(undefined8 *)(param_1 + 0xe8) = 0;
+    }
+  }
+  FUN_1400093b0(0xb2,*(longlong *)(param_1 + 0x38));
+  *(undefined8 *)(param_1 + 0x38) = 0;
+  return uVar13;
+}
+
+
+
+//// FUN_140005208 @140005208 ////
+string @14000dd68 = SendTask - ISPTRUSTLET_STOP Succeeded
+; xref @1400052d4
+string @14000dd90 = SendTask - ISPTRUSTLET_STOP Failed, status = 0x%08x 
+; xref @1400052fc
+
+undefined8
+FUN_140005208(ulonglong param_1,undefined8 param_2,undefined4 param_3,char *param_4,uint param_5,
+             undefined8 *param_6,undefined4 *param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 uVar2;
+  undefined8 uVar3;
+  undefined *puVar4;
+  char *pcVar5;
+  char *pcVar6;
+  undefined8 *puVar7;
+  undefined4 local_40 [4];
+  
+  puVar7 = (undefined8 *)(ulonglong)param_5;
+  pcVar6 = "SecureISPDriver_DeviceStop";
+  puVar4 = &DAT_14000d478;
+  uVar3 = 0xd;
+  FUN_140006a20(3,0x14000c230,0xd,"%s\n","SecureISPDriver_DeviceStop",param_6,param_7,param_8);
+  if (param_1 == 0) {
+    FUN_140006a20(0,0x14000c230,0xd,"Invalid input parameters\n",pcVar6,param_6,param_7,param_8);
+    uVar3 = 0xe;
+  }
+  else {
+    FUN_140009260(*(longlong *)(param_1 + 0xf0),extraout_x1,uVar3,puVar4,pcVar6,param_6,param_7,
+                  param_8);
+    if (*(int *)(param_1 + 0x2c) == 0) {
+      pcVar5 = "SecureISPDevice already in Stream_STOPPED state\n";
+      uVar3 = 0xd;
+      FUN_140006a20(3,0x14000c230,0xd,"SecureISPDevice already in Stream_STOPPED state\n",pcVar6,
+                    param_6,param_7,param_8);
+      uVar2 = extraout_x1_00;
+      param_4 = pcVar6;
+      puVar7 = param_6;
+    }
+    else {
+      param_7 = local_40;
+      *(undefined4 *)(param_1 + 0x28) = 0;
+      local_40[0] = 0;
+      uVar1 = FUN_140004a90(3,0,param_2,param_3,param_4,puVar7,param_7,param_8);
+      if ((int)uVar1 < 0) {
+        if (-1 < (int)uVar1) {
+          uVar1 = 0;
+        }
+        pcVar5 = "SendTask - ISPTRUSTLET_STOP Failed, status = 0x%08x \n";
+        param_4 = (char *)(ulonglong)uVar1;
+        uVar3 = 0xd;
+        FUN_140006a20(0,0x14000c230,0xd,"SendTask - ISPTRUSTLET_STOP Failed, status = 0x%08x \n",
+                      param_4,puVar7,param_7,param_8);
+      }
+      else {
+        pcVar5 = "SendTask - ISPTRUSTLET_STOP Succeeded\n";
+        uVar3 = 0xd;
+        FUN_140006a20(3,0x14000c230,0xd,"SendTask - ISPTRUSTLET_STOP Succeeded\n",param_4,puVar7,
+                      param_7,param_8);
+      }
+      FUN_140004b88(param_1,0,uVar3,pcVar5,param_4,puVar7,param_7,param_8);
+      *(undefined4 *)(param_1 + 0x2c) = 0;
+      uVar2 = extraout_x1_01;
+    }
+    FUN_1400092b0(*(longlong *)(param_1 + 0xf0),uVar2,uVar3,pcVar5,param_4,puVar7,param_7,param_8);
+    uVar3 = 0;
+  }
+  return uVar3;
+}
+
+
+
+//// FUN_140005348 @140005348 ////
+string @14000e098 = AddressMapUMD2KMD Failed
+; xref @140005774
+string @14000e098 = AddressMapUMD2KMD Failed
+; xref @140005764
+
+longlong FUN_140005348(longlong param_1,undefined8 param_2,longlong param_3,undefined8 param_4,
+                      ulonglong param_5,longlong param_6,ulonglong param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  uint uVar2;
+  uint uVar3;
+  int iVar4;
+  bool bVar5;
+  code *pcVar6;
+  undefined1 uVar7;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 extraout_x1_03;
+  undefined8 extraout_x1_04;
+  undefined8 extraout_x1_05;
+  undefined8 uVar8;
+  undefined8 extraout_x1_06;
+  undefined8 extraout_x1_07;
+  undefined8 extraout_x1_08;
+  undefined8 extraout_x1_09;
+  undefined8 extraout_x1_10;
+  ulonglong *puVar9;
+  char *pcVar10;
+  int iVar11;
+  longlong *plVar12;
+  ulonglong local_70;
+  longlong lStack_68;
+  ulonglong local_60;
+  
+  iVar4 = (int)param_2;
+  bVar5 = false;
+  if (((param_1 == 0) || (*(longlong *)(param_1 + 0xe8) == 0)) || (param_3 == 0)) {
+    FUN_140006a20(0,0x14000c230,0xd,"AddressMapUMD2KMD Failed\n",param_5,param_6,param_7,param_8);
+  }
+  else {
+    lStack_68 = 0;
+    local_70 = 0;
+    local_60 = 0;
+    FUN_140009260(*(longlong *)(param_1 + 0xf0),param_2,param_3,param_4,param_5,param_6,param_7,
+                  param_8);
+    puVar9 = (ulonglong *)0xd;
+    if (*(longlong *)(param_1 + 0xe8) == 0) {
+      pcVar10 = "Failed to get m_PacketQueue Length\n";
+      FUN_140006a20(0,0x14000c230,0xd,"Failed to get m_PacketQueue Length\n",param_5,param_6,param_7
+                    ,param_8);
+      uVar8 = extraout_x1_10;
+    }
+    else {
+      uVar1 = *(uint *)(*(longlong *)(param_1 + 0xe8) + 0x18);
+      pcVar10 = "m_PacketQueue Length = %d\n";
+      param_5 = (ulonglong)uVar1;
+      FUN_140006a20(3,0x14000c230,0xd,"m_PacketQueue Length = %d\n",param_5,param_6,param_7,param_8)
+      ;
+      uVar8 = extraout_x1;
+      for (; uVar1 != 0; uVar1 = uVar1 - 1) {
+        plVar12 = *(longlong **)(param_1 + 0xe8);
+        if (plVar12 == (longlong *)0x0) {
+LAB_140005704:
+          pcVar10 = "Failed to dequeue from m_PacketQueue\n";
+          puVar9 = (ulonglong *)0xd;
+          FUN_140006a20(0,0x14000c230,0xd,"Failed to dequeue from m_PacketQueue\n",param_5,param_6,
+                        param_7,param_8);
+          uVar8 = extraout_x1_09;
+        }
+        else {
+          uVar7 = KeAcquireSpinLockRaiseToDpc(plVar12 + 4);
+          *(undefined1 *)(plVar12 + 5) = uVar7;
+          if ((int)plVar12[3] == 0) {
+            iVar11 = 0x16;
+          }
+          else {
+            uVar2 = *(uint *)((longlong)plVar12 + 0x14);
+            FUN_140009d60(&local_70,(longlong)(int)uVar2,
+                          (undefined8 *)
+                          (*plVar12 +
+                          (ulonglong)uVar2 * (ulonglong)*(uint *)((longlong)plVar12 + 0x2c)),
+                          (longlong)(int)uVar2);
+            *(int *)(plVar12 + 3) = (int)plVar12[3] + -1;
+            *(int *)((longlong)plVar12 + 0x2c) = *(int *)((longlong)plVar12 + 0x2c) + 1;
+            uVar2 = *(uint *)(plVar12 + 2);
+            if (uVar2 == 0) {
+                    /* WARNING: Does not return */
+              pcVar6 = (code *)SoftwareBreakpoint(0xf004,0x14000544c);
+              (*pcVar6)();
+            }
+            uVar3 = 0;
+            if (uVar2 != 0) {
+              uVar3 = *(uint *)((longlong)plVar12 + 0x2c) / uVar2;
+            }
+            iVar11 = 0;
+            *(uint *)((longlong)plVar12 + 0x2c) =
+                 *(uint *)((longlong)plVar12 + 0x2c) - uVar3 * uVar2;
+          }
+          KeReleaseSpinLock(plVar12 + 4,(char)plVar12[5]);
+          if (iVar11 != 0) goto LAB_140005704;
+          param_7 = local_60 & 0xffffffff;
+          pcVar10 = "Dequeue CSLPacket: In - %p, Out - %p, ref - %d\n";
+          puVar9 = (ulonglong *)0xd;
+          param_5 = local_70;
+          param_6 = lStack_68;
+          FUN_140006a20(3,0x14000c230,0xd,"Dequeue CSLPacket: In - %p, Out - %p, ref - %d\n",
+                        local_70,lStack_68,param_7,param_8);
+          if (iVar4 == 0x19) {
+            param_5 = *(ulonglong *)(param_3 + 0x180);
+            pcVar10 = "Searching for GROUP3_STATS CSLPacket: %p\n";
+            puVar9 = (ulonglong *)0xd;
+            FUN_140006a20(3,0x14000c230,0xd,"Searching for GROUP3_STATS CSLPacket: %p\n",param_5,
+                          param_6,param_7,param_8);
+            uVar8 = extraout_x1_08;
+            if (*(longlong *)(param_3 + 0x180) != lStack_68) goto LAB_1400054ec;
+            pcVar10 = "AddressMap STATS buffer, pPacketIn = %p, pPacketOut = %p\n";
+LAB_1400056ac:
+            puVar9 = (ulonglong *)0xd;
+            param_6 = lStack_68;
+            FUN_140006a20(3,0x14000c230,0xd,pcVar10,local_70,lStack_68,param_7,param_8);
+            *(ulonglong *)(param_3 + 0x180) = local_70;
+            uVar8 = extraout_x1_07;
+LAB_1400055b0:
+            iVar11 = (int)local_60 + -1;
+            local_60 = CONCAT44(local_60._4_4_,iVar11);
+            param_5 = local_70;
+            if (iVar11 == 0) {
+              pcVar10 = "Done with payload, pPacketIn = %p, pPacketOut = %p\n";
+              puVar9 = (ulonglong *)0xd;
+              param_6 = lStack_68;
+              FUN_140006a20(3,0x14000c230,0xd,"Done with payload, pPacketIn = %p, pPacketOut = %p\n"
+                            ,local_70,lStack_68,param_7,param_8);
+              uVar8 = extraout_x1_04;
+            }
+            else {
+              plVar12 = *(longlong **)(param_1 + 0xe8);
+              if (plVar12 != (longlong *)0x0) {
+                uVar7 = KeAcquireSpinLockRaiseToDpc(plVar12 + 4);
+                *(undefined1 *)(plVar12 + 5) = uVar7;
+                if (*(uint *)(plVar12 + 3) < *(uint *)(plVar12 + 2)) {
+                  puVar9 = &local_70;
+                  uVar2 = *(uint *)((longlong)plVar12 + 0x14);
+                  pcVar10 = (char *)(longlong)(int)uVar2;
+                  FUN_140009d60((undefined8 *)
+                                (*plVar12 + (ulonglong)uVar2 * (ulonglong)*(uint *)(plVar12 + 6)),
+                                (longlong)(int)uVar2,puVar9,(ulonglong)pcVar10);
+                  *(int *)(plVar12 + 3) = (int)plVar12[3] + 1;
+                  *(int *)(plVar12 + 6) = (int)plVar12[6] + 1;
+                  uVar2 = *(uint *)(plVar12 + 2);
+                  if (uVar2 == 0) {
+                    /* WARNING: Does not return */
+                    pcVar6 = (code *)SoftwareBreakpoint(0xf004,0x140005650);
+                    (*pcVar6)();
+                  }
+                  uVar3 = 0;
+                  if (uVar2 != 0) {
+                    uVar3 = *(uint *)(plVar12 + 6) / uVar2;
+                  }
+                  *(uint *)(plVar12 + 6) = *(uint *)(plVar12 + 6) - uVar3 * uVar2;
+                }
+                KeReleaseSpinLock(plVar12 + 4,(char)plVar12[5]);
+                uVar8 = extraout_x1_05;
+              }
+            }
+            bVar5 = true;
+          }
+          else {
+            if (iVar4 == 0x1b) {
+              param_5 = *(ulonglong *)(param_3 + 0x180);
+              pcVar10 = "Searching for IFE_LITE_MSG_ID_COMBO_STATS CSLPacket: %p\n";
+              puVar9 = (ulonglong *)0xd;
+              FUN_140006a20(3,0x14000c230,0xd,
+                            "Searching for IFE_LITE_MSG_ID_COMBO_STATS CSLPacket: %p\n",param_5,
+                            param_6,param_7,param_8);
+              uVar8 = extraout_x1_06;
+              if (*(longlong *)(param_3 + 0x180) == lStack_68) {
+                pcVar10 = 
+                "AddressMap IFE_LITE_COMBO_STATS buffer, pPacketIn = %p, pPacketOut = %p\n";
+                goto LAB_1400056ac;
+              }
+            }
+            else {
+              if (iVar4 != 0x1d) {
+                uVar8 = extraout_x1_00;
+                if (iVar4 == 0x1e) {
+                  pcVar10 = "Searching for IFE_LITE_SECURE_MSG_ID_PREPROCESSED_RAW CSLPacket: %p\n";
+                  goto LAB_1400054c8;
+                }
+                goto LAB_14000571c;
+              }
+              pcVar10 = "Searching for IFE_MSG_ID_GROUP0_SECURE_IMAGE CSLPacket: %p\n";
+LAB_1400054c8:
+              param_5 = *(ulonglong *)(param_3 + 0x398);
+              puVar9 = (ulonglong *)0xd;
+              FUN_140006a20(3,0x14000c230,0xd,pcVar10,param_5,param_6,param_7,param_8);
+              uVar8 = extraout_x1_01;
+              if (*(longlong *)(param_3 + 0x398) == lStack_68) {
+                pcVar10 = "AddressMap IMAGE buffer, pPacketIn = %p, pPacketOut = %p\n";
+                puVar9 = (ulonglong *)0xd;
+                param_6 = lStack_68;
+                FUN_140006a20(3,0x14000c230,0xd,
+                              "AddressMap IMAGE buffer, pPacketIn = %p, pPacketOut = %p\n",local_70,
+                              lStack_68,param_7,param_8);
+                *(ulonglong *)(param_3 + 0x398) = local_70;
+                uVar8 = extraout_x1_03;
+                goto LAB_1400055b0;
+              }
+            }
+LAB_1400054ec:
+            plVar12 = *(longlong **)(param_1 + 0xe8);
+            param_6 = lStack_68;
+            if (plVar12 != (longlong *)0x0) {
+              uVar7 = KeAcquireSpinLockRaiseToDpc(plVar12 + 4);
+              *(undefined1 *)(plVar12 + 5) = uVar7;
+              if (*(uint *)(plVar12 + 3) < *(uint *)(plVar12 + 2)) {
+                puVar9 = &local_70;
+                uVar2 = *(uint *)((longlong)plVar12 + 0x14);
+                pcVar10 = (char *)(longlong)(int)uVar2;
+                FUN_140009d60((undefined8 *)
+                              (*plVar12 + (ulonglong)uVar2 * (ulonglong)*(uint *)(plVar12 + 6)),
+                              (longlong)(int)uVar2,puVar9,(ulonglong)pcVar10);
+                *(int *)(plVar12 + 3) = (int)plVar12[3] + 1;
+                *(int *)(plVar12 + 6) = (int)plVar12[6] + 1;
+                uVar2 = *(uint *)(plVar12 + 2);
+                if (uVar2 == 0) {
+                    /* WARNING: Does not return */
+                  pcVar6 = (code *)SoftwareBreakpoint(0xf004,0x140005560);
+                  (*pcVar6)();
+                }
+                uVar3 = 0;
+                if (uVar2 != 0) {
+                  uVar3 = *(uint *)(plVar12 + 6) / uVar2;
+                }
+                *(uint *)(plVar12 + 6) = *(uint *)(plVar12 + 6) - uVar3 * uVar2;
+              }
+              KeReleaseSpinLock(plVar12 + 4,(char)plVar12[5]);
+              uVar8 = extraout_x1_02;
+            }
+          }
+        }
+LAB_14000571c:
+      }
+    }
+    FUN_1400092b0(*(longlong *)(param_1 + 0xf0),uVar8,puVar9,pcVar10,param_5,param_6,param_7,param_8
+                 );
+    if (bVar5) {
+      return param_3;
+    }
+  }
+  FUN_140006a20(0,0x14000c230,0xd,"AddressMapUMD2KMD Failed\n",param_5,param_6,param_7,param_8);
+  return 0;
+}
+
+

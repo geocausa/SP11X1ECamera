@@ -1,0 +1,154 @@
+{
+  "schema": "sp11-camera-e004z-secureisp-static-authority-v1",
+  "status": "PASS_SECUREISP_HOST_TRUSTLET_ABI_STATIC_RECONSTRUCTED",
+  "sources": {
+    "qccamsecureisp": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.sys",
+      "sha256": "47c944fa497477751073ec79a27a589a55e884178c1859d6f27388ec7af2ad53"
+    },
+    "trustlet": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/QcISPTrustlet8380.dll",
+      "sha256": "55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606"
+    },
+    "secureisp_inf": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf",
+      "sha256": "22bffc4795803de62825ee8eab6bd13cdd2d18e505a39b410eecad52b092e05f"
+    },
+    "qctree": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qctree.inf_arm64_b90c225f258c030c/QcTrEE.sys",
+      "sha256": "9cd8252c1b501c1d58e4c49d020d526a5b9bc41a3f5de2ec08e866c3a26c16a2"
+    },
+    "qctree_inf": {
+      "path": "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qctree.inf_arm64_b90c225f258c030c/qctree.inf",
+      "sha256": "9e6d38df0b0ff8f766a4b67084f1d55e3bf44ddac766c5466b179e99adda8d6b"
+    }
+  },
+  "secure_companion": {
+    "service_binary": "QcISPTrustlet8380.dll",
+    "service_type": "SecureCompanion",
+    "trustlet_identity": 4096,
+    "secure_payloads": [
+      "libbitml_nsp_v2_skel.so",
+      "bm3a68v08s11n52.bin"
+    ]
+  },
+  "class1_tasks": {
+    "0": {
+      "name": "INIT",
+      "trustlet_behavior": "ISPDriverInit + ISPDriverConfig"
+    },
+    "1": {
+      "name": "DEINIT",
+      "trustlet_behavior": "secure IFE manager deinit + cleanup"
+    },
+    "2": {
+      "name": "START",
+      "trustlet_behavior": "ISP secure start"
+    },
+    "3": {
+      "name": "STOP",
+      "trustlet_behavior": "ISP secure stop"
+    },
+    "4": {
+      "name": "PROCESS_DMFT_SURFACE",
+      "input_bytes": 96
+    },
+    "5": {
+      "name": "PROCESS_CMD_BUFFER",
+      "input_bytes": "variable"
+    },
+    "6": {
+      "name": "PROCESS_DMI_BUFFER",
+      "input_bytes": "variable"
+    },
+    "7": {
+      "name": "PROCESS_CSL_PACKET",
+      "input_bytes": "packet length",
+      "output_bytes": 8
+    },
+    "8": {
+      "name": "GET_DIAGNOSTIC_BUFFER",
+      "output_bytes": 1000,
+      "name_is_behavioral_not_vendor_symbol": true
+    },
+    "9": {
+      "name": "GET_SWABF_DATA",
+      "input_bytes": 34
+    },
+    "10": {
+      "name": "GET_SWASF_DATA",
+      "input_bytes": 2052
+    },
+    "11": {
+      "name": "UNIMPLEMENTED_DEFAULT"
+    },
+    "12": {
+      "name": "UNIMPLEMENTED_DEFAULT"
+    },
+    "13": {
+      "name": "NOTIFY_EVENT",
+      "input_bytes": 8
+    }
+  },
+  "companion_task_classes": {
+    "1": "normal SecureISP control/data task dispatcher mapped above",
+    "2": "present in helper but no accepted camera-control callsite established",
+    "3": "separate debug/image retrieval path; task IDs overlap class 1 and must not be conflated"
+  },
+  "kmd_operations": {
+    "0x801": "GetInitParams",
+    "0x802": "DeviceConfig (creates worker threads/queue, powers on, sends class1 task 0 INIT)",
+    "0x803": "SendCSLPacket",
+    "0x804": "DeviceStart",
+    "0x805": "DeviceStop",
+    "0x806-0x80b": "unsupported/default",
+    "0x80c": "GetDeviceInfo",
+    "0x80d": "Init",
+    "0x80e": "DeInit / PowerOff",
+    "0x80f": "SupplementalDeviceConfig (captures CSIPHY/lane parameters)",
+    "0x810": "NotifyEvent"
+  },
+  "secure_lane_control": {
+    "start_order": [
+      "protect CSI lane(s) via exported command 0x2e",
+      "send class1 task 2 START"
+    ],
+    "stop_order": [
+      "send class1 task 3 STOP",
+      "unprotect CSI lane(s) via exported command 0x2f"
+    ],
+    "exported_dispatcher": "FUN_1400024f0",
+    "secure_config_function": "FUN_140001b08",
+    "qctree_service_guid": "{AE865C08-4A07-404D-BE51-D9A0465E23E5}",
+    "qctree_service_name": "PassThrough",
+    "qctree_ioctl": "0x00568004",
+    "passthrough_request_first_dword": "0x02001807",
+    "payload_fields_proved": [
+      "request first dword 0x02001807",
+      "protect boolean",
+      "computed lane protection bitmask"
+    ],
+    "exact_secure_world_meaning_of_0x02001807": "unresolved"
+  },
+  "trustlet_secure_memory": {
+    "imports": [
+      "CreateSecureSection",
+      "OpenSecureSection",
+      "AssignMemoryToSocDomain",
+      "MapSecureIo",
+      "MapViewOfFile",
+      "UnmapViewOfFile",
+      "FlushSecureSectionBuffers"
+    ],
+    "proved_handlers": [
+      "DAL_csid_process_iq_packet",
+      "DAL_secure_ife_process_iq_packet"
+    ],
+    "implication": "CSID/IFE command processing and secure buffer/domain handling occur inside the Secure Companion/trustlet path, consistent with E004y standard CAMSS MMIO staying inactive."
+  },
+  "parity_boundary": {
+    "normal_linux_camss_is_windows_1_to_1_parity": false,
+    "linux_secureisp_runtime_authorized": false,
+    "next_required_proof": "dynamic same-machine Windows trace of class-1 Secure Companion task sequence during real IR frame acquisition"
+  }
+}
