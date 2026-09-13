@@ -1,0 +1,144 @@
+# E004bt — CP_CAMERA + trusted-worker visibility contract
+
+## Result
+
+**PASS (structural capability, authority still closed): Windows proves that the internal capture backing is simultaneously visible to the VTL1 trustlet and to the CP_CAMERA SoC domain. Linux SCM can represent multiple simultaneous memory owners, so this shape is not structurally impossible; however no current Linux source establishes that `CP_CAMERA + QTEE/TZ` is a valid camera ACL, and QCOMTEE's SHM-bridge memory is ordinary HLOS-addressable memory rather than a protected-camera backing.**
+
+This gate is static-only. No ownership transition, SHM bridge creation, QTEE invocation, QSEECOM call, camera module load, or secure runtime occurred.
+
+## Windows oracle: simultaneous visibility is mandatory
+
+The exact `QcISPTrustlet8380.dll` internal-buffer constructor does the following in one object:
+
+1. `CreateSecureSection(...)`;
+2. `MapViewOfFile(...)` into the trustlet;
+3. save that trustlet VA at object `+0x30`;
+4. build the SoC-domain page-address array;
+5. `AssignMemoryToSocDomain(..., DomainId = 0x0d, Protection = 4, ...)`;
+6. retain the assignment handle and trustlet mapping simultaneously.
+
+The frame worker later passes object `+0x30` directly as the internal source to `FUN_1800037c8`, after the domain assignment has succeeded. Therefore the assignment does not replace the trustlet view; both lifetimes coexist.
+
+Release order makes the relationship explicit:
+
+1. close the assignment handle;
+2. free the domain-address array;
+3. only then `UnmapViewOfFile()` the trustlet VA;
+4. finally close the secure-section handle.
+
+For parity, Linux therefore needs **hardware-domain visibility plus trusted-worker visibility on the same protected backing during capture**.
+
+## Linux SCM can encode simultaneous owners
+
+`qcom_scm_assign_mem()` accepts:
+
+- a physical memory range;
+- a bitmap of current owners;
+- an array of destination `vmid + permission` pairs;
+- an arbitrary destination count.
+
+On success it replaces the current-owner bitmap with all destination VMIDs.
+
+This is not theoretical. Current drivers use simultaneous destination owners:
+
+- FASTRPC SECUREMAP assigns one range to both `HLOS` (RW) and a remote VMID (RWX);
+- RMTFS constructs `HLOS + N remote VMIDs`, all RW;
+- ath10k can assign one range to MSS/WLAN/WLAN-CE simultaneously.
+
+Thus Linux's low-level SCM ABI can represent a multi-owner visibility contract.
+
+## What is *not* proven for camera
+
+The kernel defines:
+
+- `QCOM_SCM_VMID_TZ = 0x01`;
+- `QCOM_SCM_VMID_HLOS = 0x03`;
+- `QCOM_SCM_VMID_CP_CAMERA = 0x0d`;
+- `QCOM_SCM_VMID_CP_CAMERA_PREVIEW = 0x1d`.
+
+But a whole-tree search finds **no Linux user of either CP_CAMERA VMID**. They exist only as ABI constants.
+
+Therefore there is no source authority for any of these candidate ACLs:
+
+- `CP_CAMERA` only;
+- `CP_CAMERA + TZ`;
+- `CP_CAMERA + HLOS`;
+- `CP_CAMERA + some QTEE-specific identity`;
+- their exact per-owner R/W permissions.
+
+In particular, E004bt does **not** equate QTEE with `QCOM_SCM_VMID_TZ` merely because QTEE is a trusted OS. That equivalence is not established by this source tree.
+
+## QCOMTEE SHM bridge solves a different sharing problem
+
+QCOMTEE's own message/shared-memory pool uses `tee_dyn_shm_alloc_helper()`:
+
+- pages are allocated by normal HLOS with `alloc_pages_exact()`;
+- a normal kernel `kaddr` is retained;
+- `virt_to_phys(kaddr)` becomes the physical address;
+- QCOMTEE registers that physical range via `qcom_tzmem_shm_bridge_create()`.
+
+The SHM-bridge helper requests RW permissions for both the non-secure and secure view and identifies HLOS as the non-secure VMID.
+
+This is useful proof that QTEE can receive a physical range while Linux keeps a kernel mapping. But it is **not** the Windows protected-camera internal contract:
+
+- the backing remains ordinary HLOS-addressable memory;
+- it is not proven assigned to CP_CAMERA;
+- the QCOMTEE memory-object code merely returns that `tee_shm` physical range with RW permission;
+- no source proves that an existing SHM bridge remains valid across a later CP_CAMERA ownership ACL change.
+
+Therefore “SHM bridge + assign to CP_CAMERA” cannot be composed by assumption.
+
+## External sample is a separate unresolved visibility contract
+
+The generic TEE core defines `TEE_DMA_HEAP_SECURE_VIDEO_RECORD` and the name `protected,secure-video-record`.
+
+However:
+
+- only OP-TEE code in this tree registers TEE protected DMA heaps;
+- QCOMTEE has no `tee_device_register_dma_heap()` integration;
+- current SP11 exposes only `system`, `default_cma_region`, and `reserved` DMA heaps.
+
+So QCOMTEE's ordinary `tee_shm` cannot stand in for the external protected sample either.
+
+This preserves the Windows two-buffer distinction:
+
+- **internal:** CP_CAMERA hardware target + trusted worker visibility;
+- **external:** consumer protected sample + trusted worker visibility;
+- neither is ordinary HLOS-shared memory.
+
+## Architectural consequence
+
+E004bt changes the blocker from “Linux cannot express simultaneous ownership” to a much narrower question:
+
+**Which exact secure owner/permission set is valid on X1E80100 for a CP_CAMERA target that must remain visible to an authorized trusted worker?**
+
+The mechanism exists; the camera-specific authority does not.
+
+This also means a future Linux backend must track more than a Boolean `assigned` flag. At minimum its internal protected target needs a formally owned ACL state and a trusted-visibility state, plus failure-safe reclaim. The concrete VMIDs must remain unset until proven.
+
+## What remains forbidden
+
+Do not yet:
+
+- call `qcom_scm_assign_mem()` with CP_CAMERA;
+- assume `QCOM_SCM_VMID_TZ` is the QTEE camera worker identity;
+- combine SHM bridge and CP_CAMERA assignment experimentally;
+- enable QCOMTEE;
+- create a guessed protected DMA heap;
+- expose the internal backing to normal HLOS CPU paths;
+- run protected CAMSS/SecureISP runtime.
+
+## Next gate
+
+The next justified gate is **E004bu — internal protected-target ACL contract**, static/compile-only.
+
+Rather than invent a VMID, encode the now-proven lifetime constraints into the CAMSS protected-target contract:
+
+- physical ownership range remains distinct from CAMSS IOVA;
+- ownership is an explicit ACL/set, not a single-domain Boolean;
+- trusted-worker visibility is independently represented;
+- hardware visibility and worker visibility must overlap for the active capture interval;
+- teardown must revoke the hardware assignment before releasing trusted mapping/backing;
+- concrete VMID/permission values remain absent until the X1E camera authority is proven.
+
+The gate must again produce zero executable `.text` change. This is useful because it prevents the eventual runtime backend from being shaped around the now-disproven single-owner model while still respecting the secure-runtime prohibition.

@@ -1,0 +1,122 @@
+E004bt EXTERNAL PROTECTED SAMPLE PROVIDER GAP
+
+--- generic protected heap names ---
+
+#define TEE_DEVICE_FLAG_REGISTERED	0x1
+#define TEE_MAX_DEV_NAME_LEN		32
+
+enum tee_dma_heap_id {
+	TEE_DMA_HEAP_SECURE_VIDEO_PLAY = 1,
+	TEE_DMA_HEAP_TRUSTED_UI,
+	TEE_DMA_HEAP_SECURE_VIDEO_RECORD,
+};
+
+/**
+ * struct tee_device - TEE Device representation
+ * @name:	name of device
+
+static const struct dma_heap_ops tee_dma_heap_ops = {
+	.allocate = tee_dma_heap_alloc,
+};
+
+static const char *heap_id_2_name(enum tee_dma_heap_id id)
+{
+	switch (id) {
+	case TEE_DMA_HEAP_SECURE_VIDEO_PLAY:
+		return "protected,secure-video";
+	case TEE_DMA_HEAP_TRUSTED_UI:
+		return "protected,trusted-ui";
+	case TEE_DMA_HEAP_SECURE_VIDEO_RECORD:
+		return "protected,secure-video-record";
+	default:
+		return NULL;
+	}
+}
+
+static int alloc_dma_heap(struct tee_device *teedev, enum tee_dma_heap_id id,
+			  struct tee_protmem_pool *pool)
+{
+	struct dma_heap_export_info exp_info = {
+		.ops = &tee_dma_heap_ops,
+		.name = heap_id_2_name(id),
+	};
+	struct tee_dma_heap *h;
+	int rc;
+
+	if (!exp_info.name)
+		return -EINVAL;
+
+	if (xa_reserve(&tee_dma_heap, id, GFP_KERNEL)) {
+		if (!xa_load(&tee_dma_heap, id))
+			return -EEXIST;
+		return -ENOMEM;
+	}
+
+	h = kzalloc_obj(*h);
+	if (!h)
+		return -ENOMEM;
+	h->id = id;
+	kref_init(&h->kref);
+	h->teedev = teedev;
+	h->pool = pool;
+	mutex_init(&h->mu);
+
+	exp_info.priv = h;
+	h->heap = dma_heap_add(&exp_info);
+	if (IS_ERR(h->heap)) {
+		rc = PTR_ERR(h->heap);
+		kfree(h);
+
+		return rc;
+	}
+
+	/* "can't fail" due to the call to xa_reserve() above */
+	return WARN_ON(xa_is_err(xa_store(&tee_dma_heap, id, h, GFP_KERNEL)));
+}
+
+int tee_device_register_dma_heap(struct tee_device *teedev,
+				 enum tee_dma_heap_id id,
+				 struct tee_protmem_pool *pool)
+{
+	struct tee_dma_heap *h;
+	int rc;
+
+	if (!tee_device_get(teedev))
+		return -EINVAL;
+
+	h = xa_load(&tee_dma_heap, id);
+	if (h) {
+		mutex_lock(&h->mu);
+		if (h->teedev) {
+			rc = -EBUSY;
+		} else {
+			kref_init(&h->kref);
+			h->shutting_down = false;
+			h->teedev = teedev;
+			h->pool = pool;
+			rc = 0;
+		}
+		mutex_unlock(&h->mu);
+	} else {
+		rc = alloc_dma_heap(teedev, id, pool);
+	}
+
+	if (rc) {
+		tee_device_put(teedev);
+		dev_err(&teedev->dev, "can't register DMA heap id %d (%s)\n",
+			id, heap_id_2_name(id));
+
+--- protected heap provider registrations in tree ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/optee/smc_abi.c:1722:	rc = tee_device_register_dma_heap(optee->teedev, heap_id, pool);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/optee/ffa_abi.c:1046:		rc = tee_device_register_dma_heap(optee->teedev, id, pool);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:285:int tee_device_register_dma_heap(struct tee_device *teedev,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:320:EXPORT_SYMBOL_GPL(tee_device_register_dma_heap);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:367:int tee_device_register_dma_heap(struct tee_device *teedev __always_unused,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:373:EXPORT_SYMBOL_GPL(tee_device_register_dma_heap);
+
+--- qcomtee provider integration search ---
+
+--- runtime heaps ---
+default_cma_region
+reserved
+system

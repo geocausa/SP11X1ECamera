@@ -1,0 +1,43 @@
+{
+  "experiment": "E004bt",
+  "status": "PASS_MULTI_OWNER_MECHANISM_PROVEN_CAMERA_ACL_AUTHORITY_UNRESOLVED",
+  "mode": "static-only",
+  "windows": {
+    "internal_trustlet_mapping_retained_after_domain_assign": true,
+    "soc_domain_id": "0x0d",
+    "domain_protection_argument": 4,
+    "worker_reads_internal_mapping_after_assign": true,
+    "release_order": [
+      "close assignment handle",
+      "free domain VA array",
+      "unmap trustlet view",
+      "close section"
+    ]
+  },
+  "linux_scm": {
+    "multi_destination_owner_abi": true,
+    "multi_owner_driver_precedents": [
+      "fastrpc",
+      "rmtfs",
+      "ath10k"
+    ],
+    "cp_camera_vmid": "0x0d",
+    "cp_camera_preview_vmid": "0x1d",
+    "cp_camera_assign_callsite_in_tree": false,
+    "cp_camera_plus_trusted_owner_acl_proven": false
+  },
+  "qcomtee": {
+    "ordinary_tee_shm_has_hlos_kaddr": true,
+    "shm_bridge_keeps_hlos_nonsecure_view": true,
+    "shm_bridge_plus_cp_camera_composition_proven": false,
+    "registers_secure_video_record_heap": false
+  },
+  "runtime_actions": {
+    "scm_assign_mem": false,
+    "shm_bridge_create": false,
+    "qtee_smc": false,
+    "qcomtee_enable_or_load": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004bu internal protected-target ACL contract, compile-only zero-text"
+}
