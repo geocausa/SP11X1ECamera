@@ -1,0 +1,143 @@
+E004ax E004aw HAL CROSS-CHECK
+E004aw IFE HAL SELECTION
+
+FUN_18000bbf0 chooses HAL family from logical IFE core index before HW-version sampling.
+
+--- family/base selection ---
+          *(undefined8 *)(lVar32 + 0xe8) = *(undefined8 *)(*(longlong *)(lVar9 + 0x28) + 0x18);
+          FUN_180019e00(4,"IFE driver gets base address IFE_CORE %d",(ulonglong)param_2,param_4,
+                        param_5,param_6,param_7,param_8);
+          param_4 = *(ulonglong *)(lVar32 + 0xe8);
+          if (param_4 == 0) {
+            uVar11 = (ulonglong)*(uint *)(lVar32 + 0xd0);
+            FUN_180019e00(2,"IFE_CORE %d base pointer is NULL",uVar11,0,param_5,param_6,param_7,
+                          param_8);
+            *(undefined8 *)(lVar32 + 0x3398) = 0;
+            *(undefined8 *)(lVar32 + 0x33a0) = 0;
+          }
+          else {
+            if (param_2 < 2) {
+              lVar9 = param_4 + 0xc00;
+              uVar33 = param_4 + 0x4000;
+            }
+            else {
+              lVar9 = param_4 + 0x1200;
+              uVar33 = param_4;
+            }
+            *(uint *)(lVar32 + 0x6b568) = (uint)(param_2 >= 2);
+            *(ulonglong *)(lVar32 + 0xf0) = uVar33;
+            *(longlong *)(lVar32 + 0xf8) = lVar9;
+            FUN_180019e00(4,"IFE_CORE %d base address = %#Ix.",(ulonglong)*(uint *)(lVar32 + 0xd0),
+                          param_4,param_5,param_6,param_7,param_8);
+            FUN_180019e00(4,"IFE_CORE %d csidBaseAddr = %#Ix.",(ulonglong)*(uint *)(lVar32 + 0xd0),
+                          *(undefined8 *)(lVar32 + 0xf0),param_5,param_6,param_7,param_8);
+            param_4 = *(ulonglong *)(lVar32 + 0xf8);
+            FUN_180019e00(4,"IFE_CORE %d busWrBaseAddr = %#Ix.",(ulonglong)*(uint *)(lVar32 + 0xd0),
+                          param_4,param_5,param_6,param_7,param_8);
+            *(undefined8 *)(lVar32 + 0x3398) = 0;
+            *(undefined8 *)(lVar32 + 0x33a0) = 0;
+            uVar16 = FUN_180008628((undefined8 *)(lVar32 + 0x50));
+--
+                   *(undefined4 *)(*(longlong *)(param_1 + 0xdc8) + uVar11 * 0x28 + 0xc);
+            }
+            else if (iVar3 == 0x3013) {
+              *(int *)(local_88 + 0x6b5d8) = piVar12[2];
+              *(undefined4 *)(local_88 + 0x6b5dc) =
+                   *(undefined4 *)(*(longlong *)(param_1 + 0xdc8) + uVar11 * 0x28 + 0xc);
+            }
+            uVar2 = (int)uVar11 + 1;
+            uVar11 = (ulonglong)uVar2;
+          } while (uVar2 < *(uint *)(param_1 + 0x564));
+        }
+        *(undefined1 *)(local_88 + 0x6b559) = 0;
+        if (*(int *)(local_88 + 0x6b568) == 0) {
+          pcVar13 = FUN_180011010;
+          pcVar15 = FUN_18000f870;
+          pcVar17 = FUN_18000f8a0;
+          pcVar19 = FUN_18000f9e0;
+          pcVar21 = FUN_18000f740;
+          pcVar30 = FUN_180010010;
+          pcVar29 = FUN_180010170;
+          pcVar28 = FUN_180010400;
+          pcVar27 = FUN_18000fbd0;
+          pcVar26 = FUN_18000f660;
+          pcVar24 = FUN_18000fbf0;
+          pcVar23 = FUN_18000f610;
+        }
+        else {
+          pcVar13 = FUN_18000dea0;
+          pcVar15 = FUN_18000d050;
+          pcVar17 = FUN_18000d080;
+          pcVar19 = FUN_18000d110;
+          pcVar21 = FUN_18000e6f0;
+          pcVar30 = FUN_18000d3d0;
+          pcVar29 = FUN_18000d510;
+          pcVar28 = FUN_18000d6d0;
+          pcVar27 = FUN_180008600;
+          pcVar26 = FUN_18000cf50;
+          pcVar24 = FUN_18000d1e0;
+          pcVar23 = FUN_18000d000;
+        }
+        *(code **)(local_88 + 0x6b570) = pcVar23;
+        *(code **)(local_88 + 0x6b578) = pcVar24;
+        *(code **)(local_88 + 0x6b580) = pcVar26;
+        *(code **)(local_88 + 0x6b588) = pcVar27;
+        *(code **)(local_88 + 0x6b590) = pcVar28;
+        *(code **)(local_88 + 0x6b598) = pcVar29;
+        *(code **)(local_88 + 0x6b5a0) = pcVar30;
+        *(code **)(local_88 + 0x6b5a8) = pcVar21;
+        *(code **)(local_88 + 0x6b5b0) = pcVar19;
+        *(code **)(local_88 + 0x6b5c0) = pcVar17;
+        *(code **)(local_88 + 0x6b5b8) = pcVar15;
+        *(code **)(local_88 + 0x6b5c8) = pcVar13;
+        *(undefined1 *)(*(longlong *)(lVar34 + 0x28) + (ulonglong)param_2 * 0x30 + 0x20) = 0;
+
+--- full getter ---
+TARGET 18000f610 FUN_18000f610@18000f610
+  REF 18003f568 DATA caller=<none>
+  REF 18002b520 DATA caller=<none>
+  REF 18000c26c DATA caller=FUN_18000bbf0@18000bbf0
+//// FUN_18000f610@18000f610 ////
+
+uint FUN_18000f610(longlong param_1)
+
+{
+  uint uVar1;
+  undefined8 in_x4;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  
+  uVar1 = **(uint **)(param_1 + 0xe8);
+  FUN_180019e00(4,"IFE%d: HAL_ife_get_hw_version = 0x%x",(ulonglong)*(uint *)(param_1 + 0xd0),
+                (ulonglong)uVar1,in_x4,in_x5,in_x6,in_x7);
+  return uVar1;
+}
+
+
+
+
+--- lite getter ---
+TARGET 18000d000 FUN_18000d000@18000d000
+  REF 18003f510 DATA caller=<none>
+  REF 18002b4e4 DATA caller=<none>
+  REF 18000c26c DATA caller=FUN_18000bbf0@18000bbf0
+//// FUN_18000d000@18000d000 ////
+
+uint FUN_18000d000(longlong param_1)
+
+{
+  uint uVar1;
+  undefined8 in_x4;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  
+  uVar1 = **(uint **)(param_1 + 0xe8);
+  FUN_180019e00(4,"IFE_Lite%d: HAL_ife_lite_get_hw_version = 0x%x",
+                (ulonglong)*(uint *)(param_1 + 0xd0),(ulonglong)uVar1,in_x4,in_x5,in_x6,in_x7);
+  return uVar1;
+}
+
+
+

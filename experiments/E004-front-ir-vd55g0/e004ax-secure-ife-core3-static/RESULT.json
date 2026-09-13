@@ -1,0 +1,35 @@
+{
+  "schema": "sp11-camera-e004ax-secure-ife-core3-static-v1",
+  "status": "PASS_SECUREISP_ACTIVE_LOGICAL_CORE3_IS_IFE_LITE",
+  "date": "2026-09-13",
+  "trustlet_sha256": "55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606",
+  "device_config": {
+    "active_core_count": 1,
+    "active_core_ids": [
+      3
+    ],
+    "first_allocation_hardcodes_core3": true
+  },
+  "lifecycle_consumers": [
+    "secure IFE initialization",
+    "secure CSID initialization",
+    "start",
+    "stop",
+    "packet dispatch",
+    "set-info/resource management"
+  ],
+  "kmd_corroboration": "ife3 clock request",
+  "e004aw_mapping": {
+    "logical_core": 3,
+    "hal_family": "IFE-Lite",
+    "csid_offset": "0x0000",
+    "bus_writer_offset": "0x1200",
+    "hw_version_callback": "HAL_ife_lite_get_hw_version"
+  },
+  "namespace_caution": "SecureISP logical IFE core ID is not asserted equal to Linux ordinary CAMSS core numbering.",
+  "runtime_executed": false,
+  "qcomtee_loaded": false,
+  "protected_aperture_accessed_linux": false,
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Statically map secure core-3 IFE-Lite register/callback family to Linux Qualcomm camera definitions without touching protected hardware."
+}

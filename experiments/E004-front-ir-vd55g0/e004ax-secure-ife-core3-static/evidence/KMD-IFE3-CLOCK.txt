@@ -1,0 +1,52 @@
+E004ax KMD IFE3 CORROBORATION
+                    uVar9 = *puVar20;
+                    uVar7 = puVar23[2];
+                    pcVar17 = "UBWCAPIVersion = 0x%x, UBWC portnum = %d\n";
+                  }
+                  else {
+                    if (uVar9 != 0) {
+                      if (uVar9 == 1) {
+                        param_7 = *(ulonglong ***)(puVar23 + 5);
+                        param_8 = (ulonglong)puVar23[2];
+                        FUN_140006a20(3,0x14000c230,0xd,
+                                      "clockConfig : usageType %d leftPixelClockHz %d rightPixelClockHz %d numRdi %d rdiClockHz %d\n"
+                                      ,(ulonglong)*puVar20,*(undefined8 *)(puVar23 + 3),param_7,
+                                      param_8);
+                        local_1b8[0] = 0;
+                        local_150 = 0;
+                        pcVar17 = (char *)FUN_140008920(0,0,0);
+                        uVar12 = 0;
+                        uVar9 = 0;
+                        if ((pcVar17 == (char *)0x0) ||
+                           (uVar16 = FUN_1400089d0(extraout_x15,pcVar17,(int *)local_1b8,&local_150)
+                           , uVar12 = local_150, uVar9 = local_1b8[0], -1 < (int)uVar16)) {
+                          pcVar17 = "IFE CLK transitioning to PState= %x ifeclk = %u\n";
+                          uVar26 = uVar12 & 0xffffffff;
+                          puVar20 = (uint *)(ulonglong)uVar9;
+                          FUN_140006a20(3,0x14000c230,0xd,
+                                        "IFE CLK transitioning to PState= %x ifeclk = %u\n",puVar20,
+                                        uVar26,param_7,param_8);
+                          FUN_140007378(0,uVar9,(uint *)0x0,pcVar17,puVar20,uVar26,
+                                        (ulonglong)param_7,param_8);
+                        }
+                        param_6 = (undefined8 *)(uVar12 & 0xffffffff);
+                        FUN_140006a20(3,0x14000c230,0xd,
+                                      "ife3 clock request: nVfeCoreClkFreq = %d, approvedClk = %d\n"
+                                      ,*(undefined8 *)(puVar23 + 3),param_6,param_7,param_8);
+                      }
+                      else {
+                        if (uVar9 != 2) {
+                          if (uVar9 != 3) goto LAB_140003c0c;
+                          goto LAB_140003a34;
+                        }
+                        param_7 = *(ulonglong ***)(puVar23 + 7);
+                        param_8 = *(ulonglong *)(puVar23 + 0xb);
+                        FUN_140006a20(3,0x14000c230,0xd,
+                                      "bwConfig : usageType %d [leftPixelVote] camnocBWbytes %llu externalBWbytes %llu [rightPixelVote] camnocBWbytes %llu externalBWbytes %llu numRdi %u [rdiVote 0] camnocBWbytes %llu externalBWbytes %llu [rdiVote 1] camnocBWbytes %llu externalBWbytes %llu [rdiVote 2] camnocBWbytes %llu externalBWbytes %llu [rdiVote 3] camnocBWbytes %llu externalBWbytes %llu\n"
+                                      ,(ulonglong)*puVar20,*(undefined8 *)(puVar23 + 5),param_7,
+                                      param_8);
+                        uVar16 = 0xd;
+                        lVar14 = *(longlong *)(puVar23 + 0x11) + *(longlong *)(puVar23 + 0x17) +
+                                 *(longlong *)(puVar23 + 5);
+                        puVar35 = (undefined8 *)
+                                  (*(longlong *)(puVar23 + 0x13) + *(longlong *)(puVar23 + 0x19) +
