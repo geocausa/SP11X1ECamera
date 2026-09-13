@@ -1,0 +1,237 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AH_SECUREISP_RELOADSAFE_TRACE_20260913\E004AH_COLD2_TRACE.log'
+===E004AH_COLD2_LOAD1===
+start             end                 module name
+fffff803`7c6d0000 fffff803`7c706000   qccamsecureisp8380   (deferred)             
+Loaded Module Info: [qccamsecureisp8380] 
+         Module: qccamsecureisp8380
+   Base Address: fffff8037c6d0000
+     Image Name: qccamsecureisp8380.sys
+   Machine Type: 43620 (ARM64)
+     Time Stamp: 67c9d686 Thu Mar  6 17:08:22 2025
+           Size: 36000
+       CheckSum: 27338
+Characteristics: 22  
+Debug Data Dirs: Type  Size     VA  Pointer
+             CODEVIEW    55, 11400,   10400 RSDS - GUID: {524FB0E0-E640-4DCC-B50A-098660BC1D12}
+               Age: 1, Pdb: Z:\b\WP\Camera\rel\10.9\ARM64\Release\qccamsecureisp8380.pdb
+                 POGO   25c, 11458,   10458 [Data not mapped]
+    Symbol Type: DEFERRED - No error - symbol load deferred
+    Load Report: no symbols loaded
+4: kd> bc *; sxe ld:qccamsecureisp8380.sys; sxe ud:qccamsecureisp8380.sys; bp fffff8037c6d3350 ".printf \"E004AH_C2_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"; bp fffff8037c6d4a90 ".printf \"E004AH_C2_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"; bp fffff8037c6d24f0 ".printf \"E004AH_C2_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"; bp fffff8037c6d1b08 ".printf \"E004AH_C2_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"; .echo ===E004AH_COLD2_LOAD1_BP_ARMED===; bl; g
+===E004AH_COLD2_LOAD1_BP_ARMED===
+ 0 e fffff803`7c6d3350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AH_C2_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 1 e fffff803`7c6d4a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AH_C2_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 2 e fffff803`7c6d24f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AH_C2_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 3 e fffff803`7c6d1b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AH_C2_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+Unload module qccamsecureisp8380.sys at fffff803`7c6d0000
+nt!DebugService2+0x8:
+fffff803`7e001408 d43e0000 brk         #0xF000
+5: kd> .echo ===E004AH_COLD2_LOAD1_UNLOADED_NO_TASK_HITS===; g
+===E004AH_COLD2_LOAD1_UNLOADED_NO_TASK_HITS===
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`7fac0000
+qcsp [spcomEvtDeviceAdd] device count [1] .
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`7fcc0000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`7fd30000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`7fac0000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`80790000
+Capacity:39912, FullChargedCapacity:49890, Voltage:8251, Rate:0
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`80ee0000
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`80f50000
+Unload module QcUsbFnSsFilter8380.sys at fffff803`7fbb0000
+Unload module ufx01000.sys at fffff803`7fc60000
+Unload module ufxsynopsys.sys at fffff803`7fc20000
+Unload module dump_dumpfve.sys at fffff803`7ae00000
+Unload module dump_stornvme.sys at fffff803`7b980000
+Unload module dump_dumpstorport.sys at fffff803`7b910000
+qccdi: WARN: Crash dump trace log buffer full
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Unload module WUDFRd.sys at fffff803`812f0000
+-successfully opened handle 00000000000003A4 for Invoke driver 
+
+-SSGTZD random number generated was 0x2ca94db8 from Invoke driver 
+
+-SSGServicesInvokeInit with status 0x0 
+
+Handle opened to SMCInvoke driver successfully 0x0
+
+Queue created successfully 0x0
+
+Interface published for SSGUMD successfully 0x0
+
+SSGServicesCreateDevice returned with status 0x0
+
+nt!DebugService2+0x8:
+fffff803`7e001408 d43e0000 brk         #0xF000
+5: kd> .echo ===E004AH_COLD2_LOAD2_CHECK===; lm m qccamsecureisp8380; !lmi qccamsecureisp8380
+===E004AH_COLD2_LOAD2_CHECK===
+start             end                 module name
+fffff803`813d0000 fffff803`81406000   qccamsecureisp8380   (deferred)             
+Loaded Module Info: [qccamsecureisp8380] 
+         Module: qccamsecureisp8380
+   Base Address: fffff803813d0000
+     Image Name: qccamsecureisp8380.sys
+   Machine Type: 43620 (ARM64)
+     Time Stamp: 67c9d686 Thu Mar  6 17:08:22 2025
+           Size: 36000
+       CheckSum: 27338
+Characteristics: 22  
+Debug Data Dirs: Type  Size     VA  Pointer
+             CODEVIEW    55, 11400,   10400 RSDS - GUID: {524FB0E0-E640-4DCC-B50A-098660BC1D12}
+               Age: 1, Pdb: Z:\b\WP\Camera\rel\10.9\ARM64\Release\qccamsecureisp8380.pdb
+                 POGO   25c, 11458,   10458 [Data not mapped]
+    Symbol Type: DEFERRED - No error - symbol load deferred
+    Load Report: no symbols loaded
+5: kd> bc *; bp fffff803813d3350 ".printf \"E004AH_C2_L2_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"; bp fffff803813d4a90 ".printf \"E004AH_C2_L2_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"; bp fffff803813d24f0 ".printf \"E004AH_C2_L2_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"; bp fffff803813d1b08 ".printf \"E004AH_C2_L2_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"; .echo ===E004AH_COLD2_LOAD2_BP_ARMED===; bl; g
+===E004AH_COLD2_LOAD2_BP_ARMED===
+ 0 e fffff803`813d3350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AH_C2_L2_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 1 e fffff803`813d4a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AH_C2_L2_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 2 e fffff803`813d24f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AH_C2_L2_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 3 e fffff803`813d1b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AH_C2_L2_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+DriverEntry failed 0xc035001e for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\l1vhlwf
+Unload module l1vhlwf.sys at fffff803`81710000
+DriverEntry failed 0xc00000bb for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\NetworkPrivacyPolicy
+Unload module NetworkPrivacyPolicy.sys at fffff803`81fd0000
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0xC0 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`7e0013b0 d43e0000 brk         #0xF000
+11: kd> .echo ===E004AH_COLD2_L2_VALIDATE===; lm m qccamsecureisp8380; bl; u fffff803813d3350 L8; u fffff803813d4a90 L8; u fffff803813d24f0 L8; u fffff803813d1b08 L8
+===E004AH_COLD2_L2_VALIDATE===
+start             end                 module name
+fffff803`813d0000 fffff803`81406000   qccamsecureisp8380   (no symbols)           
+ 0 e fffff803`813d3350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AH_C2_L2_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 1 e fffff803`813d4a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AH_C2_L2_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 2 e fffff803`813d24f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AH_C2_L2_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 3 e fffff803`813d1b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AH_C2_L2_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+qccamsecureisp8380+0x3350:
+fffff803`813d3350 d503237f pacibsp
+fffff803`813d3354 a9ba7bfd stp         fp,lr,[sp,#-0x60]!
+fffff803`813d3358 a90153f3 stp         x19,x20,[sp,#0x10]
+fffff803`813d335c a9025bf5 stp         x21,x22,[sp,#0x20]
+fffff803`813d3360 a90363f7 stp         x23,x24,[sp,#0x30]
+fffff803`813d3364 a9046bf9 stp         x25,x26,[sp,#0x40]
+fffff803`813d3368 f9002bfb str         x27,[sp,#0x50]
+fffff803`813d336c 910003fd mov         fp,sp
+qccamsecureisp8380+0x4a90:
+fffff803`813d4a90 d503237f pacibsp
+fffff803`813d4a94 f81f0ff3 str         x19,[sp,#-0x10]!
+fffff803`813d4a98 a9bc7bfd stp         fp,lr,[sp,#-0x40]!
+fffff803`813d4a9c 910003fd mov         fp,sp
+fffff803`813d4aa0 2a0103e8 mov         w8,w1
+fffff803`813d4aa4 d0000149 adrp        x9,qccamsecureisp8380+0x2e000 (fffff803`813fe000)
+fffff803`813d4aa8 f9436921 ldr         x1,[x9,#0x6D0]
+fffff803`813d4aac b5000061 cbnz        x1,qccamsecureisp8380+0x4ab8 (fffff803`813d4ab8)
+qccamsecureisp8380+0x24f0:
+fffff803`813d24f0 d503237f pacibsp
+fffff803`813d24f4 a9bf7bfd stp         fp,lr,[sp,#-0x10]!
+fffff803`813d24f8 910003fd mov         fp,sp
+fffff803`813d24fc 7100b83f cmp         w1,#0x2E
+fffff803`813d2500 54000061 bne         qccamsecureisp8380+0x250c (fffff803`813d250c)
+fffff803`813d2504 52800022 mov         w2,#1
+fffff803`813d2508 14000004 b           qccamsecureisp8380+0x2518 (fffff803`813d2518)
+fffff803`813d250c 7100bc3f cmp         w1,#0x2F
+qccamsecureisp8380+0x1b08:
+fffff803`813d1b08 d503237f pacibsp
+fffff803`813d1b0c a9bc7bfd stp         fp,lr,[sp,#-0x40]!
+fffff803`813d1b10 a90153f3 stp         x19,x20,[sp,#0x10]
+fffff803`813d1b14 a9025bf5 stp         x21,x22,[sp,#0x20]
+fffff803`813d1b18 a90363f7 stp         x23,x24,[sp,#0x30]
+fffff803`813d1b1c 910003fd mov         fp,sp
+fffff803`813d1b20 94002308 bl          qccamsecureisp8380+0xa740 (fffff803`813da740)
+fffff803`813d1b24 d10443ff sub         sp,sp,#0x110
+11: kd> .echo ===E004AH_COLD2_RELEASE_PHASE===; g
+===E004AH_COLD2_RELEASE_PHASE===
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Unload module netadaptercx.sys at fffff803`7d390000
+Unload module WifiCx.sys at fffff803`7c430000
+Unload module qcwlanhmt8380.sys at fffff803`7cf40000
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`7e0013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AH_COLD2_POSTSTOP_STATE===; lm m qccamsecureisp8380; bl
+===E004AH_COLD2_POSTSTOP_STATE===
+start             end                 module name
+fffff803`813d0000 fffff803`81406000   qccamsecureisp8380   (no symbols)           
+ 0 e fffff803`813d3350     0001 (0001) qccamsecureisp8380+0x3350 ".printf \"E004AH_C2_L2_OP op=0x%I64x in=%p inlen=0x%I64x out=%p outlen=0x%I64x\\n\", @x1,@x2,@x3,@x4,@x5; gc"
+ 1 e fffff803`813d4a90     0001 (0001) qccamsecureisp8380+0x4a90 ".printf \"E004AH_C2_L2_TASK id=0x%I64x selector=0x%I64x class=0x%I64x in=%p inlen=0x%I64x out=%p outarg=0x%I64x bw=%p\\n\", @x0,@x1,(@x1+1),@x2,@x3,@x4,@x5,@x6; gc"
+ 2 e fffff803`813d24f0     0001 (0001) qccamsecureisp8380+0x24f0 ".printf \"E004AH_C2_L2_FNTABLE cmd=0x%I64x arglen=0x%I64x ptr=%p mask=0x%I64x\\n\", @x1,@x2,@x3,poi(@x3); gc"
+ 3 e fffff803`813d1b08     0001 (0001) qccamsecureisp8380+0x1b08 ".printf \"E004AH_C2_L2_SECURECFG mask=0x%I64x protect=0x%I64x x0=%p x3=0x%I64x\\n\", @x1,@x2,@x0,@x3; gc"
+
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Unload module netadaptercx.sys at fffff803`81830000
+Unload module WifiCx.sys at fffff803`7c430000
+Unload module qcwlanhmt8380.sys at fffff803`7cf20000
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`7e0013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AH_COLD2_END_NO_SECUREISP_TASK_HITS===; .logclose; bc *; .reboot
+===E004AH_COLD2_END_NO_SECUREISP_TASK_HITS===
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AH_SECUREISP_RELOADSAFE_TRACE_20260913\E004AH_COLD2_TRACE.log
