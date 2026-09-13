@@ -1,0 +1,100 @@
+=== ShvlpProtectPages ===
+addr=1400c6718 sig=uint __cdecl ShvlpProtectPages(longlong * param_1, ulonglong * param_2, undefined4 param_3, uint param_4)
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+uint ShvlpProtectPages(longlong *param_1,ulonglong *param_2,undefined4 param_3,uint param_4)
+
+{
+  undefined8 *puVar1;
+  uint uVar2;
+  undefined8 *puVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  longlong lVar6;
+  longlong *plVar7;
+  longlong lVar8;
+  undefined4 extraout_w15;
+  uint uVar9;
+  ulonglong uVar10;
+  longlong lVar11;
+  uint local_100 [4];
+  undefined8 local_f0;
+  undefined8 uStack_e8;
+  undefined8 local_e0 [18];
+  
+  local_100[0] = 0;
+  uVar5 = *param_2;
+  uStack_e8 = 0;
+  local_f0 = 0;
+  if (uVar5 < 0x100000000) {
+    uVar10 = uVar5 & 0xffffffff;
+    uVar9 = (uint)uVar5;
+    puVar3 = (undefined8 *)0x0;
+    if (0xe < uVar9) {
+      puVar3 = (undefined8 *)ShvlpAcquireHypercallPage((uint *)&local_f0,0);
+      param_3 = extraout_w15;
+    }
+    puVar1 = local_e0;
+    if (puVar3 != (undefined8 *)0x0) {
+      puVar1 = puVar3;
+    }
+    *(undefined4 *)(puVar1 + 1) = param_3;
+    *(undefined4 *)((longlong)puVar1 + 0xc) = 0;
+    uVar4 = 0x1fe;
+    if (puVar3 == (undefined8 *)0x0) {
+      uVar4 = 0xe;
+    }
+    *puVar1 = 0xffffffffffffffff;
+    uVar2 = 0;
+    uVar5 = 0;
+    lVar11 = 0;
+    if ((param_4 & 1) != 0) {
+      lVar11 = *param_1;
+    }
+    while (uVar9 != 0) {
+      uVar9 = (uint)uVar10;
+      if (uVar9 < uVar4) {
+        uVar4 = uVar9;
+      }
+      uVar2 = 0;
+      if (uVar4 != 0) {
+        lVar6 = lVar11;
+        plVar7 = puVar1 + 2;
+        do {
+          lVar8 = lVar6;
+          if ((param_4 & 1) == 0) {
+            lVar8 = param_1[(int)uVar5 + uVar2];
+          }
+          uVar2 = uVar2 + 1;
+          *plVar7 = lVar8;
+          lVar6 = lVar6 + 1;
+          plVar7 = plVar7 + 1;
+        } while (uVar2 < uVar4);
+      }
+      if (uVar4 < 0xf) {
+        uVar2 = ShvlpInitiateFastHypercall(0xc,puVar1,(uVar4 + 2) * 8,(ulonglong)uVar4,local_100);
+      }
+      else {
+        uVar2 = ShvlpInitiateVariableHypercall();
+      }
+      if ((int)uVar2 < 0) break;
+      lVar11 = lVar11 + (ulonglong)local_100[0];
+      uVar5 = (ulonglong)((int)uVar5 + local_100[0]);
+      uVar9 = uVar9 - local_100[0];
+      uVar10 = (ulonglong)uVar9;
+    }
+    if (puVar1 != local_e0) {
+      ShvlpReleaseHypercallPage((uint *)&local_f0);
+    }
+    *param_2 = uVar5;
+  }
+  else {
+    *param_2 = 0;
+    uVar2 = DAT_1400c68b0;
+  }
+  return uVar2;
+}
+
+

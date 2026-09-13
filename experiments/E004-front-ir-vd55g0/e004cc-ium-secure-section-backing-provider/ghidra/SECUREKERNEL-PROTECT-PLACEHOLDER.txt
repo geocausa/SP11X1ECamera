@@ -1,0 +1,208 @@
+=== SkmiProtectPlaceholderPages ===
+addr=140066970 sig=undefined __cdecl SkmiProtectPlaceholderPages(longlong * param_1, ulonglong param_2, uint param_3, ulonglong param_4)
+
+void SkmiProtectPlaceholderPages(longlong *param_1,ulonglong param_2,uint param_3,ulonglong param_4)
+
+{
+  bool bVar1;
+  undefined1 auVar2 [16];
+  undefined1 auVar3 [16];
+  undefined1 auVar4 [16];
+  undefined1 auVar5 [16];
+  undefined1 auVar6 [16];
+  undefined1 auVar7 [16];
+  undefined1 auVar8 [16];
+  undefined1 auVar9 [16];
+  ulonglong *puVar10;
+  byte bVar11;
+  uint uVar12;
+  ulonglong *puVar13;
+  int iVar14;
+  undefined8 *puVar15;
+  undefined8 *puVar16;
+  undefined *in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  ulonglong uVar17;
+  undefined4 extraout_w9;
+  ulonglong uVar18;
+  ulonglong uVar19;
+  longlong lVar20;
+  undefined8 extraout_d0;
+  undefined8 extraout_d0_00;
+  undefined8 extraout_var;
+  undefined8 extraout_var_00;
+  undefined8 in_d1;
+  undefined8 in_register_00005028;
+  undefined8 in_d2;
+  undefined8 in_register_00005048;
+  undefined8 in_d3;
+  undefined8 in_register_00005068;
+  undefined1 in_q4 [16];
+  undefined1 in_q5 [16];
+  undefined1 in_q6 [16];
+  undefined1 in_q7 [16];
+  ulonglong local_88;
+  longlong *local_80;
+  ulonglong uStack_78;
+  longlong local_70;
+  undefined8 local_60;
+  undefined8 uStack_58;
+  
+  bVar1 = (param_4 & 1) == 0;
+  if (bVar1) {
+    lVar20 = 0;
+  }
+  else {
+    lVar20 = *param_1;
+  }
+  if ((param_3 == 2) && ((SkmiFlags & 0x10) == 0)) {
+    param_3 = 1;
+  }
+  uVar18 = (ulonglong)param_3;
+  if ((param_4 & 2) == 0) {
+    if (1 < param_3 - 2) goto LAB_140066c14;
+    if (bVar1) {
+      local_88 = param_2;
+      uVar12 = ShvlpProtectPages(param_1,&local_88,DAT_14003200c,0);
+      if ((int)uVar12 < 0 || local_88 != param_2) {
+        auVar2._8_8_ = extraout_var;
+        auVar2._0_8_ = extraout_d0;
+        auVar4._8_8_ = in_register_00005028;
+        auVar4._0_8_ = in_d1;
+        auVar6._8_8_ = in_register_00005048;
+        auVar6._0_8_ = in_d2;
+        auVar8._8_8_ = in_register_00005068;
+        auVar8._0_8_ = in_d3;
+                    /* WARNING: Subroutine does not return */
+        KeBugCheckEx(auVar2,auVar4,auVar6,auVar8,in_q4,in_q5,in_q6,in_q7,0x1a,0x56534d,0x90b,param_1
+                     ,(longlong)(int)uVar12,in_x5,in_x6,in_x7);
+      }
+    }
+    else {
+      SkmiProtectPageRange(lVar20,param_2,DAT_14003200c);
+    }
+  }
+  uVar19 = 0xe0000000000f03;
+  bVar11 = SkeRaiseIrql(2);
+  puVar10 = DAT_140066ca8;
+  if (param_2 != 0) {
+    uVar18 = lVar20 << 0xc;
+    in_x5 = &DAT_140050000;
+    local_88 = CONCAT44(local_88._4_4_,param_3);
+    uStack_58 = CONCAT44(extraout_w9,extraout_w9);
+    local_60 = CONCAT44(extraout_w9,extraout_w9);
+    local_80 = param_1;
+    uStack_78 = param_2;
+    local_70 = lVar20;
+    do {
+      if (bVar1) {
+        uVar19 = (uVar19 ^ *param_1 << 0xc) & 0xffff000000000fff ^ *param_1 << 0xc;
+      }
+      else {
+        uVar19 = (uVar18 ^ uVar19) & 0xffff000000000fff ^ uVar18;
+      }
+      puVar13 = (ulonglong *)SkmiGetHyperspacePte();
+      if ((puVar13 < DAT_140066ca8) || (DAT_140066cb0 < puVar13)) {
+        *puVar13 = uVar19;
+      }
+      else {
+        uVar17 = *puVar13;
+        *puVar13 = uVar19;
+        if (((uVar17 & 1) == 0) && ((*puVar13 & 1) != 0)) {
+          DataSynchronizationBarrier(3,3,0);
+          InstructionSynchronizationBarrier();
+        }
+      }
+      iVar14 = 0x40;
+      puVar16 = (undefined8 *)
+                ((longlong)puVar13 * 0x2000000 + (longlong)puVar10 * -0x2000000 >> 0x10);
+      puVar15 = puVar16;
+      do {
+        iVar14 = iVar14 + -1;
+        *puVar15 = local_60;
+        puVar15[1] = local_60;
+        puVar15[2] = local_60;
+        puVar15[3] = local_60;
+        puVar15[4] = uStack_58;
+        puVar15[5] = uStack_58;
+        puVar15[6] = uStack_58;
+        puVar15[7] = uStack_58;
+        puVar15 = puVar15 + 8;
+      } while (iVar14 != 0);
+      if ((param_4 & 2) != 0) {
+        for (puVar15 = (undefined8 *)(-(ulonglong)SkiMinimumDcacheLine & (ulonglong)puVar16);
+            puVar15 < puVar16 + 0x200;
+            puVar15 = (undefined8 *)((ulonglong)SkiMinimumDcacheLine + (longlong)puVar15)) {
+          DC_CIVAC(puVar15);
+        }
+        DataSynchronizationBarrier(3,3,0);
+        uVar17 = SkiCacheType >> 0xe & 3;
+        if (uVar17 == 3 || uVar17 == 0) {
+          for (puVar15 = (undefined8 *)(-(ulonglong)SkiMinimumIcacheLine & (ulonglong)puVar16);
+              puVar15 < puVar16 + 0x200;
+              puVar15 = (undefined8 *)((ulonglong)SkiMinimumIcacheLine + (longlong)puVar15)) {
+            IC_IVAU(puVar15);
+          }
+        }
+        else {
+          IC_IALLUIS();
+        }
+        DataSynchronizationBarrier(3,3,0);
+        InstructionSynchronizationBarrier();
+        DataSynchronizationBarrier(3,3,0);
+        InstructionSynchronizationBarrier();
+      }
+      if ((puVar13 < DAT_140066ca8) || (DAT_140066cb0 < puVar13)) {
+        *puVar13 = 0;
+      }
+      else {
+        uVar17 = *puVar13;
+        *puVar13 = 0;
+        if (((uVar17 & 1) == 0) && ((*puVar13 & 1) != 0)) {
+          DataSynchronizationBarrier(3,3,0);
+          InstructionSynchronizationBarrier();
+        }
+      }
+      in_d1 = local_60;
+      in_register_00005028 = uStack_58;
+      in_d2 = local_60;
+      in_register_00005048 = uStack_58;
+      in_d3 = local_60;
+      in_register_00005068 = uStack_58;
+      SkmiReleaseHyperspacePte(puVar13);
+      uVar18 = uVar18 + 0x1000;
+      param_1 = param_1 + 1;
+      param_2 = param_2 - 1;
+    } while (param_2 != 0);
+    uVar18 = local_88 & 0xffffffff;
+    param_2 = uStack_78;
+    param_1 = local_80;
+    lVar20 = local_70;
+  }
+  SkeLowerIrql(bVar11);
+LAB_140066c14:
+  if (bVar1) {
+    local_88 = param_2;
+    uVar12 = ShvlpProtectPages(param_1,&local_88,(&SkmiVtlPageAccess)[uVar18],0);
+    if ((int)uVar12 < 0 || local_88 != param_2) {
+      auVar3._8_8_ = extraout_var_00;
+      auVar3._0_8_ = extraout_d0_00;
+      auVar5._8_8_ = in_register_00005028;
+      auVar5._0_8_ = in_d1;
+      auVar7._8_8_ = in_register_00005048;
+      auVar7._0_8_ = in_d2;
+      auVar9._8_8_ = in_register_00005068;
+      auVar9._0_8_ = in_d3;
+                    /* WARNING: Subroutine does not return */
+      KeBugCheckEx(auVar3,auVar5,auVar7,auVar9,in_q4,in_q5,in_q6,in_q7,0x1a,0x56534d,0x90b,param_1,
+                   (longlong)(int)uVar12,in_x5,in_x6,in_x7);
+    }
+  }
+  else {
+    SkmiProtectPageRange(lVar20,param_2,(&SkmiVtlPageAccess)[uVar18]);
+  }
+  return;
+}
+
+

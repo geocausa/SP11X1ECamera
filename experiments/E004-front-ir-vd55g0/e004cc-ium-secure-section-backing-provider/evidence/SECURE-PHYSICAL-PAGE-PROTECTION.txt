@@ -1,0 +1,594 @@
+E004cc PHYSICAL PAGE SECURING PATH
+
+--- zero/single page allocation ---
+=== SYMBOL SkmiAllocateZeroedPage count=1 ===
+symbol=SkmiAllocateZeroedPage addr=1400863e0 function=SkmiAllocateZeroedPage
+sig=ulonglong __cdecl SkmiAllocateZeroedPage(undefined * param_1, ulonglong * param_2, undefined8 param_3, ulonglong param_4, undefined8 param_5, longlong * * param_6, longlong * * param_7, longlong * * param_8)
+
+ulonglong SkmiAllocateZeroedPage
+                    (undefined *param_1,ulonglong *param_2,undefined8 param_3,ulonglong param_4,
+                    undefined8 param_5,longlong **param_6,longlong **param_7,longlong **param_8)
+
+{
+  byte bVar1;
+  ulonglong uVar2;
+  
+  uVar2 = SkmiAllocateSinglePage(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+  if ((int)uVar2 != 0) {
+    bVar1 = SkeRaiseIrql(2);
+    SkmiZeroSinglePage(*param_2 >> 0xc & 0xfffffffff);
+    SkeLowerIrql(bVar1);
+    uVar2 = 1;
+  }
+  return uVar2;
+}
+
+
+
+=== SYMBOL SkmiAllocateSinglePage count=1 ===
+symbol=SkmiAllocateSinglePage addr=140086398 function=SkmiAllocateSinglePage
+sig=ulonglong __cdecl SkmiAllocateSinglePage(undefined * param_1, ulonglong * param_2, undefined8 param_3, ulonglong param_4, undefined8 param_5, longlong * * param_6, longlong * * param_7, longlong * * param_8)
+
+ulonglong SkmiAllocateSinglePage
+                    (undefined *param_1,ulonglong *param_2,undefined8 param_3,ulonglong param_4,
+                    undefined8 param_5,longlong **param_6,longlong **param_7,longlong **param_8)
+
+{
+  ulonglong uVar1;
+  ulonglong local_20 [2];
+  
+  local_20[0] = 0;
+  uVar1 = SkmiAllocatePhysicalPage(param_1,0,local_20,param_4,param_5,param_6,param_7,param_8);
+  if ((int)uVar1 != 0) {
+    uVar1 = 1;
+    *param_2 = *param_2 & 0xffff000000000000 | *param_2 & 0xfff | (local_20[0] & 0xfffffffff) << 0xc
+    ;
+  }
+  return uVar1;
+}
+
+
+
+
+--- normal-mode physical page acquisition -> SkmiSecurePhysicalPages ---
+178-        if (((((bVar4 < 2) && (lVar16 = *(longlong *)(extraout_x18_03 + 8), lVar16 != 0)) &&
+179-             (lVar17 = *(longlong *)(lVar16 + 0x90), lVar17 != 0)) &&
+180-            ((sVar5 = *(short *)(lVar17 + DAT_140032240) + 1,
+181-             *(short *)(lVar17 + DAT_140032240) = sVar5, sVar5 == 0 &&
+182-             (*(longlong *)(lVar17 + DAT_140032250) != *(longlong *)(lVar16 + 0x88) + DAT_140032250)
+183-             ))) && (*(short *)(lVar17 + DAT_140032248) == 0)) {
+184-          SkiCheckForKernelApcDelivery();
+185-        }
+186-        goto LAB_140066498;
+187-      }
+188-      piVar1 = (int *)(param_1 + 0x94);
+189-      if (*piVar1 != 0) {
+190-        SkReleaseSpinLockExclusive(puVar12,(ushort)bVar4);
+191-        local_e0 = 0x10000;
+192-        local_d0 = *(ulonglong *)(param_1 + 0x18);
+193-        uStack_b8 = 0;
+194-        local_c0 = 0;
+195-        uStack_a8 = 0;
+196-        uStack_b0 = 0;
+197-        uStack_98 = 0;
+198-        local_a0 = 0;
+199-        uStack_88 = 0;
+200-        uStack_90 = 0;
+201-        local_80 = 0;
+202-        uStack_d8 = 0;
+203-        local_c8 = (ulonglong *)(longlong)*(int *)(&SkmiPageAccessProtection + (uVar22 >> 1) * 4);
+204-        SkCallNormalMode((uint *)&local_e0);
+205-        lVar16 = extraout_x18_01;
+206-        if ((int)uStack_d8 < 0) {
+207-LAB_140066384:
+208-          if (((bVar4 < 2) && (lVar16 = *(longlong *)(lVar16 + 8), lVar16 != 0)) &&
+209-             (((lVar17 = *(longlong *)(lVar16 + 0x90), lVar17 != 0 &&
+210-               ((sVar5 = *(short *)(lVar17 + DAT_140032240) + 1,
+211-                *(short *)(lVar17 + DAT_140032240) = sVar5, sVar5 == 0 &&
+212-                (*(longlong *)(lVar17 + DAT_140032250) !=
+213-                 *(longlong *)(lVar16 + 0x88) + DAT_140032250)))) &&
+214-              (*(short *)(lVar17 + DAT_140032248) == 0)))) {
+215-            SkiCheckForKernelApcDelivery();
+216-          }
+217-          return 0;
+218-        }
+219-        *param_3 = local_d0;
+220:        SkmiSecurePhysicalPages((longlong *)param_3,1,(ulonglong)local_e8,(int)local_c8);
+221-        lVar16 = extraout_x18_02;
+222-        goto LAB_14006664c;
+223-      }
+224-      LOAcquire();
+225-      *piVar1 = *piVar1 + 1;
+226-      LORelease();
+227-      SkReleaseSpinLockExclusive(puVar12,(ushort)bVar4);
+228-      local_e0 = 0x10000;
+229-      local_d0 = *(ulonglong *)(param_1 + 0x18);
+230-      uStack_b8 = 0;
+231-      local_c0 = 0;
+232-      uStack_a8 = 0;
+233-      uStack_b0 = 0;
+234-      uStack_98 = 0;
+235-      local_a0 = 0;
+236-      uStack_88 = 0;
+237-      uStack_90 = 0;
+238-      local_80 = 0;
+239-      local_c8 = (ulonglong *)(longlong)*(int *)(&SkmiPageAccessProtection + (uVar22 >> 1) * 4);
+240-      uStack_d8 = uVar20;
+241-      SkCallNormalMode((uint *)&local_e0);
+242-      if ((int)uStack_d8 < 0) {
+243-        LOAcquire();
+244-        *piVar1 = *piVar1 + -1;
+245-        LORelease();
+246-        lVar16 = extraout_x18_00;
+247-        goto LAB_140066384;
+248-      }
+249-      puVar14 = (uint *)(param_1 + 0x90);
+250-      local_f0 = local_c8;
+251-      *param_3 = local_d0;
+252-      bVar9 = SkeRaiseIrql(2);
+--
+309-          if (-1 < (int)uVar8) break;
+310-          if (((uVar15 + 1 & ShvlLongSpinCountMask) == 0) && ((ShvlFlags >> 4 & 1) != 0)) {
+311-            ShvlNotifyLongSpinWait();
+312-            uVar15 = uVar15 + 1;
+313-          }
+314-          else {
+315-LAB_14006606c:
+316-            DataMemoryBarrier(2,2);
+317-            Yield();
+318-            uVar15 = uVar15 + 1;
+319-          }
+320-        }
+321-        uVar22 = (ulonglong)local_f8 & 0xffffffff;
+322-        while (SkmiFallbackTimerListLock != 0x80000000) {
+323-          uVar15 = uVar15 + 1;
+324-          if (((uVar15 & ShvlLongSpinCountMask) == 0) && ((ShvlFlags >> 4 & 1) != 0)) {
+325-            ShvlNotifyLongSpinWait();
+326-          }
+327-          else {
+328-            DataMemoryBarrier(2,2);
+329-            Yield();
+330-          }
+331-        }
+332-        param_1[0xb9] = 0x1e;
+333-        puVar2 = (undefined8 *)(param_1 + 0xa8);
+334-        if ((undefined8 *)*DAT_14005a9d8 != &SkmiFallbackTimerList) {
+335-                    /* WARNING: Does not return */
+336-          pcVar7 = (code *)SoftwareBreakpoint(0xf003,0x140066330);
+337-          (*pcVar7)();
+338-        }
+339-        *puVar2 = &SkmiFallbackTimerList;
+340-        *(undefined8 **)(param_1 + 0xb0) = DAT_14005a9d8;
+341-        *DAT_14005a9d8 = puVar2;
+342-        plVar21 = (longlong *)(param_1 + 0x80);
+343-        SkmiFallbackTimerListLock = 0;
+344-        uVar23 = 10;
+345-        DAT_14005a9d8 = puVar2;
+346-LAB_140066184:
+347-        if (*plVar21 == 0) {
+348-          uVar19 = (ulonglong)((int)uVar23 + 1);
+349-          puVar18 = (ulonglong *)(*(longlong *)(param_1 + 0x28) + uVar23 * 8);
+350-LAB_1400661c0:
+351:          uVar11 = SkmiSecurePhysicalPages((longlong *)param_3,1,0,(int)local_f0);
+352-          uVar10 = (*param_3 & 0xfffffffff) << 0xc | 0xe0000000000703;
+353-          if ((puVar18 < DAT_1400666c0) || (DAT_1400666c8 < puVar18)) {
+354-            *puVar18 = uVar10;
+355-          }
+356-          else {
+357-            uVar19 = *puVar18;
+358-            *puVar18 = uVar10;
+359-            if (((uVar19 & 1) == 0) && ((*puVar18 & 1) != 0)) {
+360-              DataSynchronizationBarrier(3,3,0);
+361-              InstructionSynchronizationBarrier();
+362-            }
+363-            uVar19 = (ulonglong)((int)uVar23 + 1);
+364-          }
+365-          param_4 = *param_3;
+366-          puVar14 = (uint *)((longlong)puVar18 * 0x2000000 + (longlong)DAT_1400666c0 * -0x2000000 >>
+367-                            0x10);
+368-          SkmiFillAllocatedBundle(uVar11,puVar14,(uint)uVar22,param_4);
+369-          puVar24 = (uint *)*plVar21;
+370-          goto LAB_1400662cc;
+371-        }
+372-        uVar19 = (ulonglong)((uint)uVar22 + 1);
+373-        if (*(longlong *)(param_1 + (uVar19 + 6) * 8) == 0) {
+374-          puVar18 = (ulonglong *)(*(longlong *)(param_1 + 0x28) + uVar23 * 8);
+375-          if (*puVar18 != 0) {
+376-            puVar18 = puVar18 + 1;
+377-          }
+378-          goto LAB_1400661c0;
+379-        }
+380-LAB_140066250:
+381-        SkmiRestoreUnusedPhysicalPages(*param_3);
+382-        local_d0 = 0;
+383-        local_e0 = 0x20000;
+
+--- SkmiSecurePhysicalPages ---
+=== SkmiSecurePhysicalPages ===
+addr=14008a260 sig=undefined __cdecl SkmiSecurePhysicalPages(longlong * param_1, uint param_2, ulonglong param_3, int param_4)
+
+void SkmiSecurePhysicalPages(longlong *param_1,uint param_2,ulonglong param_3,int param_4)
+
+{
+  ulonglong *puVar1;
+  ulonglong uVar2;
+  ulonglong uVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  ulonglong uVar6;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  longlong lVar7;
+  ulonglong uVar8;
+  longlong lVar9;
+  undefined1 in_q0 [16];
+  undefined1 in_q1 [16];
+  undefined1 in_q2 [16];
+  undefined1 in_q3 [16];
+  undefined1 in_q4 [16];
+  undefined1 in_q5 [16];
+  undefined1 in_q6 [16];
+  undefined1 in_q7 [16];
+  
+  uVar5 = (ulonglong)param_2;
+  if (param_2 != 0) {
+    lVar7 = DAT_14008a378 - DAT_14008a380;
+    do {
+      param_2 = param_2 - 1;
+      uVar6 = param_1[param_2];
+      if ((ulonglong)(lVar7 >> 3) < uVar6) {
+                    /* WARNING: Subroutine does not return */
+        KeBugCheckEx(in_q0,in_q1,in_q2,in_q3,in_q4,in_q5,in_q6,in_q7,0x1a,DAT_14008a388,0x901,uVar6,
+                     0,uVar6,in_x6,in_x7);
+      }
+      puVar1 = (ulonglong *)(DAT_14008a380 + uVar6 * 8);
+      Hint_Prefetch(puVar1,2,0,0);
+      do {
+        uVar8 = *puVar1;
+        if (uVar8 >> 0x3d == 2) {
+          if (4 < ((uint)uVar8 & 0xfff) - 0x408) {
+LAB_14008a35c:
+                    /* WARNING: Subroutine does not return */
+            KeBugCheckEx(in_q0,in_q1,in_q2,in_q3,in_q4,in_q5,in_q6,in_q7,0x1a,DAT_14008a388,0x902,
+                         uVar6,0,uVar6,in_x6,in_x7);
+          }
+        }
+        else if ((uVar8 >> 0x3d != 1) || ((uVar8 & 0xffffffffffff) != 0)) goto LAB_14008a35c;
+        uVar3 = 0x6000000000000000;
+        if (param_4 == 0) {
+          uVar3 = 0x6020000000000000;
+        }
+        uVar2 = *puVar1;
+      } while (uVar2 != uVar8);
+      *puVar1 = uVar3 | (param_3 & 7) << 0x32;
+      if ((uVar2 >> 0x3d == 2) && ((uVar2 & 0xfff) - 0x408 == (param_3 & 0xffffffff))) {
+        uVar4 = (int)uVar5 - 1;
+        uVar5 = (ulonglong)uVar4;
+        if (uVar4 != param_2) {
+          lVar9 = param_1[uVar4];
+          param_1[uVar5] = uVar6;
+          param_1[param_2] = lVar9;
+        }
+      }
+    } while (param_2 != 0);
+  }
+  if ((int)uVar5 != 0) {
+    SkmiProtectPlaceholderPages(param_1,uVar5,(uint)param_3,0);
+  }
+  return;
+}
+
+
+=== SkmiProtectPageRange ===
+
+--- SkmiProtectPlaceholderPages ---
+=== SkmiProtectPlaceholderPages ===
+addr=140066970 sig=undefined __cdecl SkmiProtectPlaceholderPages(longlong * param_1, ulonglong param_2, uint param_3, ulonglong param_4)
+
+void SkmiProtectPlaceholderPages(longlong *param_1,ulonglong param_2,uint param_3,ulonglong param_4)
+
+{
+  bool bVar1;
+  undefined1 auVar2 [16];
+  undefined1 auVar3 [16];
+  undefined1 auVar4 [16];
+  undefined1 auVar5 [16];
+  undefined1 auVar6 [16];
+  undefined1 auVar7 [16];
+  undefined1 auVar8 [16];
+  undefined1 auVar9 [16];
+  ulonglong *puVar10;
+  byte bVar11;
+  uint uVar12;
+  ulonglong *puVar13;
+  int iVar14;
+  undefined8 *puVar15;
+  undefined8 *puVar16;
+  undefined *in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  ulonglong uVar17;
+  undefined4 extraout_w9;
+  ulonglong uVar18;
+  ulonglong uVar19;
+  longlong lVar20;
+  undefined8 extraout_d0;
+  undefined8 extraout_d0_00;
+  undefined8 extraout_var;
+  undefined8 extraout_var_00;
+  undefined8 in_d1;
+  undefined8 in_register_00005028;
+  undefined8 in_d2;
+  undefined8 in_register_00005048;
+  undefined8 in_d3;
+  undefined8 in_register_00005068;
+  undefined1 in_q4 [16];
+  undefined1 in_q5 [16];
+  undefined1 in_q6 [16];
+  undefined1 in_q7 [16];
+  ulonglong local_88;
+  longlong *local_80;
+  ulonglong uStack_78;
+  longlong local_70;
+  undefined8 local_60;
+  undefined8 uStack_58;
+  
+  bVar1 = (param_4 & 1) == 0;
+  if (bVar1) {
+    lVar20 = 0;
+  }
+  else {
+    lVar20 = *param_1;
+  }
+  if ((param_3 == 2) && ((SkmiFlags & 0x10) == 0)) {
+    param_3 = 1;
+  }
+  uVar18 = (ulonglong)param_3;
+  if ((param_4 & 2) == 0) {
+    if (1 < param_3 - 2) goto LAB_140066c14;
+    if (bVar1) {
+      local_88 = param_2;
+      uVar12 = ShvlpProtectPages(param_1,&local_88,DAT_14003200c,0);
+      if ((int)uVar12 < 0 || local_88 != param_2) {
+        auVar2._8_8_ = extraout_var;
+        auVar2._0_8_ = extraout_d0;
+        auVar4._8_8_ = in_register_00005028;
+        auVar4._0_8_ = in_d1;
+        auVar6._8_8_ = in_register_00005048;
+        auVar6._0_8_ = in_d2;
+        auVar8._8_8_ = in_register_00005068;
+        auVar8._0_8_ = in_d3;
+                    /* WARNING: Subroutine does not return */
+        KeBugCheckEx(auVar2,auVar4,auVar6,auVar8,in_q4,in_q5,in_q6,in_q7,0x1a,0x56534d,0x90b,param_1
+                     ,(longlong)(int)uVar12,in_x5,in_x6,in_x7);
+      }
+    }
+    else {
+      SkmiProtectPageRange(lVar20,param_2,DAT_14003200c);
+    }
+  }
+  uVar19 = 0xe0000000000f03;
+  bVar11 = SkeRaiseIrql(2);
+  puVar10 = DAT_140066ca8;
+  if (param_2 != 0) {
+    uVar18 = lVar20 << 0xc;
+    in_x5 = &DAT_140050000;
+    local_88 = CONCAT44(local_88._4_4_,param_3);
+    uStack_58 = CONCAT44(extraout_w9,extraout_w9);
+    local_60 = CONCAT44(extraout_w9,extraout_w9);
+    local_80 = param_1;
+    uStack_78 = param_2;
+    local_70 = lVar20;
+    do {
+      if (bVar1) {
+        uVar19 = (uVar19 ^ *param_1 << 0xc) & 0xffff000000000fff ^ *param_1 << 0xc;
+      }
+      else {
+        uVar19 = (uVar18 ^ uVar19) & 0xffff000000000fff ^ uVar18;
+      }
+      puVar13 = (ulonglong *)SkmiGetHyperspacePte();
+      if ((puVar13 < DAT_140066ca8) || (DAT_140066cb0 < puVar13)) {
+        *puVar13 = uVar19;
+      }
+      else {
+        uVar17 = *puVar13;
+        *puVar13 = uVar19;
+        if (((uVar17 & 1) == 0) && ((*puVar13 & 1) != 0)) {
+          DataSynchronizationBarrier(3,3,0);
+          InstructionSynchronizationBarrier();
+        }
+      }
+      iVar14 = 0x40;
+      puVar16 = (undefined8 *)
+                ((longlong)puVar13 * 0x2000000 + (longlong)puVar10 * -0x2000000 >> 0x10);
+      puVar15 = puVar16;
+      do {
+        iVar14 = iVar14 + -1;
+        *puVar15 = local_60;
+        puVar15[1] = local_60;
+        puVar15[2] = local_60;
+        puVar15[3] = local_60;
+        puVar15[4] = uStack_58;
+        puVar15[5] = uStack_58;
+        puVar15[6] = uStack_58;
+        puVar15[7] = uStack_58;
+        puVar15 = puVar15 + 8;
+      } while (iVar14 != 0);
+      if ((param_4 & 2) != 0) {
+        for (puVar15 = (undefined8 *)(-(ulonglong)SkiMinimumDcacheLine & (ulonglong)puVar16);
+            puVar15 < puVar16 + 0x200;
+            puVar15 = (undefined8 *)((ulonglong)SkiMinimumDcacheLine + (longlong)puVar15)) {
+          DC_CIVAC(puVar15);
+        }
+        DataSynchronizationBarrier(3,3,0);
+        uVar17 = SkiCacheType >> 0xe & 3;
+        if (uVar17 == 3 || uVar17 == 0) {
+          for (puVar15 = (undefined8 *)(-(ulonglong)SkiMinimumIcacheLine & (ulonglong)puVar16);
+              puVar15 < puVar16 + 0x200;
+              puVar15 = (undefined8 *)((ulonglong)SkiMinimumIcacheLine + (longlong)puVar15)) {
+            IC_IVAU(puVar15);
+          }
+        }
+        else {
+          IC_IALLUIS();
+        }
+        DataSynchronizationBarrier(3,3,0);
+        InstructionSynchronizationBarrier();
+        DataSynchronizationBarrier(3,3,0);
+        InstructionSynchronizationBarrier();
+      }
+      if ((puVar13 < DAT_140066ca8) || (DAT_140066cb0 < puVar13)) {
+        *puVar13 = 0;
+      }
+      else {
+        uVar17 = *puVar13;
+        *puVar13 = 0;
+        if (((uVar17 & 1) == 0) && ((*puVar13 & 1) != 0)) {
+          DataSynchronizationBarrier(3,3,0);
+          InstructionSynchronizationBarrier();
+        }
+      }
+      in_d1 = local_60;
+      in_register_00005028 = uStack_58;
+      in_d2 = local_60;
+      in_register_00005048 = uStack_58;
+      in_d3 = local_60;
+      in_register_00005068 = uStack_58;
+      SkmiReleaseHyperspacePte(puVar13);
+      uVar18 = uVar18 + 0x1000;
+      param_1 = param_1 + 1;
+      param_2 = param_2 - 1;
+    } while (param_2 != 0);
+    uVar18 = local_88 & 0xffffffff;
+    param_2 = uStack_78;
+    param_1 = local_80;
+    lVar20 = local_70;
+  }
+  SkeLowerIrql(bVar11);
+LAB_140066c14:
+  if (bVar1) {
+    local_88 = param_2;
+    uVar12 = ShvlpProtectPages(param_1,&local_88,(&SkmiVtlPageAccess)[uVar18],0);
+    if ((int)uVar12 < 0 || local_88 != param_2) {
+      auVar3._8_8_ = extraout_var_00;
+      auVar3._0_8_ = extraout_d0_00;
+      auVar5._8_8_ = in_register_00005028;
+      auVar5._0_8_ = in_d1;
+      auVar7._8_8_ = in_register_00005048;
+      auVar7._0_8_ = in_d2;
+      auVar9._8_8_ = in_register_00005068;
+      auVar9._0_8_ = in_d3;
+                    /* WARNING: Subroutine does not return */
+      KeBugCheckEx(auVar3,auVar5,auVar7,auVar9,in_q4,in_q5,in_q6,in_q7,0x1a,0x56534d,0x90b,param_1,
+                   (longlong)(int)uVar12,in_x5,in_x6,in_x7);
+    }
+  }
+  else {
+    SkmiProtectPageRange(lVar20,param_2,(&SkmiVtlPageAccess)[uVar18]);
+  }
+  return;
+}
+
+
+
+--- ShvlpProtectPages hypercall implementation ---
+=== ShvlpProtectPages ===
+addr=1400c6718 sig=uint __cdecl ShvlpProtectPages(longlong * param_1, ulonglong * param_2, undefined4 param_3, uint param_4)
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+uint ShvlpProtectPages(longlong *param_1,ulonglong *param_2,undefined4 param_3,uint param_4)
+
+{
+  undefined8 *puVar1;
+  uint uVar2;
+  undefined8 *puVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  longlong lVar6;
+  longlong *plVar7;
+  longlong lVar8;
+  undefined4 extraout_w15;
+  uint uVar9;
+  ulonglong uVar10;
+  longlong lVar11;
+  uint local_100 [4];
+  undefined8 local_f0;
+  undefined8 uStack_e8;
+  undefined8 local_e0 [18];
+  
+  local_100[0] = 0;
+  uVar5 = *param_2;
+  uStack_e8 = 0;
+  local_f0 = 0;
+  if (uVar5 < 0x100000000) {
+    uVar10 = uVar5 & 0xffffffff;
+    uVar9 = (uint)uVar5;
+    puVar3 = (undefined8 *)0x0;
+    if (0xe < uVar9) {
+      puVar3 = (undefined8 *)ShvlpAcquireHypercallPage((uint *)&local_f0,0);
+      param_3 = extraout_w15;
+    }
+    puVar1 = local_e0;
+    if (puVar3 != (undefined8 *)0x0) {
+      puVar1 = puVar3;
+    }
+    *(undefined4 *)(puVar1 + 1) = param_3;
+    *(undefined4 *)((longlong)puVar1 + 0xc) = 0;
+    uVar4 = 0x1fe;
+    if (puVar3 == (undefined8 *)0x0) {
+      uVar4 = 0xe;
+    }
+    *puVar1 = 0xffffffffffffffff;
+    uVar2 = 0;
+    uVar5 = 0;
+    lVar11 = 0;
+    if ((param_4 & 1) != 0) {
+      lVar11 = *param_1;
+    }
+    while (uVar9 != 0) {
+      uVar9 = (uint)uVar10;
+      if (uVar9 < uVar4) {
+        uVar4 = uVar9;
+      }
+      uVar2 = 0;
+      if (uVar4 != 0) {
+        lVar6 = lVar11;
+        plVar7 = puVar1 + 2;
+        do {
+          lVar8 = lVar6;
+          if ((param_4 & 1) == 0) {
+            lVar8 = param_1[(int)uVar5 + uVar2];
+          }
+          uVar2 = uVar2 + 1;
+          *plVar7 = lVar8;
+          lVar6 = lVar6 + 1;
+          plVar7 = plVar7 + 1;
+        } while (uVar2 < uVar4);
+      }
+      if (uVar4 < 0xf) {
+        uVar2 = ShvlpInitiateFastHypercall(0xc,puVar1,(uVar4 + 2) * 8,(ulonglong)uVar4,local_100);
+      }
+      else {
+        uVar2 = ShvlpInitiateVariableHypercall();
+      }
+      if ((int)uVar2 < 0) break;
+      lVar11 = lVar11 + (ulonglong)local_100[0];
+      uVar5 = (ulonglong)((int)uVar5 + local_100[0]);
+      uVar9 = uVar9 - local_100[0];
+      uVar10 = (ulonglong)uVar9;
+    }
+    if (puVar1 != local_e0) {
+      ShvlpReleaseHypercallPage((uint *)&local_f0);
+    }
+    *param_2 = uVar5;
+  }
+  else {
+    *param_2 = 0;
+    uVar2 = DAT_1400c68b0;
+  }
+  return uVar2;
+}
+
+

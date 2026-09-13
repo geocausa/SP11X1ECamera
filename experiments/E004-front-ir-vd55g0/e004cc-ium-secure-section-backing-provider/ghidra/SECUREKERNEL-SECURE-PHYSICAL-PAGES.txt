@@ -1,0 +1,241 @@
+=== SkmiSecurePhysicalPages ===
+addr=14008a260 sig=undefined __cdecl SkmiSecurePhysicalPages(longlong * param_1, uint param_2, ulonglong param_3, int param_4)
+
+void SkmiSecurePhysicalPages(longlong *param_1,uint param_2,ulonglong param_3,int param_4)
+
+{
+  ulonglong *puVar1;
+  ulonglong uVar2;
+  ulonglong uVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  ulonglong uVar6;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  longlong lVar7;
+  ulonglong uVar8;
+  longlong lVar9;
+  undefined1 in_q0 [16];
+  undefined1 in_q1 [16];
+  undefined1 in_q2 [16];
+  undefined1 in_q3 [16];
+  undefined1 in_q4 [16];
+  undefined1 in_q5 [16];
+  undefined1 in_q6 [16];
+  undefined1 in_q7 [16];
+  
+  uVar5 = (ulonglong)param_2;
+  if (param_2 != 0) {
+    lVar7 = DAT_14008a378 - DAT_14008a380;
+    do {
+      param_2 = param_2 - 1;
+      uVar6 = param_1[param_2];
+      if ((ulonglong)(lVar7 >> 3) < uVar6) {
+                    /* WARNING: Subroutine does not return */
+        KeBugCheckEx(in_q0,in_q1,in_q2,in_q3,in_q4,in_q5,in_q6,in_q7,0x1a,DAT_14008a388,0x901,uVar6,
+                     0,uVar6,in_x6,in_x7);
+      }
+      puVar1 = (ulonglong *)(DAT_14008a380 + uVar6 * 8);
+      Hint_Prefetch(puVar1,2,0,0);
+      do {
+        uVar8 = *puVar1;
+        if (uVar8 >> 0x3d == 2) {
+          if (4 < ((uint)uVar8 & 0xfff) - 0x408) {
+LAB_14008a35c:
+                    /* WARNING: Subroutine does not return */
+            KeBugCheckEx(in_q0,in_q1,in_q2,in_q3,in_q4,in_q5,in_q6,in_q7,0x1a,DAT_14008a388,0x902,
+                         uVar6,0,uVar6,in_x6,in_x7);
+          }
+        }
+        else if ((uVar8 >> 0x3d != 1) || ((uVar8 & 0xffffffffffff) != 0)) goto LAB_14008a35c;
+        uVar3 = 0x6000000000000000;
+        if (param_4 == 0) {
+          uVar3 = 0x6020000000000000;
+        }
+        uVar2 = *puVar1;
+      } while (uVar2 != uVar8);
+      *puVar1 = uVar3 | (param_3 & 7) << 0x32;
+      if ((uVar2 >> 0x3d == 2) && ((uVar2 & 0xfff) - 0x408 == (param_3 & 0xffffffff))) {
+        uVar4 = (int)uVar5 - 1;
+        uVar5 = (ulonglong)uVar4;
+        if (uVar4 != param_2) {
+          lVar9 = param_1[uVar4];
+          param_1[uVar5] = uVar6;
+          param_1[param_2] = lVar9;
+        }
+      }
+    } while (param_2 != 0);
+  }
+  if ((int)uVar5 != 0) {
+    SkmiProtectPlaceholderPages(param_1,uVar5,(uint)param_3,0);
+  }
+  return;
+}
+
+
+=== SkmiProtectPageRange ===
+addr=1400899a0 sig=undefined __cdecl SkmiProtectPageRange(longlong param_1, ulonglong param_2, undefined4 param_3)
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+void SkmiProtectPageRange(longlong param_1,ulonglong param_2,undefined4 param_3)
+
+{
+  longlong lVar1;
+  undefined8 *puVar2;
+  uint uVar3;
+  undefined8 *puVar4;
+  uint *in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  uint uVar5;
+  longlong lVar6;
+  longlong *plVar7;
+  undefined4 extraout_w15;
+  uint uVar8;
+  ulonglong uVar9;
+  uint uVar10;
+  undefined1 in_q0 [16];
+  undefined1 extraout_q0 [16];
+  undefined1 extraout_q0_00 [16];
+  undefined1 extraout_q0_01 [16];
+  undefined1 in_q1 [16];
+  undefined1 in_q2 [16];
+  undefined1 in_q3 [16];
+  undefined1 in_q4 [16];
+  undefined1 in_q5 [16];
+  undefined1 in_q6 [16];
+  undefined1 in_q7 [16];
+  uint local_100 [4];
+  undefined8 local_f0;
+  undefined8 uStack_e8;
+  undefined8 local_e0 [18];
+  
+  local_100[0] = 0;
+  uStack_e8 = 0;
+  local_f0 = 0;
+  uVar3 = DAT_140089b28;
+  if (param_2 < 0x100000000) {
+    uVar9 = param_2 & 0xffffffff;
+    uVar8 = (uint)param_2;
+    puVar4 = (undefined8 *)0x0;
+    if (0xe < uVar8) {
+      puVar4 = (undefined8 *)ShvlpAcquireHypercallPage((uint *)&local_f0,0);
+      in_q0 = extraout_q0;
+      param_3 = extraout_w15;
+    }
+    puVar2 = local_e0;
+    if (puVar4 != (undefined8 *)0x0) {
+      puVar2 = puVar4;
+    }
+    *(undefined4 *)(puVar2 + 1) = param_3;
+    *(undefined4 *)((longlong)puVar2 + 0xc) = 0;
+    uVar5 = 0x1fe;
+    if (puVar4 == (undefined8 *)0x0) {
+      uVar5 = 0xe;
+    }
+    *puVar2 = 0xffffffffffffffff;
+    uVar3 = 0;
+    uVar10 = 0;
+    lVar1 = param_1;
+    while (uVar8 != 0) {
+      uVar8 = (uint)uVar9;
+      if (uVar8 < uVar5) {
+        uVar5 = uVar8;
+      }
+      if (uVar5 != 0) {
+        lVar6 = lVar1;
+        plVar7 = puVar2 + 2;
+        uVar3 = uVar5;
+        do {
+          *plVar7 = lVar6;
+          uVar3 = uVar3 - 1;
+          lVar6 = lVar6 + 1;
+          plVar7 = plVar7 + 1;
+        } while (uVar3 != 0);
+      }
+      if (uVar5 < 0xf) {
+        in_x6 = 0;
+        in_x5 = (uint *)0x0;
+        uVar3 = ShvlpInitiateFastHypercall(0xc,puVar2,(uVar5 + 2) * 8,(ulonglong)uVar5,local_100);
+        in_q0 = extraout_q0_00;
+      }
+      else {
+        in_x5 = local_100;
+        uVar3 = ShvlpInitiateVariableHypercall();
+        in_q0 = extraout_q0_01;
+      }
+      if ((int)uVar3 < 0) break;
+      lVar1 = lVar1 + (ulonglong)local_100[0];
+      uVar10 = uVar10 + local_100[0];
+      uVar8 = uVar8 - local_100[0];
+      uVar9 = (ulonglong)uVar8;
+    }
+    if (puVar2 != local_e0) {
+      in_q0 = ShvlpReleaseHypercallPage((uint *)&local_f0);
+    }
+    if ((-1 < (int)uVar3) && (param_2 == uVar10)) {
+      return;
+    }
+  }
+                    /* WARNING: Subroutine does not return */
+  KeBugCheckEx(in_q0,in_q1,in_q2,in_q3,in_q4,in_q5,in_q6,in_q7,0x1a,DAT_140089b20,0x90a,param_1,
+               (longlong)(int)uVar3,in_x5,in_x6,in_x7);
+}
+
+
+=== SkmiPfnClassToContents ===
+addr=1400898a8 sig=ulonglong __cdecl SkmiPfnClassToContents(uint param_1)
+
+ulonglong SkmiPfnClassToContents(uint param_1)
+
+{
+  ulonglong uVar1;
+  
+  uVar1 = (ulonglong)param_1;
+  if ((param_1 >> 10 & 1) == 0) {
+    if ((param_1 >> 0xb & 1) == 0) {
+      uVar1 = uVar1 << 0x3d;
+      if ((param_1 & 0xf) == 3 || (param_1 & 0xf) == 5) {
+        uVar1 = uVar1 | 0x20000000000000;
+      }
+    }
+    else {
+      uVar1 = (uVar1 & 7) << 0x32 | 0x6000000000000000;
+    }
+  }
+  else {
+    uVar1 = uVar1 & 0xfff | 0x4000000000000000;
+  }
+  return uVar1;
+}
+
+
+=== ShvlModifySparseSpaPageHostAccess ===
+addr=1400c52e0 sig=undefined __cdecl ShvlModifySparseSpaPageHostAccess(undefined8 param_1, char param_2, uint param_3, undefined4 param_4, void * param_5, uint * param_6)
+
+void ShvlModifySparseSpaPageHostAccess
+               (undefined8 param_1,char param_2,uint param_3,undefined4 param_4,void *param_5,
+               uint *param_6)
+
+{
+  uint uVar1;
+  uint local_10;
+  undefined4 uStack_c;
+  undefined8 local_8;
+  
+                    /* 0xc52e0  205  ShvlModifySparseSpaPageHostAccess */
+  local_10 = param_3 & 3;
+  uVar1 = 0xd7;
+  if (param_2 == '\0') {
+    uVar1 = 0xd8;
+  }
+  uStack_c = param_4;
+  local_8 = param_1;
+  ShvlpInitiateRepListHypercall
+            ((ulonglong)uVar1,1,*param_6,&local_10,0x10,param_5,8,(void *)0x0,0,param_6);
+  return;
+}
+
+

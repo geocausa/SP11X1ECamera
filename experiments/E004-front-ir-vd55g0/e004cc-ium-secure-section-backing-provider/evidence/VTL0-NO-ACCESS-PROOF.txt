@@ -1,0 +1,140 @@
+E004cc VTL0 PROTECTION MASK CROSS-CHECK
+
+--- exact PDB location of SkmiVtlPageAccess ---
+   52424 | S_PUB32 [size = 108] `??_C@_1BO@LJPNACMK@?$AAL?$AA1?$AAI?$AAC?$AAa?$AAc?$AAh?$AAe?$AAA?$AAc?$AAc?$AAe?$AAs?$AAs@`
+           flags = none, addr = 0001:6128
+  156284 | S_PUB32 [size = 32] `SkmiVtlPageAccess`
+           flags = none, addr = 0007:0008
+   75524 | S_PUB32 [size = 36] `SkmiFlushAddressRange`
+
+--- raw SkmiVtlPageAccess table from TABLERO raw+0x8 ---
+00026008: 00000000 01000000 0d000000 11000000  ................
+00026018: 01000000 00000000 00000000 80f6ffff  ................
+
+decoded first entries:
+SkmiVtlPageAccess[0] = 0x0
+SkmiVtlPageAccess[1] = 0x1
+SkmiVtlPageAccess[2] = 0x0d
+SkmiVtlPageAccess[3] = 0x11
+SkmiVtlPageAccess[4] = 0x1
+
+--- default page class path: class 0 -> secure access index 0 ---
+47-  uint local_e8;
+48-  undefined8 local_e0;
+49-  ulonglong uStack_d8;
+50-  ulonglong local_d0;
+51-  ulonglong *local_c8;
+52-  undefined8 local_c0;
+53-  undefined8 uStack_b8;
+54-  undefined8 uStack_b0;
+55-  undefined8 uStack_a8;
+56-  undefined8 local_a0;
+57-  undefined8 uStack_98;
+58-  undefined8 uStack_90;
+59-  undefined8 uStack_88;
+60-  undefined8 local_80;
+61-  
+62-  if (param_1 == (undefined *)0x0) {
+63-    param_1 = &SkmiSystemPartition;
+64-  }
+65:  local_e8 = param_2;
+66-  if ((SkmiFlags >> 3 & 1) == 0) {
+67-    uVar25 = (&SkmiAllocationSizeByAccess)[param_2];
+68-    uVar15 = param_2 * 2;
+69-    uVar22 = (ulonglong)uVar15;
+70-    if ((1 << (ulonglong)(uVar15 & 0x1f) & 0xc03U) == 0) {
+71-      uVar20 = 0xe0000000000703;
+72-      uVar8 = 0;
+73-      puVar18 = (ulonglong *)(*(longlong *)(param_1 + 0x28) + (ulonglong)uVar15 * 8);
+74-      local_f0 = param_3;
+75-      do {
+76-        lVar16 = (ulonglong)(uVar8 + uVar15) + 6;
+77-        if (*(longlong *)(param_1 + lVar16 * 8) == 0) {
+78-          local_f8 = (int *)0x0;
+79-          uVar10 = SkmiAllocatePhysicalPage
+80-                             (param_1,0,&local_f8,param_4,param_5,param_6,param_7,param_8);
+81-          if ((int)uVar10 == 0) {
+82-            return 0;
+83-          }
+84-          uVar20 = uVar20 & 0xffff000000000000 |
+85-                   uVar20 & 0xfff | ((ulonglong)local_f8 & 0xfffffffff) << 0xc;
+86-          if ((puVar18 < DAT_1400666c0) || (DAT_1400666c8 < puVar18)) {
+87-            *puVar18 = uVar20;
+88-          }
+89-          else {
+90-            uVar10 = *puVar18;
+91-            *puVar18 = uVar20;
+92-            if (((uVar10 & 1) == 0) && ((*puVar18 & 1) != 0)) {
+93-              DataSynchronizationBarrier(3,3,0);
+212-                (*(longlong *)(lVar17 + DAT_140032250) !=
+213-                 *(longlong *)(lVar16 + 0x88) + DAT_140032250)))) &&
+214-              (*(short *)(lVar17 + DAT_140032248) == 0)))) {
+215-            SkiCheckForKernelApcDelivery();
+216-          }
+217-          return 0;
+218-        }
+219-        *param_3 = local_d0;
+220:        SkmiSecurePhysicalPages((longlong *)param_3,1,(ulonglong)local_e8,(int)local_c8);
+221-        lVar16 = extraout_x18_02;
+222-        goto LAB_14006664c;
+223-      }
+224-      LOAcquire();
+225-      *piVar1 = *piVar1 + 1;
+226-      LORelease();
+227-      SkReleaseSpinLockExclusive(puVar12,(ushort)bVar4);
+228-      local_e0 = 0x10000;
+229-      local_d0 = *(ulonglong *)(param_1 + 0x18);
+230-      uStack_b8 = 0;
+231-      local_c0 = 0;
+232-      uStack_a8 = 0;
+233-      uStack_b0 = 0;
+234-      uStack_98 = 0;
+235-      local_a0 = 0;
+
+--- local Linux Hyper-V permission values ---
+	DECLARE_FLEX_ARRAY(u64, gpa_page_list);
+} __packed;
+
+/* HV Map GPA (Guest Physical Address) Flags */
+#define HV_MAP_GPA_PERMISSIONS_NONE	       0x0
+#define HV_MAP_GPA_READABLE		       0x1
+#define HV_MAP_GPA_WRITABLE		       0x2
+#define HV_MAP_GPA_KERNEL_EXECUTABLE	       0x4
+#define HV_MAP_GPA_USER_EXECUTABLE	       0x8
+#define HV_MAP_GPA_EXECUTABLE		       0xC
+#define HV_MAP_GPA_PERMISSIONS_MASK	       0xF
+#define HV_MAP_GPA_ADJUSTABLE		    0x8000
+#define HV_MAP_GPA_NO_ACCESS		   0x10000
+#define HV_MAP_GPA_NOT_CACHED		  0x200000
+#define HV_MAP_GPA_LARGE_PAGE		0x80000000
+
+struct hv_input_map_gpa_pages {
+
+Official Microsoft Hyper-V TLFS cross-check:
+https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercalls/hvcallmodifyvtlprotectionmask
+- HvCallModifyVtlProtectionMask call code = 0x000C (Rep)
+- input offset +0x00 TargetPartitionId
+- input offset +0x08 MapFlags
+- input offset +0x0c TargetVtl
+- MapFlags is the VTL GPA protection mask.
+
+https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm
+- higher VTLs enforce Read/Write/Execute access protections for lower VTLs
+- permission mask 0 means no Read/Write/Execute access
+- VTL0 is the lower/normal trust level; VTL1 is more privileged.
+
+ShvlpProtectPages builds exactly that input shape:
+- +0x00 = 0xffffffffffffffff (self/current partition sentinel)
+- +0x08 = requested protection mask
+- +0x0c = 0 (target VTL0)
+- Hypercall code = 0x000c
+
+For ordinary CreateSecureSection allocation class 0:
+SkmiAllocateSinglePage -> SkmiAllocatePhysicalPage(class=0)
+-> SkmiSecurePhysicalPages(... access_index=0 ...)
+-> SkmiProtectPlaceholderPages(... access_index=0 ...)
+-> final ShvlpProtectPages(... SkmiVtlPageAccess[0] ...)
+-> final VTL0 mask = 0x0 = no access.
+
+SkmiProtectPlaceholderPages uses SkmiVtlPageAccess[1] = 0x1 as its transition/scrub-stage mask,
+then applies the final access-index mask. This does not change the final flag-0 result: VTL0 mask 0.

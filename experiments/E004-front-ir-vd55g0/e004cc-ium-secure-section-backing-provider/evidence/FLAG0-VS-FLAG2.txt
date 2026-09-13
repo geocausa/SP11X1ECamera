@@ -1,0 +1,153 @@
+E004cc FLAG0 VS FLAG2 SECURE-SECTION CLASS
+=== SYMBOL IumCreateSecureSection count=1 ===
+symbol=IumCreateSecureSection addr=140091440 type=Function
+function=IumCreateSecureSection entry=140091440 sig=uint __cdecl IumCreateSecureSection(ulonglong * param_1, uint * param_2, ulonglong param_3, ulonglong * param_4, uint param_5, longlong * * param_6, longlong * * param_7, longlong * * param_8)
+
+uint IumCreateSecureSection
+               (ulonglong *param_1,uint *param_2,ulonglong param_3,ulonglong *param_4,uint param_5,
+               longlong **param_6,longlong **param_7,longlong **param_8)
+
+{
+  uint uVar1;
+  uint *puVar2;
+  byte bVar3;
+  uint uVar4;
+  ulonglong uVar5;
+  ulonglong *puVar6;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 extraout_x1_02;
+  undefined8 uVar7;
+  undefined8 extraout_x1_03;
+  uint **ppuVar8;
+  longlong lVar9;
+  uint extraout_w11;
+  longlong extraout_x11;
+  ulonglong *extraout_x11_00;
+  longlong in_x18;
+  ulonglong uVar10;
+  uint uVar11;
+  uint *local_58;
+  ulonglong local_50 [2];
+  
+  local_58 = (uint *)0x0;
+  local_50[0] = 0;
+  if (*(longlong *)(in_x18 + 8) == 0) {
+    lVar9 = 0;
+  }
+  else {
+    lVar9 = *(longlong *)(*(longlong *)(in_x18 + 8) + 0x50);
+  }
+  if ((*(ulonglong *)(lVar9 + 0x170) & 1) == 0) {
+    return DAT_1400916b8;
+  }
+  if (*(char *)(*(longlong *)(in_x18 + 8) + 0x60) != '\0') {
+    puVar6 = param_1;
+    if ((ulonglong *)0x7ffffffeffff < param_1) {
+      puVar6 = (ulonglong *)&DAT_7fffffff0000;
+    }
+    *puVar6 = *puVar6;
+  }
+  if (param_3 == 0) {
+    return DAT_1400916bc;
+  }
+  uVar4 = (uint)param_4;
+  if ((uVar4 - 1 & 0xfffffffc) != 0 || uVar4 == 3) {
+    return DAT_1400916c4;
+  }
+  if ((param_5 - 1 & 0xfffffffc) != 0 || param_5 == 3) {
+    return DAT_1400916c4;
+  }
+  if (((ulonglong)param_6 & 0xfffffff9) != 0) {
+    return DAT_1400916c0;
+  }
+  uVar10 = (ulonglong)param_6 & 4;
+  uVar5 = (ulonglong)param_6 & 2;
+  if ((((ulonglong)param_6 & 4) != 0) && (((ulonglong)param_6 & 2) == 0)) {
+    return DAT_1400916c0;
+  }
+  ppuVar8 = &local_58;
+  uVar4 = SkmmCreateSecureSection(param_2,0,param_3,uVar4,ppuVar8,param_6,param_7,param_8);
+  puVar2 = local_58;
+  if ((int)uVar4 < 0) {
+    return uVar4;
+  }
+  uVar11 = 0;
+  if (uVar5 != 0) {
+    *local_58 = *local_58 | 0x20000;
+    uVar11 = 6;
+  }
+  if (uVar10 != 0) {
+    *local_58 = *local_58 | 0x10000;
+  }
+  *local_58 = *local_58 & 0xffff7fff;
+  uVar5 = SkmiMakeProtectionMask(param_5);
+  *puVar2 = (extraout_w11 ^ (int)uVar5 << 9) & 0x1e00 ^ extraout_w11;
+  if (uVar11 != 0) {
+    uVar5 = 0;
+    uVar7 = extraout_x1;
+    if (puVar2[1] != 0) {
+      do {
+        uVar10 = *(ulonglong *)(*(longlong *)(puVar2 + 2) + uVar5 * 8) >> 0xc & 0xfffffffff;
+        param_3 = (ulonglong)uVar11;
+        uVar4 = SkmiClaimTrustedPage(uVar10,(longlong *)0x0,uVar11);
+        uVar7 = extraout_x1_00;
+        if ((int)uVar4 < 0) break;
+        if ((*puVar2 >> 0x10 & 1) != 0) {
+          bVar3 = SkeRaiseIrql(2);
+          puVar6 = (ulonglong *)SkmiGetHyperspacePte();
+          SKMI_WRITE_PTE_WORKER(puVar6,DAT_1400916a8 | uVar10 << 0xc);
+          SkiInvalidateCacheRange
+                    (extraout_x11 * 0x2000000 + DAT_1400916b0 * -0x2000000 >> 0x10,0x1000);
+          SkmiReleaseHyperspacePte(extraout_x11_00);
+          SkeLowerIrql(bVar3);
+          uVar7 = extraout_x1_01;
+        }
+        uVar1 = (int)uVar5 + 1;
+        uVar5 = (ulonglong)uVar1;
+      } while (uVar1 < puVar2[1]);
+    }
+    if ((int)uVar4 < 0) {
+      if ((int)uVar5 != 0) {
+        lVar9 = uVar5 << 3;
+        do {
+          uVar11 = (int)uVar5 - 1;
+          uVar5 = (ulonglong)uVar11;
+          lVar9 = lVar9 + -8;
+          param_3 = 2;
+          SkmiReleaseTrustedPage
+                    (*(ulonglong *)(lVar9 + *(longlong *)(puVar2 + 2)) >> 0xc & 0xfffffffff,
+                     (longlong *)0x0,2);
+          uVar7 = extraout_x1_02;
+        } while (uVar11 != 0);
+      }
+      *puVar2 = *puVar2 & 0xfffdffff;
+    }
+    if ((int)uVar4 < 0) goto LAB_140091678;
+  }
+  param_4 = local_50;
+  param_3 = 0;
+  uVar4 = SkobCreateHandle((longlong)puVar2,'\0',(longlong **)0x0,param_4,(ulonglong)ppuVar8,param_6
+                           ,param_7,param_8);
+  uVar7 = extraout_x1_03;
+  if (-1 < (int)uVar4) {
+    *param_1 = local_50[0];
+  }
+LAB_140091678:
+  SkobDereferenceObject((longlong)puVar2,uVar7,param_3,param_4,ppuVar8,param_6,param_7,param_8);
+  return uVar4;
+}
+
+
+=== SYMBOL IumOpenSecureSection count=1 ===
+
+CALLER CROSS-CHECK
+FsIso external protected sample: CreateSecureSection(descriptor,4,4,size,0)
+SecureISP internal target:       CreateSecureSection(NULL,4,4,size,2)
+
+In IumCreateSecureSection:
+- both paths first call SkmmCreateSecureSection and therefore receive Secure Kernel allocated/protected pages;
+- flags bit 0x2 additionally sets section flag 0x20000 and calls SkmiClaimTrustedPage(PFN,NULL,6) for every page;
+- flag0 skips that trusted-page claim loop;
+- SecureISP internal target subsequently invokes separate AssignMemoryToSocDomain(CP_CAMERA 0x0d, IUM protection 4 -> Qualcomm WRITE 0x2).
