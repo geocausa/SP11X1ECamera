@@ -1,0 +1,10 @@
+E004bc CAMERA VMID / SCM MEMORY API
+19:#define QCOM_SCM_VMID_CP_CAMERA		0xD
+29:#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+107-int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+108-				   u32 cp_nonpixel_start, u32 cp_nonpixel_size);
+109:int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz, u64 *src,
+110-			const struct qcom_scm_vmperm *newvm,
+111-			unsigned int dest_cnt);
+112-
+113-bool qcom_scm_ocmem_lock_available(void);

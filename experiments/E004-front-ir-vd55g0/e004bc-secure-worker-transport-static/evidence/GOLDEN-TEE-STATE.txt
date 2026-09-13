@@ -1,0 +1,20 @@
+E004bc GOLDEN TRUSTED-EXECUTION STATE
+7.1.5-sp11-render-parity-v4+
+CONFIG_QCOM_SCM=y
+CONFIG_QCOM_TZMEM=y
+CONFIG_QCOM_TZMEM_MODE_SHMBRIDGE=y
+CONFIG_QCOM_QSEECOM=y
+CONFIG_QCOM_QSEECOM_UEFISECAPP=y
+CONFIG_TEE=m
+CONFIG_TEE_DMABUF_HEAPS=y
+# CONFIG_QCOMTEE is not set
+
+platform devices:
+/sys/bus/platform/devices/qcom_qseecom present
+/sys/bus/platform/devices/qcomtee present
+
+drivers:
+qcom_qseecom
+
+auxiliary QSEE app clients:
+qcom_qseecom.uefisecapp.0

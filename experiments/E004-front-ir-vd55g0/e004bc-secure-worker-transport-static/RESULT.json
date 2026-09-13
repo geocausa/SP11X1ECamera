@@ -1,0 +1,52 @@
+{
+  "schema": "sp11-camera-e004bc-secure-worker-transport-static-v1",
+  "status": "PASS_WINDOWS_TRUSTLET_IS_IUM_NOT_QTEE_TA",
+  "date": "2026-09-13",
+  "windows_worker": {
+    "file": "QcISPTrustlet8380.dll",
+    "format": "PE32+/COFF ARM64 Windows DLL",
+    "service_type": "SecureCompanion",
+    "trustlet_identity": 4096,
+    "imports": [
+      "IumSdk.dll",
+      "MapSecureIo",
+      "AssignMemoryToSocDomain",
+      "CreateSecureSection",
+      "OpenSecureSection"
+    ],
+    "qsee_qtee_ta_image": false,
+    "trustlet_identity_is_qtee_uid": false
+  },
+  "linux_qcomtee": {
+    "source_present": true,
+    "golden_config_enabled": false,
+    "platform_device_present": true,
+    "model": "object transport to QTEE services and loaded TAs",
+    "arbitrary_windows_pe_loader": false
+  },
+  "linux_qseecom": {
+    "golden_config_enabled": true,
+    "platform_driver_bound": true,
+    "model": "lookup/send to already-loaded QSEE apps",
+    "upstream_base_apps": [
+      "qcom.tz.uefisecapp"
+    ],
+    "live_aux_client": "qcom_qseecom.uefisecapp.0",
+    "arbitrary_ta_loader": false
+  },
+  "microsoft_linux_firmware": {
+    "camera_ta_filename_found": false,
+    "inventory_scope": "/lib/firmware/qcom/x1e80100/microsoft",
+    "caveat": "Does not exclude a resident service inside secure firmware/boot stages."
+  },
+  "linux_primitives": {
+    "qcom_scm_assign_mem": true,
+    "cp_camera_vmid": true,
+    "cp_camera_preview_vmid": true,
+    "secure_csi_equivalent": "unresolved"
+  },
+  "runtime_executed": false,
+  "qcomtee_loaded": false,
+  "camera_memory_reassigned": false,
+  "next_gate": "Static IUM-to-Linux primitive parity map for memory ownership and protected CSI."
+}
