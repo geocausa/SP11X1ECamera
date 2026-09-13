@@ -1,0 +1,189 @@
+E004bs WINDOWS QcTrEE SERVICE CATALOGUE
+
+9cd8252c1b501c1d58e4c49d020d526a5b9bc41a3f5de2ec08e866c3a26c16a2  /home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qctree.inf_arm64_b90c225f258c030c/QcTrEE.sys
+9e6d38df0b0ff8f766a4b67084f1d55e3bf44ddac766c5466b179e99adda8d6b  /home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qctree.inf_arm64_b90c225f258c030c/qctree.inf
+
+StartType      = 0               ; SERVICE_BOOT_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %13%\QcTrEE.sys
+Dependencies   = WindowsTrustedRT,WindowsTrustedRTProxy,fastfat
+LoadOrderGroup = Extended Base
+AddReg         = QcTrEE_SecureServiceReg_common
+[QcTrEE_SecureServiceReg_common]
+; PASSTHROUGH SECURE SERVICE
+HKR,%PassThroughService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%PassThroughService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%PassThroughService.RegKey%,MinorVersion,%REG_DWORD%,0
+HKR,%PassThroughService.RegKey%,OSDependencies,%REG_MULTI_SZ%,%RpmbOsService%
+; UEFIVAR SECURE APP SERVICE
+HKR,%EFIVarService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%EFIVarService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%EFIVarService.RegKey%,MinorVersion,%REG_DWORD%,0
+HKR,%EFIVarService.RegKey%,OSDependencies,%REG_MULTI_SZ%,%RpmbOsService%
+; InlineCrypto Secure Service
+HKR,%InlineCryptoService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%InlineCryptoService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%InlineCryptoService.RegKey%,MinorVersion,%REG_DWORD%,0
+HKR,%InlineCryptoService.RegKey%,OSDependencies,%REG_MULTI_SZ%,%RpmbOsService%
+; MemShare Secure Service
+HKR,%MemSharingService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%MemSharingService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%MemSharingService.RegKey%,MinorVersion,%REG_DWORD%,0
+; MFGMODEAPP SECURE APP SERVICE
+HKR,%MfgModeService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%MfgModeService.RegKey%,SecureApp,%REG_DWORD%,1
+HKR,%MfgModeService.RegKey%,LoadApp,%REG_DWORD%,0
+HKR,%MfgModeService.RegKey%,AppName,,"qcom.tz.mfgmodemgmt"
+HKR,%MfgModeService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%MfgModeService.RegKey%,MinorVersion,%REG_DWORD%,0
+; Invoke Secure Service
+HKR,%InvokeService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%InvokeService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%InvokeService.RegKey%,MinorVersion,%REG_DWORD%,0
+; SSG SERVICES LISTENER
+HKR,%SSGListenerService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%SSGListenerService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%SSGListenerService.RegKey%,MinorVersion,%REG_DWORD%,0
+; MSSECAPP SECURE SERVICE
+HKR,%MssecService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%MssecService.RegKey%,SecureApp,%REG_DWORD%,1
+HKR,%MssecService.RegKey%,LoadApp,%REG_DWORD%,0
+HKR,%MssecService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%MssecService.RegKey%,MinorVersion,%REG_DWORD%,1
+HKR,%MssecService.RegKey%,AppName,,"qcom.tz.mssecapp"
+; TPM SECURE SERVICE
+HKR,%TPMService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%TPMService.RegKey%,SecureApp,%REG_DWORD%,1
+HKR,%TPMService.RegKey%,LoadApp,%REG_DWORD%,0
+HKR,%TPMService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%TPMService.RegKey%,MinorVersion,%REG_DWORD%,1
+HKR,%TPMService.RegKey%,AppName,,"qcom.tz.tpm"
+; WINSECAPP SECURE APP SERVICE
+HKR,%WinSecAppService.RegKey%,Enabled,%REG_DWORD%,1
+HKR,%WinSecAppService.RegKey%,SecureApp,%REG_DWORD%,1
+HKR,%WinSecAppService.RegKey%,LoadApp,%REG_DWORD%,0
+HKR,%WinSecAppService.RegKey%,AppName,,"qcom.tz.winsecapp"
+HKR,%WinSecAppService.RegKey%,MajorVersion,%REG_DWORD%,1
+HKR,%WinSecAppService.RegKey%,MinorVersion,%REG_DWORD%,0
+HKR,%WinSecAppService.RegKey%,OSDependencies,%REG_MULTI_SZ%,%RpmbOsService%
+; OPS Listener Service
+HKR,%OpsListenerService.RegKey%,ListenerID,%REG_DWORD%,0xC000
+HKR,%OpsListenerService.RegKey%,BufferSize,%REG_DWORD%,4096
+; General registry keys
+HKR,%Param.RegKey%,SmbSizeInMB,%REG_DWORD%,0x14
+HKR,%Param.RegKey%,SmbChannels,%REG_DWORD%,0x64
+HKR,%Param.RegKey%,RegisterShmBridge,%REG_DWORD%,0x01
+HKR,%Param.RegKey%,EnableHyperVLogging,%REG_DWORD%,0x0
+; Below values in seconds
+HKR,%Param.RegKey%,SfsListenerWaitTime,%REG_DWORD%,2
+HKR,%Param.RegKey%,FileListenerPath,%REG_SZ%,"\DriverData"
+HKR,%Param.RegKey%,DeprecatedAPISupported,%REG_DWORD%,0x0
+; Below value in milli seconds
+HKR,%Param.RegKey%,TpmTrfrTimeVal,%REG_DWORD%,5000 
+HKR,%Param.RegKey%,QseeLogBuffer,%REG_DWORD%,0x1
+HKR,%Param.RegKey%,FSListener,%REG_DWORD%,0x1
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+[SourceDisksFiles]
+QcTrEE.sys = 1,,
+[Strings]
+SPSVCINST_ASSOCSERVICE = 0x00000002
+QUALCOMM = "Qualcomm Inc."
+StdMfg = "(Standard system devices)"
+ClassName = "QcTrEE"
+DiskId1 = "QcTrEE Installation Disk #1"
+QcTrEE.DeviceDesc = "Qualcomm(R) System Manager Device"
+QcTrEE.SVCDESC = "Qualcomm(R) System Manager Device"
+; Secure services
+PassThroughService.RegKey = "Parameters\SecureServices\{AE865C08-4A07-404D-BE51-D9A0465E23E5}"
+TPMService.RegKey = "Parameters\SecureServices\{36DEAA79-C5DD-447C-95E6-B3859589291A}"
+EFIVarService.RegKey = "Parameters\SecureServices\{699AA2F1-A42E-40DF-BABE-3AAAD2BB6A47}"
+WinSecAppService.RegKey = "Parameters\SecureServices\{16A1AB50-7413-4875-893D-2E5AA0B79888}"
+InlineCryptoService.RegKey = "Parameters\SecureServices\{C28F7046-F72E-4F23-B061-E50421C5404C}"
+MemSharingService.RegKey = "Parameters\SecureServices\{Eb3c7242-1b1a-4d51-ab55-f268f018f860}"
+MfgModeService.RegKey = "Parameters\SecureServices\{59EB09D9-537E-4961-A905-444449D9FE61}"
+MssecService.RegKey = "Parameters\SecureServices\{1F75CF6D-F709-4C0C-8BCB-0CDCA1289DDD}"
+InvokeService.RegKey = "Parameters\SecureServices\{03B82FC5-2052-44D6-9462-F22C72499337}"
+SSGListenerService.RegKey = "Parameters\SecureServices\{DA4B2995-8A01-4440-8B45-E1C026B16695}"
+; External Listeners
+OpsListenerService.RegKey = "Parameters\OsServices\{125B2457-44A7-43C8-A64E-9392C5255192}"
+Param.RegKey = "Parameters"
+OsServices.RegKey = "Parameters\OsServices"
+RpmbOsService = "{27447C21-BCC3-4D07-A05B-A3395BB4EEE7}"
+TzAppsOsService = "{1CFE8948-E8FE-43b4-A5C5-DB9802278947}"
+REG_DWORD = 0x00010001
+REG_QWORD = 0x000B0001
+REG_MULTI_SZ = 0x00010008
+
+--- service implementation names in QcTrEE.sys ---
+InlineCryptoServiceCreateSecureServiceContext
+InlineCryptoServiceDestroySecureServiceContext
+InlineCryptoServiceConnectSecureService
+InlineCryptoServiceDisconnectSecureService
+InlineCryptoServiceCreateSessionContext
+InlineCryptoServiceDestroySessionContext
+InlineCryptoServiceProcessSecureServiceRequest
+InlineCryptoServiceCancelSecureServiceRequest
+InlineCryptoServiceProcessOtherSecureServiceIo
+InlineCryptoServiceProgramKey
+Z:\b\WP\TrEE\rel\10.9\InlineCryptoService.c
+RegisterSSGListenerService
+PassThroughServiceCreateSecureServiceContext
+Z:\b\WP\TrEE\rel\10.9\PassThroughService.c
+PassThroughServiceDestroySecureServiceContext
+PassThroughServiceConnectSecureService
+PassThroughServiceDisconnectSecureService
+PassThroughServiceCreateSessionContext
+PassThroughServiceDestroySessionContext
+PassThroughServiceProcessSecureServiceRequest
+PassThroughServiceCancelSecureServiceRequest
+PassThroughServiceProcessOtherSecureServiceIo
+PassThroughServiceSipSyscall
+PassThroughServiceTzOsSyscall
+TpmServiceCreateSecureServiceContext
+Z:\b\WP\TrEE\rel\10.9\TPMService.c
+TpmServiceDestroySecureServiceContext
+TpmServiceConnectSecureService
+TpmServiceDisconnectSecureService
+TpmServiceCreateSessionContext
+TpmServiceDestroySessionContext
+TpmServiceProcessSecureServiceRequest
+TpmServiceCancelSecureServiceRequest
+TpmServiceProcessOtherSecureServiceIo
+TpmServiceInvoke
+TpmServicePpi
+UefiVariablesServiceCreateSecureServiceContext
+Z:\b\WP\TrEE\rel\10.9\UefiVariablesService.c
+UefiVariablesServiceDestroySecureServiceContext
+UefiVariablesServiceConnectSecureService
+UefiVariablesServiceDisconnectSecureService
+UefiVariablesServiceCreateSessionContext
+UefiVariablesServiceDestroySessionContext
+UefiVariablesServiceProcessSecureServiceRequest
+UefiVariablesServiceCancelSecureServiceRequest
+UefiVariablesServiceProcessOtherSecureServiceIo
+MemShareServiceCreateSecureServiceContext
+Z:\b\WP\TrEE\rel\10.9\MemShareService.c
+MemShareServiceDestroySecureServiceContext
+MemShareServiceConnectSecureService
+MemShareServiceDisconnectSecureService
+MemShareServiceCreateSessionContext
+MemShareServiceDestroySessionContext
+MemShareServiceProcessSecureServiceRequest
+MemShareServiceCancelSecureServiceRequest
+MemShareServiceProcessOtherSecureServiceIo
+MemShareServiceSHMBridgeCreateSyscall
+MemShareServiceSHMBridgeDeleteSyscall
+MemShareServiceAllocSyscall
+MemShareServiceFreeSyscall
+Z:\b\WP\TrEE\rel\10.9\SmcInvokeService.c
+Z:\b\WP\TrEE\rel\10.9\SSGListenerService.c
+SSGListenerServiceCallback
+SSGListenerServiceCreateSecureServiceContext
+SSGListenerServiceDestroySecureServiceContext
+SSGListenerServiceConnectSecureService
+SSGListenerServiceDisconnectSecureService
+SSGListenerServiceCreateSessionContext
+SSGListenerServiceDestroySessionContext
+SSGListenerServiceCancelSecureServiceRequest
+SSGListenerServiceProcessOtherSecureServiceIo

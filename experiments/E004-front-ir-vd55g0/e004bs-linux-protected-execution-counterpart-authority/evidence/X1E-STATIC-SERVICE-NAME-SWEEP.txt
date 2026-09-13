@@ -1,0 +1,23 @@
+E004bs X1E STATIC SERVICE NAME SWEEP
+
+--- whole kernel QCOMTEE UIDs/service opens ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/qcomtee_msg.h:96:#define QCOMTEE_CLIENT_ENV_OPEN 0
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/qcomtee_msg.h:100:#define QCOMTEE_FEATURE_VER_UID		2033
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/call.c:628:		.impl_id = TEE_IMPL_ID_QTEE,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/call.c:660:	service = qcomtee_object_get_service(oic, client_env,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/call.c:661:					     QCOMTEE_FEATURE_VER_UID);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/core.c:900:qcomtee_object_get_service(struct qcomtee_object_invoke_ctx *oic,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/core.c:910:	ret = qcomtee_object_do_invoke(oic, client_env, QCOMTEE_CLIENT_ENV_OPEN,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/qcomtee_object.h:313:qcomtee_object_get_service(struct qcomtee_object_invoke_ctx *oic,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/uapi/linux/tee.h:62:#define TEE_IMPL_ID_QTEE	4
+
+--- x1e firmware metadata camera/QTEE names (empty is significant only at filename/metadata level) ---
+
+--- relevant generic constants only ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/optee/optee_msg.h:304: * OPTEE_MSG_PROTMEM_SECURE_VIDEO_RECORD	Secure Video Recording
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/optee/optee_msg.h:309:#define OPTEE_MSG_PROTMEM_SECURE_VIDEO_RECORD	3
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:237:	case TEE_DMA_HEAP_SECURE_VIDEO_RECORD:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/tee_heap.c:238:		return "protected,secure-video-record";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:19:#define QCOM_SCM_VMID_CP_CAMERA		0xD
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:29:#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/tee_core.h:41:	TEE_DMA_HEAP_SECURE_VIDEO_RECORD,

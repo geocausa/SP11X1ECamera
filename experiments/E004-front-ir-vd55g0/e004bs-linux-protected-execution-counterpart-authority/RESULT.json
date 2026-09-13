@@ -1,0 +1,48 @@
+{
+  "experiment": "E004bs",
+  "status": "PASS_GENERIC_QTEE_TRANSPORT_FOUND_NO_CAMERA_COUNTERPART_AUTHORITY",
+  "mode": "static-only",
+  "linux_qcomtee": {
+    "golden_enabled": false,
+    "root_register_op": 5,
+    "client_env_open_op": 0,
+    "hardcoded_service_uids": {
+      "feature_versions": 2033
+    },
+    "camera_service_uid_found": false,
+    "memory_object_backing": "tee_shm physical range via primordial MAP_REGION",
+    "shm_transport": "qcom_tzmem SHM bridge",
+    "enablement_is_runtime_passive": false
+  },
+  "windows_qctree": {
+    "qctree_sha256": "9cd8252c1b501c1d58e4c49d020d526a5b9bc41a3f5de2ec08e866c3a26c16a2",
+    "inf_sha256": "9e6d38df0b0ff8f766a4b67084f1d55e3bf44ddac766c5466b179e99adda8d6b",
+    "secureisp_kmd_qctree_guid_refs": {
+      "PassThrough": 1,
+      "MemSharing": 0,
+      "Invoke": 0,
+      "InlineCrypto": 0,
+      "TPM": 0,
+      "EFIVar": 0,
+      "WinSecApp": 0,
+      "MfgMode": 0,
+      "Mssec": 0,
+      "SSGListener": 0
+    },
+    "secureisp_trustlet_qctree_guid_refs": "all zero",
+    "camera_qctree_role_proven": "secure CSI/lane PassThrough only",
+    "frame_transfer_role": "VTL1 Secure Companion trustlet, not QcTrEE service"
+  },
+  "x1e_static_metadata": {
+    "camera_qtee_service_identity_found": false,
+    "scope": "kernel source and installed filename/text metadata; does not exclude undocumented secure-firmware objects"
+  },
+  "runtime_actions": {
+    "qcomtee_enable_or_load": false,
+    "qtee_smc": false,
+    "qseecom_send": false,
+    "scm_assign_mem": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004bt CP_CAMERA + trusted-worker visibility contract, static first"
+}

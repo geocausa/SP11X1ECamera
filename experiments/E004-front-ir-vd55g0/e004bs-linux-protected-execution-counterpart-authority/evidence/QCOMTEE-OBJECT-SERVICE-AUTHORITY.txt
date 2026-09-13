@@ -1,0 +1,280 @@
+E004bs QCOMTEE OBJECT / SERVICE AUTHORITY
+
+--- qcomtee config ---
+CONFIG_QCOM_SCM=y
+CONFIG_QCOM_TZMEM=y
+# CONFIG_QCOM_TZMEM_MODE_GENERIC is not set
+CONFIG_QCOM_TZMEM_MODE_SHMBRIDGE=y
+CONFIG_TEE_DMABUF_HEAPS=y
+# CONFIG_QCOMTEE is not set
+
+--- root/client-env/service protocol ---
+
+/* BI and BO payloads in QTEE messages should be at 64-bit boundaries. */
+#define qcomtee_msg_offset_align(o) ALIGN((o), sizeof(u64))
+
+/* Operations for objects are 32-bit. Transport uses the upper 16 bits. */
+#define QCOMTEE_MSG_OBJECT_OP_MASK GENMASK(15, 0)
+
+/* Reserved Operation IDs sent to QTEE: */
+/* QCOMTEE_MSG_OBJECT_OP_RELEASE - Reduces the refcount and releases the object.
+ * QCOMTEE_MSG_OBJECT_OP_RETAIN  - Increases the refcount.
+ *
+ * These operation IDs are valid for all objects.
+ */
+
+#define QCOMTEE_MSG_OBJECT_OP_RELEASE (QCOMTEE_MSG_OBJECT_OP_MASK - 0)
+#define QCOMTEE_MSG_OBJECT_OP_RETAIN  (QCOMTEE_MSG_OBJECT_OP_MASK - 1)
+
+/* Subset of operations supported by QTEE root object. */
+
+#define QCOMTEE_ROOT_OP_REG_WITH_CREDENTIALS	5
+#define QCOMTEE_ROOT_OP_NOTIFY_DOMAIN_CHANGE	4
+#define QCOMTEE_ROOT_OP_ADCI_ACCEPT		8
+#define QCOMTEE_ROOT_OP_ADCI_SHUTDOWN		9
+
+/* Subset of operations supported by client_env object. */
+
+#define QCOMTEE_CLIENT_ENV_OPEN 0
+
+/* List of available QTEE service UIDs and subset of operations. */
+
+#define QCOMTEE_FEATURE_VER_UID		2033
+#define QCOMTEE_FEATURE_VER_OP_GET	0
+/* Get QTEE version number. */
+#define QCOMTEE_FEATURE_VER_OP_GET_QTEE_ID 10
+#define QTEE_VERSION_GET_MAJOR(x) (((x) >> 22) & 0xffU)
+#define QTEE_VERSION_GET_MINOR(x) (((x) >> 12) & 0xffU)
+#define QTEE_VERSION_GET_PATCH(x) ((x) >> 0 & 0xfffU)
+
+/* Response types as returned from qcomtee_object_invoke_ctx_invoke(). */
+
+/* The message contains a callback request. */
+#define QCOMTEE_RESULT_INBOUND_REQ_NEEDED 3
+
+/**
+ * struct qcomtee_msg_object_invoke - Direct object invocation message.
+ * @ctx: object ID hosted in QTEE.
+	    typeof_qcomtee_object(object) != QCOMTEE_OBJECT_TYPE_ROOT)
+		return -EINVAL;
+
+	/* User cannot directly issue these operations to QTEE. */
+	if (op == QCOMTEE_MSG_OBJECT_OP_RELEASE ||
+	    op == QCOMTEE_MSG_OBJECT_OP_RETAIN)
+		return -EINVAL;
+
+	return qcomtee_object_do_invoke_internal(oic, object, op, u, result);
+}
+
+/**
+ * qcomtee_object_get_client_env() - Get a privileged client env. object.
+ * @oic: context to use for the current invocation.
+ *
+ * The caller should call qcomtee_object_put() on the returned object
+ * to release it.
+ *
+ * Return: On error, returns %NULL_QCOMTEE_OBJECT.
+ *         On success, returns the object.
+ */
+struct qcomtee_object *
+qcomtee_object_get_client_env(struct qcomtee_object_invoke_ctx *oic)
+{
+	struct qcomtee_arg u[3] = { 0 };
+	int ret, result;
+
+	u[0].o = NULL_QCOMTEE_OBJECT;
+	u[0].type = QCOMTEE_ARG_TYPE_IO;
+	u[1].type = QCOMTEE_ARG_TYPE_OO;
+	ret = qcomtee_object_do_invoke(oic, ROOT_QCOMTEE_OBJECT,
+				       QCOMTEE_ROOT_OP_REG_WITH_CREDENTIALS, u,
+				       &result);
+	if (ret || result)
+		return NULL_QCOMTEE_OBJECT;
+
+	return u[1].o;
+}
+
+struct qcomtee_object *
+qcomtee_object_get_service(struct qcomtee_object_invoke_ctx *oic,
+			   struct qcomtee_object *client_env, u32 uid)
+{
+	struct qcomtee_arg u[3] = { 0 };
+	int ret, result;
+
+	u[0].b.addr = &uid;
+	u[0].b.size = sizeof(uid);
+	u[0].type = QCOMTEE_ARG_TYPE_IB;
+	u[1].type = QCOMTEE_ARG_TYPE_OO;
+	ret = qcomtee_object_do_invoke(oic, client_env, QCOMTEE_CLIENT_ENV_OPEN,
+				       u, &result);
+
+	if (ret || result)
+		return NULL_QCOMTEE_OBJECT;
+
+	return u[1].o;
+}
+
+--- only hard-coded service UID/open use in whole tree ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/qcomtee_msg.h:96:#define QCOMTEE_CLIENT_ENV_OPEN 0
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/qcomtee_msg.h:100:#define QCOMTEE_FEATURE_VER_UID		2033
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/call.c:660:	service = qcomtee_object_get_service(oic, client_env,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/call.c:661:					     QCOMTEE_FEATURE_VER_UID);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/core.c:900:qcomtee_object_get_service(struct qcomtee_object_invoke_ctx *oic,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/core.c:910:	ret = qcomtee_object_do_invoke(oic, client_env, QCOMTEE_CLIENT_ENV_OPEN,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/tee/qcomtee/qcomtee_object.h:313:qcomtee_object_get_service(struct qcomtee_object_invoke_ctx *oic,
+
+--- userspace root restrictions ---
+
+	/*  QTEE can accept 16 arguments of each supported types. */
+	if (io > QCOMTEE_ARGS_PER_TYPE || oo > QCOMTEE_ARGS_PER_TYPE ||
+	    ib > QCOMTEE_ARGS_PER_TYPE || ob > QCOMTEE_ARGS_PER_TYPE)
+		return -EINVAL;
+
+	return 0;
+}
+
+/* Check if an operation on ROOT_QCOMTEE_OBJECT from userspace is permitted. */
+static int qcomtee_root_object_check(u32 op, struct tee_param *params,
+				     int num_params)
+{
+	/* Some privileged operations recognized by QTEE. */
+	if (op == QCOMTEE_ROOT_OP_NOTIFY_DOMAIN_CHANGE ||
+	    op == QCOMTEE_ROOT_OP_ADCI_ACCEPT ||
+	    op == QCOMTEE_ROOT_OP_ADCI_SHUTDOWN)
+		return -EINVAL;
+
+	/*
+	 * QCOMTEE_ROOT_OP_REG_WITH_CREDENTIALS is to register with QTEE
+	 * by passing a credential object as input OBJREF. TEE_OBJREF_NULL as a
+	 * credential object represents a privileged client for QTEE and
+	 * is used by the kernel only.
+	 */
+	if (op == QCOMTEE_ROOT_OP_REG_WITH_CREDENTIALS && num_params == 2) {
+		if (params[0].attr == TEE_IOCTL_PARAM_ATTR_TYPE_OBJREF_INPUT &&
+		    params[1].attr == TEE_IOCTL_PARAM_ATTR_TYPE_OBJREF_OUTPUT) {
+			if (params[0].u.objref.id == TEE_OBJREF_NULL)
+				return -EINVAL;
+		}
+	}
+
+	return 0;
+}
+
+/**
+ * qcomtee_object_invoke() - Invoke a QTEE object.
+ * @ctx: TEE context.
+ * @arg: ioctl arguments.
+ * @params: parameters for the object.
+ *
+ * Return: On success, returns 0; on failure, returns < 0.
+ */
+static int qcomtee_object_invoke(struct tee_context *ctx,
+				 struct tee_ioctl_object_invoke_arg *arg,
+				 struct tee_param *params)
+{
+	struct qcomtee_context_data *ctxdata = ctx->data;
+	struct qcomtee_object *object;
+	int i, ret, result;
+
+--- driver probe behavior ---
+	.supp_send = qcomtee_supp_send,
+};
+
+static const struct tee_desc qcomtee_desc = {
+	.name = "qcomtee",
+	.ops = &qcomtee_ops,
+	.owner = THIS_MODULE,
+};
+
+static int qcomtee_probe(struct platform_device *pdev)
+{
+	struct workqueue_struct *async_wq;
+	struct tee_device *teedev;
+	struct tee_shm_pool *pool;
+	struct tee_context *ctx;
+	struct qcomtee *qcomtee;
+	int err;
+
+	qcomtee = kzalloc_obj(*qcomtee);
+	if (!qcomtee)
+		return -ENOMEM;
+
+	pool = qcomtee_shm_pool_alloc();
+	if (IS_ERR(pool)) {
+		err = PTR_ERR(pool);
+
+		goto err_free_qcomtee;
+	}
+
+	teedev = tee_device_alloc(&qcomtee_desc, NULL, pool, qcomtee);
+	if (IS_ERR(teedev)) {
+		err = PTR_ERR(teedev);
+
+		goto err_pool_destroy;
+	}
+
+	qcomtee->teedev = teedev;
+	qcomtee->pool = pool;
+	err = tee_device_register(qcomtee->teedev);
+	if (err)
+		goto err_unreg_teedev;
+
+	platform_set_drvdata(pdev, qcomtee);
+	/* Start async wq. */
+	async_wq = alloc_ordered_workqueue("qcomtee_wq", 0);
+	if (!async_wq) {
+		err = -ENOMEM;
+
+		goto err_unreg_teedev;
+	}
+
+	qcomtee->wq = async_wq;
+	/* Driver context used for async operations of teedev. */
+	ctx = teedev_open(qcomtee->teedev);
+	if (IS_ERR(ctx)) {
+		err = PTR_ERR(ctx);
+
+		goto err_dest_wq;
+	}
+
+	qcomtee->ctx = ctx;
+	/* Init Object table. */
+	qcomtee->xa_last_id = 0;
+	xa_init_flags(&qcomtee->xa_local_objects, XA_FLAGS_ALLOC);
+	/* Get QTEE verion. */
+	qcomtee_get_qtee_feature_list(qcomtee->ctx,
+				      QCOMTEE_FEATURE_VER_OP_GET_QTEE_ID,
+				      &qcomtee->qtee_version);
+
+	pr_info("QTEE version %u.%u.%u\n",
+		QTEE_VERSION_GET_MAJOR(qcomtee->qtee_version),
+		QTEE_VERSION_GET_MINOR(qcomtee->qtee_version),
+		QTEE_VERSION_GET_PATCH(qcomtee->qtee_version));
+
+	return 0;
+
+err_dest_wq:
+	destroy_workqueue(qcomtee->wq);
+err_unreg_teedev:
+	tee_device_unregister(qcomtee->teedev);
+err_pool_destroy:
+	tee_shm_pool_free(pool);
+err_free_qcomtee:
+	kfree(qcomtee);
+
+	return err;
+}
+
+/**
+ * qcomtee_remove() - Device Removal Routine.
+ * @pdev: platform device information struct.
+ *
+ * It is called by the platform subsystem to alert the driver that it should
+ * release the device.
+ *
+ * QTEE does not provide an API to inform it about a callback object going away.
+ * However, when releasing QTEE objects, any callback object sent to QTEE
+ * previously would be released by QTEE as part of the object release.
+ */
+static void qcomtee_remove(struct platform_device *pdev)
+{
