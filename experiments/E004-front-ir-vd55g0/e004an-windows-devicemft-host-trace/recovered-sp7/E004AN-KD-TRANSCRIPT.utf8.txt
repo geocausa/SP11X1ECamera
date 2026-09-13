@@ -1,0 +1,126 @@
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.000 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.000 seconds
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 0
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+
+Microsoft (R) Windows Debugger Version 10.0.29617.1000 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Using NET for debugging
+Opened WinSock 2.0
+Kernel Debug Target Status: [no_debuggee]; Retries: [0] times in last [7] seconds.
+Waiting to reconnect...
+Connected to target Connected to target 169.254.226.73 on port 50005 on local IP 169.254.185.243.
+You can get the target MAC address by running .kdtargetmac command.
+Connected to Windows 10 26100 ARM 64-bit (AArch64) target at (Sun Sep 13 14:44:27.821 2026 (UTC + 1:00)), ptr64 TRUE
+Kernel Debugger connection established.
+Symbol search path is: srv*
+Executable search path is:
+Windows 10 Kernel Windows 10 Kernel Version 26100 MP (1 procs) Free ARM 64-bit (AArch64)    
+Edition build lab: 26100.1.arm64fre.ge_release.240331-1435
+Kernel base = 0xfffff801`25200000 PsLoadedModuleList = 0xfffff801`25f6ac50
+System Uptime: 0 days 0:00:10.914
+IPCCDeviceCreate Init assigned nameKDTARGET: Refreshing KD connection
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+qcsp [spcomEvtDeviceAdd] device count [1] .
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+Capacity:39912, FullChargedCapacity:49890, Voltage:8205, Rate:0
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+qccdi: WARN: Crash dump trace log buffer full
+DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\WUDFRd
+-successfully opened handle 00000000000003A4 for Invoke driver 
+
+-SSGTZD random number generated was 0x7e9f49f5 from Invoke driver 
+
+-SSGServicesInvokeInit with status 0x0
+
+Handle opened to SMCInvoke driver successfully 0x0
+
+Queue created successfully 0x0
+
+Interface published for SSGUMD successfully 0x0
+
+SSGServicesCreateDevice returned with status 0x0
+
+DriverEntry failed 0xc035001e for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\l1vhlwf
+DriverEntry failed 0xc00000bb for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\NetworkPrivacyPolicy
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0xC0 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Unable to add extension DLL: wmitrace
+Missing or incorrect wmitrace.dll - 0x70 byte trace data buffer ignored
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff801`254013b0 d43e0000 brk         #0xF000
+0: kd> !process 0n8180 1
+Searching for Process with Cid == 1ff4
+PROCESS ffffa58ffbbbe080
+    SessionId: none  Cid: 1ff4    Peb: 1e9e2da000  ParentCid: 05a0
+    DirBase: a2bba4000  ObjectTable: ffffe2870d49c740  HandleCount: 541.
+    Image: svchost.exe
+    VadRoot ffffa5800a64c6e0 Vads 131 Clone 0 Private 3559. Modified 75. Locked 0.
+    DeviceMap ffffe287003d10f0
+    Token                             ffffe2871531a060
+    ElapsedTime                       00:00:28.121
+    UserTime                          00:00:00.015
+    KernelTime                        00:00:00.015
+    QuotaPoolUsage[PagedPool]         335424
+    QuotaPoolUsage[NonPagedPool]      18896
+    Working Set Sizes (now,min,max)  (10197, 50, 345) (40788KB, 200KB, 1380KB)
+    PeakWorkingSetSize                11000
+    VirtualSize                       2101472 Mb
+    PeakVirtualSize                   2101475 Mb
+    PageFaultCount                    11833
+    MemoryPriority                    BACKGROUND
+    BasePriority                      13
+    CommitCharge                      4698
+    Job                               ffffa58ff792f040
+
+0: kd>

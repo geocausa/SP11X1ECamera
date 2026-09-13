@@ -1,0 +1,55 @@
+{
+  "schema": "sp11-camera-e004an-devicemft-host-trace-v1",
+  "status": "PASS_DYNAMIC_DEVICEMFT_HOST_FACEAUTH_CORRELATION",
+  "acquisition_date": "2026-09-13",
+  "host": {
+    "process": "svchost.exe",
+    "command_line": "C:\\WINDOWS\\System32\\svchost.exe -k Camera -s FrameServer",
+    "service": "FrameServer",
+    "display_name": "Windows Camera Frame Server",
+    "session": 0,
+    "module": "QcDeviceMFT8380.dll"
+  },
+  "observations": [
+    {
+      "kind": "complete_faceauth",
+      "pid": 3676,
+      "module_base": "0x7ff80a360000",
+      "frames": 12,
+      "start": "Success",
+      "stop": "Success"
+    },
+    {
+      "kind": "complete_faceauth",
+      "pid": 12512,
+      "module_base": "0x7ffff8640000",
+      "frames": 12,
+      "start": "Success",
+      "stop": "Success",
+      "service_identity_resolved": true
+    },
+    {
+      "kind": "post_init_gate",
+      "pid": 8180,
+      "module_base": "0x7ffff8640000",
+      "service_identity_resolved": true,
+      "kd_process_image": "svchost.exe",
+      "completed_stream": false
+    }
+  ],
+  "static_trace_targets": {
+    "cdevicemft_ksproperty_rva": "0x18250",
+    "cpinconfigurer_ksproperty_rva": "0x4d540",
+    "ccameracontrols_ksproperty_rva": "0x2d0d0",
+    "securemode_setproperty_rva": "0x43f60",
+    "captureproperties_onsetsecuremode_rva": "0x302d20"
+  },
+  "interpretation": {
+    "frame_server_hosts_devicemft": true,
+    "faceauth_correlates_with_devicemft_load": true,
+    "device_mft_ksproperty_runtime_hit_proven": false,
+    "securemode_write_runtime_hit_proven": false,
+    "linux_secureisp_runtime_authorized": false
+  },
+  "next_gate": "Trace DeviceMFT user-mode KS/SecureMode RVAs in FrameServer during a gated FaceAuth run."
+}
