@@ -1,0 +1,48 @@
+{
+  "schema": "sp11-camera-e004ap-windows-hello-trusted-trigger-static-v1",
+  "status": "PASS_STATIC_WINDOWS_HELLO_OWNS_IR_SOURCE_SECUREMODE_TRIGGER",
+  "acquisition_date": "2026-09-13",
+  "hashes": {
+    "FaceProcessor_dll": "fa201c3ec21d5e7caf4ab16c685d7a237f8883e95965a30791198bd1a061e0e7",
+    "QcDeviceMFT8380_dll": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "surfacecamavspro_ext8380_inf": "10b3583f011f92baca69fe3792c53ae802f46192c5e339174a2bd9c4f8a323b0",
+    "helloface_inf": "0aff0619357d7758595a187693cbca54e73b4068395bc0fd1902b11856166d4e",
+    "qccamsecureisp8380_inf": "22bffc4795803de62825ee8eab6bd13cdd2d18e505a39b410eecad52b092e05f"
+  },
+  "extended_camera_control": {
+    "guid": "1CB79112-C0D2-4213-9CA6-CD4FDB927972",
+    "delimiter": ",",
+    "faceauth_property_id": 35,
+    "securemode_property_id": 36,
+    "faceauth_property_string": "{1CB79112-C0D2-4213-9CA6-CD4FDB927972},35",
+    "securemode_property_string": "{1CB79112-C0D2-4213-9CA6-CD4FDB927972},36"
+  },
+  "faceprocessor_rvas": {
+    "initialize_components": "0x3ba40",
+    "set_property_string": "0x4c5b8",
+    "get_property_buffer": "0x375c8",
+    "set_property": "0x4bd98",
+    "toggle_face_mode": "0x4ed50",
+    "toggle_secure_sensor": "0x92540",
+    "create_infrared_reader": "0x31328"
+  },
+  "securemode_behavior": {
+    "source_controller_api": "MediaFrameSource.Controller GetPropertyAsync/SetPropertyAsync",
+    "minimum_payload_bytes": 40,
+    "flags_offset": 16,
+    "enable_argument": 1,
+    "enable_flags": 2,
+    "disable_argument": 0,
+    "disable_flags": 1,
+    "required_capability_bit": 1,
+    "get_modify_set": true
+  },
+  "ownership": {
+    "faceauth_profile_owner": "Surface camera extension INF",
+    "secure_trigger_owner": "Windows Hello FaceProcessor.dll",
+    "secureisp_owner": "Qualcomm CameraSecureISP + SecureBioCompanion",
+    "generic_media_profile_is_trigger": false
+  },
+  "next_gate": "Reproduce Windows Hello IR source-controller GET/modify/SET sequence under KD, then return to protected Golden.",
+  "linux_secureisp_runtime_authorized": false
+}

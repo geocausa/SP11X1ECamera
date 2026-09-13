@@ -1,0 +1,231 @@
+=== surfacecamavspro_ext8380.inf ===
+10b3583f011f92baca69fe3792c53ae802f46192c5e339174a2bd9c4f8a323b0  /mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/surfacecamavspro_ext8380.inf_arm64_273738175d2f8f2c/surfacecamavspro_ext8380.inf
+;             F r o n t   S e n s o r   A d d R e g
+;---------------------------------------------------------------
+[SurfaceCamAvs.Reg.FrontSensor]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,%FrontSensor.FriendlyName%
+;HKR,,CameraDeviceMftClsid,,%DMFT.CLSID%
+HKR,,EnablePlatformDmft,0x00010001,0x00000001
+HKR,,FSMEnableMsEffects,0x00010001,0x00000001
+HKR,,CameraDeviceMftClsidChain,0x00010000,%DMFT.CLSID%,%PDMFT.CLSID%
+HKR,,"ReferenceGUID",0,"%FrontSensor.RefGuid%"
+HKR,,"FSSensorGroupId",0,%SENSORGROUP_ID%
+HKR,,FSSensorGroupName,0,%SENSORGROUP_NAME%
+HKR,,"SCSVCamPfn",,%SURFACE_APP_PFN%
+HKR,,"OEMCameraProfileVersion",0x00010001,2
+HKR,,FSRequestSelectedProfile,0x10001,0x1
+
+;--------------------------------
+; Camera Profiles:  Front Sensor
+; 10 => 16:9 ratio resolutions
+; 20 =>  4:3 ratio resolutions
+; 30 =>  3:2 ratio resolutions
+; 40 =>  1:1 ratio resolutions
+;--------------------------------
+
+; [FFC] Legacy profile - Nativecam app is one of the apps to use this
+HKR,"Profiles\KSCAMERAPROFILE_Legacy,0","MTF0",0,"%PINNAME_VIDEO_PREVIEW%:(*)"
+HKR,"Profiles\KSCAMERAPROFILE_Legacy,0","MTF1",0,"%PINNAME_IMAGE%:(*)"
+HKR,"Profiles\KSCAMERAPROFILE_Legacy,0","MTF2",0,"%PINNAME_VIDEO_CAPTURE%:(*)"
+
+; [FFC] HighQualityPhoto
+; 16:9
+HKR,"Profiles\KSCAMERAPROFILE_HighQualityPhoto,169","MTF0",0,"%PINNAME_VIDEO_PREVIEW%:((RES<=%RES_UHD%;FRT==;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_HighQualityPhoto,169","MTF1",0,"%PINNAME_IMAGE%:((RES==%RES_UHD%;FRT==30,1;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_HighQualityPhoto,169","MTF2",0,"%PINNAME_VIDEO_CAPTURE%:(!)"
+
+; 4:3
+HKR,"Profiles\KSCAMERAPROFILE_HighQualityPhoto,43","MTF0",0,"%PINNAME_VIDEO_PREVIEW%:((RES<=1920,1440;FRT==;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_HighQualityPhoto,43","MTF1",0,"%PINNAME_IMAGE%:((RES==4032,3024;FRT==30,1;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_HighQualityPhoto,43","MTF2",0,"%PINNAME_VIDEO_CAPTURE%:(!)"
+
+; Custom RAW profile
+HKR,"Profiles\%CUSTOMCAMERAPROFILE_RawCapture%,0","MTF0",0,"%PINNAME_VIDEO_PREVIEW%:(*)"
+HKR,"Profiles\%CUSTOMCAMERAPROFILE_RawCapture%,0","MTF1",0,"%PINNAME_IMAGE%:(*)"
+HKR,"Profiles\%CUSTOMCAMERAPROFILE_RawCapture%,0","MTF2",0,"%PINNAME_VIDEO_CAPTURE%:(*)"
+
+; [FFC] FaceAuth,0 PreviewPin, Defaults
+HKR,"Profiles\KSCAMERAPROFILE_FaceAuth_Mode,0","MTF0",0,"%PINNAME_VIDEO_PREVIEW%:((RES==800,800;FRT==30,1;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_FaceAuth_Mode,0","MTF1",0,"%PINNAME_IMAGE%:(!)"
+HKR,"Profiles\KSCAMERAPROFILE_FaceAuth_Mode,0","MTF2",0,"%PINNAME_VIDEO_CAPTURE%:(!)"
+
+[SurfaceFrontRGB.AddProperty]
+; Set property to operate MEP in high resolution pipeline mode
+{AA3E8B1E-B590-4E50-90C6-780AEC4EB4D9}, 2, 7,, 2
+
+;---------------------------------------------------------------
+;             A u x   S e n s o r   A d d R e g
+;---------------------------------------------------------------
+[SurfaceCamAvs.Reg.AuxSensor]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,%AuxSensor.FriendlyName%
+HKR,,CameraDeviceMftClsid,,%DMFT.CLSID%
+HKR,,"ReferenceGUID",0,"%AuxSensor.RefGuid%"
+HKR,,"FSSensorGroupId",0,%SENSORGROUP_ID%
+HKR,,"FSSensorGroupName",0,%SENSORGROUP_NAME%
+HKR,,"OEMCameraProfileVersion",0x00010001,2
+HKR,,FSRequestSelectedProfile,0x10001,0x1
+
+;----------------------------------------
+; Camera Profiles:  Auxiliary Sensor
+;----------------------------------------
+; Legacy Profile
+HKR,"Profiles\KSCAMERAPROFILE_Legacy,0","MTF0",0,"%PINNAME_VIDEO_PREVIEW%:((RES==;FRT==60,1;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_Legacy,0","MTF1",0,"%PINNAME_IMAGE%:((RES==;FRT==;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_Legacy,0","MTF2",0,"%PINNAME_VIDEO_CAPTURE%:(!)"
+
+; FaceAuth profile.
+HKR,"Profiles\KSCAMERAPROFILE_FaceAuth_Mode,0","MTF0",0,"%PINNAME_VIDEO_PREVIEW%:((RES==644,604;FRT==60,1;SUT==NV12))"
+HKR,"Profiles\KSCAMERAPROFILE_FaceAuth_Mode,0","MTF1",0,"%PINNAME_IMAGE%:(!)"
+HKR,"Profiles\KSCAMERAPROFILE_FaceAuth_Mode,0","MTF2",0,"%PINNAME_VIDEO_CAPTURE%:(!)"
+
+;---------------------------------------------------------------
+;                S t r i n g s
+;---------------------------------------------------------------
+[Strings]
+; non-localizable
+Proxy.CLSID                     = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+DMFT.CLSID                      = "{4C2331F0-66BE-4177-9841-2FCBA8CCF5CA}"
+DMFT1.CLSID                     = "{0E313280-3169-4F41-A329-9E854169634F}"
+PDMFT.CLSID                     = "{3D096DDE-8971-4AD5-98F9-C74F56492630}"
+
+=== helloface.inf ===
+0aff0619357d7758595a187693cbca54e73b4068395bc0fd1902b11856166d4e  /mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/helloface.inf_arm64_21367d9825bad2fc/helloface.inf
+[Windows_Hello_Face_Software_Driver_Install.NT.hw]
+AddReg       = DriverAddReg_BioSensor
+AddReg       = DriverAddReg_BioSensorConfiguration
+AddReg       = DriverAddReg_BioSensorConfiguration0
+AddReg       = DriverAddReg_BioSensorConfiguration1
+Include      = wudfrd.inf
+Needs        = WUDFRD.NT.HW
+
+; ------------------------------------------------------------------------
+
+[DriverAddReg_BioSensor]
+HKR,,Capabilities,0x00010001,0x00000180
+HKR,,DeviceDescription,,"Facial Recognition (Windows Hello) Software Device"
+HKR,,Manufacturer,,"Microsoft Corporation"
+HKR,,ModelName,,"Windows Hello Face Sensor"
+HKR,,SerialNumber,,"000000000"
+HKR,,SubType,0x00010001,0x00000000
+HKR,,Version,0x000B0001,0x200000001000000
+HKR,,DeviceCharacteristics,0x10001,0x0100     ; Use same security checks on relative opens
+HKR,,Security,,"D:P(A;;GA;;;BA)(A;;GA;;;SY)"  ; Allow generic-all access to Built-in administrators and Local system
+HKR,,Exclusive,0x10001,1
+HKR,,HelloFaceDriverPackageType,0x00010001,0x00000001       ; specifies that the clean install inf is installed
+HKR,,HelloFaceRecognitionTechVersion,0x00010001,0x00000005
+
+; ------------------------------------------------------------------------
+
+[DriverAddReg_BioSensorConfiguration]
+HKR,WinBio\Configurations,DefaultConfiguration,0x00010001,0x00000000
+HKR,WinBio\Configurations,VirtualSecureConfiguration,0x00010001,0x00000001
+
+; ------------------------------------------------------------------------
+
+[DriverAddReg_BioSensorConfiguration0]
+HKR,WinBio\Configurations\0,DatabaseId,,"DC576DA6-D676-4A15-906D-C0CEAF949543"
+HKR,WinBio\Configurations\0,EngineAdapterBinary,,"%13%\FaceRecognitionEngineAdapter.DLL"
+HKR,WinBio\Configurations\0,SensorAdapterBinary,,"%13%\FaceRecognitionSensorAdapter.DLL"
+HKR,WinBio\Configurations\0,SensorMode,0x00010001,0x00000001
+HKR,WinBio\Configurations\0,StorageAdapterBinary,,"WinBioStorageAdapter.DLL"
+HKR,WinBio\Configurations\0,SystemSensor,0x00010001,0x00000001
+HKR,WinBio\Configurations\0,CaptureIntervalInMilliseconds,0x00010001,0x0000007d
+HKR,WinBio\Configurations\0,PresenceStabilizationThreshold,0x00010001,0x0000012c
+HKR,WinBio\Configurations\0,PresenceLifetimeInSeconds,0x00010001,0x00000000
+
+; ------------------------------------------------------------------------
+
+[DriverAddReg_BioSensorConfiguration1]
+HKR,WinBio\Configurations\1,DatabaseId,,"A61A7480-6A54-4D36-A0EF-B150B8545827"
+HKR,WinBio\Configurations\1,EngineAdapterBinary,,"WinBioPassthroughAdapter"
+HKR,WinBio\Configurations\1,SensorAdapterBinary,,"%13%\FaceRecognitionSensorAdapterVsm.DLL"
+HKR,WinBio\Configurations\1,SensorMode,0x00010001,0x00000001
+HKR,WinBio\Configurations\1,StorageAdapterBinary,,"WinBioVsmStorageAdapter.DLL"
+HKR,WinBio\Configurations\1,SystemSensor,0x00010001,0x00000001
+HKR,WinBio\Configurations\1,CaptureIntervalInMilliseconds,0x00010001,0x0000007d
+HKR,WinBio\Configurations\1,PresenceStabilizationThreshold,0x00010001,0x0000012c
+HKR,WinBio\Configurations\1,PresenceLifetimeInSeconds,0x00010001,0x00000000
+HKR,WinBio\Configurations\1,VirtualSecureMode,0x00010001,0x00000001
+HKR,WinBio\Configurations\1,VsmEngineAdapterBinary,,"%13%\FaceRecognitionEngineAdapter.DLL"
+HKR,WinBio\Configurations\1,VsmSensorAdapterBinary,,"%13%\FaceRecognitionSensorAdapterVsmSecure.DLL"
+HKR,WinBio\Configurations\1,VsmStorageAdapterBinary,,"WinBioVsmCacheAdapter"
+
+; ------------------------------------------------------------------------
+
+[SourceDisksFiles]
+HelloFace.dll                                     = 1
+FaceProcessor.dll                                 = 1
+FaceProcessorCore.dll                             = 1
+FaceRecognitionEngineAdapter.dll                  = 1
+facerecognitionengineadapterresourcescore.dll     = 1
+facerecognitionengineadapterresourcessecure.dll   = 1
+FaceRecognitionSensorAdapter.dll                  = 1
+facerecognitionsensoradapterresources.dll         = 1
+FaceRecognitionSensorAdapterVsm.dll               = 1
+FaceRecognitionSensorAdapterVsmSecure.dll         = 1
+
+=== qccamsecureisp8380.inf ===
+22bffc4795803de62825ee8eab6bd13cdd2d18e505a39b410eecad52b092e05f  /mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf
+%CameraSecureISP.DeviceDesc%=CameraSecureISP_Device, ACPI\QCOM0CCC
+
+[CameraSecureISP_Device.NT]
+CopyFiles=isp.Files.NTarm
+CopyFiles = DSPFiles
+AddProperty=WDTFSOCDeviceCategory
+Reboot
+
+[isp.Files.NTarm]
+qccamsecureisp8380.sys
+QcISPTrustlet8380.dll
+
+[DSPFiles]
+libbitml_nsp_v2_skel.so
+bm3a68v08s11n52.bin
+
+[WDTFSOCDeviceCategory]
+{5D078032-6378-437B-8DA5-9B32B7CA3FDD},2,7,,0
+
+[CameraSecureISP_Device.NT.HW]
+AddReg=CameraSecureISP_Device_Security_Reg, CameraSecureISP_Device_ACL
+ 
+[CameraSecureISP_Device_Security_Reg]
+HKR,,DeviceCharacteristics,0x10001,0x100
+
+[CameraSecureISP_Device_ACL]
+HKR,,Security,,"D:P(A;;GA;;;BA)(A;;GA;;;SY)(A;;GA;;;AU)"
+
+;-------------- Service installation
+[CameraSecureISP_Device.NT.Services]
+AddService = CameraSecureISP,%SPSVCINST_ASSOCSERVICE%, CameraSecureISP_Service_Inst
+
+; -------------- ISP driver install sections
+[CameraSecureISP_Service_Inst]
+DisplayName    = %CameraSecureISP.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START 
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+LoadOrderGroup = Streams Drivers ; First of all driver groups to load
+ServiceBinary  = %13%\qccamsecureisp8380.sys
+
+[CameraSecureISP_Device.NT.Wdf]
+KmdfService = CameraSecureISP, CameraSecureISP_wdfsect
+UmdfService =  SecureBioCompanion, SecureBioCompanion_wdfsect
+CompanionConfiguration = CameraSecureISP, SecureBioCompanion_companions
+
+[CameraSecureISP_wdfsect]
+KmdfLibraryVersion = 1.11
+
+[SecureBioCompanion_wdfsect]
+UmdfLibraryVersion = 2.23
+ServiceBinary = %13%\QcISPTrustlet8380.dll
+ServiceType = SecureCompanion
+TrustletIdentity = 4096
+
+[SecureBioCompanion_companions]
+CompanionServices = SecureBioCompanion
+
+
+=== FaceProcessor.dll ===
+fa201c3ec21d5e7caf4ab16c685d7a237f8883e95965a30791198bd1a061e0e7  /mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/helloface.inf_arm64_21367d9825bad2fc/FaceProcessor.dll

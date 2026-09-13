@@ -1,0 +1,446 @@
+=== FaceProcessor CreateInfraredReader secure enable call ===
+
+/mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/helloface.inf_arm64_21367d9825bad2fc/FaceProcessor.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+000000018000fa10 <CreateFacePreprocessorOutput>:
+1800324d4: 97ff8cab    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+1800324d8: 97ff8d28    	bl	0x180015978 <CreateFacePreprocessorOutput+0x5f68>
+1800324dc: 53001c08    	uxtb	w8, w0
+1800324e0: 34000d08    	cbz	w8, 0x180032680 <CreateFacePreprocessorOutput+0x22c70>
+1800324e4: 52800021    	mov	w1, #0x1                // =1
+1800324e8: aa1903e0    	mov	x0, x25
+1800324ec: 94018015    	bl	0x180092540 <FileInputManager_SendInfraredFrameData+0x1dc20>
+1800324f0: 2a0003f3    	mov	w19, w0
+1800324f4: 36f80c13    	tbz	w19, #0x1f, 0x180032674 <CreateFacePreprocessorOutput+0x22c64>
+1800324f8: b940e2e8    	ldr	w8, [x23, #0xe0]
+1800324fc: 71000d1f    	cmp	w8, #0x3
+
+=== FaceProcessor secure disable call ===
+
+/mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/helloface.inf_arm64_21367d9825bad2fc/FaceProcessor.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+000000018000fa10 <CreateFacePreprocessorOutput>:
+180043f28: f941d268    	ldr	x8, [x19, #0x3a0]
+180043f2c: b4000108    	cbz	x8, 0x180043f4c <CreateFacePreprocessorOutput+0x3453c>
+180043f30: 97ff4614    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+180043f34: 97ff4691    	bl	0x180015978 <CreateFacePreprocessorOutput+0x5f68>
+180043f38: 53001c08    	uxtb	w8, w0
+180043f3c: 34000088    	cbz	w8, 0x180043f4c <CreateFacePreprocessorOutput+0x3453c>
+180043f40: 52800001    	mov	w1, #0x0                // =0
+180043f44: aa1303e0    	mov	x0, x19
+180043f48: 9401397e    	bl	0x180092540 <FileInputManager_SendInfraredFrameData+0x1dc20>
+180043f4c: 910ea260    	add	x0, x19, #0x3a8
+180043f50: 3900029f    	strb	wzr, [x20]
+
+=== FaceProcessor ToggleSecureSensor core ===
+
+/mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/helloface.inf_arm64_21367d9825bad2fc/FaceProcessor.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000180074920 <FileInputManager_SendInfraredFrameData>:
+180092568: 910043fa    	add	x26, sp, #0x10
+18009256c: 92800030    	mov	x16, #-0x2              // =-2
+180092570: aa0003f9    	mov	x25, x0
+180092574: f9002350    	str	x16, [x26, #0x40]
+180092578: 53001c33    	uxtb	w19, w1
+18009257c: b900235f    	str	wzr, [x26, #0x20]
+180092580: 910e4321    	add	x1, x25, #0x390
+180092584: f900175f    	str	xzr, [x26, #0x28]
+180092588: 91008343    	add	x3, x26, #0x20
+18009258c: 9100a342    	add	x2, x26, #0x28
+180092590: d2800015    	mov	x21, #0x0               // =0
+180092594: d2800018    	mov	x24, #0x0               // =0
+180092598: 97fe940c    	bl	0x1800375c8 <CreateFacePreprocessorOutput+0x27bb8>
+18009259c: 2a0003f4    	mov	w20, w0
+1800925a0: f0000557    	adrp	x23, 0x18013d000
+1800925a4: f0000556    	adrp	x22, 0x18013d000
+1800925a8: 36f80c74    	tbz	w20, #0x1f, 0x180092734 <FileInputManager_SendInfraredFrameData+0x1de14>
+1800925ac: b940e2c8    	ldr	w8, [x22, #0xe0]
+1800925b0: 71000d1f    	cmp	w8, #0x3
+1800925b4: 54000109    	b.ls	0x1800925d4 <FileInputManager_SendInfraredFrameData+0x1dcb4>
+1800925b8: f00003e8    	adrp	x8, 0x180111000
+1800925bc: 91056d01    	add	x1, x8, #0x15b
+1800925c0: b9000354    	str	w20, [x26]
+1800925c4: aa1a03e4    	mov	x4, x26
+1800925c8: d2800002    	mov	x2, #0x0                // =0
+1800925cc: 910382c0    	add	x0, x22, #0xe0
+1800925d0: 97fde906    	bl	0x18000c9e8 <.text+0xb9e8>
+1800925d4: b940aae8    	ldr	w8, [x23, #0xa8]
+1800925d8: 71000d1f    	cmp	w8, #0x3
+1800925dc: 54000109    	b.ls	0x1800925fc <FileInputManager_SendInfraredFrameData+0x1dcdc>
+1800925e0: f00003e8    	adrp	x8, 0x180111000
+1800925e4: 91056d01    	add	x1, x8, #0x15b
+1800925e8: b9000354    	str	w20, [x26]
+1800925ec: aa1a03e4    	mov	x4, x26
+1800925f0: d2800002    	mov	x2, #0x0                // =0
+1800925f4: 9102a2e0    	add	x0, x23, #0xa8
+1800925f8: 97fde8fc    	bl	0x18000c9e8 <.text+0xb9e8>
+1800925fc: 97fe0c61    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+180092600: 39400008    	ldrb	w8, [x0]
+180092604: 35001128    	cbnz	w8, 0x180092828 <FileInputManager_SendInfraredFrameData+0x1df08>
+180092608: f0000248    	adrp	x8, 0x1800dd000
+18009260c: 91274101    	add	x1, x8, #0x9d0
+180092610: 9101a340    	add	x0, x26, #0x68
+180092614: 97fde929    	bl	0x18000cab8 <.text+0xbab8>
+180092618: d503201f    	nop
+18009261c: 97fe0def    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+180092620: 9101a341    	add	x1, x26, #0x68
+180092624: aa0003fb    	mov	x27, x0
+180092628: f9400368    	ldr	x8, [x27]
+18009262c: 91012340    	add	x0, x26, #0x48
+180092630: f9400519    	ldr	x25, [x8, #0x8]
+180092634: 97ff7dcd    	bl	0x180071d68 <CreateFacePreprocessorOutput+0x62358>
+180092638: 2a1403e1    	mov	w1, w20
+18009263c: aa0003e2    	mov	x2, x0
+180092640: aa1b03e0    	mov	x0, x27
+180092644: aa1903ef    	mov	x15, x25
+180092648: 9400e272    	bl	0x1800cb010
+18009264c: d63f01e0    	blr	x15
+180092650: 97fe0c4c    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+180092654: 97fe0c0d    	bl	0x180015688 <CreateFacePreprocessorOutput+0x5c78>
+180092658: 53001c08    	uxtb	w8, w0
+18009265c: 34000668    	cbz	w8, 0x180092728 <FileInputManager_SendInfraredFrameData+0x1de08>
+180092660: 97fe0dde    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+180092664: 9101a341    	add	x1, x26, #0x68
+180092668: aa0003f9    	mov	x25, x0
+18009266c: 91012340    	add	x0, x26, #0x48
+180092670: 97ff7dbe    	bl	0x180071d68 <CreateFacePreprocessorOutput+0x62358>
+180092674: 2a1403e1    	mov	w1, w20
+180092678: 97ff7d72    	bl	0x180071c40 <CreateFacePreprocessorOutput+0x62230>
+18009267c: aa0003e1    	mov	x1, x0
+180092680: aa1903e0    	mov	x0, x25
+180092684: 97fe0e65    	bl	0x180016018 <CreateFacePreprocessorOutput+0x6608>
+180092688: 53001c08    	uxtb	w8, w0
+18009268c: 350004e8    	cbnz	w8, 0x180092728 <FileInputManager_SendInfraredFrameData+0x1de08>
+180092690: f0000549    	adrp	x9, 0x18013d000
+180092694: b9407128    	ldr	w8, [x9, #0x70]
+180092698: 7100151f    	cmp	w8, #0x5
+18009269c: 54000469    	b.ls	0x180092728 <FileInputManager_SendInfraredFrameData+0x1de08>
+1800926a0: d2c80001    	mov	x1, #0x400000000000     // =70368744177664
+1800926a4: 9101c120    	add	x0, x9, #0x70
+1800926a8: 97fdee3e    	bl	0x18000dfa0 <.text+0xcfa0>
+1800926ac: 53001c08    	uxtb	w8, w0
+1800926b0: 340003c8    	cbz	w8, 0x180092728 <FileInputManager_SendInfraredFrameData+0x1de08>
+1800926b4: 97fe0dc9    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+1800926b8: 52800041    	mov	w1, #0x2                // =2
+1800926bc: 97fe0e09    	bl	0x180015ee0 <CreateFacePreprocessorOutput+0x64d0>
+1800926c0: f9000f40    	str	x0, [x26, #0x18]
+1800926c4: 97fe0dc5    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+1800926c8: 52800021    	mov	w1, #0x1                // =1
+1800926cc: 97fe0e05    	bl	0x180015ee0 <CreateFacePreprocessorOutput+0x64d0>
+1800926d0: f9001b40    	str	x0, [x26, #0x30]
+1800926d4: 97fe0c2b    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+1800926d8: 97fe0c52    	bl	0x180015820 <CreateFacePreprocessorOutput+0x5e10>
+1800926dc: f0000248    	adrp	x8, 0x1800dd000
+1800926e0: 912bc108    	add	x8, x8, #0xaf0
+1800926e4: f9000748    	str	x8, [x26, #0x8]
+1800926e8: d2a06008    	mov	x8, #0x3000000          // =50331648
+1800926ec: 9100e347    	add	x7, x26, #0x38
+1800926f0: f9001f40    	str	x0, [x26, #0x38]
+1800926f4: f9000b48    	str	x8, [x26, #0x10]
+1800926f8: 91006348    	add	x8, x26, #0x18
+1800926fc: aa1a03e6    	mov	x6, x26
+180092700: b9000354    	str	w20, [x26]
+180092704: f90007e8    	str	x8, [sp, #0x8]
+180092708: 9100c348    	add	x8, x26, #0x30
+18009270c: 91002345    	add	x5, x26, #0x8
+180092710: f90003e8    	str	x8, [sp]
+180092714: 90000348    	adrp	x8, 0x1800fa000
+180092718: 9131c501    	add	x1, x8, #0xc71
+18009271c: 91004344    	add	x4, x26, #0x10
+180092720: 97fdbb5a    	bl	0x180001488 <.text+0x488>
+180092724: d503201f    	nop
+180092728: 9101a340    	add	x0, x26, #0x68
+18009272c: 97ff7ddf    	bl	0x180071ea8 <CreateFacePreprocessorOutput+0x62498>
+180092730: 1400003e    	b	0x180092828 <FileInputManager_SendInfraredFrameData+0x1df08>
+180092734: f9401742    	ldr	x2, [x26, #0x28]
+180092738: a9416048    	ldp	x8, x24, [x2, #0x10]
+18009273c: aa0803f5    	mov	x21, x8
+180092740: 36080738    	tbz	w24, #0x1, 0x180092824 <FileInputManager_SendInfraredFrameData+0x1df04>
+180092744: aa1303f3    	mov	x19, x19
+180092748: 91000675    	add	x21, x19, #0x1
+18009274c: eb15011f    	cmp	x8, x21
+180092750: 54000120    	b.eq	0x180092774 <FileInputManager_SendInfraredFrameData+0x1de54>
+180092754: b9402343    	ldr	w3, [x26, #0x20]
+180092758: aa0203e5    	mov	x5, x2
+18009275c: aa1503e4    	mov	x4, x21
+180092760: 910e4321    	add	x1, x25, #0x390
+180092764: aa1903e0    	mov	x0, x25
+180092768: 97fee58c    	bl	0x18004bd98 <CreateFacePreprocessorOutput+0x3c388>
+18009276c: 2a0003f4    	mov	w20, w0
+180092770: 37f805c0    	tbnz	w0, #0x1f, 0x180092828 <FileInputManager_SendInfraredFrameData+0x1df08>
+180092774: b940e2c8    	ldr	w8, [x22, #0xe0]
+180092778: 7100111f    	cmp	w8, #0x4
+
+=== FaceProcessor ToggleFaceMode core ===
+
+/mnt/sp11-windows/Windows/System32/DriverStore/FileRepository/helloface.inf_arm64_21367d9825bad2fc/FaceProcessor.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+000000018000fa10 <CreateFacePreprocessorOutput>:
+18004ed50: d503237f    	pacibsp
+18004ed54: a9bb7bfd    	stp	x29, x30, [sp, #-0x50]!
+18004ed58: a90153f3    	stp	x19, x20, [sp, #0x10]
+18004ed5c: a9025bf5    	stp	x21, x22, [sp, #0x20]
+18004ed60: a90363f7    	stp	x23, x24, [sp, #0x30]
+18004ed64: a9046bf9    	stp	x25, x26, [sp, #0x40]
+18004ed68: 910003fd    	mov	x29, sp
+18004ed6c: 9401adf9    	bl	0x1800ba550 <FileInputManager_SendInfraredFrameData+0x45c30>
+18004ed70: d10243ff    	sub	sp, sp, #0x90
+18004ed74: 910043fa    	add	x26, sp, #0x10
+18004ed78: 92800030    	mov	x16, #-0x2              // =-2
+18004ed7c: f9002350    	str	x16, [x26, #0x40]
+18004ed80: f0000776    	adrp	x22, 0x18013d000
+18004ed84: b940e2c8    	ldr	w8, [x22, #0xe0]
+18004ed88: aa0003f8    	mov	x24, x0
+18004ed8c: 53001c39    	uxtb	w25, w1
+18004ed90: 7100111f    	cmp	w8, #0x4
+18004ed94: 54000109    	b.ls	0x18004edb4 <CreateFacePreprocessorOutput+0x3f3a4>
+18004ed98: f0000608    	adrp	x8, 0x180111000
+18004ed9c: 91137101    	add	x1, x8, #0x4dc
+18004eda0: b9000359    	str	w25, [x26]
+18004eda4: aa1a03e4    	mov	x4, x26
+18004eda8: d2800002    	mov	x2, #0x0                // =0
+18004edac: 910382c0    	add	x0, x22, #0xe0
+18004edb0: 97fef70e    	bl	0x18000c9e8 <.text+0xb9e8>
+18004edb4: f0000775    	adrp	x21, 0x18013d000
+18004edb8: b940aaa8    	ldr	w8, [x21, #0xa8]
+18004edbc: 2a1903f3    	mov	w19, w25
+18004edc0: 7100111f    	cmp	w8, #0x4
+18004edc4: 54000109    	b.ls	0x18004ede4 <CreateFacePreprocessorOutput+0x3f3d4>
+18004edc8: f0000608    	adrp	x8, 0x180111000
+18004edcc: 91137101    	add	x1, x8, #0x4dc
+18004edd0: b9000353    	str	w19, [x26]
+18004edd4: aa1a03e4    	mov	x4, x26
+18004edd8: d2800002    	mov	x2, #0x0                // =0
+18004eddc: 9102a2a0    	add	x0, x21, #0xa8
+18004ede0: 97fef702    	bl	0x18000c9e8 <.text+0xb9e8>
+18004ede4: 91006343    	add	x3, x26, #0x18
+18004ede8: f9001f5f    	str	xzr, [x26, #0x38]
+18004edec: 9100e342    	add	x2, x26, #0x38
+18004edf0: b9001b5f    	str	wzr, [x26, #0x18]
+18004edf4: 910e2301    	add	x1, x24, #0x388
+18004edf8: 390d631f    	strb	wzr, [x24, #0x358]
+18004edfc: aa1803e0    	mov	x0, x24
+18004ee00: d2800014    	mov	x20, #0x0               // =0
+18004ee04: d2800017    	mov	x23, #0x0               // =0
+18004ee08: 97ffa1f0    	bl	0x1800375c8 <CreateFacePreprocessorOutput+0x27bb8>
+18004ee0c: 2a0003f3    	mov	w19, w0
+18004ee10: 36f81093    	tbz	w19, #0x1f, 0x18004f020 <CreateFacePreprocessorOutput+0x3f610>
+18004ee14: b940e2c8    	ldr	w8, [x22, #0xe0]
+18004ee18: 71000d1f    	cmp	w8, #0x3
+18004ee1c: 54000109    	b.ls	0x18004ee3c <CreateFacePreprocessorOutput+0x3f42c>
+18004ee20: f0000608    	adrp	x8, 0x180111000
+18004ee24: 9111d501    	add	x1, x8, #0x475
+18004ee28: b9000353    	str	w19, [x26]
+18004ee2c: aa1a03e4    	mov	x4, x26
+18004ee30: d2800002    	mov	x2, #0x0                // =0
+18004ee34: 910382c0    	add	x0, x22, #0xe0
+18004ee38: 97fef6ec    	bl	0x18000c9e8 <.text+0xb9e8>
+18004ee3c: b940aaa8    	ldr	w8, [x21, #0xa8]
+18004ee40: 71000d1f    	cmp	w8, #0x3
+18004ee44: 54000109    	b.ls	0x18004ee64 <CreateFacePreprocessorOutput+0x3f454>
+18004ee48: f0000608    	adrp	x8, 0x180111000
+18004ee4c: 9111d501    	add	x1, x8, #0x475
+18004ee50: b9000353    	str	w19, [x26]
+18004ee54: aa1a03e4    	mov	x4, x26
+18004ee58: d2800002    	mov	x2, #0x0                // =0
+18004ee5c: 9102a2a0    	add	x0, x21, #0xa8
+18004ee60: 97fef6e2    	bl	0x18000c9e8 <.text+0xb9e8>
+18004ee64: 97ff1a47    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+18004ee68: 39400008    	ldrb	w8, [x0]
+18004ee6c: 35000968    	cbnz	w8, 0x18004ef98 <CreateFacePreprocessorOutput+0x3f588>
+18004ee70: f0000468    	adrp	x8, 0x1800dd000
+18004ee74: 91218101    	add	x1, x8, #0x860
+18004ee78: 9101a340    	add	x0, x26, #0x68
+18004ee7c: 97fef70f    	bl	0x18000cab8 <.text+0xbab8>
+18004ee80: d503201f    	nop
+18004ee84: 97ff1bd5    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+18004ee88: 9101a341    	add	x1, x26, #0x68
+18004ee8c: aa0003f9    	mov	x25, x0
+18004ee90: f9400328    	ldr	x8, [x25]
+18004ee94: 91012340    	add	x0, x26, #0x48
+18004ee98: f9400518    	ldr	x24, [x8, #0x8]
+18004ee9c: 94008bb3    	bl	0x180071d68 <CreateFacePreprocessorOutput+0x62358>
+18004eea0: 2a1303e1    	mov	w1, w19
+18004eea4: aa0003e2    	mov	x2, x0
+18004eea8: aa1903e0    	mov	x0, x25
+18004eeac: aa1803ef    	mov	x15, x24
+18004eeb0: 9401f058    	bl	0x1800cb010
+18004eeb4: d63f01e0    	blr	x15
+18004eeb8: 97ff1a32    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+18004eebc: 97ff19f3    	bl	0x180015688 <CreateFacePreprocessorOutput+0x5c78>
+18004eec0: 53001c08    	uxtb	w8, w0
+18004eec4: 34000668    	cbz	w8, 0x18004ef90 <CreateFacePreprocessorOutput+0x3f580>
+18004eec8: 97ff1bc4    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+18004eecc: 9101a341    	add	x1, x26, #0x68
+18004eed0: aa0003f9    	mov	x25, x0
+18004eed4: 91012340    	add	x0, x26, #0x48
+18004eed8: 94008ba4    	bl	0x180071d68 <CreateFacePreprocessorOutput+0x62358>
+18004eedc: 2a1303e1    	mov	w1, w19
+18004eee0: 94008b58    	bl	0x180071c40 <CreateFacePreprocessorOutput+0x62230>
+18004eee4: aa0003e1    	mov	x1, x0
+18004eee8: aa1903e0    	mov	x0, x25
+18004eeec: 97ff1c4b    	bl	0x180016018 <CreateFacePreprocessorOutput+0x6608>
+18004eef0: 53001c08    	uxtb	w8, w0
+18004eef4: 350004e8    	cbnz	w8, 0x18004ef90 <CreateFacePreprocessorOutput+0x3f580>
+18004eef8: f0000769    	adrp	x9, 0x18013d000
+18004eefc: b9407128    	ldr	w8, [x9, #0x70]
+18004ef00: 7100151f    	cmp	w8, #0x5
+18004ef04: 54000469    	b.ls	0x18004ef90 <CreateFacePreprocessorOutput+0x3f580>
+18004ef08: d2c80001    	mov	x1, #0x400000000000     // =70368744177664
+18004ef0c: 9101c120    	add	x0, x9, #0x70
+18004ef10: 97fefc24    	bl	0x18000dfa0 <.text+0xcfa0>
+18004ef14: 53001c08    	uxtb	w8, w0
+18004ef18: 340003c8    	cbz	w8, 0x18004ef90 <CreateFacePreprocessorOutput+0x3f580>
+18004ef1c: 97ff1baf    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+18004ef20: 52800041    	mov	w1, #0x2                // =2
+18004ef24: 97ff1bef    	bl	0x180015ee0 <CreateFacePreprocessorOutput+0x64d0>
+18004ef28: f9001340    	str	x0, [x26, #0x20]
+18004ef2c: 97ff1bab    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+18004ef30: 52800021    	mov	w1, #0x1                // =1
+18004ef34: 97ff1beb    	bl	0x180015ee0 <CreateFacePreprocessorOutput+0x64d0>
+18004ef38: f9001740    	str	x0, [x26, #0x28]
+18004ef3c: 97ff1a11    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+18004ef40: 97ff1a38    	bl	0x180015820 <CreateFacePreprocessorOutput+0x5e10>
+18004ef44: f0000468    	adrp	x8, 0x1800dd000
+18004ef48: 9125c108    	add	x8, x8, #0x970
+18004ef4c: f9000748    	str	x8, [x26, #0x8]
+18004ef50: d2a06008    	mov	x8, #0x3000000          // =50331648
+18004ef54: 9100c347    	add	x7, x26, #0x30
+18004ef58: f9001b40    	str	x0, [x26, #0x30]
+18004ef5c: f9000b48    	str	x8, [x26, #0x10]
+18004ef60: 91008348    	add	x8, x26, #0x20
+18004ef64: aa1a03e6    	mov	x6, x26
+18004ef68: b9000353    	str	w19, [x26]
+18004ef6c: f90007e8    	str	x8, [sp, #0x8]
+18004ef70: 9100a348    	add	x8, x26, #0x28
+18004ef74: 91002345    	add	x5, x26, #0x8
+18004ef78: f90003e8    	str	x8, [sp]
+18004ef7c: 90000568    	adrp	x8, 0x1800fa000
+18004ef80: 9131c501    	add	x1, x8, #0xc71
+18004ef84: 91004344    	add	x4, x26, #0x10
+18004ef88: 97fec940    	bl	0x180001488 <.text+0x488>
+18004ef8c: d503201f    	nop
+18004ef90: 9101a340    	add	x0, x26, #0x68
+18004ef94: 94008bc5    	bl	0x180071ea8 <CreateFacePreprocessorOutput+0x62498>
+18004ef98: b940e2c8    	ldr	w8, [x22, #0xe0]
+18004ef9c: 7100091f    	cmp	w8, #0x2
+18004efa0: 54000149    	b.ls	0x18004efc8 <CreateFacePreprocessorOutput+0x3f5b8>
+18004efa4: f0000608    	adrp	x8, 0x180111000
+18004efa8: 91071901    	add	x1, x8, #0x1c6
+18004efac: a900d357    	stp	x23, x20, [x26, #0x8]
+18004efb0: 91004346    	add	x6, x26, #0x10
+18004efb4: b9000353    	str	w19, [x26]
+18004efb8: 91002345    	add	x5, x26, #0x8
+18004efbc: aa1a03e4    	mov	x4, x26
+18004efc0: 910382c0    	add	x0, x22, #0xe0
+18004efc4: 97feddbb    	bl	0x1800066b0 <.text+0x56b0>
+18004efc8: b940aaa8    	ldr	w8, [x21, #0xa8]
+18004efcc: 7100091f    	cmp	w8, #0x2
+18004efd0: 54000149    	b.ls	0x18004eff8 <CreateFacePreprocessorOutput+0x3f5e8>
+18004efd4: f0000608    	adrp	x8, 0x180111000
+18004efd8: 91071901    	add	x1, x8, #0x1c6
+18004efdc: 91004346    	add	x6, x26, #0x10
+18004efe0: a900d357    	stp	x23, x20, [x26, #0x8]
+18004efe4: 91002345    	add	x5, x26, #0x8
+18004efe8: b9000353    	str	w19, [x26]
+18004efec: aa1a03e4    	mov	x4, x26
+18004eff0: 9102a2a0    	add	x0, x21, #0xa8
+18004eff4: 97feddaf    	bl	0x1800066b0 <.text+0x56b0>
+18004eff8: 2a1303e0    	mov	w0, w19
+18004effc: 910243ff    	add	sp, sp, #0x90
+18004f000: 9401ad5c    	bl	0x1800ba570 <FileInputManager_SendInfraredFrameData+0x45c50>
+18004f004: a9446bf9    	ldp	x25, x26, [sp, #0x40]
+18004f008: a94363f7    	ldp	x23, x24, [sp, #0x30]
+18004f00c: a9425bf5    	ldp	x21, x22, [sp, #0x20]
+18004f010: a94153f3    	ldp	x19, x20, [sp, #0x10]
+18004f014: a8c57bfd    	ldp	x29, x30, [sp], #0x50
+18004f018: d50323ff    	autibsp
+18004f01c: d65f03c0    	ret
+18004f020: f9401f42    	ldr	x2, [x26, #0x38]
+18004f024: a9415c54    	ldp	x20, x23, [x2, #0x10]
+18004f028: 34000219    	cbz	w25, 0x18004f068 <CreateFacePreprocessorOutput+0x3f658>
+18004f02c: f27f06ff    	tst	x23, #0x6
+18004f030: 54000061    	b.ne	0x18004f03c <CreateFacePreprocessorOutput+0x3f62c>
+18004f034: 18001a73    	ldr	w19, 0x18004f380 <CreateFacePreprocessorOutput+0x3f970>
+18004f038: 17ffffd8    	b	0x18004ef98 <CreateFacePreprocessorOutput+0x3f588>
+18004f03c: 360800b7    	tbz	w23, #0x1, 0x18004f050 <CreateFacePreprocessorOutput+0x3f640>
+18004f040: 52800028    	mov	w8, #0x1                // =1
+18004f044: 390d6308    	strb	w8, [x24, #0x358]
+18004f048: d2800054    	mov	x20, #0x2               // =2
+18004f04c: 14000005    	b	0x18004f060 <CreateFacePreprocessorOutput+0x3f650>
+18004f050: 36100077    	tbz	w23, #0x2, 0x18004f05c <CreateFacePreprocessorOutput+0x3f64c>
+18004f054: d2800094    	mov	x20, #0x4               // =4
+18004f058: 14000002    	b	0x18004f060 <CreateFacePreprocessorOutput+0x3f650>
+18004f05c: 18001933    	ldr	w19, 0x18004f380 <CreateFacePreprocessorOutput+0x3f970>
+18004f060: 37fff9d3    	tbnz	w19, #0x1f, 0x18004ef98 <CreateFacePreprocessorOutput+0x3f588>
+18004f064: 14000005    	b	0x18004f078 <CreateFacePreprocessorOutput+0x3f668>
+18004f068: f100069f    	cmp	x20, #0x1
+18004f06c: 54fffc60    	b.eq	0x18004eff8 <CreateFacePreprocessorOutput+0x3f5e8>
+18004f070: 3607fc57    	tbz	w23, #0x0, 0x18004eff8 <CreateFacePreprocessorOutput+0x3f5e8>
+18004f074: d2800034    	mov	x20, #0x1               // =1
+18004f078: f9400848    	ldr	x8, [x2, #0x10]
+18004f07c: eb14011f    	cmp	x8, x20
+18004f080: 54000d00    	b.eq	0x18004f220 <CreateFacePreprocessorOutput+0x3f810>
+18004f084: b9401b43    	ldr	w3, [x26, #0x18]
+18004f088: aa0203e5    	mov	x5, x2
+18004f08c: aa1403e4    	mov	x4, x20
+18004f090: 910e2301    	add	x1, x24, #0x388
+18004f094: aa1803e0    	mov	x0, x24
+18004f098: 97fff340    	bl	0x18004bd98 <CreateFacePreprocessorOutput+0x3c388>
+18004f09c: 2a0003f3    	mov	w19, w0
+18004f0a0: 36f80c13    	tbz	w19, #0x1f, 0x18004f220 <CreateFacePreprocessorOutput+0x3f810>
+18004f0a4: b940e2c8    	ldr	w8, [x22, #0xe0]
+18004f0a8: 71000d1f    	cmp	w8, #0x3
+18004f0ac: 54000109    	b.ls	0x18004f0cc <CreateFacePreprocessorOutput+0x3f6bc>
+18004f0b0: d0000608    	adrp	x8, 0x180111000
+18004f0b4: 91105101    	add	x1, x8, #0x414
+18004f0b8: b9000353    	str	w19, [x26]
+18004f0bc: aa1a03e4    	mov	x4, x26
+18004f0c0: d2800002    	mov	x2, #0x0                // =0
+18004f0c4: 910382c0    	add	x0, x22, #0xe0
+18004f0c8: 97fef648    	bl	0x18000c9e8 <.text+0xb9e8>
+18004f0cc: b940aaa8    	ldr	w8, [x21, #0xa8]
+18004f0d0: 71000d1f    	cmp	w8, #0x3
+18004f0d4: 54000109    	b.ls	0x18004f0f4 <CreateFacePreprocessorOutput+0x3f6e4>
+18004f0d8: d0000608    	adrp	x8, 0x180111000
+18004f0dc: 91105101    	add	x1, x8, #0x414
+18004f0e0: b9000353    	str	w19, [x26]
+18004f0e4: aa1a03e4    	mov	x4, x26
+18004f0e8: d2800002    	mov	x2, #0x0                // =0
+18004f0ec: 9102a2a0    	add	x0, x21, #0xa8
+18004f0f0: 97fef63e    	bl	0x18000c9e8 <.text+0xb9e8>
+18004f0f4: 97ff19a3    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+18004f0f8: 39400008    	ldrb	w8, [x0]
+18004f0fc: 35fff4e8    	cbnz	w8, 0x18004ef98 <CreateFacePreprocessorOutput+0x3f588>
+18004f100: d0000468    	adrp	x8, 0x1800dd000
+18004f104: 91248101    	add	x1, x8, #0x920
+18004f108: 9101a340    	add	x0, x26, #0x68
+18004f10c: 97fef66b    	bl	0x18000cab8 <.text+0xbab8>
+18004f110: d503201f    	nop
+18004f114: 97ff1b31    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+18004f118: 9101a341    	add	x1, x26, #0x68
+18004f11c: aa0003f9    	mov	x25, x0
+18004f120: f9400328    	ldr	x8, [x25]
+18004f124: 91012340    	add	x0, x26, #0x48
+18004f128: f9400518    	ldr	x24, [x8, #0x8]
+18004f12c: 94008b0f    	bl	0x180071d68 <CreateFacePreprocessorOutput+0x62358>
+18004f130: 2a1303e1    	mov	w1, w19
+18004f134: aa0003e2    	mov	x2, x0
+18004f138: aa1903e0    	mov	x0, x25
+18004f13c: aa1803ef    	mov	x15, x24
+18004f140: 9401efb4    	bl	0x1800cb010
+18004f144: d63f01e0    	blr	x15
+18004f148: 97ff198e    	bl	0x180015780 <CreateFacePreprocessorOutput+0x5d70>
+18004f14c: 97ff194f    	bl	0x180015688 <CreateFacePreprocessorOutput+0x5c78>
+18004f150: 53001c08    	uxtb	w8, w0
+18004f154: 34000648    	cbz	w8, 0x18004f21c <CreateFacePreprocessorOutput+0x3f80c>
+18004f158: 97ff1b20    	bl	0x180015dd8 <CreateFacePreprocessorOutput+0x63c8>
+18004f15c: 9101a341    	add	x1, x26, #0x68
