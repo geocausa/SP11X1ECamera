@@ -1,0 +1,67 @@
+E004bv END-TO-END EXTERNAL PROTECTED SAMPLE FIELD MAP
+
+Windows SDK SECURE_BUFFER_INFO (KSSTREAM_HEADER.Data):
+  +0x00 GUID guidBufferIdentifier[0:7]
+  +0x08 GUID guidBufferIdentifier[8:15]
+  +0x10 DWORD cbBufferSize
+  +0x14 DWORD cbCaptured
+
+SurfaceCam CPin::GetBuffer secure result descriptor (param_3):
+  +0x64 <- secure GUID first 8 bytes
+  +0x6c <- secure GUID second 8 bytes
+  +0x74 <- cbBufferSize
+  +0x78 <- cbCaptured
+
+SurfaceCam GetBufferforRequestId caller stack mapping:
+  local_f0 starts at stack -0xf0 and is 0x60 bytes.
+  Therefore writes at local_f0+0x64/+0x6c/+0x74/+0x78 land in
+  uStack_8c/uStack_88, uStack_84/uStack_80, local_7c, uStack_78.
+  When the protected external path has hMems[0] == 0, those become:
+    packet/io-base +0x18c <- GUID first 8 bytes
+    packet/io-base +0x194 <- GUID second 8 bytes
+    packet/io-base +0x19c <- cbBufferSize
+    packet/io-base +0x1a0 <- cbCaptured
+
+SecureISP trustlet's actual CSL IOConfig record begins at packet/io-base +0x74.
+Thus the same fields are relative to the 0x130-byte IOConfig record as:
+  IOConfig +0x118 <- GUID first 8 bytes
+  IOConfig +0x120 <- GUID second 8 bytes
+  IOConfig +0x128 <- cbBufferSize
+  IOConfig +0x12c <- cbCaptured
+
+BuildCSLPacket protected-image object (0xa8 bytes):
+  +0x00 <- CSL packet/request field at packet +0x08 (request identity)
+  +0x3c <- IOConfig +0x24
+  +0x40 <- IOConfig +0x28
+  +0x44 <- IOConfig +0x2c
+  +0x38 <- (+0x44 * +0x40) first derived plane/image offset
+  +0x5c <- IOConfig +0x54
+  +0x60 <- IOConfig +0x58
+  +0x64 <- IOConfig +0x5c
+  +0x58 <- (+0x64 * +0x60) second derived plane/image span
+  +0x20 <- +0x38 + +0x58 total internal allocation size
+  +0x6c <- IOConfig +0x118 = external GUID first 8 bytes
+  +0x74 <- IOConfig +0x120 = external GUID second 8 bytes
+  +0x7c <- IOConfig +0x128 = cbBufferSize (transient)
+  +0x80 <- IOConfig +0x12c = cbCaptured
+  +0x7c <- +0x80 immediately afterward, so final +0x7c = cbCaptured
+
+External open:
+  OpenSecureSection receives:
+    fixed scenario GUID = AE53FC6E-8D89-4488-9D2E-4D008731C5FD
+    per-sample buffer GUID = object +0x6c/+0x74
+  MapViewOfFile length = final object +0x7c = cbCaptured
+  returned section handle -> object +0x88
+  returned trustlet mapping -> object +0x90
+
+Trustlet frame metadata serialization:
+  object +0x98 = running serialized external payload offset/length
+  attribute type 0 starts at external_mapping + old(+0x98)
+  attribute header is 8 bytes
+  object +0x9c = old(+0x98) + 8 = frame pixel-data offset for the first attribute
+  worker destination = object +0x90 + object +0x9c
+
+Critical negative result:
+  class-1 task 4 / PROCESS_DMFT_SURFACE 0x60 record is NOT the external secure GUID/size contract.
+  KMD sends it for command-buffer descriptors and indirect src/dst patch-address surfaces;
+  trustlet copies its 0x60 bytes opaquely and queues it for CSL patch/DMI processing.

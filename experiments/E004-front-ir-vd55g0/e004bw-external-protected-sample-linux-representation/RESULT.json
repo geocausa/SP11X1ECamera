@@ -1,0 +1,65 @@
+{
+  "experiment": "E004bw",
+  "status": "PASS_EXTERNAL_SAMPLE_REPRESENTATION_COMPILE_ONLY_ZERO_TEXT",
+  "mode": "compile-only-disabled-by-construction",
+  "oracle": {
+    "source": "E004bv",
+    "identity": "16-byte opaque protected sample identity",
+    "allocation_extent": "SECURE_BUFFER_INFO.cbBufferSize",
+    "captured_extent": "SECURE_BUFFER_INFO.cbCaptured",
+    "request_association": true,
+    "serialized_extent": "trustlet protected-image +0x98 semantic",
+    "payload_offset": "trustlet protected-image +0x9c semantic",
+    "external_is_direct_camss_target": false,
+    "dmft_task4_is_external_identity": false
+  },
+  "contract": {
+    "fields": [
+      "id",
+      "request_id",
+      "allocation_extent",
+      "captured_extent",
+      "serialized_extent",
+      "payload_offset",
+      "plane_size",
+      "num_planes",
+      "phase",
+      "backend_handle",
+      "identity_proven",
+      "trusted_worker_visible",
+      "normal_hlos_cpu_visible"
+    ],
+    "external_camss_iova_present": false,
+    "external_ownership_phys_present": false,
+    "lifecycle": [
+      "DETACHED",
+      "IDENTITY_BOUND",
+      "TRUSTED_VISIBLE",
+      "PAYLOAD_READY",
+      "RELEASING"
+    ],
+    "operations": [
+      "bind_identity",
+      "activate_trusted_visibility",
+      "deactivate_trusted_visibility",
+      "release_identity"
+    ]
+  },
+  "build": {
+    "baseline_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "scaffold_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "text_byte_identical": true,
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "forbidden_implementation_symbol_matches": 0,
+    "callback_invocations": 0
+  },
+  "runtime_actions": {
+    "module_installed": false,
+    "module_loaded": false,
+    "linux_secureisp": false,
+    "qtee_qsee": false,
+    "scm_assign_mem": false,
+    "protected_memory_operation": false
+  },
+  "next_gate": "E004bx external protected-sample provider authority, static first"
+}

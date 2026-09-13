@@ -1,0 +1,76 @@
+E004bw BUILD COMPARISON
+baseline_module=7025e8a71771e3e97718c4f86a47bcd8f774d4e17617f38f2f47075a5223e973
+scaffold_module=71e06fbccea5757f253c8bd46917f0b9464b8bc1f800360f68c32556fdfaab33
+baseline_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+scaffold_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+TEXT_BYTE_IDENTICAL=1
+baseline_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+scaffold_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+--- external representation fields ---
+38:	bool trusted_worker_visible;
+39:	bool normal_hlos_cpu_visible;
+74:enum camss_external_sample_phase {
+84:	u64 request_id;
+85:	size_t allocation_extent;
+86:	size_t captured_extent;
+87:	size_t serialized_extent;
+88:	size_t payload_offset;
+91:	enum camss_external_sample_phase phase;
+93:	bool identity_proven;
+94:	bool trusted_worker_visible;
+95:	bool normal_hlos_cpu_visible;
+115:	int (*bind_identity)(struct device *dev, struct vb2_buffer *vb, u64 request_id,
+117:	int (*activate_trusted_visibility)(struct device *dev,
+119:	void (*deactivate_trusted_visibility)(struct device *dev,
+121:	void (*release_identity)(struct device *dev,
+
+--- no external CAMSS IOVA/ownership fields ---
+struct camss_external_protected_sample {
+	u8 id[CAMSS_PROTECTED_ID_BYTES];
+	u64 request_id;
+	size_t allocation_extent;
+	size_t captured_extent;
+	size_t serialized_extent;
+	size_t payload_offset;
+	size_t plane_size[CAMSS_PROTECTED_MAX_PLANES];
+	unsigned int num_planes;
+	enum camss_external_sample_phase phase;
+	void *backend_handle;
+	bool identity_proven;
+	bool trusted_worker_visible;
+	bool normal_hlos_cpu_visible;
+};
+
+--- forbidden concrete implementation symbols (must be empty) ---
+FORBIDDEN_IMPLEMENTATION_SYMBOL_MATCHES=0
+
+--- callback invocations in C files (must be empty) ---
+CALLBACK_INVOCATIONS=0
+
+--- exact production/scaffold C diff ---
+--- /tmp/e004bw-camss-baseline/camss-video.c	2026-09-05 09:29:09.543184962 +0100
++++ /tmp/e004bw-camss-scaffold/camss-video.c	2026-09-13 22:01:57.787552289 +0100
+@@ -16,6 +16,7 @@
+ #include <media/videobuf2-dma-sg.h>
+ 
+ #include "camss-video.h"
++#include "camss-protected-pipeline.h"
+ #include "camss-csid.h"
+ #include "camss-vfe.h"
+ #include "camss.h"
+@@ -1199,6 +1200,7 @@
+ 	struct vb2_queue *q;
+ 	int ret;
+ 
++	camss_protected_pipeline_compile_contract();
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
+
+--- runtime state ---
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
