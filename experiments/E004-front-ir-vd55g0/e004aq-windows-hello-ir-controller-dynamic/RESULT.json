@@ -1,0 +1,63 @@
+{
+  "schema": "sp11-camera-e004aq-windows-hello-secureisp-dynamic-v1",
+  "status": "PASS_WINDOWS_HELLO_SOURCE_CONTROLLER_ENTERS_SECUREISP",
+  "date": "2026-09-13",
+  "clean_run": {
+    "profile": "Surface IR FaceAuth",
+    "format": "NV12 644x604 60fps",
+    "faceauth_enable_status": "Success",
+    "faceauth_flags_before": 1,
+    "faceauth_flags_enabled": 2,
+    "securemode_enable_status": "Success",
+    "securemode_flags_before": 1,
+    "securemode_flags_enabled": 2,
+    "securemode_capability": 3,
+    "start_status": "Success",
+    "real_frames": 12,
+    "securemode_during_stream": 2,
+    "securemode_final": 1,
+    "faceauth_final": 1
+  },
+  "devicemft_trace": {
+    "live_module": "QcDeviceMFT8380.dll",
+    "actual_target_hits": 0,
+    "interpretation": "Source-controller secure control bypasses the traced DeviceMFT SecureMode broker."
+  },
+  "kernel_trace": {
+    "qccamavs_driver_start": "0xfffff80384620000",
+    "qccamavs_driver_size": "0xad000",
+    "camera_secureisp_driver_start": "0xfffff80384810000",
+    "camera_secureisp_driver_size": "0x36000",
+    "raw_trace_sha256": "5dfac22112c9d0cf2ae9cb1f1ef9cb43a00084aabba6d8e0a8da7c9440086ad3",
+    "actual_hits": {
+      "qccamavs_send_packet_internal": 88,
+      "secureisp_config_secure_camera": 3,
+      "secureisp_lane_dispatch": 1634,
+      "secureisp_op_dispatcher": 48,
+      "secureisp_task_send": 1996
+    },
+    "rerun_config_secure_camera": {
+      "enable_argument_observed": 1,
+      "teardown_argument_observed": 0
+    },
+    "qccamavs_securemode_setter_hit_observed": false
+  },
+  "instrumented_rerun": {
+    "faceauth_enable_status": "Success",
+    "securemode_enable_status": "Success",
+    "start_status": "Success",
+    "real_frames": 0,
+    "note": "Heavy KD instrumentation exceeded the frame deadline; cleanup completed. Not used as frame-success authority."
+  },
+  "golden_return": {
+    "kernel": "7.1.5-sp11-render-parity-v4+",
+    "sp11_entry": "7.1.5-sp11-fullio-v19c",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "",
+    "boot_current": "0005",
+    "camera_nodes": false,
+    "camera_modules": false
+  },
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Translate the proven Windows protected-path sequence into a Linux implementation plan without enabling Linux SecureISP runtime."
+}

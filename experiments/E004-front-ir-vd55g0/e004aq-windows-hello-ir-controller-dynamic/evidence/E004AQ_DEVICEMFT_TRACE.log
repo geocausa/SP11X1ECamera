@@ -1,0 +1,457 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AQ_HELLO_IR_CONTROLLER_20260913\E004AQ_DEVICEMFT_TRACE.log'
+===E004AQ_BPS_ARMED===
+ 0 e 00007ff8`1ebc1cf0     0001 (0001)  ".printf \"E004AQ_HIT CreateCameraControls x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffc901`0f527080
+ 1 e 00007ff8`1ebcd0d0     0001 (0001)  ".printf \"E004AQ_HIT CCameraControls_KsProperty x0=%p x1=%p x2=%p\\n\",@x0,@x1,@x2; gc"
+     Match process data ffffc901`0f527080
+ 2 e 00007ff8`1ebe3ce0     0001 (0001)  ".printf \"E004AQ_HIT SecureMode_GetProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffc901`0f527080
+ 3 e 00007ff8`1ebe3f60     0001 (0001)  ".printf \"E004AQ_HIT SecureMode_SetProperty x0=%p x1=%p x2=%p x3=%p\\n\",@x0,@x1,@x2,@x3; gc"
+     Match process data ffffc901`0f527080
+ 4 e 00007ff8`1eea9d20     0001 (0001)  ".printf \"E004AQ_HIT CaptureProperties_OnSetSecureMode x0=%p\\n\",@x0; gc"
+     Match process data ffffc901`0f527080
+ 5 e 00007ff8`1eea9f40     0001 (0001)  ".printf \"E004AQ_HIT CaptureProperties_OnGetSecureMode x0=%p\\n\",@x0; gc"
+     Match process data ffffc901`0f527080
+ 6 e 00007ff8`1ee33ad8     0001 (0001)  ".printf \"E004AQ_HIT SecureUsecaseBuilder x0=%p x1=%p\\n\",@x0,@x1; gc"
+     Match process data ffffc901`0f527080
+
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`810013b0 d43e0000 brk         #0xF000
+0: kd> .echo ===E004AQ_DRIVER_NAMESPACE===; !object \Driver
+===E004AQ_DRIVER_NAMESPACE===
+Object: ffffdb8e723810b0  Type: (ffffc90ff3496ea0) Directory
+    ObjectHeader: ffffdb8e72381080 (new version)
+    HandleCount: 0 PointerCount: 225
+    Directory Object: ffffdb8e7227a6a0  Name: Driver
+
+    Hash Address          Type                      Name
+    ---- -------          ----                      ----
+     00  ffffc90104e92aa0 Driver                    PlutonQc
+         ffffc90104c90bf0 Driver                    qcGPI
+         ffffc901037e5d00 Driver                    fvevol
+         ffffc90ff5e2cd20 Driver                    vdrvroot
+     01  ffffc901165b6d70 Driver                    PptpMiniport
+         ffffc901047e0cf0 Driver                    NetBT
+         ffffc90ff34a08d0 Driver                    acpiex
+         ffffc90ff39f3e10 Driver                    Wdf01000
+     02  ffffc9011596ae20 Driver                    WdNisDrv
+         ffffc90109f32ce0 Driver                    mpsdrv
+         ffffc9010b9794a0 Driver                    QCAUD
+         ffffc90107d1bb00 Driver                    qcsubsys
+         ffffc90105e10e20 Driver                    qcADC
+         ffffc9010480ed80 Driver                    uiomap
+         ffffc90ff5e7ee20 Driver                    qcpmic
+     03  ffffc90106a81810 Driver                    ndproxy
+         ffffc90109f41ce0 Driver                    lltdio
+         ffffc90109e61ac0 Driver                    MMCSS
+         ffffc90ff5c9fe10 Driver                    RegistryHiveCacheDriver
+         ffffc90104984a70 Driver                    bam
+         ffffc901047f9cf0 Driver                    Psched
+         ffffc901047ddcf0 Driver                    BasicRender
+         ffffc90ff5e87bf0 Driver                    disk
+     04  ffffc90109f37ac0 Driver                    HTTP
+         ffffc90109f3bac0 Driver                    Ndisuio
+         ffffc90ff5c9be10 Driver                    qcCameraPlatform
+         ffffc90ff5de57a0 Driver                    SpbCx
+         ffffc901034d07a0 Driver                    CAD
+         ffffc901045b7d60 Driver                    qcsecapp
+         ffffc90ff5e4ca70 Driver                    stornvme
+     05  ffffc901077d6cf0 Driver                    BthMini
+         ffffc90109204280 Driver                    SurfacePowerTrackerCore
+         ffffc901045b7540 Driver                    SurfaceIhvCpuSmfClient
+         ffffc9010613e060 Driver                    qcspi
+         ffffc9010613e4a0 Driver                    SurfaceButton
+         ffffc90104e9c9f0 Driver                    storvsp
+         ffffc90ff5c9de10 Driver                    WscVReg
+     06  ffffc90112088df0 Driver                    monitor
+         ffffc90109202570 Driver                    SurfacePowerStateDriver
+         ffffc90107d1a630 Driver                    CameraAuxSensor
+         ffffc90105e09e20 Driver                    vhf
+         ffffc90104496e20 Driver                    ahcache
+         ffffc90ff5e84bf0 Driver                    iorate
+         ffffc90ff5e96060 Driver                    qcpep
+         ffffc90ff5dadda0 Driver                    pcw
+     07  ffffc901166fbd00 Driver                    Wificx
+         ffffc901071d2cf0 Driver                    qcsp
+         ffffc901035252c0 Driver                    HidSpiCx
+         ffffc90104e736c0 Driver                    SurfaceThermalPolicy
+         ffffc90104e94d80 Driver                    Ucx01000
+         ffffc90104e97d80 Driver                    USBXHCI
+         ffffc901049d9d30 Driver                    hvsocketcontrol
+         ffffc901037d4d80 Driver                    VmsProxy
+         ffffc90ff5e38de0 Driver                    partmgr
+     08  ffffc9011429ee20 Driver                    qcwlan
+         ffffc90111e19df0 Driver                    P9Rdr
+         ffffc901121ea280 Driver                    PEAUTH
+         ffffc90109f48ce0 Driver                    MsLldp
+         ffffc90104931c90 Driver                    Vid
+         ffffc9010370dd80 Driver                    VMSNPXY
+     09  ffffc9010b7ad6c0 Driver                    UcmUcsiCx0101
+         ffffc90ff34d5e10 Driver                    qci2c
+         ffffc9010497b5b0 Driver                    QcSOCPartition
+         ffffc90ff5e3f0a0 Driver                    spaceport
+         ffffc90ff3b4be00 Driver                    qcppx
+     10  ffffc9010683c6f0 Driver                    Rasl2tp
+         ffffc9010b7af280 Driver                    qcadcm
+         ffffc90107d1b4a0 Driver                    QCIPC_ROUTER
+         ffffc90107c5ac30 Driver                    qcadsprpc
+         ffffc90105e0de20 Driver                    SurfaceSerialHubDriver
+         ffffc90104822cb0 Driver                    vwififlt
+     11  ffffc90111fc0df0 Driver                    condrv
+         ffffc9010bf9bc70 Driver                    AppID
+         ffffc9010b7add20 Driver                    UcmUcsiAcpiClient
+         ffffc9010b4f6e10 Driver                    UmPass
+         ffffc90104e73d20 Driver                    msgpiowin32
+         ffffc90104bace10 Driver                    Acx01000
+         ffffc90104e08340 Driver                    FxPPM
+         ffffc90ff34d8e10 Driver                    qcuart
+         ffffc901035adde0 Driver                    DXGKrnl
+         ffffc90ff38f2df0 Driver                    PnpManager
+     12  ffffc901077d1cf0 Driver                    SurfaceBattery
+         ffffc901072c6d00 Driver                    QcBluetooth
+         ffffc901047d9dc0 Driver                    Null
+         ffffc90ff3b4ce00 Driver                    PRM
+     13  ffffc90116479d60 Driver                    RasAgileVpn
+         ffffc90109f43ac0 Driver                    wanarp
+         ffffc90109fe1c40 Driver                    QCCamAvs
+         ffffc9010b7ae6c0 Driver                    qcasd
+         ffffc90104e34e10 Driver                    qcbtacx_transportdriver
+         ffffc90ff5ca2e10 Driver                    qcbam
+         ffffc90ff5daeb20 Driver                    radarm
+         ffffc90ff38f3df0 Driver                    SoftwareDevice
+     14  ffffc90107d1b060 Driver                    CameraRearSensor
+         ffffc90ff38e8d60 Driver                    qcGLINK
+         ffffc90ff34dbe10 Driver                    qcpmgpio
+         ffffc90ff34dee10 Driver                    qcABD
+         ffffc90ff5e94d80 Driver                    CLFS
+         ffffc90ff39d3da0 Driver                    WindowsTrustedRTProxy
+     15  ffffc90109fdac40 Driver                    CDD
+         ffffc9010613db00 Driver                    QCCDI
+         ffffc90105db6df0 Driver                    qcCameraMipiCsi
+         ffffc90ff34dce10 Driver                    qciommu
+         ffffc90104b4ea00 Driver                    qcPILC
+         ffffc90104915c90 Driver                    NdisCap
+         ffffc901035a48a0 Driver                    qcthermalmdm
+         ffffc90ff5e955c0 Driver                    KSecDD
+         ffffc90ff5e77bf0 Driver                    qcipcc
+         ffffc90ff5dc1c80 Driver                    volmgr
+         ffffc90ff3ae3df0 Driver                    DeviceApi
+     16  ffffc9010b7acbf0 Driver                    SurfaceIhvAudioFilterDriver
+         ffffc9010b7aeb00 Driver                    qcaucd
+         ffffc901077bfcf0 Driver                    SurfacePenBleLcAddrAdaptationDriver
+         ffffc90107c5a3b0 Driver                    qcISP
+         ffffc90105e11e20 Driver                    JpegE
+         ffffc90ff5c98e10 Driver                    umbus
+         ffffc90ff39e7dc0 Driver                    CNG
+     17  ffffc90109c710d0 Driver                    Win32k
+         ffffc90109216e10 Driver                    SurfaceHidMini
+         ffffc9010493ccd0 Driver                    npsvctrig
+         ffffc90103718bc0 Driver                    volume
+         ffffc901035eebf0 Driver                    KSecPkg
+         ffffc90ff5da0330 Driver                    TPM
+     18  ffffc901093e8b00 Driver                    mouclass
+     19  ffffc90109f3dce0 Driver                    NativeWifiP
+         ffffc90105b1f370 Driver                    qcfgbcl
+         ffffc901034b34b0 Driver                    qcPILFC
+     20  ffffc9011208edb0 Driver                    wtd
+         ffffc901121ea6c0 Driver                    Ndu
+         ffffc90107e28d80 Driver                    kbdclass
+         ffffc90107d19d90 Driver                    UrsSynopsys
+         ffffc90ff3534e10 Driver                    hvservice
+     21  ffffc901093e8d20 Driver                    mouhid
+         ffffc90103718de0 Driver                    volsnap
+     22  ffffc90107ec4cf0 Driver                    UrsCx01000
+         ffffc90107d1c280 Driver                    qcpmicglink
+         ffffc90ff351ae10 Driver                    vmbusr
+         ffffc901046bd060 Driver                    nsiproxy
+         ffffc90ff5e43b20 Driver                    GPIOClx0101
+         ffffc90ff3aeee10 Driver                    WMIxWDM
+     23  ffffc9011400e8c0 Driver                    RasSstp
+         ffffc90109f3dac0 Driver                    MSKSSRV
+         ffffc90109e50ac0 Driver                    applockerfltr
+         ffffc9010bfc8c70 Driver                    CameraSecureISP
+         ffffc90109202bd0 Driver                    SurfaceSmfDisplayClient
+         ffffc9010480acf0 Driver                    tdx
+         ffffc9010371fdc0 Driver                    qcgpio
+     24  ffffc90ff37ceda0 Driver                    WindowsTrustedRT
+     25  ffffc90104fdcbf0 Driver                    RasPppoe
+         ffffc90107d1aa70 Driver                    CameraFrontSensor
+         ffffc90104c87770 Driver                    ExecutionContext
+         ffffc9010492fc90 Driver                    qcscm
+         ffffc901047d1cf0 Driver                    BasicDisplay
+         ffffc90ff3aeebf0 Driver                    ARM64_HAL
+     26  ffffc9010b7ad280 Driver                    UcmCx0101
+         ffffc9010613cde0 Driver                    QcEVA
+         ffffc90105b1fbf0 Driver                    rdpbus
+         ffffc901037cdd80 Driver                    QcTrEE
+     27  ffffc90107e7ed80 Driver                    kbdhid
+         ffffc901034aed00 Driver                    hidspi
+         ffffc9010613d280 Driver                    QCDX
+         ffffc90104e76800 Driver                    UEFI
+         ffffc9010588ce10 Driver                    acpipagr
+         ffffc9010497b2c0 Driver                    dam
+         ffffc9010493fc90 Driver                    WinHvr
+         ffffc90ff5e38470 Driver                    pdc
+     28  ffffc90109f3fac0 Driver                    VMSP
+         ffffc90109f43ce0 Driver                    rspndr
+         ffffc90107f83e20 Driver                    qcslimbus
+         ffffc90107ebfcf0 Driver                    SurfaceIntegrationDriver
+     29  ffffc901169d8d00 Driver                    NetAdapterCx
+         ffffc90107d1c6c0 Driver                    acpitime
+         ffffc9010498ed80 Driver                    mssmbios
+         ffffc901039ede20 Driver                    nvmedisk
+         ffffc90103719de0 Driver                    qcsyscache
+         ffffc90ff5d08d80 Driver                    volmgrx
+         ffffc90ff5dd8e20 Driver                    pci
+     30  ffffc90104e9c7a0 Driver                    qcFlash
+         ffffc90105b224a0 Driver                    NdisVirtualBus
+         ffffc90ff5de6530 Driver                    QCRPEN
+         ffffc90ff5bede10 Driver                    kdnic
+         ffffc901046bc2e0 Driver                    cdrom
+         ffffc901035d9de0 Driver                    NDIS
+         ffffc90ff5e85e20 Driver                    qcspmi
+     31  ffffc9010bfb1c70 Driver                    WudfPf
+         ffffc901093e88e0 Driver                    MTConfig
+         ffffc90109107e20 Driver                    qcpdsr
+         ffffc90107ec2cf0 Driver                    QcUsb4Bus
+         ffffc90105b22060 Driver                    swenum
+         ffffc90104e765e0 Driver                    vpcivsp
+     32  ffffc90107e7fd80 Driver                    SurfaceHotPlug
+         ffffc90103550e00 Driver                    SurfaceTimeAlarmAcpiFilter
+         ffffc90103719bc0 Driver                    rdyboost
+         ffffc90ff5e85bf0 Driver                    WFPLWFS
+         ffffc901035eee10 Driver                    Tcpip
+     33  ffffc901098f3e20 Driver                    qcadsprpcd
+         ffffc9010613d6c0 Driver                    qcpmicapps
+         ffffc90105e5ce10 Driver                    USBHUB3
+         ffffc90104e99d80 Driver                    QcXhciFilter
+         ffffc901046b8840 Driver                    Beep
+         ffffc901035f9c40 Driver                    fse
+         ffffc90ff39c6da0 Driver                    lxss
+     34  ffffc901077c4cf0 Driver                    SurfaceSystemManagementFrameworkDriver
+         ffffc90107e83d80 Driver                    buttonconverter
+         ffffc90104590e20 Driver                    qcusbcucsi
+         ffffc90ff3518e10 Driver                    qcSubsysThermalMgr
+         ffffc901047f2cf0 Driver                    AFD
+         ffffc90ff5e3fc50 Driver                    mountmgr
+         ffffc90ff39cfda0 Driver                    SurfaceAcpiPlatformExtensionDriver
+     35  ffffc90112092d60 Driver                    tcpipreg
+         ffffc901077d3cf0 Driver                    BTHPORT
+         ffffc90ff353de10 Driver                    ksthunk
+         ffffc90ff3535e10 Driver                    qcsmmu
+         ffffc901047d4cf0 Driver                    afunix
+     36  ffffc90104cced00 Driver                    NdisWan
+         ffffc9010773b060 Driver                    WudfRd
+         ffffc90107f8ee10 Driver                    qcnspmcdm
+         ffffc901093e9d20 Driver                    QcTftpKmdf
+         ffffc901034e2d00 Driver                    mshidkmdf
+         ffffc90104e76c40 Driver                    SurfaceSmfClient
+         ffffc90ff34d4e10 Driver                    CompositeBus
+         ffffc901047e6cf0 Driver                    VfpExt
+         ffffc90ff5e5d0a0 Driver                    EhStorClass
+         ffffc90ff3aefd80 Driver                    ACPI
+0: kd> .echo ===E004AQ_CAMERA_DRIVER_OBJECTS===; !drvobj ffffc90109fe1c40 7; !drvobj ffffc9010bfc8c70 7
+===E004AQ_CAMERA_DRIVER_OBJECTS===
+Driver object (ffffc90109fe1c40) is for:
+ \Driver\QCCamAvs
+
+Driver Extension List: (id , addr)
+(fffff8037dc68360 ffffc901035b4ed0)  
+Device Object list:
+ffffc9010bb41940  
+
+DriverEntry:   fffff803846ca000	
+DriverStartIo: 00000000	
+DriverUnload:  fffff8037dc60e10	
+AddDevice:     fffff8037dc67c30	
+
+Dispatch routines:
+[00] IRP_MJ_CREATE                      fffff8037dc80d70	+0xfffff8037dc80d70
+[01] IRP_MJ_CREATE_NAMED_PIPE           fffff80381040e80	nt!IopInvalidDeviceRequest
+[02] IRP_MJ_CLOSE                       fffff8037dc7d3e0	+0xfffff8037dc7d3e0
+[03] IRP_MJ_READ                        fffff80381040e80	nt!IopInvalidDeviceRequest
+[04] IRP_MJ_WRITE                       fffff80381040e80	nt!IopInvalidDeviceRequest
+[05] IRP_MJ_QUERY_INFORMATION           fffff80381040e80	nt!IopInvalidDeviceRequest
+[06] IRP_MJ_SET_INFORMATION             fffff80381040e80	nt!IopInvalidDeviceRequest
+[07] IRP_MJ_QUERY_EA                    fffff80381040e80	nt!IopInvalidDeviceRequest
+[08] IRP_MJ_SET_EA                      fffff80381040e80	nt!IopInvalidDeviceRequest
+[09] IRP_MJ_FLUSH_BUFFERS               fffff80381040e80	nt!IopInvalidDeviceRequest
+[0a] IRP_MJ_QUERY_VOLUME_INFORMATION    fffff80381040e80	nt!IopInvalidDeviceRequest
+[0b] IRP_MJ_SET_VOLUME_INFORMATION      fffff80381040e80	nt!IopInvalidDeviceRequest
+[0c] IRP_MJ_DIRECTORY_CONTROL           fffff80381040e80	nt!IopInvalidDeviceRequest
+[0d] IRP_MJ_FILE_SYSTEM_CONTROL         fffff80381040e80	nt!IopInvalidDeviceRequest
+[0e] IRP_MJ_DEVICE_CONTROL              fffff8037dc33120	+0xfffff8037dc33120
+[0f] IRP_MJ_INTERNAL_DEVICE_CONTROL     fffff80381040e80	nt!IopInvalidDeviceRequest
+[10] IRP_MJ_SHUTDOWN                    fffff80381040e80	nt!IopInvalidDeviceRequest
+[11] IRP_MJ_LOCK_CONTROL                fffff80381040e80	nt!IopInvalidDeviceRequest
+[12] IRP_MJ_CLEANUP                     fffff80381040e80	nt!IopInvalidDeviceRequest
+[13] IRP_MJ_CREATE_MAILSLOT             fffff80381040e80	nt!IopInvalidDeviceRequest
+[14] IRP_MJ_QUERY_SECURITY              fffff80381040e80	nt!IopInvalidDeviceRequest
+[15] IRP_MJ_SET_SECURITY                fffff80381040e80	nt!IopInvalidDeviceRequest
+[16] IRP_MJ_POWER                       fffff8037dc81e00	+0xfffff8037dc81e00
+[17] IRP_MJ_SYSTEM_CONTROL              fffff8037dc65b30	+0xfffff8037dc65b30
+[18] IRP_MJ_DEVICE_CHANGE               fffff80381040e80	nt!IopInvalidDeviceRequest
+[19] IRP_MJ_QUERY_QUOTA                 fffff80381040e80	nt!IopInvalidDeviceRequest
+[1a] IRP_MJ_SET_QUOTA                   fffff80381040e80	nt!IopInvalidDeviceRequest
+[1b] IRP_MJ_PNP                         fffff8037dc814d0	+0xfffff8037dc814d0
+
+
+Device Object stacks:
+
+!devstack ffffc9010bb41940 :
+  !DevObj           !DrvObj            !DevExt           ObjectName
+  ffffc9010bb41720  \Driver\ksthunk    ffffc9010bb41870  00000148
+> ffffc9010bb41940  \Driver\QCCamAvs   ffffc9010bb41ab0  
+  ffffc9010bb2be00  \Driver\ACPI       ffffc90ff3538010  
+  ffffc90109b610d0  \Driver\QCDX       ffffc90109b61220  00000146
+!DevNode ffffc9010bb38010 :
+  DeviceInst is "DISPLAY\QCOM_AVStream_8380\3&a0c4df9&0&UID32768"
+  ServiceName is "QCCamAvs"
+
+Processed 1 device objects.
+Driver object (ffffc9010bfc8c70) is for:
+ \Driver\CameraSecureISP
+
+Driver Extension List: (id , addr)
+(fffff8037b47cc30 ffffc9010f1581b0)  
+Device Object list:
+ffffc9010bb3e100  
+
+DriverEntry:   fffff80384819ee0	
+DriverStartIo: 00000000	
+DriverUnload:  fffff8038481a080	
+AddDevice:     fffff8037b47cbf0	
+
+Dispatch routines:
+[00] IRP_MJ_CREATE                      fffff8037b428a90	+0xfffff8037b428a90
+[01] IRP_MJ_CREATE_NAMED_PIPE           fffff8037b428a90	+0xfffff8037b428a90
+[02] IRP_MJ_CLOSE                       fffff8037b428a90	+0xfffff8037b428a90
+[03] IRP_MJ_READ                        fffff8037b428a90	+0xfffff8037b428a90
+[04] IRP_MJ_WRITE                       fffff8037b428a90	+0xfffff8037b428a90
+[05] IRP_MJ_QUERY_INFORMATION           fffff8037b428a90	+0xfffff8037b428a90
+[06] IRP_MJ_SET_INFORMATION             fffff8037b428a90	+0xfffff8037b428a90
+[07] IRP_MJ_QUERY_EA                    fffff8037b428a90	+0xfffff8037b428a90
+[08] IRP_MJ_SET_EA                      fffff8037b428a90	+0xfffff8037b428a90
+[09] IRP_MJ_FLUSH_BUFFERS               fffff8037b428a90	+0xfffff8037b428a90
+[0a] IRP_MJ_QUERY_VOLUME_INFORMATION    fffff8037b428a90	+0xfffff8037b428a90
+[0b] IRP_MJ_SET_VOLUME_INFORMATION      fffff8037b428a90	+0xfffff8037b428a90
+[0c] IRP_MJ_DIRECTORY_CONTROL           fffff8037b428a90	+0xfffff8037b428a90
+[0d] IRP_MJ_FILE_SYSTEM_CONTROL         fffff8037b428a90	+0xfffff8037b428a90
+[0e] IRP_MJ_DEVICE_CONTROL              fffff8037b428a90	+0xfffff8037b428a90
+[0f] IRP_MJ_INTERNAL_DEVICE_CONTROL     fffff8037b428a90	+0xfffff8037b428a90
+[10] IRP_MJ_SHUTDOWN                    fffff8037b428a90	+0xfffff8037b428a90
+[11] IRP_MJ_LOCK_CONTROL                fffff8037b428a90	+0xfffff8037b428a90
+[12] IRP_MJ_CLEANUP                     fffff8037b428a90	+0xfffff8037b428a90
+[13] IRP_MJ_CREATE_MAILSLOT             fffff8037b428a90	+0xfffff8037b428a90
+[14] IRP_MJ_QUERY_SECURITY              fffff8037b428a90	+0xfffff8037b428a90
+[15] IRP_MJ_SET_SECURITY                fffff8037b428a90	+0xfffff8037b428a90
+[16] IRP_MJ_POWER                       fffff8037b428a90	+0xfffff8037b428a90
+[17] IRP_MJ_SYSTEM_CONTROL              fffff8037b428a90	+0xfffff8037b428a90
+[18] IRP_MJ_DEVICE_CHANGE               fffff8037b428a90	+0xfffff8037b428a90
+[19] IRP_MJ_QUERY_QUOTA                 fffff8037b428a90	+0xfffff8037b428a90
+[1a] IRP_MJ_SET_QUOTA                   fffff8037b428a90	+0xfffff8037b428a90
+[1b] IRP_MJ_PNP                         fffff8037b428a90	+0xfffff8037b428a90
+
+
+Device Object stacks:
+
+!devstack ffffc9010bb3e100 :
+  !DevObj           !DrvObj            !DevExt           ObjectName
+> ffffc9010bb3e100  \Driver\CameraSecureISPffffc9010d950330  
+  ffffc90ff5d09920  \Driver\ACPI       ffffc90ff5bf1010  00000060
+!DevNode ffffc90ff5d21770 :
+  DeviceInst is "ACPI\QCOM0CCC\19"
+  ServiceName is "CameraSecureISP"
+
+Processed 1 device objects.
+0: kd> !drvobj ffffc90109fe1c40 7
+Driver object (ffffc90109fe1c40) is for:
+ \Driver\QCCamAvs
+
+Driver Extension List: (id , addr)
+(fffff8037dc68360 ffffc901035b4ed0)  
+Device Object list:
+ffffc9010bb41940  
+
+DriverEntry:   fffff803846ca000	
+DriverStartIo: 00000000	
+DriverUnload:  fffff8037dc60e10	
+AddDevice:     fffff8037dc67c30	
+
+Dispatch routines:
+[00] IRP_MJ_CREATE                      fffff8037dc80d70	+0xfffff8037dc80d70
+[01] IRP_MJ_CREATE_NAMED_PIPE           fffff80381040e80	nt!IopInvalidDeviceRequest
+[02] IRP_MJ_CLOSE                       fffff8037dc7d3e0	+0xfffff8037dc7d3e0
+[03] IRP_MJ_READ                        fffff80381040e80	nt!IopInvalidDeviceRequest
+[04] IRP_MJ_WRITE                       fffff80381040e80	nt!IopInvalidDeviceRequest
+[05] IRP_MJ_QUERY_INFORMATION           fffff80381040e80	nt!IopInvalidDeviceRequest
+[06] IRP_MJ_SET_INFORMATION             fffff80381040e80	nt!IopInvalidDeviceRequest
+[07] IRP_MJ_QUERY_EA                    fffff80381040e80	nt!IopInvalidDeviceRequest
+[08] IRP_MJ_SET_EA                      fffff80381040e80	nt!IopInvalidDeviceRequest
+[09] IRP_MJ_FLUSH_BUFFERS               fffff80381040e80	nt!IopInvalidDeviceRequest
+[0a] IRP_MJ_QUERY_VOLUME_INFORMATION    fffff80381040e80	nt!IopInvalidDeviceRequest
+[0b] IRP_MJ_SET_VOLUME_INFORMATION      fffff80381040e80	nt!IopInvalidDeviceRequest
+[0c] IRP_MJ_DIRECTORY_CONTROL           fffff80381040e80	nt!IopInvalidDeviceRequest
+[0d] IRP_MJ_FILE_SYSTEM_CONTROL         fffff80381040e80	nt!IopInvalidDeviceRequest
+[0e] IRP_MJ_DEVICE_CONTROL              fffff8037dc33120	+0xfffff8037dc33120
+[0f] IRP_MJ_INTERNAL_DEVICE_CONTROL     fffff80381040e80	nt!IopInvalidDeviceRequest
+[10] IRP_MJ_SHUTDOWN                    fffff80381040e80	nt!IopInvalidDeviceRequest
+[11] IRP_MJ_LOCK_CONTROL                fffff80381040e80	nt!IopInvalidDeviceRequest
+[12] IRP_MJ_CLEANUP                     fffff80381040e80	nt!IopInvalidDeviceRequest
+[13] IRP_MJ_CREATE_MAILSLOT             fffff80381040e80	nt!IopInvalidDeviceRequest
+[14] IRP_MJ_QUERY_SECURITY              fffff80381040e80	nt!IopInvalidDeviceRequest
+[15] IRP_MJ_SET_SECURITY                fffff80381040e80	nt!IopInvalidDeviceRequest
+[16] IRP_MJ_POWER                       fffff8037dc81e00	+0xfffff8037dc81e00
+[17] IRP_MJ_SYSTEM_CONTROL              fffff8037dc65b30	+0xfffff8037dc65b30
+[18] IRP_MJ_DEVICE_CHANGE               fffff80381040e80	nt!IopInvalidDeviceRequest
+[19] IRP_MJ_QUERY_QUOTA                 fffff80381040e80	nt!IopInvalidDeviceRequest
+[1a] IRP_MJ_SET_QUOTA                   fffff80381040e80	nt!IopInvalidDeviceRequest
+[1b] IRP_MJ_PNP                         fffff8037dc814d0	+0xfffff8037dc814d0
+
+
+Device Object stacks:
+
+!devstack ffffc9010bb41940 :
+  !DevObj           !DrvObj            !DevExt           ObjectName
+  ffffc9010bb41720  \Driver\ksthunk    ffffc9010bb41870  00000148
+> ffffc9010bb41940  \Driver\QCCamAvs   ffffc9010bb41ab0  
+  ffffc9010bb2be00  \Driver\ACPI       ffffc90ff3538010  
+  ffffc90109b610d0  \Driver\QCDX       ffffc90109b61220  00000146
+!DevNode ffffc9010bb38010 :
+  DeviceInst is "DISPLAY\QCOM_AVStream_8380\3&a0c4df9&0&UID32768"
+  ServiceName is "QCCamAvs"
+
+Processed 1 device objects.
+0: kd> .echo ===E004AQ_DRIVER_BASES===; dt nt!_DRIVER_OBJECT ffffc90109fe1c40 DriverStart DriverSize DriverName; dt nt!_DRIVER_OBJECT ffffc9010bfc8c70 DriverStart DriverSize DriverName
+===E004AQ_DRIVER_BASES===
+   +0x018 DriverStart : 0xfffff803`84620000 Void
+   +0x020 DriverSize  : 0xad000
+   +0x038 DriverName  : _UNICODE_STRING "\Driver\QCCamAvs"
+   +0x018 DriverStart : 0xfffff803`84810000 Void
+   +0x020 DriverSize  : 0x36000
+   +0x038 DriverName  : _UNICODE_STRING "\Driver\CameraSecureISP"
+0: kd> dt nt!_DRIVER_OBJECT ffffc90109fe1c40 DriverStart DriverSize DriverName
+   +0x018 DriverStart : 0xfffff803`84620000 Void
+   +0x020 DriverSize  : 0xad000
+   +0x038 DriverName  : _UNICODE_STRING "\Driver\QCCamAvs"
+0: kd> bc *; .logclose; g
+Closing open log file C:\Users\SurfacePro7\Documents\KDNET\Codex\E004AQ_HELLO_IR_CONTROLLER_20260913\E004AQ_DEVICEMFT_TRACE.log
+
