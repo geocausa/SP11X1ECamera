@@ -1,0 +1,76 @@
+{
+  "schema": "sp11-camera-e004ay-linux-vfe680-secure-lite-parity-v1",
+  "status": "PASS_SECURE_IFE_LITE_BUS_MATCHES_LINUX_VFE680_LITE_LAYOUT",
+  "date": "2026-09-13",
+  "linux": {
+    "compatible": "qcom,x1e80100-camss",
+    "vfe_implementation": "vfe_ops_680",
+    "x1e_full_ifes": [
+      "IFE0",
+      "IFE1"
+    ],
+    "x1e_lite_ifes": [
+      "IFE_LITE_0",
+      "IFE_LITE_1"
+    ]
+  },
+  "trustlet": {
+    "active_logical_core": 3,
+    "hal_family": "IFE-Lite",
+    "bus_pointer_is_subblock": true
+  },
+  "parity": [
+    {
+      "trustlet": "0x18",
+      "linux_top": "0x218",
+      "meaning": "BUS IRQ mask 0"
+    },
+    {
+      "trustlet": "0x28",
+      "linux_top": "0x228",
+      "meaning": "BUS IRQ status 0"
+    },
+    {
+      "trustlet": "0x30",
+      "linux_top": "0x230",
+      "meaning": "BUS global IRQ clear"
+    },
+    {
+      "trustlet": "0x64",
+      "linux_top": "0x264",
+      "meaning": "BUS write violation status"
+    },
+    {
+      "trustlet": "0x68",
+      "linux_top": "0x268",
+      "meaning": "BUS overflow status"
+    },
+    {
+      "trustlet": "0x70",
+      "linux_top": "0x270",
+      "meaning": "BUS image violation status"
+    },
+    {
+      "trustlet": "0x200+n*0x100",
+      "linux_top": "0x400+n*0x100",
+      "meaning": "write-client CFG"
+    },
+    {
+      "trustlet": "0x204+n*0x100",
+      "linux_top": "0x404+n*0x100",
+      "meaning": "image address"
+    },
+    {
+      "trustlet": "0x208+n*0x100",
+      "linux_top": "0x408+n*0x100",
+      "meaning": "frame increment"
+    }
+  ],
+  "conclusion": "Linux already models the X1E IFE-Lite bus/DMA register family; protected ownership/transport remains separate.",
+  "csid_parity": "not_claimed",
+  "runtime_executed": false,
+  "qcomtee_loaded": false,
+  "protected_aperture_accessed_linux": false,
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Statically compare the trustlet secure CSID table with Linux X1E csid-680 lite resources."
+}

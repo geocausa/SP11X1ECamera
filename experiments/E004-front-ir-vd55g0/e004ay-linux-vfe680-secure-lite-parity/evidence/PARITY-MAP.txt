@@ -1,0 +1,17 @@
+E004ay IFE-Lite bus sub-block parity map
+
+Trustlet context +0xf8 is the IFE-Lite bus-writer sub-block base.
+
+Trustlet bus-relative    Linux vfe-680 lite top-relative    Linux symbol / meaning
++0x18                   0x218                              VFE_BUS_IRQn_MASK(...,0)
++0x28                   0x228                              VFE_BUS_IRQn_STATUS(...,0)
++0x30                   0x230                              VFE_BUS_IRQ_GLOBAL_CLEAR
++0x64                   0x264                              VFE_BUS_WR_VIOLATION_STATUS
++0x68                   0x268                              VFE_BUS_WR_OVERFLOW_STATUS
++0x70                   0x270                              VFE_BUS_WR_IMAGE_VIOLATION_STATUS
++0x200 + n*0x100        0x400 + n*0x100                   VFE_BUS_WRITE_CLIENT_CFG
++0x204 + n*0x100        0x404 + n*0x100                   VFE_BUS_IMAGE_ADDR
++0x208 + n*0x100        0x408 + n*0x100                   VFE_BUS_FRAME_INCR
+
+The +0x200 translation shows that the trustlet stores a BUS sub-block pointer,
+whereas Linux vfe-680 expresses the same registers from the IFE-Lite top base.

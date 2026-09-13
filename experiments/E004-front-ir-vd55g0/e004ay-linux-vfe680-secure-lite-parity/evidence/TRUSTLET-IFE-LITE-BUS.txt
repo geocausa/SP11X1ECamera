@@ -1,0 +1,230 @@
+E004ay TRUSTLET IFE-LITE BUS EVIDENCE
+
+//// FUN_18000cf50@18000cf50 ////
+
+void FUN_18000cf50(longlong param_1)
+
+{
+  undefined8 uVar1;
+  
+  *(undefined4 *)(param_1 + 0x10c) = 0xdc000000;
+  *(undefined4 *)(param_1 + 0x104) = 7;
+  *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x24) = 7;
+  if (*(int *)(param_1 + 0xd0) == 0) {
+    uVar1 = 0xaf024;
+  }
+  else {
+    uVar1 = 0xb6024;
+    if (*(int *)(param_1 + 0xd0) != 1) {
+      uVar1 = 0;
+    }
+  }
+  *(undefined8 *)(param_1 + 0x3630) = uVar1;
+  *(undefined4 *)(param_1 + 0x3638) = *(undefined4 *)(param_1 + 0x104);
+  *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x28) = *(undefined4 *)(param_1 + 0x108);
+  if (*(int *)(param_1 + 0xd0) == 0) {
+    uVar1 = 0xaf028;
+  }
+  else {
+    uVar1 = 0xb6028;
+    if (*(int *)(param_1 + 0xd0) != 1) {
+      uVar1 = 0;
+    }
+  }
+  *(undefined8 *)(param_1 + 0x3670) = uVar1;
+  *(undefined4 *)(param_1 + 0x3678) = *(undefined4 *)(param_1 + 0x104);
+  *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x18) = *(undefined4 *)(param_1 + 0x10c);
+  *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 8) = 0x1ff;
+  return;
+}
+
+
+
+//// FUN_18000d000@18000d000 ////
+
+uint FUN_18000d000(longlong param_1)
+
+{
+  uint uVar1;
+  undefined8 in_x4;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  
+  uVar1 = **(uint **)(param_1 + 0xe8);
+  FUN_180019e00(4,"IFE_Lite%d: HAL_ife_lite_get_hw_version = 0x%x",
+                (ulonglong)*(uint *)(param_1 + 0xd0),(ulonglong)uVar1,in_x4,in_x5,in_x6,in_x7);
+  return uVar1;
+}
+
+
+
+//// FUN_18000d050@18000d050 ////
+
+void FUN_18000d050(longlong param_1)
+
+{
+  *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x14) = 0x3ff;
+  *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x18) = 1;
+  return;
+}
+
+
+//// FUN_18000d1e0@18000d1e0 ////
+
+void FUN_18000d1e0(longlong param_1,uint param_2,byte param_3,undefined8 param_4,undefined8 param_5,
+                  undefined8 param_6,undefined8 param_7,undefined8 param_8)
+
+{
+  uint uVar1;
+  ulonglong uVar2;
+  ulonglong uVar3;
+  undefined4 uVar4;
+  
+  if (*(char *)(param_1 + 0x6b559) == '\0') {
+    uVar4 = 0x10001;
+  }
+  else {
+    uVar4 = 7;
+  }
+  if (param_3 != 1) {
+    uVar4 = 0;
+  }
+  if (((*(char *)(param_1 + 0x338c) != '\0') &&
+      (*(int *)(param_1 + 0x3384) == *(int *)(param_1 + 0xd0))) &&
+     (param_2 - 0x3006 < 3 || param_2 == 0x3016)) {
+    return;
+  }
+  uVar3 = (ulonglong)(uint)param_3;
+  uVar2 = (ulonglong)param_2;
+  uVar1 = (int)param_2 % 0x3000;
+  FUN_180019e00(4," IFE_Lite%d: HAL_ife_lite_enable_bus_client , port id = 0x%x, bEnable %d",
+                (ulonglong)*(uint *)(param_1 + 0xd0),uVar2,uVar3,param_6,param_7,param_8);
+  if (param_2 - 0x3006 < 0x1c) {
+    switch(param_2) {
+    case 0x3006:
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x200) = uVar4;
+      FUN_18000de50(param_1,0x200,uVar4);
+      break;
+    case 0x3007:
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x300) = uVar4;
+      FUN_18000de50(param_1,0x300,uVar4);
+      break;
+    case 0x3008:
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x400) = uVar4;
+      FUN_18000de50(param_1,0x400,uVar4);
+      break;
+    case 0x3009:
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x500) = uVar4;
+      break;
+    default:
+      goto switchD_18000d2ac_caseD_300a;
+    case 0x301f:
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x700) = uVar4;
+      break;
+    case 0x3020:
+      *(uint *)(*(longlong *)(param_1 + 0xf8) + 0x600) = (uint)param_3;
+      break;
+    case 0x3021:
+      *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x800) = uVar4;
+    }
+    if (uVar1 < 0x22) {
+      *(byte *)(param_1 + (ulonglong)uVar1 * 0x18 + 0x2f1c) = param_3;
+    }
+    else {
+      if (uVar1 < 0x22) {
+        uVar1 = 0;
+      }
+      FUN_180019e00(2,"Invalid Index - %d",(ulonglong)uVar1,uVar2,uVar3,param_6,param_7,param_8);
+    }
+  }
+  else {
+switchD_18000d2ac_caseD_300a:
+    FUN_180019e00(2,"IFE_Lite%d: Invalid IFEPort ID %d",(ulonglong)*(uint *)(param_1 + 0xd0),
+                  (ulonglong)param_2,uVar3,param_6,param_7,param_8);
+  }
+  return;
+}
+
+
+
+//// FUN_18000d3d0@18000d3d0 ////
+
+void FUN_18000d3d0(longlong param_1,longlong param_2)
+
+{
+  undefined4 uVar1;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  undefined8 uVar2;
+  
+  *(undefined4 *)(param_2 + 4) = *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x1c);
+  *(undefined4 *)(param_2 + 8) = *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x20);
+  *(undefined4 *)(param_2 + 0xc) = *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x28);
+  FUN_180019e00(4,"IFE_Lite%d:: DAL_ife_ist:: ife Interrupt status0=0x%x, status1=0x%x",
+                (ulonglong)*(uint *)(param_1 + 0xd0),(ulonglong)*(uint *)(param_2 + 4),
+                (ulonglong)*(uint *)(param_2 + 8),in_x5,in_x6,in_x7);
+  FUN_180019e00(4,"IFE_Lite%d:: DAL_ife_ist:: ife bus status0=0x%x, bus status1=0x%x",
+                (ulonglong)*(uint *)(param_1 + 0xd0),(ulonglong)*(uint *)(param_2 + 0xc),
+                (ulonglong)*(uint *)(param_2 + 0x10),in_x5,in_x6,in_x7);
+  uVar1 = *(undefined4 *)(param_2 + 4);
+  *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x2c) = uVar1;
+  if (*(int *)(param_1 + 0xd0) == 0) {
+    uVar2 = 0xaf02c;
+  }
+  else {
+    uVar2 = 0xb602c;
+    if (*(int *)(param_1 + 0xd0) != 1) {
+      uVar2 = 0;
+    }
+  }
+  *(undefined8 *)(param_1 + 14000) = uVar2;
+  *(undefined4 *)(param_1 + 0x36b8) = uVar1;
+  uVar1 = *(undefined4 *)(param_2 + 8);
+  *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x30) = uVar1;
+  if (*(int *)(param_1 + 0xd0) == 0) {
+    uVar2 = 0xaf030;
+  }
+  else {
+    uVar2 = 0xb6030;
+    if (*(int *)(param_1 + 0xd0) != 1) {
+      uVar2 = 0;
+    }
+  }
+  *(undefined8 *)(param_1 + 0x36f0) = uVar2;
+  *(undefined4 *)(param_1 + 0x36f8) = uVar1;
+  *(undefined4 *)(*(longlong *)(param_1 + 0xe8) + 0x38) = 1;
+  if (*(int *)(param_1 + 0xd0) == 0) {
+    uVar2 = 0xaf038;
+  }
+  else {
+    uVar2 = 0xb6038;
+    if (*(int *)(param_1 + 0xd0) != 1) {
+      uVar2 = 0;
+    }
+  }
+  *(undefined8 *)(param_1 + 0x3770) = uVar2;
+  *(undefined4 *)(param_1 + 0x3778) = 1;
+  *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x60) = *(undefined4 *)(param_2 + 0xc);
+  *(undefined4 *)(*(longlong *)(param_1 + 0xf8) + 0x30) = 1;
+  return;
+}
+  }
+  else {
+    if (*param_2 != 2) {
+      return;
+    }
+    lVar21 = *(longlong *)(param_2 + 2);
+    if ((*(uint *)(lVar21 + 8) & 0xc0000000) != 0) {
+      puVar15 = (ulonglong *)(ulonglong)*(uint *)(*(longlong *)(param_1 + 0xf8) + 100);
+      param_5 = (ulonglong *)(ulonglong)*(uint *)(*(longlong *)(param_1 + 0xf8) + 0x70);
+      FUN_180019e00(2,
+                    "IFE_Lite%d:: IFE violation occured on Bus clients violationStatus=0x%x imageSizeVioaltionStatus=0x%x"
+                    ,(ulonglong)*(uint *)(param_1 + 0xd0),puVar15,param_5,param_6,param_7,param_8);
+    }
+    piVar20 = (int *)(lVar21 + 0x10);
+    do {
+      iVar19 = *piVar20;
+      cVar6 = '\x01';
+      bVar7 = (bool)ExclusiveMonitorPass(piVar20,0x10);
