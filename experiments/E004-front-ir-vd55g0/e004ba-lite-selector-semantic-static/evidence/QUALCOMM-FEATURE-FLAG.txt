@@ -1,0 +1,299 @@
+E004ba QUALCOMM PUBLIC CAMERA FEATURE-FLAG AUTHORITY
+source_repo=/home/geoca/.cache/qualcomm-camera-driver
+source_commit=82ac3a671a5b0a4e3b3ac4519208af1d37a93eb6
+
+--- array length ---
+#define CAM_ISP_GENERIC_BLOB_TYPE_NFI_MODE_SWITCH           30
+#define CAM_ISP_GENERIC_BLOB_TYPE_IRQ_COMP_CFG              31
+#define CAM_ISP_GENERIC_BLOB_TYPE_VFE_OUT_CONFIG_V2         32
+#define CAM_ISP_GENERIC_BLOB_TYPE_IFE_FCG_CFG               33
+
+#define CAM_ISP_VC_DT_CFG    4
+
+#define CAM_ISP_IFE0_HW          0x1
+#define CAM_ISP_IFE1_HW          0x2
+#define CAM_ISP_IFE0_LITE_HW     0x4
+#define CAM_ISP_IFE1_LITE_HW     0x8
+
+--- feature flag definitions ---
+/* Acquire with custom hw */
+#define CAM_ISP_ACQ_CUSTOM_NONE       0
+#define CAM_ISP_ACQ_CUSTOM_PRIMARY    1
+#define CAM_ISP_ACQ_CUSTOM_SECONDARY  2
+
+#define CAM_IFE_CSID_RDI_MAX          5
+
+/* Feature Flag indicators */
+#define CAM_ISP_PARAM_FETCH_SECURITY_MODE      BIT(0)
+#define CAM_ISP_CAN_USE_LITE_MODE              BIT(1)
+#define CAM_ISP_DYNAMIC_SENOR_SWITCH_EN        BIT(2)
+#define CAM_ISP_SFE_BINNED_EPOCH_CFG_ENABLE    BIT(3)
+#define CAM_ISP_EPD_SUPPORT                    BIT(4)
+#define CAM_ISP_SFE_FS_MODE_EN                 BIT(5)
+#define CAM_ISP_SFE_SHDR_MODE_EN               BIT(6)
+#define CAM_ISP_AEB_MODE_EN                    BIT(7)
+#define CAM_ISP_HDR_MODE_DYNAMIC_SWITCH_EN     BIT(8)
+#define CAM_ISP_NFI_BASED_MODE_SWITCH_EN       BIT(9)
+#define CAM_ISP_YUV_CHROMA_CONVERSION_DS_EN    BIT(10)
+
+/* ISP core cfg flag params */
+
+--- v2 input structure ---
+ * struct cam_isp_in_port_info_v2 - An input port resource info
+ *
+ * @res_type:                   input resource type define in file
+ *                              cam_isp_vfe.h or cam_isp_ife.h
+ * @lane_type:                  lane type: c-phy or d-phy.
+ * @lane_num:                   active lane number
+ * @lane_cfg:                   lane configurations: 4 bits per lane
+ * @vc:                         input virtual channel number
+ * @dt:                         input data type number
+ * @num_valid_vc_dt:            valid vc and dt in array
+ * @format:                     input format
+ * @test_pattern:               test pattern for the testgen
+ * @usage_type:                 whether dual vfe is required
+ * @left_start:                 left input start offset in pixels
+ * @left_stop:                  left input stop offset in pixels
+ * @left_width:                 left input width in pixels
+ * @right_start:                right input start offset in pixels.
+ *                              Only for Dual VFE
+ * @right_stop:                 right input stop offset in pixels.
+ *                              only for Dual VFE
+ * @right_width:                right input width in pixels.
+ *                              only for dual VFE
+ * @line_start:                 top of the line number
+ * @line_stop:                  bottome of the line number
+ * @height:                     input height in lines
+ * @pixel_clk;                  sensor output clock
+ * @batch_size:                 batch size for HFR mode
+ * @dsp_mode:                   DSP stream mode (Defines as CAM_ISP_DSP_MODE_*)
+ * @hbi_cnt:                    HBI count for the camif input
+ * @cust_node:                  if any custom HW block is present before IFE
+ * @num_out_res:                number of the output resource associated
+ * @bidirectional_bin:          [0  : 15] - Set 1 for Horizontal binning
+ *                              [16 : 31] - Set 1 for Vertical binning
+ * @qcfa_bin:                   Quadra Binning info
+ * @sfe_in_path_type:           SFE input path type
+ *                              0:15 - refer to cam_isp_sfe.h for SFE paths
+ *                              16:31 - Corresponding IFE i/p path type
+ *                              Example:((CAM_ISP_PXL_PATH << 16) |
+ *                                        CAM_ISP_SFE_INLINE_PIX)
+ *                              This will acquire SFE inline IPP and IFE IPP
+ *                              PPP is an exception CSID PPP -> IFE PPP
+ * @feature_flag:               See the macros defined under feature flag above
+ * @ife_res_1:                  payload for future use.
+ * @sensor_id:                  Sensor id for pipeline.
+ * @data:                       payload that contains the output resources
+ *
+ */
+struct cam_isp_in_port_info_v2 {
+	__u32                           res_type;
+	__u32                           lane_type;
+	__u32                           lane_num;
+	__u32                           lane_cfg;
+	__u32                           vc[CAM_ISP_VC_DT_CFG];
+	__u32                           dt[CAM_ISP_VC_DT_CFG];
+	__u32                           num_valid_vc_dt;
+	__u32                           format;
+	__u32                           test_pattern;
+	__u32                           usage_type;
+	__u32                           left_start;
+	__u32                           left_stop;
+	__u32                           left_width;
+	__u32                           right_start;
+	__u32                           right_stop;
+	__u32                           right_width;
+	__u32                           line_start;
+	__u32                           line_stop;
+	__u32                           height;
+	__u32                           pixel_clk;
+	__u32                           batch_size;
+	__u32                           dsp_mode;
+	__u32                           hbi_cnt;
+	__u32                           cust_node;
+	__u32                           num_out_res;
+	__u32                           offline_mode;
+	__u32                           bidirectional_bin;
+	__u32                           qcfa_bin;
+	__u32                           sfe_in_path_type;
+	__u32                           feature_flag;
+	__u32                           ife_res_1;
+	__u32                           sensor_id;
+	union {
+		struct cam_isp_out_port_info_v2 data[1];
+		__DECLARE_FLEX_ARRAY(struct cam_isp_out_port_info_v2, data_flex);
+	};
+};
+
+/**
+ * struct cam_isp_in_port_phy_info - CSID in port PHY info
+
+--- feature decode ---
+static inline void cam_ife_mgr_acquire_get_feature_flag_params_v3(
+	struct cam_isp_in_port_info_v3      *in,
+	struct cam_isp_in_port_generic_info *in_port)
+{
+	in_port->dynamic_sensor_switch_en = in->feature_mask & CAM_ISP_DYNAMIC_SENOR_SWITCH_EN;
+	in_port->can_use_lite             = in->feature_mask & CAM_ISP_CAN_USE_LITE_MODE;
+	in_port->aeb_mode                 = in->feature_mask & CAM_ISP_AEB_MODE_EN;
+	in_port->dynamic_hdr_switch_en    = in->feature_mask & CAM_ISP_HDR_MODE_DYNAMIC_SWITCH_EN;
+}
+
+static inline void cam_ife_mgr_acquire_get_feature_flag_params(
+	struct cam_isp_in_port_info_v2      *in,
+	struct cam_isp_in_port_generic_info *in_port)
+{
+	in_port->secure_mode              = in->feature_flag & CAM_ISP_PARAM_FETCH_SECURITY_MODE;
+	in_port->dynamic_sensor_switch_en = in->feature_flag & CAM_ISP_DYNAMIC_SENOR_SWITCH_EN;
+	in_port->can_use_lite             = in->feature_flag & CAM_ISP_CAN_USE_LITE_MODE;
+	in_port->sfe_binned_epoch_cfg     = in->feature_flag & CAM_ISP_SFE_BINNED_EPOCH_CFG_ENABLE;
+	in_port->epd_supported            = in->feature_flag & CAM_ISP_EPD_SUPPORT;
+	in_port->aeb_mode                 = in->feature_flag & CAM_ISP_AEB_MODE_EN;
+	in_port->dynamic_hdr_switch_en    = in->feature_flag & CAM_ISP_HDR_MODE_DYNAMIC_SWITCH_EN;
+	in_port->yuv_chroma_conversion_en = in->feature_flag & CAM_ISP_YUV_CHROMA_CONVERSION_DS_EN;
+}
+
+
+--- lite acquisition policy ---
+static bool cam_ife_mgr_check_can_use_lite(
+	struct cam_csid_hw_reserve_resource_args  *csid_acquire,
+	struct cam_ife_hw_mgr_ctx                 *ife_ctx)
+{
+	bool can_use_lite = false;
+	struct cam_ife_hw_concrete_ctx      *c_ctx = ife_ctx->concr_ctx;
+
+	if (c_ctx->flags.is_rdi_only_context ||
+		csid_acquire->in_port->can_use_lite) {
+		can_use_lite = true;
+		goto end;
+	}
+
+	switch (csid_acquire->res_id) {
+
+	case CAM_IFE_PIX_PATH_RES_RDI_0:
+	case CAM_IFE_PIX_PATH_RES_RDI_1:
+	case CAM_IFE_PIX_PATH_RES_RDI_2:
+	case CAM_IFE_PIX_PATH_RES_RDI_3:
+		can_use_lite = true;
+		break;
+	default:
+		can_use_lite = false;
+		goto end;
+	}
+
+	if (c_ctx->flags.is_fe_enabled || c_ctx->flags.dsp_enabled)
+		can_use_lite = false;
+
+	CAM_DBG(CAM_ISP,
+		"in_port lite hint %d, rdi_only: %d can_use_lite: %d res_id: %u ctx_idx: %u",
+		csid_acquire->in_port->can_use_lite,
+		c_ctx->flags.is_rdi_only_context,
+		can_use_lite, csid_acquire->res_id, c_ctx->ctx_index);
+
+end:
+	return can_use_lite;
+}
+
+static int cam_ife_hw_mgr_acquire_res_ife_bus_rd(
+	struct cam_ife_hw_mgr_ctx                  *ife_ctx,
+
+	ife_hw_mgr = c_ctx->hw_mgr;
+
+	if (c_ctx->ctx_type == CAM_IFE_CTX_TYPE_SFE)
+		is_start_lower_idx =  true;
+
+	if (in_port->num_out_res)
+		out_port = &(in_port->data[0]);
+
+	c_ctx->flags.is_dual = (bool)in_port->usage_type;
+
+	if (c_ctx->ctx_type != CAM_IFE_CTX_TYPE_SFE)
+		can_use_lite = cam_ife_mgr_check_can_use_lite(
+			csid_acquire, ife_ctx);
+
+	if (ife_hw_mgr->csid_camif_irq_support && c_ctx->ctx_type != CAM_IFE_CTX_TYPE_SFE)
+		csid_acquire->handle_camif_irq = true;
+
+	if (in_port->per_port_en && (index != CAM_IFE_STREAM_GRP_INDEX_NONE)) {
+		csid_res_list_head = &g_ife_sns_grp_cfg.grp_cfg[index]->res_ife_csid_list;
+		csid_acquire->per_port_grp_index = index;
+	} else {
+		csid_res_list_head = &c_ctx->res_list_ife_csid;
+		csid_acquire->per_port_grp_index = -1;
+	}
+
+	/* Try acquiring CSID from previously acquired HW */
+	list_for_each_entry(csid_res_iterator, csid_res_list_head,
+		list) {
+
+		for (i = 0; i < CAM_ISP_HW_SPLIT_MAX; i++) {
+			if (!csid_res_iterator->hw_res[i])
+				continue;
+			if (in_port->num_out_res &&
+				((csid_res_iterator->is_secure == 1 &&
+				out_port->secure_mode == 0) ||
+				(csid_res_iterator->is_secure == 0 &&
+				out_port->secure_mode == 1)))
+				continue;
+			if (!in_port->num_out_res &&
+				csid_res_iterator->is_secure == 1)
+				continue;
+
+			hw_intf = csid_res_iterator->hw_res[i]->hw_intf;
+			csid_caps =
+				&ife_hw_mgr->csid_hw_caps[hw_intf->hw_idx];
+
+			if (csid_caps->is_lite && !can_use_lite) {
+				CAM_DBG(CAM_ISP, "CSID[%u] cannot use lite, ctx_idx: %u",
+					hw_intf->hw_idx, c_ctx->ctx_index);
+				continue;
+			}
+
+			if (csid_caps->is_ife_sfe_mapped &&
+				(c_ctx->ctx_type == CAM_IFE_CTX_TYPE_SFE) &&
+				!ife_hw_mgr->sfe_devices[hw_intf->hw_idx]) {
+				CAM_DBG(CAM_ISP, "No sfe_device with idx: %d, ctx_idx: %u",
+					hw_intf->hw_idx, c_ctx->ctx_index);
+				continue;
+			}
+
+			rc = hw_intf->hw_ops.reserve(hw_intf->hw_priv,
+				csid_acquire, sizeof(*csid_acquire));
+			if (rc) {
+				CAM_DBG(CAM_ISP,
+					"No ife resource from hw %d, ctx_idx: %u",
+					hw_intf->hw_idx, c_ctx->ctx_index);
+				continue;
+			}
+			CAM_DBG(CAM_ISP,
+				"acquired from old csid(%s)=%d successfully, is_secure: %s, ctx_idx: %u",
+				(i == 0) ? "left" : "right",
+				hw_intf->hw_idx,
+				CAM_BOOL_TO_YESNO(csid_res_iterator->is_secure),
+				c_ctx->ctx_index);
+			goto acquire_successful;
+		}
+	}
+
+	for (i = (is_start_lower_idx) ? 0 : (CAM_IFE_CSID_HW_NUM_MAX - 1);
+		(is_start_lower_idx) ? (i < CAM_IFE_CSID_HW_NUM_MAX) : (i >= 0);
+		(is_start_lower_idx) ? i++ : i--) {
+		if (!ife_hw_mgr->csid_devices[i])
+			continue;
+		hw_intf = ife_hw_mgr->csid_devices[i];
+
+		if (ife_hw_mgr->csid_hw_caps[hw_intf->hw_idx].is_lite &&
+			!can_use_lite) {
+			CAM_DBG(CAM_ISP, "CSID[%u] cannot use lite, ctx_idx: %u",
+				hw_intf->hw_idx, c_ctx->ctx_index);
+			continue;
+		}
+
+		compat_count++;
+
+		if (ife_hw_mgr->csid_hw_caps[hw_intf->hw_idx].is_ife_sfe_mapped &&
+			(c_ctx->ctx_type == CAM_IFE_CTX_TYPE_SFE) &&
+			!ife_hw_mgr->sfe_devices[hw_intf->hw_idx]) {
+			CAM_DBG(CAM_ISP, "No sfe_device with idx: %d, ctx_idx: %u",
+				hw_intf->hw_idx, c_ctx->ctx_index);
+			continue;

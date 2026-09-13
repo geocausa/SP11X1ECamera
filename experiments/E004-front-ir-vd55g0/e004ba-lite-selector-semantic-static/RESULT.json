@@ -1,0 +1,31 @@
+{
+  "schema": "sp11-camera-e004ba-lite-selector-semantic-static-v1",
+  "status": "PASS_TRUSTLET_SELECTOR_IS_CAM_ISP_CAN_USE_LITE_MODE",
+  "date": "2026-09-13",
+  "qualcomm_public_source_commit": "82ac3a671a5b",
+  "structure_match": {
+    "public_type": "cam_isp_in_port_info_v2",
+    "vc_dt_array_length": 4,
+    "feature_flag_dword_index": "0x23",
+    "feature_flag_byte_offset": "0x8c",
+    "trustlet_source_expression": "param_3[0x23]"
+  },
+  "selector": {
+    "public_macro": "CAM_ISP_CAN_USE_LITE_MODE",
+    "public_bit": 1,
+    "trustlet_expression": "(feature_flag >> 1) & 1",
+    "trustlet_manager_state_offset": "0xe00",
+    "semantic": "lite_resource_eligibility"
+  },
+  "distinct_from_bSfeUsed": true,
+  "surface_corroboration": [
+    "IFE_LITE_MODE",
+    "IFE_LITE_SECURE_MODE",
+    "secure IFE-Lite frame-completion path"
+  ],
+  "live_surface_feature_flag": "unproven",
+  "runtime_executed": false,
+  "qcomtee_loaded": false,
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Bounded Windows Hello run: observe exact CameraSecureISP DeviceConfig feature_flag and bit 1."
+}
