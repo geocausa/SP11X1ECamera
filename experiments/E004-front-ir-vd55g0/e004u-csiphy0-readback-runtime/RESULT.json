@@ -1,35 +1,51 @@
 {
-  "schema": "sp11-camera-e004u-csiphy0-readback-prep-v1",
-  "status": "READY_UNINSTALLED_UNARMED",
-  "parent_e004t_commit": "939251c",
-  "parent_e004s_commit": "0907585",
-  "parent_e004k_commit": "76b8640",
-  "candidate_id": "sp11-camera-e004u-csiphy0-readback-one-shot",
-  "boot_marker": "sp11_camera_e004u_csiphy0_readback=1",
-  "dtb_sha256": "fffacde38934d1baa8392f6b5687827cf0490d7af9e20fd37858347c157f5742",
-  "sensor_module_sha256": "4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72",
-  "camss_module_sha256": "bc574b2027eee19fc07f12cb1c7efbd86ec1be38e09715878d035d89cb169eba",
-  "receiver_harness_sha256": "6475d453d9e9661ce2979afdd7ad57da8badeba65b2e17ac0f47a54ca890193e",
-  "receiver_expected_table_sha256": "95007de362b9e10d1369dd255c06e0950fced412169de5e83930bb0afec1e770",
+  "schema": "sp11-camera-e004u-csiphy0-readback-result-v2",
+  "status": "FAIL_CSIPHY0_DT_APERTURE_4K_VS_REQUIRED_8K_GOLDEN_RETURN_RETIRED",
+  "package_commit": "5306df931666f3995ac0366faa11772bdaffa162",
+  "attempt_count": 1,
   "attempt_limit": 1,
+  "retry_performed": false,
   "retry_authorized": false,
-  "allowed_new_hardware_action": "CSIPHY0 s_power(1) + s_stream(1) + 96-register readback + s_stream(0) + s_power(0)",
-  "expected_receiver": {
-    "link_frequency_hz": 420000000,
-    "timer_clock_hz": 266666667,
-    "lane_mask": "0x81",
-    "settle_count": "0x10",
-    "common_ctrl7": "0x7a",
-    "windows_register_matches": 96,
-    "windows_register_mismatches": 0
+  "sensor_windows_state_pass": true,
+  "sensor_data_writes": 596,
+  "sensor_runtime_suspended_before_receiver": true,
+  "receiver_precheck_pass": true,
+  "receiver_programming_marker_pass": false,
+  "receiver_readback_pass": false,
+  "fault": {
+    "function": "csiphy_reset",
+    "function_offset": "0x3c/0x170",
+    "caller": "csiphy_set_power",
+    "fault_va": "ffff80008420e000",
+    "access": "write",
+    "translation_fault_level": 3
   },
-  "sensor_stream_callback": false,
-  "csid_stream_callback": false,
-  "vfe_stream_callback": false,
-  "capture": false,
-  "illumination": false,
-  "installed": false,
-  "armed": false,
-  "runtime_performed": false,
-  "next_gate": "Checkpoint/push; install unarmed; arm one-shot; perform one receiver-only 96-register readback; return Golden and retire."
+  "linux_dt_csiphy0": {
+    "physical_base": "0x0ace4000",
+    "size": "0x1000"
+  },
+  "x1e_driver": {
+    "common_register_offset": "0x1000",
+    "reset_first_access": "base + 0x1000"
+  },
+  "windows_csiphy0": {
+    "physical_base": "0x0ace4000",
+    "end_inclusive": "0x0ace5fff",
+    "size": "0x2000"
+  },
+  "inferred_mapping": {
+    "virtual_base": "ffff80008420d000",
+    "fault_offset": "0x1000"
+  },
+  "natural_fix": "widen disposable CSIPHY0 DT reg resource size from 0x1000 to 0x2000 only",
+  "next_resource_base": "0x0ace6000",
+  "resource_overlap_after_fix": false,
+  "sensor_stream_callback_performed": false,
+  "csid_stream_callback_performed": false,
+  "vfe_stream_callback_performed": false,
+  "capture_stream_performed": false,
+  "illumination_performed": false,
+  "golden_return_pass": true,
+  "candidate_retired": true,
+  "next_gate": "Create offline DT authority proving only CSIPHY0 resource size widens 0x1000->0x2000 and the IR graph is otherwise byte-equivalent; then use a fresh receiver-only one-shot."
 }
