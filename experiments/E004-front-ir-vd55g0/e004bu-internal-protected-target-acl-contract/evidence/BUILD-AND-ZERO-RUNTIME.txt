@@ -1,0 +1,57 @@
+E004bu BUILD COMPARISON
+baseline_module=77d6072856b297703192005f3ba7269b765b569fefff081ff9fb8b0290715e91
+scaffold_module=b82d093d02fbafd002ef641d1fef96787b3691eed927081d5ea4153d33fa3af1
+baseline_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+scaffold_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+TEXT_BYTE_IDENTICAL=1
+baseline_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+scaffold_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+--- ACL / lifecycle contract ---
+40:struct camss_protected_owner_set_contract {
+42:	bool camera_hw_visible;
+43:	bool trusted_worker_visible;
+44:	bool normal_hlos_cpu_visible;
+45:	bool concrete_owner_ids_resolved;
+50:	CAMSS_SECURE_TARGET_UNPREPARED = 0,
+51:	CAMSS_SECURE_TARGET_BACKING_READY,
+52:	CAMSS_SECURE_TARGET_ACTIVE_VISIBILITY,
+53:	CAMSS_SECURE_TARGET_REVOKING_VISIBILITY,
+61: * camera_hw_visible + trusted_worker_visible without normal HLOS CPU exposure.
+70:	struct camss_protected_owner_set_contract owners;
+93:	int (*prepare_backing)(struct device *dev, struct vb2_buffer *vb,
+95:	int (*activate_visibility)(struct device *dev,
+97:	void (*deactivate_visibility)(struct device *dev,
+99:	void (*release_backing)(struct device *dev,
+134:	BUILD_BUG_ON(CAMSS_SECURE_TARGET_UNPREPARED != 0);
+
+--- forbidden concrete secure implementation symbols in generated C/H (must be empty) ---
+FORBIDDEN_IMPLEMENTATION_SYMBOL_MATCHES=0
+
+--- callback invocations in C files (must be empty) ---
+CALLBACK_INVOCATIONS=0
+
+--- exact production/scaffold C diff ---
+--- /tmp/e004bu-camss-baseline/camss-video.c	2026-09-05 09:29:09.543184962 +0100
++++ /tmp/e004bu-camss-scaffold/camss-video.c	2026-09-13 21:50:57.246034541 +0100
+@@ -16,6 +16,7 @@
+ #include <media/videobuf2-dma-sg.h>
+ 
+ #include "camss-video.h"
++#include "camss-protected-pipeline.h"
+ #include "camss-csid.h"
+ #include "camss-vfe.h"
+ #include "camss.h"
+@@ -1199,6 +1200,7 @@
+ 	struct vb2_queue *q;
+ 	int ret;
+ 
++	camss_protected_pipeline_compile_contract();
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
+
+--- runtime state ---
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
