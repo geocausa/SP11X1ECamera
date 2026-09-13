@@ -29,3 +29,11 @@ Acceptance remains receiver-only:
 No sensor stream callback, CSID/VFE stream callback, capture or illumination is authorized.
 
 One attempt only. No same-boot retry.
+
+## Runtime outcome
+
+The single E004w attempt passed completely. The E004v 8 KiB aperture removed the E004u reset fault without changing any executable binary. The native sensor again reached the exact 596-write Windows state and returned to runtime suspend. CSIPHY0 then powered, programmed through the E004k Windows-parity path, and all 96 modeled receiver registers matched the same-machine Windows snapshot. The receiver was disabled and powered off, and the sensor remained suspended with usage 0.
+
+No sensor stream callback, CSID/VFE stream callback, capture, illumination, warning, Oops or other kernel fault occurred. SP11 returned immediately to Golden and the candidate was retired.
+
+This closes the CSIPHY0 receiver-programming stage. The next gate is offline CSID0 routing/programming authority for the Windows IR transport contract (VC0, RAW10 CSI DT 0x2b), still without authorizing sensor stream or illumination.
