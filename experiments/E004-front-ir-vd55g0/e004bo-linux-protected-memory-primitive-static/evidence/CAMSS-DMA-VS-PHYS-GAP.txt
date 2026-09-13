@@ -1,0 +1,246 @@
+E004bo CAMSS DMA/IOVA VERSUS SCM PHYSICAL-RANGE GAP
+
+--- CAMSS obtains DMA/bus address from mapped SG ---
+   211	static int video_buf_init(struct vb2_buffer *vb)
+   212	{
+   213		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+   214		struct camss_video *video = vb2_get_drv_priv(vb->vb2_queue);
+   215		struct camss_buffer *buffer = container_of(vbuf, struct camss_buffer,
+   216							   vb);
+   217		const struct v4l2_pix_format_mplane *format =
+   218							&video->active_fmt.fmt.pix_mp;
+   219		struct sg_table *sgt;
+   220		unsigned int i;
+   221	
+   222		for (i = 0; i < format->num_planes; i++) {
+   223			sgt = vb2_dma_sg_plane_desc(vb, i);
+   224			if (!sgt)
+   225				return -EFAULT;
+   226	
+   227			buffer->addr[i] = sg_dma_address(sgt->sgl);
+   228		}
+   229	
+   230		if (format->pixelformat == V4L2_PIX_FMT_NV12 ||
+   231				format->pixelformat == V4L2_PIX_FMT_NV21 ||
+   232				format->pixelformat == V4L2_PIX_FMT_NV16 ||
+   233				format->pixelformat == V4L2_PIX_FMT_NV61)
+   234			buffer->addr[1] = buffer->addr[0] +
+   235					format->plane_fmt[0].bytesperline *
+   236					format->height;
+   237	
+   238		return 0;
+
+--- kernel definition: sg_dma_address is bus address after dma_map_sg ---
+    24	/*
+    25	 * These macros should be used after a dma_map_sg call has been done
+    26	 * to get bus addresses of each of the SG entries and their lengths.
+    27	 * You should only work with the number of sg entries dma_map_sg
+    28	 * returns, or alternatively stop on the first sg_dma_len(sg) which
+    29	 * is 0.
+    30	 */
+    31	#define sg_dma_address(sg)	((sg)->dma_address)
+    32	
+    33	#ifdef CONFIG_NEED_SG_DMA_LENGTH
+    34	#define sg_dma_len(sg)		((sg)->dma_length)
+    35	#else
+    36	#define sg_dma_len(sg)		((sg)->length)
+    37	#endif
+    38	
+    39	struct sg_table {
+    40		struct scatterlist *sgl;	/* the list */
+    41		unsigned int nents;		/* number of mapped entries */
+    42		unsigned int orig_nents;	/* original size of list */
+    43	};
+
+--- VB2 DMA-SG backend supports DMA mapping / imported dmabufs ---
+   560		}
+   561	
+   562		if (WARN_ON(buf->dma_sgt)) {
+   563			pr_err("dmabuf buffer is already pinned\n");
+   564			return 0;
+   565		}
+   566	
+   567		/* get the associated scatterlist for this buffer */
+   568		sgt = dma_buf_map_attachment_unlocked(buf->db_attach, buf->dma_dir);
+   569		if (IS_ERR(sgt)) {
+   570			pr_err("Error getting dmabuf scatterlist\n");
+   571			return -EINVAL;
+   572		}
+   573	
+   574		buf->dma_sgt = sgt;
+   575		buf->vaddr = NULL;
+   576	
+   577		return 0;
+   578	}
+   579	
+   580	static void vb2_dma_sg_unmap_dmabuf(void *mem_priv)
+   581	{
+   582		struct vb2_dma_sg_buf *buf = mem_priv;
+   583		struct sg_table *sgt = buf->dma_sgt;
+   584		struct iosys_map map = IOSYS_MAP_INIT_VADDR(buf->vaddr);
+   585	
+   586		if (WARN_ON(!buf->db_attach)) {
+   587			pr_err("trying to unpin a not attached buffer\n");
+   588			return;
+   589		}
+   590	
+   591		if (WARN_ON(!sgt)) {
+   592			pr_err("dmabuf buffer is already unpinned\n");
+   593			return;
+   594		}
+   595	
+   596		if (buf->vaddr) {
+   597			dma_buf_vunmap_unlocked(buf->db_attach->dmabuf, &map);
+   598			buf->vaddr = NULL;
+   599		}
+   600		dma_buf_unmap_attachment_unlocked(buf->db_attach, sgt, buf->dma_dir);
+   601	
+   602		buf->dma_sgt = NULL;
+   603	}
+   604	
+   605	static void vb2_dma_sg_detach_dmabuf(void *mem_priv)
+   606	{
+   607		struct vb2_dma_sg_buf *buf = mem_priv;
+   608	
+   609		/* if vb2 works correctly you should never detach mapped buffer */
+   610		if (WARN_ON(buf->dma_sgt))
+   611			vb2_dma_sg_unmap_dmabuf(buf);
+   612	
+   613		/* detach this attachment */
+   614		dma_buf_detach(buf->db_attach->dmabuf, buf->db_attach);
+   615		kfree(buf);
+   616	}
+   617	
+   618	static void *vb2_dma_sg_attach_dmabuf(struct vb2_buffer *vb, struct device *dev,
+   619					      struct dma_buf *dbuf, unsigned long size)
+   620	{
+   621		struct vb2_dma_sg_buf *buf;
+   622		struct dma_buf_attachment *dba;
+   623	
+   624		if (WARN_ON(!dev))
+   625			return ERR_PTR(-EINVAL);
+   626	
+   627		if (dbuf->size < size)
+   628			return ERR_PTR(-EFAULT);
+   629	
+   630		buf = kzalloc_obj(*buf);
+   631		if (!buf)
+   632			return ERR_PTR(-ENOMEM);
+   633	
+   634		buf->dev = dev;
+   635		/* create attachment for the dmabuf with the user device */
+   636		dba = dma_buf_attach(dbuf, buf->dev);
+   637		if (IS_ERR(dba)) {
+   638			pr_err("failed to attach dmabuf\n");
+   639			kfree(buf);
+   640			return dba;
+   641		}
+   642	
+   643		buf->dma_dir = vb->vb2_queue->dma_dir;
+   644		buf->size = size;
+   645		buf->db_attach = dba;
+   646		buf->vb = vb;
+   647	
+   648		return buf;
+   649	}
+   650	
+   651	static void *vb2_dma_sg_cookie(struct vb2_buffer *vb, void *buf_priv)
+   652	{
+   653		struct vb2_dma_sg_buf *buf = buf_priv;
+   654	
+   655		return buf->dma_sgt;
+   656	}
+   657	
+   658	const struct vb2_mem_ops vb2_dma_sg_memops = {
+   659		.alloc		= vb2_dma_sg_alloc,
+   660		.put		= vb2_dma_sg_put,
+   661		.get_userptr	= vb2_dma_sg_get_userptr,
+   662		.put_userptr	= vb2_dma_sg_put_userptr,
+   663		.prepare	= vb2_dma_sg_prepare,
+   664		.finish		= vb2_dma_sg_finish,
+   665		.vaddr		= vb2_dma_sg_vaddr,
+   666		.mmap		= vb2_dma_sg_mmap,
+   667		.num_users	= vb2_dma_sg_num_users,
+   668		.get_dmabuf	= vb2_dma_sg_get_dmabuf,
+   669		.map_dmabuf	= vb2_dma_sg_map_dmabuf,
+   670		.unmap_dmabuf	= vb2_dma_sg_unmap_dmabuf,
+   671		.attach_dmabuf	= vb2_dma_sg_attach_dmabuf,
+   672		.detach_dmabuf	= vb2_dma_sg_detach_dmabuf,
+   673		.cookie		= vb2_dma_sg_cookie,
+   674	};
+   675	EXPORT_SYMBOL_GPL(vb2_dma_sg_memops);
+
+--- SP11 CAMSS is attached to apps SMMU with multiple stream IDs ---
+  8482			isp@acb7000 {
+  8483				compatible = "qcom,x1e80100-camss";
+  8484				reg = <0x00 0xacb7000 0x00 0x2000 0x00 0xacb9000 0x00 0x2000 0x00 0xacbb000 0x00 0x2000 0x00 0xacc6000 0x00 0x1000 0x00 0xacca000 0x00 0x1000 0x00 0xacb6000 0x00 0x1000 0x00 0xace4000 0x00 0x1000 0x00 0xace6000 0x00 0x2000 0x00 0xace8000 0x00 0x2000 0x00 0xacec000 0x00 0x4000 0x00 0xacf6000 0x00 0x1000 0x00 0xacf7000 0x00 0x1000 0x00 0xacf8000 0x00 0x1000 0x00 0xac62000 0x00 0x4000 0x00 0xac71000 0x00 0x4000 0x00 0xacc7000 0x00 0x2000 0x00 0xaccb000 0x00 0x2000>;
+  8485				reg-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1", "csid_wrapper", "csiphy0", "csiphy1", "csiphy2", "csiphy4", "csitpg0", "csitpg1", "csitpg2", "vfe0", "vfe1", "vfe_lite0", "vfe_lite1";
+  8486				clocks = <0x19e 0x04 0x19e 0x05 0x19e 0x0d 0x19e 0x0e 0x19e 0x10 0x19e 0x11 0x19e 0x12 0x19e 0x13 0x19e 0x16 0x19e 0x23 0x19e 0x25 0x19e 0x26 0x19e 0x17 0x19e 0x27 0x19e 0x19 0x19e 0x28 0x19e 0x1b 0x19e 0x2a 0x19e 0x1f 0x3e 0x11 0x3e 0x12 0x19e 0x31 0x19e 0x34 0x19e 0x35 0x19e 0x38 0x19e 0x3a 0x19e 0x39 0x19e 0x3c 0x19e 0x3d>;
+  8487				clock-names = "camnoc_nrt_axi", "camnoc_rt_axi", "core_ahb", "cpas_ahb", "cpas_fast_ahb", "cpas_vfe0", "cpas_vfe1", "cpas_vfe_lite", "cphy_rx_clk_src", "csid", "csid_csiphy_rx", "csiphy0", "csiphy0_timer", "csiphy1", "csiphy1_timer", "csiphy2", "csiphy2_timer", "csiphy4", "csiphy4_timer", "gcc_axi_hf", "gcc_axi_sf", "vfe0", "vfe0_fast_ahb", "vfe1", "vfe1_fast_ahb", "vfe_lite", "vfe_lite_ahb", "vfe_lite_cphy_rx", "vfe_lite_csid";
+  8488				interrupts = <0x00 0x1d0 0x01 0x00 0x1d2 0x01 0x00 0x1af 0x01 0x00 0x1d4 0x01 0x00 0x167 0x01 0x00 0x1dd 0x01 0x00 0x1de 0x01 0x00 0x1df 0x01 0x00 0x7a 0x01 0x00 0x1d1 0x01 0x00 0x1d3 0x01 0x00 0x1d5 0x01 0x00 0x168 0x01>;
+  8489				interrupt-names = "csid0", "csid1", "csid2", "csid_lite0", "csid_lite1", "csiphy0", "csiphy1", "csiphy2", "csiphy4", "vfe0", "vfe1", "vfe_lite0", "vfe_lite1";
+  8490				interconnects = <0x40 0x03 0x03 0x41 0x05 0x03 0xff 0x01 0x07 0x21 0x01 0x07 0xff 0x03 0x07 0x21 0x01 0x07 0xff 0x02 0x07 0x21 0x01 0x07>;
+  8491				interconnect-names = "ahb", "hf_mnoc", "sf_mnoc", "sf_icp_mnoc";
+  8492				iommus = <0x3d 0x800 0x60 0x3d 0x860 0x60 0x3d 0x1800 0x60 0x3d 0x1860 0x60 0x3d 0x18e0 0x00 0x3d 0x1980 0x20 0x3d 0x1900 0x00 0x3d 0x19a0 0x20>;
+  8493				power-domains = <0x19e 0x01 0x19e 0x02 0x19e 0x05>;
+  8494				power-domain-names = "ife0", "ife1", "top";
+  8495				status = "okay";
+  8496				vdd-csiphy-0p8-supply = <0x1ac>;
+  8497				vdd-csiphy-1p2-supply = <0x1ad>;
+  8498				phandle = <0x2b1>;
+
+--- apps SMMU identity ---
+  7475			iommu@15000000 {
+  7476				compatible = "qcom,x1e80100-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+  7477				reg = <0x00 0x15000000 0x00 0x100000>;
+  7478				interrupts = <0x00 0x41 0x04 0x00 0x61 0x04 0x00 0x62 0x04 0x00 0x63 0x04 0x00 0x64 0x04 0x00 0x65 0x04 0x00 0x66 0x04 0x00 0x67 0x04 0x00 0x68 0x04 0x00 0x69 0x04 0x00 0x6a 0x04 0x00 0x6b 0x04 0x00 0x6c 0x04 0x00 0x6d 0x04 0x00 0x6e 0x04 0x00 0x6f 0x04 0x00 0x70 0x04 0x00 0x71 0x04 0x00 0x72 0x04 0x00 0x73 0x04 0x00 0x74 0x04 0x00 0x75 0x04 0x00 0x76 0x04 0x00 0xb5 0x04 0x00 0xb6 0x04 0x00 0xb7 0x04 0x00 0xb8 0x04 0x00 0xb9 0x04 0x00 0xba 0x04 0x00 0xbb 0x04 0x00 0xbc 0x04 0x00 0xbd 0x04 0x00 0xbe 0x04 0x00 0xbf 0x04 0x00 0xc0 0x04 0x00 0x13b 0x04 0x00 0x13c 0x04 0x00 0x13d 0x04 0x00 0x13e 0x04 0x00 0x13f 0x04 0x00 0x140 0x04 0x00 0x141 0x04 0x00 0x142 0x04 0x00 0x143 0x04 0x00 0x144 0x04 0x00 0x145 0x04 0x00 0x146 0x04 0x00 0x147 0x04 0x00 0x148 0x04 0x00 0x149 0x04 0x00 0x14a 0x04 0x00 0x14b 0x04 0x00 0x14c 0x04 0x00 0x14d 0x04 0x00 0x14e 0x04 0x00 0x14f 0x04 0x00 0x150 0x04 0x00 0x151 0x04 0x00 0x152 0x04 0x00 0x153 0x04 0x00 0x154 0x04 0x00 0x155 0x04 0x00 0x156 0x04 0x00 0x157 0x04 0x00 0x158 0x04 0x00 0x159 0x04 0x00 0x18b 0x04 0x00 0x18c 0x04 0x00 0x18d 0x04 0x00 0x18e 0x04 0x00 0x18f 0x04 0x00 0x190 0x04 0x00 0x191 0x04 0x00 0x192 0x04 0x00 0x193 0x04 0x00 0x194 0x04 0x00 0x195 0x04 0x00 0x196 0x04 0x00 0x197 0x04 0x00 0x198 0x04 0x00 0x199 0x04 0x00 0x1a2 0x04 0x00 0x1a3 0x04 0x00 0x19c 0x04 0x00 0x1a5 0x04 0x00 0x2c3 0x04 0x00 0x1a7 0x04 0x00 0x1a8 0x04 0x00 0x1a9 0x04 0x00 0x2b2 0x04 0x00 0x2b3 0x04 0x00 0x2b4 0x04 0x00 0x2b5 0x04 0x00 0x2b6 0x04 0x00 0x2b7 0x04 0x00 0x2b8 0x04 0x00 0x2b9 0x04>;
+  7479				#iommu-cells = <0x02>;
+  7480				#global-interrupts = <0x01>;
+  7481				dma-coherent;
+  7482				phandle = <0x3d>;
+  7483			};
+
+--- historical Golden-derived runtime: translated IOMMU + CAMSS group ---
+[Fri Sep 11 18:15:37 2026] Kernel command line: BOOT_IMAGE=/boot/sp11-7.1.5-camera-e003i-fu-eighteen-frame-r5-r18/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime console=tty0 systemd.unit=multi-user.target plymouth.enable=0 systemd.show_status=1 modprobe.blacklist=qcom_camss,imx681,ov13858 firmware_class.path=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E003-front-imx681-cphy/e003h-six-frame-request6-0074-candidate/firmware sp11_entry=7.1.5-sp11-camera-e003i-fu-eighteen-frame-r5-r18 sp11_camera_e003i_fu_eighteen_frame_r5_r18=1
+[Fri Sep 11 18:15:37 2026] Unknown kernel command line parameters "sp11_entry=7.1.5-sp11-camera-e003i-fu-eighteen-frame-r5-r18 sp11_camera_e003i_fu_eighteen_frame_r5_r18=1", will be passed to user space.
+[Fri Sep 11 18:15:37 2026] iommu: Default domain type: Translated
+[Fri Sep 11 18:15:37 2026] iommu: DMA domain TLB invalidation policy: strict mode
+[Fri Sep 11 18:15:37 2026] simple-framebuffer simple-framebuffer.0: [drm] Registered 1 planes with drm panic
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: probing hardware configuration...
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: SMMUv2 with:
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: 	stage 1 translation
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: 	coherent table walk
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: 	stream matching with 117 register groups
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: 	74 context banks (0 stage-2 only)
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: 	Supported page sizes: 0x61311000
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: 	Stage-1: 40-bit VA -> 40-bit IPA
+[Fri Sep 11 18:15:37 2026] arm-smmu 15000000.iommu: 	preserved 0 boot mappings
+[Fri Sep 11 18:15:37 2026] platform 8c0000.geniqup: Adding to iommu group 0
+[Fri Sep 11 18:15:37 2026] platform a00000.dma-controller: Adding to iommu group 1
+[Fri Sep 11 18:15:37 2026] platform ac0000.geniqup: Adding to iommu group 2
+[Fri Sep 11 18:15:37 2026] platform bc0000.geniqup: Adding to iommu group 3
+[Fri Sep 11 18:15:37 2026] platform 1dc4000.dma-controller: Adding to iommu group 4
+[Fri Sep 11 18:15:37 2026] platform 1dfa000.crypto: Adding to iommu group 4
+[Fri Sep 11 18:15:37 2026] platform a600000.usb: Adding to iommu group 5
+[Fri Sep 11 18:15:37 2026] platform a800000.usb: Adding to iommu group 6
+[Fri Sep 11 18:15:37 2026] platform ae00000.display-subsystem: Adding to iommu group 7
+[Fri Sep 11 18:15:37 2026] platform acb7000.isp: Adding to iommu group 8
+[Fri Sep 11 18:15:37 2026]     sp11_entry=7.1.5-sp11-camera-e003i-fu-eighteen-frame-r5-r18
+[Fri Sep 11 18:15:37 2026]     sp11_camera_e003i_fu_eighteen_frame_r5_r18=1
+[Fri Sep 11 18:15:38 2026] arm-smmu 3da0000.iommu: probing hardware configuration...
+[Fri Sep 11 18:15:38 2026] arm-smmu 3da0000.iommu: SMMUv2 with:
+[Fri Sep 11 18:15:38 2026] arm-smmu 3da0000.iommu: 	stage 1 translation
+[Fri Sep 11 18:15:38 2026] arm-smmu 3da0000.iommu: 	coherent table walk
+
+--- CAMSS constrains DMA address width to 32 bit ---
+  9264		ret = camss_init_subdevices(camss);
+  9265		if (ret < 0)
+  9266			goto err_genpd_cleanup;
+  9267	
+  9268		ret = dma_set_mask_and_coherent(dev, 0xffffffff);
+  9269		if (ret)
+  9270			goto err_genpd_cleanup;
+  9271	
+  9272		ret = camss_rtcdm1_init(pdev, camss);
+  9273		if (ret)
+  9274			goto err_genpd_cleanup;

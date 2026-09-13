@@ -1,0 +1,592 @@
+E004bo DMA HEAP INVENTORY
+--- heap files present ---
+cma_heap.c
+Kconfig
+Makefile
+system_heap.c
+
+--- heap Kconfig ---
+config DMABUF_HEAPS_SYSTEM
+	bool "DMA-BUF System Heap"
+	depends on DMABUF_HEAPS
+	help
+	  Choose this option to enable the system dmabuf heap. The system heap
+	  is backed by pages from the buddy allocator. If in doubt, say Y.
+
+config DMABUF_HEAPS_CMA
+	bool "DMA-BUF CMA Heap"
+	depends on DMABUF_HEAPS && DMA_CMA
+	help
+	  Choose this option to enable dma-buf CMA heap. This heap is backed
+	  by the Contiguous Memory Allocator (CMA). If your system has these
+	  regions, you should say Y here.
+
+--- CMA heap CPU/DMA behavior ---
+   103	static struct sg_table *cma_heap_map_dma_buf(struct dma_buf_attachment *attachment,
+   104						     enum dma_data_direction direction)
+   105	{
+   106		struct dma_heap_attachment *a = attachment->priv;
+   107		struct sg_table *table = &a->table;
+   108		int ret;
+   109	
+   110		ret = dma_map_sgtable(attachment->dev, table, direction, 0);
+   111		if (ret)
+   112			return ERR_PTR(-ENOMEM);
+   113		a->mapped = true;
+   114		return table;
+   115	}
+   116	
+   117	static void cma_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
+   118					   struct sg_table *table,
+   119					   enum dma_data_direction direction)
+   120	{
+   121		struct dma_heap_attachment *a = attachment->priv;
+   122	
+   123		a->mapped = false;
+   124		dma_unmap_sgtable(attachment->dev, table, direction, 0);
+   125	}
+   127	static int cma_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+   128						     enum dma_data_direction direction)
+   129	{
+   130		struct cma_heap_buffer *buffer = dmabuf->priv;
+   131		struct dma_heap_attachment *a;
+   132	
+   133		mutex_lock(&buffer->lock);
+   134	
+   135		if (buffer->vmap_cnt)
+   136			invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
+   137	
+   138		list_for_each_entry(a, &buffer->attachments, list) {
+   139			if (!a->mapped)
+   140				continue;
+   141			dma_sync_sgtable_for_cpu(a->dev, &a->table, direction);
+   142		}
+   143		mutex_unlock(&buffer->lock);
+   144	
+   145		return 0;
+   146	}
+   147	
+   148	static int cma_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
+   149						   enum dma_data_direction direction)
+   150	{
+   151		struct cma_heap_buffer *buffer = dmabuf->priv;
+   152		struct dma_heap_attachment *a;
+   153	
+   154		mutex_lock(&buffer->lock);
+   155	
+   156		if (buffer->vmap_cnt)
+   157			flush_kernel_vmap_range(buffer->vaddr, buffer->len);
+   158	
+   159		list_for_each_entry(a, &buffer->attachments, list) {
+   160			if (!a->mapped)
+   161				continue;
+   162			dma_sync_sgtable_for_device(a->dev, &a->table, direction);
+   163		}
+   164		mutex_unlock(&buffer->lock);
+   165	
+   166		return 0;
+   167	}
+   168	
+   169	static vm_fault_t cma_heap_vm_fault(struct vm_fault *vmf)
+   170	{
+   171		struct vm_area_struct *vma = vmf->vma;
+   172		struct cma_heap_buffer *buffer = vma->vm_private_data;
+   173	
+   174		if (vmf->pgoff >= buffer->pagecount)
+   175			return VM_FAULT_SIGBUS;
+   176	
+   177		return vmf_insert_pfn(vma, vmf->address, page_to_pfn(buffer->pages[vmf->pgoff]));
+   178	}
+   179	
+   180	static const struct vm_operations_struct dma_heap_vm_ops = {
+   181		.fault = cma_heap_vm_fault,
+   182	};
+   183	
+   184	static int cma_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+   185	{
+   186		struct cma_heap_buffer *buffer = dmabuf->priv;
+   187	
+   188		if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
+   189			return -EINVAL;
+   190	
+   191		vm_flags_set(vma, VM_IO | VM_PFNMAP | VM_DONTEXPAND | VM_DONTDUMP);
+   192	
+   193		vma->vm_ops = &dma_heap_vm_ops;
+   194		vma->vm_private_data = buffer;
+   195	
+   196		return 0;
+   197	}
+   198	
+   199	static void *cma_heap_do_vmap(struct cma_heap_buffer *buffer)
+   200	{
+   201		void *vaddr;
+   202	
+   203		vaddr = vmap(buffer->pages, buffer->pagecount, VM_MAP, PAGE_KERNEL);
+   204		if (!vaddr)
+   205			return ERR_PTR(-ENOMEM);
+   206	
+   207		return vaddr;
+   208	}
+   209	
+   210	static int cma_heap_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
+   211	{
+   212		struct cma_heap_buffer *buffer = dmabuf->priv;
+   213		void *vaddr;
+   214		int ret = 0;
+   215	
+   216		mutex_lock(&buffer->lock);
+   217		if (buffer->vmap_cnt) {
+   218			buffer->vmap_cnt++;
+   219			iosys_map_set_vaddr(map, buffer->vaddr);
+   220			goto out;
+   221		}
+   222	
+   223		vaddr = cma_heap_do_vmap(buffer);
+   224		if (IS_ERR(vaddr)) {
+   225			ret = PTR_ERR(vaddr);
+   226			goto out;
+   227		}
+   228		buffer->vaddr = vaddr;
+   229		buffer->vmap_cnt++;
+   230		iosys_map_set_vaddr(map, buffer->vaddr);
+   231	out:
+   232		mutex_unlock(&buffer->lock);
+   233	
+   234		return ret;
+   235	}
+   236	
+   237	static void cma_heap_vunmap(struct dma_buf *dmabuf, struct iosys_map *map)
+   238	{
+   239		struct cma_heap_buffer *buffer = dmabuf->priv;
+   240	
+   241		mutex_lock(&buffer->lock);
+   242		if (!--buffer->vmap_cnt) {
+   243			vunmap(buffer->vaddr);
+   244			buffer->vaddr = NULL;
+   245		}
+   246		mutex_unlock(&buffer->lock);
+   247		iosys_map_clear(map);
+   248	}
+   249	
+   250	static void cma_heap_dma_buf_release(struct dma_buf *dmabuf)
+   251	{
+   252		struct cma_heap_buffer *buffer = dmabuf->priv;
+   253		struct cma_heap *cma_heap = buffer->heap;
+   254	
+   255		if (buffer->vmap_cnt > 0) {
+   256			WARN(1, "%s: buffer still mapped in the kernel\n", __func__);
+   257			vunmap(buffer->vaddr);
+   258			buffer->vaddr = NULL;
+   259		}
+   260	
+   261		/* free page list */
+   262		kfree(buffer->pages);
+   263		/* release memory */
+   264		cma_release(cma_heap->cma, buffer->cma_pages, buffer->pagecount);
+   265		kfree(buffer);
+   266	}
+   267	
+   268	static const struct dma_buf_ops cma_heap_buf_ops = {
+   269		.attach = cma_heap_attach,
+   270		.detach = cma_heap_detach,
+   271		.map_dma_buf = cma_heap_map_dma_buf,
+   272		.unmap_dma_buf = cma_heap_unmap_dma_buf,
+   273		.begin_cpu_access = cma_heap_dma_buf_begin_cpu_access,
+   274		.end_cpu_access = cma_heap_dma_buf_end_cpu_access,
+   275		.mmap = cma_heap_mmap,
+   276		.vmap = cma_heap_vmap,
+   277		.vunmap = cma_heap_vunmap,
+   278		.release = cma_heap_dma_buf_release,
+   281	static struct dma_buf *cma_heap_allocate(struct dma_heap *heap,
+   282						 unsigned long len,
+   283						 u32 fd_flags,
+   284						 u64 heap_flags)
+   285	{
+   286		struct cma_heap *cma_heap = dma_heap_get_drvdata(heap);
+   287		struct cma_heap_buffer *buffer;
+   288		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+   289		size_t size = PAGE_ALIGN(len);
+   290		pgoff_t pagecount = size >> PAGE_SHIFT;
+   291		unsigned long align = get_order(size);
+   292		struct page *cma_pages;
+   293		struct dma_buf *dmabuf;
+   294		int ret = -ENOMEM;
+   295		pgoff_t pg;
+   296	
+   297		buffer = kzalloc_obj(*buffer);
+   298		if (!buffer)
+   299			return ERR_PTR(-ENOMEM);
+   300	
+   301		INIT_LIST_HEAD(&buffer->attachments);
+   302		mutex_init(&buffer->lock);
+   303		buffer->len = size;
+   304	
+   305		if (align > CONFIG_CMA_ALIGNMENT)
+   306			align = CONFIG_CMA_ALIGNMENT;
+   307	
+   308		cma_pages = cma_alloc(cma_heap->cma, pagecount, align, false);
+   309		if (!cma_pages)
+   310			goto free_buffer;
+   311	
+   312		/* Clear the cma pages */
+   313		if (PageHighMem(cma_pages)) {
+   314			unsigned long nr_clear_pages = pagecount;
+   315			struct page *page = cma_pages;
+   316	
+   317			while (nr_clear_pages > 0) {
+   318				clear_highpage(page);
+   319				/*
+   320				 * Avoid wasting time zeroing memory if the process
+   321				 * has been killed by SIGKILL.
+   322				 */
+   323				if (fatal_signal_pending(current))
+   324					goto free_cma;
+   325				page++;
+   326				nr_clear_pages--;
+   327			}
+   328		} else {
+   329			clear_pages(page_address(cma_pages), pagecount);
+   330		}
+   331	
+   332		buffer->pages = kmalloc_objs(*buffer->pages, pagecount);
+   333		if (!buffer->pages) {
+   334			ret = -ENOMEM;
+   335			goto free_cma;
+   336		}
+   337	
+   338		for (pg = 0; pg < pagecount; pg++)
+   339			buffer->pages[pg] = &cma_pages[pg];
+   340	
+   341		buffer->cma_pages = cma_pages;
+   342		buffer->heap = cma_heap;
+   343		buffer->pagecount = pagecount;
+   344	
+   345		/* create the dmabuf */
+   346		exp_info.exp_name = dma_heap_get_name(heap);
+   347		exp_info.ops = &cma_heap_buf_ops;
+   348		exp_info.size = buffer->len;
+   349		exp_info.flags = fd_flags;
+   350		exp_info.priv = buffer;
+   351		dmabuf = dma_buf_export(&exp_info);
+   352		if (IS_ERR(dmabuf)) {
+   353			ret = PTR_ERR(dmabuf);
+   354			goto free_pages;
+   355		}
+   356		return dmabuf;
+   357	
+   358	free_pages:
+   359		kfree(buffer->pages);
+   360	free_cma:
+   361		cma_release(cma_heap->cma, cma_pages, pagecount);
+   362	free_buffer:
+   363		kfree(buffer);
+   364	
+   365		return ERR_PTR(ret);
+   366	}
+   367	
+   368	static const struct dma_heap_ops cma_heap_ops = {
+   369		.allocate = cma_heap_allocate,
+   370	};
+
+--- system heap SG + CPU mapping behavior ---
+    28	struct system_heap_priv {
+    29		bool cc_shared;
+    30	};
+    31	
+    32	struct system_heap_buffer {
+    33		struct dma_heap *heap;
+    34		struct list_head attachments;
+    35		struct mutex lock;
+    36		unsigned long len;
+    37		struct sg_table sg_table;
+    38		int vmap_cnt;
+    39		void *vaddr;
+    40		bool cc_shared;
+    41	};
+    42	
+    43	struct dma_heap_attachment {
+    44		struct device *dev;
+    45		struct sg_table table;
+    46		struct list_head list;
+    47		bool mapped;
+    48		bool cc_shared;
+    49	};
+    50	
+    51	#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO)
+    52	#define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+    53					| __GFP_NORETRY) & ~__GFP_RECLAIM) \
+    54					| __GFP_COMP)
+    55	static gfp_t order_flags[] = {HIGH_ORDER_GFP, HIGH_ORDER_GFP, LOW_ORDER_GFP};
+    56	/*
+    57	 * The selection of the orders used for allocation (1MB, 64K, 4K) is designed
+    58	 * to match with the sizes often found in IOMMUs. Using order 4 pages instead
+    59	 * of order 0 pages can significantly improve the performance of many IOMMUs
+    60	 * by reducing TLB pressure and time spent updating page tables.
+    61	 */
+    62	static const unsigned int orders[] = {8, 4, 0};
+    63	#define NUM_ORDERS ARRAY_SIZE(orders)
+   111	static int system_heap_attach(struct dma_buf *dmabuf,
+   112				      struct dma_buf_attachment *attachment)
+   113	{
+   114		struct system_heap_buffer *buffer = dmabuf->priv;
+   115		struct dma_heap_attachment *a;
+   116		int ret;
+   117	
+   118		a = kzalloc_obj(*a);
+   119		if (!a)
+   120			return -ENOMEM;
+   121	
+   122		ret = dup_sg_table(&buffer->sg_table, &a->table);
+   123		if (ret) {
+   124			kfree(a);
+   125			return ret;
+   126		}
+   127	
+   128		a->dev = attachment->dev;
+   129		INIT_LIST_HEAD(&a->list);
+   130		a->mapped = false;
+   131		a->cc_shared = buffer->cc_shared;
+   132	
+   133		attachment->priv = a;
+   134	
+   135		mutex_lock(&buffer->lock);
+   136		list_add(&a->list, &buffer->attachments);
+   137		mutex_unlock(&buffer->lock);
+   138	
+   139		return 0;
+   140	}
+   141	
+   142	static void system_heap_detach(struct dma_buf *dmabuf,
+   143				       struct dma_buf_attachment *attachment)
+   144	{
+   145		struct system_heap_buffer *buffer = dmabuf->priv;
+   146		struct dma_heap_attachment *a = attachment->priv;
+   147	
+   148		mutex_lock(&buffer->lock);
+   149		list_del(&a->list);
+   150		mutex_unlock(&buffer->lock);
+   151	
+   152		sg_free_table(&a->table);
+   153		kfree(a);
+   154	}
+   155	
+   156	static struct sg_table *system_heap_map_dma_buf(struct dma_buf_attachment *attachment,
+   157							enum dma_data_direction direction)
+   158	{
+   159		struct dma_heap_attachment *a = attachment->priv;
+   160		struct sg_table *table = &a->table;
+   161		unsigned long attrs;
+   162		int ret;
+   163	
+   164		attrs = a->cc_shared ? DMA_ATTR_CC_SHARED : 0;
+   165		ret = dma_map_sgtable(attachment->dev, table, direction, attrs);
+   166		if (ret)
+   167			return ERR_PTR(ret);
+   168	
+   169		a->mapped = true;
+   170		return table;
+   171	}
+   172	
+   173	static void system_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
+   174					      struct sg_table *table,
+   175					      enum dma_data_direction direction)
+   176	{
+   177		struct dma_heap_attachment *a = attachment->priv;
+   178	
+   179		a->mapped = false;
+   180		dma_unmap_sgtable(attachment->dev, table, direction, 0);
+   181	}
+   183	static int system_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+   184							enum dma_data_direction direction)
+   185	{
+   186		struct system_heap_buffer *buffer = dmabuf->priv;
+   187		struct dma_heap_attachment *a;
+   188	
+   189		mutex_lock(&buffer->lock);
+   190	
+   191		if (buffer->vmap_cnt)
+   192			invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
+   193	
+   194		list_for_each_entry(a, &buffer->attachments, list) {
+   195			if (!a->mapped)
+   196				continue;
+   197			dma_sync_sgtable_for_cpu(a->dev, &a->table, direction);
+   198		}
+   199		mutex_unlock(&buffer->lock);
+   200	
+   201		return 0;
+   202	}
+   203	
+   204	static int system_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
+   205						      enum dma_data_direction direction)
+   206	{
+   207		struct system_heap_buffer *buffer = dmabuf->priv;
+   208		struct dma_heap_attachment *a;
+   209	
+   210		mutex_lock(&buffer->lock);
+   211	
+   212		if (buffer->vmap_cnt)
+   213			flush_kernel_vmap_range(buffer->vaddr, buffer->len);
+   214	
+   215		list_for_each_entry(a, &buffer->attachments, list) {
+   216			if (!a->mapped)
+   217				continue;
+   218			dma_sync_sgtable_for_device(a->dev, &a->table, direction);
+   219		}
+   220		mutex_unlock(&buffer->lock);
+   221	
+   222		return 0;
+   223	}
+   224	
+   225	static int system_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+   226	{
+   227		struct system_heap_buffer *buffer = dmabuf->priv;
+   228		struct sg_table *table = &buffer->sg_table;
+   229		unsigned long addr = vma->vm_start;
+   230		unsigned long pgoff = vma->vm_pgoff;
+   231		struct scatterlist *sg;
+   232		pgprot_t prot;
+   233		int i, ret;
+   234	
+   235		prot = vma->vm_page_prot;
+   236		if (buffer->cc_shared)
+   237			prot = pgprot_decrypted(prot);
+   238	
+   239		for_each_sgtable_sg(table, sg, i) {
+   240			unsigned long n = sg->length >> PAGE_SHIFT;
+   241	
+   242			if (pgoff < n)
+   243				break;
+   244			pgoff -= n;
+   245		}
+   246	
+   247		for (; sg && addr < vma->vm_end; sg = sg_next(sg)) {
+   248			unsigned long n = (sg->length >> PAGE_SHIFT) - pgoff;
+   249			struct page *page = sg_page(sg) + pgoff;
+   250			unsigned long size = n << PAGE_SHIFT;
+   251	
+   252			if (addr + size > vma->vm_end)
+   253				size = vma->vm_end - addr;
+   254	
+   255			ret = remap_pfn_range(vma, addr, page_to_pfn(page), size, prot);
+   256			if (ret)
+   257				return ret;
+   258	
+   259			addr += size;
+   260			pgoff = 0;
+   261		}
+   262	
+   263		return 0;
+   264	}
+   265	
+   266	static void *system_heap_do_vmap(struct system_heap_buffer *buffer)
+   267	{
+   268		struct sg_table *table = &buffer->sg_table;
+   269		int npages = PAGE_ALIGN(buffer->len) / PAGE_SIZE;
+   270		struct page **pages = vmalloc(sizeof(struct page *) * npages);
+   271		struct page **tmp = pages;
+   272		struct sg_page_iter piter;
+   273		pgprot_t prot;
+   274		void *vaddr;
+   275	
+   276		if (!pages)
+   277			return ERR_PTR(-ENOMEM);
+   278	
+   279		for_each_sgtable_page(table, &piter, 0) {
+   280			WARN_ON(tmp - pages >= npages);
+   281			*tmp++ = sg_page_iter_page(&piter);
+   282		}
+   283	
+   284		prot = PAGE_KERNEL;
+   285		if (buffer->cc_shared)
+   286			prot = pgprot_decrypted(prot);
+   287		vaddr = vmap(pages, npages, VM_MAP, prot);
+   288		vfree(pages);
+   289	
+   290		if (!vaddr)
+   291			return ERR_PTR(-ENOMEM);
+   292	
+   293		return vaddr;
+   294	}
+   295	
+   296	static int system_heap_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
+   297	{
+   298		struct system_heap_buffer *buffer = dmabuf->priv;
+   299		void *vaddr;
+   300		int ret = 0;
+   301	
+   302		mutex_lock(&buffer->lock);
+   303		if (buffer->vmap_cnt) {
+   304			buffer->vmap_cnt++;
+   305			iosys_map_set_vaddr(map, buffer->vaddr);
+   306			goto out;
+   307		}
+   308	
+   309		vaddr = system_heap_do_vmap(buffer);
+   310		if (IS_ERR(vaddr)) {
+   311			ret = PTR_ERR(vaddr);
+   312			goto out;
+   313		}
+   314	
+   315		buffer->vaddr = vaddr;
+   316		buffer->vmap_cnt++;
+   317		iosys_map_set_vaddr(map, buffer->vaddr);
+   318	out:
+   319		mutex_unlock(&buffer->lock);
+   320	
+   321		return ret;
+   322	}
+   323	
+   324	static void system_heap_vunmap(struct dma_buf *dmabuf, struct iosys_map *map)
+   325	{
+   326		struct system_heap_buffer *buffer = dmabuf->priv;
+   327	
+   328		mutex_lock(&buffer->lock);
+   329		if (!--buffer->vmap_cnt) {
+   330			vunmap(buffer->vaddr);
+   331			buffer->vaddr = NULL;
+   332		}
+   333		mutex_unlock(&buffer->lock);
+   334		iosys_map_clear(map);
+   335	}
+   336	
+   337	static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
+   338	{
+   339		struct system_heap_buffer *buffer = dmabuf->priv;
+   340		struct sg_table *table;
+   341		struct scatterlist *sg;
+   342		int i;
+   343	
+   344		table = &buffer->sg_table;
+   345		for_each_sgtable_sg(table, sg, i) {
+   346			struct page *page = sg_page(sg);
+   347	
+   348			/*
+   349			 * Intentionally leak pages that cannot be re-encrypted
+   350			 * to prevent shared memory from being reused.
+   351			 */
+   352			if (buffer->cc_shared &&
+   353			    system_heap_set_page_encrypted(page))
+   354				continue;
+   355	
+   356			__free_pages(page, compound_order(page));
+   357		}
+   358		sg_free_table(table);
+   359		kfree(buffer);
+   360	}
+   361	
+   362	static const struct dma_buf_ops system_heap_buf_ops = {
+   363		.attach = system_heap_attach,
+   364		.detach = system_heap_detach,
+   365		.map_dma_buf = system_heap_map_dma_buf,
+   366		.unmap_dma_buf = system_heap_unmap_dma_buf,
+   367		.begin_cpu_access = system_heap_dma_buf_begin_cpu_access,
+   368		.end_cpu_access = system_heap_dma_buf_end_cpu_access,
+   369		.mmap = system_heap_mmap,
+   370		.vmap = system_heap_vmap,
+   371		.vunmap = system_heap_vunmap,
+   372		.release = system_heap_dma_buf_release,
+   373	};
+
+--- no restricted/secure heap source ---
+RESTRICTED_OR_SECURE_HEAP_SOURCE_PRESENT=0

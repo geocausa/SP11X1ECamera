@@ -1,0 +1,327 @@
+E004bo REVERSIBLE ASSIGNMENT PRECEDENTS
+These are lifetime/rollback precedents only, not camera backend authority.
+
+--- FASTRPC secure-map assign + free-path reclaim ---
+   335	static void fastrpc_free_map(struct kref *ref)
+   336	{
+   337		struct fastrpc_map *map;
+   338	
+   339		map = container_of(ref, struct fastrpc_map, refcount);
+   340	
+   341		if (map->table) {
+   342			if (map->attr & FASTRPC_ATTR_SECUREMAP) {
+   343				struct qcom_scm_vmperm perm;
+   344				int vmid = map->fl->cctx->vmperms[0].vmid;
+   345				u64 src_perms = BIT(QCOM_SCM_VMID_HLOS) | BIT(vmid);
+   346				int err = 0;
+   347	
+   348				perm.vmid = QCOM_SCM_VMID_HLOS;
+   349				perm.perm = QCOM_SCM_PERM_RWX;
+   350				err = qcom_scm_assign_mem(map->dma_addr, map->len,
+   351					&src_perms, &perm, 1);
+   352				if (err) {
+   353					dev_err(map->fl->sctx->dev,
+   354						"Failed to assign memory dma_addr %pad size 0x%llx err %d\n",
+   355						&map->dma_addr, map->len, err);
+   356					return;
+   357				}
+   358			}
+   359			dma_buf_unmap_attachment_unlocked(map->attach, map->table,
+   360							  DMA_BIDIRECTIONAL);
+   361			dma_buf_detach(map->buf, map->attach);
+   362			dma_buf_put(map->buf);
+   363		}
+   888		if (attr & FASTRPC_ATTR_SECUREMAP) {
+   889			/*
+   890			 * If subsystem VMIDs are defined in DTSI, then do
+   891			 * hyp_assign from HLOS to those VM(s)
+   892			 */
+   893			u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
+   894			struct qcom_scm_vmperm dst_perms[2] = {0};
+   895	
+   896			dst_perms[0].vmid = QCOM_SCM_VMID_HLOS;
+   897			dst_perms[0].perm = QCOM_SCM_PERM_RW;
+   898			dst_perms[1].vmid = fl->cctx->vmperms[0].vmid;
+   899			dst_perms[1].perm = QCOM_SCM_PERM_RWX;
+   900			map->attr = attr;
+   901			err = qcom_scm_assign_mem(map->dma_addr, (u64)map->len, &src_perms, dst_perms, 2);
+   902			if (err) {
+   903				dev_err(sess->dev,
+   904					"Failed to assign memory with dma_addr %pad size 0x%llx err %d\n",
+   905					&map->dma_addr, map->len, err);
+   906				goto map_err;
+   907			}
+   908		}
+   909		spin_lock(&fl->lock);
+   910		list_add_tail(&map->node, &fl->maps);
+   911		spin_unlock(&fl->lock);
+   912		*ppmap = map;
+   913	
+   914		return 0;
+   915	
+   916	map_err:
+   917		dma_buf_detach(map->buf, map->attach);
+   918	attach_err:
+   919		dma_buf_put(map->buf);
+   920	get_err:
+   921		fastrpc_map_put(map);
+
+--- FASTRPC heap rollback on failure ---
+  1374		if (!fl->cctx->remote_heap) {
+  1375			err = fastrpc_remote_heap_alloc(fl, fl->sctx->dev, init.memlen,
+  1376							&fl->cctx->remote_heap);
+  1377			if (err)
+  1378				goto err_name;
+  1379	
+  1380			/* Map if we have any heap VMIDs associated with this ADSP Static Process. */
+  1381			if (fl->cctx->vmcount) {
+  1382				u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
+  1383	
+  1384				err = qcom_scm_assign_mem(fl->cctx->remote_heap->dma_addr,
+  1385								(u64)fl->cctx->remote_heap->size,
+  1386								&src_perms,
+  1387								fl->cctx->vmperms, fl->cctx->vmcount);
+  1388				if (err) {
+  1389					dev_err(fl->sctx->dev,
+  1390						"Failed to assign memory with dma_addr %pad size 0x%llx err %d\n",
+  1391						&fl->cctx->remote_heap->dma_addr,
+  1392						fl->cctx->remote_heap->size, err);
+  1393					goto err_map;
+  1394				}
+  1395				scm_done = true;
+  1396			}
+  1397		}
+  1398	
+  1399		inbuf.client_id = fl->client_id;
+  1400		inbuf.namelen = init.namelen;
+  1401		inbuf.pageslen = 0;
+  1402		fl->pd = USER_PD;
+  1403	
+  1404		args[0].ptr = (u64)(uintptr_t)&inbuf;
+  1405		args[0].length = sizeof(inbuf);
+  1406		args[0].fd = -1;
+  1407	
+  1408		args[1].ptr = (u64)(uintptr_t)name;
+  1409		args[1].length = inbuf.namelen;
+  1410		args[1].fd = -1;
+  1411	
+  1412		pages[0].addr = fl->cctx->remote_heap->dma_addr;
+  1413		pages[0].size = fl->cctx->remote_heap->size;
+  1414	
+  1415		args[2].ptr = (u64)(uintptr_t) pages;
+  1416		args[2].length = sizeof(*pages);
+  1417		args[2].fd = -1;
+  1418	
+  1419		sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_CREATE_STATIC, 3, 0);
+  1420	
+  1421		err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE,
+  1422					      sc, args);
+  1423		if (err)
+  1424			goto err_invoke;
+  1425	
+  1426		kfree(args);
+  1427		kfree(name);
+  1428	
+  1429		return 0;
+  1430	err_invoke:
+  1431		if (fl->cctx->vmcount && scm_done) {
+  1432			u64 src_perms = 0;
+  1433			struct qcom_scm_vmperm dst_perms;
+  1434			u32 i;
+  1435	
+  1436			for (i = 0; i < fl->cctx->vmcount; i++)
+  1437				src_perms |= BIT(fl->cctx->vmperms[i].vmid);
+  1438	
+  1439			dst_perms.vmid = QCOM_SCM_VMID_HLOS;
+  1440			dst_perms.perm = QCOM_SCM_PERM_RWX;
+  1441			err = qcom_scm_assign_mem(fl->cctx->remote_heap->dma_addr,
+  1442							(u64)fl->cctx->remote_heap->size,
+  1443							&src_perms, &dst_perms, 1);
+  1444			if (err)
+  1445				dev_err(fl->sctx->dev, "Failed to assign memory dma_addr %pad size 0x%llx err %d\n",
+  1446					&fl->cctx->remote_heap->dma_addr, fl->cctx->remote_heap->size, err);
+  1447		}
+  1448	err_map:
+  1449		fastrpc_buf_free(fl->cctx->remote_heap);
+  1450		fl->cctx->remote_heap = NULL;
+
+--- RMTFS known physical reserved region + remove-time reclaim ---
+   171	static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
+   172	{
+   173		struct device_node *node = pdev->dev.of_node;
+   174		struct qcom_scm_vmperm perms[NUM_MAX_VMIDS + 1];
+   175		struct reserved_mem *rmem;
+   176		struct qcom_rmtfs_mem *rmtfs_mem;
+   177		u32 client_id;
+   178		u32 vmid[NUM_MAX_VMIDS];
+   179		int num_vmids;
+   180		int ret, i;
+   181	
+   182		rmem = of_reserved_mem_lookup(node);
+   183		if (!rmem) {
+   184			dev_err(&pdev->dev, "failed to acquire memory region\n");
+   185			return -EINVAL;
+   186		}
+   187	
+   188		ret = of_property_read_u32(node, "qcom,client-id", &client_id);
+   189		if (ret) {
+   190			dev_err(&pdev->dev, "failed to parse \"qcom,client-id\"\n");
+   191			return ret;
+   192	
+   193		}
+   194	
+   195		rmtfs_mem = kzalloc_obj(*rmtfs_mem);
+   196		if (!rmtfs_mem)
+   197			return -ENOMEM;
+   198	
+   199		rmtfs_mem->addr = rmem->base;
+   200		rmtfs_mem->client_id = client_id;
+   201		rmtfs_mem->size = rmem->size;
+   202	
+   203		/*
+   204		 * If requested, discard the first and last 4k block in order to ensure
+   205		 * that the rmtfs region isn't adjacent to other protected regions.
+   206		 */
+   207		if (of_property_read_bool(node, "qcom,use-guard-pages")) {
+   208			rmtfs_mem->addr += SZ_4K;
+   209			rmtfs_mem->size -= 2 * SZ_4K;
+   210		}
+   211	
+   212		device_initialize(&rmtfs_mem->dev);
+   213		rmtfs_mem->dev.parent = &pdev->dev;
+   214		rmtfs_mem->dev.groups = qcom_rmtfs_mem_groups;
+   215		rmtfs_mem->dev.release = qcom_rmtfs_mem_release_device;
+   216	
+   217		rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
+   218						rmtfs_mem->size, MEMREMAP_WC);
+   219		if (IS_ERR(rmtfs_mem->base)) {
+   220			dev_err(&pdev->dev, "failed to remap rmtfs_mem region\n");
+   221			ret = PTR_ERR(rmtfs_mem->base);
+   222			goto put_device;
+   223		}
+   224	
+   225		cdev_init(&rmtfs_mem->cdev, &qcom_rmtfs_mem_fops);
+   226		rmtfs_mem->cdev.owner = THIS_MODULE;
+   227	
+   228		dev_set_name(&rmtfs_mem->dev, "qcom_rmtfs_mem%d", client_id);
+   229		rmtfs_mem->dev.id = client_id;
+   230		rmtfs_mem->dev.class = &rmtfs_class;
+   231		rmtfs_mem->dev.devt = MKDEV(MAJOR(qcom_rmtfs_mem_major), client_id);
+   232	
+   233		ret = cdev_device_add(&rmtfs_mem->cdev, &rmtfs_mem->dev);
+   234		if (ret) {
+   235			dev_err(&pdev->dev, "failed to add cdev: %d\n", ret);
+   236			goto put_device;
+   237		}
+   238	
+   239		num_vmids = of_property_count_u32_elems(node, "qcom,vmid");
+   240		if (num_vmids == -EINVAL) {
+   241			/* qcom,vmid is optional */
+   242			num_vmids = 0;
+   243		} else if (num_vmids < 0) {
+   244			dev_err(&pdev->dev, "failed to count qcom,vmid elements: %d\n", num_vmids);
+   245			ret = num_vmids;
+   246			goto remove_cdev;
+   247		} else if (num_vmids > NUM_MAX_VMIDS) {
+   248			dev_warn(&pdev->dev,
+   249				 "too many VMIDs (%d) specified! Only mapping first %d entries\n",
+   250				 num_vmids, NUM_MAX_VMIDS);
+   251			num_vmids = NUM_MAX_VMIDS;
+   252		}
+   253	
+   254		ret = of_property_read_u32_array(node, "qcom,vmid", vmid, num_vmids);
+   255		if (ret < 0 && ret != -EINVAL) {
+   256			dev_err(&pdev->dev, "failed to parse qcom,vmid\n");
+   257			goto remove_cdev;
+   258		} else if (!ret) {
+   259			if (!qcom_scm_is_available()) {
+   260				ret = -EPROBE_DEFER;
+   261				goto remove_cdev;
+   262			}
+   263	
+   264			perms[0].vmid = QCOM_SCM_VMID_HLOS;
+   265			perms[0].perm = QCOM_SCM_PERM_RW;
+   266	
+   267			for (i = 0; i < num_vmids; i++) {
+   268				perms[i + 1].vmid = vmid[i];
+   269				perms[i + 1].perm = QCOM_SCM_PERM_RW;
+   270			}
+   271	
+   272			rmtfs_mem->perms = BIT(QCOM_SCM_VMID_HLOS);
+   273			ret = qcom_scm_assign_mem(rmtfs_mem->addr, rmtfs_mem->size,
+   274						  &rmtfs_mem->perms, perms, num_vmids + 1);
+   275			if (ret < 0) {
+   276				dev_err(&pdev->dev, "assign memory failed\n");
+   277				goto remove_cdev;
+   278			}
+   279		}
+   293	static void qcom_rmtfs_mem_remove(struct platform_device *pdev)
+   294	{
+   295		struct qcom_rmtfs_mem *rmtfs_mem = dev_get_drvdata(&pdev->dev);
+   296		struct qcom_scm_vmperm perm;
+   297	
+   298		if (rmtfs_mem->perms) {
+   299			perm.vmid = QCOM_SCM_VMID_HLOS;
+   300			perm.perm = QCOM_SCM_PERM_RW;
+   301	
+   302			qcom_scm_assign_mem(rmtfs_mem->addr, rmtfs_mem->size,
+   303					    &rmtfs_mem->perms, &perm, 1);
+   304		}
+   305	
+   306		cdev_device_del(&rmtfs_mem->cdev, &rmtfs_mem->dev);
+   307		put_device(&rmtfs_mem->dev);
+   308	}
+
+--- remoteproc PAS known physical resource + unassign ---
+   683			}
+   684	
+   685			if (pas->region_assign_shared)  {
+   686				perm[0].vmid = QCOM_SCM_VMID_HLOS;
+   687				perm[0].perm = QCOM_SCM_PERM_RW;
+   688				perm[1].vmid = pas->region_assign_vmid;
+   689				perm[1].perm = QCOM_SCM_PERM_RW;
+   690				perm_size = 2;
+   691			} else {
+   692				perm[0].vmid = pas->region_assign_vmid;
+   693				perm[0].perm = QCOM_SCM_PERM_RW;
+   694				perm_size = 1;
+   695			}
+   696	
+   697			pas->region_assign_phys[offset] = res.start;
+   698			pas->region_assign_size[offset] = resource_size(&res);
+   699			pas->region_assign_owners[offset] = BIT(QCOM_SCM_VMID_HLOS);
+   700	
+   701			ret = qcom_scm_assign_mem(pas->region_assign_phys[offset],
+   702						  pas->region_assign_size[offset],
+   703						  &pas->region_assign_owners[offset],
+   704						  perm, perm_size);
+   705			if (ret < 0) {
+   706				dev_err(pas->dev, "assign memory %d failed\n", offset);
+   707				return ret;
+   708			}
+   709		}
+   710	
+   711		return 0;
+   712	}
+   713	
+   714	static void qcom_pas_unassign_memory_region(struct qcom_pas *pas)
+   715	{
+   716		struct qcom_scm_vmperm perm;
+   717		int offset;
+   718		int ret;
+   719	
+   720		if (!pas->region_assign_idx || pas->region_assign_shared)
+   721			return;
+   722	
+   723		for (offset = 0; offset < pas->region_assign_count; ++offset) {
+   724			perm.vmid = QCOM_SCM_VMID_HLOS;
+   725			perm.perm = QCOM_SCM_PERM_RW;
+   726	
+   727			ret = qcom_scm_assign_mem(pas->region_assign_phys[offset],
+   728						  pas->region_assign_size[offset],
+   729						  &pas->region_assign_owners[offset],
+   730						  &perm, 1);
+   731			if (ret < 0)
+   732				dev_err(pas->dev, "unassign memory %d failed\n", offset);
+   733		}
+   734	}

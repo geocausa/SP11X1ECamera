@@ -1,0 +1,56 @@
+{
+  "schema": "sp11-camera-e004bo-linux-protected-memory-primitive-static-v1",
+  "status": "PASS_STATIC_PRIMITIVE_INVENTORY_LOW_LEVEL_ASSIGN_PRESENT_NO_PROTECTED_HEAP",
+  "date": "2026-09-13",
+  "base_checkpoint": "f16372c",
+  "kernel_facilities": {
+    "qcom_scm_assign_mem_present": true,
+    "qcom_scm_assign_mem_argument_kind": "physical memory region",
+    "cp_camera_vmid_name_present": true,
+    "cp_camera_preview_vmid_name_present": true,
+    "restricted_dma_heap_present": false,
+    "secure_dma_heap_present": false,
+    "ordinary_system_heap_present": true,
+    "ordinary_cma_heap_present": true,
+    "qcom_tzmem_present": true
+  },
+  "allocator_assessment": {
+    "cma_physically_contiguous": true,
+    "cma_current_exporter_cpu_mappable": true,
+    "cma_current_exporter_is_protected_backend": false,
+    "system_heap_scatter_gather": true,
+    "system_heap_cpu_mappable": true,
+    "qcom_tzmem_is_bulk_camera_sample_allocator": false
+  },
+  "transaction_precedent": {
+    "assignment_requires_reclaim_design": true,
+    "fastrpc_has_assign_and_reclaim": true,
+    "remoteproc_pas_has_assign_and_unassign": true,
+    "rmtfs_uses_known_physical_reserved_range": true,
+    "camera_specific_assign_mem_user_present": false
+  },
+  "camss_address_model": {
+    "ordinary_buffer_address_source": "sg_dma_address after DMA mapping",
+    "camss_attached_to_apps_smmu": true,
+    "historical_camss_iommu_group_observed": true,
+    "vfe_address_is_dma_bus_address_not_proven_physical": true,
+    "scm_requires_physical_range": true,
+    "physical_and_camera_iova_must_be_separate_fields": true
+  },
+  "unresolved": {
+    "external_sample_vmid": false,
+    "external_sample_hlos_sharing_policy": false,
+    "protected_camss_smmu_context": false,
+    "protected_memory_alignment_contract": false
+  },
+  "safety": {
+    "source_code_modified": false,
+    "module_loaded": false,
+    "scm_call_executed": false,
+    "linux_secure_runtime_executed": false,
+    "memory_assignment_executed": false,
+    "qcomtee_loaded": false,
+    "protected_mmio_access": false
+  },
+  "next_gate": "Static resolution of protected-camera memory ownership and CAMSS SMMU context; no secure calls."
+}

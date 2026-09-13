@@ -1,0 +1,177 @@
+E004bo TZMEM BOUNDARY
+qcom_tzmem is SCM/TZ-call plumbing, not evidence of a bulk camera capture allocator.
+
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-50-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-51-struct qcom_tzmem_pool *
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-52-qcom_tzmem_pool_new(const struct qcom_tzmem_pool_config *config);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-53-void qcom_tzmem_pool_free(struct qcom_tzmem_pool *pool);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-54-struct qcom_tzmem_pool *
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-55-devm_qcom_tzmem_pool_new(struct device *dev,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-56-			 const struct qcom_tzmem_pool_config *config);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-57-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h:58:void *qcom_tzmem_alloc(struct qcom_tzmem_pool *pool, size_t size, gfp_t gfp);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h:59:void qcom_tzmem_free(void *ptr);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-60-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h:61:DEFINE_FREE(qcom_tzmem, void *, if (_T) qcom_tzmem_free(_T))
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-62-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h:63:phys_addr_t qcom_tzmem_to_phys(void *ptr);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-64-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-65-#if IS_ENABLED(CONFIG_QCOM_TZMEM_MODE_SHMBRIDGE)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-66-int qcom_tzmem_shm_bridge_create(phys_addr_t paddr, size_t size, u64 *handle);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-67-void qcom_tzmem_shm_bridge_delete(u64 handle);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-68-#else
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-69-static inline int qcom_tzmem_shm_bridge_create(phys_addr_t paddr,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-70-					       size_t size, u64 *handle)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_tzmem.h-71-{
+--
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-388-	case QCOM_TZMEM_POLICY_ON_DEMAND:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-389-		break;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-390-	}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-391-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-392-	return !qcom_tzmem_pool_add_memory(pool, requested, gfp);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-393-}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-394-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-395-/**
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:396: * qcom_tzmem_alloc() - Allocate a memory chunk suitable for sharing with TZ.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-397- * @pool: TZ memory pool from which to allocate memory.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-398- * @size: Number of bytes to allocate.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-399- * @gfp: GFP flags.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-400- *
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-401- * Can be used in any context.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-402- *
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-403- * Return:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-404- * Address of the allocated buffer or NULL if no more memory can be allocated.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:405: * The buffer must be released using qcom_tzmem_free().
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-406- */
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:407:void *qcom_tzmem_alloc(struct qcom_tzmem_pool *pool, size_t size, gfp_t gfp)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-408-{
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-409-	unsigned long vaddr;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-410-	int ret;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-411-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-412-	if (!size)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-413-		return NULL;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-414-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-415-	size = PAGE_ALIGN(size);
+--
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-438-			return NULL;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-439-		}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-440-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-441-		chunk = NULL;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-442-	}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-443-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-444-	return (void *)vaddr;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-445-}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:446:EXPORT_SYMBOL_GPL(qcom_tzmem_alloc);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-447-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-448-/**
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:449: * qcom_tzmem_free() - Release a buffer allocated from a TZ memory pool.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-450- * @vaddr: Virtual address of the buffer.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-451- *
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-452- * Can be used in any context.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-453- */
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:454:void qcom_tzmem_free(void *vaddr)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-455-{
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-456-	struct qcom_tzmem_chunk *chunk;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-457-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-458-	scoped_guard(spinlock_irqsave, &qcom_tzmem_chunks_lock)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-459-		chunk = radix_tree_delete_item(&qcom_tzmem_chunks,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-460-					       (unsigned long)vaddr, NULL);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-461-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-462-	if (!chunk) {
+--
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-465-		return;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-466-	}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-467-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-468-	scoped_guard(spinlock_irqsave, &chunk->owner->lock)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-469-		gen_pool_free(chunk->owner->genpool, (unsigned long)vaddr,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-470-			      chunk->size);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-471-	kfree(chunk);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-472-}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:473:EXPORT_SYMBOL_GPL(qcom_tzmem_free);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-474-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-475-/**
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:476: * qcom_tzmem_to_phys() - Map the virtual address of TZ memory to physical.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-477- * @vaddr: Virtual address of memory allocated from a TZ memory pool.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-478- *
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-479- * Can be used in any context. The address must point to memory allocated
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:480: * using qcom_tzmem_alloc().
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-481- *
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-482- * Returns:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-483- * Physical address mapped from the virtual or 0 if the mapping failed.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-484- */
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:485:phys_addr_t qcom_tzmem_to_phys(void *vaddr)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-486-{
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-487-	struct qcom_tzmem_chunk *chunk;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-488-	struct radix_tree_iter iter;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-489-	void __rcu **slot;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-490-	phys_addr_t ret;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-491-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-492-	guard(spinlock_irqsave)(&qcom_tzmem_chunks_lock);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-493-
+--
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-500-		if (ret == -1)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-501-			continue;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-502-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-503-		return ret;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-504-	}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-505-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-506-	return 0;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-507-}
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c:508:EXPORT_SYMBOL_GPL(qcom_tzmem_to_phys);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-509-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-510-int qcom_tzmem_enable(struct device *dev)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-511-{
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-512-	if (qcom_tzmem_dev)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-513-		return -EBUSY;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-514-
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-515-	qcom_tzmem_dev = dev;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_tzmem.c-516-
+
+--- qcom_scm_assign_mem uses tzmem for descriptor metadata ---
+  1372		u64 srcvm_bits = *srcvm;
+  1373	
+  1374		src_sz = hweight64(srcvm_bits) * sizeof(*src);
+  1375		mem_to_map_sz = sizeof(*mem_to_map);
+  1376		dest_sz = dest_cnt * sizeof(*destvm);
+  1377		ptr_sz = ALIGN(src_sz, SZ_64) + ALIGN(mem_to_map_sz, SZ_64) +
+  1378				ALIGN(dest_sz, SZ_64);
+  1379	
+  1380		void *ptr __free(qcom_tzmem) = qcom_tzmem_alloc(__scm->mempool,
+  1381								ptr_sz, GFP_KERNEL);
+  1382		if (!ptr)
+  1383			return -ENOMEM;
+  1384	
+  1385		ptr_phys = qcom_tzmem_to_phys(ptr);
+  1386	
+  1387		/* Fill source vmid detail */
+  1388		src = ptr;
+  1389		i = 0;
+  1390		for (b = 0; b < BITS_PER_TYPE(u64); b++) {
+  1391			if (srcvm_bits & BIT(b))
+  1392				src[i++] = cpu_to_le32(b);
+  1393		}
+  1394	
+  1395		/* Fill details of mem buff to map */
+  1396		mem_to_map = ptr + ALIGN(src_sz, SZ_64);
+  1397		mem_to_map_phys = ptr_phys + ALIGN(src_sz, SZ_64);
+  1398		mem_to_map->mem_addr = cpu_to_le64(mem_addr);
+  1399		mem_to_map->mem_size = cpu_to_le64(mem_sz);
+  1400	
+  1401		next_vm = 0;
+  1402		/* Fill details of next vmid detail */
+  1403		destvm = ptr + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+  1404		dest_phys = ptr_phys + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+  1405		for (i = 0; i < dest_cnt; i++, destvm++, newvm++) {
+  1406			destvm->vmid = cpu_to_le32(newvm->vmid);
+  1407			destvm->perm = cpu_to_le32(newvm->perm);
+  1408			destvm->ctx = 0;
+  1409			destvm->ctx_size = 0;
+  1410			next_vm |= BIT(newvm->vmid);
+  1411		}
+  1412	
+  1413		ret = __qcom_scm_assign_mem(__scm->dev, mem_to_map_phys, mem_to_map_sz,
+  1414					    ptr_phys, src_sz, dest_phys, dest_sz);
+  1415		if (ret) {
+  1416			dev_err(__scm->dev,
+  1417				"Assign memory protection call failed %d\n", ret);
+  1418			return ret;

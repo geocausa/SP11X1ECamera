@@ -1,0 +1,180 @@
+E004bo QCOM SCM OWNERSHIP PRIMITIVE
+9937c99567878507e03e213a0b89b2f2c1b31dec1ac89c0342deb387de467c33  /home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/firmware/qcom/qcom_scm.c
+7c946d7e6509af94b9902f17e572153db88956a815d5897f3730a3abbe647d04  /home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/firmware/qcom/qcom_scm.h
+cfe40837bd64dfe3b85e72a7cba7d6091f3080ca5f65e4b0126fdefd383879ed  /home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/dt-bindings/firmware/qcom,scm.h
+
+--- public contract ---
+    20		u32 addr;
+    21		u32 val;
+    22	};
+    23	
+    24	struct qcom_scm_vmperm {
+    25		int vmid;
+    26		int perm;
+    27	};
+    28	
+    29	enum qcom_scm_ocmem_client {
+    30		QCOM_SCM_OCMEM_UNUSED_ID = 0x0,
+    31		QCOM_SCM_OCMEM_GRAPHICS_ID,
+    32		QCOM_SCM_OCMEM_VIDEO_ID,
+    33		QCOM_SCM_OCMEM_LP_AUDIO_ID,
+    34		QCOM_SCM_OCMEM_SENSORS_ID,
+    35		QCOM_SCM_OCMEM_OTHER_OS_ID,
+    36		QCOM_SCM_OCMEM_DEBUG_ID,
+    37	};
+    38	
+    39	enum qcom_scm_sec_dev_id {
+    40		QCOM_SCM_MDSS_DEV_ID    = 1,
+    41		QCOM_SCM_OCMEM_DEV_ID   = 5,
+    42		QCOM_SCM_PCIE0_DEV_ID   = 11,
+    43		QCOM_SCM_PCIE1_DEV_ID   = 12,
+    44		QCOM_SCM_GFX_DEV_ID     = 18,
+    45		QCOM_SCM_UFS_DEV_ID     = 19,
+    46		QCOM_SCM_ICE_DEV_ID     = 20,
+    47	};
+    48	
+    49	enum qcom_scm_ice_cipher {
+    50		QCOM_SCM_ICE_CIPHER_AES_128_XTS = 0,
+    51		QCOM_SCM_ICE_CIPHER_AES_128_CBC = 1,
+    52		QCOM_SCM_ICE_CIPHER_AES_256_XTS = 3,
+    53		QCOM_SCM_ICE_CIPHER_AES_256_CBC = 4,
+    54	};
+    55	
+    56	#define QCOM_SCM_PERM_READ       0x4
+    57	#define QCOM_SCM_PERM_WRITE      0x2
+    58	#define QCOM_SCM_PERM_EXEC       0x1
+    59	#define QCOM_SCM_PERM_RW (QCOM_SCM_PERM_READ | QCOM_SCM_PERM_WRITE)
+    60	#define QCOM_SCM_PERM_RWX (QCOM_SCM_PERM_RW | QCOM_SCM_PERM_EXEC)
+    61	
+    62	bool qcom_scm_is_available(void);
+   100	bool qcom_scm_restore_sec_cfg_available(void);
+   101	int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare);
+   102	int qcom_scm_set_gpu_smmu_aperture(unsigned int context_bank);
+   103	bool qcom_scm_set_gpu_smmu_aperture_is_available(void);
+   104	int qcom_scm_iommu_secure_ptbl_size(u32 spare, size_t *size);
+   105	int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare);
+   106	int qcom_scm_iommu_set_cp_pool_size(u32 spare, u32 size);
+   107	int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+   108					   u32 cp_nonpixel_start, u32 cp_nonpixel_size);
+   109	int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz, u64 *src,
+   110				const struct qcom_scm_vmperm *newvm,
+   111				unsigned int dest_cnt);
+   112	
+   113	bool qcom_scm_ocmem_lock_available(void);
+   114	int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
+   115				u32 mode);
+
+--- implementation / semantics ---
+  1343	/**
+  1344	 * qcom_scm_assign_mem() - Make a secure call to reassign memory ownership
+  1345	 * @mem_addr: mem region whose ownership need to be reassigned
+  1346	 * @mem_sz:   size of the region.
+  1347	 * @srcvm:    vmid for current set of owners, each set bit in
+  1348	 *            flag indicate a unique owner
+  1349	 * @newvm:    array having new owners and corresponding permission
+  1350	 *            flags
+  1351	 * @dest_cnt: number of owners in next set.
+  1352	 *
+  1353	 * Return negative errno on failure or 0 on success with @srcvm updated.
+  1354	 */
+  1355	int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+  1356				u64 *srcvm,
+  1357				const struct qcom_scm_vmperm *newvm,
+  1358				unsigned int dest_cnt)
+  1359	{
+  1360		struct qcom_scm_current_perm_info *destvm;
+  1361		struct qcom_scm_mem_map_info *mem_to_map;
+  1362		phys_addr_t mem_to_map_phys;
+  1363		phys_addr_t dest_phys;
+  1364		phys_addr_t ptr_phys;
+  1365		size_t mem_to_map_sz;
+  1366		size_t dest_sz;
+  1367		size_t src_sz;
+  1368		size_t ptr_sz;
+  1369		int next_vm;
+  1370		__le32 *src;
+  1371		int ret, i, b;
+  1372		u64 srcvm_bits = *srcvm;
+  1373	
+  1374		src_sz = hweight64(srcvm_bits) * sizeof(*src);
+  1375		mem_to_map_sz = sizeof(*mem_to_map);
+  1376		dest_sz = dest_cnt * sizeof(*destvm);
+  1377		ptr_sz = ALIGN(src_sz, SZ_64) + ALIGN(mem_to_map_sz, SZ_64) +
+  1378				ALIGN(dest_sz, SZ_64);
+  1379	
+  1380		void *ptr __free(qcom_tzmem) = qcom_tzmem_alloc(__scm->mempool,
+  1381								ptr_sz, GFP_KERNEL);
+  1382		if (!ptr)
+  1383			return -ENOMEM;
+  1384	
+  1385		ptr_phys = qcom_tzmem_to_phys(ptr);
+  1386	
+  1387		/* Fill source vmid detail */
+  1388		src = ptr;
+  1389		i = 0;
+  1390		for (b = 0; b < BITS_PER_TYPE(u64); b++) {
+  1391			if (srcvm_bits & BIT(b))
+  1392				src[i++] = cpu_to_le32(b);
+  1393		}
+  1394	
+  1395		/* Fill details of mem buff to map */
+  1396		mem_to_map = ptr + ALIGN(src_sz, SZ_64);
+  1397		mem_to_map_phys = ptr_phys + ALIGN(src_sz, SZ_64);
+  1398		mem_to_map->mem_addr = cpu_to_le64(mem_addr);
+  1399		mem_to_map->mem_size = cpu_to_le64(mem_sz);
+  1400	
+  1401		next_vm = 0;
+  1402		/* Fill details of next vmid detail */
+  1403		destvm = ptr + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+  1404		dest_phys = ptr_phys + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+  1405		for (i = 0; i < dest_cnt; i++, destvm++, newvm++) {
+  1406			destvm->vmid = cpu_to_le32(newvm->vmid);
+  1407			destvm->perm = cpu_to_le32(newvm->perm);
+  1408			destvm->ctx = 0;
+  1409			destvm->ctx_size = 0;
+  1410			next_vm |= BIT(newvm->vmid);
+  1411		}
+  1412	
+  1413		ret = __qcom_scm_assign_mem(__scm->dev, mem_to_map_phys, mem_to_map_sz,
+  1414					    ptr_phys, src_sz, dest_phys, dest_sz);
+  1415		if (ret) {
+  1416			dev_err(__scm->dev,
+  1417				"Assign memory protection call failed %d\n", ret);
+  1418			return ret;
+  1419		}
+  1420	
+  1421		*srcvm = next_vm;
+  1422		return 0;
+  1423	}
+  1424	EXPORT_SYMBOL_GPL(qcom_scm_assign_mem);
+
+--- camera VMID names present; no external-sample choice inferred ---
+    10	
+    11	#define QCOM_SCM_VMID_TZ		0x1
+    12	#define QCOM_SCM_VMID_HLOS		0x3
+    13	#define QCOM_SCM_VMID_SSC_Q6		0x5
+    14	#define QCOM_SCM_VMID_ADSP_Q6		0x6
+    15	#define QCOM_SCM_VMID_CP_TOUCH		0x8
+    16	#define QCOM_SCM_VMID_CP_BITSTREAM	0x9
+    17	#define QCOM_SCM_VMID_CP_PIXEL		0xA
+    18	#define QCOM_SCM_VMID_CP_NON_PIXEL	0xB
+    19	#define QCOM_SCM_VMID_CP_CAMERA		0xD
+    20	#define QCOM_SCM_VMID_HLOS_FREE		0xE
+    21	#define QCOM_SCM_VMID_MSS_MSA		0xF
+    22	#define QCOM_SCM_VMID_MSS_NONMSA	0x10
+    23	#define QCOM_SCM_VMID_CP_SEC_DISPLAY	0x11
+    24	#define QCOM_SCM_VMID_CP_APP		0x12
+    25	#define QCOM_SCM_VMID_LPASS		0x16
+    26	#define QCOM_SCM_VMID_WLAN		0x18
+    27	#define QCOM_SCM_VMID_WLAN_CE		0x19
+    28	#define QCOM_SCM_VMID_CP_SPSS_SP	0x1A
+    29	#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+    30	#define QCOM_SCM_VMID_CDSP		0x1E
+    31	#define QCOM_SCM_VMID_CP_SPSS_SP_SHARED 0x22
+    32	#define QCOM_SCM_VMID_CP_SPSS_HLOS_SHARED 0x24
+    33	#define QCOM_SCM_VMID_ADSP_HEAP		0x25
+    34	#define QCOM_SCM_VMID_CP_CDSP		0x2A
+    35	#define QCOM_SCM_VMID_NAV		0x2B
+    36	#define QCOM_SCM_VMID_TVM		0x2D
+    37	#define QCOM_SCM_VMID_OEMVM		0x31
+    38	
