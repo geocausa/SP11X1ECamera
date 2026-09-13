@@ -1,0 +1,224 @@
+E004ca SCENARIO POLICY / TRUSTED OPEN AUTHORITY
+
+--- FsIso fixed secure camera scenario and tPolicy ---
+E004bj FSISO SERVER-SIDE VTL1 SECURE SECTION
+
+FsIso is the RPC server launched by MFPlat for secure camera buffers.
+
+--- exact secure-camera scenario GUID from installed FsIso ---
+scenario_guid_bytes_le=6efc53ae898d88449d2e4d008731c5fd
+scenario_guid=AE53FC6E-8D89-4488-9D2E-4D008731C5FD
+tPolicy_scenario={AE53FC6E-8D89-4488-9D2E-4D008731C5FD}
+
+--- PDB import mapping ---
+           flags = function, addr = 0001:4628
+    9012 | S_PUB32 [size = 40] `__imp_CreateSecureSection`
+           flags = none, addr = 0003:0008
+--
+           flags = none, addr = 0004:0141
+   17816 | S_PUB32 [size = 40] `RpcCreateSecureSection`
+           flags = function, addr = 0001:6000
+--
+           flags = none, addr = 0003:23700
+   24220 | S_PUB32 [size = 32] `__imp_CloseHandle`
+           flags = none, addr = 0003:0136
+--
+           flags = function, addr = 0001:21936
+   27236 | S_PUB32 [size = 44] `SECURE_CAMERA_SCENARIO_GUID`
+           flags = none, addr = 0003:1496
+--
+           flags = function, addr = 0001:4664
+   28844 | S_PUB32 [size = 36] `RpcCloseSecureSection`
+           flags = function, addr = 0001:5232
+
+--- RpcCreateSecureSection embeds scenario GUID and calls IUM CreateSecureSection ---
+
+--- executable trustlet policy carries exact secure-camera scenario ---
+
+/mnt/windows/Windows/System32/FsIso.exe:	file format coff-arm64
+Contents of section .tPolicy:
+ 140019000 7b414535 33464336 452d3844 38392d34  {AE53FC6E-8D89-4
+ 140019010 3438382d 39443245 2d344430 30383733  488-9D2E-4D00873
+ 140019020 31433546 447d0000 00000000 00000000  1C5FD}..........
+ 140019030 01000000 00000000 05000000 00000000  ................
+ 140019040 09000000 0a000000 00000000 00000000  ................
+ 140019050 07000000 02000000 00000000 00000000  ................
+ 140019060 07000000 01000000 01000000 00000000  ................
+ 140019070 07000000 03000000 00000000 00000000  ................
+ 140019080 0a000000 0b000000 00900140 01000000  ...........@....
+ 140019090 00000000 00000000 00000000 00000000  ................
+
+--- SecureISP external opener reconstructs same fixed scenario + per-buffer GUID and maps inside trustlet ---
+//// FUN_180004828 @180004828 ////
+string @18002e930 = %s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx
+; xref @1800049c0
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint FUN_180004828(longlong param_1)
+
+{
+  DWORD DVar1;
+  HANDLE hFileMappingObject;
+  LPVOID pvVar2;
+  undefined8 in_x4;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  uint local_70;
+  uint local_6c;
+  undefined4 local_40;
+  undefined4 uStack_3c;
+  undefined4 uStack_38;
+  undefined4 uStack_34;
+  undefined4 uStack_30;
+  undefined4 local_2c;
+  undefined4 uStack_28;
+  undefined4 uStack_24;
+  undefined4 uStack_20;
+  
+  local_70 = 0;
+  uStack_34 = (undefined4)*(undefined8 *)(param_1 + 0x74);
+  uStack_30 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x74) >> 0x20);
+  uStack_3c = (undefined4)*(undefined8 *)(param_1 + 0x6c);
+  uStack_38 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x6c) >> 0x20);
+  local_40 = 0x24;
+  uStack_24 = (undefined4)_UNK_18002f5e8;
+  uStack_20 = (undefined4)((ulonglong)_UNK_18002f5e8 >> 0x20);
+  local_2c = (undefined4)_DAT_18002f5e0;
+  uStack_28 = (undefined4)((ulonglong)_DAT_18002f5e0 >> 0x20);
+  hFileMappingObject = (HANDLE)OpenSecureSection(&local_40);
+  if (hFileMappingObject == (HANDLE)0x0) {
+    local_70 = DAT_180004a08;
+    FUN_180019e00(1,"%s:%d Failed to create the secure section\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x409
+                  ,in_x4,in_x5,in_x6,in_x7);
+  }
+  else {
+    pvVar2 = MapViewOfFile(hFileMappingObject,6,0,0,(SIZE_T)*(undefined4 *)(param_1 + 0x7c));
+    if (pvVar2 == (LPVOID)0x0) {
+      DVar1 = GetLastError();
+      if ((int)DVar1 < 1) {
+        local_6c = GetLastError();
+      }
+      else {
+        DVar1 = GetLastError();
+        local_6c = DVar1 & 0xffff | 0xc0070000;
+      }
+      local_70 = local_6c;
+      FUN_180019e00(1,"%s:%d Failed to map the section into trustlet, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x411,(ulonglong)local_6c,in_x5,in_x6,in_x7);
+    }
+    else {
+      FUN_180019e00(4,
+                    "%s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x415,hFileMappingObject,pvVar2,in_x6,in_x7);
+      *(HANDLE *)(param_1 + 0x88) = hFileMappingObject;
+      *(LPVOID *)(param_1 + 0x90) = pvVar2;
+    }
+  }
+  return local_70;
+}
+
+
+
+--- BioIso consumer imports same GUID and OpenSecureSection path ---
+E004bh INSTALLED BIOISO SECURE-BUFFER CONSUMER
+/mnt/windows/Windows/System32/BioIso.exe: PE32+ executable for MS Windows 10.00 (GUI), ARM64, 12 sections
+2d1e2bb0072a935ac73702dae735961ee208e989287e50c1d3fc888825264a65  /mnt/windows/Windows/System32/BioIso.exe
+bytes=787920 mtime=2026-09-08 19:22:13.090098200 +0100
+
+Installed SDK contract: SensorAdapter AsyncImportSecureBuffer receives GUID SecureBufferIdentifier.
+BioIso strings/decomp independently expose SensorAdapterAsyncImportSecureBuffer and OpenSecureSection.
+
+--- focused BioIso decomp ---
+//// FUN_140058ad0 @140058ad0 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+ulonglong FUN_140058ad0(longlong param_1,undefined8 param_2,undefined8 param_3,undefined8 param_4,
+                       undefined8 param_5)
+
+{
+  uint uVar1;
+  HANDLE hFileMappingObject;
+  LPVOID lpAddress;
+  SIZE_T SVar2;
+  ulonglong uVar3;
+  undefined8 uVar4;
+  ulonglong uVar5;
+  undefined8 unaff_x30;
+  ulonglong local_90;
+  longlong lStack_88;
+  _MEMORY_BASIC_INFORMATION local_80;
+  undefined4 local_50;
+  undefined8 local_4c;
+  undefined8 uStack_44;
+  undefined8 local_3c;
+  undefined8 uStack_34;
+  
+  uStack_44 = *(undefined8 *)(param_1 + 0x18);
+  local_4c = *(undefined8 *)(param_1 + 0x10);
+  local_50 = 0x24;
+  uStack_34 = _UNK_140095900;
+  local_3c = _DAT_1400958f8;
+  hFileMappingObject = (HANDLE)OpenSecureSection(OpenSecureSection_exref,&local_50);
+  *(HANDLE *)(param_1 + 0x28) = hFileMappingObject;
+  if (hFileMappingObject == (HANDLE)0x0) {
+    uVar3 = 0x3b;
+  }
+  else {
+    param_5 = 0;
+    param_4 = 0;
+    lpAddress = MapViewOfFile(hFileMappingObject,2,0,0,0);
+    *(LPVOID *)(param_1 + 0x30) = lpAddress;
+    if (lpAddress == (LPVOID)0x0) {
+      uVar3 = 0x46;
+    }
+    else {
+      local_80.AllocationBase = (PVOID)0x0;
+      local_80.BaseAddress = (PVOID)0x0;
+      local_80.RegionSize = 0;
+      local_80.AllocationProtect = 0;
+      local_80._20_4_ = 0;
+      local_80.Type = 0;
+      local_80._44_4_ = 0;
+      local_80.State = 0;
+      local_80.Protect = 0;
+      SVar2 = VirtualQuery(lpAddress,&local_80,0x30);
+      if (SVar2 != 0) {
+        *(SIZE_T *)(param_1 + 0x38) = local_80.RegionSize;
+        *(bool *)(param_1 + 0x50) = (local_80._32_8_ & 0x400000000) != 0;
+        uVar3 = FUN_140058c48(param_1);
+        uVar5 = uVar3 & 0xffffffff;
+        if ((int)uVar3 < 0) {
+          uVar4 = 0x50;
+        }
+        else {
+          local_90 = 0;
+          lStack_88 = 0;
+          uVar1 = FUN_1400088b0(param_1,0,&local_90,&lStack_88,param_5);
+          uVar5 = (ulonglong)uVar1;
+          if (-1 < (int)uVar1) {
+            *(ulonglong *)(param_1 + 0x40) = local_90;
+            *(longlong *)(param_1 + 0x48) = lStack_88;
+            return 0;
+          }
+          uVar4 = 0x57;
+        }
+        FUN_14000f748(unaff_x30,uVar4,
+                      "onecore\\ds\\security\\biometrics\\service\\trustlet\\exe\\secureinput.cpp",
+                      uVar5,param_5);
+        goto LAB_140058c10;
+      }
+      uVar3 = 0x4b;
+    }
+  }
+  uVar1 = FUN_14000f718(unaff_x30,uVar3,
+                        "onecore\\ds\\security\\biometrics\\service\\trustlet\\exe\\secureinput.cpp"

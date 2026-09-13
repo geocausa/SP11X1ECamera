@@ -1,0 +1,237 @@
+E004ca QUALCOMM SECURE KERNEL EXTENSION ASSIGNMENT BRIDGE
+618910808afafda01533f6f0decc21209521d23db950209cebe1668520dff5e3  /mnt/windows/Windows/System32/DriverStore/FileRepository/qcskext8380.inf_arm64_1f302071dfc89f06/QcSkExt8380.exe
+pdb=Z:\\b\\WP\\QcSkExt\\rel\\10.9\\ARM64\\Release\\QcSkExt8380.pdb
+
+--- IUM imports used by secure-kernel extension ---
+  Name: IumSdk.dll
+  Symbol: AwaitSmc (3)
+  Symbol: FlushSecureSectionBuffers (36)
+  Symbol: CreateSecureSectionSpecifyPages (12)
+  Symbol: AssignMemoryToSocDomain (2)
+  Symbol: MapSecureIo (96)
+  Symbol: EmitSmc (25)
+
+--- recovered IUM-domain to Qualcomm-VMID translation table ---
+entry[0] addr=1400042c0 input_domain=0x25 mapped_vmid=0x6
+entry[1] addr=1400042c8 input_domain=0x21 mapped_vmid=0x6
+entry[2] addr=1400042d0 input_domain=0x22 mapped_vmid=0x1a
+entry[3] addr=1400042d8 input_domain=0x24 mapped_vmid=0x1b
+entry[4] addr=1400042e0 input_domain=0x23 mapped_vmid=0x3
+
+--- QcSkAssignMemoryToSocDomain decompilation ---
+//// FUN_140003d30 @140003d30 root=true ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+int FUN_140003d30(longlong param_1,uint param_2,undefined8 *param_3,longlong *param_4,int param_5,
+                 undefined8 *param_6,ulonglong *param_7)
+
+{
+  uint uVar1;
+  uint uVar2;
+  longlong lVar3;
+  undefined4 uVar4;
+  ulonglong uVar5;
+  ulonglong uVar6;
+  void *pvVar7;
+  ulonglong uVar8;
+  uint uVar9;
+  undefined8 *local_108;
+  void *local_100;
+  undefined4 local_e8;
+  ulonglong local_e0;
+  int local_d4;
+  ulonglong local_c4;
+  longlong local_b8 [3];
+  uint *local_a0;
+  undefined8 local_90;
+  undefined8 uStack_88;
+  undefined8 local_80;
+  undefined8 uStack_78;
+  undefined8 local_70;
+  
+  uVar8 = (ulonglong)param_2;
+  local_d4 = 0;
+  local_e0 = 0;
+  pvVar7 = (void *)0x0;
+  local_108 = (undefined8 *)0x0;
+  local_100 = (void *)0x0;
+  if ((((param_1 == 0) || (param_3 == (undefined8 *)0x0)) || (param_6 == (undefined8 *)0x0)) ||
+     (param_7 == (ulonglong *)0x0)) {
+    FUN_140001fd8();
+    local_d4 = DAT_1400042f4;
+  }
+  else if ((param_5 == 0) || (param_4 != (longlong *)0x0)) {
+    if ((param_4 == (longlong *)0x0) || ((ulonglong)param_4[2] <= (ulonglong)param_3[6])) {
+      local_108 = malloc(uVar8 << 3);
+      pvVar7 = local_100;
+      if (local_108 == (undefined8 *)0x0) {
+        GetLastError();
+        FUN_140001fd8();
+        local_d4 = DAT_1400042ec;
+      }
+      else {
+        FUN_140015aa0((undefined1 *)local_108,0,uVar8 << 3);
+        local_b8[0] = 0;
+        local_b8[1] = 0;
+        if ((param_4 == (longlong *)0x0) ||
+           (local_d4 = FUN_140009908((longlong)param_3,local_b8,local_b8 + 1), -1 < local_d4)) {
+          if (param_4 == (longlong *)0x0) {
+            local_c4 = 0;
+          }
+          else {
+            local_c4 = (ulonglong)param_4[2] >> 0xc;
+          }
+          if (param_4 == (longlong *)0x0) {
+            uVar4 = 0;
+          }
+          else {
+            uVar4 = (undefined4)((ulonglong)(param_4[1] - local_b8[0]) >> 0xc);
+          }
+          if (param_5 != 0) {
+            FUN_140001fd8();
+            local_100 = malloc((local_c4 & 0xffffffff) << 3);
+            if (local_100 == (void *)0x0) {
+              GetLastError();
+              FUN_140001fd8();
+              pvVar7 = local_100;
+              local_d4 = DAT_1400042f0;
+              goto LAB_140004234;
+            }
+            for (uVar6 = 0; (uint)uVar6 < (uint)local_c4; uVar6 = (ulonglong)((uint)uVar6 + 1)) {
+              *(ulonglong *)((longlong)local_100 + uVar6 * 8) = *param_4 + uVar6 * 0x1000;
+            }
+            FUN_140001fd8();
+          }
+          for (uVar9 = 0; param_2 = (uint)uVar8, pvVar7 = local_100, uVar9 < param_2;
+              uVar9 = uVar9 + 1) {
+            if (param_2 <= uVar9) {
+              param_2 = 0;
+            }
+            uVar8 = (ulonglong)param_2;
+            local_a0 = (uint *)(param_1 + (ulonglong)uVar9 * 0x18);
+            uVar1 = *local_a0;
+            uVar6 = (ulonglong)uVar1;
+            local_e0 = 1L << (uVar6 & 0x3f) | local_e0;
+            if (uVar1 != 3) {
+              uVar2 = local_a0[1];
+              local_d4 = 0;
+              if (uVar2 == 0) {
+                local_e8 = 0;
+                local_d4 = DAT_1400042f4;
+              }
+              else if (uVar2 == 1) {
+                local_e8 = 0x10;
+              }
+              else if (uVar2 == 4) {
+                local_e8 = 2;
+              }
+              else if (uVar2 == 5) {
+                local_e8 = 0x20;
+              }
+              else if (uVar2 == 6) {
+                local_e8 = 4;
+              }
+              else if (uVar2 == 7) {
+                local_e8 = 0x40;
+              }
+              else {
+                local_e8 = 0;
+                local_d4 = DAT_1400042f4;
+              }
+              if (local_d4 < 0) {
+                FUN_140001fd8();
+              }
+              else {
+                if (uVar1 < 0x40) {
+                  local_b8[2] = *param_3;
+                  local_90 = DAT_1400042c0;
+                  uStack_88 = DAT_1400042c8;
+                  local_80 = DAT_1400042d0;
+                  uStack_78 = DAT_1400042d8;
+                  local_70 = DAT_1400042e0;
+                  for (uVar5 = 0; (uint)uVar5 < 5; uVar5 = (ulonglong)((uint)uVar5 + 1)) {
+                    if (uVar1 == *(uint *)(&local_90 + uVar5)) {
+                      uVar6 = (ulonglong)*(uint *)((longlong)&local_90 + uVar5 * 8 + 4);
+                      FUN_140001fd8();
+                      break;
+                    }
+                  }
+                  lVar3 = AssignMemoryToSocDomain
+                                    (AssignMemoryToSocDomain_exref,local_b8[2],local_100,uVar4,
+                                     (uint)local_c4,uVar6,local_e8,0);
+                  local_108[uVar9] = lVar3;
+                  if (lVar3 - 1U < 0xfffffffffffffffe) {
+                    FUN_140001fd8();
+                    goto LAB_1400041c4;
+                  }
+                  GetLastError();
+                }
+                FUN_140001fd8();
+              }
+              local_d4 = 1;
+              goto LAB_140004234;
+            }
+            local_108[uVar9] = *param_3;
+LAB_1400041c4:
+          }
+          *param_6 = local_108;
+          *param_7 = local_e0;
+        }
+        else {
+          FUN_140001fd8();
+          local_d4 = DAT_1400042e8;
+        }
+      }
+    }
+    else {
+      FUN_140001fd8();
+      local_d4 = DAT_1400042e8;
+    }
+  }
+  else {
+    FUN_140001fd8();
+    local_d4 = DAT_1400042f4;
+  }
+LAB_140004234:
+  if (pvVar7 != (void *)0x0) {
+    free(pvVar7);
+  }
+  if ((local_d4 < 0) &&
+     (local_108 != (undefined8 *)0x0 && (local_108 != (undefined8 *)0x0 && param_2 != 0))) {
+    if (param_2 == 0) {
+      param_2 = 0;
+    }
+    do {
+      if ((HANDLE)*local_108 != (HANDLE)0x0) {
+        CloseHandle((HANDLE)*local_108);
+      }
+      param_2 = param_2 - 1;
+      local_108 = local_108 + 1;
+    } while (param_2 != 0);
+  }
+  return local_d4;
+}
+
+
+
+
+--- Linux VMID + permission constants for cross-check ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_HLOS		0x3
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_CP_CAMERA		0xD
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_HLOS_FREE		0xE
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_READ       0x4
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_WRITE      0x2
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_EXEC       0x1
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_RW (QCOM_SCM_PERM_READ | QCOM_SCM_PERM_WRITE)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_RWX (QCOM_SCM_PERM_RW | QCOM_SCM_PERM_EXEC)
+
+STATIC INTERPRETATION OF THE TRUSTLET'S INTERNAL CALL
+Trustlet input: DomainId=0x0d, Protection=4.
+QcSkExt translation table does NOT contain input 0x0d, therefore VMID remains 0x0d.
+QcSkExt permission switch maps IUM Protection=4 -> QHEE permission parameter 0x2.
+Linux cross-check: QCOM_SCM_VMID_CP_CAMERA=0x0d and QCOM_SCM_PERM_W=BIT(1)=0x2.
+Thus the internal capture target is authoritatively CP_CAMERA / write permission at the Qualcomm assignment layer.
+This does not describe the external VTL1 sample, which has no AssignMemoryToSocDomain call in its FsIso path.

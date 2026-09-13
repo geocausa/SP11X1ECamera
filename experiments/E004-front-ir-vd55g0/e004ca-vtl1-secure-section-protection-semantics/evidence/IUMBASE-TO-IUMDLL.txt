@@ -1,0 +1,110 @@
+E004ca IUMBASE WRAPPERS -> IUMDLL
+fa7e94e0e2260d7b72fa9edecd13f25c3fa40a32788efd342ce02dbfe15413ee  /mnt/windows/Windows/System32/iumbase.dll
+/mnt/windows/Windows/System32/iumbase.dll: PE32+ executable for MS Windows 10.00 (DLL), ARM64, 6 sections
+
+  Name: IUMDLL.dll
+  Symbol: IumCreateSecureSectionSpecifyPages (4)
+  Symbol: IumUnmapSecureIo (23)
+  Symbol: IumProtectSecureIo (17)
+  Symbol: IumAssignMemoryToSocDomain (0)
+  Symbol: IumGetExposedSecureSection (11)
+  Symbol: IumFlushSecureSectionBuffers (9)
+  Symbol: IumMapSecureIo (13)
+  Symbol: IumOpenSecureSection (15)
+  Symbol: IumCreateSecureSection (3)
+      PDBGUID: {030BAD6E-ADF4-1EB1-9A6A-43639F9F3B9B}
+      PDBFileName: iumbase.pdb
+
+--- CreateSecureSection wrapper ---
+
+/mnt/windows/Windows/System32/iumbase.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000180001000 <CreateSecureSection>:
+180001000: d503237f    	pacibsp
+180001004: a9be7bfd    	stp	x29, x30, [sp, #-0x20]!
+180001008: 910003fd    	mov	x29, sp
+18000100c: 2a0203e8    	mov	w8, w2
+180001010: f9000bff    	str	xzr, [sp, #0x10]
+180001014: 2a0403e5    	mov	w5, w4
+180001018: 2a0803e4    	mov	w4, w8
+18000101c: b0000008    	adrp	x8, 0x180002000
+180001020: f9405d08    	ldr	x8, [x8, #0xb8]
+180001024: aa0303e2    	mov	x2, x3
+180001028: 2a0103e3    	mov	w3, w1
+18000102c: aa0003e1    	mov	x1, x0
+180001030: 910043e0    	add	x0, sp, #0x10
+180001034: d63f0100    	blr	x8
+180001038: 36f80100    	tbz	w0, #0x1f, 0x180001058 <CreateSecureSection+0x58>
+18000103c: b0000008    	adrp	x8, 0x180002000
+180001040: f9407508    	ldr	x8, [x8, #0xe8]
+180001044: d63f0100    	blr	x8
+180001048: d2800000    	mov	x0, #0x0                // =0
+18000104c: a8c27bfd    	ldp	x29, x30, [sp], #0x20
+180001050: d50323ff    	autibsp
+180001054: d65f03c0    	ret
+180001058: f9400be0    	ldr	x0, [sp, #0x10]
+18000105c: a8c27bfd    	ldp	x29, x30, [sp], #0x20
+180001060: d50323ff    	autibsp
+180001064: d65f03c0    	ret
+
+--- AssignMemoryToSocDomain wrapper ---
+
+/mnt/windows/Windows/System32/iumbase.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000180001110 <AssignMemoryToSocDomain>:
+180001110: d503237f    	pacibsp
+180001114: a9be7bfd    	stp	x29, x30, [sp, #-0x20]!
+180001118: 910003fd    	mov	x29, sp
+18000111c: 2a0603e7    	mov	w7, w6
+180001120: f9000bff    	str	xzr, [sp, #0x10]
+180001124: 2a0503e6    	mov	w6, w5
+180001128: 2a0403e5    	mov	w5, w4
+18000112c: b0000008    	adrp	x8, 0x180002000
+180001130: f9401d08    	ldr	x8, [x8, #0x38]
+180001134: 2a0303e4    	mov	w4, w3
+180001138: 2a0203e3    	mov	w3, w2
+18000113c: aa0103e2    	mov	x2, x1
+180001140: aa0003e1    	mov	x1, x0
+180001144: 910043e0    	add	x0, sp, #0x10
+180001148: d63f0100    	blr	x8
+18000114c: 36f800c0    	tbz	w0, #0x1f, 0x180001164 <AssignMemoryToSocDomain+0x54>
+180001150: b0000008    	adrp	x8, 0x180002000
+180001154: f9407508    	ldr	x8, [x8, #0xe8]
+180001158: d63f0100    	blr	x8
+18000115c: d2800000    	mov	x0, #0x0                // =0
+180001160: 14000002    	b	0x180001168 <AssignMemoryToSocDomain+0x58>
+180001164: f9400be0    	ldr	x0, [sp, #0x10]
+180001168: a8c27bfd    	ldp	x29, x30, [sp], #0x20
+18000116c: d50323ff    	autibsp
+180001170: d65f03c0    	ret
+
+--- OpenSecureSection wrapper ---
+
+/mnt/windows/Windows/System32/iumbase.dll:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000180001ac0 <OpenSecureSection>:
+180001ac0: d503237f    	pacibsp
+180001ac4: a9be7bfd    	stp	x29, x30, [sp, #-0x20]!
+180001ac8: 910003fd    	mov	x29, sp
+180001acc: f9000bff    	str	xzr, [sp, #0x10]
+180001ad0: b0000008    	adrp	x8, 0x180002000
+180001ad4: f9405108    	ldr	x8, [x8, #0xa0]
+180001ad8: aa0003e1    	mov	x1, x0
+180001adc: 910043e0    	add	x0, sp, #0x10
+180001ae0: d63f0100    	blr	x8
+180001ae4: 36f800c0    	tbz	w0, #0x1f, 0x180001afc <OpenSecureSection+0x3c>
+180001ae8: b0000008    	adrp	x8, 0x180002000
+180001aec: f9407508    	ldr	x8, [x8, #0xe8]
+180001af0: d63f0100    	blr	x8
+180001af4: d2800000    	mov	x0, #0x0                // =0
+180001af8: 14000002    	b	0x180001b00 <OpenSecureSection+0x40>
+180001afc: f9400be0    	ldr	x0, [sp, #0x10]
+180001b00: a8c27bfd    	ldp	x29, x30, [sp], #0x20
+180001b04: d50323ff    	autibsp
+180001b08: d65f03c0    	ret

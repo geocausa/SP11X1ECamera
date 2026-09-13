@@ -1,0 +1,62 @@
+{
+  "experiment": "E004ca",
+  "status": "PASS_EXTERNAL_SAMPLE_IS_IUM_SECURE_SECTION_INTERNAL_CP_CAMERA_ASSIGNMENT_SEPARATE",
+  "mode": "windows-linux-static-only",
+  "ium_chain": {
+    "iumsdk_sha256": "2fd5b8df49ad83ad1181fe4ead77ba484f292210c28a07c4d08f49fbe93d7d2f",
+    "iumbase_sha256": "fa7e94e0e2260d7b72fa9edecd13f25c3fa40a32788efd342ce02dbfe15413ee",
+    "iumdll_sha256": "3fefa86c3b0bdc5aa863099ffcfe658366a8bbf202bdab9fb67be9da9c39b152",
+    "create_secure_section_svc": "0x8003",
+    "open_secure_section_svc": "0x800e",
+    "assign_soc_domain_svc": "0x8000"
+  },
+  "external_sample": {
+    "create_shape": "CreateSecureSection(descriptor,4,4,size,0)",
+    "identity": [
+      "per-buffer GUID",
+      "AE53FC6E-8D89-4488-9D2E-4D008731C5FD scenario"
+    ],
+    "soc_domain_assignment_in_fsiso_path": false,
+    "trusted_open_by_secureisp": true,
+    "trusted_open_by_bioiso": true,
+    "physical_page_vmid_proven": false
+  },
+  "internal_target": {
+    "create_shape": "CreateSecureSection(NULL,4,4,size,2)",
+    "ium_domain": "0x0d",
+    "qcom_vmid": "0x0d",
+    "linux_name": "CP_CAMERA",
+    "ium_protection": 4,
+    "qhee_permission": "0x2",
+    "linux_permission_name": "WRITE",
+    "trustlet_mapping_retained": true
+  },
+  "qcskext": {
+    "sha256": "618910808afafda01533f6f0decc21209521d23db950209cebe1668520dff5e3",
+    "domain_translation_table": {
+      "0x25": "0x06",
+      "0x21": "0x06",
+      "0x22": "0x1a",
+      "0x24": "0x1b",
+      "0x23": "0x03"
+    },
+    "domain_0x0d_passes_through": true,
+    "camera_specific_state_machine_found": true
+  },
+  "linux": {
+    "scm_assign_mem_is_internal_assignment_analogue": true,
+    "shm_bridge_alone_is_external_protection_analogue": false,
+    "generic_tee_protected_dmabuf_shape_useful": true,
+    "secure_video_record_provider_present": false
+  },
+  "runtime_actions": {
+    "windows_reboot_or_trace": false,
+    "ium_call": false,
+    "scm_assign_mem": false,
+    "shm_bridge_create": false,
+    "qtee_qsee_call": false,
+    "qcomtee_enable_or_load": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cb Qualcomm Secure Kernel camera memory state machine, static first"
+}
