@@ -1,0 +1,196 @@
+E004bg WINDOWS ORACLE + STATIC WORKER SEMANTICS
+dynamic_outer_authority=E004bf
+start_outer_order=protect -> protected_worker_START
+stop_outer_order=protected_worker_STOP -> unprotect
+
+Static fallback: task-2/3 internals (used only because accepted Windows dynamic established the outer task order but not internal worker calls).
+
+--- worker START ---
+  if (param_2 == 0x804) {
+    FUN_180019e00(4,"ISP HW Manager Processing CAMERA_DEVICE_IOCTL_DEVICE_START command.",uVar44,
+                  uVar22,pcVar26,param_6,pcVar31,param_8);
+    if (*(char *)(param_1 + 0x4e8) != '\0') {
+      FUN_180019e00(4,"ISP HW Mgr :: Ife is already in running state already!",uVar44,uVar22,pcVar26
+                    ,param_6,pcVar31,param_8);
+      return (undefined *)0x0;
+    }
+    uVar5 = *(uint *)(param_1 + 0x24);
+    if (uVar5 != 0) {
+      uVar4 = 0;
+      uVar42 = 0;
+      do {
+        uVar6 = *(uint *)(param_1 + (uVar42 + 6) * 4);
+        if (3 < (int)uVar6) break;
+        lVar33 = *(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)uVar6 * 0x30;
+        if (*(char *)(lVar33 + 0x20) != '\0') {
+          puVar9 = *(undefined8 **)(lVar33 + 8);
+          puVar40 = param_5;
+          uVar44 = uVar45;
+          puVar24 = param_7;
+          (*(code *)PTR__guard_check_icall_18002b360)(*puVar9,puVar9,0x804,param_3,uVar43);
+          uVar4 = (*extraout_x15)();
+          if (uVar4 != 0) {
+            FUN_180019e00(2,"ISP HW Mgr :: ife%d Start_cmd is failed with result 0x%x",
+                          (ulonglong)uVar6,(undefined *)(ulonglong)uVar4,puVar40,uVar44,puVar24,
+                          param_8);
+            return (undefined *)(ulonglong)uVar4;
+          }
+        }
+        uVar5 = *(uint *)(param_1 + 0x24);
+        uVar6 = (int)uVar42 + 1;
+        uVar42 = (ulonglong)uVar6;
+      } while (uVar6 < uVar5);
+      puVar40 = (undefined *)(ulonglong)uVar4;
+      if (uVar4 != 0) goto LAB_1800095e0;
+    }
+    *(undefined1 *)(param_1 + 0x4e8) = 1;
+    if (*(char *)(param_1 + 0x70) != '\0') {
+      local_e0 = 0;
+      do {
+        uVar43 = 0;
+        if (uVar5 != 0) {
+          do {
+            uVar4 = *(uint *)(param_1 + (uVar43 + 6) * 4);
+            if (3 < (int)uVar4) break;
+            lVar33 = *(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)uVar4 * 0x30;
+            if (*(char *)(lVar33 + 0x20) != '\0') {
+              puVar9 = *(undefined8 **)(lVar33 + 8);
+              lVar33 = (ulonglong)local_e0 + 9;
+              uVar42 = uVar45;
+              puVar40 = param_7;
+              (*(code *)PTR__guard_check_icall_18002b360)
+                        (*puVar9,puVar9,0x803,*(undefined8 *)(param_1 + lVar33 * 8),0x7c,param_5);
+              uVar5 = (*extraout_x15_00)();
+              if (uVar5 != 0) {
+                FUN_180019e00(2,"Initial packet %d to ife%d is failed with result 0x%x ",
+                              (ulonglong)local_e0,(ulonglong)uVar4,(undefined *)(ulonglong)uVar5,
+                              uVar42,puVar40,param_8);
+                return (undefined *)(ulonglong)uVar5;
+              }
+              if ((*(char *)(param_1 + 0x20) != '\0') && ((int)uVar43 == 0)) {
+                puVar9 = *(undefined8 **)
+                          (*(longlong *)(DAT_18003d230 + 0x30) + (ulonglong)uVar4 * 0x30 + 8);
+                uVar42 = uVar45;
+                puVar40 = param_7;
+                (*(code *)PTR__guard_check_icall_18002b360)
+                          (*puVar9,puVar9,0x803,*(undefined8 *)(param_1 + lVar33 * 8),0x7c,param_5);
+                uVar5 = (*extraout_x15_01)();
+                if (uVar5 != 0) {
+                  FUN_180019e00(2,"Initial packet %d to SFE0 is failed with result 0x%x ",
+                                (ulonglong)local_e0,(ulonglong)uVar4,(undefined *)(ulonglong)uVar5,
+                                uVar42,puVar40,param_8);
+                  return (undefined *)(ulonglong)uVar5;
+                }
+              }
+              puVar9 = *(undefined8 **)
+                        (*(longlong *)(DAT_18003d230 + 0x38) + (ulonglong)uVar4 * 0x30 + 8);
+              uVar42 = uVar45;
+              puVar24 = param_7;
+              (*(code *)PTR__guard_check_icall_18002b360)
+                        (*puVar9,puVar9,0x803,*(undefined8 *)(param_1 + lVar33 * 8),0x7c,param_5);
+              puVar40 = (undefined *)(*extraout_x15_02)();
+              if ((int)puVar40 != 0) {
+                FUN_180019e00(2,"Initial packet %d to csid%d is failed with result 0x%x ",
+                              (ulonglong)local_e0,(ulonglong)uVar4,
+                              (undefined *)((ulonglong)puVar40 & 0xffffffff),uVar42,puVar24,param_8)
+                ;
+                return (undefined *)((ulonglong)puVar40 & 0xffffffff);
+              }
+            }
+            uVar5 = *(uint *)(param_1 + 0x24);
+            uVar4 = (int)uVar43 + 1;
+            uVar43 = (ulonglong)uVar4;
+          } while (uVar4 < uVar5);
+          puVar40 = (undefined *)((ulonglong)puVar40 & 0xffffffff);
+        }
+        local_e0 = local_e0 + 1;
+      } while (local_e0 < *(byte *)(param_1 + 0x70));
+    }
+    *(undefined1 *)(param_1 + 0x70) = 0;
+    uVar43 = 0;
+    do {
+      uVar5 = (int)uVar43 + 1;
+      *(undefined8 *)(param_1 + (uVar43 + 9) * 8) = 0;
+      uVar43 = (ulonglong)(byte)uVar5;
+    } while ((uVar5 & 0xff) < 5);
+LAB_1800095e0:
+    if (*(int *)(param_1 + 0x24) == 0) {
+      return puVar40;
+    }
+    uVar43 = 0;
+    do {
+      uVar5 = *(uint *)(param_1 + (uVar43 + 6) * 4);
+      if (3 < (int)uVar5) break;
+      if (*(char *)(*(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)uVar5 * 0x30 + 0x20) != '\0') {
+        puVar9 = *(undefined8 **)(*(longlong *)(DAT_18003d230 + 0x38) + (ulonglong)uVar5 * 0x30 + 8)
+        ;
+        puVar24 = param_5;
+        uVar42 = uVar45;
+        puVar29 = param_7;
+        (*(code *)PTR__guard_check_icall_18002b360)
+                  (*puVar9,puVar9,0x804,param_3,param_4 & 0xffffffff);
+        puVar40 = (undefined *)(*extraout_x15_03)();
+        if ((int)puVar40 != 0) {
+          FUN_180019e00(2,"ISP HW Mgr :: CSID%d Start_cmd is failed with result 0x%x",
+                        (ulonglong)uVar5,(undefined *)((ulonglong)puVar40 & 0xffffffff),puVar24,
+                        uVar42,puVar29,param_8);
+          return (undefined *)((ulonglong)puVar40 & 0xffffffff);
+        }
+      }
+      uVar5 = (int)uVar43 + 1;
+      uVar43 = (ulonglong)uVar5;
+    } while (uVar5 < *(uint *)(param_1 + 0x24));
+    return (undefined *)((ulonglong)puVar40 & 0xffffffff);
+  }
+
+--- worker STOP ---
+  if (param_2 == 0x805) {
+    FUN_180019e00(4,"secure_ISP HW Manager Processing CAMERA_DEVICE_IOCTL_DEVICE_STOP command.",
+                  uVar44,uVar22,pcVar26,param_6,pcVar31,param_8);
+    *(undefined1 *)(param_1 + 0x4e8) = 0;
+    FUN_1800290a0((undefined1 *)(param_1 + 0x78),0,0x470);
+    FUN_1800290a0((undefined1 *)(param_1 + 0x4ec),0,0x8d8);
+    uVar42 = 0;
+    *(undefined8 *)(param_1 + 0xdd8) = 0;
+    *(undefined8 *)(param_1 + 0xdd0) = 0;
+    *(undefined8 *)(param_1 + 0xde8) = 0;
+    *(undefined8 *)(param_1 + 0xde0) = 0;
+    *(undefined8 *)(param_1 + 0xdf8) = 0;
+    *(undefined8 *)(param_1 + 0xdf0) = 0;
+    if (*(int *)(param_1 + 0x24) == 0) {
+      return (undefined *)0x0;
+    }
+    local_dc = 0;
+    do {
+      uVar5 = *(uint *)(param_1 + (uVar42 + 6) * 4);
+      if (3 < (int)uVar5) break;
+      if (*(char *)(*(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)uVar5 * 0x30 + 0x20) != '\0') {
+        puVar9 = *(undefined8 **)(*(longlong *)(DAT_18003d230 + 0x38) + (ulonglong)uVar5 * 0x30 + 8)
+        ;
+        uVar44 = uVar43;
+        puVar40 = param_5;
+        uVar22 = uVar45;
+        puVar24 = param_7;
+        (*(code *)PTR__guard_check_icall_18002b360)(*puVar9,puVar9,0x805,param_3);
+        uVar4 = (*extraout_x15_04)();
+        if (uVar4 != 0 && uVar4 != 0x1a) {
+          FUN_180019e00(2,"secure_ISP HW Mgr :: CSID Core0 stop cmd is failed with result =0x%x",
+                        (ulonglong)uVar4,uVar44,puVar40,uVar22,puVar24,param_8);
+        }
+        puVar9 = *(undefined8 **)(*(longlong *)(DAT_18003d230 + 0x28) + (ulonglong)uVar5 * 0x30 + 8)
+        ;
+        uVar44 = uVar45;
+        puVar40 = param_7;
+        (*(code *)PTR__guard_check_icall_18002b360)(*puVar9,puVar9,0x805,param_3,uVar43,param_5);
+        local_dc = (*extraout_x15_05)();
+        if (local_dc != 0 && local_dc != 0x1a) {
+          FUN_180019e00(2,"ISP HW Mgr :: IFE Core%x  stop cmd is failed with result =0x%x",0,0x805,
+                        (ulonglong)local_dc,uVar44,puVar40,param_8);
+        }
+      }
+      uVar5 = (int)uVar42 + 1;
+      uVar42 = (ulonglong)uVar5;
+    } while (uVar5 < *(uint *)(param_1 + 0x24));
+LAB_1800098a4:
+    return (undefined *)(ulonglong)local_dc;
+  }

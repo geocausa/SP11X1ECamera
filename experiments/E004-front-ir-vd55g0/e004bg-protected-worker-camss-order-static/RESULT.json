@@ -1,0 +1,55 @@
+{
+  "schema": "sp11-camera-e004bg-protected-worker-camss-order-static-v1",
+  "status": "PASS_WINDOWS_WORKER_ORDER_EXPOSES_CAMSS_SECURE_STOP_GAP",
+  "date": "2026-09-13",
+  "authority_policy": "Windows dynamic first; static Windows fallback for worker internals; Linux only as parity target.",
+  "windows_outer": {
+    "source": "E004bf",
+    "start": "protect -> protected_worker_START",
+    "stop": "protected_worker_STOP -> unprotect"
+  },
+  "windows_worker_static": {
+    "start": [
+      "IFE_START",
+      "initial_packet_replay_IFE_optional_SFE_CSID",
+      "CSID_START"
+    ],
+    "stop": [
+      "CSID_STOP",
+      "IFE_STOP"
+    ]
+  },
+  "linux_x1e_graph": [
+    "sensor",
+    "CSIPHY",
+    "CSID",
+    "VFE",
+    "video"
+  ],
+  "linux_normal_stream_walk": {
+    "start": [
+      "VFE",
+      "CSID",
+      "CSIPHY",
+      "sensor"
+    ],
+    "stop": [
+      "VFE",
+      "CSID",
+      "CSIPHY",
+      "sensor"
+    ]
+  },
+  "parity": {
+    "protected_block_start_direction_compatible": true,
+    "protected_block_stop_direction_compatible": false,
+    "csiphy_local_protect_is_too_late_for_windows_outer_invariant": true,
+    "required_shape": "pipeline-level secure ownership bracket with Windows-order protected stop"
+  },
+  "physical_csiphy_state_at_protect": "unobserved",
+  "production_hook_selected": false,
+  "linux_secure_runtime_executed": false,
+  "qcomtee_loaded": false,
+  "camera_memory_reassigned": false,
+  "next_gate": "Windows-first protected-buffer ownership/lifetime oracle."
+}

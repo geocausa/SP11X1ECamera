@@ -1,0 +1,19 @@
+E004bg MECHANICAL ORDER DERIVATION
+X1E graph (no ISPIF): sensor -> CSIPHY -> CSID -> VFE -> video
+camss-video starts from video and follows each sink upstream, calling s_stream immediately.
+therefore normal start call order=VFE -> CSID -> CSIPHY -> sensor
+camss-video stop uses the same traversal direction.
+therefore normal stop call order=VFE -> CSID -> CSIPHY -> sensor
+
+Windows protected worker static fallback:
+worker_start=IFE start -> replay initial config packets to IFE/CSID -> CSID start
+worker_stop=CSID stop -> IFE stop
+
+Prior parity mapping: Windows protected IFE-Lite <-> Linux X1E VFE680; Windows protected CSID-Lite <-> Linux X1E CSID680.
+
+Consequences:
+1. csiphy-local protect is too late to satisfy Windows outer invariant if VFE/CSID have already started.
+2. normal Linux start order VFE -> CSID is compatible with Windows worker start direction IFE -> CSID.
+3. normal Linux stop order VFE -> CSID is NOT compatible with Windows worker stop direction CSID -> IFE.
+4. parity candidate therefore needs a pipeline-level secure bracket and a Windows-order protected stop path.
+5. exact physical-CSIPHY register state at protect instant remains unobserved and is not inferred.
