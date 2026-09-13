@@ -1,0 +1,165 @@
+E004bp SURFACECAM EXTERNAL SECURE SAMPLE CONTRACT
+
+--- SurfaceCam receives external buffer identity and logs GUID separately from hMems ---
+              local_f0[0] = 0;
+              local_f0[3] = 0;
+              local_f0[2] = 0;
+              local_f0[5] = 0;
+              local_f0[4] = 0;
+              local_f0[7] = 0;
+              local_f0[6] = 0;
+              local_f0[9] = 0;
+              local_f0[8] = 0;
+              local_f0[0xb] = 0;
+              local_f0[10] = 0;
+              uStack_88 = 0;
+              uStack_84 = 0;
+              local_90 = 0;
+              uStack_8c = 0;
+              uStack_78 = 0;
+              uStack_80 = 0;
+              local_7c = 0;
+              if (*(longlong *)(lVar12 + 0x88) != 0) {
+                iVar3 = FUN_14008d160(*(longlong *)(lVar12 + 0x88),*(undefined8 *)(param_2 + 8),
+                                      (longlong)local_f0,param_4,(ulonglong)param_5,param_6,param_7,
+                                      param_8);
+              }
+              if (iVar3 < 0) {
+                pcVar9 = 
+                "{IfeNode::GetBufferforRequestId} Failed to get external buffer for requestId = %d on portResourceId : 0x%x\n"
+                ;
+                goto LAB_1400969c8;
+              }
+              if (*(int *)(lVar1 + 0x128) - 0x25U < 3) {
+                param_6 = local_f0[6] >> 0x20;
+                param_7 = local_f0[8] >> 0x20;
+                *(ulonglong *)(lVar1 + 0x74) = param_6;
+                *(ulonglong *)(lVar1 + 0x7c) = param_7;
+              }
+              else {
+                param_6 = local_f0[0] & 0xffffffff;
+                param_7 = local_f0[2] >> 0x20;
+                *(ulonglong *)(lVar1 + 0x74) = param_6;
+                *(ulonglong *)(lVar1 + 0x7c) = param_7;
+                uStack_158._4_4_ =
+                     (undefined4)
+                     ((ulonglong)*(undefined8 *)(*(longlong *)(lVar12 + 0x88) + 0x1c) >> 0x20);
+                *(undefined4 *)(lVar1 + 0xa0) = uStack_158._4_4_;
+                lVar12 = *(longlong *)(lVar12 + 0x88);
+                uStack_158 = *(undefined8 *)(lVar12 + 0x1c);
+                local_160 = *(undefined8 *)(lVar12 + 0x14);
+                uStack_148 = *(undefined8 *)(lVar12 + 0x2c);
+                local_150 = *(undefined8 *)(lVar12 + 0x24);
+                uStack_138 = *(undefined8 *)(lVar12 + 0x3c);
+                local_140 = *(undefined8 *)(lVar12 + 0x34);
+                uStack_128 = *(undefined8 *)(lVar12 + 0x4c);
+                uStack_130 = *(undefined8 *)(lVar12 + 0x44);
+                uStack_118 = *(undefined8 *)(lVar12 + 0x5c);
+                local_120 = *(undefined8 *)(lVar12 + 0x54);
+                uStack_108 = *(undefined8 *)(lVar12 + 0x6c);
+                uStack_110 = *(undefined8 *)(lVar12 + 100);
+                *(undefined4 *)(lVar1 + 0xd0) = (undefined4)local_150;
+              }
+              if (param_6 == 0) {
+                *(ulonglong *)(lVar1 + 0x194) = CONCAT44(uStack_80,uStack_84);
+                *(ulonglong *)(lVar1 + 0x18c) = CONCAT44(uStack_88,uStack_8c);
+                *(undefined4 *)(lVar1 + 0x19c) = local_7c;
+                *(undefined4 *)(lVar1 + 0x1a0) = (undefined4)uStack_78;
+              }
+              param_5 = *(char **)(lVar7 + 8);
+              param_8 = *(undefined8 *)(lVar1 + 0x18c);
+              param_3 = (char *)0x0;
+              param_4 = 
+              "{IfeNode::GetBufferforRequestId} Get external buffer for requestId = %d, hMems[0] =  %#Ix, hMems[1] =  %#Ix, guid =  %#Ix\n"
+              ;
+              FUN_14001c1d8(4,0x14009a938,0,
+                            "{IfeNode::GetBufferforRequestId} Get external buffer for requestId = %d, hMems[0] =  %#Ix, hMems[1] =  %#Ix, guid =  %#Ix\n"
+                            ,(ulonglong)param_5,param_6,param_7,param_8);
+            }
+            goto LAB_1400969a0;
+          }
+        }
+        param_5 = pcVar9;
+        param_4 = "{IfeNode::GetBufferforRequestId} NULL output port, outputIndex = %d\n";
+        param_3 = (char *)0x0;
+
+--- E004bh result authority ---
+{
+  "schema": "sp11-camera-e004bh-windows-secure-buffer-lifecycle-static-v1",
+  "status": "PASS_WINDOWS_VTL1_GUID_SECURE_BUFFER_DISTINCT_FROM_LANE_LIFETIME",
+  "date": "2026-09-13",
+  "authority_policy": "Windows dynamic first; static Windows fallback for trustlet/platform internals; Linux only as parity target.",
+  "windows_sdk": {
+    "secure_capture_surface": "0x0010",
+    "secure_capture_surface_meaning": "secure buffer in VTL1",
+    "secure_transfer_flag": "0x00040000",
+    "buffered_transfer_flag": "0x00000400",
+    "surfacecam_combined_mask": "0x00040400",
+    "secure_buffer_info": [
+      "GUID guidBufferIdentifier",
+      "DWORD cbBufferSize",
+      "DWORD cbCaptured",
+      "ULONGLONG ullReserved[16]"
+    ],
+    "biometric_import_identity": "GUID SecureBufferIdentifier"
+  },
+  "surfacecam": {
+    "recognizes_secure_surface_0x10": true,
+    "checks_combined_mask_0x40400": true,
+    "secure_descriptor_source": "KSSTREAM_HEADER.Data",
+    "descriptor_layout_matches_windows_sdk": true,
+    "forwards_external_secure_identity_into_ife_request": true
+  },
+  "trustlet": {
+    "internal_buffer": {
+      "created_with_secure_section": true,
+      "assigned_domain": "0x0d",
+      "domain_name_crosscheck": "CP_CAMERA",
+      "assignment_handle_retained": true
+    },
+    "external_buffer": {
+      "opened_with_secure_section": true,
+      "created_by_trustlet": false,
+      "identity_carried_from_external_camera_buffer": true
+    },
+    "pair_order": [
+      "internal_secure_buffer",
+      "external_secure_buffer"
+    ],
+    "per_request_release": true,
+    "deinit_sweeps_remaining_buffers": true
+  },
+  "windows_dynamic": {
+    "source": "E004aq",
+    "raw_sha256": "5dfac22112c9d0cf2ae9cb1f1ef9cb43a00084aabba6d8e0a8da7c9440086ad3",
+    "process_csl_packet_before_protected_start": true,
+    "protected_worker_stop_before_unprotect": true,
+    "final_deinit_after_unprotect": true,
+    "individual_secure_section_calls_observed_directly": false
+  },
+  "biometric_consumer": {
+    "component": "BioIso.exe",
+    "sha256": "2d1e2bb0072a935ac73702dae735961ee208e989287e50c1d3fc888825264a65",
+    "async_import_secure_buffer": true,
+    "open_secure_section": true
+  },
+  "platform_corroboration": {
+    "component": "SecureUSBVideo.dll",
+    "sha256": "378f2830f5867f31ec5c63b95fe7e35f78d48bc139989db79590c5ac7d5d7521",
+    "creates_guid_secure_sections": true,
+    "opens_incoming_secure_sections": true,
+    "surface_mipi_ir_allocator_proven": false
+  },
+  "parity_consequence": {
+    "lane_ownership_and_secure_sample_lifetime_are_distinct": true,
+    "external_secure_sample_and_cp_camera_internal_buffer_are_distinct": true,
+    "linux_single_secure_buffer_toggle_is_insufficient": true
+  },
+  "windows_volume_read_only": true,
+  "linux_secure_runtime_executed": false,
+  "linux_memory_reassignment": false,
+  "protected_mmio_access_linux": false,
+  "qcomtee_loaded": false,
+  "unresolved": "Exact Windows allocator/owner for each Surface MIPI IR external VTL1 secure section.",
+  "next_gate": "Windows-first owner map for secure capture-surface selection and MIPI external secure-section allocation."
+}

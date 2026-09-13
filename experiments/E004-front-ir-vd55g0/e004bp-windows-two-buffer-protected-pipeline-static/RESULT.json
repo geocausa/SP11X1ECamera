@@ -1,0 +1,59 @@
+{
+  "schema": "sp11-camera-e004bp-windows-two-buffer-protected-pipeline-static-v1",
+  "status": "PASS_WINDOWS_TWO_BUFFER_PIPELINE_INTERNAL_CP_CAMERA_HW_TARGET",
+  "date": "2026-09-13",
+  "authority_policy": "Static Windows oracle only; no Windows or Linux secure runtime.",
+  "pipeline": {
+    "hardware_capture_target": "internal secure buffer",
+    "external_consumer_sample": "GUID-addressed VTL1 secure section",
+    "transfer_direction": "internal CP_CAMERA buffer -> external VTL1 sample",
+    "external_vtl1_is_direct_hardware_target": false,
+    "secure_lane_is_separate_lifetime": true
+  },
+  "internal_buffer": {
+    "create_api": "CreateSecureSection",
+    "assign_api": "AssignMemoryToSocDomain",
+    "assigned_domain": "0x0d",
+    "protection_literal": "0x04",
+    "page_size": "0x1000",
+    "domain_va_window": "0x18000000..0x19000000",
+    "object_assignment_handle_offset": "0x10",
+    "object_domain_va0_offset": "0x28",
+    "object_worker_mapping_offset": "0x30",
+    "object_domain_va1_offset": "0x48",
+    "hmem0_source": "object +0x28",
+    "hmem1_source": "object +0x48",
+    "hmem_addresses_checked_as_smmu_for_hw_programming": true
+  },
+  "external_buffer": {
+    "identity": "GUID",
+    "open_api": "OpenSecureSection",
+    "object_section_handle_offset": "0x88",
+    "object_worker_mapping_offset": "0x90",
+    "internal_domain_assignment_sequence_observed_in_external_open_path": false,
+    "cp_camera_domain_for_external_sample_proven": false
+  },
+  "transfer": {
+    "dispatcher": "FUN_1800037c8",
+    "destination": "external mapping + frame-data offset",
+    "source": "internal worker mapping",
+    "early_frame_helper": "FUN_180003718",
+    "early_frame_copy": "FUN_180028600(destination, source, width*height)",
+    "later_processing_helper": "FUN_180003478",
+    "direction_proven": true
+  },
+  "parity_correction": {
+    "single_protected_sample_direct_to_vfe_matches_windows": false,
+    "internal_capture_target_and_external_sample_must_be_separate": true,
+    "protected_transfer_stage_required_for_windows_parity": true,
+    "cp_camera_applies_to_internal_capture_target_proven": true,
+    "cp_camera_for_external_sample_proven": false,
+    "e004bo_physical_iova_split_applies_to_internal_capture_target": true
+  },
+  "windows_runtime_executed": false,
+  "linux_secure_runtime_executed": false,
+  "linux_memory_reassignment": false,
+  "protected_mmio_access_linux": false,
+  "qcomtee_loaded": false,
+  "next_gate": "Compile-only Linux two-buffer protected pipeline contract with internal target, external sample, transfer, lane and queue policy; no backend/runtime activation."
+}

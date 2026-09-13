@@ -1,0 +1,144 @@
+E004bp EXTERNAL VTL1 SECTION IS OPENED/MAPPED, NOT DOMAIN-ASSIGNED HERE
+
+--- external secure section open ---
+//// FUN_180004828 @180004828 ////
+string @18002e930 = %s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx
+; xref @1800049c0
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint FUN_180004828(longlong param_1)
+
+{
+  DWORD DVar1;
+  HANDLE hFileMappingObject;
+  LPVOID pvVar2;
+  undefined8 in_x4;
+  undefined8 in_x5;
+  undefined8 in_x6;
+  undefined8 in_x7;
+  uint local_70;
+  uint local_6c;
+  undefined4 local_40;
+  undefined4 uStack_3c;
+  undefined4 uStack_38;
+  undefined4 uStack_34;
+  undefined4 uStack_30;
+  undefined4 local_2c;
+  undefined4 uStack_28;
+  undefined4 uStack_24;
+  undefined4 uStack_20;
+  
+  local_70 = 0;
+  uStack_34 = (undefined4)*(undefined8 *)(param_1 + 0x74);
+  uStack_30 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x74) >> 0x20);
+  uStack_3c = (undefined4)*(undefined8 *)(param_1 + 0x6c);
+  uStack_38 = (undefined4)((ulonglong)*(undefined8 *)(param_1 + 0x6c) >> 0x20);
+  local_40 = 0x24;
+  uStack_24 = (undefined4)_UNK_18002f5e8;
+  uStack_20 = (undefined4)((ulonglong)_UNK_18002f5e8 >> 0x20);
+  local_2c = (undefined4)_DAT_18002f5e0;
+  uStack_28 = (undefined4)((ulonglong)_DAT_18002f5e0 >> 0x20);
+  hFileMappingObject = (HANDLE)OpenSecureSection(&local_40);
+  if (hFileMappingObject == (HANDLE)0x0) {
+    local_70 = DAT_180004a08;
+    FUN_180019e00(1,"%s:%d Failed to create the secure section\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x409
+                  ,in_x4,in_x5,in_x6,in_x7);
+  }
+  else {
+    pvVar2 = MapViewOfFile(hFileMappingObject,6,0,0,(SIZE_T)*(undefined4 *)(param_1 + 0x7c));
+    if (pvVar2 == (LPVOID)0x0) {
+      DVar1 = GetLastError();
+      if ((int)DVar1 < 1) {
+        local_6c = GetLastError();
+      }
+      else {
+        DVar1 = GetLastError();
+        local_6c = DVar1 & 0xffff | 0xc0070000;
+      }
+      local_70 = local_6c;
+      FUN_180019e00(1,"%s:%d Failed to map the section into trustlet, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x411,(ulonglong)local_6c,in_x5,in_x6,in_x7);
+    }
+    else {
+      FUN_180019e00(4,
+                    "%s:%d SUCCESS..!! GetSecureExternalBuffer, hSection = 0x%llx, pBuffer:0x%llx\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x415,hFileMappingObject,pvVar2,in_x6,in_x7);
+      *(HANDLE *)(param_1 + 0x88) = hFileMappingObject;
+      *(LPVOID *)(param_1 + 0x90) = pvVar2;
+    }
+  }
+  return local_70;
+}
+
+--- external release ---
+    *(undefined8 *)(param_1 + 0x18) = 0;
+  }
+  if ((*(longlong *)(param_1 + 8) == 0) || (*(longlong *)(param_1 + 0x30) == 0)) {
+    FUN_180019e00(1,"%s:%d Invalid secure image buffer for release\n",
+                  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",0x4d3
+                  ,in_x4,in_x5,in_x6,in_x7);
+    local_20 = DAT_180005858;
+  }
+  else {
+    BVar1 = UnmapViewOfFile(*(LPCVOID *)(param_1 + 0x30));
+    if (BVar1 == 0) {
+      DVar2 = GetLastError();
+      if ((int)DVar2 < 1) {
+        local_18 = GetLastError();
+      }
+      else {
+        DVar2 = GetLastError();
+        local_18 = DVar2 & 0xffff | 0xc0070000;
+      }
+      local_20 = local_18;
+      uVar4 = (ulonglong)local_18;
+      uVar3 = *(undefined8 *)(param_1 + 0x30);
+      FUN_180019e00(1,
+                    "%s:%d Failed to unmap the section from trustlet, hSectionHandle:0x%llx, pBufferAddress:0x%llx, status = 0x%x\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4db,*(undefined8 *)(param_1 + 8),uVar3,uVar4,in_x7);
+    }
+    else {
+      uVar4 = (ulonglong)local_20;
+      uVar3 = *(undefined8 *)(param_1 + 0x30);
+      FUN_180019e00(4,
+                    "%s:%d Successfully unmap the section from trustlet, hSectionHandle:0x%llx, pBufferAddress:0x%llx, status = 0x%x\n"
+                    ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4df,*(undefined8 *)(param_1 + 8),uVar3,uVar4,in_x7);
+    }
+    *(undefined8 *)(param_1 + 0x30) = 0;
+    *(undefined8 *)(param_1 + 0x50) = 0;
+    BVar1 = CloseHandle(*(HANDLE *)(param_1 + 8));
+    if (BVar1 == 0) {
+      DVar2 = GetLastError();
+      if ((int)DVar2 < 1) {
+        local_14 = GetLastError();
+      }
+      else {
+        DVar2 = GetLastError();
+        local_14 = DVar2 & 0xffff | 0xc0070000;
+      }
+      local_20 = local_14;
+      FUN_180019e00(1,"%s:%d Failed to close secure section, status = 0x%x\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4e7,(ulonglong)local_14,uVar3,uVar4,in_x7);
+    }
+    else {
+      FUN_180019e00(4,"%s:%d Successfully closed the section, hSectionHandle:0x%llx\n",
+                    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+                    0x4eb,*(undefined8 *)(param_1 + 8),uVar3,uVar4,in_x7);
+    }
+    *(undefined8 *)(param_1 + 8) = 0;
+  }
+  return local_20;
+}
+
+
+
+//// FUN_180005a48 @180005a48 ////

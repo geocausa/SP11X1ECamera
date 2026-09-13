@@ -1,0 +1,24 @@
+E004bp TWO-BUFFER OFFSET FIELD MAP
+secure-buffer object fields proven by static flow:
++0x08 internal secure-section handle
++0x10 internal AssignMemoryToSocDomain assignment handle
++0x18 internal page/domain-VA bookkeeping array
++0x20 internal size
++0x28 internal CP_CAMERA SMMU/domain VA base
++0x30 internal trustlet virtual mapping
++0x38 image/plane offset used to derive second internal address
++0x48 second internal CP_CAMERA SMMU/domain address (= +0x28 + offset)
++0x50 internal mapped-view address + image offset
++0x6c/+0x74 external secure-section GUID components
++0x88 external OpenSecureSection handle
++0x90 external trustlet virtual mapping
++0x98/+0x9c external attribute/frame-data offsets
+
+IFE pIOConfig programming:
+hMems[0] <- object +0x28
+hMems[1] <- object +0x48
+both checked non-zero as "SMMU address for HW programming"
+
+Protected handoff:
+destination <- external mapping at +0x90 (+ frame-data offset)
+source      <- internal mapping at +0x30

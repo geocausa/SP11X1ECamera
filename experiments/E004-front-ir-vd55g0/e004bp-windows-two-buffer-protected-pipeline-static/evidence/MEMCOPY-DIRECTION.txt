@@ -1,0 +1,169 @@
+E004bp MEMCOPY DIRECTION
+Ghidra decompile of trustlet FUN_180028600 used by the early-frame transfer helper.
+Signature establishes param_1=destination, param_2=source in the caller.
+
+FUNCTION=FUN_180028600 @180028600 thunk=false
+
+void FUN_180028600(undefined8 *param_1,undefined8 *param_2,ulonglong param_3)
+
+{
+  undefined8 uVar1;
+  bool bVar2;
+  undefined8 *puVar3;
+  undefined8 *puVar4;
+  uint uVar5;
+  ulonglong uVar6;
+  undefined8 *puVar7;
+  undefined8 *puVar8;
+  undefined1 uVar9;
+  undefined8 uVar10;
+  undefined8 uVar11;
+  undefined1 uVar12;
+  undefined8 uVar13;
+  undefined8 uVar14;
+  undefined1 uVar15;
+  undefined8 uVar16;
+  undefined8 uVar17;
+  undefined1 uVar18;
+  undefined8 uVar19;
+  undefined8 uVar20;
+  undefined8 uVar21;
+  undefined8 uVar22;
+  undefined8 uVar23;
+  undefined8 uVar24;
+  undefined8 uVar25;
+  undefined8 uVar26;
+  undefined8 uVar27;
+  
+  uVar5 = (uint)param_3;
+  if ((ulonglong)((longlong)param_1 - (longlong)param_2) < param_3) {
+    puVar4 = (undefined8 *)((longlong)param_2 + param_3);
+    Hint_Prefetch((longlong)puVar4 - 1,0,0,1);
+    puVar8 = (undefined8 *)((longlong)param_1 + param_3);
+    if (7 < param_3) {
+      uVar6 = param_3 - 0x20;
+      if (0x1f < param_3) {
+        bVar2 = 0x1f < uVar6;
+        uVar6 = param_3 - 0x40;
+        puVar3 = puVar4;
+        puVar7 = puVar8;
+        if (bVar2) {
+          Hint_Prefetch((longlong)puVar4 - 0x41,0,0,1);
+          bVar2 = 0x3f < uVar6;
+          uVar6 = param_3 - 0x80;
+          if (bVar2) {
+            if ((((ulonglong)puVar4 & 0xf) == 0) && (((ulonglong)puVar8 & 0xf) == 0)) {
+              do {
+                puVar4 = puVar3 + -0x10;
+                uVar25 = puVar3[-4];
+                uVar27 = puVar3[-1];
+                uVar26 = puVar3[-2];
+                uVar22 = puVar3[-7];
+                uVar21 = puVar3[-8];
+                uVar24 = puVar3[-5];
+                uVar23 = puVar3[-6];
+                puVar8 = puVar7 + -0x10;
+                uVar17 = puVar3[-0xb];
+                uVar16 = puVar3[-0xc];
+                uVar20 = puVar3[-9];
+                uVar19 = puVar3[-10];
+                uVar11 = puVar3[-0xf];
+                uVar10 = *puVar4;
+                uVar14 = puVar3[-0xd];
+                uVar13 = puVar3[-0xe];
+                Hint_Prefetch((longlong)puVar3 - 0x101,0,0,1);
+                Hint_Prefetch((longlong)puVar3 - 0x141,0,0,1);
+                puVar7[-3] = puVar3[-3];
+                puVar7[-4] = uVar25;
+                puVar7[-1] = uVar27;
+                puVar7[-2] = uVar26;
+                puVar7[-7] = uVar22;
+                puVar7[-8] = uVar21;
+                puVar7[-5] = uVar24;
+                puVar7[-6] = uVar23;
+                puVar7[-0xb] = uVar17;
+                puVar7[-0xc] = uVar16;
+                puVar7[-9] = uVar20;
+                puVar7[-10] = uVar19;
+                puVar7[-0xf] = uVar11;
+                *puVar8 = uVar10;
+                puVar7[-0xd] = uVar14;
+                puVar7[-0xe] = uVar13;
+                bVar2 = 0x7f < uVar6;
+                uVar6 = uVar6 - 0x80;
+                puVar3 = puVar4;
+                puVar7 = puVar8;
+              } while (bVar2);
+            }
+            else {
+              do {
+                uVar10 = puVar3[-8];
+                uVar11 = puVar3[-7];
+                uVar13 = puVar3[-6];
+                uVar14 = puVar3[-5];
+                uVar16 = puVar3[-4];
+                uVar17 = puVar3[-3];
+                uVar19 = puVar3[-2];
+                uVar20 = puVar3[-1];
+                puVar4 = puVar3 + -0x10;
+                uVar21 = *puVar4;
+                uVar22 = puVar3[-0xf];
+                uVar23 = puVar3[-0xe];
+                uVar24 = puVar3[-0xd];
+                uVar25 = puVar3[-0xc];
+                uVar26 = puVar3[-0xb];
+                uVar27 = puVar3[-10];
+                uVar1 = puVar3[-9];
+                Hint_Prefetch((longlong)puVar3 - 0x101,0,0,1);
+                Hint_Prefetch((longlong)puVar3 - 0x141,0,0,1);
+                *(char *)(puVar7 + -8) = (char)uVar10;
+                *(char *)((longlong)puVar7 - 0x3f) = (char)((ulonglong)uVar10 >> 8);
+                *(char *)((longlong)puVar7 - 0x3e) = (char)((ulonglong)uVar10 >> 0x10);
+                *(char *)((longlong)puVar7 - 0x3d) = (char)((ulonglong)uVar10 >> 0x18);
+                *(char *)((longlong)puVar7 - 0x3c) = (char)((ulonglong)uVar10 >> 0x20);
+                *(char *)((longlong)puVar7 - 0x3b) = (char)((ulonglong)uVar10 >> 0x28);
+                *(char *)((longlong)puVar7 - 0x3a) = (char)((ulonglong)uVar10 >> 0x30);
+                *(char *)((longlong)puVar7 - 0x39) = (char)((ulonglong)uVar10 >> 0x38);
+                *(char *)(puVar7 + -7) = (char)uVar11;
+                *(char *)((longlong)puVar7 - 0x37) = (char)((ulonglong)uVar11 >> 8);
+                *(char *)((longlong)puVar7 - 0x36) = (char)((ulonglong)uVar11 >> 0x10);
+                *(char *)((longlong)puVar7 - 0x35) = (char)((ulonglong)uVar11 >> 0x18);
+                *(char *)((longlong)puVar7 - 0x34) = (char)((ulonglong)uVar11 >> 0x20);
+                *(char *)((longlong)puVar7 - 0x33) = (char)((ulonglong)uVar11 >> 0x28);
+                *(char *)((longlong)puVar7 - 0x32) = (char)((ulonglong)uVar11 >> 0x30);
+                *(char *)((longlong)puVar7 - 0x31) = (char)((ulonglong)uVar11 >> 0x38);
+                *(char *)(puVar7 + -6) = (char)uVar13;
+                *(char *)((longlong)puVar7 - 0x2f) = (char)((ulonglong)uVar13 >> 8);
+                *(char *)((longlong)puVar7 - 0x2e) = (char)((ulonglong)uVar13 >> 0x10);
+                *(char *)((longlong)puVar7 - 0x2d) = (char)((ulonglong)uVar13 >> 0x18);
+                *(char *)((longlong)puVar7 - 0x2c) = (char)((ulonglong)uVar13 >> 0x20);
+                *(char *)((longlong)puVar7 - 0x2b) = (char)((ulonglong)uVar13 >> 0x28);
+                *(char *)((longlong)puVar7 - 0x2a) = (char)((ulonglong)uVar13 >> 0x30);
+                *(char *)((longlong)puVar7 - 0x29) = (char)((ulonglong)uVar13 >> 0x38);
+                *(char *)(puVar7 + -5) = (char)uVar14;
+                *(char *)((longlong)puVar7 - 0x27) = (char)((ulonglong)uVar14 >> 8);
+                *(char *)((longlong)puVar7 - 0x26) = (char)((ulonglong)uVar14 >> 0x10);
+                *(char *)((longlong)puVar7 - 0x25) = (char)((ulonglong)uVar14 >> 0x18);
+                *(char *)((longlong)puVar7 - 0x24) = (char)((ulonglong)uVar14 >> 0x20);
+                *(char *)((longlong)puVar7 - 0x23) = (char)((ulonglong)uVar14 >> 0x28);
+                *(char *)((longlong)puVar7 - 0x22) = (char)((ulonglong)uVar14 >> 0x30);
+                *(char *)((longlong)puVar7 - 0x21) = (char)((ulonglong)uVar14 >> 0x38);
+                *(char *)(puVar7 + -4) = (char)uVar16;
+                *(char *)((longlong)puVar7 - 0x1f) = (char)((ulonglong)uVar16 >> 8);
+                *(char *)((longlong)puVar7 - 0x1e) = (char)((ulonglong)uVar16 >> 0x10);
+                *(char *)((longlong)puVar7 - 0x1d) = (char)((ulonglong)uVar16 >> 0x18);
+                *(char *)((longlong)puVar7 - 0x1c) = (char)((ulonglong)uVar16 >> 0x20);
+                *(char *)((longlong)puVar7 - 0x1b) = (char)((ulonglong)uVar16 >> 0x28);
+                *(char *)((longlong)puVar7 - 0x1a) = (char)((ulonglong)uVar16 >> 0x30);
+                *(char *)((longlong)puVar7 - 0x19) = (char)((ulonglong)uVar16 >> 0x38);
+                *(char *)(puVar7 + -3) = (char)uVar17;
+                *(char *)((longlong)puVar7 - 0x17) = (char)((ulonglong)uVar17 >> 8);
+                *(char *)((longlong)puVar7 - 0x16) = (char)((ulonglong)uVar17 >> 0x10);
+                *(char *)((longlong)puVar7 - 0x15) = (char)((ulonglong)uVar17 >> 0x18);
+                *(char *)((longlong)puVar7 - 0x14) = (char)((ulonglong)uVar17 >> 0x20);
+                *(char *)((longlong)puVar7 - 0x13) = (char)((ulonglong)uVar17 >> 0x28);
+                *(char *)((longlong)puVar7 - 0x12) = (char)((ulonglong)uVar17 >> 0x30);
+                *(char *)((longlong)puVar7 - 0x11) = (char)((ulonglong)uVar17 >> 0x38);
+                *(char *)(puVar7 + -2) = (char)uVar19;
+                *(char *)((longlong)puVar7 - 0xf) = (char)((ulonglong)uVar19 >> 8);
+                *(char *)((longlong)puVar7 - 0xe) = (char)((ulonglong)uVar19 >> 0x10);
