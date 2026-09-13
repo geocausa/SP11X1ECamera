@@ -1,0 +1,44 @@
+{
+  "schema": "sp11-camera-e004as-secure-csi-sip-static-v1",
+  "status": "PASS_STATIC_SECURE_CSI_SIP_DECODE_NO_RUNTIME",
+  "date": "2026-09-13",
+  "sources": {
+    "qccamsecureisp_sha256": "47c944fa497477751073ec79a27a589a55e884178c1859d6f27388ec7af2ad53",
+    "qctree_sha256": "9cd8252c1b501c1d58e4c49d020d526a5b9bc41a3f5de2ec08e866c3a26c16a2"
+  },
+  "windows_request": {
+    "header_dword0": "0x02001807",
+    "header_dword1": "0x00000002",
+    "payload_values": [
+      "protect_boolean",
+      "lane_protection_bitmask"
+    ],
+    "passthrough_service": "QcTrEE PassThrough",
+    "interpretation": "raw Qualcomm SIP/SCM-shaped request"
+  },
+  "smccc_decode": {
+    "fast": false,
+    "smc64": false,
+    "owner": 2,
+    "owner_name": "SIP",
+    "function": "0x1807",
+    "qcom_service": "0x18",
+    "qcom_command": "0x07",
+    "arginfo": "0x00000002",
+    "arginfo_matches_qcom_scm_args_2_values": true
+  },
+  "linux_tree": {
+    "symbolic_service_0x18": false,
+    "exact_service_0x18_command_0x07_wrapper": false,
+    "generic_qcom_scm_transport_present": true
+  },
+  "runtime": {
+    "qcomtee_loaded": false,
+    "secure_call_executed": false,
+    "camera_memory_reassigned": false,
+    "secure_csi_state_changed": false
+  },
+  "windows_identity_4096_mapping": "unresolved",
+  "linux_secureisp_runtime_authorized": false,
+  "next_gate": "Resolve SecureCompanion identity/trustlet addressing statically; do not execute Linux SecureISP or lane-protection calls."
+}

@@ -1,0 +1,255 @@
+E004as TARGETED QCTREE DECOMP
+
+--- PassThroughServiceSipSyscall ---
+//// FUN_14001dab0 @14001dab0 ////
+
+int FUN_14001dab0(undefined8 param_1,undefined8 param_2,undefined8 param_3,undefined4 *param_4,
+                 longlong param_5,ulonglong param_6,undefined8 *param_7)
+
+{
+  int iVar1;
+  undefined2 uVar2;
+  undefined4 uVar3;
+  undefined4 uVar4;
+  undefined4 *puVar5;
+  
+  if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) >> 2 & 1) != 0) && (4 < (byte)PTR_LOOP_14005a4a8[0x29])
+     ) {
+    FUN_140003bf0(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x20,&DAT_140057c88,param_4,
+                  "PassThroughServiceSipSyscall");
+  }
+  if ((*(int *)(param_5 + 0xc) == 0) && ((param_6 & 1) != 0)) {
+    iVar1 = DAT_14001dc20;
+    if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) >> 2 & 1) != 0) &&
+       (1 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+      uVar3 = 0x242;
+      uVar2 = 0x21;
+      uVar4 = DAT_14001dc24;
+LAB_14001dbb8:
+      FUN_140003d80(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),uVar2,&DAT_140057c88,param_4,
+                    "Z:\\b\\WP\\TrEE\\rel\\10.9\\PassThroughService.c",uVar3,uVar4);
+    }
+  }
+  else if ((*(longlong *)(param_5 + 0x18) == 0x58) && (*(longlong *)(param_5 + 0x28) == 0x20)) {
+    puVar5 = *(undefined4 **)(param_5 + 0x10);
+    param_4 = puVar5 + 2;
+    iVar1 = FUN_14002c460(param_1,*puVar5,puVar5[1],param_4,*(undefined8 *)(param_5 + 0x20));
+    *param_7 = *(undefined8 *)(param_5 + 0x28);
+    if (-1 < iVar1) goto LAB_14001dbd0;
+  }
+  else {
+    iVar1 = DAT_14001dc28;
+    if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) >> 2 & 1) != 0) &&
+       (1 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+      uVar3 = 0x249;
+      uVar2 = 0x22;
+      uVar4 = DAT_14001dc2c;
+      goto LAB_14001dbb8;
+    }
+  }
+  *param_7 = 0;
+LAB_14001dbd0:
+  if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) >> 2 & 1) != 0) && (4 < (byte)PTR_LOOP_14005a4a8[0x29])
+     ) {
+    FUN_140003cb0(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x23,&DAT_140057c88,param_4,
+                  "PassThroughServiceSipSyscall",iVar1);
+  }
+  return iVar1;
+}
+
+
+
+
+--- common SIP callback wrapper ---
+
+==== 14002c460 FUN_14002c460 @14002c460 ====
+
+undefined4
+FUN_14002c460(undefined8 param_1,undefined4 param_2,undefined4 param_3,undefined8 param_4,
+             undefined8 param_5)
+
+{
+  longlong *plVar1;
+  byte bVar2;
+  undefined4 uVar3;
+  longlong lVar4;
+  code *pcVar5;
+  longlong lVar6;
+  
+  bVar2 = KeGetCurrentIrql(param_1,param_2,param_3);
+  if (((bVar2 < 2) && ((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0)) &&
+     (3 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+    FUN_1400036e8(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x22,&DAT_140057d18,param_2);
+  }
+  plVar1 = DAT_14002c5a0;
+  lVar4 = *DAT_14002c5a0;
+  pcVar5 = (code *)*DAT_14005ce20;
+  (*(code *)PTR__guard_check_icall_140056380)();
+  uVar3 = (*pcVar5)(param_1,param_2,param_3,param_4,param_5);
+  lVar6 = *plVar1;
+  bVar2 = KeGetCurrentIrql();
+  if (((bVar2 < 2) && ((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0)) &&
+     (3 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+    FUN_14001e770(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x23,&DAT_140057d18,param_2,uVar3,
+                  (int)((ulonglong)(lVar6 - lVar4) / 10000));
+  }
+  return uVar3;
+}
+
+
+
+==== 14002c1b8 FUN_14002c1b8 @14002c1b8 ====
+
+void FUN_14002c1b8(void)
+
+{
+  byte bVar1;
+  longlong lVar2;
+  undefined8 in_x3;
+  code *pcVar3;
+  
+  pcVar3 = *(code **)(DAT_14005c408 + 0x650);
+  (*(code *)PTR__guard_check_icall_140056380)();
+  lVar2 = (*pcVar3)(DAT_14005c438,*DAT_14005c438,PTR_DAT_14005a3a8);
+  if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) && (4 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+    FUN_140003bf0(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x1e,&DAT_140057d18,in_x3,
+                  "TzLockAcquire");
+  }
+  bVar1 = KeGetCurrentIrql();
+  if (bVar1 < 2) {
+    pcVar3 = *(code **)(DAT_14005c408 + 0x9c8);
+    (*(code *)PTR__guard_check_icall_140056380)();
+
+--- SipArmV8Syscall excerpt ---
+==== 14001f5c0 FUN_14001f5c0 @14001f5c0 ====
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+int FUN_14001f5c0(undefined8 param_1,undefined4 param_2,undefined4 param_3,undefined8 *param_4,
+                 undefined8 param_5)
+
+{
+  int iVar1;
+  int iVar2;
+  longlong lVar3;
+  char *pcVar4;
+  undefined2 uVar5;
+  undefined8 *puVar6;
+  undefined8 *puVar7;
+  undefined4 uVar8;
+  code *pcVar9;
+  undefined8 local_c0;
+  undefined8 uStack_b8;
+  undefined8 local_b0;
+  undefined8 uStack_a8;
+  undefined8 local_a0;
+  undefined8 uStack_98;
+  undefined8 local_90;
+  undefined8 uStack_88;
+  undefined8 local_80;
+  undefined8 uStack_78;
+  
+  puVar7 = &local_c0;
+  local_c0 = 0;
+  uStack_b8 = 0;
+  local_b0 = 0;
+  uStack_a8 = 0;
+  local_a0 = 0;
+  uStack_98 = 0;
+  local_90 = 0;
+  uStack_88 = 0;
+  local_80 = 0;
+  uStack_78 = 0;
+  pcVar9 = *(code **)(DAT_14005c408 + 0x650);
+  puVar6 = param_4;
+  (*(code *)PTR__guard_check_icall_140056380)(param_1,param_2,param_3);
+  lVar3 = (*pcVar9)(DAT_14005c438,*DAT_14005c438,PTR_DAT_14005a3a8);
+  pcVar9 = *(code **)(DAT_14005c408 + 0x650);
+  (*(code *)PTR__guard_check_icall_140056380)();
+  pcVar4 = (char *)(*pcVar9)(DAT_14005c438,*(undefined8 *)(lVar3 + 0x28),PTR_DAT_14005a148);
+  if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) && (4 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+    FUN_140003bf0(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x26,&DAT_140057ca8,puVar6,
+                  "SipArmV8Syscall");
+  }
+  if (((*pcVar4 == '\x01') && ((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0)) &&
+     (4 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+    FUN_140003680(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x27,&DAT_140057ca8);
+  }
+  FUN_140052268(&local_c0,0x50,param_4,0x50);
+  FUN_14002c1b8();
+  pcVar9 = DAT_14005cc80;
+  *(undefined4 *)(lVar3 + 0x10) = param_2;
+  (*(code *)PTR__guard_check_icall_140056380)();
+  iVar1 = (*pcVar9)(param_1,param_2,param_3,&local_c0,param_5,0,0);
+  if (iVar1 < 0) {
+    if (-1 < iVar1) {
+      iVar1 = 0;
+    }
+    do {
+      if (iVar1 != -0xc) {
+        if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) == 0) ||
+           ((byte)PTR_LOOP_14005a4a8[0x29] < 2)) goto LAB_14001f89c;
+        uVar8 = 0x23e;
+        uVar5 = 0x29;
+        goto LAB_14001f880;
+      }
+      KeResetEvent(pcVar4 + 0x40);
+      if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) && (3 < (byte)PTR_LOOP_14005a4a8[0x29]))
+      {
+        FUN_140003680(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x2a,&DAT_140057ca8);
+      }
+      FUN_14002c2e8();
+      puVar7 = (undefined8 *)0x0;
+      iVar2 = KeWaitForSingleObject(pcVar4 + 0x40,0,0,0,0);
+      FUN_14002c1b8();
+      if (iVar2 == 0x102) {
+        if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) &&
+           (1 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+          iVar2 = 0x102;
+          uVar8 = 0x24e;
+          uVar5 = 0x2b;
+LAB_14001f960:
+          FUN_140003d80(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),uVar5,&DAT_140057ca8,puVar7,
+                        "Z:\\b\\WP\\TrEE\\rel\\10.9\\TZArmV8.c",uVar8,iVar2);
+        }
+        goto LAB_14001f89c;
+      }
+      if (iVar2 != 0) {
+        if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) &&
+           (1 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+          uVar8 = 0x25a;
+          uVar5 = 0x2d;
+          goto LAB_14001f960;
+        }
+        goto LAB_14001f89c;
+      }
+      if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) && (3 < (byte)PTR_LOOP_14005a4a8[0x29]))
+      {
+        FUN_140003680(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x2c,&DAT_140057ca8);
+      }
+      FUN_140052268(&local_c0,0x50,param_4,0x50);
+      pcVar9 = DAT_14005cc80;
+      *(undefined4 *)(lVar3 + 0x10) = param_2;
+      (*(code *)PTR__guard_check_icall_140056380)();
+      puVar7 = &local_c0;
+      iVar1 = (*pcVar9)(param_1,param_2,param_3,&local_c0,param_5,0,0);
+    } while (iVar1 < 0);
+  }
+  if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) && (3 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+    uVar8 = 0x239;
+    uVar5 = 0x28;
+LAB_14001f880:
+    FUN_140003d80(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),uVar5,&DAT_140057ca8,puVar7,
+                  "Z:\\b\\WP\\TrEE\\rel\\10.9\\TZArmV8.c",uVar8,iVar1);
+  }
+LAB_14001f89c:
+  FUN_14002c2e8();
+  if (((*(uint *)(PTR_LOOP_14005a4a8 + 0x2c) & 1) != 0) && (4 < (byte)PTR_LOOP_14005a4a8[0x29])) {
+    FUN_140003cb0(*(undefined8 *)(PTR_LOOP_14005a4a8 + 0x18),0x2e,&DAT_140057ca8,puVar7,
+                  "SipArmV8Syscall",iVar1);
+  }
+  return iVar1;
+}
+
+
