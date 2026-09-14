@@ -1,0 +1,53 @@
+{
+  "experiment": "E004cn",
+  "status": "PASS_CP_CAMERA_CP_CDSP_RULE_AND_CPZ_EXIST_NO_AUTHORIZED_WORKER_BINDING",
+  "mode": "static-passive-only",
+  "camera_owner_contract": {
+    "cp_camera": "0x0d",
+    "cp_cdsp": "0x2a",
+    "protected_cdsp_output_flag": true,
+    "qhee_coowner_rule_proven": true,
+    "ordinary_hlos_cpu_map_allowed": false
+  },
+  "golden_cdsp": {
+    "firmware": "qcom/x1e80100/microsoft/Denali/qccdsp8380.mbn",
+    "firmware_sha256": "4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789",
+    "remoteproc_running": true,
+    "fastrpc_loaded": true,
+    "secure_device_node_present": true,
+    "live_qcom_vmids_present": false,
+    "live_non_secure_domain_property": true
+  },
+  "cdsp_secure_process": {
+    "secure_process_strings": true,
+    "cpz_pd_present": true,
+    "cpz_phys_map_helper_present": true,
+    "host_creation_protocol_resolved": false,
+    "camera_cpz_worker_identity_resolved": false
+  },
+  "linux_fastrpc": {
+    "secure_device_means_signed_pd_admission": true,
+    "securemap_retains_hlos_owner": true,
+    "static_pd_can_use_dt_owner_set": true,
+    "x1e_cp_cdsp_dt_binding_found": false,
+    "parity_ready": false
+  },
+  "windows_cdsp": {
+    "device_mft_uses_libcdsprpc": true,
+    "bitml_nsp_cdsp_client": true,
+    "ife_hvx_dsp_streamer_client": true,
+    "bitml_is_final_protected_frame_transfer": false,
+    "protected_transfer_remains_vtl1_cpu_worker": true
+  },
+  "runtime_actions": {
+    "camera_stream": false,
+    "fastrpc_invoke": false,
+    "cpz_process_create": false,
+    "cdsp_restart": false,
+    "scm_assign_mem": false,
+    "protected_memory_transition": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004co CDSP CPZ protected-process authority, static first"
+}

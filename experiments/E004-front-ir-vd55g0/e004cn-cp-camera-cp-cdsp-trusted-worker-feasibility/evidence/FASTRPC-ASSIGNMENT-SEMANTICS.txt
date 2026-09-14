@@ -1,0 +1,416 @@
+E004cn FASTRPC ASSIGNMENT SEMANTICS
+--- lines 320,370 ---
+	if (!cctx->soc_data->sid_pos)
+		return 0;
+	return iova & GENMASK_ULL(cctx->soc_data->sid_pos - 1, 0);
+}
+
+/*
+ * Prepare the consolidated iova to send to DSP by prepending the SID
+ * to smmu PA at the appropriate position
+ */
+static inline u64 fastrpc_sid_offset(struct fastrpc_channel_ctx *cctx,
+				     struct fastrpc_session_ctx *sctx)
+{
+	return (u64)sctx->sid << cctx->soc_data->sid_pos;
+}
+
+static void fastrpc_free_map(struct kref *ref)
+{
+	struct fastrpc_map *map;
+
+	map = container_of(ref, struct fastrpc_map, refcount);
+
+	if (map->table) {
+		if (map->attr & FASTRPC_ATTR_SECUREMAP) {
+			struct qcom_scm_vmperm perm;
+			int vmid = map->fl->cctx->vmperms[0].vmid;
+			u64 src_perms = BIT(QCOM_SCM_VMID_HLOS) | BIT(vmid);
+			int err = 0;
+
+			perm.vmid = QCOM_SCM_VMID_HLOS;
+			perm.perm = QCOM_SCM_PERM_RWX;
+			err = qcom_scm_assign_mem(map->dma_addr, map->len,
+				&src_perms, &perm, 1);
+			if (err) {
+				dev_err(map->fl->sctx->dev,
+					"Failed to assign memory dma_addr %pad size 0x%llx err %d\n",
+					&map->dma_addr, map->len, err);
+				return;
+			}
+		}
+		dma_buf_unmap_attachment_unlocked(map->attach, map->table,
+						  DMA_BIDIRECTIONAL);
+		dma_buf_detach(map->buf, map->attach);
+		dma_buf_put(map->buf);
+	}
+
+	if (map->fl) {
+		spin_lock(&map->fl->lock);
+		list_del(&map->node);
+		spin_unlock(&map->fl->lock);
+		map->fl = NULL;
+	}
+--- lines 830,920 ---
+{
+	return sg_dma_addr + fastrpc_sid_offset(fl->cctx, fl->sctx);
+}
+
+static int fastrpc_map_attach(struct fastrpc_user *fl, int fd,
+			      u64 len, u32 attr, struct fastrpc_map **ppmap)
+{
+	struct fastrpc_session_ctx *sess = fl->sctx;
+	struct fastrpc_map *map = NULL;
+	struct sg_table *table;
+	struct scatterlist *sgl = NULL;
+	int err = 0, sgl_index = 0;
+
+	map = kzalloc_obj(*map);
+	if (!map)
+		return -ENOMEM;
+
+	INIT_LIST_HEAD(&map->node);
+	kref_init(&map->refcount);
+
+	map->fl = fl;
+	map->fd = fd;
+	map->buf = dma_buf_get(fd);
+	if (IS_ERR(map->buf)) {
+		err = PTR_ERR(map->buf);
+		goto get_err;
+	}
+
+	map->attach = dma_buf_attach(map->buf, sess->dev);
+	if (IS_ERR(map->attach)) {
+		dev_err(sess->dev, "Failed to attach dmabuf\n");
+		err = PTR_ERR(map->attach);
+		goto attach_err;
+	}
+
+	table = dma_buf_map_attachment_unlocked(map->attach, DMA_BIDIRECTIONAL);
+	if (IS_ERR(table)) {
+		err = PTR_ERR(table);
+		goto map_err;
+	}
+	map->table = table;
+
+	if (attr & FASTRPC_ATTR_SECUREMAP)
+		map->dma_addr = sg_phys(map->table->sgl);
+	else
+		map->dma_addr = fastrpc_compute_dma_addr(fl, sg_dma_address(map->table->sgl));
+	for_each_sg(map->table->sgl, sgl, map->table->nents,
+		sgl_index)
+		map->size += sg_dma_len(sgl);
+	if (len > map->size) {
+		dev_dbg(sess->dev, "Bad size passed len 0x%llx map size 0x%llx\n",
+				len, map->size);
+		err = -EINVAL;
+		goto map_err;
+	}
+	map->va = sg_virt(map->table->sgl);
+	map->len = len;
+
+	if (attr & FASTRPC_ATTR_SECUREMAP) {
+		/*
+		 * If subsystem VMIDs are defined in DTSI, then do
+		 * hyp_assign from HLOS to those VM(s)
+		 */
+		u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
+		struct qcom_scm_vmperm dst_perms[2] = {0};
+
+		dst_perms[0].vmid = QCOM_SCM_VMID_HLOS;
+		dst_perms[0].perm = QCOM_SCM_PERM_RW;
+		dst_perms[1].vmid = fl->cctx->vmperms[0].vmid;
+		dst_perms[1].perm = QCOM_SCM_PERM_RWX;
+		map->attr = attr;
+		err = qcom_scm_assign_mem(map->dma_addr, (u64)map->len, &src_perms, dst_perms, 2);
+		if (err) {
+			dev_err(sess->dev,
+				"Failed to assign memory with dma_addr %pad size 0x%llx err %d\n",
+				&map->dma_addr, map->len, err);
+			goto map_err;
+		}
+	}
+	spin_lock(&fl->lock);
+	list_add_tail(&map->node, &fl->maps);
+	spin_unlock(&fl->lock);
+	*ppmap = map;
+
+	return 0;
+
+map_err:
+	dma_buf_detach(map->buf, map->attach);
+attach_err:
+	dma_buf_put(map->buf);
+get_err:
+--- lines 1355,1455 ---
+	if (!args)
+		return -ENOMEM;
+
+	if (copy_from_user(&init, argp, sizeof(init))) {
+		err = -EFAULT;
+		goto err;
+	}
+
+	if (init.namelen > INIT_FILE_NAMELEN_MAX) {
+		err = -EINVAL;
+		goto err;
+	}
+
+	name = memdup_user(u64_to_user_ptr(init.name), init.namelen);
+	if (IS_ERR(name)) {
+		err = PTR_ERR(name);
+		goto err;
+	}
+
+	if (!fl->cctx->remote_heap) {
+		err = fastrpc_remote_heap_alloc(fl, fl->sctx->dev, init.memlen,
+						&fl->cctx->remote_heap);
+		if (err)
+			goto err_name;
+
+		/* Map if we have any heap VMIDs associated with this ADSP Static Process. */
+		if (fl->cctx->vmcount) {
+			u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
+
+			err = qcom_scm_assign_mem(fl->cctx->remote_heap->dma_addr,
+							(u64)fl->cctx->remote_heap->size,
+							&src_perms,
+							fl->cctx->vmperms, fl->cctx->vmcount);
+			if (err) {
+				dev_err(fl->sctx->dev,
+					"Failed to assign memory with dma_addr %pad size 0x%llx err %d\n",
+					&fl->cctx->remote_heap->dma_addr,
+					fl->cctx->remote_heap->size, err);
+				goto err_map;
+			}
+			scm_done = true;
+		}
+	}
+
+	inbuf.client_id = fl->client_id;
+	inbuf.namelen = init.namelen;
+	inbuf.pageslen = 0;
+	fl->pd = USER_PD;
+
+	args[0].ptr = (u64)(uintptr_t)&inbuf;
+	args[0].length = sizeof(inbuf);
+	args[0].fd = -1;
+
+	args[1].ptr = (u64)(uintptr_t)name;
+	args[1].length = inbuf.namelen;
+	args[1].fd = -1;
+
+	pages[0].addr = fl->cctx->remote_heap->dma_addr;
+	pages[0].size = fl->cctx->remote_heap->size;
+
+	args[2].ptr = (u64)(uintptr_t) pages;
+	args[2].length = sizeof(*pages);
+	args[2].fd = -1;
+
+	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_CREATE_STATIC, 3, 0);
+
+	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE,
+				      sc, args);
+	if (err)
+		goto err_invoke;
+
+	kfree(args);
+	kfree(name);
+
+	return 0;
+err_invoke:
+	if (fl->cctx->vmcount && scm_done) {
+		u64 src_perms = 0;
+		struct qcom_scm_vmperm dst_perms;
+		u32 i;
+
+		for (i = 0; i < fl->cctx->vmcount; i++)
+			src_perms |= BIT(fl->cctx->vmperms[i].vmid);
+
+		dst_perms.vmid = QCOM_SCM_VMID_HLOS;
+		dst_perms.perm = QCOM_SCM_PERM_RWX;
+		err = qcom_scm_assign_mem(fl->cctx->remote_heap->dma_addr,
+						(u64)fl->cctx->remote_heap->size,
+						&src_perms, &dst_perms, 1);
+		if (err)
+			dev_err(fl->sctx->dev, "Failed to assign memory dma_addr %pad size 0x%llx err %d\n",
+				&fl->cctx->remote_heap->dma_addr, fl->cctx->remote_heap->size, err);
+	}
+err_map:
+	fastrpc_buf_free(fl->cctx->remote_heap);
+	fl->cctx->remote_heap = NULL;
+err_name:
+	kfree(name);
+err:
+	kfree(args);
+
+--- lines 1935,2020 ---
+	struct fastrpc_mmap_rsp_msg rsp_msg;
+	struct fastrpc_phy_page pages;
+	struct fastrpc_req_mmap req;
+	struct device *dev = fl->sctx->dev;
+	int err;
+	u32 sc;
+
+	if (copy_from_user(&req, argp, sizeof(req)))
+		return -EFAULT;
+
+	if (req.flags != ADSP_MMAP_ADD_PAGES && req.flags != ADSP_MMAP_REMOTE_HEAP_ADDR) {
+		dev_err(dev, "flag not supported 0x%x\n", req.flags);
+
+		return -EINVAL;
+	}
+
+	if (req.vaddrin) {
+		dev_err(dev, "adding user allocated pages is not supported\n");
+		return -EINVAL;
+	}
+
+	if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR)
+		err = fastrpc_remote_heap_alloc(fl, dev, req.size, &buf);
+	else
+		err = fastrpc_buf_alloc(fl, dev, req.size, &buf);
+
+	if (err) {
+		dev_err(dev, "failed to allocate buffer\n");
+		return err;
+	}
+
+	req_msg.client_id = fl->client_id;
+	req_msg.flags = req.flags;
+	req_msg.vaddr = req.vaddrin;
+	req_msg.num = sizeof(pages);
+
+	args[0].ptr = (u64) (uintptr_t) &req_msg;
+	args[0].length = sizeof(req_msg);
+
+	pages.addr = buf->dma_addr;
+	pages.size = buf->size;
+
+	args[1].ptr = (u64) (uintptr_t) &pages;
+	args[1].length = sizeof(pages);
+
+	args[2].ptr = (u64) (uintptr_t) &rsp_msg;
+	args[2].length = sizeof(rsp_msg);
+
+	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_MMAP, 2, 1);
+	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE, sc,
+				      &args[0]);
+	if (err) {
+		dev_err(dev, "mmap error (len 0x%08llx)\n", buf->size);
+		fastrpc_buf_free(buf);
+		return err;
+	}
+
+	/* update the buffer to be able to deallocate the memory on the DSP */
+	buf->raddr = (uintptr_t) rsp_msg.vaddr;
+
+	/* let the client know the address to use */
+	req.vaddrout = rsp_msg.vaddr;
+
+	/* Add memory to static PD pool, protection thru hypervisor */
+	if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
+		u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
+
+		err = qcom_scm_assign_mem(buf->dma_addr, (u64)buf->size,
+			&src_perms, fl->cctx->vmperms, fl->cctx->vmcount);
+		if (err) {
+			dev_err(fl->sctx->dev,
+				"Failed to assign memory dma_addr %pad size 0x%llx err %d",
+				&buf->dma_addr, buf->size, err);
+			goto err_assign;
+		}
+	}
+
+	spin_lock(&fl->lock);
+	list_add_tail(&buf->node, &fl->mmaps);
+	spin_unlock(&fl->lock);
+
+	if (copy_to_user((void __user *)argp, &req, sizeof(req))) {
+		err = -EFAULT;
+		goto err_assign;
+	}
+
+--- lines 2360,2440 ---
+	.dma_addr_bits_cdsp = 32,
+	.dma_addr_bits_default = 32,
+};
+
+static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
+{
+	struct device *rdev = &rpdev->dev;
+	struct fastrpc_channel_ctx *data;
+	int i, err, domain_id = -1, vmcount;
+	const char *domain;
+	bool secure_dsp;
+	unsigned int vmids[FASTRPC_MAX_VMIDS];
+	const struct fastrpc_soc_data *soc_data;
+
+	soc_data = device_get_match_data(rdev);
+
+	err = of_property_read_string(rdev->of_node, "label", &domain);
+	if (err) {
+		dev_info(rdev, "FastRPC Domain not specified in DT\n");
+		return err;
+	}
+
+	domain_id = fastrpc_get_domain_id(domain);
+
+	if (domain_id < 0) {
+		dev_info(rdev, "FastRPC Domain %s not supported\n", domain);
+		return -EINVAL;
+	}
+
+	if (of_reserved_mem_device_init_by_idx(rdev, rdev->of_node, 0))
+		dev_info(rdev, "no reserved DMA memory for FASTRPC\n");
+
+	vmcount = of_property_read_variable_u32_array(rdev->of_node,
+				"qcom,vmids", &vmids[0], 0, FASTRPC_MAX_VMIDS);
+	if (vmcount < 0)
+		vmcount = 0;
+	else if (!qcom_scm_is_available())
+		return -EPROBE_DEFER;
+
+	data = kzalloc_obj(*data);
+	if (!data)
+		return -ENOMEM;
+
+	if (vmcount) {
+		data->vmcount = vmcount;
+		for (i = 0; i < data->vmcount; i++) {
+			data->vmperms[i].vmid = vmids[i];
+			data->vmperms[i].perm = QCOM_SCM_PERM_RWX;
+		}
+	}
+
+	if (domain_id == SDSP_DOMAIN_ID) {
+		struct resource res;
+		u64 src_perms;
+
+		err = of_reserved_mem_region_to_resource(rdev->of_node, 0, &res);
+		if (!err) {
+			src_perms = BIT(QCOM_SCM_VMID_HLOS);
+
+			err = qcom_scm_assign_mem(res.start, resource_size(&res), &src_perms,
+				    data->vmperms, data->vmcount);
+			if (err)
+				goto err_free_data;
+		}
+
+	}
+
+	secure_dsp = !(of_property_read_bool(rdev->of_node, "qcom,non-secure-domain"));
+	data->secure = secure_dsp;
+	data->soc_data = soc_data;
+
+	switch (domain_id) {
+	case ADSP_DOMAIN_ID:
+	case MDSP_DOMAIN_ID:
+	case SDSP_DOMAIN_ID:
+		/* Unsigned PD offloading is only supported on CDSP and GDSP */
+		data->unsigned_support = false;
+		err = fastrpc_device_register(rdev, data, secure_dsp, domain);
+		if (err)
+			goto err_free_data;
+		break;

@@ -1,0 +1,45 @@
+E004cn GOLDEN CDSP/FASTRPC PASSIVE INVENTORY
+7.1.5-sp11-render-parity-v4+
+CONFIG_DMA_SHARED_BUFFER=y
+CONFIG_QCOM_SCM=y
+CONFIG_QCOM_FASTRPC=m
+CONFIG_QCOM_RPROC_COMMON=m
+CONFIG_QCOM_Q6V5_PAS=m
+CONFIG_QCOM_SYSMON=m
+--- loaded modules ---
+q6prm_clocks           12288  17
+q6prm                  12288  1 q6prm_clocks
+fastrpc                45056  0
+q6apm_lpass_dais       20480  1
+q6apm_dai              28672  1
+snd_q6dsp_common       49152  2 q6apm_lpass_dais,q6prm_clocks
+snd_q6apm              94208  5 q6apm_dai,q6prm,q6apm_lpass_dais,snd_soc_x1e80100
+apr                    20480  2 snd_q6apm,q6prm
+rpmsg_ctrl             12288  0
+snd_soc_core          430080  16 snd_q6apm,q6apm_dai,snd_soc_qcom_common,q6apm_lpass_dais,snd_soc_hdmi_codec,snd_soc_lpass_wsa_macro,snd_soc_wsa884x,snd_soc_qcom_sdw,snd_soc_lpass_va_macro,snd_soc_wcd938x,snd_soc_wcd_mbhc,snd_soc_lpass_rx_macro,soundwire_qcom,snd_soc_x1e80100,snd_soc_lpass_tx_macro,snd_soc_wcd_classh
+qcom_q6v5_pas          49152  0
+qcom_pil_info          16384  1 qcom_q6v5_pas
+qcom_q6v5              16384  1 qcom_q6v5_pas
+qcom_sysmon            24576  2 qcom_q6v5_pas,qcom_q6v5
+qcom_common            20480  2 ath12k,qcom_q6v5_pas
+snd_pcm               208896  7 q6apm_dai,q6apm_lpass_dais,snd_soc_hdmi_codec,snd_compress,snd_soc_core,snd_soc_lpass_rx_macro,snd_pcm_dmaengine
+qcom_glink_smem        12288  1 qcom_common
+mdt_loader             12288  3 ath12k,msm,qcom_q6v5_pas
+ucsi_glink             20480  0
+typec_ucsi             73728  1 ucsi_glink
+--- devices ---
+crw------- 1 root root  10, 265 Sep 13 18:36 /dev/fastrpc-adsp
+crw------- 1 root root  10, 264 Sep 13 18:36 /dev/fastrpc-cdsp
+crw------- 1 root root  10, 263 Sep 13 18:36 /dev/fastrpc-cdsp-secure
+crw------- 1 root root 241,   0 Sep 13 18:36 /dev/remoteproc0
+crw------- 1 root root 241,   1 Sep 13 18:36 /dev/remoteproc1
+--- remoteprocs ---
+[/sys/class/remoteproc/remoteproc0]
+name=adsp
+state=running
+firmware=qcom/x1e80100/microsoft/Denali/qcadsp8380.mbn
+[/sys/class/remoteproc/remoteproc1]
+name=cdsp
+state=running
+firmware=qcom/x1e80100/microsoft/Denali/qccdsp8380.mbn
+--- fastrpc sysfs/platform ---

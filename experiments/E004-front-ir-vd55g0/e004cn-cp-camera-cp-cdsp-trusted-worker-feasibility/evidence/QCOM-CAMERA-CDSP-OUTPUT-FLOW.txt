@@ -1,0 +1,364 @@
+E004cn CDSP_OUTPUT FLOW IN QUALCOMM CAMERA STACK
+--- flag definition and all uses ---
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:606:		if (cam_flags & CAM_MEM_FLAG_CDSP_OUTPUT) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:716:		(cam_flags & CAM_MEM_FLAG_CDSP_OUTPUT)) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/include/uapi/camera/media/cam_req_mgr.h:290:#define CAM_MEM_FLAG_CDSP_OUTPUT                (1<<12)
+
+--- protected mode and CDSP output surrounding callsites ---
+===== /home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/include/uapi/camera/media/cam_req_mgr.h =====
+255-};
+256-
+257-/**
+258- * cam_req_mgr specific opcode ids
+259- */
+260-#define CAM_REQ_MGR_CREATE_DEV_NODES            (CAM_COMMON_OPCODE_MAX + 1)
+261-#define CAM_REQ_MGR_CREATE_SESSION              (CAM_COMMON_OPCODE_MAX + 2)
+262-#define CAM_REQ_MGR_DESTROY_SESSION             (CAM_COMMON_OPCODE_MAX + 3)
+263-#define CAM_REQ_MGR_LINK                        (CAM_COMMON_OPCODE_MAX + 4)
+264-#define CAM_REQ_MGR_UNLINK                      (CAM_COMMON_OPCODE_MAX + 5)
+265-#define CAM_REQ_MGR_SCHED_REQ                   (CAM_COMMON_OPCODE_MAX + 6)
+266-#define CAM_REQ_MGR_FLUSH_REQ                   (CAM_COMMON_OPCODE_MAX + 7)
+267-#define CAM_REQ_MGR_SYNC_MODE                   (CAM_COMMON_OPCODE_MAX + 8)
+268-#define CAM_REQ_MGR_ALLOC_BUF                   (CAM_COMMON_OPCODE_MAX + 9)
+269-#define CAM_REQ_MGR_MAP_BUF                     (CAM_COMMON_OPCODE_MAX + 10)
+270-#define CAM_REQ_MGR_RELEASE_BUF                 (CAM_COMMON_OPCODE_MAX + 11)
+271-#define CAM_REQ_MGR_CACHE_OPS                   (CAM_COMMON_OPCODE_MAX + 12)
+272-#define CAM_REQ_MGR_LINK_CONTROL                (CAM_COMMON_OPCODE_MAX + 13)
+273-#define CAM_REQ_MGR_LINK_V2                     (CAM_COMMON_OPCODE_MAX + 14)
+274-#define CAM_REQ_MGR_REQUEST_DUMP                (CAM_COMMON_OPCODE_MAX + 15)
+275-
+276-/* end of cam_req_mgr opcodes */
+277-
+278-#define CAM_MEM_FLAG_HW_READ_WRITE              (1<<0)
+279-#define CAM_MEM_FLAG_HW_READ_ONLY               (1<<1)
+280-#define CAM_MEM_FLAG_HW_WRITE_ONLY              (1<<2)
+281-#define CAM_MEM_FLAG_KMD_ACCESS                 (1<<3)
+282-#define CAM_MEM_FLAG_UMD_ACCESS                 (1<<4)
+283-#define CAM_MEM_FLAG_PROTECTED_MODE             (1<<5)
+284-#define CAM_MEM_FLAG_CMD_BUF_TYPE               (1<<6)
+285-#define CAM_MEM_FLAG_PIXEL_BUF_TYPE             (1<<7)
+286-#define CAM_MEM_FLAG_STATS_BUF_TYPE             (1<<8)
+287-#define CAM_MEM_FLAG_PACKET_BUF_TYPE            (1<<9)
+288-#define CAM_MEM_FLAG_CACHE                      (1<<10)
+289-#define CAM_MEM_FLAG_HW_SHARED_ACCESS           (1<<11)
+290:#define CAM_MEM_FLAG_CDSP_OUTPUT                (1<<12)
+291-#define CAM_MEM_FLAG_DISABLE_DELAYED_UNMAP      (1<<13)
+292-#define CAM_MEM_FLAG_KMD_DEBUG_FLAG             (1<<14)
+293-#define CAM_MEM_FLAG_EVA_NOPIXEL                (1<<15)
+294-
+295-
+296-#define CAM_MEM_MMU_MAX_HANDLE                  16
+297-
+298-/* Maximum allowed buffers in existence */
+299-#define CAM_MEM_BUFQ_MAX                        2048
+300-
+301-#define CAM_MEM_MGR_SECURE_BIT_POS              15
+302-#define CAM_MEM_MGR_HDL_IDX_SIZE                15
+303-#define CAM_MEM_MGR_HDL_FD_SIZE                 16
+304-#define CAM_MEM_MGR_HDL_IDX_END_POS             16
+305-#define CAM_MEM_MGR_HDL_FD_END_POS              32
+306-
+307-#define CAM_MEM_MGR_HDL_IDX_MASK      ((1 << CAM_MEM_MGR_HDL_IDX_SIZE) - 1)
+308-
+309-#define GET_MEM_HANDLE(idx, fd) \
+310-	((idx & CAM_MEM_MGR_HDL_IDX_MASK) | \
+311-	(fd << (CAM_MEM_MGR_HDL_FD_END_POS - CAM_MEM_MGR_HDL_FD_SIZE))) \
+312-
+313-#define GET_FD_FROM_HANDLE(hdl) \
+314-	(hdl >> (CAM_MEM_MGR_HDL_FD_END_POS - CAM_MEM_MGR_HDL_FD_SIZE)) \
+315-
+316-#define CAM_MEM_MGR_GET_HDL_IDX(hdl) (hdl & CAM_MEM_MGR_HDL_IDX_MASK)
+317-
+318-#define CAM_MEM_MGR_SET_SECURE_HDL(hdl, flag) \
+319-	((flag) ? (hdl |= (1 << CAM_MEM_MGR_SECURE_BIT_POS)) : \
+320-	((hdl) &= ~(1 << CAM_MEM_MGR_SECURE_BIT_POS)))
+321-
+322-#define CAM_MEM_MGR_IS_SECURE_HDL(hdl) \
+323-	(((hdl) & \
+324-	(1<<CAM_MEM_MGR_SECURE_BIT_POS)) >> CAM_MEM_MGR_SECURE_BIT_POS)
+325-
+326-/**
+327- * memory allocation type
+328- */
+329-#define CAM_MEM_DMA_NONE                        0
+330-#define CAM_MEM_DMA_BIDIRECTIONAL               1
+331-#define CAM_MEM_DMA_TO_DEVICE                   2
+332-#define CAM_MEM_DMA_FROM_DEVICE                 3
+333-
+334-
+335-/**
+336- * memory cache operation
+337- */
+338-#define CAM_MEM_CLEAN_CACHE                     1
+339-#define CAM_MEM_INV_CACHE                       2
+340-#define CAM_MEM_CLEAN_INV_CACHE                 3
+341-
+342-
+343-/**
+344- * struct cam_mem_alloc_out_params
+345- * @buf_handle: buffer handle
+346- * @fd: output buffer file descriptor
+347- * @vaddr: virtual address pointer
+348- */
+349-struct cam_mem_alloc_out_params {
+350-	__u32 buf_handle;
+351-	__s32 fd;
+352-	__u64 vaddr;
+353-};
+354-
+355-/**
+===== /home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c =====
+571-
+572-	if (tbl.alloc_profile_enable)
+573-		CAM_GET_TIMESTAMP(ts1);
+574-
+575-	if ((cam_flags & CAM_MEM_FLAG_CACHE) ||
+576-		(tbl.force_cache_allocs &&
+577-		(!(cam_flags & CAM_MEM_FLAG_PROTECTED_MODE)))) {
+578-		CAM_DBG(CAM_MEM,
+579-			"Using CACHED heap, cam_flags=0x%x, force_cache_allocs=%d",
+580-			cam_flags, tbl.force_cache_allocs);
+581-		use_cached_heap = true;
+582-	} else if (cam_flags & CAM_MEM_FLAG_PROTECTED_MODE) {
+583-		use_cached_heap = true;
+584-		CAM_DBG(CAM_MEM,
+585-			"Using CACHED heap for secure, cam_flags=0x%x, force_cache_allocs=%d",
+586-			cam_flags, tbl.force_cache_allocs);
+587-	} else {
+588-		use_cached_heap = false;
+589-		CAM_ERR(CAM_MEM,
+590-			"Using UNCACHED heap not supported, cam_flags=0x%x, force_cache_allocs=%d",
+591-			cam_flags, tbl.force_cache_allocs);
+592-		/*
+593-		 * Need a better handling based on whether dma-buf-heaps support
+594-		 * uncached heaps or not. For now, assume not supported.
+595-		 */
+596-		return -EINVAL;
+597-	}
+598-
+599-	if (cam_flags & CAM_MEM_FLAG_PROTECTED_MODE) {
+600-		heap = tbl.secure_display_heap;
+601-
+602-		vmids[num_vmids] = VMID_CP_CAMERA;
+603-		perms[num_vmids] = PERM_READ | PERM_WRITE;
+604-		num_vmids++;
+605-
+606:		if (cam_flags & CAM_MEM_FLAG_CDSP_OUTPUT) {
+607-			CAM_DBG(CAM_MEM, "Secure mode CDSP flags");
+608-
+609-			vmids[num_vmids] = VMID_CP_CDSP;
+610-			perms[num_vmids] = PERM_READ | PERM_WRITE;
+611-			num_vmids++;
+612-		}
+613-	} else if (cam_flags & CAM_MEM_FLAG_EVA_NOPIXEL) {
+614-		heap = tbl.secure_display_heap;
+615-		vmids[num_vmids] = VMID_CP_NON_PIXEL;
+616-		perms[num_vmids] = PERM_READ | PERM_WRITE;
+617-		num_vmids++;
+618-	} else if (use_cached_heap) {
+619-		try_heap = tbl.camera_heap;
+620-		heap = tbl.system_heap;
+621-	} else {
+622-		try_heap = tbl.camera_uncached_heap;
+623-		heap = tbl.system_uncached_heap;
+624-	}
+625-
+626-	CAM_DBG(CAM_MEM, "Using heaps : try=%pK, heap=%pK", try_heap, heap);
+627-
+628-	*buf = NULL;
+629-
+630-	if (!try_heap && !heap) {
+631-		CAM_ERR(CAM_MEM,
+632-			"No heap available for allocation, cant allocate");
+633-		return -EINVAL;
+634-	}
+635-
+636-	if (try_heap) {
+637-		*buf = dma_heap_buffer_alloc(try_heap, len, O_RDWR, 0);
+638-		if (IS_ERR(*buf)) {
+639-			CAM_WARN(CAM_MEM,
+640-				"Failed in allocating from try heap, heap=%pK, len=%zu, err=%d",
+641-				try_heap, len, PTR_ERR(*buf));
+642-			*buf = NULL;
+643-		}
+644-	}
+645-
+646-	if (*buf == NULL) {
+647-		*buf = dma_heap_buffer_alloc(heap, len, O_RDWR, 0);
+648-		if (IS_ERR(*buf)) {
+649-			rc = PTR_ERR(*buf);
+650-			CAM_ERR(CAM_MEM,
+651-				"Failed in allocating from heap, heap=%pK, len=%zu, err=%d",
+652-				heap, len, rc);
+653-			*buf = NULL;
+654-			return rc;
+655-		}
+656-	}
+657-
+658-	*i_ino = file_inode((*buf)->file)->i_ino;
+659-
+660-	if ((cam_flags & CAM_MEM_FLAG_PROTECTED_MODE) ||
+661-		(cam_flags & CAM_MEM_FLAG_EVA_NOPIXEL)) {
+662-		if (num_vmids >= CAM_MAX_VMIDS) {
+663-			CAM_ERR(CAM_MEM, "Insufficient array size for vmids %d", num_vmids);
+664-			rc = -EINVAL;
+665-			goto end;
+666-		}
+667-
+668-		arg.nr_acl_entries = num_vmids;
+669-		arg.vmids = vmids;
+670-		arg.perms = perms;
+671-
+--
+681-	CAM_DBG(CAM_MEM, "Allocate success, len=%zu, *buf=%pK, i_ino=%lu", len, *buf, *i_ino);
+682-
+683-	if (tbl.alloc_profile_enable) {
+684-		CAM_GET_TIMESTAMP(ts2);
+685-		CAM_GET_TIMESTAMP_DIFF_IN_MICRO(ts1, ts2, microsec);
+686-		trace_cam_log_event("IONAllocProfile", "size and time in micro",
+687-			len, microsec);
+688-	}
+689-
+690-	return rc;
+691-end:
+692-	dma_buf_put(*buf);
+693-	return rc;
+694-}
+695-#else
+696-static int cam_mem_util_get_dma_buf(size_t len,
+697-	unsigned int cam_flags,
+698-	struct dma_buf **buf,
+699-	unsigned long *i_ino)
+700-{
+701-	int rc = 0;
+702-	unsigned int heap_id;
+703-	int32_t ion_flag = 0;
+704-	struct timespec64 ts1, ts2;
+705-	long microsec = 0;
+706-
+707-	if (!buf) {
+708-		CAM_ERR(CAM_MEM, "Invalid params");
+709-		return -EINVAL;
+710-	}
+711-
+712-	if (tbl.alloc_profile_enable)
+713-		CAM_GET_TIMESTAMP(ts1);
+714-
+715-	if ((cam_flags & CAM_MEM_FLAG_PROTECTED_MODE) &&
+716:		(cam_flags & CAM_MEM_FLAG_CDSP_OUTPUT)) {
+717-		heap_id = ION_HEAP(ION_SECURE_DISPLAY_HEAP_ID);
+718-		ion_flag |=
+719-			ION_FLAG_SECURE | ION_FLAG_CP_CAMERA | ION_FLAG_CP_CDSP;
+720-	} else if (cam_flags & CAM_MEM_FLAG_PROTECTED_MODE) {
+721-		heap_id = ION_HEAP(ION_SECURE_DISPLAY_HEAP_ID);
+722-		ion_flag |= ION_FLAG_SECURE | ION_FLAG_CP_CAMERA;
+723-	} else {
+724-		heap_id = ION_HEAP(ION_SYSTEM_HEAP_ID) |
+725-			ION_HEAP(ION_CAMERA_HEAP_ID);
+726-	}
+727-
+728-	if (cam_flags & CAM_MEM_FLAG_CACHE)
+729-		ion_flag |= ION_FLAG_CACHED;
+730-	else
+731-		ion_flag &= ~ION_FLAG_CACHED;
+732-
+733-	if (tbl.force_cache_allocs && (!(ion_flag & ION_FLAG_SECURE)))
+734-		ion_flag |= ION_FLAG_CACHED;
+735-
+736-	*buf = ion_alloc(len, heap_id, ion_flag);
+737-	if (IS_ERR_OR_NULL(*buf))
+738-		return -ENOMEM;
+739-
+740-	*i_ino = file_inode((*buf)->file)->i_ino;
+741-
+742-	if (tbl.alloc_profile_enable) {
+743-		CAM_GET_TIMESTAMP(ts2);
+744-		CAM_GET_TIMESTAMP_DIFF_IN_MICRO(ts1, ts2, microsec);
+745-		trace_cam_log_event("IONAllocProfile", "size and time in micro",
+746-			len, microsec);
+747-	}
+748-
+749-	return rc;
+750-}
+751-#endif
+752-
+753-static int cam_mem_util_buffer_alloc(size_t len, uint32_t flags,
+754-	struct dma_buf **dmabuf,
+755-	int *fd,
+756-	unsigned long *i_ino)
+757-{
+758-	int rc;
+759-	struct dma_buf *temp_dmabuf = NULL;
+760-
+761-	rc = cam_mem_util_get_dma_buf(len, flags, dmabuf, i_ino);
+762-	if (rc) {
+763-		CAM_ERR(CAM_MEM,
+764-			"Error allocating dma buf : len=%llu, flags=0x%x",
+765-			len, flags);
+766-		return rc;
+767-	}
+768-
+769-	*fd = dma_buf_fd(*dmabuf, O_CLOEXEC);
+770-	if (*fd < 0) {
+771-		CAM_ERR(CAM_MEM, "get fd fail, *fd=%d", *fd);
+772-		rc = -EINVAL;
+773-		goto put_buf;
+774-	}
+775-
+776-	CAM_DBG(CAM_MEM, "Alloc success : len=%zu, *dmabuf=%pK, fd=%d, i_ino=%lu",
+777-		len, *dmabuf, *fd, *i_ino);
+778-
+779-	/*
+780-	 * increment the ref count so that ref count becomes 2 here
+781-	 * when we close fd, refcount becomes 1 and when we do
+
+--- mem_buf_lend declaration/implementation references ---
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:562:	struct mem_buf_lend_kernel_arg arg;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:603:		perms[num_vmids] = PERM_READ | PERM_WRITE;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:609:			vmids[num_vmids] = VMID_CP_CDSP;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:610:			perms[num_vmids] = PERM_READ | PERM_WRITE;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:616:		perms[num_vmids] = PERM_READ | PERM_WRITE;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:672:		rc = mem_buf_lend(*buf, &arg);
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:562:	struct mem_buf_lend_kernel_arg arg;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:603:		perms[num_vmids] = PERM_READ | PERM_WRITE;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:609:			vmids[num_vmids] = VMID_CP_CDSP;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:610:			perms[num_vmids] = PERM_READ | PERM_WRITE;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:616:		perms[num_vmids] = PERM_READ | PERM_WRITE;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:672:		rc = mem_buf_lend(*buf, &arg);
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/repo/dts_build/uapi/linux/audit.h:452:#define AUDIT_PERM_WRITE	2
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/repo/dts_build/uapi/linux/audit.h:453:#define AUDIT_PERM_READ		4
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/repo/dts_build/uapi/linux/iommufd.h:911: * @IOMMU_PGFAULT_PERM_READ: request for read permission
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/repo/dts_build/uapi/linux/iommufd.h:912: * @IOMMU_PGFAULT_PERM_WRITE: request for write permission
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/repo/dts_build/uapi/linux/iommufd.h:920:	IOMMU_PGFAULT_PERM_READ			= (1 << 0),
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/repo/dts_build/uapi/linux/iommufd.h:921:	IOMMU_PGFAULT_PERM_WRITE		= (1 << 1),
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:113:    DEST_SYS_PERM_WRITE_ONLY = 0x2,    /**< Write only permission bit mask. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:114:    DEST_SYS_PERM_EXEC_WRITE   = (DEST_SYS_PERM_EXEC | DEST_SYS_PERM_WRITE_ONLY), /**< Execute and Write permission.*/
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:115:    DEST_SYS_PERM_READ_ONLY    = 0x4, /**< Read only permission bit mask. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:116:    DEST_SYS_PERM_EXEC_READ    = (DEST_SYS_PERM_EXEC | DEST_SYS_PERM_READ_ONLY), /**< Execute and Read permission. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:117:    DEST_SYS_PERM_WRITE_READ   = (DEST_SYS_PERM_WRITE_ONLY | DEST_SYS_PERM_READ_ONLY), /**< Write and Read permission. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:118:    DEST_SYS_PERM_EXEC_WRITE_READ = (DEST_SYS_PERM_EXEC | DEST_SYS_PERM_WRITE_ONLY | DEST_SYS_PERM_READ_ONLY), /**< Execute, Write and Read permission. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/repo/dts_build/qcom/dt-bindings/firmware/qcom,scm.h:34:#define QCOM_SCM_VMID_CP_CDSP		0x2A
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/uapi/linux/audit.h:454:#define AUDIT_PERM_WRITE	2
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/uapi/linux/audit.h:455:#define AUDIT_PERM_READ		4
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/uapi/linux/iommufd.h:964: * @IOMMU_PGFAULT_PERM_READ: request for read permission
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/uapi/linux/iommufd.h:965: * @IOMMU_PGFAULT_PERM_WRITE: request for write permission
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/uapi/linux/iommufd.h:973:	IOMMU_PGFAULT_PERM_READ			= (1 << 0),
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/uapi/linux/iommufd.h:974:	IOMMU_PGFAULT_PERM_WRITE		= (1 << 1),
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/sunrpc/xdrgen/nfs4_1.h:183:enum { POSIXACE4_PERM_WRITE = 0x00000002 };
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/sunrpc/xdrgen/nfs4_1.h:185:enum { POSIXACE4_PERM_READ = 0x00000004 };
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/firmware/qcom/qcom_scm.h:56:#define QCOM_SCM_PERM_READ       0x4
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/firmware/qcom/qcom_scm.h:57:#define QCOM_SCM_PERM_WRITE      0x2
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/firmware/qcom/qcom_scm.h:59:#define QCOM_SCM_PERM_RW (QCOM_SCM_PERM_READ | QCOM_SCM_PERM_WRITE)
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/iommu.h:52:#define IOMMU_FAULT_PERM_READ	(1 << 0) /* read */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/iommu.h:53:#define IOMMU_FAULT_PERM_WRITE	(1 << 1) /* write */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/mlx5/mlx5_ifc.h:13252:	MLX5_MTT_PERM_READ	= 1 << 0,
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/mlx5/mlx5_ifc.h:13253:	MLX5_MTT_PERM_WRITE	= 1 << 1,
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/mlx5/mlx5_ifc.h:13254:	MLX5_MTT_PERM_RW	= MLX5_MTT_PERM_READ | MLX5_MTT_PERM_WRITE,
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/dt-bindings/firmware/qcom,scm.h:34:#define QCOM_SCM_VMID_CP_CDSP		0x2A
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:125:    DEST_SYS_PERM_WRITE_ONLY = 0x2,    /**< Write only permission bit mask. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:126:    DEST_SYS_PERM_EXEC_WRITE   = (DEST_SYS_PERM_EXEC | DEST_SYS_PERM_WRITE_ONLY), /**< Execute and Write permission.*/
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:127:    DEST_SYS_PERM_READ_ONLY    = 0x4, /**< Read only permission bit mask. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:128:    DEST_SYS_PERM_EXEC_READ    = (DEST_SYS_PERM_EXEC | DEST_SYS_PERM_READ_ONLY), /**< Execute and Read permission. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:129:    DEST_SYS_PERM_WRITE_READ   = (DEST_SYS_PERM_WRITE_ONLY | DEST_SYS_PERM_READ_ONLY), /**< Write and Read permission. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:130:    DEST_SYS_PERM_EXEC_WRITE_READ = (DEST_SYS_PERM_EXEC | DEST_SYS_PERM_WRITE_ONLY | DEST_SYS_PERM_READ_ONLY), /**< Execute, Write and Read permission. */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/gsl/src/gsl_shmem_mgr.c:1732:	hyp_dst_sys.dest_perm = DEST_SYS_PERM_WRITE_READ;

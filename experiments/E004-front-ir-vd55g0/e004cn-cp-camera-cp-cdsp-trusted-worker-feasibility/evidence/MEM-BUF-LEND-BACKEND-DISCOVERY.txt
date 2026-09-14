@@ -1,0 +1,161 @@
+E004cn MEM_BUF_LEND BACKEND DISCOVERY
+--- includes around camera mem manager ---
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Copyright (c) 2016-2021, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2021 XiaoMi, Inc.
+ */
+
+#include <linux/module.h>
+#include <linux/types.h>
+#include <linux/mutex.h>
+#include <linux/slab.h>
+#include <linux/dma-buf.h>
+#include <linux/version.h>
+#include <linux/debugfs.h>
+#if IS_REACHABLE(CONFIG_DMABUF_HEAPS)
+#include <linux/mem-buf.h>
+#include <soc/qcom/secure_buffer.h>
+#endif
+
+#include "cam_compat.h"
+#include "cam_req_mgr_util.h"
+#include "cam_mem_mgr.h"
+#include "cam_smmu_api.h"
+#include "cam_debug_util.h"
+#include "cam_trace.h"
+#include "cam_common_util.h"
+#include "cam_presil_hw_access.h"
+
+#define CAM_MEM_SHARED_BUFFER_PAD_4K (4 * 1024)
+
+static struct cam_mem_table tbl;
+static atomic_t cam_mem_mgr_state = ATOMIC_INIT(CAM_MEM_MGR_UNINITIALIZED);
+
+#if IS_REACHABLE(CONFIG_DMABUF_HEAPS)
+static void cam_mem_mgr_put_dma_heaps(void);
+static int cam_mem_mgr_get_dma_heaps(void);
+#endif
+
+#ifdef CONFIG_CAM_PRESIL
+static inline void cam_mem_mgr_reset_presil_params(int idx)
+{
+        tbl.bufq[idx].presil_params.fd_for_umd_daemon = -1;
+        tbl.bufq[idx].presil_params.refcount = 0;
+}
+#else
+static inline void cam_mem_mgr_reset_presil_params(int idx)
+{
+        return;
+}
+#endif
+
+static unsigned long cam_mem_mgr_mini_dump_cb(void *dst, unsigned long len)
+{
+	struct cam_mem_table_mini_dump      *md;
+
+	if (!dst) {
+		CAM_ERR(CAM_MEM, "Invalid  params");
+		return 0;
+	}
+
+	if (len < sizeof(*md)) {
+		CAM_ERR(CAM_MEM, "Insufficient length %u", len);
+		return 0;
+	}
+
+	md = (struct cam_mem_table_mini_dump *)dst;
+	memcpy(md->bufq, tbl.bufq, CAM_MEM_BUFQ_MAX * sizeof(struct cam_mem_buf_queue));
+	md->dbg_buf_idx = tbl.dbg_buf_idx;
+	md->alloc_profile_enable = tbl.alloc_profile_enable;
+	md->force_cache_allocs = tbl.force_cache_allocs;
+	md->need_shared_buffer_padding = tbl.need_shared_buffer_padding;
+	return sizeof(*md);
+}
+
+static void cam_mem_mgr_print_tbl(void)
+{
+	int i;
+	uint64_t ms, hrs, min, sec;
+	struct timespec64 current_ts;
+
+	CAM_GET_TIMESTAMP(current_ts);
+
+--- mem_buf API files across archives ---
+
+--- exact API references ---
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/include/uapi/camera/media/cam_req_mgr.h:299:#define CAM_MEM_BUFQ_MAX                        2048
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:66:	memcpy(md->bufq, tbl.bufq, CAM_MEM_BUFQ_MAX * sizeof(struct cam_mem_buf_queue));
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:85:	for (i = 1; i < CAM_MEM_BUFQ_MAX; i++) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:223:	bitmap_size = BITS_TO_LONGS(CAM_MEM_BUFQ_MAX) * sizeof(long);
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:235:	for (i = 1; i < CAM_MEM_BUFQ_MAX; i++) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:262:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:302:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0)
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:355:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0)
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:398:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0)
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:562:	struct mem_buf_lend_kernel_arg arg;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:672:		rc = mem_buf_lend(*buf, &arg);
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1211:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1288:	for (i = 1; i < CAM_MEM_BUFQ_MAX; i++) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1350:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1455:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1629:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1793:	if (idx >= CAM_MEM_BUFQ_MAX || idx <= 0) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1871:	for (idx = 0; idx < CAM_MEM_BUFQ_MAX; idx++) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1903:	for (idx = 0; idx < CAM_MEM_BUFQ_MAX; idx++) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:1964:		for (j = 0; j < CAM_MEM_BUFQ_MAX; j++) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c:2028:	for (idx = 0; idx < CAM_MEM_BUFQ_MAX; idx++) {
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.h:104:	struct cam_mem_buf_queue bufq[CAM_MEM_BUFQ_MAX];
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.h:132:	struct cam_mem_buf_queue bufq[CAM_MEM_BUFQ_MAX];
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/src/linux/qcom/ar_osal_shmem.c:221:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/src/linux/qcom/ar_osal_shmem.c:465:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/src/linux/qcom/ar_osal_shmem_db.c:228:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/src/linux/qcom/ar_osal_shmem_db.c:467:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:43:	AR_SHMEM_BUFFER_ADDRESS = 0,
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-engine/ar_osal/api/ar_osal_shmem.h:45:	AR_SHMEM_BUFFER_OFFSET = 1
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_util/test/src/ar_test_shmem.c:16:	ar_shmem_info shmem_info = { AR_SHMEM_VIRTUAL_MEMORY/*virtual & cached*/, 4096, AR_SHMEM_CACHED, AR_SHMEM_BUFFER_ADDRESS, 0,0,0,0, NULL,0, 1, &sys_id};
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/ar_osal_shmem_phy.c:116:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/ar_osal_shmem_phy.c:325:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/ar_osal_shmem_virtual.c:134:    info->index_type = AR_SHMEM_BUFFER_ADDRESS;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/qcom/ar_osal_shmem_ion.c:221:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/qcom/ar_osal_shmem_ion.c:465:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/qcom/ar_osal_shmem_ap.c:87:   info->index_type = AR_SHMEM_BUFFER_ADDRESS;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/qcom/ar_osal_shmem_db.c:189:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/src/linux/qcom/ar_osal_shmem_db.c:435:    info->index_type = AR_SHMEM_BUFFER_OFFSET;
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:43:	AR_SHMEM_BUFFER_ADDRESS = 0,
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/ar_osal/api/ar_osal_shmem.h:45:	AR_SHMEM_BUFFER_OFFSET = 1
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/gsl/src/gsl_shmem_mgr.c:62:(((ar_shmem_buffer_index_type_t)(type)) == AR_SHMEM_BUFFER_OFFSET)
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/AUDIO/Research_Hub_Audio/SOURCE/audioreach_src/audioreach-graphservices/gsl/inc/gsl_cshm_mgr.h:27:(((ar_shmem_buffer_index_type_t)(type)) == AR_SHMEM_BUFFER_OFFSET)
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:73:0x19058: SHMEM_BUF_D3_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:361:0xad338: SHMEM_BUF_D0_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:362:0xad3f0: SHMEM_BUF_D0_CLEANUP posbuffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:483:0xb2028: caching memory to be freed later, marking as SHMEM_BUF_D3_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:484:0xb2070: caching memory to be freed later,marking as  SHMEM_BUF_D0_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/audio_key_hits.txt:60:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:73:0x19058: SHMEM_BUF_D3_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/audio_key_hits.txt:72:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:361:0xad338: SHMEM_BUF_D0_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/audio_key_hits.txt:73:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:362:0xad3f0: SHMEM_BUF_D0_CLEANUP posbuffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/audio_key_hits.txt:93:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:483:0xb2028: caching memory to be freed later, marking as SHMEM_BUF_D3_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/audio_key_hits.txt:94:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:484:0xb2070: caching memory to be freed later,marking as  SHMEM_BUF_D0_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:73:0x19058: SHMEM_BUF_D3_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:361:0xad338: SHMEM_BUF_D0_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:362:0xad3f0: SHMEM_BUF_D0_CLEANUP posbuffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:483:0xb2028: caching memory to be freed later, marking as SHMEM_BUF_D3_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.txt:484:0xb2070: caching memory to be freed later,marking as  SHMEM_BUF_D0_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:292:    "string": "SHMEM_BUF_D3_CLEANUP buffer %d"
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1444:    "string": "SHMEM_BUF_D0_CLEANUP buffer %d"
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1448:    "string": "SHMEM_BUF_D0_CLEANUP posbuffer %d"
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1932:    "string": "caching memory to be freed later, marking as SHMEM_BUF_D3_CLEANUP "
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/Research_Hub_Device_Tree/UbuntuConceptEliteX/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1936:    "string": "caching memory to be freed later,marking as  SHMEM_BUF_D0_CLEANUP "
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/audio_key_hits.txt:60:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:73:0x19058: SHMEM_BUF_D3_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/audio_key_hits.txt:72:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:361:0xad338: SHMEM_BUF_D0_CLEANUP buffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/audio_key_hits.txt:73:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:362:0xad3f0: SHMEM_BUF_D0_CLEANUP posbuffer %d
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/audio_key_hits.txt:93:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:483:0xb2028: caching memory to be freed later, marking as SHMEM_BUF_D3_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/audio_key_hits.txt:94:windows_mining_20260525-204920\reports\qcadcm8380.interesting_strings.txt:484:0xb2070: caching memory to be freed later,marking as  SHMEM_BUF_D0_CLEANUP 
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:292:    "string": "SHMEM_BUF_D3_CLEANUP buffer %d"
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1444:    "string": "SHMEM_BUF_D0_CLEANUP buffer %d"
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1448:    "string": "SHMEM_BUF_D0_CLEANUP posbuffer %d"
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1932:    "string": "caching memory to be freed later, marking as SHMEM_BUF_D3_CLEANUP "
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/ResearchDeviceTree/legacy_ResearchDeviceTree/windows_mining_20260525-204920/reports/qcadcm8380.interesting_strings.json:1936:    "string": "caching memory to be freed later,marking as  SHMEM_BUF_D0_CLEANUP "
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/uapi/linux/ublk_cmd.h:98:#define UBLK_SHMEM_BUF_READ_ONLY	(1U << 0)
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/video/mach64.h:59:#define MEM_BUF_CNTL		0x002C	/* Dword offset 0_0B */
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/recovered-adata/ubi/Documents/SP11/BUNDLES/sp11-enable-7.1.1-sp11-20260628/payload/usr/src/linux-headers-7.1.1-sp11/include/linux/nvme.h:1387:	NVME_FEAT_HOST_MEM_BUF	= 0x0d,

@@ -1,0 +1,337 @@
+E004cn GOLDEN FASTRPC DEVICE NODE / SIGNED-PD SEMANTICS
+--- fastrpc_device_register ---
+static int fastrpc_device_register(struct device *dev, struct fastrpc_channel_ctx *cctx,
+				   bool is_secured, const char *domain)
+{
+	struct fastrpc_device *fdev;
+	int err;
+
+	fdev = devm_kzalloc(dev, sizeof(*fdev), GFP_KERNEL);
+	if (!fdev)
+		return -ENOMEM;
+
+	fdev->secure = is_secured;
+	fdev->cctx = cctx;
+	fdev->miscdev.minor = MISC_DYNAMIC_MINOR;
+	fdev->miscdev.fops = &fastrpc_fops;
+	fdev->miscdev.name = devm_kasprintf(dev, GFP_KERNEL, "fastrpc-%s%s",
+					    domain, is_secured ? "-secure" : "");
+	if (!fdev->miscdev.name)
+		return -ENOMEM;
+
+	err = misc_register(&fdev->miscdev);
+	if (!err) {
+		if (is_secured)
+			cctx->secure_fdevice = fdev;
+		else
+			cctx->fdevice = fdev;
+	}
+
+	return err;
+}
+
+static int fastrpc_get_domain_id(const char *domain)
+{
+	if (!strncmp(domain, "adsp", 4))
+		return ADSP_DOMAIN_ID;
+	else if (!strncmp(domain, "cdsp", 4))
+		return CDSP_DOMAIN_ID;
+	else if (!strncmp(domain, "mdsp", 4))
+		return MDSP_DOMAIN_ID;
+	else if (!strncmp(domain, "sdsp", 4))
+		return SDSP_DOMAIN_ID;
+	else if (!strncmp(domain, "gdsp", 4))
+		return GDSP_DOMAIN_ID;
+
+	return -EINVAL;
+}
+
+static const struct fastrpc_soc_data kaanapali_soc_data = {
+	.sid_pos = 56,
+	.dma_addr_bits_cdsp = 34,
+	.dma_addr_bits_default = 32,
+};
+
+static const struct fastrpc_soc_data default_soc_data = {
+	.sid_pos = 32,
+	.dma_addr_bits_cdsp = 32,
+	.dma_addr_bits_default = 32,
+};
+
+static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
+{
+	struct device *rdev = &rpdev->dev;
+	struct fastrpc_channel_ctx *data;
+	int i, err, domain_id = -1, vmcount;
+	const char *domain;
+	bool secure_dsp;
+	unsigned int vmids[FASTRPC_MAX_VMIDS];
+	const struct fastrpc_soc_data *soc_data;
+
+	soc_data = device_get_match_data(rdev);
+
+	err = of_property_read_string(rdev->of_node, "label", &domain);
+	if (err) {
+		dev_info(rdev, "FastRPC Domain not specified in DT\n");
+		return err;
+	}
+
+	domain_id = fastrpc_get_domain_id(domain);
+
+	if (domain_id < 0) {
+		dev_info(rdev, "FastRPC Domain %s not supported\n", domain);
+		return -EINVAL;
+	}
+
+	if (of_reserved_mem_device_init_by_idx(rdev, rdev->of_node, 0))
+		dev_info(rdev, "no reserved DMA memory for FASTRPC\n");
+
+	vmcount = of_property_read_variable_u32_array(rdev->of_node,
+				"qcom,vmids", &vmids[0], 0, FASTRPC_MAX_VMIDS);
+	if (vmcount < 0)
+		vmcount = 0;
+	else if (!qcom_scm_is_available())
+		return -EPROBE_DEFER;
+
+	data = kzalloc_obj(*data);
+	if (!data)
+		return -ENOMEM;
+
+	if (vmcount) {
+		data->vmcount = vmcount;
+		for (i = 0; i < data->vmcount; i++) {
+			data->vmperms[i].vmid = vmids[i];
+			data->vmperms[i].perm = QCOM_SCM_PERM_RWX;
+		}
+	}
+
+	if (domain_id == SDSP_DOMAIN_ID) {
+		struct resource res;
+		u64 src_perms;
+
+		err = of_reserved_mem_region_to_resource(rdev->of_node, 0, &res);
+		if (!err) {
+			src_perms = BIT(QCOM_SCM_VMID_HLOS);
+
+			err = qcom_scm_assign_mem(res.start, resource_size(&res), &src_perms,
+				    data->vmperms, data->vmcount);
+			if (err)
+				goto err_free_data;
+		}
+
+	}
+
+	secure_dsp = !(of_property_read_bool(rdev->of_node, "qcom,non-secure-domain"));
+	data->secure = secure_dsp;
+	data->soc_data = soc_data;
+
+	switch (domain_id) {
+
+--- create-process / unsigned-PD decision ---
+static int fastrpc_init_create_process(struct fastrpc_user *fl,
+					char __user *argp)
+{
+	struct fastrpc_init_create init;
+	struct fastrpc_invoke_args *args;
+	struct fastrpc_phy_page pages[1];
+	struct fastrpc_map *map = NULL;
+	struct fastrpc_buf *imem = NULL;
+	int memlen;
+	int err;
+	struct {
+		int client_id;
+		u32 namelen;
+		u32 filelen;
+		u32 pageslen;
+		u32 attrs;
+		u32 siglen;
+	} inbuf;
+	u32 sc;
+	bool unsigned_module = false;
+
+	args = kzalloc_objs(*args, FASTRPC_CREATE_PROCESS_NARGS);
+	if (!args)
+		return -ENOMEM;
+
+	if (copy_from_user(&init, argp, sizeof(init))) {
+		err = -EFAULT;
+		goto err;
+	}
+
+	if (init.attrs & FASTRPC_MODE_UNSIGNED_MODULE)
+		unsigned_module = true;
+
+	if (is_session_rejected(fl, unsigned_module)) {
+		err = -ECONNREFUSED;
+		goto err;
+	}
+
+	if (init.filelen > INIT_FILELEN_MAX) {
+		err = -EINVAL;
+		goto err;
+	}
+
+	inbuf.client_id = fl->client_id;
+	inbuf.namelen = strlen(current->comm) + 1;
+	inbuf.filelen = init.filelen;
+	inbuf.pageslen = 1;
+	inbuf.attrs = init.attrs;
+	inbuf.siglen = init.siglen;
+	fl->pd = USER_PD;
+
+	if (init.filelen && init.filefd) {
+		err = fastrpc_map_create(fl, init.filefd, init.filelen, 0, &map);
+		if (err)
+			goto err;
+	}
+
+	memlen = ALIGN(max(INIT_FILELEN_MAX, (int)init.filelen * 4),
+		       1024 * 1024);
+	err = fastrpc_buf_alloc(fl, fl->sctx->dev, memlen,
+				&imem);
+	if (err)
+		goto err_alloc;
+
+	fl->init_mem = imem;
+	args[0].ptr = (u64)(uintptr_t)&inbuf;
+	args[0].length = sizeof(inbuf);
+	args[0].fd = -1;
+
+	args[1].ptr = (u64)(uintptr_t)current->comm;
+	args[1].length = inbuf.namelen;
+	args[1].fd = -1;
+
+	args[2].ptr = (u64) init.file;
+	args[2].length = inbuf.filelen;
+	args[2].fd = init.filefd;
+
+	pages[0].addr = imem->dma_addr;
+	pages[0].size = imem->size;
+
+	args[3].ptr = (u64)(uintptr_t) pages;
+	args[3].length = 1 * sizeof(*pages);
+	args[3].fd = -1;
+
+	args[4].ptr = (u64)(uintptr_t)&inbuf.attrs;
+	args[4].length = sizeof(inbuf.attrs);
+	args[4].fd = -1;
+
+	args[5].ptr = (u64)(uintptr_t) &inbuf.siglen;
+	args[5].length = sizeof(inbuf.siglen);
+	args[5].fd = -1;
+
+	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_CREATE, 4, 0);
+	if (init.attrs)
+		sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_CREATE_ATTR, 4, 0);
+
+	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE,
+				      sc, args);
+	if (err)
+		goto err_invoke;
+
+	kfree(args);
+
+	return 0;
+
+err_invoke:
+	fl->init_mem = NULL;
+	fastrpc_buf_free(imem);
+err_alloc:
+	fastrpc_map_put(map);
+err:
+	kfree(args);
+
+	return err;
+}
+
+static struct fastrpc_session_ctx *fastrpc_session_alloc(
+					struct fastrpc_user *fl)
+{
+	struct fastrpc_channel_ctx *cctx = fl->cctx;
+	struct fastrpc_session_ctx *session = NULL;
+	unsigned long flags;
+	int i;
+
+	spin_lock_irqsave(&cctx->lock, flags);
+	for (i = 0; i < cctx->sesscount; i++) {
+		if (!cctx->session[i].used && cctx->session[i].valid) {
+			cctx->session[i].used = true;
+			session = &cctx->session[i];
+			/* any non-zero ID will work, session_idx + 1 is the simplest one */
+			fl->client_id = i + 1;
+			break;
+		}
+	}
+	spin_unlock_irqrestore(&cctx->lock, flags);
+
+	return session;
+}
+
+static void fastrpc_session_free(struct fastrpc_channel_ctx *cctx,
+				 struct fastrpc_session_ctx *session)
+{
+	unsigned long flags;
+
+	spin_lock_irqsave(&cctx->lock, flags);
+	session->used = false;
+	spin_unlock_irqrestore(&cctx->lock, flags);
+}
+
+static int fastrpc_release_current_dsp_process(struct fastrpc_user *fl)
+{
+	struct fastrpc_invoke_args args[1];
+	int client_id = 0;
+	u32 sc;
+
+	client_id = fl->client_id;
+	args[0].ptr = (u64)(uintptr_t) &client_id;
+	args[0].length = sizeof(client_id);
+	args[0].fd = -1;
+	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_RELEASE, 1, 0);
+
+	return fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE,
+				       sc, &args[0]);
+}
+
+static int fastrpc_device_release(struct inode *inode, struct file *file)
+{
+	struct fastrpc_user *fl = (struct fastrpc_user *)file->private_data;
+	struct fastrpc_channel_ctx *cctx = fl->cctx;
+	unsigned long flags;
+
+	fastrpc_release_current_dsp_process(fl);
+
+	spin_lock_irqsave(&cctx->lock, flags);
+	list_del(&fl->user);
+	spin_unlock_irqrestore(&cctx->lock, flags);
+
+	fastrpc_session_free(cctx, fl->sctx);
+	file->private_data = NULL;
+	/* Release the reference taken in fastrpc_device_open */
+	fastrpc_user_put(fl);
+
+	return 0;
+}
+
+static int fastrpc_device_open(struct inode *inode, struct file *filp)
+
+--- file open binds secure/nonsecure device flag ---
+12:#include <linux/miscdevice.h>
+106:#define miscdev_to_fdevice(d) container_of(d, struct fastrpc_device, miscdev)
+292:	struct miscdevice miscdev;
+308:	bool is_secure_dev;
+1323:	if (!fl->is_secure_dev && fl->cctx->secure) {
+1638:	/* Release the reference taken in fastrpc_device_open */
+1644:static int fastrpc_device_open(struct inode *inode, struct file *filp)
+1651:	fdevice = miscdev_to_fdevice(filp->private_data);
+1669:	fl->is_secure_dev = fdevice->secure;
+2213:	.open = fastrpc_device_open,
+2318:	fdev->miscdev.minor = MISC_DYNAMIC_MINOR;
+2319:	fdev->miscdev.fops = &fastrpc_fops;
+2320:	fdev->miscdev.name = devm_kasprintf(dev, GFP_KERNEL, "fastrpc-%s%s",
+2322:	if (!fdev->miscdev.name)
+2325:	err = misc_register(&fdev->miscdev);
+2478:		misc_deregister(&data->fdevice->miscdev);
+2480:		misc_deregister(&data->secure_fdevice->miscdev);
+2514:		misc_deregister(&cctx->fdevice->miscdev);
+2517:		misc_deregister(&cctx->secure_fdevice->miscdev);
