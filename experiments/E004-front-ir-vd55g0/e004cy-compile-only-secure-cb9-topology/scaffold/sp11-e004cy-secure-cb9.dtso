@@ -1,0 +1,24 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "microsoft,denali-oled", "microsoft,denali", "qcom,x1e80100";
+
+	fragment@0 {
+		target-path = "/soc@0/remoteproc@32300000/glink-edge/fastrpc";
+
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compute-cb@9 {
+				compatible = "qcom,fastrpc-compute-cb";
+				reg = <9>;
+				/* Current live apps_smmu phandle = 0x3d; offline proof only. */
+				iommus = <0x3d 0x0c09 0x20>;
+				dma-coherent;
+				pd-type = <6>;
+				status = "disabled";
+			};
+		};
+	};
+};

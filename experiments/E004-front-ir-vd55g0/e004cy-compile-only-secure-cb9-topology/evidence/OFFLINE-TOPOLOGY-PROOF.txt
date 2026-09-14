@@ -1,0 +1,43 @@
+E004cy COMPILE/OFFLINE-MERGE PROOF
+
+canonical_compile_stderr_bytes=0
+overlay_compile_stderr_bytes=0
+offline_overlay_stderr_bytes=0
+
+canonical candidate:
+/* E004cy compile-only source fragment. NOT installed. */
+compute-cb@9 {
+	compatible = "qcom,fastrpc-compute-cb";
+	reg = <9>;
+	iommus = <&apps_smmu 0x0c09 0x20>;
+	dma-coherent;
+	pd-type = <6>; /* CPZ_USERPD, downstream FastRPC ABI */
+	status = "disabled";
+};
+
+canonical harness decoded node:
+reg=9
+iommus=1 c09 20
+pd-type=6
+status=disabled
+
+offline merge into current live topology file:
+reg=9
+iommus=3d c09 20
+pd-type=6
+status=disabled
+properties:
+status
+pd-type
+dma-coherent
+iommus
+reg
+compatible
+
+live kernel node check:
+ABSENT_EXPECTED
+
+hashes:
+4f8e9bc4819acd527911f0b48440369fcf9a081b8e8ef47eafd956da1aff8012  experiments/E004-front-ir-vd55g0/e004cy-compile-only-secure-cb9-topology/scaffold/hamoa-secure-cb9-candidate.dtsi
+c75ed8d0ad464230292ad518b65a8c264bf3fe02154fed75961ce75efd5ca360  experiments/E004-front-ir-vd55g0/e004cy-compile-only-secure-cb9-topology/scaffold/compile-harness.dtb
+90fd86deabeb6a41d913cee33b6264f39e581c79a36ea0c3719fbc3f9f968e52  experiments/E004-front-ir-vd55g0/e004cy-compile-only-secure-cb9-topology/scaffold/sp11-e004cy-secure-cb9.dtbo
