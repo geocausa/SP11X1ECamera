@@ -20,4 +20,4 @@ The cross-median value becomes the two `tail` samples consumed by the already-cl
 2. use `F(x,y), F(x+1,y)` as the C230 tail pair;
 3. emit two signed 32-bit high-pass/intermediate values and two byte low-pass/control values.
 
-`scaffold/sp11-swasf-c3e8.c` encodes that scalar form.  Together with the exact C230 implementation it builds as a freestanding Hexagon-v73 relocatable with zero unresolved symbols (`1776` bytes `.text`).  A direct Windows whole-tile random differential is staged next; until that passes, `c3e8_intermediate_filter_exact` remains false.
+`scaffold/sp11-swasf-c3e8.c` encodes that scalar form.  Together with the exact C230 implementation it builds as a freestanding Hexagon-v73 relocatable with zero unresolved symbols (`1776` bytes `.text`).  A deterministic direct Windows differential then exercised 512 random 16×16 images / 1024 tiles. All three scratch products matched byte-for-byte, with aggregate Windows/scalar SHA-256 `aa35e4c06de41305edd1eabb365161bb639bd6d982226ffe6e216ec27a7ff90f`, and Windows made zero writes beyond the declared tile outputs. C3E8 is therefore closed.

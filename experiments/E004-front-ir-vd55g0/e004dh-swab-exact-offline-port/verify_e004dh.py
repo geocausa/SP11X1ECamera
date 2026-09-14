@@ -54,6 +54,13 @@ with tempfile.TemporaryDirectory() as td:
 
 # Windows-authoritative C3E8 cross-median/tile candidate.
 assert R['swasf']['c3e8_cross5_exact']
+assert R['swasf']['c3e8_random_differential_exact']
+assert R['swasf']['c3e8_random_images']==512
+assert R['swasf']['c3e8_random_tiles']==1024
+rr=(D/'oracle/windows-c3e8-random-diff/RESULT.txt').read_text(errors='replace')
+assert 'BYTE_EXACT=true' in rr
+assert 'EXTRA_WRITES_HP=0 LP=0 MED=0' in rr
+assert rr.count(R['swasf']['c3e8_random_differential_sha256'])==2
 out=subprocess.check_output([str(D/'verify_c3e8_cross5.py')],text=True)
 assert 'PASS (1792 tile pixels)' in out
 with tempfile.TemporaryDirectory() as td:
