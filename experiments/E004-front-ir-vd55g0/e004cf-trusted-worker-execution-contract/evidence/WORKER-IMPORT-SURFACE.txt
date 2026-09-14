@@ -1,0 +1,26 @@
+E004cf PRIVILEGED-CALL NEGATIVE / IMPORT SURFACE
+
+--- reachable external imports from transfer dispatcher depth <= 3 ---
+=== REACHABLE EXTERNAL IMPORTS DEPTH<=3 ===
+DEPTH 3 QueryPerformanceFrequency library=IUMSDK.DLL label=QueryPerformanceFrequency
+DEPTH 3 QueryPerformanceCounter library=IUMSDK.DLL label=QueryPerformanceCounter
+
+--- external imports reachable from SWAB core depth <= 5 ---
+=== EXTERNALS ===
+DEPTH 1 EnterCriticalSection library=IUMSDK.DLL label=EnterCriticalSection
+DEPTH 1 LeaveCriticalSection library=IUMSDK.DLL label=LeaveCriticalSection
+DEPTH 1 GetLastError library=IUMSDK.DLL label=GetLastError
+DEPTH 1 CloseHandle library=IUMSDK.DLL label=CloseHandle
+DEPTH 1 WaitForSingleObject library=IUMSDK.DLL label=WaitForSingleObject
+DEPTH 1 SetEvent library=IUMSDK.DLL label=SetEvent
+DEPTH 1 InitializeCriticalSection library=IUMSDK.DLL label=InitializeCriticalSection
+DEPTH 1 DeleteCriticalSection library=IUMSDK.DLL label=DeleteCriticalSection
+DEPTH 1 CreateThread library=IUMSDK.DLL label=CreateThread
+DEPTH 1 CreateEventA library=KERNEL32.DLL label=CreateEventA
+DEPTH 1 free library=API-MS-WIN-CRT-HEAP-L1-1-0.DLL label=free
+DEPTH 2 malloc library=API-MS-WIN-CRT-HEAP-L1-1-0.DLL label=malloc
+DEPTH 4 RaiseException library=IUMSDK.DLL label=RaiseException
+DEPTH 4 RtlPcToFileHeader library=NTDLL.DLL label=RtlPcToFileHeader
+
+--- exact forbidden secure/hardware calls across extracted worker graphs (must be empty) ---
+FORBIDDEN_SECURE_OR_DEVICE_CALL_MATCHES=0

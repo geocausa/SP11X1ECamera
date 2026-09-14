@@ -1,0 +1,92 @@
+E004cf CACHE / FLUSH BOUNDARY
+
+--- per-frame transfer evidence: no FlushSecureSectionBuffers token ---
+PER_FRAME_FLUSH_MATCHES=0
+
+--- extracted worker graphs: no FlushSecureSectionBuffers token ---
+WORKER_FLUSH_MATCHES=0
+
+--- internal target setup does flush after successful domain assignment ---
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-125-          local_20 = GetLastError();
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-126-        }
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-127-        else {
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-128-          DVar3 = GetLastError();
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-129-          local_20 = DVar3 & 0xffff | 0xc0070000;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-130-        }
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-131-        local_60 = local_20;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-132-        FUN_180019e00(1,
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-133-                      "%s:%d Failed to AssignMemoryToSocDomain, status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-134-                      ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-135-                      0x494,(ulonglong)local_20,hFileMappingObject,pvVar7,0);
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-136-      }
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-137-      else {
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-138-        pvVar12 = pvVar7;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-139-        FUN_180019e00(4,
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-140-                      "%s:%d SUCCESS..!! AssignMemoryToSocDomain hAssignHandle = 0x%llx status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-141-                      ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-142-                      0x499,lVar8,(ulonglong)local_60,hFileMappingObject,pvVar7);
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt:143:        iVar5 = FlushSecureSectionBuffers(hFileMappingObject,0,(ulonglong)uVar1 * 0x1000);
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-144-        if (iVar5 == 0) {
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-145-          uVar9 = (ulonglong)uVar1;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-146-          FUN_180019e00(4,
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-147-                        "%s:%d FAILED..!! FlushSecureSectionBuffers hSectionHandle:0x%llx, PageOffset:0x%x PageCount:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-148-                        ,
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-149-                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-150-                        ,0x4a2,hFileMappingObject,0,uVar9,pvVar12);
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-151-        }
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-152-        else {
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-153-          uVar9 = (ulonglong)uVar1;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-154-          FUN_180019e00(4,
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-155-                        "%s:%d SUCCESS..!! FlushSecureSectionBuffers hSectionHandle:0x%llx, PageOffset:0x%x PageCount:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-156-                        ,
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-157-                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-158-                        ,0x49e,hFileMappingObject,0,uVar9,pvVar12);
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-159-        }
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-160-        *(longlong *)(param_1 + 0x10) = lVar8;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-161-        *(uint *)(param_1 + 0x28) = uVar2;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-162-        *(uint *)(param_1 + 0x48) = uVar2 + *(int *)(param_1 + 0x38);
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-163-        *(void **)(param_1 + 0x18) = pvVar7;
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-164-        FUN_180019e00(4,"%s:%d GetSecureInternalBuffer successful: Address:0x%x, Size:0x%x\n",
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt-165-                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+--
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-118-          local_20 = GetLastError();
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-119-        }
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-120-        else {
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-121-          DVar3 = GetLastError();
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-122-          local_20 = DVar3 & 0xffff | 0xc0070000;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-123-        }
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-124-        local_60 = local_20;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-125-        FUN_180019e00(1,
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-126-                      "%s:%d Failed to AssignMemoryToSocDomain, status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-127-                      ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-128-                      0x494,(ulonglong)local_20,hFileMappingObject,pvVar7,0);
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-129-      }
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-130-      else {
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-131-        pvVar12 = pvVar7;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-132-        FUN_180019e00(4,
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-133-                      "%s:%d SUCCESS..!! AssignMemoryToSocDomain hAssignHandle = 0x%llx status:0x%x hSectionHandle:0x%llx, pDomainVAArray:0x%llx PageOffset:0x%x PageCount:0x%x DomainId:0x%x Protection:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-134-                      ,"Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-135-                      0x499,lVar8,(ulonglong)local_60,hFileMappingObject,pvVar7);
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt:136:        iVar5 = FlushSecureSectionBuffers(hFileMappingObject,0,(ulonglong)uVar1 * 0x1000);
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-137-        if (iVar5 == 0) {
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-138-          uVar9 = (ulonglong)uVar1;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-139-          FUN_180019e00(4,
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-140-                        "%s:%d FAILED..!! FlushSecureSectionBuffers hSectionHandle:0x%llx, PageOffset:0x%x PageCount:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-141-                        ,
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-142-                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-143-                        ,0x4a2,hFileMappingObject,0,uVar9,pvVar12);
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-144-        }
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-145-        else {
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-146-          uVar9 = (ulonglong)uVar1;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-147-          FUN_180019e00(4,
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-148-                        "%s:%d SUCCESS..!! FlushSecureSectionBuffers hSectionHandle:0x%llx, PageOffset:0x%x PageCount:0x%x\n"
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-149-                        ,
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-150-                        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp"
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-151-                        ,0x49e,hFileMappingObject,0,uVar9,pvVar12);
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-152-        }
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-153-        *(longlong *)(param_1 + 0x10) = lVar8;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-154-        *(uint *)(param_1 + 0x28) = uVar2;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-155-        *(uint *)(param_1 + 0x48) = uVar2 + *(int *)(param_1 + 0x38);
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-156-        *(void **)(param_1 + 0x18) = pvVar7;
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-157-        FUN_180019e00(4,"%s:%d GetSecureInternalBuffer successful: Address:0x%x, Size:0x%x\n",
+experiments/E004-front-ir-vd55g0/e004bt-cp-camera-trusted-worker-visibility-contract/evidence/WINDOWS-SIMULTANEOUS-VISIBILITY.txt-158-                      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\Trustlet\\ISP\\ISPTrustletDevicev2.cpp",

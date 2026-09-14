@@ -1,0 +1,54 @@
+{
+  "experiment": "E004cf",
+  "status": "PASS_TRUSTED_FRAME_WORKER_IS_CPU_MEMORY_PROCESSING_AFTER_PROTECTED_MAPPINGS",
+  "mode": "windows-static-only",
+  "dispatcher": {
+    "function": "FUN_1800037c8",
+    "source": "internal protected mapping +0x30",
+    "destination": "external protected mapping +0x90 + payload offset +0x9c",
+    "branches": [
+      "synthetic_fill",
+      "early_copy",
+      "SWABF_SWASF"
+    ]
+  },
+  "early_copy": {
+    "memcpy_like": true,
+    "tail_fill_0x80": true,
+    "privileged_calls": false
+  },
+  "swab": {
+    "wrapper": "FUN_180019828",
+    "core": "FUN_18001a138",
+    "thread_entry": "FUN_18001f170",
+    "pixel_function": "FUN_18001f420",
+    "cpu_pixel_arithmetic": true,
+    "thread_event_sync": true,
+    "secure_memory_api_during_transfer": false,
+    "camera_mmio_or_device_io_during_transfer": false,
+    "qctree_qtee_qsee_during_transfer": false
+  },
+  "coherency": {
+    "per_frame_flush_secure_section_buffers": false,
+    "internal_setup_flush_after_domain_assignment": true,
+    "worker_requires_coherent_trusted_mappings": true
+  },
+  "minimum_environment": [
+    "trusted CPU execution outside ordinary HLOS",
+    "read access to internal protected target",
+    "write access to external protected sample",
+    "private scratch/config memory",
+    "basic allocation and synchronization",
+    "ordinary CPU memory operations and integer pixel arithmetic",
+    "coherent protected mappings"
+  ],
+  "windows_one_shot_needed": false,
+  "runtime_actions": {
+    "windows_boot": false,
+    "secure_runtime": false,
+    "ownership_change": false,
+    "protected_allocation": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cg protected CPU-worker habitat feasibility, static first"
+}
