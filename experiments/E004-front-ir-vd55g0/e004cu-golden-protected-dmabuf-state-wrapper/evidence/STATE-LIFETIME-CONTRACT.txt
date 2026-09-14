@@ -1,0 +1,30 @@
+E004cu GOLDEN PROTECTED DMA-BUF STATE + LIFETIME CONTRACT
+
+The staged system-heap buffer adds an explicit protected ownership state:
+  HLOS -> TRANSITION -> LENT -> ACTIVE -> DETACHED -> TRANSITION -> RECLAIMED
+
+Failure of either ownership transition goes to:
+  POISONED
+
+Owner shape is separately recorded as:
+- EXTERNAL: destination CP_CDSP only
+- INTERNAL: destination CP_CDSP + CP_CAMERA
+
+Before the first lend the wrapper requires:
+- HLOS-accessible state;
+- no existing protected hold;
+- no active mmap;
+- no active vmap;
+- no in-progress CPU-access section;
+- no mapped dma-buf attachment.
+
+The wrapper takes an extra dma-buf reference before changing physical ownership and marks cpz_hold=true. This reference remains held through LENT/ACTIVE/DETACHED and deliberately remains held forever on POISONED state until a future explicit recovery path exists.
+
+Successful reclaim:
+1. reassigns the exact prior owner set back to HLOS RWX;
+2. changes state to RECLAIMED;
+3. clears the protected owner kind;
+4. clears cpz_hold;
+5. drops the extra dma-buf reference.
+
+Therefore user fd closure cannot recycle backing while CPZ/protected ownership is active, and uncertain ownership cannot silently return pages to the system heap.

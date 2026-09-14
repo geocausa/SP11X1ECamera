@@ -1,0 +1,69 @@
+{
+  "experiment": "E004cu",
+  "status": "PASS_GOLDEN_PROTECTED_DMABUF_STATE_WRAPPER_COMPILES_DISABLED",
+  "mode": "compile-only-disabled-by-construction",
+  "backing": {
+    "golden_system_heap_reused": true,
+    "scatter_gather_backing": true,
+    "external_owner_set": ["CP_CDSP"],
+    "internal_owner_set": ["CP_CDSP", "CP_CAMERA"],
+    "ownership_backend": "E004ct sp11_cpz_assign_sg compile dependency"
+  },
+  "state_machine": [
+    "HLOS",
+    "TRANSITION",
+    "LENT",
+    "ACTIVE",
+    "DETACHED",
+    "RECLAIMED",
+    "POISONED"
+  ],
+  "hlos_exclusion": {
+    "lend_requires_no_mmap": true,
+    "lend_requires_no_vmap": true,
+    "lend_requires_no_cpu_access": true,
+    "lend_requires_no_mapped_attachment": true,
+    "mmap_denied_while_protected": true,
+    "vmap_denied_while_protected": true,
+    "cpu_access_denied_while_protected": true,
+    "dma_skip_cpu_sync_while_protected": true
+  },
+  "lifetime": {
+    "extra_dmabuf_reference_before_lend": true,
+    "hold_through_active_and_detached": true,
+    "successful_reclaim_before_reference_drop": true,
+    "failed_lend_or_reclaim_poisoned": true,
+    "poisoned_backing_retained": true
+  },
+  "build": {
+    "production_system_heap_sha256": "56b0db19f9e4999ec2144fd3d25bf370e2d15f1602447f8fd5b1c96eb321856d",
+    "baseline_text_sha256": "9d0267b3e96c01b612815963706e5f5963c91d8ed23050a8ae28c6d37862f012",
+    "staged_text_sha256": "7c8d1398d36341e2f735ed79a95dfc61ec052fd756722ec1293a96b8b94e3051",
+    "baseline_text_size": 5128,
+    "staged_text_size": 5556,
+    "text_delta": 428,
+    "heap_registration_present": false,
+    "provider_functions_compile": true
+  },
+  "fast_rpc_binding": {
+    "cpz_userpd_exposed": false,
+    "session_info_exposed": false,
+    "pd_type_dt_enabled": false,
+    "runtime_import_authorized": false
+  },
+  "runtime_actions": {
+    "module_linked": false,
+    "module_loaded": false,
+    "heap_registered": false,
+    "protected_allocation": false,
+    "scm_assign_mem": false,
+    "ownership_change": false,
+    "fastrpc_invoke": false,
+    "cpz_process_create": false,
+    "dt_change": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004cv Golden CPZ FastRPC session/context-bank port, compile-only and privilege-gated"
+}

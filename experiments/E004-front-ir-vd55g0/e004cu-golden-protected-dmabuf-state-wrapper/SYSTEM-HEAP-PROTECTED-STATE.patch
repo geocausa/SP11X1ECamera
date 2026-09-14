@@ -1,0 +1,408 @@
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/dma-buf/heaps/system_heap.c	2026-07-24 15:21:27.000000000 +0100
++++ experiments/E004-front-ir-vd55g0/e004cu-golden-protected-dmabuf-state-wrapper/scaffold/system_heap-e004cu.c	2026-09-14 10:32:07.547472725 +0100
+@@ -24,11 +24,30 @@
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
++#include <linux/firmware/qcom/qcom_scm.h>
++#include "sp11-cpz-system-heap.h"
++#include "sp11-cpz-sg-owner.h"
+ 
+ struct system_heap_priv {
+ 	bool cc_shared;
+ };
+ 
++enum sp11_cpz_heap_state {
++	SP11_CPZ_HEAP_HLOS = 0,
++	SP11_CPZ_HEAP_TRANSITION,
++	SP11_CPZ_HEAP_LENT,
++	SP11_CPZ_HEAP_ACTIVE,
++	SP11_CPZ_HEAP_DETACHED,
++	SP11_CPZ_HEAP_RECLAIMED,
++	SP11_CPZ_HEAP_POISONED,
++};
++
++enum sp11_cpz_heap_owner_kind {
++	SP11_CPZ_OWNER_NONE = 0,
++	SP11_CPZ_OWNER_EXTERNAL,
++	SP11_CPZ_OWNER_INTERNAL,
++};
++
+ struct system_heap_buffer {
+ 	struct dma_heap *heap;
+ 	struct list_head attachments;
+@@ -36,8 +55,13 @@
+ 	unsigned long len;
+ 	struct sg_table sg_table;
+ 	int vmap_cnt;
++	unsigned int mmap_cnt;
++	unsigned int cpu_access_cnt;
+ 	void *vaddr;
+ 	bool cc_shared;
++	bool cpz_hold;
++	enum sp11_cpz_heap_state cpz_state;
++	enum sp11_cpz_heap_owner_kind cpz_owner_kind;
+ };
+ 
+ struct dma_heap_attachment {
+@@ -48,6 +72,22 @@
+ 	bool cc_shared;
+ };
+ 
++static bool sp11_cpz_hlos_cpu_allowed(const struct system_heap_buffer *buffer)
++{
++	return buffer->cpz_state == SP11_CPZ_HEAP_HLOS ||
++	       buffer->cpz_state == SP11_CPZ_HEAP_RECLAIMED;
++}
++
++static bool sp11_cpz_any_mapped_attachment(struct system_heap_buffer *buffer)
++{
++	struct dma_heap_attachment *a;
++
++	list_for_each_entry(a, &buffer->attachments, list)
++		if (a->mapped)
++			return true;
++	return false;
++}
++
+ #define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO)
+ #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+ 				| __GFP_NORETRY) & ~__GFP_RECLAIM) \
+@@ -156,17 +196,22 @@
+ static struct sg_table *system_heap_map_dma_buf(struct dma_buf_attachment *attachment,
+ 						enum dma_data_direction direction)
+ {
++	struct system_heap_buffer *buffer = attachment->dmabuf->priv;
+ 	struct dma_heap_attachment *a = attachment->priv;
+ 	struct sg_table *table = &a->table;
+ 	unsigned long attrs;
+ 	int ret;
+ 
++	mutex_lock(&buffer->lock);
+ 	attrs = a->cc_shared ? DMA_ATTR_CC_SHARED : 0;
++	if (!sp11_cpz_hlos_cpu_allowed(buffer))
++		attrs |= DMA_ATTR_SKIP_CPU_SYNC;
+ 	ret = dma_map_sgtable(attachment->dev, table, direction, attrs);
++	if (!ret)
++		a->mapped = true;
++	mutex_unlock(&buffer->lock);
+ 	if (ret)
+ 		return ERR_PTR(ret);
+-
+-	a->mapped = true;
+ 	return table;
+ }
+ 
+@@ -174,10 +219,17 @@
+ 				      struct sg_table *table,
+ 				      enum dma_data_direction direction)
+ {
++	struct system_heap_buffer *buffer = attachment->dmabuf->priv;
+ 	struct dma_heap_attachment *a = attachment->priv;
++	unsigned long attrs;
+ 
++	mutex_lock(&buffer->lock);
++	attrs = a->cc_shared ? DMA_ATTR_CC_SHARED : 0;
++	if (!sp11_cpz_hlos_cpu_allowed(buffer))
++		attrs |= DMA_ATTR_SKIP_CPU_SYNC;
++	dma_unmap_sgtable(attachment->dev, table, direction, attrs);
+ 	a->mapped = false;
+-	dma_unmap_sgtable(attachment->dev, table, direction, 0);
++	mutex_unlock(&buffer->lock);
+ }
+ 
+ static int system_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+@@ -188,6 +240,12 @@
+ 
+ 	mutex_lock(&buffer->lock);
+ 
++	if (!sp11_cpz_hlos_cpu_allowed(buffer)) {
++		mutex_unlock(&buffer->lock);
++		return -EPERM;
++	}
++	buffer->cpu_access_cnt++;
++
+ 	if (buffer->vmap_cnt)
+ 		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
+ 
+@@ -209,6 +267,11 @@
+ 
+ 	mutex_lock(&buffer->lock);
+ 
++	if (!sp11_cpz_hlos_cpu_allowed(buffer) || !buffer->cpu_access_cnt) {
++		mutex_unlock(&buffer->lock);
++		return -EPERM;
++	}
++
+ 	if (buffer->vmap_cnt)
+ 		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
+ 
+@@ -217,11 +280,36 @@
+ 			continue;
+ 		dma_sync_sgtable_for_device(a->dev, &a->table, direction);
+ 	}
++	buffer->cpu_access_cnt--;
+ 	mutex_unlock(&buffer->lock);
+ 
+ 	return 0;
+ }
+ 
++static void sp11_cpz_heap_vma_open(struct vm_area_struct *vma)
++{
++	struct system_heap_buffer *buffer = vma->vm_private_data;
++
++	mutex_lock(&buffer->lock);
++	buffer->mmap_cnt++;
++	mutex_unlock(&buffer->lock);
++}
++
++static void sp11_cpz_heap_vma_close(struct vm_area_struct *vma)
++{
++	struct system_heap_buffer *buffer = vma->vm_private_data;
++
++	mutex_lock(&buffer->lock);
++	if (buffer->mmap_cnt)
++		buffer->mmap_cnt--;
++	mutex_unlock(&buffer->lock);
++}
++
++static const struct vm_operations_struct sp11_cpz_heap_vm_ops = {
++	.open = sp11_cpz_heap_vma_open,
++	.close = sp11_cpz_heap_vma_close,
++};
++
+ static int system_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+ {
+ 	struct system_heap_buffer *buffer = dmabuf->priv;
+@@ -232,6 +320,15 @@
+ 	pgprot_t prot;
+ 	int i, ret;
+ 
++	/* Reserve the mapping before remap_pfn_range so lend cannot race it. */
++	mutex_lock(&buffer->lock);
++	if (!sp11_cpz_hlos_cpu_allowed(buffer)) {
++		mutex_unlock(&buffer->lock);
++		return -EPERM;
++	}
++	buffer->mmap_cnt++;
++	mutex_unlock(&buffer->lock);
++
+ 	prot = vma->vm_page_prot;
+ 	if (buffer->cc_shared)
+ 		prot = pgprot_decrypted(prot);
+@@ -253,13 +350,20 @@
+ 			size = vma->vm_end - addr;
+ 
+ 		ret = remap_pfn_range(vma, addr, page_to_pfn(page), size, prot);
+-		if (ret)
++		if (ret) {
++			mutex_lock(&buffer->lock);
++			buffer->mmap_cnt--;
++			mutex_unlock(&buffer->lock);
+ 			return ret;
++		}
+ 
+ 		addr += size;
+ 		pgoff = 0;
+ 	}
+ 
++	vma->vm_private_data = buffer;
++	vma->vm_ops = &sp11_cpz_heap_vm_ops;
++
+ 	return 0;
+ }
+ 
+@@ -300,6 +404,10 @@
+ 	int ret = 0;
+ 
+ 	mutex_lock(&buffer->lock);
++	if (!sp11_cpz_hlos_cpu_allowed(buffer)) {
++		ret = -EPERM;
++		goto out;
++	}
+ 	if (buffer->vmap_cnt) {
+ 		buffer->vmap_cnt++;
+ 		iosys_map_set_vaddr(map, buffer->vaddr);
+@@ -341,6 +449,12 @@
+ 	struct scatterlist *sg;
+ 	int i;
+ 
++	/* Never recycle backing under remote or ownership-unknown state. */
++	if (!sp11_cpz_hlos_cpu_allowed(buffer) || buffer->cpz_hold) {
++		pr_err_ratelimited("sp11-cpz: refusing to free remotely-owned/unknown system-heap backing\n");
++		return;
++	}
++
+ 	table = &buffer->sg_table;
+ 	for_each_sgtable_sg(table, sg, i) {
+ 		struct page *page = sg_page(sg);
+@@ -372,6 +486,144 @@
+ 	.release = system_heap_dma_buf_release,
+ };
+ 
++static int sp11_cpz_heap_check_quiescent(struct system_heap_buffer *buffer)
++{
++	if (buffer->mmap_cnt || buffer->vmap_cnt || buffer->cpu_access_cnt ||
++	    sp11_cpz_any_mapped_attachment(buffer))
++		return -EBUSY;
++	return 0;
++}
++
++int sp11_cpz_system_heap_lend(struct dma_buf *dmabuf, bool camera_target)
++{
++	struct system_heap_buffer *buffer;
++	const u32 src[] = { QCOM_SCM_VMID_HLOS };
++	struct qcom_scm_vmperm dst[2];
++	unsigned int nr_dst = 1;
++	int ret;
++
++	if (!dmabuf || dmabuf->ops != &system_heap_buf_ops)
++		return -EINVAL;
++	buffer = dmabuf->priv;
++
++	mutex_lock(&buffer->lock);
++	if (!sp11_cpz_hlos_cpu_allowed(buffer) || buffer->cpz_hold) {
++		mutex_unlock(&buffer->lock);
++		return -EPERM;
++	}
++	ret = sp11_cpz_heap_check_quiescent(buffer);
++	if (ret) {
++		mutex_unlock(&buffer->lock);
++		return ret;
++	}
++	get_dma_buf(dmabuf);
++	buffer->cpz_hold = true;
++	buffer->cpz_state = SP11_CPZ_HEAP_TRANSITION;
++	buffer->cpz_owner_kind = camera_target ? SP11_CPZ_OWNER_INTERNAL :
++					       SP11_CPZ_OWNER_EXTERNAL;
++	mutex_unlock(&buffer->lock);
++
++	dst[0].vmid = QCOM_SCM_VMID_CP_CDSP;
++	dst[0].perm = QCOM_SCM_PERM_RW;
++	if (camera_target) {
++		dst[1].vmid = QCOM_SCM_VMID_CP_CAMERA;
++		dst[1].perm = QCOM_SCM_PERM_RW;
++		nr_dst = 2;
++	}
++
++	ret = sp11_cpz_assign_sg(&buffer->sg_table, src, ARRAY_SIZE(src), dst, nr_dst);
++	mutex_lock(&buffer->lock);
++	buffer->cpz_state = ret ? SP11_CPZ_HEAP_POISONED : SP11_CPZ_HEAP_LENT;
++	mutex_unlock(&buffer->lock);
++	/* Failure intentionally keeps cpz_hold: physical ownership is uncertain. */
++	return ret;
++}
++
++int sp11_cpz_system_heap_mark_active(struct dma_buf *dmabuf)
++{
++	struct system_heap_buffer *buffer;
++
++	if (!dmabuf || dmabuf->ops != &system_heap_buf_ops)
++		return -EINVAL;
++	buffer = dmabuf->priv;
++	mutex_lock(&buffer->lock);
++	if (buffer->cpz_state != SP11_CPZ_HEAP_LENT || !buffer->cpz_hold) {
++		mutex_unlock(&buffer->lock);
++		return -EPERM;
++	}
++	buffer->cpz_state = SP11_CPZ_HEAP_ACTIVE;
++	mutex_unlock(&buffer->lock);
++	return 0;
++}
++
++int sp11_cpz_system_heap_mark_detached(struct dma_buf *dmabuf)
++{
++	struct system_heap_buffer *buffer;
++
++	if (!dmabuf || dmabuf->ops != &system_heap_buf_ops)
++		return -EINVAL;
++	buffer = dmabuf->priv;
++	mutex_lock(&buffer->lock);
++	if (buffer->cpz_state != SP11_CPZ_HEAP_ACTIVE || !buffer->cpz_hold) {
++		mutex_unlock(&buffer->lock);
++		return -EPERM;
++	}
++	buffer->cpz_state = SP11_CPZ_HEAP_DETACHED;
++	mutex_unlock(&buffer->lock);
++	return 0;
++}
++
++int sp11_cpz_system_heap_reclaim(struct dma_buf *dmabuf)
++{
++	struct system_heap_buffer *buffer;
++	u32 src[2];
++	const struct qcom_scm_vmperm dst = {
++		.vmid = QCOM_SCM_VMID_HLOS,
++		.perm = QCOM_SCM_PERM_RWX,
++	};
++	unsigned int nr_src;
++	int ret;
++
++	if (!dmabuf || dmabuf->ops != &system_heap_buf_ops)
++		return -EINVAL;
++	buffer = dmabuf->priv;
++	mutex_lock(&buffer->lock);
++	if (!buffer->cpz_hold ||
++	    (buffer->cpz_state != SP11_CPZ_HEAP_DETACHED &&
++	     buffer->cpz_state != SP11_CPZ_HEAP_LENT)) {
++		mutex_unlock(&buffer->lock);
++		return -EPERM;
++	}
++	if (buffer->cpz_owner_kind == SP11_CPZ_OWNER_INTERNAL) {
++		src[0] = QCOM_SCM_VMID_CP_CDSP;
++		src[1] = QCOM_SCM_VMID_CP_CAMERA;
++		nr_src = 2;
++	} else if (buffer->cpz_owner_kind == SP11_CPZ_OWNER_EXTERNAL) {
++		src[0] = QCOM_SCM_VMID_CP_CDSP;
++		nr_src = 1;
++	} else {
++		mutex_unlock(&buffer->lock);
++		return -EINVAL;
++	}
++	buffer->cpz_state = SP11_CPZ_HEAP_TRANSITION;
++	mutex_unlock(&buffer->lock);
++
++	ret = sp11_cpz_assign_sg(&buffer->sg_table, src, nr_src, &dst, 1);
++	mutex_lock(&buffer->lock);
++	if (ret) {
++		buffer->cpz_state = SP11_CPZ_HEAP_POISONED;
++		mutex_unlock(&buffer->lock);
++		/* Retain cpz_hold so backing cannot be recycled under uncertainty. */
++		return ret;
++	}
++	buffer->cpz_state = SP11_CPZ_HEAP_RECLAIMED;
++	buffer->cpz_owner_kind = SP11_CPZ_OWNER_NONE;
++	buffer->cpz_hold = false;
++	mutex_unlock(&buffer->lock);
++	dma_buf_put(dmabuf);
++	return 0;
++}
++
+ static struct page *alloc_largest_available(unsigned long size,
+ 					    unsigned int max_order)
+ {
+@@ -422,6 +674,9 @@
+ 	buffer->heap = heap;
+ 	buffer->len = len;
+ 	buffer->cc_shared = cc_shared;
++	buffer->cpz_hold = false;
++	buffer->cpz_state = SP11_CPZ_HEAP_HLOS;
++	buffer->cpz_owner_kind = SP11_CPZ_OWNER_NONE;
+ 
+ 	INIT_LIST_HEAD(&pages);
+ 	i = 0;
+@@ -511,7 +766,7 @@
+ 	.cc_shared = true,
+ };
+ 
+-static int __init system_heap_create(void)
++static int __maybe_unused system_heap_create(void)
+ {
+ 	struct dma_heap_export_info exp_info;
+ 	struct dma_heap *sys_heap;
+@@ -536,4 +791,4 @@
+ 
+ 	return 0;
+ }
+-module_init(system_heap_create);
++/* E004cu compile-only: heap registration deliberately disabled. */

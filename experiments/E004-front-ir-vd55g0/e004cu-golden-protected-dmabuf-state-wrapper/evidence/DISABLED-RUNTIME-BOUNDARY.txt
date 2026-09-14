@@ -1,0 +1,13 @@
+E004cu DISABLED RUNTIME BOUNDARY
+
+The staged source is intentionally not a live heap implementation:
+- the original module_init(system_heap_create) registration is removed;
+- no init_module/__initcall symbol exists in the compiled object;
+- no module is linked, installed or loaded;
+- the protected owner call remains an unresolved compile-only dependency on sp11_cpz_assign_sg from E004ct;
+- there is no CPZ_USERPD FastRPC selection;
+- there is no session-info ioctl exposure;
+- there is no pd-type DT parsing;
+- there is no camera/CAMSS callsite invoking the wrapper.
+
+The object therefore proves source/build integration only. It cannot activate the protected path on Golden.

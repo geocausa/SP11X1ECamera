@@ -1,0 +1,20 @@
+E004cu HLOS CPU ACCESS GATES
+
+The staged exporter permits ordinary HLOS CPU access only in:
+- SP11_CPZ_HEAP_HLOS
+- SP11_CPZ_HEAP_RECLAIMED
+
+While TRANSITION, LENT, ACTIVE, DETACHED or POISONED:
+- begin_cpu_access returns -EPERM;
+- vmap returns -EPERM;
+- mmap returns -EPERM;
+- DMA map/unmap uses DMA_ATTR_SKIP_CPU_SYNC so ordinary HLOS CPU cache synchronization is not implied.
+
+Pre-existing access is handled fail-closed:
+- mmap lifetime is counted with VMA open/close tracking;
+- vmap lifetime uses the existing vmap count;
+- begin/end CPU access is counted;
+- mapped attachments are tracked by the existing attachment state;
+- lend is rejected with -EBUSY unless all four are quiescent.
+
+This is a compile-only reconstruction of the Qualcomm mem-buf policy proven in E004cq. It does not claim that Golden's live system heap has these protections today.
