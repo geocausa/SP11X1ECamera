@@ -1,0 +1,43 @@
+{
+  "schema": "sp11-camera-e004do-unified-rgb-ir-offline-authority-v1",
+  "status": "PASS_OFFLINE_UNIFIED_RGB_IR_DTB_AND_GUARDED_CAMSS_COMPILE",
+  "runtime_performed": false,
+  "linux_secureisp": false,
+  "illumination": false,
+  "capture_stream": false,
+  "dt": {
+    "rgb_base_sha256": "5e919d6bf778eb9eff5bf270447fa37f3c50ee16625c085c325e8d275d162321",
+    "ir_authority_sha256": "dd54d71226b354e68164db7ad0d0985fb2d63fe584c4d0e1f647eb69ee3fe96b",
+    "output_sha256": "3d56fd6f610576dee5fc97da809f9c48da16952af9a48a5053ea864b94855beb",
+    "ir_nodes_added": 13,
+    "rgb_nodes_removed": 0,
+    "ports": [0, 1, 2],
+    "cci0_bus0_hz": 400000,
+    "cci0_bus0_rgb_children": 0,
+    "csiphy0_aperture_bytes": 8192,
+    "rgb_sensor_endpoint_nodes_byte_identical": true,
+    "camss_iommus_unchanged_from_ib": true,
+    "only_common_deltas": [
+      "IR symbol aliases",
+      "CCI0 bus0 clock-frequency",
+      "CAMSS reg CSIPHY0 size 0x1000->0x2000"
+    ]
+  },
+  "camss": {
+    "e004k_patch_sha256": "1fc0f918a2f00e79918cf8bf7164f49cb8df395b8b05c949dc424a7b3824a869",
+    "gate_default": false,
+    "gate_scope": "X1E80100 && CSIPHY0 && DPHY",
+    "baseline_compile_sha256": "9cd7e472ed9e5f0f071ec533e86c89ca88c9acef84194c7cf992f0196a2752f5",
+    "ir_gated_compile_sha256": "4c3c6e9c8dbd34ecf1346a66670bf5568b7af23d1bba7131f7c493d6268611a4",
+    "accepted_rgb_runtime_module_replaced": false,
+    "accepted_rgb_runtime_module_sha256": "7afe6ed0bd0b945092256c53d111601c44cf33c174c1988945c05d8ef2697e95"
+  },
+  "vd55g0": {
+    "source_sha256": "20bca88eb4333f386e76e17d800268511dcf30fbc0b642d39e425e00703d6745",
+    "disposable_compile_sha256": "e935d8a78d76d7cdc63b30d5a98708d8dfd62f0c0fec24a7158b53a0418afd81",
+    "stream_on": "-EOPNOTSUPP",
+    "final_state": "SW_STBY",
+    "illumination_api": false
+  },
+  "next_gate": "fresh three-camera bind/CSIPHY0-receiver-only coexistence one-shot; no sensor stream, illumination, SecureISP or protected ownership action"
+}
