@@ -1,0 +1,61 @@
+{
+  "experiment": "E004dd",
+  "status": "PASS_NO_SHIPPED_TRUSTED_ENTRYPOINT_REPRODUCES_WINDOWS_PROTECTED_FRAME_TRANSFER",
+  "mode": "same-machine-static-only",
+  "scope": {
+    "root_static_hash_module_inventory": true,
+    "normal_skel_invoke_exports_scanned": true,
+    "transfer_relevant_symbols_scanned": true,
+    "windows_oracle_token_comparison": true
+  },
+  "candidates": {
+    "example_image_runner": {
+      "contains_mmap_memcpy_primitive": true,
+      "normal_skel_invoke_export": false,
+      "proven_dynamic_entry": "algo_main -> sec_gaussian",
+      "copy_operation_production_reachable": false
+    },
+    "libloadalgo_skel": {
+      "callable": true,
+      "protected_buffer_bridge": true,
+      "camera_equivalent_algorithm": false
+    },
+    "libbenchmark_skel": {
+      "callable": true,
+      "internal_vmemset_present": true,
+      "internal_add_vectors_present": true,
+      "generic_copy_or_fill_skel_method": false,
+      "swabf_swasf_method": false
+    },
+    "libsysmon_skel": {
+      "callable": true,
+      "copy_named_methods_present": true,
+      "arbitrary_source_and_destination_parameters": false,
+      "memtest_uses_internal_allocations": true,
+      "camera_equivalent_transfer": false
+    }
+  },
+  "negative_scan": {
+    "trusted_package_swabf_token": false,
+    "trusted_package_swasf_token": false,
+    "trusted_package_isptrustlet_transfer_token": false,
+    "windows_oracle_tokens_present": true
+  },
+  "remaining": {
+    "memory_handoff_blocker": false,
+    "trusted_worker_habitat_blocker": false,
+    "shipping_worker_reuse_blocker": true,
+    "custom_worker_trust_admission_unresolved": true
+  },
+  "runtime_actions": {
+    "secure_cb9_enable": false,
+    "fastrpc_ioctl": false,
+    "ownership_transition": false,
+    "cpz_migration": false,
+    "securepd_worker_launch": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004de production CPZ/SecurePD worker trust-admission feasibility, static first"
+}

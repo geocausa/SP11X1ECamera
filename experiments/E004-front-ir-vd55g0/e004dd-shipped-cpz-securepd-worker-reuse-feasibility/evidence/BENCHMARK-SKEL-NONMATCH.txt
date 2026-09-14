@@ -1,0 +1,20 @@
+E004dd LIBBENCHMARK REUSE CHECK
+
+libbenchmark_skel.so is statically trusted by the exact root qccdsp policy and exports benchmark_skel_handle_invoke.
+Fresh Ghidra decompilation of the complete skel dispatcher shows callable cases for:
+  dilate5x5 / dilate3x3
+  integrate
+  GEMM open/run/close
+  gaussian7x7
+  bilateral filters
+  convolution/depthwise convolution
+  fast9, FFT, histogram, NCC, box filter, Harris corner, Sobel
+  clock/query/crash/perf operations
+
+The binary also contains global utility symbols:
+  addTwoVectorsTogether
+  Vmemset
+
+However, neither utility is referenced by benchmark_skel_handle_invoke. A search limited to the skel handler finds no call to addTwoVectorsTogether or Vmemset and no generic copy/fill method.
+
+Therefore the trusted benchmark interface cannot be repurposed as an arbitrary source->destination frame-copy or tail-fill RPC without changing the module or invoking an unexposed internal symbol.

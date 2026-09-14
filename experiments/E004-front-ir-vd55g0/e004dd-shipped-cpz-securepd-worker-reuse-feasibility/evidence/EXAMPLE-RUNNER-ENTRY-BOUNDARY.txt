@@ -1,0 +1,18 @@
+E004dd EXAMPLE_IMAGE_RUNNER ENTRY BOUNDARY
+
+example_image_runner.so contains the strongest transfer primitive found so far:
+example_algo_run operation 1 maps one fd-backed buffer, maps a second buffer, memcpy()s between them, performs cache maintenance, and unmaps/releases both.
+
+But its trusted dynamic-worker entry is not example_algo_run.
+Fresh decompilation of the exact module's exported algo_main shows:
+  algo_main -> secure_pd_thread_create-style helper
+  thread name = "sec_gaussian"
+  stack size = 0x20000
+  priority = 0x96
+and diagnostics explicitly say the launched thread computes Gaussian.
+
+The module exports no normal *_skel_handle_invoke entry, and a complete captured-driver-store search finds example_algo_run/example_algo_open only inside example_image_runner.so itself.
+
+The root SecurePD dynamic ALGO route resolves the fixed entry symbol algo_main. Consequently the shipped module's reachable trusted ALGO entry launches the Gaussian worker; it does not expose the operation-1 memcpy test.
+
+Conclusion: the useful mmap+memcpy code exists in trusted shipping bytes but is not reachable through the proven SecurePD/FastRPC entry surfaces without altering code or adding a new callable wrapper.

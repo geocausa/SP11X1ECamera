@@ -1,0 +1,14 @@
+E004dd LIBLOADALGO REUSE CHECK
+
+libloadalgo_skel.so is statically trusted and has a normal loadalgo_skel_handle_invoke entry.
+Its exposed worker-control surface is the Qualcomm SecurePD Gaussian example:
+  loadalgo_init
+  loadalgo_physbuffer
+  initStaticGaussian
+  loadalgo_Gaussian7x7u8
+  loadalgo_deinit
+  loadalgo_open / loadalgo_close
+
+E004dc proved loadalgo_physbuffer is useful architecture authority because it passes FastRPC buffer physical identity into SecurePD. But the callable algorithm is Gaussian processing, not a byte-copy, 0x80-tail-fill, SWABF, or SWASF transform.
+
+The proxy therefore proves how to feed protected buffers to SecurePD, but it does not expose a shipping camera-equivalent operation that can be selected without adding trusted code.

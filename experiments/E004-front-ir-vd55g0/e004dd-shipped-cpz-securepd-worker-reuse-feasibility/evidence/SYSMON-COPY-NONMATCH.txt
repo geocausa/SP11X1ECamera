@@ -1,0 +1,15 @@
+E004dd LIBSYSMON COPY SURFACE CHECK
+
+libsysmon_skel.so is statically trusted and does expose two remotely dispatched copy-named functions:
+  sysmon_usermode_buffer_copy(output_buf, output_buf_size, size_copied)
+  sysmon_usermode_npu_buffer_copy(output_buf, output_buf_size, size_copied)
+
+DWARF proves each API has only one caller-supplied output buffer; there is no caller-supplied source-buffer parameter.
+Hexagon disassembly shows each function forwards the output pointer/size to an internal QDI service:
+  sysmon_usermode_buffer_copy     -> QDI operation 0x101
+  sysmon_usermode_npu_buffer_copy -> QDI operation 0x11c
+The skel dispatcher directly calls both functions, so they are real remote APIs, but they export sysmon/NPU-owned data into a caller buffer rather than copying arbitrary protected source memory into arbitrary protected destination memory.
+
+The same library contains memtest_memcpy/memtest_memset. They are benchmark routines, not generic RPC transfer primitives. DWARF shows memtest_args_t contains size/obuf/iteration/test-control fields; the memcpy implementation allocates its own source/destination buffers with calloc/malloc before memscpy, while memtest_memset allocates its own buffer before memset.
+
+Thus libsysmon_skel.so cannot supply the Windows camera contract of {caller-selected protected source -> caller-selected protected destination} plus exact tail-fill/SWAB semantics.

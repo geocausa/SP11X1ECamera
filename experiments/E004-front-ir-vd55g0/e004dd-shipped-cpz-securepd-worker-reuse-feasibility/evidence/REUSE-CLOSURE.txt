@@ -1,0 +1,31 @@
+E004dd SHIPPED TRUSTED WORKER REUSE CLOSURE
+
+Systematic exact-package review covered all root-static-hash modules and every normal skel/invoke export found in the package.
+
+Useful-but-not-sufficient candidates:
+1. example_image_runner.so
+   - contains exact mmap+memcpy mechanics;
+   - no skel invoke entry;
+   - proven ALGO entry algo_main launches sec_gaussian instead.
+2. libloadalgo_skel.so
+   - callable FastRPC/SecurePD bridge;
+   - only Gaussian example processing is exposed.
+3. libbenchmark_skel.so
+   - broad image-processing RPC surface;
+   - internal Vmemset/addTwoVectors utilities are not skel-dispatched;
+   - no generic copy/fill RPC.
+4. libsysmon_skel.so
+   - copy-named RPCs exist but take only an output buffer and copy internal sysmon/NPU data;
+   - memcpy/memset test routines allocate their own buffers.
+5. remaining statically trusted sysmon/CRM/stability/Q6MSFR/version modules
+   - no camera transfer/SWABF/SWASF surface found.
+
+Negative token scan across the statically trusted CDSP package found zero SWABF, SWASF, ISPTRUSTLET, or Windows protected-image-copy diagnostics. The exact Windows QcISPTrustlet has all of those tokens.
+
+Result:
+No already trusted, currently exposed shipping CPZ/SecurePD entrypoint has been proven capable of reproducing the complete Windows protected-frame transfer contract. Reuse of shipping code therefore does not remove the worker-admission blocker.
+
+The remaining architecture is clean:
+  E004db supplies protected FastRPC maps/lifetime.
+  E004dc supplies CPZ/SecurePD worker and mailbox ABI.
+  A parity worker implementation is still required, and production admission of that implementation must satisfy the existing trust/signature/static-hash policy.
