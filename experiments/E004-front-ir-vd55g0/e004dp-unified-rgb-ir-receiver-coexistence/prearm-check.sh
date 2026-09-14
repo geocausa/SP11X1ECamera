@@ -32,5 +32,5 @@ ENV=$(sudo -n grub-editenv /boot/grub/grubenv list 2>/dev/null||true); grep -qx 
  cat "$D/build/AUTHORITY.sha256"
  echo action=three_sensor_bind_plus_csiphy0_receiver_readback_only
  echo sensor_stream=NO; echo capture=NO; echo illumination=NO; echo secureisp=NO; echo retry=NO
-} > "$D/PREARM.txt"
+} > "$D/PREARM-LIVE.txt"
 echo 'E004DP_PREARM=PASS THREE_SENSOR_BIND=PLANNED RECEIVER_ONLY=YES RETRY=NO'

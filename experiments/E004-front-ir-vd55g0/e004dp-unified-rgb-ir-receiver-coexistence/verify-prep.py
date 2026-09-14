@@ -28,6 +28,8 @@ expected={
  'ov13858-production.ko':'13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309'}
 for n,h in expected.items(): need((D/'build'/n).is_file() and sha(D/'build'/n)==h,'build '+n)
 pre=(D/'PREARM.txt').read_text()
+need('PREARM-LIVE.txt' in (D/'prearm-check.sh').read_text(),'live prearm target')
+need('> "$D/PREARM.txt"' not in (D/'prearm-check.sh').read_text(),'tracked prearm rewrite')
 for t in ('status=PASS_READY_TO_INSTALL','dtb_sha256=3d56fd6f610576dee5fc97da809f9c48da16952af9a48a5053ea864b94855beb','action=three_sensor_bind_plus_csiphy0_receiver_readback_only','sensor_stream=NO','capture=NO','illumination=NO','secureisp=NO','retry=NO'):
     need(t in pre,'PREARM '+t)
 # Candidate script cannot contain a userspace stream or link-mutation command.
