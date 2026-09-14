@@ -1,0 +1,306 @@
+PROGRAM=example_image_runner.so
+
+//// example_algo_open @00011b20 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 example_algo_open(void)
+
+{
+  int iVar1;
+  undefined4 extraout_r1;
+  undefined4 uVar2;
+  
+  iVar1 = FUN_00011650(1);
+  if (iVar1 == 0) {
+    uVar2 = 0x80000402;
+    if (PTR_00015090 == (undefined *)0x0) {
+      _HAP_debug_v2(3,extraout_r1,0x3c,"Error 0x%x: %s: failed to init");
+    }
+    else {
+      FUN_00011660(3,_L_str,0x3c,"Error 0x%x: %s: failed to init");
+    }
+  }
+  else {
+    if (PTR_00015090 == (undefined *)0x0) {
+      _HAP_debug_v2(2,extraout_r1,0x39,"%s: handle allocated 0x%p");
+    }
+    else {
+      FUN_00011660(2,_L_str,0x39,"%s: handle allocated 0x%p");
+    }
+    uVar2 = 0;
+  }
+  return uVar2;
+}
+
+
+
+//// example_algo_close @00011c5c ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 example_algo_close(undefined4 param_1,undefined4 param_2)
+
+{
+  sbyte sVar1;
+  
+  if (CONCAT44(param_2,param_1) == 0) {
+    sVar1 = -1;
+  }
+  else {
+    sVar1 = 0;
+  }
+  if (sVar1 == 0) {
+    param_2 = FUN_000116c0(param_1);
+  }
+  if (PTR_00015090 == (undefined *)0x0) {
+    _HAP_debug_v2(2,param_2,0x48,"%s: handle freed 0x%llx");
+  }
+  else {
+    FUN_00011660(2,_L_str,0x48,"%s: handle freed 0x%llx");
+  }
+  return 0;
+}
+
+
+
+//// example_algo_run @00011ce8 ////
+
+/* WARNING: Heritage AFTER dead removal. Example location: r3 : 0x00011d1c */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void example_algo_run(void)
+
+{
+  int iVar1;
+  int iVar2;
+  int iVar3;
+  undefined4 uVar4;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 extraout_r1_01;
+  undefined4 extraout_r1_02;
+  undefined4 extraout_r1_03;
+  undefined4 extraout_r1_04;
+  undefined4 extraout_r1_05;
+  undefined4 extraout_r1_06;
+  undefined4 extraout_r1_07;
+  undefined4 extraout_r1_08;
+  undefined4 uVar5;
+  undefined8 in_r3r2;
+  undefined4 *puVar6;
+  int in_r4;
+  undefined4 *in_r5;
+  int unaff_r18;
+  sbyte sVar7;
+  int in_stack_00000000;
+  undefined4 *in_stack_00000004;
+  undefined4 in_stack_00000014;
+  undefined4 *in_stack_0000001c;
+  int local_30;
+  int local_2c [9];
+  
+  uVar4 = FUN_000116d0();
+  iVar1 = (int)in_r3r2;
+  puVar6 = (undefined4 *)((ulonglong)in_r3r2 >> 0x20);
+  if (iVar1 == 2) {
+    local_2c[0] = 0;
+    if (in_r4 == 0xc) {
+      iVar1 = FUN_000116f0(*puVar6,local_2c,0);
+      uVar4 = extraout_r1_00;
+      if (iVar1 == 0) {
+        if (PTR_00015090 == (undefined *)0x0) {
+          uVar4 = _HAP_debug_v2(2,extraout_r1_00,0xb1,puVar6,"mmap_persistent_test");
+        }
+        else {
+          uVar4 = FUN_00011660(2,_L_str,0xb1,puVar6,"mmap_persistent_test");
+        }
+        iVar1 = -4;
+        if (local_2c[0] != 0) {
+          FUN_00011710(local_2c[0],puVar6[1],1);
+          if (PTR_00015090 == (undefined *)0x0) {
+            _HAP_debug_v2(2);
+          }
+          else {
+            FUN_00011660(2,_L_str);
+          }
+          iVar2 = FUN_00011720(*(undefined4 *)PTR_00015098,local_2c[0],puVar6[1]);
+          iVar1 = -5;
+          uVar4 = extraout_r1_03;
+          if (iVar2 == 0) {
+            if (PTR_00015090 == (undefined *)0x0) {
+              _HAP_debug_v2(2,extraout_r1_03,0xc5);
+            }
+            else {
+              FUN_00011660(2,_L_str,0xc5);
+            }
+            iVar1 = FUN_00011730(*puVar6);
+            uVar4 = extraout_r1_04;
+            if (iVar1 == 0) {
+              if (PTR_00015090 == (undefined *)0x0) {
+                _HAP_debug_v2(2,extraout_r1_04,0xcc);
+              }
+              else {
+                FUN_00011660(2,_L_str,0xcc);
+              }
+              iVar1 = FUN_00011750(*(undefined4 *)PTR_00015098,puVar6[1]);
+              uVar4 = extraout_r1_06;
+              if (iVar1 == 0) {
+                if (PTR_00015090 == (undefined *)0x0) {
+                  uVar5 = 0xd3;
+LAB_000123c4:
+                  uVar4 = _HAP_debug_v2(2,uVar4,uVar5);
+                }
+                else {
+                  uVar4 = 0xd3;
+LAB_000123f0:
+                  uVar4 = FUN_00011660(2,_L_str,uVar4);
+                }
+                iVar1 = 0;
+                goto LAB_00011ea4;
+              }
+            }
+          }
+        }
+      }
+    }
+    else {
+      iVar1 = -1;
+    }
+    if (PTR_00015090 == (undefined *)0x0) {
+      uVar5 = 0xd7;
+LAB_00011e1c:
+      uVar4 = _HAP_debug_v2(3,uVar4,uVar5);
+    }
+    else {
+LAB_00011e98:
+      uVar4 = FUN_00011660(3,_L_str);
+    }
+LAB_00011ea4:
+    if (iVar1 == 0) {
+      sVar7 = -1;
+    }
+    else {
+      sVar7 = 0;
+    }
+    unaff_r18 = iVar1;
+    if (sVar7 != 0) {
+      unaff_r18 = 0;
+    }
+    if (iVar1 == 0) goto LAB_00011f1c;
+  }
+  else {
+    if (iVar1 == 1) {
+      iVar1 = -1;
+      local_30 = 0;
+      if (in_r4 == 0xc) {
+        iVar2 = FUN_000116f0(*puVar6,&local_30,0);
+        if (iVar2 == 0) {
+          sVar7 = -1;
+        }
+        else {
+          sVar7 = 0;
+        }
+        if (sVar7 == 0) {
+          iVar1 = iVar2;
+        }
+        uVar4 = extraout_r1_01;
+        if (iVar2 == 0) {
+          if (PTR_00015090 == (undefined *)0x0) {
+            uVar4 = _HAP_debug_v2(2,extraout_r1_01,0x62,puVar6,"mmap_fd_test");
+          }
+          else {
+            uVar4 = FUN_00011660(2,_L_str,0x62,puVar6,"mmap_fd_test");
+          }
+          if (local_30 == 0) {
+            iVar1 = -4;
+          }
+          else if (in_stack_00000000 == 0xc) {
+            iVar2 = FUN_00011710(local_30,puVar6[1],1);
+            iVar1 = -3;
+            uVar4 = extraout_r1_02;
+            if (iVar2 == 0) {
+              if (PTR_00015090 == (undefined *)0x0) {
+                _HAP_debug_v2(2,extraout_r1_02,0x74);
+              }
+              else {
+                FUN_00011660(2,_L_str,0x74);
+              }
+              iVar2 = FUN_00011740(0,in_r5[1]);
+              iVar1 = -4;
+              uVar4 = extraout_r1_05;
+              if (iVar2 != -1) {
+                if (PTR_00015090 == (undefined *)0x0) {
+                  _HAP_debug_v2(2,extraout_r1_05,0x7e);
+                }
+                else {
+                  FUN_00011660(2,_L_str,0x7e);
+                }
+                FUN_00011760(iVar2,local_30,in_r5[1]);
+                iVar3 = FUN_00011710(iVar2,in_r5[1]);
+                iVar1 = -2;
+                uVar4 = extraout_r1_07;
+                if (iVar3 == 0) {
+                  if (PTR_00015090 == (undefined *)0x0) {
+                    _HAP_debug_v2(2,extraout_r1_07,0x89);
+                  }
+                  else {
+                    FUN_00011660(2,_L_str,0x89);
+                  }
+                  *(int *)PTR_00015098 = iVar2;
+                  iVar1 = FUN_00011730(*puVar6);
+                  uVar4 = extraout_r1_08;
+                  if (iVar1 == 0) {
+                    if (PTR_00015090 == (undefined *)0x0) {
+                      uVar5 = 0x93;
+                      goto LAB_000123c4;
+                    }
+                    uVar4 = 0x93;
+                    goto LAB_000123f0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      if (PTR_00015090 == (undefined *)0x0) {
+        uVar5 = 0x97;
+        goto LAB_00011e1c;
+      }
+      goto LAB_00011e98;
+    }
+    if (iVar1 == 0) {
+      sVar7 = -1;
+    }
+    else {
+      sVar7 = 0;
+    }
+    if (sVar7 == 0) {
+      unaff_r18 = 0xe;
+    }
+    if (iVar1 == 0) {
+      iVar1 = FUN_000116e0(puVar6,*in_r5,*in_stack_00000004,puVar6,in_stack_00000014,
+                           *in_stack_0000001c);
+      uVar4 = extraout_r1;
+      goto LAB_00011ea4;
+    }
+    if (PTR_00015090 == (undefined *)0x0) {
+      uVar4 = _HAP_debug_v2(3,uVar4,0xef);
+    }
+    else {
+      uVar4 = FUN_00011660(3,_L_str,0xef);
+    }
+  }
+  if (PTR_00015090 == (undefined *)0x0) {
+    _HAP_debug_v2(3,uVar4,0xf3);
+  }
+  else {
+    FUN_00011660(3,_L_str,0xf3);
+  }
+LAB_00011f1c:
+  FUN_00011700(unaff_r18);
+  return;
+}
+
+

@@ -1,0 +1,38 @@
+E004dc SAME-MACHINE SECUREPD WORKER EXECUTION AUTHORITY
+
+example_image.so is not merely a test host stub. It is a real Hexagon SecurePD worker image with:
+  algo_main
+  gaussian_main_thread
+  gaussian7x7_Gaussian7x7u8
+and dependencies on:
+  secure_pd_thread_create
+  secure_pd_mb_get / send / receive
+  get_secure_channel_handle
+  dsc_verify_buffer
+  secure_pd_mapping_create_64
+  secure_pd_mapping_delete_64
+
+algo_main launches the "sec_gaussian" worker thread.
+The worker receives 96-byte work packets, obtains the DSC secure-channel handle, verifies both protected physical buffers, creates trusted mappings, executes image processing, deletes mappings, and sends completion back over the secure mailbox.
+
+The exact root qccdsp image independently embeds its SecurePD loader and a static Gaussian execution path. Root strings/control flow include:
+  securepd_init
+  securepd_main_thread
+  p2s_loader / s2p_loader
+  process_msg
+  sec_gaussian
+  algo_main
+  "Starting static execution in new thread"
+
+The STATIC_EXEC buffer type (8) launches the built-in static algorithm thread. The ALGO buffer type (4) is a distinct dynamic-admission path:
+  - ALGO buffer must already be registered with the secure channel;
+  - secure-channel state must be DATA_LOADED;
+  - SecurePD maps the ALGO backing;
+  - loader treats it as sec_algo.elf;
+  - it resolves symbol algo_main;
+  - only then does it launch a new thread;
+  - mapping is removed and state updated after the load/launch transaction.
+
+Therefore Qualcomm's exact-machine architecture provides both:
+  A. a built-in trusted worker launch route; and
+  B. a dynamically supplied worker route gated by the SecurePD module trust policy.

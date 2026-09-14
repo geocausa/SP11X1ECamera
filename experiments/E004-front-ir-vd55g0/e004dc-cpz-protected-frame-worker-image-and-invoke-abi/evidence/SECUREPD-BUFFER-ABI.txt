@@ -1,0 +1,54 @@
+E004dc SAME-MACHINE SECUREPD BUFFER / MAILBOX ABI
+
+Shipped exact-machine modules:
+  example_image.so
+    SHA256 e969f6bc537992689214ac1c7b47c353c7aa8bc292c924a3f2baa2fe2294ac46
+  example_image_runner.so
+    SHA256 b24f185fba00bfb8d3434ac611dba5e3100364cec04fef49e92afe5840ecff1b
+  libloadalgo_skel.so
+    SHA256 db1380cbe1e64fc21501eece86528a78efaded909262ca778769384f8a7d4a71
+
+The binaries retain Qualcomm DWARF/source provenance under:
+  cdsp_proc/platform/securepd/example/...
+
+Recovered enum buffer_type_ext:
+  ALGO        = 4
+  HEAP        = 5
+  POOL        = 6
+  DATA        = 7
+  STATIC_EXEC = 8
+
+Recovered loadalgo_packet_t (12 bytes):
+  +0x00 uint32_t paddr
+  +0x04 uint32_t len
+  +0x08 int32_t  type
+
+Recovered mem_handle (24 bytes):
+  +0x00 int32_t  fd
+  +0x04 uint32_t size
+  +0x08 uint64_t addr
+  +0x10 int32_t  ion_fd
+  +0x14 padding/alignment
+
+Recovered gaussian7x7_packet_t (96 bytes):
+  +0x00 mem_handle src
+  +0x18 uint32_t srcWidth
+  +0x1c uint32_t srcHeight
+  +0x20 uint32_t srcStride
+  +0x28 mem_handle dst
+  +0x40 uint32_t dstStride
+  +0x48 mem_handle heap
+
+The layout is mechanically encoded in scaffold/sp11-securepd-worker-abi.h and compile-time checked by verify_layout.c.
+
+libloadalgo_skel.so is the proxy/control half. Its loadalgo_physbuffer path:
+  1. requires the proxy to be initialized;
+  2. resolves a FastRPC fd through HAP_mmap_get;
+  3. obtains/uses the physical-address identity;
+  4. sends {paddr,len,type} over proxy_to_secure_mb;
+  5. waits for secure_to_proxy_mb response;
+  6. reports whether SecurePD accepted/processed the protected buffer.
+
+Its Gaussian request carries source, destination, dimensions/stride, and heap state in the 96-byte packet.
+
+This is direct same-machine proof of a host/proxy -> SecurePD protected-buffer message ABI using physical-buffer identity plus a typed secure-channel state machine.

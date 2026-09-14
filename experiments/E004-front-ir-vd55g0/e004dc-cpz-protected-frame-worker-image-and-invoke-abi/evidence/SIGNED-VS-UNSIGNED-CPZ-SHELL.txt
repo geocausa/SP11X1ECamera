@@ -1,0 +1,22 @@
+E004dc SIGNED VS UNSIGNED CPZ SHELL AUTHORITY
+
+Exact SP11 Windows CDSP package:
+  qcnspmcdm_ext_cdsp8380.inf_arm64_4a8c3ebe3aad408a/CDSP
+
+fastrpc_shell_3
+  SHA256 975b5ccf27d81a5247b2cde613dccd564437a0f659144d8930ef5be6383cca6b
+  fastrpc_migrate_cpz @ 0x88618 is a direct jump to
+  fastrpc_uprocess_migrate_cpz @ 0x627a8.
+
+The production migration routine performs real protected-process setup. Static disassembly shows calls into:
+  apps_mem_request_map64
+  fastrpc_invoke_mmap_get_cpz_phys
+and the QuRT protected-process path.
+
+fastrpc_shell_unsigned_3
+  SHA256 e61c489216a2ef8017e43f33e989b3e9e1796a413040ffcde9bcbaea9e519cb3
+  fastrpc_migrate_cpz @ 0x87d50 does NOT migrate.
+  It returns immediate error 0x80000414.
+
+Conclusion:
+CPZ migration is deliberately available from the production/signed shell and deliberately unavailable from the unsigned shell. A normal unsigned FastRPC PD is not a substitute for the CPZ worker habitat.

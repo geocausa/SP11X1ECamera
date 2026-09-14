@@ -1,0 +1,650 @@
+PROGRAM=libloadalgo_skel.so
+
+//// loadalgo_init @00010e80 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void loadalgo_init(void)
+
+{
+  int iVar1;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 uVar2;
+  undefined4 uVar3;
+  undefined4 uVar4;
+  char *pcVar5;
+  sbyte sVar6;
+  
+  FUN_00010c30();
+  iVar1 = FUN_00010c40();
+  if (proxy_to_secure_mb.id == 0) {
+    sVar6 = -1;
+  }
+  else {
+    sVar6 = 0;
+  }
+  if (sVar6 == 0) {
+    iVar1 = FUN_00010c40();
+    if (*(longlong *)(iVar1 + 0x18) == 0) {
+      sVar6 = -1;
+    }
+    else {
+      sVar6 = 0;
+    }
+    if (sVar6 != 0) {
+      if (PTR_000141cc == (undefined *)0x0) {
+        pcVar5 = 
+        "ERROR 0x%x: %s: SecurePD has failed to create mailbox %s that communicates with proxy\n";
+        uVar3 = 0x2b;
+        uVar2 = extraout_r1_00;
+        goto LAB_00010f54;
+      }
+      uVar2 = 0x2b;
+      pcVar5 = 
+      "ERROR 0x%x: %s: SecurePD has failed to create mailbox %s that communicates with proxy\n";
+      goto LAB_00010fb0;
+    }
+    proxyInitialized = 1;
+    uVar2 = extraout_r1_00;
+  }
+  else if (PTR_000141cc == (undefined *)0x0) {
+    pcVar5 = "ERROR 0x%x: %s: Failed to create mailbox %s\n";
+    uVar3 = 0x23;
+    uVar2 = extraout_r1;
+LAB_00010f54:
+    uVar2 = _HAP_debug_v2(3,uVar2,uVar3,pcVar5);
+  }
+  else {
+    pcVar5 = "ERROR 0x%x: %s: Failed to create mailbox %s\n";
+    uVar2 = 0x23;
+LAB_00010fb0:
+    uVar2 = FUN_00010c50(3,"loadalgo_imp.c",uVar2,pcVar5);
+  }
+  if (iVar1 == 0) {
+    if (PTR_000141cc == (undefined *)0x0) {
+      uVar3 = 2;
+      pcVar5 = "%s: Proxy PD successfully initialized!\n";
+      uVar4 = 0x35;
+LAB_00011018:
+      _HAP_debug_v2(uVar3,uVar2,uVar4,pcVar5);
+      goto LAB_00011070;
+    }
+    uVar2 = 2;
+    uVar3 = 0x35;
+    pcVar5 = "%s: Proxy PD successfully initialized!\n";
+  }
+  else {
+    if (PTR_000141cc == (undefined *)0x0) {
+      uVar3 = 3;
+      pcVar5 = "ERROR 0x%x (%d): %s failed\n";
+      uVar4 = 0x33;
+      goto LAB_00011018;
+    }
+    uVar2 = 3;
+    pcVar5 = "ERROR 0x%x (%d): %s failed\n";
+    uVar3 = 0x33;
+  }
+  FUN_00010c50(uVar2,"loadalgo_imp.c",uVar3,pcVar5);
+LAB_00011070:
+  FUN_00010c60(iVar1);
+  return;
+}
+
+
+
+//// loadalgo_physbuffer @000110e8 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void loadalgo_physbuffer(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4
+                        ,undefined4 param_5,undefined4 param_6)
+
+{
+  int iVar1;
+  int iVar2;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 extraout_r1_01;
+  sbyte *psVar3;
+  int unaff_r16;
+  sbyte sVar4;
+  undefined4 uVar5;
+  undefined4 uVar6;
+  char *pcVar7;
+  int local_40;
+  undefined4 uStack_3c;
+  undefined4 local_38;
+  undefined4 uStack_34;
+  undefined4 uStack_2c;
+  undefined4 local_28;
+  undefined4 local_24;
+  
+  psVar3 = &proxyInitialized;
+  FUN_00010ca0();
+  local_40 = 0;
+  uStack_3c = 0;
+  local_38 = 0;
+  uStack_34 = 0;
+  if (*psVar3 == 0) {
+    iVar1 = -0x7ffffb95;
+    goto LAB_00011320;
+  }
+  iVar1 = HAP_mmap_get_llvmint_1_1(param_3,&local_38);
+  if (iVar1 == 0) {
+    sVar4 = -1;
+  }
+  else {
+    sVar4 = 0;
+  }
+  if (sVar4 == 0) {
+    unaff_r16 = iVar1;
+  }
+  if (iVar1 == 0) {
+    uStack_2c = local_38;
+    local_28 = param_5;
+    local_24 = param_6;
+    iVar1 = FUN_00010cb0(&proxy_to_secure_mb,&uStack_2c,0xc,uStack_34);
+    if (iVar1 == 0) {
+      iVar2 = FUN_00010cc0(&secure_to_proxy_mb,&local_40);
+      iVar1 = local_40;
+      if (iVar2 == 0) {
+        sVar4 = -1;
+      }
+      else {
+        sVar4 = 0;
+      }
+      if (sVar4 == 0) {
+        unaff_r16 = iVar2;
+      }
+      if (iVar2 == 0) {
+        uVar6 = 0;
+        if (CONCAT44(uStack_3c,local_40) == 0) {
+          sVar4 = -1;
+        }
+        else {
+          sVar4 = 0;
+        }
+        if (sVar4 == 0) {
+          if (PTR_000141cc == (undefined *)0x0) {
+            uVar6 = _HAP_debug_v2(3,0,0x5e,
+                                  "ERROR 0x%x (%d): %s: securePD failed to process buffer fd 0x%x (paddr 0x%llx), len %u, type %d\n"
+                                 );
+          }
+          else {
+            uVar6 = FUN_00010c50(3,"loadalgo_imp.c",0x5e,
+                                 "ERROR 0x%x (%d): %s: securePD failed to process buffer fd 0x%x (paddr 0x%llx), len %u, type %d\n"
+                                 ,PTR_000141cc);
+          }
+          if (iVar1 != 0) goto LAB_00011320;
+        }
+        if (PTR_000141cc == (undefined *)0x0) {
+          _HAP_debug_v2(2,uVar6,100,
+                        "%s: securePD successfully processed fd 0x%x (paddr 0x%llx) of len %u (type %d)"
+                        ,local_38,uStack_34);
+        }
+        else {
+          FUN_00010c50(2,"loadalgo_imp.c",100,
+                       "%s: securePD successfully processed fd 0x%x (paddr 0x%llx) of len %u (type %d)"
+                      );
+        }
+        iVar1 = 0;
+        goto LAB_00011320;
+      }
+      iVar1 = unaff_r16;
+      if (PTR_000141cc == (undefined *)0x0) {
+        pcVar7 = 
+        "ERROR 0x%x (%d): %s: Failed to receive message from securePD (fd 0x%x, len %u, type %d)\n";
+        uVar5 = 0x58;
+        uVar6 = extraout_r1_01;
+        goto LAB_000111d4;
+      }
+      uVar6 = 0x58;
+      pcVar7 = 
+      "ERROR 0x%x (%d): %s: Failed to receive message from securePD (fd 0x%x, len %u, type %d)\n";
+    }
+    else {
+      if (PTR_000141cc == (undefined *)0x0) {
+        uVar5 = 0x52;
+        pcVar7 = "ERROR 0x%x (%d): %s: mailbox send failed for paddr 0x%llx of len %u (type %d)\n";
+        uVar6 = extraout_r1_00;
+        goto LAB_000111d4;
+      }
+      uVar6 = 0x52;
+      pcVar7 = "ERROR 0x%x (%d): %s: mailbox send failed for paddr 0x%llx of len %u (type %d)\n";
+    }
+  }
+  else {
+    iVar1 = unaff_r16;
+    if (PTR_000141cc == (undefined *)0x0) {
+      uVar5 = 0x48;
+      pcVar7 = "ERROR 0x%x: %s: HAP_mmap_get for fd 0x%x (len %u, type %d)\n";
+      uVar6 = extraout_r1;
+LAB_000111d4:
+      _HAP_debug_v2(3,uVar6,uVar5,pcVar7);
+      goto LAB_00011320;
+    }
+    uVar6 = 0x48;
+    pcVar7 = "ERROR 0x%x: %s: HAP_mmap_get for fd 0x%x (len %u, type %d)\n";
+  }
+  FUN_00010c50(3,"loadalgo_imp.c",uVar6,pcVar7);
+LAB_00011320:
+  FUN_00010cd0(iVar1);
+  return;
+}
+
+
+
+//// initStaticGaussian @000113e4 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+int initStaticGaussian(void)
+
+{
+  int iVar1;
+  int iVar2;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 uVar3;
+  undefined4 uVar4;
+  char *pcVar5;
+  int unaff_r16;
+  int iVar6;
+  sbyte sVar7;
+  int iStack_28;
+  undefined4 uStack_24;
+  undefined4 local_20;
+  undefined4 uStack_1c;
+  undefined4 local_18;
+  
+  uStack_24 = 0;
+  iStack_28 = 0;
+  if (proxyInitialized == 0) {
+    return -0x7ffffb95;
+  }
+  uStack_1c = 0;
+  local_20 = 0;
+  local_18 = 8;
+  iVar1 = FUN_00010cb0(&proxy_to_secure_mb,&local_20,0xc);
+  if (iVar1 == 0) {
+    sVar7 = -1;
+  }
+  else {
+    sVar7 = 0;
+  }
+  iVar6 = iVar1;
+  if (sVar7 != 0) {
+    iVar6 = unaff_r16;
+  }
+  if (iVar1 == 0) {
+    iVar2 = FUN_00010cc0(&secure_to_proxy_mb,&iStack_28);
+    iVar1 = iStack_28;
+    if (iVar2 == 0) {
+      sVar7 = -1;
+    }
+    else {
+      sVar7 = 0;
+    }
+    if (sVar7 == 0) {
+      iVar6 = iVar2;
+    }
+    if (iVar2 == 0) {
+      uVar4 = 0;
+      if (CONCAT44(uStack_24,iStack_28) == 0) {
+        sVar7 = -1;
+      }
+      else {
+        sVar7 = 0;
+      }
+      if (sVar7 == 0) {
+        if (PTR_000141cc == (undefined *)0x0) {
+          uVar4 = _HAP_debug_v2(3,0,0x89,
+                                "ERROR 0x%x (%d): %s: securePD failed to process buffer for static gaussian\n"
+                               );
+        }
+        else {
+          uVar4 = FUN_00010c50(3,"loadalgo_imp.c",0x89,
+                               "ERROR 0x%x (%d): %s: securePD failed to process buffer for static gaussian\n"
+                              );
+        }
+        if (iVar1 != 0) {
+          return iVar1;
+        }
+      }
+      if (PTR_000141cc == (undefined *)0x0) {
+        _HAP_debug_v2(2,uVar4,0x8e,"%s: securePD successfully initialized static gaussian module");
+      }
+      else {
+        FUN_00010c50(2,"loadalgo_imp.c",0x8e,
+                     "%s: securePD successfully initialized static gaussian module");
+      }
+      return 0;
+    }
+    if (PTR_000141cc == (undefined *)0x0) {
+      pcVar5 = "ERROR 0x%x (%d): %s: Failed to receive message from securePD for static gaussian\n";
+      uVar3 = 0x83;
+      uVar4 = extraout_r1_00;
+LAB_000114bc:
+      _HAP_debug_v2(3,uVar4,uVar3,pcVar5);
+      return iVar6;
+    }
+    uVar4 = 0x83;
+    pcVar5 = "ERROR 0x%x (%d): %s: Failed to receive message from securePD for static gaussian\n";
+  }
+  else {
+    if (PTR_000141cc == (undefined *)0x0) {
+      pcVar5 = "ERROR 0x%x (%d): %s: mailbox failed to send message to initialize static gaussian\n"
+      ;
+      uVar3 = 0x7d;
+      uVar4 = extraout_r1;
+      goto LAB_000114bc;
+    }
+    uVar4 = 0x7d;
+    pcVar5 = "ERROR 0x%x (%d): %s: mailbox failed to send message to initialize static gaussian\n";
+  }
+  FUN_00010c50(3,"loadalgo_imp.c",uVar4,pcVar5);
+  return iVar6;
+}
+
+
+
+//// loadalgo_Gaussian7x7u8 @00011614 ////
+
+/* WARNING: Removing unreachable block (ram,0x00011df8) */
+/* WARNING: Removing unreachable block (ram,0x000116d0) */
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0x00011684 */
+/* WARNING: Removing unreachable block (ram,0x0001173c) */
+/* WARNING: Removing unreachable block (ram,0x00011724) */
+/* WARNING: Removing unreachable block (ram,0x00011858) */
+/* WARNING: Removing unreachable block (ram,0x00011860) */
+/* WARNING: Removing unreachable block (ram,0x00011884) */
+/* WARNING: Removing unreachable block (ram,0x00011894) */
+/* WARNING: Removing unreachable block (ram,0x0001189c) */
+/* WARNING: Removing unreachable block (ram,0x000118a8) */
+/* WARNING: Removing unreachable block (ram,0x000118e8) */
+/* WARNING: Removing unreachable block (ram,0x000118ec) */
+/* WARNING: Removing unreachable block (ram,0x00011744) */
+/* WARNING: Removing unreachable block (ram,0x0001174c) */
+/* WARNING: Removing unreachable block (ram,0x00011758) */
+/* WARNING: Removing unreachable block (ram,0x00011764) */
+/* WARNING: Removing unreachable block (ram,0x000119ec) */
+/* WARNING: Removing unreachable block (ram,0x000119f8) */
+/* WARNING: Removing unreachable block (ram,0x00011a04) */
+/* WARNING: Removing unreachable block (ram,0x00011a94) */
+/* WARNING: Removing unreachable block (ram,0x00011aa8) */
+/* WARNING: Removing unreachable block (ram,0x00011a9c) */
+/* WARNING: Removing unreachable block (ram,0x00011b58) */
+/* WARNING: Removing unreachable block (ram,0x00011b68) */
+/* WARNING: Removing unreachable block (ram,0x00011b5c) */
+/* WARNING: Removing unreachable block (ram,0x00011bcc) */
+/* WARNING: Removing unreachable block (ram,0x00011bd8) */
+/* WARNING: Removing unreachable block (ram,0x00011be4) */
+/* WARNING: Removing unreachable block (ram,0x00011c40) */
+/* WARNING: Removing unreachable block (ram,0x00011c48) */
+/* WARNING: Removing unreachable block (ram,0x00011c54) */
+/* WARNING: Removing unreachable block (ram,0x000118f4) */
+/* WARNING: Removing unreachable block (ram,0x00011948) */
+/* WARNING: Removing unreachable block (ram,0x00011950) */
+/* WARNING: Removing unreachable block (ram,0x0001195c) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+SecurePDMailBox * loadalgo_Gaussian7x7u8(void)
+
+{
+  undefined8 in_r1r0;
+  undefined4 uVar1;
+  undefined4 uVar2;
+  int iVar3;
+  SecurePDMailBox *pSVar4;
+  int in_stack_00000024;
+  
+  uVar1 = (undefined4)((ulonglong)in_r1r0 >> 0x20);
+  FUN_00010cf0();
+  iVar3 = *(int *)PTR_000141d0;
+  if (proxyInitialized == 0) {
+    pSVar4 = (SecurePDMailBox *)0x8000046b;
+    goto LAB_00011db0;
+  }
+  if (in_stack_00000024 == 1) {
+    if (PTR_000141cc == (undefined *)0x0) {
+      _HAP_debug_v2(2,uVar1,0xa5);
+    }
+    else {
+      FUN_00010c50(2,uVar1,0xa5);
+    }
+    FUN_00010d00();
+    if (PTR_000141cc == (undefined *)0x0) {
+      uVar2 = 0xa8;
+      goto LAB_00011c70;
+    }
+    uVar2 = 0xa8;
+LAB_00011cd0:
+    FUN_00010c50(3,uVar1,uVar2);
+  }
+  else {
+    FUN_00010c40();
+    if (PTR_000141cc != (undefined *)0x0) {
+      uVar2 = 0xb3;
+      goto LAB_00011cd0;
+    }
+    uVar2 = 0xb3;
+LAB_00011c70:
+    _HAP_debug_v2(3,uVar1,uVar2);
+  }
+  pSVar4 = (SecurePDMailBox *)&stack0xffffffa0;
+  FUN_00010d10(pSVar4);
+  if (pSVar4 == (SecurePDMailBox *)0x0) {
+    if (PTR_000141cc == (undefined *)0x0) {
+      _HAP_debug_v2(2,uVar1,0x101);
+    }
+    else {
+      FUN_00010c50(2,uVar1,0x101);
+    }
+    pSVar4 = (SecurePDMailBox *)0x0;
+  }
+  else if (PTR_000141cc == (undefined *)0x0) {
+    _HAP_debug_v2(3,uVar1,0xfe);
+  }
+  else {
+    FUN_00010c50(3,uVar1,0xfe);
+  }
+LAB_00011db0:
+  if (iVar3 != *(int *)PTR_000141d0) {
+    FUN_00010c90();
+    if (proxyInitialized == 0) {
+      pSVar4 = (SecurePDMailBox *)0x8000046b;
+    }
+    else {
+      FUN_00010d10(&proxy_to_secure_mb);
+      pSVar4 = &proxy_to_secure_mb;
+      if (PTR_000141cc == (undefined *)0x0) {
+        _HAP_debug_v2(3,uVar1,0x110);
+      }
+      else {
+        FUN_00010c50(3,uVar1,0x110);
+      }
+    }
+    return pSVar4;
+  }
+  FUN_00010d20(pSVar4);
+  return pSVar4;
+}
+
+
+
+//// loadalgo_deinit @00011dd0 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+int loadalgo_deinit(void)
+
+{
+  int iVar1;
+  undefined4 extraout_r1;
+  int iVar2;
+  sbyte sVar3;
+  
+  if (proxyInitialized == 0) {
+    iVar2 = -0x7ffffb95;
+  }
+  else {
+    iVar1 = FUN_00010d10(&proxy_to_secure_mb);
+    iVar2 = 0;
+    if (iVar1 == 0) {
+      sVar3 = -1;
+    }
+    else {
+      sVar3 = 0;
+    }
+    if (sVar3 != 0) {
+      proxyInitialized = 0;
+    }
+    if (iVar1 != 0) {
+      iVar2 = iVar1;
+      if (PTR_000141cc == (undefined *)0x0) {
+        _HAP_debug_v2(3,extraout_r1,0x110,"ERROR 0x%x (%d): %s: failed to delete mailbox %s\n");
+      }
+      else {
+        FUN_00010c50(3,"loadalgo_imp.c",0x110,"ERROR 0x%x (%d): %s: failed to delete mailbox %s\n");
+      }
+    }
+  }
+  return iVar2;
+}
+
+
+
+//// loadalgo_skel_handle_invoke @000126bc ////
+
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0x00012a48 */
+/* WARNING: Removing unreachable block (ram,0x00012830) */
+/* WARNING: Removing unreachable block (ram,0x0001273c) */
+/* WARNING: Removing unreachable block (ram,0x000128f4) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void loadalgo_skel_handle_invoke(uint param_1,undefined4 *param_2)
+
+{
+  undefined4 uVar1;
+  undefined4 uVar2;
+  int extraout_r0;
+  undefined8 in_r1r0;
+  undefined4 uVar3;
+  undefined4 *puVar4;
+  code *UNRECOVERED_JUMPTABLE;
+  int iVar5;
+  int iVar6;
+  uint uVar7;
+  undefined4 *puVar8;
+  sbyte sVar9;
+  
+  uVar3 = (undefined4)((ulonglong)in_r1r0 >> 0x20);
+  FUN_00010cf0();
+  extraout_r0 = (int)in_r1r0;
+  switch(param_1 >> 0x18 & 0x1f) {
+  case 0:
+    iVar6 = 0;
+    iVar5 = -0x7ffffbf2;
+    if ((((param_1 >> 0x10 & 0xff) == 2) && ((param_1 >> 8 & 0xff) == 0)) &&
+       (((param_1 >> 4 & 0xf) == 0 && (((param_1 & 0xf) == 1 && (3 < (uint)param_2[1])))))) {
+      uVar7 = *(uint *)*param_2;
+      if (uVar7 <= (uint)param_2[3]) {
+        if (uVar7 == 0) {
+          sVar9 = -1;
+        }
+        else {
+          sVar9 = 0;
+        }
+        if (sVar9 == 0) {
+          iVar6 = param_2[2];
+        }
+        if (((uVar7 != 0) && (*(sbyte *)(uVar7 + iVar6 + -1) == 0)) &&
+           (FUN_00010e10(iVar6,uVar3,0), iVar5 = iVar6, iVar6 == 0)) {
+          FUN_00010e20(param_2 + 4,uVar3,8);
+          iVar5 = 0;
+        }
+      }
+    }
+    break;
+  case 1:
+    if (param_1 == 0x10) {
+      FUN_00010e30(*param_2,uVar3,*(undefined1 *)((int)param_2 + 5),
+                   *(undefined1 *)((int)param_2 + 7),*(undefined1 *)((int)param_2 + 1),
+                   *(undefined2 *)((int)param_2 + 6));
+      FUN_00010e40();
+      return;
+    }
+    goto LAB_00012b70;
+  case 3:
+    iVar5 = -0x7ffffbf2;
+    if (((((param_1 >> 0x10 & 0xff) == 1) && ((param_1 >> 8 & 0xff) == 0)) &&
+        ((param_1 >> 4 & 0xf) == 1)) &&
+       ((((param_1 & 0xf) == 0 && (3 < (uint)param_2[1])) &&
+        (iVar6 = CONCAT22(*(undefined2 *)((int)param_2 + 10),
+                          CONCAT11(*(undefined1 *)((int)param_2 + 9),*(undefined1 *)param_2)),
+        FUN_00010e50(iVar6), iVar6 == 0)))) {
+      FUN_00010e60();
+      iVar5 = extraout_r0;
+    }
+    break;
+  case 4:
+    iVar5 = -0x7ffffbf2;
+    if (((((param_1 >> 0x10 & 0xff) == 1) && ((param_1 >> 8 & 0xff) == 0)) &&
+        ((param_1 >> 4 & 0xf) == 2)) && (((param_1 & 0xf) == 1 && (0x13 < (uint)param_2[1])))) {
+      puVar8 = (undefined4 *)*param_2;
+      iVar6 = CONCAT22(*(undefined2 *)((int)param_2 + 10),
+                       CONCAT11(*(undefined1 *)((int)param_2 + 9),*(undefined1 *)param_2));
+      uVar1 = param_2[3];
+      FUN_00010e50(iVar6);
+      puVar4 = param_2 + 6;
+      if (iVar6 == 0) {
+        uVar2 = *puVar8;
+        iVar6 = CONCAT22(*(undefined2 *)((int)param_2 + 0x1a),
+                         CONCAT11(*(undefined1 *)((int)param_2 + 0x19),*(undefined1 *)param_2));
+        FUN_00010e50(iVar6);
+        if (iVar6 == 0) {
+          sVar9 = -1;
+        }
+        else {
+          sVar9 = 0;
+        }
+        if (sVar9 != 0) {
+          puVar4 = (undefined4 *)(uint)*(char *)((int)param_2 + 0x12);
+        }
+        if ((iVar6 == 0) &&
+           (uVar7 = (uint)*(ushort *)(param_2 + 4) |
+                    ((uint)puVar4 | (uint)*(char *)((int)param_2 + 0x13) << 8) << 0x10,
+           FUN_00010e50(uVar7,uVar3,*(undefined1 *)((int)param_2 + 0x15)), uVar7 == 0)) {
+          FUN_00010e70(extraout_r0,uVar3,0,uVar1,0,uVar2);
+          iVar5 = extraout_r0;
+        }
+      }
+    }
+    break;
+  case 5:
+  case 2:
+    if (param_1 == 0) {
+      sVar9 = 0;
+    }
+    else {
+      sVar9 = -1;
+    }
+    if (sVar9 == 0) {
+      FUN_00010e30(extraout_r0);
+                    /* WARNING: Could not recover jumptable at 0x00012b80. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+      (*UNRECOVERED_JUMPTABLE)();
+      return;
+    }
+LAB_00012b70:
+    iVar5 = -0x7ffffbf2;
+    break;
+  default:
+    iVar5 = -0x7ffffbec;
+  }
+  FUN_00010d20(iVar5);
+  return;
+}
+
+

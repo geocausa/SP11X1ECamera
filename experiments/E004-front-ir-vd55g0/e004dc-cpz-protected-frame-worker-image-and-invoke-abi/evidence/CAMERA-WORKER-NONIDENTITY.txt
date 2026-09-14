@@ -1,0 +1,20 @@
+E004dc CAMERA WORKER IDENTITY BOUNDARY
+
+Windows CameraSecureISP remains the behavioral oracle for the actual protected IR transfer algorithm.
+QcISPTrustlet8380.dll contains the proven worker behavior:
+  ImageProcessingModule_SWABF
+  ImageProcessingModule_SWASF
+  direct internal/external protected-buffer copy
+  synthetic/copy branches described by E004cf
+
+The same Windows trustlet contains no static string references to:
+  FastRPC
+  CDSP
+  libloadalgo_skel.so
+  example_image.so
+  example_image_runner.so
+
+The shipped CDSP SecurePD examples implement Gaussian/test processing and a generic mapping/copy test, not the identified SWABF/SWASF CameraSecureISP algorithm.
+
+Conclusion:
+The SecurePD architecture/ABI is now proven suitable in shape, but no shipping CPZ/SecurePD module has yet been proven to be the camera parity worker. Do not substitute the Gaussian example for the camera algorithm and do not claim the example runner is reachable until its admission/invoke path is separately proven.

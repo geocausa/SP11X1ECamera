@@ -1,0 +1,34 @@
+E004dc SECUREPD DYNAMIC MODULE TRUST AUTHORITY
+
+Exact Golden/SP11 CDSP root firmware:
+  /lib/firmware/qcom/x1e80100/microsoft/Denali/qccdsp8380.mbn
+  SHA256 4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789
+
+The root image embeds static-hash policy names for the shipped SecurePD example stack, including:
+  /statichashes/example_image.so
+  /statichashes/example_image_runner.so
+  /statichashes/libloadalgo_skel.so
+  /statichashes/libbenchmark_skel.so
+  /statichashes/fastrpc_shell_3
+  /statichashes/fastrpc_shell_unsigned_3
+
+Do not interpret these as literal whole-file SHA256 values: the raw whole-file SHA256 digest bytes were not present in the root image. They are loader/security-policy entries proving the module names participate in a static-hash trust configuration.
+
+Fresh Ghidra recovery of the same root firmware shows the loader tracks at least these verification properties:
+  module signed       -> bit 0x20
+  signature valid     -> bit 0x40
+  static hash found   -> bit 0x80
+
+The same loader contains and reaches:
+  "SigVerify failed for %s"
+  "signature verify start failed for %s"
+  "module: Module is signed -----> %s"
+  "module: Signature is valid ---> %s"
+  "module: Static hash found ----> %s"
+  "error: dynamic module is unsigned"
+
+FUN_f013d890 rejects a dynamic ELF with missing signature metadata and returns failure after logging "error: dynamic module is unsigned".
+FUN_f013da44 independently carries the same rejection path.
+
+Conclusion:
+A source-built arbitrary Hexagon ELF cannot simply be copied into the CPZ/SecurePD loader and expected to run. Dynamic worker admission is a trust/signature/static-hash boundary, not only an ELF ABI problem.

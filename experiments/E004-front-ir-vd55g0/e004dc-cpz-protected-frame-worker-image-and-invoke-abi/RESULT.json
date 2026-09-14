@@ -1,0 +1,67 @@
+{
+  "experiment": "E004dc",
+  "status": "PASS_SECUREPD_WORKER_ADMISSION_AND_PROTECTED_BUFFER_ABI_PROVEN_CAMERA_PARITY_WORKER_NOT_YET_ADMITTED",
+  "mode": "same-machine-static-plus-layout-compile-only",
+  "cpz_shell": {
+    "production_shell_sha256": "975b5ccf27d81a5247b2cde613dccd564437a0f659144d8930ef5be6383cca6b",
+    "production_migrate_cpz_real": true,
+    "unsigned_shell_sha256": "e61c489216a2ef8017e43f33e989b3e9e1796a413040ffcde9bcbaea9e519cb3",
+    "unsigned_migrate_cpz_real": false,
+    "unsigned_migrate_cpz_error": "0x80000414"
+  },
+  "securepd_trust": {
+    "root_firmware_sha256": "4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789",
+    "signature_verification_present": true,
+    "unsigned_dynamic_module_rejected": true,
+    "static_hash_policy_names_present": true,
+    "arbitrary_unsigned_worker_admitted": false
+  },
+  "buffer_types": {
+    "ALGO": 4,
+    "HEAP": 5,
+    "POOL": 6,
+    "DATA": 7,
+    "STATIC_EXEC": 8
+  },
+  "mailbox_abi": {
+    "loadalgo_packet_size": 12,
+    "loadalgo_packet_fields": ["paddr@0", "len@4", "type@8"],
+    "mem_handle_size": 24,
+    "gaussian_packet_size": 96,
+    "proxy_resolves_fastrpc_fd": true,
+    "proxy_sends_physical_buffer_identity": true,
+    "secure_worker_dsc_verifies_buffers": true,
+    "secure_worker_creates_trusted_mappings": true
+  },
+  "worker_admission": {
+    "static_exec_path_present": true,
+    "dynamic_algo_path_present": true,
+    "dynamic_entry_symbol": "algo_main",
+    "dynamic_image_name": "sec_algo.elf",
+    "dynamic_image_trust_gated": true
+  },
+  "shipped_copy_candidate": {
+    "module": "example_image_runner.so",
+    "sha256": "b24f185fba00bfb8d3434ac611dba5e3100364cec04fef49e92afe5840ecff1b",
+    "operation_1_maps_two_buffers_and_memcpy": true,
+    "normal_skel_handle_invoke_export": false,
+    "host_caller_found_in_driver_store": false,
+    "camera_reachability_proven": false
+  },
+  "camera_parity": {
+    "windows_worker_behaviors_known": true,
+    "shipping_securepd_module_proven_equivalent": false,
+    "custom_worker_trust_path_resolved": false
+  },
+  "runtime_actions": {
+    "secure_cb9_enable": false,
+    "fastrpc_ioctl": false,
+    "ownership_transition": false,
+    "cpz_migration": false,
+    "securepd_worker_launch": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004dd shipped CPZ/SecurePD worker reuse feasibility, static first"
+}

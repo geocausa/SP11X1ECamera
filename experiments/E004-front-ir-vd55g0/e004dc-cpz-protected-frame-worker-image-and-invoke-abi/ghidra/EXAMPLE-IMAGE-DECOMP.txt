@@ -1,0 +1,427 @@
+PROGRAM=example_image.so
+
+//// gaussian7x7_Gaussian7x7u8 @00011900 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void gaussian7x7_Gaussian7x7u8
+               (undefined4 param_1,undefined4 param_2,uint param_3,uint param_4,uint param_5,
+               uint param_6)
+
+{
+  uint uVar1;
+  uint extraout_r1;
+  undefined4 uVar2;
+  int iVar3;
+  sbyte sVar4;
+  undefined1 auStack_54 [20];
+  int local_40 [14];
+  
+  uVar1 = FUN_000114a0();
+  if ((uVar1 != 0) && (param_5 != 0)) {
+    if (((param_6 | param_4 | uVar1 | extraout_r1 | param_5) & 0x7f) == 0) {
+      sVar4 = 0;
+    }
+    else {
+      sVar4 = -1;
+    }
+    if ((sVar4 == 0) && (6 < param_3)) {
+      local_40[4] = 0;
+      local_40[0] = 0;
+      local_40[1] = 0;
+      local_40[3] = 0;
+      local_40[2] = 2;
+      uVar2 = FUN_000114b0(local_40);
+      iVar3 = local_40[4];
+      if (local_40[0] < 1) {
+        FUN_00011500(local_40,uVar2,local_40[0]);
+        FUN_00011510(0x80000401);
+        return;
+      }
+      FUN_000114c0();
+      FUN_000114d0(iVar3 * 3 + -7 + param_3);
+      if (iVar3 == 0) {
+        sVar4 = -1;
+      }
+      else {
+        sVar4 = 0;
+      }
+      if (sVar4 == 0) {
+        do {
+          FUN_000114e0();
+          iVar3 = iVar3 + -1;
+        } while (iVar3 != 0);
+      }
+      FUN_000114f0(auStack_54);
+      FUN_00011500(local_40);
+      FUN_00011510(0);
+      return;
+    }
+  }
+  if (PTR_00014090 == (undefined *)0x0) {
+    _HAP_debug_v2(3,extraout_r1,0x98,
+                  "ERROR: bad parameters passed, src 0x%p (%u x %u) stride %u, dst 0x%p stride %u");
+  }
+  else {
+    FUN_00011520(3,_L_str,0x98,
+                 "ERROR: bad parameters passed, src 0x%p (%u x %u) stride %u, dst 0x%p stride %u");
+  }
+  FUN_00011510(0x8000040e);
+  return;
+}
+
+
+
+//// gaussian_main_thread @00011c04 ////
+
+/* WARNING (jumptable): Heritage AFTER dead removal. Revisit: 0x00001008 */
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0x00011c8c */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void gaussian_main_thread(void)
+
+{
+  dsc_feat_handle_t *pdVar1;
+  short sVar2;
+  undefined4 uVar3;
+  undefined8 in_r1r0;
+  longlong lVar4;
+  undefined4 uVar5;
+  undefined8 in_r3r2;
+  dsc_feat_handle_t *pdVar6;
+  undefined4 uVar7;
+  sbyte sVar8;
+  dsc_feat_handle_t *pdStack_fc;
+  dsc_feat_handle_t *pdStack_f8;
+  uint uStack_f4;
+  undefined4 uStack_ec;
+  dsc_feat_handle_t *pdStack_e8;
+  undefined4 uStack_e4;
+  undefined4 uStack_d4;
+  undefined4 uStack_c4;
+  dsc_feat_handle_t *pdStack_c0;
+  undefined4 uStack_bc;
+  undefined4 uStack_b0;
+  int iStack_90;
+  int iStack_8c;
+  dsc_feat_handle_t *pdStack_84;
+  dsc_feat_handle_t adStack_80 [24];
+  undefined4 uStack_68;
+  undefined4 uStack_64;
+  dsc_feat_handle_t adStack_60 [24];
+  undefined4 uStack_48;
+  undefined4 uStack_44;
+  int iStack_3c;
+  
+  FUN_000115f0();
+  iStack_3c = *(int *)PTR_00014094;
+  uStack_48 = 0;
+  uStack_44 = 0;
+  uStack_68 = 0;
+  uStack_64 = 0;
+  pdStack_84 = (dsc_feat_handle_t *)0x0;
+  FUN_00011600();
+  uVar3 = (undefined4)((ulonglong)in_r1r0 >> 0x20);
+  if (adStack_60 == (dsc_feat_handle_t *)0x0) {
+    pdStack_84 = adStack_60;
+    if (PTR_00014090 == (undefined *)0x0) {
+      _HAP_debug_v2(2,uVar3,0xed,(int)((ulonglong)in_r3r2 >> 0x20),adStack_60);
+    }
+    else {
+      FUN_00011520(2,uVar3,0xed);
+    }
+    if (PTR_00014090 == (undefined *)0x0) {
+      _HAP_debug_v2(2,uVar3,0xef);
+    }
+    else {
+      FUN_00011520(2,uVar3,0xef);
+    }
+LAB_00011d70:
+    do {
+      lVar4 = CONCAT44(uStack_64,uStack_68);
+      while( true ) {
+        if (lVar4 == 0) {
+          sVar8 = -1;
+        }
+        else {
+          sVar8 = 0;
+        }
+        if (sVar8 == 0) goto LAB_00011e6c;
+        FUN_00011610(2000000);
+        FUN_00011600(adStack_80);
+        lVar4 = CONCAT44(_L_str_6,adStack_80);
+        if (CONCAT44(uStack_64,uStack_68) == 0) {
+          sVar8 = -1;
+        }
+        else {
+          sVar8 = 0;
+        }
+        pdStack_84 = adStack_80;
+        if (sVar8 == 0) break;
+                    /* WARNING: Ignoring partial resolution of indirect */
+        uVar3 = 0;
+        uVar3 = 0;
+      }
+      if (PTR_00014090 == (undefined *)0x0) {
+        _HAP_debug_v2(3);
+      }
+      else {
+        FUN_00011520();
+      }
+    } while( true );
+  }
+  if (PTR_00014090 == (undefined *)0x0) {
+    uVar7 = 2;
+    uVar5 = 0xea;
+    goto LAB_00012414;
+  }
+  uVar7 = 2;
+  uVar5 = 0xea;
+  goto LAB_00012434;
+LAB_00011e6c:
+  pdStack_84 = (dsc_feat_handle_t *)0x0;
+  iStack_8c = 0;
+  iStack_90 = 0;
+  uVar3 = (undefined4)((ulonglong)lVar4 >> 0x20);
+  FUN_00011630(adStack_80,uVar3,0x60);
+  pdStack_84 = adStack_80;
+  if (adStack_80 == (dsc_feat_handle_t *)0x0) {
+    if (uStack_f4 < 0x60) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        _HAP_debug_v2(3);
+      }
+      else {
+        FUN_00011520();
+      }
+      goto LAB_00011d70;
+    }
+    FUN_00011640(&g_dsc_handle);
+    pdVar6 = g_dsc_handle;
+    if (g_dsc_handle == (dsc_feat_handle_t *)0x0) {
+      pdStack_84 = (dsc_feat_handle_t *)0x8000042c;
+      if (PTR_00014090 == (undefined *)0x0) {
+        _HAP_debug_v2(3);
+      }
+      else {
+        FUN_00011520();
+      }
+      secure_pd_mb_send_llvmint_1_2_i32_8(adStack_60);
+      goto LAB_00011d70;
+    }
+    uVar7 = (undefined4)((ulonglong)in_r3r2 >> 0x20);
+    FUN_00011650(g_dsc_handle,uVar3,pdStack_e8,uVar7,uStack_ec);
+    pdVar1 = g_dsc_handle;
+    pdStack_84 = pdVar6;
+    if (pdVar6 != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 != (undefined *)0x0) {
+        in_r3r2 = CONCAT44(uVar7,0x115);
+        goto LAB_000123d0;
+      }
+      in_r3r2 = CONCAT44(uVar7,0x115);
+      pdVar6 = pdStack_e8;
+      uVar7 = uStack_e4;
+LAB_00012294:
+      _HAP_debug_v2(3,uVar3,(int)in_r3r2,(int)((ulonglong)in_r3r2 >> 0x20),pdVar6,uVar7);
+LAB_000123d4:
+      iStack_90 = (int)(short)pdStack_84;
+      iStack_8c = (int)((short)pdStack_84 >> 0xf);
+      secure_pd_mb_send_llvmint_1_2_i32_8(adStack_60);
+      goto LAB_00011d70;
+    }
+    FUN_00011650(g_dsc_handle,uVar3,pdStack_c0,uVar7,uStack_c4);
+    pdStack_84 = pdVar1;
+    if (pdVar1 != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        in_r3r2 = CONCAT44(uVar7,0x11e);
+        pdVar6 = pdStack_c0;
+        uVar7 = uStack_bc;
+        goto LAB_00012294;
+      }
+      in_r3r2 = CONCAT44(uVar7,0x11e);
+LAB_000123d0:
+      FUN_00011520(3,uVar3,(int)in_r3r2);
+      goto LAB_000123d4;
+    }
+    if (PTR_00014090 == (undefined *)0x0) {
+                    /* WARNING: Ignoring partial resolution of indirect */
+      in_r3r2 = CONCAT44(uStack_bc,0x125);
+      _HAP_debug_v2(3,uVar3,0x125);
+    }
+    else {
+      FUN_00011520(3,uVar3,0x125);
+    }
+    uVar7 = (undefined4)((ulonglong)in_r3r2 >> 0x20);
+    FUN_00011660((dsc_feat_handle_t *)&pdStack_f8,uVar3,pdStack_e8,uVar7,uStack_ec,7);
+    pdStack_84 = (dsc_feat_handle_t *)&pdStack_f8;
+    if ((dsc_feat_handle_t *)&pdStack_f8 != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        in_r3r2 = CONCAT44(uVar7,299);
+        pdVar6 = pdStack_e8;
+        uVar7 = uStack_e4;
+        goto LAB_00012294;
+      }
+      in_r3r2 = CONCAT44(uVar7,299);
+      goto LAB_000123d0;
+    }
+    FUN_00011660((dsc_feat_handle_t *)&pdStack_fc,uVar3,pdStack_c0,uVar7,uStack_c4,7);
+    pdStack_84 = (dsc_feat_handle_t *)&pdStack_fc;
+    if ((dsc_feat_handle_t *)&pdStack_fc != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        in_r3r2 = CONCAT44(uVar7,0x135);
+        pdVar6 = pdStack_c0;
+        uVar7 = uStack_bc;
+        goto LAB_00012294;
+      }
+      in_r3r2 = CONCAT44(uVar7,0x135);
+      goto LAB_000123d0;
+    }
+    if (PTR_00014090 == (undefined *)0x0) {
+      _HAP_debug_v2(3,uVar3,0x13c,uVar7,pdStack_e8,uStack_e4);
+    }
+    else {
+      FUN_00011520(3,uVar3,0x13c);
+    }
+    pdVar6 = pdStack_f8;
+    FUN_00011670(pdStack_f8,uVar3,uStack_d4,uVar7,pdStack_fc,uStack_b0);
+    pdStack_84 = pdVar6;
+    if (pdVar6 != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        _HAP_debug_v2(3,uVar3,0x142);
+      }
+      else {
+        FUN_00011520(3,uVar3,0x142);
+      }
+    }
+    pdVar6 = pdStack_fc;
+    FUN_00011680(pdStack_fc);
+    pdStack_84 = pdVar6;
+    if (pdVar6 != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        _HAP_debug_v2(3,uVar3,0x147,uVar7,pdStack_fc,0);
+      }
+      else {
+        FUN_00011520(3,uVar3,0x147);
+      }
+    }
+    pdVar1 = pdStack_f8;
+    FUN_00011690(pdStack_f8);
+    pdVar6 = pdStack_fc;
+    pdStack_84 = pdVar1;
+    if (pdVar1 != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        in_r3r2 = CONCAT44(uVar7,0x14d);
+        pdVar6 = pdStack_f8;
+LAB_00012290:
+        uVar7 = 0;
+        goto LAB_00012294;
+      }
+      in_r3r2 = CONCAT44(uVar7,0x14d);
+      goto LAB_000123d0;
+    }
+    sVar2 = (short)pdStack_fc;
+    FUN_00011690(pdStack_fc);
+    pdStack_84 = pdVar6;
+    if (pdVar6 != (dsc_feat_handle_t *)0x0) {
+      if (PTR_00014090 == (undefined *)0x0) {
+        in_r3r2 = CONCAT44(uVar7,0x156);
+        pdVar6 = pdStack_fc;
+        goto LAB_00012290;
+      }
+      in_r3r2 = CONCAT44(uVar7,0x156);
+      goto LAB_000123d0;
+    }
+    pdStack_84._0_2_ = sVar2;
+    FUN_00011620(g_dsc_handle);
+    iStack_90 = (int)(short)pdStack_84;
+    iStack_8c = (int)((short)pdStack_84 >> 0xf);
+    secure_pd_mb_send_llvmint_1_2_i32_8(adStack_60);
+    if (adStack_60 != (dsc_feat_handle_t *)0x0) {
+      pdStack_84 = adStack_60;
+      if (PTR_00014090 == (undefined *)0x0) {
+        _HAP_debug_v2(3,uVar3,0x163);
+      }
+      else {
+        FUN_00011520(3,uVar3,0x163);
+      }
+    }
+    goto LAB_00011e6c;
+  }
+  if (adStack_80 != (dsc_feat_handle_t *)0xfffffffb) {
+    if (PTR_00014090 == (undefined *)0x0) {
+      _HAP_debug_v2(3,uVar3,0x101);
+    }
+    else {
+      FUN_00011520(3,uVar3,0x101);
+    }
+    goto LAB_00011d70;
+  }
+  FUN_000116a0();
+  if (PTR_00014090 == (undefined *)0x0) {
+    uVar7 = 3;
+    uVar5 = 0x167;
+LAB_00012414:
+    pdStack_84 = adStack_60;
+    _HAP_debug_v2(uVar7,uVar3,uVar5);
+    goto LAB_00012438;
+  }
+  uVar7 = 3;
+  uVar5 = 0x167;
+LAB_00012434:
+  pdStack_84 = adStack_60;
+  FUN_00011520(uVar7,uVar3,uVar5);
+LAB_00012438:
+  if (iStack_3c != *(int *)PTR_00014094) {
+    FUN_00011570();
+    (*(code *)PTR_00014140)(uVar7,uVar3,8);
+    return;
+  }
+  FUN_000116b0();
+  return;
+}
+
+
+
+//// algo_main @0001245c ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void algo_main(undefined4 param_1,undefined4 param_2)
+
+{
+  int iVar1;
+  undefined4 extraout_r1;
+  undefined4 uVar2;
+  char *pcVar3;
+  
+  if (PTR_00014090 == (undefined *)0x0) {
+    _HAP_debug_v2(3,param_2,0x16f,"Running algo_main");
+  }
+  else {
+    FUN_00011520(3,_L_str,0x16f,"Running algo_main");
+  }
+  iVar1 = FUN_000116d0("sec_gaussian",PTR_00014098,0x20000,0x96,PTR_0001409c,0);
+  if (iVar1 == 0) {
+    if (PTR_00014090 == (undefined *)0x0) {
+      pcVar3 = "Launched thread 0x%x for computing Gaussian!\n";
+      uVar2 = 0x179;
+LAB_00012520:
+      _HAP_debug_v2(3,extraout_r1,uVar2,pcVar3);
+      return;
+    }
+    pcVar3 = "Launched thread 0x%x for computing Gaussian!\n";
+    uVar2 = 0x179;
+  }
+  else {
+    if (PTR_00014090 == (undefined *)0x0) {
+      pcVar3 = "ERROR %d: gaussian thread create failed !";
+      uVar2 = 0x177;
+      goto LAB_00012520;
+    }
+    pcVar3 = "ERROR %d: gaussian thread create failed !";
+    uVar2 = 0x177;
+  }
+  FUN_00011520(3,_L_str,uVar2,pcVar3);
+  return;
+}
+
+

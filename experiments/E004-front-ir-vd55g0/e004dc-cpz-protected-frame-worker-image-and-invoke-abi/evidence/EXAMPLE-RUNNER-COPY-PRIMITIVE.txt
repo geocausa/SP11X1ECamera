@@ -1,0 +1,27 @@
+E004dc SHIPPED EXAMPLE RUNNER COPY PRIMITIVE
+
+example_image_runner.so contains a particularly relevant generic worker primitive.
+Its DWARF exposes example_algo_run(handle, operation, four input buffers, four output buffers).
+
+For operation 1, static disassembly/decompilation shows the runner:
+  - HAP_mmap_get() retrieves the first fd-backed buffer mapping;
+  - performs cache invalidation;
+  - HAP_mmap2() maps the second buffer;
+  - memcpy() copies from the first mapped VA to the second;
+  - performs cache clean;
+  - HAP_mmap_put() releases the first mapping;
+  - HAP_munmap2() removes the second mapping.
+
+Its own diagnostic strings explicitly describe:
+  "retrieved buffer 0 ... from fd"
+  "Mapped buffer 1 ..."
+  "memcpy va0 ..., va1 ..., length ..."
+  "released buffer 0"
+  "Unmapped buffer 1"
+
+This is strong architectural corroboration of the worker shape E004cf extracted from Windows: once trusted mappings exist, protected frame movement can be ordinary CPU memory work.
+
+Important reachability limit:
+A full driver-store scan found the symbols example_algo_run/example_algo_open only inside example_image_runner.so itself. No host-side Windows caller/stub for that API was found in the captured driver store. The module also does not export a normal *_skel_handle_invoke entry.
+
+Therefore E004dc does NOT claim operation 1 is directly invokable by the camera stack or that it is the Windows-equivalent worker. It is a shipped, trusted-code primitive and a reuse candidate for the next static gate, not an established camera data path.
