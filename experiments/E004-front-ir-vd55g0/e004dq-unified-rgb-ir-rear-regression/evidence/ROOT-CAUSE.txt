@@ -1,0 +1,7 @@
+E004dq root cause
+
+The rear camera runtime completed through FINAL-NEUTRAL before verify-live.py failed.
+The verifier used Path(.../e004j_ir_dphy_windows_parity).read_text() as user geoca.
+The E004k module parameter is declared mode 0400, so this read requires root and raised PermissionError.
+The correct verifier-only fix is sudo -n cat of the parameter; no camera/runtime behavior changes are required.
+No same-boot retry was performed.

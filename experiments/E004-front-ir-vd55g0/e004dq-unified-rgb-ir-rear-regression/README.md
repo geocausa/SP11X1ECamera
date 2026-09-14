@@ -19,3 +19,11 @@ One fresh one-shot may:
 It may **not** stream IMX681 or VD55G0, enable IR illumination, exercise CSIPHY0, invoke the E004t receiver harness, use Linux SecureISP, or perform any protected-memory action. In particular, the `E004J_CSIPHY0_DPHY_WINDOWS_PARITY` runtime marker must remain absent during rear-only streaming; its appearance would indicate incorrect gate scoping.
 
 One attempt only; any post-consume failure returns to protected Golden with no same-boot retry.
+
+## Attempt 1 — formally FAIL, runtime behavior passed
+
+The one-shot boot `1b72a2d4-4c5b-427d-b47f-8534d5fd24da` consumed Attempt 1. Rear runtime itself completed: the exact color-bar SHA matched, the normal stream produced sequences 0..7 at ~30 fps, all three sensors were suspended before and after, and routing returned to neutral. No front stream, IR stream, CSIPHY0 parity-selection marker, receiver harness, illumination, SecureISP action or kernel-fault marker occurred.
+
+The attempt is nevertheless recorded as **FAIL** because `verify-live.py` then tried to read `/sys/module/qcom_camss/parameters/e004j_ir_dphy_windows_parity` using normal-user `Path.read_text()`. E004k deliberately declares that parameter mode `0400`; the verifier therefore raised `PermissionError` after camera runtime had already finished. No same-boot retry was performed.
+
+SP11 returned to Golden on boot `49c8b928-46a3-43be-9acb-cb568e463f16` and the E004dq candidate was retired. The retry must be a fresh candidate. E004dr will change only that verifier read to `sudo -n cat`; camera behavior and pinned artifacts remain unchanged.
