@@ -1,0 +1,46 @@
+E004de TRUST DECISION AUTHORITY
+
+Exact same-machine CDSP root firmware Ghidra authority:
+  qccdsp8380.mbn SHA256 4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789
+
+Relevant recovered functions:
+
+1. FUN_f0137778 — main SigVerify/static-hash decision path
+
+Static-hash path (param_4 == 0):
+- calls FUN_f0138420 to obtain the per-module static-hash record;
+- sets the verification record to 32-byte hashes;
+- verifies each loadable segment against the stored hash;
+- only after all segments match does it set the success path;
+- diagnostic flag 0x80 means `module: Static hash found`.
+
+Signed dynamic-module path (param_4 != 0):
+- enters ELF/signature parsing;
+- validates segment hashes/signatures;
+- compares the image trust root / TCG against accepted production/test roots;
+- diagnostic flags include `module: Module is signed` and `module: Signature is valid`.
+
+2. FUN_f0137260 — per-segment hash verification
+
+For each segment it computes a 32-byte digest and compares it against the selected verification record. A mismatch logs `failed to verify segment %d` and fails the load.
+
+3. FUN_f013d890 — unsigned dynamic module rejection
+
+If signature metadata is absent (`param_3 == 0`) it logs:
+  `error: dynamic module is unsigned`
+and returns failure.
+
+4. FUN_f01373fc — trust-state diagnostics
+
+It reports:
+- OEM ID;
+- Debug Fuse Enabled;
+- Testsig Enabled;
+- Testsig file found;
+- Testsig file valid;
+- Module is signed;
+- Signature is valid;
+- Static hash found.
+
+Consequence:
+A source-controlled parity worker must satisfy one of the existing production trust branches. Merely running inside CPZ/SecurePD does not bypass module verification.

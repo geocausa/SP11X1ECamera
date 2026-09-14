@@ -1,0 +1,20 @@
+E004de STATIC-HASH SOURCE
+
+The exact qccdsp8380.mbn root image itself contains the complete `/statichashes/<module>` namespace for the shipping CDSP dynamic modules. The paths are physically embedded in the root firmware load segment and include the shipped SecurePD examples, FastRPC shells, benchmark/sysmon modules and runtime libraries.
+
+Examples embedded in the root MBN:
+- /statichashes/example_image.so
+- /statichashes/example_image_runner.so
+- /statichashes/libloadalgo_skel.so
+- /statichashes/libbenchmark_skel.so
+- /statichashes/fastrpc_shell_3
+- /statichashes/fastrpc_shell_unsigned_3
+
+Ghidra recovers FUN_f0138420 from the root firmware as the static-hash lookup/parser. It constructs `/statichashes/%s`, reads `num_segments`, then obtains the segment-hash array. The main SigVerify path consumes those 32-byte hashes for per-segment validation.
+
+This is not a Linux userspace allow-list file in the SP11 filesystem. The policy namespace is part of the authenticated CDSP root image/configuration environment.
+
+The whole-file SHA256 values of the shipping modules are NOT present verbatim in the MBN because SigVerify uses per-load-segment hashes, not a single whole-file hash.
+
+Evidence boundary:
+This gate proves the static-hash allow-list namespace and its lookup/verification path are rooted in the exact CDSP root image. It does not claim to have reconstructed every serialized per-segment hash record byte-for-byte.

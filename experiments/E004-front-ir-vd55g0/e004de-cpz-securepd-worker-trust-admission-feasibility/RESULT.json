@@ -1,0 +1,48 @@
+{
+  "experiment": "E004de",
+  "status": "PASS_NO_AUTHORIZED_SOURCE_CONTROLLED_CPZ_WORKER_ADMISSION_PATH",
+  "mode": "same-machine-static-trust-policy-closure",
+  "root_firmware": {
+    "sha256": "4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789",
+    "static_hash_namespace_embedded": true,
+    "static_hash_entry_count": 17,
+    "per_segment_hash_verification": true,
+    "camera_parity_worker_static_hash_present": false
+  },
+  "trust_paths": {
+    "shipping_static_hash_admission": true,
+    "signed_dynamic_module_admission": true,
+    "unsigned_dynamic_module_rejected": true,
+    "signature_root_tcg_checked": true,
+    "optional_testsig_code_present": true,
+    "oemconfig_shipped_on_sp11": false,
+    "project_has_authorized_signing_credential": false,
+    "source_controlled_production_admission_resolved": false
+  },
+  "reuse": {
+    "shipping_parity_entrypoint_exists": false,
+    "editing_static_hashed_module_preserves_trust": false,
+    "verification_bypass_accepted": false
+  },
+  "architecture": {
+    "protected_memory_blocker": false,
+    "fastrpc_handoff_blocker": false,
+    "trusted_worker_habitat_blocker": false,
+    "worker_trust_admission_blocker": true,
+    "protected_runtime_authorized": false
+  },
+  "runtime_actions": {
+    "firmware_modify": false,
+    "verification_patch": false,
+    "test_root_enable": false,
+    "secure_cb9_enable": false,
+    "fastrpc_ioctl": false,
+    "ownership_transition": false,
+    "cpz_migration": false,
+    "securepd_worker_launch": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004df parity worker admission alternatives, architecture closure"
+}

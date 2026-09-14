@@ -1,0 +1,20 @@
+E004de TEST/DEBUG ADMISSION ROUTE
+
+The exact root firmware contains optional policy strings and branches for:
+- oemconfig.so
+- testsig-0x%lx.so
+- testsig.so
+- Debug Fuse Enabled
+- Testsig Enabled
+- Testsig file found
+- Testsig file valid
+- QC test roots/TCGs
+
+Ghidra FUN_f01376d4 shows the verifier attempts to load `oemconfig.so` before applying optional OEM/test configuration. FUN_f0137778 separately distinguishes production roots from QC-test roots and reports signature-root mismatch on failure.
+
+A complete file search of the exact Golden Denali firmware tree, installed Windows DriverStore, and recovered SP11 driver packages finds:
+  oemconfig.so: ABSENT
+
+No testsig/oemconfig configuration file is shipped by the exact CDSP package, and no local source-controlled signing credential/private key is present or claimed.
+
+Therefore the presence of a test/debug code path in Qualcomm firmware is NOT an authorized admission mechanism for this retail production stack. Enabling a debug/test root, patching verification, or fabricating OEM configuration would weaken/bypass the production trust policy and is out of scope.
