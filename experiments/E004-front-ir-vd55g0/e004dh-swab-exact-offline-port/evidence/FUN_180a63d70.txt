@@ -1,0 +1,289 @@
+===== ROOT FUN_180a63d70 @180a63d70 =====
+
+undefined4 FUN_180a63d70(longlong param_1,longlong param_2)
+
+{
+  char *pcVar1;
+  longlong *plVar2;
+  longlong *plVar3;
+  longlong *plVar4;
+  int iVar5;
+  int iVar6;
+  int iVar7;
+  longlong lVar8;
+  undefined8 uVar9;
+  int *piVar10;
+  int iVar11;
+  longlong lVar12;
+  code *extraout_x15;
+  undefined4 *puVar13;
+  bool bVar14;
+  undefined4 uVar15;
+  uint uVar16;
+  undefined4 local_a0 [2];
+  longlong *local_98;
+  longlong *local_90;
+  longlong local_88;
+  ulonglong local_80;
+  undefined8 local_78;
+  undefined1 auStack_70 [24];
+  undefined1 auStack_58 [24];
+  
+  local_78 = 0xfffffffffffffffe;
+  uVar15 = 0;
+  if (param_2 == 0) {
+    return 0;
+  }
+  iVar7 = 0;
+  *(undefined4 *)(param_2 + 0x1764c) = 0;
+  if (((longlong *)**(undefined8 **)(param_2 + 0x1fe8) != (longlong *)0x0) &&
+     (lVar12 = *(longlong *)**(undefined8 **)(param_2 + 0x1fe8), lVar12 != 0)) {
+    lVar8 = FUN_1806f39f8(lVar12,&DAT_181375858,*(undefined4 **)(param_2 + 0x2060) + 1,
+                          **(undefined4 **)(param_2 + 0x2060));
+    lVar12 = 0;
+    if (lVar8 != 0) {
+      lVar12 = lVar8 + 0x120;
+    }
+    *(longlong *)(param_1 + 0xa8) = lVar12;
+  }
+  lVar12 = *(longlong *)(param_1 + 0xa8);
+  if (lVar12 == 0) {
+    lVar12 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+                           ,0x5c);
+    pcVar1 = 
+    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+    ;
+    if (lVar12 != 0) {
+      pcVar1 = (char *)(lVar12 + 1);
+    }
+    FUN_18001aca8(2,0xffff,"[ERROR]%s %s:286 %s() Failed to get Chromatix\n","[ISP    ]",pcVar1,
+                  "CamX::SWABF::CheckDependenceChange");
+    *(undefined4 *)(param_2 + 0x17648) = 0;
+    goto LAB_180a64020;
+  }
+  if (*(longlong *)(param_1 + 0xb0) == 0) {
+    *(longlong *)(param_1 + 0xb0) = lVar12;
+    *(undefined4 *)(param_1 + 0x18) = *(undefined4 *)(lVar12 + 8);
+  }
+  iVar6 = *(int *)(param_1 + 0x18);
+  *(int *)(param_2 + 0x17648) = iVar6;
+  if (iVar6 != 1) goto LAB_180a64020;
+  lVar12 = *(longlong *)(param_1 + 0xa8);
+  puVar13 = *(undefined4 **)(lVar12 + 0x40);
+  if (*(longlong *)(param_1 + 0x88) != *(longlong *)(param_1 + 0x90)) {
+    uVar9 = FUN_1804495c8(param_1 + 0x88);
+    FUN_1800848b0(*(undefined8 *)(param_1 + 0x88),*(undefined8 *)(param_1 + 0x90),uVar9);
+    *(undefined8 *)(param_1 + 0x90) = *(undefined8 *)(param_1 + 0x88);
+  }
+  if (*(int *)(lVar12 + 0x34) != 0) {
+    uVar16 = 0;
+    do {
+      local_a0[0] = *puVar13;
+      FUN_180474558(param_1 + 0x88,local_a0);
+      uVar16 = uVar16 + 1;
+      puVar13 = puVar13 + 1;
+    } while (uVar16 < *(uint *)(lVar12 + 0x34));
+  }
+  uVar9 = FUN_18089d5a8(auStack_70,param_1 + 0x88);
+  iVar5 = FUN_18045de90();
+  iVar11 = iVar5 + -1;
+  iVar6 = 1;
+  if (0 < iVar11) {
+    if (iVar11 < 1) {
+      iVar11 = 0;
+    }
+    lVar12 = 0;
+    local_80 = local_80 & 0xffffffff00000000;
+    iVar5 = iVar5 + -1;
+    iVar7 = 1;
+    do {
+      piVar10 = (int *)FUN_180474468(iVar11,uVar9,lVar12);
+      iVar11 = iVar7 * 3;
+      lVar12 = lVar12 + 1;
+      iVar5 = iVar5 + -1;
+      iVar7 = iVar7 << 1;
+      if (*piVar10 == 100) {
+        iVar7 = iVar11;
+      }
+      iVar6 = iVar7 + iVar6;
+    } while (iVar5 != 0);
+    iVar7 = (int)local_80;
+  }
+  FUN_180474590(uVar9);
+  iVar6 = (iVar6 + 1) * 0x4c;
+  if (*(longlong *)(param_1 + 0xc0) == 0) {
+    if (iVar6 != 0) {
+      if (iVar6 == 0) {
+        iVar6 = 0;
+      }
+      lVar12 = thunk_FUN_180cb16c0(iVar6);
+      if (lVar12 != 0) {
+        FUN_180f5e600(lVar12,0,iVar6);
+        *(longlong *)(param_1 + 0xc0) = lVar12;
+        goto LAB_180a63fac;
+      }
+    }
+    *(undefined8 *)(param_1 + 0xc0) = 0;
+    lVar12 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+                           ,0x5c);
+    pcVar1 = 
+    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+    ;
+    if (lVar12 != 0) {
+      pcVar1 = (char *)(lVar12 + 1);
+    }
+    FUN_18001aca8(2,0xffff,"[ERROR]%s %s:298 %s() Memmory not allocated\n","[BPS    ]",pcVar1,
+                  "CamX::SWABF::CheckDependenceChange");
+  }
+LAB_180a63fac:
+  if ((*(int *)(param_1 + 0x18) == 1) && (iVar6 = FUN_180897a70(param_2,param_1 + 0x88), iVar6 == 1)
+     ) {
+    iVar7 = 1;
+  }
+LAB_180a64020:
+  if (*(int *)(param_1 + 0x18) != 1) {
+    iVar7 = 0;
+  }
+  if ((((uint)DAT_18160a218 >> 3 & 1) != 0) || (DAT_181608858 == 0)) {
+    lVar12 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+                           ,0x5c);
+    pcVar1 = 
+    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+    ;
+    if (lVar12 != 0) {
+      pcVar1 = (char *)(lVar12 + 1);
+    }
+    FUN_18001aca8(5,0xffff,"[ VERB]%s %s:317 %s() m_moduleEnable :%d, isChanged %d\n","[ISP    ]",
+                  pcVar1,"CamX::SWABF::CheckDependenceChange",*(int *)(param_1 + 0x18),iVar7);
+  }
+  if (iVar7 == 1) {
+    *(undefined4 *)(param_2 + 0x1764c) = 1;
+    uVar9 = FUN_18089d5a8(auStack_58,param_1 + 0x88);
+    plVar2 = (longlong *)(param_1 + 0xb0);
+    bVar14 = false;
+    iVar7 = 0;
+    local_80 = uVar9;
+    if (plVar2 != (longlong *)0x0) {
+      local_98 = (longlong *)0x0;
+      local_90 = (longlong *)0x0;
+      local_88 = 0;
+      puVar13 = *(undefined4 **)(param_1 + 0xc0);
+      FUN_180890208(*(undefined4 *)(*plVar2 + 0x4c),*(undefined4 *)(*plVar2 + 0x4c),&local_98,
+                    param_2 + 0x17190,uVar9);
+      lVar12 = *plVar2;
+      iVar6 = *(int *)(lVar12 + 8);
+      *(int *)(param_1 + 0xb8) = iVar6;
+      if (iVar6 != 0) {
+        iVar6 = FUN_1809a4790(*(undefined4 *)(lVar12 + 0x5c),*(undefined4 *)(lVar12 + 0x60),
+                              *(undefined4 *)(lVar12 + 100),lVar12 + 0x68,plVar2,param_1 + 0xb8);
+        *(int *)(param_1 + 0xb8) = iVar6;
+        if (iVar6 != 0) {
+          (*(code *)PTR__ROIChangeChecker_180f7e7b8)(PTR_FUN_181620a20,plVar2,puVar13,&local_98);
+          iVar7 = (*extraout_x15)();
+        }
+        *(undefined4 *)(param_1 + 0x110) = *puVar13;
+        *(undefined4 *)(param_1 + 0x108) = puVar13[1];
+        *(undefined4 *)(param_1 + 0x10c) = puVar13[2];
+        *(undefined4 *)(param_1 + 200) = puVar13[3];
+        *(undefined4 *)(param_1 + 0xcc) = puVar13[4];
+        *(undefined4 *)(param_1 + 0xd0) = puVar13[5];
+        *(undefined4 *)(param_1 + 0xd4) = puVar13[6];
+        *(undefined4 *)(param_1 + 0xd8) = puVar13[7];
+        *(undefined4 *)(param_1 + 0xdc) = puVar13[8];
+        *(undefined4 *)(param_1 + 0xe0) = puVar13[9];
+        *(undefined4 *)(param_1 + 0xe4) = puVar13[10];
+        *(undefined4 *)(param_1 + 0xe8) = puVar13[0xb];
+        *(undefined4 *)(param_1 + 0xec) = puVar13[0xc];
+        *(undefined4 *)(param_1 + 0xf0) = puVar13[0xd];
+        *(undefined4 *)(param_1 + 0xf4) = puVar13[0xe];
+        *(undefined4 *)(param_1 + 0xf8) = puVar13[0xf];
+        *(undefined4 *)(param_1 + 0xfc) = puVar13[0x10];
+        *(undefined4 *)(param_1 + 0x100) = puVar13[0x11];
+        *(undefined4 *)(param_1 + 0x104) = puVar13[0x12];
+        if (iVar7 == 1) {
+          bVar14 = false;
+        }
+        else {
+          lVar12 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxiqinterface.cpp"
+                                 ,0x5c);
+          pcVar1 = 
+          "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxiqinterface.cpp"
+          ;
+          if (lVar12 != 0) {
+            pcVar1 = (char *)(lVar12 + 1);
+          }
+          FUN_18001aca8(2,0xffff,"[ERROR]%s %s:1065 %s() Invalid SWABF InterpolationData pointer\n",
+                        "[IQMod  ]",pcVar1,"CamX::IQInterface::GetSWABF101Data");
+          bVar14 = true;
+        }
+      }
+      plVar2 = local_90;
+      plVar4 = local_98;
+      if (local_98 != (longlong *)0x0) {
+        while (plVar3 = plVar4, plVar3 != plVar2) {
+          lVar12 = *plVar3;
+          plVar4 = plVar3 + 3;
+          if (lVar12 != 0) {
+            FUN_180ca2830(lVar12,plVar3[2] - lVar12 & 0xfffffffffffffffc);
+            *plVar3 = 0;
+            plVar3[1] = 0;
+            plVar3[2] = 0;
+          }
+        }
+        FUN_180ca2830(local_98,((local_88 - (longlong)local_98) / 0x18) * 0x18);
+        local_98 = (longlong *)0x0;
+        local_90 = (longlong *)0x0;
+        local_88 = 0;
+      }
+    }
+    FUN_180474590(uVar9);
+    if (bVar14) {
+      lVar12 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+                             ,0x5c);
+      pcVar1 = 
+      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+      ;
+      if (lVar12 != 0) {
+        pcVar1 = (char *)(lVar12 + 1);
+      }
+      FUN_18001aca8(2,0xffff,"[ERROR]%s %s:421 %s() Aide201 Calculation Failed.\n","[ISP    ]",
+                    pcVar1,"CamX::SWABF::RunCalculation");
+    }
+    *(undefined4 *)(param_2 + 0x175fc) = *(undefined4 *)(param_1 + 0x110);
+    *(undefined4 *)(param_2 + 0x17600) = *(undefined4 *)(param_1 + 0x108);
+    *(undefined4 *)(param_2 + 0x17604) = *(undefined4 *)(param_1 + 0x10c);
+    *(undefined4 *)(param_2 + 0x17608) = *(undefined4 *)(param_1 + 200);
+    *(undefined4 *)(param_2 + 0x1760c) = *(undefined4 *)(param_1 + 0xcc);
+    *(undefined4 *)(param_2 + 0x17610) = *(undefined4 *)(param_1 + 0xd0);
+    *(undefined4 *)(param_2 + 0x17614) = *(undefined4 *)(param_1 + 0xd4);
+    *(undefined4 *)(param_2 + 0x17618) = *(undefined4 *)(param_1 + 0xd8);
+    *(undefined4 *)(param_2 + 0x1761c) = *(undefined4 *)(param_1 + 0xdc);
+    *(undefined4 *)(param_2 + 0x17620) = *(undefined4 *)(param_1 + 0xe0);
+    *(undefined4 *)(param_2 + 0x17624) = *(undefined4 *)(param_1 + 0xe4);
+    *(undefined4 *)(param_2 + 0x17628) = *(undefined4 *)(param_1 + 0xe8);
+    *(undefined4 *)(param_2 + 0x1762c) = *(undefined4 *)(param_1 + 0xec);
+    *(undefined4 *)(param_2 + 0x17630) = *(undefined4 *)(param_1 + 0xf0);
+    *(undefined4 *)(param_2 + 0x17634) = *(undefined4 *)(param_1 + 0xf4);
+    *(undefined4 *)(param_2 + 0x17638) = *(undefined4 *)(param_1 + 0xf8);
+    *(undefined4 *)(param_2 + 0x1763c) = *(undefined4 *)(param_1 + 0xfc);
+    *(undefined4 *)(param_2 + 0x17640) = *(undefined4 *)(param_1 + 0x100);
+    *(undefined4 *)(param_2 + 0x17644) = *(undefined4 *)(param_1 + 0x104);
+    uVar15 = 0;
+    if (bVar14) {
+      uVar15 = 4;
+      lVar12 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+                             ,0x5c);
+      pcVar1 = 
+      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ispiqmodule\\camxswabf.cpp"
+      ;
+      if (lVar12 != 0) {
+        pcVar1 = (char *)(lVar12 + 1);
+      }
+      FUN_18001aca8(2,0xffff,"[ERROR]%s %s:206 %s() Invalid Input: pInputData %p\n","[ISP    ]",
+                    pcVar1,"CamX::SWABF::Execute",param_2);
+    }
+  }
+  return uVar15;
+}
+
+

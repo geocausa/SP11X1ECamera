@@ -1,0 +1,109 @@
+===== ROOT FUN_18073a850 @18073a850 =====
+
+int FUN_18073a850(longlong param_1,longlong param_2)
+
+{
+  int iVar1;
+  undefined4 *puVar2;
+  undefined8 uVar3;
+  char *pcVar4;
+  char *pcVar5;
+  longlong lVar6;
+  undefined1 auStack_830 [1024];
+  undefined1 auStack_430 [1024];
+  undefined4 local_30;
+  
+  iVar1 = 0;
+  if (*(int *)(param_2 + 0x17e58) == 0) {
+    if ((((uint)DAT_18160a218 >> 3 & 1) == 0) && (DAT_181608858 != 0)) {
+      return 0;
+    }
+    lVar6 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ife\\camxifenode.cpp"
+                          ,0x5c);
+    pcVar5 = 
+    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ife\\camxifenode.cpp"
+    ;
+    pcVar4 = "[ VERB]%s %s:4583 %s() No change in SWASF data\n";
+    if (lVar6 != 0) {
+      pcVar5 = (char *)(lVar6 + 1);
+    }
+    uVar3 = 5;
+    goto LAB_18073aa84;
+  }
+  local_30 = *(undefined4 *)(param_2 + 0x17e54);
+  if (param_2 + 0x17654 != 0) {
+    FUN_180f5d480(auStack_830,param_2 + 0x17654,0x400);
+  }
+  if (param_2 + 0x17a54 != 0) {
+    FUN_180f5d480(auStack_430,param_2 + 0x17a54,0x400);
+  }
+  lVar6 = *(longlong *)(param_1 + (ulonglong)*(uint *)(param_1 + 0x3c7c) * 0x30 + 0x3be8);
+  if (lVar6 == 0) {
+    lVar6 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\camxpacketbuilder.cpp"
+                          ,0x5c);
+    pcVar5 = 
+    "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\camxpacketbuilder.cpp"
+    ;
+    if (lVar6 != 0) {
+      pcVar5 = (char *)(lVar6 + 1);
+    }
+    FUN_18001aca8(2,0xffff,"[ERROR]%s %s:729 %s() Invalid input args\n","[UTILS  ]",pcVar5,
+                  "CamX::PacketBuilder::WriteGenericBlobData");
+    iVar1 = 4;
+  }
+  else {
+    puVar2 = (undefined4 *)FUN_1805e3030(lVar6,0x202);
+    if (puVar2 == (undefined4 *)0x0) {
+      lVar6 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\camxpacketbuilder.cpp"
+                            ,0x5c);
+      pcVar5 = 
+      "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\camxpacketbuilder.cpp"
+      ;
+      if (lVar6 != 0) {
+        pcVar5 = (char *)(lVar6 + 1);
+      }
+      FUN_18001aca8(2,0xffff,"[ERROR]%s %s:745 %s() Out of command buffer space\n","[UTILS  ]",
+                    pcVar5,"CamX::PacketBuilder::WriteGenericBlobData");
+      iVar1 = 10;
+    }
+    else {
+      *puVar2 = 0x8041d;
+      if (puVar2 + 1 != (undefined4 *)0x0) {
+        FUN_180f5d480(puVar2 + 1,auStack_830,0x804);
+      }
+      iVar1 = FUN_1805e30e8(lVar6);
+      if (iVar1 != 0) {
+        lVar6 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\camxpacketbuilder.cpp"
+                              ,0x5c);
+        pcVar5 = 
+        "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\core\\camxpacketbuilder.cpp"
+        ;
+        if (lVar6 != 0) {
+          pcVar5 = (char *)(lVar6 + 1);
+        }
+        FUN_18001aca8(2,0xffff,"[ERROR]%s %s:765 %s() Error in Commit command, blob=%d, result=%d\n"
+                      ,"[UTILS  ]",pcVar5,"CamX::PacketBuilder::WriteGenericBlobData",0x1d,iVar1);
+        if (DAT_1816a3fe8 == 1) goto LAB_18073a9f8;
+      }
+      if (iVar1 == 0) {
+        return 0;
+      }
+    }
+  }
+LAB_18073a9f8:
+  lVar6 = FUN_180ce7c98("Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ife\\camxifenode.cpp"
+                        ,0x5c);
+  pcVar5 = 
+  "Z:\\b\\WP\\Camera\\rel\\10.9\\CamZ\\DeviceMFT\\CaptureDevice4.0\\CamX\\camx\\src\\hwl\\ife\\camxifenode.cpp"
+  ;
+  pcVar4 = "[ERROR]%s %s:4579 %s() IFEGenericBlobTypeSWASFTuningData Update failed\n";
+  if (lVar6 != 0) {
+    pcVar5 = (char *)(lVar6 + 1);
+  }
+  uVar3 = 2;
+LAB_18073aa84:
+  FUN_18001aca8(uVar3,0xffff,pcVar4,"[ISP    ]",pcVar5,"CamX::IFENode::UpdateSWASFData");
+  return iVar1;
+}
+
+
