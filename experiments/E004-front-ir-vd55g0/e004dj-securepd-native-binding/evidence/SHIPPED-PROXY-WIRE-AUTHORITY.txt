@@ -1,0 +1,20 @@
+E004dj shipped proxy wire authority
+
+libloadalgo_skel.so SHA256 db1380cbe1e64fc21501eece86528a78efaded909262ca778769384f8a7d4a71
+loadalgo_Gaussian7x7u8 DWARF args:
+ handle, srcFd, srcOffset, srcLen, srcWidth, srcHeight, srcStride, dstFd, dstOffset, dstLen, dstStride, heapFd, heapOffset, heapLen, mode_static
+
+Shipping implementation:
+- HAP_mmap_get on srcFd, dstFd, heapFd
+- constructs gaussian7x7_packet_t (96 bytes)
+- secure_pd_mb_send(..., 0x60)
+- secure_pd_mb_receive(..., 8, ...)
+- loads returned 8 bytes as one 64-bit value and compares the whole value with zero
+
+Offset proof:
+- srcOffset enters R3; no use before R3 is overwritten by an internal load
+- dstOffset DWARF stack location +0x13c; no load/reference in function
+- heapOffset DWARF stack location +0x14c; no load/reference in function
+E004dj therefore fixes all three offsets to zero.
+
+mode_static == 1 initializes the built-in static Gaussian route. Camera call descriptor uses mode_static=0 for the dynamic ALGO route.

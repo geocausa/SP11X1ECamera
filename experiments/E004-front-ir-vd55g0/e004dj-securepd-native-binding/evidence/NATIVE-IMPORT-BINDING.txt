@@ -1,0 +1,27 @@
+E004dj native SecurePD binding authority
+
+example_image.so SHA256 e969f6bc537992689214ac1c7b47c353c7aa8bc292c924a3f2baa2fe2294ac46
+Recovered shipping call constants:
+- dsc_verify_buffer(handle, DATA=7, paddr64, len) for source/destination
+- secure_pd_mapping_create_64(&va32,paddr64,len,QURT_MEM_CACHE_WRITEBACK=7,permission=3)
+- secure_pd_mapping_delete_64(va32,len)
+- s2p_algo: CREATE_MB=0, id=2
+- p2s_algo: RETRIEVE_MB=1, id=3
+- request 96 bytes; response 8 bytes
+- persistent thread stack 131072 bytes; priority 0x96
+
+E004dj HEAP verification uses recovered buffer_type_ext HEAP=5.
+
+Native combined object unresolved symbols (and no others):
+dsc_verify_buffer
+get_secure_channel_handle
+qurt_sleep
+secure_pd_mapping_create_64
+secure_pd_mapping_delete_64
+secure_pd_mb_delete
+secure_pd_mb_get
+secure_pd_mb_receive
+secure_pd_mb_send
+secure_pd_thread_create
+
+Every symbol above is an imported symbol in the exact shipped example_image.so.

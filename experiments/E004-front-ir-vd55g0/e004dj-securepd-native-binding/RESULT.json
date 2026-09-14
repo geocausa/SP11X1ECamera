@@ -1,0 +1,90 @@
+{
+  "experiment": "E004dj",
+  "status": "PASS_OFFLINE_NATIVE_SECUREPD_BINDING_REUSES_SHIPPED_PROXY_WINDOWS_EXACT",
+  "mode": "offline-static-dwarf-disassembly-source-build-host-mock-hexagon-partial-link",
+  "authority": {
+    "windows": "pixel behavior normative",
+    "securepd": "exact shipped SP11 Qualcomm modules normative for native worker ABI",
+    "example_image_sha256": "e969f6bc537992689214ac1c7b47c353c7aa8bc292c924a3f2baa2fe2294ac46",
+    "loadalgo_skel_sha256": "db1380cbe1e64fc21501eece86528a78efaded909262ca778769384f8a7d4a71"
+  },
+  "proxy": {
+    "packet_bytes": 96,
+    "response_bytes": 8,
+    "response_zero_is_success": true,
+    "src_offset_consumed": false,
+    "dst_offset_consumed": false,
+    "heap_offset_consumed": false,
+    "mode_static": 0,
+    "existing_proxy_modified": false
+  },
+  "control": {
+    "heap_prefix_bytes": 32,
+    "request_id_bits": 64,
+    "payload_offset": true,
+    "captured_extent": true,
+    "serialized_extent": true,
+    "synthetic_flag": true
+  },
+  "native": {
+    "data_type": 7,
+    "heap_type": 5,
+    "cache_mode": 7,
+    "mapping_permission": 3,
+    "thread_stack_bytes": 131072,
+    "thread_priority": 150,
+    "mailbox_s2p": {
+      "name": "s2p_algo",
+      "type": "CREATE",
+      "id": 2
+    },
+    "mailbox_p2s": {
+      "name": "p2s_algo",
+      "type": "RETRIEVE",
+      "id": 3
+    }
+  },
+  "differential": {
+    "geometry": "644x604 NV12",
+    "luma_diff_bytes": 0,
+    "neutral_tail_diff_bytes": 0
+  },
+  "hexagon": {
+    "target": "v73",
+    "text_bytes": 9604,
+    "bss_bytes": 131072,
+    "combined_object_sha256": "4d413d54fb29d898b0a662edcc957eb02ccf4769e7036aa4c986b0c8be6afc48",
+    "unresolved_symbols": [
+      "dsc_verify_buffer",
+      "get_secure_channel_handle",
+      "qurt_sleep",
+      "secure_pd_mapping_create_64",
+      "secure_pd_mapping_delete_64",
+      "secure_pd_mb_delete",
+      "secure_pd_mb_get",
+      "secure_pd_mb_receive",
+      "secure_pd_mb_send",
+      "secure_pd_thread_create"
+    ],
+    "all_unresolved_are_shipping_example_imports": true
+  },
+  "trust": {
+    "signed": false,
+    "production_admitted": false,
+    "runtime_authorized": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "fastrpc_ioctl": false,
+    "secure_cb9_enable": false,
+    "ownership_transition": false,
+    "cpz_migration": false,
+    "mailbox_create": false,
+    "protected_mapping": false,
+    "camera_runtime": false,
+    "firmware_modify": false,
+    "verification_patch": false,
+    "secureisp_runtime": false
+  },
+  "next": "whole-stack parity: select next independent non-admission gap; keep SecurePD runtime frozen until legitimate admission"
+}
