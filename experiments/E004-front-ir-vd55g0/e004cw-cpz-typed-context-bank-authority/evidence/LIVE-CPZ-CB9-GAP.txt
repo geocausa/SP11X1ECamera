@@ -1,0 +1,109 @@
+E004cw LIVE CPZ CONTEXT-BANK FACTS
+
+live context-bank names:
+compute-cb@1 compute-cb@10 compute-cb@11 compute-cb@12 compute-cb@13 compute-cb@2 compute-cb@3 compute-cb@4 compute-cb@5 compute-cb@6 compute-cb@7 compute-cb@8 
+
+live_cdsp_cb9_count=0
+live_pd_type_count=0
+golden_secure_cb9_comment_count=1
+
+CDSP-only live excerpt:
+			glink-edge {
+				label = "cdsp";
+				qcom,remote-pid = <0x05>;
+				interrupts-extended = <0x31 0x06 0x00 0x01>;
+				mboxes = <0x31 0x06 0x00>;
+
+				fastrpc {
+					#address-cells = <0x01>;
+					qcom,non-secure-domain;
+					#size-cells = <0x00>;
+					label = "cdsp";
+					compatible = "qcom,fastrpc";
+					qcom,glink-channels = "fastrpcglink-apps-dsp";
+
+					compute-cb@3 {
+						iommus = <0x3d 0xc03 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x03>;
+					};
+
+					compute-cb@11 {
+						iommus = <0x3d 0xc0d 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x0b>;
+					};
+
+					compute-cb@1 {
+						iommus = <0x3d 0xc01 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x01>;
+					};
+
+					compute-cb@8 {
+						iommus = <0x3d 0xc08 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x08>;
+					};
+
+					compute-cb@6 {
+						iommus = <0x3d 0xc06 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x06>;
+					};
+
+					compute-cb@4 {
+						iommus = <0x3d 0xc04 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x04>;
+					};
+
+					compute-cb@12 {
+						iommus = <0x3d 0xc0e 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x0c>;
+					};
+
+					compute-cb@2 {
+						iommus = <0x3d 0xc02 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x02>;
+					};
+
+					compute-cb@10 {
+						iommus = <0x3d 0xc0c 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x0a>;
+					};
+
+					compute-cb@7 {
+						iommus = <0x3d 0xc07 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x07>;
+					};
+
+					compute-cb@5 {
+						iommus = <0x3d 0xc05 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x05>;
+					};
+
+					compute-cb@13 {
+						iommus = <0x3d 0xc0f 0x20>;
+						dma-coherent;
+						compatible = "qcom,fastrpc-compute-cb";
+						reg = <0x0d>;
+					};
+				};
+			};

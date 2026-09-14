@@ -1,0 +1,23 @@
+E004cw DOWNSTREAM FASTRPC PD-TYPE CONTRACT
+
+Public Qualcomm-derived FastRPC change:
+  0d30a26909e9383e9b75aab74d63cf08980f315a
+  title: msm: adsprpc: Allocate designated context bank session
+
+Mechanically relevant behavior already carried forward from E004co:
+- context-bank probe may read a DT property named `pd-type`;
+- a context-bank session stores that process type;
+- session allocation matches the requested remote PD type;
+- when PD typing is enabled, secure-memory session selection is normalized to CPZ_USERPD (6).
+
+The change therefore does not turn an arbitrary ordinary context bank into CPZ dynamically. A context bank has to be configured as the CPZ process type before the session allocator can select it.
+
+Public upstream Qualcomm DTs intentionally omit a secure CDSP context bank in several SoC families and leave comments such as `secure cb9 in downstream`. The exact X1E/Hamoa Golden source is even more explicit: `compute-cb@9 is secure` and the node is absent.
+
+Sources:
+- https://git.evolution-x.org/anierin/msm-5.15/commit/0d30a26909e9383e9b75aab74d63cf08980f315a
+- local Golden hamoa.dtsi in GOLDEN-HAMOA-FASTRPC-TOPOLOGY.txt
+
+No DT change was made.
+
+The secure bank is therefore a pre-typed context-bank resource, not a runtime relabel of an ordinary bank.
