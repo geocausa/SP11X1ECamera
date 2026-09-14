@@ -8,6 +8,8 @@ assert sha(D/'oracle/windows-live/SWABF-derived-from-live-cache.bin')==R['window
 assert sha(D/'oracle/windows-live/SWASF-derived-from-live-cache.bin')==R['windows_oracle']['swasf_payload_sha256']
 assert sha(D/'oracle/windows-live/E004DH-pInputData-iq-window.bin')==R['windows_oracle']['pinputdata_window_sha256']
 assert sha(D/'scaffold/sp11-swabf-reference.hexagon-v73.o')==R['swabf']['hexagon_object_sha256']
+assert sha(D/'oracle/windows-sync-oracle/windows-trustlet-sync-swabf-644x604.bin')==R['windows_shipping_trustlet_oracle']['synchronized_swabf_sha256']
+assert sha(D/'oracle/windows-sync-oracle/windows-trustlet-sync-swasf-644x604-stable.bin')==R['windows_shipping_trustlet_oracle']['swasf_stable_candidate_sha256']
 assert subprocess.check_output(['llvm-nm','-u',str(D/'scaffold/sp11-swabf-reference.hexagon-v73.o')],text=True).strip()==''
 with tempfile.TemporaryDirectory() as td:
     exe=pathlib.Path(td)/'t'

@@ -1,0 +1,7 @@
+E004dh synchronized standalone shipping trustlet oracle
+time=2026-09-14T14:50:42.4623380+01:00
+SWABF synchronized hash: d3cc53ef456f8d25d6b615336e7c4e13d22c986baceaa04fa12b035cc791bf80
+SWABF exactly matches scalar reference across full 644x604 NV12 fixture when ready flags are cleared before dispatch.
+SWASF stable hash observed repeatedly: 9ef2dc6179d6151910ff524e4821328ffddfdd151996463c08b904673688ccbf
+Fresh/multi runs show rare tiny SWASF differences only at 8-way worker partition boundaries (rows 80,160,240,320,400,480,560), usually 1-2 code values; one stable multi-run produced the same hash for all six iterations.
+Interpretation: Windows SWASF has a worker-boundary scheduling/halo race in the standalone execution path. Stable hash is the deterministic reference candidate; boundary-race variants are retained as Windows behavior evidence.
