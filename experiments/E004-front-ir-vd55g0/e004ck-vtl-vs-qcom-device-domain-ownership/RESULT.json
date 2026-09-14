@@ -1,0 +1,38 @@
+{
+  "experiment": "E004ck",
+  "status": "PASS_VTL1_CPU_MAPPING_ORTHOGONAL_TO_CP_CAMERA_PKVM_HAS_NO_PARITY_SAFE_QCOM_OWNERSHIP_COMBINATION",
+  "mode": "static-read-only",
+  "windows": {
+    "vtl1_mapping_survives_cp_camera_assignment": true,
+    "qcom_destination_owner": "CP_CAMERA 0x0d write-only",
+    "vtl1_is_qcom_destination_owner": false,
+    "vtl0_final_access_mask": "0x0"
+  },
+  "qcom_hyp": {
+    "ac_vm_hyp_explicit": true,
+    "hyp_assign_explicit": true,
+    "destination_hyp_exclusive": true,
+    "same_machine_qhee_hlos_el2_mapping_helpers": true,
+    "same_machine_camera_policy_present": true
+  },
+  "pkvm": {
+    "source_controlled_worker": true,
+    "stage2_host_hyp_isolation": true,
+    "qcom_camera_owner_binding": false,
+    "cp_camera_only_worker_access_proven": false,
+    "cp_camera_plus_hyp_authorized": false,
+    "hlos_plus_cp_camera_security_equivalent": false,
+    "dma_isolation_complete": false,
+    "selected_backend": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "pkvm_boot": false,
+    "hyp_assign": false,
+    "scm_assign_mem": false,
+    "cp_camera_operation": false,
+    "qtee_qsee": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cl Qualcomm HypX / protected-hypervisor extension authority, static first"
+}

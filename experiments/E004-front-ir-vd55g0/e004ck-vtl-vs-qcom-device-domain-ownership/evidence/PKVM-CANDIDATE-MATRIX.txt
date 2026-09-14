@@ -1,0 +1,63 @@
+E004ck PKVM CANDIDATE MATRIX
+
+WINDOWS ORACLE:
+- Secure Kernel/VTL1 mapping remains live while CP_CAMERA write assignment is active.
+- VTL1 is not inserted into the Qualcomm destination VMID list.
+- CP_CAMERA is 0x0d write-only.
+
+LINUX CANDIDATES:
+[A] CP_CAMERA only + pKVM stage-2 mapping
+    No source proves pKVM/EL2 CPU transactions remain authorized after HLOS is removed from Qualcomm ownership.
+    Same-machine QHEE exposes explicit HYP_ASSIGN / AC_VM_HYP mapping for EL2/HYP memory.
+    RESULT=NOT_AUTHORIZED
+
+[B] CP_CAMERA + Qualcomm AC_VM_HYP
+    QcSk destination-HYP branch requires destination count == 1.
+    Error text: HYP assignment cannot be shared with other domains.
+    RESULT=POLICY_REJECTED
+
+[C] HLOS + CP_CAMERA, pKVM blocks host CPU at stage-2
+    qcom_scm_assign_mem can mechanically encode multiple owners.
+    But retaining HLOS is broader than Windows VTL0-no-access and pKVM DMA isolation is unimplemented.
+    A hostile HLOS with DMA/control-plane authority is therefore not reduced to the Windows VTL0 contract.
+    RESULT=SECURITY_NOT_EQUIVALENT
+
+[D] protected guest / FF-A owner + CP_CAMERA
+    E004ci found no Qualcomm owner binding or camera DMA binding for such a guest/partition.
+    RESULT=NO_BINDING
+
+PKVM_DMA_ISOLATION_SOURCE:
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/Documentation/virt/kvm/arm/pkvm.rst:77:DMA isolation using an IOMMU
+
+E004ci result:
+{
+  "experiment": "E004ci",
+  "status": "PASS_NO_PROTECTED_GUEST_OR_FFA_PARTITION_CAMERA_OWNER_BINDING",
+  "mode": "static-read-only",
+  "pkvm_guest": {
+    "host_isolation": true,
+    "guest_cpu_execution": true,
+    "qcom_scm_integration_found": false,
+    "qhee_guest_owner_binding_found": false,
+    "camera_device_dma_binding_found": false
+  },
+  "ffa": {
+    "memory_transport_present": true,
+    "host_share_state": "PKVM_PAGE_SHARED_OWNED",
+    "camera_partition_identity_found": false,
+    "camera_worker_provider_found": false
+  },
+  "pkvm_dma_isolation": "unimplemented",
+  "overlap_requirement_satisfied": false,
+  "windows_one_shot_needed": false,
+  "runtime_actions": {
+    "pkvm_boot": false,
+    "protected_vm": false,
+    "ffa_call_or_probe": false,
+    "qtee_qsee": false,
+    "scm_assign_mem": false,
+    "camera_runtime": false,
+    "windows_boot": false
+  },
+  "next_gate": "E004cj platform secure-worker authority closure, static first"
+}

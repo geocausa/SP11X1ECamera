@@ -1,0 +1,356 @@
+E004ck WINDOWS VTL1 + CP_CAMERA ORTHOGONAL VISIBILITY
+
+# E004bt — CP_CAMERA + trusted-worker visibility contract
+
+## Result
+
+**PASS (structural capability, authority still closed): Windows proves that the internal capture backing is simultaneously visible to the VTL1 trustlet and to the CP_CAMERA SoC domain. Linux SCM can represent multiple simultaneous memory owners, so this shape is not structurally impossible; however no current Linux source establishes that `CP_CAMERA + QTEE/TZ` is a valid camera ACL, and QCOMTEE's SHM-bridge memory is ordinary HLOS-addressable memory rather than a protected-camera backing.**
+
+This gate is static-only. No ownership transition, SHM bridge creation, QTEE invocation, QSEECOM call, camera module load, or secure runtime occurred.
+
+## Windows oracle: simultaneous visibility is mandatory
+
+The exact `QcISPTrustlet8380.dll` internal-buffer constructor does the following in one object:
+
+1. `CreateSecureSection(...)`;
+2. `MapViewOfFile(...)` into the trustlet;
+3. save that trustlet VA at object `+0x30`;
+4. build the SoC-domain page-address array;
+5. `AssignMemoryToSocDomain(..., DomainId = 0x0d, Protection = 4, ...)`;
+6. retain the assignment handle and trustlet mapping simultaneously.
+
+The frame worker later passes object `+0x30` directly as the internal source to `FUN_1800037c8`, after the domain assignment has succeeded. Therefore the assignment does not replace the trustlet view; both lifetimes coexist.
+
+Release order makes the relationship explicit:
+
+1. close the assignment handle;
+2. free the domain-address array;
+3. only then `UnmapViewOfFile()` the trustlet VA;
+4. finally close the secure-section handle.
+
+For parity, Linux therefore needs **hardware-domain visibility plus trusted-worker visibility on the same protected backing during capture**.
+
+## Linux SCM can encode simultaneous owners
+
+`qcom_scm_assign_mem()` accepts:
+
+- a physical memory range;
+- a bitmap of current owners;
+- an array of destination `vmid + permission` pairs;
+- an arbitrary destination count.
+
+On success it replaces the current-owner bitmap with all destination VMIDs.
+
+This is not theoretical. Current drivers use simultaneous destination owners:
+
+- FASTRPC SECUREMAP assigns one range to both `HLOS` (RW) and a remote VMID (RWX);
+- RMTFS constructs `HLOS + N remote VMIDs`, all RW;
+- ath10k can assign one range to MSS/WLAN/WLAN-CE simultaneously.
+
+Thus Linux's low-level SCM ABI can represent a multi-owner visibility contract.
+
+## What is *not* proven for camera
+
+The kernel defines:
+
+- `QCOM_SCM_VMID_TZ = 0x01`;
+- `QCOM_SCM_VMID_HLOS = 0x03`;
+- `QCOM_SCM_VMID_CP_CAMERA = 0x0d`;
+- `QCOM_SCM_VMID_CP_CAMERA_PREVIEW = 0x1d`.
+
+But a whole-tree search finds **no Linux user of either CP_CAMERA VMID**. They exist only as ABI constants.
+
+Therefore there is no source authority for any of these candidate ACLs:
+
+- `CP_CAMERA` only;
+- `CP_CAMERA + TZ`;
+- `CP_CAMERA + HLOS`;
+- `CP_CAMERA + some QTEE-specific identity`;
+- their exact per-owner R/W permissions.
+
+In particular, E004bt does **not** equate QTEE with `QCOM_SCM_VMID_TZ` merely because QTEE is a trusted OS. That equivalence is not established by this source tree.
+
+## QCOMTEE SHM bridge solves a different sharing problem
+
+QCOMTEE's own message/shared-memory pool uses `tee_dyn_shm_alloc_helper()`:
+
+- pages are allocated by normal HLOS with `alloc_pages_exact()`;
+- a normal kernel `kaddr` is retained;
+- `virt_to_phys(kaddr)` becomes the physical address;
+- QCOMTEE registers that physical range via `qcom_tzmem_shm_bridge_create()`.
+
+The SHM-bridge helper requests RW permissions for both the non-secure and secure view and identifies HLOS as the non-secure VMID.
+
+This is useful proof that QTEE can receive a physical range while Linux keeps a kernel mapping. But it is **not** the Windows protected-camera internal contract:
+
+- the backing remains ordinary HLOS-addressable memory;
+- it is not proven assigned to CP_CAMERA;
+- the QCOMTEE memory-object code merely returns that `tee_shm` physical range with RW permission;
+- no source proves that an existing SHM bridge remains valid across a later CP_CAMERA ownership ACL change.
+
+Therefore “SHM bridge + assign to CP_CAMERA” cannot be composed by assumption.
+
+## External sample is a separate unresolved visibility contract
+
+The generic TEE core defines `TEE_DMA_HEAP_SECURE_VIDEO_RECORD` and the name `protected,secure-video-record`.
+
+However:
+
+- only OP-TEE code in this tree registers TEE protected DMA heaps;
+- QCOMTEE has no `tee_device_register_dma_heap()` integration;
+- current SP11 exposes only `system`, `default_cma_region`, and `reserved` DMA heaps.
+
+So QCOMTEE's ordinary `tee_shm` cannot stand in for the external protected sample either.
+
+This preserves the Windows two-buffer distinction:
+
+- **internal:** CP_CAMERA hardware target + trusted worker visibility;
+- **external:** consumer protected sample + trusted worker visibility;
+- neither is ordinary HLOS-shared memory.
+
+## Architectural consequence
+
+E004bt changes the blocker from “Linux cannot express simultaneous ownership” to a much narrower question:
+
+**Which exact secure owner/permission set is valid on X1E80100 for a CP_CAMERA target that must remain visible to an authorized trusted worker?**
+
+The mechanism exists; the camera-specific authority does not.
+
+This also means a future Linux backend must track more than a Boolean `assigned` flag. At minimum its internal protected target needs a formally owned ACL state and a trusted-visibility state, plus failure-safe reclaim. The concrete VMIDs must remain unset until proven.
+
+## What remains forbidden
+
+Do not yet:
+
+- call `qcom_scm_assign_mem()` with CP_CAMERA;
+- assume `QCOM_SCM_VMID_TZ` is the QTEE camera worker identity;
+- combine SHM bridge and CP_CAMERA assignment experimentally;
+- enable QCOMTEE;
+- create a guessed protected DMA heap;
+- expose the internal backing to normal HLOS CPU paths;
+- run protected CAMSS/SecureISP runtime.
+
+## Next gate
+
+The next justified gate is **E004bu — internal protected-target ACL contract**, static/compile-only.
+
+Rather than invent a VMID, encode the now-proven lifetime constraints into the CAMSS protected-target contract:
+
+- physical ownership range remains distinct from CAMSS IOVA;
+- ownership is an explicit ACL/set, not a single-domain Boolean;
+- trusted-worker visibility is independently represented;
+- hardware visibility and worker visibility must overlap for the active capture interval;
+- teardown must revoke the hardware assignment before releasing trusted mapping/backing;
+- concrete VMID/permission values remain absent until the X1E camera authority is proven.
+
+The gate must again produce zero executable `.text` change. This is useful because it prevents the eventual runtime backend from being shaped around the now-disproven single-owner model while still respecting the secure-runtime prohibition.
+
+--- external/internal VTL protection layer ---
+`SkmiAllocateZeroedPage()`
+
+which is:
+
+`SkmiAllocateZeroedPage -> SkmiAllocateSinglePage -> SkmiAllocatePhysicalPage`.
+
+This is not a Qualcomm SHM-bridge allocation and is not a QCOMTEE object. The pages are acquired into the Windows Secure Kernel memory manager.
+
+## 2. Physical pages are explicitly converted to Secure Kernel pages
+
+For the default section-page allocation class (`class 0`), `SkmiAllocatePhysicalPage` may obtain a PFN from normal mode, but before making it available to the section it calls:
+
+`SkmiSecurePhysicalPages(PFN, 1, access_index, page_access_class)`.
+
+For this exact default path:
+
+- allocation class passed by `SkmiAllocateSinglePage` = `0`;
+- `local_e8` / secure VTL access index therefore remains `0`;
+- `SkmiPageAccessProtection[0]` is used for the page's internal PFN/access class.
+
+`SkmiSecurePhysicalPages` changes the Secure Kernel PFN state and then calls:
+
+`SkmiProtectPlaceholderPages(PFN, count, access_index, 0)`.
+
+So VTL protection is part of allocation itself; it is not added only when a trusted process later maps the object.
+
+## 3. `SkmiProtectPlaceholderPages` applies the VTL protection
+
+For the normal PFN-list path, `SkmiProtectPlaceholderPages` does three important things:
+
+1. applies a temporary protection mask using `ShvlpProtectPages`;
+2. maps and scrubs the page through Secure Kernel hyperspace;
+3. applies the final access mask from:
+
+`SkmiVtlPageAccess[access_index]`.
+
+The exact table begins:
+
+| Access index | Protection mask |
+|---:|---:|
+| 0 | `0x0` |
+| 1 | `0x1` |
+| 2 | `0x0d` |
+| 3 | `0x11` |
+| 4 | `0x1` |
+
+The ordinary secure-section allocation path reaches **index 0**.
+
+Therefore its final protection mask is:
+
+`SkmiVtlPageAccess[0] = 0x0`.
+
+## 4. `ShvlpProtectPages` is exactly HvCallModifyVtlProtectionMask
+
+`ShvlpProtectPages` constructs the hypercall input as:
+
+- offset `+0x00`: partition ID `0xffffffffffffffff`;
+- offset `+0x08`: requested protection mask;
+- offset `+0x0c`: `0`, the target VTL;
+- followed by the GPA/PFN page list.
+
+It issues Hyper-V hypercall code:
+
+`0x000C`.
+
+Microsoft's Hyper-V TLFS names call `0x000C`:
+
+`HvCallModifyVtlProtectionMask`
+
+and documents the same input layout:
+
+- `TargetPartitionId` at `+0x00`;
+- `MapFlags` at `+0x08`;
+- `TargetVtl` at `+0x0c`;
+- page list after the header.
+
+The target here is therefore **VTL0**.
+
+Golden Linux's bundled Hyper-V headers independently give the GPA permission bits:
+
+- `HV_MAP_GPA_PERMISSIONS_NONE = 0x0`;
+- `HV_MAP_GPA_READABLE = 0x1`;
+- `HV_MAP_GPA_WRITABLE = 0x2`;
+- kernel execute `0x4`;
+- user execute `0x8`.
+
+The TLFS likewise defines VTL memory protection in terms of lower-VTL read/write/execute access.
+
+Thus the final mask for the external section's pages:
+
+`0x0`
+
+means:
+
+**VTL0 has no read, no write and no execute access.**
+
+This is the physical protection mechanism we had previously left unresolved.
+
+## 5. Temporary mask 1 does not weaken the final state
+
+During page transition/scrubbing, `SkmiProtectPlaceholderPages` first uses the second table value:
+
+`SkmiVtlPageAccess[1] = 0x1`
+
+which is the Hyper-V readable bit.
+
+After the Secure Kernel transition/scrub it applies the requested final access-index value.
+
+For the normal flag-0 secure section, that final value is still:
+
+`SkmiVtlPageAccess[0] = 0`.
+
+Therefore the durable external sample state is VTL0 no-access.
+
+## 6. Trusted consumers map the section in VTL1/Secure Kernel context
+
+`SkmiMapViewOfSection` creates a secure-process virtual allocation and installs the section's PTEs into that secure address space while retaining a reference to the secure-section object.
+
+That matches the camera flow already proven:
+
+- FsIso creates the GUID/scenario secure section;
+- SecureISP's VTL1 trustlet opens it by GUID/scenario;
+- the trustlet maps it and writes the protected frame payload through its trusted worker.
+
+The object is therefore simultaneously:
+
+- inaccessible to ordinary VTL0;
+- mappable in an authorized isolated/trusted VTL1 process.
+
+That is the key external protected-sample security contract.
+
+## 7. Flag 2 adds a second Secure Kernel page class for the internal target
+
+The SecureISP internal target uses:
+
+`CreateSecureSection(NULL, 4, 4, size, 2)`.
+
+`IumCreateSecureSection` first creates the same Secure Kernel section backing described above.
+
+When flags bit `0x2` is present it additionally:
+
+- sets section flag `0x20000`;
+- iterates every section PFN;
+- calls `SkmiClaimTrustedPage(PFN, NULL, 6)`.
+
+The external FsIso flag-0 sample skips this trusted-page claim loop.
+
+Afterward, the internal target separately performs the already-proven:
+
+`AssignMemoryToSocDomain(... DomainId=0x0d, Protection=4 ...)`
+
+which QcSkExt translates to:
+
+- Qualcomm VMID `0x0d` = `CP_CAMERA`;
+- Qualcomm permission `0x2` = write.
+
+So the internal target protection stack is now:
+
+**Secure Kernel / VTL0-no-access section**
+
+plus
+
+--- QcSk internal assignment bridge ---
+  else {
+    FUN_140001fd8();
+    local_d4 = DAT_1400042f4;
+  }
+LAB_140004234:
+  if (pvVar7 != (void *)0x0) {
+    free(pvVar7);
+  }
+  if ((local_d4 < 0) &&
+     (local_108 != (undefined8 *)0x0 && (local_108 != (undefined8 *)0x0 && param_2 != 0))) {
+    if (param_2 == 0) {
+      param_2 = 0;
+    }
+    do {
+      if ((HANDLE)*local_108 != (HANDLE)0x0) {
+        CloseHandle((HANDLE)*local_108);
+      }
+      param_2 = param_2 - 1;
+      local_108 = local_108 + 1;
+    } while (param_2 != 0);
+  }
+  return local_d4;
+}
+
+
+
+
+--- Linux VMID + permission constants for cross-check ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_HLOS		0x3
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_CP_CAMERA		0xD
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_HLOS_FREE		0xE
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/dt-bindings/firmware/qcom,scm.h:#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_READ       0x4
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_WRITE      0x2
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_EXEC       0x1
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_RW (QCOM_SCM_PERM_READ | QCOM_SCM_PERM_WRITE)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h:#define QCOM_SCM_PERM_RWX (QCOM_SCM_PERM_RW | QCOM_SCM_PERM_EXEC)
+
+STATIC INTERPRETATION OF THE TRUSTLET'S INTERNAL CALL
+Trustlet input: DomainId=0x0d, Protection=4.
+QcSkExt translation table does NOT contain input 0x0d, therefore VMID remains 0x0d.
+QcSkExt permission switch maps IUM Protection=4 -> QHEE permission parameter 0x2.
+Linux cross-check: QCOM_SCM_VMID_CP_CAMERA=0x0d and QCOM_SCM_PERM_W=BIT(1)=0x2.
+Thus the internal capture target is authoritatively CP_CAMERA / write permission at the Qualcomm assignment layer.
+This does not describe the external VTL1 sample, which has no AssignMemoryToSocDomain call in its FsIso path.
