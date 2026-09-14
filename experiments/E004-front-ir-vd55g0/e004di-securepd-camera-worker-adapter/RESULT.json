@@ -1,0 +1,56 @@
+{
+  "experiment": "E004di",
+  "status": "PASS_OFFLINE_SECUREPD_CAMERA_WORKER_ADAPTER_FULL_FRAME_WINDOWS_EXACT",
+  "mode": "offline-source-build-host-mock-and-hexagon-partial-link",
+  "authority": "Windows pixel behavior is normative; shipped Qualcomm SP11 SecurePD ABI is the Linux protected-worker architecture authority",
+  "packet": {
+    "bytes": 80,
+    "version": 1,
+    "source_type": "DATA=7",
+    "destination_type": "DATA=7",
+    "work_type": "HEAP=5",
+    "request_id_bits": 64,
+    "result_bytes": 16,
+    "contiguous_stride_required": true
+  },
+  "lifecycle": {
+    "verify_before_map": true,
+    "partial_map_cleanup": true,
+    "reverse_unmap": true,
+    "unmap_failure_reported": true,
+    "hlos_cpu_mapping": false,
+    "fallback_copy_in_hlos": false
+  },
+  "differential": {
+    "geometry": "644x604 NV12",
+    "luma_diff_bytes": 0,
+    "neutral_tail_diff_bytes": 0,
+    "stable_windows_luma_sha256": "591a706fcb1710b8aa152f4f672c5954e181fa783a09e3d9d4be038b3c6202f7"
+  },
+  "hexagon": {
+    "target": "v73",
+    "freestanding": true,
+    "non_pic": true,
+    "text_bytes": 9220,
+    "unresolved_symbols": 0,
+    "combined_object_sha256": "a6540c007df1c35173399a1589505555e69358b912c519818388290be43d26c6"
+  },
+  "trust": {
+    "signed": false,
+    "production_admitted": false,
+    "runtime_authorized": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "secure_cb9_enable": false,
+    "fastrpc_ioctl": false,
+    "ownership_transition": false,
+    "cpz_migration": false,
+    "protected_mapping": false,
+    "camera_runtime": false,
+    "firmware_modify": false,
+    "verification_patch": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004dj exact Qualcomm SecurePD import/mailbox binding, offline/static only"
+}
