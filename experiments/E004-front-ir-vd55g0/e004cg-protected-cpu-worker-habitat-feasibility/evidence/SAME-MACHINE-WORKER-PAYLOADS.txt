@@ -1,0 +1,49 @@
+E004cg SAME-MACHINE SECURE WORKER PAYLOAD INVENTORY
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamisp8380.inf_arm64_068a5d125dcec104/CAMERA_ICP_AAAAAA.elf
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamisp8380.inf_arm64_068a5d125dcec104/CAMERA_ICP.mbn
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamsecureisp8380.inf_arm64_e0daad652520462e/libbitml_nsp_v2_skel.so
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamsecureisp8380.inf_arm64_e0daad652520462e/QcISPTrustlet8380.dll
+
+--- SecureISP exact nature ---
+E004bc WINDOWS SECURECOMPANION IMAGE AUTHORITY
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/QcISPTrustlet8380.dll: PE32+ executable for MS Windows 10.00 (DLL), ARM64, 7 sections
+55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606  /home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/QcISPTrustlet8380.dll
+Format: COFF-ARM64
+Arch: aarch64
+  Machine: IMAGE_FILE_MACHINE_ARM64 (0xAA64)
+    IMAGE_FILE_DLL (0x2000)
+  Subsystem: IMAGE_SUBSYSTEM_WINDOWS_GUI (0x2)
+  Name: IumSdk.dll
+  Symbol: CreateSecureSection (11)
+  Symbol: OpenSecureSection (114)
+  Symbol: MapSecureIo (96)
+  Symbol: AssignMemoryToSocDomain (2)
+  Name: ntdll.dll
+  Name: KERNEL32.dll
+
+INF declarations:
+45:%CameraSecureISP.DeviceDesc%=CameraSecureISP_Device, ACPI\QCOM0CCC
+47:[CameraSecureISP_Device.NT]
+64:[CameraSecureISP_Device.NT.HW]
+65:AddReg=CameraSecureISP_Device_Security_Reg, CameraSecureISP_Device_ACL
+67:[CameraSecureISP_Device_Security_Reg]
+70:[CameraSecureISP_Device_ACL]
+74:[CameraSecureISP_Device.NT.Services]
+75:AddService = CameraSecureISP,%SPSVCINST_ASSOCSERVICE%, CameraSecureISP_Service_Inst
+78:[CameraSecureISP_Service_Inst]
+79:DisplayName    = %CameraSecureISP.SVCDESC%
+80:ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+84:ServiceBinary  = %13%\qccamsecureisp8380.sys
+86:[CameraSecureISP_Device.NT.Wdf]
+87:KmdfService = CameraSecureISP, CameraSecureISP_wdfsect
+88:UmdfService =  SecureBioCompanion, SecureBioCompanion_wdfsect
+89:CompanionConfiguration = CameraSecureISP, SecureBioCompanion_companions
+91:[CameraSecureISP_wdfsect]
+94:[SecureBioCompanion_wdfsect]
+96:ServiceBinary = %13%\QcISPTrustlet8380.dll
+97:ServiceType = SecureCompanion
+98:TrustletIdentity = 4096
+100:[SecureBioCompanion_companions]
+101:CompanionServices = SecureBioCompanion
+107:CameraSecureISP.SVCDESC= "Qualcomm(R) Spectra(TM) 395 SecureISP Device"
+108:CameraSecureISP.DeviceDesc = "Qualcomm(R) Spectra(TM) 395 SecureISP Device"

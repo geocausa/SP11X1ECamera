@@ -1,0 +1,115 @@
+E004cg WINDOWS WORKER MINIMUM
+{
+  "experiment": "E004cf",
+  "status": "PASS_TRUSTED_FRAME_WORKER_IS_CPU_MEMORY_PROCESSING_AFTER_PROTECTED_MAPPINGS",
+  "mode": "windows-static-only",
+  "dispatcher": {
+    "function": "FUN_1800037c8",
+    "source": "internal protected mapping +0x30",
+    "destination": "external protected mapping +0x90 + payload offset +0x9c",
+    "branches": [
+      "synthetic_fill",
+      "early_copy",
+      "SWABF_SWASF"
+    ]
+  },
+  "early_copy": {
+    "memcpy_like": true,
+    "tail_fill_0x80": true,
+    "privileged_calls": false
+  },
+  "swab": {
+    "wrapper": "FUN_180019828",
+    "core": "FUN_18001a138",
+    "thread_entry": "FUN_18001f170",
+    "pixel_function": "FUN_18001f420",
+    "cpu_pixel_arithmetic": true,
+    "thread_event_sync": true,
+    "secure_memory_api_during_transfer": false,
+    "camera_mmio_or_device_io_during_transfer": false,
+    "qctree_qtee_qsee_during_transfer": false
+  },
+  "coherency": {
+    "per_frame_flush_secure_section_buffers": false,
+    "internal_setup_flush_after_domain_assignment": true,
+    "worker_requires_coherent_trusted_mappings": true
+  },
+  "minimum_environment": [
+    "trusted CPU execution outside ordinary HLOS",
+    "read access to internal protected target",
+    "write access to external protected sample",
+    "private scratch/config memory",
+    "basic allocation and synchronization",
+    "ordinary CPU memory operations and integer pixel arithmetic",
+    "coherent protected mappings"
+  ],
+  "windows_one_shot_needed": false,
+  "runtime_actions": {
+    "windows_boot": false,
+    "secure_runtime": false,
+    "ownership_change": false,
+    "protected_allocation": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cg protected CPU-worker habitat feasibility, static first"
+}
+
+{
+  "experiment": "E004cc",
+  "status": "PASS_EXTERNAL_FLAG0_SECURE_SECTION_HYPERV_VTL0_NO_ACCESS",
+  "mode": "windows-static-exact-pdb-plus-tlfs",
+  "securekernel": {
+    "sha256": "9a2eeb0e4a3d76aa9a6bfaf287540f5f1f7562d814e8ecb3c3f6df6b57a557b6",
+    "pdb_guid": "0A49C8CF-92C9-F8EC-65C6-D61180FDAE51",
+    "pdb_age": 1,
+    "pdb_sha256": "8a7182241511195029a512aad0e0eb2b4799269f76d5f9ee71ccf697f649ca72"
+  },
+  "external_flag0": {
+    "create": "IumCreateSecureSection -> SkmmCreateSecureSection",
+    "page_path": [
+      "SkmiAllocateZeroedPage",
+      "SkmiAllocateSinglePage",
+      "SkmiAllocatePhysicalPage",
+      "SkmiSecurePhysicalPages",
+      "SkmiProtectPlaceholderPages",
+      "ShvlpProtectPages"
+    ],
+    "allocation_class": 0,
+    "final_vtl_access_index": 0,
+    "final_vtl0_mask": "0x0",
+    "target_vtl": 0,
+    "hypercall": "0x000c HvCallModifyVtlProtectionMask",
+    "vtl0_access": "none (no R/W/X)",
+    "trusted_page_claim": false
+  },
+  "internal_flag2": {
+    "same_base_secure_section_protection": true,
+    "trusted_page_claim": "SkmiClaimTrustedPage(PFN,NULL,6) for each page",
+    "later_qcom_assignment": {
+      "vmid": "0x0d CP_CAMERA",
+      "perm": "0x2 WRITE"
+    }
+  },
+  "provider_identity": {
+    "external_memory_enforcer": "Microsoft Secure Kernel + Hyper-V VTL protection",
+    "scenario_guid_role": "object identity/authorization",
+    "qctree_memshare_provider": false,
+    "qtee_smcinvoke_provider": false,
+    "cp_camera_external_provider": false
+  },
+  "linux_gap": {
+    "golden_has_windows_vtl1_provider": false,
+    "generic_tee_protected_dmabuf_surface_matches_hlos_no_map_shape": true,
+    "x1e_secure_video_record_provider_found": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "ium_syscall": false,
+    "hypercall": false,
+    "scm_assign_mem": false,
+    "qtee_qsee_call": false,
+    "qcomtee_enable_or_load": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cd Linux VTL-equivalent protected-sample provider feasibility, static first"
+}

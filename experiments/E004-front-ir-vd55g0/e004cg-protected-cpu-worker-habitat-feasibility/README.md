@@ -1,0 +1,223 @@
+# E004cg — protected CPU-worker habitat feasibility
+
+## Result
+
+**PASS: no currently active Linux/X1E trusted habitat can host the E004cf CPU worker with parity-safe memory ownership today. Among source-controlled options, pKVM nVHE/EL2 is the only credible engineering path because it can execute our own ARM64 code while owning pages outside HLOS, but it remains an unselected research candidate rather than an authorized backend.**
+
+This gate is static/read-only. No QTEE/QSEE/FF-A/Gunyah/pKVM activation, secure app load, ownership transition, camera runtime, Windows boot or kernel boot-mode change occurred.
+
+## Reduced requirement from E004cf
+
+The Windows protected worker does not need a proprietary camera accelerator after its mappings exist.
+
+It needs:
+
+- trusted CPU execution outside ordinary HLOS;
+- readable access to the internal protected capture target;
+- writable access to the external HLOS-inaccessible sample;
+- private scratch/config memory;
+- basic allocation and synchronization;
+- coherent mappings.
+
+That reduction matters because a Linux counterpart can in principle be ordinary compiled ARM64 code, provided the execution habitat and page ownership are real security boundaries.
+
+## 1. QCOMTEE: execution exists, but only for pre-existing service objects
+
+The Linux QCOMTEE object model can:
+
+1. obtain/register a client environment;
+2. open a service with `QCOMTEE_CLIENT_ENV_OPEN` using a known 32-bit UID;
+3. invoke the returned object.
+
+`qcomtee_object_get_service()` is therefore a **client of an existing QTEE service**.
+
+The QCOMTEE source contains no application loader, ELF/MBN loader, service installer, service-spawn path or generic API for uploading arbitrary code into the trusted OS.
+
+So E004cf's discovery that the worker is CPU-only does not make QCOMTEE sufficient. We would still need an already-installed signed QTEE service that implements the worker, and no camera service UID or object has been identified.
+
+## 2. QSEECOM: same limitation in the current Linux implementation
+
+Linux's QSEECOM driver is even more explicit:
+
+> supported apps are looked up assuming the app has already been loaded, usually by firmware bootloaders.
+
+The in-tree app table contains only:
+
+`qcom.tz.uefisecapp`
+
+The SCM interface implemented here exposes:
+
+- app lookup;
+- app send/receive;
+- QSEECOM version/query plumbing.
+
+It does **not** implement an APP_LOAD or APP_START command for a new trusted application.
+
+Therefore the current Linux QSEECOM stack cannot turn the Windows VTL1 worker binary—or a Linux port of it—into a new trusted app on SP11.
+
+The generic Qualcomm PAS loader is for authenticated peripheral firmware and does not establish a QSEE camera application identity.
+
+## 3. FF-A: transport to a secure partition, not a worker creator
+
+The kernel has FF-A memory share/lend/donate transport, but there is no known camera secure-partition identity on this X1E machine.
+
+FF-A can solve communication and memory lending **after** a trusted partition exists. It does not provide the missing partition/code authority by itself.
+
+No runtime partition enumeration was performed.
+
+## 4. Gunyah: platform architecture is present, host control is absent
+
+SP11's device tree reserves a Gunyah hypervisor region, and the X1 EL2 overlay explicitly describes operation “under Gunyah.”
+
+However all local SP11 kernel trees lack a `drivers/virt/gunyah` host implementation, Golden has no Gunyah configuration, and there is no host control device.
+
+That means Gunyah is architecturally relevant but not an actionable worker habitat in the current Linux stack.
+
+Porting a complete Gunyah host/VMM stack would be a separate major project, and we still lack a proven camera memory-sharing policy for such a guest.
+
+## 5. pKVM nVHE is the only source-controlled worker habitat
+
+The current kernel already contains pKVM/nVHE ownership machinery capable of transferring a page from the normal host to the hypervisor:
+
+- `__pkvm_host_donate_hyp()`;
+- `__pkvm_hyp_donate_host()`;
+- host/hyp share/unshare transitions.
+
+The pKVM selftests explicitly model the successful state transition:
+
+`host = PKVM_NOPAGE`
+
+`hyp = PKVM_PAGE_OWNED`
+
+after `__pkvm_host_donate_hyp()`.
+
+That is exactly the kind of CPU-side isolation E004cf requires: code resident in nVHE EL2 could operate on pages while the normal host no longer owns a mapping.
+
+Unlike QTEE, the hypervisor code is part of the kernel source we control, so the worker algorithm can actually be compiled into that trusted execution layer without a Qualcomm signing key or undiscovered service UID.
+
+This makes pKVM nVHE the **leading engineering candidate**.
+
+It does not make it selected or authorized.
+
+## 6. Three hard blockers prevent selecting pKVM today
+
+### A. Golden is not running protected pKVM
+
+Protected mode is selected at early boot using `kvm-arm.mode=protected`.
+
+The current Golden command line does not contain that option.
+
+Changing that is a boot-mode experiment and is not authorized by E004cg.
+
+### B. pKVM documents DMA isolation as unimplemented
+
+The kernel's own pKVM documentation states:
+
+`DMA isolation using an IOMMU — Status: Unimplemented.`
+
+That matters for a security feature specifically designed to keep HLOS away from protected camera data. CPU stage-2 protection alone is not sufficient if an untrusted host can program a DMA-capable device to reach protected pages.
+
+A Qualcomm memory-firewall assignment may eventually close that gap, but that composition is not yet proven.
+
+### C. Qualcomm HYP identity is unresolved for Linux pKVM
+
+Windows QcSkExt proves that its camera PIL policy uses:
+
+- VMID `4` = `HYP`;
+- VMID `0x0e` = HLOS_FREE/intermediate;
+- VMID `0x39` = camera PIL subsystem.
+
+But the public Linux Qualcomm SCM VMID header has **no `QCOM_SCM_VMID_HYP` constant**, and the Linux source provides no authority tying VMID 4 to pKVM's nVHE EL2 context.
+
+Therefore this tempting equation remains forbidden:
+
+`Windows/QHEE HYP VMID 4 == Linux pKVM hypervisor owner`
+
+until proven.
+
+The same caution applies to composing pKVM ownership with the internal target's CP_CAMERA assignment.
+
+## 7. Why a hyp-resident worker is still promising
+
+If the remaining ownership questions can be resolved, a hyp-resident worker is a notably small architecture:
+
+1. HLOS allocates/control-describes pages while they are still host-owned;
+2. pages become protected from HLOS through pKVM host→hyp ownership transfer;
+3. EL2 maps the protected internal and external pages;
+4. the E004cf CPU algorithm executes directly in nVHE code;
+5. no guest OS, QTEE app, DSP or secure camera service is required for the transform;
+6. EL2 returns ownership only at external sample teardown.
+
+The worker itself can be simpler than Windows because Linux need not reproduce Windows thread/event APIs exactly; those are implementation details of the CPU algorithm, not the security contract.
+
+A single-threaded or differently partitioned EL2 implementation is acceptable if its pixel output and protected lifetime match the oracle.
+
+## 8. Internal target remains the difficult composition point
+
+The external destination is comparatively straightforward conceptually: host access can be removed and EL2 can own the pages.
+
+The internal source must simultaneously satisfy two independent requirements:
+
+- camera hardware writes it under the proven CP_CAMERA policy;
+- the trusted CPU worker reads it.
+
+Windows demonstrates that these can coexist because its VTL1 trustlet mapping remains valid while CP_CAMERA assignment is active.
+
+Linux does not yet have static authority proving that pKVM-owned/EL2-readable pages can coexist with the Qualcomm CP_CAMERA assignment, nor which Qualcomm owner set would represent that combination.
+
+That is the central pKVM feasibility question—not the image algorithm.
+
+## Candidate ranking
+
+| Habitat | Can run our CPU code | Can exclude HLOS | Existing camera authority | Current SP11 availability | Result |
+|---|---:|---:|---:|---:|---|
+| normal Linux kernel/userspace | Yes | No | n/a | Yes | forbidden |
+| QCOMTEE | only installed service code | potentially | no camera UID/service | disabled/no provider | blocked |
+| QSEECOM | only preloaded app code | potentially | no camera app | UEFI app client only | blocked |
+| FF-A secure partition | only existing SP code | potentially | no camera partition | transport only | blocked |
+| Gunyah guest | Yes in principle | Yes in principle | none | no host stack | blocked |
+| pKVM protected guest | Yes | Yes CPU-side | none | protected mode off; DMA gap | research candidate |
+| **pKVM nVHE hyp-resident worker** | **Yes, source-controlled** | **Yes CPU-side** | **not yet for QCOM memory firewall** | code present, mode off | **leading static candidate, not selected** |
+
+## Windows one-shot decision
+
+A Windows one-shot is not useful for E004cg.
+
+Windows already proves exactly what we need from the worker and its memory visibility. The unresolved questions are Linux/Qualcomm composition questions:
+
+- pKVM boot/runtime support on our Linux build;
+- pKVM EL2 versus Qualcomm HYP identity;
+- CP_CAMERA + trusted EL2 simultaneous visibility;
+- DMA isolation.
+
+Those cannot be answered by another Windows trace.
+
+## What remains forbidden
+
+Do not yet:
+
+- boot Golden with `kvm-arm.mode=protected`;
+- add a runtime pKVM worker;
+- assign VMID 4 by assuming it means pKVM EL2;
+- combine pKVM page donation with `qcom_scm_assign_mem()`;
+- load/probe QTEE/QSEE/FF-A services;
+- invent a QSEE camera app name;
+- port Gunyah as a side project;
+- expose either protected buffer to normal HLOS;
+- activate Linux SecureISP protected runtime.
+
+## Next gate
+
+Proceed to **E004ch — pKVM hyp-worker integration boundary**, static/compile-only.
+
+Map the existing nVHE source enough to answer, without booting protected mode:
+
+1. how host code invokes a custom nVHE handler;
+2. how pages become hyp-owned and are mapped in EL2;
+3. how hyp-owned pages are returned safely to host;
+4. what code/data allocation is permitted in nVHE;
+5. whether a tiny memcpy/pixel worker can be compiled into hyp code without adding runtime behavior to Golden;
+6. identify exactly where Qualcomm ASSIGN would have to bracket the ownership transition, while leaving the concrete VMID unresolved;
+7. produce a compile-only scaffold only if executable Golden/runtime behavior remains unchanged.
+
+The goal is to determine whether pKVM can be a practical implementation substrate before any boot-mode experiment is authorized.

@@ -1,0 +1,76 @@
+E004cg QUALCOMM HYP VMID IDENTITY GAP
+
+--- Windows same-machine QcSk camera-PIL evidence ---
+E004cb VMID CROSS-CHECK
+#define QCOM_SCM_VMID_HLOS		0x3
+#define QCOM_SCM_VMID_CP_CAMERA		0xD
+#define QCOM_SCM_VMID_HLOS_FREE		0xE
+#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+
+QcSk vendor-log anchored transition identities:
+- VMID 4: source named HYP by "map to intermediate VM from HYP failed".
+- VMID 0x0e: destination of that call and source of the next call; therefore the vendor-named intermediate VM.
+- Linux public name for 0x0e: QCOM_SCM_VMID_HLOS_FREE.
+- VMID 0x39: destination of "map to subsys from intermediate VM failed" and source of the reverse "map to intermediate VM from subsys failed"; therefore camera PIL subsystem VMID in this binary.
+- VMID 3: destination of "map to HLOS from intermediate VM failed"; Linux public name QCOM_SCM_VMID_HLOS.
+- No public Linux QCOM_SCM_VMID_* definition for 0x39 exists in this tree.
+
+--- public Linux Qualcomm VMID constants ---
+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
+/*
+ * Copyright (c) 2010-2015, 2018-2019 The Linux Foundation. All rights reserved.
+ * Copyright (C) 2015 Linaro Ltd.
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ */
+
+#ifndef _DT_BINDINGS_FIRMWARE_QCOM_SCM_H
+#define _DT_BINDINGS_FIRMWARE_QCOM_SCM_H
+
+#define QCOM_SCM_VMID_TZ		0x1
+#define QCOM_SCM_VMID_HLOS		0x3
+#define QCOM_SCM_VMID_SSC_Q6		0x5
+#define QCOM_SCM_VMID_ADSP_Q6		0x6
+#define QCOM_SCM_VMID_CP_TOUCH		0x8
+#define QCOM_SCM_VMID_CP_BITSTREAM	0x9
+#define QCOM_SCM_VMID_CP_PIXEL		0xA
+#define QCOM_SCM_VMID_CP_NON_PIXEL	0xB
+#define QCOM_SCM_VMID_CP_CAMERA		0xD
+#define QCOM_SCM_VMID_HLOS_FREE		0xE
+#define QCOM_SCM_VMID_MSS_MSA		0xF
+#define QCOM_SCM_VMID_MSS_NONMSA	0x10
+#define QCOM_SCM_VMID_CP_SEC_DISPLAY	0x11
+#define QCOM_SCM_VMID_CP_APP		0x12
+#define QCOM_SCM_VMID_LPASS		0x16
+#define QCOM_SCM_VMID_WLAN		0x18
+#define QCOM_SCM_VMID_WLAN_CE		0x19
+#define QCOM_SCM_VMID_CP_SPSS_SP	0x1A
+#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+#define QCOM_SCM_VMID_CDSP		0x1E
+#define QCOM_SCM_VMID_CP_SPSS_SP_SHARED 0x22
+#define QCOM_SCM_VMID_CP_SPSS_HLOS_SHARED 0x24
+#define QCOM_SCM_VMID_ADSP_HEAP		0x25
+#define QCOM_SCM_VMID_CP_CDSP		0x2A
+#define QCOM_SCM_VMID_NAV		0x2B
+#define QCOM_SCM_VMID_TVM		0x2D
+#define QCOM_SCM_VMID_OEMVM		0x31
+
+#endif
+
+--- Linux source has no QCOM_SCM_VMID_HYP or equivalent named VMID 4 authority ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8883://VCN_HYP_ME1_PIPE0_VMID_CNTL
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8884:#define VCN_HYP_ME1_PIPE0_VMID_CNTL__VMID_ALLOWED_MASK__SHIFT                                                 0x0
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8885:#define VCN_HYP_ME1_PIPE0_VMID_CNTL__VMID_DEFAULT__SHIFT                                                      0x10
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8886:#define VCN_HYP_ME1_PIPE0_VMID_CNTL__VMID_ALLOWED_MASK_MASK                                                   0x0000FFFFL
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8887:#define VCN_HYP_ME1_PIPE0_VMID_CNTL__VMID_DEFAULT_MASK                                                        0x000F0000L
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8888://VCN_HYP_ME1_PIPE1_VMID_CNTL
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8889:#define VCN_HYP_ME1_PIPE1_VMID_CNTL__VMID_ALLOWED_MASK__SHIFT                                                 0x0
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8890:#define VCN_HYP_ME1_PIPE1_VMID_CNTL__VMID_DEFAULT__SHIFT                                                      0x10
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8891:#define VCN_HYP_ME1_PIPE1_VMID_CNTL__VMID_ALLOWED_MASK_MASK                                                   0x0000FFFFL
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_sh_mask.h:8892:#define VCN_HYP_ME1_PIPE1_VMID_CNTL__VMID_DEFAULT_MASK                                                        0x000F0000L
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_offset.h:1951:#define regVCN_HYP_ME1_PIPE0_VMID_CNTL                                                                  0x0890
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_offset.h:1952:#define regVCN_HYP_ME1_PIPE0_VMID_CNTL_BASE_IDX                                                         1
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_offset.h:1953:#define regVCN_HYP_ME1_PIPE1_VMID_CNTL                                                                  0x0891
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/gpu/drm/amd/include/asic_reg/vcn/vcn_4_0_0_offset.h:1954:#define regVCN_HYP_ME1_PIPE1_VMID_CNTL_BASE_IDX                                                         1
+HYP_VMID_PUBLIC_LINUX_AUTHORITY_MATCHES=0
+
+Therefore Windows VMID 4 == HYP must not be equated to pKVM EL2 without additional authority.

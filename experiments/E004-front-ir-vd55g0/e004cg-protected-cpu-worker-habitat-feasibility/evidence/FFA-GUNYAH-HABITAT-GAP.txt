@@ -1,0 +1,227 @@
+E004cg FF-A / GUNYAH HABITAT CHECK
+
+--- FF-A config + memory transport ---
+CONFIG_ARM_FFA_TRANSPORT=m
+CONFIG_ARM_FFA_SMCCC=y
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/arm_ffa.h:43:#define FFA_MEM_DONATE			FFA_SMC_32(0x71)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/arm_ffa.h:45:#define FFA_MEM_LEND			FFA_SMC_32(0x72)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/arm_ffa.h:47:#define FFA_MEM_SHARE			FFA_SMC_32(0x73)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/firmware/arm_ffa/driver.c:673:	    func_id == FFA_MEM_LEND)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/firmware/arm_ffa/driver.c:1183:	return ffa_memory_ops(FFA_MEM_SHARE, args);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/firmware/arm_ffa/driver.c:1198:	return ffa_memory_ops(FFA_MEM_LEND, args);
+
+--- no camera secure partition identity in X1 source/firmware names ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi:96:		key-camera-focus {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi:97:			label = "Camera Focus";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi:100:			linux,code = <KEY_CAMERA_FOCUS>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi:104:		key-camera-snapshot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi:105:			label = "Camera Snapshot";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi:108:			linux,code = <KEY_CAMERA>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916.dtsi:1285:			camera_front_default: camera-front-default-state {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916.dtsi:1306:			camera_rear_default: camera-rear-default-state {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916.dtsi:2722:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts:51:		key-camera-focus {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts:52:			label = "Camera Focus";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts:53:			linux,code = <KEY_CAMERA_FOCUS>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts:60:		key-camera-snapshot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts:61:			label = "Camera Snapshot";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts:63:			linux,code = <KEY_CAMERA>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650-hdk-rear-camera-card.dtso:3: * SM8650-HDK Rear Camera Card overlay
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts:43:		pinctrl-0 = <&camera_front_flash_default>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts:148:		pinctrl-0 = <&camera_rear_flash_default>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts:329:	camera_front_flash_default: camera-front-flash-default-state {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts:336:	camera_rear_flash_default: camera-rear-flash-default-state {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845-db845c-navigation-mezzanine.dtso:41:	camera@10 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998.dtsi:776:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998.dtsi:782:				camera_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845-google-common.dtsi:361:	/* front camera, imx355 @1a */
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/milos.dtsi:628:		camera_mem: camera-region@9eb00000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/milos.dtsi:1928:				 <&gcc GCC_CAMERA_AHB_CLK>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/milos.dtsi:3137:		camera0-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/milos.dtsi:3141:				camera0-hot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/milos.dtsi:3147:				camera0-critical {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sc7180-idp.dts:66:		camera_mem: memory@8ec00000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi:38:		key-camera-focus {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi:39:			label = "Camera Focus";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi:40:			linux,code = <KEY_CAMERA_FOCUS>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi:47:		key-camera-snapshot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi:48:			label = "Camera Snapshot";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi:49:			linux,code = <KEY_CAMERA>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/qrb5165-rb5-vision-mezzanine.dtso:37:	camera@1a {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150.dtsi:731:		camera_mem: memory@8b700000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150.dtsi:3785:				 <&gcc GCC_CAMERA_AHB_CLK>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150.dtsi:5308:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150.dtsi:5314:				camera_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/qcs6490-radxa-dragon-q6a.dts:141:		camera_mem: camera@84300000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8939-samsung-a7.dts:359:			 * Needed for camera, but not used yet.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8917.dtsi:1705:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8917.dtsi:1711:				camera_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sc8280xp.dtsi:4482:				 <&gcc GCC_CAMERA_HF_AXI_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sc8280xp.dtsi:4483:				 <&gcc GCC_CAMERA_SF_AXI_CLK>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sc8280xp.dtsi:4542:			interconnects = <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_CAMERA_CFG 0>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sc8280xp.dtsi:4586:			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8350.dtsi:460:		pil_camera_mem: memory@85200000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8350.dtsi:4511:		camera-top-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8350.dtsi:4517:				camera1_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8350.dtsi:4531:				camera2_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8937.dtsi:1882:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8937.dtsi:1886:				camera_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:57:		key-camera-focus {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:58:			label = "Camera Focus";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:59:			linux,code = <KEY_CAMERA_FOCUS>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:66:		key-camera-snapshot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:67:			label = "Camera Snapshot";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:68:			linux,code = <KEY_CAMERA>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:87:		regulator-name = "camera0_vdig_vreg";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:97:		regulator-name = "camera1_vdig_vreg";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:107:		regulator-name = "camera2_vdig_vreg";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:117:		regulator-name = "camera3_vdig_vreg";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi:127:		regulator-name = "camera_vmdr_vreg";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi:25: *         J14     = Camera Connector
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts:106:		pinctrl-0 = <&camera_flash_default>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts:356:	camera_flash_default: camera-flash-default-state {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts:123:		button-camera-snapshot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts:124:			label = "Camera Snapshot";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts:127:			linux,code = <KEY_CAMERA>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts:131:		button-camera-focus {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts:132:			label = "Camera Focus";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts:135:			linux,code = <KEY_CAMERA_FOCUS>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845.dtsi:827:		camera_mem: camera-mem@8bf00000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845.dtsi:4467:				<&gcc GCC_CAMERA_AHB_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845.dtsi:4468:				<&gcc GCC_CAMERA_AXI_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845.dtsi:4503:				"gcc_camera_ahb",
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845.dtsi:4504:				"gcc_camera_axi",
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845.dtsi:5996:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm845.dtsi:6002:				camera_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi:156:&camera0_mclk {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi:161:&camera0_pwdn {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi:166:&camera0_rst {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi:172:&camera2_mclk {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi:177:&camera2_rst {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi:266:		camera-snapshot-n-pins {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi:276:		camera-focus-n-pins {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6350.dtsi:602:		pil_camera_mem: memory@86000000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6350.dtsi:3076:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6350.dtsi:3080:				camera-crit {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/qcs8550.dtsi:122:		camera_mem: camera-region@9b300000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6125.dtsi:289:		camera_mem: memory@4ab00000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/agatti.dtsi:1853:			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/agatti.dtsi:1902:					 &config_noc SLAVE_CAMERA_CFG RPM_ACTIVE_TAG>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/agatti.dtsi:2810:		camera-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/agatti.dtsi:2814:				camera_alert0: trip-point0 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/agatti.dtsi:2820:				camera_alert1: trip-point1 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/agatti.dtsi:2826:				camera_crit: camera-crit {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts:61:		pinctrl-0 = <&hall_sensor_n>, <&key_camera_n>, <&vol_up_n>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts:73:		key-camera {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts:74:			label = "Camera Button";
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts:75:			linux,code = <KEY_CAMERA>;
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts:481:	key_camera_n: key-camera-n-state {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:1783:		camera_mem: camera@9b300000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:5442:				 <&gcc GCC_CAMERA_HF_AXI_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:5522:					 &config_noc SLAVE_CAMERA_CFG 0>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:5573:			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:8209:		camera0-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:8213:				camera0-hot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:8219:				camera0-critical {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:8227:		camera1-thermal {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:8231:				camera1-hot {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sm8650.dtsi:8237:				camera1-critical {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi:307:			 * Needed for camera, but not used yet.
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/lemans-evk-camera-csi1-imx577.dtso:55:	camera@1a {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm670.dtsi:541:		camera_mem: camera-mem@8ab00000 {
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm670.dtsi:1738:				 <&gcc GCC_CAMERA_AHB_CLK>,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/boot/dts/qcom/sdm670.dtsi:1739:				 <&gcc GCC_CAMERA_AXI_CLK>,
+
+--- Gunyah platform reservation / X1 EL2 relationship ---
+
+	reserved-memory {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		ranges;
+
+		gunyah_hyp_mem: gunyah-hyp@80000000 {
+			reg = <0x00 0x80000000 0x00 0x800000>;
+			no-map;
+			phandle = <0x1d9>;
+		};
+
+		hyp_elf_package_mem: hyp-elf-package@80800000 {
+			reg = <0x00 0x80800000 0x00 0x200000>;
+			no-map;
+			phandle = <0x1da>;
+		};
+
+		ncc_mem: ncc@80a00000 {
+			reg = <0x00 0x80a00000 0x00 0x400000>;
+			no-map;
+// SPDX-License-Identifier: BSD-3-Clause
+
+/*
+ * x1 specific modifications required to boot in EL2.
+ */
+
+/dts-v1/;
+/plugin/;
+
+&apss_watchdog {
+	status = "okay";
+};
+
+/* We can't and don't need to use zap shader in EL2 as linux can zap the gpu on it's own. */
+&gpu_zap_shader {
+	status = "disabled";
+};
+
+&iris {
+	/* TODO: Add video-firmware iommus to start IRIS from EL2 */
+	status = "disabled";
+};
+
+/*
+ * When running under Gunyah, this IOMMU is controlled by the firmware,
+ * however when we take ownership of it in EL2, we need to configure
+ * it properly to use PCIe.
+ *
+ * Additionally, it seems like ITS emulation in Gunyah is broken so we
+ * can't use MSI on some PCIe controllers in EL1. But we can add them
+ * here for EL2.
+ */
+&pcie3 {
+	iommu-map = <0 &pcie_smmu 0x30000 0x10000>;
+	msi-map = <0 &gic_its 0xb0000 0x10000>;
+};
+
+&pcie4 {
+	iommu-map = <0 &pcie_smmu 0x40000 0x10000>;
+};
+
+&pcie5 {
+	iommu-map = <0 &pcie_smmu 0x50000 0x10000>;
+	msi-map = <0 &gic_its 0xd0000 0x10000>;
+};
+
+&pcie6a {
+	iommu-map = <0 &pcie_smmu 0x60000 0x10000>;
+};
+
+&pcie_smmu {
+	status = "okay";
+};
+
+&remoteproc_adsp {
+	iommus = <&apps_smmu 0x1000 0x80>;
+};
+
+&remoteproc_cdsp {
+	iommus = <&apps_smmu 0x0c00 0x0>;
+};
+
+/*
+ * The "SBSA watchdog" is implemented in software in Gunyah
+ * and can't be used when running in EL2.
+ */
+&sbsa_watchdog {
+	status = "disabled";
+};
+
+--- no local host implementation/config/device ---
