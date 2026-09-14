@@ -1,0 +1,11 @@
+E004cj PLATFORM SECURE-WORKER MATRIX
+Candidate | Proven role | Trusted CPU processing | IUM secure-section access | QcTrEE/QSEE service | Camera-parity provider result
+QcISPTrustlet8380.dll | SecureISP SecureCompanion | yes: copy/fill/SWAB CPU worker | Create/Open/MapView | no service GUID in trustlet; KMD PassThrough only | Windows oracle, not reusable Linux service
+SecureUSBVideo.dll | Microsoft SecureCompanion | yes: trusted producer/consumer buffer handling | Create/Open/MapView | none | corroborates VTL1 workload model
+UsbXhciCompanion.dll | xHCI SDF SecureCompanion | controller secure I/O/DMA | Create/Open/GetExposed/MapView + MapSecureIo/DmaMapMemory | none | secure device plumbing, not generic copy worker
+BioIso.exe | biometric isolated process | yes: secure-input processing | Open/MapView | none | consumer workload, not service provider
+FaceRecognitionSensorAdapterVsmSecure.dll | Windows Hello VSM secure worker | yes: lock/validate, copy frame, IR face processing, release | Wbio/VSM host contract rather than IumSdk imports | none found | strong second VTL1/VSM CPU-worker oracle, not portable service
+QcDX qcdxkm8380.sys | GPU crypto/content protection | host/nonsecure copy + secure-app copy commands | no IumSdk secure-section path | SCM/QSEE secure-app + TrEE PlayReady/MemShare/WinSecApp | fixed GPU/DRM protocol; no camera/IUM authority
+QCOMTEE/QcTrEE generic transport | object/bridge transport | only pre-existing signed services | no camera IUM identity | transport only | no camera worker service identity
+
+Consequence: signed Windows VTL1/VSM workloads obtain protected CPU access through the Windows isolated execution / secure-section framework itself. No same-machine generic QcTrEE/QSEE secure-copy service was found that carries the camera SecureISP contract.

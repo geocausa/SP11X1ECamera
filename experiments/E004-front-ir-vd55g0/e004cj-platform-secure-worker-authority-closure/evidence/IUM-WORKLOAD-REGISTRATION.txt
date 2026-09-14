@@ -1,0 +1,177 @@
+E004cj IUM TRUSTED WORKLOAD REGISTRATION METADATA (UNICODE-AWARE)
+
+=== /mnt/windows/Windows/System32/DriverStore/FileRepository/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf ===
+[SourceDisksNames]
+1=%DiskId1%
+[SourceDisksFiles]
+qccamsecureisp8380.sys=1,
+QcISPTrustlet8380.dll=1,
+libbitml_nsp_v2_skel.so = 1,
+bm3a68v08s11n52.bin = 1
+[ControlFlags]
+ExcludeFromSelect=*
+;*****************************************
+; ISP  Install Section
+;*****************************************
+[Manufacturer]
+--
+AddProperty=WDTFSOCDeviceCategory
+Reboot
+[isp.Files.NTarm]
+qccamsecureisp8380.sys
+QcISPTrustlet8380.dll
+[DSPFiles]
+libbitml_nsp_v2_skel.so
+bm3a68v08s11n52.bin
+[WDTFSOCDeviceCategory]
+{5D078032-6378-437B-8DA5-9B32B7CA3FDD},2,7,,0
+[CameraSecureISP_Device.NT.HW]
+AddReg=CameraSecureISP_Device_Security_Reg, CameraSecureISP_Device_ACL
+[CameraSecureISP_Device_Security_Reg]
+--
+LoadOrderGroup = Streams Drivers ; First of all driver groups to load
+ServiceBinary  = %13%\qccamsecureisp8380.sys
+[CameraSecureISP_Device.NT.Wdf]
+KmdfService = CameraSecureISP, CameraSecureISP_wdfsect
+UmdfService =  SecureBioCompanion, SecureBioCompanion_wdfsect
+CompanionConfiguration = CameraSecureISP, SecureBioCompanion_companions
+[CameraSecureISP_wdfsect]
+KmdfLibraryVersion = 1.11
+[SecureBioCompanion_wdfsect]
+UmdfLibraryVersion = 2.23
+ServiceBinary = %13%\QcISPTrustlet8380.dll
+ServiceType = SecureCompanion
+TrustletIdentity = 4096
+[SecureBioCompanion_companions]
+CompanionServices = SecureBioCompanion
+[Strings]
+;Localizable Strings
+QC = "Qualcomm Inc."
+DiskId1= "Qualcomm Camera SecureISP Installation Disk"
+CameraSecureISP.SVCDESC= "Qualcomm(R) Spectra(TM) 395 SecureISP Device"
+CameraSecureISP.DeviceDesc = "Qualcomm(R) Spectra(TM) 395 SecureISP Device"
+;Non-localizable Strings
+SPSVCINST_ASSOCSERVICE= 0x00000002
+
+=== /mnt/windows/Windows/System32/DriverStore/FileRepository/usbvideo.inf_arm64_c2e374231ba101c0/usbvideo.inf ===
+Include=pci.inf
+Needs=PciD3ColdSupported.HW
+AddReg=SecureUSBVideo.AddReg.HW
+[SecureUSBVideo.AddReg.HW]
+HKR,,"LowerFilters",0x00010000,"WdmCompanionFilter"
+[USBVideo.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbvideo.sys
+[USBVideo.AddProp]
+GenericDriverInstalled,,,,1
+[USBVideo.TopologyNodeRegistration]
+HKLM,%MediaCategories%\%GUID.VideoStreaming%,Name,,%Node.VideoStreaming%
+HKLM,%MediaCategories%\%GUID.VideoStreaming%,Display,1,00,00,00,00
+--
+HKLM,"SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{da1d1dbd-3186-4fa2-bc2d-075efd9e43e2}","LoggerName",0,"EventLog-System"
+HKLM,"SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{da1d1dbd-3186-4fa2-bc2d-075efd9e43e2}","MatchAnyKeyword",0x000B0001, 0x8000000000000000
+HKLM,"SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{da1d1dbd-3186-4fa2-bc2d-075efd9e43e2}","MatchAllKeyword",0x000B0001, 0x0000000000000000
+HKLM,"SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{da1d1dbd-3186-4fa2-bc2d-075efd9e43e2}","EnableProperty",0x00010001,1
+; Install the UMDF service that represents the KMDF driver's (secure) companion
+; For this device, associate 'WdmCompanionFilter' with the companion service 'DriverCompanion'
+[USBVideo.NT.Wdf]
+KmdfService=WdmCompanionFilter, WdmCompanionFilter_KmdfSvcSect
+UmdfService = SecureUSBVideo, SecureUSBVideo_UmdfSvcSect
+CompanionConfiguration = WdmCompanionFilter, WdmCompanionFilter_CompanionSect
+[WdmCompanionFilter_CompanionSect]
+CompanionServices = SecureUSBVideo
+[WdmCompanionFilter_KmdfSvcSect]
+KmdfLibraryVersion = %KMDF_VERSION%
+[SecureUSBVideo_UmdfSvcSect]
+UmdfLibraryVersion = %UMDF_VERSION%
+ServiceBinary = %12%\UMDF\SecureUSBVideo.dll
+ServiceType = SecureCompanion ; allowed options are: Driver (default), SecureCompanion, NonSecureCompanion
+TrustletIdentity = 4096          ; required if it is SecureCompanion
+[USBVideo.CopyList]
+usbvideo.sys,,,0x0100
+[SecureUSBVideo.CopyList]
+SecureUSBVideo.dll,,,0x0100
+[Strings]
+;-----------------
+; Non-Localizable
+;-----------------
+
+=== /mnt/windows/Windows/System32/DriverStore/FileRepository/usbxhci.inf_arm64_663bac95800f8fc7/usbxhci.inf ===
+[SourceDisksNames]
+3426=windows cd
+[SourceDisksFiles]
+usbxhci.sys = 3426
+UsbXhciCompanion.dll = 3426
+[ControlFlags]
+BasicDriverOk = *
+ExcludeFromSelect = *
+[DestinationDirs]
+Generic.CopyFiles = 12
+TrustletCopy      = 12,UMDF
+[Manufacturer]
+%Generic.Mfg%=Generic,NTarm64
+; ---------------------- xHCI Controllers ----------------------
+[Generic.NTarm64]
+%PCI\CC_0C0330.DeviceDesc%=Generic.Install,PCI\CC_0C0330
+%ACPI\PNP0D10.DeviceDesc%=Generic.Install,ACPI\PNP0D10
+%ACPI\PNP0D15.DeviceDesc%=Generic_NoDebug.Install,ACPI\PNP0D15
+[Generic.Install.NT]
+CopyFiles=Generic.CopyFiles,TrustletCopy
+AddProperty=Generic.AddProperty
+ExcludeID=PCI\VEN_1B73&DEV_1000&CC_0C0330
+ExcludeID=PCI\VEN_1B73&DEV_1400&CC_0C0330
+ExcludeID=PCI\VEN_1B73&DEV_1009&REV_00
+; FeatureScore values between 0x00-0x7F are reserved. Values 0x81-0xFE are for OEMs.
+FeatureScore=80
+[Generic.Install.NT.HW]
+AddReg=Generic_AddReg.HW
+--
+[WMIGuidSecurity_AllRights]
+security="O:BAG:BAD:(A;;FA;;;BA)(A;;GR;;;LS)(A;;FA;;;SY)"
+[Generic.CopyFiles]
+USBXHCI.SYS,,,0x100
+[TrustletCopy]
+UsbXhciCompanion.dll,,,0x100
+[Generic.AddProperty]
+; DEVPKEY_Device_DebuggerSafe, DEVPROP_TYPE_UINT32
+{540b947e-8b40-45bc-a8a2-6a0b894cbda2},12,7,,1
+[Generic.Install.NT.Wdf]
+CompanionConfiguration = UsbXhci, UsbXhci_CompanionConfig
+UmdfService = UsbXhciCompanion, UmdfCompanionService_Config
+UmdfHostPriority = PriorityHigh
+[UsbXhci_CompanionConfig]
+CompanionServices = UsbXhciCompanion
+[UmdfCompanionService_Config]
+UmdfLibraryVersion = 2.23.0
+ServiceBinary = %12%\UMDF\UsbXhciCompanion.dll
+ServiceType = SecureCompanion
+TrustletIdentity=4096    ; Change this to 8 once WUDF companion process starts using metadata from the trustlet DLL
+; ---------------------- xHCI Controllers without STD Debug support ----------------------
+;                            Don't write DebuggerSafe property
+[Generic_NoDebug.Install.NT]
+CopyFiles=Generic.CopyFiles,TrustletCopy
+FeatureScore=80
+[Generic_NoDebug.Install.NT.HW]
+AddReg=Generic_AddReg.HW
+Include=pci.inf
+Needs=PciD3ColdSupported.HW
+[Generic_NoDebug.Install.NT.Services]
+AddService=USBXHCI, 2, Generic.AddService
+[Generic_NoDebug.Install.NT.Wdf]
+CompanionConfiguration = UsbXhci, UsbXhci_CompanionConfig
+UmdfService = UsbXhciCompanion, UmdfCompanionService_Config
+UmdfHostPriority = PriorityHigh
+; --------------------------- Strings --------------------------
+[Strings]
+;Non-Localizable
+Msft = "Microsoft"
+;Localizable
+Generic.Mfg = "Generic USB xHCI Host Controller"
+PCI\CC_0C0330.DeviceDesc="USB xHCI Compliant Host Controller"
+
+=== archive SecureCompanion / TrustletIdentity hits ===
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf:30:QcISPTrustlet8380.dll=1,
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf:55:QcISPTrustlet8380.dll
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf:96:ServiceBinary = %13%\QcISPTrustlet8380.dll
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf:97:ServiceType = SecureCompanion
+/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamsecureisp8380.inf_arm64_e0daad652520462e/qccamsecureisp8380.inf:98:TrustletIdentity = 4096

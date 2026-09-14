@@ -1,0 +1,60 @@
+{
+  "experiment": "E004cj",
+  "status": "PASS_WINDOWS_SECURE_CPU_WORKERS_ARE_VTL1_WORKLOADS_NO_REUSABLE_CAMERA_SECURE_SERVICE_FOUND",
+  "mode": "windows-static-only",
+  "ium_clients": {
+    "bounded_count": 8,
+    "meaningful_workloads": [
+      "QcISPTrustlet8380.dll",
+      "SecureUSBVideo.dll",
+      "UsbXhciCompanion.dll",
+      "BioIso.exe",
+      "FsIso.exe",
+      "QcSkExt8380.exe"
+    ],
+    "qctree_service_guid_match_found": false
+  },
+  "securecompanion": {
+    "secureisp_identity": 4096,
+    "secureusbvideo_identity": 4096,
+    "usbxhci_identity": 4096,
+    "separate_signed_workloads": true
+  },
+  "xhci": {
+    "generic_copy_service": false,
+    "secure_section_to_dma_map": true,
+    "secure_io_mapping": true,
+    "get_exposed_means_vtl0_exposure": false
+  },
+  "face_vsm": {
+    "secure_cpu_worker_found": true,
+    "lock_validate_secure_buffer": true,
+    "copies_frame": true,
+    "infrared_face_processor": true,
+    "portable_exported_wbio_secure_buffer_api_found": false
+  },
+  "qcdx": {
+    "secure_copy_protocol_found": true,
+    "scm_secure_app_transport": true,
+    "gpu_content_protection_specific": true,
+    "ium_camera_identity": false,
+    "camera_client_found": false,
+    "qcdxkmsuc8380_sha256": "f2f6dd1d7b2dc6e8019f85d9a17a16bb3bc3605fb0bebc632ec615c1b404b86b"
+  },
+  "architecture": {
+    "generic_camera_secure_service_found": false,
+    "trusted_cpu_access_source": "VTL1/VSM isolated workload + Secure Kernel protected mappings",
+    "vlt_cpu_mapping_must_be_qcom_destination_owner": false,
+    "cp_camera_plus_qcom_hyp_still_authorized": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "trustlet_launch": false,
+    "qtee_qsee_call": false,
+    "secure_app_start": false,
+    "scm_assign_mem": false,
+    "protected_memory_operation": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004ck VTL trusted-CPU visibility versus Qualcomm device-domain ownership, static first"
+}

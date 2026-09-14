@@ -1,0 +1,183 @@
+E004cj SECUREKERNEL EXPOSED-SECTION SEMANTICS
+
+=== SYMBOL SkmmCreateExposedSecureSection count=1 ===
+symbol=SkmmCreateExposedSecureSection addr=1400929d8 type=Function
+function=SkmmCreateExposedSecureSection entry=1400929d8 sig=uint __cdecl SkmmCreateExposedSecureSection(longlong param_1, ulonglong param_2, ulonglong param_3, uint param_4, uint * * param_5, longlong * * param_6, longlong * * param_7, longlong * * param_8)
+
+uint SkmmCreateExposedSecureSection
+               (longlong param_1,ulonglong param_2,ulonglong param_3,uint param_4,uint **param_5,
+               longlong **param_6,longlong **param_7,longlong **param_8)
+
+{
+  uint uVar1;
+  uint uVar2;
+  uint *puVar3;
+  uint *puVar4;
+  uint uVar5;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 uVar6;
+  undefined8 extraout_x1_02;
+  ulonglong uVar7;
+  uint **ppuVar8;
+  ulonglong uVar9;
+  ulonglong uVar10;
+  ulonglong uVar11;
+  uint extraout_w11;
+  longlong *plVar12;
+  uint *puVar13;
+  longlong lVar14;
+  ulonglong *puVar15;
+  undefined1 auVar16 [16];
+  uint *local_68;
+  uint *local_60 [2];
+  
+  local_68 = (uint *)0x0;
+  local_60[0] = (uint *)0x0;
+  *param_5 = (uint *)0x0;
+  puVar13 = (uint *)0x0;
+  uVar5 = DAT_140092c18;
+  if ((((param_4 - 2 & 0xfffffffd) == 0) &&
+      (uVar5 = DAT_140092c1c, ((uint)*(undefined8 *)(param_1 + 0x170) >> 1 & 1) != 0)) &&
+     (uVar5 = DAT_140092c20, (ShvlpHardwareFeatures >> 5 & 1) != 0)) {
+    uVar9 = 0;
+    ppuVar8 = local_60;
+    uVar7 = 1;
+    uVar5 = SkmmMapDataTransfer(param_2,param_3,(longlong **)0x1,ppuVar8,(ulonglong *)0x0,param_6,
+                                param_7,param_8);
+    puVar3 = local_60[0];
+    uVar6 = extraout_x1;
+    if ((-1 < (int)uVar5) && (uVar5 = DAT_140092c18, 0x2f < local_60[0][10])) {
+      plVar12 = *(longlong **)(local_60[0] + 6);
+      uVar1 = *(uint *)(plVar12 + 5);
+      uVar2 = *(uint *)((longlong)plVar12 + 0x2c);
+      puVar15 = (ulonglong *)(plVar12 + 6);
+      uVar11 = ((ulonglong)uVar2 & 0xfff) + (ulonglong)uVar1 + 0xfff >> 0xc;
+      puVar4 = (uint *)(plVar12 + 6);
+      if ((((uint)uVar11 != 0) &&
+          ((*plVar12 == 0 && uVar2 < 0x1000 && ((*(ushort *)((longlong)plVar12 + 10) & 0x16) != 0)))
+          ) && ((uVar11 + 6) * 8 <= (ulonglong)local_60[0][10])) {
+        ppuVar8 = &local_68;
+        uVar7 = 0;
+        local_60[0] = puVar4;
+        uVar5 = SkobCreateObjectEx('\0',0x140001a78,(int *)0x0,ppuVar8,uVar9,param_6,param_7,param_8
+                                  );
+        puVar13 = local_68;
+        uVar6 = extraout_x1_00;
+        puVar4 = local_60[0];
+        if (-1 < (int)uVar5) {
+          uVar7 = (ulonglong)DAT_140092c24;
+          local_68[2] = 0;
+          local_68[3] = 0;
+          local_68[0] = 0;
+          local_68[1] = 0;
+          local_68[6] = 0;
+          local_68[7] = 0;
+          local_68[4] = 0;
+          local_68[5] = 0;
+          auVar16 = SkAllocatePool(0x200,uVar11 << 3,uVar7,ppuVar8,uVar9,param_6,param_7,param_8);
+          uVar6 = auVar16._8_8_;
+          lVar14 = auVar16._0_8_;
+          uVar5 = DAT_140092c28;
+          puVar4 = local_60[0];
+          if (lVar14 != 0) {
+            *(ushort *)(puVar13 + 4) = (short)uVar2 + (short)uVar1 & 0xfff;
+            *(short *)((longlong)puVar13 + 0x12) = (short)uVar2;
+            *(longlong *)(puVar13 + 2) = lVar14;
+            puVar13[1] = (uint)uVar11;
+            *puVar13 = *puVar13 & 0xfffffff1 | 0xa010;
+            uVar7 = SkmiMakeProtectionMask(param_4);
+            *puVar13 = (extraout_w11 ^ (int)uVar7 << 9) & 0x1e00 ^ extraout_w11;
+            SkobReferenceObject(param_1);
+            *(longlong *)(puVar13 + 6) = param_1;
+            uVar7 = 0x801;
+            lVar14 = lVar14 - (longlong)local_60[0];
+            do {
+              uVar10 = *puVar15;
+              uVar7 = (uVar7 ^ uVar10 << 0xc) & 0xfff0000000000fff ^ uVar10 << 0xc;
+              SkmiClaimPhysicalPage(uVar10 & 0xffffffffff,1);
+              SKMI_WRITE_PTE_WORKER((ulonglong *)(lVar14 + (longlong)puVar15),uVar7);
+              puVar15 = puVar15 + 1;
+              uVar5 = (int)uVar11 - 1;
+              uVar11 = (ulonglong)uVar5;
+            } while (uVar5 != 0);
+            uVar7 = 0;
+            uVar5 = SkobCreateHandle((longlong)puVar13,'\x01',(longlong **)0x0,(ulonglong *)param_5,
+                                     uVar9,param_6,param_7,param_8);
+            uVar6 = extraout_x1_01;
+            ppuVar8 = param_5;
+            puVar4 = local_60[0];
+          }
+        }
+      }
+      local_60[0] = puVar4;
+      if (puVar13 != (uint *)0x0) {
+        SkobDereferenceObject((longlong)puVar13,uVar6,uVar7,ppuVar8,uVar9,param_6,param_7,param_8);
+        uVar6 = extraout_x1_02;
+      }
+    }
+    if (puVar3 != (uint *)0x0) {
+      SkmmUnmapDataTransfer((ulonglong)puVar3,uVar6,uVar7,ppuVar8,uVar9,param_6,param_7,param_8);
+    }
+  }
+  return uVar5;
+}
+
+
+=== SYMBOL SkmmReferenceSecureSection count=1 ===
+symbol=SkmmReferenceSecureSection addr=140092f88 type=Function
+function=SkmmReferenceSecureSection entry=140092f88 sig=undefined __cdecl SkmmReferenceSecureSection(ulonglong param_1, char param_2, longlong * param_3, longlong * param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, longlong * * param_8)
+
+void SkmmReferenceSecureSection
+               (ulonglong param_1,char param_2,longlong *param_3,longlong *param_4,
+               undefined8 param_5,undefined8 param_6,undefined8 param_7,longlong **param_8)
+
+{
+  int iVar1;
+  longlong local_20 [2];
+  
+  local_20[0] = 0;
+  iVar1 = SkobReferenceObjectByHandle
+                    (param_1,(ulonglong *)(ulonglong)(uint)(int)param_2,0,0x140001a78,local_20,
+                     (ulonglong *)0x0,param_7,param_8);
+  if (-1 < iVar1) {
+    *param_3 = local_20[0];
+    *param_4 = (ulonglong)*(uint *)(local_20[0] + 4) << 0xc;
+  }
+  return;
+}
+
+
+=== SYMBOL SkmmProbeSecureSectionPages count=1 ===
+symbol=SkmmProbeSecureSectionPages addr=140092e68 type=Function
+function=SkmmProbeSecureSectionPages entry=140092e68 sig=undefined4 __cdecl SkmmProbeSecureSectionPages(undefined8 param_1, uint param_2, undefined8 * param_3, longlong param_4, uint param_5)
+
+undefined4
+SkmmProbeSecureSectionPages
+          (undefined8 param_1,uint param_2,undefined8 *param_3,longlong param_4,uint param_5)
+
+{
+  ushort uVar1;
+  ulonglong *puVar2;
+  ulonglong *puVar3;
+  undefined4 uVar4;
+  ulonglong uVar5;
+  uint uVar6;
+  ulonglong uVar7;
+  uint *extraout_x11;
+  ulonglong uVar8;
+  
+  uVar5 = SkmiMakeProtectionMask(param_2);
+  uVar6 = *extraout_x11;
+  uVar4 = DAT_140092f80;
+
+STATIC INTERPRETATION
+- GetExposedSecureSection is not a VTL0 exposure API.
+- Secure Kernel maps the transfer descriptor, creates a secure-section object,
+  allocates secure PTE storage, claims each supplied physical page with
+  SkmiClaimPhysicalPage(), and writes Secure Kernel PTEs.
+- The xHCI SecureCompanion then uses that secure-section handle as input to
+  DmaMapMemory for the controller.
+- Therefore "exposed" means externally described pages admitted/claimed into
+  a Secure Kernel secure object, not protected pages exposed to ordinary HLOS.
