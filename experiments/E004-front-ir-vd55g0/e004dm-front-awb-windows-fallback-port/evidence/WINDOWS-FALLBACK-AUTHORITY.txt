@@ -1,0 +1,32 @@
+E004dm static Windows fallback authority
+
+QcDeviceMFT8380.dll SHA256:
+c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+
+CTrigleAdjV1::GetCurrentTriangle RVA 0x6bfcc0
+GetTriangleRatio RVA 0x6c0ae0
+
+Anti-cycle behavior:
+- per-call visit counters are zeroed by Run
+- every chosen target triangle increments its counter
+- target count > 2 sets centroid flag and returns that triangle
+- GetTriangleRatio sees centroid flag and substitutes triangle centroid for decision point
+
+Boundary behavior:
+- neighbor 255 means out of triangle zone
+- edge 0 pair = v0,v1
+- edge 1 pair = v1,v2
+- edge 2 pair = v0,v2
+- selector return = 0xff
+- third vertex = -1
+- weight B = 1 - weight A
+- projection A weight = ((|B-P|^2 - |A-P|^2 + |A-B|^2) * 0.5) / |A-B|^2
+- if weight A < 0, Windows resets weight A to 1.0
+- no corresponding >1 clamp appears in pinned implementation
+
+Profile topology:
+- 44 triangles total
+- 18 with exactly one boundary neighbor (255)
+- 26 with no boundary neighbor
+- 0 with two or more boundary neighbors
+Thus the generic all-three-side/two-boundary corner resolver is unreachable for this IMX681 profile.

@@ -2,7 +2,7 @@
   "authority": {
     "camss_final_sha256": "117136b2c624de5ef3f4c081cdcf9c363cda9f6db5c752b7ade5f5e11b1b3e95",
     "capture_helper_final_sha256": "578f41d5cc0935aff327f500d38c095ed64f7428d2e245adc1f8196e9b3c99a3",
-    "gm_iq_producer_sha256": "fa2f6f8c912a5ea5ab031ab149d1da45809ef24b79a111a5a64e3784c4af6ed1",
+    "gm_iq_producer_sha256": "7c13bc25517698cf53a8b362857852de7dd674de5c108eed4c9f5b788eed3f61",
     "imx681_final_sha256": "6e14f6d345759eb61a2a54129437e04f747e64d59d3bfc264069a0ecddeeb78e"
   },
   "created_from_he_commit": "4c120ed73e440008a9c8291ec7e22205beca26df",
@@ -494,14 +494,33 @@
       "sha256": "b8163d79160b11250a33e8751965a106809a07b096ce4a52c1c5822b72d68326"
     },
     {
-      "authority_kind": "byte-copy",
+      "authority_kind": "production-source-e004dm-windows-fallback-integrated",
       "bundle_path": "userspace/iq/live-iq-producer.py",
-      "origin": "experiments/E003-front-imx681-cphy/e003i-front-native-productionization/gm-r5-r27-producer-integration/live-iq-producer.py",
-      "sha256": "fa2f6f8c912a5ea5ab031ab149d1da45809ef24b79a111a5a64e3784c4af6ed1"
+      "origin": "src/front-imx681 E004dm Windows CTrigleAdjV1 fallback integration",
+      "sha256": "7c13bc25517698cf53a8b362857852de7dd674de5c108eed4c9f5b788eed3f61"
+    },
+    {
+      "authority_kind": "production-source-e004dm-windows-static-port",
+      "bundle_path": "userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/el-calibrated-awb-scalar-join/awb_scalar.py",
+      "origin": "E004dm; QcDeviceMFT8380.dll GetCurrentTriangle RVA 0x6bfcc0 / GetTriangleRatio RVA 0x6c0ae0",
+      "sha256": "06bfd6cd4dc4b059e2aa021d3f261b90ed2ceff90450af4bcbe4545fc5c14c0f"
     }
   ],
   "iq_producer_hermetic": false,
   "post_g3_native_feedback_proven": false,
   "runtime_performed": false,
-  "schema": "sp11-front-imx681-stable-source-provenance-v1"
+  "schema": "sp11-front-imx681-stable-source-provenance-v1",
+  "windows_awb_fallback": {
+    "experiment": "E004dm",
+    "get_current_triangle_rva": "0x6bfcc0",
+    "get_triangle_ratio_rva": "0x6c0ae0",
+    "qcd_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "reachable_profile_paths": [
+      "triangle",
+      "multiside_walk",
+      "centroid_cycle_fallback",
+      "two_vertex_boundary"
+    ],
+    "selector_source_sha256": "06bfd6cd4dc4b059e2aa021d3f261b90ed2ceff90450af4bcbe4545fc5c14c0f"
+  }
 }

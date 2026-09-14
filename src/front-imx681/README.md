@@ -16,4 +16,6 @@ The production launcher does not hard-code the IMX681 I2C bus, `/dev/videoN`, or
 
 `cap-release-one-shot` is not the default and requires explicit launcher acknowledgement. Bounded repeated-open robustness is proven through four sequential 27-frame production streams (HQ); production-native changed post-G3 feedback remains unproven. Each launcher invocation now defaults to a fresh timestamp/PID session directory, and `--execute` refuses an already-existing output directory so evidence cannot be silently overwritten or mixed between sessions.
 
+E004dm adds the Windows-authoritative `CTrigleAdjV1` fallbacks that were deliberately missing from the earlier clean runtime: per-call visit-count/centroid resolution for oscillating triangle walks and the reachable two-vertex boundary projection path. The normal contained-triangle path remains bit-exact against EG/FA/FH/FW. Runtime producer evidence now records AWB selection mode and selector visit counts.
+
 `PROVENANCE.json` remains the HF source-authority provenance record.

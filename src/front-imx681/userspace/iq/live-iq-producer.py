@@ -196,6 +196,8 @@ class ExtendedComposer:
         meta={'isp_gain':float(dm['isp_gain']),'isp_gain_bits':f"0x{dm['isp_gain_bits']:08x}",
               'reg_3b70':f"0x{dm['reg_3b70']:08x}",'reg_3b74':f"0x{dm['reg_3b74']:08x}",
               'awb_triangle':awb_output['gain_adjust']['triangle'],
+              'awb_selection_mode':awb_output['gain_adjust'].get('selection_mode','triangle'),
+              'awb_selector_visits':awb_output['gain_adjust'].get('selector_visits',{}),
               'awb_regs':{f'0x{k:04x}':f'0x{regs[k]:08x}' for k in (0x3d78,0x3d7c,0x3d80,0x3d84,0x456c,0x4570)},
               'gtm_sha256':sha(self.gtm),'tmc_dynamic_sha256':self.tmc_sha}
         return cap,desc,dt,meta
@@ -214,7 +216,7 @@ class Producer:
             req=gen+3;cap,desc,comp_ms,demux=self.composer.compose(req,wire,isp_gain)
         elif gen in (4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24):
             req=gen+3;cap,desc,comp_ms,demux=self.extended.compose(req,wire,isp_gain,awbp)
-        row={'generation':gen,'source_seq':seq,'slot':slot,'request_target':req,'cq_isp_gain_bits':f'0x{bits(isp_gain):08x}','cq_isp_gain':float(f32(isp_gain)),'demux_bls':demux,'measured_luma_bits':f'0x{bits(tr.measured_luma):08x}','lux_bits':f'0x{bits(tr.lux):08x}','lux':float(tr.lux),'fresh_cct_bits':f'0x{bits(tr.fresh_cct):08x}','fresh_cct':float(tr.fresh_cct),'final_xy_bits':[f'0x{bits(fx):08x}',f'0x{bits(fy):08x}'],'final_cct_bits':f'0x{bits(fc):08x}','final_cct':float(fc),'published_cct':int(fc),'p01':tr.p01,'valid':tr.valid,'awb_hold_previous':awb_hold,'awb_triangle':awbp['gain_adjust']['triangle'],'awb_calibration_slot':awbp.get('calibration_slot'),'awb_calibration_region':awbp.get('calibration_region'),'awb_published_gain_bits':[f'0x{bits(awbp[k]):08x}' for k in ('R','G','B')],'trigger_ms':tr_ms,'lsc':ls,'compose_ms':comp_ms,'capsule_sha256':None if cap is None else sha(cap),'total_process_ms':(time.perf_counter_ns()-t0)/1e6}
+        row={'generation':gen,'source_seq':seq,'slot':slot,'request_target':req,'cq_isp_gain_bits':f'0x{bits(isp_gain):08x}','cq_isp_gain':float(f32(isp_gain)),'demux_bls':demux,'measured_luma_bits':f'0x{bits(tr.measured_luma):08x}','lux_bits':f'0x{bits(tr.lux):08x}','lux':float(tr.lux),'fresh_cct_bits':f'0x{bits(tr.fresh_cct):08x}','fresh_cct':float(tr.fresh_cct),'final_xy_bits':[f'0x{bits(fx):08x}',f'0x{bits(fy):08x}'],'final_cct_bits':f'0x{bits(fc):08x}','final_cct':float(fc),'published_cct':int(fc),'p01':tr.p01,'valid':tr.valid,'awb_hold_previous':awb_hold,'awb_triangle':awbp['gain_adjust']['triangle'],'awb_selection_mode':awbp['gain_adjust'].get('selection_mode','triangle'),'awb_selector_visits':awbp['gain_adjust'].get('selector_visits',{}),'awb_calibration_slot':awbp.get('calibration_slot'),'awb_calibration_region':awbp.get('calibration_region'),'awb_published_gain_bits':[f'0x{bits(awbp[k]):08x}' for k in ('R','G','B')],'trigger_ms':tr_ms,'lsc':ls,'compose_ms':comp_ms,'capsule_sha256':None if cap is None else sha(cap),'total_process_ms':(time.perf_counter_ns()-t0)/1e6}
         self.rows.append(row);return row,cap,desc
     def reset_sequence(self):
         self.trigger.prev_x=frombits(INITIAL_PREV_X_BITS);self.trigger.prev_y=frombits(INITIAL_PREV_Y_BITS);self.lsc.reset();self.extended.reset();self.rows=[]
