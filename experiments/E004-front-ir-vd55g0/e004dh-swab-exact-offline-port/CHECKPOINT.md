@@ -68,3 +68,11 @@ The oracle is read-only. It does not patch the driver, trustlet, tuning or prote
 ## Safety
 
 Current Linux remains Golden FullIO v19c. No Linux SecureISP runtime, CPZ runtime, CB9 enable, protected ownership transition, camera runtime or firmware modification has occurred in E004dh.
+
+## 2026-09-14 authoritative Windows oracle update
+
+The planned one-shot Windows oracle was executed and returned cleanly to Golden. The live Windows Camera Frame Server closed the tuning ambiguity: SWABF threshold/weights and the complete SWASF 0x804 payload are now preserved under `oracle/windows-live/`. `WINDOWS-ORACLE.md` is the normative summary.
+
+The SecureISP static reverse was then extended to the real SWASF worker entry `FUN_18001d2a0` and its helper graph. This is explanatory reverse engineering only; it is being used to reproduce the live Windows transform, never to override it.
+
+A scalar SWABF transcription now passes deterministic host vectors and builds freestanding for Hexagon v73 with zero undefined symbols. SWASF pixel arithmetic remains the only algorithmic portion preventing replacement of `SP11_WORKER_ESWAB_PENDING`.

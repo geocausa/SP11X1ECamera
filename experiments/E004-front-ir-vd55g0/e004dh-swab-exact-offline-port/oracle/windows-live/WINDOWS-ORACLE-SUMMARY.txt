@@ -1,0 +1,29 @@
+﻿E004dh authoritative Windows oracle
+Time: 2026-09-14T14:17:12.3506360+01:00
+Windows: Microsoft Windows 11 Home build 26200
+QcDeviceMFT8380.dll SHA256: c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35
+QcDeviceMFT8380.dll FileVersion: 1.0.4258.7908
+Live FaceAuth profile: {81361B22-700B-4546-A2D4-C52E907BFC27},0
+IR stream: NV12 644x604 60fps
+FaceAuthMode: enabled
+SecureMode: enabled
+Frame control: 12 frames acquired; clean stop/disable observed
+
+AUTHORITATIVE LIVE CACHED SWABF STATE (QcDeviceMFT CamX::SWABF module):
+threshold float/raw: 128.0 / 0x43000000
+weights: 2000,1990,1960,1911,1846,1670,1452,1213,973,750,556,395,270,177,142,112
+raw float32: 44fa0000 44f8c000 44f50000 44eee000 44e6c000 44d0c000 44b58000 4497a000 44734000 443b8000 440b0000 43c58000 43870000 43310000 430e0000 42e00000
+packed 0x22 payload derived by exact Windows UpdateSWABFData packing: d007c607a807770736078606ac05bd04cd03ee022c028b010e01b1008e0070008000
+packed payload SHA256: 8443115a763d9f5e425cdf7415250f129bad6f028e1b1c18ade86c17a4f392aa
+
+AUTHORITATIVE LIVE CACHED SWASF STATE (QcDeviceMFT CamX::SWASF module):
+curve1: 64 x raw 0x3f400000 (0.75f)
+curve2 first raws: 3f000000 3f0ab9f5 3f25c28f 3f459b3d 3f600d1b 3f70ff97 3f79ad43 3f7d4952 3f7e8a72 3f7edfa4 3f7ef34d 3f7ef9db; remaining entries 0x3f7ef9db
+final raw/float: 0x437d0000 / 253.0f
+exact Windows GetSWASF101Data-derived 0x804 payload SHA256: 6cc727315a8d640ab40211f031efdfe28f12e8f2be90f8c8a3a785bb63ccfc0
+The complete derived 0x804 payload has ONE exact full-memory match in the live Windows FrameServer process at 0x2da66a1a0a4.
+The surrounding live pInputData block directly contains SWABF floats/flags + exact SWASF output tables/final value.
+Direct pInputData IQ window: address 0x2da66a1a04c length 0x860 SHA256 625079c1d87334eb6fad84be23f00769d2535c883f13dc22148d277635865ff7
+Observed live pInputData flags show SWABF module enabled=1/change=1 and SWASF enabled=1/change=1.
+
+Authority rule: these live Windows observations are normative for E004dh. Static decompilation is used only to explain packing/scaling and must not override contradictory Windows behavior.
