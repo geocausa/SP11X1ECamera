@@ -1,0 +1,26 @@
+E004co SAME-MACHINE CDSP CPZ STATIC AUTHORITY
+
+Exact Golden CDSP firmware:
+  /lib/firmware/qcom/x1e80100/microsoft/Denali/qccdsp8380.mbn
+  SHA256 4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789
+
+Hexagon Ghidra project:
+  /home/geoca/.cache/e004co-cdsp/E004CO
+
+Mechanical findings from CDSP-CPZ-FASTRPC.txt / CDSP-CPZ-CALLERS.txt:
+- HLOS_PHYSPOOL_CPZ is created by the secure-process code.
+- The firmware explicitly says only one CPZ PD may run.
+- The CPZ migration path logs client handle, physical address, size, entry and user-global-pointer data.
+- The same path has explicit memory-ownership acquire/release failure diagnostics.
+- FastRPC contains fastrpc_invoke_mmap_get_cpz_phys.
+- Process creation separately distinguishes critical signed, critical unsigned, system unsigned and ordinary unsigned PDs.
+
+Key decomp boundary:
+- FUN_f000fb94 allocates and names HLOS_PHYSPOOL_CPZ and creates its QDI handle.
+- FUN_f000fc64 is the CPZ migration path.
+- FUN_f000ff24 / FUN_f000ff4c call the migration routine.
+
+Conclusion:
+CPZ is a distinct CDSP protected-process/memory class. It is not merely the normal FastRPC signed-PD path and it has dedicated protected physical-memory handling.
+
+No DSP process was created or invoked for this evidence.

@@ -1,0 +1,28 @@
+E004co WINDOWS DEVICEMFT CDSP PD ORACLE
+
+Exact SP11 DeviceMFT Ghidra project:
+  /home/geoca/.cache/ghidra0073/DeviceMFT
+  QcDeviceMFT8380.dll
+
+DEVICEMFT-CDSP-CONTROLS.txt finds exactly one remote_session_control call in the DeviceMFT.
+It is in the BitML engine constructor FUN_180ef6300.
+
+The constructor builds an 8-byte control pair with:
+- domain = 3 (CDSP)
+- enable = 1
+and calls:
+  remote_session_control(2, ...)
+
+The same function's error text says:
+  Set to unsigned PD failed
+
+Qualcomm FastRPC public ABI identifies control request 2 as DSPRPC_CONTROL_UNSIGNED_MODULE.
+Therefore the exact SP11 BitML/CDSP path explicitly requests an ordinary unsigned PD.
+
+The DeviceMFT also opens:
+- libbitml_nsp_v2_skel.so on _dom=cdsp
+- libdsp_streamer_skel.so on _dom=cdsp
+but no second remote_session_control caller exists to select CPZ.
+
+Conclusion:
+Windows camera CDSP acceleration is not the protected-IR trusted worker authority. The proven Windows protected frame transfer remains the VTL1 SecureISP trustlet CPU worker. CPZ is a Linux implementation candidate, not a hidden Windows oracle path.

@@ -1,0 +1,32 @@
+E004co DOWNSTREAM FASTRPC CPZ HOST CONTRACT
+
+Public Qualcomm-derived downstream commit:
+  0d30a26909e9383e9b75aab74d63cf08980f315a
+  title: msm: adsprpc: Allocate designated context bank session
+  source: https://git.evolution-x.org/anierin/msm-5.15/commit/0d30a26909e9383e9b75aab74d63cf08980f315a
+
+The commit adds a host-visible remote process type contract. Important values:
+- DEFAULT_UNUSED = 0
+- ROOT_PD = 1
+- AUDIO_STATICPD = 2
+- SENSORS_STATICPD = 3
+- SECURE_STATICPD = 4
+- OIS_STATICPD = 5
+- CPZ_USERPD = 6
+- USERPD = 7
+- GUEST_OS_SHARED = 8
+
+It also adds fastrpc_proc_sess_info and FASTRPC_INVOKE2_SESS_INFO so an authorized client can select a remote process type.
+
+Security rule:
+- if the caller PID differs from the device-open PID, the process is marked untrusted;
+- an untrusted process may request USERPD only;
+- requesting another PD type is rejected.
+
+Context-bank rule:
+- DT context banks may carry pd-type;
+- secure buffer mapping calls fastrpc_session_alloc_secure_memory(..., fl->pd_type, ...);
+- when PD typing is active, the secure-memory allocator forces the secure context-bank lookup to CPZ_USERPD;
+- the session allocator chooses a context bank whose configured PD type matches.
+
+This closes E004cn's host-protocol gap: Qualcomm downstream FastRPC has an explicit privileged CPZ_USERPD selection and secure context-bank path. It is not available in Golden mainline FastRPC today.

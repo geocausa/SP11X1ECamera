@@ -1,0 +1,442 @@
+program=libcdsprpc.dll
+function=remote_session_control @18001cb70
+
+ulonglong remote_session_control
+                    (uint param_1,uint *param_2,undefined *param_3,undefined8 param_4,
+                    ulonglong param_5)
+
+{
+  bool bVar1;
+  DWORD DVar2;
+  uint uVar3;
+  ulonglong uVar4;
+  longlong *plVar5;
+  undefined2 uVar6;
+  undefined8 extraout_x1;
+  undefined8 uVar7;
+  undefined8 extraout_x1_00;
+  longlong lVar8;
+  ulonglong uVar9;
+  int iVar10;
+  uint local_50;
+  
+  iVar10 = (int)param_3;
+  DVar2 = FUN_18001dcf0();
+  uVar9 = (ulonglong)DVar2;
+  local_50 = DVar2;
+  if (DVar2 != 0) goto LAB_18001d320;
+  if (param_1 - 1 < 0xb) {
+    switch(param_1) {
+    default:
+      if (param_2 == (uint *)0x0) {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+        if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) &&
+           (3 < (byte)PTR_LOOP_180057100[0x19])) {
+          FUN_180014fd0(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),0x86,param_3,
+                        "remote_session_control",0);
+        }
+      }
+      else if (iVar10 == 0xc) {
+        uVar3 = *param_2;
+        if (uVar3 == 0xffffffff) {
+          uVar9 = 0;
+          for (uVar3 = 0; (int)uVar3 < 4; uVar3 = uVar3 + 1) {
+            param_3 = (undefined *)(ulonglong)param_2[2];
+            local_50 = FUN_18001c2e0(uVar3,param_2[1],param_3);
+            uVar9 = (ulonglong)local_50;
+            if (local_50 != 0) goto LAB_18001d320;
+          }
+LAB_18001cc70:
+          if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) &&
+             (3 < (byte)PTR_LOOP_180057100[0x19])) {
+            FUN_180014508(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),0x88,param_3,
+                          "remote_session_control",*param_2,param_2[1],param_2[2]);
+          }
+        }
+        else if (uVar3 < 4) {
+          param_3 = (undefined *)(ulonglong)param_2[2];
+          local_50 = FUN_18001c2e0(uVar3,param_2[1],param_3);
+          uVar9 = (ulonglong)local_50;
+          if (local_50 == 0) goto LAB_18001cc70;
+        }
+        else {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+          if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) &&
+             (3 < (byte)PTR_LOOP_180057100[0x19])) {
+            uVar6 = 0x87;
+            goto LAB_18001d308;
+          }
+        }
+      }
+      else {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      break;
+    case 2:
+      if (iVar10 == 8) {
+        if (param_2 == (uint *)0x0) {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+        }
+        else {
+          if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) &&
+             (3 < (byte)PTR_LOOP_180057100[0x19])) {
+            FUN_180014958(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),0x8a,param_3,
+                          "remote_session_control",param_2[1],*param_2);
+          }
+          uVar3 = *param_2;
+          if (uVar3 == 0xffffffff) {
+            uVar9 = 0;
+            for (iVar10 = 0; iVar10 < 4; iVar10 = iVar10 + 1) {
+              local_50 = FUN_18001c168(iVar10,param_2[1]);
+              uVar9 = (ulonglong)local_50;
+              if (local_50 != 0) goto LAB_18001d320;
+            }
+LAB_18001ce4c:
+            if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) &&
+               (1 < (byte)PTR_LOOP_180057100[0x19])) {
+              FUN_180014958(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),0x8b,param_3,
+                            "remote_session_control",*param_2,param_2[1]);
+            }
+          }
+          else if (uVar3 < 4) {
+            local_50 = FUN_18001c168(uVar3,param_2[1]);
+            uVar9 = (ulonglong)local_50;
+            if (local_50 == 0) goto LAB_18001ce4c;
+          }
+          else {
+            uVar9 = 0xe;
+            local_50 = 0xe;
+          }
+        }
+      }
+      else {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      break;
+    case 3:
+    case 5:
+      goto switchD_18001cbdc_caseD_3;
+    case 4:
+      if (iVar10 == 8) {
+        if (param_2 == (uint *)0x0) {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+        }
+        else {
+          uVar3 = param_2[1];
+          if ((int)uVar3 < 0) {
+            iVar10 = uVar3 + 0xc0;
+            if (0xbe < (int)~uVar3) {
+              iVar10 = 1;
+            }
+          }
+          else {
+            iVar10 = 0xff;
+            if ((int)uVar3 < 0x40) {
+              iVar10 = uVar3 + 0xc0;
+            }
+          }
+          uVar3 = *param_2;
+          if (uVar3 == 0xffffffff) {
+            uVar9 = 0;
+            for (uVar3 = 0; (int)uVar3 < 4; uVar3 = uVar3 + 1) {
+              param_3 = (undefined *)0xffffffff;
+              local_50 = FUN_18001c2e0(uVar3,iVar10,0xffffffff);
+              uVar9 = (ulonglong)local_50;
+              if (local_50 != 0) goto LAB_18001d320;
+            }
+LAB_18001cf9c:
+            if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) &&
+               (1 < (byte)PTR_LOOP_180057100[0x19])) {
+              FUN_180014958(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),0x8c,param_3,
+                            "remote_session_control",*param_2,iVar10);
+            }
+          }
+          else if (uVar3 < 4) {
+            param_3 = (undefined *)0xffffffff;
+            local_50 = FUN_18001c2e0(uVar3,iVar10,0xffffffff);
+            uVar9 = (ulonglong)local_50;
+            if (local_50 == 0) goto LAB_18001cf9c;
+          }
+          else {
+            uVar9 = 0xe;
+            local_50 = 0xe;
+          }
+        }
+      }
+      else {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      break;
+    case 6:
+      if (iVar10 != 4) {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+        break;
+      }
+      if (param_2 == (uint *)0x0) {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+        break;
+      }
+      uVar3 = *param_2;
+      if (3 < uVar3) {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+        break;
+      }
+      uVar4 = FUN_18001c888(uVar3);
+      uVar9 = uVar4 & 0xffffffff;
+      local_50 = (uint)uVar4;
+      if (((local_50 != 0) || ((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) == 0)) ||
+         ((byte)PTR_LOOP_180057100[0x19] < 4)) break;
+      uVar6 = 0x89;
+      goto LAB_18001d308;
+    case 7:
+      if (param_2 == (uint *)0x0) {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      else if (iVar10 == 4) {
+        uVar3 = *param_2;
+        if (uVar3 == 0xffffffff) {
+          uVar9 = 0;
+          uVar7 = extraout_x1;
+          for (uVar3 = 0; (int)uVar3 < 4; uVar3 = uVar3 + 1) {
+            local_50 = FUN_18001c640(uVar3,uVar7,param_3);
+            uVar9 = (ulonglong)local_50;
+            if (local_50 != 0) break;
+            uVar7 = extraout_x1_00;
+          }
+        }
+        else if (uVar3 < 4) {
+          local_50 = FUN_18001c640(uVar3,extraout_x1,param_3);
+          uVar9 = (ulonglong)local_50;
+        }
+        else {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+        }
+      }
+      else {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      break;
+    case 8:
+      if (iVar10 == 8) {
+        if (param_2 == (uint *)0x0) {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+        }
+        else {
+          if (*param_2 == 0xffffffff) {
+            uVar9 = 0;
+            for (uVar3 = 0; (int)uVar3 < 4; uVar3 = uVar3 + 1) {
+              local_50 = FUN_18001c4e0(uVar3,(ulonglong)param_2[1],param_3,param_4,param_5);
+              uVar9 = (ulonglong)local_50;
+              if (local_50 != 0) goto LAB_18001d320;
+            }
+          }
+          else {
+            local_50 = FUN_18001c4e0(*param_2,(ulonglong)param_2[1],param_3,param_4,param_5);
+            uVar9 = (ulonglong)local_50;
+            if (local_50 != 0) break;
+          }
+          if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) &&
+             (1 < (byte)PTR_LOOP_180057100[0x19])) {
+            FUN_180014958(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),0x8d,param_3,
+                          "remote_session_control",param_2[1],*param_2);
+          }
+        }
+      }
+      else {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      break;
+    case 9:
+      if (iVar10 == 4) {
+        if (param_2 == (uint *)0x0) {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+        }
+        else if (*param_2 < 4) {
+          plVar5 = (longlong *)FUN_180018790(*param_2);
+          if (plVar5 == (longlong *)0xffffffffffffffff) {
+            uVar3 = FUN_180001240();
+            if (uVar3 == 0xffffffff) {
+              uVar3 = 0x2c;
+            }
+            else {
+              uVar3 = remote_handle_invoke(uVar3,0x5000000,0);
+            }
+          }
+          else {
+            uVar3 = FUN_1800012e0(plVar5,7,(ulonglong)param_3);
+          }
+          local_50 = 0x200;
+          if (uVar3 != 0) {
+            local_50 = uVar3;
+          }
+          uVar9 = (ulonglong)local_50;
+          if (local_50 == DAT_18001d4d8) {
+            if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) == 0) ||
+               ((byte)PTR_LOOP_180057100[0x19] < 4)) goto LAB_18001d1d8;
+            FUN_180014bd0(*(undefined8 *)(PTR_LOOP_180057100 + 0x10));
+            uVar9 = 0;
+            local_50 = DVar2;
+          }
+        }
+        else {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+        }
+      }
+      else {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      break;
+    case 10:
+      if (iVar10 == 8) {
+        if (param_2 == (uint *)0x0) {
+          uVar9 = 0xe;
+          local_50 = 0xe;
+        }
+        else {
+          uVar3 = *param_2;
+          if (uVar3 < 4) {
+            AcquireSRWLockShared((PSRWLOCK)(DAT_180057f98 + (longlong)(int)uVar3 * 0xc0 + 0x30));
+            lVar8 = DAT_180057f98 + (longlong)(int)uVar3 * 0xc0;
+            uVar3 = *(uint *)(lVar8 + 0x68);
+            ReleaseSRWLockShared((PSRWLOCK)(lVar8 + 0x30));
+            if (uVar3 < 2) {
+              param_2[1] = uVar3;
+LAB_18001d1d8:
+              uVar9 = 0;
+              local_50 = DVar2;
+            }
+            else {
+              param_2[1] = 0xffffffff;
+              uVar9 = 0x22;
+              local_50 = 0x22;
+            }
+          }
+          else {
+            uVar9 = 0xe;
+            local_50 = 0xe;
+          }
+        }
+      }
+      else {
+        uVar9 = 0xe;
+        local_50 = 0xe;
+      }
+      break;
+    case 0xb:
+      uVar9 = 0x6c;
+      local_50 = 0x6c;
+      if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) == 0) || ((byte)PTR_LOOP_180057100[0x19] < 2))
+      break;
+      uVar6 = 0x8e;
+      goto LAB_18001d304;
+    }
+  }
+  else {
+switchD_18001cbdc_caseD_3:
+    uVar9 = 0x6c;
+    local_50 = 0x6c;
+    if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) && (1 < (byte)PTR_LOOP_180057100[0x19])) {
+      uVar6 = 0x90;
+LAB_18001d304:
+      local_50 = 0x6c;
+      uVar9 = 0x6c;
+      uVar3 = param_1;
+LAB_18001d308:
+      FUN_180003e88(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),uVar6,&DAT_18004f3c0,
+                    "remote_session_control",uVar3);
+    }
+  }
+LAB_18001d320:
+  if ((int)uVar9 == 0) {
+    return uVar9;
+  }
+  DVar2 = GetLastError();
+  uVar9 = 0;
+  if ((local_50 - 0x43 < 0x30) &&
+     ((0x800000000801U >> ((ulonglong)(local_50 - 0x43) & 0x3f) & 1) != 0)) {
+    uVar9 = (ulonglong)local_50;
+  }
+  if ((DVar2 != 0) && ((int)uVar9 == 0)) {
+    if (DVar2 == 3) {
+      uVar9 = 0x43;
+    }
+    else if (DVar2 == 5) {
+      uVar9 = 0x4e;
+    }
+    else if (DVar2 == 6) {
+      uVar9 = 0x72;
+    }
+  }
+  if ((int)uVar9 != 0) goto LAB_18001d41c;
+  if ((int)local_50 < 0x28) {
+    if (local_50 != 0x27) {
+      switch(local_50) {
+      case 1:
+      case 2:
+      case 6:
+      case 0xd:
+      case 0xe:
+      case 0x10:
+      case 0x16:
+        break;
+      default:
+switchD_18001d3b4_caseD_3:
+        uVar9 = 0x200;
+        goto LAB_18001d41c;
+      case 0x14:
+switchD_18001d3b4_caseD_14:
+        uVar9 = 0x14;
+        goto LAB_18001d41c;
+      }
+    }
+  }
+  else if ((int)local_50 < 0x4f) {
+    if (local_50 != 0x4e) {
+      if ((int)local_50 < 0x44) {
+        if (local_50 == 0x43) goto switchD_18001d3b4_caseD_1;
+        if (local_50 != 0x2c) {
+          bVar1 = local_50 == 0x2e;
+          goto LAB_18001d404;
+        }
+      }
+      else if (local_50 != 0x46) goto switchD_18001d3b4_caseD_3;
+      uVar9 = 0x2c;
+      goto LAB_18001d41c;
+    }
+  }
+  else if (local_50 != 0x68) {
+    if (local_50 == 0x6c) goto switchD_18001d3b4_caseD_14;
+    bVar1 = local_50 == 0x72;
+LAB_18001d404:
+    if (!bVar1) goto switchD_18001d3b4_caseD_3;
+  }
+switchD_18001d3b4_caseD_1:
+  uVar9 = (ulonglong)local_50;
+LAB_18001d41c:
+  if (((*(uint *)(PTR_LOOP_180057100 + 0x1c) & 1) != 0) && (1 < (byte)PTR_LOOP_180057100[0x19])) {
+    DVar2 = GetLastError();
+    FUN_180003df0(*(undefined8 *)(PTR_LOOP_180057100 + 0x10),0x91,&DAT_18004f3c0,
+                  "remote_session_control",param_1,(int)uVar9,DVar2);
+  }
+  return uVar9;
+}
+
+

@@ -1,0 +1,23 @@
+E004co QUALCOMM MEM-BUF OWNERSHIP CONTRACT
+
+Public Qualcomm msm source commit:
+  48497677f223bd018ce409aaeb4124df6ebcb07d
+  include/linux/mem-buf.h SHA256: 95cd897398db415b34cee401c9fc232d921cf895a799fa00772b58cb96724e09
+  drivers/soc/qcom/mem_buf/mem_buf_dma_buf.c SHA256: 3e973bdb424efdaa251aac82dd9649c8c9071bea5b888e55ee1effd7c14263ba
+
+Header API meaning:
+- mem_buf_dma_buf_exclusive_owner(): true only when the local VM has exclusive access and is the owner.
+- mem_buf_lend(): lends to remote VM ACL entries.
+- mem_buf_share(): sharing semantics retain/add the local VM.
+
+Implementation behavior:
+- a LEND request is rejected if the current VM is present in the destination ACL;
+- a SHARE request is rejected if the current VM is absent;
+- a pinned/mapped buffer cannot be lent away unless the current VM remains in the new ACL with sufficient access;
+- after a successful lend, mem_buf_assign_mem() applies the new VMID/perms and the wrapper records LENDSHARE state;
+- reclaim reverses the transition.
+
+exclusive_owner implementation is mechanically tied to wrapper state: after lend/share state is set, the local VM is no longer reported as the untouched exclusive owner.
+
+Consequence for camera protected output:
+a successful camera LEND to {CP_CAMERA, CP_CDSP} is an HLOS-excluding ownership transition, not ordinary HLOS-shared FastRPC memory.

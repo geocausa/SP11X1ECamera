@@ -1,0 +1,19 @@
+E004co GOLDEN CPZ HOST GAP
+
+Golden source:
+  /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/misc/fastrpc.c
+  /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/uapi/misc/fastrpc.h
+
+Whole-file checks find no:
+- CPZ_USERPD
+- FASTRPC_INVOKE2_SESS_INFO
+- fastrpc_proc_sess_info
+- cb_pd_type
+- mem_buf_dma_buf_exclusive_owner
+- pd-type context-bank parsing
+
+Golden's current FASTRPC_ATTR_SECUREMAP retains HLOS RW in the destination owner set and therefore is not the vendor CPZ protected-buffer path.
+
+Golden live DT also marks CDSP FastRPC qcom,non-secure-domain and has no qcom,vmids owner list.
+
+Thus the hardware/firmware substrate is present, but the active Linux host driver lacks the Qualcomm downstream CPZ binding.

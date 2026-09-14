@@ -1,0 +1,32 @@
+E004co CAMERA -> CPZ MECHANICAL BRIDGE
+
+Recovered Qualcomm camera source:
+  /home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_req_mgr/cam_mem_mgr.c
+
+Protected + CDSP output constructs the destination ACL:
+- VMID_CP_CAMERA, RW
+- VMID_CP_CDSP, RW
+
+The dma-buf-heaps path then calls mem_buf_lend(dmabuf, &arg) before reporting allocation success.
+
+Combining the independently recovered contracts gives this mechanical path:
+
+1. Camera allocates a protected dma-buf.
+2. Camera lends it to {CP_CAMERA, CP_CDSP}; HLOS is not in the destination ACL.
+3. mem-buf marks the dma-buf as no longer local-exclusive ownership.
+4. Qualcomm downstream FastRPC tests mem_buf_dma_buf_exclusive_owner().
+5. A non-exclusive dma-buf is treated as secure for FastRPC mapping.
+6. Secure FastRPC mapping selects a secure context bank.
+7. With PD typing enabled, secure-memory context-bank allocation is forced to CPZ_USERPD.
+8. The exact SP11 CDSP firmware contains CPZ physical-map and migration machinery to consume that protected class.
+
+This is the first mechanically connected Linux vendor architecture found in the project that can represent:
+  camera HW writer + protected compute reader/writer + no HLOS CPU owner.
+
+What is not yet present in Golden:
+- downstream mem-buf integration in the active camera stack;
+- pd-type FastRPC ABI;
+- CPZ context-bank DT policy;
+- CAMSS protected-buffer producer wired to this path.
+
+No ownership transition was executed.
