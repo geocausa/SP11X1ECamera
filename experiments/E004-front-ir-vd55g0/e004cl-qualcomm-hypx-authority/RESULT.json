@@ -1,0 +1,50 @@
+{
+  "experiment": "E004cl",
+  "status": "PASS_HYPX_IS_AUTHENTICATED_BOOT_PLATFORM_HYPERV_SUPPORT_NOT_REUSABLE_CAMERA_WORKER",
+  "mode": "static-only",
+  "qhee_hypx": {
+    "qhee_sha256": "cc33b7c0d902f0aafd64d3d866899401af7d4e0ad1c9ffc1cc97555d9a6bd78a",
+    "boot_time_manager": true,
+    "devcfg_gate": "hyp_secure_launch_enabled",
+    "auth_action": "HYP_IMG_AUTHENTICATE",
+    "launch_action": "HYP_IMG_LAUNCH",
+    "auth_service": "qcom.tz.mssecapp",
+    "creates_ac_vm_hyp": true,
+    "parses_elf": true,
+    "runtime_module_registry_found": false
+  },
+  "mssecapp": {
+    "sha256": "68821c12a1932cafa2328a8753780c1b0ef8d71e11d0eb37924a1d049892f8aa",
+    "image_auth": true,
+    "microsoft_roots_present": true,
+    "hyperv_stage_logging": true
+  },
+  "windows_boot": {
+    "hvaa64_sha256": "e8822fd521685bdd6996bb42dd3755af4420147e4a4cee85852d887a013c4b44",
+    "hvloader_sha256": "6e5df7a8ea95ebd12feaecd230176b78d5d24ea1271d3db123c169df62abc531",
+    "hvloader_qualcomm_secure_launch_aware": true,
+    "hvaa64_is_hypx_elf": false
+  },
+  "qctree_mssec": {
+    "connects_mssecapp": true,
+    "runtime_operations": [
+      "Invoke",
+      "Ppi",
+      "Shutdown"
+    ],
+    "hypx_auth_launch_surface_found": false
+  },
+  "installed_separate_hypx_package_found": false,
+  "camera_worker_reusable": false,
+  "windows_one_shot_used": false,
+  "windows_one_shot_reason": "static evidence resolved boot-only authority; post-boot probe would not expose loader interface",
+  "runtime_actions": {
+    "windows_boot": false,
+    "hypx_launch": false,
+    "qhee_operation": false,
+    "qtee_qsee_call": false,
+    "ownership_change": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cm Gunyah/QHEE worker-VM ownership feasibility, static first"
+}
