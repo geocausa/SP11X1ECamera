@@ -1,0 +1,62 @@
+{
+  "experiment": "E004cd",
+  "status": "PASS_LINUX_SURFACE_AND_OWNERSHIP_PRIMITIVES_EXIST_NO_TRUSTED_WORKER_PROVIDER",
+  "mode": "static-read-only-feasibility",
+  "windows_required": {
+    "hlos_cpu_access": "none",
+    "trusted_worker_access": true,
+    "external_is_cp_camera": false,
+    "worker": "VTL1 QcISPTrustlet8380.dll"
+  },
+  "qcom_assign": {
+    "can_replace_owner_set": true,
+    "can_exclude_hlos_mechanically": true,
+    "multi_owner_supported": true,
+    "external_camera_owner_identity_known": false,
+    "current_camera_policy_callsite_found": false
+  },
+  "tee_dma_heap": {
+    "surface_matches_no_cpu_map_shape": true,
+    "backend_interface": [
+      "alloc",
+      "free",
+      "update_shm",
+      "destroy_pool"
+    ],
+    "qcomtee_protmem_backend_found": false,
+    "secure_video_record_provider_found": false
+  },
+  "pkvm": {
+    "source_present": true,
+    "golden_booted_protected": false,
+    "host_memory_isolation_capable": true,
+    "dma_isolation_status": "unimplemented",
+    "camera_provider_candidate": false
+  },
+  "ffa": {
+    "transport_present": true,
+    "camera_secure_partition_identity_known": false
+  },
+  "gunyah": {
+    "x1_reserved_region_present": true,
+    "x1_el2_overlay_mentions_gunyah": true,
+    "golden_host_driver_present": false,
+    "runtime_control_device_present": false,
+    "camera_worker_available": false
+  },
+  "feasible_architecture_in_principle": true,
+  "runtime_provider_authorized_now": false,
+  "blocking_fact": "no identified trusted execution owner/worker that can retain access after HLOS revocation",
+  "runtime_actions": {
+    "windows_boot": false,
+    "scm_assign_mem": false,
+    "protected_heap_register": false,
+    "qcomtee_probe": false,
+    "ffa_probe": false,
+    "optee_probe": false,
+    "gunyah_operation": false,
+    "pkvm_boot": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004ce compile-only protected-provider capability gate"
+}

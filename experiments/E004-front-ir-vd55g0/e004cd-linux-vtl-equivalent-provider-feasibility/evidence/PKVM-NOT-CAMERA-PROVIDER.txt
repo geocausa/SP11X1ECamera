@@ -1,0 +1,192 @@
+E004cd pKVM FEASIBILITY / REJECTION
+
+--- live config/cmdline ---
+CONFIG_KVM_GUEST_MEMFD=y
+CONFIG_KVM=y
+CONFIG_ARM_FFA_TRANSPORT=m
+CONFIG_ARM_FFA_SMCCC=y
+# CONFIG_ARM_PKVM_GUEST is not set
+BOOT_IMAGE=/boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+ root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f ro clk_ignore_unused pd_ignore_unused cma=128M efi=noruntime quiet splash console=tty0 crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M mshw0485_touch.windows_init_parity=1 mshw0485_touch.parity_linux_power=1 mshw0485_touch.windows_read_cadence=1 mshw0485_touch.parity_display_bitmap=1 mshw0485_touch.parity_stitching_flag=0 mshw0485_touch.parity_hinge_angle=400 mshw0485_touch.parity_fast_host_id=400 mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78 mshw0485_touch.parity_report56_flag=0 mshw0485_touch.parity_cfu_inventory=1 mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00 mshw0485_touch.parity_heat_input=1 mshw0485_touch.behavior_v2=1 mshw0485_touch.host_fault_recovery=1 mshw0485_touch.ready_quiesce=1 sp11_cps_parity_v2=1 sp11_cps_v3=1 sp11_volume_transaction=1 sp11_softpause=1 sp11_headroom_link=1 sp11_wsa_clockstop=1 sp11_visense_parity=1 sp11_wsa_windows_init=1 sp11_wsa_macro0db_oracle=1 sp11_wsa_winproducer_nohd2_v3=1 sp11_wsa_csren0_v4=1 sp11_wsa_csren0_v5_idlegated=1 sp11_wsa_windows_3state_v26=1 sp11_wsa_windows_3state_retain_v27=1 sp11_wsa_dp2_offsetctrl2_v28=1 soundwire_qcom.sp11_feedback_active_offset2_zero=1 soundwire_qcom.sp11_cps_pcm_route_105c=1 sp11_entry=7.1.5-sp11-fullio-v19c
+
+--- mode selection ---
+static int __init early_kvm_mode_cfg(char *arg)
+{
+	if (!arg)
+		return -EINVAL;
+
+	if (strcmp(arg, "none") == 0) {
+		kvm_mode = KVM_MODE_NONE;
+		return 0;
+	}
+
+	if (!is_hyp_mode_available()) {
+		pr_warn_once("KVM is not available. Ignoring kvm-arm.mode\n");
+		return 0;
+	}
+
+	if (strcmp(arg, "protected") == 0) {
+		if (!is_kernel_in_hyp_mode())
+			kvm_mode = KVM_MODE_PROTECTED;
+		else
+			pr_warn_once("Protected KVM not available with VHE\n");
+
+		return 0;
+	}
+
+	if (strcmp(arg, "nvhe") == 0 && !WARN_ON(is_kernel_in_hyp_mode())) {
+		kvm_mode = KVM_MODE_DEFAULT;
+		return 0;
+	}
+
+	if (strcmp(arg, "nested") == 0 && !WARN_ON(!is_kernel_in_hyp_mode())) {
+		kvm_mode = KVM_MODE_NV;
+		return 0;
+	}
+
+	return -EINVAL;
+}
+early_param("kvm-arm.mode", early_kvm_mode_cfg);
+
+static int __init early_kvm_wfx_trap_policy_cfg(char *arg, enum kvm_wfx_trap_policy *p)
+
+--- authoritative pKVM documentation ---
+.. SPDX-License-Identifier: GPL-2.0
+
+====================
+Protected KVM (pKVM)
+====================
+
+**NOTE**: pKVM is currently an experimental, development feature and
+subject to breaking changes as new isolation features are implemented.
+Please reach out to the developers at kvmarm@lists.linux.dev if you have
+any questions.
+
+Overview
+========
+
+Booting a host kernel with '``kvm-arm.mode=protected``' enables
+"Protected KVM" (pKVM). During boot, pKVM installs a stage-2 identity
+map page-table for the host and uses it to isolate the hypervisor
+running at EL2 from the rest of the host running at EL1/0.
+
+pKVM permits creation of protected virtual machines (pVMs) by passing
+the ``KVM_VM_TYPE_ARM_PROTECTED`` machine type identifier to the
+``KVM_CREATE_VM`` ioctl(). The hypervisor isolates pVMs from the host by
+unmapping pages from the stage-2 identity map as they are accessed by a
+pVM. Hypercalls are provided for a pVM to share specific regions of its
+IPA space back with the host, allowing for communication with the VMM.
+A Linux guest must be configured with ``CONFIG_ARM_PKVM_GUEST=y`` in
+order to issue these hypercalls.
+
+See hypercalls.rst for more details.
+
+Isolation mechanisms
+====================
+
+pKVM relies on a number of mechanisms to isolate PVMs from the host:
+
+CPU memory isolation
+--------------------
+
+Status: Isolation of anonymous memory and metadata pages.
+
+Metadata pages (e.g. page-table pages and '``struct kvm_vcpu``' pages)
+are donated from the host to the hypervisor during pVM creation and
+are consequently unmapped from the stage-2 identity map until the pVM is
+destroyed.
+
+Similarly to regular KVM, pages are lazily mapped into the guest in
+response to stage-2 page faults handled by the host. However, when
+running a pVM, these pages are first pinned and then unmapped from the
+stage-2 identity map as part of the donation procedure. This gives rise
+to some user-visible differences when compared to non-protected VMs,
+largely due to the lack of MMU notifiers:
+
+* Memslots cannot be moved or deleted once the pVM has started running.
+* Read-only memslots and dirty logging are not supported.
+* With the exception of swap, file-backed pages cannot be mapped into a
+  pVM.
+* Donated pages are accounted against ``RLIMIT_MLOCK`` and so the VMM
+  must have a sufficient resource limit or be granted ``CAP_IPC_LOCK``.
+  The lack of a runtime reclaim mechanism means that memory locked for
+  a pVM will remain locked until the pVM is destroyed.
+* Changes to the VMM address space (e.g. a ``MAP_FIXED`` mmap() over a
+  mapping associated with a memslot) are not reflected in the guest and
+  may lead to loss of coherency.
+* Accessing pVM memory that has not been shared back will result in the
+  delivery of a SIGSEGV.
+* If a system call accesses pVM memory that has not been shared back
+  then it will either return ``-EFAULT`` or forcefully reclaim the
+  memory pages. Reclaimed memory is zeroed by the hypervisor and a
+  subsequent attempt to access it in the pVM will return ``-EFAULT``
+  from the ``VCPU_RUN`` ioctl().
+
+CPU state isolation
+-------------------
+
+Status: **Unimplemented.**
+
+DMA isolation using an IOMMU
+----------------------------
+
+Status: **Unimplemented.**
+
+Proxying of Trustzone services
+------------------------------
+
+Status: FF-A and PSCI calls from the host are proxied by the pKVM
+hypervisor.
+
+The FF-A proxy ensures that the host cannot share pVM or hypervisor
+
+--- host donation API is hyp/VM path ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/include/asm/kvm_asm.h:98:	__KVM_HOST_SMCCC_FUNC___pkvm_host_donate_guest,
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/ffa.c:358:		if (__pkvm_host_share_ffa(pfn, sz / PAGE_SIZE))
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mm.c:483:	 * __pkvm_host_donate_hyp() takes care of races for us, so if it
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mm.c:486:	if (__pkvm_host_donate_hyp(hyp_phys_to_pfn(host_mc->head), 1))
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/pkvm.c:440:		ret = kvm_call_hyp_nvhe(__pkvm_host_donate_guest, pfn, gfn);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h:38:int __pkvm_host_donate_hyp(u64 pfn, u64 nr_pages);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h:40:int __pkvm_host_share_ffa(u64 pfn, u64 nr_pages);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/include/nvhe/mem_protect.h:42:int __pkvm_host_donate_guest(u64 pfn, u64 gfn, struct pkvm_hyp_vcpu *vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/hyp-main.c:260:static void handle___pkvm_host_donate_guest(struct kvm_cpu_context *host_ctxt)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/hyp-main.c:275:	ret = __pkvm_host_donate_guest(pfn, gfn, hyp_vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/hyp-main.c:739:	HANDLE_FUNC(__pkvm_host_donate_guest),
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/pkvm.c:654:	if (__pkvm_host_donate_hyp(hyp_virt_to_pfn(va),
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1080:int __pkvm_host_donate_hyp(u64 pfn, u64 nr_pages)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1198:int __pkvm_host_share_ffa(u64 pfn, u64 nr_pages)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1409:int __pkvm_host_donate_guest(u64 pfn, u64 gfn, struct pkvm_hyp_vcpu *vcpu)
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1757:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1760:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1765:	assert_transition_res(-EPERM,   __pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1780:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1781:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1785:	assert_transition_res(-EPERM,   __pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1793:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1794:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1798:	assert_transition_res(-EPERM,   __pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1810:	assert_transition_res(0,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1811:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1812:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1818:	assert_transition_res(-EPERM,   __pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1830:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1831:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1835:	assert_transition_res(-EPERM,   __pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1851:	assert_transition_res(0,	__pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1852:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1853:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn + 1, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1856:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1857:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1866:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1867:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn + 1, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1870:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1871:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1880:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1881:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn + 1, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1884:	assert_transition_res(-EPERM,	__pkvm_host_share_ffa, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1885:	assert_transition_res(-EPERM,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1893:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1900:	assert_transition_res(0,	__pkvm_host_donate_guest, pfn, gfn + 1, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1905:	assert_transition_res(-EPERM,	__pkvm_host_donate_guest, pfn, gfn, vcpu);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c:1910:	assert_transition_res(0,	__pkvm_host_donate_hyp, pfn, 1);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/trace.c:54:	return __pkvm_host_donate_hyp(hyp_virt_to_pfn(start), size >> PAGE_SHIFT);
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/trace.c:179:	 * values. We rely on __pkvm_host_donate_hyp() to enforce their validity.

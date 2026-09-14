@@ -1,0 +1,216 @@
+E004cd TRUSTED WORKER AUTHORITY CARRY-FORWARD
+
+=== e004br-protected-transfer-backend-authority ===
+{
+  "experiment": "E004br",
+  "status": "PASS_PROTECTED_TRANSFER_AUTHORITY_MAPPED_LINUX_BACKEND_UNRESOLVED",
+  "mode": "static-only",
+  "windows_authority": {
+    "component": "QcISPTrustlet8380.dll",
+    "sha256": "55ebf254447b9ff8c0a5b20ae81e84f04355f84ce6fa6a09f6205562a5b0b606",
+    "service_type": "SecureCompanion",
+    "trustlet_identity": 4096,
+    "memory_api_provider": "IumSdk.dll",
+    "internal_constructor": "FUN_180004c58",
+    "external_open": "FUN_180004828",
+    "combined_constructor": "FUN_180005868",
+    "transfer_dispatch": "FUN_1800037c8",
+    "direction": "internal CP_CAMERA mapping -> external VTL1 mapping",
+    "host_task4_is_final_transfer": false,
+    "qsee_qcomtee_transport_imported": false
+  },
+  "linux": {
+    "qseecom_enabled": true,
+    "qseecom_registered_base_apps": [
+      "qcom.tz.uefisecapp"
+    ],
+    "qcomtee_enabled": false,
+    "tee_dmabuf_heaps_enabled": true,
+    "active_dma_heaps": [
+      "default_cma_region",
+      "reserved",
+      "system"
+    ],
+    "active_protected_tee_heap": false,
+    "trusted_transfer_backend_proven": false
+  },
+  "firmware_inventory": {
+    "obvious_x1e_camera_secure_app_filename_found": false,
+    "negative_result_scope": "installed firmware filenames only; does not exclude services embedded in monolithic secure firmware"
+  },
+  "runtime_actions": {
+    "linux_secureisp": false,
+    "qseecom_send": false,
+    "qcomtee_enable_or_load": false,
+    "scm_assign_mem": false,
+    "protected_mmio": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004bs Linux protected execution counterpart authority, static first"
+}
+
+=== e004bs-linux-protected-execution-counterpart-authority ===
+{
+  "experiment": "E004bs",
+  "status": "PASS_GENERIC_QTEE_TRANSPORT_FOUND_NO_CAMERA_COUNTERPART_AUTHORITY",
+  "mode": "static-only",
+  "linux_qcomtee": {
+    "golden_enabled": false,
+    "root_register_op": 5,
+    "client_env_open_op": 0,
+    "hardcoded_service_uids": {
+      "feature_versions": 2033
+    },
+    "camera_service_uid_found": false,
+    "memory_object_backing": "tee_shm physical range via primordial MAP_REGION",
+    "shm_transport": "qcom_tzmem SHM bridge",
+    "enablement_is_runtime_passive": false
+  },
+  "windows_qctree": {
+    "qctree_sha256": "9cd8252c1b501c1d58e4c49d020d526a5b9bc41a3f5de2ec08e866c3a26c16a2",
+    "inf_sha256": "9e6d38df0b0ff8f766a4b67084f1d55e3bf44ddac766c5466b179e99adda8d6b",
+    "secureisp_kmd_qctree_guid_refs": {
+      "PassThrough": 1,
+      "MemSharing": 0,
+      "Invoke": 0,
+      "InlineCrypto": 0,
+      "TPM": 0,
+      "EFIVar": 0,
+      "WinSecApp": 0,
+      "MfgMode": 0,
+      "Mssec": 0,
+      "SSGListener": 0
+    },
+    "secureisp_trustlet_qctree_guid_refs": "all zero",
+    "camera_qctree_role_proven": "secure CSI/lane PassThrough only",
+    "frame_transfer_role": "VTL1 Secure Companion trustlet, not QcTrEE service"
+  },
+  "x1e_static_metadata": {
+    "camera_qtee_service_identity_found": false,
+    "scope": "kernel source and installed filename/text metadata; does not exclude undocumented secure-firmware objects"
+  },
+  "runtime_actions": {
+    "qcomtee_enable_or_load": false,
+    "qtee_smc": false,
+    "qseecom_send": false,
+    "scm_assign_mem": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004bt CP_CAMERA + trusted-worker visibility contract, static first"
+}
+
+=== e004by-qctree-memshare-smcinvoke-authority ===
+{
+  "experiment": "E004by",
+  "status": "PASS_QCTREE_TRANSPORTS_MAP_TO_EXISTING_LINUX_ABIS_NO_CAMERA_PROVIDER_IDENTITY",
+  "mode": "windows-linux-static-only",
+  "windows_qctree": {
+    "sha256": "9cd8252c1b501c1d58e4c49d020d526a5b9bc41a3f5de2ec08e866c3a26c16a2",
+    "memshare": {
+      "ops": {
+        "alloc": 0,
+        "free": 1,
+        "shm_bridge_create": 2,
+        "shm_bridge_delete": 3
+      },
+      "create_smc": "0x02000c1e",
+      "delete_smc": "0x02000c1d",
+      "explicit_vmid_permission_list": true,
+      "opaque_bridge_handle": true
+    },
+    "smcinvoke": {
+      "modern_smc": "0x32000602",
+      "legacy_smc": "0x32000600",
+      "owner": "ARM_SMCCC_OWNER_TRUSTED_OS (50)",
+      "service": "0x06",
+      "generic_object_transport": true,
+      "camera_service_identity_found": false
+    }
+  },
+  "linux_equivalence": {
+    "memshare_create": "qcom_scm_shm_bridge_create / QCOM_SCM_MP_SHM_BRIDGE_CREATE 0x1e",
+    "memshare_delete": "qcom_scm_shm_bridge_delete / QCOM_SCM_MP_SHM_BRIDGE_DELETE 0x1d",
+    "smcinvoke": "qcom_scm_qtee_invoke_smc / service 0x06 command 0x02",
+    "transport_equivalence_proven": true,
+    "camera_provider_equivalence_proven": false
+  },
+  "driverdump_guid_scan": {
+    "memsharing_hits": 6,
+    "invoke_hits": 3,
+    "camera_memsharing_client_found": false,
+    "camera_invoke_client_found": false,
+    "camera_passthrough_clients": [
+      "qccamsecureisp8380.sys",
+      "qccamisp8380.sys"
+    ]
+  },
+  "runtime_actions": {
+    "qcomtee_enable_or_load": false,
+    "smc_invocation": false,
+    "shm_bridge_create": false,
+    "qtee_service_probe": false,
+    "scm_assign_mem": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004bz SHM-bridge ACL capability versus protected-camera requirements, static first"
+}
+
+=== e004cb-qcsk-camera-memory-state-machine ===
+{
+  "experiment": "E004cb",
+  "status": "PASS_QCSK_CAMERA_PIL_STATE_MACHINE_IS_FIRMWARE_HANDOFF_NOT_FRAME_PROVIDER",
+  "mode": "windows-static-only",
+  "authority": {
+    "binary": "QcSkExt8380.exe",
+    "sha256": "618910808afafda01533f6f0decc21209521d23db950209cebe1668520dff5e3",
+    "camera_set_state": "FUN_1400138b0",
+    "pil_camera_mem_assign": "FUN_140013990"
+  },
+  "vmids": {
+    "4": "HYP (vendor-log identity)",
+    "0x0e": "intermediate VM; Linux QCOM_SCM_VMID_HLOS_FREE",
+    "0x39": "camera PIL subsystem VM; no public Linux constant name found",
+    "3": "HLOS; Linux QCOM_SCM_VMID_HLOS"
+  },
+  "forward": {
+    "accepted_state_field": 1,
+    "request_selector": 2,
+    "transitions": [
+      "HYP(4) -> HLOS_FREE/intermediate(0x0e)",
+      "HLOS_FREE/intermediate(0x0e) -> camera PIL subsystem(0x39)"
+    ],
+    "subsystem_permissions": "per-ELF-segment R/W/X bits"
+  },
+  "reverse": {
+    "accepted_state_field": 2,
+    "request_selector": 0,
+    "transitions": [
+      "camera PIL subsystem(0x39) -> HLOS_FREE/intermediate(0x0e)",
+      "HLOS_FREE/intermediate(0x0e) -> HLOS(3)"
+    ]
+  },
+  "classification": {
+    "elf_segment_processing": true,
+    "core_state_bracket": true,
+    "per_frame_guid": false,
+    "request_id": false,
+    "captured_extent": false,
+    "payload_offset": false,
+    "external_protected_sample_provider": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "camera_state_switch": false,
+    "smc": false,
+    "ium_call": false,
+    "qtee_qsee_call": false,
+    "linux_camera_runtime": false
+  },
+  "next_gate": "E004cc IUM secure-section backing/provider path below CreateSecureSection, static first; Windows one-shot if static becomes ambiguous"
+}
+
+--- exact same-machine camera secure payloads ---
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamisp8380.inf_arm64_068a5d125dcec104/CAMERA_ICP_AAAAAA.elf
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamisp8380.inf_arm64_068a5d125dcec104/CAMERA_ICP.mbn
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamsecureisp8380.inf_arm64_e0daad652520462e/libbitml_nsp_v2_skel.so
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qccamsecureisp8380.inf_arm64_e0daad652520462e/QcISPTrustlet8380.dll

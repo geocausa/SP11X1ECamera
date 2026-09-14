@@ -1,0 +1,128 @@
+E004cd WINDOWS REQUIRED OBSERVABLE CONTRACT
+
+{
+  "experiment": "E004cc",
+  "status": "PASS_EXTERNAL_FLAG0_SECURE_SECTION_HYPERV_VTL0_NO_ACCESS",
+  "mode": "windows-static-exact-pdb-plus-tlfs",
+  "securekernel": {
+    "sha256": "9a2eeb0e4a3d76aa9a6bfaf287540f5f1f7562d814e8ecb3c3f6df6b57a557b6",
+    "pdb_guid": "0A49C8CF-92C9-F8EC-65C6-D61180FDAE51",
+    "pdb_age": 1,
+    "pdb_sha256": "8a7182241511195029a512aad0e0eb2b4799269f76d5f9ee71ccf697f649ca72"
+  },
+  "external_flag0": {
+    "create": "IumCreateSecureSection -> SkmmCreateSecureSection",
+    "page_path": [
+      "SkmiAllocateZeroedPage",
+      "SkmiAllocateSinglePage",
+      "SkmiAllocatePhysicalPage",
+      "SkmiSecurePhysicalPages",
+      "SkmiProtectPlaceholderPages",
+      "ShvlpProtectPages"
+    ],
+    "allocation_class": 0,
+    "final_vtl_access_index": 0,
+    "final_vtl0_mask": "0x0",
+    "target_vtl": 0,
+    "hypercall": "0x000c HvCallModifyVtlProtectionMask",
+    "vtl0_access": "none (no R/W/X)",
+    "trusted_page_claim": false
+  },
+  "internal_flag2": {
+    "same_base_secure_section_protection": true,
+    "trusted_page_claim": "SkmiClaimTrustedPage(PFN,NULL,6) for each page",
+    "later_qcom_assignment": {
+      "vmid": "0x0d CP_CAMERA",
+      "perm": "0x2 WRITE"
+    }
+  },
+  "provider_identity": {
+    "external_memory_enforcer": "Microsoft Secure Kernel + Hyper-V VTL protection",
+    "scenario_guid_role": "object identity/authorization",
+    "qctree_memshare_provider": false,
+    "qtee_smcinvoke_provider": false,
+    "cp_camera_external_provider": false
+  },
+  "linux_gap": {
+    "golden_has_windows_vtl1_provider": false,
+    "generic_tee_protected_dmabuf_surface_matches_hlos_no_map_shape": true,
+    "x1e_secure_video_record_provider_found": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "ium_syscall": false,
+    "hypercall": false,
+    "scm_assign_mem": false,
+    "qtee_qsee_call": false,
+    "qcomtee_enable_or_load": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cd Linux VTL-equivalent protected-sample provider feasibility, static first"
+}
+
+--- E004bw external representation ---
+{
+  "experiment": "E004bw",
+  "status": "PASS_EXTERNAL_SAMPLE_REPRESENTATION_COMPILE_ONLY_ZERO_TEXT",
+  "mode": "compile-only-disabled-by-construction",
+  "oracle": {
+    "source": "E004bv",
+    "identity": "16-byte opaque protected sample identity",
+    "allocation_extent": "SECURE_BUFFER_INFO.cbBufferSize",
+    "captured_extent": "SECURE_BUFFER_INFO.cbCaptured",
+    "request_association": true,
+    "serialized_extent": "trustlet protected-image +0x98 semantic",
+    "payload_offset": "trustlet protected-image +0x9c semantic",
+    "external_is_direct_camss_target": false,
+    "dmft_task4_is_external_identity": false
+  },
+  "contract": {
+    "fields": [
+      "id",
+      "request_id",
+      "allocation_extent",
+      "captured_extent",
+      "serialized_extent",
+      "payload_offset",
+      "plane_size",
+      "num_planes",
+      "phase",
+      "backend_handle",
+      "identity_proven",
+      "trusted_worker_visible",
+      "normal_hlos_cpu_visible"
+    ],
+    "external_camss_iova_present": false,
+    "external_ownership_phys_present": false,
+    "lifecycle": [
+      "DETACHED",
+      "IDENTITY_BOUND",
+      "TRUSTED_VISIBLE",
+      "PAYLOAD_READY",
+      "RELEASING"
+    ],
+    "operations": [
+      "bind_identity",
+      "activate_trusted_visibility",
+      "deactivate_trusted_visibility",
+      "release_identity"
+    ]
+  },
+  "build": {
+    "baseline_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "scaffold_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "text_byte_identical": true,
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "forbidden_implementation_symbol_matches": 0,
+    "callback_invocations": 0
+  },
+  "runtime_actions": {
+    "module_installed": false,
+    "module_loaded": false,
+    "linux_secureisp": false,
+    "qtee_qsee": false,
+    "scm_assign_mem": false,
+    "protected_memory_operation": false
+  },
+  "next_gate": "E004bx external protected-sample provider authority, static first"
+}
