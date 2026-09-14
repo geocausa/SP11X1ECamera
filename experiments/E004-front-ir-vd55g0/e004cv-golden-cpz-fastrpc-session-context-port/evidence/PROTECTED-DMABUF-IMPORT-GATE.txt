@@ -1,0 +1,20 @@
+E004cv PROTECTED DMA-BUF IMPORT GATE
+
+The staged FastRPC map path consults the provider-authoritative hook:
+  sp11_cpz_dma_buf_is_protected(dmabuf)
+
+If the imported dma-buf is protected, the map is rejected unless all of these hold:
+- legacy FASTRPC_ATTR_SECUREMAP is NOT set;
+- the secure FastRPC device is in use;
+- the client selected CPZ_USERPD;
+- a session is bound;
+- the bound session is typed CPZ_USERPD.
+
+For a protected map:
+- DSP DMA address comes from the secure session/IOMMU mapping path;
+- map->va is forced to NULL, so FastRPC does not retain an HLOS CPU virtual mapping;
+- ordinary legacy SECUREMAP ownership semantics are explicitly rejected.
+
+This compiles against an unresolved sp11_cpz_dma_buf_is_protected() provider hook, proving the E004cu backing state and E004cv FastRPC import remain separate integration units.
+
+No dma-buf import occurred at runtime.

@@ -1,0 +1,36 @@
+E004cv COMPILE PROOF
+
+object:
+experiments/E004-front-ir-vd55g0/e004cv-golden-cpz-fastrpc-session-context-port/scaffold/fastrpc-e004cv.o: ELF 64-bit LSB relocatable, ARM aarch64, version 1 (SYSV), with debug_info, not stripped
+
+text:
+.text                            3432      0
+Total                          145005
+
+preserved compile roots:
+0000000000000bf8 t fastrpc_invoke2_session_info_e004cv
+00000000000001d0 t fastrpc_map_attach
+00000000000007c8 t fastrpc_set_session_info_e004cv
+
+key unresolved dependencies:
+                 U __arch_copy_from_user
+                 U __arch_copy_to_user
+                 U capable
+                 U dma_buf_attach
+                 U dma_buf_get
+                 U sp11_cpz_dma_buf_is_protected
+
+registration symbols (must be absent):
+
+source dispatch/control markers:
+328:	bool session_config_locked;
+879:	map->protected = sp11_cpz_dma_buf_is_protected(map->buf);
+1740:	fl->session_config_locked = false;
+2254:	    info->pd_type != FASTRPC_REMOTE_PD_CPZ_USER)
+2257:	if (info->pd_type == FASTRPC_REMOTE_PD_CPZ_USER &&
+2258:	    (delegated || !capable(CAP_SYS_ADMIN) || !fl->is_secure_dev ||
+2263:	if (fl->session_config_locked) {
+2271:		fl->session_config_locked = true;
+2287:	if (inv2.req != FASTRPC_INVOKE2_SESS_INFO_E004CV ||
+2304:	fl->session_config_locked = true;
+2353:	case FASTRPC_IOCTL_INVOKE2_E004CV:

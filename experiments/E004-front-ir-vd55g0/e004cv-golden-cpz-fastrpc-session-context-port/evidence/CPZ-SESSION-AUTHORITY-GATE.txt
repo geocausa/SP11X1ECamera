@@ -1,0 +1,20 @@
+E004cv CPZ SESSION AUTHORITY GATE
+
+Staged FastRPC session selection rules:
+
+1. Session-info request must match the open FastRPC domain and sharedcb must be zero.
+2. Only USERPD (7) and CPZ_USERPD (6) are accepted by this compile-only port.
+3. A delegated caller (current->tgid != opener_tgid) may select USERPD only.
+4. CPZ_USERPD additionally requires all of:
+   - caller is not delegated;
+   - CAP_SYS_ADMIN;
+   - the secure FastRPC device node was opened;
+   - the domain is CDSP.
+5. Session selection becomes immutable before any process attach/create operation.
+6. CPZ selection must rebind to an already-existing session whose pd_type is CPZ_USERPD.
+7. E004cv deliberately does not parse a DT pd-type property; probed sessions stay DEFAULT_UNUSED.
+
+Consequence:
+The staged ioctl/control code is privilege-gated, but it cannot create a CPZ typed context bank by itself. With Golden DT/probe behavior, CPZ rebind fails closed with -ENODEV.
+
+No process was created and no ioctl was issued.
