@@ -1,12 +1,28 @@
 {
-  "schema": "sp11-camera-e004dk-rgb-alternating-soak-v1",
-  "status": "PREPARED_OFFLINE_NOT_ARMED",
-  "planned_legs": ["rear", "front", "rear", "front", "rear", "front"],
-  "planned_cross_camera_transitions": 5,
-  "neutral_between_every_leg": true,
-  "same_boot_retry_authorized": false,
-  "linux_secureisp": false,
-  "candidate_installed": false,
-  "candidate_armed": false,
-  "runtime_performed": false
+  "schema": "sp11-camera-e004dk-rgb-alternating-soak-v2",
+  "status": "FAIL_HARNESS_FRONT_NEUTRAL_SOURCE_PAD_GOLDEN_RETURN_RETIRED",
+  "candidate_consumed": true,
+  "failed_boot_id": "fa8221e5-ab6b-4a8a-a944-8c66eb32fff6",
+  "golden_return_boot_id": "9abd8ab6-657e-49aa-bd8c-6a59789a52f9",
+  "completed_legs": [
+    "rear1",
+    "front1"
+  ],
+  "completed_cross_camera_transitions": 1,
+  "failed_step": "front1_to_neutral",
+  "camera_stack_failure": false,
+  "harness_failure": true,
+  "cause": "front neutralization used msm_csid1 source pad 1; accepted IH authority and live topology prove the PIX link uses source pad 4",
+  "accepted_authority_command": "media-ctl -d \"$MEDIA\" -l '\"msm_csid1\":4 -> \"msm_vfe1_pix\":0 [0]'",
+  "same_boot_retry_performed": false,
+  "golden_return": "PASS",
+  "candidate_retired": true,
+  "evidence": {
+    "rear1_colorbar_sha256": "6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346",
+    "rear1_normal8_log_sha256": "88f47b3e7f36735b66ac6f9eeb28ab0c6a6e2ac774a0e543fd040fef9512fe44",
+    "front1_log_sha256": "d9282e9838fea0b65cd5f7f77e448a5ba760381f41c73a0359ce1aab57ba47b2",
+    "partial_route_sha256": "96616035106c776ff6d398413376cef310e230710eef456966f1699b46037eda",
+    "dmesg_sha256": "5b4ed509b8932fa8b3c37be44bd336940cdc90e60e0058b5c7e02edfb2642624"
+  },
+  "next_gate": "E004dl corrected six-leg fresh one-shot: CSID1 pad4 neutralization + ERR trap inheritance"
 }
