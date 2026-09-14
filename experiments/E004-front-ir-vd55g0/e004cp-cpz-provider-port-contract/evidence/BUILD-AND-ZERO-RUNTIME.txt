@@ -1,0 +1,67 @@
+E004cp BUILD / ZERO-RUNTIME PROOF
+baseline_module=aaa91c3513d7010fedd7fce42a5ec0b4fc39b83979638ef1d68e6c55d50623c2
+scaffold_module=7513cc7febf4f50ba37fc3fd132c5efa973714f29f30860c0a2e9e2a479820c1
+baseline_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+scaffold_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+TEXT_BYTE_IDENTICAL=1
+baseline_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+scaffold_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+--- CPZ provider capability gate ---
+20:	CAMSS_CPZ_CAP_CAMERA_CDSP_COOWNED_TARGET = 1U << 0,
+21:	CAMSS_CPZ_CAP_HLOS_EXCLUDED_TARGET       = 1U << 1,
+22:	CAMSS_CPZ_CAP_PRIVILEGED_PROCESS_TYPE    = 1U << 2,
+23:	CAMSS_CPZ_CAP_SECURE_CONTEXT_IMPORT      = 1U << 3,
+24:	CAMSS_CPZ_CAP_EXTERNAL_SAMPLE_IMPORT     = 1U << 4,
+25:	CAMSS_CPZ_CAP_RECLAIM_ORDER_RESOLVED     = 1U << 5,
+26:	CAMSS_CPZ_CAP_NO_HLOS_FALLBACK           = 1U << 6,
+29:#define CAMSS_CPZ_PROVIDER_REQUIRED_CAPS \
+30:	(CAMSS_CPZ_CAP_CAMERA_CDSP_COOWNED_TARGET | \
+31:	 CAMSS_CPZ_CAP_HLOS_EXCLUDED_TARGET | \
+32:	 CAMSS_CPZ_CAP_PRIVILEGED_PROCESS_TYPE | \
+33:	 CAMSS_CPZ_CAP_SECURE_CONTEXT_IMPORT | \
+34:	 CAMSS_CPZ_CAP_EXTERNAL_SAMPLE_IMPORT | \
+35:	 CAMSS_CPZ_CAP_RECLAIM_ORDER_RESOLVED | \
+36:	 CAMSS_CPZ_CAP_NO_HLOS_FALLBACK)
+50:	bool runtime_binding_authorized;
+51:	bool host_process_type_binding_present;
+52:	bool secure_context_bank_policy_present;
+55:	bool external_sample_provider_resolved;
+57:	bool ownership_reclaim_before_backing_release;
+58:	bool hlos_transfer_fallback_allowed;
+65:	BUILD_BUG_ON(CAMSS_CPZ_PROVIDER_REQUIRED_CAPS != 0x7f);
+
+--- forbidden runtime implementation calls in new contracts / modified C ---
+FORBIDDEN_RUNTIME_CALL_MATCHES=0
+
+--- callback invocations in modified C/header ---
+CALLBACK_INVOCATIONS=0
+
+--- exact production C diff ---
+--- /tmp/e004cp-camss-baseline/camss-video.c	2026-09-05 09:29:09.543184962 +0100
++++ /tmp/e004cp-camss-scaffold/camss-video.c	2026-09-14 09:01:32.776841020 +0100
+@@ -16,6 +16,7 @@
+ #include <media/videobuf2-dma-sg.h>
+ 
+ #include "camss-video.h"
++#include "camss-protected-cpz-provider.h"
+ #include "camss-csid.h"
+ #include "camss-vfe.h"
+ #include "camss.h"
+@@ -1199,6 +1200,7 @@
+ 	struct vb2_queue *q;
+ 	int ret;
+ 
++	camss_cpz_provider_compile_contract();
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
+
+--- runtime safety ---
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+modules:
+nodes:

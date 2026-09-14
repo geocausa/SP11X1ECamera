@@ -1,0 +1,12 @@
+E004cp AUTHORITY CARRIED FORWARD FROM E004co
+
+Required architecture facts already proven before this compile-only gate:
+- protected camera + CDSP output has a vendor owner set that excludes HLOS;
+- Qualcomm mem-buf LEND is the ownership-changing operation, distinct from SHARE;
+- downstream FastRPC recognizes a non-local-exclusive dma-buf as secure;
+- downstream FastRPC has privileged remote-process typing and CPZ-designated secure context banks;
+- exact SP11 CDSP firmware contains CPZ protected-process/physical-map machinery;
+- Golden mainline FastRPC lacks that downstream CPZ host binding;
+- exact Windows DeviceMFT uses ordinary unsigned CDSP PD, while Windows protected IR remains VTL1.
+
+E004cp does not implement or execute any of these mechanisms. It encodes only the compile-time readiness shape needed before a future port can bind them.
