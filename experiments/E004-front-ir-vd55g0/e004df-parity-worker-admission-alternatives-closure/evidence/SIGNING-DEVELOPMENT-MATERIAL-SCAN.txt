@@ -1,0 +1,18 @@
+E004df SIGNING / DEVELOPMENT MATERIAL SCAN
+
+Searched exact local SP11 material:
+- Golden Denali firmware tree;
+- recovered SP11 driver packages;
+- installed Windows DriverStore package metadata.
+
+Candidate credential/config file patterns searched:
+  *.pem *.key *.pfx *.p12 *.crt *.cer *.der
+  *testsig* *oemconfig* *sign*key* *cert*
+
+Result relevant to CPZ/SecurePD worker admission:
+- no oemconfig.so;
+- no testsig worker package;
+- no private signing key / PFX / PEM credential for CDSP SecurePD modules;
+- Windows package catalog certificates are ordinary package-signing/public certificate material, not a CDSP worker private signing credential.
+
+Windows FastRPC host policy does expose SID allow-lists for signed callers, but that controls who may access FastRPC on Windows. It does not sign/admit a new DSP SecurePD ELF and therefore does not solve E004de.

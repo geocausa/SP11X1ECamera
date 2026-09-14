@@ -1,0 +1,54 @@
+E004df PARITY WORKER BACKEND MATRIX
+
+Goal:
+Trusted CPU worker must read protected internal camera target and write protected external sample while HLOS CPU remains excluded.
+
+1. CPZ / SecurePD
+- protected camera owner set CP_CAMERA + CP_CDSP proven;
+- external CP_CDSP-only sample proven;
+- secure FastRPC context bank / map lifetime proven;
+- trusted SecurePD CPU worker habitat proven;
+- exact camera-parity worker NOT present in shipping trusted surface;
+- new source-controlled worker admission blocked by production static-hash/signature policy.
+Result: BEST architecture, but trust-admission blocked.
+
+2. pKVM nVHE / protected VM
+- source-controlled trusted CPU execution exists in source;
+- Golden protected mode is not enabled;
+- trusted IOMMU/DMA control equivalent to Windows device-GPA mapping is not implemented/proven;
+- no same-machine binding from camera device DMA to protected worker memory is established.
+Result: not parity-ready; would require new trusted IOMMU architecture, not a small worker substitution.
+
+3. Gunyah trusted VM
+- QHEE/Gunyah memory parcels and device passthrough exist;
+- same-machine QHEE ACL analysis found no CP_CAMERA + trusted-VM rule;
+- camera-to-trusted-VM binding not found.
+Result: no authorized camera ownership path.
+
+4. FF-A / QTEE / QSEE
+- transports/services exist;
+- no camera secure partition/service identity found;
+- no arbitrary source-controlled camera worker loader in current Linux interface.
+Result: no worker authority.
+
+5. Qualcomm HypX
+- authenticated boot-time Hyper-V platform extension;
+- tied to Microsoft/Qualcomm secure launch chain;
+- no post-boot runtime module registry/loading surface found.
+Result: not a reusable Linux camera worker.
+
+6. Existing shipping CPZ/SecurePD modules
+- callable protected-buffer bridge exists;
+- copy-like internal primitives exist;
+- no remotely reachable generic copy/fill/SWABF/SWASF surface reproduces Windows semantics.
+Result: reuse closed by E004dd.
+
+7. HLOS post-processing
+- technically easy;
+- would require HLOS CPU visibility of pixels after capture.
+Result: violates the Windows protection boundary; rejected.
+
+8. Windows VTL1 trustlet itself
+- exact worker behavior exists in QcISPTrustlet8380.dll;
+- it is a Windows VTL1 isolated workload, not a Linux/EL2/Hexagon portable binary/service.
+Result: oracle only, not a Linux backend.

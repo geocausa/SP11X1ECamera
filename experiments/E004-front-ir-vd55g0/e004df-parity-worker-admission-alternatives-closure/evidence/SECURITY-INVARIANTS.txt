@@ -1,0 +1,12 @@
+E004df NON-NEGOTIABLE SECURITY INVARIANTS
+
+A candidate backend is rejected if any of the following is required:
+- HLOS CPU mapping of protected image pixels;
+- disabling/bypassing CDSP module signature/static-hash verification;
+- enabling QC test/debug trust roots as a substitute for production authorization;
+- modifying authenticated CDSP root firmware only to admit project code;
+- replacing Windows transfer semantics with an unrelated trusted filter/algorithm;
+- time-multiplexing ownership in a way that loses required protected device/worker overlap;
+- treating an unproven VMID/context bank as equivalent merely because its numeric value is nearby.
+
+Compile-only/offline worker development remains acceptable because it changes no runtime trust state.
