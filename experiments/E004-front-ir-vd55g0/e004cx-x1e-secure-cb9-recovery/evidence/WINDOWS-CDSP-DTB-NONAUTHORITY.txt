@@ -1,0 +1,12 @@
+E004cx WINDOWS CDSP FIRMWARE DTB CHECK
+
+The exact SP11 Windows CDSP package contains cdsp_dtbs.elf SHA256:
+  93941f040da14b8305d39579686d886706d22954a538b03da676c1aaa191797f
+
+It embeds two valid FDTs:
+- Hamoa root-process CDSP DTB at file offset 0x130
+- Purwa root-process CDSP DTB at file offset 0x46d8
+
+Both were extracted and decompiled in this experiment. They describe DSP-internal platform resources and do not contain host FastRPC/SMMU compute-context-bank definitions, `pd-type`, or CPZ host mapping policy.
+
+Therefore cdsp_dtbs.elf is not the authority for the missing Linux host compute-cb@9. The same-machine qcsmmu8380.inf is the decisive host-SMMU oracle.

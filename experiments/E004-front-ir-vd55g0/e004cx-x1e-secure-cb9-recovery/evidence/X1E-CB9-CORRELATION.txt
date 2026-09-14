@@ -1,0 +1,28 @@
+E004cx X1E SECURE COMPUTE-CB@9 CORRELATION
+
+Exact Golden Hamoa/X1E Linux source:
+  compute-cb@1 -> iommus = <&apps_smmu 0x0c01 0x20>
+  ...
+  compute-cb@8 -> iommus = <&apps_smmu 0x0c08 0x20>
+  /* note: compute-cb@9 is secure */
+  compute-cb@10 -> iommus = <&apps_smmu 0x0c0c 0x20>
+  ...
+  compute-cb@13 -> iommus = <&apps_smmu 0x0c0f 0x20>
+
+Exact same-machine Windows qcsmmu8380.inf maps FASTRPC client 0x17:
+  S1_COMPUTE_1  -> SID 0x0c01, mask 0x0020, HLOS
+  ...
+  S1_COMPUTE_8  -> SID 0x0c08, mask 0x0020, HLOS
+  S1_COMPUTE_10 -> SID 0x0c0c, mask 0x0020, HLOS
+  ...
+  S1_COMPUTE_13 -> SID 0x0c0f, mask 0x0020, HLOS
+
+and additionally:
+  S1_COMPUTE_CP_P -> SID 0x0c09, mask 0x0020, CP-P
+
+The secure entry is not inferred from numeric sequence: Windows explicitly names it as the protected FASTRPC compute context and explicitly assigns SID 0x0c09 / mask 0x0020.
+
+Thus the Linux source comment `compute-cb@9 is secure` and the Windows SMMU table identify the same missing stream identity:
+  compute-cb@9 -> <&apps_smmu 0x0c09 0x20>
+
+Windows hardware context-bank index is 0x25 (CB37); Linux FastRPC logical session index is 9. These are different namespaces and must not be conflated.

@@ -1,0 +1,38 @@
+{
+  "experiment": "E004cx",
+  "status": "PASS_WINDOWS_ORACLE_RECOVERS_X1E_SECURE_FASTRPC_SID_0C09",
+  "mode": "static-cross-os-authority",
+  "windows_oracle": {
+    "qcsmmu_inf_sha256": "c1afd89419c12ca093a7d3b1f80ef980723d78d3549ceb158b9ee1a1ca051846",
+    "fastrpc_client_id": "0x17",
+    "protected_context_name": "S1_COMPUTE_CP_P",
+    "windows_hw_cb_index": "0x25",
+    "windows_hw_cb_number": 37,
+    "stream_id": "0x0c09",
+    "stream_mask": "0x0020",
+    "vm_class": "CP-P"
+  },
+  "linux_correlation": {
+    "logical_compute_cb": 9,
+    "golden_source_marks_cb9_secure": true,
+    "iommu_stream_tuple_directly_proven": true,
+    "candidate_iommus": "<&apps_smmu 0x0c09 0x20>"
+  },
+  "cpz_pd_type": {
+    "value": 6,
+    "name": "CPZ_USERPD",
+    "source": "Qualcomm downstream FastRPC ABI/allocator semantics",
+    "exact_hamoa_downstream_dts_recovered": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "dt_change": false,
+    "smmu_programming": false,
+    "fastrpc_ioctl": false,
+    "cpz_process_create": false,
+    "ownership_change": false,
+    "camera_runtime": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004cy compile-only X1E secure CB9 topology candidate"
+}

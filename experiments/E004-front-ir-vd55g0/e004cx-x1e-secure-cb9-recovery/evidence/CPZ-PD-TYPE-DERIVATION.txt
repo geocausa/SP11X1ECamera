@@ -1,0 +1,21 @@
+E004cx CPZ PD-TYPE DERIVATION
+
+Qualcomm downstream FastRPC process-type contract (E004co authority):
+  CPZ_USERPD = 6
+
+The downstream driver:
+- reads a context-bank DT property named `pd-type`;
+- stores it in the context-bank session;
+- requires process/session PD-type matching;
+- when PD typing is enabled, secure-memory session allocation normalizes the requested type to CPZ_USERPD.
+
+Therefore a Linux context bank intended to service the CPZ secure-memory path must be typed CPZ_USERPD (6).
+
+Same-machine Windows independently proves the missing X1E FastRPC stream is the protected `S1_COMPUTE_CP_P` context at SID 0x0c09 / mask 0x0020.
+
+Important evidence boundary:
+- SID 0x0c09 and mask 0x20 are directly proven by the exact Windows SP11 SMMU package.
+- `pd-type = <6>` is derived from Qualcomm's downstream FastRPC ABI and allocator semantics, not recovered from an exact Hamoa downstream DTS file.
+- Windows uses its own SMMU/driver policy and does not carry a Linux `pd-type` property.
+
+This is sufficient for a compile-only Linux topology candidate, but runtime activation still requires a separate integration gate.
