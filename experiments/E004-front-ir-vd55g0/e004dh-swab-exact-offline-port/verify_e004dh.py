@@ -17,4 +17,21 @@ with tempfile.TemporaryDirectory() as td:
     out=subprocess.check_output([str(exe)],text=True)
     assert 'PASS' in out
 assert not R['swasf']['pixel_transform_port_complete']
+
+# Windows-authoritative SWASF helper closure.
+assert sha(D/'oracle/windows-helper-oracle/HELPERS.txt') == '9523aeafa7139bcf02f7c8251867d9f5094449de5b59edf57bffd1f0db60e573'
+assert (D/'oracle/windows-c078-basis/C078-BASIS.txt').exists()
+assert R['swasf']['helper_local_extrema_exact']
+assert R['swasf']['helper_c078_activity_exact']
+assert not R['swasf']['pixel_transform_port_complete']
+with tempfile.TemporaryDirectory() as td:
+    exe=pathlib.Path(td)/'swasf_helpers'
+    subprocess.check_call(['cc','-std=c11','-O2','-Wall','-Wextra','-Werror',str(D/'scaffold/sp11-swasf-helpers.c'),str(D/'scaffold/test_swasf_helpers.c'),'-o',str(exe)])
+    out=subprocess.check_output([str(exe)],text=True)
+    assert 'SWASF helper vectors: PASS' in out
+with tempfile.TemporaryDirectory() as td:
+    obj=pathlib.Path(td)/'swasf_helpers.o'
+    subprocess.check_call(['clang','--target=hexagon','-mcpu=hexagonv73','-O2','-ffreestanding','-fno-builtin','-Wall','-Wextra','-Werror','-c',str(D/'scaffold/sp11-swasf-helpers.c'),'-o',str(obj)])
+    assert sha(obj)==R['swasf']['helper_hexagon_object_sha256']
+    assert subprocess.check_output(['llvm-nm','-u',str(obj)],text=True).strip()==''
 print('E004dh VERIFY: PASS (partial gate; SWASF pixel port pending)')
