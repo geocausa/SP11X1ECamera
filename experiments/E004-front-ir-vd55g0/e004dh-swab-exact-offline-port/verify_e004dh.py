@@ -72,4 +72,17 @@ with tempfile.TemporaryDirectory() as td:
     assert sha(c)==R['swasf']['c3e8_combined_hexagon_object_sha256']
     assert subprocess.check_output(['llvm-nm','-u',str(c)],text=True).strip()==''
 
+
+# Self-consistent shipping-Windows CD90 capture and scalar candidate.
+assert R['swasf']['cd90_consistent_windows_capture']
+assert not R['swasf']['cd90_final_combine_exact']
+out=subprocess.check_output([str(D/'verify_cd90_consistent.py')],text=True)
+assert 'PASS' in out
+assert sha(D/'oracle/windows-cd90-consistent/p13.bin') == R['windows_oracle']['swasf_payload_sha256']
+with tempfile.TemporaryDirectory() as td:
+    obj=pathlib.Path(td)/'cd90.o'
+    subprocess.check_call(['clang','--target=hexagon','-mcpu=hexagonv73','-O2','-ffreestanding','-fno-builtin','-Wall','-Wextra','-Werror','-c',str(D/'scaffold/sp11-swasf-cd90.c'),'-o',str(obj)])
+    assert sha(obj)==R['swasf']['cd90_hexagon_object_sha256']
+    assert subprocess.check_output(['llvm-nm','-u',str(obj)],text=True).strip()==''
+
 print('E004dh VERIFY: PASS (partial gate; SWASF pixel port pending)')
