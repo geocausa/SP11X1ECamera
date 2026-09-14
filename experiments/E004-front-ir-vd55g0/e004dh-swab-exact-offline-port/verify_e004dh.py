@@ -51,4 +51,18 @@ with tempfile.TemporaryDirectory() as td:
     assert sha(obj)==R['swasf']['c230_hexagon_object_sha256']
     assert subprocess.check_output(['llvm-nm','-u',str(obj)],text=True).strip()==''
 
+
+# Windows-authoritative C3E8 cross-median/tile candidate.
+assert R['swasf']['c3e8_cross5_exact']
+out=subprocess.check_output([str(D/'verify_c3e8_cross5.py')],text=True)
+assert 'PASS (1792 tile pixels)' in out
+with tempfile.TemporaryDirectory() as td:
+    a=pathlib.Path(td)/'c230.o'; b=pathlib.Path(td)/'c3e8.o'; c=pathlib.Path(td)/'combined.o'
+    common=['clang','--target=hexagon','-mcpu=hexagonv73','-O2','-ffreestanding','-fno-builtin','-Wall','-Wextra','-Werror','-c']
+    subprocess.check_call(common+[str(D/'scaffold/sp11-swasf-c230.c'),'-o',str(a)])
+    subprocess.check_call(common+[str(D/'scaffold/sp11-swasf-c3e8.c'),'-o',str(b)])
+    subprocess.check_call(['ld.lld','-m','hexagonelf','-r',str(a),str(b),'-o',str(c)])
+    assert sha(c)==R['swasf']['c3e8_combined_hexagon_object_sha256']
+    assert subprocess.check_output(['llvm-nm','-u',str(c)],text=True).strip()==''
+
 print('E004dh VERIFY: PASS (partial gate; SWASF pixel port pending)')
