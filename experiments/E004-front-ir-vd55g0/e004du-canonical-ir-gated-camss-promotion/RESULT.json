@@ -1,0 +1,28 @@
+{
+  "schema": "sp11-camera-e004du-canonical-ir-gated-camss-promotion-v1",
+  "status": "PASS_CANONICAL_CAMSS_PROMOTED_BYTE_EXACT_TO_LIVE_TESTED_IR_GATED_AUTHORITY",
+  "runtime_performed": false,
+  "source_changed": "src/front-imx681/kernel/camss/camss-csiphy-3ph-1-0.c",
+  "source_sha256": "2ea354304cad721967279a8a0211e97ec2731a71bd945a6ddba6dccdb191a362",
+  "legacy_gate_name_retained": "e004j_ir_dphy_windows_parity",
+  "gate_default": false,
+  "gate_scope": ["CAMSS_X1E80100", "CSIPHY0", "V4L2_MBUS_CSI2_DPHY"],
+  "patch_sha256": "1fc0f918a2f00e79918cf8bf7164f49cb8df395b8b05c949dc424a7b3824a869",
+  "canonical_camss_module_sha256": "862732b7c9e4712360840a033a016239beac7e81a7d620aff61db51efb8ecdc7",
+  "canonical_imx681_module_sha256": "ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6",
+  "canonical_capture_sha256": "70f407f5fd70e6657f9647a33eecde744ac9e1bd19fa9e901a4faf52508e354d",
+  "canonical_bootstrap_sha256": "4721ff6510d806ed63ffcb70d9a88441220047ef734ca760cc40bdc5719cd7ce",
+  "build_interface": {
+    "kernel_source_required": true,
+    "kernel_build_required": true,
+    "kbuild_shape": "make -C KERNEL_SOURCE O=KERNEL_BUILD M=external-module",
+    "fail_closed_on_hash_drift": true
+  },
+  "live_tested_runtime_authority": {
+    "E004dp": "PASS_THREE_CAMERA_BIND_CSIPHY0_WINDOWS_96_OF_96_GOLDEN_RETURN_RETIRED",
+    "E004dr": "PASS_REAR_RGB_UNDER_THREE_CAMERA_AUTHORITY_GOLDEN_RETURN_RETIRED",
+    "E004ds": "PASS_FRONT_RGB_UNDER_THREE_CAMERA_AUTHORITY_GOLDEN_RETURN_RETIRED"
+  },
+  "linux_secureisp_runtime": false,
+  "next_gate": "promote unified rear+front+IR DTB/module package authority; protected IR stream remains blocked on legitimate SecurePD worker admission"
+}

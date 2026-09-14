@@ -3,7 +3,9 @@
     "camss_final_sha256": "117136b2c624de5ef3f4c081cdcf9c363cda9f6db5c752b7ade5f5e11b1b3e95",
     "capture_helper_final_sha256": "578f41d5cc0935aff327f500d38c095ed64f7428d2e245adc1f8196e9b3c99a3",
     "gm_iq_producer_sha256": "7c13bc25517698cf53a8b362857852de7dd674de5c108eed4c9f5b788eed3f61",
-    "imx681_final_sha256": "6e14f6d345759eb61a2a54129437e04f747e64d59d3bfc264069a0ecddeeb78e"
+    "imx681_final_sha256": "6e14f6d345759eb61a2a54129437e04f747e64d59d3bfc264069a0ecddeeb78e",
+    "camss_module_sha256": "862732b7c9e4712360840a033a016239beac7e81a7d620aff61db51efb8ecdc7",
+    "imx681_module_sha256": "ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6"
   },
   "created_from_he_commit": "4c120ed73e440008a9c8291ec7e22205beca26df",
   "files": [
@@ -92,10 +94,10 @@
       "sha256": "370181d484c6284820e867089b72ec4e2e7d21becce512cbf0902db9f1e8080f"
     },
     {
-      "authority_kind": "byte-copy-external-kernel-base",
+      "authority_kind": "e004du-promoted-live-tested-ir-gated-camss-source",
       "bundle_path": "kernel/camss/camss-csiphy-3ph-1-0.c",
-      "origin": "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c",
-      "sha256": "418fe18845e1d57e2de5f2c9ece4bdd78d817d59ca71b25b00eb4259581464a8"
+      "origin": "E004k exact patch promoted after E004dp/E004dr/E004ds coexistence/regression acceptance",
+      "sha256": "2ea354304cad721967279a8a0211e97ec2731a71bd945a6ddba6dccdb191a362"
     },
     {
       "authority_kind": "byte-copy-external-kernel-base",
@@ -522,5 +524,25 @@
       "two_vertex_boundary"
     ],
     "selector_source_sha256": "06bfd6cd4dc4b059e2aa021d3f261b90ed2ceff90450af4bcbe4545fc5c14c0f"
+  },
+  "ir_receiver_promotion": {
+    "experiment": "E004du",
+    "legacy_parameter_name": "e004j_ir_dphy_windows_parity",
+    "default_enabled": false,
+    "scope": [
+      "CAMSS_X1E80100",
+      "CSIPHY0",
+      "V4L2_MBUS_CSI2_DPHY"
+    ],
+    "source_sha256": "2ea354304cad721967279a8a0211e97ec2731a71bd945a6ddba6dccdb191a362",
+    "patch_sha256": "1fc0f918a2f00e79918cf8bf7164f49cb8df395b8b05c949dc424a7b3824a869",
+    "module_sha256": "862732b7c9e4712360840a033a016239beac7e81a7d620aff61db51efb8ecdc7",
+    "dtb_sha256": "3d56fd6f610576dee5fc97da809f9c48da16952af9a48a5053ea864b94855beb",
+    "live_acceptance": [
+      "E004dp three-camera bind + receiver acceptance",
+      "E004dr rear RGB regression with gate armed/nonselected",
+      "E004ds front RGB R27 regression with gate armed/nonselected"
+    ],
+    "linux_secureisp_runtime": false
   }
 }
