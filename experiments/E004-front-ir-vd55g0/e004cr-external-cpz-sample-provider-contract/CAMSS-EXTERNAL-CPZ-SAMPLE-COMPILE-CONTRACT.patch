@@ -1,0 +1,18 @@
+--- /tmp/e004cr-camss-baseline/camss-video.c	2026-09-05 09:29:09.543184962 +0100
++++ /tmp/e004cr-camss-scaffold/camss-video.c	2026-09-14 09:45:05.271922940 +0100
+@@ -16,6 +16,7 @@
+ #include <media/videobuf2-dma-sg.h>
+ 
+ #include "camss-video.h"
++#include "camss-protected-cpz-external-sample.h"
+ #include "camss-csid.h"
+ #include "camss-vfe.h"
+ #include "camss.h"
+@@ -1199,6 +1200,7 @@
+ 	struct vb2_queue *q;
+ 	int ret;
+ 
++	camss_cpz_external_sample_compile_contract();
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);

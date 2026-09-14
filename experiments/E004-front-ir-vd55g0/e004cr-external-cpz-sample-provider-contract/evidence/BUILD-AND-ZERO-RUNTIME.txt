@@ -1,0 +1,87 @@
+E004cr BUILD / ZERO-RUNTIME PROOF
+baseline_module=ca832223d8814ef4c9e2839e7ffb0782acdef531a6bb04eb467677775ef95ecb
+scaffold_module=9c40668a053ad308409ac06197ab870dd9928b524beaf2b7b5e6aad5208be648
+baseline_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+scaffold_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+TEXT_BYTE_IDENTICAL=1
+baseline_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+scaffold_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+--- external CPZ sample capability/lifecycle ---
+15:	CAMSS_CPZ_EXT_CAP_OPAQUE_IDENTITY        = 1U << 0,
+16:	CAMSS_CPZ_EXT_CAP_GENERIC_BACKING        = 1U << 1,
+17:	CAMSS_CPZ_EXT_CAP_WORKER_ONLY_OWNERSHIP  = 1U << 2,
+18:	CAMSS_CPZ_EXT_CAP_HLOS_CPU_EXCLUDED      = 1U << 3,
+19:	CAMSS_CPZ_EXT_CAP_TRUSTED_IMPORT         = 1U << 4,
+20:	CAMSS_CPZ_EXT_CAP_WORKER_REF_HELD        = 1U << 5,
+21:	CAMSS_CPZ_EXT_CAP_DETACH_BEFORE_RECLAIM = 1U << 6,
+22:	CAMSS_CPZ_EXT_CAP_RECLAIM_BEFORE_FREE    = 1U << 7,
+23:	CAMSS_CPZ_EXT_CAP_NO_CAMERA_HW_OWNER     = 1U << 8,
+24:	CAMSS_CPZ_EXT_CAP_NO_HLOS_FALLBACK       = 1U << 9,
+27:#define CAMSS_CPZ_EXTERNAL_REQUIRED_CAPS \
+28:	(CAMSS_CPZ_EXT_CAP_OPAQUE_IDENTITY | \
+29:	 CAMSS_CPZ_EXT_CAP_GENERIC_BACKING | \
+30:	 CAMSS_CPZ_EXT_CAP_WORKER_ONLY_OWNERSHIP | \
+31:	 CAMSS_CPZ_EXT_CAP_HLOS_CPU_EXCLUDED | \
+32:	 CAMSS_CPZ_EXT_CAP_TRUSTED_IMPORT | \
+33:	 CAMSS_CPZ_EXT_CAP_WORKER_REF_HELD | \
+34:	 CAMSS_CPZ_EXT_CAP_DETACH_BEFORE_RECLAIM | \
+35:	 CAMSS_CPZ_EXT_CAP_RECLAIM_BEFORE_FREE | \
+36:	 CAMSS_CPZ_EXT_CAP_NO_CAMERA_HW_OWNER | \
+37:	 CAMSS_CPZ_EXT_CAP_NO_HLOS_FALLBACK)
+40:	CAMSS_CPZ_EXTERNAL_DETACHED = 0,
+41:	CAMSS_CPZ_EXTERNAL_IDENTITY_BOUND,
+42:	CAMSS_CPZ_EXTERNAL_BACKING_READY,
+43:	CAMSS_CPZ_EXTERNAL_WORKER_OWNED,
+44:	CAMSS_CPZ_EXTERNAL_WORKER_IMPORTED,
+45:	CAMSS_CPZ_EXTERNAL_PAYLOAD_READY,
+46:	CAMSS_CPZ_EXTERNAL_WORKER_DETACHING,
+47:	CAMSS_CPZ_EXTERNAL_RECLAIMING,
+48:	CAMSS_CPZ_EXTERNAL_RECLAIMED,
+49:	CAMSS_CPZ_EXTERNAL_RELEASING,
+60:	bool logical_identity_bound;
+61:	bool backing_reference_held;
+62:	bool worker_owner_active;
+63:	bool worker_mapping_active;
+64:	bool normal_hlos_cpu_visible;
+65:	bool camera_hw_owner_required;
+66:	bool worker_detached_before_reclaim;
+67:	bool ownership_reclaimed_before_free;
+68:	bool hlos_transfer_fallback_allowed;
+100:	BUILD_BUG_ON(CAMSS_CPZ_EXTERNAL_DETACHED != 0);
+101:	BUILD_BUG_ON(CAMSS_CPZ_EXTERNAL_REQUIRED_CAPS != 0x3ff);
+
+--- forbidden concrete runtime implementation symbols ---
+FORBIDDEN_RUNTIME_CALL_MATCHES=0
+
+--- provider callback invocations in production C ---
+CALLBACK_INVOCATIONS=0
+
+--- exact production C diff ---
+--- /tmp/e004cr-camss-baseline/camss-video.c	2026-09-05 09:29:09.543184962 +0100
++++ /tmp/e004cr-camss-scaffold/camss-video.c	2026-09-14 09:45:05.271922940 +0100
+@@ -16,6 +16,7 @@
+ #include <media/videobuf2-dma-sg.h>
+ 
+ #include "camss-video.h"
++#include "camss-protected-cpz-external-sample.h"
+ #include "camss-csid.h"
+ #include "camss-vfe.h"
+ #include "camss.h"
+@@ -1199,6 +1200,7 @@
+ 	struct vb2_queue *q;
+ 	int ret;
+ 
++	camss_cpz_external_sample_compile_contract();
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
+
+--- runtime safety ---
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+modules:
+nodes:
