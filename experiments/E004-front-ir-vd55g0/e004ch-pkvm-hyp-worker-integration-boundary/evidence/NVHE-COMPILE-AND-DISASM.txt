@@ -1,0 +1,99 @@
+E004ch nVHE COMPILE PROOF
+baseline_nvhe_sha256=e877a2f04c1d759af22c8bdb67d9436d0693c2a1617609b383c8542bd73f8644
+scaffold_nvhe_sha256=29da7db6440006f12b32470e43531c1ff23625a7d672b0d87f041a7a5d77ff50
+baseline_size=9028584
+scaffold_size=9046032
+
+--- baseline worker symbols (must be empty) ---
+--- scaffold worker symbols ---
+0000000000004e90 t __kvm_nvhe_handle___pkvm_camera_worker_copy_mapped
+00000000000118c0 T __kvm_nvhe___pkvm_camera_worker_copy_mapped
+
+--- direct worker object symbols ---
+                 U hyp_physvirt_offset
+                 U __hyp_vmemmap
+                 U memcpy
+0000000000000000 T __pkvm_camera_worker_copy_mapped
+
+--- direct worker object disassembly ---
+
+/tmp/e004ch-build-scaffold/arch/arm64/kvm/hyp/nvhe/camera_worker.nvhe.o:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000000000 <__pkvm_camera_worker_copy_mapped>:
+   0:	d1000443 	sub	x3, x2, #0x1
+   4:	f13ffc7f 	cmp	x3, #0xfff
+   8:	54000528 	b.hi	ac <__pkvm_camera_worker_copy_mapped+0xac>  // b.pmore
+   c:	90000003 	adrp	x3, 0 <__hyp_vmemmap>
+			c: R_AARCH64_ADR_PREL_PG_HI21	__hyp_vmemmap
+  10:	f9400064 	ldr	x4, [x3]
+			10: R_AARCH64_LDST64_ABS_LO12_NC	__hyp_vmemmap
+  14:	d37dcc03 	ubfiz	x3, x0, #3, #52
+  18:	b8646863 	ldr	w3, [x3, x4]
+  1c:	531c7c63 	lsr	w3, w3, #28
+  20:	71000c7f 	cmp	w3, #0x3
+  24:	54000341 	b.ne	8c <__pkvm_camera_worker_copy_mapped+0x8c>  // b.any
+  28:	d37dcc23 	ubfiz	x3, x1, #3, #52
+  2c:	b8646863 	ldr	w3, [x3, x4]
+  30:	531c7c63 	lsr	w3, w3, #28
+  34:	71000c7f 	cmp	w3, #0x3
+  38:	540002a1 	b.ne	8c <__pkvm_camera_worker_copy_mapped+0x8c>  // b.any
+  3c:	d503233f 	paciasp
+  40:	90000003 	adrp	x3, 0 <hyp_physvirt_offset>
+			40: R_AARCH64_ADR_PREL_PG_HI21	hyp_physvirt_offset
+  44:	a9bf7bfd 	stp	x29, x30, [sp, #-16]!
+  48:	910003fd 	mov	x29, sp
+  4c:	f9400064 	ldr	x4, [x3]
+			4c: R_AARCH64_LDST64_ABS_LO12_NC	hyp_physvirt_offset
+  50:	d374cc23 	lsl	x3, x1, #12
+  54:	d374cc01 	lsl	x1, x0, #12
+  58:	cb040021 	sub	x1, x1, x4
+  5c:	cb040060 	sub	x0, x3, x4
+  60:	94000000 	bl	0 <memcpy>
+			60: R_AARCH64_CALL26	memcpy
+  64:	52800000 	mov	w0, #0x0                   	// #0
+  68:	a8c17bfd 	ldp	x29, x30, [sp], #16
+  6c:	d50323bf 	autiasp
+  70:	d2800001 	mov	x1, #0x0                   	// #0
+  74:	d2800002 	mov	x2, #0x0                   	// #0
+  78:	d2800003 	mov	x3, #0x0                   	// #0
+  7c:	d2800004 	mov	x4, #0x0                   	// #0
+  80:	d2800010 	mov	x16, #0x0                   	// #0
+  84:	d2800011 	mov	x17, #0x0                   	// #0
+  88:	d65f03c0 	ret
+  8c:	12800000 	mov	w0, #0xffffffff            	// #-1
+  90:	d2800001 	mov	x1, #0x0                   	// #0
+  94:	d2800002 	mov	x2, #0x0                   	// #0
+  98:	d2800003 	mov	x3, #0x0                   	// #0
+  9c:	d2800004 	mov	x4, #0x0                   	// #0
+  a0:	d2800010 	mov	x16, #0x0                   	// #0
+  a4:	d2800011 	mov	x17, #0x0                   	// #0
+  a8:	d65f03c0 	ret
+  ac:	128002a0 	mov	w0, #0xffffffea            	// #-22
+  b0:	d2800001 	mov	x1, #0x0                   	// #0
+  b4:	d2800002 	mov	x2, #0x0                   	// #0
+  b8:	d2800003 	mov	x3, #0x0                   	// #0
+  bc:	d2800004 	mov	x4, #0x0                   	// #0
+  c0:	d2800010 	mov	x16, #0x0                   	// #0
+  c4:	d2800011 	mov	x17, #0x0                   	// #0
+  c8:	d65f03c0 	ret
+
+--- scaffold hyp-main worker handler evidence ---
+00000000000005b0 t handle___pkvm_camera_worker_copy_mapped
+0000000000000000 r host_hcall
+                 U __pkvm_camera_worker_copy_mapped
+
+--- forbidden policy identifiers in new worker/header/added lines ---
+/home/geoca/Documents/SP11-PROJECT/02-kernel/.e004ch-src-scaffold/arch/arm64/kvm/hyp/include/nvhe/camera_worker.h:10: * ownership, Qualcomm VMID, DMA, camera, or secure-world policy.
+FORBIDDEN_POLICY_MATCHES=0
+
+--- Golden source hashes unchanged ---
+49be0476835b1b0678d0bdc51826c5618c59de8940f6f54a0b9e09efda5a3002  /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/include/asm/kvm_asm.h
+b409d18f8798e84eb51dd50fe861b10a614d21e865899d4a0c507d1f262d84db  /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/Makefile
+4328020e7670a5e1d3c10d5149397eec5bfe3c6566316affe47b2f3678e28b2d  /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+c2b1d3ad9e69a3bb0b94ada024257756035140f9938da2c5d8993fd1838967a1  /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+
+--- original seed build tree nVHE target presence ---
+ORIGINAL_SEED_NVHE_OBJECT_PRESENT=0

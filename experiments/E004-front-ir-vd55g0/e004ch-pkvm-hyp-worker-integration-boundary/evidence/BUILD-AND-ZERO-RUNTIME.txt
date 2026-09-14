@@ -1,0 +1,27 @@
+E004ch BUILD / ZERO-RUNTIME PROOF
+baseline_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+scaffold_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+TEXT_BYTE_IDENTICAL=1
+baseline_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+scaffold_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+--- overlap capability ---
+91:	CAMSS_PROTECTED_CAP_HW_WORKER_OVERLAP_PROVEN   = 1U << 6,
+94:#define CAMSS_PROTECTED_PROVIDER_REQUIRED_CAPS \
+101:	 CAMSS_PROTECTED_CAP_HW_WORKER_OVERLAP_PROVEN)
+117:	bool hardware_worker_overlap_proven;
+118:	bool time_multiplex_visibility_allowed;
+170:	BUILD_BUG_ON(CAMSS_PROTECTED_PROVIDER_REQUIRED_CAPS != 0x7f);
+
+--- forbidden concrete backend symbols/calls (must be empty) ---
+FORBIDDEN_CONCRETE_BACKEND_MATCHES=0
+
+--- callback invocations (must be empty) ---
+CALLBACK_INVOCATIONS=0
+
+--- runtime safety ---
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
+saved_entry=sp11-audio-fullio-v19c
+next_entry=

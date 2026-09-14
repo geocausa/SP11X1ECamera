@@ -1,0 +1,235 @@
+E004ch QUALCOMM MULTI-OWNER MECHANISM VS HYP POLICY
+
+--- raw Linux SCM can carry multiple destination VMIDs ---
+	int ret;
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_MP,
+		.cmd = QCOM_SCM_MP_ASSIGN,
+		.arginfo = QCOM_SCM_ARGS(7, QCOM_SCM_RO, QCOM_SCM_VAL,
+					 QCOM_SCM_RO, QCOM_SCM_VAL, QCOM_SCM_RO,
+					 QCOM_SCM_VAL, QCOM_SCM_VAL),
+		.args[0] = mem_region,
+		.args[1] = mem_sz,
+		.args[2] = src,
+		.args[3] = src_sz,
+		.args[4] = dest,
+		.args[5] = dest_sz,
+		.args[6] = 0,
+		.owner = ARM_SMCCC_OWNER_SIP,
+	};
+	struct qcom_scm_res res;
+
+	ret = qcom_scm_call(dev, &desc, &res);
+
+	return ret ? : res.result[0];
+}
+
+/**
+ * qcom_scm_assign_mem() - Make a secure call to reassign memory ownership
+ * @mem_addr: mem region whose ownership need to be reassigned
+ * @mem_sz:   size of the region.
+ * @srcvm:    vmid for current set of owners, each set bit in
+ *            flag indicate a unique owner
+ * @newvm:    array having new owners and corresponding permission
+ *            flags
+ * @dest_cnt: number of owners in next set.
+ *
+ * Return negative errno on failure or 0 on success with @srcvm updated.
+ */
+int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+			u64 *srcvm,
+			const struct qcom_scm_vmperm *newvm,
+			unsigned int dest_cnt)
+{
+	struct qcom_scm_current_perm_info *destvm;
+	struct qcom_scm_mem_map_info *mem_to_map;
+	phys_addr_t mem_to_map_phys;
+	phys_addr_t dest_phys;
+	phys_addr_t ptr_phys;
+	size_t mem_to_map_sz;
+	size_t dest_sz;
+	size_t src_sz;
+	size_t ptr_sz;
+	int next_vm;
+	__le32 *src;
+	int ret, i, b;
+	u64 srcvm_bits = *srcvm;
+
+	src_sz = hweight64(srcvm_bits) * sizeof(*src);
+	mem_to_map_sz = sizeof(*mem_to_map);
+	dest_sz = dest_cnt * sizeof(*destvm);
+	ptr_sz = ALIGN(src_sz, SZ_64) + ALIGN(mem_to_map_sz, SZ_64) +
+			ALIGN(dest_sz, SZ_64);
+
+	void *ptr __free(qcom_tzmem) = qcom_tzmem_alloc(__scm->mempool,
+							ptr_sz, GFP_KERNEL);
+	if (!ptr)
+		return -ENOMEM;
+
+	ptr_phys = qcom_tzmem_to_phys(ptr);
+
+	/* Fill source vmid detail */
+	src = ptr;
+	i = 0;
+	for (b = 0; b < BITS_PER_TYPE(u64); b++) {
+		if (srcvm_bits & BIT(b))
+			src[i++] = cpu_to_le32(b);
+	}
+
+	/* Fill details of mem buff to map */
+	mem_to_map = ptr + ALIGN(src_sz, SZ_64);
+	mem_to_map_phys = ptr_phys + ALIGN(src_sz, SZ_64);
+	mem_to_map->mem_addr = cpu_to_le64(mem_addr);
+	mem_to_map->mem_size = cpu_to_le64(mem_sz);
+
+	next_vm = 0;
+	/* Fill details of next vmid detail */
+	destvm = ptr + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+	dest_phys = ptr_phys + ALIGN(mem_to_map_sz, SZ_64) + ALIGN(src_sz, SZ_64);
+	for (i = 0; i < dest_cnt; i++, destvm++, newvm++) {
+		destvm->vmid = cpu_to_le32(newvm->vmid);
+		destvm->perm = cpu_to_le32(newvm->perm);
+		destvm->ctx = 0;
+		destvm->ctx_size = 0;
+		next_vm |= BIT(newvm->vmid);
+	}
+
+	ret = __qcom_scm_assign_mem(__scm->dev, mem_to_map_phys, mem_to_map_sz,
+				    ptr_phys, src_sz, dest_phys, dest_sz);
+	if (ret) {
+		dev_err(__scm->dev,
+			"Assign memory protection call failed %d\n", ret);
+		return ret;
+	}
+
+	*srcvm = next_vm;
+	return 0;
+}
+EXPORT_SYMBOL_GPL(qcom_scm_assign_mem);
+
+/**
+ * qcom_scm_ocmem_lock_available() - is OCMEM lock/unlock interface available
+ */
+bool qcom_scm_ocmem_lock_available(void)
+{
+	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_OCMEM,
+					    QCOM_SCM_OCMEM_LOCK_CMD);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ocmem_lock_available);
+
+/**
+ * qcom_scm_ocmem_lock() - call OCMEM lock interface to assign an OCMEM
+ * region to the specified initiator
+ *
+ * @id:     tz initiator id
+ * @offset: OCMEM offset
+ * @size:   OCMEM size
+ * @mode:   access mode (WIDE/NARROW)
+ */
+int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
+			u32 mode)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_OCMEM,
+		.cmd = QCOM_SCM_OCMEM_LOCK_CMD,
+		.args[0] = id,
+		.args[1] = offset,
+		.args[2] = size,
+		.args[3] = mode,
+		.arginfo = QCOM_SCM_ARGS(4),
+	};
+
+	return qcom_scm_call(__scm->dev, &desc, NULL);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ocmem_lock);
+
+/**
+ * qcom_scm_ocmem_unlock() - call OCMEM unlock interface to release an OCMEM
+ * region from the specified initiator
+ *
+ * @id:     tz initiator id
+ * @offset: OCMEM offset
+ * @size:   OCMEM size
+ */
+int qcom_scm_ocmem_unlock(enum qcom_scm_ocmem_client id, u32 offset, u32 size)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_OCMEM,
+		.cmd = QCOM_SCM_OCMEM_UNLOCK_CMD,
+		.args[0] = id,
+		.args[1] = offset,
+		.args[2] = size,
+		.arginfo = QCOM_SCM_ARGS(3),
+	};
+
+	return qcom_scm_call(__scm->dev, &desc, NULL);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ocmem_unlock);
+
+/**
+ * qcom_scm_ice_available() - Is the ICE key programming interface available?
+ *
+ * Return: true iff the SCM calls wrapped by qcom_scm_ice_invalidate_key() and
+ *	   qcom_scm_ice_set_key() are available.
+ */
+
+--- public Linux VMID names ---
+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
+/*
+ * Copyright (c) 2010-2015, 2018-2019 The Linux Foundation. All rights reserved.
+ * Copyright (C) 2015 Linaro Ltd.
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ */
+
+#ifndef _DT_BINDINGS_FIRMWARE_QCOM_SCM_H
+#define _DT_BINDINGS_FIRMWARE_QCOM_SCM_H
+
+#define QCOM_SCM_VMID_TZ		0x1
+#define QCOM_SCM_VMID_HLOS		0x3
+#define QCOM_SCM_VMID_SSC_Q6		0x5
+#define QCOM_SCM_VMID_ADSP_Q6		0x6
+#define QCOM_SCM_VMID_CP_TOUCH		0x8
+#define QCOM_SCM_VMID_CP_BITSTREAM	0x9
+#define QCOM_SCM_VMID_CP_PIXEL		0xA
+#define QCOM_SCM_VMID_CP_NON_PIXEL	0xB
+#define QCOM_SCM_VMID_CP_CAMERA		0xD
+#define QCOM_SCM_VMID_HLOS_FREE		0xE
+#define QCOM_SCM_VMID_MSS_MSA		0xF
+#define QCOM_SCM_VMID_MSS_NONMSA	0x10
+#define QCOM_SCM_VMID_CP_SEC_DISPLAY	0x11
+#define QCOM_SCM_VMID_CP_APP		0x12
+#define QCOM_SCM_VMID_LPASS		0x16
+#define QCOM_SCM_VMID_WLAN		0x18
+#define QCOM_SCM_VMID_WLAN_CE		0x19
+#define QCOM_SCM_VMID_CP_SPSS_SP	0x1A
+#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+#define QCOM_SCM_VMID_CDSP		0x1E
+#define QCOM_SCM_VMID_CP_SPSS_SP_SHARED 0x22
+#define QCOM_SCM_VMID_CP_SPSS_HLOS_SHARED 0x24
+#define QCOM_SCM_VMID_ADSP_HEAP		0x25
+#define QCOM_SCM_VMID_CP_CDSP		0x2A
+#define QCOM_SCM_VMID_NAV		0x2B
+#define QCOM_SCM_VMID_TVM		0x2D
+#define QCOM_SCM_VMID_OEMVM		0x31
+
+#endif
+
+--- same-machine Windows QcSk identifies VMID 4 as HYP ---
+E004cb VMID CROSS-CHECK
+#define QCOM_SCM_VMID_HLOS		0x3
+#define QCOM_SCM_VMID_CP_CAMERA		0xD
+#define QCOM_SCM_VMID_HLOS_FREE		0xE
+#define QCOM_SCM_VMID_CP_CAMERA_PREVIEW 0x1D
+
+QcSk vendor-log anchored transition identities:
+- VMID 4: source named HYP by "map to intermediate VM from HYP failed".
+- VMID 0x0e: destination of that call and source of the next call; therefore the vendor-named intermediate VM.
+- Linux public name for 0x0e: QCOM_SCM_VMID_HLOS_FREE.
+- VMID 0x39: destination of "map to subsys from intermediate VM failed" and source of the reverse "map to intermediate VM from subsys failed"; therefore camera PIL subsystem VMID in this binary.
+- VMID 3: destination of "map to HLOS from intermediate VM failed"; Linux public name QCOM_SCM_VMID_HLOS.
+- No public Linux QCOM_SCM_VMID_* definition for 0x39 exists in this tree.
+
+CONSEQUENCE
+The low-level SCM packet format supports N destination VMIDs, but QcSk adds a platform policy rule for destination HYP:
+HYP must be the sole destination owner. Therefore generic multi-owner capability does not authorize CP_CAMERA + HYP on this X1E Windows oracle.
+Linux has no public QCOM_SCM_VMID_HYP name and no authority equating pKVM nVHE with Qualcomm AC_VM_HYP. Even if that identity were later proven, the Windows platform policy above would still reject HYP as a simultaneous co-owner.

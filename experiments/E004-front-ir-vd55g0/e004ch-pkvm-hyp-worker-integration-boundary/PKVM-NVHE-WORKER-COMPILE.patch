@@ -1,0 +1,107 @@
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/include/asm/kvm_asm.h	2026-07-24 15:21:27.000000000 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/.e004ch-src-scaffold/arch/arm64/include/asm/kvm_asm.h	2026-09-14 06:34:00.257776870 +0100
+@@ -93,6 +93,7 @@
+ 	MARKER(__KVM_HOST_SMCCC_FUNC_PKVM_ONLY),
+ 
+ 	/* Hypercalls that are available only when pKVM has finalised. */
++	__KVM_HOST_SMCCC_FUNC___pkvm_camera_worker_copy_mapped,
+ 	__KVM_HOST_SMCCC_FUNC___pkvm_host_share_hyp,
+ 	__KVM_HOST_SMCCC_FUNC___pkvm_host_unshare_hyp,
+ 	__KVM_HOST_SMCCC_FUNC___pkvm_host_donate_guest,
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/Makefile	2026-07-24 15:21:27.000000000 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/.e004ch-src-scaffold/arch/arm64/kvm/hyp/nvhe/Makefile	2026-09-14 06:34:00.239039485 +0100
+@@ -24,7 +24,7 @@
+ 
+ hyp-obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o \
+ 	 hyp-main.o hyp-smp.o psci-relay.o early_alloc.o page_alloc.o \
+-	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o stacktrace.o ffa.o
++	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o stacktrace.o ffa.o camera_worker.o
+ hyp-obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
+ 	 ../fpsimd.o ../hyp-entry.o ../exception.o ../pgtable.o ../vgic-v5-sr.o
+ hyp-obj-y += ../../../kernel/smccc-call.o
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/arch/arm64/kvm/hyp/nvhe/hyp-main.c	2026-07-24 15:21:27.000000000 +0100
++++ /home/geoca/Documents/SP11-PROJECT/02-kernel/.e004ch-src-scaffold/arch/arm64/kvm/hyp/nvhe/hyp-main.c	2026-09-14 06:34:00.276406862 +0100
+@@ -16,6 +16,7 @@
+ #include <asm/kvm_mmu.h>
+ 
+ #include <nvhe/ffa.h>
++#include <nvhe/camera_worker.h>
+ #include <nvhe/mem_protect.h>
+ #include <nvhe/mm.h>
+ #include <nvhe/pkvm.h>
+@@ -511,6 +512,16 @@
+ 	cpu_reg(host_ctxt, 1) = pkvm_cpu_set_vector(slot);
+ }
+ 
++static void handle___pkvm_camera_worker_copy_mapped(struct kvm_cpu_context *host_ctxt)
++{
++	DECLARE_REG(u64, src_pfn, host_ctxt, 1);
++	DECLARE_REG(u64, dst_pfn, host_ctxt, 2);
++	DECLARE_REG(size_t, len, host_ctxt, 3);
++
++	cpu_reg(host_ctxt, 1) =
++		__pkvm_camera_worker_copy_mapped(src_pfn, dst_pfn, len);
++}
++
+ static void handle___pkvm_host_share_hyp(struct kvm_cpu_context *host_ctxt)
+ {
+ 	DECLARE_REG(u64, pfn, host_ctxt, 1);
+@@ -734,6 +745,7 @@
+ 	HANDLE_FUNC(__vgic_v5_save_apr),
+ 	HANDLE_FUNC(__vgic_v5_restore_vmcr_apr),
+ 
++	HANDLE_FUNC(__pkvm_camera_worker_copy_mapped),
+ 	HANDLE_FUNC(__pkvm_host_share_hyp),
+ 	HANDLE_FUNC(__pkvm_host_unshare_hyp),
+ 	HANDLE_FUNC(__pkvm_host_donate_guest),
+--- /dev/null
++++ arch/arm64/kvm/hyp/nvhe/camera_worker.c
++// SPDX-License-Identifier: GPL-2.0-only
++/* E004ch compile-only nVHE worker substrate proof. */
++
++#include <linux/errno.h>
++#include <linux/string.h>
++
++#include <nvhe/camera_worker.h>
++#include <nvhe/memory.h>
++
++int __pkvm_camera_worker_copy_mapped(u64 src_pfn, u64 dst_pfn, size_t len)
++{
++	phys_addr_t src_phys = hyp_pfn_to_phys(src_pfn);
++	phys_addr_t dst_phys = hyp_pfn_to_phys(dst_pfn);
++	struct hyp_page *src_page;
++	struct hyp_page *dst_page;
++	void *src;
++	void *dst;
++
++	if (!len || len > PAGE_SIZE)
++		return -EINVAL;
++
++	src_page = hyp_phys_to_page(src_phys);
++	dst_page = hyp_phys_to_page(dst_phys);
++	if (get_hyp_state(src_page) != PKVM_PAGE_OWNED ||
++	    get_hyp_state(dst_page) != PKVM_PAGE_OWNED)
++		return -EPERM;
++
++	src = hyp_phys_to_virt(src_phys);
++	dst = hyp_phys_to_virt(dst_phys);
++	memcpy(dst, src, len);
++
++	return 0;
++}
+--- /dev/null
++++ arch/arm64/kvm/hyp/include/nvhe/camera_worker.h
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __KVM_NVHE_CAMERA_WORKER__
++#define __KVM_NVHE_CAMERA_WORKER__
++
++#include <linux/types.h>
++
++/*
++ * Compile-only E004ch substrate proof.
++ * Both pages must already be HYP-owned/mapped. This function establishes no
++ * ownership, Qualcomm VMID, DMA, camera, or secure-world policy.
++ */
++int __pkvm_camera_worker_copy_mapped(u64 src_pfn, u64 dst_pfn, size_t len);
++
++#endif /* __KVM_NVHE_CAMERA_WORKER__ */

@@ -1,0 +1,168 @@
+E004ch QCSK HYP OWNERSHIP EXCLUSIVITY
+binary:
+618910808afafda01533f6f0decc21209521d23db950209cebe1668520dff5e3  /mnt/windows/Windows/System32/DriverStore/FileRepository/qcskext8380.inf_arm64_1f302071dfc89f06/QcSkExt8380.exe
+
+--- policy strings / xrefs ---
+STRING @14001b4d0 = %s: ERROR: The whitelist region does not have shared assignment with HLOS, HYP assignment cannot be made.\n
+  XREF 1400045fc function=FUN_1400044d0 entry=1400044d0
+STRING @14001b588 = %s: INFO: Assignment to AC_VM_HYP successful.\n
+  XREF 1400045e8 function=FUN_1400044d0 entry=1400044d0
+STRING @14001bb40 = %s: ERROR: HYP_ASSIGN is being performed using a non-external rule(err:0x%x). Aborting assign operation....\n
+  XREF 140004b90 function=FUN_140004728 entry=140004728
+STRING @14001c440 = %s: ERROR: Failure closing handle for memory mapped to HYP VM.\n
+  XREF 1400051e0 function=FUN_140004728 entry=140004728
+STRING @14001c530 = %s: ERROR: Invalid assignment, assignment to HYP domain cannot be shared with other domains or memory region not mapped into view.\n
+  XREF 1400052c4 function=FUN_140004728 entry=140004728
+STRING @14001c5c0 = %s: ERROR: Unsupported assign to HYP VM, source VM not HLOS or HLOS_UNMAPPED.\n
+  XREF 1400052ac function=FUN_140004728 entry=140004728
+
+//// FUN_1400044d0 @1400044d0 ////
+
+ulonglong FUN_1400044d0(ulonglong param_1,longlong param_2,longlong param_3)
+
+{
+  uint uVar1;
+  ulonglong extraout_x0;
+  ulonglong uVar2;
+  longlong lVar3;
+  ulonglong uVar4;
+  ulonglong local_68;
+  longlong alStack_60 [2];
+  longlong local_50;
+  undefined8 *local_48;
+  undefined8 local_40;
+  undefined8 uStack_38;
+  
+  local_68 = param_1;
+  alStack_60[0] = param_2;
+  if (((param_1 == 0) || (param_2 == 0)) || (param_3 == 0)) {
+    FUN_140001fd8();
+    return (ulonglong)DAT_140004720;
+  }
+  local_50 = 0;
+  uVar1 = FUN_1400091e0(param_1,&local_50);
+  lVar3 = local_50;
+  uVar4 = (ulonglong)uVar1;
+  if (((int)uVar1 < 0) || (local_50 == 0)) {
+    FUN_140001fd8();
+    return (ulonglong)DAT_14000471c;
+  }
+  FUN_140001fd8();
+  if ((param_3 != 8) || (uVar2 = *(ulonglong *)(lVar3 + 0x10), (uVar2 & 8) == 0 || uVar2 == 8)) {
+    lVar3 = *(longlong *)(lVar3 + 0x10);
+    if (param_3 == 0x10) {
+      if ((lVar3 == 0x13) || (((uint)lVar3 >> 3 & 1) == 0)) goto LAB_140004600;
+      local_40 = 0;
+      uStack_38 = 0xffffffffffffffff;
+      FUN_1400024c0((longlong)&local_68,(longlong)alStack_60,1,&uStack_38,&local_40,1,0,1,1);
+      uVar4 = extraout_x0 & 0xffffffff;
+      if ((int)extraout_x0 < 0) {
+        GetLastError();
+        FUN_140001fd8();
+        return extraout_x0 & 0xffffffff;
+      }
+    }
+    else {
+      if ((lVar3 == 0x13) || (lVar3 != param_3)) {
+LAB_140004600:
+        FUN_140001fd8();
+        return (ulonglong)DAT_140004718;
+      }
+      local_48 = (undefined8 *)0x0;
+      uVar1 = FUN_140009568(local_68,(longlong *)&local_48);
+      if (((int)uVar1 < 0) || (local_48 == (undefined8 *)0x0)) {
+        FUN_140001fd8();
+        return (ulonglong)uVar1;
+      }
+      uVar1 = FUN_1400031a8(local_48);
+      uVar4 = (ulonglong)uVar1;
+      if (-1 < (int)uVar1) {
+        FUN_140001fd8();
+        return uVar4;
+      }
+    }
+  }
+  FUN_140001fd8();
+  return uVar4;
+}
+
+
+
+//// FUN_140004728 @140004728 ////
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+DWORD FUN_140004728(int *param_1,uint param_2,longlong param_3,uint param_4,ulonglong *param_5,
+                   uint param_6,ulonglong param_7,uint *param_8,int param_9)
+
+{
+  undefined1 *puVar1;
+  ulonglong *puVar2;
+  uint uVar3;
+  uint uVar4;
+  uint uVar5;
+  bool bVar6;
+  bool bVar7;
+  bool bVar8;
+  int iVar9;
+  DWORD extraout_w0;
+  DWORD extraout_w0_00;
+  DWORD extraout_w0_01;
+  DWORD extraout_w0_02;
+  void *_Memory;
+  longlong *plVar10;
+  uint *puVar11;
+  int *piVar12;
+  uint uVar13;
+  void *pvVar14;
+  ulonglong uVar15;
+  DWORD local_1f0;
+  byte local_1ec;
+  undefined8 *local_1e8;
+  void *local_1e0;
+  void *local_1d8;
+  int local_1c8;
+
+--- raw machine-code branch around destination-HYP exclusivity ---
+
+/mnt/windows/Windows/System32/DriverStore/FileRepository/qcskext8380.inf_arm64_1f302071dfc89f06/QcSkExt8380.exe:	file format coff-arm64
+
+Disassembly of section .text:
+
+0000000140001000 <.text>:
+140005274: b9402b49    	ldr	w9, [x26, #0x28]
+140005278: b9006749    	str	w9, [x26, #0x64]
+14000527c: b9406349    	ldr	w9, [x26, #0x60]
+140005280: 34000269    	cbz	w9, 0x1400052cc <.text+0x42cc>
+140005284: b9402f41    	ldr	w1, [x26, #0x2c]
+140005288: 7100043f    	cmp	w1, #0x1
+14000528c: 540001a1    	b.ne	0x1400052c0 <.text+0x42c0>
+140005290: f9401708    	ldr	x8, [x24, #0x28]
+140005294: b4000168    	cbz	x8, 0x1400052c0 <.text+0x42c0>
+140005298: b9404349    	ldr	w9, [x26, #0x40]
+14000529c: 350000c9    	cbnz	w9, 0x1400052b4 <.text+0x42b4>
+1400052a0: b9407349    	ldr	w9, [x26, #0x70]
+1400052a4: 35000089    	cbnz	w9, 0x1400052b4 <.text+0x42b4>
+1400052a8: f00000a8    	adrp	x8, 0x14001c000
+1400052ac: 91170100    	add	x0, x8, #0x5c0
+1400052b0: 17fffd5f    	b	0x14000482c <.text+0x382c>
+1400052b4: f00000a8    	adrp	x8, 0x14001c000
+1400052b8: 91184100    	add	x0, x8, #0x610
+1400052bc: 17ffffc0    	b	0x1400051bc <.text+0x41bc>
+1400052c0: f00000a8    	adrp	x8, 0x14001c000
+1400052c4: 9114c100    	add	x0, x8, #0x530
+1400052c8: 17fffd79    	b	0x1400048ac <.text+0x38ac>
+1400052cc: b9403f41    	ldr	w1, [x26, #0x3c]
+1400052d0: 7100043f    	cmp	w1, #0x1
+1400052d4: 54000ac8    	b.hi	0x14000542c <.text+0x442c>
+
+STATIC BRANCH INTERPRETATION
+- the generic assignment engine records whether destination VMID 4/HYP is present;
+- when the destination-HYP flag is set, the branch at 0x140005284 loads the destination-entry count;
+- it requires count == 1 (cmp w1,#1; b.ne -> 0x1400052c0);
+- it also requires an existing mapped backing handle/view;
+- either failure reaches string @0x14001c530:
+  "Invalid assignment, assignment to HYP domain cannot be shared with other domains or memory region not mapped into view."
+- therefore QcSk enforces exclusive destination-HYP ownership at this policy layer.
+- the same function is the generic ProcessAssignOperation engine reached from both the external HYP assignment path and the secure-kernel domain-assignment path.

@@ -1,0 +1,45 @@
+{
+  "experiment": "E004ch",
+  "status": "PASS_PKVM_NVHE_WORKER_BUILDS_DIRECT_HYP_BACKEND_BLOCKED_BY_QCSK_EXCLUSIVITY",
+  "mode": "static-plus-disposable-compile-only",
+  "windows_oracle": {
+    "simultaneous_hw_worker_visibility_required": true,
+    "time_multiplex_equivalent": false,
+    "internal_hw_owner": "CP_CAMERA 0x0d",
+    "assignment_live_during_worker": true
+  },
+  "pkvm": {
+    "nvhe_worker_source_controlled": true,
+    "worker_compiled_into_kvm_nvhe": true,
+    "host_call_dispatch_compiled": true,
+    "worker_requires_hyp_owned_pages": true,
+    "worker_establishes_ownership": false,
+    "golden_protected_mode_enabled": false
+  },
+  "qcom_hyp_policy": {
+    "windows_vmid_4_named_hyp": true,
+    "linux_public_named_hyp_vmid_found": false,
+    "destination_hyp_count_must_equal_one": true,
+    "destination_hyp_may_share_with_other_domains": false,
+    "cp_camera_plus_hyp_authorized": false
+  },
+  "camss_gate": {
+    "new_capability": "HW_WORKER_OVERLAP_PROVEN",
+    "required_mask": "0x7f",
+    "time_multiplex_visibility_explicitly_represented": true,
+    "baseline_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "scaffold_text_sha256": "fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e",
+    "text_byte_identical": true
+  },
+  "backend_selected": false,
+  "runtime_actions": {
+    "pkvm_boot": false,
+    "nvhe_worker_runtime": false,
+    "scm_assign_mem": false,
+    "cp_camera_plus_hyp_attempt": false,
+    "qtee_qsee_ffa_gunyah": false,
+    "camera_runtime": false,
+    "windows_boot": false
+  },
+  "next_gate": "E004ci protected guest/partition worker visibility feasibility, static first"
+}
