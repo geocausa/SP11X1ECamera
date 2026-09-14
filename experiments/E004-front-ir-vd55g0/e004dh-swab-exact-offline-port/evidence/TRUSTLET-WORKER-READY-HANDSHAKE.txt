@@ -1,0 +1,29 @@
+E004dh shipping Windows trustlet worker-ready handshake
+======================================================
+
+Authority note: this file explains behavior observed from the shipping Windows binary. It does not outrank the Windows oracle.
+
+SWABF worker function: QcISPTrustlet8380.dll FUN_18001f170
+SWABF dispatcher:      QcISPTrustlet8380.dll FUN_18001f420
+
+The worker enters each loop iteration by setting byte +0xb1 in its worker state to 1, then waits for byte +0xb0 (work pending). Therefore +0xb1 is an idle/ready/completion handshake bit, not a durable "current request finished" latch.
+
+The dispatcher installs four request descriptors, sets the low work bytes, and waits on the high ready bytes represented by:
+  DAT_18003db90._1_1_
+  DAT_18003dc48._1_1_
+  DAT_18003dd00._1_1_
+  DAT_18003ddb8._1_1_
+After each wait it clears the high byte while retaining the low byte.
+
+Consequence for a standalone differential harness:
+- immediately after worker creation, the workers can already be idle with ready=1;
+- a first direct ProcessImage call can consume that pre-existing ready state and return before the newly dispatched large frame finishes;
+- this exactly explains why the first 644x604 standalone SWABF snapshot was complete through row 528 but mostly unchanged in rows 529..602, while the same 16x16 vector happened to finish before capture.
+
+This is a harness synchronization issue, not evidence that the scalar arithmetic changes at row 529.
+
+For a deterministic shipping-binary differential oracle the harness must clear the pre-existing ready bytes immediately before dispatch. The shipping dispatcher then waits for the worker to set them again after the current job, making that invocation synchronous with respect to the requested frame.
+
+SWASF uses the analogous per-worker ready bytes in its allocated handle; the static process path waits/clears eight ready flags at offsets:
+  +0x2e1, +0x3a1, +0x461, +0x521, +0x5e1, +0x6a1, +0x761, +0x821
+The synchronized oracle clears these before SWASF dispatch for the same reason.
