@@ -1,0 +1,54 @@
+{
+  "experiment": "E004da",
+  "status": "PASS_EXTERNAL_CPZ_BACKING_LIFETIME_COMPILES_LINKS_IMPORT_HANDOFF_STILL_EXPLICIT",
+  "mode": "compile-and-partial-link-only",
+  "external_backing": {
+    "opaque_identity_preserved": true,
+    "request_id_preserved": true,
+    "allocation_extent_separate": true,
+    "system_heap_enforced_on_lend": true,
+    "cp_cdsp_owner": true,
+    "cp_camera_owner": false,
+    "normal_hlos_cpu_visible_while_protected": false
+  },
+  "lifetime": {
+    "base_dmabuf_reference_held": true,
+    "provider_worker_reference_held_before_import": true,
+    "failed_import_abort_path": true,
+    "detach_before_reclaim": true,
+    "reclaim_before_release": true,
+    "reclaim_failure_retains_backing": true,
+    "poisoned_lend_failure_fails_closed": true
+  },
+  "payload": {
+    "captured_extent_separate": true,
+    "serialized_extent_separate": true,
+    "payload_offset_separate": true,
+    "ordering_guard": "payload_offset <= serialized_extent <= captured_extent <= allocation_extent"
+  },
+  "build": {
+    "provider_text_size": 3080,
+    "combined_text_size": 31400,
+    "combined_sha256": "794f1a94f923ecddfde622f2ab07bad5d75c149241f6593553e98ba5a248405e",
+    "protected_integration_edges_remaining": 0,
+    "runtime_registration_present": false
+  },
+  "handoff": {
+    "actual_fastrpc_import_implemented": false,
+    "begin_commit_abort_boundary_present": true,
+    "post_fastrpc_detach_boundary_present": true
+  },
+  "runtime_actions": {
+    "object_load": false,
+    "provider_registration": false,
+    "dma_buf_lend": false,
+    "dma_buf_reclaim": false,
+    "scm_assign_mem": false,
+    "fastrpc_ioctl": false,
+    "cpz_process_create": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004db external protected-sample FastRPC handoff authority, static/compile-only first"
+}

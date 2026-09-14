@@ -1,0 +1,20 @@
+E004da EXTERNAL SAMPLE LIFETIME ORDER
+
+25:int sp11_cpz_external_bind(struct sp11_cpz_external_runtime *external,
+50:int sp11_cpz_external_lend_to_worker(struct sp11_cpz_external_runtime *external)
+100:int sp11_cpz_external_begin_worker_import(struct sp11_cpz_external_runtime *external,
+128:int sp11_cpz_external_commit_worker_import(struct sp11_cpz_external_runtime *external)
+152:void sp11_cpz_external_abort_worker_import(struct sp11_cpz_external_runtime *external)
+169:int sp11_cpz_external_mark_payload_ready(struct sp11_cpz_external_runtime *external,
+198:int sp11_cpz_external_worker_detached(struct sp11_cpz_external_runtime *external)
+230:int sp11_cpz_external_reclaim(struct sp11_cpz_external_runtime *external)
+269:int sp11_cpz_external_release(struct sp11_cpz_external_runtime *external)
+
+Required order:
+bind/backing ref -> CP_CDSP lend -> provider worker ref -> external FastRPC import -> commit active -> payload -> external FastRPC detach -> mark detached/drop worker ref -> reclaim -> release backing ref
+
+Failed import rollback:
+begin_worker_import extra ref -> abort_worker_import drops extra ref -> WORKER_OWNED/LENT may reclaim directly.
+
+Reclaim failure:
+phase remains RECLAIMING, backing ref remains held, normal_hlos_cpu_visible remains false, release rejects.

@@ -1,0 +1,43 @@
+E004da CP_CDSP-ONLY OWNERSHIP SEPARATION
+
+provider call site:
+60-		goto out;
+61-	}
+62-
+63-	/* camera_target=false is the hard separation from CP_CAMERA ownership. */
+64:	ret = sp11_cpz_system_heap_lend(external->dmabuf, false);
+65-	if (ret) {
+66-		/*
+67-		 * E004cu marks uncertain post-SCM failures POISONED and keeps the
+68-		 * dma-buf held. Mirror that uncertainty instead of claiming HLOS.
+69-		 */
+
+E004cz system-heap destination construction:
+542-	buffer->cpz_state = SP11_CPZ_HEAP_TRANSITION;
+543-	buffer->cpz_owner_kind = camera_target ? SP11_CPZ_OWNER_INTERNAL :
+544-					       SP11_CPZ_OWNER_EXTERNAL;
+545-	mutex_unlock(&buffer->lock);
+546-
+547:	dst[0].vmid = QCOM_SCM_VMID_CP_CDSP;
+548-	dst[0].perm = QCOM_SCM_PERM_RW;
+549-	if (camera_target) {
+550-		dst[1].vmid = QCOM_SCM_VMID_CP_CAMERA;
+551-		dst[1].perm = QCOM_SCM_PERM_RW;
+552-		nr_dst = 2;
+553-	}
+554-
+555-	ret = sp11_cpz_assign_sg(&buffer->sg_table, src, ARRAY_SIZE(src), dst, nr_dst);
+556-	mutex_lock(&buffer->lock);
+557-	buffer->cpz_state = ret ? SP11_CPZ_HEAP_POISONED : SP11_CPZ_HEAP_LENT;
+558-	mutex_unlock(&buffer->lock);
+559-	/* Failure intentionally keeps cpz_hold: physical ownership is uncertain. */
+560-	return ret;
+561-}
+562-
+563-int sp11_cpz_system_heap_mark_active(struct dma_buf *dmabuf)
+564-{
+565-	struct system_heap_buffer *buffer;
+
+Interpretation:
+camera_target=false keeps nr_dst=1, so the external sample is lent to CP_CDSP only.
+QCOM_SCM_VMID_CP_CAMERA is appended only in the camera_target=true internal-target branch.

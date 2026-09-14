@@ -1,0 +1,33 @@
+E004da FASTRPC HANDOFF BOUNDARY
+
+The provider does not call FastRPC itself.
+begin_worker_import returns the protected dma_buf under a provider-held extra reference.
+A future control-plane/import layer must perform the actual protected FastRPC import and call commit_worker_import only after that import succeeds.
+worker_detached must be called only after the real FastRPC mapping has been detached.
+
+FastRPC calls present in provider source (expected none):
+
+Protected-query/import precondition:
+96-	mutex_unlock(&external->lock);
+97-	return ret;
+98-}
+99-
+100:int sp11_cpz_external_begin_worker_import(struct sp11_cpz_external_runtime *external,
+101-					 struct dma_buf **dmabuf)
+102-{
+103-	int ret = 0;
+104-
+105-	if (!external || !dmabuf)
+106-		return -EINVAL;
+107-	mutex_lock(&external->lock);
+108-	if (!external->dmabuf || !external->contract.worker_owner_active ||
+109-	    external->contract.phase != CAMSS_CPZ_EXTERNAL_WORKER_OWNED ||
+110-	    !sp11_cpz_dma_buf_is_protected(external->dmabuf) ||
+111-	    external->worker_ref_held) {
+112-		ret = -EPERM;
+113-		goto out;
+114-	}
+115-
+116-	/*
+117-	 * Provider-held reference spans the future FastRPC import and payload life.
+118-	 * The actual FastRPC map also takes its own dma-buf reference.

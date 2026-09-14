@@ -1,0 +1,80 @@
+E004da FAIL-CLOSED SOURCE CHECK
+
+post-lend uncertainty handling:
+60-		goto out;
+61-	}
+62-
+63-	/* camera_target=false is the hard separation from CP_CAMERA ownership. */
+64:	ret = sp11_cpz_system_heap_lend(external->dmabuf, false);
+65-	if (ret) {
+66-		/*
+67-		 * E004cu marks uncertain post-SCM failures POISONED and keeps the
+68-		 * dma-buf held. Mirror that uncertainty instead of claiming HLOS.
+69-		 */
+70-		if (sp11_cpz_dma_buf_is_protected(external->dmabuf)) {
+71-			external->contract.phase = CAMSS_CPZ_EXTERNAL_RECLAIMING;
+72-			external->contract.sample.normal_hlos_cpu_visible = false;
+73-		}
+74-		goto out;
+75-	}
+76-
+77-	/* HLOS is no longer trusted immediately after a successful lend. */
+78-	external->contract.worker_owner_active = true;
+79-	external->contract.sample.normal_hlos_cpu_visible = false;
+80-	if (!sp11_cpz_dma_buf_is_protected(external->dmabuf)) {
+81-		/* LENT may reclaim directly.  Failure remains held/fail-closed below. */
+82-		ret = sp11_cpz_system_heap_reclaim(external->dmabuf);
+83-		if (!ret) {
+84-			external->contract.worker_owner_active = false;
+85-			external->contract.sample.normal_hlos_cpu_visible = true;
+86-			ret = -EIO;
+87-		} else {
+88-			external->contract.phase = CAMSS_CPZ_EXTERNAL_RECLAIMING;
+89-		}
+90-		goto out;
+91-	}
+92-
+93-	external->contract.phase = CAMSS_CPZ_EXTERNAL_WORKER_OWNED;
+94-	ret = 0;
+95-out:
+96-	mutex_unlock(&external->lock);
+
+release gate:
+265-	mutex_unlock(&external->lock);
+266-	return ret;
+267-}
+268-
+269:int sp11_cpz_external_release(struct sp11_cpz_external_runtime *external)
+270-{
+271-	struct dma_buf *put;
+272-	int ret = 0;
+273-
+274-	if (!external)
+275-		return -EINVAL;
+276-	mutex_lock(&external->lock);
+277-	if (!external->backing_ref_held || !external->dmabuf || external->worker_ref_held ||
+278-	    (external->contract.phase != CAMSS_CPZ_EXTERNAL_RECLAIMED &&
+279-	     external->contract.phase != CAMSS_CPZ_EXTERNAL_BACKING_READY)) {
+280-		ret = -EBUSY;
+281-		goto out;
+282-	}
+283-	if (external->contract.phase == CAMSS_CPZ_EXTERNAL_RECLAIMED &&
+284-	    !external->contract.ownership_reclaimed_before_free) {
+285-		ret = -EPERM;
+286-		goto out;
+287-	}
+288-	put = external->dmabuf;
+289-	external->dmabuf = NULL;
+290-	external->backing_ref_held = false;
+291-	external->contract.backing_reference_held = false;
+292-	external->contract.sample.phase = CAMSS_EXTERNAL_SAMPLE_RELEASING;
+293-	external->contract.phase = CAMSS_CPZ_EXTERNAL_RELEASING;
+294-	mutex_unlock(&external->lock);
+295-	dma_buf_put(put);
+296-	return 0;
+297-out:
+298-	mutex_unlock(&external->lock);
+299-	return ret;
+300-}
+
+runtime registration symbols in provider object (must be empty):
