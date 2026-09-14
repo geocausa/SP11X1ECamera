@@ -34,4 +34,16 @@ with tempfile.TemporaryDirectory() as td:
     subprocess.check_call(['clang','--target=hexagon','-mcpu=hexagonv73','-O2','-ffreestanding','-fno-builtin','-Wall','-Wextra','-Werror','-c',str(D/'scaffold/sp11-swasf-helpers.c'),'-o',str(obj)])
     assert sha(obj)==R['swasf']['helper_hexagon_object_sha256']
     assert subprocess.check_output(['llvm-nm','-u',str(obj)],text=True).strip()==''
+
+# Windows-authoritative C230 nested-filter basis closure.
+assert R['swasf']['c230_scalar_basis_exact']
+assert R['swasf']['c230_windows_basis_cases'] == 232
+out=subprocess.check_output([str(D/'verify_c230_windows_basis.py')],text=True)
+assert 'PASS (232 direct oracle cases)' in out
+with tempfile.TemporaryDirectory() as td:
+    obj=pathlib.Path(td)/'swasf_c230.o'
+    subprocess.check_call(['clang','--target=hexagon','-mcpu=hexagonv73','-O2','-ffreestanding','-fno-builtin','-Wall','-Wextra','-Werror','-c',str(D/'scaffold/sp11-swasf-c230.c'),'-o',str(obj)])
+    assert sha(obj)==R['swasf']['c230_hexagon_object_sha256']
+    assert subprocess.check_output(['llvm-nm','-u',str(obj)],text=True).strip()==''
+
 print('E004dh VERIFY: PASS (partial gate; SWASF pixel port pending)')
