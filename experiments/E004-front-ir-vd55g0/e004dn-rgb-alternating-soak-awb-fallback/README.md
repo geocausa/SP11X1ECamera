@@ -20,3 +20,15 @@ Planned one-shot sequence remains exactly:
 No same-boot retry is authorized. Every source must runtime-suspend before neutralization; all four mutable links must be neutral before enabling the next target. Final route must be neutral. Any production launcher `PINNED_FOR_REBOOT` condition causes immediate Golden return.
 
 Linux SecureISP / VD55G0 are not touched by this RGB-only gate.
+
+## Attempt 1 — PASS
+
+The single E004dn candidate boot `63634d5b-01d8-4faa-922b-96a35322958e` completed the full six-leg sequence without retry:
+
+`rear R16 -> neutral -> front R27 -> neutral -> rear R16 -> neutral -> front R27 -> neutral -> rear R16 -> neutral -> front R27 -> neutral`.
+
+All five cross-camera transitions were accepted. Rear completed three 8-frame streams at ~30 fps and retained the exact accepted OV13858 color-bar SHA `6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346`. Front completed three 27-frame production streams with post-G3 policy `shadow`, zero later native writes, no DQBUF mismatch and no producer failure. Both sensors runtime-suspended after every leg; final topology was neutral; kernel-health checks passed.
+
+The 72 live front AWB rows in this particular lighting run all remained in normal `triangle` selection mode. Therefore E004dn proves repeated cross-camera RGB robustness after the E004dm fix, while the newly ported centroid/two-vertex fallback itself remains covered by E004dm's Windows-authoritative offline G21 and boundary regressions rather than by this live lighting sample.
+
+No same-boot retry was performed. SP11 returned to protected Golden FullIO v19c on boot `9dc8cdc6-d8d4-40fc-ba09-fdd7ab4ebace`, and the consumed candidate was removed from `/boot` and GRUB.
