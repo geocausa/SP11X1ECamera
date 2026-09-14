@@ -1,0 +1,46 @@
+{
+  "schema": "sp11-camera-stack-readiness-v1",
+  "project_goal": "1:1 Windows camera stack parity including protected IR and Windows Hello",
+  "promotion_decision": "HOLD_FULL_1TO1_DEFAULT",
+  "nonprotected_product": {
+    "status": "READY_NONDEFAULT",
+    "canonical_hardware_authority": true,
+    "canonical_package": true,
+    "install_update_uninstall": true,
+    "same_boot_rear_to_front_runtime": true,
+    "rear_rgb": "PASS",
+    "front_rgb": "PASS",
+    "three_sensor_bind": "PASS",
+    "ir_receiver_windows_readback": "PASS_96_OF_96",
+    "ir_sensor_bind_windows_standby": "PASS",
+    "default_activation_authorized": false
+  },
+  "protected_path": {
+    "integrated_provider_compile_link": "PASS_FAILS_CLOSED",
+    "external_cpz_sample_backing": "PASS_COMPILE_LINK",
+    "fastrpc_fd_handoff_lifetime": "PASS_BOUND",
+    "securepd_worker_abi": "PASS",
+    "canonical_windows_exact_worker_source": "PASS_OFFLINE",
+    "worker_signed": false,
+    "worker_production_admitted": false,
+    "runtime_authorized": false,
+    "blocker": "legitimate Qualcomm/Microsoft/OEM production SecurePD worker signing/admission authority"
+  },
+  "remaining_proofs": {
+    "protected_ir_windows_hello_end_to_end": "BLOCKED_ON_PRODUCTION_WORKER_ADMISSION",
+    "front_post_g3_changed_native_feedback": "IMPLEMENTED_BUT_LIVE_PROOF_SCENE_GATED",
+    "current_scene_post_g3_state": "CAP_ACTIVE_NO_APPLY_ONE_NATIVE_OPPORTUNITY"
+  },
+  "forbidden_shortcuts": [
+    "patch signature verification",
+    "enable test/debug trust root",
+    "modify trusted CDSP root firmware to admit the worker",
+    "expose protected pixels to HLOS",
+    "claim direct unprotected VD55G0 streaming as parity",
+    "force/synthesize the front post-G3 cap-release condition"
+  ],
+  "resume_conditions": {
+    "protected_runtime": "only when a legitimate accepted production worker signing/admission route is available",
+    "post_g3_feedback": "when a natural shadow observation reports E003I_HA_APPLY_ONE_NATIVE / decision 4"
+  }
+}
