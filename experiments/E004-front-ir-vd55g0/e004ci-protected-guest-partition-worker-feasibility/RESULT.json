@@ -1,0 +1,31 @@
+{
+  "experiment": "E004ci",
+  "status": "PASS_NO_PROTECTED_GUEST_OR_FFA_PARTITION_CAMERA_OWNER_BINDING",
+  "mode": "static-read-only",
+  "pkvm_guest": {
+    "host_isolation": true,
+    "guest_cpu_execution": true,
+    "qcom_scm_integration_found": false,
+    "qhee_guest_owner_binding_found": false,
+    "camera_device_dma_binding_found": false
+  },
+  "ffa": {
+    "memory_transport_present": true,
+    "host_share_state": "PKVM_PAGE_SHARED_OWNED",
+    "camera_partition_identity_found": false,
+    "camera_worker_provider_found": false
+  },
+  "pkvm_dma_isolation": "unimplemented",
+  "overlap_requirement_satisfied": false,
+  "windows_one_shot_needed": false,
+  "runtime_actions": {
+    "pkvm_boot": false,
+    "protected_vm": false,
+    "ffa_call_or_probe": false,
+    "qtee_qsee": false,
+    "scm_assign_mem": false,
+    "camera_runtime": false,
+    "windows_boot": false
+  },
+  "next_gate": "E004cj platform secure-worker authority closure, static first"
+}

@@ -1,0 +1,171 @@
+E004ci WINDOWS OVERLAP REQUIREMENT / HYP EXCLUSION
+# E004ch — pKVM hyp-worker integration boundary
+
+## Result
+
+**PASS (negative backend-selection result): a source-controlled nVHE/pKVM CPU worker is mechanically buildable and can enforce "operate only on already-HYP-owned pages", but Qualcomm's same-machine Secure Kernel policy forbids HYP from being a simultaneous co-owner with another VM/domain. Because the Windows oracle requires CP_CAMERA hardware visibility and trusted-worker visibility to overlap on the same internal backing, direct pKVM-HYP cannot currently satisfy parity and remains unselected.**
+
+E004ch also tightens the compile-only CAMSS provider gate with a seventh mandatory capability: **hardware/worker overlap proven**. A time-multiplexed `CP_CAMERA -> worker -> CP_CAMERA` design is now explicitly represented as an unsafe shortcut rather than an acceptable backend.
+
+No boot mode, ownership, camera, QTEE/QSEE, SCM or protected-memory runtime operation occurred.
+
+## 1. Windows parity requirement is simultaneous, not sequential
+
+E004bt already proved the internal Windows protected target has two live views at the same time:
+
+1. the VTL1 trustlet creates and maps the secure section;
+2. it assigns the same backing to SoC domain `0x0d`;
+3. it retains both the assignment handle and trustlet mapping;
+4. the frame worker later reads through the retained trustlet mapping while the assignment handle is still live;
+5. teardown closes the assignment handle before unmapping the trustlet VA.
+
+Therefore parity requires:
+
+**camera-hardware visibility + trusted-worker visibility on the same backing during the active capture interval.**
+
+Merely switching ownership after each captured frame would be a different lifetime/security contract.
+
+## 2. pKVM/nVHE can host our CPU worker mechanically
+
+The current kernel's nVHE implementation is source-controlled and compiled into `kvm_nvhe.o`, which is linked into the kernel image. It is not a runtime plugin/app loader.
+
+E004ch built a disposable source-copy proof containing a minimal worker:
+
+`__pkvm_camera_worker_copy_mapped(src_pfn, dst_pfn, len)`
+
+The worker:
+
+- accepts at most one page per call;
+- obtains the nVHE metadata for source and destination pages;
+- requires both pages to be `PKVM_PAGE_OWNED` by HYP;
+- converts their physical addresses to HYP virtual addresses;
+- performs an ordinary `memcpy()`;
+- returns `-EPERM` if either page is not HYP-owned.
+
+It does **not**:
+
+- donate/share pages;
+- call Qualcomm SCM;
+- mention CP_CAMERA or a Qualcomm VMID;
+- create a DMA mapping;
+- invoke QTEE/QSEE;
+- establish a protected sample or camera policy.
+
+That boundary is intentional: it proves only that the E004cf CPU-worker algorithm has a viable nVHE execution habitat once correct mappings already exist.
+
+### Host-call integration
+
+The disposable tree also added:
+
+- one pKVM-only host-call ID;
+- one `handle___pkvm_camera_worker_copy_mapped()` dispatch handler;
+- one nVHE object in the `hyp-obj-y` link set.
+
+The resulting nVHE image contains both:
+
+- `__kvm_nvhe_handle___pkvm_camera_worker_copy_mapped`;
+- `__kvm_nvhe___pkvm_camera_worker_copy_mapped`.
+
+The direct worker object disassembles to page-state checks followed by a call to nVHE `memcpy`.
+
+So **EL2 worker code is not the blocker anymore**.
+
+## 3. pKVM ownership and Qualcomm ownership are different layers
+
+pKVM's page ownership machinery can transfer a host page to HYP:
+
+- host state becomes `PKVM_NOPAGE`;
+- HYP state becomes `PKVM_PAGE_OWNED`.
+
+This is a real host-stage2 security boundary and is useful for excluding ordinary Linux/HLOS access.
+
+However this ownership state is not the same thing as Qualcomm's MP/QHEE VMID ACL used for CP_CAMERA.
+
+Linux `qcom_scm_assign_mem()` can mechanically encode multiple destination VMIDs, but E004ch found a platform-specific HYP policy in the exact SP11 Windows Secure Kernel extension that constrains that generic mechanism.
+
+## 4. Same-machine QcSk authority: HYP is an exclusive destination
+
+Exact binary:
+
+`QcSkExt8380.exe`
+
+SHA-256:
+
+`618910808afafda01533f6f0decc21209521d23db950209cebe1668520dff5e3`
+
+E004cb already anchored VMID `4` as vendor-named **HYP** from the camera PIL transition logs.
+
+E004ch traced the generic assignment engine's HYP destination branch and recovered the exact policy string:
+
+`Invalid assignment, assignment to HYP domain cannot be shared with other domains or memory region not mapped into view.`
+
+The raw ARM64 branch around that xref is decisive:
+
+- destination-HYP state is active;
+- it loads the destination-entry count;
+- `cmp w1, #1`;
+- any count other than exactly one branches to the above error;
+- a valid mapped backing is also required.
+
+The same engine separately logs:
+
+- `Unsupported assign to HYP VM, source VM not HLOS or HLOS_UNMAPPED.`
+- `Assignment to AC_VM_HYP successful.`
+
+Thus, at the same-machine Windows/QcSk policy layer, **HYP cannot be one member of a multi-destination owner set**.
+
+That restriction is stronger than the generic Linux SCM packet format, which by itself accepts N destination VMID/permission entries.
+
+## 5. Why CP_CAMERA + pKVM-HYP is rejected
+
+Windows requires the internal target to remain:
+
+- visible to CP_CAMERA hardware;
+- simultaneously visible to its trusted CPU worker.
+
+If the Linux worker were mapped through Qualcomm's HYP domain, the desired destination set would effectively require:
+
+`{ CP_CAMERA, HYP }`
+
+But QcSk's destination-HYP policy requires HYP to be the sole destination.
+
+Therefore the straightforward pKVM-HYP architecture contradicts the Windows platform authority.
+
+### Important remaining identity caveat
+
+Linux's public Qualcomm VMID header does not even define a named `QCOM_SCM_VMID_HYP`, and E004cg intentionally refused to equate Windows `AC_VM_HYP` with pKVM EL2 without authority.
+
+E004ch does not need to weaken that caution. The result is stronger in the safe direction:
+
+- if pKVM EL2 is **not** Qualcomm HYP, its Qualcomm protected-memory visibility is unproven;
+- if pKVM EL2 **is** Qualcomm HYP, QcSk proves HYP cannot simultaneously co-own the backing with CP_CAMERA.
+
+Either way, direct pKVM-HYP is not parity-ready.
+
+## 6. Time-multiplexing is not accepted as a shortcut
+
+A tempting design would be:
+
+1. CP_CAMERA owns/writes the frame;
+2. revoke CP_CAMERA;
+3. assign/donate the frame to HYP;
+4. run the pKVM worker;
+5. reverse the transition for the next frame.
+
+E004ch does **not** authorize that design.
+
+It differs from Windows in three important ways:
+
+- Windows retains the CP_CAMERA assignment while the worker uses the trustlet mapping;
+- repeated ownership transitions add an unproven synchronization/coherency boundary to every frame;
+- it would make the worker's visibility sequential rather than simultaneous.
+
+If a future oracle result proves Windows can safely release hardware ownership before processing, this can be revisited. Current evidence says the opposite.
+
+## 7. Compile-only CAMSS gate tightened
+
+E004ce previously required six provider capabilities (`0x3f`).
+
+E004ch adds:
+
+`CAMSS_PROTECTED_CAP_HW_WORKER_OVERLAP_PROVEN = 1U << 6`

@@ -1,0 +1,786 @@
+E004ci FFA MEMORY TRANSPORT
+int __pkvm_host_share_ffa(u64 pfn, u64 nr_pages)
+{
+	u64 phys = hyp_pfn_to_phys(pfn);
+	u64 size = PAGE_SIZE * nr_pages;
+	int ret;
+
+	if (!pfn_range_is_valid(pfn, nr_pages))
+		return -EINVAL;
+
+	host_lock_component();
+	ret = __host_check_page_state_range(phys, size, PKVM_PAGE_OWNED);
+	if (!ret)
+		ret = __host_set_page_state_range(phys, size, PKVM_PAGE_SHARED_OWNED);
+	host_unlock_component();
+
+	return ret;
+}
+
+int __pkvm_host_unshare_ffa(u64 pfn, u64 nr_pages)
+{
+	u64 phys = hyp_pfn_to_phys(pfn);
+	u64 size = PAGE_SIZE * nr_pages;
+	int ret;
+
+	if (!pfn_range_is_valid(pfn, nr_pages))
+		return -EINVAL;
+
+	host_lock_component();
+	ret = __host_check_page_state_range(phys, size, PKVM_PAGE_SHARED_OWNED);
+	if (!ret)
+		ret = __host_set_page_state_range(phys, size, PKVM_PAGE_OWNED);
+	host_unlock_component();
+
+	return ret;
+}
+
+152-		.a1 = hyp_virt_to_phys(hyp_buffers.tx),
+153-		.a2 = hyp_virt_to_phys(hyp_buffers.rx),
+154-		.a3 = ffa_page_count,
+155-	}, &res);
+156-
+157-	return res.a0 == FFA_SUCCESS ? FFA_RET_SUCCESS : res.a2;
+158-}
+159-
+160-static int ffa_unmap_hyp_buffers(void)
+161-{
+162-	struct arm_smccc_1_2_regs res;
+163-
+164-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs) {
+165-		.a0 = FFA_RXTX_UNMAP,
+166-		.a1 = HOST_FFA_ID,
+167-	}, &res);
+168-
+169-	return res.a0 == FFA_SUCCESS ? FFA_RET_SUCCESS : res.a2;
+170-}
+171-
+172:static void ffa_mem_frag_tx(struct arm_smccc_1_2_regs *res, u32 handle_lo,
+173-			     u32 handle_hi, u32 fraglen, u32 endpoint_id)
+174-{
+175-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs) {
+176-		.a0 = FFA_MEM_FRAG_TX,
+177-		.a1 = handle_lo,
+178-		.a2 = handle_hi,
+179-		.a3 = fraglen,
+180-		.a4 = endpoint_id,
+181-	}, res);
+182-}
+183-
+184:static void ffa_mem_frag_rx(struct arm_smccc_1_2_regs *res, u32 handle_lo,
+185-			     u32 handle_hi, u32 fragoff)
+186-{
+187-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs) {
+188-		.a0 = FFA_MEM_FRAG_RX,
+189-		.a1 = handle_lo,
+190-		.a2 = handle_hi,
+191-		.a3 = fragoff,
+192-		.a4 = HOST_FFA_ID,
+193-	}, res);
+194-}
+195-
+196:static void ffa_mem_xfer(struct arm_smccc_1_2_regs *res, u64 func_id, u32 len,
+197-			  u32 fraglen)
+198-{
+199-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs) {
+200-		.a0 = func_id,
+201-		.a1 = len,
+202-		.a2 = fraglen,
+203-	}, res);
+204-}
+205-
+206:static void ffa_mem_reclaim(struct arm_smccc_1_2_regs *res, u32 handle_lo,
+207-			     u32 handle_hi, u32 flags)
+208-{
+209-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs) {
+210-		.a0 = FFA_MEM_RECLAIM,
+211-		.a1 = handle_lo,
+212-		.a2 = handle_hi,
+213-		.a3 = flags,
+214-	}, res);
+215-}
+216-
+217-static void ffa_retrieve_req(struct arm_smccc_1_2_regs *res, u32 len)
+218-{
+219-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs) {
+220-		.a0 = FFA_FN64_MEM_RETRIEVE_REQ,
+221-		.a1 = len,
+222-		.a2 = len,
+223-	}, res);
+224-}
+225-
+226-static void ffa_rx_release(struct arm_smccc_1_2_regs *res)
+227-{
+228-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs) {
+229-		.a0 = FFA_RX_RELEASE,
+230-	}, res);
+231-}
+232-
+233-static void do_ffa_rxtx_map(struct arm_smccc_1_2_regs *res,
+234-			    struct kvm_cpu_context *ctxt)
+235-{
+236-	DECLARE_REG(phys_addr_t, tx, ctxt, 1);
+237-	DECLARE_REG(phys_addr_t, rx, ctxt, 2);
+238-	DECLARE_REG(u32, npages, ctxt, 3);
+239-	int ret = 0;
+240-	void *rx_virt, *tx_virt;
+241-
+242-	if (npages != (KVM_FFA_MBOX_NR_PAGES * PAGE_SIZE) / FFA_PAGE_SIZE) {
+243-		ret = FFA_RET_INVALID_PARAMETERS;
+244-		goto out;
+245-	}
+246-
+247-	if (!PAGE_ALIGNED(tx) || !PAGE_ALIGNED(rx)) {
+248-		ret = FFA_RET_INVALID_PARAMETERS;
+249-		goto out;
+250-	}
+251-
+252-	hyp_spin_lock(&host_buffers.lock);
+253-	if (host_buffers.tx) {
+254-		ret = FFA_RET_DENIED;
+255-		goto out_unlock;
+256-	}
+257-
+258-	/*
+259-	 * Map our hypervisor buffers into the SPMD before mapping and
+260-	 * pinning the host buffers in our own address space.
+261-	 */
+262-	ret = ffa_map_hyp_buffers(npages);
+263-	if (ret)
+264-		goto out_unlock;
+265-
+266-	ret = __pkvm_host_share_hyp(hyp_phys_to_pfn(tx));
+267-	if (ret) {
+268-		ret = FFA_RET_INVALID_PARAMETERS;
+269-		goto err_unmap;
+270-	}
+271-
+272-	ret = __pkvm_host_share_hyp(hyp_phys_to_pfn(rx));
+273-	if (ret) {
+274-		ret = FFA_RET_INVALID_PARAMETERS;
+275-		goto err_unshare_tx;
+276-	}
+277-
+278-	tx_virt = hyp_phys_to_virt(tx);
+279-	ret = hyp_pin_shared_mem(tx_virt, tx_virt + 1);
+280-	if (ret) {
+281-		ret = FFA_RET_INVALID_PARAMETERS;
+282-		goto err_unshare_rx;
+283-	}
+284-
+285-	rx_virt = hyp_phys_to_virt(rx);
+286-	ret = hyp_pin_shared_mem(rx_virt, rx_virt + 1);
+287-	if (ret) {
+288-		ret = FFA_RET_INVALID_PARAMETERS;
+289-		goto err_unpin_tx;
+290-	}
+291-
+292-	host_buffers.tx = tx_virt;
+293-	host_buffers.rx = rx_virt;
+294-
+295-out_unlock:
+296-	hyp_spin_unlock(&host_buffers.lock);
+297-out:
+298-	ffa_to_smccc_res(res, ret);
+299-	return;
+300-
+301-err_unpin_tx:
+302-	hyp_unpin_shared_mem(tx_virt, tx_virt + 1);
+303-err_unshare_rx:
+304-	__pkvm_host_unshare_hyp(hyp_phys_to_pfn(rx));
+305-err_unshare_tx:
+306-	__pkvm_host_unshare_hyp(hyp_phys_to_pfn(tx));
+307-err_unmap:
+308-	ffa_unmap_hyp_buffers();
+309-	goto out_unlock;
+310-}
+311-
+312-static void do_ffa_rxtx_unmap(struct arm_smccc_1_2_regs *res,
+313-			      struct kvm_cpu_context *ctxt)
+314-{
+315-	DECLARE_REG(u32, id, ctxt, 1);
+316-	int ret = 0;
+317-
+318-	if (id != HOST_FFA_ID) {
+319-		ret = FFA_RET_INVALID_PARAMETERS;
+320-		goto out;
+321-	}
+322-
+323-	hyp_spin_lock(&host_buffers.lock);
+324-	if (!host_buffers.tx) {
+325-		ret = FFA_RET_INVALID_PARAMETERS;
+326-		goto out_unlock;
+327-	}
+328-
+329-	hyp_unpin_shared_mem(host_buffers.tx, host_buffers.tx + 1);
+330-	WARN_ON(__pkvm_host_unshare_hyp(hyp_virt_to_pfn(host_buffers.tx)));
+331-	host_buffers.tx = NULL;
+332-
+333-	hyp_unpin_shared_mem(host_buffers.rx, host_buffers.rx + 1);
+334-	WARN_ON(__pkvm_host_unshare_hyp(hyp_virt_to_pfn(host_buffers.rx)));
+335-	host_buffers.rx = NULL;
+336-
+337-	ffa_unmap_hyp_buffers();
+338-
+339-out_unlock:
+340-	hyp_spin_unlock(&host_buffers.lock);
+341-out:
+342-	ffa_to_smccc_res(res, ret);
+343-}
+344-
+345:static u32 __ffa_host_share_ranges(struct ffa_mem_region_addr_range *ranges,
+346-				   u32 nranges)
+347-{
+348-	u32 i;
+349-
+350-	for (i = 0; i < nranges; ++i) {
+351:		struct ffa_mem_region_addr_range *range = &ranges[i];
+352-		u64 sz = (u64)range->pg_cnt * FFA_PAGE_SIZE;
+353-		u64 pfn = hyp_phys_to_pfn(range->address);
+354-
+355-		if (!PAGE_ALIGNED(sz))
+356-			break;
+357-
+358-		if (__pkvm_host_share_ffa(pfn, sz / PAGE_SIZE))
+359-			break;
+360-	}
+361-
+362-	return i;
+363-}
+364-
+365:static u32 __ffa_host_unshare_ranges(struct ffa_mem_region_addr_range *ranges,
+366-				     u32 nranges)
+367-{
+368-	u32 i;
+369-
+370-	for (i = 0; i < nranges; ++i) {
+371:		struct ffa_mem_region_addr_range *range = &ranges[i];
+372-		u64 sz = (u64)range->pg_cnt * FFA_PAGE_SIZE;
+373-		u64 pfn = hyp_phys_to_pfn(range->address);
+374-
+375-		if (!PAGE_ALIGNED(sz))
+376-			break;
+377-
+378-		if (__pkvm_host_unshare_ffa(pfn, sz / PAGE_SIZE))
+379-			break;
+380-	}
+381-
+382-	return i;
+383-}
+384-
+385:static int ffa_host_share_ranges(struct ffa_mem_region_addr_range *ranges,
+386-				 u32 nranges)
+387-{
+388-	u32 nshared = __ffa_host_share_ranges(ranges, nranges);
+389-	int ret = 0;
+390-
+391-	if (nshared != nranges) {
+392-		WARN_ON(__ffa_host_unshare_ranges(ranges, nshared) != nshared);
+393-		ret = FFA_RET_DENIED;
+394-	}
+395-
+396-	return ret;
+397-}
+398-
+399:static int ffa_host_unshare_ranges(struct ffa_mem_region_addr_range *ranges,
+400-				   u32 nranges)
+401-{
+402-	u32 nunshared = __ffa_host_unshare_ranges(ranges, nranges);
+403-	int ret = 0;
+404-
+405-	if (nunshared != nranges) {
+406-		WARN_ON(__ffa_host_share_ranges(ranges, nunshared) != nunshared);
+407-		ret = FFA_RET_DENIED;
+408-	}
+409-
+410-	return ret;
+411-}
+412-
+413:static void do_ffa_mem_frag_tx(struct arm_smccc_1_2_regs *res,
+414-			       struct kvm_cpu_context *ctxt)
+415-{
+416-	DECLARE_REG(u32, handle_lo, ctxt, 1);
+417-	DECLARE_REG(u32, handle_hi, ctxt, 2);
+418-	DECLARE_REG(u32, fraglen, ctxt, 3);
+419-	DECLARE_REG(u32, endpoint_id, ctxt, 4);
+420:	struct ffa_mem_region_addr_range *buf;
+421-	int ret = FFA_RET_INVALID_PARAMETERS;
+422-	u32 nr_ranges;
+423-
+424-	if (fraglen > KVM_FFA_MBOX_NR_PAGES * PAGE_SIZE)
+425-		goto out;
+426-
+427-	if (fraglen % sizeof(*buf))
+428-		goto out;
+429-
+430-	hyp_spin_lock(&host_buffers.lock);
+431-	if (!host_buffers.tx)
+432-		goto out_unlock;
+433-
+434-	buf = hyp_buffers.tx;
+435-	memcpy(buf, host_buffers.tx, fraglen);
+436-	nr_ranges = fraglen / sizeof(*buf);
+437-
+438-	ret = ffa_host_share_ranges(buf, nr_ranges);
+439-	if (ret) {
+440-		/*
+441-		 * We're effectively aborting the transaction, so we need
+442-		 * to restore the global state back to what it was prior to
+443-		 * transmission of the first fragment.
+444-		 */
+445:		ffa_mem_reclaim(res, handle_lo, handle_hi, 0);
+446-		WARN_ON(res->a0 != FFA_SUCCESS);
+447-		goto out_unlock;
+448-	}
+449-
+450:	ffa_mem_frag_tx(res, handle_lo, handle_hi, fraglen, endpoint_id);
+451-	if (res->a0 != FFA_SUCCESS && res->a0 != FFA_MEM_FRAG_RX)
+452-		WARN_ON(ffa_host_unshare_ranges(buf, nr_ranges));
+453-
+454-out_unlock:
+455-	hyp_spin_unlock(&host_buffers.lock);
+456-out:
+457-	if (ret)
+458-		ffa_to_smccc_res(res, ret);
+459-
+460-	/*
+461-	 * If for any reason this did not succeed, we're in trouble as we have
+462-	 * now lost the content of the previous fragments and we can't rollback
+463-	 * the host stage-2 changes. The pages previously marked as shared will
+464-	 * remain stuck in that state forever, hence preventing the host from
+465-	 * sharing/donating them again and may possibly lead to subsequent
+466-	 * failures, but this will not compromise confidentiality.
+467-	 */
+468-	return;
+469-}
+470-
+471:static void __do_ffa_mem_xfer(const u64 func_id,
+472-			      struct arm_smccc_1_2_regs *res,
+473-			      struct kvm_cpu_context *ctxt)
+474-{
+475-	DECLARE_REG(u32, len, ctxt, 1);
+476-	DECLARE_REG(u32, fraglen, ctxt, 2);
+477-	DECLARE_REG(u64, addr_mbz, ctxt, 3);
+478-	DECLARE_REG(u32, npages_mbz, ctxt, 4);
+479:	struct ffa_mem_region_attributes *ep_mem_access;
+480-	struct ffa_composite_mem_region *reg;
+481:	struct ffa_mem_region *buf;
+482-	u32 offset, nr_ranges, checked_offset;
+483-	int ret = 0;
+484-
+485-	if (addr_mbz || npages_mbz || fraglen > len ||
+486-	    fraglen > KVM_FFA_MBOX_NR_PAGES * PAGE_SIZE) {
+487-		ret = FFA_RET_INVALID_PARAMETERS;
+488-		goto out;
+489-	}
+490-
+491:	if (fraglen < sizeof(struct ffa_mem_region) +
+492:		      sizeof(struct ffa_mem_region_attributes)) {
+493-		ret = FFA_RET_INVALID_PARAMETERS;
+494-		goto out;
+495-	}
+496-
+497-	hyp_spin_lock(&host_buffers.lock);
+498-	if (!host_buffers.tx) {
+499-		ret = FFA_RET_INVALID_PARAMETERS;
+500-		goto out_unlock;
+501-	}
+502-
+503-	if (len > ffa_desc_buf.len) {
+504-		ret = FFA_RET_NO_MEMORY;
+505-		goto out_unlock;
+506-	}
+507-
+508-	buf = hyp_buffers.tx;
+509-	memcpy(buf, host_buffers.tx, fraglen);
+510-
+511-	ep_mem_access = (void *)buf +
+512:			ffa_mem_desc_offset(buf, 0, hyp_ffa_version);
+513-	offset = ep_mem_access->composite_off;
+514-	if (!offset || buf->ep_count != 1 || buf->sender_id != HOST_FFA_ID) {
+515-		ret = FFA_RET_INVALID_PARAMETERS;
+516-		goto out_unlock;
+517-	}
+518-
+519-	if (check_add_overflow(offset, sizeof(struct ffa_composite_mem_region), &checked_offset)) {
+520-		ret = FFA_RET_INVALID_PARAMETERS;
+521-		goto out_unlock;
+522-	}
+523-
+524-	if (fraglen < checked_offset) {
+525-		ret = FFA_RET_INVALID_PARAMETERS;
+526-		goto out_unlock;
+527-	}
+528-
+529-	reg = (void *)buf + offset;
+530-	nr_ranges = ((void *)buf + fraglen) - (void *)reg->constituents;
+531-	if (nr_ranges % sizeof(reg->constituents[0])) {
+532-		ret = FFA_RET_INVALID_PARAMETERS;
+533-		goto out_unlock;
+534-	}
+535-
+536-	nr_ranges /= sizeof(reg->constituents[0]);
+537-	ret = ffa_host_share_ranges(reg->constituents, nr_ranges);
+538-	if (ret)
+539-		goto out_unlock;
+540-
+541:	ffa_mem_xfer(res, func_id, len, fraglen);
+542-	if (fraglen != len) {
+543-		if (res->a0 != FFA_MEM_FRAG_RX)
+544-			goto err_unshare;
+545-
+546-		if (res->a3 != fraglen)
+547-			goto err_unshare;
+548-	} else if (res->a0 != FFA_SUCCESS) {
+549-		goto err_unshare;
+550-	}
+551-
+552-out_unlock:
+553-	hyp_spin_unlock(&host_buffers.lock);
+554-out:
+555-	if (ret)
+556-		ffa_to_smccc_res(res, ret);
+557-	return;
+558-
+559-err_unshare:
+560-	WARN_ON(ffa_host_unshare_ranges(reg->constituents, nr_ranges));
+561-	goto out_unlock;
+562-}
+563-
+564:#define do_ffa_mem_xfer(fid, res, ctxt)				\
+565-	do {							\
+566-		BUILD_BUG_ON((fid) != FFA_FN64_MEM_SHARE &&	\
+567-			     (fid) != FFA_FN64_MEM_LEND);	\
+568:		__do_ffa_mem_xfer((fid), (res), (ctxt));	\
+569-	} while (0);
+570-
+571:static void do_ffa_mem_reclaim(struct arm_smccc_1_2_regs *res,
+572-			       struct kvm_cpu_context *ctxt)
+573-{
+574-	DECLARE_REG(u32, handle_lo, ctxt, 1);
+575-	DECLARE_REG(u32, handle_hi, ctxt, 2);
+576-	DECLARE_REG(u32, flags, ctxt, 3);
+577:	struct ffa_mem_region_attributes *ep_mem_access;
+578-	struct ffa_composite_mem_region *reg;
+579-	u32 offset, len, fraglen, fragoff;
+580:	struct ffa_mem_region *buf;
+581-	int ret = 0;
+582-	u64 handle;
+583-
+584-	handle = PACK_HANDLE(handle_lo, handle_hi);
+585-
+586-	hyp_spin_lock(&host_buffers.lock);
+587-
+588-	buf = hyp_buffers.tx;
+589:	*buf = (struct ffa_mem_region) {
+590-		.sender_id	= HOST_FFA_ID,
+591-		.handle		= handle,
+592-	};
+593-
+594-	ffa_retrieve_req(res, sizeof(*buf));
+595-	buf = hyp_buffers.rx;
+596-	if (res->a0 != FFA_MEM_RETRIEVE_RESP)
+597-		goto out_unlock;
+598-
+599-	len = res->a1;
+600-	fraglen = res->a2;
+601-
+602-	ep_mem_access = (void *)buf +
+603:			ffa_mem_desc_offset(buf, 0, hyp_ffa_version);
+604-	offset = ep_mem_access->composite_off;
+605-	/*
+606-	 * We can trust the SPMD to get this right, but let's at least
+607-	 * check that we end up with something that doesn't look _completely_
+608-	 * bogus.
+609-	 */
+610-	if (WARN_ON(offset > len ||
+611-		    fraglen > KVM_FFA_MBOX_NR_PAGES * PAGE_SIZE)) {
+612-		ret = FFA_RET_ABORTED;
+613-		ffa_rx_release(res);
+614-		goto out_unlock;
+615-	}
+616-
+617-	if (len > ffa_desc_buf.len) {
+618-		ret = FFA_RET_NO_MEMORY;
+619-		ffa_rx_release(res);
+620-		goto out_unlock;
+621-	}
+622-
+623-	buf = ffa_desc_buf.buf;
+624-	memcpy(buf, hyp_buffers.rx, fraglen);
+625-	ffa_rx_release(res);
+626-
+627-	for (fragoff = fraglen; fragoff < len; fragoff += fraglen) {
+628:		ffa_mem_frag_rx(res, handle_lo, handle_hi, fragoff);
+629-		if (res->a0 != FFA_MEM_FRAG_TX) {
+630-			ret = FFA_RET_INVALID_PARAMETERS;
+631-			goto out_unlock;
+632-		}
+633-
+634-		fraglen = res->a3;
+635-		memcpy((void *)buf + fragoff, hyp_buffers.rx, fraglen);
+636-		ffa_rx_release(res);
+637-	}
+638-
+639:	ffa_mem_reclaim(res, handle_lo, handle_hi, flags);
+640-	if (res->a0 != FFA_SUCCESS)
+641-		goto out_unlock;
+642-
+643-	reg = (void *)buf + offset;
+644-	/* If the SPMD was happy, then we should be too. */
+645-	WARN_ON(ffa_host_unshare_ranges(reg->constituents,
+646-					reg->addr_range_cnt));
+647-out_unlock:
+648-	hyp_spin_unlock(&host_buffers.lock);
+649-
+650-	if (ret)
+651-		ffa_to_smccc_res(res, ret);
+652-}
+653-
+654-/*
+655- * Is a given FFA function supported, either by forwarding on directly
+656- * or by handling at EL2?
+657- */
+658-static bool ffa_call_supported(u64 func_id)
+659-{
+660-	switch (func_id) {
+661-	/* Unsupported memory management calls */
+662-	case FFA_FN64_MEM_RETRIEVE_REQ:
+663-	case FFA_MEM_RETRIEVE_RESP:
+664-	case FFA_MEM_RELINQUISH:
+665-	case FFA_MEM_OP_PAUSE:
+666-	case FFA_MEM_OP_RESUME:
+667-	case FFA_MEM_FRAG_RX:
+668-	case FFA_FN64_MEM_DONATE:
+669-	/* Indirect message passing via RX/TX buffers */
+670-	case FFA_MSG_SEND:
+671-	case FFA_MSG_POLL:
+672-	case FFA_MSG_WAIT:
+673-	/* 32-bit variants of 64-bit calls */
+674-	case FFA_MSG_SEND_DIRECT_RESP:
+675-	case FFA_RXTX_MAP:
+676:	case FFA_MEM_DONATE:
+677-	case FFA_MEM_RETRIEVE_REQ:
+678-       /* Optional notification interfaces added in FF-A 1.1 */
+679-	case FFA_NOTIFICATION_BITMAP_CREATE:
+680-	case FFA_NOTIFICATION_BITMAP_DESTROY:
+681-	case FFA_NOTIFICATION_BIND:
+682-	case FFA_NOTIFICATION_UNBIND:
+683-	case FFA_NOTIFICATION_SET:
+684-	case FFA_NOTIFICATION_GET:
+685-	case FFA_NOTIFICATION_INFO_GET:
+686-	/* Optional interfaces added in FF-A 1.2 */
+687-	case FFA_MSG_SEND_DIRECT_REQ2:		/* Optional per 7.5.1 */
+688-	case FFA_MSG_SEND_DIRECT_RESP2:		/* Optional per 7.5.1 */
+689-	case FFA_CONSOLE_LOG:			/* Optional per 13.1: not in Table 13.1 */
+690-	case FFA_PARTITION_INFO_GET_REGS:	/* Optional for virtual instances per 13.1 */
+691-		return false;
+692-	}
+693-
+694-	return true;
+695-}
+696-
+697-static bool do_ffa_features(struct arm_smccc_1_2_regs *res,
+698-			    struct kvm_cpu_context *ctxt)
+699-{
+700-	DECLARE_REG(u32, id, ctxt, 1);
+701-	u64 prop = 0;
+702-	int ret = 0;
+703-
+704-	if (!ffa_call_supported(id)) {
+705-		ret = FFA_RET_NOT_SUPPORTED;
+706-		goto out_handled;
+707-	}
+708-
+709-	switch (id) {
+710:	case FFA_MEM_SHARE:
+711-	case FFA_FN64_MEM_SHARE:
+712:	case FFA_MEM_LEND:
+713-	case FFA_FN64_MEM_LEND:
+714-		ret = FFA_RET_SUCCESS;
+715-		prop = 0; /* No support for dynamic buffers */
+716-		goto out_handled;
+717-	default:
+718-		return false;
+719-	}
+720-
+721-out_handled:
+722-	ffa_to_smccc_res_prop(res, ret, prop);
+723-	return true;
+724-}
+725-
+726-static int hyp_ffa_post_init(void)
+727-{
+728-	size_t min_rxtx_sz;
+729-	struct arm_smccc_1_2_regs res;
+730-
+731-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs){
+732-		.a0 = FFA_ID_GET,
+733-	}, &res);
+734-	if (res.a0 != FFA_SUCCESS)
+735-		return -EOPNOTSUPP;
+736-
+737-	if (res.a2 != HOST_FFA_ID)
+738-		return -EINVAL;
+739-
+740-	hyp_smccc_1_2_smc(&(struct arm_smccc_1_2_regs){
+741-		.a0 = FFA_FEATURES,
+742-		.a1 = FFA_FN64_RXTX_MAP,
+743-	}, &res);
+744-	if (res.a0 != FFA_SUCCESS)
+745-		return -EOPNOTSUPP;
+746-
+747-	switch (res.a2 & FFA_FEAT_RXTX_MIN_SZ_MASK) {
+748-	case FFA_FEAT_RXTX_MIN_SZ_4K:
+749-		min_rxtx_sz = SZ_4K;
+750-		break;
+751-	case FFA_FEAT_RXTX_MIN_SZ_16K:
+752-		min_rxtx_sz = SZ_16K;
+753-		break;
+754-	case FFA_FEAT_RXTX_MIN_SZ_64K:
+755-		min_rxtx_sz = SZ_64K;
+756-		break;
+757-	default:
+758-		return -EINVAL;
+759-	}
+760-
+761-	if (min_rxtx_sz > PAGE_SIZE)
+762-		return -EOPNOTSUPP;
+763-
+764-	return 0;
+765-}
+766-
+767-static void do_ffa_version(struct arm_smccc_1_2_regs *res,
+768-			   struct kvm_cpu_context *ctxt)
+769-{
+770-	DECLARE_REG(u32, ffa_req_version, ctxt, 1);
+771-
+
+--- partition discovery ---
+			buf->exec_ctxt = PART_INFO_EXEC_CXT(val);
+			buf->properties = PART_INFO_PROPERTIES(val);
+			uuid_copy(&buf->uuid, &uuid_regs.uuid);
+			regs += regs_per_desc;
+		}
+		start_idx = cur_idx + 1;
+
+	} while (cur_idx < (count - 1));
+
+	return count;
+}
+
+/* buffer is allocated and caller must free the same if returned count > 0 */
+static int
+ffa_partition_probe(const uuid_t *uuid, struct ffa_partition_info **buffer)
+{
+	int count;
+	u32 uuid0_4[4];
+	bool reg_mode = false;
+	struct ffa_partition_info *pbuf;
+
+	if (!ffa_features(FFA_PARTITION_INFO_GET_REGS, 0, NULL, NULL))
+		reg_mode = true;
+
+	export_uuid((u8 *)uuid0_4, uuid);
+	if (reg_mode)
+		count = __ffa_partition_info_get_regs(uuid0_4[0], uuid0_4[1],
+						      uuid0_4[2], uuid0_4[3],
+						      NULL, 0);
+	else
+		count = __ffa_partition_info_get(uuid0_4[0], uuid0_4[1],
+						 uuid0_4[2], uuid0_4[3],
+						 NULL, 0);
+	if (count <= 0)
+		return count;
+
+	pbuf = kzalloc_objs(*pbuf, count);
+	if (!pbuf)
+		return -ENOMEM;
+
+	if (reg_mode)
+		count = __ffa_partition_info_get_regs(uuid0_4[0], uuid0_4[1],
+						      uuid0_4[2], uuid0_4[3],
+						      pbuf, count);
+	else
+		count = __ffa_partition_info_get(uuid0_4[0], uuid0_4[1],
+						 uuid0_4[2], uuid0_4[3],
+						 pbuf, count);
+	if (count <= 0)
+		kfree(pbuf);
+	else
+		*buffer = pbuf;
+
+	return count;
+}
+
+#define VM_ID_MASK	GENMASK(15, 0)
+static int ffa_id_get(u16 *vm_id)
+{
+	ffa_value_t id;
+
+	invoke_ffa_fn((ffa_value_t){
+		      .a0 = FFA_ID_GET,
+		      }, &id);
+
+	if (id.a0 == FFA_ERROR)
+		return ffa_to_linux_errno((int)id.a2);
+
+	*vm_id = FIELD_GET(VM_ID_MASK, (id.a2));
+
+	return 0;
+			list_del(&info->node);
+			kfree(info);
+		}
+		kfree(phead);
+	}
+
+	xa_destroy(&drv_info->partition_info);
+}
+
+static int ffa_setup_partitions(void)
+{
+	int count, idx, ret;
+	struct ffa_device *ffa_dev;
+	struct ffa_partition_info *pbuf, *tpbuf;
+
+	if (!FFA_PART_INFO_HAS_UUID_IN_RESP(drv_info->version)) {
+		ret = bus_register_notifier(&ffa_bus_type, &ffa_bus_nb);
+		if (ret)
+			pr_err("Failed to register FF-A bus notifiers\n");
+		else
+			drv_info->bus_notifier_registered = true;
+	}
+
+	count = ffa_partition_probe(&uuid_null, &pbuf);
+	if (count <= 0) {
+		pr_info("%s: No partitions found, error %d\n", __func__, count);
+		ffa_bus_notifier_unregister();
+		return -EINVAL;
+	}
+
+	xa_init(&drv_info->partition_info);
+	for (idx = 0, tpbuf = pbuf; idx < count; idx++, tpbuf++) {
+		/* Note that if the UUID will be uuid_null, that will require
+		 * ffa_bus_notifier() to find the UUID of this partition id
+		 * with help of ffa_device_match_uuid(). FF-A v1.1 and above
+		 * provides UUID here for each partition as part of the
+		 * discovery API and the same is passed.
+		 */
+		ffa_dev = ffa_device_register(tpbuf, &ffa_drv_ops);
+		if (!ffa_dev) {
+			pr_err("%s: failed to register partition ID 0x%x\n",
+			       __func__, tpbuf->id);
+			continue;
+		}
+
+		if (FFA_PART_INFO_HAS_EXEC_STATE_IN_RESP(drv_info->version) &&
+		    !(tpbuf->properties & FFA_PARTITION_AARCH64_EXEC))
+			ffa_mode_32bit_set(ffa_dev);
+
+		if (ffa_xa_add_partition_info(ffa_dev)) {
+			ffa_device_unregister(ffa_dev);
+			continue;
+		}
+	}
+
+	kfree(pbuf);
