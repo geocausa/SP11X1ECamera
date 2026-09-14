@@ -1,17 +1,27 @@
 {
-  "schema": "sp11-camera-e004dl-rgb-alternating-soak-v1",
-  "status": "PREPARED_OFFLINE_NOT_ARMED",
-  "parent_failure": "E004dk harness-only CSID1 source-pad error",
-  "corrections": {
-    "front_pix_source_pad": 4,
-    "bash_errtrace": true
+  "schema": "sp11-camera-e004dl-rgb-alternating-soak-v2",
+  "status": "FAIL_FRONT1_AWB_MESH_FAIL_CLOSED_GOLDEN_RETURN_RETIRED",
+  "harness_correction_proven": true,
+  "front_pad4_neutralization_not_reached_due_to_front1_failure": true,
+  "candidate_consumed": true,
+  "completed_legs": [
+    "rear1"
+  ],
+  "front1_started": true,
+  "front1_completed": false,
+  "root_failure": "live IQ producer RG/BG point outside stateful CTrigleAdjV1 mesh; fail closed, followed by sequence mismatch and PINNED_FOR_REBOOT",
+  "awb_mesh_fail_closed": true,
+  "sequence_mismatch_after_producer_exit": true,
+  "pinned_for_reboot": true,
+  "same_boot_retry_performed": false,
+  "golden_return": "PASS",
+  "golden_return_boot_id": "27b6ecc3-2ea6-42f4-840f-eaf3d46f3860",
+  "candidate_retired": true,
+  "evidence": {
+    "dmesg_sha256": "3f1fa55c0255d6eb150ccbeba2bc5a0259937ead7a13eb5518a6c0213f7c1959",
+    "front1_log_sha256": "d4c21681c25244b99538268796314af561e102d69255bbac7b487cb50afb01a6",
+    "front_route_sha256": "547fb9b4f90300505e5f6174233b4d491cced01dd07a7424b2db357a1b7a4399",
+    "rear1_log_sha256": "cf0a42394622f1edeabbb4392841366f49362989738c7dd9e862a9d5276a4920"
   },
-  "planned_legs": ["rear", "front", "rear", "front", "rear", "front"],
-  "planned_cross_camera_transitions": 5,
-  "neutral_between_every_leg": true,
-  "same_boot_retry_authorized": false,
-  "linux_secureisp": false,
-  "candidate_installed": false,
-  "candidate_armed": false,
-  "runtime_performed": false
+  "next_gate": "trace front RGB stateful AWB mesh authority and close out-of-mesh live point before a fresh alternating soak"
 }
