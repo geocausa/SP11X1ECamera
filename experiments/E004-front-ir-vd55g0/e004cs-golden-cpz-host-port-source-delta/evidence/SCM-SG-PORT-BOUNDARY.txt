@@ -1,0 +1,22 @@
+E004cs SCM / SCATTER-GATHER PORT BOUNDARY
+
+Golden qcom_scm_assign_mem():
+- accepts one physical start address and one size;
+- serializes exactly one qcom_scm_mem_map_info record;
+- can represent arbitrary source owner bitmask and destination vmperm array;
+- updates the source owner mask after success.
+
+Qualcomm downstream secure_buffer/hyp_assign_table():
+- accepts a scatter-gather table;
+- batches up to 32 regions / <2 MiB per secure call;
+- calls qcom_scm_assign_mem_regions() with multiple qcom_scm_mem_map_info records;
+- marks pages inaccessible when HLOS is absent.
+
+Golden already contains the same qcom_scm_current_perm_info and qcom_scm_mem_map_info layouts privately inside qcom_scm.c, but does NOT export qcom_scm_assign_mem_regions or the public helpers.
+
+Consequence:
+- the full downstream mem-buf + generic system-heap path cannot be copied verbatim into Golden yet;
+- a contiguous single-segment protected buffer can use Golden qcom_scm_assign_mem immediately;
+- a non-contiguous system-heap protected buffer requires a separate qcom_scm_assign_mem_regions/secure_buffer backport with batch-failure recovery analysis.
+
+Because current Golden has cma=128M but runtime CmaFree is very low under the normal desktop workload, CMA-only is suitable as a compile/bring-up simplification but should not be assumed to be the final capacity solution.

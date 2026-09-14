@@ -1,0 +1,49 @@
+{
+  "experiment": "E004cs",
+  "status": "PASS_GOLDEN_CPZ_HOST_PORT_DELTA_BOUNDED_COMPILE_FIRST",
+  "mode": "static-plus-compile-only-source-port",
+  "golden": {
+    "qcom_scm_assign_mem_present": true,
+    "qcom_scm_assign_mem_regions_present": false,
+    "mem_buf_present": false,
+    "secure_buffer_hyp_assign_table_present": false,
+    "fastrpc_pd_type_present": false,
+    "fastrpc_session_info_abi_present": false,
+    "gunyah_required_for_cp_cdsp": false
+  },
+  "compiled_owner_shim": {
+    "external_hlos_to_cp_cdsp": true,
+    "internal_hlos_to_cp_camera_cp_cdsp": true,
+    "reclaim_to_hlos": true,
+    "qcom_scm_assign_mem_dependency_retained": true,
+    "module_loaded": false
+  },
+  "compiled_fastrpc_stage1": {
+    "cpz_pd_type_value": 6,
+    "session_pd_type_field": true,
+    "client_pd_type_field": true,
+    "matching_session_allocator": true,
+    "nonzero_pd_type_control_exposed": false,
+    "dt_pd_type_exposed": false,
+    "module_loaded": false
+  },
+  "sg_boundary": {
+    "golden_single_range_only": true,
+    "downstream_multi_region_batching": true,
+    "system_heap_final_ready": false,
+    "contiguous_bringup_mechanically_possible": true,
+    "cma_capacity_finally_accepted": false
+  },
+  "runtime_actions": {
+    "module_loaded": false,
+    "scm_assign_mem": false,
+    "ownership_change": false,
+    "fastrpc_invoke": false,
+    "cpz_process_create": false,
+    "dt_change": false,
+    "camera_runtime": false,
+    "secureisp_runtime": false,
+    "windows_boot": false
+  },
+  "next_gate": "E004ct Golden scatter-gather ownership backport, static/compile-only first"
+}

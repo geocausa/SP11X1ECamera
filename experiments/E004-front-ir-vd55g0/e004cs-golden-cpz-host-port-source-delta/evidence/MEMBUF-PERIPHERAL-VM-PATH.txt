@@ -1,0 +1,14 @@
+E004cs DOWNSTREAM MEM-BUF PERIPHERAL VM PATH
+
+Qualcomm msm authority commit: 48497677f223bd018ce409aaeb4124df6ebcb07d
+
+mem-buf-ids.c registers fixed peripheral VM objects including:
+- CP_CAMERA
+- CP_CDSP
+
+Those peripheral VMs have allowed_api = 0.
+mem_buf_vm_uses_gunyah() returns true only for VM classes whose allowed_api includes MEM_BUF_API_GUNYAH (for example trusted VM / OEM VM).
+
+mem_buf_assign_mem() first performs the hyp_assign ownership operation and calls the Gunyah memparcel layer only when the requested VM class requires it.
+
+Therefore the camera CP_CAMERA / CP_CDSP route does NOT require porting the Gunyah host stack. The minimum ownership dependency is the Qualcomm MP/HYP_ASSIGN secure-call path plus dma-buf ownership state/lifetime tracking.

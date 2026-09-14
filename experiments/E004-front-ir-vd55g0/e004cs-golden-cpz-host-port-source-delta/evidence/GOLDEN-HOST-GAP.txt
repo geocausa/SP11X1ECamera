@@ -1,0 +1,23 @@
+E004cs GOLDEN HOST-PORT GAP
+
+Golden source: /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src
+fastrpc.c sha256 e2410813bdab7ca71d972749bd3da8040a53e0fc35bf472983b5254220d5dcb2
+fastrpc UAPI sha256 1b75dd9e95a2cda193cff7b9ba4a306642c9f6e1454bf99771b3a1e5862b1132
+
+Present in Golden:
+- CONFIG_QCOM_FASTRPC=m
+- CONFIG_QCOM_SCM=y
+- qcom_scm_assign_mem() contiguous-range ownership primitive
+- /dev/fastrpc-cdsp and /dev/fastrpc-cdsp-secure at runtime
+- generic system and CMA DMA heaps
+- QCOM_SCM_VMID_CP_CAMERA and QCOM_SCM_VMID_CP_CDSP constants
+
+Absent in Golden:
+- Qualcomm mem-buf subsystem and mem_buf_dma_buf ownership wrappers
+- secure_buffer.h / hyp_assign_table scatter-gather ownership layer
+- qcom_scm_assign_mem_regions() multi-region public API
+- FastRPC fastrpc_proc_sess_info / FASTRPC_INVOKE2_SESS_INFO
+- FastRPC session/context-bank pd_type matching
+- mem_buf_dma_buf_exclusive_owner() protected-import classification
+
+Golden FastRPC currently allocates the first free valid context-bank session. The session has dev/sid/used/valid only. The user object has no pd_type field.

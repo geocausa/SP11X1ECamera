@@ -1,0 +1,18 @@
+E004cs DOWNSTREAM SOURCE AUTHORITY SUMMARY
+
+FastRPC designated-context-bank authority:
+- Qualcomm-derived commit 0d30a26909e9383e9b75aab74d63cf08980f315a
+- adds process/session PD type vocabulary including CPZ_USERPD=6
+- adds session-info control path
+- restricts untrusted delegated callers from selecting privileged PD types
+- context-bank allocation can require a matching pd_type
+- secure-memory session selection normalizes a typed process to CPZ_USERPD
+- context-bank DT nodes may carry pd-type
+
+mem-buf authority:
+- Qualcomm msm commit 48497677f223bd018ce409aaeb4124df6ebcb07d
+- CP_CAMERA and CP_CDSP are fixed peripheral VM classes, not Gunyah guest VM classes
+- mem-buf ownership state supplies lend/share/reclaim lifetime and dma-buf protected-owner classification
+- its generic SG assignment path depends on secure_buffer/hyp_assign_table and qcom_scm_assign_mem_regions
+
+E004cs does not copy the full vendor subsystems blindly. It separates the minimum semantics from dependencies absent in Golden and compiles only the first non-activating source pieces.

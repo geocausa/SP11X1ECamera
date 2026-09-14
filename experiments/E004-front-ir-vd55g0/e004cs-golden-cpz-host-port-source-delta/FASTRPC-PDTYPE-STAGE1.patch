@@ -1,0 +1,79 @@
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/misc/fastrpc.c	2026-07-24 15:21:27.000000000 +0100
++++ experiments/E004-front-ir-vd55g0/e004cs-golden-cpz-host-port-source-delta/scaffold/fastrpc-e004cs.c	2026-09-14 09:55:22.202709708 +0100
+@@ -103,6 +103,20 @@
+ #define USER_PD		(1)
+ #define SENSORS_PD	(2)
+ 
++/* E004cs staged PD-type vocabulary. No user ABI or DT binding yet. */
++enum fastrpc_remote_pd_type {
++	FASTRPC_PD_TYPE_DEFAULT_UNUSED = 0,
++	FASTRPC_PD_TYPE_ROOT = 1,
++	FASTRPC_PD_TYPE_AUDIO_STATIC = 2,
++	FASTRPC_PD_TYPE_SENSORS_STATIC = 3,
++	FASTRPC_PD_TYPE_SECURE_STATIC = 4,
++	FASTRPC_PD_TYPE_OIS_STATIC = 5,
++	FASTRPC_PD_TYPE_CPZ_USER = 6,
++	FASTRPC_PD_TYPE_USER = 7,
++	FASTRPC_PD_TYPE_GUEST_OS_SHARED = 8,
++	FASTRPC_PD_TYPE_MAX,
++};
++
+ #define miscdev_to_fdevice(d) container_of(d, struct fastrpc_device, miscdev)
+ 
+ struct fastrpc_phy_page {
+@@ -253,6 +267,7 @@
+ struct fastrpc_session_ctx {
+ 	struct device *dev;
+ 	int sid;
++	int pd_type;
+ 	bool used;
+ 	bool valid;
+ };
+@@ -305,6 +320,7 @@
+ 
+ 	int client_id;
+ 	int pd;
++	int pd_type;
+ 	bool is_secure_dev;
+ 	/* Lock for lists */
+ 	spinlock_t lock;
+@@ -1573,7 +1589,7 @@
+ }
+ 
+ static struct fastrpc_session_ctx *fastrpc_session_alloc(
+-					struct fastrpc_user *fl)
++					struct fastrpc_user *fl, int pd_type)
+ {
+ 	struct fastrpc_channel_ctx *cctx = fl->cctx;
+ 	struct fastrpc_session_ctx *session = NULL;
+@@ -1582,7 +1598,9 @@
+ 
+ 	spin_lock_irqsave(&cctx->lock, flags);
+ 	for (i = 0; i < cctx->sesscount; i++) {
+-		if (!cctx->session[i].used && cctx->session[i].valid) {
++		if (!cctx->session[i].used && cctx->session[i].valid &&
++		    (pd_type == FASTRPC_PD_TYPE_DEFAULT_UNUSED ||
++		     cctx->session[i].pd_type == pd_type)) {
+ 			cctx->session[i].used = true;
+ 			session = &cctx->session[i];
+ 			/* any non-zero ID will work, session_idx + 1 is the simplest one */
+@@ -1667,8 +1685,10 @@
+ 	INIT_LIST_HEAD(&fl->user);
+ 	fl->cctx = cctx;
+ 	fl->is_secure_dev = fdevice->secure;
++	/* E004cs: staged only. No ioctl/DT path can select a nonzero type. */
++	fl->pd_type = FASTRPC_PD_TYPE_DEFAULT_UNUSED;
+ 
+-	fl->sctx = fastrpc_session_alloc(fl);
++	fl->sctx = fastrpc_session_alloc(fl, fl->pd_type);
+ 	if (!fl->sctx) {
+ 		dev_err(&cctx->rpdev->dev, "No session available\n");
+ 		mutex_destroy(&fl->mutex);
+@@ -2242,6 +2262,7 @@
+ 	sess = &cctx->session[cctx->sesscount++];
+ 	sess->used = false;
+ 	sess->valid = true;
++	sess->pd_type = FASTRPC_PD_TYPE_DEFAULT_UNUSED;
+ 	sess->dev = dev;
+ 	dev_set_drvdata(dev, sess);
+ 

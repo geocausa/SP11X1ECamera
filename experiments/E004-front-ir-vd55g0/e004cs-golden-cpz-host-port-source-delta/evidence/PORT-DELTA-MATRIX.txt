@@ -1,0 +1,42 @@
+E004cs MINIMUM GOLDEN CPZ HOST-PORT DELTA MATRIX
+
+A. OWNER TRANSITION CORE — required
+  Golden primitive: qcom_scm_assign_mem()
+  Needed semantics: track current owner mask, HLOS->{CP_CDSP} external, HLOS->{CP_CAMERA,CP_CDSP} internal, reverse to HLOS.
+  Contiguous bring-up: directly expressible now.
+  SG final form: needs qcom_scm_assign_mem_regions()/secure_buffer-style batching.
+
+B. DMA-BUF OWNERSHIP WRAPPER — required
+  Needed semantics from mem-buf:
+  - refuse HLOS-excluding lend while CPU mappings/pins exist;
+  - remember active owner set;
+  - deny HLOS mmap/vmap while HLOS is absent;
+  - reclaim before heap free;
+  - fail closed if reclaim fails;
+  - expose protected/nonexclusive ownership classification to FastRPC.
+
+C. BACKING HEAP — required
+  Initial compile/bring-up candidate: protected-only contiguous/CMA exporter.
+  Final scalable candidate: mem-buf-aware system heap after SG assignment support is backported.
+  Do not mutate the ordinary Golden system/default CMA heaps in place for first bring-up.
+
+D. FASTRPC PD-TYPE SESSION SELECTION — required
+  Backport concepts from Qualcomm commit 0d30a26909e9383e9b75aab74d63cf08980f315a:
+  - process/session PD type;
+  - CPZ_USERPD class;
+  - context-bank PD type;
+  - session selection by matching PD type;
+  - secure-memory session normalization to CPZ_USERPD.
+  Stage 1 can add inert pd_type fields/session matching while all configured values remain DEFAULT_UNUSED.
+
+E. FASTRPC PROTECTED DMA-BUF CLASSIFICATION — required
+  Replace Golden FASTRPC_ATTR_SECUREMAP as the parity signal.
+  Protected selection must derive from provider-owned dma-buf ownership state (downstream uses mem_buf_dma_buf_exclusive_owner()).
+  A userspace attr alone must not be trusted to assert protected ownership.
+
+F. USER/HOST AUTHORIZATION ABI — required later, not for compile-first gate
+  Downstream uses FASTRPC_INVOKE2_SESS_INFO and validates trusted caller/process type.
+  Do not expose CPZ selection to userspace until context-bank DT authority and caller policy are ported and proven.
+
+G. DT POLICY — intentionally deferred
+  No live pd-type/qcom,vmids changes in E004cs.
