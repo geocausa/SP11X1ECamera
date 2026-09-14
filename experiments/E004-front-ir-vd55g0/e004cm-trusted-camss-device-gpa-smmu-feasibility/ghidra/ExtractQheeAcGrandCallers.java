@@ -1,0 +1,6 @@
+// ExtractQheeAcGrandCallers.java
+//@category SP11.Camera
+import ghidra.app.script.GhidraScript; import ghidra.app.decompiler.*; import ghidra.program.model.listing.*; import java.io.*; import java.util.*;
+public class ExtractQheeAcGrandCallers extends GhidraScript {
+ public void run() throws Exception {String[] a=getScriptArgs();PrintWriter p=new PrintWriter(new FileOutputStream(a[0]));FunctionManager fm=currentProgram.getFunctionManager();DecompInterface di=new DecompInterface();di.openProgram(currentProgram);LinkedHashSet<Function> all=new LinkedHashSet<>();for(String x:new String[]{"001b4af0","001b446c"}){Function t=fm.getFunctionAt(toAddr(x));p.println("TARGET "+t.getName()+" @"+t.getEntryPoint());for(Function c:t.getCallingFunctions(monitor)){p.println(" CALLER "+c.getName()+" @"+c.getEntryPoint()+" sig="+c.getSignature());all.add(c); for(Function g:c.getCallingFunctions(monitor)){p.println("  GRAND "+g.getName()+" @"+g.getEntryPoint()+" sig="+g.getSignature());all.add(g);}}}for(Function f:all){p.println("\n//// "+f.getName()+" @"+f.getEntryPoint()+" ////");DecompileResults dr=di.decompileFunction(f,120,monitor);if(dr!=null&&dr.decompileCompleted()&&dr.getDecompiledFunction()!=null)p.println(dr.getDecompiledFunction().getC());}di.dispose();p.close();}
+}

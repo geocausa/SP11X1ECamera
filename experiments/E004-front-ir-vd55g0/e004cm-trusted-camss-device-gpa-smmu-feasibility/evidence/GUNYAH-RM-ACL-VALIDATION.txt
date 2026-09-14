@@ -1,0 +1,224 @@
+E004cm Gunyah RM ACL / VMID validation excerpts
+                              puVar33[3] = local_3f8;
+                              puVar33[4] = 0;
+                              puVar33[10] = local_428;
+                              puVar33[0xb] = local_430;
+                              cVar16 = DAT_00158170;
+                              *(undefined2 *)(puVar33 + 9) = uVar21;
+                              uVar49 = DAT_00158188;
+                              cVar17 = DAT_00158180;
+                              bVar62 = 6;
+                              if (cVar74 != '\x01') {
+                                bVar62 = 7;
+                              }
+                              uVar55 = 0xf6200000000000;
+                              if (cVar16 == '\0') {
+                                uVar55 = 0;
+                              }
+                              *(int *)(puVar33 + 5) = iVar24;
+                              *(undefined1 *)((long)puVar33 + 0x2c) = 1;
+                              uVar57 = 0x400;
+                              if (cVar17 == '\0') {
+                                uVar57 = 0;
+                              }
+                              puVar33[7] = 0;
+                              *(byte *)((long)puVar33 + 0x42) = bVar5 & 1;
+                              *(undefined2 *)((long)puVar33 + 0x43) = 0;
+                              puVar33[0xc] = local_420;
+                              puVar33[0xd] = 0;
+                              uVar48 = 0;
+                              puVar65 = (ushort *)0x0;
+                              while( true ) {
+                                uVar22 = (uint)uVar52;
+                                if ((uint)uVar48 == uVar22) break;
+                                uVar64 = uVar48;
+                                puVar31 = puVar60;
+                                while( true ) {
+                                  uVar75 = *(ushort *)((long)puVar60 + uVar48 * 4);
+                                  if ((int)uVar64 == 0) break;
+                                  if (uVar75 == (ushort)*puVar31) {
+                                    pcVar43 = "memparcel: acl[%i] duplicate vmid";
+                                    goto LAB_0013fc64;
+                                  }
+                                  uVar64 = (ulong)((int)uVar64 - 1);
+                                  puVar31 = (ulong *)((long)puVar31 + 4);
+                                }
+                                uVar22 = (uint)uVar75;
+                                if ((((((uVar75 != 3) && (uVar75 != 0xff)) &&
+                                      ((uVar64 = 1L << ((ulong)uVar75 & 0x3f), 0x3f < uVar75 ||
+                                       ((uVar55 & uVar64) == 0)))) &&
+                                     ((0x3f < uVar22 || ((uVar57 & uVar64) == 0)))) &&
+                                    ((0x3e < uVar22 - 0x80 ||
+                                     ((uVar49 >> ((ulong)uVar75 & 0x3f) & 1) != 0)))) ||
+                                   (bVar7 = *(byte *)((long)puVar60 + uVar48 * 4 + 2),
+                                   (bVar7 & 0xfc) != 4)) {
+                                  pcVar43 = "memparcel: acl[%d]: invalid vmid or rights\n";
+LAB_0013fc64:
+                                  FUN_00122440(pcVar43);
+                                  goto LAB_0013fc68;
+                                }
+                                if ((cVar74 == '\x01') && ((bVar7 & 1) != 0)) {
+                                  pcVar43 = "memparcel: acl[%d]: invalid IO rights\n";
+                                  goto LAB_0013fc64;
+                                }
+                                if ((bVar20) && (bVar62 != bVar7)) goto LAB_00140b10;
+                                puVar32 = (ushort *)(local_428 + uVar48 * 0x20);
+                                *puVar32 = uVar75;
+                                *(byte *)(puVar32 + 0xc) = bVar7;
+                                *(uint *)(puVar32 + 2) = (uint)(cVar74 == '\x01');
+                                *(undefined1 *)(puVar32 + 0xd) = 0;
+                                puVar2 = puVar32;
+                                if (uVar22 != (uVar29 & 0xffff)) {
+                                  puVar2 = puVar65;
+                                }
+                                puVar32[10] = 0;
+                                puVar32[0xb] = 0x8000;
+                                uVar48 = (ulong)((uint)uVar48 + 1);
+                                puVar65 = puVar2;
+                              }
+                              if (((bool)(bVar4 & puVar65 == (ushort *)0x0)) ||
+                                 ((bool)(bVar14 & puVar65 != (ushort *)0x0))) {
+                                FUN_001265ac("memparcel: invalid share request");
+LAB_0013fc68:
+                                puVar34 = (undefined8 *)0x0;
+LAB_0013fc6c:
+                                uVar49 = 6;
+                                goto LAB_0013fc74;
+                              }
+                              uVar77 = (uint)*puVar54;
+                              puVar31 = puVar60;
+                              for (uVar27 = uVar22; uVar27 != 0; uVar27 = uVar27 - 1) {
+                                if ((ushort)*puVar31 == 3) {
+                                  if (uVar77 == 3 || bVar20) {
+                                    if (cVar74 == '\0') goto LAB_001405bc;
+                                    goto LAB_00140b20;
+                                  }
+                                  FUN_00122440("HLOS is not owner (%d) and transaction is not donate (%d)\n"
+                                               ,*puVar54,uVar58);
+                                  uVar49 = 0x1e;
+                                  goto LAB_00140b00;
+                                }
+                                puVar31 = (ulong *)((long)puVar31 + 4);
+                              }
+                              puVar34 = (undefined8 *)0x0;
+                              if ((uVar77 == 3) && (cVar74 == '\0')) {
+LAB_001405bc:
+                                puVar34 = (undefined8 *)FUN_001189d8(1,8);
+                                if (puVar34 == (undefined8 *)0x0) {
+                                  FUN_001265ac("out of memory");
+                                  uVar49 = 10;
+LAB_00140b00:
+                                  FUN_00122440("memparcel: Failed to get VM ACL info %d\n",
+                                               uVar49 & 0xffffffff);
+LAB_00140b10:
+                                  puVar34 = (undefined8 *)0x0;
+                                  uVar49 = 3;
+                                  goto LAB_0013fc74;
+                                }
+                                if (uVar22 < 9) {
+                                  if (uVar77 != 3) {
+                                    uVar22 = 0x3a;
+                                    if (uVar77 < 0x80) {
+                                      uVar22 = uVar77;
+                                    }
+                                    uVar27 = 0x3d;
+                                    if (uVar77 != 0xff) {
+                                      uVar27 = uVar22;
+                                    }
+                                    if (0x3f < uVar27) {
+                                      uVar47 = 0xaf;
+LAB_00140e68:
+                    /* WARNING: Subroutine does not return */
+                                      FUN_00131ba8("platform/qcom/src/hyp_assign/hyp_assign.c",
+                                                   uVar47);
+                                    }
+                                    lVar68 = FUN_0012caf0(1L << ((ulong)uVar27 & 0x3f));
+                                    if (lVar68 != 0) {
+                                      local_3a0 = (ushort *)0x7;
+
+        local_3a0 = (ushort *)CONCAT44(local_3a0._4_4_,0x1000164);
+        uVar71 = 0x560000a0;
+        goto LAB_0013c2dc;
+      }
+      goto switchD_0013b1e0_default;
+    }
+  }
+  switch(uVar26) {
+  case 0x56000001:
+code_r0x0013afac:
+    if (DAT_00158168 == 0) {
+      uVar47 = 0x1f7;
+LAB_00140688:
+                    /* WARNING: Subroutine does not return */
+      FUN_00131ba8("src/vm_mgnt/vm_mgnt.c",uVar47);
+    }
+    if ((uVar29 & 0xffff) == 3) {
+      if (param_6 != 4) {
+        uVar49 = 4;
+        goto LAB_0013d598;
+      }
+      uVar75 = (ushort)*param_5;
+      uVar71 = (ulong)uVar75;
+      if (uVar75 == 0) {
+        if (DAT_00158188 == 0) {
+LAB_0013d594:
+          uVar49 = 2;
+          goto LAB_0013d598;
+        }
+        uVar71 = (DAT_00158188 & 0xaaaaaaaaaaaaaaaa) >> 1 | (DAT_00158188 & 0x5555555555555555) << 1
+        ;
+        uVar71 = (uVar71 & 0xcccccccccccccccc) >> 2 | (uVar71 & 0x3333333333333333) << 2;
+        uVar71 = (uVar71 & 0xf0f0f0f0f0f0f0f0) >> 4 | (uVar71 & 0xf0f0f0f0f0f0f0f) << 4;
+        uVar71 = (uVar71 & 0xff00ff00ff00ff00) >> 8 | (uVar71 & 0xff00ff00ff00ff) << 8;
+        uVar71 = (uVar71 & 0xffff0000ffff0000) >> 0x10 | (uVar71 & 0xffff0000ffff) << 0x10;
+        uVar49 = LZCOUNT(uVar71 >> 0x20 | uVar71 << 0x20);
+        uVar29 = (uint)uVar49;
+        uVar71 = (ulong)(uVar29 | 0x80);
+        DAT_00158188 = DAT_00158188 & (1L << (uVar49 & 0x3f) ^ 0xffffffffffffffffU);
+        FUN_00122440("allocated vmid=%d\n",uVar71);
+        uVar26 = FUN_00152e04(uVar71,3);
+        if (uVar26 == 0) {
+          puVar34 = &local_3a0;
+          local_3a0 = (ushort *)(CONCAT44(local_3a0._4_4_,uVar29) | 0x80);
+          uVar47 = 4;
+LAB_0013e66c:
+          FUN_00143164(3,0x56000001,uVar78,0,puVar34,uVar47);
+          FUN_00122440("VM_ALLOCATE: %d vmid=%d, ret=%d\n",3,uVar71,0);
+          goto LAB_0013dfdc;
+        }
+        uVar49 = (ulong)uVar26;
+        FUN_00122440("VM_ALLOCATE: %d vmid=%d, ret=%d\n",3,uVar71,uVar49);
+        DAT_00158188 = DAT_00158188 | 1L << (uVar71 & 0x3f);
+      }
+      else {
+        if ((0x3f < uVar75) || (uVar49 = 1L << (uVar71 & 0x3f), (uVar49 & DAT_00158178) == 0))
+        goto LAB_0013d594;
+        DAT_00158178 = DAT_00158178 & (uVar49 ^ 0xffffffffffffffff);
+        uVar26 = FUN_00152e04(uVar75,3);
+        if (uVar26 == 0) {
+          puVar34 = (undefined8 *)0x0;
+          uVar47 = 0;
+          goto LAB_0013e66c;
+        }
+        uVar49 = (ulong)uVar26;
+        FUN_00122440("VM_ALLOCATE: %d vmid=%d, ret=%d\n",3,uVar75,uVar49);
+        DAT_00158178 = DAT_00158178 | 1L << (uVar71 & 0x3f);
+      }
+    }
+    else {
+      uVar49 = 3;
+LAB_0013d598:
+      FUN_00122440("VM_ALLOCATE: %d vmid=%d, ret=%d\n",uVar29 & 0xffff,0,uVar49);
+    }
+    uVar26 = 0x56000001;
+    goto LAB_0013f6d4;
+  case 0x56000002:
+code_r0x0013bb6c:
+    if (param_6 == 4) {
+      uVar75 = (ushort)*param_5;
+      lVar35 = FUN_00152f40(uVar75);
+      if (lVar35 == 0) {
+        uVar47 = 0x253;
+        goto LAB_00140688;
+      }
+      if ((uint)*(ushort *)(lVar35 + 2) == (uVar29 & 0xffff)) {

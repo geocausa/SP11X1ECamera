@@ -1,0 +1,52 @@
+{
+  "experiment": "E004cm",
+  "status": "PASS_GUNYAH_TRUSTED_VM_CANNOT_COOWN_CP_CAMERA_CP_CDSP_RULE_DISCOVERED",
+  "mode": "same-machine-firmware-static-only",
+  "gunyah_rm": {
+    "parent_qhee_sha256": "cc33b7c0d902f0aafd64d3d866899401af7d4e0ad1c9ffc1cc97555d9a6bd78a",
+    "embedded_offset": "0x14a5c0",
+    "sha256": "533c1d629f498b7185275507c516336ef94ed04fff661fd7e9db63c222c98a6d",
+    "memparcel_acl": true,
+    "share_lend_donate": true,
+    "vm_allocate": true,
+    "device_passthrough": true
+  },
+  "rm_acl": {
+    "trusted_fixed_vmids": [
+      "0x2d",
+      "0x31",
+      "0x32",
+      "0x34",
+      "0x35",
+      "0x36",
+      "0x37"
+    ],
+    "trusted_class_normalized_vmid": "0x3f",
+    "cp_camera": "0x0d",
+    "cp_camera_allowed_in_rm_acl": false
+  },
+  "qhee_ac_rules": {
+    "total_rules": 116,
+    "cp_camera_plus_trusted_class_rules": 0,
+    "hlos_to_cp_camera": true,
+    "hlos_to_cp_camera_plus_preview": true,
+    "hlos_to_cp_camera_plus_cp_cdsp": true,
+    "hlos_to_cp_camera_plus_0x2e": true,
+    "vmid_0x2e_is_trusted_vm_class": false
+  },
+  "device_passthrough": {
+    "static_trusted_vmid_whitelist": true,
+    "camera_to_trusted_vm_binding_found": false,
+    "parity_safe_substitute": false
+  },
+  "runtime_actions": {
+    "gunyah_vm_create": false,
+    "memparcel": false,
+    "hyp_assign": false,
+    "smmu_reassign": false,
+    "scm_call": false,
+    "windows_boot": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cn CP_CAMERA + CP_CDSP trusted-worker feasibility, static first"
+}

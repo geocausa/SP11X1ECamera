@@ -1,0 +1,169 @@
+E004cm Gunyah trusted-device passthrough policy
+            FUN_00131ba8("src/vm_mgnt/vm_mgnt.c",uVar11);
+          }
+          FUN_0015459c(lVar8,&DAT_00104e96);
+          iVar4 = FUN_00152e04(3,0xff);
+          if (iVar4 != 0) {
+            pcVar15 = "failed to create hlos vm_t";
+            goto LAB_00139900;
+          }
+          lVar8 = FUN_00152f40(3);
+          if (lVar8 == 0) {
+            uVar11 = 0x1b4;
+            goto LAB_00139918;
+          }
+          FUN_0015459c(lVar8,&DAT_00102835);
+          DAT_00158030 = FUN_0014565c(4,4,8);
+          plVar7 = DAT_00158028;
+          if (DAT_00158030 == 0) {
+            uVar11 = 0xbf;
+            goto LAB_00139608;
+          }
+          for (uVar10 = 0; *(int *)DAT_00158028[0x61] != (int)uVar10;
+              uVar10 = (ulong)((int)uVar10 + 1)) {
+            if ((0xf6200000000000U >>
+                 ((ulong)*(ushort *)(*(long *)((int *)DAT_00158028[0x61] + 2) + uVar10 * 0x20) &
+                 0x3f) & 1) == 0) {
+              FUN_00122440("vm_passthrough_config: Unsupported VMID:%u\n");
+                    /* WARNING: Subroutine does not return */
+              FUN_00133bbc("vm_passthrough_config: Invalid vmid configured");
+            }
+          }
+          if (DAT_00157fd8 != 0) {
+            uVar11 = 0x78;
+            goto LAB_001397a8;
+          }
+          if (DAT_00157fe0 != 0) {
+            uVar11 = 0x79;
+            goto LAB_001397a8;
+          }
+          uVar5 = FUN_00137f94();
+          uVar10 = extraout_x1;
+          if ((int)extraout_x1 != 0) goto LAB_001395e4;
+          if (plVar7 == (long *)0x0) {
+            uVar11 = 0x81;
+            goto LAB_001397a8;
+          }
+          lVar8 = plVar7[0x5e];
+          if (lVar8 == 0) {
+            uVar11 = 0x83;
+            goto LAB_001397a8;
+          }
+          DAT_00157fe8 = uVar5 - 0x3fb;
+          if (uVar5 < 0xfffffc05) {
+            DAT_00157fe8 = uVar5;
+          }
+          DAT_00157fd8 = FUN_00144470(0x10,0x3fb);
+          if (DAT_00157fd8 == 0) {
+            uVar10 = 10;
+          }
+          else {
+            DAT_00157fe0 = FUN_00144470(0x10,0x3fb);
+            if (DAT_00157fe0 != 0) {
+              for (lVar23 = 0; lVar18 = DAT_00157fd8, lVar23 != 0x3ec; lVar23 = lVar23 + 1) {
+                lVar33 = *(long *)(lVar8 + 0x80 + lVar23 * 8);
+                if (lVar33 != -1) {
+                  if (DAT_00157fd8 == 0) {
+                    uVar11 = 0xf4;
+                    goto LAB_001397a8;
+                  }
+                  iVar4 = (int)lVar23;
+                  if (((lVar23 + 0x10U & 0xfffffff0) == 0x10) || (iVar4 - 0x10U < 0x3dc)) {
+                    puVar13 = (undefined2 *)FUN_001189d8(1,0x10);
+                    if (puVar13 == (undefined2 *)0x0) {
+                      uVar10 = 10;
+                    }
+                    else {
+                      *(long *)(puVar13 + 4) = lVar33;
+                      *puVar13 = 3;
+                      *(undefined4 *)(puVar13 + 2) = 0xffffffff;
+                      uVar5 = FUN_001445b0(lVar18,iVar4 + 0x10,puVar13);
+                      if (uVar5 == 0) goto LAB_001389dc;
+                      uVar10 = (ulong)uVar5;
+                      FUN_00118110(puVar13);
+                    }
+                  }
+                  else {
+                    uVar10 = 1;
+                  }
+                  FUN_00122440("Error: %s %d: %d\n","src/irq_manager/irq_manager.c",0x10e,uVar10);
+                  FUN_00122440("hwirq %d\n",iVar4 + 0x10);
+                  goto code_r0x00139794;
+                }
+LAB_001389dc:
+              }
+              uVar5 = *(uint *)(plVar7 + 3);
+              if (8 < uVar5) {
+                uVar11 = 0xc1;
+                goto LAB_001397a8;
+              }
+              for (uVar35 = 0; uVar5 != uVar35; uVar35 = uVar35 + 1) {
+                uVar36 = *(uint *)((long)plVar7 + uVar35 * 4 + 0x1c);
+                if ((uVar36 - 0x3fc < 0xfffffc14) || (*(long *)(lVar8 + (ulong)uVar36 * 8) == -1)) {
+                  FUN_00122440("Warning: skipping invalid reserved irq %d\n",uVar36);
+                }
+                else {
+                  uVar6 = FUN_001341a4(uVar36,0xfffe);
+                  if (uVar6 != 0) {
+                    uVar10 = (ulong)uVar6;
+                    FUN_00122440("%i: res irq %d\n",uVar35 & 0xffffffff,uVar36);
+                    goto code_r0x00139794;
+                  }
+                }
+              }
+              for (uVar10 = 0; uVar10 < *(uint *)plVar7[0x61]; uVar10 = uVar10 + 1) {
+                uVar2 = *(undefined2 *)(*(long *)((uint *)plVar7[0x61] + 2) + uVar10 * 0x20);
+                for (uVar35 = 0; lVar8 = *(long *)(plVar7[0x61] + 8) + uVar10 * 0x20,
+                    uVar35 < *(uint *)(lVar8 + 4); uVar35 = uVar35 + 1) {
+                  uVar31 = *(undefined4 *)(*(long *)(lVar8 + 0x10) + uVar35 * 4);
+                  psVar14 = (short *)FUN_00144554(DAT_00157fd8,uVar31);
+                  if (psVar14 == (short *)0x0) {
+                    FUN_00122440("Invalid passthrough irq:%u of vmid:%u",uVar31,uVar2);
+                    uVar10 = 0xb;
+                    goto LAB_001395e4;
+                  }
+                  if (*psVar14 != 3) {
+                    FUN_00122440("The passthrough irq:%u of vmid:%u is not owned by HLOS ",uVar31,
+                                 uVar2);
+                    uVar10 = 0x1f;
+                    goto LAB_001395e4;
+                  }
+                  uVar5 = FUN_001341a4(uVar31,uVar2);
+                  if (uVar5 != 0) {
+                    uVar10 = (ulong)uVar5;
+                    FUN_00122440("Failed to map passthrough irq:%u of vmid:%u",uVar31,uVar2);
+                    goto LAB_001395e4;
+                  }
+                }
+              }
+              lVar8 = FUN_00152f40(0xff);
+              if (lVar8 == 0) {
+                uVar11 = 0xd9;
+                goto LAB_001397a8;
+              }
+              uVar11 = FUN_00142abc();
+              uVar5 = FUN_00134260(lVar8,uVar11,0x1ff);
+              plVar7 = DAT_00158028;
+              if (uVar5 != 0) {
+                uVar10 = (ulong)uVar5;
+                goto code_r0x00139794;
+              }
+              lVar8 = 0x10;
+              for (uVar10 = 0; puVar24 = (uint *)plVar7[0x61], uVar10 < *puVar24;
+                  uVar10 = uVar10 + 1) {
+                FUN_00118110(*(undefined8 *)(*(long *)(puVar24 + 2) + lVar8));
+                *(undefined8 *)(*(long *)(plVar7[0x61] + 8) + lVar8) = 0;
+                lVar8 = lVar8 + 0x20;
+              }
+              FUN_0012bbc8(&local_2b0,0,0x180);
+              local_2f0[7] = 0;
+              local_2f0[0] = 0x180;
+              local_2f0[6] = 0;
+              local_2f0[5] = 0;
+              local_2f0[4] = 0;
+              local_2f0[3] = 0;
+              local_2f0[2] = 0;
+              local_2f0[1] = 0;
+              auStack_128[0] = 0;
+
+vm_passthrough_supported_vmids= ['0x2d', '0x31', '0x32', '0x34', '0x35', '0x36', '0x37']
