@@ -1,0 +1,35 @@
+E004db FASTRPC MEM_MAP / MEM_UNMAP LIFETIME
+
+E004cv staged Golden FastRPC is the host-side compile authority.
+
+MEM_MAP:
+- FASTRPC_IOCTL_MEM_MAP enters fastrpc_req_mem_map().
+- It calls fastrpc_map_create(fl, req.fd, req.length, 0, &map).
+- fastrpc_map_attach() calls dma_buf_get(req.fd).
+- For a provider-authoritative protected dma-buf, attach is accepted only when:
+    secure FastRPC device is open;
+    selected process type is CPZ_USERPD;
+    bound session is CPZ_USERPD;
+    legacy FASTRPC_ATTR_SECUREMAP is absent.
+- FastRPC attaches/maps the dma-buf to the selected secure context-bank device.
+- protected map->va is NULL; no HLOS CPU virtual mapping is retained.
+- FASTRPC_RMID_INIT_MEM_MAP is sent to the DSP.
+- only after a successful DSP response is map->raddr stored and the map retained in fl->maps.
+
+Failure behavior:
+- DSP MEM_MAP failure -> fastrpc_map_put(map), dropping attachment/reference.
+- copy_to_user failure after DSP map -> driver immediately executes the MEM_UNMAP path.
+
+MEM_UNMAP:
+- FASTRPC_IOCTL_MEM_UNMAP locates the retained map by fd/raddr.
+- FASTRPC_RMID_INIT_MEM_UNMAP is sent to DSP first.
+- DSP unmap failure returns without fastrpc_map_put(); the mapping/reference stays pinned.
+- only successful DSP unmap calls fastrpc_map_put().
+- final map free unmaps DMA attachment, detaches it, and dma_buf_put() drops FastRPC's dma-buf reference.
+
+E004da/E004db binding:
+- provider begin_worker_import() happens before MEM_MAP and holds an extra fail-closed reference;
+- successful MEM_MAP -> commit_worker_import();
+- failed MEM_MAP -> abort_worker_import();
+- successful MEM_UNMAP -> worker_detached();
+- failed MEM_UNMAP -> no detach/reclaim; references and protected ownership remain pinned.

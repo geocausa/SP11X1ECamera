@@ -1,0 +1,25 @@
+E004db SAME-MACHINE CDSP FD-MAP DISPATCH AUTHORITY
+
+Exact firmware:
+  /lib/firmware/qcom/x1e80100/microsoft/Denali/qccdsp8380.mbn
+  SHA256 4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789
+
+Fresh Hexagon/Ghidra E004db analysis recovers the FastRPC mapping surface:
+- fastrpc_invoke_mmap_create
+- fastrpc_invoke_mmap_create32
+- fastrpc_invoke_fd_mmap_get
+- fastrpc_invoke_fd_mmap_create
+- fastrpc_invoke_mmap_get_cpz_phys
+- apps_mem_dma_handle_map / unmap diagnostics carrying fd, length and offsets
+
+Key control-flow result:
+  FastRPC kprocess dispatcher FUN_f011b0c8 checks the map flag.
+  For param_4 == 2 it calls FUN_f010f290.
+  FUN_f010f290 is the function referenced by the string fastrpc_invoke_fd_mmap_create.
+
+Golden/Linux FastRPC UAPI defines:
+  FASTRPC_MAP_FD = 2
+
+Thus the exact SP11 CDSP firmware mechanically confirms that FastRPC map flag 2 is the normal fd-backed DSP mapping path. E004db does not invent a private kernel token/API: the real host handoff is the dma-buf fd plus the existing MEM_MAP/MEM_UNMAP protocol.
+
+CPZ-specific physical-map support remains separately present in this same firmware (`fastrpc_invoke_mmap_get_cpz_phys`) as proven in E004co.

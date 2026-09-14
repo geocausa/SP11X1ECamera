@@ -1,0 +1,71 @@
+{
+  "experiment": "E004db",
+  "status": "PASS_REAL_FASTRPC_FD_HANDOFF_AUTHORITY_COMPILES_MAP_UNMAP_LIFETIME_BOUND",
+  "mode": "static-plus-compile-partial-link-only",
+  "fd_handoff": {
+    "system_dma_heap_present": true,
+    "userspace_fd_preexists_before_lend": true,
+    "dma_buf_get_creates_cpu_mapping": false,
+    "same_fd_required_through_unmap": true,
+    "protected_mmap_allowed": false,
+    "protected_vmap_allowed": false,
+    "protected_cpu_access_allowed": false
+  },
+  "cpz_session": {
+    "domain_id": 3,
+    "pd_type": 6,
+    "pd_name": "CPZ_USERPD",
+    "secure_device_required": true,
+    "same_opener_privilege_required": true,
+    "selection_before_process_init": true
+  },
+  "same_machine_cdsp": {
+    "firmware_sha256": "4a67a03367f2eff2f8a0e867ca25d2bf2fcd5aee3e41e2c9f436c804e257c789",
+    "fd_mmap_create_present": true,
+    "cpz_phys_helper_present": true,
+    "map_flag_2_dispatches_fd_mapping": true,
+    "linux_flag_2_name": "FASTRPC_MAP_FD"
+  },
+  "map_lifetime": {
+    "mem_map_takes_dmabuf_reference": true,
+    "map_failure_drops_reference": true,
+    "map_success_requires_provider_commit": true,
+    "unmap_failure_keeps_mapping_pinned": true,
+    "unmap_success_precedes_worker_detach": true,
+    "worker_detach_precedes_ownership_reclaim": true
+  },
+  "windows_extent_parity": {
+    "allocation_extent_separate": true,
+    "captured_extent_known_before_map": true,
+    "map_length_source": "declared_captured_extent / Windows cbCaptured",
+    "map_length_uses_allocation_capacity": false,
+    "payload_completion_must_match_declared_capture": true
+  },
+  "build": {
+    "handoff_text_size": 1884,
+    "handoff_object_sha256": "60cc5da79add461ec9b32669ff2ba64afc7a593b5fb2b430977b83c1a3a13239",
+    "combined_text_size": 33308,
+    "combined_sha256": "67dedfc5ba8c838990a5562ba9dac17fbf05dd763f9d44737a440a8dd0352831",
+    "protected_integration_edges_remaining": 0,
+    "runtime_registration_present": false,
+    "ioctl_calls_in_coordinator": 0
+  },
+  "remaining": {
+    "cpz_camera_worker_image_resolved": false,
+    "protected_frame_invoke_abi_resolved": false,
+    "protected_runtime_authorized": false
+  },
+  "runtime_actions": {
+    "object_load": false,
+    "live_cb9_enable": false,
+    "dma_heap_allocation": false,
+    "dma_buf_lend": false,
+    "scm_assign_mem": false,
+    "fastrpc_ioctl": false,
+    "cpz_process_create": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004dc CPZ protected-frame worker image and invoke ABI, static first"
+}

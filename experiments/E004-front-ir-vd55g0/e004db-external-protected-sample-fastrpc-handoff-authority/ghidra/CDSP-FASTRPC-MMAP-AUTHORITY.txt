@@ -1,0 +1,4445 @@
+STRING @f01c8f2c = fastrpc_invoke_mmap_create
+  XREF f010e940 function=FUN_f010e87c entry=f010e87c
+  XREF f010e910 function=FUN_f010e87c entry=f010e87c
+STRING @f01c8f5e = fastrpc_invoke_mmap_create32
+  XREF f010ee10 function=FUN_f010ed50 entry=f010ed50
+  XREF f010edec function=FUN_f010ed50 entry=f010ed50
+STRING @f01c8fbd = %s unmap fd %d
+  XREF f010f1e4 function=FUN_f010ee3c entry=f010ee3c
+  XREF f010f1b0 function=FUN_f010ee3c entry=f010ee3c
+STRING @f01c90b6 = fastrpc_invoke_fd_mmap_get
+STRING @f01c90d1 = %s map fd %d
+STRING @f01c917a = Error 0x%x: %s apps_mem_dma_handle_map failed for fd %d \n
+STRING @f01c929f = Error 0x%x: %s: apps_mem_dma_handle_unmap to unmap fd %d of length %zu bytes addr 0x%llx
+  XREF f010f21c function=FUN_f010ee3c entry=f010ee3c
+  XREF f010f23c function=FUN_f010ee3c entry=f010ee3c
+STRING @f01c93e9 = fastrpc_invoke_fd_mmap_create
+  XREF f010f338 function=FUN_f010f290 entry=f010f290
+  XREF f010f2c0 function=FUN_f010f290 entry=f010f290
+  XREF f010f448 function=FUN_f010f290 entry=f010f290
+  XREF f010f408 function=FUN_f010f290 entry=f010f290
+  XREF f010f530 function=FUN_f010f290 entry=f010f290
+  XREF f010f604 function=FUN_f010f290 entry=f010f290
+  XREF f010f6e0 function=FUN_f010f290 entry=f010f290
+  XREF f010f2f8 function=FUN_f010f290 entry=f010f290
+STRING @f01c9407 = %s: map fd %d
+  XREF f010f520 function=FUN_f010f290 entry=f010f290
+  XREF f010f5b8 function=FUN_f010f290 entry=f010f290
+STRING @f01c9415 = Error 0x%x: %s apps_mem_dma_handle_map failed for fd %d of length %zu bytes(offset 0x%lx)\n
+  XREF f010f6d4 function=FUN_f010f290 entry=f010f290
+  XREF f010f610 function=FUN_f010f290 entry=f010f290
+STRING @f01c9695 = fastrpc_invoke_mmap_get_cpz_phys
+STRING @f01c983e = %s: before unmapping map fd %d, DSP VA 0x%llx, 							size %zu, flags 0x%x, PA 0x%llx, msg_ctx 0x%llx, client_handle 0x%x
+  XREF f0109bf8 function=FUN_f0109b30 entry=f0109b30
+  XREF f0109c3c function=FUN_f0109b30 entry=f0109b30
+STRING @f01c98ce = Error 0x%x: %s: unmapping failed for map fd %d, 							DSP VA 0x%llx, size %zu, flags %d, client_handle 0x%x
+  XREF f0109ce8 function=FUN_f0109b30 entry=f0109b30
+  XREF f0109cc4 function=FUN_f0109b30 entry=f0109b30
+STRING @f01c993b = %s: unmapped map fd %d, DSP VA 0x%llx, size %zu, 									flags 0x%x, PA 0x%llx, client_handle 0x%x, nErr 0x%x
+  XREF f0109d88 function=FUN_f0109b30 entry=f0109b30
+  XREF f0109d3c function=FUN_f0109b30 entry=f0109b30
+
+//// ROOT FUN_f010e87c @f010e87c ////
+
+/* WARNING: Removing unreachable block (ram,0xf010e8fc) */
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0xf010e940 */
+/* WARNING: Removing unreachable block (ram,0xf010ea74) */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010e87c(uint param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+                 longlong *param_5,int param_6,undefined4 *param_7)
+
+{
+  bool bVar1;
+  longlong lVar2;
+  longlong lVar3;
+  undefined4 *extraout_r0;
+  undefined8 in_r1r0;
+  undefined4 extraout_r1;
+  ulonglong uVar4;
+  ulonglong uVar5;
+  undefined4 *unaff_r19;
+  undefined4 *puVar6;
+  sbyte sVar7;
+  
+  FUN_f0147470();
+  extraout_r1 = (undefined4)((ulonglong)in_r1r0 >> 0x20);
+  extraout_r0 = (undefined4 *)in_r1r0;
+  if ((param_1 == 1) || (param_6 < 1)) {
+    puVar6 = (undefined4 *)&DAT_8000040e;
+    thunk_FUN_f0119ea0();
+  }
+  else {
+    thunk_FUN_f010919c();
+    if (extraout_r0 == (undefined4 *)0x0) {
+      sVar7 = -1;
+    }
+    else {
+      sVar7 = 0;
+    }
+    if (sVar7 == 0) {
+      unaff_r19 = extraout_r0 + 2;
+    }
+    if (extraout_r0 == (undefined4 *)0x0) {
+      puVar6 = (undefined4 *)0x80000468;
+      thunk_FUN_f0119ea0();
+    }
+    else {
+      *extraout_r0 = 0;
+      extraout_r0[1] = 0;
+      extraout_r0[4] = param_1;
+      extraout_r0[3] = param_6;
+      extraout_r0[5] = extraout_r1;
+      if (0xfff < (int)param_1) {
+        if ((int)param_1 < 0x3000) {
+          if (param_1 == 0x1000) goto LAB_f010e9c0;
+          if (param_1 != 0x2000) goto LAB_f010eb30;
+          if ((extraout_r0 == (undefined4 *)0x0) || (extraout_r0[0x16] != 0)) {
+            puVar6 = (undefined4 *)0x80000487;
+            thunk_FUN_f0119ea0();
+            goto LAB_f010eb3c;
+          }
+          lVar2 = *param_5;
+          extraout_r0[7] = (int)((ulonglong)lVar2 >> 0x20);
+          extraout_r0[6] = (int)lVar2;
+          lVar3 = param_5[1];
+          extraout_r0[0xb] = param_4;
+          extraout_r0[10] = param_3;
+          uVar5 = lVar3 + lVar2;
+          *(ulonglong *)(extraout_r0 + 8) = uVar5;
+          lVar2 = param_5[1];
+          extraout_r0[2] = 1;
+          *(longlong *)(extraout_r0 + 0xc) = lVar2 + CONCAT44(param_4,param_3);
+          FUN_f004f5e0(unaff_r19);
+          extraout_r0[0x16] = extraout_r0;
+LAB_f010ea18:
+          FUN_f004f678(unaff_r19);
+        }
+        else {
+          if ((param_1 != 0x3000) && (param_1 != 0x5000)) goto LAB_f010eb30;
+LAB_f010e9c0:
+          extraout_r0[0xb] = param_4;
+          extraout_r0[10] = param_3;
+          lVar2 = *param_5;
+          bVar1 = (param_1 | 0x4000) == 0x5000;
+          extraout_r0[7] = (int)((ulonglong)lVar2 >> 0x20);
+          extraout_r0[6] = (int)lVar2;
+          *(longlong *)(extraout_r0 + 8) = param_5[1] + lVar2;
+          lVar2 = param_5[1];
+          extraout_r0[2] = 1;
+          uVar4 = lVar2 + CONCAT44(param_4,param_3);
+          uVar5 = uVar4;
+          if (bVar1) {
+            uVar5 = ZEXT48(unaff_r19);
+          }
+          *(ulonglong *)(extraout_r0 + 0xc) = uVar4;
+          if (bVar1) {
+            FUN_f004f5e0();
+            puVar6 = (undefined4 *)extraout_r0[9];
+            extraout_r0[1] = puVar6;
+            *extraout_r0 = extraout_r0 + 8;
+            extraout_r0[9] = extraout_r0;
+            *puVar6 = extraout_r0;
+            goto LAB_f010ea18;
+          }
+          thunk_FUN_f004f5e0((int)uVar5);
+          extraout_r0[1] = DAT_f08eff74;
+          *extraout_r0 = &DAT_f08eff70;
+          puVar6 = extraout_r0;
+          *DAT_f08eff74 = extraout_r0;
+          DAT_f08eff74 = puVar6;
+          thunk_FUN_f004f678();
+        }
+        puVar6 = (undefined4 *)0x0;
+        if (param_7 != (undefined4 *)0x0) {
+          param_7[1] = (int)(uVar5 >> 0x20);
+          *param_7 = (int)uVar5;
+        }
+        goto LAB_f010eb28;
+      }
+      if ((int)param_1 < 6) {
+        if (param_1 == 0) goto LAB_f010ea20;
+        if (param_1 == 4) goto LAB_f010e9c0;
+LAB_f010eb30:
+        puVar6 = (undefined4 *)0x80000414;
+        FUN_f0119ea0(0x80000414);
+      }
+      else {
+        if (param_1 != 6) {
+          if (param_1 == 8) goto LAB_f010e9c0;
+          goto LAB_f010eb30;
+        }
+LAB_f010ea20:
+        FUN_f0107d40(extraout_r1);
+        puVar6 = extraout_r0;
+        if (extraout_r0 == (undefined4 *)0x0) {
+          FUN_f010eb94();
+          FUN_f0111684(_DAT_00000054);
+          _DAT_0000001c = (undefined4 *)0x0;
+          _DAT_00000018 = 0;
+          _DAT_00000020 = param_5[1];
+          uVar5 = param_5[1] + CONCAT44(param_4,param_3);
+          _DAT_00000038 = (undefined4)*param_5;
+          _DAT_0000003c = (undefined4)((ulonglong)*param_5 >> 0x20);
+          _SUB_00000008 = 1;
+          lRam00000040 = param_5[1] + *param_5;
+          _DAT_00000028 = param_3;
+          _DAT_0000002c = param_4;
+          _DAT_00000030 = uVar5;
+          FUN_f004f5e0(unaff_r19);
+          if (param_1 == 6) {
+            puVar6 = _DAT_00000034;
+            _DAT_00000004 = _DAT_00000034;
+            _SUB_00000000 = 0x30;
+            _DAT_00000030 = _DAT_00000030 & 0xffffffff;
+            *puVar6 = 0;
+          }
+          else if (param_1 == 0) {
+            _DAT_00000004 = _DAT_0000001c;
+            _SUB_00000000 = 0x18;
+            *_DAT_0000001c = 0;
+            iRam0000005c = iRam0000005c + 1;
+            _DAT_0000001c = (undefined4 *)0x0;
+          }
+          goto LAB_f010ea18;
+        }
+      }
+LAB_f010eb3c:
+      FUN_f010ec6c(extraout_r0);
+    }
+  }
+  FUN_f0102e44(3,extraout_r1,0xa60);
+LAB_f010eb28:
+  FUN_f014754c(puVar6);
+  return;
+}
+
+
+
+//// CALLER FUN_f011b0c8 @f011b0c8 ////
+
+/* WARNING: Removing unreachable block (ram,0xf011b3dc) */
+/* WARNING: Removing unreachable block (ram,0xf011b3e4) */
+/* WARNING: Removing unreachable block (ram,0xf011b184) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f011b0c8(undefined4 param_1,undefined4 param_2,undefined4 param_3,uint param_4,
+                 undefined4 param_5,undefined4 param_6,longlong *param_7,uint param_8,
+                 undefined4 *param_9)
+
+{
+  int iVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 uVar5;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 extraout_r1_01;
+  undefined4 extraout_r1_02;
+  undefined4 extraout_r1_03;
+  undefined4 extraout_r1_04;
+  undefined4 extraout_r1_05;
+  undefined4 extraout_r1_06;
+  uint uVar6;
+  undefined1 *puVar7;
+  undefined1 *puVar8;
+  sbyte sVar9;
+  sbyte sVar10;
+  sbyte sVar11;
+  undefined4 local_74;
+  undefined1 *local_70 [26];
+  
+  iVar1 = FUN_f0147454();
+  uVar6 = param_4;
+  iVar2 = FUN_f011a18c();
+  sVar11 = (sbyte)uVar6;
+  local_74 = 0;
+  uVar5 = extraout_r1_00;
+  if (iVar2 == 0) {
+    puVar8 = (undefined1 *)0x80000433;
+LAB_f011b170:
+    FUN_f0119ea0(puVar8,uVar5);
+  }
+  else {
+    puVar8 = &DAT_8000040e;
+    if ((param_8 & 0xf) == 0) {
+      sVar9 = 0;
+    }
+    else {
+      sVar9 = -1;
+    }
+    if ((sVar9 != 0) || (param_8 >> 4 != 1)) goto LAB_f011b170;
+    sVar9 = -(param_4 == 0x2000);
+    if (sVar9 != 0) {
+      uVar5 = *(undefined4 *)((int)param_7 + 4);
+      sVar11 = 0;
+      if (*param_7 == 0) {
+        sVar10 = -1;
+      }
+      else {
+        sVar10 = 0;
+      }
+      if (sVar10 != 0) {
+        thunk_FUN_f001e3d4(&DAT_f01cd6a8);
+        goto LAB_f011b464;
+      }
+    }
+    if (*(int *)(*(int *)(iVar2 + 0xd8) + 0x28) != iVar1) {
+      iVar3 = FUN_f011eafc(iVar1,uVar5,sVar9);
+      if (iVar3 == 0) {
+        sVar10 = -1;
+      }
+      else {
+        sVar10 = 0;
+      }
+      if (sVar10 == 0) {
+        sVar11 = sVar9;
+      }
+      if (iVar3 == 0) {
+        puVar8 = &DAT_80000441;
+        uVar5 = FUN_f0119ea0(&DAT_80000441);
+        goto LAB_f011b3c8;
+      }
+      uVar6 = *(uint *)(iVar3 + 0x140);
+      if (uVar6 < 8) {
+        if ((1 << uVar6 & 0xb8U) == 0) {
+          sVar9 = 0;
+        }
+        else {
+          sVar9 = -1;
+        }
+        if (sVar9 != 0) {
+          puVar8 = (undefined1 *)0x80000414;
+          iVar4 = *(int *)(iVar3 + 0x180);
+          if (iVar4 == 0) {
+LAB_f011b464:
+            uVar5 = thunk_FUN_f001e3d4(&DAT_f01cd6bc);
+            FUN_f011b0c8(uVar5,0xffffffff,0,extraout_r1_06);
+            return;
+          }
+          uVar5 = extraout_r1_01;
+          if ((int)param_4 < 0x1000) {
+            if (param_4 < 0x11) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              uVar6 = 0xc;
+            }
+            if (param_4 < 0x11) {
+              if ((uVar6 & 1 << param_4) == 0) {
+                sVar11 = 0;
+              }
+              else {
+                sVar11 = -1;
+              }
+              if (sVar11 == 0) {
+                if ((1 << param_4 & 0x41U) == 0) {
+                  sVar11 = 0;
+                }
+                else {
+                  sVar11 = -1;
+                }
+                if (sVar11 == 0) goto LAB_f011b3c8;
+                puVar8 = (undefined1 *)FUN_f010a57c(iVar4,extraout_r1,param_4);
+                uVar5 = extraout_r1_04;
+              }
+              else {
+                puVar8 = (undefined1 *)FUN_f01096e0(iVar4,extraout_r1,param_3,(int)param_7[1]);
+                uVar5 = extraout_r1_02;
+              }
+              goto LAB_f011b3c0;
+            }
+          }
+          else {
+            if ((int)param_4 < 0x3000) {
+              if (param_4 != 0x1000) {
+                if (sVar11 != 0) goto LAB_f011b44c;
+                goto LAB_f011b3c8;
+              }
+            }
+            else if (param_4 != 0x3000) {
+              if (param_4 == 0x4000) {
+                puVar8 = (undefined1 *)FUN_f010ff14();
+                uVar5 = extraout_r1_05;
+                goto LAB_f011b3c0;
+              }
+              if (param_4 != 0x5000) goto LAB_f011b3c8;
+            }
+            puVar8 = (undefined1 *)FUN_f010e87c(iVar4,extraout_r1,param_4);
+            uVar5 = extraout_r1_03;
+LAB_f011b3c0:
+            if (puVar8 == (undefined1 *)0x0) goto LAB_f011b44c;
+          }
+LAB_f011b3c8:
+          FUN_f011df54(iVar3,uVar5);
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x3cd,
+                       "Error 0x%x: %s failed for pidA %d, fd %d, offset 0x%x, flags 0x%x, PA 0x%llx, size %lld"
+                      );
+          goto LAB_f011b178;
+        }
+      }
+LAB_f011b44c:
+      FUN_f011df54(iVar3);
+      *(int *)(iVar2 + 0x110) = iVar1;
+LAB_f011b458:
+      puVar8 = (undefined1 *)0x0;
+      goto LAB_f011b1e8;
+    }
+    if (param_4 != 2) {
+      puVar8 = (undefined1 *)0x80000414;
+      uVar5 = extraout_r1;
+      if (param_4 == 3) goto LAB_f011b170;
+      puVar8 = (undefined1 *)FUN_f010e87c(*(undefined4 *)(iVar2 + 0x11c),extraout_r1,param_4);
+      if (puVar8 != (undefined1 *)0x0) goto LAB_f011b178;
+      FUN_f011c9c8(iVar2,&local_74,local_70,extraout_r1);
+      goto LAB_f011b458;
+    }
+    local_70[0] = (undefined1 *)0x0;
+    puVar8 = (undefined1 *)FUN_f01096e0(*(undefined4 *)(iVar2 + 0x11c),extraout_r1,param_3);
+    if (puVar8 == (undefined1 *)0x0) {
+      iVar1 = FUN_f010f290(*(undefined4 *)(iVar2 + 0x11c),extraout_r1,0);
+      puVar8 = (undefined1 *)0x80000465;
+      if (iVar1 == 0) {
+        sVar11 = -1;
+      }
+      else {
+        sVar11 = 0;
+      }
+      puVar7 = &DAT_8000840d;
+      if (sVar11 != 0) {
+        puVar7 = local_70[0];
+      }
+      if (iVar1 == 0) {
+        puVar8 = (undefined1 *)0x0;
+        param_9[1] = 0;
+        *param_9 = puVar7;
+        goto LAB_f011b1e8;
+      }
+      FUN_f01093f8(*(undefined4 *)(iVar2 + 0x11c),extraout_r1);
+    }
+  }
+LAB_f011b178:
+  FUN_f0102e44(3,"fastrpc_kprocess.c",0x443,
+               "Error 0x%x: %s failed for pidA %d fd %d offset 0x%x flags 0x%x raddr 0x%llx pagesLen 0x%x"
+              );
+LAB_f011b1e8:
+  FUN_f0147530(puVar8);
+  return;
+}
+
+
+
+//// CALLER FUN_f010ed50 @f010ed50 ////
+
+/* WARNING: Removing unreachable block (ram,0xf010ede0) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010ed50(void)
+
+{
+  uint uVar1;
+  undefined4 uVar2;
+  int iVar3;
+  undefined4 uVar4;
+  int extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 *puVar5;
+  int in_r3;
+  undefined4 *puVar6;
+  uint in_r4;
+  undefined4 *in_r5;
+  int iVar7;
+  sbyte sVar8;
+  undefined4 local_30;
+  undefined4 uStack_2c;
+  
+  uVar2 = FUN_f0147488();
+  iVar3 = FUN_f010919c();
+  if (iVar3 == 0) {
+    sVar8 = -1;
+  }
+  else {
+    sVar8 = 0;
+  }
+  iVar7 = extraout_r1;
+  if (sVar8 != 0) {
+    iVar7 = -0x7ffffb98;
+  }
+  if (iVar3 == 0) {
+    thunk_FUN_f0119ea0();
+  }
+  else {
+    if (0 < (int)in_r4) {
+      uVar1 = USR;
+      USR = uVar1 & 0xfffffcff;
+      puVar5 = (undefined4 *)(in_r3 + 8);
+      puVar6 = (undefined4 *)(iVar3 + 8);
+      while( true ) {
+        uVar4 = puVar5[-2];
+        puVar6[-1] = puVar5[-1];
+        puVar6[-2] = uVar4;
+        uVar4 = puVar5[4];
+        puVar6[1] = puVar5[5];
+        *puVar6 = uVar4;
+        if (in_r4 < 2) break;
+        in_r4 = in_r4 - 1;
+        puVar5 = puVar5 + 4;
+        puVar6 = puVar6 + 4;
+      }
+    }
+    iVar7 = FUN_f010e87c(uVar2,0xff,iVar7);
+    if (iVar7 == 0) {
+      *in_r5 = local_30;
+      iVar7 = 0;
+      FUN_f01091bc(iVar3,extraout_r1_00,local_30,uStack_2c);
+      goto LAB_f010ee34;
+    }
+    FUN_f01091bc(iVar3);
+  }
+  FUN_f0102e44(3,"fastrpc_invoke.c",0xa79,"Error 0x%x: %s failed\n");
+LAB_f010ee34:
+  FUN_f0147564(iVar7);
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f010919c @f0109928 ////
+
+/* WARNING: Removing unreachable block (ram,0xf01091a0) */
+/* WARNING: Removing unreachable block (ram,0xf010919c) */
+/* WARNING: Removing unreachable block (ram,0xf01091a8) */
+
+undefined4 thunk_FUN_f010919c(void)
+
+{
+  undefined4 uVar1;
+  
+  uVar1 = FUN_f00189b0();
+  return uVar1;
+}
+
+
+
+//// CALLEE FUN_f0102e44 @f0102e44 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102e44(void)
+
+{
+  FUN_f0102ac0();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0109394 @f0109394 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0109394(void)
+
+{
+  undefined4 in_r3;
+  undefined1 auStack_128 [260];
+  int local_24;
+  
+  FUN_f01474ac();
+  local_24 = DAT_f01dd000;
+  FUN_f0142f48(auStack_128,0x100,in_r3);
+  FUN_f0102e60();
+  if (DAT_f01dd000 != local_24) {
+    FUN_f0001060();
+  }
+  FUN_f0147588();
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f0119ea0 @f01096d4 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void thunk_FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488(&DAT_8000040e);
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f0119ea0 @f010968c ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void thunk_FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488(0x80000487);
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f004f5e0 @f010937c ////
+
+/* WARNING: Removing unreachable block (ram,0xf004f630) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 thunk_FUN_f004f5e0(void)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  undefined4 in_UGP;
+  sbyte sVar4;
+  
+  do {
+    while( true ) {
+      uVar2 = memd_locked(0xf08eff60);
+      iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(0xf08eff60,CONCAT44(iVar3,in_UGP));
+      if (sVar4 != 0) {
+        return 0;
+      }
+    }
+    sVar4 = memw_locked_store(0xf08eff60,CONCAT44(iVar3 + 1,(int)uVar2));
+  } while (sVar4 == 0);
+  do {
+    trap0(0x20);
+    while( true ) {
+      uVar2 = memd_locked(0xf08eff60);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(0xf08eff60,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,in_UGP));
+      if (sVar4 != 0) {
+        uVar1 = 0;
+        if (sVar4 == 0) {
+          do {
+            uVar2 = memd_locked(0);
+            sVar4 = memw_locked_store(0,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,(int)uVar2));
+          } while (sVar4 == 0);
+          uVar1 = 0x2f;
+        }
+        return uVar1;
+      }
+    }
+  } while( true );
+}
+
+
+
+//// CALLEE thunk_FUN_f004f678 @f0109388 ////
+
+undefined * thunk_FUN_f004f678(void)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  int in_UGP;
+  sbyte sVar4;
+  
+  do {
+    uVar2 = memd_locked(0xf08eff60);
+    iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+    if ((int)uVar2 != in_UGP) {
+      uVar1 = FUN_f004f4c8(&DAT_f08eff60,1);
+      do {
+        uVar2 = memd_locked(uVar1);
+        if ((int)uVar2 != 0xfe) {
+          return (undefined *)0x1;
+        }
+        sVar4 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar2 >> 0x20),in_UGP));
+      } while (sVar4 == 0);
+      return (undefined *)0x0;
+    }
+    sVar4 = memw_locked_store(0xf08eff60,CONCAT44(iVar3,0xfe));
+  } while (sVar4 == 0);
+  if (iVar3 == 0) {
+    return (undefined *)0x0;
+  }
+  trap0(0x11);
+  return &DAT_f08eff60;
+}
+
+
+
+//// CALLEE FUN_f0107d40 @f0107d40 ////
+
+undefined4 FUN_f0107d40(void)
+
+{
+  return 0;
+}
+
+
+
+//// CALLEE FUN_f014754c @f014754c ////
+
+void FUN_f014754c(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f010ec6c @f010ec6c ////
+
+/* WARNING: Removing unreachable block (ram,0xf010ed08) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010ec6c(int param_1)
+
+{
+  int iVar1;
+  undefined4 extraout_r1;
+  
+  if (param_1 != 0) {
+    if ((*(int *)(param_1 + 0x54) == 0) ||
+       ((*(int *)(param_1 + 0x10) != 6 && (*(int *)(param_1 + 0x10) != 0)))) {
+      FUN_f01091bc(param_1);
+      return;
+    }
+    iVar1 = FUN_f01108dc(*(int *)(param_1 + 0x54));
+    if (iVar1 != 0) {
+      FUN_f01113d0(*(undefined4 *)(*(int *)(param_1 + 0x54) + 0x58),extraout_r1,0);
+    }
+    else {
+      FUN_f0111684();
+      FUN_f0110c08(*(undefined4 *)(param_1 + 0x54));
+    }
+    FUN_f01107b0(*(undefined4 *)(param_1 + 0x54));
+    *(undefined4 *)(param_1 + 0x54) = 0;
+    FUN_f01091bc(param_1);
+    if (iVar1 != 0) {
+      FUN_f0102e44(3,"fastrpc_invoke.c",0x9f6,"Error 0x%x: %s failed\n");
+    }
+  }
+  return;
+}
+
+
+
+//// CALLEE FUN_f004f5e0 @f004f5e0 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 FUN_f004f5e0(int param_1)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  undefined4 in_UGP;
+  sbyte sVar4;
+  
+  do {
+    while( true ) {
+      uVar2 = memd_locked(param_1);
+      iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(param_1,CONCAT44(iVar3,in_UGP));
+      if (sVar4 != 0) {
+        return 0;
+      }
+    }
+    sVar4 = memw_locked_store(param_1,CONCAT44(iVar3 + 1,(int)uVar2));
+  } while (sVar4 == 0);
+  do {
+    trap0(0x20);
+    if (param_1 == 0x2f) {
+      uVar1 = 0x2f;
+LAB_f004f660:
+      do {
+        uVar2 = memd_locked(uVar1);
+        sVar4 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,(int)uVar2));
+      } while (sVar4 == 0);
+      return 0x2f;
+    }
+    while( true ) {
+      uVar2 = memd_locked(param_1);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(param_1,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,in_UGP));
+      if (sVar4 != 0) {
+        uVar1 = 0;
+        if (sVar4 != 0) {
+          return 0;
+        }
+        goto LAB_f004f660;
+      }
+    }
+  } while( true );
+}
+
+
+
+//// CALLEE FUN_f004f678 @f004f678 ////
+
+undefined4 FUN_f004f678(undefined4 param_1)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  int in_UGP;
+  sbyte sVar4;
+  
+  do {
+    uVar2 = memd_locked(param_1);
+    iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+    if ((int)uVar2 != in_UGP) {
+      uVar1 = FUN_f004f4c8(param_1,1);
+      do {
+        uVar2 = memd_locked(uVar1);
+        if ((int)uVar2 != 0xfe) {
+          return 1;
+        }
+        sVar4 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar2 >> 0x20),in_UGP));
+      } while (sVar4 == 0);
+      return 0;
+    }
+    sVar4 = memw_locked_store(param_1,CONCAT44(iVar3,0xfe));
+  } while (sVar4 == 0);
+  if (iVar3 == 0) {
+    return 0;
+  }
+  trap0(0x11);
+  return param_1;
+}
+
+
+
+//// CALLEE FUN_f0147470 @f0147470 ////
+
+void FUN_f0147470(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f0111684 @f0111684 ////
+
+void FUN_f0111684(int param_1)
+
+{
+  if (param_1 != 0) {
+    *(undefined4 *)(param_1 + 0xc) = 0;
+  }
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f0119ea0 @f01096a4 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void thunk_FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488(0x80000468);
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0119ea0 @f0119ea0 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488();
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE FUN_f010eb94 @f010eb94 ////
+
+/* WARNING: Removing unreachable block (ram,0xf010ec10) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010eb94(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+                 int *param_5,undefined4 *param_6)
+
+{
+  int iVar1;
+  int extraout_r1;
+  undefined4 extraout_r6;
+  undefined4 extraout_r7;
+  sbyte extraout_P0;
+  undefined4 local_28;
+  undefined4 uStack_24;
+  
+  iVar1 = FUN_f014749c();
+  if ((extraout_P0 == 0) && (iVar1 != 0)) {
+    local_28 = extraout_r6;
+    uStack_24 = extraout_r7;
+    iVar1 = FUN_f0111bf4(*(uint *)(extraout_r1 + 4) & 0xf,0,param_5);
+    if ((iVar1 == 0) &&
+       (iVar1 = FUN_f0111a04(*param_5,&local_28,param_3,param_4,extraout_r1), iVar1 == 0)) {
+      iVar1 = 0;
+      *param_6 = local_28;
+      goto LAB_f010ec64;
+    }
+  }
+  else {
+    iVar1 = -0x7ffffbf0;
+    thunk_FUN_f0119ea0();
+  }
+  uStack_24 = FUN_f0102e44(3,"fastrpc_invoke.c",0x53c,"Error 0x%x: %s failed\n");
+  if (*param_5 != 0) {
+    uStack_24 = FUN_f01107b0(*param_5);
+    *param_5 = 0;
+  }
+LAB_f010ec64:
+  FUN_f0147578(iVar1,uStack_24);
+  return;
+}
+
+
+
+//// ROOT FUN_f010ed50 @f010ed50 ////
+
+/* WARNING: Removing unreachable block (ram,0xf010ede0) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010ed50(void)
+
+{
+  uint uVar1;
+  undefined4 uVar2;
+  int iVar3;
+  undefined4 uVar4;
+  int extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 *puVar5;
+  int in_r3;
+  undefined4 *puVar6;
+  uint in_r4;
+  undefined4 *in_r5;
+  int iVar7;
+  sbyte sVar8;
+  undefined4 local_30;
+  undefined4 uStack_2c;
+  
+  uVar2 = FUN_f0147488();
+  iVar3 = FUN_f010919c();
+  if (iVar3 == 0) {
+    sVar8 = -1;
+  }
+  else {
+    sVar8 = 0;
+  }
+  iVar7 = extraout_r1;
+  if (sVar8 != 0) {
+    iVar7 = -0x7ffffb98;
+  }
+  if (iVar3 == 0) {
+    thunk_FUN_f0119ea0();
+  }
+  else {
+    if (0 < (int)in_r4) {
+      uVar1 = USR;
+      USR = uVar1 & 0xfffffcff;
+      puVar5 = (undefined4 *)(in_r3 + 8);
+      puVar6 = (undefined4 *)(iVar3 + 8);
+      while( true ) {
+        uVar4 = puVar5[-2];
+        puVar6[-1] = puVar5[-1];
+        puVar6[-2] = uVar4;
+        uVar4 = puVar5[4];
+        puVar6[1] = puVar5[5];
+        *puVar6 = uVar4;
+        if (in_r4 < 2) break;
+        in_r4 = in_r4 - 1;
+        puVar5 = puVar5 + 4;
+        puVar6 = puVar6 + 4;
+      }
+    }
+    iVar7 = FUN_f010e87c(uVar2,0xff,iVar7);
+    if (iVar7 == 0) {
+      *in_r5 = local_30;
+      iVar7 = 0;
+      FUN_f01091bc(iVar3,extraout_r1_00,local_30,uStack_2c);
+      goto LAB_f010ee34;
+    }
+    FUN_f01091bc(iVar3);
+  }
+  FUN_f0102e44(3,"fastrpc_invoke.c",0xa79,"Error 0x%x: %s failed\n");
+LAB_f010ee34:
+  FUN_f0147564(iVar7);
+  return;
+}
+
+
+
+//// CALLER FUN_f011b49c @f011b49c ////
+
+/* WARNING: Removing unreachable block (ram,0xf011b500) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f011b49c(void)
+
+{
+  int iVar1;
+  int iVar2;
+  uint extraout_r1;
+  undefined1 *puVar3;
+  int iVar4;
+  int in_r4;
+  undefined1 *puVar5;
+  sbyte sVar6;
+  undefined4 local_5c;
+  undefined1 auStack_58 [80];
+  
+  iVar1 = FUN_f0147488();
+  iVar2 = FUN_f011a18c();
+  puVar3 = &DAT_8000840d;
+  if (iVar2 == 0) {
+    puVar3 = (undefined1 *)0x80000433;
+LAB_f011b4e8:
+    FUN_f0119ea0(puVar3);
+  }
+  else {
+    if (in_r4 != 1) {
+      puVar3 = &DAT_8000040e;
+      goto LAB_f011b4e8;
+    }
+    local_5c = 0;
+    if ((extraout_r1 & 0xfffffffe) == 2) {
+      sVar6 = -1;
+    }
+    else {
+      sVar6 = 0;
+    }
+    if (sVar6 == 0) {
+      puVar3 = *(undefined1 **)(iVar2 + 0xd8);
+    }
+    if ((extraout_r1 & 0xfffffffe) == 2) {
+      puVar3 = puVar3 + -0x7ff9;
+      goto LAB_f011b4e8;
+    }
+    puVar5 = (undefined1 *)0x0;
+    iVar4 = *(int *)(puVar3 + 0x28);
+    if (iVar4 == iVar1) {
+      sVar6 = -1;
+    }
+    else {
+      sVar6 = 0;
+    }
+    if (sVar6 == 0) {
+      *(int *)(iVar2 + 0x110) = iVar1;
+    }
+    if (iVar4 != iVar1) goto thunk_FUN_f0147564;
+    puVar3 = (undefined1 *)FUN_f010ed50(*(undefined4 *)(iVar2 + 0x11c),extraout_r1);
+    if (puVar3 == (undefined1 *)0x0) {
+      FUN_f011c9c8(iVar2,&local_5c,auStack_58,0xffffffff);
+      goto thunk_FUN_f0147564;
+    }
+  }
+  puVar5 = puVar3;
+  FUN_f0102e44(3,"fastrpc_kprocess.c",0x470,"Error 0x%x: %s failed for pidA: %d, vaddrin 0x%llx");
+thunk_FUN_f0147564:
+  FUN_f0147564(puVar5);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0102e44 @f0102e44 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102e44(void)
+
+{
+  FUN_f0102ac0();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0109394 @f0109394 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0109394(void)
+
+{
+  undefined4 in_r3;
+  undefined1 auStack_128 [260];
+  int local_24;
+  
+  FUN_f01474ac();
+  local_24 = DAT_f01dd000;
+  FUN_f0142f48(auStack_128,0x100,in_r3);
+  FUN_f0102e60();
+  if (DAT_f01dd000 != local_24) {
+    FUN_f0001060();
+  }
+  FUN_f0147588();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0147564 @f0147564 ////
+
+void FUN_f0147564(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f010919c @f010919c ////
+
+undefined4 FUN_f010919c(int param_1,int param_2)
+
+{
+  undefined4 uVar1;
+  
+  if ((param_1 != 0) && (param_2 != 0)) {
+    uVar1 = FUN_f00189b0();
+    return uVar1;
+  }
+  return 0;
+}
+
+
+
+//// CALLEE FUN_f01091bc @f01091bc ////
+
+void FUN_f01091bc(int param_1)
+
+{
+  sbyte sVar1;
+  
+  if (param_1 == 0) {
+    sVar1 = -1;
+  }
+  else {
+    sVar1 = 0;
+  }
+  if (sVar1 != 0) {
+    return;
+  }
+  FUN_f0018a00();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0147488 @f0147488 ////
+
+void FUN_f0147488(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f0119ea0 @f01096a4 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void thunk_FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488(0x80000468);
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE FUN_f010e87c @f010e87c ////
+
+/* WARNING: Removing unreachable block (ram,0xf010e8fc) */
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0xf010e940 */
+/* WARNING: Removing unreachable block (ram,0xf010ea74) */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010e87c(uint param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+                 longlong *param_5,int param_6,undefined4 *param_7)
+
+{
+  bool bVar1;
+  longlong lVar2;
+  longlong lVar3;
+  undefined4 *extraout_r0;
+  undefined8 in_r1r0;
+  undefined4 extraout_r1;
+  ulonglong uVar4;
+  ulonglong uVar5;
+  undefined4 *unaff_r19;
+  undefined4 *puVar6;
+  sbyte sVar7;
+  
+  FUN_f0147470();
+  extraout_r1 = (undefined4)((ulonglong)in_r1r0 >> 0x20);
+  extraout_r0 = (undefined4 *)in_r1r0;
+  if ((param_1 == 1) || (param_6 < 1)) {
+    puVar6 = (undefined4 *)&DAT_8000040e;
+    thunk_FUN_f0119ea0();
+  }
+  else {
+    thunk_FUN_f010919c();
+    if (extraout_r0 == (undefined4 *)0x0) {
+      sVar7 = -1;
+    }
+    else {
+      sVar7 = 0;
+    }
+    if (sVar7 == 0) {
+      unaff_r19 = extraout_r0 + 2;
+    }
+    if (extraout_r0 == (undefined4 *)0x0) {
+      puVar6 = (undefined4 *)0x80000468;
+      thunk_FUN_f0119ea0();
+    }
+    else {
+      *extraout_r0 = 0;
+      extraout_r0[1] = 0;
+      extraout_r0[4] = param_1;
+      extraout_r0[3] = param_6;
+      extraout_r0[5] = extraout_r1;
+      if (0xfff < (int)param_1) {
+        if ((int)param_1 < 0x3000) {
+          if (param_1 == 0x1000) goto LAB_f010e9c0;
+          if (param_1 != 0x2000) goto LAB_f010eb30;
+          if ((extraout_r0 == (undefined4 *)0x0) || (extraout_r0[0x16] != 0)) {
+            puVar6 = (undefined4 *)0x80000487;
+            thunk_FUN_f0119ea0();
+            goto LAB_f010eb3c;
+          }
+          lVar2 = *param_5;
+          extraout_r0[7] = (int)((ulonglong)lVar2 >> 0x20);
+          extraout_r0[6] = (int)lVar2;
+          lVar3 = param_5[1];
+          extraout_r0[0xb] = param_4;
+          extraout_r0[10] = param_3;
+          uVar5 = lVar3 + lVar2;
+          *(ulonglong *)(extraout_r0 + 8) = uVar5;
+          lVar2 = param_5[1];
+          extraout_r0[2] = 1;
+          *(longlong *)(extraout_r0 + 0xc) = lVar2 + CONCAT44(param_4,param_3);
+          FUN_f004f5e0(unaff_r19);
+          extraout_r0[0x16] = extraout_r0;
+LAB_f010ea18:
+          FUN_f004f678(unaff_r19);
+        }
+        else {
+          if ((param_1 != 0x3000) && (param_1 != 0x5000)) goto LAB_f010eb30;
+LAB_f010e9c0:
+          extraout_r0[0xb] = param_4;
+          extraout_r0[10] = param_3;
+          lVar2 = *param_5;
+          bVar1 = (param_1 | 0x4000) == 0x5000;
+          extraout_r0[7] = (int)((ulonglong)lVar2 >> 0x20);
+          extraout_r0[6] = (int)lVar2;
+          *(longlong *)(extraout_r0 + 8) = param_5[1] + lVar2;
+          lVar2 = param_5[1];
+          extraout_r0[2] = 1;
+          uVar4 = lVar2 + CONCAT44(param_4,param_3);
+          uVar5 = uVar4;
+          if (bVar1) {
+            uVar5 = ZEXT48(unaff_r19);
+          }
+          *(ulonglong *)(extraout_r0 + 0xc) = uVar4;
+          if (bVar1) {
+            FUN_f004f5e0();
+            puVar6 = (undefined4 *)extraout_r0[9];
+            extraout_r0[1] = puVar6;
+            *extraout_r0 = extraout_r0 + 8;
+            extraout_r0[9] = extraout_r0;
+            *puVar6 = extraout_r0;
+            goto LAB_f010ea18;
+          }
+          thunk_FUN_f004f5e0((int)uVar5);
+          extraout_r0[1] = DAT_f08eff74;
+          *extraout_r0 = &DAT_f08eff70;
+          puVar6 = extraout_r0;
+          *DAT_f08eff74 = extraout_r0;
+          DAT_f08eff74 = puVar6;
+          thunk_FUN_f004f678();
+        }
+        puVar6 = (undefined4 *)0x0;
+        if (param_7 != (undefined4 *)0x0) {
+          param_7[1] = (int)(uVar5 >> 0x20);
+          *param_7 = (int)uVar5;
+        }
+        goto LAB_f010eb28;
+      }
+      if ((int)param_1 < 6) {
+        if (param_1 == 0) goto LAB_f010ea20;
+        if (param_1 == 4) goto LAB_f010e9c0;
+LAB_f010eb30:
+        puVar6 = (undefined4 *)0x80000414;
+        FUN_f0119ea0(0x80000414);
+      }
+      else {
+        if (param_1 != 6) {
+          if (param_1 == 8) goto LAB_f010e9c0;
+          goto LAB_f010eb30;
+        }
+LAB_f010ea20:
+        FUN_f0107d40(extraout_r1);
+        puVar6 = extraout_r0;
+        if (extraout_r0 == (undefined4 *)0x0) {
+          FUN_f010eb94();
+          FUN_f0111684(_DAT_00000054);
+          _DAT_0000001c = (undefined4 *)0x0;
+          _DAT_00000018 = 0;
+          _DAT_00000020 = param_5[1];
+          uVar5 = param_5[1] + CONCAT44(param_4,param_3);
+          _DAT_00000038 = (undefined4)*param_5;
+          _DAT_0000003c = (undefined4)((ulonglong)*param_5 >> 0x20);
+          _SUB_00000008 = 1;
+          lRam00000040 = param_5[1] + *param_5;
+          _DAT_00000028 = param_3;
+          _DAT_0000002c = param_4;
+          _DAT_00000030 = uVar5;
+          FUN_f004f5e0(unaff_r19);
+          if (param_1 == 6) {
+            puVar6 = _DAT_00000034;
+            _DAT_00000004 = _DAT_00000034;
+            _SUB_00000000 = 0x30;
+            _DAT_00000030 = _DAT_00000030 & 0xffffffff;
+            *puVar6 = 0;
+          }
+          else if (param_1 == 0) {
+            _DAT_00000004 = _DAT_0000001c;
+            _SUB_00000000 = 0x18;
+            *_DAT_0000001c = 0;
+            iRam0000005c = iRam0000005c + 1;
+            _DAT_0000001c = (undefined4 *)0x0;
+          }
+          goto LAB_f010ea18;
+        }
+      }
+LAB_f010eb3c:
+      FUN_f010ec6c(extraout_r0);
+    }
+  }
+  FUN_f0102e44(3,extraout_r1,0xa60);
+LAB_f010eb28:
+  FUN_f014754c(puVar6);
+  return;
+}
+
+
+
+//// ROOT FUN_f010ee3c @f010ee3c ////
+
+/* WARNING: Removing unreachable block (ram,0xf010f2dc) */
+/* WARNING: Removing unreachable block (ram,0xf010f064) */
+/* WARNING: Removing unreachable block (ram,0xf010eea4) */
+/* WARNING: Removing unreachable block (ram,0xf010ee84) */
+/* WARNING: Removing unreachable block (ram,0xf010f1d4) */
+/* WARNING: Removing unreachable block (ram,0xf010f59c) */
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0xf010eec0 */
+/* WARNING: Removing unreachable block (ram,0xf010f604) */
+/* WARNING: Removing unreachable block (ram,0xf010f30c) */
+/* WARNING: Removing unreachable block (ram,0xf010f0a0) */
+/* WARNING: Removing unreachable block (ram,0xf010f0ac) */
+/* WARNING: Removing unreachable block (ram,0xf010f0b8) */
+/* WARNING: Removing unreachable block (ram,0xf010f510) */
+/* WARNING: Removing unreachable block (ram,0xf010f3f8) */
+/* WARNING: Removing unreachable block (ram,0xf010f204) */
+/* WARNING: Removing unreachable block (ram,0xf010f114) */
+/* WARNING: Removing unreachable block (ram,0xf010f0f8) */
+/* WARNING: Removing unreachable block (ram,0xf010f024) */
+/* WARNING: Removing unreachable block (ram,0xf010ef4c) */
+/* WARNING: Removing unreachable block (ram,0xf010efd8) */
+/* WARNING: Removing unreachable block (ram,0xf010f104) */
+/* WARNING: Removing unreachable block (ram,0xf010f1b0) */
+/* WARNING: Removing unreachable block (ram,0xf010f684) */
+/* WARNING: Removing unreachable block (ram,0xf010f20c) */
+/* WARNING: Removing unreachable block (ram,0xf010f21c) */
+/* WARNING: Removing unreachable block (ram,0xf010f210) */
+/* WARNING: Removing unreachable block (ram,0xf010f25c) */
+/* WARNING: Removing unreachable block (ram,0xf010f264) */
+/* WARNING: Removing unreachable block (ram,0xf010f354) */
+/* WARNING: Removing unreachable block (ram,0xf010f35c) */
+/* WARNING: Removing unreachable block (ram,0xf010f360) */
+/* WARNING: Removing unreachable block (ram,0xf010f36c) */
+/* WARNING: Removing unreachable block (ram,0xf010f378) */
+/* WARNING: Removing unreachable block (ram,0xf010f498) */
+/* WARNING: Removing unreachable block (ram,0xf010f5d4) */
+/* WARNING: Removing unreachable block (ram,0xf010f5f0) */
+/* WARNING: Removing unreachable block (ram,0xf010f644) */
+/* WARNING: Removing unreachable block (ram,0xf010f64c) */
+/* WARNING: Removing unreachable block (ram,0xf010f5fc) */
+/* WARNING: Removing unreachable block (ram,0xf010f380) */
+/* WARNING: Removing unreachable block (ram,0xf010f3a0) */
+/* WARNING: Removing unreachable block (ram,0xf010f4d4) */
+/* WARNING: Removing unreachable block (ram,0xf010f4c8) */
+/* WARNING: Removing unreachable block (ram,0xf010f58c) */
+/* WARNING: Removing unreachable block (ram,0xf010f598) */
+/* WARNING: Removing unreachable block (ram,0xf010f4e0) */
+/* WARNING: Removing unreachable block (ram,0xf010f3c4) */
+/* WARNING: Removing unreachable block (ram,0xf010f3d8) */
+/* WARNING: Removing unreachable block (ram,0xf010f3dc) */
+/* WARNING: Removing unreachable block (ram,0xf010f3e4) */
+/* WARNING: Removing unreachable block (ram,0xf010f470) */
+/* WARNING: Removing unreachable block (ram,0xf010f154) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010ee3c(void)
+
+{
+  int extraout_r0;
+  undefined8 in_r1r0;
+  int *extraout_r1;
+  uint uVar1;
+  ulonglong in_r3r2;
+  int iVar2;
+  uint in_r4;
+  int iVar3;
+  undefined4 uVar4;
+  int *piVar5;
+  ulonglong *puVar6;
+  int *piVar7;
+  sbyte sVar8;
+  
+  FUN_f0147454();
+  extraout_r1 = (int *)((ulonglong)in_r1r0 >> 0x20);
+  extraout_r0 = (int)in_r1r0;
+  uVar4 = 0x80000448;
+  FUN_f0102a84(2,extraout_r1,0xb0c);
+  iVar3 = extraout_r0 + 8;
+  FUN_f004f5e0(iVar3);
+  piVar7 = *(int **)(extraout_r0 + 0x28);
+  if ((int *)(extraout_r0 + 0x28) != piVar7) {
+    do {
+      puVar6 = (ulonglong *)(piVar7 + 8);
+      if ((extraout_r1 != (int *)0xffffffff) && ((int *)piVar7[0xd] == extraout_r1)) {
+LAB_f010ef68:
+        if ((piVar7[2] == 0) && (((sbyte)piVar7[0x16] == 0 || (piVar7[3] == 0)))) {
+          FUN_f0102e44(2,0,0xb17);
+        }
+        else {
+          iVar2 = (int)(in_r3r2 >> 0x20) + -1;
+          uVar1 = piVar7[2] - 1;
+          piVar7[3] = iVar2;
+          piVar7[2] = uVar1;
+          if ((iVar2 == 0) &&
+             ((((uVar1 < 2 || ((sbyte)piVar7[0x16] != 0)) && (piVar7[0xc] != 0)) &&
+              (piVar7[0x10] != 2)))) {
+            FUN_f0102a84(2);
+            FUN_f01108dc(piVar7[0xc]);
+            FUN_f0110c08(piVar7[0xc]);
+            FUN_f0107d3c(piVar7[0xd]);
+            FUN_f01107b0(piVar7[0xc]);
+            piVar7[0xc] = 0;
+            piVar7[0xb] = 0;
+            piVar7[10] = 0;
+            piVar7[9] = 0;
+            *(undefined4 *)puVar6 = 0;
+            if ((sbyte)piVar7[0x16] == 0) {
+              sVar8 = -1;
+            }
+            else {
+              sVar8 = 0;
+            }
+            piVar5 = extraout_r1;
+            if (sVar8 == 0) {
+              piVar5 = piVar7 + 0x12;
+            }
+            if ((sbyte)piVar7[0x16] != 0) {
+              *(undefined1 *)((int)piVar7 + 0x59) = 1;
+              piVar7[5] = 0;
+              piVar7[4] = 0;
+              piVar7[7] = 0;
+              piVar7[6] = 0;
+              FUN_f004f678(iVar3);
+              FUN_f004f5e0(piVar5);
+              FUN_f0102a84(2,0,0xb39);
+              thunk_FUN_f0153368(piVar7[0xd]);
+              FUN_f004f678(piVar5);
+              FUN_f004f5e0(iVar3);
+              *(undefined1 *)((int)piVar7 + 0x59) = 0;
+            }
+          }
+        }
+        uVar4 = 0;
+        FUN_f004f678(iVar3);
+        goto LAB_f010efac;
+      }
+      if (*puVar6 == 0) {
+        sVar8 = -1;
+      }
+      else {
+        sVar8 = 0;
+      }
+      if (sVar8 == 0) {
+        if (in_r3r2 < *puVar6) {
+          sVar8 = -1;
+        }
+        else {
+          sVar8 = 0;
+        }
+        if (sVar8 == 0) {
+          if (*(ulonglong *)(piVar7 + 10) < in_r4 + in_r3r2) {
+            sVar8 = -1;
+          }
+          else {
+            sVar8 = 0;
+          }
+          if (sVar8 == 0) goto LAB_f010ef68;
+        }
+      }
+      piVar7 = (int *)*piVar7;
+    } while (piVar7 != (int *)(extraout_r0 + 0x28));
+  }
+  FUN_f004f678(iVar3);
+  FUN_f0102e44(3,0,0xb4e);
+LAB_f010efac:
+  FUN_f0147530(uVar4);
+  return;
+}
+
+
+
+//// CALLER FUN_f011b78c @f011b78c ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f011b78c(undefined4 param_1,undefined4 param_2)
+
+{
+  int iVar1;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 extraout_r1_01;
+  undefined4 uVar2;
+  undefined4 unaff_r16;
+  undefined4 unaff_r18;
+  undefined4 unaff_r19;
+  undefined4 unaff_r20;
+  int unaff_r22;
+  int unaff_r26;
+  sbyte sVar3;
+  int in_stack_00000038;
+  int in_stack_0000003c;
+  undefined4 in_stack_00000040;
+  undefined4 in_stack_00000044;
+  undefined4 in_stack_00000048;
+  undefined4 in_stack_0000004c;
+  undefined4 in_stack_00000050;
+  undefined4 in_stack_00000054;
+  undefined4 in_stack_00000058;
+  undefined4 in_stack_0000005c;
+  
+  if (in_stack_00000038 == 2) {
+    iVar1 = FUN_f010ee3c(*(undefined4 *)(unaff_r22 + 0x11c),unaff_r16,unaff_r18,unaff_r19,unaff_r20)
+    ;
+    if (iVar1 == 0) {
+      sVar3 = -1;
+    }
+    else {
+      sVar3 = 0;
+    }
+    uVar2 = extraout_r1;
+    if (sVar3 != 0) {
+      uVar2 = unaff_r16;
+    }
+    if ((iVar1 == 0) &&
+       (iVar1 = FUN_f01093f8(*(undefined4 *)(unaff_r22 + 0x11c),uVar2), uVar2 = extraout_r1_00,
+       iVar1 == 0)) {
+      thunk_FUN_f0147530();
+      return;
+    }
+  }
+  else {
+    iVar1 = FUN_f010faec(*(undefined4 *)(unaff_r22 + 0x11c),param_2,unaff_r18);
+    uVar2 = extraout_r1_01;
+    if (iVar1 == 0) {
+      iVar1 = 0;
+      FUN_f011b098(&stack0x0000003c,*(undefined4 *)(unaff_r22 + 0x28));
+      if (in_stack_0000003c == 1) {
+        in_stack_00000054 = *(undefined4 *)(unaff_r22 + 0x44);
+        in_stack_00000050 = *(undefined4 *)(unaff_r22 + 0x40);
+        in_stack_00000044 = *(undefined4 *)(unaff_r22 + 0x34);
+        in_stack_00000040 = *(undefined4 *)(unaff_r22 + 0x30);
+        in_stack_0000005c = *(undefined4 *)(unaff_r22 + 0x4c);
+        in_stack_00000058 = *(undefined4 *)(unaff_r22 + 0x48);
+        in_stack_0000004c = *(undefined4 *)(unaff_r22 + 0x3c);
+        in_stack_00000048 = *(undefined4 *)(unaff_r22 + 0x38);
+        FUN_f0108714(8,&stack0x00000040,0x30,in_stack_00000038,in_stack_00000048,in_stack_0000004c);
+      }
+      goto code_r0xf011b8a4;
+    }
+  }
+  if (unaff_r26 == 0) {
+    FUN_f0119dec(3,uVar2,0x4a2,"Error 0x%x: %s failed for pidA %d fd %d vaddrin 0x%llx len 0x%llx");
+  }
+  else {
+    FUN_f0102e44(3,"fastrpc_kprocess.c",0x4a2,
+                 "Error 0x%x: %s failed for pidA %d fd %d vaddrin 0x%llx len 0x%llx");
+  }
+code_r0xf011b8a4:
+  FUN_f0147530(iVar1);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0102e44 @f0102e44 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102e44(void)
+
+{
+  FUN_f0102ac0();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0107d3c @f0107d3c ////
+
+undefined4 FUN_f0107d3c(void)
+
+{
+  return 0;
+}
+
+
+
+//// CALLEE FUN_f0147454 @f0147454 ////
+
+void FUN_f0147454(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f0109394 @f0109394 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0109394(void)
+
+{
+  undefined4 in_r3;
+  undefined1 auStack_128 [260];
+  int local_24;
+  
+  FUN_f01474ac();
+  local_24 = DAT_f01dd000;
+  FUN_f0142f48(auStack_128,0x100,in_r3);
+  FUN_f0102e60();
+  if (DAT_f01dd000 != local_24) {
+    FUN_f0001060();
+  }
+  FUN_f0147588();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0110c08 @f0110c08 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0110cb8) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0110c08(void)
+
+{
+  int iVar1;
+  int iVar2;
+  int iVar3;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 extraout_r1_01;
+  undefined4 uVar4;
+  undefined4 extraout_r1_02;
+  int *piVar5;
+  sbyte sVar6;
+  
+  iVar1 = FUN_f01474ac();
+  iVar2 = *(int *)(iVar1 + 0x10);
+  uVar4 = extraout_r1;
+  if (*(int *)(iVar1 + 0xc) == 0) {
+    iVar3 = iVar2;
+    if (iVar2 == 0) {
+      iVar2 = FUN_f0110b88();
+      *(int *)(iVar1 + 0x10) = iVar2;
+      uVar4 = extraout_r1_02;
+      goto LAB_f0110c1c;
+    }
+LAB_f0110c2c:
+    *(undefined4 *)(iVar1 + 0xc) = 1;
+    if (*(int *)(iVar1 + 0x60) != 0) goto LAB_f0110c38;
+LAB_f0110c9c:
+    iVar2 = FUN_f01113d0(*(undefined4 *)(iVar1 + 0x58));
+    if (iVar2 != 0) {
+LAB_f0110cac:
+      FUN_f0102e44(3,"fastrpc_mem.c",0x1cf,"Error 0x%x: %s failed %x\n");
+      goto LAB_f0110d08;
+    }
+    *(int *)(iVar1 + 0x14) = *(int *)(iVar1 + 0x14) + 1;
+  }
+  else {
+LAB_f0110c1c:
+    if (iVar2 == 0) {
+      sVar6 = -1;
+    }
+    else {
+      sVar6 = 0;
+    }
+    iVar3 = iVar2;
+    if (sVar6 != 0) {
+      iVar3 = 0;
+    }
+    if (iVar2 != 0) goto LAB_f0110c2c;
+LAB_f0110c38:
+    piVar5 = *(int **)(iVar1 + 4);
+    if ((int *)(iVar1 + 4) != piVar5) {
+      do {
+        iVar2 = FUN_f0110d20(piVar5,uVar4,piVar5[10],piVar5[0xb],piVar5[0xc],piVar5[0xd]);
+        if ((iVar2 != 0) ||
+           ((uVar4 = extraout_r1_00, *(int *)(iVar1 + 0x10) != 0 &&
+            (iVar2 = FUN_f0111100(piVar5,extraout_r1_00,piVar5[0xe],piVar5[0xf],piVar5[0x10],
+                                  piVar5[0x11]), uVar4 = extraout_r1_01, iVar2 != 0))))
+        goto LAB_f0110cac;
+        piVar5 = (int *)*piVar5;
+      } while (piVar5 != (int *)(iVar1 + 4));
+      iVar3 = *(int *)(iVar1 + 0x10);
+    }
+    if (iVar3 != 0) goto LAB_f0110c9c;
+  }
+  *(undefined4 *)(iVar1 + 0x10) = 0;
+  iVar2 = 0;
+LAB_f0110d08:
+  FUN_f0147588(iVar2);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0119de8 @f0119de8 ////
+
+undefined4 FUN_f0119de8(void)
+
+{
+  return 1;
+}
+
+
+
+//// CALLEE FUN_f0142fa8 @f0142fa8 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0142fa8(undefined4 param_1,int param_2)
+
+{
+  if (param_2 != 0) {
+    FUN_f01452c0("In function ",&DAT_f0200528);
+    FUN_f01452c0();
+    FUN_f01452c0(&DAT_f01d359d,&DAT_f0200528);
+  }
+  FUN_f01452c0();
+  FUN_f01452c0(" -- assertion failed\n",&DAT_f0200528);
+  FUN_f0141830(0);
+  FUN_f0142ad0(6);
+  FUN_f014175c(1);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0147530 @f0147530 ////
+
+void FUN_f0147530(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f01108dc @f01108dc ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f01108dc(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+                 undefined4 param_5,undefined4 param_6)
+
+{
+  longlong lVar1;
+  int iVar2;
+  undefined4 uVar3;
+  undefined4 uVar4;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 uVar6;
+  undefined4 uVar7;
+  undefined4 uVar8;
+  undefined4 uVar9;
+  int *piVar10;
+  ulonglong uVar11;
+  sbyte extraout_P0;
+  sbyte sVar12;
+  sbyte sVar13;
+  ulonglong uVar5;
+  
+  iVar2 = FUN_f0147470();
+  uVar5 = CONCAT44(extraout_r1,iVar2);
+  if (extraout_P0 == 0) {
+    uVar9 = 0x80000410;
+    uVar11 = CONCAT44(param_6,param_5) + CONCAT44(param_4,param_3);
+    for (piVar10 = *(int **)(iVar2 + 4); piVar10 != (int *)(iVar2 + 4); piVar10 = (int *)*piVar10) {
+      if (piVar10 == (int *)0x0) {
+        sVar12 = -1;
+      }
+      else {
+        sVar12 = 0;
+      }
+      if (sVar12 == 0) {
+        uVar5 = *(ulonglong *)(piVar10 + 2);
+      }
+      if (piVar10 != (int *)0x0) {
+        if (CONCAT44(param_4,param_3) < uVar5) {
+          sVar12 = -1;
+        }
+        else {
+          sVar12 = 0;
+        }
+        if (sVar12 == 0) {
+          if (*(ulonglong *)(piVar10 + 4) < uVar11) {
+            sVar12 = -1;
+          }
+          else {
+            sVar12 = 0;
+          }
+          if (sVar12 == 0) {
+            lVar1 = *(longlong *)(piVar10 + 10);
+            uVar9 = 0;
+            uVar3 = (undefined4)(uVar11 >> 0x20);
+            if (*(longlong *)(piVar10 + 0xc) == 0) {
+              sVar12 = -1;
+            }
+            else {
+              sVar12 = 0;
+            }
+            if (lVar1 == 0) {
+              sVar13 = -1;
+            }
+            else {
+              sVar13 = 0;
+            }
+            uVar8 = param_4;
+            uVar4 = param_3;
+            if (sVar13 == 0) {
+              uVar8 = (int)((ulonglong)lVar1 >> 0x20);
+              uVar4 = (int)lVar1;
+            }
+            uVar7 = uVar3;
+            uVar6 = (int)uVar11;
+            if (sVar12 == 0) {
+              uVar7 = piVar10[0xd];
+              uVar6 = (int)*(longlong *)(piVar10 + 0xc);
+            }
+            if (CONCAT44(param_4,param_3) <= CONCAT44(uVar8,uVar4)) {
+              uVar4 = param_3;
+              uVar8 = param_4;
+            }
+            if (CONCAT44(uVar7,uVar6) <= uVar11) {
+              uVar6 = (int)uVar11;
+              uVar7 = uVar3;
+            }
+            piVar10[0xb] = uVar8;
+            piVar10[10] = uVar4;
+            piVar10[0xd] = uVar7;
+            piVar10[0xc] = uVar6;
+            *(longlong *)(iVar2 + 0x28) = *(longlong *)(iVar2 + 0x28) + CONCAT44(param_6,param_5);
+            break;
+          }
+        }
+      }
+      uVar3 = thunk_FUN_f0119ea0();
+      uVar5 = CONCAT44(extraout_r1_00,uVar3);
+    }
+  }
+  else {
+    uVar9 = 0x80000410;
+    thunk_FUN_f0119ea0();
+  }
+  FUN_f014754c(uVar9);
+  return;
+}
+
+
+
+//// CALLEE FUN_f004f5e0 @f004f5e0 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 FUN_f004f5e0(int param_1)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  undefined4 in_UGP;
+  sbyte sVar4;
+  
+  do {
+    while( true ) {
+      uVar2 = memd_locked(param_1);
+      iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(param_1,CONCAT44(iVar3,in_UGP));
+      if (sVar4 != 0) {
+        return 0;
+      }
+    }
+    sVar4 = memw_locked_store(param_1,CONCAT44(iVar3 + 1,(int)uVar2));
+  } while (sVar4 == 0);
+  do {
+    trap0(0x20);
+    if (param_1 == 0x2f) {
+      uVar1 = 0x2f;
+LAB_f004f660:
+      do {
+        uVar2 = memd_locked(uVar1);
+        sVar4 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,(int)uVar2));
+      } while (sVar4 == 0);
+      return 0x2f;
+    }
+    while( true ) {
+      uVar2 = memd_locked(param_1);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(param_1,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,in_UGP));
+      if (sVar4 != 0) {
+        uVar1 = 0;
+        if (sVar4 != 0) {
+          return 0;
+        }
+        goto LAB_f004f660;
+      }
+    }
+  } while( true );
+}
+
+
+
+//// CALLEE FUN_f004f678 @f004f678 ////
+
+undefined4 FUN_f004f678(undefined4 param_1)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  int in_UGP;
+  sbyte sVar4;
+  
+  do {
+    uVar2 = memd_locked(param_1);
+    iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+    if ((int)uVar2 != in_UGP) {
+      uVar1 = FUN_f004f4c8(param_1,1);
+      do {
+        uVar2 = memd_locked(uVar1);
+        if ((int)uVar2 != 0xfe) {
+          return 1;
+        }
+        sVar4 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar2 >> 0x20),in_UGP));
+      } while (sVar4 == 0);
+      return 0;
+    }
+    sVar4 = memw_locked_store(param_1,CONCAT44(iVar3,0xfe));
+  } while (sVar4 == 0);
+  if (iVar3 == 0) {
+    return 0;
+  }
+  trap0(0x11);
+  return param_1;
+}
+
+
+
+//// CALLEE FUN_f0102a84 @f0102a84 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102a84(int param_1)
+
+{
+  sbyte sVar1;
+  
+  if ((DAT_f025075c & 1 << param_1) == 0) {
+    sVar1 = -1;
+  }
+  else {
+    sVar1 = 0;
+  }
+  if (sVar1 == 0) {
+    FUN_f0102ac0();
+    return;
+  }
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f0153368 @f01536c4 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0153440) */
+/* WARNING: Removing unreachable block (ram,0xf01533d0) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void thunk_FUN_f0153368(void)
+
+{
+  undefined4 uVar1;
+  int iVar2;
+  undefined4 extraout_r1;
+  int iVar3;
+  undefined4 uStack_28;
+  undefined4 uStack_24;
+  undefined4 *puStack_20;
+  undefined4 uStack_1c;
+  
+  iVar3 = 1;
+  uVar1 = FUN_f01474ac();
+  iVar2 = FUN_f0153194();
+  if (iVar2 == -1) {
+    iVar2 = -0x7ffffbd4;
+  }
+  else {
+    puStack_20 = &uStack_28;
+    uStack_1c = 8;
+    uStack_28 = uVar1;
+    uStack_24 = extraout_r1;
+    if (iVar3 == 1) {
+      iVar2 = FUN_f0157450(iVar2,0x7010000,&puStack_20);
+    }
+    else {
+      iVar2 = FUN_f0157450(iVar2,thunk_FUN_01010110,&puStack_20);
+    }
+    if (iVar2 != 0) {
+      FUN_f0102a84(3,
+                   "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/apps_mem/build/platform_libs/qdsp6/hamoa.cdsp.prod/apps_mem_stub.c"
+                   ,0x1a5,"ERROR 0x%x: handle=0x%lx, scalar=0x%x, method ID=%d: %s failed\n");
+    }
+  }
+  FUN_f0147588(iVar2);
+  return;
+}
+
+
+
+//// CALLEE FUN_f01107b0 @f01107b0 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f01107b0(void)
+
+{
+  int iVar1;
+  int iVar2;
+  int *piVar3;
+  longlong lVar4;
+  int *piVar5;
+  sbyte extraout_P0;
+  sbyte sVar6;
+  sbyte sVar7;
+  int iVar8;
+  
+  iVar1 = FUN_f0147488();
+  if (extraout_P0 == 0) {
+    piVar5 = (int *)(iVar1 + 4);
+    piVar3 = *(int **)(iVar1 + 4);
+    if (piVar3 != piVar5) {
+      iVar8 = 0;
+      do {
+        iVar2 = *piVar3;
+        *(int *)(iVar1 + 4) = iVar2;
+        piVar3[1] = 0;
+        *(int **)(iVar2 + 4) = piVar5;
+        iVar2 = piVar3[0x16];
+        *piVar3 = 0;
+        if (iVar2 == 0) {
+          iVar2 = piVar3[0x17];
+          if (iVar2 == 0) {
+            iVar8 = *(int *)(iVar1 + 100);
+            if (iVar8 == 0) {
+              sVar6 = -1;
+            }
+            else {
+              sVar6 = 0;
+            }
+            lVar4 = *(longlong *)(piVar3 + 4) - *(longlong *)(piVar3 + 2);
+            if (sVar6 == 0) {
+              iVar8 = 0xff;
+            }
+            iVar8 = FUN_f0107e58(iVar8,(int)*(longlong *)(piVar3 + 2));
+            iVar2 = (int)lVar4;
+          }
+        }
+        else if (piVar3[0x18] != 0) {
+          FUN_f01091bc(piVar3[0x18]);
+        }
+        sVar6 = (sbyte)iVar2;
+        if (iVar8 == 0) {
+          sVar7 = -1;
+        }
+        else {
+          sVar7 = 0;
+        }
+        if (sVar7 == 0) {
+          sVar6 = 0;
+        }
+        if (iVar8 != 0) {
+          if (sVar6 == 0) {
+            FUN_f0102e44();
+          }
+          else {
+            FUN_f0110aac();
+          }
+        }
+        if (piVar3[0x15] == 0) {
+          FUN_f01091bc(piVar3);
+        }
+        piVar3 = *(int **)(iVar1 + 4);
+      } while (piVar3 != piVar5);
+    }
+    FUN_f01474f4(iVar1);
+    FUN_f01091bc();
+    return;
+  }
+  FUN_f0147564();
+  return;
+}
+
+
+
+//// ROOT FUN_f010f290 @f010f290 ////
+
+/* WARNING: Removing unreachable block (ram,0xf010f2dc) */
+/* WARNING: Removing unreachable block (ram,0xf010f30c) */
+/* WARNING: Removing unreachable block (ram,0xf010f59c) */
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0xf010f338 */
+/* WARNING: Removing unreachable block (ram,0xf010f604) */
+/* WARNING: Removing unreachable block (ram,0xf010f510) */
+/* WARNING: Removing unreachable block (ram,0xf010f3f8) */
+/* WARNING: Removing unreachable block (ram,0xf010f684) */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010f290(void)
+
+{
+  ulonglong uVar1;
+  int extraout_r0;
+  undefined4 uVar2;
+  undefined8 in_r1r0;
+  int extraout_r1;
+  ulonglong uVar3;
+  undefined4 uVar5;
+  undefined4 uVar6;
+  longlong in_r3r2;
+  undefined4 uVar7;
+  uint in_r4;
+  undefined1 *puVar8;
+  int iVar9;
+  sbyte sVar10;
+  int in_stack_00000000;
+  undefined4 in_stack_00000004;
+  uint *in_stack_0000000c;
+  longlong lVar4;
+  
+  FUN_f0147454();
+  extraout_r1 = (int)((ulonglong)in_r1r0 >> 0x20);
+  extraout_r0 = (int)in_r1r0;
+  uVar6 = (undefined4)in_r3r2;
+  uVar1 = (ulonglong)in_r3r2 >> 0x20;
+  *in_stack_0000000c = 0xffffff7f;
+  uVar3 = CONCAT44(extraout_r1,2);
+  FUN_f0102a84(2,extraout_r1,0xb5d);
+  iVar9 = extraout_r0 + 8;
+  FUN_f004f5e0(iVar9);
+  if ((*(int *)(extraout_r0 + 0x28) == extraout_r0 + 0x28) ||
+     (FUN_f01106f8(), iRam00000036 != extraout_r1)) {
+    thunk_FUN_f0119ea0();
+    puVar8 = (undefined1 *)0x80000448;
+LAB_f010f3dc:
+    FUN_f004f678(iVar9);
+  }
+  else {
+    if (CONCAT44(uRam00000016,uRam00000012) == CONCAT44(0x80008001,in_stack_0000000c)) {
+      sVar10 = -1;
+    }
+    else {
+      sVar10 = 0;
+    }
+    if (sVar10 != 0) {
+      uRam0000005b = 1;
+      FUN_f004f678(iVar9);
+      FUN_f004f5e0(0x4a);
+      lVar4 = CONCAT44(uRam00000016,uRam00000012);
+      if (lVar4 == CONCAT44(0x80008001,in_stack_0000000c)) {
+        sVar10 = -1;
+      }
+      else {
+        sVar10 = 0;
+      }
+      if (sVar10 == 0) {
+        FUN_f004f678(0x4a);
+        FUN_f004ed78(iVar9);
+        puVar8 = (undefined1 *)0x0;
+        uRam0000005b = 0;
+        FUN_f004f678(iVar9);
+        goto LAB_f010f470;
+      }
+                    /* WARNING: Ignoring partial resolution of indirect */
+      uVar2 = 2;
+      puVar8 = (undefined1 *)lVar4;
+      FUN_f0102a84(puVar8,
+                   "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_invoke/src/fastrpc_invoke.c"
+                   ,0xb76);
+      FUN_f015361c(iRam00000036,
+                   "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_invoke/src/fastrpc_invoke.c"
+                   ,_DAT_0000003e);
+      if (puVar8 == (undefined1 *)0x0) {
+        sVar10 = -1;
+      }
+      else {
+        sVar10 = 0;
+      }
+      FUN_f004f678(0x4a);
+      if (sVar10 == 0) {
+        uVar3 = 0xf01c833a00000000;
+        FUN_f0102e44(3,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_invoke/src/fastrpc_invoke.c"
+                     ,0xb7a);
+        FUN_f004ed78(iVar9);
+        uRam0000005b = 0;
+      }
+      else {
+        FUN_f004f5e0(iVar9);
+        uVar3 = 0;
+        uRam0000005b = 0;
+        if (CONCAT44(uRam00000016,uRam00000012) == 0) {
+          sVar10 = -1;
+        }
+        else {
+          sVar10 = 0;
+        }
+        if (sVar10 == 0) goto LAB_f010f380;
+        thunk_FUN_f0119ea0();
+        puVar8 = &DAT_8000040e;
+      }
+      goto LAB_f010f3dc;
+    }
+LAB_f010f380:
+    uVar2 = uRam00000012;
+    uVar3 = (ulonglong)in_r4 + (longlong)in_stack_00000000 + CONCAT44(uRam00000016,uRam00000012) +
+            (ulonglong)_DAT_0000003a;
+    if (_DAT_0000001a < uVar3) {
+      sVar10 = -1;
+    }
+    else {
+      sVar10 = 0;
+    }
+    if (sVar10 != 0) {
+      puVar8 = (undefined1 *)0x8000044c;
+      FUN_f0119ea0(0x8000044c);
+      goto LAB_f010f3dc;
+    }
+    if (iRam00000032 != 0) {
+LAB_f010f4e0:
+      puVar8 = (undefined1 *)0x0;
+      *in_stack_0000000c = _DAT_0000003a + (int)in_r3r2 + in_stack_00000000;
+      _DAT_0000000e = _DAT_0000000e + 1;
+      iRam0000000a = iRam0000000a + 1;
+      FUN_f004f678(iVar9,(int)(uVar3 >> 0x20),(int)in_r3r2);
+      goto LAB_f010f470;
+    }
+    in_r3r2 = _DAT_0000001a - CONCAT44(uRam00000016,uRam00000012);
+    FUN_f004f678(iVar9);
+    uVar5 = (undefined4)(uVar3 >> 0x20);
+    uVar7 = (undefined4)((ulonglong)in_r3r2 >> 0x20);
+    FUN_f0107d40(extraout_r1,uVar5,uVar2,uVar7,uVar6,(int)uVar1);
+    puVar8 = (undefined1 *)uVar3;
+    if ((undefined1 *)uVar3 == (undefined1 *)0x0) {
+      FUN_f010eb94(extraout_r0,uVar5,in_stack_00000004,uVar7,0x32,in_stack_0000000c);
+      FUN_f004f5e0(iVar9);
+      FUN_f0111684(iRam00000032);
+      uRam00000022 = *in_stack_0000000c;
+      uRam00000026 = 0;
+      uVar3 = in_r3r2 + (ulonglong)*in_stack_0000000c;
+      uRam0000002a = uVar3;
+      goto LAB_f010f4e0;
+    }
+  }
+  FUN_f0102e44(3,(int)(uVar3 >> 0x20),0xba5);
+LAB_f010f470:
+  FUN_f0147530(puVar8);
+  return;
+}
+
+
+
+//// CALLER FUN_f011b0c8 @f011b0c8 ////
+
+/* WARNING: Removing unreachable block (ram,0xf011b3dc) */
+/* WARNING: Removing unreachable block (ram,0xf011b3e4) */
+/* WARNING: Removing unreachable block (ram,0xf011b184) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f011b0c8(undefined4 param_1,undefined4 param_2,undefined4 param_3,uint param_4,
+                 undefined4 param_5,undefined4 param_6,longlong *param_7,uint param_8,
+                 undefined4 *param_9)
+
+{
+  int iVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 uVar5;
+  undefined4 extraout_r1;
+  undefined4 extraout_r1_00;
+  undefined4 extraout_r1_01;
+  undefined4 extraout_r1_02;
+  undefined4 extraout_r1_03;
+  undefined4 extraout_r1_04;
+  undefined4 extraout_r1_05;
+  undefined4 extraout_r1_06;
+  uint uVar6;
+  undefined1 *puVar7;
+  undefined1 *puVar8;
+  sbyte sVar9;
+  sbyte sVar10;
+  sbyte sVar11;
+  undefined4 local_74;
+  undefined1 *local_70 [26];
+  
+  iVar1 = FUN_f0147454();
+  uVar6 = param_4;
+  iVar2 = FUN_f011a18c();
+  sVar11 = (sbyte)uVar6;
+  local_74 = 0;
+  uVar5 = extraout_r1_00;
+  if (iVar2 == 0) {
+    puVar8 = (undefined1 *)0x80000433;
+LAB_f011b170:
+    FUN_f0119ea0(puVar8,uVar5);
+  }
+  else {
+    puVar8 = &DAT_8000040e;
+    if ((param_8 & 0xf) == 0) {
+      sVar9 = 0;
+    }
+    else {
+      sVar9 = -1;
+    }
+    if ((sVar9 != 0) || (param_8 >> 4 != 1)) goto LAB_f011b170;
+    sVar9 = -(param_4 == 0x2000);
+    if (sVar9 != 0) {
+      uVar5 = *(undefined4 *)((int)param_7 + 4);
+      sVar11 = 0;
+      if (*param_7 == 0) {
+        sVar10 = -1;
+      }
+      else {
+        sVar10 = 0;
+      }
+      if (sVar10 != 0) {
+        thunk_FUN_f001e3d4(&DAT_f01cd6a8);
+        goto LAB_f011b464;
+      }
+    }
+    if (*(int *)(*(int *)(iVar2 + 0xd8) + 0x28) != iVar1) {
+      iVar3 = FUN_f011eafc(iVar1,uVar5,sVar9);
+      if (iVar3 == 0) {
+        sVar10 = -1;
+      }
+      else {
+        sVar10 = 0;
+      }
+      if (sVar10 == 0) {
+        sVar11 = sVar9;
+      }
+      if (iVar3 == 0) {
+        puVar8 = &DAT_80000441;
+        uVar5 = FUN_f0119ea0(&DAT_80000441);
+        goto LAB_f011b3c8;
+      }
+      uVar6 = *(uint *)(iVar3 + 0x140);
+      if (uVar6 < 8) {
+        if ((1 << uVar6 & 0xb8U) == 0) {
+          sVar9 = 0;
+        }
+        else {
+          sVar9 = -1;
+        }
+        if (sVar9 != 0) {
+          puVar8 = (undefined1 *)0x80000414;
+          iVar4 = *(int *)(iVar3 + 0x180);
+          if (iVar4 == 0) {
+LAB_f011b464:
+            uVar5 = thunk_FUN_f001e3d4(&DAT_f01cd6bc);
+            FUN_f011b0c8(uVar5,0xffffffff,0,extraout_r1_06);
+            return;
+          }
+          uVar5 = extraout_r1_01;
+          if ((int)param_4 < 0x1000) {
+            if (param_4 < 0x11) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              uVar6 = 0xc;
+            }
+            if (param_4 < 0x11) {
+              if ((uVar6 & 1 << param_4) == 0) {
+                sVar11 = 0;
+              }
+              else {
+                sVar11 = -1;
+              }
+              if (sVar11 == 0) {
+                if ((1 << param_4 & 0x41U) == 0) {
+                  sVar11 = 0;
+                }
+                else {
+                  sVar11 = -1;
+                }
+                if (sVar11 == 0) goto LAB_f011b3c8;
+                puVar8 = (undefined1 *)FUN_f010a57c(iVar4,extraout_r1,param_4);
+                uVar5 = extraout_r1_04;
+              }
+              else {
+                puVar8 = (undefined1 *)FUN_f01096e0(iVar4,extraout_r1,param_3,(int)param_7[1]);
+                uVar5 = extraout_r1_02;
+              }
+              goto LAB_f011b3c0;
+            }
+          }
+          else {
+            if ((int)param_4 < 0x3000) {
+              if (param_4 != 0x1000) {
+                if (sVar11 != 0) goto LAB_f011b44c;
+                goto LAB_f011b3c8;
+              }
+            }
+            else if (param_4 != 0x3000) {
+              if (param_4 == 0x4000) {
+                puVar8 = (undefined1 *)FUN_f010ff14();
+                uVar5 = extraout_r1_05;
+                goto LAB_f011b3c0;
+              }
+              if (param_4 != 0x5000) goto LAB_f011b3c8;
+            }
+            puVar8 = (undefined1 *)FUN_f010e87c(iVar4,extraout_r1,param_4);
+            uVar5 = extraout_r1_03;
+LAB_f011b3c0:
+            if (puVar8 == (undefined1 *)0x0) goto LAB_f011b44c;
+          }
+LAB_f011b3c8:
+          FUN_f011df54(iVar3,uVar5);
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x3cd,
+                       "Error 0x%x: %s failed for pidA %d, fd %d, offset 0x%x, flags 0x%x, PA 0x%llx, size %lld"
+                      );
+          goto LAB_f011b178;
+        }
+      }
+LAB_f011b44c:
+      FUN_f011df54(iVar3);
+      *(int *)(iVar2 + 0x110) = iVar1;
+LAB_f011b458:
+      puVar8 = (undefined1 *)0x0;
+      goto LAB_f011b1e8;
+    }
+    if (param_4 != 2) {
+      puVar8 = (undefined1 *)0x80000414;
+      uVar5 = extraout_r1;
+      if (param_4 == 3) goto LAB_f011b170;
+      puVar8 = (undefined1 *)FUN_f010e87c(*(undefined4 *)(iVar2 + 0x11c),extraout_r1,param_4);
+      if (puVar8 != (undefined1 *)0x0) goto LAB_f011b178;
+      FUN_f011c9c8(iVar2,&local_74,local_70,extraout_r1);
+      goto LAB_f011b458;
+    }
+    local_70[0] = (undefined1 *)0x0;
+    puVar8 = (undefined1 *)FUN_f01096e0(*(undefined4 *)(iVar2 + 0x11c),extraout_r1,param_3);
+    if (puVar8 == (undefined1 *)0x0) {
+      iVar1 = FUN_f010f290(*(undefined4 *)(iVar2 + 0x11c),extraout_r1,0);
+      puVar8 = (undefined1 *)0x80000465;
+      if (iVar1 == 0) {
+        sVar11 = -1;
+      }
+      else {
+        sVar11 = 0;
+      }
+      puVar7 = &DAT_8000840d;
+      if (sVar11 != 0) {
+        puVar7 = local_70[0];
+      }
+      if (iVar1 == 0) {
+        puVar8 = (undefined1 *)0x0;
+        param_9[1] = 0;
+        *param_9 = puVar7;
+        goto LAB_f011b1e8;
+      }
+      FUN_f01093f8(*(undefined4 *)(iVar2 + 0x11c),extraout_r1);
+    }
+  }
+LAB_f011b178:
+  FUN_f0102e44(3,"fastrpc_kprocess.c",0x443,
+               "Error 0x%x: %s failed for pidA %d fd %d offset 0x%x flags 0x%x raddr 0x%llx pagesLen 0x%x"
+              );
+LAB_f011b1e8:
+  FUN_f0147530(puVar8);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0102e44 @f0102e44 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102e44(void)
+
+{
+  FUN_f0102ac0();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0147454 @f0147454 ////
+
+void FUN_f0147454(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f01106f8 @f01106f8 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f01106f8(int *param_1,int param_2,int param_3)
+
+{
+  do {
+    if (param_1[0xd] == param_2) {
+      return;
+    }
+    param_1 = (int *)*param_1;
+  } while (param_1 != (int *)param_3);
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f0119ea0 @f01096b0 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void thunk_FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488(0x80000448);
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0109394 @f0109394 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0109394(void)
+
+{
+  undefined4 in_r3;
+  undefined1 auStack_128 [260];
+  int local_24;
+  
+  FUN_f01474ac();
+  local_24 = DAT_f01dd000;
+  FUN_f0142f48(auStack_128,0x100,in_r3);
+  FUN_f0102e60();
+  if (DAT_f01dd000 != local_24) {
+    FUN_f0001060();
+  }
+  FUN_f0147588();
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f0119ea0 @f01096d4 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void thunk_FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488(&DAT_8000040e);
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0147530 @f0147530 ////
+
+void FUN_f0147530(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f0107d40 @f0107d40 ////
+
+undefined4 FUN_f0107d40(void)
+
+{
+  return 0;
+}
+
+
+
+//// CALLEE FUN_f004f5e0 @f004f5e0 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 FUN_f004f5e0(int param_1)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  undefined4 in_UGP;
+  sbyte sVar4;
+  
+  do {
+    while( true ) {
+      uVar2 = memd_locked(param_1);
+      iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(param_1,CONCAT44(iVar3,in_UGP));
+      if (sVar4 != 0) {
+        return 0;
+      }
+    }
+    sVar4 = memw_locked_store(param_1,CONCAT44(iVar3 + 1,(int)uVar2));
+  } while (sVar4 == 0);
+  do {
+    trap0(0x20);
+    if (param_1 == 0x2f) {
+      uVar1 = 0x2f;
+LAB_f004f660:
+      do {
+        uVar2 = memd_locked(uVar1);
+        sVar4 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,(int)uVar2));
+      } while (sVar4 == 0);
+      return 0x2f;
+    }
+    while( true ) {
+      uVar2 = memd_locked(param_1);
+      if ((int)uVar2 != 0xfe) break;
+      sVar4 = memw_locked_store(param_1,CONCAT44((int)((ulonglong)uVar2 >> 0x20) + -1,in_UGP));
+      if (sVar4 != 0) {
+        uVar1 = 0;
+        if (sVar4 != 0) {
+          return 0;
+        }
+        goto LAB_f004f660;
+      }
+    }
+  } while( true );
+}
+
+
+
+//// CALLEE FUN_f004f678 @f004f678 ////
+
+undefined4 FUN_f004f678(undefined4 param_1)
+
+{
+  undefined4 uVar1;
+  undefined8 uVar2;
+  int iVar3;
+  int in_UGP;
+  sbyte sVar4;
+  
+  do {
+    uVar2 = memd_locked(param_1);
+    iVar3 = (int)((ulonglong)uVar2 >> 0x20);
+    if ((int)uVar2 != in_UGP) {
+      uVar1 = FUN_f004f4c8(param_1,1);
+      do {
+        uVar2 = memd_locked(uVar1);
+        if ((int)uVar2 != 0xfe) {
+          return 1;
+        }
+        sVar4 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar2 >> 0x20),in_UGP));
+      } while (sVar4 == 0);
+      return 0;
+    }
+    sVar4 = memw_locked_store(param_1,CONCAT44(iVar3,0xfe));
+  } while (sVar4 == 0);
+  if (iVar3 == 0) {
+    return 0;
+  }
+  trap0(0x11);
+  return param_1;
+}
+
+
+
+//// CALLEE FUN_f0102a84 @f0102a84 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102a84(int param_1)
+
+{
+  sbyte sVar1;
+  
+  if ((DAT_f025075c & 1 << param_1) == 0) {
+    sVar1 = -1;
+  }
+  else {
+    sVar1 = 0;
+  }
+  if (sVar1 == 0) {
+    FUN_f0102ac0();
+    return;
+  }
+  return;
+}
+
+
+
+//// CALLEE FUN_f004ed78 @f004ed78 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 FUN_f004ed78(int param_1)
+
+{
+  undefined4 uVar1;
+  int iVar2;
+  undefined8 uVar3;
+  int iVar4;
+  int in_UGP;
+  sbyte sVar5;
+  
+  do {
+    while( true ) {
+      uVar3 = memd_locked(param_1);
+      iVar2 = (int)uVar3;
+      iVar4 = (int)((ulonglong)uVar3 >> 0x20);
+      if (iVar2 != 0xfe) break;
+      sVar5 = memw_locked_store(param_1,CONCAT44(iVar4,in_UGP));
+      if (sVar5 != 0) {
+        return 0;
+      }
+    }
+    if (iVar2 == in_UGP) {
+      *(int *)(param_1 + 0xc) = *(int *)(param_1 + 0xc) + 1;
+      return 0;
+    }
+    sVar5 = memw_locked_store(param_1,CONCAT44(iVar4 + 1,iVar2));
+  } while (sVar5 == 0);
+  do {
+    trap0(0x20);
+    if (param_1 == 0x2f) {
+      uVar1 = 0x2f;
+LAB_f004ee28:
+      do {
+        uVar3 = memd_locked(uVar1);
+        sVar5 = memw_locked_store(uVar1,CONCAT44((int)((ulonglong)uVar3 >> 0x20) + -1,(int)uVar3));
+      } while (sVar5 == 0);
+      return 0x2f;
+    }
+    while( true ) {
+      uVar3 = memd_locked(param_1);
+      if ((int)uVar3 != 0xfe) break;
+      sVar5 = memw_locked_store(param_1,CONCAT44((int)((ulonglong)uVar3 >> 0x20) + -1,in_UGP));
+      if (sVar5 != 0) {
+        uVar1 = 0;
+        if (sVar5 != 0) {
+          return 0;
+        }
+        goto LAB_f004ee28;
+      }
+    }
+  } while( true );
+}
+
+
+
+//// CALLEE FUN_f0111684 @f0111684 ////
+
+void FUN_f0111684(int param_1)
+
+{
+  if (param_1 != 0) {
+    *(undefined4 *)(param_1 + 0xc) = 0;
+  }
+  return;
+}
+
+
+
+//// CALLEE FUN_f0119ea0 @f0119ea0 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0119fa8) */
+/* WARNING: Removing unreachable block (ram,0xf0119fac) */
+/* WARNING: Removing unreachable block (ram,0xf011a074) */
+/* WARNING: Removing unreachable block (ram,0xf0119fcc) */
+/* WARNING: Removing unreachable block (ram,0xf011a0a4) */
+/* WARNING: Removing unreachable block (ram,0xf011a054) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0119ea0(void)
+
+{
+  uint uVar1;
+  int iVar2;
+  int iVar3;
+  int iVar4;
+  undefined4 extraout_r1;
+  char *pcVar5;
+  undefined4 *puVar6;
+  char *pcVar7;
+  int *piVar8;
+  undefined1 *puVar9;
+  int iVar10;
+  sbyte sVar11;
+  
+  iVar3 = FUN_f0147488();
+  pcVar7 = DAT_f09026b8;
+  if ((DAT_f09026b8 == (char *)0x1) && (pcVar7 = DAT_f0902634, 0 < (int)DAT_f0902634)) {
+    piVar8 = &DAT_f0902638;
+    pcVar5 = DAT_f0902634;
+    do {
+      if (*piVar8 == iVar3) {
+        iVar3 = FUN_f0103808(0,0,
+                             "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n"
+                            );
+        iVar10 = -1;
+        do {
+          iVar2 = DAT_f0912230;
+          iVar4 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar3,DAT_f0912230);
+          if (iVar4 == iVar2) {
+            sVar11 = -1;
+          }
+          else {
+            sVar11 = 0;
+          }
+          if (sVar11 != 0) {
+            iVar10 = iVar10 + 1;
+          }
+        } while ((iVar4 != iVar2) || (0x20000 < (uint)(iVar2 + iVar3)));
+        if (iVar10 != 0) {
+          FUN_f010434c();
+        }
+        FUN_f0103808(iVar2 + 0x10c0,0x20000 - iVar2,
+                     "fastrpc_kprocess.c:424  %s : Crashing due to panic error code : 0x%x\n");
+        FUN_f004f3b0();
+        pcVar5 = " %s : Crashing due to panic error code : 0x%x";
+        puVar6 = (undefined4 *)&DAT_000001a8;
+        DAT_f091222c = iVar2 + iVar3;
+        FUN_f0102a84(0x10000012,
+                     "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/fastrpc_process/src/fastrpc_kprocess.c"
+                    );
+        FUN_f004ecc4(0);
+        FUN_f01474ac();
+        iVar3 = FUN_f011a14c();
+        pcVar7 = "adsp_current_process1_panic_err_codes";
+        if (iVar3 < 1) {
+          FUN_f0102e44(3,"fastrpc_kprocess.c",0x1b5,
+                       " %s : setting panic error codes will not be effective due to device debuggability capabilities"
+                      );
+          puVar9 = (undefined1 *)0x8000042b;
+        }
+        else {
+          puVar9 = &DAT_8000040e;
+          if (DAT_f09026b8 == (char *)0x1) {
+            FUN_f0102e44(2,"fastrpc_kprocess.c",0x1bc,
+                         "Warning: %s : Panic error codes already set for this daemon,to make effective of new error codes, please reboot the device"
+                        );
+            puVar9 = (undefined1 *)0x0;
+          }
+          else if (0 < (int)pcVar5) {
+            if ((int)pcVar5 < 0x20) {
+              sVar11 = 0;
+            }
+            else {
+              sVar11 = -1;
+            }
+            if (sVar11 == 0) {
+              pcVar7 = &DAT_00000038;
+            }
+            if ((int)pcVar5 < 0x20) {
+              uVar1 = USR;
+              USR = uVar1 & 0xfffffcff;
+              DAT_f0902634 = pcVar5;
+              while( true ) {
+                *(undefined4 *)pcVar7 = *puVar6;
+                if (pcVar5 < (char *)0x2) break;
+                pcVar5 = pcVar5 + -1;
+                pcVar7 = pcVar7 + 2;
+                puVar6 = puVar6 + 1;
+              }
+              puVar9 = (undefined1 *)0x0;
+              DAT_f09026b8 = (char *)0x1;
+            }
+            else {
+              FUN_f0102e44(3,"fastrpc_kprocess.c",0x1c8,
+                           " %s : number of panic err codes : %d crossed max limit : %d\n");
+            }
+          }
+        }
+        FUN_f0147588(puVar9);
+        return;
+      }
+      piVar8 = piVar8 + 1;
+      pcVar5 = pcVar5 + -1;
+      pcVar7 = (char *)0x0;
+    } while (pcVar5 != (char *)0x0);
+  }
+  FUN_f0147564(iVar3,extraout_r1,pcVar7);
+  return;
+}
+
+
+
+//// CALLEE FUN_f015361c @f015361c ////
+
+/* WARNING: Removing unreachable block (ram,0xf0153684) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f015361c(undefined4 param_1,undefined4 param_2,int param_3)
+
+{
+  undefined4 uVar1;
+  int iVar2;
+  undefined4 extraout_r1;
+  sbyte sVar3;
+  undefined4 local_30;
+  undefined4 uStack_2c;
+  int local_28;
+  undefined4 *local_20;
+  undefined4 local_1c;
+  
+  uVar1 = FUN_f01474ac();
+  iVar2 = FUN_f0153194();
+  if (iVar2 == -1) {
+    sVar3 = -1;
+  }
+  else {
+    sVar3 = 0;
+  }
+  if (sVar3 != 0) {
+    param_3 = -0x7ffffbd4;
+  }
+  if (iVar2 != -1) {
+    local_20 = &local_30;
+    local_1c = 0xc;
+    local_30 = uVar1;
+    uStack_2c = extraout_r1;
+    local_28 = param_3;
+    param_3 = FUN_f0157450(iVar2,0x6010000,&local_20);
+    if (param_3 != 0) {
+      FUN_f0102a84(3,
+                   "/local/mnt/workspace/CRMBuilds/CDSP.HT.2.9.c1-00078-HAMOA-1_20251101_183151/b/cdsp_proc/platform/apps_mem/build/platform_libs/qdsp6/hamoa.cdsp.prod/apps_mem_stub.c"
+                   ,0x22f,"ERROR 0x%x: handle=0x%lx, scalar=0x%x, method ID=%d: %s failed\n");
+    }
+  }
+  FUN_f0147588(param_3);
+  return;
+}
+
+
+
+//// CALLEE FUN_f010eb94 @f010eb94 ////
+
+/* WARNING: Removing unreachable block (ram,0xf010ec10) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f010eb94(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+                 int *param_5,undefined4 *param_6)
+
+{
+  int iVar1;
+  int extraout_r1;
+  undefined4 extraout_r6;
+  undefined4 extraout_r7;
+  sbyte extraout_P0;
+  undefined4 local_28;
+  undefined4 uStack_24;
+  
+  iVar1 = FUN_f014749c();
+  if ((extraout_P0 == 0) && (iVar1 != 0)) {
+    local_28 = extraout_r6;
+    uStack_24 = extraout_r7;
+    iVar1 = FUN_f0111bf4(*(uint *)(extraout_r1 + 4) & 0xf,0,param_5);
+    if ((iVar1 == 0) &&
+       (iVar1 = FUN_f0111a04(*param_5,&local_28,param_3,param_4,extraout_r1), iVar1 == 0)) {
+      iVar1 = 0;
+      *param_6 = local_28;
+      goto LAB_f010ec64;
+    }
+  }
+  else {
+    iVar1 = -0x7ffffbf0;
+    thunk_FUN_f0119ea0();
+  }
+  uStack_24 = FUN_f0102e44(3,"fastrpc_invoke.c",0x53c,"Error 0x%x: %s failed\n");
+  if (*param_5 != 0) {
+    uStack_24 = FUN_f01107b0(*param_5);
+    *param_5 = 0;
+  }
+LAB_f010ec64:
+  FUN_f0147578(iVar1,uStack_24);
+  return;
+}
+
+
+
+//// ROOT FUN_f0109b30 @f0109b30 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0109c14) */
+/* WARNING: Removing unreachable block (ram,0xf0109d64) */
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0xf0109c08 */
+/* WARNING: Removing unreachable block (ram,0xf0109e88) */
+/* WARNING: Removing unreachable block (ram,0xf0109bdc) */
+/* WARNING: Removing unreachable block (ram,0xf0109cac) */
+/* WARNING: Removing unreachable block (ram,0xf0109d20) */
+/* WARNING: Removing unreachable block (ram,0xf0109dfc) */
+/* WARNING: Removing unreachable block (ram,0xf0109e08) */
+/* WARNING: Removing unreachable block (ram,0xf0109f00) */
+/* WARNING: Removing unreachable block (ram,0xf0109f44) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+/* WARNING: Restarted to delay deadcode elimination for space: stack */
+
+void FUN_f0109b30(undefined4 param_1,undefined4 param_2)
+
+{
+  bool bVar1;
+  longlong lVar2;
+  undefined4 *puVar3;
+  undefined4 *extraout_r0;
+  undefined4 uVar4;
+  longlong in_r1r0;
+  int extraout_r1;
+  undefined4 *puVar6;
+  int iVar7;
+  int iVar8;
+  undefined4 uVar9;
+  undefined4 *puVar10;
+  int iVar11;
+  uint uVar12;
+  int iVar13;
+  int unaff_r26;
+  sbyte sVar14;
+  longlong lVar5;
+  
+  FUN_f0147454();
+  extraout_r1 = (int)((ulonglong)in_r1r0 >> 0x20);
+  extraout_r0 = (undefined4 *)in_r1r0;
+  puVar10 = (undefined4 *)*extraout_r0;
+  if (puVar10 == extraout_r0) {
+    sVar14 = -1;
+  }
+  else {
+    sVar14 = 0;
+  }
+  if (sVar14 == 0) {
+    unaff_r26 = 3;
+  }
+  if (puVar10 != extraout_r0) {
+    iVar11 = 0;
+    puVar3 = (undefined4 *)*puVar10;
+    do {
+      puVar6 = puVar3;
+      iVar8 = 9;
+      if (*(longlong *)(puVar10 + 0x16) == CONCAT44(param_2,param_1)) {
+        sVar14 = -1;
+      }
+      else {
+        sVar14 = 0;
+      }
+      if (sVar14 != 0) {
+        FUN_f0110624();
+        FUN_f0110618();
+        iVar7 = 4;
+        iVar13 = unaff_r26;
+        if ((puVar10[4] | 0x4000) != 0x5000) {
+          iVar7 = 8;
+          iVar8 = unaff_r26;
+          iVar13 = 7;
+        }
+        uVar9 = (undefined4)*(longlong *)(puVar10 + iVar8 * 2);
+        lVar2 = *(longlong *)(puVar10 + iVar8 * 2);
+        uVar12 = (int)*(undefined8 *)(puVar10 + iVar7 * 2) -
+                 (int)*(undefined8 *)(puVar10 + iVar13 * 2);
+        FUN_f0102a84(2,(int)((ulonglong)in_r1r0 >> 0x20),0x244,
+                     "%s: before unmapping map fd %d, DSP VA 0x%llx, \t\t\t\t\t\t\tsize %zu, flags 0x%x, PA 0x%llx, msg_ctx 0x%llx, client_handle 0x%x"
+                     ,puVar10[6],puVar10[7]);
+                    /* WARNING: Ignoring partial resolution of indirect */
+        uVar4 = 0;
+        uVar4 = 0;
+        lVar5 = 0;
+        if (lVar2 == in_r1r0) {
+          sVar14 = -1;
+        }
+        else {
+          sVar14 = 0;
+        }
+        if (sVar14 == 0) {
+          bVar1 = 0xfffff < uVar12;
+          iVar8 = iVar11;
+          if (!bVar1) {
+            FUN_f004f8a8();
+            iVar8 = 0;
+          }
+          lVar5 = CONCAT44(uVar9,extraout_r1);
+                    /* WARNING: Ignoring partial resolution of indirect */
+          FUN_f0107e58(extraout_r1,uVar9,uVar12);
+          iVar13 = extraout_r1;
+          if (extraout_r1 != 0) {
+                    /* WARNING: Ignoring partial resolution of indirect */
+            lVar5 = -0xfe37d55fffffffd;
+            FUN_f0102e44(3,"fastrpc_invoke.c",0x253,
+                         "Error 0x%x: %s: unmapping failed for map fd %d, \t\t\t\t\t\t\tDSP VA 0x%llx, size %zu, flags %d, client_handle 0x%x"
+                        );
+          }
+          if (bVar1) {
+            FUN_f004f3b0();
+            iVar8 = (int)lVar5;
+          }
+          FUN_f0102a84(2,(int)((ulonglong)lVar5 >> 0x20),0x25b,
+                       "%s: unmapped map fd %d, DSP VA 0x%llx, size %zu, \t\t\t\t\t\t\t\t\tflags 0x%x, PA 0x%llx, client_handle 0x%x, nErr 0x%x"
+                      );
+          iVar11 = 0;
+          if (iVar13 != 0 || iVar8 != 0) {
+                    /* WARNING: Ignoring partial resolution of indirect */
+            FUN_f0103808(0,0,
+                         "fastrpc_invoke.c:607 Error 0x%x(QuRT error: 0x%x): %s: DSP VA 0x%llx, size %zu, flags 0x%x, PA 0x%llx, client_handle 0x%x\n"
+                         ,puVar10[7]);
+            FUN_f0110634(0);
+            FUN_f0103808(0x10c0,0x20000,
+                         "fastrpc_invoke.c:607 Error 0x%x(QuRT error: 0x%x): %s: DSP VA 0x%llx, size %zu, flags 0x%x, PA 0x%llx, client_handle 0x%x\n"
+                        );
+            thunk_FUN_f004f3b0();
+            DAT_f091222c = 0;
+            FUN_f0102e44(3,0x20000,0x25f,
+                         "Error 0x%x(QuRT error: 0x%x): %s: DSP VA 0x%llx, size %zu, flags 0x%x, PA 0x%llx, client_handle 0x%x"
+                        );
+                    /* WARNING: Ignoring partial resolution of indirect */
+            lVar5 = 0x2000000000003;
+            unaff_r26 = 3;
+            FUN_f0102a84(0x10000012,0x20000,0x25f,
+                         "Error 0x%x(QuRT error: 0x%x): %s: DSP VA 0x%llx, size %zu, flags 0x%x, PA 0x%llx, client_handle 0x%x"
+                         ,puVar10[6],puVar10[7]);
+            iVar11 = iVar8;
+          }
+        }
+        FUN_f01091bc(puVar10);
+        in_r1r0 = lVar5;
+      }
+      puVar3 = (undefined4 *)*puVar6;
+      puVar10 = puVar6;
+    } while (puVar6 != extraout_r0);
+  }
+  FUN_f0147530((int)in_r1r0);
+  return;
+}
+
+
+
+//// CALLER FUN_f0109930 @f0109930 ////
+
+/* WARNING: Heritage AFTER dead removal. Example location: r1 : 0xf0109a70 */
+/* WARNING: Removing unreachable block (ram,0xf0109a98) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0109930(undefined4 param_1,undefined4 param_2)
+
+{
+  undefined4 *puVar1;
+  int *extraout_r0;
+  undefined4 *puVar2;
+  undefined8 in_r1r0;
+  int iVar3;
+  int iVar4;
+  undefined4 *puVar5;
+  uint uVar6;
+  int iVar7;
+  undefined4 uVar8;
+  longlong in_r25r24;
+  int iVar9;
+  uint uVar10;
+  sbyte sVar11;
+  
+  iVar3 = (int)((ulonglong)in_r1r0 >> 0x20);
+  FUN_f0147454();
+  extraout_r0 = (int *)in_r1r0;
+  iVar9 = *extraout_r0;
+  iVar7 = extraout_r0[0x1b];
+  uVar6 = extraout_r0[0x19];
+  FUN_f004f5e0(iVar9 + 8);
+  if ((iVar7 != 0) && (iVar4 = (uVar6 >> 4 & 0xf) + (uVar6 & 0xf), iVar4 != 0)) {
+                    /* WARNING: Ignoring partial resolution of indirect */
+    uVar8 = 0;
+    uVar8 = 0;
+    uVar6 = (uVar6 >> 0x10 & 0xff) + (uVar6 >> 8 & 0xff);
+    uVar10 = iVar4 + uVar6;
+    do {
+      puVar2 = *(undefined4 **)(iVar9 + 0x28);
+      if (puVar2 != (undefined4 *)(iVar9 + 0x28)) {
+        puVar1 = (undefined4 *)*puVar2;
+        do {
+          puVar5 = puVar1;
+          if ((*(sbyte *)(puVar2 + 0x16) != 0) && (puVar2[0xd] == *(int *)(iVar7 + uVar6 * 0x10))) {
+            if (*(longlong *)(puVar2 + 4) == in_r25r24) {
+              sVar11 = -1;
+            }
+            else {
+              sVar11 = 0;
+            }
+            if (sVar11 != 0) {
+              if ((undefined4 *)puVar2[1] != (undefined4 *)0x0) {
+                *(undefined4 *)puVar2[1] = puVar5;
+              }
+              FUN_f0110618();
+              *(int *)(iVar9 + 0x60) = *(int *)(iVar9 + 0x60) + -1;
+              FUN_f004f0a0(puVar2 + 0x12);
+              FUN_f01091bc(puVar2);
+              break;
+            }
+          }
+          puVar1 = (undefined4 *)*puVar5;
+          puVar2 = puVar5;
+        } while (puVar5 != (undefined4 *)(iVar9 + 0x28));
+      }
+      uVar6 = uVar6 + 1;
+    } while (uVar6 < uVar10);
+  }
+  puVar2 = *(undefined4 **)(iVar9 + 0x48);
+  if ((undefined4 *)(iVar9 + 0x48) != puVar2) {
+    puVar1 = (undefined4 *)*puVar2;
+    do {
+      puVar5 = puVar1;
+      if (*(longlong *)(puVar2 + 0x18) == CONCAT44(param_2,param_1)) {
+        sVar11 = -1;
+      }
+      else {
+        sVar11 = 0;
+      }
+      if (sVar11 != 0) {
+        FUN_f0110624(puVar2);
+        FUN_f0110618();
+        FUN_f004f0a0(puVar2 + 0x12);
+        if (*(longlong *)(puVar2 + 8) == 0) {
+          sVar11 = -1;
+        }
+        else {
+          sVar11 = 0;
+        }
+        if ((sVar11 == 0) &&
+           (FUN_f0107e58(iVar3,iVar3,(int)(*(longlong *)(puVar2 + 6) - *(longlong *)(puVar2 + 4))),
+           iVar3 != 0)) {
+          FUN_f0102e44();
+        }
+        FUN_f01091bc(puVar2);
+      }
+      puVar1 = (undefined4 *)*puVar5;
+      puVar2 = puVar5;
+    } while (puVar5 != (undefined4 *)(iVar9 + 0x48));
+  }
+  FUN_f0109b30();
+  FUN_f0109b30();
+  FUN_f0109b30();
+  FUN_f01474b8(iVar9 + 8);
+  FUN_f004f678();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0102e44 @f0102e44 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102e44(void)
+
+{
+  FUN_f0102ac0();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0147454 @f0147454 ////
+
+void FUN_f0147454(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f0109394 @f0109394 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0109394(void)
+
+{
+  undefined4 in_r3;
+  undefined1 auStack_128 [260];
+  int local_24;
+  
+  FUN_f01474ac();
+  local_24 = DAT_f01dd000;
+  FUN_f0142f48(auStack_128,0x100,in_r3);
+  FUN_f0102e60();
+  if (DAT_f01dd000 != local_24) {
+    FUN_f0001060();
+  }
+  FUN_f0147588();
+  return;
+}
+
+
+
+//// CALLEE thunk_FUN_f004f3b0 @f010aac4 ////
+
+/* WARNING: Removing unreachable block (ram,0xf004f3c8) */
+/* WARNING: Removing unreachable block (ram,0xf004f424) */
+/* WARNING: Removing unreachable block (ram,0xf004f42c) */
+/* WARNING: Removing unreachable block (ram,0xf004f438) */
+/* WARNING: Removing unreachable block (ram,0xf004f440) */
+/* WARNING: Removing unreachable block (ram,0xf004f3d4) */
+/* WARNING: Removing unreachable block (ram,0xf004f3e0) */
+/* WARNING: Removing unreachable block (ram,0xf004f3ec) */
+/* WARNING: Removing unreachable block (ram,0xf004f3f8) */
+/* WARNING: Removing unreachable block (ram,0xf004f400) */
+/* WARNING: Removing unreachable block (ram,0xf004f3bc) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 thunk_FUN_f004f3b0(void)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  
+  iVar1 = FUN_f0048c94();
+  if (iVar1 != 0) {
+    return 1;
+  }
+  uVar2 = FUN_f0048f10();
+  return uVar2;
+}
+
+
+
+//// CALLEE FUN_f0103808 @f0103808 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0103808(void)
+
+{
+  FUN_f010367c();
+  return;
+}
+
+
+
+//// CALLEE FUN_f01091bc @f01091bc ////
+
+void FUN_f01091bc(int param_1)
+
+{
+  sbyte sVar1;
+  
+  if (param_1 == 0) {
+    sVar1 = -1;
+  }
+  else {
+    sVar1 = 0;
+  }
+  if (sVar1 != 0) {
+    return;
+  }
+  FUN_f0018a00();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0110634 @f0110634 ////
+
+void FUN_f0110634(void)
+
+{
+  int iVar1;
+  int iVar2;
+  int iVar3;
+  
+  iVar2 = FUN_f01474ac();
+  do {
+    iVar1 = DAT_f0912230;
+    iVar3 = FUN_f0153764(&DAT_f0912230,DAT_f0912230 + iVar2,DAT_f0912230);
+  } while (iVar3 != iVar1);
+  FUN_f0147588(iVar1);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0147530 @f0147530 ////
+
+void FUN_f0147530(void)
+
+{
+  return;
+}
+
+
+
+//// CALLEE FUN_f0110618 @f0110618 ////
+
+void FUN_f0110618(int param_1,undefined4 param_2)
+
+{
+  if (param_1 != 0) {
+    *(undefined4 *)(param_1 + 4) = param_2;
+  }
+  return;
+}
+
+
+
+//// CALLEE FUN_f004f8a8 @f004f8a8 ////
+
+/* WARNING: Removing unreachable block (ram,0xf004f91c) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 FUN_f004f8a8(undefined4 param_1,uint param_2)
+
+{
+  longlong lVar1;
+  int iVar2;
+  undefined4 uVar3;
+  undefined4 *puVar4;
+  int *piVar5;
+  int iVar6;
+  int iVar7;
+  
+  lVar1 = (ulonglong)(param_2 >> 0x10) << 0x1f;
+  iVar2 = (int)((ulonglong)lVar1 >> 0x20);
+  if (DAT_f01f9250 < (int)param_2) {
+    trap1(param_1,2);
+    return param_1;
+  }
+  iVar6 = DAT_f01f9240;
+  iVar7 = DAT_f01f9244;
+  if (iVar2 != 0) {
+    piVar5 = (int *)((int)DAT_f01f9248 + iVar2 * 0x10);
+    if (DAT_f01f9248._4_4_ < iVar2) goto LAB_f0043554;
+    iVar6 = *piVar5;
+    iVar7 = piVar5[1];
+  }
+  if (((int)(param_2 | (uint)lVar1) <= iVar7) &&
+     (puVar4 = *(undefined4 **)(iVar6 + param_2 * 4), puVar4 != (undefined4 *)0x0)) {
+                    /* WARNING: Could not recover jumptable at 0xf004f908. Too many branches */
+                    /* WARNING: Treating indirect jump as call */
+    uVar3 = (*(code *)*puVar4)(3,puVar4);
+    return uVar3;
+  }
+LAB_f0043554:
+  iVar2 = FUN_f0048c94();
+  if (iVar2 == 0) {
+    FUN_f004a5b0("Invalid QDI handle 0x%x, method %d called by client 0x%x\n");
+  }
+  return 0xffffffff;
+}
+
+
+
+//// CALLEE FUN_f010bd74 @f010bd74 ////
+
+void FUN_f010bd74(void)
+
+{
+  FUN_f010434c();
+  return;
+}
+
+
+
+//// CALLEE FUN_f0102a84 @f0102a84 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0102a84(int param_1)
+
+{
+  sbyte sVar1;
+  
+  if ((DAT_f025075c & 1 << param_1) == 0) {
+    sVar1 = -1;
+  }
+  else {
+    sVar1 = 0;
+  }
+  if (sVar1 == 0) {
+    FUN_f0102ac0();
+    return;
+  }
+  return;
+}
+
+
+
+//// CALLEE FUN_f004f3b0 @f004f3b0 ////
+
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+undefined4 FUN_f004f3b0(uint param_1,int param_2,int param_3,int param_4)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  uint uVar3;
+  uint uVar4;
+  uint uVar5;
+  sbyte sVar6;
+  
+  if (param_4 == 1) {
+    uVar4 = param_2 + -1 + param_1;
+    uVar3 = param_1 & 0xffffffc0;
+    if (param_3 == 0) {
+      if (uVar4 < uVar3) {
+        sVar6 = -1;
+      }
+      else {
+        sVar6 = 0;
+      }
+      uVar5 = uVar4;
+      if (sVar6 == 0) {
+        uVar5 = uVar3 - uVar4;
+      }
+      if (uVar3 <= uVar4) {
+        uVar5 = uVar5 + 0x40 >> 6;
+        uVar4 = USR;
+        USR = uVar4 & 0xfffffcff;
+        while( true ) {
+          dcache_clean_addr(uVar3);
+          if (uVar5 < 2) break;
+          uVar5 = uVar5 - 1;
+          uVar3 = uVar3 + 0x40;
+        }
+      }
+      memory_synch();
+      return 0;
+    }
+    uVar3 = param_2 + -1 + param_1;
+    param_1 = param_1 & 0xffffffc0;
+    if (param_3 == 1) {
+      if (uVar3 < param_1) {
+        sVar6 = -1;
+      }
+      else {
+        sVar6 = 0;
+      }
+      uVar4 = uVar3;
+      if (sVar6 == 0) {
+        uVar4 = param_1 - uVar3;
+      }
+      if (uVar3 < param_1) {
+        return 0;
+      }
+      uVar4 = uVar4 + 0x40 >> 6;
+      uVar3 = USR;
+      USR = uVar3 & 0xfffffcff;
+      while( true ) {
+        dcache_cleaninv_addr(param_1);
+        if (uVar4 < 2) break;
+        uVar4 = uVar4 - 1;
+        param_1 = param_1 + 0x40;
+      }
+      return 0;
+    }
+  }
+  iVar1 = FUN_f0048c94();
+  if (iVar1 != 0) {
+    return 1;
+  }
+  uVar2 = FUN_f0048f10();
+  return uVar2;
+}
+
+
+
+//// CALLEE FUN_f0107e58 @f0107e58 ////
+
+/* WARNING: Removing unreachable block (ram,0xf0107eac) */
+/* WARNING: Removing unreachable block (ram,0xf0107eb8) */
+/* WARNING: Restarted to delay deadcode elimination for space: register */
+
+void FUN_f0107e58(undefined4 param_1,undefined4 param_2,undefined4 param_3)
+
+{
+  int iVar1;
+  int extraout_r1;
+  undefined4 uVar2;
+  
+  iVar1 = FUN_f014749c();
+  if (extraout_r1 == 0) {
+    uVar2 = 0x80000483;
+  }
+  else {
+    if (0 < iVar1) {
+      iVar1 = 0xff;
+    }
+    iVar1 = FUN_f00497d4(iVar1,extraout_r1,param_3);
+    uVar2 = 0;
+    if (iVar1 == 0) goto LAB_f0107f14;
+    uVar2 = 0x80000561;
+  }
+  FUN_f0119ea0(uVar2);
+  FUN_f0102e44(3,"platform_qdi_driver.c",0x5a8,
+               "Error 0x%x (QuRT err %d): %s failed for client handle 0x%x, VA 0x%p size %zu");
+LAB_f0107f14:
+  FUN_f0147578(uVar2);
+  return;
+}
+
+
+
+//// CALLEE FUN_f0110624 @f0110624 ////
+
+void FUN_f0110624(int param_1,undefined4 param_2)
+
+{
+  if (*(undefined4 **)(param_1 + 4) != (undefined4 *)0x0) {
+    **(undefined4 **)(param_1 + 4) = param_2;
+  }
+  return;
+}
+
+

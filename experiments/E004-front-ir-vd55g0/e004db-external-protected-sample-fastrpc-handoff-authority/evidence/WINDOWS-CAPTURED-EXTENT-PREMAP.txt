@@ -1,0 +1,29 @@
+E004db WINDOWS EXTERNAL MAP-LENGTH AUTHORITY
+
+Carried forward from E004bv, using exact SP11 SurfaceCam + SecureISP trustlet static evidence.
+
+Before the SecureISP trustlet opens/maps the external sample, SurfaceCam has already carried both secure-buffer sizes into the CSL IOConfig:
+  IOConfig +0x128 = SECURE_BUFFER_INFO.cbBufferSize
+  IOConfig +0x12c = SECURE_BUFFER_INFO.cbCaptured
+
+BuildCSLPacket copies them into the protected-image object:
+  +0x7c <- cbBufferSize (transient)
+  +0x80 <- cbCaptured
+  +0x7c <- +0x80 immediately afterwards
+
+The external opener then executes:
+  OpenSecureSection(... per-sample GUID ...)
+  MapViewOfFile(..., length = object +0x7c)
+
+Therefore the final trusted mapping length is cbCaptured, and cbCaptured is known BEFORE the external mapping is established.
+
+Parity consequence for E004db:
+- allocation capacity remains a distinct field;
+- the FastRPC/DSP process mapping request must use the predeclared captured extent;
+- callers may not substitute dma-buf allocation size/capacity as the mapping length;
+- later payload completion must report the same captured extent that was used for the map.
+
+Local authority:
+- E004bv README sections 2-4
+- E004bv evidence/FIELD-MAP.txt
+- E004bv evidence/CSL-IOCONFIG-TO-EXTERNAL-OPEN.txt

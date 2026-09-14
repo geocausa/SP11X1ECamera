@@ -1,0 +1,26 @@
+E004db LINUX DMA-BUF FD CAPABILITY / CPU-VISIBILITY CONTRACT
+
+Golden userspace allocation surface:
+  /dev/dma_heap/system exists on the booted SP11.
+  DMA_HEAP_IOCTL_ALLOC returns a dma-buf file descriptor directly to userspace.
+
+Golden dma-buf core:
+  dma_buf_get(fd) calls fget(fd), verifies the file is a dma-buf, then returns file->private_data.
+  It does NOT mmap, vmap, begin CPU access, or otherwise create a CPU mapping.
+
+E004cz protected system-heap rules while CPZ ownership is active:
+  mmap() -> -EPERM
+  vmap() -> -EPERM
+  begin_cpu_access() -> -EPERM
+  device/IOMMU attachment remains possible; protected mapping uses DMA_ATTR_SKIP_CPU_SYNC.
+
+Therefore a trusted control process can retain the original dma-buf fd across the HLOS->CP_CDSP lend and use that fd as the FastRPC identity without restoring ordinary HLOS CPU image access.
+
+Preferred control-plane shape:
+1. trusted userspace allocates external backing from /dev/dma_heap/system and receives fd;
+2. provider binds the exact dma-buf behind that fd;
+3. ownership is lent to CP_CDSP only;
+4. the SAME fd remains open/stable through FastRPC MEM_MAP and MEM_UNMAP;
+5. after successful unmap and ownership reclaim, final fd/base references may be released.
+
+Do not close/reuse the fd before MEM_UNMAP. Golden FastRPC map lookup couples fd number and dma_buf identity, so stable fd lifetime avoids alias/reuse ambiguity.

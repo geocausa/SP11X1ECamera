@@ -1,0 +1,18 @@
+E004db CPZ SESSION / PROCESS ORDERING
+
+Carried from E004cv + Qualcomm downstream FastRPC authority:
+
+1. Open /dev/fastrpc-cdsp-secure.
+2. The same opener TGID, with CAP_SYS_ADMIN, selects:
+     domain_id = 3 (CDSP)
+     pd_type   = 6 (CPZ_USERPD)
+     sharedcb  = 0
+   through the staged session-info INVOKE2 request.
+3. Selection rebinds to a pre-typed CPZ context bank (the disabled X1E CB9 candidate).
+4. Any INIT_ATTACH / INIT_CREATE operation locks session configuration.
+5. Therefore CPZ session selection MUST occur before process attach/create.
+6. MEM_MAP/MEM_UNMAP then belong to that same FastRPC file/process context.
+
+Delegated callers may select only ordinary USERPD and cannot perform CPZ selection.
+
+E004db builds the CPZ session-info payload but issues no ioctl and creates no process.

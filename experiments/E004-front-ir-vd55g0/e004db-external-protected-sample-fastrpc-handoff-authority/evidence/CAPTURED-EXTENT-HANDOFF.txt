@@ -1,0 +1,17 @@
+E004db CAPTURED-EXTENT HANDOFF
+
+The compile-only coordinator now has a handoff-local `declared_captured_extent`.
+
+Rules:
+- declaration is accepted only after the dma-buf identity/protected backing has been prepared;
+- declared extent must be non-zero and <= allocation_extent;
+- MEM_MAP length is populated ONLY from declared_captured_extent;
+- there is no caller-supplied alternate length at build_mem_map();
+- later payload-ready completion requires captured_extent == declared_captured_extent;
+- serialized_extent <= captured_extent;
+- payload_offset <= serialized_extent.
+
+This preserves the Windows timing/semantics:
+  allocation capacity (cbBufferSize) != trusted mapping length (cbCaptured)
+
+The Linux DMA attachment may establish the secure context-bank DMA mapping for the dma-buf backing, while the FastRPC process mapping exposed to the trusted worker is bounded by the declared captured extent. The worker remains trusted and HLOS CPU visibility remains revoked.
