@@ -1,0 +1,482 @@
+
+=== IumAssignMemoryToSocDomain ===
+addr=1400b0c70 sig=ulonglong __cdecl IumAssignMemoryToSocDomain(ulonglong * param_1, ulonglong param_2, void * param_3, uint param_4, uint * param_5, longlong * * param_6, undefined8 param_7, undefined8 param_8)
+
+ulonglong IumAssignMemoryToSocDomain
+                    (ulonglong *param_1,ulonglong param_2,void *param_3,uint param_4,uint *param_5,
+                    longlong **param_6,longlong **param_7,longlong **param_8)
+
+{
+  ulonglong *puVar1;
+  char cVar2;
+  longlong *plVar3;
+  uint uVar4;
+  uint *puVar5;
+  void *_Dst;
+  ulonglong uVar6;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 uVar7;
+  longlong *plVar8;
+  longlong *plVar9;
+  ulonglong *puVar10;
+  int iVar11;
+  longlong **pplVar12;
+  longlong in_x18;
+  longlong extraout_x18;
+  ulonglong uVar13;
+  int iVar14;
+  longlong **pplVar15;
+  undefined1 auVar16 [16];
+  longlong *local_78;
+  uint local_6c;
+  uint local_68;
+  ulonglong local_60;
+  ulonglong local_58;
+  undefined4 local_50;
+  int iStack_4c;
+  
+  local_6c = (uint)param_7;
+  iVar14 = (int)param_5;
+  iVar11 = (int)param_6;
+  local_78 = (longlong *)0x0;
+  local_60 = 0;
+  local_58 = 0;
+  pplVar15 = (longlong **)0x1;
+  if (local_6c != 2) {
+    if (local_6c == 4) {
+      pplVar15 = (longlong **)0x3;
+    }
+    else if (local_6c == 0x20) {
+      pplVar15 = (longlong **)0xd;
+    }
+    else {
+      if (local_6c != 0x40) {
+        return (ulonglong)DAT_1400b0f20;
+      }
+      pplVar15 = (longlong **)0xf;
+    }
+  }
+  if ((int)param_8 != 0) {
+    return (ulonglong)DAT_1400b0f24;
+  }
+  if (*(longlong *)(in_x18 + 8) == 0) {
+    puVar5 = (uint *)0x0;
+  }
+  else {
+    puVar5 = *(uint **)(*(longlong *)(in_x18 + 8) + 0x50);
+  }
+  pplVar12 = param_6;
+  uVar4 = SkhalValidateProcessIoDomain(puVar5,iVar11);
+  if ((int)uVar4 < 0) {
+    return (ulonglong)uVar4;
+  }
+  uVar4 = SkobCreateObjectEx('\0',0x140001aa8,(int *)0x0,&local_78,param_5,pplVar12,param_7,param_8)
+  ;
+  plVar3 = local_78;
+  if ((int)uVar4 < 0) {
+    return (ulonglong)uVar4;
+  }
+  local_78[1] = 0;
+  *local_78 = 0;
+  local_78[3] = 0;
+  local_78[2] = 0;
+  cVar2 = *(char *)(*(longlong *)(extraout_x18 + 8) + 0x60);
+  puVar10 = &local_58;
+  plVar9 = local_78 + 1;
+  auVar16 = SkmmReferenceSecureSection
+                      (param_2,cVar2,plVar9,(longlong *)puVar10,param_5,pplVar12,param_7,param_8);
+  uVar7 = auVar16._8_8_;
+  uVar13 = auVar16._0_8_ & 0xffffffff;
+  if (auVar16._0_4_ < 0) {
+    plVar3[1] = 0;
+    goto LAB_1400b0ef8;
+  }
+  if (0xffffffff < local_58) {
+    uVar13 = (ulonglong)DAT_1400b0f28;
+    goto LAB_1400b0ef8;
+  }
+  uVar4 = (uint)(local_58 >> 0xc);
+  if (iVar14 == 0) {
+    if (param_3 == (void *)0x0) {
+      iVar14 = uVar4 - param_4;
+      goto LAB_1400b0d98;
+    }
+  }
+  else {
+LAB_1400b0d98:
+    if (param_4 < param_4 + iVar14 && param_4 + iVar14 <= uVar4) {
+      if (param_3 == (void *)0x0) {
+LAB_1400b0e28:
+        plVar8 = (longlong *)(ulonglong)DAT_1400b0f2c;
+        auVar16 = SkAllocatePool(0x200,((ulonglong)(iVar14 + 6) & 0x1fffffff) << 3,plVar8,puVar10,
+                                 param_5,pplVar12,param_7,param_8);
+        uVar7 = auVar16._8_8_;
+        plVar9 = auVar16._0_8_;
+        *plVar3 = (longlong)plVar9;
+        if (plVar9 != (longlong *)0x0) {
+          param_5 = (uint *)(ulonglong)(uint)(iVar14 << 0xc);
+          puVar10 = (ulonglong *)((ulonglong)param_4 << 0xc);
+          uVar4 = SkmmProbeSecureSectionPages
+                            (plVar3[1],local_6c,plVar9,(longlong)puVar10,iVar14 << 0xc);
+          uVar13 = (ulonglong)uVar4;
+          uVar7 = extraout_x1;
+          if (-1 < (int)uVar4) {
+            *(int *)(plVar3 + 3) = iVar11;
+            *(int *)((longlong)plVar3 + 0x1c) = iVar14;
+            local_50 = 2;
+            param_5 = (uint *)((longlong)plVar3 + 0x1c);
+            puVar10 = (ulonglong *)plVar3[2];
+            plVar9 = (longlong *)(*plVar3 + 0x30);
+            iStack_4c = iVar11;
+            uVar6 = ShvlMapSparseDeviceGpaPages
+                              (CONCAT44(iVar11,2),(ulonglong)param_6 & 0xffffffff,(longlong)plVar9,
+                               (longlong)puVar10,param_5,(int)pplVar15);
+            uVar13 = uVar6 & 0xffffffff;
+            uVar7 = extraout_x1_00;
+            pplVar12 = pplVar15;
+            if (-1 < (int)uVar6) {
+              puVar10 = &local_60;
+              plVar9 = (longlong *)0x0;
+              local_68 = SkobCreateHandle((longlong)plVar3,'\0',(longlong **)0x0,puVar10,
+                                          (ulonglong)param_5,pplVar15,param_7,param_8);
+              uVar13 = (ulonglong)local_68;
+              uVar7 = extraout_x1_01;
+              pplVar12 = pplVar15;
+              if (-1 < (int)local_68) {
+                if (cVar2 == '\0') {
+                  *param_1 = local_60;
+                }
+                else {
+                  puVar1 = param_1;
+                  if ((ulonglong *)0x7ffffffeffff < param_1) {
+                    puVar1 = (ulonglong *)&DAT_7fffffff0000;
+                  }
+                  *puVar1 = *puVar1;
+                  *param_1 = local_60;
+                }
+              }
+            }
+          }
+          goto LAB_1400b0ef8;
+        }
+      }
+      else {
+        uVar4 = iVar14 << 3;
+        if (((cVar2 != '\0') && (uVar4 != 0)) && (((ulonglong)param_3 & 3) != 0)) {
+                    /* WARNING: Subroutine does not return */
+          ExRaiseDatatypeMisalignment();
+        }
+        plVar8 = (longlong *)(ulonglong)DAT_1400b0f2c;
+        auVar16 = SkAllocatePool(0x200,(ulonglong)uVar4,plVar8,puVar10,param_5,pplVar12,param_7,
+                                 param_8);
+        uVar7 = auVar16._8_8_;
+        _Dst = auVar16._0_8_;
+        plVar3[2] = (longlong)_Dst;
+        if (_Dst != (void *)0x0) {
+          memmove(_Dst,param_3,(ulonglong)uVar4);
+          goto LAB_1400b0e28;
+        }
+      }
+      plVar9 = plVar8;
+      uVar13 = (ulonglong)DAT_1400b0f30;
+      goto LAB_1400b0ef8;
+    }
+  }
+  uVar13 = (ulonglong)DAT_1400b0f34;
+LAB_1400b0ef8:
+  SkobDereferenceObject((longlong)plVar3,uVar7,plVar9,puVar10,param_5,pplVar12,param_7,param_8);
+  return uVar13;
+}
+
+
+
+=== ShvlMapSparseDeviceGpaPages ===
+addr=1400c5170 sig=ulonglong __cdecl ShvlMapSparseDeviceGpaPages(undefined8 param_1, undefined8 param_2, longlong param_3, longlong param_4, uint * param_5, undefined4 param_6)
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+ulonglong ShvlMapSparseDeviceGpaPages
+                    (undefined8 param_1,undefined8 param_2,longlong param_3,longlong param_4,
+                    uint *param_5,undefined4 param_6)
+
+{
+  undefined8 uVar1;
+  uint uVar2;
+  ulonglong uVar3;
+  ulonglong uVar4;
+  ulonglong extraout_x1;
+  undefined4 *puVar5;
+  longlong lVar6;
+  uint uVar7;
+  uint uVar8;
+  uint local_150 [4];
+  undefined4 local_140;
+  undefined4 uStack_13c;
+  ulonglong uStack_138;
+  undefined8 uStack_130;
+  undefined8 uStack_128;
+  undefined8 local_120;
+  undefined8 uStack_118;
+  undefined8 uStack_110;
+  undefined8 uStack_108;
+  undefined8 local_100;
+  undefined8 uStack_f8;
+  undefined8 uStack_f0;
+  undefined8 uStack_e8;
+  undefined8 local_e0;
+  undefined8 local_d0;
+  undefined8 uStack_c8;
+  undefined8 local_c0;
+  undefined4 local_b8;
+  undefined4 uStack_b4;
+  longlong local_b0 [14];
+  
+  local_d0 = 0xffffffffffffffff;
+  uStack_c8 = 0;
+  local_b8 = 0x11;
+  local_150[0] = 0;
+  local_b0[1] = 0;
+  local_b0[0] = 0;
+  local_b0[3] = 0;
+  local_b0[2] = 0;
+  local_b0[5] = 0;
+  local_b0[4] = 0;
+  local_b0[7] = 0;
+  local_b0[6] = 0;
+  uVar7 = 6;
+  local_b0[9] = 0;
+  local_b0[8] = 0;
+  local_b0[0xb] = 0;
+  local_b0[10] = 0;
+  uVar8 = 0;
+  uVar4 = 0;
+  local_c0 = param_1;
+  uStack_b4 = param_6;
+LAB_1400c51d0:
+  do {
+    uVar2 = *param_5;
+    if (uVar2 == 0) goto LAB_1400c52b8;
+    if (uVar2 < uVar7) {
+      uVar7 = uVar2;
+    }
+    uVar4 = 0;
+    if (uVar7 != 0) {
+      do {
+        uVar2 = uVar8 + (int)uVar4;
+        lVar6 = *(longlong *)(param_3 + (ulonglong)uVar2 * 8);
+        local_b0[uVar4 * 2 + 1] = lVar6;
+        if (param_4 == 0) {
+          lVar6 = lVar6 << 0xc;
+        }
+        else {
+          lVar6 = *(longlong *)(param_4 + (ulonglong)uVar2 * 8);
+        }
+        uVar2 = (int)uVar4 + 1;
+        local_b0[uVar4 * 2] = lVar6;
+        uVar4 = (ulonglong)uVar2;
+      } while (uVar2 < uVar7);
+    }
+    uVar2 = ShvlpInitiateFastHypercall(199,&local_d0,(uVar7 + 2) * 0x10,(ulonglong)uVar7,local_150);
+    uVar8 = uVar8 + local_150[0];
+    *param_5 = *param_5 - local_150[0];
+    uVar3 = ShvlpHvStatusIsInsufficientMemory(uVar2);
+    uVar4 = extraout_x1;
+    if ((uVar3 & 0xff) != 0) {
+      lVar6 = 0x68;
+      _local_140 = 0;
+      uStack_128 = 0;
+      uStack_130 = 0;
+      uStack_118 = 0;
+      local_120 = 0;
+      uStack_108 = 0;
+      uStack_110 = 0;
+      uStack_f8 = 0;
+      local_100 = 0;
+      uStack_e8 = 0;
+      uStack_f0 = 0;
+      local_e0 = 0;
+      puVar5 = &local_140;
+      do {
+        *(undefined1 *)puVar5 = 0;
+        uVar1 = _local_140;
+        lVar6 = lVar6 + -1;
+        puVar5 = (undefined4 *)((longlong)puVar5 + 1);
+      } while (lVar6 != 0);
+      local_140._0_2_ = (ushort)(byte)local_140;
+      uStack_13c = SUB84(uVar1,4);
+      local_140 = CONCAT22(0x18,(ushort)local_140);
+      uStack_138 = (ulonglong)(int)extraout_x1;
+      SkCallNormalMode(&local_140);
+      uVar4 = uStack_138;
+      if (-1 < (int)uStack_138) goto LAB_1400c51d0;
+    }
+    if ((int)uVar4 < 0) {
+LAB_1400c52b8:
+      *param_5 = uVar8;
+      return uVar4 & 0xffffffff;
+    }
+  } while( true );
+}
+
+
+
+=== ShvlUnmapSparseDeviceGpaPages ===
+addr=1400c5d48 sig=uint __cdecl ShvlUnmapSparseDeviceGpaPages(undefined8 param_1, longlong param_2, uint * param_3, char param_4)
+
+/* WARNING: Function: __security_push_cookie replaced with injection: security_push_cookie */
+/* WARNING: Function: __security_pop_cookie replaced with injection: security_pop_cookie */
+
+uint ShvlUnmapSparseDeviceGpaPages(undefined8 param_1,longlong param_2,uint *param_3,char param_4)
+
+{
+  uint uVar1;
+  uint uVar2;
+  longlong *plVar3;
+  longlong lVar4;
+  uint uVar5;
+  uint uVar6;
+  uint local_d0 [2];
+  undefined8 local_c8;
+  undefined8 uStack_c0;
+  undefined8 local_b8;
+  longlong local_b0 [14];
+  
+  local_d0[0] = 0;
+  local_b0[1] = 0;
+  local_b0[0] = 0;
+  local_b0[3] = 0;
+  local_b0[2] = 0;
+  local_b0[5] = 0;
+  local_b0[4] = 0;
+  local_b0[7] = 0;
+  local_b0[6] = 0;
+  uVar5 = 0xd;
+  local_b0[9] = 0;
+  local_b0[8] = 0;
+  local_b0[0xb] = 0;
+  local_b0[10] = 0;
+  uVar6 = 0;
+  local_b0[0xc] = 0;
+  uVar2 = 0;
+  local_c8 = 0xffffffffffffffff;
+  uStack_c0 = 0;
+  local_b8 = param_1;
+  do {
+    uVar1 = *param_3;
+    if (uVar1 == 0) break;
+    if (uVar1 < uVar5) {
+      uVar5 = uVar1;
+    }
+    uVar2 = 0;
+    if (uVar5 != 0) {
+      plVar3 = local_b0;
+      do {
+        lVar4 = *(longlong *)(param_2 + (ulonglong)(uVar6 + uVar2) * 8);
+        *plVar3 = lVar4;
+        if (param_4 != '\0') {
+          *plVar3 = lVar4 << 0xc;
+        }
+        uVar2 = uVar2 + 1;
+        plVar3 = plVar3 + 1;
+      } while (uVar2 < uVar5);
+    }
+    uVar2 = ShvlpInitiateFastHypercall(200,&local_c8,(uVar5 + 3) * 8,(ulonglong)uVar5,local_d0);
+    uVar6 = uVar6 + local_d0[0];
+    *param_3 = *param_3 - local_d0[0];
+  } while (-1 < (int)uVar2);
+  *param_3 = uVar6;
+  return uVar2;
+}
+
+
+
+=== SkmmProbeSecureSectionPages ===
+addr=140092e68 sig=undefined4 __cdecl SkmmProbeSecureSectionPages(undefined8 param_1, uint param_2, undefined8 * param_3, longlong param_4, uint param_5)
+
+undefined4
+SkmmProbeSecureSectionPages
+          (undefined8 param_1,uint param_2,undefined8 *param_3,longlong param_4,uint param_5)
+
+{
+  ushort uVar1;
+  ulonglong *puVar2;
+  ulonglong *puVar3;
+  undefined4 uVar4;
+  ulonglong uVar5;
+  uint uVar6;
+  ulonglong uVar7;
+  uint *extraout_x11;
+  ulonglong uVar8;
+  
+  uVar5 = SkmiMakeProtectionMask(param_2);
+  uVar6 = *extraout_x11;
+  uVar4 = DAT_140092f80;
+  if (((((uVar6 >> 9 & 0xf) != 8) && (((uint)uVar5 & 4) <= (uVar6 >> 9 & 4))) &&
+      (((uint)uVar5 & 2) <= (uVar6 >> 9 & 2))) &&
+     (uVar5 = (ulonglong)*(ushort *)((longlong)extraout_x11 + 0x12) + param_4, uVar4 = DAT_140092f7c
+     , *(ushort *)((longlong)extraout_x11 + 0x12) <= uVar5)) {
+    uVar8 = uVar5 >> 0xc;
+    param_3[1] = 0;
+    *param_3 = 0;
+    param_3[3] = 0;
+    param_3[2] = 0;
+    param_3[5] = 0;
+    param_3[4] = 0;
+    *(uint *)(param_3 + 5) = param_5;
+    *(uint *)((longlong)param_3 + 0x2c) = (uint)uVar5 & 0xfff;
+    uVar6 = extraout_x11[1];
+    uVar7 = (uVar5 & 0xfff) + (ulonglong)param_5 + 0xfff >> 0xc;
+    uVar4 = DAT_140092f78;
+    if ((uVar8 <= uVar6) && (uVar8 + uVar7 <= (ulonglong)uVar6)) {
+      if (uVar8 + uVar7 == (ulonglong)uVar6) {
+        uVar1 = (ushort)extraout_x11[4];
+        if ((uVar1 != 0) &&
+           (uVar6 = (uint)uVar5 + param_5 & 0xfff, uVar1 <= uVar6 && uVar6 != uVar1)) {
+          return DAT_140092f78;
+        }
+      }
+      uVar6 = (uint)uVar7;
+      puVar2 = (ulonglong *)(*(longlong *)(extraout_x11 + 2) + uVar8 * 8);
+      puVar3 = param_3 + 6;
+      while (uVar6 != 0) {
+        uVar6 = (int)uVar7 - 1;
+        uVar7 = (ulonglong)uVar6;
+        *puVar3 = *puVar2 >> 0xc & 0xffffffffff;
+        puVar2 = puVar2 + 1;
+        puVar3 = puVar3 + 1;
+      }
+      *(ushort *)((longlong)param_3 + 10) = *(ushort *)((longlong)param_3 + 10) | 2;
+      uVar4 = 0;
+    }
+  }
+  return uVar4;
+}
+
+
+
+=== SkmmReferenceSecureSection ===
+addr=140092f88 sig=undefined __cdecl SkmmReferenceSecureSection(ulonglong param_1, char param_2, longlong * param_3, longlong * param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, longlong * * param_8)
+
+void SkmmReferenceSecureSection
+               (ulonglong param_1,char param_2,longlong *param_3,longlong *param_4,
+               undefined8 param_5,undefined8 param_6,undefined8 param_7,longlong **param_8)
+
+{
+  int iVar1;
+  longlong local_20 [2];
+  
+  local_20[0] = 0;
+  iVar1 = SkobReferenceObjectByHandle
+                    (param_1,(ulonglong *)(ulonglong)(uint)(int)param_2,0,0x140001a78,local_20,
+                     (ulonglong *)0x0,param_7,param_8);
+  if (-1 < iVar1) {
+    *param_3 = local_20[0];
+    *param_4 = (ulonglong)*(uint *)(local_20[0] + 4) << 0xc;
+  }
+  return;
+}
+
+

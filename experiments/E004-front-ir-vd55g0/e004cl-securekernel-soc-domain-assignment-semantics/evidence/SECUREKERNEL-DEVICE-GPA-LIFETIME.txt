@@ -1,0 +1,133 @@
+TARGET ShvlUnmapSparseDeviceGpaPages @1400c5d48
+ CALLER SkhalpDeleteDomainAssignment @1400b1aa8 sig=undefined __cdecl SkhalpDeleteDomainAssignment(undefined1[16] param_1, undefined1[16] param_2, undefined1[16] param_3, undefined1[16] param_4, undefined1[16] param_5, undefined1[16] param_6, undefined1[16] param_7, undefined1[16] param_8, ulonglong * param_9, undefined8 param_10, uint * param_11, ulonglong param_12, undefined8 param_13, undefined8 param_14, undefined8 param_15, longlong * * param_16)
+ CALLER SkhalpBridgeDelete @1400b17f0 sig=ulonglong __cdecl SkhalpBridgeDelete(ulonglong param_1, undefined8 param_2, uint * param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, longlong * * param_8)
+TARGET ShvlUnmapDeviceGpaPages @1400c5c98
+ CALLER SkhalpDmaDeleteMapping @1400b3ae0 sig=undefined __cdecl SkhalpDmaDeleteMapping(undefined1[16] param_1, undefined1[16] param_2, undefined1[16] param_3, undefined1[16] param_4, undefined1[16] param_5, undefined1[16] param_6, undefined1[16] param_7, undefined1[16] param_8, longlong * param_9, undefined8 param_10, undefined8 param_11, undefined8 param_12, undefined8 param_13, undefined8 param_14, undefined8 param_15, longlong * * param_16)
+
+//// SkhalpDeleteDomainAssignment @1400b1aa8 ////
+
+void SkhalpDeleteDomainAssignment
+               (undefined1 param_1 [16],undefined1 param_2 [16],undefined1 param_3 [16],
+               undefined1 param_4 [16],undefined1 param_5 [16],undefined1 param_6 [16],
+               undefined1 param_7 [16],undefined1 param_8 [16],ulonglong *param_9,
+               undefined8 param_10,uint *param_11,ulonglong param_12,undefined8 param_13,
+               undefined8 param_14,undefined8 param_15,longlong **param_16)
+
+{
+  bool bVar1;
+  uint uVar2;
+  ulonglong uVar3;
+  undefined8 extraout_x1;
+  undefined8 uVar4;
+  undefined1 extraout_q0 [16];
+  
+  if (*(int *)((longlong)param_9 + 0x1c) != 0) {
+    uVar3 = param_9[2];
+    param_11 = (uint *)((longlong)param_9 + 0x1c);
+    bVar1 = uVar3 == 0;
+    if (bVar1) {
+      uVar3 = *param_9 + 0x30;
+    }
+    param_12 = (ulonglong)bVar1;
+    uVar2 = ShvlUnmapSparseDeviceGpaPages(CONCAT44((int)param_9[3],2),uVar3,param_11,bVar1);
+    if ((int)uVar2 < 0) {
+                    /* WARNING: Subroutine does not return */
+      KeBugCheckEx(extraout_q0,param_2,param_3,param_4,param_5,param_6,param_7,param_8,0x121,
+                   (longlong)(int)uVar2,(ulonglong)(uint)param_9[3],
+                   (ulonglong)*(uint *)((longlong)param_9 + 0x1c),0,param_14,param_15,param_16);
+    }
+  }
+  if (param_9[2] != 0) {
+    SkFreePool(0x200,param_9[2],param_11,param_12,param_13,param_14,param_15,param_16);
+  }
+  uVar4 = 0;
+  if (*param_9 != 0) {
+    SkFreePool(0x200,*param_9,param_11,param_12,param_13,param_14,param_15,param_16);
+    uVar4 = extraout_x1;
+  }
+  if (param_9[1] != 0) {
+    SkobDereferenceObject(param_9[1],uVar4,param_11,param_12,param_13,param_14,param_15,param_16);
+  }
+  return;
+}
+
+
+
+//// SkhalpBridgeDelete @1400b17f0 ////
+
+ulonglong SkhalpBridgeDelete(ulonglong param_1,undefined8 param_2,uint *param_3,undefined8 param_4,
+                            undefined8 param_5,undefined8 param_6,undefined8 param_7,
+                            longlong **param_8)
+
+{
+  uint uVar1;
+  ulonglong uVar2;
+  ulonglong uVar3;
+  
+  uVar2 = param_1;
+  if (*(int *)(param_1 + 0x48) != 0) {
+    param_4 = 1;
+    param_3 = (uint *)(param_1 + 0x48);
+    uVar1 = ShvlUnmapSparseDeviceGpaPages
+                      (DAT_1400b1870,*(longlong *)(param_1 + 0x40),param_3,'\x01');
+    uVar2 = (ulonglong)uVar1;
+    *(undefined4 *)(param_1 + 0x48) = 0;
+  }
+  uVar3 = *(ulonglong *)(param_1 + 0x40);
+  if (uVar3 != 0) {
+    uVar2 = SkFreePool(1,uVar3,param_3,param_4,param_5,param_6,param_7,param_8);
+    *(ulonglong *)(param_1 + 0x40) = 0;
+  }
+  if ((*(uint *)(param_1 + 0x10) & 1) != 0) {
+    uVar1 = SkmmReleaseTrustedFirmwareRange
+                      (*(ulonglong *)(param_1 + 0x20) & 0xfffffffffffff000,
+                       *(ulonglong *)(param_1 + 0x30) & 0xfffffffffffff000,param_3,param_4,param_5,
+                       param_6,param_7,param_8);
+    uVar2 = (ulonglong)uVar1;
+    *(uint *)(param_1 + 0x10) = *(uint *)(param_1 + 0x10) & 0xfffffffe;
+  }
+  return uVar2;
+}
+
+
+
+//// SkhalpDmaDeleteMapping @1400b3ae0 ////
+
+void SkhalpDmaDeleteMapping
+               (undefined1 param_1 [16],undefined1 param_2 [16],undefined1 param_3 [16],
+               undefined1 param_4 [16],undefined1 param_5 [16],undefined1 param_6 [16],
+               undefined1 param_7 [16],undefined1 param_8 [16],longlong *param_9,undefined8 param_10
+               ,undefined8 param_11,undefined8 param_12,undefined8 param_13,undefined8 param_14,
+               undefined8 param_15,longlong **param_16)
+
+{
+  uint uVar1;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  ulonglong uVar2;
+  longlong lVar3;
+  undefined1 extraout_q0 [16];
+  uint local_20 [4];
+  
+  lVar3 = *param_9;
+  if (lVar3 != 0) {
+    local_20[0] = *(uint *)(param_9 + 3);
+    uVar1 = ShvlUnmapDeviceGpaPages(*(undefined8 *)(lVar3 + 0x18),param_9[2],local_20);
+    uVar2 = (ulonglong)local_20[0];
+    if (((int)uVar1 < 0) || (local_20[0] != *(uint *)(param_9 + 3))) {
+                    /* WARNING: Subroutine does not return */
+      KeBugCheckEx(extraout_q0,param_2,param_3,param_4,param_5,param_6,param_7,param_8,0x121,
+                   (longlong)(int)uVar1,uVar2,(ulonglong)*(uint *)(param_9 + 3),param_9,param_14,
+                   param_15,param_16);
+    }
+    (**(code **)(**(longlong **)(lVar3 + 0x38) + 8))(*(longlong **)(lVar3 + 0x38),param_9[2]);
+    SkFreePool(0x200,param_9[4],uVar2,param_12,param_13,param_14,param_15,param_16);
+    SkobDereferenceObject(param_9[1],extraout_x1,uVar2,param_12,param_13,param_14,param_15,param_16)
+    ;
+    SkobDereferenceObject
+              (*param_9,extraout_x1_00,uVar2,param_12,param_13,param_14,param_15,param_16);
+  }
+  return;
+}
+
+

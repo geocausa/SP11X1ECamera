@@ -1,0 +1,41 @@
+{
+  "experiment": "E004cl",
+  "status": "PASS_CAMERA_ASSIGNMENT_IS_SECURE_SECTION_DEVICE_GPA_MAPPING_NOT_PHYSICAL_OWNER_REPLACEMENT",
+  "mode": "windows-static-pdb-authority",
+  "windows": {
+    "io_domain": "0x0d",
+    "protection_input": 4,
+    "device_gpa_flags": "0x3",
+    "process_policy_validates_io_domain": true,
+    "secure_section_remains_referenced": true,
+    "map_function": "ShvlMapSparseDeviceGpaPages",
+    "map_hypercall": "199/0xC7",
+    "unmap_function": "ShvlUnmapSparseDeviceGpaPages",
+    "unmap_hypercall": "200/0xC8",
+    "assignment_handle_owns_mapping_lifetime": true,
+    "physical_owner_replacement_proven": false
+  },
+  "correction": {
+    "qcskext_frame_owner_model_superseded": true,
+    "cp_camera_plus_hyp_owner_set_required": false,
+    "pkvm_concept_reopened": true
+  },
+  "linux": {
+    "pkvm_protected_cpu_pages_possible": true,
+    "camss_uses_dma_sg_addresses": true,
+    "trusted_iommu_dma_control_present": false,
+    "normal_host_dma_mapping_parity_safe": false,
+    "runtime_backend_selected": false
+  },
+  "runtime_actions": {
+    "windows_boot": false,
+    "pkvm_boot": false,
+    "ium_call": false,
+    "hyperv_call": false,
+    "iommu_change": false,
+    "scm_assign_mem": false,
+    "qtee_qsee": false,
+    "camera_runtime": false
+  },
+  "next_gate": "E004cm trusted CAMSS device-GPA/SMMU mapping feasibility, static/compile-only first"
+}

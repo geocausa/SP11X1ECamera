@@ -1,0 +1,210 @@
+SYMBOL IumAssignMemoryToSocDomain @1400b0c70 sig=ulonglong __cdecl IumAssignMemoryToSocDomain(ulonglong * param_1, ulonglong param_2, void * param_3, uint param_4, uint * param_5, longlong * * param_6, undefined8 param_7, undefined8 param_8)
+SYMBOL IumAssignMemoryToSocDomain$filt$0 @14012488c sig=undefined4 __cdecl IumAssignMemoryToSocDomain$filt$0(undefined8 param_1, longlong param_2)
+
+=== DECOMPILATIONS ===
+
+//// IumAssignMemoryToSocDomain @1400b0c70 ////
+
+ulonglong IumAssignMemoryToSocDomain
+                    (ulonglong *param_1,ulonglong param_2,void *param_3,uint param_4,uint *param_5,
+                    longlong **param_6,longlong **param_7,longlong **param_8)
+
+{
+  ulonglong *puVar1;
+  char cVar2;
+  longlong *plVar3;
+  uint uVar4;
+  uint *puVar5;
+  void *_Dst;
+  ulonglong uVar6;
+  undefined8 extraout_x1;
+  undefined8 extraout_x1_00;
+  undefined8 extraout_x1_01;
+  undefined8 uVar7;
+  longlong *plVar8;
+  longlong *plVar9;
+  ulonglong *puVar10;
+  int iVar11;
+  longlong **pplVar12;
+  longlong in_x18;
+  longlong extraout_x18;
+  ulonglong uVar13;
+  int iVar14;
+  longlong **pplVar15;
+  undefined1 auVar16 [16];
+  longlong *local_78;
+  uint local_6c;
+  uint local_68;
+  ulonglong local_60;
+  ulonglong local_58;
+  undefined4 local_50;
+  int iStack_4c;
+  
+  local_6c = (uint)param_7;
+  iVar14 = (int)param_5;
+  iVar11 = (int)param_6;
+  local_78 = (longlong *)0x0;
+  local_60 = 0;
+  local_58 = 0;
+  pplVar15 = (longlong **)0x1;
+  if (local_6c != 2) {
+    if (local_6c == 4) {
+      pplVar15 = (longlong **)0x3;
+    }
+    else if (local_6c == 0x20) {
+      pplVar15 = (longlong **)0xd;
+    }
+    else {
+      if (local_6c != 0x40) {
+        return (ulonglong)DAT_1400b0f20;
+      }
+      pplVar15 = (longlong **)0xf;
+    }
+  }
+  if ((int)param_8 != 0) {
+    return (ulonglong)DAT_1400b0f24;
+  }
+  if (*(longlong *)(in_x18 + 8) == 0) {
+    puVar5 = (uint *)0x0;
+  }
+  else {
+    puVar5 = *(uint **)(*(longlong *)(in_x18 + 8) + 0x50);
+  }
+  pplVar12 = param_6;
+  uVar4 = SkhalValidateProcessIoDomain(puVar5,iVar11);
+  if ((int)uVar4 < 0) {
+    return (ulonglong)uVar4;
+  }
+  uVar4 = SkobCreateObjectEx('\0',0x140001aa8,(int *)0x0,&local_78,param_5,pplVar12,param_7,param_8)
+  ;
+  plVar3 = local_78;
+  if ((int)uVar4 < 0) {
+    return (ulonglong)uVar4;
+  }
+  local_78[1] = 0;
+  *local_78 = 0;
+  local_78[3] = 0;
+  local_78[2] = 0;
+  cVar2 = *(char *)(*(longlong *)(extraout_x18 + 8) + 0x60);
+  puVar10 = &local_58;
+  plVar9 = local_78 + 1;
+  auVar16 = SkmmReferenceSecureSection
+                      (param_2,cVar2,plVar9,(longlong *)puVar10,param_5,pplVar12,param_7,param_8);
+  uVar7 = auVar16._8_8_;
+  uVar13 = auVar16._0_8_ & 0xffffffff;
+  if (auVar16._0_4_ < 0) {
+    plVar3[1] = 0;
+    goto LAB_1400b0ef8;
+  }
+  if (0xffffffff < local_58) {
+    uVar13 = (ulonglong)DAT_1400b0f28;
+    goto LAB_1400b0ef8;
+  }
+  uVar4 = (uint)(local_58 >> 0xc);
+  if (iVar14 == 0) {
+    if (param_3 == (void *)0x0) {
+      iVar14 = uVar4 - param_4;
+      goto LAB_1400b0d98;
+    }
+  }
+  else {
+LAB_1400b0d98:
+    if (param_4 < param_4 + iVar14 && param_4 + iVar14 <= uVar4) {
+      if (param_3 == (void *)0x0) {
+LAB_1400b0e28:
+        plVar8 = (longlong *)(ulonglong)DAT_1400b0f2c;
+        auVar16 = SkAllocatePool(0x200,((ulonglong)(iVar14 + 6) & 0x1fffffff) << 3,plVar8,puVar10,
+                                 param_5,pplVar12,param_7,param_8);
+        uVar7 = auVar16._8_8_;
+        plVar9 = auVar16._0_8_;
+        *plVar3 = (longlong)plVar9;
+        if (plVar9 != (longlong *)0x0) {
+          param_5 = (uint *)(ulonglong)(uint)(iVar14 << 0xc);
+          puVar10 = (ulonglong *)((ulonglong)param_4 << 0xc);
+          uVar4 = SkmmProbeSecureSectionPages
+                            (plVar3[1],local_6c,plVar9,(longlong)puVar10,iVar14 << 0xc);
+          uVar13 = (ulonglong)uVar4;
+          uVar7 = extraout_x1;
+          if (-1 < (int)uVar4) {
+            *(int *)(plVar3 + 3) = iVar11;
+            *(int *)((longlong)plVar3 + 0x1c) = iVar14;
+            local_50 = 2;
+            param_5 = (uint *)((longlong)plVar3 + 0x1c);
+            puVar10 = (ulonglong *)plVar3[2];
+            plVar9 = (longlong *)(*plVar3 + 0x30);
+            iStack_4c = iVar11;
+            uVar6 = ShvlMapSparseDeviceGpaPages
+                              (CONCAT44(iVar11,2),(ulonglong)param_6 & 0xffffffff,(longlong)plVar9,
+                               (longlong)puVar10,param_5,(int)pplVar15);
+            uVar13 = uVar6 & 0xffffffff;
+            uVar7 = extraout_x1_00;
+            pplVar12 = pplVar15;
+            if (-1 < (int)uVar6) {
+              puVar10 = &local_60;
+              plVar9 = (longlong *)0x0;
+              local_68 = SkobCreateHandle((longlong)plVar3,'\0',(longlong **)0x0,puVar10,
+                                          (ulonglong)param_5,pplVar15,param_7,param_8);
+              uVar13 = (ulonglong)local_68;
+              uVar7 = extraout_x1_01;
+              pplVar12 = pplVar15;
+              if (-1 < (int)local_68) {
+                if (cVar2 == '\0') {
+                  *param_1 = local_60;
+                }
+                else {
+                  puVar1 = param_1;
+                  if ((ulonglong *)0x7ffffffeffff < param_1) {
+                    puVar1 = (ulonglong *)&DAT_7fffffff0000;
+                  }
+                  *puVar1 = *puVar1;
+                  *param_1 = local_60;
+                }
+              }
+            }
+          }
+          goto LAB_1400b0ef8;
+        }
+      }
+      else {
+        uVar4 = iVar14 << 3;
+        if (((cVar2 != '\0') && (uVar4 != 0)) && (((ulonglong)param_3 & 3) != 0)) {
+                    /* WARNING: Subroutine does not return */
+          ExRaiseDatatypeMisalignment();
+        }
+        plVar8 = (longlong *)(ulonglong)DAT_1400b0f2c;
+        auVar16 = SkAllocatePool(0x200,(ulonglong)uVar4,plVar8,puVar10,param_5,pplVar12,param_7,
+                                 param_8);
+        uVar7 = auVar16._8_8_;
+        _Dst = auVar16._0_8_;
+        plVar3[2] = (longlong)_Dst;
+        if (_Dst != (void *)0x0) {
+          memmove(_Dst,param_3,(ulonglong)uVar4);
+          goto LAB_1400b0e28;
+        }
+      }
+      plVar9 = plVar8;
+      uVar13 = (ulonglong)DAT_1400b0f30;
+      goto LAB_1400b0ef8;
+    }
+  }
+  uVar13 = (ulonglong)DAT_1400b0f34;
+LAB_1400b0ef8:
+  SkobDereferenceObject((longlong)plVar3,uVar7,plVar9,puVar10,param_5,pplVar12,param_7,param_8);
+  return uVar13;
+}
+
+
+
+//// IumAssignMemoryToSocDomain$filt$0 @14012488c ////
+
+undefined4 IumAssignMemoryToSocDomain_filt_0(undefined8 param_1,longlong param_2)
+
+{
+  longlong in_x18;
+  
+  *(undefined8 *)(param_2 + 0x48) = *(undefined8 *)(in_x18 + 8);
+  *(uint *)(param_2 + 0x20) = (uint)(*(char *)(*(longlong *)(param_2 + 0x48) + 0x60) == '\x01');
+  return *(undefined4 *)(param_2 + 0x20);
+}
+
+

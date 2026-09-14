@@ -1,0 +1,6 @@
+// ExtractUnmapCallers.java
+//@category SP11.Camera
+import ghidra.app.script.GhidraScript; import ghidra.app.decompiler.*; import ghidra.program.model.listing.*; import ghidra.program.model.symbol.*; import java.io.*; import java.util.*;
+public class ExtractUnmapCallers extends GhidraScript {
+ public void run() throws Exception {String[] a=getScriptArgs(); PrintWriter p=new PrintWriter(new FileOutputStream(a[0])); SymbolTable st=currentProgram.getSymbolTable(); FunctionManager fm=currentProgram.getFunctionManager(); DecompInterface di=new DecompInterface(); di.openProgram(currentProgram); String[] names={"ShvlUnmapSparseDeviceGpaPages","ShvlUnmapDeviceGpaPages"}; LinkedHashSet<Function> fs=new LinkedHashSet<>(); for(String n:names){for(Symbol s:st.getGlobalSymbols(n)){Function f=fm.getFunctionAt(s.getAddress()); if(f!=null){p.println("TARGET "+n+" @"+f.getEntryPoint()); for(Function c:f.getCallingFunctions(monitor)){p.println(" CALLER "+c.getName()+" @"+c.getEntryPoint()+" sig="+c.getSignature()); fs.add(c);}}}} for(Function f:fs){p.println("\n//// "+f.getName()+" @"+f.getEntryPoint()+" ////"); DecompileResults dr=di.decompileFunction(f,180,monitor); if(dr!=null&&dr.decompileCompleted()&&dr.getDecompiledFunction()!=null)p.println(dr.getDecompiledFunction().getC());} di.dispose();p.close();}
+}

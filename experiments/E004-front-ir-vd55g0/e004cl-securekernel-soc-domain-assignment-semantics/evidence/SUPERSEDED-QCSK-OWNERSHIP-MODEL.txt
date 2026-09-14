@@ -1,0 +1,24 @@
+E004cl SUPERSEDED OWNERSHIP INTERPRETATION
+E004ca/E004ck had used QcSkExt8380.exe's separate QcSkAssignMemoryToSocDomain path as evidence that the SecureISP frame target became a Qualcomm VMID 0x0d page-owner assignment.
+
+The exact Secure Kernel PDB now resolves the actual IUM SVC #0x8000 implementation used by QcISPTrustlet8380.dll:
+  IumAssignMemoryToSocDomain
+    -> SkhalValidateProcessIoDomain
+    -> SkmmReferenceSecureSection
+    -> SkmmProbeSecureSectionPages
+    -> ShvlMapSparseDeviceGpaPages
+
+The returned assignment handle owns this device mapping. Its destructor path is:
+  SkhalpDeleteDomainAssignment
+    -> ShvlUnmapSparseDeviceGpaPages
+
+There is no QcSkExt call in this Secure Kernel path and no physical-page ownership replacement in the recovered implementation.
+
+QcSkExt remains valid authority for its own PIL/platform memory-assignment workflows, including camera firmware handoff and HYP assignment policy, but it is not the frame-buffer IUM assignment implementation.
+
+CORRECTION:
+- keep: domain 0x0d is the camera IO-domain identifier used by the trustlet;
+- replace: "CP_CAMERA physical owner write-only" for this frame target;
+- with: "Secure-Kernel-owned protected pages + Hyper-V device-GPA map to IO domain 0x0d, R/W flags 0x3".
+
+E004ck's direct {CP_CAMERA,HYP} ownership matrix is therefore not the correct model for the Windows frame target and is superseded by E004cl.

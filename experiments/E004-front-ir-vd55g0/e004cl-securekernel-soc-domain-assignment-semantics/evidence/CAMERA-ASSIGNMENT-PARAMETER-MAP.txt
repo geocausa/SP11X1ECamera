@@ -1,0 +1,37 @@
+E004cl CAMERA ASSIGNMENT PARAMETER MAP
+
+TRUSTLET CALL (existing oracle evidence):
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/verify_e004bp.py:15:    "AssignMemoryToSocDomain(hFileMappingObject,pvVar7,0,uVar1,0xd,4,0)",
+experiments/E004-front-ir-vd55g0/e004bp-windows-two-buffer-protected-pipeline-static/evidence/INTERNAL-CP-CAMERA-HW-TARGET.txt:121:      lVar8 = AssignMemoryToSocDomain(hFileMappingObject,pvVar7,0,uVar1,0xd,4,0);
+experiments/E004-front-ir-vd55g0/e004ca-vtl1-secure-section-protection-semantics/evidence/EXTERNAL-VS-INTERNAL-CREATE-CONTRACT.txt:263:      lVar8 = AssignMemoryToSocDomain(hFileMappingObject,pvVar7,0,uVar1,0xd,4,0);
+experiments/E004-front-ir-vd55g0/e004ca-vtl1-secure-section-protection-semantics/verify_e004ca.py:17:e=need('evidence/EXTERNAL-VS-INTERNAL-CREATE-CONTRACT.txt','CreateSecureSection(&local_378,4,4,param_3,0)','CreateSecureSection(0,4,4,*(undefined4 *)(param_1 + 0x20),2)','AssignMemoryToSocDomain(hFileMappingObject,pvVar7,0,uVar1,0xd,4,0)','scenario_guid=AE53FC6E-8D89-4488-9D2E-4D008731C5FD')
+
+API / SECUREKERNEL ARGUMENT MAP
+IumSdk user-visible call shape:
+  AssignMemoryToSocDomain(section, page_array, page_offset, page_count, io_domain, protection, flags)
+IumBase prepends output assignment-handle pointer before entering IUM SVC #0x8000.
+SecureKernel signature therefore maps as:
+  param_1 = output assignment handle
+  param_2 = secure-section handle
+  param_3 = optional caller page/IPA array
+  param_4 = page offset
+  param_5 = page count
+  param_6 = IO domain
+  param_7 = protection
+  param_8 = flags
+
+CAMERA VALUES
+  io_domain = 0x0d
+  protection = 4 (Windows PAGE_READWRITE class)
+  flags = 0
+
+SECUREKERNEL TRANSLATION
+  protection 2    -> device GPA flags 0x1
+  protection 4    -> device GPA flags 0x3
+  protection 0x20 -> device GPA flags 0x0d
+  protection 0x40 -> device GPA flags 0x0f
+Therefore camera protection=4 becomes device GPA R|W flags 0x3.
+
+DOMAIN AUTHORIZATION
+SkhalValidateProcessIoDomain(process_policy, io_domain) walks the secure process policy's IO-domain list and succeeds only on an exact domain match.
+Thus 0x0d is a policy-authorized secure-process IO domain, not inferred here as a replacement physical-page owner.
