@@ -1,0 +1,62 @@
+E004ce BUILD / ZERO-RUNTIME PROOF
+baseline_module=9699c4c18ec0724d94b1ef186482fed9ce73d4621541ed45cf26ae0557552d7c
+scaffold_module=d0e3537b640cc81970481180cad45c94d5b76d76b301c54dbf236ac386c937ed
+baseline_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+scaffold_text=fa5a8000207830a11d34fb46301cfd1b38f312a7666f6726bc170e2d0597e45e
+TEXT_BYTE_IDENTICAL=1
+baseline_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+scaffold_vermagic=7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64
+
+--- capability gate ---
+85:	CAMSS_PROTECTED_CAP_HLOS_ACCESS_REVOKED       = 1U << 0,
+86:	CAMSS_PROTECTED_CAP_TRUSTED_OWNER_RESOLVED    = 1U << 1,
+87:	CAMSS_PROTECTED_CAP_TRUSTED_WORKER_VISIBLE    = 1U << 2,
+88:	CAMSS_PROTECTED_CAP_RELEASE_PATH_RESOLVED     = 1U << 3,
+89:	CAMSS_PROTECTED_CAP_NO_HLOS_TRANSFER_FALLBACK = 1U << 4,
+90:	CAMSS_PROTECTED_CAP_EXTERNAL_TARGET_DISTINCT  = 1U << 5,
+93:#define CAMSS_PROTECTED_PROVIDER_REQUIRED_CAPS \
+94:	(CAMSS_PROTECTED_CAP_HLOS_ACCESS_REVOKED | \
+95:	 CAMSS_PROTECTED_CAP_TRUSTED_OWNER_RESOLVED | \
+96:	 CAMSS_PROTECTED_CAP_TRUSTED_WORKER_VISIBLE | \
+97:	 CAMSS_PROTECTED_CAP_RELEASE_PATH_RESOLVED | \
+98:	 CAMSS_PROTECTED_CAP_NO_HLOS_TRANSFER_FALLBACK | \
+99:	 CAMSS_PROTECTED_CAP_EXTERNAL_TARGET_DISTINCT)
+110:	bool runtime_binding_authorized;
+113:	bool external_reuses_internal_target;
+114:	bool hlos_transfer_fallback_allowed;
+166:	BUILD_BUG_ON(CAMSS_PROTECTED_PROVIDER_REQUIRED_CAPS != 0x3f);
+
+--- forbidden concrete backend identifiers in new contract / added C only ---
+FORBIDDEN_CONCRETE_BACKEND_MATCHES=0
+
+--- callback invocations in modified C/header ---
+CALLBACK_INVOCATIONS=0
+
+--- exact production C diff ---
+--- /tmp/e004ce-camss-baseline/camss-video.c	2026-09-05 09:29:09.543184962 +0100
++++ /tmp/e004ce-camss-scaffold/camss-video.c	2026-09-14 06:15:33.618189180 +0100
+@@ -16,6 +16,7 @@
+ #include <media/videobuf2-dma-sg.h>
+ 
+ #include "camss-video.h"
++#include "camss-protected-pipeline.h"
+ #include "camss-csid.h"
+ #include "camss-vfe.h"
+ #include "camss.h"
+@@ -1199,6 +1200,7 @@
+ 	struct vb2_queue *q;
+ 	int ret;
+ 
++	camss_protected_pipeline_compile_contract();
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
+
+--- runtime safety ---
+7.1.5-sp11-render-parity-v4+
+BOOT_IMAGE=/boot/sp11-7.1.5-audio-fullio-v19c/vmlinuz-7.1.5-sp11-render-parity-v4+
+sp11_entry=7.1.5-sp11-fullio-v19c
+saved_entry=sp11-audio-fullio-v19c
+next_entry=
+modules:
+nodes:
