@@ -38,6 +38,11 @@ with tempfile.TemporaryDirectory() as td:
 # Windows-authoritative C230 nested-filter basis closure.
 assert R['swasf']['c230_scalar_basis_exact']
 assert R['swasf']['c230_windows_basis_cases'] == 232
+assert R['swasf']['c230_random_differential_exact']
+assert R['swasf']['c230_random_differential_cases']==4096
+rr=(D/'oracle/windows-c230-random-diff/RESULT.txt').read_text(errors='replace')
+assert 'BYTE_EXACT=true' in rr
+assert rr.count(R['swasf']['c230_random_differential_sha256'])==2
 out=subprocess.check_output([str(D/'verify_c230_windows_basis.py')],text=True)
 assert 'PASS (232 direct oracle cases)' in out
 with tempfile.TemporaryDirectory() as td:

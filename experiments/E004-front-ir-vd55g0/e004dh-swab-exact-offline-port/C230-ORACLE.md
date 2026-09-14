@@ -48,4 +48,4 @@ The 48-byte post-init constant block at trustlet RVA `0x3c120` contains the uniq
 
 `scaffold/sp11-swasf-c230.c` implements both two-lane filters with the Windows rounding shifts. `verify_c230_windows_basis.py` compiles that C as a shared object and compares it against **232 direct Windows oracle cases** (±256 around 512 and ±4096 around zero), including every row/column basis position and both tail inputs.
 
-Current result: **232/232 byte/numeric outcomes match**.  A separate random differential oracle is the next strengthening step before declaring the nested helper completely closed and folding it into the full C3E8 scalar port.
+Current result: **232/232 byte/numeric outcomes match**.  A deterministic 4096-case random differential against the shipping Windows helper is also byte-exact.  The Windows and scalar aggregate SHA-256 values are both `f926c06b87b2679132cd9ac41b0a590578e712e353ce91732a646b584756d035`.  The nested C230 helper is therefore closed; the next task is the C3E8 wrapper/edge semantics.
