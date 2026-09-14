@@ -1,0 +1,23 @@
+E004dg WINDOWS BRANCH CONTRACT
+
+Carried directly from E004cf transfer dispatcher:
+
+FUN_1800037c8 validates non-null source/destination and non-zero width/height, then selects:
+
+1. synthetic global enabled -> FUN_1800033d8
+   y = width * height
+   memset(dst, 100, y)
+   memset(dst + y, 0x80, y/2)
+   source is unused
+
+2. request_id < 10 -> FUN_180003718
+   y = width * height
+   memmove/copy(dst, src, y)
+   memset(dst + y, 0x80, y/2)
+
+3. request_id >= 10 -> FUN_180003478
+   SWABF(src -> scratch)
+   SWASF(scratch -> dst)
+   memset(dst + y, 0x80, y/2)
+
+E004dg implements branches 1 and 2 exactly at the byte-operation level and returns a dedicated fail-closed error for branch 3. It deliberately does NOT substitute ordinary copy for the later SWAB path.
