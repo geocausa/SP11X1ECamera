@@ -1,0 +1,49 @@
+{
+  "experiment": "E004ct",
+  "status": "PASS_GOLDEN_MULTI_REGION_SG_OWNERSHIP_BACKPORT_COMPILES",
+  "mode": "static-plus-compile-only",
+  "golden_scm": {
+    "existing_mp_assign_smc_reused": true,
+    "existing_low_level_multi_descriptor_call": true,
+    "new_secure_world_abi": false,
+    "descriptor_transport": "qcom_tzmem",
+    "production_source_modified": false
+  },
+  "sg_contract": {
+    "max_regions_per_batch": 32,
+    "batch_bytes_less_than": 2097152,
+    "whole_table_prevalidated": true,
+    "sg_offset_preserved": true,
+    "partial_failure_fail_closed": true,
+    "system_heap_sg_mechanically_viable": true,
+    "contiguous_heap_fundamentally_required": false
+  },
+  "build": {
+    "baseline_text_sha256": "5f3f150e41dbb6675036e991273138db178eda3331d8057a36256635aae36633",
+    "staged_text_sha256": "4934ec5ce69238379ea727f92693b251720a797f8d18b0f5acbac037541d7aee",
+    "baseline_text_size": 21852,
+    "staged_text_size": 22300,
+    "text_delta": 448,
+    "sg_consumer_links_to_new_api": true
+  },
+  "still_missing": {
+    "golden_mem_buf_ownership_tracking": true,
+    "protected_heap_cpu_access_policy": true,
+    "cpz_runtime_binding": true,
+    "provider_state_machine": true
+  },
+  "runtime_actions": {
+    "module_loaded": false,
+    "kernel_replaced": false,
+    "scm_assign_mem": false,
+    "ownership_change": false,
+    "protected_allocation": false,
+    "fastrpc_invoke": false,
+    "cpz_process_create": false,
+    "dt_change": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004cu Golden protected dma-buf ownership state/backing wrapper, compile-only first"
+}

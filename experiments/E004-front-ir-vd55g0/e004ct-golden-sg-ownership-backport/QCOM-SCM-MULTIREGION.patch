@@ -1,0 +1,82 @@
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/drivers/firmware/qcom/qcom_scm.c	2026-07-24 15:21:27.000000000 +0100
++++ experiments/E004-front-ir-vd55g0/e004ct-golden-sg-ownership-backport/scaffold/qcom_scm-e004ct.c	2026-09-14 10:21:32.449126793 +0100
+@@ -62,19 +62,6 @@
+ 	unsigned int wq_cnt;
+ };
+ 
+-struct qcom_scm_current_perm_info {
+-	__le32 vmid;
+-	__le32 perm;
+-	__le64 ctx;
+-	__le32 ctx_size;
+-	__le32 unused;
+-};
+-
+-struct qcom_scm_mem_map_info {
+-	__le64 mem_addr;
+-	__le64 mem_size;
+-};
+-
+ /**
+  * struct qcom_scm_qseecom_resp - QSEECOM SCM call response.
+  * @result:    Result or status of the SCM call. See &enum qcom_scm_qseecom_result.
+@@ -1424,6 +1411,59 @@
+ EXPORT_SYMBOL_GPL(qcom_scm_assign_mem);
+ 
+ /**
++ * qcom_scm_assign_mem_regions() - reassign several physical memory regions.
++ *
++ * The public descriptors are copied into the same SCM TZ-memory pool used by
++ * qcom_scm_assign_mem(), so the secure call never consumes caller kmalloc or
++ * vmalloc addresses directly. This is the multi-region form required by
++ * secure_buffer-style SG batching.
++ */
++int qcom_scm_assign_mem_regions(const struct qcom_scm_mem_map_info *mem_regions,
++				size_t mem_regions_sz, const u32 *srcvms, size_t src_sz,
++				const struct qcom_scm_current_perm_info *newvms,
++				size_t newvms_sz)
++{
++	phys_addr_t ptr_phys, mem_phys, src_phys, dest_phys;
++	size_t mem_off = 0;
++	size_t src_off, dest_off, ptr_sz;
++	__le32 *src;
++	unsigned int i, nr_src;
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++	if (!mem_regions || !mem_regions_sz || !srcvms || !src_sz ||
++	    !newvms || !newvms_sz ||
++	    mem_regions_sz % sizeof(*mem_regions) ||
++	    src_sz % sizeof(*srcvms) || newvms_sz % sizeof(*newvms))
++		return -EINVAL;
++
++	src_off = ALIGN(mem_regions_sz, SZ_64);
++	dest_off = src_off + ALIGN(src_sz, SZ_64);
++	ptr_sz = dest_off + ALIGN(newvms_sz, SZ_64);
++
++	void *ptr __free(qcom_tzmem) = qcom_tzmem_alloc(__scm->mempool,
++							ptr_sz, GFP_KERNEL);
++	if (!ptr)
++		return -ENOMEM;
++
++	ptr_phys = qcom_tzmem_to_phys(ptr);
++	mem_phys = ptr_phys + mem_off;
++	src_phys = ptr_phys + src_off;
++	dest_phys = ptr_phys + dest_off;
++
++	memcpy(ptr + mem_off, mem_regions, mem_regions_sz);
++	src = ptr + src_off;
++	nr_src = src_sz / sizeof(*srcvms);
++	for (i = 0; i < nr_src; i++)
++		src[i] = cpu_to_le32(srcvms[i]);
++	memcpy(ptr + dest_off, newvms, newvms_sz);
++
++	return __qcom_scm_assign_mem(__scm->dev, mem_phys, mem_regions_sz,
++				     src_phys, src_sz, dest_phys, newvms_sz);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_assign_mem_regions);
++
++/**
+  * qcom_scm_ocmem_lock_available() - is OCMEM lock/unlock interface available
+  */
+ bool qcom_scm_ocmem_lock_available(void)

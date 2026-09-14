@@ -1,0 +1,55 @@
+--- /home/geoca/Documents/SP11-PROJECT/02-kernel/.golden-v33-delta-replay/src/include/linux/firmware/qcom/qcom_scm.h	2026-07-24 15:21:27.000000000 +0100
++++ experiments/E004-front-ir-vd55g0/e004ct-golden-sg-ownership-backport/scaffold/include/linux/firmware/qcom/qcom_scm.h	2026-09-14 10:21:32.449332098 +0100
+@@ -26,6 +26,41 @@
+ 	int perm;
+ };
+ 
++/* Multi-region ownership descriptors used by Qualcomm MP/HYP_ASSIGN. */
++struct qcom_scm_current_perm_info {
++	__le32 vmid;
++	__le32 perm;
++	__le64 ctx;
++	__le32 ctx_size;
++	__le32 unused;
++};
++
++struct qcom_scm_mem_map_info {
++	__le64 mem_addr;
++	__le64 mem_size;
++};
++
++static inline void qcom_scm_populate_vmperm_info(
++		struct qcom_scm_current_perm_info *destvm, int vmid, int perm)
++{
++	if (!destvm)
++		return;
++	destvm->vmid = cpu_to_le32(vmid);
++	destvm->perm = cpu_to_le32(perm);
++	destvm->ctx = 0;
++	destvm->ctx_size = 0;
++	destvm->unused = 0;
++}
++
++static inline void qcom_scm_populate_mem_map_info(
++		struct qcom_scm_mem_map_info *mem, phys_addr_t addr, size_t size)
++{
++	if (!mem)
++		return;
++	mem->mem_addr = cpu_to_le64(addr);
++	mem->mem_size = cpu_to_le64(size);
++}
++
+ enum qcom_scm_ocmem_client {
+ 	QCOM_SCM_OCMEM_UNUSED_ID = 0x0,
+ 	QCOM_SCM_OCMEM_GRAPHICS_ID,
+@@ -109,6 +144,10 @@
+ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz, u64 *src,
+ 			const struct qcom_scm_vmperm *newvm,
+ 			unsigned int dest_cnt);
++int qcom_scm_assign_mem_regions(const struct qcom_scm_mem_map_info *mem_regions,
++				size_t mem_regions_sz, const u32 *srcvms, size_t src_sz,
++				const struct qcom_scm_current_perm_info *newvms,
++				size_t newvms_sz);
+ 
+ bool qcom_scm_ocmem_lock_available(void);
+ int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,

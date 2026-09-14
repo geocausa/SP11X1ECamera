@@ -1,0 +1,22 @@
+E004ct SG BATCH FAILURE CONTRACT
+
+Qualcomm secure_buffer-style ownership changes batch a scatter-gather table because the MP/HYP_ASSIGN request has bounded descriptor capacity. The E004ct proof uses:
+- at most 32 SG regions per call;
+- each batch below 2 MiB;
+- qcom_scm_assign_mem_regions() for each batch.
+
+Correctness fixes made during audit:
+- every SG entry is validated before the first ownership transition;
+- sg_phys(sg) is used so non-zero SG offsets are preserved;
+- a single region at or above the 2 MiB batch bound is rejected before any transition;
+- descriptor buffers are copied into qcom_tzmem by SCM rather than relying on caller DMA mappings.
+
+An important lifetime property remains: a later batch can fail after earlier batches have already changed physical ownership. There is no generally safe automatic rollback unless the caller knows exactly which ranges succeeded and which owner set secure world accepted.
+
+Therefore any batch-assignment failure after execution starts is converted to -EADDRNOTAVAIL and must be treated by the future provider as POISONED / ownership-unknown:
+- retain backing;
+- do not return it to the ordinary heap;
+- do not expose an HLOS CPU fallback;
+- require explicit recovery/reclaim proof before release.
+
+This matches E004cq's established fail-closed reclaim rule.

@@ -1,0 +1,22 @@
+E004ct GOLDEN qcom_scm MULTI-REGION BACKPORT DELTA
+
+Golden preimages:
+- drivers/firmware/qcom/qcom_scm.c
+  sha256 9937c99567878507e03e213a0b89b2f2c1b31dec1ac89c0342deb387de467c33
+- include/linux/firmware/qcom/qcom_scm.h
+  sha256 7c946d7e6509af94b9902f17e572153db88956a815d5897f3730a3abbe647d04
+
+Golden already contains the low-level static __qcom_scm_assign_mem() that accepts arrays of memory-region descriptors, source VMIDs and destination permission records. The ordinary exported qcom_scm_assign_mem() creates a one-region descriptor and places all secure-call descriptors in the SCM qcom_tzmem pool.
+
+The E004ct backport therefore adds no new SMC ID and invents no new secure-world protocol. It only:
+1. exposes the already-existing descriptor layouts in the public qcom_scm header;
+2. exposes descriptor-population helpers;
+3. adds qcom_scm_assign_mem_regions();
+4. copies caller descriptors into the same qcom_tzmem pool used by Golden qcom_scm_assign_mem();
+5. forwards the qcom_tzmem physical addresses to the unchanged __qcom_scm_assign_mem().
+
+The first draft used caller kmalloc buffers plus virt_to_phys. Audit rejected that shape because Golden's current SCM implementation deliberately stages descriptors in qcom_tzmem. The final proof preserves Golden's secure-call transport model.
+
+The patched Golden translation unit compiles successfully. Its .text increases by 448 bytes in this external-object build.
+
+No modified SCM code was linked into the running kernel or loaded as a module.
