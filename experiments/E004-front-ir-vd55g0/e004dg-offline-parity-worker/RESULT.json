@@ -1,17 +1,18 @@
 {
   "experiment": "E004dg",
-  "status": "PASS_OFFLINE_HEXAGON_WORKER_SYNTHETIC_AND_EARLY_COPY_EXACT_SWAB_PENDING",
-  "mode": "offline-source-build-and-synthetic-test",
+  "status": "PASS_OFFLINE_HEXAGON_WORKER_FULL_WINDOWS_SWABF_SWASF_EXACT",
+  "mode": "offline-source-build-and-windows-full-frame-differential",
   "worker": {
     "source_controlled": true,
     "hexagon_v73_compiles": true,
     "unresolved_symbols": 0,
-    "text_size": 908,
+    "text_size": 7812,
     "synthetic_branch_exact": true,
     "early_copy_branch_exact": true,
-    "later_swab_branch_exact": false,
+    "later_swab_branch_exact": true,
     "later_swab_fallback_used": false,
-    "later_swab_status": "SP11_WORKER_ESWAB_PENDING"
+    "later_swab_status": "SWABF_SWASF_BYTE_EXACT",
+    "caller_owned_work_buffer": true
   },
   "validation": {
     "overflow_safe_geometry": true,
@@ -20,7 +21,15 @@
     "serialized_extent_bounded": true,
     "source_extent_bounded": true,
     "host_vectors_pass": true,
-    "hexagon_object_sha256": "5c4ec67e0ced0eaf50e7a91eae89e236efcb1c984690c85a9739cf014bb1926c"
+    "hexagon_object_sha256": "120f534cdfaa70b4a2e461a39a07cc6f6987846ed9741242214b10ad33c0e4fa",
+    "work_extent_bounded": true,
+    "full_frame_geometry": "644x604 NV12",
+    "full_frame_luma_bytes": 388976,
+    "full_frame_luma_diff_bytes": 0,
+    "full_frame_tail_diff_bytes": 0,
+    "stable_windows_swasf_luma_sha256": "591a706fcb1710b8aa152f4f672c5954e181fa783a09e3d9d4be038b3c6202f7",
+    "worker_full_output_sha256": "731aa107edadded21f368c01f38ad8df77c8c51a86446aacb7db105795ddcab0",
+    "hexagon_non_pic": true
   },
   "trust": {
     "signed": false,
@@ -38,5 +47,24 @@
     "windows_boot": false,
     "secureisp_runtime": false
   },
-  "next_gate": "E004dh exact SWABF/SWASF algorithm extraction and offline port"
+  "next_gate": "Protected-worker packaging/admission/signing integration; Linux SecureISP runtime remains unauthorized",
+  "windows_race_fixtures": {
+    "stable_primary": true,
+    "race_a_diff_bytes": 34,
+    "race_a_rows": [
+      320,
+      560
+    ],
+    "race_b_diff_bytes": 1,
+    "race_b_rows": [
+      243
+    ],
+    "uv_diff_bytes": 0,
+    "interpretation": "preserved Windows eight-worker scheduling nondeterminism; deterministic scalar target is stable fixture"
+  },
+  "tail_contract": {
+    "worker_tail": "0x80 neutral fill after SWASF",
+    "standalone_trustlet_fixture_tail": "preserves input UV bytes",
+    "comparison_rule": "compare integrated worker luma to stable trustlet SWASF luma, then enforce the independently Windows-proven worker 0x80 tail contract"
+  }
 }

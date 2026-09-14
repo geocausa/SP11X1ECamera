@@ -1,6 +1,6 @@
 {
   "gate": "E004dh",
-  "status": "PASS_WINDOWS_LIVE_SWAB_TUNING_SWABF_C3E8_CD90_BYTE_EXACT_FULL_SWASF_INTEGRATION_PENDING",
+  "status": "PASS_WINDOWS_LIVE_SWAB_TUNING_SWABF_SWASF_FULL_FRAME_BYTE_EXACT",
   "authority": "Windows live oracle is normative; static reverse engineering is explanatory only",
   "windows_oracle": {
     "profile": "Surface FaceAuth IR 644x604 NV12 60fps",
@@ -43,7 +43,7 @@
   "swasf": {
     "worker_entry": "FUN_18001d2a0",
     "eight_worker_partitions": true,
-    "pixel_transform_port_complete": false,
+    "pixel_transform_port_complete": true,
     "helper_local_extrema_exact": true,
     "helper_c078_activity_exact": true,
     "c078_basis_windows_proven": true,
@@ -93,7 +93,22 @@
     "cd90_random_differential_exact": true,
     "cd90_random_differential_cases": 4096,
     "cd90_random_differential_lanes": 32768,
-    "cd90_windows_vectors_sha256": "86b1851e1023d4659a50b89ff8f9ace26fe5ec344ee434066e2c5d9887702785"
+    "cd90_windows_vectors_sha256": "86b1851e1023d4659a50b89ff8f9ace26fe5ec344ee434066e2c5d9887702785",
+    "full_scalar_reference_complete": true,
+    "full_frame_windows_stable_exact": true,
+    "full_frame_luma_bytes": 388976,
+    "full_frame_luma_diff_bytes": 0,
+    "full_frame_luma_sha256": "591a706fcb1710b8aa152f4f672c5954e181fa783a09e3d9d4be038b3c6202f7",
+    "windows_tuning_words": 513,
+    "windows_activity_scale": 253,
+    "root_prefilter": "clamped separable [1,4,6,4,1]x[1,4,6,4,1], rounded >>8",
+    "p11_p12_active_init": 256,
+    "full_scalar_hexagon_v73_compiles": true,
+    "full_scalar_hexagon_undefined_symbols": 0,
+    "full_scalar_hexagon_text_bytes": 5956,
+    "full_scalar_hexagon_object_sha256": "4503cf8322213ca6dab12b52848bce23d8b608c43fde545d37651864dd19b37e",
+    "integrated_worker_exact": true,
+    "integrated_worker_output_sha256": "731aa107edadded21f368c01f38ad8df77c8c51a86446aacb7db105795ddcab0"
   },
   "runtime": {
     "linux_secureisp": false,
@@ -101,7 +116,7 @@
     "protected_ownership_transition": false,
     "linux_camera_runtime": false
   },
-  "next": "Integrate the now Windows-proven SWABF + C3E8 + CD90 scalar stages into the offline parity worker; run complete SWASF/full-frame differential against preserved Windows oracle fixtures; only then remove SP11_WORKER_ESWAB_PENDING.",
+  "next": "Offline SWABF/SWASF parity is closed. Continue protected-worker packaging/admission/signing integration only; Linux SecureISP runtime remains unauthorized.",
   "windows_shipping_trustlet_oracle": {
     "geometry": "644x604 NV12",
     "synchronized_swabf_sha256": "d3cc53ef456f8d25d6b615336e7c4e13d22c986baceaa04fa12b035cc791bf80",

@@ -2,117 +2,70 @@
 
 ## Result
 
-**PASS / PARTIAL: the first source-controlled Hexagon parity worker now exists and reproduces the Windows synthetic/fill and early-request copy branches exactly at the byte-operation level. It compiles directly for Hexagon v73 as a freestanding object with no unresolved symbols, and native synthetic-vector tests pass. The later `request_id >= 10` SWABF→SWASF branch intentionally fails closed with a dedicated status until its exact algorithm is ported.**
+**PASS / CLOSED OFFLINE: the source-controlled parity worker now reproduces all three Windows transfer branches, including the later `request_id >= 10` `SWABF -> SWASF` path. The authoritative 644x604 synchronized Windows stable fixture is byte-exact across all 388,976 luma bytes, the worker's explicit `0x80` NV12 tail contract is exact, and the complete freestanding Hexagon-v73 bundle partial-links with zero unresolved symbols.**
 
-This is an offline engineering artifact only. It is not signed, admitted, installed or loaded into CPZ.
+This remains an offline engineering artifact. It is not signed, admitted, installed, or loaded into CPZ, and Linux SecureISP runtime was not used.
 
-## 1. Worker ABI
+## Worker ABI and memory boundary
 
-The worker request carries only the information already proven by the Windows/Linux contracts:
+The request preserves the already-proven Windows/Linux transfer contract: source and destination pointers/extents, geometry, request ID, payload offset, captured/serialized extents, synthetic selector, plus a caller-owned work buffer used only by the later SWAB path. The worker performs no allocation, syscall, FastRPC operation, ownership change, or secure-runtime action.
 
-- source pointer + extent;
-- destination base + extent;
-- width / height;
-- request ID;
-- payload offset;
-- captured extent;
-- serialized extent;
-- synthetic-fill selector.
+The work buffer contains the SWABF luma scratch and two signed-16 SWASF planes. Its alignment and exact required extent are checked before the later branch touches it.
 
-The worker never allocates memory, performs syscalls, opens FastRPC, changes ownership, or assumes HLOS access. It is pure bounded memory processing over mappings supplied by a future trusted runtime.
+## Exact Windows branches
 
-## 2. Strict extent validation
+The worker now implements:
 
-Before touching pixels it validates:
+1. synthetic: `Y=100`, tail=`0x80`;
+2. `request_id < 10`: copy luma, tail=`0x80`;
+3. `request_id >= 10`: `SWABF(source -> scratch) -> SWASF(scratch -> destination) -> 0x80 tail`.
 
-- non-null source/destination;
-- non-zero width and height;
-- overflow-safe `width * height`;
-- `frame_size = Y + Y/2`;
-- payload offset + frame size within serialized/captured/destination extents;
-- source extent large enough for the luma input.
+The third branch composes the Windows-proven SWABF scalar with the E004dh full SWASF scalar, which itself composes the Windows-proven local-extrema/activity helpers, C3E8/C230 stage, CD90 final combine, exact live 513-dword SWASF tuning, and exact worker glue.
 
-This keeps E004db's mapping/lifetime boundary separate from the worker algorithm.
+`SP11_WORKER_ESWAB_PENDING` is no longer part of the worker ABI because the complete two-stage path passed the Windows full-frame differential before that pending state was removed.
 
-## 3. Synthetic branch is byte-exact to the oracle
+## 644x604 Windows differential
 
-For the Windows synthetic branch:
+Input: `e004dh-swab-exact-offline-port/oracle/windows-sync-oracle/input-644x604-nv12.bin`.
 
-- first `width * height` bytes become decimal `100`;
-- following `width * height / 2` bytes become `0x80`;
-- source contents are ignored.
-
-The host vector test confirms the prefix before `payload_offset` is untouched and the two payload regions have the exact expected values.
-
-## 4. Early-request copy branch is byte-exact to the oracle
-
-For `request_id < 10`:
-
-- exactly `width * height` source bytes are moved to the destination payload;
-- the following half-size region is filled with `0x80`.
-
-A local overlap-safe move implementation is used so the Hexagon object has no libc dependency.
-
-## 5. Later SWAB branch is deliberately not faked
-
-For `request_id >= 10`, Windows executes:
-
-`SWABF(source -> scratch) -> SWASF(scratch -> destination) -> 0x80 tail`
-
-E004dg currently returns:
-
-`SP11_WORKER_ESWAB_PENDING`
-
-without modifying the output.
-
-This is intentional. Replacing that branch with ordinary copy would produce visually plausible data while silently losing Windows parity. The architecture closure in E004df explicitly forbids such a fallback.
-
-## 6. Hexagon build proof
-
-The same C source compiles with the installed LLVM toolchain using:
-
-`clang --target=hexagon -mcpu=hexagonv73 -ffreestanding -fno-builtin`
+Primary deterministic target: the luma plane of `windows-trustlet-sync-swasf-644x604-stable.bin`.
 
 Result:
 
-- ELF32 Qualcomm DSP6 relocatable;
-- `.text = 908` bytes;
+- luma bytes compared: 388,976;
+- luma differences: **0**;
+- stable Windows SWASF luma SHA-256: `591a706fcb1710b8aa152f4f672c5954e181fa783a09e3d9d4be038b3c6202f7`;
+- worker neutral-tail differences: **0**;
+- complete worker-output SHA-256: `731aa107edadded21f368c01f38ad8df77c8c51a86446aacb7db105795ddcab0`.
+
+The synchronized standalone trustlet fixture preserves the input UV bytes, whereas the separately reversed transfer worker explicitly overwrites its tail with `0x80`. Therefore the correct integrated differential is stable Windows SWASF luma plus the independently proven worker neutral-tail contract; replacing the tail with the standalone fixture UV would contradict the Windows transfer dispatcher.
+
+## Preserved Windows race behavior
+
+The deterministic scalar result matches the stable fixture exactly. The two preserved Windows race captures remain documentary evidence of Windows' own eight-worker scheduling nondeterminism:
+
+- race A: 34 luma bytes on rows 320 and 560;
+- race B: 1 luma byte on row 243;
+- UV differences: 0 in both.
+
+Those race bytes are not normalized into the scalar algorithm.
+
+## Hexagon-v73 closure
+
+All constituent sources are compiled freestanding and non-PIC for Hexagon v73, then partial-linked into one relocatable bundle.
+
+- ELF32 Qualcomm Hexagon relocatable;
+- `.text = 7,812` bytes;
 - zero unresolved symbols;
-- exported `sp11_parity_worker_run`;
-- no runtime/OS dependency.
+- bundle SHA-256: `120f534cdfaa70b4a2e461a39a07cc6f6987846ed9741242214b10ad33c0e4fa`;
+- exported worker plus SWABF/SWASF/C3E8/CD90 symbols are present.
 
-This proves the implementation is suitable for the exact CDSP ISA family independent of the unresolved production signing/admission issue.
-
-## 7. Host synthetic vectors
-
-Native tests cover:
-
-- synthetic branch contents;
-- early request copy branch contents;
-- payload-offset preservation;
-- 0x80 tail fill;
-- later request fail-closed behavior with no output mutation;
-- insufficient source extent;
-- insufficient serialized extent;
-- invalid payload offset;
-- zero dimension rejection.
-
-All tests pass.
+The explicit non-PIC build avoids a toolchain-generated `_GLOBAL_OFFSET_TABLE_` dependency and is the correct freestanding form for this offline bundle.
 
 ## Safety boundary
 
-No protected buffer, dma-heap runtime allocation, FastRPC ioctl, CPZ process, secure CB9, ownership transition, camera runtime or Linux SecureISP runtime was touched. The Hexagon object exists only as an offline build product.
+No protected buffer, dma-heap runtime allocation, FastRPC ioctl, CPZ process, secure CB9 enable, ownership transition, camera runtime, Windows reboot, or Linux SecureISP runtime action occurred during this integration closure.
 
 ## Next gate
 
-**E004dh — exact SWABF/SWASF algorithm extraction and offline port.**
-
-Recover the later-request two-pass transform far enough to replace `SP11_WORKER_ESWAB_PENDING` without approximation:
-
-1. recover pass descriptors/configuration and constant tables;
-2. reconstruct edge handling and the four worker partitions;
-3. port a scalar reference implementation first;
-4. validate with deterministic synthetic vectors against the recovered Windows equations/constants;
-5. only then optimize for Hexagon/HVX if useful.
-
-Do not use a generic bilateral/gaussian substitute and do not enable protected runtime.
+Offline image-algorithm parity is closed. The remaining camera work returns to protected-worker delivery/admission/signing and the already-defined protected-memory ownership path. Signature verification must not be bypassed, and Linux SecureISP runtime remains unauthorized until explicitly approved.

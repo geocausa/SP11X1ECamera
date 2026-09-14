@@ -20,4 +20,4 @@ FUN_1800037c8 validates non-null source/destination and non-zero width/height, t
    SWASF(scratch -> dst)
    memset(dst + y, 0x80, y/2)
 
-E004dg implements branches 1 and 2 exactly at the byte-operation level and returns a dedicated fail-closed error for branch 3. It deliberately does NOT substitute ordinary copy for the later SWAB path.
+E004dg now implements all three branches exactly at the byte-operation level. Branch 3 is the Windows-proven SWABF -> SWASF composition and does NOT substitute ordinary copy. The 644x604 integrated Windows differential is recorded in FULLFRAME-WINDOWS-DIFFERENTIAL.txt.

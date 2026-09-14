@@ -1,6 +1,6 @@
 # E004dh checkpoint — exact SWABF/SWASF offline port
 
-Status: **in progress, static contract substantially recovered; one bounded Windows oracle planned for final resolved tuning blobs.**
+Status: **CLOSED OFFLINE — Windows-authoritative SWABF/SWASF full-frame pixel parity is byte-exact; protected runtime remains unauthorized.**
 
 ## Exact Windows transfer branch
 
@@ -84,3 +84,14 @@ The final SWASF combine (`FUN_18001cd90`) is now closed for the shipping Windows
 Authoritative vector set SHA-256: `86b1851e1023d4659a50b89ff8f9ace26fe5ec344ee434066e2c5d9887702785`.
 
 E004dh is still deliberately partial: the independently Windows-proven SWABF, C3E8 and CD90 pieces have not yet been integrated into the complete offline SWASF/full-frame path, and `SP11_WORKER_ESWAB_PENDING` must remain fail-closed until that final integrated Windows differential passes.
+## 2026-09-14 full SWASF / E004dg integration closure
+
+E004dh is now **closed for offline pixel parity**. The independently Windows-proven SWABF, helper/C3E8/C230, and CD90 stages were composed with the root-worker glue recovered from the shipping `QcISPTrustlet8380.dll`. The resulting scalar SWASF produces **0 differing bytes across the full 388,976-byte 644x604 luma plane** against the synchronized stable Windows fixture.
+
+The root glue is now proved, not guessed: byte input is promoted by `<<2`; a clamped separable `[1,4,6,4,1]` 5x5 binomial prefilter produces the smoothed plane; raw/smoothed extrema feed the exact helper combination; C078 uses the smoothed center and live scale `253`; active p11/p12 init planes are `0x100`; the already-closed C3E8/C230 and CD90 stages consume the exact 513-dword live SWASF tuning.
+
+The complete raw-input E004dg worker chain also passes: `SWABF -> SWASF` luma differs from the stable Windows oracle by 0 bytes, and its independently proven transfer-tail fill differs from `0x80` by 0 bytes. Complete worker-output SHA-256: `731aa107edadded21f368c01f38ad8df77c8c51a86446aacb7db105795ddcab0`.
+
+The full SWASF scalar partial-links freestanding/non-PIC for Hexagon v73 with zero unresolved symbols (`.text=5956`, SHA-256 `4503cf8322213ca6dab12b52848bce23d8b608c43fde545d37651864dd19b37e`). The complete E004dg worker bundle also has zero unresolved symbols (`.text=7812`, SHA-256 `120f534cdfaa70b4a2e461a39a07cc6f6987846ed9741242214b10ad33c0e4fa`).
+
+`SP11_WORKER_ESWAB_PENDING` was removed only after the full-frame chain passed. No Linux SecureISP, CPZ, protected ownership transition, camera runtime, or Windows reboot was used for this integration closure.

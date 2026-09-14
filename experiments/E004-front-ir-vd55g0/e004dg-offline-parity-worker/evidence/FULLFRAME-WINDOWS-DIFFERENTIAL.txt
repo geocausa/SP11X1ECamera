@@ -1,0 +1,16 @@
+E004dg integrated Windows differential
+
+Geometry: 644x604 NV12
+Input: E004dh synchronized raw input fixture
+Later branch: SWABF -> SWASF -> 0x80 tail
+Stable Windows SWASF luma bytes compared: 388976
+WORKER_FULL_LUMA_DIFF=0
+WORKER_NEUTRAL_TAIL_DIFF=0
+Stable Windows SWASF luma SHA256: 591a706fcb1710b8aa152f4f672c5954e181fa783a09e3d9d4be038b3c6202f7
+Complete integrated worker output SHA256: 731aa107edadded21f368c01f38ad8df77c8c51a86446aacb7db105795ddcab0
+
+Standalone trustlet synchronized fixtures preserve input UV. The transfer-worker contract independently overwrites its tail with 0x80, so the integrated target is stable SWASF luma plus neutral worker tail.
+
+Preserved Windows scheduling variants relative to stable fixture:
+- race A: 34 luma bytes, rows 320 and 560, UV differences 0
+- race B: 1 luma byte, row 243, UV differences 0

@@ -1,0 +1,23 @@
+E004dh full SWASF Windows differential
+
+Authority: shipping Windows QcISPTrustlet8380.dll + preserved live tuning + synchronized Windows fixture.
+Geometry: 644x604
+Input luma: synchronized byte-exact Windows SWABF output
+Target luma: synchronized stable Windows SWASF output
+Bytes compared: 388976
+SWASF_FULL_LUMA_DIFF=0
+Luma SHA256 (both): 591a706fcb1710b8aa152f4f672c5954e181fa783a09e3d9d4be038b3c6202f7
+
+Root-worker glue closed by the differential:
+- input bytes promoted to signed-16 domain by <<2
+- clamped separable 5x5 [1,4,6,4,1] binomial prefilter, rounded /256
+- raw and smoothed 5x5 extrema; positive=max(raw,smooth), negative=min(raw,smooth)
+- C078 activity centered on smoothed plane with live activity scale 253
+- p11/p12 init planes = 0x100 on the active shipping path
+- Windows-proven C3E8/C230 and CD90 stages
+- exact 513-dword live Windows SWASF tuning payload
+
+Preserved Windows race variants are not folded into the deterministic scalar algorithm:
+- race A differs from stable by 34 luma bytes on rows 320 and 560
+- race B differs from stable by 1 luma byte on row 243
+- both have zero UV differences
