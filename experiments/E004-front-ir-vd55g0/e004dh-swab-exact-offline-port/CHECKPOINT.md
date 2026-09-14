@@ -76,3 +76,11 @@ The planned one-shot Windows oracle was executed and returned cleanly to Golden.
 The SecureISP static reverse was then extended to the real SWASF worker entry `FUN_18001d2a0` and its helper graph. This is explanatory reverse engineering only; it is being used to reproduce the live Windows transform, never to override it.
 
 A scalar SWABF transcription now passes deterministic host vectors and builds freestanding for Hexagon v73 with zero undefined symbols. SWASF pixel arithmetic remains the only algorithmic portion preventing replacement of `SP11_WORKER_ESWAB_PENDING`.
+
+## 2026-09-14 CD90 randomized Windows closure
+
+The final SWASF combine (`FUN_18001cd90`) is now closed for the shipping Windows path. A normal SWASF init/proc established live runtime tables; a self-consistent debugger capture proved the real argument/tuning contract; then a deterministic direct Windows oracle generated 4,096 CD90 records / 32,768 lanes. `verify_cd90_random_vectors.py` compares every lane with `scaffold/sp11-swasf-cd90.c` and reports byte-exact parity.
+
+Authoritative vector set SHA-256: `86b1851e1023d4659a50b89ff8f9ace26fe5ec344ee434066e2c5d9887702785`.
+
+E004dh is still deliberately partial: the independently Windows-proven SWABF, C3E8 and CD90 pieces have not yet been integrated into the complete offline SWASF/full-frame path, and `SP11_WORKER_ESWAB_PENDING` must remain fail-closed until that final integrated Windows differential passes.

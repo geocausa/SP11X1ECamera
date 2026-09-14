@@ -22,3 +22,13 @@ Under that proven runtime state, the active CD90 path reduces cleanly to a lane-
 `p10` is multiplied by `DAT_18003d239-DAT_18003d23c`, which is zero in the shipping runtime and was independently observed to have no effect in the Windows basis oracle.
 
 `scaffold/sp11-swasf-cd90.c` reproduces the exact self-consistent Windows invocation and builds freestanding for Hexagon v73 with zero unresolved symbols (`420` bytes `.text`). This is still a candidate until the direct randomized shipping-Windows differential passes; `cd90_final_combine_exact` therefore remains false.
+
+## Randomized shipping-Windows closure
+
+A deterministic Windows oracle generated 4,096 initialized CD90 records (32,768 lanes) by calling the shipping `QcISPTrustlet8380.dll` final-combine function directly after normal SWASF initialization. The complete Windows vector set has SHA-256:
+
+`86b1851e1023d4659a50b89ff8f9ace26fe5ec344ee434066e2c5d9887702785`
+
+`verify_cd90_random_vectors.py` feeds every recorded input through `scaffold/sp11-swasf-cd90.c`. Result: **4096/4096 cases, 32768/32768 lanes byte-exact**.
+
+Together with the self-consistent real invocation and active post-processing state capture, this closes `FUN_18001cd90` for the shipping Windows path. The remaining E004dh work is integration of the already-proven SWABF/C3E8/CD90 stages and a full-frame Windows differential; it is no longer reverse engineering of an unknown CD90 transform.
