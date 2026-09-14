@@ -1,0 +1,21 @@
+E004cq SAME-MACHINE QHEE CP_CDSP-ONLY OWNERSHIP AUTHORITY
+
+Same-machine QHEE access-control table from E004cm contains an active HLOS -> CP_CDSP-only rule:
+  RULE 11.1 addr=00308b18 src=0x0000000000000008 dst=0x0000040000000000 active=1 dcount=1 vmid=0x2a flags=0xff
+
+The same table contains the active reverse CP_CDSP -> HLOS rule:
+  RULE 70.2 addr=003098f8 src=0x0000040000000000 dst=0x0000000000000008 active=1 dcount=1 vmid=0x3 flags=0xff
+
+For comparison, the internal protected camera target uses a different approved co-owner rule:
+  RULE 22.1 addr=00308e48 src=0x0000000000000008 dst=0x0000040000002000 active=1 dcount=2 vmid=0x2a flags=0xff vmid=0xd flags=0xff
+
+Interpretation:
+- VMID 0x03 = HLOS
+- VMID 0x0d = CP_CAMERA
+- VMID 0x2a = CP_CDSP
+
+Therefore same-machine firmware independently authorizes:
+1. HLOS -> CP_CDSP as a one-owner protected transition, with a return path to HLOS.
+2. HLOS -> {CP_CAMERA, CP_CDSP} for the internal camera target.
+
+This distinction is exactly what the two-buffer parity model needs: the external sample does not have to become a CP_CAMERA owner merely to be visible to the protected CDSP worker.

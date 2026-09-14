@@ -1,0 +1,26 @@
+E004cq QUALCOMM MEM-BUF EXTERNAL SAMPLE OWNERSHIP + RELEASE CONTRACT
+
+Public Qualcomm msm source authority:
+  commit 48497677f223bd018ce409aaeb4124df6ebcb07d
+  mem_buf_dma_buf.c sha256 3e973bdb424efdaa251aac82dd9649c8c9071bea5b888e55ee1effd7c14263ba
+
+Key static facts:
+- mem_buf_lend() accepts an arbitrary destination VMID/perms array.
+- validate_lend_vmids() rejects LEND if the current VM appears in the destination ACL.
+- therefore a LEND to {CP_CDSP} excludes HLOS by construction.
+- no CP_CAMERA owner is required by the generic mem-buf API.
+- after a successful assignment, mem_buf_vmperm_update_state() replaces the owner/perms state and MEM_BUF_WRAPPER_FLAG_LENDSHARE is set.
+- current_vm_perms becomes zero when HLOS is absent from the destination list.
+
+Release ordering is mechanical:
+1. dma-buf release enters qcom_sg_release().
+2. qcom_sg_release() first calls mem_buf_vmperm_release().
+3. if the object is lent/shared, mem_buf_vmperm_release() calls __mem_buf_vmperm_reclaim().
+4. reclaim calls mem_buf_unassign_mem() and restores the owner state to current VM/HLOS RWX.
+5. only after reclaim succeeds does qcom_sg_release() call the heap backing free callback.
+
+Failure is fail-closed:
+- if reclaim fails, mem_buf_vmperm_set_err() takes an extra dma-buf reference to prevent backing from being freed while ownership is unknown.
+
+This provides the required external-sample lifetime rule:
+  protected ownership is reclaimed before backing release.

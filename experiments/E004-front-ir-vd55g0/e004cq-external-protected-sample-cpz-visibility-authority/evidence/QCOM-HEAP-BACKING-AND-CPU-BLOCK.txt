@@ -1,0 +1,29 @@
+E004cq GENERIC QCOM DMA-HEAP BACKING AND HLOS CPU-BLOCK CONTRACT
+
+Source authority at Qualcomm msm commit 48497677f223bd018ce409aaeb4124df6ebcb07d:
+  qcom_system_heap.c sha256 77d02fac25894894e910a2e196f02b57a6930c0ee292bfc94a9331b73a93e8b4
+  qcom_cma_heap.c sha256 a7c3d8ca44de1c6553924709aed0b8b95002320a7ae18d89a1be07ac94df5ca6
+  qcom_sg_ops.c sha256 abda86af49f4a056c01eb635c695e29e0c577d2d4afda6ddaf6e9bc2dc307e07
+
+Both ordinary Qualcomm system and CMA heaps:
+- allocate backing independently of the camera stack;
+- create a scatter-gather table;
+- call mem_buf_vmperm_alloc(table), which initializes ownership to the current VM/HLOS;
+- export the dma-buf through mem_buf_dma_buf_export().
+
+Thus an external protected sample can start as an ordinary per-sample dma-buf without being a CAMSS/IFE target and then transition ownership through mem_buf_lend().
+
+CPU access after HLOS-excluding lend is blocked by the dma-buf exporter:
+- qcom_sg_mmap() pins and calls mem_buf_vmperm_can_mmap(); without current-VM read/write permission it returns -EPERM.
+- qcom_sg_vmap() pins and calls mem_buf_vmperm_can_vmap(); without current-VM RW it returns -EPERM.
+- CMO helpers do no CPU cache operation when current-VM RW is absent.
+
+Crucially, device/IOMMU mapping is a separate permission path. qcom_sg_map_dma_buf():
+- pins ownership state;
+- explicitly allows mapping to the IOMMU regardless of current-VM CPU permissions;
+- uses DMA_ATTR_SKIP_CPU_SYNC when HLOS cannot perform CPU cache maintenance.
+
+This matches the required external protected sample shape:
+  no HLOS CPU mapping + protected device/context-bank mapping still possible.
+
+The Qualcomm secure-system heap is *not* the preferred per-sample primitive here because it uses MEM_BUF_WRAPPER_FLAG_STATIC_VM and the generic lend/reclaim API rejects static-VM wrappers. The generic system/CMA + lend model has the required dynamic lifetime.

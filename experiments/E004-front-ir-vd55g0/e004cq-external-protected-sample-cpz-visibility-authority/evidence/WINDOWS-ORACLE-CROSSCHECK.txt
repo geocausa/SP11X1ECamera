@@ -1,0 +1,27 @@
+E004cq WINDOWS TWO-BUFFER ORACLE CROSS-CHECK
+
+Carried authoritative results:
+
+E004bv external sample:
+- stable per-sample 16-byte identity;
+- cbBufferSize and cbCaptured are separate;
+- SecureISP VTL1 opens the external protected section by identity;
+- final trustlet map length is cbCaptured;
+- worker destination is external_mapping + trusted payload offset.
+
+E004bk/E004ca external ownership:
+- FsIso creates the external secure section under the secure-camera scenario;
+- external sample creation does not call AssignMemoryToSocDomain(CP_CAMERA);
+- CP_CAMERA assignment belongs to the separate SecureISP internal target.
+
+E004cf worker:
+- final protected-frame transfer is CPU memory processing inside the trusted worker;
+- no HLOS memcpy fallback is part of Windows parity.
+
+Linux CPZ candidate equivalence:
+- internal sample: {CP_CAMERA, CP_CDSP} protected backing.
+- external sample: CP_CDSP-only protected backing.
+- CPZ worker: reads internal target and writes external sample through protected mappings.
+- ordinary HLOS CPU access is absent from both active protected owner sets.
+
+The Linux per-sample opaque id remains provider metadata and is intentionally not equated with a dma-buf fd. A retained dma-buf object supplies backing lifetime; the existing E004bw 16-byte id field supplies stable logical identity.

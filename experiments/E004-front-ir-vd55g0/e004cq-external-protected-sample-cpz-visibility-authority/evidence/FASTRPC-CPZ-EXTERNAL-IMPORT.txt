@@ -1,0 +1,25 @@
+E004cq FASTRPC IMPORT AND DMA-BUF LIFETIME AUTHORITY
+
+Qualcomm msm source authority:
+  commit 48497677f223bd018ce409aaeb4124df6ebcb07d
+  adsprpc.c sha256 7dcdee1eac05d3b9f189000c39ab559b406f74a55f9a9e4b730b3c859b1211f0
+
+For an imported dma-buf FastRPC:
+1. takes a dma-buf reference with dma_buf_get(fd) or get_dma_buf().
+2. tests mem_buf_dma_buf_exclusive_owner().
+3. a lent buffer is non-exclusive, so map->secure = 1.
+4. secure maps use the secure session/context bank and attach/map the dma-buf to that SMMU device.
+5. the FastRPC mapping keeps the dma-buf reference until unmap/detach; only then does it call dma_buf_put().
+
+E004co separately proved the downstream PD-typed extension:
+- CPZ_USERPD = 6;
+- secure-memory session allocation is normalized to CPZ_USERPD when PD typing is enabled;
+- a matching secure context bank is selected.
+
+Therefore a generic external sample lent only to CP_CDSP can be imported by the same protected worker path as the internal protected target. FastRPC does not require that the dma-buf was originally allocated by the camera driver.
+
+Lifetime consequence:
+- closing the user-visible dma-buf fd cannot free backing while FastRPC still retains its dma-buf reference;
+- after the worker unmaps and drops its reference, final dma-buf release reclaims ownership before the heap frees backing.
+
+No HLOS memcpy path is introduced.

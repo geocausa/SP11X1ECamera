@@ -1,0 +1,49 @@
+{
+  "experiment": "E004cq",
+  "status": "PASS_EXTERNAL_CPZ_SAMPLE_CP_CDSP_ONLY_OWNERSHIP_AND_LIFETIME_PROVEN",
+  "mode": "static-read-only-authority",
+  "same_machine_qhee": {
+    "hlos_to_cp_cdsp_only": true,
+    "cp_cdsp_to_hlos_reclaim": true,
+    "internal_cp_camera_cp_cdsp_separate_rule": true,
+    "cp_cdsp_vmid": "0x2a"
+  },
+  "external_backing": {
+    "generic_qcom_system_heap_mem_buf_aware": true,
+    "generic_qcom_cma_heap_mem_buf_aware": true,
+    "camera_allocator_required": false,
+    "cp_camera_owner_required": false
+  },
+  "hlos_cpu_exclusion": {
+    "lend_destination_excludes_current_vm": true,
+    "mmap_denied_after_lend": true,
+    "vmap_denied_after_lend": true,
+    "preexisting_pinned_map_blocks_exclusive_lend": true
+  },
+  "cpz_import": {
+    "iommu_mapping_independent_of_hlos_cpu_perms": true,
+    "fastrpc_holds_dmabuf_reference": true,
+    "nonexclusive_owner_selects_secure_mapping": true,
+    "cpz_pd_typed_secure_context_proven_by_e004co": true
+  },
+  "lifetime": {
+    "logical_identity_separate_from_fd": true,
+    "worker_reference_holds_backing": true,
+    "worker_detach_before_dmabuf_put": true,
+    "reclaim_before_heap_free": true,
+    "reclaim_failure_fail_closed": true
+  },
+  "golden_runtime_ready": false,
+  "runtime_actions": {
+    "mem_buf_lend": false,
+    "mem_buf_reclaim": false,
+    "scm_assign_mem": false,
+    "fastrpc_invoke": false,
+    "cpz_process_create": false,
+    "protected_allocation": false,
+    "camera_runtime": false,
+    "windows_boot": false,
+    "secureisp_runtime": false
+  },
+  "next_gate": "E004cr compile-only external CPZ sample provider contract"
+}
