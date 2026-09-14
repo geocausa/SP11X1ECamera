@@ -1,0 +1,31 @@
+E004cz FAIL-CLOSED CAPABILITY SUMMARY
+
+runtime_binding_authorized=false
+secure_cb9_status=disabled
+live_cb9_present=false
+fastrpc_driver_registration=false
+scm_driver_registration=false
+external_sample_runtime_provider=false
+protected_transfer_runtime_provider=false
+camera_runtime=false
+secureisp_runtime=false
+
+internal integration symbols:
+00000000000014a8 T qcom_scm_assign_mem_regions
+0000000000004748 T sp11_cpz_assign_sg
+0000000000005a08 T sp11_cpz_dma_buf_is_protected
+0000000000005ad8 T sp11_cpz_system_heap_lend
+0000000000005d98 T sp11_cpz_system_heap_mark_active
+0000000000005e78 T sp11_cpz_system_heap_mark_detached
+0000000000005f58 T sp11_cpz_system_heap_reclaim
+
+runtime registration symbols (must be empty):
+
+external sample code shape only:
+76:struct camss_cpz_external_sample_ops {
+77:	int (*bind_identity)(struct device *dev, u64 request_id,
+79:	int (*prepare_backing)(struct device *dev,
+81:	int (*activate_worker_ownership)(struct device *dev,
+83:	int (*import_worker_mapping)(struct device *dev,
+89:	void (*detach_worker_mapping)(struct device *dev,
+91:	int (*reclaim_ownership)(struct device *dev,

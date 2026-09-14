@@ -1,0 +1,37 @@
+E004cz INTEGRATED PARTIAL-LINK PROOF
+
+prelink integration edges:
+--- sp11-cpz-sg-owner.o
+                 U qcom_scm_assign_mem_regions
+--- system_heap-e004cz.o
+                 U sp11_cpz_assign_sg
+--- fastrpc-e004cz.o
+                 U sp11_cpz_dma_buf_is_protected
+--- sp11-protected-stack-proof.o
+                 U sp11_cpz_dma_buf_is_protected
+                 U sp11_cpz_system_heap_lend
+                 U sp11_cpz_system_heap_mark_active
+                 U sp11_cpz_system_heap_mark_detached
+                 U sp11_cpz_system_heap_reclaim
+
+integrated object:
+experiments/E004-front-ir-vd55g0/e004cz-integrated-golden-protected-provider-build-closure/scaffold/sp11-protected-stack-e004cz.o: ELF 64-bit LSB relocatable, ARM aarch64, version 1 (SYSV), with debug_info, not stripped
+text_size=28308
+init_text_size=24
+b00a922f4654117c1f3432ea1f9431c4109a5bb93e127e77d0d2009438603ce7  experiments/E004-front-ir-vd55g0/e004cz-integrated-golden-protected-provider-build-closure/scaffold/sp11-protected-stack-e004cz.o
+
+resolved integration symbols:
+00000000000014a8 T qcom_scm_assign_mem_regions
+0000000000004748 T sp11_cpz_assign_sg
+0000000000005a08 T sp11_cpz_dma_buf_is_protected
+0000000000005ad8 T sp11_cpz_system_heap_lend
+0000000000005d98 T sp11_cpz_system_heap_mark_active
+0000000000005e78 T sp11_cpz_system_heap_mark_detached
+0000000000005f58 T sp11_cpz_system_heap_reclaim
+
+integration edges still unresolved (must be empty):
+
+runtime registration symbols (must be empty):
+
+compile-only fail-closed init:
+0000000000000008 t qcom_scm_init_e004cz_compile_only
