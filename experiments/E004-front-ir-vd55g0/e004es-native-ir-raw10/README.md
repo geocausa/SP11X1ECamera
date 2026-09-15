@@ -16,3 +16,5 @@ Acceptance remains four RAW10 frames, sensor start/stop confirmation, disabled
 GPIO outputs, clean kernel, runtime suspend, Golden return and retirement.
 Protected runtime and illumination remain inactive. This is transport validation,
 not complete camera/face-authentication readiness.
+
+Observed result: four complete buffers, sequences 0–3, EOF intervals about 17.06 ms, clean start/stop and sensor autosuspend. Golden returned and the candidate was retired. Active-pixel decoding excludes the 11 padding bytes per row. Pixels span 60–69 around the configured black level 64; useful scene imagery remains unproven. The next experiment tests the zero digital-gain hypothesis using the standard V4L2 digital-gain control.
