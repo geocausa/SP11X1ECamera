@@ -549,6 +549,31 @@ static int sp11_vd55g0_set_fmt(struct v4l2_subdev *sd,
 	return 0;
 }
 
+static int sp11_vd55g0_get_selection(struct v4l2_subdev *sd,
+				     struct v4l2_subdev_state *state,
+				     struct v4l2_subdev_selection *sel)
+{
+	if (sel->pad || sel->stream)
+		return -EINVAL;
+
+	switch (sel->target) {
+	case V4L2_SEL_TGT_NATIVE_SIZE:
+	case V4L2_SEL_TGT_CROP_BOUNDS:
+	case V4L2_SEL_TGT_CROP_DEFAULT:
+	case V4L2_SEL_TGT_CROP:
+		/* Fixed full-array readout, including the sensor border pixels. */
+		sel->r = (struct v4l2_rect) {
+			.left = 0,
+			.top = 0,
+			.width = SP11_VD55G0_WIDTH,
+			.height = SP11_VD55G0_HEIGHT,
+		};
+		return 0;
+	default:
+		return -EINVAL;
+	}
+}
+
 static int sp11_vd55g0_get_mbus_config(struct v4l2_subdev *sd,
 				       unsigned int pad,
 				       struct v4l2_mbus_config *config)
@@ -776,6 +801,7 @@ static const struct v4l2_subdev_pad_ops sp11_vd55g0_pad_ops = {
 	.enum_frame_size = sp11_vd55g0_enum_frame_size,
 	.get_fmt = v4l2_subdev_get_fmt,
 	.set_fmt = sp11_vd55g0_set_fmt,
+	.get_selection = sp11_vd55g0_get_selection,
 	.get_mbus_config = sp11_vd55g0_get_mbus_config,
 	.enable_streams = sp11_vd55g0_enable_streams,
 	.disable_streams = sp11_vd55g0_disable_streams,

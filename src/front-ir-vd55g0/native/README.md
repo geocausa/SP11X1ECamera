@@ -14,7 +14,7 @@ or DSP-service policy belongs in this sensor driver.
 This is a board-specific candidate, not an upstream-ready submission yet. Remaining
 upstream work includes consolidation with ST's sensor support, a reviewed binding,
 firmware redistribution/provisioning policy, frame-duration control,
-selection/orientation metadata, and compliance/lifecycle testing on hardware.
+board orientation metadata, and compliance/lifecycle testing on hardware.
 E004ew measured a 137.6 MHz timing clock and 16 consecutive frames through four
 buffers. Pixel-rate metadata now reflects that measured fixed mode. The nominal
 420 MHz link setting is unchanged; it is not a measurement of the physical link.
@@ -32,3 +32,8 @@ Exposure (1–1891 lines, default 100) and analogue gain (code 0–24, default 0
 are standard V4L2 controls. Analogue multiplier is 32 / (32 - code). Idle
 updates are cached, then replayed after initialization; powered writes are
 checked by readback. E004ex validates a 1000-line exposure request.
+
+The read-only selection API reports the fixed full-array rectangle (0, 0)/644x604
+for native size, crop bounds, default crop and current crop, matching the board
+mode and ST reference driver. This includes sensor border pixels. It does not
+add adjustable cropping or claim a separately characterized optical active area.
