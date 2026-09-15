@@ -1,0 +1,24 @@
+E004EN_NATURAL_POST_G3_WRITE=PASS
+candidate_boot_id=7b62f11b-bf7e-4e18-88c9-d09020e57a95
+golden_return_boot_id=101d83cd-3160-4630-9fcf-d575d22dde2f
+frames=27 sequences=0..26 retry=NO synthetic_delta=NO
+policy=cap-release-one-shot
+control_ioctls=4 startup_fill_writes=0 later_native_writes=1
+allow_source=4 request=7 effect_generation=7
+allow_convergence=4074449535 capped_output=4074449535 fixed_preview_max=6133333088
+cap_noop=YES below_fixed_preview_max=YES tuple_changed_from_G3=YES
+linux_request7_tuple=FLL6492/VB4332/EXP6484/AGAIN960/DGAIN1072/ISP0x3f800000
+later_second_writes=0 already_applied_shadow=20 horizon_shadow=2
+kernel_health=PASS all_three_suspended_before_after=YES final_route=neutral
+initial_run_exit_nonzero_due_verifier_only=YES camera_runtime_itself_completed=YES
+verifier_correction=logged CAP is capped output; valid HA release requires CONV==CAP<6133333088
+
+FRESH_WINDOWS_E004EM_VS_LINUX_E004EN_PRECAP (requests 7..10):
+request7: windows=4503849882 linux=4074449535 delta_pct=-9.534
+request8: windows=9089298967 linux=8772227905 delta_pct=-3.488
+request9: windows=10626484168 linux=9976983699 delta_pct=-6.112
+request10: windows=8996116228 linux=8923413955 delta_pct=-0.808
+
+CAUSALITY_NOTE:
+request7 through request10 are usable for fresh cross-OS shape comparison. Linux G4/request7 is physically applied for effect at G7; later G5+ changes are shadowed, so request11+ is not treated as a matched physical-feedback continuation.
+Windows and Linux captures are sequential rather than simultaneous, so percentage deltas are evidence of close behavioral agreement, not a claim of pixel-identical scene matching.
