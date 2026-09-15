@@ -16,3 +16,16 @@ retire the one-shot identity on return. No same-boot retry.
 Hypothesis: the now-complete mandatory control set lets stock libcamera discover
 the native IR sensor. Logs will identify remaining selection, sensor-helper,
 format or pipeline requirements without inventing a replacement camera service.
+
+## Result
+
+PASS: Ubuntu libcamera 0.7.0-1ubuntu2 discovers the sensor through its existing
+simple/qcom-camss pipeline. It identifies MONO and advertises R10_CSI2P/644x604.
+The subsequent V4L2 regression delivered 16 consecutive complete frames, correct
+applied controls, clean kernel, stop and autosuspend. Golden restored; retired.
+
+Discovery logs retain gaps: missing selection rectangles and board orientation,
+missing sensor properties/delays and gain helper, fallback uncalibrated tuning,
+and unsupported R10_CSI2P in the selected EGL debayer. The application exposes
+Contrast/Gamma only. Raw application capture and processed output are not proven.
+E004ez tests the stock application's unconverted packed monochrome stream.
