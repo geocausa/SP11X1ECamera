@@ -1,23 +1,28 @@
 {
-  "schema": "sp11-camera-e004eh-method11-interval-correction-v1",
-  "status": "PASS_OFFLINE_ROOT_CAUSE_AND_INTERVAL_CORRECTION_NOT_LIVE_TESTED",
-  "root_cause": "Linux collapsed Windows SceneAnalyzer low/high ranges to high-end scalar points before method-11 aggregation",
-  "windows_request4": {
-    "frame_bits": "0x42809ffb",
-    "range_aggregate_bits": "0x42809ffb",
-    "old_point_aggregate_bits": "0x43b62909"
-  },
+  "camera_stack_manifest_sha256": "cc1faed4358863b3b5714e2f5310649557ccddec5c1ccef8fc60acefef3569e1",
+  "capture_sha256_candidate": "2a22259a133db3a335617daa4c9dab28a26d71642d4d4788c320275573b8fdde",
+  "disposable_root_lifecycle_pass": true,
   "e004eg_g1": {
-    "old_short_convergence": 154912929,
+    "corrected_capped": false,
     "corrected_short_convergence": 84034875,
     "corrected_short_retained": 84034869,
-    "corrected_capped": false
+    "old_short_convergence": 154912929
   },
-  "capture_sha256_candidate": "2a22259a133db3a335617daa4c9dab28a26d71642d4d4788c320275573b8fdde",
+  "front_package_manifest_sha256": "1aa738e45692faf41dfb0469e5fd7f542e304d33b127c7257106c9b7f4ad6da2",
   "hardware_manifest_sha256_candidate": "ec987046abf8dcf6b0b7c2131052703c9d94e5fca5b2dc327ab5168894c89ca6",
   "kernel_modules_unchanged": true,
-  "unified_dtb_unchanged": true,
-  "runtime_performed": false,
   "native_write_authorized": false,
-  "next_gate": "commit source/proof, rebuild package from committed HEAD, then fresh shadow-only front runtime"
+  "next_gate": "fresh shadow-only live front runtime from corrected canonical package; no native write authorization",
+  "root_cause": "Linux collapsed Windows SceneAnalyzer low/high ranges to high-end scalar points before method-11 aggregation",
+  "runtime_performed": false,
+  "schema": "sp11-camera-e004eh-method11-interval-correction-v1",
+  "status": "PASS_OFFLINE_ROOT_CAUSE_INTERVAL_CORRECTION_PACKAGE_PROMOTED_NOT_LIVE_TESTED",
+  "tamper_rejected": true,
+  "unified_dtb_unchanged": true,
+  "unrelated_sentinel_preserved": true,
+  "windows_request4": {
+    "frame_bits": "0x42809ffb",
+    "old_point_aggregate_bits": "0x43b62909",
+    "range_aggregate_bits": "0x42809ffb"
+  }
 }

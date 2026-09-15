@@ -35,6 +35,16 @@ for marker in ('out->sat_prev.low = 0.0f','out->dark_prev.low =','out->dark_prev
     need(marker in eff,'effective analyzer range marker '+marker)
 for marker in ('upper <= ranges[i].low','lower >= ranges[i].high'):
     need(marker in agg,'generic method11 range rule '+marker)
+
+rj=__import__('json').loads((D/'RESULT.json').read_text())
+need(rj['camera_stack_manifest_sha256']=='cc1faed4358863b3b5714e2f5310649557ccddec5c1ccef8fc60acefef3569e1','stack manifest result')
+need(rj['front_package_manifest_sha256']=='1aa738e45692faf41dfb0469e5fd7f542e304d33b127c7257106c9b7f4ad6da2','front manifest result')
+life=(D/'evidence/PACKAGE-ROOT-LIFECYCLE.txt').read_text()
+for marker in ('SP11 CAMERA STACK INSTALLED ROOT VERIFY: PASS ACTIVATED=NO','TAMPER_VERIFY_RC=1','SENTINEL_PRESERVED=YES','PACKAGE_PATHS_REMOVED=YES'):
+    need(marker in life,'lifecycle '+marker)
+installer=(REPO/'src/sp11-camera-stack/install-live-unactivated.sh').read_text()
+need('STACK_SHA=cc1faed4358863b3b5714e2f5310649557ccddec5c1ccef8fc60acefef3569e1' in installer,'live installer stack pin')
+
 print(rout.strip())
 print(gout.strip())
 print('OLD_G1_CONV_SHORT=154912929')

@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(git -C "$ROOT" rev-parse --show-toplevel)"
 PKG=${1:?staged package root required}
-STACK_SHA=d1d0eb4c504378643630f6975a08d9c15d2b8ac0bedca2f1205bbfb51f885373
+STACK_SHA=cc1faed4358863b3b5714e2f5310649557ccddec5c1ccef8fc60acefef3569e1
 STATE=/var/lib/sp11-camera-stack
 "$REPO/tools/camera-overlap-guard.sh" --require-golden --require-no-camera-process >/dev/null
 PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/verify-package.py" "$PKG" >/dev/null

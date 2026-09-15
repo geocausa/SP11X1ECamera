@@ -15,3 +15,9 @@ The correction restores `[low, high, confidence]` candidates and the exact gener
 The fixture `evidence/E004EG-G1-STATS3A.bin` is the exact first Linux statistics generation from E004eg. G1 is causally clean for this counterfactual because it was captured before any output from the old wrong recurrence could affect a later sensor frame. The old point implementation produced Short convergence 154,912,929. The interval-corrected replay produces 84,034,875, versus the historical authoritative Windows request-4 value 82,061,904 from the earlier DI oracle. The fresh darker-scene E004EH request-4 value is 133,645,888 and is retained only as a structural range oracle, not as a same-scene numerical comparison.
 
 No live camera runtime is authorized by this checkpoint. It is an offline/source correction gate only.
+
+## Canonical package promotion
+
+After the source/proof checkpoint was committed, the hardware authority was rebuilt from committed HEAD. The accepted DTB and all four camera modules remained byte-exact; only `front-imx681-capture` changed. The resulting hardware manifest file SHA-256 is `ec987046abf8dcf6b0b7c2131052703c9d94e5fca5b2dc327ab5168894c89ca6`.
+
+The committed full package verifies with front-package manifest SHA-256 `1aa738e45692faf41dfb0469e5fd7f542e304d33b127c7257106c9b7f4ad6da2` and camera-stack manifest SHA-256 `cc1faed4358863b3b5714e2f5310649557ccddec5c1ccef8fc60acefef3569e1`. Disposable-root install/verify, deliberate capture-binary tamper rejection, managed reinstall, uninstall, and unrelated-sentinel preservation all pass. Live activation remains intentionally unperformed at this checkpoint.

@@ -1,0 +1,73 @@
+=== INSTALL ===
+SP11_CAMERA_STACK_ROOT_INSTALL=PASS ACTIVATED=NO
+=== VERIFY1 ===
+SP11 CAMERA STACK INSTALLED ROOT VERIFY: PASS ACTIVATED=NO
+=== TAMPER ===
+TAMPER_VERIFY_RC=1
+Traceback (most recent call last):
+  File "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/src/sp11-camera-stack/verify-installed-root.py", line 9, in <module>
+    cp=subprocess.run(['sha256sum','-c',str(m)],cwd=r,text=True,capture_output=True);need(cp.returncode==0,cp.stdout+cp.stderr)
+                                                                                     ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/src/sp11-camera-stack/verify-installed-root.py", line 6, in need
+    if not v:raise AssertionError(m)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: usr/bin/sp11-front-imx681: OK
+usr/bin/sp11-front-imx681-discover: OK
+usr/lib/sp11-camera-stack/hardware/dtb/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb: OK
+usr/lib/sp11-camera-stack/hardware/HARDWARE-MANIFEST.sha256: OK
+usr/lib/sp11-camera-stack/hardware/modules/imx681.ko: OK
+usr/lib/sp11-camera-stack/hardware/modules/ov13858.ko: OK
+usr/lib/sp11-camera-stack/hardware/modules/qcom-camss.ko: OK
+usr/lib/sp11-camera-stack/hardware/modules/sp11-vd55g0.ko: OK
+usr/lib/sp11-camera-stack/meta/PROVENANCE.json: OK
+usr/lib/sp11-camera-stack/meta/README.md: OK
+usr/lib/sp11-front-imx681/bin/front-imx681-discover.py: OK
+usr/lib/sp11-front-imx681/bin/front-imx681-launcher.py: OK
+usr/lib/sp11-front-imx681/build/front-imx681-bootstrap-controls: OK
+usr/lib/sp11-front-imx681/build/front-imx681-capture: FAILED
+usr/lib/sp11-front-imx681/build/imx681.ko: OK
+usr/lib/sp11-front-imx681/build/qcom-camss.ko: OK
+usr/lib/sp11-front-imx681/PROVENANCE.json: OK
+usr/lib/sp11-front-imx681/README.md: OK
+usr/lib/sp11-front-imx681/userspace/iq/authority/authority.json: OK
+usr/lib/sp11-front-imx681/userspace/iq/AUTHORITY-CACHE-MANIFEST.json: OK
+usr/lib/sp11-front-imx681/userspace/iq/authority/r4-bootstrap.bin: OK
+usr/lib/sp11-front-imx681/userspace/iq/authority/r4-bootstrap.json: OK
+usr/lib/sp11-front-imx681/userspace/iq/live-iq-producer.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/prepare-authority-cache.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/README.md: OK
+usr/lib/sp11-front-imx681/userspace/iq/v4l2-control-shim.c: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003h-iq-producer-0073-static/decode_imx681_chromatix.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003h-iq-producer-0073-static/prove-lsc-live-golden-authority.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ac-clean-cct-reconstruction/cct_model.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ac-clean-cct-reconstruction/fixtures/E003I-AC31-CCT-replay.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dr-native-awb-zero-weight-hold/native-trigger-core.c: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/dv-live-residual-isp-demux/demux_bls.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ef-clean-awb-gain-adjust-replay/gain_adjust.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/ej-clean-awb-cal-factor-replay/cal_factors.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/el-calibrated-awb-scalar-join/awb_scalar.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/em-r7-r9-template-free-composer/compose-em.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/e-template-free-capsule/build-template-free-0076-capsules.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/e-template-free-capsule/parse-epoch0-log.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/f-native-iq-backends/generate-steady-scalar-state.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/fy-calibrated-awb-selector-replay/dynamic_awb.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/g-cleanroom-lsc-upstream/cleanroom-front-lsc.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/i-cleanroom-tintless/cleanroom-tintless-helpers.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/j-cleanroom-gtm/generate-cleanroom-gtm-wire.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/k-cleanroom-lsc-backend/generate-cleanroom-front-lsc-wire.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/m-stats-only-lsc-request-state/generate-stats-only-front-lsc.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/n-titan680-tlbg-parser/titan680-tlbg-parser.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/x-native-live-lsc-deadline/native-tintless-core.c: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/experiments/E003-front-imx681-cphy/e003i-front-native-productionization/x-native-live-lsc-deadline/prove-native-live-lsc-deadline.py: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/.gitignore: OK
+usr/lib/sp11-front-imx681/userspace/iq/VENDOR-SOURCE-PROVENANCE.json: OK
+usr/lib/sp11-front-imx681/userspace/iq/vendor/tools/qti_parameter_bin.py: OK
+sha256sum: WARNING: 1 computed checksum did NOT match
+=== MANAGED REINSTALL ===
+SP11_CAMERA_STACK_ROOT_INSTALL=PASS ACTIVATED=NO
+=== VERIFY2 ===
+SP11 CAMERA STACK INSTALLED ROOT VERIFY: PASS ACTIVATED=NO
+=== UNINSTALL ===
+SP11_CAMERA_STACK_ROOT_UNINSTALL=PASS
+SENTINEL_PRESERVED=YES
+PACKAGE_PATHS_REMOVED=YES
