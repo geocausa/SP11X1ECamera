@@ -1,19 +1,70 @@
 {
-  "schema": "sp11-camera-e004eg-static-full-light-windows-linux-parity-v1",
-  "status": "PREPARED_SHADOW_ONLY_NOT_INSTALLED_NOT_ARMED",
   "attempt_limit": 1,
-  "retry_authorized": false,
-  "native_write_authorized": false,
+  "candidate_boot_id": "5ec8222c-2f71-4281-ac1b-eacdf1d32f54",
+  "candidate_consumed": true,
+  "candidate_retired": true,
+  "first_observable_parity_divergence": "FrameSA luma/target/AdjRatio, upstream of SafeAgg/ADRC/final exposure/convergence/cap policy",
   "front_post_g3_policy": "shadow",
+  "golden_return_boot_id": "f0de6b74-f541-41a3-a1a5-53c45265c92a",
+  "golden_return_pass": true,
+  "lighting_hypothesis": "DISPROVEN",
+  "linux_late_frame": {
+    "cap": 6133333088,
+    "convergence": 11133280747,
+    "frame_adj": 0.478348166,
+    "frame_target": 40.0,
+    "generation": 24,
+    "measured_luma": 83.6211014,
+    "published_short": 30486355401,
+    "safe_target": 6.95884275,
+    "short_target": 0.774501204
+  },
+  "native_write_authorized": false,
+  "next_gate": "audit why Linux live AEC_BE/FrameSA recurrence does not reproduce Windows FrameSA under equivalent scene; distinguish stats-plane parity from exposure-history recurrence before any fix",
+  "package_uninstalled": true,
+  "production_code_changed": false,
+  "purpose": "capture unchanged canonical Linux front stream under the same static full-light scene, preserve raw STATS3A, then replay AEC offline to isolate upstream parity divergence",
+  "retry_authorized": false,
+  "runtime_performed": true,
   "scene": "empty room; side and main lights on; static",
+  "schema": "sp11-camera-e004eg-static-full-light-windows-linux-parity-v1",
+  "status": "PASS_LIGHTING_DISPROVEN_FIRST_OBSERVABLE_DIVERGENCE_AT_FRAMESA_GOLDEN_RETURN_RETIRED_UNINSTALLED",
   "windows_oracle": {
-    "studio_effects_toggle": "Off",
+    "dm_capflag_all": 0,
+    "dm_compact_high": 1340473362,
+    "dm_compact_low": 954179854,
+    "dm_requests": 12,
     "preview_mean_luma": 110.9,
     "preview_median_luma": 115,
-    "dm_requests": 12,
-    "dm_capflag_all": 0,
-    "dm_compact_low": 954179854,
-    "dm_compact_high": 1340473362
+    "studio_effects_toggle": "Off"
   },
-  "purpose": "capture unchanged canonical Linux front stream under the same static full-light scene, preserve raw STATS3A, then replay AEC offline to isolate upstream parity divergence"
+  "windows_oracle_second_boot": true,
+  "windows_preview_normally_exposed": true,
+  "windows_sceneanalyzer_frames": [
+    {
+      "adj": 1.037633061,
+      "frame": 1,
+      "luma": 45.389797211,
+      "target": 47.097953796
+    },
+    {
+      "adj": 1.038730741,
+      "frame": 2,
+      "luma": 45.338123322,
+      "target": 47.094100952
+    },
+    {
+      "adj": 1.039485931,
+      "frame": 3,
+      "luma": 45.302635193,
+      "target": 47.091453552
+    },
+    {
+      "adj": 1.037810683,
+      "frame": 4,
+      "luma": 45.381427765,
+      "target": 47.097328186
+    }
+  ],
+  "windows_sceneanalyzer_ids_8_13": "match Frame AdjRatio per captured frame"
 }
