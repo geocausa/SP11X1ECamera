@@ -13,3 +13,5 @@ Same firmware, exposure, DT, CAMSS and disabled GPIO outputs. Require the existi
 capture/PM/kernel gates, then offline pattern analysis, Golden return and retirement.
 
 Source: https://www.st.com/resource/en/user_manual/um2829-how-to-integrate-and-configure-the-vd55g0-device-from-a-hardware-and-software-perspective-stmicroelectronics.pdf
+
+Result: PASS. All 1555904 active pixels across four frames exactly equal x+66, with no leading dark rows. All buffer extents, gain/pattern readbacks, kernel health, stop and autosuspend checks passed. Golden returned and candidate retired. Changing dark calibration 0 to 2 alone restored the required four-frame capture and normal pattern row layout. Useful optical scene signal and continuous/requeued capture remain separate gates.
