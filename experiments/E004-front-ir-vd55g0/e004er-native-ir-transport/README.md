@@ -61,3 +61,17 @@ module/firmware/DT hashes. Golden kernel/initrd hashes are recorded at installat
 - https://github.com/STMicroelectronics/vd55g0-linux-driver
 - https://docs.kernel.org/driver-api/media/camera-sensor.html
 - https://docs.libcamera.org/master/libcamera_architecture.html
+
+## Result
+
+FAIL, Golden restored and candidate retired. The experiment builder mistakenly
+selected the old E004o DT with a 4 KiB CSIPHY0 mapping. This reproduced the already
+solved E004u fault at base + 0x1000. E004v had corrected the aperture to 8 KiB and
+E004w had tested it. This is an integration regression, not a new hardware barrier.
+The new firmware loader and mode/GPIO initialization passed on the physical sensor;
+no sensor stream began and no frames were captured. The sensor runtime-suspended.
+The subprocess timeout could not reap the ioctl task after the kernel oops.
+Recovery reboot took several minutes; eventual Golden return was verified.
+
+Successor E004es uses the already verified E004v DT and adds an independent
+resource-extent preflight that rejects E004o without touching hardware.
