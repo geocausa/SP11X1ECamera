@@ -48,7 +48,7 @@ def main():
     ap.add_argument('--media',default='/dev/media0')
     ap.add_argument('--build-dir',type=Path,default=ROOT/'build')
     ap.add_argument('--output-dir',type=Path,help='fresh session output directory; default is a unique /var/tmp session path')
-    ap.add_argument('--post-g3-write-policy',choices=('shadow','cap-release-one-shot'),default='shadow')
+    ap.add_argument('--post-g3-write-policy',choices=('shadow','cap-release-one-shot','g4-startup-fill-shadow'),default='shadow')
     ap.add_argument('--allow-one-native-write',action='store_true')
     ap.add_argument('--execute',action='store_true')
     a=ap.parse_args()
@@ -56,7 +56,7 @@ def main():
     if a.execute and a.topology_file:raise SystemExit('--execute cannot be combined with --topology-file')
     if a.execute and os.geteuid()!=0:raise SystemExit('--execute requires root')
     if a.execute and a.post_g3_write_policy!='shadow' and not a.allow_one_native_write:
-        raise SystemExit('cap-release-one-shot requires explicit --allow-one-native-write')
+        raise SystemExit('non-shadow post-G3 policy requires explicit --allow-one-native-write')
     p=plan(a);print(json.dumps(p,indent=2,sort_keys=True))
     if not a.execute:return
     capture=Path(p['capture_command'][0]);bootstrap=Path(p['bootstrap_command'][0])

@@ -6,11 +6,16 @@
 enum sp11_front_post_g3_policy {
     SP11_FRONT_POST_G3_SHADOW = 0,
     SP11_FRONT_POST_G3_CAP_RELEASE_ONE_SHOT = 1,
+    SP11_FRONT_POST_G3_G4_STARTUP_FILL_SHADOW = 2,
 };
 
 int sp11_front_parse_post_g3_policy(const char *value,
                                     enum sp11_front_post_g3_policy *out);
 int sp11_front_post_g3_apply_allowed(enum sp11_front_post_g3_policy policy,
                                      enum e003i_ha_decision decision);
+int sp11_front_g4_startup_fill_exact(
+    enum sp11_front_post_g3_policy policy,
+    uint32_t source_generation,
+    const struct e003i_raw_control_output *native_output);
 const char *sp11_front_post_g3_policy_name(enum sp11_front_post_g3_policy policy);
 #endif

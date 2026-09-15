@@ -39,7 +39,7 @@ sha(){ sha256sum "$1" | awk '{print $1}'; }
 [ "$(sha "$OUT/modules/imx681.ko")" = ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6 ] || { echo IMX681_DRIFT >&2; exit 1; }
 [ "$(sha "$OUT/modules/ov13858.ko")" = 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309 ] || { echo OV13858_DRIFT >&2; exit 1; }
 [ "$(sha "$OUT/modules/sp11-vd55g0.ko")" = 4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72 ] || { echo VD55G0_DRIFT >&2; exit 1; }
-[ "$(sha "$OUT/bin/front-imx681-capture")" = 2a22259a133db3a335617daa4c9dab28a26d71642d4d4788c320275573b8fdde ] || { echo FRONT_CAPTURE_DRIFT >&2; exit 1; }
+[ "$(sha "$OUT/bin/front-imx681-capture")" = 4735e81c25c3feff6f595480296e54da358622603c5e711cdabff3caddcd9934 ] || { echo FRONT_CAPTURE_DRIFT >&2; exit 1; }
 [ "$(sha "$OUT/bin/front-imx681-bootstrap-controls")" = 4721ff6510d806ed63ffcb70d9a88441220047ef734ca760cc40bdc5719cd7ce ] || { echo FRONT_BOOTSTRAP_DRIFT >&2; exit 1; }
 (
  cd "$OUT"

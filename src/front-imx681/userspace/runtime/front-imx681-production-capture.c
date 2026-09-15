@@ -216,6 +216,7 @@ struct pair_audit_ctx {
 	unsigned int last_applied_valid;
 	unsigned int later_native_write_applied;
 	unsigned int later_native_write_count;
+	unsigned int startup_fill_write_count;
 	unsigned int policy_disabled_shadow_count;
 	enum sp11_front_post_g3_policy post_g3_policy;
 	unsigned int control_ioctl_count;
@@ -305,6 +306,12 @@ static int release_control_at_video_boundary(struct pair_audit_ctx *ctx,
 			native);
 		uint64_t conv = native->raw.request.convergence.linear[E003I_LANE_SHORT];
 		uint64_t cap = native->raw.request.capped.linear[E003I_LANE_SHORT];
+		int g4_startup_fill = sp11_front_g4_startup_fill_exact(
+			ctx->post_g3_policy, ev->source_generation, native);
+
+		if (ctx->post_g3_policy == SP11_FRONT_POST_G3_G4_STARTUP_FILL_SHADOW &&
+		    ev->source_generation == 4U && !g4_startup_fill)
+			return -ERANGE;
 
 		/* HC must keep the N+2 optical effect inside the 27-frame evidence window. */
 		if (ev->source_generation > 24U) {
@@ -323,7 +330,16 @@ static int release_control_at_video_boundary(struct pair_audit_ctx *ctx,
 			return 0;
 		}
 
-		if (decision == E003I_HA_APPLY_ONE_NATIVE &&
+		if (g4_startup_fill) {
+			printf("PROD_G4_STARTUP_FILL_ALLOW SOURCE=%u AFTER_G=%u REQUEST=%llu EFFECT_G=%u CONV=%llu CAP=%llu FLL=%u EXP=%u AGAIN=%u DGAIN=%u\n",
+			       ev->source_generation, after_generation,
+			       (unsigned long long)ev->logical_request_frame,
+			       ev->expected_effect_generation,
+			       (unsigned long long)conv, (unsigned long long)cap,
+			       ev->controls.frame_length_lines, ev->controls.exposure_lines,
+			       ev->controls.analogue_gain_code, ev->controls.digital_gain_code);
+			fflush(stdout);
+		} else if (decision == E003I_HA_APPLY_ONE_NATIVE &&
 		    !sp11_front_post_g3_apply_allowed(ctx->post_g3_policy, decision)) {
 			ctx->later_shadow_count++;
 			ctx->policy_disabled_shadow_count++;
@@ -341,7 +357,7 @@ static int release_control_at_video_boundary(struct pair_audit_ctx *ctx,
 			return 0;
 		}
 
-		if (decision == E003I_HA_APPLY_ONE_NATIVE) {
+		else if (decision == E003I_HA_APPLY_ONE_NATIVE) {
 			printf("HB_NATIVE_CAP_RELEASE_ALLOW SOURCE=%u AFTER_G=%u REQUEST=%llu EFFECT_G=%u CONV=%llu CAP=%llu FLL=%u EXP=%u AGAIN=%u DGAIN=%u\n",
 			       ev->source_generation, after_generation,
 			       (unsigned long long)ev->logical_request_frame,
@@ -400,8 +416,14 @@ static int release_control_at_video_boundary(struct pair_audit_ctx *ctx,
 	ctx->last_applied_valid = 1U;
 	ctx->control_ioctl_count++;
 	if (ev->source_generation > 3U) {
-		ctx->later_native_write_applied = 1U;
-		ctx->later_native_write_count++;
+		if (sp11_front_g4_startup_fill_exact(ctx->post_g3_policy,
+					       ev->source_generation,
+					       &ctx->aec_output[ev->source_generation - 1U])) {
+			ctx->startup_fill_write_count++;
+		} else {
+			ctx->later_native_write_applied = 1U;
+			ctx->later_native_write_count++;
+		}
 	}
 	return 0;
 }
@@ -600,7 +622,7 @@ int main(int argc, char **argv)
 	}
 	if (sp11_front_parse_post_g3_policy(getenv("SP11_FRONT_POST_G3_WRITE_POLICY"),
 					&post_g3_policy)) {
-		fprintf(stderr, "SP11_FRONT_POST_G3_WRITE_POLICY must be shadow or cap-release-one-shot\n");
+		fprintf(stderr, "SP11_FRONT_POST_G3_WRITE_POLICY must be shadow, cap-release-one-shot, or g4-startup-fill-shadow\n");
 		return 4;
 	}
 	printf("PROD_POST_G3_POLICY=%s\n", sp11_front_post_g3_policy_name(post_g3_policy));
@@ -742,19 +764,25 @@ int main(int argc, char **argv)
 	    audit.schedule.pending_generation[(FRAME_COUNT - 1U) % E003I_CONT_PENDING_SLOTS] != FRAME_COUNT ||
 	    audit.schedule.pending_valid[FRAME_COUNT % E003I_CONT_PENDING_SLOTS])
 		pin_until_reboot("continuous delayed sensor schedule did not close bounded G1..G26 releases with G27 pending");
-	if (audit.control_ioctl_count != 3U + audit.later_native_write_count ||
+	if (audit.control_ioctl_count != 3U + audit.startup_fill_write_count +
+	                              audit.later_native_write_count ||
 	    audit.later_native_write_count > 1U ||
-	    audit.later_shadow_count + audit.later_native_write_count != 23U ||
+	    audit.later_shadow_count + audit.later_native_write_count +
+	        audit.startup_fill_write_count != 23U ||
 	    audit.cap_active_shadow_count + audit.unchanged_shadow_count +
 	    audit.already_applied_shadow_count + audit.horizon_shadow_count +
-	    audit.policy_disabled_shadow_count != audit.later_shadow_count)
-		pin_until_reboot("native cap-release accounting invariant failed");
-	printf("PROD_NATIVE_SCHEDULE_PASS ACCEPTED_G=1..27 RELEASED_SOURCES=G1..G26 POLICY=%s CONTROL_IOCTLS=%u LATER_NATIVE_WRITES=%u LATER_SHADOW=%u POLICY_DISABLED_SHADOW=%u CAP_ACTIVE_SHADOW=%u UNCHANGED_SHADOW=%u ALREADY_APPLIED_SHADOW=%u HORIZON_SHADOW=%u PENDING=G27 APPLY_EFFECT_MAX=G27\n",
+	    audit.policy_disabled_shadow_count != audit.later_shadow_count ||
+	    (audit.post_g3_policy == SP11_FRONT_POST_G3_G4_STARTUP_FILL_SHADOW ?
+	        audit.startup_fill_write_count != 1U || audit.later_native_write_count != 0U :
+	        audit.startup_fill_write_count != 0U))
+		pin_until_reboot("native cap-release/startup-fill accounting invariant failed");
+	printf("PROD_NATIVE_SCHEDULE_PASS ACCEPTED_G=1..27 RELEASED_SOURCES=G1..G26 POLICY=%s CONTROL_IOCTLS=%u STARTUP_FILL_WRITES=%u LATER_NATIVE_WRITES=%u LATER_SHADOW=%u POLICY_DISABLED_SHADOW=%u CAP_ACTIVE_SHADOW=%u UNCHANGED_SHADOW=%u ALREADY_APPLIED_SHADOW=%u HORIZON_SHADOW=%u PENDING=G27 APPLY_EFFECT_MAX=G27\n",
 	       sp11_front_post_g3_policy_name(audit.post_g3_policy),
-	       audit.control_ioctl_count, audit.later_native_write_count,
-	       audit.later_shadow_count, audit.policy_disabled_shadow_count,
-	       audit.cap_active_shadow_count, audit.unchanged_shadow_count,
-	       audit.already_applied_shadow_count, audit.horizon_shadow_count);
+	       audit.control_ioctl_count, audit.startup_fill_write_count,
+	       audit.later_native_write_count, audit.later_shadow_count,
+	       audit.policy_disabled_shadow_count, audit.cap_active_shadow_count,
+	       audit.unchanged_shadow_count, audit.already_applied_shadow_count,
+	       audit.horizon_shadow_count);
 	fflush(stdout);
 	for (i = 0; i < FRAME_COUNT; i++) {
 		uint8_t *t = audit_tlbg + (size_t)i * TLBG_BYTES;
