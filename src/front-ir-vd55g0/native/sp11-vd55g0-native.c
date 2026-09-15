@@ -44,6 +44,9 @@
 #define VD55G0_REG_REVISION                   0x0004
 #define VD55G0_REG_SYSTEM_FSM                 0x002c
 #define VD55G0_REG_BOOT                       0x0200
+#define VD55G0_REG_DIGITAL_GAIN               0x0450
+#define VD55G0_DIGITAL_GAIN_UNITY                  256
+#define VD55G0_DIGITAL_GAIN_MAX                   2048
 #define VD55G0_PATCH_START                    0x2000
 
 #define VD55G0_FSM_READY_TO_BOOT                0x01
@@ -502,6 +505,56 @@ static int sp11_vd55g0_get_mbus_config(struct v4l2_subdev *sd,
 	return 0;
 }
 
+static int sp11_vd55g0_set_ctrl(struct v4l2_ctrl *ctrl)
+{
+	struct sp11_vd55g0 *sensor = container_of(ctrl->handler,
+					       struct sp11_vd55g0, ctrls);
+	u8 data[] = { VD55G0_REG_DIGITAL_GAIN >> 8,
+		      VD55G0_REG_DIGITAL_GAIN & 0xff,
+		      ctrl->val & 0xff, ctrl->val >> 8 };
+	struct i2c_msg msg = {
+		.addr = sensor->client->addr,
+		.flags = sensor->client->flags,
+		.buf = data,
+		.len = sizeof(data),
+	};
+	u8 readback[2];
+	int ret;
+
+	if (ctrl->id != V4L2_CID_DIGITAL_GAIN)
+		return -EINVAL;
+
+	/* Cache idle updates; stream start replays controls after firmware init. */
+	ret = pm_runtime_get_if_in_use(sensor->dev);
+	if (ret <= 0)
+		return ret;
+
+	ret = i2c_transfer(sensor->client->adapter, &msg, 1);
+	if (ret != 1) {
+		ret = ret < 0 ? ret : -EIO;
+		goto out;
+	}
+	ret = sp11_read(sensor, VD55G0_REG_DIGITAL_GAIN, readback,
+			sizeof(readback));
+	if (ret)
+		goto out;
+	if ((readback[0] | (readback[1] << 8)) != ctrl->val) {
+		ret = -EIO;
+		goto out;
+	}
+	dev_info(sensor->dev, "native digital gain verified: %d/256\n",
+		 ctrl->val);
+
+out:
+	pm_runtime_mark_last_busy(sensor->dev);
+	pm_runtime_put_autosuspend(sensor->dev);
+	return ret;
+}
+
+static const struct v4l2_ctrl_ops sp11_vd55g0_ctrl_ops = {
+	.s_ctrl = sp11_vd55g0_set_ctrl,
+};
+
 static int sp11_vd55g0_enable_streams(struct v4l2_subdev *sd,
 				      struct v4l2_subdev_state *state,
 				      u32 pad, u64 streams_mask)
@@ -528,6 +581,10 @@ static int sp11_vd55g0_enable_streams(struct v4l2_subdev *sd,
 		ret = -EIO;
 		goto reset;
 	}
+
+	ret = __v4l2_ctrl_handler_setup(&sensor->ctrls);
+	if (ret)
+		goto reset;
 
 	/* SW_STBY command is self-clearing; FSM confirms completion. */
 	ret = sp11_write8(sensor, 0x0201, 0x01);
@@ -611,7 +668,7 @@ static int sp11_vd55g0_init_controls(struct sp11_vd55g0 *sensor)
 	struct v4l2_ctrl *ctrl;
 	int ret;
 
-	ret = v4l2_ctrl_handler_init(&sensor->ctrls, 4);
+	ret = v4l2_ctrl_handler_init(&sensor->ctrls, 5);
 	if (ret)
 		return ret;
 
@@ -639,6 +696,10 @@ static int sp11_vd55g0_init_controls(struct sp11_vd55g0 *sensor)
 				 SP11_VD55G0_VBLANK);
 	if (ctrl)
 		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+
+	v4l2_ctrl_new_std(&sensor->ctrls, &sp11_vd55g0_ctrl_ops,
+			  V4L2_CID_DIGITAL_GAIN, VD55G0_DIGITAL_GAIN_UNITY,
+			  VD55G0_DIGITAL_GAIN_MAX, 1, VD55G0_DIGITAL_GAIN_UNITY);
 
 	if (sensor->ctrls.error) {
 		ret = sensor->ctrls.error;
