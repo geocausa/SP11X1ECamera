@@ -20,6 +20,9 @@ board authority and are not a newly verified frame-rate claim.
 
 The historical bind-only driver remains frozen for existing reproducibility checks.
 Do not load both drivers for the same sensor. E004es proved bounded RAW10 transport; E004et proved standard digital-gain readback.
-Both captured only black-level pixels. E004eu tests an internal greyscale pattern.
+Both captured only black-level pixels. E004ev proved four exact full-frame greyscale patterns after correcting dark-row
+handling: bypass averaging, not the whole dark-calibration block.
+Read-only status snapshots report actual clocks and applied controls for validation;
+they are sequential observations rather than atomic per-frame metadata.
 Digital gain is a standard V4L2 control. Test-pattern selection is locked during
 streaming and uses the sensor firmware defaults when returning to normal capture.

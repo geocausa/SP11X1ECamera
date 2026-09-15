@@ -15,6 +15,7 @@
 #include <linux/pm_runtime.h>
 #include <linux/regulator/consumer.h>
 #include <linux/string.h>
+#include <linux/unaligned.h>
 
 #include <media/v4l2-ctrls.h>
 #include <media/v4l2-device.h>
@@ -132,6 +133,33 @@ static int sp11_read(struct sp11_vd55g0 *sensor, u16 reg, u8 *data, u16 len)
 	if (ret == ARRAY_SIZE(msgs))
 		return 0;
 	return ret >= 0 ? -EIO : ret;
+}
+
+/* Read-only snapshots are sequential observations, not atomic frame metadata. */
+static void sp11_vd55g0_log_status(struct sp11_vd55g0 *sensor, const char *phase)
+{
+	u8 clock[4], counters[10], applied[6], mode[2];
+	int ret;
+
+	ret = sp11_read(sensor, 0x0040, clock, sizeof(clock));
+	if (!ret)
+		ret = sp11_read(sensor, 0x004e, counters, sizeof(counters));
+	if (!ret)
+		ret = sp11_read(sensor, 0x0064, applied, sizeof(applied));
+	if (!ret)
+		ret = sp11_read(sensor, 0x0070, mode, sizeof(mode));
+	if (ret) {
+		dev_info(sensor->dev, "native status phase=%s read_error=%d\n",
+			 phase, ret);
+		return;
+	}
+	dev_info(sensor->dev,
+		 "native status phase=%s pixel_clock=%u fps_x16=%u frames=%u context_frames=%u repeat=%u context=%u next=%u exposure_lines=%u analogue_code=%u digital_code=%u ae_mode=%u ae_status=%u\n",
+		 phase, get_unaligned_le32(clock), get_unaligned_le16(counters),
+		 get_unaligned_le16(counters + 2), get_unaligned_le16(counters + 4),
+		 get_unaligned_le16(counters + 6), counters[8], counters[9],
+		 get_unaligned_le16(applied), applied[2],
+		 get_unaligned_le16(applied + 4), mode[0], mode[1]);
 }
 
 /* Exact Windows transport shape: one 16-bit register + one 8-bit data byte. */
@@ -375,6 +403,7 @@ static int sp11_vd55g0_windows_init(struct sp11_vd55g0 *sensor)
 		return ret;
 
 	sensor->initialized = true;
+	sp11_vd55g0_log_status(sensor, "initialized");
 	dev_info(sensor->dev,
 		 "SP11_VD55G0_NATIVE_MODE=PASS writes=597 patch=552 safe_config=42 gpio_disable=1 extclk=19200000 mipi=840000000 link_freq=420000000 pixel_rate=84000000 line=1200 frame=1955 roi=644x604 gpio=01,01,01,01 final_state=SW_STBY stream=0 illumination=0\n");
 	return 0;
@@ -654,6 +683,7 @@ static int sp11_vd55g0_enable_streams(struct v4l2_subdev *sd,
 	if (ret)
 		goto reset;
 
+	sp11_vd55g0_log_status(sensor, "started");
 	__v4l2_ctrl_grab(sensor->test_pattern, true);
 	dev_info(sensor->dev, "native RAW10 stream started; GPIO outputs disabled\n");
 	return 0;
@@ -676,6 +706,7 @@ static int sp11_vd55g0_disable_streams(struct v4l2_subdev *sd,
 	if (pad || streams_mask != BIT_ULL(0))
 		return -EINVAL;
 
+	sp11_vd55g0_log_status(sensor, "before-stop");
 	ret = sp11_write8(sensor, 0x0202, 0x01);
 	if (!ret)
 		ret = sp11_poll8(sensor, 0x0202, 0, 2000, "STOP_COMPLETE");
