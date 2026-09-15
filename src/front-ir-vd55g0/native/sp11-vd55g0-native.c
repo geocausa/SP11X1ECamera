@@ -28,7 +28,8 @@
 
 #define SP11_VD55G0_XCLK_HZ              19200000UL
 #define SP11_VD55G0_LINK_FREQ_HZ        420000000LL
-#define SP11_VD55G0_PIXEL_RATE_HZ        84000000LL
+/* E004ew: measured timing clock for this fixed 19.2 MHz board mode. */
+#define SP11_VD55G0_PIXEL_RATE_HZ       137600000LL
 #define SP11_VD55G0_WIDTH                      644
 #define SP11_VD55G0_HEIGHT                     604
 #define SP11_VD55G0_LINE_LENGTH               1200
@@ -50,6 +51,11 @@
 #define VD55G0_REG_DUSTER_CTRL                0x0316
 #define VD55G0_REG_PATTERN_CTRL               0x0400
 #define VD55G0_PATTERN_HORIZONTAL             0x0201
+#define VD55G0_REG_ANALOGUE_GAIN              0x044d
+#define VD55G0_ANALOGUE_GAIN_MAX                     24
+#define VD55G0_REG_EXPOSURE                   0x044e
+#define VD55G0_EXPOSURE_DEFAULT                    100
+#define VD55G0_EXPOSURE_MARGIN                      64
 #define VD55G0_REG_DIGITAL_GAIN               0x0450
 #define VD55G0_DIGITAL_GAIN_UNITY                  256
 #define VD55G0_DIGITAL_GAIN_MAX                   2048
@@ -577,6 +583,20 @@ static int sp11_write16_verify(struct sp11_vd55g0 *sensor, u16 reg, u16 value)
 	return (readback[0] | (readback[1] << 8)) == value ? 0 : -EIO;
 }
 
+static int sp11_write8_verify(struct sp11_vd55g0 *sensor, u16 reg, u8 value)
+{
+	u8 readback;
+	int ret;
+
+	ret = sp11_write8(sensor, reg, value);
+	if (ret)
+		return ret;
+	ret = sp11_read(sensor, reg, &readback, 1);
+	if (ret)
+		return ret;
+	return readback == value ? 0 : -EIO;
+}
+
 static int sp11_vd55g0_apply_pattern(struct sp11_vd55g0 *sensor)
 {
 	bool enabled = sensor->test_pattern->val;
@@ -616,17 +636,35 @@ static int sp11_vd55g0_set_ctrl(struct v4l2_ctrl *ctrl)
 	/* Pattern selection is cached and applied before the next stream. */
 	if (ctrl->id == V4L2_CID_TEST_PATTERN)
 		return 0;
-	if (ctrl->id != V4L2_CID_DIGITAL_GAIN)
+	if (ctrl->id != V4L2_CID_DIGITAL_GAIN &&
+	    ctrl->id != V4L2_CID_ANALOGUE_GAIN &&
+	    ctrl->id != V4L2_CID_EXPOSURE)
 		return -EINVAL;
 
 	/* Cache idle updates; stream start replays controls after firmware init. */
 	ret = pm_runtime_get_if_in_use(sensor->dev);
 	if (ret <= 0)
 		return ret;
-	ret = sp11_write16_verify(sensor, VD55G0_REG_DIGITAL_GAIN, ctrl->val);
-	if (!ret)
-		dev_info(sensor->dev, "native digital gain verified: %d/256\n",
-			 ctrl->val);
+	switch (ctrl->id) {
+	case V4L2_CID_EXPOSURE:
+		ret = sp11_write16_verify(sensor, VD55G0_REG_EXPOSURE, ctrl->val);
+		break;
+	case V4L2_CID_ANALOGUE_GAIN:
+		/* ST gain code: multiplier = 32 / (32 - code). */
+		ret = sp11_write8_verify(sensor, VD55G0_REG_ANALOGUE_GAIN,
+					 ctrl->val);
+		break;
+	case V4L2_CID_DIGITAL_GAIN:
+		ret = sp11_write16_verify(sensor, VD55G0_REG_DIGITAL_GAIN,
+					  ctrl->val);
+		if (!ret)
+			dev_info(sensor->dev, "native digital gain verified: %d/256\n",
+				 ctrl->val);
+		break;
+	default:
+		ret = -EINVAL;
+		break;
+	}
 	pm_runtime_mark_last_busy(sensor->dev);
 	pm_runtime_put_autosuspend(sensor->dev);
 	return ret;
@@ -757,7 +795,7 @@ static int sp11_vd55g0_init_controls(struct sp11_vd55g0 *sensor)
 	struct v4l2_ctrl *ctrl;
 	int ret;
 
-	ret = v4l2_ctrl_handler_init(&sensor->ctrls, 6);
+	ret = v4l2_ctrl_handler_init(&sensor->ctrls, 8);
 	if (ret)
 		return ret;
 
@@ -785,6 +823,14 @@ static int sp11_vd55g0_init_controls(struct sp11_vd55g0 *sensor)
 				 SP11_VD55G0_VBLANK);
 	if (ctrl)
 		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+
+	v4l2_ctrl_new_std(&sensor->ctrls, &sp11_vd55g0_ctrl_ops,
+			  V4L2_CID_EXPOSURE, 1,
+			  SP11_VD55G0_FRAME_LENGTH - VD55G0_EXPOSURE_MARGIN,
+			  1, VD55G0_EXPOSURE_DEFAULT);
+	v4l2_ctrl_new_std(&sensor->ctrls, &sp11_vd55g0_ctrl_ops,
+			  V4L2_CID_ANALOGUE_GAIN, 0,
+			  VD55G0_ANALOGUE_GAIN_MAX, 1, 0);
 
 	v4l2_ctrl_new_std(&sensor->ctrls, &sp11_vd55g0_ctrl_ops,
 			  V4L2_CID_DIGITAL_GAIN, VD55G0_DIGITAL_GAIN_UNITY,
