@@ -45,6 +45,7 @@
 #define VD55G0_REG_SYSTEM_FSM                 0x002c
 #define VD55G0_REG_BOOT                       0x0200
 #define VD55G0_REG_DARKCAL_CTRL               0x032c
+#define VD55G0_DARKCAL_BYPASS_AVERAGE            0x02
 #define VD55G0_REG_DUSTER_CTRL                0x0316
 #define VD55G0_REG_PATTERN_CTRL               0x0400
 #define VD55G0_PATTERN_HORIZONTAL             0x0201
@@ -550,12 +551,13 @@ static int sp11_write16_verify(struct sp11_vd55g0 *sensor, u16 reg, u16 value)
 static int sp11_vd55g0_apply_pattern(struct sp11_vd55g0 *sensor)
 {
 	bool enabled = sensor->test_pattern->val;
-	u8 darkcal = enabled ? 0 : sensor->darkcal_default;
+	u8 darkcal = enabled ? VD55G0_DARKCAL_BYPASS_AVERAGE :
+			      sensor->darkcal_default;
 	u8 duster = enabled ? 0 : sensor->duster_default;
 	u8 readback;
 	int ret;
 
-	/* ST's pattern path bypasses dark calibration and defect correction. */
+	/* Bypass averaging rather than the entire dark-calibration block. */
 	ret = sp11_write8(sensor, VD55G0_REG_DARKCAL_CTRL, darkcal);
 	if (ret)
 		return ret;
