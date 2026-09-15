@@ -44,6 +44,10 @@
 #define VD55G0_REG_REVISION                   0x0004
 #define VD55G0_REG_SYSTEM_FSM                 0x002c
 #define VD55G0_REG_BOOT                       0x0200
+#define VD55G0_REG_DARKCAL_CTRL               0x032c
+#define VD55G0_REG_DUSTER_CTRL                0x0316
+#define VD55G0_REG_PATTERN_CTRL               0x0400
+#define VD55G0_PATTERN_HORIZONTAL             0x0201
 #define VD55G0_REG_DIGITAL_GAIN               0x0450
 #define VD55G0_DIGITAL_GAIN_UNITY                  256
 #define VD55G0_DIGITAL_GAIN_MAX                   2048
@@ -60,6 +64,9 @@ struct sp11_vd55g0 {
 	struct v4l2_subdev sd;
 	struct media_pad pad;
 	struct v4l2_ctrl_handler ctrls;
+	struct v4l2_ctrl *test_pattern;
+	u8 darkcal_default;
+	u8 duster_default;
 	const struct firmware *firmware;
 	struct clk *xclk;
 	struct gpio_desc *reset;
@@ -75,6 +82,11 @@ struct sp11_vd55g0 {
 
 static const s64 sp11_vd55g0_link_freq_menu[] = {
 	SP11_VD55G0_LINK_FREQ_HZ,
+};
+
+static const char * const sp11_test_patterns[] = {
+	"Disabled",
+	"Horizontal greyscale",
 };
 
 static const u8 sp11_gpio_disabled[] = { 1, 1, 1, 1 };
@@ -352,6 +364,15 @@ static int sp11_vd55g0_windows_init(struct sp11_vd55g0 *sensor)
 	if (memcmp(gpio_ctrl, sp11_gpio_disabled, sizeof(gpio_ctrl)))
 		return -EIO;
 
+	ret = sp11_read(sensor, VD55G0_REG_DARKCAL_CTRL,
+			&sensor->darkcal_default, 1);
+	if (ret)
+		return ret;
+	ret = sp11_read(sensor, VD55G0_REG_DUSTER_CTRL,
+			&sensor->duster_default, 1);
+	if (ret)
+		return ret;
+
 	sensor->initialized = true;
 	dev_info(sensor->dev,
 		 "SP11_VD55G0_NATIVE_MODE=PASS writes=597 patch=552 safe_config=42 gpio_disable=1 extclk=19200000 mipi=840000000 link_freq=420000000 pixel_rate=84000000 line=1200 frame=1955 roi=644x604 gpio=01,01,01,01 final_state=SW_STBY stream=0 illumination=0\n");
@@ -505,13 +526,9 @@ static int sp11_vd55g0_get_mbus_config(struct v4l2_subdev *sd,
 	return 0;
 }
 
-static int sp11_vd55g0_set_ctrl(struct v4l2_ctrl *ctrl)
+static int sp11_write16_verify(struct sp11_vd55g0 *sensor, u16 reg, u16 value)
 {
-	struct sp11_vd55g0 *sensor = container_of(ctrl->handler,
-					       struct sp11_vd55g0, ctrls);
-	u8 data[] = { VD55G0_REG_DIGITAL_GAIN >> 8,
-		      VD55G0_REG_DIGITAL_GAIN & 0xff,
-		      ctrl->val & 0xff, ctrl->val >> 8 };
+	u8 data[] = { reg >> 8, reg & 0xff, value & 0xff, value >> 8 };
 	struct i2c_msg msg = {
 		.addr = sensor->client->addr,
 		.flags = sensor->client->flags,
@@ -521,6 +538,53 @@ static int sp11_vd55g0_set_ctrl(struct v4l2_ctrl *ctrl)
 	u8 readback[2];
 	int ret;
 
+	ret = i2c_transfer(sensor->client->adapter, &msg, 1);
+	if (ret != 1)
+		return ret < 0 ? ret : -EIO;
+	ret = sp11_read(sensor, reg, readback, sizeof(readback));
+	if (ret)
+		return ret;
+	return (readback[0] | (readback[1] << 8)) == value ? 0 : -EIO;
+}
+
+static int sp11_vd55g0_apply_pattern(struct sp11_vd55g0 *sensor)
+{
+	bool enabled = sensor->test_pattern->val;
+	u8 darkcal = enabled ? 0 : sensor->darkcal_default;
+	u8 duster = enabled ? 0 : sensor->duster_default;
+	u8 readback;
+	int ret;
+
+	/* ST's pattern path bypasses dark calibration and defect correction. */
+	ret = sp11_write8(sensor, VD55G0_REG_DARKCAL_CTRL, darkcal);
+	if (ret)
+		return ret;
+	ret = sp11_read(sensor, VD55G0_REG_DARKCAL_CTRL, &readback, 1);
+	if (ret || readback != darkcal)
+		return ret ? ret : -EIO;
+	ret = sp11_write8(sensor, VD55G0_REG_DUSTER_CTRL, duster);
+	if (ret)
+		return ret;
+	ret = sp11_read(sensor, VD55G0_REG_DUSTER_CTRL, &readback, 1);
+	if (ret || readback != duster)
+		return ret ? ret : -EIO;
+	ret = sp11_write16_verify(sensor, VD55G0_REG_PATTERN_CTRL,
+				  enabled ? VD55G0_PATTERN_HORIZONTAL : 0);
+	if (!ret)
+		dev_info(sensor->dev, "native test pattern verified: %s\n",
+			 sp11_test_patterns[sensor->test_pattern->val]);
+	return ret;
+}
+
+static int sp11_vd55g0_set_ctrl(struct v4l2_ctrl *ctrl)
+{
+	struct sp11_vd55g0 *sensor = container_of(ctrl->handler,
+					       struct sp11_vd55g0, ctrls);
+	int ret;
+
+	/* Pattern selection is cached and applied before the next stream. */
+	if (ctrl->id == V4L2_CID_TEST_PATTERN)
+		return 0;
 	if (ctrl->id != V4L2_CID_DIGITAL_GAIN)
 		return -EINVAL;
 
@@ -528,24 +592,10 @@ static int sp11_vd55g0_set_ctrl(struct v4l2_ctrl *ctrl)
 	ret = pm_runtime_get_if_in_use(sensor->dev);
 	if (ret <= 0)
 		return ret;
-
-	ret = i2c_transfer(sensor->client->adapter, &msg, 1);
-	if (ret != 1) {
-		ret = ret < 0 ? ret : -EIO;
-		goto out;
-	}
-	ret = sp11_read(sensor, VD55G0_REG_DIGITAL_GAIN, readback,
-			sizeof(readback));
-	if (ret)
-		goto out;
-	if ((readback[0] | (readback[1] << 8)) != ctrl->val) {
-		ret = -EIO;
-		goto out;
-	}
-	dev_info(sensor->dev, "native digital gain verified: %d/256\n",
-		 ctrl->val);
-
-out:
+	ret = sp11_write16_verify(sensor, VD55G0_REG_DIGITAL_GAIN, ctrl->val);
+	if (!ret)
+		dev_info(sensor->dev, "native digital gain verified: %d/256\n",
+			 ctrl->val);
 	pm_runtime_mark_last_busy(sensor->dev);
 	pm_runtime_put_autosuspend(sensor->dev);
 	return ret;
@@ -586,6 +636,10 @@ static int sp11_vd55g0_enable_streams(struct v4l2_subdev *sd,
 	if (ret)
 		goto reset;
 
+	ret = sp11_vd55g0_apply_pattern(sensor);
+	if (ret)
+		goto reset;
+
 	/* SW_STBY command is self-clearing; FSM confirms completion. */
 	ret = sp11_write8(sensor, 0x0201, 0x01);
 	if (ret)
@@ -598,6 +652,7 @@ static int sp11_vd55g0_enable_streams(struct v4l2_subdev *sd,
 	if (ret)
 		goto reset;
 
+	__v4l2_ctrl_grab(sensor->test_pattern, true);
 	dev_info(sensor->dev, "native RAW10 stream started; GPIO outputs disabled\n");
 	return 0;
 
@@ -636,6 +691,7 @@ static int sp11_vd55g0_disable_streams(struct v4l2_subdev *sd,
 		pm_runtime_put_autosuspend(sensor->dev);
 	}
 
+	__v4l2_ctrl_grab(sensor->test_pattern, false);
 	/* Both paths stop transmission and release exactly one stream reference. */
 	return 0;
 }
@@ -668,7 +724,7 @@ static int sp11_vd55g0_init_controls(struct sp11_vd55g0 *sensor)
 	struct v4l2_ctrl *ctrl;
 	int ret;
 
-	ret = v4l2_ctrl_handler_init(&sensor->ctrls, 5);
+	ret = v4l2_ctrl_handler_init(&sensor->ctrls, 6);
 	if (ret)
 		return ret;
 
@@ -700,6 +756,12 @@ static int sp11_vd55g0_init_controls(struct sp11_vd55g0 *sensor)
 	v4l2_ctrl_new_std(&sensor->ctrls, &sp11_vd55g0_ctrl_ops,
 			  V4L2_CID_DIGITAL_GAIN, VD55G0_DIGITAL_GAIN_UNITY,
 			  VD55G0_DIGITAL_GAIN_MAX, 1, VD55G0_DIGITAL_GAIN_UNITY);
+
+	sensor->test_pattern = v4l2_ctrl_new_std_menu_items(&sensor->ctrls,
+							    &sp11_vd55g0_ctrl_ops,
+							    V4L2_CID_TEST_PATTERN,
+							    ARRAY_SIZE(sp11_test_patterns) - 1,
+							    0, 0, sp11_test_patterns);
 
 	if (sensor->ctrls.error) {
 		ret = sensor->ctrls.error;

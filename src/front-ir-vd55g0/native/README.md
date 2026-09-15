@@ -19,4 +19,7 @@ testing on hardware. Existing fixed pixel-rate/timing values preserve the histor
 board authority and are not a newly verified frame-rate claim.
 
 The historical bind-only driver remains frozen for existing reproducibility checks.
-Do not load both drivers for the same sensor. Active candidate: E004er.
+Do not load both drivers for the same sensor. E004es proved bounded RAW10 transport; E004et proved standard digital-gain readback.
+Both captured only black-level pixels. E004eu tests an internal greyscale pattern.
+Digital gain is a standard V4L2 control. Test-pattern selection is locked during
+streaming and uses the sensor firmware defaults when returning to normal capture.
