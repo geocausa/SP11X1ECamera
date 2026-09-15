@@ -17,3 +17,13 @@ Require 16 full buffers with consecutive sequences, clean kernel, confirmed stop
 autosuspend, Golden return and retirement. Optical scene signal remains unproven.
 
 Reference: https://www.st.com/resource/en/user_manual/um2829-how-to-integrate-and-configure-the-vd55g0-device-from-a-hardware-and-software-perspective-stmicroelectronics.pdf
+
+## Result
+
+PASS: 16 full frames, sequence 0–15, through four buffers; clean kernel,
+confirmed stop and autosuspend, Golden return and retirement. Actual applied
+exposure/gain are 100 lines / analogue code 0 / digital code 256. Sensor timing
+clock is 137.6 MHz, consistent with approximately 58.65 fps at line length 1200
+and frame length 1955. The currently advertised 84 MHz pixel rate is incorrect
+for this fixed mode and must be corrected before application integration.
+Normal pixels remain near black; this does not establish optical scene quality.
