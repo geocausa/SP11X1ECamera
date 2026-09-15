@@ -1,0 +1,32 @@
+E004EH fresh Windows startup oracle, front RGB, read-only debugger capture before reader StartAsync.
+Full Windows-side log: C:\Users\Geoca\Documents\E004EH-oracle.log
+Full log SHA256: 74294f20c2073f3c9a45aea1cbdd88d3bd558b839e95d4b26f3ad3a1e31a90b7
+Holder SHA256: f63bf31dd64f7f8d7e2c5ce20fd5d513af6354d18f4a5a00a5ebca780ee01f56
+
+Authoritative post-convergence Short:
+request1=33312452 predGain=1
+request2=33312452 predGain=1
+request3=33312452 predGain=1
+request4=133645888 predGain=1
+request5=536172576 predGain=1
+request6=1624426496 predGain=1
+
+Fresh request4 SceneAnalyzer publications used by the root-cause proof:
+FrameSA id7 point: bits 0x42809ffb = 64.3124619
+FrameSA confidence id6: bits 0x3a83126f = 0.001
+SatPrev id18 range: [0x00000000,0x430d7247]
+SatPrev confidence id16: 0x3ee8d8f3
+DarkPrev id24 range: [0x4203f081,0x446a8f1d]
+DarkPrev confidence id21: 0x3e356210
+Brighten confidence id27=0
+ExtremeColor confidence id182=0
+Illuminance confidence id227=0
+Windows SafeAgg id8/id9: bits 0x42809ffb, exactly FrameSA.
+Windows ShortAgg id10/id11 and LongAgg id12/id13: also 0x42809ffb.
+
+Exact generic Windows method11 semantics from QcDeviceMFT8380.dll RVA 0x3f0978..0x3f0b74:
+Each candidate carries [low,high] plus weight. Positive-weight low/high endpoints are boundaries. For each adjacent test interval, a candidate contributes weight*low if the interval is entirely below the range, weight*high if entirely above, and zero penalty when the interval overlaps the candidate range. Windows appends 0 and 256, evaluates the weighted clamped candidate for each interval, and selects the minimum absolute residual.
+
+For the request4 vector above:
+range-aware Windows method11 => bits 0x42809ffb = 64.3124619 exactly.
+old Linux point-collapse (using each high endpoint) => bits 0x43b62909 = 364.320587.

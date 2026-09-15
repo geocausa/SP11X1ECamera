@@ -124,6 +124,39 @@ static float dark_luma(float raw)
     return interp_regions(raw, r, 2);
 }
 
+
+static float dark_target_low(float lux)
+{
+    static const struct scalar_region r[] = {
+        { 0.0f, 270.0f, 11.0f },
+        { 300.0f, 360.0f, 9.0f },
+        { 380.0f, 460.0f, 9.0f },
+        { 480.0f, 1000.0f, 4.0f },
+    };
+    return interp_regions(lux, r, sizeof(r) / sizeof(r[0]));
+}
+
+static float dark_low_inner(float ratio)
+{
+    if (ratio <= 0.0f)
+        return 0.0f;
+    if (ratio < 1.5f)
+        return ratio;
+    return 1.5f;
+}
+
+static float dark_method2_low(float lux, float ratio)
+{
+    float v = dark_low_inner(ratio);
+    struct scalar_region r[] = {
+        { 0.0f, 270.0f, v },
+        { 300.0f, 360.0f, v },
+        { 380.0f, 460.0f, v },
+        { 480.0f, 1000.0f, 1.0f },
+    };
+    return interp_regions(lux, r, 4);
+}
+
 static float dark_target_high(float lux)
 {
     static const struct scalar_region r[] = {
@@ -248,7 +281,7 @@ int e003i_aec_default_effective_analyzers(
     const struct e003i_effective_analyzer_input *in,
     struct e003i_final_target_input *out)
 {
-    float frame_adj, t, l, ratio, mapped;
+    float frame_adj, t, l, ratio, mapped, low_t, low_ratio, low_mapped;
     float short_f, illuminance_luma, illuminance_ratio, corr;
     const float frame_conf = f32bits(UINT32_C(0x3a83126f));
     const float illuminance_factor = f32bits(UINT32_C(0x3d0eb463));
@@ -262,7 +295,8 @@ int e003i_aec_default_effective_analyzers(
     frame_adj = fdivv(in->frame_target, in->frame_luma);
     if (!(frame_adj > 0.0f) || !isfinite(frame_adj))
         return -2;
-    out->frame.value = frame_adj;
+    out->frame.low = frame_adj;
+    out->frame.high = frame_adj;
     out->frame.confidence = frame_conf;
 
     /* SatPrevSA: high target selector -> normalized ratio -> method2 -> denormalize. */
@@ -270,21 +304,26 @@ int e003i_aec_default_effective_analyzers(
     l = in->sat_prev_high_pctl_luma;
     ratio = fdivv(fmul(t, in->frame_luma), fmul(l, in->frame_target));
     mapped = sat_method2(in->lux_index, ratio);
-    out->sat_prev.value = fdivv(fmul(mapped, in->frame_target), in->frame_luma);
+    out->sat_prev.low = 0.0f;
+    out->sat_prev.high = fdivv(fmul(mapped, in->frame_target), in->frame_luma);
     out->sat_prev.confidence = sat_confidence(in->lux_index);
 
-    /* DarkPrevSA phase-2 AdjRatioEnd (the final data24 publication). */
-    t = dark_target_high(in->lux_index);
+    /* DarkPrevSA data24 is a true [AdjRatioStart, AdjRatioEnd] range. */
     l = dark_luma(in->dark_prev_low_pctl_luma);
+    low_t = dark_target_low(in->lux_index);
+    low_ratio = fdivv(fmul(low_t, in->frame_luma), fmul(l, in->frame_target));
+    low_mapped = dark_method2_low(in->lux_index, low_ratio);
+    out->dark_prev.low = fdivv(fmul(low_mapped, in->frame_target), in->frame_luma);
+    t = dark_target_high(in->lux_index);
     ratio = fdivv(fmul(t, in->frame_luma), fmul(l, in->frame_target));
     mapped = dark_method2(in->lux_index, ratio);
-    out->dark_prev.value = fdivv(fmul(mapped, in->frame_target), in->frame_luma);
+    out->dark_prev.high = fdivv(fmul(mapped, in->frame_target), in->frame_luma);
     out->dark_prev.confidence = dark_confidence(in->lux_index);
 
     /* Proven exact-zero confidence candidates are CE-equivalent canonical zeros. */
-    out->brighten.value = 0.0f;
+    out->brighten.low = out->brighten.high = 0.0f;
     out->brighten.confidence = 0.0f;
-    out->extreme_color.value = 0.0f;
+    out->extreme_color.low = out->extreme_color.high = 0.0f;
     out->extreme_color.confidence = 0.0f;
 
     /*
@@ -297,7 +336,8 @@ int e003i_aec_default_effective_analyzers(
     illuminance_ratio = fdivv(in->frame_target,
                               fmul(illuminance_luma, frame_adj));
     corr = illuminance_correction(illuminance_ratio);
-    out->illuminance.value = fmul(fmul(illuminance_ratio, corr), frame_adj);
+    out->illuminance.low = 0.0f;
+    out->illuminance.high = fmul(fmul(illuminance_ratio, corr), frame_adj);
     out->illuminance.confidence = fminf(illuminance_conf_a(frame_adj),
                                         illuminance_conf_b(in->saturate_stats_ratio));
 
@@ -306,17 +346,18 @@ int e003i_aec_default_effective_analyzers(
     l = in->short_sat_prev_high_pctl_luma;
     ratio = fdivv(fmul(t, in->frame_luma), fmul(l, in->frame_target));
     mapped = short_method2(in->lux_index, ratio);
-    out->short_sat_prev.value = fdivv(fmul(mapped, in->frame_target),
-                                      in->frame_luma);
+    out->short_sat_prev.low = 0.0f;
+    out->short_sat_prev.high = fdivv(fmul(mapped, in->frame_target),
+                                     in->frame_luma);
     out->short_sat_prev.confidence = short_confidence(in->lux_index);
 
-    out->long_dark_prev.value = 0.0f;
+    out->long_dark_prev.low = out->long_dark_prev.high = 0.0f;
     out->long_dark_prev.confidence = 0.0f;
 
-    if (!isfinite(out->sat_prev.value) || !isfinite(out->sat_prev.confidence) ||
-        !isfinite(out->dark_prev.value) || !isfinite(out->dark_prev.confidence) ||
-        !isfinite(out->illuminance.value) || !isfinite(out->illuminance.confidence) ||
-        !isfinite(out->short_sat_prev.value) ||
+    if (!isfinite(out->sat_prev.low) || !isfinite(out->sat_prev.high) || !isfinite(out->sat_prev.confidence) ||
+        !isfinite(out->dark_prev.low) || !isfinite(out->dark_prev.high) || !isfinite(out->dark_prev.confidence) ||
+        !isfinite(out->illuminance.low) || !isfinite(out->illuminance.high) || !isfinite(out->illuminance.confidence) ||
+        !isfinite(out->short_sat_prev.low) || !isfinite(out->short_sat_prev.high) ||
         !isfinite(out->short_sat_prev.confidence))
         return -3;
     return 0;

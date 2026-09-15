@@ -7,7 +7,8 @@
 #define E003I_SAFE_ACTIVE_CANDIDATES 6
 
 struct e003i_aec_candidate {
-    float value;
+    float low;
+    float high;
     float confidence;
 };
 

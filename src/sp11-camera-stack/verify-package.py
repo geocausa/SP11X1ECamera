@@ -16,7 +16,7 @@ expected={
  hw/'modules/sp11-vd55g0.ko':'4839415eadc41f541606b334d64f06678eada3b8c4ef7e9faf57565b18a65a72',
  front/'build/qcom-camss.ko':'862732b7c9e4712360840a033a016239beac7e81a7d620aff61db51efb8ecdc7',
  front/'build/imx681.ko':'ef57ed06941a8c9c3ce6b811268767944affce409936be4eb7f4db09806f63d6',
- front/'build/front-imx681-capture':'70f407f5fd70e6657f9647a33eecde744ac9e1bd19fa9e901a4faf52508e354d',
+ front/'build/front-imx681-capture':'2a22259a133db3a335617daa4c9dab28a26d71642d4d4788c320275573b8fdde',
  front/'build/front-imx681-bootstrap-controls':'4721ff6510d806ed63ffcb70d9a88441220047ef734ca760cc40bdc5719cd7ce'}
 for p,h in expected.items():need(p.is_file() and sha(p)==h,str(p))
 prov=json.loads((meta/'PROVENANCE.json').read_text());need(prov['modules']['qcom_camss_sha256']==expected[hw/'modules/qcom-camss.ko'],'meta provenance')

@@ -190,7 +190,8 @@ int e003i_request_loop_process(struct e003i_request_loop_state *state,
     memset(&fi, 0, sizeof(fi));
     fi.source_exposure_s1 = h3->s1_exposure;
     fi.target_input.lux_index = lux_in;
-    fi.target_input.frame.value = frame_adj;
+    fi.target_input.frame.low = frame_adj;
+    fi.target_input.frame.high = frame_adj;
     fi.target_input.frame.confidence = frame_conf;
     fi.target_input.sat_prev = in->analyzers.sat_prev;
     fi.target_input.dark_prev = in->analyzers.dark_prev;
@@ -255,7 +256,8 @@ int e003i_request_loop_process(struct e003i_request_loop_state *state,
 
     out->lux_trigger_in = lux_in;
     out->frame_target = frame_target;
-    out->frame_candidate.value = frame_adj;
+    out->frame_candidate.low = frame_adj;
+    out->frame_candidate.high = frame_adj;
     out->frame_candidate.confidence = frame_conf;
     out->history_reference_log103 = href;
     out->next_lux_trigger = next_lux;

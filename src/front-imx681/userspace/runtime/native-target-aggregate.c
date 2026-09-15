@@ -97,3 +97,75 @@ int e003i_method11_point_aggregate(
     *out_value = best_value;
     return 0;
 }
+
+
+int e003i_method11_range_aggregate(
+    const struct e003i_weighted_range *ranges,
+    size_t count,
+    float *out_value)
+{
+    const float epsilon = bits_to_float(UINT32_C(0x33d6bf95));
+    float boundaries[2 * E003I_METHOD11_MAX_RANGES + 2];
+    float best_value = -1.0f;
+    float best_metric = 100000.0f;
+    size_t nb = 0, i, k;
+
+    if (ranges == NULL || out_value == NULL)
+        return -1;
+    if (count > E003I_METHOD11_MAX_RANGES)
+        return -2;
+    for (i = 0; i < count; ++i) {
+        if (!isfinite(ranges[i].low) || !isfinite(ranges[i].high) ||
+            !isfinite(ranges[i].weight) || ranges[i].low > ranges[i].high)
+            return -3;
+        if (ranges[i].weight > 0.0f) {
+            boundaries[nb++] = ranges[i].low;
+            boundaries[nb++] = ranges[i].high;
+        }
+    }
+    boundaries[nb++] = 0.0f;
+    boundaries[nb++] = 256.0f;
+    sort_float_ascending(boundaries, nb);
+
+    for (k = 0; k + 1 < nb; ++k) {
+        const float lower = boundaries[k];
+        const float upper = boundaries[k + 1];
+        float sum_weight = 0.0f;
+        float sum_weighted = 0.0f;
+        float avg, candidate, metric;
+
+        if (fabsf(lower - upper) < epsilon)
+            continue;
+        for (i = 0; i < count; ++i) {
+            const float weight = ranges[i].weight;
+            if (fabsf(weight) < epsilon)
+                continue;
+            if (upper <= ranges[i].low) {
+                volatile float product = weight * ranges[i].low;
+                sum_weight = sum_weight + weight;
+                sum_weighted = sum_weighted + product;
+            }
+            if (lower >= ranges[i].high) {
+                volatile float product = weight * ranges[i].high;
+                sum_weight = sum_weight + weight;
+                sum_weighted = sum_weighted + product;
+            }
+        }
+        avg = sum_weighted / sum_weight;
+        candidate = avg;
+        if (candidate < lower)
+            candidate = lower;
+        if (upper < candidate)
+            candidate = upper;
+        {
+            volatile float product = candidate * sum_weight;
+            metric = fabsf(product - sum_weighted);
+        }
+        if (metric < best_metric) {
+            best_value = candidate;
+            best_metric = metric;
+        }
+    }
+    *out_value = best_value;
+    return 0;
+}

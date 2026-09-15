@@ -4,7 +4,7 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(git -C "$ROOT" rev-parse --show-toplevel)"
 HW=${1:?hardware authority build directory required}
 OUT=${2:?staging root required}
-[ "$(sha256sum "$HW/HARDWARE-MANIFEST.sha256" | awk '{print $1}')" = 3b84ddcbb5728d04ea0e86d8ae066e1b4436e0f707afca1c4f7fb00e0e4ba140 ] || { echo hardware_manifest_drift >&2; exit 1; }
+[ "$(sha256sum "$HW/HARDWARE-MANIFEST.sha256" | awk '{print $1}')" = ec987046abf8dcf6b0b7c2131052703c9d94e5fca5b2dc327ab5168894c89ca6 ] || { echo hardware_manifest_drift >&2; exit 1; }
 (cd "$HW" && sha256sum -c HARDWARE-MANIFEST.sha256 >/dev/null)
 rm -rf "$OUT"; mkdir -p "$OUT"
 FB="$OUT/.front-build-input"; mkdir -p "$FB"
