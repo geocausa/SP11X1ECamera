@@ -16,3 +16,12 @@ full byte counts, requested/applied controls, clean kernel, stop and autosuspend
 Save stock application debug logs and metadata. Bound capture to 20 seconds and
 return to Golden on success or failure. Retire the identity; never retry it.
 No scene-quality or processed-video claim follows from this transport gate.
+
+## Result
+
+PASS: stock cam captured all 16 consecutive full frames (7,885,824 bytes)
+through libcamera, with no fallback capture client. Applied 1000-line exposure
+and unity gains matched, kernel health passed, stop and autosuspend completed.
+Golden restored and identity retired. Crop/helper/processing warnings remain;
+this proves bounded unconverted application capture, not processed video or
+scene image quality.
