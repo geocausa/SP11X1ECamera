@@ -25,3 +25,13 @@ References:
 - https://github.com/STMicroelectronics/vd55g0-linux-driver
 - https://www.st.com/resource/en/user_manual/um2829-how-to-integrate-and-configure-the-vd55g0-device-from-a-hardware-and-software-perspective-stmicroelectronics.pdf
 - https://docs.libcamera.org/master/sensor_driver_requirements.html
+
+## Result
+
+PASS: V4L2 exposed the expected ranges and cached the idle request. Before-stop
+status confirmed 1000 lines, analogue code 0 and digital code 256 at 137.6 MHz.
+Sixteen full consecutive frames passed through four buffers. Kernel health,
+stop and autosuspend passed; Golden restored and candidate retired. Immediate
+start status had zero exposure before the first completed frame, so it must not
+be interpreted as frame-associated metadata. Pixels remain 60–69 near black;
+useful scene imagery is still unproven despite the longer applied exposure.
