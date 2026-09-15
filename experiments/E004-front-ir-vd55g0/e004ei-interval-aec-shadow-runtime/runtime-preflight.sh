@@ -13,7 +13,7 @@ mapfile -t dirty < <(git -C "$R" diff --name-only | sort); expected=(CONTINUE.md
 for x in UNIFIED-DISCOVERY.json LOAD-MEDIA.txt DMESG.txt ATTEMPT1-PASS.json ATTEMPT1-FAILURE.json ATTEMPT1-CONSUMED.marker; do [ ! -e "$D/$x" ] || fail prior_$x; done
 for m in qcom_camss imx681 ov13858 sp11_vd55g0 e004t_csiphy_readback_test; do [ ! -d "/sys/module/$m" ] || fail module_$m; done
 [ ! -e /dev/media0 ] || fail media_present
-[ "$(sha256sum /var/lib/sp11-camera-stack/installed-camera-stack-manifest.sha256|awk '{print $1}')" = d1d0eb4c504378643630f6975a08d9c15d2b8ac0bedca2f1205bbfb51f885373 ] || fail package_manifest
+[ "$(sha256sum /var/lib/sp11-camera-stack/installed-camera-stack-manifest.sha256|awk '{print $1}')" = cc1faed4358863b3b5714e2f5310649557ccddec5c1ccef8fc60acefef3569e1 ] || fail package_manifest
 sudo -n sh -c 'cd / && sha256sum -c /var/lib/sp11-camera-stack/installed-camera-stack-manifest.sha256 >/dev/null' || fail package_files
 grep -qx 'activated=NO' /var/lib/sp11-camera-stack/INSTALL-STATE.txt || fail package_activation_state
 for spec in \
@@ -28,7 +28,7 @@ for _ in $(seq 1 60); do IR=$(find_compat 0060 microsoft,sp11-vd55g0 2>/dev/null
 for p in "$IR" "$REAR" "$FRONT"; do [ ! -e "$p/driver" ] || fail unexpected_bound_$(basename "$p"); done
 {
  echo schema=sp11-camera-e004ei-runtime-preflight-v1; echo status=PASS_READY_FOR_FRONT_SHADOW_OBSERVATION; echo time=$(date -Ins); echo boot_id=$(cat /proc/sys/kernel/random/boot_id)
- echo ir_client_path=$IR; echo rear_client_path=$REAR; echo front_client_path=$FRONT; echo package_manifest_sha256=d1d0eb4c504378643630f6975a08d9c15d2b8ac0bedca2f1205bbfb51f885373
+ echo ir_client_path=$IR; echo rear_client_path=$REAR; echo front_client_path=$FRONT; echo package_manifest_sha256=cc1faed4358863b3b5714e2f5310649557ccddec5c1ccef8fc60acefef3569e1
  echo qcom_camss=absent; echo media_node=absent; echo ir_stream=NO; echo illumination=NO; echo secureisp=NO; echo retry=NO
 } > "$D/RUNTIME-PREFLIGHT.txt"
 echo "E004EI_RUNTIME_PREFLIGHT=PASS IR=$(basename "$IR") REAR=$(basename "$REAR") FRONT=$(basename "$FRONT") PACKAGE=EXACT"
