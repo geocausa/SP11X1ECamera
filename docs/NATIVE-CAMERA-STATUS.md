@@ -109,3 +109,9 @@ baseline failure reproduces in an offline callback model; the patch passes 16
 cases normally and with sanitizers, compiles as an isolated module with W=1,
 and passes strict checkpatch. No system driver was installed. See E004fg for
 scope and limitations. Next obtain same-machine emitter routing/timing evidence.
+
+E004fh confirms 700 mA in the installed Windows flash device registry and exact
+archive matches for all four running flash/PMIC driver binaries. It was a
+read-only collection, with no camera or illumination command. Golden return
+98b67104-e3eb-4091-8b6c-180fd054bd06 and unchanged boot order are verified.
+Physical emitter routing and pulse limits remain open.
