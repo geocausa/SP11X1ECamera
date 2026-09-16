@@ -17,6 +17,7 @@ The original five locally modified handoff/state files remain untouched.
 | Stock application capture | E004ez | Stock cam owns 16 complete requests and stream lifecycle |
 | Standard selection API | E004fa | All four full-array rectangles; no libcamera rectangle errors |
 | Non-unity analogue gain | E004fb | Applied code 16 (2x), stock cam 16 frames, clean PM and kernel |
+| Native processed monochrome | E004fe | 16 complete RGB888 pattern frames including frame zero; clean PM and kernel |
 
 Each completed candidate returned to Golden FullIO v19c and was retired. Latest
 captures are bounded runs of roughly a third of a second, not endurance proof.
@@ -46,9 +47,10 @@ promote RGB, protected-worker or complete-stack readiness.
    packed samples, but the selected EGL software ISP rejects R10_CSI2P. The CPU
    conversion and statistics paths also require Bayer layouts in inspected 0.7.0
    source. E004fc now implements native CPU monochrome conversion and statistics,
-   with normal and sanitizer tests passing; live processed capture is next.
+   with normal and sanitizer tests passing. E004fe now proves 16 live processed
+   pattern frames including the first frame; ordinary scene quality remains open.
 3. **Sensor integration is incomplete.** The generic gain helper passes offline;
-   next validate live binding and establish measured black-level policy, characterize control delays, and report board orientation
+   E004fe proves live binding. Establish measured black-level policy, characterize control delays, and report board orientation
    from verified firmware/DT facts. Current app control inventory exposes only
    Contrast/Gamma; kernel exposure/gain are proven, app request controls are not.
 4. **Lifecycle and desktop integration remain.** Test repeated start/stop,
@@ -75,7 +77,7 @@ facts need to be assessed against that shared implementation.
 
 Read AGENTS.md and this status, then inspect HEAD/origin, live boot, active
 processes and consumed/retired records. Latest retired hardware identity is
-E004fd; never reuse it. Start a fresh identity for the next hardware run.
+E004fe; never reuse it. Start a fresh identity for the next hardware run.
 Keep Golden the permanent default. No protected SecureISP runtime activation.
 Native code is in `src/front-ir-vd55g0/native/`; experiment results are under
 `experiments/E004-front-ir-vd55g0/`. Proprietary firmware and raw captures stay
@@ -90,5 +92,6 @@ CPU selection and a colour-free generic tuning fallback are included. Patches
 reapply byte-exactly to the recorded upstream base. No system library was replaced.
 E004fd captured 16 processed frames but failed: frame zero used stale zero IPA
 parameters; frames 1..15 are verified neutral ramps. The candidate is retired.
-Fix asynchronous parameter ordering before the next fresh hardware identity.
+E004fe fixes asynchronous parameter ordering and passes all 16 frames, including
+frame zero. Both candidates are retired. Next investigate useful optical signal.
 See E004fc/README.md and MONO-MANIFEST.json for exact coverage and limitations.

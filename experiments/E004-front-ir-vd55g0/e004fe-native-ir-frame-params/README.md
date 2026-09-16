@@ -30,3 +30,12 @@ IPA may adjust exposure/gain. No illumination or protected runtime.
 Fresh one-shot entry, 120-second return watchdog, automatic Golden return and
 hash-checked retirement. No same-boot retry. Successful output would prove the
 generated-pattern path only; optical image quality and endurance remain open.
+
+## Result: PASS, retired to Golden
+
+All 16 complete 644x604 RGB888 frames, including sequence zero, are byte-identical
+neutral ramps spanning 15..212. Each frame is 1,169,344 bytes (stride 1936); all rows
+match and padding is zero. The generic gain helper and automatic CPU/monochrome
+tuning path bind. Kernel health, applied controls, stop and runtime suspension
+pass. Golden boot is restored and the candidate is retired. This is a bounded
+~0.3-second generated-pattern result, not endurance or useful optical quality.
