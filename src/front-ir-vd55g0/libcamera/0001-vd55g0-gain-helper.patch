@@ -1,0 +1,94 @@
+diff --git a/src/ipa/libipa/camera_sensor_helper.cpp b/src/ipa/libipa/camera_sensor_helper.cpp
+index e3e3e53..5ae51e5 100644
+--- a/src/ipa/libipa/camera_sensor_helper.cpp
++++ b/src/ipa/libipa/camera_sensor_helper.cpp
+@@ -789,6 +789,17 @@ public:
+ };
+ REGISTER_CAMERA_SENSOR_HELPER("ov13858", CameraSensorHelperOv13858)
+ 
++class CameraSensorHelperVd55g0 : public CameraSensorHelper
++{
++public:
++	CameraSensorHelperVd55g0()
++	{
++		/* VD55G0 integration manual: analogue gain = 32 / (32 - code). */
++		gain_ = AnalogueGainLinear{ 0, 32, -1, 32 };
++	}
++};
++REGISTER_CAMERA_SENSOR_HELPER("vd55g0", CameraSensorHelperVd55g0)
++
+ class CameraSensorHelperVd55g1 : public CameraSensorHelper
+ {
+ public:
+diff --git a/test/ipa/libipa/meson.build b/test/ipa/libipa/meson.build
+index 2070bed..3a5b51c 100644
+--- a/test/ipa/libipa/meson.build
++++ b/test/ipa/libipa/meson.build
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: CC0-1.0
+ 
+ libipa_test = [
++    {'name': 'vd55g0-helper', 'sources': ['vd55g0-helper.cpp']},
+     {'name': 'fixedpoint', 'sources': ['fixedpoint.cpp']},
+     {'name': 'histogram', 'sources': ['histogram.cpp']},
+     {'name': 'interpolator', 'sources': ['interpolator.cpp']},
+diff --git a/test/ipa/libipa/vd55g0-helper.cpp b/test/ipa/libipa/vd55g0-helper.cpp
+new file mode 100644
+index 0000000..1712828
+--- /dev/null
++++ b/test/ipa/libipa/vd55g0-helper.cpp
+@@ -0,0 +1,54 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/* VD55G0 sensor gain-unit and factory registration checks. */
++
++#include <cmath>
++#include <iostream>
++
++#include "camera_sensor_helper.h"
++#include "test.h"
++
++using namespace libcamera;
++using namespace libcamera::ipa;
++
++class Vd55g0HelperTest : public Test
++{
++protected:
++	int run() override
++	{
++		auto helper = CameraSensorHelperFactoryBase::create("vd55g0");
++		if (!helper) {
++			std::cerr << "VD55G0 helper was not registered" << std::endl;
++			return TestFail;
++		}
++
++		/* Independent documented operating points, not a second formula. */
++		const struct {
++			unsigned int code;
++			double multiplier;
++		} points[] = {
++			{ 0, 1.0 },
++			{ 16, 2.0 },
++			{ 24, 4.0 },
++			{ 28, 8.0 },
++		};
++		for (const auto &point : points) {
++			if (std::abs(helper->gain(point.code) - point.multiplier) > 1e-12 ||
++			    helper->gainCode(point.multiplier) != point.code) {
++				std::cerr << "Incorrect gain units at code " << point.code
++					  << std::endl;
++				return TestFail;
++			}
++		}
++
++		/* Fractional requests must quantize without exceeding the request. */
++		if (helper->gainCode(1.5) != 10 ||
++		    helper->gain(helper->gainCode(1.5)) > 1.5) {
++			std::cerr << "Unexpected fractional gain quantization" << std::endl;
++			return TestFail;
++		}
++
++		return TestPass;
++	}
++};
++
++TEST_REGISTER(Vd55g0HelperTest)

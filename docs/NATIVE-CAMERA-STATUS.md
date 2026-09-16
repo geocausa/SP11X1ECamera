@@ -80,3 +80,12 @@ Keep Golden the permanent default. No protected SecureISP runtime activation.
 Native code is in `src/front-ir-vd55g0/native/`; experiment results are under
 `experiments/E004-front-ir-vd55g0/`. Proprietary firmware and raw captures stay
 local and ignored. Only exact intended source/evidence paths are staged.
+
+## Offline integration checkpoint: E004fc
+
+An isolated upstream libcamera 0.7.0 build now passes on SP11. The generic VD55G0
+gain-helper patch and independent conversion tests pass, along with existing
+pixel/Bayer format tests. Source base and patch hashes are recorded in E004fc.
+Nothing was installed into the system camera library. Monochrome conversion and
+statistics remain unimplemented; current board model naming also needs alignment
+with the generic helper. See E004fc/README.md for exact paths and next work.
