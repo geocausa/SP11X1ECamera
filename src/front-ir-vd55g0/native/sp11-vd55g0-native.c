@@ -289,7 +289,7 @@ static int sp11_vd55g0_windows_init(struct sp11_vd55g0 *sensor)
 		return ret;
 
 	dev_info(sensor->dev,
-		 "SP11_VD55G0_NATIVE_PATCH_BEGIN start=0x2000 bytes=%u sha256=%s\n",
+		 "SP11_VD55G0_NATIVE_PATCH_BEGIN start=0x2000 bytes=%u expected_sha256=%s\n",
 		 SP11_SURFACE_PATCH_SIZE, SP11_SURFACE_PATCH_SHA256);
 	for (i = 0; i < SP11_SURFACE_PATCH_SIZE; i++) {
 		ret = sp11_write8(sensor, VD55G0_PATCH_START + i,
@@ -411,7 +411,8 @@ static int sp11_vd55g0_windows_init(struct sp11_vd55g0 *sensor)
 	sensor->initialized = true;
 	sp11_vd55g0_log_status(sensor, "initialized");
 	dev_info(sensor->dev,
-		 "SP11_VD55G0_NATIVE_MODE=PASS writes=597 patch=552 safe_config=42 gpio_disable=1 extclk=19200000 mipi=840000000 link_freq=420000000 pixel_rate=84000000 line=1200 frame=1955 roi=644x604 gpio=01,01,01,01 final_state=SW_STBY stream=0 illumination=0\n");
+		 "SP11_VD55G0_NATIVE_MODE=PASS writes=597 patch=552 safe_config=42 gpio_disable=1 extclk=19200000 mipi=840000000 link_freq=420000000 pixel_rate=%lld line=1200 frame=1955 roi=644x604 gpio=01,01,01,01 final_state=SW_STBY stream=0 illumination=0\n",
+		 SP11_VD55G0_PIXEL_RATE_HZ);
 	return 0;
 }
 
@@ -987,7 +988,8 @@ static int sp11_vd55g0_probe(struct i2c_client *client)
 	pm_runtime_put_autosuspend(sensor->dev);
 
 	dev_info(sensor->dev,
-		 "SP11_VD55G0_NATIVE_BIND=PASS format=Y10_1X10 size=644x604 link_freq=420000000 pixel_rate=84000000 line=1200 frame=1955 stream_capable=1 illumination_capable=0\n");
+		 "SP11_VD55G0_NATIVE_BIND=PASS format=Y10_1X10 size=644x604 link_freq=420000000 pixel_rate=%lld line=1200 frame=1955 stream_capable=1 illumination_capable=0\n",
+		 SP11_VD55G0_PIXEL_RATE_HZ);
 	return 0;
 
 err_subdev:
