@@ -27,3 +27,17 @@ Lifecycle: install separate payload, push exact source, arm one fresh GRUB entry
 one bounded capture with a 120-second Golden return timer, automatic return and
 hash-checked retirement. Never overwrite Golden FullIO v19c or retry a consumed
 identity. Inspect RUNTIME-RESULT.json even if the harness exits zero.
+
+## Result: failed first-frame parameter ordering, retired
+
+All 16 full-size RGB888 buffers arrived at sequences 0..15. Generic helper and
+monochrome tuning bound correctly, the sensor stopped and suspended, and no kernel
+fault/warning appeared. Frame zero is uniformly 255 because the software ISP
+queued processing immediately after requesting asynchronous parameter computation;
+its cached gamma/contrast/gains were all zero. Frames 1..15 contain identical,
+neutral horizontal ramps spanning 15..212, with all 604 rows equal and cleared
+padding. Original RUNTIME-RESULT remains FAIL. FRAME-ANALYSIS.json records the
+per-frame evidence. Golden is restored and this identity is retired.
+
+Next: fix per-frame parameter ordering in libcamera and use a fresh identity;
+do not drop the first frame or weaken the image gate.

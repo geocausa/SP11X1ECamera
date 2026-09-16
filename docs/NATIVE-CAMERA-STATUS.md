@@ -75,7 +75,7 @@ facts need to be assessed against that shared implementation.
 
 Read AGENTS.md and this status, then inspect HEAD/origin, live boot, active
 processes and consumed/retired records. Latest retired hardware identity is
-E004fb; never reuse it. Start a fresh identity for the next hardware run.
+E004fd; never reuse it. Start a fresh identity for the next hardware run.
 Keep Golden the permanent default. No protected SecureISP runtime activation.
 Native code is in `src/front-ir-vd55g0/native/`; experiment results are under
 `experiments/E004-front-ir-vd55g0/`. Proprietary firmware and raw captures stay
@@ -88,5 +88,7 @@ helper and true RAW10 monochrome processing. Four focused tests pass; the mono
 processing tests also pass with address/undefined-behaviour sanitizers. Automatic
 CPU selection and a colour-free generic tuning fallback are included. Patches
 reapply byte-exactly to the recorded upstream base. No system library was replaced.
-E004fd is the fresh prepared identity for the first processed test-pattern capture.
+E004fd captured 16 processed frames but failed: frame zero used stale zero IPA
+parameters; frames 1..15 are verified neutral ramps. The candidate is retired.
+Fix asynchronous parameter ordering before the next fresh hardware identity.
 See E004fc/README.md and MONO-MANIFEST.json for exact coverage and limitations.
