@@ -1,0 +1,64 @@
+{
+  "status": "PASS_OFFLINE_MONO_PROCESSING",
+  "upstream_commit": "b7854fd07d42168f099b5ce30d1702e0e0875bf5",
+  "patches": {
+    "src/front-ir-vd55g0/libcamera/0001-vd55g0-gain-helper.patch": "a292ea4803c0a9eef0bc6316aa2ba33e45a499910598f7dc35a4e8657249ddf3",
+    "src/front-ir-vd55g0/libcamera/0002-softisp-monochrome-raw10.patch": "6561db67fbb6106e9a99fbaabf54fd392d70b6d9273e74b35d30680692afd057"
+  },
+  "source_files": {
+    "include/libcamera/internal/software_isp/meson.build": "a06d0947bdde83ab1a2428be00470b878d69f25f1f9caf023aa0b9348c812148",
+    "include/libcamera/internal/software_isp/monochrome.h": "6d4317ef22c9941437153964675b8a38dfed0eb2b5dac30448a354143717ba38",
+    "include/libcamera/internal/software_isp/swstats_cpu.h": "8f1b6702bff5b795afd40f438261f0203ba62ce71a78b31d4ffe97f2c5097c01",
+    "src/ipa/libipa/camera_sensor_helper.cpp": "9d05feb3ac31c90d2c1e17821f9440278e5c6c57c3710209e268f8eac858785b",
+    "src/ipa/simple/data/meson.build": "c5d7732cec74f32cd893b28a7151f9c0ceee5962b9e1242d3bd6fb7215d00c31",
+    "src/ipa/simple/data/uncalibrated-mono.yaml": "009d3861585d025c44fc1ed2d6ad5aaabf80ecc7b8fcc640d592263788341141",
+    "src/libcamera/software_isp/debayer_cpu.cpp": "bb2eb404c98d765b78fb9c9a34ecd548ebcf23e9b2936da0493c0b7a0e9f9861",
+    "src/libcamera/software_isp/debayer_cpu.h": "7e2e6305c6a54df3474e9339811690f7e4e13c81aa20c6ae4dbb6f8268a2118e",
+    "src/libcamera/software_isp/software_isp.cpp": "a7888fa1c0c455ade497466db9a2f806c61dde0e63739f87ad821a8baf556f85",
+    "src/libcamera/software_isp/swstats_cpu.cpp": "0fbd9afe2e76c9fd1be9e23e0fa994a76ca1368979f759422032a7ba5db446da",
+    "test/ipa/libipa/meson.build": "5d556ebc86bb6c257fb70a6d478a6c8e9fbd5e761d7695309358b3a5be0d4c9a",
+    "test/ipa/libipa/vd55g0-helper.cpp": "182c0c26799efd6adcee76fc9f13551d1bba18c30bd93ff8c2fcaeaa8a997a27",
+    "test/meson.build": "38af09675ddcdc9e7838cbe2ed9997c8f31cae827f3cabd9a7eb6ab3d1edd69a",
+    "test/mono-processing.cpp": "3ac61e06cd1e8f2f8582777de34b52dab2859bd1eab77e679501c2eb5e691b10"
+  },
+  "patch_reapplication_matches_source": true,
+  "normal_tests": [
+    "mono-processing",
+    "vd55g0-helper",
+    "bayer-format",
+    "pixel-format"
+  ],
+  "sanitizers": [
+    "address",
+    "undefined"
+  ],
+  "sanitized_test": "mono-processing",
+  "formats": [
+    "RGB888",
+    "BGR888",
+    "XRGB8888",
+    "ARGB8888",
+    "XBGR8888",
+    "ABGR8888"
+  ],
+  "geometry_tests": [
+    "4x1",
+    "4x3",
+    "aligned centered crop with distinct border",
+    "644x604/816-byte input stride"
+  ],
+  "test_coverage": [
+    "all RAW10 values and histogram bins",
+    "low two bits preserved before gamma",
+    "eight-bit IPA sum domain",
+    "neutral output despite colour gains",
+    "alpha and padding",
+    "short allocation/short payload/error input rejected and buffers returned",
+    "full-size ramp with black index 0/64/128",
+    "sequence and timestamp preservation"
+  ],
+  "automatic_cpu_for_monochrome": true,
+  "mono_tuning_fallback": "uncalibrated-mono.yaml; BlackLevel, Adjust, Agc",
+  "system_install": false,
+  "hardware_tested": false
+}

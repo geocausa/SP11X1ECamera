@@ -45,10 +45,10 @@ promote RGB, protected-worker or complete-stack readiness.
 2. **Processed monochrome output is missing in stock libcamera.** It advertises
    packed samples, but the selected EGL software ISP rejects R10_CSI2P. The CPU
    conversion and statistics paths also require Bayer layouts in inspected 0.7.0
-   source. Add proper monochrome processing within libcamera, with packing,
-   padding, brightness and boundary tests; do not label mono data as Bayer.
-3. **Sensor integration is incomplete.** Add the VD55G0 gain helper and measured
-   black-level policy, characterize control delays, and report board orientation
+   source. E004fc now implements native CPU monochrome conversion and statistics,
+   with normal and sanitizer tests passing; live processed capture is next.
+3. **Sensor integration is incomplete.** The generic gain helper passes offline;
+   next validate live binding and establish measured black-level policy, characterize control delays, and report board orientation
    from verified firmware/DT facts. Current app control inventory exposes only
    Contrast/Gamma; kernel exposure/gain are proven, app request controls are not.
 4. **Lifecycle and desktop integration remain.** Test repeated start/stop,
@@ -83,9 +83,10 @@ local and ignored. Only exact intended source/evidence paths are staged.
 
 ## Offline integration checkpoint: E004fc
 
-An isolated upstream libcamera 0.7.0 build now passes on SP11. The generic VD55G0
-gain-helper patch and independent conversion tests pass, along with existing
-pixel/Bayer format tests. Source base and patch hashes are recorded in E004fc.
-Nothing was installed into the system camera library. Monochrome conversion and
-statistics remain unimplemented; current board model naming also needs alignment
-with the generic helper. See E004fc/README.md for exact paths and next work.
+An isolated upstream libcamera 0.7.0 build now includes the generic VD55G0 gain
+helper and true RAW10 monochrome processing. Four focused tests pass; the mono
+processing tests also pass with address/undefined-behaviour sanitizers. Automatic
+CPU selection and a colour-free generic tuning fallback are included. Patches
+reapply byte-exactly to the recorded upstream base. No system library was replaced.
+E004fd is the fresh prepared identity for the first processed test-pattern capture.
+See E004fc/README.md and MONO-MANIFEST.json for exact coverage and limitations.

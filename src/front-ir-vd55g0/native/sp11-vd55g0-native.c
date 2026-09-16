@@ -915,6 +915,8 @@ static int sp11_vd55g0_probe(struct i2c_client *client)
 	sensor->dev = &client->dev;
 	sensor->client = client;
 	v4l2_i2c_subdev_init(&sensor->sd, client, &sp11_vd55g0_subdev_ops);
+	/* Report the sensor model independently of this board driver name. */
+	v4l2_i2c_subdev_set_name(&sensor->sd, client, "vd55g0", NULL);
 
 	ret = sp11_vd55g0_check_endpoint(sensor->dev);
 	if (ret)

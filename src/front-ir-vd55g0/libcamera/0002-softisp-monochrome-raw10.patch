@@ -1,0 +1,725 @@
+diff --git a/include/libcamera/internal/software_isp/meson.build b/include/libcamera/internal/software_isp/meson.build
+index df7c3b9..5f287dd 100644
+--- a/include/libcamera/internal/software_isp/meson.build
++++ b/include/libcamera/internal/software_isp/meson.build
+@@ -3,6 +3,7 @@
+ libcamera_internal_headers += files([
+     'benchmark.h',
+     'debayer_params.h',
++    'monochrome.h',
+     'software_isp.h',
+     'swisp_stats.h',
+     'swstats_cpu.h',
+diff --git a/include/libcamera/internal/software_isp/monochrome.h b/include/libcamera/internal/software_isp/monochrome.h
+new file mode 100644
+index 0000000..cedaae1
+--- /dev/null
++++ b/include/libcamera/internal/software_isp/monochrome.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++/* CSI-2 packed monochrome sample decoding. */
++#pragma once
++
++#include <array>
++#include <stdint.h>
++
++namespace libcamera {
++
++/* The caller supplies one complete five-byte CSI-2 RAW10 group. */
++inline std::array<uint16_t, 4> unpackMono10(const uint8_t *src)
++{
++	return { uint16_t((src[0] << 2) | (src[4] & 3)),
++		 uint16_t((src[1] << 2) | ((src[4] >> 2) & 3)),
++		 uint16_t((src[2] << 2) | ((src[4] >> 4) & 3)),
++		 uint16_t((src[3] << 2) | (src[4] >> 6)) };
++}
++
++} /* namespace libcamera */
+diff --git a/include/libcamera/internal/software_isp/swstats_cpu.h b/include/libcamera/internal/software_isp/swstats_cpu.h
+index 64b3e23..3df40b0 100644
+--- a/include/libcamera/internal/software_isp/swstats_cpu.h
++++ b/include/libcamera/internal/software_isp/swstats_cpu.h
+@@ -54,7 +54,7 @@ public:
+ 	int configure(const StreamConfiguration &inputCfg);
+ 	void setWindow(const Rectangle &window);
+ 	void startFrame(uint32_t frame);
+-	void finishFrame(uint32_t frame, uint32_t bufferId);
++	void finishFrame(uint32_t frame, uint32_t bufferId, bool valid = true);
+ 	void processFrame(uint32_t frame, uint32_t bufferId, FrameBuffer *input);
+ 
+ 	void processLine0(uint32_t frame, unsigned int y, const uint8_t *src[])
+@@ -98,6 +98,8 @@ private:
+ 	void statsBGGR10PLine0(const uint8_t *src[]);
+ 	void statsGBRG10PLine0(const uint8_t *src[]);
+ 
++	void statsMono10Line(const uint8_t *src[]);
++	void processMonoFrame(MappedFrameBuffer &in);
+ 	void processBayerFrame2(MappedFrameBuffer &in);
+ 
+ 	processFrameFn processFrame_;
+@@ -109,6 +111,8 @@ private:
+ 
+ 	unsigned int ySkipMask_;
+ 
++	bool monochrome_ = false;
++	size_t inputFrameSize_ = 0;
+ 	Rectangle window_;
+ 
+ 	Size patternSize_;
+diff --git a/src/ipa/simple/data/meson.build b/src/ipa/simple/data/meson.build
+index 92795ee..ebacb86 100644
+--- a/src/ipa/simple/data/meson.build
++++ b/src/ipa/simple/data/meson.build
+@@ -2,6 +2,7 @@
+ 
+ conf_files = files([
+     'uncalibrated.yaml',
++    'uncalibrated-mono.yaml',
+ ])
+ 
+ # The install_dir must match the name from the IPAModuleInfo
+diff --git a/src/ipa/simple/data/uncalibrated-mono.yaml b/src/ipa/simple/data/uncalibrated-mono.yaml
+new file mode 100644
+index 0000000..3902e57
+--- /dev/null
++++ b/src/ipa/simple/data/uncalibrated-mono.yaml
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: CC0-1.0
++%YAML 1.1
++---
++# Generic monochrome fallback; not a sensor calibration.
++version: 1
++algorithms:
++  - BlackLevel:
++  - Adjust:
++  - Agc:
++...
+diff --git a/src/libcamera/software_isp/debayer_cpu.cpp b/src/libcamera/software_isp/debayer_cpu.cpp
+index af7af0a..018cdf1 100644
+--- a/src/libcamera/software_isp/debayer_cpu.cpp
++++ b/src/libcamera/software_isp/debayer_cpu.cpp
+@@ -25,6 +25,7 @@
+ #include "libcamera/internal/framebuffer.h"
+ #include "libcamera/internal/global_configuration.h"
+ #include "libcamera/internal/mapped_framebuffer.h"
++#include "libcamera/internal/software_isp/monochrome.h"
+ 
+ namespace libcamera {
+ 
+@@ -295,6 +296,15 @@ void DebayerCpu::debayer10P_RGRG_BGR888(uint8_t *dst, const uint8_t *src[])
+  */
+ int DebayerCpu::getInputConfig(PixelFormat inputFormat, DebayerInputConfig &config)
+ {
++	if (inputFormat == formats::R10_CSI2P) {
++		config.bpp = 10;
++		config.patternSize = { 4, 1 };
++		config.outputFormats = { formats::RGB888, formats::BGR888,
++			formats::XRGB8888, formats::ARGB8888,
++			formats::XBGR8888, formats::ABGR8888 };
++		return 0;
++	}
++
+ 	BayerFormat bayerFormat =
+ 		BayerFormat::fromPixelFormat(inputFormat);
+ 
+@@ -485,6 +495,12 @@ int DebayerCpu::configure(const StreamConfiguration &inputCfg,
+ 	if (getInputConfig(inputCfg.pixelFormat, inputConfig_) != 0)
+ 		return -EINVAL;
+ 
++	monochrome_ = inputCfg.pixelFormat == formats::R10_CSI2P;
++	if (monochrome_ && (inputCfg.size.isNull() || inputCfg.size.width % 4 ||
++			   inputCfg.stride < uint64_t(inputCfg.size.width) * 5 / 4))
++		return -EINVAL;
++	inputFrameSize_ = size_t(inputCfg.stride) * inputCfg.size.height;
++
+ 	if (stats_->configure(inputCfg) != 0)
+ 		return -EINVAL;
+ 
+@@ -519,13 +535,16 @@ int DebayerCpu::configure(const StreamConfiguration &inputCfg,
+ 		return -EINVAL;
+ 	}
+ 
+-	int ret = setDebayerFunctions(inputCfg.pixelFormat,
++	int ret = monochrome_ ? getOutputConfig(outputCfg.pixelFormat, outputConfig_) :
++		setDebayerFunctions(inputCfg.pixelFormat,
+ 				      outputCfg.pixelFormat,
+ 				      ccmEnabled);
+ 	if (ret != 0)
+ 		return -EINVAL;
+ 
+-	ccmEnabled_ = ccmEnabled;
++	ccmEnabled_ = ccmEnabled && !monochrome_;
++	if (monochrome_)
++		swapRedBlueGains_ = false;
+ 
+ 	/*
+ 	 * Lookup tables must be initialized because the initial value is used for
+@@ -533,7 +552,7 @@ int DebayerCpu::configure(const StreamConfiguration &inputCfg,
+ 	 * own parameters. Let's enforce recomputing lookup tables by setting the
+ 	 * stored last used gamma to an out-of-range value.
+ 	 */
+-	params_.gamma = 1.0;
++	params_.gamma = monochrome_ ? -1.0 : 1.0;
+ 
+ 	window_.x = ((inputCfg.size.width - outputCfg.size.width) / 2) &
+ 		    ~(inputConfig_.patternSize.width - 1);
+@@ -644,6 +663,32 @@ void DebayerCpu::memcpyNextLine(const uint8_t *linePointers[])
+ 	lineBufferIndex_ = (lineBufferIndex_ + 1) % (patternHeight + 1);
+ }
+ 
++void DebayerCpu::processMono(uint32_t frame, const uint8_t *src, uint8_t *dst)
++{
++	src += size_t(window_.y) * inputConfig_.stride + window_.x * 5 / 4;
++	const unsigned int bytesPerPixel = outputConfig_.bpp / 8;
++
++	for (unsigned int y = 0; y < window_.height; ++y) {
++		const uint8_t *line[] = { src };
++		stats_->processLine0(frame, y, line);
++		uint8_t *pixel = dst;
++		for (unsigned int x = 0; x < window_.width; x += 4) {
++			for (uint16_t sample : unpackMono10(src + x * 5 / 4)) {
++				/* No colour interpolation, white balance or colour matrix. */
++				uint8_t value = gammaTable_[sample];
++				pixel[0] = pixel[1] = pixel[2] = value;
++				if (bytesPerPixel == 4)
++					pixel[3] = 255;
++				pixel += bytesPerPixel;
++			}
++		}
++		/* Do not expose stale bytes in output row padding. */
++		std::fill(pixel, dst + outputConfig_.stride, 0);
++		src += inputConfig_.stride;
++		dst += outputConfig_.stride;
++	}
++}
++
+ void DebayerCpu::process2(uint32_t frame, const uint8_t *src, uint8_t *dst)
+ {
+ 	unsigned int yEnd = window_.height;
+@@ -794,7 +839,7 @@ void DebayerCpu::updateLookupTables(DebayerParams &params)
+ 	};
+ 	const unsigned int gammaTableSize = gammaTable_.size();
+ 	const double div = static_cast<double>(kRGBLookupSize) / gammaTableSize;
+-	if (ccmEnabled_) {
++	if (!monochrome_ && ccmEnabled_) {
+ 		if (gammaUpdateNeeded ||
+ 		    matrixChanged(params.combinedMatrix, params_.combinedMatrix)) {
+ 			auto &red = swapRedBlueGains_ ? blueCcm_ : redCcm_;
+@@ -816,7 +861,7 @@ void DebayerCpu::updateLookupTables(DebayerParams &params)
+ 				gammaLut_[i] = gammaTable_[i / div];
+ 			}
+ 		}
+-	} else {
++	} else if (!monochrome_) {
+ 		if (gammaUpdateNeeded || params.gains != params_.gains) {
+ 			auto &gains = params.gains;
+ 			auto &red = swapRedBlueGains_ ? blue_ : red_;
+@@ -868,12 +913,30 @@ void DebayerCpu::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+ 
+ 	stats_->startFrame(frame);
+ 
+-	if (inputConfig_.patternSize.height == 2)
++	if (monochrome_ && (in.planes().size() != 1 || out.planes().size() != 1 ||
++			   in.planes()[0].size() < inputFrameSize_ ||
++			   input->metadata().status != FrameMetadata::FrameSuccess ||
++			   input->metadata().planes()[0].bytesused < inputFrameSize_ ||
++			   out.planes()[0].size() < outputConfig_.frameSize)) {
++		metadata.status = FrameMetadata::FrameError;
++		metadata.planes()[0].bytesused = 0;
++		dmaSyncers.clear();
++		bench_.finishFrame();
++		stats_->finishFrame(frame, 0, false);
++		outputBufferReady.emit(output);
++		inputBufferReady.emit(input);
++		return;
++	}
++
++	if (monochrome_)
++		processMono(frame, in.planes()[0].data(), out.planes()[0].data());
++	else if (inputConfig_.patternSize.height == 2)
+ 		process2(frame, in.planes()[0].data(), out.planes()[0].data());
+ 	else
+ 		process4(frame, in.planes()[0].data(), out.planes()[0].data());
+ 
+-	metadata.planes()[0].bytesused = out.planes()[0].size();
++	metadata.planes()[0].bytesused = monochrome_ ? outputConfig_.frameSize :
++						   out.planes()[0].size();
+ 
+ 	dmaSyncers.clear();
+ 
+@@ -892,6 +955,12 @@ void DebayerCpu::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output
+ 
+ SizeRange DebayerCpu::sizes(PixelFormat inputFormat, const Size &inputSize)
+ {
++	if (inputFormat == formats::R10_CSI2P) {
++		if (inputSize.width < 4 || inputSize.width % 4 || !inputSize.height)
++			return {};
++		return SizeRange({ 4, 1 }, inputSize, 4, 1);
++	}
++
+ 	Size patternSize = this->patternSize(inputFormat);
+ 	unsigned int borderHeight = patternSize.height;
+ 
+diff --git a/src/libcamera/software_isp/debayer_cpu.h b/src/libcamera/software_isp/debayer_cpu.h
+index b5cbb5b..1dabfce 100644
+--- a/src/libcamera/software_isp/debayer_cpu.h
++++ b/src/libcamera/software_isp/debayer_cpu.h
+@@ -108,6 +108,7 @@ private:
+ 	void setupInputMemcpy(const uint8_t *linePointers[]);
+ 	void shiftLinePointers(const uint8_t *linePointers[], const uint8_t *src);
+ 	void memcpyNextLine(const uint8_t *linePointers[]);
++	void processMono(uint32_t frame, const uint8_t *src, uint8_t *dst);
+ 	void process2(uint32_t frame, const uint8_t *src, uint8_t *dst);
+ 	void process4(uint32_t frame, const uint8_t *src, uint8_t *dst);
+ 	void updateGammaTable(DebayerParams &params);
+@@ -140,6 +141,8 @@ private:
+ 	debayerFn debayer1_;
+ 	debayerFn debayer2_;
+ 	debayerFn debayer3_;
++	bool monochrome_ = false;
++	size_t inputFrameSize_ = 0;
+ 	Rectangle window_;
+ 	std::unique_ptr<SwStatsCpu> stats_;
+ 	std::vector<uint8_t> lineBuffers_[kMaxLineBuffers];
+diff --git a/src/libcamera/software_isp/software_isp.cpp b/src/libcamera/software_isp/software_isp.cpp
+index a83986b..775ca19 100644
+--- a/src/libcamera/software_isp/software_isp.cpp
++++ b/src/libcamera/software_isp/software_isp.cpp
+@@ -19,6 +19,7 @@
+ 
+ #include <libcamera/controls.h>
+ #include <libcamera/formats.h>
++#include <libcamera/property_ids.h>
+ #include <libcamera/stream.h>
+ 
+ #include "libcamera/internal/framebuffer.h"
+@@ -104,6 +105,9 @@ SoftwareIsp::SoftwareIsp(PipelineHandler *pipe, const CameraSensor *sensor,
+ 	}
+ 	stats->statsReady.connect(this, &SoftwareIsp::statsReady);
+ 
++	const bool monochrome = sensor->properties().get(properties::draft::ColorFilterArrangement) ==
++		properties::draft::MONO;
++
+ #if HAVE_DEBAYER_EGL
+ 	std::optional<std::string> softISPMode = configuration.envOption("LIBCAMERA_SOFTISP_MODE", { "software_isp", "mode" });
+ 	if (softISPMode) {
+@@ -114,7 +118,8 @@ SoftwareIsp::SoftwareIsp(PipelineHandler *pipe, const CameraSensor *sensor,
+ 		}
+ 	}
+ 
+-	if (!softISPMode || softISPMode == "gpu")
++	/* The EGL backend does not currently support monochrome input. */
++	if ((!softISPMode && !monochrome) || softISPMode == "gpu")
+ 		debayer_ = std::make_unique<DebayerEGL>(std::move(stats), configuration);
+ 
+ #endif
+@@ -137,7 +142,8 @@ SoftwareIsp::SoftwareIsp(PipelineHandler *pipe, const CameraSensor *sensor,
+ 	 * isn't found, fall back to the 'uncalibrated' file.
+ 	 */
+ 	std::string ipaTuningFile =
+-		ipa_->configurationFile(sensor->model() + ".yaml", "uncalibrated.yaml");
++		ipa_->configurationFile(sensor->model() + ".yaml",
++				monochrome ? "uncalibrated-mono.yaml" : "uncalibrated.yaml");
+ 
+ 	IPACameraSensorInfo sensorInfo{};
+ 	int ret = sensor->sensorInfo(&sensorInfo);
+diff --git a/src/libcamera/software_isp/swstats_cpu.cpp b/src/libcamera/software_isp/swstats_cpu.cpp
+index 5c3011a..0908bd2 100644
+--- a/src/libcamera/software_isp/swstats_cpu.cpp
++++ b/src/libcamera/software_isp/swstats_cpu.cpp
+@@ -13,10 +13,12 @@
+ 
+ #include <libcamera/base/log.h>
+ 
++#include <libcamera/formats.h>
+ #include <libcamera/stream.h>
+ 
+ #include "libcamera/internal/bayer_format.h"
+ #include "libcamera/internal/mapped_framebuffer.h"
++#include "libcamera/internal/software_isp/monochrome.h"
+ 
+ namespace libcamera {
+ 
+@@ -68,7 +70,7 @@ namespace libcamera {
+  * also indicates if processLine2() should be called or not.
+  * This may only be called after a successful configure() call.
+  *
+- * Valid sizes are: 1x1, 2x2, 4x2 or 4x4.
++ * Valid sizes are: 1x1, 2x2, 4x1, 4x2 or 4x4.
+  *
+  * \return The pattern size
+  */
+@@ -340,12 +342,13 @@ void SwStatsCpu::startFrame(uint32_t frame)
+  * \brief Finish statistics calculation for the current frame
+  * \param[in] frame The frame number
+  * \param[in] bufferId ID of the statistics buffer
++ * \param[in] valid Whether the input frame was successfully processed
+  *
+  * This may only be called after a successful setWindow() call.
+  */
+-void SwStatsCpu::finishFrame(uint32_t frame, uint32_t bufferId)
++void SwStatsCpu::finishFrame(uint32_t frame, uint32_t bufferId, bool valid)
+ {
+-	stats_.valid = frame % kStatPerNumFrames == 0;
++	stats_.valid = valid && frame % kStatPerNumFrames == 0;
+ 	*sharedStats_ = stats_;
+ 	statsReady.emit(frame, bufferId);
+ }
+@@ -395,6 +398,20 @@ int SwStatsCpu::setupStandardBayerOrder(BayerFormat::Order order)
+ int SwStatsCpu::configure(const StreamConfiguration &inputCfg)
+ {
+ 	stride_ = inputCfg.stride;
++	monochrome_ = inputCfg.pixelFormat == formats::R10_CSI2P;
++	if (monochrome_) {
++		if (inputCfg.size.isNull() || inputCfg.size.width % 4 ||
++		    stride_ < uint64_t(inputCfg.size.width) * 5 / 4)
++			return -EINVAL;
++		inputFrameSize_ = size_t(stride_) * inputCfg.size.height;
++		patternSize_ = { 4, 1 };
++		xShift_ = 0;
++		ySkipMask_ = 0;
++		swapLines_ = false;
++		stats0_ = &SwStatsCpu::statsMono10Line;
++		processFrame_ = &SwStatsCpu::processMonoFrame;
++		return 0;
++	}
+ 
+ 	BayerFormat bayerFormat =
+ 		BayerFormat::fromPixelFormat(inputCfg.pixelFormat);
+@@ -487,6 +504,34 @@ void SwStatsCpu::setWindow(const Rectangle &window)
+ 	window_.height &= ~(patternSize_.height - 1);
+ }
+ 
++void SwStatsCpu::statsMono10Line(const uint8_t *src[])
++{
++	const uint8_t *line = src[0] + window_.x * 5 / 4;
++	uint64_t sum = 0;
++
++	for (unsigned int x = 0; x < window_.width; x += 4) {
++		for (uint16_t value : unpackMono10(line + x * 5 / 4)) {
++			/* The software IPA expects channel sums in the 8-bit domain. */
++			sum += value >> 2;
++			stats_.yHistogram[value * SwIspStats::kYHistogramSize / 1024]++;
++		}
++	}
++	/* Equal channel sums preserve the existing statistics ABI for mono. */
++	stats_.sum_.r() += sum;
++	stats_.sum_.g() += sum;
++	stats_.sum_.b() += sum;
++}
++
++void SwStatsCpu::processMonoFrame(MappedFrameBuffer &in)
++{
++	const uint8_t *src = in.planes()[0].data() + size_t(window_.y) * stride_;
++	for (unsigned int y = 0; y < window_.height; ++y) {
++		const uint8_t *line[] = { src };
++		statsMono10Line(line);
++		src += stride_;
++	}
++}
++
+ void SwStatsCpu::processBayerFrame2(MappedFrameBuffer &in)
+ {
+ 	const uint8_t *src = in.planes()[0].data();
+@@ -533,6 +578,15 @@ void SwStatsCpu::processFrame(uint32_t frame, uint32_t bufferId, FrameBuffer *in
+ 		return;
+ 	}
+ 
++	if (monochrome_ && (in.planes().size() != 1 ||
++			   in.planes()[0].size() < inputFrameSize_ ||
++			   input->metadata().status != FrameMetadata::FrameSuccess ||
++			   input->metadata().planes()[0].bytesused < inputFrameSize_)) {
++		finishFrame(frame, bufferId, false);
++		bench_.finishFrame();
++		return;
++	}
++
+ 	(this->*processFrame_)(in);
+ 	finishFrame(frame, bufferId);
+ 	bench_.finishFrame();
+diff --git a/test/meson.build b/test/meson.build
+index 52f0436..4b9bdf8 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -83,6 +83,10 @@ internal_non_parallel_tests = [
+     {'name': 'mapped-buffer', 'sources': ['mapped-buffer.cpp']},
+ ]
+ 
++if softisp_enabled
++    internal_tests += [{'name': 'mono-processing', 'sources': ['mono-processing.cpp']}]
++endif
++
+ foreach test : public_tests
+     deps = [libcamera_public]
+     if 'dependencies' in test
+diff --git a/test/mono-processing.cpp b/test/mono-processing.cpp
+new file mode 100644
+index 0000000..ede1afc
+--- /dev/null
++++ b/test/mono-processing.cpp
+@@ -0,0 +1,265 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/* Monochrome conversion, statistics and buffer-boundary regression tests. */
++#include <algorithm>
++#include <array>
++#include <cmath>
++#include <iostream>
++#include <numeric>
++#include <unistd.h>
++#include <vector>
++
++#include <libcamera/formats.h>
++#include <libcamera/stream.h>
++
++#include "libcamera/internal/framebuffer.h"
++#include "libcamera/internal/shared_mem_object.h"
++#include "libcamera/internal/software_isp/monochrome.h"
++#include "../src/libcamera/software_isp/debayer_cpu.h"
++#include "test.h"
++
++using namespace libcamera;
++
++class MonoProcessingTest : public Test
++{
++	void ready(FrameBuffer *) { ++completed_; }
++	unsigned int completed_ = 0;
++
++	int conversion(PixelFormat outputFormat, unsigned int height, bool shortInput,
++		       bool shortOutput, bool cropped = false, bool shortPayload = false,
++		       bool failedFrame = false)
++	{
++		GlobalConfiguration config;
++		auto stats = std::make_unique<SwStatsCpu>(config);
++		DebayerCpu converter(std::move(stats), config);
++		converter.inputBufferReady.connect(this, &MonoProcessingTest::ready);
++		converter.outputBufferReady.connect(this, &MonoProcessingTest::ready);
++
++		StreamConfiguration input;
++		input.pixelFormat = formats::R10_CSI2P;
++		input.size = cropped ? Size(12, height + 2) : Size(4, height);
++		input.stride = input.size.width * 5 / 4 + 3;
++		StreamConfiguration output;
++		output.pixelFormat = outputFormat;
++		output.size = { 4, height };
++		std::tie(output.stride, output.frameSize) =
++			converter.strideAndFrameSize(outputFormat, output.size);
++		if (converter.configure(input, { output }, true))
++			return TestFail;
++
++		const size_t inputSize = input.stride * input.size.height;
++		SharedMem inputMem("mono-test-input", inputSize);
++		SharedMem outputMem("mono-test-output", output.frameSize + 16);
++		if (!inputMem || !outputMem)
++			return TestFail;
++		std::fill(inputMem.mem().begin(), inputMem.mem().end(), 0xa5);
++		std::fill(outputMem.mem().begin(), outputMem.mem().end(), 0x5a);
++		/* Known wire vector 00 00 00 00 e4 decodes to 0,1,2,3. */
++		for (unsigned int y = 0; y < input.size.height; ++y) {
++			for (unsigned int x = 0; x < input.size.width; x += 4) {
++				uint8_t *p = inputMem.mem().data() + y * input.stride + x * 5 / 4;
++				const bool outside = cropped && (x != 4 || y == 0 || y == height + 1);
++				p[0] = p[1] = p[2] = p[3] = outside ? 255 : 0;
++				p[4] = outside ? 255 : 0xe4;
++			}
++		}
++		FrameBuffer in(std::vector<FrameBuffer::Plane>{ { inputMem.fd(), 0, unsigned(inputSize - shortInput) } });
++		FrameBuffer out(std::vector<FrameBuffer::Plane>{ { outputMem.fd(), 0,
++				   shortOutput ? output.frameSize - 1 : output.frameSize + 16 } });
++		auto &metadata = in._d()->metadata();
++		metadata.status = failedFrame ? FrameMetadata::FrameError : FrameMetadata::FrameSuccess;
++		metadata.sequence = 42;
++		metadata.timestamp = 123456;
++		metadata.planes()[0].bytesused = inputSize - shortPayload;
++		DebayerParams params{};
++		params.gamma = 0.5;
++		params.contrastExp = 1;
++		/* Colour adjustments must not tint monochrome output. */
++		params.gains = RGB<float>({ 3, 1, 2 });
++		completed_ = 0;
++		converter.process(0, &in, &out, params);
++		SwIspStats observed{};
++		if (pread(converter.getStatsFD().get(), &observed, sizeof(observed), 0) != sizeof(observed))
++			return TestFail;
++		if (completed_ != 2 || out.metadata().sequence != 42 ||
++		    out.metadata().timestamp != 123456)
++			return TestFail;
++
++		if (shortInput || shortOutput || shortPayload || failedFrame) {
++			if (out.metadata().status != FrameMetadata::FrameError ||
++			    out.metadata().planes()[0].bytesused || observed.valid ||
++			    !std::all_of(outputMem.mem().begin(), outputMem.mem().end(),
++					 [](uint8_t v) { return v == 0x5a; }))
++				return TestFail;
++			return TestPass;
++		}
++
++		const bool alpha = outputFormat != formats::RGB888 && outputFormat != formats::BGR888;
++		const unsigned int pixelBytes = alpha ? 4 : 3;
++		const uint8_t expected[] = { 0, 7, 11, 13 };
++		for (unsigned int y = 0; y < height; ++y) {
++			const uint8_t *row = outputMem.mem().data() + y * output.stride;
++			for (unsigned int x = 0; x < 4; ++x) {
++				const uint8_t *pixel = row + x * pixelBytes;
++				if (pixel[0] != expected[x] || pixel[1] != expected[x] ||
++				    pixel[2] != expected[x] || (alpha && pixel[3] != 255))
++					return TestFail;
++			}
++			for (unsigned int x = 4 * pixelBytes; x < output.stride; ++x) {
++				if (row[x] != 0)
++					return TestFail;
++			}
++		}
++		for (unsigned int i = output.frameSize; i < output.frameSize + 16; ++i) {
++			if (outputMem.mem()[i] != 0x5a)
++				return TestFail;
++		}
++		if (!observed.valid || observed.sum_.r() != 0 ||
++		    observed.sum_.g() != 0 || observed.sum_.b() != 0 ||
++		    observed.yHistogram[0] != 4 * height ||
++		    std::accumulate(observed.yHistogram.begin(), observed.yHistogram.end(), 0U) != 4 * height ||
++		    out.metadata().planes()[0].bytesused != output.frameSize)
++			return TestFail;
++		return TestPass;
++	}
++
++	int histogram()
++	{
++		GlobalConfiguration config;
++		SwStatsCpu stats(config);
++		StreamConfiguration input;
++		input.pixelFormat = formats::R10_CSI2P;
++		input.size = { 1024, 3 };
++		input.stride = 1296;
++		if (stats.configure(input))
++			return TestFail;
++		stats.setWindow(Rectangle(input.size));
++		SharedMem memory("mono-histogram", input.stride * input.size.height);
++		if (!memory)
++			return TestFail;
++		std::fill(memory.mem().begin(), memory.mem().end(), 0xff);
++		for (unsigned int y = 0; y < 3; ++y) {
++			for (unsigned int group = 0; group < 256; ++group) {
++				uint8_t *p = memory.mem().data() + y * input.stride + group * 5;
++				/* Four equal MSBs plus the independently known low-bit vector. */
++				p[0] = p[1] = p[2] = p[3] = group;
++				p[4] = 0xe4;
++			}
++		}
++		FrameBuffer buffer(std::vector<FrameBuffer::Plane>{ { memory.fd(), 0, unsigned(memory.mem().size()) } });
++		buffer._d()->metadata().status = FrameMetadata::FrameSuccess;
++		buffer._d()->metadata().planes()[0].bytesused = memory.mem().size();
++		stats.processFrame(0, 0, &buffer);
++		SwIspStats observed{};
++		if (pread(stats.getStatsFD().get(), &observed, sizeof(observed), 0) != sizeof(observed))
++			return TestFail;
++		if (!observed.valid || observed.sum_.r() != 391680 ||
++		    observed.sum_.g() != observed.sum_.r() || observed.sum_.b() != observed.sum_.r() ||
++		    !std::all_of(observed.yHistogram.begin(), observed.yHistogram.end(),
++				 [](uint32_t count) { return count == 48; }))
++			return TestFail;
++		stats.processFrame(1, 0, &buffer);
++		if (pread(stats.getStatsFD().get(), &observed, sizeof(observed), 0) != sizeof(observed) ||
++		    observed.valid)
++			return TestFail;
++		return TestPass;
++	}
++
++	int fullFrame(unsigned int blackIndex)
++	{
++		GlobalConfiguration config;
++		DebayerCpu converter(std::make_unique<SwStatsCpu>(config), config);
++		StreamConfiguration input;
++		input.pixelFormat = formats::R10_CSI2P;
++		input.size = { 644, 604 };
++		input.stride = 816;
++		StreamConfiguration output;
++		output.pixelFormat = formats::RGB888;
++		output.size = input.size;
++		std::tie(output.stride, output.frameSize) =
++			converter.strideAndFrameSize(output.pixelFormat, output.size);
++		if (converter.configure(input, { output }, false))
++			return TestFail;
++		SharedMem source("mono-full-input", input.stride * input.size.height);
++		SharedMem destination("mono-full-output", output.frameSize);
++		if (!source || !destination)
++			return TestFail;
++		std::fill(source.mem().begin(), source.mem().end(), 0xff);
++		/* Reproduce the dimensions and x+66 ramp observed on the SP11. */
++		for (unsigned int y = 0; y < input.size.height; ++y) {
++			for (unsigned int x = 0; x < input.size.width; x += 4) {
++				uint8_t *group = source.mem().data() + y * input.stride + x * 5 / 4;
++				for (unsigned int i = 0; i < 4; ++i)
++					group[i] = (x + i + 66) / 4;
++				group[4] = 0x4e; /* Low bits 2,3,0,1. */
++			}
++		}
++		FrameBuffer in(std::vector<FrameBuffer::Plane>{ { source.fd(), 0, unsigned(source.mem().size()) } });
++		FrameBuffer out(std::vector<FrameBuffer::Plane>{ { destination.fd(), 0, output.frameSize } });
++		in._d()->metadata().status = FrameMetadata::FrameSuccess;
++		in._d()->metadata().planes()[0].bytesused = source.mem().size();
++		DebayerParams params{};
++		params.gamma = 1;
++		params.contrastExp = 1;
++		params.gains = RGB<float>(1);
++		params.blackLevel = RGB<float>(blackIndex / 1024.0f);
++		converter.process(0, &in, &out, params);
++		if (out.metadata().status != FrameMetadata::FrameSuccess ||
++		    out.metadata().planes()[0].bytesused != output.frameSize)
++			return TestFail;
++		for (unsigned int y = 0; y < input.size.height; ++y) {
++			const uint8_t *row = destination.mem().data() + y * output.stride;
++			for (unsigned int x = 0; x < input.size.width; ++x) {
++				const int signal = std::max(int(x + 66) - int(blackIndex), 0);
++				const int expected = signal * 255 / (1023 - blackIndex);
++				if (std::abs(int(row[x * 3]) - expected) > 1 ||
++				    row[x * 3] != row[x * 3 + 1] || row[x * 3] != row[x * 3 + 2])
++					return TestFail;
++			}
++		}
++		return TestPass;
++	}
++
++	int run() override
++	{
++		const uint8_t high[] = { 255, 255, 255, 255, 0xe4 };
++		if (unpackMono10(high) != std::array<uint16_t, 4>{ 1020, 1021, 1022, 1023 })
++			return TestFail;
++		for (PixelFormat format : { formats::RGB888, formats::BGR888,
++					   formats::XRGB8888, formats::ARGB8888,
++					   formats::XBGR8888, formats::ABGR8888 }) {
++			for (unsigned int height : { 1U, 3U }) {
++				if (conversion(format, height, false, false) ||
++				    conversion(format, height, false, false, true)) {
++					std::cerr << "Mono conversion failed: " << format << " height=" << height << std::endl;
++					return TestFail;
++				}
++			}
++		}
++		if (conversion(formats::RGB888, 3, true, false) ||
++		    conversion(formats::RGB888, 3, false, true) ||
++		    conversion(formats::RGB888, 3, false, false, false, true) ||
++		    conversion(formats::RGB888, 3, false, false, false, false, true) || histogram() ||
++		    fullFrame(0) || fullFrame(64) || fullFrame(128))
++			return TestFail;
++
++		GlobalConfiguration config;
++		DebayerCpu converter(std::make_unique<SwStatsCpu>(config), config);
++		StreamConfiguration input;
++		input.pixelFormat = formats::R10_CSI2P;
++		input.size = { 4, 1 };
++		input.stride = 4;
++		StreamConfiguration output;
++		output.pixelFormat = formats::RGB888;
++		output.size = { 4, 1 };
++		output.stride = 16;
++		if (!converter.configure(input, { output }, false))
++			return TestFail;
++		input.size = { 6, 1 };
++		input.stride = 16;
++		if (!converter.configure(input, { output }, false))
++			return TestFail;
++		return TestPass;
++	}
++};
++
++TEST_REGISTER(MonoProcessingTest)

@@ -30,14 +30,47 @@ preserved as the committed camera-repository patch. The incremental build tree
 is `build/libcamera-baseline`; BASELINE-BUILD.json describes its initial unmodified
 build, while HELPER-MANIFEST.json describes the current patched state.
 
-## Remaining
+## Monochrome processing implemented and tested
 
-Stock 0.7.0 rejects mono R10_CSI2P in both CPU/EGL conversion and the statistics
-path. Proper monochrome conversion and exposure statistics need implementation;
-do not disguise monochrome samples as a Bayer pattern. Add offline fixtures for
-all RAW10 low bits, padded rows, odd/minimum geometry as supported by the API,
-buffer bounds, brightness transforms and metadata/lifecycle. Preserve existing
-Bayer behavior. Hardware remains a fresh, separately gated experiment afterward.
+`0002-softisp-monochrome-raw10.patch` adds true R10_CSI2P processing to the CPU
+software ISP, preserving all ten bits through black-level/gamma adjustment and
+producing neutral RGB/BGR output (24/32-bit). No Bayer impersonation or colour
+interpolation is used. Full-array 644x604 output is allowed, including borders.
+Monochrome sensors select the CPU backend automatically unless the caller
+explicitly requests another mode. The generic uncalibrated monochrome fallback
+runs BlackLevel, Adjust and Agc; no AWB or CCM. This is not sensor calibration.
 
-No claim of processed camera output, auto-exposure, useful optical scene signal,
-endurance or Windows Hello parity follows from this helper-only checkpoint.
+The statistics histogram is computed from full samples; equal channel sums use
+the existing IPA eight-bit domain. Short planes, short payloads and error frames
+produce invalid statistics and return both buffers with an output error. Output
+padding is cleared. The standalone statistics path rejects incomplete buffers.
+
+Four focused normal tests pass, including the new mono-processing test, and the
+monochrome test also passes with address/undefined-behaviour sanitizers. Fixtures
+cover all 1024 values, all histogram bins, low-bit sensitivity, six output formats,
+minimum/odd-height sizes, distinct cropped borders, padding, error buffer return,
+metadata and a full-size x+66 ramp with three black-level settings. The full-frame
+fixture is synthetic, based on E004ev geometry; it is not a new hardware capture.
+Test memory is memfd-backed, so expected DMA_BUF_IOCTL_SYNC ENOTTY messages do not
+validate DMA cache coherency. Real DMA buffers still need a hardware gate.
+
+`MONO-MANIFEST.json` records exact source/patch hashes. Both patches reapply to
+the recorded pristine upstream commit and match all 14 source files byte-for-byte.
+The earlier helper manifest remains historical; this manifest supersedes its
+unimplemented-monochrome status. Neither modified library nor tuning is installed.
+
+To reproduce, apply patches 0001 then 0002 to the recorded upstream base, configure
+using HELPER-MANIFEST.json options and run `ninja -C BUILD -j4`, then
+`meson test -C BUILD --no-rebuild --print-errorlogs mono-processing vd55g0-helper bayer-format pixel-format`.
+For the bounds gate, configure another build with `-Db_sanitize=address,undefined`,
+build `test/mono-processing`, then run that test through Meson.
+
+## Next hardware gate
+
+E004fd will test 16 processed RGB888 frames from the already-proven sensor pattern.
+The kernel now reports the generic vd55g0 model using the standard V4L2 naming
+helper, allowing the generic gain helper to bind without a board alias. All
+sensor register/power/control code is unchanged. The fresh candidate and isolated
+libcamera build will be hashed before installation; Golden remains permanent.
+No claim of hardware-processed output, useful optical signal, endurance or
+Windows Hello parity follows from these offline tests.
