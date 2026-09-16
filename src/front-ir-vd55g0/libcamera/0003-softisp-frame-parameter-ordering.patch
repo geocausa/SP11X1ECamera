@@ -1,0 +1,118 @@
+diff --git a/include/libcamera/internal/software_isp/software_isp.h b/include/libcamera/internal/software_isp/software_isp.h
+index ad89c9b..fcc5331 100644
+--- a/include/libcamera/internal/software_isp/software_isp.h
++++ b/include/libcamera/internal/software_isp/software_isp.h
+@@ -89,7 +89,7 @@ public:
+ 	Signal<const ControlList &> setSensorControls;
+ 
+ private:
+-	void saveIspParams();
++	void saveIspParams(uint32_t frame);
+ 	void setSensorCtrls(const ControlList &sensorControls);
+ 	void statsReady(uint32_t frame, uint32_t bufferId);
+ 	void inputReady(FrameBuffer *input);
+@@ -97,7 +97,13 @@ private:
+ 	std::unique_ptr<Debayer> debayer_;
+ 	Thread ispWorkerThread_;
+ 	SharedMemObject<DebayerParams> sharedParams_;
+-	DebayerParams debayerParams_;
++	struct PendingFrame {
++		uint32_t frame;
++		FrameBuffer *input;
++		FrameBuffer *output;
++	};
++	std::deque<PendingFrame> pendingFrames_;
++	bool stopping_ = true;
+ 	DmaBufAllocator dmaHeap_;
+ 	bool ccmEnabled_;
+ 
+diff --git a/include/libcamera/ipa/soft.mojom b/include/libcamera/ipa/soft.mojom
+index 77328c5..4480204 100644
+--- a/include/libcamera/ipa/soft.mojom
++++ b/include/libcamera/ipa/soft.mojom
+@@ -33,6 +33,6 @@ interface IPASoftInterface {
+ 
+ interface IPASoftEventInterface {
+ 	setSensorControls(libcamera.ControlList sensorControls);
+-	setIspParams();
++	setIspParams(uint32 frame);
+ 	metadataReady(uint32 frame, libcamera.ControlList metadata);
+ };
+diff --git a/src/ipa/simple/soft_simple.cpp b/src/ipa/simple/soft_simple.cpp
+index 6bef597..d6e8eb3 100644
+--- a/src/ipa/simple/soft_simple.cpp
++++ b/src/ipa/simple/soft_simple.cpp
+@@ -292,7 +292,7 @@ void IPASoftSimple::computeParams(const uint32_t frame)
+ 		algo->prepare(context_, frame, frameContext, params_);
+ 	params_->combinedMatrix = context_.activeState.combinedMatrix;
+ 
+-	setIspParams.emit();
++	setIspParams.emit(frame);
+ }
+ 
+ void IPASoftSimple::processStats(const uint32_t frame,
+diff --git a/src/libcamera/software_isp/software_isp.cpp b/src/libcamera/software_isp/software_isp.cpp
+index 775ca19..1354aaa 100644
+--- a/src/libcamera/software_isp/software_isp.cpp
++++ b/src/libcamera/software_isp/software_isp.cpp
+@@ -355,6 +355,7 @@ int SoftwareIsp::start()
+ 	if (ret)
+ 		return ret;
+ 
++	stopping_ = false;
+ 	ispWorkerThread_.start();
+ 
+ 	return debayer_->invokeMethod(&Debayer::start,
+@@ -369,6 +370,9 @@ int SoftwareIsp::start()
+  */
+ void SoftwareIsp::stop()
+ {
++	/* Late IPA replies must not enqueue work after the worker is stopped. */
++	stopping_ = true;
++
+ 	debayer_->invokeMethod(&Debayer::stop,
+ 			       ConnectionTypeBlocking);
+ 
+@@ -378,6 +382,7 @@ void SoftwareIsp::stop()
+ 	Thread::current()->dispatchMessages(Message::Type::InvokeMessage, this);
+ 
+ 	ipa_->stop();
++	pendingFrames_.clear();
+ 
+ 	for (auto buffer : queuedOutputBuffers_) {
+ 		FrameMetadata &metadata = buffer->_d()->metadata();
+@@ -402,14 +407,29 @@ void SoftwareIsp::stop()
+  */
+ void SoftwareIsp::process(uint32_t frame, FrameBuffer *input, FrameBuffer *output)
+ {
+-	ipa_->computeParams(frame);
+-	debayer_->invokeMethod(&Debayer::process,
+-			       ConnectionTypeQueued, frame, input, output, debayerParams_);
++	pendingFrames_.push_back({ frame, input, output });
++
++	/* Only one parameter request may own the shared buffer at a time. */
++	if (pendingFrames_.size() == 1)
++		ipa_->computeParams(frame);
+ }
+ 
+-void SoftwareIsp::saveIspParams()
++void SoftwareIsp::saveIspParams(uint32_t frame)
+ {
+-	debayerParams_ = *sharedParams_;
++	if (stopping_)
++		return;
++
++	ASSERT(!pendingFrames_.empty());
++	const PendingFrame pending = pendingFrames_.front();
++	ASSERT(pending.frame == frame);
++
++	/* Snapshot this frame's completed parameters before requesting the next. */
++	debayer_->invokeMethod(&Debayer::process, ConnectionTypeQueued,
++			       frame, pending.input, pending.output, *sharedParams_);
++	pendingFrames_.pop_front();
++
++	if (!pendingFrames_.empty())
++		ipa_->computeParams(pendingFrames_.front().frame);
+ }
+ 
+ void SoftwareIsp::setSensorCtrls(const ControlList &sensorControls)
