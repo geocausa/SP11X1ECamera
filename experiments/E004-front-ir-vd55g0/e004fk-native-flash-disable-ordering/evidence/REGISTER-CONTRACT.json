@@ -1,0 +1,35 @@
+{
+  "status": "PASS_OFFLINE_STROBE_REGISTER_ORDERING",
+  "hardware_access": false,
+  "runs": [
+    {
+      "baseline": true,
+      "sanitizers": false,
+      "stdout": "PASS 8 strobe-register contract cases (baseline armed-mode writes reproduced)",
+      "source_sha256": "5e6a5d966f19e987fe432d622600cc613128fff16bbb6f4c904ad9d1b514ba3a"
+    },
+    {
+      "baseline": false,
+      "sanitizers": false,
+      "stdout": "PASS 15 strobe-register contract cases",
+      "source_sha256": "cd1f98411545cdb4b679bb21c4c29076a88866517488d5b618c31485caa04727"
+    },
+    {
+      "baseline": true,
+      "sanitizers": true,
+      "stdout": "PASS 8 strobe-register contract cases (baseline armed-mode writes reproduced)",
+      "source_sha256": "5e6a5d966f19e987fe432d622600cc613128fff16bbb6f4c904ad9d1b514ba3a"
+    },
+    {
+      "baseline": false,
+      "sanitizers": true,
+      "stdout": "PASS 15 strobe-register contract cases",
+      "source_sha256": "cd1f98411545cdb4b679bb21c4c29076a88866517488d5b618c31485caa04727"
+    }
+  ],
+  "limitations": [
+    "Regmap state model, no physical PMIC validation.",
+    "No concurrency or power-failure proof.",
+    "If initial disable fails, output is not proven off; no trigger writes follow."
+  ]
+}

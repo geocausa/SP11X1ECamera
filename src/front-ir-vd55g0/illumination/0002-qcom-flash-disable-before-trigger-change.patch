@@ -1,0 +1,70 @@
+Subject: [PATCH] leds: qcom-flash: disable channels before changing trigger
+
+Changing an armed channel from hardware to software trigger before clearing
+its enable bit can momentarily activate the output. The strobe helper
+currently writes the trigger configuration first and disables channels
+only afterward.
+
+Clear this LED's channel enable mask first, then change its trigger
+configuration. Re-enable channels only after all configuration writes
+succeed. Reflect a successful disable immediately in the cached state so
+an error during later configuration leaves accurate state.
+
+This development patch has offline register-model coverage only. Physical
+validation and upstream submission remain pending.
+
+---
+--- a/drivers/leds/flash/leds-qcom-flash.c
++++ b/drivers/leds/flash/leds-qcom-flash.c
+@@ -414,10 +414,20 @@
+ static int set_flash_strobe(struct qcom_flash_led *led, enum led_strobe strobe, bool state)
+ {
+ 	struct qcom_flash_data *flash_data = led->flash_data;
+-	u8 strobe_sel, chan_en, chan_id, chan_mask = 0;
++	u8 strobe_sel, chan_id, chan_mask = 0;
+ 	int rc, i;
+ 
+-	/* Set SW strobe config for all channels connected to the LED */
++	for (i = 0; i < led->chan_count; i++)
++		chan_mask |= BIT(led->chan_id[i]);
++
++	/* Disable the channels before changing their trigger source. */
++	rc = regmap_field_update_bits(flash_data->r_fields[REG_CHAN_EN], chan_mask, 0);
++	if (rc)
++		return rc;
++
++	led->enabled = false;
++
++	/* Set the strobe configuration for all channels connected to the LED. */
+ 	for (i = 0; i < led->chan_count; i++) {
+ 		chan_id = led->chan_id[i];
+ 
+@@ -434,17 +444,17 @@
+ 				flash_data->r_fields[REG_CHAN_STROBE], chan_id, strobe_sel);
+ 		if (rc)
+ 			return rc;
+-
+-		chan_mask |= BIT(chan_id);
+-	}
+-
+-	/* Enable/disable flash channels */
+-	chan_en = state ? chan_mask : 0;
+-	rc = regmap_field_update_bits(flash_data->r_fields[REG_CHAN_EN], chan_mask, chan_en);
+-	if (rc)
+-		return rc;
+-
+-	led->enabled = state;
++	}
++
++	if (!state)
++		return 0;
++
++	/* Arm only after every channel has its requested trigger configuration. */
++	rc = regmap_field_update_bits(flash_data->r_fields[REG_CHAN_EN], chan_mask, chan_mask);
++	if (rc)
++		return rc;
++
++	led->enabled = true;
+ 	return 0;
+ }
+ 

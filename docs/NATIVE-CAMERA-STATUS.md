@@ -100,8 +100,8 @@ See E004fc/README.md and MONO-MANIFEST.json for exact coverage and limitations.
 
 The exact exported Windows flash extension specifies 700 mA; matching driver
 fallback/default values corroborate configuration, not measured current.
-Physical PMIC channel, pulse timing, duty cycle and effective safety timeout are
-still unresolved. No Linux emitter activation has occurred.
+E004fj now proves the active PMIC channel pairing. Pulse timing, duty cycle and
+effective safety timeout remain unresolved. No Linux emitter activation has occurred.
 
 E004fg supplies a small generic qcom-flash patch: external strobe now shares the
 software path's current-budget, flash-current and timeout preparation. The
@@ -114,4 +114,25 @@ E004fh confirms 700 mA in the installed Windows flash device registry and exact
 archive matches for all four running flash/PMIC driver binaries. It was a
 read-only collection, with no camera or illumination command. Golden return
 98b67104-e3eb-4091-8b6c-180fd054bd06 and unchanged boot order are verified.
-Physical emitter routing and pulse limits remain open.
+E004fj observes the installed PMIC driver's initialized four-channel table in an
+idle Windows RAM snapshot. Logical LED1 uses native one-based sources 1 and 4;
+LED2 uses 2 and 3. Combined with E004fi, the configured 700 mA request maps to
+350 mA per LED1 channel. This is configuration/driver arithmetic, not measured
+current or optical output. No camera or flash command was sent. The initial
+symbol lookup failed and was recovered by resuming, refreshing module metadata,
+and then reading one 32-byte snapshot; the full sequence is preserved.
+Golden return 15ea0beb-c042-4a22-a833-97b8c0e019e8 is verified.
+
+E004fk finds and fixes a second generic qcom-flash issue: the lower-level helper
+changes trigger mode while a channel may still be armed. Patch 0002 clears this
+LED's channel mask before configuring trigger registers, then enables only after
+all configuration succeeds. Fifteen register-model cases pass normally and with
+sanitizers, including seven injected failures. The combined source also passes
+E004fg's 16 callback cases, W=1 module build and strict checkpatch. Both patches
+reapply exactly. Patch 0001 alone is not an adequate integration candidate.
+Neither patch is installed; physical bus-error behavior and concurrency remain
+unproven.
+
+Next establish Windows sensor strobe edge shifts, exposure/duty-cycle limits,
+PMIC trigger configuration and timeout behavior before native emitter activation.
+The installed 700 mA setting alone is not a pulse-duration specification.
