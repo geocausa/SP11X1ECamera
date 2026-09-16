@@ -1,0 +1,30 @@
+{
+  "status": "PASS_OFFLINE_CURRENT_AUTHORITY_AND_NATIVE_GAP_IDENTIFIED",
+  "sources": {
+    "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamflash8380.inf_arm64_e7729176a9bcf2a8/qccamflash8380.sys": "6bc1d698bc3b6da16974cd6f3ea89dc1ba6a8ea102eebe1a5d41129b4eb9ba2b",
+    "/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamflash_ext8380.inf_arm64_d0ff13c27e746314/qccamflash_ext8380.inf": "e1aaf6c654cce521ab6e056ce6fe1d9c0ddd081b9d0f8e0b29884159ac528e6f",
+    "/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/leds/flash/leds-qcom-flash.c": "770ba6ed706184e3017ebee3c06784569ad7f13a0f20326c6fa7fc56607ef4e0",
+    "/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/media/v4l2-core/v4l2-flash-led-class.c": "1c9d4e92269f45944ac546bdcd13b4437576290c6ff370bda421973906f76ea5",
+    "/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/drivers/leds/led-class-flash.c": "7c4afffcb97e22d677ddae90ee58d895a8ae1a594da577054c9d19ec9f082aa7",
+    "/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src/arch/arm64/boot/dts/qcom/x1e80100-microsoft-denali-sp11-baseline1.dts": "17e27717d23b9c62f1f57a6b2dc6bb8584caf7b2328c8b7963a516879227b5c0"
+  },
+  "windows_ir_current_ma": 700,
+  "windows_current_evidence": [
+    "extension INF IrLedCurrentMilliampere DWORD=700",
+    "driver registry fallback at VA 0x14002cb6c is 0x2bc",
+    "white LED object initializer at VA 0x140006d54 sets 0x2bc"
+  ],
+  "current_is_live_measurement": false,
+  "trigger_type": 0,
+  "physical_channel_mapping_proven": false,
+  "pulse_timing_proven": false,
+  "linux_external_strobe_finding": "external callback enables module/channels without update_allowed_flash_current, set_flash_current or set_flash_timeout; V4L2 FLASH mode first turns torch off, whose callback programs TORCH_MODE and disables timeout",
+  "upstream_commit": "9b87fdc9af2fbfcdb5c24a64139685ef80f6573f",
+  "upstream_source_url": "https://raw.githubusercontent.com/torvalds/linux/9b87fdc9af2fbfcdb5c24a64139685ef80f6573f/drivers/leds/flash/leds-qcom-flash.c",
+  "upstream_file_sha256": "770ba6ed706184e3017ebee3c06784569ad7f13a0f20326c6fa7fc56607ef4e0",
+  "kernel_source_git_head": "78e5a235e6df62bc84fba379b141cd58a4270088",
+  "kernel_flash_source_matches_upstream": true,
+  "native_route_candidate": "LED flash class + V4L2 flash subdevice + qcom,spmi-flash-led; PM8550 node currently disabled",
+  "runtime_activation": false,
+  "protected_runtime": false
+}

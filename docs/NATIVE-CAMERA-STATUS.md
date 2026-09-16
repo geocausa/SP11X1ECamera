@@ -95,3 +95,17 @@ parameters; frames 1..15 are verified neutral ramps. The candidate is retired.
 E004fe fixes asynchronous parameter ordering and passes all 16 frames, including
 frame zero. Both candidates are retired. Next investigate useful optical signal.
 See E004fc/README.md and MONO-MANIFEST.json for exact coverage and limitations.
+
+## Offline illumination checkpoint: E004ff/E004fg
+
+The exact exported Windows flash extension specifies 700 mA; matching driver
+fallback/default values corroborate configuration, not measured current.
+Physical PMIC channel, pulse timing, duty cycle and effective safety timeout are
+still unresolved. No Linux emitter activation has occurred.
+
+E004fg supplies a small generic qcom-flash patch: external strobe now shares the
+software path's current-budget, flash-current and timeout preparation. The
+baseline failure reproduces in an offline callback model; the patch passes 16
+cases normally and with sanitizers, compiles as an isolated module with W=1,
+and passes strict checkpatch. No system driver was installed. See E004fg for
+scope and limitations. Next obtain same-machine emitter routing/timing evidence.

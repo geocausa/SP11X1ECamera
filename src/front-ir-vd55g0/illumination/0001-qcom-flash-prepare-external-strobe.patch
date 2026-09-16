@@ -1,0 +1,71 @@
+Subject: [PATCH] leds: qcom-flash: prepare current and timeout for external strobe
+
+The brightness and timeout callbacks cache their values. Unlike software
+strobe, external strobe does not program these values or reserve the
+allowed flash current before enabling the module and hardware-triggered
+channels.
+
+In particular, V4L2 switching to flash mode first turns torch off. That
+path programs torch current resolution and disables the safety timer.
+Merely selecting hardware strobe can therefore retain settings from
+torch mode.
+
+Share the existing software-strobe preparation with external strobe,
+keeping its budget check, flash current and timeout setup before arming.
+Select the requested trigger source only at the final channel-enable
+step.
+
+This is an offline-tested development patch; physical validation and
+upstream submission remain pending.
+---
+--- a/drivers/leds/flash/leds-qcom-flash.c
++++ b/drivers/leds/flash/leds-qcom-flash.c
+@@ -469,9 +469,9 @@
+ 	return 0;
+ }
+ 
+-static int qcom_flash_strobe_set(struct led_classdev_flash *fled_cdev, bool state)
+-{
+-	struct qcom_flash_led *led = flcdev_to_qcom_fled(fled_cdev);
++static int qcom_flash_strobe(struct qcom_flash_led *led, enum led_strobe strobe,
++			     bool state)
++{
+ 	int rc;
+ 
+ 	rc = set_flash_strobe(led, SW_STROBE, false);
+@@ -494,7 +494,14 @@
+ 	if (rc)
+ 		return rc;
+ 
+-	return set_flash_strobe(led, SW_STROBE, state);
++	return set_flash_strobe(led, strobe, state);
++}
++
++static int qcom_flash_strobe_set(struct led_classdev_flash *fled_cdev, bool state)
++{
++	struct qcom_flash_led *led = flcdev_to_qcom_fled(fled_cdev);
++
++	return qcom_flash_strobe(led, SW_STROBE, state);
+ }
+ 
+ static int qcom_flash_strobe_get(struct led_classdev_flash *fled_cdev, bool *state)
+@@ -631,16 +638,9 @@
+ {
+ 	struct led_classdev_flash *fled_cdev = v4l2_flash->fled_cdev;
+ 	struct qcom_flash_led *led = flcdev_to_qcom_fled(fled_cdev);
+-	int rc;
+-
+-	rc = set_flash_module_en(led, enable);
+-	if (rc)
+-		return rc;
+-
+-	if (enable)
+-		return set_flash_strobe(led, HW_STROBE, true);
+-	else
+-		return set_flash_strobe(led, SW_STROBE, false);
++
++	/* Apply the flash budget, current and timeout before arming hardware. */
++	return qcom_flash_strobe(led, enable ? HW_STROBE : SW_STROBE, enable);
+ }
+ 
+ static enum led_brightness

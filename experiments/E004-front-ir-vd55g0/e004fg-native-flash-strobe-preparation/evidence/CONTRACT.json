@@ -1,0 +1,35 @@
+{
+  "result": "PASS_OFFLINE_CALLBACK_CONTRACT",
+  "hardware_activated": false,
+  "runs": [
+    {
+      "source_sha256": "770ba6ed706184e3017ebee3c06784569ad7f13a0f20326c6fa7fc56607ef4e0",
+      "baseline": true,
+      "sanitizers": false,
+      "stdout": "baseline external trigger fails preparation contract\nPASS 8 callback-contract cases"
+    },
+    {
+      "source_sha256": "5e6a5d966f19e987fe432d622600cc613128fff16bbb6f4c904ad9d1b514ba3a",
+      "baseline": false,
+      "sanitizers": false,
+      "stdout": "PASS 16 callback-contract cases"
+    },
+    {
+      "source_sha256": "770ba6ed706184e3017ebee3c06784569ad7f13a0f20326c6fa7fc56607ef4e0",
+      "baseline": true,
+      "sanitizers": true,
+      "stdout": "baseline external trigger fails preparation contract\nPASS 8 callback-contract cases"
+    },
+    {
+      "source_sha256": "5e6a5d966f19e987fe432d622600cc613128fff16bbb6f4c904ad9d1b514ba3a",
+      "baseline": false,
+      "sanitizers": true,
+      "stdout": "PASS 16 callback-contract cases"
+    }
+  ],
+  "limitations": [
+    "Hardware helpers are state-model stubs.",
+    "No register-level, wiring or optical validation.",
+    "Existing helper internals and disable-error recovery are not tested."
+  ]
+}
