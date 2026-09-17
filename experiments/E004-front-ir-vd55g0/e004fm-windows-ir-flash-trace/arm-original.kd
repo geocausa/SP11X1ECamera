@@ -1,0 +1,6 @@
+.echo E004FM_ARM_BEGIN
+r @$t0 = 0
+bp 0 fffff80358f14ac0 "r @$t0 = @$t0 + 1; .printf \"E004FM_REQUEST hit=%u code=%x bytes=%u\\n\", @$t0, @w0, @w2; .if ((@x1 != 0) && (@w2 > 0) && (@w2 <= 0n20)) { db @x1 L@w2 }; .if (@$t0 >= 0n32) { bd 0 }; gc"
+bl
+.echo E004FM_ARMED_RESUMING
+g

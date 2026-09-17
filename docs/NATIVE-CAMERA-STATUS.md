@@ -136,3 +136,20 @@ unproven.
 Next establish Windows sensor strobe edge shifts, exposure/duty-cycle limits,
 PMIC trigger configuration and timeout behavior before native emitter activation.
 The installed 700 mA setting alone is not a pulse-duration specification.
+
+
+## Windows timing checkpoint: E004fl/E004fm
+
+E004fl replays the exact saved initial sensor packet: GPIO1 strobe, zero edge
+shifts and 100-line initial exposure. Static PMIC decoding yields hardware,
+level-sensitive, active-high triggering. The input selector is platform-dependent;
+Windows also clears an unresolved common bit at ee67. A separate timer helper's
+1270 ms setting is not proven active for this sensor and is not board pulse policy.
+
+E004fm acquired 12 ordinary Windows IR frames and stopped cleanly. Its partial
+trace confirms an actual 700 mA LED1 request. A debugger expression error required
+removing the breakpoint and resuming; later selector/timer requests were not
+captured. Standard exposure readback remained 0.5 ms in auto mode, not proven
+sensor exposure. Both errors and recovery are retained. Golden return is verified
+on boot aec4c427-6fee-4590-9a30-c6eaa888295f. Next validate logger syntax before a
+fresh Windows identity. No native illumination activation has occurred.

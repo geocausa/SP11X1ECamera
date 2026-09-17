@@ -1,0 +1,168 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FM_FLASH_TRACE_20260916\flash-trace.log'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.000 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.000 seconds
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 0
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+
+Microsoft (R) Windows Debugger Version 10.0.29617.1000 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Using NET for debugging
+Opened WinSock 2.0
+Waiting to reconnect...
+Connected to target 169.254.241.21 on port 50005 on local IP 169.254.185.243.
+You can get the target MAC address by running .kdtargetmac command.
+Connected to Windows 10 26100 ARM 64-bit (AArch64) target at (Wed Sep 16 23:50:43.748 2026 (UTC + 1:00)), ptr64 TRUE
+Kernel Debugger connection established.
+Symbol search path is: srv*
+Executable search path is:
+Windows 10 Kernel Version 26100 MP (12 procs) Free ARM 64-bit (AArch64)
+Product: WinNt, suite: TerminalServer SingleUserTS Personal
+Edition build lab: 26100.1.arm64fre.ge_release.240331-1435
+Kernel base = 0xfffff803`57000000 PsLoadedModuleList = 0xfffff803`57d6ac50
+Debug session time: Wed Sep 16 23:50:49.000 2026 (UTC + 1:00)
+System Uptime: 0 days 0:00:52.638
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`572013b0 d43e0000 brk         #0xF000
+8: kd> .echo E004FM_CONNECTED; .reload; lm m qccamflash*; g
+E004FM_CONNECTED
+Connected to Windows 10 26100 ARM 64-bit (AArch64) target at (Wed Sep 16 23:51:06.244 2026 (UTC + 1:00)), ptr64 TRUE
+Loading Kernel Symbols
+...............................................................
+................................................................
+................................................................
+................................................................
+............................
+Loading User Symbols
+
+Loading unloaded module list
+.......................
+start             end                 module name
+fffff803`58f10000 fffff803`58f41000   qccamflash8380   (deferred)
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`572013b0 d43e0000 brk         #0xF000
+8: kd> g
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`572013b0 d43e0000 brk         #0xF000
+8: kd> $><C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FM_FLASH_TRACE_20260916\arm.kd
+E004FM_ARM_BEGIN
+                                                             ^ Range error in '.echo E004FM_ARM_BEGIN;r @$t0 = 0;bp 0 fffff80358f14ac0 "r @$t0 = @$t0 + 1; .printf \"E004FM_REQUEST hit=%u code=%x bytes=%u\\n\", @$t0, @w0, @w2; .if ((@x1 != 0) && (@w2 > 0) && (@w2 <= 0n20)) { db @x1 L@w2 }; .if (@$t0 >= 0n32) { bd 0 }; gc";bl;.echo E004FM_ARMED_RESUMING;g;'
+8: kd> g
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`572013b0 d43e0000 brk         #0xF000
+0: kd> $><C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FM_FLASH_TRACE_20260916\arm-fixed.kd
+E004FM_ARM_BEGIN
+breakpoint 0 exists, redefining
+ 0 e fffff803`58f14ac0     0001 (0001) qccamflash8380+0x4ac0 "r @$t0 = @$t0 + 1; .printf \"E004FM_REQUEST hit=%u code=%x bytes=%u\\n\", @$t0, @w0, @w2; .if ((@x1 != 0) && (@w2 > 0) && (@w2 <= 0n20)) { db @x1 L@w2 }; .if (@$t0 >= 0n32) { bd 0 }; gc"
+
+E004FM_ARMED_RESUMING
+E004FM_REQUEST hit=1 code=802f0fb0 bytes=6
+Numeric expression missing from '& (@w2 > 0) && (@w2 <= 0n20)) { db @x1 L@w2 }; .if (@$t0 >= 0n32) { bd 0 }; gc'
+qccamflash8380+0x4ac0:
+fffff803`58f14ac0 d503237f pacibsp
+0: kd> .echo E004FM_FIRST_PAYLOAD_RECOVERY; db @x1 L6; bc 0; .echo E004FM_BREAKPOINT_REMOVED_RESUMING; g
+E004FM_FIRST_PAYLOAD_RECOVERY
+ffffef83`6965add0  bc 02 00 00 00 00                                ......
+E004FM_BREAKPOINT_REMOVED_RESUMING
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff803`572013b0 d43e0000 brk         #0xF000
+0: kd> .echo E004FM_VERIFY_NO_BREAKPOINTS; bl; .if (6 > 0) { .if (6 <= 0n20) { .echo E004FM_NESTED_CONDITION_PASS } }; .echo E004FM_FINAL_RESUME; g
+E004FM_VERIFY_NO_BREAKPOINTS
+
+E004FM_NESTED_CONDITION_PASS
+E004FM_FINAL_RESUME
+Cannot write on the current requested socket/address.This normally results from an attempt to bind Shutdown occurred at (Thu Sep 17 06:13:44.639 2026 (UTC + 1:00))...unloading all symbol tables.
+Using NET for debugging
+Opened WinSock 2.0
+Waiting to reconnect...
