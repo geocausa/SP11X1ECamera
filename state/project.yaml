@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-17
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004fn-windows-ir-flash-sequence-pass
+state_id: E004fo-consumed-e004fp-pmic-observer-prepared
 phase: camera-stack-front-ir-illumination-register-authority
-status: golden-e004fn-pass-native-illumination-off
+status: golden-e004fo-consumed-e004fp-prepared-native-illumination-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
-current_gate: E004fn-windows-ir-flash-sequence-pass
+current_gate: E004fp-windows-pmic-register-trace-corrected
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E004fo-windows-pmic-register-trace
+next_experiment: E004fp-windows-pmic-register-trace-corrected
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  E004fn proves the live Windows IR flash request sequence and Golden return while native Linux illumination remains disabled. Prepare and consume E004fo as one fresh Windows boot with a bounded read-only KD observer around qcpmic8380 masked-register RMW: capture timer 0xee3e..0xee41, trigger 0xee4a..0xee4d and common 0xee67 pre/post bytes plus bus return status during one ordinary <=12-frame/5-second IR preview. No property SETs, no saved image, no same-boot retry, then immediate Golden return. Keep Linux emitter activation prohibited until PMIC state and later sensor exposure/pulse policy are closed.
+  E004fo is consumed: its first idle KD validation failed on unsupported &&/|| syntax, and later same-boot diagnostics are non-acceptance evidence only. Static recovery found the PRE old byte at [sp+0x18] and the original target register in low16(w27) after w24 is clobbered. Execute E004fp as one fresh Windows identity with the corrected read-only PMIC observer, a clean idle validation gate, one ordinary <=12-frame/5-second IR preview, no property SETs or saved images, and immediate Golden return. Keep Linux emitter activation prohibited until clean PMIC state plus later sensor exposure/pulse policy are closed.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4312,4 +4312,39 @@ e004fn_current:
   actual_sensor_exposure_proven: false
   golden_return_boot_id: cd5253ff-bffa-495f-895d-79831524a6ff
   native_flash_patches_installed: false
-  next_gate: E004fo-windows-pmic-register-trace
+  next_gate: E004fp-windows-pmic-register-trace-corrected
+
+e004fo_current:
+  status: fail-consumed-observer-validation-and-post-filter-defect
+  date: 2026-09-17
+  identity_consumed: true
+  accepted_live_evidence: false
+  first_validation_error: kd-unsupported-double-boolean-operators
+  same_boot_continuation_after_error: true
+  diagnostic_pre_hits: 7
+  diagnostic_post_hits_logged: 0
+  pre_old_byte_correct_location: sp+0x18
+  post_register_correct_source: low16-w27
+  recovered_kd_log_sha256: 3506c238ceeac21ad51fd1b21550e3d3520325d2749a3f5b40c57832360280db
+  linux_illumination_activated: false
+  next_gate: E004fp-windows-pmic-register-trace-corrected
+
+e004fp_prepared:
+  status: prepared-not-executed
+  date: 2026-09-17
+  fresh_identity_required: true
+  pre_hook: qcpmic8380+0x23af8
+  pre_register: w24
+  pre_old_byte: sp+0x18
+  pre_requested_byte: sp+0x10
+  post_hook: qcpmic8380+0x23bec
+  post_register: low16-w27
+  post_final_byte: x21
+  post_write_status: w0
+  idle_validation_required: true
+  max_frames: 12
+  max_seconds: 5
+  property_sets: false
+  saved_images: false
+  linux_illumination_authorized: false
+  next_gate: fresh-windows-e004fp-live-pmic-trace

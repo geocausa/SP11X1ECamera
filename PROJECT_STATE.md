@@ -1,6 +1,6 @@
 ## Current continuation — reconciled R27 authority frontier — 2026-09-11
 
-> **Current frontier — 2026-09-17 / E004fn PASS:** Front IR VD55G0 is now live-proven on Linux through stock libcamera (16-frame native capture), standard exposure/gain controls, buffer reuse, and 16/16 processed monochrome frames including frame zero. Windows E004fn then proved the normal IR flash request sequence: 700 mA LED1 request, selector 0, hardware/level/active-high trigger words, arm and disable, followed by verified Golden return. Native illumination remains OFF. The next gate is E004fo, a bounded Windows register-level PMIC observer for timer `0xee3e..0xee41`, trigger `0xee4a..0xee4d` and common `0xee67`; no Linux emitter activation until that evidence is closed.
+> **Current frontier — 2026-09-17 / E004fo consumed, E004fp prepared:** Front IR VD55G0 remains live-proven on Linux through stock libcamera and 16/16 processed monochrome frames. E004fn proved the normal Windows 700 mA LED1 request and selector-0 hardware/level/active-high trigger sequence. E004fo then consumed one Windows identity on an idle KD parser error; recovered diagnostics exposed incorrect PRE-byte and POST-register observer assumptions, so none of that boot is accepted as register-level authority. The observer is mechanically corrected under fresh identity E004fp. Native illumination remains OFF until a clean fresh Windows PMIC trace and later sensor exposure/pulse-policy gates are closed.
 
 
 **Authoritative durable checkpoint:** `6985bb6` (`camera: close R25-R27 offline authority`) on `experiment/e003-front-imx681-cphy`; local and origin matched at reconciliation.
@@ -21,7 +21,7 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **RGB bounded production authority:** accepted without Golden promotion. **Front IR:** Linux VD55G0 transport, stock-libcamera capture, controls and 16/16 processed monochrome frames are live-proven through E004fe. **E004fn:** Windows normal flash request sequence PASS with 700 mA LED1, selector 0, hardware/level/active-high trigger, arm/disable and clean Golden return. Native illumination remains off.
 
-**Next action:** E004fo observes the actual Windows PMIC masked-register RMW state and write return status for timer/trigger/common registers during one bounded ordinary IR preview. Linux emitter activation remains prohibited.
+**Next action:** E004fp re-runs the PMIC masked-register observer under a fresh Windows identity after E004fo was consumed. The corrected hook reads the PRE byte from `[sp+0x18]` and recovers the POST register from `w27 & 0xffff`. Linux emitter activation remains prohibited.
 
 **After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR transport/capture is proven; illumination and complete image-quality/lifecycle parity remain open.
 

@@ -1,0 +1,64 @@
+{
+  "status": "FAIL_CONSUMED_OBSERVER_VALIDATION_AND_POST_FILTER_DEFECT",
+  "identity": "E004fo-windows-pmic-register-trace",
+  "accepted_live_evidence": false,
+  "identity_consumed": true,
+  "same_boot_continuation_occurred_after_validation_error": true,
+  "reason_not_accepted": "Initial KD validation used unsupported &&/|| syntax. The contract makes that debugger command error consuming; later same-boot observations are diagnostic only.",
+  "diagnostic_pre_hits": [
+    {
+      "reg": "0xee4a",
+      "mask": "0x70",
+      "requested": "0x00"
+    },
+    {
+      "reg": "0xee4b",
+      "mask": "0x70",
+      "requested": "0x00"
+    },
+    {
+      "reg": "0xee4c",
+      "mask": "0x70",
+      "requested": "0x00"
+    },
+    {
+      "reg": "0xee4d",
+      "mask": "0x70",
+      "requested": "0x00"
+    },
+    {
+      "reg": "0xee4a",
+      "mask": "0x07",
+      "requested": "0x05"
+    },
+    {
+      "reg": "0xee4d",
+      "mask": "0x07",
+      "requested": "0x05"
+    },
+    {
+      "reg": "0xee67",
+      "mask": "0x01",
+      "requested": "0x00"
+    }
+  ],
+  "diagnostic_post_hits_logged": 0,
+  "observer_defects": [
+    "KD boolean operators must use & and | in this command context, not && and ||.",
+    "At qcpmic8380+0x23af8 the read byte is [sp+0x18]; x21 is not yet the read buffer.",
+    "w24 is clobbered at qcpmic8380+0x23b0c before +0x23bec; the original target register survives in low16(w27)."
+  ],
+  "corrected_observer": {
+    "pre_hook": "qcpmic8380+0x23af8",
+    "pre_register": "w24",
+    "pre_old_byte": "[sp+0x18]",
+    "pre_requested_byte": "[sp+0x10]",
+    "post_hook": "qcpmic8380+0x23bec",
+    "post_register": "w27 & 0xffff",
+    "post_final_byte": "[x21]",
+    "post_write_status": "w0"
+  },
+  "recovered_kd_log_sha256": "3506c238ceeac21ad51fd1b21550e3d3520325d2749a3f5b40c57832360280db",
+  "next_identity": "E004fp-windows-pmic-register-trace-corrected",
+  "linux_illumination_activated": false
+}

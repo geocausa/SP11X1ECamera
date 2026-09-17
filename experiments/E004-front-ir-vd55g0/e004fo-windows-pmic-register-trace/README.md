@@ -1,6 +1,6 @@
 # E004fo: Windows PMIC flash register-level trace
 
-Status: **PREPARED / no live execution yet**.
+Status: **FAILED/CONSUMED first live identity; corrected observer moved to E004fp.**
 
 E004fn proved the normal Windows IR flash request sequence at the flash driver boundary. E004fo moves one layer lower and observes only the installed `qcpmic8380.sys` masked-register helper during one ordinary bounded IR preview. It does not call a PMIC function, set exposure/current, save images, or activate anything beyond what the normal Windows camera path already does.
 
@@ -18,11 +18,20 @@ This gate is deliberately separate from live sensor-exposure tracing.
 
 The hash-pinned E004fi disassembly shows every relevant callback calling `qcpmic8380+0x23968` with register in `w2`, mask in `w3`, and requested value in `w4`. Inside that helper:
 
-- `+0x23af4` returns from the one-byte register read; at `+0x23af8`, `w24` is the target register, `w23` is the mask, `x21` points at the pre-update byte and `[sp+0x10]` retains the requested byte;
+- `+0x23af4` returns from the one-byte register read; at `+0x23af8`, `w24` is the target register, `w23` is the mask, `[sp+0x18]` holds the pre-update byte and `[sp+0x10]` retains the requested byte;
 - the helper applies `(old & ~mask) | (requested & mask)`;
-- the underlying bus write returns at `+0x23bec`; `w0` is its return status and `x21` points at the final byte submitted.
+- the helper packs the original register into low 16 bits of `w27` at `+0x23aac`; `w24` is later clobbered at `+0x23b0c`; the underlying bus write returns at `+0x23bec`, where `w0` is its return status and `x21` points at the final byte submitted.
 
 `generate_kd.py` therefore installs two auto-resuming, filtered breakpoints at exactly those post-call sites. Only the nine register addresses above are logged. Each hook self-disables at 64 relevant hits. The idle validation script exercises the same debugger expression/formatter using literals and a one-byte mapped PE read before any camera open, then deliberately stays broken so the validated observer can be armed without a second debugger break-in.
+
+
+## Consumed first live attempt
+
+A Windows one-shot did start on 2026-09-17. The first idle `validate.kd` command failed because the generated KD expression used `&&`/`||`; under this experiment contract that debugger command error consumed E004fo immediately. A manual same-boot expression correction was then attempted before the run was recovered, so all later observations from that boot are retained **only as diagnostic evidence**, not as an accepted E004fo result.
+
+The diagnostic trace exposed two additional observer bugs. At `qcpmic8380+0x23af8`, the returned register byte lives at `[sp+0x18]`; `x21` is not yet the read buffer. Before the post-write site the helper reuses `w24` as an allocation flag at `+0x23b0c`, so filtering `+0x23bec` on `w24` necessarily suppresses the post records. Static disassembly proves the original target register was already packed into low 16 bits of `w27` at `+0x23aac`, while `x21` points at the final one-byte write buffer by `+0x23bec`.
+
+The recovered diagnostic trace saw seven PRE requests (`ee4a..ee4d` mask `0x70`, `ee4a/ee4d` mask `0x07`, and `ee67` mask `0x01`) but zero logged POST records because of that filter defect. Those values are not promoted as accepted live authority. The exact recovered KD log and a machine-readable failure record are in `evidence/`. E004fo must never be reused; E004fp is the fresh corrected identity. Native Linux illumination remains off.
 
 ## Live contract
 

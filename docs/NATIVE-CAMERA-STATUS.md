@@ -166,3 +166,9 @@ in auto mode and is not promoted to physical timing evidence. Golden return
 cd5253ff-bffa-495f-895d-79831524a6ff is verified. Both native flash patches remain
 uninstalled. Next resolve actual sensor exposure and PMIC timeout/common-bit
 state before emitter activation.
+
+## E004fo consumed observer attempt / E004fp correction
+
+E004fo did start one fresh Windows one-shot, but its first idle KD validation failed because the generated expression used unsupported `&&`/`||` operators. By the experiment contract that command error consumed the identity; subsequent same-boot observations are retained only as diagnostics and are not accepted register-level Windows authority. The recovered debugger log is hash-pinned in E004fo evidence.
+
+Those diagnostics exposed two concrete observer defects. At `qcpmic8380+0x23af8`, the one-byte read result is in `[sp+0x18]`; `x21` is not yet that buffer. The helper then overwrites `w24` at `+0x23b0c`, so the original POST filter on `w24` suppressed every post-write record. Static disassembly proves the original register is preserved in low 16 bits of `w27` at `+0x23aac`, and `x21` holds the final one-byte write buffer by `+0x23bec`. E004fp is prepared as the fresh corrected identity using those lifetimes and KD-compatible single `&`/`|` expressions. Both Python and PowerShell generators pass the static equivalence check. Native illumination remains off.

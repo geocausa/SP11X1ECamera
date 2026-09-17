@@ -1,6 +1,6 @@
 # Resume contract
 
-> **Current frontier — 2026-09-17 / E004fn PASS:** Front IR VD55G0 is now live-proven on Linux through stock libcamera (16-frame native capture), standard exposure/gain controls, buffer reuse, and 16/16 processed monochrome frames including frame zero. Windows E004fn then proved the normal IR flash request sequence: 700 mA LED1 request, selector 0, hardware/level/active-high trigger words, arm and disable, followed by verified Golden return. Native illumination remains OFF. The next gate is E004fo, a bounded Windows register-level PMIC observer for timer `0xee3e..0xee41`, trigger `0xee4a..0xee4d` and common `0xee67`; no Linux emitter activation until that evidence is closed.
+> **Current frontier — 2026-09-17 / E004fo consumed, E004fp prepared:** Front IR VD55G0 remains live-proven on Linux through stock libcamera and 16/16 processed monochrome frames. E004fn proved the normal Windows 700 mA LED1 request and selector-0 hardware/level/active-high trigger sequence. E004fo then consumed one Windows identity on an idle KD parser error; recovered diagnostics exposed incorrect PRE-byte and POST-register observer assumptions, so none of that boot is accepted as register-level authority. The observer is mechanically corrected under fresh identity E004fp. Native illumination remains OFF until a clean fresh Windows PMIC trace and later sensor exposure/pulse-policy gates are closed.
 
 
 If the user says **“continue the camera work on SP11”**, do not ask them to repeat the project context.
@@ -33,4 +33,4 @@ The post-G3 native feedback proof is now **environment-blocked**: it needs a fre
 
 **RGB bounded production authority remains accepted, and front IR has now advanced through E004fe/E004fn.** Linux VD55G0 transport, stock-libcamera capture, controls and processed monochrome are live-proven; E004fn proves Windows' normal 700 mA LED1 request plus selector-0 hardware/level/active-high trigger arm/disable sequence. Native illumination itself remains deliberately disabled while PMIC register state and pulse policy are closed.
 
-Next action: **E004fo Windows PMIC register-level trace**. Observe only the existing Windows camera path's timer/trigger/common-bit RMWs and write status; no Linux emitter activation, no control SETs and no same-boot retry.
+Next action: **E004fp corrected Windows PMIC register-level trace**. E004fo is consumed and must not be reused. On one fresh Windows identity, validate the corrected PRE `[sp+0x18]` byte and POST `w27 & 0xffff` register observer before one bounded preview; any debugger error consumes the identity. No Linux emitter activation.

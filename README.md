@@ -1,6 +1,6 @@
 # SP11X1ECamera
 
-> **Current frontier — 2026-09-17 / E004fn PASS:** Front IR VD55G0 is now live-proven on Linux through stock libcamera (16-frame native capture), standard exposure/gain controls, buffer reuse, and 16/16 processed monochrome frames including frame zero. Windows E004fn then proved the normal IR flash request sequence: 700 mA LED1 request, selector 0, hardware/level/active-high trigger words, arm and disable, followed by verified Golden return. Native illumination remains OFF. The next gate is E004fo, a bounded Windows register-level PMIC observer for timer `0xee3e..0xee41`, trigger `0xee4a..0xee4d` and common `0xee67`; no Linux emitter activation until that evidence is closed.
+> **Current frontier — 2026-09-17 / E004fo consumed, E004fp prepared:** Front IR VD55G0 remains live-proven on Linux through stock libcamera and 16/16 processed monochrome frames. E004fn proved the normal Windows 700 mA LED1 request and selector-0 hardware/level/active-high trigger sequence. E004fo then consumed one Windows identity on an idle KD parser error; recovered diagnostics exposed incorrect PRE-byte and POST-register observer assumptions, so none of that boot is accepted as register-level authority. The observer is mechanically corrected under fresh identity E004fp. Native illumination remains OFF until a clean fresh Windows PMIC trace and later sensor exposure/pulse-policy gates are closed.
 
 
 Evidence-driven native Linux camera bring-up for the Microsoft Surface Pro 11 (Denali, X1E80100).
