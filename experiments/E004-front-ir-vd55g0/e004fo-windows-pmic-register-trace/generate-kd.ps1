@@ -30,6 +30,6 @@ foreach($r in $cases){
     $cond='((0x'+$h+' >= 0xee3e && 0x'+$h+' <= 0xee41) || (0x'+$h+' >= 0xee4a && 0x'+$h+' <= 0xee4d) || 0x'+$h+' == 0xee67)'
     $dry.Add('.if ('+$cond+') { .printf "E004FO_DRY_TARGET reg=%x\n", 0x'+$h+'; db 0x'+('{0:x16}' -f $base)+' L1 } .else { .printf "E004FO_DRY_SKIP reg=%x\n", 0x'+$h+' }')
 }
-$dry.Add('.echo E004FO_DRY_END_RESUMING'); $dry.Add('g')
+$dry.Add('.echo E004FO_DRY_END_STAY_BROKEN')
 [IO.File]::WriteAllText((Join-Path $Output 'validate.kd'),(($dry -join "`n")+"`n"),(New-Object Text.UTF8Encoding($false)))
 Write-Output ("PMIC base=0x{0:x16}; hooks=0x{1},0x{2}" -f $base,$preHook,$postHook)

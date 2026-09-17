@@ -33,7 +33,7 @@ def main():
     for r in cases:
         yes=expr(hex(r))
         dry += [f'.if ({yes}) {{ .printf "E004FO_DRY_TARGET reg=%x\\n", 0x{r:x}; db 0x{base:016x} L1 }} .else {{ .printf "E004FO_DRY_SKIP reg=%x\\n", 0x{r:x} }}']
-    dry += ['.echo E004FO_DRY_END_RESUMING','g']
+    dry += ['.echo E004FO_DRY_END_STAY_BROKEN']
     (a.output/'validate.kd').write_text('\n'.join(dry)+'\n')
     print(f'PMIC base=0x{base:016x}; hooks=0x{base+0x23af8:016x},0x{base+0x23bec:016x}')
 

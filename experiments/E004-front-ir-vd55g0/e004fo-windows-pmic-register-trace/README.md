@@ -22,7 +22,7 @@ The hash-pinned E004fi disassembly shows every relevant callback calling `qcpmic
 - the helper applies `(old & ~mask) | (requested & mask)`;
 - the underlying bus write returns at `+0x23bec`; `w0` is its return status and `x21` points at the final byte submitted.
 
-`generate_kd.py` therefore installs two auto-resuming, filtered breakpoints at exactly those post-call sites. Only the nine register addresses above are logged. Each hook self-disables at 64 relevant hits. The idle validation script exercises the same debugger expression/formatter using literals and a one-byte mapped PE read before any camera open.
+`generate_kd.py` therefore installs two auto-resuming, filtered breakpoints at exactly those post-call sites. Only the nine register addresses above are logged. Each hook self-disables at 64 relevant hits. The idle validation script exercises the same debugger expression/formatter using literals and a one-byte mapped PE read before any camera open, then deliberately stays broken so the validated observer can be armed without a second debugger break-in.
 
 ## Live contract
 
