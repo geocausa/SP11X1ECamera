@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import hashlib,re,subprocess,tempfile
+import hashlib,re,subprocess,tempfile,shutil
 R=Path(__file__).resolve().parents[3]
 D=Path(__file__).resolve().parent
 dis=R/'experiments/E004-front-ir-vd55g0/e004fi-native-ir-pmic-routing/build/qcpmic.dis'
@@ -25,4 +25,9 @@ with tempfile.TemporaryDirectory() as td:
         if s not in a: raise SystemExit('generated arm missing '+s)
     for s in ('0xee3e','0xee41','0xee4a','0xee4d','0xee67','0xee42','0xee68'):
         if s not in v: raise SystemExit('dry case missing '+s)
-print('E004FO_STATIC=PASS hooks=post-read/post-write target_regs=9 capture=no-set bounded=12frames/5s')
+    if shutil.which('pwsh'):
+        ps=Path(td)/'ps'; ps.mkdir()
+        subprocess.run(['pwsh','-NoProfile','-File',str(D/'generate-kd.ps1'),'-PmicBase','fffff80012345000','-Output',str(ps)],check=True,stdout=subprocess.DEVNULL)
+        if (ps/'arm.kd').read_bytes() != (Path(td)/'arm.kd').read_bytes(): raise SystemExit('PowerShell arm differs')
+        if (ps/'validate.kd').read_bytes() != (Path(td)/'validate.kd').read_bytes(): raise SystemExit('PowerShell validate differs')
+print('E004FO_STATIC=PASS hooks=post-read/post-write target_regs=9 capture=no-set bounded=12frames/5s generators=equivalent')
