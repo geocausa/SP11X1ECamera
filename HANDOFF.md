@@ -1,6 +1,6 @@
 # SP11 Camera Linux Parity Handover — 2026-09-11 reconciled R27 frontier
 
-> **Current frontier — 2026-09-17 / E004fo consumed, E004fp prepared:** Front IR VD55G0 remains live-proven on Linux through stock libcamera and 16/16 processed monochrome frames. E004fn proved the normal Windows 700 mA LED1 request and selector-0 hardware/level/active-high trigger sequence. E004fo then consumed one Windows identity on an idle KD parser error; recovered diagnostics exposed incorrect PRE-byte and POST-register observer assumptions, so none of that boot is accepted as register-level authority. The observer is mechanically corrected under fresh identity E004fp. Native illumination remains OFF until a clean fresh Windows PMIC trace and later sensor exposure/pulse-policy gates are closed.
+> **Current frontier — 2026-09-17 / E004fp PMIC trace PASS, E004fq timing authority next:** Front IR VD55G0 remains live-proven on Linux through stock libcamera and 16/16 processed monochrome frames. E004fp completed one fresh bounded Windows IR preview with a clean corrected PMIC observer: seven paired read/modify/write records all returned success, trigger registers `ee4a..ee4d` were observed, LED1 sources 1 and 4 reached low-three-bit value `0x05` (the E004fl hardware/level/active-high encoding), and common `ee67` bit 0 was live-proven `1 -> 0`. No `ee3e..ee41` timer access appeared in this 12-frame session; that bounded absence does not prove the timer is globally unused. SP11 returned cleanly to protected Golden. Native illumination remains OFF while actual VD55G0 exposure/strobe timing and any required PMIC timer policy are closed.
 
 
 ## Current continuous-control frontier — GV consumed/adjudicated PASS
@@ -21,7 +21,7 @@ The next post-G3 native feedback live attempt therefore requires a **fresh ident
 
 HE/HF/HG/HH/HI/HJ production consolidation and bounded RGB handoff remain accepted without Golden promotion. **Front IR is now natively live through E004fe, and E004fn closes the normal Windows flash request sequence.** Linux has stock-libcamera capture and 16/16 processed monochrome frames; Windows requests 700 mA on logical LED1, selector 0, hardware/level/active-high trigger mode, arm then disable. Illumination on Linux remains unauthorized pending register-level PMIC and pulse-policy evidence.
 
-**Next gate: E004fp corrected Windows PMIC register-level trace.** E004fo is consumed by an observer-validation failure. Use one fresh Windows boot, require a clean idle KD validation, then one <=12-frame/5-second ordinary IR preview with corrected PRE/POST register tracking and immediate Golden return.
+**Next gate: E004fq actual VD55G0 sensor-exposure/strobe-envelope and PMIC-timer authority.** E004fp is consumed PASS and Golden-restored. The PMIC register writes are now live-proven; next determine the physical sensor exposure/strobe relationship and whether any separate timeout/timer programming is active or required. Prefer static authority first and keep native Linux illumination off.
 
 ---
 

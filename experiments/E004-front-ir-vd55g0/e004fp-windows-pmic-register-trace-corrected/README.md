@@ -1,6 +1,6 @@
 # E004fp: corrected Windows PMIC flash register-level trace
 
-Status: **PREPARED / not executed.** Fresh identity after consumed E004fo.
+Status: **PASS live PMIC register trace; consumed and Golden-restored.** Fresh identity after consumed E004fo.
 
 E004fo was consumed by an idle KD parser error and then revealed two observer defects during non-acceptance same-boot diagnostics: the PRE old byte was addressed incorrectly, and the POST filter used `w24` after that register had been clobbered. E004fp carries only the mechanically corrected observer into a new Windows one-shot. No E004fo runtime identity, module base, breakpoint file, or same-boot state may be reused.
 
@@ -33,3 +33,54 @@ The generator uses KD-compatible single `&`/`|` boolean composition and emits an
 ## Acceptance
 
 Pair relevant PRE/POST records by order/register, retain read/request/final bytes and bus return status, and state exactly which timer/trigger/common registers were observed. Timer absence during this bounded session is only bounded-session evidence. Physical current, optical power, pulse width and actual sensor exposure remain unmeasured unless separately proven. Linux emitter activation remains prohibited by E004fp itself.
+
+## Live result
+
+E004fp passed on one fresh Windows one-shot. The idle validator completed every
+target/skip case plus packed-register recovery without a parser error. The exact
+`qcpmic8380.sys` base was `fffff800`0a640000`, so the accepted hooks were
+`+0x23af8` and `+0x23bec` for this boot only. One normal Surface IR preview then
+acquired 12 NV12 644x604 frames and stopped normally.
+
+The corrected observer recorded seven paired PMIC read/modify/write operations,
+all with read status 0 and write status 0:
+
+| Hit | Register | Mask | Old | Requested | Final |
+| ---: | --- | ---: | ---: | ---: | ---: |
+| 1 | `ee4a` | `70` | `01` | `00` | `01` |
+| 2 | `ee4b` | `70` | `01` | `00` | `01` |
+| 3 | `ee4c` | `70` | `01` | `00` | `01` |
+| 4 | `ee4d` | `70` | `01` | `00` | `01` |
+| 5 | `ee4a` | `07` | `01` | `05` | `05` |
+| 6 | `ee4d` | `07` | `01` | `05` | `05` |
+| 7 | `ee67` | `01` | `01` | `00` | `00` |
+
+This is the missing live register-level confirmation behind E004fn/E004fl. For
+logical LED1, Windows successfully programs paired sources 1 and 4 to low-three-
+bit value `0x05`, the statically decoded hardware/level-sensitive/active-high
+encoding, and successfully clears common `ee67` bit 0 from 1 to 0. The initial
+`0x70` masked writes leave each register at `0x01` because those masked bits were
+already clear.
+
+No `ee3e..ee41` timer register access appeared during this bounded 12-frame
+preview. That is accepted only as bounded-session absence, not proof that the
+timer is globally unused or that no other path can program it. Standard Windows
+exposure readback remained Auto=True / 0.5 ms and is still not direct physical
+VD55G0 exposure evidence. Physical current, optical power and pulse width were
+not measured.
+
+After capture, both breakpoints were removed, the empty list was verified, and
+the target resumed. SP11 returned to protected Golden boot
+`e60ab8bd-9e89-4d98-9d4f-2f897ec99248` with unchanged BootOrder, empty
+`next_entry`, no camera nodes/modules/processes, and overlap guard PASS. The exact
+KD log SHA-256 is
+`8bfc9b11422d96a5383b7dabe5b250b512f51aa210224dd00dd886ddac71e89e`; the
+original Windows capture-output file was hashed before reboot as
+`7a477318d8ad43f56f214ba0a7e6dc3e5cd6278fedfc56488f53ad573b9521d4`.
+`verify_result.py` mechanically checks the accepted trace, capture and Golden
+return. Native Linux illumination remains off.
+
+**Next gate:** E004fq closes actual VD55G0 exposure/strobe-envelope timing and
+whether a separate PMIC timer/timeout program is active or required before a
+first native emitter candidate. Prefer static/offline authority before another
+Windows boot.

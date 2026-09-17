@@ -1,0 +1,185 @@
+Opened log file 'C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FP_PMIC_TRACE_20260917_01\pmic-trace-pty2.log'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.016 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.000 seconds
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 0
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+
+Microsoft (R) Windows Debugger Version 10.0.29617.1000 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Using NET for debugging
+Opened WinSock 2.0
+Waiting to reconnect...
+Connected to target 169.254.208.245 on port 50005 on local IP 169.254.185.243.
+You can get the target MAC address by running .kdtargetmac command.
+Connected to Windows 10 26100 ARM 64-bit (AArch64) target at (Thu Sep 17 08:48:37.218 2026 (UTC + 1:00)), ptr64 TRUE
+Kernel Debugger connection established.
+Symbol search path is: srv*
+Executable search path is: 
+Windows 10 Kernel Version 26100 MP (12 procs) Free ARM 64-bit (AArch64)
+Product: WinNt, suite: TerminalServer SingleUserTS Personal
+Edition build lab: 26100.1.arm64fre.ge_release.240331-1435
+Kernel base = 0xfffff800`0f000000 PsLoadedModuleList = 0xfffff800`0fd6ac50
+Debug session time: Thu Sep 17 08:48:32.445 2026 (UTC + 1:00)
+System Uptime: 0 days 0:02:04.004
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`0f2013b0 d43e0000 brk         #0xF000
+0: kd> .echo E004FP_CONNECTED; .reload; lm m qcpmic*; lm m qccamflash*; .time
+E004FP_CONNECTED
+Connected to Windows 10 26100 ARM 64-bit (AArch64) target at (Thu Sep 17 08:48:49.207 2026 (UTC + 1:00)), ptr64 TRUE
+Loading Kernel Symbols
+...............................................................
+................................................................
+................................................................
+................................................................
+............................
+Loading User Symbols
+
+Loading unloaded module list
+.......................
+start             end                 module name
+fffff800`0a640000 fffff800`0a699000   qcpmic8380   (deferred)             
+fffff800`0d130000 fffff800`0d16a000   qcpmicgpio8380   (deferred)             
+fffff800`0e5b0000 fffff800`0e5f4000   qcpmicapps8380   (deferred)             
+fffff800`10870000 fffff800`108bc000   qcpmicglink8380   (deferred)             
+start             end                 module name
+fffff800`0e210000 fffff800`0e241000   qccamflash8380   (deferred)             
+Debug session time: Thu Sep 17 08:48:32.445 2026 (UTC + 1:00)
+System Uptime: 0 days 0:02:04.004
+0: kd> bl
+
+0: kd> g
+DBGK: DbgkWerCaptureLiveKernelDump: WerLiveKernelCreateReport failed, status 0xc0000099.
+
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`0f2013b0 d43e0000 brk         #0xF000
+0: kd> $><C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FP_PMIC_TRACE_20260917_01\generated-pty2\validate.kd
+E004FP_DRY_BEGIN
+E004FP_DRY_TARGET reg=ee3e
+fffff800`0a640000  4d                                               M
+E004FP_DRY_TARGET reg=ee41
+fffff800`0a640000  4d                                               M
+E004FP_DRY_TARGET reg=ee4a
+fffff800`0a640000  4d                                               M
+E004FP_DRY_TARGET reg=ee4d
+fffff800`0a640000  4d                                               M
+E004FP_DRY_TARGET reg=ee67
+fffff800`0a640000  4d                                               M
+E004FP_DRY_SKIP reg=ee42
+E004FP_DRY_SKIP reg=ee68
+E004FP_DRY_POSTREG raw=1234ee4a reg=ee4a
+E004FP_DRY_END_STAY_BROKEN
+0: kd> $><C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FP_PMIC_TRACE_20260917_01\generated-pty2\arm.kd
+E004FP_ARM_BEGIN
+ 0 e fffff800`0a663af8     0001 (0001) qcpmic8380+0x23af8 ".if (((@w24 >= 0xee3e & @w24 <= 0xee41) | (@w24 >= 0xee4a & @w24 <= 0xee4d) | @w24 == 0xee67)) { r @$t0 = @$t0 + 1; .printf \"E004FP_PRE hit=%u reg=%x mask=%x read_rc=%x\\n\", @$t0, @w24, @w23, @w0; db @sp+0x18 L1; db @sp+0x10 L1; .if (@$t0 >= 0n64) { bd 0 } }; gc"
+ 1 e fffff800`0a663bec     0001 (0001) qcpmic8380+0x23bec ".if ((((@w27 & 0xffff) >= 0xee3e & (@w27 & 0xffff) <= 0xee41) | ((@w27 & 0xffff) >= 0xee4a & (@w27 & 0xffff) <= 0xee4d) | (@w27 & 0xffff) == 0xee67)) { r @$t1 = @$t1 + 1; .printf \"E004FP_POST hit=%u reg=%x mask=%x write_rc=%x\\n\", @$t1, (@w27 & 0xffff), @w23, @w0; db @x21 L1; .if (@$t1 >= 0n64) { bd 1 } }; gc"
+
+E004FP_ARMED_RESUMING
+E004FP_PRE hit=1 reg=ee4a mask=70 read_rc=0
+ffff8208`46acb668  01                                               .
+ffff8208`46acb660  00                                               .
+E004FP_POST hit=1 reg=ee4a mask=70 write_rc=0
+ffff960e`2aaf75b4  01                                               .
+E004FP_PRE hit=2 reg=ee4b mask=70 read_rc=0
+ffff8208`46acb668  01                                               .
+ffff8208`46acb660  00                                               .
+E004FP_POST hit=2 reg=ee4b mask=70 write_rc=0
+ffff960e`2aaf7634  01                                               .
+E004FP_PRE hit=3 reg=ee4c mask=70 read_rc=0
+ffff8208`46acb668  01                                               .
+ffff8208`46acb660  00                                               .
+E004FP_POST hit=3 reg=ee4c mask=70 write_rc=0
+ffff960e`2aaf74f4  01                                               .
+E004FP_PRE hit=4 reg=ee4d mask=70 read_rc=0
+ffff8208`46acb668  01                                               .
+ffff8208`46acb660  00                                               .
+E004FP_POST hit=4 reg=ee4d mask=70 write_rc=0
+ffff960e`2aaf7714  01                                               .
+E004FP_PRE hit=5 reg=ee4a mask=7 read_rc=0
+ffff8208`46acb648  01                                               .
+ffff8208`46acb640  05                                               .
+E004FP_POST hit=5 reg=ee4a mask=7 write_rc=0
+ffff960e`2aaf7594  05                                               .
+E004FP_PRE hit=6 reg=ee4d mask=7 read_rc=0
+ffff8208`46acb648  01                                               .
+ffff8208`46acb640  05                                               .
+E004FP_POST hit=6 reg=ee4d mask=7 write_rc=0
+ffff960e`1fb2eb54  05                                               .
+E004FP_PRE hit=7 reg=ee67 mask=1 read_rc=0
+ffff8208`46acb648  01                                               .
+ffff8208`46acb640  00                                               .
+E004FP_POST hit=7 reg=ee67 mask=1 write_rc=0
+ffff960e`1fb2e934  00                                               .
+Break instruction exception - code 80000003 (first chance)
+*******************************************************************************
+*                                                                             *
+*   You are seeing this message because you pressed either                    *
+*       CTRL+C (if you run console kernel debugger) or,                       *
+*       CTRL+BREAK (if you run GUI kernel debugger),                          *
+*   on your debugger machine's keyboard.                                      *
+*                                                                             *
+*                   THIS IS NOT A BUG OR A SYSTEM CRASH                       *
+*                                                                             *
+* If you did not intend to break into the debugger, press the "g" key, then   *
+* press the "Enter" key now.  This message might immediately reappear.  If it *
+* does, press "g" and "Enter" again.                                          *
+*                                                                             *
+*******************************************************************************
+nt!DbgBreakPoint:
+fffff800`0f2013b0 d43e0000 brk         #0xF000
+0: kd> bc 0; bc 1; bl; .echo E004FP_BREAKPOINTS_CLEARED; g
+
+E004FP_BREAKPOINTS_CLEARED
+... Retry sending the same data packet for 64 times.
+The transport connection between host kernel debugger and target Windows seems lost.
+please try resync with target, recycle the host debugger, or reboot the target Windows.
+Cannot write on the current requested socket/address.This normally results from an attempt to bind Shutdown occurred at (Thu Sep 17 09:24:58.543 2026 (UTC + 1:00))...unloading all symbol tables.
+Using NET for debugging
+Opened WinSock 2.0
+Waiting to reconnect...

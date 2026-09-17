@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-17
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004fo-consumed-e004fp-pmic-observer-prepared
-phase: camera-stack-front-ir-illumination-register-authority
-status: golden-e004fo-consumed-e004fp-prepared-native-illumination-off
+state_id: E004fp-pass-e004fq-timing-authority-next
+phase: camera-stack-front-ir-illumination-timing-authority
+status: golden-e004fp-pass-native-illumination-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
-current_gate: E004fp-windows-pmic-register-trace-corrected
+current_gate: E004fq-sensor-exposure-timer-authority
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E004fp-windows-pmic-register-trace-corrected
+next_experiment: E004fq-sensor-exposure-timer-authority
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  E004fo is consumed: its first idle KD validation failed on unsupported &&/|| syntax, and later same-boot diagnostics are non-acceptance evidence only. Static recovery found the PRE old byte at [sp+0x18] and the original target register in low16(w27) after w24 is clobbered. Execute E004fp as one fresh Windows identity with the corrected read-only PMIC observer, a clean idle validation gate, one ordinary <=12-frame/5-second IR preview, no property SETs or saved images, and immediate Golden return. Keep Linux emitter activation prohibited until clean PMIC state plus later sensor exposure/pulse policy are closed.
+  E004fp is consumed PASS and Golden-restored. Its corrected observer live-proved seven successful paired PMIC RMWs during one 12-frame Windows IR preview: ee4a..ee4d trigger programming, ee4a/ee4d low3=0x05 for LED1 sources 1/4, and ee67 bit0 1->0; no ee3e..ee41 timer access appeared in this bounded session. Next close actual VD55G0 sensor exposure/strobe timing and whether separate PMIC timer/timeout programming is active or required. Keep Linux emitter activation prohibited until that timing policy is mechanically justified.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4348,3 +4348,31 @@ e004fp_prepared:
   saved_images: false
   linux_illumination_authorized: false
   next_gate: fresh-windows-e004fp-live-pmic-trace
+
+e004fp_current:
+  status: pass-live-windows-pmic-register-trace
+  date: 2026-09-17
+  identity_consumed: true
+  accepted_live_evidence: true
+  same_boot_retry: false
+  windows_ir_frames: 12
+  pre_post_pairs: 7
+  read_status_all_zero: true
+  write_status_all_zero: true
+  trigger_registers_observed: [0xee4a, 0xee4b, 0xee4c, 0xee4d]
+  led1_sources: [1, 4]
+  led1_trigger_low3_final: 0x05
+  led1_trigger_interpretation: hardware-level-active-high
+  common_ee67_bit0_old: 1
+  common_ee67_bit0_final: 0
+  common_ee67_live_write_proven: true
+  timer_register_range: 0xee3e-0xee41
+  timer_register_access_observed: false
+  timer_absence_scope: one-bounded-12-frame-preview-only
+  standard_exposure_api_us: 500
+  actual_sensor_exposure_proven: false
+  linux_illumination_activated: false
+  golden_return_boot_id: e60ab8bd-9e89-4d98-9d4f-2f897ec99248
+  kd_log_sha256: 8bfc9b11422d96a5383b7dabe5b250b512f51aa210224dd00dd886ddac71e89e
+  raw_windows_capture_file_sha256: 7a477318d8ad43f56f214ba0a7e6dc3e5cd6278fedfc56488f53ad573b9521d4
+  next_gate: E004fq-sensor-exposure-timer-authority

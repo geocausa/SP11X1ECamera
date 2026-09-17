@@ -1,6 +1,6 @@
 # SP11X1ECamera
 
-> **Current frontier — 2026-09-17 / E004fo consumed, E004fp prepared:** Front IR VD55G0 remains live-proven on Linux through stock libcamera and 16/16 processed monochrome frames. E004fn proved the normal Windows 700 mA LED1 request and selector-0 hardware/level/active-high trigger sequence. E004fo then consumed one Windows identity on an idle KD parser error; recovered diagnostics exposed incorrect PRE-byte and POST-register observer assumptions, so none of that boot is accepted as register-level authority. The observer is mechanically corrected under fresh identity E004fp. Native illumination remains OFF until a clean fresh Windows PMIC trace and later sensor exposure/pulse-policy gates are closed.
+> **Current frontier — 2026-09-17 / E004fp PMIC trace PASS, E004fq timing authority next:** Front IR VD55G0 remains live-proven on Linux through stock libcamera and 16/16 processed monochrome frames. E004fp completed one fresh bounded Windows IR preview with a clean corrected PMIC observer: seven paired read/modify/write records all returned success, trigger registers `ee4a..ee4d` were observed, LED1 sources 1 and 4 reached low-three-bit value `0x05` (the E004fl hardware/level/active-high encoding), and common `ee67` bit 0 was live-proven `1 -> 0`. No `ee3e..ee41` timer access appeared in this 12-frame session; that bounded absence does not prove the timer is globally unused. SP11 returned cleanly to protected Golden. Native illumination remains OFF while actual VD55G0 exposure/strobe timing and any required PMIC timer policy are closed.
 
 
 Evidence-driven native Linux camera bring-up for the Microsoft Surface Pro 11 (Denali, X1E80100).
@@ -22,7 +22,7 @@ Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed 
 
 The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
 
-The project has closed bounded rear/front RGB production authority while the brighter-scene post-G3 feedback proof remains separately parked. **Front IR has since advanced through native Linux transport, stock-libcamera capture, controls and 16/16 processed monochrome frames (E004fe); E004fn proves the normal Windows flash request sequence.** The active frontier is safe register-level PMIC/pulse authority before any native IR-emitter activation.
+The project has closed bounded rear/front RGB production authority while the brighter-scene post-G3 feedback proof remains separately parked. **Front IR has since advanced through native Linux transport, stock-libcamera capture, controls and 16/16 processed monochrome frames (E004fe); E004fp now live-proves the normal Windows PMIC trigger/common-register writes.** The active frontier is actual sensor exposure/strobe-envelope and timeout authority before any native IR-emitter activation.
 
 Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 capture is now proven on Linux; illumination, longer lifecycle/desktop integration and final upstream consolidation remain open.
 
