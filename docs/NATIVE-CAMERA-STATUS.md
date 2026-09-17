@@ -1,4 +1,4 @@
-# Native camera stack status — 2026-09-16
+# Native camera stack status — 2026-09-17
 
 Branch: `experiment/e004-front-ir-vd55g0`. Scope: SP11, SP7 and PiMaster.
 This is the current ordinary-memory Linux route. It does not claim Windows Hello
@@ -153,3 +153,16 @@ captured. Standard exposure readback remained 0.5 ms in auto mode, not proven
 sensor exposure. Both errors and recovery are retained. Golden return is verified
 on boot aec4c427-6fee-4590-9a30-c6eaa888295f. Next validate logger syntax before a
 fresh Windows identity. No native illumination activation has occurred.
+
+
+E004fn closes the flash-request sequence gap on a fresh Windows boot: seven idle
+logger checks passed, followed by five auto-resuming hits around a successful
+12-frame capture. Requests were current [700,0,0] mA, input selector 0, trigger
+words [1,1,0,1,0], LED1/module arm and disable. With the proven active PMIC table,
+this matches Linux's selector-0, hardware, level, active-high configuration for
+sources 1 and 4. No timer request appeared at this helper; live timer state and
+actual sensor pulse envelope remain open. Standard exposure still reported 0.5 ms
+in auto mode and is not promoted to physical timing evidence. Golden return
+cd5253ff-bffa-495f-895d-79831524a6ff is verified. Both native flash patches remain
+uninstalled. Next resolve actual sensor exposure and PMIC timeout/common-bit
+state before emitter activation.

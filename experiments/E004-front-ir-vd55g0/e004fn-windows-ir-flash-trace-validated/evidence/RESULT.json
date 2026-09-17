@@ -1,0 +1,79 @@
+{
+  "status": "PASS_BOUNDED_WINDOWS_FLASH_REQUEST_SEQUENCE",
+  "identity_consumed": true,
+  "same_boot_retry": false,
+  "idle_parser_cases_passed": 7,
+  "frames": 12,
+  "normal_teardown": true,
+  "observed_requests": [
+    {
+      "hit": 1,
+      "command": "0x802f0fb0",
+      "bytes": 6,
+      "payload_hex": "bc0200000000"
+    },
+    {
+      "hit": 2,
+      "command": "0x802f0fcc",
+      "bytes": 4,
+      "payload_hex": "00000000"
+    },
+    {
+      "hit": 3,
+      "command": "0x802f0fd0",
+      "bytes": 20,
+      "payload_hex": "0100000001000000000000000100000000000000"
+    },
+    {
+      "hit": 4,
+      "command": "0x802f0fc8",
+      "bytes": 4,
+      "payload_hex": "01000001"
+    },
+    {
+      "hit": 5,
+      "command": "0x802f0fc8",
+      "bytes": 4,
+      "payload_hex": "00000000"
+    }
+  ],
+  "observed_led_current_requests_ma": [
+    700,
+    0,
+    0
+  ],
+  "observed_input_selector": 0,
+  "observed_trigger_mode_words": [
+    1,
+    1,
+    0,
+    1,
+    0
+  ],
+  "static_handler_interpretation": {
+    "logical_led": 1,
+    "sources_one_based": [
+      1,
+      4
+    ],
+    "trigger": "hardware, level-sensitive, active-high",
+    "common_ee67_bit0_requested": 0,
+    "native_trigger_selector_matches": true
+  },
+  "timer_command_observed": false,
+  "effective_hardware_timeout_proven": false,
+  "standard_exposure_api_us": 500,
+  "actual_sensor_exposure_proven": false,
+  "physical_pulse_or_current_measured": false,
+  "linux_illumination_activated": false,
+  "golden_boot_id": "cd5253ff-bffa-495f-895d-79831524a6ff",
+  "evidence_sha256": {
+    "DEBUGGER-CLOSED.txt": "b9af80502963f02223bd31463df4bc3979f3a2a7a3189a902a008fa91ce8eb09",
+    "GOLDEN-RETURN.txt": "3f827417a18d118efb2b4df0c8126945f94664cd9d8a1515172ecc5a856fba5a",
+    "KD-TRACE.log": "82c140d70dc0fbd2f9e267924ab01b5f7d427ce4ede2d45fd27206b42ef080a9",
+    "PREBOOT.txt": "cae7014a94a5ed9d78d01eeea31f607783502ed507d4bd095a0a977a3ed813d6",
+    "WINDOWS-READY.json": "d7919398b7a96b20a05a1de5a3cf8812fafbde5c3265657d29e4c346182d4f91",
+    "WINDOWS.json": "f460273aca6243677dddcbca93543ab4d9d558e919dfc4de1f338ab0ddb102c6"
+  },
+  "next_gate": "Establish actual pulse envelope and PMIC timeout/common-bit state; keep native illumination off."
+}
