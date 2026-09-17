@@ -1,11 +1,11 @@
 schema: 1
 project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
-updated: 2026-09-12
+updated: 2026-09-17
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: IJ-bidirectional-rgb-handoff-accepted
-phase: camera-stack-front-ir-vd55g0-offline-authority
-status: golden-ij-rgb-handoff-accepted-default-not-promoted
+state_id: E004fn-windows-ir-flash-sequence-pass
+phase: camera-stack-front-ir-illumination-register-authority
+status: golden-e004fn-pass-native-illumination-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -85,8 +85,8 @@ strategy:
   - OV13858 rear
   - IMX681 front
   - VD55G0 IR
-current_experiment: E003-front-imx681-cphy
-current_gate: IJ-bounded-bidirectional-rgb-handoff-accepted
+current_experiment: E004-front-ir-vd55g0
+current_gate: E004fn-windows-ir-flash-sequence-pass
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
@@ -2132,7 +2132,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: E004-VD55G0-front-IR-offline-authority
+next_experiment: E004fo-windows-pmic-register-trace
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -2929,7 +2929,7 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  IJ accepts the exact unified IB-DTB CAMSS/IMX681/OV13858 authority for bounded bidirectional rear-RGB/front-RGB production handoff. IG and IH prove both directions through mandatory explicit neutral routing with source/target suspend, clean kernel health and no retries. Protected Golden/default promotion remains unauthorized because front IR VD55G0 is unproven on Linux, front post-G3 native feedback remains brighter-scene environment-blocked with production policy shadow, and repeated alternating RGB switch soak is not yet proven. Next E004 builds the VD55G0 offline authority and Linux bring-up foundation with illumination/privacy/security paths kept off until separately proven.
+  E004fn proves the live Windows IR flash request sequence and Golden return while native Linux illumination remains disabled. Prepare and consume E004fo as one fresh Windows boot with a bounded read-only KD observer around qcpmic8380 masked-register RMW: capture timer 0xee3e..0xee41, trigger 0xee4a..0xee4d and common 0xee67 pre/post bytes plus bus return status during one ordinary <=12-frame/5-second IR preview. No property SETs, no saved image, no same-boot retry, then immediate Golden return. Keep Linux emitter activation prohibited until PMIC state and later sensor exposure/pulse policy are closed.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -4260,3 +4260,56 @@ ij_current:
   ov13858_sha256: 13a8ad956075c518687149f8473764d85979f38a7666244b132ad992a9bc1309
   front_post_g3_policy: shadow
   next_gate: E004-VD55G0-front-IR-offline-authority
+
+e004a_current:
+  status: pass-offline-vd55g0-windows-st-authority
+  camera_runtime_performed: false
+  linux_probe_performed: false
+  linux_stream_performed: false
+  illumination_authorized: false
+  sensor: vd55g0
+  acpi_id: SMO55F0
+  surface_subsystem: MSHW0492
+  linux_i2c_address: 0x60
+  route: CCI0/master0 -> CSIPHY0
+  mclk_hz: 19200000
+  reset_gpio: 109
+  mode: 644x604 RAW10 VC0 60fps
+  data_lanes: 1
+  phy_type: CSI2_DPHY
+  link_frequency_hz: 420000000
+  mipi_data_rate_bps: 840000000
+  line_length: 1200
+  frame_length: 1955
+  windows_package_sha256: e574db7eb28231d3fa4f5eee5c1861919125d8ec7a753fc7a0708606e1f1a794
+  windows_patch_sha256: 5c07088c8871792e48a3d75d5b9af1cb3725739b8d6aaed229be6f7c0126b321
+  st_upstream_commit: a05627b0f6d8775aa54b6fa306e91f425f2cbf9e
+  st_vd55g0_c_sha256: 7d268c6204f1d85fe6047af5204693a428dc396667ee68ec12785462540cff03
+  st_vd55g0_patches_sha256: abfdee386588e72f237aa4975efdce68cc2bea9f23b03694a0f8371a2bfc402b
+  pristine_driver_build: PASS
+  pristine_driver_module_sha256: cdf54ebd3429330af845aa8561f0004f06ec36ec28ee09f2e86d997582d48554
+  patch_policy_resolved: false
+  csiphy0_lane_polarity_resolved: false
+  pm8010_ir_provider_nodes_integrated: false
+  next_gate: E004b-VD55G0-DT-power-transport-probe-only-design
+
+
+e004fn_current:
+  status: pass-live-windows-flash-request-sequence
+  date: 2026-09-17
+  linux_ir_native_capture_proven: true
+  linux_ir_processed_monochrome_16_of_16: true
+  linux_illumination_activated: false
+  windows_ir_frames: 12
+  windows_current_request_ma: 700
+  windows_trigger_selector: 0
+  windows_trigger_words: [1, 1, 0, 1, 0]
+  windows_led1_sources: [1, 4]
+  windows_trigger_mode: hardware-level-active-high
+  windows_timer_request_observed: false
+  windows_timer_state_proven: false
+  windows_common_ee67_live_write_proven: false
+  actual_sensor_exposure_proven: false
+  golden_return_boot_id: cd5253ff-bffa-495f-895d-79831524a6ff
+  native_flash_patches_installed: false
+  next_gate: E004fo-windows-pmic-register-trace

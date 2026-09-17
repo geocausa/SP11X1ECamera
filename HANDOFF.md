@@ -1,5 +1,8 @@
 # SP11 Camera Linux Parity Handover — 2026-09-11 reconciled R27 frontier
 
+> **Current frontier — 2026-09-17 / E004fn PASS:** Front IR VD55G0 is now live-proven on Linux through stock libcamera (16-frame native capture), standard exposure/gain controls, buffer reuse, and 16/16 processed monochrome frames including frame zero. Windows E004fn then proved the normal IR flash request sequence: 700 mA LED1 request, selector 0, hardware/level/active-high trigger words, arm and disable, followed by verified Golden return. Native illumination remains OFF. The next gate is E004fo, a bounded Windows register-level PMIC observer for timer `0xee3e..0xee41`, trigger `0xee4a..0xee4d` and common `0xee67`; no Linux emitter activation until that evidence is closed.
+
+
 ## Current continuous-control frontier — GV consumed/adjudicated PASS
 
 GT limited redundant-write policy and GU helper integration are durable. GV then consumed exactly one fresh R27 stream. Six control ioctls G1..G6 succeeded, but because G4..G6 were bit-identical to current G3, V4L2 `cluster_changed()` suppressed those three before driver `.s_ctrl`. Thus the live run produced only bootstrap + G1..G3 sensor transactions and **no new post-G3 hardware write**.
@@ -16,9 +19,9 @@ HD closes that offline strategy. GO/GS/GV/GY/HC all end deeply cap-censored (>8�
 
 The next post-G3 native feedback live attempt therefore requires a **fresh identity plus a substantially brighter diffuse real scene**; HC must never be reused and no synthetic sensor delta is authorized. Until that physical condition is available, continue production integration and repeated-stream robustness work offline/safely.
 
-HE/HF/HG/HH/HI/HJ production consolidation is PASS; HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB are PASS; ID/IE prove rear/front separately, IF defines neutral ownership, and IG + IH prove both bounded same-boot RGB handoff directions. **IJ accepts the unified rear-RGB + front-RGB handoff as bounded production authority, while explicitly refusing protected-Golden/default promotion.** Neutral-route transfer is mandatory. Default/full-stack promotion remains blocked by unproven front IR/VD55G0, parked brighter-scene post-G3 native feedback, and lack of repeated alternating switch soak.
+HE/HF/HG/HH/HI/HJ production consolidation and bounded RGB handoff remain accepted without Golden promotion. **Front IR is now natively live through E004fe, and E004fn closes the normal Windows flash request sequence.** Linux has stock-libcamera capture and 16/16 processed monochrome frames; Windows requests 700 mA on logical LED1, selector 0, hardware/level/active-high trigger mode, arm then disable. Illumination on Linux remains unauthorized pending register-level PMIC and pulse-policy evidence.
 
-**Next gate: E004 VD55G0 front-IR offline authority / Linux bring-up foundation.** Keep illumination/privacy/security paths off until independently proven; do not disturb protected Golden.
+**Next gate: E004fo Windows PMIC register-level trace.** One fresh Windows boot, one <=12-frame/5-second ordinary IR preview, filtered read-only KD observation of timer `0xee3e..0xee41`, trigger `0xee4a..0xee4d` and common `0xee67`, then immediate Golden return.
 
 ---
 

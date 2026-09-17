@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import hashlib,re,subprocess,tempfile
+R=Path(__file__).resolve().parents[3]
+D=Path(__file__).resolve().parent
+dis=R/'experiments/E004-front-ir-vd55g0/e004fi-native-ir-pmic-routing/build/qcpmic.dis'
+t=dis.read_text(errors='replace')
+need=[
+ '140023af4:', 'bl\t0x140024098', '140023af8:',
+ '140023bbc:', 'bic\tw9, w8, w23', '140023bc8:', 'orr\tw8, w9, w8',
+ '140023be8:', 'blr\tx15', '140023bec:',
+ '140028340:', 'mov\tw2, #0xee67',
+ '140026e40:', 'bl\t0x140023968',
+]
+for s in need:
+    if s not in t: raise SystemExit('missing disassembly authority: '+s)
+cap=(D/'capture.ps1').read_text()
+for bad in ('TrySet','SetValue','FlashControl','ExposureControl.Set','FocusControl','ZoomControl'):
+    if bad in cap: raise SystemExit('forbidden setter token: '+bad)
+if 'frames -lt 12' not in cap or 'AddSeconds(5)' not in cap: raise SystemExit('capture bound changed')
+with tempfile.TemporaryDirectory() as td:
+    subprocess.run(['python3',str(D/'generate_kd.py'),'--pmic-base','fffff80012345000','--output',td],check=True)
+    a=(Path(td)/'arm.kd').read_text(); v=(Path(td)/'validate.kd').read_text()
+    for s in ('fffff80012368af8','fffff80012368bec','0xee3e','0xee41','0xee4a','0xee4d','0xee67','bd 0','bd 1'):
+        if s not in a: raise SystemExit('generated arm missing '+s)
+    for s in ('0xee3e','0xee41','0xee4a','0xee4d','0xee67','0xee42','0xee68'):
+        if s not in v: raise SystemExit('dry case missing '+s)
+print('E004FO_STATIC=PASS hooks=post-read/post-write target_regs=9 capture=no-set bounded=12frames/5s')

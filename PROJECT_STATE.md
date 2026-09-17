@@ -1,5 +1,8 @@
 ## Current continuation — reconciled R27 authority frontier — 2026-09-11
 
+> **Current frontier — 2026-09-17 / E004fn PASS:** Front IR VD55G0 is now live-proven on Linux through stock libcamera (16-frame native capture), standard exposure/gain controls, buffer reuse, and 16/16 processed monochrome frames including frame zero. Windows E004fn then proved the normal IR flash request sequence: 700 mA LED1 request, selector 0, hardware/level/active-high trigger words, arm and disable, followed by verified Golden return. Native illumination remains OFF. The next gate is E004fo, a bounded Windows register-level PMIC observer for timer `0xee3e..0xee41`, trigger `0xee4a..0xee4d` and common `0xee67`; no Linux emitter activation until that evidence is closed.
+
+
 **Authoritative durable checkpoint:** `6985bb6` (`camera: close R25-R27 offline authority`) on `experiment/e003-front-imx681-cphy`; local and origin matched at reconciliation.
 
 The DN-era continuation below is historical. Since then FU R18, GC R21 and GI R24 bounded Linux live passes closed; GJ closed combined Windows AWB + Tintless/LSC authority through R27; GK closes deterministic R25/R26/R27 composition while regressing R5..R24 against real GI live capsules 20/20.
@@ -16,11 +19,11 @@ SP11 is on protected FullIO v19c Golden with empty `next_entry`, no camera nodes
 
 **HD cap-release envelope:** five independent Linux R27 runs all remain cap-active through G27 and finish >8× above cap. Windows DM proves ordinary preview is below cap through R7 before first clamp at R8. A numeric scene threshold is not defensible across those different captures.
 
-**HE/HF/HG/HH/HI/HJ production consolidation:** PASS. **HR/HS/HT/HU/HV/HW/HX/HY/HZ/IA/IB:** production packaging, exact-Golden front path, shared-CAMSS authority and unified DTB PASS. **ID/IE/IF/IG/IH:** rear/front unified regressions, neutral-route ownership and both bounded same-boot RGB directions PASS. **IJ:** bounded bidirectional rear-RGB + front-RGB production handoff ACCEPTED; protected-Golden/default promotion remains denied.
+**RGB bounded production authority:** accepted without Golden promotion. **Front IR:** Linux VD55G0 transport, stock-libcamera capture, controls and 16/16 processed monochrome frames are live-proven through E004fe. **E004fn:** Windows normal flash request sequence PASS with 700 mA LED1, selector 0, hardware/level/active-high trigger, arm/disable and clean Golden return. Native illumination remains off.
 
-**Next action:** E004 VD55G0 front-IR authority and Linux bring-up foundation. Whole-stack/default promotion still needs IR, plus later alternating RGB soak and the separately parked brighter-scene native-feedback proof.
+**Next action:** E004fo observes the actual Windows PMIC masked-register RMW state and write return status for timer/trigger/common registers during one bounded ordinary IR preview. Linux emitter activation remains prohibited.
 
-**After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR/VD55G0 remains unproven.
+**After GO:** pivot to continuous delayed sensor-control feedback, control-to-statistics timing, long/repeated streaming and production integration. Front IR transport/capture is proven; illumination and complete image-quality/lifecycle parity remain open.
 
 **Concurrency rule:** Git/machine/evidence state outranks chat chronology. Run `tools/camera-overlap-guard.sh` before mutations and audit unexpected existing evidence.
 

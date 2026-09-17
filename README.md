@@ -1,5 +1,8 @@
 # SP11X1ECamera
 
+> **Current frontier — 2026-09-17 / E004fn PASS:** Front IR VD55G0 is now live-proven on Linux through stock libcamera (16-frame native capture), standard exposure/gain controls, buffer reuse, and 16/16 processed monochrome frames including frame zero. Windows E004fn then proved the normal IR flash request sequence: 700 mA LED1 request, selector 0, hardware/level/active-high trigger words, arm and disable, followed by verified Golden return. Native illumination remains OFF. The next gate is E004fo, a bounded Windows register-level PMIC observer for timer `0xee3e..0xee41`, trigger `0xee4a..0xee4d` and common `0xee67`; no Linux emitter activation until that evidence is closed.
+
+
 Evidence-driven native Linux camera bring-up for the Microsoft Surface Pro 11 (Denali, X1E80100).
 
 The project goal is **not** to cargo-cult an existing Surface patchset. We use Windows on the same SP11 as the hardware oracle, preserve useful upstream Qualcomm infrastructure, and independently derive the Surface-specific camera topology, power sequencing, sensor behaviour, CSI configuration and image pipeline.
@@ -19,9 +22,9 @@ Front IMX681 now has a consumed bounded Linux live PASS through **R27**, backed 
 
 The final bounded chain is now closed through **R27**. GL G1..G24 publisher, GM R5..R27 producer and GN 27-frame transport passed offline, and **GO completed a consumed one-shot 27-frame Linux live PASS with clean Golden return and candidate retirement**.
 
-The project has now pivoted to continuous delayed sensor-control feedback. GP/GQ/GR closed timing/scheduler/integration; GS proved live shadow ownership; GT/GU/GV proved repeated ioctl lifecycle and V4L2 dedupe; GW/GX/GY proved one changed post-G3 transport transaction. **GZ/HA/HB/HC/HD leave native-feedback environment-blocked; HE..HY close the front production path, HZ/IA reconcile shared rear+front CAMSS authority, IB builds the deterministic exact-Golden unified DTB, ID + IE prove rear/front separately, IF defines neutral-route ownership, IG + IH prove both bounded same-boot RGB directions, and IJ accepts that bounded RGB handoff as production authority without promoting Golden.** The next major functional gap is front IR / VD55G0 on Linux.
+The project has closed bounded rear/front RGB production authority while the brighter-scene post-G3 feedback proof remains separately parked. **Front IR has since advanced through native Linux transport, stock-libcamera capture, controls and 16/16 processed monochrome frames (E004fe); E004fn proves the normal Windows flash request sequence.** The active frontier is safe register-level PMIC/pulse authority before any native IR-emitter activation.
 
-Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 remains unproven on Linux.
+Rear OV13858 E002k-D R3 remains accepted with 16/16 normal frames and clean Golden return. Front IR / VD55G0 capture is now proven on Linux; illumination, longer lifecycle/desktop integration and final upstream consolidation remain open.
 
 SP11 is on protected FullIO v19c Golden. Bounded success does **not** yet claim unrestricted continuous AEC or full Windows camera parity. See [current handoff](HANDOFF.md).
 ## Start here
