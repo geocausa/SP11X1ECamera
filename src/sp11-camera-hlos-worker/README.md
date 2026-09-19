@@ -14,9 +14,13 @@ Do **not** feed protected CPZ/SecurePD images to this adapter, enable a forbidde
 
 ## E004fe archived-capture integration
 
-`sp11-ir-rgb888-to-nv12.c` is a strict format bridge for the **actual, archived E004fe sensor-pattern libcamera output**, which was captured as 644×604 RGB888 with a 1936-byte stride. It requires three identical colour components per pixel, zero row padding, and exactly one complete frame. It copies each grayscale value to 8-bit NV12 luma and sets chroma to neutral 128 before passing the frame to the existing HLOS worker. It is intentionally not a generic colour conversion or live camera launcher.
+`sp11-ir-rgb888-to-nv12.c` is a strict format bridge for the **actual, archived E004fe sensor-pattern libcamera output**, which was captured as 644×604 RGB888 with a 1936-byte stride. It requires three identical colour components per pixel and zero row padding. By default it accepts exactly one complete frame; `--frames N` accepts a bounded batch of 1–16 frames, validates the entire batch before producing any output and emits exactly N contiguous NV12 frames. It copies each grayscale value to 8-bit NV12 luma and sets chroma to neutral 128 before passing the frame to the existing HLOS worker. It is intentionally not a generic colour conversion or live camera launcher.
 
 `bash src/sp11-camera-hlos-worker/test-capture-integration.sh` checks the unchanged 16-frame archive SHA-256 and per-frame SHA-256, independently constructs expected NV12 from the first frame, verifies the bridge byte-for-byte, runs the maintained parity pixel core, confirms the direct and piped paths agree, and rejects short/long/non-neutral/padded-corrupt frames. The bounded end-to-end pattern-output SHA-256 is `beb89bd8799fb43549d1ab1ade9135145e31651efcba4b8b72a8856dd4cdb7f9`. A separate ASan/UBSan full-frame pipeline passed on the same fixture.
+
+## Bounded 16-frame RGB888 bridge and worker integration
+
+Run `bash src/sp11-camera-hlos-worker/test-bridge16-offline.sh` or set `HLOS_SANITIZE=1` for AddressSanitizer/UndefinedBehaviorSanitizer. This independently confirms that all 16 archived E004fe RGB888 frames convert to identical neutral-chroma NV12, and that the complete 16-frame bridge-to-worker pipeline matches 16 separately processed frames. It rejects ten malformed-input and frame-count cases, including a non-neutral pixel or nonzero padding in the *last* frame, without emitting partial output. Ordinary and sanitizer tests passed; output SHA-256 is `ea414ce89d3fdcf25f834baa3f8d13a1d04b25289ff34dba844a57986db655df`. This is offline replay of a generated sensor pattern, not live optical capture.
 
 ## Bounded 16-frame offline worker regression
 
