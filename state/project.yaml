@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gq-offline-real-arm64-yunet-sface-inference-pass-physical-safety-blocked
+state_id: E004gr-maintained-hlos-c-to-actual-arm64-face-model-integration-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gq-actual-offline-face-detector-recognizer-inference-pass-native-ir-off
+status: golden-e004gr-maintained-hlos-c-to-real-arm64-face-inference-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,21 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gr_current:
+  status: pass-real-hlos-c-neutral-nv12-to-arm64-yunet-sface-offline
+  date: 2026-09-19
+  baseline_commit: 111b1ee409b1b1947796cb2eeb3086d48a636743
+  actual_maintained_hlos_c_worker_compiled_and_executed: true
+  full_range_nv12_grayscale_to_bgr_preserves_exact_luma: true
+  in_memory_public_visible_demo_single_face_yunet_sface_inference: PASS
+  zero_face_and_multiface_inference_rejected: PASS
+  actual_native_near_ir_darkness_optical_face_tested: false
+  biometric_liveness_accuracy_or_login_authorization_proven: false
+  camera_provenance_securepd_or_host_fault_autonomy_proven: false
+  native_ir_emitter_authorized: false
+  camera_or_pmic_accessed: false
+  golden_modified: false
+  next_gate: consented-real-face-ir-liveness-and-protected-provenance-after-independent-physical-emitter-safety
 e004gq_current:
   status: pass-actual-opencv-yunet-sface-arm64-offline-model-inference
   date: 2026-09-19
