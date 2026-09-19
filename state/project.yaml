@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gh-original-arm64-pmic-timer-emulation-pass-physical-safety-blocked
+state_id: E004gi-windows-flash-timer-direct-call-map-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gh-windows-timer-cpu-emulation-pass-native-illumination-off
+status: golden-e004gi-flash-timer-direct-call-map-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,20 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gi_current:
+  status: pass-hash-pinned-windows-direct-timer-callgraph
+  date: 2026-09-19
+  baseline_commit: eeff437d78c51519a1e65c326485802f4fa29775
+  direct_timer_helper_callers: ["0x4938", "0x5b2c"]
+  observed_normal_type0_direct_timer_helper_call: false
+  subtype2_direct_timer_helper_call: true
+  alternative_indirect_timer_writers_excluded: false
+  actual_hardware_timer_cutoff_proven: false
+  physical_optical_current_irradiance_measured: false
+  native_ir_emitter_authorized: false
+  new_windows_camera_pmic_or_emitter_activity: false
+  golden_modified: false
+  next_gate: examine-sensor-poweroff-and-alternative-timer-programming-physical-safety-still-required
 e004gh_current:
   status: pass-original-windows-arm64-pmic-timer-cpu-emulation
   date: 2026-09-19
