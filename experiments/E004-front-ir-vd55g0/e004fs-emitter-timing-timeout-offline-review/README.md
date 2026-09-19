@@ -45,4 +45,10 @@ E004fv reproduced a one-step discrepancy between the actual isolated Linux flash
 
 A separate source-only patch `src/front-ir-vd55g0/illumination/0003-qcom-flash-align-pmic-timer-encoding.patch` and E004fv test reproduce the Windows handler for all 1271 integer-ms requests from 10 to 1280, under sanitizers, and build an isolated Linux kernel module. This patch is UNINSTALLED and DOES NOT authorize light emission. The still-missing authorities are physical timeout/current/irradiance and independent fail-safe off.
 
+## E004fx passive Golden timer read — idle bytes now observed
+
+A **separate, consumed read-only** E004fx experiment identified the PM8550 flash controller as disabled on Golden, mapped its timer registers to SPMI `0-01` addresses `0xee3e..0xee41`, and read exactly those four idle bytes once. All four returned `0x93`, whose bit 7 is set. Under the recovered Windows *software handler* encoding, `0x93` would conditionally represent a nominal 200 ms request. This observation closes the narrow question of **these four idle configuration bytes on this one Golden boot**; it does **not** establish whether the flash module/channels are enabled, actual physical timer length, Windows streaming-time timer state, spontaneous/stuck-trigger shutoff, or permissible optical output. No PMIC write or IR LED activation was requested and Golden returned unchanged. E004fx is consumed and must never be reread under the same identity. See its pinned original evidence and offline verifier.
+
+The E004fs **emitter-activation gate remains BLOCKED**. Before activation, separately establish flash module/channel off-state, timer enforcement independently of the host under fault conditions, real optical pulse duration and current/irradiance limits. A stored register bit cannot substitute for those measurements.
+
 Do not reboot, enable LED/flash/strobe output, change protected firmware, enroll a face, install PAM modules or alter Golden during this **offline-only** review. E004fp, E004fq and E004fr have all been consumed. Any future hardware experiment must use a fresh identity and pass a new read-only preflight.
