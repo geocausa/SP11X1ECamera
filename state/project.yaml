@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gj-oem-sensor-stop-linux-reset-static-pass-physical-safety-blocked
+state_id: E004gk-oem-aux-flash-on-off-cpu-emulation-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gj-sensor-stop-reset-static-pass-native-ir-off
+status: golden-e004gk-windows-aux-flash-on-off-cpu-emulation-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,21 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gk_current:
+  status: pass-original-windows-arm64-auxiliary-flash-on-off-cpu-emulation
+  date: 2026-09-19
+  baseline_commit: c9bbfe5599ef28afa74696e976346585185fc88d
+  additional_aux_on_rva: '0x6db0'
+  additional_aux_off_rva: '0x6e28'
+  off_aux_command_and_zero_payload_confirmed_in_offline_vm: true
+  transport_failure_returns_software_error: true
+  direct_software_off_route_is_autonomous_pmic_hardware_cutoff: false
+  all_windows_host_crash_suspend_teardown_paths_proven: false
+  physical_current_irradiance_or_led_off_measured: false
+  native_ir_emitter_authorized: false
+  windows_boot_kd_camera_pmic_accessed: false
+  golden_modified: false
+  next_gate: independent-physical-electrical-optical-current-pulse-fault-off-proof
 e004gj_current:
   status: pass-oem-aux-stop-candidate-linux-stream-stop-reset-source
   date: 2026-09-19
