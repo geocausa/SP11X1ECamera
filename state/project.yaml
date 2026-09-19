@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gp-pmic-timer-indirect-dispatch-audit-pass-physical-safety-blocked
+state_id: E004gq-offline-real-arm64-yunet-sface-inference-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gp-pmic-indirect-timer-dispatch-audit-pass-native-ir-off
+status: golden-e004gq-actual-offline-face-detector-recognizer-inference-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,21 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gq_current:
+  status: pass-actual-opencv-yunet-sface-arm64-offline-model-inference
+  date: 2026-09-19
+  baseline_commit: 3c43e34b31c7a09ccfae4365bc3d30dc88eb07b5
+  model_runtime_in_isolated_tmp_venv: opencv-python-headless-4.12.0.88
+  official_original_model_and_public_sample_sha256_pinned: true
+  group_and_zero_face_reject_real_detector: PASS
+  isolated_public_visible_face_feature_extraction_128d: PASS
+  grayscale_public_visible_image_is_real_sp11_near_ir: false
+  real_sp11_darkness_recognition_or_liveness_proven: false
+  real_user_enrollment_or_login_enabled: false
+  native_ir_emitter_authorized: false
+  camera_windows_kd_pmic_or_emitter_activity: false
+  golden_modified: false
+  next_gate: consented-real-sensor-optical-IR-matching-liveness-tests-after-independent-hardware-emitter-safety
 e004gp_current:
   status: pass-original-windows-pmic-indirect-timer-callback-table-offline
   date: 2026-09-19
