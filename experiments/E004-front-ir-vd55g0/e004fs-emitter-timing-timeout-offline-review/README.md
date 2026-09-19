@@ -39,4 +39,10 @@ For a *hypothetical* combination of the separately measured Linux 137.6 MHz pixe
 
 **Next hardware evidence needed:** independently verify the timer's *initial and post-programming* readback per actual LED channel while output remains disabled; establish the sensor GPIO1 and physical LED pulse envelope, peak optical current/irradiance, and independent shutoff under camera stop, host crash and stuck trigger. A host-process watchdog and one-shot Golden reboot do **not** substitute for an electrically independent optical cutoff. Do not install the flash patch or request any IR emission based solely on these code-level findings.
 
+## Follow-up E004fv: timer encoding mismatch, not physical authority
+
+E004fv reproduced a one-step discrepancy between the actual isolated Linux flash-source byte encoding and the recovered Windows PMIC handler: Linux nominal 10 ms → 0x81, Windows nominal 10 ms → 0x80; Linux 1270 ms → 0xff while Windows 1270 ms → 0xfe. For a nominal 1280 ms request, both yield 0xff because the original Linux implementation clamps the divided value. Thus the prior wording about a “1270 ms encoded maximum” describes when the **uncorrected Linux implementation reaches saturation**, not any measured or verified physical 1270 ms cutoff. The Windows handler maps 0xff to an *encoded nominal* 1280 ms; **neither operating system's actual electrical output duration has been measured**.
+
+A separate source-only patch `src/front-ir-vd55g0/illumination/0003-qcom-flash-align-pmic-timer-encoding.patch` and E004fv test reproduce the Windows handler for all 1271 integer-ms requests from 10 to 1280, under sanitizers, and build an isolated Linux kernel module. This patch is UNINSTALLED and DOES NOT authorize light emission. The still-missing authorities are physical timeout/current/irradiance and independent fail-safe off.
+
 Do not reboot, enable LED/flash/strobe output, change protected firmware, enroll a face, install PAM modules or alter Golden during this **offline-only** review. E004fp, E004fq and E004fr have all been consumed. Any future hardware experiment must use a fresh identity and pass a new read-only preflight.

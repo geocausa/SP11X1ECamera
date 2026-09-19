@@ -1,0 +1,36 @@
+--- a/drivers/leds/flash/leds-qcom-flash.c
++++ b/drivers/leds/flash/leds-qcom-flash.c
+@@ -394 +394 @@
+-	/* set SAFETY_TIMER for all the channels connected to the same LED */
++	/* Fail closed on an enabled but unrepresentable sub-step request. */
+@@ -395,0 +396,18 @@
++	if (timeout_ms && timeout_ms < FLASH_TIMER_STEP_MS)
++		return -EINVAL;
++
++	/*
++	 * Windows PMIC handler uses bit 7 plus a 10 ms base interval;
++	 * bits 6:0 encode additional 10 ms intervals. Zero disables.
++	 * Reject an unrepresentable value before any timer-register write.
++	 */
++	if (!timeout_ms)
++		timer = 0;
++	else {
++		u32 steps = (timeout_ms - FLASH_TIMER_STEP_MS) /
++				FLASH_TIMER_STEP_MS;
++
++		if (steps > FLASH_TIMER_VAL_MASK)
++			return -EINVAL;
++		timer = (u8)steps | FLASH_TIMER_EN_BIT;
++	}
+@@ -399,6 +416,0 @@
+-
+-		timer = timeout_ms / FLASH_TIMER_STEP_MS;
+-		timer = clamp_t(u8, timer, 0, FLASH_TIMER_VAL_MASK);
+-
+-		if (timeout_ms)
+-			timer |= FLASH_TIMER_EN_BIT;
+@@ -489,0 +502,4 @@
++
++	if (state && (led->flash_timeout_ms < FLASH_TIMER_STEP_MS ||
++		      led->max_timeout_ms < FLASH_TIMER_STEP_MS))
++		return -EINVAL;

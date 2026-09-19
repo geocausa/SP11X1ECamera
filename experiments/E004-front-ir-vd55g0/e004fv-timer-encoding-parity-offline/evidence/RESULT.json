@@ -1,0 +1,72 @@
+{
+  "experiment": "E004fv",
+  "status": "PASS_OFFLINE_WINDOWS_HANDLER_ENCODING_PARITY_SOURCE_PATCH_ONLY",
+  "source_sha256": "cd1f98411545cdb4b679bb21c4c29076a88866517488d5b618c31485caa04727",
+  "windows_static_result_sha256": "1d3ab98722a381c64f355b0b71da6cea84c4f569f81da1ebde262f51ea4348ef",
+  "patch_sha256": "430953b2eade6a9ac08a1c2689982b5685fceb61b30222f02a79ce98cec62de9",
+  "patched_source_sha256": "591e55b46a326c55f76fab2f2f782d76226c243a85b65ba3fed4261cd3500526",
+  "sample_timer_encodings": {
+    "0": {
+      "original_linux_hex": "0x00",
+      "candidate_and_windows_handler_hex": "0x00"
+    },
+    "10": {
+      "original_linux_hex": "0x81",
+      "candidate_and_windows_handler_hex": "0x80"
+    },
+    "11": {
+      "original_linux_hex": "0x81",
+      "candidate_and_windows_handler_hex": "0x80"
+    },
+    "19": {
+      "original_linux_hex": "0x81",
+      "candidate_and_windows_handler_hex": "0x80"
+    },
+    "20": {
+      "original_linux_hex": "0x82",
+      "candidate_and_windows_handler_hex": "0x81"
+    },
+    "40": {
+      "original_linux_hex": "0x84",
+      "candidate_and_windows_handler_hex": "0x83"
+    },
+    "100": {
+      "original_linux_hex": "0x8a",
+      "candidate_and_windows_handler_hex": "0x89"
+    },
+    "1260": {
+      "original_linux_hex": "0xfe",
+      "candidate_and_windows_handler_hex": "0xfd"
+    },
+    "1270": {
+      "original_linux_hex": "0xff",
+      "candidate_and_windows_handler_hex": "0xfe"
+    },
+    "1280": {
+      "original_linux_hex": "0xff",
+      "candidate_and_windows_handler_hex": "0xff"
+    }
+  },
+  "windows_reported_handler_formula": "0x80 | floor((requested_ms - 10) / 10)",
+  "original_linux_formula": "0x80 | min(floor(timeout_ms / 10), 127)",
+  "candidate_formula": "0x80 | floor((timeout_ms - 10) / 10) for 10..1280 ms; zero disables",
+  "nonzero_requests_below_ten_ms_rejected": true,
+  "arming_with_disabled_timer_rejected": true,
+  "windows_parity_valid_requested_intervals_tested": 1271,
+  "invalid_interval_count_tested": 9,
+  "paired_channels_tested": [
+    0,
+    3
+  ],
+  "kernel_module_built_offline_against_golden_headers": true,
+  "address_and_undefined_behavior_sanitizers": "PASS",
+  "patched_module_installed": false,
+  "flash_source_replaced_in_golden": false,
+  "emitter_activated": false,
+  "physical_timer_duration_measured": false,
+  "physical_led_strobe_shutdown_verified": false,
+  "actual_pmic_timer_register_readback_verified": false,
+  "optical_current_and_irradiance_limit_verified": false,
+  "emitter_enable_authorized": false,
+  "next_gate": "Actual read-only timer register evidence and independently verified electrical/optical shutoff before any active emitter test."
+}
