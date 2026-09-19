@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gg-original-arm64-windows-cpu-emulation-pass-hardware-safety-unproven
+state_id: E004gh-original-arm64-pmic-timer-emulation-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gg-offline-original-windows-arm64-instruction-emulation-pass-ir-off
+status: golden-e004gh-windows-timer-cpu-emulation-pass-native-illumination-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,21 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gh_current:
+  status: pass-original-windows-arm64-pmic-timer-cpu-emulation
+  date: 2026-09-19
+  parent_commit: 8652bea603040b2f8e4d11286d88a8e8cbce1cc9
+  nominal_windows_timer_200ms_encoded_byte: '0x93'
+  archived_idle_byte_matches_nominal_software_encoding: true
+  streaming_time_timer_activity_proven: false
+  pmic_helper_calls_mocked: true
+  five_injected_write_fault_paths_tested: true
+  autonomous_electrical_shutdown_proven: false
+  optical_output_and_current_measured: false
+  native_ir_emitter_authorized: false
+  camera_or_pmic_hardware_accessed: false
+  golden_modified: false
+  next_gate: independent-physical-optical-electrical-safety-validation
 e004gg_current:
   status: pass-original-windows-arm64-offline-unicorn-cpu-emulation
   date: 2026-09-19
