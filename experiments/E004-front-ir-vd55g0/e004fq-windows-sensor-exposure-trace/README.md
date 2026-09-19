@@ -1,6 +1,6 @@
 # E004fq — bounded Windows VD55G0 exposure/strobe write trace
 
-Status: **PREPARED / NOT YET CONSUMED**.
+Status: **CONSUMED / ABORTED BEFORE CAMERA CAPTURE (2026-09-19)**.
 
 E004fp closed the live PMIC register-level flash trigger configuration. The remaining pre-emitter question is the sensor-side exposure/strobe envelope used during a normal Windows IR preview.
 
@@ -46,3 +46,7 @@ The observer caps matching events at 128. A command/parser error aborts the capt
 A changed write to `0x044e/0x044f` during the preview establishes the Windows-requested coarse exposure value for that frame path. If Windows leaves the InitialConfig value at 100 lines, that is also useful but must be stated only within the bounded capture. Frame arrival plus successful teardown is supporting execution evidence; it is not an electrical measurement of light output.
 
 E004fp already showed no PMIC timer-register access in its bounded 12-frame preview. E004fq does not reinterpret that absence as global proof. Native Linux illumination remains disabled until this sensor-side observation is closed and the resulting bounded activation contract is reviewed.
+
+## Actual bounded attempt — consumed / no sensor observation
+
+On 2026-09-19 the fresh direct Windows BootNext reached SP7 KD. The fresh module base was `fffff80042770000`; idle `validate.kd` printed every expected target/skip marker. The generated `arm.kd` then produced KD `Malformed string` because an inner `.printf "..."` was not escaped for the outer breakpoint command string. KD did not complete the arm script; no `capture.ps1` was invoked and no IR preview frames were acquired. The single boot identity is consumed rather than reused. `bc *; bl` produced an empty breakpoint list and the cleanup marker, then `g` resumed Windows. SP11 was rebooted to protected Golden Ubuntu and its unchanged BootOrder, empty `next_entry` and camera-idle state were verified. The full original KD log and `ABORT.json` are in `evidence/`. No new exposure, optical or timer evidence was obtained. A different fresh identity with corrected generator and an idle validation gate is required before any new live capture.

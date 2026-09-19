@@ -1,0 +1,40 @@
+Excerpt normalized from exact original KD log; original Windows file SHA256 a9a7eaea59c252b69462622497b58eb05a8d7a8accbdc849125d779a18cbf14d
+
+0: kd> .echo E004FQ_CONNECTED; .reload; lm m surfacecamauxsensor*; bl; .time
+E004FQ_CONNECTED
+Connected to Windows 10 26100 ARM 64-bit (AArch64) target at (Sat Sep 19 16:18:44.648 2026 (UTC + 1:00)), ptr64 TRUE
+Loading Kernel Symbols
+...............................................................
+................................................................
+................................................................
+................................................................
+............................
+Loading User Symbols
+
+Loading unloaded module list
+.......................
+start             end                 module name
+fffff800`42770000 fffff800`427ac000   surfacecamauxsensor8380   (deferred)
+
+Debug session time: Sat Sep 19 16:17:56.761 2026 (UTC + 1:00)
+System Uptime: 0 days 0:01:44.038
+0: kd> $><C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FQ_SENSOR_EXPOSURE_20260919_01\generated\validate.kd
+E004FQ_DRY_BEGIN
+E004FQ_DRY_TARGET reg=200
+E004FQ_DRY_TARGET reg=202
+E004FQ_DRY_SKIP reg=44b
+E004FQ_DRY_TARGET reg=44c
+E004FQ_DRY_TARGET reg=44e
+E004FQ_DRY_TARGET reg=451
+E004FQ_DRY_SKIP reg=452
+E004FQ_DRY_TARGET reg=458
+E004FQ_DRY_TARGET reg=459
+E004FQ_DRY_SKIP reg=466
+E004FQ_DRY_TARGET reg=467
+E004FQ_DRY_TARGET reg=46e
+E004FQ_DRY_SKIP reg=46f
+E004FQ_DRY_END_STAY_BROKEN
+0: kd> $><C:\Users\SurfacePro7\Documents\KDNET\Codex\E004FQ_SENSOR_EXPOSURE_20260919_01\generated\arm.kd
+E004FQ_ARM_BEGIN
+                                                                                                                                                                                                                                         ^ Malformed string in '.echo E004FQ_ARM_BEGIN;r @$t0 = 0;bp0 fffff8004277a350 ".if (((@w0 >= 0x0200 & @w0 <= 0x0202) | (@w0 >= 0x044c & @w0 <= 0x0451) | (@w0 >= 0x0458 & @w0 <= 0x0459) | (@w0 >= 0x0467 & @w0 <= 0x046e))) { r @$t0 = @$t0 + 1; .printf "E004FQ_SENSOR_WRITE hit=%u reg=%x data=%x\n", @$t0, @w0, @w1; .if (@$t0 >= 0n128) { bd 0 } }; gc";bl;.echo E004FQ_ARMED_RESUMING;g;'
+0: kd> bc *; bl; .echo E004FQ_ABORT_BREAKPOINTS_CLEARED; g

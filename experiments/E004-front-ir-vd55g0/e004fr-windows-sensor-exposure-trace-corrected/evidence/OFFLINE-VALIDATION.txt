@@ -1,0 +1,13 @@
+2026-09-19 E004fr offline-only preparation
+
+Previous E004fq KD abort log SHA256:
+a9a7eaea59c252b69462622497b58eb05a8d7a8accbdc849125d779a18cbf14d
+
+E004fr verify_static.py:
+E004FR_STATIC=PASS PACKAGE_INIT_EXPOSURE=100 GPIO1=STROBE DELAYS=0 AUX_WRITE_HELPER_RVA=0xa350 CAPTURE=READ_ONLY_12F_5S
+
+SP7 PowerShell generator invoked only with the historical E004fq base to check generated text (NOT an E004fr live address):
+AUX base=0xfffff80042770000; hook=0xfffff8004277a350
+E004FR_OFFLINE_GENERATOR=PASS QUOTED_CALLBACK=YES TARGET_REMAINS_BROKEN=YES
+
+The generated callback escapes internal .printf quotation marks; arm.kd has no standalone g. Live KD parser acceptance has NOT been tested for E004fr. A new Windows boot is required for a future E004fr run. Current machine is protected Golden Linux.
