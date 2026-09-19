@@ -31,3 +31,7 @@ This demonstrates compatibility between the already-proven **libcamera output fo
 ## E004gc — offline optical signal metrics (not face matching)
 
 `sp11-ir-signal-metrics.c` strictly validates a 1..16-frame 644×604 neutral-chroma NV12 batch before emitting aggregate per-frame JSON (mean, p10/p90, dark/bright fraction and neighbor contrast). `python3 src/sp11-camera-hlos-worker/test-signal-metrics-offline.py` and `HLOS_SANITIZE=1` exercise the real C executable, synthetic fixtures and fail-closed input rejection. It has no camera/device/IR-light access and does not retain pixel data. No real face image or authentication-quality threshold was evaluated: E004fu's raw optical frames were intentionally not retained. See `experiments/E004-front-ir-vd55g0/e004gc-offline-ir-optical-signal-metrics/README.md`; E004fs remains BLOCKED.
+
+## E004gd — archived-pattern end-to-end diagnostic integration
+
+Run `python3 src/sp11-camera-hlos-worker/test-telemetry-integration.py` (optional `HLOS_SANITIZE=1`) to verify all 16 hash-pinned E004fe **sensor-generated pattern** frames through the RGB888 bridge, unchanged HLOS pixel core and E004gc diagnostic, comparing every aggregate metric against a separate Python reference and rejecting final-frame corruption without partial output. Only offline pattern data; no real-face image-quality claim or E004fs emitter safety authority. See E004gd README/RESULT.
