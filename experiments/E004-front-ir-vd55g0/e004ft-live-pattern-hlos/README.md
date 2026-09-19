@@ -1,6 +1,6 @@
 # E004ft — first bounded live Linux IR capture-to-HLOS worker test
 
-Status: **PREPARED / NOT YET ARMED OR CONSUMED**. This is a separate, fresh experiment; E004fe is already consumed and must not be reused.
+Status: **PASS — FRESH LIVE ONE-SHOT CONSUMED, RETIRED TO GOLDEN (2026-09-19)**. E004ft captured and processed 16 current-session generated-pattern frames with ordinary Linux userspace; it is not eligible for another run. E004fe remains separately consumed.
 
 ## Hypothesis and one variable
 
@@ -21,4 +21,10 @@ This tests live generated-pattern capture → ordinary Linux userspace processin
 
 A successful outcome requires a verified fresh 16-frame libcamera capture, no test-pattern/firmware/CAMSS drift, 16 processed NV12 frames with correct length and neutral chroma, camera stop, no kernel faults, and sensor runtime suspension. A failed capture or worker check is a failed experiment, not an instruction to change camera or emitter settings during that boot.
 
-The E004fs emitter safety gate remains **BLOCKED**. Native illumination, biometric enrollment and PAM changes are forbidden in E004ft. Raw test-pattern payload and processed images are ignored build/runtime artifacts, never Git evidence.
+## Actual result — accepted and retired
+
+A single fresh E004ft one-shot boot captured 16 consecutive live VD55G0 **sensor-generated horizontal grayscale pattern** frames with GPIO outputs disabled. It then passed those *same session's* 16 × 644×604 RGB888 frames to the independently built Linux RGB888→NV12 bridge and ordinary Linux HLOS parity processor. All 16 resulting processed NV12 frames matched the established pinned offline generated-pattern output digest `ea414ce89d3fdcf25f834baa3f8d13a1d04b25289ff34dba844a57986db655df`. The capture digest was `33dce2a2a6edacd608c998734e2635d7a9230c39d0f0fa27767dfa8b514918c3`. These are deterministic test-pattern values, **not optical face images**. One camera stream/capture, 16/16 numbered frames, camera stop, sensor runtime suspension, and kernel-health gates passed. No protected worker, login/PAM changes or IR illumination were used.
+
+The one-shot's scheduled reboot returned SP11 to protected Golden FullIO v19c (`df3233f3-c19e-491a-ab98-928893f39603`). BootOrder `0005,0004,0000,0001,0002,0006`, saved Golden default, empty `next_entry`, no camera nodes/modules/processes, and removal of the disposable boot entry, boot files and sensor firmware were verified. The raw generated-pattern payload was deleted. `verify_result.py` checks the hash-pinned capture/kernel text logs, lifecycle markers and bounded result, then emits `evidence/RESULT.json`. These non-image capture/kernel logs and lifecycle markers are checkpointed; expanded media inventories remain local and are identified by the project evidence state.
+
+The E004fs emitter safety gate remains **BLOCKED**. Native illumination, biometric enrollment and PAM changes were not attempted. The next live question is **ordinary unilluminated optical capture** in a separate fresh one-shot identity; E004ft cannot be reused. Current HLOS output establishes pixel processing of camera-generated frames, not optical quality, face identification, liveness or working login.
