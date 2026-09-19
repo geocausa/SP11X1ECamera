@@ -1,6 +1,6 @@
 # E004ga — fresh bounded Windows flash enable and shutdown-request trace
 
-Status: **OFFLINE PREPARED / NOT ARMED OR CONSUMED.** This is a fresh experiment; E004fp/E004fr and all prior Windows/camera attempts are consumed and must never be reused.
+Status: **ABORTED DURING KD DRY VALIDATION; WINDOWS ONE-SHOT IDENTITY CONSUMED, NO CAMERA CAPTURE (2026-09-19).** The SP7 debugger's live MASM dry-run unexpectedly skipped both required enable registers `ee46` and `ee4e`; the observer was NEVER armed and no OEM preview was started. Breakpoints were cleared, Windows was resumed and SP11 returned to protected Golden (boot `c017bcd7-4e86-45ed-8453-224646b6cc8e`). The SP7 original dry-run KD log is preserved under the separate E004ga directory and pinned by SHA-256 in `evidence/ABORTED.json`. **Do not rerun this Windows one-shot or reuse E004ga's generator.** A corrected explicit-equality predicate requires a separately staged experiment, with a fresh Windows boot and a *live KD interpreter* dry-run demonstrating all positive and negative classifications before any camera preview.
 
 ## Specific question
 
