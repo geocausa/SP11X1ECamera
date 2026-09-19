@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gn-pmic-status3-timeout-source-map-pass-physical-safety-blocked
+state_id: E004go-offline-one-shot-hlos-diagnostic-session-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gn-pmic-status3-source-map-pass-native-ir-off
+status: golden-e004go-offline-hlos-session-prototype-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,20 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004go_current:
+  status: pass-offline-one-shot-hlos-aggregate-diagnostic-session
+  date: 2026-09-19
+  baseline_commit: 25479032438468fb944b4de28336c27483a3c956
+  bounded_16_frame_real_c_synthetic_telemetry_json_integration: PASS
+  adversarial_state_event_sequences: 1024
+  fail_closed_cancel_fault_deadline_and_no_rearm: true
+  pixel_frames_or_face_templates_ingested: false
+  biometric_matching_liveness_or_login_proven: false
+  host_crash_independent_watchdog_proven: false
+  native_ir_emitter_authorized: false
+  camera_or_pmic_accessed: false
+  golden_modified: false
+  next_gate: actual-consented-facial-detection-matching-liveness-evaluation-and-independent-physical-ir-safety
 e004gn_current:
   status: pass-public-pmic-timer-status3-source-audit-offline
   date: 2026-09-19

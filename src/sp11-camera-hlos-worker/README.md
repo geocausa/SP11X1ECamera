@@ -35,3 +35,7 @@ This demonstrates compatibility between the already-proven **libcamera output fo
 ## E004gd — archived-pattern end-to-end diagnostic integration
 
 Run `python3 src/sp11-camera-hlos-worker/test-telemetry-integration.py` (optional `HLOS_SANITIZE=1`) to verify all 16 hash-pinned E004fe **sensor-generated pattern** frames through the RGB888 bridge, unchanged HLOS pixel core and E004gc diagnostic, comparing every aggregate metric against a separate Python reference and rejecting final-frame corruption without partial output. Only offline pattern data; no real-face image-quality claim or E004fs emitter safety authority. See E004gd README/RESULT.
+
+## E004go — bounded one-shot offline diagnostic session protocol
+
+`sp11-offline-session-gate.py` accepts only the JSON aggregates from the offline C signal-metrics program, with strict type/length/ordering, injected monotonic tick deadlines, terminal fault/cancel/no-rearm behavior, and no emitter, camera or login API. Run `python3 src/sp11-camera-hlos-worker/test-offline-session-gate.py` for 1024 adversarial state sequences and integration with fresh synthetic 16-frame input through the unchanged real C diagnostic. This is **NOT** biometric matching, a host-crash-independent watchdog, real-time hardware service, face unlock or authorisation to enable IR; E004fs/E004ge remain BLOCKED.
