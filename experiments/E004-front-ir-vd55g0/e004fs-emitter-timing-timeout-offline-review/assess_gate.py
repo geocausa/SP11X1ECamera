@@ -13,6 +13,8 @@ FR = E / "e004fr-windows-sensor-exposure-trace-corrected" / "evidence" / "RESULT
 ARCHIVE = FR.parent / "ORIGINAL-WINDOWS-LOGS.zip"
 KD_DIGEST = "e51fe8ac39c4dcada637bf914c18c891ab81d27e974bffc0bd330f4201223722"
 CAP_DIGEST = "079dd61665adbfe21c5f5316078e9cebb91d5462ddb05e4be79dda5233cebb78"
+FP_RESULT_DIGEST = "b94a5997ecfb27f8f87527b2099763416cae390abf03e90d909b11efd2deac86"
+FR_RESULT_DIGEST = "a5da6c08a1a1b4269970750e0971f207561310fd47316561b0ef30f2760c0b92"
 
 
 def require(ok: bool, msg: str) -> None:
@@ -76,6 +78,11 @@ def main() -> None:
                 "archived KD log hash mismatch")
         require(sha256(z.read("WINDOWS-CAPTURE.txt")).hexdigest() == CAP_DIGEST,
                 "archived Windows capture log hash mismatch")
+    require(FP.is_file() and FR.is_file(), "source result missing")
+    require(sha256(FP.read_bytes()).hexdigest() == FP_RESULT_DIGEST,
+            "PMIC result differs from checkpointed evidence")
+    require(sha256(FR.read_bytes()).hexdigest() == FR_RESULT_DIGEST,
+            "sensor result differs from checkpointed evidence")
     fp, fr = (json.loads(p.read_text()) for p in (FP, FR))
     require(fr.get("kd_log_sha256") == KD_DIGEST and
             fr.get("capture_log_sha256") == CAP_DIGEST,

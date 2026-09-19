@@ -3,7 +3,9 @@
 import copy
 import json
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
+import assess_gate as gate
 from assess_gate import E, assess
 
 fp = json.loads((E / "e004fp-windows-pmic-register-trace-corrected/evidence/RESULT.json").read_text())
@@ -44,4 +46,36 @@ rejects(fp, bad, "programming group count")
 bad = copy.deepcopy(fr)
 bad["windows_capture"]["frames_acquired"] = 13
 rejects(fp, bad, "bounded capture")
-print("E004FS_GATE_TESTS=PASS VALID_EVIDENCE_BLOCKED=YES INVALID_EVIDENCE_REJECTED=6")
+# The archived inputs and parsed-result files are a single evidence contract.
+# A modified result must be rejected even if its simple structural checks pass.
+with TemporaryDirectory(prefix="sp11-e004fs-check-") as directory:
+    out = Path(directory)
+    original_fp, original_fr = gate.FP, gate.FR
+    original_result = (Path(__file__).parent / "evidence/RESULT.json").read_bytes()
+    try:
+        for name, original, old, new, error in (
+            ("pmic", original_fp, b'"frames": 12', b'"frames": 13',
+             "PMIC result differs"),
+            ("sensor", original_fr, b'"observed_writes": 114',
+             b'"observed_writes": 113', "sensor result differs"),
+        ):
+            assert old in original.read_bytes(), name + " fixture drift"
+            changed = original.read_bytes().replace(old, new, 1)
+            destination = out / (name + "-tampered.json")
+            destination.write_bytes(changed)
+            gate.FP, gate.FR = original_fp, original_fr
+            if name == "pmic":
+                gate.FP = destination
+            else:
+                gate.FR = destination
+            try:
+                gate.main()
+            except ValueError as exc:
+                assert error in str(exc), str(exc)
+            else:
+                raise AssertionError("tampered " + name + " result accepted")
+            assert (Path(__file__).parent / "evidence/RESULT.json").read_bytes() == original_result
+    finally:
+        gate.FP, gate.FR = original_fp, original_fr
+
+print("E004FS_GATE_TESTS=PASS VALID_EVIDENCE_BLOCKED=YES INVALID_EVIDENCE_REJECTED=8")
