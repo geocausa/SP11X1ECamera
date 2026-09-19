@@ -1,0 +1,79 @@
+{
+  "experiment": "E004gl",
+  "status": "PASS_GHIDRA_DECOMPILED_AND_ORIGINAL_ARM64_LIFECYCLE_FAULT_EMULATION_OFFLINE",
+  "prior_emulator_source_sha256": "097b97fdfb197b594410d1dc1d37d96ea7c54e24a87d317040f67610850e84b4",
+  "emulation_script_sha256": "3e6756e00cdcff96b835f0b8673f3a61a699721b3c3b00360ca342d3733c8fb7",
+  "negative_test_sha256": "12a3a9c64f888ba332f9ae9ae2b51969d215a85aeb0b1fa6c73c970d0425a14e",
+  "ghidra_script_sha256": "7dd930ed5efb8045293c5ab06d39942f72fe0eddc5171bba16e7256c99475c1e",
+  "ghidra_runner_sha256": "544f7a33a990f5069fe1cef576999f42eec90726187bd25bbbee3a58bd226458",
+  "original_pe_windows_arm64_instructions_executed": true,
+  "windows_os_and_pmic_io_mocked": true,
+  "previous_off_request_failure_does_not_prevent_subsequent_rearm_request": true,
+  "stop_off_request_failure_returns_failed_and_does_not_clear_software_active_flag": true,
+  "new_on_request_error_does_not_trigger_best_effort_off_in_examined_function": true,
+  "physical_led_state_after_error_measured": false,
+  "real_software_failure_and_hardware_failure_equivalent_proven": false,
+  "native_emitter_enable_authorized": false,
+  "original_windows_boot_kd_camera_or_pmic_accessed": false,
+  "golden_modified": false,
+  "vm_cases": {
+    "start_ok": {
+      "calls": [
+        "current",
+        "timer",
+        "strobe_on"
+      ],
+      "returned_success": true,
+      "software_active_flag": 1
+    },
+    "start_current_error": {
+      "calls": [
+        "current"
+      ],
+      "returned_success": false,
+      "software_active_flag": 0
+    },
+    "start_timer_error": {
+      "calls": [
+        "current",
+        "timer"
+      ],
+      "returned_success": false,
+      "software_active_flag": 0
+    },
+    "start_strobe_error": {
+      "calls": [
+        "current",
+        "timer",
+        "strobe_on"
+      ],
+      "returned_success": false,
+      "software_active_flag": 0
+    },
+    "start_prior_off_error": {
+      "calls": [
+        "prior_off",
+        "current",
+        "timer",
+        "strobe_on"
+      ],
+      "returned_success": true,
+      "software_active_flag": 1
+    },
+    "stop_ok": {
+      "calls": [
+        "strobe_off",
+        "software_cleanup"
+      ],
+      "returned_success": true,
+      "software_active_flag": 0
+    },
+    "stop_bus_error": {
+      "calls": [
+        "strobe_off"
+      ],
+      "returned_success": false,
+      "software_active_flag": 1
+    }
+  }
+}

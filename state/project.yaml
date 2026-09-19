@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gk-oem-aux-flash-on-off-cpu-emulation-pass-physical-safety-blocked
+state_id: E004gl-ghidra-windows-flash-lifecycle-fault-gap-proven-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gk-windows-aux-flash-on-off-cpu-emulation-pass-native-ir-off
+status: golden-e004gl-windows-flash-ghidra-lifecycle-gap-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,21 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gl_current:
+  status: pass-ghidra-original-windows-arm64-start-stop-fault-branch
+  date: 2026-09-19
+  baseline_commit: d78f04f9548bd02d4c70c10b8f51717fe08c91e4
+  ghidra_installed_and_original_flash_pmic_binaries_decompiled: true
+  prior_off_mock_error_still_requests_rearm_and_may_report_success: true
+  stopped_off_mock_error_retains_windows_software_active_flag: true
+  original_windows_arm64_vm_test_cases: 7
+  original_windows_vm_input_negative_tests: 8
+  physical_led_state_after_mock_bus_error_measured: false
+  native_driver_should_rearm_after_prior_off_failure: false
+  native_ir_emitter_authorized: false
+  windows_boot_kd_camera_pmic_or_emitter_accessed: false
+  golden_modified: false
+  next_gate: offline-linux-fail-closed-state-machine-plus-independent-physical-optical-electrical-safety
 e004gk_current:
   status: pass-original-windows-arm64-auxiliary-flash-on-off-cpu-emulation
   date: 2026-09-19
