@@ -1,0 +1,52 @@
+--- a/drivers/leds/flash/leds-qcom-flash.c
++++ b/drivers/leds/flash/leds-qcom-flash.c
+@@ -497 +497 @@
+-	int rc;
++	int rc, off_rc;
+@@ -501 +501 @@
+-		return rc;
++		goto attempt_disarm;
+@@ -504,2 +504,4 @@
+-		      led->max_timeout_ms < FLASH_TIMER_STEP_MS))
+-		return -EINVAL;
++		      led->max_timeout_ms < FLASH_TIMER_STEP_MS)) {
++		rc = -EINVAL;
++		goto attempt_disarm;
++	}
+@@ -509 +511 @@
+-		return rc;
++		goto attempt_disarm;
+@@ -513 +515 @@
+-		return rc;
++		goto attempt_disarm;
+@@ -517 +519 @@
+-		return rc;
++		goto attempt_disarm;
+@@ -521,3 +523,24 @@
+-		return rc;
+-
+-	return set_flash_strobe(led, strobe, state);
++		goto attempt_disarm;
++
++	rc = set_flash_strobe(led, strobe, state);
++	if (!rc)
++		return 0;
++
++attempt_disarm:
++	/*
++	 * Best-effort software rollback on every error, including failed
++	 * initial channel disarm and failed arm after module enable.
++	 * A failed SPMI write may leave hardware ON: neither these retries
++	 * nor a host reboot constitute an independent electrical cutoff.
++	 */
++	off_rc = set_flash_strobe(led, SW_STROBE, false);
++	if (off_rc)
++		dev_err(led->flash.led_cdev.dev,
++			"flash rollback: unable to disarm channels (%d)\n", off_rc);
++
++	off_rc = set_flash_module_en(led, false);
++	if (off_rc)
++		dev_err(led->flash.led_cdev.dev,
++			"flash rollback: unable to disable module (%d)\n", off_rc);
++
++	return rc;

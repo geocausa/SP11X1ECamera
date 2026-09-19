@@ -1,0 +1,31 @@
+{
+  "experiment": "E004fz",
+  "status": "PASS_OFFLINE_FLASH_ERROR_ROLLBACK_SOURCE_AND_FAULT_TESTS",
+  "baseline_source_sha256": "cd1f98411545cdb4b679bb21c4c29076a88866517488d5b618c31485caa04727",
+  "prior_timer_patch_sha256": "430953b2eade6a9ac08a1c2689982b5685fceb61b30222f02a79ce98cec62de9",
+  "uninstalled_error_rollback_patch_sha256": "cbc8bc73882fd258e81549e96323f11c7bdefa2fefed6870f7da82be838b55ce",
+  "combined_source_sha256": "6c7ccabfad2e67a19dfb3330ca831abb7e688108f55eee78c5c525e78db0b06a",
+  "original_error_preserved_by_dispatcher": true,
+  "rollback_attempts_after_failed_initial_disarm": true,
+  "rollback_attempts_after_failed_final_arm": true,
+  "software_rollback_order": "best effort channel disable then module disable",
+  "failure_stages_simulated": 6,
+  "failed_initial_and_final_hardware_disarm_simulated": true,
+  "failed_rollback_reads_or_writes_physically_proven_safe": false,
+  "address_and_undefined_sanitizers": "PASS",
+  "isolated_kernel_module_build": "PASS W=1 on Golden headers",
+  "patch_installed": false,
+  "module_loaded": false,
+  "pmic_values_read_or_written": false,
+  "ir_emitter_activated": false,
+  "independent_hardware_cutoff_verified": false,
+  "current_and_irradiance_limits_verified": false,
+  "allowed_to_enable_ir_emitter": false,
+  "important_limitations": [
+    "An SPMI bus failure may leave LEDs enabled even after both software disarm attempts fail.",
+    "Disabling a shared flash module cannot be guaranteed when another LED owns live channels.",
+    "An auto-Golden reboot, watchdog or user-space timeout does not independently extinguish a stuck emitter.",
+    "No current/irradiance limits, electrical pulse widths or hard fault-off path have been physically established."
+  ],
+  "next_gate": "A separately scoped Windows KDNET shutdown-path review and independent electrical/optical off/current authority, with no Linux illumination until verified."
+}

@@ -51,4 +51,8 @@ A **separate, consumed read-only** E004fx experiment identified the PM8550 flash
 
 The E004fs **emitter-activation gate remains BLOCKED**. Before activation, separately establish flash module/channel off-state, timer enforcement independently of the host under fault conditions, real optical pulse duration and current/irradiance limits. A stored register bit cannot substitute for those measurements.
 
+## E004fz source-only software error rollback — still NOT a hardware cutoff
+
+An offline review identified that the uninstalled Linux flash dispatcher could return after enabling the module but failing to arm the final trigger without attempting a combined off sequence. E004fz adds a separate **uninstalled** patch `0004-qcom-flash-best-effort-error-disarm.patch` after `0003`: on any error, it attempts to disarm channels, then disable this LED's module ownership, logs rollback failures and preserves the original error. Fault-injected tests on the actual patched C dispatcher and an isolated Golden-kernel W=1 build PASS. Crucially, the tests also explicitly demonstrate simulated SPMI failure in which both rollback requests fail and the hardware may remain ON. **This is best-effort software fault handling, not an autonomous physical off mechanism**; neither patch authorizes installation, IR illumination or a face-unlock trial.
+
 Do not reboot, enable LED/flash/strobe output, change protected firmware, enroll a face, install PAM modules or alter Golden during this **offline-only** review. E004fp, E004fq and E004fr have all been consumed. Any future hardware experiment must use a fresh identity and pass a new read-only preflight.
