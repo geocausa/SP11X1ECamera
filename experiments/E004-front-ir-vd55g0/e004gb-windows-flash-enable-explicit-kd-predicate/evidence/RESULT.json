@@ -1,0 +1,163 @@
+{
+  "experiment": "E004gb",
+  "status": "PASS_BOUNDED_WINDOWS_PMIC_FLASH_ENABLE_DISABLE_HELPER_OBSERVATION",
+  "identity_consumed": true,
+  "golden_postboot_verified": true,
+  "golden_boot_id": "6ca88e8c-525b-4944-bffa-037a4337a01d",
+  "postboot_sha256": "fb1cf93cbe78788094452a7c2596f542619d3b9958f67620001ed51138e60bd0",
+  "original_archive_sha256": "330afa1f20fc2714d8e8a172c6d754dbb4d32e5dc1a41e174825bb2c0eb0bfbf",
+  "original_member_sha256": {
+    "e004gb-flash-enable-kd.log": "058d15d56fdfe31a5b4dbae54ae1544cb0788fba83fc82b57c696d26fde609df",
+    "e004gb-observer-kd.log": "cf889c909142b786a8778fe7528b7b315af64eb3742c71fd61addf29286997ae",
+    "CAPTURE-ORIGINAL-WINDOWS.txt": "12675cc0bac2b70775215c3b6234d79c527965825de9a842739d63df725c07fc",
+    "SESSION_COMPLETED_WINDOWS.json": "bb7d13ab98af0813542f07453e470054e030f747c63e5d8e532bc59ac92c5bcb",
+    "WINDOWS_ONESHOT_CONSUMED.json": "b70dc8be4b834c10190b15d6cbd0e436b90d3a302a327f0af192d0216d04cac8",
+    "KD_DRY_VALIDATED.json": "77807c037527fc1e81ed6f1d287061c3ed9f2a8aae9f4a5f01536779ea678827",
+    "KD_ARMED_CONFIRMED.json": "3bf7204639f920b01d64afb582e390443cfa98825e52ab33ce743247d1d8be1f",
+    "WINDOWS_CAPTURE_ATTEMPTED.json": "8b5021832299e281e167c7604d6f002bbec04d9aa5d4982c3fb9f1bd1b821258"
+  },
+  "windows_pmic_module": "qcpmic8380.sys",
+  "fresh_windows_module_base": "fffff802a5e40000",
+  "live_kd_masm_dry_targets_passed": 11,
+  "live_kd_masm_dry_exclusions_passed": 8,
+  "kd_pre_calls": 11,
+  "kd_post_calls": 11,
+  "observed_masked_helper_calls": [
+    {
+      "hit": 1,
+      "register": "0xee4a",
+      "mask": "0x70",
+      "helper_read_byte": "0x01",
+      "helper_requested_byte": "0x00",
+      "post_helper_buffer": "0x01",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 2,
+      "register": "0xee4b",
+      "mask": "0x70",
+      "helper_read_byte": "0x01",
+      "helper_requested_byte": "0x00",
+      "post_helper_buffer": "0x01",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 3,
+      "register": "0xee4c",
+      "mask": "0x70",
+      "helper_read_byte": "0x01",
+      "helper_requested_byte": "0x00",
+      "post_helper_buffer": "0x01",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 4,
+      "register": "0xee4d",
+      "mask": "0x70",
+      "helper_read_byte": "0x01",
+      "helper_requested_byte": "0x00",
+      "post_helper_buffer": "0x01",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 5,
+      "register": "0xee4a",
+      "mask": "0x07",
+      "helper_read_byte": "0x01",
+      "helper_requested_byte": "0x05",
+      "post_helper_buffer": "0x05",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 6,
+      "register": "0xee4d",
+      "mask": "0x07",
+      "helper_read_byte": "0x01",
+      "helper_requested_byte": "0x05",
+      "post_helper_buffer": "0x05",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 7,
+      "register": "0xee67",
+      "mask": "0x01",
+      "helper_read_byte": "0x01",
+      "helper_requested_byte": "0x00",
+      "post_helper_buffer": "0x00",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 8,
+      "register": "0xee46",
+      "mask": "0x80",
+      "helper_read_byte": "0x00",
+      "helper_requested_byte": "0x80",
+      "post_helper_buffer": "0x80",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 9,
+      "register": "0xee4e",
+      "mask": "0x0f",
+      "helper_read_byte": "0x00",
+      "helper_requested_byte": "0x09",
+      "post_helper_buffer": "0x09",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 10,
+      "register": "0xee46",
+      "mask": "0x80",
+      "helper_read_byte": "0x80",
+      "helper_requested_byte": "0x00",
+      "post_helper_buffer": "0x00",
+      "read_rc": 0,
+      "write_rc": 0
+    },
+    {
+      "hit": 11,
+      "register": "0xee4e",
+      "mask": "0x0f",
+      "helper_read_byte": "0x09",
+      "helper_requested_byte": "0x00",
+      "post_helper_buffer": "0x00",
+      "read_rc": 0,
+      "write_rc": 0
+    }
+  ],
+  "timer_register_access_observed_in_selected_helper": false,
+  "module_enable_request": "ee46 mask 80: 00 -> 80, helper return 0",
+  "channel_enable_request": "ee4e mask 0f: 00 -> 09, helper return 0",
+  "module_disable_request": "ee46 mask 80: 80 -> 00, helper return 0",
+  "channel_disable_request": "ee4e mask 0f: 09 -> 00, helper return 0",
+  "capture": {
+    "frames_acquired": 12,
+    "stop": "PASS",
+    "format": "NV12",
+    "width": 644,
+    "height": 604,
+    "reported_fps": "60/1",
+    "image_files_saved": false
+  },
+  "kd_breakpoints_cleared": true,
+  "direct_post_write_pmic_readback_performed": false,
+  "physical_led_pulse_duration_measured": false,
+  "actual_led_current_or_irradiance_measured": false,
+  "independent_stuck_trigger_or_host_failure_off_verified": false,
+  "native_linux_emitter_activation_authorized": false,
+  "limitations": [
+    "The trace records successful Windows PMIC helper calls and buffer values, not physical LED emission or direct post-write PMIC register readback.",
+    "No timer-register access hit this masked helper in the one bounded preview; timer state or independent hardware cutoff cannot be inferred.",
+    "The Windows module-disable request preceded channel-disable request in this trace; physical off timing was not observed.",
+    "The optical-current, irradiance, pulse-width and host-crash/stuck-trigger safety evidence required by E004fs remains missing."
+  ]
+}
