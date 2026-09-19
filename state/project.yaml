@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gm-uninstalled-native-rearm-fail-closed-pass-physical-safety-blocked
+state_id: E004gn-pmic-status3-timeout-source-map-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gm-native-fail-closed-original-c-test-pass-native-ir-off
+status: golden-e004gn-pmic-status3-source-map-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,19 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gn_current:
+  status: pass-public-pmic-timer-status3-source-audit-offline
+  date: 2026-09-19
+  baseline_commit: 0dca347897dfd0f175bc6942f6e51ea4f4d4c841
+  candidate_status3_address: '0xee09'
+  paired_led1_timeout_status_bits: ['0x01', '0x40']
+  timeout_status_read_live: false
+  timer_retrigger_or_host_fault_independent_cutoff_proven: false
+  emitter_physical_current_and_irradiance_measured: false
+  native_ir_emitter_authorized: false
+  new_camera_pmic_windows_kd_activity: false
+  golden_modified: false
+  next_gate: offline-camera-session-service-prototype-and-oem-indirect-timer-initialization
 e004gm_current:
   status: pass-uninstalled-native-linux-fail-closed-prior-off-failure
   date: 2026-09-19
