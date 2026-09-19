@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gb-windows-kdnet-enable-disable-pass-consumed-golden-emitter-blocked
+state_id: E004gc-offline-ir-signal-telemetry-pass-e004fs-emitter-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gb-windows-pmic-trace-pass-native-illumination-off
+status: golden-e004gc-offline-hlos-signal-metrics-pass-native-illumination-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,21 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gc_current:
+  status: pass-offline-ir-signal-telemetry
+  date: 2026-09-19
+  baseline_commit: a01acac7cf2350e77a38361fb727522e1fe014bf
+  image_input: 644x604-nv12-neutral-chroma-1-to-16-frames
+  source_sha256: 0b0a81f806ae4778b11163818e9d804e5745bed6cd3195a9bed9a19de3e8fa64
+  synthetic_and_asan_ubsan_tests: PASS
+  existing_hlos_windows_oracle_and_16frame_bridge_regressions: PASS
+  new_camera_runtime_or_windows_boot: false
+  e004fu_optical_images_retained_or_replayed: false
+  real_face_detection_or_matching_proven: false
+  login_or_pam_modified: false
+  native_ir_emitter_activated: false
+  independent_optical_current_pulse_and_fault_cutoff_proven: false
+  next_gate: E004fs-independent-physical-illumination-safety-plus-real-face-quality
 e002a:
   status: pass
   boot_entry: sp11-camera-e002a-infra
