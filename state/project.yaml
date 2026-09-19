@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gr-maintained-hlos-c-to-actual-arm64-face-model-integration-pass-physical-safety-blocked
+state_id: E004gs-passive-windows-timer-boot-prepared-not-executed
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gr-maintained-hlos-c-to-real-arm64-face-inference-pass-native-ir-off
+status: golden-e004gs-new-passive-windows-timer-boot-prepared-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,18 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gs_current:
+  status: prepared-not-executed
+  date: 2026-09-20
+  baseline_commit: 85b470b69d7707aff82352afaef0a6d4a7127890
+  previous_e004gb_windows_boot_or_capture_repeated: false
+  intended_camera_preview: false
+  intended_new_native_ir_emitter_activation: false
+  new_windows_boot_count: 0
+  new_sp7_kd_passive_capture_completed: false
+  permanent_boot_entry_modification: false
+  native_ir_emitter_authorized: false
+  next_gate: gated-one-time-windows-boot-kd-passive-timer-inspection-and-return-to-golden
 e004gr_current:
   status: pass-real-hlos-c-neutral-nv12-to-arm64-yunet-sface-offline
   date: 2026-09-19
