@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-19
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gl-ghidra-windows-flash-lifecycle-fault-gap-proven-physical-safety-blocked
+state_id: E004gm-uninstalled-native-rearm-fail-closed-pass-physical-safety-blocked
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gl-windows-flash-ghidra-lifecycle-gap-pass-native-ir-off
+status: golden-e004gm-native-fail-closed-original-c-test-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,21 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gm_current:
+  status: pass-uninstalled-native-linux-fail-closed-prior-off-failure
+  date: 2026-09-19
+  baseline_commit: 20744e3f01c5acfb8b7512f23449cd6f6a9582c5
+  windows_original_arm64_rearm_after_mock_prior_off_failure: true
+  native_uninstalled_patched_c_rearm_after_initial_off_error: false
+  existing_flash_patches_installed: false
+  native_original_c_sanitized_fail_closed_test: PASS
+  original_windows_and_existing_linux_regressions: PASS
+  failed_pmic_bus_cleanup_can_still_leave_hardware_on: true
+  physical_current_irradiance_or_emitter_cutoff_proven: false
+  native_ir_emitter_authorized: false
+  camera_windows_kd_pmic_or_emitter_activity: false
+  golden_modified: false
+  next_gate: independently-validated-physical-emitter-cutoff-and-optical-current-pulse-evidence
 e004gl_current:
   status: pass-ghidra-original-windows-arm64-start-stop-fault-branch
   date: 2026-09-19
