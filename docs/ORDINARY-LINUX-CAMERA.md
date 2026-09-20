@@ -3,6 +3,30 @@
 User-selected direction, 2026-09-20: practical RGB and ordinary-memory IR
 processing alongside the still-blocked protected Windows-equivalence goal.
 
+## Same-machine Windows RGB parity baseline — E004jk
+
+A safe one-shot Windows boot on the **same SP11** measured actual WinRT
+CPU-accessible NV12 buffers: rear VideoPreview **1920×1080** (45 frame-handle
+acquisitions), rear VideoRecord **3840×2160** (45 acquisitions) and front
+VideoRecord **1920×1080** (45 acquisitions). Both RGB camera readers
+started successfully. The front source additionally *advertises*
+2560×1440 NV12, but that mode was not selected/streamed in this
+session. All advertised modes list 30 fps; no sensor frame IDs or
+usable WinRT timestamps were captured, so sustained cadence and
+unique-frame counts are unproven. CPU SoftwareBitmap access and
+dimensions are established; pixel-content export, same-scene optical
+quality, photo resolution, concurrent capture, AE/AWB and in-app
+switching were not measured. Windows image/colour parity remains
+a separate unsatisfied gate.
+
+Windows results were saved privately and a privacy-redacted summary
+and the successful Windows probe script are in E004jk. The direct
+Windows BootNext was consumed, persistent Linux-first firmware/GRUB
+boot order unchanged, and protected Golden independently verified
+on the return. These measured Windows front/rear RGB resolutions
+supersede relying on another platform's 720p browser demo as our
+own SP11 quality target. No IR/Hello test was made.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
