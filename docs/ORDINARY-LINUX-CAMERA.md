@@ -180,6 +180,46 @@ No normal optical image file was saved, front/IR was not streamed, and
 IR illumination was not enabled. Only redacted E004ju RESULT.json
 and README persist. E004ju must never be rearmed.
 
+## Longer real rear 4K concurrency test exposes subscriber/cadence limitation — E004jw
+
+After the earlier physically successful **27-frame rear Bayer→4K NV12→eight
+independent application buffers** E004ju result, a NEW E004jw camera
+candidate stressed the complete ordinary V4L2 4K pipeline for longer.
+The real OV13858 captured and software-converted **180 normal optical
+4076×2806 Bayer frames** with contiguous reported hardware sequences
+0–179. The physical capture timestamp span was 7.913 seconds over
+179 intervals: **22.621 delivered source frames/s** under this load,
+with 52 interframe gaps greater than 50 ms, p95 gap 67.938 ms and
+average converter-only 16.642 ms. This does **not** demonstrate
+sustained sensor or consumer 4K30, even though the previous much shorter
+E004ju physical capture measured approximately 29.95 source fps.
+
+The standard temporary /dev/video90 advertised NV12 3840×2160 and
+an independent V4L2 reader received **58 complete 4K buffers**
+(sequences 6–63, contiguous within the observed reader sample)
+but had requested 90. Once the bounded source publisher finished,
+the reader could not complete its requested frame count and hit its
+65-second timeout. The separate GStreamer app therefore never
+reported a completed 90-frame sink count or usable wall-clock frame
+cadence. The cause of the shortfall is **not yet established**:
+start timing, backpressure, queueing and application consumption must
+be isolated. Do not infer lossless virtual delivery from the reader's
+contiguous sequence numbers, or a measured 4K30 application rate from
+synthetic video timestamps. No normal optical pixels were saved.
+
+The fail-closed experiment removed its temporary virtual module,
+neutralized the rear media route and returned automatically to
+protected Golden. The consumed E004jw GRUB/service/package, private
+test-pattern raw file and logs were retired; no front video or IR
+illumination was started. E004ju's earlier bounded physically delivered
+rear 4K app result remains valid. E004jv separately adds **real
+appsink wall-clock arrival telemetry** for a *future* independent 4K
+application run (90 offline unpaced synthetic frames passed; not
+physical-capture evidence). E004jw RESULT.json and README contain
+redacted findings. The remaining production work includes stream
+backpressure/drop/latency and Windows-quality ISP calibration, alongside
+correct front QC10C-to-displayable video conversion.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
