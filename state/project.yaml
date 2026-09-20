@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gy-early-raw-write-hardware-kd-prepared-not-executed
+state_id: E004gy-raw-write-hardware-kd-bounded-no-timer-overlap-golden-return-first-writer-unknown
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gy-raw-pmic-write-hardware-kd-prepared-native-ir-off
+status: golden-e004gy-raw-pmic-hardware-kd-positive-control-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,29 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gy_completed:
+  status: pass-fresh-original-oem-raw-pmic-write-hardware-kd-bounded-no-timer-overlap-golden-return
+  date: 2026-09-20
+  baseline_commit: e348fa720a0c94d266d77106541834a720aed0a3
+  new_windows_boots_consumed: 1
+  original_pmic_raw_write_helper_rva: '0x23dc8'
+  original_pmic_live_base: fffff80220520000
+  hardware_breakpoint_actual_first_hit_kernel_uptime_s: 17.902
+  hardware_breakpoint_positive_control: true
+  first_nonemitter_raw_write_address: '0x4716'
+  corrected_hardware_raw_write_entry_records: 26
+  all_logged_byte_lengths: [1]
+  only_observed_caller_return_rva: '0x23a08'
+  logged_raw_write_spans_overlapping_timer_registers: 0
+  three_alternative_direct_raw_write_callers_observed: false
+  first_timer_register_writer_or_reset_default_identified: false
+  original_sp7_kd_log_sha256: 0b072371f455a8aaa253582fcba3a8af2d85ffd58e9b1c920a5da103f6cf945b
+  kd_breakpoints_cleared_log_closed_and_kd_stopped: true
+  golden_return_boot_id: 836f28b9-850a-486a-9742-7152ebbe23e2
+  camera_manual_pmic_write_fault_injection_or_native_led_activity: false
+  native_ir_emitter_authorized: false
+  independent_physical_cutoff_proven: false
+  next: offline-classify-raw-write-bypass-caller-lifecycle-and-preos-timer-initialization-ownership
 e004gy_prepared:
   status: distinct-raw-pmic-write-hardware-kd-prepared-not-executed
   date: 2026-09-20
