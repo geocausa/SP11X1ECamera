@@ -1,0 +1,22 @@
+[Unit]
+Description=SP11 E004js bounded read-only media graph diagnostic, unconditional Golden return
+ConditionKernelCommandLine=sp11_camera_e004js_diag=1
+After=local-fs.target systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+Wants=systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+TimeoutStartSec=100
+TimeoutStopSec=10
+ExecStart=/usr/local/sbin/sp11-camera-e004js-run-once
+ExecStopPost=/usr/bin/systemctl --no-block reboot
+StandardOutput=journal+console
+StandardError=journal+console
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
