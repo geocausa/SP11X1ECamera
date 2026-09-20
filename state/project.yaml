@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ho-natural-early-spmi-masked-onebyte-nontimer-callback-positive-golden-return
+state_id: E004hp-early-original-spmi-timer-span-persistent-no-match-with-real-positive-control-golden-return
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004ho-early-oem-spmi-software-positive-native-ir-off
+status: golden-e004hp-original-spmi-early-timer-span-bounded-no-match-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,39 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004hp_completed:
+  status: pass-fresh-early-original-spmi-persistent-timer-span-filter-with-independent-nontimer-positive-bounded-no-match-golden-return
+  date: 2026-09-20
+  windows_boots_consumed: 1
+  original_spmi_driver_load_uptime_s: 11.771
+  original_spmi_live_base: fffff80359180000
+  original_pmic_live_base: fffff80359120000
+  original_persistent_timer_span_filter_rva: '0x1660'
+  original_separate_nontimer_positive_control_rva: '0x1664'
+  real_original_spmi_positive_control_hit: true
+  control_hit_uptime_s: 16.819
+  control_real_packed_selector: '0x00019246'
+  control_real_register_low16: '0x9246'
+  control_real_byte_count: 1
+  control_software_breakpoint_action_syntax_error_occurred: true
+  manual_separate_register_capture_and_prompt_kernel_resume: true
+  original_positive_control_lr_was_pac_signed: true
+  original_timer_filter_command_action_syntax_corrected_at_uptime_s: 30.921
+  original_timer_filter_condition_unchanged_on_correction: true
+  final_bounded_kernel_uptime_s: 58.415
+  persistent_original_spmi_timer_filtered_breakpoint_active_at_final_stop: true
+  original_timer_span_hit_markers_in_observed_window: 0
+  actual_original_idle_timer_byte_0x93_first_writer_identified: false
+  absence_of_all_pmic_timer_writes_proven: false
+  physical_spmi_completion_proven: false
+  independent_emitter_current_irradiance_pulse_autonomous_fault_off_proven: false
+  native_linux_emitter_or_login_modified: false
+  all_kd_breakpoints_cleared_log_closed_and_sp7_kd_stopped: true
+  original_sp7_log_raw_bytes: 12707
+  original_sp7_log_sha256: 74d5d5b73cc29a96e6fcc7be73dd4b3f02ffe68144bfd6a9e3d5827ae1405472
+  golden_return_boot_id: e32d34ba-a422-44cb-a60b-4ff28b583bab
+  golden_kernel_grub_efi_camera_idle_preserved: true
+  next: seek-distinct-preos-alternate-spmi-writer-or-actual-timer-request-not-replay-consumed-selected-callback-no-match
 e004ho_completed:
   status: pass-fresh-early-windows-natural-spmi-nontimer-onebyte-masked-write-software-callback-hit-golden-return
   date: 2026-09-20
