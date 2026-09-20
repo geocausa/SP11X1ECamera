@@ -49,7 +49,7 @@ def collect():
             "device_nodes": nodes, "prerequisite_gaps": blockers,
             "application_capture": "NOT_TESTED",
             "assessment": "PREREQUISITES_INCOMPLETE" if blockers else "PREREQUISITES_PRESENT_CAPTURE_UNPROVEN",
-            "next_validation": "Fresh separately checkpointed RGB candidate, continuous processed output, then desktop application capture.",
+            "next_validation": "Prove QC10C compressed-YUV conversion before continuous front RGB desktop capture; see desktop-output-contract.json.",
             "ir_illumination": "NOT_AUTHORIZED_BY_THIS_DIAGNOSTIC",
             "authentication": "NOT_IMPLEMENTED_BY_THIS_DIAGNOSTIC"}
 

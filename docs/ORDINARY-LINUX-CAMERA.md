@@ -37,8 +37,12 @@ opened by the exporter. Full transaction success is required before export.
 
 ## Work remaining
 
-1. RGB: bridge accepted capture/processing to a standard application format;
-   the existing 27-frame QC10C launcher is not a continuous webcam.
+1. Front RGB: convert accepted ISP-processed 10-bit QC10C/TP10-UBWC YUV
+   into a standard desktop format. It is neither Bayer RAW nor linear NV12.
+   The current 27-frame launcher is not a continuous webcam. The installed
+   EGL driver advertises compressed NV12 but only linear P030/P010; exact
+   QC10C import and conversion remain unproven. Run
+   `python3 tools/camera-gpu-import-status.py` to inspect current support.
 2. Validate fresh RGB-only candidate capture, then repeated use, switching,
    suspend and application integration, preserving Golden.
 3. IR: use offline previews for ordinary pixel work; useful live scene signal

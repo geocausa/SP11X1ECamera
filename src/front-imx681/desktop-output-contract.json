@@ -1,0 +1,48 @@
+{
+  "schema": "sp11-front-desktop-output-contract-v1",
+  "source": "src/front-imx681/userspace/runtime/front-imx681-production-capture.c",
+  "sensor": "IMX681",
+  "v4l2_fourcc": "Q10C",
+  "v4l2_symbol": "V4L2_PIX_FMT_QC10C",
+  "pixel_semantics": "ISP-processed 10-bit YUV420, Qualcomm TP10 UBWC compressed",
+  "width": 2560,
+  "height": 1440,
+  "bytesperline": 3584,
+  "allocation_bytes": 7778304,
+  "v4l2_memory_planes": 1,
+  "regions": [
+    {
+      "name": "Y_META",
+      "offset": 0,
+      "size": 24576
+    },
+    {
+      "name": "Y_TP10",
+      "offset": 24576,
+      "size": 5160960
+    },
+    {
+      "name": "C_META",
+      "offset": 5185536,
+      "size": 12288
+    },
+    {
+      "name": "C_TP10",
+      "offset": 5197824,
+      "size": 2580480
+    }
+  ],
+  "current_capture_frames": 27,
+  "raw_bayer": false,
+  "linear_nv12": false,
+  "desktop_conversion_proven": false,
+  "drm_import_mapping_proven": false,
+  "colorimetry_for_desktop": "requires explicit verification",
+  "required_bridge_evidence": [
+    "exact QC10C to DRM mapping and compression-version/layout compatibility",
+    "supported decompression or separately validated linear ISP output",
+    "converted pixels compared to an independent reference",
+    "correct color range, matrix, transfer and orientation",
+    "buffer lifetime/synchronization and bounded application capture"
+  ]
+}
