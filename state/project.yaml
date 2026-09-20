@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gt-bounded-oem-timer-caller-kd-prepared-not-executed
+state_id: E004gt-bounded-oem-timer-callers-zero-hits-golden-return-pass
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gt-new-oem-timer-caller-kd-prepared-native-ir-off
+status: golden-e004gt-oem-8frame-kd-timer-entry-zero-hits-return-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,24 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gt_completed:
+  status: pass-oem-windows-8frame-kd-timer-entry-zero-hits-golden-return
+  date: 2026-09-20
+  new_windows_boots: 1
+  bounded_oem_preview_sessions: 1
+  preview_frames_metadata_only: 8
+  observed_timer4_timer1_flash_timer_flash_config_hits: [0, 0, 0, 0]
+  kd_hooks_armed_after_windows_boot: true
+  early_boot_or_alternative_timer_configuration_excluded: false
+  new_live_pmic_base: fffff8031b8a0000
+  new_live_flash_base: fffff8031f940000
+  original_sp7_kd_sha256: e10a1bc0c51085ba94dcd4a870c4adf739100294b62f55306dfdaba23bd994a0
+  original_windows_capture_sha256: aac4b8dfeb7df757623d7784cedf6b434272b45e72282ce80813febb17f48ec2
+  all_kd_breakpoints_cleared_and_kd_stopped: true
+  golden_return_boot_id: 6f958ff9-f46b-47c5-91ac-30a3a5b1aa47
+  native_emitter_authorized: false
+  autonomous_physical_cutoff_proven: false
+  next: offline-oem-timer-initialization-ownership-caller-trace
 e004gt_prepared:
   status: new-identity-bounded-oem-windows-timer-caller-diagnostic-not-executed
   date: 2026-09-20
