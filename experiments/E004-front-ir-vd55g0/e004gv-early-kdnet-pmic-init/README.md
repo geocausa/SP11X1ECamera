@@ -1,3 +1,15 @@
+# E004gv — FRESH early KDNET PMIC load observed; original trace archived; Golden returned
+
+**COMPLETED 2026-09-20, actual first timer-register writer still UNKNOWN.** A *new* SP7 KDNET `kd.exe -d -bonc` session attached to Windows on SP11 at kernel uptime 10.839 s, with `qcpmic8380.sys` **not yet listed as loaded**. After `sxe ld:qcpmic8380; g`, a second debugger break at uptime 11.659 s showed the original PMIC driver now loaded at `fffff80011fc0000`. This was an early initial-module-load breakpoint; the original trace does NOT establish whether PMIC DriverEntry and its first writes had already executed in the 0.82-second interval. The corresponding original ARM64 generic PMIC masked-write entry at RVA `0x23968` was disassembled and a conditional `bp /1 /w` was successfully armed *after* the second break, matching address arguments `0xee3e..0xee41`. No camera preview was started. Windows' **installed** qcpmic driver registry confirms Start=0 (boot), Type=1 (kernel driver), Group=Filter.
+
+**Evidence caveat:** There is no actual timer-write hit marker in the KD log. At the final debugger pause at uptime 1:00.767, the breakpoint list was empty; it is possible that the one-shot conditional observer was consumed by a *nonmatching* generic helper call. Its lifetime was not independently proven, and it was armed after the PMIC first appeared. Therefore this is **NOT evidence of zero PMIC timer writes during early boot** and does not identify or exclude any initial writer. It DOES establish that a future distinct experiment can break before the PMIC module appears, arm a pending persistent address-filtered observer *at the initial pause* rather than after the second, and verify that the hook survives to final cleanup unless it logs an actual hit. Do not reuse E004gv's single consumed Windows boot.
+
+All KD breakpoints were explicitly cleared, the original KD log closed, and Windows normally restarted. SP11 returned to protected Golden Linux boot `0f0b092e-538a-4391-a518-d7eab653f400`, kernel `7.1.5-sp11-render-parity-v4+`, saved GRUB `sp11-audio-fullio-v19c`, unchanged persistent EFI BootOrder, empty BootNext/next_entry and no camera nodes/modules/processes. SP7 KD job stopped. No PMIC or sensor writes, camera operation, manual illumination, Linux IR, login or Golden modifications occurred.
+
+The **original, byte-for-byte** SP7 KD transcript (12,536 bytes, SHA256 `4c85099f3f02bb0b17c4fc5e15a22061ca1f84b14ca5dbd73f9e9e38c8af8e92`) is archived at `evidence/ORIGINAL-SP7-EARLY-KD-20260920.zip`. `verify_result.py` enforces bounded findings and avoids false no-write claims; `test_verify_result.py` rejects eight fake altered outcomes. Both PASS offline. No KDNET credentials or original proprietary Windows driver PE are included.
+
+## Original one-time preparation record (historical, already executed)
+
 # E004gv — fresh early-boot KDNET PMIC initialization observation
 
 ## Hypothesis and why this is NEW

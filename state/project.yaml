@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gv-boot-start-pmic-early-kdnet-observation-prepared-not-executed
+state_id: E004gv-early-kd-pmic-load-window-pass-first-timer-writer-unknown-golden-return
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gv-pmic-early-boot-kd-prepared-native-ir-off
+status: golden-e004gv-pmic-preload-kd-observed-first-timer-writer-inconclusive-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,26 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gv_completed:
+  status: pass-fresh-early-kd-pmic-preload-identified-golden-return-first-writer-unknown
+  date: 2026-09-20
+  baseline_commit: af164ab7dd66f3b5e7839553ad2066293da593ba
+  new_windows_boots_consumed: 1
+  initial_windows_uptime_s: 10.839
+  pmic_loaded_at_initial_pause: false
+  pmic_loaded_at_second_uptime_s: 11.659
+  initial_driver_entry_intercepted: false
+  generic_timer_watcher_armed_after_second_pause: true
+  first_timer_register_writer_observed: false
+  absence_of_early_timer_writes_proven: false
+  one_shot_condition_observer_lifetime_unverified: true
+  original_sp7_kd_log_sha256: 4c85099f3f02bb0b17c4fc5e15a22061ca1f84b14ca5dbd73f9e9e38c8af8e92
+  kd_breakpoints_disarmed_and_kd_stopped: true
+  golden_return_boot_id: 0f0b092e-538a-4391-a518-d7eab653f400
+  oem_preview_pmic_register_or_emitter_activity: false
+  native_ir_emitter_authorized: false
+  independent_physical_cutoff_proven: false
+  next: new-identity-arm-persistent-deferred-address-filtered-watcher-before-pmic-driver-load
 e004gv_prepared:
   status: fresh-early-boot-kdnet-pmic-initialization-observation-not-executed
   date: 2026-09-20
