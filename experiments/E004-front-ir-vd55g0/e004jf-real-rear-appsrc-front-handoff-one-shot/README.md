@@ -1,5 +1,61 @@
 # E004jf — actual rear V4L2 → NV12 → GStreamer appsrc, then front QC10C
 
+## Observed live SP11 result — PASS (candidate retired)
+
+The unique source-locked candidate boot
+`7fb56739-7604-4066-8f67-1d8feb073986` passed ordered, successful
+stock GRUB writer services and all boot, SHA, R4-complete package,
+bridged colourbar-to-application and front-launcher preflight gates.
+Its live route progression was
+`neutral → rear-only → neutral → front-only → neutral`.
+
+**Real rear producer-to-GStreamer integration passed:** with the rear
+sensor test pattern restored to normal optical mode, V4L2 delivered
+eight complete 14,321,824-byte `pgAA` frames with ordered hardware
+sequences **0..7** and a measured hardware timestamp cadence of
+**29.9545 fps**. The C converter accepted all eight full frames and
+emitted eight 1920×1080 NV12 frames directly through its output pipe.
+GStreamer `appsrc → videoconvert → I420 appsink` accepted all eight
+buffers at the configured 30fps *synthetic PTS*. Average C conversion
+time alone was **3.2750 ms per frame**; the bounded 8-frame end-to-end
+pipe took **514 ms** including process startup, capture, IPC and
+consumer shutdown. This is **not** a measurement of per-frame
+sensor-to-display latency or sustained camera app frame rate.
+No normal optical Bayer or intermediate NV12 disk frame was created.
+
+After the rear route was neutralized, the front IMX681 again produced
+**27 distinct compressed QC10C frames of 7,778,304 bytes**, sequences
+0..26, through the real E004ip mapped-SG-DMA-guard CAMSS module.
+The front producer passed 24 rows under `shadow` policy with
+**zero later native sensor writes**. All three sensors suspended and
+the final route was neutral. Kernel log contained no Oops/panic or
+IR-emitter activation marker. The automatic service returned SP11 to
+protected Golden boot `8ec2fa9a-1c44-4794-980a-a37fda7c20d0`,
+saved entry `sp11-audio-fullio-v19c`, empty `next_entry`, no camera
+modules/nodes, and unchanged Golden kernel/DTB/initrd.
+
+After recording only non-image metadata in `RESULT.json`, the
+consumed unique one-shot identity was proven to reject rearming.
+The root-owned front frames, colourbar, canonical package and
+R4, streaming bridge, conditional systemd service, unique GRUB
+entry and isolated boot assets were **deleted/retired**. The E004iy
+reversible stock GRUB-writer ordering drop-in remains installed.
+
+**Application boundary:** a real GStreamer application successfully
+consumed optical data in this bounded test. The system still does NOT
+provide a discoverable/reusable rear webcam for arbitrary Linux
+applications; the in-process GStreamer bridge has no PipeWire camera
+provider or `/dev/video` loopback endpoint. This test does NOT
+calibrate rear image quality or demonstrate indefinitely sustained
+30fps operation. Front output remains Qualcomm QC10C/TP10-UBWC and
+needs true linear ISP NV12 or validated decompression for app delivery.
+No protected IR/Windows Hello parity is claimed. The result file's
+rear converter/consumer stage indicators say `LIVE_CAMERA_PROVEN=NO`
+because each stage cannot attest its input origin independently;
+the **combined outer one-shot** verified the real V4L2 producer and
+bounded app consumer together. See the time-scoped outer-run logs
+and `RESULT.json` for the actual hardware conclusion.
+
 2026-09-20. Parent `280de0a`. A NEW unique source-locked, one-shot
 camera-capable Linux candidate after E004jc's successful bounded 8-rear
 then 27-front **hardware capture and mapped-DMA guard** and E004je's

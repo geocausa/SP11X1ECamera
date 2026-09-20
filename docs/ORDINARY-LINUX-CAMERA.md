@@ -35,6 +35,34 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Real rear V4L2 Bayer10 to GStreamer appsrc, then front 27 QC10C — E004jf
+
+The new uniquely bounded E004jf candidate loaded the E004jd R4-complete
+51-file camera package and a separately SHA-pinned E004je streaming bridge.
+In **one real SP11 camera-capable boot**, the rear OV13858 V4L2 producer
+piped eight fresh normal-scene Bayer10 frames (hardware sequence 0..7,
+29.9545 fps, 14,321,824 bytes each) directly to the converter and then
+GStreamer `appsrc → videoconvert → appsink`. The real application received
+all eight 1920×1080 NV12-derived frames. Converter-only mean 3.275 ms per
+frame; eight-frame bounded pipe elapsed 514 ms including startup, V4L2
+acquisition and shutdown, **not** per-frame sensor-to-screen latency.
+No normal optical Bayer or intermediate NV12 frame file was written.
+
+Following a verified neutral media handoff, front IMX681 again produced
+27 distinct ordered compressed QC10C frames with the live-tested E004ip
+mapped-DMA guard; 24 producer rows passed under shadow policy, zero
+later native sensor writes. All sensors suspended, the final graph was
+neutral and automatic reboot returned to untouched protected Golden.
+The consumed E004jf boot entry, root-private package, optical colourbar,
+front QC10C files and GStreamer bridge were retired/deleted. Only
+redacted metadata is committed; see E004jf README/RESULT.json.
+
+This establishes **bounded live rear V4L2→GStreamer application frame
+delivery**, but does NOT establish a persistent app-discoverable rear
+virtual webcam, colour calibration or sustained multi-minute cadence.
+The front remains QC10C/TP10-UBWC: no verified linear NV12/decoder or
+ordinary front webcam endpoint yet. Protected IR/Hello remain gated.
+
 ## Bounded rear NV12-to-GStreamer application pipe — E004je
 
 A source-only bounded rear RGB bridge now converts whole packed Bayer10
