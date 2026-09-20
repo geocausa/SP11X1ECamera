@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004iq-front-qc10c-one-shot-regression-staged-unarmed
+state_id: E004iq-front-qc10c-one-shot-pre-camera-grubenv-abort-retired
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-front-qc10c-only-guard-one-shot-prepared-live-not-yet-run-nv12-isp-gated-ir-off
+status: golden-e004iq-pre-camera-boot-env-aborted-and-retired-zero-live-frames-nv12-isp-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5492,8 +5492,8 @@ e004ip_completed:
   golden_modified: false
   next_gate: bounded-isolated-qc10c-regression-before-admitting-live-safety-patch; independent-isp-linear-nv12-and-ubwc-reset-proof
 
-e004iq_prepared:
-  status: PASS_QC10C_ONLY_ONE_SHOT_CANDIDATE_COMPILED_UNARMED
+e004iq_consumed:
+  status: ABORTED_BEFORE_CAMERA_DUE_TO_CANDIDATE_GRUBENV_READ_ERROR
   date: 2026-09-20
   evidence: experiments/E004-front-ir-vd55g0/e004iq-qc10c-dma-one-shot/README.md
   accepted_kernel_source_frontend: /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
@@ -5504,8 +5504,18 @@ e004iq_prepared:
   candidate_camss_delta: qc10c-mapped-DMA-coverage-only
   nv12_v4l2_new_mode_in_candidate: false
   one_shot_grub_entry_and_auto_golden_return_scripts_validated_offline: true
-  live_capture_result: NOT_YET_RUN
+  live_capture_result: PRE_CAMERA_ABORT_ZERO_QC10C_FRAMES
+  candidate_kernel_booted: true
+  candidate_grub_editenv_error: invalid-environment-block
+  camera_attempt_marker_created: false
+  qc10c_candidate_camera_modules_loaded: false
+  same_boot_retry: false
+  automatic_golden_return: true
+  golden_return_boot_id: 9e93c056-82bc-48d3-91a2-3e1e8a590df8
+  e004iq_service_grub_and_private_root_retired: true
+  one_shot_identity_consumed: true
+  evidence: experiments/E004-front-ir-vd55g0/e004iq-qc10c-dma-one-shot/evidence/PRE-CAMERA-ABORT.json
   system_default_camera_modified: false
   native_ir_illumination_authorized: false
   independent_isp_linear_nv12_and_ubwc_reset_open: true
-  next_gate: root_owned_unarmed_assets_then-single-guarded-qc10c-one-shot-automatic-golden-return
+  next_gate: establish-candidate-boot-grubenv-safety-before-new-unique-one-shot; independent-linear-nv12-isp-ubwc-gate

@@ -11,6 +11,7 @@ SERVICE=/etc/systemd/system/sp11-camera-e004iq-one-shot.service
 RUNNER=/usr/local/sbin/sp11-camera-e004iq-run-once
 ID=sp11-camera-e004iq-qc10c-dma-guard-one-shot
 cd "$R"
+[[ ! -e "$H/evidence/PRE-CAMERA-ABORT.json" ]] || { echo E004IQ_IDENTITY_CONSUMED_DO_NOT_REARM >&2; exit 1; }
 "$R/tools/camera-overlap-guard.sh" --require-clean-tracked --require-golden --require-no-camera-process
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/experiment/e004-front-ir-vd55g0)" ]]
 [[ ! -e "$D" && ! -e "$BOOT" ]]

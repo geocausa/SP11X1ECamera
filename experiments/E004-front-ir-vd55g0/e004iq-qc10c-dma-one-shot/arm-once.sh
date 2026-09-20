@@ -5,6 +5,7 @@ R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
 D=/var/lib/sp11-camera-e004iq
 ID=sp11-camera-e004iq-qc10c-dma-guard-one-shot
 cd "$R"
+[[ ! -e "$R/experiments/E004-front-ir-vd55g0/e004iq-qc10c-dma-one-shot/evidence/PRE-CAMERA-ABORT.json" ]] || { echo E004IQ_IDENTITY_CONSUMED_DO_NOT_REARM >&2; exit 1; }
 "$R/tools/camera-overlap-guard.sh" --require-clean-tracked --require-golden --require-no-camera-process
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/experiment/e004-front-ir-vd55g0)" ]]
 [[ "$(sudo -n cat "$D/EXPECTED-HEAD")" == "$(git rev-parse HEAD)" ]]

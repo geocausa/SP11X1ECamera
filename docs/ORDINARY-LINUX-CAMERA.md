@@ -60,6 +60,21 @@ fails before pipeline PM and the planner remains without runtime callers.
 The module is not installed. Real linear ISP output and compression reset
 are still open hardware gates. See E004im README.
 
+## E004iq QC10C-only physical one-shot — pre-camera abort, retired
+
+The unique E004iq candidate booted on SP11 but its dedicated service failed
+at the initial `grub-editenv` preflight (`invalid environment block`). The
+service triggered the configured reboot into protected Golden; the consumed
+candidate captured **zero frames** and never loaded its camera module or
+reached real mapped-DMA validation. The one-shot identity, private staging
+root and service were retired; the original QC10C driver is unchanged. The
+candidate-only boot-environment read failure is not explained by the valid
+Golden GRUB state after return, and this identity must **not** be rerun.
+See E004iq `evidence/PRE-CAMERA-ABORT.json` and `RESULT.json`. The next
+candidate must establish the boot rollback/preflight contract independently
+before a new unique test identity can be justified. NV12 linear output and
+UBWC-state reset remain separate open gates.
+
 ## Separate bounded QC10C-only physical regression candidate — E004iq
 
 A provenance-correct rebuild reproduced the accepted hardware module hashes

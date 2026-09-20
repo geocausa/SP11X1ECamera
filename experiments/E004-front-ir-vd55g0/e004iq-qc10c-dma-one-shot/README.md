@@ -5,6 +5,30 @@ QC10C DMA-mapped coverage check is the **only** source delta from the
 original CAMSS driver; the earlier E004io alternate NV12 format overlay
 is **not installed or compiled into this candidate**.
 
+## Actual consumed one-shot result — PRE-CAMERA ABORT
+
+The E004iq identity was armed once on 2026-09-20. SP11 booted the intended
+candidate kernel/DTB and its conditional systemd service started, but at
+16:16:55 BST the candidate service's initial `grub-editenv` read failed:
+`invalid environment block`. The service exited with RC=1 **before its
+camera-attempt marker was written**, before loading any camera module,
+opening a video device or executing the 27-frame launcher. Thus **zero
+QC10C frames were captured and the new mapped-DMA guard was NOT tested
+on real vb2 buffers**. No same-boot retry occurred.
+
+The boot-specific service's exit hook rebooted the machine into the
+persistent Golden entry. The Golden-return boot ID was distinct, the
+protected kernel and saved GRUB default were verified, `next_entry` was
+empty, no camera modules remained, and Golden's `grubenv` was readable.
+The *underlying cause* of the candidate-only invalid environment block
+has not been established; do not assume that bypassing this check would
+be a safe fix. The unique E004iq service, private package, GRUB entry,
+candidate boot files and temporary raw-image directory were retired under
+independent pre-camera-abort checks. The E004iq identity is **consumed:
+do not rearm it**. The next work is a separately proven candidate-boot
+GRUB environment/rollback contract, not another unguarded camera run.
+See `evidence/PRE-CAMERA-ABORT.json` and the updated `RESULT.json`.
+
 ## Why this separate candidate is needed
 
 The existing front QC10C camera already completed its accepted R27/27-frame
