@@ -135,6 +135,21 @@ sensor, codec driver or IR illumination was activated. See E004jj
 README and machine-readable `format-route-gate.json` for the
 remaining independent decoded-image or safe full-ISP-mode gate.
 
+## Front QC10C indirect hardware encoder route gated — E004jo
+
+A source-hash-pinned read-only check of the **installed Golden** Iris VENC
+driver finds encoder raw INPUT formats limited to NV12 and QC08C; H264
+and HEVC are its encoded OUTPUT formats. The physical front camera
+produces **QC10C**, not QC08C or a codec bitstream, and the installed
+encoder's source-level format admission does not accept that QC10C as
+input. Five exact same-machine source/direction tests pass; this was
+**not** a live encoder format IOCTL or a proof that no future GPU/ISP/
+alternative dedicated conversion mechanism exists. E004jj independently
+excluded incorrectly sending QC10C directly to Iris video DECODER
+bitstream input. Front app-displayable Linux 1080p video is still
+unproven; keep the actual QC10C decompression or safely verified
+linear-ISP conversion gate. See E004jo README.
+
 ## Installed SP11 Vulkan Turnip does not advertise 10-bit YUV compressed import — E004ji
 
 The **real physical Adreno X1-85** Turnip Vulkan driver was queried
