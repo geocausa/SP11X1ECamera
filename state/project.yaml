@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004hu-matched-current-bios-version-uefi-pmic-spmi-literal-timer-audit
+state_id: E004hv-original-uefi-indirect-computed-pmic-two-register-write-service-unproven-timer-target
 phase: camera-stack-front-ir-illumination-timing-authority
 status: golden-e004ht-original-common-spmi-controller-read-control-native-ir-off
 golden:
@@ -87,6 +87,32 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004hv_completed:
+  status: pass-original-current-version-uefi-pmic-indirect-computed-peripheral-two-register-write-offline
+  date: 2026-09-20
+  original_uefi_pmic_pe_sha256: 402315711a6761441234eac8c0cd3c0ad23cb4fdb7d0a9de3dd94c3ffac38dff
+  indirect_original_firmware_function_table_rva: '0x38d98'
+  indirect_original_firmware_service_code_rva: '0x222f8'
+  original_direct_calls_to_indirect_service: 0
+  original_generic_uefi_pmic_write_helper_rva: '0x12154'
+  original_generic_write_helper_direct_calls: 47
+  first_write_peripheral_index: '0x0e'
+  first_write_relative_offset: '0x26'
+  first_write_bytes: 4
+  second_write_peripheral_index: '0x0e'
+  second_write_relative_offset: '0x3e'
+  second_write_bytes: 2
+  second_write_value_input: original-caller-w1-low16
+  original_uefi_spmi_software_write_wrapper_rva: '0x8cd0'
+  original_runtime_effective_spmi_address_or_stride_identified: false
+  original_indirect_firmware_service_called_on_actual_sp11_boot_proven: false
+  original_caller_w1_value_equal_0x9393_or_0x93_proven: false
+  original_second_register_absolute_address_is_0xee3e_proven: false
+  original_pmic_idle_0x93_first_writer_identified: false
+  independent_physical_emitter_autonomous_fault_off_proven: false
+  golden_or_windows_camera_spmi_pmic_led_firmware_login_modified: false
+  native_ir_emitter_authorized: false
+  next: identify-original-firmware-protocol-pointer-table-ownership-active-invocation-and-runtime-address-descriptor
 e004hu_completed:
   status: pass-installed-version-matched-sp11-uefi-pmic-spmi-arm64-image-and-explicit-timer-literal-audit
   date: 2026-09-20
