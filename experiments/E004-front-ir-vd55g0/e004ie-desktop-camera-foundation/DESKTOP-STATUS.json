@@ -1,0 +1,62 @@
+{
+  "schema": "sp11-camera-desktop-status-v1",
+  "camera_opened": false,
+  "activation_performed": false,
+  "packages": {
+    "libcamera-tools": {
+      "installed": true,
+      "version": "0.7.0-1ubuntu2"
+    },
+    "libcamera-ipa": {
+      "installed": true,
+      "version": "0.7.0-1ubuntu2"
+    },
+    "libspa-0.2-libcamera": {
+      "installed": true,
+      "version": "1.6.2-1ubuntu1.1"
+    },
+    "gstreamer1.0-libcamera": {
+      "installed": true,
+      "version": "0.7.0-1ubuntu2"
+    },
+    "pipewire": {
+      "installed": true,
+      "version": "1.6.2-1ubuntu1.1"
+    },
+    "wireplumber": {
+      "installed": true,
+      "version": "0.5.13-1ubuntu1"
+    },
+    "xdg-desktop-portal": {
+      "installed": true,
+      "version": "1.21.1+ds-1ubuntu3"
+    },
+    "xdg-desktop-portal-gnome": {
+      "installed": true,
+      "version": "50.0-0ubuntu1"
+    }
+  },
+  "services": {
+    "pipewire.service": "active",
+    "wireplumber.service": "active",
+    "xdg-desktop-portal.service": "active"
+  },
+  "tools": {
+    "cam": "/usr/bin/cam",
+    "gst-launch-1.0": "/usr/bin/gst-launch-1.0",
+    "gst-inspect-1.0": "/usr/bin/gst-inspect-1.0",
+    "wpctl": "/usr/bin/wpctl"
+  },
+  "device_nodes": {
+    "video": [],
+    "media": []
+  },
+  "prerequisite_gaps": [
+    "Camera media/video devices are not exposed on this boot; expected on protected Golden."
+  ],
+  "application_capture": "NOT_TESTED",
+  "assessment": "PREREQUISITES_INCOMPLETE",
+  "next_validation": "Fresh separately checkpointed RGB candidate, continuous processed output, then desktop application capture.",
+  "ir_illumination": "NOT_AUTHORIZED_BY_THIS_DIAGNOSTIC",
+  "authentication": "NOT_IMPLEMENTED_BY_THIS_DIAGNOSTIC"
+}
