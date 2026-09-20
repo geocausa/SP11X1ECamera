@@ -220,6 +220,25 @@ redacted findings. The remaining production work includes stream
 backpressure/drop/latency and Windows-quality ISP calibration, alongside
 correct front QC10C-to-displayable video conversion.
 
+## E004jx offline incomplete-stream diagnostics before another 4K camera boot
+
+The E004jw six-to-eight-second real rear 4K stress attempt returned 58/90
+complete virtual V4L2 buffers, and its exact-count-only app was terminated
+without a final app-sink cadence result. A new **source-only** E004jx
+GStreamer app receiver now measures actual monotonic appsink callback
+times and emits flushed in-flight progress per ten full 4K buffers.
+On an early upstream EOF or a still-open but idle input pipe it reports
+the complete frames already consumed, their observed wall-clock
+cadence and explicit shortfall reason, returns nonzero and retains **no
+pixel data or hashes**. It never treats an incomplete frame as valid
+or a partially complete stream as a successful 4K30 camera run.
+Six camera-free tests pass, including a deliberately stalled open pipe,
+early EOF, normal synthetic video, invalid/extra input and a no-camera/
+boot-activation check. The new app is **not yet** connected to a physical
+camera or a V4L2 device; only the previous E004ju finite real optical
+4K app test is physically demonstrated. E004jx README contains the
+source identity and next fail-closed integration requirements.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
