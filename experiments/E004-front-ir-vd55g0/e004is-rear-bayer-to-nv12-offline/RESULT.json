@@ -1,0 +1,56 @@
+{
+  "experiment": "E004is",
+  "date": "2026-09-20",
+  "parent_commit": "ae523f0398d2e8d0747a23de86d50de71791f54b",
+  "status": "PASS_OFFLINE_PREVIOUSLY_CAPTURED_REAL_REAR_COLORBAR_TO_1920X1080_NV12_PROXY",
+  "rear_source": "E004dz accepted prior SP11 rear OV13858 colourbar",
+  "rear_source_fourcc": "V4L2_PIX_FMT_SGRBG10P/pgAA",
+  "rear_source_bayer": "GRBG",
+  "rear_source_geometry": {
+    "width": 4076,
+    "height": 2806,
+    "stride": 5104,
+    "frame_bytes": 14321824
+  },
+  "source_sha256": "6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346",
+  "output_geometry": {
+    "width": 1920,
+    "height": 1080,
+    "frame_bytes": 3110400,
+    "fourcc": "NV12"
+  },
+  "output_sha256": "b4137232d73a498bbc483d780f0570180c0255bd0135eb0283fe598780d4db8c",
+  "colourbar_output_y_min": 16,
+  "colourbar_output_y_max": 255,
+  "colourbar_output_uv_min": 27,
+  "colourbar_output_uv_max": 228,
+  "offline_positive_negative_tests": 9,
+  "real_rear_colourbar_gstreamer_nv12_rawvideoparse_and_videoconvert": "PASS",
+  "v4l2_mipi_10_bit_bit_order_test": "PASS",
+  "rear_colour_preview_method": "2x2 Bayer tile RGB proxy, centred 16:9 crop and Pillow approximate BT.601 full-range YCbCr conversion",
+  "image_quality_calibrated": false,
+  "full_demosaic_performed": false,
+  "real_time_30fps_proven": false,
+  "recorded_rear_colorbar_used": true,
+  "new_real_rear_scene_capture": false,
+  "front_qc10c_mislabel_rejected": true,
+  "existing_front_linear_nv12_bridge_unchanged": true,
+  "both_live_cameras_in_desktop_application": false,
+  "private_nv12_frame_deleted_after_verification": true,
+  "actual_camera_module_loaded": false,
+  "default_stack_modified": false,
+  "grub_modified": false,
+  "golden_modified": false,
+  "remaining_rear_gates": [
+    "calibrated optical Bayer processing",
+    "live streaming and 30fps converter throughput",
+    "standard Linux desktop virtual-device and controls",
+    "repeatable rear/front selection and switching"
+  ],
+  "remaining_front_gates": [
+    "genuine linear NV12 ISP output or proven QC10C decompression",
+    "safe UBWC state transition",
+    "safe boot preflight and new unique bounded capture"
+  ],
+  "next_gate": "combined front-rear desktop output contract with source-specific strict capability gating"
+}

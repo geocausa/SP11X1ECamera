@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ir-front-candidate-grubenv-offline-diagnostic-reviewed
+state_id: E004is-both-rgb-rear-real-colorbar-nv12-offline-front-nv12-isp-blocked
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-grubenv-readonly-offline-tests-pass-qc10c-guard-live-untested-nv12-isp-gated-ir-off
+status: golden-rear-bayer-real-colourbar-nv12-gstreamer-pass-front-compressed-isp-hardware-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5540,3 +5540,30 @@ e004ir_completed:
   isp_linear_nv12_output_proven: false
   ubwc_reset_proven: false
   next_gate: independently-prove-candidate-boot-grubenv-and-rollback-contract-before-new-physical-identity
+
+e004is_rear_desktop_preview_completed:
+  status: PASS_REAL_ARCHIVED_REAR_COLORBAR_BAYER10_TO_NV12_OFFLINE_GSTREAMER
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004is-rear-bayer-to-nv12-offline/RESULT.json
+  rear_capture_source: accepted-E004dz-OV13858-rear-colorbar
+  source_fourcc: V4L2_PIX_FMT_SGRBG10P
+  source_geometry: 4076x2806
+  source_stride_bytes: 5104
+  source_frame_bytes: 14321824
+  source_sha256: 6987a73633dd085044b6893909cee663998b2c8cd8b5b2030ad95e01b8f09346
+  offline_output_fourcc: NV12
+  offline_output_geometry: 1920x1080
+  offline_output_frame_bytes: 3110400
+  offline_output_sha256: b4137232d73a498bbc483d780f0570180c0255bd0135eb0283fe598780d4db8c
+  output_colours_calibrated: false
+  spatial_demosaic_and_isp_parity_proven: false
+  nine_positive_and_negative_tests: PASS
+  real_rear_colourbar_consumed_by_gstreamer_nv12_videoconvert: true
+  offline_preview_file_removed_after_validation: true
+  live_rear_camera_stream_in_application: false
+  live_front_camera_stream_in_application: false
+  accepted_front_qc10c_input_can_be_relabelled_nv12: false
+  front_linear_nv12_hardware_output_proven: false
+  new_camera_module_or_boot: false
+  golden_modified: false
+  next_gate: separate-rear-front-desktop-device-selection-and-calibrated-output-no-front-qc10c-mislabel

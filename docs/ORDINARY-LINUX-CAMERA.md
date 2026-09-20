@@ -35,6 +35,25 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Rear RGB ordinary-video prototype — E004is
+
+The accepted OV13858 rear path already captured 4076x2806 GRBG10 packed
+Bayer at an aligned 5104-byte stride and approximately 30 fps; its
+14,321,824-byte colour-bar frame and eight normal frames are documented
+in E004dz. E004is now **unpacks a checksum-verified previously captured
+rear colour-bar frame**, builds a basic 2x2 Bayer-tile colour proxy,
+centre-crops to 16:9 and writes private 1920x1080 NV12. A real
+GStreamer `rawvideoparse ! videoconvert ! fakesink` pipeline accepted
+that frame. Nine offline tests pass, including packed-bit order,
+colour layout, incorrect-format rejection and file isolation. The
+preview is not colour-calibrated or full demosaic, and no live desktop
+video device or sustained throughput is claimed. The previously accepted
+front QC10C compressed format cannot be fed to this rear converter;
+front's E004ij scaler needs genuine linear NV12 not yet available
+from the SP11 front ISP. Both cameras still need standard app-facing
+devices, repeatable selection and per-camera IQ/PM/cadence checks.
+See E004is README/RESULT.json.
+
 ## Work remaining
 
 1. Front RGB: convert accepted ISP-processed 10-bit QC10C/TP10-UBWC YUV
