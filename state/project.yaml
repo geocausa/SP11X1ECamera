@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004in-front-nv12-full-wm-pure-kernel-plan-offline
+state_id: E004io-front-nv12-single-mapped-dma-span-guard-offline
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-nv12-full-wm-dryrun-build-pass-isp-hardware-output-gated-ir-off
+status: golden-nv12-dma-contiguity-guard-compiled-isp-hardware-output-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5448,3 +5448,25 @@ e004in_completed:
   accepted_qc10c_modified: false
   golden_modified: false
   next_gate: exact-sp11-linear-isp-and-ubwc-reset-authority-before-physical-test
+
+e004io_completed:
+  status: PASS_OFFLINE_KERNEL_NV12_MAPPED_DMA_SPAN_GUARD
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004io-nv12-sg-dma-span/RESULT.json
+  full_arm64_module_build: PASS
+  kernel_release: 7.1.5-sp11-render-parity-v4+
+  new_positive_and_negative_tests: 8
+  required_mapped_dma_segments: 1
+  minimum_single_mapped_segment_bytes: 5529600
+  mapped_dma_base_matches_vb2: true
+  interleaved_uv_offset_checked: true
+  fragmented_dma_mapping_rejected: true
+  accepted_qc10c_source_modified: false
+  nv12_stream_authorization: EOPNOTSUPP-before-pipeline-power
+  new_mmio_operations: 0
+  installed_module: false
+  live_nv12_camera_frame: false
+  sp11_linear_isp_output_proven: false
+  safe_ubwc_transition_proven: false
+  golden_modified: false
+  next_gate: exact-sp11-linear-output-and-compression-reset-before-bounded-physical-test

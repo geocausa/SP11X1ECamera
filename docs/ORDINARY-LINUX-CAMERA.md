@@ -60,6 +60,21 @@ fails before pipeline PM and the planner remains without runtime callers.
 The module is not installed. Real linear ISP output and compression reset
 are still open hardware gates. See E004im README.
 
+## DMA-contiguous NV12 buffer gate — E004io
+
+The next strictly uninstalled Golden-v4 kernel build strengthens the
+experimental NV12 buffer planner against an overlooked scatter-gather DMA
+hazard. Current vb2_dma_sg logic records the DMA address of the first SG
+segment, but a large V4L2 allocation does not guarantee one continuous
+DMA-mapped span for the 5,529,600-byte linear Y+UV image. E004io therefore
+requires one **mapped** DMA segment with at least the entire image's byte
+length, matching DMA base and computed UV offset. Eight offline positive/
+mutation tests and a complete scratch ARM64 kernel build PASS. This may
+reject valid multi-segment maps conservatively. No device DMA mapping
+was actually exercised, and the stage remains uninstalled with NV12
+STREAMON blocked before media power. ISP linear output and safe UBWC
+reset still need separate physical proof. See E004io README.
+
 ## Kernel-compiled FULL Y/C NV12 dry-run plan — E004in
 
 The next uninstalled SP11 kernel build combines the proposed NV12 V4L2 queue,
