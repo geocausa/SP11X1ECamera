@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gv-early-kd-pmic-load-window-pass-first-timer-writer-unknown-golden-return
+state_id: E004gw-early-persistent-symbolic-pmic-timer-watch-prepared-not-executed
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gv-pmic-preload-kd-observed-first-timer-writer-inconclusive-native-ir-off
+status: golden-e004gw-preload-persistent-timer-writer-kd-prepared-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,18 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gw_prepared:
+  status: fresh-early-persistent-deferred-timer-writer-kd-not-executed
+  date: 2026-09-20
+  parent_commit: 8b2fcff0bc4446c68a78acc4e392f8dba696a393
+  prior_e004gv_repeated: false
+  new_windows_boot_consumed: false
+  pmic_generic_masked_write_helper_rva: '0x23968'
+  arm_hook_at_first_kd_break_before_pmic_load: true
+  persistent_not_one_shot_filtered_breakpoint: true
+  native_ir_emitter_authorized: false
+  golden_before_boot_id: 0f0b092e-538a-4391-a518-d7eab653f400
+  next: one-new-preload-kd-boot-persistent-hook-or-fail-closed-golden-return
 e004gv_completed:
   status: pass-fresh-early-kd-pmic-preload-identified-golden-return-first-writer-unknown
   date: 2026-09-20
