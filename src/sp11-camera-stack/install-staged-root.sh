@@ -6,6 +6,7 @@ DEST=${2:?destination root required}
 [ "$DEST" != / ] || { echo 'live root install is intentionally forbidden by this tool' >&2; exit 2; }
 [ -d "$PKG/usr" ] || { echo 'package usr tree missing' >&2; exit 1; }
 PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/verify-package.py" "$PKG" >/dev/null
+PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/offline-root-guard.py" install "$PKG" "$DEST" >/dev/null
 mkdir -p "$DEST"
 STATE="$DEST/var/lib/sp11-camera-stack"
 # If a previous managed install exists, remove only its previously listed files first.

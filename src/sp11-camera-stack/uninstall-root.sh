@@ -2,6 +2,8 @@
 set -euo pipefail
 DEST=${1:?destination root required}
 [ "$DEST" != / ] || { echo 'live root uninstall is intentionally forbidden by this tool' >&2; exit 2; }
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/offline-root-guard.py" uninstall "$DEST" >/dev/null
 STATE="$DEST/var/lib/sp11-camera-stack"
 MAN="$STATE/installed-camera-stack-manifest.sha256"
 [ -f "$MAN" ] || { echo 'managed install state missing' >&2; exit 1; }
