@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gu-oem-pmic-timer-table-xref-cfg-metadata-audit-pass-early-origin-unknown
+state_id: E004gv-boot-start-pmic-early-kdnet-observation-prepared-not-executed
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gu-original-pmic-timer-table-provenance-pass-native-ir-off
+status: golden-e004gv-pmic-early-boot-kd-prepared-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,18 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gv_prepared:
+  status: fresh-early-boot-kdnet-pmic-initialization-observation-not-executed
+  date: 2026-09-20
+  baseline_commit: dcb6e667c260bd52ec24063b27f717b78f85841e
+  original_oem_pmic_inf_boot_start: true
+  prior_kd_connected_uptime_seconds: 10.969
+  first_timer_register_writer_identified: false
+  new_windows_boot_consumed: false
+  no_oem_camera_preview_or_pmic_write: true
+  native_ir_emitter_authorized: false
+  golden_before_boot_id: 6f958ff9-f46b-47c5-91ac-30a3a5b1aa47
+  next: run-one-time-sp7-kd-d-bonc-and-verify-actual-driver-load-timing
 e004gu_current:
   status: pass-original-oem-pmic-timer-table-cfg-unwind-provenance-offline
   date: 2026-09-20
