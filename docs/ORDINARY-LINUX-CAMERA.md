@@ -119,6 +119,20 @@ preserves bounded non-image media inventory, parser stdout/stderr and
 kernel graph status before any physical streaming. E004jq RESULT.json
 and README contain the verified boundary and Golden-return status.
 
+## E004jr bounded diagnostic source for next unique camera experiment
+
+The E004jq capture attempt failed before a media graph could be discovered,
+but its parser error text was discarded. E004jr adds a **read-only non-image**
+media inventory helper that preserves bounded `media-ctl -p` stdout,
+stderr, exit status and missing expected entities in a root-owned private
+directory for a *future distinct one-shot*. The helper has not been used to
+probe live camera hardware; nine offline tests on accepted/partial archived
+graphs and fail-closed output/CLI conditions pass. A previously accepted
+44-entity graph satisfies all required rear/front entity names, while a
+42-entity earlier graph correctly reports absent RGB sensors. These
+archived samples do not reveal the actual missing E004jq graph: its
+cause is still unknown. Golden remains unchanged. See E004jr README.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
