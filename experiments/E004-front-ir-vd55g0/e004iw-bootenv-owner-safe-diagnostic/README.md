@@ -1,5 +1,9 @@
 # E004iw — GRUB one-shot environment diagnostic, owner-scoped Git preflight
 
+## Actual candidate result — read-only check passed; stock writer failed
+
+E004iw booted once as candidate boot `112069bc-a12f-45a2-9aef-046a28f79f8a`. Its owner-scoped Git checks succeeded, `grub-initrd-fallback.service` finished, and the diagnostic read a private 1024-byte candidate GRUB environment snapshot (SHA-256 `151df76c93e71843bb39c645a8a9d37d524b3e3e347f3d6eb3a4418cb85493ba`) and successfully verified `saved_entry=sp11-audio-fullio-v19c` and `next_entry=`. The service returned SP11 to Golden boot `9523efbe-8d0b-48c9-ba8c-ec1ffe27f2fb`. However `grub2-common.service` **failed earlier in the candidate boot** with `cannot read /boot/grub/grubenv: Invalid argument`. The same error occurred in `grub2-common.service` on the subsequent ordinary Golden boot; in both cases the fallback service finished and a later environment read was valid. Thus E004iw validates **post-writer read-only preflight**, not successful execution of both stock GRUB writers or resolution of the original E004iq failure. A disposable-file race reproducer is E004ix. All E004iw private files, service and GRUB entry have been retired; this unique identity is consumed. No camera hardware was accessed or further camera boot authorized by this outcome. Redacted results: `evidence/OBSERVED.json` and `RESULT.json`.
+
 2026-09-20. Parent: `f0e0a00`. Unique, **camera-free** one-shot
 test of the exact failure preventing further front and rear live capture.
 

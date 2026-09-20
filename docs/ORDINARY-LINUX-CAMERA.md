@@ -35,6 +35,24 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## GRUB writer concurrency reproduced without touching Golden — E004iw/E004ix
+
+E004iw's new camera-free candidate proved that a **read-only GRUB
+environment check can pass after both stock GRUB writer services reach
+terminal state**, and returned to Golden. But `grub2-common.service`
+failed an environment read during that candidate boot **and during the
+next normal Golden boot**, while `grub-initrd-fallback.service` finished.
+E004ix reproduced transient GRUB read/write failures on separately
+created **/tmp environment fixtures**: 120 simultaneous-reader/writer
+trials produced two reader and two writer failures; the 120 serialized
+controls had zero failures. The Golden GRUB environment checksum stayed
+unchanged. A minimal proposed service ordering has been verified on
+**disposable copies of the stock units only** and is NOT installed.
+This supports a writer-concurrency hypothesis; it does not conclusively
+establish the cause of the earlier E004iq camera-boot failure or certify
+a corrected physical capture boot. Both live RGB camera paths remain
+gated. See E004iw and E004ix README/RESULT evidence.
+
 ## Camera-free boot diagnostic status — E004iv
 
 The original QC10C DMA-guard one-shot E004iq aborted at a GRUB environment

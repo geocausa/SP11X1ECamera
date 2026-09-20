@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004iv-ordered-grub-writers-verified-pre-env-git-owner-abort-retired
+state_id: E004ix-disposable-grubenv-writer-race-reproduced-boot-services-unchanged
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-boot-diag-ordered-writers-confirmed-env-still-unread-live-rear-front-app-endpoints-gated-ir-off
+status: golden-disposable-grubenv-race-reproduced-stock-grub2-writer-fails-front-rear-live-app-endpoints-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5645,3 +5645,38 @@ e004iv_camera_free_ordered_boot_diagnostic:
   golden_saved_entry_preserved: true
   golden_next_entry_empty: true
   next_gate: new-unique-camera-free-boot-diagnostic-with-correct-owner-scoped-git-and-bounded-golden-return
+
+e004iw_owner_safe_grubenv_diagnostic:
+  status: PASS_READONLY_CANDIDATE_GRUBENV_AFTER_WRITER_TERMINAL_WITH_STOCK_WRITER_FAILURE_RETIRED
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004iw-bootenv-owner-safe-diagnostic/RESULT.json
+  candidate_boot_id: 112069bc-a12f-45a2-9aef-046a28f79f8a
+  golden_return_boot_id: 9523efbe-8d0b-48c9-ba8c-ec1ffe27f2fb
+  candidate_owner_scoped_git_preflight: PASS
+  candidate_readonly_grubenv_after_writers: PASS
+  candidate_grub2_common_writer_status: FAILED_INVALID_ARGUMENT
+  candidate_grub_initrd_fallback_status: PASS
+  subsequent_golden_grub2_common_writer_status: FAILED_INVALID_ARGUMENT
+  subsequent_golden_grub_initrd_fallback_status: PASS
+  later_saved_golden_and_empty_next_entry: PASS
+  candidate_grubenv_private_snapshot_retired: true
+  diagnostic_one_shot_assets_removed: true
+  front_and_rear_camera_hardware_activated: false
+  golden_kernel_dtb_initrd_default_modified: false
+  next_gate: boot-writer-concurrency-check-on-disposable-fixture-before-any-camera-test
+
+e004ix_offline_grubenv_writer_race_reproducer:
+  status: PASS_TEMP_DISPOSABLE_GRUBENV_RACE_REPRODUCED_SERIAL_CONTROL_CLEAN
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004ix-grub-writer-race-offline/RESULT.json
+  parallel_trials: 120
+  concurrent_writer_failures: 2
+  concurrent_reader_failures: 2
+  serialized_trial_count: 120
+  serialized_writer_reader_or_saved_state_failures: 0
+  real_golden_grubenv_sha256_unchanged: true
+  staged_uninstalled_grub2_after_initrd_fallback_dropin_verified_offline: true
+  actual_boot_services_modified: false
+  exact_e004iq_original_error_root_cause_proven: false
+  experimental_camera_boot_armed: false
+  next_gate: independently-validate-reversible-service-writer-serialization-and-rollback-before-physical-front-rear-test
