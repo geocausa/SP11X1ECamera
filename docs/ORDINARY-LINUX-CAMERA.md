@@ -50,6 +50,18 @@ opened by the exporter. Full transaction success is required before export.
 4. Keep passwords/security keys for login. Preview and face-model experiments
    provide neither liveness nor secure biometric authentication.
 
+## Offline linear-NV12 buffer implementation — E004ii
+
+A separate fail-closed ARM64 C component now calculates the proposed NV12
+Y/UV buffer and both FULL-client DMA addresses, rejecting undersized or
+out-of-32-bit allocations and mismatched/compressed plans. Public Qualcomm
+BUS ver3 source is SHA-pinned and confirms an uncompressed NV12 packer (3)
+separate from TP10 (11). Twenty-six C/ASan/UBSan checkpoints and three
+public-source-verifier Python tests PASS on SP11. This is offline code,
+not a driver, physical frame or final Windows application resolution.
+The actual SP11 bus programming and clean UBWC-to-linear state transition
+still need independent authority. See E004ii README.
+
 ## Separate linear-NV12 offline candidate — E004ih
 
 Qualcomm's public VFE BUS ver3 code has a distinct noncompressed NV12 FULL
