@@ -1,6 +1,12 @@
-# E004gs — independent Windows PMIC timer-initialization diagnostic
+# E004gs — passive Windows timer-initialization diagnostic COMPLETE (2026-09-20)
 
-Identity NEW, separate from consumed E004gb. User explicitly authorized SP11 reboot and SP7 KDNET. Previous E004gb scripts, original Windows capture, and hardware writes must not be replayed or modified.
+**Completed, NEW Windows boot #1, original E004gb consumed identity not repeated, Golden returned.** The read-only SP7 KDNET original transcript is archived intact as `evidence/ORIGINAL-SP7-KD-20260920.zip`, raw SHA256 `2d8f43c76e426b491f894184342f499cc5ad6dd2597295ee3a749555d35fb571` (10,792 bytes). Run `python3 verify_result.py` and `python3 test_verify_result.py` to verify the archive, bounded claims and six tampered fixtures.
+
+SP11 was booted via EFI **one-time** Windows Direct entry `0006` with persistent BootOrder `0005,0004,0000,0001,0002,0006` preserved. New Windows boot local 07:15:06 BST, build 26100 ARM64. SP7 KDNET attached to the original live `qcpmic8380.sys` at fresh base `fffff8009ace0000` and `qccamflash8380.sys` at `fffff8009f340000`; original instructions at PMIC timer four-channel RVA `26d50`, single-channel RVA `26f30` and flash timer helper RVA `4dd0` were disassembled directly on the live target. After boot, three **one-shot, automatic-continue** breakpoints were set at those targets. During a short passive idle window with NO intentionally initiated OEM camera preview, there were **zero timer callback hits**. All three one-shot breakpoints remained armed at the final pause; all were explicitly cleared, debugger logging was closed, and Windows was normally rebooted into Golden. KD process was stopped. Final SP11 Linux boot ID `bbb9ef1b-f1e5-4024-a636-44b5cc67c5a6`, unchanged Golden `7.1.5-sp11-render-parity-v4+`, saved FullIO v19c, no next_entry or BootNext, unchanged EFI BootOrder and camera-idle guard PASS.
+
+**Scope limit:** Breakpoints were armed AFTER Windows had already booted. This cannot exclude early boot timer initialization, other call sites, firmware or prior register state, nor is the absence of hits a measured LED-off result. A default Windows background face-service action was not instrumented as physical proof of no optical emission. No native IR emitter enabled; E004fs/E004ge physical current/irradiance, actual pulse and autonomous host-fault/stuck-trigger off are still BLOCKED. The fresh next diagnostic requires an independent E004gt identity and new bounded windows normal OEM camera lifecycle trace rather than repeating E004gs or earlier E004gb.
+
+## Prior preparation record (executed; retained for audit)
 
 ## Stage 1: passive Windows boot, no camera preview
 
