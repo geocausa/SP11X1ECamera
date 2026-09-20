@@ -1,0 +1,39 @@
+{
+  "experiment": "E004gz",
+  "status": "PASS_ORIGINAL_ARM64_PMIC_THREE_BYPASS_ADDRESS_RANGE_AUDIT",
+  "date": "2026-09-20",
+  "baseline_commit": "60d4a05df31700ea2e2022c21c174e6be8b7b496",
+  "original_pmic_sha256": "756b5c2e4eb8d5a2bdc0dcc0f7f5703eef79dec0c963155c54e42097bc2f790e",
+  "prior_e004gy_result_sha256": "28e3bce5698fb55b40151862aeeb9159bdeb5476c3d4dbcd12d2942dbd7c3384",
+  "static_address_proof": {
+    "raw_write_helper_rva": "0x23dc8",
+    "original_direct_raw_write_callsite_rvas": [
+      "0x23a04",
+      "0x2fc54",
+      "0x303b4",
+      "0x32c2c"
+    ],
+    "masked_write_callsite": "0x23a04",
+    "excluded_as_direct_timer_writer": {
+      "0x2fc54": "start 0xfd00 | u8, length u8<=255, start strictly above timer range",
+      "0x303b4": "start input_or_0x49, length exactly 2; no overlap-eligible start contains all 0x49 bits"
+    },
+    "generic_capable_raw_write_callsite": "0x32c2c",
+    "generic_wrapper_entry_rva": "0x32b70",
+    "generic_wrapper_argument_address": "u16 of w1",
+    "generic_wrapper_argument_length": "u8 of w2",
+    "generic_wrapper_actual_data_callback_table_rva": "0x3a510",
+    "generic_wrapper_direct_bl_callers": [],
+    "generic_wrapper_dispatch_or_firmware_writer_identified": false,
+    "actual_electrical_timer_register_write_observed": false
+  },
+  "two_direct_callers_impossible_to_overlap_four_timer_registers": true,
+  "generic_16bit_address_u8_length_bypass_caller_remains_possible": true,
+  "actual_generic_bypass_caller_runtime_hit_observed": false,
+  "preos_firmware_or_original_timer_writer_identified": false,
+  "native_linux_ir_emitter_authorized": false,
+  "new_windows_kd_camera_or_pmic_activity": false,
+  "golden_modified": false,
+  "test_source_sha256": "e9ac25953b7e7e79e3dcd6f7a714c17ff01c1c79b7e0584540fceddb94fad564",
+  "verifier_source_sha256": "ad3307f752bd464f2b8fd65250e7cb43a98254bb435cf67102ec29df387244e0"
+}
