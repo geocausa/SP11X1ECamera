@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gw-early-persistent-symbolic-pmic-timer-watch-prepared-not-executed
+state_id: E004gw-early-persistent-pmic-timer-helper-no-match-golden-return-first-writer-unknown
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gw-preload-persistent-timer-writer-kd-prepared-native-ir-off
+status: golden-e004gw-postresolution-persistent-pmic-timer-watch-no-match-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,27 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gw_completed:
+  status: pass-fresh-preload-persistent-timer-helper-watch-bounded-no-match-golden-return
+  date: 2026-09-20
+  baseline_commit: 59651262968f908e53ddcaed1fae2c041ce21198
+  new_windows_boots_consumed: 1
+  original_pmic_masked_helper_rva: '0x23968'
+  first_preload_break_kernel_uptime_s: 10.948
+  pmic_loaded_and_hook_resolved_kernel_uptime_s: 11.770
+  final_active_hook_kernel_uptime_s: 50.272
+  matching_ee3e_through_ee41_requests_in_selected_helper: 0
+  persistent_watch_confirmed_active_at_final_pause: true
+  first_pmic_driver_entry_timing_proven_covered: false
+  entire_windows_boot_or_other_writers_excluded: false
+  original_0x93_timer_register_writer_identified: false
+  original_sp7_kd_log_sha256: 1c6d5a603f00c0b5d53f316abcb686a6d9b3b7f30a9542d30b17f997fb3c25a2
+  kd_breakpoints_cleared_and_kd_stopped: true
+  golden_return_boot_id: e305fe1c-0bd9-407d-bf8c-e56a19354b7e
+  new_oem_camera_preview_or_pmic_write: false
+  native_ir_emitter_authorized: false
+  independent_physical_cutoff_proven: false
+  next: inspect-different-low-level-pmic-write-transport-or-preos-firmware-timer-configuration
 e004gw_prepared:
   status: fresh-early-persistent-deferred-timer-writer-kd-not-executed
   date: 2026-09-20
