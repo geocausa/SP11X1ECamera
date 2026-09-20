@@ -1,0 +1,90 @@
+{
+  "experiment": "E004he",
+  "status": "PASS_ORIGINAL_SUBTYPE0_CROSS_DRIVER_FLASH_TIMER_BRANCH_AND_LIVE_HANDLER_RECONCILIATION_OFFLINE",
+  "date": "2026-09-20",
+  "baseline_commit": "ed70db7d9afff865790b769212a49b6a5d988c9a",
+  "original_pe_sha256": {
+    "qccamflash8380": "6bc1d698bc3b6da16974cd6f3ea89dc1ba6a8ea102eebe1a5d41129b4eb9ba2b",
+    "qcpmic8380": "756b5c2e4eb8d5a2bdc0dcc0f7f5703eef79dec0c963155c54e42097bc2f790e"
+  },
+  "prior_e004hd_live_kd_result_sha256": "3b790cac922759ba1bd5a5332cc21466e29a63d812b239a38dd483bb6ce6f20d",
+  "cross_driver_original_arm64_route": {
+    "verified_cross_driver_commands": {
+      "current": {
+        "ioctl": "0x802f0fb0",
+        "flash_literal_rva": "0x4d50",
+        "pmic_literal_rva": "0x7bfc",
+        "pmic_dispatch_branch_rva": "0x6fc8",
+        "input_bytes": 6,
+        "live_four_channel_table_offset": "0x38",
+        "original_pmic_callback_rva": "0x270c0"
+      },
+      "timer": {
+        "ioctl": "0x802f0fac",
+        "flash_literal_rva": "0x4e80",
+        "pmic_literal_rva": "0x7bf8",
+        "pmic_dispatch_branch_rva": "0x7040",
+        "input_bytes": 16,
+        "live_four_channel_table_offset": "0x28",
+        "original_pmic_callback_rva": "0x26d50"
+      },
+      "trigger_input": {
+        "ioctl": "0x802f0fcc",
+        "flash_literal_rva": "0x6238",
+        "pmic_literal_rva": "0x7c14",
+        "pmic_dispatch_branch_rva": "0x7300",
+        "input_bytes": 4,
+        "live_four_channel_table_offset": "0x70",
+        "original_pmic_callback_rva": "0x27f20"
+      },
+      "trigger_mode": {
+        "ioctl": "0x802f0fd0",
+        "flash_literal_rva": "0x623c",
+        "pmic_literal_rva": "0x7c18",
+        "pmic_dispatch_branch_rva": "0x7288",
+        "input_bytes": 20,
+        "live_four_channel_table_offset": "0x80",
+        "original_pmic_callback_rva": "0x281e0"
+      },
+      "strobe": {
+        "ioctl": "0x802f0fc8",
+        "flash_literal_rva": "0x4dc8",
+        "pmic_literal_rva": "0x7c10",
+        "pmic_dispatch_branch_rva": "0x7378",
+        "input_bytes": 4,
+        "live_four_channel_table_offset": "0x90",
+        "original_pmic_callback_rva": "0x285c0"
+      }
+    },
+    "live_windows_flash_handler_table_rva": "0x39470",
+    "normal_subtype_zero_direct_flash_request_sequence": [
+      "current",
+      "trigger_input",
+      "trigger_mode",
+      "strobe"
+    ],
+    "flash_timer_helper_rva": "0x4dd0",
+    "whole_flash_original_direct_timer_helper_callers": [
+      "0x4938",
+      "0x5b2c"
+    ],
+    "normal_subtype_zero_contains_direct_timer_helper_call": false,
+    "normal_subtype_zero_may_invoke_indirect_or_prior_timer_writer_excluded": false,
+    "normal_subtype_zero_strobe_on_initial_data_bytes": [
+      1,
+      1,
+      0,
+      1
+    ],
+    "pmic_strobe_callback_requests_module_ee46_then_channels_ee4e": true,
+    "pmic_strobe_callback_directly_calls_timer_helper_0x26d50": false,
+    "windows_normal_subtype_zero_actual_0x93_timer_source_identified": false
+  },
+  "fresh_windows_session_or_camera_preview_executed": false,
+  "original_timer_0x93_first_writer_identified": false,
+  "physical_current_irradiance_autonomous_timer_proven": false,
+  "native_linux_ir_emitter_authorized": false,
+  "golden_modified": false,
+  "verifier_source_sha256": "63165bdfdf4e3e4a3e0dac09e411b796fee2ebd7e859aedafb9a21ad65032b07",
+  "negative_test_source_sha256": "bdbdb8c103f8dbf80894671eab972ba8198ff1a08243f2935f18bc9c536cbd91"
+}
