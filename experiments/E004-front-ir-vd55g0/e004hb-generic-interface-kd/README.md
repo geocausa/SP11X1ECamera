@@ -1,3 +1,17 @@
+# E004hb — early generic-interface hardware KD COMPLETE (2026-09-20)
+
+**Original SP7 KD observation archived; SP11 returned to protected Golden Linux.** A distinct Windows boot was interrupted by SP7 KD at kernel uptime 10.969 s before qcpmic8380.sys appeared. The next pause, at uptime 11.791 s, identified the live OEM driver base fffff803a6220000 and verified original ARM64 instruction entries at RVAs 0x2f918 (general descriptor), 0x2fdd0 (type 0x4a descriptor) and 0x32b70 (generic register-write callback). All three hardware execution breakpoints were added to KD's list, but attempting to continue failed: **the third hardware breakpoint could not be programmed on processor 0** (KD reported too many data breakpoints). This is an observed resource limit for this session, not a general claim about ARM64 debugger capacity.
+
+I manually cleared all three entries and armed only two: the original generic writer callback +32b70 and general descriptor producer +2f918. Windows then continued normally. At kernel uptime **34.451 s**, KD verified both hardware breakpoints were still armed. Neither produced an actual callback-hit record during the bounded boot/idle window. The type-0x4a descriptor producer was NOT monitored during that window. Crucially, there was **no positive callback hit** in this session, so this is inconclusive about whether the registered interface ever executes; it does not identify the first timer-register writer, exclude other PMIC/firmware paths or establish any emission properties.
+
+Both remaining KD breakpoints were explicitly cleared, the original KD log closed and SP7 KD stopped. Windows was normally restarted. SP11 returned to **Golden Linux boot 91e918f6-a800-4a6a-9511-78cbc275a07c**, original kernel 7.1.5-sp11-render-parity-v4+, saved FullIO v19c, persistent EFI BootOrder unchanged, empty BootNext/next_entry and camera-idle guard PASS. There was no Camera preview, deliberate PMIC register write, fault injection, Linux emitter activation or login modification. All earlier one-shot Windows/KD experiment identities remain consumed.
+
+The original SP7 KD log is archived byte-for-byte in evidence/ORIGINAL-SP7-GENERIC-KD-20260920.zip (10,463 raw bytes, SHA256 9a92d9ff07fd4d9876385edb05a8e9978f15774fdba24e941d3898b3fc645b9d; ZIP SHA256 d98e9658cc41af8a39618c5dd427f3fc30d86c1eeb553fa6a45f8f0e6e17c0e8). Offline verify_result.py and test_verify_result.py PASS, including ten negative tests that reject invented positive hits, resource coverage and physical evidence.
+
+**Next distinct lead:** determine which OEM device/interface request actually invokes the exported 0x3a4f8 or 0x3a508 callback table, rather than repeating another natural idle watch of unexercised callbacks. The E004fs/E004ge electrical and optical verification gate remains blocked; native Linux IR and PAM remain OFF.
+
+## Historical E004hb preparation — executed once; retained for audit
+
 # E004hb — fresh early OEM PMIC generic interface hardware KD (PREPARED)
 
 Separate from consumed E004gv/E004gw/E004gx/E004gy Windows/KD sessions. Objective: determine whether the **original generic raw-write callback** at qcpmic8380.sys RVA 0x32b70 and either of its two descriptor producers RVA 0x2f918 / 0x2fdd0 are entered during natural Windows boot/idle. This tests the new E004ha callback-registration lead, not the already observed masked helper or raw helper.

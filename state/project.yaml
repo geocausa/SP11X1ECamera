@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ha-original-oem-generic-writer-callback-registration-verified-runtime-unobserved
+state_id: E004hb-generic-hardware-two-watch-inconclusive-golden-return-pass
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gy-raw-pmic-hardware-kd-positive-control-pass-native-ir-off
+status: golden-e004hb-generic-hardware-idle-no-positive-control-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,25 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004hb_completed:
+  status: pass-bounded-original-kd-log-inconclusive-callback-no-hit-golden-return
+  date: 2026-09-20
+  new_windows_boots_consumed: 1
+  original_pmic_live_base: fffff803a6220000
+  requested_simultaneous_hardware_breakpoints: 3
+  third_hardware_breakpoint_install_failed: true
+  effective_hardware_breakpoints_after_recovery: 2
+  active_hardware_breakpoint_rvas: ['0x32b70', '0x2f918']
+  type_0x4a_descriptor_watched_during_bounded_boot: false
+  actual_generic_writer_and_general_descriptor_markers: [0, 0]
+  callback_positive_control_obtained: false
+  absence_of_generic_callback_or_timer_writer_proven: false
+  original_sp7_kd_sha256: 9a92d9ff07fd4d9876385edb05a8e9978f15774fdba24e941d3898b3fc645b9d
+  all_kd_breakpoints_cleared_and_kd_stopped: true
+  golden_return_boot_id: 91e918f6-a800-4a6a-9511-78cbc275a07c
+  native_ir_emitter_authorized: false
+  new_camera_or_manual_pmic_write: false
+  next: determine-which-request-activates-original-exported-pmic-interface
 e004gy_completed:
   status: pass-fresh-original-oem-raw-pmic-write-hardware-kd-bounded-no-timer-overlap-golden-return
   date: 2026-09-20
