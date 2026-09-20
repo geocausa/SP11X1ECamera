@@ -1,0 +1,15 @@
+[Unit]
+Description=SP11 E004ir READ-ONLY boot-environment diagnostic (never camera)
+ConditionKernelCommandLine=sp11_camera_e004ir_diagnostic=1
+# The prior E004iq service started in parallel with these GRUB environment
+# mutators. Ordering removes that overlap but does NOT prove root cause.
+Wants=grub2-common.service grub-initrd-fallback.service
+After=local-fs.target grub2-common.service grub-initrd-fallback.service
+
+[Service]
+Type=oneshot
+TimeoutStartSec=30
+ExecStart=/usr/bin/python3 /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera/experiments/E004-front-ir-vd55g0/e004ir-boot-env-preflight-offline/boot_env_preflight.py --grubenv /boot/grub/grubenv --cmdline /proc/cmdline --require-candidate
+StandardOutput=journal
+StandardError=journal
+# No Install section, no reboot callback, no modules/camera/GRUB write.

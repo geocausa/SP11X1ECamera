@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004iq-front-qc10c-one-shot-pre-camera-grubenv-abort-retired
+state_id: E004ir-front-candidate-grubenv-offline-diagnostic-reviewed
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-e004iq-pre-camera-boot-env-aborted-and-retired-zero-live-frames-nv12-isp-gated-ir-off
+status: golden-grubenv-readonly-offline-tests-pass-qc10c-guard-live-untested-nv12-isp-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5519,3 +5519,24 @@ e004iq_consumed:
   native_ir_illumination_authorized: false
   independent_isp_linear_nv12_and_ubwc_reset_open: true
   next_gate: establish-candidate-boot-grubenv-safety-before-new-unique-one-shot; independent-linear-nv12-isp-ubwc-gate
+
+e004ir_completed:
+  status: PASS_OFFLINE_READ_ONLY_GRUBENV_PREFLIGHT_SERVICE_ORDERING_HYPOTHESIS_UNPROVEN
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004ir-boot-env-preflight-offline/RESULT.json
+  historical_candidate: E004iq
+  historical_abort_before_camera: true
+  same_second_grubenv_writers_started: true
+  writer_race_root_cause_proven: false
+  live_grubenv_read_only: true
+  disposable_grubenv_fixture_tests_passed: 11
+  proposed_service_orders_after_grub2_common_and_initrd_fallback: true
+  proposed_diagnostic_unit_systemd_verify: PASS
+  proposed_diagnostic_unit_installed_or_enabled: false
+  diagnostic_boot_armed: false
+  e004iq_candidate_identity_reusable: false
+  golden_modified: false
+  qc10c_guard_live_tested: false
+  isp_linear_nv12_output_proven: false
+  ubwc_reset_proven: false
+  next_gate: independently-prove-candidate-boot-grubenv-and-rollback-contract-before-new-physical-identity

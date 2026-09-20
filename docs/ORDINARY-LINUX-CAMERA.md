@@ -60,6 +60,20 @@ fails before pipeline PM and the planner remains without runtime callers.
 The module is not installed. Real linear ISP output and compression reset
 are still open hardware gates. See E004im README.
 
+## Read-only boot-environment diagnostic — E004ir
+
+Review of the consumed E004iq candidate boot found that two systemd GRUB
+services which modify grubenv started in the same second as the failed
+camera preflight; this is a plausible but unproven scheduling hazard. The
+original invalid environment bytes were not retained. E004ir supplies an
+**uninstalled, diagnostic-only** unit ordered after both GRUB writers and
+a read-only script that rejects unreadable GRUB state, a non-Golden saved
+default, a still-armed or absent next_entry and mismatched candidate boot
+markers. Eleven temporary-fixture tests and systemd-analyze verification
+passed on SP11. This does not authorize a replacement one-shot, and it
+cannot establish the cause of the prior invalid GRUB environment. See
+E004ir README/RESULT.json. No camera or boot configuration was changed.
+
 ## E004iq QC10C-only physical one-shot — pre-camera abort, retired
 
 The unique E004iq candidate booted on SP11 but its dedicated service failed
