@@ -12,7 +12,7 @@ Then, a controlled **camera-free** paced synthetic stream of **35 tiny 320×180 
 
 ## Next guarded physical gate
 
-Use a **NEW uniquely identified**, source-locked, single-use camera-capable candidate (do not reuse consumed E004ka/E004jy) with the exact same bounded 180 real optical source → 4K NV12 → /dev/video90 → independent V4L2 stdout byte meter → E004jx app setup. Change the virtual output pipeline's sink explicitly to `v4l2sink sync=true qos=false max-lateness=-1` to test whether avoiding late-buffer drop improves the counted **publisher→independent reader** path. Keep real hardware timestamps, full output byte totals, app callback arrival cadence and fail-closed partial telemetry. An improved buffer count would not establish long-run 4K30 or Windows visual parity, and front QC10C decoding remains a separate task.
+Use a **NEW uniquely identified**, source-locked, single-use camera-capable candidate (do not reuse consumed E004ka/E004jy) with the exact same bounded 180 real optical source → 4K NV12 → /dev/video90 → independent V4L2 stdout byte meter → E004jx app setup. Change the virtual output pipeline's sink explicitly to `v4l2sink sync=true qos=true max-lateness=-1` to test whether avoiding late-buffer drop improves the counted **publisher→independent reader** path. Keep real hardware timestamps, full output byte totals, app callback arrival cadence and fail-closed partial telemetry. An improved buffer count would not establish long-run 4K30 or Windows visual parity, and front QC10C decoding remains a separate task.
 
 Reproduce the source-only probe without camera activation:
 
