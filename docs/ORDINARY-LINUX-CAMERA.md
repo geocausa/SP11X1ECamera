@@ -50,6 +50,19 @@ opened by the exporter. Full transaction success is required before export.
 4. Keep passwords/security keys for login. Preview and face-model experiments
    provide neither liveness nor secure biometric authentication.
 
+## Kernel-native, uninstalled linear-NV12 planner — E004ik
+
+A separate fail-closed SP11 kernel-sidecar source now compiles into a
+**disposable/uninstalled** CAMSS kernel module against the actual Golden v4
+build ABI. It explicitly rejects the existing QC10C video queue even if its
+buffer has sufficient bytes, and checks an independently negotiated NV12
+queue, exact geometry and stride, active frame, DMA alignment and both Y/UV
+32-bit bounds. The sidecar has no active callers, format advertisements,
+MMIO writes or module install; authorization always returns EOPNOTSUPP.
+Six offline static/negative tests PASS. It is not yet a working NV12
+capture mode: the SP11-specific linear ISP/BUS/UBWC transition remains
+unproven. See E004ik README.
+
 ## Windows WinRT 1920x1080 NV12 target and offline bridge — E004ij
 
 A previously overlooked SHA-pinned original SP11 Windows holder log establishes

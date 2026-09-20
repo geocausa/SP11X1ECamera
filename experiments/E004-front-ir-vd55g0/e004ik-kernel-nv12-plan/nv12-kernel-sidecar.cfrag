@@ -1,0 +1,100 @@
+/*
+ * E004ik isolated, uninstalled kernel-NATIVE SP11 linear-NV12 DMA plan.
+ *
+ * This section is appended ONLY to a disposable copy of camss-vfe-680.c.
+ * It is intentionally NOT connected to the V4L2 format table, streaming
+ * callbacks, MMIO, firmware, device tree or default QC10C runtime.
+ * All SP11 bus register semantics remain pending physical validation.
+ */
+#define VFE680_X1E_LINEAR_NV12_WIDTH          2560U
+#define VFE680_X1E_LINEAR_NV12_HEIGHT         1440U
+#define VFE680_X1E_LINEAR_NV12_STRIDE         2560U
+#define VFE680_X1E_LINEAR_NV12_Y_BYTES        3686400U
+#define VFE680_X1E_LINEAR_NV12_UV_BYTES       1843200U
+#define VFE680_X1E_LINEAR_NV12_ALLOCATION     5529600U
+
+struct vfe680_x1e_linear_nv12_plan {
+	u32 y_dma;
+	u32 uv_dma;
+	u32 y_bytes;
+	u32 uv_bytes;
+	u32 allocation_bytes;
+	u32 y_stride;
+	u32 uv_stride;
+	u32 y_rows;
+	u32 uv_rows;
+};
+
+/* Compile-time proof of boundary-only representation, no MMIO writes. */
+static int __used
+vfe680_x1e_linear_nv12_buffer_plan(struct vfe_device *vfe,
+				   struct camss_buffer *buffer,
+				   struct vfe680_x1e_linear_nv12_plan *out)
+{
+	dma_addr_t base;
+	u64 end, chroma;
+
+	if (!out)
+		return -EINVAL;
+	memset(out, 0, sizeof(*out));
+	if (!vfe680_x1e_bus_target(vfe) || !buffer)
+		return -ENODEV;
+	/*
+	 * A larger QC10C allocation is NOT evidence of linear NV12. Require
+	 * an independently negotiated and validated alternate V4L2 queue.
+	 * Current production PIX advertises only QC10C, so this guard keeps
+	 * the experimental planner unreachable in the accepted runtime.
+	 */
+	{
+		const struct camss_video *video =
+			&vfe->line[VFE_LINE_PIX].video_out;
+		const struct v4l2_pix_format_mplane *fmt =
+			&video->active_fmt.fmt.pix_mp;
+
+		if (fmt->pixelformat != V4L2_PIX_FMT_NV12 ||
+		    fmt->width != VFE680_X1E_LINEAR_NV12_WIDTH ||
+		    fmt->height != VFE680_X1E_LINEAR_NV12_HEIGHT ||
+		    fmt->num_planes != 1 ||
+		    fmt->plane_fmt[0].bytesperline !=
+			VFE680_X1E_LINEAR_NV12_STRIDE ||
+		    fmt->plane_fmt[0].sizeimage !=
+			VFE680_X1E_LINEAR_NV12_ALLOCATION ||
+		    buffer->vb.vb2_buf.vb2_queue != &video->vb2_q)
+			return -EINVAL;
+	}
+	if (buffer->vb.vb2_buf.num_planes != 1 ||
+	    buffer->vb.vb2_buf.state != VB2_BUF_STATE_ACTIVE ||
+	    vb2_plane_size(&buffer->vb.vb2_buf, 0) <
+		VFE680_X1E_LINEAR_NV12_ALLOCATION)
+		return -EINVAL;
+
+	base = buffer->addr[0];
+	if (!base || !IS_ALIGNED(base, PAGE_SIZE))
+		return -EINVAL;
+	chroma = (u64)base + VFE680_X1E_LINEAR_NV12_Y_BYTES;
+	end = (u64)base + VFE680_X1E_LINEAR_NV12_ALLOCATION;
+	if (base > U32_MAX || chroma > U32_MAX || end <= base ||
+	    end - 1 > U32_MAX)
+		return -ERANGE;
+
+	out->y_dma = (u32)base;
+	out->uv_dma = (u32)chroma;
+	out->y_bytes = VFE680_X1E_LINEAR_NV12_Y_BYTES;
+	out->uv_bytes = VFE680_X1E_LINEAR_NV12_UV_BYTES;
+	out->allocation_bytes = VFE680_X1E_LINEAR_NV12_ALLOCATION;
+	out->y_stride = VFE680_X1E_LINEAR_NV12_STRIDE;
+	out->uv_stride = VFE680_X1E_LINEAR_NV12_STRIDE;
+	out->y_rows = VFE680_X1E_LINEAR_NV12_HEIGHT;
+	out->uv_rows = VFE680_X1E_LINEAR_NV12_HEIGHT / 2;
+	return 0;
+}
+
+/*
+ * Do not authorize an unproven compressed->linear transition, even if a
+ * caller has successfully planned Y/C memory. Hardware-write permission
+ * MUST be closed independently with an exact SP11 ISP/BUS/UBWC authority.
+ */
+static int __used vfe680_x1e_linear_nv12_stream_authorize(void)
+{
+	return -EOPNOTSUPP;
+}
