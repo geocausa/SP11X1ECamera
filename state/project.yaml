@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gx-early-hardware-pmic-execute-positive-control-pass-first-writer-unknown-golden-return
+state_id: E004gy-early-raw-write-hardware-kd-prepared-not-executed
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gx-original-pmic-hardware-execute-positive-control-pass-native-ir-off
+status: golden-e004gy-raw-pmic-write-hardware-kd-prepared-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,16 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gy_prepared:
+  status: distinct-raw-pmic-write-hardware-kd-prepared-not-executed
+  date: 2026-09-20
+  parent_commit: 5918dd3096a2e1afbef4da39e6f5730090ea2d93
+  original_oem_raw_write_helper_rva: '0x23dc8'
+  additional_direct_raw_write_caller_rvas: ['0x2fc54', '0x303b4', '0x32c2c']
+  watch_register_span_start_and_length_not_only_exact_start: true
+  new_windows_boot_consumed: false
+  native_ir_emitter_authorized: false
+  golden_before_boot_id: ad449a21-86c0-4194-b8a5-e297d750226a
 e004gx_completed:
   status: pass-original-oem-pmic-hardware-execution-breakpoint-positive-control-golden-return
   date: 2026-09-20
