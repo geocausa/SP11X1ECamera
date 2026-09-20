@@ -1,5 +1,9 @@
 # E004iv — one-shot, camera-free GRUB-environment diagnostic
 
+## Actual single-use result — E004iv pre-observation abort, retired
+
+The E004iv one-shot booted the unchanged Golden kernel/DTB and its service started only **after both GRUB environment writers finished** (confirmed by the candidate's monotonic systemd journal). However the root-owned diagnostic attempted `git -C` in the user-owned camera checkout; Git rejected the worktree ownership before the script created its attempt marker or copied/read GRUB's environment. The candidate service exited RC=1 and its automatic-return callback rebooted SP11 to persistent Golden. The diagnostic did **not** read or verify candidate GRUB state, load a camera module or capture a frame. The original E004iq environment-corruption cause is still unproven. A read-only `runuser -u geoca -- git -C ... rev-parse HEAD` command was verified independently on Golden without changing global Git trust settings, but has NOT yet run in a candidate boot. All E004iv-owned root staging, service and GRUB assets were subsequently retired; do not rearm this consumed identity. Non-sensitive outcome: `evidence/OBSERVED.json`. A separate unique candidate is required for any later check.
+
 2026-09-20. Parent `1c62d42`. The user requires **both** rear OV13858
 and front IMX681 usable as ordinary Linux cameras; a previous front QC10C
 DMA-guard physical regression, E004iq, instead aborted before loading

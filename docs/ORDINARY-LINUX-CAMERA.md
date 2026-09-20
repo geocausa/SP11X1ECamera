@@ -35,6 +35,20 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Camera-free boot diagnostic status — E004iv
+
+The original QC10C DMA-guard one-shot E004iq aborted at a GRUB environment
+read before camera activation. A new camera-free E004iv one-shot established
+that the two GRUB environment writers can be ordered to **finish before**
+the diagnostic service starts. E004iv's root-owned script then failed an
+unrelated Git ownership check **before reaching the GRUB read**; it created
+no camera attempt and the automatic service reboot returned to Golden.
+A read-only owner-scoped Git command was subsequently tested on Golden;
+it does not set a global trusted directory. The E004iv identity and
+all temporary boot assets are retired. The original GRUB failure root
+cause and real QC10C DMA guard remain unproven. No new front/rear video
+endpoint is implied; see E004iv README and RESULT.json.
+
 ## Fast bounded rear Bayer-to-NV12 offline batch — E004iu
 
 The E004is rear Bayer-to-NV12 preview was functionally correct but
