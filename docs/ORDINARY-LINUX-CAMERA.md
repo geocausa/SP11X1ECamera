@@ -78,6 +78,27 @@ long-run 4K30 guarantee, measured capture latency, calibrated colour
 pipeline or native ISP. Nothing in this new offline path decodes front
 QC10C or changes the protected Golden kernel/boot. See E004jn README.
 
+## 4K standard selectable video endpoint — E004jp synthetic one-shot PASS
+
+After the offline E004jm/jn 4K rear conversion/application proof, a NEW,
+uniquely consumed isolated Golden-v4 candidate boot physically opened
+a **synthetic-only** standard /dev/video90 webcam. The normal independent
+V4L2 reader acquired eight complete 3840×2160 NV12 frames, 12,441,600
+bytes each, and an actual GStreamer application accepted eight 4K samples.
+The source was GStreamer moving-ball synthetic video, not real OV13858
+optical pixels. Virtual capture sequences 4,7–13 included an initial gap;
+synthetic app PTS and 174 ms bounded app-pipeline duration do not
+establish sustained 4K30, per-frame camera latency, no drops, Windows
+pixel quality or a working native rear 4K camera. The temporary
+loopback module/virtual node unloaded before automatic Golden return,
+and the unique boot/runner/staging were completely retired. Existing
+Golden default kernel/DTB/initrd and front/IR paths remained untouched.
+See E004jp README/RESULT for independently observed metadata. Next
+separately bounded **REAL** rear optical→fused 4K converter→independent
+standard virtual webcam with strict source/candidate provenance, followed
+by sustained cadence/quality validation. Front QC10C remains an
+independent unresolved source-to-pixels gate.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
