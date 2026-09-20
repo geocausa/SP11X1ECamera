@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004hr-early-original-alternate-spmi-masked-rmw-bounded-entry-nonhit-direct-control-golden-return
+state_id: E004hs-offline-original-spmi-three-interface-callbacks-four-common-controller-direct-callers-no-new-live-kd
 phase: camera-stack-front-ir-illumination-timing-authority
 status: golden-e004hr-original-spmi-alt-masked-nohit-direct-control-native-ir-off
 golden:
@@ -87,6 +87,33 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004hs_completed:
+  status: pass-original-spmi-entire-executable-four-common-controller-calls-offline-no-new-windows-boot
+  date: 2026-09-20
+  original_spmi_interface_standalone_read_offset: '0x28'
+  original_spmi_interface_standalone_read_rva: '0x13a0'
+  original_spmi_interface_direct_write_offset: '0x30'
+  original_spmi_interface_direct_write_rva: '0x1660'
+  original_spmi_interface_masked_rmw_offset: '0x38'
+  original_spmi_interface_masked_rmw_rva: '0x1920'
+  original_shared_controller_helper_rva: '0x64d8'
+  original_all_direct_controller_callers: ['0x15b4', '0x1870', '0x1b38', '0x1b70']
+  original_single_read_w0: 1
+  original_direct_write_w0: 0
+  original_masked_read_w0: 1
+  original_masked_write_w0_after_read_success: 0
+  controller_entry_bus_sid_register_address_length_regs: ['w2', 'w3', 'w4', 'w6']
+  original_executable_all_direct_callers_verified: true
+  original_indirect_other_driver_firmware_calls_excluded: false
+  live_common_controller_observer_executed: false
+  fresh_windows_kd_boots_consumed: 0
+  synthetic_filter_only_maximum_bytes: 256
+  actual_original_driver_longer_length_excluded: false
+  golden_boot_id_unchanged: a668186f-df85-4238-9983-f7b28455ec84
+  native_ir_emitter_authorized: false
+  original_0x93_first_writer_identified: false
+  independently_qualified_emitter_optical_electrical_host_fault_off: false
+  next: obtain-working-debugger-or-independent-physical-instrumentation-before-more-live-or-emitter-attribution
 e004hr_completed:
   status: pass-fresh-early-spmi-alternate-masked-one-byte-timer-address-bounded-nohit-direct-control-golden-return
   date: 2026-09-20
