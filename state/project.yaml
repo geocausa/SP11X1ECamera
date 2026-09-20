@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004hs-offline-original-spmi-three-interface-callbacks-four-common-controller-direct-callers-no-new-live-kd
+state_id: E004ht-new-early-common-spmi-controller-read-positive-filtered-timer-write-nonhit-golden-return
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004hr-original-spmi-alt-masked-nohit-direct-control-native-ir-off
+status: golden-e004ht-original-common-spmi-controller-read-control-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,38 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004ht_completed:
+  status: pass-fresh-early-windows-common-spmi-controller-read-positive-filtered-timer-write-nohit-golden-return
+  date: 2026-09-20
+  new_windows_boots_consumed: 1
+  first_kd_kernel_uptime_seconds: 10.967
+  original_spmi_module_load_kernel_uptime_seconds: 11.788
+  original_spmi_live_base: fffff8037b2a0000
+  original_pmic_live_base: fffff8037b240000
+  original_spmi_common_controller_rva: '0x64d8'
+  unfiltered_controller_positive_hit_kernel_uptime_seconds: 12.313
+  positive_control_original_operation: read
+  positive_control_normalized_bus_sid: [0, 0]
+  positive_control_register_address: '0x0100'
+  positive_control_byte_count: 6
+  positive_control_validates_actual_write_filter_predicate: false
+  persistent_write_only_timer_span_filter_rva: '0x64d8'
+  persistent_write_filter_byte_count_min_max: [1, 256]
+  persistent_write_filter_timer_low16_start_end: ['0xee3e', '0xee41']
+  timer_write_marker_count_in_active_normal_boot_window: 0
+  persistent_write_breakpoint_active_at_final_uptime_seconds: 92.962
+  original_pmic_idle_byte_0x93_first_writer_identified: false
+  real_spmi_write_success_or_silicon_write_proven: false
+  independently_measured_emitter_current_irradiance_pulse_or_host_fault_cutoff: false
+  original_sp7_kd_log_raw_bytes: 9782
+  original_sp7_kd_log_raw_sha256: a439d6073f22f27c707b631d8fd95c2fb21db4225230ccd272816f3412fdb434
+  software_code_breakpoints_disarmed_and_kd_stopped: true
+  module_load_event_filter_separately_disabled_before_exit: false
+  golden_return_boot_id: b151079f-6d5d-48fa-937a-2b1eff6d992b
+  golden_kernel_grub_efi_and_camera_idle_preserved: true
+  camera_preview_manual_pmic_led_write_or_linux_emitter_activation: false
+  native_ir_emitter_or_pam_login_enabled: false
+  next: investigate-genuinely-distinct-first-writer-preos-or-reset-source-and-independent-physical-emitter-cutoff-not-repeat-spmi-idle-nonhit
 e004hs_completed:
   status: pass-original-spmi-entire-executable-four-common-controller-calls-offline-no-new-windows-boot
   date: 2026-09-20
