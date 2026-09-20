@@ -6232,6 +6232,31 @@ e004jw_rear_4k_longer_app_cadence_one_shot:
   saved_golden_boot_and_empty_next_entry_verified: true
   next_gate: source_only_partial_sink_cadence_and_producer_subscriber_handshake_telemetry_then_NEW_unique_bounded_camera_candidate_without_reusing_e004jw
 
+e004kb_gstreamer_synthetic_clock_lateness_source_only:
+  status: PASS_OFFLINE_INSTALLED_V4L2SINK_5MS_LATENESS_AND_22FPS_SOURCE_30FPS_PTS_MODEL_DROP
+  date: 2026-09-21
+  evidence: experiments/E004-front-ir-vd55g0/e004kb-gstreamer-sink-lateness-offline/README.md
+  source_sha256: 1d87311248df6e4e8e22eef8553cfba584f618bd4f4645b58d90936eb2af5477
+  installed_gstreamer_version: 1.28.2
+  actual_v4l2sink_default_sync: true
+  actual_v4l2sink_default_qos: true
+  actual_v4l2sink_default_max_lateness_ns: 5000000
+  rawvideoparse_first_three_nominal30fps_pts_ns: [0, 33333333, 66666666]
+  synthetic_fdsrc_source_rate_fps: 22
+  synthetic_fdsrc_nominal_caps_rate_fps: 30
+  synthetic_small_nv12_frame_count: 35
+  synthetic_fakesink_default_clock_model_rendered: 4
+  synthetic_fakesink_no_lateness_rendered: 35
+  synthetic_fakesink_unsynced_rendered: 35
+  synthetic_appsrc_default_clock_model_rendered: 5
+  synthetic_appsrc_no_lateness_rendered: 35
+  synthetic_appsrc_unsynced_rendered: 35
+  offline_automated_tests_passed: 4
+  camera_module_v4l2_device_or_grub_activated: false
+  default_sink_lateness_caused_actual_e004ka_40_of180_shortfall_proven: false
+  physical_cadence_or_4k30_proven_by_synthetic_model: false
+  next_gate: NEW_unique_auto_golden_source_locked_4k_rear_candidate_change_only_v4l2sink_qos_false_max_lateness_minus1_keep_sync_true_and_measure_actual_reader_app_cadence
+
 e004ka_real_rear_4k_stdout_meter_and_app:
   status: FAIL_CLOSED_REAL_SOURCE180_VIRTUAL40_METER40_FULL_APP40_FULL_GOLDEN_RETURNED_RETIRED
   date: 2026-09-21

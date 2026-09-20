@@ -344,6 +344,32 @@ one-shot identity is consumed forever. Redacted E004ka RESULT.json
 and README record the physical findings; the earlier E004ju short
 rear 4K-to-eight-app-frame result remains separately valid.
 
+## E004kb: GStreamer sink clock lateness is a reproducible candidate bottleneck
+
+The physical E004ka publisher previously sent nominal 30fps timestamps
+from `rawvideoparse framerate=30/1` while real rear source delivery
+under full load averaged 21.8819 fps, and its independent application
+received only 40/90 requested 4K frames. The SP11 Golden-installed
+GStreamer 1.28.2 `v4l2sink` defaults were independently inspected
+*without opening a camera*: `sync=true`, `qos=true`, and **5-ms
+max-lateness**. A source-only fdsrc→rawvideoparse timestamp probe confirmed
+nominal 30fps PTS are synthesized from caps, not physical capture cadence.
+
+In an isolated tiny synthetic NV12 stream paced at **22fps** but labeled
+**30fps** by rawvideoparse, a real GStreamer fakesink with the same
+clock/lateness/QoS settings as v4l2sink rendered just **4/35** buffers
+in one bounded run; with `max-lateness=-1` it rendered **35/35**, and
+with synchronization disabled it also rendered **35/35**. This is
+evidence that late-frame dropping is a plausible **contributor** to
+the physical 4K underdelivery, **not a proven causal attribution**:
+the experiment did not open /dev/video90, use the actual v4l2sink
+implementation to publish video, stream a physical camera or exercise
+real 4K pixel throughput. See E004kb README/tests. A NEW unique,
+Golden-returning real optical test can change only the sink lateness
+policy while retaining the byte meter, physical source timestamps and
+independent application count; do not claim continuous 4K30 or Windows
+ISP image quality until measured.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
