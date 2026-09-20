@@ -1,0 +1,72 @@
+{
+  "experiment": "E004hu",
+  "status": "PASS_CURRENT_VERSION_MATCHED_ARCHIVED_SP11_UEFI_PMIC_SPMI_EXPLICIT_TIMER_LITERAL_AUDIT_OFFLINE",
+  "date": "2026-09-20",
+  "source_checkpoint": "311aebe31836e64c9bebf7da7dd39f4f34fc793b",
+  "live_sp11_golden_bios_version_at_audit": "175.222.235",
+  "original_previous_e004ht_result_sha256": "1725dc16f8a00b037273dae6f15d81cfd720e0527acf084a7df01f8728afa286",
+  "original_uefi_firmware_bounded_audit": {
+    "original_capsule_sha256": "2908e3152b5d3c6141c34114bfee39a15f5e94f20acfe1c49be6a5084ec8cb47",
+    "original_capsule_bytes": 13608082,
+    "original_firmware_version": "175.222.235",
+    "original_extracted_arm64_pe_image_count": 255,
+    "original_pmic_spmi_uefi_modules": {
+      "PmicDxe": {
+        "raw_sha256": "402315711a6761441234eac8c0cd3c0ad23cb4fdb7d0a9de3dd94c3ffac38dff",
+        "image_bytes": 253952,
+        "original_ffs_guid": "C44697D5-B4AA-4030-9749-29860844183D",
+        "arm64_uefi_pe": true,
+        "explicit_first_timer_address_16bit_le_hits": 0,
+        "explicit_first_timer_address_32bit_le_hits": 0,
+        "explicit_contiguous_four_timer_addresses_dword_le_hits": 0
+      },
+      "SPMI": {
+        "raw_sha256": "62b53f5daaf46e016962895ff19f26b7449b4566c9859ad3140e2748f87f3ef0",
+        "image_bytes": 49152,
+        "original_ffs_guid": "2A7B4BEF-80CD-49E1-B473-374BA4D673FC",
+        "arm64_uefi_pe": true,
+        "explicit_first_timer_address_16bit_le_hits": 0,
+        "explicit_first_timer_address_32bit_le_hits": 0,
+        "explicit_contiguous_four_timer_addresses_dword_le_hits": 0
+      }
+    },
+    "pmic_dxe_contains_pmic_spmi_init_and_write_functionality_strings": true,
+    "capsule_exact_literal_signature_occurrences": {
+      "four_channel_dword_le": 0,
+      "four_channel_word_le": 0,
+      "four_channel_byte_low_only": 0,
+      "first_timer_dword_le": 0,
+      "four_adjacent_0x93_bytes": 0
+    },
+    "capsule_undifferentiated_two_byte_ee3e_hits": 95,
+    "all_extracted_pe_exact_literal_hits": {
+      "four_channel_dword_le": [],
+      "four_channel_word_le": [],
+      "four_channel_byte_low_only": [
+        {
+          "module": "112 UsbKbDxe",
+          "occurrences": 1
+        },
+        {
+          "module": "20 HidKeyboardDxe",
+          "occurrences": 1
+        }
+      ],
+      "first_timer_dword_le": [],
+      "four_adjacent_0x93_bytes": []
+    },
+    "literal_16bit_ee3e_hits_prove_pmic_timer_access": false,
+    "literal_table_absence_rules_out_computed_or_indirect_firmware_timer_writer": false,
+    "archived_capsule_version_matches_current_running_bios_version_as_observed": true,
+    "archived_capsule_bytes_equals_running_firmware_bytes_verified": false,
+    "firmware_pmic_or_spmi_driver_initializes_timer_ee3e_in_actual_boot_proven": false,
+    "original_first_0x93_timer_writer_identified": false,
+    "actual_hw_reset_value_or_independent_led_cutoff_established": false
+  },
+  "new_windows_boot_or_kd_spmi_pmic_camera_led_login_activity": false,
+  "firmware_flashing_or_uefi_mutation": false,
+  "native_ir_emitter_authorized": false,
+  "golden_modified": false,
+  "verifier_sha256": "84024e94255e427263727d0afd6b9e4db69fcef79fd8ea5c6fc1bae8725b9132",
+  "negative_test_sha256": "c345c41c8e9503461441c57e4fa9d4f27d7f4de46853ca896db3fe7bf11be43c"
+}
