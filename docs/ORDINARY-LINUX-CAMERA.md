@@ -60,6 +60,23 @@ fails before pipeline PM and the planner remains without runtime callers.
 The module is not installed. Real linear ISP output and compression reset
 are still open hardware gates. See E004im README.
 
+## Separate bounded QC10C-only physical regression candidate — E004iq
+
+A provenance-correct rebuild reproduced the accepted hardware module hashes
+using the originally recorded kernel source frontend, and the resulting
+current stack manifest matches the already validated E004id 50-file package.
+E004iq additionally compiled a QC10C-only module with the *sole* code delta
+being the E004ip mapped DMA-coverage guard in `camss.c`. Unlike earlier
+uninstalled E004io combined scratch modules, this candidate does **not**
+advertise the proposed NV12 format. A unique, non-default, strictly
+one-shot front-RGB test is prepared with a root-owned private package,
+source-pinned 27-frame `shadow` launcher and an automatic return to the
+persistent Golden GRUB default after success, failure or timeout.
+At the offline preparation checkpoint, no boot was armed, camera opened or
+new module installed; a live mapped-buffer/optical result is **not** yet
+claimed. IR illumination/login are excluded and ISP linear NV12 plus
+compression-state reset are independently unresolved. See E004iq README.
+
 ## QC10C mapped-DMA safety candidate — E004ip
 
 Source review found the already accepted front QC10C capture path checks the

@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ip-front-qc10c-mapped-dma-coverage-scratch-compiled
+state_id: E004iq-front-qc10c-one-shot-regression-staged-unarmed
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-qc10c-dma-safety-scratch-pass-nv12-isp-output-still-gated-ir-off
+status: golden-front-qc10c-only-guard-one-shot-prepared-live-not-yet-run-nv12-isp-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5491,3 +5491,21 @@ e004ip_completed:
   safe_ubwc_transition_proven: false
   golden_modified: false
   next_gate: bounded-isolated-qc10c-regression-before-admitting-live-safety-patch; independent-isp-linear-nv12-and-ubwc-reset-proof
+
+e004iq_prepared:
+  status: PASS_QC10C_ONLY_ONE_SHOT_CANDIDATE_COMPILED_UNARMED
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004iq-qc10c-dma-one-shot/README.md
+  accepted_kernel_source_frontend: /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
+  accepted_camss_rebuild_sha256: 862732b7c9e4712360840a033a016239beac7e81a7d620aff61db51efb8ecdc7
+  accepted_current_stack_manifest_sha256: 11a649fafbfbfc3467f86f2f17d8ff4d4a86e2f5f4fc36c7f1d1c7839160c646
+  candidate_qc10c_only_sha256: 950ca403fc224873762001a013ec278bf93b041eb12e1ad7a0bd3687c86b4f56
+  original_camss_c_untouched: true
+  candidate_camss_delta: qc10c-mapped-DMA-coverage-only
+  nv12_v4l2_new_mode_in_candidate: false
+  one_shot_grub_entry_and_auto_golden_return_scripts_validated_offline: true
+  live_capture_result: NOT_YET_RUN
+  system_default_camera_modified: false
+  native_ir_illumination_authorized: false
+  independent_isp_linear_nv12_and_ubwc_reset_open: true
+  next_gate: root_owned_unarmed_assets_then-single-guarded-qc10c-one-shot-automatic-golden-return
