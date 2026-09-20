@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ik-front-kernel-native-nv12-buffer-plan-offline
+state_id: E004il-front-staged-nv12-v4l2-negotiation-stream-blocked
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-kernel-nv12-planner-compiled-stream-blocked-isp-linear-output-open-ir-off
+status: golden-staged-nv12-negotiation-kernel-build-pass-live-output-isp-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5382,3 +5382,24 @@ e004ik_completed:
   accepted_qc10c_modified: false
   golden_modified: false
   next_gate: exact-sp11-vfe1-linear-bus-ubwc-reset-and-v4l2-mode-isolation
+
+e004il_completed:
+  status: PASS_OFFLINE_KERNEL_NV12_V4L2_NEGOTIATION_STREAM_BLOCKED_BEFORE_PM
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004il-nv12-v4l2-negotiation/RESULT.json
+  kernel_build: PASS
+  kernel_release: 7.1.5-sp11-render-parity-v4+
+  default_qc10c_preserved: true
+  staged_alternate_v4l2_fourcc: NV12
+  staged_alternate_width: 2560
+  staged_alternate_height: 1440
+  staged_alternate_stride_bytes: 2560
+  staged_alternate_sizeimage_bytes: 5529600
+  staged_alternate_streaming: EOPNOTSUPP-before-pipeline-PM
+  offline_regression_tests: 7
+  exact_sp11_linear_isp_recipe_proven: false
+  new_mmio_writes: false
+  camera_runtime: false
+  installed_module: false
+  golden_modified: false
+  next_gate: exact-sp11-linear-FULL-bus-and-ubwc-reset-authority-before-one-shot

@@ -50,6 +50,19 @@ opened by the exporter. Full transaction success is required before export.
 4. Keep passwords/security keys for login. Preview and face-model experiments
    provide neither liveness nor secure biometric authentication.
 
+## Separate NV12 V4L2 negotiation, hard streaming gate — E004il
+
+The exact-source-locked E004il experimental kernel overlay adds a proposed
+2560x1440 single-memory-plane NV12 format to the dedicated X1E80100 front
+PIX format table **after** the accepted QC10C default, with exact format
+negotiation and discrete framesize metadata. Both the pipeline-PM prepare
+stage and stream-start stage reject this NV12 format with EOPNOTSUPP *before*
+any new camera power, pipeline or MMIO activity. Seven offline source/negative
+tests and a complete scratch SP11 ARM64 kernel module build PASS. It is NOT
+installed or enabled and the new format has not been tested via a real
+video-device IOCTL. Real ISP linear output and safe UBWC reset remain
+unproven. See E004il README.
+
 ## Kernel-native, uninstalled linear-NV12 planner — E004ik
 
 A separate fail-closed SP11 kernel-sidecar source now compiles into a
