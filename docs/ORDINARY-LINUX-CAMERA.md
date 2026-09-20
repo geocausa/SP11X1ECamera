@@ -239,6 +239,45 @@ camera or a V4L2 device; only the previous E004ju finite real optical
 4K app test is physically demonstrated. E004jx README contains the
 source identity and next fail-closed integration requirements.
 
+## E004jy: real rear 4K app-sink partial and early-subscriber timings now measured
+
+E004jy ran a NEW one-use camera-capable Linux candidate with the same
+180-source/90-independent-app 4K workload as E004jw. Actual physical rear
+OV13858 Bayer capture completed **180 normal optical 4076×2806 frames**,
+consecutively reported sequences 0–179, converted via transient pipes
+into 3840×2160 NV12. Its physical source timestamp rate under combined
+load was **20.5406 fps** over an 8.71446-s span (p95 interframe gap
+100.169 ms); mean software conversion-only cost was 18.469 ms.
+
+The standard temporary virtual `/dev/video90` subscriber started
+2.771 ms after discovering its 4K NV12 format, 435.15 ms after the
+publisher began. It dequeued **69 full-sized 4K buffers** (virtual seq
+7–75). The separate GStreamer appsink successfully received **68 complete
+4K samples**, then observed an **incomplete next input frame** with
+12,439,552 of 12,441,600 bytes before its six-second idle bound. It
+reported this as PARTIAL, never counted the incomplete image and exited
+nonzero. A flushed appsink progress line showed an initial **31.2835
+observed fps at sample 60**, but the final 68-sample average was
+**12.0007 fps**, with a maximum 3,440.065-ms interarrival gap.
+Therefore these data **do not** establish continuous app 4K30, zero
+repeated virtual frames, a working 90-frame app test or Windows image
+quality parity. The observed shortage is not yet tied to a proven
+specific sensor/driver/queue mechanism; further isolated byte-counting,
+capture cadence, GStreamer and virtual-device backpressure diagnosis
+is needed.
+
+The publisher finished its 180 frames in 9.227 seconds; the independent
+reader did not reach 90 frames and timed out after 24.443 seconds. The
+fail-closed one-shot unloaded /dev/video90 and its temporary module,
+neutralized the media route, automatically returned to protected Golden
+and retired its camera-enabled boot entry, service, temporary raw
+colourbar and private logs. Front video and IR illumination stayed off.
+The identity is consumed and must never be rearmed. E004jy RESULT.json
+and README retain **redacted text-only** evidence. The earlier E004ju
+**short** 27-source/eight-app real optical 4K pass remains valid but
+is not a continuous-app-cadence demonstration; correct front QC10C
+video and OEM Windows ISP colour/detail parity remain open.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
