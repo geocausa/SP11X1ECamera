@@ -75,6 +75,17 @@ class OwnerSafeBootTests(unittest.TestCase):
         self.assertIn("ATTEMPT-CONSUMED",text)
         self.assertIn('[[ ! -f "$T/evidence/OBSERVED.json" ]]',text)
 
+    def test_all_lifecycle_scripts_use_actual_owner_safe_directory(self):
+        correct="experiments/E004-front-ir-vd55g0/e004iw-bootenv-owner-safe-diagnostic"
+        for name in ("install-unarmed.sh","arm-once.sh","retire-after-golden.sh"):
+            source=(HERE/name).read_text()
+            self.assertIn(correct,source,name)
+            self.assertNotIn("e004iw-bootenv-ordered-diagnostic",source,name)
+        for needed in ("run-diagnostic-once.sh",
+                       "99zzzzzz_sp11_camera_e004iw",
+                       "sp11-camera-e004iw-bootenv-diagnostic.service"):
+            self.assertTrue((HERE/needed).is_file(),needed)
+
     def test_unarmed_install_does_not_arm(self):
         text=(HERE/"install-unarmed.sh").read_text()
         self.assertNotIn('grub-reboot "$ID"',text)

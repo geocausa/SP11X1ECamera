@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
 D=/var/lib/sp11-camera-e004iw
-T=$R/experiments/E004-front-ir-vd55g0/e004iw-bootenv-ordered-diagnostic
+T=$R/experiments/E004-front-ir-vd55g0/e004iw-bootenv-owner-safe-diagnostic
 ID=sp11-camera-e004iw-bootenv-diagnostic-one-shot
 cd "$R"
 [[ ! -f "$T/evidence/OBSERVED.json" ]]

@@ -2,7 +2,7 @@
 # E004iw: install a unique, camera-free GRUB diagnostic UNARMED.
 set -Eeuo pipefail
 R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
-T=$R/experiments/E004-front-ir-vd55g0/e004iw-bootenv-ordered-diagnostic
+T=$R/experiments/E004-front-ir-vd55g0/e004iw-bootenv-owner-safe-diagnostic
 D=/var/lib/sp11-camera-e004iw
 GRUB_SCRIPT=/etc/grub.d/99zzzzzz_sp11_camera_e004iw
 UNIT=/etc/systemd/system/sp11-camera-e004iw-bootenv-diagnostic.service

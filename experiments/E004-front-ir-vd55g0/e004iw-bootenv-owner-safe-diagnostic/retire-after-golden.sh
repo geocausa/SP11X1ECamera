@@ -2,7 +2,7 @@
 # E004iw: retire ONLY this unique camera-free diagnostic after Golden return.
 set -Eeuo pipefail
 R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
-T=$R/experiments/E004-front-ir-vd55g0/e004iw-bootenv-ordered-diagnostic
+T=$R/experiments/E004-front-ir-vd55g0/e004iw-bootenv-owner-safe-diagnostic
 D=/var/lib/sp11-camera-e004iw
 UNIT=/etc/systemd/system/sp11-camera-e004iw-bootenv-diagnostic.service
 RUN=/usr/local/sbin/sp11-camera-e004iw-bootenv-diagnostic
