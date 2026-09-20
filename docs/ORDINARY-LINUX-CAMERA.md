@@ -35,6 +35,31 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Front QC10C decoder input and same-machine Windows MFT evidence — E004jj
+
+A SHA-locked offline audit of the archived SP11 Windows camera
+`QcDeviceMFT8380.dll` found **both** `IMAGE_FORMAT_LINEAR_NV12`
+and `IMAGE_FORMAT_UBWC_TP_10` references: the former near BPS
+striping-library assertions and the latter near IPE striping-library
+assertions. These are source-location clues, **not evidence** that
+either library actually converts the captured front camera's QC10C
+pixels into the Windows WinRT reader's selected 1920×1080 NV12.
+The archived WinRT holder created and started its selected reader,
+but contains no independently checked output video-frame pixels.
+
+The actual installed Golden-v4 Qualcomm Iris VDEC has **encoded
+H264/HEVC/VP9/AV1 bitstream** input formats and NV12/QC08C output
+formats; it cannot be used as a generic QC10C camera-buffer input
+converter. Newer upstream Iris QC10C support also concerns compressed
+**video decoder output**, not direct QC10C source conversion. The
+front remains 2560×1440 processed TP10 UBWC with four contiguous
+Y-meta/Y-data/C-meta/C-data regions, 7,778,304 bytes per buffer.
+Do not reinterpret it as linear NV12, P010 or encoded HEVC.
+Five readonly archive/source regression tests PASS. No reboot,
+sensor, codec driver or IR illumination was activated. See E004jj
+README and machine-readable `format-route-gate.json` for the
+remaining independent decoded-image or safe full-ISP-mode gate.
+
 ## Installed SP11 Vulkan Turnip does not advertise 10-bit YUV compressed import — E004ji
 
 The **real physical Adreno X1-85** Turnip Vulkan driver was queried

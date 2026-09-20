@@ -1,0 +1,30 @@
+{
+  "schema": "sp11-e004jj-front-route-gate-v1",
+  "date": "2026-09-20",
+  "status": "NO_VALIDATED_FRONT_QC10C_TO_APP_NV12",
+  "front_accepted_v4l2_fourcc": "Q10C",
+  "front_current_capture": "27 distinct real compressed TP10/UBWC 2560x1440 buffers per bounded test",
+  "front_current_allocation_bytes": 7778304,
+  "front_current_regions": [
+    "Y_META",
+    "Y_TP10",
+    "C_META",
+    "C_TP10"
+  ],
+  "current_turnip_10bit_multiplanar_modifier_available": false,
+  "iris_bitstream_vdec_accepts_raw_qc10c_input": false,
+  "windows_mft_nv12_conversion_owner_proven": false,
+  "windows_mft_contains_ubwc_tp10_and_linear_nv12_format_names": true,
+  "windows_winrt_custom_holder_selected_nv12_1920x1080_and_started": true,
+  "windows_winrt_holder_independent_video_frame_pixels_verified": false,
+  "physical_front_nv12_app_frames_proven": false,
+  "safe_sp11_linear_isp_register_state_transition_proven": false,
+  "require_independent_decoded_image_oracle": true,
+  "warning": "The kernel Iris VDEC consumes encoded H264 HEVC VP9 AV1 bitstreams, not naked captured QC10C. QC10C support in a decoder's capture/output list does not imply QC10C camera-buffer input or conversion. MFT format names alone do not establish TP10-to-NV12 ownership. Never reinterpret or relabel front QC10C as NV12/P010.",
+  "next_required_evidence": [
+    "SP11 version-matched compressed TP10 UBWC decoder and exact metadata plus independent pixel oracle, or validated supported QC10C GPU importer and same-machine memory layout",
+    "Alternatively X1E80100-specific complete ISP linear Y/UV output, validated compression state clear and real camera frames before enabling V4L2 NV12",
+    "After genuine front linear pixels, independently selectable front app endpoint under isolated Golden-return hardware test"
+  ],
+  "no_hardware_test_or_camera_boot_in_this_experiment": true
+}
