@@ -300,6 +300,50 @@ meter. It has **not yet been tested with the physical camera** and
 does not establish either sustained 4K30 or Windows-equivalent ISP
 image processing. See E004jz README/tests for source identity.
 
+## E004ka: physical 4K V4L2 reader-to-application byte boundary measured
+
+The unique E004ka physical candidate repeated the accepted real rear optical
+OV13858 → software NV12 3840×2160 → ordinary selectable /dev/video90 →
+independent V4L2 capture reader → GStreamer app pipeline, now adding the
+byte-preserving E004jz meter **between the independent reader's stdout and
+the application**. The rear sensor produced 180 complete fresh normal
+optical Bayer frames with contiguous reported hardware sequences 0–179,
+at **21.8819 delivered source fps** over its 8.18028-second timestamp
+span under the combined processing workload. All 180 converted to 4K
+NV12; mean converter-only cost was 17.044 ms.
+
+The independent virtual-camera reader dequeued **40 full-sized 4K buffers**
+(virtual sequences 7–46). The meter recorded **497,664,000 bytes read
+and exactly 497,664,000 bytes forwarded**, 40 complete NV12 frames,
+**zero incomplete final-frame bytes**, then stopped on input idle.
+The independent GStreamer app accepted exactly the same **40 complete**
+frames, then reported partial/EOF from the bounded meter. Thus this
+physical run showed **no byte loss between reader stdout, pipe meter
+and appsink**, and the requested 90-frame application test failed
+because insufficient complete V4L2 reader output was available. The
+prior E004jy 2,048-byte truncated-tail observation was *not reproduced*
+here; its exact cause is not established.
+
+Initial 30-sample app arrival was 32.6829 measured fps for that SHORT
+interval, but the 40-sample final average was only **5.3341 fps** owing
+to long stalls (p95 interarrival 2,737.676 ms). The source itself
+also ran below 30fps under concurrent load. Neither sustained app
+4K30, lossless virtual capture, OEM Windows ISP image-quality parity
+nor native front QC10C decoding has been demonstrated. The remaining
+bottleneck is at or before the ordinary reader's stdout in this
+experiment; available evidence does not isolate its cause among
+v4l2loopback, v4l2sink publication, reader timing and V4L2 capture
+semantics. Further source-only driver/pacing inspection and bounded
+isolated trials are required.
+
+E004ka failed closed, automatically returned to protected Golden,
+unloaded /dev/video90 and retired its uniquely identified experimental
+boot, service, private colourbar and logs. No normal optical pixel
+files, front-camera stream or IR illumination were produced. The
+one-shot identity is consumed forever. Redacted E004ka RESULT.json
+and README record the physical findings; the earlier E004ju short
+rear 4K-to-eight-app-frame result remains separately valid.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
