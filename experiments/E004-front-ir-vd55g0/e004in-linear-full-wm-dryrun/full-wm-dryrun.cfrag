@@ -1,0 +1,81 @@
+/* SPDX-License-Identifier: GPL-2.0-only
+ * E004in: compiled, dry-run-only 2-WM FULL NV12 image/buffer update plan.
+ *
+ * Appended to disposable E004im camss-vfe-680.c copy; no live caller.
+ * Image/stride/packer/frame increment values are PROPOSED; matching generic
+ * Qualcomm source does NOT prove physical X1E 10->8-bit output support.
+ * Crucial: the UBWC enable/mode transition is not inferred from packer=3.
+ */
+struct vfe680_x1e_linear_nv12_wm_dryrun {
+	u8 client;
+	u32 image_cfg0;
+	u32 image_cfg2;
+	u32 packer_cfg;
+	u32 frame_incr;
+	u32 image_addr;
+	bool compression_disable_proven;
+	bool isp_linear_rgb_authority_proven;
+};
+
+struct vfe680_x1e_linear_nv12_full_dryrun {
+	struct vfe680_x1e_linear_nv12_wm_dryrun full[2];
+	u32 allocation_bytes;
+	bool verified_ubwc_state_transition;
+	bool approved_for_hardware;
+};
+
+/* Pure data derivation; *zero* writes/reads, PM/device operations or IOCTLs.
+ * Both clients refer to the same separately validated V4L2 DMA allocation.
+ */
+static int __used vfe680_x1e_linear_nv12_full_dryrun_build(
+	struct vfe_device *vfe, struct camss_buffer *buffer,
+	struct vfe680_x1e_linear_nv12_full_dryrun *out)
+{
+	struct vfe680_x1e_linear_nv12_plan p;
+	int ret;
+
+	if (!out)
+		return -EINVAL;
+	memset(out, 0, sizeof(*out));
+	ret = vfe680_x1e_linear_nv12_buffer_plan(vfe, buffer, &p);
+	if (ret)
+		return ret;
+
+	out->full[0].client = 0;
+	out->full[0].image_cfg0 =
+		(VFE680_X1E_LINEAR_NV12_HEIGHT << 16) |
+		 VFE680_X1E_LINEAR_NV12_WIDTH;
+	out->full[0].image_cfg2 = p.y_stride;
+	out->full[0].packer_cfg = 3; /* public BUS ver3 PLAIN_8_LSB_MSB_10 */
+	out->full[0].frame_incr = p.y_bytes;
+	out->full[0].image_addr = p.y_dma;
+	out->full[1].client = 1;
+	out->full[1].image_cfg0 =
+		((VFE680_X1E_LINEAR_NV12_HEIGHT / 2) << 16) |
+		 VFE680_X1E_LINEAR_NV12_WIDTH;
+	out->full[1].image_cfg2 = p.uv_stride;
+	out->full[1].packer_cfg = 3; /* not TP10 11 */
+	out->full[1].frame_incr = p.uv_bytes;
+	out->full[1].image_addr = p.uv_dma;
+	out->allocation_bytes = p.allocation_bytes;
+	/*
+	 * Not populated: old WM MODE_CFG, META_CFG, CTRL_2, BW_LIMIT,
+	 * common UBWC_STATIC_CTRL, exact reset sequence, ISP TOP/RT-CDM
+	 * 10->8-bit YUV output policy and chroma/colorimetry proof.
+	 * Do not synthesize 0-register writes for unknown reset semantics.
+	 */
+	out->verified_ubwc_state_transition = false;
+	out->approved_for_hardware = false;
+	return 0;
+}
+
+/* This code MUST NOT grant hardware access merely because geometry passes.
+ * Full-specific modes require independent same-silicon ISP/UBWC authority.
+ */
+static int __used vfe680_x1e_linear_nv12_full_dryrun_authorize(
+	const struct vfe680_x1e_linear_nv12_full_dryrun *plan)
+{
+	if (!plan)
+		return -EINVAL;
+	return -EOPNOTSUPP;
+}

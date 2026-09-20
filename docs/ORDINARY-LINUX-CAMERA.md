@@ -60,6 +60,20 @@ fails before pipeline PM and the planner remains without runtime callers.
 The module is not installed. Real linear ISP output and compression reset
 are still open hardware gates. See E004im README.
 
+## Kernel-compiled FULL Y/C NV12 dry-run plan — E004in
+
+The next uninstalled SP11 kernel build combines the proposed NV12 V4L2 queue,
+validated kernel-native Y/UV DMA plan and a **data-only** WM0/WM1 FULL
+configuration proposal (image geometry, explicit Y/C strides, generic public
+packer 3, per-client frame increments and DMA image addresses). Seven
+positive/negative tests and the full ARM64 Golden-v4 scratch build PASS.
+There are no new hardware call sites, and NV12 streaming remains blocked
+before pipeline power. The real VFE680 global-reset callback is a no-op
+completion; the accepted bus-stop function disables WMs without clearing
+UBWC MODE_CFG. Explicit SP11 compression-state reset/verification and
+RAW10-to-8-bit ISP output authority remain required before any real NV12
+frames. See E004in README.
+
 ## Separate NV12 V4L2 negotiation, hard streaming gate — E004il
 
 The exact-source-locked E004il experimental kernel overlay adds a proposed
