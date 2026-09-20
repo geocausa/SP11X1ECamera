@@ -1,5 +1,63 @@
 # E004jh — real rear optical camera to standard V4L2 virtual webcam
 
+## Actual E004jh result — real optical rear webcam PASS, candidate retired
+
+The unique camera-capable boot
+`053bfcc0-c416-4c2a-8c08-d8a61d07d36d` passed the exact source,
+R4-complete camera package, separately hash-verified V4L2 loopback,
+previously live-tested CAMSS mapped-DMA guard, stock GRUB writer and
+hardware-free launcher/real-publisher preflights. The actual
+OV13858 sensor first produced its accepted hardware colourbar and
+then **27 complete normal-scene optical Bayer10 frames, hardware
+sequences 0..26 at 29.9502 fps**. The source-pinned C converter
+published 27 uncalibrated 1920×1080 NV12 frames into the now
+**system-discoverable standard** `/dev/video90` webcam device
+(`SP11-Rear-Preview`) via GStreamer `v4l2sink`, with mean
+conversion-only time of **3.5107 ms per frame**.
+
+A **separate standard V4L2 reader**, not a direct pipe from the
+hardware producer, opened /dev/video90 and obtained eight successive
+complete 3,110,400-byte NV12 buffers with virtual sequences **7..14**.
+Its output fed a real GStreamer
+`appsrc → videoconvert → I420 appsink` application consumer, which
+reported **eight valid application frames**. The combined bounded
+publisher/capture/reader interval was **1,247 ms**, including process
+startup, stream acquisition, teardown and IPC; it does NOT measure
+individual sensor-to-screen latency or prove sustained multi-minute
+30fps app throughput. No normal-scene optical Bayer or NV12
+intermediate file was created, and **pixel contents of the eight
+virtual buffers were not saved**; consecutive buffer sequences
+must not be misrepresented as independently hashed colour frames.
+
+The virtual loopback module and /dev/video90 were unloaded before
+the rear route was neutralized and the front was activated.
+In the **same boot**, IMX681 again captured **27 distinct compressed
+QC10C buffers (7,778,304 bytes each)** with the E004ip mapped-DMA
+coverage guard, shadow policy and zero later native sensor writes.
+All three sensors suspended, the final graph was neutral and no
+kernel Oops/panic/IR-emitter marker occurred. Automatic return to
+protected Golden boot
+`e59ae47f-0081-44ca-9d86-6de7a7ee3ff6` succeeded, with
+`saved_entry=sp11-audio-fullio-v19c`, an empty `next_entry`, no
+video/camera/loopback modules or nodes and unchanged default
+kernel/DTB/initrd. The consumed identity was proven unable to rearm;
+root-private front QC10C pixels, rear colourbar, package and
+standalone loopback module, isolated boot entry and test unit
+were retired/deleted after recording non-image evidence in
+`RESULT.json`.
+
+**Scope of this milestone:** the rear hardware actually produces
+video that a standard V4L2 application can select and consume in
+a temporary, camera-capable Linux candidate boot. It is NOT yet a
+persistently installed user-service camera; the colour transform is
+a fast **uncalibrated GRBG tile proxy**, not a full demosaic,
+auto-exposure, auto-white-balance or calibrated ISP implementation.
+Likewise the validated **front** remains QC10C compressed data, not
+true app-displayable NV12; a correct QC10C decoder or safe proven
+linear ISP mode plus its own separate selectable webcam endpoint
+are still required for front/rear Windows parity. Protected IR
+illumination/Hello admission remains explicitly disabled.
+
 2026-09-20. Parent `fb37574`. This is a **NEW unique, single-use
 camera-capable Linux candidate**. E004jf separately proved real
 OV13858 Bayer10→NV12→GStreamer appsrc with eight optical frames and

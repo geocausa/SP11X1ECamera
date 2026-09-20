@@ -35,6 +35,37 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Real rear optical frames reach an independently selectable webcam — E004jh
+
+A new uniquely bounded camera-capable E004jh boot integrated both
+previously independent rear paths. The **actual OV13858 sensor**
+delivered 27 real 4076×2806 packed Bayer10 frames at 29.9502 fps,
+converted immediately in memory into 1920×1080 NV12 previews and
+published via GStreamer `v4l2sink` to discoverable standard
+`/dev/video90` (`SP11-Rear-Preview`). A **separate, ordinary V4L2
+capture client** opened that virtual webcam and retrieved eight
+complete 3,110,400-byte NV12 buffers with ordered virtual sequences
+7..14; a separate GStreamer app consumed all eight. The bounded
+27-source/8-consumer stream elapsed 1,247 ms, including startup and
+teardown; no normal optical or NV12 intermediate file was written.
+The colour converter remains **uncalibrated** and this result does not
+establish per-frame camera-to-screen latency or multi-minute cadence.
+
+The test unloaded virtual camera `/dev/video90` before a neutral
+handoff to front IMX681, which captured 27 distinct compressed QC10C
+frames through the live mapped-DMA guard and shadow policy (zero later
+native sensor writes). All sensors suspended, the final graph was
+neutral, and the test automatically returned to unchanged protected
+Golden. The root-private optical colourbar, front QC10C files,
+virtual module, one-shot boot entry and service were retired/deleted.
+**This is the first physically proven *standard app-selectable rear
+camera endpoint*, but it was deliberately temporary, not installed as
+a persistent desktop service.** The rear still needs a supported
+long-running lifecycle and calibrated image quality; the front still
+needs proper QC10C decoding or verified true linear ISP output plus
+its own separate standard endpoint. IR illumination/Hello remain
+protected. See E004jh README and RESULT.json.
+
 ## Synthetic virtual V4L2 rear device passes on Golden-v4 ABI — E004jg
 
 Ubuntu 26.04's GPL `v4l2loopback` source was compiled **offline** against
