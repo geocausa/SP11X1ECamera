@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gt-bounded-oem-timer-callers-zero-hits-golden-return-pass
+state_id: E004gu-oem-pmic-timer-table-xref-cfg-metadata-audit-pass-early-origin-unknown
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gt-oem-8frame-kd-timer-entry-zero-hits-return-pass-native-ir-off
+status: golden-e004gu-original-pmic-timer-table-provenance-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,22 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gu_current:
+  status: pass-original-oem-pmic-timer-table-cfg-unwind-provenance-offline
+  date: 2026-09-20
+  baseline_commit: e7954fd6b997036c821ca13452497446496764bc
+  original_windows_driver_sys_files_audited: 102
+  exact_contiguous_timer_register_table_unique_to_original_pmic_sys: true
+  four_channel_timer_table_code_ref_rvas: ['0x26e2c', '0x26e60']
+  single_channel_timer_table_code_ref_rva: '0x27010'
+  guard_cf_rva_entries_are_additional_runtime_dispatchers: false
+  pdata_unwind_function_start_entries_are_runtime_dispatchers: false
+  early_firmware_or_windows_generic_timer_initialization_owner_identified: false
+  original_0x93_idle_is_a_verified_pmic_reset_default: false
+  native_ir_emitter_authorized: false
+  new_windows_kd_camera_pmic_or_emitter_activity: false
+  golden_modified: false
+  next: trace-earliest-timer-register-writer-through-pmic-generic-request-or-preos-firmware-with-new-evidence-identity
 e004gt_completed:
   status: pass-oem-windows-8frame-kd-timer-entry-zero-hits-golden-return
   date: 2026-09-20

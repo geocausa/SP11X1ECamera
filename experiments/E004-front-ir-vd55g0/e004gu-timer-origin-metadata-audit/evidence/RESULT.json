@@ -1,0 +1,65 @@
+{
+  "experiment": "E004gu",
+  "status": "PASS_ORIGINAL_OEM_PMIC_TIMER_TABLE_AND_METADATA_PROVENANCE_OFFLINE",
+  "date": "2026-09-20",
+  "baseline_commit": "e7954fd6b997036c821ca13452497446496764bc",
+  "archived_windows_sys_files_scanned": 102,
+  "four_register_literal_sequence_unique_to_qcpmic8380": true,
+  "original_pmic_sha256": "756b5c2e4eb8d5a2bdc0dcc0f7f5703eef79dec0c963155c54e42097bc2f790e",
+  "pinned_binary_sha256": {
+    "qcpmic8380.sys": "756b5c2e4eb8d5a2bdc0dcc0f7f5703eef79dec0c963155c54e42097bc2f790e",
+    "qcpmicapps8380.sys": "8418c2739e6d969a0c791d937a09f583eeeacd70e866126d9362b2f56d13cca7",
+    "qcpmicglink8380.sys": "00a73e2b050d2299a33ee6823756dc94ce2a5f9e70948fc563a05938803cae2b",
+    "qccamflash8380.sys": "6bc1d698bc3b6da16974cd6f3ea89dc1ba6a8ea102eebe1a5d41129b4eb9ba2b"
+  },
+  "pmic_function_and_metadata_classification": {
+    "pmic_timer_register_table_rva": "0x36d48",
+    "pmic_timer_registers": [
+      "0xee3e",
+      "0xee3f",
+      "0xee40",
+      "0xee41"
+    ],
+    "recognized_code_refs_to_timer_table": [
+      "0x26e2c",
+      "0x26e60",
+      "0x27010"
+    ],
+    "actual_indirect_runtime_timer_callbacks": {
+      "slot5_four_channel": "0x39498 -> 0x26d50",
+      "slot6_single_channel": "0x394a0 -> 0x26f30"
+    },
+    "guardcf_allowed_target_table": {
+      "rva": "0x36218",
+      "entries": 438,
+      "four_timer_entry": "0x364c4",
+      "single_timer_entry": "0x364c8",
+      "runtime_callback_table": false
+    },
+    "pdata_unwind_function_start_metadata": {
+      "four_timer": "0x3faa0",
+      "single_timer": "0x3faa8",
+      "runtime_callback_table": false
+    },
+    "true_additional_timer_callback_dispatchers_from_cfg_pdata": false
+  },
+  "executable_immediate_0x93_sites": {
+    "qcpmic8380.sys": [],
+    "qcpmicapps8380.sys": [],
+    "qcpmicglink8380.sys": [
+      "0xc740"
+    ],
+    "qccamflash8380.sys": []
+  },
+  "no_literal_0x93_in_three_named_executable_drivers_proves_no_timer_writer": false,
+  "four_register_literal_absence_in_other_sys_excludes_computed_or_indirect_writers": false,
+  "alternative_windows_oem_early_init_or_uefi_firmware_timer_source_identified": false,
+  "windows_preexisting_0x93_is_true_pmic_reset_default_proven": false,
+  "normal_oem_preview_postboot_timer_entry_calls_observed": false,
+  "golden_idle_0x93_physically_enforces_200ms": false,
+  "new_windows_kd_camera_pmic_or_emitter_activity": false,
+  "linux_native_ir_emitter_authorized": false,
+  "golden_modified": false,
+  "verifier_sha256": "81f54553c9aecfdb78b2c162f038c6e7c1c91c3a677e0ba417e16f5891226cc9",
+  "negative_test_sha256": "8fcd130d17810e6b51251d5ab49b98bd766bef268b23e6a6f997b2bcf2e3e83f"
+}
