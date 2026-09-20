@@ -35,6 +35,34 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Both real RGB camera hardware routes validated — E004jc
+
+A unique source-locked, candidate-only E004jc camera boot added the missing
+front 41,088-byte SHA-verified derived R4 bootstrap as a separately
+staged root-private sidecar to the unchanged accepted camera package.
+The **actual packaged** front launcher passed an offline dry-run before
+the single boot was armed. The candidate boot successfully captured
+**eight distinct normal optical rear OV13858 Bayer10 frames at 29.9501
+fps**, returned the graph to neutral, then captured **27 distinct,
+sequential 7,778,304-byte front IMX681 QC10C frames** using the E004ip
+mapped-DMA guard module on actual SP11 V4L2/vb2 buffers. The front
+producer passed 24 rows under shadow policy with zero later native
+sensor writes; all sensors suspended and the final route was neutral.
+Both Ubuntu GRUB writers finished successfully in the E004iy-ordered
+configuration, and the unconditional service returned the machine to
+protected Golden. The camera-candidate root tree, R4 sidecar, optical
+frames and unique boot entry/service were retired/deleted following
+redacted proof. The candidate driver is not installed as the Golden
+default.
+
+This completes the **bounded live front/rear capture and mapped-DMA guard
+regression**, NOT ordinary application camera parity. Rear still needs a
+live calibrated Bayer-to-NV12 pipeline and app endpoint; the front
+remains compressed Qualcomm QC10C/TP10-UBWC and needs a verified
+decoder or true safe linear ISP NV12 output before apps can display it.
+No IR emitter/Hello or native post-G3 writes were enabled. See E004jc
+README and RESULT.json.
+
 ## Real rear optical NV12 preview, front bootstrap packaging gate — E004ja
 
 The distinct, consumed E004ja one-shot successfully captured the rear

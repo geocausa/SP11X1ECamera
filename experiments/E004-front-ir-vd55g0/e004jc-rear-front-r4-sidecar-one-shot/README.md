@@ -1,5 +1,48 @@
 # E004jc — root-private R4 sidecar and bounded rear→front DMA regression
 
+## Real E004jc result — both physical camera routes PASSED
+
+The uniquely identified candidate boot `c344cd57-8dc8-4a00-a7a0-88c79d238616`
+passed both ordered Ubuntu GRUB service gates, exact SHA-pinned camera
+package and R4 sidecar preflight, and the real packaged launcher
+offline plan. The route progression was `neutral → rear-only → neutral
+→ front-only → neutral`. The rear OV13858 produced one byte-exact
+hardware colourbar and **eight distinct real optical Bayer10 frames**
+at **29.9501 fps**. After a verified neutral handoff, the front IMX681
+produced **27 distinct and sequential QC10C frames, each 7,778,304
+bytes**, using the exact E004ip mapped-DMA coverage guard module
+`4297bb57ae19fd972955cd679ebc0bb337b089299cfc88f8fe77c555ad8c799d`.
+Its 24-row producer passed with the `shadow` post-G3 policy and
+**zero later native sensor writes**. All three sensors suspended after
+the streams, the final graph was neutral, and saved kernel health
+showed no Oops, panic or IR-illumination marker.
+
+The one-shot service exited successfully and rebooted to protected
+Golden boot `234821d0-ae99-4b66-a452-b7fb3c2376fa`, with saved
+Golden `sp11-audio-fullio-v19c`, empty `next_entry`, no camera
+module/node and clean tracked Git. The consumed identity was
+explicitly checked not to rearm. The unique GRUB entry, service,
+boot assets, derived R4 capsule sidecar, optical frames, QC10C frames
+and all private root staging were then deleted or retired. Only
+redacted metadata is committed: `RESULT.json` and the historically
+named no-rearm sentinel `evidence/PRE-CAMERA-ABORT.json` (the latter
+does **not** mean E004jc aborted; E004jc **passed**).
+
+**Precisely what was proven:** the bounded *real SP11 V4L2* front QC10C
+producer can acquire 27 frames while the new mapped-DMA coverage
+check runs in the candidate CAMSS driver, and safe rear-to-front
+camera hardware handoff succeeds. This is not a proof that every
+future DMA mapping will be contiguous or that a different camera
+format is safe. The validated guard is **not yet installed as the
+production/default module**.
+
+**Precisely what is still missing:** real front QC10C decoding or
+verified hardware ISP output to *genuine linear* NV12, a live rear
+Bayer→NV12 delivery service with proper image-quality calibration,
+and two ordinary Linux application-facing selectable video endpoints.
+Do not mislabel the 27 compressed front frames as webcam-ready NV12
+or claim full Windows parity.
+
 2026-09-20. Parent `55e0dd1`. New unique one-shot, not a retry
 of consumed E004iq, E004iz or E004ja. Golden v4 is preserved.
 
