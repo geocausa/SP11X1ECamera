@@ -29,9 +29,37 @@ The protected provider, CPZ sample backing, FastRPC FD handoff lifetime, SecureP
 
 This is an external trust/admission blocker, not missing Linux algorithm code. Do not weaken verification to get runtime output.
 
-### Front post-G3 changed native feedback
+### Front post-G3 changed native feedback — CLOSED by E004en
 
-The one-write production policy is implemented and bounded, but the latest live scene remained preview-cap-active for every eligible G4..G24 source. There was no legitimate APPLY_ONE_NATIVE opportunity to prove. Wait for a naturally changed/brighter scene and observe decision 4 under `shadow` before consuming a fresh `cap-release-one-shot` candidate.
+The original scene-gated evidence gap was resolved in E004en on
+2026-09-15. The single, consumed one-shot ran 27 front-RGB frames and
+observed one naturally changed post-G3 native tuple applied to IMX681
+at source G4/request7 for effect at G7. It used no synthetic control
+delta, second later write or same-boot camera rerun. The candidate was
+retired and returned to protected Golden Linux. The earlier cap-active
+observation remains historical context, NOT a current blocker. Do not
+repeat the consumed E004en identity or demand another scene change.
+
+### Native front-IR illumination and offline face processing — SEPARATE BLOCKED PATH
+
+E004fu demonstrated 16 live ambient/unilluminated VD55G0 optical captures,
+but the steady grayscale signal was low (mean 38.6–39.7/255, max 48)
+and NOT validated for facial authentication. E004hi/HZ/IA demonstrate
+an uninstalled ordinary Linux HLOS pixel/transaction/public visible-light
+YuNet/SFace diagnostic; public-fixture inference is neither live VD55G0
+near-IR face validation nor Windows Hello security or protected processing.
+
+E004ge still lacks calibrated optical radiometry, measured electrical/
+optical pulse and current, independently verified stuck-high strobe/
+host-failure autonomous LED-off, physically reviewed hardware cutoff,
+and exact wiring/routing evidence for native Linux IR illumination.
+The discovered idle PMIC timer 0x93 is not that physical proof. Do NOT
+enable native IR illumination, enroll a user or attach this offline
+prototype to PAM/login on the strength of software and register evidence.
+
+Protected Windows Hello parity is separately blocked by legitimate
+production SecurePD worker signing/admission; neither a nonprotected
+HLOS image nor weakening trusted-worker verification can replace it.
 
 ## Default rule
 
