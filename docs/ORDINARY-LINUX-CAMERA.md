@@ -60,6 +60,23 @@ fails before pipeline PM and the planner remains without runtime callers.
 The module is not installed. Real linear ISP output and compression reset
 are still open hardware gates. See E004im README.
 
+## QC10C mapped-DMA safety candidate — E004ip
+
+Source review found the already accepted front QC10C capture path checks the
+V4L2 allocation length and 32-bit base/end but does not establish that the
+entire 7,778,304-byte compressed surface is covered by a continuous
+*device-mapped* DMA address range. An E004ip scratch-only kernel patch now
+checks actual mapped scatter-gather entries for complete adjacent DMA
+coverage, supporting multiple contiguous DMA segments and rejecting gaps,
+short mappings, zero-length entries and stale cached DMA bases. The exact
+inserted C guard passed ten synthetic cases each under GCC and Clang
+ASan/UBSan, with six source-integrity/negative tests and a full ARM64
+Golden-v4 uninstalled CAMSS module build PASS. This is NOT yet the accepted
+QC10C driver: real SP11 mapped-buffer behavior and bounded live capture
+regression remain to be verified before installing this candidate.
+NV12 STREAMON remains blocked and separate ISP/UBWC linear-output authority
+is unchanged. See E004ip README.
+
 ## DMA-contiguous NV12 buffer gate — E004io
 
 The next strictly uninstalled Golden-v4 kernel build strengthens the
