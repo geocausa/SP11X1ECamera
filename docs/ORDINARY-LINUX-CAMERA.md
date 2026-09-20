@@ -133,6 +133,23 @@ graphs and fail-closed output/CLI conditions pass. A previously accepted
 archived samples do not reveal the actual missing E004jq graph: its
 cause is still unknown. Golden remains unchanged. See E004jr README.
 
+## E004js complete camera media graph physically verified (non-streaming)
+
+A new uniquely identified camera-capable E004js **read-only diagnostic**
+candidate bound rear OV13858, front IMX681 and IR VD55G0 sensors and
+observed all three runtime-suspended, with no stream or IR illumination.
+On its *first* attempt `media-ctl -d /dev/media0 -p` returned a complete
+44-entity graph including all ten required roles, 16 video nodes and
+28 subdevices (19,307 bytes, exit 0, empty stderr). E004js captured
+**zero optical or test-pattern frames**, loaded no virtual webcam and
+performed no 4K application delivery. Its automatic return to protected
+Golden and retirement of unique candidate boot/service/assets are
+verified. Earlier E004jq failure to discover a graph was not logged
+well enough to establish its cause; this success shows the graph can
+register in a separate equivalent candidate, not why E004jq failed.
+No native rear 4K optical webcam or front QC10C decoder is claimed.
+Redacted E004js RESULT.json and README record the unique boot/return.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
