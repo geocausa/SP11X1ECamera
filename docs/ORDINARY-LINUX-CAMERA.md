@@ -35,6 +35,27 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Fast bounded rear Bayer-to-NV12 offline batch — E004iu
+
+The E004is rear Bayer-to-NV12 preview was functionally correct but
+needed roughly 53–56 ms per archived colour-bar frame on SP11, too slow
+for a single-threaded 30 fps pipeline. E004iu adds a separately
+validated, **uncalibrated** C11 nearest-Bayer-tile colour proxy. It
+reads actual accepted 4076x2806, stride-5104 `pgAA` rear frame
+payloads and outputs real 1920x1080 NV12 bytes. A 27-frame offline
+batch of **27 repetitions of one previously captured rear test-pattern
+frame**, not fresh optical captures, averaged approximately 3.0 ms
+conversion time or 5.2 ms including that batch's input/output file
+operations per frame; its resulting 27-frame NV12 stream passed
+GStreamer. Fifteen source/colour/sanitizer/IO/batch regression tests
+pass. These timings exclude compiling the offline helper, live sensor
+acquisition and application presentation. No full spatial demosaic,
+calibrated IQ, **live 30 fps camera** or app device is proven; front
+QC10C compressed data cannot use this Bayer converter. A new
+privacy-controlled normal rear sample, proper colour processing and
+a separate standard rear video endpoint are still necessary. See
+E004iu README/RESULT.json.
+
 ## Both RGB cameras: source-aware desktop readiness — E004it
 
 The read-only `python3 tools/camera-desktop-status.py --json` now reports

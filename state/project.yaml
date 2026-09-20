@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004it-both-rgb-source-aware-desktop-readiness-contract-offline
+state_id: E004iu-rear-fast-bounded-nv12-batch-offline-front-qc10c-isp-gated
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-rear-real-colourbar-nv12-offline-front-compressed-source-gated-dual-app-endpoints-unverified-ir-off
+status: golden-rear-offline-27-frame-repeat-pattern-fast-nv12-pass-front-true-isp-output-gated-dual-app-endpoints-unverified-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5593,3 +5593,36 @@ e004it_dual_rgb_desktop_contract_completed:
   default_install_authorized: false
   golden_modified: false
   next_gate: calibrated-bounded-rear-normal-video-to-separate-app-endpoint-and-front-real-decompression-or-safe-linear-isp-output-then-dual-switching
+
+e004iu_rear_fast_preview_completed:
+  status: PASS_OFFLINE_BOUNDED_REAR_27_REPEAT_PATTERN_TO_NV12_GSTREAMER
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004iu-rear-fast-nv12-offline/RESULT.json
+  rear_source: accepted-E004dz-OV13858-rear-colorbar
+  source_fourcc: pgAA
+  source_stride_bytes: 5104
+  source_frame_bytes: 14321824
+  output_fourcc: NV12
+  output_geometry: 1920x1080
+  output_frame_bytes: 3110400
+  reference_colourbar_single_output_sha256: 86f496416883d7728675802c70a0c83adb10d1a02591a56de1fe45cc3e223d0b
+  offline_repeat_pattern_batch_frames: 27
+  offline_repeat_pattern_frame_provenance: one-preexisting-colorbar-repeated-not-new-captures
+  average_compiled_c_only_conversion_ms: 3.0197
+  average_compiled_c_file_io_plus_conversion_ms: 5.164685185185185
+  c_helper_offline_wrapper_compilation_excluded_from_timing: true
+  previous_python_preview_approximate_conversion_ms: 53-56
+  offline_positive_negative_tests: 15
+  compiled_c_with_asan_and_ubsan: PASS
+  synthetic_2x2_grbg_to_nv12_known_colors: PASS
+  synthetic_two_distinct_frames_order_preserved: PASS
+  gstreamer_consumed_offline_27_frame_nv12_stream: PASS
+  fast_rear_preview_colour_calibrated: false
+  spatial_demosaic_or_windows_iq_proven: false
+  real_time_live_30fps_stream_or_app_endpoint_proven: false
+  front_qc10c_not_supported_by_rear_preview: true
+  front_true_linear_isp_or_qc10c_decode_proven: false
+  temporary_optical_preview_files_removed: true
+  camera_kernel_module_or_boot_changed: false
+  golden_modified: false
+  next_gate: rear-calibrated-optical-video-and-front-proven-true-desktop-output-then-front-rear-app-selection
