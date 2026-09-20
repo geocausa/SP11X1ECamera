@@ -150,6 +150,36 @@ register in a separate equivalent candidate, not why E004jq failed.
 No native rear 4K optical webcam or front QC10C decoder is claimed.
 Redacted E004js RESULT.json and README record the unique boot/return.
 
+## First physical rear 4K selectable V4L2 webcam delivered to an ordinary app — E004ju
+
+The unique E004ju camera-capable candidate physically captured **27 consecutive
+fresh rear OV13858 optical Bayer frames** at 4076×2806 `pgAA` (hardware
+sequences 0–26, timestamp-derived source cadence 29.9504 fps over 26
+inter-frame intervals), *after* its physical rear colourbar and disabling
+test-pattern mode. E004jm-derived bounded, still **uncalibrated** software
+conversion produced 27 complete **3840×2160 NV12** buffers in direct
+transient pipes (mean conversion-only 11.559 ms). The standard selectable
+Linux virtual `/dev/video90` advertised NV12 3840×2160; a **separate
+ordinary V4L2 capture process** received eight complete 12,441,600-byte
+4K buffers (virtual sequences 6,9,10,11,12,13,14,15), and a genuine
+GStreamer I420 application received all eight samples in its bounded
+228-ms app interval using synthetic PTS. This is the FIRST physically
+observed real rear optical→4K standard V4L2→app chain on SP11 Linux,
+not merely synthetic 4K output or an internal appsrc mock. Source-sensor
+29.9504 fps does NOT establish 4K30 sustained application output,
+lossless buffering, end-to-end latency or Windows-quality ISP; virtual
+sequence gaps 7–8 occurred near subscriber startup and require further
+diagnosis. Output uses 8-bit proxy bilinear Bayer colour processing
+without OEM matrix/exposure/white balance, native ISP or matched pixel
+quality. Front QC10C decoding/normal native Linux camera remains open.
+
+The E004ju single-use experiment unloaded virtual video90, neutralized
+rear route, returned automatically to protected Golden boot and retired
+the unique candidate modules/GRUB/service and private raw colourbar.
+No normal optical image file was saved, front/IR was not streamed, and
+IR illumination was not enabled. Only redacted E004ju RESULT.json
+and README persist. E004ju must never be rearmed.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
