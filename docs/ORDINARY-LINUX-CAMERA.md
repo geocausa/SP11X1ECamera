@@ -49,3 +49,13 @@ opened by the exporter. Full transaction success is required before export.
    and independently validated illumination safety remain unresolved.
 4. Keep passwords/security keys for login. Preview and face-model experiments
    provide neither liveness nor secure biometric authentication.
+
+## Conversion implementation finding — E004ig
+
+Official Mesa 26.0.8 and current upstream Freedreno snapshots explain the
+missing compressed P030 advertisement: the generic DRI format mapping is
+not backed by a TP10 texture/layout path in the inspected implementation.
+A modifier-list edit or routine Mesa upgrade is not a demonstrated fix.
+Next inspect a separate linear-YUV ISP output candidate, preserving the
+accepted QC10C parity path, before any new camera runtime. Full details and
+source hashes are in E004ig. No conversion implementation is claimed.
