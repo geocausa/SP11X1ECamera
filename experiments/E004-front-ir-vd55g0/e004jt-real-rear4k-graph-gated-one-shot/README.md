@@ -1,5 +1,11 @@
 # E004jt — first graph-gated live rear 4K virtual-camera candidate
 
+## Actual E004jt one-shot result — fail closed before sensor capture
+
+One-use camera-capable candidate `e1bb0532-83e8-4697-8e3b-5449c784325c` passed package/GRUB/source guards and the improved current-boot graph diagnostic on its **first** try: complete 44-entity media graph, no stderr, 19,279 bytes of topology, and successful independent unified parser. The next command was the pre-stream route-state checker. The system journal reports `run-once.sh: line 190: .../route-state.py: Permission denied`, with service exit code **126**: the committed `route-state.py` was mode **0644** and the runner mistakenly executed it directly instead of invoking Python. Thus the rear test pattern, normal optical capture, 4K converter, standard virtual webcam and app **never ran** in this candidate; the kernel did not report an Oops/panic or IR-illumination-on marker. The service automatically returned to Golden boot `5033a749-f6da-4eb3-b7d0-155835a2ef4b`, original saved entry with empty next_entry and no experimental camera modules/nodes. The unique candidate service, boot entry, copied modules, private logs and stage were retired, and `evidence/PRE-CAMERA-ABORT.json` marks the **E004jt identity consumed; never rearm it**. See `RESULT.json`.
+
+The failure is a launch-script executable-permission defect, **not** a sensor, media graph, 4K algorithm or 4K delivery finding. A NEW uniquely identified candidate must explicitly call `/usr/bin/python3 route-state.py` everywhere, include an offline static check for the route helper's non-executable mode, pass the same graph-first checks and use its own fresh single-use Golden-returning boot. It still must not claim live 4K optical video until independent app buffers are observed.
+
 2026-09-20. New single-use identity distinct from E004jq (consumed fail-closed) and E004js (consumed diagnostic pass). Source parent `0c9b2c5`. Goal: only after verified *current-boot* complete 44-role media graph gate, connect actual OV13858 optical RAW10 4076×2806 to the bounded E004jm 3840×2160 NV12 converter, standard 4K /dev/video90, independent V4L2 subscriber and GStreamer application.
 
 ## What is already physically demonstrated vs not
