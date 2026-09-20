@@ -50,6 +50,16 @@ opened by the exporter. Full transaction success is required before export.
 4. Keep passwords/security keys for login. Preview and face-model experiments
    provide neither liveness nor secure biometric authentication.
 
+## One combined, non-runnable NV12 kernel build — E004im
+
+E004im builds the alternate V4L2 negotiation and the separately checked
+kernel-native Y/UV DMA planner together in a single disposable SP11 ARM64
+CAMSS module. Exact source-hash and geometry consistency checks and seven
+negative integration tests PASS. QC10C stays first/default, NV12 STREAMON
+fails before pipeline PM and the planner remains without runtime callers.
+The module is not installed. Real linear ISP output and compression reset
+are still open hardware gates. See E004im README.
+
 ## Separate NV12 V4L2 negotiation, hard streaming gate — E004il
 
 The exact-source-locked E004il experimental kernel overlay adds a proposed
