@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004hc-original-oem-flash-pmic-matching-guid-and-ioctl-handler-offset-proven
+state_id: E004hd-original-oem-flash-ioctl-live-four-channel-handler-resolved-golden-return
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004hb-generic-hardware-idle-no-positive-control-native-ir-off
+status: golden-e004hd-readonly-oem-pmic-ioctl-handler-resolved-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,27 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004hd_completed:
+  status: pass-fresh-read-only-windows-pmic-ioctl-live-handler-pointer-golden-return
+  date: 2026-09-20
+  new_windows_boots_consumed: 1
+  original_pmic_live_base: fffff803477a0000
+  first_loaded_kernel_uptime_s: 10.807
+  original_pmic_dispatch_global_rva: '0x3b8d8'
+  original_pmic_dispatch_global_at_initial_load: '0x0'
+  final_kernel_uptime_s: 26.746
+  final_live_handler_table_rva: '0x39470'
+  final_live_handler_slot_offset: '0x90'
+  final_live_handler_target_rva: '0x285c0'
+  physical_original_four_channel_callback_in_this_session_executed: false
+  timer_byte_0x93_first_writer_identified: false
+  original_sp7_kd_log_sha256: 72d567f1f679d307d59519376e5da56b4f39436aea2f06a254f4506e6afe332a
+  kd_breakpoints_cleared_log_closed_and_stopped: true
+  golden_return_boot_id: 9fe8087b-9476-4ea1-9d26-fda7b59c9828
+  new_camera_preview_pmic_register_write_or_fault_injection: false
+  native_ir_emitter_authorized: false
+  independent_physical_cutoff_proven: false
+  next: trace-normal-flash-subtype-0-caller-and-timer-origin-through-proven-four-channel-handler
 e004hb_completed:
   status: pass-bounded-original-kd-log-inconclusive-callback-no-hit-golden-return
   date: 2026-09-20
