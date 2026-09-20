@@ -1,5 +1,40 @@
 # E004jg — isolated virtual rear webcam endpoint (synthetic-only test)
 
+## Observed E004jg result — synthetic V4L2 device PASS and retired
+
+The unique candidate boot `6af9cc03-9633-4945-9d98-d8f2cae9c8b9` passed the
+ordered GRUB-writer and exact binary gates, created **/dev/video90**
+card `SP11-Rear-Preview` with standard Video Capture / Video Output /
+Read/Write / Streaming V4L2 capabilities, and was visible in
+`v4l2-ctl --list-devices`. The synthetic GStreamer publisher
+negotiated **NV12 1920×1080**, 3,110,400 bytes per frame; a separate
+standard V4L2 reader retrieved **eight complete video frames** and
+piped them into an actual GStreamer appsrc→videoconvert→appsink
+application, which reported PASS for all eight. This was **a synthetic
+ball test pattern, not live rear optical pixels**. No physical
+camera, front, IR sensor, IR emitter or secure Hello path was opened.
+
+The service exited successfully, stopped the publisher and unloaded
+`v4l2loopback`, checking that /dev/video90 disappeared, then
+automatically rebooted to protected Golden boot
+`a9116028-f9ea-449a-ae0f-4670c86c45ea`. Golden kept its original
+`sp11-audio-fullio-v19c` saved entry, empty `next_entry`, and no
+camera/loopback module or video device. No kernel Oops/panic/IR
+activation marker was observed. Its unique identity was proven
+unrearmable; the temporary GRUB entry, systemd unit, private copied
+loopback module, synthetic test logs and isolated boot assets were
+removed. Only non-image evidence was recorded in `RESULT.json`.
+The previously installed reversible E004iy GRUB-writer ordering
+configuration remains in place.
+
+**What is established:** SP11's Golden-v4 ABI accepts this out-of-tree
+V4L2 loopback driver under isolated conditions, and arbitrary standard
+V4L2 readers can discover and consume a correctly formatted synthetic
+video endpoint. **What is not established:** connecting the real
+rear NV12 stream to that virtual device, persistent device/service
+integration, colour calibration, long-duration cadence, a front
+QC10C decoder or front system webcam. Those require separate gates.
+
 2026-09-20. Parent `a5acabb`. The E004jf physical boot already proved that eight real
 rear OV13858 Bayer frames can travel directly from V4L2 through the
 uncalibrated Bayer-to-NV12 converter into a real GStreamer application

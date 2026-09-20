@@ -35,6 +35,24 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Synthetic virtual V4L2 rear device passes on Golden-v4 ABI — E004jg
+
+Ubuntu 26.04's GPL `v4l2loopback` source was compiled **offline** against
+the exact Golden-v4 custom kernel ABI. A unique synthetic-only boot used
+Golden's original kernel, initrd and **non-camera DTB**, then created a
+standard discoverable `/dev/video90` card `SP11-Rear-Preview`.
+A bounded GStreamer synthetic ball publisher negotiated 1920×1080 NV12;
+an independent standard V4L2 reader acquired eight complete frames and
+passed them to a real GStreamer application consumer. It unloaded the
+loopback module, removed the node and returned automatically to Golden.
+The one-shot boot assets and private copied module were retired.
+**No real rear optical camera was connected to this device in this test.**
+E004jf separately established eight *real* rear V4L2 optical frames into
+GStreamer. The next gate is the **combined real rear-to-virtual camera
+path**, proper image calibration and sustained application delivery;
+front compressed QC10C still needs decoding or verified linear ISP NV12.
+See E004jg README/RESULT.json.
+
 ## Real rear V4L2 Bayer10 to GStreamer appsrc, then front 27 QC10C — E004jf
 
 The new uniquely bounded E004jf candidate loaded the E004jd R4-complete
