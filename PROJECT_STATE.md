@@ -1,3 +1,5 @@
+E004ha complete (2026-09-20): original OEM PMIC generic writer +32b70 appears at true callback table +3a510; code +2f918 / +20304 exposes four-function table head +3a4f8 and code +2fdd0 / +2021c exposes two-function suffix +3a508 on 0x4a descriptor path. Original writer accepts u16 address/u8 length and calls raw-write +23dc8. Offline verifier and 12 negative tests pass. Runtime invocation and first timer writer remain unobserved; Golden unchanged, native IR off. See E004ha README.
+
 E004gz complete (2026-09-20): original PMIC raw write bypasses +2fc54 and +303b4 cannot overlap timer registers by original ARM64 address arithmetic. Remaining generic 16-bit address write at +32c2c is indirectly exported via genuine data callback slot +3a510; dispatch owner and 0x93 writer still unknown. Offline verifier and 11 negative tests passed; no devices operated. Golden remains protected, native IR off. See E004gz README.
 
 ## E004gy lower-level PMIC raw-write hardware KD — complete and Golden returned
