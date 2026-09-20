@@ -99,6 +99,26 @@ standard virtual webcam with strict source/candidate provenance, followed
 by sustained cadence/quality validation. Front QC10C remains an
 independent unresolved source-to-pixels gate.
 
+## E004jq physical rear 4K candidate — discovery abort, no optical capture
+
+A distinct, source-pinned **real rear 4K one-shot** passed offline 4K
+converter/application/publisher, release/R4 and GRUB-ordering preflights.
+Its only physical candidate boot initialized rear and front camera sensors
+and the IR sensor in standby (no IR illumination or stream), but the
+required unified media-graph discovery **did not succeed** before timeout.
+The debug output had been suppressed: the precise failure cause remains
+**unverified**. No rear colourbar, fresh normal optical frame, 4K virtual
+camera, application frame or front capture occurred in that candidate.
+The service failed closed, automatically returned to protected Golden,
+and the unique boot entry, service, private stage and logs were retired.
+This consumed **E004jq** one-shot cannot be rearmed. Earlier E004jp
+*synthetic* selectable 4K and E004jh *real 1080p* achievements are
+unchanged; do not combine their distinct evidence into a claimed real
+4K webcam. Next requires a **new unique** diagnostic candidate that
+preserves bounded non-image media inventory, parser stdout/stderr and
+kernel graph status before any physical streaming. E004jq RESULT.json
+and README contain the verified boundary and Golden-return status.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
