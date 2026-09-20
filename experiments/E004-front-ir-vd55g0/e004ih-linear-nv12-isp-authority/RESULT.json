@@ -1,0 +1,58 @@
+{
+  "accepted_qc10c_unchanged": true,
+  "accepted_source_sha256": {
+    "src/front-imx681/desktop-output-contract.json": "72486cd33a9a8d6b560faa1db44ddab5a50c88be1de901de25f99a4863e5edfa",
+    "src/front-imx681/kernel/camss/camss-vfe-680.c": "5af25a42cd15aa5b4c0721da1929b3e50b7bac43e40bdb0962ba996f189632ec",
+    "src/front-imx681/kernel/camss/camss-vfe.c": "98474729d5036a4e1770e3ab7d275ccaaba143b22202468e4ad8b93c0cbec2cb",
+    "src/front-imx681/kernel/camss/camss-video.c": "c046b3156f5507755fd6df6cc5398ea1513ce4365ee1feb9395828f2495121ac",
+    "src/front-imx681/userspace/runtime/front-imx681-production-capture.c": "8cb1e4135007bf93abf241bb4122c57ff62592e35dd15e283bab4807162d6eb1"
+  },
+  "based_on": "555f086882131626eb1b5ceea641d2fa0bdf3f4d",
+  "camera_runtime": false,
+  "candidate_format": "NV12",
+  "candidate_name": "front-rgb-linear-nv12-separate-mode",
+  "experiment": "E004ih",
+  "golden_modified": false,
+  "memory_layout_proposal_only": {
+    "height": 1440,
+    "isp_clients": [
+      0,
+      1
+    ],
+    "proposed_stride_bytes": 2560,
+    "proposed_total_bytes": 5529600,
+    "uv": {
+      "bytes": 1843200,
+      "offset": 3686400,
+      "rows": 720
+    },
+    "v4l2_memory_planes": 1,
+    "width": 2560,
+    "y": {
+      "bytes": 3686400,
+      "offset": 0,
+      "rows": 1440
+    }
+  },
+  "not_authorized": [
+    "kernel mode selection",
+    "ISP register writes",
+    "camera boot",
+    "camera capture",
+    "QC10C replacement",
+    "continuous output"
+  ],
+  "public_vendor_vfe_bus_ver3": {
+    "nv12_packer_enum_name": "PACKER_FMT_VER3_PLAIN_8_LSB_MSB_10",
+    "same_sp11_isp_register_value_confirmed": false,
+    "separate_uncompressed_nv12_full_yc_case": true
+  },
+  "required_before_hardware": [
+    "prove exact X1E80100 FULL_Y/FULL_C uncompressed NV12 register set and IP compatibility",
+    "prove disable/restore compression and metadata controls without changing accepted QC10C",
+    "specify and isolate alternate V4L2 format, buffers, 32-bit DMA spans and both-client completion",
+    "verify ISP scaler, colourimetry, chroma order and per-plane stride from independent authority",
+    "offline build/regression and bounded fresh one-shot candidate with Golden rollback"
+  ],
+  "status": "OFFLINE_NV12_GEOMETRY_ONLY_NOT_HARDWARE_AUTHORIZED"
+}

@@ -50,6 +50,17 @@ opened by the exporter. Full transaction success is required before export.
 4. Keep passwords/security keys for login. Preview and face-model experiments
    provide neither liveness nor secure biometric authentication.
 
+## Separate linear-NV12 offline candidate — E004ih
+
+Qualcomm's public VFE BUS ver3 code has a distinct noncompressed NV12 FULL
+Y/C format case. A source-locked, fail-closed offline experiment proposes
+2560x1440 NV12 in 5,529,600 contiguous bytes at a *proposed* 2560-byte
+stride and verifies that original QC10C files are unchanged (10 tests PASS).
+The exact SP11 VFE1 uncompressed programming, pixel output and lifecycle
+are NOT proven; there is no executable NV12 camera mode yet. See
+`experiments/E004-front-ir-vd55g0/e004ih-linear-nv12-isp-authority/README.md`.
+No new camera boot or IR change is authorized by this specification.
+
 ## Conversion implementation finding — E004ig
 
 Official Mesa 26.0.8 and current upstream Freedreno snapshots explain the
