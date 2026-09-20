@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "PASS_OFFLINE_CURRENT_FULL_PACKAGE_LIFECYCLE",
+  "base_commit": "67f45800d0c343cda8e2cc12a93c9c6c4b493ce5",
+  "machine": "SP11 Linux ARM64",
+  "boot_id": "b151079f-6d5d-48fa-937a-2b1eff6d992b",
+  "scratch_root": "/tmp/sp11-package-check-uEIxBnwq",
+  "checks": [
+    "exact current hardware rebuild",
+    "package verification",
+    "fresh install and verification",
+    "same-package reinstall and verification",
+    "uninstall",
+    "unrelated etc and var/local sentinels preserved",
+    "managed library roots removed",
+    "Golden and idle guard before and after"
+  ],
+  "camera_runtime": false,
+  "live_install": false,
+  "ir_illumination": false,
+  "securepd_admission": false,
+  "inputs": {
+    "src/sp11-camera-stack/build-hardware-authority.sh": "8de1e660bf76ecf3e7efe8093cb90a630e29413b333893ba140c4d328fe7efd0",
+    "src/sp11-camera-stack/stage-full-package.sh": "21a02f69785b4dfd9b7006856f17322252e3427cb61ede92ec17e583bf225de2",
+    "src/sp11-camera-stack/install-staged-root.sh": "4e159adedd588643c10241f5a85740d46c7586c23b3f50ececabf038a7c317f7",
+    "src/sp11-camera-stack/uninstall-root.sh": "0cb3d6cd1bb1512420ac65cea923d44955b0a70933385072592733c7e8899156",
+    "src/sp11-camera-stack/offline-root-guard.py": "11ea8ea2c43daaf42528021b339466d6d1a6b7b0451df6e26d5c9ef467766e4c",
+    "src/sp11-camera-stack/verify-package.py": "a675c76c6a4dcad7972cb14693cafaefb4377b682cee5eee934fe530ce1cc222",
+    "src/sp11-camera-stack/verify-installed-root.py": "7f4e0d380f4e382a89fe843b1f93c7a28f833a67227a95d9b5ed3190b040937b"
+  },
+  "evidence": {
+    "LIFECYCLE.txt": "3e3c8b358626c5973144948fb7a5f456a93c25bf99618d6d5642a72d6270d531",
+    "BUILD.txt": "b9abcd75ee278a28c6430c56e4714c4b972f2e62b580b20c884f39ed20f1b89f",
+    "FRONT-PACKAGE-MANIFEST.sha256": "48bee8318ac0ac3359d9e9c760eaed42e23ddbe118d9d719baad19890d1b5341",
+    "HARDWARE-MANIFEST.sha256": "ad96f706b5e0c5440707c0b9dc5d40a1376391b792f03d3d20bba5d23244f53c",
+    "CAMERA-STACK-MANIFEST.sha256": "11a649fafbfbfc3467f86f2f17d8ff4d4a86e2f5f4fc36c7f1d1c7839160c646"
+  }
+}
