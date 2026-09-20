@@ -50,6 +50,19 @@ opened by the exporter. Full transaction success is required before export.
 4. Keep passwords/security keys for login. Preview and face-model experiments
    provide neither liveness nor secure biometric authentication.
 
+## Windows WinRT 1920x1080 NV12 target and offline bridge — E004ij
+
+A previously overlooked SHA-pinned original SP11 Windows holder log establishes
+an actual successful WinRT front Color/VideoRecord reader with NV12 1920x1080.
+This is the app-facing format of that holder, not proof of stock Camera UI's
+default resolution. Distinguish it from sensor RAW10 3840x2160 and internal
+processed QC10C 2560x1440 FULL output. The offline-only E004ij prototype
+converts two synthetic 2560x1440 linear-NV12 frames to two 1920x1080 NV12
+frames through installed GStreamer. Both frames retained their distinct
+constant Y and neutral UV; all six tests PASS. The converter **cannot** read
+compressed QC10C. Actual linear ISP image capture/colourimetry and webcam
+application integration remain unproven. See E004ij README.
+
 ## Offline linear-NV12 buffer implementation — E004ii
 
 A separate fail-closed ARM64 C component now calculates the proposed NV12

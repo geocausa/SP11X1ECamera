@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ii-front-linear-nv12-buffer-plan-offline
+state_id: E004ij-winrt-nv12-1920x1080-offline-desktop-bridge
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-linear-nv12-buffer-plan-tested-isp-register-authority-open-ir-off
+status: golden-winrt-record-size-confirmed-offline-bridge-tested-isp-linear-output-open-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5344,3 +5344,24 @@ e004ii_completed:
   hardware_runtime_authorized: false
   golden_modified: false
   next_gate: exact-sp11-isp-bus-ubwc-transition-and-v4l2-format-isolation
+
+e004ij_completed:
+  status: PASS_WINDOWS_WINRT_NV12_VIDEORECORD_FORMAT_AND_OFFLINE_GSTREAMER_DESKTOP_BRIDGE
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004ij-windows-app-nv12-offline/README.md
+  windows_winrt_front_color_video_record_fourcc: NV12
+  windows_winrt_front_color_video_record_width: 1920
+  windows_winrt_front_color_video_record_height: 1080
+  windows_winrt_frame_reader_start: success
+  stock_windows_camera_ui_default_resolution_proven: false
+  windows_sensor_width_height: [3840, 2160]
+  windows_isp_full_width_height: [2560, 1440]
+  offline_nv12_source_width_height: [2560, 1440]
+  offline_nv12_desktop_width_height: [1920, 1080]
+  offline_synthetic_frames_tested: 2
+  offline_python_tests_passed: 6
+  real_linux_linear_isp_capture_proven: false
+  real_camera_application_output_proven: false
+  accepted_qc10c_changed: false
+  golden_modified: false
+  next_gate: exact-sp11-isp-linear-nv12-bus-and-ubwc-transition-authority
