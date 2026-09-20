@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004is-both-rgb-rear-real-colorbar-nv12-offline-front-nv12-isp-blocked
+state_id: E004it-both-rgb-source-aware-desktop-readiness-contract-offline
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-rear-bayer-real-colourbar-nv12-gstreamer-pass-front-compressed-isp-hardware-gated-ir-off
+status: golden-rear-real-colourbar-nv12-offline-front-compressed-source-gated-dual-app-endpoints-unverified-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5567,3 +5567,29 @@ e004is_rear_desktop_preview_completed:
   new_camera_module_or_boot: false
   golden_modified: false
   next_gate: separate-rear-front-desktop-device-selection-and-calibrated-output-no-front-qc10c-mislabel
+
+e004it_dual_rgb_desktop_contract_completed:
+  status: PASS_OFFLINE_FRONT_REAR_SOURCE_AWARE_APP_READINESS_DIAGNOSTIC
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004it-dual-rgb-desktop-contract/RESULT.json
+  maintained_contract: src/sp11-camera-stack/rgb-desktop-output-contract.json
+  rear_sensor: OV13858
+  rear_source_fourcc: pgAA
+  rear_real_archived_colourbar_to_nv12_gstreamer: PASS_OFFLINE_UNCALIBRATED
+  rear_live_app_endpoint_proven: false
+  front_sensor: IMX681
+  front_source_fourcc: Q10C
+  front_synthetic_already_linear_nv12_scaler: PASS_OFFLINE_SYNTHETIC_ONLY
+  front_real_linear_nv12_or_qc10c_decode_proven: false
+  front_live_app_endpoint_proven: false
+  common_future_desktop_fourcc: NV12
+  common_future_desktop_resolution: 1920x1080
+  selectable_dual_live_devices_proven: false
+  positive_and_negative_contract_tests: 14
+  gstreamer_libcamera_pipewire_prerequisites_present_on_golden: true
+  camera_media_video_nodes_present_on_golden: false
+  v4l2loopback_kernel_module_present: false
+  diagnostic_opens_cameras_or_changes_services: false
+  default_install_authorized: false
+  golden_modified: false
+  next_gate: calibrated-bounded-rear-normal-video-to-separate-app-endpoint-and-front-real-decompression-or-safe-linear-isp-output-then-dual-switching

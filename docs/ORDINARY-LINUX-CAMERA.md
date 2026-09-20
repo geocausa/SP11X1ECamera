@@ -35,6 +35,23 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Both RGB cameras: source-aware desktop readiness — E004it
+
+The read-only `python3 tools/camera-desktop-status.py --json` now reports
+**rear OV13858 and front IMX681 independently**. A new shared output
+contract validates the accepted rear `pgAA`/GRBG10 frame against E004is
+real archived-rear-to-NV12 offline evidence, and the accepted front
+`Q10C` compressed surface against its existing exact hardware contract.
+The diagnostic reports both possible future 1920x1080 NV12 application
+endpoints as `NOT_VERIFIED`; a synthetic-only front linear NV12 scaler
+is NOT mistaken for a working QC10C decoder or a real front stream.
+Fourteen positive and negative tests pass, including rejection of false
+live-device, switching and default-install claims. SP11 already has its
+libcamera/GStreamer/PipeWire prerequisites, but no cameras are exposed
+on protected Golden, and the running kernel lacks v4l2loopback.
+No kernel/video/IR module is loaded and the read-only diagnostic opens
+no camera. See E004it README and `src/sp11-camera-stack/rgb-desktop-output-contract.json`.
+
 ## Rear RGB ordinary-video prototype — E004is
 
 The accepted OV13858 rear path already captured 4076x2806 GRBG10 packed
