@@ -35,6 +35,21 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Production package includes required SHA-pinned front bootstrap — E004jd
+
+The E004jc real front test needed a separately installed root-private
+R4 derived bootstrap sidecar because Git archive omitted the ignored
+`r4-bootstrap.bin`. E004jd fixes this in the maintained production
+source: an exact 41,088-byte hash- and provenance-verified R4 is now
+included in newly staged packages and **both** generated manifests.
+A freshly source-built 51-file package and its packaged front launcher
+passed offline checks, including eight positive/negative tests for
+missing or corrupt R4, symlinks and unlisted files. Historical 50-file
+packages do **not** satisfy the strict new production gate.
+The package is not installed into protected Golden and neither front
+QC10C decoding nor a live rear desktop endpoint is implied. See
+E004jd README.
+
 ## Both real RGB camera hardware routes validated — E004jc
 
 A unique source-locked, candidate-only E004jc camera boot added the missing

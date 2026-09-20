@@ -4,6 +4,9 @@ This tree is the stable, non-experiment-path form of the proven SP11 front RGB s
 
 It contains:
 
+- the source-verified 41,088-byte *derived* R4 bootstrap capsule is Git-ignored, but production staging now requires its exact pinned SHA-256, checks the committed `r4-bootstrap.json` metadata and installs only that local file into the generated package at mode 0600. Both front and unified output manifests name this file; absent/corrupt R4 now fails staging before any camera boot (E004jd). The capsule itself is never committed or installed in protected Golden.
+
+
 - `kernel/camss/`: the final R27 CAMSS authority;
 - `kernel/imx681/`: the CW atomic clustered IMX681 driver and mode table;
 - `userspace/runtime/`: frozen HC/native AEC/CQ/scheduler sources plus the HI production capture helper and write-policy gate;

@@ -29,4 +29,7 @@ git -C "$REPO" archive HEAD:src/sp11-camera-stack README.md PROVENANCE.json | ta
  find usr -type f -print0 | sort -z | xargs -0 sha256sum > CAMERA-STACK-MANIFEST.sha256
 )
 printf 'SP11_CAMERA_STACK_STAGE=PASS ACTIVATED=NO\n'
+# Production front RGB launch requires a separately SHA-verified R4 capsule
+# that git archive would otherwise omit. Both manifests must cover it.
+python3 "$ROOT/verify-package.py" "$OUT" --require-r4 > "$OUT/.rgb-r4-stage-verification.log"
 sha256sum "$OUT/FRONT-PACKAGE-MANIFEST.sha256" "$OUT/CAMERA-STACK-MANIFEST.sha256"
