@@ -27,6 +27,24 @@ on the return. These measured Windows front/rear RGB resolutions
 supersede relying on another platform's 720p browser demo as our
 own SP11 quality target. No IR/Hello test was made.
 
+## Experimental rear 4K NV12 buffer feasibility — E004jl
+
+The **same SP11's Windows** rear VideoRecord delivered 3840×2160 NV12
+buffer handles; the current temporary Linux rear webcam was previously
+proved only at 1920×1080. A new **offline-only** C converter now
+accepts a complete 4076×2806 rear pgAA Bayer frame and generates
+3840×2160 NV12 using a 3840×2160 parity-preserving crop and bilinear
+8-bit Bayer processing rather than upscaling a 1080p proxy. An
+archived **rear hardware colourbar**, not a current optical scene,
+produced a complete 12,441,600-byte 4K NV12 buffer consumed by
+GStreamer; seven source/negative/format tests and ASan/UBSan replay
+passed. This only closes an **offline buffer-format feasibility gate**:
+the converter is uncalibrated, its isolated measured conversion times
+included 36.840 ms and 60.099 ms, no sustained 4K30 is established,
+and neither a live 4K camera nor a 4K virtual webcam was opened.
+Front compressed QC10C is completely separate and still undecoded.
+No camera power, module, boot or IR state changed. See E004jl README.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
