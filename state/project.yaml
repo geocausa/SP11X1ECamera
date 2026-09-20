@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004jc-rear8-front27-live-qc10c-mapped-dma-guard-pass-golden
+state_id: E004je-rear-bayer10-stdin-to-nv12-gstreamer-appsrc-offline-pass
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-real-rear8-front27-bounded-hardware-success-front-qc10c-decode-and-rear-live-desktop-app-endpoints-still-gated-ir-off
+status: golden-rear-real-hardware-capture-proven-offline-bounded-rear-gstreamer-pipe-pass-live-app-input-unverified-front-qc10c-decoder-gated-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5805,3 +5805,22 @@ e004jd_production_package_r4_staging_fix:
   front_qc10c_decode_completed: false
   live_rear_desktop_endpoint_completed: false
   next_gate: validated_mapped_dma_guard_source_promotion_and_separate_real_rear_nv12_live_application_endpoint
+
+e004je_rear_bayer_to_gstreamer_appsrc_stream_offline:
+  status: PASS_SOURCE_ONLY_BOUNDED_BAYER_TO_NV12_APP_PIPE_TESTPATTERN_NOT_LIVE
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004je-rear-live-appsrc-bridge/README.md
+  converter_source: experiments/E004-front-ir-vd55g0/e004je-rear-live-appsrc-bridge/rear-bayer-stdin-to-nv12.c
+  consumer_source: experiments/E004-front-ir-vd55g0/e004je-rear-live-appsrc-bridge/nv12-appsrc-consumer.py
+  accepted_archived_rear_colorbar_streamed_with_exact_old_nv12_sha: true
+  gstreamer_real_appsrc_to_videoconvert_to_appsink_one_frame: PASS
+  eight_archived_colorbar_repetitions_bounded_pipe_to_gstreamer: PASS
+  offline_positive_negative_tests: 9
+  bounded_frames_max: 27
+  no_intermediate_optical_or_nv12_frame_files: true
+  physical_rear_v4l2_stream_piped_into_appsrc_proven: false
+  standard_discoverable_video_device_created: false
+  rear_colour_demosaic_and_calibration_complete: false
+  front_genuine_nv12_or_qc10c_decode_complete: false
+  golden_device_nodes_modules_or_grub_modified: false
+  next_gate: new_unique_bounded_candidate_pipe_real_rear_v4l2_8_frames_to_gstreamer_appsrc_with_automatic_golden_return

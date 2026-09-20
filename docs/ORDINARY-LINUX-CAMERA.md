@@ -35,6 +35,20 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Bounded rear NV12-to-GStreamer application pipe — E004je
+
+A source-only bounded rear RGB bridge now converts whole packed Bayer10
+`pgAA` frames from STDIN using the **same validated E004iu colour proxy**,
+then sends proper 1920×1080 NV12 frame bytes to a real GStreamer
+`appsrc → videoconvert → appsink` application pipeline with 30fps buffer
+PTS, bounded queues, count/EOS validation and no intermediate image files.
+On protected Golden, the archived hardware rear **colour-bar** frame
+reproduced its exact accepted NV12 hash and an eight-frame repeated
+colour-bar pipe delivered eight app samples. Nine offline tests pass;
+no camera was opened. This is not a live V4L2 producer test or a
+system-wide virtual webcam; the physical live pipeline and ordinary
+app discovery remain separate gates. See E004je README.
+
 ## Production package includes required SHA-pinned front bootstrap — E004jd
 
 The E004jc real front test needed a separately installed root-private
