@@ -278,6 +278,28 @@ and README retain **redacted text-only** evidence. The earlier E004ju
 is not a continuous-app-cadence demonstration; correct front QC10C
 video and OEM Windows ISP colour/detail parity remain open.
 
+## E004jz: source-only byte-exact 4K pipe-boundary instrumentation
+
+The physical E004jy test's independent reader dequeued 69 complete-sized
+4K NV12 buffers, while its GStreamer app counted 68 complete frames and
+received only **12,439,552 of 12,441,600 bytes** for the next input image
+before an idle timeout. Dequeuing a full V4L2 buffer does not prove the
+entire payload was subsequently written to stdout or consumed by the app.
+
+New **source-only** E004jz adds a bounded, byte-preserving, low-overhead
+C pipe transducer. In a future uniquely isolated experiment it can sit
+between an independent ordinary V4L2 reader and E004jx's GStreamer
+consumer and report **bytes actually read and forwarded**, complete
+4K frame boundaries, incomplete tail size, input EOF/idle/error and
+monotonic full-frame boundary timing. It never emits image bytes to
+logs, writes image files, changes pixels or accesses any camera,
+module, IR or boot controls. Its seven camera-free Golden tests passed,
+including an exact synthetic **2,048-byte** tail shortfall and a real
+GStreamer app consuming two complete 4K synthetic frames through the
+meter. It has **not yet been tested with the physical camera** and
+does not establish either sustained 4K30 or Windows-equivalent ISP
+image processing. See E004jz README/tests for source identity.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
