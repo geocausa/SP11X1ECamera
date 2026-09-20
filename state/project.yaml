@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ix-disposable-grubenv-writer-race-reproduced-boot-services-unchanged
+state_id: E004iy-reversible-stock-grub-writer-order-cold-boot-success
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-disposable-grubenv-race-reproduced-stock-grub2-writer-fails-front-rear-live-app-endpoints-gated-ir-off
+status: golden-grub-writer-order-cold-boot-pass-front-rear-live-desktop-endpoints-unverified-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5680,3 +5680,24 @@ e004ix_offline_grubenv_writer_race_reproducer:
   exact_e004iq_original_error_root_cause_proven: false
   experimental_camera_boot_armed: false
   next_gate: independently-validate-reversible-service-writer-serialization-and-rollback-before-physical-front-rear-test
+
+e004iy_reversible_grub_writer_serialization:
+  status: PASS_MANUAL_SERVICE_START_AND_ONE_ORDINARY_GOLDEN_COLD_BOOT
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004iy-grub-writer-order-reversible/RESULT.json
+  dropin_installed: /etc/systemd/system/grub2-common.service.d/90-sp11-serialize-grubenv-writers.conf
+  original_ubuntu_service_exec_commands_modified: false
+  private_original_grubenv_backup_exists: true
+  exact_private_backup_and_live_grubenv_sha256: 151df76c93e71843bb39c645a8a9d37d524b3e3e347f3d6eb3a4418cb85493ba
+  rollback_script: experiments/E004-front-ir-vd55g0/e004iy-grub-writer-order-reversible/rollback.sh
+  manual_serialized_fallback_then_grub2_service_both_success: true
+  normal_golden_cold_boot_id: 67795738-e246-40ae-8177-5f7b531b768b
+  normal_golden_cold_boot_both_grub_writer_services_success: true
+  normal_golden_cold_boot_writer_order: fallback-before-grub2
+  normal_golden_cold_boot_grubenv_read_error: false
+  physical_camera_modules_loaded_or_camera_boot_armed: false
+  permanent_golden_kernel_dtb_initrd_or_saved_default_modified: false
+  physical_capture_regression_proven_after_boot_fix: false
+  repeat_boot_reliability_proven: false
+  original_e004iq_root_cause_exclusively_race_proven: false
+  next_gate: unique-bounded-rear-and-front-hardware-regression-after-candidate-boot-preflight-checks

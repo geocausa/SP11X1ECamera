@@ -83,8 +83,18 @@ class GRUBServiceOrder(unittest.TestCase):
             result=subprocess.run(["bash","-n",str(path)],capture_output=True,text=True,timeout=10)
             self.assertEqual(result.returncode,0,result.stderr)
 
-    def test_not_installed_at_time_of_offline_test(self):
-        self.assertFalse(Path(REAL).exists())
-        self.assertFalse(Path("/var/lib/sp11-camera-e004iy").exists())
+    def test_live_deployment_is_exact_scoped_dropin_or_absent(self):
+        active=Path(REAL)
+        if not active.exists():
+            self.assertFalse(Path("/var/lib/sp11-camera-e004iy").exists())
+            return
+        self.assertEqual(active.read_bytes(),DROP.read_bytes())
+        unit=subprocess.run(["systemctl","show","grub2-common.service",
+                             "-p","DropInPaths","-p","Wants","-p","After"],
+                            capture_output=True,text=True,check=True,timeout=15)
+        self.assertIn("DropInPaths="+REAL,unit.stdout)
+        self.assertIn("grub-initrd-fallback.service",unit.stdout)
+        self.assertTrue(Path("/var/lib/sp11-camera-e004iy").exists())
+
 
 if __name__=="__main__":unittest.main(verbosity=2)

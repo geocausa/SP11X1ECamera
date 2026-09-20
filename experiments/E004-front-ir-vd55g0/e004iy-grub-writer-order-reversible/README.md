@@ -1,5 +1,9 @@
 # E004iy — reversible serialization of stock GRUB environment writers
 
+## Observed on-machine deployment and single ordinary Golden reboot
+
+The source-locked drop-in was installed without arming a camera or GRUB one-shot. The actual systemd graph exposed `After=` and `Wants=` for `grub-initrd-fallback.service`; original Ubuntu service commands were unchanged, and GRUB environment bytes were identical to the private backup immediately after installation. A controlled manual start on Golden then showed fallback success **before** grub2-common success. One subsequent **ordinary Golden reboot**, boot ID `67795738-e246-40ae-8177-5f7b531b768b`, showed the fallback service finishing at monotonic 12.052 s and grub2-common starting at 12.053 s, both success/exit 0. The transient GRUB environment read error seen on the two prior boots did not recur on this boot. The live GRUB environment and original private snapshot both SHA-256 `151df76c93e71843bb39c645a8a9d37d524b3e3e347f3d6eb3a4418cb85493ba`, with saved Golden `sp11-audio-fullio-v19c` and empty `next_entry`. No camera hardware was opened, no candidate was armed, and protected Golden kernel/DTB/initrd were unchanged. The reversible drop-in and private backup **remain installed** for subsequent independent bounded camera validation; the rollback script remains available. This is **one cold-boot success**, not evidence of indefinite boot/recovery reliability or proof of E004iq's exact original failure cause. Full outcome: `RESULT.json`.
+
 Date: 2026-09-20. Parent: `3eabdd4`. Camera project encompasses
 **rear OV13858 AND front IMX681 RGB**; both physical capture paths
 have previously produced real frames, but ordinary Linux selectable

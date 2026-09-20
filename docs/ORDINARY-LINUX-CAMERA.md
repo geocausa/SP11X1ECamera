@@ -35,6 +35,22 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Reversible GRUB writer serialization — E004iy
+
+After the disposable-file E004ix race reproducer, a scoped removable
+`grub2-common.service` drop-in now requests and waits for the stock
+`grub-initrd-fallback.service` to finish before writing the shared
+GRUB environment. The original Ubuntu commands, persistent Golden boot
+and kernel/DTB/initrd remain unchanged. A controlled real service start
+and an ordinary Golden cold reboot both completed with BOTH GRUB services
+successful and in the intended order. No transient environment-read
+failure appeared on that reboot; its Golden GRUB environment bytes
+matched the pre-install private snapshot. This is **one** Golden reboot
+and does not prove indefinitely reliable boot behaviour or authorize
+unbounded camera access. The ordering drop-in is still installed with
+an independent rollback script and no camera or one-shot boot armed.
+See E004iy README and RESULT.json.
+
 ## GRUB writer concurrency reproduced without touching Golden — E004iw/E004ix
 
 E004iw's new camera-free candidate proved that a **read-only GRUB
