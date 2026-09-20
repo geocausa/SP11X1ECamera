@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004he-original-oem-subtype0-vs-timer-live-table-callgraph-reconciled
+state_id: E004hf-alternate-flash-start-and-fixed-1270ms-timer-helper-excludes-direct-idle-0x93
 phase: camera-stack-front-ir-illumination-timing-authority
 status: golden-e004hd-readonly-oem-pmic-ioctl-handler-resolved-native-ir-off
 golden:
@@ -87,6 +87,23 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004hf_completed:
+  status: pass-original-oem-alternate-start-two-callers-fixed-helper-values-offline
+  date: 2026-09-20
+  alternate_flash_start_rva: '0x48c8'
+  original_direct_alternate_start_callers: ['0x6638', '0x6a20']
+  original_direct_timer_helper_callers: ['0x4938', '0x5b2c']
+  alternate_start_requests_timer: true
+  normal_subtype_zero_direct_dispatch_is_complete_lifecycle_proven: false
+  fixed_helper_requested_nominal_enabled_ms: 1270
+  fixed_helper_pmictimer_encoded_enabled_byte: '0xfe'
+  fixed_helper_pmictimer_encoded_disabled_byte: '0x00'
+  fixed_helper_directly_requests_archived_idle_byte_0x93: false
+  original_0x93_first_writer_identified: false
+  other_indirect_preos_or_firmware_timer_writers_excluded: false
+  native_ir_emitter_authorized: false
+  new_windows_camera_pmic_led_or_debugger_activity: false
+  next: identify-distinct-prior-or-indirect-0x93-timer-writer
 e004he_completed:
   status: pass-original-oem-subtype-zero-vs-timer-cross-driver-live-table-route-offline
   date: 2026-09-20
