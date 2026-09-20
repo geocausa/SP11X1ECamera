@@ -45,6 +45,39 @@ and neither a live 4K camera nor a 4K virtual webcam was opened.
 Front compressed QC10C is completely separate and still undecoded.
 No camera power, module, boot or IR state changed. See E004jl README.
 
+## Rear 4K offline conversion performance and exact output preservation — E004jm
+
+A new **offline-only** E004jm fused C path retains E004jl's exact 3840×2160
+NV12 output bytes for archived rear colourbar and nonuniform synthetic
+packed-Bayer patterns while sharing neighbouring samples across each 2×2
+bilinear output tile. All eight baseline-versus-optimized source/format/
+negative tests pass; ASan/UBSan and real GStreamer offline replay pass.
+Five independent short colourbar runs on this SP11 measured E004jl baseline
+36.356–40.733 ms versus fused 12.148–18.086 ms *conversion time only*;
+eight repeats of the SAME colourbar measured 11.313 ms fused average
+conversion versus 30.732 ms baseline (not independent live optical frames).
+This is not 4K30 sustained camera, validated live 4K V4L2 delivery,
+colorimetric Windows parity, or a native sensor ISP: real optical capture,
+application backpressure and long-run thermal/latency remain separate.
+Protected Golden, rear 1080p temporary webcam and front compressed-QC10C
+gate remain untouched. E004jm README/test suite records exact evidence.
+
+## Rear 4K offline delivery into a real GStreamer application — E004jn
+
+A separate 3840×2160 NV12 application receiver now accepts the E004jm
+rear Bayer→NV12 output through a bounded GStreamer appsrc→queue→
+videoconvert→I420 appsink pipeline. Six offline tests pass; two
+**synthetic** nonuniform source frames were separately identified at
+the application output, and an optional consumer-side hash gate rejects
+repeated payloads. A file-free eight-frame pipeline with **eight repeats
+of the same archived rear hardware colourbar** delivered 8/8 consumer
+samples (15.595 ms averaged converter work, 198 ms application pipeline
+interval). The app timestamps were synthesized and this was not an
+eight-frame live optical recording, ordinary selectable 4K V4L2 camera,
+long-run 4K30 guarantee, measured capture latency, calibrated colour
+pipeline or native ISP. Nothing in this new offline path decodes front
+QC10C or changes the protected Golden kernel/boot. See E004jn README.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
