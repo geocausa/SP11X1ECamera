@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004iz-rear-idle-startup-route-pre-stream-abort-retired
+state_id: E004ja-rear-eight-real-bayer-optical-to-nv12-pass-front-r4-packaging-block
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-writer-health-on-camera-candidate-pass-initial-rear-only-route-failclosed-no-frames-front-rear-live-gated-ir-off
+status: golden-real-rear-eight-optical-30fps-fast-offline-nv12-gstreamer-pass-front-r4-sidecar-not-packaged-qc10c-dma-unverified-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -5724,3 +5724,30 @@ e004iz_combined_rear_front_one_shot:
   golden_kernel_dtb_initrd_saved_default_unmodified: true
   ir_illumination_started: false
   next_gate: unique-bounded-candidate-requires-idle-rear-only-or-neutral-startup-then-explicit-route-neutralization-before-rear-front-capture
+
+e004ja_live_rear_normal_optical_and_front_r4_gate:
+  status: PARTIAL_REAR8_REAL_OPTICAL_NV12_GSTREAMER_PASS_FRONT_R4_PACKAGE_MISSING_RETIRED
+  date: 2026-09-20
+  evidence: experiments/E004-front-ir-vd55g0/e004ja-rear-front-dma-one-shot/RESULT.json
+  candidate_boot_id: 5c89b663-0a87-4108-80ce-c53b44987e52
+  golden_return_boot_id: 841a0a8a-a718-4e79-bc56-6041674e55e3
+  stock_grub_writer_order_and_success: PASS
+  rear_hardware_colourbar_exact: PASS
+  rear_normal_optical_bayer_frames: 8
+  rear_normal_optical_fps: 29.9504
+  rear_normal_distinct_frames: 8
+  rear_offline_NV12_1920x1080_frames: 8
+  rear_offline_NV12_distinct_frames: 8
+  rear_offline_NV12_gstreamer_acceptance: PASS
+  rear_offline_NV12_conversion_average_ms: 3.4232
+  rear_offline_NV12_with_batch_disk_io_average_ms: 5.8775625
+  rear_real_optical_image_quality_calibrated: false
+  rear_live_desktop_endpoint_proven: false
+  front_launcher_first_failure: missing-41088-byte-gitignored-r4-bootstrap-bin-in-packaged-tree
+  front_launcher_r4_original_source_sha256: 1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa
+  front_qc10c_streamed_frames: 0
+  front_mapped_dma_guard_physically_tested: false
+  candidate_one_shot_retired: true
+  private_optical_frames_and_nv12_deleted_after_evidence: true
+  protected_golden_default_and_no_ir_illumination: true
+  next_gate: unique-source-locked-front-r4-bootstrap-sidecar-staging-with-offline-launcher-proof-before-bounded-front-qc10c-dma-guard-test

@@ -35,6 +35,30 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Real rear optical NV12 preview, front bootstrap packaging gate — E004ja
+
+The distinct, consumed E004ja one-shot successfully captured the rear
+OV13858 hardware colourbar plus **eight distinct real normal-scene Bayer10
+frames** at 29.9504 fps; the rear-to-front handoff route was neutral.
+The eight normal optical Bayer frames were privately converted to eight
+distinct 1920×1080 NV12 previews on Golden; the real eight-frame output
+was accepted by GStreamer. Mean conversion-only time was 3.4232 ms per
+frame, and the batch I/O+conversion average was 5.8776 ms per frame.
+This is a fast **uncalibrated offline colour proxy**, not yet a live
+ordinary Linux camera endpoint. The optical frames and previews were
+kept private on SP11 then deleted after non-sensitive evidence collection.
+
+The front QC10C launcher stopped **before streaming**, because the
+accepted package's git-archive staging excludes the pinned 41,088-byte
+`r4-bootstrap.bin` through `*.bin` ignore. The local accepted file
+exists and hashes to the exact launcher-pinned digest; a new candidate
+must stage it independently as a private, separately verified sidecar,
+then prove a launcher dry-run without hardware before attempting live
+front capture. The E004ja one-shot and private system assets were
+retired; the physical QC10C DMA guard remains untested. The E004iy
+reversible GRUB writer ordering passed again on E004ja and remained
+installed. See E004ja README and RESULT.json.
+
 ## First combined rear/front candidate — E004iz consumed before streaming
 
 The new E004iz one-shot verified that both GRUB writer services completed

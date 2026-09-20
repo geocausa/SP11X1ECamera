@@ -1,5 +1,11 @@
 # E004ja — bounded rear Bayer then front QC10C, idle-rear normalization
 
+## Actual E004ja outcome — rear real frames and NV12 pass; front packaging gate failed
+
+The single E004ja candidate boot `5c89b663-0a87-4108-80ce-c53b44987e52` passed the ordered GRUB-writer and source-lock gates, started with a **neutral** graph, captured one byte-exact rear hardware colourbar frame, then **eight distinct real rear optical Bayer10 frames** at 29.9504 fps. It neutralized the rear route before front discovery and retained a neutral final graph. On Golden return `841a0a8a-a718-4e79-bc56-6041674e55e3`, the private real eight-frame Bayer stream was converted offline to eight distinct 1920x1080 NV12 preview frames (SHA-256 `467c093db022a72044839826142a24d4f3f7bd0242c9f0e88aacf29cdad7cfff`) at 3.4232 ms average conversion alone, 5.8776 ms including batch input/output; a real GStreamer NV12 consumer accepted all eight. This is a **basic uncalibrated offline colour proxy**, not a calibrated or live webcam. Raw optical frames were kept private on SP11 and must be deleted after evidence collection.
+
+The **front RGB QC10C test never reached streaming**: the accepted launcher rejected `R4 bootstrap identity` because its required 41,088-byte `userspace/iq/authority/r4-bootstrap.bin` was absent from the Git-archive-built package. The original local accepted file matches the launcher SHA-256 `1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa`, but is excluded by the repository's `*.bin` ignore pattern; the accepted 50-file package manifest never included it. This is a packaging omission, not proof of a front DMA guard failure. A future distinct candidate must **separately hash and privately stage the R4 sidecar and validate the launcher dry-run without hardware** before arming. The E004ja run is consumed, must not be rearmed and has no front-QC10C hardware verdict. Non-sensitive summary: `RESULT.json`.
+
 2026-09-20. Distinct new one-shot candidate after retired E004iz. Parent
 `4f4d2e9`. The goal is to advance **both** rear OV13858 and front
 IMX681 into selectable ordinary Linux RGB cameras. This is a bounded
