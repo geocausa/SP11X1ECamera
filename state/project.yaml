@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004gx-pmic-hardware-kd-positive-control-prepared-not-executed
+state_id: E004gx-early-hardware-pmic-execute-positive-control-pass-first-writer-unknown-golden-return
 phase: camera-stack-front-ir-illumination-timing-authority
-status: golden-e004gx-hardware-execute-pmic-early-kd-prepared-native-ir-off
+status: golden-e004gx-original-pmic-hardware-execute-positive-control-pass-native-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -87,6 +87,30 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004gx_completed:
+  status: pass-original-oem-pmic-hardware-execution-breakpoint-positive-control-golden-return
+  date: 2026-09-20
+  baseline_commit: fa6c1ef73fd3e7156598c578671c1e17e1450f91
+  new_windows_boots_consumed: 1
+  pmic_loaded_kernel_uptime_s: 11.756
+  hardware_breakpoint_helper_rva: '0x23968'
+  first_actual_nonemitter_hardware_break_kernel_uptime_s: 17.847
+  first_actual_helper_w2: '0x4716'
+  initial_complex_kd_command_parser_error_then_manually_corrected: true
+  corrected_hardware_breakpoint_real_helper_entry_records: 104
+  corrected_hardware_breakpoint_distinct_register_arguments: 36
+  actual_ee3e_through_ee41_requests_in_logged_calls: 0
+  final_break_kernel_uptime_s: 22.176
+  selected_helper_hardware_breakpoint_remained_active_at_final_pause: true
+  complete_boot_all_writers_or_pmic_reset_default_proven: false
+  original_0x93_timer_register_writer_identified: false
+  original_sp7_kd_sha256: ba6161d368be4d946e35c82064be2e16f0e87b50ea660e222c685ec1bb620de4
+  kd_breakpoints_cleared_log_closed_kd_stopped: true
+  golden_return_boot_id: ad449a21-86c0-4194-b8a5-e297d750226a
+  new_camera_pmic_write_fault_or_native_led_activity: false
+  native_ir_emitter_authorized: false
+  independent_physical_cutoff_proven: false
+  next: inspect-distinct-lower-level-pmic-write-transport-or-firmware-initialization-owner
 e004gx_prepared:
   status: distinct-hardware-execute-breakpoint-early-kd-prepared-not-executed
   date: 2026-09-20
