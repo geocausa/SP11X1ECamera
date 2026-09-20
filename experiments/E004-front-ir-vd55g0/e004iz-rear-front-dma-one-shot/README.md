@@ -1,5 +1,9 @@
 # E004iz — bounded SAME-BOOT rear RGB + front RGB QC10C DMA regression
 
+## Actual one-shot result — failed closed before either stream; retired
+
+E004iz's candidate boot `4cfc3519-533e-4304-8908-0e9a9d33a1f2` passed its ordered GRUB writer health checks and valid GRUB environment, verified the accepted package and new QC10C guard module SHA, loaded the camera modules, and discovered the unified topology. The **idle startup graph had both rear links enabled** (`rear-only`, front links disabled), whereas E004iz's initial assertion demanded `neutral`. The runner failed closed before it configured or streamed either rear or front RGB. Its cleanup explicitly disabled both rear and front links, and the final topology was verified `neutral`; kernel log contained no observed IR-emitter or Oops marker. The unconditional service exit returned SP11 to protected Golden boot `a8a76f25-fa6f-460f-81dd-10447775f2a9`, with saved Golden and empty `next_entry`. No rear optical frame was written and the new front mapped-DMA guard remains untested on live buffers. This **unique one-shot is consumed and retired**, including root staging/temporary GRUB entry/service; its pre-capture abort is recorded in `evidence/PRE-CAMERA-ABORT.json` (the filename is a historical no-rearm marker, NOT a claim that camera modules were never loaded). Next distinct candidate may accept ONLY an exact idle `rear-only` or `neutral` graph, explicitly disable the two rear links before starting, prove neutral, and then use the previously accepted rear->front sequence. Do not rearm E004iz.
+
 Date: 2026-09-20. Parent `665e93b`. This is a **new, unique**
 one-shot candidate; previous E004iq, E004iv and E004iw identities
 were each consumed and retired and must never be reused.

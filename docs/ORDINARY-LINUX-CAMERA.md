@@ -35,6 +35,24 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## First combined rear/front candidate — E004iz consumed before streaming
+
+The new E004iz one-shot verified that both GRUB writer services completed
+successfully and in the intended order on a real camera-capable candidate
+boot, then loaded the exact accepted camera package with the new front
+QC10C mapped-DMA guard and discovered the media topology. The initial
+idle graph unexpectedly had **both rear links already enabled** and
+both front links disabled (`rear-only`); the script had expected neutral
+and therefore stopped before any front or rear frame. Its cleanup
+explicitly returned the graph to neutral, and the automatic reboot
+returned to protected Golden with no loaded camera modules. E004iz's
+identity and all private boot/package staging were retired, never
+rearmed. A new independent candidate must recognize only the verified
+idle rear-only or neutral graph, explicitly neutralize it and prove
+neutral before starting the accepted rear-to-front sequence. The
+front real DMA guard and normal rear optical output remain physically
+untested by E004iz. See E004iz README/RESULT.json.
+
 ## Reversible GRUB writer serialization — E004iy
 
 After the disposable-file E004ix race reproducer, a scoped removable
