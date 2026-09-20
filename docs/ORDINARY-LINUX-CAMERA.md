@@ -35,6 +35,26 @@ for viewing; delete them when no longer needed. Cadence is for playback only.
 No camera, illuminator, protected buffer, face model or login interface is
 opened by the exporter. Full transaction success is required before export.
 
+## Installed SP11 Vulkan Turnip does not advertise 10-bit YUV compressed import — E004ji
+
+The **real physical Adreno X1-85** Turnip Vulkan driver was queried
+read-only with `vkGetPhysicalDeviceFormatProperties2` and DRM modifier
+lists. The installed Mesa 26.0.8 Turnip ICD advertises NV12 **8-bit**
+with both linear and Qualcomm compressed modifier
+`0x0500000000000001` (two planes), but tested 10-bit 2-plane,
+10-bit 3-plane and 16-bit two-plane YUV Vulkan formats have **zero
+reported tiling features and zero advertised modifiers**. This
+extends the previous EGL Mesa result to a genuine **Vulkan runtime
+format query** rather than assuming an EGL restriction applies to
+Vulkan. It neither decodes a QC10C frame nor proves that another
+GPU API, a custom shader, version-matched driver, validated UBWC
+decoder or alternate safe ISP output could not provide a solution.
+The queried 10-bit Vulkan formats have P010-style 16-bit containers,
+not verified packed TP10/P030 compatibility. **Do not alias front
+QC10C to compressed 8-bit NV12.** No camera, GPU image, module,
+reboot or IR emitter was opened/changed. See E004ji README and
+source-compiled probe/tests.
+
 ## Real rear optical frames reach an independently selectable webcam — E004jh
 
 A new uniquely bounded camera-capable E004jh boot integrated both
