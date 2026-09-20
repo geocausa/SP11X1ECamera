@@ -1,0 +1,54 @@
+{
+  "experiment": "E004hm",
+  "status": "PASS_ORIGINAL_SPMI_RAW_CALLBACK_TO_MMIO_COMMAND_STATUS_AND_RETURN_OFFLINE",
+  "date": "2026-09-20",
+  "baseline_commit": "023636e138d1f8f355c756d40a05c3d3e347b95f",
+  "original_binary_sha256": {
+    "qcspmi8380": "b6a5868ec2450e713b9a5ada7b4e1a4a77c77427fedf0806fe3eb6541099523c",
+    "qcpmic8380": "756b5c2e4eb8d5a2bdc0dcc0f7f5703eef79dec0c963155c54e42097bc2f790e"
+  },
+  "prior_e004hl_result_sha256": "7d90f68c1917fb0da50627c3c527df97a1e79b12c459244325c8e6e4663070d8",
+  "original_spmi_controller_path": {
+    "original_spmi_interface_write_callback_rva": "0x1660",
+    "original_spmi_controller_helper_callsite_rva": "0x1870",
+    "original_spmi_controller_helper_rva": "0x64d8",
+    "original_spmi_selector_word_incoming": "w2",
+    "original_spmi_input_payload_pointer": "x3",
+    "original_spmi_input_byte_count": "w4",
+    "original_spmi_controller_data_mmio_write_rvas": [
+      "0x674c",
+      "0x6788"
+    ],
+    "original_spmi_controller_command_mmio_write_rva": "0x67e0",
+    "original_spmi_controller_status_read_rvas": [
+      "0x684c",
+      "0x6854"
+    ],
+    "original_spmi_controller_poll_counter_initial_hex": "0x190",
+    "original_spmi_controller_success_return_path_rvas": [
+      "0x6924",
+      "0x6b54",
+      "0x1874",
+      "0x18e4"
+    ],
+    "original_spmi_controller_failure_examples": {
+      "not_initialized": "0x6530 -> w0=0x0e",
+      "invalid_index": "0x6548 -> w0=0x12",
+      "no_buffer_or_count": "0x6968 -> w21=0x0f",
+      "status_bit3": "0x6864 -> 0x6954 -> w21=0x07",
+      "status_not_complete": "0x6868 -> 0x692c (status-specific)"
+    },
+    "mmio_stores_guarantee_actual_physical_pmic_write": false,
+    "finite_host_poll_counter_is_autonomous_emitter_watchdog": false,
+    "real_windows_spmi_callback_hit_this_stage": false,
+    "actual_controller_mmio_status_observed_this_stage": false,
+    "first_writer_of_idle_timer_byte_0x93_identified": false,
+    "real_light_pulse_current_irradiance_or_fault_off_measured": false
+  },
+  "original_instruction_site_count": 79,
+  "new_windows_kd_camera_spmi_pmic_led_or_login_actions": false,
+  "golden_modified": false,
+  "native_ir_emitter_authorized": false,
+  "verifier_sha256": "826792b8913ec9790ccacd428c63e1a1f4fe456e394e2f7adc4d55bc6902b379",
+  "negative_test_sha256": "e9e9b3274541a45371d6ebd4200b7c2909ec031912ba055fcf9a56b6468a3be7"
+}

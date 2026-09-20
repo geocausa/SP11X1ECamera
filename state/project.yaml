@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-20
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004hl-original-spmi-provider-interface-write-slot-static-callback-1660-identified
+state_id: E004hm-original-spmi-1660-controller-64d8-mmio-command-status-return-offline
 phase: camera-stack-front-ir-illumination-timing-authority
 status: golden-e004hd-readonly-oem-pmic-ioctl-handler-resolved-native-ir-off
 golden:
@@ -87,6 +87,24 @@ strategy:
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
 current_gate: E004fs-emitter-timing-timeout-offline-review
+e004hm_completed:
+  status: pass-original-oem-spmi-write-callback-controller-mmio-command-status-return-offline
+  date: 2026-09-20
+  original_spmi_provider_write_callback_rva: '0x1660'
+  original_spmi_controller_helper_call_rva: '0x1870'
+  original_spmi_controller_helper_rva: '0x64d8'
+  original_spmi_controller_mmio_data_store_rvas: ['0x674c', '0x6788']
+  original_spmi_controller_mmio_command_store_rva: '0x67e0'
+  original_spmi_controller_status_read_rvas: ['0x684c', '0x6854']
+  original_spmi_host_poll_counter_initial_hex: '0x190'
+  original_spmi_host_poll_is_independent_emitter_watchdog: false
+  original_spmi_live_callback_or_controller_status_observed: false
+  original_PMIC_idle_0x93_first_writer_identified: false
+  physical_emitter_current_irradiance_pulse_or_autonomous_cutoff_proven: false
+  original_oem_arm64_opcode_mutation_negative_cases: 79
+  native_ir_emitter_authorized: false
+  camera_windows_kd_spmi_pmic_led_login_or_golden_modified: false
+  next: distinct-separately-staged-read-only-spmi-plus1660-positive-control-and-controller-timer-span-trace
 e004hl_completed:
   status: pass-original-oem-spmi-provider-interface-plus30-callback-1660-static-identity
   date: 2026-09-20
