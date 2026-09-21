@@ -482,6 +482,33 @@ to disk. The unique identity is consumed forever and cannot
 be rearmed. Redacted `RESULT.json`, README and consumed-marker
 evidence record the actual outcomes.
 
+## E004kf — IMX681 front RAW10 generic VFE0 RDI bypass failed to deliver DMA buffers
+
+In an **actual separate camera-capable one-shot** with Golden auto-return,
+E004kf completed first-boot media graph discovery and physically enabled only
+front IMX681 C-PHY2→CSID1 RDI0→generic **VFE0 RDI0** (front PIX QC10C,
+rear and IR routes off). Kernel logs confirmed IMX681 normal optical
+MODE_SELECT=1 transmission start and safe stop. The generic V4L2 RDI
+node negotiated **SRGGB10P pRAA 3840×2160**, 4,800-byte stride and
+10,368,000-byte full image size, but **zero front RAW10 buffers were
+dequeued** within the 48-second bounded test. The source byte meter read
+zero image bytes, the NV12 software converter correctly rejected empty
+input and the actual front GStreamer app received zero displayable frames.
+Sensor transmission is **not evidence of camera receiver/DMA delivery**;
+the cause of the cross-instance CSID1→VFE0 RDI shortfall is unproven.
+
+The one-shot failed closed, disabled/neutralized all five rear/front-RDI/
+front-PIX links, returned automatically to protected Golden Linux,
+removed its isolated package/boot/service and deleted private test logs
+without writing front optical pixels to disk. E004kf's unique identity
+is consumed forever; see text-only E004kf RESULT.json and README.
+The earlier physical **front PIX QC10C compressed** captures remain
+valid, as do the offline E004ke RGGB RAW10→NV12 1080p tests, but
+**neither physical front RAW10 nor a displayable native front webcam
+is proven by these tests**. The matched-instance CSID1→VFE1 RDI0
+route is a separate candidate for a NEW isolated experiment, while
+preserving the original front Windows ISP quality-parity objective.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
