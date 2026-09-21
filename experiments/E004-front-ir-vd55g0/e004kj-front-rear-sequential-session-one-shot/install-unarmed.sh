@@ -41,9 +41,9 @@ FRONT_NV12_AUDIT_SOURCE_SHA=2d194cac3301c8189a37eb08768c4962919cfd83f293902e77eb
 FRONT_NV12_AUDIT_SHA=8160bf78849bf5dac08394f1dc8b935af5399447a79d72e89e141297fc67fdf5
 [[ "$(sha256sum "$FRONT_NV12_AUDIT_SOURCE" | awk '{print $1}')" == "$FRONT_NV12_AUDIT_SOURCE_SHA" ]]
 [[ "$(sha256sum "$SOURCE/front-nv12-1080p-pipe-audit" | awk '{print $1}')" == "$FRONT_NV12_AUDIT_SHA" ]]
-LOOP_SOURCE=$SOURCE/loopback-build/modules/v4l2loopback/v4l2loopback.ko
+LOOP_SOURCE=$SOURCE/loopback-clean/modules/v4l2loopback/v4l2loopback.ko
 LOOP_SOURCE_DEB=$SOURCE/loopback-package/v4l2loopback-source_0.15.3-1ubuntu2_all.deb
-LOOP_SHA=2307cabcde97ab9cca7166ded1c974a9378e2ec99b8b8b07afb7213b7bc5aad4
+LOOP_SHA=8077fc12d7dc72fdde9237b2d383a26832ce17b022aeeac3e634cd95f9008537
 [[ "$(sha256sum "$LOOP_SOURCE_DEB" | awk '{print $1}')" == 007a2aa9a723976318407c871b2f1ecdbcd3dc065bf482b0b86f03b026ef40e0 ]]
 [[ -f "$LOOP_SOURCE" && ! -L "$LOOP_SOURCE" && "$(sha256sum "$LOOP_SOURCE" | awk '{print $1}')" == "$LOOP_SHA" ]]
 [[ "$(modinfo -F vermagic "$LOOP_SOURCE")" == '7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64' ]]
