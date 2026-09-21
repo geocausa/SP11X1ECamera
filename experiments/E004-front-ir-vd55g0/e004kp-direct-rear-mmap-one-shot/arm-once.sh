@@ -15,11 +15,11 @@ sudo -n test ! -e "$D/ATTEMPT-CONSUMED"
 sudo -n test -s "$D/FRONT-OFFLINE-PIPE-DRYRUN.txt"
 for video in /dev/video90 /dev/video91; do sudo -n test ! -e "$video"; done
 [[ ! -d /sys/module/v4l2loopback ]]
-[[ "$(sudo -n sha256sum "$D/v4l2loopback.ko" | awk '{print $1}')" == 328f9dd8757592e69e63d863031045b0a5a0c089f19a6ead14d289c2cd87154d ]]
-[[ "$(sudo -n sha256sum "$D/bridge/front-nv12-1080p-pipe-audit" | awk '{print $1}')" == 8160bf78849bf5dac08394f1dc8b935af5399447a79d72e89e141297fc67fdf5 ]]
+[[ "$(sudo -n sha256sum "$D/v4l2loopback.ko" | awk '{print $1}')" == 1d34a54eac776d780add46097dff2bd0bf49405e5ca8337e2694451022e89bb6 ]]
+[[ "$(sudo -n sha256sum "$D/bridge/front-nv12-1080p-pipe-audit" | awk '{print $1}')" == 23e5152cea7dab8b437eae309f16a8f33e7c01b50f9ab61fa26f952d90b3600e ]]
 [[ "$(sudo -n modinfo -F vermagic "$D/v4l2loopback.ko")" == "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64" ]]
 [[ "$(sudo -n sha256sum "$D/bridge/front-rggb10p-to-nv12-1080" | awk '{print $1}')" == 820a6871f78e9ecaecfd4b1a16fc1e0bad9600aeeb6a1505133e467c1354dc82 ]]
-[[ "$(sudo -n sha256sum "$D/bridge/front-rdi-raw10-pipe-audit" | awk '{print $1}')" == 2a5bd3aa227f503555821a573b3bd80546cb9b878c93fc484e90876c148ccef0 ]]
+[[ "$(sudo -n sha256sum "$D/bridge/front-rdi-raw10-pipe-audit" | awk '{print $1}')" == 377a9c2e8704bd57687c5449608c632e1e06cc39067b87cc28aa3ac8a060d186 ]]
 [[ "$(sudo -n sha256sum "$D/bridge/front-1080p-app.py" | awk '{print $1}')" == e165491ea22bcc4c452ea03073525662293c30ff3c274c67c4c6d4872e1c6b0a ]]
 [[ "$(sudo -n sha256sum "$D/route-state.py" | awk '{print $1}')" == 53c2230114512b954c67fa4572df569394d3bd259fb3ae036691f72002009861 ]]
 [[ "$(sudo -n sha256sum "$D/validate-front-rdi.py" | awk '{print $1}')" == 934fb0aea58c8996ec9edd1e9581c3ce83d7c48cff0ba8ae10923c4877ec95f4 ]]
