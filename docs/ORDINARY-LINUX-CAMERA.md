@@ -547,6 +547,33 @@ service and GRUB assets were retired. E004kg's identity is consumed
 forever. Only redacted text-only RESULT.json and README retain its
 verified evidence and limitations.
 
+## E004kh: independently selectable ordinary front 1080p optical webcam path demonstrated
+
+In a NEW bounded, single-use camera-enabled SP11 Linux boot, front IMX681
+normal optical packed RAW10 3840×2160 was captured as 72 complete
+hardware-sourced frames with short-window source timestamps at 30.0054fps.
+All 72 were converted in volatile pipes by a software RGGB→NV12 8-bit
+proxy to 1920×1080. A separately opened, ordinary V4L2 subscriber
+captured 24 complete NV12 1080p buffers from the temporary selectable
+front `/dev/video91`, with contiguous sample sequences 6–29 and exact
+74,649,600 bytes forwarded to a separate actual GStreamer application.
+The app accepted **24/24 complete 1080p frames** and privately verified
+all 24 image payloads bytewise different. Its 33.0468fps callback rate
+was observed only over the shorter 23-interarrival window. This is
+bounded evidence for **real optical front camera→ordinary Linux 1080p
+V4L2 webcam→independent app**, alongside the separately established
+rear 4K→independent app tests; it is *not* sustained front 30fps,
+simultaneous front/rear use or complete permanently installed driver parity.
+The front software proxy discards RAW10 two LSBs and lacks Windows OEM
+ISP colour/3A/sharpening calibration. It does **not** decode QC10C,
+reproduce the Windows ISP image quality or prove front/rear switching.
+
+The unique one-shot returned automatically to protected Golden Linux,
+where its V4L2 node, camera/loopback modules, boot assets, service and
+root-private image test pattern/logs were retired. IR remained disabled,
+and no optical images or frame hashes were persisted. E004kh's consumed
+identity must never be reused; see its redacted RESULT.json and README.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
