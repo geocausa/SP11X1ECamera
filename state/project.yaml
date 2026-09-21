@@ -3,9 +3,9 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-21
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ki-complete-graph-session-integration-gate
+state_id: E004kj-front-rear-sequential-session-proven
 phase: ordinary-linux-rgb-desktop-output-integration
-status: golden-front-1080p-and-rear-4k-standard-v4l2-app-separately-proven-session-integration-pending-windows-isp-parity-open-ir-off
+status: golden-front-1080p-rear-4k-sequential-session-proven-throughput-service-and-windows-isp-parity-open-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -86,7 +86,7 @@ strategy:
   - IMX681 front
   - VD55G0 IR
 current_experiment: E004-front-ir-vd55g0
-current_gate: source-locked-front-neutral-rear-neutral-session-integration
+current_gate: rear-4k-throughput-and-managed-session-lifecycle
 e004jk_windows_rgb_baseline:
   date: 2026-09-20
   status: pass-same-machine-windows-rgb-buffer-dimensions-golden-returned
@@ -6674,3 +6674,24 @@ e004ki_complete_graph_session_guard:
   persistent_camera_service_proven: false
   windows_isp_quality_parity_proven: false
   golden_preserved: true
+
+e004kj_same_boot_front_rear_session:
+  date: 2026-09-21
+  status: PASS_REAL_SEQUENTIAL_STANDARD_V4L2_FRONT24_REAR120_GOLDEN_RETURNED_RETIRED
+  evidence: experiments/E004-front-ir-vd55g0/e004kj-front-rear-sequential-session-one-shot/RESULT.json
+  front_complete_app_frames: 24
+  rear_complete_app_frames: 120
+  complete_graph_entities: 44
+  complete_graph_edges: 119
+  all_handoffs_verified_neutral_and_processes_exited: true
+  front_hardware_timestamp_fps_short_window: 30.0047
+  rear_hardware_timestamp_fps: 18.1231
+  rear_app_callback_fps_shorter_window: 20.5190
+  rear_virtual_sequence_skips: 2
+  all_app_payloads_distinct_in_private_memory: true
+  sustained_30fps_proven: false
+  persistent_service_proven: false
+  windows_isp_parity_proven: false
+  ir_enabled: false
+  golden_return_and_retirement_verified: true
+  one_shot_identity_consumed_never_rearm: true
