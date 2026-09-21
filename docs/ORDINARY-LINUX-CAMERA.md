@@ -370,6 +370,66 @@ policy while retaining the byte meter, physical source timestamps and
 independent application count; do not claim continuous 4K30 or Windows
 ISP image quality until measured.
 
+## E004kc — full bounded real rear optical 4K Linux V4L2 webcam-to-app delivery
+
+A NEW uniquely protected E004kc physical experiment changed only the
+GStreamer `v4l2sink` lateness policy for the rear virtual webcam:
+`sync=true qos=true max-lateness=-1` instead of the inherited 5-ms
+late-frame drop threshold. It preserved the accepted native rear
+OV13858 camera driver, full current-boot media graph, real hardware
+colourbar/normal optical stream distinction, same 180-source/90-reader
+bounded workload and independent stdout byte-meter/GStreamer app.
+The source captured **180 complete fresh normal optical pgAA Bayer
+4076×2806 frames** (physical sequences 0–179). All 180 converted
+in transient memory/pipes to **3840×2160 NV12**; physical source
+hardware timestamps gave **24.0407 delivered sensor frames/s** over
+7.445698 seconds, and average converter-only time was 16.230 ms.
+
+The normal selectable temporary Linux **/dev/video90** advertised
+NV12 3840×2160, and a separately opened V4L2 subscriber received
+**90/90 full 4K buffers** (virtual sequences 6–95 within its sample).
+A separate pass-through byte meter verified **1,119,744,000 bytes
+read and identically forwarded**, exactly 90 complete 4K buffers
+with no incomplete tail and clean EOF. The independent actual
+GStreamer I420 appsink received **90/90 complete 4K frames** with
+real monotonic first-to-last callback cadence **27.9337 fps** over
+its finite 89-interarrival window (p95 interarrival 86.312 ms,
+maximum 127.699 ms), rather than using the fabricated 30fps
+buffer PTS to claim a rate. The source/reader/app/text validator
+all exited successfully. Three app output samples showed in-memory
+image variation; this does not prove no repeated buffers, fully
+calibrated quality or source cadence across all 180 frames.
+
+The E004ka physical test using the inherited sink lateness policy
+had delivered 40/90 buffers, whereas this NEW E004kc run with
+lateness dropping disabled delivered 90/90. The E004kb offline
+controlled source-only model separately reproduced GStreamer
+late-buffer dropping for ~22fps incoming frames marked with
+nominal 30fps PTS. This is compelling evidence for a **testable
+sink-lateness contributor**, not conclusive isolation of every
+camera/virtual pipeline bottleneck, because separate physical
+runs also differed in delivered source cadence and workload timing.
+
+**The result is a finite, physically demonstrated rear 4K standard
+Linux webcam-to-ordinary-app chain, not long-run continuous app
+4K30 or installed 1:1 Windows camera parity.** The source itself
+delivered approximately 24fps in this test and the app's finite
+rate was below 30fps; independent pixel quality, colour/AE/AWB,
+noise/detail/Windows OEM ISP processing, app latency, buffer
+duplication and thermal stability remain to be measured. Front
+IMX681 QC10C UBWC still lacks independently proven displayable
+Linux NV12 and native front video; IR/Hello can remain outside
+the agreed acceptable compromise.
+
+E004kc automatically returned to protected Golden Linux after
+unloading /dev/video90, neutralizing the rear media route and
+leaving front/IR streams and illumination disabled. Its unique
+experimental boot, module copies, service, GRUB entry, root-private
+colourbar and logs were retired; no normal optical images were
+saved. The one-shot identity is consumed and **must never be
+rearmed**. Redacted E004kc RESULT.json, README and consumed marker
+record the observation and explicit limits.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
