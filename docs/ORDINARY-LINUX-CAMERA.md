@@ -430,6 +430,58 @@ saved. The one-shot identity is consumed and **must never be
 rearmed**. Redacted E004kc RESULT.json, README and consumed marker
 record the observation and explicit limits.
 
+## E004kd — extended finite physical rear 4K webcam-to-app uniqueness result
+
+E004kd ran a **NEW** single-use protected camera-enabled Linux candidate
+with the normal rear OV13858 hardware, 240 fresh optical 4076×2806
+Bayer source frame captures and a separately opened standard
+3840×2160 NV12 V4L2 reader of temporary /dev/video90, now requesting
+**120 complete 4K frames**. Hardware capture sequences 0–239 were
+consecutive; all 240 frames were software converted to 4K NV12 in
+volatile pipes, with mean conversion-only time 18.837 ms. Physical
+source timestamp delivery averaged **19.9946fps across 11.953231
+seconds**; p95 interframe gap was 100.207 ms. This is slower than
+the previous 180-source E004kc finite test and is **not** sustained
+4K30, despite the nominal 30fps PTS attached by GStreamer.
+
+The independent V4L2 capture reader dequeued **120/120 complete 4K
+buffers**, first virtual sequence 6 and last 127. The reader reported
+a **two-ID gap, 6→9 (missing 7 and 8), near startup**; therefore
+lossless virtual output is not proven. The exact stdout byte meter
+read and forwarded **1,492,992,000 bytes**, 120 complete 4K NV12
+frames with zero incomplete tail and clean EOF. The independent actual
+GStreamer I420 appsink delivered **120/120 complete 4K frames**, and
+its private in-memory SHA-256 comparison showed **all 120 app-output
+frame payloads were bytewise different** without saving raw frames
+or hashes. Bytewise app-frame distinctness does **not** prove no
+skipped virtual frames, one-to-one association with individual
+sensor exposures, real motion or image quality.
+
+Real app callback arrival averaged **24.5036fps** over 119
+interarrival intervals in its approximately 5-second reader
+window (p95 gap 90.645 ms, maximum 186.196 ms). The 240-source
+publisher continued for approximately 12.626 seconds, so these
+source/app average rates describe *different time windows*.
+The accepted GStreamer publishing sink kept
+`sync=true qos=true max-lateness=-1`, avoiding the prior
+5-ms lateness drop threshold. The temporary hardware experiment,
+independent byte meter, app and strict validator all passed their
+bounded exact-count gates. This demonstrates a longer finite
+**physical optical rear 4K→ordinary Linux V4L2 webcam→independent
+application path**, but **not long-running 4K30, zero frame loss,
+permanent installation, OEM Windows ISP parity, low latency or
+front IMX681 QC10C→displayable video**.
+
+E004kd automatically returned to protected Golden with its
+original saved boot entry and no camera/virtual nodes or modules.
+The rear media route was neutralized, front/IR video and IR
+illumination were not activated, and E004kd's unique boot, service,
+module/package copies, hardware colourbar/raw test asset and
+private logs were retired. Normal optical pixels were not written
+to disk. The unique identity is consumed forever and cannot
+be rearmed. Redacted `RESULT.json`, README and consumed-marker
+evidence record the actual outcomes.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
