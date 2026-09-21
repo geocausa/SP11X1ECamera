@@ -223,6 +223,12 @@ wait_suspend
 modprobe videodev
 insmod "$LOOP_MOD" devices=2 video_nr=91,90 card_label=SP11-Front-Preview,SP11-Rear-Preview exclusive_caps=0,0 max_buffers=8 max_openers=5
 udevadm settle
+access_ready=0
+for _ in $(seq 1 150); do
+ if runuser -u geoca -- /bin/sh -c 'test -r /dev/video91 && test -w /dev/video91 && test -r /dev/video90 && test -w /dev/video90'; then access_ready=1; break; fi
+ sleep 0.2
+done
+[[ "$access_ready" -eq 1 ]]
 runuser -u geoca -- /usr/bin/python3 -c 'import os,json,stat; nodes=["/dev/video91","/dev/video90"]; access={p:stat.S_ISCHR(os.stat(p).st_mode) and os.access(p,os.R_OK|os.W_OK) for p in nodes}; assert os.geteuid()==1000 and all(access.values()); print(json.dumps({"uid":os.geteuid(),"read_write_access":access,"permissions_modified":False}))' > "$O/UNPRIVILEGED-ACCESS.json"
 runuser -u geoca -- v4l2-ctl --list-devices > "$O/UNPRIVILEGED-DEVICE-DISCOVERY.txt"
 grep -Fq 'SP11-Front-Preview' "$O/UNPRIVILEGED-DEVICE-DISCOVERY.txt"
