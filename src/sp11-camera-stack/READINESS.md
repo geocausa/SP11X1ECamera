@@ -23,6 +23,8 @@ The non-protected hardware package supports **guarded, bounded non-default exper
 
 ## Current RGB application evidence (2026-09-21)
 
+E004kp subsequently removed the rear RAW/NV12 pipes and separate publisher, using direct mmap capture and V4L2 output with unchanged pixels. Rear2400sources achieved29.9496fps over80.101s and1800distinct app frames achieved30.0684fps over59.830s; source gaps0, one Gst offset gap, clean neutral shutdown and Golden return. This closes the bounded rear throughput gap, not day-long reliability or calibrated image quality. Front remains at E004km throughput pending direct transport.
+
 E004km delivered1800 complete distinct front1080p and rear4K frames to independent standard V4L2/GStreamer applications in sequential sessions. Source2400frames each had no sequence gaps. Front app26.9873fps and rear app13.7766fps are observed over different source/app windows, not30fps parity. Both sampled scenes were dark; no calibrated scene comparison exists. The front path is a separate pRAA RAW10 software proxy, not a QC10C decoder or Windows ISP replacement. E004km is consumed, retired and returned to Golden. Historical hardware/IQ-control claims below do not establish end-to-end image quality.
 
 ## Not honestly complete yet
