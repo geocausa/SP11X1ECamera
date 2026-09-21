@@ -509,6 +509,44 @@ is proven by these tests**. The matched-instance CSID1→VFE1 RDI0
 route is a separate candidate for a NEW isolated experiment, while
 preserving the original front Windows ISP quality-parity objective.
 
+## E004kg — physical native front RAW10 → displayable NV12 application frames now proven
+
+An actual NEW, isolated E004kg physical candidate used the matched front
+IMX681 **CSID1→VFE1 RDI0** route rather than the cross-instance
+CSID1→VFE0 RDI0 route that previously delivered zero RAW10 frames.
+E004kg captured **eight genuine normal optical IMX681 3840×2160 pRAA
+RAW10 Bayer V4L2 buffers**, reported hardware sequence numbers 0–7
+without a gap and **30.0057 source frames/s** over just seven timestamp
+intervals. The rear, front PIX QC10C and IR/illumination streams
+remained off. Eight complete source buffers totaling **82,944,000
+bytes** passed an independent exact-byte meter and the tested software
+RGGB Bayer demosaic/downscale converter produced **eight complete
+1920×1080 NV12 images**, averaging 4.258 ms conversion-only.
+
+A real GStreamer I420 application consumed **eight out of eight
+complete, bytewise distinct 1080p front-camera outputs**; private
+in-memory comparisons verified uniqueness without saving image pixels
+or hashes. This is a **finite, actual native front RGB optical capture
+to displayable Linux 1080p application path**, not merely a simulated
+front image or a claimed QC10C decompression.
+
+It **does not yet expose the front camera as a separately selectable
+ordinary Linux V4L2 webcam**, establish reliable long-running front
+1080p30, reproduce Windows OEM ISP colour/AE/AWB/sharpness processing
+or demonstrate front/rear switching. The RAW10→NV12 conversion is an
+uncalibrated 8-bit software proxy, not native QC10C/UBWC ISP output.
+A new unique, guarded hardware test can publish the proven front
+stream to a standard temporary NV12 V4L2 device for an independent
+application before ordinary production-camera lifecycle work.
+
+The physical E004kg one-shot automatically returned to protected
+Golden Linux with unchanged saved boot entry, no active experimental
+camera or virtual modules/nodes and neutral front/rear camera links.
+Its unique camera-enabled boot, private package, colourbar/test files,
+service and GRUB assets were retired. E004kg's identity is consumed
+forever. Only redacted text-only RESULT.json and README retain its
+verified evidence and limitations.
+
 ## Desktop inventory
 
 Run `python3 tools/camera-desktop-status.py` (or `--json`). It queries
