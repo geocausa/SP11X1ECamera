@@ -4,7 +4,7 @@
 
 **Hold full 1:1 default promotion.**
 
-The canonical non-protected product is ready and has passed its package-backed runtime acceptance, but the project goal is wider than RGB camera usability. Calling the stack fully Windows-equivalent or making it the final default while protected IR/Windows Hello cannot legitimately execute would overstate parity.
+The canonical hardware package has passed bounded runtime acceptance. RGB application transport now works, but sustained30fps, persistent service lifecycle and calibrated image quality remain unproven. Calling the stack fully Windows-equivalent or making it the final default while protected IR/Windows Hello cannot legitimately execute would overstate parity.
 
 ## Ready now
 
@@ -19,7 +19,11 @@ The canonical non-protected product is ready and has passed its package-backed r
 - bounded install/update/uninstall and real-filesystem lifecycle with zero activation side effects;
 - maintained offline Windows-exact protected worker source and exact SecurePD proxy/native ABI.
 
-The non-protected product may therefore be treated as **ready for guarded, non-default use**.
+The non-protected hardware package supports **guarded, bounded non-default experiments**. This is not a complete daily-use RGB application stack.
+
+## Current RGB application evidence (2026-09-21)
+
+E004km delivered1800 complete distinct front1080p and rear4K frames to independent standard V4L2/GStreamer applications in sequential sessions. Source2400frames each had no sequence gaps. Front app26.9873fps and rear app13.7766fps are observed over different source/app windows, not30fps parity. Both sampled scenes were dark; no calibrated scene comparison exists. The front path is a separate pRAA RAW10 software proxy, not a QC10C decoder or Windows ISP replacement. E004km is consumed, retired and returned to Golden. Historical hardware/IQ-control claims below do not establish end-to-end image quality.
 
 ## Not honestly complete yet
 

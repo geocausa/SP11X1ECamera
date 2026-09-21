@@ -1,0 +1,5 @@
+# E004kn contiguous Bayer conversion (camera-free)
+
+Tests an upper-eight-bit contiguous scratch plane before the accepted bilinear transform. Crop, rounding and YUV matrix remain unchanged. One worker, bounded 1 MiB pipes, maximum240 frames; no camera, boot, service or thermal-policy changes. Generated synthetic frames remain in memory. This does not resolve the discarded RAW10 low bits, 3A, colour calibration or Windows ISP parity.
+
+All black/white/random/gradient/changing-frame outputs match the accepted converter byte for byte. However, contiguous scalar, full-plane NEON and four-row NEON all regressed end-to-end throughput. The final fixed-affinity check (writer CPU5, converter CPU4, no frequency-policy changes) measured rolling NEON38.885–39.868fps versus baseline57.228–57.761fps. Conversion time was similar but input waits were longer. Cause is not established; no hardware deployment is justified. All three variants are REJECTED for deployment. The accepted single-thread pipe converter remains authoritative. Next performance work should remove RAW/NV12 interprocess transfers rather than adopt these measured regressions.

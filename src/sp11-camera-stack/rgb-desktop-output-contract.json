@@ -1,14 +1,15 @@
 {
   "schema": "sp11-dual-rgb-desktop-output-contract-v1",
-  "date": "2026-09-20",
-  "scope": "ordinary Linux front/rear RGB, not protected IR, Windows Hello, or completed app integration",
+  "date": "2026-09-21",
+  "scope": "ordinary Linux bounded sequential front/rear RGB applications; production lifecycle and calibrated parity incomplete",
   "common_desktop_target": {
     "fourcc": "NV12",
     "width": 1920,
     "height": 1080,
     "frame_bytes": 3110400,
     "verified_physical_live_desktop_capture": false,
-    "selectable_front_rear_live_devices": false
+    "selectable_front_rear_live_devices": false,
+    "note": "Common1080p is a target; demonstrated endpoints are front1080p and rear4K."
   },
   "rear": {
     "sensor": "OV13858",
@@ -27,15 +28,23 @@
     "offline_previous_real_colorbar_to_nv12_evidence": "experiments/E004-front-ir-vd55g0/e004is-rear-bayer-to-nv12-offline/RESULT.json",
     "preview_source_colour_calibrated": false,
     "offline_gstreamer_nv12_processing_verified": true,
-    "live_desktop_nv12_device_verified": false,
+    "live_desktop_nv12_device_verified": true,
     "real_time_color_converter_30fps_verified": false,
-    "device_advertisable_to_applications": false,
+    "device_advertisable_to_applications": true,
     "required_next": [
-      "privacy-controlled normal rear optical sample and image quality calibration",
-      "live capture to bounded continuous NV12 RGB processing",
-      "separate discoverable video application endpoint",
-      "repeated front/rear switching, PM and suspend regression"
-    ]
+      "sustained30fps and long-duration failure handling",
+      "managed selectable-session start/stop/restart and suspend regression",
+      "matched-scene colour/exposure/detail validation"
+    ],
+    "bounded_standard_app_evidence": {
+      "experiment": "E004km",
+      "node": "/dev/video90",
+      "width": 3840,
+      "height": 2160,
+      "complete_distinct_app_frames": 1800,
+      "observed_app_fps": 13.7766,
+      "permanent_device_available_on_golden": false
+    }
   },
   "front": {
     "sensor": "IMX681",
@@ -52,24 +61,43 @@
     "accepted_format_authority": "src/front-imx681/desktop-output-contract.json",
     "offline_synthetic_already_linear_nv12_scaler_verified": true,
     "offline_synthetic_scaler_evidence": "experiments/E004-front-ir-vd55g0/e004ij-windows-app-nv12-offline/README.md",
-    "genuine_live_front_linear_nv12_verified": false,
+    "genuine_live_front_linear_nv12_verified": true,
     "compressed_qc10c_decompression_verified": false,
-    "live_desktop_nv12_device_verified": false,
-    "device_advertisable_to_applications": false,
+    "live_desktop_nv12_device_verified": true,
+    "device_advertisable_to_applications": true,
     "may_treat_qc10c_as_bayer": false,
     "may_treat_qc10c_as_linear_nv12": false,
     "required_next": [
-      "prove compressed QC10C import/decode or exact physically safe separate linear ISP output and compression reset",
-      "demonstrate valid colour image and independent colourimetry",
-      "stream source to a separate stable discoverable application video endpoint",
-      "bounded live regression only after independent candidate boot safety"
-    ]
+      "sustained30fps and long-duration failure handling",
+      "managed selectable-session start/stop/restart and suspend regression",
+      "matched-scene colour/exposure/detail validation",
+      "QC10C import/decode and Windows ISP parity remain unresolved"
+    ],
+    "bounded_standard_app_evidence": {
+      "experiment": "E004km",
+      "node": "/dev/video91",
+      "width": 1920,
+      "height": 1080,
+      "complete_distinct_app_frames": 1800,
+      "observed_app_fps": 26.9873,
+      "permanent_device_available_on_golden": false
+    },
+    "separate_raw10_preview": {
+      "sensor_fourcc": "pRAA",
+      "width": 3840,
+      "height": 2160,
+      "route": "msm_csiphy2 -> msm_csid1 -> msm_vfe1_rdi0",
+      "pixel_processing": "uncalibrated upper8bit Bayer proxy",
+      "qc10c_decode": false
+    }
   },
   "front_rear_switching": {
     "previously_verified_hardware_level": true,
     "earlier_evidence": "experiments/E004-front-ir-vd55g0/e004dz-canonical-package-rgb-handoff/RESULT.json",
     "continuous_application_camera_switching_verified": false,
-    "physical_concurrent_streaming_supported_or_required": false
+    "physical_concurrent_streaming_supported_or_required": false,
+    "bounded_sequential_standard_app_sessions_verified": true,
+    "latest_evidence": "experiments/E004-front-ir-vd55g0/e004km-sustained-direct-rgb-session-one-shot/RESULT.json"
   },
   "protected_ir_and_hello": {
     "illumination_authorized": false,
