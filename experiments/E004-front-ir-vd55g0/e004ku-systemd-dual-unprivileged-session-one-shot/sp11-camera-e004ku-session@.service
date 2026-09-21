@@ -1,0 +1,17 @@
+[Unit]
+Description=SP11 E004ku bounded %i RGB publisher
+ConditionKernelCommandLine=sp11_camera_e004ku_rgb_session=1
+PartOf=sp11-camera-e004ku-one-shot.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /var/lib/sp11-camera-e004ku/start-session.sh %i
+RuntimeMaxSec=220
+TimeoutStopSec=5
+KillMode=control-group
+KillSignal=SIGTERM
+SuccessExitStatus=143
+Restart=no
+UMask=0077
+StandardOutput=append:/var/lib/sp11-camera-e004ku/output/%i-SERVICE-STDOUT.txt
+StandardError=append:/var/lib/sp11-camera-e004ku/output/%i-SERVICE-STDERR.txt
