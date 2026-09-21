@@ -1,0 +1,13 @@
+# E004kj — sequential front/rear session integration, single-use candidate
+
+Parent d0cba9c. Hypothesis: the independently proven front matched CSID1/VFE1 RDI RAW10→1080p NV12 and rear CSID0/VFE0 RDI Bayer→4K NV12 pipelines work sequentially in one isolated camera boot when all publishers/readers exit and the complete 119-edge media graph is neutral between sessions. This is a new integration test, not a repeat of consumed E004kh/E004kd one-shots.
+
+Workload: front 72 source frames / 24 independent ordinary /dev/video91 application frames, then all devices closed, virtual module removed, sensors suspended and graph neutral; rear 240 source / 120 independent /dev/video90 app frames, then neutral again. Per-stage byte meters, real timestamps, sequence gaps and private in-memory payload uniqueness remain enabled. No optical files or frame hashes are persisted. Prior physical colourbar tests are not repeated. IR routes and illumination are forbidden.
+
+Source-lock: accepted 51-file package manifest 9913494cc2eb4db08ba0f0d09dd4a0cad9415982a1a502f903a0217b0be4e455; accepted camera DTB and modules unchanged. Proven conversion/validation helpers retain their exact original bytes and E004kh/E004kd/E004jx log tags; these labels identify immutable helper implementations, not reused runtime identities. New root-private session SHA manifest covers every helper, runner, service, GRUB entry and candidate boot payload. Expected Git HEAD must match origin.
+
+Each publisher runs in a distinct session/process group, with finite timeout. Any surviving descendant or open camera device prevents route handoff. Both graph snapshots and process-exit checks must pass. Systemd returns unconditionally to protected Golden on success, failure or timeout. Install/arm refuse consumed evidence. Retire only this candidate after Golden verification and redacted evidence extraction.
+
+This finite sequential proof does not establish a persistent user service, simultaneous cameras, sustained 30fps, image-quality parity, front 3A or QC10C decode. Golden payload/default/module tree remain protected.
+
+Offline validation: 3 new tests pass, exercising actual synthetic subprocess pipelines for both cameras (success and middle-stage failure), process-group rejection while a process is alive, acceptance only after exit, unique identity and neutral handoff. The 9 strengthened E004ki graph tests pass. Rear converter and byte-audit recompilation reproduced accepted binary SHA-256 values 35f658158f5d6d74ba5ea3a25c2d3d6b291fa0ba49dcd8b9c27005f124acc406 and aad050944551f77f71c760031bfa3d25968e9ab2e5accf74ffdae561be3e852b. Physical outcome remains untested at this source checkpoint.
