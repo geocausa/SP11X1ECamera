@@ -16,3 +16,7 @@ python3 -m unittest discover \
  -p 'test_*.py' -v
 ./tools/camera-overlap-guard.sh --require-clean-tracked --require-golden --require-no-camera-process
 ```
+
+## Complete-graph guard correction (2026-09-21)
+
+Review before session integration found that the original six-link classifier could label a graph neutral while other mutable links (including IR CSIPHY0 routes) were enabled. The strengthened classifier checks all 44 unique entities, device nodes, pad directions/counts and 119 unique edges, requires matching incoming/outgoing flags and the accepted immutable sensor/video links, and accepts only the exact neutral, front RDI or rear RDI enabled-edge sets. I2C adapter numbers remain dynamic. Nine offline tests pass, including IR/other-CSID activation, asymmetric flags, missing edges, duplicate entities/devices and immutable-link corruption rejection. No physical experiment was repeated or armed. The original six-test result above describes the earlier implementation.

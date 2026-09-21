@@ -25,7 +25,17 @@ def toggled(text,source,target,pad,enabled):
     assert original_link is not None,(source,target,pad)
     before=original_link.group(0)
     after=original_link.group(1)+f"[{status}]"
-    return text[:block.start()]+original.replace(before,after,1)+text[block.end():]
+    changed=text[:block.start()]+original.replace(before,after,1)+text[block.end():]
+    # A real media graph reports each edge at both source and sink.
+    source_pad=1 if source.startswith("msm_csiphy") or "rdi" in target else 4
+    reverse=re.search(rf"^- entity \d+: {re.escape(target)} \("
+                      rf".*?(?=^- entity |\Z)",changed,re.M|re.S)
+    assert reverse is not None
+    old=reverse.group(0)
+    new=re.sub(rf'(<- "{re.escape(source)}":{source_pad} )\[[^\]]*\]',
+               lambda m:m[1]+f"[{status}]",old,count=1)
+    assert new!=old or before==after
+    return changed[:reverse.start()]+new+changed[reverse.end():]
 
 def from_neutral(front=False,rear=False,pix=False,cross=False):
     text=ARCHIVE.read_text()
@@ -102,6 +112,29 @@ class NativeCameraSwitch(unittest.TestCase):
         with self.assertRaises(ValueError):
             MOD["full_cycle"]([n,f,n,r,n],
                 [(True,True),(False,True),(True,True),(True,True)])
+
+    def test_unchecked_ir_and_other_csid_routes_rejected(self):
+        n=ARCHIVE.read_text()
+        for source,target in (("msm_csiphy0","msm_csid0"),
+                              ("msm_csiphy4","msm_csid3"),
+                              ("msm_csiphy2","msm_csid2")):
+            bad=toggled(n,source,target,0,True)
+            with self.assertRaises(ValueError): MOD["classify"](bad)
+
+    def test_asymmetric_duplicate_and_truncated_edges_rejected(self):
+        n=ARCHIVE.read_text()
+        bad=n.replace('-> "msm_csid2":0 []','-> "msm_csid2":0 [ENABLED]',1)
+        with self.assertRaises(ValueError): MOD["classify"](bad)
+        for old,new in (('-> "msm_csid2":0 []',''),
+                        ('-> "msm_csid2":0 []','-> "msm_csid2":0 [UNKNOWN]'),
+                        ('[ENABLED,IMMUTABLE]','[IMMUTABLE]'),
+                        ('- entity 4: msm_csiphy1','- entity 1: msm_csiphy1'),
+                        ('/dev/v4l-subdev1','/dev/v4l-subdev0')):
+            with self.assertRaises(ValueError): MOD["classify"](n.replace(old,new,1))
+
+    def test_i2c_adapter_numbers_remain_dynamic(self):
+        n=ARCHIVE.read_text().replace('imx681 1-0010','imx681 42-0010')
+        self.assertEqual(MOD["classify"](n)[0],"neutral")
 
     def test_cli_only_reads_fixture_and_does_not_open_cameras(self):
         program=(HERE/"camera-session-contract.py").read_text()
