@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lc-libcamera-prerequisites-clock-gate-golden
+state_id: E004ld-clock-timing-candidate-offline-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -3843,12 +3843,11 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  Resolve CAMSS VFE transport bandwidth versus sensor-array PIXEL_RATE semantics
-  before exposing IMX681 HBLANK/PIXEL_RATE and admitting a fresh kernel candidate.
-  E004lc helper and hardware-free clock regression pass; correct VT clock currently
-  exceeds PIX clock limits. Preserve accepted hardware and Golden; do not bypass
-  libcamera validation. Production sensor/publisher restart, suspend and calibrated
-  RGB quality remain open. IR emitter activation remains prohibited.
+  E004ld isolated CAMSS/IMX681 timing candidate builds and passes hardware-free
+  tests. Prepare a fresh uniquely guarded one-shot for control readback and
+  frame continuity under the lower C-PHY VFE clock vote; PIX also needs live
+  validation. Accepted sources/modules remain unchanged. Do not promote
+  source-only results to runtime or upstream support. IR emitter stays off.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -6820,3 +6819,12 @@ e004lc_completed:
   kernel_modified: false
   live_libcamera_proven: false
   next_gate: resolve-camss-transport-versus-pixel-array-clock-semantics
+
+e004ld_completed:
+  status: isolated-clock-timing-candidate-build-and-offline-tests-pass
+  installed: false
+  physical_test: false
+  accepted_sources_modified: false
+  build_anchor_unchanged: true
+  source: experiments/E004-front-ir-vd55g0/e004ld-imx681-timing-clock-candidate
+  next_gate: fresh-guarded-hardware-clock-vote-and-control-validation

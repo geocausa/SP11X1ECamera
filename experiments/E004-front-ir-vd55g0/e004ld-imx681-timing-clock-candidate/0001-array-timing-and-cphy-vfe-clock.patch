@@ -1,0 +1,150 @@
+--- a/camss/camss.c
++++ b/camss/camss.c
+@@ -4320,21 +4320,54 @@
+ /*
+  * camss_get_pixel_clock - Get pixel clock rate from sensor
+  * @entity: Media entity in the current pipeline
+- * @pixel_clock: Received pixel clock value
++ * @bpp: Bits per sample at the VFE sink
++ * @pixel_clock: Received bus pixel clock value
+  *
+  * Return 0 on success or a negative error code otherwise
+  */
+-int camss_get_pixel_clock(struct media_entity *entity, u64 *pixel_clock)
++int camss_get_pixel_clock(struct media_entity *entity, unsigned int bpp,
++			  u64 *pixel_clock)
+ {
+ 	struct media_pad *sensor_pad;
+ 	struct v4l2_subdev *subdev;
+ 	struct v4l2_ctrl *ctrl;
++	struct v4l2_mbus_config config = {};
++	unsigned int lanes;
++	u64 numerator, denominator;
++	int ret;
+
+ 	sensor_pad = camss_find_sensor_pad(entity);
+ 	if (!sensor_pad)
+ 		return -ENODEV;
+
+ 	subdev = media_entity_to_v4l2_subdev(sensor_pad->entity);
++
++	ret = v4l2_subdev_call(subdev, pad, get_mbus_config,
++			       sensor_pad->index, &config);
++	if (ret && ret != -ENOIOCTLCMD)
++		return ret;
++
++	/*
++	 * PIXEL_RATE describes the pixel array, not CSI transport throughput.
++	 * For an explicit C-PHY link use the bus rate documented in
++	 * Documentation/driver-api/media/tx-rx.rst. Keep legacy fallback for
++	 * sensors without this configuration and leave D-PHY unchanged.
++	 */
++	if (!ret && config.type == V4L2_MBUS_CSI2_CPHY &&
++	    config.link_freq) {
++		lanes = config.bus.mipi_csi2.num_data_lanes;
++		if (!lanes || lanes > 3 || !bpp || bpp > 64)
++			return -EINVAL;
++		if (config.link_freq > U64_MAX / (2 * lanes * 16))
++			return -ERANGE;
++		numerator = config.link_freq * 2 * lanes * 16;
++		denominator = 7 * bpp;
++		/* Round up without overflowing the numerator. */
++		*pixel_clock = div64_u64(numerator, denominator);
++		if (numerator % denominator)
++			(*pixel_clock)++;
++		return 0;
++	}
+
+ 	ctrl = v4l2_ctrl_find(subdev->ctrl_handler, V4L2_CID_PIXEL_RATE);
+
+--- a/camss/camss.h
++++ b/camss/camss.h
+@@ -198,7 +198,8 @@
+ struct media_pad *camss_find_sensor_pad(struct media_entity *entity);
+ s64 camss_get_link_freq(struct media_entity *entity, unsigned int bpp,
+ 			unsigned int lanes, const bool cphy);
+-int camss_get_pixel_clock(struct media_entity *entity, u64 *pixel_clock);
++int camss_get_pixel_clock(struct media_entity *entity, unsigned int bpp,
++			  u64 *pixel_clock);
+ int camss_pm_domain_on(struct camss *camss, int id);
+ void camss_pm_domain_off(struct camss *camss, int id);
+ int camss_vfe_get(struct camss *camss, int id);
+--- a/camss/camss-vfe.c
++++ b/camss/camss-vfe.c
+@@ -976,7 +976,11 @@
+ 	int ret;
+
+ 	for (i = VFE_LINE_RDI0; i < vfe->res->line_num; i++) {
+-		ret = camss_get_pixel_clock(&vfe->line[i].subdev.entity,
++		struct vfe_line *line = &vfe->line[i];
++		u8 bpp = camss_format_get_bpp(line->formats, line->nformats,
++					     line->fmt[MSM_VFE_PAD_SINK].code);
++
++		ret = camss_get_pixel_clock(&line->subdev.entity, bpp,
+ 					    &pixel_clock[i]);
+ 		if (ret)
+ 			pixel_clock[i] = 0;
+@@ -1057,7 +1061,11 @@
+ 	int ret;
+
+ 	for (i = VFE_LINE_RDI0; i < vfe->res->line_num; i++) {
+-		ret = camss_get_pixel_clock(&vfe->line[i].subdev.entity,
++		struct vfe_line *line = &vfe->line[i];
++		u8 bpp = camss_format_get_bpp(line->formats, line->nformats,
++					     line->fmt[MSM_VFE_PAD_SINK].code);
++
++		ret = camss_get_pixel_clock(&line->subdev.entity, bpp,
+ 					    &pixel_clock[i]);
+ 		if (ret)
+ 			pixel_clock[i] = 0;
+--- a/imx681/imx681.c
++++ b/imx681/imx681.c
+@@ -51,6 +51,8 @@
+ #define IMX681_FRAME_LENGTH_MAX	0x00ffffffU
+ #define IMX681_EXPOSURE_HW_MAX \
+ 	((IMX681_FRAME_LENGTH_MAX - IMX681_EXPOSURE_MARGIN) & ~1U)
++/* E003i CQ: exposure timing, distinct from CSI output-clock metadata. */
++#define IMX681_VT_PIXEL_RATE_HZ 719898240ULL
+ #define IMX681_CPHY_TRIOS	1
+ /* Windows mode2 PLL2: 19.2 MHz * 0x177 / 3 = 2.400 GHz symbol rate.
+  * V4L2 CSI-2 C-PHY link frequency is half the operating symbol rate. */
+@@ -62,7 +64,7 @@
+ 	u32 height;
+ 	u32 line_length;
+ 	u32 frame_length;
+-	u32 pixel_rate;
++	u32 output_pixel_rate;
+ 	u32 fps;
+ };
+
+@@ -180,11 +182,25 @@
+ 	struct v4l2_ctrl_handler *hdl = &imx681->ctrl_handler;
+ 	const struct imx681_mode *mode = &imx681_modes[0];
+ 	u32 vblank = mode->frame_length - mode->height;
+-	int ret;
+-
+-	ret = v4l2_ctrl_handler_init(hdl, 4);
+-	if (ret)
+-		return ret;
++	u32 hblank = mode->line_length - mode->width;
++	struct v4l2_ctrl *ctrl;
++	int ret;
++
++	ret = v4l2_ctrl_handler_init(hdl, 6);
++	if (ret)
++		return ret;
++
++	/* Fixed mode timing controls do not join the four writable controls. */
++	ctrl = v4l2_ctrl_new_std(hdl, NULL, V4L2_CID_HBLANK,
++				 hblank, hblank, 1, hblank);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++	ctrl = v4l2_ctrl_new_std(hdl, NULL, V4L2_CID_PIXEL_RATE,
++				 IMX681_VT_PIXEL_RATE_HZ,
++				 IMX681_VT_PIXEL_RATE_HZ, 1,
++				 IMX681_VT_PIXEL_RATE_HZ);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+
+ 	imx681->vblank = v4l2_ctrl_new_std(hdl, &imx681_ctrl_ops,
+ 					 V4L2_CID_VBLANK, vblank,
