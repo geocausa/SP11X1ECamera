@@ -29,3 +29,15 @@ All returned CAP_STREAMS=0, including both RGB sensors and standby IR.
 This closes the *specific tested-kernel* hasStreams/ACTIVE reset question;
 E004lm itself remains a source-only libcamera build with no CameraManager
 enumeration/registration, no frames and no production ownership proof.
+
+## Subsequent guarded libcamera registration evidence — E004lo
+
+An independent, consumed one-shot first registered real OV13858 through
+the guarded Simple adapter but rejected IMX681 at CameraSensor
+construction due to absent mandatory V4L2_CID_HBLANK/PIXEL_RATE on
+the canonical IMX681 module. It returned to Golden and did not stream.
+This does not alter E004lm's OFFLINE native build PASS, nor prove a
+dual-RGB libcamera stack. The E004ld/E004le fixed metadata/clock
+module pair has separately recorded real sustained RGB success;
+revalidate that exact pinned pair, and independently seal compiled
+IPA/config paths, in a NEW unique candidate before another live test.

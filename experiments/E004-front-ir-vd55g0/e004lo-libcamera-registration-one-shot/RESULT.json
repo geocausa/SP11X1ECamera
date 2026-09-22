@@ -1,0 +1,42 @@
+{
+  "actual_imx681_registered": false,
+  "actual_ov13858_registered": true,
+  "bundle_sha_verified_before_registration": true,
+  "camera_manager_invoked": true,
+  "camera_stream_started": false,
+  "candidate_boot_id": "137fc04d-a632-4e3d-9b1c-199b69bcbcb2",
+  "date": "2026-09-22",
+  "evidence": [
+    "evidence/CAMERA-LIST.txt",
+    "evidence/FRONT-MANDATORY-CONTROLS.txt",
+    "evidence/IR-STANDBY-READBACK.txt",
+    "evidence/IPA-CONFIG-LOAD.txt"
+  ],
+  "front_legacy_camera_sensor_failed_mandatory_v4l2_controls": [
+    "HBLANK",
+    "PIXEL_RATE"
+  ],
+  "golden_camera_nodes_or_modules": "absent",
+  "golden_return_boot_id": "3925efc3-b544-4b75-92bb-abd156744c43",
+  "golden_saved_entry": "sp11-audio-fullio-v19c",
+  "ir_emitter_enabled": false,
+  "ir_kernel_standby_readback": "stream=0 illumination=0",
+  "next": "Compare accepted E004le timing/clock driver sources with canonical hardware builder. Pin HBLANK=2912, PIXEL_RATE=719898240 only where previously physically accepted, inspect RDI vs PIX consumers, and create an entirely fresh guarded registration attempt. Do not reuse E004lo.",
+  "nonfatal_additional_driver_gaps": [
+    "VIDIOC_SUBDEV_G_SELECTION crop rectangles for both sensors return ENOTTY; libcamera defaulted areas for rear and still registered it."
+  ],
+  "one_shot_consumed": true,
+  "pixel_frames_captured": false,
+  "protected_golden_return": true,
+  "retry_allowed": false,
+  "root_seal_preflight_completed": true,
+  "root_service_result": "failed-as-expected-bounded-safety-reboot",
+  "source_commit": "dfe72d47aa63f00f951b99bdfbc372f2f1f7d092",
+  "status": "FAIL_FRONT_MISSING_MANDATORY_TIMING_CONTROLS_REAR_REGISTERED",
+  "unexpected_front_control_ids": [
+    "0x009e0902",
+    "0x009f0902"
+  ],
+  "virtual_camera_entries_present": 4,
+  "warning": "The libcamera scratch build log resolves IPA config under a geoca-writable /home path despite a root-owned staged cam and libraries; next candidate must pin all build/IPA/config paths into a root-owned persistent staging location before arming."
+}

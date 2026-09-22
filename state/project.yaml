@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ln-live-subdev-querycap-pass-golden
+state_id: E004lo-rear-libcamera-registration-front-metadata-blocked-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -187,6 +187,22 @@ e004ln_live_subdev_capability:
   exclusive_quiescent_ownership_proven: false
   unique_one_shot_assets_retired: true
   next: establish-verified-exclusive-camera-owner-before-new-libcamera-one-shot
+e004lo_live_guarded_libcamera_registration:
+  date: 2026-09-22
+  status: fail-front-mandatory-timing-controls-rear-registered-consumed-retired
+  source_commit: dfe72d47aa63f00f951b99bdfbc372f2f1f7d092
+  candidate_boot_id: 137fc04d-a632-4e3d-9b1c-199b69bcbcb2
+  golden_return_boot_id: 3925efc3-b544-4b75-92bb-abd156744c43
+  guarded_native_rear_camera_registration: pass
+  guarded_native_front_camera_registration: fail-no-hblank-or-pixel-rate
+  virtual_cameras_excluded_from_pass: true
+  bundle_root_owned: true
+  ipa_config_compiled_path_root_private: false
+  camera_streams: 0
+  ir_illumination: off
+  dual_rgb_libcamera_admitted: false
+  candidate_assets_retired: true
+  next: pin-physically-accepted-e004ld-e004le-timing-clock-and-private-ipa-build-in-new-one-shot
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3148,7 +3164,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: establish-exclusive-quiescent-owner-before-guarded-libcamera
+next_experiment: e004lp-pin-accepted-timing-clock-for-new-guarded-libcamera
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
