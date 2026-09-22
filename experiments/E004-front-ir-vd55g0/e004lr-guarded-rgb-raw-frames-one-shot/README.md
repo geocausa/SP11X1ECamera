@@ -15,3 +15,32 @@ E004lp already physically proved both real sensors register; E004lq physically p
 Safety limit: DAC and cooperative media FD lock exclude ordinary unprivileged competing clients in a controlled root-only one-shot, not arbitrary root-equivalent processes or production multi-client exclusivity. No general libcamera installation, IR illumination, PAM/login setup, quality-parity score, or change to protected Golden is authorized. The candidate is bounded and must return to Golden before archived numeric evidence is committed, and its private boot/service/bundle/compiled source are retired only after independent Golden verification.
 
 Status at preparation: SOURCE AND GUARDED TEST ONLY, no E004lr physical attempt until explicit consumed/boot evidence. A later RESULT.json and CONSUMED.json override this preparation status.
+
+## Final physical result — PASS, consumed, retired
+
+One unique root-sealed camera-capable boot e6164854-1633-438e-87a2-93d8fe135a40
+ran the pinned libcamera v0.7.0 cam client in two completely independent
+sequential RAW streaming processes with --capture=6, no --file payload sink.
+OV13858 rear RAW 4076x2806 SGRBG10_CSI2P delivered 6 strictly increasing
+0..5 request frame sequences, positive 14,321,824 bytesused each, with
+165,862 us between first and last kernel timestamps. IMX681 front RAW
+3840x2160 SRGGB10_CSI2P delivered 6 strictly increasing 0..5 frame
+sequences, positive 10,368,000 bytesused each, spanning 166,416 us.
+Each source timestamp span is compatible with about 30 fps during the
+brief six-frame sample, not a sustained-rate benchmark or distinct-pixel
+hash proof. An independent native full-graph Media Controller v2 read
+confirmed neutral before the first capture, after rear stream shutdown,
+and after front stream shutdown; the runner denied existing/leaked
+video/subdev/media FDs and any libcamera failed STREAMOFF/route-shutdown
+diagnostic. IR kernel readback remained stream=0 illumination=0, and no
+IR camera or emitter was activated. The dedicated systemd oneshot passed
+and automatically returned to protected Golden boot
+117c3de9-efdb-4cab-9add-1a56339e8acd, with saved_entry v19c, empty
+next_entry and absent camera nodes/modules. Exact staged binaries were
+SHA-verified and root-owned. Separate boot entry/service/private candidate
+and private IPA-source build were retired after independently confirming
+Golden. E004lr CONSUMED, NEVER rearm. Numeric/non-image request metadata
+and kernel standby evidence are archived in RESULT/CONSUMED/evidence/.
+Ordinary desktop processed RGB (as opposed to RAW), sustained FPS,
+multi-client service lifecycle, ISP calibration and Windows quality parity
+are STILL OPEN. The scene was dark at night, not a quality assessment.

@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lq-both-real-libcamera-raw-configure-neutral-pass-golden
+state_id: E004lr-both-real-libcamera-raw-frame-stream-pass-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -239,6 +239,28 @@ e004lq_live_libcamera_rgb_raw_configure:
   production_multiclient_owner_proven: false
   unique_one_shot_assets_consumed_and_retired: true
   next: bounded-libcamera-raw-streamon-frames-streamoff-neutral-on-fresh-candidate
+e004lr_live_libcamera_rgb_raw_frames:
+  date: 2026-09-22/23
+  status: pass-sequential-real-raw-streams-neutral-consumed-retired
+  source_commit: e59a21c887b34c1c4cd4711cf3c2bafe07692fbe
+  candidate_boot_id: e6164854-1633-438e-87a2-93d8fe135a40
+  golden_return_boot_id: 117c3de9-efdb-4cab-9add-1a56339e8acd
+  rear_ov13858_raw: 4076x2806-SGRBG10_CSI2P
+  rear_distinct_request_sequences: 6
+  rear_timestamp_span_us_for_5_intervals: 165862
+  front_imx681_raw: 3840x2160-SRGGB10_CSI2P
+  front_distinct_request_sequences: 6
+  front_timestamp_span_us_for_5_intervals: 166416
+  full_graph_before_between_after_streaming: neutral
+  libcamera_start_streamon_stop_streamoff: pass-bounded-both-cameras
+  frame_payload_files_saved: false
+  long_duration_fps_proven: false
+  ir_illumination: off
+  processed_rgb_publisher_via_libcamera: open
+  production_multiclient_owner_proven: false
+  golden_modified: false
+  unique_one_shot_assets_consumed_and_retired: true
+  next: sustained-libcamera-rgb-raw-and-processed-output-service-in-new-guarded-candidate
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3200,7 +3222,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: bounded-libcamera-raw-streamon-frames-streamoff-neutral-on-fresh-candidate
+next_experiment: sustained-libcamera-rgb-raw-and-processed-output-service-in-new-guarded-candidate
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30

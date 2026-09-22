@@ -75,3 +75,16 @@ Future work must separately demonstrate bounded libcamera app buffers/
 STREAMON and STREAMOFF, neutral shutdown and processed RGB desktop
 publication under real cross-process ownership. No production install,
 calibrated ISP or IR illumination is authorized by these results.
+
+## E004lr first guarded libcamera RAW STREAMON proof
+
+Separate E004lr one-shot boot used exact accepted timing CAMSS/IMX681,
+pinned libcamera and two independent cam --stream=role=raw --capture=6
+front/rear processes. Each produced six consecutive nonzero request
+frames with timestamps roughly 30 fps over five intervals; independent
+read-only full Media Controller graph was neutral before/between/after
+sessions, auto Golden return, assets consumed/retired. This validates
+basic bounded libcamera RAW buffer/STREAMON/STREAMOFF for both physical
+cameras, NOT sustained rate, processed RGB desktop output, production
+multi-client service, calibrated ISP quality or protected IR emission.
+See E004lr README/RESULT/CONSUMED and metadata-only evidence.
