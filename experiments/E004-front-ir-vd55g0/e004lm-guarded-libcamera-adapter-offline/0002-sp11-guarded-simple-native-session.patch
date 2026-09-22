@@ -1,0 +1,186 @@
+--- a/src/libcamera/pipeline/simple/simple.cpp
++++ b/src/libcamera/pipeline/simple/simple.cpp
+@@ -24,6 +24,7 @@
+ #include <linux/media-bus-format.h>
+ 
+ #include <libcamera/base/log.h>
++#include <libcamera/base/utils.h>
+ 
+ #include <libcamera/camera.h>
+ #include <libcamera/color_space.h>
+@@ -49,6 +50,7 @@
+ #include "libcamera/internal/v4l2_videodevice.h"
+ 
+ #include "sp11-rgb-paths.h"
++#include "sp11-libcamera-experimental-lease.h"
+ 
+ namespace libcamera {
+ 
+@@ -336,6 +338,8 @@
+ 
+ 	std::vector<Stream> streams_;
+ 	Stream *rawStream_;
++	bool sp11Camss_ = false;
++	std::string sp11SensorName_;
+ 
+ 	/*
+ 	 * All entities in the pipeline, from the camera sensor to the video
+@@ -429,6 +433,7 @@
+ 	V4L2Subdevice *subdev(const MediaEntity *entity);
+ 	std::shared_ptr<MediaDevice> converter() { return converter_; }
+ 	bool swIspEnabled() const { return swIspEnabled_; }
++	int setupSp11Links(const std::string &sensor);
+ 
+ protected:
+ 	int queueRequestDevice(Camera *camera, Request *request) override;
+@@ -462,6 +467,7 @@
+ 
+ 	std::shared_ptr<MediaDevice> converter_;
+ 	bool swIspEnabled_;
++	sp11::ExperimentalLibcameraLease sp11Lease_;
+ };
+ 
+ /* -----------------------------------------------------------------------------
+@@ -475,6 +481,9 @@
+ {
+ 	/* Experimental CAMSS RGB-only path policy; live admission is separate. */
+ 	const bool restrictedCamss = sensor->device()->driver() == "qcom-camss";
++	sp11Camss_ = restrictedCamss;
++	if (restrictedCamss)
++		sp11SensorName_ = sensor->name();
+ 	if (restrictedCamss && !sp11::sensorAllowed(sensor->name()))
+ 		return;
+ 
+@@ -774,6 +783,9 @@
+ 
+ int SimpleCameraData::setupLinks()
+ {
++	/* SP11 never uses stale cached MediaLink flags for graph writes. */
++	if (sp11Camss_)
++		return pipe()->setupSp11Links(sp11SensorName_);
+ 	int ret;
+ 
+ 	/*
+@@ -1420,6 +1432,11 @@
+ {
+ }
+ 
++int SimplePipelineHandler::setupSp11Links(const std::string &sensor)
++{
++	return sp11Lease_.setupLinks(sensor) ? 0 : -EACCES;
++}
++
+ std::unique_ptr<CameraConfiguration>
+ SimplePipelineHandler::generateConfiguration(Camera *camera, Span<const StreamRole> roles)
+ {
+@@ -1518,6 +1535,20 @@
+ 	SimpleCameraData *data = cameraData(camera);
+ 	V4L2VideoDevice *video = data->video_;
+ 	int ret;
++
++	/* On any failed configure, close the route if the full kernel graph
++	 * still admits a safe neutral transition. Never guess a rollback.
++	 */
++	auto failCleanup = utils::scope_exit{ [&] {
++		if (data->sp11Camss_ && !sp11Lease_.neutralizeWhenIdle())
++			LOG(SimplePipeline, Error) << "SP11 configure failed; retire route session";
++	} };
++	auto completeConfiguration = [&]() -> int {
++		if (data->sp11Camss_ && !sp11Lease_.parkRouteUntilStart())
++			return -EACCES;
++		failCleanup.release();
++		return 0;
++	};
+ 
+ 	/*
+ 	 * Configure links on the pipeline and propagate formats from the
+@@ -1594,7 +1625,7 @@
+ 	}
+ 
+ 	if (outputCfgs.empty())
+-		return 0;
++		return completeConfiguration();
+ 
+ 	StreamConfiguration inputCfg;
+ 	inputCfg.pixelFormat = videoFormat.toPixelFormat();
+@@ -1603,12 +1634,15 @@
+ 	inputCfg.bufferCount = kNumInternalBuffers;
+ 
+ 	if (data->converter_) {
+-		return data->converter_->configure(inputCfg, outputCfgs);
++		ret = data->converter_->configure(inputCfg, outputCfgs);
+ 	} else {
+ 		ipa::soft::IPAConfigInfo configInfo;
+ 		configInfo.sensorControls = data->sensor_->controls();
+-		return data->swIsp_->configure(inputCfg, outputCfgs, configInfo);
+-	}
++		ret = data->swIsp_->configure(inputCfg, outputCfgs, configInfo);
++	}
++	if (ret)
++		return ret;
++	return completeConfiguration();
+ }
+ 
+ int SimplePipelineHandler::exportFrameBuffers(Camera *camera, Stream *stream,
+@@ -1677,6 +1711,10 @@
+ 						      &DelayedControls::applyControls);
+ 	}
+ 
++	if (data->sp11Camss_ && !sp11Lease_.beforeStream(data->sp11SensorName_)) {
++		stop(camera);
++		return -EACCES;
++	}
+ 	ret = video->streamOn();
+ 	if (ret < 0) {
+ 		stop(camera);
+@@ -1734,6 +1772,8 @@
+ 	data->conversionBuffers_.clear();
+ 
+ 	releasePipeline(data);
++	if (data->sp11Camss_ && !sp11Lease_.afterStream())
++		LOG(SimplePipeline, Error) << "SP11 route shutdown failed; retire session";
+ }
+ 
+ int SimplePipelineHandler::queueRequestDevice(Camera *camera, Request *request)
+@@ -1871,6 +1911,12 @@
+ 					const SimplePipelineInfo &info,
+ 					DeviceEnumerator *enumerator)
+ {
++	/* Fail closed BEFORE sensor open, subdevice routing or link setup. */
++	if (media->driver() == "qcom-camss" &&
++	    !sp11Lease_.initialize(media->deviceNode())) {
++		LOG(SimplePipeline, Error) << "SP11 guarded camera session absent";
++		return false;
++	}
+ 	unsigned int numStreams = 1;
+ 
+ 	for (const auto &[name, streams] : info.converters) {
+@@ -1984,6 +2030,12 @@
+ 			}
+ 
+ 			if (subdev->caps().hasStreams()) {
++				/* No unguarded ACTIVE routing-table reset on SP11. */
++				if (media->driver() == "qcom-camss" &&
++				    !sp11::ExperimentalLibcameraLease::allowActiveRoutingReset()) {
++					LOG(SimplePipeline, Error) << "SP11 active subdev routes not admitted";
++					return false;
++				}
+ 				/*
+ 				 * Reset the routing table to its default state
+ 				 * to make sure entities are enumerated according
+@@ -2013,8 +2065,14 @@
+ 
+ 	for (std::unique_ptr<SimpleCameraData> &data : pipelines) {
+ 		int ret = data->init();
+-		if (ret < 0)
++		if (ret < 0) {
++			if (media->driver() == "qcom-camss")
++				return false; /* Never continue after uncertain route. */
+ 			continue;
++		}
++		/* libcamera enumeration must end neutral before registration. */
++		if (data->sp11Camss_ && !sp11Lease_.neutralizeWhenIdle())
++			return false;
+ 
+ 		std::set<Stream *> streams;
+ 		std::transform(data->streams_.begin(), data->streams_.end(),

@@ -21,3 +21,28 @@ SimpleCameraData::setupLinks and resetRoutingTable may mutate the graph;
 unrestricted cam/CameraManager activation on a camera-capable boot is still
 prohibited. Verify live v2 layout and integrate real exclusive/quiescent
 ownership, all mutation sites and failure retirement before live admission.
+
+## E004lk/E004ll live kernel graph and guarded native link routing PASS
+
+One-shot E004lk independently accepted real 44/44/84/163 Media Controller v2
+topology, initially neutral. E004ll then proved exact native link transitions
+neutral/front/neutral/rear/neutral with eight guarded writes, no STREAMON,
+automatic Golden return and verified IR standby. Both are retired; no
+unrestricted libcamera or ordinary app access was attempted.
+
+## E004lm experimental libcamera Simple adapter (OFFLINE ONLY)
+
+The maintained sp11-libcamera-route-gate.h and
+sp11-libcamera-experimental-lease.h bridge E004lj NativeSession to the pinned
+libcamera v0.7.0 Simple handler. Apply the E004lh RGB filter patch, then
+E004lm 0002-sp11-guarded-simple-native-session.patch, and copy the maintained
+sp11-*.h headers into the Simple source directory. libcamera builds/tests
+pass in a private clean scratch checkout, including Golden admission-denial.
+CAMSS setupLinks is intercepted for init+configure and existing ACTIVE
+subdevice routing reset is denied; route is neutral after sensor enumeration,
+after configure and after stop, and only the selected sensor can be routed
+before streamOn. Boot token plus root and cooperative lockf are experimental
+guards, NOT general OS-enforced exclusivity. There is no authorized
+production install or live libcamera test; real hasStreams/active routing
+requirements and independent cross-process ownership remain open. Do not
+run unrestricted libcamera on a camera-enabled SP11 boot.

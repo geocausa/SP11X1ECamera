@@ -1,0 +1,23 @@
+E004lm SP11 V4L2 subdevice streams capability SOURCE-ONLY audit, 2026-09-22
+
+Kernel source: /home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
+Kernel core drivers/media/v4l2-core/v4l2-subdev.c (subdev_do_ioctl):
+  streams_subdev = sd->flags & V4L2_SUBDEV_FL_STREAMS;
+  VIDIOC_SUBDEV_QUERYCAP sets V4L2_SUBDEV_CAP_STREAMS only when streams_subdev is true;
+  global experimental-streams API setting can additionally clear it.
+
+Literal V4L2_SUBDEV_FL_STREAMS source uses counted:
+  drivers/media/platform/qcom/camss/: 0
+  src/sp11-camera-stack/authority/ov13858.c: 0
+  src/front-imx681/: 0
+  src/front-ir-vd55g0/sp11-vd55g0-native/: 0
+
+Inference only: the pinned tested source is consistent with the libcamera
+Simple hasStreams() branch NOT running for these exact camera entities.
+This does not independently establish the capability flags of ALL running
+SP11 subdevices, module/source parity under all build overlays, or absence
+of another ACTIVE routing-table write path. Before live libcamera admission,
+the fresh, distinct one-shot must query VIDIOC_SUBDEV_QUERYCAP on each
+actual dynamically enumerated subdevice, reject ANY unexpected CAP_STREAMS,
+and prohibit resetRoutingTable on SP11.
+No module loaded, subdevice opened, camera boot or image captured in this audit.
