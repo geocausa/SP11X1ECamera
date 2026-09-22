@@ -1,0 +1,29 @@
+{
+  "status": "PASS_LOW_OVERHEAD_WINDOWS_DELIVERY_OBSERVATION",
+  "advertised_recording_fps_all_enumerated_modes": 30,
+  "front_source_timestamp_fps": 14.985254676272207,
+  "rear_source_timestamp_fps": 14.955979727690268,
+  "front_arrival_fps": 14.994304969282313,
+  "rear_arrival_fps": 14.953377538410102,
+  "front_observer_mean_ms": 1.4217411111110188,
+  "rear_observer_mean_ms": 4.321681514476596,
+  "conclusion": "Approximately15fps app delivery persisted without full-frame copy/hash. Supports a real observed Windows delivery cadence under these conditions; does not prove physical sensor maximum or establish cause. All enumerated advertised modes remain30fps.",
+  "comparison": {
+    "linux_front_1080p_app_fps": 30.0247,
+    "linux_front_evidence": "E004kr",
+    "linux_rear_4k_app_fps": 30.0684,
+    "linux_rear_evidence": "E004kp",
+    "linux_observation_seconds_approx": 60,
+    "windows_observation_seconds_each": 30,
+    "same_scene_exposure_processing_or_observer": false
+  },
+  "limitations": [
+    "No sensor sequence/drop proof; timestamp cadence counts acquired frames",
+    "No controlled lighting/exposure test; low-light frame reduction is a hypothesis only",
+    "No60fps mode advertised in enumerated VideoRecord formats; this is not an absolute hardware ceiling",
+    "CPU counters belong to observer process, not Windows driver/ISP",
+    "No Windows image-quality parity or Linux twice-as-fast product claim",
+    "No new Linux physical throughput test repeated"
+  ],
+  "next": "Controlled lit scene, exposure and frame-interval investigation; optimize Linux CPU/latency/ISP quality rather than infer unsupported faster sensor mode."
+}
