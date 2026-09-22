@@ -7,3 +7,16 @@ Candidate: accepted canonical camera modules rebuilt from pinned v19c Kbuild int
 Hard gates: distinct boot token, empty next_entry after boot, unique ATTEMPT-CONSUMED marker created before driver bind; existing three sensor compat strings discovered dynamically, canonical four modules only, suspended runtime state verified before and during each graph transaction. Before and after native program, fuser checks for other video/subdev users. The native program opens only /dev/media0 O_RDWR|O_NOFOLLOW|O_CLOEXEC and takes a cooperative lockf media lock; initializes only from complete neutral, validates the whole exact 44/44/84/163 graph before and after every ioctl, and issues only the eight admitted mutable RGB MEDIA_IOC_SETUP_LINK writes. Any unexpected ioctl result, graph mutation, missing ownership, active sensor or invalid initial route terminates without further link writes or speculative rollback. Service has 120s bound, native probe 12s timeout and systemd ExecStopPost always requests reboot to saved Golden on normal success/failure.
 
 Limit: cooperative fd lock and fuser/suspended state exclude normal competing clients during this isolated experimental window but do not establish general OS-enforced exclusive ownership against malicious/uncooperative applications. This physical test does not authorize ordinary libcamera enumeration or production operation. Do not reuse identity if arming or execution fails; independently inspect boot and archive evidence, then retire all private assets and GRUB/service entries only after Golden recovery. Nighttime darkness is irrelevant to this no-frame route test.
+
+## Final physical result — PASS, consumed and retired
+
+One uniquely armed candidate (boot 0ce25895-ae31-4ee5-ac53-f0e974261f5a)
+returned four ordered PASS lines for front→neutral→rear→neutral, each
+verified against the full fresh graph after exact native kernel link writes.
+Candidate runner rc0, zero probe stderr, no RGB STREAMON or IR emitter.
+All modules bound, native kernel VD55G0 standby stream=0 illumination=0.
+Returned automatically to Golden boot 0673288a-360c-4c38-a3f0-fd0a7bad9731;
+retired private stage, unique service and GRUB files after verified return.
+Numeric and redacted standby evidence are preserved in RESULT and evidence/.
+This is native routing hardware proof only, not live libcamera or
+production cross-process exclusivity. E004ll is CONSUMED: never rearm.
