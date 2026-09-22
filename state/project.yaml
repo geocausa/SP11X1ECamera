@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ld-clock-timing-candidate-offline-golden
+state_id: E004le-live-timing-rdi-clock-sustained-rgb-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -3843,11 +3843,12 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  E004ld isolated CAMSS/IMX681 timing candidate builds and passes hardware-free
-  tests. Prepare a fresh uniquely guarded one-shot for control readback and
-  frame continuity under the lower C-PHY VFE clock vote; PIX also needs live
-  validation. Accepted sources/modules remain unchanged. Do not promote
-  source-only results to runtime or upstream support. IR emitter stays off.
+  E004le consumed PASS validates timing controls and front345.6MHz RDI clock,
+  sustained1800-frame app sessions for front1080p and rear4K, then Golden return.
+  Audit libcamera metadata/format admission and independently validate PIX594MHz
+  before promoting the candidate package. Sensor/publisher restart, suspend and
+  calibrated image quality remain open. Do not reuse E004le or claim near-black
+  uncontrolled luma is Windows ISP parity. IR emitter remains off.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -6828,3 +6829,18 @@ e004ld_completed:
   build_anchor_unchanged: true
   source: experiments/E004-front-ir-vd55g0/e004ld-imx681-timing-clock-candidate
   next_gate: fresh-guarded-hardware-clock-vote-and-control-validation
+
+e004le_completed:
+  status: pass-live-timing-controls-lower-front-rdi-clock-sustained-dual-rgb
+  consumed: true
+  retired: true
+  candidate_boot_id: f6f8c3e2-5a84-45fa-aee8-98bde364aeba
+  golden_return_boot_id: d7f4882f-6d75-4f4a-933d-2bf47e3e3a5b
+  front_vfe_clock_hz: 345600000
+  per_camera_distinct_app_frames: 1800
+  front_app_fps: 30.0421
+  rear_app_fps: 30.0058
+  source_sequence_gaps: 0
+  power_savings_measured: false
+  pix_path_validated: false
+  image_quality_parity_proven: false
