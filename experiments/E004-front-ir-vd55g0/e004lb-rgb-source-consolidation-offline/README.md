@@ -1,0 +1,2 @@
+# E004lb RGB source consolidation
+No physical test. Promote byte-identical converters and the E004la capture/lifecycle implementation into a self-contained source package. Only native include paths, default-deny compile-time token admission and comments change. Standalone copied-tree build proves absence of experiment dependencies; wrapped fake-device tests and default-admission tests preserve failure handling. Existing physical evidence remains E004la/E004kp/E004kr; no repeated hardware run.

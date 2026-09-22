@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+HERE=$(cd "$(dirname "$0")/.." && pwd)
+T=$(mktemp -d /tmp/sp11-rgb-source-tests.XXXXXX)
+trap 'rm -rf "$T"' EXIT
+cp -a "$HERE" "$T/source"
+bash "$T/source/build.sh" "$T/build"
+F=(-O3 -std=c11 -Wall -Wextra -Werror -pedantic -fno-fast-math -ffp-contract=off)
+for camera in front rear; do
+ if "$T/build/$camera-direct-publisher" --source /dev/video0 1; then exit 1; fi
+ gcc "${F[@]}" "$T/source/tests/test_$camera.c" -Wl,--wrap=fopen,--wrap=geteuid,--wrap=open,--wrap=fstat,--wrap=close,--wrap=mmap,--wrap=munmap,--wrap=poll,--wrap=write,--wrap=ioctl -o "$T/fake"
+ "$T/fake"
+ cat > "$T/source/tests/default.c" <<EOF
+#define E004KQ_NO_MAIN
+#include "../$camera-direct-publisher.c"
+#include <assert.h>
+int main(void) {
+ assert(!token_allowed(""));
+ assert(!token_allowed("sp11_camera_e004la_rgb_session=1"));
+ assert(!token_allowed("sp11_camera_offline_test=1"));
+ return 0;
+}
+EOF
+ gcc "${F[@]}" "$T/source/tests/default.c" -o "$T/default"
+ "$T/default"
+done
+echo RGB_STANDALONE_SOURCE_TESTS=PASS
