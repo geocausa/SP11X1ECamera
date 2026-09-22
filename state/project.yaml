@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lp-both-real-libcamera-rgb-registration-pass-golden
+state_id: E004lq-both-real-libcamera-raw-configure-neutral-pass-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -221,6 +221,24 @@ e004lp_live_libcamera_rgb_registration:
   general_multi_client_ownership_proven: false
   one_shot_consumed_and_retired: true
   next: new-guarded-sequential-rgb-libcamera-configure-stream-stop-neutral
+e004lq_live_libcamera_rgb_raw_configure:
+  date: 2026-09-22
+  status: pass-both-real-raw-configure-neutral-consumed-retired
+  source_commit: 928f865578cfb0c2d6217880ee779cf5305a3fc7
+  candidate_boot_id: 6bbe3993-d47a-402c-8c53-42cfd6cb5ab0
+  golden_return_boot_id: 0d41c33e-7536-4d61-84c6-c9556aa1012e
+  rear_ov13858_raw: 4076x2806-SGRBG10_CSI2P
+  front_imx681_raw: 3840x2160-SRGGB10_CSI2P
+  independent_full_kernel_graph_after_each_configure: neutral
+  final_kernel_graph_after_both_releases: neutral
+  camera_manager_acquire_generate_configure_release: pass-sequential
+  streamon_or_frames: false
+  ir_illumination: off
+  processed_rgb_ipa_and_windows_image_quality: open
+  root_only_experimental_lease: true
+  production_multiclient_owner_proven: false
+  unique_one_shot_assets_consumed_and_retired: true
+  next: bounded-libcamera-raw-streamon-frames-streamoff-neutral-on-fresh-candidate
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3182,7 +3200,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: new-guarded-sequential-rgb-libcamera-configure-stream-stop-neutral
+next_experiment: bounded-libcamera-raw-streamon-frames-streamoff-neutral-on-fresh-candidate
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30

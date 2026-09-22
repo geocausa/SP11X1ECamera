@@ -60,3 +60,18 @@ production general exclusivity remain out of scope. Any camera setup
 failure returns to Golden without guessing at link rollback. The protected
 Golden library and kernel must not be replaced. After any first attempt,
 E004lo identity is consumed, never retried. See E004lo README/evidence.
+
+## E004lp/E004lq separately guarded libcamera physical milestones
+
+E004lp root-sealed pinned libcamera CameraManager registered BOTH real RGB
+cameras, no stream. E004lq then acquired, generated, configured and
+released both real cameras in separate Raw-role sessions: OV13858 rear
+4076x2806 SGRBG10_CSI2P and IMX681 front 3840x2160 SRGGB10_CSI2P.
+After each configure, an independent read-only Media Controller v2
+auditor checked the complete kernel graph had returned neutral.
+E004lq did not call Camera::start or capture frames; protected Golden
+automatically recovered and both one-shot identities are retired.
+Future work must separately demonstrate bounded libcamera app buffers/
+STREAMON and STREAMOFF, neutral shutdown and processed RGB desktop
+publication under real cross-process ownership. No production install,
+calibrated ISP or IR illumination is authorized by these results.

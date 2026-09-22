@@ -13,3 +13,24 @@ The new one-shot runner consumes the identity BEFORE driver bind, verifies Golde
 Limitations: DAC root-only permissions exclude normal unprivileged camera users during the experimental boot but cannot protect against root-equivalent actors; this does not establish production multi-client exclusivity. Camera configuration may change subdevice formats and kernel controls but must not start streaming. Front/rear optically sustained 30 fps through a separate standard V4L2 software-publisher path in E004le; this new test does not establish libcamera app fps, full ISP parity, calibrated colour or frame capture. Nighttime darkness is irrelevant to the no-pixel configuration test. Never reuse E004lq once armed, even if it fails before opening a camera.
 
 Status at preparation: compiled and staged source-only; no E004lq physical attempt until its unique consumed marker is written. RESULT.json/CONSUMED.json and guarded boot history supersede preparation status.
+
+## Final physical result — PASS, consumed, retired
+
+Fresh candidate boot 6bbe3993-d47a-402c-8c53-42cfd6cb5ab0 executed
+exactly once under root-only camera node seal. OV13858 configured RAW
+4076x2806 SGRBG10_CSI2P and IMX681 configured RAW 3840x2160
+SRGGB10_CSI2P, each in independent acquire/configure/release sessions.
+The separate read-only native Media Controller v2 graph auditor
+accepted a FULL neutral graph after EACH configuration and after both
+releases. There was no Camera::start, V4L2 STREAMON, frame allocation,
+pixel recording or IR emitter. Root-owned libcamera/IPA configuration
+remained pinned under /var/lib/sp11-e004lq-build; optional sensor crop
+ENOTTY/defaulted rectangles and uncalibrated IPA still need work.
+The oneshot reported rc0 and automatically returned to protected
+Golden boot 0d41c33e-7536-4d61-84c6-c9556aa1012e, saved_entry v19c,
+next_entry empty, no camera nodes or modules. Root-private build,
+candidate stage, service and separate GRUB entry were retired after
+independent Golden verification. See RESULT.json, CONSUMED.json and
+evidence/ for non-image proof. This does NOT demonstrate libcamera
+streaming, FPS, processed output, calibrated image quality or
+production multi-client ownership. Never rearm E004lq.
