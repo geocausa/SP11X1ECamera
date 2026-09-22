@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lt-both-real-rgb-xrgb8888-short-frames-pass-front-control-errors-golden
+state_id: E004lu-fixed-frame-ipa-exposure-offline-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -301,6 +301,21 @@ e004lt_real_rgb_xrgb8888:
   pixel_quality_and_sustained_fps: unproven
   one_shot_consumed_and_retired: true
   next: audit-and-fix-imx681-ipa-dynamic-exposure-cluster-erange
+e004lu_imx681_softipa_fixed_frame:
+  date: 2026-09-23
+  status: pass-offline-fixed-frame-ipa-exposure-guard-live-not-tested
+  source_pinned_libcamera: b7854fd07d42168f099b5ce30d1702e0e0875bf5
+  active_frame_length_lines: 3554
+  active_exposure_max_lines: 3550
+  active_exposure_step_lines: 2
+  front_only_mode_guard: fail-closed
+  cpp_asan_ubsan_numeric_tests: pass
+  pinned_libcamera_build: pass
+  libcamera_tests: 45-ok-1-expected-fail-31-skipped-0-unexpected
+  actual_erange_control_id_proven: false
+  physical_new_exposure_fix_test: false
+  golden_modified: false
+  next: unique-guarded-processed-rgb-front-control-zero-erange-validation
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3262,7 +3277,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: audit-and-fix-imx681-ipa-dynamic-exposure-cluster-erange
+next_experiment: unique-guarded-processed-rgb-front-control-zero-erange-validation
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30

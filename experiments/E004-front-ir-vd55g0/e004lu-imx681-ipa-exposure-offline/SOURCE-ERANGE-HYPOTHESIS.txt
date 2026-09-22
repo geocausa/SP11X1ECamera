@@ -1,0 +1,9 @@
+IMX681 pinned accepted 3840x2160 sensor mode: height=2160, frame_length=3554,
+VBLANK minimum/default=1394, exposure default=3546, margin=4, step=2,
+advertised EXPOSURE hardware MAX=16777210; current-frame MAX=3550.
+Driver IMX681 try_ctrl enforces exposure <= (height+VBLANK-4)&~1.
+Pinned Soft IPA AGC used hardware advertised MAX; in dark scene its
+ten-percent step from 3546 gives >3550. E004lt front six ERANGE errors
+are consistent with this mismatch but log does not identify which
+control failed. New fixed-frame Soft IPA bounds/quantizes front only;
+fresh physical 0-ERANGE test is REQUIRED to verify this explanation.

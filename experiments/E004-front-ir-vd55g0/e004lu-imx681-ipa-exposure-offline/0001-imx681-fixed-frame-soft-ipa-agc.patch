@@ -1,0 +1,55 @@
+--- a/src/ipa/simple/soft_simple.cpp
++++ b/src/ipa/simple/soft_simple.cpp
+@@ -30,6 +30,7 @@
+ #include "libipa/camera_sensor_helper.h"
+ 
+ #include "module.h"
++#include "sp11-imx681-fixed-frame-agc.h"
+ 
+ namespace libcamera {
+ LOG_DEFINE_CATEGORY(IPASoft)
+@@ -215,6 +216,25 @@
+ 		context_.sensorInfo.minLineLength * 1.0s / context_.sensorInfo.pixelRate;
+ 	context_.configuration.agc.exposureMin = exposureInfo.min().get<int32_t>();
+ 	context_.configuration.agc.exposureMax = exposureInfo.max().get<int32_t>();
++	/* The accepted fixed-30fps IMX681 has FLL=3554, exposure margin=4
++	 * and 2-line step. V4L2 advertises the 24-bit HARDWARE maximum,
++	 * but our Simple IPA does not request extra VBLANK, so AGC must not
++	 * ask for an exposure longer than the current frame. Reject any
++	 * other IMX681 mode rather than silently extending an unproven FLL.
++	 */
++	if (context_.sensorInfo.model == "imx681") {
++		auto maximum = sp11::Imx681FixedFrameAgc::exposureMaximum(
++			context_.sensorInfo.outputSize.height,
++			context_.sensorInfo.minFrameLength,
++			context_.configuration.agc.exposureMin,
++			context_.configuration.agc.exposureMax);
++		if (!maximum) {
++			LOG(IPASoft, Error)
++				<< "SP11 IMX681 fixed-frame exposure contract not admitted";
++			return -ERANGE;
++		}
++		context_.configuration.agc.exposureMax = *maximum;
++	}
+ 	if (!context_.configuration.agc.exposureMin) {
+ 		LOG(IPASoft, Warning) << "Minimum exposure is zero, that can't be linear";
+ 		context_.configuration.agc.exposureMin = 1;
+@@ -309,6 +329,18 @@
+ 	ControlList metadata(controls::controls);
+ 	for (auto const &algo : algorithms())
+ 		algo->process(context_, frame, frameContext, stats_, metadata);
++	/* The accepted IMX681 V4L2 exposure control only accepts even lines.
++	 * Quantize AFTER AGC so both the next V4L2 write and the retained
++	 * AGC state respect the actual frame length and control step.
++	 * No other camera algorithm or gain conversion is modified.
++	 */
++	if (context_.sensorInfo.model == "imx681") {
++		frameContext.sensor.exposure =
++			sp11::Imx681FixedFrameAgc::quantize(
++				frameContext.sensor.exposure,
++				context_.configuration.agc.exposureMax);
++		context_.activeState.agc.exposure = frameContext.sensor.exposure;
++	}
+ 	metadataReady.emit(frame, metadata);
+ 
+ 	/* Sanity check */
