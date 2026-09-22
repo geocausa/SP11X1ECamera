@@ -28,7 +28,7 @@ sudo -n test -f /var/lib/sp11-e004lp-build/build/src/ipa/simple/ipa_soft_simple.
 ( cd "$SRC"; sha256sum -c HARDWARE-MANIFEST.sha256 >/dev/null )
 [[ "$(sudo -n sha256sum "$PROBE" | awk '{print $1}')" == a8c71fcad1df40b103bcd95556ab76d14b746ce116502db4b8c1a1f28f64ff9e ]]
 [[ "$(sha256sum "$SRC/dtb/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb" | awk '{print $1}')" == 3d56fd6f610576dee5fc97da809f9c48da16952af9a48a5053ea864b94855beb ]]
-[[ "$(sudo -n sha256sum "/var/lib/sp11-e004lp-build/source/src/libcamera/pipeline/simple/simple.cpp" | awk '{print $1}')" == 077d542475a28c9f982d4c7813a5cd7945198363bcc6bca79f645e4b80ebac ]]
+[[ "$(sudo -n sha256sum "/var/lib/sp11-e004lp-build/source/src/libcamera/pipeline/simple/simple.cpp" | awk '{print $1}')" == 077d542475a28c9f982d4c7813a5a3cd7945198363bcc6bca79f645e4b80ebac ]]
 [[ "$(sha256sum "$H/sp11-libcamera-e004lp-lease.h" | awk '{print $1}')" == dffe7b1d51bc692b5ed2893ea51ebe1a859bf6eee10bc331a37697b180b09255 ]]
 bash -n "$H/run-once.sh" "$H/arm-once.sh" "$H/retire-after-golden.sh"
 tail -n +3 "$H/99zzzzzz_sp11_camera_e004lp" | grub-script-check
