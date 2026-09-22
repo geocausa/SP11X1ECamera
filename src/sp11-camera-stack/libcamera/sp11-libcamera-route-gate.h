@@ -61,9 +61,22 @@ public:
         streaming_ = true;
         return true;
     }
+    void retireUncertainStreamStop()
+    {
+        /* streamOff() returned an error: never attempt neutral with a
+         * potentially running sensor; only the outer guarded one-shot
+         * reboot can recover this untrusted hardware state.
+         */
+        failed_ = true;
+    }
     bool afterStream()
     {
-        if (!admitted() || !streaming_) return fail();
+        /* libcamera invokes stopDevice() after partial start failures.
+         * That is also valid if STREAMON never happened, or if the
+         * pipeline already returned neutral. Do not manufacture a
+         * failure solely because no stream was active.
+         */
+        if (!admitted()) return fail();
         streaming_ = false;
         selected_.clear();
         if (!session_->transition("neutral")) return fail();

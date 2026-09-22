@@ -46,3 +46,17 @@ guards, NOT general OS-enforced exclusivity. There is no authorized
 production install or live libcamera test; real hasStreams/active routing
 requirements and independent cross-process ownership remain open. Do not
 run unrestricted libcamera on a camera-enabled SP11 boot.
+
+## E004lo guarded libcamera registration-only candidate
+
+E004ln independently confirmed all 28 live SP11 subdevices report
+V4L2_SUBDEV_CAP_STREAMS=0. E004lo pins the E004lh/E004lm clean-libcamera
+native route integration plus the standalone IMX681 gain helper and an
+additional fail-closed STREAMOFF patch. It isolates registration-only
+cam --list in a NEW one-shot boot. Root:root mode 0600 on all 45 exact
+CAMSS media/video/subdev nodes denies ordinary non-root clients only during
+that experimental candidate; root-equivalent competing clients and
+production general exclusivity remain out of scope. Any camera setup
+failure returns to Golden without guessing at link rollback. The protected
+Golden library and kernel must not be replaced. After any first attempt,
+E004lo identity is consumed, never retried. See E004lo README/evidence.

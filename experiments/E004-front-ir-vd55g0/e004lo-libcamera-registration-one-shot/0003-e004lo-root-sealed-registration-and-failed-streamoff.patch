@@ -1,0 +1,28 @@
+--- a/src/libcamera/pipeline/simple/simple.cpp
++++ b/src/libcamera/pipeline/simple/simple.cpp
+@@ -50,7 +50,7 @@
+ #include "libcamera/internal/v4l2_videodevice.h"
+ 
+ #include "sp11-rgb-paths.h"
+-#include "sp11-libcamera-experimental-lease.h"
++#include "sp11-libcamera-e004lo-lease.h"
+ 
+ namespace libcamera {
+ 
+@@ -1762,7 +1762,15 @@
+ 			data->swIsp_->stop();
+ 	}
+ 
+-	video->streamOff();
++	/* Never disconnect a media route while the kernel may still be
++	 * streaming. A failed STREAMOFF permanently retires this one-shot
++	 * libcamera session, leaving recovery to the Golden reboot.
++	 */
++	int stopResult = video->streamOff();
++	if (data->sp11Camss_ && stopResult < 0) {
++		sp11Lease_.retireUncertainStreamStop();
++		LOG(SimplePipeline, Error) << "SP11 STREAMOFF unconfirmed; reject all further graph writes";
++	}
+ 	video->releaseBuffers();
+ 
+ 	video->bufferReady.disconnect(data, &SimpleCameraData::imageBufferReady);

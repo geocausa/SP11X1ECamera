@@ -8,6 +8,9 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <fcntl.h>
 #include <memory>
 #include <string>
@@ -32,14 +35,15 @@ public:
         if (attempted_ || ::geteuid() != 0 || mediaNode != "/dev/media0" ||
             !bootAuthorized()) return false;
         attempted_ = true;
-        if (!sensorsSuspended()) return false;
+        if (!sensorsSuspended() || !cameraNodesRootOnly()) return false;
         fd_ = ::open(mediaNode.c_str(), O_RDWR | O_CLOEXEC | O_NOFOLLOW |
                                        O_NONBLOCK);
         if (fd_ < 0) return false;
         if (::lockf(fd_, F_TLOCK, 0) < 0) return false;
         locked_ = true;
         auto owner = [this] {
-            return locked_ && fd_ >= 0 && ::fcntl(fd_, F_GETFD) >= 0;
+            return locked_ && fd_ >= 0 && ::fcntl(fd_, F_GETFD) >= 0 &&
+                   cameraNodesRootOnly();
         };
         auto idle = [this] {
             return !streaming_ && sensorsSuspended();
@@ -86,6 +90,49 @@ public:
     static bool allowActiveRoutingReset() { return false; }
 
 private:
+    /* DAC, unlike a cooperative media-fd lock, denies every non-root
+     * process access to the actual video, media and subdevice nodes.
+     * The candidate runner applies 0600 root:root AFTER device creation,
+     * checks no preexisting fds, and confirms the seal before launch.
+     * Recheck on EVERY kernel graph transition, not just admission.
+     * Root-equivalent adversaries are explicitly OUTSIDE this limited
+     * single-use test's security model: this is NOT production ownership.
+     */
+    static bool cameraNodesRootOnly()
+    {
+        DIR *dir = ::opendir("/dev");
+        if (!dir) return false;
+        unsigned mediaCount=0, videoCount=0, subdevCount=0;
+        bool good=true;
+        for (struct dirent *entry; (entry=::readdir(dir)); ) {
+            const std::string name(entry->d_name);
+            std::string type;
+            if (name == "media0") type = "media";
+            else if (name.rfind("video", 0) == 0 &&
+                     name.size() > 5) type = "video";
+            else if (name.rfind("v4l-subdev", 0) == 0 &&
+                     name.size() > 10) type = "subdev";
+            else if (name.rfind("media", 0) == 0 &&
+                     name.size() > 5) { good=false; break; }
+            else continue;
+            const auto first = type == "video" ? 5U :
+                               type == "subdev" ? 10U : name.size();
+            for (size_t i=first; i<name.size(); ++i)
+                if (name[i] < '0' || name[i] > '9') good=false;
+            if (!good) break;
+            const std::string path = "/dev/" + name;
+            struct stat st{};
+            if (::lstat(path.c_str(), &st) ||
+                !S_ISCHR(st.st_mode) || st.st_uid != 0 || st.st_gid != 0 ||
+                (st.st_mode & 0777) != 0600) { good=false; break; }
+            if (type == "media") ++mediaCount;
+            else if (type == "video") ++videoCount;
+            else ++subdevCount;
+        }
+        ::closedir(dir);
+        return good && mediaCount == 1 && videoCount == 16 &&
+               subdevCount == 28;
+    }
     static bool bootAuthorized()
     {
         FILE *stream = std::fopen("/proc/cmdline", "r");
@@ -94,8 +141,8 @@ private:
         const bool got = std::fgets(text, sizeof(text), stream);
         std::fclose(stream);
         return got &&
-               std::strstr(text, "sp11_camera_e004lm_libcamera=1") &&
-               std::strstr(text, "sp11_entry=7.1.5-sp11-camera-e004lm-libcamera") &&
+               std::strstr(text, "sp11_camera_e004lo_libcamera=1") &&
+               std::strstr(text, "sp11_entry=7.1.5-sp11-camera-e004lo-libcamera") &&
                std::strstr(text, "modprobe.blacklist=qcom_camss,imx681,ov13858,sp11_vd55g0,vd55g0");
     }
     static bool sensorsSuspended()

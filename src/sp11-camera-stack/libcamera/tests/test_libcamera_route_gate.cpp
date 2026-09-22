@@ -86,6 +86,7 @@ int main()
     assert(decodeTopology(f.top, graph) && validGraph(graph, enabled) &&
            phase(enabled) == "neutral");
     assert(gate.neutralizeWhenIdle() && writes == 8);
+    assert(gate.afterStream() && writes == 8 && gate.admitted());
     /* Re-run frontend lifecycle with neutral hardware between configure and
      * STREAMON: no camera route remains active during ordinary app idle.
      */
@@ -97,6 +98,7 @@ int main()
     assert(gate.afterStream() && writes == 16);
     assert(decodeTopology(f.top, graph) && validGraph(graph, enabled));
     assert(phase(enabled) == "neutral");
+    assert(gate.afterStream() && writes == 16 && gate.admitted());
     assert(!gate.attach(makeSession(owner, idle)));
 
     Fixture noLease;
@@ -143,6 +145,27 @@ int main()
     assert(!rejectConcurrent.setupLinks("ov13858 3-0010"));
     assert(!rejectConcurrent.admitted() && writes == activeWrites);
 
+    Fixture partialStart;
+    bind(partialStart);
+    sp11::LibcameraRouteGate failedBeforeStream;
+    assert(failedBeforeStream.attach(makeSession(owner, idle)));
+    assert(failedBeforeStream.setupLinks("imx681 1-0010"));
+    assert(failedBeforeStream.afterStream() && writes == 4);
+    assert(failedBeforeStream.admitted());
+    assert(decodeTopology(partialStart.top, graph) && validGraph(graph, enabled));
+    assert(phase(enabled) == "neutral");
+
+    Fixture unconfirmedStop;
+    bind(unconfirmedStop);
+    sp11::LibcameraRouteGate uncertain;
+    assert(uncertain.attach(makeSession(owner, idle)));
+    assert(uncertain.setupLinks("imx681 1-0010"));
+    assert(uncertain.beforeStream("imx681 1-0010"));
+    unsigned beforeUnsafe = writes;
+    uncertain.retireUncertainStreamStop(); /* e.g. VIDIOC_STREAMOFF failed */
+    assert(!uncertain.admitted() && !uncertain.afterStream());
+    assert(!uncertain.neutralizeWhenIdle() && writes == beforeUnsafe);
+
     Fixture writeFail;
     bind(writeFail);
     sp11::LibcameraRouteGate failing;
@@ -154,6 +177,6 @@ int main()
     std::cout << "PASS libcamera-native RGB gate: exact front/rear stream "
                  "lifecycle with 16 exact native ioctl writes including idle-neutral parking; IR/foreign sensor, "
                  "missing ownership/quiescence, cross-camera start, "
-                 "failed writer and active routing reset rejected\n";
+                 "failed writer, uncertain stream-off and active routing reset rejected\n";
     return 0;
 }
