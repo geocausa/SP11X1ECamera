@@ -1,0 +1,22 @@
+[Unit]
+Description=SP11 E004lr single-use root-sealed RGB native camera bounded sequential RAW frame diagnostic; return Golden
+ConditionKernelCommandLine=sp11_camera_e004lr_raw_frames=1
+After=local-fs.target systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+Wants=systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+TimeoutStartSec=150
+TimeoutStopSec=15
+ExecStart=/usr/local/sbin/sp11-camera-e004lr-run-once
+ExecStopPost=/usr/bin/systemctl --no-block reboot
+StandardOutput=journal+console
+StandardError=journal+console
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
