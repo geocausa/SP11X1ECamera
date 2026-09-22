@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lr-both-real-libcamera-raw-frame-stream-pass-golden
+state_id: E004ls-rear-processed-xrgb8888-partial-strict-rgb888-rejected-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -261,6 +261,26 @@ e004lr_live_libcamera_rgb_raw_frames:
   golden_modified: false
   unique_one_shot_assets_consumed_and_retired: true
   next: sustained-libcamera-rgb-raw-and-processed-output-service-in-new-guarded-candidate
+e004ls_live_libcamera_processed_rgb:
+  date: 2026-09-23
+  status: failed-strict-rgb888-contract-rear-xrgb8888-partial-consumed-retired
+  source_commit: 84e8de4eebf4553aeb6c22cf2aab8ab2e953d220
+  candidate_boot_id: ec89a029-8fb3-4801-b99a-b01a682a9a2a
+  golden_return_boot_id: 2fdd13fe-daa1-44a4-bd36-8802cc0943f7
+  requested_rgb888: 640x480-RGB888
+  actual_rear_processed_format: 640x480-XRGB8888
+  rear_metadata_frames: 6
+  rear_bytesused_per_frame: 1228800
+  strict_format_acceptance: failed
+  front_processed_session_attempted: false
+  before_capture_full_graph: neutral
+  after_rear_graph: not-checked-in-candidate
+  saved_image_payloads: false
+  ir_illumination: off
+  production_multiclient_owner_proven: false
+  golden_modified: false
+  unique_one_shot_assets_consumed_and_retired: true
+  next: new-guarded-both-real-xrgb8888-processed-frame-proof-with-full-neutral-checks
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3222,7 +3242,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: sustained-libcamera-rgb-raw-and-processed-output-service-in-new-guarded-candidate
+next_experiment: new-guarded-both-real-xrgb8888-processed-frame-proof-with-full-neutral-checks
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30

@@ -11,3 +11,31 @@ Admission: unique dedicated single-use nondefault boot sp11_camera_e004ls_rgb_fr
 Limits: root-only DAC protects an isolated experiment against ordinary unprivileged desktop clients, not arbitrary root-equivalent actors or production multi-client exclusivity. Calibrated ISP/Windows QC10C parity, service robustness and ordinary consumer app output remain unproven until separate tests. This is NOT a production driver deployment.
 
 Status at preparation: SOURCE ONLY. Final attempt status must be determined from its own fresh RESULT.json and CONSUMED.json; never infer success from earlier E004lr RAW frames.
+
+## Final physical result — strict-contract FAIL, partial rear processed output
+
+One unique candidate boot ec89a029-8fb3-4801-b99a-b01a682a9a2a
+ran a real root-guarded libcamera X1E rear viewfinder stream. The
+requested 640x480 RGB888 format was ADJUSTED by libcamera to actual
+640x480 XRGB8888/sRGB, so the pinned strict configure-log check
+correctly FAILED and the one-shot terminated without attempting the
+front camera or executing the rear post-session full-graph check.
+This is NOT a pass for the requested RGB888 contract, nor for front
+processed output. The rear cam process independently reported six
+completed sequence numbers 0..5 and 1,228,800 bytesused in each output
+buffer (640*480*4), with no saved pixel payload; intermittent timing
+is not a sustained frame-rate proof. The initial full media graph
+was independently NEUTRAL. The post-rear graph was NOT independently
+checked, because the strict format gate stopped the runner first;
+do not infer its state from the automatic reboot. The candidate
+systemd service failed as expected (rc1), requested and achieved
+automatic protected Golden return boot
+2fdd13fe-daa1-44a4-bd36-8802cc0943f7. Golden default v19c,
+empty next_entry and absence of camera nodes/modules were verified.
+Kernel VD55G0 remained stream=0 illumination=0. Root-private E004ls
+bundle/build, unique boot and service were RETIRED; E004ls identity
+is CONSUMED and must NEVER be rearmed. See RESULT/CONSUMED and
+redacted numeric evidence. The next fresh candidate should explicitly
+request the observed XRGB8888 output from BOTH sensors, require a
+separate full neutral graph read after each session, and still
+record no image payload in the dark nighttime scene.
