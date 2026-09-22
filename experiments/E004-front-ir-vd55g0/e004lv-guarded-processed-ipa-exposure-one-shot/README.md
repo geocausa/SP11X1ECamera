@@ -13,3 +13,37 @@ A read-only full kernel Media Controller v2 probe requires neutral BEFORE, BETWE
 **Limitation:** Even a zero-error 30-frame run is only a short control-path test. The exact failed control from E004lt was not recorded; a fixed outcome supports but does not by itself isolate the root cause. Ordinary desktop service, multi-user ownership, repeated suspend/reopen, calibrated colour/Windows QC10C ISP parity and longer low-light testing remain open.
 
 Preparation status: source and scripts only, not yet a physical attempt. Once attempted, RESULT.json/CONSUMED.json and numeric evidence supersede this status; NEVER rearm a consumed E004lv.
+
+## Final physical result — PASS; consumed and retired
+
+Unique guarded E004lv candidate boot c3662af2-cbd3-4240-b0d6-f52d65535d12
+verified E004lu's bounded IMX681 fixed-mode software IPA: front IPA
+logged active exposure range 4–3550 lines. Real front IMX681 then
+rear OV13858 each produced THIRTY distinct-sequence 640x480-XRGB8888/sRGB
+processed camera buffer records, exactly 1228800 bytes per frame,
+first-to-last timestamp spans 967530us and 968393us (about 30fps across
+29 short frame intervals), and ZERO V4L2 set-controls errors on BOTH
+cameras. This is a 30-frame-per-camera short test, NOT a multi-minute
+performance, image-content, low-light quality or Windows ISP parity test.
+The previously observed six front ERANGE events did NOT recur in this
+bounded test, though E004lt's exact failed V4L2 control ID was never
+independently captured, so this is evidence supporting the fixed-frame
+exposure hypothesis rather than per-control causal isolation.
+
+Each independent media-v2 read showed complete NEUTRAL graph before,
+between and after separate real-camera sessions. No --file image payloads
+were saved, no IR camera or emitter used, and VD55G0 kernel standby
+confirmed stream=0 illumination=0. Root-private libcamera source, IPA
+config and entire staged binary bundle passed SHA and ownership checks.
+The one-shot service passed and automatically returned SP11 to Golden
+boot 50b23212-8e86-4f5b-bc8b-f1705db5546d, with original v19c saved
+entry, empty pending next entry and no camera nodes/modules.
+
+After independent Golden recovery, the separate E004lv boot files, GRUB
+entry, root-private libcamera build, stage and service were fully
+RETIRED. E004lv identity is CONSUMED; NEVER rearm. Redacted numeric
+frame metadata, format, AGC exposure-cap, neutral graphs, root asset
+verification and IR standby are in RESULT/CONSUMED/evidence.
+Next step is new uniquely guarded sustained processed camera
+reopen/suspend/30fps and functional selectable service ownership
+tests; eventual Windows ISP comparison must use controlled lighting.

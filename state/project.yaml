@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lu-fixed-frame-ipa-exposure-offline-golden
+state_id: E004lv-processed-both-rgb-30frames-zero-control-errors-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -316,6 +316,29 @@ e004lu_imx681_softipa_fixed_frame:
   physical_new_exposure_fix_test: false
   golden_modified: false
   next: unique-guarded-processed-rgb-front-control-zero-erange-validation
+e004lv_fixed_frame_ipa_real_rgb:
+  date: 2026-09-23
+  status: pass-physical-both-processed-30frames-zero-control-errors-consumed-retired
+  source_commit: 5d7494cf15dba89a0d8f659678a05953c740b07b
+  candidate_boot_id: c3662af2-cbd3-4240-b0d6-f52d65535d12
+  golden_return_boot_id: 50b23212-8e86-4f5b-bc8b-f1705db5546d
+  front_active_agc_exposure_max_lines: 3550
+  front_processed_format: 640x480-XRGB8888-sRGB
+  rear_processed_format: 640x480-XRGB8888-sRGB
+  front_valid_frame_metadata: 30
+  rear_valid_frame_metadata: 30
+  front_timestamp_span_us: 967530
+  rear_timestamp_span_us: 968393
+  front_set_controls_errors: 0
+  rear_set_controls_errors: 0
+  full_media_graph_neutral_before_between_after: true
+  ir_illumination: off
+  root_private_ipa_build: pass
+  sustained_fps_and_calibrated_quality: unproven
+  earlier_exact_failed_v4l2_control_id: not-independently-captured
+  production_multiclient_ownership: unproven
+  one_shot_consumed_and_retired: true
+  next: fresh-guarded-processed-rgb-sustained-reopen-suspend-and-service-ownership
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3277,7 +3300,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: unique-guarded-processed-rgb-front-control-zero-erange-validation
+next_experiment: fresh-guarded-processed-rgb-sustained-reopen-suspend-and-service-ownership
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
