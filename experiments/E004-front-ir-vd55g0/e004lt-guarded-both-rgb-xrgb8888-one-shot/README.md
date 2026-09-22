@@ -9,3 +9,25 @@ Hardware authority is the SHA-pinned canonical four-camera module/DTB package pl
 The software ISP source supports the sensor input packed Bayer10 and emits XRGB8888, and E004ls independently observed six actual rear processed XRGB8888 buffers. E004lt extends physical proof to BOTH sensors with exact no-adjustment XRGB8888 request and separated neutral checks. This is NOT sustained performance or ordinary desktop/public driver deployment; production multi-client exclusive ownership, quality calibration/Windows ISP parity, image tuning and service suspend/reopen remain.
 
 Status at preparation: SOURCE ONLY; the final evidence/RESULT/CONSUMED records override this preparation note. Never rearm after any attempt.
+
+## Final physical result — PASS short processed frames, front control-loop failure still open
+
+The unique E004lt boot 3e516455-a5f5-4406-b76c-1e136a832712 captured
+exactly six nonempty 640x480-XRGB8888/sRGB metadata-confirmed viewfinder
+frames on each real camera in independent rear-then-front libcamera
+sessions. Rear distinct sequences 0..5 span 167690us and front distinct
+sequences 0..5 span 166604us; all twelve buffers report 1228800 bytes.
+Full independent read-only v2 topology is neutral BEFORE, BETWEEN and
+AFTER captures. No frame pixel file or image hash was saved, so there is
+no sustained-fps or image-quality claim. Front libcamera log contains SIX
+per-frame "Unable to set controls: Numerical result out of range" errors;
+rear has ZERO. These are real front AGC/control-loop failures despite the
+successful frame delivery: investigate dynamic IMX681 exposure limit,
+exposure step and timing interplay before another candidate.
+Runner rc0 and automatic protected Golden return
+dc3ad691-35fb-4423-a723-063ee38bc0ed, saved v19c, next empty,
+no camera nodes/modules, IR standby stream=0 illumination=0.
+The one-shot candidate, GRUB/service and root-private build were fully
+retired; identity CONSUMED and NEVER reusable. RESULT/CONSUMED and
+redacted numeric evidence were archived. No processed camera installation
+or production session ownership authorization is implied.

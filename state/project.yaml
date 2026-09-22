@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004ls-rear-processed-xrgb8888-partial-strict-rgb888-rejected-golden
+state_id: E004lt-both-real-rgb-xrgb8888-short-frames-pass-front-control-errors-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -281,6 +281,26 @@ e004ls_live_libcamera_processed_rgb:
   golden_modified: false
   unique_one_shot_assets_consumed_and_retired: true
   next: new-guarded-both-real-xrgb8888-processed-frame-proof-with-full-neutral-checks
+e004lt_real_rgb_xrgb8888:
+  date: 2026-09-23
+  status: pass-both-short-processed-frame-delivery-front-control-errors-consumed-retired
+  source_commit: b8bd95f7e55389787cfeebf427a93fb5eb975d33
+  candidate_boot_id: 3e516455-a5f5-4406-b76c-1e136a832712
+  golden_return_boot_id: dc3ad691-35fb-4423-a723-063ee38bc0ed
+  rear_processed_format: 640x480-XRGB8888-sRGB
+  front_processed_format: 640x480-XRGB8888-sRGB
+  rear_valid_metadata_frames: 6
+  front_valid_metadata_frames: 6
+  rear_timestamp_span_us: 167690
+  front_timestamp_span_us: 166604
+  front_sensor_control_erange_errors: 6
+  rear_sensor_control_erange_errors: 0
+  full_graph_neutral_before_between_after: true
+  ir_illumination: off
+  production_camera_service_or_multiclient_ownership: unproven
+  pixel_quality_and_sustained_fps: unproven
+  one_shot_consumed_and_retired: true
+  next: audit-and-fix-imx681-ipa-dynamic-exposure-cluster-erange
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3242,7 +3262,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: new-guarded-both-real-xrgb8888-processed-frame-proof-with-full-neutral-checks
+next_experiment: audit-and-fix-imx681-ipa-dynamic-exposure-cluster-erange
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
