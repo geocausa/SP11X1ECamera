@@ -1,0 +1,40 @@
+{
+  "sensor_driver": "src/front-imx681/kernel/imx681/imx681.c",
+  "mandatory_controls_missing": [
+    "V4L2_CID_HBLANK",
+    "V4L2_CID_PIXEL_RATE"
+  ],
+  "raw_width": 3840,
+  "line_length": 6752,
+  "hblank_derived": 2912,
+  "nominal_frame_length": 3554,
+  "nominal_fps": 30,
+  "windows_exposure_vt_clock_hz": 719898240,
+  "csi_output_pixel_clock_hz": 548570000,
+  "timing_authority": "experiments/E003-front-imx681-cphy/e003i-front-native-productionization/cq-aec-output-imx681-control-adapter/RESULT.json",
+  "requires_camss_consumer_review": true,
+  "kernel_modified": false,
+  "live_proven": false,
+  "camss_pixel_clock_consumer": "src/front-imx681/kernel/camss/camss-vfe.c:vfe_set_clock_rates and vfe_check_clock_rates",
+  "clock_margin": [
+    105,
+    100
+  ],
+  "x1e_vfe_frequencies_hz": [
+    345600000,
+    432000000,
+    594000000,
+    675000000,
+    727000000
+  ],
+  "current_missing_pixel_rate_fallback_hz": 727000000,
+  "vt_clock_pix_required_hz": 755893152,
+  "vt_clock_pix_outcome": "-EINVAL: Pixel clock is too high for VFE",
+  "vt_clock_rdi_raw10_selected_hz": 345600000,
+  "link_frequency_stays_explicit_hz": 1200000000,
+  "link_frequency_reason": "v4l2_get_link_freq prefers get_mbus_config.link_freq before controls",
+  "clock_vote_change_requires_physical_validation": true,
+  "transport_clock_must_not_substitute_for_exposure_clock": true,
+  "internal_60fps_mode_evidence": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-imx681-six-mode-correction/imx681-six-mode-correction-oracle.json",
+  "internal_60fps_mode_live_validated": false
+}

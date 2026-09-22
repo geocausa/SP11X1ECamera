@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lb-self-contained-rgb-source-golden
+state_id: E004lc-libcamera-prerequisites-clock-gate-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -3843,7 +3843,12 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  E004fp is consumed PASS and Golden-restored. Its corrected observer live-proved seven successful paired PMIC RMWs during one 12-frame Windows IR preview: ee4a..ee4d trigger programming, ee4a/ee4d low3=0x05 for LED1 sources 1/4, and ee67 bit0 1->0; no ee3e..ee41 timer access appeared in this bounded session. Next close actual VD55G0 sensor exposure/strobe timing and whether separate PMIC timer/timeout programming is active or required. Keep Linux emitter activation prohibited until that timing policy is mechanically justified.
+  Resolve CAMSS VFE transport bandwidth versus sensor-array PIXEL_RATE semantics
+  before exposing IMX681 HBLANK/PIXEL_RATE and admitting a fresh kernel candidate.
+  E004lc helper and hardware-free clock regression pass; correct VT clock currently
+  exceeds PIX clock limits. Preserve accepted hardware and Golden; do not bypass
+  libcamera validation. Production sensor/publisher restart, suspend and calibrated
+  RGB quality remain open. IR emitter activation remains prohibited.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -6798,3 +6803,20 @@ e004lb_completed:
   source: src/sp11-camera-stack/rgb
   converter_bytes_unchanged: true
   hardware_bootstrap_still_separate: true
+
+e004lc_completed:
+  status: gain-helper-build-pass-kernel-clock-integration-blocked
+  physical_test: false
+  libcamera_base: b7854fd07d42168f099b5ce30d1702e0e0875bf5
+  libcamera_tests_passed: 3
+  actual_camss_c_clock_cases_passed: 6
+  mandatory_controls_missing: [HBLANK, PIXEL_RATE]
+  exposure_vt_clock_hz: 719898240
+  csi_output_clock_hz: 548570000
+  hblank: 2912
+  pix_required_clock_hz: 755893152
+  vfe_max_clock_hz: 727000000
+  installed: false
+  kernel_modified: false
+  live_libcamera_proven: false
+  next_gate: resolve-camss-transport-versus-pixel-array-clock-semantics

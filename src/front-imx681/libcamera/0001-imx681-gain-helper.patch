@@ -1,0 +1,80 @@
+diff --git a/src/ipa/libipa/camera_sensor_helper.cpp b/src/ipa/libipa/camera_sensor_helper.cpp
+--- a/src/ipa/libipa/camera_sensor_helper.cpp
++++ b/src/ipa/libipa/camera_sensor_helper.cpp
+@@ -642,6 +642,17 @@
+ };
+ REGISTER_CAMERA_SENSOR_HELPER("imx477", CameraSensorHelperImx477)
+
++class CameraSensorHelperImx681 : public CameraSensorHelper
++{
++public:
++	CameraSensorHelperImx681()
++	{
++		/* IMX681 analogue gain code: 1024 - 1024 / gain. */
++		gain_ = AnalogueGainLinear{ 0, 1024, -1, 1024 };
++	}
++};
++REGISTER_CAMERA_SENSOR_HELPER("imx681", CameraSensorHelperImx681)
++
+ class CameraSensorHelperImx708 : public CameraSensorHelper
+ {
+ public:
+diff --git a/test/ipa/libipa/meson.build b/test/ipa/libipa/meson.build
+--- a/test/ipa/libipa/meson.build
++++ b/test/ipa/libipa/meson.build
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: CC0-1.0
+
+ libipa_test = [
++    {'name': 'imx681-helper', 'sources': ['imx681-helper.cpp']},
+     {'name': 'fixedpoint', 'sources': ['fixedpoint.cpp']},
+     {'name': 'histogram', 'sources': ['histogram.cpp']},
+     {'name': 'interpolator', 'sources': ['interpolator.cpp']},
+diff --git a/test/ipa/libipa/imx681-helper.cpp b/test/ipa/libipa/imx681-helper.cpp
+new file mode 100644
+--- /dev/null
++++ b/test/ipa/libipa/imx681-helper.cpp
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++#include <cmath>
++#include <iostream>
++
++#include "camera_sensor_helper.h"
++#include "test.h"
++
++using namespace libcamera;
++using namespace libcamera::ipa;
++
++class Imx681HelperTest : public Test
++{
++protected:
++	int run() override
++	{
++		auto helper = CameraSensorHelperFactoryBase::create("imx681");
++		if (!helper || helper->blackLevel().has_value())
++			return TestFail;
++
++		/* Operating points from the independently verified IMX681 oracle. */
++		const struct {
++			unsigned int code;
++			double multiplier;
++		} points[] = {
++			{ 0, 1.0 }, { 512, 2.0 }, { 768, 4.0 },
++			{ 896, 8.0 }, { 960, 16.0 },
++		};
++		for (const auto &point : points) {
++			if (std::abs(helper->gain(point.code) - point.multiplier) > 1e-12 ||
++			    helper->gainCode(point.multiplier) != point.code)
++				return TestFail;
++		}
++
++		/* Integer conversion rounds down; no invented calibration. */
++		if (helper->gainCode(1.5) != 341 ||
++		    helper->gain(helper->gainCode(1.5)) > 1.5)
++			return TestFail;
++
++		return TestPass;
++	}
++};
++
++TEST_REGISTER(Imx681HelperTest)
