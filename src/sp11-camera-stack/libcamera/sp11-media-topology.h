@@ -138,7 +138,8 @@ inline int kernelTopologyIoctl(int fd, unsigned long request, void *arg)
     return ::ioctl(fd, request, arg);
 }
 inline bool readFreshTopology(int fd, Graph &out,
-                              TopologyIoctl request = kernelTopologyIoctl)
+                              TopologyIoctl request = kernelTopologyIoctl,
+                              Topology *snapshot = nullptr)
 {
     if (fd < 0 || !request) return false;
     media_device_info info{};
@@ -173,6 +174,10 @@ inline bool readFreshTopology(int fd, Graph &out,
         first.num_pads != second.num_pads ||
         first.num_links != second.num_links)
         return false;
-    return decodeTopology(payload, out);
+    Graph verified;
+    if (!decodeTopology(payload, verified)) return false;
+    out = std::move(verified);
+    if (snapshot) *snapshot = std::move(payload);
+    return true;
 }
 } /* namespace sp11 */

@@ -192,4 +192,5 @@ int main()
     std::cout << "PASS native v2 graph: 3 phases, 44 entities, 84 pads, "
                  "119 data edges, 44 interfaces; " << rejected
               << " malformed/topology/route negatives; 7 simulated ioctl failures; invalid fd denied\n";
+    return 0;
 }

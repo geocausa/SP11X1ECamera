@@ -15,7 +15,7 @@ static int fakeIoctl(int fd, unsigned long op, void *raw)
     if (op != MEDIA_IOC_G_TOPOLOGY || (mockMode == 4 && mockStep == 1))
         return -1;
     auto &t = *static_cast<media_v2_topology *>(raw);
-    const unsigned step = ++mockStep;
+    const unsigned step = (++mockStep % 2) ? 1 : 2;
     t.topology_version = step == 2 && mockMode == 2 ? 8 : 7;
     t.num_entities = static_cast<unsigned>(mockTop->entities.size());
     t.num_interfaces = static_cast<unsigned>(mockTop->interfaces.size());

@@ -110,16 +110,26 @@ public:
     using Idle = std::function<bool()>;
     Transaction(Read read, Write write, Idle idle)
         : read_(read), write_(write), idle_(idle) {}
-    bool initialize()
+    bool initialize(bool adoptAndNeutralize = false)
     {
         if (initialized_ || poisoned_) return false;
         poisoned_ = true;
         Graph graph;
-        if (!idle_() || !read_(graph) || !validGraph(graph, expected_) ||
-            !expected_.empty()) return false;
+        if (!idle_() || !read_(graph) || !validGraph(graph, expected_))
+            return false;
+        const auto initial = phase(expected_);
+        if (initial == "invalid" ||
+            (initial != "neutral" && !adoptAndNeutralize))
+            return false;
         identity_ = graph.identity;
         initialized_ = true;
         poisoned_ = false;
+        /* An explicitly adopted complete front/rear route may be
+         * DISABLED only with independently verified idle/ownership
+         * guards. Failure poisons the session, never guesses rollback.
+         */
+        if (initial != "neutral")
+            return transition("neutral");
         return true;
     }
     bool transition(const std::string &target)
