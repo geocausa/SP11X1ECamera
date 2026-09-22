@@ -2,7 +2,7 @@
 # E004lv: isolated root-private fixed-frame Soft IPA capture diagnostic.
 set -Eeuo pipefail
 R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
-H=$R/experiments/E004-front-ir-vd55g0/e004lv-guarded-both-rgb-xrgb8888-one-shot
+H=$R/experiments/E004-front-ir-vd55g0/e004lv-guarded-processed-ipa-exposure-one-shot
 SRC=/tmp/sp11-e004lv-hardware
 PROBE=/var/lib/sp11-e004lv-build/build/src/apps/cam/cam
 D=/var/lib/sp11-camera-e004lv

@@ -2,7 +2,7 @@
 # E004lv: mark ONE attempt consumed before scheduling one-time diagnostic boot.
 set -Eeuo pipefail
 R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
-H=$R/experiments/E004-front-ir-vd55g0/e004lv-guarded-both-rgb-xrgb8888-one-shot
+H=$R/experiments/E004-front-ir-vd55g0/e004lv-guarded-processed-ipa-exposure-one-shot
 D=/var/lib/sp11-camera-e004lv
 ID=sp11-camera-e004lv-xrgb8888-one-shot
 cd "$R"
