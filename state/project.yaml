@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004le-live-timing-rdi-clock-sustained-rgb-golden
+state_id: E004lf-libcamera-route-admission-blocker-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -3843,12 +3843,13 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  E004le consumed PASS validates timing controls and front345.6MHz RDI clock,
-  sustained1800-frame app sessions for front1080p and rear4K, then Golden return.
-  Audit libcamera metadata/format admission and independently validate PIX594MHz
-  before promoting the candidate package. Sensor/publisher restart, suspend and
-  calibrated image quality remain open. Do not reuse E004le or claim near-black
-  uncontrolled luma is Windows ISP parity. IR emitter remains off.
+  Close E004lf libcamera route-admission safety blocker: restrict camera discovery
+  to RGB and shortest-path candidates to the physically validated front/rear
+  routes, with full-graph neutral/exclusive transition guards before setupLinks.
+  Do not run unrestricted cam enumeration; it can mutate links during init.
+  E004le timing and lower345.6MHz front RDI clock/sustainedRGB remain proven.
+  PIX594MHz, sensor/publisher restart, suspend and calibrated quality remain open.
+  Keep IR off and never reuse consumed experiment identities.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -6844,3 +6845,14 @@ e004le_completed:
   power_savings_measured: false
   pix_path_validated: false
   image_quality_parity_proven: false
+
+e004lf_completed:
+  status: static-libcamera-route-admission-safety-blocker-confirmed
+  physical_test: false
+  shortest_paths_per_sensor: 80
+  admitted_front_paths: 1
+  admitted_rear_paths: 1
+  admitted_ir_paths: 0
+  fixture_order_front_route_rejected: true
+  live_libcamera_route_order_proven: false
+  unrestricted_libcamera_enumeration_admitted: false
