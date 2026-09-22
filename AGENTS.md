@@ -34,6 +34,25 @@ Reboots, static inspection, dynamic tracing and debugger work are normal parts o
 - Initrd extra-module paths may disappear after switch-root; for a manual post-boot harness, use a SHA-checked repo/build copy if the initrd copy is no longer visible.
 - Do not use `.golden-v33-delta-replay/src` as the production camera source. Use `.golden-v33-repro/src` for true Golden reference and `sp11-camera-e002k-d-src` for the accepted integrated camera source.
 
+## SP11 Linux system sleep: prohibited camera test path
+
+The user reports that **OS-level standby/suspend/resume is not yet
+implemented reliably on SP11 Linux and may crash the whole OS**.
+Do NOT initiate system suspend, resume, hibernate, hybrid-sleep,
+systemctl suspend, loginctl suspend, rtcwake suspend, or
+write a sleep state into /sys/power/state for camera testing.
+Do not schedule automated suspend/resume loops or label their absence
+as a camera failure. Normal independent camera experiments and
+guarded reboots with verified Golden fallback remain authorized.
+Test sustained capture, sequential camera switching, stop/reopen,
+service lifecycle and recovery WITHOUT putting Linux into system sleep.
+Read-only observation that individual camera sensors enter ordinary
+runtime-PM suspended/idle state while Linux remains awake is distinct
+from OS-level standby and remains permitted. Do not change system
+power-management policies. Revisit system standby/resume only after
+independent platform support is established and explicit user
+authorization is obtained.
+
 ## Golden protection
 
 Current deployed Golden is the FullIO v19c audio kernel/DT/initrd stack. Camera work must not overwrite it.

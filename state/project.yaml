@@ -338,9 +338,21 @@ e004lv_fixed_frame_ipa_real_rgb:
   earlier_exact_failed_v4l2_control_id: not-independently-captured
   production_multiclient_ownership: unproven
   one_shot_consumed_and_retired: true
-  next: fresh-guarded-processed-rgb-sustained-reopen-suspend-and-service-ownership
+  next: fresh-guarded-processed-rgb-sustained-switch-reopen-service-no-system-sleep
+sp11_linux_system_sleep_restriction:
+  date: 2026-09-23
+  source: user-direct-platform-safety-instruction
+  os_standby_suspend_resume_implemented_reliably: false
+  may_crash_entire_linux_os: true
+  prohibit_os_sleep_suspend_resume_in_camera_tests: true
+  prohibit_hibernate_hybrid_sleep_and_sleep_state_writes: true
+  normal_guarded_camera_tests_authorized: true
+  normal_guarded_reboots_authorized: true
+  observe_camera_sensor_runtime_pm_idle_without_os_sleep: allowed-readonly
+  camera_sustained_streaming_switch_stop_reopen_service_no_sleep: proceed
+  reconsider_os_sleep_only_after_platform_support_and_new_user_authorization: true
 current_experiment: E004-front-ir-vd55g0
-current_gate: production-reopen-suspend-long-reliability-and-image-quality
+current_gate: production-reopen-long-reliability-and-image-quality-no-system-sleep
 e004jk_windows_rgb_baseline:
   date: 2026-09-20
   status: pass-same-machine-windows-rgb-buffer-dimensions-golden-returned
@@ -3300,7 +3312,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: fresh-guarded-processed-rgb-sustained-reopen-suspend-and-service-ownership
+next_experiment: fresh-guarded-processed-rgb-sustained-switch-reopen-service-no-system-sleep
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
