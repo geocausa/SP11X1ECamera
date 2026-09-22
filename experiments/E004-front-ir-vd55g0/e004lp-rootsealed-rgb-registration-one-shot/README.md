@@ -15,3 +15,25 @@ The installer uses the unchanged canonical 4-module package with its independent
 Root ownership and the cooperative media lock provide bounded experimental exclusion of ordinary nonroot applications only. They do NOT prove general multi-client OS-enforced exclusivity against root-equivalent/uncooperative clients and do not make the camera stack production-ready. Failure or inconclusive result permanently consumes E004lp. After independent Golden return, archive actual evidence and remove candidate boot files, service, root-private staging and root-only build tree. Never rerun this attempt under E004lp.
 
 Status at preparation: SOURCE AND SCRIPTS ONLY, NO E004lp BOOT yet. Subsequent RESULT.json / CONSUMED.json supersede this status once the unique physical attempt runs.
+
+## Final physical result — PASS; one-shot consumed and fully retired
+
+The unique physical candidate boot c5f7d2f0-7164-4fba-9550-7fbb64e3ffff
+successfully registered BOTH real libcamera cameras: ov13858 and imx681,
+each exactly once. Four Virtual cameras were deliberately excluded from the
+acceptance count. The earlier E004lo mandatory HBLANK/PIXEL_RATE registration
+blocker was cleared using the byte-identical E004le accepted IMX681/CAMSS
+timing pair. No capture or STREAMON was requested by cam --list, no IR camera
+was registered, and VD55G0 kernel standby confirmed stream=0 illumination=0.
+The root-private IPA configuration resolved only under the root-owned
+/var/lib/sp11-e004lp-build/source path, not the prior geoca-writable /home
+scratch. Runtime logs still report optional crop/selection ENOTTY, defaulted
+sensor rectangles and missing per-sensor calibrated IPA YAML; registration
+is not image-quality or streaming proof. Candidate one-shot service passed
+and automatically returned to Golden boot 78eea3f0-1852-42ea-8ab5-c250319b38c5.
+The saved default remained v19c, next_entry empty, no camera nodes/modules.
+All candidate boot, private build, service and root-staged assets were
+retired after Golden verification. See RESULT.json, CONSUMED.json and
+redacted evidence/. NEVER rearm E004lp. The next independent guard is
+libcamera configure/start/stream/stop/neutral with a fresh identity and
+current exclusive/quiescent ownership, not an unguarded production install.
