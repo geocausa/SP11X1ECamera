@@ -8,7 +8,7 @@ New maintained headers: sp11-libcamera-route-gate.h and sp11-libcamera-experimen
 
 Validated on protected camera-free SP11 Golden ARM64: initial pinned libcamera 0.7.0 native build 357/357 targets, followed by a successful 15/15 incremental rebuild after applying the independently verified IMX681 gain helper, and the final 77-test suite with 45 OK (including libcamera:imx681-helper), 1 expected failure, 31 skips and 0 unexpected failures. Native C++ -Wall -Wextra -Werror -pedantic ASan+UBSan gate test passes front/rear/idle-neutral parking, rejects IR, invalid sensors, wrong-camera start, simultaneous route switching, absent owner/quiescence and failed link writes. Golden experimental-lease denial executable PASS; 11 existing Python route tests PASS; static patched Simple mutation-boundary smoke test PASS. The second patch passes git apply --check against clean E004lh baseline. These are OFFLINE and camera-free proofs, not ordinary app capture, kernel module changes or parity validation.
 
-**Remaining gates before ANY E004lm physical/libcamera activation:** establish genuinely exclusive, current cross-process camera ownership and verified all-camera-streams-stopped proof; independently verify actual SP11 V4L2 subdevice hasStreams routing requirements because the current candidate deliberately rejects active reset; design a fresh, uniquely staged fail-closed service/boot with durable error exit, native neutral cleanup and Golden automatic return; inspect libcamera's real sensor metadata/configurations and chosen front/rear format; then separately prove application frames through the expected front 1080p/rear 4K output bridge. No claim of libcamera registration, STREAMON, production service, Windows ISP image-quality parity or protected IR. Dark nighttime scenes are not evidence of a defective image pipeline.
+**Remaining gates before ANY E004lm physical/libcamera activation:** establish genuinely exclusive, current cross-process camera ownership and verified all-camera-streams-stopped proof; use E004ln's separate live-kernel read-only evidence that all 28 SP11 subdevices advertise CAP_STREAMS=0 (the candidate still deliberately rejects active reset); design a fresh, uniquely staged fail-closed service/boot with durable error exit, native neutral cleanup and Golden automatic return; inspect libcamera's real sensor metadata/configurations and chosen front/rear format; then separately prove application frames through the expected front 1080p/rear 4K output bridge. No claim of libcamera registration, STREAMON, production service, Windows ISP image-quality parity or protected IR. Dark nighttime scenes are not evidence of a defective image pipeline.
 
 ## Source-only subdevice capability audit
 
@@ -19,3 +19,13 @@ blocked libcamera active routing reset not being needed on the source tested,
 but is NOT actual live VIDIOC_SUBDEV_QUERYCAP evidence. A future fresh
 one-shot must query real dynamically enumerated subdevices and fail closed on
 unexpected stream capabilities before enabling any camera manager.
+
+## Subsequent independent hardware prerequisite — E004ln
+
+E004ln (separate fresh one-shot, later consumed and retired) matched all
+28 real SP11 /dev/v4l-subdev* device numbers to the verified qcom-camss
+Media Controller interface topology and queried VIDIOC_SUBDEV_QUERYCAP.
+All returned CAP_STREAMS=0, including both RGB sensors and standby IR.
+This closes the *specific tested-kernel* hasStreams/ACTIVE reset question;
+E004lm itself remains a source-only libcamera build with no CameraManager
+enumeration/registration, no frames and no production ownership proof.

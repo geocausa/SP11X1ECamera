@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lm-guarded-libcamera-native-route-offline-golden
+state_id: E004ln-live-subdev-querycap-pass-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -171,6 +171,22 @@ e004lm_guarded_libcamera_simple:
   golden_modified: false
   ir_illumination: off
   next: audit-real-subdev-hasStreams-and-exclusive-session-before-new-libcamera-physical-attempt
+e004ln_live_subdev_capability:
+  date: 2026-09-22
+  status: pass-physical-readonly-querycap-consumed-retired
+  source_commit: 728ea64e6efa98c218b29edd0c322aff44207ae4
+  candidate_boot_id: b504661b-d157-4a51-8e18-be921a5cebe7
+  golden_return_boot_id: 1545dc5d-6483-443b-a715-6c96aaf7d023
+  actual_subdevs_queried: 28
+  subdevs_advertising_streams: 0
+  native_subdev_querycap: pass-actual-kernel-readonly
+  native_media_link_writes: 0
+  physical_video_streams: 0
+  ir_illumination: off
+  production_libcamera_admitted: false
+  exclusive_quiescent_ownership_proven: false
+  unique_one_shot_assets_retired: true
+  next: establish-verified-exclusive-camera-owner-before-new-libcamera-one-shot
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-suspend-long-reliability-and-image-quality
 e004jk_windows_rgb_baseline:
@@ -3132,7 +3148,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: audit-real-subdev-hasStreams-and-exclusive-session
+next_experiment: establish-exclusive-quiescent-owner-before-guarded-libcamera
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30

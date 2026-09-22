@@ -9,3 +9,21 @@ Build: independently rebuild SHA-pinned accepted canonical camera hardware packa
 An exact SHA-locked, root-private, newly named candidate module/diagnostic staging directory is installed only in a separate one-shot nondefault GRUB candidate with automatic Golden return. The 120-second systemd service writes an irreversible consumed marker before module binding and invokes the query program under a 15-second timeout. Both native and runner use fail-closed errors, no retry; the unit requests reboot to protected saved Golden on normal or failed completion. The conditional service remains inactive on Golden. On boot failure independent recovery may be needed; the script does not promote an experimental default. Verify boot ID, GRUB saved/next state, absence of active camera nodes and actual result before retiring and archiving numeric evidence.
 
 The E004lm guarded libcamera adapter is NOT installed or launched. This is read-only metadata evidence, not a claim of production-safe exclusive ownership; dark nighttime images are irrelevant because no images are captured. Never rearm E004ln once attempted.
+
+## Final physical result — PASS, consumed and retired
+
+The unique candidate boot b504661b-d157-4a51-8e18-be921a5cebe7 loaded
+the accepted modules and queried the 28 actual subdevice nodes, matched by
+major/minor to their verified Media Controller v2 interfaces. All 28
+returned VIDIOC_SUBDEV_QUERYCAP without CAP_STREAMS; none advertised
+CAP_RO_SUBDEV. Actual sensors IMX681, OV13858 and standby VD55G0 were
+included. The initial graph was complete and neutral; no media links,
+formats, video streams, IR emitter or image data were changed/recorded.
+Systemd completed successfully and returned automatically to protected
+Golden boot 1545dc5d-6483-443b-a715-6c96aaf7d023. The unique root-private
+candidate, service and GRUB entry were retired after independently confirming
+the saved default, no pending boot and camera-free Golden. Numerical results
+and standby IR kernel evidence are preserved in RESULT/CONSUMED/evidence.
+Never rearm E004ln. This is a read-only metadata proof for this tested
+kernel/device set, NOT actual libcamera registration or general OS-enforced
+ownership of an ordinary multi-client camera stack.
