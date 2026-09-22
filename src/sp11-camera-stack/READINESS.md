@@ -4,7 +4,7 @@
 
 **Hold full 1:1 default promotion.**
 
-The canonical hardware package has passed bounded runtime acceptance. RGB application transport has passed approximately60-second near30fps runs at front1080p/rear4K. Bounded systemd start/stop and sequential uid1000 apps passed E004kw with both named devices visible. Persistent daily operation, arbitrary reopen, suspend/resume, hours-long reliability and calibrated image quality remain unproven. Calling the stack fully Windows-equivalent or making it the final default while protected IR/Windows Hello cannot legitimately execute would overstate parity.
+The canonical hardware package has passed bounded runtime acceptance. RGB application transport has passed approximately60-second near30fps runs at front1080p/rear4K. Bounded systemd start/stop and sequential uid1000 apps passed E004kw with both named devices visible. E004la additionally proved repeated uid1000 client opens and recovery after a deliberately killed client while each publisher stayed running. Persistent daily operation, sensor/publisher restart, suspend/resume, hours-long reliability and calibrated image quality remain unproven. Calling the stack fully Windows-equivalent or making it the final default while protected IR/Windows Hello cannot legitimately execute would overstate parity.
 
 ## Ready now
 
