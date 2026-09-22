@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lf-libcamera-route-admission-blocker-golden
+state_id: E004lh-offline-libcamera-path-policy-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -3843,13 +3843,12 @@ e003i_x_native_live_lsc_deadline:
 handoff:
   latest: HANDOFF.md
 next_action: >-
-  Close E004lf libcamera route-admission safety blocker: restrict camera discovery
-  to RGB and shortest-path candidates to the physically validated front/rear
-  routes, with full-graph neutral/exclusive transition guards before setupLinks.
-  Do not run unrestricted cam enumeration; it can mutate links during init.
+  Connect the tested E004lg whole-graph route transaction policy and E004lh native
+  libcamera RGB path filter through a native adapter using fresh kernel snapshots,
+  current-boot session ownership, confirmed quiescence and terminal failure handling.
+  No live libcamera admission yet; cached MediaLink flags are insufficient.
   E004le timing and lower345.6MHz front RDI clock/sustainedRGB remain proven.
-  PIX594MHz, sensor/publisher restart, suspend and calibrated quality remain open.
-  Keep IR off and never reuse consumed experiment identities.
+  Keep Golden and IR-off safeguards; do not repeat consumed physical experiments.
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
@@ -6856,3 +6855,18 @@ e004lf_completed:
   fixture_order_front_route_rejected: true
   live_libcamera_route_order_proven: false
   unrestricted_libcamera_enumeration_admitted: false
+
+e004lg_completed:
+  status: offline-rgb-route-policy-tests-pass
+  tests: 11
+  shortest_paths_tested: 240
+  phase_transition_pairs_tested: 9
+  live_backend_present: false
+
+e004lh_completed:
+  status: pinned-libcamera-build-and-native-path-filter-tests-pass
+  physical_test: false
+  installed: false
+  libcamera_tests_passed: 3
+  native_edge_decisions_tested: 960
+  live_libcamera_admitted: false
