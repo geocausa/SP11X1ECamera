@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/var/lib/sp11-camera-e004me/rgb/service/selector.py", line 112, in serve
+    conn, _ = sock.accept()
+              ~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/socket.py", line 298, in accept
+    fd, addr = self._accept()
+               ~~~~~~~~~~~~^^
+TimeoutError: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/var/lib/sp11-camera-e004me/rgb/service/selector.py", line 175, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/var/lib/sp11-camera-e004me/rgb/service/selector.py", line 169, in main
+    result = serve(args.candidate, max_seconds=args.max_seconds)
+  File "/var/lib/sp11-camera-e004me/rgb/service/selector.py", line 118, in serve
+    if (not selector.session.backend.publisher_running(active)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/var/lib/sp11-camera-e004me/rgb/service/rgb_device_backend.py", line 180, in publisher_running
+    state=self.owner.service_state(camera)
+  File "/var/lib/sp11-camera-e004me/rgb/service/candidate_owner.py", line 198, in service_state
+    raise SessionRejected("FAILED_OR_UNEXPECTED_SYSTEMD_STATE")
+session.SessionRejected: FAILED_OR_UNEXPECTED_SYSTEMD_STATE

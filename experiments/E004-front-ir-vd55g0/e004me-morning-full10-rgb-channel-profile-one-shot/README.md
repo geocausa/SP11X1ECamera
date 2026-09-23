@@ -21,3 +21,16 @@ return to protected Golden on both pass and failure. Full-bit code values and
 application sparse texture/brightness alone cannot establish recognizable
 scene detail, white balance, calibrated optical black or Windows ISP parity.
 A failed attempt consumes this identity without retry.
+
+## Physical one-shot result (consumed, no retry)
+
+E004me booted candidate f162bfed-07e6-4b1c-a226-8daf7110d029,
+recovered neutral complete 119-edge graph and both virtual endpoints, but the
+front publisher rejected its candidate boot token BEFORE frames were captured.
+The compiler `-D` string token was misquoted; the sealed publisher ELF has no
+standalone embedded E004me token. No RAW10 profiles or images exist; rear was
+not attempted. Outer service failed closed and rebooted automatically to
+protected Golden 1a50b7be-7db5-41fb-832c-05b36401ef53. E004me was fully
+retired, including its service/boot assets. Never rearm this identity. A new
+candidate needs an explicit source-defined exact boot token and camera-free
+compiled ELF/token_allowed pre-arm gate, not another guessed `-D` string.
