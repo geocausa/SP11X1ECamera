@@ -215,6 +215,28 @@ mapping. Windows E004wn rendered a much brighter rear at another time,
 but scenes/time and statistics were not matched. Default/Golden camera
 still not enabled, IR OFF, no Linux OS-level sleep.
 
+## Camera-free fixed-frame envelope and temporal source preparation (after E004mp)
+
+A read-only E004mp evidence validator now checks exact native V4L2
+bounds, previous control readbacks/restoration and ordered full10
+Bayer channel quantiles. Under the accepted current frame timings,
+front exposure3546 leaves 4 lines vs active max3550 and rear3200
+leaves 6 vs max3206. It explicitly REFUSES to promote an uncalibrated
+p01 to sensor black or approve further native writes/AE/tone mapping
+without a dark reference and a lit target. An independent camera-free
+front/rear RAW10 two-frame temporal/spatial aggregate primitive has
+passed synthetic constant/fixed-pattern/temporal-jitter tests but is
+NOT integrated into live publishers and has captured NO NEW frames.
+Stable spatial correlation can arise from sensor FPN as well as a
+scene; temporal changes can reflect illumination flicker or motion.
+
+Admission for the *next* physical one-shot is an actual distinguishable,
+visibly lit target IN BOTH physical fields of view, a separate dark
+reference, bounded timestamps/exact controls and private on-SP11 image
+verification. Do not run another uncontrolled dark-corner gain trial
+or silently change FPS/IR/Golden/Linux OS-level sleep. See
+`src/sp11-camera-stack/rgb/iq/FIXED-TARGET-ACCEPTANCE.md`.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:

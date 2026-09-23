@@ -73,3 +73,18 @@ implicitly. Prioritize fixed visible-target optical/source testing
 plus explicit analogue-gain vs dark-noise checks before enabling
 aggressive auto-exposure/tone curves. Keep normal Golden RGB disabled,
 IR OFF and Linux system sleep untested.
+
+## Post-retirement offline diagnostic (NO new E004mp hardware attempt)
+
+The completely read-only maintained `rgb/iq/exposure_envelope.py`
+revalidated this run's scalar control bounds/restore and full10
+channel quantiles. Its scalar-only record is
+`evidence/READ-ONLY-EXPOSURE-ENVELOPE.json`: current fixed frame timing
+leaves front 4 and rear 6 exposure lines, and the real rear G0 p01
+changes by9 under gain. It approves NO new sensor/IR/FPS/tone writes.
+A distinct pure-memory two-frame RAW10 spatial/temporal aggregate
+passed synthetic front/rear camera-free tests but has not sampled
+new real camera frames; it cannot prove that stable patterns reflect
+optical scene rather than sensor FPN. The next camera one-shot is
+blocked on a physically visible fixed lit target, independent dark
+reference and genuine local visual acceptance. Never reuse E004mp.

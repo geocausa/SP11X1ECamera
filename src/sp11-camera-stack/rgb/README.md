@@ -60,3 +60,22 @@ Any physical assessment requires a completely FRESH single-use,
 source-pinned, IR-off and Golden-reversible camera candidate; NEVER
 rearm the consumed E004mg identity or silently enable this mode for
 normal/Golden builds.
+
+## Source-only fixed-frame exposure envelope (E004mp follow-up)
+
+The camera-free `iq/exposure_envelope.py` checks archived E004mp native
+control bounds, readback, exact restore and RAW10 channel quantiles.
+It reports 4 remaining front and 6 remaining rear exposure lines
+at the verified fixed-frame modes and marks further AE/gain,
+VBLANK/FPS and tone-map writes UNAPPROVED pending a fixed visible-light
+target, independent dark reference and temporal noise measurements.
+This pure read-only analysis never opens a camera or modifies Golden.
+Longer rear exposure requires a separate reviewed frame-rate contract;
+do not silently change FPS, protected IR or Linux OS system sleep.
+
+`iq/raw10_temporal_spatial.h` additionally offers a **non-integrated,
+camera-free** pair-of-RAW10-frames optical/noise aggregate for a future
+source-locked fixed-target trial. Its scalar spatial correlation can
+indicate repeatability but CANNOT distinguish a real scene from stable
+sensor fixed-pattern noise without a separate dark reference. No
+new camera frames, image files or control writes were made to test it.
