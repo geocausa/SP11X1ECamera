@@ -136,6 +136,35 @@ CSID1/VFE1 front/rear mutual-exclusion and Golden-safe rollback are
 validated. Existing front E003i, Linux rear E004lr RAW and E004ne
 software fallback remain unchanged.
 
+## E004nt compiled rear 4K VFE1 coherent-DMA surface — still offline
+
+A NEW source-only isolated ARM64 CAMSS build, E004nt at
+`experiments/E004-front-ir-vd55g0/e004nt-rear-vfe1-4k-buffer-contract/`,
+retains original E004nr graph and E004ns rear IPP and adds actual
+compiled Linux rear VFE1 FULL Y/C surface alloc/address/free routines.
+SP7 PRIVATE E004nq Windows rear LIVE1/LIVE2 register snapshots gave
+the identical RELATIVE layout: Ymeta=0, Ydata=0x11000,
+Cmeta=0xA9D000, Cdata=0xAA6000, frame increments Y0xA9D000,
+C0x559000, combined output window0xFF6000=16,736,256 bytes,
+both WM physical stride5120. NO Windows DMA address or optical bytes
+were exported; only relative geometric offsets were committed.
+Linux source uses the ACTUAL CAMSS device for a single coherent
+DMA allocation, verifies whole 4K-aligned IOMMU DMA aperture fits in
+the 32-bit VFE registers, compile-time bounds metadata+row coverage,
+and refuses address-rebind/free in-flight. **This is NOT already
+allocated, NOT a V4L2 NV12 format, NOT UBWC metadata correctness**.
+`vfe680_e004nt_rear_4k_runtime_authorization` still ALWAYS
+returns `-EOPNOTSUPP`; no source caller, module installation,
+Golden boot mutation, real device DMA allocation or rear native 4K
+optical frame has occurred. Existing front 27-frame E003i, rear RAW
+E004lr and software4K E004ne implementations remain intact.
+The new qcom-camss module compiled cleanly in a unique isolated
+directory, NOT installed/loaded; see E004nt README/verify.py for
+actual module SHA, byte-for-byte original-source preservation and 18
+negative tests. Next integrate rear-only VFE1 WM programming,
+exclusive CSID1/VFE1 ownership, ISP IQ/RT-CDM/3A and safe hardware
+retire before ANY Golden-safe live rear 4K native optical-frame test.
+
 ## Resume behaviour
 
 When asked to continue camera work:
