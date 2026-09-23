@@ -262,6 +262,44 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004mt source-frame temporal RAW10 quality gate after E004ms
+
+The NEW guarded E004mt one-shot passed actual front1080/rear4K
+independent app/lifecycle and exact native RGB-control restoration and
+three rear full10 native source consecutive frame-pair comparisons
+before QBUF. Native sequence gaps zero and 31–34ms capture spacing.
+At baseline rear green Bayer full10 sampled pixel std~0.78 codes and
+frame-pair difference RMS~0.84 codes, 12x16 coarse tile correlation
+0.973. At bounded trial exposure3200/analogue512/digital2048, sampled
+per-frame spatial std9.07–9.20 codes, paired temporal difference
+RMS5.52–5.53 codes, coarse tile correlation0.9957–0.9964. High
+coarse correlation DOES NOT identify true optical scene or exclude
+sensor FPN; substantial per-pixel variation means brighter preview
+should not be marketed as recovered fine detail or calibrated SNR.
+
+SP11-private photos across independent E004ms/E004mt Linux boots:
+rear brighter-gain grayscale full corr0.9795, Gaussian smoothed0.9923,
+**highpass corr0.0498**; same method front gain highpass corr0.8743.
+This is a reproducible DIFFERENCE between smooth rear shading and
+fine-scale repeatability in available corner images, not a calibrated
+fixed scene/dark reference or proof rear cannot image meaningful
+features under adequate lighting. The ordinary-user app rear mean
+NV12 Y142.332–143.221 after gated preview tone, still near fresh
+Windows E004wp auto-rendered rear mean149–150 from a separate time,
+NOT same physical sensor exposure/colour/detail or windows ISP parity.
+
+Unique E004mt consumed and fully retired after automatic protected
+Golden return boot `9798e796-694a-4568-ab14-f0ede5266ac9` with
+safety guard PASS, no camera modules/nodes/processes or pending boot;
+normal maintained Golden camera and default-OFF tone unchanged.
+Four original photos remain private ONLY on SP11
+`~/Pictures/SP11-Camera-Private-E004mt/`, dir0700/file0600;
+scalar-only logs archived. The next engineering gate is genuinely
+measured native noise under known lit and dark optical references,
+and motion-aware temporal denoising/exposure policy offline before
+fresh physical testing. No assertion that Windows-like brightness
+implies true optical detail.
+
 ## E004ms first real opt-in rear brightness near current Windows range
 
 After E004mr failed pre-stream and was retired, a distinct new E004ms
