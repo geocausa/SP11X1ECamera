@@ -46,3 +46,35 @@ sample points 1, 30, 90, 180 are measured before V4L2 source QBUF;
 the former accepted full graph/owner and output pixel contracts
 remain untouched. Both publisher binaries MUST be newly built with
 E004mc's unique candidate boot token and SHA-pinned before arming.
+
+## Final E004mc physical result — PASS diagnosis / CONSUMED / RETIRED
+
+A fresh isolated single-use candidate boot
+781fe4ab-0cc6-4cf9-a427-5fade20622ca obtained four physically
+paired same-mmap-source-frame sparse RAW10 upper-eight-bit samples
+and corresponding NV12 Y samples for each camera. The front RAW8
+p99 was 19 while NV12 Y p99 was 18; rear RAW8 p99 and NV12 Y p99
+were BOTH 16. Incoming upper8 RAW photosite measurements were
+already dark: the RAW-to-NV12 software converter **did not turn an
+otherwise bright captured source into a black output**. Ordinary
+independent uid1000 front1080p/rear4K 90-frame scene probes again
+reported essentially no spatial image contrast. Each camera
+completed the earlier first/reopen/app-crash recovery lifecycle.
+
+Both publisher processes stopped through validated STREAMOFF 143;
+native complete119-edge media graph returned neutral. No unvalidated
+sensor exposure/gain write, IR use, photo export or OS-level Linux
+system sleep. Protected Golden boot
+51309717-8e55-4ced-b347-58988305ca15 was independently verified
+with unchanged saved boot entry and zero camera nodes/modules/
+processes. Candidate root-private boot/services/assets RETIRED,
+physical identity CONSUMED: never reuse. See RESULT.json,
+CONSUMED.json and evidence/.
+
+**Remaining uncertainty:** RAW10 high eight bits alone cannot
+resolve ambient/occluded scene, actual sensor gain/integration,
+sensor RAW packing or hardware upstream source processing. The
+next candidate must use a fresh identity for bounded supported
+V4L2 sensor control-response validation and paired RAW/Y statistics,
+rather than presenting a black but correctly sized V4L2 frame as
+a useful Linux webcam image.

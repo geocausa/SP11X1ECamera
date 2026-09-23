@@ -64,6 +64,24 @@ controlled-lit exposure, image quality and Windows ISP parity are
 still UNPROVEN. E004ly independently proved ~115s per camera with
 the prior separate scripted route rather than this new controller.
 
+## E004mc paired RAW source versus NV12 image diagnosis (2026-09-23)
+
+**Source RAW10 upper-eight-bit photosite samples are themselves
+near-black:** on four same-source-frame pairs per camera, front
+source p99=19 versus converted NV12 Y p99=18; rear source p99=16
+versus NV12 Y p99=16. The converter alone does NOT explain a
+bright captured source going black. Independent front1080p and
+rear4K app probes still showed no distinguishable spatial scene
+contrast; image quality is NOT ready for an ordinary RGB release.
+Ambient/occluded scene, actual sensor exposure/gain effect and
+upstream source format remain unresolved. Sensor controls were
+read but not written in this test. Physical root selector, app
+lifecycle, STREAMOFF, full native graph neutral, IR-off and Golden
+return PASSED. E004mc is retired and CONSUMED; never reuse.
+Next: bounded, supported sensor control response with the paired
+RAW8/Y scalar diagnostic under a NEW guarded one-shot identity,
+not OS standby or speculative register programming.
+
 ## E004mb real morning-light RGB detail check (2026-09-23)
 
 **Image quality is now an observed release blocker, not just
