@@ -123,3 +123,33 @@ only build using explicit SP11_RGB_NV12_VIDEO_RANGE=1 AND
 SP11_RGB_REAR_PREVIEW_TONE=1 with an exact NEW boot token. The default
 maintained converter is unchanged. Any actual optical PNGs stay local
 SP11, not Git/chat/another device.
+
+## Camera-free default-OFF rear 4K temporal preview prototype
+
+rear_temporal_preview.h implements a separate, opt-in, one-prior
+filtered-Y-frame luma temporal filter for ONLY exact 3840x2160 NV12 video
+range. The maintained front/rear publishers, Golden camera,
+native sensor/IR controls and ordinary application output remain UNCHANGED.
+A new independently source-pinned candidate must explicitly call the
+primitive; it never opens a device, allocates a frame, saves pixels,
+changes UV/colour, touches RAW10 or delays source frames. Its caller
+supplies and clears one private previous-filtered-Y buffer, source
+sequence/timestamp, a nonzero caller-selected epoch (NOT native sensor
+control readback), and the actual already-opted-in tone gate.
+No tone -> reset/no transform; the first active frame seeds the
+private prior Y without altering output. Dropped/out-of-order/slow
+frames, changed epoch, large median shift or widespread pixel changes
+reset history and copy current without blending. Stable 2x2 blocks
+with all four pixel differences no greater than eight display Y
+blend current/previous 50:50; high-contrast motion blocks bypass.
+UV bytes are unchanged.
+
+This is NOT calibrated motion segmentation: low-contrast movement
+may still blur or ghost; filtering noise in a static corner cannot
+create identifiable scene detail; fixed sensor patterns remain.
+No auto-exposure or Windows ISP is implemented. Full-4K synthetic
+tests cover malformed frames, tone-off/scene-cut/sequence/profile
+reset, moving high-contrast edge and unchanged UV. The independent
+synthetic CPU benchmark cannot establish true camera conversion
+overhead or physical quality, which need a newly guarded live trial
+before any user-facing or production activation.
