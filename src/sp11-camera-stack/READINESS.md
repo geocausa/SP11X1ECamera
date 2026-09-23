@@ -1,5 +1,21 @@
 # SP11 camera stack readiness
 
+## RGB-only software-first delivery decision (2026-09-23)
+
+Finish and validate a usable opt-in software-processing front1080p /
+rear4K RGB camera service FIRST. Once its actual app-delivered image,
+throughput and lifecycle gates pass, report the result and ask the user
+whether to pursue Qualcomm native hardware-ISP Windows-image parity.
+The ISP path and protected IR/Hello are NOT prerequisites for an
+honestly labelled RGB-only software release. Historic ~65–70%
+software and ~30–40% Qualcomm hardware-ISP figures are rough
+engineering estimates for RGB usability, not measured completion
+or image-parity percentages. Earlier 1080p/4K V4L2 software transport
+and the recent 640x480 libcamera software-ISP proof are SEPARATE
+implementations and cannot be called one finished 1080p/4K pipeline.
+Authoritative stages and acceptance/decision gates:
+[RGB-PHASED-ROADMAP.md](RGB-PHASED-ROADMAP.md).
+
 ## Promotion decision
 
 **Hold full 1:1 default promotion.**

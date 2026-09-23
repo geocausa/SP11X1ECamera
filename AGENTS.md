@@ -6,6 +6,19 @@ This file is the durable working agreement for assistants/agents operating this 
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
 
+## RGB-only product priority (user decision, 2026-09-23)
+
+Read src/sp11-camera-stack/RGB-PHASED-ROADMAP.md before resuming.
+FIRST finish and validate the usable native Linux software-processing
+front1080p/rear4K RGB app-facing stack. At its acceptance gate,
+present real performance/image-quality results and ASK whether to
+pursue the separately optional native Qualcomm hardware-ISP path
+for Windows-like image quality; the user has NOT yet selected
+that second phase. Preserve the existing native-ISP research but
+do not make its completion block RGB-only usability. Protected
+IR/Hello is separately deferred; all IR-off, Golden and no-OS-system-
+sleep guards remain mandatory.
+
 ## Resume behaviour
 
 When asked to continue camera work:
