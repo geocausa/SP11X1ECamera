@@ -225,3 +225,28 @@ UID1000 app negotiated caps still need separate real evidence
 from a new source-locked Golden-guarded single-use candidate.
 Sensor primaries, Bayer green mismatch, gamma, white balance,
 noise, true detail and Windows native ISP parity remain unproven.
+
+
+### V4L2 SMPTE170M default field normalization after real E004nb readback
+
+The original E004na exact V4L2 loopback format echo rejected the first
+front camera before streaming. E004nb explicitly measured both
+S_FMT and independent G_FMT with correct geometry, successful rc=0,
+explicit `colorspace=SMPTE170M(1)` but three optional metadata
+fields `ycbcr_enc=DEFAULT(0)`, `quantization=DEFAULT(0)`,
+`xfer_func=DEFAULT(0)`. Linux UAPI defines these DEFAULT values
+for NV12 YCbCr+SMPTE170M as effective encoding601, limited studio
+quantization and transfer709, respectively. The NEW separately
+named `sp11_rgb_nv12_confirm_effective_bt601()` handles exactly
+that V4L2-standard default mapping, but continues to fail-closed
+on absent/default colorspace, Rec709 colorspace, non-NV12 pixel
+format, explicit 709 YCbCr encoding, full range or wrong transfer.
+The old `sp11_rgb_nv12_confirm_bt601()` remains strict literal
+for preserving previous source and tests; default-maintained camera
+does NOT compile either metadata opt-in without its explicit flag.
+Camera-free negative unit tests pass. This does NOT prove GStreamer
+actually negotiates bt601 at 1080p/4K with that metadata; fresh
+single-use physical trial must independently audit ordinary uid1000
+v4l2src AND downstream app real bt601 caps plus sensor control
+restore, 29fps per gain window and final neutral graph. Colour
+chart, true optics/white balance, noise and Windows ISP IQ unproven.
