@@ -2,6 +2,7 @@
 # E004mg: uniquely guarded LONG software RGB test, automatic Golden return.
 set -Eeuo pipefail
 R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera
+H=$R/experiments/E004-front-ir-vd55g0/e004mg-private-optical-rgb-visual-one-shot
 D=/var/lib/sp11-camera-e004mg
 ID=sp11-camera-e004mg-private-optical-rgb-visual-one-shot
 cd "$R"
