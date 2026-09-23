@@ -21,3 +21,33 @@ ordinary UID1000 app/color caps/29fps each gain window/final neutral
 GPU/Golden checks. Any captured private photos stay ONLY SP11
 geoca0700/photos0600; none expected if same pre-stream failure.
 Normal Golden camera/IR/nonnative DSP configuration unchanged.
+
+## 2026-09-23 actual E004nb outcome: numeric pre-stream colour fields measured
+
+Single-use candidate boot0c425045-b8a0-4b6d-99ec-289521f5f419
+confirmed the FIRST FRONT temporary V4L2 output 1920x1080 NV12
+S_FMT REQUEST colorspace=1 (SMPTE170M), ycbcr_enc=1 (601),
+quantization=2 (limited), xfer_func=1 (709). Both ACTUAL S_FMT
+RETURN and a SEPARATE VIDIOC_G_FMT RETURN success rc=0 retained
+colorspace=1 but returned ycbcr_enc=0, quantization=0,
+xfer_func=0. All dimensions/fourcc/stride/sizeimage unchanged.
+The original literal four-field equality rejected BEFORE sensor
+STREAMON, zero physical front/rear source or ordinary app frames,
+zero optical photos. It is a genuine original runner FAIL, not a
+performance or sensor defect. The checked-in Linux videodev2.h API
+explicitly defines 0 as DEFAULT for all three; for an NV12
+YCbCr stream with SMPTE170M, its default maps independently to
+601 encoding, limited range and 709 transfer. This is a clear
+representation mismatch in the test, NOT yet verification that
+ordinary real GStreamer v4l2src/consumer negotiated BT601.
+
+The candidate kernel showed no new GPU hang/panic/thermal event.
+The host automatically returned to protected Golden Linux boot
+3361fa4f-2171-4938-ab4c-68e368df9b6b; E004nb consumed
+NEVER REARM, all experimental assets retired and Golden camera/IR
+defaults unchanged. Next source-only tests must accept the V4L2
+standard effective DEFAULT semantics only when explicit
+SMPTE170M/NV12 geometry and all mapped components agree, never
+blindly accept missing/Rec709 tags or relax strict actual normal
+UID1000 app BT601 caps and 29fps/frame-gap/neutral quality gates.
+Evidence: RESULT.json and evidence/front-SERVICE-STDERR.txt.

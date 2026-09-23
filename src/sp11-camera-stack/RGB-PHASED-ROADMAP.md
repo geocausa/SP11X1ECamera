@@ -262,6 +262,27 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004nb prestream V4L2 exact readback: explicit colorspace retained, 3 default zero fields
+
+Fresh consumed/retired E004nb distinct one-shot physically logged first
+front1080 V4L2 NV12 requested `(colorspace=1,ycbcr=1,quant=2,xfer=1)`
+and successful returned `S_FMT` AND separately queried `G_FMT`
+`(1,0,0,0)` with unchanged expected geometry and no errors.
+V4L2 UAPI defines zero as DEFAULT for these three trailing fields;
+for an NV12 YCbCr stream with explicit SMPTE170M colorspace,
+header mappings give effective 601/limited/709 respectively.
+Original literal exact equality was overly strict, so candidate
+failed before sensor streaming, zero front/rear photos/frames,
+selector failed closed. This does NOT prove negotiated real UID1000
+GStreamer source/consumer caps or actual colour improvement.
+Candidate automatically returned Golden, unique assets retired,
+no new GPU/panic/thermal marker, prior E004my full RGB pass intact.
+Next source-only strict effective-default normalization and negative
+camera-free tests; any REAL colour claim requires a new separately
+source-locked one-shot checking both actual v4l2src and independent
+normal UID1000 consumer caps plus all original FPS/neutral gates.
+See E004nb/RESULT.json + evidence/front-SERVICE-STDERR.txt.
+
 ## E004na physical original trial FAIL PRE-STREAM: exact loopback S_FMT metadata readback mismatched
 
 After entirely synthetic 1080p/4K proof of existing provisional

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/var/lib/sp11-camera-e004nb/client_lifecycle.py", line 79, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/var/lib/sp11-camera-e004nb/client_lifecycle.py", line 78, in main
+    print(json.dumps(cycle(a.client,a.camera,a.output,identity='geoca'),indent=2),flush=True)
+                     ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/lib/sp11-camera-e004nb/client_lifecycle.py", line 59, in cycle
+    record=attempt(argv,out/f'{key}-{name}-APP',crash,15 if crash else deadline,identity)
+  File "/var/lib/sp11-camera-e004nb/client_lifecycle.py", line 46, in attempt
+    else: assert rc==0,f'CLIENT_EXIT_{rc}'
+                 ^^^^^
+AssertionError: CLIENT_EXIT_1
