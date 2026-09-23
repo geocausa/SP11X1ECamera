@@ -47,10 +47,25 @@ NV12 is still an uncalibrated software Bayer proxy; no pixel files
 or authentication images may be exported. Hardware ISP and Windows
 IQ parity are separate and deferred until Stage 1 RGB usability.
 
-Prior status: offline-only candidate preparation; NEVER arm until
-all new SHA, source, boot, source-pinning, root-sealing, live-guard,
-mock publisher/lifecycle, bounded watchdog and Golden rollback
-preflights pass. After ANY first arming E004ly is CONSUMED regardless
-of success or failure. RESULT/CONSUMED/evidence supersede this
-preparation and must be committed after Golden is independently
-verified and the candidate boot/service/private assets retired.
+**Final result: PASS, CONSUMED, RETIRED.** See RESULT.json,
+CONSUMED.json and evidence/ for bounded physical acceptance. Fresh
+candidate boot 22877e95-4ad7-4e4d-8dc4-94915197c488 completed
+front→neutral→rear→neutral with full native graph validation and
+normal powered-on app client first/reopen/SIGKILL/recovery for both.
+Front software1080p captured/published 3452 contiguous source frames
+in 115.004s; rear software4K 3444 frames in 114.957s. Both sources
+reported zero source-sequence gaps and intentional service stop=143
+with verified STREAMOFF. Three normal uid1000 independent app opens
+per camera obtained 120 distinct complete appropriately sized frames
+each; intentionally killed client was recovered with the SAME
+publisher invocation. Both named V4L2 endpoints were discoverable,
+IR stayed off, zero camera FDs remained at route handoff and final
+shutdown; peak sampled thermal 52.1C. Protected Golden returned,
+and this candidate's boot/services/assets were RETIRED after return.
+The prior 2400-frame source bound was passed, not an uninterrupted
+all-day camera service. Both optical scenes sampled near-black, so
+IMAGE QUALITY, calibration and Windows visual parity remain UNKNOWN.
+The separately maintained source-only RGBSession policy has NOT
+been wired into this live physical harness; no production daily
+service or generic multi-client exclusivity is claimed.
+E004ly one-shot identity MUST NEVER be reused.

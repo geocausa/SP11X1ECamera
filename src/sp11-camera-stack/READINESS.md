@@ -45,6 +45,29 @@ E004kp subsequently removed the rear RAW/NV12 pipes and separate publisher, usin
 
 E004km delivered1800 complete distinct front1080p and rear4K frames to independent standard V4L2/GStreamer applications in sequential sessions. Source2400frames each had no sequence gaps. Front app26.9873fps and rear app13.7766fps are observed over different source/app windows, not30fps parity. Both sampled scenes were dark; no calibrated scene comparison exists. The front path is a separate pRAA RAW10 software proxy, not a QC10C decoder or Windows ISP replacement. E004km is consumed, retired and returned to Golden. Historical hardware/IQ-control claims below do not establish end-to-end image quality.
 
+## E004ly guarded high-resolution software publisher trial (2026-09-23)
+
+Independent fresh one-shot real hardware front1080p and rear4K
+RAW10→NV12 opt-in continuous source publisher proof PASSED.
+Front captured/published 3452 frames over 115.004s; rear 3444 over
+114.957s, both zero source-sequence gaps. Each standard V4L2 endpoint
+remained discoverable and ordinary uid1000 apps completed first,
+reopen and post-SIGKILL recovery (three normal 120-frame app opens)
+under the SAME publisher invocation. Intentional planned 143 stop
+verified STREAMOFF; all camera users closed and complete native
+media graph neutral between cameras and after rear. IR off, Golden
+returned safely; candidate retired and identity consumed.
+See e004ly RESULT.json/CONSUMED.json/evidence.
+
+**Not a finished daily camera service:** two separately bounded
+~115s publishers; maintained RGBSession state-machine still
+source-only rather than live integrated; general multi-client
+session ownership, production installation, extended uninterrupted
+operation, light/exposure/image quality and matched Windows visual
+parity remain unresolved. Both scenes sampled nearly black. The
+separately proven 640x480-XRGB8888 libcamera processed path must
+not be conflated with this 1080p/4K RAW→NV12 software path.
+
 ## E004lx guarded processed RGB soak and reopen (2026-09-23)
 
 A new single-use, isolated root-sealed libcamera v0.7.0 test delivered
