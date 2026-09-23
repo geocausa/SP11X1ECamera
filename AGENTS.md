@@ -165,6 +165,33 @@ negative tests. Next integrate rear-only VFE1 WM programming,
 exclusive CSID1/VFE1 ownership, ISP IQ/RT-CDM/3A and safe hardware
 retire before ANY Golden-safe live rear 4K native optical-frame test.
 
+## E004nu rear VFE1 BUS ten-client source-only implementation
+
+The new independently compiled ARM64 CAMSS experiment
+`experiments/E004-front-ir-vd55g0/e004nu-rear-vfe1-ten-wm-ownership/`
+incorporates all prior E004nr graph/E004ns rear CSID1 IPP/E004nt coherent
+4K buffer source-only gates and adds a distinct ten-WM rear VFE1 BUS
+static configuration and conservative candidate per-client frame lifecycle.
+Windows rear had WMs 0,1,2,3,11,12,13,14,**16**,18 in BOTH live
+recordings; the working front BUS recipe only has nine, OMITTING the
+active rear WM16 BAF autofocus stats. DO NOT reuse front's nine-master
+configuration for rear. New rear code checks all ten existing enable
+bits BEFORE writing anything and writes only STATIC config fields with
+WM enables cleared, and NO Windows/Linux DMA image/meta addresses.
+The ten-client frame model refuses buffer release until all ten verified
+master completions (including WM16) and independent HW BUS STOP.
+**Actual rear WM16 completion event/group mapping remains UNKNOWN,**
+so DO NOT connect this model to any real ISR, deem a front VIDEO event
+sufficient, or free a timed-out in-flight buffer. The rear-only runtime
+authorization still unconditionally returns -EOPNOTSUPP and the new
+source has NO callers in the active Golden kernel. The isolated kernel
+module was actually compiled with zero warnings/errors and verified
+against exact two-phase rear WM nonpointer physical evidence, 20 negative
+tests and byte-identical original front CAMSS/CSID/VFE source.
+No module installed/loaded, no camera activated, no DMA allocated,
+and Linux native rear 4K ISP optical frame is still UNPROVEN.
+See E004nu README, verify.py and BUILD-RESULT.json.
+
 ## Resume behaviour
 
 When asked to continue camera work:
