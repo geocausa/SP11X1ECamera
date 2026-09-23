@@ -32,4 +32,6 @@ EOF
  gcc "${F[@]}" "$T/source/tests/default.c" -o "$T/default"
  "$T/default"
 done
+gcc "${F[@]}" "$T/source/iq/tests/test_raw10_unpack.c" -o "$T/raw10-unpack-test"
+"$T/raw10-unpack-test"
 echo RGB_STANDALONE_SOURCE_TESTS=PASS DEFAULT_CONTINUOUS=DENIED

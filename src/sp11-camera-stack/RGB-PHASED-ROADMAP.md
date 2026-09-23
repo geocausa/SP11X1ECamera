@@ -89,6 +89,15 @@ prioritize offline gain/exposure policy and controlled-lit RGB scene
 visibility with source-format/black-level checks. Keep IR off and
 never initiate OS system sleep. Evidence: E004md RESULT.json.
 
+The camera-free standalone full-precision RAW10 primitive at
+`rgb/iq/raw10_unpack.h` preserves both previously discarded low bits
+and validates the native front/rear packing and rear stride padding.
+It is unit-tested but not integrated into the live publishers. In a
+FRESH guarded lit-scene candidate, test real black-level/channel
+statistics before any auto-exposure or tone-curve claim; neither
+this offline primitive nor E004md gain-response numbers establish
+recognizable images.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:

@@ -18,3 +18,9 @@ as a long-lived SP11 camera service. The owner must preserve the
 fresh-boot token guard, closed reader/FD proof and media-neutral
 checkpoint before switching or stopping. Do not turn this flag on in
 a default Golden build. It remains uncalibrated software processing, not a libcamera pipeline or Windows ISP equivalent. This userspace package is self-contained; the separate hardware/bootstrap package still has its documented local R4 requirement.
+
+Full-precision MIPI RAW10 low-two-bit unpacking is now separately available
+for offline analysis under `iq/raw10_unpack.h`; its synthetic-row regression
+runs with `tests/test.sh`. It is NOT installed into the accepted live
+RAW→NV12 converter, which still discards those bits, and is NOT by itself
+evidence of visible scene detail, calibrated black level or ISP parity.
