@@ -28,6 +28,10 @@ for camera in front rear; do
  "$T/studio-fake-$camera" > "$T/studio-fake-$camera.log" 2>&1
  grep -Fq "E004KQ_FAKE_DEVICE_TESTS=PASS" "$T/studio-fake-$camera.log"
  echo "RGB_${camera^^}_FAKE_STUDIO_RANGE_LIFECYCLE=PASS CAMERA_HARDWARE=NONE"
+ gcc "${F[@]}" -DSP11_RGB_NV12_BT601_TAG=1 -DSP11_RGB_NV12_VIDEO_RANGE=1 "$T/source/tests/test_$camera.c" -Wl,--wrap=fopen,--wrap=geteuid,--wrap=open,--wrap=fstat,--wrap=close,--wrap=mmap,--wrap=munmap,--wrap=poll,--wrap=write,--wrap=ioctl -o "$T/bt601-fake-$camera"
+ "$T/bt601-fake-$camera" > "$T/bt601-fake-$camera.log" 2>&1
+ grep -Fq "E004KQ_FAKE_DEVICE_TESTS=PASS" "$T/bt601-fake-$camera.log"
+ echo "RGB_${camera^^}_OPTIN_BT601_V4L2_FAKE_LIFECYCLE=PASS CAMERA_HARDWARE=NONE"
  cat > "$T/source/tests/default.c" <<EOF
 #define E004KQ_NO_MAIN
 #include "../$camera-direct-publisher.c"
@@ -45,6 +49,8 @@ done
 gcc "${F[@]}" "$T/source/iq/tests/test_raw10_unpack.c" -o "$T/raw10-unpack-test"
 gcc "${F[@]}" "$T/source/iq/tests/test_raw10_profile.c" -o "$T/raw10-profile-test"
 "$T/raw10-profile-test"
+gcc "${F[@]}" "$T/source/iq/tests/test_nv12_colorimetry.c" -o "$T/bt601-metadata-offline"
+"$T/bt601-metadata-offline"
 python3 "$T/source/iq/tests/test_exposure_envelope.py" -q
 python3 "$T/source/iq/tests/test_preview_brightness_policy.py" -q
 echo "RGB_READ_ONLY_EXPOSURE_ENVELOPE_CAMERA_FREE_TESTS=PASS"

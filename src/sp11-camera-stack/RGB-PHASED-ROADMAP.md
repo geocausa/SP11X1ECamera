@@ -262,6 +262,33 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004na high-resolution colour matrix/metadata mismatch: synthetic proof, candidate-only fix
+
+Current software Bayer->NV12 Y/Cb/Cr uses provisional BT.601-like
+coefficients, yet prior loopback publisher output V4L2 colorspace
+was unspecified. Actual SP11 synthetic-only GStreamer
+appsrc->videoconvert->RGB selected BT.709 at 1920x1080 and
+3840x2160, while 128x64 defaulted BT.601. Known generated red
+RGB(192,32,32) round-tripped HD/UHD default to RGB(203,44,29),
+but explicit BT.601 returned RGB(190,29,31). The previously
+validated Y-only studio-range test used a neutral low-res patch
+and could not expose this chroma-matrix error.
+
+The new candidate-only flag SP11_RGB_NV12_BT601_TAG=1 for both
+maintained RGB publisher sources requests exact V4L2
+SMPTE170M/YCBCR_601/limited-quantization/XFER_709 metadata
+and fails BEFORE stream-on if S_FMT returns a different tag.
+Default normal camera remains unchanged. Tests on generated
+colour patches, exact 1080p and 4K real GStreamer consumer
+geometry, struct negative fields and opt-in front/rear fake
+lifecycle PASS; NO actual physical UID1000 V4L2 caps yet.
+A new distinct guarded single-use candidate must check native
+real consumer negotiated BT.601 plus strict old source/FPS/
+sensor controls/final-neutral acceptance before claiming
+a real physical colour-matrix match. Not sensor colour chart
+calibration, white balance, gamma, optical detail or
+Windows OEM ISP parity.
+
 ## E004mz two-boot PRIVATE same-host fine vs coarse image-repeatability: detail still unproven
 
 Read only eight existing E004mx/E004my owner-private front1080/rear4K

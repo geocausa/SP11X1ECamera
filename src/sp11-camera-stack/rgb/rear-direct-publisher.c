@@ -12,6 +12,9 @@
 #include <signal.h>
 #include <limits.h>
 #include <stdbool.h>
+#if defined(SP11_RGB_NV12_BT601_TAG) && SP11_RGB_NV12_BT601_TAG
+#include "iq/nv12_colorimetry.h"
+#endif
 #if defined(SP11_CAMERA_ALLOW_RAW_PROFILE) && SP11_CAMERA_ALLOW_RAW_PROFILE
 #include "iq/raw10_profile.h"
 /* Isolated opt-in new-candidate in-memory sensor diagnostics; no frames or
@@ -142,10 +145,19 @@ int rear_publisher_main(int argc,char **argv) {
     output.fmt.pix.width=DST_W;output.fmt.pix.height=DST_H;
     output.fmt.pix.pixelformat=V4L2_PIX_FMT_NV12;output.fmt.pix.field=V4L2_FIELD_NONE;
     output.fmt.pix.bytesperline=DST_W;output.fmt.pix.sizeimage=DST_BYTES;
+#if defined(SP11_RGB_NV12_BT601_TAG) && SP11_RGB_NV12_BT601_TAG
+    sp11_rgb_nv12_request_bt601(&output.fmt.pix);
+#endif
     if(xioctl(dst,VIDIOC_S_FMT,&output) ||
        output.fmt.pix.width!=DST_W || output.fmt.pix.height!=DST_H ||
        output.fmt.pix.pixelformat!=V4L2_PIX_FMT_NV12 ||
        output.fmt.pix.bytesperline!=DST_W || output.fmt.pix.sizeimage!=DST_BYTES) goto cleanup;
+#if defined(SP11_RGB_NV12_BT601_TAG) && SP11_RGB_NV12_BT601_TAG
+    /* A driver that does not echo this encoding MUST NOT accept
+     * BT.601-encoded frame bytes while advertising BT.709/unknown.
+     */
+    if(!sp11_rgb_nv12_confirm_bt601(&output.fmt.pix))goto cleanup;
+#endif
     struct v4l2_requestbuffers req={.count=4,.type=type,.memory=V4L2_MEMORY_MMAP};
     if(xioctl(src,VIDIOC_REQBUFS,&req) || req.count<2 || req.count>4) goto cleanup;
     count=req.count;

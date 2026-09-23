@@ -196,3 +196,32 @@ source-only decision audit, not a claimed live closed-loop result.
 
 
 E004mx isolated default-OFF FRONT1080 gain-only NV12 luma tone helper: front_preview_tone.h is camera-free and never invoked by normal maintained front/rear camera. For the supported front gain source p01~30/p99~61, an opt-in 1080p Y-only test maps p01 to100 with 2x contrast, preserving all UV bytes and source RAW10. Flat/black baseline, already bright, clipped and unsupported geometry bypass unchanged. This is NOT ISP/AE/colour calibration, recovered detail, true SNR, or released camera quality. Full-1080p synthetic tests verify gate, chroma and geometry before a fresh source-locked physical one-shot.
+
+### Candidate-only BT.601 metadata mismatch and experimental solution
+
+Current source RAW10->NV12 front/rear converters use approximately
+BT.601 RGB/YUV integer coefficients and nominal studio-range YUV.
+Through E004my the loopback publisher S_FMT left colorspace unspecified.
+SP11 actual camera-free synthetic GStreamer appsrc->videoconvert->RGB
+appsink selected BT.601 for unspecified 128x64, but BT.709 at BOTH
+1920x1080 and 3840x2160. Synthetic RGB(192,32,32) converted to
+BT.601-style studio YUV was decoded by default as RGB(203,44,29) at
+both HD/UHD, while an explicit BT.601 decoder produced RGB(190,29,31).
+Other neutral/red/green/blue/warm test patterns at explicit
+BT.601 showed only tiny integer rounding differences. No real
+optical pixel or image entered any synthetic experiment.
+
+The opt-in-only helper iq/nv12_colorimetry.h is compiled into BOTH
+front/rear existing source publishers ONLY with
+SP11_RGB_NV12_BT601_TAG=1, and requests/validates exact V4L2
+SMPTE170M colorspace, YCBCR_601, limited quantization and
+XFER_709 before any camera STREAMON. If driver S_FMT fails to echo
+metadata, fail closed. Normal maintained camera build defaults
+remain unchanged. Standalone fake camera lifecycle C tests for
+both cameras and synthetic GStreamer HD/UHD contract PASS.
+Source v4l2loopback v0.15.3 showed explicit valid colorspace is
+preserved in its VIDIOC_S_FMT implementation; actual physical
+UID1000 app negotiated caps still need separate real evidence
+from a new source-locked Golden-guarded single-use candidate.
+Sensor primaries, Bayer green mismatch, gamma, white balance,
+noise, true detail and Windows native ISP parity remain unproven.

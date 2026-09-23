@@ -88,3 +88,16 @@ sensor/IR/exposure/FPS and is NOT integrated into normal publishers.
 A separately source-pinned E004mr one-shot may measure its isolated
 rendering with an unchanged supported native gain profile and Golden
 auto-return. See `iq/README.md` for limitations and refusal gates.
+
+
+Candidate-only BT.601 colour metadata: source RAW10 Bayer->NV12
+conversion uses provisional BT.601-like studio-range coefficients;
+real camera-free SP11 GStreamer chooses BT.709 on unspecified
+HD/UHD caps, causing a known synthetic red sample to decode
+RGB(203,44,29), versus RGB(190,29,31) with explicit 601.
+Both publishers can explicitly opt in using
+SP11_RGB_NV12_BT601_TAG=1 to request exact supported V4L2 601
+limited-range output metadata and reject a driver mismatch;
+normal maintained/default camera remains unchanged.
+Independent real ordinary app caps and live image IQ need
+future physically guarded confirmation. Not a colour-calibrated ISP.
