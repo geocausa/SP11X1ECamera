@@ -262,6 +262,72 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004ne real screen-scene independent acceptance PASS; older OEM Windows photo still brighter
+
+After original E004nd new-scene run FAILED original RAW10
+early frame600/601 sampling just91.489ms after native controls
+settled (strict min>=300ms), new distinct unique consumed
+E004ne source-locked physical trial boot0b39c7b1-3b60-4a69-
+aa08-4da5a4eddbd3 kept strict>=300ms requirement and
+instead audited two LATE actual gain RAW10 consecutive native
+pairs630/631 and660/661, measured1704.143ms and2705.642ms
+after actual native gain settled. Baseline90/91 also valid.
+ORIGINAL full trial PASSED raw sensor source and 29fps whole
+plus four real 30frame gain intervals on both front1080 and
+rear4K, zero source gaps, actual native control readback/
+restoration, ordinary UID1000 app both cameras baseline/gain,
+strict real V4L2 source and GStreamer consumer bt601, front->
+rear->off->quit selector and original independent final
+119-edge complete media graph neutral/GPU checks. Newly
+repositioned rear gain native NV12-Y p01/p50/p99=29/31/141
+spread112: genuine nonflat image, high gain dark-only rear
+tone/temporal CORRECTLY BYPASSED, NOT a fake dim-scene
+enhancement. Front gain tone pilot not claimed in this FOV.
+
+Candidate automatically returned protected Golden bootafc8da03-
+2eba-40fa-a451-313929ec2148; unique camera root/GRUB/boot/
+systemd fully retired, saved Golden boot intact, normal RGB
+camera/IR/processing default unchanged. Four original
+front/rear baseline/gain private photos ONLY same SP11
+user-private dir0700/files0600.
+
+Separate older real OEM Windows E004wq rear 4K Color
+WinRT private original photos were read on SAME SP11
+via Windows NTFS mounted STRICT READ-ONLY underneath
+root-only0700 directory and cleanly unmounted immediately
+after scalar processing. New E004ne real Linux rear4K
+gain preview vs old OEM Windows original matched480x270
+display-luma mean Windows60.25587 vs Linux36.35741;
+Y>=96 bright fraction Windows25.4753% vs Linux10.6535%.
+Coarse sigma8 correlation0.900138 (bounded shift best
+0.91043) supports matching broad scene despite different
+time/lighting/target content, while fine highpass
+correlation0.030744 does NOT prove matched fine detail
+or screen text. Prior E004nd Linux mean36.923, so merely
+fixing source settle timing did NOT make image brighter.
+Windows OEM auto exposure vs Linux fixed native tuple,
+provisional original Windows BT709 colour preview vs Linux
+BT601 consumer, screen image content/light and independent
+25–40min boot times remain uncontrolled. Do not claim
+full Windows ISP parity, actual object recognition,
+calibrated white balance or genuine pixel-perfect matched
+source. A labelled user-private optical side-by-side
+derived from originals was generated ONLY SP11
+~/Pictures/SP11-Camera-Private-E004ne/
+PRIVATE-SP11-REAR-E004WQ-OEM-WINDOWS-vs-E004NE-LINUX.png
+owner geoca dir0700/photo0600, NEVER share/export it.
+Git has scalar-only numerical comparison and code, no
+photo/pixel array/RAW/thumb/photo hash.
+
+Next independent target: native auto exposure and true
+shadow signal/detail versus fixed supported exposure/gain,
+known illuminated and dark reference, controlled
+lighting/registration and non-oscillating bounded adjustment
+that does not alter FPS/VBLANK or overbrighten noise.
+No automatic Golden daily camera promotion yet.
+Evidence E004ne/RESULT.json and evidence/
+PRIVATE-CROSS-OS-NEW-REAR-LINUX-vs-OEM-WINDOWS-SCALARS.json.
+
 ## E004nd/E004wq original rear photos after moving SP11 toward SP7 screen: Windows and Linux same scene locally compared
 
 Fresh distinct E004nd Linux real rear4K candidate captured current rear scene original RGB PNG and native input gain Y p01/p50/p99 30/32/141, versus old corner E004nc31/34/38. Real native front1080/rear4K UID1000 apps, selector front->rear->off->quit, native control restore, automatic protected Golden return and candidate retirement. ORIGINAL E004nd full one-shot FAILED separate RAW10 gain pair frame600 timestamp91.489ms after exposure/gain controls settled, less than required300ms; later frame6301095.513ms after settle passed timing. This test failure is not evidence of a machine crash or full pass.
