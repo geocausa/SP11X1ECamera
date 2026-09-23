@@ -85,3 +85,77 @@ but cannot by themselves establish Windows ISP parity or
 absolute white balance. Do not claim the whole SP7 display
 is faultless or that the earlier dark band originated at
 the SP11 camera.
+
+
+## Actual 2026-09-23 E004nh physical upper-60%-only SP7 colour target result
+
+SP7 user's reported lower LCD thick defective band was intentionally
+EXCLUDED from the NEW chart: the interactive user desktop showed
+CYAN/RED/GREEN/BLUE/GRAY/WHITE only in UPPER60% of 1368x912
+panel, lower40% black/untrusted. Target visible marker confirmed
+from19:15:03 to19:23:22 BST; SP7 original desktop restored,
+our temporary scheduled task/scripts removed. The PRIOR E004ng
+chart had used full-screen 2x3 patches INCLUDING an unknown portion
+of the faulty lower display; old E004ng per-patch and white/blue
+estimates must be treated as POTENTIALLY tainted and unregistered.
+
+Fresh distinct E004nh physically ran opt-in candidate-only
+SOFTWARE BGGR rear Bayer converter with unchanged Golden
+default GRBG source, front processing/sensor registers/IR.
+Actual original camera and user-app RGB front1080/rear4K
+baseline+gain photos captured; native source front29.9609fps
+and rear29.9500fps, zero source-frame gaps. All four rear
+high-gain 30frame intervals>=29fps; original rear RAW10
+baseline90/91 and both late gain630/631+660/661 full10
+source pairs passed with original strict settling requirement.
+Exact front and rear native controls restored, selector
+front->rear->off->quit passed. BUT the ORIGINAL full
+E004nh physical runner FAILED on real native FRONT gain
+630->660 window28.0310fps (< unchanged strict29fps).
+The original downstream independent bt601 validator and
+final native119-edge neutral did NOT execute. No new
+candidate GPU/panic/thermal error; automatic protected
+Golden reboot3b1410be-fe1c-4148-a17d-1630a5deaf33.
+Unique E004nh identity consumed NEVER REARM, all root/boot/
+GRUB/systemd assets retired, Golden camera/IR/tone/temporal
+settings unchanged. These facts must NOT be relabeled
+complete original run success or permanent ISP parity.
+
+SAME SP11-only user-private optical snapshots from earlier
+E004ng GRBG/FULL-screen and later E004nh opt-in BGGR/UPPER60
+were separately sampled every4x and compared using ONLY
+WHOLE-IMAGE/THRESHOLD MASK scalar channel aggregates, NO
+optical photo/pixel arrays/RAW/thumbs/image hashes exported.
+Older GRBG bright Y>96 RGB mean (196.423,126.612,195.523)
+was predominantly MAGENTA (R/G1.5514,B/G1.5443).
+Later experimental BGGR NEW upper60 chart bright Y>96 mean
+(103.427,165.751,123.292) is GREEN-DOMINANT
+(R/G0.6240,B/G0.7438); every sampled bright pixel had
+G>R and G>B. This is substantial optical colour change.
+It does NOT prove sensor hardware BGGR, measured per-patch
+accurate RGB, screen's true spectra, front-camera colour,
+or recovered screen text: the two runs have DIFFERENT
+physical chart geometry, possibly varied screen/display
+lighting and unregistered ROIs, unknown lower-band fault
+in the old snapshot and different independent gain timing.
+The only defensible interpretation is that software
+CFA-site reconstruction is a live candidate cause of
+the magenta problem, worth testing against SAME unaffected
+registered upper-panel patch positions and genuinely
+identical native exposure/gain, not that blue is absent
+or that the candidate can be enabled by default.
+
+Private originals ONLY SAME SP11 geoca0700/files0600 at
+~/Pictures/SP11-Camera-Private-E004nh/ and earlier E004ng/.
+Text-only audit in evidence/REAL-PRIVATE-OLDER-GRBG-VS-
+NEW-UPPER60-BGGR-GLOBAL-COLOUR-SCALARS.json and
+ORIGINAL-RUN-FAILURE.txt, RETIREMENT.txt, RESULT.json.
+Next use a freshly distinct source-locked one-use candidate,
+repeat fixed known upper-only colour chart, compare
+actual per-patch channel scalar means with robustly
+REGISTERED panel bounds EXCLUDING lower LCD band and
+native per-CFA-site readbacks. Preserve all >=29fps
+native gain-window, exact control restore and final
+119-edge neutral gates; do not force colour correction
+on Golden until native Bayer order and sensor optics
+are independently established.

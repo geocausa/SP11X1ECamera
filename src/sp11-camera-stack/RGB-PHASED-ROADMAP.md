@@ -262,6 +262,63 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004ng + E004nh six-patch screen colour reconstruction and SP7 lower LCD defect caveat
+
+User reports SP7 LCD has a THICK FAULTY BAND along LOWER EDGE.
+E004ng original six-patch known digital RGB chart occupied
+entire SP7 screen, so old approximate patch WHITE/BLUE colour
+evidence can include this faulty region and screen geometry
+was not independently registered. E004ng original full
+one-shot also failed front 630->660 gain window28.454<29fps,
+candidate consumed/auto Golden retired; its real observed
+magenta image and native two-green-site mismatch are
+diagnostic ONLY, not proof of actual sensor BGGR Bayer
+pattern or actual loss of blue. The maintained rear media
+format reports GRBG and MUST NOT be altered by guesswork.
+
+Fresh E004nh opt-in only rear SOFTWARE BGGR hypothesis
+was source-locked and synthetic Bayer-primary tested.
+NEW KNOWN CYAN/RED/GREEN/BLUE/GRAY/WHITE target confined
+to UPPER60% of SP7 1368x912 display, BOTTOM40% black/
+untrusted and EXCLUDED from chart due defective LCD.
+SP7 interactive task visible19:15–19:23, removed after
+physical capture; desktop restored. Genuine E004nh camera
+captured original private front1080/rear4K baseline+gain
+optical previews, real rear three full10 RAW10 sequential
+pairs, front/rear native sensor controls EXACT restored,
+selector front->rear->off->quit, both source full-run
+near30fps zero source gaps and every rear gain interval
+>=29fps. But actual FRONT gain frame630–660 interval
+28.0310fps < immutable29fps gate, so ORIGINAL E004nh
+full-run FAILED, its downstream independent bt601 and
+final119-edge neutral checks were NOT executed. Candidate
+no GPU/panic/thermal fault, automatically returned Golden
+boot3b1410be-fe1c-4148-a17d-1630a5deaf33, unique
+root/GRUB/boot/systemd assets retired and identity
+CONSUMED NEVER REARM. Golden normal CFA/IR/camera/tone
+defaults unchanged.
+
+Original photos never left SP11. Local independent
+whole-image bright Y>96 RGB scalar means changed from
+older E004ng GRBG/full-screen(196.423,126.612,195.523)
+predominantly MAGENTA to new E004nh opt-in BGGR/upper60
+(103.427,165.751,123.292) GREEN-DOMINANT. Since
+screen placement/content geometry differs and OLD photo
+may include user's known faulty lower LCD, these
+UNREGISTERED global aggregates do NOT independently
+prove physical sensor BGGR order, per-patch accurate
+RGB, blue reconstruction, actual fine detail, white
+balance or OEM Windows ISP parity. This is an important
+isolated software CFA hypothesis requiring a fresh
+controlled same-upper-screen chart, independently
+REGISTERED patch ROI and native per-site RAW10 sensor
+response under matched controls; no premature normal
+camera promotion. Text-only results E004nh/RESULT.json
+and evidence/REAL-PRIVATE-OLDER-GRBG-VS-NEW-UPPER60-
+BGGR-GLOBAL-COLOUR-SCALARS.json. Four private original
+front/rear baseline/gain photos only same SP11 owner
+geoca dir0700/photos0600.
+
 ## E004ne real screen-scene independent acceptance PASS; older OEM Windows photo still brighter
 
 After original E004nd new-scene run FAILED original RAW10
