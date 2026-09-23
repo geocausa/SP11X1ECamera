@@ -101,8 +101,29 @@ python3 -m unittest discover -s "$R/experiments/E004-front-ir-vd55g0/e004ki-fron
 for camera in front rear; do
  grep -Fq '#error E004NH_REFUSE_UNCORRECTED_NV12_OUTPUT_RANGE' "$H/$camera-direct-publisher.c"
  grep -Fq 'sp11_rgb_output_y' "$H/$camera-convert.c"
- cmp "$H/$camera-convert.c" "$R/src/sp11-camera-stack/rgb/$camera-convert.c"
 done
+# Unlike all earlier ordinary-candidate stages, this one IS an isolated
+# opt-in experimental BGGR Bayer implementation. A literal cmp with
+# maintained Golden GRBG rear-convert.c must reject it by construction;
+# instead prove that REMOVING the single explicit opt-in branch gives
+# byte-for-byte the unmodified maintained rear converter. Both
+# alternate source and compiled ELF are separately SHA-pinned.
+cmp "$H/front-convert.c" "$R/src/sp11-camera-stack/rgb/front-convert.c"
+python3 - "$R/src/sp11-camera-stack/rgb/rear-convert.c" "$H/rear-convert.c" <<'VERIFY_ISOLATED_BGGR_ONLY'
+from pathlib import Path
+import sys
+baseline=Path(sys.argv[1]).read_text()
+candidate=Path(sys.argv[2]).read_text()
+opening='#if defined(SP11_RGB_REAR_BGGR_OPTIN) && SP11_RGB_REAR_BGGR_OPTIN\n'
+assert candidate.count(opening)==1 and opening not in baseline
+start=candidate.index(opening)
+mid=candidate.index('#else\n',start)
+end=candidate.index('#endif\n',mid)
+assert baseline==candidate[:start]+candidate[mid+len('#else\n'):end]+candidate[end+len('#endif\n'):]
+assert '#error E004NH_REAR_BGGR_CFA_EXPLICIT_OPTIN_REQUIRED' not in baseline
+assert len(candidate[start:mid].splitlines())>=15
+print('E004NH_ONLY_SEALED_SOFTWARE_BGGR_DEMOSAIC_BRANCH_DIFFERS_FROM_UNMODIFIED_MAINTAINED_GRBG=PASS')
+VERIFY_ISOLATED_BGGR_ONLY
 cmp "$H/iq/nv12_range.h" "$R/src/sp11-camera-stack/rgb/iq/nv12_range.h"
 cmp "$H/iq/rear_preview_tone.h" "$R/src/sp11-camera-stack/rgb/iq/rear_preview_tone.h"
 cmp "$H/iq/raw10_temporal_spatial.h" "$R/src/sp11-camera-stack/rgb/iq/raw10_temporal_spatial.h"
