@@ -185,6 +185,36 @@ Linux one-shot. E004wn task was retired and SP11 returned to protected
 Golden; never reuse E004wn, E004mh or other consumed identity. IR OFF,
 no Linux OS system sleep.
 
+## E004mp bounded rear extra analogue gain: signal rises, usability still open
+
+New E004mp one-shot ran source-locked front1080/rear4K RGB, UID1000 apps,
+full10 RAW10 channel histograms, same-frame RAW-upper8/NV12 telemetry
+and exact native control restoration. Only the **rear analogue gain target**
+changed versus E004mh (256→512); rear trial exposure3200 and digital
+gain2048 were unchanged, frame timing/FPS unchanged and IR OFF.
+The rear source green0 RAW10 P01/P99 baseline64/70→gain73/140;
+p99−p01 6→67, while ordinary-app NV12 Y p99 31→48 and private
+RGB preview downsampled Y p99 15→30. The gain-dependent shift of P01
+means full10 code64 is not a calibrated optical black value. More
+spatial contrast MAY mean optical scene detail and/or fixed pattern noise.
+Local-only 12x16-tile image brightness correlation rear baseline/gain
+r0.806 and E004mh-vs-E004mp gain r0.977 suggests a repeatable pattern,
+but cannot identify it as usable scenery or prove SNR/scene recognition.
+
+All four original PNGs remain ONLY on SP11 at
+`~/Pictures/SP11-Camera-Private-E004mp/` (directory0700/photos0600),
+no pixel data/image hashes committed or sent. Candidate consumed and
+retired after automatic protected Golden boot
+`b3692bba-238a-4885-8f3b-9332c8284b51`, native neutral and clean
+overlap guard. The rear native exposure current mode max is3206 lines,
+and trial3200 is almost full-frame; longer exposure needs explicit
+separate VBLANK/FPS verification rather than a silent control tweak.
+Next controlled fixed-lit target/actual black/noise and per-gain
+RAW10 scene checks must precede robust automatic exposure or tone
+mapping. Windows E004wn rendered a much brighter rear at another time,
+but scenes/time and statistics were not matched. Default/Golden camera
+still not enabled, IR OFF, no Linux OS-level sleep.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:
