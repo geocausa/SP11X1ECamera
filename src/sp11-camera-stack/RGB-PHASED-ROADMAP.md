@@ -262,6 +262,44 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004mv opt-in AArch64 rear NEON: real 4K near-30fps PASS
+
+After user permission to continue guarded hardware work despite an
+earlier firmware restart leaving SP11 powered off, a BRAND-NEW unique
+E004mv one-shot physically PASSED native front1080/rear4K RGB
+and ordinary UID1000 apps, real full10 RAW10 source, exact supported
+sensor control baseline/trial/restoration, independent front/rear/off
+routes and final neutral graph with no IR or native FPS/VBLANK changes.
+Fast explicitly opt-in rear Y-only 16-lane NEON is bit-for-bit equal
+to earlier scalar algorithm on all generated full4K NV12 source,
+history, chroma and summary stats across motion/scene-change tests.
+Real rear filter141 frames mean CPU0.318ms vs E004mu 3.831ms;
+combined real conversion+tone+filter20.454ms vs23.695ms;
+true source711 frames/23.739465s=29.9501fps zero source gaps.
+Separate measured high-gain 30frame windows achieved29.8803,
+30.0039,29.9136,30.0933fps; each passed SAME strict29fps
+gate vs E004mu physical fail28.8485fps overall, ~24.7-24.9fps
+under higher gain. Do not relax FPS gate.
+
+No Adreno GPU fault/GMU OOB timeout/DPU hangcheck in this candidate
+boot; one successful automatic reboot to protected Golden
+08c11e69-283f-47e5-acea-e7e8431429e8 does NOT identify or solve
+earlier E004mu GPU/final-firmware-restart failure. Unique candidate
+consumed and fully retired; Golden saved_entry intact/next_entry
+empty, default RGB camera + rear tone/temporal OFF/unchanged, IR off.
+Four original front/rear optical RGB PNGs stay ONLY SP11 in private
+~/Pictures/SP11-Camera-Private-E004mv/ owner geoca dir0700/files0600;
+Git evidence text/scalars only, no private pixels/photo hashes.
+
+The achieved near-30fps real source plus exact synthetic filter
+output does NOT establish visible optical object detail, true noise,
+correct colour/white balance, safe low-contrast motion, bounded
+native auto exposure, Windows IQ parity or reliable routine camera
+service. Continue software-first, no automatic daily filter activation.
+Future physical tests require fresh single-use guarded boot and user
+is aware firmware may again require physical power-on on failure.
+See E004mv/RESULT.json and evidence/REAL-REAR-TEMPORAL-PREVIEW-RESULT.json.
+
 ## E004mu rear 4K opt-in temporal-filter physical failure and reboot safety HOLD
 
 On new uniquely guarded source-locked E004mu Linux boot, real
