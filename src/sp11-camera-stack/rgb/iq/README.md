@@ -170,3 +170,26 @@ this does not prove live 29-30fps or scene detail. Prior physical E004mu
 scalar rear temporal candidate failed at28.8485fps; DO NOT lower the
 29fps requirement, or rearm that consumed candidate. New physical
 SIMD testing requires its own source-locked one-shot.
+
+### Offline-only bounded native sensor brightness *planning* gate
+
+preview_brightness_policy.py has no device, file, image, network or
+sensor-writing API. Its synthetic tests exercise a hypothetical
+one-time selection between ONLY the front/rear baseline and trial
+native RGB V4L2 exposure/gain tuples already physically tested, with
+an unchanged active fixed frame/30fps sensor mode, an independent
+real-source 29fps-or-higher gate, 30 consecutive frames, exact
+source/control readback, IR off and exclusive route prerequisites.
+It can output scalar TRIAL_ELIGIBLE or REVERT_ELIGIBLE but every
+decision has eligible_for_live_control_write=False. A live driver
+must NEVER treat this report as authorization to write the sensor.
+
+In particular, a truly dark/occluded or overexposed scene must not
+cause unbounded gain/black-level lift, a front scene that remains
+dim after the known trial must not be labeled usable, and missing
+sensor readback/FPS/sequence or route safety poisons the proposal.
+No neutral color or known-dark reference has been observed:
+scene recognition, raw black/SNR, automatic exposure/white balance
+and OEM Windows ISP are still unproven. The E004mv real front/rear
+published scalar baseline/trial values can inform a separate,
+source-only decision audit, not a claimed live closed-loop result.

@@ -262,6 +262,36 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004mw SP11-private existing photo scalar quality audit + software-first brightness policy
+
+Read only four existing E004mv original front/rear baseline/gain user
+photos LOCALLY on SP11, without activating cameras, moving pixel
+files or exporting pictures/hashes/thumbnails/per-tile images.
+Four-channel means and 4x-stride luma aggregate show front gain RGB
+still extremely dark (display gray mean19.628/p99 47, ~87.1% samples
+below25), whereas rear gain toned display gray mean144.493/p99 166.
+Both baseline photos remain near-black. Front current fixed native
+gain alone did NOT produce the Windows-like bright appearance.
+Rear reconstructed green pixel 2x2 parity spread ~5.03 display
+levels vs baseline~0.23, with real rear RAW10 G0 vs G1 p50 code
+87 vs80 at high gain. This could arise from CFA/ISP/sensor/scene
+or uncalibrated low-light processing; no sensor defect, green
+correction, calibrated colour balance, true black, sharpness or
+recognizable scene is demonstrated by these aggregate scalars.
+No gray card, colour chart or controlled known dark optical reference
+has been verified. Review full E004mw scalar-only report before any
+white balance or sharpening changes.
+
+Maintained IQ preview_brightness_policy.py is camera-free only and
+returns non-executable bounded front/rear baseline/trial profile
+plans: no sensor writes or new native gain values, actual>=29fps
+and 30 consecutive source frames, exact sensor register/control
+bounds readback, IR-off/exclusive route, no native frame-timing
+change, no highlights clipping, and once-only gain probe with
+flat/too-dark trial rejection. Tests PASS on synthetic controls.
+Actual closed-loop automatic exposure and front/rear visual IQ
+are NOT yet validated. Normal Golden camera remains unchanged.
+
 ## E004mv opt-in AArch64 rear NEON: real 4K near-30fps PASS
 
 After user permission to continue guarded hardware work despite an

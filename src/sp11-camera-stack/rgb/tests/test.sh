@@ -46,6 +46,7 @@ gcc "${F[@]}" "$T/source/iq/tests/test_raw10_unpack.c" -o "$T/raw10-unpack-test"
 gcc "${F[@]}" "$T/source/iq/tests/test_raw10_profile.c" -o "$T/raw10-profile-test"
 "$T/raw10-profile-test"
 python3 "$T/source/iq/tests/test_exposure_envelope.py" -q
+python3 "$T/source/iq/tests/test_preview_brightness_policy.py" -q
 echo "RGB_READ_ONLY_EXPOSURE_ENVELOPE_CAMERA_FREE_TESTS=PASS"
 gcc "${F[@]}" "$T/source/iq/tests/test_raw10_temporal_spatial.c" -lm -o "$T/raw10-temporal-test"
 "$T/raw10-temporal-test"
