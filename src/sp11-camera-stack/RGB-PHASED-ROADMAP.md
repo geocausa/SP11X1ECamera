@@ -262,6 +262,53 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004my new source-pinned real FRONT1080 gain tone plus rear4K NEON: ORIGINAL complete independent trial PASS
+
+Unlike E004mx (original validator FAILED, posthoc real-text
+analysis passed), fresh distinct one-shot E004my source-locked
+candidate boot9319f52d-daf3-43e1-afc8-6b1f45d3921e
+successfully ran the ORIGINAL corrected independent real front
+gain-only NV12 Y output brightness checker to completion,
+including separately original real UID1000 app p50>=106/p99>=154,
+unmodified front baseline p99<=37, same-frame front native
+RAW10/converted untoned source comparison and unchanged UV.
+Real front source30.0311fps zero sequence gaps, each of four
+settled high-gain 30frame intervals30.2703/29.7609/29.9367/
+29.9514fps all met unchanged>=29fps requirement. Existing rear
+NEON 4K comparator source29.8243fps with gain window
+29.9727/29.9661/29.9139/30.0018fps each>=29,
+gaps0, three real RAW10 full10 consecutive source pairs.
+All exact supported front/rear native gain/exposure controls
+restored, ordinary uid1000 app front->rear->off->quit exclusive
+selector, complete independent FINAL 119-edge media-graph
+neutral proof, no GPU GMU/Adreno/DPU/panic/thermal fault.
+
+Automatic firmware reboot returned to protected Golden Linux
+boot725cbcd3-9339-446b-ad42-f0d3e31ac3d7 on 2026-09-23
+15:55:13 BST. Distinct E004my consumed NEVER rearm; unique
+root/GRUB/boot/systemd candidate retired, normal camera/IR/
+tone/temporal defaults unchanged. E004mu's earlier GPU and
+firmware-reboot hang cause is still UNKNOWN.
+
+SP11-private same-host original front/rear baseline/gain
+photo scalar-only analysis: front baseline display gray mean15.097
+p99 20, front toned gain gray mean106.122 p99 155,
+rear baseline14.077 p99 15 and rear toned gain142.646
+p99 163. Front gain ~0.30% 4x-stride RGB samples had any
+channel>=250; uncalibrated highlight/demosaic/colour and
+actual optical scene detail still require independent
+fixed visible target and separate known dark reference.
+Photos remain ONLY on SP11 user-private
+~/Pictures/SP11-Camera-Private-E004my/ 0700/0600;
+no pixels/photos/thumbs/RAW/photo hashes uploaded or committed.
+This is a REAL 1080p/4K fps/brightness/selector/neutral SUCCESS,
+but NOT OEM Windows ISP visual IQ, true noise/SNR, real
+object recognizability, native AE/white balance or an
+everyday configured camera service. DO NOT silently enable
+default tone/exposure profiles. See E004my/RESULT.json and
+REAL-FRONT-GAIN-TONE-RESULT.json, FINAL-NATIVE-NEUTRAL-PROOF.txt
+and LOCAL-SP11-ONLY-PRIVATE-RGB-AGGREGATES.json.
+
 ## E004mx front1080 opt-in display-luma lift: REAL measurement, original independent acceptance FAIL (validator typo)
 
 A fresh E004mx one-shot source-locked candidate captured real
