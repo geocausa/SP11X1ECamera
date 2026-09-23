@@ -64,6 +64,24 @@ controlled-lit exposure, image quality and Windows ISP parity are
 still UNPROVEN. E004ly independently proved ~115s per camera with
 the prior separate scripted route rather than this new controller.
 
+## E004mb real morning-light RGB detail check (2026-09-23)
+
+**Image quality is now an observed release blocker, not just
+uncalibrated:** real 90-frame ordinary-app front1080p and rear4K
+probes under morning corner light produced front mean Y~16.3,
+p99 18 and rear mean Y~16.0, p99 16, with negligible spatial
+contrast. Neither camera produced statistically distinguishable
+scene detail. Current V4L2 sensor controls stayed at their
+fixed readback values; this test made NO exposure/gain writes.
+The source RAW signal and physical light at each lens remain
+unmeasured, so do NOT claim scene darkness alone explains this
+or that the software converter is definitely at fault.
+Bounded root selector, independent apps, stop/STREAMOFF and
+Golden return all passed; one-shot consumed/retired.
+Next finite safely guarded test: paired RAW source versus NV12
+scalar histogram and controlled supported-exposure engineering,
+NO IR or OS system sleep.
+
 ## E004ma root-private RGB selector (2026-09-23)
 
 An independent guarded one-shot proved the maintained root Unix-socket
