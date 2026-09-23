@@ -29,3 +29,23 @@ and candidate retirement after independent Golden verification.
 Finite root-only selector acceptance is NOT a permanent daily camera
 service or proof of unbounded multiclient safety, balanced image
 quality, auto exposure or Windows visual parity.
+
+## Final E004ma result (2026-09-23): PASS / CONSUMED / RETIRED
+
+Independent real root-private opt-in Unix selector commands front→rear→off→quit
+succeeded with exact front1080p/rear4K software NV12. For EACH camera,
+three normal uid1000 reader processes received 120 distinct complete
+frames, and intentionally killed client recovery retained the same
+publisher service invocation. Service publisher SIGTERM/STREAMOFF=143;
+full native graph neutral after run; no IR or OS-level system sleep.
+Candidate boot 93141fda-ca01-4e24-a97b-6d669a7f54b2 returned to Golden
+bc251567-c1a4-4cbb-84eb-6e47474f0eee, default boot preserved.
+Candidate boot/service/private assets retired and identity consumed:
+NEVER REARM. RESULT.json, CONSUMED.json and evidence/ are authoritative.
+
+Opt-in ROOT-ONLY socket selector acceptance is still a finite guarded
+candidate, not a persistent ordinary desktop camera service. Front/rear
+sampled luma Y ~16 even though application video delivery passed; optical
+scene detail, active autoexposure and quality remain UNKNOWN. Morning
+changing light requires a separate fresh safely guarded experiment;
+do not infer that app-visible video is correctly exposed.

@@ -64,6 +64,22 @@ controlled-lit exposure, image quality and Windows ISP parity are
 still UNPROVEN. E004ly independently proved ~115s per camera with
 the prior separate scripted route rather than this new controller.
 
+## E004ma root-private RGB selector (2026-09-23)
+
+An independent guarded one-shot proved the maintained root Unix-socket
+selector commands front→rear→off→quit on real native CAMSS, front1080p /
+rear4K NV12 ordinary uid1000 V4L2 clients. Three normal 120-distinct
+frame app openings and intentional SIGKILL/recovery per camera retained
+the same publisher. Both returned to native graph neutral with IR off;
+Golden recovered, candidate retired/consumed. This closes *bounded
+physical selector control*, not persistent everyday camera installation.
+
+Both front and rear sampled luma Y ~16. A genuinely distinguishable
+scene, correct exposure, dynamic range, colour and calibrated image
+quality remain unproven despite successful real optical frame delivery.
+Next: guarded finite daylight/low-light RAW-vs-Y in-memory scene
+diagnosis; no user-image archive, IR or system sleep.
+
 ## E004ly guarded high-resolution software publisher trial (2026-09-23)
 
 Independent fresh one-shot real hardware front1080p and rear4K
