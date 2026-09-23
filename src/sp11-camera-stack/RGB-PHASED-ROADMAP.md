@@ -157,6 +157,34 @@ processing proposal offline BEFORE a fresh camera one-shot; never reuse
 E004mh. Do not substitute another delivery-only PASS for the usability
 gate or activate protected IR/OS system sleep.
 
+## E004wn fresh Windows oracle: current rear corner is rendered bright
+
+The rear camera may physically face a darker, relatively featureless corner
+(as reported by the user), so comparing front vs rear physical signal is NOT
+an equivalent scene exposure test. To check that explanation, a new
+single-use E004wn Windows-only numeric oracle sampled exact SP11 front1080
+and rear4K colour WinRT NV12 at 11:16 BST, about 18min after E004mh
+Linux. Windows rear mean Y=148.24–148.55, P01=119–120, P99=169,
+with **zero** sampled Y below32, and 8x8 tile means std ~11.2. Windows
+front mean Y~123.27–123.70. Both ExposureControl.Auto=true, nominal
+ticks5000 (not a native sensor-register exposure readback). This
+Windows rear capture is NOT similarly near-black to the recent Linux
+rear app baseline Y P99=31/adjusted37 or Linux RGB PNG P99=15/20.
+
+A dark/featureless corner alone is therefore insufficient as a factual
+explanation for *both* platforms' current rendered output, but it remains
+possible that lighting/direction changed or Windows automatic exposure
+compensates for the corner. The capture times, raw/native sensor exposure
+units, image processing and data summary statistics were NOT matched.
+Do NOT diagnose sensor failure or calculate a cross-OS brightness ratio.
+Use a deliberately fixed bright and dark physical target, confirm field
+of view and illuminance in both boots, collect comparable native NV12
+Y histograms plus Linux RAW10 channel and exposure/gain metadata, and
+then test bounded automatic-exposure/tonal processing in a fresh guarded
+Linux one-shot. E004wn task was retired and SP11 returned to protected
+Golden; never reuse E004wn, E004mh or other consumed identity. IR OFF,
+no Linux OS system sleep.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:
