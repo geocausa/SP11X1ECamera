@@ -192,6 +192,32 @@ No module installed/loaded, no camera activated, no DMA allocated,
 and Linux native rear 4K ISP optical frame is still UNPROVEN.
 See E004nu README, verify.py and BUILD-RESULT.json.
 
+## E004nv OEM static BF completion group8, six-group rear candidate
+
+The NEW isolated same-SP11 E004nv
+`experiments/E004-front-ir-vd55g0/e004nv-rear-six-group-bf-static/`
+recovered a previously-unexercised OEM Windows BF stats IRQ branch in
+the exact private same-SP11 qccamisp8380.sys (SHA64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c):
+event 0x0F at RVA0x1fc60, diagnostic "IFE%d IFE BF stats buf done
+Irq occured." RVA0x37b88, passes group index8 at RVA0x1fc8c
+to the SAME independent FIFO helper RVA0x26460, and stores resource
+port0x300D at RVA0x1fce8. Both Windows rear 4K physical live
+snapshots showed active extra WM16 BAF, absent from the working front.
+This supports a new **static-candidate** sixth rear completion group:
+VIDEO0x03/idx0 WM0-3, AEC_BE_BHIST0x0D/idx5 WM11-12,
+TL_BG0x0E/idx6 WM13, AWB_BG0x10/idx7 WM14,
+BF0x0F/idx8 WM16, RS0x12/idx9 WM18.
+IMPORTANT: BF event 0x0F was **NOT ACTUALLY OBSERVED** during either
+Windows rear live session, nor was a WM16 DMA completion proven.
+Do not present a static OEM BF branch as a proven LIVE rear DMA/IRQ
+lifecycle. E004nv source-only six-group mapping compiled on ARM64
+with 720 offline cross-order simulations and 20 negative tests but
+the runtime stays DENIED -EOPNOTSUPP, NO new caller, and Golden/front
+sources remain unchanged. Private OEM binary remains only SAME SP11.
+Next is a dedicated private Windows REAR LIVE BF completion trace,
+then real per-group stats DMA/retire, RT-CDM/IQ/3A and safe exclusive
+CSID1/VFE1 hardware lifecycle before any Linux-native rear4K run.
+
 ## Resume behaviour
 
 When asked to continue camera work:
