@@ -1,0 +1,25 @@
+[Unit]
+Description=SP11 E004mc continuous RGB software 1080p/4K opt-in publisher diagnostic; no IR; auto return Golden
+Documentation=man:systemd.service(5)
+ConditionKernelCommandLine=sp11_camera_e004mc_rgb_session=1
+After=local-fs.target systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+Wants=systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+TimeoutStartSec=560
+TimeoutStopSec=20
+ExecStart=/usr/local/sbin/sp11-camera-e004mc-run-once
+# Runs on success, failure or timeout. One-shot GRUB next_entry is consumed
+# before this unit starts and persistent saved_entry stays protected Golden.
+ExecStopPost=/usr/bin/systemctl --no-block reboot
+StandardOutput=journal+console
+StandardError=journal+console
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
