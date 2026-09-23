@@ -319,6 +319,23 @@ owner geoca dir0700/photo0600, NEVER share/export it.
 Git has scalar-only numerical comparison and code, no
 photo/pixel array/RAW/thumb/photo hash.
 
+Same original E004ne session proves native rear RAW10 signal DID
+increase under gain: sampled full10 G0 p99 baseline100 -> gain628
+and RAW-upper8 p99 24 ->144. Ordinary rear UID1000 app p99
+baseline153 -> gain141 is not evidence gain darkened the sensor:
+baseline dark-scene tone artificially raised native input Yp99
+37 to153; later high-gain nonflat scene correctly BYPASSED
+tone with input/output Yp99 both141. Comparing processed
+baseline/gain as if both were untoned native exposure is invalid.
+Bounded sampled blue RAW10 max906/1023 at gain calls for
+per-channel highlight-headroom checks, but is not a measured
+full-frame clipping rate or optical black calibration. Windows
+OEM auto-exposure, scene content and lighting are NOT matched;
+do not boost gain merely to equalise global Windows mean.
+See scalar-only E004ne/evidence/
+SCALAR-ONLY-NATIVE-GAIN-VS-DISPLAY-TONE-CONFOUND.json.
+No image/pixels/RAW/photo hashes exported; Golden camera unchanged.
+
 Next independent target: native auto exposure and true
 shadow signal/detail versus fixed supported exposure/gain,
 known illuminated and dark reference, controlled
