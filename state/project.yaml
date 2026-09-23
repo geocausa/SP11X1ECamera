@@ -3,7 +3,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-22
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004lw-processed-reopen-startup-1s-cadence-fail-golden
+state_id: E004lx-rgb-four-session-steady-pass-startup-stalls-golden
 phase: ordinary-linux-rgb-desktop-output-integration
 status: golden-sustained-sequential-apps-proven-30fps-service-and-quality-open-ir-off
 golden:
@@ -370,6 +370,29 @@ e004lw_processed_rgb_reopen_soak:
   os_system_sleep_attempted: false
   one_shot_consumed_and_retired: true
   next: new-guarded-startup-vs-steady-four-process-with-per-close-unconditional-neutral
+e004lx_processed_rgb_steady_and_reopen:
+  date: 2026-09-23
+  status: pass-four-independent-900frame-processed-rgb-steady-with-reopen-startup-stalls
+  source_commit: a83ef0e28889f88628a4fbc6589419c404b2edd3
+  candidate_boot_id: dae3678e-8e04-4847-a35e-39f0434c81d3
+  golden_return_boot_id: 13a1f53d-cfad-44e7-a8a0-9012c6b0c172
+  independent_real_camera_processes: 4
+  camera_order: front-rear-front-rear
+  per_camera_process_frames: 900
+  total_processed_xrgb8888_frames: 3600
+  steady_intervals_checked_per_session: 889
+  steady_intervals_over_250ms: 0
+  first_front_and_rear_startup_gaps_over_250ms: 0
+  reopened_front_startup_gap_us: 999185
+  reopened_rear_startup_gap_us: 966638
+  startup_stall_root_cause: unknown
+  all_four_processes_independently_neutral_after_close: true
+  all_sessions_camera_control_errors: 0
+  ir_illumination: off
+  linux_os_standby_suspend_test: excluded-by-user-platform-safety
+  one_shot_consumed_and_retired: true
+  production_multiclient_and_iq_parity_proven: false
+  next: resolve-early-frame-reopen-stall-and-functional-opt-in-rgb-service
 current_experiment: E004-front-ir-vd55g0
 current_gate: production-reopen-long-reliability-and-image-quality-no-system-sleep
 e004jk_windows_rgb_baseline:
@@ -3331,7 +3354,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: new-guarded-startup-vs-steady-four-process-with-per-close-unconditional-neutral
+next_experiment: resolve-early-frame-reopen-stall-and-functional-opt-in-rgb-service
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30

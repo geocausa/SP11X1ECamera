@@ -1,0 +1,120 @@
+{
+  "automatic_golden_return": true,
+  "camera_control_errors_all_sessions": 0,
+  "camera_node_fd_leaks_all_sessions": false,
+  "candidate_boot_id": "dae3678e-8e04-4847-a35e-39f0434c81d3",
+  "date": "2026-09-23",
+  "evidence": [
+    "evidence/CAMERA-LIST.txt",
+    "evidence/FRONT-1-CADENCE-DETAIL.json",
+    "evidence/FRONT-1-FIRST-12-AND-LAST-3-FRAMES.txt",
+    "evidence/FRONT-1-VALIDATION-SUMMARY.txt",
+    "evidence/FRONT-2-CADENCE-DETAIL.json",
+    "evidence/FRONT-2-FIRST-12-AND-LAST-3-FRAMES.txt",
+    "evidence/FRONT-2-VALIDATION-SUMMARY.txt",
+    "evidence/IR-STANDBY-READBACK.txt",
+    "evidence/NEUTRAL-AFTER-front-1.txt",
+    "evidence/NEUTRAL-AFTER-front-2.txt",
+    "evidence/NEUTRAL-AFTER-rear-1.txt",
+    "evidence/NEUTRAL-AFTER-rear-2.txt",
+    "evidence/NEUTRAL-BEFORE.txt",
+    "evidence/REAR-1-CADENCE-DETAIL.json",
+    "evidence/REAR-1-FIRST-12-AND-LAST-3-FRAMES.txt",
+    "evidence/REAR-1-VALIDATION-SUMMARY.txt",
+    "evidence/REAR-2-CADENCE-DETAIL.json",
+    "evidence/REAR-2-FIRST-12-AND-LAST-3-FRAMES.txt",
+    "evidence/REAR-2-VALIDATION-SUMMARY.txt",
+    "evidence/RGB-FRAMES-SUMMARY.txt",
+    "evidence/ROOT-ASSET-VERIFICATION.txt"
+  ],
+  "full_native_media_graph_neutral_before_between_and_after_all_four": true,
+  "golden_return_boot_id": "13a1f53d-cfad-44e7-a8a0-9012c6b0c172",
+  "independent_camera_app_processes": 4,
+  "ir_streaming_or_illumination_enabled": false,
+  "kernel_ir_standby_readback": "stream=0 illumination=0",
+  "limitations": "Startup ~1s frame interruption recurs on BOTH cameras after switching/reopen; steady cadence and graph neutral pass. Full resolution processed RGB and long-term production service still not proven.",
+  "next": "Investigate reproducible early-frame stall using per-layer timing while building functional selectable camera service; exclude system sleep.",
+  "no_saved_frame_pixels_or_calibrated_image_quality_proof": true,
+  "normal_os_system_standby_suspend_resumed": false,
+  "one_shot_consumed": true,
+  "ordinary_desktop_camera_service_installed": false,
+  "per_session_steady_cadence_all_889_intervals_under_250ms": true,
+  "production_general_client_exclusivity_proven": false,
+  "protected_golden_default": "sp11-audio-fullio-v19c",
+  "reopened_front_initial_gap_us": 999185,
+  "reopened_rear_initial_gap_us": 966638,
+  "root_only_experiment_device_access": true,
+  "session_results": {
+    "front-1": {
+      "bytesused_per_frame": 1228800,
+      "exact_processed_format": "640x480-XRGB8888/sRGB",
+      "first_to_last_timestamp_span_us": 30020760,
+      "frames": 900,
+      "largest_steady_gap_us": 36383,
+      "seq0_to_899_contiguous": true,
+      "startup_gaps_gt250ms": [],
+      "steady_intervals_checked": 889,
+      "steady_median_interval_us": 33366,
+      "v4l2_control_errors": 0
+    },
+    "front-2": {
+      "bytesused_per_frame": 1228800,
+      "exact_processed_format": "640x480-XRGB8888/sRGB",
+      "first_to_last_timestamp_span_us": 30964415,
+      "frames": 900,
+      "largest_steady_gap_us": 36221,
+      "seq0_to_899_contiguous": true,
+      "startup_gaps_gt250ms": [
+        {
+          "gap_us": 999185,
+          "seq_from": 3,
+          "seq_to": 4
+        }
+      ],
+      "steady_intervals_checked": 889,
+      "steady_median_interval_us": 33369,
+      "v4l2_control_errors": 0
+    },
+    "rear-1": {
+      "bytesused_per_frame": 1228800,
+      "exact_processed_format": "640x480-XRGB8888/sRGB",
+      "first_to_last_timestamp_span_us": 30020511,
+      "frames": 900,
+      "largest_steady_gap_us": 35827,
+      "seq0_to_899_contiguous": true,
+      "startup_gaps_gt250ms": [],
+      "steady_intervals_checked": 889,
+      "steady_median_interval_us": 33396,
+      "v4l2_control_errors": 0
+    },
+    "rear-2": {
+      "bytesused_per_frame": 1228800,
+      "exact_processed_format": "640x480-XRGB8888/sRGB",
+      "first_to_last_timestamp_span_us": 30951900,
+      "frames": 900,
+      "largest_steady_gap_us": 36298,
+      "seq0_to_899_contiguous": true,
+      "startup_gaps_gt250ms": [
+        {
+          "gap_us": 966638,
+          "seq_from": 3,
+          "seq_to": 4
+        }
+      ],
+      "steady_intervals_checked": 889,
+      "steady_median_interval_us": 33389,
+      "v4l2_control_errors": 0
+    }
+  },
+  "source_commit": "a83ef0e28889f88628a4fbc6589419c404b2edd3",
+  "startup_interruption_events": 2,
+  "startup_interruption_root_cause_independently_identified": false,
+  "status": "PASS_FOUR_SEQUENTIAL_PROCESSED_RGB_900_FRAME_SESSIONS_STEADY_WITH_TWO_REOPEN_STARTUP_STALLS",
+  "stream_order": [
+    "front-1",
+    "rear-1",
+    "front-2",
+    "rear-2"
+  ],
+  "total_delivered_frames": 3600
+}

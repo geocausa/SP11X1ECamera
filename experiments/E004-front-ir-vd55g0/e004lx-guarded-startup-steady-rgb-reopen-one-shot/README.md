@@ -11,3 +11,36 @@ Crucial correction: after EACH independent cam process exits, native READ-ONLY f
 Source: canonical exact hardware/DTB authority, E004le previously physically accepted IMX681+CAMSS timing pair, new exact E004lx one-shot cmdline lease, clean pinned libcamera 0.7.0 RGB filter/native guarded route/fail-closed STREAMOFF plus front fixed-frame bounded exposure/gain helper in a new root-private compiled/IPA path. No normal Golden kernel/initrd or saved boot default replaced. Distinct staged binaries and run scripts SHA checked before arm and on candidate boot. The one-shot service has a 310s bound and reboots to Golden on completion or failure; identity irrevocably consumed after its first attempt. No image pixel files or optical quality data are saved; processed-video Windows ISP parity, ordinary desktop service and production multi-client ownership remain separate blockers.
 
 Status: source-only preparation, no E004lx physical attempt at writing. RESULT.json and CONSUMED.json/evidence will supersede preparation.
+
+## Final physical result — steady/reopen PASS, startup stalls present; retired
+
+Distinct guarded E004lx physical boot dae3678e-8e04-4847-a35e-39f0434c81d3
+completed ALL FOUR independent pinned libcamera native front→rear→front→rear
+processes. Each delivered exactly 900 sequential 640x480-XRGB8888/sRGB
+1228800-byte processed buffers, total 3600, no sensor-control error;
+each had 889 post-first-ten steady intervals at approximately 30fps
+and no steady timestamp gap >250ms. Native read-only complete media-v2
+graph independently verified neutral initially and after EVERY process,
+including BOTH reopened devices, with no leaked camera-node handles.
+The accepted IMX681 Soft IPA active exposure range remained 4–3550.
+IR standby readbacks confirmed stream=0 illumination=0.
+
+**Startup caveat:** first front and rear opening had no early >250ms
+gap. After switching/reopening, front had one 999185us early gap and
+rear one 966638us early gap. The same class of ~1s gap occurred on
+front reopen in the separately failed E004lw test. E004lx reports both
+interruptions explicitly; its PASS is for bounded steady-state cadence,
+controlled sequential reopen and neutral shutdown, NOT seamless startup
+or fully calibrated image quality. No optical pixel files were stored.
+This test did not put Linux into system standby/suspend/resume.
+
+The one-shot service rc0 automatically returned protected Golden boot
+13a1f53d-cfad-44e7-a8a0-9012c6b0c172, saved v19c, next_entry empty,
+no camera nodes/modules. Candidate root-owned build, boot image, service,
+private stage and GRUB entry fully RETIRED after independent Golden checks.
+E004lx identity is CONSUMED, NEVER rearm. RESULT/CONSUMED/evidence
+record per-session numerical timing, IR, full neutral, asset hashes.
+Next: per-layer trace the reproducible early frame pause and complete
+a selectable, non-default RGB application/service lifecycle; Windows
+QC10C ISP, ordinary production multi-client access and optional IR/Hello
+remain separately unresolved. System standby testing stays prohibited.
