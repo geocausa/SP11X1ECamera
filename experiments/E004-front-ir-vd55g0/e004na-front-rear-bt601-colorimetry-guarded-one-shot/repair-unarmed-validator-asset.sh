@@ -24,9 +24,9 @@ sudo -n test ! -e "$D/ATTEMPT-CONSUMED"
 sudo -n test ! -e "$D/UNARMED-REPAIR.txt"
 sudo -n test ! -e "$D/validate_bt601_live.py"
 [[ "$(sudo -n grep -Fc 'python3 "$D/validate_bt601_live.py"' "$RUNNER")" == 1 ]]
-cmp "$H/run-once.sh" "$RUNNER"
+sudo -n cmp "$H/run-once.sh" "$RUNNER"
 cmp "$H/scene_probe.py" /usr/local/lib/sp11-camera-e004na/scene_probe.py
-cmp "$H/selector_acceptance.py" "$D/rgb/service/selector_acceptance.py"
+sudo -n cmp "$H/selector_acceptance.py" "$D/rgb/service/selector_acceptance.py"
 cmp "$H/iq/nv12_colorimetry.h" "$R/src/sp11-camera-stack/rgb/iq/nv12_colorimetry.h"
 [[ "$(sudo -n grub-editenv /boot/grub/grubenv list | sed -n 's/^saved_entry=//p')" == sp11-audio-fullio-v19c ]]
 [[ -z "$(sudo -n grub-editenv /boot/grub/grubenv list | sed -n 's/^next_entry=//p')" ]]
