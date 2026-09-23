@@ -39,3 +39,80 @@ scalar source diagnostics; separately verify all patches were
 actually in FOV and scene didn't change during test.
 Never infer CFA phase merely from a different-time Windows
 photo or a synthetic counterfactual.
+
+## Actual 2026-09-23 SP7 six-patch physical colour test — ORIGINAL full run FAIL, marked magenta reconstruction
+
+At18:52 SP7 interactive user screen temporarily displayed a
+system-font-labelled FULLSCREEN six-patch synthetic RGB chart:
+CYAN(0,195,215), RED(215,20,20), GREEN(20,215,20),
+BLUE(20,40,215), GRAY(118,118,118), WHITE(215,215,215).
+SP7 window remained active through E004ng physical captures
+18:57–18:58, then was stopped after capture at19:00,
+normal interactive desktop restored, scheduled task and
+temporary scripts deleted. No SP7 hardware/firmware/sleep changes.
+
+E004ng original protected candidate boot7f807223-8334-4bb0-
+8530-cf6542433e13 really acquired ordinary UID1000 front1080
+and rear4K baseline+gain RGB photos and FULL10 RAW10 sensor
+channel profiles. Rear full run29.995fps zero sequence gaps,
+all four high-gain rear 30frame intervals>=29fps, valid
+baseline90/91 and both late gain630/631 and660/661
+RAW10 source pairs. Front source full-run>=29fps
+but front HIGH-GAIN 630->660 30frame interval was
+28.4543fps < unchanged29fps required, so the ORIGINAL
+full independent runner correctly FAIL_CLOSED. The original
+colour-specific and final complete119-edge native-neutral
+gates did NOT execute after the failure. Separate read-only
+posthoc bt601 V4L2+UID1000 source/consumer metadata validator
+PASS on original scalar logs is clearly archived as POSTHOC
+and does NOT make original full E004ng test PASS.
+Candidate kernel showed no new GPU/thermal/panic faults,
+auto returned protected Golden Linux boot9ee35386-502f-46ac-
+84c0-9489dd67a68b. E004ng CONSUMED NEVER REARM and all
+unique root/GRUB/boot/systemd assets retired. Normal
+RGB camera/IR/tone/temporal defaults remain OFF/unchanged.
+
+The genuine original rear4K gain PRIVATE PNG, inspected
+ONLY locally on SP11 via every-fourth-pixel subsampling,
+was compared with known digital SP7 six-patch reference
+using approximate target window geometry derived from
+the older E004ne private screen ROI. **This geometrical
+patch mapping is NOT independently registered, is
+susceptible to screen perspective/crop and DOES NOT
+constitute calibrated patch-colour accuracy.** Nevertheless
+the approximately GREEN patch intended RGB(20,215,20)
+rendered approximate aggregate RGB(148.262,57.329,146.937)
+(magenta), while the approximately WHITE patch intended
+(215,215,215) rendered(231.473,154.498,230.300),
+also magenta; a red-like patch appeared nearly green.
+Source native RAW10 four per-site gain frame630 p99
+G0=627, R-labeled=855, B-labeled=852, G1=513.
+The nominal "R" and "B" sites have very similar high
+responses and the current preview shows R≈B, whereas
+the two nominal "green" sites differ. Together with
+prior cyan-like Windows OEM screen preview vs magenta
+Linux image these data support a SERIOUS RGB channel
+reconstruction problem, not a literally absent blue
+sensor. Actual physical BGGR sensor mosaic versus
+software-assumed GRBG is a TESTABLE HYPOTHESIS, not yet
+proven by per-patch native CFA-site analysis, identical
+optical exposure, or an alternate converter's live
+measured improvement. Do NOT silently change kernel
+media-bus code, sensor flip, default Bayer conversion
+or apply cosmetic white balance to hide it.
+
+Original four photos remain ONLY SAME SP11 owner geoca
+~/Pictures/SP11-Camera-Private-E004ng (dir0700/photos0600);
+scalar-only data e004ng/evidence/
+REAL-PRIVATE-KNOWN-SP7-SIX-PATCH-RGB-AGGREGATE.json,
+RAW10-PROFILE-RESULT.json, POSTHOC-REAL-FOUR-UID1000-BT601-CAPS.json,
+RESULT.json and RETIREMENT.txt. No optical photos,
+pixel arrays, per-tile grids, RAW frames, thumbnails
+or image hashes exported to chat/Fabric/Git/other host.
+Next test the exact maintained 4K Bayer converter on
+synthetic GRBG/BGGR/GBRG/RGGB mosaic before a NEW source-
+locked opt-in real BGGR and actual CFA-patch colour
+validation. Keep strict >=29fps every gain interval,
+native sensor control restoration, 119-edge final
+neutral and automatic Golden return; never rearm
+consumed E004ng.
