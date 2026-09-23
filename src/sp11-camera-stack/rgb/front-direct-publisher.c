@@ -13,6 +13,7 @@
 #include <sys/mman.h>
 #include <poll.h>
 #include <signal.h>
+#include <limits.h>
 #include <stdbool.h>
 static volatile sig_atomic_t stopping;
 static void stop_requested(int sig) { (void)sig; stopping=1; }
@@ -62,13 +63,24 @@ static int ready(int fd,short events,double deadline) {
 }
 int front_publisher_main(int argc,char **argv) {
     if(argc!=4 || strcmp(argv[1],"--source") || strncmp(argv[2],"/dev/video",10)) {
-        fputs("usage: --source /dev/videoN FRAME_COUNT_1_TO_2400\n",stderr);return 2;
+        fputs("usage: --source /dev/videoN FRAME_COUNT_1_TO_2400|continuous\n",stderr);return 2;
     }
     const char *suffix=argv[2]+10;
     if(!*suffix || strspn(suffix,"0123456789")!=strlen(suffix) ||
        !strcmp(argv[2],"/dev/video90") || !strcmp(argv[2],"/dev/video91")) return 2;
-    char *end;errno=0;long requested=strtol(argv[3],&end,10);
-    if(errno || end==argv[3] || *end || requested<1 || requested>2400) return 2;
+    /* Long-lived mode is disabled in normal builds and opt-in only for
+     * a new source-pinned guarded candidate with a distinct boot token.
+     * A four-hour hard deadline remains FAIL (never silently restart).
+     */
+    const bool continuous=strcmp(argv[3],"continuous")==0;
+#if !defined(SP11_CAMERA_ALLOW_CONTINUOUS) || !SP11_CAMERA_ALLOW_CONTINUOUS
+    if(continuous) return 2;
+#endif
+    long requested=LONG_MAX;
+    if(!continuous) {
+        char *end;errno=0;requested=strtol(argv[3],&end,10);
+        if(errno || end==argv[3] || *end || requested<1 || requested>2400) return 2;
+    }
     char cmd[8192]={0};FILE *cf=fopen("/proc/cmdline","r");
     if(!cf) return 1;
     bool read_ok=fgets(cmd,sizeof(cmd),cf)!=NULL;fclose(cf);
@@ -81,7 +93,7 @@ int front_publisher_main(int argc,char **argv) {
     void *maps[4]={0};size_t lengths[4]={0};unsigned count=0;
     long completed=0,captured=0;uint32_t first_seq=0,last_seq=0;unsigned long gaps=0;
     double first_ts=0,last_ts=0,conversion=0,publication=0;
-    double begin=wall_ms(),deadline=begin+210000;
+    double begin=wall_ms(),deadline=begin+(continuous?14400000.0:210000.0);
     enum v4l2_buf_type type=V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
     src=open(argv[2],O_RDWR|O_NONBLOCK|O_CLOEXEC|O_NOFOLLOW);
     if(src<0) goto cleanup;
@@ -148,7 +160,7 @@ int front_publisher_main(int argc,char **argv) {
         if(n!=DST_BYTES) goto cleanup;
         publication+=wall_ms()-t;completed++;
     }
-    if(completed==requested && !stopping) rc=0;
+    if(!continuous && completed==requested && !stopping) rc=0;
 cleanup:;
     bool stop_ok=!streaming;
     if(streaming) { stop_ok=xioctl(src,VIDIOC_STREAMOFF,&type)==0; if(!stop_ok) rc=1; }
@@ -158,12 +170,13 @@ cleanup:;
     if(dst>=0) close(dst);
     free(nv12);nv12=NULL;raw=NULL;
     fprintf(stderr,"E004KQ_LIFECYCLE captured=%ld published=%ld termination_requested=%d streamoff_completed=%d\n",captured,completed,(int)stopping,(int)stop_ok);
-    fprintf(stderr,"{\"status\":\"%s\",\"frames\":%ld,\"requested\":%ld,"
+    fprintf(stderr,"{\"status\":\"%s\",\"frames\":%ld,\"requested\":%ld,\"continuous\":%s,"
         "\"source_sequence_first_last\":[%u,%u],\"source_sequence_gaps\":%lu,"
         "\"source_span_s\":%.6f,\"conversion_mean_ms\":%.3f,"
         "\"publication_mean_ms\":%.3f,\"elapsed_ms\":%.3f,"
         "\"raw_pipe_copy\":false,\"pixel_files_written\":false}\n",
-        rc?(rc==143?"STOPPED":"FAIL"):"PASS",completed,requested,first_seq,last_seq,gaps,last_ts-first_ts,
+        rc?(rc==143?"STOPPED":"FAIL"):"PASS",completed,continuous?0:requested,
+        continuous?"true":"false",first_seq,last_seq,gaps,last_ts-first_ts,
         completed?conversion/completed:0,completed?publication/completed:0,wall_ms()-begin);
     return rc;
 }

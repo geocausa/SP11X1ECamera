@@ -1,4 +1,5 @@
 /* Camera-free fake-device lifecycle tests. Linker wrapping prevents device access. */
+#define SP11_CAMERA_ALLOW_CONTINUOUS 1
 #define E004KQ_NO_MAIN
 #define SP11_CAMERA_BOOT_TOKEN "sp11_camera_offline_test=1"
 #include "../rear-direct-publisher.c"
@@ -32,6 +33,7 @@ int __wrap_poll(struct pollfd *p,nfds_t n,int timeout) {
 }
 ssize_t __wrap_write(int fd,const void *buf,size_t n) {
     assert(fd==1002 && buf && n==DST_BYTES);writes++;
+    if(scenario==8 && writes==4)stop_requested(SIGTERM);
     return scenario==4?(ssize_t)n-1:(ssize_t)n;
 }
 int __wrap_ioctl(int fd,unsigned long op,...) {
@@ -77,6 +79,11 @@ int main(void) {
         if(scenario==0)assert(writes==4 && started==1);
         if(scenario==1)assert(!started && !writes && !mapped);
     }
-    puts("E004KQ_FAKE_DEVICE_TESTS=PASS CASES=8 TOKEN_NEGATIVES=4");
+    scenario=8;started=stopped=writes=closed=mapped=unmapped=seq=0;stopping=0;
+    char *live_argv[]={"test","--source","/dev/video0","continuous",NULL};
+    int continuous_rc=rear_publisher_main(4,live_argv);
+    assert(continuous_rc==143 && started==1 && stopped==1);
+    assert(writes==4 && mapped==unmapped && closed==2);
+    puts("E004KQ_FAKE_DEVICE_TESTS=PASS CASES=9 TOKEN_NEGATIVES=4 CONTINUOUS_OPT_IN_STREAMOFF=PASS");
     return 0;
 }

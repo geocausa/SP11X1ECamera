@@ -8,6 +8,14 @@ bash "$T/source/build.sh" "$T/build"
 F=(-O3 -std=c11 -Wall -Wextra -Werror -pedantic -fno-fast-math -ffp-contract=off)
 for camera in front rear; do
  if "$T/build/$camera-direct-publisher" --source /dev/video0 1; then exit 1; fi
+ # Standard release builds must reject the opt-in continuous flag BEFORE
+ # accessing any camera; only a distinct new guarded candidate may compile
+ # SP11_CAMERA_ALLOW_CONTINUOUS=1 with an exact one-shot boot token.
+ set +e
+ "$T/build/$camera-direct-publisher" --source /dev/video0 continuous > "$T/default-continuous-$camera.log" 2>&1
+ continuous_rc=$?
+ set -e
+ [[ "$continuous_rc" -eq 2 ]]
  gcc "${F[@]}" "$T/source/tests/test_$camera.c" -Wl,--wrap=fopen,--wrap=geteuid,--wrap=open,--wrap=fstat,--wrap=close,--wrap=mmap,--wrap=munmap,--wrap=poll,--wrap=write,--wrap=ioctl -o "$T/fake"
  "$T/fake"
  cat > "$T/source/tests/default.c" <<EOF
@@ -24,4 +32,4 @@ EOF
  gcc "${F[@]}" "$T/source/tests/default.c" -o "$T/default"
  "$T/default"
 done
-echo RGB_STANDALONE_SOURCE_TESTS=PASS
+echo RGB_STANDALONE_SOURCE_TESTS=PASS DEFAULT_CONTINUOUS=DENIED

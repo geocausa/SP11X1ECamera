@@ -68,6 +68,33 @@ is NOT IMPLEMENTED RELIABLY and is excluded from camera tests;
 do not label this platform limitation a camera failure. Normal
 guarded reboots and ordinary sensor stop/reopen are allowed.
 
+## Software RGB service integration in progress (2026-09-23)
+
+Maintained source:
+\`src/sp11-camera-stack/rgb/service/session.py\` defines a
+single-owner front/rear session state machine. It requires an
+injected real backend to prove a fresh authorized camera boot and
+exclusive lease, complete neutral/selected native graph before/after
+each camera, actual publisher STREAMOFF and process exit, no remaining
+source/client FDs and IR-off readback. Unsafe/uncertain operations
+poison it: no speculative rollback or further link writes. Fifteen
+camera-free simulated-device lifecycle/failure tests pass. **This is
+source-only, not a functional installed camera service.** The real
+kernel-backed adapter and guarded physical multi-app acceptance
+remain necessary.
+
+Both maintained RAW→NV12 direct publishers now support an explicit
+\`SP11_CAMERA_ALLOW_CONTINUOUS=1\` compile-time opt-in coupled to the
+separate one-shot boot token. Normal/default builds DENY the
+\`continuous\` argument. The experimental mode has a four-hour hard
+deadline and returns STOPPED=143 only after intentional termination
+and verified STREAMOFF. Nine fake-device scenarios per camera pass,
+including intentional signal-stop after four published buffers;
+**continuous capture has NOT yet been live-tested on SP11**.
+Do not claim a persistent daily camera service until the new mode
+and controller/backend are separately accepted on real front1080p
+and rear4K hardware, through ordinary application readers.
+
 ## Decision gate — when software RGB acceptance passes
 
 Report the measured real front1080p/rear4K output, visual quality,
