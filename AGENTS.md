@@ -81,6 +81,35 @@ RT-CDM/3A scheduling, checked DMA/SMMU and Golden-safe cleanup;
 method is physical `dd /p`, not a dependency on private OEM WPP/TMF
 decoders. See E004nq README.md/RESULT.json/WINDOWS-RESULT.json/verify.py.
 
+## E004nr compiled rear native-ISP source-only profile (NOT an arm gate)
+
+The next Linux rear native-ISP graph/profile is now real **compiled ARM64
+CAMSS kernel source**, independently staged against the existing integrated
+CAMSS base instead of changing the deployed Golden or accepted front path:
+`experiments/E004-front-ir-vd55g0/e004nr-rear-pix-kernel-source-profile/`.
+It rejects any sensor other than physical rear OV13858 GRBG4076x2806
+CSIPHY1 four-lane D-PHY linked to **CSID1 PIX → VFE1 PIX**; it is
+not the still-useful diagnostic rear CSID0/VFE0 RAW media graph.
+E004nq-proven Windows rear IPP 4064x2286 x0/y0, FULL Y3840x2160,
+C3840x1080, physical WM stride5120 packer0xb are separate from the front
+IMX681 QC10C profile. New SP7-private-KD whitelisted WM two-live-pass
+registers show WM0 frame-incr0x00a9d000, WM1 frame-incr0x00559000,
+FULL metadata cfg0x800, WM modes0x23/0x33; this still does NOT prove
+a safe Linux DMA/UBWC allocation/IOVA/V4L2 buffer format or IQ.
+`camss_e004nr_rear_pix_runtime_authorization` unconditionally returns
+`-EOPNOTSUPP`; no runtime caller/module parameter was added.
+The isolated new qcom-camss module was actually compiled and validated,
+but it was NEVER installed/loaded/booted. The original integrated
+CAMSS camss.c is byte-identical and the accepted Golden/front sources
+are not changed. See E004nr verify.py and README.md for source-lock
+checks and 15 fail-closed negative tests; do not rerun an already-used
+staged build directory without an independently new source identity.
+NEVER promote the source-only rear profile to live hardware without
+separately establishing 4K buffer metadata/IOMMU ownership, sensor IQ/
+3A/RT-CDM packet lifecycle, and safe exclusive shared CSID1/VFE1
+front/rear switching. A Linux-native rear 4K optical ISP frame is
+**still unproven**.
+
 ## Resume behaviour
 
 When asked to continue camera work:
