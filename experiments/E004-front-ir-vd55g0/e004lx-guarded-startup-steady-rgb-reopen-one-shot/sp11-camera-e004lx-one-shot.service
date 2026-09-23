@@ -1,0 +1,22 @@
+[Unit]
+Description=SP11 E004lx single-use root-sealed RGB native camera four-session 3600-frame processed RGB soak without OS system sleep; return Golden
+ConditionKernelCommandLine=sp11_camera_e004lx_xrgb8888=1
+After=local-fs.target systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+Wants=systemd-udev-settle.service grub2-common.service grub-initrd-fallback.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+TimeoutStartSec=310
+TimeoutStopSec=15
+ExecStart=/usr/local/sbin/sp11-camera-e004lx-run-once
+ExecStopPost=/usr/bin/systemctl --no-block reboot
+StandardOutput=journal+console
+StandardError=journal+console
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target

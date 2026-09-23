@@ -1,0 +1,17 @@
+E004lx 2026-09-23 source-only guarded startup/steady validation preflight
+
+Unconsumed fresh E004lx identity, distinct cmdline marker and root-only experimental lease. NO Linux OS standby/suspend/resume command; only normal guarded one-shot reboot and Golden fallback.
+Canonical four-camera hardware+DTB authority manifest SHA ad96f706b5e0c5440707c0b9dc5d40a1376391b792f03d3d20bba5d23244f53c.
+Accepted E004le physical timing module pair rebuilt with byte-identical hashes:
+ qcom-camss.ko=8aa3e7cb3ce790a0b37b6494f540e4075d78f8b3fed69ed415e81f4da5cfb75d
+ imx681.ko=448bd926193c003cdf3c1407382c3de0af7ba0ebfdca7cb36d8c797797c0bc6c.
+Fresh clean pinned libcamera0.7.0 v0.7 source + accepted RGB native routing and fail-closed stop + IMX681 gain and E004lu bounded exposure + exact new E004lx lease. Meson/Ninja 368/368, libcamera test suite 77: 45 OK,1 expected failure,31 skipped,0 unexpected fails.
+ cam=e980c4ba7e091c8ff3c4899f4c09086faa11d18cb0c1c508bb6dfbe5d54efc5b
+ simple.cpp=3b581ec2812ed08262f8e7f2fefaada0acd56ac70f279149e5d08eeaf04f5e9b
+ soft_simple.cpp=f9a9f417976fe99a593c3d68dde85659a20be860d19a1c61df61732efd78b4e0
+ e004lx-lease=1816890fee0cc4a3887ad74927825fe1b4efb44113990ef49fb626ff8b571f36
+ neutral-probe=59d70f48e79ee79a4a14dd3502c6aa0f10ac80670b5725ef74ab4e3a41864c0d
+ frame-validator=298e787551b2d7e9adcc726d6e7e7c146a8bf0ef754d4352b96609c3f5a4390b.
+Standalone 900-frame synthetic validation: normal/no-startup-gap PASS; exactly one <=2s startup interruption PASS and explicitly reported; steady-state 1s gap FAIL; two startup stalls FAIL; >2s early gap FAIL. 900 frames and 1,228,800-byte per frame still mandatory.
+ALL four app processes must finish with independent native neutral graph and camera node FD audit BEFORE any format or output validator can abort the session. No guessed rollback after uncertainty. No image pixels captured to file.
+Golden denial of new graph probe rc2; shellcheck, bash -n, grub-script-check PASS; exact source/root bundle SHA preflight before physical boot.
