@@ -15,6 +15,19 @@ def line(frame,kind):
            source_RAW10_unchanged="YES")
     return "E004MX_FRONT_PREVIEW_TONE "+" ".join(f"{k}={v}" for k,v in d.items())
 GOOD="\n".join(line(f,"gain" if f>=600 else "baseline") for f in FRAMES)
+class FrontTimestampWordBoundaryTests(unittest.TestCase):
+    def test_real_native_source_frame_token_parser_has_no_ascii_backspace(self):
+        from pathlib import Path
+        from validate_front_tone_live import __file__ as source_path
+        text=Path(source_path).read_text()
+        self.assertNotIn(chr(8),text)
+        self.assertIn(chr(92)+"bframe=",text)
+        import re
+        actual="E004MX_PAIRED_RAW_NV12 camera=front frame=600 mono_ms=38471.846 raw_mean8=22.127"
+        m=re.search(r"\bframe=(\d+) mono_ms=([0-9.]+)",actual)
+        self.assertIsNotNone(m)
+        self.assertEqual(m[1],"600")
+
 class ParserTests(unittest.TestCase):
     def test_good(self):
         o=parse(GOOD)

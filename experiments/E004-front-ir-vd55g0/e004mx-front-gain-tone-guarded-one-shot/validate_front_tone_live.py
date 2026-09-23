@@ -64,7 +64,7 @@ def validate(output:Path)->dict:
         if line.startswith('{"status":"STOPPED","frames":') and '"source_sequence_gaps":' in line:
             summary.append(json.loads(line))
         if line.startswith("E004MX_PAIRED_RAW_NV12 camera=front frame="):
-            mt=re.search(r"frame=(\d+) mono_ms=([0-9.]+)",line)
+            mt=re.search(r"\bframe=(\d+) mono_ms=([0-9.]+)",line)
             if mt:
                 frame=int(mt[1]);ts=float(mt[2])
                 if frame in GAIN_WINDOW:

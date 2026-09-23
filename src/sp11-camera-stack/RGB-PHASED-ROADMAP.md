@@ -262,6 +262,58 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004mx front1080 opt-in display-luma lift: REAL measurement, original independent acceptance FAIL (validator typo)
+
+A fresh E004mx one-shot source-locked candidate captured real
+front1080/rear4K native RAW10->NV12 visible RGB in ordinary UID1000
+applications with exact supported sensor control readback/restoration.
+An isolated FRONT-only gain-gated studio-range Y preview LUT
+left native front baseline untoned (Yp99~37), and under the
+ALREADY independently supported front gain tuple transformed source
+videoYp01~30/p50~33/p99~57 to displayYp01=100/p50=106/p99=154.
+Front ordinary app measured 90 source-backed gain frames with sparse
+median>=106/p99>=154, versus prior E004mv untoned front gain
+median~34/p99~61. Real front704 frames/23.430015s=30.0469fps,
+zero source gaps, combined converter+tone12.989ms; independent
+front high-gain 30frame window FPS29.899,30.0707,30.0171,29.9861,
+ALL meeting unchanged29fps. Existing rear-only 4K NEON branch passed
+29.9475fps and all four separate gain FPS windows>=29 as control,
+and three real full10 rear RAW10 temporal source pairs passed.
+
+Actual E004mx original full one-shot FAIL_RC=1: original installed
+Python front timestamp parser included a literal ASCII backspace
+instead of intended regex word boundary before frame=. Native front
+570/600/630/660/690 timestamps WERE present, but the independent
+original validator falsely reported MISSING. This failure aborted
+runner before its independent final neutral post-check; do NOT
+claim complete candidate acceptance from subsequently re-running
+the corrected script OFFLINE on already captured real scalar logs,
+even though it re-parsed all front gain/FPS/control evidence PASS.
+E004mx selector itself completed front->rear->off/quit and restored
+controls; automatic reboot to protected Golden Linux
+610a672b-fdb1-4289-be9f-1c8fc44a79dd completed, GPU GMU/DPU
+fault absent in candidate journal; consumed unique root/GRUB/boot/
+systemd stage RETIRED and Golden idle. Earlier E004mu GPU/failed
+firmware reboot root cause STILL UNKNOWN. Never rearm E004mx.
+
+LOCAL private PNG scalar-only front display check E004mv old gain
+mean19.628/p99 47 (~87.1% samples below25) versus E004mx new
+gain mean106.338/p99 155 (0% below25), baseline still gray mean
+~15/p99 21. New gain ~0.34% pixels with any RGB channel>=250;
+this is not a colour/ISP parity or true image detail assessment.
+Different boots/time/light, no known neutral chart or identifiable
+optical target; no photos or pixels viewed by assistant, exported to
+chat/Git or other devices. Four originals remain only on SP11
+~/Pictures/SP11-Camera-Private-E004mx/ owner geoca dir0700/files0600.
+Source-only corrected validator and 35 offline regression tests
+PASS. To certify the full independent FRONT preview candidate, a
+NEW separately guarded unique physical one-shot must complete the
+fixed original script through neutral/GPU/safety and automatic
+Golden return; normal maintained front camera/front tone OFF remains
+unchanged until optical/colour/noise and routine service acceptance.
+Evidence E004mx/RESULT.json + evidence/POSTHOC-FRONT-TONE-VALIDATION.json
++ SP11-LOCAL-FRONT-TONE-PRIVATE-RGB-SCALARS.json.
+
 ## E004mw SP11-private existing photo scalar quality audit + software-first brightness policy
 
 Read only four existing E004mv original front/rear baseline/gain user
