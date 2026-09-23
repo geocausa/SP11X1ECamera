@@ -262,6 +262,30 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## Existing Windows rear grayscale preview reviewed locally without reboot
+
+A read-only/no-recovery Windows NTFS mount on SP11 provided the earlier
+E004wp 960x540 PRIVATE rear grayscale display preview to an SP11-only
+numeric analysis; it was unmounted immediately after. Its native
+Windows oracle script sampled source 4K luma at 4x pixel stride,
+**not** PIL bilinear resize. E004mt native Linux private 4K RGB was
+compared using the SAME 4x source pixel stride and local grayscale
+conversion. Windows preview local meanY_display155.895/highpass
+Gaussian8 std3.607; Linux toned private RGB local meanY_display144.932/
+highpass std4.052. Linux 4x-decimated highpass cannot be directly
+compared to an earlier separately bilinear downsampled Linux image
+with highpass std~1.154: interpolation discards substantial fine
+variation. Windows vs Linux cross-OS highpass correlation~-0.001;
+lighting, exposure, time, framing and processing were not registered.
+These sharpness/gradient proxies include noise and aliasing; do NOT
+claim Windows-recognizable scene, OEM parity or that Linux lacks fine
+detail solely from mismatched resampling. The independent Linux-vs-
+Linux E004ms/E004mt highpass corr~0.05 used identical bilinear methods
+on both and is reported separately. Private photos/pixels/hashes
+never left SP11; root-private NTFS ro,norecover mount removed. No OS
+reboot, IR, normal camera configuration or experimental boot touched.
+Evidence E004mt/evidence/SP11-LOCAL-WINDOWS-LINUX-PRIVATE-CORNER-DETAIL-SCALARS.json.
+
 ## E004mt source-frame temporal RAW10 quality gate after E004ms
 
 The NEW guarded E004mt one-shot passed actual front1080/rear4K

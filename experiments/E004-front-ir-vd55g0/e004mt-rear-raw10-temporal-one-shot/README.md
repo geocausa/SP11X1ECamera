@@ -93,3 +93,50 @@ known target and separately controlled optical dark reference, or
 camera-free design of motion-aware denoising/exposure policy before
 new physical tests; do not turn mere bright luma/noisy corner into
 unjustified image-quality release acceptance.
+
+## Previously stored Windows preview independently analyzed on SP11 — no reboot
+
+Windows E004wp rear native NV12 grayscale preview was already private
+on SP11 Windows NTFS. At 13:10 BST the partition was mounted on the
+SAME SP11 with ntfs-3g `ro,norecover` into a fresh root-private
+mount, this ONE existing grayscale RGB PNG was read locally, and the
+partition was unmounted again with no writes/recovery, boot or user
+involvement. The Windows 960x540 RGB channels are identical (it is
+actual grayscale). Its generation code sampled ONE full native 4K Y
+pixel at `(4*y,4*x)`, **not a bilinear resize**, and converted video
+Y16..235 into full display grayscale. For a comparable spatial-frequency
+sampling method, Linux E004mt rear private 3840x2160 toned RGB was
+also sampled at `(4*y,4*x)` before RGB→grayscale. This matches
+**geometry/decimation**, NOT native ISP, exposure, photometric
+metric, field of view, lighting, temporal sample, or color encoding.
+
+Local-only display grayscale numeric results at identical 960x540
+sampling and PIL Gaussian radius8 highpass:
+
+| metric | Windows E004wp existing private grayscale | Linux E004mt existing toned private rear RGB converted to grayscale |
+|---|---:|---:|
+| display mean / p01 / p99 |155.895 /118 /180|144.932 /125 /167|
+| 12×16 tile std |14.216|9.099|
+| Gaussian8 highpass std |3.607|4.052|
+| adjacent horizontal / vertical absolute gradient mean |2.928 /3.212|4.308 /4.344|
+| horizontal / vertical gradient >5 fraction |14.149% /17.2%|28.351% /28.663%|
+
+Cross-OS local full/smooth/highpass correlation0.64944/0.73233/-0.00099;
+the OS time, exposure, framing and processing are not registered.
+**Do not compare the Windows nearest-decimated highpass3.607 to the
+Linux PIL-bilinear-resized highpass~1.154** previously measured: that
+mixes incompatible resampling and falsely exaggerates apparent Linux
+lack of high-frequency variation. Equivalent 4x decimation actually
+finds Linux highpass4.052, which could reflect image structure OR
+aliasing or shot/readout noise. The earlier Linux-vs-Linux rear
+highpass correlation~0.05 used the SAME bilinear method for BOTH
+Linux captures and remains a separately valid lack-of-repeatability
+observation under uncontrolled inter-boot scene/lighting conditions.
+Neither Windows nor Linux geometric highpass proves object recognition,
+actual optical sharpness, measured true SNR, correct color or parity.
+
+Scalar-only comparison is in
+`evidence/SP11-LOCAL-WINDOWS-LINUX-PRIVATE-CORNER-DETAIL-SCALARS.json`.
+Original PNGs/pixels/thumbnails/photo hashes remain ONLY on SP11;
+no Windows photo was copied even onto the Linux user Pictures folder
+and no camera device or Windows boot was activated for this check.
