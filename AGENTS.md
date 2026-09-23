@@ -110,6 +110,32 @@ separately establishing 4K buffer metadata/IOMMU ownership, sensor IQ/
 front/rear switching. A Linux-native rear 4K optical ISP frame is
 **still unproven**.
 
+## E004ns source-only compiled rear CSID1 IPP register configuration
+
+A NEW isolated ARM64 kernel build now includes real rear-only CSID1 IPP
+mode/receiver-word/prepare/enable routines from
+`experiments/E004-front-ir-vd55g0/e004ns-rear-csid1-ipp-offline/`.
+The code is compiled with the prior E004nr rear graph check but **has NO
+caller in any runtime path**; authorization always returns
+`-EOPNOTSUPP` and no module is installed/loaded on protected Golden.
+Both original E004nq Windows rear KD LIVE1/LIVE2 samples match ALL 26
+whitelisted CSID1 configuration dwords. Rear `RX_CFG0=0x10232103`
+contains `TPG_NUM_SEL=1` despite FOUR-lane D-PHY; the existing
+`__csid_configure_rx()` only sets that bit for the front C-PHY, so it
+MUST NOT be reused unchanged for rear. Rear IPP register +0x330 is
+`0x02000000` (front companion writes zero); rear HCROP x0..4063,
+VCROP y0..2285; +0x388 is **IPP_FORMAT_MEASURE_CFG1** configured
+expected dimensions 4064x2286, NOT an independently observed
+completed-frame width/height register. See E004ns README.md/verify.py
+for 17 negative tests, isolated module SHA and source preservation.
+Only final LIVE register targets, not OEM startup order, were observed.
+Do NOT connect rear prepare/enable to front code, probe, V4L2 or sysfs
+until independently implemented 4K FULL Y/C+metadata/IOMMU-safe buffer
+surface, RT-CDM/IQ/3A lifecycle, rear-specific startup order,
+CSID1/VFE1 front/rear mutual-exclusion and Golden-safe rollback are
+validated. Existing front E003i, Linux rear E004lr RAW and E004ne
+software fallback remain unchanged.
+
 ## Resume behaviour
 
 When asked to continue camera work:
