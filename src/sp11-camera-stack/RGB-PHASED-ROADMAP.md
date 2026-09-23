@@ -95,6 +95,27 @@ Do not claim a persistent daily camera service until the new mode
 and controller/backend are separately accepted on real front1080p
 and rear4K hardware, through ordinary application readers.
 
+## Stage 1 real-software-publisher service integration in progress
+
+E004ly separately demonstrated physical 1080p-front and 4K-rear
+software RAW→NV12 capture/publication for about 115s each, with
+same-invocation uid1000 app first/reopen/SIGKILL/recovery, verified
+STREAMOFF and full native media graph neutral between/after.
+The one-shot was CONSUMED and RETIRED and Golden returned safely.
+Actual sampled frames were nearly black; no calibrated image quality.
+
+The next maintained backend implementation lives in
+src/sp11-camera-stack/rgb/service/{session.py,media_backend.py,
+rgb_device_backend.py,candidate_owner.py,candidate_driver.py}.
+35 camera-free injected-failure tests pass. This joins the exclusive
+RGBSession with the exact Media Controller route policy, pinned
+root-only candidate owner, live source-format configuration and
+verified publisher stop contract at SOURCE level. The backend still
+needs a distinct fresh guarded physical one-shot validation, followed
+by a genuinely opt-in normal-use camera service and controlled-lit
+image-quality acceptance. Do not count tests on a fake graph as
+real hardware integration, nor an opt-in one-shot as a daily service.
+
 ## Decision gate — when software RGB acceptance passes
 
 Report the measured real front1080p/rear4K output, visual quality,

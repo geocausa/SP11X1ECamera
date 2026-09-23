@@ -4,6 +4,32 @@ The first RGB product priority is **real front 1920x1080 NV12 and rear 3840x2160
 
 `session.py` is the maintained **single-owner safety state machine** for the future opt-in camera service. It is intentionally a standalone, camera-free policy component, **not** a deployed live backend and **not** evidence of working persistent service. A future root-private, fresh one-shot candidate must implement `SessionBackend` with independently checked kernel state. The physical backend must bridge the already maintained `../../routing/route_policy.py` complete 119-link transaction policy and the known-good source publisher format/STREAMOFF guards; do not create a second ad-hoc unverified graph switching algorithm. A staged opt-in candidate must maintain both discoverable /dev/video91 front1080p and /dev/video90 rear4K endpoints with one active physical CAMSS route at a time.
 
+New maintained Linux integration sources:
+- media_backend.py supplies the exact bounded media-ctl argv backend
+  for the 119-edge full-graph route_policy.Controller, admitting only
+  documented front/rear RGB links and fail-closing on uncertain writes.
+- rgb_device_backend.py joins that policy to RGBSession, source/virtual
+  format negotiation and the root-owned source publisher service
+  start/stop/invocation verification contract.
+- candidate_owner.py implements the root-private, unique-candidate
+  boot/GRUB/consumption checks, process-backed exclusive controller
+  flock, fresh independent device FD and IR-idle checks, an operation
+  command allowlist and source publisher 143/STREAMOFF proof.
+- candidate_driver.py is the candidate-ONLY front→neutral→rear→neutral
+  acceptance harness for independently launched ordinary uid1000
+  first/reopen/crash/recovery app clients and one publisher invocation
+  per camera. It does not load modules, install anything, arm a boot
+  or schedule sleep: the separate freshly source-pinned one-shot
+  candidate must first validate and stage all assets and automatically
+  return to Golden on error or success.
+
+35 offline mock-controller, exact graph-write, device-format, root
+operation allowlist and stop-proof tests pass. This code has NOT yet
+been exercised together against actual SP11 hardware and must not
+be described as a deployed permanent selectable camera service.
+The previous physical E004ly trial used the older independent
+scripted route transitions, not these joined backend modules.
+
 Service invariants implemented by the policy:
 
 - Before admission, require **exact authorized candidate boot/asset identity, live exclusive camera lease, IR-off readback, zero camera-owner/client FDs and independently verified complete neutral media graph**. The prospective backend MUST implement these checks against fresh physical state; a boolean mock is not a security boundary.
