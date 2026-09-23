@@ -11,6 +11,7 @@
 #elif defined(SP11_TOKEN_CHECK_REAR)
 /* Source-only token test must satisfy the exact opt-in rear compile guard.
  * The normal build and front test remain explicitly tone disabled. */
+#define SP11_RGB_REAR_BGGR_OPTIN 1 /* only this candidate camera-free rear token test */
 #define SP11_RGB_REAR_PREVIEW_TONE 1
 #define SP11_CAMERA_ALLOW_TEMPORAL_RAW10 1
 #define SP11_CAMERA_ALLOW_REAR_TEMPORAL_PREVIEW 1
