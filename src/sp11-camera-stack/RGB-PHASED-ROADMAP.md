@@ -262,6 +262,43 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004mu rear 4K opt-in temporal-filter physical failure and reboot safety HOLD
+
+On new uniquely guarded source-locked E004mu Linux boot, real
+front1080/rear4K full10 source and UID1000 app/selector/control restore
+passed, and rear opt-in temporal filter processed137 actual frames
+with mean CPU3.831ms. At a sparse sample frame the original unfiltered
+consecutive luma RMS was5.058 vs filtered output to *previous filtered*
+RMS3.515 display Y: these reference different histories and do NOT
+calibrate true SNR, motion detail or noise reduction. The real source
+reported707 frames/24.507338s =**28.8485fps** and combined mean
+conversion/filter23.695ms, zero source sequence gaps. Strict29fps
+gate **FAILED**, vs E004ms29.949 and E004mt29.908fps with mean
+conversion20.132/20.197ms. Candidate last four high-gain 30frame
+intervals ~24.7–24.9fps; DO NOT lower gate to declare success.
+
+Separate GPU/display fault at14:12:49–50 before rear filtering started:
+5 GMU OOB timeouts, one Adreno fault and DPU hangcheck involving
+`gnome-shell`; other12/13 accessible persisted boot journals lack
+that fault. Cannot attribute it to camera kernel, filter or subsequent
+reboot failure. Service exited at14:13:30 after validator rejection,
+requested reboot; Linux journal reached reboot.target14:13:43 and
+closed normally. No new boot logged until user manually powered on
+SP11 at14:34:38; firmware reboot handoff/power-state cause unverified.
+No kernel panic/OOM/thermal shutdown/new crash dump; thermal peak49.2C,
+watchdog warning also in prior SUCCESSFUL reboots. Candidate E004mu
+fully consumed/retired and SP11 protected Golden boot57150330-c0a84e72-
+b7a3-f8ae790354ed guard PASS, normal camera default unchanged.
+
+**HOLD further unattended experimental camera reboots** until a
+separate safe independent reboot/firmware handoff and out-of-band
+power recovery mechanism is confirmed. Continue source-only temporal
+CPU optimization, real30fps baseline validation and motion/detail
+policy research without live camera or system reboot. Preserve
+private SP11-only four E004mu original optical PNGs; Git evidence
+text/scalars only. See E004mu/RESULT.json and
+E004mu/evidence/READONLY-GPU-REBOOT-POSTMORTEM.json.
+
 ## Existing Windows rear grayscale preview reviewed locally without reboot
 
 A read-only/no-recovery Windows NTFS mount on SP11 provided the earlier
