@@ -128,6 +128,35 @@ converter ELFs remain byte-identical to their E004mg-era equivalents.
 It has NOT been physically tested and does not compensate for the dark
 rear native RAW sensor or establish colour/black/exposure calibration.
 
+## E004mh physical opt-in video-range and private baseline/gain image gate
+
+A completely fresh/consumed E004mh boot physically ran both source-locked
+studio-range-enabled front1080/rear4K software publishers, ordinary UID1000
+applications, same-frame RAW10/NV12 diagnostics, and bounded native sensor
+gain/exposure with exact restore. Four original RGB PNGs remain ONLY ON
+SP11 at `~/Pictures/SP11-Camera-Private-E004mh/` (0700/0600). All
+normal STREAMOFF/native graph neutral/Golden return checks passed and
+candidate assets were retired, IR off, no Linux OS system sleep.
+
+Downsampled RGB PNG luma p99 front baseline/gain 22/51 and rear 15/20;
+independent NV12 app Y p99 front 37/62 and rear 31/37. Real front
+source RAW-upper8 p99 26→56.3333 and rear17→27. The baseline rear
+RAW10 green is still tightly clustered around code64–70; that is NOT
+a verified optical black offset, and amplified signal may include noise.
+Earlier E004mg non-studio-range preview p99 front9/rear0 was captured
+under separate uncontrolled morning light. Thus the synthetic range
+fix is independently verified and physical studio-range images are no
+longer numerically zero, but a matched scene luminance ratio and
+recognizable visual detail remain UNPROVEN, especially at the rear.
+Normal publisher release/default still excludes studio range opt-in;
+no colour/AE/black-level calibration or Windows ISP parity is claimed.
+
+Next, obtain a controlled visible-light target/black reference and
+validate optical source/exposure plus a bounded noise-preserving tonal
+processing proposal offline BEFORE a fresh camera one-shot; never reuse
+E004mh. Do not substitute another delivery-only PASS for the usability
+gate or activate protected IR/OS system sleep.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:
