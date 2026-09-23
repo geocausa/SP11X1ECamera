@@ -33,7 +33,7 @@
     "device_advertisable_to_applications": true,
     "required_next": [
       "matched-scene colour/exposure/detail validation",
-      "sensor/publisher restart, long-duration reliability and suspend regression",
+      "sensor/publisher restart and long-duration reliability while Linux remains awake; OS system sleep prohibited until separately supported",
       "production managed session packaging"
     ],
     "bounded_standard_app_evidence": {
@@ -69,7 +69,7 @@
     "may_treat_qc10c_as_linear_nv12": false,
     "required_next": [
       "matched-scene colour/exposure/detail validation",
-      "sensor/publisher restart, long-duration reliability and suspend regression",
+      "sensor/publisher restart and long-duration reliability while Linux remains awake; OS system sleep prohibited until separately supported",
       "production managed session packaging",
       "QC10C/OEM ISP parity remains unresolved"
     ],
@@ -109,5 +109,47 @@
     "secure_production_worker_signed": false,
     "may_substitute_ordinary_rgb_preview_for_authentication": false
   },
-  "default_install_authorized": false
+  "default_install_authorized": false,
+  "processed_libcamera_runtime_evidence_2026_09_23": {
+    "source": "experiments/E004-front-ir-vd55g0/e004lx-guarded-startup-steady-rgb-reopen-one-shot/RESULT.json",
+    "method": "guarded root-only one-shot with native libcamera v0.7.0 Simple and software ISP",
+    "camera_order": [
+      "front",
+      "rear",
+      "front",
+      "rear"
+    ],
+    "independent_camera_app_processes": 4,
+    "processed_format": "640x480-XRGB8888/sRGB",
+    "frames_per_process": 900,
+    "total_frames": 3600,
+    "reported_sensor_control_errors": 0,
+    "full_native_media_graph_neutral_after_each_process": true,
+    "per_session_steady_intervals_after_first_ten_frames": 889,
+    "steady_intervals_over_250ms": 0,
+    "reopened_front_early_gap_us": 999185,
+    "reopened_rear_early_gap_us": 966638,
+    "optical_pixel_payloads_saved": false,
+    "full_resolution_processed_rgb_verified": false,
+    "general_unprivileged_libcamera_access": false,
+    "permanent_camera_boot_or_service_installed": false,
+    "ordinary_desktop_apps_using_processed_libcamera_front_rear": false,
+    "no_linux_os_system_sleep_attempted": true
+  },
+  "potential_ordinary_app_bridge_prerequisites": {
+    "system_libcamera_gstreamer_source_plugin_installed": true,
+    "system_gstreamer_video_converter_and_v4l2sink_installed": true,
+    "synthetic_gstreamer_BGRx640x480_to_NV12_120_frames": "pass-offline-no-camera",
+    "real_libcamera_gstreamer_source_to_loopback_and_unprivileged_reader": "NOT_LIVE_TESTED",
+    "root_only_camera_device_seal_must_be_preserved": true,
+    "one_active_native_media_route_at_a_time": true,
+    "normal_user_selectable_device_and_restart_controller": "NOT_IMPLEMENTED",
+    "linux_system_standby_resume_tests": "PROHIBITED_PLATFORM_UNSUPPORTED"
+  },
+  "system_sleep_scope": {
+    "status": "not-reliably-implemented-may-crash-Linux",
+    "camera_testing": "exclude-OS-suspend-resume-hibernate-hybrid-sleep",
+    "camera_runtime_PM_idle_observation": "read-only-allowed-while-Linux-awake",
+    "user_authorized_normal_guarded_reboots": true
+  }
 }

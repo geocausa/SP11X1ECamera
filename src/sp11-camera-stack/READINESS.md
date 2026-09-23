@@ -4,7 +4,7 @@
 
 **Hold full 1:1 default promotion.**
 
-The canonical hardware package has passed bounded runtime acceptance. RGB application transport has passed approximately60-second near30fps runs at front1080p/rear4K. Bounded systemd start/stop and sequential uid1000 apps passed E004kw with both named devices visible. E004la additionally proved repeated uid1000 client opens and recovery after a deliberately killed client while each publisher stayed running. Persistent daily operation, sensor/publisher restart, suspend/resume, hours-long reliability and calibrated image quality remain unproven. Calling the stack fully Windows-equivalent or making it the final default while protected IR/Windows Hello cannot legitimately execute would overstate parity.
+The canonical hardware package has passed bounded runtime acceptance. RGB application transport has passed approximately60-second near30fps runs at front1080p/rear4K. Bounded systemd start/stop and sequential uid1000 apps passed E004kw with both named devices visible. E004la additionally proved repeated uid1000 client opens and recovery after a deliberately killed client while each publisher stayed running. Persistent daily operation, normal powered-on sensor/publisher restart, hours-long reliability and calibrated image quality remain unproven. SP11 Linux OS system standby/resume is separately unsupported and MAY CRASH THE OS: it is explicitly OUT OF CAMERA TEST SCOPE, not a camera-regression gate. Calling the stack fully Windows-equivalent or making it the final default while protected IR/Windows Hello cannot legitimately execute would overstate parity.
 
 ## Ready now
 
@@ -23,11 +23,50 @@ The non-protected hardware package supports **guarded, bounded non-default exper
 
 ## Current RGB application evidence (2026-09-21)
 
-E004kr extends direct transport to front1080p:1800distinct app frames at30.0247fps, source30.0061fps over60s. Intentional SIGTERM/STREAMOFF, exited processes/readers and neutral graph passed before a short rear120app-frame session and the same controlled stop. Both sampled images were nearly black. This proves bounded transport and planned cancellation/handoff, not calibrated image quality, arbitrary reopen, suspend or permanent daily service. E004kr is consumed and retired on Golden.
+E004kr extends direct transport to front1080p:1800distinct app frames at30.0247fps, source30.0061fps over60s. Intentional SIGTERM/STREAMOFF, exited processes/readers and neutral graph passed before a short rear120app-frame session and the same controlled stop. Both sampled images were nearly black. This proves bounded transport and planned cancellation/handoff, not calibrated image quality, arbitrary reopen or permanent daily service. OS system standby/resume remains expressly excluded from camera tests. E004kr is consumed and retired on Golden.
 
 E004kp subsequently removed the rear RAW/NV12 pipes and separate publisher, using direct mmap capture and V4L2 output with unchanged pixels. Rear2400sources achieved29.9496fps over80.101s and1800distinct app frames achieved30.0684fps over59.830s; source gaps0, one Gst offset gap, clean neutral shutdown and Golden return. This closes the bounded rear throughput gap, not day-long reliability or calibrated image quality. Front remains at E004km throughput pending direct transport.
 
 E004km delivered1800 complete distinct front1080p and rear4K frames to independent standard V4L2/GStreamer applications in sequential sessions. Source2400frames each had no sequence gaps. Front app26.9873fps and rear app13.7766fps are observed over different source/app windows, not30fps parity. Both sampled scenes were dark; no calibrated scene comparison exists. The front path is a separate pRAA RAW10 software proxy, not a QC10C decoder or Windows ISP replacement. E004km is consumed, retired and returned to Golden. Historical hardware/IQ-control claims below do not establish end-to-end image quality.
+
+## E004lx guarded processed RGB soak and reopen (2026-09-23)
+
+A new single-use, isolated root-sealed libcamera v0.7.0 test delivered
+3600 real processed 640x480-XRGB8888/sRGB frames in FOUR independent
+front→rear→front→rear processes (900 contiguous frames each). All four
+had no observed sensor-control errors and each returned the COMPLETE
+native media graph to neutral after app exit. Each had 889 steady
+intervals after the first ten with no >250ms gap. First front/rear
+openings had no large early gap; reopened front and rear each had one
+~1s startup pause (999185us and 966638us). The previous E004lw
+all-interval strict validator rightly failed on this pause; E004lx
+separately reports startup vs steady cadence and does NOT claim
+seamless switching. This proves bounded 2-minute processed transport
+and clean independent reopen/neutral shutdown, not permanent daily
+operation, native full-resolution processed RGB or Windows ISP parity.
+Root-only experimental access is NOT general OS-enforced multiclient
+ownership. The one-shot boot/service/private build is consumed and
+retired, Golden recovered unmodified; no live camera on Golden.
+See E004lx RESULT/CONSUMED/evidence.
+
+**Next RGB product gate:** build a non-default, opt-in, independently
+owned and recoverable RGB camera service with simultaneous selectable
+front/rear *published* endpoints or equivalent verified ordinary-app
+handoff. Verify actual libcamera-processed output through normal
+unprivileged app readers and clean stop/reopen, investigate the
+repeatable ~1s early-frame interruption, then validate acceptable
+processed resolution and controlled-light image quality. GStreamer
+libcamerasrc, videoconvert and v4l2sink are installed on Golden and
+a synthetic 120-frame BGRx640x480→NV12 conversion passes offline;
+this is ONLY a bridge prerequisite, not a live camera-to-loopback
+or ordinary desktop client proof. Do not activate experimental camera
+devices on protected Golden.
+
+**OS sleep exclusion:** user reports SP11 Linux standby/suspend/resume
+is not reliably implemented and may crash the whole OS. Never put it
+into system sleep for a camera test. Normal guarded reboots and
+powered-on camera open/stop/reopen tests remain authorized. Sensor
+runtime-PM idle checks are distinct from OS system sleep.
 
 ## Not honestly complete yet
 
