@@ -1,0 +1,18 @@
+[Unit]
+Description=SP11 E004my bounded %i RGB publisher
+ConditionKernelCommandLine=sp11_camera_e004my_rgb_session=1
+PartOf=sp11-camera-e004my-one-shot.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /var/lib/sp11-camera-e004my/start-session.sh %i
+ExecStopPost=/usr/bin/python3 /var/lib/sp11-camera-e004my/record-stop.py /var/lib/sp11-camera-e004my/output/%i-SERVICE-EXIT.json
+RuntimeMaxSec=240
+TimeoutStopSec=5
+KillMode=control-group
+KillSignal=SIGTERM
+SuccessExitStatus=143
+Restart=no
+UMask=0077
+StandardOutput=append:/var/lib/sp11-camera-e004my/output/%i-SERVICE-STDOUT.txt
+StandardError=append:/var/lib/sp11-camera-e004my/output/%i-SERVICE-STDERR.txt
