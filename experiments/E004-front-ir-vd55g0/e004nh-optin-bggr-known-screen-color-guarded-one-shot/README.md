@@ -57,3 +57,31 @@ Do not rearm any earlier consumed identity.
 All camera optical images/pixels/RAW/thumbs/image hashes
 stay ONLY SP11 private, never send through Fabric, ChatGPT,
 Git or to SP7/other machines.
+
+## SP7 real LCD lower-band fault and 2026-09-23 replacement target
+
+The user reports a THICK FAULTY BAND in SP7 LCD near the
+LOWER screen edge. Prior E004ng six-patch chart used full
+screen including that unreliable lower region; approximate
+E004ng patch/WHITE/BLUE aggregate measurements may include
+known faulty SP7 panel pixels and MUST NOT be accepted as
+calibrated evidence of Linux channel error by themselves.
+No prior E004ng photo was transferred or altered.
+
+For E004nh the replacement known digital six-colour chart
+is expressly drawn ONLY in the upper 60% of the physical
+1368x912 SP7 display (two rows each ~274px high), with
+BOTTOM 40% black/untrusted. The SP7 interactive user task
+reports `KNOWN_RGB_PATCHES_UPPER_60_PERCENT_ONLY_LOWER_SP7_LCD_FAULT_EXCLUDED=YES`
+and auto exits after nine minutes; avoid any source capture
+if chart no longer active. Any post-test image-colour
+comparison MUST register the actual optical display corners
+and sample ONLY safely interior known TOP 60% chart patches,
+never use old E004ng full-screen ROI mapping as ground truth
+or infer correct Bayer pattern from display's damaged band.
+The physical display is not colour-calibrated; patch identity
+and source-specific native CFA site ratios can corroborate
+but cannot by themselves establish Windows ISP parity or
+absolute white balance. Do not claim the whole SP7 display
+is faultless or that the earlier dark band originated at
+the SP11 camera.
