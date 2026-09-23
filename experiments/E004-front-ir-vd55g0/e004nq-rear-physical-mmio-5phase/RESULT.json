@@ -1,0 +1,439 @@
+{
+  "schema": "sp11-e004nq-rear-windows-physical-dd-slash-p-5phase-scalar-v1",
+  "parent_source_revision": "eba30fea25c6fb770ad79f5bcf3abf67aa6626aa",
+  "acquisition": "SP11 same-machine OEM Windows rear VideoRecord 3840x2160 NV12; SP7 KDNET WinDbg dd /p 5 phases",
+  "phases": [
+    "IDLE",
+    "LIVE1",
+    "POST",
+    "LIVE2",
+    "POST2"
+  ],
+  "source_private_SP7_KD_mmio_logs": [
+    {
+      "phase": "IDLE",
+      "private_sp7_utf16_original_bytes": 431250,
+      "complete_physical_regions": 6
+    },
+    {
+      "phase": "LIVE1",
+      "private_sp7_utf16_original_bytes": 431278,
+      "complete_physical_regions": 6
+    },
+    {
+      "phase": "POST",
+      "private_sp7_utf16_original_bytes": 431250,
+      "complete_physical_regions": 6
+    },
+    {
+      "phase": "LIVE2",
+      "private_sp7_utf16_original_bytes": 431278,
+      "complete_physical_regions": 6
+    },
+    {
+      "phase": "POST2",
+      "private_sp7_utf16_original_bytes": 431278,
+      "complete_physical_regions": 6
+    }
+  ],
+  "region_stats": [
+    {
+      "region": "WRAPPER",
+      "source_physical_base": "0x0acb6000",
+      "complete_dwords_each_phase": 1024,
+      "idle_all_sentinel": true,
+      "LIVE1_nonzero_nonsentinel_dwords": 3,
+      "LIVE2_nonzero_nonsentinel_dwords": 3,
+      "POST_vs_IDLE_dword_differences": 0,
+      "POST2_vs_IDLE_dword_differences": 0,
+      "LIVE1_vs_LIVE2_dword_differences": 0
+    },
+    {
+      "region": "CSID0",
+      "source_physical_base": "0x0acb7000",
+      "complete_dwords_each_phase": 2048,
+      "idle_all_sentinel": true,
+      "LIVE1_nonzero_nonsentinel_dwords": 79,
+      "LIVE2_nonzero_nonsentinel_dwords": 79,
+      "POST_vs_IDLE_dword_differences": 0,
+      "POST2_vs_IDLE_dword_differences": 0,
+      "LIVE1_vs_LIVE2_dword_differences": 0
+    },
+    {
+      "region": "CSID1",
+      "source_physical_base": "0x0acb9000",
+      "complete_dwords_each_phase": 2048,
+      "idle_all_sentinel": true,
+      "LIVE1_nonzero_nonsentinel_dwords": 110,
+      "LIVE2_nonzero_nonsentinel_dwords": 108,
+      "POST_vs_IDLE_dword_differences": 0,
+      "POST2_vs_IDLE_dword_differences": 0,
+      "LIVE1_vs_LIVE2_dword_differences": 11
+    },
+    {
+      "region": "CSIPHY1",
+      "source_physical_base": "0x0ace6000",
+      "complete_dwords_each_phase": 2048,
+      "idle_all_sentinel": true,
+      "LIVE1_nonzero_nonsentinel_dwords": 103,
+      "LIVE2_nonzero_nonsentinel_dwords": 101,
+      "POST_vs_IDLE_dword_differences": 0,
+      "POST2_vs_IDLE_dword_differences": 0,
+      "LIVE1_vs_LIVE2_dword_differences": 7
+    },
+    {
+      "region": "VFE0",
+      "source_physical_base": "0x0ac62000",
+      "complete_dwords_each_phase": 4096,
+      "idle_all_sentinel": true,
+      "LIVE1_nonzero_nonsentinel_dwords": 0,
+      "LIVE2_nonzero_nonsentinel_dwords": 0,
+      "POST_vs_IDLE_dword_differences": 0,
+      "POST2_vs_IDLE_dword_differences": 0,
+      "LIVE1_vs_LIVE2_dword_differences": 0
+    },
+    {
+      "region": "VFE1",
+      "source_physical_base": "0x0ac71000",
+      "complete_dwords_each_phase": 4096,
+      "idle_all_sentinel": true,
+      "LIVE1_nonzero_nonsentinel_dwords": 219,
+      "LIVE2_nonzero_nonsentinel_dwords": 219,
+      "POST_vs_IDLE_dword_differences": 0,
+      "POST2_vs_IDLE_dword_differences": 0,
+      "LIVE1_vs_LIVE2_dword_differences": 36
+    }
+  ],
+  "live_physical_config": [
+    {
+      "phase": "LIVE1",
+      "wrapper": [
+        {
+          "csid": 0,
+          "config": "0x00000001",
+          "output_ife_enable": false
+        },
+        {
+          "csid": 1,
+          "config": "0x00000101",
+          "output_ife_enable": true
+        },
+        {
+          "csid": 2,
+          "config": "0x00000001",
+          "output_ife_enable": false
+        }
+      ],
+      "csid": [
+        {
+          "instance": 0,
+          "rx_cfg0": "0x00032103",
+          "rx_cfg1": "0x00000001",
+          "ipp_cfg0": "0x00000000",
+          "ipp_cfg1": "0x00000040",
+          "ipp_path_enabled": false,
+          "raw10_csi_data_type": 0,
+          "hcrop": "0xffff0000",
+          "x_start": 0,
+          "x_end": 65535,
+          "vcrop": "0x3fff0000",
+          "y_start": 0,
+          "y_end": 16383,
+          "format_measure": "0x00000000",
+          "measured_width": 0,
+          "measured_height": 0
+        },
+        {
+          "instance": 1,
+          "rx_cfg0": "0x10232103",
+          "rx_cfg1": "0x00000001",
+          "ipp_cfg0": "0x802b2000",
+          "ipp_cfg1": "0x00007241",
+          "ipp_path_enabled": true,
+          "raw10_csi_data_type": 43,
+          "hcrop": "0x0fdf0000",
+          "x_start": 0,
+          "x_end": 4063,
+          "vcrop": "0x08ed0000",
+          "y_start": 0,
+          "y_end": 2285,
+          "format_measure": "0x08ee0fe0",
+          "measured_width": 4064,
+          "measured_height": 2286
+        }
+      ],
+      "vfe": [
+        {
+          "instance": 0,
+          "hardware_version": "0x00000000",
+          "bus_version": "0x00000000",
+          "enabled_clients": []
+        },
+        {
+          "instance": 1,
+          "hardware_version": "0x30000002",
+          "bus_version": "0x20020000",
+          "enabled_clients": [
+            {
+              "wm": 0,
+              "name": "FULL_Y",
+              "config": "0x00000011",
+              "width": 3840,
+              "height": 2160,
+              "stride": 5120,
+              "packer_config": "0x0000000b"
+            },
+            {
+              "wm": 1,
+              "name": "FULL_C",
+              "config": "0x00000011",
+              "width": 3840,
+              "height": 1080,
+              "stride": 5120,
+              "packer_config": "0x0000000b"
+            },
+            {
+              "wm": 2,
+              "name": "DS4",
+              "config": "0x00000011",
+              "width": 480,
+              "height": 270,
+              "stride": 3840,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 3,
+              "name": "DS16",
+              "config": "0x00000011",
+              "width": 120,
+              "height": 68,
+              "stride": 1024,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 11,
+              "name": "STATS_BE0",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 12,
+              "name": "STATS_BHIST0",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 13,
+              "name": "STATS_TINTLESS_BG",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 14,
+              "name": "STATS_AWB_BG",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 16,
+              "name": "STATS_BAF",
+              "config": "0x00020001",
+              "width": 4,
+              "height": 25,
+              "stride": 32,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 18,
+              "name": "STATS_RS",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x00000008"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "LIVE2",
+      "wrapper": [
+        {
+          "csid": 0,
+          "config": "0x00000001",
+          "output_ife_enable": false
+        },
+        {
+          "csid": 1,
+          "config": "0x00000101",
+          "output_ife_enable": true
+        },
+        {
+          "csid": 2,
+          "config": "0x00000001",
+          "output_ife_enable": false
+        }
+      ],
+      "csid": [
+        {
+          "instance": 0,
+          "rx_cfg0": "0x00032103",
+          "rx_cfg1": "0x00000001",
+          "ipp_cfg0": "0x00000000",
+          "ipp_cfg1": "0x00000040",
+          "ipp_path_enabled": false,
+          "raw10_csi_data_type": 0,
+          "hcrop": "0xffff0000",
+          "x_start": 0,
+          "x_end": 65535,
+          "vcrop": "0x3fff0000",
+          "y_start": 0,
+          "y_end": 16383,
+          "format_measure": "0x00000000",
+          "measured_width": 0,
+          "measured_height": 0
+        },
+        {
+          "instance": 1,
+          "rx_cfg0": "0x10232103",
+          "rx_cfg1": "0x00000001",
+          "ipp_cfg0": "0x802b2000",
+          "ipp_cfg1": "0x00007241",
+          "ipp_path_enabled": true,
+          "raw10_csi_data_type": 43,
+          "hcrop": "0x0fdf0000",
+          "x_start": 0,
+          "x_end": 4063,
+          "vcrop": "0x08ed0000",
+          "y_start": 0,
+          "y_end": 2285,
+          "format_measure": "0x08ee0fe0",
+          "measured_width": 4064,
+          "measured_height": 2286
+        }
+      ],
+      "vfe": [
+        {
+          "instance": 0,
+          "hardware_version": "0x00000000",
+          "bus_version": "0x00000000",
+          "enabled_clients": []
+        },
+        {
+          "instance": 1,
+          "hardware_version": "0x30000002",
+          "bus_version": "0x20020000",
+          "enabled_clients": [
+            {
+              "wm": 0,
+              "name": "FULL_Y",
+              "config": "0x00000011",
+              "width": 3840,
+              "height": 2160,
+              "stride": 5120,
+              "packer_config": "0x0000000b"
+            },
+            {
+              "wm": 1,
+              "name": "FULL_C",
+              "config": "0x00000011",
+              "width": 3840,
+              "height": 1080,
+              "stride": 5120,
+              "packer_config": "0x0000000b"
+            },
+            {
+              "wm": 2,
+              "name": "DS4",
+              "config": "0x00000011",
+              "width": 480,
+              "height": 270,
+              "stride": 3840,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 3,
+              "name": "DS16",
+              "config": "0x00000011",
+              "width": 120,
+              "height": 68,
+              "stride": 1024,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 11,
+              "name": "STATS_BE0",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 12,
+              "name": "STATS_BHIST0",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 13,
+              "name": "STATS_TINTLESS_BG",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 14,
+              "name": "STATS_AWB_BG",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 16,
+              "name": "STATS_BAF",
+              "config": "0x00020001",
+              "width": 4,
+              "height": 25,
+              "stride": 32,
+              "packer_config": "0x0000000a"
+            },
+            {
+              "wm": 18,
+              "name": "STATS_RS",
+              "config": "0x00010001",
+              "width": 0,
+              "height": 0,
+              "stride": 1,
+              "packer_config": "0x00000008"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "rear_OEM_Windows_VFE1_PIX_3840x2160_confirmed_across_two_live_passes": true,
+  "rear_OEM_Windows_CSID1_IPP_enabled_confirmed_across_two_live_passes": true,
+  "Linux_rear_native_4k_ISP_optical_frame_proven": false,
+  "image_dma_addresses_RAW_optical_pixels_images_thumbnails_hashes_exported": false
+}

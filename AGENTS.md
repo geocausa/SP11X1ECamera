@@ -49,6 +49,38 @@ OS-level sleep rules remain mandatory. Do not enable a default
 native ISP or flash unverified Windows firmware.
 
 
+## E004nq rear-native Windows route supersedes rear RAW parity assumption
+
+2026-09-23 E004nq physically captured TWO same-SP11 Windows Rear OV13858
+VideoRecord 3840x2160 sessions using the **original working front E003g
+SP7 KDNET `dd /p` PHYSICAL register command** at IDLE/LIVE1/POST/LIVE2/POST2.
+The later E004nm `!dd` was NOT the same physical acquisition and its
+all-0x80000000 camera values must NOT block hardware work.
+E004nq's five-phase/repeated OEM proof shows Windows REAR uses:
+
+- CSIPHY1, **4 D-PHY lanes**, CSID1 RAW10 IPP crop **x0..4063/y0..2285**
+  (4064x2286, GRBG Bayer phase unchanged);
+- shared VFE1 FULL WM0 luma 3840x2160 and WM1 chroma 3840x1080,
+  **physical WM stride 5120**, packer reg0x0b, plus DS4/DS16 and stats;
+- CSID0 IPP disabled and VFE0 inactive in BOTH actual Windows rear PIX
+  capture passes. Both stopped states return exactly to all-sentinel idle.
+
+Front E003g ALSO uses CSID1/VFE1, but has IMX681 C-PHY CSIPHY2,
+input crop3840x2160 and output2560x1440: the two OEM camera modes
+**time-multiplex the same processing cores** with distinct CSI and IQ
+profiles. Preserve the existing Linux rear CSIPHY1→CSID0→VFE0 RAW
+E004lr diagnostic capture and E004ne SW4K fallback: they are REAL,
+but NOT Windows rear native ISP parity. Historical E004nk/E004nl rear
+VFE0 source preflight/route must not be used as a *Windows native rear
+4K processed route gate*. Do NOT copy front-only predicates, tuning,
+2560x1440 QC10C output or MF app stride3840 into new rear hardware.
+New Linux rear PIX must have separately source-locked CSI1/VFE1
+graph ownership, 4K hardware output surface, OV13858 Bayer crop, IQ/
+RT-CDM/3A scheduling, checked DMA/SMMU and Golden-safe cleanup;
+**Linux rear native 4K ISP frame remains unproven**. The reusable E003g
+method is physical `dd /p`, not a dependency on private OEM WPP/TMF
+decoders. See E004nq README.md/RESULT.json/WINDOWS-RESULT.json/verify.py.
+
 ## Resume behaviour
 
 When asked to continue camera work:
