@@ -193,3 +193,6 @@ scene recognition, raw black/SNR, automatic exposure/white balance
 and OEM Windows ISP are still unproven. The E004mv real front/rear
 published scalar baseline/trial values can inform a separate,
 source-only decision audit, not a claimed live closed-loop result.
+
+
+E004mx isolated default-OFF FRONT1080 gain-only NV12 luma tone helper: front_preview_tone.h is camera-free and never invoked by normal maintained front/rear camera. For the supported front gain source p01~30/p99~61, an opt-in 1080p Y-only test maps p01 to100 with 2x contrast, preserving all UV bytes and source RAW10. Flat/black baseline, already bright, clipped and unsupported geometry bypass unchanged. This is NOT ISP/AE/colour calibration, recovered detail, true SNR, or released camera quality. Full-1080p synthetic tests verify gate, chroma and geometry before a fresh source-locked physical one-shot.

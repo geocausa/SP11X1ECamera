@@ -52,6 +52,8 @@ gcc "${F[@]}" "$T/source/iq/tests/test_raw10_temporal_spatial.c" -lm -o "$T/raw1
 "$T/raw10-temporal-test"
 gcc "${F[@]}" "$T/source/iq/tests/test_rear_preview_tone.c" -o "$T/rear-tone-offline"
 "$T/rear-tone-offline"
+gcc "${F[@]}" "$T/source/iq/tests/test_front_preview_tone.c" -o "$T/front-tone-offline"
+"$T/front-tone-offline"
 gcc -O3 -std=c11 -Wall -Wextra -Werror -pedantic -fno-fast-math -ffp-contract=off "$T/source/iq/tests/test_rear_temporal_preview.c" -lm -o "$T/rear-temporal-offline"
 "$T/rear-temporal-offline"
 
