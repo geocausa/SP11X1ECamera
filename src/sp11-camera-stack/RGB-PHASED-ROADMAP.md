@@ -101,10 +101,26 @@ recognizable images.
 The maintained direct publishers now contain a default-disabled
 `SP11_CAMERA_ALLOW_RAW_PROFILE` diagnostic for sparse same-frame full
 10-bit R/G0/G1/B source statistics. Both front/rear fake-device lifecycle
-suites and synthetic native full-frame packing tests pass. This has NOT
-been physically accepted; only an entirely fresh one-shot boot can
-measure real sensor data. A raw code histogram alone cannot prove
-recognizable scene detail or optical black-level calibration.
+suites and synthetic native full-frame packing tests pass. It was physically exercised in the fresh guarded E004mf/E004mg
+one-shots; a raw histogram still cannot prove recognizable detail
+or an optical black-level calibration.
+
+## E004mg private local RGB optical proof — image usability still open
+
+A new source-pinned E004mg physical one-shot captured real front1080p
+and rear4K RGB PNGs **only on SP11** (`~/Pictures/SP11-Camera-Private-E004mg/`).
+Numerical analysis of the locally downsampled images found front
+luminance p99=9 (99.74% below20) and rear p99=0 (all below20):
+physical frame delivery is proven but visually usable imagery is NOT.
+Independent same-boot NV12 app Y p99 was 27/17 at baseline and 60/25
+after bounded reversible visible RGB sensor gain. Native RAW10 full10
+source and same-frame paired RAW8/NV12 checks passed. The RGB PNG and
+NV12 studio-range Y values have different scales and can clip near
+video black; no converter-only root cause or true optical black level
+is established. Both photos are private and not committed/exported.
+E004mg consumed/retired, Golden recovered. Prioritize source black
+reference and supported exposure control, then opt-in offline-verified
+tone mapping and a fresh guarded controlled-light recognizability gate.
 
 ## Software RGB service integration in progress (2026-09-23)
 
