@@ -120,6 +120,17 @@ service; controlled-lit image quality and general-client/long-run
 reliability still require acceptance. Do not count an opt-in one-shot
 as a daily service.
 
+Next acceptance candidate E004ma exercises root-private
+selector.py/rgbctl.py opt-in front/rear/off/quit commands as a
+separate process from the three normal uid1000 app opens and one
+killed/recovered app per camera. It retains both discoverable named
+front1080p/rear4K endpoints, but only one real source is active.
+A source-only selector is not a production normal-user camera
+interface until actual guarded optical test and duration/IQ/user
+permissions are independently accepted. Direct root-only
+selection is a temporary administrative interface, not automatic
+app-driven routing or Windows camera UX equivalence.
+
 ## Decision gate — when software RGB acceptance passes
 
 Report the measured real front1080p/rear4K output, visual quality,

@@ -35,6 +35,30 @@ quality. Both test scenes sampled near-black. The previous E004ly
 trial proved longer ~115s per camera but used older scripted route
 transitions.
 
+Explicit root-controlled camera selection now has a source-only
+finite candidate implementation:
+- selector.py owns RGBSession for the whole opt-in root-private Unix
+  socket lifetime, admitting only front/rear/off/status/quit commands
+  from root, verifying active publisher/graph/IR continuously and
+  enforcing the 180-second candidate acceptance timeout.
+- rgbctl.py issues a single bounded command over this root-owned
+  0600 socket in the sealed candidate directory.
+- selector_acceptance.py is the separate candidate-only orchestration
+  test: front→ordinary uid1000 V4L2 app first/reopen/SIGKILL/
+  recovery→rear→the corresponding ordinary 4K clients→off→quit.
+  Control and apps live in DIFFERENT processes. Both virtual nodes
+  may be discoverable but only ONE physical source can stream. The
+  root-only control API is a first guarded opt-in interface, not a
+  desktop permission/user-service solution yet. A camera app should
+  close the current reader before requesting route switching:
+  outstanding reader FDs cause fail-closed candidate stop/return to
+  Golden rather than guessed live graph mutation.
+
+A new fresh E004ma one-shot is planned to verify the control socket
+and actual camera switching; **no live selector acceptance is
+claimed before its RESULT exists**. Only E004lz has passed physical
+RGBSession backend integration to date.
+
 Service invariants implemented by the policy:
 
 - Before admission, require **exact authorized candidate boot/asset identity, live exclusive camera lease, IR-off readback, zero camera-owner/client FDs and independently verified complete neutral media graph**. The prospective backend MUST implement these checks against fresh physical state; a boolean mock is not a security boundary.
