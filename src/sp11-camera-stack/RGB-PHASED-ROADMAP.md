@@ -262,6 +262,51 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004nc real front1080/rear4K ordinary app BT601 matrix caps, but independent full-run rear darkness gate fails
+
+A fresh consumed source-locked E004nc physical candidate boot
+92954eda-392b-4557-924c-1d39151a7c23 captured both visible
+RGB cameras at full 1080p/4K and reported BOTH independent
+real V4L2 S_FMT/G_FMT NV12 explicit SMPTE170M colorspace=1,
+ycbcr/quantization/transfer DEFAULT=0. Strict Linux UAPI
+effective normalization accepts 601/limited/709 and still
+rejects unspecified or wrong actual colorspace. All FOUR
+ordinary UID1000 front/rear baseline/gain app probes,
+90 frames each, independently negotiated actual v4l2src
+NV12 input bt601 AND I420 consumer bt601. Real front
+source30.005fps/rear29.948fps, zero gaps, four separate
+30frame gain windows each>=29fps, exact native controls
+restored, front->rear->off->quit selector and three rear
+full10 RAW10 temporal source pairs passed.
+
+ORIGINAL full E004nc one-shot runner FAILED its pre-existing
+rear tone/temporal visual-quality gate: actual rear gain scene
+was still a very dark near-flat corner, native preview input
+Y p01=31/p50=34/p99=38 spread7 below min8, so the
+rear Y-only tone SAFELY BYPASSED and temporal filtered0 frames.
+Original independent rear filter acceptance therefore failed
+as intended; original downstream independent BT601 validator,
+front tone and final complete119-edge graph neutral gate did
+NOT run. A separate read-only POSTHOC run of only the
+colour-specific validator on SAME original physical scalar
+source and UID1000 app metadata PASSED; do NOT relabel
+original full runner pass. No actual optical neutral colour
+chart, true signal detail, scene lighting or matched Windows
+ISP colour parity has been verified.
+
+Automatic reboot reached protected Golden boot
+4d68e367-b5e6-44dd-bf4f-0123366449c5, no matching
+candidate GPU/thermal/panic fault, unique candidate root/
+GRUB/boot/systemd assets retired. Four original photos ONLY
+SP11 owner geoca private dir0700/photos0600; Git contains
+scalar/text evidence exclusively, no optical photos/pixels/
+RAW/thumbs/image hashes. Normal camera/IR/tone/temporal
+defaults unchanged. Next make colour metadata/app-caps
+acceptance independent of dark-rear preview IQ rather than
+lower the flat-scene tone bypass or produce unproven detail.
+See E004nc/RESULT.json, ORIGINAL-GATE-FAILURE.txt and
+POSTHOC-REAL-BT601-SOURCE-AND-UID1000-APP-CAPS.json.
+
 ## E004nb prestream V4L2 exact readback: explicit colorspace retained, 3 default zero fields
 
 Fresh consumed/retired E004nb distinct one-shot physically logged first
