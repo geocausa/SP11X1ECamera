@@ -38,6 +38,10 @@ def check(result):
     import yaml
     state = yaml.safe_load((ROOT / "state/project.yaml").read_text())
     oracle = state["latest_windows_native_isp_oracle"]
+    if oracle["identity"] != "E004nm":
+        # Keep this historical Windows oracle independently verifiable after
+        # E004nn (or any later source-backed Windows session) becomes latest.
+        oracle = state["prior_windows_native_isp_oracle"]
     assert oracle["identity"] == "E004nm"
     assert oracle["dynamic_rear_VFE0_4k_isp_output_proven"] is False
     assert state["latest_native_isp_source_gate"]["identity"] == "E004nl"

@@ -168,8 +168,30 @@ First achieve stable native RAW capture with correct power, reset, link, mode, e
 
 ## User authorization — 2026-09-05
 
-The user explicitly authorizes installation of useful missing tools on the project machines/OSes, discretionary Linux/Windows reboots, KD, ETW/ETL, Ghidra and static/dynamic analysis, and saving/committing/pushing meaningful progress. Proceed without repeatedly asking for these routine project actions. Scope remains SP11, SP7 and PiMaster. Preserve Golden and checkpoint exact hardware experiments.
+The user explicitly authorizes installation of useful missing tools on the project machines/OSes, discretionary Linux/Windows reboots, KD, ETW/ETL, Ghidra and static/dynamic analysis, and saving/committing/pushing meaningful progress. Proceed without repeatedly asking for these routine project actions. The user reaffirmed on 2026-09-23 that ANY lab machine and useful static/dynamic tool may be used; this supersedes the prior SP11/SP7/PiMaster-only HOST restriction. Same-SP11 proprietary Windows tuning/drivers/firmware and camera optical pixels/photos/RAW/thumbs/image hashes must still remain private on SP11; do not put originals in Git/chat or export them to another host. Preserve Golden and checkpoint exact hardware experiments. SP11 can remain on one-shot Windows for an extended oracle session; a normal reboot returns via persistent Linux-first EFI BootOrder and saved Golden GRUB entry. SP7's LCD NEVER sleeps, but has a permanently non-rendering thick dark LOWER band: use only registered healthy upper display ROI for private SP11 rear-camera comparison, and never classify its dark lower band as a camera/lens/exposure defect.
 
+
+## Windows oracle scheduled-task single-use guard — E004nn correction
+
+On 2026-09-23 E004nn a signed-in Windows user task was manually started
+and THEN automatically re-ran at its `New-ScheduledTaskTrigger -Once -At
+(Get-Date).AddMinutes(1)` time. Separate private original JSON files
+and the original first-run ETW time boundary proved two invocations.
+The ETW covers the FIRST ONLY; never merge their counts or claim
+single-use. This does not invalidate the recorded first-run Windows
+FrameServer 297/295 unique timestamped client samples, but is an
+execution-control failure. The Windows Scheduled Task was unregistered. Source-only guarded future-task helper and duplicate-rejection selftest live in experiments/E004-front-ir-vd55g0/e004nn-rear-oem-ife-windows-observer/windows-atomic-consumed-guard.ps1 and test-windows-atomic-consumed-guard.ps1, verified on SP11 pwsh7.6.5 and SP7 native Windows PowerShell5.1. The helper was NOT used in historical E004nn and does NOT negate its second invocation.
+
+Future Windows camera oracle tasks MUST use a persisted atomic
+`[System.IO.File]::Open($marker,[System.IO.FileMode]::CreateNew,
+[System.IO.FileAccess]::Write,[System.IO.FileShare]::None)` at script
+ENTRY, before any camera access, so a later unintended trigger fails
+closed; also unregister the task after the intended invocation ends.
+Do not assume a file-exists check only at task REGISTRATION protects
+against a later automatic trigger. Do not re-use an already-consumed
+Windows or Linux experiment identity. Keep original source ETL and
+optical files private; commit only verified scalar evidence and
+source, with explicit unproven hardware contracts.
 
 ## Concurrent-turn / UI-disconnect safety
 
