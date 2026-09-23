@@ -153,3 +153,20 @@ reset, moving high-contrast edge and unchanged UV. The independent
 synthetic CPU benchmark cannot establish true camera conversion
 overhead or physical quality, which need a newly guarded live trial
 before any user-facing or production activation.
+
+
+### Candidate-only AArch64 NEON 4K luma temporal acceleration
+
+The separate explicit SP11_REAR_TEMPORAL_ENABLE_NEON=1 build provides
+AArch64 16-lane vector processing of eight exact 2x2 motion gates at
+once; default-OFF front/rear maintained Golden camera remains unchanged.
+The AArch64 test runs scalar and NEON in the same executable over only
+synthetic full 4K NV12, comparing the entire output, Y history and
+statistics bit-for-bit across noise, moved contrast edges, scene cuts,
+source frame gaps and tone reset. A standalone synthetic benchmark on
+SP11 measured NEON ~1.1ms versus scalar ~17.5ms for that fixture in
+three repeated interleaved runs. Different runtime loads change times;
+this does not prove live 29-30fps or scene detail. Prior physical E004mu
+scalar rear temporal candidate failed at28.8485fps; DO NOT lower the
+29fps requirement, or rearm that consumed candidate. New physical
+SIMD testing requires its own source-locked one-shot.

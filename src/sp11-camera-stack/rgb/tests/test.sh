@@ -53,6 +53,11 @@ gcc "${F[@]}" "$T/source/iq/tests/test_rear_preview_tone.c" -o "$T/rear-tone-off
 "$T/rear-tone-offline"
 gcc -O3 -std=c11 -Wall -Wextra -Werror -pedantic -fno-fast-math -ffp-contract=off "$T/source/iq/tests/test_rear_temporal_preview.c" -lm -o "$T/rear-temporal-offline"
 "$T/rear-temporal-offline"
+
+if [[ "$(uname -m)" == aarch64 ]];then
+ gcc "${F[@]}" "$T/source/iq/tests/test_rear_temporal_scalar_neon_exact.c" -lm -o "$T/rear-temporal-neon-exact"
+ "$T/rear-temporal-neon-exact"
+fi
 gcc "${F[@]}" "$T/source/iq/tests/test_nv12_range.c" -o "$T/nv12-range-test"
 "$T/nv12-range-test"
 "$T/raw10-unpack-test"
