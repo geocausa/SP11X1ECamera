@@ -15,7 +15,7 @@ sudo -n test ! -e "$D/ATTEMPT-CONSUMED"
 sudo -n test -s "$D/FRONT-OFFLINE-PIPE-DRYRUN.txt"
 for video in /dev/video90 /dev/video91; do sudo -n test ! -e "$video"; done
 [[ ! -d /sys/module/v4l2loopback ]]
-[[ "$(sudo -n sha256sum "$D/v4l2loopback.ko" | awk '{print $1}')" == 739564139552eebdb51c64d750cb746aa96745054d21d7e2f7d0445c59e32db1 ]]
+[[ "$(sudo -n sha256sum "$D/v4l2loopback.ko" | awk '{print $1}')" == 2b64ec09aca2a7f38df6606f9c8b8244c4a3b6270b4d3524f587a48aa882503d ]]
 [[ "$(sudo -n sha256sum "$D/bridge/front-nv12-1080p-pipe-audit" | awk '{print $1}')" == 23e5152cea7dab8b437eae309f16a8f33e7c01b50f9ab61fa26f952d90b3600e ]]
 [[ "$(sudo -n modinfo -F vermagic "$D/v4l2loopback.ko")" == "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64" ]]
 [[ "$(sudo -n sha256sum "$D/bridge/front-rggb10p-to-nv12-1080" | awk '{print $1}')" == 820a6871f78e9ecaecfd4b1a16fc1e0bad9600aeeb6a1505133e467c1354dc82 ]]
