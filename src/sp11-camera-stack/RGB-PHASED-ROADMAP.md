@@ -68,6 +68,26 @@ is NOT IMPLEMENTED RELIABLY and is excluded from camera tests;
 do not label this platform limitation a camera failure. Normal
 guarded reboots and ordinary sensor stop/reopen are allowed.
 
+## E004md actual low-light gain response (2026-09-23)
+
+E004ma selector, E004mb morning dark-scene probe and E004mc same-frame
+RAW/NV12 source diagnosis are completed, archived and retired. A newer
+unique E004md guarded trial measured physical front source RAW8-upper
+p99 21→36 and uid1000 NV12 app Y p99 20→34 after supported gain edits.
+The rear source p99 rose 17→21 and app p99 16→20 after supported
+gain and bounded exposure edits. Both sensors had exact baseline
+control readback restoration and controlled publisher stop143. This
+confirms real gain-response data, NOT visibly recognizable images,
+calibrated RAW black level/colour, normal dynamic 3A, or Windows parity.
+The enclosing E004md runner FAILED due to a stale predecessor-status
+string check AFTER inner tests; final independent candidate graph/FD
+checks did not run. Automatic Golden recovery verified and all E004md
+assets retired. Never retry that identity. Before any fresh guarded
+physical trial, prevent stale cross-experiment validator literals;
+prioritize offline gain/exposure policy and controlled-lit RGB scene
+visibility with source-format/black-level checks. Keep IR off and
+never initiate OS system sleep. Evidence: E004md RESULT.json.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:
