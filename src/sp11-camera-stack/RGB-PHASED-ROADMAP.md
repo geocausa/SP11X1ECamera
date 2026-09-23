@@ -262,6 +262,40 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004na physical original trial FAIL PRE-STREAM: exact loopback S_FMT metadata readback mismatched
+
+After entirely synthetic 1080p/4K proof of existing provisional
+BT.601 NV12 Y/Cb/Cr encoder vs unspecified GStreamer BT.709
+decoder at HD/UHD, a NEW single-use original E004na trial
+attempted explicit SMPTE170M(1)/YCBCR601(1)/limited quant2/
+xfer709(1) V4L2 output. First FRONT publisher S_FMT returned
+a struct that failed its exact FOUR-field echo gate; original
+stderr E004NA_V4L2_BT601_NATIVE_LOOPBACK_S_FMT_COLOUR_TAG_MISMATCH,
+captured=0/published=0. Actual front UID1000 app got zero frames,
+no rear source frames, no actual real native front/rear BT.601
+caps or FPS/brightness measurement on E004na, no original
+optical photos created. Selector failed closed. The original
+program only printed a generic mismatch, **NOT actual returned
+colour field integers**. We CANNOT assert which V4L2 field was
+different, whether loopback normalized the metadata, or
+whether the physical source had a colour problem.
+
+Candidate Linux boot25434aee-c0fb-40ba-8128-62ffb6984227
+automatically returned protected Golden boot
+c6312e00-f579-4ba2-a276-365fc311ce1f without matching
+GPU/GMU/DPU fault, panic or thermal shutdown. Unique E004na
+is fully consumed/retired including root/GRUB/boot/systemd
+stages, no active camera/IR and normal Golden settings
+unchanged. Previous independently PASSED E004my original
+front1080/rear4K brightness/29fps/full neutral remains valid.
+Do NOT rearm E004na or claim the new colour metadata
+works on actual UID1000 video. Next inspect actual
+v4l2loopback V4L2 S_FMT implementation camera-free,
+then a fresh unique sealed bounded diagnostic that prints
+*all returned fields* prior to rejection IF software source
+analysis cannot isolate the mismatch. Don't weaken strict
+colour/FPS/source gate or turn normal camera settings on.
+
 ## E004na high-resolution colour matrix/metadata mismatch: synthetic proof, candidate-only fix
 
 Current software Bayer->NV12 Y/Cb/Cr uses provisional BT.601-like

@@ -55,3 +55,55 @@ UNARMED staging fix, NOT a reused candidate boot or a retroactive
 physical pass. No native camera controls or device modules were
 touched in the pre-arm repair; full physical end-to-end acceptance
 remains to be checked after a deliberately armed one-shot.
+
+
+## 2026-09-23 E004na actual physical outcome: FAIL before sensor streaming
+
+The distinct source-locked 0a8882f candidate boot
+25434aee-c0fb-40ba-8128-62ffb6984227 was attempted ONCE.
+Its original first FRONT publisher called VIDIOC_S_FMT on the
+temporary v4l2loopback output, then failed the strict new
+BT.601 exact-metadata readback. Original stderr:
+E004NA_V4L2_BT601_NATIVE_LOOPBACK_S_FMT_COLOUR_TAG_MISMATCH;
+captured=0 published=0, so neither front nor rear produced
+a real native source frame, the ordinary UID1000 front app
+received zero, the selector failed closed and the true live
+front/rear GStreamer negotiated colour caps were NEVER observed.
+The original pixel/fps/neutral release gates were not completed.
+The new physical metadata trial is a FAIL, not a successful fix.
+
+Crucially, the new opt-in implementation logged only a generic
+mismatch before exiting, not actual returned integer colours:
+the specific field(s) not echoed, and why, remain UNKNOWN.
+The earlier source-only inspection of v4l2loopback v0.15.3
+showed valid explicit colorspace accepted at a code location;
+it did not prove transfer function, quantization, YCBCR encoding
+or the actual IOCTL echo. Do NOT claim V4L2 driver inability,
+colour accuracy, successful live colour fix or altered camera
+FPS from this failed pre-stream experiment. Front/rear original
+optical photos did not exist for E004na; previous SP11-local
+private originals remain untouched.
+
+SP11 successfully rebooted itself into protected normal Golden
+Linux boot c6312e00-f579-4ba2-a276-365fc311ce1f with no
+matching GPU hangcheck/GMU/Adreno ring, panic or thermal event
+in the failed candidate kernel journal; no physical user
+intervention. The already-consumed unique E004na root, boot,
+GRUB and systemd assets were fully RETIRED under Golden, no
+camera devices/modules/processes remain, IR and normal camera
+settings unaffected. It must NEVER be rearmed. Future analysis
+should first inspect the exact loopback V4L2 API and source
+in camera-free mode and create a candidate that LOGS the actual
+S_FMT returned colour fields BEFORE the rejection, rather than
+merely assuming a valid colorspace implies all metadata echoes.
+Only a fresh single-use source-locked boot could test that in
+real hardware, without relaxing strict accepted FPS or daily
+default camera protection.
+
+This failure does not invalidate the previous distinct E004my
+original fully passed real front1080/rear4K speed/brightness/
+native-neutral and automatic Golden return result.
+See RESULT.json, evidence/front-SERVICE-STDERR.txt,
+evidence/FRONT-FIRST-APP.jsonl,
+evidence/FAILURE-INTERPRETATION.txt,
+evidence/CANDIDATE-KERNEL-ERROR-SCALARS.json and RETIREMENT.txt.
