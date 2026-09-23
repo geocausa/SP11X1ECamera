@@ -130,7 +130,7 @@ FRONT_AUDIT=$D/bridge/front-rdi-raw10-pipe-audit
 [[ "$(sha256sum "$FRONT_APP" | awk '{print $1}')" == e165491ea22bcc4c452ea03073525662293c30ff3c274c67c4c6d4872e1c6b0a ]]
 [[ "$(sha256sum "$FRONT_AUDIT" | awk '{print $1}')" == 377a9c2e8704bd57687c5449608c632e1e06cc39067b87cc28aa3ac8a060d186 ]]
 FRONT_NV12_AUDIT=$D/bridge/front-nv12-1080p-pipe-audit
-[[ -f "$LOOP_MOD" && ! -L "$LOOP_MOD" && "$(sha256sum "$LOOP_MOD" | awk '{print $1}')" == 1ce4e638638a26f9f9c5c58d35d827f253d4032d3f4320098ddfa0f520490aef ]]
+[[ -f "$LOOP_MOD" && ! -L "$LOOP_MOD" && "$(sha256sum "$LOOP_MOD" | awk '{print $1}')" == 739564139552eebdb51c64d750cb746aa96745054d21d7e2f7d0445c59e32db1 ]]
 [[ "$(modinfo -F vermagic "$LOOP_MOD")" == "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64" ]]
 [[ -f "$FRONT_NV12_AUDIT" && ! -L "$FRONT_NV12_AUDIT" && "$(sha256sum "$FRONT_NV12_AUDIT" | awk '{print $1}')" == 23e5152cea7dab8b437eae309f16a8f33e7c01b50f9ab61fa26f952d90b3600e ]]
 grep -Fq 'E004KH_NV12_1080P_PIPE=PASS REQUESTED_FRAMES=1 FULL_FRAMES=1' "$D/FRONT-1080P-OFFLINE-PIPE-DRYRUN.txt"
