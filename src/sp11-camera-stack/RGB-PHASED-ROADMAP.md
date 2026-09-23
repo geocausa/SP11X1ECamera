@@ -262,6 +262,38 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004mz two-boot PRIVATE same-host fine vs coarse image-repeatability: detail still unproven
+
+Read only eight existing E004mx/E004my owner-private front1080/rear4K
+baseline/gain RGB original photos locally on protected Golden SP11,
+no hardware/IR/reboot/pixel transfer and synthetic scalar-correlation
+unit tests PASS. Identical 4x original pixel sampling and Gaussian
+lowpass sigma8 / fine highpass sigma2, plus bounded +/-8 original
+pixel shift search: FRONT gain highpass cross-boot corr0.841871,
+coarse corr0.990579, BUT near-black front baseline highpass
+corr0.806122 and same-boot front baseline-vs-gain highpass
+corr0.445/0.431. Repeated FRONT fine-scale image pattern may
+be actual optical structure OR persistent sensor/demosaic patterns,
+not proof recognized scene detail. REAR gain coarse corr0.999493,
+fine highpass cross-boot only0.047818 (not improved by bounded
+shift), baseline fine corr0.087524; same-boot baseline/gain
+fine corr<0.008. Coarse spatial shape persists in dark rear
+corner while the fine variations do NOT persist at identical
+pixel coordinates. Cannot attribute them conclusively to
+temporal noise instead of scene/pose/focus/light differences.
+Do NOT sharpen rear current dark-corner output based on an
+apparent histogram spread, claim recovered detail from Y-only
+tone, or claim fixed-pattern sensor defect. Known lit
+optical target/dark reference/colour chart remain absent.
+
+All original optical PNGs strictly SP11-private; Git has only
+scalar results, scripts and generated-array synthetic tests.
+Golden default front/rear camera/IR/tone/temporal unchanged.
+Evidence E004mz/SCALAR-ONLY-PRIVATE-SP11-REPEATABILITY.json.
+Next camera-free RAW10 Bayer->NV12 colour pattern validation,
+then controlled target and independent optical dark reference
+before a new distinct physical IQ one-shot.
+
 ## E004my new source-pinned real FRONT1080 gain tone plus rear4K NEON: ORIGINAL complete independent trial PASS
 
 Unlike E004mx (original validator FAILED, posthoc real-text

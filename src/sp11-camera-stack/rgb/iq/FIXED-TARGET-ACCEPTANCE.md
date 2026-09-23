@@ -1,5 +1,26 @@
 # Next physical acceptance gate: fixed visible target, dark reference and RAW temporal evidence
 
+2026-09-23 UPDATE: E004mt, E004mv and E004my HAVE now run three
+real rear FULL10 native RAW10 consecutive-frame pairs at the same
+exact native control profile per pair, with scalar means/spreads,
+frame-pair deltas and coarse tile correlations. E004my original
+complete front1080/rear4K ordinary UID1000 brightness/FPS/lifecycle/
+final-neutral acceptance PASSED. The historical SOURCE-ONLY
+instructions below describing RAW temporal as "not yet used" are
+superseded. E004mz further compared only original private RGB
+scalar two-boot repeatability: front gain highpass corr~0.842 BUT
+near-black baseline corr~0.806; rear gain lowpass corr~0.9995
+yet fine highpass corr~0.048; nearby small shifts did not
+improve it. These measurements do NOT independently identify
+fixed pattern vs true scene texture vs time-dependent noise.
+STILL MISSING: verified known illuminated optical target actually
+in each FOV, a distinct measured dark optical reference, matched
+lighting, color chart, real recognized detail and artifact-safe
+moving-subject quality. Do not launch another uncontrolled same-
+corner physical capture as a substitute for those prerequisites,
+promote tone/temporal to Golden or claim Windows ISP parity.
+
+
 Status: SOURCE-ONLY PLAN. No user target placement, illumination calibration,
 new camera boot, modified Golden or auto-exposure approval has occurred.
 E004mf/mg/mh/mp and Windows E004kt/wn identities are CONSUMED; never
