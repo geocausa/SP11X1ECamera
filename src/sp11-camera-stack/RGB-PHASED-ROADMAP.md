@@ -83,7 +83,8 @@ The enclosing E004md runner FAILED due to a stale predecessor-status
 string check AFTER inner tests; final independent candidate graph/FD
 checks did not run. Automatic Golden recovery verified and all E004md
 assets retired. Never retry that identity. Before any fresh guarded
-physical trial, prevent stale cross-experiment validator literals;
+physical trial, run tools/camera-validator-contract.py on its fresh
+runner/paired validator and prevent stale cross-experiment literals;
 prioritize offline gain/exposure policy and controlled-lit RGB scene
 visibility with source-format/black-level checks. Keep IR off and
 never initiate OS system sleep. Evidence: E004md RESULT.json.
