@@ -262,6 +262,43 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004ms first real opt-in rear brightness near current Windows range
+
+After E004mr failed pre-stream and was retired, a distinct new E004ms
+source-pinned one-shot added durable root-private selector tracing and
+successfully delivered actual front1080p/rear4K RAW-to-NV12 video to
+ordinary UID1000 apps. Exact native RGB controls were restored,
+source RAW10 paired/full10 and service/graph shutdown evidence passed,
+IR OFF, no Linux OS system sleep. A **rear-only, opt-in** studio-range
+Y preview LUT bypasses flat baseline and engages only when the bounded
+rear exposure3200/analogue512/digital2048 produces sufficient sampled
+luminance spread. The real rear ordinary app baseline meanY30.22–30.23,
+p01=30, p99=31, tile std0.22; trial with live LUT meanY145.46–145.67,
+p01=125, p99=167, tile std9.8–9.87. Root-private rear RGB PNG
+aggregate meanY144.399/p99=165, no endpoint-clipped Y pixels; front
+was NOT tone-adjusted. E004wp Windows current rear auto-exposed native
+NV12 had meanY149.15–150.41/p99=169–171/tile std11.46–12.06.
+Therefore Windows-like rear *rendered brightness* is physically possible
+through Linux software; these different-time scenes and different
+exposure controls do NOT prove color, recognizable detail, true SNR,
+calibrated black, white balance, full Windows ISP parity, dynamic AE or
+safe routine day-to-day camera integration. Y-only tone does not
+recover genuinely absent source signal and can amplify sensor FPN.
+
+E004ms fresh one-shot consumed and fully retired after automatic
+protected Golden return boot
+`5e400c52-4c3f-4c69-ab7e-19065f514527`; Golden normal output
+remains unchanged and candidate tone default-OFF. Four original PNGs
+remain user-private **only on SP11** at
+`~/Pictures/SP11-Camera-Private-E004ms/` folder0700/photos0600;
+no pixels, photos or image hashes exported. Future work: controlled
+lit/dark optical RAW10 sensor-noise and color measurements, bounded
+adaptive native exposure/gain within fixed-mode max3206 lines rear,
+day/night/tone clipping/flicker safeguards, and a separate fresh guarded
+end-to-end opt-in normal-service test before productionization. No
+manual user-side reboot or photo inspection is required for the tests
+and diagnosis accomplished here.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:
