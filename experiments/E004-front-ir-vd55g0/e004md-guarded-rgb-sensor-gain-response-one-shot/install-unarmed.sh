@@ -43,7 +43,7 @@ FRONT_NV12_AUDIT_SHA=23e5152cea7dab8b437eae309f16a8f33e7c01b50f9ab61fa26f952d90b
 [[ "$(sha256sum "$SOURCE/front-nv12-1080p-pipe-audit" | awk '{print $1}')" == "$FRONT_NV12_AUDIT_SHA" ]]
 LOOP_SOURCE=$SOURCE/loopback-clean/modules/v4l2loopback/v4l2loopback.ko
 LOOP_SOURCE_DEB=$SOURCE/loopback-package/v4l2loopback-source_0.15.3-1ubuntu2_all.deb
-LOOP_SHA=2b64ec09aca2a7f38df6606f9c8b8244c4a3b6270b4d3524f587a48aa882503d
+LOOP_SHA=6bdc8d3eeeeb4f6e7181ecb275b36b9e790ffc4e3883edeeba30e3f7a2972da9
 [[ "$(sha256sum "$LOOP_SOURCE_DEB" | awk '{print $1}')" == 007a2aa9a723976318407c871b2f1ecdbcd3dc065bf482b0b86f03b026ef40e0 ]]
 [[ -f "$LOOP_SOURCE" && ! -L "$LOOP_SOURCE" && "$(sha256sum "$LOOP_SOURCE" | awk '{print $1}')" == "$LOOP_SHA" ]]
 [[ "$(modinfo -F vermagic "$LOOP_SOURCE")" == '7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64' ]]
@@ -93,8 +93,8 @@ done
 for camera in front rear; do
  sudo -n install -m 0700 "$SOURCE/$camera-direct-publisher" "$D/bridge/$camera-direct-publisher"
 done
-[[ "$(sudo -n sha256sum "$D/bridge/front-direct-publisher" | awk '{print $1}')" == ec9c215488b7fb6587d772efec83a3cd642497f49fae5ef26ff8b4d3f186c2ca ]]
-[[ "$(sudo -n sha256sum "$D/bridge/rear-direct-publisher" | awk '{print $1}')" == 757ac04935ed8dd7ba9aa28fb9f07bb71a7cfecd8dce86e3f12085ea7f71793a ]]
+[[ "$(sudo -n sha256sum "$D/bridge/front-direct-publisher" | awk '{print $1}')" == 8d371d1e259cfcd2bdf2d7a306a164738fac6a7f59009169c8ac6a02ef98efc3 ]]
+[[ "$(sudo -n sha256sum "$D/bridge/rear-direct-publisher" | awk '{print $1}')" == f33f0445ca775c1b8a1c063c28ad75ee10de29384ae3903e37a512c6b02d16a2 ]]
 sudo -n install -m 0700 "$SOURCE/rear-bayer-4k-240" "$D/bridge/rear-bayer-to-nv12-4k"
 sudo -n install -m 0700 "$SOURCE/nv12-4k-pipe-audit" "$D/bridge/nv12-4k-pipe-audit"
 sudo -n install -m 0600 "$R/experiments/E004-front-ir-vd55g0/e004jx-rear-4k-partial-telemetry/nv12-4k-partial-telemetry-app.py" "$D/bridge/nv12-4k-partial-telemetry-app.py"
