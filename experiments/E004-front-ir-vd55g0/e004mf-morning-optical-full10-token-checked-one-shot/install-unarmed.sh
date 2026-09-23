@@ -100,7 +100,7 @@ done
 for camera in front rear; do
  sudo -n install -m 0700 "$SOURCE/$camera-direct-publisher" "$D/bridge/$camera-direct-publisher"
 done
-[[ "$(sudo -n sha256sum "$D/bridge/front-direct-publisher" | awk '{print $1}')" == 59894f3bf552dd2ff6b07fb5f2fb2fdacdda2a785ab8be92d564d6e6312bee ]]
+[[ "$(sudo -n sha256sum "$D/bridge/front-direct-publisher" | awk '{print $1}')" == 59894f3bf552dd2ff6b07fb5f2b6fb2fdacdda2a785ab8be92d564d6e6312bee ]]
 [[ "$(sudo -n sha256sum "$D/bridge/rear-direct-publisher" | awk '{print $1}')" == 46de93b4d1e256005067eb13b5c5967088f1c6003fcb405df59745112004ea6a ]]
 sudo -n install -m 0700 "$SOURCE/rear-bayer-4k-240" "$D/bridge/rear-bayer-to-nv12-4k"
 sudo -n install -m 0700 "$SOURCE/nv12-4k-pipe-audit" "$D/bridge/nv12-4k-pipe-audit"
