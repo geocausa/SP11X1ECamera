@@ -10,6 +10,8 @@ cd "$R"
 "$R/tools/camera-overlap-guard.sh" --require-clean-tracked --require-golden --require-no-camera-process
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/experiment/e004-front-ir-vd55g0)" ]]
 [[ "$(sudo -n cat "$D/EXPECTED-HEAD")" == "$(git rev-parse HEAD)" ]]
+sudo -n test -s "$D/validate_bt601_live.py"
+[[ "$(sudo -n sha256sum "$D/validate_bt601_live.py" | awk '{print $1}')" == "$(sha256sum "$H/validate_bt601_live.py" | awk '{print $1}')" ]]
 sudo -n test ! -e "$D/ATTEMPT-CONSUMED"
 [[ "$(sudo -n stat -c%s "$D/stack/usr/lib/sp11-front-imx681/userspace/iq/authority/r4-bootstrap.bin")" == 41088 ]]
 [[ "$(sudo -n sha256sum "$D/stack/usr/lib/sp11-front-imx681/userspace/iq/authority/r4-bootstrap.bin" | awk '{print $1}')" == 1a1fa39cbc7051d4ae9db8e2970fa5f405ec7e1b4f2867ff030fb1293fda57fa ]]

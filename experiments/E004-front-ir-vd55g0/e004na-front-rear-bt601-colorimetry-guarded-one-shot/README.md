@@ -31,3 +31,27 @@ IR remain default OFF/unchanged, no OS sleep or native VBLANK/FPS
 changes, original four optical RGB PNGs ONLY on same SP11
 owner geoca private 0700/0600, never export photos/optical
 pixels/RAW/image hashes/thumbnails to chat/Git/other hosts.
+
+
+## Pre-arm source asset omission discovered and guarded repair
+
+Initial unarmed 98ad08b staging ran camera-free software tests,
+registered an experimental boot/service but did NOT arm the boot,
+reboot SP11 or access a real camera. Independent mandatory pre-arm
+asset check found that install-unarmed.sh had accidentally failed
+to copy the brand-new root validator validate_bt601_live.py, though
+its source was committed and the immutable original run-once.sh
+correctly invokes that file. Arming would have produced a false
+physical FAIL after stream; no such trial has occurred.
+
+The installer and arm preconditions were corrected BEFORE arming,
+and repair-unarmed-validator-asset.sh was separately source-pinned
+with an exact OLD expected HEAD, verified active Golden/no camera,
+no arm/consumption, every old stage SHA, same front/rear ELF and
+runner, then ONLY installed the missing validator, regenerated the
+complete root/private-boot/user-service SHA manifest and advanced
+EXPECTED-HEAD to the new committed source. This is a unique
+UNARMED staging fix, NOT a reused candidate boot or a retroactive
+physical pass. No native camera controls or device modules were
+touched in the pre-arm repair; full physical end-to-end acceptance
+remains to be checked after a deliberately armed one-shot.

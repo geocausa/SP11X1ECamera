@@ -89,6 +89,11 @@ cmp "$H/iq/rear_preview_tone.h" "$R/src/sp11-camera-stack/rgb/iq/rear_preview_to
 cmp "$H/iq/raw10_temporal_spatial.h" "$R/src/sp11-camera-stack/rgb/iq/raw10_temporal_spatial.h"
 cmp "$H/iq/rear_temporal_preview.h" "$R/src/sp11-camera-stack/rgb/iq/rear_temporal_preview.h"
 cmp "$H/iq/front_preview_tone.h" "$R/src/sp11-camera-stack/rgb/iq/front_preview_tone.h"
+cmp "$H/iq/nv12_colorimetry.h" "$R/src/sp11-camera-stack/rgb/iq/nv12_colorimetry.h"
+python3 "$R/src/sp11-camera-stack/rgb/tests/test_nv12_gst_colorimetry.py"
+python3 "$H/test_validate_bt601_live.py"
+grep -Fq '#error E004NA_EXACT_BT601_OUTPUT_METADATA_EXPLICIT_OPTIN_REQUIRED' "$H/front-direct-publisher.c"
+grep -Fq '#error E004NA_EXACT_BT601_OUTPUT_METADATA_EXPLICIT_OPTIN_REQUIRED' "$H/rear-direct-publisher.c"
 grep -Fq "#error E004NA_REFUSE_UNGATED_FRONT_1080_GAIN_TONE" "$H/front-direct-publisher.c"
 grep -Fq "E004NA_FRONT_PREVIEW_TONE frame=" "$H/front-direct-publisher.c"
 grep -Fq "#error E004NA_REAR_4K_TEMPORAL_NEON_EXPLICIT_OPTIN_REQUIRED" "$H/rear-direct-publisher.c"
@@ -200,6 +205,7 @@ sudo -n install -m 0600 "$H/validate_raw10_profile.py" "$D/validate_raw10_profil
 sudo -n install -m 0600 "$H/validate_temporal_raw10.py" "$D/validate_temporal_raw10.py"
 sudo -n install -m 0600 "$H/validate_rear_temporal_live.py" "$D/validate_rear_temporal_live.py"
 sudo -n install -m 0600 "$H/validate_front_tone_live.py" "$D/validate_front_tone_live.py"
+sudo -n install -m 0600 "$H/validate_bt601_live.py" "$D/validate_bt601_live.py"
 sudo -n install -m 0600 "$H/validate_boot_token.py" "$D/validate_boot_token.py"
 # Root-sealed maintained service backend; no source tree imports at runtime.
 # Exact files are committed and then pinned by the candidate asset manifest.
