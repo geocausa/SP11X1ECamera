@@ -1,0 +1,74 @@
+{
+  "automatic_golden_return": true,
+  "candidate_boot_id": "38faf9e3-6f47-4e5b-bc28-f7101df53491",
+  "date": "2026-09-23",
+  "evidence": [
+    "evidence/FRONT-1-FIRST-12-AND-LAST-3-FRAMES.txt",
+    "evidence/FRONT-1-TIMING-AND-GAP-SUMMARY.txt",
+    "evidence/FRONT-2-FIRST-12-AND-LAST-3-FRAMES.txt",
+    "evidence/FRONT-2-TIMING-AND-GAP-SUMMARY.txt",
+    "evidence/IR-STANDBY-READBACK.txt",
+    "evidence/NEUTRAL-AFTER-front-1.txt",
+    "evidence/NEUTRAL-AFTER-rear-1.txt",
+    "evidence/NEUTRAL-BEFORE.txt",
+    "evidence/REAR-1-FIRST-12-AND-LAST-3-FRAMES.txt",
+    "evidence/REAR-1-TIMING-AND-GAP-SUMMARY.txt",
+    "evidence/ROOT-ASSET-VERIFICATION.txt"
+  ],
+  "exact_gap": "front-second-seq3-to-seq4",
+  "front_first": {
+    "bytesused_each": 1228800,
+    "consecutive_sequences": true,
+    "delivered_frames": 900,
+    "largest_steady_gap_us": 36246,
+    "startup_gaps_over_250ms": [],
+    "steady_gaps_over_250ms": 0,
+    "strict_validator": "pass",
+    "timestamp_span_us": 30000971
+  },
+  "front_second": {
+    "bytesused_each": 1228800,
+    "consecutive_sequences": true,
+    "delivered_frames": 900,
+    "largest_steady_gap_us": 36223,
+    "startup_gaps_over_250ms": [
+      {
+        "gap_us": 1001018,
+        "seq_from": 3,
+        "seq_to": 4
+      }
+    ],
+    "steady_gaps_over_250ms": 0,
+    "strict_validator": "failed-startup-cadence",
+    "timestamp_span_us": 30962668
+  },
+  "golden_return_boot_id": "3fe1e5eb-d574-4ac0-8e7e-efaa03bfe3ad",
+  "independent_full_graph_neutral_before_first_and_after_first_two": true,
+  "independent_graph_neutral_after_failed_third_session": "NOT_CHECKED",
+  "ir_illumination_enabled": false,
+  "kernel_ir_standby_readback": "stream=0 illumination=0",
+  "next": "Distinct guarded startup-gap telemetry vs steady-cadence, require neutral after every one of four app processes, preserve strict classification.",
+  "no_camera_nodes_modules_on_golden": true,
+  "no_saved_image_payload_or_quality_validation": true,
+  "no_system_sleep_attempted": true,
+  "one_shot_consumed": true,
+  "physical_test": true,
+  "production_service_not_proven": true,
+  "rear_first": {
+    "bytesused_each": 1228800,
+    "consecutive_sequences": true,
+    "delivered_frames": 900,
+    "largest_steady_gap_us": 36208,
+    "startup_gaps_over_250ms": [],
+    "steady_gaps_over_250ms": 0,
+    "strict_validator": "pass",
+    "timestamp_span_us": 30018414
+  },
+  "rear_second": "NOT_RUN_AFTER_FRONT_SECOND_VALIDATOR_FAILURE",
+  "root_only_device_access": true,
+  "runner_exit_code": 6,
+  "source_commit": "84f469260a9947f27df55ebfa062704c5e085cdc",
+  "status": "FAIL_STRICT_STARTUP_CADENCE_FRONT_REOPEN_1001018US_GAP",
+  "steady_state_895_following_intervals_no_gap_over_250ms": true,
+  "strict_test_failed_due_to_gap_us": 1001018
+}
