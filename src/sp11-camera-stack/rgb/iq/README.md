@@ -35,3 +35,11 @@ camera-free fake-device STREAMOFF/lifecycle tests; no physical camera
 has yet been accessed with this new diagnostic. Only a fresh isolated
 RGB candidate, exact native format guard, IR-off and Golden rollback
 may subsequently exercise it on hardware.
+
+An independent pure integer `nv12_range.h` maps the current provisional
+full-scale 8-bit Bayer-converted Y/UV codes into nominal studio-range
+NV12 with explicit build opt-in. This is NOT optical black-level
+calibration or automatic tone/exposure adjustment. Its exhaustive
+256-value test and separate SP11 synthetic GStreamer appsrc→RGB test
+show the expected range and clipped-near-video-black consumer behavior.
+Existing default publisher binary behavior remains byte-identical.

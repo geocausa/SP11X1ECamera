@@ -30,3 +30,33 @@ flag records sparse in-memory full-precision Bayer channel statistics
 from the SAME captured mmap frame before converter/QBUF, with no RAW
 photo export and no default/Golden activation. `rgb/iq/README.md`
 describes the strictly bounded diagnostics and their limits.
+
+## Camera-free opt-in NV12 studio-range contract
+
+E004mg private baseline PNGs are effectively black (front downsampled
+p99=9, rear=0) despite independent same-boot NV12 app Y p99 27/17.
+The existing RAW-upper8 Bayer converter generates full-range luma code
+values but the NV12 consumer's video-range conversion treats Y near16 as
+black. A SP11-local camera-free synthetic GStreamer test proves NV12
+Y=16 and 17 become RGB=0, Y=27 becomes RGB=11 and Y=39 becomes RGB=25.
+
+`rgb/iq/nv12_range.h` provides a bounded integer full8→nominal
+video-range Y/UV transform (Y16..235, C16..240), wired into both
+maintained front/rear converters ONLY when compiled with
+`-DSP11_RGB_NV12_VIDEO_RANGE=1`. Default builds remain binary-exact
+against the previously accepted E004mg-era copies with this macro
+absent, and the maintained opt-in publisher fake-device lifecycle/STOP
+cases and 256-level numeric-range tests pass. An additional standalone
+SP11-only camera-free GStreamer test lives at
+`rgb/tests/test_nv12_gst_range.py`; it verifies low-level dark values
+survive the synthetic studio-range→RGB round trip, without real camera
+access. No physical live RGB sensor trial has exercised this option.
+
+This corrects an output-range convention only: no calibrated optical
+black reference, supported automatic exposure target, RAW10 bit-depth
+processing, proper colour-space conversion or recognizable image is
+established. In particular, rear native sensor signal remains weak.
+Any physical assessment requires a completely FRESH single-use,
+source-pinned, IR-off and Golden-reversible camera candidate; NEVER
+rearm the consumed E004mg identity or silently enable this mode for
+normal/Golden builds.

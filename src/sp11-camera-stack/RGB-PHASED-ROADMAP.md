@@ -121,6 +121,12 @@ is established. Both photos are private and not committed/exported.
 E004mg consumed/retired, Golden recovered. Prioritize source black
 reference and supported exposure control, then opt-in offline-verified
 tone mapping and a fresh guarded controlled-light recognizability gate.
+A source-only optional NV12 nominal video-range output mapping has since
+passed SP11 synthetic GStreamer dark-value round-trip and exhaustive
+integer/opt-in publisher fake-device tests; without the flag, front/rear
+converter ELFs remain byte-identical to their E004mg-era equivalents.
+It has NOT been physically tested and does not compensate for the dark
+rear native RAW sensor or establish colour/black/exposure calibration.
 
 ## Software RGB service integration in progress (2026-09-23)
 

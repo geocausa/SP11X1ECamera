@@ -24,6 +24,10 @@ for camera in front rear; do
  grep -Fq "SP11_RGB_RAW10_PROFILE camera=$camera frame=1 blocks=" "$T/profile-fake-$camera.log"
  grep -Fq "E004KQ_FAKE_DEVICE_TESTS=PASS" "$T/profile-fake-$camera.log"
  echo "RGB_${camera^^}_FAKE_MMAP_RAW10_PROFILE=PASS CAMERA_HARDWARE=NONE"
+ gcc "${F[@]}" -DSP11_RGB_NV12_VIDEO_RANGE=1 "$T/source/tests/test_$camera.c" -Wl,--wrap=fopen,--wrap=geteuid,--wrap=open,--wrap=fstat,--wrap=close,--wrap=mmap,--wrap=munmap,--wrap=poll,--wrap=write,--wrap=ioctl -o "$T/studio-fake-$camera"
+ "$T/studio-fake-$camera" > "$T/studio-fake-$camera.log" 2>&1
+ grep -Fq "E004KQ_FAKE_DEVICE_TESTS=PASS" "$T/studio-fake-$camera.log"
+ echo "RGB_${camera^^}_FAKE_STUDIO_RANGE_LIFECYCLE=PASS CAMERA_HARDWARE=NONE"
  cat > "$T/source/tests/default.c" <<EOF
 #define E004KQ_NO_MAIN
 #include "../$camera-direct-publisher.c"
@@ -41,5 +45,7 @@ done
 gcc "${F[@]}" "$T/source/iq/tests/test_raw10_unpack.c" -o "$T/raw10-unpack-test"
 gcc "${F[@]}" "$T/source/iq/tests/test_raw10_profile.c" -o "$T/raw10-profile-test"
 "$T/raw10-profile-test"
+gcc "${F[@]}" "$T/source/iq/tests/test_nv12_range.c" -o "$T/nv12-range-test"
+"$T/nv12-range-test"
 "$T/raw10-unpack-test"
 echo RGB_STANDALONE_SOURCE_TESTS=PASS DEFAULT_CONTINUOUS=DENIED

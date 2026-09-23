@@ -7,6 +7,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include <errno.h>
 #include <stdint.h>
+#include "iq/nv12_range.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +37,23 @@ static unsigned char *nv12;
  * Even crop origins are mandatory for the GRBG parity assumptions.
  */
 static unsigned char clip(int v);
+/* Default release keeps its previous numeric output bit-for-bit;
+ * only an isolated fresh guarded trial may explicitly request studio-range
+ * encoding. No auto exposure or sensor/IR control is introduced here. */
+static unsigned char sp11_rgb_output_y(int full) {
+#if defined(SP11_RGB_NV12_VIDEO_RANGE) && SP11_RGB_NV12_VIDEO_RANGE
+    return sp11_rgb_y_to_video(clip(full));
+#else
+    return clip(full);
+#endif
+}
+static unsigned char sp11_rgb_output_uv(int full) {
+#if defined(SP11_RGB_NV12_VIDEO_RANGE) && SP11_RGB_NV12_VIDEO_RANGE
+    return sp11_rgb_uv_to_video(clip(full));
+#else
+    return clip(full);
+#endif
+}
 static int byte_offset[SRC_W];
 static void plan_offsets(void) {
     for (int x=0;x<SRC_W;x++)
@@ -70,15 +88,15 @@ static void convert(void) {
             const int r10=avg4(em,e1,qm,q1);
             const int g10=avg4(pm,p1,e0,q0), b10=p0;
             const int r11=avg2(e1,q1), g11=p1, b11=avg2(p0,p2);
-            y0[ox]=clip((77*r00+150*g00+29*b00+128)>>8);
-            y0[ox+1]=clip((77*r01+150*g01+29*b01+128)>>8);
-            y1[ox]=clip((77*r10+150*g10+29*b10+128)>>8);
-            y1[ox+1]=clip((77*r11+150*g11+29*b11+128)>>8);
+            y0[ox]=sp11_rgb_output_y((77*r00+150*g00+29*b00+128)>>8);
+            y0[ox+1]=sp11_rgb_output_y((77*r01+150*g01+29*b01+128)>>8);
+            y1[ox]=sp11_rgb_output_y((77*r10+150*g10+29*b10+128)>>8);
+            y1[ox+1]=sp11_rgb_output_y((77*r11+150*g11+29*b11+128)>>8);
             const int rr=(r00+r01+r10+r11+2)/4;
             const int gg=(g00+g01+g10+g11+2)/4;
             const int bb=(b00+b01+b10+b11+2)/4;
-            uvrow[ox]=clip(128+((-43*rr-85*gg+128*bb+128)>>8));
-            uvrow[ox+1]=clip(128+((128*rr-107*gg-21*bb+128)>>8));
+            uvrow[ox]=sp11_rgb_output_uv(128+((-43*rr-85*gg+128*bb+128)>>8));
+            uvrow[ox+1]=sp11_rgb_output_uv(128+((128*rr-107*gg-21*bb+128)>>8));
         }
     }
 }

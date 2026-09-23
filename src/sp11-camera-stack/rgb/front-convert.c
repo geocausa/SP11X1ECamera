@@ -7,6 +7,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include <errno.h>
 #include <stdint.h>
+#include "iq/nv12_range.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +22,23 @@ enum {
 static unsigned char *raw,*nv12;
 static int mipi_high_index[SRC_W];
 static unsigned char clip(int x) { return (unsigned char)(x<0?0:x>255?255:x); }
+/* Default release keeps its previous numeric output bit-for-bit;
+ * only an isolated fresh guarded trial may explicitly request studio-range
+ * encoding. No auto exposure or sensor/IR control is introduced here. */
+static unsigned char sp11_rgb_output_y(int full) {
+#if defined(SP11_RGB_NV12_VIDEO_RANGE) && SP11_RGB_NV12_VIDEO_RANGE
+    return sp11_rgb_y_to_video(clip(full));
+#else
+    return clip(full);
+#endif
+}
+static unsigned char sp11_rgb_output_uv(int full) {
+#if defined(SP11_RGB_NV12_VIDEO_RANGE) && SP11_RGB_NV12_VIDEO_RANGE
+    return sp11_rgb_uv_to_video(clip(full));
+#else
+    return clip(full);
+#endif
+}
 static int read_exact(int fd,unsigned char *p,size_t n) {
     while(n) {
         ssize_t k=read(fd,p,n);
@@ -63,7 +81,7 @@ static void convert(void) {
             const int green=(top[mipi_high_index[px+1]]+
                 bottom[mipi_high_index[px]]+1)/2;
             const int blue=bottom[mipi_high_index[px+1]];
-            y[yrow+ox]=clip((77*red+150*green+29*blue+128)>>8);
+            y[yrow+ox]=sp11_rgb_output_y((77*red+150*green+29*blue+128)>>8);
             /* One fully populated UV pair after a 2x2 output tile. */
             if((oy&1)==0 && (ox&1)==0) {
                 int reds=0,greens=0,blues=0;
@@ -79,8 +97,8 @@ static void convert(void) {
                     }
                 }
                 const int r=(reds+2)/4,g=(greens+2)/4,b=(blues+2)/4;
-                uv[uvrow+ox]=clip(128+((-43*r-85*g+128*b+128)>>8));
-                uv[uvrow+ox+1]=clip(128+((128*r-107*g-21*b+128)>>8));
+                uv[uvrow+ox]=sp11_rgb_output_uv(128+((-43*r-85*g+128*b+128)>>8));
+                uv[uvrow+ox+1]=sp11_rgb_output_uv(128+((128*r-107*g-21*b+128)>>8));
             }
         }
     }
