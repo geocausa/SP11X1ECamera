@@ -110,11 +110,15 @@ rgb_device_backend.py,candidate_owner.py,candidate_driver.py}.
 35 camera-free injected-failure tests pass. This joins the exclusive
 RGBSession with the exact Media Controller route policy, pinned
 root-only candidate owner, live source-format configuration and
-verified publisher stop contract at SOURCE level. The backend still
-needs a distinct fresh guarded physical one-shot validation, followed
-by a genuinely opt-in normal-use camera service and controlled-lit
-image-quality acceptance. Do not count tests on a fake graph as
-real hardware integration, nor an opt-in one-shot as a daily service.
+verified publisher stop contract. Fresh distinct E004lz physically
+validated this maintained controller against both actual cameras at
+front1080p/rear4K, uid1000 first/reopen/kill/recovery app sessions,
+stop143/STREAMOFF and full graph neutrality. E004lz was consumed,
+retired and Golden returned. This proves bounded real hardware
+integration, NOT a default or genuinely opt-in enduring normal-use
+service; controlled-lit image quality and general-client/long-run
+reliability still require acceptance. Do not count an opt-in one-shot
+as a daily service.
 
 ## Decision gate — when software RGB acceptance passes
 

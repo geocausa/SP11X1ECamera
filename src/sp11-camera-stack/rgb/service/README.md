@@ -24,11 +24,16 @@ New maintained Linux integration sources:
   return to Golden on error or success.
 
 35 offline mock-controller, exact graph-write, device-format, root
-operation allowlist and stop-proof tests pass. This code has NOT yet
-been exercised together against actual SP11 hardware and must not
-be described as a deployed permanent selectable camera service.
-The previous physical E004ly trial used the older independent
-scripted route transitions, not these joined backend modules.
+operation allowlist and stop-proof tests pass. **E004lz** subsequently
+physically exercised these joined components on both real RGB cameras
+(front 1080p and rear 4K) with three ordinary-user normal app opens,
+intentional app kill and recovery, planned 143/STREAMOFF and complete
+neutral media graph. See its RESULT/CONSUMED/evidence. This confirms
+bounded hardware integration, NOT a deployed permanent selectable
+camera service, long-run reliability or acceptable calibrated image
+quality. Both test scenes sampled near-black. The previous E004ly
+trial proved longer ~115s per camera but used older scripted route
+transitions.
 
 Service invariants implemented by the policy:
 

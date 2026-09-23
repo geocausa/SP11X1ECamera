@@ -45,6 +45,25 @@ E004kp subsequently removed the rear RAW/NV12 pipes and separate publisher, usin
 
 E004km delivered1800 complete distinct front1080p and rear4K frames to independent standard V4L2/GStreamer applications in sequential sessions. Source2400frames each had no sequence gaps. Front app26.9873fps and rear app13.7766fps are observed over different source/app windows, not30fps parity. Both sampled scenes were dark; no calibrated scene comparison exists. The front path is a separate pRAA RAW10 software proxy, not a QC10C decoder or Windows ISP replacement. E004km is consumed, retired and returned to Golden. Historical hardware/IQ-control claims below do not establish end-to-end image quality.
 
+## E004lz maintained physical RGBSession integration (2026-09-23)
+
+New distinct safeguarded one-shot physically PASSED the MAINTAINED
+RGBSession + exact 119-link Media Controller and ordinary source
+publisher backends. Front1080p 448 and rear4K 446 full contiguous
+software RAW→NV12 source/app-compatible frames, 0 source sequence
+gaps. Both ordinary uid1000 endpoints completed three separate
+120-frame normal app processes and an intentional client kill
+followed by recovery under the SAME source publisher invocation.
+Stop143/STREAMOFF, complete real neutral→front→neutral→rear→neutral
+graph, lease and independent FD release passed. Golden returned and
+E004lz boot/services/assets retired, consumed and documented in
+e004lz RESULT/CONSUMED/evidence. It was FINITE ~15s per camera,
+not a persistent/daily-user service or unlimited-client proof.
+Both sampled images remained near-black meanY≈16, meaning real
+controlled-lit exposure, image quality and Windows ISP parity are
+still UNPROVEN. E004ly independently proved ~115s per camera with
+the prior separate scripted route rather than this new controller.
+
 ## E004ly guarded high-resolution software publisher trial (2026-09-23)
 
 Independent fresh one-shot real hardware front1080p and rear4K

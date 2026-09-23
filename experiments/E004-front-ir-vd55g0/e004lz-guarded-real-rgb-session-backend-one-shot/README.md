@@ -27,3 +27,7 @@ Prepare hardware and software test assets offline, commit and push all
 candidate scripts, run overlap/hygiene and independent rollback guards,
 then install unarmed and arm at MOST ONCE. On return inspect RESULT,
 CONSUMED and retire the private candidate boot/services/assets.
+
+## Final result (2026-09-23)
+
+**PASS, CONSUMED, RETIRED.** Fresh candidate boot 64698955-b3ab-4c96-85aa-7f4abf2c885f proved actual maintained RGBSession and the real device/route/controller-owner adapters against front1080p and rear4K, sequentially. Front448/rear446 real optical source frames, no source-sequence gaps, ordinary uid1000 first/reopen/kill/recovery, same publisher invocation, verified stop143/STREAMOFF and complete native graph neutral before, between and after. Both optical scenes sampled nearly black (mean Y≈16), so image quality/3A/Windows pixel parity remain unresolved. Golden returned with original saved default, assets retired and E004lz may NEVER be rearmed. RESULT.json, CONSUMED.json and evidence/ are authoritative. Not a persistent opt-in service or long-duration stress proof.
