@@ -1,15 +1,57 @@
-# SP11 RGB cameras — software-first plan and optional hardware ISP
+# SP11 RGB cameras — user-selected native Qualcomm ISP / Windows OEM path
 
-Decision: 2026-09-23. Current scope: front IMX681 and rear OV13858
-visible-light RGB cameras. Finish and validate the Linux
-software-processing RGB stack FIRST, then show the user actual results
-and decide TOGETHER whether to pursue the Qualcomm hardware-ISP
-path to seek Windows-like image quality. Do not silently turn hardware
-ISP parity into a requirement for the first usable RGB release.
-Preserve the substantial existing Qualcomm ISP/QC10C/derived IQ work
-for that later decision. Protected IR/Windows Hello is separately
-deferred and is NOT an RGB-only release blocker. IR illumination
-remains prohibited.
+LATEST DECISION (2026-09-23 ~19:36 BST): User explicitly chose
+the SECOND originally optional track: work toward FRONT+REAR
+native Qualcomm hardware ISP with SAME physical SP11 Windows
+OEM camera stack/tuning as the oracle, prioritizing image
+detail, exposure, blue/colour and quality over more cosmetic
+CPU software-Bayer experiments. The earlier SOFTWARE-FIRST
+proposal is superseded as a PRIORITY, not erased as evidence.
+Last complete E004ne RGB 1080p/4K software path remains an
+opt-in safe fallback; no native processed ISP first frame,
+OEM Windows optical parity or ordinary native-ISP service
+has yet been independently proven. E004ng/E004nh original
+full trial failures and SP7 lower LCD fault still apply.
+Protected IR/Hello is separately deferred, IR remains OFF
+and Linux OS system suspend/hibernate remains prohibited.
+Never load Windows kernel .sys or user .dll as Linux native
+camera code, distribute proprietary OEM tuning/firmware or
+enable an unverified Windows camera firmware loader.
+
+Exact Windows ISP/rear MSHW0491 device-package audit and
+next bounded Windows oracle/portable Linux engineering gates:
+experiments/E004-front-ir-vd55g0/e004ni-native-isp-windows-rear-oracle-source-audit/README.md.
+Existing extensive E003h front Windows CamX IQ/RT-CDM VFE1
+and 007x live state are valuable inputs; do NOT treat
+front-specific sensor mode, LSC or PIX transport as
+proven rear OV13858 readiness. The Linux front and rear
+RAW10 software-to-NV12 results proved image transport
+and cadence but NOT an OEM-like hardware ISP image.
+
+## Historical software-first plan (superseded as active priority;
+## retain its measured fallback acceptance requirements)
+
+
+### 2026-09-23 source-only OEM rear ISP audit — active next route
+
+The SAME SP11 Windows DriverStore was mounted private READ-ONLY
+and unmounted after inspecting EXACT selected sensor extension,
+platform, ISP firmware, AVStream DeviceMFT and MSHW0491 tuning.
+The selected OV13858 rear tuning and sensor module hashes match
+older Windows live driver inventory. Full details including
+MSHW0491 vs unrelated MSHW0561 variant, default/multiframe
+photo settings, CamX module ownership and Linux first processed
+frame blockers are in E004ni/README.md. This does NOT mean
+OEM tuning can run on Linux or that the Windows driver has
+been ported. Qualcomm's 2026 upstream CAMSS Offline Processing
+Engine series targets Agatti/Shikra, NOT proven X1E-compatible;
+do not confuse it with our Spectra/VFE native route.
+Next run a fresh bounded SAME-device Windows REAR 4K/video
+vs actual high-quality STILL oracle, verify selected tuning
+and actual per-frame ISP stage/metadata, then safely port
+the independently understood Linux native ISP boundary
+behind Golden-preserving one-shot gates. Keep the known
+SP7 lower-panel LCD fault out of controlled colour data.
 
 ## Planning snapshots — NOT objective completion metrics
 

@@ -6,18 +6,31 @@ This file is the durable working agreement for assistants/agents operating this 
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
 
-## RGB-only product priority (user decision, 2026-09-23)
+## RGB product priority (latest user decision, 2026-09-23 ~19:36 BST)
 
-Read src/sp11-camera-stack/RGB-PHASED-ROADMAP.md before resuming.
-FIRST finish and validate the usable native Linux software-processing
-front1080p/rear4K RGB app-facing stack. At its acceptance gate,
-present real performance/image-quality results and ASK whether to
-pursue the separately optional native Qualcomm hardware-ISP path
-for Windows-like image quality; the user has NOT yet selected
-that second phase. Preserve the existing native-ISP research but
-do not make its completion block RGB-only usability. Protected
-IR/Hello is separately deferred; all IR-off, Golden and no-OS-system-
-sleep guards remain mandatory.
+User EXPLICITLY selected the previously optional SECOND route:
+resume native Qualcomm Spectra hardware ISP / SAME SP11 Windows
+OEM camera stack as the engineering oracle to seek improved real
+front1080/rear4K image detail, color and brightness. This decision
+SUPERSEDES the earlier software-FIRST / ask-before-ISP wording
+below. The proven opt-in Linux RAW10-to-NV12 software camera
+(E004ne last complete original acceptance) is RETAINED as a
+fallback and for safe baseline comparison, not silently promoted
+to final Windows-parity production. Native PIX/ISP hardware
+processed video is NOT yet proven for front OR rear; older front
+Windows/VFE1/QC10C materializer work is source/reference, NOT
+a verified rear service. First read source-only audit:
+experiments/E004-front-ir-vd55g0/e004ni-native-isp-windows-rear-oracle-source-audit/README.md.
+The installed MSHW0491 rear OV13858 selects its OWN Windows
+sensor module and tuning; do not confuse with MSHW0561 or front
+IMX681 package, nor try to run Windows PE .sys/.dll as Linux
+drivers. Windows binaries/firmware, optical photos/pixels/RAW/
+thumbs/image hashes never enter Git/chat/other hosts.
+All existing Golden one-shot source-pin, >=29fps each actual
+gain window, complete native neutral, IR OFF and NO Linux
+OS-level sleep rules remain mandatory. Do not enable a default
+native ISP or flash unverified Windows firmware.
+
 
 ## Resume behaviour
 
