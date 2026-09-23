@@ -88,7 +88,7 @@ python3 "$R/tools/camera-validator-contract.py" --runner "$H/run-once.sh" --vali
 python3 "$H/validate_boot_token.py" --candidate e004mt --front-source "$H/front-direct-publisher.c" --rear-source "$H/rear-direct-publisher.c" --front-elf "$SOURCE/front-direct-publisher" --rear-elf "$SOURCE/rear-direct-publisher"
 for camera in front rear; do
  case "$camera" in front) TEST_DEFINE=-DSP11_TOKEN_CHECK_FRONT=1;;rear) TEST_DEFINE=-DSP11_TOKEN_CHECK_REAR=1;; esac
- gcc -O3 -std=c11 -Wall -Wextra -Werror -pedantic "$TEST_DEFINE" "$H/test_exact_boot_token.c" -o "$SOURCE/$camera-token-test"
+ gcc -O3 -std=c11 -Wall -Wextra -Werror -pedantic "$TEST_DEFINE" "$H/test_exact_boot_token.c" -o "$SOURCE/$camera-token-test" -lm
  "$SOURCE/$camera-token-test" | grep -Fqx 'E004MT_EXACT_BOOT_TOKEN_COMPILED_AND_CHECKED=PASS NO_CAMERA_ACCESS'
 done
 # Stage exclusively root-private; no experimental binary is installed into Golden.

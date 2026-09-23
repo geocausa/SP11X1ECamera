@@ -26,6 +26,9 @@
 #include <limits.h>
 #include <stdbool.h>
 #include "raw-nv12-probe.h"
+#if !defined(SP11_CAMERA_ALLOW_RAW_PROFILE) || !SP11_CAMERA_ALLOW_RAW_PROFILE
+#error E004MT_REAR_TEMPORAL_REQUIRES_FULL10_RAW_PROFILE
+#endif
 #if defined(SP11_CAMERA_ALLOW_RAW_PROFILE) && SP11_CAMERA_ALLOW_RAW_PROFILE
 #include "iq/raw10_profile.h"
 #if !defined(SP11_CAMERA_ALLOW_TEMPORAL_RAW10) || !SP11_CAMERA_ALLOW_TEMPORAL_RAW10

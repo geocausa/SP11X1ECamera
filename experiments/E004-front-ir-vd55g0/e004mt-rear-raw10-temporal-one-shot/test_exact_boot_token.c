@@ -11,6 +11,7 @@
  * The normal build and front test remain explicitly tone disabled. */
 #define SP11_RGB_REAR_PREVIEW_TONE 1
 #define SP11_CAMERA_ALLOW_TEMPORAL_RAW10 1
+#define SP11_CAMERA_ALLOW_RAW_PROFILE 1
 #include "rear-direct-publisher.c"
 #else
 #error BOOT_TOKEN_TEST_CAMERA_MISSING
