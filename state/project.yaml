@@ -6,17 +6,24 @@ machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E004nh-optin_BGGR_upper60_RGB_chart_excludes_SP7_faulty_lower_LCD_original_front_gain_28fps_FAIL_auto_Golden_E004ne_last_full_pass
 phase: native-qualcomm-hardware-isp-windows-oem-rgb-image-quality-priority
 latest_native_isp_source_gate:
-  identity: E004nk
-  status: PASS_SOURCE_ONLY_REAR_PIX_BOUNDARY_NOT_HARDWARE_PROVEN
+  identity: E004nl
+  status: PASS_SOURCE_ONLY_REAR_IDENTITY_ROUTE_CFA_GUARD_NO_HARDWARE_FRAME
   rear_existing_raw_route: csiphy1_csid0_vfe0_rdi0
   rear_pix_entity_archived_not_live_proven: msm_vfe0_pix_to_msm_vfe0_video3
   rear_source_format_proven: 4076x2806_SGRBG10_CSI2P
+  front_proven_input_format: 3840x2160_SRGGB10
+  front_proven_qc10c_output_format: 2560x1440_stride3584
   actual_front_native_pix_proven: true
   actual_rear_native_pix_4k_proven: false
-  source_blocker: csid_ipp_and_vfe_bus_contract_front_only_requires_independent_rear_mode
+  source_blocker: independent_rear_csid_ipp_vfe0_bus_camss_orchestrator_IQ_RTCDM_output_required
+  hypothetical_center_crop_bayer_only_not_selected: 118x323_changes_GRBG_to_BGGR
+  c_source_only_assertions_normal_and_sanitized: 25
   windows_oem_parity_or_everyday_service_proven: false
   hardware_or_firmware_mutation_this_gate: false
   preserved_protected_Golden: true
+  evidence: experiments/E004-front-ir-vd55g0/e004nl-rear-pix-route-contract/RESULT.json
+prior_native_isp_source_gate:
+  identity: E004nk
   evidence: experiments/E004-front-ir-vd55g0/e004nk-rear-vfe0-pix-source-preflight/RESULT.json
 prior_failed_optin_rear_tone_attempt:
   identity: E004mr
