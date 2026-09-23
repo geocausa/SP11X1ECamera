@@ -24,3 +24,9 @@ for offline analysis under `iq/raw10_unpack.h`; its synthetic-row regression
 runs with `tests/test.sh`. It is NOT installed into the accepted live
 RAW→NV12 converter, which still discards those bits, and is NOT by itself
 evidence of visible scene detail, calibrated black level or ISP parity.
+
+A further source-only optional `SP11_CAMERA_ALLOW_RAW_PROFILE=1` compile
+flag records sparse in-memory full-precision Bayer channel statistics
+from the SAME captured mmap frame before converter/QBUF, with no RAW
+photo export and no default/Golden activation. `rgb/iq/README.md`
+describes the strictly bounded diagnostics and their limits.

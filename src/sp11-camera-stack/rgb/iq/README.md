@@ -14,3 +14,24 @@ source-pinned, bounded in-memory per-channel source/black-level and
 RAW-to-NV12 analysis; do not infer black level, lens occlusion or colour
 accuracy from upper-8-bit percentiles alone. No existing Golden or
 one-shot live publisher is modified by this offline component.
+
+`raw10_profile.h` adds an in-memory, per-channel (R/G0/G1/B) exact
+10-bit histogram, p01/p50/p95/p99, min/max and low-two-bit frequency
+sampler for strictly specified native front RGGB3840x2160/4800-stride
+and rear GRBG4076x2806/5104-stride frames. It fails closed on unexpected
+sensor format, short payload, unknown Bayer phase or unbounded sampling.
+Its returned histograms are memory-only: a future camera candidate may
+persist a few channel percentiles and bit counts, not image pixels or a
+spatial mosaic. These are raw code values, NOT calibrated optical black,
+measured lux, recognizable detail, proper white balance or inferred AE.
+
+The maintained direct publishers optionally emit these scalars for
+source frames 1/30/90/180/600/630 before requeue via an explicitly
+source-pinned `-DSP11_CAMERA_ALLOW_RAW_PROFILE=1` build. Normal builds
+compile the instrumentation OUT and still deny real capture unless an
+independent fresh one-shot boot token is embedded and verified. The
+existing RAW8→NV12 output bytes are NOT changed. Both modes have passed
+camera-free fake-device STREAMOFF/lifecycle tests; no physical camera
+has yet been accessed with this new diagnostic. Only a fresh isolated
+RGB candidate, exact native format guard, IR-off and Golden rollback
+may subsequently exercise it on hardware.

@@ -15,6 +15,34 @@
 #include <signal.h>
 #include <limits.h>
 #include <stdbool.h>
+#if defined(SP11_CAMERA_ALLOW_RAW_PROFILE) && SP11_CAMERA_ALLOW_RAW_PROFILE
+#include "iq/raw10_profile.h"
+/* Isolated opt-in new-candidate in-memory sensor diagnostics; no frames or
+ * spatial pixel positions are exported and normal builds compile it out. */
+static int profile_source_raw10(const uint8_t *pixels,long frame_number) {
+    struct sp11_raw10_profile statistics;
+    if (sp11_raw10_profile_frame(pixels,SRC_BYTES,SRC_STRIDE,SRC_W,SRC_H,
+                SP11_RGB_RGGB,16u,&statistics)) return -1;
+    static const char *names[4]={"R","G0","G1","B"};
+    fprintf(stderr,"SP11_RGB_RAW10_PROFILE camera=front frame=%ld blocks=%zu",
+            frame_number,statistics.sampled_bayer_blocks);
+    for (unsigned k=0;k<4;k++) {
+        const struct sp11_raw10_channel *v=&statistics.channel[k];
+        fprintf(stderr," %s_p01=%u %s_p50=%u %s_p95=%u %s_p99=%u"
+                       " %s_min=%u %s_max=%u %s_lsb0=%llu %s_lsb1=%llu"
+                       " %s_lsb2=%llu %s_lsb3=%llu",
+                names[k],(unsigned)v->p01,names[k],(unsigned)v->p50,
+                names[k],(unsigned)v->p95,names[k],(unsigned)v->p99,
+                names[k],(unsigned)v->lowest,names[k],(unsigned)v->highest,
+                names[k],(unsigned long long)v->low_two_bits[0],
+                names[k],(unsigned long long)v->low_two_bits[1],
+                names[k],(unsigned long long)v->low_two_bits[2],
+                names[k],(unsigned long long)v->low_two_bits[3]);
+    }
+    fputc('\n',stderr);
+    return 0;
+}
+#endif
 static volatile sig_atomic_t stopping;
 static void stop_requested(int sig) { (void)sig; stopping=1; }
 static int xioctl(int fd,unsigned long op,void *arg) {
@@ -150,7 +178,17 @@ int front_publisher_main(int argc,char **argv) {
         if(!completed) { first_seq=b.sequence; first_ts=stamp; }
         else gaps+=b.sequence-last_seq-1;
         last_seq=b.sequence;last_ts=stamp;captured++;
-        raw=maps[b.index];double t=wall_ms();convert();conversion+=wall_ms()-t;
+        raw=maps[b.index];
+#if defined(SP11_CAMERA_ALLOW_RAW_PROFILE) && SP11_CAMERA_ALLOW_RAW_PROFILE
+        /* Exactly the source mmap buffer that will be converted, before QBUF.
+         * Sparse full-precision per-Bayer-channel statistics are opt-in only.
+         * No derived exposure or black-level value is applied to the live image. */
+        if (captured==1 || captured==30 || captured==90 || captured==180 ||
+            captured==600 || captured==630) {
+            if (profile_source_raw10(raw,captured)) goto cleanup;
+        }
+#endif
+        double t=wall_ms();convert();conversion+=wall_ms()-t;
         /* Release the physical buffer as soon as conversion ends. */
         if(xioctl(src,VIDIOC_QBUF,&b)) goto cleanup;
         t=wall_ms();

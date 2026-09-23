@@ -98,6 +98,14 @@ statistics before any auto-exposure or tone-curve claim; neither
 this offline primitive nor E004md gain-response numbers establish
 recognizable images.
 
+The maintained direct publishers now contain a default-disabled
+`SP11_CAMERA_ALLOW_RAW_PROFILE` diagnostic for sparse same-frame full
+10-bit R/G0/G1/B source statistics. Both front/rear fake-device lifecycle
+suites and synthetic native full-frame packing tests pass. This has NOT
+been physically accepted; only an entirely fresh one-shot boot can
+measure real sensor data. A raw code histogram alone cannot prove
+recognizable scene detail or optical black-level calibration.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:
