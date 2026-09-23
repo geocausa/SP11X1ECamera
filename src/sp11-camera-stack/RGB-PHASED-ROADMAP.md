@@ -209,3 +209,7 @@ Evidence:
 - src/front-imx681/userspace/iq/README.md
 - src/sp11-camera-stack/rgb-desktop-output-contract.json
 - src/sp11-camera-stack/READINESS.md
+
+### 2026-09-23 E004mf visible-light measurement (consumed)
+
+Normal front1080 and rear4K UID1000 application sessions, RAW10 full-bit per-channel scalar and same-frame RAW8/NV12 profile passed. Morning baseline/gain Y p99 front27/59, rear17/25; rear baseline RAW10 green p99 ~70 is clustered near ~16–18 upper8, front green p99 ~119. E004mf Golden returned and assets retired. No image pixels retained, so recognizable scene, calibrated black, colour or Windows IQ parity remain unproven; next attempts must use a new unique guarded identity and never activate IR or Linux OS sleep.
