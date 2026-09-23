@@ -7,6 +7,9 @@
 #if defined(SP11_TOKEN_CHECK_FRONT)
 #include "front-direct-publisher.c"
 #elif defined(SP11_TOKEN_CHECK_REAR)
+/* Source-only token test must satisfy the exact opt-in rear compile guard.
+ * The normal build and front test remain explicitly tone disabled. */
+#define SP11_RGB_REAR_PREVIEW_TONE 1
 #include "rear-direct-publisher.c"
 #else
 #error BOOT_TOKEN_TEST_CAMERA_MISSING
