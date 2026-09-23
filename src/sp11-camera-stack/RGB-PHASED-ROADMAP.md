@@ -237,6 +237,31 @@ verification. Do not run another uncontrolled dark-corner gain trial
 or silently change FPS/IR/Golden/Linux OS-level sleep. See
 `src/sp11-camera-stack/rgb/iq/FIXED-TARGET-ACCEPTANCE.md`.
 
+## E004wp fresh Windows oracle: rear receives ample rendered luminance
+
+At 11:58 BST a **new** one-shot SP11 Windows Color VideoRecord NV12
+oracle sampled eight 4K rear frames: Y mean149.15–150.41, P01 118–119,
+P99 169–171, zero samples below64; 8x8 tile-mean Y std11.46–12.06
+and horizontal64px/vertical32px mean absolute Y changes~3.3. The
+front1080 mean Y124.87–125.19. WinRT RGB ExposureControl.Auto=true
+for both; nominal ticks5000 is not verified equivalent to native
+Linux sensor-register exposure. This independently reinforces fresh
+E004wn Windows rear mean Y~148 at 11:16 BST, so Windows can render
+the current corner *brightly*, with nonzero spatial contrast. It
+cannot alone establish recognizable objects or sensor RAW scene SNR.
+A 960x540 rear luma-derived grayscale PNG remains strictly LOCAL on
+SP11 Windows user-private Documents E004wp folder (Geoca/SYSTEM/
+Administrators ACL), NEVER exported/hash committed; user can inspect
+it locally to confirm scene geometry. No Windows vs Linux same-time,
+identical exposure/light/metrics experiment was achieved.
+
+E004wp unique Windows identity was consumed, single-use task retired,
+auto-return to protected Golden Linux verified at boot
+`fe4bcab8-a209-4466-819e-0ce7fbeabc03`. No camera processes,
+IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
+quality test still requires a fixed visible scene and dark reference;
+not another uncontrolled rear corner gain run.
+
 ## Software RGB service integration in progress (2026-09-23)
 
 Maintained source:
