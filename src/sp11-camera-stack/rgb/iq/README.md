@@ -96,3 +96,30 @@ lighting can contaminate either statistic. Never infer image quality,
 calibrated black/SNR or approve gain/AE/tone mapping from these values
 alone. The front/rear synthetic zero-noise, fixed-pattern, checker-jitter
 and fail-closed geometry tests run camera-free with `rgb/tests/test.sh`.
+
+## Read-only exploratory rear NV12 preview-tone curve (E004mr)
+
+`rear_preview_tone.h` is a **pure in-memory, opt-in** bounded 4K rear
+NV12 VIDEO-RANGE Y-only candidate. The maintained release and protected
+Golden camera have NO tone integration and NO extra camera authorization.
+Only an independent NEW source-pinned one-shot may opt in. For a
+verified 3840x2160 full NV12 buffer, a sparse p01/p50/p99 Y histogram
+requires input p01 in20..50, p99<=65, and p99-p01>=8. Nearly uniform
+unilluminated/baseline and already bright scenes are passed through
+unchanged. When enabled, output Y = clamp(125 + 3.5*(inputY-p01),16,235),
+while preserving every UV/chroma byte and the full original RAW source.
+This exploratory display mapping does NOT set native sensor exposure,
+change gain/FPS/IR, infer black, prove scene detail/colour, or implement
+OEM Windows ISP/AE. The y=125 anchor and slope3.5 are display heuristics
+for the observed E004mp rear gain sample (app p01≈33, p99≈48), NOT
+physical measurements of light or calibrated black. A positive pixel
+spread may be fixed-pattern noise and should NEVER be accepted as
+recognized scene.
+
+Synthetic front-safe/dark-flat/bright-scene/refused-geometry/gated-gain
+video-range and UV-preservation tests run camera-free as part of
+`rgb/tests/test.sh`. E004mr additionally source-locks an isolated rear
+only build using explicit SP11_RGB_NV12_VIDEO_RANGE=1 AND
+SP11_RGB_REAR_PREVIEW_TONE=1 with an exact NEW boot token. The default
+maintained converter is unchanged. Any actual optical PNGs stay local
+SP11, not Git/chat/another device.

@@ -79,3 +79,12 @@ source-locked fixed-target trial. Its scalar spatial correlation can
 indicate repeatability but CANNOT distinguish a real scene from stable
 sensor fixed-pattern noise without a separate dark reference. No
 new camera frames, image files or control writes were made to test it.
+
+Experimental rear-only dark-scene display rendering exists as a
+**default-OFF**, pure in-memory NV12 Y mapping helper in
+`iq/rear_preview_tone.h` with strict dark/flat/bright source guard and
+camera-free tests. It is not a production ISP, does not manipulate
+sensor/IR/exposure/FPS and is NOT integrated into normal publishers.
+A separately source-pinned E004mr one-shot may measure its isolated
+rendering with an unchanged supported native gain profile and Golden
+auto-return. See `iq/README.md` for limitations and refusal gates.
