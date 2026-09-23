@@ -213,3 +213,7 @@ Evidence:
 ### 2026-09-23 E004mf visible-light measurement (consumed)
 
 Normal front1080 and rear4K UID1000 application sessions, RAW10 full-bit per-channel scalar and same-frame RAW8/NV12 profile passed. Morning baseline/gain Y p99 front27/59, rear17/25; rear baseline RAW10 green p99 ~70 is clustered near ~16–18 upper8, front green p99 ~119. E004mf Golden returned and assets retired. No image pixels retained, so recognizable scene, calibrated black, colour or Windows IQ parity remain unproven; next attempts must use a new unique guarded identity and never activate IR or Linux OS sleep.
+
+### 2026-09-23 E004kt Windows morning reference (consumed)
+
+Fresh Windows WinRT NV12 CPU luminance scalar eight samples/camera gave mean Y front123.17–123.58 and rear151.48–151.90 with Auto=true nominal5000 ticks; no pixel exports/IR or control writes. Linux E004mf earlier morning baseline app p99 front27/rear17 (gain59/25) is NOT the same luminance statistic, time or controlled scene, so only a qualitative brightness discrepancy. The prior Windows E004ks reference was much darker under different lighting; do not infer a calibrated cause. Investigate source black level, Linux exposure controls and bounded tone mapping next. Windows returned Golden, inert future scheduled task retired, no default changes.

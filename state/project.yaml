@@ -3,19 +3,33 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-09-23
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: E004md-bounded-rgb-gain-response-partial-pass-enclosing-validator-fail-golden-retired
+state_id: E004mf-full10-morning-RGB-physical-pass-consumed-golden-and-E004kt-windows-oracle-pass-retired
 phase: ordinary-linux-rgb-desktop-output-integration
 latest_rgb_experiment:
-  identity: E004md
-  candidate_boot_id: edf5d26c-db3c-40f0-b1fd-99bf2fa68541
-  golden_return_boot_id: 292103c3-3978-43f2-981e-ab85e2e6c7d4
+  identity: E004mf
+  candidate_boot_id: 7ab6eb01-8646-4c70-99c6-8295c9c1a0b8
+  golden_return_boot_id: f054672f-bf5a-4ed3-83e3-32f84bd6240e
   consumed_and_retired: true
-  physical_gain_response: front_RAW_p99_21_to_36_app_20_to_34_rear_RAW_p99_17_to_21_app_16_to_20
-  inner_selector_and_gain_trials: passed
-  enclosing_one_shot: failed_stale_E004mc_status_grep_before_final_neutrality_checks
-  recognition_or_colour_iq: unproven
-  protected_ir_or_os_sleep: not_tested_and_must_remain_off
-  next: offline_validated_AE_and_lit_scene_diagnostics_then_fresh_guarded_identity
+  accepted: full10_per_bayer_source_front_rear_and_paired_raw8_nv12_gain_and_uid1000_front1080p_rear4k
+  physical_scene: actual_morning_ambient_uncontrolled_not_windows_matched
+  front_app_y_p99_baseline_to_gain: 27_to_59
+  rear_app_y_p99_baseline_to_gain: 17_to_25
+  front_green_raw10_p99_baseline_to_gain: approximately_119_to_284
+  rear_green_raw10_p99_baseline_to_gain: approximately_70_to_100
+  black_level_colour_scene_recognizability_windows_iq: unproven
+  ir_illumination_and_os_sleep: off_not_tested
+  next: separate_fresh_guarded_scene_controlled_or_visible_image_proof_then_bounded_software_AEC_black_level_tone_mapping
+latest_windows_oracle:
+  identity: E004kt
+  status: passed_eight_numeric_Nv12_samples_per_front1080_rear4k
+  front_mean_y_range: 123.169_to_123.578
+  rear_mean_y_range: 151.475_to_151.900
+  exposure_auto: reported_true_nominal_5000ticks_not_sensor_register_verified
+  scene_and_statistic: uncontrolled_unmatched_approximately_12_minutes_later_than_linux_and_mean_vs_p99
+  candidate_consumed_and_one_shot_task_retired: true
+  golden_return_boot_id_after_task_retirement: a9dfed2b-7097-4a55-ba9b-67bb693743e4
+  persistent_efi_order_and_golden_grub: unchanged
+  result: experiments/E004-front-ir-vd55g0/e004kt-windows-morning-rgb-reference-one-shot/SUMMARY.json
 rgb_phased_plan:
   reference: src/sp11-camera-stack/RGB-PHASED-ROADMAP.md
   decision_date: 2026-09-23
@@ -32,7 +46,7 @@ rgb_phased_plan:
   maintained_rgb_session_live_hardware_proof: E004lz-front448-rear446-raw-to-nv12-full-resolution-uid1000-clients-graph-neutral
   ir_and_windows_hello: separately-deferred-not-rgb-only-stage-one-gate
   linux_os_system_sleep_testing: prohibited-until-separately-supported-and-authorized
-status: golden-e004md-retired-gain-response-measured-front-rear-full-resolution-app-iq-and-production-service-open-ir-off
+status: golden-e004mf-and-e004kt-retired-morning-rgb-full10-gain-windows-luma-reference-complete-scene-iq-and-production-service-open-ir-off
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
