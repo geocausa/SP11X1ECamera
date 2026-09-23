@@ -5,3 +5,15 @@ NEW unique source-locked and unarmed camera one-shot from retired E004nc; all pr
 Immediately after return to Golden, inspect source and four photos only LOCALLY on SP11 and calculate scalar scene-screen chromatic/spatial/layout comparisons; do not assume screen is actually within rear FOV without scene-specific checks. Four original private RGB PNGs remain ONLY SP11 geoca0700/files0600. Next separately run fresh SP11 Windows rear visible Color WinRT photo with the same SP7 display composition, return Golden and locally compare matched downsampling/contrast/target recognition. No photos/RAW/pixels/thumbs/image hashes leave SP11 or enter Git/chat.
 
 Actual single use 2026-09-23 17:47 BST: original physical run failed after complete native front1080/rear4K ordinary UID1000 front/rear/off/quit and exact supported-control restore; independent RAW10 baseline-vs-gain time-window validator rejected. Original full test and subsequent final neutral gate NOT PASS. Rear gain raw 4K NV12 input p01=30 p50=32 p99=141 vs previous corner31/34/38; local ONLY private RGB gain global mean36.92, >96 gray fraction10.81%, largest contiguous bright region10.6% of image around normalized xyxy(.25,.215,.625,.578). This is a newly observable bright rectangular-type region, screen identity/recognizability unverified until direct Windows OEM photo and same-host comparison. Rear gain Y tone safely BYPASSED large dynamic span, not a regression in rendering. Automatic protected Golden return and exclusive candidate retirement PASS; four original photos stay SP11 user-private dir0700/photo0600. Scalar source-only RESULTS/evidence, no optical photos/pixels/thumbs/image hashes exported or Git-staged. Use fresh Windows E004wq only; consumed E004nd never rearm.
+
+E004nd original full-run failure was specifically temporal validation
+timing: rear gain controls settled at monotonic67239.620ms, original
+RAW10 pair frame600 at67331.109ms was only91.489ms after settle,
+below strict minimum300ms. Frame630 at68335.133ms was1095.513ms
+after settle. Do not use frame600 as fully settled gain evidence;
+do not infer camera crash/defect. Original full E004nd runner remains
+FAIL even though it captured genuine new-scene 4K rear photos,
+restored native controls and returned protected Golden. New separate
+E004wq Windows OEM photo/cross-OS same-SP11 private comparison
+subsequently passed independent capture and scalar cross-scene
+correlation, without retroactively changing E004nd.

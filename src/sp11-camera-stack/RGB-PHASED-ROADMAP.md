@@ -262,6 +262,18 @@ IR/illumination or Linux system sleep. Next meaningful Linux ISP/AE
 quality test still requires a fixed visible scene and dark reference;
 not another uncontrolled rear corner gain run.
 
+## E004nd/E004wq original rear photos after moving SP11 toward SP7 screen: Windows and Linux same scene locally compared
+
+Fresh distinct E004nd Linux real rear4K candidate captured current rear scene original RGB PNG and native input gain Y p01/p50/p99 30/32/141, versus old corner E004nc31/34/38. Real native front1080/rear4K UID1000 apps, selector front->rear->off->quit, native control restore, automatic protected Golden return and candidate retirement. ORIGINAL E004nd full one-shot FAILED separate RAW10 gain pair frame600 timestamp91.489ms after exposure/gain controls settled, less than required300ms; later frame6301095.513ms after settle passed timing. This test failure is not evidence of a machine crash or full pass.
+
+NEW separate Windows E004wq OEM rear4K Color WinRT actually captured eight native NV12 frames (native Y mean67.26-67.49, p99=175) and eight front1080 frames. Windows user-private original rear 960x540 colour photo and same-frame grayscale photo verified with Geoca/SYSTEM/Administrators-only ACL. Source-locked single-use task set 300s automatic reboot BEFORE camera access, exited0 and retired, protected Golden Linux return observed. All real optical images, thumbnails, raw pixels, private SP7 screen content and photo hashes remain ONLY on SP11, never chat/Fabric/Git/other hosts.
+
+Same SP11 read-only NTFS matched Windows original OEM grayscale and Linux original rear4K gain RGB, both using EXACT original 4K native8x pixel stride to480x270. Windows matched display grayscale mean60.2559 median45, Linux displayed RGB mean36.923 median15.353. Windows Y>=96 bright area25.4753%, Linux10.8102%; 99.7645% of Linux bright region is within Windows bright region. Coarse sigma8 spatial correlation0.902659 (small-shift best0.912981) supports shared broad screen-like scene, but screen text/object identity was NOT independently recognized. Fine sigma2 highpass correlation0.000851 (best small shift0.091969) does NOT establish identical optical fine detail or camera noise. Different native exposure/ISP, provisional Windows BT709 preview render, changing screen content and captures ~10 minutes apart: no exact scene match, true sensor colour calibration, measured white balance or full Windows ISP parity verdict. Windows NTFS cleanly unmounted.
+
+Labeled same-SP11 user-private side-by-side genuine original Windows LEFT and Linux RIGHT photo:
+ /home/geoca/Pictures/SP11-Camera-Private-E004wq/PRIVATE-SP11-REAR-NEW-SP7-SCREEN-WINDOWS-vs-LINUX.png
+dir0700/photo0600, NOT exported. Original Windows photos remain only SP11 Windows user Documents, original Linux photos only SP11 user-private Pictures. Normal Golden camera/IR/tone/temporal unchanged. E004nd/E004wq consumed, never rearm. Source and global-scalar-only evidence: E004wq/RESULT.json, E004wq/SCALAR-ONLY-REAL-WINDOWS-LINUX-NEW-SCREEN.json. Next independently test safe Linux rear highlight/shadow rendering, actual exposure/gain and fixed lit/neutral/dark references without losing 4K30 or prematurely enabling optional tone by default.
+
 ## E004nc real front1080/rear4K ordinary app BT601 matrix caps, but independent full-run rear darkness gate fails
 
 A fresh consumed source-locked E004nc physical candidate boot
