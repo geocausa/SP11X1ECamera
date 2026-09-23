@@ -17,7 +17,9 @@ def verify():
     assert opt["selected_real_rear_Windows_tuning_file"]=="com.surface.tuned.rfc_ov13858.bin"
     assert opt["selected_real_rear_Windows_tuning_sha256"]=="4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635"
     assert opt["other_MSHW0561_tuning_is_NOT_selected_on_this_SP11"]
-    assert not opt["physical_FRONT_linux_VFE_PIX_QC10C_processed_frame_proven"]
+    assert opt["physical_FRONT_linux_VFE_PIX_QC10C_processed_frame_proven"]
+    assert opt["actual_front_native_E003i_HY_27_hardware_frames_Golden_return_proven"]
+    assert opt["actual_front_native_E003i_Z_six_generation_paired_AEC_BHist_AWB_stats_proven"]
     assert not opt["physical_REAR_linux_VFE_PIX_hardware_processed_4K_frame_proven"]
     assert not opt["Windows_Xtensa_ICP_firmware_compatible_Linux_loader_and_host_IPC_proven"]
     assert not opt["candidate_OPE_upstream_Agatti_shikra_code_directly_compatible_X1E_proven"]
@@ -47,7 +49,8 @@ def verify():
         assert value in prior
     return {"status":"PASS_E004NI_SOURCE_ONLY_USER_SELECTED_WINDOWS_NATIVE_ISP_PRIORITY_SAME_SP11_REAR_MSHW0491_TUNING_LAST_RGB_FALLBACK_GOLDEN_NO_PROPRIETARY_PAYLOAD",
             "selected_rear_sensor":"OV13858","selected_board":"MSHW0491",
-            "native_front_rear_ISP_processed_frames_proven":False,
+            "native_front_27frame_QC10C_hardware_output_proven":True,
+            "Windows_parity_front_and_rear_native_4K_processed_frames_proven":False,
             "old_software_fallback_E004ne_preserved":True,
             "old_E004nh_original_full_runner_failed_preserved":True,
             "Windows_driverstore_readonly_partition_unmounted":True,

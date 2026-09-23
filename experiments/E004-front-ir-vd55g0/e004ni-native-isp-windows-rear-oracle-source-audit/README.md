@@ -92,16 +92,20 @@ BT601 tags do not provide demosaic, native AWB, LSC,
 black-level calibration, tone mapping, advanced noise
 control or window-equivalent picture detail.
 
-Older native Qualcomm front VFE1 PIX/QC10C experiments
-built independent transport/RT-CDM and IQ-module
-materializers. A physically working first Windows-parity
-front VFE PIX QC10C frame has NOT been established:
-older disposable runtime attempts timed out before
-the expected first stable Epoch0/processed output.
-Later separate front IQ-producer research goes much
-further offline but is NOT a published, validated
-ordinary-app rear4K hardware ISP service.
-The rear hardware PIX route is independently UNPROVEN;
+The earliest E003h front VFE1 PIX/QC10C one-shots initially
+timed out before first Epoch0; they are HISTORICAL failures.
+LATER E003i-Z independently proved 6 REAL source-generation-
+matched front VFE1 hardware QC10C output frames with actual
+AEC/BHist/AWB stats, correct STREAMOFF and Golden return.
+E003i-HY then passed an ORIGINAL 27-frame native front
+VFE1 PIX QC10C production stream on the protected-Golden-
+derived camera DTB; E003i-IG and IH independently validated
+bounded front/rear same-boot neutral handoff in both orders.
+Those are ACTUAL native Linux FRONT hardware processed output
+and IQ stats, NOT a Windows-colour-parity front app-facing
+linear NV12, dynamic native AWB/AE perfection or proof of
+any rear OV13858 hardware-processed 4K frame. The rear
+hardware PIX route is independently UNPROVEN;
 do not reuse front CSI, LSC, geometry or camera ID.
 
 The Windows kernel .sys / user MFT .dll are Windows

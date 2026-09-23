@@ -10,8 +10,16 @@ proposal is superseded as a PRIORITY, not erased as evidence.
 Last complete E004ne RGB 1080p/4K software path remains an
 opt-in safe fallback; no native processed ISP first frame,
 OEM Windows optical parity or ordinary native-ISP service
-has yet been independently proven. E004ng/E004nh original
-full trial failures and SP7 lower LCD fault still apply.
+has yet been independently proven. More precisely: E003i-Z
+and E003i-HY previously produced 6 and 27 REAL native front
+VFE1 PIX QC10C hardware frames, respectively, with paired
+3A stats and protected Golden return; neither proves
+Windows-quality OEM ISP tuning or actual REAR OV13858
+hardware-processed 4K output, both of which remain OPEN.
+Earlier E003h first-frame timeout is historical and must
+NOT erase the later successful bounded front native path.
+E004ng/E004nh original full trial failures and
+SP7 lower LCD fault still apply.
 Protected IR/Hello is separately deferred, IR remains OFF
 and Linux OS system suspend/hibernate remains prohibited.
 Never load Windows kernel .sys or user .dll as Linux native
@@ -31,6 +39,47 @@ and cadence but NOT an OEM-like hardware ISP image.
 ## Historical software-first plan (superseded as active priority;
 ## retain its measured fallback acceptance requirements)
 
+
+### E004nj read-only real CAMERA_ICP firmware / Linux host-loader compatibility
+
+SAME-SP11 Windows qccamisp8380 OEM package contains
+CAMERA_ICP.mbn (905880 bytes) and CAMERA_ICP_AAAAAA.elf
+(4738507 bytes), BOTH actual ELF32 Xtensa executables,
+NOT the existing Qualcomm audio ADSP/CDSP Q6 images
+or native ARM64 Linux executables. Linux sysfs reports
+running remoteproc ADSP/CDSP only and NO CAMERA/ICP
+remoteproc. The checked-out X1E Linux CAMSS
+request_firmware_direct call sites ingest E003h HOST IQ
+oracle capsule data, NOT Windows Xtensa ICP firmware.
+Therefore copying a Windows camera blob to the Linux
+firmware directory or trying the audio DSP remoteproc
+does NOT on its own enable Windows camera processing.
+A future vetted Xtensa ICP power/reset/IOMMU/secure
+auth/host IPC driver may still be possible; installed
+OEM files do NOT independently prove actual runtime
+firmware role.
+
+CRITICAL earlier-source correction: initial E003h
+front VFE PIX first-frame diagnostics timed out, but
+LATER E003i-Z physically PASSED SIX real native FRONT
+VFE1 PIX hardware QC10C frames with paired AEC/BHist/AWB
+3A stats; E003i-HY physically PASSED 27 native FRONT
+VFE1 PIX QC10C frames, with protected Golden return.
+Native front transport and 3A DO exist; Windows-parity
+image colour/detail/linear NV12 and any REAR OV13858
+native PIX-processed 4K frame remain UNPROVEN.
+Prior E004ni text incorrectly said no front first
+frame: superseded by evidence E003i-Z/HY and E004nj
+header+loader source audit. Reuse the proven bounded
+front native PIX hardware host command route as a
+REFERENCE for separately pinned rear-specific CSI,
+sensor geometry, tuning, QC10C/buffer and IRQ ownership.
+Do not copy front IMX681 LSC or old optical buffers
+to pretend a rear frame. Only if Windows rear actual
+processing requires Xtensa ICP should an independently
+vetted controller loader/IPC become a hardware runtime
+candidate. E004ne remains safe 1080p/4K software fallback,
+no firmware or Golden defaults changed.
 
 ### 2026-09-23 source-only OEM rear ISP audit — active next route
 

@@ -16,11 +16,28 @@ SUPERSEDES the earlier software-FIRST / ask-before-ISP wording
 below. The proven opt-in Linux RAW10-to-NV12 software camera
 (E004ne last complete original acceptance) is RETAINED as a
 fallback and for safe baseline comparison, not silently promoted
-to final Windows-parity production. Native PIX/ISP hardware
-processed video is NOT yet proven for front OR rear; older front
-Windows/VFE1/QC10C materializer work is source/reference, NOT
-a verified rear service. First read source-only audit:
+to final Windows-parity production. CORRECTION: E003i-HY
+physically captured 27 REAL hardware-generated front VFE1 PIX
+QC10C frames under protected Golden; E003i-Z previously passed
+six actual native front AEC/BHist/AWB generation-matched stats.
+Windows-equivalent FRONT colour/detail/true linear NV12 and
+any REAR hardware-ISP processed 4K image are NOT proven.
+The earlier E003h initial PIX first-frame attempts failed but
+do not invalidate LATER successful E003i front evidence.
+Front IQ materializer is a source reference, NOT independently
+a working rear OV13858 service. Read both source-only
+audits FIRST:
+experiments/E004-front-ir-vd55g0/e004nj-icp-firmware-host-compatibility-readonly/README.md
 experiments/E004-front-ir-vd55g0/e004ni-native-isp-windows-rear-oracle-source-audit/README.md.
+Do not blindly load Xtensa Windows CAMERA_ICP firmware
+with Linux Q6 AUDIO remoteproc. Linux currently has
+ADSP/CDSP only and the checked CAMSS source firmware
+requests are HOST IQ capsules, not an ICP loader.
+Re-use ACTUAL validated E003i native front PIX QC10C/
+3A hardware evidence for a source-locked OV13858
+REAR-specific native PIX first-frame design, NOT
+as if front tuning or the rear processed frame
+were already proven.
 The installed MSHW0491 rear OV13858 selects its OWN Windows
 sensor module and tuning; do not confuse with MSHW0561 or front
 IMX681 package, nor try to run Windows PE .sys/.dll as Linux

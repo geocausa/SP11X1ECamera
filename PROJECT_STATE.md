@@ -1,3 +1,5 @@
+2026-09-23 E004nj FRONT NATIVE CORRECTION AND WINDOWS CAMERA ICP STATIC COMPAT: Earlier E004ni wrongly described FIRST front native QC10C as unproven. ACTUAL E003i-Z 6 frame+paired 3A and E003i-HY 27 frame front VFE1 PIX QC10C original bounded runs PASSED, protected Golden restored; full Windows-quality front image and REAR hardware-ISP processed 4K not proven. Installed SAME-SP11 Windows CAMERA_ICP.mbn and CAMERA_ICP_AAAAAA.elf are ELF32 Xtensa, NOT the Q6 audio/CDSP images; current Linux remoteprocs adsp+cdsp, no ICP loader in checked-out CAMSS source (its firmware API loads E003h HOST IQ capsules, not ICP executable). Static header tests only, NO firmware loading, camera capture, Windows image transfer, IR or Golden modification. See E004nj/README.md and E004nj/scalar-only compatibility report.
+
 2026-09-23 19:36 BST ACTIVE USER PRIORITY: Native Qualcomm
 hardware ISP and same-SP11 Windows OEM rear/front camera
 stack are now the preferred engineering path for actual
