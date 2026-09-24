@@ -113,6 +113,10 @@ The prior ISP context +0x10 callback UNKNOWN is now resolved in original same-SP
 
 [Same-SP11 original ISP E004oe analysis](experiments/E004-front-ir-vd55g0/e004oe-isp-manager-per-core-order-static/README.md) checks 55 exact original ARM64 instructions, six distinct diagnostic-hash/code-xref stage identities and 13 fail-closed mutations. Conditional selector 0x804 branch source software dispatch **CDM→IFE→CSID**; 0x805 branch **CSID→IFE→CDM**. These stage labels are now source-backed in the manager; their receiving per-core callback implementations/ABI and physical hardware register/IRQ/DMA completion are NOT identified. 0x809 and live rear Windows 4K session path also remain UNKNOWN. Next static only: identify CDM, IFE, CSID interface array producers and lower callback bodies; don't encode opaque Windows selectors into protected Linux Golden. No Windows AI/effects dependence or native rear4K claim.
 
+## E004of exact per-core interface provenance — next function-body boundary
+
+[E004of](experiments/E004-front-ir-vd55g0/e004of-isp-per-core-interface-provenance-static/README.md) source-locks original ISP core-array allocators 0x3918/0x15768, dynamic descriptor lookup 0x156E8, and 0x30-byte per-core records populated with independently obtained callable pointers at 0x698A8, then read/checked/indirectly called from E004oe's CDM/IFE/CSID manager. 56 exact original ARM64 anchors + 15 negative tests PASS; all static only. NEXT: locate actual first callback function bodies in the core descriptors; verify argument and physical MMIO/interrupt/DMA lifetimes before implementing native Linux L0–L3. No live rear profile, 0x809, BF/WM16 retirement or Linux-native rear ISP4K proven. No opaque Windows interface/effects transplant or Golden runtime changes.
+
 ## Mission
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
