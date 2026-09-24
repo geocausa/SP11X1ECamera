@@ -1,4 +1,8 @@
-# E004ow — native VFE ISR still stub; E004pi confirms CSID BUF_DONE bit7 live but NOT VFE WM16 IRQ/DMA completion
+# E004ow — real native VFE ISR remains stub; E004pj distinguishes CSID stats bus-done from generic RDI/PIX callback
+
+**2026-09-24 E004pj ARCHITECTURE QUALIFICATION:** E004ow's accepted Linux VFE680 ISR no-op still stands, but Titan Gen3 hardware can deliver SOME WM bus-done events via CSID. Do not assume a separate VFE IRQ is always mandatory. Accepted SP11 CSID680 actually forwards **only RDI bits14..17** via generic camss_buf_done→one-WM VB2, not BF stats bit7; neither a live exact WM16 completion nor six-group owner/DMA/IOMMU fence exists today. A new dedicated BF stats completion path must first prove whether SP11 CSID bit7 itself carries exact WM16 bus-done semantics or a separate VFE bus IRQ is required; cannot wire the bit into generic VFE/PIX completion, double ACK or release buffers. Actual rear runtime remains DENIED. [E004pj](../e004pj-csid-bf-statistics-completion-bridge-offline/README.md).
+
+# Historical E004ow real VFE ISR source and E004pi conservative VFE gate
 
 **2026-09-24 E004pi physical update:** Both pre-existing original Windows rear4K LIVE snapshots physically show CSID1 BUF_DONE bit7 set+unmasked and WM16 enabled, but **no original per-frame BF FIFO8/WM16 DMA quiescence**. Accepted native CSID ISR already reads/acks CSID BUF_DONE+0x8C/+0x94; real accepted native VFE680 ISR is still this E004ow stub. Do NOT double-ack CSID or interpret the CSID bit7 as an independently verified VFE WM16 DMA fence. E004pi offline domain-separation C11 model and physical scalar rechecks still keep rear ISP runtime denied. [E004pi](../e004pi-original-live-rear-csid-bf-bit7-wm16-fence-offline/README.md).
 

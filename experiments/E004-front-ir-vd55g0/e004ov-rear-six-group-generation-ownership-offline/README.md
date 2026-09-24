@@ -1,4 +1,8 @@
-# E004ov — generation/ownership offline design; E004pi enforces separate CSID IRQ versus VFE WM16 DMA evidence
+# E004ov — six-group offline ownership model; E004pj allows verified CSID-delivered WM16 but never raw BF self-attestation
+
+**2026-09-24 E004pj SOURCE/DESIGN QUALIFICATION:** Some Titan Gen3 CSID hardware forwards bus-done to VFE, so a **separate VFE IRQ is not inherently mandatory**. This does NOT convert CSID BUF_DONE BF bit7 into an already-proven per-generation WM16 safe completion. E004ov's six-group FIFO/owner/frame checks and independent trusted hardware/DMA/IOMMU evidence remain mandatory; E004pj's offline bridge models both hypothetical CSID-delivered and VFE-sourced WM16 completions only with independently verified exact WM16 buffer identity, IRQ/ACK semantics and owner-safe stop. Accepted SP11 CSID680 BF bit7 is not forwarded today, generic RDI/PIX completion is NOT stats group8 and no trusted source producer exists. Runtime rear ISP DENIED. [E004pj](../e004pj-csid-bf-statistics-completion-bridge-offline/README.md).
+
+# Historical E004ov six-group offline ownership and E004pi source-separation checks
 
 **2026-09-24 E004pi LIVE/DOMAIN UPDATE:** E004pi physically observed CSID1 BUF_DONE bit7 set+unmasked and WM16 enabled in both original rear4K Windows LIVE snapshots. An additional standalone offline C11 gate now **rejects CSID bit7 as a substitute for independent VFE1 WM16 BUS/IRQ/DMA/IOMMU retirement**, and checks same owner/frame/FIFO8 identity, stop and all-six-group fences; 95 assertions each GCC+Clang ASAN/UBSAN, runtime authorization still -EOPNOTSUPP. E004ov generation guard remains a separate offline design, **not** native CAMSS-integrated. No per-frame original BF event0x0F/WM16 DMA fence was measured, and no camera/kernel/boot changes. [E004pi](../e004pi-original-live-rear-csid-bf-bit7-wm16-fence-offline/README.md).
 
