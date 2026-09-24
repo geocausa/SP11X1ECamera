@@ -76,6 +76,25 @@ identity + receiver for 0x2326AB, then hardware-only necessary
 sensor/ISP command lifecycle. No Windows services/AI needed for native
 Linux hardware safety. Golden/front/native27/rearRAW/software4K intact.
 
+## E004ob actual matching OEM interface-code receiver branches
+
+E004oa's source-verified opaque internal request0x2326AB is NOT
+a unique marker for one camera backend! The next static audit
+`experiments/E004-front-ir-vd55g0/e004ob-dual-backend-ioctl-static/README.md`
+and `verify.py` source-locks originals qccamplatform8380.sys and
+qccamisp8380.sys (20 exact ARM64 receiver instructions, both OEM
+SHA256, 12 fail-closed mutations). Platform matches same code at
+RVA0x6334→0x6364 and clears a state flag/two fields; ISP matches
+at RVA0x5638→0x566c and populates its pointer/flag/callback.
+Do NOT equate those structures/semantics or presume both received
+one request. **LIVE rear VideoRecord selected interface and receiving
+driver unverified.** Next map AVStream binder's device-instance
+interface identity to original platform/ISP/sensor registration;
+only then decode the opaque OnStart/OnStop selectors into real
+hardware effects. Current source-only audit changes no Golden,
+front native27, rearRAW/software4K, IR or Linux rear native4K status.
+Do not port Windows orchestrator, hidden .sys/.dll code or AI effects.
+
 ## Mission
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
