@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """E004pe original two ring allocation sites and fail-closed pointer identity.
 
-Static source and local synthetic aliases only. Source and worker allocation
-differences cannot be mistaken for same-session physical completion or DMA ACK.
+2026-09-24 ERRATUM: the context+0x1b0 allocation belongs to the command-B
+DESTINATION endpoint, not the separate command-A source endpoint.
+Static source only; destination/worker allocations cannot prove any live
+source-to-worker alias, IRQ completion or DMA ACK.
 """
 import copy,hashlib,json,re,subprocess
 from pathlib import Path
@@ -12,6 +14,14 @@ ISP=Path("/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccam
 SHA="64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c"
 BASE=0x140000000
 SOURCE="""
+175f8|ldr|x8, [x27]
+17600|ldr|x8, [x8, #0x40]
+17604|umaddl|x8, w20, w24, x8
+17608|str|x8, [sp, #0x40]
+1760c|add|x8, x8, #0x8
+17610|stp|xzr, x8, [sp, #0x30]
+17688|bl|0x14002a260 <.text+0x29260>
+1768c|str|x0, [x21, #0x20]
 176bc|bl|0x14002df80 <.text+0x2cf80>
 176c0|ldr|x19, [x21, #0x20]
 17a90|add|x20, x19, #0x1b0
@@ -32,6 +42,8 @@ SOURCE="""
 17ae0|stp|wzr, wzr, [x22, #0x2c]
 17af0|str|x22, [x20]
 17b34|ldr|x24, [x19, #0x1b0]
+17bec|ldr|x8, [sp, #0x38]
+17bf4|str|x21, [x8]
 17b48|strb|w0, [x24, #0x28]
 17b4c|ldr|w9, [x24, #0x18]
 17b50|ldr|w8, [x24, #0x10]
@@ -46,6 +58,7 @@ SOURCE="""
 214c4|str|x8, [x4]
 214a4|ldr|x8, [x21]
 214a8|str|x8, [x19, #0x198]
+17fb8|ldr|x8, [x8, #0x30]
 17fb0|add|x4, sp, #0x50
 17fc0|mov|w1, #0xa
 17ff8|mov|w3, #0x18
@@ -81,29 +94,34 @@ def require(cond,why):
     if not cond:raise AssertionError("E004PE_FAIL_CLOSED "+why)
 def facts():
     return {
-      "schema":"sp11-e004pe-original-IFE-source-plus1b0-and-worker-plus8-separate-ring-allocation-sites-static-v1",
+      "schema":"sp11-e004pe-ERRATUM-original-IFE-destination-plus1b0-and-worker-plus8-separate-ring-allocation-sites-static-v2",
       "parent_git_revision":"b68dc190ef2c53e3df57b6970c6e6679b1a8a44b",
       "same_SP11_original_OEM_ISP_sha256":SHA,
       "original_exact_ARM64_instruction_anchors":len(ANCHORS),
-      "source_context_original_allocation_owner_init_RVA":"0x176c0",
-      "source_context_ring_field_offset":"0x1b0",
-      "source_context_ring_allocation_RVA":"0x17aa4",
-      "source_context_ring_allocation_structure_bytes":"0x1d0",
-      "source_context_ring_store_RVA":"0x17af0",
-      "source_context_ring_local_setup_use_RVA":"0x17b34",
-      "source_context_ring_local_setup_loop_bound":50,
-      "source_context_ring_local_cleanup_use_RVA":"0x21f28",
-      "source_context_ring_export_command_a_RVA":"0x214c0",
-      "source_context_ring_export_to_destination_receiver_RVA":"0x214a8",
+      "historical_original_E004pe_source_allocation_assignment_superseded":True,
+      "destination_context_original_allocation_owner_init_RVA":"0x176c0",
+      "destination_context_ring_field_offset":"0x1b0",
+      "destination_context_ring_allocation_RVA":"0x17aa4",
+      "destination_context_ring_allocation_structure_bytes":"0x1d0",
+      "destination_context_ring_store_RVA":"0x17af0",
+      "destination_context_ring_local_setup_use_RVA":"0x17b34",
+      "destination_context_ring_local_setup_loop_bound":50,
+      "destination_context_ring_local_cleanup_use_RVA":"0x21f28",
+      "distinct_source_endpoint_command_a_export_RVA":"0x214c0",
+      "distinct_source_endpoint_command_a_to_destination_import_RVA":"0x214a8",
       "worker_context_ring_field_offset":"0x8",
       "worker_context_ring_allocation_RVA":"0x2284c",
       "worker_context_ring_allocation_structure_bytes":"0x368",
       "worker_context_ring_store_RVA":"0x22898",
       "worker_context_ring_dequeue_RVA":"0x23940",
-      "original_source_and_worker_own_ring_allocations_are_separate_code_paths":True,
-      "original_source_ring_allocation_structure_bytes_equal_worker":False,
-      "original_source_and_worker_ring_exact_same_session_pointer_alias_proven":False,
-      "original_source_and_worker_ring_never_alias_any_live_session_proven":False,
+      "original_destination_and_worker_own_ring_allocations_are_separate_code_paths":True,
+      "allocated_destination_ring_is_command_A_source_ring_proven":False,
+      "allocated_destination_endpoint_table_offset":"0x40",
+      "distinct_command_A_source_endpoint_table_offset":"0x30",
+      "command_A_source_plus_0x1b0_allocation_site_proven":False,
+      "original_destination_ring_allocation_structure_bytes_equal_worker":False,
+      "original_destination_and_worker_ring_exact_same_session_pointer_alias_proven":False,
+      "original_destination_and_worker_ring_never_alias_any_live_session_proven":False,
       "original_type_one_record_reaches_worker_same_queue_generation_proven":False,
       "original_snapshot_wrapper_output_is_exact_type_one_input_proven":False,
       "original_rear4k_live_selected_mode_BF_event0x0f_observed":False,
@@ -141,23 +159,28 @@ if __name__=="__main__":
     else:saved.write_text(json.dumps(f,sort_keys=True,indent=2)+"\n")
     muts=(
        ("sha","same_SP11_original_OEM_ISP_sha256","0"*64),
-       ("source_field","source_context_ring_field_offset","0x8"),
-       ("source_alloc","source_context_ring_allocation_RVA","0x2284c"),
-       ("source_size","source_context_ring_allocation_structure_bytes","0x368"),
-       ("source_store","source_context_ring_store_RVA","0x22898"),
-       ("source_setup","source_context_ring_local_setup_use_RVA","0x23940"),
-       ("source_cleanup","source_context_ring_local_cleanup_use_RVA","0x23940"),
-       ("source_export","source_context_ring_export_command_a_RVA","0x23900"),
-       ("source_to_dst","source_context_ring_export_to_destination_receiver_RVA","0x23940"),
+       ("source_field","destination_context_ring_field_offset","0x8"),
+       ("source_alloc","destination_context_ring_allocation_RVA","0x2284c"),
+       ("source_size","destination_context_ring_allocation_structure_bytes","0x368"),
+       ("source_store","destination_context_ring_store_RVA","0x22898"),
+       ("source_setup","destination_context_ring_local_setup_use_RVA","0x23940"),
+       ("source_cleanup","destination_context_ring_local_cleanup_use_RVA","0x23940"),
+       ("source_export","distinct_source_endpoint_command_a_export_RVA","0x23900"),
+       ("source_to_dst","distinct_source_endpoint_command_a_to_destination_import_RVA","0x23940"),
        ("worker_field","worker_context_ring_field_offset","0x198"),
        ("worker_alloc","worker_context_ring_allocation_RVA","0x17aa4"),
        ("worker_size","worker_context_ring_allocation_structure_bytes","0x1d0"),
        ("worker_store","worker_context_ring_store_RVA","0x17af0"),
        ("worker_dequeue","worker_context_ring_dequeue_RVA","0x17b34"),
-       ("fake_samealloc","original_source_and_worker_own_ring_allocations_are_separate_code_paths",False),
-       ("fake_size","original_source_ring_allocation_structure_bytes_equal_worker",True),
-       ("fake_alias","original_source_and_worker_ring_exact_same_session_pointer_alias_proven",True),
-       ("fake_noalias","original_source_and_worker_ring_never_alias_any_live_session_proven",True),
+       ("fake_samealloc","original_destination_and_worker_own_ring_allocations_are_separate_code_paths",False),
+       ("fake_source_allocation","allocated_destination_ring_is_command_A_source_ring_proven",True),
+       ("fake_source_site","command_A_source_plus_0x1b0_allocation_site_proven",True),
+       ("fake_endpoint","allocated_destination_endpoint_table_offset","0x30"),
+       ("fake_source_endpoint","distinct_command_A_source_endpoint_table_offset","0x40"),
+       ("fake_erratum","historical_original_E004pe_source_allocation_assignment_superseded",False),
+       ("fake_size","original_destination_ring_allocation_structure_bytes_equal_worker",True),
+       ("fake_alias","original_destination_and_worker_ring_exact_same_session_pointer_alias_proven",True),
+       ("fake_noalias","original_destination_and_worker_ring_never_alias_any_live_session_proven",True),
        ("fake_worker","original_type_one_record_reaches_worker_same_queue_generation_proven",True),
        ("fake_snapshot","original_snapshot_wrapper_output_is_exact_type_one_input_proven",True),
        ("fake_live","original_rear4k_live_selected_mode_BF_event0x0f_observed",True),
@@ -173,4 +196,4 @@ if __name__=="__main__":
         try:strict(changed)
         except (AssertionError,KeyError,TypeError):continue
         raise AssertionError("E004PE_NEGATIVE_FAIL_OPEN "+name)
-    print("PASS_E004PE_%d_EXACT_ORIGINAL_ARM64_ANCHORS_%d_NEGATIVES_TWO_INDEPENDENT_SOURCE_WORKER_RING_ALLOCATIONS_NO_SAME_SESSION_ALIAS_BF_DMA_PROVEN_GOLDEN_SAFE"%(len(ANCHORS),len(muts)))
+    print("PASS_E004PE_%d_EXACT_ORIGINAL_ARM64_ANCHORS_%d_NEGATIVES_ERRATUM_DESTINATION_1B0_VS_WORKER_8_SEPARATE_ALLOCATIONS_SOURCE_COMMAND_A_ALLOCATION_UNKNOWN_BF_DMA_UNPROVEN_GOLDEN_SAFE"%(len(ANCHORS),len(muts)))

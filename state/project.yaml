@@ -5,38 +5,67 @@ updated: 2026-09-24
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E004nh-optin_BGGR_upper60_RGB_chart_excludes_SP7_faulty_lower_LCD_original_front_gain_28fps_FAIL_auto_Golden_E004ne_last_full_pass
 phase: native-qualcomm-hardware-isp-windows-oem-rgb-image-quality-priority
-latest_original_IFE_source_ring_and_worker_ring_separate_allocations_static:
+latest_original_IFE_source_destination_endpoint_disambiguation_static:
+  identity: E004pf
+  state: PASS_DESTINATION_0x40_CONTEXT_1B0_ALLOCATION_SOURCE_0x30_ALLOCATION_UNTRACED_E004PE_ATTRIBUTION_CORRECTED
+  evidence_class: S_SAME_SP11_ORIGINAL_OEM_ISP_ARM64_STATIC_ONLY
+  parent_git_revision: 1ba51d254d758f63e391ffb84b537cb1e885e6b3
+  same_SP11_original_OEM_ISP_sha256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
+  exact_original_ARM64_instruction_anchors: 60
+  fail_closed_negative_tests: 27
+  original_command_A_source_endpoint_table_slot_offset: '0x30'
+  original_command_B_destination_endpoint_table_slot_offset: '0x40'
+  original_destination_endpoint_creation_RVA: '0x17660'
+  original_destination_endpoint_instance_store_RVA: '0x17bf4'
+  original_destination_context_0x1b0_ring_allocation_RVA: '0x17aa4'
+  original_destination_context_0x1b0_ring_structure_bytes: '0x1d0'
+  original_command_A_source_context_0x1b0_allocation_site_proven: false
+  original_command_A_source_context_0x1b0_equals_destination_context_0x1b0_proven: false
+  original_command_A_source_context_0x1b0_equals_worker_device_0x8_proven: false
+  original_source_0x1b0_to_destination_0x198_command_A_B_transfer_proven: true
+  original_type_one_event_record_same_worker_queue_generation_proven: false
+  original_snapshot_wrapper_output_to_type_one_producer_input_proven: false
+  original_live_rear4k_selected_IFE_mode_BF0x0f_proven: false
+  old_direct_TOP1_to_BF_bit7_inference_valid: false
+  native_rear_VFE1_BF_IRQ_FIFO8_WM16_generation_bus_dma_iommu_retirement_proven: false
+  native_rear_hardware_ISP_4k_optical_proven: false
+  rear_Linux_hardware_ISP_runtime_authorized: false
+  Golden_boot_kernel_camera_hardware_modified: false
+  next_original_static_gate: locate_actual_per_instance_0x30_source_endpoint_context_0x1b0_allocation_consumer_and_snapshot_type_one_same_buffer
+  next_native_gate: independent_real_VFE1_irq_status_mask_ack_BF_FIFO8_generation_matched_WM16_bus_dma_iommu_quiescence_before_rear_ISP_arm
+  evidence: experiments/E004-front-ir-vd55g0/e004pf-original-channel-source-vs-destination-endpoint-context-static/README.md
+  verifier: experiments/E004-front-ir-vd55g0/e004pf-original-channel-source-vs-destination-endpoint-context-static/verify.py
+latest_original_IFE_destination_and_worker_ring_separate_allocations_corrected_static:
   identity: E004pe
-  state: PASS_ORIGINAL_SOURCE_RING_1D0_AND_WORKER_RING_368_INDEPENDENT_ALLOCATION_NO_LIVE_RING_ALIAS_PROOF
-  evidence_class: S_SAME_SP11_ORIGINAL_ISP_ARM64_STATIC_PLUS_D_OFFLINE_SAME_SESSION_ALIAS_GUARD
+  state: PASS_ERRATUM_DESTINATION_0x40_RING_1D0_WORKER_RING_368_SEPARATE_ALLOCATIONS_SOURCE_0x30_CONTEXT_ALLOCATION_UNKNOWN
+  evidence_class: S_SAME_SP11_ORIGINAL_OEM_ISP_ARM64_STATIC_CORRECTED_V2
   parent_git_revision: b68dc190ef2c53e3df57b6970c6e6679b1a8a44b
   same_SP11_original_OEM_ISP_sha256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
-  original_exact_ARM64_instruction_anchors: 63
-  fail_closed_negative_tests: 27
-  original_source_context_ring_field_offset: '0x1b0'
-  original_source_ring_allocation_RVA: '0x17aa4'
-  original_source_ring_structure_bytes: '0x1d0'
-  original_source_ring_store_RVA: '0x17af0'
-  original_source_ring_setup_use_RVA: '0x17b34'
-  original_source_ring_cleanup_use_RVA: '0x21f28'
+  original_exact_ARM64_instruction_anchors: 74
+  fail_closed_negative_tests: 32
+  original_destination_endpoint_table_slot_offset: '0x40'
+  original_command_A_source_endpoint_table_slot_offset: '0x30'
+  original_destination_context_ring_field_offset: '0x1b0'
+  original_destination_ring_allocation_RVA: '0x17aa4'
+  original_destination_ring_structure_bytes: '0x1d0'
+  original_destination_ring_store_RVA: '0x17af0'
   original_worker_ring_field_offset: '0x8'
   original_worker_ring_allocation_RVA: '0x2284c'
   original_worker_ring_structure_bytes: '0x368'
   original_worker_ring_store_RVA: '0x22898'
   original_worker_ring_dequeue_RVA: '0x23940'
-  original_source_ring_exported_to_type_one_producer_context_0x198: true
+  command_A_source_0x1b0_allocation_site_proven: false
+  destination_0x1b0_allocation_is_command_A_source_ring: false
+  original_source_ring_exported_to_type_one_producer_destination_context_0x198: true
   source_ring_identity_equal_worker_queue_same_session_proven: false
-  source_and_worker_ring_never_alias_all_live_sessions_proven: false
   original_type_one_record_consumed_by_worker_same_queue_generation_proven: false
   original_snapshot_wrapper_output_is_type_one_producer_input_proven: false
   original_live_rear4k_selected_IFE_mode_BF0x0f_observed: false
   old_direct_TOP1_to_BF_register_inference_valid: false
   native_rear_VFE1_BF_IRQ_FIFO8_WM16_generation_DMA_IOMMU_retirement_proven: false
-  native_rear_hardware_ISP_4k_optical_proven: false
   rear_Linux_hardware_ISP_runtime_authorized: false
   protected_Golden_boot_kernel_camera_modified: false
-  next_original_static_gate: trace_exact_source_ring_record_consumer_vs_worker_device_0x8_and_snapshot_wrapper_type_one_input_buffer_source
-  next_native_gate: verify_real_VFE1_IRQ_mask_status_ack_BF_FIFO8_frame_generation_WM16_BUS_DMA_IOMMU_quiescence_before_rear_ISP_arm
+  next_original_static_gate: find_true_source_endpoint_table_0x30_context_0x1b0_ring_allocation_and_consumer
   evidence: experiments/E004-front-ir-vd55g0/e004pe-original-ife-source-ring-independent-allocation-static/README.md
   verifier: experiments/E004-front-ir-vd55g0/e004pe-original-ife-source-ring-independent-allocation-static/verify.py
 latest_original_IFE_type_one_channel_command_A_B_supplier_to_receiver_static:
