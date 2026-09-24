@@ -4,6 +4,24 @@ Parent E004nu commit `f06338233da184dde44e3bdb898ad10a37514ef0`. The existing fr
 
 **E004nv now independently recovers the omitted BF event branch from the original, exact same-SP11 OEM Windows camera driver** and compiles a rear-specific *six-group candidate*. Neither the original Windows driver nor any camera pixels/DMA addresses are exported, and the candidate has no runtime caller.
 
+## Additional static BF caller / WM16 register chain
+
+[STATIC-BF-CALLCHAIN.md](STATIC-BF-CALLCHAIN.md) and
+`verify_static_bf_callchain.py` trace 47 exact ARM64 instruction
+anchors in the same private OEM driver. The real indirect caller at
+RVA0x239A0 invokes a **mode-dependent** interrupt handler registered
+at RVA0x1A100; the event0x0F dispatcher at RVA0x1EF90 is chosen only
+in **mode 0**, while mode 1 selects a distinct handler. In mode 0,
+incoming status **word2 bit7** generates event0x0F, dequeues FIFO8,
+then its per-event callback reads the actual **WM16 CFG0
+(VFE+0x1E00) and WM16 ADDR_STATUS0 (VFE+0x1E70)**. CFG0 bit0 is
+copied to the precise scratch byte that gates the extended BF
+completion record, outstanding-item match, port0x300D tagging and
+software notification. This directly links the BF branch to WM16
+registers in OEM code; the active Windows rear dispatch mode and any
+live BF event/physical buffer retirement are still unproven.
+No proprietary Windows binary, private KD log or optical data exported.
+
 ## Same-SP11 OEM Windows driver branch: BF event 0x0F, FIFO index 8
 
 The already archived same-SP11 OEM `qccamisp8380.sys` is 376,560 bytes and has SHA256 `64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c`. The file stays **private on the SAME SP11** at `/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/qccamisp8380.inf_arm64_068a5d125dcec104/qccamisp8380.sys`. The new `extract-bf-driver-static.py` validates its entire SHA, PE section addressing and **exact ARM64 instruction anchors** using `llvm-objdump` before exporting ONLY derived event/group/resource scalar evidence to `BF-RESULT.json`.

@@ -245,6 +245,29 @@ rear4K frame delivery, with independently established WM16/stats DMA
 and IQ/RT-CDM lifecycle. Linux-native rear 4K ISP optical frame is
 still UNPROVEN.
 
+## E004nv BF static callgraph — direct WM16 proof and mode caveat
+
+`experiments/E004-front-ir-vd55g0/e004nv-rear-six-group-bf-static/STATIC-BF-CALLCHAIN.md`
+and `verify_static_bf_callchain.py` (47 SHA-locked OEM ARM64
+instruction anchors) now trace **who invokes and where BF goes**.
+Registration at RVA0x1a100 installs mode0 event handler RVA0x1ef90
+or mode1 alternate RVA0x1c9d0 at object+0x6bd8; real event
+worker at RVA0x239a0 loads/calls that handler. In mode0, incoming
+second 32-bit status word bit7 generates BF event0x0F; event branch
+pops FIFO group8, invokes mode0 per-event callback RVA0x1d620,
+event15 target RVA0x1d710. Its mapped MMIO window begins at
+VFE_base+0xc00; direct BF hardware reads VFE+0x1e00 = **WM16 CFG0**
+and VFE+0x1e70 = **WM16 ADDR_STATUS0**. It stores WM16 CFG0 bit0
+in device+0x1c0, which is EXACTLY the subsequent extended BF
+completion gate. A nonempty/enabled path matches queued item/tag,
+stamps BF resource port0x300d and notifies via RVA0x26340.
+**IMPORTANT:** same binary has TWO event dispatch modes selected by
+per-device instance/threshold, and actual Windows rear 4K runtime
+mode is UNPROVEN; no BF input bit7, event0x0F LIVE or WM16 DMA
+retirement was observed. This static route is real evidence of
+BF↔WM16 connection but does NOT authorize Linux runtime, ISR or
+Golden installation. Full report + offline verifier in above path.
+
 ## Resume behaviour
 
 When asked to continue camera work:
