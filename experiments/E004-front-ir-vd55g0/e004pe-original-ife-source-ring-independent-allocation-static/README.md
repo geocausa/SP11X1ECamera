@@ -1,4 +1,8 @@
-# E004pe — ERRATUM: the 0x1D0-byte +0x1B0 ring belongs to the command-B destination endpoint, NOT the command-A source
+# E004pe — corrected destination 0x1D0-byte +0x1B0 ring (NOT source type-1 channel)
+
+**2026-09-24 E004pg UPDATE:** E004pf's correction remains: 0x17AA4 allocates the 0x1D0-byte ring at **DESTINATION context+0x1B0**. E004pg now establishes that the actual SOURCE command0x0A handler0x22CD0 returns **source context+0x08**, a different **0x368-byte worker ring** allocated at0x2284C, alongside the notification address &source context+0x20. The actual type1 source→destination+0x198→worker ring is source-proven on successful setup. The old E004pe/ E004pf "source context+0x1B0 allocation unknown" question is not a type1-channel blocker because that field is not exported by actual source command0x0A; any `RESULT.json` references treating it as a candidate type1 ring are historical, superseded. [E004pg](../e004pg-original-source-command-a-worker-ring-identity-static/README.md).
+
+# E004pe v2 historical destination-allocation erratum and evidence
 
 **Corrected 2026-09-24 during E004pf continuation.** The original E004pe commit `1ba51d254d758f63e391ffb84b537cb1e885e6b3` accurately identified **two ring allocation sites** but incorrectly identified the endpoint that owns the 0x1D0-byte ring. This document and `RESULT.json`/verifier **supersede that source-side attribution**. The folder name is retained only to preserve the historical project link and should not be read as a current factual claim. The corrected verifier pins the original OEM ISP SHA, **74 exact original ARM64 instructions and 32 fail-closed negative cases** including the per-instance endpoint table and rejects equating the destination allocation to command-A source.
 

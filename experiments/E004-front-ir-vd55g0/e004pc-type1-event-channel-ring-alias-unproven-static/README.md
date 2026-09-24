@@ -1,4 +1,8 @@
-# E004pc — type-1 event-channel ring and IFE worker queue are separately provisioned; exact alias is not yet proven
+# E004pc — historical channel assignment boundary; E004pg now proves static source→worker ring identity
+
+**2026-09-24 UPDATE:** E004pg traced the actual per-instance table+0x30 SOURCE handler0x22CD0 command0x0A to export **source context+0x08 worker ring and &context+0x20 notify**, handed to table+0x40 DESTINATION handler0x211B0 command0x0B, which imports ring into type1 producer destination+0x198. Original source worker dequeues the **same context+0x08 ring**. Thus the earlier E004pc "alias not proven" boundary is **superseded for the source-verified successful channel setup path**, although no particular live rear4K BF/event/WM16 DMA completion was measured. Preserve the historical verifier/result only for its original limited assignment observations, not as a current ring-specification authority. [E004pg](../e004pg-original-source-command-a-worker-ring-identity-static/README.md).
+
+# Historical E004pc description (before actual source cmd0x0A decoder was located)
 
 **2026-09-24; parent E004pb Git `047b33e5cf7a8bfd5af392b893a6bf572643f5f6`.** Read-only same-SP11 original OEM ISP SHA locked, **73 exact original ARM64 instructions and 23 negative tests PASS**; isolated synthetic same-object guard refuses to infer an alias from offset/record format alone. Evidence **S/source** for the original callback/control dataflow and **D/offline assertion** for the proposed alias contract, not P/live Windows rear BF or real Linux DMA. Target rear OV13858 NV12 3840×2160 VideoRecord; Windows E004nq physically proves CSID1/VFE1 activity but not the actual original status-buffer channel or WM16 completion. Linux slices **L1 front↔rear shared VFE1 ownership, L2 channel/stop, L3 IRQ/event FIFO8 + generation-matched WM16 DMA**.
 
