@@ -101,6 +101,10 @@ Do not port Windows orchestrator, hidden .sys/.dll code or AI effects.
 
 **Live rear VideoRecord selected identity remains UNKNOWN**, as do the original returned callback implementations/selector argument ABI, true BF/WM16 DMA retirement and native Linux rear ISP4K optical frames. Next only source-trace **ISP slot-4, rear sensor slot-1 and platform slot-5 returned interfaces**, then map physical effects into independent Linux CAMSS L0–L3. No Windows Frame Server/AI/effects dependence; no numeric Windows engine selector promoted to a Linux command without source-backed receiver evidence.
 
+## E004oc ISP nested callback source proof — do not name Windows selectors yet
+
+The original same-SP11 ISP matching interface-acquisition branch sets callback RVA0x4E30. Only if the AVStream alternative-dispatch path is selected, its engine selector is passed to that ISP callback. Source-locked original ARM64 code at ISP RVA0x50C4–0x5210 sends selector values 0x804/0x805/0x809 to a **SECOND, currently unidentified callback interface at ISP state/context +0x10**. Proof: experiments/E004-front-ir-vd55g0/e004oc-device-interface-identity-routing-static/verify_isp_callback_delegation.py (24 exact instruction anchors) and README addendum. Do not map these numbers to native ISP/sensor start/stop or assume this was the actual rear video runtime path. The next static dependency is the nested callback producer and its actual receiving hardware request ABI. Protect original Golden/front/rear RAW fallback, no Windows AI/effects port.
+
 ## Mission
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
