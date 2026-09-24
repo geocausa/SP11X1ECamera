@@ -1,4 +1,8 @@
-# E004pa — two original mode-selected IFE TOP status/clear register layouts match different Linux VFE680 TOP branches
+# E004pa — IFE snapshot TOP layout original source correct; this snapshot is NOT original BF type1 queue source
+
+**2026-09-24 E004ph UPDATE:** This exact original IFE snapshot layout concerns queue A, whereas the actual type1 event preparation uses separate queue B and CSID0/1 BUF_DONE IRQ_STATUS+0x8C. The historic E004ox TOP1 BF inference and E004pb conditional queue-A BUS0 BF source are not the actual type1 source. Snapshot register offset matches **do not** authorize CSID bit7→VFE WM16 DMA completion, IRQ ack, or native processed rear arm. See [E004ph](../e004ph-original-type1-preparation-queue-status-provenance-static/README.md).
+
+# Historical E004pa snapshot TOP layout evidence
 
 **2026-09-24 E004pb/E004pc provenance correction:** The source-verified type-1 producer swaps original source+0x08 and +0x0C in *both* selected normalizers. Thus E004ox's earlier zero-mode TOP1+0x08→BF record+0x08 direct inference is **superseded**; the original E004pa mode-dependent TOP status/clear *register-offset matches remain true*, but do NOT independently specify the BF bit or IRQ acknowledge. If the input is the same original IFE snapshot, the normalized BF record+0x08 sources selected BUS status0 snapshot+0x0C, whose actual rear4K live origin remains unproven. The type-1 producer context+0x198 ring-to-worker device+0x08 alias also remains unproven. See [E004pb](../e004pb-ife-type1-record-producer-normalization-static/README.md) and [E004pc](../e004pc-type1-event-channel-ring-alias-unproven-static/README.md).
 

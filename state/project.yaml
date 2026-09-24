@@ -5,6 +5,51 @@ updated: 2026-09-24
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E004nh-optin_BGGR_upper60_RGB_chart_excludes_SP7_faulty_lower_LCD_original_front_gain_28fps_FAIL_auto_Golden_E004ne_last_full_pass
 phase: native-qualcomm-hardware-isp-windows-oem-rgb-image-quality-priority
+latest_original_IFE_type_one_B_status_preparation_CSID_BUF_DONE_static:
+  identity: E004ph
+  state: PASS_TYPE1_QUEUE_B_CSID0_1_BUF_DONE_STATUS_BIT7_CONDITIONAL_BF_EVENT0F_STATIC_WM16_DMA_UNPROVEN
+  evidence_class: S_SAME_SP11_ORIGINAL_ISP_OEM_ARM64_PLUS_ACCEPTED_LINUX_CSID680_STATIC_ONLY
+  parent_git_revision: dd112e7dd9723b9f519d5953147c7d4e07b4222a
+  same_SP11_original_OEM_ISP_sha256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
+  accepted_same_SP11_native_CSID680_source_sha256: 9c79fec22fc63738dd05b33aa7d43f4a68be4935b522fa35354a0170c498ae90
+  exact_original_ARM64_instruction_anchors: 200
+  fail_closed_negative_tests: 51
+  original_IFE_snapshot_A_queue_context_offset: '0x228'
+  original_IFE_snapshot_A_registered_wrapper_RVA: '0x24a30'
+  original_type1_B_queue_context_offset: '0x60328'
+  original_type1_B_prepare_callback_RVA: '0x24380'
+  original_type1_B_consumer_callback_RVA: '0x243d0'
+  original_type1_B_preparer_context_callback_offset: '0x200'
+  original_type1_B_normalizer_context_callback_offset: '0x208'
+  original_type1_B_status_format_config_input_offset: '0xe28'
+  original_type1_B_configzero_preparer_RVA: '0x1b5f0'
+  original_type1_B_configzero_normalizer_RVA: '0x1b7d0'
+  original_type1_B_confignonzero_preparer_RVA: '0x20b50'
+  original_type1_B_confignonzero_normalizer_RVA: '0x20ce0'
+  original_CSID_resource_selector_for_type1_destination_context_instance0: 7
+  original_CSID_resource_selector_for_type1_destination_context_instance1: 8
+  original_CSID_resource_names: ['CSID0', 'CSID1']
+  original_type1_B_configzero_register_window_pointer_context_offset: '0x8'
+  original_type1_B_configzero_BUF_DONE_status_offset: '0x8c'
+  original_type1_B_configzero_BUF_DONE_clear_offset: '0x94'
+  original_type1_B_configzero_BUF_DONE_mask: '0x7ffffff'
+  original_type1_B_confignonzero_BUF_DONE_mask: '0x1f'
+  original_type1_B_prepared_status_word_offset: '0xc'
+  original_type1_B_normalized_BF_consumer_status_word_offset: '0x8'
+  original_type1_B_configzero_BF_event_bit_position: 7
+  original_type1_B_configzero_BF_event_id: '0x0f'
+  original_type1_B_source_is_separate_from_IFE_snapshot_wrapper: true
+  original_type1_B_configzero_CSID_BUF_DONE_bit7_to_conditional_BF_event0F_static_proven: true
+  accepted_native_CSID_ISR_already_reads_and_clears_BUF_DONE_status: true
+  accepted_native_CSID_ISR_bit7_is_independent_VFE_WM16_completion_proven: false
+  original_live_rear4k_CSID1_selected_mode_BF0x0f_observed: false
+  native_rear_VFE1_BF_FIFO8_generation_matched_WM16_IRQ_bus_dma_iommu_quiescence_proven: false
+  rear_Linux_hardware_ISP_runtime_authorized: false
+  protected_Golden_boot_kernel_camera_hardware_modified: false
+  next_original_gate: match_live_rear4k_CSID1_type1_B_status_format_and_BF0x0f_with_independent_VFE_WM16_completion
+  next_native_gate: prove_real_VFE1_WM16_BUS_IRQ_DMA_IOMMU_quiescence_with_owner_generation_and_fifo8_identity_before_runtime_arm
+  evidence: experiments/E004-front-ir-vd55g0/e004ph-original-type1-preparation-queue-status-provenance-static/README.md
+  verifier: experiments/E004-front-ir-vd55g0/e004ph-original-type1-preparation-queue-status-provenance-static/verify.py
 latest_original_IFE_type_one_source_command_A_same_worker_ring_static:
   identity: E004pg
   state: PASS_ORIGINAL_SOURCE_HANDLER_22CD0_CMD_A_CONTEXT_8_WORKER_RING_EXPORTED_TO_DEST_198_TYPE1_PRODUCER
@@ -44,7 +89,7 @@ latest_original_IFE_type_one_source_command_A_same_worker_ring_static:
   native_rear_hardware_ISP_4k_optical_proven: false
   rear_Linux_hardware_ISP_runtime_authorized: false
   protected_Golden_boot_kernel_camera_hardware_modified: false
-  next_original_static_gate: prove_same_original_IFE_snapshot_wrapper_input_into_type1_producer_and_mode_selected_handler_same_rear4k_session
+  next_original_static_gate: E004ph_queueB_CSID_status_proven_next_original_live_rear4k_mode_and_independent_VFE_WM16_completion
   next_native_gate: independently_prove_real_VFE1_irq_ack_BF_FIFO8_generation_matched_WM16_bus_dma_iommu_quiescence_before_rear_ISP_arm
   evidence: experiments/E004-front-ir-vd55g0/e004pg-original-source-command-a-worker-ring-identity-static/README.md
   verifier: experiments/E004-front-ir-vd55g0/e004pg-original-source-command-a-worker-ring-identity-static/verify.py

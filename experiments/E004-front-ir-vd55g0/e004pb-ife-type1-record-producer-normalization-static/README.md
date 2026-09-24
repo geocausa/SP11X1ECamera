@@ -1,4 +1,8 @@
-# E004pb — original type-1 IFE event producer and status normalization overturn the direct TOP1→BF inference
+# E004pb — status-word reorder source proven; historical snapshot-origin conditional superseded by E004ph
+
+**2026-09-24 E004ph UPDATE:** The original **type1 status source is queue B's separate preparation callback0x24380**, which reads per-context CSID0/1 BUF_DONE_IRQ_STATUS+0x8C (in config-zero), rather than the different original IFE snapshot-wrapper0x24A30 in queue A. The E004pb exact original source+0x0C→record+0x08 normalization and corrected no-direct-TOP1 conclusion remain true. Its hypothetical 'IF the type1 input were IFE snapshot, BUS0 word could carry BF' does **not** identify the actual discovered type1 path. Correct source path is CSID_BUF_DONE bit7→type1 normalized record+0x08→conditional event0x0F, **NOT a proof that CSID bit7 retires VFE WM16 DMA**. See [E004ph](../e004ph-original-type1-preparation-queue-status-provenance-static/README.md).
+
+# Historical E004pb source/record copier proof original type-1 IFE event producer and status normalization overturn the direct TOP1→BF inference
 
 **2026-09-24; parent E004pa Git `779e77ef89284b6aeeb37e8b5b09c584dc04b763`.** Original SHA-pinned same-SP11 OEM ISP read-only; **129 exact original ARM64 instruction anchors, 25 negative tests** and independent synthetic distinct-word source/consumer counterexamples PASS. Evidence class **S/original static**, not live P Windows rear BF or verified native Linux DMA. Target rear OV13858 NV12 3840×2160 VideoRecord; accepted Windows E004nq physically observed shared CSID1/VFE1 with enabled WM16, but original active per-device callback mode, actual BF event0x0F, queue-entry generation and WM16 DMA lifetime remain unobserved. Linux responsibility **L1 front↔rear VFE1 owner, L2 stop/handoff, L3 IRQ/FIFO8/per-generation WM16 DMA**. No camera, boot, kernel module, hardware MMIO, blocked KD or proprietary export touched.
 

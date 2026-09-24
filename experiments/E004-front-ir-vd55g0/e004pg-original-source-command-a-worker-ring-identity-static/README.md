@@ -1,4 +1,8 @@
-# E004pg — original source command 0x0A exports its OWN worker ring+0x08 and notification address+0x20 into the type-1 producer
+# E004pg — source→worker same software ring remains proven; E004ph closes type1 status source via separate CSID callback queue
+
+**2026-09-24 E004ph UPDATE:** The original type-1 incoming status record is *not* the IFE snapshot-wrapper0x24A30 output in separate queue A. Type1 queue B preparer0x24380 uses context+0x200 callback0x1B5F0/0x20B50 to read the **type1 destination context's CSID0/1 mapped register window+0x8C (BUF_DONE_IRQ_STATUS)**; normalizer+0x208 copies prepared source+0x0C→type1 record+0x08, from which mode-zero BF event0x0F checks bit7. Thus E004pg's old next gate to prove snapshot-wrapper→type1 input is superseded. Its original SAME type1 software ring→worker conclusion is unchanged. CSID_BUF_DONE bit7 is **not** proven WM16 DMA retirement; Linux real VFE ISR still no-op and rear ISP runtime DENIED. [E004ph](../e004ph-original-type1-preparation-queue-status-provenance-static/README.md).
+
+# Historical E004pg original source+worker ring evidence
 
 **2026-09-24; parent E004pf Git `54edb98a3ef4107642013bed2033ce008118c517`.** Original same-SP11 OEM ISP source-only, SHA pinned, **93 exact original ARM64 instruction anchors and 34 fail-closed negative cases PASS**, including the actual original **SOURCE** command jump table and an isolated same-context/success gate. Evidence **S/verified original static code path** and D/offline gate, **NOT P/live original rear 4K BF completion or verified native DMA**. Target original Windows rear OV13858 NV12 3840×2160 VideoRecord; E004nq observed physical CSID1/VFE1 sharing with front but not callback-mode choice, original BF IRQ event0x0F, frame identity or WM16 DMA retirement. Native Linux L1 shared front/rear VFE1 exclusive owner, L2 event-channel setup/stop, L3 real BF IRQ/status/ack, FIFO8 and generation-matched WM16 DMA/IOMMU fence.
 
