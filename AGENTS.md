@@ -25,6 +25,10 @@ Golden remain protected. Every new experiment MUST name a Linux L0–L6
 slice, an explicit mode/client, evidence tier and falsifiable next gate;
 update the map if the Windows→Linux component boundary changes.
 
+## E004oo IFE later-progress event is KeSetEvent, no DMA-stop inference
+
+[E004oo original same-SP11 ISP later IFE event](experiments/E004-front-ir-vd55g0/e004oo-ife-later-progress-event-not-dma-ack-static/README.md) checks 60 exact original ARM64 instructions, all 33 instructions of helper RVA0x241D8 and three source-resolved original imported API slots, with 11 fail-closed negatives. Conditional context flag+0x171 is cleared before calling helper; wrapper RVA0x2A1D8 invokes original imported **KeSetEvent**. This is SOFTWARE EVENT signalling, not an independent WM16 DMA/IRQ bus drain or buffer fence. Other hardware-driven callers may exist; do not claim entire stop sequence lacks a hardware ack. NEXT trace flag producer and independent BF/WM16 per-buffer bus/IRQ retirement, live rear selected IFE mode. Preserve Golden, front PIX, rear RAW+software4K and IR safeguards; source-compiled experimental Linux rear ISP runtime remains denied.
+
 ## E004on three concrete 0x809 first callbacks do not acknowledge physical stop
 
 [E004on original same-SP11 ISP first callback source](experiments/E004-front-ir-vd55g0/e004on-isp-selector-809-three-concrete-core-receivers-static/README.md): E004og-installed CSID/IFE/CDM first callback valid-input 0x809 paths source-checked at 57 original ARM64 instructions + 13 negatives. CSID default diagnostic status 0, IFE default status 0 **without** 0x805 IFE stop helpers, CDM unsupported-selector status 0x0E. Conditional [S], no claim that live rear Windows 4K selects any of them. Neither zero return nor 0x809 is physical WM16 DMA/IRQ quiescence; never release buffer or switch native Linux shared-core owner from these selectors/statuses. NEXT independent IFE later progress/bus/IRQ/WM16 DMA retirement and live rear selection evidence; maintain source-compiled rear ISP runtime DENIED and protect Golden/front/rear RAW fallback/IR.
