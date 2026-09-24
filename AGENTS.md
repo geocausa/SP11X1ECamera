@@ -95,6 +95,12 @@ hardware effects. Current source-only audit changes no Golden,
 front native27, rearRAW/software4K, IR or Linux rear native4K status.
 Do not port Windows orchestrator, hidden .sys/.dll code or AI effects.
 
+## E004oc closes static backend-GUID routing, NOT callback semantics
+
+[E004oc device-interface routing](experiments/E004-front-ir-vd55g0/e004oc-device-interface-identity-routing-static/README.md) SHA-pins original same-SP11 OEM Windows binaries and **nine** AVStream table identities; **seven** have independently checked original provider registration-code call sites. The correct static provider mapping is **rear sensor slot 1, front sensor slot 2, ISP slot 4, shared platform slot 5**, flash slot 0, auxiliary slot 3, secure ISP slot 8. Slots 6–7 remain UNKNOWN in the scoped archive. The ISP, rear and front sensors also **query** the platform-common GUID, which is **registered** by the platform driver: do not mislabel consumers as duplicate providers. One opaque 0x2326AB request appearing in both platform and ISP does not mean it broadcasts a single command.
+
+**Live rear VideoRecord selected identity remains UNKNOWN**, as do the original returned callback implementations/selector argument ABI, true BF/WM16 DMA retirement and native Linux rear ISP4K optical frames. Next only source-trace **ISP slot-4, rear sensor slot-1 and platform slot-5 returned interfaces**, then map physical effects into independent Linux CAMSS L0–L3. No Windows Frame Server/AI/effects dependence; no numeric Windows engine selector promoted to a Linux command without source-backed receiver evidence.
+
 ## Mission
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
