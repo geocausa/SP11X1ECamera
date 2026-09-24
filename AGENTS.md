@@ -218,6 +218,33 @@ Next is a dedicated private Windows REAR LIVE BF completion trace,
 then real per-group stats DMA/retire, RT-CDM/IQ/3A and safe exclusive
 CSID1/VFE1 hardware lifecycle before any Linux-native rear4K run.
 
+## E004nx/E004ny Windows rear 4K delivery control — KD contrast
+
+Real SAME-SP11 Windows rear NV12 3840x2160 frame-reader delivery is
+REPRODUCIBLE with NO KD attached. E004nx delivered 365 and 366 valid
+rear4K handles across 2×35sec successful Start/Stop passes; E004ny
+delivered 1152 and 1154 handles across 2×110sec successful passes,
+after recording ≥12 valid handle pre-KD checkpoints EACH PASS.
+The earlier E004nw SP7 KDNET one-shot BF0x0F branch was armed but
+its Windows WinRT StartAsync=Success delivered ZERO handles, so no
+actual BF event/WM16 completion was observed. E004ny debugger launch
+was blocked by a tool safety check; **NO debugger was attached** in
+that healthy test and the block MUST NOT be circumvented. Comparing
+KD-armed zero frames and these two no-KD healthy runs does NOT
+establish KD causation; camera timing/state may differ. See
+`experiments/E004-front-ir-vd55g0/e004ny-rear4k-live-control/README.md`
+and E004nx RESULT, E004nw previous failure scalar, E004ny RESULT +
+verify.py with 14 fail-closed mutations. Windows ScheduledTask removed,
+original private logs and binary remain private, Windows NTFS mounted
+read-only and unmounted, user-authored frame-count-only source/evidence
+in Git; new Linux boot verified protected Golden v19c BootCurrent0005
+Linux-first order, no loaded camera/process, no Golden modifications.
+Maintain E004nv BF0x0F/group8 as STATIC driver-dispatch candidate
+until an authorized live debugger event is observed DURING confirmed
+rear4K frame delivery, with independently established WM16/stats DMA
+and IQ/RT-CDM lifecycle. Linux-native rear 4K ISP optical frame is
+still UNPROVEN.
+
 ## Resume behaviour
 
 When asked to continue camera work:
