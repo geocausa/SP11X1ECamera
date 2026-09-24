@@ -25,6 +25,10 @@ Golden remain protected. Every new experiment MUST name a Linux L0–L6
 slice, an explicit mode/client, evidence tier and falsifiable next gate;
 update the map if the Windows→Linux component boundary changes.
 
+## E004ok immediate BF stop callback is NOT physical WM16/DMA retirement
+
+[E004ok source-only original ISP trace](experiments/E004-front-ir-vd55g0/e004ok-bf-stop-cfg0-postwrite-software-state-static/README.md) establishes that the conditional BF0x300D WM16 CFG0 zero-write at original RVA0x1DA74 branches to a common tail and entire 16-instruction helper RVA0x1C990–0x1C9CC, which only updates original context mapping/software status. Valid resource flag update/return and the outer IFE loop also do **not** provide a hardware IRQ/DMA completion acknowledgement. Exactly 47 original ARM64 instructions + 12 fail-closed checks PASS, **static-only**. Next independently source-trace later IFE progress/event and BF/WM16 bus/IRQ/queue buffer-retirement; confirm live rear Windows selected instance/mode separately. Never free WM16 DMA or switch Linux shared PIX owner based solely on CFG0 zero or callback return. 0x809 independently unknown. Protected Golden, front native PIX, rear RAW/software4K, IR safeguards unchanged; experimental Linux rear ISP still runtime-denied.
+
 ## E004nz OEM AVStream camera-engine handoff — next reverse-engineering slice
 
 The same-SP11 `surfacecamavs8380.sys` has now been independently
