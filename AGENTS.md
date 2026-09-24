@@ -25,6 +25,10 @@ Golden remain protected. Every new experiment MUST name a Linux L0–L6
 slice, an explicit mode/client, evidence tier and falsifiable next gate;
 update the map if the Windows→Linux component boundary changes.
 
+## E004om conditional manager per-core list writer identified, no live rear inference
+
+[E004om same-SP11 ISP manager list](experiments/E004-front-ir-vd55g0/e004om-isp-manager-core-list-producer-static/README.md) 80 original ARM64 instruction anchors and 17 fail-closed tests PASS: conditional 0x802 hardware-descriptor configuration can append two paired descriptor indices or one selected index to manager indexed words starting at six and increments manager +0x24 count. E004ol 0x809 generic dispatch reads the SAME record/count. Count-nonzero branch skips the checked builder; not all producer/teardown cases are closed. Actual live rear4K configured core IDs, callback semantics, IRQ/BF/WM16 DMA retirement remain unproven. NEXT trace actual 0x809 branch/return of concrete E004og CSID/IFE/CDM first callbacks and independent physical stop. Preserve Golden, front PIX, rear RAW/software fallback, IR privacy; experimental rear Linux ISP remains runtime DENIED.
+
 ## E004ol selector0x809: generic default forwarding, not a decoded stop command
 
 [E004ol original same-SP11 ISP source](experiments/E004-front-ir-vd55g0/e004ol-isp-selector-809-independent-dispatch-static/README.md) independently traces 0x809 through dedicated-case fallthrough into manager generic/default branch RVA0x1932C; eligible configured core callbacks receive original w1=0x809. 58 exact original ARM64 instruction anchors + 12 fail-closed checks PASS. Generic list starts at manager index six, but actual live rear VideoRecord selected cores, receiving callback bodies and 0x809 argument/return/hardware semantics remain UNKNOWN. Do not equate with 0x805, a physical stop, or DMA buffer retirement. Signed >=4 ID guard is not proof of nonnegative IDs. Next find exact generic-list producers/receivers; independently trace IFE/WM16 IRQ/bus/DMA stop and live selected rear profile. Linux rear native ISP remains runtime-denied; Golden/front PIX/rear RAW fallback/IR safe.
