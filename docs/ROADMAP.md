@@ -19,7 +19,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 tools/verify-camera-stack-port-map.py
 
 - Identify exact devices/packages: **done**.
 - Decode board resource ordering, CCI/I2C identity, MCLK, GPIO/reset and CSI link mode.
-- Trace Windows only where static packages are insufficient.
+- E004nz now source-pins the OEM AVStream camera engine, profile/configuration packet handoff and start/stop indirect dispatch: [E004nz callgraph](../experiments/E004-front-ir-vd55g0/e004nz-avstream-profile-control-static/README.md). Next: trace helper RVA `0x20DA8` to its platform/ISP/sensor recipient and decode only the required hardware request ABI. **Numeric command selectors remain unidentified**; do not port them or infer the registered Device MFT ran in a given session.
+- Trace Windows only where static packages are insufficient; compare manual rear VideoRecord versus preview/photo and front→rear→front in a bounded non-image session.
 
 ## Phase B — Common Qualcomm path
 

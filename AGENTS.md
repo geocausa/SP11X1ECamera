@@ -25,6 +25,33 @@ Golden remain protected. Every new experiment MUST name a Linux L0–L6
 slice, an explicit mode/client, evidence tier and falsifiable next gate;
 update the map if the Windows→Linux component boundary changes.
 
+## E004nz OEM AVStream camera-engine handoff — next reverse-engineering slice
+
+The same-SP11 `surfacecamavs8380.sys` has now been independently
+verified **statically** at 66 exact ARM64 instruction anchors, see
+`experiments/E004-front-ir-vd55g0/e004nz-avstream-profile-control-static/README.md`
+and `RESULT.json` and rerunnable `verify.py` (17 negative cases).
+Not merely a list of Windows drivers: we pinned AVStream preview/still/
+video/stats pin handlers, single-active-filter policy, privacy state,
+CameraEngine OnStart/OnStop, actual separate user-mode sensor timing
+and profile/processing CONFIG packet path, separate PER-REQUEST packet,
+and separate ISP notification worker. Windows INF **registers**
+QcDeviceMFT8380.dll but its actual involvement in the rear recording
+is UNPROVEN; OEMCameraProfiles syntax in that INF is COMMENTED EXAMPLE.
+CCameraEngine engine start RVA0x1efd0 / stop RVA0x1f130 both call
+indirect helper RVA0x20da8 with potential ordered selector sites
+0x804,0x804,0x5,0x17 (start) and 0x805,0x809,0x805,0x18 (stop).
+These NUMERIC VALUES ARE **NOT DECODED COMMAND MEANINGS OR LINUX
+IOCTLS**. Do not port them until the helper's backing interface and
+actual platform/ISP/sensor recipient have source-backed mapping;
+branches may skip certain command calls. Source code proves Windows
+separately handles IFE and sensor stop and timing-aware user-mode
+control without requiring a Windows AI/effects pipeline. Linux kernel
+must preserve hardware safety/ISP/DMA ownership; optional 3A/IQ policy
+may be small open libcamera IPA / explicit standard user controls.
+The E004nv mode0 BF branch, live rear BF and Linux native4K ISP frame
+remain unproven; no new runtime code loaded, Golden untouched.
+
 ## Mission
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
