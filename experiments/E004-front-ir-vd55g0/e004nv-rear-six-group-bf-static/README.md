@@ -1,4 +1,8 @@
-# E004nv — OEM BF event 0x0F/group 8 and source-compiled rear six-group ownership candidate
+# E004nv — six-group source-only rear candidate, BF CSID bit7 now observed live but no WM16 DMA fence
+
+**2026-09-24 E004ph/E004pi UPDATE:** E004ph resolves original type1 BF input to **CSID0/CSID1 BUF_DONE STATUS+0x8C bit7** (separate from IFE snapshot queue), and E004pi physically observed CSID1 BUF_DONE STATUS `0x000002F1` with bit7 unmasked in BOTH original Windows rear4K LIVE physical register snapshots. This **does not** independently prove original software BF event0x0F/group8 FIFO8 same-frame delivery or VFE1 WM16 BUS/IRQ/DMA/IOMMU safe completion/owner handoff. The E004nv candidate stays compiled but unwired and **runtime DENIED**. Accepted Linux CSID ISR already ACKs BUF_DONE; do not relabel bit7 as VFE WM16 IRQ. [E004pi read-only live evidence](../e004pi-original-live-rear-csid-bf-bit7-wm16-fence-offline/README.md).
+
+# Historical E004nv original static BF event/GROUP8 and source-only kernel candidate
 
 Parent E004nu commit `f06338233da184dde44e3bdb898ad10a37514ef0`. The existing front-camera E003h reverse engineering established five independent OEM Windows completion groups. E004nq then proved an additional active VFE1 WM16 **BAF autofocus statistics** write master in **both** Windows rear 3840×2160 live recording passes. E004nu compiled a separate ten-client rear VFE1 static BUS contract, keeping all ten WM buffers conservatively in flight, but deliberately did **not** assign an unknown completion interrupt to WM16.
 

@@ -1,4 +1,8 @@
-# E004ov — offline-only generation-tagged rear stop/ownership contract
+# E004ov — generation/ownership offline design; E004pi enforces separate CSID IRQ versus VFE WM16 DMA evidence
+
+**2026-09-24 E004pi LIVE/DOMAIN UPDATE:** E004pi physically observed CSID1 BUF_DONE bit7 set+unmasked and WM16 enabled in both original rear4K Windows LIVE snapshots. An additional standalone offline C11 gate now **rejects CSID bit7 as a substitute for independent VFE1 WM16 BUS/IRQ/DMA/IOMMU retirement**, and checks same owner/frame/FIFO8 identity, stop and all-six-group fences; 95 assertions each GCC+Clang ASAN/UBSAN, runtime authorization still -EOPNOTSUPP. E004ov generation guard remains a separate offline design, **not** native CAMSS-integrated. No per-frame original BF event0x0F/WM16 DMA fence was measured, and no camera/kernel/boot changes. [E004pi](../e004pi-original-live-rear-csid-bf-bit7-wm16-fence-offline/README.md).
+
+# Historical E004ov original C11 generation-tagged offline design
 
 **2026-09-24; parent E004ou Git `dd37658148802a938e5499b1fb5bf249a154208b`.** Evidence tier **D = proposed native Linux safety design**, NOT live original Windows evidence **P**, exact OEM source evidence **S** or proven hardware DMA completion. Client/mode: rear OV13858 Windows-oracle 3840×2160 NV12 processed VideoRecord. Linux slices **L1 VFE1 exclusive front↔rear ownership, L2 source/camera stop, L3 six-group IRQ/queue/per-generation DMA retirement**. E004nq already physically established that *both* original rear Windows 4K sessions use shared CSID1/VFE1; BF `0x0F` *live occurrence* and precise original IRQ status/ack plus WM16 physical DMA retirement remain **UNPROVEN**.
 

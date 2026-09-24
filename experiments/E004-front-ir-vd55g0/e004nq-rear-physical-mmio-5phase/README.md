@@ -1,4 +1,8 @@
-# E004nq — rear Windows five-phase physical-register route oracle (new identity)
+# E004nq — original Windows rear physical five-phase route oracle; E004pi extracted new CSID BUF_DONE bit7 scalar
+
+**2026-09-24 E004pi READ-ONLY ADDENDUM:** Original E004nq LIVE1/LIVE2 Windows rear4K full physical KD logs stayed PRIVATE on SP7. E004pi reread existing logs by SHA, verified complete CSID1/VFE1 regions and safely exported scalar-only registers: CSID1 BUF_DONE STATUS+0x8C=`0x000002F1` and MASK+0x90=`0x0001FFFF` in BOTH rear4K live captures (bit7 **set and unmasked**); VFE1 WM16 CFG0=`0x00020001` enabled in both, VFE1 BUS status0/1 zero at sampled instant (NOT DMA/quiescence proof). E004ph source-zero path conditionally links CSID bit7→original BF event0x0F, but actual rear4K selected handler/software event/FIFO8 same-generation and independent VFE WM16 DMA/IOMMU completion remain UNPROVEN. [E004pi](../e004pi-original-live-rear-csid-bf-bit7-wm16-fence-offline/README.md). No private logs, DMA/physical addresses or optical pixels exported, no new live camera operation.
+
+# Historical E004nq original physical routing and source evidence
 
 Predecessor pinned to `7b15bee929cfe5098175e885d76e8b4d66468822`; parent `E004no` left protected SP11 Ubuntu Golden v19c and working front E003i VFE1 + E004ne rear RAW/software 4K fallback unchanged. Scope SAME SP11 Windows OEM rear OV13858 MSHW0491 Color VideoRecord NV12 3840x2160 **under active streaming**, and simultaneous SP7 KDNET PHYSICAL MMIO. One direct EFI BootNext0006 Windows boot, persistent BootOrder Linux Boot0005-first, GRUB saved Golden v19c unchanged; normal reboot returns protected Ubuntu. No IR, Hello, Linux OS suspend, SP7 screen photo, Windows firmware/driver/tuning exported, optical pixels/RAW/photo/thumb/hash exported.
 

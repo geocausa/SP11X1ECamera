@@ -1,4 +1,8 @@
-# E004ow — accepted native Linux VFE680 ISR is a stub; rear BF/WM16 hardware completion provider does not yet exist
+# E004ow — native VFE ISR still stub; E004pi confirms CSID BUF_DONE bit7 live but NOT VFE WM16 IRQ/DMA completion
+
+**2026-09-24 E004pi physical update:** Both pre-existing original Windows rear4K LIVE snapshots physically show CSID1 BUF_DONE bit7 set+unmasked and WM16 enabled, but **no original per-frame BF FIFO8/WM16 DMA quiescence**. Accepted native CSID ISR already reads/acks CSID BUF_DONE+0x8C/+0x94; real accepted native VFE680 ISR is still this E004ow stub. Do NOT double-ack CSID or interpret the CSID bit7 as an independently verified VFE WM16 DMA fence. E004pi offline domain-separation C11 model and physical scalar rechecks still keep rear ISP runtime denied. [E004pi](../e004pi-original-live-rear-csid-bf-bit7-wm16-fence-offline/README.md).
+
+# Historical E004ow accepted real native VFE ISR source proof
 
 **2026-09-24; parent E004ov Git `0a5b3325b91368f139889d7099570a16a67bd61e`.** Read-only accepted SP11 native Linux CAMSS source, four SHA-pinned files. Evidence tier **D/native source inspection**; not a physical original Windows measurement or a successful Linux rear hardware ISP capture. Explicit target: rear OV13858 3840×2160 processed VideoRecord (existing Windows physical oracle E004nq: shared CSID1/VFE1 active; VFE0 inactive). Linux slices **L1** front↔rear shared-core owner, **L2** safe stop/handoff, **L3** real VFE1 IRQ/WM/stats queue and per-generation DMA retirement. **No camera/boot/firmware/KD operation.**
 
