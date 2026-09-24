@@ -1,0 +1,24 @@
+# E004op — original IFE stop flag links per-resource stop to two distinct software events
+
+**2026-09-24; parent E004oo Git `8953e3ae58082d8c73f1a96391b94f3132fdbb6b`.** Original same-SP11 OEM Qualcomm `qccamisp8380.sys` SHA-locked and read-only. Evidence class **S** (conditional original ARM64 code); not a live Windows rear 4K stop or Linux hardware result. Target client/mode: rear OV13858 3840×2160 VideoRecord. Native Linux responsibilities **L1–L3**: exclusive CSID1/VFE1 owner, per-resource hardware stop, IRQ and image/statistics DMA lifetime.
+
+E004oh established a bounded original IFE resource stop helper RVA`0x27278`; E004oj pinned a conditional zero write to BF-associated WM16 CFG0; E004oo identified the later progress helper as a **software `KeSetEvent` signal**, not an independently verified hardware DMA fence. E004op now traces **the pending flag's original producer, its two conditional mode-selected consumers and two different software event objects**:
+
+| Source point | Source-backed control/data flow | Critical limit |
+| --- | --- | --- |
+| Stop/resource helper `0x27278`, RVAs `0x2729C–0x272A0` | Initializes w23 to **1** and marks context flag **`+0x173 = 1`** before the bounded resource-stop loop. | This is a software active marker, not a physical WM stop acknowledgement. |
+| RVA `0x27340–0x2738C` | Invokes original selected callback at context `+0x6B690`, then clears internal software state and sets **`context+0x171 = 1`** at `0x2738C` using unchanged w23. | This code order does not establish what hardware/IRQ completion, if any, happened inside the still-untraced selected callback or other paths before the flag was set. |
+| RVA `0x273F4–0x2740C` | Directly loads original **ntoskrnl `KeSetEvent`** IAT slot RVA`0x3F2E8` (independently established by E004oo), passes **context +`0x38`** as the event object and signals it after the pending-flag store on this path. | Signal is separate from the later progress event, not proof of safe WM16 buffer retirement. |
+| Original mode-one handler entry `0x1C9D0`, RVAs `0x1CC70–0x1CC94` | On an eligible branch it checks pending flag `+0x171`, clears it if nonzero and calls later helper `0x241D8`. | Whether this handler actually ran in a live rear session, or was entered by a hardware interrupt, is unverified. |
+| Original mode-zero handler entry `0x1EF90`, RVAs `0x1F230–0x1F254` | Separately tests/clears **the same pending flag** and calls **the same later helper**, subject to its own earlier mode-specific input/status gates. | Mode zero contains the separately identified BF event0x0F software branch, but no live BF/WM16 occurrence or DMA retirement has been proven. |
+| E004oo later helper `0x241D8` → wrapper `0x2A1D8` | Passes **context +`0xC8`** to the event-wrapper, which calls `KeSetEvent`. The two source-relative objects **`+0x38` and `+0xC8` are different**. | The later event could be causally downstream of a hardware-driven event in an untraced caller, but the software signal alone is not an independently verified WM16 DMA fence. |
+
+The source therefore has a **stop-helper pending marker and a separate later event acknowledgement** across two possible event-dispatch modes; neither is a substitute for tracing the original selected `+0x6B690` resource callback, actual VFE1 bus/write-master quiescence, IRQ state and generation-matched DMA buffer retirement. Do not assume a Windows numeric selector is a portable native Linux stop API or release/switch owner merely because a flag cleared or event was set.
+
+## Verification and next test
+
+`PYTHONDONTWRITEBYTECODE=1 python3 verify.py` source-locks the original ISP SHA, **50 exact ARM64 instruction anchors**, **four actual original ARM64 PE function entries**, E004oo's source-verified `KeSetEvent` IAT identity and conservative DMA limitation, and **14 fail-closed negative tests**. `RESULT.json` contains only derived scalar RVAs/offsets and explicit unproven gates; no OEM binaries, bulk disassembly, optical images, DMA pointers, firmware, KD credentials/logs or per-frame private data leave SP11.
+
+**Next independently falsifiable static gate:** resolve the original mode-selected *resource finalization* callback installed at IFE context `+0x6B690` and identify whether it waits for a specific VFE bus/WM16 hardware/IRQ completion; separately trace the actual upstream status/event source for the two event modes and the per-output buffer lifetime (including BF FIFO8 group8). A **permitted same-session** Windows rear 4K capture must establish which mode/callback executes and whether BF `0x0F` actually occurs before any Linux rear hardware-ISP arm; do not retry or bypass the previously blocked KD workflow.
+
+**Runtime unchanged:** source-compiled experimental Linux rear ISP stays DENIED; protected Golden FullIO v19c, front native 27-frame PIX, rear RAW/software-4K fallback and IR privacy remain intact.

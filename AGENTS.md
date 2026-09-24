@@ -25,6 +25,10 @@ Golden remain protected. Every new experiment MUST name a Linux L0–L6
 slice, an explicit mode/client, evidence tier and falsifiable next gate;
 update the map if the Windows→Linux component boundary changes.
 
+## E004op distinct original IFE stop-progress flags and two software events
+
+[E004op original same-SP11 ISP flag producer](experiments/E004-front-ir-vd55g0/e004op-ife-stop-pending-flag-two-event-modes-static/README.md): 50 exact original ARM64 instructions + four PE entries + 14 negative tests PASS. Bounded IFE stop helper sets software active context+0x173, after selected finalization callback +0x6B690 sets pending context+0x171=1, and signals KeSetEvent on context+0x38. Separate mode-one0x1C9D0 and mode-zero0x1EF90 handler branches clear that flag and use later helper signalling **different context+0xC8 event**. Neither signal independently proves live rear4K path, BF0x0F, WM16 bus/IRQ or DMA retirement. NEXT trace +0x6B690 callback's actual physical ack and independent selected Windows mode; do not free/handoff on flags/events. Keep Golden/front native PIX/rear RAW/software4K/IR protected; experimental rear Linux ISP runtime-denied.
+
 ## E004oo IFE later-progress event is KeSetEvent, no DMA-stop inference
 
 [E004oo original same-SP11 ISP later IFE event](experiments/E004-front-ir-vd55g0/e004oo-ife-later-progress-event-not-dma-ack-static/README.md) checks 60 exact original ARM64 instructions, all 33 instructions of helper RVA0x241D8 and three source-resolved original imported API slots, with 11 fail-closed negatives. Conditional context flag+0x171 is cleared before calling helper; wrapper RVA0x2A1D8 invokes original imported **KeSetEvent**. This is SOFTWARE EVENT signalling, not an independent WM16 DMA/IRQ bus drain or buffer fence. Other hardware-driven callers may exist; do not claim entire stop sequence lacks a hardware ack. NEXT trace flag producer and independent BF/WM16 per-buffer bus/IRQ retirement, live rear selected IFE mode. Preserve Golden, front PIX, rear RAW+software4K and IR safeguards; source-compiled experimental Linux rear ISP runtime remains denied.
