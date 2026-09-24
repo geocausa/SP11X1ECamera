@@ -5,6 +5,36 @@ updated: 2026-09-24
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E004nh-optin_BGGR_upper60_RGB_chart_excludes_SP7_faulty_lower_LCD_original_front_gain_28fps_FAIL_auto_Golden_E004ne_last_full_pass
 phase: native-qualcomm-hardware-isp-windows-oem-rgb-image-quality-priority
+latest_oem_AVStream_engine_backend_interface_static_bind:
+  identity: E004oa
+  state: PASS_SAME_SP11_OEM_AVSTREAM_EXTERNAL_KERNEL_DEVICE_INTERFACE_ACQUISITION_STATIC_ONLY
+  parent_git_revision: 9cc697e7da1ed32d4595a537bddef53892d63380
+  exact_private_AVStream_sha256: b97c4338c7c8868b9f3b73a34f6aea338ae6ab2a773bfd65f3b8fd31941577ed
+  OEM_ARM64_exact_instruction_anchors: 42
+  OEM_NT_kernel_import_table_mappings_verified: 5
+  OEM_engine_virtual_table_entries_verified: 2
+  fail_closed_negative_mutations: 12
+  engine_device_instance_binding_RVA: '0x1ec18'
+  Windows_backend_binder_RVA: '0x20b60'
+  Windows_device_interface_enumeration_verified: true
+  Windows_device_object_pointer_acquisition_verified: true
+  Windows_device_control_interface_query_IRP_RVA: '0x20a50'
+  Windows_device_control_interface_request_opaque_code: '0x2326ab'
+  Windows_device_control_returned_interface_size_bytes: 8
+  engine_selected_interface_record_lookup_RVA: '0x1f620'
+  engine_common_dispatch_through_returned_interface_RVA: '0x20da8'
+  OEM_engine_dispatch_interface_vtable_or_alternate_callback_paths_verified: true
+  Windows_rear_live_selected_device_interface_identity_proven: false
+  Windows_device_interface_request_receiving_platform_sensor_or_ISP_module_proven: false
+  OEM_numeric_start_stop_selectors_decoded_as_sensor_ISP_commands: false
+  Windows_registered_DeviceMFT_loaded_in_rear_video_session_proven: false
+  Windows_live_rear_BF_event_0x0f_observed: false
+  Linux_native_rear_4k_ISP_optical_frame_proven: false
+  original_private_OEM_binary_or_optical_data_exported: false
+  protected_Golden_hardware_or_boot_modified: false
+  next_static_dependency: match_device_instance_interface_identity_and_opaque_internal_request_0x2326ab_to_correct_original_platform_ISP_sensor_handler
+  evidence: experiments/E004-front-ir-vd55g0/e004oa-avstream-kernel-interface-bind/README.md
+  verifier: experiments/E004-front-ir-vd55g0/e004oa-avstream-kernel-interface-bind/prove-kernel-interface-bind.py
 latest_oem_AVStream_camera_engine_static_handoff:
   identity: E004nz
   state: PASS_SAME_SP11_PRIVATE_OEM_AVSTREAM_66_INSTRUCTION_ANCHORS_17_FAIL_CLOSED_NEGATIVES
@@ -32,7 +62,7 @@ latest_oem_AVStream_camera_engine_static_handoff:
   Linux_native_rear_4k_ISP_optical_frame_proven: false
   OEM_binary_UMD_payload_optical_data_exported: false
   protected_Golden_hardware_or_boot_modified: false
-  next_static_dependency: source_trace_helper_0x20da8_interface_object_recipient_and_profile_packet_ABI_across_platform_ISP_sensor
+  next_static_dependency: E004oa_proved_interface_acquisition_query_0x2326ab_now_find_recipient_original_OEM_driver_and_per_selector_operation_ABI
   evidence: experiments/E004-front-ir-vd55g0/e004nz-avstream-profile-control-static/README.md
   verifier: experiments/E004-front-ir-vd55g0/e004nz-avstream-profile-control-static/verify.py
 camera_stack_architecture_port_map:
@@ -49,8 +79,8 @@ camera_stack_architecture_port_map:
   rear_RAW_fallback_and_native_front_27_frame_path_preserved: true
   windows_live_BF_event_observed: false
   native_rear_4k_isp_optical_frame_proven: false
-  next_research_slice: W2_E004nz_source_verified_AVStream_engine_indirect_dispatch_to_actual_platform_ISP_sensor_ABI
-  next_static_dependency: decode_E004nz_common_0x20da8_interface_recipient_and_profile_request_packet_ABI_before_attributing_sensor_ISP_commands
+  next_research_slice: W2_E004oa_source_verified_kernel_device_interface_query_to_exact_platform_ISP_sensor_recipient
+  next_static_dependency: match_E004oa_device_instance_interface_GUID_and_internal_IO_control_0x2326ab_receiving_handler_then_decode_only_hardware_essential_commands
   next_dynamic_dependency: source_backed_same_session_request_to_HW_contract_per_video_preview_photo_and_front_rear_switch
 latest_windows_rear_BF_verified_static_callchain:
   identity: E004nv-static-callchain-addendum

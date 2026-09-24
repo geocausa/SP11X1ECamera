@@ -52,6 +52,30 @@ may be small open libcamera IPA / explicit standard user controls.
 The E004nv mode0 BF branch, live rear BF and Linux native4K ISP frame
 remain unproven; no new runtime code loaded, Golden untouched.
 
+## E004oa backend interface — next Windows→Linux source slice
+
+The original same-SP11 AVStream CameraEngine's common dispatcher now has
+a SOURCE-VERIFIED **external Windows kernel-device interface acquisition**
+path, see
+`experiments/E004-front-ir-vd55g0/e004oa-avstream-kernel-interface-bind/README.md`.
+Exact OEM SHA pinned, 42 ARM64 instructions + five Windows IAT mappings
++ two engine virtual-table entries + 12 negative mutations pass.
+Engine→binder RVA0x20b60 actually calls IoGetDeviceInterfaces,
+IoGetDeviceObjectPointer, then internal device-control
+**opaque request code 0x002326AB** with 8-byte output via
+IoBuildDeviceIoControlRequest/IofCallDriver; chosen backend interface
+record later feeds engine common indirect dispatcher RVA0x20da8,
+which calls the returned vtable or alternate callback. This proves
+there is an external driver interface; it does **NOT** identify the
+active rear-session device-interface identity, receiving
+qccamplatform/qccamisp/sensor driver, selector meanings, nor live BF.
+E004nz engine start/stop selector numbers must NEVER be treated as
+Linux commands until original OEM receiving handler/request ABI
+is matched. NEXT static trace: original OEM device-instance interface
+identity + receiver for 0x2326AB, then hardware-only necessary
+sensor/ISP command lifecycle. No Windows services/AI needed for native
+Linux hardware safety. Golden/front/native27/rearRAW/software4K intact.
+
 ## Mission
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.
