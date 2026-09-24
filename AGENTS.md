@@ -25,6 +25,10 @@ Golden remain protected. Every new experiment MUST name a Linux L0–L6
 slice, an explicit mode/client, evidence tier and falsifiable next gate;
 update the map if the Windows→Linux component boundary changes.
 
+## E004on three concrete 0x809 first callbacks do not acknowledge physical stop
+
+[E004on original same-SP11 ISP first callback source](experiments/E004-front-ir-vd55g0/e004on-isp-selector-809-three-concrete-core-receivers-static/README.md): E004og-installed CSID/IFE/CDM first callback valid-input 0x809 paths source-checked at 57 original ARM64 instructions + 13 negatives. CSID default diagnostic status 0, IFE default status 0 **without** 0x805 IFE stop helpers, CDM unsupported-selector status 0x0E. Conditional [S], no claim that live rear Windows 4K selects any of them. Neither zero return nor 0x809 is physical WM16 DMA/IRQ quiescence; never release buffer or switch native Linux shared-core owner from these selectors/statuses. NEXT independent IFE later progress/bus/IRQ/WM16 DMA retirement and live rear selection evidence; maintain source-compiled rear ISP runtime DENIED and protect Golden/front/rear RAW fallback/IR.
+
 ## E004om conditional manager per-core list writer identified, no live rear inference
 
 [E004om same-SP11 ISP manager list](experiments/E004-front-ir-vd55g0/e004om-isp-manager-core-list-producer-static/README.md) 80 original ARM64 instruction anchors and 17 fail-closed tests PASS: conditional 0x802 hardware-descriptor configuration can append two paired descriptor indices or one selected index to manager indexed words starting at six and increments manager +0x24 count. E004ol 0x809 generic dispatch reads the SAME record/count. Count-nonzero branch skips the checked builder; not all producer/teardown cases are closed. Actual live rear4K configured core IDs, callback semantics, IRQ/BF/WM16 DMA retirement remain unproven. NEXT trace actual 0x809 branch/return of concrete E004og CSID/IFE/CDM first callbacks and independent physical stop. Preserve Golden, front PIX, rear RAW/software fallback, IR privacy; experimental rear Linux ISP remains runtime DENIED.
