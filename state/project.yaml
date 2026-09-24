@@ -5,6 +5,35 @@ updated: 2026-09-24
 machine: Microsoft Surface Pro 11 Denali X1E80100
 state_id: E004nh-optin_BGGR_upper60_RGB_chart_excludes_SP7_faulty_lower_LCD_original_front_gain_28fps_FAIL_auto_Golden_E004ne_last_full_pass
 phase: native-qualcomm-hardware-isp-windows-oem-rgb-image-quality-priority
+latest_oem_ISP_core_control_dispatch_order_static:
+  identity: E004oe
+  state: PASS_ORIGINAL_SAME_SP11_ISP_CDM_IFE_CSID_START_CSID_IFE_CDM_STOP_INDIRECT_CORE_DISPATCH_STATIC_ONLY
+  parent_git_revision: d3ce9c8a953295daeaaeaa404df9ffadeaa03546
+  OEM_original_ISP_sha256: 64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c
+  OEM_ISP_nested_hardware_manager_callback_RVA: '0x15d70'
+  OEM_0x804_conditional_start_branch_RVA: '0x15ee0'
+  OEM_0x804_dispatch_order: [CDM, IFE, CSID]
+  OEM_0x804_CDM_indirect_callback_RVA: '0x15f50'
+  OEM_0x804_IFE_indirect_callback_RVA: '0x15fec'
+  OEM_0x804_CSID_indirect_callback_RVA: '0x16208'
+  OEM_0x805_conditional_stop_branch_RVA: '0x16300'
+  OEM_0x805_dispatch_order: [CSID, IFE, CDM]
+  OEM_0x805_CSID_indirect_callback_RVA: '0x163c8'
+  OEM_0x805_IFE_indirect_callback_RVA: '0x16434'
+  OEM_0x805_CDM_indirect_callback_RVA: '0x164b4'
+  original_OEM_diagnostic_source_sha_and_RVA_anchors_per_core: true
+  original_OEM_ARM64_instruction_anchors: 55
+  fail_closed_negative_tests: 13
+  software_dispatch_order_proves_hardware_completion_or_DMA_retirement: false
+  actual_receiving_core_callback_bodies_and_per_core_0x804_0x805_ABI_decoded: false
+  OEM_ISP_0x809_receiving_callback_decoded: false
+  live_Windows_rear_4k_VideoRecord_took_these_branches_proven: false
+  Windows_live_rear_BF_0x0f_WM16_retirement_observed: false
+  Linux_native_rear_4k_ISP_optical_frame_proven: false
+  protected_Golden_hardware_or_boot_modified: false
+  next_static_dependency: identify_ISP_hw_manager_CDM_IFE_CSID_per_core_interface_array_producers_received_callback_bodies_parameter_ABI_then_real_stop_completion
+  evidence: experiments/E004-front-ir-vd55g0/e004oe-isp-manager-per-core-order-static/README.md
+  verifier: experiments/E004-front-ir-vd55g0/e004oe-isp-manager-per-core-order-static/verify.py
 latest_oem_ISP_nested_hw_manager_start_stop_static:
   identity: E004od
   state: PASS_OEM_AVSTREAM_ISP_CONTEXT_POOL_REAL_NESTED_CALLBACK_804_805_MULTICORE_FANOUT_STATIC_ONLY
@@ -166,8 +195,8 @@ camera_stack_architecture_port_map:
   rear_RAW_fallback_and_native_front_27_frame_path_preserved: true
   windows_live_BF_event_observed: false
   native_rear_4k_isp_optical_frame_proven: false
-  next_research_slice: W2_E004od_source_verified_ISP_real_nested_HW_manager_804_805_per_core_branches_now_trace_actual_IFE_CSID_CDM_callbacks
-  next_static_dependency: E004od_ISP_context_plus_0x10_pool_record_callback_0x15d70_found_804_805_fanout_to_per_core_receivers_now_decode_IFE_CSID_CDM_specific_implementations_and_809_separately
+  next_research_slice: W2_E004oe_original_ISP_hardware_manager_per_core_CDM_IFE_CSID_start_CSID_IFE_CDM_stop_call_order_source_verified_now_identify_core_interface_implementations
+  next_static_dependency: E004oe_CDM_IFE_CSID_start_CSID_IFE_CDM_stop_indirect_call_order_source_proven_now_trace_each_core_interface_array_producer_and_actual_callback_0x804_0x805_ABI_plus_809
   next_dynamic_dependency: source_backed_same_session_request_to_HW_contract_per_video_preview_photo_and_front_rear_switch
 latest_windows_rear_BF_verified_static_callchain:
   identity: E004nv-static-callchain-addendum
