@@ -1,0 +1,137 @@
+# SP11 camera stack — Windows behaviour to clean native Linux port map
+
+**Pinned architecture baseline: 2026-09-24.** Device: Surface Pro 11 (Denali/X1E80100), RGB front IMX681, RGB rear OV13858, independent IR VD55G0, Qualcomm Spectra ISP. This is the FIRST map to consult when choosing a future experiment, driver, breakpoint or Linux implementation slice. Target: ordinary, controllable, native Linux camera capture and high-quality hardware-ISP frames. **Windows services, proprietary driver code, Studio Effects and AI image enhancements are not parity requirements.**
+
+## Evidence legend
+
+- **P — physically observed/proven on this SP11:** a source-backed register/stream/hardware experiment within its stated sensor and profile. An actual Windows application frame is not by itself a Linux DMA proof.
+- **S — same-SP11 OEM static evidence:** driver/INF/disassembly identifies a branch or component, but does not demonstrate it ran during any specific camera session.
+- **H — working hypothesis / unverified link:** plausible assignment of control ownership, effect or request path, requiring further evidence.
+- **D — chosen Linux design:** what we plan to implement; not a claim that Windows is architected identically.
+
+Do not promote S or H to P by analogy. Do not infer an app requested autofocus because Windows had an active BF write master, or infer a Device MFT was loaded because its DLL is registered.
+
+## Schematic 1: Windows request-to-hardware map, with native Linux responsibilities
+
+~~~mermaid
+flowchart TB
+ subgraph W["Windows client / selection plane — do NOT port"]
+  A["Camera app / browser / video call<br/>select sensor, capture type, format, controls"]
+  B["MediaCapture / Frame Server / profiles<br/>client negotiation and lifetime"]
+  C["OEM Device MFT (registered)<br/>actual session role UNKNOWN"]
+  X["Windows Studio Effects / AI<br/>OUT OF SCOPE"]
+  A --> B
+  B -. "optional/unknown" .-> C
+  B -. "optional" .-> X
+ end
+ subgraph O["OEM SP11 driver/control plane — observe, don't transplant"]
+  AVS["surfacecamavs8380.sys AVStream<br/>front / rear / aux identities; 3 stream pins [S]"]
+  P["qccamplatform8380.sys + Surface configs<br/>board power/resources [S/H]"]
+  SEN["IMX681 / OV13858 sensor drivers<br/>power, mode, CCI controls [S/P]"]
+  ISP["qccamisp8380.sys<br/>CSI/VFE config, buffers, event callbacks [S/P]"]
+  IQ["IQ/3A/RT-CDM/ICP interaction<br/>rear ordering and participants UNKNOWN"]
+  AVS --> P
+  AVS --> SEN
+  P --> ISP
+  SEN --> ISP
+  ISP <--> IQ
+ end
+ B --> AVS
+ C -. "if active: prove role" .-> AVS
+ subgraph PHYS["Real hardware routes [P]"]
+  FRONT["IMX681 front<br/>CSIPHY2 C-PHY"] --> CSID["CSID1 PIX → VFE1<br/>one exclusive PIX owner"]
+  REAR["OV13858 rear<br/>CSIPHY1 4-lane D-PHY"] --> CSID
+  REAR --> RAW["Linux rear RAW fallback<br/>CSID0 → VFE0 RDI0"]
+  IR["VD55G0 IR independent transport<br/>illumination/privacy guarded"]
+ end
+ ISP --> CSID
+ subgraph L["Clean native Linux — implementation design [D]"]
+  APPS["Apps / browsers / calls<br/>libcamera, PipeWire, V4L2"]
+  POLICY["Minimal camera/profile/session policy<br/>select sensor and format"]
+  KERNEL["Kernel media graph + CCI/CAMSS<br/>power, exclusive CSI/ISP, DMA/IRQ/stop"]
+  ALG["Optional open libcamera IPA<br/>auto/manual AE, AWB, AF and IQ policy"]
+  BUFS["Truthful complete portable frame buffers<br/>format and colourimetry checked"]
+  APPS --> POLICY --> KERNEL --> BUFS --> APPS
+  POLICY <--> ALG
+ end
+~~~
+
+**Dashed Windows arrows indicate possible paths, not confirmed SP11 calls.** The Windows Camera app's front/rear switch is a client-level request; its exact Windows close/reopen, profile negotiation and hardware-stop sequence is **unmeasured**. The Linux diagram identifies responsibilities, not Windows software to reproduce. No Windows-specific runtime service is intrinsically required for the Linux hardware driver to work.
+
+## Windows components and decisions — the slice ledger
+
+| Slice | Established Windows SP11 evidence | What remains unproven and how to chase it | Independent Linux owner |
+| --- | --- | --- | --- |
+| W0 client/capture intent | E004nx/ny manual WinRT Color VideoRecord rear NV12 3840×2160 produced **365/366** and **1,152/1,154** valid frame handles in two no-KD sessions [P]. Script did not explicitly select preview, still-photo profile, autofocus or a front/rear switch. | Compare Camera-app preview/photo, manual VideoRecord, front↔rear switch, and a second client. Log requested stream pin, profile, format and controls; do not assume all clients invoke identical ISP instructions. | Ordinary V4L2/libcamera camera selection, formats and manual/auto controls. No Camera-app clone. |
+| W1 client sharing/profile mediation | AVStream OEM INF names distinct back/front/aux filter IDs and **Pin0 preview, Pin1 still image, Pin2 video capture** [S]. | Which layer arbitrates multi-client access, what opens/closes on a switch, which negotiated profile is active? INF describes exposed interfaces, not an observed runtime call graph. | Optional small user-facing policy; **hard CSID1/VFE1 lease and stop safety remain kernel-owned**. |
+| W2 OEM AVStream | surfacecamavs8380.sys registered as separate QCCamAvs kernel service [S]. | Static trace KS filter, stream-pin, property/controls dispatch into platform, sensor and ISP requests. Determine which requests differ by actual capture mode. | Media-controller graph, V4L2 subdevices, standard stream and control UAPI. No AVStream or KS emulation. |
+| W3 OEM Device MFT | OEM AVStream INF **registers** QcDeviceMFT8380.dll CLSID [S]. Separate mep_camera_component installs Windows Studio Effects [S]. | Is the OEM MFT loaded for the *specific* VideoRecord/profile? Does it apply a transform or send necessary hardware controls? Registration does **not** imply it ran or is an orchestrator. | Reproduce only demonstrated necessary hardware/profile functionality. Studio Effects/AI, synthetic background blur, eye-contact, etc. are **out of scope**. |
+| W4 Qualcomm platform/resources | qccamplatform8380.sys has separate OEM Spectra 695 service and Surface board config/resource files [S]; sensor-specific power/CSI experiments already exist [P]. | Trace real per-mode power/clocks, resource votes, shared-core ownership, recovery and suspend boundaries; no invented hardware version based on driver name. | DT/ACPI-derived clocks, power/reset, CCI/interconnect runtime PM and bounded rollback in Linux kernel. |
+| W5 individual sensors | Front IMX681, rear OV13858 and IR VD55G0 use distinct packages and modes [S/P]. Windows rear 4K uses CSIPHY1 4-lane D-PHY, front PIX uses CSIPHY2 C-PHY [P]. | Actual focus actuator presence/commands, still-photo differences, per-mode sensor IQ/power timing, IR emission security. **BF enabled does not prove an AF request or focus motor exists.** | Native sensor/actuator V4L2 drivers only for verified hardware; explicit controllable sensor modes, default-off IR illumination. |
+| W6 ISP/CSI route | E004nq two independent Windows rear 4K sessions use **CSID1 IPP→VFE1**; front also uses CSID1/VFE1, while Linux rear RAW fallback uses **CSID0→VFE0 RDI0** [P]. Rear WM0/1 FULL Y/C, DS4/DS16, stats including WM16 enabled in the measured 4K mode [P]. | Which controller submits specific per-profile VFE, IQ/RT-CDM requests and buffer lifetime; what must change on front/rear handoff? | Independent Linux CAMSS/CCI/CSIPHY/CSID/VFE driver: verified shared-PIX state machine, specific mode recipes, protected front/RAW fallbacks. |
+| W7 BF/stats completion | Same OEM qccamisp8380.sys **mode-0** path reads status word2 bit7 → event 0x0F → FIFO group8 → direct **WM16 CFG0 at VFE+0x1E00, WM16 ADDR_STATUS0 at VFE+0x1E70** → gated BF resource port 0x300D notification [S]. Both Windows rear 4K snapshots have WM16 enabled [P]. | What interrupt **mode** did live rear use? Was bit7 raised, queue nonempty, WM16 DMA retired? Previous E004nw KD trial StartAsync success returned **zero handles**; E004nx/ny no-KD good frames do **not** prove BF live. | Source-proven per-mode event decode, per-request stats allocation/completion, DMA safe retirement; no live group8 ISR until evidence exists. |
+| W8 ICP / tuning / 3A control | Rear has separate OV13858 OEM tuning; front sensor/ISP live experiments show bounded 3A/stat paths [S/P]. | Source the REAR-specific packet command, timing, stats to 3A feedback and legal Linux-compatible firmware path before enabling. | HW-critical RT-CDM/ISP register submission and DMA lifetimes in kernel; variable-rate **AE/AWB/AF algorithms and policy generally in a small open libcamera IPA**, user-overridable. |
+| W9 pixel presentation | Windows WinRT delivers *application-visible* NV12 4K handles [P]; rear VFE physical WM stride is **5120**, packer 0x0B with separate metadata offsets [P]. | Prove actual Linux native ISP frame data/colourimetry, physical vs portable layout conversion, frame identity/cadence. | V4L2/libcamera advertises **truthful** formats/strides/timestamps. HW UBWC/metadata is **not automatically linear NV12**; use validated conversion only when necessary. |
+
+**A Windows AVStream pin is a logical stream, not a VFE write master.** A complete application NV12 frame is not equivalent to every physical hardware DMA/stat output having completed. A **registered DLL** is not proof of a running DLL or of a necessary hardware command. An OEM Windows BF branch is not proof that BF ran in a manual VideoRecord session.
+
+## Linux port ownership: L0–L6, and what we can ignore
+
+| ID | Port this behaviour | Keep out of kernel / what not to port | Evidence gate |
+| --- | --- | --- | --- |
+| **L0: physical sensor resources** | Per-sensor power, clocks, reset, CCI, CSI wiring/mode/standby; separate IR privacy. | Windows INF/driver semantics and unverified flash/IR activation. | Independent sensor hardware identities, safe power lifecycle and CSI evidence. |
+| **L1: mode and exclusive ISP owner** | Kernel-owned atomic CSID1/VFE1 PIX lease, owner/capture generation, no conflicting front/rear PIX stream, quiesce/stop/IRQ drain and safe handoff. | Reproduce no Windows Frame Server; policy may be outside kernel but **hardware lock may not**. Do not infer that Windows always switches sensors without closing/reopening. | Source-verified front→rear→front hardware stop and no stale in-flight DMA/IRQ. |
+| **L2: CSI/ISP configuration** | Rear/front-specific CSID RX/IPP, VFE WMs, start/stop order, per-mode IQ/RT-CDM and safe recovery in native CAMSS/CCI. | Do not mix rear D-PHY with front C-PHY registers; do not run Windows PE .sys, .dll, tuned .bin or unsupported ICP firmware in Linux. | E004nr/ns are only source-compiled and uncalled. Real rear processed ISP stream not yet achieved. |
+| **L3: DMA/interrupt ownership** | Allocate ALL outputs enabled in the chosen profile (FULL, DS, metadata/stats), verify 32-bit IOMMU bounds, queue exact request generation, decode actual event groups, retire only proved-completed buffers after independent stop. | Do not pretend ten clients always apply: E004nu ten-WM contract is for the **measured OEM rear 4K mode**; optional BF can be omitted **only if a separate HW config/IRQ/buffer contract proves WM16 disabled**. No timeout-triggered unsafe free. | E004nt/nu/nv are source-compiled but runtime-denied; BF group8 still only **static**, and Linux native rear 4K ISP frame unproven. |
+| **L4: image/focus algorithms and controls** | Explicit manual exposure/gain/WB/focus where actuators exist, optional AE/AWB/AF, per-frame stats→decision→sensor/ISP update with known frame latency and user override. | Avoid embedding open-ended policy, heavy 3A loops, AI and pixel effects in kernel IRQ/ISR. A small libcamera IPA is acceptable **without a proprietary orchestrator**. | Rear calibration, AF hardware, stats frame IDs and IQ feedback unverified. Do not make BF obligatory merely because WM16 was enabled in Windows. |
+| **L5: portable frames and metadata** | Truthful format, stride, colour, timestamp, monotonically owned frame ID, complete output and bounded conversion if needed. | VFE WM physical metadata/UBWC/packer does not itself mean standard linear NV12 or a good optical image. | Preserve working Linux rear RAW→software 4K and front QC10C path while independently proving rear native 4K ISP image content. |
+| **L6: app integration** | Ordinary front/back selection for V4L2/libcamera/PipeWire/browser and video call; multi-client policy may use a thin open layer while kernel enforces physical limits. | Windows Camera app, Frame Server, Windows Studio Effects, background replacement, AI appearance processing, Hello identity pipeline are **not parity goals**. | Confirm the final default capture route works in an independent ordinary app; do not mask missing HW using a synthetic or software-fallback stream. |
+
+**“Integrated into the driver” means integrating deterministic, safety-critical hardware behaviour into Linux CAMSS/V4L2 drivers**, not transplanting Windows driver code or forcing all policy into the kernel. A small, optional open userspace layer for mode negotiation and control algorithms is normally the better Linux interface, with full user control; it must not be required merely to prevent unsafe shared-hardware access.
+
+## Schematic 2: native camera/session state machine
+
+~~~mermaid
+stateDiagram-v2
+ [*] --> OFF
+ OFF --> ACQUIRED: select validated camera/profile, lock PIX owner
+ ACQUIRED --> POWERED: sensor regulators / clocks / reset / CCI
+ POWERED --> ROUTED: CSI PHY, CSID, VFE / assert no conflicting owner
+ ROUTED --> PREPARED: safe IQ/RT-CDM and all enabled DMA outputs
+ PREPARED --> STREAMING: request generation / IRQ arm / sensor start
+ STREAMING --> STREAMING: verified frames and optional 3A controls
+ STREAMING --> QUIESCING: stop, switch, end, timeout, failure
+ QUIESCING --> DRAINED: sensor off / VFE disabled / DMA+IRQ retired
+ DRAINED --> OFF: free only retired buffers / power down / unlock
+ DRAINED --> ACQUIRED: other camera after complete safe handoff
+ QUIESCING --> FAULT: cannot prove hardware has stopped
+ FAULT --> OFF: only after independently verified recovery
+~~~
+
+Front/rear PIX **share CSID1/VFE1** in the measured Windows routes. A front→rear switch is therefore not just toggling a sensor pointer: it requires quiescence and an exclusive owner transition. Independent Linux rear RAW and front IR routes have their own verified scope and must not be silently conflated with PIX ownership. No implicit IR illumination.
+
+## Future investigation: identify the missing *request-to-hardware* link
+
+For each named mode, keep a single-session request ledger: **client → chosen camera → OS pin/profile → active OEM AVStream controls → platform/sensor/ISP request → CCI/CSID/VFE register/output mask → IQ/stats buffers → hardware IRQ/frame completion → safe stop**. Record UNKNOWN wherever no same-session source exists.
+
+| Controlled Windows scenario | Which architectural question it isolates | What is NOT automatically proved |
+| --- | --- | --- |
+| A. Manual rear 3840×2160 VideoRecord | Existing rear baseline, active WMs, dispatcher mode, BF status and IQ per frame. | Photo/focus/preview, BF IRQ, or Linux-native 4K. |
+| B. Rear preview on the SAME app | Alternate preview pin, crop, stats and profile transition. | Identical VideoRecord pipeline or OS compositor effects. |
+| C. Rear still-photo and **explicit focus if supported** | Whether photo/AF changes BF/WM16, actuator, IQ/RT-CDM or stats ring. | An actuator or AF request merely because BF is enabled. No automatic flash. |
+| D. Front RGB known-good stream | Different C-PHY and front nine-WM contract on shared CSID1/VFE1. | That front data/colour tuning or IRQ timing applies to the rear. |
+| E. Front→rear→front in one client | Actual Windows stop, close/reopen, shared-core owner and residual IRQ/DMA lifecycle. | That two front/rear physical PIX sessions run concurrently. |
+| F. Two clients / video-call / browser | Whether Frame Server shares/rejects/renegotiates profiles and which layer makes that choice. | That Windows uses one universal “camera orchestrator” executable. |
+
+**Recommended evidence order:** (1) statically map AVStream stream-pin/KS property handler → platform/sensor/ISP requests and inspect Device MFT role **without assuming it loaded**; (2) bounded, permissioned non-image Windows ETW/Media Foundation/KS session logs of A–F; (3) only if needed and permitted, debugger work conditioned on **already-flowing** real frames, first establishing actual IRQ handler mode, then BF bit7/group8/WM16 retirement. Do not bypass blocked debugger safety checks. Do not export Windows private OEM binaries, KD logs, firmware, image data or DMA pointers.
+
+## Permanent evidence pointers and no-regression contract
+
+- OEM SP11 identities: [HARDWARE.md](HARDWARE.md); original Windows methodology: [WINDOWS_ORACLE.md](WINDOWS_ORACLE.md); existing ordinary Linux/fallback: [ORDINARY-LINUX-CAMERA.md](ORDINARY-LINUX-CAMERA.md).
+- [E004nq rear CSID1→VFE1 physical route](../experiments/E004-front-ir-vd55g0/e004nq-rear-physical-mmio-5phase/README.md) **supersedes** a wrong Windows CSID0/VFE0 assumption.
+- Rear ISP isolated sources: [E004nr graph](../experiments/E004-front-ir-vd55g0/e004nr-rear-pix-kernel-source-profile/README.md), [E004ns CSID1](../experiments/E004-front-ir-vd55g0/e004ns-rear-csid1-ipp-offline/README.md), [E004nt 4K DMA surface](../experiments/E004-front-ir-vd55g0/e004nt-rear-vfe1-4k-buffer-contract/README.md), [E004nu ten WMs](../experiments/E004-front-ir-vd55g0/e004nu-rear-vfe1-ten-wm-ownership/README.md), [E004nv six groups](../experiments/E004-front-ir-vd55g0/e004nv-rear-six-group-bf-static/README.md): **source-only compiled, runtime DENIED, no native rear 4K ISP optical frame**.
+- [Exact OEM static BF call chain](../experiments/E004-front-ir-vd55g0/e004nv-rear-six-group-bf-static/STATIC-BF-CALLCHAIN.md): *mode-0 branch* event 0x0F → WM16 hardware read, **NOT a live rear BF event**.
+- [E004nx/ny actual no-KD rear WinRT 4K handles](../experiments/E004-front-ir-vd55g0/e004ny-rear4k-live-control/README.md): 365/366 and 1,152/1,154 application-visible handles, **NOT proof of live BF or Linux native ISP**.
+- Preserve protected Golden FullIO v19c and front 27-frame native PIX, rear real RAW/software-NV12 fallback and IR safety. Do not install/arm newer rear source without independent hardware stop, DMA, image and rollback proof.
+
+**New work must name one slice L0–L6 and one client/profile above, identify its evidence tier P/S/H/D and a next falsifiable test, and update this map when a new observation changes the component boundary.** Never chase a vague “orchestrator” when the missing choice can be localized to a client request, AVStream property, sensor mode, platform resource, ISP packet, stats algorithm or buffer-completion event.

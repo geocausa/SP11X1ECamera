@@ -33,9 +33,10 @@ If resuming after a new chat/session, read in this order:
 
 1. [`CONTINUE.md`](CONTINUE.md)
 2. [`AGENTS.md`](AGENTS.md)
-3. [`PROJECT_STATE.md`](PROJECT_STATE.md)
-4. [`state/project.yaml`](state/project.yaml)
-5. latest entry under [`experiments/`](experiments/)
+3. [`docs/CAMERA-STACK-PORT-MAP.md`](docs/CAMERA-STACK-PORT-MAP.md) — pinned Windows behaviour → native Linux L0–L6 ownership map; run `python3 tools/verify-camera-stack-port-map.py` before redirecting engineering work.
+4. [`PROJECT_STATE.md`](PROJECT_STATE.md)
+5. [`state/project.yaml`](state/project.yaml)
+6. latest entry under [`experiments/`](experiments/)
 
 Then run:
 

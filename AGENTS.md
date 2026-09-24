@@ -2,6 +2,29 @@
 
 This file is the durable working agreement for assistants/agents operating this repository.
 
+## Canonical Windows → native Linux camera architecture and slice map (2026-09-24)
+
+Before selecting a porting task, driver function, Windows app, breakpoint,
+or camera mode, read [docs/CAMERA-STACK-PORT-MAP.md](docs/CAMERA-STACK-PORT-MAP.md).
+It is the PINNED Windows request/AVStream/platform/sensor/ISP/DMFT/physical
+graph and separate L0–L6 Linux responsibility map, with two schematics,
+evidence classes P=physical, S=static, H=hypothesis, D=design, and
+mode-specific test ledger. Its acceptance verifier is
+`PYTHONDONTWRITEBYTECODE=1 python3 tools/verify-camera-stack-port-map.py`.
+
+USER SCOPE: clean, controllable, native Linux stack with essential Windows-
+observed sensor, ISP, DMA, power, controls and safe front/rear switching;
+**no required Windows Camera app, Frame Server, .sys/.dll translation,
+Windows Studio Effects, AI image enhancements or proprietary orchestrator**.
+Put deterministic physical safety/ownership in kernel CAMSS/V4L2; put
+optional AE/AWB/AF algorithm/policy behind standard controls or a small
+open libcamera IPA where appropriate. Existing E004nr–E004nv rear native
+ISP source is compiled but UNCALLED and DENIED; static BF group8 does
+not prove a live event; front 27-frame, rear RAW/software fallback and
+Golden remain protected. Every new experiment MUST name a Linux L0–L6
+slice, an explicit mode/client, evidence tier and falsifiable next gate;
+update the map if the Windows→Linux component boundary changes.
+
 ## Mission
 
 Develop a native Linux camera stack for Surface Pro 11 (Denali/X1E80100) with the same evidence discipline used for the successful SP11 audio work. Windows on the same hardware is the behavioural oracle. The objective is native Linux implementation, not wrapping or redistributing Windows drivers.

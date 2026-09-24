@@ -1,5 +1,20 @@
 # Roadmap
 
+## Canonical request-to-hardware slice map
+
+Before interpreting a Windows video pin or reverse-engineered event
+as a Linux driver requirement, read
+[CAMERA-STACK-PORT-MAP.md](CAMERA-STACK-PORT-MAP.md). It pins the
+Windows request → AVStream → platform/sensor/ISP → physical CSI/VFE
+relationships and corresponding clean Linux L0–L6 owners, marks
+observed versus static versus conjectured facts, separates mandatory
+native capture/control from optional Windows AI effects, and protects
+the accepted front/rear RAW paths. Run the source/INF/scalar gate:
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 python3 tools/verify-camera-stack-port-map.py
+~~~
+
 ## Phase A — Oracle map
 
 - Identify exact devices/packages: **done**.
