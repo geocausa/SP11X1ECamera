@@ -2,6 +2,10 @@
 
 This file is the durable working agreement for assistants/agents operating this repository.
 
+## E004py historical PHYSICAL front/rear BF bit7 and WM16 source-mode discriminator
+
+[E004py verified four original Windows physical snapshots](experiments/E004-front-ir-vd55g0/e004py-physical-front-rear-csid1-bf-bit7-discriminator/README.md): E003g front IMX681 existing SHA-locked raw KD 2026-08-28 LIVE1/LIVE2 CSID1 BUF_DONE status0x271, mask0x1FFFF, VFE1 WM16 CFG0=0x10 disabled; existing SHA-verified E004pi rear OV13858 2026-09-23 LIVE1/LIVE2 status0x2F1, mask0x1FFFF, WM16 CFG0=0x20001 enabled. Paired NAMED live phases differ EXACTLY CSID status bit7 (XOR0x80) in both source captures; masks and instant BUS IRQ status zeros are identical. These are DIFFERENT camera sessions/dates, NOT same frame, not proof BF callback FIFO8/nonnull WM16 or DMA/IOMMU completion. Shared CSID1/VFE1 native BF observer must require independently proven live owner/sensor/route provenance; bit7 and WM16 co-occurrence in Windows snapshots never authorizes VB2/DMA retirement or native rear runtime. Golden/front/rearRAW+software4K/IR unchanged.
+
 ## E004px shared front/rear BF ring owner handoff correction (OFFLINE ONLY)
 
 [E004px owner-local frame epoch and unique pending-token correction](experiments/E004-front-ir-vd55g0/e004px-bf-owner-handoff-token-uniqueness-isolated/README.md) is a distinct isolated ARM64 compiled/C11 tested BF software-ring revision, parent f2617111. A fresh strictly higher owner epoch can start frame1 after independently verified all-group/DMA/IOMMU safe stop; old owner epoch remains stale. Duplicate opaque token while pending fails -EEXIST, preserving count/frame epoch; already verified/popped token may later be reused. Exact source header SHA7293d95a... compiled ARM64 W1 zero warnings, 437 GCC and 437 Clang ASAN/UBSAN assertions and 22 conservative result-field negatives PASS. This does NOT implement a live evidence producer, driver ISR/V4L2 caller or rear ISP authorization; do not conflate synthetic predicates with real DMA safety. Isolated module was not loaded, installed or booted; Golden/front PIX/rear RAW+software4K/IR protected.
