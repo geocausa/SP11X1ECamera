@@ -2,6 +2,10 @@
 
 This file is the durable working agreement for assistants/agents operating this repository.
 
+## E004px shared front/rear BF ring owner handoff correction (OFFLINE ONLY)
+
+[E004px owner-local frame epoch and unique pending-token correction](experiments/E004-front-ir-vd55g0/e004px-bf-owner-handoff-token-uniqueness-isolated/README.md) is a distinct isolated ARM64 compiled/C11 tested BF software-ring revision, parent f2617111. A fresh strictly higher owner epoch can start frame1 after independently verified all-group/DMA/IOMMU safe stop; old owner epoch remains stale. Duplicate opaque token while pending fails -EEXIST, preserving count/frame epoch; already verified/popped token may later be reused. Exact source header SHA7293d95a... compiled ARM64 W1 zero warnings, 437 GCC and 437 Clang ASAN/UBSAN assertions and 22 conservative result-field negatives PASS. This does NOT implement a live evidence producer, driver ISR/V4L2 caller or rear ISP authorization; do not conflate synthetic predicates with real DMA safety. Isolated module was not loaded, installed or booted; Golden/front PIX/rear RAW+software4K/IR protected.
+
 ## Canonical Windows → native Linux camera architecture and slice map (2026-09-24)
 
 Before selecting a porting task, driver function, Windows app, breakpoint,
