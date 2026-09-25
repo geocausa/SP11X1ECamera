@@ -41,3 +41,31 @@ No data breakpoint, register/MMIO write, patch, driver mutation or local SP11 de
 Exactly one of the two top-half schemas should dominate for the rear-4K IFE instance. The active mode plus IFE id and BUS0 behavior chooses the correct proprietary completion path for the next source/dynamic correlation.
 
 This experiment does not itself authorize native rear ISP or claim DMA/IOMMU-safe retirement.
+
+## Runtime result — consumed / accepted camera run, mode discriminator negative
+
+The single E005w Windows attempt was consumed exactly once.
+
+The bounded rear Surface Camera Color / VideoRecord / NV12 3840x2160 capture completed successfully:
+
+- StartAsync: Success
+- elapsed: 8,091 ms
+- valid 3840x2160 frame handles: 50
+- StopAsync: Success
+- predeclared acceptance threshold: >=10 frames — PASS
+
+The SP7 external-KD private log was reduced to safe marker counts only:
+
+- BF event marker: 86
+- mode0 top-half BUS0 probe at RVA 0x1DC5C: 0 runtime hits
+- mode1 top-half BUS0 probe at RVA 0x1C2EC: 0 runtime hits
+
+Because the BF marker fired repeatedly from the same module while both proposed top-half probe sites remained silent, this run does **not** identify mode0 or mode1. It instead rejects the assumption that either of those two selected probe sites can be used as the live rear4K mode discriminator without a deeper source trace. The zero counts must not be promoted into a claim that IFE interrupts or WM16 completion were absent.
+
+Cleanup completed: all KD breakpoints were removed, the private KD log was closed, the one-shot Windows task was unregistered, the target was resumed, SP11 was rebooted normally, and protected Golden Linux returned with overlap guard PASS. E005n remains unloaded.
+
+Native rear processed ISP remains **DENIED**.
+
+### Next smallest step
+
+Stay static. Trace backward from the proven BF/type-1 path and its actual registered interrupt/preparer callbacks to the precise runtime mode selector/IFE instance dispatch. Source-lock the real physical WM16 completion predicate/ACK path before another Windows run. Do not repeat E005w under the same identity.
