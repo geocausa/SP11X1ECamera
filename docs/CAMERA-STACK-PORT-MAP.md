@@ -1,3 +1,7 @@
+## E005f: original Windows user-mode FrameServer -> KS rear4K boundary (P/user-mode, not DMA proof)
+
+[experiments/E004-front-ir-vd55g0/e005f-windows-usermode-frameserver-ks-ioctl-trace](../experiments/E004-front-ir-vd55g0/e005f-windows-usermode-frameserver-ks-ioctl-trace/README.md) ran one fresh original rear NV12 3840x2160 session for 20,049 ms / 203 handles. CDB was user-mode only on Camera FrameServer. 4,598 DeviceIoControl calls were observed; SDK-backed IOCTL_KS_READ_STREAM occurred 1,225 times across exactly two pin handles (922/303). QCOM_AVStream_8380 filter open, QcDeviceMFT8380.dll and ksuser.dll loaded. This narrows L0/L1 user-mode streaming into KS but does not yet assign VideoRecord pin2 to one of those two read-stream handles and does not reach L3 FIFO8/non-null WM16 hardware completion. Rear native ISP stays denied.
+
 # SP11 camera stack — Windows behaviour to clean native Linux port map
 
 **Pinned architecture baseline: 2026-09-24.** Device: Surface Pro 11 (Denali/X1E80100), RGB front IMX681, RGB rear OV13858, independent IR VD55G0, Qualcomm Spectra ISP. This is the FIRST map to consult when choosing a future experiment, driver, breakpoint or Linux implementation slice. Target: ordinary, controllable, native Linux camera capture and high-quality hardware-ISP frames. **Windows services, proprietary driver code, Studio Effects and AI image enhancements are not parity requirements.**
