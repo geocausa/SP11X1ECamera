@@ -1,0 +1,33 @@
+{
+  "schema": "E005w-preflight-v1",
+  "parent_git_revision": "b9c698b5db7440d4ab3790f46ab0146fda49f70e",
+  "runtime": "one bounded SP11 Windows rear4K session under external SP7 KD",
+  "sp7_external_kd_only": true,
+  "local_sp11_kd_forbidden": true,
+  "autocontinue_breakpoints_only": true,
+  "breakpoints": [
+    {
+      "rva": "0x1dc5c",
+      "purpose": "mode0 top-half BUS0 snapshot, print safe mode marker/IFE id/BUS0 scalar"
+    },
+    {
+      "rva": "0x1c2ec",
+      "purpose": "mode1 top-half BUS0 snapshot, print safe mode marker/IFE id/BUS0 scalar"
+    },
+    {
+      "rva": "0x1f190",
+      "purpose": "BF event marker"
+    }
+  ],
+  "camera": {
+    "role": "Surface Camera Rear Color VideoRecord",
+    "format": "NV12",
+    "width": 3840,
+    "height": 2160,
+    "min_valid_frame_handles": 10
+  },
+  "raw_debugger_and_address_values_private": true,
+  "load_e005n": false,
+  "native_rear_hardware_isp_runtime_authorized": false,
+  "rollback": "normal reboot -> saved Golden Linux sp11-audio-fullio-v19c"
+}
