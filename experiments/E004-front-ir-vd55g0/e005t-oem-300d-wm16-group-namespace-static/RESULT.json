@@ -1,0 +1,57 @@
+{
+  "schema": "E005t-result-v1",
+  "parent_git_revision": "a586928657e1f03eebd866c9aa9807ec5e465438",
+  "evidence_class": "S_SAME_SP11_OEM_STATIC_PLUS_PINNED_QCOM_VFE680_SOURCE_NO_NEW_RUNTIME",
+  "same_sp11_oem_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+  "qualcomm_reference": {
+    "git_revision": "82ac3a671a5b0a4e3b3ac4519208af1d37a93eb6",
+    "tag": "v1.0.6",
+    "vfe680_header_sha256": "a31f6fe84cbd2b544fe504e9099ea6adc6bbe846628999742d9fb6024add2505",
+    "bus_ver3_sha256": "dbe53691b46f912d59a5848a7c3e039601088430fd2e3efc992d9100dcc36b44"
+  },
+  "e005s_live_oem_output_config": {
+    "resource_id": "0x300d",
+    "reported_composite_group_id": 3
+  },
+  "oem_software_namespace": {
+    "resource_0x300d_sets_mask_bit": "0x100",
+    "established_software_ring_index": 8
+  },
+  "oem_hardware_programming": {
+    "resource_id": "0x300d",
+    "enable_cfg_literal": "0x00020001",
+    "jump_table_index": 13,
+    "jump_target_rva": "0x1da6c",
+    "bus_relative_cfg_offset": "0x1200",
+    "full_vfe_cfg_offset": "0x1e00",
+    "source_locked_target": "WM16_CFG0",
+    "resource_0x300d_to_wm16_cfg0_proven": true
+  },
+  "pinned_vfe680": {
+    "wm16_description": "STATS_BAF",
+    "wm16_cfg": "0x1e00",
+    "wm16_addr_status0": "0x1e70",
+    "wm16_comp_group": 7,
+    "comp_group7_done_mask": "BIT(7)",
+    "comp_group3_bus_client": "WM10_PIXEL_RAW"
+  },
+  "bus_v3_semantics": {
+    "wm_returns_comp_group_from_static_hw_regs": true,
+    "comp_group_index_selects_comp_done_mask": true,
+    "completion_tests_bus_status0_against_comp_done_mask": true
+  },
+  "namespace_conclusion": {
+    "software_group8_equals_oem_output_group3": false,
+    "oem_output_group3_may_be_assumed_equal_to_upstream_wm16_group7": false,
+    "resource_0x300d_and_wm16_hardware_programming_are_independently_linked": true,
+    "exact_oem_group3_to_physical_completion_bit_translation_proven": false
+  },
+  "not_proven": {
+    "exact_same_generation_fifo8_key_equals_wm16_completed_dma_buffer": true,
+    "independent_wm16_dma_iommu_quiescence_and_safe_reuse": true,
+    "full_six_group_safe_retirement": true
+  },
+  "e005n_loaded": false,
+  "protected_golden_modified": false,
+  "native_rear_hardware_isp_runtime_authorized": false
+}
