@@ -1,0 +1,48 @@
+{
+  "schema": "E005v-csid-sof-timestamp-matcher-token-correction-static-v1",
+  "parent_git_revision": "92c3b61b9ea5d1fb2310ed9e72f9a6690e6a0369",
+  "correction_of": "E005u",
+  "same_sp11_oem_driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+  "normalized_type1_token": {
+    "low_register": "CSID+0x398",
+    "high_register": "CSID+0x39c",
+    "high_bits_used": 24,
+    "destination": "normalized_record+0x30",
+    "oem_build_rvas": [
+      "0x1b7f8",
+      "0x1b7fc",
+      "0x1b804",
+      "0x1b808",
+      "0x1b80c"
+    ],
+    "qualcomm_csid680_low_name": "timestamp_curr0_sof_addr",
+    "qualcomm_csid680_high_name": "timestamp_curr1_sof_addr",
+    "token_semantics": "56-bit current CSID SOF timestamp"
+  },
+  "matcher": {
+    "installer_rva": "0x24f60",
+    "matcher_rva": "0x25078",
+    "slot_value_base": "0x2e60",
+    "key_base": "0x2e68",
+    "tag_base": "0x2e78",
+    "slot_value_is_pointer": false,
+    "slot_value_is_dma_address": false,
+    "slot_value_is_csid_current_sof_timestamp": true,
+    "matcher_returns_timestamp_for_exact_key_tag_generation": true
+  },
+  "retained_from_e005u": {
+    "bf_csid_status_ack": true,
+    "synchronous_wm16_addr_status0_before_matcher": true,
+    "synchronous_wm16_cfg0_before_matcher": true,
+    "wm16_status_sample_is_independent_bus_completion_fence": false
+  },
+  "not_proven": {
+    "csid_sof_timestamp_equals_wm16_dma_address": true,
+    "wm16_completion_path_carries_same_sof_timestamp": true,
+    "exact_same_generation_fifo8_to_independently_completed_wm16_dma_buffer": true,
+    "dma_iommu_quiescence_safe_reuse": true
+  },
+  "e005n_loaded": false,
+  "protected_golden_modified": false,
+  "native_rear_hardware_isp_runtime_authorized": false
+}
