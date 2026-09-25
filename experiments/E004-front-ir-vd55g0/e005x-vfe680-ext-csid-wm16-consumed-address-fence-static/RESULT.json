@@ -1,0 +1,25 @@
+{
+  "schema": "E005x-vfe680-ext-csid-wm16-consumed-address-fence-static-v1",
+  "parent_git_revision": "c4f9a98c",
+  "evidence_class": "S_PINNED_QUALCOMM_VFE680_PLUS_SAME_SP11_OEM_CONVERGENCE",
+  "proven": {
+    "vfe680_uses_external_csid_for_buf_done": true,
+    "csid680_buf_done_status_mask_clear_offsets_are_0x8c_0x90_0x94": true,
+    "wm16_stats_baf_is_comp_group7": true,
+    "wm16_completion_mask_is_bit7": true,
+    "wm16_addr_status0_is_0x1e70": true,
+    "buf_done_bit_causes_last_consumed_addr_read": true,
+    "vfe680_support_consumed_addr_is_true": true,
+    "isp_context_matches_last_consumed_iova_to_request_output_iova": true,
+    "successful_match_releases_smmu_buffer_tracker_ref_and_signals_success_fence": true,
+    "same_sp11_windows_bf_status_offsets_and_bit_match_reference_completion_architecture": true
+  },
+  "not_proven": {
+    "linux_sp11_runtime_csid_bit7_wm16_completion": true,
+    "linux_exact_wm16_iova_correlation": true,
+    "linux_safe_wm16_retirement_requeue": true,
+    "full_six_group_rear_retirement": true
+  },
+  "native_rear_hardware_isp_runtime_authorized": false,
+  "next": "fresh isolated Linux observer for CSID BUF_DONE BIT7 plus WM16 ADDR_STATUS0 versus Linux-owned queued IOVAs; no retirement on first run"
+}
