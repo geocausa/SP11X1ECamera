@@ -9383,3 +9383,27 @@ e004lh_completed:
   libcamera_tests_passed: 3
   native_edge_decisions_tested: 960
   live_libcamera_admitted: false
+
+e005m_static_completed:
+  status: pass-vfe680-wm16-baf-compgrp7-busdone-contract-static
+  physical_test: false
+  parent_git_revision: 8747f7780fbf056dcf891e202e3e3345eb98d50d
+  qualcomm_camera_driver_revision: 82ac3a671a5b0a4e3b3ac4519208af1d37a93eb6
+  qualcomm_camera_driver_tag: v1.0.6
+  wm_id: 16
+  wm_role: STATS_BAF
+  comp_group: 7
+  comp_done_mask: BIT(7)
+  bus_status0_offset: 0xc28
+  bus_clear0_offset: 0xc20
+  bus_clear1_offset: 0xc24
+  bus_global_clear_offset: 0xc30
+  wm16_addr_status0_offset: 0x1e70
+  c3c_c40_semantics: if_frameheader_cfg
+  accepted_sp11_vfe680_isr_implements_completion: false
+  live_rear_compgrp7_wm16_completion_proven: false
+  fifo8_generation_matched_to_consumed_addr_proven: false
+  dma_iommu_safe_retirement_proven: false
+  rear_hardware_isp_runtime_authorized: false
+  next_gate: source-review-vfe-irq-ownership-then-isolated-nonretiring-compgrp7-wm16-observer
+  evidence: experiments/E004-front-ir-vd55g0/e005m-vfe680-wm16-baf-compgrp7-busdone-static/RESULT.json
