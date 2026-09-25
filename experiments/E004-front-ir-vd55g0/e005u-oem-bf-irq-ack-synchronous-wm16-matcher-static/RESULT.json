@@ -1,0 +1,66 @@
+{
+  "schema": "E005u-oem-bf-irq-ack-synchronous-wm16-matcher-static-v1",
+  "parent_git_revision": "4713bbc4e67ffb3a3e3976c329e65c039c7c6657",
+  "evidence_class": "S_SAME_SP11_OEM_STATIC_PLUS_PRIOR_LIVE_SCALAR_EVIDENCE",
+  "same_sp11_oem_driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+  "type1_bf_hardware_status": {
+    "status_read_offset": "0x8c",
+    "prepared_status_field": "0x0c",
+    "ack_write_offset": "0x94",
+    "normalizer_destination_field": "0x08",
+    "bf_bit": 7,
+    "bf_event_id": "0x0f",
+    "same_word_status_ack_source_locked": true
+  },
+  "bf_synchronous_wm16_sample": {
+    "fifo8_pop_rva": "0x1fc94",
+    "hardware_status_selector": "0x0f",
+    "selector_function_rva": "0x1d620",
+    "wm16_case_rva": "0x1d710",
+    "wm16_addr_status0_bus_offset": "0x1270",
+    "wm16_addr_status0_vfe_offset": "0x1e70",
+    "wm16_cfg0_bus_offset": "0x1200",
+    "wm16_cfg0_vfe_offset": "0x1e00",
+    "result_addr_status0_offset": "0x4c",
+    "result_cfg_enabled_offset": "0x48",
+    "device_result_base": "0x178",
+    "device_addr_status0_field": "0x1c4",
+    "sample_occurs_after_fifo8_pop_before_matcher": true,
+    "selector_tests_bus_completion_irq": false,
+    "selector_acks_bus_completion_irq": false
+  },
+  "matcher_object": {
+    "matcher_rva": "0x25078",
+    "slot_count": 6,
+    "slot_stride": "0x20",
+    "object_pointer_base": "0x2e60",
+    "key_base": "0x2e68",
+    "matched_count_base": "0x2e70",
+    "expected_count_base": "0x2e74",
+    "tag_base": "0x2e78",
+    "installer_rva": "0x24f60",
+    "installer_stores_argument_x1_as_object_pointer": true,
+    "type1_installed_object_origin": "event/request record +0x30",
+    "matcher_returns_same_installed_object_pointer": true,
+    "object_dma_address_field_source_proven": false,
+    "object_pointer_equal_to_wm16_addr_status0_source_proven": false
+  },
+  "proven": {
+    "bf_event_has_hardware_status_bit_and_explicit_same_word_ack": true,
+    "bf_path_synchronously_reads_wm16_addr_status0_before_matcher": true,
+    "bf_path_synchronously_reads_wm16_cfg0_before_matcher": true,
+    "matcher_exactly_matches_fifo_key_and_tag": true,
+    "matcher_return_is_request_associated_opaque_object": true
+  },
+  "not_proven": {
+    "csid_bf_bit7_is_itself_wm16_dma_completion_fence": true,
+    "wm16_addr_status0_sample_is_independent_bus_completion_fence": true,
+    "matcher_object_contains_exact_wm16_dma_address": true,
+    "same_generation_fifo8_key_equals_independently_completed_wm16_dma_buffer": true,
+    "dma_iommu_quiescence_and_safe_reuse": true,
+    "full_six_group_rear_retirement": true
+  },
+  "e005n_loaded": false,
+  "protected_golden_modified": false,
+  "native_rear_hardware_isp_runtime_authorized": false
+}
