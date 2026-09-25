@@ -1,3 +1,7 @@
+## E005i original GROUP3/BF aggregate source lock
+
+Pinned OEM static analysis plus E005h's already-published live user-mode endpoint proves BF event0x0f/resource0x300d is a member of original raw GROUP3_STATS ID25. GROUP3 is emitted only after original software all-stats gate0x25190 returns1, and AVStream routes raw25 through normalized type4 into ProcessStatsFrame/STAT custom metadata. **Do not treat this as DMA completion:** GROUP3 sender0x26170 calls matcher0x25078 without requiring a nonnull result. Runtime rear ISP remains denied until exact FIFO8/WM16 same-buffer hardware completion and DMA/IOMMU safe stop are independently proved. See experiments/E004-front-ir-vd55g0/e005i-original-group3-bf-stat-chain-static/README.md.
+
 ## SP11 remote-debug safety rule (2026-09-25)
 
 SP11 is remote-only unless the user explicitly says a person is physically present. **Never use on-target KD/local kernel debugging, kernel WinDbg attach, kernel breakpoints, or any debugger operation that can halt the SP11 Windows kernel.** A kernel stop strands PiSlave/Fabric/network control. User-mode WinDbg/CDB is permitted only for ordinary camera processes (camera client, FrameServer/DeviceMFT user-mode host) and should prefer auto-continue/logpoint behavior. Non-halting ETW/WPP and static analysis are permitted. Kernel debugging may be reconsidered only with a separate live external debugger host. Do not alter BCD debug settings for user-mode work.
