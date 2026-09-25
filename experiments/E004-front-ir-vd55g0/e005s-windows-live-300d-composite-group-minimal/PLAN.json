@@ -1,0 +1,27 @@
+{
+  "schema": "E005s-preflight-v1",
+  "parent_git_revision": "a4d8e280601196cb287487bfe3ee812d99cf89ed",
+  "runtime": "one bounded SP11 Windows rear4K session under external SP7 KD",
+  "objective": "capture live resource0x300d OEM composite-group field with minimal debugger overhead while retaining FIFO8/matcher and one WM16 completion sample per matched event",
+  "sp7_external_kd_only": true,
+  "local_sp11_kd_forbidden": true,
+  "breakpoint_count": 3,
+  "breakpoints": [
+    {
+      "rva": "0x16de8",
+      "purpose": "if output resource type at x21+0x8b0 is 0x300d, print dword x21+0x8c0 composite-group scalar"
+    },
+    {
+      "rva": "0x1fc98",
+      "purpose": "BF group8 FIFO return; print opaque key/tag only when non-null"
+    },
+    {
+      "rva": "0x1fce8",
+      "purpose": "matcher return; print matched opaque key/tag plus WM16 ADDR_STATUS0 from same device BUS base"
+    }
+  ],
+  "load_e005n": false,
+  "raw_debugger_dma_and_pointer_values_private": true,
+  "acceptance_min_valid_rear4k_handles": 10,
+  "expected_rollback": "normal reboot -> persistent Golden Linux sp11-audio-fullio-v19c"
+}
