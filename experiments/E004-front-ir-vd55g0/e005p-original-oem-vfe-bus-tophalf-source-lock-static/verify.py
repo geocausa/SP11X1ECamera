@@ -77,7 +77,12 @@ def main():
     req(o["native_rear_hardware_isp_runtime_authorized"] is False, "E005o rear denied")
 
     d=json.loads((HERE/"RESULT.json").read_text())
-    req(d["oem_bf_event"]["raw_source"]=="TOP_STATUS1_BIT7", "BF source")
+    ph=json.loads((ROOT/"experiments/E004-front-ir-vd55g0/e004ph-original-type1-preparation-queue-status-provenance-static/RESULT.json").read_text())
+    req(ph["original_type_one_B_preparation_input_is_separate_from_IFE_snapshot_A_wrapper"] is True, "E004ph queue separation")
+    req(ph["old_direct_IFE_snapshot_TOP_status1_plus0x8_as_type1_BF_source_valid"] is False, "E004ph supersedes TOP1 origin")
+    req(ph["original_zero_mode_CSID_BUF_DONE_status_bit7_to_type1_BF0x0f_static_proven"] is True, "E004ph CSID type1 source")
+    req(d["oem_bf_event"]["raw_source"]=="CSID_BUF_DONE_IRQ_STATUS_BIT7_VIA_TYPE1_QUEUE_B", "corrected BF source")
+    req(d["oem_bf_event"]["snapshot_top1_is_actual_type1_source"] is False, "snapshot is not type1 source")
     req(d["oem_bf_event"]["not_directly_sourced_from_bus_status0_bit7"] is True, "BF/BUS distinction")
     req(d["oem_full_ife"]["direct_context150_canonical_clear0_0x20_store_sites_observed"]==0, "saved clear0 scan")
     req(d["oem_full_ife"]["direct_context150_canonical_clear1_0x24_store_sites_observed"]==0, "saved clear1 scan")
@@ -86,7 +91,7 @@ def main():
     req(d["linux_port_policy"]["copy_oem_c3c_c40_writeback_into_linux"] is False, "do not port unresolved OEM writes")
     req(d["linux_port_policy"]["keep_e005n_unloaded_from_this_static_result_alone"] is True, "E005n stays unloaded")
     req(d["linux_port_policy"]["native_rear_hardware_isp_runtime_authorized"] is False, "rear denied")
-    print("PASS_E005P_OEM_TOPHALF_RAW_TOP_BUS_SOURCE_LOCK_BF_TOP1BIT7_C3C40_DIVERGENCE_STATIC_ONLY_REAR_DENIED")
+    print("PASS_E005P_REGISTER_MAP_PRESERVED_BF_ORIGIN_SUPERSEDED_BY_E004PH_E005R_REAR_DENIED")
 
 if __name__=="__main__":
     main()

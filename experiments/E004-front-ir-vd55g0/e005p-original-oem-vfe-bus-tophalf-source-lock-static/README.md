@@ -1,3 +1,10 @@
+## E005r correction — BF provenance superseded
+
+E005p's register-map/top-half facts remain valid, but its statement that the actual type-1 BF event is sourced from the 0x1DC20 snapshot's TOP status1 bit7 is **superseded**. E004ph had already proven the stronger path: type-1 queue B uses preparer 0x24380, whose zero-mode callback 0x1B5F0 reads CSID0/CSID1 BUF_DONE_IRQ_STATUS +0x8C; normalizer 0x1B7D0 copies prepared +0x0C to the type-1 consumer word +0x08, whose bit7 produces BF event 0x0F. The 0x24A30 / 0x1DC20 IFE snapshot belongs to a separate queue A.
+
+E005q subsequently observed 35 live BF/FIFO8/matcher events while the 0x1DC20 probe emitted zero rows, consistent with that separation. This live absence is supporting evidence only; the source proof is E004ph.
+
+Treat E005p as authoritative for the OEM IFE TOP/BUS register snapshot and writeback geometry, **not** for type-1 BF status provenance. See E005r.
 # E005p — source-lock the original OEM VFE interrupt top half before another physical run
 
 Parent Git 897bdb0175e15e46c2f4c8943da1761da1e73fae. This stage is static only on SP11 Golden Linux. It analyzes the SHA-pinned same-SP11 original qccamisp8380.sys locally and cross-checks the already pinned Qualcomm VFE680 source from E005m. No camera stream, reboot, module load, MMIO write, KD session, BCD change or Golden mutation occurred.

@@ -1,0 +1,70 @@
+{
+  "schema": "E005r-type1-csid-provenance-output-group-field-correction-v1",
+  "parent_git_revision": "1f418e98687204627d5d3f656d714ebbcde50368",
+  "evidence_class": "S_SAME_SP11_OEM_STATIC_CORRECTION_PLUS_E005Q_PRIVATE_LIVE_SCALAR_SUMMARY",
+  "same_sp11_oem_driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+  "correction": {
+    "e005p_register_map_facts_retained": true,
+    "e005p_top1_as_actual_type1_bf_source_superseded": true,
+    "type1_status_source": "CSID_BUF_DONE_IRQ_STATUS_BIT7",
+    "type1_prepare_callback_rva": "0x24380",
+    "type1_zero_mode_status_preparer_rva": "0x1b5f0",
+    "type1_zero_mode_normalizer_rva": "0x1b7d0",
+    "csid_buf_done_status_offset": "0x8c",
+    "prepared_source_word_offset": "0x0c",
+    "normalized_bf_consumer_word_offset": "0x08",
+    "bf_event_id": "0x0f",
+    "ife_snapshot_wrapper_rva": "0x24a30",
+    "ife_snapshot_mode0_rva": "0x1dc20",
+    "ife_snapshot_is_separate_queue": true
+  },
+  "e005q_live_summary": {
+    "attempt_consumed": true,
+    "capture_acceptance_passed": false,
+    "start_stop_clean": true,
+    "valid_frame_handles": 5,
+    "bf_events": 35,
+    "fifo8_nonnull": 35,
+    "matcher_nonnull": 35,
+    "fifo_matcher_key_sequences_identical": true,
+    "wm16_addr_status0_samples": 70,
+    "wm16_addr_status0_unique_values": 10,
+    "wm16_pairs_same": 33,
+    "wm16_pairs_changed": 2,
+    "snapshot_0x1dc20_rows": 0
+  },
+  "resource_0x300d": {
+    "live_write_master_update_count": 37,
+    "write_master_record_resource_offset": "0x08",
+    "write_master_record_width_offset": "0x14",
+    "write_master_record_height_offset": "0x18",
+    "observed_width": 25,
+    "observed_height": 4,
+    "width_height_diagnostic": "Write Master Update for PortId = %d: W = %d, H = %d",
+    "height_4_is_composite_group": false
+  },
+  "output_resource_config": {
+    "entry_stride_bytes": 40,
+    "resource_type_field_relative_to_container": "0x8b0",
+    "format_field_relative_to_container": "0x8b4",
+    "width_field_relative_to_container": "0x8b8",
+    "height_field_relative_to_container": "0x8bc",
+    "composite_group_field_relative_to_container": "0x8c0",
+    "split_point_field_relative_to_container": "0x8c4",
+    "secure_field_relative_to_container": "0x8c8",
+    "wm_mode_field_relative_to_container": "0x8cc",
+    "composite_group_diagnostic": "Composite Group id of the group         = %d",
+    "live_resource_0x300d_composite_group_captured": false
+  },
+  "not_proven": {
+    "csid_buf_done_bit7_equals_wm16_dma_completion": true,
+    "live_resource_0x300d_composite_group_equals_reference_group7": true,
+    "fifo8_opaque_key_is_request_id": true,
+    "fifo8_opaque_key_identifies_exact_wm16_consumed_address": true,
+    "same_generation_fifo8_wm16_hardware_completion": true,
+    "independent_wm16_dma_iommu_safe_retirement": true,
+    "full_six_group_rear_retirement": true
+  },
+  "native_rear_hardware_isp_runtime_authorized": false,
+  "next_gate": "minimal external-SP7 capture of source-defined output-resource composite-group for resource0x300d plus source-proven type1 CSID status and WM16 completion state; avoid snapshot-queue probe and reduce instrumentation"
+}

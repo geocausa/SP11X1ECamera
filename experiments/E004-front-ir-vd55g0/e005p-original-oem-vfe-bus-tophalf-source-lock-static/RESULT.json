@@ -25,13 +25,15 @@
     "direct_context150_canonical_clear1_0x24_store_sites_observed": 0
   },
   "oem_bf_event": {
-    "raw_source": "TOP_STATUS1_BIT7",
+    "raw_source": "CSID_BUF_DONE_IRQ_STATUS_BIT7_VIA_TYPE1_QUEUE_B",
     "bit_extract_rva": "0x1f048",
     "event_id": "0x0f",
     "event_assignment_rva": "0x1f190",
     "resource_port": "0x300d",
     "software_fifo_group": 8,
-    "not_directly_sourced_from_bus_status0_bit7": true
+    "not_directly_sourced_from_bus_status0_bit7": true,
+    "historical_e005p_raw_source_candidate": "TOP_STATUS1_BIT7",
+    "snapshot_top1_is_actual_type1_source": false
   },
   "reference_vfe680": {
     "wm16_role": "STATS_BAF",
@@ -49,10 +51,11 @@
     "oem_full_ife_bus_window_is_vfe_plus_0xc00": true,
     "oem_tophalf_snapshots_top0_top1_bus0_bus1_before_dpc": true,
     "oem_bus_status_reads_are_vfe_0xc28_0xc2c": true,
-    "oem_bf_event0x0f_is_generated_from_raw_top_status1_bit7": true,
+    "oem_bf_event0x0f_is_generated_from_raw_top_status1_bit7": false,
     "oem_bf_event_is_not_direct_proof_of_bus_status0_bit7": true,
     "oem_observed_bus_status_writeback_sequence_differs_from_pinned_qualcomm_canonical_clear_offsets": true,
-    "reference_wm16_is_stats_baf_comp_group7": true
+    "reference_wm16_is_stats_baf_comp_group7": true,
+    "e004ph_csid_type1_source_supersedes_snapshot_origin": true
   },
   "not_proven": {
     "oem_runtime_bf_resource_0x300d_composite_group_id_equals_7": true,
@@ -68,5 +71,11 @@
     "keep_e005n_unloaded_from_this_static_result_alone": true,
     "native_rear_hardware_isp_runtime_authorized": false
   },
-  "next_gate": "bounded SP7-external-KD trace at the OEM 0x1dc20 top-half to capture raw TOP0/TOP1/BUS0/BUS1 before writeback on BF events, plus capture/derive the live resource-0x300d composite-group scalar; then correlate one BF FIFO8/matcher generation with a trustworthy WM16 hardware-completion witness"
+  "next_gate": "use the source-proven type1 CSID preparation path plus the exact OEM output-resource composite-group field; do not probe 0x1dc20 as BF provenance",
+  "superseded_by": "E005r",
+  "correction": {
+    "historical_e005p_top1_bf_origin_claim_valid": false,
+    "authoritative_type1_status_source": "CSID_BUF_DONE_IRQ_STATUS_BIT7_VIA_TYPE1_QUEUE_B",
+    "ife_snapshot_queue_is_separate_from_type1_preparation_queue": true
+  }
 }

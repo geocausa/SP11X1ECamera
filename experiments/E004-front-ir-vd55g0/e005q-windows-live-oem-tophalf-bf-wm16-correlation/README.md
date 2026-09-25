@@ -55,3 +55,15 @@ Even a positive run does **not** by itself authorize native rear ISP. Same-gener
 ## Rollback
 
 The direct Windows EFI entry is BootNext-only. A normal reboot returns through GRUB to the persistent Golden Linux entry. SP7 remains available throughout any SP11 kernel pause.
+
+## Runtime result — consumed / partial
+
+The single E005q Windows attempt was consumed exactly once. Rear VideoRecord Start and Stop both succeeded, but the six debugger probes reduced delivery to 5 valid 4K handles in 8.402 s, below the predeclared >=10-frame acceptance threshold. The attempt therefore **does not receive a full capture PASS** and must never be replayed under the same identity.
+
+The private SP7 KD log was reduced locally to safe scalars only: 35 BF events, 35/35 non-null FIFO8 entries, 35/35 non-null matcher returns, equal opaque FIFO/matcher keys for all 35 events, and 70 WM16 ADDR_STATUS0 samples spanning 10 distinct values. The two WM16 samples around each key were equal for 33/35 events and changed for 2/35, so this is live movement but **not** an exact per-buffer fence.
+
+Resource 0x300D was observed in 37 write-master updates with source-proven W=25 and H=4. The 4 is height, not composite group. The 0x1DC20 snapshot probe emitted zero rows; E005r explains why this is not a hardware-negative result.
+
+All breakpoints were removed, the private debugger log was closed, the triggerless scheduled task was unregistered, and a normal reboot returned SP11 to protected Golden Linux with the overlap guard PASS.
+
+Native rear processed ISP remains **DENIED**. See E005r for the corrected type-1 CSID provenance and the exact OEM composite-group field.
