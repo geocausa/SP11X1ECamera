@@ -26,6 +26,10 @@ This file is the durable working agreement for assistants/agents operating this 
 
 [E004px owner-local frame epoch and unique pending-token correction](experiments/E004-front-ir-vd55g0/e004px-bf-owner-handoff-token-uniqueness-isolated/README.md) is a distinct isolated ARM64 compiled/C11 tested BF software-ring revision, parent f2617111. A fresh strictly higher owner epoch can start frame1 after independently verified all-group/DMA/IOMMU safe stop; old owner epoch remains stale. Duplicate opaque token while pending fails -EEXIST, preserving count/frame epoch; already verified/popped token may later be reused. Exact source header SHA7293d95a... compiled ARM64 W1 zero warnings, 437 GCC and 437 Clang ASAN/UBSAN assertions and 22 conservative result-field negatives PASS. This does NOT implement a live evidence producer, driver ISR/V4L2 caller or rear ISP authorization; do not conflate synthetic predicates with real DMA safety. Isolated module was not loaded, installed or booted; Golden/front PIX/rear RAW+software4K/IR protected.
 
+## E005j original Windows AVStream pin2 roundtrip source lock
+
+[experiments/E004-front-ir-vd55g0/e005j-original-avstream-pin2-isp-roundtrip-static](experiments/E004-front-ir-vd55g0/e005j-original-avstream-pin2-isp-roundtrip-static/README.md) source-locks the original surfacecamavs8380 video-pin request/completion loop around the already-proven E005h rear4K pin2 role. Request: CVideoPin HandleExtBuffer → TriggerStart → SubmitPendingPackets → SendPacketInternal → IfeNode ProcessRequest. Completion: ISP worker/notification → GetIspNotification + ProcessIfeFrame → video-pin ValidateBuffer → CompleteFrame → NotifyFrameCompleted. This is original static source evidence plus parent user-mode physical identity, not per-frame kernel-object/FIFO8/WM16 DMA evidence. No local KD is permitted on remote-only SP11; native rear hardware ISP remains denied.
+
 ## Canonical Windows → native Linux camera architecture and slice map (2026-09-24)
 
 Before selecting a porting task, driver function, Windows app, breakpoint,
