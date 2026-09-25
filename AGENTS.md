@@ -1,3 +1,7 @@
+## SP11 remote-debug safety rule (2026-09-25)
+
+SP11 is remote-only unless the user explicitly says a person is physically present. **Never use on-target KD/local kernel debugging, kernel WinDbg attach, kernel breakpoints, or any debugger operation that can halt the SP11 Windows kernel.** A kernel stop strands PiSlave/Fabric/network control. User-mode WinDbg/CDB is permitted only for ordinary camera processes (camera client, FrameServer/DeviceMFT user-mode host) and should prefer auto-continue/logpoint behavior. Non-halting ETW/WPP and static analysis are permitted. Kernel debugging may be reconsidered only with a separate live external debugger host. Do not alter BCD debug settings for user-mode work.
+
 # Agent operating contract — SP11 camera
 
 This file is the durable working agreement for assistants/agents operating this repository.
