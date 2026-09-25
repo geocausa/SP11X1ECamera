@@ -1,6 +1,11 @@
 ## E005l — STAT metadata exposes aggregate queue4 key/tag, not BF queue8 requestId
 
 
+
+## E005n: isolated native VFE680 comp7 / WM16 observer
+
+The accepted SP11 VFE680 owns one dedicated, non-shared platform IRQ and currently binds it to a no-op ISR. E005n compiles an isolated replacement that latches TOP/BUS status, recognizes BUS status0 BIT(7) as comp-group7, reads WM16 ADDR_STATUS0 before ACK, and then uses canonical TOP/BUS clear+global-clear. The observer never calls vfe_buf_done, VB2, DMA unmap/free or buffer reuse. Its BIT7 mask-arm helper is source-only and has no runtime caller. Fresh fix1 ARM64 qcom-camss build is zero-warning and Golden-vermagic compatible, but was never installed/loaded. This closes compile/IRQ-ownership feasibility only; live rear WM16 completion and safe retirement remain unproven.
+
 ## E005m: exact VFE680 BF/BAF hardware completion contract
 
 Pinned Qualcomm VFE680 source independently maps **WM16 = STATS_BAF = composite group 7**. Group7 completion is **BUS IRQ status0 BIT(7)**; the BUS-v3 top half then reads WM16 **ADDR_STATUS0 (base+0x1E70)** as last-consumed address before the bottom half reports hardware DONE. VFE680 BUS mask/clear/status0 are **0xC18/0xC20/0xC28**, clear1 is **0xC24**, and global clear is **0xC30**. The same hardware table identifies **0xC3C/0xC40 as frame-header configuration**, resolving the old E004ox offset ambiguity: they are not canonical BUS IRQ clears. This is source convergence only; accepted SP11 VFE680 ISR remains a no-op and live rear WM16 comp7/FIFO8 generation/DMA-IOMMU retirement is not yet proven. See [E005m](../experiments/E004-front-ir-vd55g0/e005m-vfe680-wm16-baf-compgrp7-busdone-static/README.md).
