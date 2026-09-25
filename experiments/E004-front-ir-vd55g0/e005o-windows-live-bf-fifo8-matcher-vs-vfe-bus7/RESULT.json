@@ -1,0 +1,45 @@
+{
+  "schema": "E005o-windows-live-bf-fifo8-matcher-vs-vfe-bus7-v1",
+  "parent_git_revision": "7e7841dae68ceb5f56a8c040b08c97cbb905d240",
+  "evidence_class": "P_WINDOWS_REAR4K_EXTERNAL_SP7_KD_AUTOCONTINUE_SAFE_SCALARS",
+  "capture": {
+    "role": "Surface Camera Rear Color VideoRecord NV12 3840x2160",
+    "elapsed_ms": 8026,
+    "valid_frame_handles": 13,
+    "start_success": true,
+    "stop_success": true
+  },
+  "external_debugger": {
+    "host": "SP7",
+    "target": "SP11 Windows",
+    "kernel_breakpoints_autocontinue": true,
+    "all_breakpoints_removed_after_run": true,
+    "private_log_closed": true,
+    "debugger_job_stopped_after_linux_return": true
+  },
+  "exact_live_marker_counts": {
+    "bf_event": 22,
+    "fifo8_nonnull": 22,
+    "matcher_nonnull": 22,
+    "wm16_consumed_status_nonnull": 42,
+    "vfe_bus_compgrp7_probe_mode_a": 0,
+    "vfe_bus_compgrp7_probe_mode_b": 0
+  },
+  "proven": {
+    "successful_rear4k_capture_during_external_kd": true,
+    "live_bf_event_observed": true,
+    "live_bf_event_with_nonnull_fifo8_entry_observed": true,
+    "live_bf_event_with_nonnull_matcher_return_observed": true,
+    "wm16_consumed_status_nonzero_observed_in_same_session": true
+  },
+  "not_proven": {
+    "vfe_bus_compgrp7_bit7_observed_by_two_oem_status_read_probes": true,
+    "same_frame_fifo8_entry_equals_wm16_consumed_buffer": true,
+    "same_generation_fifo8_wm16_correlation": true,
+    "independent_wm16_dma_iommu_safe_retirement": true,
+    "full_six_group_rear_retirement": true
+  },
+  "native_rear_hardware_isp_runtime_authorized": false,
+  "interpretation": "The live software BF chain is materially stronger: all 22 observed BF events had a non-null group8 FIFO entry and a non-null matcher return during a successful rear4K session, with separate WM16 consumed-status activity. Neither of the two selected OEM VFE BUS-status readers exposed comp-group7 bit7, so they are not accepted as a live hardware-retirement witness. This negative probe does not prove the hardware failed to complete; the probe location/aggregation semantics remain unresolved.",
+  "next_gate": "source-lock the true OEM VFE BUS interrupt-status producer/ack path and exact comp-group encoding before another Windows run; do not load E005n solely on the basis of E005o"
+}

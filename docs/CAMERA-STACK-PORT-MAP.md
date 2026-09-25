@@ -2,6 +2,11 @@
 
 
 
+
+## E005o: live BF/FIFO8/matcher chain closes; independent BUS7 witness still missing
+
+A bounded Windows rear4K session under external SP7 KD produced 22 original BF events, 22 nonnull group8 FIFO entries and 22 nonnull outstanding-matcher returns; WM16 consumed-status was nonzero 42 times. The camera still completed a clean 8.026-second 3840x2160 NV12 session with 13 valid frame handles. This is the first live run where every observed BF event had both a real FIFO8 object and a nonnull matcher. Two selected OEM VFE BUS-status readers saw comp-group7 bit7 zero times, so those locations do not yet establish the independent WM16 DMA-retirement fence. Treat the zero as a probe-location/aggregation unknown, not proof of hardware failure. Same-frame/generation identity and DMA/IOMMU-safe reuse remain denied.
+
 ## E005n: isolated native VFE680 comp7 / WM16 observer
 
 The accepted SP11 VFE680 owns one dedicated, non-shared platform IRQ and currently binds it to a no-op ISR. E005n compiles an isolated replacement that latches TOP/BUS status, recognizes BUS status0 BIT(7) as comp-group7, reads WM16 ADDR_STATUS0 before ACK, and then uses canonical TOP/BUS clear+global-clear. The observer never calls vfe_buf_done, VB2, DMA unmap/free or buffer reuse. Its BIT7 mask-arm helper is source-only and has no runtime caller. Fresh fix1 ARM64 qcom-camss build is zero-warning and Golden-vermagic compatible, but was never installed/loaded. This closes compile/IRQ-ownership feasibility only; live rear WM16 completion and safe retirement remain unproven.
