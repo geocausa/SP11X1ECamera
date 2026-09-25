@@ -1,0 +1,72 @@
+{
+  "schema": "E005p-original-oem-vfe-bus-tophalf-source-lock-static-v1",
+  "parent_git_revision": "897bdb0175e15e46c2f4c8943da1761da1e73fae",
+  "evidence_class": "S_SAME_SP11_SHA_PINNED_OEM_STATIC_PLUS_PINNED_QUALCOMM_REFERENCE_NO_NEW_LIVE_RUNTIME",
+  "same_sp11_oem_driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+  "oem_full_ife": {
+    "bus_window_base_from_vfe": "0x0c00",
+    "isr_wrapper_rva": "0x24a30",
+    "mode0_irq_capture_rva": "0x1dc20",
+    "dpc_rva": "0x24a70",
+    "mode0_event_dispatch_rva": "0x1ef90",
+    "top_status0_offset": "0x44",
+    "top_status1_offset": "0x48",
+    "bus_status0_offset_from_bus_window": "0x28",
+    "bus_status1_offset_from_bus_window": "0x2c",
+    "bus_status0_vfe_offset": "0x0c28",
+    "bus_status1_vfe_offset": "0x0c2c",
+    "observed_oem_bus_writeback0_offset_from_bus_window": "0x3c",
+    "observed_oem_bus_writeback1_offset_from_bus_window": "0x40",
+    "observed_oem_bus_global_write_offset_from_bus_window": "0x30",
+    "observed_oem_bus_writeback0_vfe_offset": "0x0c3c",
+    "observed_oem_bus_writeback1_vfe_offset": "0x0c40",
+    "observed_oem_bus_global_write_vfe_offset": "0x0c30",
+    "direct_context150_canonical_clear0_0x20_store_sites_observed": 0,
+    "direct_context150_canonical_clear1_0x24_store_sites_observed": 0
+  },
+  "oem_bf_event": {
+    "raw_source": "TOP_STATUS1_BIT7",
+    "bit_extract_rva": "0x1f048",
+    "event_id": "0x0f",
+    "event_assignment_rva": "0x1f190",
+    "resource_port": "0x300d",
+    "software_fifo_group": 8,
+    "not_directly_sourced_from_bus_status0_bit7": true
+  },
+  "reference_vfe680": {
+    "wm16_role": "STATS_BAF",
+    "wm16_cfg_vfe_offset": "0x1e00",
+    "wm16_addr_status0_vfe_offset": "0x1e70",
+    "wm16_comp_group": 7,
+    "canonical_bus_status0_vfe_offset": "0x0c28",
+    "canonical_bus_status1_vfe_offset": "0x0c2c",
+    "canonical_bus_clear0_vfe_offset": "0x0c20",
+    "canonical_bus_clear1_vfe_offset": "0x0c24",
+    "canonical_bus_global_clear_vfe_offset": "0x0c30",
+    "vfe_0x0c3c_0x0c40_reference_semantics": "IF_FRAME_HEADER_CFG_ENTRIES"
+  },
+  "proven": {
+    "oem_full_ife_bus_window_is_vfe_plus_0xc00": true,
+    "oem_tophalf_snapshots_top0_top1_bus0_bus1_before_dpc": true,
+    "oem_bus_status_reads_are_vfe_0xc28_0xc2c": true,
+    "oem_bf_event0x0f_is_generated_from_raw_top_status1_bit7": true,
+    "oem_bf_event_is_not_direct_proof_of_bus_status0_bit7": true,
+    "oem_observed_bus_status_writeback_sequence_differs_from_pinned_qualcomm_canonical_clear_offsets": true,
+    "reference_wm16_is_stats_baf_comp_group7": true
+  },
+  "not_proven": {
+    "oem_runtime_bf_resource_0x300d_composite_group_id_equals_7": true,
+    "oem_c3c_c40_writeback_has_canonical_vfe680_bus_clear_semantics": true,
+    "oem_driver_never_accesses_c20_c24_through_any_aliased_or_indirect_path": true,
+    "same_frame_fifo8_entry_equals_independently_completed_wm16_dma_buffer": true,
+    "same_generation_fifo8_wm16_correlation": true,
+    "independent_wm16_dma_iommu_safe_retirement": true,
+    "full_six_group_rear_retirement": true
+  },
+  "linux_port_policy": {
+    "copy_oem_c3c_c40_writeback_into_linux": false,
+    "keep_e005n_unloaded_from_this_static_result_alone": true,
+    "native_rear_hardware_isp_runtime_authorized": false
+  },
+  "next_gate": "bounded SP7-external-KD trace at the OEM 0x1dc20 top-half to capture raw TOP0/TOP1/BUS0/BUS1 before writeback on BF events, plus capture/derive the live resource-0x300d composite-group scalar; then correlate one BF FIFO8/matcher generation with a trustworthy WM16 hardware-completion witness"
+}

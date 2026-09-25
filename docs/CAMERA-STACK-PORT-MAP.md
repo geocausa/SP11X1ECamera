@@ -1,4 +1,7 @@
-## E005l — STAT metadata exposes aggregate queue4 key/tag, not BF queue8 requestId
+## E005p: OEM interrupt domains source-locked; BF is TOP1 bit7, not direct BUS7
+
+The exact same-SP11 OEM top half now has a source-locked four-word interrupt packet: TOP status0/status1 plus BUS status0/status1. BF software event 0x0f is created from raw TOP status1 bit7; the BUS words are separate. This resolves the apparent E005o contradiction without promoting a hardware-completion claim. The OEM full-IFE BUS window is VFE+0xc00, so its status reads are canonical VFE 0xc28/0xc2c, but its observed status writeback uses 0xc3c/0xc40 plus 0xc30. Pinned Qualcomm VFE680 calls 0xc20/0xc24 the BUS clears and 0xc3c/0xc40 frame-header config. Keep that divergence quarantined: do not transplant the OEM write sequence into Linux. Live resource 0x300d composite-group identity and independent WM16 DMA/IOMMU retirement still require a bounded external-SP7 trace.
+
 
 
 
@@ -14,6 +17,8 @@ The accepted SP11 VFE680 owns one dedicated, non-shared platform IRQ and current
 ## E005m: exact VFE680 BF/BAF hardware completion contract
 
 Pinned Qualcomm VFE680 source independently maps **WM16 = STATS_BAF = composite group 7**. Group7 completion is **BUS IRQ status0 BIT(7)**; the BUS-v3 top half then reads WM16 **ADDR_STATUS0 (base+0x1E70)** as last-consumed address before the bottom half reports hardware DONE. VFE680 BUS mask/clear/status0 are **0xC18/0xC20/0xC28**, clear1 is **0xC24**, and global clear is **0xC30**. The same hardware table identifies **0xC3C/0xC40 as frame-header configuration**, resolving the old E004ox offset ambiguity: they are not canonical BUS IRQ clears. This is source convergence only; accepted SP11 VFE680 ISR remains a no-op and live rear WM16 comp7/FIFO8 generation/DMA-IOMMU retirement is not yet proven. See [E005m](../experiments/E004-front-ir-vd55g0/e005m-vfe680-wm16-baf-compgrp7-busdone-static/README.md).
+
+## E005l — STAT metadata exposes aggregate queue4 key/tag, not BF queue8 requestId
 
 [experiments/E004-front-ir-vd55g0/e005l-original-group3-stat-aggregate-key-tag-export-static/README.md](../experiments/E004-front-ir-vd55g0/e005l-original-group3-stat-aggregate-key-tag-export-static/README.md) source-locks the non-halting STAT metadata boundary. The common qccamisp producer feeds separate group4 COMBO_STATS and group8 BF rings from the same locally built descriptor only when each independent insertion succeeds. GROUP3 pops **queue4**, and its key/tag flow through raw25 normalization into custom metadata item `0x8000000f`: aggregate key low32 at item+0x10 and tag at item+0x18. The producer's input+0x08 is diagnostically called requestId, but ring+0x08 is a separately assembled field and is **not** source-proven to equal requestId. Therefore a future user-mode STAT trace can observe an aggregate key/tag, but cannot stand in for physical BF queue8 dequeue/non-null WM16 match or hardware DMA completion.
 
