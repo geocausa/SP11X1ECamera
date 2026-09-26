@@ -74,3 +74,15 @@ Status: **OFFLINE SYMBOLIC COMPOSE PASS**. Startup composition and all Linux rea
 ### Next
 
 Source-lock the exact owner/producer semantics of 0x49B8 and 0x49BC. Then bind the steady symbolic register slots to accepted producer interfaces and compile that integration offline before addressing startup MAIN composition.
+
+
+## E006i ownership closure
+
+E006i source-locked the last two unnamed dynamic register offsets:
+
+- 0x49B8 -> BPC_ABF411 calculated register word
+- 0x49BC -> BPC_ABF411 calculated register word
+
+Both are emitted inside IFEBPCABF411Titan680's 0x49A0..0x49BC register range and are packed by the same request-time BPCABF411 calculated-setting path. The symbolic recipe now labels them BPC_ABF rather than unresolved; their values remain symbolic and are not frozen.
+
+There are now **zero unnamed dynamic register owners** in the E006h steady recipe. This closes ownership, not the Linux implementation of the complete BPCABF411 algorithm.
