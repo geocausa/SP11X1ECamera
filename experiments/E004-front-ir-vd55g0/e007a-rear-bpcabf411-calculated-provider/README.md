@@ -2,7 +2,7 @@
 
 Parent Git: `a32928cd` (E006z clean scalar + bank provider PASS).
 
-Status: **STAGED / COMPILE-ONLY**. No module install/load, camera access, reboot, MMIO write, DMI submission or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write, DMI submission or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -57,6 +57,20 @@ If the isolated build passes:
   - BFStats25: 29.
 
 This is register-provider closure only. Full rear BPC/ABF parity still requires the actual rear interpolation/common calculation inputs plus selector-1 DMI generation and live request-state integration.
+
+## Build result — PASS
+
+The full E006/E007a verifier chain passed and the staged provider was injected into an isolated copy of the accepted CAMSS source.
+
+- private validation: 22 records, 154 exact seven-register round-trip checks;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,656,584 bytes;
+- SHA-256: `1875123610a3d54b30e78333d1002a1b7ecd86353ca832762b8faaccae4d2059`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained symbols: `e007a_bpcabf411_lookup`, `e007a_bpcabf411_provider_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
+
+Concrete startup register providers are now **684/714 (95.8%)**. The remaining register contracts are exactly **30**: VFE680 PERIOD_CFG (1) and BFStats25 (29).
 
 ## Runtime gate
 
