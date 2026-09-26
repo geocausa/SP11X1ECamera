@@ -1,0 +1,52 @@
+{
+  "schema": "E006y-rear-awbbg17-source-safe-v1",
+  "module": "IFEAWBBGStats17Titan680",
+  "functions": {
+    "create_cmd_list": "0x180b39720",
+    "create_sub_cmd_list": "0x180b398a0",
+    "pack_iq_register_setting": "0x180b39950",
+    "hardware_caps": "0x180b39870",
+    "dependence_copy": "0x1809fdf60",
+    "modern_adjust_roi": "0x1809fe120",
+    "validate_dependence_params": "0x1809fe600",
+    "execute": "0x1809fe780"
+  },
+  "writes": [
+    {
+      "register": "0xb86c",
+      "count": 5
+    },
+    {
+      "register": "0xb880",
+      "count": 10
+    },
+    {
+      "register": "0xb868",
+      "count": 1
+    },
+    {
+      "register": "0xb864",
+      "count": 1
+    },
+    {
+      "register": "0xb860",
+      "count": 1
+    }
+  ],
+  "semantic_core": {
+    "identical_to_e006w_aecbe17_packer": true,
+    "identical_hardware_function_to_e006x_tintless": true,
+    "register_window_delta": "0x800",
+    "black_level_request_byte_offset": "0x2170",
+    "sample_pattern": "0xffff",
+    "quad_sync_enable": "CFG bit9",
+    "hardware_caps": "region 16..512; H/V grid max 64; threshold max from pipeline bit depth"
+  },
+  "modern_adjust_roi": {
+    "region_width_even": true,
+    "region_height_even": true,
+    "same_hardware_capability_function_as_e006w": true
+  },
+  "upstream_policy": "AWB stats policy/stripe/ROI configuration supplies adjusted semantic BGBE state; packer is shared",
+  "raw_windows_command_values_committed": false
+}
