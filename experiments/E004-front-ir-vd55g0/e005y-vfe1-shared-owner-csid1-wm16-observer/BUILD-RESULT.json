@@ -1,0 +1,38 @@
+{
+  "schema": "E005y-shared-vfe1-owner-csid1-wm16-observer-build-v1",
+  "parent_git_revision": "77d39e064aa0d32ab5f3a37f3a9e3b18a7cef70a",
+  "accepted_build": {
+    "identity": "fix3",
+    "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/e005y-vfe1-shared-owner-observer-build-fix3/camss/qcom-camss.ko",
+    "bytes": 13657480,
+    "sha256": "dd9a18263f571368ea5a49264306c12a6943465e24787bf8b651e575ed84b554",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "w1_zero_warnings": true,
+    "installed": false,
+    "loaded": false
+  },
+  "consumed_attempts": {
+    "original": "linked but rejected for unused static helper warnings",
+    "fix1": "linked but rejected because split observe helper declaration remained non-inline",
+    "fix2": "linked but rejected for the same single warning after an ineffective text replacement",
+    "fix3": "accepted"
+  },
+  "proven_by_build": {
+    "shared_front_rear_vfe1_owner_compiles": true,
+    "front_runner_is_scoped_by_owner_before_power_start": true,
+    "unsafe_front_teardown_pins_owner_until_reboot": true,
+    "csid1_observer_uses_existing_latched_and_acked_buf_done": true,
+    "rear_wm16_sample_requires_exact_rear_route_and_rear_owner_epoch": true,
+    "rear_owner_epoch_is_rechecked_after_mmio_sample": true,
+    "vfe1_wm16_addr_status0_read_helper_compiles": true,
+    "no_buffer_retirement_requeue_or_second_irq_ack_added": true
+  },
+  "runtime_not_proven": {
+    "rear_owner_live_acquisition": true,
+    "linux_rear_csid1_bit7": true,
+    "linux_rear_wm16_addr_status0": true,
+    "linux_owned_iova_match": true,
+    "linux_wm16_safe_retirement": true
+  },
+  "native_rear_hardware_isp_runtime_authorized": false
+}
