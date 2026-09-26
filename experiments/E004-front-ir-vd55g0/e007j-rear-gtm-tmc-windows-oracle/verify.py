@@ -23,3 +23,24 @@ for token in ('range(4,19)','clean_gtm_replay','post_r6_tmc_state_law','raw_capt
     assert token in a
 print('E007J_VERIFY_PASS rear4k_holder=true gtm_hooks=2 requests=4..18')
 print('capture=sparse_tmc+gtm_inputs+0x800_output raw_pixels=false one_shot=true')
+import json
+s=json.loads((D/'SAFE-ANALYSIS.json').read_text())
+r=json.loads((D/'RESULT.json').read_text())
+assert s['status']=='PASS_WINDOWS_ORACLE'
+assert s['clean_gtm_replay']=='15/15 PASS'
+assert s['requests']==list(range(4,19))
+assert s['post_r6_tmc_state_law']=='evolving'
+assert s['post_r6_gtm_output_law']=='evolving'
+assert s['post_r6_distinct_tmc_states']==5
+assert s['post_r6_distinct_gtm_outputs']==5
+assert s['post_r6_region_law']=='stable'
+assert s['post_r6_flags_law']=='stable'
+assert s['post_r6_aux_law']=='stable'
+assert s['post_r6_common_normalized_law']=='stable'
+assert s['post_r6_bank_values']==[0,1,0,1,0,1,0,1,0,1,0,1,0]
+assert r['windows_one_shot_consumed'] is True
+assert r['windows_private_manifest_sha256']=='6abed62438b00d1607349b97e71ea1ed093dd70c962ee2d8030000f2acb3d868'
+assert r['clean_gtm_replay_requests_exact']==15
+assert r['returned_to_golden_linux'] is True
+assert r['overlap_guard_pass'] is True
+print('E007J_RESULT_VERIFY_PASS replay=15/15 distinct_post_r6=5 golden_return=true')
