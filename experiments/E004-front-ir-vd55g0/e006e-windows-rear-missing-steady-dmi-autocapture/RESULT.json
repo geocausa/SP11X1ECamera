@@ -1,0 +1,58 @@
+{
+  "schema": "E006e-result-v1",
+  "parent_git_revision": "4ae9586b",
+  "staging_commit": "37737e99",
+  "classification": "CAMERA_PASS_CORPUS_PARTIAL_A98_CROSS_VARIANT_PASS",
+  "run_consumed_no_retry": true,
+  "instrumentation_note": "Initial WinDbg command used unsupported && syntax and stopped on the first qccamisp hit. It was repaired in-place with nested .if statements and the same single-use camera invocation was resumed; no replay occurred.",
+  "camera": {
+    "role": "Surface Camera Rear Color VideoRecord NV12 3840x2160",
+    "start_success": true,
+    "elapsed_ms": 90077,
+    "valid_frame_handles": 592,
+    "stop_success": true,
+    "acceptance_min_frames": 10,
+    "acceptance_passed": true
+  },
+  "captures": {
+    "a98": {
+      "captured": true,
+      "request_generation": 12,
+      "patch_count": 15,
+      "all_payloads_covered": true
+    },
+    "f8": {
+      "captured": false
+    },
+    "steady_658": {
+      "captured": false,
+      "minimum_request_generation": 4
+    }
+  },
+  "cross_variant": {
+    "baseline": "E006c consecutive steady AC8",
+    "comparison": "E006e A98 request 12",
+    "previously_ac8_stable_identities": 12,
+    "identical_in_a98": 12,
+    "all_12_match": true,
+    "dynamic_present": [
+      "0x4308 selector1",
+      "0x4308 selector2",
+      "0x5A08 selector1"
+    ],
+    "dynamic_present_changed_vs_ac8": true,
+    "gic_0x4708_present_in_a98": false
+  },
+  "cleanup": {
+    "kd_breakpoints_removed": true,
+    "private_log_closed": true,
+    "one_shot_task_unregistered": true,
+    "target_resumed": true,
+    "normal_reboot_returned_golden_linux": true,
+    "sp7_kd_stopped": true,
+    "overlap_guard_pass": true
+  },
+  "raw_windows_payloads_committed": false,
+  "raw_kernel_addresses_committed": false,
+  "native_rear_linux_isp_authorized": false
+}

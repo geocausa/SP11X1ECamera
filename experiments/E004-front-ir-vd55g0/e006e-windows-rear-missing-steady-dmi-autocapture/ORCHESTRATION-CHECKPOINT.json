@@ -2,31 +2,19 @@
   "schema": "camera-orchestration-checkpoint-v1",
   "experiment": "E006e",
   "parent_git_revision": "4ae9586b",
-  "phase": "STAGED_NOT_BOOTED",
-  "intended_hosts": {
-    "SP11": "one-shot Windows target; normal reboot returns protected Linux Golden",
-    "SP7": "external KD host only"
+  "staging_commit": "37737e99",
+  "phase": "COMPLETED_CLEANED_REDUCED",
+  "sp7_kd_job_id": "job_T0W8P2dju6sJp4pqiLmO3c2a",
+  "run_consumed": true,
+  "camera_acceptance_passed": true,
+  "valid_frame_handles": 592,
+  "captures": {
+    "a98": true,
+    "f8": false,
+    "steady_658": false
   },
-  "planned_jobs": [
-    "SP7 external KDNET PTY observer",
-    "SP11 Windows single-use rear4K camera runner"
-  ],
-  "target_breakpoint": "qccamisp8380+0x26838",
-  "targets": [
-    "steady A98",
-    "steady 8F0",
-    "steady 658 request>=4"
-  ],
-  "camera_window_seconds": 90,
-  "rollback": [
-    "clear all E006e KD breakpoints",
-    "close private KD log",
-    "unregister E006e one-shot task",
-    "resume target",
-    "normal reboot SP11 to default Golden Linux",
-    "stop SP7 KD PTY",
-    "run camera-overlap-guard.sh"
-  ],
-  "raw_private_evidence_policy": "Remain on SP7/SP11 Windows only; Git receives derived hashes/structure only.",
-  "run_consumed": false
+  "cleanup_complete": true,
+  "returned_to_golden_linux": true,
+  "overlap_guard_pass": true,
+  "raw_private_evidence_policy": "Remain on SP7/SP11 Windows only; Git receives derived hashes/structure only."
 }
