@@ -2,7 +2,7 @@
 
 Parent Git: de4b1f69 (E006t rear small-IQ compile PASS).
 
-Status: **STAGED / COMPILE PENDING**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -27,6 +27,27 @@ Retained E006a startup packets were used only as a private validation oracle. Th
 
 No raw packet bytes or raw Windows register values are committed.
 
+## Coverage
+
+E006u closes three BHistStats16 startup values: two startup-only words and the startup-vs-steady region-count word.
+
+- startup-only implemented: **126/184**
+- concrete startup providers: **595/714 (83.3%)**
+- remaining startup-only registers: **58**, all in AECBEStats17, TintlessBGStats17, AWBBGStats17 and RSStats14
+
+## Build result — PASS
+
+The E006g/j/l/m/o/p/q/r/s/t/u verifier chain passed and the staged providers were injected into an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0
+- qcom-camss.ko: 13,630,432 bytes
+- SHA-256: `b3b8c895a9d89958c91409186444cc36ce654a327315da39d803785d2affb530`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- retained symbols: `e006u_bhist16_lookup`, `e006u_bhist16_recipe`
+- install/load/camera/RT-CDM submission: none
+
 ## Runtime gate
 
 Compile-only. Native rear Linux ISP and RT-CDM submission remain **DENIED** until the remaining stats/state producers and integration gates are closed.
+
+Next: close RSStats14, then the three 18-word stats families.
