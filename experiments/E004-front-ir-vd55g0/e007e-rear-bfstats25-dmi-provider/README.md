@@ -2,7 +2,7 @@
 
 Parent Git: `56b8fe74` (E007d register-provider integration PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -59,6 +59,21 @@ Current result:
 - 128 gamma words;
 - exact byte-for-byte repack for both selectors;
 - no raw payload values emitted or committed.
+
+## Build result — PASS
+
+The full E006/E007 provider chain plus E007d integration and E007e DMI encoding compiled in an isolated accepted CAMSS source copy.
+
+- private validation: 5 captures;
+- selector-1 ROI payloads: 5 / 125 compact ROI records;
+- selector-2 gamma payloads: 4 / 128 gamma words;
+- exact byte-for-byte repack for both selectors;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,736,888 bytes;
+- SHA-256: `9e4ce04df6613513e2d0cbcf19d1548de736af6e7f3a24214603906e124de486`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained symbols: `e007e_bfstats25_dmi`, `e007e_bfstats25_dmi_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
 
 ## Boundary
 
