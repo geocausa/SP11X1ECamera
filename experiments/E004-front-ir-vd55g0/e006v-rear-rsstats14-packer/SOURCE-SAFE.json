@@ -1,0 +1,63 @@
+{
+  "schema": "E006v-rear-rsstats14-source-safe-v1",
+  "module": "IFERSStats14Titan680",
+  "functions": {
+    "create_cmd_list": "0x180b44840",
+    "pack_iq_register_setting": "0x180b44930",
+    "modern_adjust_roi": "0x180a0e538"
+  },
+  "writes": [
+    {
+      "register": "0xbe60",
+      "count": 1
+    },
+    {
+      "register": "0xbe68",
+      "count": 3
+    }
+  ],
+  "fields": {
+    "0xbe60": {
+      "enable": "bit0 forced 1 when emitted",
+      "color_conversion": "bit4 from adjusted semantic RS state",
+      "shift_bits": "bits8..11"
+    },
+    "0xbe68": {
+      "h_offset": "bits0..12",
+      "v_offset": "bits16..29"
+    },
+    "0xbe6c": {
+      "h_num_minus_1": "bits0..3",
+      "v_num_minus_1": "bits16..25"
+    },
+    "0xbe70": {
+      "region_width_minus_1": "bits0..12",
+      "region_height_minus_1": "bits16..19"
+    }
+  },
+  "modern_adjust_roi": {
+    "h_num_range": [
+      1,
+      16
+    ],
+    "v_num_range": [
+      1,
+      1024
+    ],
+    "region_width_range": [
+      2,
+      8192
+    ],
+    "region_height_range": [
+      2,
+      16
+    ],
+    "region_height_even": true,
+    "v_offset_even": true,
+    "shift_rule": "max(bit_length(region_width * region_height) - 4, 0)",
+    "input_depth": 12,
+    "output_depth": 16
+  },
+  "upstream_policy": "AFD/stripe policy supplies adjusted semantic RS state; this checkpoint packs it only",
+  "raw_windows_command_values_committed": false
+}
