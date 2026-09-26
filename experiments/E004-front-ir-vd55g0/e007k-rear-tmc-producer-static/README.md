@@ -27,13 +27,11 @@ The output descriptor in `0x180923B90` maps three TMC anchor families into the r
 
 `tmc141-coeff.py` is a clean float32 port of `0x1809276E8`.
 
-Private E007j validation, performed against the Windows volume mounted read-only and unmounted immediately afterward, proves:
+The pinned Windows helper proves `TMC_COEF` is **not an independent dynamic producer**: it is calculated from the 7-float source and destination knot vectors.
 
-- 15/15 requests R4..R18;
-- exact byte-for-byte reproduction of all 60 coefficient bytes;
-- no raw Windows values committed.
+A later E007o revalidation corrected the clean-port exactness claim. The current `tmc141-coeff.py` is byte-exact for **12/15** accepted E007j request states; R4/R7/R8 differ only at coefficient index 8. This is a clean-port float/operation-order discrepancy, not evidence of additional dynamic coefficient state.
 
-Therefore `TMC_COEF` is **not an independent dynamic producer**. It is derived entirely from the 7-float source and destination knot vectors.
+No raw Windows values are committed.
 
 ## Remaining TMC parity boundary
 

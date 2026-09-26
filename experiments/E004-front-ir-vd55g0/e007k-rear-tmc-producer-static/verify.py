@@ -19,9 +19,13 @@ assert r["gtm_src_offset"] == "0x5104"
 assert r["gtm_dst_offset"] == "0x5120"
 assert r["gtm_coef_offset"] == "0x51b0"
 assert r["gtm_domain_offset"] == "0x6228"
-assert r["private_coefficient_exact_requests"] == 15
+assert r["private_coefficient_exact_requests"] == 12
 assert r["private_coefficient_total_requests"] == 15
+assert r["private_coefficient_mismatch_requests"] == [4,7,8]
+assert r["private_coefficient_mismatch_indices"] == [8]
+assert r["coefficient_clean_port_bit_exact_complete"] is False
 assert r["coefficient_independent_dynamic_state"] is False
+assert r["coefficient_structurally_derived_from_src_dst"] is True
 assert r["raw_windows_values_committed"] is False
 py_compile.compile(str(D/"tmc141-coeff.py"),doraise=True)
-print("E007K_VERIFY_PASS family=2 coef=derived exact=15/15")
+print("E007K_VERIFY_PASS family=2 coef=structurally-derived clean_port_exact=12/15")

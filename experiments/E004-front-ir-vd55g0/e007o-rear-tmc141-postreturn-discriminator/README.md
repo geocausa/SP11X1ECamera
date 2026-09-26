@@ -2,7 +2,9 @@
 
 Parent Git: `87bfc6fc` (E007n unfiltered TMC141 input oracle preparation; E007n live capture subsequently completed underneath the UI and is retained privately).
 
-Status: **PREPARED / NOT YET CONSUMED**.
+Status: **CONSUMED / OFFLINE ANALYSIS PASS**.
+
+The bounded Windows one-shot completed successfully with all 20 PRE/POST states captured. SP11 returned to Golden Linux; subsequent analysis used the Windows volume read-only and unmounted it immediately afterward.
 
 ## Why this experiment exists
 
@@ -61,3 +63,29 @@ After return to Golden Linux:
 4. never replay captured SRC/DST as a Linux producer.
 
 No Linux camera, DMI, RT-CDM or native rear ISP submission is part of E007o.
+
+## Result
+
+E007o resolves the discriminator decisively:
+
+- H01 initializes the family-2 state to the E007j R4 state.
+- The meaningful settling calls are H04/H06/H07/H08/H09.
+- On every settling call, only family-2 SRC knots 1/2 and DST knots 1/2 change.
+- Immediate solver POST states already match the accepted E007j GTM-facing progression (18/20 total POST triplets match an E007j state).
+- Therefore **no downstream publication/marshalling rewrite is required**. The missing clean arithmetic is inside `TMC141Interpolation::CalculateAnchorKneePoints`.
+
+Pinned binary + ARM64 analysis identifies the omitted rear-mode branch:
+
+- mode `0x60800`;
+- control byte `0x8244` becomes enabled after startup;
+- after the base seven-point generator, the solver applies an additional scale/clamp path to family-2 **SRC knots 1 and 2**;
+- family-2 destination knots are not modified by that branch;
+- `RUNTIME+0x0C` is the only directly solver-used scalar that continues changing through the settling window; `RUNTIME+0x488` changes once when the mode-specific branch becomes active.
+
+The family-2 publication weights are zero in the exercised rear path, so published SRC/DST are solver locals directly, not a blend with previously published state.
+
+`PRIVATE-VALIDATION-SAFE.json` contains only safe structural results; no captured float values are committed.
+
+### E007k coefficient correction
+
+Re-running the committed `tmc141-coeff.py` against the accepted private E007j oracle gives **12/15**, not 15/15, byte-exact coefficient payloads. R4/R7/R8 differ only at coefficient index 8. The pinned Windows helper still proves COEF is derived from SRC/DST; the remaining difference is clean-port float/operation-order semantics, not an independent dynamic producer.
