@@ -2,7 +2,7 @@
 
 Parent Git: `e0c37ce1` (E007p clean TMC141 family-2 producer PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -38,6 +38,18 @@ Validation rejects:
 - missing remaining stable-family producer.
 
 LSC/Tintless remains bound through E007i; BFStats remains bound through E007f; the still-open stable DMI families remain explicit upstream dependencies.
+
+## Build result — PASS
+
+The full rear register/DMI provider chain through E007q compiled in an isolated accepted CAMSS source copy.
+
+- private end-to-end GTM validation: 15/15 accepted E007j requests exact;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,774,432 bytes;
+- SHA-256: `cf644fa17cdd66c6d9878d49e5032b73ca34a2c6e562e3a44e6fd189156d1754`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained symbols: `e007q_rear_gtm`, `e007q_rear_validate_request`, `e007q_rear_prepare_dynamic`, `e007q_rear_fill_slot`, `e007q_rear_gtm_handoff_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
 
 ## Safety
 
