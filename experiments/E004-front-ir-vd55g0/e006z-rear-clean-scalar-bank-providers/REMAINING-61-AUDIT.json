@@ -1,0 +1,78 @@
+{
+  "schema": "E006z-remaining-61-audit-v1",
+  "before": {
+    "concrete_startup_registers": 653,
+    "total_startup_registers": 714,
+    "remaining": 61
+  },
+  "implement_now": {
+    "count": 24,
+    "groups": {
+      "bank_select": 16,
+      "demux_bls": 2,
+      "pdpc": 4,
+      "wb": 2
+    }
+  },
+  "after_compile_pass": {
+    "concrete_startup_registers": 677,
+    "total_startup_registers": 714,
+    "remaining": 37
+  },
+  "remaining_register_contracts": {
+    "VFE680_PERIOD_CFG": [
+      "0x008c"
+    ],
+    "BPC_ABF": [
+      "0x49b8",
+      "0x49bc",
+      "0x49d0",
+      "0x49d4",
+      "0x49d8",
+      "0x49dc",
+      "0x49e0"
+    ],
+    "BFSTATS25": [
+      "0xbc58",
+      "0xbc5c",
+      "0xbc60",
+      "0xbc6c",
+      "0xbc70",
+      "0xbc74",
+      "0xbc78",
+      "0xbc7c",
+      "0xbc80",
+      "0xbc84",
+      "0xbc88",
+      "0xbc8c",
+      "0xbc90",
+      "0xbc94",
+      "0xbc98",
+      "0xbc9c",
+      "0xbca0",
+      "0xbca4",
+      "0xbca8",
+      "0xbcac",
+      "0xbcb0",
+      "0xbcb4",
+      "0xbcb8",
+      "0xbcbc",
+      "0xbcc0",
+      "0xbcc4",
+      "0xbcc8",
+      "0xbccc",
+      "0xbcd0"
+    ]
+  },
+  "non_register_parity_gaps": [
+    "rear live LSC/Tintless state construction and DMI production",
+    "rear live GTM TMC/ADRC state and DMI production",
+    "rear PDPC DMI where mode/state changes require it",
+    "rear BPC/ABF411 DMI and full calculation",
+    "rear Gamma LUT generation/DMI",
+    "rear DSX payload generation/DMI",
+    "rear BFStats25 AF-derived ROI/gamma/state",
+    "Linux PERIOD_CFG transport-state derivation"
+  ],
+  "native_rear_linux_isp_authorized": false
+}

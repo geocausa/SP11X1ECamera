@@ -1,0 +1,95 @@
+{
+  "schema": "E006z-rear-clean-scalar-bank-source-safe-v1",
+  "parent_git_revision": "70c62db3c60612982d94602e986ffe8de4ecc14b",
+  "closed_register_count": 24,
+  "bank_registers": {
+    "count": 16,
+    "startup_rule": "all present bank selectors = startup_phase & 1",
+    "steady_regular": {
+      "registers": [
+        "0x3d58",
+        "0x3d5c",
+        "0x4758",
+        "0x475c",
+        "0x4958",
+        "0x495c",
+        "0xa058",
+        "0xa05c",
+        "0xa258",
+        "0xa25c"
+      ],
+      "rule": "(request_id + 1) & 1"
+    },
+    "steady_inverse": {
+      "registers": [
+        "0x4358",
+        "0x435c",
+        "0x5a58",
+        "0x5a5c",
+        "0x5f58",
+        "0x5f5c"
+      ],
+      "rule": "request_id & 1"
+    },
+    "note": "rear LSC belongs to inverse steady group; do not copy the older front grouping blindly"
+  },
+  "scalar_registers": {
+    "demux_bls": {
+      "registers": [
+        "0x3b70",
+        "0x3b74"
+      ],
+      "module": "IFEDemuxBLS141Titan680",
+      "common_hw_rva": "0x998e70",
+      "packer_rva": "0xb42840",
+      "create_cmd_list_rva": "0xb41ff0",
+      "semantic_input": "four already-quantized common-calculation Q10 normalized channel values, max 0x7fff",
+      "packing": {
+        "0x3b70": "(q[0] << 16) | q[1]",
+        "0x3b74": "(q[3] << 16) | q[2]"
+      }
+    },
+    "pdpc": {
+      "registers": [
+        "0x3d78",
+        "0x3d7c",
+        "0x3d80",
+        "0x3d84"
+      ],
+      "module": "IFEPDPC311Titan680",
+      "common_hw_rva": "0x9c07c0",
+      "interpolation_rva": "0x943e80",
+      "packer_rva": "0xb3c7d0",
+      "create_cmd_list_rva": "0xb3bd10",
+      "semantic_input": "four already-quantized Q12 AWB ratios, max 0x3ffff",
+      "ratios": [
+        "AWBR/AWBG",
+        "AWBB/AWBG",
+        "AWBG/AWBR",
+        "AWBG/AWBB"
+      ]
+    },
+    "wb": {
+      "registers": [
+        "0x456c",
+        "0x4570"
+      ],
+      "module": "IFEWB201Titan680",
+      "common_hw_rva": "0x995e60",
+      "packer_rva": "0xb560c0",
+      "create_cmd_list_rva": "0xb559f0",
+      "semantic_input": "already-quantized Q10 B/R gains after predictiveGain",
+      "packing": {
+        "0x456c": "b_q10 << 17",
+        "0x4570": "r_q10 << 17"
+      }
+    }
+  },
+  "upstream_open": [
+    "rear post-sensor digital gain and Demux/BLS tuning/interpolation",
+    "rear live AWB G/B/R state and predictiveGain",
+    "rear live request identity/startup phase binding"
+  ],
+  "raw_windows_register_values_committed": false,
+  "private_windows_bytes_committed": false
+}
