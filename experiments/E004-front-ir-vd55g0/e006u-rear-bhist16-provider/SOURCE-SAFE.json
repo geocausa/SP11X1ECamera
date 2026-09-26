@@ -1,0 +1,45 @@
+{
+  "schema": "E006u-rear-bhist16-source-safe-v1",
+  "module": "IFEBHistStats16Titan680",
+  "registers": {
+    "startup1_dmi_side": [
+      "0xb258",
+      "0xb25c"
+    ],
+    "region_count": "0xb26c"
+  },
+  "create_cmd_list": {
+    "ife_bhist_addresses": {
+      "config": "0xb260",
+      "region_range": "0xb268",
+      "dmi_side_range": "0xb258",
+      "other_config": "0xb264",
+      "segment_range": "0xb270",
+      "tail": "0xb2a4",
+      "dmi": "0xb208"
+    },
+    "dmi_side_count": 2,
+    "dmi_side_startup_only": true
+  },
+  "register_image": {
+    "bytes": 80,
+    "constructor_zero_initialized": true,
+    "b258_image_offset": "0x0c",
+    "b25c_image_offset": "0x10",
+    "b26c_image_offset": "0x08"
+  },
+  "calculate_region_configuration": {
+    "horizontal_region_num": "max((roi_width >> 1) - 1, 1)",
+    "vertical_region_num": "max((roi_height >> 1) - 1, 0)",
+    "adjusted_width": "(horizontal_region_num + 1) * 2",
+    "adjusted_height": "(vertical_region_num + 1) * 2"
+  },
+  "titan680_pack": {
+    "b26c_h_mask": "0x00001fff",
+    "b26c_v_mask": "0x1fff0000",
+    "b26c_v_shift": 16,
+    "b258_operation": "clear bit0 of zero-initialized word",
+    "b25c_operation": "clear bit0 of zero-initialized word"
+  },
+  "raw_windows_command_values_committed": false
+}
