@@ -54,3 +54,40 @@ The run is useful for materializer closure only if:
 - raw addresses and bytes remain private.
 
 Native rear Linux ISP remains DENIED.
+
+
+## Runtime result — camera PASS / corpus PARTIAL / consumed
+
+The single E006c Windows identity was consumed exactly once.
+
+The bounded rear Color / VideoRecord / NV12 3840x2160 run passed its camera acceptance gate cleanly:
+
+- StartAsync: Success
+- elapsed: 15,309 ms
+- valid 3840x2160 frame handles: 84
+- StopAsync: Success
+- acceptance threshold >=10: PASS
+
+The SP7 external-KD probe remained auto-continue during the stream. The pseudo-register writemem syntax was tested before capture on harmless debugger memory. No MMIO/register write, data breakpoint or local SP11 kernel debugger was used.
+
+The run captured two consecutive steady AC8 packets (requests 4 and 5). It also captured one 0x658 packet at request 3; that is startup and therefore does not satisfy the requested steady-658 sample. No A98 or 8F0 packet appeared within this bounded 15-second window. The identity is consumed and must not be replayed.
+
+### Two-request AC8 payload stability
+
+Both AC8 packets contained 16 patch records, one source mapping each, and every referenced DMI payload was fully contained in its private 0x8000 source snapshot. Raw source bytes and addresses remain private on SP7.
+
+Exact payload hashing across the two consecutive AC8 requests divides the 16 DMI identities into 12 stable and 4 request-varying identities.
+
+Stable: 0x3D08 selector1; 0x4308 selector3; 0x4908 selector1; 0x5F08 selectors1/2/3; 0xA008 selectors1/2; 0xA208 selectors1/2; 0xBC08 selectors1/2.
+
+Request-varying: 0x4308 selectors1/2; 0x4708 selector1; 0x5A08 selector1.
+
+This is the key E006c result: the rear steady materializer cannot freeze the full Windows DMI corpus as static templates. At least those four payload families require a per-request producer or independently derived equivalent. The 12 stable AC8 identities are candidates for normalized static payload templates, subject to cross-variant checks.
+
+Cleanup completed: breakpoint removed, private log closed, target resumed, normal reboot returned protected Golden Linux, SP7 KD stopped, and overlap guard PASS.
+
+Native rear Linux ISP remains **DENIED**.
+
+### Next
+
+Use a fresh identity for the still-missing A98 / 8F0 / steady-658 source windows. Require request generation >=4 for any 0x658 match so startup cannot satisfy it, and use a longer auto-continue capture window rather than manual debugger pauses. In parallel, source-trace the four proven request-varying DMI families toward their Windows IQ/3A producer so Linux does not replay stale captured bytes.
