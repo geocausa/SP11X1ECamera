@@ -1,0 +1,37 @@
+{
+  "schema": "E007w-period-cfg-semantic-proof-v1",
+  "classification": "SOURCE_LOCKED_SEMANTIC_CLOSURE",
+  "register": "0x008c",
+  "surface_function": "CamX::IFEPipelineTitan680::UpdateSubsampleConfig",
+  "surface_function_address": "0x1808a2d30",
+  "active_field_mask": "0x0000001f",
+  "semantic_input": "numBatchedFrames",
+  "semantic_formula": "numBatchedFrames > 1 ? numBatchedFrames - 1 : 0",
+  "pattern_register": "0x0090",
+  "pattern_value": 1,
+  "surface_instruction_evidence": {
+    "load_num_batched_frames": "0x1808a31f8: ldr w9, [x22, #0x30]",
+    "subtract_one": "0x1808a3200: subs w8, w9, #0x1",
+    "zero_for_zero_or_one": "0x1808a3208: csel w8, wzr, w8, ls",
+    "active_mask": "0x1808a3210: and w8, w8, #0x1f",
+    "write_register": "0x1808a32a8: stp w9, w22, [x0, #0x4]"
+  },
+  "undefined_upper_bits": {
+    "source": "local stack word merged outside mask 0x1f",
+    "final_frame_slot": "final sp + 0x10",
+    "write_before_read": false,
+    "canonical_linux_policy": "zero"
+  },
+  "reference_camx_semantics": {
+    "field": "pipelineIFEData.numBatchedFrames",
+    "non_batch_value": 1,
+    "irq_subsample_period_rule": "numBatchedFrames - 1 when > 1, otherwise zero",
+    "normal_rear_mode": "Surface Camera Rear Color / VideoRecord / NV12 3840x2160@30"
+  },
+  "accepted_windows_samples_checked": 28,
+  "accepted_windows_samples_nonzero_active_bits": 0,
+  "canonical_first_frame_num_batched_frames": 1,
+  "canonical_first_frame_period_cfg": 0,
+  "windows_raw_upper_bits_embedded": false,
+  "windows_raw_period_words_embedded": false
+}
