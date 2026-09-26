@@ -2,7 +2,7 @@
 
 Parent Git: `2d706a0e` (E007t Gamma151 clean provider PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -52,6 +52,18 @@ No captured payload bytes are committed or used as runtime producer inputs.
 E007u extends the stable-DMI chain after E007t. It intercepts only `0x4908 / selector 1 / 256 bytes` and delegates everything else.
 
 After this provider, **DSX101 is the only remaining first-frame payload generator blocker**. `PERIOD_CFG` remains the transport-state blocker.
+
+## Build result — PASS
+
+The complete accepted E006/E007 provider chain through E007u compiled in an isolated CAMSS source copy.
+
+- semantic authority: 65 derived BPC/ABF points;
+- private rear payload validation: 4/4 exact;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,821,520 bytes;
+- SHA-256: c39bdd16f5c1b26e8d3ad952e94f989aae8a84dee4b03d8a1aca2f9ab5310fd1;
+- vermagic: exact Golden 7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64;
+- install/load/camera/DMI/RT-CDM submission: none.
 
 ## Safety
 
