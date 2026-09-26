@@ -2,7 +2,7 @@
 
 Parent Git: `f7751d66` (E006r rear CST12 compile PASS).
 
-Status: **STAGED / COMPILE-ONLY**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -60,3 +60,16 @@ The other four small startup-only IQ config words (BayerGTM101, BayerLTM101, LCA
 ## Runtime gate
 
 This is compile-only. Native rear Linux ISP and RT-CDM submission remain **DENIED**.
+
+## Build result — PASS
+
+The E006g/j/l/m/o/p/q/r/s verifier chain passed and the staged providers were injected into an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0
+- qcom-camss.ko: 13,617,632 bytes
+- SHA-256: `2aaee983b762dfd63248353c392b41624a2412b10abe6a461550ad8f6fc472cf`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- retained symbols: `e006s_bc101_lookup`, `e006s_bc101_recipe`
+- install/load/camera/RT-CDM submission: none
+
+Status: **COMPILE-ONLY PASS**.
