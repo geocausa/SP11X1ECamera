@@ -33,3 +33,29 @@ camss-e006g-rear-materializer.inc is injected only into an isolated copy of acce
 The build script never installs or loads the resulting module.
 
 Native rear Linux processed ISP remains DENIED.
+
+## Build result — PASS
+
+The isolated E006g build completed against the pinned accepted CAMSS source.
+
+- accepted camss.c SHA-256: 788243cbf08d1f8cc1500a8c7177e30095875bd3b3be54bf0ac0fdec106dba91
+- accepted camss.h SHA-256: da2941a9d2afa6250773c682027fc70512e32daa69a9478cb372ecaa74be37c0
+- W=1: zero warnings/errors
+- qcom-camss.ko bytes: 13,542,816
+- qcom-camss.ko SHA-256: c26a4851cd8298c37e35a1f9666220f5da59e7fdb4eba03af1ba256b98a23f54
+- vermagic: exact protected Golden kernel
+- retained symbols include:
+  - e006g_rear_validate_contract
+  - e006g_rear_prepare_dynamic
+  - e006g_rear_fill_slot
+  - e006g_rear_steady_bl_shape
+  - e006g_rear_variants
+  - e006g_rear_materializer_recipe
+
+No module install/load, camera runtime, RT-CDM submit, MMIO write or boot mutation occurred.
+
+Status is therefore COMPILE-ONLY PASS. Native rear Linux processed ISP remains DENIED.
+
+### Next
+
+Build a fully offline rear MAIN command composer/materializer from the E006a normalized command structure. It must patch only Linux-owned payload addresses, use E006g producer ownership for every DMI slot, and prove deterministic structural output before any runtime integration.
