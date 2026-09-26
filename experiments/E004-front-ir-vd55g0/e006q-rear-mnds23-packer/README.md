@@ -2,7 +2,7 @@
 
 Parent Git: `4730deaf` (E006p Crop12 + RoundClamp12 compile PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -60,3 +60,23 @@ The provider is retained only for compiler/type checking against E006m's `mnds23
 Passing compilation closes packing/implementation for these 20 startup-only MNDS23 addresses. Production of the semantic geometry state and later guarded materializer wiring remain separate tasks.
 
 Native rear Linux processed ISP remains **DENIED**.
+
+## Build result — PASS
+
+The single isolated E006q build passed after re-verifying E006g/j/l/m/o/p/q.
+
+- implemented MNDS23 startup-only addresses: 20
+  - Video Full luma: 10
+  - Video Full chroma: 10
+- private semantic validation: startup0/startup1 exact 20/20 each
+- startup-only implementation total after E006p+E006q: 98/184
+- concrete startup providers including E006o singletons: 566/714 (79.3%)
+- W=1: zero warnings/errors
+- qcom-camss.ko: 13,597,952 bytes
+- SHA-256: 5641abe3e116b16d40356c718cf61387aa1ecf880f06880405914e043c1bb0e5
+- vermagic: exact Golden
+- MNDS23 lookup/recipe symbols retained
+
+No install/load/camera/RT-CDM/MMIO/boot action occurred.
+
+Status: **COMPILE-ONLY PASS**.
