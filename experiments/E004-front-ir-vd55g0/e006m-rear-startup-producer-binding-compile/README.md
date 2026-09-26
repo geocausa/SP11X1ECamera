@@ -29,3 +29,28 @@ The generated include is injected into an isolated copy of accepted CAMSS solely
 Passing this experiment closes **compiler-visible startup ownership/binding**, not implementation of all algorithms/providers.
 
 Native rear Linux processed ISP remains **DENIED**.
+
+## Build result — PASS
+
+The single isolated E006m build completed against the pinned accepted CAMSS source.
+
+All prerequisite contracts re-verified before compilation:
+
+- E006g DMI/payload materializer: PASS
+- E006j steady dynamic producer binding: PASS
+- E006l startup ownership partition: PASS
+- E006m 714-register dispatch table: PASS
+
+Build result:
+
+- W=1: zero warnings/errors
+- qcom-camss.ko: 13,569,320 bytes
+- SHA-256: aec7dee1d2aad766e3bfc484199dcdc21830362bbaa23cdefa92561d4593698f
+- vermagic: exact protected Golden kernel
+- retained compiler-visible contracts include E006g, E006j and E006m recipes.
+
+No module installation/load, camera stream, RT-CDM submission, MMIO write or boot mutation occurred.
+
+Status: **COMPILE-ONLY PASS**.
+
+The rear command topology plus steady/startup ownership is now compiler-closed. What remains is producer/state implementation and later guarded runtime integration. Native rear processed ISP remains **DENIED**.
