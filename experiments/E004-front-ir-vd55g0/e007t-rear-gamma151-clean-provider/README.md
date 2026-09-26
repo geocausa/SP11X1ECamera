@@ -2,7 +2,7 @@
 
 Parent Git: a53f18c4 (E007s rear zero-stable DMI binding PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -57,6 +57,19 @@ The E007t stable-DMI adapter intercepts:
 - exactly 1024 bytes per selector.
 
 Everything else delegates to the still-open stable provider. BPC/ABF and DSX therefore remain explicit first-frame dependencies and validation continues to fail closed until they are installed.
+
+## Build result — PASS
+
+The full E006/E007 provider chain through E007t compiled in an isolated accepted CAMSS source copy.
+
+- semantic authority: 257 integral 12-bit samples;
+- private Gamma DMI validation: 9/9 exact;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,804,856 bytes;
+- SHA-256: `f4713c8455a35dfc6ecba5fc01d154a377cdfb53361c2cf7bb99ebf08374ed0f`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained symbols: `e007t_rear_stable_nonzero`, `e007t_rear_validate_request`, `e007t_rear_prepare_dynamic`, `e007t_rear_fill_slot`, `e007t_rear_gamma_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
 
 ## Safety
 
