@@ -2,32 +2,39 @@
 
 Parent Git: bb549786 (E006w rear AECBEStats17 compile PASS).
 
-Status: **STAGED / COMPILE PENDING**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
+Status: **STAGED / COMPILE-ONLY**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
 
 ## Goal
 
-Close all 18 TintlessBGStats17 startup-only words at 0xB660..0xB6A4 from adjusted semantic Tintless BG state.
+Close the 18 TintlessBGStats17 startup-only words at 0xB660..0xB6A4 from adjusted semantic Tintless Bayer-grid state, without freezing captured Windows values.
 
-## Shared Titan680 Bayer-grid core
+## Exact Titan680 closure
 
-Pinned Surface QcDeviceMFT8380.dll proves IFETintlessBGStats17Titan680 emits the same five-range 5+10+1+1+1 topology as AECBE, shifted by +0x600. Its PackIQRegisterSetting at 0x180b39950 is field-for-field the same semantic algorithm already clean-room implemented by E006w: ROI/grid geometry, channel maxima, black-level-derived minima, Q4 Y coefficients, region sampling, QUAD_SYNC_EN and enable.
+Pinned Surface QcDeviceMFT8380.dll source-locks IFETintlessBGStats17Titan680:
 
-The Tintless dependency path reads the same request byte offset 0x2170, source-locked by E006w as blackLevelOffset. Tintless uses the same Titan680 hardware-capability helper (0x180b39870) and modern 16..512 region / 64x64 grid limits.
+- CreateCmdList 0x180b45e60 emits five ranges: 0xB66C count 5, 0xB680 count 10, then one word each at 0xB668, 0xB664 and 0xB660.
+- PackIQRegisterSetting 0x180b39950 is bit-for-bit the same semantic Bayer-grid packer used by E006w AECBEStats17, translated by register-window delta 0x600.
+- Hardware-capability helper 0x180b39870 is shared with E006w.
+- Tintless-specific CheckDependenceChange, AdjustROIParams, ValidateDependenceParams and Execute remain separate upstream producer policy.
 
-E006x therefore translates the Tintless register window onto the compiler-checked E006w semantic core rather than duplicating the packer.
+The common semantic state is H/V ROI offsets and grid counts, adjusted region width/height, R/B/GR/GB upper thresholds, black-level-derived lower thresholds, Q4 Y coefficients, the source-defined 0xFFFF sample pattern, QUAD_SYNC_EN and enable state. The request field at byte offset 0x2170 is the same source-locked blackLevelOffset used by E006w.
+
+The Linux compile-only wrapper intentionally reuses the E006w semantic state/packer rather than duplicating a second register-shaped implementation. Tintless AEC/tintless policy, striping and ROI adjustment remain upstream Linux responsibilities.
 
 ## Private validation
 
-The retained private E006a oracle is decoded only by validate-private.py. Startup1 and startup2 each repack exactly for all 18 words through the shared semantic layout; startup3 and startup4 omit the block. No raw register values or packet bytes are committed.
+The retained E006a rear Windows startup packets are decoded only by validate-private.py. Startup1 and startup2 each invert and repack exactly across all 18 words through the shared semantic core; startup3 and startup4 omit the Tintless block. No raw packet bytes or captured register values are committed.
 
 ## Coverage on compile PASS
 
+E006x will add all 18 TintlessBGStats17 startup-only words:
+
 - startup-only implemented: **166/184**
 - concrete startup providers: **635/714 (88.9%)**
-- remaining startup-only registers: **18** — AWBBGStats17
+- remaining startup-only registers: **18** — AWBBGStats17 only
 
 ## Runtime gate
 
-Compile-only. Native rear Linux ISP and RT-CDM submission remain **DENIED**. Upstream Tintless state production remains required for parity.
+Compile-only. Native rear Linux ISP and RT-CDM submission remain **DENIED**. Upstream Linux Tintless/AEC state production must eventually supply the semantic inputs for full parity.
 
 Next after compile PASS: AWBBGStats17.
