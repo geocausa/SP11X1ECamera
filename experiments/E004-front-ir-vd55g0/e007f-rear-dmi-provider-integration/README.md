@@ -2,7 +2,7 @@
 
 Parent Git: `cccb9517` (E007e BFStats25 DMI encoding PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -37,6 +37,20 @@ The integration validator rejects:
 - invalid/missing BF gamma state.
 
 Therefore the presence of a completed BF encoder cannot accidentally make the still-open LSC/GTM/stable families look complete.
+
+## Build result — PASS
+
+The full E006/E007 register chain, E007e BFStats25 DMI encoder and E007f DMI adapter compiled in an isolated accepted CAMSS source copy.
+
+- E007f structural verifier: PASS;
+- BFStats25 selectors 1/2 are bound through E007e;
+- LSC/GTM/stable producer contexts remain independent and fail closed if absent;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,748,336 bytes;
+- SHA-256: `05fe7094b4fbcb4291e9698461373b7f7925c3c750e27485e4d63a63ae8671bf`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained symbols: `e007f_rear_validate_dmi_integration`, `e007f_rear_prepare_dynamic`, `e007f_rear_fill_slot`, `e007f_rear_dmi_integration_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
 
 ## Boundary
 
