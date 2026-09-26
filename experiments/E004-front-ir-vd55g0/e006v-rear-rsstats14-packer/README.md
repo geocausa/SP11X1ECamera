@@ -2,7 +2,7 @@
 
 Parent Git: 12f48d0e (E006u rear BHist16 compile PASS).
 
-Status: **STAGED / COMPILE PENDING**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -46,6 +46,27 @@ The safe E006k symbolic recipe proves startup1, startup2 and startup3 each emit 
 
 The retained private E006a oracle was decoded locally only for validation. In all three emitted startup phases, inversion to semantic state followed by the clean packer reproduces all four words exactly, including the modern shift rule; startup4 has no RS block. No raw register values or packet bytes are committed.
 
+## Coverage
+
+E006v adds all four RSStats14 startup-only words.
+
+- startup-only implemented: **130/184**
+- concrete startup providers: **599/714 (83.9%)**
+- remaining startup-only registers: **54** — AECBEStats17, TintlessBGStats17 and AWBBGStats17, 18 words each
+
+## Build result — PASS
+
+The E006g/j/l/m/o/p/q/r/s/t/u/v verifier chain passed and the complete staged provider set was injected into an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0
+- qcom-camss.ko: 13,634,856 bytes
+- SHA-256: `f6bc8b4f978bfb1123b9e87b88995924f0ff0d02be66d644d557ac83c5986f03`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- retained recipe symbol: `e006v_rs_stats14_recipe`
+- install/load/camera/RT-CDM submission: none
+
 ## Runtime gate
 
 Compile-only. Native rear Linux ISP and RT-CDM submission remain **DENIED**. Upstream Linux AFD/RS state production must eventually supply these semantic inputs for full parity.
+
+Next: AECBEStats17, then TintlessBGStats17 and AWBBGStats17.
