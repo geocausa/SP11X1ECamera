@@ -2,7 +2,7 @@
 
 Parent Git: `120bc0bc` (E007k TMC141 static producer contract PASS).
 
-Status: **PREPARED / NOT YET CONSUMED**.
+Status: **CONSUMED / INCONCLUSIVE — RETIRED. DO NOT RERUN.**\n\nThe one-shot was consumed on 2026-09-26. The camera holder initialized and the debugger breakpoints armed, but CDB rejected the original `||` conditional and the live correction then hit nested target-execution/event-handler errors. No solver entry/post capture completed and **zero raw solver dump files were created**. This identity is permanently retired; E007m is the corrected fresh identity.
 
 ## Goal
 
