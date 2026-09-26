@@ -9,8 +9,11 @@ HDR=/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-202608
 B=/home/geoca/Documents/SP11-PROJECT/02-kernel/e006g-rear-materializer-build
 
 cd "$R"
+HEAD_NOW="$(git rev-parse HEAD)"
+ORIGIN_NOW="$(git rev-parse origin/experiment/e004-front-ir-vd55g0)"
+test "$HEAD_NOW" = "$ORIGIN_NOW"
 ./tools/camera-overlap-guard.sh --require-clean-tracked --require-golden --require-no-camera-process \
-  --expect-head 5c92d586c7dc664b4887b93622ebbab37f80c4e7 --expect-origin 5c92d586c7dc664b4887b93622ebbab37f80c4e7
+  --expect-head "$HEAD_NOW" --expect-origin "$ORIGIN_NOW"
 
 python3 - "$SRC" <<'PY'
 from pathlib import Path
