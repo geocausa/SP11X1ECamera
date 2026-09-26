@@ -1,0 +1,73 @@
+{
+  "schema": "E007r-first-native-frame-blocker-audit-v1",
+  "classification": "OFFLINE_FIRST_FRAME_BLOCKER_AUDIT_PASS",
+  "parent_git_revision": "a43a91297222868501338cb74b245545bd8edf99",
+  "rear_register_providers_integrated": "714/714",
+  "dynamic_dmi": {
+    "bfstats25": "CLOSED_BOUND",
+    "lsc_tintless_selectors_1_2": "CLOSED_BOUND",
+    "gic_alias": "CLOSED_DERIVED_FROM_LSC",
+    "gtm_tmc": "CLOSED_BOUND"
+  },
+  "stable_dmi": {
+    "pdpc_0x3d08_selector1": {
+      "classification": "BIND_ONLY_ZERO_AUTHORITY",
+      "bytes": 512,
+      "cross_sensor_identical": true,
+      "rear_all_zero": true
+    },
+    "lsc_0x4308_selector3": {
+      "classification": "BIND_ONLY_ZERO_AUTHORITY",
+      "bytes": 884,
+      "cross_sensor_identical": true,
+      "rear_all_zero": true,
+      "clean_userspace_runtime_also_emits_selector3": true
+    },
+    "bpc_abf_0x4908_selector1": {
+      "classification": "FIRST_FRAME_PAYLOAD_GENERATOR_BLOCKER",
+      "bytes": 256,
+      "cross_sensor_identical": true,
+      "rear_adaptive_state_required": false
+    },
+    "gamma_0x5f08_selectors1_2_3": {
+      "classification": "FIRST_FRAME_PAYLOAD_GENERATOR_BLOCKER",
+      "bytes_each": 1024,
+      "selectors_identical": true,
+      "cross_sensor_identical": true,
+      "rear_adaptive_state_required": false
+    },
+    "dsx_0xa008_selectors1_2": {
+      "classification": "FIRST_FRAME_PAYLOAD_GENERATOR_BLOCKER",
+      "bytes_each": 768,
+      "selector_pair_identical": true,
+      "cross_sensor_identical": true,
+      "rear_adaptive_state_required": false
+    },
+    "dsx_0xa208_selectors1_2": {
+      "classification": "FIRST_FRAME_PAYLOAD_GENERATOR_BLOCKER",
+      "bytes_each": 384,
+      "selector_pair_identical": true,
+      "cross_sensor_identical": true,
+      "rear_adaptive_state_required": false
+    }
+  },
+  "transport": {
+    "period_cfg_0x008c": {
+      "classification": "FIRST_FRAME_TRANSPORT_BLOCKER",
+      "materializer_boundary_closed": true,
+      "upstream_derivation_closed": false,
+      "packet_mapping": "packet0=value0; packets1/2/3=value1"
+    },
+    "full_non_submitting_startup_request_assembly": "REQUIRED_AFTER_PAYLOAD_BLOCKERS"
+  },
+  "deferable_after_first_frame": [
+    "upper-AEC rear LSC coverage",
+    "long-run live 3A convergence",
+    "broad scene/mode parity",
+    "quality tuning corner cases"
+  ],
+  "windows_boot_required_for_next_step": false,
+  "linux_camera_runtime_performed": false,
+  "dmi_submission": false,
+  "rtcdm_submission": false
+}
