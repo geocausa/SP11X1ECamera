@@ -39,8 +39,30 @@ assert 'prove-lsc-live-staging-pack.py' in a
 assert 'raw_capture_values_committed' in a
 assert 'clean_replay_status' in a
 
+rp=(D/'replay-clean.py').read_text()
+for token in [
+    "sid':'0x29e->0x2a0'",
+    "generic resampler != accepted front",
+    "rear initial config not dirty",
+    "tintless_core_mode2_native",
+    "_wrapper_temporal_blend",
+    "wire_from_output",
+    "all_15_wire_exact",
+]:
+    assert token in rp
+safe=D/'CLEAN-REPLAY-SAFE.json'
+if safe.exists():
+    import json
+    j=json.loads(safe.read_text())
+    assert j['status']=='PASS'
+    assert j['all_15_wire_exact'] is True
+    assert j['generic_resampler_front_differential_exact'] is True
+    assert len(j['requests'])==15
+    assert all(all(x['exact']) for x in j['requests'])
+    assert j['raw_capture_values_emitted'] is False
+
 for text in (o,e,p):
     assert max(map(len,text.splitlines()))<512
 
 print('E007G_VERIFY_PASS rear4k_holder=true lsc_hooks=2 requests=4..18')
-print('one_shot_entry=true raw_pixels=false runtime_not_yet_performed=true')
+print('one_shot_entry=true raw_pixels=false clean_replay=15/15_exact')

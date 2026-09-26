@@ -2,7 +2,7 @@
 
 Parent Git: `e0d0fa8c` (E007f rear DMI provider integration PASS).
 
-Status: **PREPARED / WINDOWS ONE-SHOT NOT YET CONSUMED**.
+Status: **PASS — WINDOWS ONE-SHOT CONSUMED / CLEAN REPLAY 15/15 EXACT**.
 
 ## Goal
 
@@ -71,3 +71,57 @@ After return to Golden Linux:
 Only then may the rear LSC/Tintless producer be considered closed for E006g binding.
 
 No Linux camera runtime, DMI submission or RT-CDM submission is authorized by this oracle.
+
+## Actual one-shot result — PASS
+
+The prepared identity was consumed once on the original SP11 Windows stack. The gated holder remained at `WAIT_START` until ARM64 CDB had both DeviceMFT hooks armed and enabled. Only then was `START.GO` created.
+
+The rear holder selected exactly `Surface Camera Rear / Color / VideoRecord / NV12 3840x2160`, started successfully, acquired 139 valid 4K frame handles in the bounded five-second interval, stopped successfully and disposed the reader/capture objects. It did not copy optical frame bytes.
+
+CDB captured exactly 15 entry hits and 15 post-staging hits for R4..R18, with no `E007G_FAIL`, then cleared both breakpoints, closed its log and detached automatically at R18. The private capture consists of:
+
+- 15 × 76,780-byte Tintless stats objects;
+- 15 × 256-byte trigger blocks;
+- 15 × 6,304-byte LSC staging objects.
+
+The Windows-private 45-file manifest SHA-256 is
+`65318dade08d8655edb3d5e4ec25c797ae21819baad0be59e540a18d45056ecf`.
+No raw capture payload is committed.
+
+SP11 then returned normally to protected Golden Linux, boot ID
+`ce993597-725f-4899-a3f9-1372a46121ee`, kernel
+`7.1.5-sp11-render-parity-v4+`. Persistent BootOrder remained
+`0005,0004,0000,0001,0002,0006`, GRUB saved entry remained
+`sp11-audio-fullio-v19c`, `next_entry` was empty, and the overlap guard passed with no camera node/module/process.
+
+## Clean rear replay — PASS
+
+`replay-clean.py` closes the complete rear LSC/Tintless producer chain against the fresh private oracle:
+
+1. exact rear/default LSC41 tree selection from SHA-pinned `rfc_ov13858`;
+2. exact float32/float64 generic interpolation arithmetic;
+3. exact rear golden/OV13858 calibration-slot application;
+4. generic source-locked LSC geometry resampling;
+5. clean native mode-2 Tintless core initialized from the preserved OV13858 mode-1 `x1` configuration;
+6. exact wrapper temporal carry;
+7. Q10 conversion, Titan680 LSC0/LSC1/LSC2 packing and proven GIC wire alias.
+
+The generic geometry implementation first differential-checks byte-for-byte against the already-accepted front implementation. It then derives the rear geometry directly from the source equations:
+
+- full: 4076×2806;
+- output: 4064×2286;
+- crop: (6,260);
+- half-resolution mesh steps: 128×96;
+- centering residual: 16×9.
+
+The fresh request sequence exercises more than one tuning state:
+
+- R4: direct CCT leaf `0x2a0`;
+- R5/R6: exact interpolation across `0x29e -> 0x2a0` (4200→4800 CCT gap);
+- R7..R18: direct CCT leaf `0x29e`.
+
+For **every request R4 through R18**, clean generated LSC0, LSC1, LSC2 and the GIC alias are byte-identical to Windows. LSC2 is zero throughout, while LSC0/LSC1/GIC evolve request-to-request exactly with the captured Tintless state.
+
+Therefore the rear OV13858 mode-1 **LSC/Tintless algorithm/state/wire producer is closed byte-exactly** for this full sequential oracle. The remaining engineering work is production binding/scheduling, not algorithm reconstruction.
+
+The Windows partition was mounted read-only only for offline validation and was unmounted immediately afterwards. No Linux camera runtime, DMI submission or RT-CDM submission occurred.
