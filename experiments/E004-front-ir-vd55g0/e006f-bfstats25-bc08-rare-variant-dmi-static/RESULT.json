@@ -1,0 +1,45 @@
+{
+  "schema": "E006f-bfstats25-bc08-rare-variant-dmi-static-v1",
+  "parent_git_revision": "e88726420950ca1d126f10a76d89f202a9547739",
+  "classification": "STATIC_PASS",
+  "windows_binary": {
+    "name": "QcDeviceMFT8380.dll",
+    "sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+  },
+  "source_locked": {
+    "bfstats25_request_logic_rva": "0xA1D340",
+    "titan680_create_cmd_list_rva": "0xB4F4E0",
+    "titan680_populate_lut_config_rva": "0xB4FC20",
+    "dmi_register": "0xBC08",
+    "selector1": {
+      "meaning": "BF ROI DMI",
+      "record_bytes": 12,
+      "observed_payload_bytes": 300,
+      "observed_records": 25
+    },
+    "selector2": {
+      "meaning": "BF gamma LUT DMI",
+      "payload_bytes": 128
+    }
+  },
+  "producer_model": {
+    "source": "incoming AF BFStats configuration",
+    "roi_change_tracked": true,
+    "gamma_change_tracked": true,
+    "force_update_supported": true,
+    "banked_dmi": true,
+    "per_main_variant_capture_required": false
+  },
+  "rare_variants": {
+    "0x8F0": {
+      "new_dmi_identity": false
+    },
+    "0x658": {
+      "new_dmi_identity": false
+    }
+  },
+  "decision": "NO_ADDITIONAL_WINDOWS_CAPTURE_FOR_8F0_658_DMI_BYTES",
+  "linux_camera_runtime_performed": false,
+  "raw_windows_payloads_committed": false,
+  "native_rear_linux_isp_authorized": false
+}
