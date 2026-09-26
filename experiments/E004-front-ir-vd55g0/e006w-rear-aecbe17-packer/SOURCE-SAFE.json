@@ -1,0 +1,135 @@
+{
+  "schema": "E006w-rear-aecbe17-source-safe-v1",
+  "module": "IFEAECBEStats17Titan680",
+  "functions": {
+    "create_cmd_list": "0x180b3f660",
+    "create_sub_cmd_list": "0x180b3f7b0",
+    "pack_iq_register_setting": "0x180b3f860",
+    "get_aecbe_config": "0x180a05978",
+    "modern_adjust_roi": "0x180a06288",
+    "validate_dependence_params": "0x180a067d8",
+    "execute": "0x180a06910"
+  },
+  "writes": [
+    {
+      "register": "0xb06c",
+      "count": 5
+    },
+    {
+      "register": "0xb080",
+      "count": 10
+    },
+    {
+      "register": "0xb068",
+      "count": 1
+    },
+    {
+      "register": "0xb064",
+      "count": 1
+    },
+    {
+      "register": "0xb060",
+      "count": 1
+    }
+  ],
+  "fields": {
+    "0xb060": {
+      "sample_pattern": "bits16..31; Execute supplies 0xffff",
+      "quad_sync_enable": "bit9; Titan680 Bayer-grid firmware names QUAD_SYNC_EN",
+      "enable": "bit0; CreateSubCmdList patches this bit independently"
+    },
+    "0xb064": {
+      "black_level_offset": "bits14..31"
+    },
+    "0xb068": {
+      "y_weight_0_q4": "bits9..15",
+      "y_weight_1_q4": "bits17..23",
+      "y_weight_2_q4": "bits25..31"
+    },
+    "0xb06c": {
+      "h_offset": "bits1..13",
+      "h_num_minus_1": "bits16..21"
+    },
+    "0xb070": {
+      "region_width_minus_1": "bits0..8"
+    },
+    "0xb074": {
+      "v_offset": "bits1..13",
+      "v_num_minus_1": "bits16..21"
+    },
+    "0xb078": {
+      "region_height_minus_1": "bits0..8"
+    },
+    "0xb07c": {
+      "reserved": "zero-initialized; packer leaves zero"
+    },
+    "0xb080": {
+      "gr_max": "18-bit threshold shifted by 14"
+    },
+    "0xb084": {
+      "r_max": "18-bit threshold shifted by 14"
+    },
+    "0xb088": {
+      "gb_max": "18-bit threshold shifted by 14"
+    },
+    "0xb08c": {
+      "b_max": "18-bit threshold shifted by 14"
+    },
+    "0xb090": {
+      "y_max": "current Titan680 packer reuses GB threshold shifted by 14"
+    },
+    "0xb094..0xb0a4": {
+      "r_gr_gb_b_y_min": "common -blackLevelOffset encoded above bit12"
+    }
+  },
+  "adjusted_state_limits": {
+    "h_num": [
+      1,
+      64
+    ],
+    "v_num": [
+      1,
+      64
+    ],
+    "region_width": [
+      16,
+      512
+    ],
+    "region_height": [
+      16,
+      512
+    ],
+    "offsets_even": true,
+    "offset_max": 16382,
+    "channel_threshold_max": 262143,
+    "black_level_offset_max": 262143,
+    "y_weight_q4_max": 127
+  },
+  "config_semantics": [
+    "horizontalNum",
+    "verticalNum",
+    "ROI.left",
+    "ROI.top",
+    "ROI.width",
+    "ROI.height",
+    "channelGainThreshold[R]",
+    "channelGainThreshold[B]",
+    "channelGainThreshold[GR]",
+    "channelGainThreshold[GB]",
+    "outputBitDepth",
+    "outputMode",
+    "YStatsWeights[0..2]",
+    "greenType",
+    "regionHeight",
+    "regionWidth",
+    "isStripeValid",
+    "quadSyncEnable"
+  ],
+  "black_level_source": {
+    "request_byte_offset": "0x2170",
+    "producer": "BLS UpdateIFELiteInternalData",
+    "evidence": "same request field is logged/published as blackLevelOffset before AECBE consumes it"
+  },
+  "upstream_policy": "AEC/stripe policy and AdjustROI supply adjusted semantic state; this checkpoint packs that state only",
+  "raw_windows_command_values_committed": false
+}
