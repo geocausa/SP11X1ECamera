@@ -1,0 +1,50 @@
+{
+  "schema": "E006x-rear-tintlessbg17-source-safe-v1",
+  "module": "IFETintlessBGStats17Titan680",
+  "functions": {
+    "create_cmd_list": "0x180b45e60",
+    "pack_iq_register_setting": "0x180b39950",
+    "hardware_caps": "0x180b39870",
+    "check_dependence_change": "0x180a10e58",
+    "modern_adjust_roi": "0x180a10fb0",
+    "validate_dependence_params": "0x180a11490",
+    "execute": "0x180a11610"
+  },
+  "writes": [
+    {
+      "register": "0xb66c",
+      "count": 5
+    },
+    {
+      "register": "0xb680",
+      "count": 10
+    },
+    {
+      "register": "0xb668",
+      "count": 1
+    },
+    {
+      "register": "0xb664",
+      "count": 1
+    },
+    {
+      "register": "0xb660",
+      "count": 1
+    }
+  ],
+  "semantic_core": {
+    "identical_to_e006w_aecbe17_packer": true,
+    "register_window_delta": "0x600",
+    "black_level_request_byte_offset": "0x2170",
+    "sample_pattern": "0xffff",
+    "quad_sync_enable": "CFG bit9",
+    "hardware_caps": "region 16..512; H/V grid max 64; threshold max from pipeline bit depth"
+  },
+  "modern_adjust_roi": {
+    "region_width_even": true,
+    "region_height_even": true,
+    "same_hardware_capability_function_as_e006w": true
+  },
+  "upstream_policy": "Tintless stats policy/stripe/ROI configuration supplies adjusted semantic BGBE state; packer is shared",
+  "raw_windows_command_values_committed": false
+}
