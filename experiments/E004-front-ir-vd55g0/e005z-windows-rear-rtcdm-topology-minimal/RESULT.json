@@ -1,0 +1,42 @@
+{
+  "schema": "E005z-windows-rear-rtcdm-topology-result-v1",
+  "parent_git_revision": "a9d6f27bd84b31472213497878bbbed30574679f",
+  "run_consumed_no_retry": true,
+  "capture": {
+    "role": "Surface Camera Rear Color VideoRecord NV12 3840x2160",
+    "elapsed_ms": 8055,
+    "valid_frame_handles": 55,
+    "start_success": true,
+    "stop_success": true,
+    "acceptance_min_frames": 10,
+    "acceptance_passed": true
+  },
+  "kd": {
+    "host": "SP7",
+    "target": "SP11 Windows",
+    "selector2_consumer_hit": true,
+    "complete_batches_reduced": 32,
+    "next_batch_header_seen": 33,
+    "intended_self_clear_worked": false,
+    "manual_cleanup_performed": true,
+    "raw_log_private": true
+  },
+  "rear_startup_vectors": [
+    ["0x4","0xf1c","0x4","0x3c"],
+    ["0x4","0xebc","0xc","0x4","0x10","0x14"],
+    ["0x4","0xa00","0xc","0x4","0x10","0x14"],
+    ["0x4","0x658","0xc","0x4","0x10","0x14"]
+  ],
+  "rear_steady_shape": ["0x4","MAIN","0xc","0x4","0x10","0x14"],
+  "rear_steady_main_variants_observed": ["0xac8","0xa98","0x8f0","0x658"],
+  "front_canonical_steady_shape": ["0x4","MAIN","0x4","0x10","0x14"],
+  "front_canonical_main_variants": ["0x958","0x868","0x83c","0x6b8","0x5a4"],
+  "proven": {
+    "rear_uses_source_locked_selector2_queue_contract": true,
+    "rear_and_front_rtcdm_command_topologies_differ": true,
+    "rear_has_persistent_extra_0x0c_bl_from_batch2_onward": true,
+    "front_capsule_corpus_cannot_be_reused_as_rear_template_by_tuning_substitution_only": true
+  },
+  "next": "capture exact rear startup plus one representative of each rear steady variant; decode and build separate rear capsule materializer",
+  "native_rear_linux_runtime_authorized": false
+}

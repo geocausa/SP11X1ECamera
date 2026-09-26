@@ -52,3 +52,72 @@ The earlier front oracle proved four startup batches followed by five-record ste
 - A topology match alone does not authorize reusing front IQ/tuning bytes.
 
 No Linux rear ISP runtime is authorized by this experiment.
+
+
+## Runtime result — consumed / PASS
+
+The single E005z Windows attempt was consumed exactly once.
+
+Rear Surface Camera Color / VideoRecord / NV12 3840x2160 completed cleanly:
+
+- StartAsync: Success
+- elapsed: 8,055 ms
+- valid 3840x2160 frame handles: 55
+- StopAsync: Success
+- acceptance threshold >=10: PASS
+
+The external-SP7 KD selector-2 probe positively hit the same source-locked queue consumer used by the front oracle. Raw debugger state remained private; the committed reduction contains only batch record counts and byte lengths.
+
+The intended debugger self-clear at batch 21 did not take effect while executing its own command breakpoint. The probe was manually interrupted and cleared after 33 batch headers; 32 complete batches were retained. This does not invalidate the topology result, but the run identity is consumed and must not be replayed.
+
+### Rear topology observed
+
+Startup / first four batches:
+
+- batch 1: 4 BLs = 0x4, 0xF1C, 0x4, 0x3C
+- batch 2: 6 BLs = 0x4, 0xEBC, 0xC, 0x4, 0x10, 0x14
+- batch 3: 6 BLs = 0x4, 0xA00, 0xC, 0x4, 0x10, 0x14
+- batch 4: 6 BLs = 0x4, 0x658, 0xC, 0x4, 0x10, 0x14
+
+Early steady-state batches remain 6-BL vectors of the form:
+
+0x4, MAIN, 0xC, 0x4, 0x10, 0x14
+
+with MAIN variants observed in the bounded sample:
+
+- 0xAC8
+- 0xA98
+- 0x8F0
+- 0x658
+
+### Direct comparison with canonical front corpus
+
+Canonical front startup:
+
+- 4 BLs = 0x4, 0xE94, 0x4, 0x3C
+- 5 BLs = 0x4, 0xE34, 0x4, 0x10, 0x14
+- 5 BLs = 0x4, 0x904, 0x4, 0x10, 0x14
+- 5 BLs = 0x4, 0x4E8, 0x4, 0x10, 0x14
+
+Canonical front steady state is always 5 BLs:
+
+0x4, MAIN, 0x4, 0x10, 0x14
+
+with front MAIN variants 0x958, 0x868, 0x83C, 0x6B8 and 0x5A4.
+
+Therefore rear and front are structurally different command corpora. From rear batch 2 onward, rear adds a persistent 0xC BL that the front corpus does not have, and the observed rear main-list sizes are different.
+
+This decisively rejects reusing the front 36-section corpus as a rear template with only sensor-specific tuning substitutions.
+
+Cleanup completed: all breakpoints were removed, private KD logging closed, the one-shot Windows task unregistered, SP11 rebooted normally to protected Golden Linux, and the SP7 KD job was stopped.
+
+## Next
+
+Build a dedicated rear command-corpus oracle/materializer. A second targeted Windows capture should dump exact bytes only for:
+
+1. the four rear startup batches;
+2. the persistent 0xC BL;
+3. one representative instance of each observed rear steady MAIN variant;
+4. the fixed 0x4/0x10/0x14 wrapper lists as needed for identity comparison.
+
+Then decode commands/DMI references using the already-proven front CDM parser, normalize relocatable addresses, and construct a separate rear capsule schema. Do not reuse front IQ bytes by assumption.
