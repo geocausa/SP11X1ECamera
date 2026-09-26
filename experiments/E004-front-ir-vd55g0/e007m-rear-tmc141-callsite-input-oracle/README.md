@@ -2,7 +2,9 @@
 
 Parent: E007l consumed/inconclusive plus E007k static TMC141 contract.
 
-Status: **PREPARED / NOT YET CONSUMED**.
+Status: **CONSUMED / INCONCLUSIVE — RETIRED. DO NOT RERUN.**
+
+The fresh one-shot streamed successfully (114 valid 4K handles), but the inherited pre-dump filtering caused every breakpoint action to continue before any dump or input marker was emitted. The oracle log contains 71 target-execution/event-handler warnings, zero E007M_INPUT markers, zero completion markers and zero raw input files. E007m is permanently retired. E007n removes all request/mode early-exit filtering and captures a bounded sequential hit window before the single final `gc`.
 
 E007l is permanently retired: its in-callee conditional plus return breakpoints produced CDB expression/event-handler failures and zero solver dumps.
 
