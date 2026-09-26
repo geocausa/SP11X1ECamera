@@ -52,3 +52,28 @@ Do not construct a rear materializer if:
 - startup or steady payload identity cannot be joined to an E006a DMI command.
 
 Native rear Linux ISP remains DENIED.
+
+## Runtime result — consumed / PARTIAL, no replay
+
+The single E006b Windows identity was consumed exactly once.
+
+Camera control itself reached StartAsync=Success and StopAsync=Success, but the manual startup/KD inspection pauses stretched the streaming interval to 54,302 ms and no valid 3840x2160 frame handles were delivered. The predeclared >=10-frame acceptance criterion therefore failed. This run is PARTIAL and must not be replayed under the same identity.
+
+Useful evidence was nevertheless captured before stopping:
+
+- all four rear startup MAIN packets: 0xF1C, 0xEBC, 0xA00, 0x658;
+- one real rear steady 0xAC8 packet;
+- exact live KMD patch-record counts: 17, 16, 10, 3, 16 respectively;
+- exact patch-record destination fields join one-for-one to E006a's decoded DMI address fields;
+- private source payload windows were captured and reduced to DMI identity / selector / length / SHA-256 only;
+- the steady 0xAC8 source references independently fit inside one 0x8000 source window.
+
+The reduction found 18 DMI identities across the captured phases. Stable identities include 0x3D08/1, 0x4308/3, 0x4908/1, 0x5F08/1..3, 0xA008/1..2, 0xA208/1..2, and rear 0xBC08/2. Captured phase-dependent payload changes were observed for 0x4308 selectors1/2, 0x4708 selector1, 0x5A08 selector1, and rear-specific 0xBC08 selector1. These variations are evidence that one captured DMI payload must not be frozen globally.
+
+Missing steady families remain 0xA98, 0x8F0 and steady 0x658. Rear materializer completion and native rear Linux ISP remain DENIED.
+
+Cleanup completed: all breakpoints removed, private log closed, one-shot Windows task unregistered, target resumed, SP11 normally rebooted to protected Golden Linux, SP7 KD stopped, and overlap guard PASS.
+
+### Next
+
+Use a fresh Windows identity with an auto-continue-only steady DMI oracle. Do not manually stop the kernel during the camera stream. Automatically snapshot the private source window on first occurrences of 0x8F0, 0xA98 and steady 0x658 (and preferably a second sample for variation classification), then reduce after the run on Golden Linux.
