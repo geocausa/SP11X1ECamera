@@ -2,7 +2,7 @@
 
 Parent Git: `0e9d362c` (E006s rear BC101 compile PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -72,3 +72,17 @@ E006t adds four startup-only registers:
 - remaining startup-only registers: 60, all statistics families
 
 Native rear Linux processed ISP and RT-CDM submission remain **DENIED**.
+
+## Build result — PASS
+
+The E006g/j/l/m/o/p/q/r/s/t verifier chain passed and all staged providers were
+injected into an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0
+- qcom-camss.ko: 13,627,664 bytes
+- SHA-256: `811276a3a26cb9d097a2fccdc56aa752b560e3c478d36169de9eca08b22e7f3b`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- all eight E006t lookup/recipe symbols retained
+- install/load/camera/RT-CDM submission: none
+
+Status: **COMPILE-ONLY PASS**.

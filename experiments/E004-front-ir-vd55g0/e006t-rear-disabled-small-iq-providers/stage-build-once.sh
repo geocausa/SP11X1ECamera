@@ -77,5 +77,5 @@ test "$(modinfo -F vermagic "$B/qcom-camss.ko")" =  '7.1.5-sp11-render-parity-v4
 sha=$(sha256sum "$B/qcom-camss.ko" | cut -d' ' -f1)
 bytes=$(stat -c %s "$B/qcom-camss.ko")
 printf 'E006T_BUILD_PASS bytes=%s sha256=%s\n' "$bytes" "$sha"
-aarch64-linux-gnu-nm -a "$B/qcom-camss.ko" |  grep -E 'e006s_(bc101_recipe|bc101_lookup|bc101_clamp)' || true
+aarch64-linux-gnu-nm -a "$B/qcom-camss.ko" | grep -E 'e006(s_bc101|t_(bayer_gtm101|bayer_ltm101|lcac111|uv_gamma101))_(recipe|lookup)' || true
 echo E006T_BUILD_ONLY_NO_INSTALL_NO_LOAD_NO_CAMERA_NO_RTCDM_SUBMIT
