@@ -2,7 +2,7 @@
 
 Parent Git: `d5a5c525` (E007b BFStats25 compile PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Purpose
 
@@ -37,6 +37,21 @@ On compile PASS, all **714/714 startup register materialization contracts** have
 That does **not** mean camera-stack parity is complete. The Linux side still needs the upstream transport-state producer that supplies the two period values from the equivalent stream/request state; E007c deliberately leaves that dependency explicit.
 
 Other remaining parity work is primarily live DMI/IQ/3A state production and non-submitting integration.
+
+## Build result — PASS
+
+The full E006/E007a/E007b/E007c verifier chain passed and the packet-aware provider was injected into an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,679,904 bytes;
+- SHA-256: `e34226cb173b22560ed8f210808cd85b2a70f95995971d9010274b482b3b56c1`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained symbols: `e007c_period_cfg_lookup`, `e007c_rear_fill_startup_packet`, `e007c_rear_startup_packet_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
+
+All **714/714 startup register materialization contracts are now closed at a concrete provider boundary**.
+
+This is not equivalent to full stack parity: upstream PERIOD_CFG transport-state derivation and several live DMI/IQ/3A producers remain open.
 
 ## Safety
 
