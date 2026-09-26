@@ -2,7 +2,7 @@
 
 Parent Git: `db081152` (E007c PERIOD_CFG compile PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -26,6 +26,20 @@ Thin wrappers route the E006j steady and E006m startup callback tables to the co
 Split producer families are merged explicitly. For example BPC/ABF bank selectors are resolved by E006z and its calculated words by E007a.
 
 PERIOD_CFG deliberately fails closed through the old packet-blind E006m scalar callback. All integrated startup fills go through E007c's packet-aware wrapper.
+
+## Build result — PASS
+
+The full E006/E007 provider chain plus E007d integration compiled in an isolated accepted CAMSS source copy.
+
+- E007d structural verifier: PASS;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,724,400 bytes;
+- SHA-256: `12d23af05b87193d407322d68d8d01f3efff52851cd32b808bacbf1fcf060e95`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained integration symbols: `e007d_rear_fill_startup`, `e007d_rear_fill_steady`, `e007d_rear_validate_register_integration`, `e007d_rear_register_integration_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
+
+The register side is now not only 714/714 provider-complete but also **composed behind one non-submitting integration API**.
 
 ## Boundary
 
