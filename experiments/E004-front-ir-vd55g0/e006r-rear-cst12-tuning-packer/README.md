@@ -72,6 +72,19 @@ E006r implements 19 CST12 startup-only words.
 
 That makes **117/184 startup-only words implemented**, and **585/714 total startup registers (81.9%)** with concrete providers when combined with E006o's 468 safe singleton providers.
 
+
+## Compile result
+
+The staged E006g/E006j/E006m/E006o/E006p/E006q/E006r chain was injected into an isolated copy of the accepted CAMSS source and built against the Golden headers with `W=1`.
+
+- verifier chain: PASS
+- warnings/errors: 0
+- `qcom-camss.ko`: 13,613,328 bytes
+- SHA-256: `9c01ea4b901dd51d0a89dc46d52fb48751e31bb41a34cd514cf6cccec82bd67a`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- retained E006r symbols: `e006r_cst12_lookup`, `e006r_cst12_recipe`
+- install/load/camera/RT-CDM submission: none
+
 ## Runtime gate
 
 This remains compile-only. Native rear Linux ISP submission is still denied. The remaining startup-only families contain stats configuration and other tuning/state producers that must be closed on their own semantics; they must not be replaced by captured constants.
