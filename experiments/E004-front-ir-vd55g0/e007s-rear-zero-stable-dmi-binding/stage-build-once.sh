@@ -51,7 +51,8 @@ names=[
 "camss-e007a-bpcabf411.inc","camss-e007b-bfstats25.inc","camss-e007c-period-cfg.inc",
 "camss-e007d-register-integration.inc","camss-e007e-bfstats25-dmi.inc",
 "camss-e007f-dmi-integration.inc","camss-e007i-rear-lsc-handoff.inc",
-"camss-e007q-rear-gtm-handoff.inc","camss-e007s-zero-stable.inc"]
+"camss-e007q-rear-gtm-handoff.inc",
+"camss-e007s-zero-stable.inc"]
 inject="".join(f'#include "{n}"\n' for n in names)+"\n"
 p.write_text(s.replace(needle,inject+needle,1))
 print("E007S_ISOLATED_SOURCE_INJECTION_PASS")
