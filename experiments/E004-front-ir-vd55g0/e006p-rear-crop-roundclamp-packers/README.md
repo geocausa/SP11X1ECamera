@@ -60,3 +60,21 @@ The C implementation accepts semantic crop rectangles plus bit-width/enable inpu
 Passing compilation closes packing/implementation for these 78 register addresses; upstream production of the semantic geometry state remains a separate Linux integration task.
 
 Native rear Linux processed ISP remains **DENIED**.
+
+## Build result — PASS
+
+The single isolated E006p build passed after re-verifying E006g/j/l/m/o/p.
+
+- implemented startup-only addresses: 78
+  - Crop12: 12
+  - RoundClamp12: 66
+- private semantic validation: startup0/startup1 exact
+- W=1: zero warnings/errors
+- qcom-camss.ko: 13,586,400 bytes
+- SHA-256: 875e3bc64e67f5d508e7488a92d28162daabe7c56457fc672fbbdcc4ec386472
+- vermagic: exact Golden
+- Crop12 and RoundClamp12 provider symbols retained
+
+No install/load/camera/RT-CDM/MMIO/boot action occurred.
+
+Status: **COMPILE-ONLY PASS**.
