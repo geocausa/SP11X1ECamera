@@ -2,7 +2,7 @@
 
 Parent Git: f1240a5f (E006v rear RSStats14 compile PASS).
 
-Status: **STAGED / COMPILE PENDING**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -37,8 +37,19 @@ E006w will add all 18 AECBEStats17 startup-only words:
 - concrete startup providers: **617/714 (86.4%)**
 - remaining startup-only registers: **36** — TintlessBGStats17 and AWBBGStats17, 18 words each
 
+## Build result — PASS
+
+The E006g/j/l/m/o/p/q/r/s/t/u/v/w verifier chain passed and the complete staged provider set was injected into an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0
+- qcom-camss.ko: 13,641,464 bytes
+- SHA-256: `048f5c3ed40f418646d814ce544b68b5fabe003cbb50e0b6bc8887019b7a0421`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- retained symbols: `e006w_aecbe17_lookup`, `e006w_aecbe_stats17_recipe`
+- install/load/camera/RT-CDM submission: none
+
 ## Runtime gate
 
 Compile-only. Native rear Linux ISP and RT-CDM submission remain **DENIED**. Upstream Linux AEC state production must eventually supply the semantic inputs for full parity.
 
-Next after compile PASS: TintlessBGStats17, then AWBBGStats17.
+Next: TintlessBGStats17, then AWBBGStats17.
