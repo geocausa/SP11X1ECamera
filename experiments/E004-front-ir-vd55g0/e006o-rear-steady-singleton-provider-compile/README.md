@@ -30,3 +30,18 @@ The provider has the exact E006m callback type, but is retained only for compile
 A passing build means 468/714 startup values have an actual compiler-checked provider. It does **not** authorize rear RT-CDM submission or native rear ISP runtime.
 
 Native rear Linux processed ISP remains **DENIED**.
+
+## Build result — PASS
+
+The single E006o isolated build passed after re-verifying E006g, E006j, E006l, E006m and E006o.
+
+- 468/468 safe singleton entries exactly match E006h
+- W=1: zero warnings/errors
+- qcom-camss.ko: 13,576,664 bytes
+- SHA-256: f94bbdf3d41344549c980e1a757005c4d9284be9af29fc9743e43a3b5b6cc3c7
+- vermagic: exact Golden
+- singleton table + lookup + prior E006g/E006j/E006m recipes retained
+
+No module install/load, camera access, RT-CDM submission, MMIO write or boot mutation occurred.
+
+Status: **COMPILE-ONLY PASS**. An actual provider now exists for 468/714 startup registers.
