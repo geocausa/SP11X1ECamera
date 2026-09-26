@@ -2,7 +2,7 @@
 
 Parent Git: `14d64501` (E007v DSX101 clean provider PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -64,6 +64,19 @@ The former packet0-versus-packets123 distinction is retained only as an ABI shap
 ## Consequence
 
 After E007w, there are **no remaining first-frame register, DMI-payload, or transport-state blockers**. The next gate is complete non-submitting rear startup-request assembly and structural comparison before any native rear runtime attempt.
+
+## Build result — PASS
+
+The complete accepted E006/E007 provider chain through E007w compiled in an isolated CAMSS source copy.
+
+- semantic PERIOD_CFG proof: 28/28 accepted Windows samples have active bits [4:0] equal to zero;
+- first-frame `numBatchedFrames = 1` -> canonical `PERIOD_CFG = 0`;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,848,256 bytes;
+- SHA-256: `7ee5f9b02b4d1339255d12ac07689cf5a23942359a704d27cf62292dfe2d4fb7`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- first-frame blocker count: **0**;
+- install/load/camera/DMI/RT-CDM submission: none.
 
 ## Safety
 
