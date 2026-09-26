@@ -2,7 +2,7 @@
 
 Parent Git: 81402fd8 (corrected E006x TintlessBGStats17 compile PASS record).
 
-Status: **STAGED / COMPILE-ONLY**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -35,8 +35,19 @@ E006y will complete startup-only producer coverage:
 
 The remaining 61 of 714 startup registers are the previously classified non-startup-only contracts: dynamic producers and startup-specific shared-register variants. They are not silently treated as solved by this milestone.
 
+## Build result — PASS
+
+The full E006 verifier chain through E006y passed in an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0
+- qcom-camss.ko: 13,644,248 bytes
+- SHA-256: `c0ce367dde73434d9951ec7454772ef48aac3ad55371ff0d1abc7c68cd075aed`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- retained symbols: `e006y_awbbg17_lookup`, `e006y_awbbg_stats17_recipe`
+- install/load/camera/RT-CDM submission: none
+
 ## Runtime gate
 
 Compile-only. Native rear Linux ISP and RT-CDM submission remain **DENIED**. Full parity still requires the upstream 3A/state producers and the remaining dynamic/startup-shared contracts to be wired and validated.
 
-Next after compile PASS: audit the remaining 61 non-startup-only callback contracts and join all providers into the non-submitting packet integration path.
+Next: audit the remaining 61 non-startup-only callback contracts and join all providers into the non-submitting packet integration path.
