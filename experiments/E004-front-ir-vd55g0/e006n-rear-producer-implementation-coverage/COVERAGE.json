@@ -1,0 +1,166 @@
+{
+  "schema": "E006n-rear-producer-implementation-coverage-v1",
+  "parent_git_revision": "f62966d0f844a7e0581b6fda28777d01047cb931",
+  "classification": "OFFLINE_IMPLEMENTATION_GAP_AUDIT",
+  "steady_dynamic": {
+    "DEMUX_BLS": {
+      "status": "CLEAN_ALGORITHM_REUSABLE_REAR_INPUTS_OPEN",
+      "front_evidence": "f-native-iq-backends/generate-steady-scalar-state.py + dv-live-residual-isp-demux/demux_bls.py",
+      "rear_gap": "rear black-level/channel tuning + live isp/digital gain binding"
+    },
+    "PDPC": {
+      "status": "CLEAN_SCALAR_AND_BANK_RULE_REUSABLE_REAR_AWB_OPEN",
+      "front_evidence": "f-native-iq-backends/generate-steady-scalar-state.py",
+      "rear_gap": "rear AWB gains/calibration/live state"
+    },
+    "WB": {
+      "status": "CLEAN_SCALAR_REUSABLE_REAR_AWB_OPEN",
+      "front_evidence": "f-native-iq-backends/generate-steady-scalar-state.py + dynamic AWB path",
+      "rear_gap": "rear AWB calibration/live state"
+    },
+    "LSC": {
+      "status": "CLEAN_ALGORITHM_REUSABLE_REAR_PROFILE_STATE_OPEN",
+      "front_evidence": "i-cleanroom-tintless + k-cleanroom-lsc-backend",
+      "rear_gap": "rear tuning/golden/OTP/geometry/Tintless stats+descriptor construction"
+    },
+    "GIC": {
+      "status": "DERIVED_FROM_LSC_ALIAS_REUSABLE",
+      "front_evidence": "k-cleanroom-lsc-backend; rear alias independently proven E006d",
+      "rear_gap": "none beyond rear LSC producer"
+    },
+    "GTM": {
+      "status": "CLEAN_TRANSFORM_REUSABLE_REAR_TMC_STATE_OPEN",
+      "front_evidence": "j-cleanroom-gtm",
+      "rear_gap": "rear live TMC/ADRC state and rear tuning/domain authority"
+    },
+    "GAMMA": {
+      "status": "BANK_RULE_REUSABLE_PAYLOAD_GENERATOR_OPEN",
+      "front_evidence": "f-native-iq-backends bank rule; front payload historically base/static",
+      "rear_gap": "clean rear Gamma LUT generation or independent stable authority"
+    },
+    "DSX": {
+      "status": "BANK_RULE_REUSABLE_PAYLOAD_GENERATOR_OPEN",
+      "front_evidence": "f-native-iq-backends bank rule; front payload historically base/static",
+      "rear_gap": "clean rear DSX payload generation from output geometry"
+    },
+    "BPC_ABF": {
+      "status": "BANK_RULE_REUSABLE_FULL_REAR_CALCULATION_OPEN",
+      "front_evidence": "f-native-iq-backends bank rule",
+      "rear_gap": "rear BPCABF411 DMI + calculated scalars including 0x49B8/0x49BC and startup 0x49D0..0x49E0"
+    },
+    "BFSTATS25": {
+      "status": "OWNER_PACKING_CLOSED_PRODUCER_OPEN",
+      "front_evidence": "none equivalent in front live producer",
+      "rear_gap": "rear AF/BF ROI+gamma + register configuration from AF stats state"
+    }
+  },
+  "startup_extra": {
+    "VFE680_PERIOD_CFG": {
+      "status": "TRANSPORT_STATE_EXISTING_LINUX_CONTRACT",
+      "phase_variant": 1,
+      "gap": "bind rear request/stream period config; never use captured Windows value"
+    },
+    "BC101": {
+      "status": "STARTUP_CONFIG_DERIVATION_OPEN",
+      "registers": 3,
+      "phase_variant": 0
+    },
+    "BAYER_GTM101": {
+      "status": "STARTUP_CONFIG_DERIVATION_OPEN",
+      "registers": 1,
+      "phase_variant": 0
+    },
+    "BAYER_LTM101": {
+      "status": "STARTUP_CONFIG_DERIVATION_OPEN",
+      "registers": 1,
+      "phase_variant": 0
+    },
+    "LCAC111": {
+      "status": "STARTUP_CONFIG_DERIVATION_OPEN",
+      "registers": 1,
+      "phase_variant": 0
+    },
+    "CST12": {
+      "status": "STARTUP_CONFIG_DERIVATION_OPEN",
+      "registers": 19,
+      "phase_variant": 0
+    },
+    "UV_GAMMA101": {
+      "status": "STARTUP_CONFIG_DERIVATION_OPEN",
+      "registers": 1,
+      "phase_variant": 0
+    },
+    "MNDS23": {
+      "status": "GEOMETRY_CONFIG_DERIVATION_OPEN",
+      "registers": 20,
+      "phase_variant": 0
+    },
+    "ROUND_CLAMP12": {
+      "status": "GEOMETRY_CONFIG_DERIVATION_OPEN",
+      "registers": 66,
+      "phase_variant": 0
+    },
+    "CROP12": {
+      "status": "GEOMETRY_CONFIG_DERIVATION_OPEN",
+      "registers": 12,
+      "phase_variant": 0
+    },
+    "AEC_BE_STATS17": {
+      "status": "STATS_CONFIG_PRODUCER_OPEN",
+      "registers": 18,
+      "phase_variant": 9
+    },
+    "BHIST_STATS16": {
+      "status": "STATS_CONFIG_PRODUCER_OPEN",
+      "registers": 3,
+      "phase_variant": 1
+    },
+    "TINTLESS_BG_STATS17": {
+      "status": "STATS_GEOMETRY_CONFIG_OPEN",
+      "registers": 18,
+      "phase_variant": 0
+    },
+    "AWB_BG_STATS17": {
+      "status": "STATS_CONFIG_PRODUCER_OPEN",
+      "registers": 18,
+      "phase_variant": 7
+    },
+    "RS_STATS14": {
+      "status": "STATS_CONFIG_PRODUCER_OPEN",
+      "registers": 4,
+      "phase_variant": 3
+    }
+  },
+  "safe_value_providers": {
+    "steady_singleton": {
+      "register_count": 468,
+      "status": "READY_TO_IMPLEMENT_FROM_COMMITTED_SAFE_E006H_OBSERVATIONS",
+      "private_bytes_required": false,
+      "windows_reboot_required": false
+    },
+    "steady_dynamic": {
+      "register_count": 25,
+      "status": "OWNER_BOUND_IMPLEMENTATION_MIXED"
+    },
+    "startup_differs": {
+      "register_count": 37,
+      "status": "OWNER_BOUND_IMPLEMENTATION_MIXED"
+    },
+    "startup_only": {
+      "register_count": 184,
+      "status": "OWNER_BOUND_VALUES_NOT_COMMITTED"
+    }
+  },
+  "front_live_proof": {
+    "bounded_front_producer": "GO 27/27 frames; R5..R27 live IQ consumption; max producer pipeline ~28.76ms",
+    "portability_limit": "front sensor/profile tuning and request-state inputs are not rear authority; HG authority cache is not fully redistributable clean-room"
+  },
+  "next_priority": [
+    "implement compile-only 468-register steady-singleton provider from E006h safe recipe",
+    "derive geometry-only startup providers (MNDS23/Crop12/RoundClamp12 + PERIOD_CFG)",
+    "adapt clean algorithms to rear state (Demux/AWB/PDPC/WB/LSC/GTM)",
+    "implement rear BPCABF411 and BFStats25/stats configuration producers",
+    "only then integrate RT-CDM runtime"
+  ],
+  "native_rear_linux_isp_authorized": false
+}
