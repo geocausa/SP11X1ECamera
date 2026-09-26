@@ -2,7 +2,7 @@
 
 Parent Git: `70c62db3` (E006y AWBBGStats17 compile PASS).
 
-Status: **STAGED / COMPILE-ONLY**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -56,6 +56,18 @@ Those 37 are exactly:
 - BFStats25: 29.
 
 This does **not** mean 94.8% overall camera-stack parity. DMI/live-state work remains for LSC/Tintless, GTM, PDPC modes, BPC/ABF, Gamma and DSX, in addition to BFStats25 and PERIOD_CFG.
+
+## Build result — PASS
+
+The complete E006g/j/l/m/o/p/q/r/s/t/u/v/w/x/y/z verifier chain passed and the staged provider was injected into an isolated copy of the accepted CAMSS source.
+
+- W=1 warnings/errors: 0
+- qcom-camss.ko: 13,649,832 bytes
+- SHA-256: `53f86813628ae6babb00a302387203fb92f8b4f1e524c6dd2d906102707ffbd8`
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`
+- retained symbols: `e006z_rear_clean_scalar_bank_lookup`, `e006z_rear_clean_provider_recipe`
+- private validation: 46 startup bank checks, 412 steady bank checks over 31 records, 26 scalar round-trip checks
+- install/load/camera/RT-CDM submission: none
 
 ## Runtime gate
 
