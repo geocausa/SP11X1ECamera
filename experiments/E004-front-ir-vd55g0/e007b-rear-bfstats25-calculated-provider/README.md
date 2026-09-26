@@ -2,7 +2,7 @@
 
 Parent Git: `6705a2f5` (E007a BPC/ABF411 compile PASS).
 
-Status: **STAGED / COMPILE-ONLY**. No module install/load, camera access, reboot, MMIO write, DMI submission or RT-CDM submission is part of this experiment.
+Status: **COMPILE-ONLY PASS**. No module install/load, camera access, reboot, MMIO write, DMI submission or RT-CDM submission is part of this experiment.
 
 ## Goal
 
@@ -65,6 +65,20 @@ If the isolated build passes:
 This does **not** mean camera-stack parity is complete.
 
 BFStats25 still requires the Linux AF producer to generate validated/adjusted ROI state, ROI DMI records, the 128-byte gamma LUT, independent DMI bank state and change/force-update policy. Other live rear DMI/IQ/3A state-production gaps also remain.
+
+## Build result — PASS
+
+The complete E006/E007a/E007b verifier chain passed and the staged provider was injected into an isolated copy of the accepted CAMSS source.
+
+- private validation: 35 records, 1,015 exact 29-register round-trip checks;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,674,856 bytes;
+- SHA-256: `c5174f717f05e7494af97aff3b3ee39f6a7d2d7b0a63de067801e919de99087f`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- retained symbols: `e007b_bfstats25_lookup`, `e007b_bfstats25_provider_recipe`;
+- install/load/camera/DMI/RT-CDM submission: none.
+
+Concrete startup register providers are now **713/714 (99.9%)**. The sole remaining register contract is VFE680 PERIOD_CFG 0x008C, already classified as opaque upstream transport state rather than IQ state.
 
 ## Runtime gate
 
