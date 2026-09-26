@@ -2,7 +2,7 @@
 
 Parent Git: `4742df8c` (E007u BPC/ABF411 clean DMI PASS).
 
-Status: **STAGED / COMPILE-ONLY**.
+Status: **COMPILE-ONLY PASS**.
 
 ## Goal
 
@@ -66,6 +66,18 @@ No captured DMI bytes are embedded or used as producer inputs.
 E007v installs the final stable-DMI callback under E007u. All first-frame DMI payload families are then concrete.
 
 After E007v, the only remaining first-native-frame blocker is the upstream derivation of VFE680 `PERIOD_CFG`; its packet-aware materializer boundary was already closed by E007c.
+
+## Build result — PASS
+
+The complete accepted E006/E007 provider chain through E007v compiled in an isolated CAMSS source copy.
+
+- private rear DSX validation: 16/16 exact;
+- W=1 warnings/errors: 0;
+- qcom-camss.ko: 13,843,024 bytes;
+- SHA-256: `379678934e5224ffd9cc6761198975b105dc48a5a94f09ac3c0e77e1eeebe6aa`;
+- vermagic: exact Golden `7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64`;
+- all first-frame DMI payload families: concrete;
+- install/load/camera/DMI/RT-CDM submission: none.
 
 ## Safety
 
