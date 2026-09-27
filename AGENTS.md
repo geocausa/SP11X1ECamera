@@ -1,3 +1,7 @@
+## E008u rear BF ROI geometry audit — OFFLINE PARTIAL PASS
+
+E008t's clean packet0 ROI seed, passed the accepted 4064x2286 rear ISP crop, matches 25/25 records and 300/300 selector-1 bytes in a private same-SP11 comparison. Normal packets1–3 retain geometry mismatches; do not replay observed coordinates, claim final four-packet DMI parity, or arm rear ISP. Source-close the normal AF ROI mapper and BFStats25 validate/adjust path next. See experiments/E004-front-ir-vd55g0/e008u-rear-bf-roi-geometry-audit/README.md. No runtime.
+
 ## E008r rear BFStats25 request-state source closure — STATIC PASS
 
 Exact DeviceMFT BFStats25::CheckDependenceChange/Titan680 source now fixes the request ownership boundary. The normal LUT-bank state toggles as one value and drives ROI-index/gamma banks together, matching E006z startup phase parity. Gamma/luma/scale plus FIR/IIR enables are caller semantic fields, not transport guesses. BCA8's two signed4 nibbles are the two AF BF IIR-filter shift fields; their producer identity is closed but their numerical initial values are not yet promoted. Nonzero ROI input is copied from upstream AF BFStatsROIConfig and then boundary-adjusted; the accepted 25-entry grid is therefore upstream AF policy, not a Titan-generated table. Do not wire runtime from E008r. Remaining BF seed work is now upstream AF/BAF only: packet0's distinct filter/coring seed, numerical shifts, 25 ROI semantics and per-packet validity choices.

@@ -1,3 +1,7 @@
+## E008u rear BF ROI L4→L2 boundary (2026-09-27)
+
+The accepted 4064x2286 active rear ISP crop gives an exact offline packet0 BF selector-1 payload through clean E008t/E007e: 25/25 private same-SP11 ROI records, 300/300 bytes [P comparison, S AF/IFE source, D Linux composer]. Normal packets1–3 retain geometric differences; IDs/flags match, packet1→2 shifts uniformly, and packet2/3/steady match in the bounded retained corpus. L4 normal AF ROI policy and BFStats25 validation/adjustment must be source-implemented before L2 packet materialization can claim final selector-1 parity. L3 rear DMA/runtime remains denied. See E008u README; no captured payload bytes or hashes are published.
+
 ## E005r correction: BF is type-1 CSID status, not the separate IFE snapshot
 
 E005r restores the source-proven E004ph path after E005p over-connected the separate 0x24A30/0x1DC20 snapshot queue to BF. Original type-1 queue B reads CSID BUF_DONE_IRQ_STATUS+0x8C in zero mode, normalizes prepared+0x0C to record+0x08, and bit7 drives BF0x0F/FIFO8. E005q then observed 35 BF/FIFO/matcher events while the snapshot probe emitted zero rows. E005q also proves resource0x300D WriteMaster W=25/H=4; that 4 is height, **not composite group**. The OEM output-resource structure names its actual composite-group field at container+0x8C0. Live 0x300D group and exact FIFO8↔WM16 DMA/IOMMU retirement remain unproven; rear ISP stays denied.
