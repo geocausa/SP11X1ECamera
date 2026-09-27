@@ -1,3 +1,7 @@
+## E008l rear Linux command-DMA arena — BUILD-ONLY PASS
+
+E008l closes E008k caller-owned command backing: four packet-local coherent slabs provide E007y MAIN/wrapper/DMI bytes under a validated 32-bit DMA aperture; DMI payload sizes are derived directly from each E007y skeleton. CPU-only dynamic scratch stays off the hardware DMA surface. Release is allowed before any submit, but once hardware_exposed is marked the entire command set stays pinned until RT-CDM stop is independently proven. No call site exists. Preserve this conservative lifetime in any one-shot integration.
+
 ## E008k complete rear two-slot runner — BUILD-ONLY PASS / still unreachable
 
 E008k mechanically composes the source-locked rear startup, two-slot ownership/completion and pair-aware teardown in one unreachable function. Exact order is E008j alloc/bind no-MMIO -> packet0 -> slot0 BUS disabled prepare -> E008h enable/rewrite -> packet1 -> CSID1 enable -> CSIPHY1 -> OV13858 -> Epoch0 slot1 retarget + packet2 -> next Epoch0 + packet3 -> E008i exact consumed-IOVA completion -> one CSID quiesce + one VFE BUS stop -> both ledgers retireable/released -> RT-CDM/source stop -> PM/owner release. Do not wire a runtime call site yet: caller-owned Linux command DMA for E007y and successful post-stop output-DMA release/reuse remain unresolved. Hardware-exposed failures and current successful path conservatively pin DMA.
