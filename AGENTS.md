@@ -1,3 +1,7 @@
+## E008v rear normal ROI Windows oracle — BOUNDED STREAM PASS
+
+Original-Windows rear 4K NV12 holder produced 284 valid handles, and QcDeviceMFT8380.dll loaded in FrameServer. The disposable user-mode debugger auto-detach test failed; no camera process was attached and no intermediate ROI stage was observed. Packet1–3 geometry source closure remains open. SP11 is back on Golden Linux. Continue static AF/BAF and BFStats25 source analysis, private offline parity only; do not arm native rear ISP. See experiments/E004-front-ir-vd55g0/e008v-rear-normal-bf-roi-windows-oracle/RESULT.md.
+
 ## E008u rear BF ROI geometry audit — OFFLINE PARTIAL PASS
 
 E008t's clean packet0 ROI seed, passed the accepted 4064x2286 rear ISP crop, matches 25/25 records and 300/300 selector-1 bytes in a private same-SP11 comparison. Normal packets1–3 retain geometry mismatches; do not replay observed coordinates, claim final four-packet DMI parity, or arm rear ISP. Source-close the normal AF ROI mapper and BFStats25 validate/adjust path next. See experiments/E004-front-ir-vd55g0/e008u-rear-bf-roi-geometry-audit/README.md. No runtime.
