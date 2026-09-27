@@ -1,3 +1,7 @@
+## E008m rear IFE0x804 logical-state closure — STATIC PASS
+
+Do not invent a Linux IFE-start MMIO stage for the E008f IFE804 event. Exact qccamisp analysis proves IFE804 only stores usecase/frames-to-skip and has no direct hardware-start action; its only downstream effect is optional frame-drop override. The accepted rear BUS snapshots already pin every active WM to period0/pattern1 and E008d programs those exact values. Rear numeric usecase remains intentionally unpromoted.
+
 ## E008l rear Linux command-DMA arena — BUILD-ONLY PASS
 
 E008l closes E008k caller-owned command backing: four packet-local coherent slabs provide E007y MAIN/wrapper/DMI bytes under a validated 32-bit DMA aperture; DMI payload sizes are derived directly from each E007y skeleton. CPU-only dynamic scratch stays off the hardware DMA surface. Release is allowed before any submit, but once hardware_exposed is marked the entire command set stays pinned until RT-CDM stop is independently proven. No call site exists. Preserve this conservative lifetime in any one-shot integration.
