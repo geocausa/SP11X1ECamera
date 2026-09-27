@@ -1,3 +1,7 @@
+## E008w normal BF ROI width — OFFLINE PARTIAL PASS
+
+Exact pinned BFStats25 non-clipping even-width adjustment produces 75/75 normal ROI widths matching the private same-SP11 packet1–3 corpus. Left/top/height remain open, packet0 remains byte exact, and no normal selector-1 payload is fully exact. Do not wire native rear runtime. See experiments/E004-front-ir-vd55g0/e008w-rear-bf-width-source-slice/README.md.
+
 ## E008v rear normal ROI Windows oracle — BOUNDED STREAM PASS
 
 Original-Windows rear 4K NV12 holder produced 284 valid handles, and QcDeviceMFT8380.dll loaded in FrameServer. The disposable user-mode debugger auto-detach test failed; no camera process was attached and no intermediate ROI stage was observed. Packet1–3 geometry source closure remains open. SP11 is back on Golden Linux. Continue static AF/BAF and BFStats25 source analysis, private offline parity only; do not arm native rear ISP. See experiments/E004-front-ir-vd55g0/e008v-rear-normal-bf-roi-windows-oracle/RESULT.md.
