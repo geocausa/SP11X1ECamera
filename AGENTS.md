@@ -1,3 +1,7 @@
+## E008k complete rear two-slot runner — BUILD-ONLY PASS / still unreachable
+
+E008k mechanically composes the source-locked rear startup, two-slot ownership/completion and pair-aware teardown in one unreachable function. Exact order is E008j alloc/bind no-MMIO -> packet0 -> slot0 BUS disabled prepare -> E008h enable/rewrite -> packet1 -> CSID1 enable -> CSIPHY1 -> OV13858 -> Epoch0 slot1 retarget + packet2 -> next Epoch0 + packet3 -> E008i exact consumed-IOVA completion -> one CSID quiesce + one VFE BUS stop -> both ledgers retireable/released -> RT-CDM/source stop -> PM/owner release. Do not wire a runtime call site yet: caller-owned Linux command DMA for E007y and successful post-stop output-DMA release/reuse remain unresolved. Hardware-exposed failures and current successful path conservatively pin DMA.
+
 ## E008j rear pre-BUS two-slot ordering adapter — BUILD-ONLY PASS
 
 E008j resolves the E008h/E008g integration seam: final rear orchestration must not use e008h_rear_alloc_prime_pair() directly because it performs disabled BUS preload before packet0. Use E008j zero-MMIO allocation + zero-MMIO ledger bind, submit E007y packet0, then E008j disabled slot0 prepare, E008h slot0 enable/address rewrite, then packet1. This preserves both the Windows-proven packet0-before-BUS order and the Linux safety rule that enabled WMs never contain stale/unowned addresses. No runtime call site exists.
