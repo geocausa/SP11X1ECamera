@@ -1,0 +1,114 @@
+{
+  "schema": "E008P-bootstrap-coverage-v1",
+  "parent_git_revision": "08693d573c956fb22e1df5c8600fe6765c2d53e8",
+  "purpose": "identify semantic seed inputs still required before E008o can materialize a clean first rear native startup",
+  "closed_clean_families": [
+    {
+      "family": "startup bank/phase policy",
+      "authority": "E006z + E008o",
+      "status": "closed"
+    },
+    {
+      "family": "PERIOD_CFG",
+      "authority": "E007w numBatchedFrames semantic rule",
+      "status": "closed"
+    },
+    {
+      "family": "crop/round-clamp geometry",
+      "authority": "E006p rear 4K geometry",
+      "status": "closed"
+    },
+    {
+      "family": "MNDS23 geometry",
+      "authority": "E006q rear 4064x2286 -> 3840x2160",
+      "status": "closed"
+    },
+    {
+      "family": "CST12",
+      "authority": "E006r source/tuning-derived semantic provider",
+      "status": "closed"
+    },
+    {
+      "family": "BC101/disabled small IQ",
+      "authority": "E006s/E006t",
+      "status": "closed"
+    },
+    {
+      "family": "stable PDPC/LSC3/Gamma/BPC-ABF/DSX DMI",
+      "authority": "E007s/E007t/E007u/E007v",
+      "status": "closed"
+    },
+    {
+      "family": "BHist startup zero priming",
+      "authority": "E007x",
+      "status": "closed"
+    }
+  ],
+  "seed_handoffs_required": [
+    {
+      "family": "Demux/PDPC/WB scalar semantics",
+      "provider": "E006z packer",
+      "missing": "clean initial AEC/AWB semantic seed"
+    },
+    {
+      "family": "BPCABF411 calculated register semantics",
+      "provider": "E007a packer",
+      "missing": "clean calculated-state producer/seed"
+    },
+    {
+      "family": "BFStats25 calculated register semantics",
+      "provider": "E007b packer",
+      "missing": "clean initial AF/BF calculated-state seed"
+    },
+    {
+      "family": "BFStats25 ROI/gamma DMI semantics",
+      "provider": "E007e encoder",
+      "missing": "clean initial 25-ROI + 32-sample gamma policy"
+    },
+    {
+      "family": "BHist16 ROI semantics",
+      "provider": "E006u packer",
+      "missing": "clean initial ROI state for non-zero register fields"
+    },
+    {
+      "family": "RSStats14 semantics",
+      "provider": "E006v packer",
+      "missing": "clean initial row-sum grid/ROI seed"
+    },
+    {
+      "family": "AEC_BE17 semantics",
+      "provider": "E006w packer",
+      "missing": "clean initial grid/threshold/weight seed"
+    },
+    {
+      "family": "TintlessBG17 semantics",
+      "provider": "E006x via E006w shape",
+      "missing": "clean initial grid/threshold seed"
+    },
+    {
+      "family": "AWBBG17 semantics",
+      "provider": "E006y via E006w shape",
+      "missing": "clean initial grid/threshold seed"
+    },
+    {
+      "family": "LSC selectors 1/2",
+      "provider": "E007h clean LSC/Tintless + E007i handoff",
+      "missing": "first-frame lux/CCT/tintless semantic bootstrap"
+    },
+    {
+      "family": "GTM",
+      "provider": "E007p/E007q clean TMC/GTM",
+      "missing": "first-frame semantic TMC runtime/common/control bootstrap"
+    }
+  ],
+  "long_run_not_required_for_first_proof": [
+    "live AEC convergence",
+    "live AWB convergence",
+    "live AF convergence",
+    "upper-AEC LSC",
+    "broad scene/mode IQ"
+  ],
+  "runtime_gate": "do not wire E008n/E008k; E008o packet-isolated semantic states must be fully seeded and validated first",
+  "windows_value_replay_required": false,
+  "runtime_actions_performed": false
+}
