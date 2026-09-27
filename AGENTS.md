@@ -1,3 +1,7 @@
+## E008j rear pre-BUS two-slot ordering adapter — BUILD-ONLY PASS
+
+E008j resolves the E008h/E008g integration seam: final rear orchestration must not use e008h_rear_alloc_prime_pair() directly because it performs disabled BUS preload before packet0. Use E008j zero-MMIO allocation + zero-MMIO ledger bind, submit E007y packet0, then E008j disabled slot0 prepare, E008h slot0 enable/address rewrite, then packet1. This preserves both the Windows-proven packet0-before-BUS order and the Linux safety rule that enabled WMs never contain stale/unowned addresses. No runtime call site exists.
+
 ## E008i rear CSID1 IRQ/consumed-IOVA observer — build-only PASS
 
 Rear native mode cannot use the accepted front-only CSID software latches. E008i adds an isolated-build rear observer gated by exact E004ns CSID1 D-PHY mode. It consumes the already-read BUF_DONE value immediately after the existing clear write, adds no CSID ACK, and snapshots VFE1 ADDR_STATUS0 for exactly rear completion groups0/4/5/6/7/9 into a bounded 16-event owner-epoch-seeded history. It also latches rear Epoch0 from the already-read IPP status. The ring never overwrites; overflow/snapshot error is a hard failure. Future runner must seed observer only after exclusive REAR owner acquire and before IRQ masks are armed, then validate the owner epoch while draining records into E008h/E007z. Build-only PASS, no install/load/runtime. Next compose the complete unreachable runner; do not arm rear hardware yet.
