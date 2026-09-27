@@ -1,3 +1,7 @@
+## E008z source-derived default AF rectangle — OFFLINE SOURCE SLICE
+
+A parameterized offline helper now models the pinned default AF ROI producer: selected CAMIF geometry, tuning fractions, inverse zoom, optional PD scale, the selected 200/400 minimum and centered rectangle. The request can instead select face/track/salient/touch/PD multiwindow paths; no live packet1/2 input or normal full DMI parity is established. Do not treat the helper as a runtime seed. See experiments/E004-front-ir-vd55g0/e008z-rear-af-default-rectangle/README.md.
+
 ## E008y original rear AF ETW oracle — STREAM PASS, STAGE UNRESOLVED
 
 One bounded original-Windows 12-second rear4K VideoRecord stream acquired 281 valid handles. The pinned DeviceMFT ETW provider emitted 195450 events, but generic decoding lacked its schema and the capture did not expose a request-tagged AF/BAF rectangle or BFStats25 intermediate ROI. Source analysis separately shows a BAF coordinate handoff that adds vertical grid count plus 11 to the adjusted rectangle height before a geometry clamp; it does not identify the live request input. SP11 returned to Golden with overlap guard PASS. Do not rerun this trace unchanged, hard-code coordinates, or arm native rear ISP. See experiments/E004-front-ir-vd55g0/e008y-rear-af-etw-oracle/RESULT.md.
