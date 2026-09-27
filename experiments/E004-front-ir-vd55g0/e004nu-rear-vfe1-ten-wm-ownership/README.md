@@ -1,5 +1,7 @@
 # E004nu — compiled rear-only ten-client VFE1 BUS and conservative frame ownership
 
+> **2026-09-27 E008d correction:** the historical `vfe680_e004nu_rear_wm_prepare_disabled()` implementation below is **not a valid disabled-only writer**. Audit found that after its masked-off CFG write it also executes `writel_relaxed(c->cfg, ...CFG)`, which can restore the enable bit. E004nu was isolated, unreachable, never installed/loaded and never touched hardware, so no live result is invalidated. Its two-Windows-capture ten-client scalar table remains useful authority, but the helper itself is **superseded and must not be called**. E008d provides the replacement disabled-only Linux-owned DMA/address path and explicitly verifies that no enabled CFG write exists.
+
 Parent E004nt Git `6bc77a8119195bb968ec36f4aaa92b7a14e79894`; inherited original Windows physical oracle E004nq, compiled isolated rear graph E004nr, CSID1 IPP E004ns, and bounded 4K coherent-DMA candidate E004nt. **E004nu is real source-compiled Linux kernel code, not an enabled capture:** it fills the independent rear VFE1 BUS *configuration* and per-write-master ownership model, with no loaded module, live camera activation, image capture, front-path changes or Golden reboot.
 
 ## Why the front BUS path cannot drive the rear
