@@ -1,0 +1,33 @@
+{
+  "schema": "E008G-result-v1",
+  "classification": "STATIC_CORRELATION_PASS",
+  "parent_git_revision": "bc5a1096e6982d8ef61b5e812d47e56d205a77a8",
+  "runtime_actions_performed": false,
+  "windows_boot_performed": false,
+  "linux_camera_runtime_performed": false,
+  "pre_csid_selector2": {
+    "function_rva": "0x246f0",
+    "function_identity": "CSID DAL_csid_process_iq_packet",
+    "selector_load_rva": "0x24918",
+    "call_rva": "0x2491c",
+    "rtcdm_dispatcher_rva": "0x28480"
+  },
+  "epoch0_selector2": {
+    "selector_load_rva": "0x25ec4",
+    "call_rva": "0x25ec8",
+    "rtcdm_dispatcher_rva": "0x28480",
+    "software_order": "IFE Epoch0 -> BUS IOVA update -> RT-CDM selector2 consume"
+  },
+  "rear_startup_packets": [
+    {"e008f_batch": 0, "logical_batch": 1, "e007y_packet": 0, "bl_count": 4, "main_bytes": 3868, "dmi_count": 17, "owner": "CSID_DAL_pre_bus"},
+    {"e008f_batch": 1, "logical_batch": 2, "e007y_packet": 1, "bl_count": 6, "main_bytes": 3772, "dmi_count": 16, "owner": "CSID_DAL_post_bus_pre_csid_start"},
+    {"e008f_batch": 2, "logical_batch": 3, "e007y_packet": 2, "bl_count": 6, "main_bytes": 2560, "dmi_count": 10, "owner": "IFE_Epoch0_post_start"},
+    {"e008f_batch": 3, "logical_batch": 4, "e007y_packet": 3, "bl_count": 6, "main_bytes": 1624, "dmi_count": 3, "owner": "IFE_Epoch0_post_start"}
+  ],
+  "first_steady_e008f_batch": 4,
+  "front_all_four_pre_csid_order_reusable_for_rear": false,
+  "linux_source_activation_order": ["CSID1_IPP", "CSIPHY1", "OV13858"],
+  "csiphy1_before_ov13858_physically_accepted_on_linux": true,
+  "new_windows_oracle_required_for_closed_edges": false,
+  "next_gate": "rear_two_slot_ten_wm_initial_prime_and_inflight_dma_ownership"
+}
