@@ -1,0 +1,15 @@
+# E008y — original rear AF trace, bounded negative stage result
+
+Status: **REAR4K STREAM PASS; ETW PROVIDER LIVE; AF RECTANGLE NOT RESOLVED**.
+Parent E008x `0801142b2dc6c057a90723eb28c4049fa94cf358`.
+Linux slice L4/L5, rear color VideoRecord NV12 3840×2160.
+
+On 2026-09-27 one original-Windows holder initialized and streamed for 12 seconds, stopped cleanly and acquired 281 valid 4K handles. The exact pinned DeviceMFT provider GUID derived from its EventRegister argument was enabled in a bounded 64 MiB circular ETW trace before holder initialization. After the run the private trace contained 195,450 events from that provider, across a 35.6-second trace window. No debugger was attached. The trace session was stopped and deleted, while the private ETL/CSV and holder log remain on SP11 under `C:\Users\Geoca\Documents\SP11CameraPrivate\E008y` and `C:\Users\Geoca\Documents\E008Y-holder.log`.
+
+The provider's event schema was unavailable to the generic Windows reader: its 200/201/215–218 event payloads appeared as `ProcessingErrorData/EventPayload`, not rendered messages. A private raw text-marker scan found no literal `BAF ROI Coords`, `BF ROI config`, `SetROICoordinates` or `MapROIConfigure`. Therefore the capture does **not** show an AF request rectangle, mapper output, or BFStats25 pre-hardware ROI. A live provider is not proof that CamX's separate logger was enabled or that opaque binary event payloads contain this stage. Do not infer packet1→2 origin ownership from the final DMI shift.
+
+Static follow-up on the same pinned DLL narrows the handoff: `af_util_adjust_roi` rounds its packed 16-bit x/y/width/height values down to even on the shown path. Before storing a BAF coordinate rectangle, `BAFLogicDriver::SetROICoordinates` forms a temporary rectangle whose **height** is the adjusted rectangle height plus the current vertical grid count plus 11, and passes it through helper `FUN_1806300a8`. That helper enforces minimum width 6, height 8, x 76, y 64, plus right and bottom bounds from the caller's geometry. It also clamps the original adjusted rectangle separately. This is source-level conditional behavior; which input and branches the live packet1–3 requests took is still open. E008x's explicit AF-rectangle input remains necessary. Neither the +11 term nor the clamps justify hard-coded output coordinates.
+
+SP11 returned by ordinary reboot to protected Golden kernel `7.1.5-sp11-render-parity-v4+`, new boot `f352b7d8-fe16-4625-b00e-2d70f0745677`, saved GRUB `sp11-audio-fullio-v19c`, empty `next_entry`, Linux-first BootOrder unchanged. The overlap guard passes: no camera nodes/modules/active processes. The native rear ISP runtime remains denied.
+
+Next: source-close the caller geometry and AF request policy feeding `af_util_adjust_roi`, then reproduce all four normal/steady private DMI payloads offline with request-specific inputs. A future trace is useful only if the CamX log provider/schema and stage enable path are identified in advance; do not repeat this ETW capture unchanged.

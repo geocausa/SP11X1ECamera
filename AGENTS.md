@@ -1,3 +1,7 @@
+## E008y original rear AF ETW oracle — STREAM PASS, STAGE UNRESOLVED
+
+One bounded original-Windows 12-second rear4K VideoRecord stream acquired 281 valid handles. The pinned DeviceMFT ETW provider emitted 195450 events, but generic decoding lacked its schema and the capture did not expose a request-tagged AF/BAF rectangle or BFStats25 intermediate ROI. Source analysis separately shows a BAF coordinate handoff that adds vertical grid count plus 11 to the adjusted rectangle height before a geometry clamp; it does not identify the live request input. SP11 returned to Golden with overlap guard PASS. Do not rerun this trace unchanged, hard-code coordinates, or arm native rear ISP. See experiments/E004-front-ir-vd55g0/e008y-rear-af-etw-oracle/RESULT.md.
+
 ## E008x normal AF/BAF and BF ROI map — OFFLINE SHAPE PASS
 
 Exact pinned mapper and BF valid-branch arithmetic now has a generic offline transform requiring an explicit AF rectangle. Four private normal/steady payloads (100 ROI records) satisfy its vertical relative-step and parity structure, but this does not prove absolute coordinates or full DMI parity. The simple 2336-basis hypothesis fails this source-shape test. Source-close request-tagged AF geometry and origin before integration; native rear ISP remains denied. See experiments/E004-front-ir-vd55g0/e008x-rear-af-bf-roi-map/README.md.
