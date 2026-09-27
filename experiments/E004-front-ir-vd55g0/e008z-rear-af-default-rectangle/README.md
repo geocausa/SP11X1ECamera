@@ -23,11 +23,22 @@ by one of eight policy indices. The later adjust stage rounds the packed
 rectangle's halfword components even, then BAF forms/clamps its own
 coordinate rectangle (E008y). Neither the live per-request policy index,
 CAMIF geometry, fractions, zoom nor the packet1→2 origin handoff has been
-measured at the intermediate stage. E008x's generic map still needs an
+measured at the intermediate stage. The earlier E008s serialized HAF
+25% window at raw offsets 0x28/0x2C is a tuning fact for its selected
+grid/default block; it does not prove that these are the live fields read
+by `af_util_get_roi_default` from its loaded HAF object at +0x44/+0x48.
+The `loadTuningData` source obtains that object through a named tuning
+lookup, not by passing the raw serialized record directly. A private
+negative-control calculation that naively equated raw offsets +0x44/+0x48
+with those live fields matched **0/25 left, top, width and height** records
+for each of four normal/steady payloads. This invalidates that naive
+composition, not the default-policy path itself. E008x's generic map still needs an
 explicit final BAF rectangle and no normal DMI payload has full byte parity.
 
-Next falsifiable gate: resolve selected rear sensor-mode CAMIF dimensions,
-AF tuning fractions and initial ROI policy for each of packet1/2, then
+Next falsifiable gate: prove the serialized-HAF-to-loaded-object field
+layout or obtain an intermediate request-stage scalar; resolve selected
+rear sensor-mode CAMIF dimensions, AF tuning fractions and initial ROI
+policy for each of packet1/2, then
 privately compare the source-composed default→adjust→BAF→BFStats25 output
 with all retained selector-1 records. Reject a candidate unless all records
 are byte exact. No native rear ISP runtime, module load or optical output.

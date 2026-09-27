@@ -1,3 +1,7 @@
+## E008z tuning layout guard
+
+Do not equate serialized rear HAF record offsets with the loaded CamX HAF object offsets used by `af_util_get_roi_default` without proving the loader layout. A private direct-offset candidate matched 0/25 in every ROI geometry field across four normal/steady samples; this is a negative control, not evidence against the default branch. See experiments/E004-front-ir-vd55g0/e008z-rear-af-default-rectangle/README.md.
+
 ## E008z source-derived default AF rectangle — OFFLINE SOURCE SLICE
 
 A parameterized offline helper now models the pinned default AF ROI producer: selected CAMIF geometry, tuning fractions, inverse zoom, optional PD scale, the selected 200/400 minimum and centered rectangle. The request can instead select face/track/salient/touch/PD multiwindow paths; no live packet1/2 input or normal full DMI parity is established. Do not treat the helper as a runtime seed. See experiments/E004-front-ir-vd55g0/e008z-rear-af-default-rectangle/README.md.
