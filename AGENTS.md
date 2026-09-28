@@ -1,3 +1,7 @@
+## E009f first-normal zoom geometry candidate — EXACT BITS, PRODUCER OPEN
+
+The independent accepted rear crop width4064 divided by raw sensor width4076 rounds to live first-normal AF zoom float32 bits0x3f7f3f0f exactly. Feeding this parameterized ratio into E009e yields startup0–3 and one steady BF ROI selector1 each 300/300. The CamX writer of AF parameter case0x15/state+0x1a4d8 and its request transition are not source-closed, so this is a high-confidence geometry hypothesis, not an authorized driver constant or runtime ISP permission. See experiments/E004-front-ir-vd55g0/e009f-rear-crop-width-zoom-hypothesis/README.md.
+
 ## E009e live first-normal AF zoom — PHYSICAL INPUT, FOUR ROI PAYLOADS EXACT OFFLINE
 
 One bounded original rear4K SP11 Windows session under external SP7 KD observed a first-normal `af_util_adjust_roi` zoom float32 0x3f7f3f0f (0.9970559477806091), CAMIF 4064x2286, ROI type0 and loaded HAF 0.25/0.25; twenty later same-caller hits used zoom1.0. The holder produced 52 valid 4K handles/8s, debugger breakpoints were cleared, and SP11 returned to Golden. A source-forward host composer using this independent physical scalar gives exact selector1 300/300 for all four retained startup packets and one steady; zoom1.0 negative control is packet1 250/300. The AF hit itself lacks direct RT-CDM packet ID, and zoom upstream derivation plus broader semantic/DMA gates remain open. Do not hardcode the transient into a native runtime seed. See experiments/E004-front-ir-vd55g0/e009e-rear-af-live-zoom-forward/README.md.
