@@ -1,3 +1,7 @@
+## E010p cold BHist memory timing — aborted capture
+
+Local CDB caught MFT load before Init; no setter/selector hit during Init. After Start, a bounded private-memory scan saw no smaller ROI at the first full-crop setter entry and 24 matches by the first selector, including the actual selected request context. This narrows the observed write interval but does not identify the writer or request ID. The CDB pause let the holder's 30-second WinRT wait expire; no frames or clean Stop are claimed. CDB closed, Golden return guard passed. Use a debugger-safe timeout or private time-travel trace for a new identity; do not promote this aborted run into rear ISP authorization. See e010p README.
+
 ## E010o BHist setter before selector — initial writer open
 
 A fresh Windows rear4K Start showed the first observed AEC BHist setter consume full crop and a zero destination before the first observed BHist selector returned the smaller ROI from a separate request context. No numeric request ID or setter-to-selected-context causal link was captured. The holder returned 226 valid 4K handles, KD was cleared, and Golden return guard passed. E009h's direct smaller-to-full transition stands; source-close the initial request-context writer before integrating policy. See e010o README.
