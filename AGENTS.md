@@ -1,6 +1,14 @@
+## E010n live AEC crop selection — startup ROI writer still open
+
+The first observed rear4K SetStats call selected GetCropWindow (ROISelection=1); its returned rectangle and the subsequent BHist setter argument were full active crop. Direct EngineFrameControl rectangle was zero. The bounded Windows holder returned 230 valid 4K handles, KD breakpoints were cleared, and Golden return guard passed. This call has no direct startup packet ID; E009h directly observed the initial smaller BHist ROI in a separate clean start; do not infer it was produced by this setter call or use it as a runtime constant. Trace the algorithm BHist ROI writer and correlate requests. See e010n README.
+
+## E009h initial BHist ROI and next transition — LIVE, POLICY OPEN
+
+E009h directly observed the original BHist path consume the smaller initial ROI, then a write to its request configuration and the next calculation consuming full active crop in the same rear4K start. The setter RVA 0x83E8F8 did not hit at the expected first-start point in that trace. Numeric request ID and the original algorithm/tuning policy producer remain unproven; keep E009g caller-owned and rear ISP disarmed. See e009h README.
+
 ## E009g initial AEC BHist ROI — REQUEST HANDOFF EXACT OFFLINE, ORIGIN OPEN
 
-The detached request-owned E009g handoff validates the caller AEC BHist ROI and generates the E006u Titan680 region word. Private startup0 matches a 90% even-crop candidate and startup1–3 match full active crop; reverse controls fail. Static DeviceMFT traces algorithm-output copy through CAECStatsProcessor/IFENode to BHistStats16, but do not prove the first AEC algorithm ROI writer or its request timing. Do not freeze 90% as a native default or arm rear ISP. E009g README has the bounded evidence.
+The detached request-owned E009g handoff validates the caller AEC BHist ROI and generates the E006u Titan680 region word. Private startup0 matches the smaller rectangle later observed directly by E009h, and startup1–3 match full active crop; reverse controls fail. Static DeviceMFT traces algorithm-output copy through CAECStatsProcessor/IFENode to BHistStats16, but do not prove the first AEC algorithm ROI writer or its request timing. Do not freeze 90% as a native default or arm rear ISP. E009g README has the bounded evidence.
 
 ## E009f first-normal zoom geometry candidate — EXACT BITS, PRODUCER OPEN
 
