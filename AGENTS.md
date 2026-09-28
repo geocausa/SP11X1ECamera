@@ -1,3 +1,7 @@
+## E011a first rear stats cold geometry — SOURCE + LIVE PARTIAL
+
+The original HardcodeSettings cold branch derives four 64x48 BG-style grids with zero origin and 90% active-bound width/height. E011A's request-1 AEC_BE and AWB_BG validation saw 3658x2058 from 4064x2286 active bounds; Tintless_BG and per-request replacement remain open. The debugger-paused holder recovered: 656 rear 4K handles, clean Stop, CDB detached, Golden guard PASS. Do not hardcode the observed rectangle or arm rear ISP. See e011a README.
+
 ## E010z first-selector request-1 BHist cold seed — SOURCE + LIVE TIMING CLOSED
 
 Fresh same-SP11 rear4K tracing now closes the startup BHist ambiguity. The pinned IFENode::HardcodeSettings helper derives the cold/default BHist rectangle from active bounds as width-floor(width/10), height-floor(height/10); 4064x2286 therefore yields 3658x2058. A selector breakpoint armed before START.GO showed the first BHist selector after start belongs to request ID 1 and consumes that 3658x2058 request-owned slot. A write watch on that same slot then caught the request-frame bulk config copy replacing it with the live full-crop 4064x2286 config, and the next selector for request ID 1 consumed full crop. Model this as a cold first-selector seed followed by per-request replacement; do not treat 90% as a permanent request policy or hard-code 3658x2058. The run closed cleanly with 418 valid rear 4K handles. Native rear ISP remains denied by the remaining first-frame stats seeds and VFE1 WM16 IRQ/DMA/IOMMU retirement gate. See e010z README.
