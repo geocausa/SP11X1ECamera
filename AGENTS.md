@@ -1,3 +1,7 @@
+## E011c rear AEC_BE request slot cold-to-caller transition — LIVE PARTIAL
+
+Fresh original rear4K request ID 1 AEC_BE validation first read its normal request slot at 64x48, 3658x2058, four 0x3ffff thresholds. A hardware write watch on that exact slot caught the bulk config copy, changing it to 32x32 and full 4064x2286; two threshold lanes changed at the watched SIMD store and all four read 0x3e7ff at a later AEC_BE validation of the same slot. The later hit was request ID 1153 because the validation breakpoint was temporarily cleared, so the immediate second request-1 consumer remains open. Holder Start/Stop passed with 1,302 valid 4K handles; CDB detached and Golden guard passed. Tintless_BG/RS and other E008p seeds plus VFE1 WM16 generation-safe retirement still gate native rear runtime. See e011c README.
+
 ## E011b rear BG cold slot identities — SOURCE MAP PASS, REPLACEMENT OPEN
 
 The pinned original IFENode request pointer table and HardcodeSettings now map the four 64x48 AEC_BE cold records to normal request +0x3E0 and HDR exposure types 0/1/2 at +0x798/+0x818/+0x718. A separate AWB_BG cold record is request +0xCF8. E011A directly observed only the normal AEC_BE and AWB_BG cold consumers. Tintless_BG reads request +0x500 and is not covered by those records; RS and per-request BG replacement remain open. Native rear ISP stays denied. See e011b README.
