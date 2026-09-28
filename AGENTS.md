@@ -1,3 +1,7 @@
+## E009e live first-normal AF zoom — PHYSICAL INPUT, FOUR ROI PAYLOADS EXACT OFFLINE
+
+One bounded original rear4K SP11 Windows session under external SP7 KD observed a first-normal `af_util_adjust_roi` zoom float32 0x3f7f3f0f (0.9970559477806091), CAMIF 4064x2286, ROI type0 and loaded HAF 0.25/0.25; twenty later same-caller hits used zoom1.0. The holder produced 52 valid 4K handles/8s, debugger breakpoints were cleared, and SP11 returned to Golden. A source-forward host composer using this independent physical scalar gives exact selector1 300/300 for all four retained startup packets and one steady; zoom1.0 negative control is packet1 250/300. The AF hit itself lacks direct RT-CDM packet ID, and zoom upstream derivation plus broader semantic/DMA gates remain open. Do not hardcode the transient into a native runtime seed. See experiments/E004-front-ir-vd55g0/e009e-rear-af-live-zoom-forward/README.md.
+
 ## E009d packet1 AF scalar equivalence — CALIBRATED, NOT OBSERVED
 
 An illustrative packet1 zoom input 0.998 in the pinned default AF source path reproduces private selector1 300/300; that same input breaks packet2/3 (250/300), while zoom 1.0 gives packet2/3 300/300 and packet1 250/300. The scalar was calibrated against final DMI. This identifies a falsifiable transient AF input target, not the actual Windows value or a runtime seed. Observe first normal AF ROI type, rectangle, CAMIF geometry, selected HAF and zoom before use. See experiments/E004-front-ir-vd55g0/e009d-rear-af-transient-zoom-equivalence/README.md.
