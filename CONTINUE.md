@@ -1,3 +1,7 @@
+## E011b rear BG cold slot identities — SOURCE MAP PASS, REPLACEMENT OPEN
+
+The pinned original IFENode request pointer table and HardcodeSettings now map the four 64x48 AEC_BE cold records to normal request +0x3E0 and HDR exposure types 0/1/2 at +0x798/+0x818/+0x718. A separate AWB_BG cold record is request +0xCF8. E011A directly observed only the normal AEC_BE and AWB_BG cold consumers. Tintless_BG reads request +0x500 and is not covered by those records; RS and per-request BG replacement remain open. Native rear ISP stays denied. See e011b README.
+
 ## E011a first rear stats cold geometry — SOURCE + LIVE PARTIAL
 
 The original HardcodeSettings cold branch derives four 64x48 BG-style grids with zero origin and 90% active-bound width/height. E011A's request-1 AEC_BE and AWB_BG validation saw 3658x2058 from 4064x2286 active bounds; Tintless_BG and per-request replacement remain open. The debugger-paused holder recovered: 656 rear 4K handles, clean Stop, CDB detached, Golden guard PASS. Do not hardcode the observed rectangle or arm rear ISP. See e011a README.
