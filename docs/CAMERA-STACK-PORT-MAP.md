@@ -1,3 +1,7 @@
+## E009g explicit AEC BHist region handoff (2026-09-28)
+
+Pinned DeviceMFT AEC stats processing supplies an ROI per request, and BHistStats16 validates/counts/packs it. A detached request-owned handoff through E006u reproduces the private 0xB26C word in all four startup packets: packet0 with an even 90% crop candidate, packets1–3 with the accepted full crop. Both reverse controls fail. The AEC algorithm producer of the first 90% input and precise request association remain open; no fixed runtime ratio or rear ISP arm. See [E009g](../experiments/E004-front-ir-vd55g0/e009g-rear-bhist-request-handoff/README.md).
+
 ## E009f candidate origin for the live first-normal AF zoom (2026-09-28)
 
 The independently accepted rear widths 4064 CAMIF crop and 4076 OV13858 raw sensor yield float32(4064/4076) = 0x3F7F3F0F, exactly the physically observed E009e first-normal AF zoom. An offline parameterized ratio reproduces all four startup BF ROI selectors 300/300. This is an exact numerical convergence, **not** source proof that the original metadata producer computes this quotient. Trace AF set-param case0x15 writer and first-to-settled request timing before integration; native rear ISP runtime remains denied. See [E009f](../experiments/E004-front-ir-vd55g0/e009f-rear-crop-width-zoom-hypothesis/README.md).

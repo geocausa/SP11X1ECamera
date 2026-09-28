@@ -1,3 +1,7 @@
+## E009g initial AEC BHist ROI — REQUEST HANDOFF EXACT OFFLINE, ORIGIN OPEN
+
+The detached request-owned E009g handoff validates the caller AEC BHist ROI and generates the E006u Titan680 region word. Private startup0 matches a 90% even-crop candidate and startup1–3 match full active crop; reverse controls fail. Static DeviceMFT traces algorithm-output copy through CAECStatsProcessor/IFENode to BHistStats16, but do not prove the first AEC algorithm ROI writer or its request timing. Do not freeze 90% as a native default or arm rear ISP. E009g README has the bounded evidence.
+
 ## E009f first-normal zoom geometry candidate — EXACT BITS, PRODUCER OPEN
 
 The independent accepted rear crop width4064 divided by raw sensor width4076 rounds to live first-normal AF zoom float32 bits0x3f7f3f0f exactly. Feeding this parameterized ratio into E009e yields startup0–3 and one steady BF ROI selector1 each 300/300. The CamX writer of AF parameter case0x15/state+0x1a4d8 and its request transition are not source-closed, so this is a high-confidence geometry hypothesis, not an authorized driver constant or runtime ISP permission. See experiments/E004-front-ir-vd55g0/e009f-rear-crop-width-zoom-hypothesis/README.md.
