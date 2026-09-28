@@ -1,0 +1,11 @@
+# E010o — BHist setter and selector order on a fresh rear 4K start
+
+Status: **the first observed AEC BHist setter received full crop before the first observed BHist selector returned the smaller ROI; the initial ROI producer and numeric request association remain open.** Parent E009h `cca57a10` and E010n `818c2020`.
+
+A new atomically guarded SP11 Windows MediaFrameReader holder split enumeration, initialization and Start. The external SP7 KD armed process-scoped read-only execute breakpoints after initialization, before Start, on the pinned DeviceMFT `CAECStatsProcessor::SetBHistConfigFromAlgoConfig` (RVA 0x83E8F8) and `BHistStats16::GetBHistConfig` (RVA 0xA06BE8). The setter hit first: its rectangle argument was full active crop, selection was 1, and its destination rectangle began zero. On resuming, the selector hit; at its return, the selected request configuration's first four words were the smaller initial ROI directly observed independently by E009h. The setter destination was transient stack configuration, while the selector returned a separate request-owned context. These two hits have no independently captured numeric request ID or causal link from setter output to that selected context.
+
+This order explains why a full-crop AEC setter hit cannot be promoted into the source of the first smaller BHist ROI. It does not prove the earlier seed writer, nor does it negate E009h's directly observed first-to-next transition. Static read-only Ghidra inventory found no literal smaller-width DWORD in the original DeviceMFT image and 20 occurrences of the 0.9 float byte pattern in several functions; these broad matches do not identify the BHist policy producer.
+
+The holder completed Start/Stop with 226 valid 3840×2160 frame handles. KD breakpoints were cleared; ordinary reboot returned SP11 to the protected Golden kernel, with no camera process and the overlap guard passing. Raw debugger memory, OEM binaries, logs and frames remain on the private lab machines.
+
+**Next:** identify the writer of the selected request context before its first BHist calculation, or trace the initialization/default copy that seeds it. Correlate the provenance with request identity before changing E009g's caller-owned interface. Other AEC/AWB/LSC/GTM startup semantics and VFE1 WM16 IRQ/DMA/IOMMU generation-safe stop still block native rear ISP runtime.
