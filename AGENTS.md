@@ -1,3 +1,7 @@
+## E009d packet1 AF scalar equivalence — CALIBRATED, NOT OBSERVED
+
+An illustrative packet1 zoom input 0.998 in the pinned default AF source path reproduces private selector1 300/300; that same input breaks packet2/3 (250/300), while zoom 1.0 gives packet2/3 300/300 and packet1 250/300. The scalar was calibrated against final DMI. This identifies a falsifiable transient AF input target, not the actual Windows value or a runtime seed. Observe first normal AF ROI type, rectangle, CAMIF geometry, selected HAF and zoom before use. See experiments/E004-front-ir-vd55g0/e009d-rear-af-transient-zoom-equivalence/README.md.
+
 ## E009c request-scoped AF/BF ROI handoff — OFFLINE SETTLED PARITY
 
 Source-derived handoff now consumes an explicit per-request AF rectangle into the isolated E008o/E008t BF selector-1 state. Packet0 is rejected/preserved; invalid or consumed requests fail closed. Pinned private startup2/3 comparisons are each 300/300 bytes; startup1 remains 250/300 with only position fields open. This is detached host code, not runtime authorization. Source-derive or independently observe startup1 AF selection before treating its ROI as resolved. See experiments/E004-front-ir-vd55g0/e009c-rear-af-request-roi-handoff/README.md.
