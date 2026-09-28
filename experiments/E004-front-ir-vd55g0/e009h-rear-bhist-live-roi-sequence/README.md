@@ -1,0 +1,13 @@
+# E009h — live first-request AEC BHist ROI sequence
+
+Status: **first BHist ROI and first-to-next transition directly observed on the original SP11 Windows stack; upstream policy producer still open; no native runtime authorization**. Parent E009g `b53381ef`.
+
+A fresh Windows Camera Frame Server instance was traced from process creation through `QcDeviceMFT8380.dll` image load with the external SP7 kernel debugger. The pinned BHist request selector at RVA `0xA06BE8` selected the request-owned configuration, and `BHistStats16::CalculateRegionConfiguration` at RVA `0xA07618` directly consumed `{left=0, top=0, width=3658, height=2058}` on the first observed rear-4K BHist calculation. This removes the E009g “90% crop candidate” uncertainty for the rectangle itself: 3658×2058 is a live Windows request value, not geometry reconstructed from the packed region word.
+
+The selected request configuration is the four-DWORD rectangle at the request context selected by `GetBHistConfig`. The BHist update path compares those four DWORDs against the module-owned ROI at offsets `+0x60..+0x6c` and copies the rectangle when it changes. A write watchpoint on the selected configuration then caught the same live context being replaced from `{0,0,3658,2058}` to `{0,0,4064,2286}`. The next `CalculateRegionConfiguration` invocation in the same rear-4K start consumed `{0,0,4064,2286}`. Thus the initial-versus-later ROI transition is physically observed in order rather than inferred from retained packets.
+
+The bulk context copy that performs the transition receives a source context already containing the full 4064×2286 rectangle and copies it into the request context. This source-to-request copy is direct evidence for the transition, but it does not identify the algorithm or tuning rule that originally seeded 3658×2058. In particular, the prior static `CAECStatsProcessor::SetBHistConfigFromAlgoConfig` RVA `0x83E8F8` did not execute at the expected first-start point in the clean E009W trace, so E009h does not claim that RVA as the live first-ROI producer.
+
+The E009g request-owned handoff therefore remains the correct interface: the caller supplies the actual per-request rectangle. Its first observed input is now source-observed as 3658×2058 and the immediately following observed input is 4064×2286. Request ordering is direct within one start, but no independent numeric request ID was captured, so exact request-ID association remains open. Rear ISP submission remains denied by the remaining first-frame statistics seeds and the VFE1 WM16 IRQ/DMA/IOMMU stop-and-drain proof.
+
+No raw frames, OEM packet bytes, captured register values, or transient virtual addresses are stored in this experiment.
