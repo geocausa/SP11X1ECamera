@@ -1,3 +1,7 @@
+## E010z BHist startup seed lifecycle (2026-09-28)
+
+The first rear BHist selector after a cold 4K start is now request-correlated and source-closed. IFENode::HardcodeSettings seeds the default BHist ROI from the active crop with integer 90% dimensions (width-floor(width/10), height-floor(height/10)); 4064x2286 gives 3658x2058. The first post-start selector is request ID 1 and consumes this cold seed. The same request-owned slot is then overwritten by the normal request-frame bulk config copy with full 4064x2286, and a later selector for request ID 1 consumes full crop. Port this as a startup/default seed plus normal per-request replacement, not a permanent 90% rule. This closes the E009g/E009h BHist origin/timing gap but does not authorize native rear ISP runtime; remaining first-frame stats and VFE1 WM16 retirement gates still apply. See [E010z](../experiments/E004-front-ir-vd55g0/e010z-first-selector-request1-transition/README.md).
+
 ## E009g explicit AEC BHist region handoff (2026-09-28)
 
 Pinned DeviceMFT AEC stats processing supplies an ROI per request, and BHistStats16 validates/counts/packs it. A detached request-owned handoff through E006u reproduces the private 0xB26C word in all four startup packets: packet0 with an even 90% crop candidate, packets1–3 with the accepted full crop. Both reverse controls fail. The AEC algorithm producer of the first 90% input and precise request association remain open; no fixed runtime ratio or rear ISP arm. See [E009g](../experiments/E004-front-ir-vd55g0/e009g-rear-bhist-request-handoff/README.md).
