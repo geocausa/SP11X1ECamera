@@ -1,3 +1,7 @@
+## E011f Tintless retained writer / first consumer ordering — LIVE PARTIAL
+
+Fresh rear4K tracing hit IFENode's Tintless writer RVA 0x736DB0 before the first dependency. It wrote retained node config +0x500 from zero to 32x24/full 4064x2286/four 0x3ffff thresholds and record +0x28=18, with source node +0x9764=18, half-width flag 0, override flag 0. The first request-ID-1 Tintless dependency then read its request +0x500 with the same geometry/thresholds but +0x28=14; retained +0x28 was also 14. A later direct store in Tintless Execute RVA 0xA1174C changed retained +0x28 from 14 back to 18. The intervening 18-to-14 writer and request-copy timing remain open. Holder Start/Stop passed with 1,242 valid 4K handles, CDB detached and Golden guard PASS. Rear ISP remains denied. See e011f README.
+
 ## E011e Tintless_BG request writer shape — SOURCE PASS, PRODUCER ORDER OPEN
 
 Pinned original IFENode helper RVA 0x736DB0 writes the request +0x500 Tintless record through pointer table entry 1 (+0x360) plus +0x1A0. It derives 32x24 zero-origin geometry from active bounds, with a conditional half-width and separate-window override, and derives thresholds plus record word +0x28 from node field +0x9764. E011D's first request-1 consumer had thresholds 0x3ffff but +0x28=14; the later copy changed that word to 18. This mismatch means the helper's exact first-consumer ordering/intervening writer remains open even though the source record mapping is proved. Rear ISP stays denied by other E008p seeds and VFE1 WM16 retirement. See e011e README.
