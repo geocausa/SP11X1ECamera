@@ -1,3 +1,7 @@
+## E009a normal AF centered inverse — PRIVATE SHAPE PASS
+
+The exact AF-even / BAF-height-and-clamp / 5x5-grid / BF-valid direct path has centered AF-size candidates for all 100 normal/steady ROI records under the accepted 4064x2286 active crop: two candidates per axis per sample. The tested raw sensor and video output dimensions have none. Packet1/2 candidate sizes are disjoint with possible 1–3 size deltas per axis despite unchanged final cell dimensions; a centered size change can therefore explain the uniform position shift. This is an inverse fit to private final DMI, not independent request input or predictive 300-byte parity. Native rear ISP stays denied. See experiments/E004-front-ir-vd55g0/e009a-rear-af-centered-inverse/README.md.
+
 ## E008z tuning layout guard
 
 Do not equate serialized rear HAF record offsets with the loaded CamX HAF object offsets used by `af_util_get_roi_default` without proving the loader layout. A private direct-offset candidate matched 0/25 in every ROI geometry field across four normal/steady samples; this is a negative control, not evidence against the default branch. See experiments/E004-front-ir-vd55g0/e008z-rear-af-default-rectangle/README.md.
