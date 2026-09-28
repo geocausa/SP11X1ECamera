@@ -1,3 +1,7 @@
+## E009c request-scoped AF/BF ROI handoff — OFFLINE SETTLED PARITY
+
+Source-derived handoff now consumes an explicit per-request AF rectangle into the isolated E008o/E008t BF selector-1 state. Packet0 is rejected/preserved; invalid or consumed requests fail closed. Pinned private startup2/3 comparisons are each 300/300 bytes; startup1 remains 250/300 with only position fields open. This is detached host code, not runtime authorization. Source-derive or independently observe startup1 AF selection before treating its ROI as resolved. See experiments/E004-front-ir-vd55g0/e009c-rear-af-request-roi-handoff/README.md.
+
 ## E009b settled rear AF/BF ROI — OFFLINE BYTE PARITY FOR NAMED SAMPLES
 
 The pinned rear HAF 25% scalar pair, accepted 4064x2286 crop, source-derived default/even/BAF/5x5/BF valid path and E008t/E007e packer now give selector1 300/300 bytes exact for packet0, packet2, packet3 and one retained steady sample. Packet1 is 250/300: all 25 left and top fields differ, while width/height/IDs/flags match. This is a forward source candidate validated against private final DMI, not a live AF request-stage observation. Do not hard-code packet1 coordinates or arm native rear ISP. Next close first normal AF state and ROI update order, then require four startup packets exact. See experiments/E004-front-ir-vd55g0/e009b-rear-af-settled-forward/README.md.
