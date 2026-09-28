@@ -1,3 +1,7 @@
+## E009b settled rear AF/BF ROI — OFFLINE BYTE PARITY FOR NAMED SAMPLES
+
+The pinned rear HAF 25% scalar pair, accepted 4064x2286 crop, source-derived default/even/BAF/5x5/BF valid path and E008t/E007e packer now give selector1 300/300 bytes exact for packet0, packet2, packet3 and one retained steady sample. Packet1 is 250/300: all 25 left and top fields differ, while width/height/IDs/flags match. This is a forward source candidate validated against private final DMI, not a live AF request-stage observation. Do not hard-code packet1 coordinates or arm native rear ISP. Next close first normal AF state and ROI update order, then require four startup packets exact. See experiments/E004-front-ir-vd55g0/e009b-rear-af-settled-forward/README.md.
+
 ## E009a normal AF centered inverse — PRIVATE SHAPE PASS
 
 The exact AF-even / BAF-height-and-clamp / 5x5-grid / BF-valid direct path has centered AF-size candidates for all 100 normal/steady ROI records under the accepted 4064x2286 active crop: two candidates per axis per sample. The tested raw sensor and video output dimensions have none. Packet1/2 candidate sizes are disjoint with possible 1–3 size deltas per axis despite unchanged final cell dimensions; a centered size change can therefore explain the uniform position shift. This is an inverse fit to private final DMI, not independent request input or predictive 300-byte parity. Native rear ISP stays denied. See experiments/E004-front-ir-vd55g0/e009a-rear-af-centered-inverse/README.md.
