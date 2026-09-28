@@ -1,3 +1,7 @@
+## E011e Tintless_BG request writer shape — SOURCE PASS, PRODUCER ORDER OPEN
+
+Pinned original IFENode helper RVA 0x736DB0 writes the request +0x500 Tintless record through pointer table entry 1 (+0x360) plus +0x1A0. It derives 32x24 zero-origin geometry from active bounds, with a conditional half-width and separate-window override, and derives thresholds plus record word +0x28 from node field +0x9764. E011D's first request-1 consumer had thresholds 0x3ffff but +0x28=14; the later copy changed that word to 18. This mismatch means the helper's exact first-consumer ordering/intervening writer remains open even though the source record mapping is proved. Rear ISP stays denied by other E008p seeds and VFE1 WM16 retirement. See e011e README.
+
 ## E011d rear Tintless_BG request-1 first consumer — LIVE, PRODUCER OPEN
 
 Fresh original rear4K request ID 1 Tintless_BG dependency read the distinct request +0x500 record at grid 32x24, zero origin, full 4064x2286 rectangle and four 0x3ffff thresholds. It was already populated before the first AEC_BE validation and differs from the AEC_BE 64x48 90%-bounds cold seed. A watched broad copy preserved Tintless geometry/thresholds while record word +0x28 changed 14 to 18; request ID 2's Tintless dependency consumed that same slot with the latter word. The upstream producer and semantic meaning of +0x28 remain open. E011D holder Start/Stop passed with 246 valid 4K handles, CDB detached and Golden guard PASS. Other E008p seeds and VFE1 WM16 retirement still deny native rear ISP. See e011d README.
