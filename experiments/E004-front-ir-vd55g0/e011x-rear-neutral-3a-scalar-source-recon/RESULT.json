@@ -1,62 +1,95 @@
 {
   "experiment": "E011X",
   "parent_git_revision": "b15e23a623f0879ec127cd09ad470b9821bfba61",
-  "state": "REAR_NEUTRAL_3A_SCALAR_SOURCE_BOUNDARY_PINNED_LIVE_OPEN",
-  "evidence_class": "SOURCE_ONLY_COMMITTED_CONTRACT_AUDIT",
+  "state": "REAR_NEUTRAL_3A_STATIC_INPUTS_CLOSED_LIVE_BINDING_OPEN",
+  "evidence_class": "SOURCE_STATIC_EXACT_BINARY_TUNING_REDUCTION",
+  "installed_authority": {
+    "device_mft_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "rear_tuning_sha256": "4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635"
+  },
+  "rear_tuning_selection": {
+    "sensor2_video_inherits_default": true,
+    "rear_sensor_override_for_neutral_scalar_modules": false,
+    "video_override_for_neutral_scalar_modules": false,
+    "modules": {
+      "demux": {
+        "root_bytes": 64,
+        "root_sha256": "74d7414241013b4470cbe88be9abcaba4f5d59dcae3a1d780855ed67ddc6c817",
+        "leaf_bytes": 16,
+        "leaf_sha256": "e1f38cb569bd193ee5f6cedb5a938a5b6a579302a0f9f0366e36cf5b8a9a2f98"
+      },
+      "pdpc": {
+        "root_bytes": 96,
+        "root_sha256": "081f03e9a7f286b77f83f8e90186555a267d90de633103278020516a565704fc",
+        "leaf_bytes": 24,
+        "leaf_sha256": "ccd305f45ef9b5cc3c82bb09dbf239f85239ed261a75a908d10d33107dc42160"
+      },
+      "wb": {
+        "root_bytes": 56,
+        "root_sha256": "2822385e43c9bf7629dd8c1cbf179f1e5fa21552d2c13cf32b0e1dcfba2a11ea",
+        "leaf_bytes": 32,
+        "leaf_sha256": "adaa0328a8d4f654c50b317d314627c9bc406be495768f35066f291633b568ae"
+      }
+    },
+    "raw_tuning_values_committed": false
+  },
   "neutral_scalar_state": {
     "demux_q10_count": 4,
     "pdpc_q12_count": 4,
-    "wb_q10_fields": [
-      "B",
-      "R"
-    ],
-    "identity_fields": [
-      "epoch_kind",
-      "startup_phase",
-      "request_id"
-    ]
+    "wb_q10_fields": ["B", "R"],
+    "identity_fields": ["epoch_kind", "startup_phase", "request_id"]
   },
   "titan680_anchors": {
     "demux": {
       "common_calc_rva": "0x998E70",
       "packer_rva": "0xB42840",
       "create_cmd_list_rva": "0xB41FF0",
-      "registers": [
-        "0x3B70",
-        "0x3B74"
-      ]
+      "registers": ["0x3B70", "0x3B74"]
     },
     "pdpc": {
       "common_calc_rva": "0x9C07C0",
       "interpolation_rva": "0x943E80",
       "packer_rva": "0xB3C7D0",
       "create_cmd_list_rva": "0xB3BD10",
-      "registers": [
-        "0x3D78",
-        "0x3D7C",
-        "0x3D80",
-        "0x3D84"
-      ]
+      "registers": ["0x3D78", "0x3D7C", "0x3D80", "0x3D84"]
     },
     "wb": {
       "common_calc_rva": "0x995E60",
       "packer_rva": "0xB560C0",
       "create_cmd_list_rva": "0xB559F0",
-      "registers": [
-        "0x456C",
-        "0x4570"
-      ]
+      "registers": ["0x456C", "0x4570"]
     }
   },
-  "pdpc_ratio_order": [
-    "AWBR/AWBG",
-    "AWBB/AWBG",
-    "AWBG/AWBR",
-    "AWBG/AWBB"
-  ],
+  "common_calc_dependence_layout": {
+    "demux": {
+      "pixel_bayer_selector": "x0+0x10",
+      "request_time_gain_float": "x0+0x1C",
+      "bls_terms": "x1[0..3]",
+      "channel_terms": "x2[0..3]",
+      "output": "x4"
+    },
+    "wb": {
+      "awb_g_float": "x0+0x10",
+      "awb_b_float": "x0+0x14",
+      "awb_r_float": "x0+0x18",
+      "predictive_gain_float": "x0+0x1C",
+      "formula": "round(channel_gain * predictiveGain * 1024)"
+    }
+  },
+  "atomic_request_hook": {
+    "complete_trigger_hook_rva": "0x746F18",
+    "request_id_expression": "qwo(x26+0x3EF0)",
+    "trigger_expression": "x26+0x3F78",
+    "awb_offsets_in_trigger": ["0x3C", "0x40", "0x44"],
+    "dgain_expression": "dwo(x26+0x1F7C)"
+  },
+  "pdpc_ratio_order": ["AWBR/AWBG", "AWBB/AWBG", "AWBG/AWBR", "AWBG/AWBB"],
+  "static_tuning_provenance_closed": true,
+  "common_calc_dependence_layout_closed": true,
   "four_packet_identity_required": true,
   "private_e006a_outputs_are_validation_only": true,
   "live_identity_consumed": false,
+  "live_request_producer_values_closed": false,
   "producer_provenance_closed": false,
   "request_phase_binding_closed": false,
   "neutral_3a_gate_closed": false,
