@@ -1,119 +1,101 @@
-# E011X — rear neutral-3A scalar source reconnaissance
+# E011X - rear neutral-3A scalar bootstrap closure
 
-Parent Git: `b15e23a623f0879ec127cd09ad470b9821bfba61` (E011W). Evidence class: exact installed-source/static reduction only. No new Windows live identity was consumed and no native rear ISP runtime occurred.
+Parent Git: `b15e23a623f0879ec127cd09ad470b9821bfba61` (E011W). Source-only E011X checkpoint Git before this live closure: `683b21194ef770e1103119ae053e7ae96dabd020`.
 
-Status: **STATIC INPUT/DEPENDENCE REDUCTION CLOSED; LIVE REQUEST/PHASE BINDING OPEN.**
+Status: **SOURCE + LIVE + PRIVATE-AGGREGATE CLOSED. REAR NEUTRAL-3A SCALAR BOOTSTRAP GATE CLOSED.**
 
 ## Scope
 
-E011W closed the remaining AF/BF bootstrap timing question. E008p therefore leaves neutral AEC/AWB scalar state as the next semantic gate before request-tagged LSC/GTM.
+E011W closed AF/BF bootstrap timing. E011X then source-locked the rear Demux/BLS141, PDPC311 and WB201 dependence layouts and the exact Titan680 packing boundary. This closure adds one fresh bounded Windows rear4K trace and compares the source-derived scalar outputs against the retained private E006a startup command corpus.
 
-This stage does **not** reuse retained Windows startup register words as bootstrap policy. E008p's rule still applies: a packer output is not its semantic producer. Private E006a startup outputs remain validation-only after a source-backed producer is identified.
+Captured Windows register words and command bytes remain validation-only. No captured scalar register value is promoted as policy.
 
 ## Exact installed authority
 
-The current Windows DriverStore copies were re-verified before analysis:
+The installed source authority remains:
 
 - `QcDeviceMFT8380.dll` SHA-256 `c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35`;
 - rear `com.surface.tuned.rfc_ov13858.bin` SHA-256 `4858ccb297eeecbc8e9b6d673f7ab4b0ead559adf16e3fe717eea9e40ccef635`.
 
-The rear tuning selector graph proves that the Sensor2/Video branch inherits the **Default** records for all three neutral-scalar modules. There is no rear-sensor or Video override for:
+Sensor2/Video inherits the Default Demux/BLS14, PDPC31 and WB20 tuning records; no rear-sensor or Video override was found for those three modules. Raw tuning words and decoded leaf values remain private.
 
-- `demuxblklevel14_ife_v2`;
-- `pdpc31_ife_v2`;
-- `wb20_ife_v2`.
+## Source-locked scalar producers
 
-Safe structural fingerprints:
+The exact common-calculation boundaries are unchanged:
 
-| Module | Root bytes | Root SHA-256 | Non-empty leaf bytes | Leaf SHA-256 |
-| --- | ---: | --- | ---: | --- |
-| Demux/BLS14 | 64 | `74d7414241013b4470cbe88be9abcaba4f5d59dcae3a1d780855ed67ddc6c817` | 16 | `e1f38cb569bd193ee5f6cedb5a938a5b6a579302a0f9f0366e36cf5b8a9a2f98` |
-| PDPC31 | 96 | `081f03e9a7f286b77f83f8e90186555a267d90de633103278020516a565704fc` | 24 | `ccd305f45ef9b5cc3c82bb09dbf239f85239ed261a75a908d10d33107dc42160` |
-| WB20 | 56 | `2822385e43c9bf7629dd8c1cbf179f1e5fa21552d2c13cf32b0e1dcfba2a11ea` | 32 | `adaa0328a8d4f654c50b317d314627c9bc406be495768f35066f291633b568ae` |
+- Demux/BLS141 common calculation RVA `0x998E70`, Titan680 packer `0xB42840`;
+- PDPC311 common calculation RVA `0x9C07C0`, interpolation `0x943E80`, packer `0xB3C7D0`;
+- WB201 common calculation RVA `0x995E60`, packer `0xB560C0`.
 
-The raw tuning words and decoded leaf values remain private and are not committed.
+Demux consumes the request-time post-sensor gain plus four interpolated BLS terms and four channel terms, applies the exact `16383/(16383-BLS)` normalization, and quantizes four Q10 outputs. WB consumes G/B/R plus `predictiveGain` and quantizes `round(channel_gain * predictiveGain * 1024)`. PDPC consumes the same AWB tuple and produces Q12 ratios in the accepted order R/G, B/G, G/R, G/B.
 
-## Exact neutral-3A scalar boundary
+The Linux E006z boundary remains the semantic target: four Demux Q10 values, four PDPC Q12 values, WB B/R Q10, and explicit startup/request identity.
 
-The accepted E006z provider fixes the Linux semantic object shape:
+## Fresh live identity E011X-1412A
 
-- `demux_q10[4]`: four Q10 normalized Demux/BLS channel values;
-- `pdpc_q12[4]`: four Q12 AWB ratios;
-- `wb_b_q10` and `wb_r_q10`: Q10 B/R WB gains after `predictiveGain`;
-- `request_id`, `startup_phase`, and epoch kind for identity/bank policy.
+A fresh original Windows rear Color VideoRecord NV12 3840x2160 session was staged so the debugger attached after initialization and before `StartAsync`. The trace used the exact primary IFE request hook RVA `0x746F18` and the three common-calculation RVAs above.
 
-The PDPC ratios are, in order:
+Each breakpoint was bounded to eight hits and then self-disabled. The trace observed:
 
-1. AWBR / AWBG
-2. AWBB / AWBG
-3. AWBG / AWBR
-4. AWBG / AWBB
+- eight atomic request hooks with sequential request IDs 1 through 8;
+- eight Demux common-calculation entries;
+- eight PDPC common-calculation entries;
+- eight WB common-calculation entries;
+- one stable four-term rear BLS input tuple across the sampled window;
+- one stable four-term Demux channel-input tuple across the sampled window;
+- `predictiveGain == 1.0` for all eight sampled WB calculations;
+- coherent request-time dGain and AWB evolution across the atomic trigger and common-calculation boundaries.
 
-No observed rear scalar register value is promoted by this checkpoint.
+The event order also exposes the startup hold behavior: one scalar calculation occurs before request 1, request 1 and request 2 each produce a new scalar state, and no scalar common-calculation update occurs between the request-3 and request-4 atomic hooks. Therefore request 3 holds the preceding scalar state rather than inventing a fourth scalar set.
 
-## Exact common-calculation dependence layouts
+The holder completed cleanly:
 
-Offline ARM64 disassembly of the exact installed DeviceMFT removes the remaining structural ambiguity.
+- `StartAsync`: Success;
+- `StopAsync`: PASS;
+- valid rear 4K handles: 1,807;
+- debugger detached normally.
 
-### Demux/BLS141 common calculation — RVA `0x998E70`
+Raw debugger output, process addresses and holder transcripts remain private.
 
-At entry:
+## Private E006a comparison
 
-- dependence input is `x0`;
-- request-time ISP/post-sensor gain is float `x0 + 0x1C`;
-- pixel/Bayer selector is read from `x0 + 0x10`;
-- interpolated four-term BLS input is `x1[0..3]`;
-- four channel terms are `x2[0..3]`;
-- calculated output is `x4`.
+The retained private E006a corpus was recovered from SP7 and transferred to SP11 with exact SHA-256 preservation. The existing E006a decoder was used; no packet bytes or captured register values were emitted publicly.
 
-The common routine applies the already source-locked `16383/(16383-BLS)` normalization, multiplies by request-time gain and channel terms, then quantizes the four Q10 channel outputs. Rear tuning selection for the BLS/channel side is now static-source closed; the only live scalar still needed here is the request-time gain plus identity.
+Startup scalar coverage is exactly the coverage already implied by E006z's 26 scalar round-trip checks:
 
-### WB201 common calculation — RVA `0x995E60`
+| startup phase | scalar register instances present | source-derived live match |
+| --- | ---: | ---: |
+| 0 | 8 | 8/8 |
+| 1 | 8 | 8/8 |
+| 2 | 8 | 8/8 |
+| 3 | 2 | 2/2 |
 
-At entry, dependence input is `x0` and the exact float layout is:
+Phase 3's only scalar registers are Demux `0x3B70` and `0x3B74`; PDPC/WB scalar registers are absent from that 0x658 MAIN. Those two Demux words exactly match the held preceding Demux calculation. Total: **26/26 exact scalar register instances**.
 
-- `x0 + 0x10`: AWB G gain;
-- `x0 + 0x14`: AWB B gain;
-- `x0 + 0x18`: AWB R gain;
-- `x0 + 0x1C`: `predictiveGain`.
+This is an output comparison only after the producer inputs, formulas and request ordering were independently source/live established. The E006a captured words remain validation evidence, not bootstrap constants.
 
-The routine independently computes each channel as `round(channel_gain * predictiveGain * 1024)` before Titan680 packing. This pins `predictiveGain` as a first-class request dependence field rather than an inferred constant.
+## Closure
 
-### PDPC311 common calculation — RVA `0x9C07C0`
+The neutral-3A scalar gate is closed:
 
-The existing E006z/E003h proof remains authoritative for the four Q12 AWB ratios and their Titan680 packing. Rear tuning selection is now also source-closed to the inherited Default PDPC record, so the remaining live evidence is the coherent AWB request state and request/phase identity, not a rear-specific tuning override.
+- rear tuning provenance: closed;
+- Demux request-time gain/BLS/channel producer boundary: closed;
+- AWB G/B/R and WB `predictiveGain` producer boundary: closed;
+- PDPC AWB-ratio producer boundary: closed;
+- startup scalar phase/hold schedule: closed;
+- all E006a startup scalar instances reproduced from semantic inputs: 26/26 exact.
 
-## Atomic request boundary available for the live proof
+This does **not** close the complete E008o packet semantic objects. Request-tagged LSC selectors 1/2 and GTM still need their initial semantic inputs, and VFE1 WM16 same-generation IRQ/DMA/IOMMU retirement/lifecycle remains a separate hardware gate.
 
-The exact primary IFE request hook recovered in E003h is valid for this same DeviceMFT image:
+## Next
 
-- `IFENode::ExecuteProcessRequest` complete trigger hook: RVA `0x746F18`;
-- request/frame identity: `qwo(x26 + 0x3EF0)`;
-- complete trigger block: `x26 + 0x3F78`;
-- AWB G/B/R in that trigger block: `+0x3C / +0x40 / +0x44`;
-- request-time sensor/ISP `dGain`: `dwo(x26 + 0x1F7C)`.
+Proceed to the next semantic gate: request-tagged LSC/GTM initial state.
 
-That gives the next live pass one coherent request identity plus the AEC/AWB inputs needed to correlate the common calculations.
-
-## Four-packet identity requirement
-
-E008o/E007y forbid collapsing startup into one mutable neutral state. Each of the four startup packets owns a distinct E007d register state and E007v DMI state. Validation requires startup phase to equal packet index and scalar request ID to equal packet semantic request ID. Request ID is explicit; it is not derived from packet number.
-
-The remaining live closure must therefore prove producer -> common-calculation -> packed scalar for coherent startup/request states, not one arbitrary steady AWB snapshot.
-
-## Next live evidence contract
-
-Use a fresh one-shot E011X identity only after the environment is intentionally returned to Windows:
-
-1. hook the bounded atomic request boundary at `0x746F18`;
-2. correlate the first required startup/request identities with Demux `0x998E70`, WB `0x995E60`, and PDPC `0x9C07C0` or their already-pinned packers;
-3. capture only semantic inputs/outputs needed to prove `dGain`, AWB G/B/R, `predictiveGain`, and request/phase identity;
-4. use fresh KDNET only if user-mode request correlation proves insufficient;
-5. keep raw OEM bytes, process addresses and debugger transcripts private;
-6. privately compare produced scalar/packed outputs against retained E006a startup evidence and publish only aggregate equality plus stable RVAs/scalar relationships.
-
-Neutral-3A remains open until live producer values and four-startup request/phase binding are proved. LSC/GTM remains the following semantic gate. VFE1 WM16 same-generation IRQ/DMA/IOMMU retirement/lifecycle remains separate.
+- LSC: close the first-frame lux/CCT/Tintless inputs feeding the already-clean E007h/E007i producer/handoff.
+- GTM: close the initial TMC TUNE/RUNTIME/COMMON/CTRL/FACE inputs feeding E007p/E007q.
+- Preserve four independent E008o startup packet semantic objects and explicit request tags.
+- Keep VFE1 WM16 same-generation retirement/lifecycle separate.
 
 ## Safety
 
-No native camera module was installed or loaded. No Linux rear camera access, MMIO write, DMI submission, RT-CDM submission or reboot occurred. Native rear ISP runtime remains denied.
+No native Linux rear camera access occurred. No native camera module was installed or loaded. No MMIO write, DMI submission or RT-CDM submission occurred. Native rear ISP runtime remains denied.
