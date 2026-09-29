@@ -21,7 +21,7 @@ def dumps(counter,prefix,items):
 write("common.cmd",dumps("t1","COMMON",[("REGION","@x1",0x1ac),("RESERVE","@x3",0x18),("DEP","@x0",0x160)]))
 write("pack.cmd",dumps("t2","PACK",[("OUT","poi(@x1+0x10)",0x90)]))
 oracle=["r @$t0=0","r @$t1=1","r @$t2=1","r @$t9=0"]
-oracle.append('bp0 QcDeviceMFT8380+0x746f18 ".if (@$t0 < 16) { r @$t9=qwo(@x26+0x3ef0); .printf \\"E011AB_REQ n=%I64u req=%I64u\\n\\",@$t0,@$t9; r @$t0=@$t0+1 } .else { bd 0 }; g"')
+oracle.append('bp0 QcDeviceMFT8380+0x746f18 ".if (@$t0 < 0n16) { r @$t9=qwo(@x26+0x3ef0); .printf \\"E011AB_REQ n=%I64u req=%I64u\\n\\",@$t0,@$t9; r @$t0=@$t0+1 } .else { bd 0 }; g"')
 for bid,rva,counter,script in [(1,"0x9c16b0","t1","common.cmd"),(2,"0xb41090","t2","pack.cmd")]:
     command=f"$$><{win}\\{script}".replace("\\","\\\\")
     oracle.append(f'bp{bid} QcDeviceMFT8380+{rva} ".if (@${counter} <= 8) {{ {command} }} .else {{ bd {bid}; g }}"')
