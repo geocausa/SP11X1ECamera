@@ -1,0 +1,9 @@
+# E011AF — live AEC/context to startup BPC lineage
+
+Status: PREPARED; no E011AF camera session consumed yet. Parent 0e2952a0b81cd4300285d121d26f49bdb8ab1943.
+
+The observer records three BPC calculation inputs, three full selected regions/common outputs, three ordinary nested trigger vectors and mode paths; up to16 source gain/generic-vector producers; and up to32 snapshot metadata returns at each of three gain-selection call sites. It uses11 concrete software breakpoints. Exact AEC, node/input context, shared-vector identity, thread, request tags and event ordering must validate locally on SP11 before any upstream closure claim. Raw records/addresses remain private on SP11. A missing AEC pointer is recorded without dereferencing it; the independent cold Default source seed remains authoritative. Any unreadable/misaligned/ambiguous producer lineage makes that portion inconclusive, not a policy constant.
+
+The holder atomically consumes its identity before WinRT setup/enumeration, waits for explicit held gates, captures original rear Color/VideoRecord NV12 3840x2160 handles, and automatically Stops after30 seconds. Register a manual-only task, initialize/CreateFrameReader before discovering the actual QcDeviceMFT8380 process owner, attach to that owner, verify all11 concrete enabled breakpoints before START.GO. Do not start an idle FrameServer and assume it owns the module. No same-boot camera retry; normal Stop/task removal/reboot returns to persistent Linux-first Golden. Generated observer command files are own code, not original driver content.
+
+E011AE remains the source arithmetic authority. Snapshot metadata context and any IPE QLL override are not inferred from outputs. Live input-to-producer binding, complete E008o composition and independent WM16 same-generation IRQ/DMA/IOMMU retirement remain open. No Linux camera/module/MMIO/DMI/RT-CDM access, IR activation or suspend is authorized by this stage. Golden FullIO v19c remains protected.
