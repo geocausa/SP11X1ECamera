@@ -1,0 +1,76 @@
+{
+  "schema": "E011R-rear-awbstats-usecase-request-bridge-v1",
+  "parent_git_revision": "14133f6e820dac1b61ece91d4855f0383bcbb951",
+  "status": "source_live_exact_request_property_bridge_closed_usecase_shared_producer_relationship_closed",
+  "properties": {
+    "usecase_awb_stats_control": {
+      "id": "0x5000001D",
+      "name": "PropertyIDUsecaseAWBStatsControl",
+      "payload_bytes": 128,
+      "prepublish_container_rva": "0x831510",
+      "prepublish_write_callsite_rva": "0x831E00"
+    },
+    "request_awb_stats_control": {
+      "id": "0x3000000D",
+      "name": "PropertyIDAWBStatsControl",
+      "payload_bytes": 128,
+      "descriptor_data_rva": "0x840E58",
+      "descriptor_value": "0x803000000D",
+      "cawbioutil_output_descriptor_qword_index": "0x5BF",
+      "cawbioutil_output_descriptor_byte_offset": "0x2DF8",
+      "cawbioutil_output_buffer_qword_index": "0x5FD",
+      "cawbioutil_output_buffer_byte_offset": "0x2FE8"
+    }
+  },
+  "shared_internal_source": {
+    "cawbioutil_bg_config_offset": "0xCB4",
+    "relationship": "UsecaseAWBStatsControl and request AWBStatsControl are independently materialized from the same CAWBIOUtil internal BG configuration; no direct usecase-to-request memcpy is claimed"
+  },
+  "request1_producer": {
+    "execute_process_request_rva": "0x82EF50",
+    "fill_bg_callsite_rva": "0x82FA60",
+    "fill_bg_helper_rva": "0x846020",
+    "fill_bg_return_rva": "0x82FA64",
+    "request_id": 1,
+    "output_zero_at_helper_entry": true,
+    "output_normal_at_helper_return": true,
+    "normal_record": {
+      "horizontal_regions": 64,
+      "vertical_regions": 48,
+      "effective_roi": [0, 0, 4064, 2286],
+      "thresholds": ["0x3c3fe", "0x3c3fe", "0x3c3fe", "0x3c3fe"],
+      "adjacent_mode_word": "0x12"
+    }
+  },
+  "get3a_consumer": {
+    "get3a_frame_config_rva": "0x741570",
+    "get_data_list_callsite_rva": "0x7418E8",
+    "property_array_group": ["0x3000000C", "0x3000000D", "0x3000000E", "0x3000000F"],
+    "awb_property_index": 3,
+    "awb_source_load_rva": "0x741BA8",
+    "request_first_store_rva": "0x741BC8",
+    "request_awbbg_offset": "0xCF8",
+    "request_id": 1,
+    "source_payload_matches_request1_producer": true,
+    "metadata_pool_pointer_aliases_producer_buffer": false
+  },
+  "later_request_dependency": {
+    "get_dependencies_rva": "0x830EE0",
+    "property_id": "0x3000000D",
+    "offset_requests": 1,
+    "conditional": true
+  },
+  "capture": {
+    "session": "E011R-0732A",
+    "holder_script_sha256": "7DB2B3C15AE13E06BD6B6779E4695A7C2AA828661FA18B4A6D4B586F8314D056",
+    "start_success": true,
+    "valid_rear_4k_handles": 446,
+    "stop_success": true,
+    "breakpoints_cleared": true
+  },
+  "safety": {
+    "native_rear_isp_runtime_authorized": false,
+    "native_module_install_or_load": false,
+    "rtcdm_submit": false
+  }
+}
