@@ -25,7 +25,7 @@ def select(intervals,value):
             return index,index+1,f32((float(value)-float(end))/(float(next_start)-float(end)))
     raise AssertionError("validated nonempty interval list exhausted")
 
-def source_intervals(authority,root):
+def source_intervals(authority,root,*,with_prefix=False):
     """Decode the proven 1 -> 1 -> 6 serialized trigger shape, retaining leaf IDs."""
     def data(sid,kind):
         symbol=authority.symbols[sid]
@@ -36,6 +36,7 @@ def source_intervals(authority,root):
     if len(raw)!=136:raise ValueError("root layout changed")
     count,sid=struct.unpack_from("<2I",raw,128)
     if count!=1:raise ValueError("root must have one outer trigger")
+    prefix=[]
     for kind,expected_children in (("mod_bpcabf41_trigger_data",1),("trigger",6)):
         raw=data(sid,kind)
         if len(raw)!=24:raise ValueError("singleton trigger layer changed")
@@ -43,6 +44,7 @@ def source_intervals(authority,root):
         if not all(math.isfinite(x) for x in (start,end)) or start>end:
             raise ValueError("outer interval domain")
         if children!=expected_children or regions!=0:raise ValueError("singleton shape changed")
+        prefix.append((start,end))
         sid=child
     raw=data(sid,"trigger")
     if len(raw)!=6*24:raise ValueError("six-terminal-trigger layout changed")
@@ -57,7 +59,8 @@ def source_intervals(authority,root):
     # Exercise the domain checks without introducing a selection policy.
     select(intervals,intervals[0][0])
     if len(set(leaves))!=6:raise ValueError("duplicate terminal leaf")
-    return tuple(intervals),tuple(leaves)
+    result=(tuple(intervals),tuple(leaves))
+    return (*result,tuple(prefix)) if with_prefix else result
 
 def produce(authority,modes,exposure_value):
     """Exposure scalar is caller-owned until request provenance is verified."""

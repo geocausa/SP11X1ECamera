@@ -28,7 +28,7 @@ def native():
         if word in (0xD503237F,0xD50323FF):uc.reg_write(UC_ARM64_REG_PC,address+4)
         elif word==0xD65F0FFF:uc.reg_write(UC_ARM64_REG_PC,uc.reg_read(UC_ARM64_REG_LR))
     u.hook_add(UC_HOOK_CODE,hook)
-    def run(rows,value,mode):
+    def run(rows,value,mode,raw_vector=None):
         parent=heap;block=heap+0x1000;children=heap+0x2000
         vector=heap+0x3000;values=heap+0x3100;records=heap+0x4000
         u.mem_write(heap,b"\x00"*0x8000)
@@ -43,8 +43,10 @@ def native():
         for i,(start,end) in enumerate(rows):
             u.mem_write(records+i*48+8,struct.pack("<2f",start,end))
             u.mem_write(records+i*48+0x28,struct.pack("<Q",heap+0x8000+i*512))
-        u.mem_write(values,struct.pack("<2f",0,value))
-        u.mem_write(vector,struct.pack("<3Q",values,values+8,values+8))
+        vector_bytes=struct.pack("<2f",0,value) if raw_vector is None else raw_vector
+        if len(vector_bytes)!=8:raise ValueError("two-float ordinary trigger vector required")
+        u.mem_write(values,vector_bytes)
+        u.mem_write(vector,struct.pack("<3Q",values,values+len(vector_bytes),values+len(vector_bytes)))
         for reg,val in ((UC_ARM64_REG_X0,last),(UC_ARM64_REG_X1,parent),
                         (UC_ARM64_REG_X2,children),(UC_ARM64_REG_X3,vector),
                         (UC_ARM64_REG_LR,stop),(UC_ARM64_REG_SP,stack+0xf000)):
