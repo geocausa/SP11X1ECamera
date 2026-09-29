@@ -1,0 +1,61 @@
+{
+  "schema": "E011T-rear-bf-request1-normal-roi-boundary-v1",
+  "parent_git_revision": "271e4c0a",
+  "status": "live_request1_consumer_branch_observed_producer_bridge_open",
+  "pinned_oem_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "prior_e008s": {
+    "packet0_source_closed": true,
+    "packet0_iir_shifts": [
+      -3,
+      0
+    ],
+    "normal_iir_shifts": [
+      3,
+      3
+    ],
+    "roi_count": 25
+  },
+  "static": {
+    "caf_initialize_rva": "0x827940",
+    "caf_execute_rva": "0x8288C0",
+    "af_core_setparam_dispatch_rva": "0x616450",
+    "outer_param15_arm_rva": "0x619910",
+    "haf_settings_handoff_rva": "0x622020",
+    "ife_get3a_rva": "0x741570",
+    "ife_bf_count_check_rva": "0x741C7C",
+    "ife_zero_count_branch_rva": "0x741D08",
+    "ife_hardcode_call_rva": "0x741D38",
+    "ife_hardcode_roi_helper_rva": "0x7637D8"
+  },
+  "live": {
+    "identity": "E011T-0838B",
+    "request_id": 1,
+    "first_observed_order": [
+      "BFStats25::CheckDependenceChange",
+      "CAFStatsProcessor::ExecuteProcessRequest",
+      "IFENode::Get3AFrameConfig BF ROI count check"
+    ],
+    "ife_published_roi_count": 25,
+    "ife_normal_nonzero_branch": true,
+    "kdnet_initial_connection": true,
+    "kdnet_breakin_completed": false,
+    "local_cdb_fallback": true,
+    "start_status": "Success",
+    "valid_4k_handles": 618,
+    "stop": "PASS",
+    "breakpoints_cleared": true,
+    "debugger_detached": true
+  },
+  "open": [
+    "exact 25-ROI request property producer and validity",
+    "whether packet-0 hardcode path occurs separately before observed normal request-1 consumer",
+    "neutral-3A and LSC/GTM gates",
+    "VFE1 WM16 same-generation IRQ/DMA/IOMMU retirement"
+  ],
+  "safety": {
+    "native_rear_isp_runtime_authorized": false,
+    "native_module_install_or_load": false,
+    "rtcdm_submit": false,
+    "private_logs_in_git": false
+  }
+}
