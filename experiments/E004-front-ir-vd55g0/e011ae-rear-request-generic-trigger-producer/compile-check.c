@@ -55,6 +55,25 @@ int main(int argc, char **argv)
 	struct e011ae_rear_startup_bpc_source source = {0};
 	struct e008o_rear_semantic_set set, prior;
 	unsigned int p;
+	if (argc == 2 && strcmp(argv[1], "bind-source") == 0) {
+		if (fread(source.common, sizeof(source.common), 1, stdin) != 1) return 5;
+		for (p = 0; p < 3; p++) source.source_request_id[p] = p;
+		init_set(&set); /* Explicit host materializer fixture identities 4/5/6/7. */
+		if (e011ae_rear_bind_startup_bpc(&set, &source)) return 6;
+		if (set.sealed) return 7;
+		for (p = 0; p < E007Y_STARTUP_PACKETS; p++) {
+			u32 words[ARRAY_SIZE(e007a_bpcabf411_closed_regs)];
+			unsigned int i;
+			if (set.packet[p].ready || set.packet[p].request_id != 4 + p ||
+			    set.packet[p].regs.scalar.request_id != 4 + p ||
+			    set.packet[p].regs.unrelated_marker != 0x100 + p) return 8;
+			for (i = 0; i < ARRAY_SIZE(words); i++)
+				if (e007a_bpcabf411_lookup(&set.packet[p].regs.bpcabf,
+						e007a_bpcabf411_closed_regs[i], &words[i])) return 9;
+			if (fwrite(words, sizeof(words), 1, stdout) != 1) return 10;
+		}
+		return 0;
+	}
 	if (argc == 2 && strcmp(argv[1], "pack") == 0) {
 		struct e007a_bpcabf411_calc_state state;
 		_Static_assert(sizeof(state) == 34, "semantic wire shape changed");
