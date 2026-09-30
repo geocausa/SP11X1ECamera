@@ -1,3 +1,13 @@
+## E011AM full offline startup comparison — ZERO DIFFERENCES / ARM64 BUILD PASS
+
+Portable integer RS production now removes all seven remaining differences. Both original ARM64 adjustment and clean C match4,387 cases/35,096 fields per compiler; all three sampled pack shifts match original state+0x130. The detached binder preserves caller tags and unrelated modules, with70 binder and14 producer negatives. RS source schedule is0/1/2/2; all12 present RS register instances match.
+
+The full four-phase provider replay now has zero semantic register differences:[0,0,0,0]. Prior BG, weights/quad, scalar, BF ROI/gamma, BPC and LSC/GTM/GIC checks remain exact. GCC and Clang ASan/UBSan each pass509,829 assertions. A fresh isolated ARM64 W=1 build has zero warnings, moduleSHA85c318c424d5b3380f884c2e28893dbe28d49c233c4d0874de9a95cd058a3d25, never installed/loaded.
+
+This is offline parity conditional on independently observed semantic inputs. Cold BG weights/quad initialization, normal RS/AFD count policy and whole-frame zero-offset authority remainOPEN. Stripe policy is unsupported. Complete deterministic E008o bootstrap without observed caller inputs, explicit inactive cold gamma policy and independent WM16 same-generation IRQ/DMA/IOMMU retirement remainOPEN. Zero numeric differences do not authorize live rear ISP; runtime staysDENIED.
+
+NEXT source-close the remaining caller-policy origins and inactive cold gamma before composing a complete deterministic bootstrap; independently prove WM16 retirement before any live rear ISP run. Golden boot b74c0760-83bb-421f-ac4d-1efa4e297294 stays idle, saved FullIOv19c, next_entry empty, NTFS unmounted. No camera/boot/sleep/MMIO/submission or platform change. See [E011AM](experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/README.md), RESULT, ARITHMETIC-SAFE, INTEGRATION-SAFE and BUILD-SAFE. E011AM and all prior one-use builders remain consumed.
+
 ## E011AL Bayer-grid weight/quad integration — PRIVATE PARITY AND ARM64 BUILD PASS
 
 Portable integer L4 quantization now produces AEC Q4 luminance weights and the AWB quad flag from E011AK semantic input records. Both original ARM64 pack functions match2,164 cases/8,656 fields per sanitizer compiler, including exact rounding boundaries. The detached binder validates both source identities and every caller startup tag before mutation;35 binding and22 producer negatives preserve output/state. It changes only AEC weights and AWB quad.
