@@ -1,3 +1,13 @@
+## E011AV source-derived cold AWB quad — BOUNDED OFFLINE PASS
+
+The clean integer decoder now derives the initial AWB quad from the independently parsed bgStatsConfigV1 v1.0 Default root, rather than a captured cold flag or constant. Three SHA-pinned applicable tuning files have one named 93-byte Default root each and the same quad1. Original immutable scalar-reader execution agrees across137 inputs/28 scalar bytes, including quad0 mutations;12 malformed source-authority cases are rejected. E011AU independently proves the live source-to-retained lineage.
+
+The full E011AS composer/E011AR preflight now passes using this source flag. A deliberately invalid cold input byte255 must be overwritten by the C decoder before binding. GCC/Clang ASan/UBSan each pass510,374 assertions, with packet differences0/0/0/0. Captured cold AEC weights and normal semantic inputs remain in use. No new kernel build or runtime action occurred.
+
+Closure is bounded to this scalar and three qualified Default roots: exact loaded tuning filename, full aggregate deserialization and whole-profile materialization remainOPEN. Metadata/name/security/allocation helpers are stubbed in the owned-memory scalar fixture; the aggregate tail is excluded. Do not promote this to complete bootstrap or Linux optical parity. Protected Golden boot25999320-3114-4f2c-bbce-a6335b0e2046 and all three payload hashes are unchanged; camera remains idle.
+
+NEXT independently derive cold AEC weights, resolve RS normal count/offset policy authority and source-selection requirements, then final deterministic startup preflight and independent WM16 same-generation IRQ/consumed-IOVA/DMA/IOMMU retirement proof. Native rear Linux runtime remainsDENIED. Do not repeat the verified AWB writer/GetParam2 copy or hardcode1. See experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/README.md, SCALAR-SAFE, INTEGRATION-SAFE and RESULT. Raw tuning/originals remain private on SP11.
+
 ## E011AU named AWB configuration writer — LIVE PASS / GOLDEN RETURNED
 
 Fresh Run B E011AU-20260930-2327B completed one successful Start, 713 valid rear4K handles and clean Stop. The actual original DeviceMFT module was qualified at its load event with three exact code ranges before the CreateAWBAlgorithm probe was armed. Create/configuration occurred during StartAsync, after InitializeAsync completed: the earlier pre-Init timing hypothesis is corrected.
