@@ -1,3 +1,9 @@
+## E011AU pre-Init AWB writer — RUN A INCONCLUSIVE / FRESH RUN B PREPARED
+
+Run A E011AU-20260930-2000A initialized the original rear camera but never released START.GO. The manually started FrameServer service twice terminated/replaced its idle host; the actual DeviceMFT owner initialized outside the attached process, so no writer event was captured. Both user-mode CDB sessions detached/exited0, the manual task was stopped/removed, and normal reboot returned protected Golden boot c0667dd5-a17d-4531-8fd1-21e20530deb2. No first-writer/value-policy closure is claimed.
+
+Fresh Run B E011AU-20260930-2327B shortens the idle window: prepare holder first, then start FrameServer and attach user-mode CDB, release enumeration and initialization immediately after debugger readiness, and qualify the original loaded module at its load event before arming the CreateAWBAlgorithm probe. No same-boot camera retry. Static exact writer and original source hashes remain valid; native rear Linux runtime stays DENIED. See E011AU README, RUN-A-SAFE and PREPARE-B-SAFE. Run A is consumed.
+
 ## E011AT AWB SetParam retained BG — CALLBACK EXCLUDED / GOLDEN RETURNED
 
 One original Windows rear 4K run completed 714 valid handles, one successful Start and clean Stop. User-mode CDB explicitly detached/exited0 and the manual task was removed. The live original CAWBMain::AWBSetParameter callback is RVA68C090 through wrapper+28 -> actor+0 -> vtable+08; its same-thread return result is0 and the40-byte parameter record matches the outer call.

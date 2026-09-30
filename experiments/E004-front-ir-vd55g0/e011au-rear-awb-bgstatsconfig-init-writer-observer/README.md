@@ -9,3 +9,7 @@ The SetParam wrapper RVA 0x681C40 only validates wrapper/parameter pointers, wri
 The live observer is intentionally armed before MediaCapture.InitializeAsync. It targets the CreateAWBAlgorithm call, the exact post-lookup point and the post-population point; it will compare the selected bgStatsConfigV1 source against the retained actor record. The FrameServer service must be started and user-mode CDB attached with the deferred breakpoint before PREINIT.GO is released. One camera Start/Stop remains the maximum for the fresh identity.
 
 No kernel debugger, BCD change, Linux camera runtime, production source change or native rear activation is authorized. Raw code, process bytes and captures remain private on SP11. The exact numeric profile/value is still pending live qualification; do not hardcode quad=1 from static control flow alone.
+
+## First attempt and corrected preparation
+
+Run A consumed without streaming: FrameServer replaced both idle manually started hosts before the DeviceMFT owner initialized. No writer event; no live source-policy closure. Both CDB sessions detached and exited0; task stopped/removed; Golden returned. Run B is fresh and uses immediate enumeration/initialization release after attachment, with a module-load qualification hold before the create-call probe. See RUN-A-SAFE.json and PREPARE-B-SAFE.json.
