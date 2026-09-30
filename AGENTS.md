@@ -1,3 +1,11 @@
+## E011AS explicit inactive cold gamma — OFFLINE / ARM64 BUILD PASS
+
+The cold gamma gate is now closed for the bounded four-packet startup. Four additive provider derivatives and a kernel-compilable producer express inactive gamma without a dummy table. Cold selector2 production is skipped/rejected, normal gamma remains required, and packet/register/activity contradictions fail closed. The actual full composer and E011AR preflight use the explicit absence producer.
+
+GCC/Clang ASan/UBSan each pass510,371 assertions with zero differences0/0/0/0. Nine activity negatives,38 atomic policy negatives,32 nonzero inactive-LUT negatives and9 producer-failure zeroing cases pass. Fresh isolated ARM64 W=1 v2 build haszero warnings; moduleSHA41d169f5d5d9f24cf429a6e922eca49899a5c60b9034965ea9810da97935959e, separately hash/vermagic checked via Fabric. First build preparation failed before compiler due to a host-only seed dependency; v2 is separate. Both builders/preparer consumed. No install/load/runtime/reboot/sleep/MMIO; Golden bootc0e263ed-7319-4f69-8f10-4d51f20cd1a1 remains idle.
+
+NEXT remaining deterministic startup policy origins: E011AQ retained AWB BG initialization, AEC cold weights and RS count/offset authority. Then final full bootstrap/preflight and independent WM16 same-generation IRQ/IOVA/DMA/IOMMU retirement proof. Do not reopen the inactive cold gamma gate or repeat the closed GetParam2 copy. Native rear runtime DENIED; no live optical improvement claimed. See [E011AS](experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/README.md), INTEGRATION-SAFE, BUILD-SAFE, AUDIT-SAFE, BUILD-ATTEMPTS-SAFE and RESULT.
+
 ## E011AR packet-isolated Linux runner — BUILD-ONLY PASS
 
 The new unreachable runner now consumes four E008o packet semantic records and Linux-owned command backing, replacing the archived shared-state runner shape. Materialization completes before owner acquisition/exposure; exposed commands are never rewritten. The consumed wrapper pins uncertain DMA and requires reboot after exposure. Partial RT-CDM/BUS/CSID/CSIPHY/sensor starts enter conservative emergency-stop paths before the attempt.
