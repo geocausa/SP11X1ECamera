@@ -1,3 +1,13 @@
+## E011AU named AWB configuration writer — LIVE PASS / GOLDEN RETURNED
+
+Fresh Run B E011AU-20260930-2327B completed one successful Start, 713 valid rear4K handles and clean Stop. The actual original DeviceMFT module was qualified at its load event with three exact code ranges before the CreateAWBAlgorithm probe was armed. Create/configuration occurred during StartAsync, after InitializeAsync completed: the earlier pre-Init timing hypothesis is corrected.
+
+Three events match the same thread/actor. All92 retained BG bytes are stable from create-call to lookup return; quad is0 before population. The selected bgStatsConfigV1 source remains byte-identical across96 bytes, has quad1 at source+20, and the retained actor has1 at+FB798 after the source-identified store688290. Nine private records/716 bytes validate with zero capture-command diagnostics. This closes the live named-config-to-retained-field lineage for the sampled startup, NOT independent source-profile materialization or complete deterministic bootstrap.
+
+Run A is consumed/inconclusive without START.GO; both idle manually started FrameServer hosts were replaced before actual initialization. Fresh B used immediate gate release (0.130029s after debugger readiness), then a module-load qualification hold. B user-mode CDB detached/exited0 and manual task was removed. Normal reboot returned protected Golden Linux7.1.5-sp11-render-parity-v4+, boot25999320-3114-4f2c-bbce-a6335b0e2046, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle; all three Golden payload hashes unchanged.
+
+NEXT independently derive/materialize the selected bgStatsConfigV1 source profile (never hardcode1 or use captured source bytes as producer inputs), independent AEC cold weights and RS count/offset authority, then final full startup preflight and independent WM16 same-generation IRQ/consumed-IOVA/DMA/IOMMU retirement proof. Native rear Linux runtime remainsDENIED. Do not repeat the verified GetParam2 copy or SetParam exclusion, reuse either AU identity or activate any rear candidate. See E011AU README, RESULT, VALIDATION-SAFE and validate-private.py. Raw records/originals stay private on this SP11.
+
 ## E011AU pre-Init AWB writer — RUN A INCONCLUSIVE / FRESH RUN B PREPARED
 
 Run A E011AU-20260930-2000A initialized the original rear camera but never released START.GO. The manually started FrameServer service twice terminated/replaced its idle host; the actual DeviceMFT owner initialized outside the attached process, so no writer event was captured. Both user-mode CDB sessions detached/exited0, the manual task was stopped/removed, and normal reboot returned protected Golden boot c0667dd5-a17d-4531-8fd1-21e20530deb2. No first-writer/value-policy closure is claimed.
