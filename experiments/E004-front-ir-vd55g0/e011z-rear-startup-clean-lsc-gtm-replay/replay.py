@@ -76,10 +76,13 @@ def clean_lsc():
 
 def clean_gtm():
     J = load(GTM_FILE, "e011z_gtm")
-    domain = J.load_domain(GTM_FILE.parent)
-    # Source-locked pre-valid-TMC GTM region: 257 points, all 4096.0.
-    # Pack through the same clean Titan680 GTM packer used for normal GTM.
-    wire = J.pack_gtm([4096.0] * 257, J.titan_grid(domain))
+    # Source-locked pre-valid-TMC curve is flat: every slope is zero.
+    # Its packed output is independent of the interpolation coordinate grid.
+    # Supply a canonical increasing grid; no private normal-TMC domain is needed.
+    curve = [4096.0] * 257
+    wire = J.pack_gtm(curve, list(range(257)))
+    if J.pack_gtm(curve, [float(i * i) for i in range(257)]) != wire:
+        raise RuntimeError("flat startup GTM unexpectedly depends on coordinate grid")
     got = sha(wire)
     if got != EXPECTED["gtm_startup"]:
         raise RuntimeError(f"startup GTM hash drift: {got}")

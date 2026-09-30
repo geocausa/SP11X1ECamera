@@ -46,7 +46,7 @@ def source_anchors():
         ins=next(cs.disasm(pe.get_data(rva,4),rva));assert (ins.mnemonic,ins.op_str)==expected
     return len(anchors)
 
-def main():
+def main(return_source=False):
     anchor_count=source_anchors()
     cap=PRIVATE/"capture";text=(PRIVATE/"cdb-observer.raw").read_text(errors="replace")
     safe=json.loads((PRIVATE/"RUN-SAFE.json").read_text(encoding="utf-8-sig"))
@@ -214,5 +214,7 @@ def main():
         "repair_in_same_held_session":True,"camera_retry":False,
         "complete_e008o_composition_closed":False,"wm16_retirement_closed":False,
         "native_rear_linux_runtime_allowed":False,"raw_source_or_capture_values_exported":False}
+    if return_source:
+        return source
     print(json.dumps(report,indent=2))
 if __name__=="__main__":main()

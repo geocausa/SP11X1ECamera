@@ -69,3 +69,5 @@ VFE1 WM16 same-generation IRQ/DMA/IOMMU retirement/lifecycle remains a separate 
 ## Safety
 
 Offline only. No module install/load, Linux camera access, MMIO, DMI submission or RT-CDM submission occurred. Native rear ISP runtime remains denied.
+
+E011AG integration portability note: the flat startup curve has zero slopes, so the clean packer output is independent of coordinate-grid values. Replay now supplies a canonical increasing grid, checks an irregular grid for the same result, and checks the existing startup hash. It does not need the private normal-TMC domain binary; normal adaptive GTM is unchanged.
