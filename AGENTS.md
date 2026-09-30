@@ -1,3 +1,7 @@
+## E011AQ delegate/retained BG — PREPARED
+
+Fresh E011AQ-20260930-1740A not consumed. Five outer probes resolve before Start; GetParam2 stops for correct vtable callback and nested descriptor qualification, then three inner one-shot probes arm before the call. Compare retained BG92 with IO before/after PopulateOutput. One Start/Stop, user CDB detach/exit0/task removal and Golden return; original records private. Numeric policy/WM16 retirement OPEN; native rear runtime DENIED. See E011AQ README/PREPARE-SAFE. No Linux camera/build/kernel debugging/BCD changes.
+
 ## E011AP earlier AWB calls — GETPARAM2 TRANSITION VERIFIED / GOLDEN RETURNED
 
 One Windows run completed866 valid4K frame handles, clean Stop, explicit user-mode CDB detach/exit0 and task removal. Eight resolved one-shot probes ran; GetParam2 deliberately stopped for qualification. No capture diagnostics occurred. Quad stayed0 and all92 BG bytes stayed identical through SetParam; GetParam2 at831920/831924 returned0 on the same thread/processor, changing29 bytes and setting quad1. Its after record equals pre-selector12 across92 bytes; publication and first cold request1 carry1. Numeric value policy remainsOPEN.
