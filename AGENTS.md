@@ -1,3 +1,7 @@
+## E011AP earlier AWB boundaries — PREPARED
+
+Fresh E011AP-20260930-1640A is not yet consumed. Eight one-shot user-mode probes bracket SetParam and GetParam2 before the already excluded selector12. GetParam2 deliberately stops for wrapper/delegate qualification. No leading conditional handler guards; no unattended qualification claimed. Attach the actual loaded MFT owner after InitializeAsync, resolve every probe before one Start, then clean Stop/detach/task removal and Golden return. Original records remain private on SP11; no kernel debugger, BCD change, Linux camera run or build. Native rear runtime DENIED; cold value policy/WM16 retirement OPEN. See E011AP README/PREPARE-SAFE.
+
 ## E011AO AWB initialization — LIVE ORIGIN NARROWED / GOLDEN RETURNED
 
 One original Windows capture completed 859 valid 4K frame handles and a clean Stop. Both user-mode CDB sessions explicitly detached/exited 0; the manual-only task was removed. The actual driver owner had five resolved probes before Start after FrameServer replaced its initial process.
