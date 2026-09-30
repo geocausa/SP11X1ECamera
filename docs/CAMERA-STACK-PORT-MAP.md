@@ -1,3 +1,11 @@
+## E011AT AWB SetParam retained BG — CALLBACK EXCLUDED / GOLDEN RETURNED
+
+One original Windows rear 4K run completed 714 valid handles, one successful Start and clean Stop. User-mode CDB explicitly detached/exited0 and the manual task was removed. The live original CAWBMain::AWBSetParameter callback is RVA68C090 through wrapper+28 -> actor+0 -> vtable+08; its same-thread return result is0 and the40-byte parameter record matches the outer call.
+
+The actor's92-byte retained BG already has quad1 at callback entry and remains byte-identical through callback return, outer return, pre-GetParam2 and the later sampled helper689228. Publication5000001D/size128 and first request1 consumer carry1. Thus callback68C090 is not the cold initializer. The generated outer handler had one excess dereference, so its outer object/code/IO dumps are excluded; the chain was corrected while the same call remained held. The ARM64 data watch had no free slot and was removed, so no first writer is claimed.
+
+NEXT bracket the wrapper from entry681C40 through pre-dispatch83180C, then construction/configuration if quad is already1 at wrapper entry. Do not repeat68C090 or hardcode1. Golden Linux7.1.5-sp11-render-parity-v4+ boot25a899ad-ae69-418f-86fb-d110b5bd84d0 is idle, saved FullIOv19c, next_entry empty and NTFS unmounted. Cold AEC weights, exact AWB retained initialization, RS count/offset authority, final bootstrap and WM16 retirement proof remainOPEN; native rear runtime DENIED. See [E011AT](../experiments/E004-front-ir-vd55g0/e011at-rear-awb-setparam-retained-bg-observer/README.md), VALIDATION-SAFE and RESULT. Identity consumed.
+
 ## E011AS explicit inactive cold gamma — OFFLINE / ARM64 BUILD PASS
 
 The cold gamma gate is now closed for the bounded four-packet startup. Four additive provider derivatives and a kernel-compilable producer express inactive gamma without a dummy table. Cold selector2 production is skipped/rejected, normal gamma remains required, and packet/register/activity contradictions fail closed. The actual full composer and E011AR preflight use the explicit absence producer.
