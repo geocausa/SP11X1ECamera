@@ -1,3 +1,13 @@
+## E011AL Bayer-grid weight/quad integration — PRIVATE PARITY AND ARM64 BUILD PASS
+
+Portable integer L4 quantization now produces AEC Q4 luminance weights and the AWB quad flag from E011AK semantic input records. Both original ARM64 pack functions match2,164 cases/8,656 fields per sanitizer compiler, including exact rounding boundaries. The detached binder validates both source identities and every caller startup tag before mutation;35 binding and22 producer negatives preserve output/state. It changes only AEC weights and AWB quad.
+
+The full composer now matches all four previously different weight/quad register instances. Remaining differences drop11->7, by phase1/3/3/0, exclusively RS_STATS14. Prior36 BG geometry/threshold and26 scalar register instances, BF ROI/gamma, BPC and LSC/GTM/GIC comparisons remain exact. GCC and Clang ASan/UBSan each pass509,582 assertions. A fresh isolated ARM64 W=1 build passes zero warnings, moduleSHA1b510b04dd119bd5c1e978b54829794bf02e7f0447c79f960e3e829cc0934f10, not installed or loaded.
+
+Cold weights/quad are caller-owned observed consumer inputs: their initialization policy is stillOPEN. Normal producer field handoffs are source-verified. Later holds are detached state only because packets2/3 do not emit BG ranges. Complete source-produced E008o startup, explicit inactive cold gamma policy and independent WM16 same-generation retirement remainOPEN; native rear ISP DENIED. No Linux camera start, boot/sleep/MMIO/submission or platform change occurred.
+
+NEXT source-close normal RS count policy and exact shift binding, implement portable RS production and require zero remaining differences. Cold weight/quad initialization authority also remains required for complete bootstrap. Golden boot b74c0760-83bb-421f-ac4d-1efa4e297294 stays idle, saved FullIOv19c, next_entry empty, NTFS unmounted. See [E011AL](../experiments/E004-front-ir-vd55g0/e011al-rear-bg-weight-quad-integration/README.md), RESULT, ARITHMETIC-SAFE, INTEGRATION-SAFE and BUILD-SAFE. Never rerun the consumed E011AL or previous one-use builders.
+
 ## E011AK Windows statistics inputs — VALIDATED, PORTABLE INTEGRATION NEXT
 
 Fresh consumed E011AK-20260930-1025A completed one Start/Stop with860 valid4K handles. Nine probes resolved to the actual DeviceMFT owner before Start;49 bounded input events/106 private files were verified. Original ARM64 arithmetic privately reproduces40 BG geometry/threshold fields and21 RS count/color/region/offset fields. Eight AEC producer snapshots match24 normal weight fields; eight AWB producer snapshots match8 quad fields. Producer request labels are last observed IFE hooks, not independent AEC/AWB request identities.
