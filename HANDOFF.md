@@ -1,3 +1,11 @@
+## E011AR packet-isolated Linux runner — BUILD-ONLY PASS
+
+The new unreachable runner now consumes four E008o packet semantic records and Linux-owned command backing, replacing the archived shared-state runner shape. Materialization completes before owner acquisition/exposure; exposed commands are never rewritten. The consumed wrapper pins uncertain DMA and requires reboot after exposure. Partial RT-CDM/BUS/CSID/CSIPHY/sensor starts enter conservative emergency-stop paths before the attempt.
+
+GCC/Clang sanitizer lifecycle tests each pass4,091 assertions with58 injected failing operations; these providers simulate hardware contracts. The exact preflight with the real composer each passes510,045 assertions and zero differences0/0/0/0. Fresh isolated ARM64 W=1 build haszero warnings; moduleSHA5545aaff892fb87eade9be4e1168f391b6cc76dab9ccd88aa213fec4b0f31604, separately hash/vermagic checked through Fabric. No install/load/runtime/boot/sleep/MMIO change. Golden bootc0e263ed-7319-4f69-8f10-4d51f20cd1a1 remains idle. Builder/preparer consumed.
+
+NEXT complete deterministic startup policy origins (E011AQ upstream retained BG, AEC weights, RS count/offset authority) and explicit inactive cold gamma, then final integrated preflight audit and independent WM16 same-generation IRQ/IOVA/DMA/IOMMU retirement proof. Native rear runtime DENIED; do not activate the candidate or old E008n shared-state runner. See [E011AR](experiments/E004-front-ir-vd55g0/e011ar-rear-packet-isolated-runner/README.md), LIFECYCLE-SAFE, INTEGRATION-SAFE, BUILD-SAFE and RESULT. This checkpoint changes integration code; Linux optical/image quality remains unproven.
+
 ## E011AQ AWB delegate/retained BG — LIVE COPY VERIFIED / GOLDEN RETURNED
 
 One Windows run completed 711 valid4K frame handles, clean Stop, explicit CDB detach/exit0 and task removal. Five outer probes resolved before Start; three inner probes resolved after manual qualification, before the same GetParam2 call. Eight events/26 private records/2720 bytes validate. Two mistaken pre-capture input-as-list qualification queries are retained; corrected output1 capture has zero diagnostics. No camera retry or unattended qualification claim.

@@ -1,3 +1,11 @@
+## E011AR packet-isolated Linux runner — BUILD-ONLY PASS
+
+The new unreachable runner now consumes four E008o packet semantic records and Linux-owned command backing, replacing the archived shared-state runner shape. Materialization completes before owner acquisition/exposure; exposed commands are never rewritten. The consumed wrapper pins uncertain DMA and requires reboot after exposure. Partial RT-CDM/BUS/CSID/CSIPHY/sensor starts enter conservative emergency-stop paths before the attempt.
+
+GCC/Clang sanitizer lifecycle tests each pass4,091 assertions with58 injected failing operations; these providers simulate hardware contracts. The exact preflight with the real composer each passes510,045 assertions and zero differences0/0/0/0. Fresh isolated ARM64 W=1 build haszero warnings; moduleSHA5545aaff892fb87eade9be4e1168f391b6cc76dab9ccd88aa213fec4b0f31604, separately hash/vermagic checked through Fabric. No install/load/runtime/boot/sleep/MMIO change. Golden bootc0e263ed-7319-4f69-8f10-4d51f20cd1a1 remains idle. Builder/preparer consumed.
+
+NEXT complete deterministic startup policy origins (E011AQ upstream retained BG, AEC weights, RS count/offset authority) and explicit inactive cold gamma, then final integrated preflight audit and independent WM16 same-generation IRQ/IOVA/DMA/IOMMU retirement proof. Native rear runtime DENIED; do not activate the candidate or old E008n shared-state runner. See [E011AR](../experiments/E004-front-ir-vd55g0/e011ar-rear-packet-isolated-runner/README.md), LIFECYCLE-SAFE, INTEGRATION-SAFE, BUILD-SAFE and RESULT. This checkpoint changes integration code; Linux optical/image quality remains unproven.
+
 ## E011AQ AWB delegate/retained BG — LIVE COPY VERIFIED / GOLDEN RETURNED
 
 One Windows run completed 711 valid4K frame handles, clean Stop, explicit CDB detach/exit0 and task removal. Five outer probes resolved before Start; three inner probes resolved after manual qualification, before the same GetParam2 call. Eight events/26 private records/2720 bytes validate. Two mistaken pre-capture input-as-list qualification queries are retained; corrected output1 capture has zero diagnostics. No camera retry or unattended qualification claim.
@@ -6,7 +14,7 @@ Actual original callback68E5A0 (CAWBMain::AWBGetParameter) and all six vtable ta
 
 NEXT trace upstream retained BG initialization: source SetParam wrapper681C40 -> actor/vtable slot08 ->68C090; tuning/mode helper689228 references bgStatsConfigV1. SetParam IO preservation does not exclude retained-record writes. Trace registration/configuration/construction and bracket retained BG there; do not repeat GetParam2 copy or hardcode1. Numeric initialization policy/full bootstrap/WM16 retirement OPEN; native rear runtime DENIED.
 
-Golden boot c0e263ed-7319-4f69-8f10-4d51f20cd1a1, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. No production C/build/Linux runtime/kernel debug/BCD/MMIO change; offline parity remains0/0/0/0 conditional on input records. See [E011AQ](experiments/E004-front-ir-vd55g0/e011aq-rear-awb-delegate-bg-observer/README.md), VALIDATION-SAFE, COPY-SAFE, SOURCE-SAFE and RESULT. Identity/builders consumed.
+Golden boot c0e263ed-7319-4f69-8f10-4d51f20cd1a1, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. No production C/build/Linux runtime/kernel debug/BCD/MMIO change; offline parity remains0/0/0/0 conditional on input records. See [E011AQ](../experiments/E004-front-ir-vd55g0/e011aq-rear-awb-delegate-bg-observer/README.md), VALIDATION-SAFE, COPY-SAFE, SOURCE-SAFE and RESULT. Identity/builders consumed.
 
 ## E011AP earlier AWB calls — GETPARAM2 TRANSITION VERIFIED / GOLDEN RETURNED
 
@@ -14,7 +22,7 @@ One Windows run completed866 valid4K frame handles, clean Stop, explicit user-mo
 
 Delegate correction: wrapper+28 -> object+0 -> vtable+10. The direct object+10 target read is excluded; input descriptors are16 bytes, so the extra40-byte input-table tail is also excluded.18 files/1824 bytes yield17 valid source records/1656 bytes. Both original wrapper targets match128 bytes. Captured object points to original vtable133A390; pinned source candidate GetParam68E5A0 is CamX::CAWBMain::AWBGetParameter, not yet live callback-code verified. Next capture the actual slot/code and nested type2/12-byte input payload, then trace retained BG initialization. Do not hardcode1.
 
-Golden bootf4982efd-f612-4819-b1f5-de4820807375, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. No production C/build/Linux runtime/kernel debug/BCD/MMIO change. Offline parity remains0/0/0/0 conditional on source inputs. Exact cold value policy/full deterministic bootstrap and independent WM16 retirement OPEN; native rear runtime DENIED. See [E011AP](experiments/E004-front-ir-vd55g0/e011ap-rear-awb-earlier-call-observer/README.md), VALIDATION-SAFE, ORIGIN-SAFE and RESULT. Identity/builders consumed.
+Golden bootf4982efd-f612-4819-b1f5-de4820807375, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. No production C/build/Linux runtime/kernel debug/BCD/MMIO change. Offline parity remains0/0/0/0 conditional on source inputs. Exact cold value policy/full deterministic bootstrap and independent WM16 retirement OPEN; native rear runtime DENIED. See [E011AP](../experiments/E004-front-ir-vd55g0/e011ap-rear-awb-earlier-call-observer/README.md), VALIDATION-SAFE, ORIGIN-SAFE and RESULT. Identity/builders consumed.
 
 ## E011AO AWB initialization — LIVE ORIGIN NARROWED / GOLDEN RETURNED
 
@@ -24,7 +32,7 @@ Quad was already 1 before initialization selector12 at 0x831964. Its same-thread
 
 14 records/1324 bytes were retained privately; one auxiliary publication-node BG read has wrong object attribution and is excluded, leaving 13 source records/1232 bytes. Conditional pair/publication probes required direct control; this run does not qualify unattended observer behavior. A queued post-Stop informational query had an unresolved symbol; capture records remain valid. No retry/kernel debug/Linux camera/build/MMIO/submission occurred.
 
-NEXT bracket the earlier SetParam 0x83180C/GetParam2 at 0x831920 and identify the underlying wrapper delegate; nested expected-output inputs may carry BG writes even when selector2 lacks a direct BG output. Keep all value-policy, cold-gamma/full-bootstrap and independent WM16 retirement gates open; native rear runtime DENIED. Golden Linux boot 68454cbe-a55e-430c-8699-206bf84435bb, saved FullIOv19c, next_entry empty, NTFS unmounted, camera idle. See [E011AO](experiments/E004-front-ir-vd55g0/e011ao-rear-awb-init-algorithm-observer/README.md), VALIDATION-SAFE and RESULT. Never reuse the consumed Windows identity or prior builders.
+NEXT bracket the earlier SetParam 0x83180C/GetParam2 at 0x831920 and identify the underlying wrapper delegate; nested expected-output inputs may carry BG writes even when selector2 lacks a direct BG output. Keep all value-policy, cold-gamma/full-bootstrap and independent WM16 retirement gates open; native rear runtime DENIED. Golden Linux boot 68454cbe-a55e-430c-8699-206bf84435bb, saved FullIOv19c, next_entry empty, NTFS unmounted, camera idle. See [E011AO](../experiments/E004-front-ir-vd55g0/e011ao-rear-awb-init-algorithm-observer/README.md), VALIDATION-SAFE and RESULT. Never reuse the consumed Windows identity or prior builders.
 
 ## E011AN cold BG origin boundary — ORIGINAL OWNERSHIP PASS / PARITY UNCHANGED
 
@@ -32,7 +40,7 @@ The original AWB descriptor helpers expose a 92-byte BG algorithm output at IO+0
 
 Full E011AM regression passes again: GCC and Clang ASan/UBSan each 509,829 assertions; semantic differences remain 0/0/0/0, and prior reports are byte-identical. No production C or kernel build changed. Initial AEC weights/AWB quad policy, normal RS/AFD count policy, whole-frame offset authority, explicit inactive cold gamma, complete deterministic bootstrap and independent WM16 generation-safe retirement remain OPEN; native rear runtime DENIED.
 
-NEXT observe the bounded AWB selector 12 call and actual algorithm owner privately, then trace its first write/policy inputs and the independent AEC Usecase producer. Golden boot b74c0760-83bb-421f-ac4d-1efa4e297294 stays idle, saved FullIOv19c, next_entry empty, NTFS unmounted. No camera/boot/sleep/MMIO/submission occurred. See [E011AN](experiments/E004-front-ir-vd55g0/e011an-rear-cold-bg-origin-audit/README.md), ORIGIN-SAFE, VALIDATION-SAFE and RESULT. Previous builders remain consumed.
+NEXT observe the bounded AWB selector 12 call and actual algorithm owner privately, then trace its first write/policy inputs and the independent AEC Usecase producer. Golden boot b74c0760-83bb-421f-ac4d-1efa4e297294 stays idle, saved FullIOv19c, next_entry empty, NTFS unmounted. No camera/boot/sleep/MMIO/submission occurred. See [E011AN](../experiments/E004-front-ir-vd55g0/e011an-rear-cold-bg-origin-audit/README.md), ORIGIN-SAFE, VALIDATION-SAFE and RESULT. Previous builders remain consumed.
 
 ## E011AM full offline startup comparison — ZERO DIFFERENCES / ARM64 BUILD PASS
 
