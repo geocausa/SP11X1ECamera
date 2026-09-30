@@ -1,3 +1,13 @@
+## E011AO AWB initialization — LIVE ORIGIN NARROWED / GOLDEN RETURNED
+
+One original Windows capture completed 859 valid 4K frame handles and a clean Stop. Both user-mode CDB sessions explicitly detached/exited 0; the manual-only task was removed. The actual driver owner had five resolved probes before Start after FrameServer replaced its initial process.
+
+Quad was already 1 before initialization selector12 at 0x831964. Its same-thread/processor return at 0x831968 preserved all 92 BG bytes; publication and four consumers (request IDs1/1/2/3) carry1. The actual target is original CamX::AWBGetParam RVA 0x681B00; 128 captured instruction bytes match the pinned image. The delegate object is wrapper+0x28, callback slot+0x10, not captured by the 32-byte wrapper header. Selector12 is excluded as this invocation's origin; exact earlier writer/value policy remainsOPEN.
+
+14 records/1324 bytes were retained privately; one auxiliary publication-node BG read has wrong object attribution and is excluded, leaving 13 source records/1232 bytes. Conditional pair/publication probes required direct control; this run does not qualify unattended observer behavior. A queued post-Stop informational query had an unresolved symbol; capture records remain valid. No retry/kernel debug/Linux camera/build/MMIO/submission occurred.
+
+NEXT bracket the earlier SetParam 0x83180C/GetParam2 at 0x831920 and identify the underlying wrapper delegate; nested expected-output inputs may carry BG writes even when selector2 lacks a direct BG output. Keep all value-policy, cold-gamma/full-bootstrap and independent WM16 retirement gates open; native rear runtime DENIED. Golden Linux boot 68454cbe-a55e-430c-8699-206bf84435bb, saved FullIOv19c, next_entry empty, NTFS unmounted, camera idle. See [E011AO](experiments/E004-front-ir-vd55g0/e011ao-rear-awb-init-algorithm-observer/README.md), VALIDATION-SAFE and RESULT. Never reuse the consumed Windows identity or prior builders.
+
 ## E011AN cold BG origin boundary — ORIGINAL OWNERSHIP PASS / PARITY UNCHANGED
 
 The original AWB descriptor helpers expose a 92-byte BG algorithm output at IO+0xCB4 while preserving its contents. GetParam selector 12 uses output index 10/type 10; selector 2 does not expose BG. Initialization call/return RVAs 0x831964/0x831968 now identify the next concrete upstream boundary. FillBG carries the full IO+0xD08 field to record+0x4C; it does not generate the value. 184 original ARM64 calls pass in owned memory across four IO bases. This source boundary is NOT a physically trapped first writer or a closed numeric policy.
