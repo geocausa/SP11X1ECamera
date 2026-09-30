@@ -1,3 +1,11 @@
+## E011AN cold BG origin boundary — ORIGINAL OWNERSHIP PASS / PARITY UNCHANGED
+
+The original AWB descriptor helpers expose a 92-byte BG algorithm output at IO+0xCB4 while preserving its contents. GetParam selector 12 uses output index 10/type 10; selector 2 does not expose BG. Initialization call/return RVAs 0x831964/0x831968 now identify the next concrete upstream boundary. FillBG carries the full IO+0xD08 field to record+0x4C; it does not generate the value. 184 original ARM64 calls pass in owned memory across four IO bases. This source boundary is NOT a physically trapped first writer or a closed numeric policy.
+
+Full E011AM regression passes again: GCC and Clang ASan/UBSan each 509,829 assertions; semantic differences remain 0/0/0/0, and prior reports are byte-identical. No production C or kernel build changed. Initial AEC weights/AWB quad policy, normal RS/AFD count policy, whole-frame offset authority, explicit inactive cold gamma, complete deterministic bootstrap and independent WM16 generation-safe retirement remain OPEN; native rear runtime DENIED.
+
+NEXT observe the bounded AWB selector 12 call and actual algorithm owner privately, then trace its first write/policy inputs and the independent AEC Usecase producer. Golden boot b74c0760-83bb-421f-ac4d-1efa4e297294 stays idle, saved FullIOv19c, next_entry empty, NTFS unmounted. No camera/boot/sleep/MMIO/submission occurred. See [E011AN](experiments/E004-front-ir-vd55g0/e011an-rear-cold-bg-origin-audit/README.md), ORIGIN-SAFE, VALIDATION-SAFE and RESULT. Previous builders remain consumed.
+
 ## E011AM full offline startup comparison — ZERO DIFFERENCES / ARM64 BUILD PASS
 
 Portable integer RS production now removes all seven remaining differences. Both original ARM64 adjustment and clean C match4,387 cases/35,096 fields per compiler; all three sampled pack shifts match original state+0x130. The detached binder preserves caller tags and unrelated modules, with70 binder and14 producer negatives. RS source schedule is0/1/2/2; all12 present RS register instances match.
