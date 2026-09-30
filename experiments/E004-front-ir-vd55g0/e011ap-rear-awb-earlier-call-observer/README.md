@@ -1,3 +1,5 @@
+E011AQ correction: live nested BG descriptors come through output1/type1/container16. The separate input2/type2/information12 is not that list. Actual callback68E5A0 and full retained92-byte copy are now verified; see E011AQ. E011AP boundary transition remains valid.
+
 # E011AP — earlier AWB initialization boundaries
 
 Status: LIVE GETPARAM2 TRANSITION VERIFIED / DELEGATE CHAIN CORRECTED; exact numeric policy OPEN.

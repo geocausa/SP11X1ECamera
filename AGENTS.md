@@ -1,6 +1,12 @@
-## E011AQ delegate/retained BG — PREPARED
+## E011AQ AWB delegate/retained BG — LIVE COPY VERIFIED / GOLDEN RETURNED
 
-Fresh E011AQ-20260930-1740A not consumed. Five outer probes resolve before Start; GetParam2 stops for correct vtable callback and nested descriptor qualification, then three inner one-shot probes arm before the call. Compare retained BG92 with IO before/after PopulateOutput. One Start/Stop, user CDB detach/exit0/task removal and Golden return; original records private. Numeric policy/WM16 retirement OPEN; native rear runtime DENIED. See E011AQ README/PREPARE-SAFE. No Linux camera/build/kernel debugging/BCD changes.
+One Windows run completed 711 valid4K frame handles, clean Stop, explicit CDB detach/exit0 and task removal. Five outer probes resolved before Start; three inner probes resolved after manual qualification, before the same GetParam2 call. Eight events/26 private records/2720 bytes validate. Two mistaken pre-capture input-as-list qualification queries are retained; corrected output1 capture has zero diagnostics. No camera retry or unattended qualification claim.
+
+Actual original callback68E5A0 (CAWBMain::AWBGetParameter) and all six vtable targets are byte/source verified. Retained actor BG+FB744 already has quad1 at+FB798 before GetParam2. PopulateOutput68F490 returns0 at68E8D8 and copies all92 retained bytes into previously zero IO+CB4; outer return/publication/first cold request1 agree. Nested channel is output1/type1/16-byte container ->15 descriptors atIO+2080 ->BGindex5/type5/92 bytes. Input2/type2/12 bytes is a separate information record.140 original owned-memory BG copy slices preserve full u32/source/neighbors; full algorithm emulation return is not claimed.
+
+NEXT trace upstream retained BG initialization: source SetParam wrapper681C40 -> actor/vtable slot08 ->68C090; tuning/mode helper689228 references bgStatsConfigV1. SetParam IO preservation does not exclude retained-record writes. Trace registration/configuration/construction and bracket retained BG there; do not repeat GetParam2 copy or hardcode1. Numeric initialization policy/full bootstrap/WM16 retirement OPEN; native rear runtime DENIED.
+
+Golden boot c0e263ed-7319-4f69-8f10-4d51f20cd1a1, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. No production C/build/Linux runtime/kernel debug/BCD/MMIO change; offline parity remains0/0/0/0 conditional on input records. See [E011AQ](experiments/E004-front-ir-vd55g0/e011aq-rear-awb-delegate-bg-observer/README.md), VALIDATION-SAFE, COPY-SAFE, SOURCE-SAFE and RESULT. Identity/builders consumed.
 
 ## E011AP earlier AWB calls — GETPARAM2 TRANSITION VERIFIED / GOLDEN RETURNED
 
