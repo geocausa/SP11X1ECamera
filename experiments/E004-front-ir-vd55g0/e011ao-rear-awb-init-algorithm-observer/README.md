@@ -1,3 +1,5 @@
+E011AP correction: the wrapper delegate chain includes object+0 vtable dereference before slot+0x10. See E011AP validated correction; E011AO selector12 exclusion is unchanged.
+
 # E011AO — rear AWB initialization algorithm observation
 
 Status: LIVE SELECTOR12 ORIGIN EXCLUDED / WRAPPER IDENTIFIED; exact earlier writer and numeric policy OPEN.

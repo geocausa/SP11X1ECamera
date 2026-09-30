@@ -1,3 +1,11 @@
+## E011AP earlier AWB calls — GETPARAM2 TRANSITION VERIFIED / GOLDEN RETURNED
+
+One Windows run completed866 valid4K frame handles, clean Stop, explicit user-mode CDB detach/exit0 and task removal. Eight resolved one-shot probes ran; GetParam2 deliberately stopped for qualification. No capture diagnostics occurred. Quad stayed0 and all92 BG bytes stayed identical through SetParam; GetParam2 at831920/831924 returned0 on the same thread/processor, changing29 bytes and setting quad1. Its after record equals pre-selector12 across92 bytes; publication and first cold request1 carry1. Numeric value policy remainsOPEN.
+
+Delegate correction: wrapper+28 -> object+0 -> vtable+10. The direct object+10 target read is excluded; input descriptors are16 bytes, so the extra40-byte input-table tail is also excluded.18 files/1824 bytes yield17 valid source records/1656 bytes. Both original wrapper targets match128 bytes. Captured object points to original vtable133A390; pinned source candidate GetParam68E5A0 is CamX::CAWBMain::AWBGetParameter, not yet live callback-code verified. Next capture the actual slot/code and nested type2/12-byte input payload, then trace retained BG initialization. Do not hardcode1.
+
+Golden bootf4982efd-f612-4819-b1f5-de4820807375, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. No production C/build/Linux runtime/kernel debug/BCD/MMIO change. Offline parity remains0/0/0/0 conditional on source inputs. Exact cold value policy/full deterministic bootstrap and independent WM16 retirement OPEN; native rear runtime DENIED. See [E011AP](experiments/E004-front-ir-vd55g0/e011ap-rear-awb-earlier-call-observer/README.md), VALIDATION-SAFE, ORIGIN-SAFE and RESULT. Identity/builders consumed.
+
 ## E011AO AWB initialization — LIVE ORIGIN NARROWED / GOLDEN RETURNED
 
 One original Windows capture completed 859 valid 4K frame handles and a clean Stop. Both user-mode CDB sessions explicitly detached/exited 0; the manual-only task was removed. The actual driver owner had five resolved probes before Start after FrameServer replaced its initial process.
