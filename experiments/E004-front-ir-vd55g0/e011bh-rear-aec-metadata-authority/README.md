@@ -1,3 +1,5 @@
+> E011BJ scope correction: x2/x4 are64-bit stores at module+60/+72. The +64/+76 zero results below are valid only for E011BH's U32 argument patterns; they are not unconditional zero fields. Minor/tag naming is not independent semantic policy authority. See ../e011bj-rear-aec-reader-width-authority/README.md for full-width owned tests.
+
 # E011BH: original metadata, name and comparison helpers
 
 Original module metadata constructor0x6F45D8, name helper0x6F4AC0 and comparison0xF5DF00 now execute in isolated owned fixtures. Their skips are removed only from metadata-fixture-private.py, an isolated copy of the owned E011BE initializer. Historical full-parent fixtures remain unchanged and still skip these helpers. Original bytes stay on SP11.
