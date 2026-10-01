@@ -1,3 +1,11 @@
+## E011BE original revision materialization — BOUNDED PASS / FULL PROFILE OPEN
+
+Original revision reader0xDB3A0 and original copy helper0xCAE7C0 now execute without stubs, using E011BD-qualified packed alignment1. Revision x2=count2, x3=alignment1; guard0xDB468 is an explicit zero-divisor trap, not a demonstrated ARM64EC/hardware defect. Three pinned sources provide typed revision v0.0/mode0/no-selector/two-byte terminated records. Original output at payload+32 equals its source and cursor advances2.
+
+48 parent/revision/four-grid prefixes plus12 full-parent return smokes pass at four placements, including nine owned revision variants:60 original revision returns/copy calls and240 original grid returns. Fourteen malformed revision descriptions rejected; source data, reader non-cursor bytes and allocation canaries preserved. No captured value becomes policy. Full-parent returns are smokes only; sibling metadata and full aggregate/profile authority remainOPEN. Seven metadata/security/comparison/allocation/memset helpers remain explicitly stubbed.
+
+Golden boot50edbeb8-e42d-41b1-8b37-3d536443604f and all3 protected hashes unchanged; camera idle/NTFS unmounted. Zero new Start/reboot/observer/production C/kernel build. Prior E011BD Windows initialization remains incomplete and its identity consumed. NEXT derive typed sibling/statistics metadata fields beyond124040, qualify remaining metadata helpers and full loader selection. Cold metadata ownership, RS authority, deterministic bootstrap, WM16 retirement and Linux optical parity remainOPEN. Native rear runtime **DENIED**. See [E011BE](experiments/E004-front-ir-vd55g0/e011be-rear-aec-revision-materialization/README.md), REVISION-SAFE, GUARD-SAFE, RESULT and NEXT-SOURCE. Originals stay private on SP11.
+
 ## E011BD original deserializer caller — ENTRY/SOURCE PASS, INITIALIZATION INCOMPLETE, GOLDEN RETURNED
 
 One qualified original123CC0 entry receives alignment1. Actual module table1335598/slot8 and reader bounds match; caller return6F35B0/code window matches the pinned original, with indirect call6F35AC. The48-byte root/full404-byte grid fingerprint matches only rear-specific com.surface.tuned.rfc_ov13858.bin among three pinned candidates; exact opened filename/full selection policy remainOPEN.
