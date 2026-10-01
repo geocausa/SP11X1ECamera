@@ -1,3 +1,11 @@
+## E011BF original histogram sibling — BOUNDED PASS / BFW AND FULL PROFILE OPEN
+
+Original parent histogram materialization is validated through loop exit124970, before BFW source fields: root count32/ref36; typed histStatsConfig v0.0/mode0/no-selector. Default candidates have9 entries, rear-specific7; wire stride172/runtime200, payload count64/pointer72. Native nested readerEA758 selects typed data/values IDs, with pointer160/184, exact source copies and consumed cursors. Aliased source spans do not substitute for selected-reader authority.
+
+76 prefixes across four placements plus3 full-parent return smokes verify573 histogram entries,1146 nested arrays and2865 original scalar memcpy spans;150 malformed source descriptions rejected. Eight owned scalar/eight nested-array variants preserve source/reader non-cursor bytes and allocation canaries. Original revision/grid checks retained; no additional stubs or captured producer inputs. Full-parent smokes do not validate BFW fields or full metadata/profile selection.
+
+Golden boot50edbeb8-e42d-41b1-8b37-3d536443604f and all3 protected hashes unchanged, saved FullIOv19c/empty next_entry, NTFS unmounted/camera idle. Zero Start/reboot/observer/production C/kernel build. NEXT typed bfwStatsConfig at root count40/ref44, BFWROICombo/nested fields, then remaining metadata/comparison helpers and full loader selection. E011BD Windows identity remains consumed/initialization incomplete. Cold metadata ownership, RS authority, deterministic bootstrap, WM16 retirement and Linux optical parity remainOPEN. Native rear runtime **DENIED**. See [E011BF](experiments/E004-front-ir-vd55g0/e011bf-rear-aec-histogram-materialization/README.md), HISTOGRAM-SAFE, GUARD-SAFE, RESULT and NEXT-SOURCE. Originals stay private on SP11.
+
 ## E011BE original revision materialization — BOUNDED PASS / FULL PROFILE OPEN
 
 Original revision reader0xDB3A0 and original copy helper0xCAE7C0 now execute without stubs, using E011BD-qualified packed alignment1. Revision x2=count2, x3=alignment1; guard0xDB468 is an explicit zero-divisor trap, not a demonstrated ARM64EC/hardware defect. Three pinned sources provide typed revision v0.0/mode0/no-selector/two-byte terminated records. Original output at payload+32 equals its source and cursor advances2.
