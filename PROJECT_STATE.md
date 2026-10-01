@@ -1,3 +1,11 @@
+## E011BS user priority: clean front/back baseline before optional features
+
+User2026-10-01 asks to deploy necessary clean front/back functionality and skip unwanted AI/effects. This changes the queue: one normal-colour mode per RGB camera, a finite front->rear->off app/image test, then expanded features/Windows1:1 parity. Full tuning catalogue port is not a prerequisite. Explicit manual exposure/WB/focus may be used for the first controlled scene with its limits reported; extra modes/HDR/multiframe/AI/beautification/portrait/advanced stabilization are deferred.
+
+Bounded inventory over two original full rear loaders shows1,246 module instances but242 distinct embedded source names: default914instances/234names across77 ordinary profile nodes; specific332/239 across29. Names are not feature counts and do not prove the minimal enabled set. Existing detached rear register schema has14 state member groups plus its DMI wrapper. Required modules must be selected by actual enabled consumers/dependencies. Never infer a safe hardware bypass just from a name or skip an enabled stats/DMA channel.
+
+NEXT E011BT baseline-required cold AEC metadata consumer join and selected-mode dependency closure, then required RS/bootstrap/preflight and hardware ownership. Entire74 different-name queue is deferred unless a chosen baseline consumer needs a key. Keep rear BF/WM16 retirement gating until enabled lifecycle proof or a separately proven disable/bypass. E004kg/E004ne already prove bounded RAW/software front/rear transport/switching, not clean native ISP quality parity. No new deployment/image/start/reboot/C/kernel changes; Golden/all3 hashes unchanged, idle/NTFS unmounted, native rear denied. See [E011BS](experiments/E004-front-ir-vd55g0/e011bs-clean-front-rear-scope/README.md), INVENTORY-SAFE/BASELINE-SCOPE/GUARD-SAFE/RESULT/NEXT-SOURCE.
+
 ## E011BR common module headers and selected nonroot retrieval — BOUNDED PASS
 
 Four original full rear loaders at two placements pass194,976 exact readers and2,492 actual module returns. Seven common source-backed fields at16/56/60/68/72/80/208 match at actual return and remain intact after loader/input retirement;52,332 repeated field checks pass. Owned dynamic names and map keys are active/terminated and equal each other. Name-map stores preserve typed source leaf/flag-derived map owner.

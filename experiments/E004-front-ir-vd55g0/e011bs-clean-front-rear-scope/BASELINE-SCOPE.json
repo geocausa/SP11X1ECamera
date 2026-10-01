@@ -1,0 +1,68 @@
+{
+  "authorization": "User2026-10-01: deploy necessary functionality for clean front/back, omit unwanted AI/effects.",
+  "baseline_functions_to_resolve": [
+    "sensor mode/power/link and bounded exposure/gain",
+    "correct RAW or compressed pixel decoding/CFA",
+    "black-level/white-balance and usable colour pipeline",
+    "demosaic/colour conversion/tone encoding needed by chosen route",
+    "lens-shading/defect/noise correction when required for clean chosen image",
+    "format/crop/resize needed by selected output",
+    "statistics channels actually enabled by selected ISP mode",
+    "buffer/IRQ/DMA/IOMMU ownership, stop and front/rear switching"
+  ],
+  "exact_minimal_module_count_proven": false,
+  "existing_results": {
+    "bounded_front_rear_software_preview_and_switch": "E004ne",
+    "finite_front_RAW10_software_NV12_path": "E004kg",
+    "processed_rear_offline_startup": "E011AM/E011AR/E011AV and later AEC source checkpoints",
+    "these_results_are_not_native_ISP_clean_image_quality_parity": true
+  },
+  "experiment": "E011BS",
+  "feature_work_deferred": [
+    "AI scene or face enhancement",
+    "beautification and effects",
+    "portrait blur",
+    "HDR and multi-frame processing",
+    "advanced stabilization",
+    "additional modes and resolutions"
+  ],
+  "first_image_target": {
+    "frames_per_camera_target": 8,
+    "fresh_complete_frames_required": true,
+    "manual_exposure_white_balance_focus_allowed_if_explicit_and_scene_appropriate": true,
+    "normal_optical_test_pattern_off": true,
+    "one_mode_per_camera": true,
+    "optical_pixels_and_image_hashes_remain_private_on_SP11": true,
+    "ordinary_application_consumer_required": true,
+    "physical_cameras": [
+      "IMX681 front RGB",
+      "OV13858 rear RGB"
+    ],
+    "selected_mode_and_processing_path_reported": true,
+    "sequence": [
+      "front finite frames",
+      "stop and release front",
+      "rear finite frames",
+      "stop and neutral graph"
+    ],
+    "sustained_30fps_and_4K_and_full_Windows_parity_required_for_first_image": false
+  },
+  "native_ISP_open_dependencies": [
+    "cold AEC metadata/source-to-consumer join",
+    "required RS count/offset producer authority",
+    "deterministic integrated bootstrap/preflight for selected enabled modules",
+    "WM16 same-generation IRQ/DMA/consumed-IOVA/IOMMU retirement while rear BF is enabled",
+    "front output decode/colour fidelity and selected route optical validation"
+  ],
+  "native_rear_runtime_allowed": false,
+  "priority": "Clean normal-colour front/back baseline before feature-complete Windows parity.",
+  "production_code_or_runtime_gate_changed": false,
+  "selection_rules": [
+    "Follow active consumer calls/enables and dependencies for one explicit mode; names alone do not decide optionality.",
+    "Use existing validated clean producers for required modules, preserve source-backed parameter authority.",
+    "Full catalog parsing/registry counts are offline discovery coverage, not mandatory deployment workload.",
+    "Different owned name keys get naming work only if the chosen baseline actually consumes them.",
+    "An omitted hardware module requires proven disable/bypass and channel/lifecycle consistency; skipping its parser does not disable hardware.",
+    "Fixed exposure/WB/focus may reduce algorithm scope, but does not itself disable BG/BF/RS or waive existing ownership gates."
+  ]
+}
