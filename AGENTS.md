@@ -1,3 +1,11 @@
+## E011BT cold AEC metadata route/copy — BOUNDED PASS
+
+Clean front/back baseline remains first; optional AI/effects and unrelated catalogue work stay deferred. Original source selects property0x5000001C, reader vector index2, Node+1200 UsecasePool and2072 bytes.40 original writer/reader routing prefixes reach the correct store boundaries using explicit single-slot owned pools;20 publication slices and128 full original memcpy slices pass with strict memory guards. Trace/TLS context is owned; original trace construction and metadata store implementations are excluded.
+
+Publisher0x83ABD4 sends the first temporary SP+3152. A separate second temporary SP+5232 supplies a retained processor copy; matching previous values did not identify the published record. Whole prepublisher/default reader returns, numeric initialization and actual live pool/store/payload lineage remain OPEN. Native rear denied; no image/start/reboot/C/kernel changes. Golden/all3 hashes unchanged, idle/NTFS unmounted.
+
+NEXT E011BU source-qualified bounded Windows metadata observer from first setter output through publication/store write/read to cold2072 copy; see [E011BT](experiments/E004-front-ir-vd55g0/e011bt-rear-cold-aec-metadata-route/README.md), METADATA-SAFE/GUARD-SAFE/RESULT/NEXT-SOURCE/NEXT-OBSERVER. Do not treat the unarmed plan as a completed live join. Then baseline dependency/required RS/bootstrap/preflight and independent enabled WM16 ownership/optical validation. Entire74 renamed-key queue remains conditional on baseline consumers; full catalogue is not a first-pair prerequisite.
+
 ## E011BS user priority: clean front/back baseline before optional features
 
 User2026-10-01 asks to deploy necessary clean front/back functionality and skip unwanted AI/effects. This changes the queue: one normal-colour mode per RGB camera, a finite front->rear->off app/image test, then expanded features/Windows1:1 parity. Full tuning catalogue port is not a prerequisite. Explicit manual exposure/WB/focus may be used for the first controlled scene with its limits reported; extra modes/HDR/multiframe/AI/beautification/portrait/advanced stabilization are deferred.
