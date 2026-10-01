@@ -1,3 +1,13 @@
+## E011AZ AEC parent-to-first-grid weights — OFFLINE PASS / LIVE SOURCE JOIN OPEN
+
+The original parent reader now resolves the grid symbol at wire+28, allocates 4×120=480 bytes, stores the first-grid array at payload+38 and copies 12 weight bytes from wire+14 to grid+14. 548 original prefixes pass across three independent installed Default roots and scalar mutations, plus 48 array-address and 18 original symbol-helper checks. Source bytes/allocation canaries are preserved; 16 malformed source descriptions are rejected. Captured weights are comparison outputs only.
+
+Original symbol/count/grid readers and native memcpy execute; metadata/security/name/comparison/allocation/memset and revision materialization helpers are excluded/stubbed. Prefix stops 123818; full aggregate/post-copy bookkeeping and actual Windows selected profile/source/cache join remain OPEN. At the first-grid prefix, payload+2C=4 and +30=0; do not assign the total to the wrong counter. ID 0 resolves symbol slot 0 and requires separate type authority.
+
+NEXT fresh qualified live named-source/cache join: hwstats name x1 at call 3CA984, return 3CA988, bank-holder store 3CA998; then actual public/core/bank callbacks and ConfigureHWStats 39F0B8/39F0BC -> module payload+38 -> grid Init 3A0D70. NEXT-OBSERVER is source-only, no fresh identity or arming; E011AX identity remains consumed. Cold metadata bridge, RS authority, complete startup, WM16 retirement and Linux optical parity remain OPEN; native rear runtime **DENIED**. Existing full offline parity remains 0/0/0/0 conditional on prior observed inputs.
+
+Golden boot f627e38e-19d3-480a-900d-73116d63b4df/all 3 payload hashes unchanged, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. Transient PiMaster drop recovered without reboot. No camera Start/production C/build/runtime action. See [E011AZ](experiments/E004-front-ir-vd55g0/e011az-rear-aec-grid-materialization/README.md), MATERIALIZATION-SAFE, GUARD-SAFE, NEXT-OBSERVER and RESULT. Originals remain same-SP11 private.
+
 ## E011AY named AEC module and grid reader — OFFLINE PASS / POLICY OPEN
 
 The original public/core/bank accessor chain now selects the named aecxhwstatsconfig payload. 128 owned cases execute all three accessors and the cache loads, with 43 original named lookups per case. The core accessor's **pre-indexed +8** matters: data is bank+EF8 =core+F00; hwstats is bank+FE8 =core+FF0. Do not reuse offsets with the wrong owner base.
