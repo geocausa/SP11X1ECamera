@@ -13,7 +13,7 @@ The original reader now returns through its real indirect callback and decimal f
 
 Four placements include unaligned locations. Eight malformed owned descriptions are rejected before execution. The complete-reader cases include 24 invocations using typed AEC records from three SHA-pinned files and 48 using owned numeric record variants. Each uses an owned interface/context and either a single-node or ancestor profile graph.
 
-The original interface constructor installs table 0x133B740; its first slot is callback 0x6F3B50. Four original interface-table slots have that same callback. This qualifies the base interface fixture and common callback, without selecting the actual loader subclass or live interface instance.
+The original interface constructor installs table 0x133B740; its first slot is callback 0x6F3B50. The first slot in four different original interface tables has that same callback; their other slots contain separate methods. This qualifies the base interface fixture and common callback, without selecting the actual loader subclass or live interface instance.
 
 The callback reads the node table pointer at interface+1072 and U32 count at+1080. Its index comes from reader wire+44, also retained at reader+68. Node stride is160 bytes. A valid selected node supplies its eight bytes at+4 to reader+60. Null table, negative signed index and out-of-range index zero only that eight-byte output and preserve the profile buffer.
 

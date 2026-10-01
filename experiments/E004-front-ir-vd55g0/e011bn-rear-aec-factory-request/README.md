@@ -1,0 +1,17 @@
+# E011BN production AEC request constructor and source join
+
+PASS_BOUNDED_ORIGINAL_FACTORY_AEC_REQUEST_PREFIX_AND_SOURCE_READER_JOIN. Base commit76912b2d1312dfec73e4c3e4a42559be8391f50c. Four cases: two SHA-pinned rear files at aligned and unaligned placement. Job job_p8uWaJ_n_2nMlo_7eroC8FTb completed with exit0.
+
+The production parser constructor0xD2BB0 runs through its actual AEC request call0xD979C -> original0x1231D8, then stops at that constructor's return0xD979A0. Each prefix performs986 guarded allocations. The AEC request is an original allocated384-byte object whose name and U64 version10 originate in original code. No tuning-file name/version is supplied to construct that request. The request name allocation/termination, subclass vtable0x1335598, version10, numeric68/72 zero and initially empty header-name field are verified. The actual constructor also supplies a profile field; its full policy is not inferred here.
+
+Production object owns base fields, request-pointer array and a64-byte cache at5632, so owned extent5696 is guarded. The prior1112-byte base-reader extent and an exploratory1176-byte factory extent do not describe the production object. Source header/context/table/manager remain preserved while the independent factory prefix executes on a lower stack. Its scratch object is restored after the intentional stop; its request allocations remain available for the direct consumer join. Whole factory return and registry selection are not claimed.
+
+194,976 exact original symbol-reader returns, four original source table-builder returns, four actual production AEC request-constructor returns, four AEC parent full returns, four metadata constructor returns and eight original incompatible-name/version rejections pass. The direct parent call uses the production-created request and source-produced reader/stack context. Inherited qualified revision/grid/histogram/BFW fields, cursor-only changes, source maps and allocation canaries remain checked.
+
+Four different interface tables share first slot0x6F3B50; their other methods differ. Production vtable0x1335288 uses lookup slot8=0xD2AC0 and creator slot24=0xD2A20; base0x133B740 has different methods. E011BK's earlier ambiguous phrase about four slots meant slot0 in four distinct tables, not four adjacent entries. Its wording is clarified; its original slot0 anchors remain correct.
+
+Exploration continuing the base fixture after table creation reached an unsupported path; continuing the full production constructor reached0xCB167C after the AEC constructor. Neither is an accepted complete loader/factory return or evidence of an OEM defect. Next trace factory completion/actual registry selection, then loader/context ownership. Factory selection and whole loader return remain open.
+
+Retained shims only: security0x11D0/0x11F0, allocator0xCAE740 and memset0xF5E600. No factory/module/name/comparison/metadata helper shim is added. Allocator uses bounded owned32MiB arena; OEM heap policy is unproven. Original bytes stay private on SP11; captured scalars are not producer inputs. Opaque name tail/padding, every root/grid field, platform path, node containers and opened filesystem filename remain unqualified.
+
+Golden boot/all3 protected hashes unchanged, camera idle, NTFS unmounted. Zero starts/reboots/observer/production C/kernel build; native rear runtime denied. Cold metadata/RS/bootstrap/WM16/optical gates remain open. Evidence: FACTORY-REQUEST-SAFE, GUARD-SAFE, RESULT, NEXT-SOURCE and source-private.py.

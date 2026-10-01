@@ -1,3 +1,11 @@
+## E011BN production AEC request - BOUNDED PREFIX/JOIN PASS / REGISTRY SELECTION OPEN
+
+Four original production-constructor prefixes reach0xD979C -> AEC request constructor0x1231D8 and stop at0xD979A0,986 allocations per prefix. Name and version10 now originate in original code, not tuning-file supplied request arguments. Four AEC parent full returns, four metadata returns and eight original incompatible-name/version rejections pass against 194,976 exact source symbol-reader returns. Original source context/cursors and qualified revision/grid/histogram/BFW checks are retained.
+
+Production object extent5696 includes cache at5632; base1112 extent does not cover it. Production vtable0x1335288 shares profile slot0=0x6F3B50 but uses lookup8=0xD2AC0 and creator24=0xD2A20. The four-table callback statement refers to each table's first slot, not adjacent slots. Factory prefix is intentionally stopped; direct source consumer join does not prove registry selection or complete factory/loader return.
+
+NEXT qualify production completion/runtime path0xCB1650/0xCB167C, registry lookup/creation, loader after0x6F3524 and context transfer; no failed exploration is OEM failure evidence. Opaque name tail/padding, every root/grid field, platform/mode16/node containers/opened path remain open. Golden/all3 hashes unchanged, idle/NTFS unmounted; no starts/reboots/observer/C/kernel build. Cold metadata/RS/bootstrap/WM16/optical open; native rear denied; originals private on SP11. See [E011BN](experiments/E004-front-ir-vd55g0/e011bn-rear-aec-factory-request/README.md), FACTORY-REQUEST-SAFE/GUARD-SAFE/RESULT/NEXT-SOURCE.
+
 ## E011BM original symbol context and AEC join - BOUNDED PASS / FACTORY POLICY OPEN
 
 Four original symbol-builder returns, 194,976 exact symbol-reader returns, four AEC parent full returns, eight original metadata constructor returns and eight original name/version gate rejections pass over two rear files at two placements. All source readers use the original loader's stack context: header module name+0, header version+8, maximum ID+24 and table+40. Builder returns at0x6F3524. No metadata/name/comparison shim remains in this join.
@@ -16,7 +24,7 @@ Golden boot/all three protected hashes unchanged; camera idle/NTFS unmounted. Ze
 
 ## E011BK original profile callback — COMPLETE READER FIXTURE PASS / SOURCE PROFILE SELECTION OPEN
 
-Original interface constructor0x6F3D08 installs table0x133B740 whose slot0 is callback0x6F3B50; four original interface slots share that callback. Four constructor returns,72 callback returns,44 independent recursive formatter returns and72 complete reader returns pass at four placements, with eight pre-execution scope rejections. Reader dispatch0x6F4A98 now executes the original callback and original decimal formatter0xCB6300. No new helper shim/allocation; only inherited security-cookie shims execute.
+Original interface constructor0x6F3D08 installs table0x133B740 whose slot0 is callback0x6F3B50; slot0 in four distinct interface tables shares that callback; their other methods differ. Four constructor returns,72 callback returns,44 independent recursive formatter returns and72 complete reader returns pass at four placements, with eight pre-execution scope rejections. Reader dispatch0x6F4A98 now executes the original callback and original decimal formatter0xCB6300. No new helper shim/allocation; only inherited security-cookie shims execute.
 
 Callback node table/count are interface+1072/+1080, stride160. Reader index is wire+44; selected node bytes4:12 -> reader60:68 exactly. Null table/negative signed index/out-of-range zero only numeric output. Valid callback clears one profile byte; parent-first formatting follows node+24, emits U16+4/+6 decimal pairs for zero U32+8, joining included pairs with a vertical bar. Exact whole-heap/source-map guards pass, including128-byte profile buffer and formatter terminal byte127. Scope: acyclic owned graphs<=12 nodes/generated text<=100; zero-filled owned file context/alignment1. Actual loader subclass/instance, tuning-file node selection and filename remain OPEN; captured values are not producer inputs.
 
