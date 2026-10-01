@@ -1,3 +1,11 @@
+## E011BQ source hierarchy and nonroot selection — BOUNDED PASS
+
+Four full original rear loaders at two placements pass 194,976 exact reader returns and 86,496 source-derived hierarchy pointer checks. Original selector0x6F3BD0 returns match the independent typed model in2,072 queries, including1,248 nonroot and784 null returns, before and after source/context retirement. Direct helper0x6F1D68 adds7,208 returns,128 nonnull. All eight links per node are verified: source wire16 becomes primary/inheritance pointer16; flag-derived48 points to parent map owner; ordinary children32/40, flagged children56/64 and sibling72 preserve physical record order.
+
+Query index0 is ignored. Contiguous category grouping uses fullU32 words; child matching uses lowU16 category/value. Original repeated-category recursion passes nine separate owned seven-node graph queries (six positive/three null), including primary fallback. Three malformed primary reference shapes are rejected before execution. No selector allocations or source/heap changes occur. Original module/AEC ownership checks and five existing shims are retained.
+
+NEXT E011BR nonroot loaded-module retrieval and independently source-backed common metadata. Entire manager source lifetime, other module bodies/root/grid/padding/platform/opened path and destruction/reuse remain open. Golden/all3 hashes unchanged; idle/NTFS unmounted; no camera starts/reboots/observer/C/kernel build. Cold metadata/RS/bootstrap/WM16/optical open, native rear denied, no new front/back image test; originals private on SP11. See [E011BQ](experiments/E004-front-ir-vd55g0/e011bq-rear-source-mode-selection/README.md), SELECTION-SAFE/GUARD-SAFE/RESULT/NEXT-SOURCE.
+
 ## E011BP both rear full loaders / retained AEC root lookup - BOUNDED PASS / NONROOT POLICY OPEN
 
 Four original production factory/full loader success1 returns cover both rear sources at placements0/1:194,976 exact readers,2,492 module dispatches and four source-qualified actual AEC parent returns. Larger rear-default full-loader coverage is now qualified. Immutable AEC module spans0:280/288:384 and all30(default)/26(specific) deep allocations survive full loader return;280 is the mutable sibling link.3,604 bounded node lists/2,492 active module memberships pass.
