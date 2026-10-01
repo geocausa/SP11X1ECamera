@@ -1,3 +1,13 @@
+## E011AW cold AEC weight origin — BOUNDED COPY PASS / INITIALIZER OPEN
+
+Source-locked engine call8528EC binds algorithm BG selector12/output type10/size92 into frame+1A8, which later supplies hardware AEC_BE weights. Do not assume hardware AEC_BE naming selects algorithm BE20. AEC GetParam372E40 uses24-byte typed descriptors (query output pointer+18/count+20 hex);48 valid routes and24 wrong-type/undersized routes are mechanically verified before39EA40 dispatch.
+
+Original grid getter3A0DB0 copies cache+14/+18/+1C through object+18 into output+44/+48/+4C. Original primary fragment83E01C..83E034 copies frame+1EC/+1F0/+1F4 into stats+30/+34/+38. Each bounded copy passes908 owned cases across4 bases,5448 matching fields total and checked neighbor/source preservation. Neither bounded fragment generates the numeric triple. The original default AEC copy is precisely73C090, length818(hex), retained node destination+72A58 from E011AN.
+
+Cold numeric initialization and live cache/selector lineage remainOPEN. Full C++ dispatch-manager/context exploration is incomplete; diagnostic tails, full getter/engine return and zero-count diagnostic behavior are excluded. No captured value or constant became policy. No production C/kernel build/runtime action occurred. Last full E011AV replay remains0/0/0/0 conditional on observed cold AEC/normal inputs. Protected Golden boot25999320-3114-4f2c-bbce-a6335b0e2046/all3 payload hashes unchanged; NTFS unmounted/camera idle.
+
+NEXT fresh qualified Windows observation of the earliest primary AEC BG query and actual cached grid weights during initialization/prepublish, then trace the cache+14/+18/+1C writer/source policy. Capture only BE20 would miss the static primary path. Follow E011AW NEXT-OBSERVER plan; it is source-only, not armed. Then RS count/offset authority, complete bootstrap/preflight and independent WM16 IRQ/consumed-IOVA/DMA/IOMMU retirement. Native rear Linux runtime remainsDENIED. See experiments/E004-front-ir-vd55g0/e011aw-rear-cold-aec-weight-origin README, SOURCE-SAFE, VALIDATION-SAFE and RESULT. Originals/decomp remain private on SP11.
+
 ## E011AV source-derived cold AWB quad — BOUNDED OFFLINE PASS
 
 The clean integer decoder now derives the initial AWB quad from the independently parsed bgStatsConfigV1 v1.0 Default root, rather than a captured cold flag or constant. Three SHA-pinned applicable tuning files have one named 93-byte Default root each and the same quad1. Original immutable scalar-reader execution agrees across137 inputs/28 scalar bytes, including quad0 mutations;12 malformed source-authority cases are rejected. E011AU independently proves the live source-to-retained lineage.
