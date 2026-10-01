@@ -1,3 +1,7 @@
+## E011BU cold metadata observer — PREPARED, UNARMED
+
+Fresh identity E011BU-20261001-2230A targets the actual first AEC2072 output -> publication -> original metadata store write/read -> cold IFENode copy. Twelve source ranges must be checked in the loaded user-mode DLL before arming/Start. Manual-only task with atomic entry guard, maxone camera Start, bounded original rear Color VideoRecord NV12 3840x2160 run; no kernel debugging/sleep/BCD or Linux rear activation. Scripts and validators prepared; no live result yet. See [E011BU](experiments/E004-front-ir-vd55g0/e011bu-rear-cold-aec-live-metadata/README.md), PRE-RUNTIME-SAFE/PRE-BOOT-GUARD-SAFE. Numeric tuning initialization and opened filename/profile remain separate from metadata handoff. Preserve clean baseline priority, optional features deferred and existing rear ownership gates. Inspect current attempt evidence before continuing; never infer the attempt is unconsumed after a UI interruption.
+
 ## E011BT cold AEC metadata route/copy — BOUNDED PASS
 
 Clean front/back baseline remains first; optional AI/effects and unrelated catalogue work stay deferred. Original source selects property0x5000001C, reader vector index2, Node+1200 UsecasePool and2072 bytes.40 original writer/reader routing prefixes reach the correct store boundaries using explicit single-slot owned pools;20 publication slices and128 full original memcpy slices pass with strict memory guards. Trace/TLS context is owned; original trace construction and metadata store implementations are excluded.
