@@ -1,0 +1,11 @@
+# E011BV actual cold metadata getter pointer
+
+PREPARED, NOT ARMED OR CONSUMED. Fresh identity E011BV-20261001-2310A, Linux L3 ISP statistics/bootstrap, original Windows rear Color VideoRecord NV12 3840x2160 oracle, source-qualification tier S until observed.
+
+E011BU proved the first complete2072-byte configuration is published/written and equals the cold source/destination, with the same actual UsecasePool and metadata store. Its attempted reader pointer dump is excluded: original0x5C4D78 returns a publication flag, not data. Original Node reader reaches actual data getter0x5C2FC0 after the successful flag; return0x5D54D0 supplies output vector index2. Controlled owned interface fixtures qualify that caller handoff while excluding the metadata API implementations/numeric policy.
+
+This observer repeats only the remaining pointer gate with correctly identified GetTag entry/return. Twelve actual loaded code/data ranges, including the real getter and caller handoff, must match pinned source before arming/Start. Complete getter-return payload and its exact pointer must join the cold copy. Actual property/pool/store, same invocation/thread, source lifetime and first published record must agree. Reading matching bytes alone is insufficient. Writer/reader/API probes disable after the first qualified capture to limit debugger overhead.
+
+One manual-only holder invocation with persisted atomic entry guard, at mostone camera Start, bounded30-second acquisition/normal Stop; no kernel debugger, sleep, BCD changes or native Linux rear ISP. Initial idle FrameServer owners can disappear quickly: start service/attach/release PREENUM/PREINIT in one orchestrated call, then qualify the loaded module before Start. Use MASM and, not C++&& in .if conditions. Preserve every failed launch/condition and never reuse a consumed attempt.
+
+Clear breakpoints and explicitly detach/exit CDB, remove manual task, normal reboot to Golden and reverify hashes/idle/NTFS. Numeric initialization, exact opened tuning profile/file, required RS/bootstrap/preflight and enabled WM16 ownership remain separate open gates. Optional AI/effects/catalogue work remain deferred. Originals/logs/payload/optical pixels stay private on SP11.

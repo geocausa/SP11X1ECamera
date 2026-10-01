@@ -1,3 +1,7 @@
+## E011BU correction to API label
+
+The observed0x5C4D78 boundary is a publication-flag check, not the actual data getter. Original data getter0x5C2FC0 returns at0x5D54D0 and then feeds output vector index2. E011BT prefix/byte-copy facts remain bounded; neither metadata API implementation was executed there. See E011BU/E011BV for the separated live evidence and remaining pointer gate.
+
 # E011BT bounded original rear cold AEC metadata route and copy
 
 The clean front/back baseline remains the priority. This checks the exposure-statistics startup path needed by that baseline; optional AI/effects and the unrelated tuning catalogue remain deferred. Linux slice: L3 ISP statistics configuration/bootstrap, detached source qualification only.

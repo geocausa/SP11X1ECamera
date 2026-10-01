@@ -58,9 +58,9 @@ save("arm",[
  'bp0 /1 QcDeviceMFT8380+0x83aa20 '+script("first"),
  'bp1 /1 QcDeviceMFT8380+0x83aad4 '+script("second"),
  'bp2 /1 QcDeviceMFT8380+0x83abd4 '+script("publish"),
- 'bp4 QcDeviceMFT8380+0x5c44c8 ".if ((@x1==0x5000001c)&&(@lr==QcDeviceMFT8380+0x5d6ef8)&&(@$t13==1)&&(@$t14==0)&&(@$tid==@$t2)) { '+script("write").strip('"')+' } .else { g }"',
- 'bp6 QcDeviceMFT8380+0x5d4d30 ".if ((@x3==2)&&(dwo(@x1+8)==0x5000001c)&&(@lr>=QcDeviceMFT8380+0x73b730)&&(@lr<QcDeviceMFT8380+0x73c298)&&(@$t5==0)) { '+script("reader").strip('"')+' } .else { g }"',
- 'bp7 QcDeviceMFT8380+0x5c4d78 ".if ((@x1==0x5000001c)&&(@lr==QcDeviceMFT8380+0x5d5180)&&(@$t5!=0)&&(@$t15==0)&&(@$tid==@$t8)) { '+script("read").strip('"')+' } .else { g }"',
+ 'bp4 QcDeviceMFT8380+0x5c44c8 ".if ((@x1==0x5000001c) and (@lr==QcDeviceMFT8380+0x5d6ef8) and (@$t13==1) and (@$t14==0) and (@$tid==@$t2)) { '+script("write").strip('"')+' } .else { g }"',
+ 'bp6 QcDeviceMFT8380+0x5d4d30 ".if ((@x3==2) and (dwo(@x1+8)==0x5000001c) and (@lr>=QcDeviceMFT8380+0x73b730) and (@lr<QcDeviceMFT8380+0x73c298) and (@$t5==0)) { '+script("reader").strip('"')+' } .else { g }"',
+ 'bp7 QcDeviceMFT8380+0x5c4d78 ".if ((@x1==0x5000001c) and (@lr==QcDeviceMFT8380+0x5d5180) and (@$t5!=0) and (@$t15==0) and (@$tid==@$t8)) { '+script("read").strip('"')+' } .else { g }"',
  'bp9 /1 QcDeviceMFT8380+0x73c090 '+script("cold"),
  '.printf "E011BU_ARMED_BOUNDED_METADATA_LINEAGE\\n"',"bl"])
 save("oracle",[".logopen "+win+"\\cdb-observer.raw","sxe ld:QcDeviceMFT8380.dll",'.printf "E011BU_WAIT_OWNER_MODULE\\n"',"g"])
