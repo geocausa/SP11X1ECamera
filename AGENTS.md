@@ -1,3 +1,13 @@
+## E011AY named AEC module and grid reader — OFFLINE PASS / POLICY OPEN
+
+The original public/core/bank accessor chain now selects the named aecxhwstatsconfig payload. 128 owned cases execute all three accessors and the cache loads, with 43 original named lookups per case. The core accessor's **pre-indexed +8** matters: data is bank+EF8 =core+F00; hwstats is bank+FE8 =core+FF0. Do not reuse offsets with the wrong owner base.
+
+Three SHA-pinned installed Default v10.0 roots each have a candidate gridStatsConfig child. The original grid reader/native memcpy copies wire+14 to grid+14 across 12 weight bytes; 137 cases at 4 placements plus private comparison pass 549 executions. Candidate source weights match E011AX across 12 bytes; captured weights are never producer inputs. Parent deserialization, array bookkeeping/aggregate tail, actual profile choice and live named-module/cache join remainOPEN. Matching values do not close numeric policy.
+
+NEXT qualify parent reader 123CC0, payload+38 pointer store 123FA4 and first grid reader 123550 call 124034, then actual selected source/cache ownership. Prefix ends 123818; do not treat the exploratory post-prefix BRK as a driver defect. Prior E011AX live identity remains consumed; no new observer armed. Cold metadata bridge, RS authority, whole bootstrap, WM16 retirement and Linux optical parity remainOPEN; native rear runtime **DENIED**.
+
+Golden boot f627e38e-19d3-480a-900d-73116d63b4df/all 3 payload hashes unchanged, saved FullIOv19c, empty next_entry, NTFS unmounted, camera idle. No camera Start/reboot/production C/build/runtime action. See [E011AY](experiments/E004-front-ir-vd55g0/e011ay-rear-aec-cache-construction/README.md), SOURCE-SAFE, SCALAR-SAFE, GUARD-SAFE and NEXT-SOURCE. Originals remain same-SP11 private.
+
 ## E011AX live AEC cache/frame lineage — PASS / EARLIER WRITER AND METADATA BRIDGE OPEN
 
 One qualified original Windows rear4K Start/Stop completed710 valid frame handles. Actual grid Init/cache/getter ownership is joined across4 captures, with selector12/type10/92-byte primary descriptor. Two same-object/cache getter observations write the primary output; final observed92-byte block equals the consumed frame. First BG-joined getter weights and4 primary scalar-copy records match. Only selector12 callback was logged; do not assign the second getter's selector by timing (source has subsequent selector20 at852984). Full GetParam return is not instrumented.
