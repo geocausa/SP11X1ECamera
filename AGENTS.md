@@ -1,3 +1,11 @@
+## E011BR common module headers and selected nonroot retrieval — BOUNDED PASS
+
+Four original full rear loaders at two placements pass194,976 exact readers and2,492 actual module returns. Seven common source-backed fields at16/56/60/68/72/80/208 match at actual return and remain intact after loader/input retirement;52,332 repeated field checks pass. Owned dynamic names and map keys are active/terminated and equal each other. Name-map stores preserve typed source leaf/flag-derived map owner.
+
+Original source-derived selectors and map lookups pass4,688 selected existing-key returns before/after source unmap, old context overwrite and retired-storage poison:2,940 nonroot and1,748 root. Eligible source-exact keys are872(default)/300(specific), across40/9 nonroot owners. Original string construction uses typed source names. All preexisting allocation/heap bytes survive; no missing keys are queried.
+
+NEXT E011BS independent naming authority for42(default)/32(specific) different owned names,148 excluded across placements, then remaining typed payload consumers. Common header/retrieval success does not qualify other tuning bodies, whole manager lifetime, destruction/reuse, platform/opened filename or camera parity. Golden/all3 hashes unchanged, idle/NTFS unmounted; zero starts/reboots/observer/C/kernel build. Cold metadata/RS/bootstrap/WM16/optical open; native rear denied; no new front/back image test. Originals private on SP11. See [E011BR](experiments/E004-front-ir-vd55g0/e011br-rear-selected-module-metadata/README.md), RETRIEVAL-SAFE/GUARD-SAFE/RESULT/NEXT-SOURCE.
+
 ## E011BQ source hierarchy and nonroot selection — BOUNDED PASS
 
 Four full original rear loaders at two placements pass 194,976 exact reader returns and 86,496 source-derived hierarchy pointer checks. Original selector0x6F3BD0 returns match the independent typed model in2,072 queries, including1,248 nonroot and784 null returns, before and after source/context retirement. Direct helper0x6F1D68 adds7,208 returns,128 nonnull. All eight links per node are verified: source wire16 becomes primary/inheritance pointer16; flag-derived48 points to parent map owner; ordinary children32/40, flagged children56/64 and sibling72 preserve physical record order.
