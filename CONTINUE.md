@@ -1,3 +1,13 @@
+## E011BB original four-grid mapping — OFFLINE PASS / CALLER POLICY OPEN
+
+548 original parent-through-four-grid prefixes pass at four owned-memory placements:2192 complete grid-reader returns and6576 matching weight fields. Serialized entries start0/101/202/303 and each consumes101 bytes; runtime entries use120-byte stride. Three SHA-pinned Default sources each match all four E011BA live cache weight triples,12 comparisons/144 bytes. Additional16-byte copies at offsets32/48 and typed nested4-byte data arrays are verified;64 malformed source descriptions are rejected. Source bytes and allocation canaries stay intact.
+
+The earlier123820 stop is an explicit zero-divisor guard for the serialized-alignment argument retained at123570. The complete fixture passes alignment1 explicitly; actual caller/live alignment policy remainsOPEN. This was not an ARM64EC requirement or driver defect. Root virtual table1335598/slot8 points to123CC0 in source, and all four prior named objects have that table pointer; actual loaded slot bytes/entry argument were not captured. Payload+2C=4 and nearby+30=0; do not call+30 a completed count.
+
+Three full parent-return smoke checks pass, but revision/name/security/allocation/memset helpers remain excluded/stubbed; sibling field/profile metadata policy is not closed. No captured scalar becomes a producer input. No camera Start/reboot/production C/kernel build/native rear activation. Golden boot d1ebda3c-7b12-4b35-8819-296ed4b29f4b/all three hashes unchanged, saved FullIOv19c, empty next_entry, NTFS unmounted/camera idle.
+
+NEXT source-close deserializer caller alignment, selected file/profile and revision/metadata authority before detached source integration. Cold metadata bridge, RS authority, complete bootstrap, WM16 retirement and Linux optical parity remainOPEN; native rear runtime **DENIED**. See [E011BB](experiments/E004-front-ir-vd55g0/e011bb-rear-aec-four-grid-deserialization/README.md), DESERIALIZATION-SAFE, ALIGNMENT-SOURCE-SAFE, GUARD-SAFE, NEXT-SOURCE and RESULT. Originals remain private on SP11.
+
 ## E011BA live named AEC source/cache — PASS / GOLDEN RETURNED
 
 One fresh original Windows rear Color VideoRecord NV12 3840x2160 Start/Stop completed874 valid4K frame handles. Seven loaded code ranges and three tables matched before Start; actual public/core/bank callback slots and grid vtable matched before use. Four named aecxhwstatsconfig lookups join module+120 payload to bank+FE8, through Configure returned data+F0 to payload+38 grid array.
