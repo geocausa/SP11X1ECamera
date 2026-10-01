@@ -9,7 +9,7 @@ private=ROOT.parent/"private"/(a.identity+"-captured");cap=private/"capture"
 def read(n):return json.loads((private/n).read_text(encoding="utf-8-sig"))
 ps=read("VALIDATION-SAFE.json");prep=json.loads((HERE/"PREPARE-SAFE.json").read_text())
 raw=(private/"cdb-observer.raw").read_text(errors="replace")
-assert not re.search(r"Syntax error|Memory access error|Couldn.t resolve|E011BD_AUTHORITY_FAIL",raw)
+assert not re.search(r"Syntax error|Memory access error|Couldn.t resolve|(?m:^E011BD_AUTHORITY_FAIL\s*$)",raw)
 def events(n):
  out=[]
  for m in re.finditer(r"^E011BD_"+n+r" ([^\r\n]+)",raw,re.M):

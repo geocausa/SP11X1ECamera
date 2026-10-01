@@ -11,7 +11,7 @@ $e=@(Events 'MODULE_BASE');if($e.Count-ne1){throw 'module base absent'};$mb=Ptr 
 $prep=Get-Content ($p+'\PREPARE-SAFE.json') -Raw|ConvertFrom-Json
 foreach($code in $prep.code_ranges){$f=$p+'\capture\CODE_'+$code.name+'.bin';if((Get-Item $f).Length-ne$code.bytes -or (Get-FileHash $f -Algorithm SHA256).Hash.ToLowerInvariant()-ne$code.sha256){throw ('loaded code mismatch '+$code.name)}}
 foreach($tab in $prep.tables){$r=Record ('TABLE_'+$tab.name) (8*$tab.target_rvas.Count);for($i=0;$i-lt$tab.target_rvas.Count;$i++){if([BitConverter]::ToUInt64($r,8*$i)-$mb-ne$tab.target_rvas[$i]){throw 'loaded table mismatch'}}}
-if($t-match'Syntax error|Memory access error|Couldn.t resolve|E011BD_AUTHORITY_FAIL'){throw 'observer diagnostic'}
+if($t-match'Syntax error|Memory access error|Couldn.t resolve|(?m)^E011BD_AUTHORITY_FAIL\s*$'){throw 'observer diagnostic'}
 if($QualificationOnly){
  $q=[ordered]@{experiment='E011BD';identity=$Identity;status='PASS_LOADED_CODE_STATIC_TABLES';UTC=[DateTime]::UtcNow.ToString('o');loaded_code_ranges=$prep.code_ranges.Count;loaded_tables=$prep.tables.Count;private_bytes_exported=$false}
  $q|ConvertTo-Json|Set-Content ($p+'\LOADED-QUALIFICATION-SAFE.json');$q|ConvertTo-Json;return

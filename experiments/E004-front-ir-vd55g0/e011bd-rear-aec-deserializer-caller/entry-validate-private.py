@@ -8,7 +8,7 @@ p=argparse.ArgumentParser();p.add_argument("identity");a=p.parse_args()
 assert re.fullmatch(r"E011BD-\d{8}-\d{4}[A-Z]",a.identity)
 private=ROOT.parent/"private"/(a.identity+"-captured");cap=private/"capture"
 raw=(private/"cdb-observer.raw").read_text(errors="replace")
-assert not re.search(r"Syntax error|Memory access error|Couldn.t resolve|E011BD_(CHILD_)?AUTHORITY_FAIL",raw)
+assert not re.search(r"Syntax error|Memory access error|Couldn.t resolve|(?m:^E011BD_(CHILD_)?AUTHORITY_FAIL\s*$)",raw)
 def events(name):
  return [dict(re.findall(r"([A-Za-z]+)=([0-9a-fA-F\x60]+)",m.group(1))) for m in re.finditer(r"^E011BD_"+name+r" ([^\r\n]+)",raw,re.M)]
 def ptr(x):return int(x.replace(chr(96),""),16)
@@ -16,7 +16,7 @@ def rec(name,size):
  b=(cap/(name+".bin")).read_bytes();assert len(b)==size;return b
 def q(b,o=0):return struct.unpack_from("<Q",b,o)[0]
 def w(b,o=0):return struct.unpack_from("<I",b,o)[0]
-mb=ptr(events("MODULE_BASE")[0]["base"]);entries=events("ENTRY")
+mb=ptr(events("MODULE_BASE")[0]["base"]);all_entries=events("ENTRY");entries=[e for e in all_entries if "lr" in e and mb<=ptr(e["lr"])<mb+0x1a00000]
 assert 1<=len(entries)<=4
 ps=json.loads((private/"ENTRY-SAFE.json").read_text(encoding="utf-8-sig"))
 for item in ps["record_hashes"]:
@@ -35,6 +35,10 @@ for item in files:
 dll=archive/"surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/QcDeviceMFT8380.dll"
 blob=dll.read_bytes();assert hashlib.sha256(blob).hexdigest()=="c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
 pe=pefile.PE(data=blob);base=pe.OPTIONAL_HEADER.ImageBase
+prep=json.loads((HERE/"PREPARE-SAFE.json").read_text())
+for c in prep["code_ranges"]:assert hashlib.sha256(rec("CODE_"+c["name"],c["bytes"])).hexdigest()==c["sha256"]
+for t in prep["tables"]:
+ b=rec("TABLE_"+t["name"],8*len(t["target_rvas"]));assert [q(b,i*8)-mb for i in range(len(t["target_rvas"]))]==t["target_rvas"]
 md=capstone.Cs(capstone.CS_ARCH_ARM64,capstone.CS_MODE_ARM);md.detail=True;md.skipdata=True
 results=[];captured_callers=set()
 for index,e in enumerate(entries,1):
@@ -61,10 +65,16 @@ for index,e in enumerate(entries,1):
    qualified_instance_slot=True,reader_context_and_child_bounds_match=True,
    source_root_and_grid_candidate_matches=matched,caller_return_rva=hex(caller) if caller>=0 else "outside_module",
    caller_code_window_matches_pinned_original=source_window_match,caller_is_original_indirect_call=call_is_indirect))
+cleanup=json.loads((private/"CLEANUP-SAFE.json").read_text(encoding="utf-8-sig"))
+assert cleanup["task_removed"] and cleanup["debugger_exited"] and cleanup["debugger_exit_code"]==0
+assert cleanup["start_count"]==cleanup["stop_count"]==0 and not cleanup["frame_run_completed"]
+for f in (ROOT.parent/"private"/a.identity).glob("*.cmd"):assert f.read_bytes()==(private/f.name).read_bytes()
 assert len(entries)==ps["entry_cases"]
 assert sum(r["alignment_matches_fixture_one"] for r in results)==ps["alignment_one_cases"]
 safe=dict(experiment="E011BD",identity=a.identity,status="PASS_INDEPENDENT_LIVE_ENTRY_RECHECK",
  entry_cases=len(results),entry_results=results,
+ rejected_partial_entry_records=len(all_entries)-len(entries),loaded_code_ranges_qualified=9,loaded_static_tables_qualified=4,
+ completed_camera_Starts=0,completed_frame_run=False,initialization_completed=False,
  actual_entry_alignment_observed=True,actual_caller_alignment_policy_closed=False,
  exact_loaded_tuning_filename_closed=False,full_profile_materialization_closed=False,
  raw_original_bytes_exported=False,captured_scalars_used_as_producer_inputs=False,native_rear_runtime_allowed=False)

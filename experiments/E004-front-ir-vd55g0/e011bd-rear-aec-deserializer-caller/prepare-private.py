@@ -69,14 +69,14 @@ save("init-after",[
  'r $t2=@$t2+1',"g"])
 # The original AEC module entry is qualified before touching its reader.
 save("entry",[
- r'.printf "E011BD_ENTRY n=%I64u tid=%x object=%p table=%p slot=%p reader=%p alignment=%I64u lr=%p\n",@$t17,@$tid,@x0,poi(@x0),poi(poi(@x0)+8),@x1,@x2,@x30',
+ r'.printf "E011BD_ENTRY n=%I64u tid=%x object=%p table=%p slot=%p reader=%p alignment=%I64u lr=%p\n",@$t17,@$tid,@x0,poi(@x0),poi(poi(@x0)+8),@x1,@x2,@lr',
  '.if ((poi(@x0)!=QcDeviceMFT8380+0x1335598) | (poi(poi(@x0)+8)!=QcDeviceMFT8380+0x123cc0) | (dwo(@x1+0xc8)!=0n48)) { .echo E011BD_AUTHORITY_FAIL; } .else { '+include("entry-qualified").strip('"')+' }'])
-child='poi(poi(@x1)+0x28)+(dwo(poi(@x1+0xd0)+0x28)*0xe0)'
+child='poi(poi(@x1)+0x28)+(dwo(poi(@x1+0xd0)+0x1c)*0xe0)'
 save("entry-qualified",[
- '.if ((dwo(poi(@x1+0xd0)+0x28)>dwo(poi(@x1)+0x18)) | (dwo('+child+'+0xc8)!=0n404)) { .echo E011BD_CHILD_AUTHORITY_FAIL; } .else { '+include("entry-record").strip('"')+' }'])
+ '.if (dwo(poi(@x1+0xd0)+0x1c)>dwo(poi(@x1)+0x18)) { .echo E011BD_CHILD_AUTHORITY_FAIL; } .else { .if (dwo('+child+'+0xc8)!=0n404) { .echo E011BD_CHILD_AUTHORITY_FAIL; } .else { '+include("entry-record").strip('"')+' } }'])
 save("entry-record",[
- *bounded("ENTRY","@$t17",[("OBJECT","@x0",384),("READER","@x1",224),("CONTEXT","poi(@x1)",64),("ROOT","poi(@x1+0xd0)",48),("SLOT","poi(@x0)+8",8),("CHILD",child,224),("GRID","poi('+child+'+0xd0)",404)]),
- *[f'.if ((@$t17==0n{i}) & (@x30>=QcDeviceMFT8380+0x1080) & (@x30<QcDeviceMFT8380+0x1a00000)) {{ '+dump(f"ENTRY{i:02}_CALLER","@x30-0x80",192)+' }' for i in range(1,5)],
+ *bounded("ENTRY","@$t17",[("OBJECT","@x0",384),("READER","@x1",224),("CONTEXT","poi(@x1)",64),("ROOT","poi(@x1+0xd0)",48),("SLOT","poi(@x0)+8",8),("CHILD",child,224),("GRID","poi("+child+"+0xd0)",404)]),
+ *[f'.if ((@$t17==0n{i}) & (@lr>=QcDeviceMFT8380+0x1080) & (@lr<QcDeviceMFT8380+0x1a00000)) {{ '+dump(f"ENTRY{i:02}_CALLER","@lr-0x80",192)+' }' for i in range(1,5)],
  'r $t17=@$t17+1',"g"])
 
 save("arm",["r $t0=1; r $t1=1; r $t2=1; r $t17=1"]+[
