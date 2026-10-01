@@ -1,3 +1,11 @@
+## E011BL original source profile records - BOUNDED PASS / ACTUAL AEC CONTEXT OPEN
+
+Four original loader prefixes over two SHA-pinned rear files at two placements pass: 3,604 source mode records, 56 original profile callback returns and four actual table-builder reader returns. Runtime node stride160 is indexed by serialized ID, not file order; source bytes0:12 and parent ID+12 -> pointer+24 are verified. Loader X1 is file base and X2 byte length. The first actual reader selector is invalid sentinel: its zero numeric/empty profile return does not close valid AEC selection.
+
+Manager+16 points to the header module name at file+88, not an opened filesystem filename. Header32:40 -> manager1104:1112 is verified; manager24:32 policy remains open. Actual reader context is not manager+16. Manually guessed AEC contexts failed checks and are excluded. NEXT reach the actual AEC reader via original caller state after 0x6F4E88, then join parent0x123CC0 metadata/name allocation. Opaque wire+16, platform path, node strings/containers and full loader return remain open.
+
+Golden boot/all three protected hashes unchanged; camera idle/NTFS unmounted. Zero camera starts, reboots, observer, production C or kernel build. Cold metadata/RS/bootstrap/WM16/optical gates remain open; native rear runtime denied. Originals remain private on SP11, captured scalars are not producer inputs. See [E011BL](experiments/E004-front-ir-vd55g0/e011bl-rear-aec-source-profile/README.md), SOURCE-PROFILE-SAFE, GUARD-SAFE, RESULT and NEXT-SOURCE.
+
 ## E011BK original profile callback — COMPLETE READER FIXTURE PASS / SOURCE PROFILE SELECTION OPEN
 
 Original interface constructor0x6F3D08 installs table0x133B740 whose slot0 is callback0x6F3B50; four original interface slots share that callback. Four constructor returns,72 callback returns,44 independent recursive formatter returns and72 complete reader returns pass at four placements, with eight pre-execution scope rejections. Reader dispatch0x6F4A98 now executes the original callback and original decimal formatter0xCB6300. No new helper shim/allocation; only inherited security-cookie shims execute.
