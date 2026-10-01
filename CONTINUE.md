@@ -1,3 +1,9 @@
+## E011AX AEC grid initialization / cold-cache observer — PREPARED ONLY
+
+Source-qualified grid interface13381A0 selects original Init3A0D70 and getter3A0DB0. Init retains its supplied configuration pointer at self+18 via3A0D84;128 owned fixtures preserve the cache and all checked object neighbors except the designated pointer/helper result. Helper numeric policy is excluded. This boundary does not generate the weights.
+
+Fresh E011AX-20261001-0055A is prepared but NOT ARMED/CONSUMED. Qualify loaded code before Start, normalize actual interface pointers, then join init/cache -> primary BG selector12/type10 -> getter output -> primary stats -> default AEC2072-byte copy. One manual-only holder with atomic CreateNew entry and one camera Start. Original records remain same-SP11 private. Cold numeric initialization, source-profile authority, RS authority, complete bootstrap and WM16 retirement remainOPEN. Native Linux rear runtime remainsDENIED; Golden preserved. See experiments/E004-front-ir-vd55g0/e011ax-rear-aec-hwstats-source-authority.
+
 ## E011AW cold AEC weight origin — BOUNDED COPY PASS / INITIALIZER OPEN
 
 Source-locked engine call8528EC binds algorithm BG selector12/output type10/size92 into frame+1A8, which later supplies hardware AEC_BE weights. Do not assume hardware AEC_BE naming selects algorithm BE20. AEC GetParam372E40 uses24-byte typed descriptors (query output pointer+18/count+20 hex);48 valid routes and24 wrong-type/undersized routes are mechanically verified before39EA40 dispatch.
