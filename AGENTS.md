@@ -1,3 +1,11 @@
+## E011BG original BFW sibling — BOUNDED PASS / METADATA AND FULL PROFILE OPEN
+
+Original parent full returns now validate typed bfwStatsConfig v0.0/mode0/no-selector140-byte ->160-byte runtime, one root count40/ref44. Five BFWROICombo records count12/ref16 produce160 bytes through10 original E8CC8 reader calls; nested data count132/ref136 uses original EA758. Payload count80/pointer88, BFW pointers24/152, exact scalar mapping/selected IDs/cursors/source copies verified. No new helper stubs or captured producer inputs.
+
+108 full-parent returns/BFW records across four placements validate540 ROI combinations,1080 original ROI returns and108 BFW data arrays;34 malformed source descriptions rejected. Eight owned scalar/eight ROI/eight nested-data variants; inherited revision/grid/histogram checks retained, including772 histogram entries, source data/reader non-cursor bytes/allocation canaries preserved. Full metadata/profile authority and every grid scalar/reserved field remainOPEN.
+
+Golden boot50edbeb8-e42d-41b1-8b37-3d536443604f/all3 protected hashes unchanged, saved FullIOv19c/empty next_entry, NTFS unmounted/camera idle. Zero Start/reboot/observer/production C/kernel build. NEXT qualify metadata6F4AC0/6F45D8/comparisonF5DF00, audit remaining root/grid fields, then complete loader6F22C8 and exact selector/source policy. E011BD identity still consumed/Windows initialization incomplete. Cold metadata ownership, RS authority, deterministic bootstrap, WM16 retirement and Linux optical parity remainOPEN. Native rear runtime **DENIED**. See [E011BG](experiments/E004-front-ir-vd55g0/e011bg-rear-aec-bfw-materialization/README.md), BFW-SAFE, GUARD-SAFE, RESULT and NEXT-SOURCE. Originals stay private on SP11.
+
 ## E011BF original histogram sibling — BOUNDED PASS / BFW AND FULL PROFILE OPEN
 
 Original parent histogram materialization is validated through loop exit124970, before BFW source fields: root count32/ref36; typed histStatsConfig v0.0/mode0/no-selector. Default candidates have9 entries, rear-specific7; wire stride172/runtime200, payload count64/pointer72. Native nested readerEA758 selects typed data/values IDs, with pointer160/184, exact source copies and consumed cursors. Aliased source spans do not substitute for selected-reader authority.
