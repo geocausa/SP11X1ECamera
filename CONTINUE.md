@@ -1,10 +1,12 @@
-## E011BA live named AEC source/cache — PREPARED / NOT ARMED
+## E011BA live named AEC source/cache — PASS / GOLDEN RETURNED
 
-Fresh E011BA-20261001-0749A will test the actual named aecxhwstatsconfig module object/payload, bank holder and qualified ConfigureHWStats/public/core/bank route through the cache retained by original grid Init. Seven loaded code ranges and three static tables must match before Start; instance callback slots and the grid vtable are checked before use. Bounded observations stop at four cases per boundary.
+One fresh original Windows rear Color VideoRecord NV12 3840x2160 Start/Stop completed874 valid4K frame handles. Seven loaded code ranges and three tables matched before Start; actual public/core/bank callback slots and grid vtable matched before use. Four named aecxhwstatsconfig lookups join module+120 payload to bank+FE8, through Configure returned data+F0 to payload+38 grid array.
 
-One atomic-entry, manual-only holder invocation permits one original Windows rear Color VideoRecord NV12 3840x2160 Start/Stop. No same-boot retry. User-mode CDB must detach/exit, the task must be removed, and normal reboot must return protected Golden. Original code/tuning, raw captures and live pointers remain private on this SP11. Exact tuning filename, full aggregate/profile policy, cold metadata bridge, RS authority, bootstrap, WM16 retirement and Linux optical parity remain OPEN. Native Linux rear runtime remains DENIED.
+Grid Init retains array elements at byte offsets0/120/240/360, with all120 bytes preserved per element. The first element's12 weight bytes join the named selected module and match three independently parsed SHA-pinned Default roots. Later elements have pointer-retention proof only; their numeric source mapping remainsOPEN. Initial validator's all-first-pointer assumption was corrected without altering captures. Windows and independent same-SP11 Linux validation pass78 private records/8256 bytes. No captured weights become producer inputs.
 
-See PREPARE-SAFE.json, PRE-RUNTIME-SAFE.json and independently written observer/validator sources. Current source base 823b8bb8; Golden boot f627e38e-19d3-480a-900d-73116d63b4df and all three payload hashes unchanged. No new camera Start yet.
+Identity E011BA-20261001-0749A consumed; CDB explicitly detached/exited0, task ended0/removed, no automatic triggers. Normal reboot returned protected Golden boot d1ebda3c-7b12-4b35-8819-296ed4b29f4b, kernel7.1.5-sp11-render-parity-v4+, saved FullIOv19c/empty next_entry and unchanged three payload hashes. NTFS unmounted, camera idle. No kernel debugging, BCD/sleep changes, production C/kernel build/native rear activation.
+
+NEXT complete original grid reader/typed aggregate and all-four source mapping, then independently resolve profile/source-selection authority before source-only integration. Exact loaded filename/full profile, cold numeric policy/metadata bridge, RS authority, whole bootstrap, WM16 retirement and Linux optical parity remainOPEN. Native Linux rear runtime **DENIED**. See [E011BA](experiments/E004-front-ir-vd55g0/e011ba-rear-aec-live-source-cache/README.md), VALIDATION-SAFE, CLEANUP-SAFE, GUARD-SAFE, NEXT-SOURCE and RESULT. Originals remain private on this SP11.
 
 ## E011AZ AEC parent-to-first-grid weights — OFFLINE PASS / LIVE SOURCE JOIN OPEN
 
