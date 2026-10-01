@@ -1,3 +1,11 @@
+## E011BM original symbol context and AEC join - BOUNDED PASS / FACTORY POLICY OPEN
+
+Four original symbol-builder returns, 194,976 exact symbol-reader returns, four AEC parent full returns, eight original metadata constructor returns and eight original name/version gate rejections pass over two rear files at two placements. All source readers use the original loader's stack context: header module name+0, header version+8, maximum ID+24 and table+40. Builder returns at0x6F3524. No metadata/name/comparison shim remains in this join.
+
+Parent0x123CC0 x0 is a request descriptor, not file context: embedded name+16 and U64 version+60 must match reader+12/+52. The owned request is source-backed and built with original metadata helper; actual factory request policy remains OPEN. AEC subclass vtable0x1335598 and reader ID+8 -> module+56 are verified. Qualified revision/grid/histogram/BFW fields and exact cursor-only changes pass. Unwritten padding and opaque embedded-name tail are unqualified; prior zero-filled fixture bytes are not source zero-policy.
+
+NEXT trace actual factory/caller request construction and complete loader/context ownership after0x6F3524; audit remaining root/grid fields, mode wire+16/platform/node strings and opened filename policy. Golden/all3 hashes unchanged, camera idle, NTFS unmounted; zero starts/reboots/observer/C/kernel build. Cold metadata/RS/bootstrap/WM16/optical remain open; native rear runtime denied. Originals private on SP11. See [E011BM](experiments/E004-front-ir-vd55g0/e011bm-rear-aec-original-context/README.md), CONTEXT-JOIN-SAFE, GUARD-SAFE, RESULT and NEXT-SOURCE.
+
 ## E011BL original source profile records - BOUNDED PASS / ACTUAL AEC CONTEXT OPEN
 
 Four original loader prefixes over two SHA-pinned rear files at two placements pass: 3,604 source mode records, 56 original profile callback returns and four actual table-builder reader returns. Runtime node stride160 is indexed by serialized ID, not file order; source bytes0:12 and parent ID+12 -> pointer+24 are verified. Loader X1 is file base and X2 byte length. The first actual reader selector is invalid sentinel: its zero numeric/empty profile return does not close valid AEC selection.
