@@ -1,3 +1,11 @@
+## E011BP both rear full loaders / retained AEC root lookup - BOUNDED PASS / NONROOT POLICY OPEN
+
+Four original production factory/full loader success1 returns cover both rear sources at placements0/1:194,976 exact readers,2,492 module dispatches and four source-qualified actual AEC parent returns. Larger rear-default full-loader coverage is now qualified. Immutable AEC module spans0:280/288:384 and all30(default)/26(specific) deep allocations survive full loader return;280 is the mutable sibling link.3,604 bounded node lists/2,492 active module memberships pass.
+
+Actual loader store6F3654 places AEC in owned56-byte name-map entry/value48. It lives in a source-flagged leaf sibling list while root profile map96 owns lookup. Eight original root selector6F3BD0 and eight original loaded name-map6F3F48 returns pass before/after source unmap, old48-byte context overwrite and retired-storage poison, with native reads rejecting stale context/retired storage. Entire manager source lifetime remains OPEN: header-name pointer16 still borrows source88. Root querycount1 skips index0; visible profile text is not a unique selector.
+
+NEXT E011BQ typed nonroot/repeated-group queries and node children16/32,sibling72,alias48/wire16, then selected consumers. Destruction/reuse, other module fields/root/grid/padding/platform/opened path remain open. Scoped27-site instrumentation and binary-search extent checks preserve accepted original outputs/five shim targets; no new semantic parser shim. Golden/all3 hashes unchanged, idle/NTFS unmounted, no starts/reboots/observer/C/kernel build. Cold metadata/RS/bootstrap/WM16/optical open, native rear denied, no new image test; originals private on SP11. See [E011BP](experiments/E004-front-ir-vd55g0/e011bp-rear-aec-output-ownership/README.md), OWNERSHIP-SAFE/GUARD-SAFE/RESULT/NEXT-SOURCE.
+
 ## E011BO full production factory / rear-specific loader - BOUNDED PASS / LIFETIME AND FULL PROFILE OPEN
 
 Four original factory returns and eight actual name lookups pass over both rear files/two placements:565 registry stores per factory,194,976 exact reader returns and four qualified direct AEC joins. The prior0xCB167C stop is unresolved HeapFree import; guarded owned release0xCAE730 validates allocation start/no double release/canaries and defers retirement without reuse. No OEM heap defect is claimed.
