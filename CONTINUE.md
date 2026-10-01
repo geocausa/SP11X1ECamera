@@ -1,3 +1,11 @@
+## E011BA live named AEC source/cache — PREPARED / NOT ARMED
+
+Fresh E011BA-20261001-0749A will test the actual named aecxhwstatsconfig module object/payload, bank holder and qualified ConfigureHWStats/public/core/bank route through the cache retained by original grid Init. Seven loaded code ranges and three static tables must match before Start; instance callback slots and the grid vtable are checked before use. Bounded observations stop at four cases per boundary.
+
+One atomic-entry, manual-only holder invocation permits one original Windows rear Color VideoRecord NV12 3840x2160 Start/Stop. No same-boot retry. User-mode CDB must detach/exit, the task must be removed, and normal reboot must return protected Golden. Original code/tuning, raw captures and live pointers remain private on this SP11. Exact tuning filename, full aggregate/profile policy, cold metadata bridge, RS authority, bootstrap, WM16 retirement and Linux optical parity remain OPEN. Native Linux rear runtime remains DENIED.
+
+See PREPARE-SAFE.json, PRE-RUNTIME-SAFE.json and independently written observer/validator sources. Current source base 823b8bb8; Golden boot f627e38e-19d3-480a-900d-73116d63b4df and all three payload hashes unchanged. No new camera Start yet.
+
 ## E011AZ AEC parent-to-first-grid weights — OFFLINE PASS / LIVE SOURCE JOIN OPEN
 
 The original parent reader now resolves the grid symbol at wire+28, allocates 4×120=480 bytes, stores the first-grid array at payload+38 and copies 12 weight bytes from wire+14 to grid+14. 548 original prefixes pass across three independent installed Default roots and scalar mutations, plus 48 array-address and 18 original symbol-helper checks. Source bytes/allocation canaries are preserved; 16 malformed source descriptions are rejected. Captured weights are comparison outputs only.
