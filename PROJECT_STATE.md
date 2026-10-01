@@ -1,3 +1,11 @@
+## E011BH original metadata helpers — OWNED-FIXTURE PASS / PARENT CONTEXT JOIN OPEN
+
+Original6F45D8 metadata constructor,6F4AC0 name helper andF5DF00 comparison execute in isolated owned fixtures:44 constructor returns,44 standalone+44 embedded name-helper calls,192 comparison cases,15 scope rejections before execution. Original name allocation/source strings/heap field guards pass. ASCII names<=32 preserve case; profile+80 truncates127 chars, filename+208 truncates64. x2/x3/x4 forward into+60/+68/+72. Opaque name-helper tail and names>32 remain excluded; numeric patterns are not selector/mode policy.
+
+Source caller reads profile at reader+72, minor+68, reader->file context at+0 and filename pointer context+0. Original compiled AEC name matches the typed source. Loader initialization of those fields is stillOPEN; owned strings do not prove actual filename/profile. Metadata skips are removed only in the isolated helper fixture; historical full-parent metadata skips remain unchanged. NEXT trace source/selector/header ownership, then integrate the original helpers while accounting for the additional name allocation. Audit remaining root/grid fields before full aggregate claims.
+
+Golden boot50edbeb8-e42d-41b1-8b37-3d536443604f/all3 protected hashes unchanged, saved FullIOv19c/empty next_entry, NTFS unmounted/camera idle. Zero Start/reboot/observer/production C/kernel build. E011BD identity consumed/Windows initialization incomplete. Exact source/profile selection, cold metadata ownership, RS authority, deterministic bootstrap, WM16 retirement and Linux optical parity remainOPEN. Native rear runtime **DENIED**. See [E011BH](experiments/E004-front-ir-vd55g0/e011bh-rear-aec-metadata-authority/README.md), METADATA-SAFE, GUARD-SAFE, RESULT and NEXT-SOURCE. Originals stay private on SP11.
+
 ## E011BG original BFW sibling — BOUNDED PASS / METADATA AND FULL PROFILE OPEN
 
 Original parent full returns now validate typed bfwStatsConfig v0.0/mode0/no-selector140-byte ->160-byte runtime, one root count40/ref44. Five BFWROICombo records count12/ref16 produce160 bytes through10 original E8CC8 reader calls; nested data count132/ref136 uses original EA758. Payload count80/pointer88, BFW pointers24/152, exact scalar mapping/selected IDs/cursors/source copies verified. No new helper stubs or captured producer inputs.
