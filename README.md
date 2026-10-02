@@ -3,14 +3,14 @@
 **Active workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean` on
 `experiment/e004-front-ir-vd55g0`; see [machine/workspace map](docs/MACHINE_MAP.md).
 
-**Current engineering checkpoint — 2026-10-02 / E011CJ:** original post-attachment
-baseline reset passes24 cases, including12 explicit poisoned-field fixtures.
-Exact entire-inner/arena deltas check three clears,51 scalar store chunks and
-an internal buffer link per case. Source-only; Golden unchanged. Next E011CK
-qualifies remaining source producers and CRT state before final publication/return.
-Native rear hardware ISP runtime remains denied pending remaining initialization
-and DMA-retirement gates. See [current continuation](CONTINUE.md) and
-[E011CJ result](experiments/E004-front-ir-vd55g0/e011cj-baseline-state-reset/RESULT.json).
+**Current engineering checkpoint — 2026-10-02 / E011CK:** original source object
+and module binding passes24 cases, including12 explicit scalar poison fixtures.
+Complete1088/120 object models, exact entire-inner delta and source cache identities
+pass. Source-only; Golden unchanged. Next E011CL qualifies conditional context
+fields and CRT state before final output publication/return. Native rear hardware
+ISP runtime remains denied pending initialization and DMA-retirement gates.
+See [current continuation](CONTINUE.md) and
+[E011CK result](experiments/E004-front-ir-vd55g0/e011ck-source-object-and-module-binding/RESULT.json).
 
 Current product priority is a clean, controllable front/back native Linux
 baseline; optional AI/effects/HDR/catalogue are deferred. Protected IR/Hello
