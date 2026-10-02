@@ -1,3 +1,9 @@
+## E011CF complete original core creator and interface — BOUNDED PASS
+
+Full4980-byte3A8BE0 returns12 original320-byte interfaces/5152-byte cores under explicit owned count0 descriptors. Full516-byte3C8380/3376-byte3D4BD0,24 cache/bank updates,1032 exact cache lookups,24 unchanged skips and292 source-requested element initializers pass. Complete required core/setup delta, caller/old source immutability and guarded arenas pass. Actual source-created interface/core now supply12 full statistics setups,180 independent152-byte records and72 positive/72 exhausted full ordinary queries. Seven mode mirrors are byte stores; source initializer counts differ18+3+3 vs18+3+4. Numeric callbacks unmodified. Whole optional-bank field semantics/destruction/reuse remain unqualified.
+
+NEXT E011CG complete ordinary outer36CBA0 and incoming/live Default descriptor, inner/context/opened filename lifetime. Full core creator is closed only under explicit owned inputs; whole outer/source bootstrap and RS/hardware gates remain open. Optional AI/effects/HDR/catalogue deferred. Golden boot e9983770-a981-49f9-a9f2-2fe081b5863d/all3hashes unchanged; zero Start/reboot/C/kernel/reachable integration. Native rear DENIED pending RS/full bootstrap-preflight/independent enabled WM16 IRQ-consumed IOVA-DMA-IOMMU retirement/optical. No new Linux front/back image test. See [E011CF](experiments/E004-front-ir-vd55g0/e011cf-full-core-startup/README.md).
+
 ## E011AT AWB SetParam retained BG — CALLBACK EXCLUDED / GOLDEN RETURNED
 
 One original Windows rear 4K run completed 714 valid handles, one successful Start and clean Stop. User-mode CDB explicitly detached/exited0 and the manual task was removed. The live original CAWBMain::AWBSetParameter callback is RVA68C090 through wrapper+28 -> actor+0 -> vtable+08; its same-thread return result is0 and the40-byte parameter record matches the outer call.
