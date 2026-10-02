@@ -1,3 +1,13 @@
+## E011CM original CRT object producers — BOUNDED PASS
+
+Four unchanged original CRT routines return across eight owned cases: four placements, default count 512 and explicit preset count 128. Independent whole mapped-image/arena models pass for 512 entire 72-byte indexed records, 24 entire 88-byte static stream objects and eight full pointer vectors. All 180 source image stores, 656 logical OS mutex initializations and 16 guarded allocations match. Eight existing-table lookups allocate/initialize nothing and balance their locks; 24 invalid OS ownership requests are rejected.
+
+Correction: global 0x16A2A50 is a 32-bit count, 0x16A2A58 a pointer vector, and 0x16A2A90 an indexed table. Their original producers return under explicit owned heap and logical single-thread OS contracts. The original global mutex initializer includes 0x16A3000. These contracts do not prove Windows mutex bytes, concurrency, actual standard handles, locale or full CRT/loader initialization.
+
+NEXT **E011CN**: integrate exact original producers into owned outer-entry, qualify runtime CRT deltas/lock ownership, then final output publication, whole outer return and balanced release. This isolated CRT matrix does not extend E011CL's accepted camera-entry prefix. Original TLS 0xCFE600 stays unqualified and raises; no numeric/TLS success substitute or new logger admission. Full bootstrap/preflight/RS and independently enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied.
+
+Golden boot/payload hashes and both historical checkouts are unchanged. Zero camera Starts/reboots/production C/kernel changes/image tests. Clean controllable front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CM](../experiments/E004-front-ir-vd55g0/e011cm-crt-object-producers/README.md).
+
 ## E011CL original conditional source context — BOUNDED PASS
 
 Original entry `0x36CBA0` reaches the stop before `0x36DE04` in 24 cases: 12 unmodified and 12 explicit owned destination-poison fixtures across three pinned sources and four placements. The new 428-byte conditional portion executes unchanged original instructions. Serialized scene-change bank flags, values and names independently select record 1; source counts are 3/3/4, with guarded arrays of 528/528/704 bytes and 176-byte records. Exact comparison arguments and three context read origins pass.
