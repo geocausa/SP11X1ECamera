@@ -1,3 +1,11 @@
+## E011BX live cache/frame join; source/receiver scope partial
+
+One consumed Windows rear4K Start/Stop completed450 valid handles. Four named source-array/Init pairs and both typed queries (written92, types10/21) supply the actual FIRST frame+424, converter and first2072 publication with matching pointers/thread/bytes.11loaded ranges/table qualified beforeStart; zero observer diagnostics. Same-SP11 Linux bounded validation and eight corruption negatives pass.
+
+Seven-field source claim rejects profile high word+76; six fields match one pinned candidate. Actual outer callback36E460 differs from owned fixture372E40; full loaded524-byte receiver/inner ABI not qualified. Retained descriptors correct eight MASM decimal-offset printf fields; original logs preserved. Converter return register has no qualified status ABI. Whole source bootstrap/profile policy remains open; do not use captured constants or replay consumed E011BX-20261002-0030A.
+
+Golden e9983770-a981-49f9-a9f2-2fe081b5863d/all3hashes unchanged, idle; debugger/task cleaned. NEXT E011BY source-only36E460 delegation/actual ABI and numeric metadata76 construction. Native rear DENIED, RS/bootstrap/WM16/optical gates open, no new Linux front/back image. Clean baseline priority, optional features deferred. See [E011BX](../experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/README.md).
+
 ## E011BW source-produced cold AEC weights — DETACHED PASS
 
 Three qualified Default tuning roots have identical weights in all twelve grid records. A new portable integer decoder requires the four records to agree and rejects unsupported shapes/values. Cold AEC weights and AWB quad now come from tuning in the detached C replay; incoming cold bytes are deliberately255 and must be overwritten. GCC/Clang ASan/UBSan each pass5,616 decoder checks and510,380 full startup/preflight assertions, with zero semantic register differences in all four packets.

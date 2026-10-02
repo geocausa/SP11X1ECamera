@@ -17,7 +17,7 @@ def hx(e,k):return int(e[k],16)
 def dc(e,k):return int(e[k],10)
 def u32(b,at):return struct.unpack_from("<I",b,at)[0]
 def u64(b,at):return struct.unpack_from("<Q",b,at)[0]
-def validate(events,data,manifest,expected,base,holder):
+def validate(events,data,manifest,expected,base,holder,bounded=False):
  for r in manifest["ranges"]:
   b=data["CODE_"+r["name"]];assert len(b)==r["bytes"] and hashlib.sha256(b).hexdigest()==r["sha256"],"loaded code"
  assert [v-base for v in struct.unpack("<3Q",data["TABLE_GRID"])]==manifest["tables"][0]["target_rvas"],"loaded table"
@@ -31,7 +31,8 @@ def validate(events,data,manifest,expected,base,holder):
  for key in ["frameStackMatch","outStackMatch","sameProcessor","sameTid"]:assert dc(first,key)==1,"first arguments"
  assert dc(first,"queryCount")==dc(first,"getterCount")==nq
  assert hx(first,"frame")==hx(after,"frame") and hx(first,"out")==hx(after,"out")==hx(pub,"src"),"first pointers"
- assert hx(after,"result")==0 and dc(after,"sameTid")==1
+ assert dc(after,"sameTid")==1
+ # First converter return register is recorded, but its status ABI is unqualified.
  assert hx(pub,"tag")==0x5000001c and dc(pub,"bytes")==2072 and dc(pub,"firstStackMatch")==dc(pub,"sameTid")==1
  assert len(data["FRAME"])==len(data["FRAME_AFTER"])==1880
  assert data["FRAME"]==data["FRAME_AFTER"],"input frame changed"
@@ -44,8 +45,11 @@ def validate(events,data,manifest,expected,base,holder):
   prefix=f"NAMED{i:02}_";obj=data[prefix+"OBJECT"];payload=data[prefix+"PAYLOAD"];arr=data[prefix+"ARRAY"]
   assert len(obj)==384 and len(payload)==96 and len(arr)==480 and obj[288:]==payload,"named shape"
   assert u32(payload,44)==4 and u64(payload,56)==hx(e,"array"),"named array"
-  matches=[x for x in expected if all(obj[int(off):int(off)+len(bytes.fromhex(v))]==bytes.fromhex(v) for off,v in x["fields"].items())]
+  matches=[x for x in expected if all(obj[int(off):int(off)+len(bytes.fromhex(v))]==bytes.fromhex(v) for off,v in x["fields"].items() if not bounded or off!="72")]
   assert matches,"typed source module metadata"
+  if bounded:
+   assert all(u32(obj,72)==u32(bytes.fromhex(x["fields"]["72"]),0) for x in matches),"source numeric low word"
+   assert all(u32(obj,76)!=u32(bytes.fromhex(x["fields"]["72"]),4) for x in matches),"retain known numeric high mismatch"
   weights=bytes.fromhex(matches[0]["weights"])
   assert hashlib.sha256(weights).hexdigest()==manifest["source_weight_sha256"]
   assert all(arr[j*120+20:j*120+32]==weights for j in range(4)),"source weights"
@@ -69,7 +73,7 @@ def validate(events,data,manifest,expected,base,holder):
   selector=dc(q,"selector");kind=10 if selector==12 else 21
   assert selector in [12,20] and dc(q,"count")==1 and dc(q,"allocated")==92 and dc(q,"type")==kind
   assert hx(q,"callerRVA")==({12:0x8528f0,20:0x852988}[selector])
-  assert hx(q,"callbackRVA")==0x372e40
+  assert hx(q,"callbackRVA")== (0x36e460 if bounded else 0x372e40)
   assert hx(q,"tid")==hx(a,"tid")==hx(g,"tid")==hx(ga,"tid")==hx(first,"tid")
   assert dc(a,"sameTid")==dc(ga,"sameTid")==1 and hx(a,"status")==0 and hx(ga,"result")==1
   assert dc(a,"written")==92 and dc(a,"type")==kind
@@ -82,7 +86,7 @@ def validate(events,data,manifest,expected,base,holder):
   gp=f"GETTER{i:02}_";ap=f"GETTERAFTER{i:02}_";qp=f"QUERY{i:02}_";rp=f"QUERYAFTER{i:02}_"
   assert data[gp+"CACHE"]==data[ap+"CACHE"]==sourcecache,"unchanged source cache"
   assert len(data[gp+"SELF"])==48 and u64(data[gp+"SELF"],24)==sourceptr
-  interface=data[qp+"INTERFACE"];assert len(interface)==48 and u64(interface,8)-base==0x372e40 and u64(interface,40)==hx(q,"manager")
+  interface=data[qp+"INTERFACE"];assert len(interface)==48 and u64(interface,8)-base==(0x36e460 if bounded else 0x372e40) and u64(interface,40)==hx(q,"manager")
   desc=data[qp+"DESC"];post=data[rp+"DESC"]
   assert len(desc)==len(post)==24
   assert u64(desc,0)==u64(post,0)==hx(q,"out") and u32(desc,8)==u32(post,8)==92

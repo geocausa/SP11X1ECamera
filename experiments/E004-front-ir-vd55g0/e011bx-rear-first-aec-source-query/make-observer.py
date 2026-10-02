@@ -79,12 +79,12 @@ def main():
   log('ENVELOPE tid=%x processor=%p','@$tid,@x0'),"r $t5=@x0; r $t6=@$tid; r $t7=1","g"])
  save("query",[
   log('QUERY n=%I64u tid=%x engine=%p selector=%u interface=%p callbackRVA=%I64x manager=%p desc=%p out=%p count=%u allocated=%u written=%u type=%u callerRVA=%I64x',
-   '@$t8,@$tid,@x0,@w1,poi(@x0+0x1088),poi(poi(@x0+0x1088)+8)-QcDeviceMFT8380,poi(poi(@x0+0x1088)+0x28),@x3,poi(@x3),@w4,dwo(@x3+8),dwo(@x3+12),dwo(@x3+16),@lr-QcDeviceMFT8380'),
+   '@$t8,@$tid,@x0,@w1,poi(@x0+0x1088),poi(poi(@x0+0x1088)+8)-QcDeviceMFT8380,poi(poi(@x0+0x1088)+0x28),@x3,poi(@x3),@w4,dwo(@x3+8),dwo(@x3+0xc),dwo(@x3+0x10),@lr-QcDeviceMFT8380'),
   "r $t9=@x0; r $t10=@x3; r $t11=poi(@x3); r $t12=@$tid; r $t13=@w1",
   *bounded("QUERY",8,[("INTERFACE","poi(@x0+0x1088)",48),("DESC","@x3",24),("BEFORE","poi(@x3)",92)]),
   "bp5 /1 @lr "+include("query-after"),"g"])
  save("query-after",[
-  log('QUERYAFTER n=%I64u tid=%x status=%x desc=%p out=%p sameTid=%u written=%u type=%u','@$t8,@$tid,@w0,@$t10,poi(@$t10),(@$tid==@$t12),dwo(@$t10+12),dwo(@$t10+16)'),
+  log('QUERYAFTER n=%I64u tid=%x status=%x desc=%p out=%p sameTid=%u written=%u type=%u','@$t8,@$tid,@w0,@$t10,poi(@$t10),(@$tid==@$t12),dwo(@$t10+0xc),dwo(@$t10+0x10)'),
   *bounded("QUERYAFTER",8,[("DESC","@$t10",24),("OUT","@$t11",92)]),
   "r $t8=@$t8+1; r $t10=0; r $t11=0; .if (@$t8>4) { bd 4 }; g"])
  save("getter",[
