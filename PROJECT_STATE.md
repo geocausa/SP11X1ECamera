@@ -3,6 +3,16 @@
 > Use top-level state fields and the latest experiment for continuation; older
 > entries below are historical records and do not override the current frontier.
 
+## E011CQ original conversion-query boundary — BOUNDED PASS
+
+Six original camera startup joins cover both explicit ANSI/OEM policies across three pinned tuning inputs, at the first camera placement. The unchanged CRT branches call converter0xCB76B0 and reach the Unicode size-query tail at0xCB8DD4. ANSI selects codepage0; OEM selects1. Original arguments are flags9, W3=-1, a NUL-terminated owned-stack filename, null output and capacity0. Execution stops before the tail branch into the conversion API; no conversion result is supplied.
+
+All48 exact saved-register qword stores match independent entire64KB stack models. Entire OEM image, native/CRT/camera arenas, serialized input and caller fixtures remain unchanged. The filename and zero result record remain unchanged; no allocation or lock-depth change occurs. Thirty-six scope negatives reject without state delta. Inherited prefixes retain90 exact statistics records,720 statistics initializers,146 core initializers and270 GetTag lookups. Output remainszero; camera/new-stream locks remainheld.
+
+NEXT **E011CR**: qualify the conversion dependency and explicit codepage/locale/size-result ownership before admitting any conversion result, allocator or later file-opening continuation. Full CRT/final publication/whole outer return/balanced release, original TLS CFE600 and full startup/preflight/RS remain open. Independently enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied. No numeric/TLS/policy/conversion success stub or new logger admission.
+
+Golden hashes and historical checkouts are unchanged. Zero camera Starts/reboots/deployments/production C/kernel/image tests. Original OS policy code remains inherited Unicorn-only evidence; no native Windows DLL execution. Clean controllable front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CQ](experiments/E004-front-ir-vd55g0/e011cq-original-conversion-query/README.md).
+
 ## E011CP original file-encoding policy and wrapper — BOUNDED PASS
 
 Fourteen original OS policy-setter, query and OEM wrapper returns pass in guarded owned memory: seven ANSI results1 and seven OEM results0. Four isolated cold/cached pairs flip the source-produced policy without reloading the cached API pointer. Six original camera0x36CBA0 joins cover both explicit policy states across three pinned tuning inputs, one camera placement each.
