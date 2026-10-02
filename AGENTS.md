@@ -1,3 +1,15 @@
+## E011CO original dynamic module/API resolution — BOUNDED PASS
+
+Seven complete original 0xCB9B88 resolver returns pass, including three original camera 0x36CBA0 joins across three pinned tuning inputs (one placement per source). Four isolated cold/cached pairs cover four opaque-handle placements. Source-selected module/API names match a SHA-pinned same-SP11 Windows PE export catalog; the selected file-encoding policy export is present, ordinal38/RVA0x70A90, not forwarded.
+
+All 22 exact image stores,14 real Unicorn page-protection changes,seven balanced initialized CRT index14 lock pairs and42 rejected ownership requests pass. Independent whole mapped-image/CRT/native-heap/resolver-arena models match. Cached continuations perform no loader/export/protection/lock calls or stores. The cache PE section is initially writable in the source metadata; source explicitly ends it read-only. Initial writable/read-only states and opaque OS handles/adapters remain explicit owned fixtures, not live Windows loader/init/cookie/lifetime/concurrency proof.
+
+Three fresh camera-source joins retain45 exact statistics records,360 statistics initializers,73 core initializers and135 total GetTag lookups. The camera arena/inner/outer are unchanged after CN; public output remainszero and camera/new-stream locks remainheld. CN's prior four-placement integration remains historical accepted evidence; CO integrates one placement per source.
+
+NEXT **E011CP**: qualify the file-encoding policy API/consumer and original wrapper return, then remaining CRT/final publication/whole outer return/balanced release. Accepted execution stops at an owned API adapter before any adapter instruction or policy result. No guessed-success numeric/TLS/policy substitute or new logger admission; CFE600 still raises. Full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied.
+
+Golden boot/payload hashes and both historical checkouts unchanged; zero Starts/reboots/production C/kernel/image tests. Clean controllable front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CO](experiments/E004-front-ir-vd55g0/e011co-original-api-resolver/README.md).
+
 ## E011CN original CRT integration into camera startup — BOUNDED PASS
 
 The original camera entry 0x36CBA0 with source-produced CRT objects reaches the stop before 0xCB9C10 in 12 unmodified source/placement cases across three pinned inputs. Twelve complete original 0xCC6078 stream-allocator returns pass with independently modeled entire 88-byte streams. The return is an 8-byte argument0 pointer record, not a direct stream pointer; its two stores and adjacent stack bytes are exact.
