@@ -1,3 +1,13 @@
+## E011BW source-produced cold AEC weights — DETACHED PASS
+
+Three qualified Default tuning roots have identical weights in all twelve grid records. A new portable integer decoder requires the four records to agree and rejects unsupported shapes/values. Cold AEC weights and AWB quad now come from tuning in the detached C replay; incoming cold bytes are deliberately255 and must be overwritten. GCC/Clang ASan/UBSan each pass5,616 decoder checks and510,380 full startup/preflight assertions, with zero semantic register differences in all four packets.
+
+592 complete original engine-query/GetParam/manager/grid-getter chains pass in owned memory across74 cases/four placements/selectors12 and20. Numeric callbacks are unmodified; dispatch/allocation/TLS/logging interfaces are explicit fixtures. The five-argument wrapper's output array is argument3, count argument4. Descriptor allocated bytes+8, written bytes+12 and type+16 are u32.24 wrong-type/undersized cases return status0 but write nothing; require the full written92 contract, never status alone.
+
+This proves invariant Default source producibility, not the live FIRST source-cache-to-prepublication-frame pointer join or opened filename/profile. E011BV's metadata pointer/copy proof remains closed and both previous Windows identities consumed. NEXT E011BX qualify both full typed query returns and their actual cache/frame identity into first83AA1C/SP+1264 -> SP+3152, keeping the second temporary separate. Do not repeat closed GetTag/copy or use captured scalars as producer policy.
+
+Golden boot0f8a8389-9627-42e7-9c69-98b550e5814e/all3 protected hashes unchanged, camera idle/NTFSunmounted. Zero new Start/reboot/kernel build/reachable integration/MMIO/sleep. No new Linux front/back image test; native rear runtime remainsDENIED. Clean baseline first, optional AI/effects/catalogue deferred. Required RS count/whole-frame offset, complete source bootstrap/preflight and independent enabled WM16 retirement/optical gates remainOPEN. See [E011BW](../experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/README.md), SOURCE-SAFE/INTEGRATION-SAFE/GUARD-SAFE/RESULT/NEXT-SOURCE.
+
 ## E011AT AWB SetParam retained BG — CALLBACK EXCLUDED / GOLDEN RETURNED
 
 One original Windows rear 4K run completed 714 valid handles, one successful Start and clean Stop. User-mode CDB explicitly detached/exited0 and the manual task was removed. The live original CAWBMain::AWBSetParameter callback is RVA68C090 through wrapper+28 -> actor+0 -> vtable+08; its same-thread return result is0 and the40-byte parameter record matches the outer call.
