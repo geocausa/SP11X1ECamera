@@ -1,3 +1,5 @@
+> E011CC correction: source setup receives primaryCore+8. This meterweight module occupies primaryF28, not primaryF20; the required primaryF20 input is aecxcorestatsconfig. The reader/layout checks below remain valid. Their claimed following-setup consumer association is superseded by ../e011cc-coherent-source-statistics-setup/ASSOCIATION-CORRECTION.json. Historical source/JSON are unchanged.
+
 # E011CB ordinary metering configuration — bounded source pass
 
 The next ordinary setup consumes the configuration cached at core+0xF20. The original cache producer calls GetTag at RVA0x3CA59C with the typed name `aecxdb1dmeterweight` and stores its payload at0x3CA5B0. This selects one necessary ordinary module; the optional AI/effects/HDR/catalogue queue remains deferred.
