@@ -1,3 +1,5 @@
+> E011CD now closes the independent attached-record field and setter-delta checks. E011CC evidence below retains its original scope. Actual normal request and complete startup ownership remain open.
+
 # E011CC coherent source statistics setup
 
 The original complete following setup (`39FAF8`, 3168 bytes) now returns with both tuning inputs supplied by the original loader and selected native GetTag/cache-store fragments. Three pinned source files at four owned output placements pass 12 full setups, 180 attached 152-byte records, 1,440 original element-initializer returns, and 72 full subsequent ordinary query chains. Inputs remain byte-identical, allocations retain canaries, and complete heap deltas are restricted to new allocations, the secondary ring, its used count and two source flags. Numeric callbacks execute original code. These are offline ARM64 emulator checks, not a Linux camera/image run.
