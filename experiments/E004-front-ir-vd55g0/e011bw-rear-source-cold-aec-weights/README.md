@@ -104,3 +104,7 @@ Offline checks on SP11:
 
 See SOURCE-SAFE.json, INTEGRATION-SAFE.json, GUARD-SAFE.json, RESULT.json and
 NEXT-SOURCE.json.
+
+## E011BZ initialized-grid follow-up
+
+This historical query fixture retained the source cache pointer directly and left the grid's normalized field+32 zero; it did not execute the original full Init. E011BZ now executes Init3A0D70/normalizer388630 before288 queries and24 descriptor negatives across12 source records. The initialized route reaches39EC68: source global16A4230 identifies a diagnostic callback, which is treated explicitly as logging in E011BZ. The older numeric allowlist did not cover this active diagnostic branch. Historical private artifacts/results remain unchanged; whole collection construction, selection and live receiver qualification remain open. See [E011BZ](../e011bz-rear-source-grid-initialization/README.md).

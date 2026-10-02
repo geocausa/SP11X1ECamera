@@ -34,3 +34,7 @@ Native rear runtime remains DENIED. RS normal count/whole-frame offset, complete
 - METADATA-SAFE.json: reader cases, corrected selector schema, saved-live matches and rejection families.
 - RESULT.json, GUARD-SAFE.json and NEXT-SOURCE.json: accepted scope, protected state and next work.
 - Same-SP11 reproduction: python3 source-private.py; python3 metadata-private.py. Metadata validation takes several minutes; use a supervised job rather than a short foreground timeout. Scripts read originals locally and export only derived facts. No raw proprietary bytes, live addresses, payloads or pixels are in this checkpoint.
+
+## E011BZ initialized-grid follow-up
+
+This historical query fixture retained the source cache pointer directly and left the grid's normalized field+32 zero; it did not execute the original full Init. E011BZ now executes Init3A0D70/normalizer388630 before288 queries and24 descriptor negatives across12 source records. The initialized route reaches39EC68: source global16A4230 identifies a diagnostic callback, which is treated explicitly as logging in E011BZ. The older numeric allowlist did not cover this active diagnostic branch. Historical private artifacts/results remain unchanged; whole collection construction, selection and live receiver qualification remain open. See [E011BZ](../e011bz-rear-source-grid-initialization/README.md).
