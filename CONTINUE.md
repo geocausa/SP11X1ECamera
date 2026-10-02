@@ -3,6 +3,16 @@
 > Use top-level state fields and the latest experiment for continuation; older
 > entries below are historical records and do not override the current frontier.
 
+## E011CR original Unicode conversion — BOUNDED PASS
+
+Seventy-six original Windows conversion API returns and NTDLL entries pass in guarded Unicorn fixtures. Sixty-four isolated size/output cases cover eight ASCII lengths, two input alignments and both ANSI/OEM codepage aliases. Six original camera joins cover both policies across three pinned tuning inputs, first camera placement only. The unchanged CRT converter returns to0xCFD4E8 with status0 in all six.
+
+Each camera path queries37 UTF-16 code units including NUL, requests74 bytes through original malloc and a strict owned HeapAlloc contract, then converts into that allocation. Original source stores the owned pointer and code-unit extent at caller record+16/+24. Independent entire32-byte result-record,64KB stack and CRT-arena models match; callee-saved registers restore. Other entire regions/pages/permissions match, output remainszero and camera/new-stream locks remainheld. All4980 integrated OS instructions,426 OS stores,450 following CRT instructions,54 following CRT stores and30 new scope/heap negatives pass.
+
+The API/NTDLL routines execute unchanged only inside Unicorn. ANSI/OEM defaults65001 are copied from the file image, virtual caches are explicit zero fixtures, and the security cookie is the file-image seed. This qualifies ASCII conversion in that fixture, not live Windows default codepages/locale/cookie/loader initialization, general Unicode/error paths, native DLL execution or real heap/concurrency semantics. No size/conversion/numeric/TLS/policy success stub or new logger admission; original CFE600 remains unqualified and raises.
+
+NEXT **E011CS**: follow the caller after0xCFD4E8 through remaining CRT/file-opening/cleanup, qualify dependencies and ownership, then final publication/whole outer return/balanced release. Full startup/preflight/RS and independently enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied. Golden/historical checkouts unchanged; zero camera Starts/reboots/deployments/C/kernel/image tests. Clean controllable front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CR](experiments/E004-front-ir-vd55g0/e011cr-original-unicode-conversion/README.md).
+
 ## E011CQ original conversion-query boundary — BOUNDED PASS
 
 Six original camera startup joins cover both explicit ANSI/OEM policies across three pinned tuning inputs, at the first camera placement. The unchanged CRT branches call converter0xCB76B0 and reach the Unicode size-query tail at0xCB8DD4. ANSI selects codepage0; OEM selects1. Original arguments are flags9, W3=-1, a NUL-terminated owned-stack filename, null output and capacity0. Execution stops before the tail branch into the conversion API; no conversion result is supplied.
