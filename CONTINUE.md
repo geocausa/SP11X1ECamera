@@ -1,3 +1,8 @@
+> **Current workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean`
+> on `experiment/e004-front-ir-vd55g0`. See [machine/workspace map](docs/MACHINE_MAP.md).
+> Use top-level state fields and the latest experiment for continuation; older
+> entries below are historical records and do not override the current frontier.
+
 ## E011CG original inner binding and retired caller inputs — BOUNDED PASS
 
 Original caller slice36D03C..36D27C passes12 source-created606264-byte inner/interface/core bindings across3 sources/four placements. It takes the first kind4 descriptor, then requires24 bytes; valid first-match indices1/2/5/8 pass. Exact original creator arguments are selected descriptor, inner+93032, parameter list and inner+8 output.48 caller-input regions and old stack are overwritten;12 subsequent unchanged setups, full caches/516 postretirement lookups and original interface accessors read no retired caller input. Whole preexisting arena/native/source immutability, core delta and guards pass;292 original numeric initializers are unchanged. Initial and postretirement caches total1032 lookups. Full inner field semantics/outer/statistics bootstrap and filename/destruction/reuse remain open.

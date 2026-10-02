@@ -1,8 +1,14 @@
 # Development workflow
 
+## Workspace selection
+
+Use the active checkout recorded in [MACHINE_MAP.md](MACHINE_MAP.md),
+the project-level CURRENT-CAMERA-WORKSPACE.txt pointer and PiMaster
+`sp11-camera-handoff`. Preserve retained historical checkouts.
+
 ## Branch/state model
 
-`main` is the durable last-proven project state and documentation baseline. Unproven runtime work happens in an experiment branch/worktree and is only promoted once its result is understood.
+The active experiment branch recorded in MACHINE_MAP.md holds the current camera checkpoints. Resume from that branch and the latest continuation/state. `main` is a separate baseline; it is not the current resume target. Unproven runtime work stays in an experiment branch/worktree and is promoted only after its result is understood.
 
 Experiment IDs are monotonic: `E000`, `E001`, ...
 
@@ -44,6 +50,8 @@ Before ending a long session or when chat context becomes unreliable:
 
 1. finish or explicitly mark the current experiment incomplete;
 2. update `PROJECT_STATE.md`;
-3. update `state/project.yaml` (`current_experiment`, `next_experiment`, `next_action`);
+3. update top-level `state/project.yaml` fields (`updated`, `state_id`,
+   `status`, `current_experiment`, `current_gate`, `next_experiment`,
+   `next_action`) and `workspace.canonical`; retain nested historical records;
 4. commit/push;
 5. ensure the local workspace pointer still identifies this repository.

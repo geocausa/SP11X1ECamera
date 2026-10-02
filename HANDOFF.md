@@ -1,3 +1,8 @@
+> **Current workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean`
+> on `experiment/e004-front-ir-vd55g0`. See [machine/workspace map](docs/MACHINE_MAP.md).
+> Use top-level state fields and the latest experiment for continuation; older
+> entries below are historical records and do not override the current frontier.
+
 ## E011CF complete original core creator and interface — BOUNDED PASS
 
 Full4980-byte3A8BE0 returns12 original320-byte interfaces/5152-byte cores under explicit owned count0 descriptors. Full516-byte3C8380/3376-byte3D4BD0,24 cache/bank updates,1032 exact cache lookups,24 unchanged skips and292 source-requested element initializers pass. Complete required core/setup delta, caller/old source immutability and guarded arenas pass. Actual source-created interface/core now supply12 full statistics setups,180 independent152-byte records and72 positive/72 exhausted full ordinary queries. Seven mode mirrors are byte stores; source initializer counts differ18+3+3 vs18+3+4. Numeric callbacks unmodified. Whole optional-bank field semantics/destruction/reuse remain unqualified.

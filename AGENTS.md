@@ -1245,6 +1245,18 @@ retirement was observed. This static route is real evidence of
 BF↔WM16 connection but does NOT authorize Linux runtime, ISR or
 Golden installation. Full report + offline verifier in above path.
 
+## Active workspace and historical records
+
+The current camera source-of-truth checkout is `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean` on
+`experiment/e004-front-ir-vd55g0`. PiMaster workspace `sp11-camera-handoff`
+and the project-level CURRENT-CAMERA-WORKSPACE.txt pointer must agree with it.
+See [docs/MACHINE_MAP.md](docs/MACHINE_MAP.md) for retained historical clones.
+
+Top-level state fields identify the current/next experiment and next action.
+Nested experiment records and older handoff paragraphs retain historical
+results; their old paths, NEXT statements and boot IDs do not override the
+current frontier. Preserve older checkouts and untracked evidence.
+
 ## Resume behaviour
 
 When asked to continue camera work:
