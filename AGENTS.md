@@ -1,3 +1,15 @@
+## E011CP original file-encoding policy and wrapper — BOUNDED PASS
+
+Fourteen original OS policy-setter, query and OEM wrapper returns pass in guarded owned memory: seven ANSI results1 and seven OEM results0. Four isolated cold/cached pairs flip the source-produced policy without reloading the cached API pointer. Six original camera0x36CBA0 joins cover both explicit policy states across three pinned tuning inputs, one camera placement each.
+
+The requested export branches through an original import thunk into the dependency's original28-byte query. Original68-byte setters produce four policy fields each; no BOOL success substitute is used. All56 exact policy stores,392 original OS instructions,12 original consumer instructions,60 OS ownership rejections and30 policy-scope rejections pass. Entire owned pages and real permissions, OEM image, CRT/native heap/stack and camera-object guards match. Relocation/linking and uncalled conversion-pointer identities remain explicit owned fixtures, not actual Windows default policy/loader/NTDLL conversion/concurrency proof.
+
+All six camera wrappers return to0xCFD49C. The unchanged caller reads one byte at SP+48 and branches on nonzero W0: ANSI stops before0xCFD4C0, OEM before0xCFD4A4. The source caller byte is0 in these six cases. Ninety exact statistics records,720 statistics initializers,146 core initializers and270 total GetTag lookups remain checked. Output remainszero; camera/new-stream locks remainheld; ten resolver lock pairs balance. CN/CO wider placement evidence remains historical, not rerun across this new consumer boundary.
+
+NEXT **E011CQ**: follow those selected CRT/file-opening branches, qualify receivers/stores/dependencies, then final publication/whole outer return/balanced release. Actual conversion/codepage/locale/full CRT and original TLS CFE600 remain open. No numeric/TLS/policy success stub or new logger admission. Full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied.
+
+Original OS routines execute only inside Unicorn on SP11; no native Windows DLL call. Golden hashes and historical checkouts unchanged; zero camera Starts/reboots/production C/kernel/image tests. Clean controllable front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CP](experiments/E004-front-ir-vd55g0/e011cp-original-file-encoding-policy/README.md).
+
 ## E011CO original dynamic module/API resolution — BOUNDED PASS
 
 Seven complete original 0xCB9B88 resolver returns pass, including three original camera 0x36CBA0 joins across three pinned tuning inputs (one placement per source). Four isolated cold/cached pairs cover four opaque-handle placements. Source-selected module/API names match a SHA-pinned same-SP11 Windows PE export catalog; the selected file-encoding policy export is present, ordinal38/RVA0x70A90, not forwarded.

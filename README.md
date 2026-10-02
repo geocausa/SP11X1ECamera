@@ -3,15 +3,14 @@
 **Active workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean` on
 `experiment/e004-front-ir-vd55g0`; see [machine/workspace map](docs/MACHINE_MAP.md).
 
-**Current engineering checkpoint — 2026-10-02 / E011CO:** original dynamic
-module/API resolution passes with a SHA-pinned same-SP11 export catalog and
-explicit owned OS contracts. Seven complete resolver returns and four cached
-continuations pass; three camera-source joins reach the file-encoding API
-boundary. Next E011CP qualifies that API and wrapper return before remaining
-CRT/final publication/whole outer return/balanced release. Source-only; Golden
-unchanged. Native rear runtime remains denied pending startup and DMA-retirement
-gates. See [current continuation](CONTINUE.md) and
-[E011CO result](experiments/E004-front-ir-vd55g0/e011co-original-api-resolver/RESULT.json).
+**Current engineering checkpoint — 2026-10-02 / E011CP:** original file-encoding
+policy setters, query and OEM wrapper return pass in guarded owned memory.
+Fourteen complete returns cover both ANSI/OEM policies; six camera-source joins
+qualify the caller's policy branch. Next E011CQ follows the remaining CRT/file-
+opening path before final publication, whole outer return and balanced release.
+Source-only; Golden unchanged. Native rear runtime remains denied pending startup
+and DMA-retirement gates. See [current continuation](CONTINUE.md) and
+[E011CP result](experiments/E004-front-ir-vd55g0/e011cp-original-file-encoding-policy/RESULT.json).
 
 Current product priority is a clean, controllable front/back native Linux
 baseline; optional AI/effects/HDR/catalogue are deferred. Protected IR/Hello
