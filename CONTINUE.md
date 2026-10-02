@@ -3,6 +3,12 @@
 > Use top-level state fields and the latest experiment for continuation; older
 > entries below are historical records and do not override the current frontier.
 
+## E011CH original outer entry and actual-inner statistics — BOUNDED PASS
+
+Original `0x36CBA0` entry through the stop before `0x36D3DC` passes 12 cases using the actual source-created inner/interface/core. Both complete statistics routines return; 180 independent entire 152-byte records, 1440 original statistics initializers, 292 core initializers and 516 cache lookups pass with whole-memory guards. Saved input is frame+32, frame+40 is diagnostic TLS and output is saved in X26. The first-kind4 search loop and nine 48-byte record vectors are exact. Explicit owned single-thread OS-lock and earlier diagnostic fixtures remain limitations; numeric callbacks are unmodified.
+
+NEXT **E011CI**: continue after `0x36D3DC` to final inner-manager attachment, output publication and complete outer return/lock release. The current stop still holds the lock and leaves final output zero; whole outer/live Default producers/filename/destruction/reuse remain open. Golden boot `e9983770-a981-49f9-a9f2-2fe081b5863d` and all three payload hashes are unchanged; zero camera Starts/reboots/kernel/C changes/new Linux image tests. Native rear runtime remains DENIED pending remaining full bootstrap/preflight, RS, independent enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement and optical gates. Clean front/back baseline first; optional AI/effects/HDR/catalogue deferred. See [E011CH](experiments/E004-front-ir-vd55g0/e011ch-outer-startup-context/README.md).
+
 ## E011CG original inner binding and retired caller inputs — BOUNDED PASS
 
 Original caller slice36D03C..36D27C passes12 source-created606264-byte inner/interface/core bindings across3 sources/four placements. It takes the first kind4 descriptor, then requires24 bytes; valid first-match indices1/2/5/8 pass. Exact original creator arguments are selected descriptor, inner+93032, parameter list and inner+8 output.48 caller-input regions and old stack are overwritten;12 subsequent unchanged setups, full caches/516 postretirement lookups and original interface accessors read no retired caller input. Whole preexisting arena/native/source immutability, core delta and guards pass;292 original numeric initializers are unchanged. Initial and postretirement caches total1032 lookups. Full inner field semantics/outer/statistics bootstrap and filename/destruction/reuse remain open.

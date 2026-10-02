@@ -3,6 +3,12 @@
 > Use top-level state fields and the latest experiment for continuation; older
 > entries below are historical records and do not override the current frontier.
 
+## E011CH original outer entry and actual-inner statistics — BOUNDED PASS
+
+Original `0x36CBA0` entry through the stop before `0x36D3DC` passes 12 cases using the actual source-created inner/interface/core. Both complete statistics routines return; 180 independent entire 152-byte records, 1440 original statistics initializers, 292 core initializers and 516 cache lookups pass with whole-memory guards. Saved input is frame+32, frame+40 is diagnostic TLS and output is saved in X26. The first-kind4 search loop and nine 48-byte record vectors are exact. Explicit owned single-thread OS-lock and earlier diagnostic fixtures remain limitations; numeric callbacks are unmodified.
+
+NEXT **E011CI**: continue after `0x36D3DC` to final inner-manager attachment, output publication and complete outer return/lock release. The current stop still holds the lock and leaves final output zero; whole outer/live Default producers/filename/destruction/reuse remain open. Golden boot `e9983770-a981-49f9-a9f2-2fe081b5863d` and all three payload hashes are unchanged; zero camera Starts/reboots/kernel/C changes/new Linux image tests. Native rear runtime remains DENIED pending remaining full bootstrap/preflight, RS, independent enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement and optical gates. Clean front/back baseline first; optional AI/effects/HDR/catalogue deferred. See [E011CH](experiments/E004-front-ir-vd55g0/e011ch-outer-startup-context/README.md).
+
 ## E011CF complete original core creator and interface — BOUNDED PASS
 
 Full4980-byte3A8BE0 returns12 original320-byte interfaces/5152-byte cores under explicit owned count0 descriptors. Full516-byte3C8380/3376-byte3D4BD0,24 cache/bank updates,1032 exact cache lookups,24 unchanged skips and292 source-requested element initializers pass. Complete required core/setup delta, caller/old source immutability and guarded arenas pass. Actual source-created interface/core now supply12 full statistics setups,180 independent152-byte records and72 positive/72 exhausted full ordinary queries. Seven mode mirrors are byte stores; source initializer counts differ18+3+3 vs18+3+4. Numeric callbacks unmodified. Whole optional-bank field semantics/destruction/reuse remain unqualified.
