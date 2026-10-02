@@ -1,3 +1,7 @@
+## E011BX first live AEC source/query join — PREPARED, UNARMED
+
+Fresh E011BX-20261002-0030A targets named source/cache -> both full typed engine query returns -> FIRST prepublication frame -> first converter/publication. Eleven loaded code ranges and actual grid vtable must match before arming/Start. Require written92 and correct selector/type; status0 alone does not prove output. Four bounded source/Init/query/getter events maximum, one rear4K Start/Stop, manual-only atomic entry guard. No runtime yet; never reuse an identity after entry/camera evidence. See [E011BX](experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/README.md). Golden protected, native rear DENIED; RS/bootstrap/WM16/optical gates open. Optional enhancements deferred.
+
 ## E011BW source-produced cold AEC weights — DETACHED PASS
 
 Three qualified Default tuning roots have identical weights in all twelve grid records. A new portable integer decoder requires the four records to agree and rejects unsupported shapes/values. Cold AEC weights and AWB quad now come from tuning in the detached C replay; incoming cold bytes are deliberately255 and must be overwritten. GCC/Clang ASan/UBSan each pass5,616 decoder checks and510,380 full startup/preflight assertions, with zero semantic register differences in all four packets.
