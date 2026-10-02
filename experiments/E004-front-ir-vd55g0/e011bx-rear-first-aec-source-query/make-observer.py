@@ -27,8 +27,9 @@ def main():
  for name,pin in BB.AZ.AV.FILES:
   blob=(BB.AZ.AV.ARCHIVE/name).read_bytes();assert hashlib.sha256(blob).hexdigest()==pin
   h,sy,wire,info=BB.source(blob);_,_,_,records=BL.describe(blob)
-  sid=info["root_symbol_id"];s=sy[sid];selector=s["mode_id"]
+  sid=info["root_symbol_id"];s=sy[sid];selector=s["mode_symbol_id"]
   off=s["record_offset"];record=blob[off:off+56]
+  assert selector==struct.unpack_from("<I",record,44)[0],"selector node comes from wire44, not serialization mode40"
   assert s["type"]=="aecxhwstatsconfig" and s["version_major"]==10 and s["version_minor"]==0
   assert len(set(wire[i*101+20:i*101+32] for i in range(4)))==1
   fields={16:record[4:36].split(b"\0",1)[0]+b"\0",56:record[:4],

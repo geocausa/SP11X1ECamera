@@ -19,3 +19,9 @@ validate-private.py retains the strict seven-field check and original fixture-ro
 Next E011BY: source-only qualify36E460's actual inner receiver/ABI and native numeric profile-field76 construction. Do not substitute observed scalars for producers or replay this consumed attempt. E011BV downstream metadata/cold-copy remains closed; no repeat probe needed.
 
 Native rear remains **DENIED**. Required RS count/whole-frame offset, complete source bootstrap/preflight, independent enabled WM16 retirement and optical gates remain open. No Linux camera run, kernel build, reachable C integration, MMIO, KD, BCD change or sleep. Clean front/back baseline first; optional AI/effects/HDR/catalogue deferred.
+
+## E011BY follow-up correction (2026-10-02)
+
+The historical numeric profile mismatch below came from our source generator: it used serialization mode_id at wire40 instead of selector-node mode_symbol_id at wire44. E011BY independently checks the original root reader/profile callback and all seven common fields now match all four saved live modules against the pinned rear source. The future generator is corrected; original private SOURCE-EXPECTED/logs/payloads and the consumed E011BX identity are unchanged.
+
+Source-only E011BY also verifies that36E460 forwards via an inner algorithm object's context setter374050 and GetParam372E40; outer+40 is this inner object, whose own+40 is the grid manager. The original core context setter3AE320 passes1,776 chains within the3,552-chain differential. Whole startup construction and actual live loaded inner receiver/context qualification remain open. See [E011BY](../e011by-rear-query-forwarder-context/README.md).
