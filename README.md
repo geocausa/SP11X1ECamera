@@ -3,14 +3,14 @@
 **Active workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean` on
 `experiment/e004-front-ir-vd55g0`; see [machine/workspace map](docs/MACHINE_MAP.md).
 
-**Current engineering checkpoint — 2026-10-02 / E011CK:** original source object
-and module binding passes24 cases, including12 explicit scalar poison fixtures.
-Complete1088/120 object models, exact entire-inner delta and source cache identities
-pass. Source-only; Golden unchanged. Next E011CL qualifies conditional context
-fields and CRT state before final output publication/return. Native rear hardware
-ISP runtime remains denied pending initialization and DMA-retirement gates.
+**Current engineering checkpoint — 2026-10-02 / E011CL:** original conditional
+source context passes all 24 source/placement/destination-poison cases. Independent
+source-derived bank selection and whole-memory deltas pass through the stop before
+`0x36DE04`. Source-only; Golden unchanged. Next E011CM qualifies CRT initialization
+and global/locale/OS ownership before final output publication and whole return.
+Native rear ISP runtime remains denied pending startup and DMA-retirement gates.
 See [current continuation](CONTINUE.md) and
-[E011CK result](experiments/E004-front-ir-vd55g0/e011ck-source-object-and-module-binding/RESULT.json).
+[E011CL result](experiments/E004-front-ir-vd55g0/e011cl-conditional-source-context/RESULT.json).
 
 Current product priority is a clean, controllable front/back native Linux
 baseline; optional AI/effects/HDR/catalogue are deferred. Protected IR/Hello

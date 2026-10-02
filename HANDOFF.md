@@ -3,6 +3,16 @@
 > Use top-level state fields and the latest experiment for continuation; older
 > entries below are historical records and do not override the current frontier.
 
+## E011CL original conditional source context — BOUNDED PASS
+
+Original entry `0x36CBA0` reaches the stop before `0x36DE04` in 24 cases: 12 unmodified and 12 explicit owned destination-poison fixtures across three pinned sources and four placements. The new 428-byte conditional portion executes unchanged original instructions. Serialized scene-change bank flags, values and names independently select record 1; source counts are 3/3/4, with guarded arrays of 528/528/704 bytes and 176-byte records. Exact comparison arguments and three context read origins pass.
+
+All 144 original stores match the six predicted inner fields. Independent whole 606264-byte inner and whole-arena comparisons admit no other changes or new conditional allocations/releases. Inherited 360 records, 2880 statistics initializers, 584 core initializers and 1080 total GetTag lookups pass with caller/TLS, image, native heap, serialized source and allocation guards. Statistics+40 and mode+91952 remain attached; outer unchanged, output zero and owned single-thread lock held.
+
+NEXT **E011CM**: qualify original CRT initialization/global/locale/OS ownership before final public output, whole return and balanced lock release. A static scan identifies candidate `0xCB3260` writing globals `0x16A2A50/58`; its execution, source objects and OS contract remain unqualified. Alternate context branches, full bank/metering-name producers, child payload semantics and live Default/filename/reuse/destruction remain open. No guessed locale, null-page mapping or numeric/TLS success substitute is admitted.
+
+Golden boot and all three payload hashes, plus both historical checkouts, are unchanged. Zero camera Starts/reboots/C/kernel/image tests. Native rear runtime remains denied pending full bootstrap/preflight/RS and independently enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical gates. Clean controllable front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CL](experiments/E004-front-ir-vd55g0/e011cl-conditional-source-context/README.md).
+
 ## E011CK original source objects and module binding — BOUNDED PASS
 
 Original36CBA0 entry through stop before36DC58 passes24 cases:12 unmodified+12 owned scalar poison fixtures. Independent entire606264-byte inner and complete1088/120 primary object models verify original attachments at inner+16/+24,408 exact inner stores/408 guarded allocations.48 actual aecxface/aecxmetering returns match core cache26/31;72 original accessors/72 original helper returns/24 original strcmp equal returns pass. F5DF00 is comparison, not memcpy. Inherited360 records/2880 statistics initializers/584 core initializers/1080 total GetTag lookups and whole-memory guards pass. Statistics+40/mode+91952 retained to stop; outer unchanged/output zero/lock held. Full child semantics/reuse/live Default producers remain open.
