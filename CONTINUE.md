@@ -3,6 +3,12 @@
 > Use top-level state fields and the latest experiment for continuation; older
 > entries below are historical records and do not override the current frontier.
 
+## E011CJ original post-attachment baseline reset — BOUNDED PASS
+
+Original entry36CBA0 through stop before36D784 passes24 cases:12 unmodified and12 explicit owned poison fixtures across3 sources/four placements. Independent entire606264-byte inner and full-arena deltas verify72 original clears/1224 scalar store chunks and the internal inner+91816 -> inner+92976 link. Statistics+40 and mode+91952 attachments are retained to this stop; outer unchanged/output zero/lock held. Inherited360 records/2880 statistics initializers/584 core initializers/1032 cache lookups and whole-memory guards pass. Poison checks validate resets, not real object reuse or live Default producers.
+
+NEXT **E011CK**: additional original object/module/context/cache producers after36D784, then CRT ownership/environment before final publication/whole return/balanced lock release. Excluded CRT exploration identifies null image globals16A2A58/16A2A50 before CC6140 reads address24; second CRT-lock fixture remains excluded, no guessed locale/null mapping. Actual live Default/filename/destruction/reuse and full optional semantics remain open. Golden boot e9983770-a981-49f9-a9f2-2fe081b5863d/all3 hashes and historical checkouts unchanged; zero Starts/reboots/C/kernel/image tests. Native rear DENIED pending full bootstrap/preflight/RS/independent enabled WM16 IRQ-consumed IOVA-DMA-IOMMU retirement/optical. Clean front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CJ](experiments/E004-front-ir-vd55g0/e011cj-baseline-state-reset/README.md).
+
 ## E011CI original statistics and mode configuration attachment — BOUNDED PASS
 
 Original `0x36CBA0` entry through the stop before `0x36D63C` passes 12 cases. The1664-byte statistics manager is attached at inner+40; the separately source-allocated96-byte configuration object is attached at inner+91952. An independent entire606264-byte inner delta allows only those two qword writes after the E011CH prefix; the72-byte outer is unchanged and public output still zero. Complete224-byte395940 returns with its actual96-byte receiver;24 original interface accessors,36 mode-record factory calls and36 record accessors pass. Inherited180 independent records/1440 statistics initializers/292 core initializers/516 cache lookups and whole-memory guards pass; numeric callbacks unchanged.
