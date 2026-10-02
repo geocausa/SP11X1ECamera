@@ -3,14 +3,14 @@
 **Active workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean` on
 `experiment/e004-front-ir-vd55g0`; see [machine/workspace map](docs/MACHINE_MAP.md).
 
-**Current engineering checkpoint — 2026-10-02 / E011CH:** original outer
-entry and complete statistics startup using the actual source-created inner
-pass 12 guarded cases. This is source-only verification, with no new camera
-Start, reboot or Linux image test. Next is E011CI: final manager attachment,
-output publication and complete outer return. Native rear hardware ISP runtime
-remains denied pending remaining initialization and DMA-retirement gates.
-See [current continuation](CONTINUE.md) and
-[E011CH result](experiments/E004-front-ir-vd55g0/e011ch-outer-startup-context/RESULT.json).
+**Current engineering checkpoint — 2026-10-02 / E011CI:** original statistics
+manager and mode configuration attachment pass12 guarded cases, including an
+exact entire-inner memory delta. This remains source-only verification; no new
+camera Start, reboot or Linux image test. Next is E011CJ: remaining configuration,
+diagnostic/C-runtime environment and complete outer publication/return.
+Native rear hardware ISP runtime remains denied pending remaining initialization
+and DMA-retirement gates. See [current continuation](CONTINUE.md) and
+[E011CI result](experiments/E004-front-ir-vd55g0/e011ci-outer-return-publication/RESULT.json).
 
 Current product priority is a clean, controllable front/back native Linux
 baseline; optional AI/effects/HDR/catalogue are deferred. Protected IR/Hello
