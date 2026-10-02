@@ -1,3 +1,13 @@
+## E011CN original CRT integration into camera startup — BOUNDED PASS
+
+The original camera entry 0x36CBA0 with source-produced CRT objects reaches the stop before 0xCB9C10 in 12 unmodified source/placement cases across three pinned inputs. Twelve complete original 0xCC6078 stream-allocator returns pass with independently modeled entire 88-byte streams. The return is an 8-byte argument0 pointer record, not a direct stream pointer; its two stores and adjacent stack bytes are exact.
+
+All 96 CRT owned-store chunks and six first-use image stores match. Independent entire CRT arena/image and unchanged camera-arena/inner/outer checks pass. The CRT global index8 lock is released; the newly allocated stream and camera outer locks remain held at this bounded stop. Inherited 180 statistics records, 1440 statistics initializers, 292 core initializers and 540 total GetTag lookups pass. The three four-entry CRT bootstraps also pass; their execution order and OS heap/single-thread lock contracts remain explicit owned fixtures.
+
+NEXT **E011CO**: qualify original dynamic DLL-loader/module/API ownership. Accepted execution stops before the LoadLibraryExW import at 0xCB9C10 / IAT 0xF7E310. Complete CRT/loader environment, original TLS 0xCFE600, actual OS locale/standard handles, final publication, whole return and balanced stream/camera lock release remain open. No guessed-success loader/numeric/TLS substitute or new logger admission. Full bootstrap/preflight/RS and independently enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied.
+
+Golden boot/payload hashes and both historical checkouts unchanged; zero Starts/reboots/production C/kernel/image tests. Clean controllable front/back first; optional AI/effects/HDR/catalogue deferred. See [E011CN](experiments/E004-front-ir-vd55g0/e011cn-crt-startup-integration/README.md).
+
 ## E011CM original CRT object producers — BOUNDED PASS
 
 Four unchanged original CRT routines return across eight owned cases: four placements, default count 512 and explicit preset count 128. Independent whole mapped-image/arena models pass for 512 entire 72-byte indexed records, 24 entire 88-byte static stream objects and eight full pointer vectors. All 180 source image stores, 656 logical OS mutex initializations and 16 guarded allocations match. Eight existing-table lookups allocate/initialize nothing and balance their locks; 24 invalid OS ownership requests are rejected.

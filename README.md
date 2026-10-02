@@ -3,14 +3,15 @@
 **Active workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean` on
 `experiment/e004-front-ir-vd55g0`; see [machine/workspace map](docs/MACHINE_MAP.md).
 
-**Current engineering checkpoint — 2026-10-02 / E011CM:** four original CRT
-object producers return in eight owned cases with independent whole-memory checks.
-Missing globals are a count, pointer vector and indexed table. Explicit owned OS
-contracts remain fixtures. Next E011CN integrates these producers into full camera
-startup, publication and return. Source-only; Golden unchanged. Native rear runtime
-remains denied pending startup and DMA-retirement gates.
+**Current engineering checkpoint — 2026-10-02 / E011CN:** source-produced CRT
+objects are integrated into the bounded original camera startup path. All 12
+source/placement cases pass through a stop before the original Windows DLL-loading
+call. Complete stream objects and pointer-result records match independent models.
+Next E011CO qualifies dynamic module/API ownership before final publication,
+whole return and balanced lock release. Source-only; Golden unchanged. Native rear
+runtime remains denied pending startup and DMA-retirement gates.
 See [current continuation](CONTINUE.md) and
-[E011CM result](experiments/E004-front-ir-vd55g0/e011cm-crt-object-producers/RESULT.json).
+[E011CN result](experiments/E004-front-ir-vd55g0/e011cn-crt-startup-integration/RESULT.json).
 
 Current product priority is a clean, controllable front/back native Linux
 baseline; optional AI/effects/HDR/catalogue are deferred. Protected IR/Hello

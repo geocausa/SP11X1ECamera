@@ -1,3 +1,98 @@
+latest_original_CRT_camera_integration:
+  experiment: E011CN
+  status: PASS_BOUNDED_ORIGINAL_CRT_INTEGRATION
+  base_commit: 26424022418adb9ecb934cc2d92db92153616a06
+  case_count: 12
+  source_files: 3
+  placement_cases_per_source: 4
+  complete_original_CRT_bootstrap_entry_returns: 12
+  original_existing_table_lookup_returns: 3
+  complete_original_runtime_stream_allocator_returns: 12
+  complete_argument0_pointer_result_records: 12
+  independent_entire_new88byte_streams: 12
+  independent_bootstrap72byte_records: 192
+  independent_bootstrap88byte_static_streams: 9
+  original_bootstrap_logical_OS_initializations: 246
+  original_runtime_logical_OS_initializations: 12
+  bootstrap_guarded_heap_allocations: 6
+  runtime_guarded_heap_allocations: 12
+  exact_runtime_owned_store_chunks: 96
+  exact_runtime_image_store_chunks: 6
+  runtime_CRT_lock_enters: 24
+  runtime_CRT_global_lock_leaves: 12
+  CRT_stream_locks_held_at_stop: 12
+  statistics_records: 180
+  statistics_initializers: 1440
+  core_initializers: 292
+  core_cache_lookups: 516
+  camera_objects_unchanged_after_CL: true
+  new_numeric_or_TLS_success_stub: false
+  new_logger16A4228_admitted: false
+  unmodeled_LoadLibraryExW_executed: false
+  whole_outer_return_qualified: false
+  final_output_publication_qualified: false
+  complete_CRT_environment_qualified: false
+  actual_live_Default_producers_qualified: false
+  native_Windows_mutex_bytes_or_concurrency_qualified: false
+  native_rear_runtime_allowed: false
+  new_camera_Starts: 0
+  new_reboots: 0
+  runtime_or_image_test: false
+  next_experiment: E011CO
+  camera_outer_lock_held_stop_cases: 12
+  accepted_source_job: job_PFfejVVkqpBhiAenERkT8zIG
+  accepted_source_job_exit_code: 0
+  accepted_job_start_UTC: '2026-10-02T20:58:42.857Z'
+  accepted_job_end_UTC: '2026-10-02T21:00:51.185Z'
+  source_script_sha256: afd8c03466f2de1b8064b7bfa02e22789685568ebcea727fd7855f888e9c1966
+  camera_entry_RVA: '0x36cba0'
+  accepted_CL_prefix_stop_RVA: '0x36de04'
+  bounded_stop_before_OS_call_RVA: '0xcb9c10'
+  unmodeled_next_OS_import: LoadLibraryExW
+  next_OS_import_IAT_RVA: '0xf7e310'
+  original_stream_allocator_entry_RVA: '0xcc6078'
+  original_stream_allocator_caller_return_RVA: '0xced150'
+  stream_allocator_argument0_result_record_bytes: 8
+  stream_allocator_returns_argument0_record_pointer_not_direct_stream: true
+  source_default_CRT_stream_capacity: 512
+  source_claimed_stream_flag: 8192
+  runtime_CRT_image_flag_RVA: '0x1607b00'
+  runtime_flag_first_use_source_stores_by_case:
+  - 2
+  - 0
+  - 0
+  - 0
+  total_source_GetTag_lookups: 540
+  inherited_CRT_negative_ownership_rejections: 9
+  source_case_variants: Unmodified source inputs only; CM retains separate preset128
+    and CL retains prior destination-poison evidence.
+  lock_scope: Three independent source fixtures; each camera invocation adds a hold
+    on its single logical outer lock and retains its new stream lock at the bounded
+    stop. These incomplete objects are not reused, cleaned up or claimed concurrent.
+    The CRT global index8 lock is released on every stream-allocator return.
+  original_four_entry_bootstrap_order_is_owned_fixture_not_full_loader_order: true
+  excluded_exploration:
+  - All private candidate/origin/ABI probes and three rejected matrix attempts are
+    excluded.
+  - 'Three matrix checks were corrected before acceptance: premature construction
+    of a not-yet-allocated stream lock address, direct-stream return assumption (actual
+    argument0 record ABI), and constant two-write assumption (flag changes only on
+    first use). No original instruction changes or new numeric/TLS success substitute.'
+  - An exploratory attempt reaches unmodeled LoadLibraryExW. Accepted execution stops
+    before this call and invokes no Windows DLL loader.
+  evidence: experiments/E004-front-ir-vd55g0/e011cn-crt-startup-integration/README.md
+  required_next: E011CO source-only qualify original dynamic loader/module/API ownership
+    after the LoadLibraryExW boundary, and remaining CRT dependencies; then final
+    output/outer-inner publication, whole outer return and balanced release. Full
+    bootstrap/preflight/RS and independently enabled WM16 retirement/optical remain
+    required.
+  checks:
+    original_source_matrix_exit0: true
+    architecture_links: 104
+    repository_hygiene: true
+    AST_JSON_YAML_frontier_hash: true
+    git_diff_check: true
+    Golden_and_historical_checkout_checks: true
 latest_original_CRT_object_producers:
   status: PASS_BOUNDED_ORIGINAL_CRT_OBJECT_PRODUCERS
   experiment: E011CM
@@ -1996,7 +2091,7 @@ project: SP11X1ECamera
 repo: https://github.com/geocausa/SP11X1ECamera
 updated: 2026-10-02
 machine: Microsoft Surface Pro 11 Denali X1E80100
-state_id: "E011CM-source-qualified-CRT-object-producers"
+state_id: "E011CN-source-qualified-CRT-camera-integration"
 phase: native-qualcomm-hardware-isp-windows-oem-rgb-image-quality-priority
 latest_native_physical_front_production_BF_status_one_shot:
   identity: E005b
@@ -4143,7 +4238,7 @@ rgb_phased_plan:
   maintained_rgb_session_live_hardware_proof: E004lz-front448-rear446-raw-to-nv12-full-resolution-uid1000-clients-graph-neutral
   ir_and_windows_hello: separately-deferred-not-rgb-only-stage-one-gate
   linux_os_system_sleep_testing: prohibited-until-separately-supported-and-authorized
-status: "Golden-idle-E011CM-bounded-source-pass-E011CN-next-native-rear-runtime-denied"
+status: "Golden-idle-E011CN-bounded-source-pass-E011CO-next-native-rear-runtime-denied"
 golden:
   boot_entry: sp11-audio-fullio-v19c
   kernel_release: 7.1.5-sp11-render-parity-v4+
@@ -4542,9 +4637,9 @@ e004lx_processed_rgb_steady_and_reopen:
   one_shot_consumed_and_retired: true
   production_multiclient_and_iq_parity_proven: false
   next: resolve-early-frame-reopen-stall-and-functional-opt-in-rgb-service
-current_experiment: "E011CM"
+current_experiment: "E011CN"
 current_workstream: E004-front-ir-vd55g0
-current_gate: "source-only-CRT-outer-integration-publication-return"
+current_gate: "source-only-dynamic-loader-CRT-publication-return"
 e004jk_windows_rgb_baseline:
   date: 2026-09-20
   status: pass-same-machine-windows-rgb-buffer-dimensions-golden-returned
@@ -7504,7 +7599,7 @@ linux_0048_authorization:
   after_any_helper_result: archive evidence then immediately reboot to Golden
   candidate_boot_armed: false
 
-next_experiment: "E011CN"
+next_experiment: "E011CO"
 linux_0048_runtime:
   accepted: true
   date: 2026-08-30
@@ -8300,7 +8395,7 @@ e003i_x_native_live_lsc_deadline:
 
 handoff:
   latest: HANDOFF.md
-next_action: "Integrate source-qualified original CRT producers into owned outer36CBA0 after CL. Independently model runtime CRT stream/table deltas and initialized OS-lock ownership; qualify final output/outer-inner publication, whole return and balanced release. Read E011CM RESULT.json/NEXT-SOURCE.json. TLS CFE600/full CRT/actual OS locale-standard handles remain unqualified; no numeric/TLS substitute or new logger admission. Full bootstrap/preflight/RS and independently enabled WM16 IRQ-consumed IOVA-DMA-IOMMU retirement/optical required. Preserve Golden/IR-off/no-system-sleep; no Start/deployment/reboot. Clean front/back first; optional AI/effects/HDR/catalogue deferred."
+next_action: "Qualify original dynamic DLL-loader/module/API ownership at CB9C10 LoadLibraryExW (IAT F7E310), called after the source-created stream allocator. Determine actual source arguments, target-module/API provenance and required CRT environment without guessed-success OS/numeric/TLS substitutes. Then final output/publication/whole outer return/balanced release. Read E011CN RESULT.json/NEXT-SOURCE.json. No guessed loader success, null mapping, numeric/TLS substitute or new logger admission. Full CRT/TLS CFE600/actual OS locale-standard handles/native concurrency remain unqualified. Full bootstrap/preflight/RS and independently enabled WM16 IRQ-consumed IOVA-DMA-IOMMU retirement/optical required. Preserve Golden/IR-off/no-system-sleep; no Start/deployment/reboot. Clean front/back first; optional AI/effects/HDR/catalogue deferred."
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
