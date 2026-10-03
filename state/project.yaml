@@ -1,3 +1,62 @@
+pending_original_file_api_Windows_oracle:
+  experiment: E011CT
+  identity: E011CT-OS-001
+  status: PREPARED_UNARMED_WINDOWS_OS_DEPENDENCY_OBSERVER
+  base_commit: cdb2614864a28f2d70b8f897bc4797788d5bdccc
+  current_accepted_source_proof: E011CS
+  hypothesis: A real standard Win32 call with the source-verified owned filename and seven ABI
+    inputs will establish file-result/thread-error facts; a same-process shared-page snapshot
+    will bind the runtime-only input encountered by original NTDLL at4478C. No actual live Default
+    filename or full CRT/startup proof is claimed.
+  source_sha256:
+    windows-file-api-observer.ps1: 794a5b8ba58695f2aea64260e5d7df79c6a6ec6a13e91afb8497f49a3dced55a
+    run-windows-observer-and-return.ps1: b37f6c2d697989c9d8cbb674b75022390bc5e1828f5fe325e6d717dac5a34bdf
+  selected_filename_private_input_sha256: 4cbd98d9784913d9111d301111dba46a1ec9d90e9545d450fc616bca635c432d
+  source_filename_bytes_including_NUL: 37
+  scope: Read-only standard Windows API and observer-thread metadata. No proprietary OEM DLL is
+    loaded by the observer; no camera API/Start/stream, optical read, KD, driver install, MMIO
+    or production/kernel change.
+  max_selected_file_CreateFileW_calls: 1
+  selected_file_open_inputs:
+    desired_access: 2147483648
+    share_mode: 1
+    SECURITY_ATTRIBUTES_bytes: 24
+    security_descriptor_null: true
+    inherit_handle: true
+    creation_disposition: 3
+    attributes: 128
+    template_null: true
+  selected_file_content_read: false
+  selected_file_created: false
+  native_standard_Windows_API_observation_planned: true
+  proprietary_OEM_DLL_native_execution_planned: false
+  atomic_consumed_marker_before_target_call: true
+  max_Windows_boots: 1
+  expected_reboots_total: 2
+  existing_direct_Windows_BootNext_entry: '0006'
+  persistent_BootOrder_expected: 0005,0004,0000,0001,0002,0006
+  GRUB_saved_entry_expected: sp11-audio-fullio-v19c
+  protected_Golden_payload_sha256:
+    x1e80100-microsoft-denali-sp11-fullio-v19c.dtb: 2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00
+    initrd.img-7.1.5-sp11-fullio-v19c: ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d
+    vmlinuz-7.1.5-sp11-render-parity-v4+: bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a
+  new_boot_entry_created: false
+  Windows_agent_entry_reboot_watchdog_seconds: 600
+  normal_reboot_to_Golden_after_observer_seconds: 15
+  watchdog_owned_by_this_runner_only: true
+  private_same_SP11_parameter_and_result_handoff: /boot/efi/EFI/SP11CameraPrivate/E011CT-OS-001
+  ESP_handoff_is_inert_data_not_bootloader_or_Golden_payload: true
+  temporary_ESP_mount_letter_removed: true
+  scheduled_task_registered: false
+  raw_OS_shared_page_and_filename_remain_private_SP11: true
+  raw_Original_bytes_exported: false
+  native_rear_runtime_allowed: false
+  new_camera_Starts_authorized: 0
+  actual_file_call_or_source_continuation_not_yet_observed: true
+  after_run: Return to new Golden boot, verify emptyBootNext/GRUBnext, unchanged persistentBootOrder/3Golden
+    hashes/idle/history. Archive private results on sameSP11; retire inert ESP input/scripts/snapshots
+    while preserving consumed evidence. Qualify OS dependency/CRT cleanup from measured facts
+    before original outer return or Linux hardware test.
 latest_original_file_opening_boundary:
   experiment: E011CS
   status: PASS_BOUNDED_ORIGINAL_FILE_OPENING_BOUNDARY
@@ -5084,7 +5143,7 @@ e004lx_processed_rgb_steady_and_reopen:
   next: resolve-early-frame-reopen-stall-and-functional-opt-in-rgb-service
 current_experiment: "E011CS"
 current_workstream: E004-front-ir-vd55g0
-current_gate: "source-only-file-result-error-cleanup-publication-return"
+current_gate: "read-only-Windows-file-dependency-oracle-prepared"
 e004jk_windows_rgb_baseline:
   date: 2026-09-20
   status: pass-same-machine-windows-rgb-buffer-dimensions-golden-returned
@@ -8840,7 +8899,7 @@ e003i_x_native_live_lsc_deadline:
 
 handoff:
   latest: HANDOFF.md
-next_action: "E011CT source-only qualify original CreateFileW/OS filesystem-result and last-error/TLS ownership before supplying any result, then follow file-error or success handling, descriptor/UTF16 owner cleanup, final publication/full outer return/balanced camera-stream locks. Original CFE600 and live Default filename/default locale remain open. Full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical remain required. Read E011CS RESULT.json/NEXT-SOURCE.json. No numeric/TLS/policy/Unicode/file-result success stub or new logger. Preserve Golden/IR-off/no-system-sleep; no Start/deploy/reboot. Clean front/back first; AI/effects/HDR/catalogue deferred."
+next_action: "E011CT prepared read-only Windows file/API-thread oracle E011CT-OS-001: publish/verify exact observer/runner sources and same-SP11 inert private ESP handoff, then one direct Windows BootNext0006 without changing persistentLinux-firstBootOrder or GRUBsavedGolden. One selected-file OPEN_EXISTING read-only call, private OS shared-page/runtime error observation, zero camera Starts/OEM DLL native executions/MMIO/KD. Windows runner owns600secondrebootwatchdog and normal15secondGoldenreturn. Verify/archive/retire on newGolden before qualifying source file/error/CRT cleanup. No Linux runtime/deploy/kernel change; originalCFE600/liveDefault/fullstartup/preflight/RS/WM16IRQ/IOVA/DMA/IOMMU/optical remain gates."
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static

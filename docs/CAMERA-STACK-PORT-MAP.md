@@ -1,3 +1,11 @@
+## E011CT Windows file-API observation — PREPARED, UNARMED
+
+E011CS remains the accepted source checkpoint. Its next dependency now requires a bounded same-SP11 Windows observation: one standard CreateFileW call with the verified private filename/read-only ABI, immediate observer-thread Win32/NT status, and a private4096-byte shared OS-page snapshot. No camera API or proprietary OEM DLL is invoked by this observer. Default filename production and full CRT/startup remain open.
+
+The independently written C# compiles on SP7 with exact24-byte Win64 SECURITY_ATTRIBUTES/offsets8/16; both final PowerShell scripts parse. No SP11 private input was transferred to SP7, and preflight invokes no target file/shared-page API. Atomic CreateNew marks the fresh E011CT-OS-001 before the target call. The Windows runner arms its own600-second reboot watchdog, removes its temporary ESP mount and requests normal Golden return after15seconds.
+
+Next publish/verify this exact prepared source and private same-SP11 inert ESP handoff, then use existing direct-Windows BootNext0006 once. Preserve persistent Linux-first BootOrder and GRUBsavedGolden; verify a new Golden boot and emptynext entries, archive/retire evidence, then qualify original OS/result/error/CRT cleanup. Native rear stays denied pending full startup/preflight/RS and independent enabledWM16IRQ/consumedIOVA/DMA/IOMMUretirement/optical. See [E011CT plan](../experiments/E004-front-ir-vd55g0/e011ct-windows-file-api-oracle/PLAN.json).
+
 ## E011CS original file-opening boundary — BOUNDED PASS
 
 Six unchanged original camera startup joins cover both ANSI/OEM fixtures across three pinned inputs, first camera placement only. After the inherited complete Unicode conversion, original CRT mode parsing and descriptor allocation reach the stop before CreateFileW at0xCFD658. No file API executes and no handle/error result is supplied.

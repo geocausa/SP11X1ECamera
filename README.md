@@ -11,6 +11,10 @@ return. Source-only; Golden unchanged, native rear runtime remains denied.
 See [current continuation](CONTINUE.md) and
 [E011CS result](experiments/E004-front-ir-vd55g0/e011cs-original-file-opening-boundary/RESULT.json).
 
+**Prepared next step — E011CT:** a read-only Windows file/API-thread observation
+with one fresh identity, private same-SP11 inputs, a reboot watchdog and verified
+Golden return. No camera start or OEM DLL execution. See [prepared plan](experiments/E004-front-ir-vd55g0/e011ct-windows-file-api-oracle/PLAN.json).
+
 Current product priority is a clean, controllable front/back native Linux
 baseline; optional AI/effects/HDR/catalogue are deferred. Protected IR/Hello
 records are retained historical work.
