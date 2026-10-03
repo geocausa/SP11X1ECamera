@@ -1,3 +1,13 @@
+## E011DI original enumeration bootstrap — BOUNDED PASS
+
+Thirty-two cases continue the verified factory VM into original5F8DC0: combined15,936 original instructions,12,832 exact store chunks and3,488 rejected requests. Added enumeration proof contributes2,560 /1,024 /1,536.
+
+Original stack helper1440 uses the actual112-byte initial frame and source5920-byte additional request under explicit already-committed stack bounds. Original CE7AD8 runs through second caller5F9460/guard1B30320, claimsFFFFFFFF and preserves its actual caller with balanced logical SRW ownership. Source code clears all56 bytes at169FE00. Whole memory/permissions/source reads/stores retain both48-byte records, typed owners and the1040-byte receiver.
+
+The stop is BEFORE5F94A0→CA34A0 with callback argumentF7B5E0. Registry body/result, OS guard-page growth, file enumeration/completion/full parent return/Default/startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical remain open. Owned loader/TLS/stack/native OS/allocator/canary fixtures remain explicit.
+
+NEXT **E011DJ** follows original callback registry CA34A0/CA3450 and then enumeration completion/file provenance. Golden/history unchanged; zero Starts/reboots/images/production C or kernel changes. See [E011DI](../../experiments/E004-front-ir-vd55g0/e011di-original-enumeration-bootstrap/README.md).
+
 ## E011DH original factory initialization and1040-byte clear — BOUNDED PASS
 
 Thirty-two cases across stack/node placements, loader indices, negative epochs and original/D7-canary field states execute13,376 original instructions,11,808 exact store chunks and1,952 invalid requests rejected before effects.
