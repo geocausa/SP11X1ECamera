@@ -1,3 +1,11 @@
+## E011CU original measured file-failure path — BOUNDED PASS
+
+Six unchanged original camera joins cover both ANSI/OEM fixtures across three pinned inputs, first placement only. Strict external contracts use the actual E011CT read-only file failure and thread error3, bound to the exact filename digest, seven ABI inputs, SECURITY_ATTRIBUTES, source return sites and call sequence. All432 original failure-prefix instructions,96 exact store chunks and60 invalid API requests pass full memory/state checks.
+
+Original CFD6F0 clears descriptor0 record+56. Its invalid handle and initialized mutex remain held; the owned74-byte Unicode allocation is retained. Independent entire64KB stack and CRT models permit only original stack stores and that one flag clear. Entire other image/native-heap/camera/serialized/API regions and policy pages/permissions match; all lock depths and allocation ownership remain unchanged. The original thread-context helper reaches the stop before FlsSetValue atCBA198, with source CRT slot1607168 stillFFFFFFFF and a -1 busy marker. No FLS call/result is supplied, and original CFE600 remains unqualified.
+
+NEXT **E011CV** source-only: original slot initializer CB4310/dynamic module-export resolution and fresh owned FLS registry, then original per-thread object producer/error mapping, descriptor/Unicode cleanup and full outer return. Actual live Default/full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied. Golden/history unchanged; zero new Start/reboot/C/kernel/image tests in this source phase. See [E011CU](experiments/E004-front-ir-vd55g0/e011cu-original-file-error-boundary/README.md).
+
 ## E011CT actual Windows file/error input — BOUNDED PASS
 
 The fresh E011CT-OS-002 observer made one native standard ARM64 CreateFileW call with the source-verified private filename and all seven read-only ABI inputs. It returned an invalid handle; the managed capture, Kernel32 and NTDLL thread-error getters all reported3, with NTSTATUS0xC000003A. An independent known-value last-error round trip agreed. The private4096-byte shared OS page and NTDLL initialization cell were observed on SP11; the cell matched before/after. No file content was read or created, and no proprietary OEM camera DLL, camera Start, stream or optical API was invoked.
