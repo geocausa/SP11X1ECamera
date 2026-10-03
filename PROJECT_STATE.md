@@ -1,3 +1,9 @@
+## E011CT Windows file-API observation — FRESH ATTEMPT 002 PREPARED, UNARMED
+
+Attempt E011CT-OS-001 is consumed and aborted before the observer or target API. Windows rejected the temporary mount command; read-only topology showed the existing EFI mount at Z:. The runner returned normally to new Golden boot f6b17d2b-4a76-4ab1-a748-35fcd9ee17c4, with all three payload hashes, persistent boot order and historical checkouts preserved. No camera Start, file API or shared-page observation ran. Its private input/scripts were archived on SP11 and retired from ESP; consumed evidence remains.
+
+Fresh E011CT-OS-002 verifies the existing EFI partition GUID/type/size, uses and preserves its current mount, and removes only a mount it creates. The observer additionally requires loaded ARM64 NTDLL. Both PowerShell sources parse and the independent C# compiles on SP7 without private inputs or target calls. Publish exact prepared source, then a single guarded direct-Windows BootNext0006 observation with the owned600-second return timer and normal15-second Golden return. E011CS remains the accepted source proof; complete original startup/Default producer/cleanup and hardware gates remain open, with native rear denied. See [fresh plan](experiments/E004-front-ir-vd55g0/e011ct-windows-file-api-oracle/attempt-002/PLAN.json) and [consumed abort](experiments/E004-front-ir-vd55g0/e011ct-windows-file-api-oracle/ATTEMPT-001-ABORT-SAFE.json).
+
 > **Current workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean`
 > on `experiment/e004-front-ir-vd55g0`. See [machine/workspace map](docs/MACHINE_MAP.md).
 > Use top-level state fields and the latest experiment for continuation; older

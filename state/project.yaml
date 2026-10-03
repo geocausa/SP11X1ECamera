@@ -1,21 +1,16 @@
 pending_original_file_api_Windows_oracle:
   experiment: E011CT
-  identity: E011CT-OS-001
+  identity: E011CT-OS-002
   status: PREPARED_UNARMED_WINDOWS_OS_DEPENDENCY_OBSERVER
-  base_commit: cdb2614864a28f2d70b8f897bc4797788d5bdccc
+  base_commit: 255316c7ab5843ff00ef6cf864904fe5883cb5cd
   current_accepted_source_proof: E011CS
-  hypothesis: A real standard Win32 call with the source-verified owned filename and seven ABI
-    inputs will establish file-result/thread-error facts; a same-process shared-page snapshot
-    will bind the runtime-only input encountered by original NTDLL at4478C. No actual live Default
-    filename or full CRT/startup proof is claimed.
+  hypothesis: A real standard Win32 call with the source-verified owned filename and seven ABI inputs will establish file-result/thread-error facts; a same-process shared-page snapshot will bind the runtime-only input encountered by original NTDLL at4478C. No actual live Default filename or full CRT/startup proof is claimed.
   source_sha256:
-    windows-file-api-observer.ps1: 794a5b8ba58695f2aea64260e5d7df79c6a6ec6a13e91afb8497f49a3dced55a
-    run-windows-observer-and-return.ps1: b37f6c2d697989c9d8cbb674b75022390bc5e1828f5fe325e6d717dac5a34bdf
+    windows-file-api-observer.ps1: 19f038786d855568caf499ebcef3a7b1c06ea0f13aaab8bff6f5ab2f1c9dae8d
+    run-windows-observer-and-return.ps1: 43c330349e384c998c7f0a98bd531e3ef2e6f08c7f6e0745ad3d51e6fb723d0a
   selected_filename_private_input_sha256: 4cbd98d9784913d9111d301111dba46a1ec9d90e9545d450fc616bca635c432d
   source_filename_bytes_including_NUL: 37
-  scope: Read-only standard Windows API and observer-thread metadata. No proprietary OEM DLL is
-    loaded by the observer; no camera API/Start/stream, optical read, KD, driver install, MMIO
-    or production/kernel change.
+  scope: Read-only standard Windows API and observer-thread metadata. No proprietary OEM DLL is loaded by the observer; no camera API/Start/stream, optical read, KD, driver install, MMIO or production/kernel change.
   max_selected_file_CreateFileW_calls: 1
   selected_file_open_inputs:
     desired_access: 2147483648
@@ -44,19 +39,56 @@ pending_original_file_api_Windows_oracle:
   Windows_agent_entry_reboot_watchdog_seconds: 600
   normal_reboot_to_Golden_after_observer_seconds: 15
   watchdog_owned_by_this_runner_only: true
-  private_same_SP11_parameter_and_result_handoff: /boot/efi/EFI/SP11CameraPrivate/E011CT-OS-001
+  private_same_SP11_parameter_and_result_handoff: /boot/efi/EFI/SP11CameraPrivate/E011CT-OS-002
   ESP_handoff_is_inert_data_not_bootloader_or_Golden_payload: true
-  temporary_ESP_mount_letter_removed: true
+  temporary_ESP_mount_letter_removed: Only when created by this runner; preexisting mount is preserved
   scheduled_task_registered: false
   raw_OS_shared_page_and_filename_remain_private_SP11: true
   raw_Original_bytes_exported: false
   native_rear_runtime_allowed: false
   new_camera_Starts_authorized: 0
   actual_file_call_or_source_continuation_not_yet_observed: true
-  after_run: Return to new Golden boot, verify emptyBootNext/GRUBnext, unchanged persistentBootOrder/3Golden
-    hashes/idle/history. Archive private results on sameSP11; retire inert ESP input/scripts/snapshots
-    while preserving consumed evidence. Qualify OS dependency/CRT cleanup from measured facts
-    before original outer return or Linux hardware test.
+  after_run: Return to new Golden boot, verify emptyBootNext/GRUBnext, unchanged persistentBootOrder/3Golden hashes/idle/history. Archive private results on sameSP11; retire inert ESP input/scripts/snapshots while preserving consumed evidence. Qualify OS dependency/CRT cleanup from measured facts before original outer return or Linux hardware test.
+  preexisting_ESP_mount_preserved: true
+  Windows_ESP_partition_Guid: 5b4f74dc-b427-4828-bc1d-ab024feeb313
+  Windows_ESP_partition_size: 209715200
+  prior_consumed_identity: E011CT-OS-001
+  prior_attempt_outcome: ABORT_BEFORE_OBSERVER_ESP_MOUNT_REJECTED
+  prior_attempt_new_camera_Starts: 0
+  prior_attempt_target_CreateFileW_calls: 0
+  each_fresh_identity_max_Windows_boots: 1
+  source_folder: experiments/E004-front-ir-vd55g0/e011ct-windows-file-api-oracle/attempt-002
+original_file_api_Windows_attempt_001_abort:
+  experiment: E011CT
+  identity: E011CT-OS-001
+  status: CONSUMED_ABORT_BEFORE_TARGET_API
+  prepared_commit: 255316c7ab5843ff00ef6cf864904fe5883cb5cd
+  phase: watchdog_armed
+  native_observer_invoked: false
+  target_CreateFileW_calls: 0
+  shared_page_reads: 0
+  new_camera_Starts: 0
+  Windows_runner_watchdog_armed: true
+  normal_Golden_return_requested: true
+  Golden_return_verified: true
+  Golden_boot_id: f6b17d2b-4a76-4ab1-a748-35fcd9ee17c4
+  Golden_3_payload_hashes_unchanged: true
+  persistent_BootOrder_unchanged: true
+  BootNext_empty: true
+  GRUB_saved_Golden_next_empty: true
+  historical_clones_unchanged: true
+  new_reboots: 2
+  error: 'mountvol S:\ /S rejected with parameter incorrect; existing ESP mount observed at Z:'
+  Windows_ESP_GptType: c12a7328-f81f-11d2-ba4b-00a0c93ec93b
+  Windows_ESP_partition_DiskNumber: 0
+  Windows_ESP_partition_PartitionNumber: 1
+  Windows_ESP_volume_Guid: 5b4f74dc-b427-4828-bc1d-ab024feeb313
+  Windows_ESP_preexisting_drive: Z
+  Windows_ESP_Size: 209715200
+  same_identity_retry_allowed: false
+  private_original_name_or_bytes_exported: false
+  native_rear_runtime_allowed: false
+
 latest_original_file_opening_boundary:
   experiment: E011CS
   status: PASS_BOUNDED_ORIGINAL_FILE_OPENING_BOUNDARY
@@ -5143,7 +5175,7 @@ e004lx_processed_rgb_steady_and_reopen:
   next: resolve-early-frame-reopen-stall-and-functional-opt-in-rgb-service
 current_experiment: "E011CS"
 current_workstream: E004-front-ir-vd55g0
-current_gate: "read-only-Windows-file-dependency-oracle-prepared"
+current_gate: read-only-Windows-file-dependency-fresh-attempt-002-prepared
 e004jk_windows_rgb_baseline:
   date: 2026-09-20
   status: pass-same-machine-windows-rgb-buffer-dimensions-golden-returned
@@ -8899,7 +8931,7 @@ e003i_x_native_live_lsc_deadline:
 
 handoff:
   latest: HANDOFF.md
-next_action: "E011CT prepared read-only Windows file/API-thread oracle E011CT-OS-001: publish/verify exact observer/runner sources and same-SP11 inert private ESP handoff, then one direct Windows BootNext0006 without changing persistentLinux-firstBootOrder or GRUBsavedGolden. One selected-file OPEN_EXISTING read-only call, private OS shared-page/runtime error observation, zero camera Starts/OEM DLL native executions/MMIO/KD. Windows runner owns600secondrebootwatchdog and normal15secondGoldenreturn. Verify/archive/retire on newGolden before qualifying source file/error/CRT cleanup. No Linux runtime/deploy/kernel change; originalCFE600/liveDefault/fullstartup/preflight/RS/WM16IRQ/IOVA/DMA/IOMMU/optical remain gates."
+next_action: "Publish verified fresh E011CT-OS-002 observer, preserve existing Windows ESP mount, observe one standard read-only API call, return Golden and continue original cleanup; no camera Start."
 
 e003i_y_generation_tagged_3a_stats:
   status: pass_static
