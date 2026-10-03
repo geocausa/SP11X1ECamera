@@ -1,3 +1,13 @@
+## E011CZ original runtime helper authority — BOUNDED PASS
+
+Original CE7C98 is reverse byte search used by18 source callers on eight private source-path literals, not a TLS/context getter. Its inherited owned_diagnostic_context label and TLS+3000 result fixture are corrected in scope; the camera harness still retains the fixture pending E011DA.
+
+Seventy-two original reverse-search returns (64 owned placement/search cases and8 actual private image literals) match independent last-match/NUL/NULL results in4,601 original instructions. The source-derived aligned16-byte SIMD read windows and every canary remain unchanged. Thirty-two original CFE600 -> CFE560 returns cover four owned placements/four PE TLS-index fixtures/fresh and initialized flags:928 instructions/176 store chunks independently produce block+20=1 when fresh, with actual SP/X19–X29/D8–D15 restoration and whole memory checks. All584 invalid scope requests are rejected before effects.
+
+PE TLS AddressOfIndex matches source global16A3740. The callback table is pinned null file-image data; this is bounded empty-initializer-table proof under declared loader/TEB/array fixtures. Full actual Windows loader, nonempty initializer callbacks, Default/CRT/TLS/locale/concurrency and runtime CFE600 authority remain open. Original helpers are not yet integrated into the camera harness.
+
+NEXT **E011DA** performs that shared camera join and rechecks whole memory, caller restoration, output/global retention and balanced locks across six source cases; then remaining full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical. Golden/history unchanged; zero Starts/reboots/Linux images/C/kernel changes. See [E011CZ](../experiments/E004-front-ir-vd55g0/e011cz-original-runtime-helpers/README.md).
+
 ## E011CY original publication callback and outer return — BOUNDED PASS
 
 Six ANSI/OEM camera joins across three pinned inputs recheck the accepted publication prefix and execute the original publication callback36E670 through outer return36E394. The tail checks 3,360 executed OEM instructions plus90 explicit inherited adapter entries, 666 exact store chunks, 2,592 separately contracted owned library-clear bytes and450 invalid requests rejected before effects.

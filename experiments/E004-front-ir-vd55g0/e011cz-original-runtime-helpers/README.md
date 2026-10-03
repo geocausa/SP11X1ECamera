@@ -1,0 +1,15 @@
+# E011CZ — original runtime helper authority
+
+The original helper CE7C98 is reverse byte search, used by 18 observed original source call sites to select the last backslash in eight private embedded source-path literals. It is not a TLS/context getter. The inherited owned_diagnostic_context label and TLS+3000 result fixture are explicitly corrected here; the camera harness still retains that fixture until E011DA integrates original execution. All original strings remain private on SP11; published authority contains only RVAs, lengths, hashes, offsets and caller counts.
+
+Seventy-two unchanged original reverse-search returns pass: 64 owned ASCII/empty/repeated-match cases across four placements and four search bytes, plus eight actual private image-literal cases. Last-match, terminating-NUL and missing-character results match an independent byte-search model. All 4,601 executed original instructions match pinned code. The original routine uses containing aligned16-byte SIMD loads, reported as two8-byte reads; the exact mapped read windows and all surrounding canaries remain unchanged. Full image, heap, stack and all other mapped regions are immutable. Actual incoming SP, X19–X29 and D8–D15 restore.
+
+Thirty-two original CFE600 -> CFE560 TLS-wrapper returns cover four owned placements, four loader-index fixtures and fresh/already-initialized flags. The PE TLS AddressOfIndex equals source global16A3740. Original code reads X18+88 -> indexed TLS array -> block+20 and, when fresh, writes block+20=1 at CFE5A4. All 928 original instructions and 176 exact store chunks pass independently modeled entire stack/block deltas; all other entire image/heap/TEB/array regions remain unchanged, with actual caller restoration.
+
+The TLS callback table cell F7F438 is the pinned null file-image value. This qualifies only that empty-initializer-table scope. TLS index/layout are explicit owned loader ABI fixtures; actual Windows loader construction, nonempty callback execution, full TLS/Default/CRT/locale/concurrency and native CFE600 runtime bootstrap remain open. The wrapper returns void/status0, not a context pointer. No camera Start, reboot, production C/kernel change or Linux image test occurs.
+
+All 584 invalid source-scope requests are rejected before effects. Failed private verifier versions are retained and excluded; they corrected byte-width/read-window and unvisited alignment-path assumptions without changing original code.
+
+Next **E011DA** integrates these exact original helpers into the camera harness with whole memory, source/caller and lock checks. Remaining full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical gates remain open; native rear runtime stays denied.
+
+Files: [result](RESULT.json), [full scalar evidence](RUNTIME-HELPERS-SAFE.json), [source/literal/caller authority](RUNTIME-HELPER-AUTHORITY-V2-SAFE.json), [guard](GUARD-SAFE.json), [next source scope](NEXT-SOURCE.json) and independently written [verifier](source-private.py).
