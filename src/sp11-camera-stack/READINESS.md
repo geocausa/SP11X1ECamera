@@ -1,5 +1,15 @@
 # SP11 camera stack readiness
 
+## E011DE original standalone startup-guard sequence — BOUNDED PASS
+
+Sixteen scenarios cover four placements, two owned loader indices and two epochs across fresh initialization, completion and cache refresh. All48 original helper phases pass: 1,504 instructions, 304 exact store chunks and 1,168 invalid requests rejected before effects.
+
+Original CE7AD8 claims first initialization with guardFFFFFFFF. Original CE7A48 increments epoch1607B04 and updates the guard/TLS+16; the original initialized path refreshes a stale TLS epoch. Whole memory, actual permissions, logical SRW resource order and original caller SP/nonvolatile registers pass.
+
+Loader/TEB/TLS/SRW/CV readiness and void OS dependencies remain explicit owned models. Native OS bodies/bytes, concurrent waiting and actual factory/Default production remain open. This standalone proof is not yet joined to factory5BDE08 and its source guard1B302D0.
+
+NEXT **E011DF** joins the original runtime guard to its exact factory caller, then resolves file enumeration/context receiver/RootOpsinput+72 and full startup/preflight/RS. Independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical remain open. Golden/history unchanged; zero Starts/reboots/images/production C or kernel changes. See [E011DE](../../experiments/E004-front-ir-vd55g0/e011de-original-startup-guard-sequence/README.md).
+
 ## E011DD original root reference-release component — BOUNDED PASS
 
 Sixteen isolated cases at four placements cover null roots and references1/2/41. Twelve first execute original fresh-root construction. The source release branch decrements references, retains nonfinal roots and calls the typed OS root+8 deletion and sized176-byte release only for the final reference, then clears global1798458.

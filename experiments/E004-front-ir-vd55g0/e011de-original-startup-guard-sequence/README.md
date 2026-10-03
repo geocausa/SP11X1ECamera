@@ -1,0 +1,15 @@
+# E011DE original standalone startup-guard sequence
+
+Sixteen scenarios execute 48 original helper phases: four aligned guard/TLS placements, two owned loader indices0/37 and two initial epochs80000000/41. The same original source-created guard transition feeds completion, followed by an explicitly stale TLS-cache fixture. Original CE7AD8 writes guardFFFFFFFF on first initialization; original CE7A48 increments global epoch1607B04 and writes that epoch to the guard and TLS+16; original CE7AD8 refreshes the stale TLS epoch for an already initialized guard.
+
+All cases pass: 1,504 original instructions, 304 exact source store chunks and 1,168 invalid requests rejected before effects. Independent whole mapped memory and actual permissions are checked against planned field writes and exact pre-instruction stack stores. All other memory stays unchanged. Logical SRW ownership, initialization readiness, ordered acquire/release/wake calls and original caller SP/X19-X29/D8-D15 are checked.
+
+Invalid entry, arguments, actual held state, lock/CV readiness, loader index, TEB array, TLS slot, import bindings and standard OS caller/argument/ownership requests reject without effects. There are112 owned OS calls and16 wakes. Every tested phase returns through its original function body; original helper results are not replaced.
+
+This is a standalone source qualification under explicit owned loader index, TEB/TLS layout, epoch, SRW/CV readiness and void OS dependency models. The native OS API bodies and opaque SRW/CV bytes, actual Windows loader, concurrency, waiting/SleepConditionVariableSRW, real factory caller production and full Default startup remain unqualified. The backing bytes of logical OS lock objects stay unchanged under the dependency model; this is not a claim about native Windows lock bytes. Epoch41 is an owned robustness fixture, not Windows startup evidence.
+
+Metadata pins CE7AD8 to188bytes and CE7A48 to140bytes. See STARTUP-GUARD-AUTHORITY-SAFE.json. The original global epoch is1607B04; the earlier private1607C04 conversion was wrong and excluded. Private exploratory v2/v3/v4 are not acceptance; only the unchanged v5 verifier SHA948969eebad0a326f5525e8e1a834768586e1db4f3b5957aa0ef4aa9378749c6 is accepted. Job_VBoALq7wSsbzNp1daE-YGCS_ exited0 with no stderr at12:38:34.868..12:39:03.624UTC on2026-10-03.
+
+No join to factory5BDE08/guard1B302D0 is claimed yet. Its actual source call5BE67C is the next boundary. Factory file enumeration, actual context receiver/vtable+192, RootOps input+72, full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical remain open. Input+48 configuration data is distinct from RootOps; context+9552 is not established as a camera entry.
+
+Golden payloads, boot/default/order and historical clones are unchanged. Zero camera Starts, reboots, native Windows DLL execution, Linux image tests or production C/kernel changes. Native rear runtime remains denied. Next: E011DF. Read [RESULT.json](RESULT.json) and [NEXT-SOURCE.json](NEXT-SOURCE.json).
