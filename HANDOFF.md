@@ -1,3 +1,11 @@
+## E011CV original CRT slot and thread record — BOUNDED PASS
+
+Four owned allocation placements and fresh slots pass 1,684 unchanged OEM instructions, 165 original Windows getter/setter instructions, 307 exact store chunks and 264 invalid API requests rejected before effects. Bounded API-set parsing and the exact host export/NTDLL forwarder agree. Original CB4338 publishes the allocated slot; the original producer allocates and initializes the entire 968-byte thread record.
+
+Independent entire image, stack, CRT, TEB and FLS byte-layout models match. All other entire regions and actual permissions match, original callee-saved registers/SP restore and locks balance. The original Windows getter retrieves the exact published owner; the original error setter restores the input error after an explicit owned API clobber.
+
+This is standalone guarded Unicorn evidence under a fresh single-thread registry, file-image/null locale and zero diagnostic-global fixtures. FlsAlloc/FlsSetValue use strict owned adapters; their original Windows implementations, actual live loader/TLS/locale/concurrency, callback cleanup and the camera join are open. Original CFE600 remains unqualified. NEXT **E011CW** joins this producer to the original file-error path, then qualifies error mapping, descriptor/Unicode release and full outer return. Full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical still gate the smoke test. Golden/history unchanged; zero new camera Starts, reboots or Linux image tests. See [E011CV](experiments/E004-front-ir-vd55g0/e011cv-original-slot-thread-producer/README.md).
+
 ## E011CU original measured file-failure path — BOUNDED PASS
 
 Six unchanged original camera joins cover both ANSI/OEM fixtures across three pinned inputs, first placement only. Strict external contracts use the actual E011CT read-only file failure and thread error3, bound to the exact filename digest, seven ABI inputs, SECURITY_ATTRIBUTES, source return sites and call sequence. All432 original failure-prefix instructions,96 exact store chunks and60 invalid API requests pass full memory/state checks.
