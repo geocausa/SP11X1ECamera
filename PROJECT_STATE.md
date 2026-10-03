@@ -1,3 +1,17 @@
+## 2026-10-03 E011DM original query through selected empty slots accepted
+
+The original reader, metadata query and selected-slot helper now execute together without query or slot-helper result fixtures for declared empty slots. All 18,816 queries return actual null records; missing RS preserves the prior 132-byte source record.
+
+640 scenarios / 1,920 cold/warm/stale-thread reader calls pass. Added query/helper coverage is 2,916,480 original instruction visits; inherited reader/tag/guard coverage is counted separately. All 356,608 altered dependency bindings reject in the owned harness contracts. Entire nonstack memory/mapping state, immutable source/pool/slot objects, preserved ABI and stack redzones pass.
+
+The normal path selects node+490, uses pool capacity+278 and the inline pointer array+298, with selector modulo capacity. TLS block+138 is a scalar request selector; the original reader's ninth query stack argument is zero. Registry/settings/node/context/pool/empty-slot construction and standard OS resources remain explicit owned models.
+
+**Still open:** actual selected registry values and metadata registry initialization, populated-record identity/generation/lifetime, normal AFD H/V counts and whole-frame zero-offset producer. Private populated-slot exploration reaches 5DF780 -> 5C0A58 and image+17350E0; it is excluded from acceptance. NEXT **E011DN** resolves that selected dependency and populated RS ownership, then normal AFD policy.
+
+Selected input/profile integration, deterministic startup/preflight and independent enabled-output IRQ/exact-buffer/DMA/IOMMU retirement still precede the clean-colour front/rear/off app gate. Separate factory/enumeration acceptance stays E011DI; native rear runtime remains denied. No camera Starts, reboots, kernel builds, optical tests or production C changes; Golden unchanged.
+
+See [E011DM empty-slot query](experiments/E004-front-ir-vd55g0/e011dm-normal-rs-empty-slot-query/README.md). Earlier current/NEXT paragraphs below are historical. User authorizes Fabric or PiMaster, one-shot GRUB Windows oracle/external SP7 KD boots and missing-tool installation. Hosts SP11/SP7/PiMaster; originals and optical material stay private on SP11.
+
 ## 2026-10-03 E011DL original runtime statistics tag initialization accepted
 
 The actual reader's guarded first-use path now produces all seven runtime tags from declared registry fields, including RS slot5, with no tag-vector or guard-result fixture. Unchanged CRT acquisition/publication bodies execute in the real reader caller. Warm and stale-thread calls preserve published tags despite altered registry inputs.
