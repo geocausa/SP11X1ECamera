@@ -1,3 +1,13 @@
+## E011CY original publication callback and outer return — BOUNDED PASS
+
+Six ANSI/OEM camera joins across three pinned inputs recheck the accepted publication prefix and execute the original publication callback36E670 through outer return36E394. The tail checks 3,360 executed OEM instructions plus90 explicit inherited adapter entries, 666 exact store chunks, 2,592 separately contracted owned library-clear bytes and450 invalid requests rejected before effects.
+
+Independent entire stack/camera/caller models match; every other full inherited region, real permissions, allocation/release history and CRT resource state stays unchanged. W0 returns0; actual incoming SP, X19–X29 and D8–D15 restore. Output/global retain the actual outer object and outer+40 the actual inner. The SAME parent camera-root mutex closure records one Enter/one Leave with final depth0 at original return36E2B4.
+
+The exact outer cookie producer11D0/checker11F0 pair now executes unchanged (36/48 instructions across six cases), with its entire producer-stack delta and caller restoration checked. Other nested cookie helpers and the clear-helper implementation remain explicit fixtures. Added owned TEB+88 linkage and the restored existing parent Leave binding are declared ABI fixtures before the tail baseline; actual Windows loader/Default/CFE600/TLS/FLS/locale/concurrency remain open.
+
+NEXT **E011CZ** source-qualifies original TLS/context and runtime bootstrap authority, then full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical. Golden/history unchanged; zero new Starts/reboots/Linux images or production C/kernel changes. See [E011CY](experiments/E004-front-ir-vd55g0/e011cy-original-outer-return/README.md).
+
 ## E011CX original output and global publication — BOUNDED PASS
 
 Six cases cover both ANSI/OEM fixtures across three pinned inputs. After accepted file/thread cleanup, the remaining parameter iterations run through the unchanged interface96 and core-vtable16 callbacks. Original code links outer+40 to the actual inner object and publishes the same outer object to the caller output and image global1798460.
