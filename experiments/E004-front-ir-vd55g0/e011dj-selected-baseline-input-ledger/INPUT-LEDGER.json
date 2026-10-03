@@ -1,0 +1,633 @@
+{
+  "schema": "E011DJ-selected-baseline-input-ledger-v1",
+  "experiment": "E011DJ",
+  "audited_base_commit": "a796921824128bb62ec495845814961da4991a39",
+  "scope": "Actual existing four-packet qualified rear offline replay, input and consumer inventory. Not a proven minimal enabled-module deployment.",
+  "latest_original_emulation_checkpoint": "E011DI",
+  "native_rear_runtime_allowed": false,
+  "complete_deterministic_source_bootstrap_closed": false,
+  "minimal_enabled_module_dependency_closure_proven": false,
+  "new_camera_starts": 0,
+  "new_reboots": 0,
+  "new_kernel_build": false,
+  "private_bytes_exported": false,
+  "harness_chain": [
+    "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/verify-private.py",
+    "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/verify-private.py",
+    "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/verify-private.py",
+    "experiments/E004-front-ir-vd55g0/e011al-rear-bg-weight-quad-integration/verify-private.py",
+    "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/verify-private.py",
+    "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/verify-private.py",
+    "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/verify-private.py"
+  ],
+  "register_members": [
+    {
+      "member": "scalar",
+      "input_origin": "observed upstream scalar inputs; clean numeric producer; explicit request hold schedule",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/scalar-producer.h",
+        "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/authority-private.py",
+        "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/host-scalar-check.h"
+      ],
+      "remaining": "Bind selected exposure/WB/gain/black-level inputs and supported Bayer policy independently of recorded source samples; kernel binder consumes already quantized outputs."
+    },
+    {
+      "member": "bpcabf",
+      "input_origin": "source-derived clean common calculation with observed live AEC trigger lineage",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011ae-rear-request-generic-trigger-producer/camss-e011ae-rear-startup-bpc-bind.inc",
+        "experiments/E004-front-ir-vd55g0/e011af-rear-live-aec-trigger-lineage/verify-live-private.py"
+      ],
+      "remaining": "Use existing clean calculation; complete selected source-profile/receiver construction and request trigger binding rather than taking a retained packet as input."
+    },
+    {
+      "member": "bfstats",
+      "input_origin": "source-qualified hardcode/tuning seed; clean request ROI producer; observed first normal zoom",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e008t-rear-packet-aware-bf-semantic-composer/camss-vfe-e008t-rear-bf-semantic.inc",
+        "experiments/E004-front-ir-vd55g0/e008t-rear-packet-aware-bf-semantic-composer/SAFE-SOURCE-AUTHORITY.json",
+        "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/host-af-check.h",
+        "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/camss-e011ah-request-af-roi.inc"
+      ],
+      "remaining": "Bind explicit selected request AF rectangle/zoom policy; manual focus does not disable BF or remove hardware output retirement."
+    },
+    {
+      "member": "geometry",
+      "input_origin": "bounded selected-mode host fixture; clean packer",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e006p-rear-crop-roundclamp-packers/camss-e006p-crop-roundclamp.inc",
+        "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c"
+      ],
+      "remaining": "Bind actual sensor/output crop configuration; full replay agreement does not prove runtime mode negotiation."
+    },
+    {
+      "member": "mnds",
+      "input_origin": "bounded selected-mode host fixture; clean scaler packer",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e006q-rear-mnds23-packer/camss-e006q-mnds23.inc",
+        "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c"
+      ],
+      "remaining": "Bind selected input/output dimensions and chroma divisors coherently with actual mode."
+    },
+    {
+      "member": "cst",
+      "input_origin": "derived selected tuning reserve; clean coefficient packer",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e006r-rear-cst12-tuning-packer/camss-e006r-cst12.inc",
+        "experiments/E004-front-ir-vd55g0/e006r-rear-cst12-tuning-packer/TUNING-SAFE.json",
+        "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/verify-private.py"
+      ],
+      "remaining": "Preserve existing coefficient authority; selected profile materialization/selection is not proven by the host substitution."
+    },
+    {
+      "member": "bc101",
+      "input_origin": "selected tuning disables this family; clean disabled provider",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e006s-rear-bc101-tuning-provider/camss-e006s-bc101.inc",
+        "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c"
+      ],
+      "remaining": "Retain validated disable semantics in selected profile; do not infer arbitrary other modules can be omitted."
+    },
+    {
+      "member": "small_iq",
+      "input_origin": "selected disabled small-IQ provider",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e006t-rear-disabled-small-iq-providers/camss-e006t-small-iq.inc",
+        "experiments/E004-front-ir-vd55g0/e006t-rear-disabled-small-iq-providers/TUNING-SAFE.json"
+      ],
+      "remaining": "Keep explicit selected disable/bypass semantics; no minimal enabled-module dependency closure claimed."
+    },
+    {
+      "member": "bhist",
+      "input_origin": "bounded cold/normal crop host fixture; clean packer",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e006u-rear-bhist16-provider/camss-e006u-bhist16.inc",
+        "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c"
+      ],
+      "remaining": "Bind cold/normal crop policy from selected bootstrap; fixture agreement is conditional input evidence."
+    },
+    {
+      "member": "rs",
+      "input_origin": "observed pre-adjustment counts/crop/format/color; clean integer producer; explicit whole-frame zero-offset scope",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/rs-producer.h",
+        "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/native-private.py",
+        "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/host-rs-check.h",
+        "experiments/E004-front-ir-vd55g0/e011h-rs-first-request-source-handoff/RESULT.json",
+        "experiments/E004-front-ir-vd55g0/e011m-rs-titan680-capability-origin/RESULT.json"
+      ],
+      "remaining": "Initial active Titan680 default origin already closed. Normal count writer/override policy remains open; whole-frame zero offsets are a bounded caller scope, stripe policy unsupported."
+    },
+    {
+      "member": "aec_be",
+      "input_origin": "clean BG geometry/threshold and Q4 producer; observed normal record; qualified cold source decoder",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/bg-producer.h",
+        "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/native-private.py",
+        "experiments/E004-front-ir-vd55g0/e011al-rear-bg-weight-quad-integration/weight-quad-producer.h",
+        "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/cold-aec-source.h",
+        "experiments/E004-front-ir-vd55g0/e011n-rear-aecbe-request1-producer/RESULT.json"
+      ],
+      "remaining": "Immediate normal producer lineage already observed. Integrate selected ROI/threshold/gain/weight policy; unity BG gain is the implemented scope. Cold source decode does not prove whole source construction."
+    },
+    {
+      "member": "tintless_bg",
+      "input_origin": "bounded selected-mode grid host fixture; clean BG packer",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e006x-rear-tintlessbg17-packer/camss-e006x-tintlessbg17.inc",
+        "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c"
+      ],
+      "remaining": "Bind selected dimensions/grid consistently; optional feature decisions require actual enables/consumers, not this schema member alone."
+    },
+    {
+      "member": "awb_bg",
+      "input_origin": "clean BG geometry/threshold and quad producer; observed normal record; qualified cold quad decoder",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/bg-producer.h",
+        "experiments/E004-front-ir-vd55g0/e011al-rear-bg-weight-quad-integration/weight-quad-producer.h",
+        "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/cold-quad-source.h",
+        "experiments/E004-front-ir-vd55g0/e011q-rear-awbbg-prerequest-seed-prepublish/RESULT.json"
+      ],
+      "remaining": "Normal pre-request seed/writer lineage is already closed; exact usecase-to-request property bridge and selected normal quad/profile binding remain open."
+    },
+    {
+      "member": "period",
+      "input_origin": "explicit host request identity and period-one seed; clean period provider",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e007c-rear-period-cfg-transport-provider/camss-e007c-period-cfg.inc",
+        "experiments/E004-front-ir-vd55g0/e007w-rear-period-cfg-semantic-provider/camss-e007w-period-cfg.inc",
+        "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c"
+      ],
+      "remaining": "Bind actual request generations and selected port cadence; synthetic IDs and host completion are not physical completion evidence."
+    }
+  ],
+  "dmi_families": [
+    {
+      "name": "LSC selectors 1/2",
+      "origin": "existing clean LSC replay",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/replay.py",
+        "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/REPLAY-SAFE.json"
+      ],
+      "remaining": "selected profile/trigger construction; no captured DMI as policy"
+    },
+    {
+      "name": "GIC alias",
+      "origin": "existing validated alias of LSC backing",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/camss-e011z-rear-startup-adaptive-bind.inc"
+      ],
+      "remaining": "retain alias and backing ownership; no independent synthetic GIC input"
+    },
+    {
+      "name": "GTM",
+      "origin": "existing clean GTM replay",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/replay.py"
+      ],
+      "remaining": "selected source/trigger policy and runtime ownership"
+    },
+    {
+      "name": "BF ROI selector 1",
+      "origin": "source seed and clean request ROI producer",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e008t-rear-packet-aware-bf-semantic-composer/camss-vfe-e008t-rear-bf-semantic.inc",
+        "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/camss-e011ah-request-af-roi.inc"
+      ],
+      "remaining": "selected request input policy and independent enabled WM16 retirement"
+    },
+    {
+      "name": "BF gamma selector 2",
+      "origin": "cold explicitly inactive; normal existing source-qualified seed",
+      "reuse": [
+        "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/camss-e011as-cold-gamma-policy.inc",
+        "experiments/E004-front-ir-vd55g0/e008t-rear-packet-aware-bf-semantic-composer/SAFE-SOURCE-AUTHORITY.json"
+      ],
+      "remaining": "preserve activity/register/packet coherence; cold absence is not an active LUT"
+    }
+  ],
+  "wire_groups": [
+    {
+      "name": "cold_awb_root",
+      "offset": 0,
+      "record_bytes": 93,
+      "records": 1,
+      "bytes": 93,
+      "input_origin": "qualified source wire",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/verify-private.py"
+    },
+    {
+      "name": "cold_aec_grid",
+      "offset": 93,
+      "record_bytes": 404,
+      "records": 1,
+      "bytes": 404,
+      "input_origin": "qualified invariant source wire",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/verify-private.py"
+    },
+    {
+      "name": "rs_values",
+      "offset": 497,
+      "record_bytes": 32,
+      "records": 3,
+      "bytes": 96,
+      "input_origin": "clean-produced output from observed pre-adjustment inputs",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/host-rs-check.h"
+    },
+    {
+      "name": "weight_quad",
+      "offset": 593,
+      "record_bytes": 4,
+      "records": 2,
+      "bytes": 8,
+      "input_origin": "cold invalid sentinel replaced by clean source output; normal observed input through clean producer",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/host-source-weight-quad-check.h"
+    },
+    {
+      "name": "bg_values",
+      "offset": 601,
+      "record_bytes": 40,
+      "records": 4,
+      "bytes": 160,
+      "input_origin": "clean-produced output from bounded/observed upstream geometry and thresholds",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/host-bg-check.h"
+    },
+    {
+      "name": "scalar_values",
+      "offset": 761,
+      "record_bytes": 28,
+      "records": 3,
+      "bytes": 84,
+      "input_origin": "clean-produced output from observed upstream scalar inputs",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/host-scalar-check.h"
+    },
+    {
+      "name": "bpc_common",
+      "offset": 845,
+      "record_bytes": 34,
+      "records": 3,
+      "bytes": 102,
+      "input_origin": "clean-derived common-calculation output with observed live triggers",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c"
+    },
+    {
+      "name": "lsc_selector1",
+      "offset": 947,
+      "record_bytes": 884,
+      "records": 2,
+      "bytes": 1768,
+      "input_origin": "existing clean LSC producer output",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/replay.py"
+    },
+    {
+      "name": "lsc_selector2",
+      "offset": 2715,
+      "record_bytes": 884,
+      "records": 2,
+      "bytes": 1768,
+      "input_origin": "existing clean LSC producer output",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/replay.py"
+    },
+    {
+      "name": "gtm",
+      "offset": 4483,
+      "record_bytes": 2048,
+      "records": 1,
+      "bytes": 2048,
+      "input_origin": "existing clean GTM producer output",
+      "consumer_or_producer": "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/replay.py"
+    }
+  ],
+  "wire_bytes": 6531,
+  "reused_proofs": [
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+      "key": "remaining_semantic_register_mismatches_by_phase",
+      "expected": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scope": "existing conditional four-phase replay, not a new comparison run"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+      "key": "normal_dynamic_weights_quad_and_RS_still_use_independently_observed_inputs",
+      "expected": true,
+      "scope": "normal input authority remains conditional"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+      "key": "complete_deterministic_source_bootstrap_closed",
+      "expected": false,
+      "scope": "no deterministic bootstrap claim"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+      "key": "RS_normal_count_policy_and_whole_frame_offset_authority_closed",
+      "expected": false,
+      "scope": "normal RS policy remains open"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+      "key": "native_rear_runtime_allowed",
+      "expected": false,
+      "scope": "runtime denied"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+      "key": "captured_cold_weight_and_quad_inputs_replaced_by_invalid_sentinels",
+      "expected": true,
+      "scope": "cold inputs are source-decoded, not captured numeric authority"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/INTEGRATION-SAFE.json",
+      "key": "inactive_cold_gamma_policy_closed",
+      "expected": true,
+      "scope": "reuse explicit inactive cold gamma; no dummy active table"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011m-rs-titan680-capability-origin/RESULT.json",
+      "key": "initial_rs_origin_closed_for_active_titan680",
+      "expected": true,
+      "scope": "initial default is already closed, later normal overrides are separate"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011n-rear-aecbe-request1-producer/RESULT.json",
+      "key": "request1_immediate_normal_producer_closed",
+      "expected": true,
+      "scope": "reuse observed immediate normal AEC BG producer lineage"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011q-rear-awbbg-prerequest-seed-prepublish/RESULT.json",
+      "key": "closure.prerequest_normal_seed_origin_closed",
+      "expected": true,
+      "scope": "reuse observed AWB normal pre-request seed lineage"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011q-rear-awbbg-prerequest-seed-prepublish/RESULT.json",
+      "key": "closure.exact_usecase_to_request_3a_property_bridge_closed",
+      "expected": false,
+      "scope": "do not overclaim bridge"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/RESULT.json",
+      "key": "live_cache_first_frame_join_closed",
+      "expected": true,
+      "scope": "later bounded live join supersedes earlier absent-join snapshots"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/RESULT.json",
+      "key": "actual_receiver_source_bootstrap_closed",
+      "expected": false,
+      "scope": "join does not close whole receiver/source construction"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bs-clean-front-rear-scope/RESULT.json",
+      "key": "minimal_enabled_module_dependency_closure_proven",
+      "expected": false,
+      "scope": "ledger inventories actual qualified replay, not proven minimal deployment"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/RESULT.json",
+      "key": "WM16_safe_retirement_closed",
+      "expected": false,
+      "scope": "independent physical lifecycle remains open"
+    }
+  ],
+  "source_locks": [
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006g-rear-rtcdm-materializer-skeleton/camss-e006g-rear-materializer.inc",
+      "sha256": "91fdbd8db5a62a239bef872b56c21d1e76e7c6d197d8e700c506265c372fb72c"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006p-rear-crop-roundclamp-packers/camss-e006p-crop-roundclamp.inc",
+      "sha256": "60c95d074efe357f6905daa31c42fa72c1e3a6a9bb6528cb246faa9d8f96e889"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006q-rear-mnds23-packer/camss-e006q-mnds23.inc",
+      "sha256": "efeea39fc21abae1c3b26e5a588c146ca3a82b74267b717a0fac6c7ab57bd46b"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006r-rear-cst12-tuning-packer/TUNING-SAFE.json",
+      "sha256": "ced1de6b4fd6e082292e6cad90de495d8824811482c5d2d856af37de4320a21c"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006r-rear-cst12-tuning-packer/camss-e006r-cst12.inc",
+      "sha256": "1cb5b1453c33a5111e95076d53d1e6422f8fe80ea21573bb147d56a6c0623534"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006s-rear-bc101-tuning-provider/camss-e006s-bc101.inc",
+      "sha256": "cc166519ad946756063a3e22a41c2e0640bf1cea55273ad37d42a8f1366d6920"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006t-rear-disabled-small-iq-providers/TUNING-SAFE.json",
+      "sha256": "0b1458b1f14ac499541565ad84b5f6883bdf2d3c8fb4e3df28793bb2645fd94c"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006t-rear-disabled-small-iq-providers/camss-e006t-small-iq.inc",
+      "sha256": "e5eb7ee138fb57c7be493f2094c5c3a0329704aadb87ede78e303a97ae81e216"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006u-rear-bhist16-provider/camss-e006u-bhist16.inc",
+      "sha256": "b6685ae3240689eacc52b95aa5809fafd0a28d6d3b57da4eeea03d8fcbe1c54f"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e006x-rear-tintlessbg17-packer/camss-e006x-tintlessbg17.inc",
+      "sha256": "12100343a1fcd16d243a58f4947791dfa014a9bb2fa51b9ecbba10c831625773"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e007c-rear-period-cfg-transport-provider/camss-e007c-period-cfg.inc",
+      "sha256": "e5159726d77b718e892139b8feb53b4688a627c1f35afeeb8a04cc7bc935ffc2"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e007d-rear-register-provider-integration/camss-e007d-register-integration.inc",
+      "sha256": "b5b462672829b9c5e0d28eb6441823d055d1e4ef49ee17799aa8f5956be84451"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e007w-rear-period-cfg-semantic-provider/camss-e007w-period-cfg.inc",
+      "sha256": "b4c2554ff0f5d439872bb3c57fd973eae789b9daf378eca64ef324bbc5f6233c"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e008t-rear-packet-aware-bf-semantic-composer/SAFE-SOURCE-AUTHORITY.json",
+      "sha256": "2249b78f14e37ebae09b6e1c4e3b6e8918e958bfc8ad91a1486d01d100247735"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e008t-rear-packet-aware-bf-semantic-composer/camss-vfe-e008t-rear-bf-semantic.inc",
+      "sha256": "a6cb373936aa1a5cdd301abc466dcd447fc305c3a232e0173f1a9c849ccc33ff"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ae-rear-request-generic-trigger-producer/camss-e011ae-rear-startup-bpc-bind.inc",
+      "sha256": "e2ef08d97fd13da99cf693777bdec0ce88fc133609bdc8b16c9e73c7fea05b33"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011af-rear-live-aec-trigger-lineage/verify-live-private.py",
+      "sha256": "cabc746067fee3f1f744fd25b2df30c8a9578922abe87fc1fc93ad5d59b9155f"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/camss-e011ag-startup-compose.inc",
+      "sha256": "18873fcd1c3aa69ebb0fa4391d42d8d8505c0bb86ba566463f2c132b2c5ef1b1"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/integration-check.c",
+      "sha256": "de0a9a47a71797de31da627c4d90deb35eb6881b4c4b4a0cfc67e5c9c6dfe7f3"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ag-rear-full-provider-startup-integration/verify-private.py",
+      "sha256": "44afa5c6a3f71491649e971004c9665ab0895fd12ea242190f44507cb152810d"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/camss-e011ah-request-af-roi.inc",
+      "sha256": "7f5c3d3e8b27ac45157c398d07906aa1fb55e6a14912d36ac7b2f5682ab87a40"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/host-af-check.h",
+      "sha256": "fd1bdd6476791a079b21786070398e6a5f2d353281f913d42fa4ab7f1843db32"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ah-rear-request-af-roi-full-integration/verify-private.py",
+      "sha256": "9863c63d5489897bfb34a3828d4231b21d9e44b0f333b5f808aa9ffd41c9ebc0"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/authority-private.py",
+      "sha256": "f30fdb9379fef9af5967703672e707de6c69d4d919654679fb6d1c777be89b57"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/host-scalar-check.h",
+      "sha256": "e2a383182cde0d5c39130d7e308c7c615e9f0f0374321937c619ae6c0ad31abb"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/scalar-producer.h",
+      "sha256": "020f3b6972f4d9e20c06c2daed4a5ac69c13be0f61a159369259a348962401f0"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/verify-private.py",
+      "sha256": "e51b05ac3a280aa0ff633f408b1ceadc8b9c0acb8e31d4a56f628dd508e89fb0"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/bg-producer.h",
+      "sha256": "293faaad9629216c7db01f73f7c0efdf70986692a43dbca980d31d69925d18a6"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/host-bg-check.h",
+      "sha256": "e2a09448f55e97d7742fb8bd0b3a6052f017962ac37bd52a479019f5f081eacf"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/native-private.py",
+      "sha256": "3df555b39abe676ea826625dc63e5c3462d3e775aa5a9608137a6b612ac702d0"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011aj-rear-bg-geometry-threshold-integration/verify-private.py",
+      "sha256": "35833cdef743f9fee5f69d17225646ede3ac24089b2522bb8eef51fd1a44789e"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011al-rear-bg-weight-quad-integration/verify-private.py",
+      "sha256": "c7aa9501644b54c9dcd1d6fb4fba76fd15d1c1f072cfcf5460aefdb1a0f0516e"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011al-rear-bg-weight-quad-integration/weight-quad-producer.h",
+      "sha256": "eed1994121b3caaa07791f557873121e9e5f8aa9883ed25765fd8ffb8893b3b9"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/RESULT.json",
+      "sha256": "9119e703c1f000b133f9f2315bc3cad43dfcd38e4c960fac29b3ff53dd0ab320"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/host-rs-check.h",
+      "sha256": "c6869b33e29002429465eeeaeb013d0b04af77d03badc41569c2080f201c7bf8"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/native-private.py",
+      "sha256": "c14718e43de35f4bd72b06d6e394aed8e2ed1abcff551e685fefef6dfa91884c"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/rs-producer.h",
+      "sha256": "e02fa40e190acfe05decf9e69f5126a50d8e5f04a64640909157d70976eceb21"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/INTEGRATION-SAFE.json",
+      "sha256": "6d468bc9e3cd9470226005cd71605e734e0a64647550fb260a331580184a3349"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/camss-e011as-cold-gamma-policy.inc",
+      "sha256": "418fea1c13797d2784f980971991e2cd569da90802d64bd1001276ddea4c18a3"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/verify-private.py",
+      "sha256": "b40395902af8d61c884d8dd63f1fab6f6cea96095948aca3ba68bcc0845990b6"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/cold-quad-source.h",
+      "sha256": "4c5d17f11c616a2b85afd175f7857b6b8a82bf524b7b0c74db22e1cc6e0b7131"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/verify-private.py",
+      "sha256": "1ffe4ff6cec27524d64748f39ed7401ee069991aad9020f8e1f2f95c1ed0b27a"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bs-clean-front-rear-scope/RESULT.json",
+      "sha256": "5d6804df5c6c6f29e180ad90e599718996b63bfb343d5f3b9bbcc207cfe54083"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+      "sha256": "4e9fa05a40484fba3edf9234949cb66d6763981bc40a768ad1d7a8f48e9ecbd8"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/cold-aec-source.h",
+      "sha256": "3e4273222494006f6e749e0465b716bac5008f159ca88f638f25a62a362d2ab2"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/host-source-weight-quad-check.h",
+      "sha256": "c28541a58b3591f9a19024af69b0ef3adfee9b5ae63db9b581ba0e9a42177434"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/verify-private.py",
+      "sha256": "7a16d4192f62356d0d1bd123f2663730c250cfad123c0019bdd92f894d839212"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/RESULT.json",
+      "sha256": "83d186e64074cc749d66a6399bde52451fc1d0a6d9783173c2c6e0e7eb01b44f"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011h-rs-first-request-source-handoff/RESULT.json",
+      "sha256": "01e140d5c3d16bf57a2ffb95f71f6e9ed8a1420f0324d4160a0c64205e7e3c1f"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011m-rs-titan680-capability-origin/RESULT.json",
+      "sha256": "c6018b2be7242e55a4340bf19cb52760e0441449ef94b10db7d293b3ba79591a"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011n-rear-aecbe-request1-producer/RESULT.json",
+      "sha256": "43f8a21c9139c48d665ccde9858dcc3a1120f86afd45fbf61cc24742c4e0de8f"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011q-rear-awbbg-prerequest-seed-prepublish/RESULT.json",
+      "sha256": "6f464fafaea87bc89e312ed340aae44a28ea3bbf54da0e4a477e01fc949a5c92"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/REPLAY-SAFE.json",
+      "sha256": "58a24805314532edcecf407fecef5e92c264bd1c7d40d2c34fa8f00d9259ce58"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/camss-e011z-rear-startup-adaptive-bind.inc",
+      "sha256": "668cb9a2adfca8c017d87e3d6d1f312aa7f567f9786f62e9b83cc73ed3042f9c"
+    },
+    {
+      "path": "experiments/E004-front-ir-vd55g0/e011z-rear-startup-clean-lsc-gtm-replay/replay.py",
+      "sha256": "8fd87b78d0e4ada6fcc811b5d82db614f2b5615bf61b5730f436f19d6b5a40a8"
+    }
+  ],
+  "next_smallest_gap": {
+    "experiment": "E011DK",
+    "consumer": "E011AM RS producer inputs h_num/v_num and whole-frame policy, consumed by E011AM binder and the four-packet composer",
+    "scope": "Follow actual normal pre-adjustment RS count writer/override upstream of dependence A0DFC0 using existing E011AK observations. Retain E011M initial capability/default proof. Separate numerical production, input policy and request/phase binding.",
+    "not_required_without_named_consumer": "Generic registry/catalogue/factory/CRT completion beyond selected profile/receiver dependency.",
+    "later_gates": [
+      "selected source/profile and required normal input integration",
+      "new source-only integrated preflight",
+      "independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement",
+      "finite front/rear/off normal-colour ordinary-app test; eight fresh frames per camera"
+    ]
+  }
+}

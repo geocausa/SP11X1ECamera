@@ -1,3 +1,11 @@
+## 2026-10-03 E011DJ input ledger accepted; E011DK normal RS policy next
+
+The checked selected-baseline ledger covers all 14 register-state members, five DMI families and ten replay input blocks. It reuses 15 bounded proof facts, pins 55 authored files and rejects eight invalid ledger mutations. This is source/evidence inventory; no new numerical, emulation, optical or hardware test.
+
+Initial Titan680 RS defaults, immediate AEC BG producer lineage and AWB pre-request seed/writer lineage are already proven. Normal RS count/override authority, selected normal input/profile bindings and independent enabled-output retirement remain open. NEXT **E011DK** follows the actual normal RS pre-adjustment writer upstream of A0DFC0; reuse E011AM arithmetic/binding and E011M initial defaults. Continue generic factory/registry work only for a named selected-baseline dependency.
+
+Latest original emulation remains E011DI. Native rear runtime remains denied; Golden unchanged. See the checked [input ledger](experiments/E004-front-ir-vd55g0/e011dj-selected-baseline-input-ledger/README.md). Earlier NEXT statements below are historical.
+
 ## 2026-10-03 evidence audit and next product gate
 
 Latest accepted source checkpoint remains **E011DI**; native rear runtime remains denied. Earlier live front native ISP, front/rear RAW and ordinary-app/software fallback capture are retained. E011AM has zero-difference offline startup parity; E011AR is a compiled packet-isolated runner; E011AS/AV/BW supply specific cold policies. Complete deterministic startup and physical buffer retirement remain open.
