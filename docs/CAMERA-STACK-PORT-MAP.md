@@ -1,3 +1,15 @@
+## E011DB original callback registration and registered camera entry — BOUNDED PASS
+
+Twelve isolated cases cover four aligned placements and owned root reference counts 0/1/41. Six ANSI/OEM camera joins across three pinned private inputs now enter 36CBA0 through slot 32 of the 48-byte callback record produced by original 36E9C8. The caller no longer chooses a fixed entry address.
+
+All 18 original registration returns execute 810 unchanged instructions and 234 exact store chunks. Independent complete-record/entire-memory models check size 48, slots 16/32/40, preserved reserved bytes and the original root+0 reference increment. All 126 invalid requests reject before effects. Original X0 returns the input record pointer, not a status code; actual SP/X19–X29/D8–D15 and the complete paused caller restore.
+
+The entire added table region, initializer stack, root record and actual permissions remain unchanged after registration through the camera outer return. Inherited runtime-helper, caller, output/global/inner-link and SAME balanced-root-lock checks pass. The file-image control globals 0/1/0, owned nonnull root, placements and component ordering remain explicit fixtures; fresh 176-byte root construction, other registered-slot bodies, actual Default input production and full Windows startup remain open.
+
+Original ARM64 exception metadata identifies 36CBA0 as 6152 bytes (the older 6160-byte source window was wider), registration 36E9C8 as 448 bytes and provider 2BC618 as 2128 bytes. Internal source call 2BC71C registers this record. The provider's complete execution and descriptor construction are not inferred from that static reference.
+
+NEXT **E011DC** follows the fresh-root allocator/initializer/OS/name-helper ownership and provider/Default input lineage, then full startup/preflight/RS and independent WM16 IRQ/exact consumed IOVA/DMA/IOMMU retirement/optical. Golden/history unchanged; zero Starts/reboots/Linux images/production C or kernel changes. See [E011DB](../experiments/E004-front-ir-vd55g0/e011db-original-callback-registration-join/README.md).
+
 ## E011DA original runtime helpers in the camera join — BOUNDED PASS
 
 All six ANSI/OEM cases across three pinned private inputs execute original CE7C98 reverse byte search inside the camera harness. Its basename result fixture is removed: 300 source calls / 77,992 original instructions use exact source callers, private literal hashes, search byte 92 and last-backslash results. Every call preserves all mapped memory, permissions, resource state and actual callee-saved registers.
