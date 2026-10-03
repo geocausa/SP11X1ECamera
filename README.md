@@ -3,13 +3,13 @@
 **Active workspace:** `/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean` on
 `experiment/e004-front-ir-vd55g0`; see [machine/workspace map](docs/MACHINE_MAP.md).
 
-**Current engineering checkpoint — 2026-10-02 / E011CR:** original Unicode
-size/output routines and six complete CRT converters pass in guarded source
-fixtures. Seventy-six API returns match independent outcomes; caller records and
-owned UTF-16 buffers are exact. Next E011CS continues file opening and cleanup
-toward full startup return. Source-only; Golden unchanged, native rear runtime
-remains denied. See [current continuation](CONTINUE.md) and
-[E011CR result](experiments/E004-front-ir-vd55g0/e011cr-original-unicode-conversion/RESULT.json).
+**Current engineering checkpoint — 2026-10-03 / E011CS:** six original camera
+paths pass file-opening preparation with independent stack/CRT models and strict
+lock contracts. Execution stops before CreateFileW; no file handle/error result
+is supplied. Next E011CT qualifies that dependency and cleanup toward full startup
+return. Source-only; Golden unchanged, native rear runtime remains denied.
+See [current continuation](CONTINUE.md) and
+[E011CS result](experiments/E004-front-ir-vd55g0/e011cs-original-file-opening-boundary/RESULT.json).
 
 Current product priority is a clean, controllable front/back native Linux
 baseline; optional AI/effects/HDR/catalogue are deferred. Protected IR/Hello

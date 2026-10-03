@@ -1,3 +1,13 @@
+## E011CS original file-opening boundary — BOUNDED PASS
+
+Six unchanged original camera startup joins cover both ANSI/OEM fixtures across three pinned inputs, first camera placement only. After the inherited complete Unicode conversion, original CRT mode parsing and descriptor allocation reach the stop before CreateFileW at0xCFD658. No file API executes and no handle/error result is supplied.
+
+All1098 original preparation instructions,282 exact store chunks and48 lock-contract negatives pass. Independent entire64KB stack and CRT-arena models permit only stack stores plus descriptor0 record+56=1/+40=INVALID_HANDLE_VALUE. Other entire image/native-heap/camera/serialized regions and policy pages/permissions match. GlobalCRTindex7 enters/leaves balance; the initialized descriptor0 lock remains held. The owned74-byte UTF16 allocation is unchanged/retained; output remainszero and camera/new-stream locks remainheld.
+
+All seven file-call arguments and the entire24-byte SECURITY_ATTRIBUTES match: read access, share-read, owned absolute drive-C path, null security descriptor, inherit1, OPEN_EXISTING, normal attributes, null template. This proves preparation in explicit owned fixtures, not actual Windows filesystem/default filename/last-error/TLS/concurrency or file success/failure. Earlier wider/isolated source evidence remains historical. Original numeric/TLS/policy/Unicode instructions are unchanged; CFE600 still raises.
+
+NEXT **E011CT**: qualify file API/result/error ownership, then descriptor/UTF16 cleanup, final publication/full outer return/balanced locks. Full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical keep native rear denied. Golden/historical checkouts unchanged; zero Starts/reboots/deployments/C/kernel/image tests. Clean controllable front/back first; AI/effects/HDR/catalogue deferred. See [E011CS](experiments/E004-front-ir-vd55g0/e011cs-original-file-opening-boundary/README.md).
+
 ## E011CR original Unicode conversion — BOUNDED PASS
 
 Seventy-six original Windows conversion API returns and NTDLL entries pass in guarded Unicorn fixtures. Sixty-four isolated size/output cases cover eight ASCII lengths, two input alignments and both ANSI/OEM codepage aliases. Six original camera joins cover both policies across three pinned tuning inputs, first camera placement only. The unchanged CRT converter returns to0xCFD4E8 with status0 in all six.
