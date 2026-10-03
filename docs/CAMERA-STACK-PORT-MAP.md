@@ -1,3 +1,15 @@
+## 2026-10-03 E011DN Windows registry boundary observed
+
+The accepted evidence is a 116-byte rear-reader-ready metadata snapshot before Start: bound/descriptor populated, seven runtime tag cells zero, and live platform callbacks equal the file default targets. Source references identify writer 0x5DE700; full initializer execution is still unqualified.
+
+Two distinct atomic holder identities ran in one Windows boot, stopped/disposed successfully and counted 69 / 449 valid 4K handle acquisitions. A is excluded from RS qualification after observer command/filter issues. B captured only the registry snapshot; zero RS copy hits does not prove reader/query execution or general RS absence. No pixels were saved. This is not isolated-boot hardware or populated-record lifetime acceptance.
+
+Golden return passed: payload hashes, permanent EFI/GRUB and historical repositories unchanged; Windows read-only recovery unmounted, temporary tasks removed, debuggers/holders closed. No production camera C/kernel change or Linux power-policy change.
+
+NEXT **E011DO** qualifies original metadata registry initialization, allocation/descriptor ownership and the selected normal request/profile path before another fresh-boot oracle. E011DM remains the latest source empty-slot query proof, E011DI the separate factory/enumeration proof. Normal AFD input authority, deterministic startup/input/profile integration and independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open; native rear runtime remains denied.
+
+See [E011DN boundary](../experiments/E004-front-ir-vd55g0/e011dn-windows-registry-boundary/README.md). Earlier current/NEXT paragraphs below are historical. PiMaster connects SP11 Linux/Windows and SP7; Windows oracle/external SP7 KD boots and missing tools are authorized. Originals and optical material stay private on SP11.
+
 ## 2026-10-03 E011DM original query through selected empty slots accepted
 
 The original reader, metadata query and selected-slot helper now execute together without query or slot-helper result fixtures for declared empty slots. All 18,816 queries return actual null records; missing RS preserves the prior 132-byte source record.
