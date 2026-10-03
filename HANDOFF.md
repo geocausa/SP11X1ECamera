@@ -1,3 +1,13 @@
+## E011CX original output and global publication — BOUNDED PASS
+
+Six cases cover both ANSI/OEM fixtures across three pinned inputs. After accepted file/thread cleanup, the remaining parameter iterations run through the unchanged interface96 and core-vtable16 callbacks. Original code links outer+40 to the actual inner object and publishes the same outer object to the caller output and image global1798460.
+
+The verifier checks 2,316 executed OEM instructions and 114 original Windows getter instructions, with 48 explicitly inherited diagnostic/CFG adapter entries counted separately. All 384 store chunks match pre-instruction/source-field models; 150 invalid callback/getter requests are rejected before effects. Independent entire stack, camera, caller and image models match, all other complete regions stay unchanged, actual permissions and allocation/lock state match, and the retired Unicode owner is never read.
+
+The accepted stop is before guard36E178 and original outer field16 callback36E670. The camera root mutex remains held; complete outer return and full Windows loader/Default/CRT/TLS/locale/concurrency remain unqualified. The observer's initial X26 assertion now applies only to the first parameter-loop visit; subsequent visits use the original saved output at SP+96. No original code bytes change and original CFE600 remains guarded.
+
+NEXT **E011CY** qualifies the publication callback, whole outer return and balanced camera lock with independent models and exact incoming caller checks. Separate private exploration reaches a return under extended owned ABI fixtures, but is excluded from acceptance. Full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical still gate smoke testing. Golden/history unchanged; zero new Starts/reboots/Linux images. See [E011CX](experiments/E004-front-ir-vd55g0/e011cx-original-output-publication/README.md).
+
 ## E011CW original file-error thread join and cleanup — BOUNDED PASS
 
 Six original camera joins cover both ANSI/OEM fixtures across three pinned inputs. The unchanged slot/thread initializer runs in the same Native instance and CRT owner, with a separate owned stack and preserved paused caller. Its 2,406 OEM/258 OS instructions pass the inherited whole-memory models and 396 invalid API requests. The slot and entire 968-byte thread owner are source-produced.
