@@ -1,3 +1,15 @@
+## E011DD original root reference-release component — BOUNDED PASS
+
+Sixteen isolated cases at four placements cover null roots and references1/2/41. Twelve first execute original fresh-root construction. The source release branch decrements references, retains nonfinal roots and calls the typed OS root+8 deletion and sized176-byte release only for the final reference, then clears global1798458.
+
+Combined construction/release: 2,004 original instructions, 616 exact store chunks and 464 invalid requests rejected before effects. Whole memory, actual permissions, logical resource order and paused register restoration pass. Held-lock and competing-user states also reject before effects.
+
+This is the interior source component290988..2909D4, not a full parent destructor or parent ABI return. Native OS/allocator bodies, concurrent retry, failure cleanup, live caller ownership and hardware retirement remain open. No cleanup is appended to retained E011DC camera outputs.
+
+Provider input+48 and RootOps candidate input+72 are distinct. Context+9552 is not established as the registered camera callback. Cold factory startup reaches an unqualified runtime helperCE7AD8 at5BE67C under guard1B302D0; actual Default/factory/context receiver production remains open.
+
+NEXT **E011DE** resolves that source runtime/factory/Default consumer, then full startup/preflight/RS and independent WM16 IRQ/exact consumed IOVA/DMA/IOMMU retirement/optical. Golden/history unchanged; zero Starts/reboots/Linux images/production C or kernel changes. See [E011DD](../experiments/E004-front-ir-vd55g0/e011dd-original-root-reference-release/README.md).
+
 ## E011DC original fresh-root construction and registered camera join — BOUNDED PASS
 
 Four isolated placements and six ANSI/OEM camera joins execute the fresh-null-root registration path: 1,530 original instructions, 500 exact store chunks and 170 invalid requests rejected before effects. Original code zeros all 176 bytes, copies the private 12-byte NUL-terminated name into root+48, calls the typed OS initializer on root+8, publishes the root at 1798458 and increments its reference to one.
