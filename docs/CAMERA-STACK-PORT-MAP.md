@@ -1,3 +1,15 @@
+## 2026-10-03 E011DL original runtime statistics tag initialization accepted
+
+The actual reader's guarded first-use path now produces all seven runtime tags from declared registry fields, including RS slot5, with no tag-vector or guard-result fixture. Unchanged CRT acquisition/publication bodies execute in the real reader caller. Warm and stale-thread calls preserve published tags despite altered registry inputs.
+
+192 scenarios / 576 reader calls, 1,344 exact tag-field stores, 5,376 initializer-path instruction visits and 76,224 rejected dependency bindings pass. The 262,848 total original visits include inherited reader/guard coverage; this is bounded emulation, not camera hardware acceptance. Entire nonstack memory/mapping state and preserved ABI/stack redzones pass.
+
+**Still owned models:** registry values/objects, settings, metadata-query results and OS SRW/CV resources. Actual query body, selected pool/record lifetime and normal AFD count/offset policy remain open. NEXT **E011DM** resolves those dependencies, reusing E011DK copy/decoder, E011AM arithmetic, E011M initial defaults and E011AK sampled unity binding.
+
+Required input/profile integration, deterministic startup/preflight and independent enabled-output IRQ/exact-buffer/DMA/IOMMU retirement still precede the clean-colour front/rear/off app gate. Latest selected RS source acceptance is E011DL; separate factory/enumeration acceptance stays E011DI. Native rear runtime remains denied. No camera Starts, reboots, kernel builds, optical tests or production C changes; Golden unchanged.
+
+See [E011DL tag initialization](../experiments/E004-front-ir-vd55g0/e011dl-normal-rs-runtime-tag-initialization/README.md). Earlier NEXT/current statements below are historical. User reaffirmed autonomous one-shot Windows oracle/external SP7 KD boots and missing-tool installation on 2026-10-03; preserve Golden and same-SP11 private originals.
+
 ## 2026-10-03 E011DK RS metadata copy and C decoder accepted
 
 The original RS metadata reader passes 96 present/absent/fallback cases and 39,904 instruction visits. The new checked C decoder reuses E011AM arithmetic, matches three observed records and 42 input/output fields per compiler, and rejects 21 invalid or unsupported inputs before output effects under GCC/Clang ASan/UBSan. All 132 copied bytes, owned heap changes, source immutability, original code, stack and caller state pass.

@@ -1,0 +1,33 @@
+{
+  "experiment": "E011DM",
+  "status": "SOURCE_ONLY_ACTUAL_RS_METADATA_QUERY_AND_SELECTED_POOL_RECORD_AUTHORITY",
+  "query_body": {
+    "RVA": "0x5d4d30",
+    "bytes": 2144,
+    "sha256": "cb1f18cbcf4bf0c7dc34f9081c2d83b148e36a213ba92a0686ea3585698dcdff"
+  },
+  "required_dependencies": [
+    {
+      "owner": "runtime registry inputs",
+      "need": "Actual selected-mode registry values; E011DL derives tags from declared synthetic registry fields"
+    },
+    {
+      "owner": "metadata query and pool",
+      "need": "Qualify actual slot-5 query path, typed node/context/pool initialization, request/delta selection and returned RS record lifetime"
+    },
+    {
+      "owner": "normal AFD publisher",
+      "need": "Actual source producing normal H/V counts and whole-frame zero offsets; observed records and initial defaults are not normal policy"
+    }
+  ],
+  "reuse": [
+    "E011DL guarded tag-vector initialization/reuse",
+    "E011DK 132-byte copy and checked decoder",
+    "E011AM RS arithmetic/binding",
+    "E011M initial defaults",
+    "E011AK sampled unity BG gain, 16 samples only"
+  ],
+  "native_rear_runtime_allowed": false,
+  "independent_enabled_output_retirement_proven": false,
+  "hardware_test_authorized_by_this_plan": false
+}
