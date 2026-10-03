@@ -1,3 +1,13 @@
+## 2026-10-03 evidence audit and next product gate
+
+Latest accepted source checkpoint remains **E011DI**; native rear runtime remains denied. Earlier live front native ISP, front/rear RAW and ordinary-app/software fallback capture are retained. E011AM has zero-difference offline startup parity; E011AR is a compiled packet-isolated runner; E011AS/AV/BW supply specific cold policies. Complete deterministic startup and physical buffer retirement remain open.
+
+**NEXT E011DJ first builds the selected-baseline input/dependency ledger**, reusing closed producers and identifying remaining normal RS count/whole-frame offset and other required normal-input authority. Continue the private registry/factory trace only for a named baseline consumer/lifetime dependency. Then integrate source-only preflight, independently prove IRQ/exact-buffer/DMA/IOMMU retirement, and target the existing eight-fresh-frame front/rear/off clean-colour app milestone. Optional effects/catalogue and protected IR/Hello remain deferred. Runtime/default promotion gates are unchanged.
+
+Windows BF events were already live-observed in E005o; exact hardware retirement is still open. Older software-first, black-scene and historical NEXT paragraphs are snapshots, superseded by this audit for current priority. Report added coverage separately from inherited regression totals.
+
+See [camera evidence audit](docs/CAMERA-STACK-AUDIT-2026-10-03.md) for evidence tiers, corrected status and acceptance gates.
+
 ## E011DI original enumeration bootstrap — BOUNDED PASS
 
 Thirty-two cases continue the verified factory VM into original5F8DC0: combined15,936 original instructions,12,832 exact store chunks and3,488 rejected requests. Added enumeration proof contributes2,560 /1,024 /1,536.

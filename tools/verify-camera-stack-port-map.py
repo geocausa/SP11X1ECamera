@@ -76,8 +76,8 @@ def check():
     assert "Registration does **not** imply" in doc
     assert "actual session role UNKNOWN" in doc
 
-    # Two physical rear Windows live snapshots have enabled WM16, but a live
-    # BF event is not an established observation and cannot be promoted.
+    # Historical E004nv/nx/ny snapshots predate the E005o live BF proof.
+    # Their original no-observation scope is retained; the aggregate is below.
     assert nv["BF_static_dispatch"]["driver_event_id"]=="0x0f"
     assert nv["BF_static_dispatch"]["queue_group_index"]==8
     assert nv["BF_event_live_during_OEM_rear_recording_observed"] is False
@@ -106,14 +106,28 @@ def check():
     assert route["document"]=="docs/CAMERA-STACK-PORT-MAP.md"
     assert route["status"]=="PINNED_WINDOWS_TO_NATIVE_LINUX_FUNCTIONAL_SLICES"
     assert route["native_rear_4k_isp_optical_frame_proven"] is False
-    assert route["windows_live_BF_event_observed"] is False
+    # E005o updates the current aggregate; E004nv/nx/ny remain historical.
+    live_bf=json.loads((E/"e005o-windows-live-bf-fifo8-matcher-vs-vfe-bus7/RESULT.json").read_text())
+    correction=json.loads((E/"e005r-type1-csid-provenance-and-output-group-field-correction/RESULT.json").read_text())
+    assert live_bf["proven"]["live_bf_event_observed"] is True
+    assert live_bf["capture"]["start_success"] and live_bf["capture"]["stop_success"]
+    assert live_bf["capture"]["valid_frame_handles"]==13
+    hits=live_bf["exact_live_marker_counts"]
+    assert hits["bf_event"]==hits["fifo8_nonnull"]==hits["matcher_nonnull"]==22
+    assert live_bf["not_proven"]["independent_wm16_dma_iommu_safe_retirement"] is True
+    assert correction["not_proven"]["same_generation_fifo8_wm16_hardware_completion"] is True
+    assert correction["not_proven"]["independent_wm16_dma_iommu_safe_retirement"] is True
+    assert route["windows_live_BF_event_observed"] is True
+    assert route["windows_live_BF_evidence"]=="experiments/E004-front-ir-vd55g0/e005o-windows-live-bf-fifo8-matcher-vs-vfe-bus7/RESULT.json"
+    assert route["independent_WM16_retirement_proven"] is False
+
     assert route["native_linux_windows_services_or_AI_required"] is False
     assert route["hardware_critical_session_safety_in_kernel"] is True
     assert route["optional_AE_AWB_AF_policy_can_live_in_open_userspace"] is True
     assert route["linux_slices"]==[f"L{n}" for n in range(7)]
     print(f"PASS_SP11_CAMERA_WINDOWS_LINUX_ARCHITECTURE_{len(links)}_LINKS_"
           "AVSTREAM_PROFILE_INVENTORY_L0_TO_L6_STATIC_VS_LIVE_"
-          "BF_NOT_PROMOTED_RUNTIME_REAR_DENIED_GOLDEN_UNTOUCHED")
+          "HISTORICAL_BF_SCOPED_LIVE_E005O_DMA_UNPROVEN_RUNTIME_REAR_DENIED")
 
 if __name__=="__main__":
     check()

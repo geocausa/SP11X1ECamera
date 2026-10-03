@@ -1,3 +1,13 @@
+## 2026-10-03 evidence audit and next product gate
+
+Latest accepted source checkpoint remains **E011DI**; native rear runtime remains denied. Earlier live front native ISP, front/rear RAW and ordinary-app/software fallback capture are retained. E011AM has zero-difference offline startup parity; E011AR is a compiled packet-isolated runner; E011AS/AV/BW supply specific cold policies. Complete deterministic startup and physical buffer retirement remain open.
+
+**NEXT E011DJ first builds the selected-baseline input/dependency ledger**, reusing closed producers and identifying remaining normal RS count/whole-frame offset and other required normal-input authority. Continue the private registry/factory trace only for a named baseline consumer/lifetime dependency. Then integrate source-only preflight, independently prove IRQ/exact-buffer/DMA/IOMMU retirement, and target the existing eight-fresh-frame front/rear/off clean-colour app milestone. Optional effects/catalogue and protected IR/Hello remain deferred. Runtime/default promotion gates are unchanged.
+
+Windows BF events were already live-observed in E005o; exact hardware retirement is still open. Older software-first, black-scene and historical NEXT paragraphs are snapshots, superseded by this audit for current priority. Report added coverage separately from inherited regression totals.
+
+See [camera evidence audit](../../docs/CAMERA-STACK-AUDIT-2026-10-03.md) for evidence tiers, corrected status and acceptance gates.
+
 ## E011DI original enumeration bootstrap — BOUNDED PASS
 
 Thirty-two cases continue the verified factory VM into original5F8DC0: combined15,936 original instructions,12,832 exact store chunks and3,488 rejected requests. Added enumeration proof contributes2,560 /1,024 /1,536.
@@ -62,27 +72,15 @@ Provider input+48 and RootOps candidate input+72 are distinct. Context+9552 is n
 
 NEXT **E011DE** resolves that source runtime/factory/Default consumer, then full startup/preflight/RS and independent WM16 IRQ/exact consumed IOVA/DMA/IOMMU retirement/optical. Golden/history unchanged; zero Starts/reboots/Linux images/production C or kernel changes. See [E011DD](../../experiments/E004-front-ir-vd55g0/e011dd-original-root-reference-release/README.md).
 
-## RGB-only software-first delivery decision (2026-09-23)
+## Historical software-first proposal — superseded
 
-Finish and validate a usable opt-in software-processing front1080p /
-rear4K RGB camera service FIRST. Once its actual app-delivered image,
-throughput and lifecycle gates pass, report the result and ask the user
-whether to pursue Qualcomm native hardware-ISP Windows-image parity.
-The ISP path and protected IR/Hello are NOT prerequisites for an
-honestly labelled RGB-only software release. Historic ~65–70%
-software and ~30–40% Qualcomm hardware-ISP figures are rough
-engineering estimates for RGB usability, not measured completion
-or image-parity percentages. Earlier 1080p/4K V4L2 software transport
-and the recent 640x480 libcamera software-ISP proof are SEPARATE
-implementations and cannot be called one finished 1080p/4K pipeline.
-Authoritative stages and acceptance/decision gates:
-[RGB-PHASED-ROADMAP.md](RGB-PHASED-ROADMAP.md).
+The earlier software-first proposal was superseded by the user's native Qualcomm ISP decision on 2026-09-23 and clean front/back baseline scope in E011BS. E004ne remains a bounded opt-in software fallback/reference, with later structured rear-scene and supported-control evidence; native rear ISP and matched Windows optical parity remain open. Historic percentages are unmeasured planning estimates. See [RGB-PHASED-ROADMAP.md](RGB-PHASED-ROADMAP.md) and the current audit above.
 
 ## Promotion decision
 
 **Hold full 1:1 default promotion.**
 
-The canonical hardware package has passed bounded runtime acceptance. RGB application transport has passed approximately60-second near30fps runs at front1080p/rear4K. Bounded systemd start/stop and sequential uid1000 apps passed E004kw with both named devices visible. E004la additionally proved repeated uid1000 client opens and recovery after a deliberately killed client while each publisher stayed running. Persistent daily operation, normal powered-on sensor/publisher restart, hours-long reliability and calibrated image quality remain unproven. SP11 Linux OS system standby/resume is separately unsupported and MAY CRASH THE OS: it is explicitly OUT OF CAMERA TEST SCOPE, not a camera-regression gate. Calling the stack fully Windows-equivalent or making it the final default while protected IR/Windows Hello cannot legitimately execute would overstate parity.
+The canonical hardware package and bounded RGB application transport/lifecycle tests remain accepted. E004ne subsequently demonstrated a structured rear scene, supported controls, front1080p/rear4K near30fps source and ordinary-app negotiation. Persistent daily service, complete deterministic native-ISP startup, independent enabled-output retirement, chosen-route decoding/colour and matched Windows image quality remain open. Protected IR/Hello is separately deferred and does not gate the selected normal front/back baseline. Linux system suspend/hibernate remains prohibited; its absence is not a camera failure.
 
 ## Ready now
 

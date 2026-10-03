@@ -1,0 +1,252 @@
+{
+  "schema": "sp11-camera-evidence-audit-v1",
+  "checked_at_UTC": "2026-10-03T15:26:47.407684+00:00",
+  "audited_base_commit": "08613fb105f6d92ce745b48e748ccf457744ca28",
+  "accepted_experiment": "E011DI",
+  "next_experiment": "E011DJ",
+  "priority": "Clean controllable front/back baseline with native ISP priority; feature-complete Windows parity later.",
+  "overall_completion_percentage_measured": false,
+  "audit_is_new_capture_or_emulation_acceptance": false,
+  "native_rear_runtime_allowed": false,
+  "new_camera_Starts": 0,
+  "new_reboots": 0,
+  "production_C_or_kernel_changed": false,
+  "accepted_vfe680_source_sha256": "99b7f9c18456e1926a5ad82b56a9b025a798add797c09490b645d9907b3a3208",
+  "accepted_vfe680_ISR_only_returns_IRQ_HANDLED": true,
+  "evidence": [
+    {
+      "id": "physical_topology",
+      "tier": "LIVE_BOUNDED",
+      "proven": "Three-sensor bind and separate front/rear routes established.",
+      "missing": "Production shared-PIX owner/switch lifecycle remains to be proved.",
+      "references": [
+        "src/sp11-camera-stack/PROVENANCE.json",
+        "docs/CAMERA-STACK-PORT-MAP.md"
+      ]
+    },
+    {
+      "id": "front_native_ISP_transport",
+      "tier": "LIVE_BOUNDED",
+      "proven": "27 front VFE1 PIX QC10C frames with statistics and clean stop.",
+      "missing": "Chosen output decode, usable colour and matched Windows image quality.",
+      "references": [
+        "experiments/E003-front-imx681-cphy/e003i-front-native-productionization/hy-production-one-stream-r27/README.md"
+      ]
+    },
+    {
+      "id": "front_rear_libcamera_RAW",
+      "tier": "LIVE_BOUNDED",
+      "proven": "Six metadata-confirmed RAW frames per sensor and neutral handoff.",
+      "missing": "Separate from a processed native-ISP colour pipeline.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e004lr-guarded-rgb-raw-frames-one-shot/README.md"
+      ]
+    },
+    {
+      "id": "front_rear_software_app_fallback",
+      "tier": "LIVE_BOUNDED",
+      "proven": "E004ne front1080p/rear4K supported controls, near30fps source, app negotiation and neutral switch passed.",
+      "missing": "Matched Windows ISP optical detail/colour and persistent daily service.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e004ne-screen-rear-stable-window-guarded-one-shot/README.md"
+      ]
+    },
+    {
+      "id": "ordinary_app_lifecycle",
+      "tier": "LIVE_BOUNDED",
+      "proven": "Finite maintained RGBSession opens, client-kill recovery and neutral graph passed.",
+      "missing": "Long-run native-ISP service, arbitrary clients and production kernel ownership.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e004lz-guarded-real-rgb-session-backend-one-shot/README.md"
+      ]
+    },
+    {
+      "id": "rear_startup_packet_parity",
+      "tier": "OFFLINE_CONDITIONAL",
+      "proven": "Four-phase replay has zero remaining semantic register differences.",
+      "missing": "Some normal semantic inputs are observed records; complete deterministic bootstrap remains open.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/INTEGRATION-SAFE.json",
+        "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json"
+      ]
+    },
+    {
+      "id": "packet_isolated_runner",
+      "tier": "BUILD_ONLY",
+      "proven": "Four owned command arenas, real composer preflight and host fault injection; ARM64 build passed.",
+      "missing": "No reachable live rear path or physical IRQ/DMA/stop proof.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011ar-rear-packet-isolated-runner/README.md"
+      ]
+    },
+    {
+      "id": "inactive_cold_gamma",
+      "tier": "OFFLINE_AND_BUILD",
+      "proven": "Cold gamma inactivity implemented; dummy active table removed.",
+      "missing": "Full selected-mode startup still has other open dependencies.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/README.md"
+      ]
+    },
+    {
+      "id": "cold_AWB_quad",
+      "tier": "OFFLINE_SOURCE_PRODUCER",
+      "proven": "Portable decoder produces bounded invariant Default cold quad.",
+      "missing": "Whole profile/source selection and general dynamic AWB are wider scopes.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/README.md"
+      ]
+    },
+    {
+      "id": "cold_AEC_weights",
+      "tier": "OFFLINE_SOURCE_PRODUCER",
+      "proven": "Portable decoder produces invariant Default weights; later live first-frame join exists.",
+      "missing": "Complete startup and normal input authority remain open; no wholesale factory requirement inferred.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+        "experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/README.md"
+      ]
+    },
+    {
+      "id": "factory_runtime_chain",
+      "tier": "EMULATED_BOUNDED",
+      "proven": "E011DE-DI extend original caller/guard/constructor checks in owned memory.",
+      "missing": "Full original factory incomplete; these checks have not installed a Linux driver.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011di-original-enumeration-bootstrap/RESULT.json"
+      ]
+    },
+    {
+      "id": "Windows_live_BF",
+      "tier": "LIVE_BOUNDED",
+      "proven": "E005o observed22 BF/nonempty-FIFO/matcher events during13 valid rear4K handles.",
+      "missing": "No exact same-generation WM16 hardware-retirement proof.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e005o-windows-live-bf-fifo8-matcher-vs-vfe-bus7/RESULT.json",
+        "experiments/E004-front-ir-vd55g0/e005r-type1-csid-provenance-and-output-group-field-correction/RESULT.json"
+      ]
+    },
+    {
+      "id": "native_WM16_completion",
+      "tier": "STATIC_AND_BUILD",
+      "proven": "Independent comp-group7/consumed-address contract and isolated observer build exist.",
+      "missing": "Independent hardware completion, exact consumed IOVA, IRQ/ACK and DMA/IOMMU retirement.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e005m-vfe680-wm16-baf-compgrp7-busdone-static/README.md",
+        "experiments/E004-front-ir-vd55g0/e005n-vfe680-wm16-compgrp7-observer-isolated/README.md",
+        "experiments/E004-front-ir-vd55g0/e005r-type1-csid-provenance-and-output-group-field-correction/RESULT.json"
+      ]
+    },
+    {
+      "id": "native_rear_processed_frame",
+      "tier": "OPEN",
+      "proven": "Rear-specific source recipes and startup composer exist.",
+      "missing": "First Linux rear native-ISP processed optical frame and controlled stop unproven.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011ar-rear-packet-isolated-runner/README.md",
+        "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/INTEGRATION-SAFE.json",
+        "docs/CAMERA-STACK-PORT-MAP.md"
+      ]
+    },
+    {
+      "id": "clean_colour_and_Windows_parity",
+      "tier": "OPEN",
+      "proven": "Existing fallback has bounded structured-scene evidence.",
+      "missing": "Chosen-route decode/exposure/colour, controlled matched scene and calibration.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e004ne-screen-rear-stable-window-guarded-one-shot/README.md",
+        "src/sp11-camera-stack/RGB-PHASED-ROADMAP.md"
+      ]
+    },
+    {
+      "id": "optional_effects_IR_Hello",
+      "tier": "DEFERRED",
+      "proven": "Baseline defers AI/effects/additional modes; IR remains off.",
+      "missing": "Protected IR admission and illumination are separate gates.",
+      "references": [
+        "experiments/E004-front-ir-vd55g0/e011bs-clean-front-rear-scope/BASELINE-SCOPE.json",
+        "src/sp11-camera-stack/PROVENANCE.json"
+      ]
+    }
+  ],
+  "references": {
+    "front_native": "experiments/E003-front-imx681-cphy/e003i-front-native-productionization/hy-production-one-stream-r27/README.md",
+    "raw": "experiments/E004-front-ir-vd55g0/e004lr-guarded-rgb-raw-frames-one-shot/README.md",
+    "fallback": "experiments/E004-front-ir-vd55g0/e004ne-screen-rear-stable-window-guarded-one-shot/README.md",
+    "app_lifecycle": "experiments/E004-front-ir-vd55g0/e004lz-guarded-real-rgb-session-backend-one-shot/README.md",
+    "offline_startup": "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/INTEGRATION-SAFE.json",
+    "runner": "experiments/E004-front-ir-vd55g0/e011ar-rear-packet-isolated-runner/README.md",
+    "inactive_gamma": "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/README.md",
+    "cold_awb": "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/README.md",
+    "cold_aec": "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json",
+    "live_aec_join": "experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/README.md",
+    "scope": "experiments/E004-front-ir-vd55g0/e011bs-clean-front-rear-scope/BASELINE-SCOPE.json",
+    "bf_contract": "experiments/E004-front-ir-vd55g0/e005m-vfe680-wm16-baf-compgrp7-busdone-static/README.md",
+    "bf_observer": "experiments/E004-front-ir-vd55g0/e005n-vfe680-wm16-compgrp7-observer-isolated/README.md",
+    "live_bf": "experiments/E004-front-ir-vd55g0/e005o-windows-live-bf-fifo8-matcher-vs-vfe-bus7/RESULT.json",
+    "bf_correction": "experiments/E004-front-ir-vd55g0/e005r-type1-csid-provenance-and-output-group-field-correction/RESULT.json",
+    "latest_emulation": "experiments/E004-front-ir-vd55g0/e011di-original-enumeration-bootstrap/RESULT.json",
+    "hardware_authority": "src/sp11-camera-stack/PROVENANCE.json",
+    "port_map": "docs/CAMERA-STACK-PORT-MAP.md",
+    "native_priority": "src/sp11-camera-stack/RGB-PHASED-ROADMAP.md"
+  },
+  "authored_evidence_sha256": {
+    "experiments/E003-front-imx681-cphy/e003i-front-native-productionization/hy-production-one-stream-r27/README.md": "98e4d3b9defb64e47356026ae2eca1ddf8798f7cf64c4fb799f7f3cf58ae822e",
+    "experiments/E004-front-ir-vd55g0/e004lr-guarded-rgb-raw-frames-one-shot/README.md": "5caa23a3eed14ef584f0851f8784b334b4570848669e3a2a36ee2b81a522a8d2",
+    "experiments/E004-front-ir-vd55g0/e004ne-screen-rear-stable-window-guarded-one-shot/README.md": "5b455c1a3698507ab503850e4c7011692cfda2fdf79fb4b368d840f17e1194fc",
+    "experiments/E004-front-ir-vd55g0/e004lz-guarded-real-rgb-session-backend-one-shot/README.md": "37aae8af70c0d168a7630107de6abc32aa0b9aeaba19ae38bec63f7fdac792d1",
+    "experiments/E004-front-ir-vd55g0/e011am-rear-rs-full-startup-integration/INTEGRATION-SAFE.json": "9684cd5ac1d9376ed30a35a72e0dae3b42f293bb1527b0e1f15e75298c20b446",
+    "experiments/E004-front-ir-vd55g0/e011ar-rear-packet-isolated-runner/README.md": "7f728d8f7dbb1786e9e98d9b0ac72e8d551de1d7219227efedd98c07423452cd",
+    "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma/README.md": "253166a330923d0876a502904168300d3a33a6e7bb1673e5a8866a47ec442794",
+    "experiments/E004-front-ir-vd55g0/e011av-rear-source-cold-awb-quad/README.md": "19f21763691e2d99ff59002caf357c852820d33da09efb2a765f03ac10f32a16",
+    "experiments/E004-front-ir-vd55g0/e011bw-rear-source-cold-aec-weights/INTEGRATION-SAFE.json": "4e9fa05a40484fba3edf9234949cb66d6763981bc40a768ad1d7a8f48e9ecbd8",
+    "experiments/E004-front-ir-vd55g0/e011bx-rear-first-aec-source-query/README.md": "f34c15ad139998c7b76525e106a16b42e99bf4c6357c05bad40649c21aaa0304",
+    "experiments/E004-front-ir-vd55g0/e011bs-clean-front-rear-scope/BASELINE-SCOPE.json": "1439525d6ac45efbc9dbda4372a1b19dd193fbfebbfbbc2d99560ba5df659b4f",
+    "experiments/E004-front-ir-vd55g0/e005m-vfe680-wm16-baf-compgrp7-busdone-static/README.md": "f529dcb2bba0bf5b4a92ab3ac4b9cf4b34ab3d2f4b47dc82aa799ed8ee2e3017",
+    "experiments/E004-front-ir-vd55g0/e005n-vfe680-wm16-compgrp7-observer-isolated/README.md": "2a37b25829fb2d3cda80723cc4b491809a8058158e5bdc951f03dc31fa1650cc",
+    "experiments/E004-front-ir-vd55g0/e005o-windows-live-bf-fifo8-matcher-vs-vfe-bus7/RESULT.json": "ebac98ef8a742afac49f6f1d5a5ae2caa727c1d328d229056ee6e5fb6404a17b",
+    "experiments/E004-front-ir-vd55g0/e005r-type1-csid-provenance-and-output-group-field-correction/RESULT.json": "9bb968599f6939716df351077a11778513a39405c7cc50c6669d327e0bc807c8",
+    "experiments/E004-front-ir-vd55g0/e011di-original-enumeration-bootstrap/RESULT.json": "f25c4405455da560a5124d5249ce6b77d16ee0cfb359f69876b3966695e65ea8",
+    "src/sp11-camera-stack/PROVENANCE.json": "506185ffdd53407aceedf6bff35248eb9079e4ccb1c5ae02c1057be1bff4111f",
+    "src/sp11-camera-stack/RGB-PHASED-ROADMAP.md": "964e5c192acf8d6d822f3c8c72190fcfecdf867b4e41887f0e5a7905a0afaa17"
+  },
+  "next_steps": [
+    {
+      "id": "selected_baseline_inputs",
+      "owner": "L2/L4",
+      "action": "Inventory selected enabled startup semantic inputs; attach existing producer, authority and actual consumer; classify source, observed and owned-fixture inputs. Isolate remaining normal RS count/whole-frame offset and other required normal-input gaps.",
+      "acceptance": "Every required field has an evidence-backed producer or explicit open dependency. Further factory/CRT/catalogue tracing names a required baseline consumer.",
+      "hardware_allowed": false
+    },
+    {
+      "id": "integrated_preflight",
+      "owner": "L1/L2/L3",
+      "action": "After input gaps close, compose existing cold AEC/AWB decoders, inactive gamma, packet-isolated runner and required normal producers in one new source-only preflight.",
+      "acceptance": "Four packets derive from declared authority; owned command/output lifetimes, failure/stop paths and existing parity remain checked. Build evidence alone does not authorize runtime.",
+      "hardware_allowed": false
+    },
+    {
+      "id": "physical_completion",
+      "owner": "L1/L3",
+      "action": "Prepare a separate fresh bounded observer after exact source-defined completion/identity/stop criteria and Golden rollback are reviewable.",
+      "acceptance": "Independent completion correlated to exact output/generation; verified stop, IRQ/ACK and DMA/IOMMU retirement. Manual focus does not disable BF outputs.",
+      "hardware_allowed": false
+    },
+    {
+      "id": "clean_front_rear_image",
+      "owner": "L5/L6",
+      "action": "After required gates, use the existing E011BS eight-fresh-frame-per-camera normal-scene front/rear/off target in an ordinary app, naming each route and processing path.",
+      "acceptance": "Fresh complete normal-colour frames, supported controls, neutral stop/switch and private image QA. Full30fps/4K/catalogue parity is later.",
+      "hardware_allowed": false
+    }
+  ],
+  "corrections": [
+    "Primary status still namedDE/DF although current acceptedDI.",
+    "Readiness commandedsoftware-first despite nativeISP decision.",
+    "Architecture flag and verifier wrongly required no liveWindowsBF despiteE005o.",
+    "Older near-black summaries predateE004ne structured rear scene.",
+    "Further factory/runtime tracing must name a selected-baseline consumer underE011BS."
+  ],
+  "scope_rule": "Each new trace names the selected baseline field/consumer/hardware requirement and expected acceptance; inherited totals are regression coverage.",
+  "preservation": "Accepted experiment results/sources and historical evidence unchanged; no optical/original payload exports."
+}
