@@ -1,3 +1,13 @@
+## E011DG original factory two-record construction — BOUNDED PASS
+
+Sixteen cases across four stack/node placements, two owned loader indices and two negative cold epochs execute1,712 original instructions,672 exact store chunks and816 invalid requests rejected before effects.
+
+Actual factory guard caller checks remain intact. Original call instructions5BE698/5BE6CC request two48-byte allocations under typed owned success models; original source then constructs and publishes both full records, with three self-pointers, two-byte257 and22 zero bytes each. Whole mapped memory, actual permissions, source reads/stores, logical allocation/SRW ownership and actual guard caller preservation pass.
+
+The accepted stop is BEFORE5BE6F4. Allocator/native OS bodies, failure cleanup, full factory parent return/completion/Default/startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical remain open. Owned loader/TLS/cold file-BSS/negative epochs/stack/allocator fixtures are explicit.
+
+NEXT **E011DH** follows original factory data initialization and library boundary, then file enumeration/context/RootOpsinput+72/Default. Golden/history unchanged; zero Starts/reboots/images/production C or kernel changes. See [E011DG](../../experiments/E004-front-ir-vd55g0/e011dg-original-factory-two-records/README.md).
+
 ## E011DF original factory cold prefix and actual startup guard caller — BOUNDED PASS
 
 Sixteen cases across four stack placements, two owned loader indices and two negative cold epochs execute 1,344 original instructions, 352 exact store chunks and 640 invalid requests rejected before effects.
