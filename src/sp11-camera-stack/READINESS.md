@@ -1,3 +1,13 @@
+## 2026-10-03 E011DK RS metadata copy and C decoder accepted
+
+The original RS metadata reader passes 96 present/absent/fallback cases and 39,904 instruction visits. The new checked C decoder reuses E011AM arithmetic, matches three observed records and 42 input/output fields per compiler, and rejects 21 invalid or unsupported inputs before output effects under GCC/Clang ASan/UBSan. All 132 copied bytes, owned heap changes, source immutability, original code, stack and caller state pass.
+
+This closes the consumer/decoder contract only. Query/helper results, registry/settings/TLS/locks and runtime property tags are explicit owned fixtures. Actual tag initialization, metadata query/record publication and upstream AFD normal count policy remain open. Missing metadata preserves the prior source record; the decoder supplies no guessed defaults.
+
+**NEXT E011DL:** follow RS tag cell 17A30F4, slot-5 query 5D4D30 and actual upstream normal count/offset publisher. Reuse E011M initial counts, E011AM numerical binding and E011AK sampled unity BG gain proof. Required selected input/profile integration, deterministic bootstrap/preflight and independent enabled-output DMA/IOMMU retirement still precede the clean-colour front/rear/off app gate.
+
+Latest selected RS source acceptance is **E011DK**; the separate original factory/enumeration branch remains **E011DI**. Native rear runtime remains denied. Zero camera Starts, reboots, kernel builds or optical tests here; Golden unchanged. See [E011DK metadata input](../../experiments/E004-front-ir-vd55g0/e011dk-normal-rs-metadata-input/README.md). Earlier NEXT statements below are historical.
+
 ## 2026-10-03 E011DJ input ledger accepted; E011DK normal RS policy next
 
 The checked selected-baseline ledger covers all 14 register-state members, five DMI families and ten replay input blocks. It reuses 15 bounded proof facts, pins 55 authored files and rejects eight invalid ledger mutations. This is source/evidence inventory; no new numerical, emulation, optical or hardware test.
