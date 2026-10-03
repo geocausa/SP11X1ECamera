@@ -1,3 +1,13 @@
+## E011DH original factory initialization and1040-byte clear — BOUNDED PASS
+
+Thirty-two cases across stack/node placements, loader indices, negative epochs and original/D7-canary field states execute13,376 original instructions,11,808 exact store chunks and1,952 invalid requests rejected before effects.
+
+Original factory code clears190 image field chunks. Original F5E600 now executes through source call5BE9F8, zeros1040 bytes at incomingSP-1144 and returns destination to5BE9FC with its actual caller preserved. Its result fixture is absent. Whole mapped memory, actual permissions, exact scalar/vector/source writes and reads, both full48-byte records and logical SRW/allocation ownership pass.
+
+The accepted stop is BEFORE5BE9FC→5F8DC0. Owned loader/TLS/cold file-BSS/negative epochs/stack/allocator/native OS models and D7 robustness fixtures are explicit. File enumeration, full factory completion/parent return/Default/startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical remain open.
+
+NEXT **E011DI** follows original file-enumeration routine5F8DC0 through its actual caller and source-created1040-byte stack record. Golden/history unchanged; zero Starts/reboots/images/production C or kernel changes. See [E011DH](experiments/E004-front-ir-vd55g0/e011dh-original-factory-initialization-clear/README.md).
+
 ## E011DG original factory two-record construction — BOUNDED PASS
 
 Sixteen cases across four stack/node placements, two owned loader indices and two negative cold epochs execute1,712 original instructions,672 exact store chunks and816 invalid requests rejected before effects.
