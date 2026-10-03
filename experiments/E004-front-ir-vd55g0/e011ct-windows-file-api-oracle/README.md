@@ -1,3 +1,11 @@
+# E011CT actual Windows file/error dependency
+
+The fresh E011CT-OS-002 observer made one native standard ARM64 CreateFileW call with the source-verified private filename and all seven read-only ABI inputs. It returned an invalid handle; the managed capture, Kernel32 and NTDLL thread-error getters all reported3, with NTSTATUS0xC000003A. An independent known-value last-error round trip agreed. The private4096-byte shared OS page and NTDLL initialization cell were observed on SP11; the cell matched before/after. No file content was read or created, and no proprietary OEM camera DLL, camera Start, stream or optical API was invoked.
+
+The runner preserved the existing EFI mount and returned normally to Golden boot e5f58539-ac31-427d-a718-f1970684107b. All three Golden payload hashes, persistent boot order, saved GRUB, empty next entries, idle camera and both historical checkouts match. Private evidence is archived on SP11; ESP inputs/scripts/snapshots are retired, retaining consumed markers. The earlier mount rejection is a preserved consumed abort, with no target API call.
+
+NEXT **E011CU** source-only: bind this measured failure to the exact original caller/input contract, qualify original error/TLS/descriptor/UTF16 cleanup, then final publication/full outer return and balanced locks. Actual live Default production and full CRT/startup are still open. Native rear remains denied pending full startup/preflight/RS and independent enabled WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical. This is an OS-dependency observation, with zero new Linux camera images. See [E011CT result](RESULT.json) and [next source](NEXT-SOURCE.json).
+
 # E011CT same-SP11 Windows file-API dependency observation
 
 E011CS remains the accepted source checkpoint. Its next dependency now requires a bounded same-SP11 Windows observation: one standard CreateFileW call with the verified private filename/read-only ABI, immediate observer-thread Win32/NT status, and a private4096-byte shared OS-page snapshot. No camera API or proprietary OEM DLL is invoked by this observer. Default filename production and full CRT/startup remain open.
