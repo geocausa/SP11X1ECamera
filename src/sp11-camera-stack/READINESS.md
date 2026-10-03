@@ -1,3 +1,13 @@
+## E011DF original factory cold prefix and actual startup guard caller — BOUNDED PASS
+
+Sixteen cases across four stack placements, two owned loader indices and two negative cold epochs execute 1,344 original instructions, 352 exact store chunks and 640 invalid requests rejected before effects.
+
+Original factory5BDE08 now calls original CE7AD8 at5BE67C with actual guard1B302D0; it returns to5BE680 with actual guard caller SP/nonvolatile registers preserved and balanced logical SRW ownership. Original code changes the guard0→FFFFFFFF and clears three factory initialization fields. Whole mapped memory, actual permissions, exact source reads and independent store models pass.
+
+Each case stops BEFORE allocator call5BE698→CAE740 requesting48 bytes: 84 instructions executed, with the stop call excluded. Owned loader/TLS/negative epochs/file-BSS state/native OS models remain explicit. Full factory parent return, allocation/construction/completion, Default/full startup/preflight/RS and independent WM16 IRQ/consumed IOVA/DMA/IOMMU retirement/optical remain open.
+
+NEXT **E011DG** qualifies the exact48-byte allocation boundary and original factory construction, then context/file enumeration/RootOpsinput+72/Default. Golden/history unchanged; zero Starts/reboots/images/production C or kernel changes. See [E011DF](../../experiments/E004-front-ir-vd55g0/e011df-original-factory-guard-prefix/README.md).
+
 # SP11 camera stack readiness
 
 ## E011DE original standalone startup-guard sequence — BOUNDED PASS
