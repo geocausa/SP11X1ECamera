@@ -1,0 +1,17 @@
+# E011EA original first argument length and copy
+
+This checkpoint continues actual 0xCACE90 inside the accepted E011DZ parser parent. Original 0xF5E3E0 reads two eight-byte words from a pinned immutable 16-byte window and returns twelve, matching the independently bounded first NUL in a 13-byte literal. The pointed contents remain private; only extents, hashes and derived counts are published.
+
+Original 0xCACDF8 restores its caller and returns one. Original 0xCAB178 invokes 0xCAD1F0 twice: the zero-padding request returns without output, and the twelve-byte request calls original 0xF5D480. Its eight-byte store and four one-byte vector stores are independently checked against the private source bytes, exact addresses, widths and order. The destination cursor and produced counts advance to twelve. No length, copy or return result fixture substitutes for execution.
+
+All 256 retained cases pass. Per case: 179 added original visits, 25 exact store chunks, 195 altered owned requests rejected, seven exact argument reads, four original callee ABI returns, two argument-consumer ABI returns and one cookie-pop convention return. Totals are 45,824 visits / 6,400 stores / 49,920 rejects / 1,792 reads / 1,024 callee returns / 512 consumer returns / 256 cookie-pop returns. No added allocation or OS leaf runs. Every complete E011DZ row remains equal; all original-entry-to-frontier memory and permissions match with no resets.
+
+The earlier DX zero-destination invariant is explicitly advanced to a 640-byte owned expected buffer through checked original copy stores. At entry it is still entirely zero. At the new frontier it contains precisely the private first twelve bytes and 628 zero bytes. All other inherited ownership, permissions, immutable image data, nine allocation leases/redzones, containers, published 18,832-byte zero buffer/refcount one and callback/epoch state remain exact.
+
+Original 0xCAD1F0 and 0xF5D480 preserve NONVOL including SP; the length and first argument handlers also restore their actual callers. The separate original 0x11F0 cookie-pop leaf returns at 0xCAB640 with SP+16 and all other NONVOL preserved. This balances the prior cookie push convention; it does not qualify alternate cookie failure paths or OS stack growth.
+
+Execution stops BEFORE original byte read 0xCA984C from image+0x1370762. Seven active consumers remain: 0x7AC38 / 0x7ACA0 / 0x6BDD0 / 0x6BD48 / 0xCAD868 / 0xCA6280 / 0xCA94E8. Current SP is outer-entrySP-3200; the output cursor is outer-entrySP-1380 and the variadic cursor outer-entrySP-1488. NEXT E011EB continues the parser and remaining arguments in this state. The existing literal pin is not proof of this next read, the remaining argument paths, completed formatting or full consumer return.
+
+The runtime initial-value models remain inherited. Native scalar/pointer selection, alternate flags, pointed locale tables, full consumer/outer/helper/descriptor/profile startup, populated RS/AFD lifetime and independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open. The guarded clean-colour front/rear/off smoke remains pending; native rear runtime remains denied.
+
+Run `python3 verify.py --selfcheck` for the portable evidence review. `source-private.py` requires the pinned originals on SP11. Original text, literals, decompilation, raw records and optical material remain private. Zero new camera Starts, reboots, kernel builds, production C or PM changes.

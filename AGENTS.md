@@ -1,3 +1,18 @@
+## 2026-10-04 E011EA original first argument length / copy accepted
+
+Original source now finds the first argument's NUL in an immutable 13-byte literal, reads its exact 16-byte window, and copies twelve private bytes into the retained 640-byte destination. The eight-byte store and four one-byte vector stores match independently pinned source bytes; the remaining 628 destination bytes remain zero. No string contents or length/copy result fixture is supplied or exported.
+
+256 cases pass: 45,824 added original visits, 6,400 exact ordered store chunks, 49,920 altered owned requests rejected, 1,792 exact argument reads, 1,024 callee ABI returns, 512 argument-consumer ABI returns and 256 cookie-pop convention returns. All complete E011DZ rows remain equal; cumulative original-entry-to-frontier memory and permissions match without resets. Combined original visits are 1,024,256; all ancestor counts remain separate.
+
+Original 0xF5E3E0 returns length twelve; the two 0xCAD1F0 calls execute zero padding and actual copy, and original 0xF5D480 writes the private bytes. Original 0xCACDF8 and 0xCAB178 return one with exact caller ABI. The 0x11F0 cookie-pop leaf restores SP+16 and all other NONVOL; this remains separate from a standard SP-preserving leaf and OS stack-growth proof. The earlier zero-destination invariant advances only through these checked original copy effects.
+
+Stop BEFORE the byte read at 0xCA984C from image+0x1370762. NEXT **E011EB** continues the original parser and remaining arguments with the twelve-byte output and returned handler frames retained. Current SP=outer-entrySP-3200, output cursor=outer-entrySP-1380 and variadic cursor=outer-entrySP-1488. Seven consumer frames remain active; full consumer and outer 0x5F8EA8 returns remain pending.
+
+All nine allocations, redzones, published 18,832-byte zero buffer/refcount one, callback table and registry locks remain exact. Native runtime scalar/pointer selection, pointed locale tables, complete helper/descriptor/profile startup, populated RS/AFD identity/generation/lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement still gate clean-colour front/rear/off acceptance. Native rear runtime remains denied.
+
+Zero new Starts/reboots/kernel builds/production C/PM changes; Golden payloads, EFI/GRUB and historical repositories unchanged. Originals and optical material stay private on SP11. See [E011EA first argument length / copy](experiments/E004-front-ir-vd55g0/e011ea-original-first-argument-length-copy/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DZ original parser dispatch / variadic argument accepted
 
 The retained original consumer now reads a seven-byte immutable literal (including its terminator) and seven exact sparse classification/branch cells, dispatches the first argument through original 0xCAB178 / 0xCACDF8, and advances the actual variadic cursor by eight bytes. The original 0xCA65A8 scalar helper returns zero with exact callee-saved ABI; the separate 0x11D0 cookie-frame convention again changes SP by -16. No original literal contents or string result fixture is exported or supplied.
