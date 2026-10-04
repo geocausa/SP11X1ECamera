@@ -1,3 +1,18 @@
+## 2026-10-04 E011ED isolated original stream-table publication prefix accepted
+
+The runtime pointer at 0x16A2A58 has an original publisher: initializer 0xCB3260. Its prefix now executes in an isolated fresh emulator with explicit owned cold count/pointer inputs. Original source sets 512 slots, requests a 4,096-byte zeroed allocation, publishes the returned pointer, initializes the first logical standard-stream resource and writes image+0x1607060 into slot zero. The remaining 511 slots stay zero. Native allocation, CRT resource initialization and pointed stream contents remain unproved.
+
+256 cases pass: 13,056 isolated original visits, 4,096 exact ordered source stores, 36,096 altered owned requests rejected, 1,024 dependency reads, 512 nested entries/ABI returns, 256 owned zeroed allocations and 256 owned resource-model calls. All E011EC rows remain equal; camera memory, permissions and its 0xCC6120 frontier remain unchanged. Isolated initializer entry-to-frontier memory/permissions and redzones match without resets. Forty-six execution pins remain exact.
+
+Original 0xCB1650 returns zero on its null cleanup path. Original 0xCBA4B0 tail-calls the owned InitializeCriticalSectionEx model at resource 0x1607090 with spin count 4,000 and flags zero; both nested returns preserve NONVOL including SP. Model success and readiness remain explicit provider inputs, not native observations. The camera and isolated initializer states have not been joined.
+
+Stop BEFORE 0xCB3338 reads eight bytes from image+0x16A2A90, independently checked index zero; current SP=initializer-entrySP-80. NEXT **E011EE** establishes the low-level I/O table's authority before continuing. The initializer remains active; full return and actual loader/CRT startup invocation are pending. The camera caller separately remains at 0xCC6120 / outer-entrySP-1648, with four active stream frames and its owned stream lock held.
+
+Camera output, all nine allocations/redzones, published 18,832-byte zero buffer/refcount one, callbacks, epochs and both registry locks remain retained. Its source-chain count stays 1,237,760; aggregate 1,250,816 includes the isolated initializer matrix and does not describe a joined trace. File/provenance collection, full helper/descriptor/profile startup, native runtime/CRT resources, populated RS/AFD lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement still gate guarded clean-colour front/rear/off acceptance. Native rear runtime remains denied; rough ~70% smoke estimate unchanged.
+
+Zero new camera Starts/reboots/kernel builds/production C/PM changes. Golden payloads, EFI/GRUB and historical repositories unchanged. Originals and optical material stay private on SP11. See [E011ED isolated stream-table publication prefix](../experiments/E004-front-ir-vd55g0/e011ed-original-isolated-stream-initializer-publication/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011EC bounded stream setup / owned CRT lock accepted
 
 Original caller 0x600368 resumes with the completed formatter result and enters wrappers 0xCED2F0 / 0xCED0D8 / 0xCC6078 / 0xCC6108. The exact 37 private bytes plus 603 zeros remain intact. A pinned two-byte mode literal at 0x1363D40 qualifies the original first-byte nonempty gate; mode interpretation, stream selection and file contents remain open.
