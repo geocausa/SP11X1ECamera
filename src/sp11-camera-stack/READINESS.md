@@ -1,3 +1,20 @@
+## 2026-10-04 E011DR original cleanup registration / guard publication accepted
+
+The unchanged cold caller registers cleanup callback 0xF7B120 and publishes the helper guard through original code, without registration/guard result fixtures. The encoded exit table contains one callback in 32 slots; global, helper and TLS thread epochs agree.
+
+512 cases pass: 321,536 original visits, including 173,056 CRT registration and 17,920 publication visits. All 62,464 nonstack chunks, 43,520 stack chunks, 5,632 added callee ABI returns and 62,976 invalid owned-contract rejections pass. Whole memory/permissions, immutable source/unmodified loader regions and the exact TLS epoch update are checked.
+
+Loader/OS resource readiness, fresh allocation storage and a ready empty encoded CRT exit table remain explicit owned models. Native CRT initialization, failure/existing-table growth, callback execution/teardown and concurrency remain open. CRT and SRW locks are released; registry logical lock remains held.
+
+Stop BEFORE 0x5B8104, next factory pointer 0x1731880 read at 0x5B8108. Parent/helper remain active. NEXT **E011DS** follows actual factory construction/publication in this caller; source references identify a pointer write at 0x5B8138, outside current acceptance. Full first-helper return and metadata descriptor registry initialization remain open.
+
+E011DM remains the empty RS-query proof, E011DI separate factory/enumeration acceptance and E011DN the limited Windows snapshot. Selected input/profile deterministic startup and independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement precede clean-colour front/rear/off acceptance. Native rear runtime remains denied.
+
+Zero Starts/reboots/kernel builds/production C changes; Golden boot, payloads, permanent EFI/GRUB and historical repositories unchanged. Windows oracle/external SP7 KD and missing tools remain authorized; fresh boot and atomic identity for another oracle. Originals and optical material stay private on SP11.
+
+See [E011DR registration / publication](../../experiments/E004-front-ir-vd55g0/e011dr-original-cleanup-registration-publication/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DQ original cold container construction accepted
 
 The unchanged first-helper constructor 0x2EE1A0 completes its normal path and returns at 0x5B9094 with exact ABI. Original source constructs the 64-byte container, 24-byte self-linked sentinel and 128-byte array containing 16 sentinel pointers. Allocation storage/readiness/provenance are explicit owned models; no constructed-object or constructor/helper/guard result fixture is used.

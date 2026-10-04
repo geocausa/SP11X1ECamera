@@ -1,0 +1,38 @@
+{
+  "experiment": "E011DS",
+  "goal": "Follow original factory pointer construction in actual cold first-helper caller",
+  "resume_source_RVA": "0x5b8104",
+  "factory_pointer_RVA": "0x1731880",
+  "factory_pointer_read_RVA": "0x5b8108",
+  "factory_pointer_write_RVA": "0x5b8138",
+  "active_first_helper_RVA": "0x5b80a8",
+  "active_parent_RVA": "0x5de700",
+  "registry_logical_lock_held": true,
+  "SRW_logical_lock_held": false,
+  "CRT_logical_lock_held": false,
+  "helper_guard_published": true,
+  "cleanup_callback_RVA": "0xf7b120",
+  "exit_used_entries": 1,
+  "exit_capacity_entries": 32,
+  "reuse": {
+    "constructor": "E011DQ",
+    "registry_lock": "E011DO",
+    "empty_RS_query": "E011DM",
+    "separate_factory_enumeration": "E011DI",
+    "factory_initialization": "E011DH"
+  },
+  "remaining_dependencies": [
+    "actual factory call/return and ownership in this parent",
+    "full first-helper and descriptor registry publication",
+    "native CRT initialization and runtime resources",
+    "selected profile/input deterministic bootstrap and populated RS lifetime",
+    "independent exact-buffer/generation IRQ/DMA/IOMMU retirement"
+  ],
+  "do_not_claim": [
+    "derived factory pointer write reference proves execution",
+    "ready encoded exit table proves native CRT initialization",
+    "registered callback has executed or proves teardown",
+    "source proof proves camera hardware retirement"
+  ],
+  "native_rear_runtime_allowed": false
+}
