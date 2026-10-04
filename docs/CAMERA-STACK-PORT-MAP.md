@@ -1,3 +1,18 @@
+## 2026-10-04 E011DX exact constant-data / retained consumer setup accepted
+
+Original source now reads the exact opaque eight-byte window at 0x10F03A0 and enters the original nested consumer setup at 0x7AC38 / 0x7ACA0 / 0x6BDD0 / 0x6BD48. The original 12-byte leaf at 0xEDD0 returns the address 0x17A1150 at 0x6BD70 with exact ABI preservation. No constant contents, pointed strings, formatted result or consumer return fixture substitutes for execution.
+
+All 256 cases pass: 19,200 added original visits, 8,448 exact stack store chunks, 52,224 altered owned requests rejected, 256 exact constant reads and 256 original leaf ABI returns. The 33 setup chunks per case have independently authored source/address/width/value/order contracts. Inherited DW/DV/DU/DT/DS results remain exactly equal and separate; combined original visits are 914,432. The original-entry-to-frontier memory and permissions snapshot remains cumulative.
+
+The constant authority is the exact eight-byte file-backed nonwritable window, not the earlier exploratory 64-byte window. Five exact function bodies extend the inherited 25 source pins to 30. Four consumer frames remain active; their returns and the outer 0x5F8EA8 return remain pending. The original 640-byte destination and published 18,832-byte buffer are still entirely zero. All nine live allocations, callback table, epochs, locks, previous nodes and redzones remain retained.
+
+Stop BEFORE 0x6BD8C, the next eight-byte read from writable virtual zero-fill coordinate 0x17A1150. NEXT **E011DY** establishes loader/runtime scalar authority and resumes the retained consumer. A static zero-fill coordinate is not proof of its native runtime value. Pointed constant strings, complete consumer/outer/factory/helper returns, selected profile/input deterministic startup, populated RS/AFD lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open. Native rear runtime remains denied.
+
+Zero camera Starts, reboots, kernel builds, production C or PM changes; Golden payloads/full EFI/GRUB/history unchanged. Original binaries/instruction text/decompilation/raw records/proprietary names and optical material remain private SP11. Authorized fresh one-shot Windows oracle/external SP7 KD remain available with fresh atomic identities and manual-only tasks.
+
+See [E011DX exact constant-data / retained consumer setup](../experiments/E004-front-ir-vd55g0/e011dx-original-constant-data-consumer-setup/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DW nested enumeration container / stack clear accepted
 
 Original callee 0x600368 creates a fresh 16-byte object, executes original nested constructor 0x5E81B8 and attaches its returned 64-byte header. Original source creates and clears an 8192-byte array with 1024 zero QWORD slots, then clears a 640-byte stack buffer. No constructed-record, clear or return result fixture substitutes for source execution.
