@@ -1,3 +1,20 @@
+## 2026-10-04 E011DY cold runtime context / nested receiver setup accepted
+
+Under explicit loader initial-value models, original source reads the zero-fill options scalar at 0x17A1150 and flag at 0x16A2A84, then the file-initial pointer pair at 0x16072D8. Original 0xCAD868 constructs the retained stack context, and original 0xCA6280 constructs the nested receiver fields. These are source effects under declared models; native flag/pointer selection remains unqualified.
+
+All 256 cases pass: 20,992 added original visits, 11,264 exact setup store chunks and 68,608 altered owned requests rejected. Each case validates four exact runtime reads, 44 independently authored ordered stores and two nested entries. The original 0x11D0 cookie-frame leaf returns at 0xCA6298 with its deliberate SP minus 16 effect and all other nonvolatile registers preserved. This is a cookie-frame convention, not an SP-preserving leaf ABI or OS stack-growth proof.
+
+Complete inherited DX/DW/DV/DU/DT/DS rows remain exactly equal and separate; combined original visits are 935,424. One cumulative original-entry-to-frontier memory and permissions snapshot passes. All nine allocations, prior nodes/arrays/redzones, published 18,832-byte zero buffer/refcount one, callback table and epochs remain retained. The 640-byte output destination remains entirely zero; all 44 new stores lie below it. Both registry locks remain held and CRT/SRW released.
+
+Stop BEFORE actual call 0xCA6348 -> 0xCA94E8, return 0xCA634C. Six consumer frames remain active; consumer, outer 0x5F8EA8, enumeration, factory and helper returns remain pending. NEXT **E011DZ** executes the next original consumer with receiver at outer-entry SP minus 3104 and runtime context at minus 1888. The next exact 1028-byte body is pinned as metadata only; accepted source pins remain 32.
+
+The two scalar cells are writable virtual zero-fill with no file-byte hash authority; only cold zero is accepted by this model. The writable file-initial pair identifies 0x1607180 / 0x1607650, without qualifying pointed tables. Alternate native flags, initialized runtime values, pointed locale/format/string contents, complete consumer output/returns, profile/input deterministic startup, populated RS/AFD lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open. Native rear runtime remains denied.
+
+Zero camera Starts, reboots, kernel builds, production C or PM changes; Golden payloads/full EFI/GRUB/history unchanged. Original binaries/instructions/decompilation/raw records/proprietary names and optical material remain private SP11. Fresh one-shot Windows oracle/external SP7 KD remain authorized with fresh atomic identities and manual-only tasks.
+
+See [E011DY cold runtime context / nested receiver setup](../experiments/E004-front-ir-vd55g0/e011dy-original-cold-runtime-context-receiver/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DX exact constant-data / retained consumer setup accepted
 
 Original source now reads the exact opaque eight-byte window at 0x10F03A0 and enters the original nested consumer setup at 0x7AC38 / 0x7ACA0 / 0x6BDD0 / 0x6BD48. The original 12-byte leaf at 0xEDD0 returns the address 0x17A1150 at 0x6BD70 with exact ABI preservation. No constant contents, pointed strings, formatted result or consumer return fixture substitutes for execution.
