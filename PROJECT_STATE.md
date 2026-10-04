@@ -1,3 +1,7 @@
+## 2026-10-04 E011EV joined CC08E8 / CreateFileW frontier accepted
+
+Original `0xCC08E8` now runs against the source-qualified attach-time lowIO table under the inherited owned lock contract. Record zero is claimed, global mutex 7 is released, the record lock remains held, and the original path advances to the exact `CreateFileW` call boundary with the verified 76-byte UTF-16 path and exact GENERIC_READ / FILE_SHARE_READ / OPEN_EXISTING / normal-attributes argument set. `CreateFileW` itself is not executed. Four placements reject 936 altered contracts. NEXT E011EW resolves native file/provenance/handle authority before continuing. No Start/reboot/build was required; native rear remains denied.
+
 ## 2026-10-04 E011EU startup lowIO lifetime join / CFD570 prefix accepted
 
 The attach-time lowIO table is now source-qualified through the joined runtime camera interval rather than copied from the separate E011EF path. Pair-8 attach initialization produces the 64 × 72-byte table; its reverse uninitializer belongs to detach/finalization. Four retained placements join only that accepted state, preserve the entire block unchanged, enter original `0xCFD570`, and complete the `0xCFD0B0` parser before stopping at `0xCFD5E8 -> 0xCC08E8`. 820 altered contracts reject. NEXT E011EV executes CC08E8 under the inherited owned lock contract. No Start/reboot/build was required. Native record selection/concurrency and rear runtime remain unqualified/denied.
