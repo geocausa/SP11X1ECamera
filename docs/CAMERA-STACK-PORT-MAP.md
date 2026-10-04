@@ -1,3 +1,18 @@
+## 2026-10-04 E011DZ original parser dispatch / variadic argument accepted
+
+The retained original consumer now reads a seven-byte immutable literal (including its terminator) and seven exact sparse classification/branch cells, dispatches the first argument through original 0xCAB178 / 0xCACDF8, and advances the actual variadic cursor by eight bytes. The original 0xCA65A8 scalar helper returns zero with exact callee-saved ABI; the separate 0x11D0 cookie-frame convention again changes SP by -16. No original literal contents or string result fixture is exported or supplied.
+
+256 cases pass: 43,008 added original visits, 9,728 exact stack store chunks, 70,912 altered owned requests rejected, 2,304 exact immutable reads, 256 scalar-helper ABI returns, 256 cookie-frame convention returns and 768 nested entries. Every complete E011DY row remains equal; cumulative original-entry-to-frontier memory and permissions match with no resets. Combined original coverage is 978,432 visits; inherited DY/DX/DW/DV/DU/DT/DS counts stay separate.
+
+The first argument pointer is original image+0x10F0380, and the variadic cursor is outer-entrySP-1488. Its pointed string contents, read extent and length remain unqualified. The destination remains 640 zero bytes; all nine allocations, redzones, published 18,832-byte zero buffer/refcount one, nested containers, callback table and both registry locks remain retained. Native scalar/pointer selection, pointed locale tables, alternate flags and complete consumer/outer/helper/descriptor/profile startup remain open.
+
+Stop BEFORE actual 0xCACE90 -> 0xF5E3E0, return 0xCACE94, SP=outer-entrySP-3360, X0=image+0x10F0380 and X1=0x7FFFFFFF. NEXT **E011EA** qualifies the original bounded string helper and exact pointed data/read windows in this retained parent. Its 184-byte body metadata is pinned separately; no helper execution or string-length result is accepted here. Nine consumer frames remain active; the outer 0x5F8EA8 return is pending.
+
+E011DM remains the empty RS-query proof and E011DN the limited Windows snapshot. Populated RS/AFD identity/generation/lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open before clean-colour front/rear/off acceptance. Native rear runtime remains denied. Zero new Starts/reboots/kernel builds/production C/PM changes; Golden payloads, EFI/GRUB and historical repositories unchanged. Originals and optical material remain private on SP11.
+
+See [E011DZ parser dispatch / variadic argument](../experiments/E004-front-ir-vd55g0/e011dz-original-parser-dispatch-variadic-argument/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DY cold runtime context / nested receiver setup accepted
 
 Under explicit loader initial-value models, original source reads the zero-fill options scalar at 0x17A1150 and flag at 0x16A2A84, then the file-initial pointer pair at 0x16072D8. Original 0xCAD868 constructs the retained stack context, and original 0xCA6280 constructs the nested receiver fields. These are source effects under declared models; native flag/pointer selection remains unqualified.
