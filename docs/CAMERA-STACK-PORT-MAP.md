@@ -1,3 +1,16 @@
+## 2026-10-04 E011EF low-level I/O count transition / initializer return accepted
+
+The isolated original lowIO initializer now completes its cold owned-count path: source reads zero from 0x16A2E90, writes 64, enters record zero through the original wrapper, sets its active byte, releases the global index-seven lock and returns zero with exact NONVOL/SP.
+
+256 cases pass: 9,472 added original visits, 512 exact source stores, 14,080 altered owned requests rejected, 1,280 exact dependency reads, 512 wrapper entries, 512 owned API calls and 256 exact initializer returns. Every E011EE ancestor row remains equal; memory/permissions and redzones match without resets. Forty-nine execution pins remain exact.
+
+This proves the isolated cold path and return, not native count selection, native CRT/handle state or loader startup ordering. The first record logical lock remains held and the global initializer lock is released. The stream initializer still remains before 0xCB3338 / 0x16A2A90, and the camera remains before 0xCC6120 / 0x16A2A58. No state join is claimed.
+
+NEXT **E011EG** establishes actual loader/CRT ordering and only then attempts a source-qualified lowIO-to-stream handoff. Full stream/camera state joining, file/provenance, helper/descriptor/profile startup, populated RS/AFD lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open. Native rear runtime remains denied; rough ~70% smoke estimate unchanged.
+
+Zero new camera Starts/reboots/kernel builds/production C/PM changes. Golden payloads, EFI/GRUB and historical repositories unchanged. Originals and optical material stay private on SP11. See [E011EF lowIO count / initializer return](../experiments/E004-front-ir-vd55g0/e011ef-original-lowio-count-activation-return/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011EE isolated original low-level I/O block publication accepted
 
 The low-level table pointer at 0x16A2A90 now has a source-qualified producer prefix in a third, isolated emulator. Original initializer 0xCC08E8 acquires its owned index-seven lock, takes the explicitly owned cold pointer-zero branch, and calls original constructor 0xCC05B8. The constructor requests 64 records of 72 bytes, initializes each record through checked source stores and owned resource successes, returns the 4,608-byte block with exact NONVOL/SP, and original 0xCC093C publishes it.
