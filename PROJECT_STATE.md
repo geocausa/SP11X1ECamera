@@ -1,3 +1,9 @@
+## 2026-10-04 E011ES exact allocator / output conversion return accepted
+
+E011ER's exact 38-character query result now continues through original `0xCB16C0`: the source-qualified process heap handle is read, an exact 76-byte flags-zero allocation is admitted under the inherited owned HeapAlloc contract, and the second original conversion produces the independently verified 76-byte UTF-16 output. Original `0xCB76B0` then returns status zero.
+
+Four retained placements pass with 736 altered-contract rejections total. Selected object state remains unchanged; selected logical lock held, index-8 global lock released. NEXT E011ET resumes the parent at `0xCFD4E8` and qualifies the exact setup toward `0xCFD514 -> 0xCFD570` without assigning deeper semantics prematurely. No Start/reboot/build was required. Native heap internals, live locale/default-codepage policy, general error paths and native rear runtime remain unqualified/denied.
+
 ## 2026-10-04 E011ER exact conversion query to allocator frontier accepted
 
 The exact E011EQ query is now closed for this specific source: 37 ASCII bytes plus NUL (38 bytes total). The bounded original Windows/NTDLL conversion machinery returns 38 UTF-16 characters with no result stub, giving an exact 76-byte allocation requirement. Four retained camera placements replay the joined chain through that return and stop immediately before original `0xCB16C0` executes.
