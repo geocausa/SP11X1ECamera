@@ -1,3 +1,14 @@
+## 2026-10-04 E011EH startup stream lifetime / camera pointer read accepted
+
+The process-attach stream vector is now source-qualified through the retained camera caller. 0xCB3260 publishes 0x16A2A58; the paired teardown 0xCB33A0 is the only source-qualified later clearer at 0xCB3400, while camera site 0xCC6120 is a pure read. Within successful attach to runtime camera use before detach, the startup vector remains live.
+
+All 8 accepted E011CM startup variants pass the joined E011EH verifier. Original 0xCC6120 loads the exact startup vector pointer in every case, image/vector bytes remain unchanged, and 40 altered site/address/width/value/lifetime contracts are rejected. The startup-stream-to-camera join and pointer dependency read are accepted; native loader/allocator/synchronization internals remain separate.
+
+NEXT E011EI resumes at 0xCC6130 / 0x16A2A50 and, where stronger or faster, correlates the same state dynamically using the existing SP7 debugger / SP11 Windows target. RS/AFD, file/provenance, exact buffer generation, IRQ and DMA/IOMMU retirement remain open. Native rear runtime remains denied. Rough front/back smoke readiness is now about 80 percent, subject to native hardware-lifetime evidence.
+
+Zero camera Starts/reboots/kernel builds/production C/PM changes in E011EH. Golden payloads, EFI/GRUB and historical repositories remain unchanged. See experiments/E004-front-ir-vd55g0/e011eh-source-qualified-stream-lifetime-camera-read/. Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011EG CRT startup order accepted
 
 Process-attach source ordering is now qualified: the pre-constructor subsystem walker must successfully pass pair eight `0xCB5DD0`, which requires `0xCC06F0` index zero to succeed, before the later constructor iterator can invoke first non-null entry `0xCB3260`. E011CM's 8-case producer/consumer matrix was rerun successfully, so the startup `CC06F0 → CB3260` state handoff and stream-initializer return are accepted within the inherited owned OS contracts.

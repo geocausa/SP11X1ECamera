@@ -1,3 +1,14 @@
+## 2026-10-04 E011EH startup stream lifetime / camera pointer read accepted
+
+The process-attach stream vector is now source-qualified through the retained camera caller. 0xCB3260 publishes 0x16A2A58; the paired teardown 0xCB33A0 is the only source-qualified later clearer at 0xCB3400, while camera site 0xCC6120 is a pure read. Within successful attach to runtime camera use before detach, the startup vector remains live.
+
+All 8 accepted E011CM startup variants pass the joined E011EH verifier. Original 0xCC6120 loads the exact startup vector pointer in every case, image/vector bytes remain unchanged, and 40 altered site/address/width/value/lifetime contracts are rejected. The startup-stream-to-camera join and pointer dependency read are accepted; native loader/allocator/synchronization internals remain separate.
+
+NEXT E011EI resumes at 0xCC6130 / 0x16A2A50 and, where stronger or faster, correlates the same state dynamically using the existing SP7 debugger / SP11 Windows target. RS/AFD, file/provenance, exact buffer generation, IRQ and DMA/IOMMU retirement remain open. Native rear runtime remains denied. Rough front/back smoke readiness is now about 80 percent, subject to native hardware-lifetime evidence.
+
+Zero camera Starts/reboots/kernel builds/production C/PM changes in E011EH. Golden payloads, EFI/GRUB and historical repositories remain unchanged. See experiments/E004-front-ir-vd55g0/e011eh-source-qualified-stream-lifetime-camera-read/. Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011EG source-qualified CRT startup order / lowIO-to-stream handoff accepted
 
 The actual process-attach source path now closes the startup-order gap without copying the separate E011EF context. Before the constructor iterator can reach `0xCB3260`, original CRT startup must complete the forward subsystem table at `0xF8BA20..0xF8BB20`. Pair eight is `0xCB5DD0 / 0xCB5E20`; successful `0xCB5DD0` requires original `0xCC06F0` index zero to return success. Only afterward does the constructor iterator walk `0xF7F440..0xF7F468`, whose first non-null entry is `0xCB3260`.

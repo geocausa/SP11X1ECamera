@@ -1,0 +1,35 @@
+{
+  "experiment": "E011EI",
+  "goal": "Qualify the retained camera count read at 0xCC6130 / 0x16A2A50 from the joined startup stream state, and correlate the same native Windows stream/count state dynamically through the existing SP7-to-SP11 debugger path when that yields stronger evidence.",
+  "reuse": {
+    "startup_order": "E011EG",
+    "stream_lifetime_camera_join": "E011EH",
+    "crt_object_producers": "E011CM",
+    "camera_frontier": "E011EC"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcc6130",
+    "dependency_RVA": "0x16a2a50",
+    "bytes": 4,
+    "current_SP_relative_outer_entry": -1648
+  },
+  "dynamic_evidence_priority": [
+    "native QcDeviceMFT8380 stream vector/count at camera entry",
+    "real process/module lifetime",
+    "native handles/allocator/synchronization where observable",
+    "kernel RS/AFD/buffer/IRQ/DMA/IOMMU state as the path advances"
+  ],
+  "remaining_dependencies": [
+    "camera stream count and continuation",
+    "remaining stream/file/provenance effects and enclosing outer return",
+    "full factory/helper/descriptor/profile startup",
+    "populated RS identity/generation/lifetime and normal AFD authority",
+    "independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement"
+  ],
+  "do_not_claim": [
+    "owned allocator or critical-section providers prove native allocation or synchronization",
+    "stream-vector lifetime proof alone proves file/provenance or kernel buffer lifetime",
+    "dynamic observation of one run proves alternate branches or rear runtime safety"
+  ],
+  "native_rear_runtime_allowed": false
+}
