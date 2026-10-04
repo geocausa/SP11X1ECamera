@@ -1,3 +1,10 @@
+## 2026-10-04 E011EG CRT startup order accepted
+
+Process-attach source ordering is now qualified: the pre-constructor subsystem walker must successfully pass pair eight `0xCB5DD0`, which requires `0xCC06F0` index zero to succeed, before the later constructor iterator can invoke first non-null entry `0xCB3260`. E011CM's 8-case producer/consumer matrix was rerun successfully, so the startup `CC06F0 → CB3260` state handoff and stream-initializer return are accepted within the inherited owned OS contracts.
+
+E011EF `0xCC08E8` remains a separate valid path and is not joined here. The camera remains separate before `0xCC6120` reads `0x16A2A58`. NEXT **E011EH** qualifies startup-stream lifetime/order to that camera caller. Native CRT internals and native rear runtime remain unqualified/denied.
+
+
 ## 2026-10-04 E011EF low-level I/O count transition / initializer return accepted
 
 The isolated original lowIO initializer now completes its cold owned-count path: source reads zero from 0x16A2E90, writes 64, enters record zero through the original wrapper, sets its active byte, releases the global index-seven lock and returns zero with exact NONVOL/SP.

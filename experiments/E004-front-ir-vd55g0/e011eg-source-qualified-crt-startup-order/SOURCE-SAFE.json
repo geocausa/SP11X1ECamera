@@ -1,0 +1,127 @@
+{
+  "experiment": "E011EG",
+  "status": "PASS_SOURCE_QUALIFIED_CRT_STARTUP_ORDER",
+  "original_DLL_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "pe_entrypoint_RVA": "0xca2d70",
+  "process_attach_source_chain": [
+    "0xca2d70",
+    "0xca2bc0",
+    "0xca2970",
+    "0xca29d8"
+  ],
+  "preconstructor_initializer_RVA": "0xca31e0",
+  "preconstructor_initializer_call_site_RVA": "0xca29fc",
+  "constructor_iterator_RVA": "0xcaeda0",
+  "constructor_iterator_call_site_RVA": "0xca2a54",
+  "preconstructor_precedes_constructor_iterator": true,
+  "subsystem_table": {
+    "start_RVA": "0xf8ba20",
+    "end_RVA": "0xf8bb20",
+    "pair_stride_bytes": 16,
+    "pair_count": 16,
+    "global_mutex_pair_index": 4,
+    "heap_pair_index": 5,
+    "lowIO_owner_pair_index": 8,
+    "lowIO_owner_init_RVA": "0xcb5dd0",
+    "lowIO_owner_uninit_RVA": "0xcb5e20",
+    "forward_first_member_walk": true,
+    "success_required_to_advance": true
+  },
+  "lowIO_startup_owner": {
+    "owner_RVA": "0xcb5dd0",
+    "producer_RVA": "0xcc06f0",
+    "producer_index": 0,
+    "producer_success_return_W0": 0,
+    "owner_success_return_W0": 1,
+    "producer_required_for_owner_success": true
+  },
+  "constructor_table": {
+    "start_RVA": "0xf7f440",
+    "end_RVA": "0xf7f468",
+    "entries_RVA": [
+      "0x0",
+      "0xcb3260",
+      "0xcc2580",
+      "0xcfbdb0",
+      "0xcfe2c0"
+    ],
+    "first_nonnull_RVA": "0xcb3260",
+    "ascending_eight_byte_walk": true
+  },
+  "ordering_theorem": {
+    "conditional_on_process_attach_reaching_stream_initializer": true,
+    "CB05A8_success_precedes_constructor_iteration": true,
+    "CB5DD0_success_precedes_constructor_iteration": true,
+    "CC06F0_success_precedes_CB3260": true,
+    "startup_lowIO_to_stream_order_source_qualified": true,
+    "full_native_CRT_startup_success_qualified": false
+  },
+  "inherited_E011CM": {
+    "result_sha256": "0df193089d9fe0db44117cffb84c30902f9e611a21c6f3ff526ec766c83f7810",
+    "bootstrap_sha256": "761345a7f6d6b664b5f3c85b8eedcc9b82ea965173df61b91d4ea48342e6a743",
+    "source_sha256": "ced215f019ff73c93586f72cc68fe393544ee4a2bc052e331dff3880d0e37d7d",
+    "complete_original_entry_returns": 32,
+    "default_capacity_cases": 4,
+    "producer_consumer_state_model_qualified": true,
+    "default_stream_capacity": 512,
+    "lowIO_records": 64,
+    "lowIO_record_bytes": 72,
+    "stream_vector_bytes": 4096,
+    "static_stream_objects": 3
+  },
+  "state_handoff": {
+    "startup_CC06F0_to_CB3260_handoff_qualified": true,
+    "original_stream_initializer_return_qualified_under_inherited_owned_OS_contracts": true,
+    "runtime_stream_table_pointer_RVA": "0x16a2a58",
+    "runtime_lowIO_table_pointer_RVA": "0x16a2a90",
+    "E011EF_CC08E8_state_joined": false,
+    "camera_state_joined": false
+  },
+  "separation": {
+    "E011EF_remains_valid_separate_lowIO_path": true,
+    "CC08E8_is_not_used_as_startup_handoff_producer": true,
+    "native_allocator_qualified": false,
+    "native_mutex_bytes_or_concurrency_qualified": false,
+    "native_loader_internals_qualified": false,
+    "complete_CRT_environment_qualified": false,
+    "native_rear_runtime_allowed": false
+  },
+  "function_pins": {
+    "0xca2d70": {
+      "bytes": 224,
+      "sha256": "f8d4203a9dcdbe7559998f6835baf7abb79f761aed5b7f482288528d41ae47cb"
+    },
+    "0xca2bc0": {
+      "bytes": 432,
+      "sha256": "c65e9855b1bee0449ea358af0b156a7583d9494690cadc22db8791155c059d48"
+    },
+    "0xca2970": {
+      "bytes": 104,
+      "sha256": "6583dde00a8dc9e0f0cd5d1f305a1154a45c6909faacb8d8ff70da996ac6380b"
+    },
+    "0xca29d8": {
+      "bytes": 316,
+      "sha256": "bd90d7862ff966a1842313291ca5e0826f5f753c4232a1a3f0b11a070ea46439"
+    },
+    "0xca31e0": {
+      "bytes": 92,
+      "sha256": "610eb013bf0316ae145aa2946999ef7d569cf75a3fd7c9b42b756ce839fc3557"
+    },
+    "0xcb05a8": {
+      "bytes": 44,
+      "sha256": "5570a03b6344b308e332b54d14f0e96cb3bf8030532ee40010281e224e427c9f"
+    },
+    "0xcbae70": {
+      "bytes": 180,
+      "sha256": "f2cf70032cc9daf33071e7483065d5bff2aaae48c813042e57ebd70ec70e73fc"
+    },
+    "0xcb5dd0": {
+      "bytes": 80,
+      "sha256": "ed33948d06d01f9bdb16e9ae840e77dc30a09e56bf047e820581fef68a56925c"
+    },
+    "0xcaeda0": {
+      "bytes": 80,
+      "sha256": "b04ce4b03bd992ccbc041cb67e151f4d576e8bf87b2bed1a6bccd1ab5859ee1a"
+    }
+  }
+}

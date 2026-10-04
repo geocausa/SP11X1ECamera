@@ -1,3 +1,16 @@
+## 2026-10-04 E011EG source-qualified CRT startup order / lowIO-to-stream handoff accepted
+
+The actual process-attach source path now closes the startup-order gap without copying the separate E011EF context. Before the constructor iterator can reach `0xCB3260`, original CRT startup must complete the forward subsystem table at `0xF8BA20..0xF8BB20`. Pair eight is `0xCB5DD0 / 0xCB5E20`; successful `0xCB5DD0` requires original `0xCC06F0` index zero to return success. Only afterward does the constructor iterator walk `0xF7F440..0xF7F468`, whose first non-null entry is `0xCB3260`.
+
+This proves the conditional source order **`CC06F0` before `CB3260` whenever process attach reaches the stream initializer**. The accepted E011CM producer/consumer matrix was rerun: all 8 cases passed with zero stderr. Its default cases create the 64×72-byte lowIO table at `0x16A2A90`, then the 512-entry stream vector at `0x16A2A58`, link three static stream objects and return. The startup lowIO-to-stream handoff and complete stream-initializer return are therefore qualified within the inherited owned OS contracts.
+
+E011EF's `0xCC08E8` path remains valid but separate and is **not** used as this startup producer. Native CRT success, loader internals, allocator internals and Windows mutex bytes/concurrency remain unproved. The retained camera caller is still separate before `0xCC6120` reads `0x16A2A58`; no camera-state join is claimed.
+
+NEXT **E011EH** source-qualifies startup stream-vector lifetime/order to that camera caller, then resumes the dependency read only if the original path supports it. File/provenance, full helper/descriptor/profile startup, populated RS/AFD lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open. Native rear runtime remains denied; rough ~70% smoke estimate remains unchanged.
+
+Zero camera Starts/reboots/kernel builds/production C/PM changes. Golden payloads, EFI/GRUB and historical repositories remain unchanged. See `experiments/E004-front-ir-vd55g0/e011eg-source-qualified-crt-startup-order/`. Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011EF low-level I/O count transition / initializer return accepted
 
 The isolated original lowIO initializer now completes its cold owned-count path: source reads zero from 0x16A2E90, writes 64, enters record zero through the original wrapper, sets its active byte, releases the global index-seven lock and returns zero with exact NONVOL/SP.
