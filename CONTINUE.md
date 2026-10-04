@@ -1,3 +1,15 @@
+## 2026-10-04 E011DO original registry lock / initialized reuse accepted
+
+The unchanged initializer executes its original default EnterCriticalSection/LeaveCriticalSection callbacks and complete already-initialized branch under explicit owned OS/diagnostic contracts. No callback or parent result fixture is used.
+
+64 scenarios pass: 48 complete initialized reuse returns and 16 cold-prefix stops before 0x5DE800. All 6,848 original visits, 112 ABI-exact callback returns, whole mapped memory/permissions and stack checks pass; 2,512 invalid owned dependency requests reject. Nonzero bound fixtures do not prove registry construction. The accepted cold prefix retains its logical lock and active parent frame; cold field stores/allocation/publication are not accepted.
+
+NEXT **E011DP** qualifies cold-bound construction and original first helper 0x5B80A8 (caller return 0x5DE844), plus resource readiness/construction ownership. Selected reader/request/profile, populated RS generation/lifetime and normal AFD input authority remain open. E011DM remains the original empty-RS-query proof, E011DN the limited Windows ready snapshot, and E011DI the separate factory/enumeration proof.
+
+Deterministic selected-input/profile startup and independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement precede clean-colour front/rear/off acceptance. Native rear runtime remains denied. No new camera Start/reboot/kernel build/production C change; Golden boot, payloads, EFI/GRUB and historical repositories unchanged.
+
+See [E011DO lock / reuse](experiments/E004-front-ir-vd55g0/e011do-original-registry-lock-reuse/README.md). Earlier current/NEXT paragraphs below are historical. PiMaster works; SP11/SP7/PiMaster only. Windows oracle/external SP7 KD boots and tools remain authorized; originals/optical material stay private on SP11. Fresh boot and atomic identity for another oracle.
+
 ## 2026-10-03 E011DN Windows registry boundary observed
 
 The accepted evidence is a 116-byte rear-reader-ready metadata snapshot before Start: bound/descriptor populated, seven runtime tag cells zero, and live platform callbacks equal the file default targets. Source references identify writer 0x5DE700; full initializer execution is still unqualified.
