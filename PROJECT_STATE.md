@@ -1,3 +1,17 @@
+## 2026-10-04 E011DQ original cold container construction accepted
+
+The unchanged first-helper constructor 0x2EE1A0 completes its normal path and returns at 0x5B9094 with exact ABI. Original source constructs the 64-byte container, 24-byte self-linked sentinel and 128-byte array containing 16 sentinel pointers. Allocation storage/readiness/provenance are explicit owned models; no constructed-object or constructor/helper/guard result fixture is used.
+
+256 cases pass: 65,280 original visits, 13,056 exact nonstack chunks, 12,288 stack chunks and 17,664 invalid owned contract rejections. Whole mapped memory/permissions, source/TLS immutability, allocation redzones/relations and actual constructor/callback/guard return ABI pass. Native allocator, failure/exception cleanup and teardown remain open.
+
+Stop BEFORE 0xCA3450, actual return 0xCA34B0 and callback argument 0xF7B120, after only the four-instruction original registration-wrapper prefix. Parent/helper/wrapper active; registry logical lock held, SRW released and helper guard in-progress. Cleanup registration, helper guard publication, full first-helper return and full metadata registry construction/publication remain open.
+
+NEXT **E011DR** qualifies cleanup registration and original helper-guard publication in this caller. E011DM remains the original empty RS-query proof, E011DN the limited Windows snapshot, E011DI the separate factory/enumeration proof, E011DO initialized-registry reuse and E011DP cold bounds/guard prefix.
+
+Selected input/profile deterministic startup and independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement precede clean-colour front/rear/off acceptance. Native rear runtime remains denied. Zero Starts/reboots/kernel builds/production C changes; Golden boot, payloads, EFI/GRUB and historical repositories unchanged.
+
+See [E011DQ container construction](experiments/E004-front-ir-vd55g0/e011dq-original-cold-container-construction/README.md). Earlier current/NEXT paragraphs below are historical. PiMaster works; Windows oracle/external SP7 KD boots and missing tools are authorized. Originals/optical material remain private on SP11; another oracle needs a fresh boot and atomic identity.
+
 ## 2026-10-04 E011DP cold literal bounds / first-helper guard prefix accepted
 
 The unchanged initializer writes uint32 literal bounds 239 and 282, enters first helper 0x5B80A8 and executes its original fresh TLS guard acquisition. No bound/helper/guard result fixture is used; loader TLS and OS lock readiness/operations remain explicit owned models.

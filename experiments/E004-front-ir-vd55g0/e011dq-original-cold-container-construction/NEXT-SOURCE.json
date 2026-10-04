@@ -1,0 +1,63 @@
+{
+  "experiment": "E011DR",
+  "goal": "Qualify original cleanup registration and first-helper guard publication in the actual cold caller",
+  "resume_source_RVA": "0xca3450",
+  "actual_caller_return_RVA": "0xca34b0",
+  "actual_callback_argument_RVA": "0xf7b120",
+  "active_wrapper_RVA": "0xca34a0",
+  "wrapper_parent_return_RVA": "0x5b90a0",
+  "active_first_helper_RVA": "0x5b80a8",
+  "active_parent_RVA": "0x5de700",
+  "constructor_RVA": "0x2ee1a0",
+  "constructor_completed_return_RVA": "0x5b9094",
+  "container_RVA": "0x17a7088",
+  "container_bytes": 64,
+  "owned_live_allocations": [
+    {
+      "kind": "sentinel",
+      "bytes": 24
+    },
+    {
+      "kind": "pointer_array",
+      "bytes": 128
+    }
+  ],
+  "constructed_array_pointer_entries": 16,
+  "constructed_mask": 7,
+  "constructed_bucket_count": 8,
+  "constructed_load_factor_bits": "0x3f800000",
+  "registry_logical_lock_held": true,
+  "SRW_logical_lock_held": false,
+  "helper_guard_RVA": "0x17a4220",
+  "helper_guard_value": 4294967295,
+  "remaining_dependencies": [
+    "original cleanup-registration resource construction and its exact callback ownership",
+    "original guard publication in this caller, complete first-helper return",
+    "full metadata descriptor allocation/construction/publication",
+    "selected input/profile, populated RS identity/generation/lifetime and normal AFD producer",
+    "independent IRQ/exact-buffer/generation/DMA/IOMMU retirement"
+  ],
+  "reuse": {
+    "cold_container_construction": "E011DQ",
+    "cold_bounds_and_guard_prefix": "E011DP",
+    "initialized_registry_reuse": "E011DO",
+    "Windows_snapshot": "E011DN",
+    "original_empty_RS_query": "E011DM",
+    "separate_factory_enumeration": "E011DI"
+  },
+  "do_not_claim": [
+    "owned fresh allocations prove native allocator or failure paths",
+    "empty container construction publishes helper guard or descriptor registry",
+    "cleanup callback registration or teardown has executed",
+    "first helper, registration wrapper or cold parent has returned",
+    "bounded constructor ownership proves runtime RS/DMA retirement"
+  ],
+  "ordering": [
+    "source-only registration, guard publication and first-helper closure",
+    "selected profile deterministic startup/preflight",
+    "fresh Windows boot/atomic identity for another oracle",
+    "independent exact-buffer/generation IRQ/DMA/IOMMU retirement",
+    "clean-colour front/rear/off app gate"
+  ],
+  "native_rear_runtime_allowed": false
+}
