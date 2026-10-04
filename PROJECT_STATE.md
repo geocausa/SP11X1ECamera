@@ -1,3 +1,7 @@
+## 2026-10-04 E011ET post-conversion CFD570 call frontier accepted
+
+The original parent now resumes after the complete E011ES conversion return and source-qualifies the exact seven-argument setup at `0xCFD514 -> 0xCFD570`. The owned UTF-16 pointer is carried as argument2; retained locals/scalars are exact. `0xCFD570` itself is deliberately not executed in this checkpoint. Four placements reject 772 altered contracts. No Start/reboot/build was required. NEXT E011EU enters CFD570 and stops at the first genuinely new dependency. Native rear runtime remains denied.
+
 ## 2026-10-04 E011ES exact allocator / output conversion return accepted
 
 E011ER's exact 38-character query result now continues through original `0xCB16C0`: the source-qualified process heap handle is read, an exact 76-byte flags-zero allocation is admitted under the inherited owned HeapAlloc contract, and the second original conversion produces the independently verified 76-byte UTF-16 output. Original `0xCB76B0` then returns status zero.
