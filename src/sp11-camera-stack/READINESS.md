@@ -1,3 +1,9 @@
+## 2026-10-04 E011EL joined parent mode-parser prefix accepted
+
+Original 0xCED150 continuation now reaches 0xCFA968 with exact retained arguments and completes the source-pinned 0xCFA2E0 mode parser. Four cases return flags 0x100000000 / validity 1. The new 0x16A382C dependency is writable virtual-zero BSS with two direct reads and no direct writers; E011EL uses only a bounded cold-zero source model, never a native-runtime claim. The two-byte mode literal remains immutable, SHA-pinned and unexported.
+
+The new frontier is before 0xCFA9BC -> 0xCFD550 with exact prepared arguments. 4 cold-global reads, 16 mode reads, 8 call-argument sets and 60 altered-contract rejections pass. Selected object/output remain unchanged; selected lock held, index-8 global lock released. NEXT E011EM follows CFD550/CFCC18 only to its next independently qualified dependency. Native rear runtime remains denied.
+
 ## 2026-10-04 E011EK joined stream-allocator return accepted
 
 E011EJ's qualified selected-stream state is now joined back into the retained E011EC 0xCC6078 frame. Four placement cases execute original 0xCC60A0..0xCC60D8, publish the selected stream to the outer result, retain exact object bytes, release the index-8 global resource at 0x16A3000 through original 0xCB7398, and return with exact ABI state to 0xCED150. The selected object's own logical lock remains held. Totals: 8 dependency reads, 24 exact stores and 220 altered-contract rejections.

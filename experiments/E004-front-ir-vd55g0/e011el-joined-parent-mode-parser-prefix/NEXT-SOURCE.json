@@ -1,0 +1,25 @@
+{
+  "experiment": "E011EM",
+  "goal": "Execute the original 0xCFA9BC -> 0xCFD550 wrapper path under E011EL-qualified arguments, follow its register reshaping into 0xCFCC18, and qualify the bounded wrapper/validation prefix through but not beyond the first deeper 0xCFCC98 -> 0xCFD410 call unless that callee's dependencies are independently established.",
+  "reuse": {
+    "stream_allocator_return": "E011EK",
+    "parent_mode_parser_prefix": "E011EL"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfa9bc",
+    "function_RVA": "0xcfa968",
+    "next_call_target_RVA": "0xcfd550",
+    "call_arguments_qualified": true
+  },
+  "parallel_dynamic_open": [
+    "true IRQ/interrupt retirement",
+    "exact DMA/IOMMU mapping lifetime/retirement",
+    "front hardware retirement path identification"
+  ],
+  "do_not_claim": [
+    "CFD550/CFCC18 deeper effects before execution qualification",
+    "native runtime value of 0x16A382C",
+    "native Linux rear runtime authorization"
+  ],
+  "native_rear_runtime_allowed": false
+}
