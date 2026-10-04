@@ -1,3 +1,9 @@
+## 2026-10-04 E011EM CFD550 / CFCC18 validation prefix accepted
+
+Original CFA9BC->CFD550 reshaping and the CFCC18 validation prefix now pass four retained placements. The result word is initialized to -1, CFCC18's local pair is zeroed, and the exact seven-argument CFD410 call state is qualified at CFCC98 without executing CFD410. Totals: 20 meaningful exact wrapper stores and 220 altered-contract rejections. Selected object/output remain unchanged; selected lock held, index-8 lock released.
+
+NEXT E011EN begins at CFCC98->CFD410 and stops at the first new dependency without source authority. Native rear runtime remains denied; IRQ/DMA/IOMMU and front retirement remain open.
+
 ## 2026-10-04 E011EL joined parent mode-parser prefix accepted
 
 Original 0xCED150 continuation now reaches 0xCFA968 with exact retained arguments and completes the source-pinned 0xCFA2E0 mode parser. Four cases return flags 0x100000000 / validity 1. The new 0x16A382C dependency is writable virtual-zero BSS with two direct reads and no direct writers; E011EL uses only a bounded cold-zero source model, never a native-runtime claim. The two-byte mode literal remains immutable, SHA-pinned and unexported.
