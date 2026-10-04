@@ -1,3 +1,20 @@
+## 2026-10-04 E011DW nested enumeration container / stack clear accepted
+
+Original callee 0x600368 creates a fresh 16-byte object, executes original nested constructor 0x5E81B8 and attaches its returned 64-byte header. Original source creates and clears an 8192-byte array with 1024 zero QWORD slots, then clears a 640-byte stack buffer. No constructed-record, clear or return result fixture substitutes for source execution.
+
+256 cases pass: 151,552 added original visits, 293,632 exact added stores and 26,624 altered owned requests rejected. All 256 nested constructor, 256 array-clear and 256 stack-clear ABI returns pass. Clear visits 122,624 and heap/stack clear chunks 262,144/20,480 are subsets. Inherited DV/DU/DT/DS visits remain separate; combined coverage is 895,232. The original entry-to-frontier memory/permissions snapshot remains exact.
+
+The 16/64/8192-byte leases join six older disjoint live allocations, giving nine. Source constructs exact header/array/owner relations; five header reads have exact contracts. The published 18,832-byte buffer, two-entry/32-slot callback table, epochs, earlier nodes, redzones, constructed container and clears remain retained. Both registry locks remain held, CRT/SRW released. Native allocation, loader/runtime scalar selection, failures/concurrency/teardown and committed stack bounds remain explicit models or open gates.
+
+Stop BEFORE 0x600420, next eight-byte read from 0x10F03A0. NEXT **E011DX** derives exact bounded constant-data authority and resumes the retained original callee. The outer callee return 0x5F8EA8 remains pending; enumeration, factory and first helper have not returned.
+
+E011DM remains the empty RS-query proof, E011DW the nested container proof, E011DV the cold buffer proof, E011DU the callback/epoch proof and E011DN the limited Windows snapshot. Full helper/descriptor registry initialization, selected profile/input deterministic startup, populated RS/AFD authority and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open before clean-colour front/rear/off acceptance. Native rear runtime remains denied.
+
+Zero Starts/reboots/kernel builds/production C/PM changes; Golden boot/payloads, EFI/GRUB and historical repositories unchanged. Fresh one-shot Windows oracle/external SP7 KD and tools remain authorized; use fresh atomic identity and keep originals/optical material private on SP11.
+
+See [E011DW nested enumeration container / stack clear](experiments/E004-front-ir-vd55g0/e011dw-original-nested-enumeration-container/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DV cold enumeration buffer allocation / publication accepted
 
 Under the declared virtual loader zero-fill scalar model, original enumeration requests fresh 18,832-byte storage, clears it through original source and publishes its pointer at 0x169FDF0 and reference count one at 0x169FDE8. No buffer/clear/publication result fixture substitutes for source execution.
