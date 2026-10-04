@@ -1,0 +1,22 @@
+{
+  "experiment": "E011ES",
+  "goal": "Execute original CB16C0 for the exact 76-byte request under the already accepted owned process-heap contract, then continue CB76B0 through its second conversion call only while allocation/output ownership and exact API semantics remain independently bounded.",
+  "reuse": {
+    "conversion_query_to_allocator_frontier": "E011ER",
+    "original_unicode_conversion": "E011CR",
+    "CRT_heap_authority": "E011CM",
+    "native_callback_cache_branch": "E011EP"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcb77d8",
+    "call_target_RVA": "0xcb16c0",
+    "requested_allocation_bytes": 76
+  },
+  "do_not_claim": [
+    "native Windows heap implementation",
+    "live locale/default-codepage policy",
+    "general allocation or conversion error paths",
+    "complete CB76B0 return until source-qualified"
+  ],
+  "native_rear_runtime_allowed": false
+}

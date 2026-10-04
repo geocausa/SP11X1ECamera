@@ -1,3 +1,9 @@
+## 2026-10-04 E011ER exact conversion query to allocator frontier accepted
+
+The exact E011EQ query is now closed for this specific source: 37 ASCII bytes plus NUL (38 bytes total). The bounded original Windows/NTDLL conversion machinery returns 38 UTF-16 characters with no result stub, giving an exact 76-byte allocation requirement. Four retained camera placements replay the joined chain through that return and stop immediately before original `0xCB16C0` executes.
+
+The accepted matrix rejects 612 altered contracts total. Selected object/output state remains unchanged, the selected logical lock remains held and the index-8 global lock remains released. No camera Start, reboot or kernel build was required. NEXT E011ES qualifies the exact 76-byte allocator path and only then advances to the second conversion/output phase. Native allocator internals, live default-codepage/locale policy, general error paths and native rear runtime remain unqualified/denied.
+
 ## 2026-10-04 E011EQ CB76B0 conversion-query prefix accepted
 
 The exact E011EP result-one state now enters original `0xCB76B0`. Its retained input is a 37-byte non-NUL ASCII source followed by NUL (38 bytes including terminator), so the original non-empty branch reaches `0xCB8D88`. The dispatch preserves exact query arguments: codepage selector 0, flags 9, input count -1, null output and capacity 0, then stops before the `MultiByteToWideChar` import at RVA `0xF7E2E8`. No OS query result is supplied or claimed.
