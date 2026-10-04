@@ -1,3 +1,18 @@
+## 2026-10-04 E011EE isolated original low-level I/O block publication accepted
+
+The low-level table pointer at 0x16A2A90 now has a source-qualified producer prefix in a third, isolated emulator. Original initializer 0xCC08E8 acquires its owned index-seven lock, takes the explicitly owned cold pointer-zero branch, and calls original constructor 0xCC05B8. The constructor requests 64 records of 72 bytes, initializes each record through checked source stores and owned resource successes, returns the 4,608-byte block with exact NONVOL/SP, and original 0xCC093C publishes it.
+
+256 cases pass: 738,304 added original visits, 169,728 exact ordered source-store chunks, 1,206,784 altered owned requests rejected, 33,280 exact dependency reads, 17,152 nested entries/ABI returns, 256 owned zeroed allocations and 16,640 owned API calls. Every complete E011ED row remains equal. Camera and isolated stream-initializer memory, permissions and frontiers remain unchanged; the new low-level initializer's entry-to-frontier memory/permissions and redzones match without resets. Forty-eight execution pins remain exact.
+
+All 64 record resources are logically ready in the owned model. Each source record has an eight-byte all-ones field at +40, zero at +48, checked four-byte value 0x0A0A0000 at +56, byte ten at +60 and zeros at +61..+66; the remaining bytes stay owned-allocation zero. This proves neither native critical-section bytes nor valid native handles. Allocation and API success are explicit provider inputs; original allocator internals and native CRT initialization remain unproved.
+
+Stop BEFORE 0xCC0948 reads four bytes from image+0x16A2E90, at lowIO-entrySP-96. NEXT **E011EF** establishes this runtime input before continuing the low-level initializer. The block constructor returned, but the low-level initializer has not returned and its logical lock stays held. Actual loader startup ordering and any joining of the three contexts remain unqualified. The stream initializer separately remains before 0xCB3338 / 0x16A2A90 at stream-entrySP-80; the camera separately remains before 0xCC6120 / 0x16A2A58 at outer-entrySP-1648.
+
+Camera output, nine allocations/redzones, published 18,832-byte zero buffer/refcount one, callbacks, epochs and both registry locks remain retained. Its source-chain count stays 1,237,760; aggregate 1,989,120 includes two isolated initializer matrices and is not a joined trace. Full initialization/state joining, file/provenance collection, full helper/descriptor/profile startup, native runtime/CRT resources, populated RS/AFD lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement still gate guarded clean-colour front/rear/off acceptance. Native rear runtime remains denied; rough ~70% smoke estimate unchanged.
+
+Zero new camera Starts/reboots/kernel builds/production C/PM changes. Golden payloads, EFI/GRUB and historical repositories unchanged. Originals and optical material stay private on SP11. See [E011EE isolated low-level I/O block publication](experiments/E004-front-ir-vd55g0/e011ee-original-isolated-lowio-block-publication/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011ED isolated original stream-table publication prefix accepted
 
 The runtime pointer at 0x16A2A58 has an original publisher: initializer 0xCB3260. Its prefix now executes in an isolated fresh emulator with explicit owned cold count/pointer inputs. Original source sets 512 slots, requests a 4,096-byte zeroed allocation, publishes the returned pointer, initializes the first logical standard-stream resource and writes image+0x1607060 into slot zero. The remaining 511 slots stay zero. Native allocation, CRT resource initialization and pointed stream contents remain unproved.
