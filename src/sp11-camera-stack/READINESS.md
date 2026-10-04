@@ -1,3 +1,9 @@
+## 2026-10-04 E011EO native-qualified selected field zero branch accepted
+
+A bounded native front reference after successful initialization and before Start qualified the E011EN selected first-pointer field: runtime flag 0x16A2A84=0, first pointer target RVA 0x1607180, selected field 0x160718C=0, independently confirmed by KD memory read. The same reference disproved broad file-static persistence for the second pointer/global aliases, so authority remains intentionally narrow. The exact native CFD46C instruction was not trapped and is not claimed.
+
+Original source now executes CFD46C and takes the zero/non-match branch to CFD498. Four placements reject 448 altered contracts total with selected object/output unchanged. NEXT E011EP is the CFD498->CB9F68 callback/cache helper and its first 0x1B60000 dependency. Four front-only Start/Stop references succeeded; one Windows round-trip returned to Golden Linux with boot order and Golden payload hashes unchanged. Rear native runtime remains denied; front retirement/IRQ/DMA/IOMMU gates remain open.
+
 ## 2026-10-04 E011EN joined CFD410 / CB6520 prefix accepted
 
 Original CFCC98->CFD410 now advances through its first dependency helper at CFD460->CB6520 under the inherited E011DY owned cold-start authority. Four retained placements qualify the exact helper return, 12 dependency reads, 36 exact local-store chunks and 428 altered-contract rejections. The selected object/output remain unchanged; selected lock held, index-8 lock released.
