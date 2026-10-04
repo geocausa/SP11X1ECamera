@@ -1,3 +1,18 @@
+## 2026-10-04 E011EC bounded stream setup / owned CRT lock accepted
+
+Original caller 0x600368 resumes with the completed formatter result and enters wrappers 0xCED2F0 / 0xCED0D8 / 0xCC6078 / 0xCC6108. The exact 37 private bytes plus 603 zeros remain intact. A pinned two-byte mode literal at 0x1363D40 qualifies the original first-byte nonempty gate; mode interpretation, stream selection and file contents remain open.
+
+256 cases pass: 13,824 added original visits, 4,608 exact ordered stack stores, 37,632 altered owned requests rejected, 256 immutable mode reads, 256 inherited loader-binding reads, 1,280 exact callee entries, 256 lock-wrapper ABI returns and 256 owned lock-model calls. No allocation runs. Complete E011EB rows remain equal; cumulative original-entry-to-frontier memory and permissions match without resets. Combined visits are 1,237,760, with ancestor counts separate.
+
+Original 0xCB7300 derives a critical-section request at 0x16A3000 using the inherited import binding. Its owned EnterCriticalSection model requires exact caller, argument, SP, readiness and initially unheld state; both OS-void X0 clobber cases preserve the wrapper's saved NONVOL/SP. The new stream lock model is held. Earlier publication CRT/SRW locks remain released. This does not prove native CRT resource initialization or synchronization.
+
+Stop BEFORE 0xCC6120 reads the runtime stream-table pointer at image+0x16A2A58 / eight bytes, current SP=outer-entrySP-1648. Four stream frames remain active with pending returns 0x600454 / 0xCED330 / 0xCED150 / 0xCC60A0. NEXT **E011ED** establishes this runtime dependency's authority before continuing. The enclosing 0x5F8EA8 return, enumeration, factory, helper and parent remain pending.
+
+Forty-four execution pins retain all nine allocations/redzones, published 18,832-byte zero buffer/refcount one, object/header/zero-array graph, callbacks, epochs and both registry locks. Native runtime scalar/pointer selection, native CRT resources, file/provenance collection, full helper/descriptor/profile startup, populated RS/AFD lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement still gate guarded clean-colour front/rear/off acceptance. Native rear runtime remains denied; rough ~70% smoke estimate unchanged.
+
+Zero new camera Starts/reboots/kernel builds/production C/PM changes. Golden payloads, EFI/GRUB and historical repositories unchanged. Originals and optical material stay private on SP11. See [E011EC bounded stream setup / owned CRT lock](../../experiments/E004-front-ir-vd55g0/e011ec-original-stream-setup-lock/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011EB complete selected formatter output / consumer returns accepted
 
 Original source completes the selected three-argument formatter with lengths 12 / 1 / 24, exact 37 private bytes, and original terminators at output indices 37 and 639. The retained 640-byte destination has 603 zero bytes after the output. All seven inherited consumer frames return to their actual callers with exact NONVOL including SP; their stack contexts and cookie scratch slots retire after proof. No output or result fixture is supplied or exported.
