@@ -1,3 +1,20 @@
+## 2026-10-04 E011DU existing-table registration / enumeration publication accepted
+
+Original source appends the second cleanup callback to the actual retained one-entry encoded exit table, using its existing 32-slot allocation without reallocation. Original enumeration guard publication advances its guard, global and actual TLS epoch to 80000042; the first-helper guard remains 80000041 and factory guard remains FFFFFFFF in-progress.
+
+256 cases pass: 45,056 added original visits, 9,472 exact added store chunks and 27,392 altered owned requests rejected. All 2,048 original registration/publication callee ABI returns and the single entry-to-frontier memory/permissions snapshot pass. Inherited E011DT adds 127,744 visits and E011DS 333,312, giving 506,112 combined visits; counts remain separated.
+
+Both registry locks and all five allocations remain owned and live. CRT/SRW are released; first callback, 30 unused slots, nodes, redzones, constructed container and prior clears remain exact. Readiness, native allocator construction and committed stack bounds remain explicit inherited models; native failures/concurrency/teardown remain open.
+
+Stop BEFORE 0x5F8E24, four-byte dependency read from 0x1731598. NEXT **E011DV** qualifies this enumeration dependency and its subsequent branch while retaining the two-entry table and actual published epoch. The enumeration, factory and first helper have not returned.
+
+E011DM remains the empty RS-query proof, E011DT the actual factory/enumeration bootstrap, E011DI the separate bootstrap proof and E011DN the limited Windows snapshot. Full helper/descriptor registry initialization, selected profile/input deterministic startup, populated RS/AFD authority and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open before clean-colour front/rear/off acceptance. Native rear runtime remains denied.
+
+Zero Starts/reboots/kernel builds/production C/PM changes; Golden boot/payloads, EFI/GRUB and historical repositories unchanged. Fresh one-shot Windows oracle/external SP7 KD and tools remain authorized; use fresh atomic identity and keep originals/optical material private on SP11.
+
+See [E011DU existing-table registration / enumeration publication](../experiments/E004-front-ir-vd55g0/e011du-original-existing-table-registration-publication/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DT actual-parent factory / enumeration bootstrap accepted
 
 The original factory and enumeration bootstrap now execute in the actual live first-helper parent. The helper's published negative TLS epoch is retained; two fresh 48-byte sentinel nodes remain distinct from its 24/128/256-byte ancestor allocations. Original source initializes 190 fields, clears a 1040-byte stack record and enters enumeration under declared committed-stack bounds.
