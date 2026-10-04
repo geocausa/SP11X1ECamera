@@ -1,3 +1,14 @@
+## 2026-10-04 E011EI source count + native Windows correlation accepted
+
+The camera count read at 0xCC6130 / 0x16A2A50 is now source-qualified and natively correlated at 512. Original arithmetic therefore bounds the next vector scan to slots 3..511 (509 slots), ending exactly at the 4096-byte vector boundary. The next source frontier is the slot-3 load at 0xCC6140.
+
+SP7 KDNET plus SP11 Windows CDB directly confirmed the same native stream vector/count on the real FrameServer start path. Rear OEM NV12 3840x2160 and front OEM NV12 1920x1080 both completed Start/Stop reference runs. The rear bounded ISP probe produced 81 monotonic FIFO generations, 81 matching completions and 161 WM16 consumption observations across 10 rotating addresses. IRQ retirement remains unqualified. The front run does not traverse the same rear FIFO/match probe path, so front hardware retirement remains separate.
+
+Raw native pointers, debugger logs, transport credentials and optical material remain private; committed evidence is derived and SHA-anchored only. SP11 returned to Golden Linux with BootNext consumed, saved GRUB entry unchanged and camera nodes idle.
+
+NEXT E011EJ starts at 0xCC6140 and qualifies the slot-3 null/allocation path and bounded stream-vector scan/return. IRQ/DMA/IOMMU retirement continues as a parallel dynamic gate. Native rear runtime remains denied.
+
+
 ## 2026-10-04 E011EH startup stream lifetime / camera pointer read accepted
 
 The process-attach stream vector is now source-qualified through the retained camera caller. 0xCB3260 publishes 0x16A2A58; the paired teardown 0xCB33A0 is the only source-qualified later clearer at 0xCB3400, while camera site 0xCC6120 is a pure read. Within successful attach to runtime camera use before detach, the startup vector remains live.
