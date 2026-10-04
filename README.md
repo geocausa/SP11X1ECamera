@@ -1,3 +1,9 @@
+## 2026-10-04 E011EQ CB76B0 conversion-query prefix accepted
+
+The exact E011EP result-one state now enters original `0xCB76B0`. Its retained input is a 37-byte non-NUL ASCII source followed by NUL (38 bytes including terminator), so the original non-empty branch reaches `0xCB8D88`. The dispatch preserves exact query arguments: codepage selector 0, flags 9, input count -1, null output and capacity 0, then stops before the `MultiByteToWideChar` import at RVA `0xF7E2E8`. No OS query result is supplied or claimed.
+
+Four retained placements pass with 544 altered-contract rejections total, selected object/output unchanged, selected logical lock held and index-8 lock released. NEXT E011ER extends the accepted E011CR original conversion contract to this exact 38-byte-including-NUL source before joining any result. No Start/reboot/build was required. Native rear remains denied; front retirement/IRQ/DMA/IOMMU remain open.
+
 ## 2026-10-04 E011EP native-qualified callback cache branch accepted
 
 A fresh front-only Windows reference closed the `0x1B60000` callback-cache dependency without promoting the whole callback table. After successful initialization and before Start, the required slot was already populated with the source-identified Windows file-API mode callback. External KD inspection of that loaded callback showed a process-local equality test, and the live FrameServer values were equal, qualifying an exact native return of one. The exact native `0xCB9F68` instruction itself was not trapped and is not claimed.

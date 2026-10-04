@@ -1,0 +1,22 @@
+{
+  "experiment": "E011ER",
+  "goal": "Extend the already accepted original Windows/NTDLL conversion contract to this exact 38-byte NUL-terminated ASCII source, qualify the MultiByteToWideChar query result under bounded owned OS semantics, then continue original CB76B0 only while allocator/output ownership remains exact.",
+  "reuse": {
+    "conversion_query_prefix": "E011EQ",
+    "original_unicode_conversion": "E011CR",
+    "native_callback_cache_branch": "E011EP"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcb8dd0",
+    "dependency_RVA": "0xf7e2e8",
+    "dependency_name": "MultiByteToWideChar",
+    "input_bytes_including_NUL": 38,
+    "input_sha256": "cf8019b95989baec9a5e624ee52c5fb9732f092a41c3f68eee04edbbb5bd0146"
+  },
+  "do_not_claim": [
+    "E011CR integrated 37-byte-including-NUL case is byte-identical to this 38-byte-including-NUL source; it is not",
+    "live default Windows codepage/locale selection",
+    "general conversion error paths"
+  ],
+  "native_rear_runtime_allowed": false
+}
