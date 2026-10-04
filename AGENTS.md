@@ -1,3 +1,9 @@
+## 2026-10-04 E011EK joined stream-allocator return accepted
+
+E011EJ's qualified selected-stream state is now joined back into the retained E011EC 0xCC6078 frame. Four placement cases execute original 0xCC60A0..0xCC60D8, publish the selected stream to the outer result, retain exact object bytes, release the index-8 global resource at 0x16A3000 through original 0xCB7398, and return with exact ABI state to 0xCED150. The selected object's own logical lock remains held. Totals: 8 dependency reads, 24 exact stores and 220 altered-contract rejections.
+
+Parent frames 0xCED0D8 and 0xCED2F0 remain live. NEXT E011EL resumes at 0xCED150 and qualifies the exact setup/call at 0xCED174 -> 0xCFA968 without assigning semantics prematurely. IRQ/DMA/IOMMU and front hardware retirement remain open; native rear runtime remains denied.
+
 ## 2026-10-04 E011EJ slot-3 stream object + native front correlation accepted
 
 The original slot-3 null path is now source-qualified under the inherited source CRT state: 4 placement cases, one exact 88-byte lazy stream object, slot-3 publication, checked +20/+24 fields, owned resource initialization/lock, complete 0xCC6108 return, 16 exact key stores and 20 altered-contract rejections. Allocation-failure and alternate source runtime-flag branches remain unqualified.
