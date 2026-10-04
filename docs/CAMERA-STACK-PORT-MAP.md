@@ -1,3 +1,18 @@
+## 2026-10-04 E011EB complete selected formatter output / consumer returns accepted
+
+Original source completes the selected three-argument formatter with lengths 12 / 1 / 24, exact 37 private bytes, and original terminators at output indices 37 and 639. The retained 640-byte destination has 603 zero bytes after the output. All seven inherited consumer frames return to their actual callers with exact NONVOL including SP; their stack contexts and cookie scratch slots retire after proof. No output or result fixture is supplied or exported.
+
+256 cases pass: 199,680 added original visits, 30,464 exact ordered store chunks, 221,952 altered owned requests rejected, 7,936 immutable reads, 4,096 ordinary callee ABI returns, 1,792 inherited consumer ABI returns, 512 cookie-push and 768 cookie-pop convention returns. All complete E011EA rows remain equal; cumulative original-entry-to-frontier memory and permissions match without resets. Combined visits are 1,223,936 with ancestor counts separate.
+
+Remaining literal authorities cover 0x10F03B0 / 16 bytes and aligned 0x13F1F20 / 48 bytes, with the second literal at offset eight. One sparse cell at 0xF8B230 and the 304-byte cold cleanup body at 0xCA8658 are pinned. Forty execution pins retain inherited runtime initial-value models. Signed write-hook values normalize to the exact unsigned word before comparison; original execution and effects remain unchanged. Cookie conventions remain SP-16 / SP+16, distinct from SP-preserving leaves or OS stack-growth proof.
+
+Stop BEFORE actual caller instruction 0x600440 inside 0x600368, SP=outer-entrySP-1456 and X0=37. No consumer frames remain active. NEXT **E011EC** continues this caller with the completed output and all ancestor ownership retained. The enclosing 0x5F8EA8 return, enumeration, factory, helper and parent remain pending.
+
+All nine allocations, redzones, published 18,832-byte zero buffer/refcount one, object/header/zero-array graph, callbacks, epochs and both registry locks remain exact. Native runtime scalar/pointer selection, pointed locale tables, full helper/descriptor/profile startup, populated RS/AFD identity/generation/lifetime and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement still gate clean-colour front/rear/off acceptance. Native rear runtime remains denied; guarded smoke remains pending and the rough ~70% estimate is unchanged.
+
+Zero new Starts/reboots/kernel builds/production C/PM changes; Golden payloads, EFI/GRUB and historical repositories unchanged. Originals and optical material stay private on SP11. See [E011EB complete selected formatter / consumer returns](../experiments/E004-front-ir-vd55g0/e011eb-original-complete-constant-consumer-return/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011EA original first argument length / copy accepted
 
 Original source now finds the first argument's NUL in an immutable 13-byte literal, reads its exact 16-byte window, and copies twelve private bytes into the retained 640-byte destination. The eight-byte store and four one-byte vector stores match independently pinned source bytes; the remaining 628 destination bytes remain zero. No string contents or length/copy result fixture is supplied or exported.
