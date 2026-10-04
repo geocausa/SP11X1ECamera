@@ -1,3 +1,20 @@
+## 2026-10-04 E011DT actual-parent factory / enumeration bootstrap accepted
+
+The original factory and enumeration bootstrap now execute in the actual live first-helper parent. The helper's published negative TLS epoch is retained; two fresh 48-byte sentinel nodes remain distinct from its 24/128/256-byte ancestor allocations. Original source initializes 190 fields, clears a 1040-byte stack record and enters enumeration under declared committed-stack bounds.
+
+256 cases pass: 127,744 added original visits and 102,656 added exact store chunks; 333,312 inherited E011DS visits give 461,056 combined visits. Added invalid-contract rejections are 15,104, separate from 43,264 inherited. All actual guard/probe/clear return checks and the single entry-to-frontier memory/permissions snapshot pass.
+
+Both registry locks remain held, SRW/CRT released. Factory and enumeration guards are FFFFFFFF in-progress; neither callee has returned or published its guard. OS/CRT/loader/allocator readiness and committed-stack bounds remain explicit models; native failures/guard-page growth/concurrency/teardown are open.
+
+Stop BEFORE 0x5F94A0 -> 0xCA34A0, actual return 0x5F94A4, callback 0xF7B5E0. Existing encoded exit table contains one callback in 32 slots. NEXT **E011DU** executes this new registration against that nonempty table, then enumeration guard publication and the next dependency. Reuse E011DR registration/publication source and E011DT retained ownership.
+
+E011DM remains the empty RS-query proof, E011DI the separate factory/enumeration proof and E011DN the limited Windows snapshot. Full helper/descriptor registry initialization, selected profile/input deterministic startup, populated RS/AFD authority and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open before clean-colour front/rear/off acceptance. Native rear runtime remains denied.
+
+Zero Starts/reboots/kernel builds/production C/PM changes; Golden boot/payloads, EFI/GRUB and historical repositories unchanged. Fresh one-shot Windows oracle/external SP7 KD and tools remain authorized; use fresh atomic identity and keep originals/optical material private on SP11.
+
+See [E011DT actual-parent factory / enumeration](../../experiments/E004-front-ir-vd55g0/e011dt-original-actual-factory-enumeration/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DS cached object / nested lock / large clear accepted
 
 The unchanged first helper caches inline object 0x17A4230 at 0x1731880, enters a distinct registry lock through original callbacks, writes bounded header fields and clears all 11,808 bytes at 0x17A4268 through original source. No cache/lock/clear result fixture is used.
