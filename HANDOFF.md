@@ -1,3 +1,20 @@
+## 2026-10-04 E011DS cached object / nested lock / large clear accepted
+
+The unchanged first helper caches inline object 0x17A4230 at 0x1731880, enters a distinct registry lock through original callbacks, writes bounded header fields and clears all 11,808 bytes at 0x17A4268 through original source. No cache/lock/clear result fixture is used.
+
+512 cases pass: 666,624 original visits, including 345,088 added visits; 301,568 added clear visits are a subset. The large clear contributes 756,736 write chunks, counted separately from 66,560 other nonstack and 49,152 stack chunks. All 86,528 altered owned contracts reject. Whole memory/permissions, source/unmodified loader regions, actual callee returns, padding and the adjacent constructed container remain exact.
+
+Runtime readiness, cold zero control cells and disabled tracing remain explicit models; buffer/padding poison are robustness fixtures. Native OS/CRT/allocator construction, failures/concurrency/teardown and full inline-object initialization remain open. Both registry locks are held; CRT/SRW locks are released.
+
+Stop BEFORE actual call 0x5B8268 -> 0x5BDE08, return 0x5B826C. NEXT **E011DT** integrates this factory callee with the actual live parent, published TLS epoch and existing allocation leases. Positive global-epoch edge cases are not native cold-factory readiness proof. E011DH/DI remain separate factory/enumeration acceptance; E011DM remains the empty RS-query proof.
+
+Full helper/descriptor registry initialization, selected profile/input deterministic startup and independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement still precede clean-colour front/rear/off acceptance. Native rear runtime remains denied.
+
+Zero Starts/reboots/kernel builds/production C/PM changes; Golden boot, payloads, EFI/GRUB and historical repositories unchanged. Fresh one-shot Windows oracle/external SP7 KD and missing tools remain authorized; use a fresh atomic identity and preserve private originals/optical material on SP11.
+
+See [E011DS cached object / lock / clear](experiments/E004-front-ir-vd55g0/e011ds-original-cached-object-nested-lock-clear/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DR original cleanup registration / guard publication accepted
 
 The unchanged cold caller registers cleanup callback 0xF7B120 and publishes the helper guard through original code, without registration/guard result fixtures. The encoded exit table contains one callback in 32 slots; global, helper and TLS thread epochs agree.

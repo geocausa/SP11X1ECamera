@@ -1,0 +1,47 @@
+{
+  "experiment": "E011DT",
+  "goal": "Integrate original factory callee with the actual live cold helper parent",
+  "resume_source_call_RVA": "0x5b8268",
+  "target_RVA": "0x5bde08",
+  "actual_caller_return_RVA": "0x5b826c",
+  "active_first_helper_RVA": "0x5b80a8",
+  "active_parent_RVA": "0x5de700",
+  "cached_pointer_RVA": "0x1731880",
+  "source_inline_object_RVA": "0x17a4230",
+  "clear_destination_RVA": "0x17a4268",
+  "clear_bytes": 11808,
+  "observed_pre_call_X0_RVA": "0x17a4268",
+  "pre_call_X0_is_required_factory_input_qualified": false,
+  "outer_and_nested_registry_locks_held": true,
+  "CRT_and_SRW_locks_released": true,
+  "helper_guard_and_TLS_epoch_published": true,
+  "ready_encoded_exit_table_used_entries": 1,
+  "ready_encoded_exit_table_capacity": 32,
+  "existing_owned_allocations": [
+    24,
+    128,
+    256
+  ],
+  "reuse": {
+    "factory_initialization": "E011DH",
+    "separate_factory_enumeration": "E011DI",
+    "registration_guard_publication": "E011DR",
+    "cached_object_nested_lock_clear": "E011DS",
+    "empty_RS_query": "E011DM"
+  },
+  "remaining_dependencies": [
+    "fresh factory guard uses the actual updated thread/global epoch; positive epoch edge cases do not prove native cold readiness",
+    "new factory allocation leases must not alias existing constructor/exit-table allocations",
+    "actual factory/enumeration callbacks and publication in this parent",
+    "full helper and metadata descriptor registry construction/publication",
+    "selected profile/input deterministic bootstrap, populated RS lifetime and normal AFD authority",
+    "independent IRQ/exact-buffer/generation/DMA/IOMMU retirement"
+  ],
+  "do_not_claim": [
+    "reaching the call executes the factory callee",
+    "cached object pointer proves full initialization/lifetime",
+    "buffer poison proves native allocation or hardware readiness",
+    "source clear or callback ABI proves runtime DMA retirement"
+  ],
+  "native_rear_runtime_allowed": false
+}
