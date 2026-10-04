@@ -1,3 +1,20 @@
+## 2026-10-04 E011DV cold enumeration buffer allocation / publication accepted
+
+Under the declared virtual loader zero-fill scalar model, original enumeration requests fresh 18,832-byte storage, clears it through original source and publishes its pointer at 0x169FDF0 and reference count one at 0x169FDE8. No buffer/clear/publication result fixture substitutes for source execution.
+
+256 cases pass: 237,568 added original visits, 603,136 exact added stores and 11,008 altered owned requests rejected. All 256 actual clear callee ABI returns and the single original entry-to-frontier memory/permissions snapshot pass. Clear visits 233,472 and chunks 602,624 are subsets. Inherited DU/DT/DS visits remain separate; combined coverage is 743,680.
+
+All six allocations remain disjoint and live. Both registry locks remain held; CRT/SRW are released. The two-entry/32-slot callback table, epochs, earlier nodes, redzones, constructed container and prior clears remain exact. Loader scalar selection, allocator success/storage, native resource construction and committed stack bounds remain explicit models. Alternate nonzero scalar branch, native failures/concurrency/teardown and native selection are unqualified.
+
+Stop BEFORE 0x5F8EA4 -> 0x600368, actual return 0x5F8EA8. NEXT **E011DW** integrates this original callee in the retained parent with the published buffer and six allocations. Its exact 1120-byte body metadata is pinned separately; no callee execution is accepted here. Enumeration, factory and first helper have not returned.
+
+E011DM remains the empty RS-query proof, E011DU the callback/epoch proof, E011DT the actual factory/enumeration bootstrap and E011DN the limited Windows snapshot. Full helper/descriptor registry initialization, selected profile/input deterministic startup, populated RS/AFD authority and independent IRQ/exact-buffer/generation/DMA/IOMMU retirement remain open before clean-colour front/rear/off acceptance. Native rear runtime remains denied.
+
+Zero Starts/reboots/kernel builds/production C/PM changes; Golden boot/payloads, EFI/GRUB and historical repositories unchanged. Fresh one-shot Windows oracle/external SP7 KD and tools remain authorized; use fresh atomic identity and keep originals/optical material private on SP11.
+
+See [E011DV cold enumeration buffer allocation / publication](../../experiments/E004-front-ir-vd55g0/e011dv-original-cold-enumeration-buffer/README.md). Earlier current/NEXT paragraphs below are historical.
+
+
 ## 2026-10-04 E011DU existing-table registration / enumeration publication accepted
 
 Original source appends the second cleanup callback to the actual retained one-entry encoded exit table, using its existing 32-slot allocation without reallocation. Original enumeration guard publication advances its guard, global and actual TLS epoch to 80000042; the first-helper guard remains 80000041 and factory guard remains FFFFFFFF in-progress.
