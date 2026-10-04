@@ -1,3 +1,9 @@
+## 2026-10-04 E011EP native-qualified callback cache branch accepted
+
+A fresh front-only Windows reference closed the `0x1B60000` callback-cache dependency without promoting the whole callback table. After successful initialization and before Start, the required slot was already populated with the source-identified Windows file-API mode callback. External KD inspection of that loaded callback showed a process-local equality test, and the live FrameServer values were equal, qualifying an exact native return of one. The exact native `0xCB9F68` instruction itself was not trapped and is not claimed.
+
+Four retained source cases execute original `0xCB9F68` on the populated-slot path, the inherited original CFG no-op check, and the native-qualified callback result-one branch. Each rejects 124 altered contracts (496 total), leaves selected object/output unchanged, keeps the selected logical lock held and index-8 lock released, then reaches `0xCFD4E4 -> 0xCB76B0` with exact mode argument `w3=0`. Three front-only Start/Stop references succeeded (449/448/43 valid handles), no rear Start occurred, and SP11 returned to Golden Linux with persistent boot state and Golden hashes unchanged. NEXT E011EQ qualifies `0xCB76B0`; front retirement/IRQ/DMA/IOMMU remain open and native rear runtime remains denied.
+
 ## 2026-10-04 E011EO native-qualified selected field zero branch accepted
 
 A bounded native front reference after successful initialization and before Start qualified the E011EN selected first-pointer field: runtime flag 0x16A2A84=0, first pointer target RVA 0x1607180, selected field 0x160718C=0, independently confirmed by KD memory read. The same reference disproved broad file-static persistence for the second pointer/global aliases, so authority remains intentionally narrow. The exact native CFD46C instruction was not trapped and is not claimed.
