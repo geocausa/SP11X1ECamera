@@ -1,0 +1,25 @@
+{
+  "experiment": "E011EO",
+  "goal": "Establish source-qualified authority and lifetime for the selected pointed object field read at 0xCFD46C -> 0x160718C. Execute that read and subsequent branch only if the original source path or bounded native reference supplies authority; otherwise stop and preserve the current frontier.",
+  "reuse": {
+    "joined_validation_prefix": "E011EM",
+    "joined_CFD410_CB6520_prefix": "E011EN",
+    "owned_runtime_initial_value_authority": "E011DY"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfd46c",
+    "dependency_RVA": "0x160718c",
+    "bytes": 4,
+    "dependency_read_executed": false
+  },
+  "parallel_dynamic_open": [
+    "true IRQ/interrupt retirement",
+    "exact DMA/IOMMU mapping lifetime/retirement",
+    "front hardware retirement path identification"
+  ],
+  "do_not_claim": [
+    "file-initial pointed bytes are unchanged at runtime without source/lifetime authority",
+    "owned cold-start models are native runtime measurements"
+  ],
+  "native_rear_runtime_allowed": false
+}

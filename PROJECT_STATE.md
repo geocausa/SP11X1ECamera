@@ -1,3 +1,9 @@
+## 2026-10-04 E011EN joined CFD410 / CB6520 prefix accepted
+
+Original CFCC98->CFD410 now advances through its first dependency helper at CFD460->CB6520 under the inherited E011DY owned cold-start authority. Four retained placements qualify the exact helper return, 12 dependency reads, 36 exact local-store chunks and 428 altered-contract rejections. The selected object/output remain unchanged; selected lock held, index-8 lock released.
+
+The new frontier is before CFD46C dereferences 0x160718C. File-initial bytes are not promoted to runtime authority, and the inherited cold flag/pointer model remains explicitly non-native. NEXT E011EO must establish source/lifetime authority for that pointed field before advancing. Native rear runtime remains denied; IRQ/DMA/IOMMU and front retirement remain open.
+
 ## 2026-10-04 E011EM CFD550 / CFCC18 validation prefix accepted
 
 Original CFA9BC->CFD550 reshaping and the CFCC18 validation prefix now pass four retained placements. The result word is initialized to -1, CFCC18's local pair is zeroed, and the exact seven-argument CFD410 call state is qualified at CFCC98 without executing CFD410. Totals: 20 meaningful exact wrapper stores and 220 altered-contract rejections. Selected object/output remain unchanged; selected lock held, index-8 lock released.
