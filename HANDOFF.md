@@ -1,3 +1,17 @@
+## 2026-10-04 E011DP cold literal bounds / first-helper guard prefix accepted
+
+The unchanged initializer writes uint32 literal bounds 239 and 282, enters first helper 0x5B80A8 and executes its original fresh TLS guard acquisition. No bound/helper/guard result fixture is used; loader TLS and OS lock readiness/operations remain explicit owned models.
+
+128 cases pass: 18,560 original visits, 384 exact nonstack field-store chunks, 4,992 stack-store chunks and 6,528 invalid owned contract rejections. Whole mapped memory/permissions, immutable source/loader regions, actual lock-callback and guard-return ABI pass. The helper body is pinned to 4,104 bytes but only its bounded prefix is accepted.
+
+The stop is BEFORE next dependency 0x2EE1A0, actual return 0x5B9094, pointer argument 0x17A7088 and scalar 65535. Parent/helper frames remain active, registry logical lock held, SRW released and helper guard in-progress. Full helper return, allocation/construction/publication and native OS resource construction remain open.
+
+NEXT **E011DQ** qualifies that unchanged construction dependency and complete first-helper/publication path. E011DM remains the original empty RS-query proof, E011DN the limited Windows ready snapshot, E011DI the separate factory/enumeration proof and E011DO the original initialized-registry reuse proof.
+
+Selected input/profile deterministic startup and independent enabled-output IRQ/exact-buffer/generation/DMA/IOMMU retirement precede clean-colour front/rear/off acceptance. Native rear runtime remains denied. Zero camera Starts/reboots/kernel builds/production C changes; Golden boot, payloads, EFI/GRUB and historical repositories unchanged.
+
+See [E011DP cold bounds / guard](experiments/E004-front-ir-vd55g0/e011dp-original-cold-bounds-helper-guard/README.md). Earlier current/NEXT paragraphs below are historical. PiMaster works; Windows oracle/external SP7 KD boots and missing tools are authorized. Originals and optical material stay private on SP11. Another oracle requires a fresh boot and atomic identity.
+
 ## 2026-10-04 E011DO original registry lock / initialized reuse accepted
 
 The unchanged initializer executes its original default EnterCriticalSection/LeaveCriticalSection callbacks and complete already-initialized branch under explicit owned OS/diagnostic contracts. No callback or parent result fixture is used.
