@@ -1,0 +1,15 @@
+# E011EJ: slot-3 stream object + native front existing-slot correlation
+
+Status: **PASS_BOUNDED_ORIGINAL_SLOT3_STREAM_OBJECT_AND_NATIVE_FRONT_EXISTING_SLOT_CORRELATION**.
+
+E011EI bounded the original scan to stream-vector slots 3..511. E011EJ now qualifies the original null-slot success path at slot 3 under the inherited source-owned CRT first-use state. Across four allocation placements, original 0xCC6108 allocates one 88-byte object, publishes it into slot 3, writes the checked fields (+20 = 0x2000 and +24 = 0xffffffff), initializes the owned resource at +48, acquires its logical lock and publishes the same stream pointer into the caller result record. The complete 0xCC6108 ABI return is exact. Sixteen key source-store chunks are exact and twenty altered site/address/width/value contracts are rejected. Only slot 3 changes in the 4096-byte stream vector.
+
+The source qualification deliberately uses the inherited E011CN source state where 0x1607B00 is 0x80000000. Allocation failure is not qualified: forcing the owned HeapAlloc result to zero enters the original CRT allocator retry/error machinery and reaches runtime dependencies not admitted by this checkpoint. Alternate source runtime-flag paths are also not claimed.
+
+A fresh SP11 Windows front reference was then observed with SP7 KDNET and ARM64 CDB. Native state differs usefully from the source-owned fixture: count remains 512, but 0x1607B00 is 0x80000001 and slot 3 is already non-null before Start. The real front start therefore takes the existing-object path, not E011EJ's lazy-null path. On the same start thread the slot-3 object is selected, its flag field is 0x2000 and +24 is 0xffffffff, the object is published into the caller result record, and 0xCC6108 returns to 0xCC60A0. The native flag's bit zero source-determines the LSE atomic helper branch; the LSE instruction itself was not directly breakpoint-observed, so that distinction is retained.
+
+Front StartAsync returned Success. This particular debugger-delayed run is not used as a frame-handle qualification because its STOP gate had already been created before StartAsync returned; E011EI separately retains the successful front Start/Stop reference with 102 valid-format handles. Raw native pointers, debugger logs, transport credentials and optical material remain private; only derived facts and SHA256 anchors are committed.
+
+SP11 returned normally to Golden Linux: kernel 7.1.5-sp11-render-parity-v4+, BootCurrent 0005, persistent BootOrder 0005,0004,0000,0001,0002,0006, saved GRUB entry sp11-audio-fullio-v19c, empty next_entry, camera nodes idle. No Linux camera Start, kernel build, production-C or PM change occurred. Native rear runtime remains denied.
+
+NEXT **E011EK** resumes the enclosing original 0xCC6078 at 0xCC60A0, qualifies result-record normalization, the index-8 global-lock release and the complete stream-allocator return, then continues the retained caller chain. IRQ/DMA/IOMMU and the distinct front hardware retirement path remain parallel dynamic gates.

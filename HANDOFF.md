@@ -1,3 +1,13 @@
+## 2026-10-04 E011EJ slot-3 stream object + native front correlation accepted
+
+The original slot-3 null path is now source-qualified under the inherited source CRT state: 4 placement cases, one exact 88-byte lazy stream object, slot-3 publication, checked +20/+24 fields, owned resource initialization/lock, complete 0xCC6108 return, 16 exact key stores and 20 altered-contract rejections. Allocation-failure and alternate source runtime-flag branches remain unqualified.
+
+Native Windows front evidence is intentionally separate. The real FrameServer has count 512, runtime flag 0x80000001 and slot 3 already populated before Start. The front start therefore selects/reuses that existing object, publishes it to the caller result and returns from 0xCC6108 to 0xCC60A0 on the same thread; it does not exercise the source lazy-null path. Front StartAsync succeeded, while frame-handle success for this debugger-delayed run is not claimed; E011EI's 102-handle front reference remains authoritative.
+
+Raw pointers/logs/credentials/optical material remain private and SHA-anchored. SP11 returned to Golden Linux (BootCurrent 0005, Linux-first BootOrder unchanged, saved sp11-audio-fullio-v19c, empty next_entry, camera idle).
+
+NEXT E011EK resumes original 0xCC6078 at 0xCC60A0 to qualify result normalization, index-8 lock release and complete stream-allocator return. IRQ/DMA/IOMMU and the distinct front hardware retirement path remain open. Native rear runtime remains denied.
+
 ## 2026-10-04 E011EI source count + native Windows correlation accepted
 
 The camera count read at 0xCC6130 / 0x16A2A50 is now source-qualified and natively correlated at 512. Original arithmetic therefore bounds the next vector scan to slots 3..511 (509 slots), ending exactly at the 4096-byte vector boundary. The next source frontier is the slot-3 load at 0xCC6140.
