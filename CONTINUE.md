@@ -1,3 +1,7 @@
+## 2026-10-05 E011FP formatter wrappers to `0x6BDD0` accepted
+
+E011FP executes the accepted `0x60043C -> 0x7AC38` formatter call and the original `0x7AC38 -> 0x7ACA0` wrapper chain, bounding all live wrapper stack writes. At untouched `0x7ACD8`, the exact `0x6BDD0` tuple is `x0=outer-SP-1392`, `x1=0x280`, `x2=-1`, `x3=base+0x1370760`, `x4=outer-SP-1496`; `0x6BDD0` itself is not executed. Four placements reject 2,004 current-path mutations plus 264 producer-API mutations. No new Start, reboot, kernel build or rear runtime was used. NEXT E011FQ qualifies `0x6BDD0` through its `0x6BE08 -> 0x6BD48` dependency boundary; native rear remains denied.
+
 ## 2026-10-05 E011FO second-iteration formatter arguments accepted
 
 E011FO executes original second-iteration setup through the untouched `0x60043C` call boundary and qualifies the exact `0x7AC38` helper arguments: `x0=outer-SP-1392`, `x1=0x280`, `x2=base+0x1370760`, `x3=base+0x1370780`, `x4=base+0x10F03B0`, `x5=base+0x13F1F28`, with `w26=1` and retained `x23=base+0x10F03B0`. Four placements stop before executing the helper and reject 1,940 current-path mutations plus 264 producer-API mutations. No new Start, reboot, kernel build or rear runtime was used. NEXT E011FP qualifies the `0x7AC38 -> 0x7ACA0` wrapper chain to its nested `0x6BDD0` dependency; native rear remains denied.
