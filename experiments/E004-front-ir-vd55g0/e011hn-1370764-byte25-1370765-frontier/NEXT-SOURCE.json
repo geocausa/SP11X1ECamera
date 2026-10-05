@@ -1,0 +1,36 @@
+{
+  "experiment": "E011HO",
+  "goal": "Source-qualify image byte RVA 0x1370765. Under exact E011HN state execute the signed read/update, advance the retained pointer to RVA 0x1370766, reuse the accepted byte-0x73 parser lookup chain (0xF8B2B7=8, 0xF8B2A2=7, signed dispatch 0xCA9908=+20), and stop at 0xCA9838 before the helper case executes.",
+  "reuse": {
+    "byte73_lookup": "E011HI/E011HJ/E011HK",
+    "current_state": "E011HN"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xca984c",
+    "dependency_RVA": "0x1370765",
+    "bytes": 1,
+    "signed": true,
+    "read_executed": false
+  },
+  "source_hint": {
+    "dependency_RVA": "0x1370765",
+    "expected_u8": 115,
+    "expected_s8": 115
+  },
+  "expected_helper_frontier": {
+    "pointer_after_RVA": "0x1370766",
+    "receiver_plus_0x39_u8": 115,
+    "receiver_plus_0x20_u32": 2,
+    "parser_state_after_u8": 7,
+    "dispatch_target_RVA": "0xca9838",
+    "target_executed": false
+  },
+  "do_not_claim": [
+    "0xca9838 helper execution before E011HP",
+    "receiver+0x658 vararg qword before source qualification",
+    "third formatter string contents",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

@@ -1,3 +1,7 @@
+## 2026-10-06 E011HN third `%` byte accepted through repeated case to 0x1370765 frontier
+
+E011HN source-qualifies RVA `0x1370764 = 0x25`, advances the retained pointer to `0x1370765`, reuses accepted table bytes `0xF8B21B = 1` / `0xF8B230 = 1` and signed dispatch `-52`, and executes the accepted `0xCA9718` case while receiver `+0x20` remains `2`. Execution stops before the next signed read at `0x1370765`. NEXT E011HO source-qualifies that byte and reuses the accepted `0x73` parser chain to stop at `0xCA9838` before helper execution. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HM backslash vararg accepted to 0x1370764 byte frontier
 
 E011HM joins the accepted formatter vararg layout to receiver `+0x650 = RVA 0x10F03B0`, source-qualifies the one-byte `0x5c` string, and executes the repeated helper through scan, one-byte copy, stream updates, cookie check and helper return. Stream pointer/count become receiver `+0x6b2` / `2`, receiver `+0x20 = 2`, and receiver `+0x6b1 = 0x5c`. Execution stops before `0xCA984C` reads source RVA `0x1370764`. NEXT E011HN source-qualifies that byte and reuses the accepted `%` parser/dispatch/case chain to the `0x1370765` read frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
