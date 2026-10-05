@@ -1,0 +1,24 @@
+{
+  "experiment": "E011FH",
+  "goal": "Execute original 0xCED194 zero-result propagation through the 0xCED110 epilogue and qualify the complete enclosing 0xCED0D8 return only to its exact caller, preserving the E011FG released selected-lock state and retired-owner protections.",
+  "reuse": {
+    "selected_lock_release": "E011FG",
+    "selected_cleanup": "E011FF",
+    "retired_76byte_owner": "E011FA-E011FG"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xced194",
+    "epilogue_RVA": "0xced110",
+    "incoming_result_u64": 0,
+    "selected_object_lock_released": true,
+    "selected_object_claim_u32": 0
+  },
+  "do_not_claim": [
+    "complete enclosing return before exact return-link qualification",
+    "any reacquisition or use of the released selected-object lock",
+    "native mutex bytes or concurrency semantics",
+    "any use of the released 76-byte owner",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
