@@ -1,0 +1,23 @@
+{
+  "experiment": "E011FJ",
+  "goal": "Execute the outer 0xCAECF8 invocation under the rejoined same-thread authority, qualify the returned current-thread CRT-error pointer and the original 32-bit load at 0xCED33C as value 2, then continue through the CED2F0 error epilogue only while its saved return/stack ownership remains exact.",
+  "reuse": {
+    "CED330_store_zero_branch": "E011FI",
+    "current_thread_error_authority": "E011EY/E011EZ",
+    "complete_CED0D8_zero_return": "E011FH"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcaecf8",
+    "return_target_RVA": "0xced33c",
+    "SP_relative_outer_entry": -1488,
+    "expected_CRT_error_u32": 2,
+    "outer_result_value_u64": 0
+  },
+  "do_not_claim": [
+    "complete CED2F0 return before exact source qualification",
+    "any use of the released selected-object lock or 76-byte owner",
+    "new outer CAECF8 return before original source execution",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
