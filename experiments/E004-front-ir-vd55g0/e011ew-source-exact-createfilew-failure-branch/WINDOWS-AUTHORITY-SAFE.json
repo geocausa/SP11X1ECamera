@@ -1,0 +1,37 @@
+{
+  "experiment": "E011EW",
+  "status": "WINDOWS_REFERENCE_COMPLETE_PENDING_SOURCE_REPLAY",
+  "authority_file_sha256_on_windows": "e2f5dd0d0d9a34e7e08ace02dc292c3f077fcb8f255b96d7f3ceaa0b6a38fa85",
+  "native_front_reference": {
+    "successful_start_stop_identity": "E011EW-20261005-0012B",
+    "valid_4k_handles": 432,
+    "total_front_starts_in_experiment": 3,
+    "rear_starts": 0
+  },
+  "source_exact_CreateFileW": {
+    "path": "C:\\data\\test\\camxoverridesettings.txt",
+    "desired_access": "0x80000000",
+    "share_mode": 1,
+    "creation_disposition": 3,
+    "flags_attributes": 128,
+    "security_attributes_length": 24,
+    "security_descriptor_null": true,
+    "inherit_handle": true,
+    "template_handle_null": true
+  },
+  "same_boot_filesystem": {"file_exists": false, "parent_directory_exists": false},
+  "same_boot_exact_OS_contract": {
+    "invalid_handle": true,
+    "handle_signed": -1,
+    "last_error": 3,
+    "last_error_name": "ERROR_PATH_NOT_FOUND"
+  },
+  "live_debug_notes": {
+    "exact_source_callsite_breakpoint_observed": false,
+    "FrameServer_rehosted_across_MediaCapture_Initialize": true,
+    "source_call_compares_CreateFileW_return_against_INVALID_HANDLE_VALUE": true
+  },
+  "qualification_boundary": "Source-exact CreateFileW failure branch is qualified by E011EV exact arguments plus same-boot path absence and same-boot exact Win32 API contract; no claim that an instruction breakpoint observed the camera call return.",
+  "returned_to_Golden_Linux": true,
+  "native_rear_runtime_allowed": false
+}

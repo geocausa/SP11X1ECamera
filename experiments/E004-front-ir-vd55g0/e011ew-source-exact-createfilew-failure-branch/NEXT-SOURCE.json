@@ -1,0 +1,22 @@
+{
+  "experiment": "E011EX",
+  "goal": "Execute the exact GetLastError dependency for the source-qualified CreateFileW failure, require ERROR_PATH_NOT_FOUND (3) under the accepted same-boot Win32 contract, then continue original CFD570 only while lowIO cleanup and error propagation remain exact.",
+  "reuse": {
+    "CreateFileW_failure_branch": "E011EW",
+    "joined_file_open_frontier": "E011EV",
+    "startup_lowIO_lifetime": "E011EU"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfd6fc",
+    "dependency_RVA": "0xf7e468",
+    "dependency_name": "GetLastError",
+    "expected_authority_value": 3
+  },
+  "do_not_claim": [
+    "an instruction breakpoint observed the actual camera CreateFileW return",
+    "general filesystem absence beyond the exact same-boot path",
+    "complete CFD570 return before qualified",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
