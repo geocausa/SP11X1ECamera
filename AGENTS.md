@@ -1,3 +1,7 @@
+## 2026-10-05 E011FY `CA6280` entry accepted to cookie-producer frontier
+
+E011FY executes the exact `0xCAD93C -> 0xCA6280` call and five original `CA6280` prologue instructions across four placements. The helper creates its exact 48-byte frame, saves the current nonvolatile tuple, sets the frame pointer, and preserves the E011FX call arguments. Execution stops before `0xCA6294 -> 0x11D0`; `0x11D0` is the image security-cookie producer and is not executed or assigned a live cookie value here. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011FZ qualifies the current cookie-producer contract before resuming `CA6280`; native rear remains denied.
+
 ## 2026-10-05 E011FX native `0x16072D8` pair accepted to `CA6280` frontier
 
 E011FX joins bounded same-boot SP7 KDNET front-only authority for the current 16-byte `0x16072D8` pair. Qword0 remains image-relative to RVA `0x1607180`; qword1 is stable, nonzero, and not image-relative, and its absolute Windows value stays private. The older file-initial qword1 RVA `0x1607650` is rejected as current native authority. Four source-exact placements execute original `0xCAD8C8..0xCAD938`, copy the pair to `SP+0x28`, store owner flag `1` at `SP+0x38`, and reach exact `0xCAD93C -> 0xCA6280` args; `CA6280` is not executed. One front Start and two Windows oracle excursions occurred since FW base (the second reconstruction-only), no rear Start/kernel build, Golden restored. NEXT E011FY executes CA6280 only to the first new qualified dependency/effect; native rear remains denied.
