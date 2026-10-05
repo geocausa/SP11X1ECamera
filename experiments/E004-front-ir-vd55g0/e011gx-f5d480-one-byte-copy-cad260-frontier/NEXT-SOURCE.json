@@ -1,0 +1,39 @@
+{
+  "experiment": "E011GY",
+  "goal": "Resume at 0xCAD260 under the exact E011GX state. Execute only the source-owned stream-object pointer and count updates: advance object qword0 from receiver+0x6b0 to receiver+0x6b1 and object +0x10 from 0 to 1. Execute the slot reload at 0xCAD280 and stop before 0xCAD284 reads the unqualified object +0x18 flag byte at receiver-relative -0x8.",
+  "reuse": {
+    "stream_object_authority": "E011GW",
+    "copy_result": "E011GX"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xcad260",
+    "object_receiver_relative": "-0x20",
+    "qword0_before_receiver_relative": "0x6b0",
+    "count_before_u64": 0,
+    "increment_u64": 1
+  },
+  "expected_mutations": {
+    "pointer_store_RVA": "0xcad26c",
+    "qword0_after_receiver_relative": "0x6b1",
+    "count_store_RVA": "0xcad27c",
+    "count_after_u64": 1
+  },
+  "next_dependency": {
+    "slot_reload_RVA": "0xcad280",
+    "flag_read_RVA": "0xcad284",
+    "flag_receiver_relative": "-0x8",
+    "flag_bytes": 1,
+    "flag_read_executed": false
+  },
+  "do_not_claim": [
+    "object flag byte value before exact qualification",
+    "branch at 0xcad288",
+    "complete CAD1F0 return",
+    "complete CAB178 helper return",
+    "branch at 0xca9844",
+    "next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

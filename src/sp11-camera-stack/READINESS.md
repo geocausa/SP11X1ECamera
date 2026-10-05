@@ -1,3 +1,7 @@
+## 2026-10-06 E011GX source-qualified one-byte copy accepted to stream-update frontier
+
+E011GX executes `0xCAD25C -> 0xF5D480` using E011GR source authority for RVA `0x1370780 = 0x2e`. The original helper copies exactly one byte to receiver `+0x6b0` and returns to `0xCAD260`; no stream object pointer/count update has executed yet. NEXT E011GY advances the qualified pointer and count by one, reloads the object at `0xCAD280`, and stops before the unqualified object `+0x18` byte read at `0xCAD284` (receiver `-0x8`). No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011GW stream-object fields accepted to one-byte copy frontier
 
 E011GW reuses accepted E011FZ final-frame authority to qualify the stream object at receiver `-0x20`: qword0 selects receiver `+0x6b0`, while object `+0x8 = 640` and `+0x10 = 0`. Original `0xCAD21C` takes the unequal branch, selects copy length `1`, and stops before `0xCAD25C -> 0xF5D480` with source RVA `0x1370780`. NEXT E011GX reuses E011GR's `0x2e` source-byte authority, executes the one-byte copy, and stops at `0xCAD260` before stream pointer/count updates. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
