@@ -1,0 +1,23 @@
+{
+  "experiment": "E011FN",
+  "goal": "Execute original 0x6006D4 from the E011FM branch frontier, qualify the retained loop-counter decrement and 0x6006D8 CBNZ loop-back to 0x600418, then enter the second iteration only while the counter and post-indexed x23 progression remain exact.",
+  "reuse": {
+    "native_1608858_one_and_nonzero_branch": "E011FM",
+    "native_zero_160a218_and_bit16_fallthrough": "E011FL"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0x6006d4",
+    "next_branch_RVA": "0x6006d8",
+    "candidate_loop_target_RVA": "0x600418",
+    "loop_counter_source_init_RVA": "0x600404",
+    "loop_counter_source_initial_u32": 2
+  },
+  "do_not_claim": [
+    "the 0x6006D8 branch direction before the current counter value is replay-qualified",
+    "second-iteration x23/post-index state before original 0x600420 executes",
+    "second-iteration CED2F0 result or any later cleanup",
+    "an exact 0x600474 native instruction breakpoint hit",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
