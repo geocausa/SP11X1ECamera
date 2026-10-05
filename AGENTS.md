@@ -1,3 +1,7 @@
+## 2026-10-05 E011GS CACDF8 return accepted to CAB288 helper-local write frontier
+
+E011GS stores scan result `1` at receiver `+0x48`, completes `0xCACDF8`, returns to `0xCAB1F8`, and qualifies the common continuation through receiver `+0x38 = 0` and `+0x28` low word `0`. It stops at `0xCAB288` before the first `x22` write. `x22` is source-owned helper-local SP from `0xCAB19C`, with local qword0 sentinel `-2`. NEXT E011GT executes the deterministic local-format path to `0xCAB3EC -> 0xCAD1F0`, with E011GA supplying receiver `+0x8` as receiver-relative `+0x4c0`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GR source-backed F5E3E0 scan accepted to CACE94 store frontier
 
 E011GR source-qualifies the first 16-byte block at RVA `0x1370780` (leading byte `0x2e`, first zero at offset `1`) and executes `0xCACE90 -> 0xF5E3E0`; the original scan returns exact length `1`. Execution stops at `0xCACE94` before receiver `+0x48` is written. NEXT E011GS executes the store and `0xCACDF8` return path to the common helper continuation, stopping before the first `x22` write at `0xCAB288`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

@@ -1,0 +1,35 @@
+{
+  "experiment": "E011GT",
+  "goal": "Execute the original helper-local writes and deterministic formatting path from 0xCAB288 through 0xCAB3E8 under the exact E011GS receiver state, qualify the receiver +0x8 pointer from E011GA as receiver-relative +0x4c0, and stop before the call at 0xCAB3EC to 0xCAD1F0.",
+  "reuse": {
+    "helper_local_x22": "E011GS",
+    "receiver_qword1": "E011GA",
+    "receiver_fields": "E011GF/E011GP"
+  },
+  "current_camera_frontier": {
+    "next_RVA": "0xcab288",
+    "x22_is_helper_local_SP": true,
+    "x22_write_offset": "0x8",
+    "write_executed": false
+  },
+  "expected_call_frontier": {
+    "call_RVA": "0xcab3ec",
+    "target_RVA": "0xcad1f0",
+    "x0_receiver_relative": "0x460",
+    "x1_helper_local_relative": "0x8",
+    "x2_u64": 0,
+    "x3_receiver_relative": "0x20",
+    "x4_receiver_relative": "0x4c0",
+    "call_executed": false
+  },
+  "do_not_claim": [
+    "CAD1F0 execution before its input dependencies are qualified",
+    "any downstream writes through the CAD1F0 arguments",
+    "complete CAB178 helper return",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
