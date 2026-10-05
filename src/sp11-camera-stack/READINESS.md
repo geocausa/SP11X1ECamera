@@ -1,3 +1,7 @@
+## 2026-10-06 E011HP third vararg copied to 0x1370766 byte frontier
+
+E011HP source-qualifies receiver `+0x658 = RVA 0x13F1F28` and its 24-byte NUL-terminated source block, then executes the repeated helper through scan/copy/stream updates and cookie return. Stream pointer/count become receiver `+0x6ca` / `26`, receiver `+0x20 = 26`, and the retained source pointer is `0x1370766`. Execution stops before the signed byte read. NEXT E011HQ source-qualifies the zero byte and stops before receiver `+0x468` is read. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HO byte 0x73 accepted to third helper frontier
 
 E011HO source-qualifies RVA `0x1370765 = 0x73`, advances the retained pointer to `0x1370766`, and reuses accepted parser-table bytes `8`/`7` plus signed dispatch `+20` to stop at `0xCA9838` before helper execution. Receiver `+0x20` remains `2`, parser state is `7`. NEXT E011HP source-qualifies receiver `+0x658 = RVA 0x13F1F28` and its 24-byte string, then carries the helper through copy/return to the `0x1370766` read frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

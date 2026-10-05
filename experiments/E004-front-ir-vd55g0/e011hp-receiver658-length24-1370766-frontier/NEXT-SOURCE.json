@@ -1,0 +1,36 @@
+{
+  "experiment": "E011HQ",
+  "goal": "Source-qualify image byte RVA 0x1370766 as zero. Under exact E011HP state execute 0xCA984C..0xCA9868: perform the signed zero-byte read, advance/store the retained pointer to 0x1370767, store receiver +0x39 = 0, qualify the nonzero branch at 0xCA9858 as not taken, qualify parser state 7 through the state checks, and stop before 0xCA986C reads receiver +0x468.",
+  "current_camera_frontier": {
+    "read_RVA": "0xca984c",
+    "dependency_RVA": "0x1370766",
+    "bytes": 1,
+    "signed": true,
+    "read_executed": false
+  },
+  "source_hint": {
+    "dependency_RVA": "0x1370766",
+    "expected_u8": 0,
+    "expected_s8": 0
+  },
+  "expected_frontier": {
+    "pointer_after_RVA": "0x1370767",
+    "receiver_plus_0x39_u8": 0,
+    "nonzero_branch_RVA": "0xca9858",
+    "nonzero_branch_taken": false,
+    "parser_state_u8": 7,
+    "state_reject_branch_RVA": "0xca9868",
+    "state_reject_branch_taken": false,
+    "next_read_RVA": "0xca986c",
+    "next_read_receiver_relative": "0x468",
+    "next_read_executed": false
+  },
+  "do_not_claim": [
+    "receiver+0x468 value before E011HR source qualification",
+    "loop counter result/branch at 0xca987c",
+    "CA94E8 return",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
