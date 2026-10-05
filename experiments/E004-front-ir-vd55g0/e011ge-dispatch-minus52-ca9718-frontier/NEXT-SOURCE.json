@@ -1,0 +1,34 @@
+{
+  "experiment": "E011GF",
+  "goal": "Execute the selected original parser case at 0xCA9718 under the exact E011GE receiver state, qualify its owned receiver mutations and branch to common resume 0xCA9848, qualify the retained source pointer as 0x1370761, and stop before the signed one-byte read at 0xCA984C from 0x1370761.",
+  "reuse": {
+    "dispatch_target": "E011GE",
+    "retained_source_pointer_after_first_byte": "E011GB",
+    "receiver_ownership": "E011GA"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xca9718",
+    "selected_case_executed": false,
+    "case_expected_last_RVA": "0xca9728",
+    "common_resume_RVA": "0xca9848",
+    "next_dependency_source_RVA": "0xca984c",
+    "next_dependency_read_RVA": "0x1370761",
+    "next_dependency_bytes": 1,
+    "next_dependency_signed": true,
+    "next_dependency_read_executed": false
+  },
+  "owned_mutations_to_qualify": {
+    "receiver_plus_0x38": "u8_zero",
+    "receiver_plus_0x28": "u64_zero",
+    "receiver_plus_0x30": "u64_0xffffffff",
+    "receiver_plus_0x4c": "u8_zero"
+  },
+  "do_not_claim": [
+    "the source byte at 0x1370761 before exact source qualification",
+    "downstream parser state or complete parser iteration",
+    "CA94E8 return",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

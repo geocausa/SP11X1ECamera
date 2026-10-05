@@ -1,3 +1,7 @@
+## 2026-10-05 E011GE signed parser dispatch accepted to selected-case frontier
+
+E011GE qualifies the pinned signed jump-table entry at RVA `0xCA98F0` as `-52`. Four source-exact placements execute original `0xCA95F4..0xCA9600`, selecting case entry `0xCA9718` while deliberately stopping before the selected case body. Static source shape shows that case rejoins at `0xCA9848`; NEXT E011GF will qualify its owned receiver mutations and stop before the next signed source-byte read at `0xCA984C -> 0x1370761`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GD second parser-table byte accepted to dispatch frontier
 
 E011GD qualifies the pinned `.rdata` byte at RVA `0xF8B222` as `1`. Four source-exact placements execute the second table read, store parser state `1`, pass the current range checks, and form the parser jump-table base `0xCA98EC` with index `1`. Execution stops before the signed 4-byte dispatch entry read at `0xCA95F4 -> 0xCA98F0`; no dispatch target or selected case is claimed. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011GE qualifies that exact jump-table entry; native rear remains denied.
