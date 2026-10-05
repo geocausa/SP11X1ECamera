@@ -1,0 +1,38 @@
+{
+  "experiment": "E011HA",
+  "goal": "Source-qualify receiver +0x20 as u32 zero from the accepted E011FZ CA6280 setup (`0xCA6318: str wzr,[sp,#0x40]`, where the later receiver is `sp+0x20`). Under exact E011GZ state, execute 0xCAD294..0xCAD29C, qualify the read/one-byte-count addition and store receiver +0x20 = 1, and stop before the CAD1F0 epilogue at 0xCAD2A0.",
+  "reuse": {
+    "consumer_state": "E011GZ",
+    "receiver_source": "accepted E011FZ CA6318 setup",
+    "increment_u64": "E011GW selected copy bytes = 1"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xcad294",
+    "receiver_relative": "0x20",
+    "bytes": 4,
+    "read_executed": false
+  },
+  "source_hint": {
+    "producer_RVA": "0xca6318",
+    "producer_shape": "str wzr,[sp,#0x40]",
+    "receiver_from_SP_relative": "0x20",
+    "expected_u32": 0
+  },
+  "expected_store_frontier": {
+    "add_RVA": "0xcad298",
+    "store_RVA": "0xcad29c",
+    "receiver_relative": "0x20",
+    "expected_after_u32": 1,
+    "next_RVA": "0xcad2a0"
+  },
+  "do_not_claim": [
+    "CAD1F0 epilogue or return before E011HB",
+    "parent resume at 0xcab590",
+    "complete CAB178 helper return",
+    "branch at 0xca9844",
+    "next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
