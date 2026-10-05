@@ -1,0 +1,35 @@
+{
+  "experiment": "E011HE",
+  "goal": "Source-qualify the exact image byte at RVA 0x1370762. Under exact E011HD state execute 0xCA984C..0xCA9858: perform the signed byte read, advance/store the retained source pointer to 0x1370763, update receiver +0x39, qualify the nonzero branch, and stop at its selected target before executing it.",
+  "current_camera_frontier": {
+    "read_RVA": "0xca984c",
+    "dependency_RVA": "0x1370762",
+    "bytes": 1,
+    "signed": true,
+    "read_executed": false
+  },
+  "source_hint": {
+    "dependency_RVA": "0x1370762",
+    "expected_u8": 37,
+    "expected_s8": 37
+  },
+  "expected_path": {
+    "pointer_store_RVA": "0xca9850",
+    "pointer_after_RVA": "0x1370763",
+    "receiver_byte_store_RVA": "0xca9854",
+    "receiver_plus_0x39_u8": 37,
+    "branch_RVA": "0xca9858",
+    "nonzero_branch_taken": true,
+    "target_RVA": "0xca9590",
+    "target_executed": false
+  },
+  "do_not_claim": [
+    "0xca9590 execution before next checkpoint",
+    "downstream parser-table lookup/state",
+    "complete parser iteration",
+    "CA94E8 return",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
