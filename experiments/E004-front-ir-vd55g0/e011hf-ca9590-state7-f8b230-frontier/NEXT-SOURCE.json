@@ -1,0 +1,35 @@
+{
+  "experiment": "E011HG",
+  "goal": "Source-qualify the byte at RVA 0xF8B230 under the exact E011HF state. Execute the original second lookup at 0xCA95D8, parser-state store and checks, then reuse the accepted signed dispatch entry at 0xCA98F0 = -52 to execute 0xCA95F4..0xCA9600 and stop at selected target 0xCA9718 before its case body executes.",
+  "reuse": {
+    "second_lookup_state": "E011HF",
+    "dispatch_entry": "E011GE"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xca95d8",
+    "dependency_RVA": "0xf8b230",
+    "bytes": 1,
+    "read_executed": false
+  },
+  "source_hint": {
+    "dependency_RVA": "0xf8b230",
+    "expected_u8": 1
+  },
+  "expected_dispatch": {
+    "parser_state_after_u8": 1,
+    "dispatch_base_RVA": "0xca98ec",
+    "dispatch_entry_RVA": "0xca98f0",
+    "dispatch_entry_s32": -52,
+    "dispatch_branch_RVA": "0xca9600",
+    "selected_target_RVA": "0xca9718",
+    "selected_target_executed": false
+  },
+  "do_not_claim": [
+    "0xca9718 case-body execution before E011HH",
+    "mutations from the selected case",
+    "next source read",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

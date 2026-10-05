@@ -1,3 +1,7 @@
+## 2026-10-06 E011HF state-7 first parser lookup accepted to F8B230 frontier
+
+E011HF executes the `0xCA9590` loop under source byte `0x25`, receiver `+0x20 = 1`, and parser state `7`. Reusing accepted first-table RVA `0xF8B21B = 1`, the exact second lookup resolves to RVA `0xF8B230`; execution stops before `0xCA95D8` reads it. NEXT E011HG source-qualifies that byte and reuses the accepted signed `-52` dispatch entry to stop at `0xCA9718` before the case body. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HE 0x1370762 byte 0x25 accepted to CA9590 loop frontier
 
 E011HE source-qualifies RVA `0x1370762 = 0x25`, executes the signed read, advances the retained pointer to `0x1370763`, stores byte `37` to receiver `+0x39`, and takes the nonzero branch to `0xCA9590` without executing the target. NEXT E011HF reuses the accepted first table byte at `0xF8B21B = 1`, executes the first lookup under parser state `7`, and stops before the derived second-table read at RVA `0xF8B230`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
