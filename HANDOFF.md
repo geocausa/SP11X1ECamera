@@ -1,3 +1,7 @@
+## 2026-10-05 E011FR `0x6BD48` to `0xEDD0` frontier accepted
+
+E011FR executes the accepted `0x6BE08 -> 0x6BD48` call with the current formatter tuple. Original `0x6BD48` enters at outer-SP-1696, allocates its 80-byte frame to outer-SP-1776, and performs eight exact 8-byte local-save chunks (saved frame/return pair plus six arguments). Four placements reach untouched `0x6BD6C -> 0xEDD0` and stop before the dependency, rejecting 2,184 current-path mutations plus 264 producer-API mutations. No new Start, reboot, kernel build or rear runtime was used. NEXT E011FS executes the source-pinned `0xEDD0` leaf under this current frame and qualifies its exact return/result at `0x6BD70`; native rear remains denied.
+
 ## 2026-10-05 E011FQ `0x6BDD0` to `0x6BD48` frontier accepted
 
 E011FQ executes the accepted `0x7ACD8 -> 0x6BDD0` dependency and qualifies the exact local argument reshape through untouched `0x6BE08 -> 0x6BD48`: `x0=outer-SP-1392`, `x1=0x280`, `x2=-1`, `x3=base+0x1370760`, `x4=0`, `x5=outer-SP-1496`. `0x6BD48` itself remains unexecuted. Four placements reject 2,040 current-path mutations plus 264 producer-API mutations. No new Start, reboot, kernel build or rear runtime was used. NEXT E011FR enters `0x6BD48` only to its first `0x6BD6C -> 0xEDD0` dependency; native rear remains denied.
