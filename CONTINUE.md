@@ -1,3 +1,7 @@
+## 2026-10-05 E011GP CACE28 source qword accepted to CA65A8 call frontier
+
+E011GP closes receiver-relative `+0x648` from existing source authority: E011FO supplies formatter `x3 = RVA 0x1370780`, and the original formatter wrappers preserve that `x3` in the exact slot propagated into the receiver pointer. Four source-exact placements execute `0xCACE28..0xCACE44`, retaining RVA `0x1370780` in receiver `+0x40` and qualifying the `0xCACE48 -> 0xCA65A8` call state as `x0=36`, `w1=115`, `w2=0`, with `w21=0x7fffffff`; the call is not executed. NEXT E011GQ executes that leaf and stops before the downstream `0xCACE90 -> 0xF5E3E0` call. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GO CACDF8 receiver pointer accepted to CACE28 dereference frontier
 
 E011GO derives receiver `+0x18` as receiver-relative `+0x648` from accepted E011FX/E011FZ placement authority and executes helper `0xCACDF8` through its frame/pointer update. The pointer is already aligned, advances to receiver-relative `+0x650`, and execution stops before the 8-byte read at `0xCACE28` from the original `+0x648` location. That qword remains unclaimed; NEXT E011GP must source- or native-qualify it before executing to the `0xCACE48 -> 0xCA65A8` call frontier. The parser source pointer remains `0x1370762`, state remains `7`, and no camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

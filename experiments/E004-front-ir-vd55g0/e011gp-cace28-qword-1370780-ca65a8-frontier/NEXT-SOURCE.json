@@ -1,0 +1,35 @@
+{
+  "experiment": "E011GQ",
+  "goal": "Execute the original leaf helper 0xCA65A8 under the exact E011GP call state x0=36, w1=115, w2=0; qualify its exact return, resume at 0xCACE4C, qualify the resulting branch path and arguments, and stop before the downstream call at 0xCACE90 to 0xF5E3E0.",
+  "reuse": {
+    "receiver_dependency": "E011GP",
+    "helper_entry_state": "E011GO",
+    "retained_parser_state": "E011GN"
+  },
+  "current_camera_frontier": {
+    "call_RVA": "0xcace48",
+    "call_target_RVA": "0xca65a8",
+    "call_executed": false,
+    "x0_u64": 36,
+    "w1_u32": 115,
+    "w2_u32": 0,
+    "x20_value_RVA": "0x1370780",
+    "w21_u32": 2147483647
+  },
+  "source_hint": {
+    "leaf_helper_first_RVA": "0xca65a8",
+    "leaf_helper_return_RVA": "0xca65e4",
+    "expected_downstream_call_RVA": "0xcace90",
+    "expected_downstream_target_RVA": "0xf5e3e0"
+  },
+  "do_not_claim": [
+    "CA65A8 return before original helper execution",
+    "the F5E3E0 memory scan before its source dependency is separately qualified",
+    "complete helper return",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
