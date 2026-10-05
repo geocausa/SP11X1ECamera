@@ -1,0 +1,23 @@
+{
+  "experiment": "E011FT",
+  "goal": "Execute original 0x6BD70 through the argument-reload prefix under the E011FS current frame, qualify x8=base+0x17A1150 and the restored x1..x6 tuple, and stop before the exact 8-byte read at 0x6BD8C from base+0x17A1150.",
+  "reuse": {
+    "current_EDD0_return": "E011FS",
+    "current_6BD48_frame": "E011FR"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0x6bd70",
+    "dependency_read_callsite_RVA": "0x6bd8c",
+    "dependency_read_RVA": "0x17a1150",
+    "dependency_bytes": 8,
+    "later_callsite_RVA": "0x6bd90",
+    "later_call_target_RVA": "0xcad868"
+  },
+  "do_not_claim": [
+    "the 8-byte value at 0x17A1150 before source or native authority is established",
+    "0xCAD868 behavior before its exact current contract is qualified",
+    "formatter return value or second-iteration CED2F0 result",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
