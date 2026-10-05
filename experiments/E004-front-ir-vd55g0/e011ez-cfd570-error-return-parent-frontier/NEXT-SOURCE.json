@@ -1,0 +1,25 @@
+{
+  "experiment": "E011FA",
+  "goal": "Execute the original parent prefix at 0xCFD518, qualify the current one-byte owned-allocation flag read at 0xCFD51C and the exact current 76-byte owner pointer selected for the 0xCFD528 -> 0xCB1650 cleanup call, then release only if the current owned HeapFree contract is exact; do not reuse E011CW\u2019s older 74-byte release geometry.",
+  "reuse": {
+    "complete_CFD570_error_return": "E011EZ",
+    "current_thread_error_propagation": "E011EY",
+    "current_76byte_allocation": "E011ES",
+    "older_cleanup_source_shape_only": "E011CW"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfd518",
+    "next_dependency_source_RVA": "0xcfd51c",
+    "expected_owner_flag_u8": 1,
+    "candidate_cleanup_callsite_RVA": "0xcfd528",
+    "candidate_cleanup_target_RVA": "0xcb1650",
+    "current_owner_bytes": 76
+  },
+  "do_not_claim": [
+    "older 74-byte Unicode cleanup geometry applies to the current 76-byte owner",
+    "current 76-byte owner has been released before exact current cleanup qualification",
+    "complete parent return before qualified",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
