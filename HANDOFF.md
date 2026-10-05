@@ -1,3 +1,7 @@
+## 2026-10-05 E011FH CED0D8 zero return to CED330 caller frontier accepted
+
+E011FH executes the original `0xCED194 -> 0xCED110` zero-result epilogue, restores return link `0xCED330`, and completes the enclosing CED0D8 return with `x0=0`. The caller frame is exact at SP-relative `-1488`, with its output pointer at outer-entry `SP-1448`; the `CED330` store remains deliberately unexecuted. Selected lock stays released and no selected-object or retired-owner read occurs after release. Four cases reject 1,568 current-path mutations plus 264 producer API mutations. NEXT E011FI qualifies the exact zero store/branch.
+
 ## 2026-10-05 E011FG selected-object lock release to CED194 frontier accepted
 
 E011FG executes `0xCED190 -> 0xCB3480`, proves the exact `LeaveCriticalSection(selected+0x30)` owned contract, and transitions the selected-object lock from held to released without changing the exact E011FF cleanup image. Execution returns to `0xCED194`; the 76-byte owner remains retired and both lowIO locks remain released. Four cases reject 1,496 current-path mutations plus 264 producer API mutations. NEXT E011FH propagates zero through the `0xCED110` epilogue and qualifies the enclosing return. Native mutex bytes/concurrency and rear runtime remain unqualified.
