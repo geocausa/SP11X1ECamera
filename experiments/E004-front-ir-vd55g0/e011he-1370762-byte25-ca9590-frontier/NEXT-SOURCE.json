@@ -1,0 +1,32 @@
+{
+  "experiment": "E011HF",
+  "goal": "Execute 0xCA9590 through the already-qualified first table read at 0xCA95B8 using source byte 0x25 and parser state 7. Reuse the accepted first-table byte at RVA 0xF8B21B = 1, derive the exact second lookup RVA under state 7, and stop before that second table byte is read.",
+  "reuse": {
+    "source_byte": "E011HE",
+    "first_table_byte": "E011GC",
+    "table_base": "E011GB"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xca9590",
+    "source_byte_u8": 37,
+    "receiver_plus_0x20_u32": 1,
+    "parser_state_u8": 7,
+    "executed": false
+  },
+  "expected_lookup": {
+    "first_table_read_RVA": "0xca95b8",
+    "first_table_RVA": "0xf8b21b",
+    "first_table_u8": 1,
+    "second_table_read_RVA": "0xca95d8",
+    "second_table_RVA": "0xf8b230",
+    "second_table_read_executed": false
+  },
+  "do_not_claim": [
+    "byte at 0xf8b230 before separate source qualification",
+    "parser state after second lookup",
+    "dispatch target",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

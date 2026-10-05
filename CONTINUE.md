@@ -1,3 +1,7 @@
+## 2026-10-06 E011HE 0x1370762 byte 0x25 accepted to CA9590 loop frontier
+
+E011HE source-qualifies RVA `0x1370762 = 0x25`, executes the signed read, advances the retained pointer to `0x1370763`, stores byte `37` to receiver `+0x39`, and takes the nonzero branch to `0xCA9590` without executing the target. NEXT E011HF reuses the accepted first table byte at `0xF8B21B = 1`, executes the first lookup under parser state `7`, and stops before the derived second-table read at RVA `0xF8B230`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HD helper-return branch accepted to 0x1370762 byte frontier
 
 E011HD executes `0xCA9840..0xCA9848` with helper return `1`; the zero branch is not taken and receiver `+0x10` reloads exact source RVA `0x1370762`. Execution stops before `0xCA984C` reads the byte. NEXT E011HE source-qualifies that image byte, advances the retained pointer to `0x1370763`, updates receiver `+0x39`, and stops before the selected `0xCA9590` target executes. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
