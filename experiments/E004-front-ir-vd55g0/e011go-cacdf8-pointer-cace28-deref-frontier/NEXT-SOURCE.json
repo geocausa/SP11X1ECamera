@@ -1,0 +1,35 @@
+{
+  "experiment": "E011GP",
+  "goal": "Qualify the exact 8-byte value at the E011GO next dependency, receiver-relative +0x648, using source authority if available or a bounded Windows front-camera oracle if the value is runtime-owned. Do not execute 0xCACE28 before that value is authoritative. Once qualified, execute the original helper path from 0xCACE28 through 0xCACE44 and stop before the call at 0xCACE48 to 0xCA65A8.",
+  "reuse": {
+    "helper_entry_state": "E011GO",
+    "receiver_core_fields": "E011GA/E011GF",
+    "retained_byte": "E011GG"
+  },
+  "current_camera_frontier": {
+    "next_camera_source_RVA": "0xcace28",
+    "memory_read_RVA": "0xcace28",
+    "dependency_receiver_relative": "0x648",
+    "dependency_bytes": 8,
+    "read_executed": false
+  },
+  "known_downstream_source": {
+    "receiver_plus_0x39_u8": 115,
+    "receiver_qword0_u64": 36,
+    "receiver_plus_0x30_low_u32": 4294967295,
+    "receiver_plus_0x34_u32": 0,
+    "call_frontier_RVA": "0xcace48",
+    "call_target_RVA": "0xca65a8"
+  },
+  "do_not_claim": [
+    "the receiver-relative +0x648 value before exact source/native qualification",
+    "the call 0xca65a8 before the pre-call state is qualified",
+    "helper return value",
+    "the helper-result path to 0xcab274",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
