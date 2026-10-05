@@ -1,0 +1,29 @@
+{
+  "experiment": "E011GH",
+  "goal": "Source-qualify the exact pinned byte at image RVA 0xf8b2b7, execute the original table read at 0xCA95B8 under the exact E011GG state, qualify the derived parser lookup arithmetic, and stop before the first new unqualified dependency.",
+  "reuse": {
+    "source_byte_and_branch": "E011GG",
+    "retained_receiver_state": "E011GF",
+    "parser_table_base": "E011GB/E011GD"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xca95b8",
+    "dependency_read_RVA": "0xf8b2b7",
+    "dependency_bytes": 1,
+    "dependency_read_executed": false
+  },
+  "must_qualify_before_execution": {
+    "image_RVA": "0xf8b2b7",
+    "bytes": 1,
+    "exact_value_known_publicly": false
+  },
+  "do_not_claim": [
+    "the table byte at 0xf8b2b7 before exact source qualification",
+    "the second parser lookup derived from that byte",
+    "complete parser iteration",
+    "CA94E8 return",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

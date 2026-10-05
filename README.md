@@ -1,3 +1,7 @@
+## 2026-10-05 E011GG second source byte accepted to table lookup frontier
+
+E011GG source-qualifies image RVA `0x1370761` as signed/u8 `0x73` / 115. Four source-exact placements execute the original `0xCA984C` read, advance the retained source pointer to `0x1370762`, retain the byte at receiver `+0x39`, take the nonzero branch at `0xCA9858`, and derive lookup offset `166` from table base `0xF8B211`. Execution stops at `0xCA95B8` before the newly selected table-byte read at `0xF8B2B7`. NEXT E011GH must source-qualify that byte first. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GF selected parser case accepted to next signed-byte frontier
 
 E011GF executes original `0xCA9718..0xCA9728` in four source-exact placements, qualifies the owned receiver mutations (`+0x38 = 0`, `+0x28 = 0`, `+0x30 = 0xffffffff`, `+0x4c = 0`), rejoins at `0xCA9848`, and reloads retained source-pointer RVA `0x1370761`. Execution stops at `0xCA984C` before its signed one-byte source read; the bounded memory-read trace observes no access to `0x1370761`. NEXT E011GG must source-qualify that exact byte before executing the read. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
