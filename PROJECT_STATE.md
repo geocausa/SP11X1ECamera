@@ -1,3 +1,7 @@
+## 2026-10-05 E011GI second table byte accepted to signed dispatch frontier
+
+E011GI source-qualifies image RVA `0xF8B2A2` as `0x07`. Four source-exact placements execute the original `0xCA95D8` table read, retain parser state `7`, pass the original `< 8` / `<= 7` checks, and form jump-table base `0xCA98EC` with index `7`. Execution stops at `0xCA95F4` before the signed 4-byte dispatch entry read at `0xCA9908`. NEXT E011GJ must source-qualify that exact signed entry first. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GH first table byte accepted to second lookup frontier
 
 E011GH source-qualifies image RVA `0xF8B2B7` as `0x08`. Four source-exact placements execute the original `0xCA95B8` table read, scale the value to `72`, combine it with retained parser-state byte `1`, and derive second lookup offset `146` from table base `0xF8B210`. Execution stops at `0xCA95D8` before the newly selected table-byte read at `0xF8B2A2`. NEXT E011GI must source-qualify that exact byte first. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

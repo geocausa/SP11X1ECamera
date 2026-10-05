@@ -1,0 +1,30 @@
+{
+  "experiment": "E011GJ",
+  "goal": "Source-qualify the exact pinned signed 4-byte dispatch entry at image RVA 0xca9908, execute the original dispatch read/branch at 0xCA95F4..0xCA9600 under the exact E011GI state, qualify the selected case target, and stop before that case body executes.",
+  "reuse": {
+    "parser_state_and_jump_index": "E011GI",
+    "dispatch_source_shape": "E011GE"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xca95f4",
+    "dependency_read_RVA": "0xca9908",
+    "dependency_bytes": 4,
+    "dependency_signed": true,
+    "dependency_read_executed": false
+  },
+  "must_qualify_before_execution": {
+    "image_RVA": "0xca9908",
+    "bytes": 4,
+    "signed": true,
+    "exact_value_known_publicly": false
+  },
+  "do_not_claim": [
+    "the dispatch entry at 0xca9908 before exact source qualification",
+    "the selected parser case before source-qualified dispatch execution",
+    "complete parser iteration",
+    "CA94E8 return",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
