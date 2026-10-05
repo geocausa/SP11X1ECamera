@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2026 geoca
 """Extract a conservative hardware summary from QTI Parameter Parser v3 sensor-module bins.
 
 Only fields whose layout has been mechanically cross-checked against the public CamX sensor
