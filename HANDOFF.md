@@ -1,3 +1,7 @@
+## 2026-10-05 E011GC first parser-table byte accepted to second lookup frontier
+
+E011GC qualifies the pinned `.rdata` byte at RVA `0xF8B21B` as `1`. Four source-exact placements execute the first table read and current parser index arithmetic with parser state `0`, producing scaled state `9` and second lookup offset `18`. Execution stops before the one-byte read at `0xCA95D8 -> 0xF8B222`; no second lookup value or downstream parser state is claimed. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011GD qualifies that exact second table byte; native rear remains denied.
+
 ## 2026-10-05 E011GB exact source byte accepted to parser-table frontier
 
 E011GB qualifies the pinned `.rdata` byte at image RVA `0x1370760` as `0x25` (37). Four source-exact placements execute `0xCA984C` and the selected nonzero parser path: the owned source pointer advances to `0x1370761`, the byte is retained in the receiver, and the current parser arithmetic selects lookup RVA `0xF8B21B`. Execution stops before the one-byte table read at `0xCA95B8`; no lookup value or downstream parser state is claimed. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011GC qualifies that exact table byte; native rear remains denied.
