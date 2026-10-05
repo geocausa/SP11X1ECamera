@@ -1,0 +1,36 @@
+{
+  "experiment": "E011HP",
+  "goal": "Source-qualify the next vararg qword at receiver+0x658 from the accepted 0x7AC38 layout as image RVA 0x13F1F28, and source-qualify that NUL-terminated string length 24. Under exact E011HO state execute the repeated 0xCA9838 helper through CAB178/CACDF8, CA65A8/F5E3E0, both CAD1F0 calls, the 24-byte F5D480 copy, stream updates, receiver +0x20 update, cookie/epilogue return, and stop before 0xCA984C reads source RVA 0x1370766.",
+  "reuse": {
+    "vararg_layout": "E011FO plus E011HM wrapper authority",
+    "helper_chain": "E011HL/E011HM",
+    "current_state": "E011HO"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xca9838",
+    "executed": false
+  },
+  "expected_source": {
+    "vararg_receiver_relative": "0x658",
+    "vararg_value_RVA": "0x13f1f28",
+    "string_length_u64": 24
+  },
+  "expected_post_helper": {
+    "receiver_plus_0x18_relative": "0x660",
+    "stream_qword0_receiver_relative": "0x6ca",
+    "stream_count_u64": 26,
+    "receiver_plus_0x20_u32": 26,
+    "destination_first_receiver_relative": "0x6b2",
+    "copied_bytes": 24,
+    "source_pointer_RVA": "0x1370766",
+    "next_read_RVA": "0xca984c",
+    "next_read_executed": false
+  },
+  "do_not_claim": [
+    "byte at 0x1370766 before E011HQ source qualification",
+    "termination branch after a zero byte",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

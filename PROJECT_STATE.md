@@ -1,3 +1,7 @@
+## 2026-10-06 E011HO byte 0x73 accepted to third helper frontier
+
+E011HO source-qualifies RVA `0x1370765 = 0x73`, advances the retained pointer to `0x1370766`, and reuses accepted parser-table bytes `8`/`7` plus signed dispatch `+20` to stop at `0xCA9838` before helper execution. Receiver `+0x20` remains `2`, parser state is `7`. NEXT E011HP source-qualifies receiver `+0x658 = RVA 0x13F1F28` and its 24-byte string, then carries the helper through copy/return to the `0x1370766` read frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HN third `%` byte accepted through repeated case to 0x1370765 frontier
 
 E011HN source-qualifies RVA `0x1370764 = 0x25`, advances the retained pointer to `0x1370765`, reuses accepted table bytes `0xF8B21B = 1` / `0xF8B230 = 1` and signed dispatch `-52`, and executes the accepted `0xCA9718` case while receiver `+0x20` remains `2`. Execution stops before the next signed read at `0x1370765`. NEXT E011HO source-qualifies that byte and reuses the accepted `0x73` parser chain to stop at `0xCA9838` before helper execution. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
