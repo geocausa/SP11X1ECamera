@@ -1,3 +1,7 @@
+## 2026-10-06 E011HJ F8B2B7 byte 8 accepted to F8B2A2 frontier
+
+E011HJ source-qualifies RVA `0xF8B2B7 = 8`; the first-table read combines scaled value `72` with parser state `1`, deriving exact second lookup RVA `0xF8B2A2`. Execution stops before `0xCA95D8` reads it. NEXT E011HK source-qualifies that byte and reuses the accepted index-7 signed `+20` dispatch entry to stop at `0xCA9838` before its case body. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HI 0x1370763 byte 0x73 accepted to F8B2B7 first-lookup frontier
 
 E011HI source-qualifies RVA `0x1370763 = 0x73`, advances the retained pointer to `0x1370764`, stores byte `115` at receiver `+0x39`, and executes the parser-loop arithmetic under receiver `+0x20 = 1` and state `1`. The exact first lookup resolves to RVA `0xF8B2B7`; execution stops before reading it. NEXT E011HJ source-qualifies that byte and derives second lookup RVA `0xF8B2A2`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

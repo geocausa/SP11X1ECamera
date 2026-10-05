@@ -1,0 +1,33 @@
+{
+  "experiment": "E011HK",
+  "goal": "Source-qualify the second parser-table byte at RVA 0xF8B2A2 under exact E011HJ state. Execute 0xCA95D8 parser-state update/checks, then reuse the accepted index-7 signed dispatch entry at 0xCA9908 = +20 to execute original dispatch and stop at target 0xCA9838 before its case body executes.",
+  "reuse": {
+    "second_lookup_state": "E011HJ",
+    "dispatch_entry": "E011GJ"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xca95d8",
+    "dependency_RVA": "0xf8b2a2",
+    "bytes": 1,
+    "read_executed": false
+  },
+  "source_hint": {
+    "dependency_RVA": "0xf8b2a2",
+    "expected_u8": 7
+  },
+  "expected_dispatch": {
+    "parser_state_after_u8": 7,
+    "dispatch_entry_RVA": "0xca9908",
+    "dispatch_entry_s32": 20,
+    "dispatch_branch_RVA": "0xca9600",
+    "target_RVA": "0xca9838",
+    "target_executed": false
+  },
+  "do_not_claim": [
+    "0xca9838 case-body execution before E011HL",
+    "helper call result",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
