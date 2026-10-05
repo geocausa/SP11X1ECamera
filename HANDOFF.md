@@ -1,3 +1,7 @@
+## 2026-10-05 E011FA current 76-byte parent cleanup accepted
+
+E011FA resumes the accepted `CFD570` error return at `0xCFD518`: original source reads the current owner flag as `1`, selects the exact live 76-byte UTF-16 owner, and executes original `0xCB1650` through the owned `HeapFree(handle, 0, owner)` contract. All four cases observe HeapFree success, retire the 76-byte owner, perform no original read of it before `0xCFD52C`, reject 1,112 current-path mutations plus 264 producer API mutations, and explicitly reject E011CW's older 74-byte geometry. NEXT E011FB qualifies the parent epilogue/return to `0xCFCC9C`; no new Start/reboot/build and native rear remains denied.
+
 ## 2026-10-05 E011EZ CFD570 error return to parent frontier accepted
 
 E011EZ follows the accepted error path from `0xCFD704` through original `0xCAECF8`: a third original Windows `FlsGetValue2` lookup returns the current thread CRT-error pointer, `CFD570` loads CRT error `2`, restores its caller state and reaches parent `0xCFD518`. Four cases preserve the exact live 76-byte UTF-16 owner, reject 1,020 current-path mutations plus 264 producer API mutations, and execute no parent cleanup. E011CW’s older 74-byte release geometry remains excluded. NEXT E011FA qualifies the parent ownership flag and exact 76-byte cleanup pointer before `0xCFD528 -> 0xCB1650`; no new Start/reboot/build and native rear remains denied.

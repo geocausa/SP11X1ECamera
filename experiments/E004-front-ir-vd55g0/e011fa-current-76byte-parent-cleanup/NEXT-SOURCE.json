@@ -1,0 +1,22 @@
+{
+  "experiment": "E011FB",
+  "goal": "Execute the original CFD410 parent epilogue from 0xCFD52C through return to 0xCFCC9C, preserving return value 2 and proving no use of the released 76-byte owner before the caller resumes; continue beyond 0xCFCC9C only while lock/error ownership remains exact.",
+  "reuse": {
+    "exact_current_76byte_cleanup": "E011FA",
+    "complete_CFD570_error_return": "E011EZ",
+    "current_thread_error_propagation": "E011EY"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfd52c",
+    "expected_return_u32": 2,
+    "parent_return_target_RVA": "0xcfcc9c",
+    "released_owner_bytes": 76
+  },
+  "do_not_claim": [
+    "full CFD410 return before qualified",
+    "any read/use of the released 76-byte owner",
+    "older 74-byte cleanup geometry applies to the current path",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
