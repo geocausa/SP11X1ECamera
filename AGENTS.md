@@ -1,3 +1,7 @@
+## 2026-10-05 E011FZ opaque cookie producer accepted to `CA94E8` frontier
+
+E011FZ executes the current `0xCA6294 -> 0x11D0` security-cookie producer under four distinct opaque cookie fixtures. All four traverse the same six original producer instructions and the same 38-instruction current `CA6280` path; only the encoded cookie stack word changes according to the exact `SP - cookie` formula. The live process cookie value is deliberately not claimed and the file-image cookie is not substituted as native authority. Original `CA6280` setup is qualified through `0xCA6344`, stopping before `0xCA6348 -> 0xCA94E8`. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011GA enters `CA94E8` only to its first new dependency/effect; native rear remains denied.
+
 ## 2026-10-05 E011FY `CA6280` entry accepted to cookie-producer frontier
 
 E011FY executes the exact `0xCAD93C -> 0xCA6280` call and five original `CA6280` prologue instructions across four placements. The helper creates its exact 48-byte frame, saves the current nonvolatile tuple, sets the frame pointer, and preserves the E011FX call arguments. Execution stops before `0xCA6294 -> 0x11D0`; `0x11D0` is the image security-cookie producer and is not executed or assigned a live cookie value here. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011FZ qualifies the current cookie-producer contract before resuming `CA6280`; native rear remains denied.
