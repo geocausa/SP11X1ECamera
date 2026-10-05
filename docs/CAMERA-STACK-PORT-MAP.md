@@ -1,3 +1,7 @@
+## 2026-10-06 E011GV second CAD1F0 stream pointer accepted to object-field frontier
+
+E011GV executes the second `0xCAB58C -> 0xCAD1F0` call with `x2=1` and reaches original `0xCAD218`. Receiver `+0x460` selects the accepted E011GA object at receiver-relative `-0x20`; execution stops before `0xCAD21C` reads object fields at `-0x18/-0x10`. NEXT E011GW reuses the accepted E011FZ CA6280 final-frame construction to qualify those object qwords and proceed only to the `0xCAD25C -> 0xF5D480` call frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GU first CAD1F0 zero-count return accepted to second-call frontier
 
 E011GU executes the first `0xCAB3EC -> 0xCAD1F0` with `x2=0`; the original helper takes its zero-count fast path without reading receiver `+0x460` or the stream object. The caller follows receiver `+0x28` bit-3 clear and `+0x4c = 0` branches and stops before the second `0xCAB58C -> 0xCAD1F0` call. That call tuple is `x0=receiver+0x460`, `x1=RVA 0x1370780`, `x2=1`, `x3=receiver+0x20`, `x4=receiver+0x4c0`. E011GA authority resolves the slot value as receiver-relative `-0x20`. NEXT E011GV executes only through the pointer load at `0xCAD218` and stops before the object-field pair read at `0xCAD21C`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

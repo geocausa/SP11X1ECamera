@@ -1,0 +1,42 @@
+{
+  "experiment": "E011GW",
+  "goal": "Use accepted E011FZ source-owned CA6280 frame geometry to qualify the receiver-relative stream-object fields at -0x18 and -0x10 (object +8/+16), plus the object qword0 at -0x20 required after the unequal-field branch. Then execute original 0xCAD21C..0xCAD258 under the exact E011GV state and stop before the 0xCAD25C -> 0xF5D480 copy call.",
+  "reuse": {
+    "second_call_state": "E011GV",
+    "stream_object_source": "accepted E011FZ CA6280 final-frame construction",
+    "retained_parser_state": "E011GN"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xcad21c",
+    "object_receiver_relative": "-0x20",
+    "first_field_receiver_relative": "-0x18",
+    "second_field_receiver_relative": "-0x10",
+    "bytes": 16,
+    "read_executed": false
+  },
+  "source_authority_to_qualify": {
+    "object_qword0_receiver_relative_value_expected": "0x6b0",
+    "object_plus_0x8_u64_expected": 640,
+    "object_plus_0x10_u64_expected": 0
+  },
+  "expected_call_frontier": {
+    "call_RVA": "0xcad25c",
+    "target_RVA": "0xf5d480",
+    "x0_receiver_relative_expected": "0x6b0",
+    "x1_value_RVA": "0x1370780",
+    "x2_u64_expected": 1,
+    "call_executed": false
+  },
+  "do_not_claim": [
+    "F5D480 execution before E011GX",
+    "any copied byte or destination mutation",
+    "post-copy stream pointer/counter updates",
+    "complete CAD1F0 return",
+    "complete CAB178 helper return",
+    "branch at 0xca9844",
+    "next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
