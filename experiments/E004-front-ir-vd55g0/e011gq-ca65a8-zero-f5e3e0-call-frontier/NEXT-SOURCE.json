@@ -1,0 +1,37 @@
+{
+  "experiment": "E011GR",
+  "goal": "Source-qualify the 16-byte block at RVA 0x1370780 consumed by 0xF5E3E0, execute the original call at 0xCACE90 and only the source-backed scan path through its return, and stop at 0xCACE94 before storing the returned length into receiver +0x48.",
+  "reuse": {
+    "call_state": "E011GQ",
+    "source_pointer_identity": "E011GP",
+    "retained_parser_state": "E011GN"
+  },
+  "current_camera_frontier": {
+    "call_RVA": "0xcace90",
+    "call_target_RVA": "0xf5e3e0",
+    "x0_RVA": "0x1370780",
+    "x1_u64": 2147483647,
+    "call_executed": false
+  },
+  "next_dependency": {
+    "image_RVA": "0x1370780",
+    "bytes": 16,
+    "read_executed": false,
+    "source_qualification_required": true
+  },
+  "stop_frontier": {
+    "resume_RVA": "0xcace94",
+    "receiver_result_offset": "0x48",
+    "store_executed": false
+  },
+  "do_not_claim": [
+    "F5E3E0 return before exact source-block qualification and original execution",
+    "receiver +0x48 result before store",
+    "complete helper return",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
