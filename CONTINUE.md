@@ -1,3 +1,7 @@
+## 2026-10-05 E011GR source-backed F5E3E0 scan accepted to CACE94 store frontier
+
+E011GR source-qualifies the first 16-byte block at RVA `0x1370780` (leading byte `0x2e`, first zero at offset `1`) and executes `0xCACE90 -> 0xF5E3E0`; the original scan returns exact length `1`. Execution stops at `0xCACE94` before receiver `+0x48` is written. NEXT E011GS executes the store and `0xCACDF8` return path to the common helper continuation, stopping before the first `x22` write at `0xCAB288`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GQ CA65A8 leaf accepted to F5E3E0 call frontier
 
 E011GQ executes `0xCACE48 -> 0xCA65A8` under the exact E011GP inputs and qualifies return `0`. The parent takes the zero-result and nonzero-pointer branches, preserving receiver `+0x4c = 0`, then reaches `0xCACE90` with `x0 = RVA 0x1370780` and `x1 = 0x7fffffff`; the call to `0xF5E3E0` is not executed. NEXT E011GR source-qualifies its first 16-byte dependency at RVA `0x1370780`, executes only the source-backed scan to return, and stops before the receiver `+0x48` store at `0xCACE94`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

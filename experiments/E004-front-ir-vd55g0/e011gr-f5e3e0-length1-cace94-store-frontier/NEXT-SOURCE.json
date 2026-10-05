@@ -1,0 +1,32 @@
+{
+  "experiment": "E011GS",
+  "goal": "Execute the original store at 0xCACE94 of the qualified scan result 1 into receiver +0x48, execute the remainder of helper 0xCACDF8 through its return to 0xCAB1F8, branch to common helper continuation 0xCAB274, qualify the returned truth value and receiver +0x38 zero branch path, and stop before the first x22-owned write at 0xCAB288.",
+  "reuse": {
+    "scan_return": "E011GR",
+    "receiver_fields": "E011GP/E011GF",
+    "selected_case": "E011GN"
+  },
+  "current_camera_frontier": {
+    "resume_RVA": "0xcace94",
+    "receiver_result_offset": "0x48",
+    "result_store_executed": false,
+    "scan_return_u64": 1
+  },
+  "stop_frontier": {
+    "helper_return_target_RVA": "0xcab1f8",
+    "common_resume_RVA": "0xcab274",
+    "receiver_plus_0x38_u8": 0,
+    "first_x22_write_RVA": "0xcab288",
+    "write_executed": false
+  },
+  "do_not_claim": [
+    "x22 ownership/value before the 0xcab288 write frontier is separately qualified",
+    "the write at 0xcab288",
+    "downstream helper continuation",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
