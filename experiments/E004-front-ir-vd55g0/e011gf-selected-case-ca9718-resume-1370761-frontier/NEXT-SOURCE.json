@@ -1,0 +1,32 @@
+{
+  "experiment": "E011GG",
+  "goal": "Source-qualify the exact pinned signed byte at image RVA 0x1370761, execute the original signed one-byte read at 0xCA984C under the exact E011GF receiver state, qualify retention of that byte and its source-qualified branch, then stop at the first new unqualified dependency.",
+  "reuse": {
+    "selected_case_and_resume": "E011GF",
+    "retained_source_pointer": "E011GF",
+    "receiver_ownership": "E011GA",
+    "parser_prefix": "E011GB"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xca984c",
+    "source_pointer_RVA": "0x1370761",
+    "source_bytes": 1,
+    "source_signed": true,
+    "source_read_executed": false
+  },
+  "must_qualify_before_execution": {
+    "image_RVA": "0x1370761",
+    "bytes": 1,
+    "signed": true,
+    "exact_value_known_publicly": false
+  },
+  "do_not_claim": [
+    "the source byte at 0x1370761 before exact source qualification",
+    "downstream parser state before the source-qualified branch executes",
+    "complete parser iteration",
+    "CA94E8 return",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

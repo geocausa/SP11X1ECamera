@@ -1,3 +1,7 @@
+## 2026-10-05 E011GF selected parser case accepted to next signed-byte frontier
+
+E011GF executes original `0xCA9718..0xCA9728` in four source-exact placements, qualifies the owned receiver mutations (`+0x38 = 0`, `+0x28 = 0`, `+0x30 = 0xffffffff`, `+0x4c = 0`), rejoins at `0xCA9848`, and reloads retained source-pointer RVA `0x1370761`. Execution stops at `0xCA984C` before its signed one-byte source read; the bounded memory-read trace observes no access to `0x1370761`. NEXT E011GG must source-qualify that exact byte before executing the read. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GE signed parser dispatch accepted to selected-case frontier
 
 E011GE qualifies the pinned signed jump-table entry at RVA `0xCA98F0` as `-52`. Four source-exact placements execute original `0xCA95F4..0xCA9600`, selecting case entry `0xCA9718` while deliberately stopping before the selected case body. Static source shape shows that case rejoins at `0xCA9848`; NEXT E011GF will qualify its owned receiver mutations and stop before the next signed source-byte read at `0xCA984C -> 0x1370761`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
