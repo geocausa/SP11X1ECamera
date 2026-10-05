@@ -1,0 +1,31 @@
+{
+  "experiment": "E011GN",
+  "goal": "Execute only the selected helper case prefix at 0xCAB1F0 under the exact E011GM helper state, qualify that x0 selects the retained receiver, and stop at 0xCAB1F4 before helper 0xCACDF8 is called. Preserve the retained parser source pointer 0x1370762 and parser state 7.",
+  "reuse": {
+    "helper_dispatch_state": "E011GM",
+    "helper_entry_state": "E011GL",
+    "opaque_cookie_contract": "E011FZ"
+  },
+  "current_camera_frontier": {
+    "selected_case_entry_RVA": "0xcab1f0",
+    "selected_case_executed": false,
+    "helper_call_RVA": "0xcab1f4",
+    "helper_target_RVA": "0xcacdf8",
+    "helper_call_executed": false
+  },
+  "helper_source_hint": {
+    "first_receiver_read_RVA": "0xcace10",
+    "first_receiver_read_offset": "0x18",
+    "value_qualified": false
+  },
+  "do_not_claim": [
+    "helper 0xcacdf8 execution before its owned receiver dependencies are qualified",
+    "helper return value",
+    "the helper-result path to 0xcab274",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
