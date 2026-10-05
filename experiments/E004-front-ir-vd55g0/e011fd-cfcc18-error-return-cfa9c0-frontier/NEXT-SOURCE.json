@@ -1,0 +1,22 @@
+{
+  "experiment": "E011FE",
+  "goal": "Execute the original CFA9C0 nonzero return branch for CFCC18 return 2, qualify the exact CFA99C target and continue only while the retained selected-object/outer cleanup ownership remains exact; do not claim the surrounding CFA968 return before its cleanup path is qualified.",
+  "reuse": {
+    "complete_CFCC18_error_return": "E011FD",
+    "caller_lowIO_release": "E011FC",
+    "exact_current_76byte_cleanup": "E011FA"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfa9c0",
+    "incoming_return_u32": 2,
+    "expected_branch_target_RVA": "0xcfa99c",
+    "lowIO_record0_lock_depth": 0
+  },
+  "do_not_claim": [
+    "complete CFA968 return before qualified",
+    "selected-object retained lock released before exact source qualification",
+    "any use of the released 76-byte owner",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

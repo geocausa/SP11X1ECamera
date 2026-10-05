@@ -1,3 +1,7 @@
+## 2026-10-05 E011FD CFCC18 error return to CFA9C0 frontier accepted
+
+E011FD resumes at `0xCFCCE4`: all four cases restore the caller-visible result slot to `-1`, preserve error return `2`, execute the original CFCC18 epilogue/`ret`, restore its saved nonvolatile state and stack, and land exactly at `0xCFA9C0`. Both lowIO locks remain released and the retired 76-byte owner remains untouched. Four cases reject 1,212 current-path mutations plus 264 producer API mutations. NEXT E011FE qualifies the `CFA9C0` nonzero branch to `CFA99C`; no new Start/reboot/build and native rear remains denied.
+
 ## 2026-10-05 E011FC caller index-0 lowIO release accepted
 
 E011FC resumes at `0xCFCC9C`: all four cases store return `2`, read cleanup flag `1`, select index `0`, resolve lowIO record 0, preserve its already-cleared active byte, and execute original `0xCC08C0` through the owned `LeaveCriticalSection(record0)` boundary. At `0xCFCCE4` both lowIO global7 and record0 lock depths are zero; the retired 76-byte Unicode owner remains untouched. Four cases reject 1,168 current-path mutations plus 264 producer API mutations. NEXT E011FD qualifies the remaining CFCC18 tail and return to `0xCFA9C0`; no new Start/reboot/build and native rear remains denied.
