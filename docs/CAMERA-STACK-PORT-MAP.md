@@ -1,3 +1,7 @@
+## 2026-10-06 E011HI 0x1370763 byte 0x73 accepted to F8B2B7 first-lookup frontier
+
+E011HI source-qualifies RVA `0x1370763 = 0x73`, advances the retained pointer to `0x1370764`, stores byte `115` at receiver `+0x39`, and executes the parser-loop arithmetic under receiver `+0x20 = 1` and state `1`. The exact first lookup resolves to RVA `0xF8B2B7`; execution stops before reading it. NEXT E011HJ source-qualifies that byte and derives second lookup RVA `0xF8B2A2`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HH repeat CA9718 case accepted to 0x1370763 read frontier
 
 E011HH reuses the accepted `0xCA9718` case under the new receiver state, preserving receiver `+0x20 = 1`, parser state `1`, and source pointer RVA `0x1370763` while applying the same owned case mutations. `0xCA9848` reloads the pointer and stops before the signed byte read. NEXT E011HI source-qualifies `0x1370763`, advances to `0x1370764`, and derives first lookup RVA `0xF8B2B7` without reading it. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
