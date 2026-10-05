@@ -1,3 +1,7 @@
+## 2026-10-06 E011HC CAB178 return 1 accepted through cookie check to CA9840 frontier
+
+E011HC sets helper return `1`, executes original `0x11F0` across four accepted opaque-cookie axes with successful comparison on every axis, restores the CAB178 frame, and returns from `0xCAB658` to `0xCA9840` with `w0=1`. Execution stops before the caller instruction. NEXT E011HD executes the caller zero-test and receiver source-pointer reload to RVA `0x1370762`, stopping before `0xCA984C` reads that still-unqualified byte. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HB CAD1F0 return accepted to CAB62C helper-return frontier
 
 E011HB executes the `CAD1F0` epilogue and returns to `0xCAB590`. Receiver `+0x20 = 1` keeps the sign branch clear, while receiver `+0x28 = 0` takes the bit-2-zero branch to `0xCAB62C`; that instruction is not executed. NEXT E011HC writes helper return `1`, reuses E011GL/E011FZ's opaque cookie frame contract, validates the original `0x11F0` cookie check and `CAB178` epilogue, and stops at `0xCA9840` before the caller branch. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

@@ -1,0 +1,32 @@
+{
+  "experiment": "E011HD",
+  "goal": "Execute caller 0xCA9840 and 0xCA9844 under exact E011HC return w0=1, qualify the zero-test branch as not taken, execute 0xCA9848 to reload receiver +0x10 as image RVA 0x1370762, and stop before the signed byte read at 0xCA984C.",
+  "reuse": {
+    "helper_return": "E011HC",
+    "retained_source_pointer": "E011GN/E011HC"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xca9840",
+    "w0_u32": 1,
+    "executed": false
+  },
+  "expected_path": {
+    "uxtb_RVA": "0xca9840",
+    "w8_u8": 1,
+    "branch_RVA": "0xca9844",
+    "zero_branch_taken": false,
+    "pointer_reload_RVA": "0xca9848",
+    "pointer_RVA": "0x1370762",
+    "next_read_RVA": "0xca984c",
+    "next_read_executed": false
+  },
+  "do_not_claim": [
+    "byte value at 0x1370762 before source qualification",
+    "parser state after the 0xca984c read",
+    "complete parser iteration",
+    "CA94E8 return",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
