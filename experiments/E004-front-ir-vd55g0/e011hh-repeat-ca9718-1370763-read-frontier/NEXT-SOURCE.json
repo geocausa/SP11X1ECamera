@@ -1,0 +1,37 @@
+{
+  "experiment": "E011HI",
+  "goal": "Source-qualify byte RVA 0x1370763, execute 0xCA984C read/pointer advance/update and the nonzero branch back to 0xCA9590. Under receiver +0x20 = 1 and parser state 1, execute the arithmetic through 0xCA95B4 to derive the first lookup RVA and stop before 0xCA95B8 reads it.",
+  "reuse": {
+    "repeat_case": "E011HH",
+    "parser_loop_shape": "E011GB"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xca984c",
+    "dependency_RVA": "0x1370763",
+    "bytes": 1,
+    "signed": true,
+    "read_executed": false
+  },
+  "source_hint": {
+    "dependency_RVA": "0x1370763",
+    "expected_u8": 115,
+    "expected_s8": 115
+  },
+  "expected_first_lookup": {
+    "pointer_after_RVA": "0x1370764",
+    "receiver_plus_0x39_u8": 115,
+    "parser_state_u8": 1,
+    "receiver_plus_0x20_u32": 1,
+    "lookup_read_RVA": "0xca95b8",
+    "lookup_RVA": "0xf8b2b7",
+    "lookup_read_executed": false
+  },
+  "do_not_claim": [
+    "byte at 0xf8b2b7 before E011HJ source qualification",
+    "second lookup",
+    "dispatch target",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
