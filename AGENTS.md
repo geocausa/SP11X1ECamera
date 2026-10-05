@@ -1,3 +1,7 @@
+## 2026-10-05 E011GK selected case receiver accepted to helper-call frontier
+
+E011GK executes only case prefix `0xCA9838`, qualifying `x0` as the exact retained receiver, and stops at `0xCA983C` before helper `0xCAB178`. The retained source pointer is `0x1370762`, retained byte is `0x73`, and parser state is `7`. Helper source reuses E011FZ's opaque `0x11D0` cookie contract, then reads receiver `+0x39`, derives range index `50`, and first reaches a new signed dependency at `0xCAB1C4 -> 0xCAB724`. NEXT E011GL executes the helper entry only to that frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GJ signed +20 dispatch accepted to helper-call case frontier
 
 E011GJ source-qualifies signed entry RVA `0xCA9908` as `+20`. Four source-exact placements execute original `0xCA95F4..0xCA9600`, selecting case entry `0xCA9838` while stopping before the case body. Source inspection shows `0xCA9838` moves the receiver to `x0` and `0xCA983C` calls helper `0xCAB178`. NEXT E011GK executes only that case prefix and stops before the helper call; no helper result or downstream branch is claimed. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
