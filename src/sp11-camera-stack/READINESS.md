@@ -1,3 +1,7 @@
+## 2026-10-05 E011FC caller index-0 lowIO release accepted
+
+E011FC resumes at `0xCFCC9C`: all four cases store return `2`, read cleanup flag `1`, select index `0`, resolve lowIO record 0, preserve its already-cleared active byte, and execute original `0xCC08C0` through the owned `LeaveCriticalSection(record0)` boundary. At `0xCFCCE4` both lowIO global7 and record0 lock depths are zero; the retired 76-byte Unicode owner remains untouched. Four cases reject 1,168 current-path mutations plus 264 producer API mutations. NEXT E011FD qualifies the remaining CFCC18 tail and return to `0xCFA9C0`; no new Start/reboot/build and native rear remains denied.
+
 ## 2026-10-05 E011FB CFD410 parent return to CFCC9C frontier accepted
 
 E011FB completes the original `CFD410` epilogue from `0xCFD52C`: all four cases restore the saved nonvolatile state and caller stack, preserve return value `2`, execute the original `ret` at `0xCFD548`, and arrive exactly at caller `0xCFCC9C`. The 76-byte owner released by E011FA remains retired with no original read before the frontier. The caller instruction itself is not executed. Four cases reject 1,136 current-path mutations plus 264 producer API mutations. NEXT E011FC qualifies the caller post-return store/branch prefix and retained lock/resource cleanup; no new Start/reboot/build and native rear remains denied.

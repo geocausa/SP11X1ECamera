@@ -1,0 +1,24 @@
+{
+  "experiment": "E011FD",
+  "goal": "Execute the original CFCC18 tail from 0xCFCCE4, qualify the error-result restoration store and complete CFCC18 epilogue/return to its CFA9C0 caller while preserving return 2 and the already-released lowIO record0 lock; do not continue past CFA9C0 until that caller branch is qualified.",
+  "reuse": {
+    "caller_lowIO_release": "E011FC",
+    "complete_CFD410_return": "E011FB",
+    "current_76byte_cleanup": "E011FA"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfcce4",
+    "incoming_return_u32": 2,
+    "lowIO_record0_lock_depth": 0,
+    "next_store_RVA": "0xcfcce8",
+    "expected_store_u32": 4294967295,
+    "expected_parent_return_target_RVA": "0xcfa9c0"
+  },
+  "do_not_claim": [
+    "complete CFCC18 return before qualified",
+    "CFA9C0 caller branch before qualified",
+    "selected-object retained lock released before exact source qualification",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
