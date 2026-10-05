@@ -1,3 +1,7 @@
+## 2026-10-06 E011HA receiver+0x20 accepted zero-to-one at CAD1F0 epilogue frontier
+
+E011HA reuses accepted E011FZ `0xCA6318` to source-qualify receiver `+0x20 = 0`. Original `0xCAD294..0xCAD29C` reads zero, adds the selected one-byte count, and stores `1`. Execution stops before the `0xCAD2A0` epilogue. NEXT E011HB executes the epilogue/return to `0xCAB590`, qualifies receiver `+0x20 = 1` and `+0x28 = 0`, and stops at `0xCAB62C` before the helper return value is written. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011GZ object flag zero accepted to receiver+0x20 frontier
 
 E011GZ replays the accepted E011FZ producer and qualifies object `+0x18` (receiver `-0x8`) as zero. Original `0xCAD284` reads zero, the nonzero branch is not taken, `x22=x23=1`, and `0xCAD290` also falls through. Execution stops before `0xCAD294` reads receiver `+0x20`. NEXT E011HA source-qualifies that u32 from original `0xCA6318`, increments/stores it to `1`, and stops before the `0xCAD2A0` epilogue. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

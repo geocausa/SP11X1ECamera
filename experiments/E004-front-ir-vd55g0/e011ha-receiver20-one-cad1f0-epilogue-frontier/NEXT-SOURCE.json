@@ -1,0 +1,33 @@
+{
+  "experiment": "E011HB",
+  "goal": "Execute the CAD1F0 epilogue at 0xCAD2A0..0xCAD2B4 under the exact E011HA state and return to 0xCAB590. Qualify the parent reads receiver +0x20 = 1 and +0x28 = 0, the sign-bit branch at 0xCAB598 as not taken, and bit-2-zero branch at 0xCAB5A4 as taken to 0xCAB62C. Stop before 0xCAB62C writes the CAB178 helper return value.",
+  "reuse": {
+    "epilogue_state": "E011HA",
+    "receiver_plus_0x20": "E011HA",
+    "receiver_plus_0x28": "E011GS/E011GU"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xcad2a0",
+    "expected_return_target_RVA": "0xcab590",
+    "epilogue_executed": false
+  },
+  "expected_parent_branch": {
+    "receiver_plus_0x20_u32": 1,
+    "receiver_plus_0x28_u32": 0,
+    "sign_branch_RVA": "0xcab598",
+    "sign_branch_taken": false,
+    "bit2_branch_RVA": "0xcab5a4",
+    "bit2_zero_branch_taken": true,
+    "target_RVA": "0xcab62c",
+    "target_executed": false
+  },
+  "do_not_claim": [
+    "CAB178 return value before 0xcab62c executes",
+    "CAB178 cleanup/return",
+    "branch at 0xca9844",
+    "next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
