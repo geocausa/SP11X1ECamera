@@ -1,3 +1,7 @@
+## 2026-10-05 E011GL CAB178 helper accepted to signed dispatch-read frontier
+
+E011GL executes helper `0xCAB178` under four accepted opaque-cookie axes, qualifying its frame setup, retained receiver read `+0x39 = 0x73`, range index `50`, and not-taken range branch. Execution stops at `0xCAB1C4` before the signed 4-byte table read from `0xCAB724`; that entry and selected helper case remain unclaimed. The retained parser source pointer is `0x1370762` and parser state is `7`. NEXT E011GM source-qualifies the signed entry and executes only the original dispatch calculation to the selected-case frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GK selected case receiver accepted to helper-call frontier
 
 E011GK executes only case prefix `0xCA9838`, qualifying `x0` as the exact retained receiver, and stops at `0xCA983C` before helper `0xCAB178`. The retained source pointer is `0x1370762`, retained byte is `0x73`, and parser state is `7`. Helper source reuses E011FZ's opaque `0x11D0` cookie contract, then reads receiver `+0x39`, derives range index `50`, and first reaches a new signed dependency at `0xCAB1C4 -> 0xCAB724`. NEXT E011GL executes the helper entry only to that frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

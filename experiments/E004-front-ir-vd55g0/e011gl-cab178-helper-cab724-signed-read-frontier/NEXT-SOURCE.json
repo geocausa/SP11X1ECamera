@@ -1,0 +1,32 @@
+{
+  "experiment": "E011GM",
+  "goal": "Source-qualify the signed 4-byte helper dispatch entry at RVA 0xCAB724 selected by E011GL range index 50, execute the original helper dispatch read/target calculation from 0xCAB1C4 through the branch at 0xCAB1D0, and stop before the selected helper case body executes.",
+  "reuse": {
+    "helper_entry_and_range_index": "E011GL",
+    "opaque_cookie_contract": "E011FZ",
+    "receiver_state": "E011GK"
+  },
+  "current_camera_frontier": {
+    "helper_dispatch_read_RVA": "0xcab1c4",
+    "helper_dispatch_base_RVA": "0xcab65c",
+    "helper_dispatch_index_u32": 50,
+    "dispatch_branch_RVA": "0xcab1d0",
+    "dispatch_read_executed": false
+  },
+  "next_dependency": {
+    "image_RVA": "0xcab724",
+    "bytes": 4,
+    "signed": true,
+    "exact_value_known_publicly": false
+  },
+  "do_not_claim": [
+    "the signed helper dispatch entry before exact source qualification",
+    "the selected helper case before original dispatch evidence",
+    "the helper return value",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
