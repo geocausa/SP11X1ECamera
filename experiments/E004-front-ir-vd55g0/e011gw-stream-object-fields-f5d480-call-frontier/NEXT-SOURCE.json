@@ -1,0 +1,40 @@
+{
+  "experiment": "E011GX",
+  "goal": "Reuse accepted E011GR source authority for RVA 0x1370780 (leading byte 0x2e) and execute the original 0xCAD25C -> 0xF5D480 one-byte copy under the exact E011GW tuple x0=receiver+0x6b0, x1=RVA 0x1370780, x2=1. Qualify the single copied byte and destination mutation, return to 0xCAD260, and stop before the stream-object pointer/counter update sequence begins.",
+  "reuse": {
+    "call_state": "E011GW",
+    "source_byte_authority": "E011GR",
+    "stream_object_authority": "E011FZ"
+  },
+  "current_camera_frontier": {
+    "call_RVA": "0xcad25c",
+    "target_RVA": "0xf5d480",
+    "x0_receiver_relative": "0x6b0",
+    "x1_value_RVA": "0x1370780",
+    "x2_u64": 1,
+    "call_executed": false
+  },
+  "source_dependency": {
+    "RVA": "0x1370780",
+    "bytes": 1,
+    "expected_u8": 46,
+    "authority": "accepted E011GR source block"
+  },
+  "expected_resume_frontier": {
+    "RVA": "0xcad260",
+    "destination_receiver_relative": "0x6b0",
+    "copied_bytes": 1,
+    "stream_update_executed": false
+  },
+  "do_not_claim": [
+    "stream object pointer increment at 0xcad268 before E011GY",
+    "stream object count increment at 0xcad27c before E011GY",
+    "complete CAD1F0 return",
+    "complete CAB178 helper return",
+    "branch at 0xca9844",
+    "next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
