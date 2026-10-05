@@ -1,3 +1,7 @@
+## 2026-10-05 E011EY current thread/FLS CAEC20 error propagation accepted
+
+E011EY joins the accepted CRT slot/thread producer into the same current owned CRT arena: across four placements the 968-byte thread owner is exactly the current next allocation, original Windows `FlsGetValue2` retrieves it twice, and original `0xCAEC20` maps Win32 error 3 to thread OS=3 / CRT=2. Four current-path cases reject 1,020 altered contracts; the inherited producer rejects 264 API mutations. The current 76-byte UTF-16 owner remains live and E011CW’s older 74-byte cleanup geometry is explicitly not reused. NEXT E011EZ follows `0xCFD704 -> 0xCFD5DC` through `0xCAECF8` to the CFD570 error return; no new Start/reboot/build and native rear remains denied.
+
 ## 2026-10-05 E011EX exact GetLastError return accepted
 
 E011EX executes the original `0xCFD6FC` imported `GetLastError` call under the accepted E011EW same-boot Win32 contract and requires exact return `3` (`ERROR_PATH_NOT_FOUND`). Four retained placements preserve the 76-byte UTF-16 owner and lowIO/lock state, reject 984 altered contracts, and stop at `0xCFD700` before internal helper `0xCAEC20`. No new Start/reboot/build was needed. Older E011CU/E011CW cleanup evidence remains source authority only where byte-exact; its 74-byte owner geometry is not joined into this path. NEXT E011EY establishes current thread/TLS authority for `0xCAEC20`; native rear remains denied.
