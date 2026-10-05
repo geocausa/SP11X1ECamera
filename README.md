@@ -1,3 +1,7 @@
+## 2026-10-05 E011GT local formatting accepted to first CAD1F0 call frontier
+
+E011GT executes `0xCAB288..0xCAB3E8` under the exact retained receiver state. The helper-local output prefix is zeroed, E011GA resolves receiver `+0x8` as receiver-relative `+0x4c0`, and the path reaches `0xCAB3EC -> 0xCAD1F0` with `x0=receiver+0x460`, `x1=local+8`, `x2=0`, `x3=receiver+0x20`, `x4=receiver+0x4c0`; the call is not executed. NEXT E011GU executes the zero-count fast return and proceeds only to the second `0xCAB58C -> 0xCAD1F0` call frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GS CACDF8 return accepted to CAB288 helper-local write frontier
 
 E011GS stores scan result `1` at receiver `+0x48`, completes `0xCACDF8`, returns to `0xCAB1F8`, and qualifies the common continuation through receiver `+0x38 = 0` and `+0x28` low word `0`. It stops at `0xCAB288` before the first `x22` write. `x22` is source-owned helper-local SP from `0xCAB19C`, with local qword0 sentinel `-2`. NEXT E011GT executes the deterministic local-format path to `0xCAB3EC -> 0xCAD1F0`, with E011GA supplying receiver `+0x8` as receiver-relative `+0x4c0`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

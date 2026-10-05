@@ -1,0 +1,36 @@
+{
+  "experiment": "E011GU",
+  "goal": "Execute the first 0xCAB3EC -> 0xCAD1F0 call under E011GT with x2=0, qualify the zero-count fast return without dereferencing the receiver-owned stream object, resume the helper, qualify the receiver flag branches (+0x28 bits 3/2 clear and +0x4c zero), and stop before the second call at 0xCAB58C to 0xCAD1F0.",
+  "reuse": {
+    "first_call_state": "E011GT",
+    "receiver_plus_0x40": "E011GP",
+    "receiver_plus_0x48": "E011GS",
+    "receiver_qword1": "E011GA"
+  },
+  "current_camera_frontier": {
+    "call_RVA": "0xcab3ec",
+    "target_RVA": "0xcad1f0",
+    "x2_u64": 0,
+    "call_executed": false
+  },
+  "expected_second_call_frontier": {
+    "call_RVA": "0xcab58c",
+    "target_RVA": "0xcad1f0",
+    "x0_receiver_relative": "0x460",
+    "x1_value_RVA": "0x1370780",
+    "x2_u64": 1,
+    "x3_receiver_relative": "0x20",
+    "x4_receiver_relative": "0x4c0",
+    "call_executed": false
+  },
+  "do_not_claim": [
+    "the second CAD1F0 call before receiver +0x460 stream-object dependencies are qualified",
+    "the stream object at receiver-relative -0x20 before its fields are qualified",
+    "complete CAB178 helper return",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
