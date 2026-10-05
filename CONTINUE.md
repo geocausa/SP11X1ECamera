@@ -1,3 +1,7 @@
+## 2026-10-06 E011HB CAD1F0 return accepted to CAB62C helper-return frontier
+
+E011HB executes the `CAD1F0` epilogue and returns to `0xCAB590`. Receiver `+0x20 = 1` keeps the sign branch clear, while receiver `+0x28 = 0` takes the bit-2-zero branch to `0xCAB62C`; that instruction is not executed. NEXT E011HC writes helper return `1`, reuses E011GL/E011FZ's opaque cookie frame contract, validates the original `0x11F0` cookie check and `CAB178` epilogue, and stops at `0xCA9840` before the caller branch. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HA receiver+0x20 accepted zero-to-one at CAD1F0 epilogue frontier
 
 E011HA reuses accepted E011FZ `0xCA6318` to source-qualify receiver `+0x20 = 0`. Original `0xCAD294..0xCAD29C` reads zero, adds the selected one-byte count, and stores `1`. Execution stops before the `0xCAD2A0` epilogue. NEXT E011HB executes the epilogue/return to `0xCAB590`, qualifies receiver `+0x20 = 1` and `+0x28 = 0`, and stops at `0xCAB62C` before the helper return value is written. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

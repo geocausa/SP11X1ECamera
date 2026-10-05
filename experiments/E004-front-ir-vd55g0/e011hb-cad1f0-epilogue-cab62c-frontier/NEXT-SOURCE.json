@@ -1,0 +1,34 @@
+{
+  "experiment": "E011HC",
+  "goal": "Execute 0xCAB62C to set helper return value 1, then execute the original 0x11F0 security-cookie checker under the exact accepted E011GL opaque-cookie frame contract. Qualify successful cookie comparison, restore the CAB178 saved register frame, return to 0xCA9840 with w0=1, and stop before 0xCA9840 executes.",
+  "reuse": {
+    "parent_state": "E011HB",
+    "cookie_frame": "E011GL",
+    "opaque_cookie_contract": "E011FZ"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xcab62c",
+    "return_value_u32": 1,
+    "return_value_store_executed": false
+  },
+  "cookie_contract": {
+    "checker_RVA": "0x11f0",
+    "cookie_global_RVA": "0x1607000",
+    "opaque_axes": 4,
+    "success_return_RVA": "0x120c"
+  },
+  "expected_helper_return": {
+    "CAB178_return_RVA": "0xcab658",
+    "target_RVA": "0xca9840",
+    "w0_u32": 1,
+    "target_executed": false
+  },
+  "do_not_claim": [
+    "0xca9840 execution or branch result before E011HD",
+    "0xca9848 source pointer reload before E011HD",
+    "next parser byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
