@@ -1,3 +1,7 @@
+## 2026-10-05 E011FF CC60E0 selected cleanup to lock-release frontier accepted
+
+E011FF resumes at `0xCED188 -> 0xCC60E0`, joins the source-qualified runtime atomic flag `0x80000000` from E011EJ/E011CN, and executes the exact original cleanup plus fallback atomic exchange. The selected claim changes `0x2000 -> 0`; the remaining cleanup image is exact, the `+0x30` critical-section region is unchanged, and its owned lock remains held. Execution returns to `0xCED18C`, reloads the same pointer, and stops at `0xCED190 -> 0xCB3480` before lock release. Four cases reject 1,440 current-path mutations plus 264 producer API mutations. NEXT E011FG qualifies the exact selected-object lock release; no new Start/reboot/build and native rear remains denied.
+
 ## 2026-10-05 E011FE CFA9C0 error branch to CC60E0 frontier accepted
 
 E011FE resumes at `0xCFA9C0`: exact incoming CFCC18 return `2` takes the original nonzero branch to `0xCFA99C`, sets `x0=0`, bypasses the selected-object mutation path, executes the CFA968 epilogue/`ret`, and returns to `0xCED178`. The outer zero-result path stores zero, reloads the exact unchanged selected-object pointer, and reaches `0xCED188 -> 0xCC60E0` with its owned lock still held. The retired 76-byte owner is never read again and both lowIO lock depths remain zero. Four cases reject 1,236 current-path mutations plus 264 producer API mutations. NEXT E011FF qualifies `CC60E0` selected-object cleanup; no new Start/reboot/build and native rear remains denied.

@@ -1,0 +1,25 @@
+{
+  "experiment": "E011FG",
+  "goal": "Execute original 0xCED190 -> 0xCB3480 selected-object critical-section release using the exact E011FF post-cleanup object and retained lock ownership, then resume at 0xCED194 only while release and outer return state remain exact.",
+  "reuse": {
+    "exact_CC60E0_cleanup": "E011FF",
+    "source_runtime_atomic_flag": "E011EJ/E011CN",
+    "older_selected_lock_release_source_authority": "E011CW"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xced190",
+    "call_target_RVA": "0xcb3480",
+    "selected_object_claim_u32": 0,
+    "selected_object_lock_offset": 48,
+    "selected_object_lock_retained_held": true
+  },
+  "do_not_claim": [
+    "selected-object lock released before exact CB3480/LeaveCriticalSection execution",
+    "complete outer CED150 return before qualified",
+    "native mutex bytes or concurrency semantics",
+    "native LSE branch from the source fallback proof",
+    "any use of the released 76-byte owner",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
