@@ -1,3 +1,7 @@
+## 2026-10-05 E011GA `CA94E8` receiver prefix accepted to source-byte frontier
+
+E011GA executes the exact `0xCA6348 -> 0xCA94E8` call and current owned-receiver prefix across four placements. The helper creates its 64-byte frame, follows only fields constructed by E011FZ, increments the owned receiver counter `0 -> 1`, clears parser-state fields, and selects image RVA `0x1370760` as the source pointer. Execution stops before the signed byte read at `0xCA984C -> 0x1370760`; no source byte or parser branch is claimed yet. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011GB qualifies that exact image byte and follows only its resulting source branch; native rear remains denied.
+
 ## 2026-10-05 E011FZ opaque cookie producer accepted to `CA94E8` frontier
 
 E011FZ executes the current `0xCA6294 -> 0x11D0` security-cookie producer under four distinct opaque cookie fixtures. All four traverse the same six original producer instructions and the same 38-instruction current `CA6280` path; only the encoded cookie stack word changes according to the exact `SP - cookie` formula. The live process cookie value is deliberately not claimed and the file-image cookie is not substituted as native authority. Original `CA6280` setup is qualified through `0xCA6344`, stopping before `0xCA6348 -> 0xCA94E8`. No camera Start, reboot, rear runtime, or kernel build is used. NEXT E011GA enters `CA94E8` only to its first new dependency/effect; native rear remains denied.
