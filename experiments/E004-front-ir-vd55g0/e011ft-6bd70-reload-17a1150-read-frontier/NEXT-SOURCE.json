@@ -1,0 +1,22 @@
+{
+  "experiment": "E011FU",
+  "goal": "Resolve the exact current native/front-camera value and provenance of the 8-byte writable zero-fill dependency at RVA 0x17A1150, preferring bounded Windows process-context measurement before and after a successful front reader start; execute original 0x6BD8C only after that authority is established.",
+  "reuse": {
+    "current_reload_frontier": "E011FT",
+    "older_loader_model_only_zero": "E011DY"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0x6bd8c",
+    "dependency_read_RVA": "0x17a1150",
+    "dependency_bytes": 8,
+    "later_callsite_RVA": "0x6bd90",
+    "later_call_target_RVA": "0xcad868"
+  },
+  "do_not_claim": [
+    "the native value at 0x17A1150 from the older loader-model zero alone",
+    "the 0x6BD8C read result before current source/native authority",
+    "0xCAD868 behavior before its exact current contract is qualified",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

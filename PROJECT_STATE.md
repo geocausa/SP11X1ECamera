@@ -1,3 +1,7 @@
+## 2026-10-05 E011FT `0x6BD70` reload prefix accepted
+
+E011FT executes the exact `0x6BD70..0x6BD88` consumer reload prefix after the current E011FS leaf return. `x8` retains `base+0x17A1150`; six exact stack reads per placement restore the formatter tuple into `x1..x6`. Four placements stop before the `0x6BD8C` 8-byte dependency read and reject 2,320 current-path mutations plus 264 producer-API mutations. The older E011DY zero at writable zero-fill `0x17A1150` remains a loader/model assumption, not native runtime authority. No new Start, reboot, kernel build or rear runtime was used. NEXT E011FU resolves the current native value before executing that read; native rear remains denied.
+
 ## 2026-10-05 E011FS current `0xEDD0` leaf return accepted
 
 E011FS executes the current `0x6BD6C -> 0xEDD0` call. The exact 12-byte original leaf executes three instructions per placement, returns `base+0x17A1150` in `x0` at `0x6BD70`, and preserves the current stack/nonvolatile ABI. Four placements reject 2,212 current-path mutations plus 264 producer-API mutations. Execution stops before the consumer; the next dependency is the 8-byte read at `0x6BD8C` from `base+0x17A1150`, with later `0xCAD868` still unexecuted. No new Start, reboot, kernel build or rear runtime was used. NEXT E011FT qualifies the `0x6BD70` reload prefix to that read frontier; native rear remains denied.
