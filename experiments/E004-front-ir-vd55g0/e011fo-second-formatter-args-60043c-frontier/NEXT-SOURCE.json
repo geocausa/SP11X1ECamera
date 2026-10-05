@@ -1,0 +1,23 @@
+{
+  "experiment": "E011FP",
+  "goal": "Execute the exact 0x60043C call into original wrapper 0x7AC38, qualify its argument-save/va-list setup and nested 0x7ACA0 call, then stop at the 0x6BDD0 dependency boundary unless that nested helper contract is exact.",
+  "reuse": {
+    "second_formatter_arguments": "E011FO",
+    "second_iteration_x23_state": "E011FN"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0x60043c",
+    "call_target_RVA": "0x7ac38",
+    "wrapper_nested_call_RVA": "0x7ac78",
+    "wrapper_nested_target_RVA": "0x7aca0",
+    "nested_dependency_call_RVA": "0x7acd8",
+    "nested_dependency_target_RVA": "0x6bdd0"
+  },
+  "do_not_claim": [
+    "0x6BDD0 helper semantics before its exact current contract is qualified",
+    "0x7AC38 final return before the nested helper returns exactly",
+    "second-iteration CED2F0 call or result",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

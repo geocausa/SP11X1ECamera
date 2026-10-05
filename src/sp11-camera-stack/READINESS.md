@@ -1,3 +1,7 @@
+## 2026-10-05 E011FO second-iteration formatter arguments accepted
+
+E011FO executes original second-iteration setup through the untouched `0x60043C` call boundary and qualifies the exact `0x7AC38` helper arguments: `x0=outer-SP-1392`, `x1=0x280`, `x2=base+0x1370760`, `x3=base+0x1370780`, `x4=base+0x10F03B0`, `x5=base+0x13F1F28`, with `w26=1` and retained `x23=base+0x10F03B0`. Four placements stop before executing the helper and reject 1,940 current-path mutations plus 264 producer-API mutations. No new Start, reboot, kernel build or rear runtime was used. NEXT E011FP qualifies the `0x7AC38 -> 0x7ACA0` wrapper chain to its nested `0x6BDD0` dependency; native rear remains denied.
+
 ## 2026-10-05 E011FN loop-counter / second `x23` post-index accepted
 
 E011FN resumes the accepted `0x6006D4` frontier with retained `w26=2` and `x23=base+0x10F03A8`. Original `0x6006D4` decrements the counter to `1`, original `0x6006D8` loops back to `0x600418`, and original `0x600420` reads the second read-only `.rdata` table entry at RVA `0x10F03A8`, yielding image RVA `0x1370780` while post-indexing `x23` to `0x10F03B0`. Four retained placements stop at `0x600424` and reject 1,904 current-path mutations plus 264 producer-API mutations. No new camera Start, reboot, kernel build or rear runtime was used. NEXT E011FO qualifies the exact second-iteration `0x60043C -> 0x7AC38` formatter/helper call setup; native rear remains denied.
