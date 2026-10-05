@@ -1,0 +1,40 @@
+{
+  "experiment": "E011HM",
+  "goal": "Source-qualify the next vararg qword at receiver+0x650 from the accepted E011FO 7AC38 vararg layout (x3=0x1370780, x4=0x10F03B0, x5=0x13F1F28). Qualify the selected string at 0x10F03B0 as one byte 0x5C followed by NUL. Then execute the repeated helper path source-exactly through CA65A8/F5E3E0, the one-byte F5D480 copy, stream pointer/count updates, receiver +0x20 increment from 1 to 2, CAB178 cookie/epilogue return, and stop before 0xCA984C reads source RVA 0x1370764.",
+  "reuse": {
+    "vararg_layout": "E011FO/E011FP plus original 7AC38 wrapper",
+    "helper_chain": "E011GP..E011HC",
+    "stream_state": "E011GY",
+    "current_helper_frontier": "E011HL"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xcace28",
+    "dependency_receiver_relative": "0x650",
+    "bytes": 8,
+    "read_executed": false
+  },
+  "expected_source": {
+    "vararg_value_RVA": "0x10f03b0",
+    "string_first_u8": 92,
+    "string_length_u64": 1
+  },
+  "expected_post_helper": {
+    "receiver_plus_0x18_relative": "0x658",
+    "stream_qword0_receiver_relative": "0x6b2",
+    "stream_count_u64": 2,
+    "receiver_plus_0x20_u32": 2,
+    "destination_new_byte_receiver_relative": "0x6b1",
+    "destination_new_byte_u8": 92,
+    "source_pointer_RVA": "0x1370764",
+    "next_read_RVA": "0xca984c",
+    "next_read_executed": false
+  },
+  "do_not_claim": [
+    "byte at 0x1370764 before E011HN source qualification",
+    "next parser table lookups",
+    "third vararg processing",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
