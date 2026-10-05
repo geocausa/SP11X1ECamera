@@ -1,0 +1,31 @@
+{
+  "experiment": "E011HL",
+  "goal": "Execute the repeated 0xCA9838 helper case under the exact E011HK receiver state. Reuse accepted E011GK/GL/GM/GN/GO helper contracts and opaque-cookie axes to run through CAB178 dispatch, select CAB1F0 -> CACDF8, advance receiver +0x18 from receiver+0x650 to receiver+0x658, and stop before 0xCACE28 dereferences the next vararg qword at receiver+0x650.",
+  "reuse": {
+    "case_prefix": "E011GK",
+    "helper_prefix_dispatch": "E011GL/E011GM",
+    "selected_helper_case": "E011GN",
+    "CACDF8_pointer_prefix": "E011GO",
+    "opaque_cookie": "E011FZ"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xca9838",
+    "target_executed": false
+  },
+  "expected_vararg_frontier": {
+    "CACDF8_read_pointer_RVA": "0xcace10",
+    "receiver_plus_0x18_before_relative": "0x650",
+    "receiver_plus_0x18_after_relative": "0x658",
+    "vararg_read_RVA": "0xcace28",
+    "vararg_receiver_relative": "0x650",
+    "vararg_read_executed": false
+  },
+  "do_not_claim": [
+    "qword at receiver+0x650 before E011HM source qualification",
+    "downstream CA65A8/F5E3E0 path for the next argument",
+    "complete CAB178 helper return",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

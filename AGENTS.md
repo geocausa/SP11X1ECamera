@@ -1,3 +1,7 @@
+## 2026-10-06 E011HK F8B2A2 byte 7 accepted through +20 dispatch to CA9838 frontier
+
+E011HK source-qualifies RVA `0xF8B2A2 = 7`, stores parser state `7`, and reuses the accepted index-7 dispatch entry `0xCA9908 = +20`; original dispatch selects `0xCA9838` and stops before the case. NEXT E011HL reuses the qualified helper/cookie chain to advance receiver `+0x18` from `+0x650` to `+0x658` and stop before the next vararg qword read at `0xCACE28`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HJ F8B2B7 byte 8 accepted to F8B2A2 frontier
 
 E011HJ source-qualifies RVA `0xF8B2B7 = 8`; the first-table read combines scaled value `72` with parser state `1`, deriving exact second lookup RVA `0xF8B2A2`. Execution stops before `0xCA95D8` reads it. NEXT E011HK source-qualifies that byte and reuses the accepted index-7 signed `+20` dispatch entry to stop at `0xCA9838` before its case body. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
