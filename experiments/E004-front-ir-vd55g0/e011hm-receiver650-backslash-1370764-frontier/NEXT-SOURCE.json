@@ -1,0 +1,40 @@
+{
+  "experiment": "E011HN",
+  "goal": "Source-qualify image byte RVA 0x1370764. Under exact E011HM state execute the signed read/update at 0xCA984C, advance the retained pointer to 0x1370765, reuse the accepted source-byte-0x25 parser lookup chain (first table 0xF8B21B=1, second table 0xF8B230=1, signed dispatch 0xCA98F0=-52), execute the accepted 0xCA9718 case body, reload the retained pointer, and stop before 0xCA984C reads RVA 0x1370765.",
+  "reuse": {
+    "source_byte_path": "E011HE/E011HF/E011HG",
+    "selected_case": "E011GF/E011HH",
+    "stream_state": "E011HM"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xca984c",
+    "dependency_RVA": "0x1370764",
+    "bytes": 1,
+    "signed": true,
+    "read_executed": false
+  },
+  "source_hint": {
+    "dependency_RVA": "0x1370764",
+    "expected_u8": 37,
+    "expected_s8": 37
+  },
+  "expected_next_frontier": {
+    "pointer_after_first_read_RVA": "0x1370765",
+    "receiver_plus_0x39_u8": 37,
+    "parser_state_after_u8": 1,
+    "dispatch_target_RVA": "0xca9718",
+    "case_executed": true,
+    "receiver_plus_0x20_u32_preserved": 2,
+    "pointer_RVA": "0x1370765",
+    "next_read_RVA": "0xca984c",
+    "next_read_executed": false
+  },
+  "do_not_claim": [
+    "byte at 0x1370765 before E011HO source qualification",
+    "downstream parser path for byte 0x73",
+    "third formatter vararg processing",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

@@ -1,3 +1,7 @@
+## 2026-10-06 E011HM backslash vararg accepted to 0x1370764 byte frontier
+
+E011HM joins the accepted formatter vararg layout to receiver `+0x650 = RVA 0x10F03B0`, source-qualifies the one-byte `0x5c` string, and executes the repeated helper through scan, one-byte copy, stream updates, cookie check and helper return. Stream pointer/count become receiver `+0x6b2` / `2`, receiver `+0x20 = 2`, and receiver `+0x6b1 = 0x5c`. Execution stops before `0xCA984C` reads source RVA `0x1370764`. NEXT E011HN source-qualifies that byte and reuses the accepted `%` parser/dispatch/case chain to the `0x1370765` read frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HL repeated helper accepted to receiver+0x650 vararg frontier
 
 E011HL executes the repeated `0xCA9838 -> CAB178 -> CAB1F0 -> CACDF8` path across four opaque-cookie axes, advancing receiver `+0x18` from relative `+0x650` to `+0x658` and stopping before `0xCACE28` dereferences the qword at `+0x650`. NEXT E011HM joins the accepted formatter vararg layout to qualify that qword as RVA `0x10F03B0`, qualifies its one-byte string, and carries the helper through copy/return to the next parser-byte frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
