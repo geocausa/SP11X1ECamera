@@ -1,0 +1,41 @@
+{
+  "experiment": "E011GV",
+  "goal": "Execute the second 0xCAB58C -> 0xCAD1F0 call under the exact E011GU state only through the owned stream-pointer load at 0xCAD218. Qualify receiver +0x460 as selecting the accepted E011GA object at receiver-relative -0x20, then stop before the 16-byte object-field read at 0xCAD21C from receiver-relative -0x18/-0x10.",
+  "reuse": {
+    "second_call_state": "E011GU",
+    "stream_pointer_source": "E011GA",
+    "retained_parser_state": "E011GN"
+  },
+  "current_camera_frontier": {
+    "call_RVA": "0xcab58c",
+    "target_RVA": "0xcad1f0",
+    "x0_receiver_relative": "0x460",
+    "x1_value_RVA": "0x1370780",
+    "x2_u64": 1,
+    "x3_receiver_relative": "0x20",
+    "x4_receiver_relative": "0x4c0",
+    "call_executed": false
+  },
+  "next_dependency": {
+    "pointer_slot_receiver_relative": "0x460",
+    "pointer_value_receiver_relative": "-0x20",
+    "pointer_load_RVA": "0xcad218",
+    "pointer_load_executed": false,
+    "object_field_read_RVA": "0xcad21c",
+    "object_field_first_receiver_relative": "-0x18",
+    "object_field_second_receiver_relative": "-0x10",
+    "object_field_bytes": 16,
+    "object_field_read_executed": false
+  },
+  "do_not_claim": [
+    "the object-field values before source/native qualification",
+    "the branch at 0xcad224 before the two object fields are qualified",
+    "any downstream stream mutation",
+    "complete CAB178 helper return",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
