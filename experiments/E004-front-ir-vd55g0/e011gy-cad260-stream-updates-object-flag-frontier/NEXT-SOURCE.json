@@ -1,0 +1,43 @@
+{
+  "experiment": "E011GZ",
+  "goal": "Source-qualify the object +0x18 flag byte at receiver-relative -0x8 from the accepted E011FZ CA6280 setup path. Then execute only 0xCAD284..0xCAD290 under the exact E011GY state, qualify the flag branch and x22/x23 equality branch, and stop before 0xCAD294 reads receiver +0x20.",
+  "reuse": {
+    "stream_update_state": "E011GY",
+    "object_flag_source": "accepted E011FZ CA62E8..CA6300 setup",
+    "x22_x23_state": "E011GW"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xcad284",
+    "flag_receiver_relative": "-0x8",
+    "bytes": 1,
+    "read_executed": false
+  },
+  "source_hint": {
+    "producer_RVA": "0xca6300",
+    "producer_shape": "strb w8,[sp,#0x18]",
+    "expected_flag_u8": 0
+  },
+  "expected_branch_frontier": {
+    "flag_branch_RVA": "0xcad288",
+    "flag_nonzero_branch_expected": false,
+    "equality_compare_RVA": "0xcad28c",
+    "x22_u64": 1,
+    "x23_u64": 1,
+    "inequality_branch_RVA": "0xcad290",
+    "inequality_branch_expected": false,
+    "next_read_RVA": "0xcad294",
+    "next_read_receiver_relative": "0x20",
+    "next_read_executed": false
+  },
+  "do_not_claim": [
+    "receiver +0x20 value before E011HA exact qualification",
+    "receiver +0x20 store at 0xcad29c",
+    "complete CAD1F0 return",
+    "complete CAB178 helper return",
+    "branch at 0xca9844",
+    "next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

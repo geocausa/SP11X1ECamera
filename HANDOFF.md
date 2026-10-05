@@ -1,3 +1,7 @@
+## 2026-10-06 E011GY stream pointer/count updates accepted to object-flag frontier
+
+E011GY resumes at `0xCAD260`, advances the stream-object qword0 from receiver `+0x6b0` to `+0x6b1` and count from `0` to `1`, then reloads the object slot at `0xCAD280`. It stops before `0xCAD284` reads object `+0x18` (receiver `-0x8`). NEXT E011GZ source-qualifies that flag from the accepted E011FZ setup and executes only the immediate branch pair, stopping before receiver `+0x20` is read at `0xCAD294`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011GX source-qualified one-byte copy accepted to stream-update frontier
 
 E011GX executes `0xCAD25C -> 0xF5D480` using E011GR source authority for RVA `0x1370780 = 0x2e`. The original helper copies exactly one byte to receiver `+0x6b0` and returns to `0xCAD260`; no stream object pointer/count update has executed yet. NEXT E011GY advances the qualified pointer and count by one, reloads the object at `0xCAD280`, and stops before the unqualified object `+0x18` byte read at `0xCAD284` (receiver `-0x8`). No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
