@@ -1,3 +1,7 @@
+## 2026-10-05 E011FK caller nonzero return/output cleanup accepted
+
+E011FK qualifies the original `0x600454` nonzero return branch for `w0=2`, clears `x20`, executes the exact 8-byte zero store to the retained caller output slot at outer-entry `SP-1448`, and qualifies the `0x600468` zero-`x20` fallthrough. The next untouched source is `0x60046C`, reading 8 bytes from RVA `0x160A218`. Four cases reject 1,732 current-path mutations plus 264 producer API mutations. NEXT E011FL qualifies that pointer-field dependency before its bit-16 branch.
+
 ## 2026-10-05 E011FJ outer CAECF8 CRT2 / CED2F0 return accepted
 
 E011FJ executes the new outer `CAECF8` call under the exact same-thread error authority, returns the current-thread CRT-error pointer, qualifies the `CED33C` 4-byte load as value `2`, and completes the original `CED2F0` error epilogue back to `0x600454` with `w0=2`, SP-relative `-1456`, and the saved nonvolatile frame restored. Four cases reject 1,680 current-path mutations plus 264 producer API mutations. NEXT E011FK qualifies the caller nonzero-return branch and output cleanup.

@@ -1,0 +1,23 @@
+{
+  "experiment": "E011FL",
+  "goal": "Qualify the exact 8-byte dependency read at 0x60046C from source-retained x24=base+0x160A1F0 (field RVA 0x160A218), establish its current-path authority, and execute the following 0x600470 bit-16 branch only if that value is source- or native-qualified.",
+  "reuse": {
+    "caller_nonzero_output_cleanup": "E011FK",
+    "complete_CED2F0_error_return": "E011FJ"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0x60046c",
+    "x24_RVA": "0x160a1f0",
+    "dependency_RVA": "0x160a218",
+    "dependency_bytes": 8,
+    "next_branch_RVA": "0x600470",
+    "tested_bit": 16
+  },
+  "do_not_claim": [
+    "0x160A218 runtime value before source/native authority is established",
+    "0x600470 branch direction before the exact value is qualified",
+    "deeper caller state beyond the next dependency",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
