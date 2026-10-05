@@ -1,0 +1,24 @@
+{
+  "experiment": "E011GE",
+  "goal": "Qualify the exact signed 4-byte image jump-table entry at RVA 0xCA98F0 selected by parser state 1, execute original 0xCA95F4..0xCA9600 dispatch only while source authority remains exact, and stop at the selected case entry before any new dependency/effect.",
+  "reuse": {
+    "second_parser_table_byte": "E011GD",
+    "first_parser_table_byte": "E011GC",
+    "older_dispatch_shape_only": "E011DY"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xca95f4",
+    "dependency_read_RVA": "0xca98f0",
+    "dependency_bytes": 4,
+    "dependency_signed": true,
+    "dependency_read_executed": false,
+    "jump_table_index_u32": 1
+  },
+  "do_not_claim": [
+    "jump-table entry or target before exact qualification",
+    "selected case body",
+    "CA94E8 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
