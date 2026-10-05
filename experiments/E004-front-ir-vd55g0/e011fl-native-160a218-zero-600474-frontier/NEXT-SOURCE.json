@@ -1,0 +1,22 @@
+{
+  "experiment": "E011FM",
+  "goal": "At original 0x600474, qualify the retained x21 owner and the exact 4-byte read from [x21+0x858], then execute the following source branch only after that value has source or native authority.",
+  "reuse": {
+    "native_zero_160a218_and_bit16_fallthrough": "E011FL",
+    "caller_nonzero_output_cleanup": "E011FK"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0x600474",
+    "dependency_expression": "[x21+0x858]",
+    "dependency_bytes": 4,
+    "dependency_read_executed": false
+  },
+  "do_not_claim": [
+    "an absolute address for [x21+0x858] before x21 ownership is qualified",
+    "the value read at 0x600474 before source or native authority exists",
+    "the next branch direction before the exact value is qualified",
+    "an exact 0x60046C native instruction breakpoint hit",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

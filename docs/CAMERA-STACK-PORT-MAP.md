@@ -1,3 +1,7 @@
+## 2026-10-05 E011FL native `0x160A218` zero / bit-16 fallthrough accepted
+
+E011FL independently reads the live front-camera FrameServer qword at RVA `0x160A218` as zero before reader Start and again after one successful NV12 1920x1080 front-only Start. The exact `0x60046C` breakpoint remained correctly armed at the stable module address but was not observed, so the checkpoint records the native value authority without claiming a breakpoint hit. Four retained placements execute original `0x60046C` and `0x600470`, prove bit 16 clear, fall through to `0x600474`, and reject 1,768 current-path mutations plus 264 producer API mutations. One front Start, zero rear Starts and one controlled reboot return SP11 to verified Golden Linux. NEXT E011FM qualifies the retained `x21` owner and exact 4-byte `[x21+0x858]` read; native rear remains denied.
+
 ## 2026-10-05 E011FK caller nonzero return/output cleanup accepted
 
 E011FK qualifies the original `0x600454` nonzero return branch for `w0=2`, clears `x20`, executes the exact 8-byte zero store to the retained caller output slot at outer-entry `SP-1448`, and qualifies the `0x600468` zero-`x20` fallthrough. The next untouched source is `0x60046C`, reading 8 bytes from RVA `0x160A218`. Four cases reject 1,732 current-path mutations plus 264 producer API mutations. NEXT E011FL qualifies that pointer-field dependency before its bit-16 branch.
