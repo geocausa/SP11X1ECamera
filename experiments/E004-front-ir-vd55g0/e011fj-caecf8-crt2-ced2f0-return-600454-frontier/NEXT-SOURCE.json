@@ -1,0 +1,22 @@
+{
+  "experiment": "E011FK",
+  "goal": "Execute the original 0x600454 return branch with w0=2, qualify the nonzero fallthrough through the exact caller output cleanup at 0x600458-0x600460, and continue only while the caller result/output ownership remains exact.",
+  "reuse": {
+    "complete_CED2F0_error_return": "E011FJ",
+    "outer_zero_result_store": "E011FI",
+    "current_thread_error_authority": "E011EY/E011EZ"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0x600454",
+    "incoming_return_u32": 2,
+    "SP_relative_outer_entry": -1456,
+    "expected_nonzero_fallthrough_RVA": "0x600458"
+  },
+  "do_not_claim": [
+    "0x600464 success-path load on the current nonzero return",
+    "complete surrounding caller return before exact cleanup/branch ownership is qualified",
+    "any use of released selected-object lock or 76-byte owner",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

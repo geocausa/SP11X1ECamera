@@ -1,3 +1,7 @@
+## 2026-10-05 E011FJ outer CAECF8 CRT2 / CED2F0 return accepted
+
+E011FJ executes the new outer `CAECF8` call under the exact same-thread error authority, returns the current-thread CRT-error pointer, qualifies the `CED33C` 4-byte load as value `2`, and completes the original `CED2F0` error epilogue back to `0x600454` with `w0=2`, SP-relative `-1456`, and the saved nonvolatile frame restored. Four cases reject 1,680 current-path mutations plus 264 producer API mutations. NEXT E011FK qualifies the caller nonzero-return branch and output cleanup.
+
 ## 2026-10-05 E011FI CED330 zero store/branch to CAECF8 frontier accepted
 
 E011FI executes the original `0xCED330` 8-byte zero-result store through the exact caller output pointer at outer-entry `SP-1448`, qualifies the `0xCED334` zero fallthrough to `0xCED338`, and reaches the new outer `0xCAECF8` entry with return link `0xCED33C`. Same-thread authority remains exact at OS error `3` / CRT error `2`; the selected lock and 76-byte owner remain released with no subsequent original reads. Four cases reject 1,620 current-path mutations plus 264 producer API mutations. NEXT E011FJ executes the outer `CAECF8` body and qualifies the returned CRT-error pointer/value before advancing the `CED2F0` epilogue.
