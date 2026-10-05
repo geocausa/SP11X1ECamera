@@ -1,3 +1,7 @@
+## 2026-10-06 E011HG F8B230 byte 1 accepted through -52 dispatch to CA9718 frontier
+
+E011HG source-qualifies RVA `0xF8B230 = 1`, stores parser state `1`, and reuses the accepted signed dispatch entry `0xCA98F0 = -52`; original dispatch selects `0xCA9718` and stops before the case body. The retained source pointer is `0x1370763` and receiver `+0x20 = 1`. NEXT E011HH reuses E011GF case semantics and stops before the next byte read at `0x1370763`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HF state-7 first parser lookup accepted to F8B230 frontier
 
 E011HF executes the `0xCA9590` loop under source byte `0x25`, receiver `+0x20 = 1`, and parser state `7`. Reusing accepted first-table RVA `0xF8B21B = 1`, the exact second lookup resolves to RVA `0xF8B230`; execution stops before `0xCA95D8` reads it. NEXT E011HG source-qualifies that byte and reuses the accepted signed `-52` dispatch entry to stop at `0xCA9718` before the case body. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

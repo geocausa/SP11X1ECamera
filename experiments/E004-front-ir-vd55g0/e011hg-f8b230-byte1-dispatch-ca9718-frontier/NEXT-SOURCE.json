@@ -1,0 +1,32 @@
+{
+  "experiment": "E011HH",
+  "goal": "Execute the already-qualified selected case body at 0xCA9718 under the exact E011HG receiver state. Reuse E011GF case semantics, qualify the same owned receiver mutations while preserving receiver +0x20 = 1 and source pointer RVA 0x1370763, branch to 0xCA9848, reload that pointer, and stop before 0xCA984C reads the byte at 0x1370763.",
+  "reuse": {
+    "selected_case_semantics": "E011GF",
+    "dispatch_state": "E011HG"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xca9718",
+    "selected_target_executed": false
+  },
+  "expected_mutations": {
+    "receiver_plus_0x38_u8": 0,
+    "receiver_plus_0x28_u64": 0,
+    "receiver_plus_0x30_u64": 4294967295,
+    "receiver_plus_0x4c_u8": 0,
+    "receiver_plus_0x20_u32_preserved": 1
+  },
+  "expected_read_frontier": {
+    "common_resume_RVA": "0xca9848",
+    "pointer_RVA": "0x1370763",
+    "read_RVA": "0xca984c",
+    "read_executed": false
+  },
+  "do_not_claim": [
+    "byte at 0x1370763 before E011HI source qualification",
+    "downstream parser state after the next read",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
