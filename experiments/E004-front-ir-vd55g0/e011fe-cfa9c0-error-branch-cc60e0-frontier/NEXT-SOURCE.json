@@ -1,0 +1,24 @@
+{
+  "experiment": "E011FF",
+  "goal": "Qualify original 0xCC60E0 selected-object cleanup from the exact E011FE 0xCED188 callsite and retained selected-object lock ownership, then continue only while the cleanup/release contract and outer caller state remain exact.",
+  "reuse": {
+    "CFA968_error_return": "E011FE",
+    "selected_object_and_lock_ownership": "E011EL-E011FE",
+    "retired_76byte_owner": "E011FA-E011FE"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xced188",
+    "call_target_RVA": "0xcc60e0",
+    "CFA968_return_u64": 0,
+    "selected_cleanup_pointer_exact": true,
+    "selected_object_lock_retained_held": true
+  },
+  "do_not_claim": [
+    "CC60E0 cleanup effects before exact qualification",
+    "selected-object lock release before original source proves it",
+    "any use of the released 76-byte owner",
+    "complete outer CED150 return before qualified",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

@@ -1,3 +1,7 @@
+## 2026-10-05 E011FE CFA9C0 error branch to CC60E0 frontier accepted
+
+E011FE resumes at `0xCFA9C0`: exact incoming CFCC18 return `2` takes the original nonzero branch to `0xCFA99C`, sets `x0=0`, bypasses the selected-object mutation path, executes the CFA968 epilogue/`ret`, and returns to `0xCED178`. The outer zero-result path stores zero, reloads the exact unchanged selected-object pointer, and reaches `0xCED188 -> 0xCC60E0` with its owned lock still held. The retired 76-byte owner is never read again and both lowIO lock depths remain zero. Four cases reject 1,236 current-path mutations plus 264 producer API mutations. NEXT E011FF qualifies `CC60E0` selected-object cleanup; no new Start/reboot/build and native rear remains denied.
+
 ## 2026-10-05 E011FD CFCC18 error return to CFA9C0 frontier accepted
 
 E011FD resumes at `0xCFCCE4`: all four cases restore the caller-visible result slot to `-1`, preserve error return `2`, execute the original CFCC18 epilogue/`ret`, restore its saved nonvolatile state and stack, and land exactly at `0xCFA9C0`. Both lowIO locks remain released and the retired 76-byte owner remains untouched. Four cases reject 1,212 current-path mutations plus 264 producer API mutations. NEXT E011FE qualifies the `CFA9C0` nonzero branch to `CFA99C`; no new Start/reboot/build and native rear remains denied.
