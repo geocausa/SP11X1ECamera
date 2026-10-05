@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2026 geoca
 """Read-only structural decoder for QTI Parameter Parser v3.x .bin files.
 
 This does not contain or redistribute vendor data. It decodes the generic container:

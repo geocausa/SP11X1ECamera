@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2026 geoca
 set -euo pipefail
 cd "$(dirname "$0")/.."
 bad_re='\.(sys|dll|cat|mbn|elf|bin|etl|dmp|pcap|pcapng)$'

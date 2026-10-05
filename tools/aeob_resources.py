@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2026 geoca
 """Decode an AeoB blob to structured JSON, focused on DEVICE/DSTATE resources."""
 from __future__ import annotations
 import argparse, io, json, struct
