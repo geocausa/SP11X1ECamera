@@ -1,3 +1,7 @@
+## 2026-10-05 E011GN selected helper case accepted to CACDF8 call frontier
+
+E011GN executes only selected case prefix `0xCAB1F0`, qualifying `x0` as the exact retained receiver, and stops at `0xCAB1F4` before helper `0xCACDF8`. The retained source pointer remains `0x1370762` and parser state remains `7`. Helper source first consumes receiver `+0x18`, updates that pointer, then reaches an 8-byte dereference at `0xCACE28`. NEXT E011GO source-qualifies the retained receiver pointer from E011GA and executes only through the pointer update, stopping before that dereference. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-05 E011GM signed helper dispatch accepted to CAB1F0 case frontier
 
 E011GM source-qualifies helper dispatch entry `0xCAB724` as signed `-6`. Four source-exact placements execute original `0xCAB1C4..0xCAB1D0`, selecting exact target `0xCAB1F0` while stopping before the selected case. Source inspection shows `0xCAB1F0` selects the retained receiver for helper call `0xCACDF8` at `0xCAB1F4`. NEXT E011GN executes only that case prefix and stops before the helper call. The retained parser source pointer remains `0x1370762`, parser state remains `7`, and no camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

@@ -1,0 +1,34 @@
+{
+  "experiment": "E011GO",
+  "goal": "Source-qualify the retained receiver +0x18 pointer from the accepted E011GA owned-receiver setup as receiver-relative +0x648, execute helper 0xCACDF8 entry/prologue through the pointer-alignment update at 0xCACE24, qualify the updated receiver +0x18 pointer as receiver-relative +0x650, and stop before the 8-byte dereference at 0xCACE28 from the original receiver-relative +0x648 location.",
+  "reuse": {
+    "selected_case_receiver_argument": "E011GN",
+    "owned_receiver_setup": "E011GA",
+    "helper_dispatch_state": "E011GM"
+  },
+  "current_camera_frontier": {
+    "helper_entry_RVA": "0xcacdf8",
+    "helper_call_RVA": "0xcab1f4",
+    "helper_call_executed": false
+  },
+  "next_dependency": {
+    "receiver_pointer_offset": "0x18",
+    "expected_initial_receiver_relative": "0x648",
+    "pointer_update_RVA": "0xcace24",
+    "expected_updated_receiver_relative": "0x650",
+    "memory_read_RVA": "0xcace28",
+    "bytes": 8,
+    "read_executed": false
+  },
+  "do_not_claim": [
+    "the 8-byte value at receiver-relative +0x648 before E011GO source qualification",
+    "downstream helper call 0xca65a8",
+    "helper return value",
+    "the helper-result path to 0xcab274",
+    "the branch at 0xca9844",
+    "the next parser source byte at 0x1370762",
+    "complete parser iteration",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
