@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2026 geoca
 """Decode Qualcomm Windows AeoB ACPI resource blobs to readable package text.
 
 Format behavior derived from WOA-Project/AeoBUtils (MIT, copyright 2022 WOA Project),
