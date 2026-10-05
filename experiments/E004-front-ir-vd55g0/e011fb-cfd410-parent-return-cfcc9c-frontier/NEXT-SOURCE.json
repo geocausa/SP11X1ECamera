@@ -1,0 +1,23 @@
+{
+  "experiment": "E011FC",
+  "goal": "Execute the original caller prefix from 0xCFCC9C, qualify storage of return 2 and the immediate branch state, then continue only while lowIO/selected-object lock release ownership remains exact; do not claim the complete CFCC18 return until all retained lock/resource cleanup is qualified.",
+  "reuse": {
+    "complete_CFD410_return": "E011FB",
+    "exact_current_76byte_cleanup": "E011FA",
+    "joined_lowIO_lifetime": "E011EU/E011EV/E011EW"
+  },
+  "current_camera_frontier": {
+    "source_RVA": "0xcfcc9c",
+    "incoming_return_u32": 2,
+    "released_owner_bytes": 76,
+    "next_store_RVA": "0xcfcca0",
+    "next_state_read_RVA": "0xcfcca4"
+  },
+  "do_not_claim": [
+    "complete CFCC18 return before qualified",
+    "any use of the released 76-byte owner",
+    "retained lowIO/selected-object locks are released before exact source qualification",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
