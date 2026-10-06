@@ -1,0 +1,20 @@
+{
+  "experiment": "E011LY",
+  "goal": "Execute the second accepted registry-helper call at 0x5DE948 -> 0x5B80A8 by reusing the closed helper return authority, then source-execute the caller flattening loop over all 231 descriptors / 519 nested tags. Verify the exact 519 vendor-tag IDs written into caller object RVA 0x1733E20, close total count 282+519+239=1040 at +0x12C0, and stop before 0x5DE9E4. This is baseline metadata plumbing; optional AI/effects consumers remain out of scope.",
+  "current_frontier": {
+    "call_RVA": "0x5de948",
+    "target_RVA": "0x5b80a8",
+    "aggregate_nested_count_u32": 519,
+    "call_executed": false
+  },
+  "expected_closure": {
+    "flattened_value_count_u32": 519,
+    "caller_total_offset": "0x12c0",
+    "caller_total_u32": 1040,
+    "stop_RVA": "0x5de9e4",
+    "stop_executed": false
+  },
+  "product_scope": "front_rear_rgb_parity",
+  "optional_ai_effects_non_blocking": true,
+  "native_rear_runtime_allowed": false
+}

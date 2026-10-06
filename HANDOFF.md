@@ -1,3 +1,7 @@
+## 2026-10-06 E011LX descriptor nested-count reduction accepted
+
+E011LX source-executes the original caller from `0x5DE844`: the accepted 231-descriptor table reduces to exactly 519 nested metadata elements, stored at caller object `0x1733E20 + 0x12C8`; 519 is below the 1200 guard, selecting the second `0x5B80A8` registry-helper call at `0x5DE948`. With existing 282 and 239 counts, the eventual combined count is 1040. NEXT E011LY verifies exact flattening of the 519 vendor-tag IDs. Product scope remains front/rear RGB parity.
+
 ## 2026-10-06 E011LW complete registry-helper return accepted
 
 E011LW reloads the accepted cached registry object, restores the 0x220-byte local frame, executes the source-exact 0x11F0 stack-cookie epilogue under the accepted contract, restores saved registers, and returns from `0x5B80A8` at `0x5B9068` to original caller `0x5DE844` with x0 = registry object RVA `0x17A4230`. NEXT E011LX follows the caller descriptor-count reduction to the second registry-helper frontier. Product scope remains front/rear RGB parity.
