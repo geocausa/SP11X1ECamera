@@ -1,3 +1,7 @@
+## 2026-10-06 E011JV native loader index accepted to TLS publication frontier
+
+E011JV used the bounded Windows front-camera oracle because the inherited loader index was not unique. RVA `0x16A3740` measured `15` both before and after a successful `NV12 1920x1080` front reader Start in the same process/module context. Source-exact continuation then uses `x18+0x58`, slot `15`, and stores epoch `0x80000043` at TLS block offset `+0x10` via `0xCE7AA4`, stopping before `0xCE7AB0` releases the SRW lock. NEXT E011JW qualifies that release and stops before the condition-variable wake. One bounded front Start was used; no rear runtime or kernel build occurred, and SP11 is back on Golden Linux.
+
 ## 2026-10-06 E011JU epoch publication accepted to loader-index frontier
 
 E011JU advances the retained global epoch from `0x80000042` to `0x80000043` while SRW ownership is held, publishes it to RVA `0x1607B04` and guard RVA `0x1B302D0`, and stops before `0xCE7A90` reads loader-index RVA `0x16A3740`. NEXT E011JV resolves the exact loader/TLS index contract, using the bounded Windows oracle if retained authority is not unique. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
