@@ -1,3 +1,7 @@
+## 2026-10-06 E011LY complete vendor-tag flattening accepted
+
+E011LY reuses the closed second registry-helper return and source-executes the caller flattening loop across all 231 descriptors / 519 nested vendor tags. The exact 519-ID sequence is verified by SHA-256 and caller object `0x1733E20` closes total metadata count `282 + 519 + 239 = 1040` at `+0x12C0`. NEXT E011LZ inspects only generic standard-metadata construction needed by normal front/rear RGB.
+
 ## 2026-10-06 E011LX descriptor nested-count reduction accepted
 
 E011LX source-executes the original caller from `0x5DE844`: the accepted 231-descriptor table reduces to exactly 519 nested metadata elements, stored at caller object `0x1733E20 + 0x12C8`; 519 is below the 1200 guard, selecting the second `0x5B80A8` registry-helper call at `0x5DE948`. With existing 282 and 239 counts, the eventual combined count is 1040. NEXT E011LY verifies exact flattening of the 519 vendor-tag IDs. Product scope remains front/rear RGB parity.
