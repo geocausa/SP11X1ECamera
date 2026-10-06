@@ -1,3 +1,7 @@
+## 2026-10-06 E011LM first map entry linked accepted
+
+E011LM copies the four-byte value, publishes key storage in the 24-byte value node, links that node as both head/tail of bucket 280, increments bucket/map counts to one, and returns zero to `0x5B8D54`. NEXT E011LN resolves the caller runtime globals at `0x160A218/0x1608858` before taking the post-insert branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LL value-node/key-storage frontier accepted
 
 E011LL allocates the 24-byte value node and 132-byte key storage, clears them, copies 128 normalized-key bytes, and stops at `0x5E8578`. NEXT E011LM copies the four-byte value, links the node into bucket 280, updates counts, and returns to the caller. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
