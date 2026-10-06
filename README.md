@@ -1,3 +1,7 @@
+## 2026-10-06 E011LZ standard metadata first-record frontier accepted
+
+E011LZ source-qualifies the 282-entry standard metadata component: original static tag table RVA `0x10EDA10`, first tag ID 0, destination record array RVA `0x17350E0`, 168-byte record stride, and first name buffer at `+0x3C`. Execution stops before `0x5DEA10 -> 0x5E07B0`. NEXT E011MA bounds name decoration and keeps only numeric/core metadata needed by normal front/rear RGB clients.
+
 ## 2026-10-06 E011LY complete vendor-tag flattening accepted
 
 E011LY reuses the closed second registry-helper return and source-executes the caller flattening loop across all 231 descriptors / 519 nested vendor tags. The exact 519-ID sequence is verified by SHA-256 and caller object `0x1733E20` closes total metadata count `282 + 519 + 239 = 1040` at `+0x12C0`. NEXT E011LZ inspects only generic standard-metadata construction needed by normal front/rear RGB.
