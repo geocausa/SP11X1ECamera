@@ -1,3 +1,7 @@
+## 2026-10-06 E011IE second-formatter caller accepted to CED2F0 call frontier
+
+E011IE resumes at `0x600440` with return `26`, loop counter `1`, and `x23=RVA 0x10F03B0`, then reaches `0x600450 -> 0xCED2F0` with exact source-owned arguments and no intervening memory access. NEXT E011IF rejoins the accepted same-thread CRT error and CED2F0 return. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011ID 0x7AC38 wrapper tail accepted to 0x600440 frontier
 
 E011ID preserves return `26` through the accepted 0x7AC38 wrapper tail, restores its frame, and stops before `0x600440`. NEXT E011IE continues the accepted formatter caller source-exactly. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
