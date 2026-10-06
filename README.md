@@ -1,3 +1,7 @@
+## 2026-10-06 E011KF 0x1480 allocation accepted
+
+E011KF executes the accepted process-heap allocator chain for exactly `0x1480` bytes, receives a nonzero owned allocation in `x24`, and stops before `0x5B82D0`. NEXT E011KG clears the complete allocation through `0xF5E600` and stops at `0x5B82E0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KE post-descriptor allocation size accepted
 
 E011KE consumes return `0`, descriptor size `0xA4`, and E011DS caller-object state to compute the exact `0x1480` allocation request, stopping before `0x5B82C8 -> 0xCAE740`. NEXT E011KF reuses the accepted process-heap allocator contract and stops before the result branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
