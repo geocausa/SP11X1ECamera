@@ -1,3 +1,7 @@
+## 2026-10-06 E011JY zero status branch accepted to 0x5BE368
+
+E011JY follows `0x5BE674 -> 0x5BDEB8`, preserves the accepted E011JP `x25=RVA 0x18A2968` authority, reads `x25+4=0`, and proves `0x5BDEC0 b.ne` selects `0x5BE368`. NEXT E011JZ executes the paired stack-cookie check and stops at `0x5BE374` before nonvolatile restoration. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JX condition wake accepted through helper return
 
 E011JX executes `WakeAllConditionVariable` at `0xCE7AC0` with `x0=RVA 0x16A3730`, proves it occurs after SRW release, completes the source-exact helper epilogue, and returns through `0xCE7AD0` to caller RVA `0x5BE674`. NEXT E011JY follows the branch to `0x5BDEB8`, consumes the accepted zero at `x25+4`, and stops at the selected `0x5BE368` continuation. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
