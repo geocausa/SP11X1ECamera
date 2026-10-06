@@ -1,3 +1,7 @@
+## 2026-10-06 E011LI first normalized key frontier accepted
+
+E011LI source-executes the first normalized descriptor key path: 56 key bytes are placed into the 128-byte scratch buffer, original xor-DJB2 yields `0x9F92CC38`, bucket 280/350 is empty, and execution stops before `0x5B8D50 -> 0x5E83D8`. This also corrects E011LH's unexecuted additive-hash forecast. NEXT E011LJ executes empty-bucket node publication. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LH map object construction accepted
 
 E011LH constructs the exact 0x40-byte map object and cleared 2800-byte / 350-entry array, returns nonzero, stores it at caller `+0x30`, and stops before `0x5B8BCC`. NEXT E011LI qualifies the first descriptor key/hash/bucket and targets the first `0x5E83D8` insertion call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
