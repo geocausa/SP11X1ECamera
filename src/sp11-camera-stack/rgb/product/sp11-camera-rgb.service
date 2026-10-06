@@ -1,0 +1,23 @@
+[Unit]
+Description=SP11 opt-in front/rear RGB camera selector (pre-release)
+ConditionKernelCommandLine=sp11_camera_rgb_product=1
+After=systemd-udev-settle.service
+Wants=systemd-udev-settle.service
+OnFailure=sp11-camera-rgb-recover.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=root
+Group=root
+UMask=0077
+ExecStart=/usr/local/libexec/sp11-camera-stack/rgb/product/product_daemon.py --max-seconds 14400
+RuntimeMaxSec=4h
+TimeoutStopSec=20
+KillSignal=SIGTERM
+Restart=no
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

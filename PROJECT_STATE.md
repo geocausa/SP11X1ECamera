@@ -1,3 +1,7 @@
+## 2026-10-06 E012A RGB product-integration pivot accepted
+
+E012A ends open-ended OEM DLL archaeology as the default workstream and moves the selected product to integration: normal front/rear RGB only. The new `src/sp11-camera-stack/rgb/product/` layer reuses the physically proven RGBSession, exact 119-edge route controller and front1080/rear4K RAW10→NV12 publishers; it adds an opt-in pre-release daemon, `video`-group selector, exact asset admission, systemd publisher ownership, verified STREAMOFF stop, and fail-safe Golden recovery. 42 existing service tests + 14 new product tests + 11 route-policy tests and the RGB source suite pass. Product publishers refuse on current Golden without the dedicated boot token. No camera Start/reboot/kernel build or service activation occurred. NEXT E012B is inactive Golden installation only; Ghidra/KD/Windows oracle is now demand-driven by concrete RGB product failures.
+
 ## 2026-10-06 E011MD complete vendor numeric metadata accepted
 
 E011MD closes all 519 vendor numeric/core metadata records at indices 282..800 with signature `fdb6847dfafc5172343b5de56abdb3a7d2e56c9e2365054b8c00fee1d643ad9e`, aggregate element bytes 6071452 and 3633 accepted registry-helper reads. Name decoration remains deliberately bypassed under E011MA. NEXT E011ME closes the remaining 239 numeric records and the full 1040-record table.

@@ -1,0 +1,11 @@
+# SP11 RGB product integration (pre-release, opt-in)
+
+This directory is the productization pivot for the normal **front + rear RGB camera**. It deliberately stops treating the whole Windows OEM DLL as a prerequisite. Further Windows/Ghidra/KD archaeology is demand-driven only: use it when a concrete RGB product failure requires an oracle answer.
+
+The maintained path is the already physically proven software RAW10→NV12 transport: front 1920×1080 and rear 3840×2160, exact 119-edge exclusive route switching, ordinary uid1000 V4L2 clients, crash/reopen recovery, STREAMOFF and neutral shutdown. The product service reuses that safety state machine rather than inventing another route controller.
+
+`install-unactivated.sh` is safe to run on protected Golden Linux: it compiles the publishers with the accepted opt-in continuous + video-range + BT.601 metadata flags, installs only inert service assets, leaves the daemon disabled, creates **no ENABLE contract**, creates no camera boot entry, loads no module and opens no camera. The binaries themselves require `sp11_camera_rgb_product=1` on the kernel command line.
+
+The pre-release runtime is intentionally still bounded to four hours until a fresh product-boot soak closes that gate. On a product boot, the daemon requires a root-sealed `/var/lib/sp11-camera-rgb/ENABLE`, the exact installed camera-stack manifest, exact product-assets manifest/source commit, saved Golden GRUB entry, exact kernel, IR suspended, exclusive controller lease and validated physical/virtual nodes. Users in the `video` group can request `front`, `rear`, `off`, or `status` through `/run/sp11-camera-rgb/control.sock`; the daemon remains the sole hardware owner. Any ambiguous stop, graph write, publisher death, lost guard or runtime bound failure fails closed and the systemd recovery path returns to Golden.
+
+Still open before calling this the daily camera stack: create the separate opt-in product boot bundle, run a fresh repeated-switch/long-duration hardware acceptance, validate service recovery and normal app behavior for hours rather than minutes, then improve exposure/colour/detail against Windows. Protected IR/Hello and optional AI/effects remain outside the RGB release gate.

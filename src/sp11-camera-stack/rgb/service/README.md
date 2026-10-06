@@ -54,10 +54,7 @@ finite candidate implementation:
   outstanding reader FDs cause fail-closed candidate stop/return to
   Golden rather than guessed live graph mutation.
 
-A new fresh E004ma one-shot is planned to verify the control socket
-and actual camera switching; **no live selector acceptance is
-claimed before its RESULT exists**. Only E004lz has passed physical
-RGBSession backend integration to date.
+E004ma subsequently physically PASSED the control socket and actual front→rear→off→quit selector with ordinary uid1000 front1080/rear4K readers, crash/reopen recovery and neutral shutdown; that identity is consumed and retired. E012A now reuses this accepted controller as the basis of `../product/` rather than inventing another camera route path.
 
 Service invariants implemented by the policy:
 
@@ -75,7 +72,7 @@ bash src/sp11-camera-stack/rgb/tests/test.sh
 python3 src/sp11-camera-stack/routing/tests/test_route_policy.py
 ```
 
-**Next engineering work, not yet proved:** implement the actual root-private candidate backend and service lifecycle against the accepted physical authority, source-pinned publishers and `route_policy.Controller`; independently validate unprivileged front1080p/rear4K optical application frames, peer-reader release, repeated normal-powered-on selection, process signal/stop, neutral after every switch, service timeout/crash recovery and controlled-lit image quality. Then separately design a safe opt-in release install and longer-lived publisher (normal builds remain bounded at **2400 frames/210 seconds**;
+**Next engineering work:** productize the already physically accepted candidate backend through `../product/`; independently validate longer-duration repeated normal-powered-on selection, service timeout/crash recovery and controlled-lit image quality. Then separately design a safe opt-in release install and longer-lived publisher (normal builds remain bounded at **2400 frames/210 seconds**;
 the new explicit compile-time opt-in \`continuous\` mode is only
 camera-free mock-tested with a hard **4-hour** safety deadline,
 and has NOT been validated on real SP11 hardware or as a persistent

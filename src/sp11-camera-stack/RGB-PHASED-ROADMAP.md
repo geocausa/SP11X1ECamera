@@ -1,3 +1,9 @@
+# 2026-10-06 PRODUCT INTEGRATION PIVOT — CURRENT PRIORITY
+
+The selected release is normal front + rear RGB. Complete Windows OEM DLL reconstruction is no longer a prerequisite. The already proven front1080/rear4K RAW10→NV12 transport, maintained RGBSession and exact route controller are the product baseline. Build a recoverable opt-in service, repeated switching/reopen/crash recovery and image-quality acceptance first. Use Ghidra/KD/Windows oracle only when a concrete RGB behavior or IQ discrepancy requires it. Protected IR/Hello and optional AI/effects/analytics are non-blocking unless product scope is explicitly expanded.
+
+The new maintained integration lives at `rgb/product/`. E012A is source/offline only; E012B installs it inert on Golden; a later fresh product boot must pass long-duration hardware acceptance before any daily/default promotion.
+
 # SP11 RGB cameras — user-selected native Qualcomm ISP / Windows OEM path
 
 LATEST DECISION (2026-09-23 ~19:36 BST): User explicitly chose

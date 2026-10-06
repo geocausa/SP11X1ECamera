@@ -1,0 +1,18 @@
+[Unit]
+Description=SP11 pre-release %i RGB publisher
+ConditionKernelCommandLine=sp11_camera_rgb_product=1
+PartOf=sp11-camera-rgb.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /var/lib/sp11-camera-rgb/start-session.sh %i
+ExecStopPost=/usr/bin/python3 /var/lib/sp11-camera-rgb/record-stop.py /var/lib/sp11-camera-rgb/output/%i-SERVICE-EXIT.json
+RuntimeMaxSec=4h
+TimeoutStopSec=8
+KillMode=control-group
+KillSignal=SIGTERM
+SuccessExitStatus=143
+Restart=no
+UMask=0077
+StandardOutput=append:/var/lib/sp11-camera-rgb/output/%i-SERVICE-STDOUT.txt
+StandardError=append:/var/lib/sp11-camera-rgb/output/%i-SERVICE-STDERR.txt
