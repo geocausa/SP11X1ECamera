@@ -1,3 +1,7 @@
+## 2026-10-06 E011LL value-node/key-storage frontier accepted
+
+E011LL allocates the 24-byte value node and 132-byte key storage, clears them, copies 128 normalized-key bytes, and stops at `0x5E8578`. NEXT E011LM copies the four-byte value, links the node into bucket 280, updates counts, and returns to the caller. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LK zero bucket-chain lookup accepted
 
 E011LK executes `0x5E8488 -> 0x5E8740` on the newly published zero bucket node, proves null return and caller `x24=0`, and stops at `0x5E84B0` before value-node allocation. NEXT E011LL materializes the value node/key storage. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
