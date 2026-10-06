@@ -1,3 +1,7 @@
+## 2026-10-06 E011LD enumeration-global producer accepted
+
+E011LD source-qualifies the producer of writable global pair RVA `0x1766540`: one owned 16-byte entry is published, naming original source table RVA `0x1617B40` with 62 descriptors after all 62 descriptor preconditions pass. The accepted `0x5BA850` method therefore yields count 1 and reaches `0x5B8778 -> 0x5B9C80`. NEXT E011LE merges those 62 descriptors into the accepted 169-entry table and closes the enumeration pair. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LC factory D0 enumeration-global frontier accepted
 
 E011LC executes the accepted guarded indirect method at object `+0xD0` (`0x5BA850`) through the accepted CFG check target, proves its zero return, and proves caller `SP+0x50/+0x58` mirrors writable global pair RVA `0x1766540/+0x8`. Concrete global values remain deliberately unresolved rather than guessed. NEXT E011LD resolves that producer/state and targets the first `0x5B9C80` element-processing call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
