@@ -1,3 +1,7 @@
+## 2026-10-06 E011LK zero bucket-chain lookup accepted
+
+E011LK executes `0x5E8488 -> 0x5E8740` on the newly published zero bucket node, proves null return and caller `x24=0`, and stops at `0x5E84B0` before value-node allocation. NEXT E011LL materializes the value node/key storage. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LJ empty-bucket node publication accepted
 
 E011LJ executes the accepted insertion helper for the first normalized key: bucket 280 receives a new zero-initialized 24-byte node and execution stops before `0x5E8488 -> 0x5E8740`. NEXT E011LK qualifies the zero-node chain lookup and stops before value-node allocation. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
