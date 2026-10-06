@@ -1,3 +1,7 @@
+## 2026-10-06 E011KX nested payload loop complete
+
+E011KX publishes the second nested payload element, raises destination count to 2, completes the two-element source loop, and takes the zero-status success branch to `0x5B9B80` without executing the helper epilogue. NEXT E011KY restores the helper frame and returns `w0=0` to caller `0x5B8348`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KW second nested string copy accepted
 
 E011KW executes the exact 16-byte second nested string copy through `0x5B9A08 -> 0xCAE7C0`, returns zero, and stops at `0x5B9A0C` before publication. NEXT E011KX publishes the second element and closes the two-element nested payload loop at the success epilogue frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
