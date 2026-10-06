@@ -1,0 +1,17 @@
+{
+  "experiment": "E011KB",
+  "goal": "Resume the accepted caller at 0x5B826C with x0=RVA 0x17A70D0. Qualify the restored caller x26 destination, execute mov x8,x0 and the 0x5B8270 store of the returned factory object at [x26+0x70], then stop before 0x5B8274 reads object+0xC0. Do not infer the x26 destination; reuse the retained E011DS parent frame authority or source-qualify it first.",
+  "current_frontier": {
+    "RVA": "0x5b826c",
+    "return_x0_RVA": "0x17a70d0",
+    "executed": false
+  },
+  "expected_next_frontier": {
+    "returned_object_store_RVA": "0x5b8270",
+    "returned_object_RVA": "0x17a70d0",
+    "next_object_field_read_RVA": "0x5b8274",
+    "next_object_field_offset": "0xc0",
+    "next_object_field_read_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

@@ -1,3 +1,7 @@
+## 2026-10-06 E011KA factory return object accepted to caller
+
+E011KA completes the `0x5BDE08` factory epilogue, restores the caller frame, preserves `x0=RVA 0x17A70D0`, and returns through `0x5BE390` to the accepted E011DS caller resume RVA `0x5B826C`. NEXT E011KB qualifies the restored caller `x26` output slot, stores the returned object, and stops before the `+0xC0` object-field read at `0x5B8274`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JZ stack-cookie restore accepted
 
 E011JZ executes `0x5BE368 -> 0x11F0` under the accepted opaque process-cookie contract, proves the paired stack-cookie check succeeds without exposing the native cookie, and stops at `0x5BE374` before nonvolatile restoration. NEXT E011KA completes the factory epilogue and returns `x0=RVA 0x17A70D0` to accepted caller resume RVA `0x5B826C`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
