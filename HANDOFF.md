@@ -1,3 +1,7 @@
+## 2026-10-06 E011KI first native descriptor entered
+
+E011KI executes descriptor entry 0 through the source-exact `0x5B9888` prefix, derives the safe 41-byte name span and destination scalars, and stops before the exact 42-byte nested allocation at `0x5B9908 -> 0xCAE740`. Raw OEM descriptor/string bytes remain private. NEXT E011KJ executes only that owned allocation. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KH first native descriptor copy selected
 
 E011KH consumes the accepted native descriptor table (`RVA 0x1624140`, count `0xA4`), confirms the restored caller has zero existing entries, and forms the first 32-byte copy call at `0x5B8344 -> 0x5B9888`, stopping before execution. NEXT E011KI enters descriptor entry 0 only to the first nested string-allocation frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
