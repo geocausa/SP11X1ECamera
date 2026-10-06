@@ -1,3 +1,7 @@
+## 2026-10-06 E011HR termination counter accepted to CA9880 return frontier
+
+E011HR reuses E011GA's accepted receiver `+0x468 = 1`, increments/stores it to `2`, and takes the equality branch to `0xCA9880`. Execution stops before receiver `+0x20 = 26` is loaded as the parser return value. NEXT E011HS executes that load and the `CA94E8` epilogue, stopping at caller `0xCA634C`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HQ zero byte accepted to termination-counter frontier
 
 E011HQ source-qualifies RVA `0x1370766 = 0`, advances the source pointer to `0x1370767`, stores receiver `+0x39 = 0`, and falls through the byte/state checks with parser state `7`. Execution stops before `0xCA986C` reads receiver `+0x468`. NEXT E011HR reuses E011GA's accepted counter value `1`, increments/stores it to `2`, and stops at `0xCA9880` before the return-value load. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

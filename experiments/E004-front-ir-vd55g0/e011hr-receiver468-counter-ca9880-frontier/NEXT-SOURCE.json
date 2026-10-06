@@ -1,0 +1,27 @@
+{
+  "experiment": "E011HS",
+  "goal": "Execute 0xCA9880 under exact E011HR state, qualify return value w0=26 from receiver +0x20, execute the original CA94E8 epilogue at 0xCA9884..0xCA9898, restore its saved register frame, and return to 0xCA634C. Stop before 0xCA634C executes.",
+  "reuse": {
+    "return_value": "E011HR receiver+0x20 = 26",
+    "return_target": "E011GA CA94E8_return_RVA = 0xCA634C"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xca9880",
+    "expected_w0_u32": 26,
+    "executed": false
+  },
+  "expected_return": {
+    "epilogue_first_RVA": "0xca9884",
+    "ret_RVA": "0xca9898",
+    "target_RVA": "0xca634c",
+    "target_executed": false,
+    "w0_u32": 26,
+    "saved_registers_restored": true
+  },
+  "do_not_claim": [
+    "0xCA634C branch path before E011HT",
+    "CA6280 return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
