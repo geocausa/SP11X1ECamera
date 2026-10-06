@@ -1,3 +1,7 @@
+## 2026-10-06 E011IB 0x6BD48 epilogue accepted to 0x6BE0C frontier
+
+E011IB source-qualifies `0x6BE08 -> 0x6BD48`, restores the 0x50-byte frame, preserves `w0=26`, and returns to `0x6BE0C` without executing it. NEXT E011IC advances only to the first new source-exact dependency/frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IA caller result propagation accepted to 0x6BDC0 epilogue frontier
 
 E011IA propagates return `26` through the caller frame, takes the exact `0x6BDA4 -> 0x6BDB4` branch, and reloads `w0=26`, stopping before `0x6BDC0`. NEXT E011IB uses the unique source callsite `0x6BE08 -> 0x6BD48` to restore the 0x50-byte caller frame and return to `0x6BE0C`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
