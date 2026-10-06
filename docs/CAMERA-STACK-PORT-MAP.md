@@ -1,3 +1,7 @@
+## 2026-10-06 E011LQ cached registry C0 baseline publication frontier accepted
+
+E011LQ reuses the accepted cached registry object at RVA `0x17A4230`; E011DS clear authority source-qualifies registry `+0xC0=0`. Original caller code forms the first baseline publication call `0x5B8DF8 -> 0x5B9F18` with object RVA `0x17A7088` and scalar zero, then stops before the call. NEXT E011LR executes that publication and returns to `0x5B8DFC`. Scope remains front/rear RGB parity; optional AI/effects/analytics stay non-blocking unless they gate ordinary capture. No camera Start, reboot, rear runtime, or kernel build is used.
+
 ## 2026-10-06 E011LP complete normalized descriptor map accepted
 
 E011LP source-executes the generic OEM map plumbing across all 231 descriptors: 519 nested attempts produce 517 unique entries (2 duplicate keys preserve first-value semantics), 268/350 buckets are used, 249 unique collision insertions occur, and maximum chain length is 8. This corrects E011LO's earlier unexecuted 350-entry forecast. The generic map is closed because it is prerequisite infrastructure; optional AI/effects/analytics consumers remain non-blocking under the RGB-parity product scope. NEXT E011LQ qualifies `0x5B8DDC -> 0x5B80A8` and the first baseline scalar publication frontier. No new camera Start, reboot, rear runtime, or kernel build is used.
