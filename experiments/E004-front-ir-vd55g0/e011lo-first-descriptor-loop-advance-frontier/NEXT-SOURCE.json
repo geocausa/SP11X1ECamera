@@ -1,6 +1,6 @@
 {
   "experiment": "E011LP",
-  "goal": "Starting at descriptor position 1 / RVA 0x5B8BEC, generalize the accepted normalized-key/map insertion machinery across the remaining 230 descriptors and 349 nested elements. Source-qualify all 350 padded keys, xor-DJB2 hashes, bucket collisions/chains, 24-byte value nodes, 132-byte key/value storage, bucket counts, and final map entry count. Stop before 0x5B8DDC after the outer descriptor loop closes.",
+  "goal": "Starting at descriptor position 1 / RVA 0x5B8BEC, generalize the accepted normalized-key/map machinery across the remaining descriptor table. Source-execute all 519 nested key attempts, preserve first-value semantics for duplicate keys, qualify xor-DJB2 buckets/collisions/chains, and stop before 0x5B8DDC after the outer descriptor loop closes.",
   "current_frontier": {
     "RVA": "0x5b8bec",
     "outer_descriptor_position_u32": 1,
@@ -10,8 +10,11 @@
   },
   "expected_closure": {
     "descriptor_count_u32": 231,
-    "nested_element_count_u32": 350,
-    "map_entry_count_u32": 350,
+    "nested_element_attempts_u32": 519,
+    "unique_map_entries_u32": 517,
+    "duplicate_key_attempts_u32": 2,
+    "used_bucket_count_u32": 268,
+    "maximum_chain_length_u32": 8,
     "stop_RVA": "0x5b8ddc",
     "stop_executed": false
   },
