@@ -1,3 +1,7 @@
+## 2026-10-06 E011JF first zero source copy accepted to +0x3E28 frontier
+
+E011JF qualifies zero at `buffer+0x3C28` and executes exact `0x5BE480 -> 0xCAE7C0` to `x26+0x70` with capacity 512/count -1; only the terminating NUL is copied and the helper returns zero. NEXT E011JG handles the second `buffer+0x3E28` copy. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JE buffer +0x4890 accepted to +0x3C28 frontier
 
 E011JE qualifies accepted published-buffer `+0x4890=0`, stores zero to outer local `x26+0x474`, and stops before `0x5BE47C` forms source pointer `buffer+0x3C28`. NEXT E011JF source-qualifies that bounded-copy source before `0x5BE480 -> 0xCAE7C0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
