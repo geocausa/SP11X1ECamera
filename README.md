@@ -1,3 +1,7 @@
+## 2026-10-06 E011IM parent return/store accepted to 0x5F941C frontier
+
+E011IM stores the returned nonzero owned object pointer at parent `+0x18`, selects status `8` from the preserved pre-call `w22=8`, and takes the exact branch to `0x5F941C`. NEXT E011IN enters helper `0x5F9578` and stops before global pointer `RVA 0x169FDF0`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IL outer epilogue accepted to 0x5F8EA8 frontier
 
 E011IL executes the original `0x60079C..0x6007C4` epilogue, reuses the accepted opaque process-cookie contract, restores the complete saved frame/entry SP, and returns the nonzero owned object pointer to the E011DV caller at `0x5F8EA8`. NEXT E011IM qualifies the parent compare/store/status branch. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
