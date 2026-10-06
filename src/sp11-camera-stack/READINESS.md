@@ -1,3 +1,7 @@
+## 2026-10-06 E011HS parser return accepted through CA94E8 epilogue to CA634C frontier
+
+E011HS loads parser return `26`, restores the CA94E8 frame, and returns to `0xCA634C`, stopping before caller execution. NEXT E011HT qualifies the accepted caller-frame branch chain and output-buffer zero write, stopping before `[sp+0x478]`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HR termination counter accepted to CA9880 return frontier
 
 E011HR reuses E011GA's accepted receiver `+0x468 = 1`, increments/stores it to `2`, and takes the equality branch to `0xCA9880`. Execution stops before receiver `+0x20 = 26` is loaded as the parser return value. NEXT E011HS executes that load and the `CA94E8` epilogue, stopping at caller `0xCA634C`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

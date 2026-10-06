@@ -1,0 +1,36 @@
+{
+  "experiment": "E011HT",
+  "goal": "Reuse accepted E011FZ caller-register/frame authority with E011HS w0=26. Execute the original CA634C branch chain: x20 nonzero; w22 bit0 zero; x21 zero; x19=640 nonzero; [sp+0x10]=0 mismatches x19; take 0xCA63BC to 0xCA63D0; qualify the zero-byte write at caller output-buffer offset 0 and w21=26 at 0xCA63D4. Stop before 0xCA63D8 reads [sp+0x478].",
+  "reuse": {
+    "caller_frame": "E011FZ",
+    "parser_return": "E011HS"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xca634c",
+    "w0_u32": 26,
+    "executed": false
+  },
+  "expected_path": {
+    "x20_nonzero": true,
+    "w22_u32": 36,
+    "bit0_zero_branch_RVA": "0xca6350",
+    "bit0_zero_branch_taken": true,
+    "x21_u64": 0,
+    "x19_u64": 640,
+    "frame_plus_0x10_u64": 0,
+    "mismatch_branch_RVA": "0xca63bc",
+    "mismatch_branch_taken": true,
+    "zero_write_RVA": "0xca63d0",
+    "zero_write_output_offset": 0,
+    "w21_after_u32": 26,
+    "next_read_RVA": "0xca63d8",
+    "next_read_SP_relative": "0x478",
+    "next_read_executed": false
+  },
+  "do_not_claim": [
+    "[sp+0x478] value before separate qualification",
+    "CA6280 cleanup/return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
