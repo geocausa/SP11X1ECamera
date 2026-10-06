@@ -3,10 +3,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(git -C "$ROOT" rev-parse --show-toplevel)"
 PKG=${1:?staged package root required}
-STACK_SHA=3f3bf8d3ea40a5045896f8ab3053bad14f09cc8fe3c328738905b33a5cf33c71
+STACK_SHA=633b23ebad2b7f8085ed078c412dedcf68274506d336bc658fbc377f67ced36d
 STATE=/var/lib/sp11-camera-stack
 "$REPO/tools/camera-overlap-guard.sh" --require-golden --require-no-camera-process >/dev/null
-PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/verify-package.py" "$PKG" >/dev/null
+PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/verify-package.py" "$PKG" --require-r4 >/dev/null
 [ "$(sha256sum "$PKG/CAMERA-STACK-MANIFEST.sha256"|awk '{print $1}')" = "$STACK_SHA" ] || { echo unaccepted_stack_manifest >&2; exit 1; }
 for m in qcom_camss imx681 ov13858 sp11_vd55g0; do [ ! -d "/sys/module/$m" ] || { echo "camera module active: $m" >&2; exit 1; }; done
 ! ls /dev/media* >/dev/null 2>&1 || { echo 'media node active' >&2; exit 1; }
