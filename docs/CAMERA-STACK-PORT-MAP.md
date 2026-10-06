@@ -1,3 +1,7 @@
+## 2026-10-06 E011KS first nested element publication accepted
+
+E011KS publishes the first nested payload element, copies its byte/qword metadata, increments destination count to 1, advances source index to 1, computes the 24-byte second-element offset, and stops before `0x5B9998`. NEXT E011KT scans the second nested string and derives its exact allocator request. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KR first nested string copy accepted
 
 E011KR executes the exact 23-byte nested string copy through `0x5B9A08 -> 0xCAE7C0`, returns zero, preserves `x25`, and stops at `0x5B9A0C` before publication. NEXT E011KS publishes element 0 metadata and advances to the second nested source element. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
