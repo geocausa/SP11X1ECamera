@@ -1,0 +1,16 @@
+{
+  "experiment": "E011IJ",
+  "goal": "Execute the exact 0x6006D4 loop-counter decrement under current w26=1, qualify the 0x6006D8 branch as not taken when w26 becomes 0, then stop before 0x6006DC reads the caller local.",
+  "current_frontier": {
+    "RVA": "0x6006d4",
+    "w26_u32": 1,
+    "executed": false
+  },
+  "expected_frontier": {
+    "RVA": "0x6006dc",
+    "dependency_expression": "[sp+4]",
+    "bytes": 4,
+    "read_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

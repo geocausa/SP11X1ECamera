@@ -1,3 +1,7 @@
+## 2026-10-06 E011II accepted native 0x1608858 one to 0x6006D4 frontier
+
+E011II reuses accepted E011FM same-boot Windows authority for `RVA 0x1608858=1`, executes the exact load/nonzero branch, and reaches `0x6006D4` with `w26=1` and `x23=RVA 0x10F03B0`; the decrement is still unexecuted. NEXT E011IJ executes the decrement/branch and stops before `0x6006DC`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IH accepted native 0x160A218 zero to 0x600474 frontier
 
 E011IH reuses the accepted E011FL same-boot Windows authority for `RVA 0x160A218=0`, executes the exact `0x60046C` load and bit-16 test, confirms no branch, and stops before `0x600474` reads `RVA 0x1608858`. NEXT E011II reuses E011FM authority for that field. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
