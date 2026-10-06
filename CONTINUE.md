@@ -1,3 +1,7 @@
+## 2026-10-06 E011JT SRW ownership accepted to epoch frontier
+
+E011JT executes the accepted SRW acquire at `0xCE7A70`, holds resource RVA `0x16A3738`, and stops before reading epoch RVA `0x1607B04`; the inherited accepted value is `0x80000042`. NEXT E011JU publishes the next epoch and stops before loader-index RVA `0x16A3740`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JS publication helper accepted to SRW-lock frontier
 
 E011JS enters `0xCE7A48` with guard RVA `0x1B302D0`, source-qualifies the SRW resource RVA `0x16A3738`, and stops before `AcquireSRWLockExclusive` at `0xCE7A70`. NEXT E011JT executes that accepted lock leaf and stops before reading epoch cell RVA `0x1607B04`, inheriting the accepted E011DU epoch `0x80000042`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

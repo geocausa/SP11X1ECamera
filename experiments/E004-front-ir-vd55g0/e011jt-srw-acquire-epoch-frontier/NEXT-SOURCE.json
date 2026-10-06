@@ -1,0 +1,19 @@
+{
+  "experiment": "E011JU",
+  "goal": "Inherit the accepted E011DU epoch value 0x80000042 at RVA 0x1607B04 while SRW ownership is held, execute 0xCE7A78 through the epoch increment and stores to the global epoch and guard RVA 0x1B302D0, and stop before the loader-index read at 0xCE7A90 from RVA 0x16A3740.",
+  "current_frontier": {
+    "read_RVA": "0xce7a78",
+    "cell_RVA": "0x1607b04",
+    "expected_u32": "0x80000042",
+    "read_executed": false
+  },
+  "expected_effects": {
+    "epoch_before_u32": "0x80000042",
+    "epoch_after_u32": "0x80000043",
+    "guard_RVA": "0x1b302d0",
+    "guard_after_u32": "0x80000043",
+    "stop_before_RVA": "0xce7a90",
+    "loader_index_RVA": "0x16a3740"
+  },
+  "native_rear_runtime_allowed": false
+}
