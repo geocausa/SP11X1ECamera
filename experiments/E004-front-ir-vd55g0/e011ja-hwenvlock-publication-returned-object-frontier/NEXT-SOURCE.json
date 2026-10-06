@@ -1,0 +1,17 @@
+{
+  "experiment": "E011JB",
+  "goal": "Source-qualify the preserved enumeration return object in x20 far enough to resolve its +0x10 pointer at 0x5BE3D8. Execute that one read only after proving provenance, then stop before 0x5BE3DC dereferences the pointed object at +0x20. Reuse existing E011DV/E011IL/E011IM ownership and return-state authority where applicable; consult the Windows oracle only if static/source provenance is insufficient.",
+  "current_frontier": {
+    "RVA": "0x5be3d8",
+    "dependency_expression": "[x20+0x10]",
+    "dependency_bytes": 8,
+    "executed": false
+  },
+  "expected_frontier": {
+    "next_RVA": "0x5be3dc",
+    "next_dependency_expression": "[[x20+0x10]+0x20]",
+    "next_dependency_bytes": 4,
+    "next_dependency_read_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

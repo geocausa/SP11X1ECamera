@@ -1,3 +1,7 @@
+## 2026-10-06 E011JA `HwEnvLock` object publication accepted to returned-object frontier
+
+E011JA publishes the constructed `HwEnvLock` pointer to source-owned `RVA 0x1B30288`, confirms preserved enumeration `x20` is nonzero, and stops before `0x5BE3D8` reads `[x20+0x10]`. NEXT E011JB must qualify that returned-object pointer provenance before executing the read. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IZ `HwEnvLock` critical section accepted to publication frontier
 
 E011IZ binds `RVA 0xF7E0C8` to `KERNEL32!InitializeCriticalSection`, executes the accepted logical owned-critical-section contract on object `+8`, and stops at `0x5BE3CC` before publication; native critical-section bytes/concurrency remain unclaimed. NEXT E011JA publishes the object to source-owned owner `RVA 0x1B30170 + 0x118` and stops before `[x20+0x10]`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
