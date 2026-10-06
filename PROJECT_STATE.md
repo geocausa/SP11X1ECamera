@@ -1,3 +1,7 @@
+## 2026-10-06 E011LO first descriptor loop advance accepted
+
+E011LO proves descriptor position 0 is source descriptor 164 with one nested element, closes that nested iteration, advances outer descriptor position to 1, and reaches `0x5B8BEC`. NEXT E011LP generalizes the accepted normalized-key/map insertion machinery across the remaining 230 descriptors / 349 nested elements and stops after the outer loop closes. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LN post-insert native-global branch accepted
 
 E011LN reuses accepted same-boot Windows authority for `RVA 0x160A218=0` and `RVA 0x1608858=1`: the bit-16 test falls through, the fallback nonzero branch skips logging, and execution reaches `0x5B8DAC`. NEXT E011LO closes the first descriptor iteration and advances to descriptor position 1. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
