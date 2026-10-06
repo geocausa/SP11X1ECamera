@@ -1,3 +1,7 @@
+## 2026-10-06 E011MB standard tag-0 numeric record accepted
+
+E011MB completes the first 168-byte standard metadata record numerically after the name-only decoration path: tag/index 0, source class 0, default category pointer, 1-byte scalar, type 0, element count 1, sentinel `0xFFFFFFFF`, aggregate bytes 1. NEXT E011MC generalizes numeric/core construction across the remaining 281 standard tags without decoding names individually.
+
 ## 2026-10-06 E011MA standard tag-0 name decoration accepted
 
 E011MA executes `0x5DEA14 -> 0x5E07B0` for standard tag 0 and resolves `ColorCorrectionMode`; the helper touches only the 128-byte name field at record `+0x3C`, leaving numeric/core record bytes unchanged. NEXT E011MB follows only the numeric metadata fields needed by ordinary front/rear RGB clients.
