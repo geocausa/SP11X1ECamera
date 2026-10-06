@@ -1,0 +1,22 @@
+{
+  "experiment": "E011HX",
+  "goal": "Execute 0xCAD9A4 under exact E011HW caller state, qualify x0 as caller SP+0x10 and stop before 0xCAD9A8 -> 0xCA8658 cleanup call executes. Source-qualify the cleanup object bytes required by CA8658 separately before entering it.",
+  "current_camera_frontier": {
+    "RVA": "0xcad9a4",
+    "executed": false
+  },
+  "expected_call_frontier": {
+    "arg_build_RVA": "0xcad9a4",
+    "x0_SP_relative": "0x10",
+    "call_RVA": "0xcad9a8",
+    "target_RVA": "0xca8658",
+    "call_executed": false
+  },
+  "do_not_claim": [
+    "cleanup object +0x28/+0x30 values before exact qualification",
+    "CA8658 execution",
+    "CAD8C8 function epilogue/return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}

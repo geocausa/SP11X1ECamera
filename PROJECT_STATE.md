@@ -1,3 +1,7 @@
+## 2026-10-06 E011HW CAD940 caller path accepted to cleanup frontier
+
+E011HW terminates the output at caller `SP+0x47f`, carries return `26` through the positive return branch, and stops at `0xCAD9A4`. NEXT E011HX qualifies the cleanup-call argument and stops before `CA8658`. No camera Start, reboot, rear runtime, or kernel build; native rear remains denied.
+
 ## 2026-10-06 E011HV CA6280 cookie return accepted to CAD940 frontier
 
 E011HV passes the original cookie checker across four opaque axes, restores the CA6280 frame, and returns to `0xCAD940` with `w0=26`. NEXT E011HW qualifies the immediate caller branch path. No camera Start, reboot, rear runtime, or kernel build; native rear remains denied.
