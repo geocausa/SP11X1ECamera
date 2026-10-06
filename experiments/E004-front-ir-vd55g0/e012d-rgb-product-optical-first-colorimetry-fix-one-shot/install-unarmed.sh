@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 R=/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-clean
-H=$R/experiments/E004-front-ir-vd55g0/e012d-rgb-product-optical-first-guarded-one-shot
+H=$R/experiments/E004-front-ir-vd55g0/e012d-rgb-product-optical-first-colorimetry-fix-one-shot
 D=/var/lib/sp11-camera-e012d
 BOOT=/boot/sp11-7.1.5-camera-e012d-rgb-product
 ENTRY=/etc/grub.d/99zzzzzz_sp11_camera_e012d
