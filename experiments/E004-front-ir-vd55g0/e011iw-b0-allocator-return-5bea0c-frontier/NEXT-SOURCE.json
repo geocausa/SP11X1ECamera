@@ -1,0 +1,22 @@
+{
+  "experiment": "E011IX",
+  "goal": "Resume at 0x5BEA0C with the accepted nonzero 0xB0 allocation. Qualify the nonzero branch, preserve the allocated pointer, execute the exact zero-initialization loop through 0x5BE39C/0x5BE3A0, and stop before the first object-construction call at 0x5BE3B8 -> 0xCAE7C0.",
+  "current_frontier": {
+    "RVA": "0x5bea0c",
+    "returned_pointer_nonzero": true,
+    "executed": false
+  },
+  "expected_zero_init": {
+    "allocated_bytes": 176,
+    "zeroed_prefix_bytes": 176,
+    "pointer_register": "x24"
+  },
+  "expected_frontier": {
+    "call_RVA": "0x5be3b8",
+    "target_RVA": "0xcae7c0",
+    "x0_alloc_plus": "0x30",
+    "x1_u64": 128,
+    "call_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

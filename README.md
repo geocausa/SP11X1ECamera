@@ -1,3 +1,7 @@
+## 2026-10-06 E011IW 0xB0 allocator return accepted to 0x5BEA0C frontier
+
+E011IW executes the source allocator thunk and accepted `0xCB16C0` process-heap path for exactly 176 bytes, obtains a nonzero owned allocation, preserves the enumeration object in `x20`, and stops at `0x5BEA0C` before its branch. NEXT E011IX qualifies the nonzero branch and exact allocation zero-initialization through the `0x5BE39C` tail, stopping before `0x5BE3B8 -> 0xCAE7C0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IV return object accepted to 0xB0 allocator frontier
 
 E011IV resumes at `0x5BEA00`, preserves the enumeration return object in `x20`, sets exact allocator size `0xB0`, and stops before `0x5BEA08 -> 0xCAE740`; source identifies the thunk target as accepted allocator `0xCB16C0`. NEXT E011IW executes only that 176-byte owned allocation and stops at `0x5BEA0C` before its result branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
