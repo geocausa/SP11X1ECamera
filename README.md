@@ -1,3 +1,7 @@
+## 2026-10-06 E011JI selector-zero tree accepted to function-block frontier
+
+E011JI executes the accepted `w20=w23=0` selector decision tree without memory access; all seven selector flags remain zero and source reaches `0x5BEA80`. NEXT E011JJ resolves the current `x19+0xA0..0xD0` function-pointer block before any loads or indirect calls. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JH selector zero/native globals accepted to 0x5BE510 frontier
 
 E011JH source-audits selector block RVA `0x1798508`: nine exact page+0x508 materializations are immediate readers with no direct writer/address escape, so zero-fill bytes `+1/+2` remain zero. Reusing accepted native `0x160A218=0` and `0x1608858=1`, original code branches to `0x5BE510` with `w23=w20=0`. NEXT E011JI follows only that selector decision tree to `0x5BEA80`, stopping before the x19 function-pointer block. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
