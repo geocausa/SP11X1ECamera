@@ -1,3 +1,7 @@
+## 2026-10-06 E011JO second diagnostic returned to x25-store frontier
+
+E011JO executes `0x5BEDA0 -> 0x1ACA8` under the accepted no-effect diagnostic contract and stops at `0x5BEDA4` before the store through `x25`. NEXT E011JP qualifies that destination before executing it and following the branch to `0x5BE658`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JN repeated basename search accepted to second logger frontier
 
 E011JN follows the post-diagnostic branch, executes the repeated `0x5BED74 -> 0xCE7C98` basename search, source-qualifies the fatal initialization diagnostic tuple, and stops before `0x5BEDA0 -> 0x1ACA8`. NEXT E011JO executes only that accepted no-effect logger and stops before the `x25` store. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
