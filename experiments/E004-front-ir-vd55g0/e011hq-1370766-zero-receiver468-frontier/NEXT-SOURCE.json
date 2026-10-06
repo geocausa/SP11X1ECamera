@@ -1,0 +1,31 @@
+{
+  "experiment": "E011HR",
+  "goal": "Reuse accepted E011GA authority that receiver +0x468 is u32 1 after the CA94E8 entry-prefix increment. Under exact E011HQ state execute 0xCA986C..0xCA987C, qualify the load/add/store to receiver +0x468 = 2 and the equality branch as taken to 0xCA9880, and stop before 0xCA9880 reads receiver +0x20.",
+  "reuse": {
+    "counter_authority": "E011GA owned_receiver_counter_after_u32 = 1",
+    "termination_state": "E011HQ"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xca986c",
+    "receiver_relative": "0x468",
+    "bytes": 4,
+    "read_executed": false
+  },
+  "expected_path": {
+    "counter_before_u32": 1,
+    "counter_after_u32": 2,
+    "store_RVA": "0xca9874",
+    "compare_RVA": "0xca9878",
+    "branch_RVA": "0xca987c",
+    "branch_equal_taken": true,
+    "target_RVA": "0xca9880",
+    "target_executed": false
+  },
+  "do_not_claim": [
+    "receiver +0x20 return load before E011HS",
+    "CA94E8 epilogue/return",
+    "CA6280 caller state",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
