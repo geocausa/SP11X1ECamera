@@ -1,3 +1,7 @@
+## 2026-10-06 RGB parity product-scope decision
+
+Release-critical work is front/rear ordinary-camera parity: sensor/ISP setup, normal preview/video/snapshot formats and FPS, AEC/exposure/gain, AWB/colour, AF/focus, ordinary crop/zoom, baseline ISP IQ (including denoise/sharpening only when it materially participates in normal Windows output), stream/buffer lifecycle, switching, application delivery, and reliability. Windows Hello/protected IR remains sidelined. AI enhancement/denoiser features, face analytics, beauty/effects, depth-focus, EIS/look-ahead, advanced HDR/computational modes, GeoLib/MF features, visualizers/debug features, and similar optional capabilities are non-blocking and are not to be reverse-engineered or implemented beyond the minimum needed to prove whether they gate the baseline RGB path. Generic OEM infrastructure may still be closed once when it is a prerequisite to reach baseline RGB consumers; downstream work must prioritize only baseline front/rear consumers.
+
 ## 2026-10-06 E011LO first descriptor loop advance accepted
 
 E011LO proves descriptor position 0 is source descriptor 164 with one nested element, closes that nested iteration, advances outer descriptor position to 1, and reaches `0x5B8BEC`. NEXT E011LP generalizes the accepted normalized-key/map insertion machinery across the remaining 230 descriptors / 349 nested elements and stops after the outer loop closes. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
