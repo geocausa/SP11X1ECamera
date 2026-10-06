@@ -1,3 +1,7 @@
+## 2026-10-06 E011LV nested lock cleanup accepted
+
+E011LV executes `0x5B9038 -> 0x1B438` from caller local `SP+0x78`, source-qualifies the nested lock object RVA `0x1623598`, vtable slot `+0x10 -> 0x1DF90`, guarded indirect call, and exact `LeaveCriticalSection` on resource RVA `0x16235A0`. Cleanup returns zero to `0x5B903C`. NEXT E011LW closes the `0x5B80A8` epilogue and returns to original caller `0x5DE844`. Product scope remains front/rear RGB parity.
+
 ## 2026-10-06 E011LU disabled trace bypass accepted
 
 E011LU qualifies `RVA 0x17A1180=0`, takes the original bit-3-clear branch to `0x5B9034`, and proves the diagnostic logging block `0x5B8FDC..0x5B9030` is not executed on the accepted path. Logging remains non-blocking for front/rear RGB parity. NEXT E011LV executes `0x5B9038 -> 0x1B438` cleanup and stops before the cached registry reload.
