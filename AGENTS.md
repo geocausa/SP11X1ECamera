@@ -1,3 +1,7 @@
+## 2026-10-06 E011HU zero cleanup leaf accepted to CA63E4 frontier
+
+E011HU qualifies `[sp+0x478]=0`, executes the `CB1650` zero fast path, and resumes with `w0=26`. NEXT E011HV closes the CA6280 cookie/epilogue return to `CAD940`. No camera Start, reboot, rear runtime, or kernel build; native rear remains denied.
+
 ## 2026-10-06 E011HT caller branch accepted to SP+0x478 frontier
 
 E011HT qualifies the CA634C branch chain, caller output-buffer zero write, and `w21=26`, stopping before `[sp+0x478]`. NEXT E011HU reuses E011FZ zero-frame authority for that slot. No camera Start, reboot, rear runtime, or kernel build; native rear remains denied.
