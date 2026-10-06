@@ -1,3 +1,7 @@
+## 2026-10-06 E011IN helper prologue accepted to 0x169FDF0 frontier
+
+E011IN executes `0x5F941C -> 0x5F9578` and its exact save/cookie prologue, stopping before `0x5F95A4` reads global `RVA 0x169FDF0`. NEXT E011IO reuses accepted E011DV publication authority for that pointer. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IM parent return/store accepted to 0x5F941C frontier
 
 E011IM stores the returned nonzero owned object pointer at parent `+0x18`, selects status `8` from the preserved pre-call `w22=8`, and takes the exact branch to `0x5F941C`. NEXT E011IN enters helper `0x5F9578` and stops before global pointer `RVA 0x169FDF0`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
