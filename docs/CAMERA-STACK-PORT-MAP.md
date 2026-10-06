@@ -1,3 +1,7 @@
+## 2026-10-06 E011KQ first nested string clear/copy accepted
+
+E011KQ follows the nonzero nested-string allocation path, clears exactly 23 owned bytes, preserves the accepted source span at RVA `0x1362948`, and stops with the exact bounded copy arguments before `0x5B9A08 -> 0xCAE7C0`. NEXT E011KR executes the copy and stops before nested pointer/scalar publication. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KP first nested string allocation accepted
 
 E011KP executes the accepted process-heap allocator chain for exactly 23 bytes, receives a nonzero owned allocation in `x25`, preserves the first nested source selection and `x26=23`, and stops before `0x5B99D4`. NEXT E011KQ clears that buffer and forms the exact bounded source-copy call at `0x5B9A08 -> 0xCAE7C0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
