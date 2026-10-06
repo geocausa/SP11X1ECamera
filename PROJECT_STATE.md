@@ -1,3 +1,7 @@
+## 2026-10-06 E011IJ loop counter accepted 1→0 to 0x6006DC frontier
+
+E011IJ executes the exact `0x6006D4` decrement, obtains `w26=0`, confirms the `0x6006D8` loop-back is not taken, and stops before `0x6006DC` reads `[sp+4]`. NEXT E011IK traces that caller-local provenance before executing it. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011II accepted native 0x1608858 one to 0x6006D4 frontier
 
 E011II reuses accepted E011FM same-boot Windows authority for `RVA 0x1608858=1`, executes the exact load/nonzero branch, and reaches `0x6006D4` with `w26=1` and `x23=RVA 0x10F03B0`; the decrement is still unexecuted. NEXT E011IJ executes the decrement/branch and stops before `0x6006DC`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
