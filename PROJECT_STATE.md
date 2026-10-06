@@ -1,3 +1,7 @@
+## 2026-10-06 E011KV second nested string clear/copy accepted
+
+E011KV clears the exact 16-byte second nested string buffer, preserves the source span at RVA `0x1362938`, and stops before the bounded `0x5B9A08 -> 0xCAE7C0` copy. NEXT E011KW executes that copy and stops before publication. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KU second nested string allocation accepted
 
 E011KU executes the accepted allocator chain for the exact 16-byte second nested string buffer, receives a nonzero owned pointer in `x25`, preserves the second-element selection, and stops before `0x5B99D4`. NEXT E011KV clears and prepares the exact bounded copy. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
