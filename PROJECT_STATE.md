@@ -1,3 +1,7 @@
+## 2026-10-06 E011LE complete 231-descriptor merge accepted
+
+E011LE deep-merges the accepted 169 runtime descriptors with the original 62-entry source table at RVA `0x1617B40`, producing 231 exact descriptors. It closes 982 owned allocations/clears and 750 bounded string copies, frees the superseded 169-entry ownership tree and the enumeration-global allocation, zeros the global pair, and stops before `0x5B87F8`. NEXT E011LF derives the descriptor index/prefix/scalar arrays and targets `0x5B8B68`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LD enumeration-global producer accepted
 
 E011LD source-qualifies the producer of writable global pair RVA `0x1766540`: one owned 16-byte entry is published, naming original source table RVA `0x1617B40` with 62 descriptors after all 62 descriptor preconditions pass. The accepted `0x5BA850` method therefore yields count 1 and reaches `0x5B8778 -> 0x5B9C80`. NEXT E011LE merges those 62 descriptors into the accepted 169-entry table and closes the enumeration pair. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
