@@ -1,3 +1,7 @@
+## 2026-10-06 E011KR first nested string copy accepted
+
+E011KR executes the exact 23-byte nested string copy through `0x5B9A08 -> 0xCAE7C0`, returns zero, preserves `x25`, and stops at `0x5B9A0C` before publication. NEXT E011KS publishes element 0 metadata and advances to the second nested source element. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KQ first nested string clear/copy accepted
 
 E011KQ follows the nonzero nested-string allocation path, clears exactly 23 owned bytes, preserves the accepted source span at RVA `0x1362948`, and stops with the exact bounded copy arguments before `0x5B9A08 -> 0xCAE7C0`. NEXT E011KR executes the copy and stops before nested pointer/scalar publication. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
