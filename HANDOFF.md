@@ -1,3 +1,7 @@
+## 2026-10-06 E011MA standard tag-0 name decoration accepted
+
+E011MA executes `0x5DEA14 -> 0x5E07B0` for standard tag 0 and resolves `ColorCorrectionMode`; the helper touches only the 128-byte name field at record `+0x3C`, leaving numeric/core record bytes unchanged. NEXT E011MB follows only the numeric metadata fields needed by ordinary front/rear RGB clients.
+
 ## 2026-10-06 E011LZ standard metadata first-record frontier accepted
 
 E011LZ source-qualifies the 282-entry standard metadata component: original static tag table RVA `0x10EDA10`, first tag ID 0, destination record array RVA `0x17350E0`, 168-byte record stride, and first name buffer at `+0x3C`. Execution stops before `0x5DEA14 -> 0x5E07B0`. NEXT E011MA bounds name decoration and keeps only numeric/core metadata needed by normal front/rear RGB clients.
