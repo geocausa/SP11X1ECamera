@@ -1,3 +1,7 @@
+## 2026-10-06 E011LB 169-entry descriptor republish accepted
+
+E011LB grows the accepted 164-entry native descriptor table by five original static descriptors, source-exactly materializes all 169 outputs, frees the superseded 164-entry ownership tree, republishes count 169, and stops before `0x5B8738`. The closure covers 790 owned allocations/clears and 620 bounded string copies. NEXT E011LC qualifies the guarded indirect factory-object call and stops before `0x5B875C`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LA complete native descriptor table accepted
 
 E011LA source-exactly materializes all 164 native 32-byte descriptors through the original helper, verifying all 439 nested payload elements and their source strings. It uses 767 owned allocations/clears and 603 bounded string copies, cleans the old zero-count table, publishes count 164, and stops before `0x5B84B8`. NEXT E011LB grows the accepted table with five original static descriptors and targets the `0x5B8738` frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
