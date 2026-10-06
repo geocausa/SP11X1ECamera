@@ -1,0 +1,21 @@
+{
+  "experiment": "E011LB",
+  "goal": "Resume at 0x5B84B8 with the accepted published 164-entry descriptor table. Compute (164+5)*32 = 0x1520, allocate and clear the replacement table, source-exactly copy the 164 accepted entries from x19+0x18 and then the five original static descriptors at RVA 0x16235D0, destroy the superseded 164-entry table through 0x5B9BA8, publish count 169 and the replacement pointer, and stop at 0x5B8738 before subsequent caller logic.",
+  "current_frontier": {
+    "RVA": "0x5b84b8",
+    "published_count_u32": 164,
+    "published_table_nonzero": true,
+    "executed": false
+  },
+  "expected_closure": {
+    "extra_source_table_RVA": "0x16235d0",
+    "extra_descriptor_count_u32": 5,
+    "replacement_count_u32": 169,
+    "replacement_bytes": 5408,
+    "publish_table_field_RVA": "0x17a4248",
+    "publish_count_field_RVA": "0x17a4250",
+    "stop_RVA": "0x5b8738",
+    "stop_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

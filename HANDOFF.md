@@ -1,3 +1,7 @@
+## 2026-10-06 E011LA complete native descriptor table accepted
+
+E011LA source-exactly materializes all 164 native 32-byte descriptors through the original helper, verifying all 439 nested payload elements and their source strings. It uses 767 owned allocations/clears and 603 bounded string copies, cleans the old zero-count table, publishes count 164, and stops before `0x5B84B8`. NEXT E011LB grows the accepted table with five original static descriptors and targets the `0x5B8738` frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KZ second descriptor call frontier accepted
 
 E011KZ consumes the first descriptor helper return `w0=0`, advances index/completed counters to 1, takes the table loop back, and forms the second call with source entry RVA `0x1624160` and destination offset 32. NEXT E011LA closes the full 164-entry descriptor materialization loop as one bounded source-exact offline proof. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
