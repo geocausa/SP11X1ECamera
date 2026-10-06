@@ -1,0 +1,17 @@
+{
+  "experiment": "E011KE",
+  "goal": "Resume at 0x5B8290 with w0=0 and the accepted descriptor at caller SP+0x60. Execute mov w23,w0, prove cmp w23,#1 does not take 0x5B8298 -> 0x5B87F8, read descriptor size 0xA4 from caller SP+0x68 at 0x5B829C, prove cbz at 0x5B82A4 is not taken, and stop before 0x5B82A8 reads [x19+0x20]. Source-qualify the restored caller x19 before that next dependency.",
+  "current_frontier": {
+    "RVA": "0x5b8290",
+    "function_return_u32": 0,
+    "descriptor_SP_relative": "0x60",
+    "descriptor_size_u32": 164,
+    "executed": false
+  },
+  "expected_next_frontier": {
+    "x19_field_read_RVA": "0x5b82a8",
+    "x19_field_offset": "0x20",
+    "read_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

@@ -1,3 +1,7 @@
+## 2026-10-06 E011KD native +0xC0 function accepted
+
+E011KD executes `0x5B828C -> 0x5BA820` and qualifies descriptor output at caller `SP+0x60`: pointer RVA `0x1624140`, size `0xA4`, return `w0=0`. It stops at `0x5B8290`. NEXT E011KE qualifies the post-call result/size branches and stops before `0x5B82A8` reads restored caller `x19+0x20`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KC native front function vector accepted
 
 E011KC uses a bounded Windows front-only oracle to distinguish the native live function vector at `0x17A70D0` from E011JJ's cold zero-selector model. The native `+0xC0` target is RVA `0x5BA820`, stable before and after a successful `NV12 1920x1080` Start. Source-exact replay executes the `+0xC0` read and the `GuardCFCheckFunctionPointer` check through RVA `0xF7E7B8` / target `0x1A8C0`, then stops before `0x5B828C -> 0x5BA820`. NEXT E011KD executes that function and qualifies its descriptor output. One bounded front Start/reboot was used; rear runtime remains denied and Golden Linux is restored.
