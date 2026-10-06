@@ -1,3 +1,7 @@
+## 2026-10-06 E011KN first nested descriptor payload string frontier accepted
+
+E011KN clears/publishes the 48-byte payload array, source-qualifies its two-element pointer table, and reaches the first nested string at RVA `0x1362948` without reading it. NEXT E011KO scans that 22-character string and stops before the 23-byte allocator call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KM first descriptor payload allocation accepted
 
 E011KM executes the exact 48-byte nested payload allocation under the accepted process-heap contract and stops with a nonzero owned result in `x21` before `0x5B9970`. NEXT E011KN clears/publishes that array and enters the first nested descriptor payload element. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

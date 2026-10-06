@@ -1,0 +1,17 @@
+{
+  "experiment": "E011KO",
+  "goal": "Execute the first nested payload string-length scan from 0x5B999C using the source-qualified NUL-terminated span at RVA 0x1362948, require length 22 and x26=23 bytes including NUL, preserve first-element offset 0, and stop before 0x5B99CC -> 0xCAE740 allocates the first nested string buffer.",
+  "current_frontier": {
+    "first_string_read_RVA": "0x5b999c",
+    "first_string_RVA": "0x1362948",
+    "first_string_read_executed": false
+  },
+  "expected_next_frontier": {
+    "string_length_u64": 22,
+    "allocation_bytes": 23,
+    "allocator_call_RVA": "0x5b99cc",
+    "allocator_target_RVA": "0xcae740",
+    "allocator_call_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}
