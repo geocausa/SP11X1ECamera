@@ -1,0 +1,18 @@
+{
+  "experiment": "E011LV",
+  "goal": "Execute the accepted cleanup call at 0x5B9038 -> 0x1B438 for the caller local at SP+0x78. Source-qualify the local interface/object pointer and its vtable slot +0x10 target, execute the guarded indirect cleanup call on the success path, return to 0x5B903C, and stop before the cached registry reload.",
+  "current_frontier": {
+    "RVA": "0x5b9034",
+    "cleanup_call_RVA": "0x5b9038",
+    "cleanup_target_RVA": "0x1b438",
+    "cleanup_call_executed": false
+  },
+  "expected_closure": {
+    "resume_RVA": "0x5b903c",
+    "cached_registry_reload_RVA": "0x5b9040",
+    "cached_registry_reload_executed": false
+  },
+  "product_scope": "front_rear_rgb_parity",
+  "diagnostic_logging_non_blocking": true,
+  "native_rear_runtime_allowed": false
+}

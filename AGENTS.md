@@ -1,3 +1,7 @@
+## 2026-10-06 E011LU disabled trace bypass accepted
+
+E011LU qualifies `RVA 0x17A1180=0`, takes the original bit-3-clear branch to `0x5B9034`, and proves the diagnostic logging block `0x5B8FDC..0x5B9030` is not executed on the accepted path. Logging remains non-blocking for front/rear RGB parity. NEXT E011LV executes `0x5B9038 -> 0x1B438` cleanup and stops before the cached registry reload.
+
 ## 2026-10-06 E011LT post-publication native gate accepted
 
 E011LT reuses accepted Windows authorities `RVA 0x160A218=0` and `RVA 0x1608858=1`. Original code takes the bit16-clear fallthrough and nonzero second-global branch to `0x5B8FD0`, with no new Windows round trip. NEXT E011LU qualifies the trace flag and skips diagnostic-only logging when disabled. Product scope remains front/rear RGB parity.
