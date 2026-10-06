@@ -1,3 +1,7 @@
+## 2026-10-06 E011IZ `HwEnvLock` critical section accepted to publication frontier
+
+E011IZ binds `RVA 0xF7E0C8` to `KERNEL32!InitializeCriticalSection`, executes the accepted logical owned-critical-section contract on object `+8`, and stops at `0x5BE3CC` before publication; native critical-section bytes/concurrency remain unclaimed. NEXT E011JA publishes the object to source-owned owner `RVA 0x1B30170 + 0x118` and stops before `[x20+0x10]`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IY `HwEnvLock` copy accepted to critical-section frontier
 
 E011IY source-qualifies `RVA 0x13DBC80` as `HwEnvLock`, executes its bounded copy into the new 176-byte object, returns zero, and stops before import slot `0xF7E0C8`; PE import metadata identifies that slot as `KERNEL32!InitializeCriticalSection`. NEXT E011IZ executes that logical owned critical-section initialization on object `+8` and stops before object publication. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
