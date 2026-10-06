@@ -1,3 +1,7 @@
+## 2026-10-06 E011ID 0x7AC38 wrapper tail accepted to 0x600440 frontier
+
+E011ID preserves return `26` through the accepted 0x7AC38 wrapper tail, restores its frame, and stops before `0x600440`. NEXT E011IE continues the accepted formatter caller source-exactly. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IC 0x6BDD0 tail accepted to 0x7ACDC frontier
 
 E011IC executes the `0x6BE0C..0x6BE1C` tail under return `26`, restores the 0x40-byte frame, and returns to source callsite target `0x7ACDC`. NEXT E011ID returns the accepted 0x7AC38 wrapper to `0x600440`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
