@@ -1,3 +1,7 @@
+## 2026-10-06 E011IQ native 0x160A260 zero accepted to 0x5F96A0 frontier
+
+E011IQ used the bounded SP11 Windows oracle because `RVA 0x160A260` is writable `.data`: the exact QcDeviceMFT8380.dll qword was zero after front-only initialization and remained zero after one successful NV12 1920x1080 front reader Start. The original `0x5F968C` load therefore yields zero and `0x5F9690` branches to `0x5F96A0`. NEXT E011IR continues from that branch target. One Windows one-shot/front Start was used; rear runtime stayed denied, no rear Start or kernel build occurred, and the machine returned to Golden Linux.
+
 ## 2026-10-06 E011IP zero enumeration fields accepted to 0x160A260 frontier
 
 E011IP proves the E011DV-published enumeration buffer remains zero through the accepted callee return, executes all current helper field loads, takes the zero-byte branch to `0x5F9684`, and stops before global `RVA 0x160A260`. NEXT E011IQ resolves that global from existing authority/Ghidra/Windows oracle in that order. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
