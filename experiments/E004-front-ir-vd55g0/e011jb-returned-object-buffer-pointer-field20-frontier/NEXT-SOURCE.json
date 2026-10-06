@@ -1,0 +1,26 @@
+{
+  "experiment": "E011JC",
+  "goal": "Reuse the accepted E011DV zeroed 18,832-byte published-buffer authority plus the accepted no-buffer-write path through E011IR to source-qualify buffer offsets +0x20, +0x14 and +0x0C as zero. Execute the exact clear/set flag sequence 0x5BE3DC..0x5BE420, including the +0x20 bit-27 set, and stop before 0x5BE424 reads [x26+0x6C].",
+  "current_frontier": {
+    "RVA": "0x5be3dc",
+    "published_buffer_pointer_nonzero": true,
+    "executed": false
+  },
+  "expected_fields_before": {
+    "plus_0x20_u32": 0,
+    "plus_0x14_u32": 0,
+    "plus_0x0c_u32": 0
+  },
+  "expected_fields_after": {
+    "plus_0x20_u32": "0x08000000",
+    "plus_0x14_u32": 0,
+    "plus_0x0c_u32": 0
+  },
+  "expected_frontier": {
+    "RVA": "0x5be424",
+    "next_dependency_expression": "[x26+0x6c]",
+    "next_dependency_bytes": 4,
+    "next_dependency_read_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

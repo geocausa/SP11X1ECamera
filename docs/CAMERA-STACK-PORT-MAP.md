@@ -1,3 +1,7 @@
+## 2026-10-06 E011JB enumeration return object closed to published-buffer field frontier
+
+E011JB closes returned `x20` as source `RVA 0x169FDE0`; its `+0x10` slot is accepted `RVA 0x169FDF0`, the nonzero 18,832-byte published enumeration-buffer pointer. The pointer read at `0x5BE3D8` is executed and the checkpoint stops before buffer `+0x20`. NEXT E011JC qualifies the zero-backed flag fields and advances to the next `x26` dependency. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JA `HwEnvLock` object publication accepted to returned-object frontier
 
 E011JA publishes the constructed `HwEnvLock` pointer to source-owned `RVA 0x1B30288`, confirms preserved enumeration `x20` is nonzero, and stops before `0x5BE3D8` reads `[x20+0x10]`. NEXT E011JB must qualify that returned-object pointer provenance before executing the read. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
