@@ -6,4 +6,4 @@ The new `src/sp11-camera-stack/rgb/product/` layer reuses the already physically
 
 Offline validation: 42 existing service tests, 14 new product tests and 11 route-policy tests pass; the broader RGB source suite passes. Product-compiled front/rear publishers refuse execution on current Golden because the dedicated product boot token is absent. No camera Start, reboot, kernel build, service activation or ENABLE contract occurred.
 
-Product source tree SHA-256: `7bd024a1f372c28d2266b8ae8e2d84c0b147b590e90a0a206c39d0c7cf768bac`. NEXT E012B performs only the inactive Golden installation/verification.
+Product source tree SHA-256: `407ce4be04b32a734194ac27b160c601897ee13330b234467f929fdb3536525b`. NEXT E012B performs only the inactive Golden installation/verification.

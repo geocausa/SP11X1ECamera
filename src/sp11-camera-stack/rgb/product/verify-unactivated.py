@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import subprocess
+import os,subprocess
 
 def need(v,m):
     if not v: raise AssertionError(m)
+need(os.geteuid()==0,'root verifier required')
 need('sp11_camera_rgb_product=1' not in Path('/proc/cmdline').read_text().split(),'product boot token unexpectedly active')
 for p in ('/usr/local/libexec/sp11-camera-stack/rgb/product/product_daemon.py','/usr/local/libexec/sp11-camera-stack/rgb/product/product_owner.py','/usr/local/libexec/sp11-camera-stack/rgb/service/session.py','/usr/local/libexec/sp11-camera-stack/routing/route_policy.py','/usr/local/bin/sp11-rgbctl','/var/lib/sp11-camera-rgb/PRODUCT-ASSETS.sha256'):
     need(Path(p).is_file(),p)

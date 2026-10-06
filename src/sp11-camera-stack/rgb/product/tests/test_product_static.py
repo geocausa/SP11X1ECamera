@@ -18,4 +18,5 @@ class StaticTests(unittest.TestCase):
         self.assertNotIn('systemctl enable sp11-camera-rgb.service',text)
         self.assertNotIn('systemctl start sp11-camera-rgb.service',text)
         self.assertIn('rm -f "$STATE/ENABLE"',text)
+        self.assertIn('sudo -n "$HERE/verify-unactivated.py"',text)
 if __name__=='__main__': unittest.main()

@@ -44,5 +44,5 @@ sudo -n systemctl disable sp11-camera-rgb.service >/dev/null 2>&1 || :
 sudo -n rm -f "$STATE/ENABLE"
 ! sudo -n systemctl is-active --quiet sp11-camera-rgb.service
 ! sudo -n systemctl is-enabled --quiet sp11-camera-rgb.service
-"$HERE/verify-unactivated.py"
+sudo -n "$HERE/verify-unactivated.py"
 echo SP11_RGB_PRODUCT_INSTALL=PASS ACTIVATED=NO BOOT_ENTRY=NONE
