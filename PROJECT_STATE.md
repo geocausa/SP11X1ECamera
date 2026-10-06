@@ -1,3 +1,7 @@
+## 2026-10-06 E011LH map object construction accepted
+
+E011LH constructs the exact 0x40-byte map object and cleared 2800-byte / 350-entry array, returns nonzero, stores it at caller `+0x30`, and stops before `0x5B8BCC`. NEXT E011LI qualifies the first descriptor key/hash/bucket and targets the first `0x5E83D8` insertion call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LG ready aggregate call frontier accepted
 
 E011LG proves that 147 tail-`0xFFFFFFFF` descriptors contribute 350 nested elements, materializes the exact 24-byte `SP+0x80` aggregate input, and stops before `0x5B8BC4 -> 0x5E81B8`. NEXT E011LH executes the helper object/entry-array construction. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
