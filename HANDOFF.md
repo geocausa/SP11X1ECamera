@@ -1,3 +1,7 @@
+## 2026-10-06 E011JL level lookup accepted to diagnostic logger frontier
+
+E011JL executes `0x5BEC98 -> 0x5D0C0` with selector `0x20000`, source-qualifies the returned file-backed HWL level pointer at RVA `0x135F200`, forms the exact diagnostic arguments, and stops before `0x5BECB8 -> 0x1ACA8`. NEXT E011JM reuses the accepted E011DQ no-effect diagnostic dependency contract and stops at `0x5BECBC` before the following branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JK source path search accepted to 0x5D0C0 frontier
 
 E011JK source-qualifies the 97-byte path at `0x13DBCB0`, executes `0x5BEC84 -> 0xCE7C98` for backslash, and proves the helper returns the final backslash at offset 74; the caller selects basename offset 75. NEXT E011JL executes `0x5BEC98 -> 0x5D0C0` for selector `0x20000` and stops before the logger call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
