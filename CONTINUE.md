@@ -1,3 +1,7 @@
+## 2026-10-06 E011IT parent status publication accepted to 0x5F9438 frontier
+
+E011IT writes caller status `1` to `RVA 0x1731598`, preserves the caller-owned return object into `x0`, restores `0x1720` bytes of local stack, and stops before `0x5F9438 -> 0x11F0`. NEXT E011IU qualifies the parent cookie epilogue and return to `0x5BEA00`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IS helper cookie epilogue accepted to 0x5F9420 frontier
 
 E011IS executes the `0x5F9724` helper epilogue under the accepted opaque-cookie contract, passes `0x11F0`, restores the frame/nonvolatiles, returns `x0=0` through `0x5F9748`, and stops at caller `0x5F9420`. NEXT E011IT qualifies the caller status publication and stops before its cookie check. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
