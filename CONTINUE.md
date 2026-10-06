@@ -1,3 +1,7 @@
+## 2026-10-06 E011IY `HwEnvLock` copy accepted to critical-section frontier
+
+E011IY source-qualifies `RVA 0x13DBC80` as `HwEnvLock`, executes its bounded copy into the new 176-byte object, returns zero, and stops before import slot `0xF7E0C8`; PE import metadata identifies that slot as `KERNEL32!InitializeCriticalSection`. NEXT E011IZ executes that logical owned critical-section initialization on object `+8` and stops before object publication. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IX 0xB0 zero initialization accepted to 0xCAE7C0 frontier
 
 E011IX follows the nonzero 176-byte allocation path, zeroes the complete object, preserves it in `x24`, and reaches `0x5BE3B8 -> 0xCAE7C0` with the exact bounded-copy tuple. NEXT E011IY source-qualifies `RVA 0x13DBC80` (`HwEnvLock`), executes that construction copy, and stops before the following imported-function call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
