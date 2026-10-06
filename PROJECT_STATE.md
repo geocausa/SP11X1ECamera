@@ -1,3 +1,7 @@
+## 2026-10-06 E011JD local/buffer fields accepted to +0x4890 frontier
+
+E011JD reuses the accepted 1040-byte source clear and zero-backed 18,832-byte enumeration buffer to execute `0x5BE424..0x5BE46C`. Buffer `+0x442C/+0x1C/+0x0C` are zero, `+0x20=0x08000000`, and derived outer locals `+0x68/+0x6C/+0x470` are zero. NEXT E011JE source-qualifies `buffer+0x4890`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JC published-buffer flags accepted to x26 frontier
 
 E011JC qualifies zero-backed buffer offsets `+0x20/+0x14/+0x0C`, executes the source flag clears and bit-27 set, leaves `+0x20=0x08000000`, reloads the nonzero published buffer into `x20`, and stops before `[x26+0x6C]` at `0x5BE424`. NEXT E011JD qualifies that local and buffer `+0x442C` before advancing. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
