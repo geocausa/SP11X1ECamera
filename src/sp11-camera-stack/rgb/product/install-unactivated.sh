@@ -18,11 +18,11 @@ gcc "${CFLAGS[@]}" "$HERE/../rear-direct-publisher.c" -o "$TMP/rear-direct-publi
 # Product boot token is absent on Golden, so even copied binaries remain inert.
 ! grep -qw 'sp11_camera_rgb_product=1' /proc/cmdline
 sudo -n install -d -m 0755 "$DEST" "$SERVICE_DEST" "$ROUTING_DEST"
-for f in product_owner.py product_daemon.py productctl.py; do sudo -n install -m 0755 "$HERE/$f" "$DEST/$f"; done
+for f in product_owner.py product_daemon.py productctl.py private_optical_preview.py; do sudo -n install -m 0755 "$HERE/$f" "$DEST/$f"; done
 sudo -n install -m 0755 "$HERE/recover-golden.sh" "$DEST/recover-golden.sh"
 for f in session.py media_backend.py rgb_device_backend.py; do sudo -n install -m 0644 "$HERE/../service/$f" "$SERVICE_DEST/$f"; done
 for f in route_policy.py graph_contract.py; do sudo -n install -m 0644 "$REPO/src/sp11-camera-stack/routing/$f" "$ROUTING_DEST/$f"; done
-sudo -n install -d -m 0700 "$STATE" "$STATE/bin" "$STATE/output"
+sudo -n install -d -m 0700 "$STATE" "$STATE/bin" "$STATE/output" "$STATE/private-optical"
 sudo -n install -m 0700 "$TMP/front-direct-publisher" "$STATE/bin/front-direct-publisher"
 sudo -n install -m 0700 "$TMP/rear-direct-publisher" "$STATE/bin/rear-direct-publisher"
 sudo -n install -m 0700 "$HERE/start-session.sh" "$STATE/start-session.sh"

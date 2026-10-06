@@ -1,6 +1,10 @@
+## 2026-10-06 E012B optical-first correction before product soak
+
+E012C must not treat service plumbing/soak as the first live gate. The next guarded product boot must first capture and visually inspect current-product front 1080p and rear 4K rendered frames for geometry, Bayer/channel order, colour, exposure, corruption and orientation. Only after both optical renders are accepted may repeated switching or long-duration soak proceed. Private optical frames stay local/uncommitted.
+
 ## 2026-10-06 E012B inert RGB product install accepted
 
-E012B installed the new RGB product daemon/publisher/service assets on protected Golden **without activation**. Installed source HEAD is `781d2b01`; product asset manifest SHA-256 is `881d2429082d1b0505c1d19826523d2708b9d85ed7015eb70bc63df7e294b692`. Service is disabled/inactive, ENABLE absent, no product boot entry/token, no camera modules/media nodes, and Golden overlap guard passes. No camera Start/reboot/kernel build. NEXT E012C prepares a fresh guarded product boot for repeated front/rear ordinary-app switching and longer soak. OEM archaeology remains demand-driven only.
+E012B installed the new RGB product daemon/publisher/service assets on protected Golden **without activation**. Installed source HEAD is `781d2b01`; product asset manifest SHA-256 is `881d2429082d1b0505c1d19826523d2708b9d85ed7015eb70bc63df7e294b692`. Service is disabled/inactive, ENABLE absent, no product boot entry/token, no camera modules/media nodes, and Golden overlap guard passes. No camera Start/reboot/kernel build. NEXT E012C prepares a fresh guarded product boot whose first live gate is front/rear optical rendering; repeated switching and longer soak come only after both current-product images pass visual inspection. OEM archaeology remains demand-driven only.
 
 ## 2026-10-06 E012A RGB product-integration pivot accepted
 

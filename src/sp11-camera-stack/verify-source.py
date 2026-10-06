@@ -11,6 +11,8 @@ need(sha(D/'authority/ir-native-bind.dtb')==p['dt']['ir_input_sha256'],'IR DT in
 need(sha(D/'fdt_authority.py')==p['dt']['fdt_helper_sha256'],'FDT helper')
 need(sha(D/'authority/ov13858.c')==p['rear_ov13858']['source_sha256'],'rear source')
 need(sha(D/'authority/ov13858-production.ko')==p['rear_ov13858']['runtime_module_sha256'],'rear module')
+need(sha(D/'authority/sp11-vd55g0-production.ko')==p['modules']['sp11_vd55g0_sha256'],'VD55G0 accepted runtime module')
+need(sha(R/'src/front-ir-vd55g0/sp11-vd55g0-native/sp11-vd55g0.c')==p['ir']['source_sha256'],'VD55G0 source')
 cam=(R/'src/front-imx681/kernel/camss/camss-csiphy-3ph-1-0.c').read_text()
 for tok in ('module_param_named(e004j_ir_dphy_windows_parity','CAMSS_X1E80100','csiphy->id == 0','V4L2_MBUS_CSI2_DPHY'):
     need(tok in cam,'CAMSS gate '+tok)

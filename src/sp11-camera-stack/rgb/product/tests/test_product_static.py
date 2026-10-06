@@ -19,4 +19,13 @@ class StaticTests(unittest.TestCase):
         self.assertNotIn('systemctl start sp11-camera-rgb.service',text)
         self.assertIn('rm -f "$STATE/ENABLE"',text)
         self.assertIn('sudo -n "$HERE/verify-unactivated.py"',text)
+        self.assertIn('private_optical_preview.py',text)
+        self.assertIn('"$STATE/private-optical"',text)
+    def test_visual_gate_helper_is_product_scoped(self):
+        text=(P/'private_optical_preview.py').read_text()
+        self.assertIn('sp11_camera_rgb_product=1',text)
+        self.assertIn('/var/lib/sp11-camera-rgb',text)
+        self.assertIn('/dev/video91',text); self.assertIn('/dev/video90',text)
+        self.assertIn('1920,1080',text); self.assertIn('3840,2160',text)
+        self.assertNotIn('requests.',text); self.assertNotIn('urllib',text)
 if __name__=='__main__': unittest.main()

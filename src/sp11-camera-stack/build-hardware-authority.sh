@@ -19,20 +19,14 @@ install -m 0644 "$FRONT_OUT/qcom-camss.ko" "$OUT/modules/qcom-camss.ko"
 install -m 0644 "$FRONT_OUT/imx681.ko" "$OUT/modules/imx681.ko"
 install -m 0755 "$FRONT_OUT/front-imx681-capture" "$OUT/bin/front-imx681-capture"
 install -m 0755 "$FRONT_OUT/front-imx681-bootstrap-controls" "$OUT/bin/front-imx681-bootstrap-controls"
-# Build VD55G0 from a disposable source copy while preserving its canonical debug path.
-VDWORK="$OUT/.vd55g0-build"; mkdir -p "$VDWORK"
-HEADER="$IR/surface-windows.generated.h"
-[ ! -e "$HEADER" ] || { echo "refusing to overwrite existing $HEADER" >&2; exit 1; }
-trap 'rm -f "$HEADER"' EXIT
-python3 "$IR/generate_windows_header.py" > "$OUT/meta/VD55G0-HEADER.txt"
-cp "$IR/sp11-vd55g0.c" "$IR/Makefile" "$HEADER" "$VDWORK/"
-rm -f "$HEADER"
-MAP="-ffile-prefix-map=$VDWORK=$IR -fdebug-prefix-map=$VDWORK=$IR -fmacro-prefix-map=$VDWORK=$IR"
-make -C "$KERNEL_SOURCE" O="$KERNEL_BUILD" M="$VDWORK" clean >/dev/null
-make -C "$KERNEL_SOURCE" O="$KERNEL_BUILD" M="$VDWORK" modules KCFLAGS="$MAP" KCPPFLAGS="$MAP" -j4 > "$OUT/meta/VD55G0-BUILD.txt"
-install -m 0644 "$VDWORK/sp11-vd55g0.ko" "$OUT/modules/sp11-vd55g0.ko"
+# VD55G0 is a second frozen accepted runtime exception, like OV13858.
+# Its ELF contains historical absolute Kbuild/source paths; rebuilding the same
+# source from a differently named checkout changes non-runtime metadata bytes.
+# E004dp/dr/ds physically accepted this exact module, so product builds pin the
+# accepted ELF instead of pretending a path-dependent rebuild is byte-identical.
+install -m 0644 "$ROOT/authority/sp11-vd55g0-production.ko" "$OUT/modules/sp11-vd55g0.ko"
 install -m 0644 "$ROOT/authority/ov13858-production.ko" "$OUT/modules/ov13858.ko"
-rm -rf "$FRONT_OUT" "$VDWORK"; trap - EXIT
+rm -rf "$FRONT_OUT"
 sha(){ sha256sum "$1" | awk '{print $1}'; }
 [ "$(sha "$OUT/dtb/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb")" = 3d56fd6f610576dee5fc97da809f9c48da16952af9a48a5053ea864b94855beb ] || { echo DTB_DRIFT >&2; exit 1; }
 [ "$(sha "$OUT/modules/qcom-camss.ko")" = 862732b7c9e4712360840a033a016239beac7e81a7d620aff61db51efb8ecdc7 ] || { echo CAMSS_DRIFT >&2; exit 1; }
