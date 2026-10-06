@@ -1,3 +1,7 @@
+## 2026-10-06 E011JX condition wake accepted through helper return
+
+E011JX executes `WakeAllConditionVariable` at `0xCE7AC0` with `x0=RVA 0x16A3730`, proves it occurs after SRW release, completes the source-exact helper epilogue, and returns through `0xCE7AD0` to caller RVA `0x5BE674`. NEXT E011JY follows the branch to `0x5BDEB8`, consumes the accepted zero at `x25+4`, and stops at the selected `0x5BE368` continuation. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JW SRW release accepted to condition wake frontier
 
 E011JW executes the accepted SRW release at `0xCE7AB0` through import RVA `0xF7E518` against resource RVA `0x16A3738`, proves the lock released, and stops before `0xCE7AC0` calls `WakeAllConditionVariable` with `x0=RVA 0x16A3730`. NEXT E011JX executes that wake and returns the publication helper to caller RVA `0x5BE674`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
