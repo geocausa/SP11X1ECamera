@@ -1,3 +1,7 @@
+## 2026-10-06 E011KO first nested string allocator frontier accepted
+
+E011KO source-scans the first nested payload name at RVA `0x1362948`, derives length 22 / allocation 23 bytes, and stops before `0x5B99CC -> 0xCAE740`. NEXT E011KP executes that allocator and stops before the result branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KN first nested descriptor payload string frontier accepted
 
 E011KN clears/publishes the 48-byte payload array, source-qualifies its two-element pointer table, and reaches the first nested string at RVA `0x1362948` without reading it. NEXT E011KO scans that 22-character string and stops before the 23-byte allocator call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
