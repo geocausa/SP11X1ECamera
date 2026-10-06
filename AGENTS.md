@@ -1,3 +1,7 @@
+## 2026-10-06 E011LS remaining baseline zero-scalar publications accepted
+
+E011LS source-executes the remaining nine baseline scalar publications. All nine registry fields remain zero under the accepted E011DS clear authority, each publication returns the already-owned scalar-zero node with inserted=0, no additional value node is allocated, and the publication container remains size one after ten total calls. NEXT E011LT reuses accepted native globals `0x160A218=0` and `0x1608858=1` to close the post-publication gate without another Windows round trip. Product scope remains front/rear RGB parity; optional AI/effects/analytics stay non-blocking unless they gate ordinary capture.
+
 ## 2026-10-06 E011LR first baseline scalar publication accepted
 
 E011LR executes `0x5B8DF8 -> 0x5B9F18` with scalar zero. Original helper code hashes the four-byte value with FNV-1a64 to `0x4D25767F9DCE13F5`, selects bucket 5/8, allocates and links one 24-byte node, increments container size to one, and returns inserted=1 at `0x5B8DFC`. NEXT E011LS closes the remaining nine baseline zero-scalar publications before the native gate. Scope remains front/rear RGB parity; optional AI/effects/analytics stay non-blocking unless they gate ordinary capture. No camera Start, reboot, rear runtime, or kernel build is used.
