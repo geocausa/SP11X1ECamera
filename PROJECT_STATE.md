@@ -1,3 +1,7 @@
+## 2026-10-06 E011HZ CAD868 epilogue accepted to caller 0x6BD94 frontier
+
+E011HZ source-qualifies the unique callsite `0x6BD90 -> 0xCAD868`, executes the epilogue at `0xCAD9B0..0xCAD9C4`, restores the saved frame and entry SP, preserves `w0=26`, and returns to `0x6BD94`. Execution stops before the caller instruction. NEXT E011IA advances that caller only to its first new source-exact dependency/frontier. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011HY CA8658 short cleanup accepted to CAD9B0 epilogue frontier
 
 E011HY source-qualifies cleanup object bytes `+0x28=1`, `+0x30=0`, `+0x38=0`, executes `0xCAD9A8 -> 0xCA8658` on its short cleanup path, returns to `0xCAD9AC`, and restores `w0=26`. Execution stops before the `0xCAD9B0` epilogue. NEXT E011HZ uses the unique source callsite `0x6BD90 -> 0xCAD868` to execute the epilogue and stop at caller `0x6BD94`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

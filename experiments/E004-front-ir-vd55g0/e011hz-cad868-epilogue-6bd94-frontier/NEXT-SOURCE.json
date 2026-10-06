@@ -1,0 +1,18 @@
+{
+  "experiment": "E011IA",
+  "goal": "Execute the caller at 0x6BD94 under the exact E011HZ return state w0=26. Qualify the immediate caller control-flow and stop at the first new source-owned data dependency or next call/return frontier before executing it.",
+  "reuse": {
+    "return_state": "E011HZ",
+    "caller_source": "unique 0x6bd90 -> 0xcad868 callsite"
+  },
+  "current_camera_frontier": {
+    "RVA": "0x6bd94",
+    "w0_u32": 26,
+    "executed": false
+  },
+  "do_not_claim": [
+    "caller result/control-flow beyond the first source-exact dependency",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
