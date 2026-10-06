@@ -1,0 +1,23 @@
+{
+  "experiment": "E011LH",
+  "goal": "Execute 0x5B8BC4 -> 0x5E81B8 with the accepted 24-byte aggregate input at SP+0x80. Source-qualify the 0x40-byte helper object, its copied/defaulted scalar fields, the count*8 allocation for 350 entries (2800 bytes), exact clear/publication of that array, helper return, and caller store at object+0x30. Stop at 0x5B8BCC before the null-result branch.",
+  "current_frontier": {
+    "call_RVA": "0x5b8bc4",
+    "call_target_RVA": "0x5e81b8",
+    "input_SP_relative": "0x80",
+    "input_aggregate_u32": 350,
+    "call_executed": false
+  },
+  "expected_closure": {
+    "helper_object_bytes": 64,
+    "entry_array_count_u32": 350,
+    "entry_array_bytes": 2800,
+    "copied_field_plus_0x8_u32": 128,
+    "copied_field_plus_0xc_u32": 4,
+    "derived_field_plus_0x30_u64": 132,
+    "caller_store_offset": "0x30",
+    "stop_RVA": "0x5b8bcc",
+    "stop_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}
