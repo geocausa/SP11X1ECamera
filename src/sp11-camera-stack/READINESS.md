@@ -1,3 +1,7 @@
+## 2026-10-06 E011KP first nested string allocation accepted
+
+E011KP executes the accepted process-heap allocator chain for exactly 23 bytes, receives a nonzero owned allocation in `x25`, preserves the first nested source selection and `x26=23`, and stops before `0x5B99D4`. NEXT E011KQ clears that buffer and forms the exact bounded source-copy call at `0x5B9A08 -> 0xCAE7C0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KO first nested string allocator frontier accepted
 
 E011KO source-scans the first nested payload name at RVA `0x1362948`, derives length 22 / allocation 23 bytes, and stops before `0x5B99CC -> 0xCAE740`. NEXT E011KP executes that allocator and stops before the result branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
