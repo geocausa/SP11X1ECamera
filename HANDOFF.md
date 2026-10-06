@@ -1,3 +1,7 @@
+## 2026-10-06 E011KG 0x1480 clear accepted
+
+E011KG follows the nonzero allocation path and clears the entire owned `0x1480` block through the source-exact `0xF5E600` helper, preserving redzones, then stops at `0x5B82E0`. NEXT E011KH forms the first 32-byte descriptor copy from RVA `0x1624140`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KF 0x1480 allocation accepted
 
 E011KF executes the accepted process-heap allocator chain for exactly `0x1480` bytes, receives a nonzero owned allocation in `x24`, and stops before `0x5B82D0`. NEXT E011KG clears the complete allocation through `0xF5E600` and stops at `0x5B82E0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
