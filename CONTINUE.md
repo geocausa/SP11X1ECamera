@@ -1,3 +1,7 @@
+## 2026-10-06 E011JM diagnostic logger returned to branch frontier
+
+E011JM executes `0x5BECB8 -> 0x1ACA8` under the accepted E011DQ owned no-effect diagnostic contract, returns to `0x5BECBC`, and stops before its unconditional branch to `0x5BED6C`. NEXT E011JN follows that branch and qualifies the repeated basename-search diagnostic setup. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JL level lookup accepted to diagnostic logger frontier
 
 E011JL executes `0x5BEC98 -> 0x5D0C0` with selector `0x20000`, source-qualifies the returned file-backed HWL level pointer at RVA `0x135F200`, forms the exact diagnostic arguments, and stops before `0x5BECB8 -> 0x1ACA8`. NEXT E011JM reuses the accepted E011DQ no-effect diagnostic dependency contract and stops at `0x5BECBC` before the following branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
