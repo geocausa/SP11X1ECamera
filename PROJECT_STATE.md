@@ -1,3 +1,7 @@
+## 2026-10-06 E011LC factory D0 enumeration-global frontier accepted
+
+E011LC executes the accepted guarded indirect method at object `+0xD0` (`0x5BA850`) through the accepted CFG check target, proves its zero return, and proves caller `SP+0x50/+0x58` mirrors writable global pair RVA `0x1766540/+0x8`. Concrete global values remain deliberately unresolved rather than guessed. NEXT E011LD resolves that producer/state and targets the first `0x5B9C80` element-processing call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LB 169-entry descriptor republish accepted
 
 E011LB grows the accepted 164-entry native descriptor table by five original static descriptors, source-exactly materializes all 169 outputs, frees the superseded 164-entry ownership tree, republishes count 169, and stops before `0x5B8738`. The closure covers 790 owned allocations/clears and 620 bounded string copies. NEXT E011LC qualifies the guarded indirect factory-object call and stops before `0x5B875C`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
