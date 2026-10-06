@@ -1,0 +1,23 @@
+{
+  "experiment": "E011KC",
+  "goal": "Source-qualify returned-object offset +0xC0 from the accepted E011JJ seven-slot zero function block, execute the 0x5B8274 read, form x0=caller SP+0x60 and x15=0 through 0x5B827C, source-qualify the indirect-call dispatch import loaded from RVA 0xF7E7B8 at 0x5B8284, and stop before 0x5B8288 BLR x17.",
+  "current_frontier": {
+    "object_field_read_RVA": "0x5b8274",
+    "object_RVA": "0x17a70d0",
+    "object_field_offset": "0xc0",
+    "read_executed": false
+  },
+  "retained_state": {
+    "caller_x26_is_SP": true,
+    "returned_object_store_SP_relative": "0x70"
+  },
+  "expected_next_frontier": {
+    "dispatch_import_RVA": "0xf7e7b8",
+    "dispatch_call_RVA": "0x5b8288",
+    "dispatch_target_register": "x17",
+    "function_target_register": "x15",
+    "function_target_expected_u64": 0,
+    "dispatch_call_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}
