@@ -1,3 +1,7 @@
+## 2026-10-06 E011LN post-insert native-global branch accepted
+
+E011LN reuses accepted same-boot Windows authority for `RVA 0x160A218=0` and `RVA 0x1608858=1`: the bit-16 test falls through, the fallback nonzero branch skips logging, and execution reaches `0x5B8DAC`. NEXT E011LO closes the first descriptor iteration and advances to descriptor position 1. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LM first map entry linked accepted
 
 E011LM copies the four-byte value, publishes key storage in the 24-byte value node, links that node as both head/tail of bucket 280, increments bucket/map counts to one, and returns zero to `0x5B8D54`. NEXT E011LN resolves the caller runtime globals at `0x160A218/0x1608858` before taking the post-insert branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
