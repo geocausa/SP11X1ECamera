@@ -1,0 +1,18 @@
+{
+  "experiment": "E011KD",
+  "goal": "Execute the now-native-qualified 0x5B828C -> 0x5BA820 function call with x0=caller SP+0x60. Qualify its non-null branch, the returned descriptor writes ([x0]=RVA 0x1624140 and [x0+8]=0xA4), return w0=0 to 0x5B8290, and stop before 0x5B8290 moves w0 into w23.",
+  "current_frontier": {
+    "function_call_RVA": "0x5b828c",
+    "function_target_RVA": "0x5ba820",
+    "x0_SP_relative": "0x60",
+    "function_call_executed": false
+  },
+  "expected_effects": {
+    "descriptor_pointer_RVA": "0x1624140",
+    "descriptor_size_u32": "0xa4",
+    "function_return_u32": 0,
+    "resume_RVA": "0x5b8290",
+    "resume_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

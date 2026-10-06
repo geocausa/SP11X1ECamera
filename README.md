@@ -1,3 +1,7 @@
+## 2026-10-06 E011KC native front function vector accepted
+
+E011KC uses a bounded Windows front-only oracle to distinguish the native live function vector at `0x17A70D0` from E011JJ's cold zero-selector model. The native `+0xC0` target is RVA `0x5BA820`, stable before and after a successful `NV12 1920x1080` Start. Source-exact replay executes the `+0xC0` read and the `GuardCFCheckFunctionPointer` check through RVA `0xF7E7B8` / target `0x1A8C0`, then stops before `0x5B828C -> 0x5BA820`. NEXT E011KD executes that function and qualifies its descriptor output. One bounded front Start/reboot was used; rear runtime remains denied and Golden Linux is restored.
+
 ## 2026-10-06 E011KB returned-object store accepted
 
 E011KB resumes at `0x5B826C`, source-qualifies `x26` as caller `SP`, and stores returned factory object RVA `0x17A70D0` at caller `SP+0x70` via `0x5B8270`. NEXT E011KC consumes the accepted zero at object `+0xC0`, forms the indirect dispatch state, and stops before `0x5B8288`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

@@ -1,6 +1,6 @@
 {
   "experiment": "E011KC",
-  "goal": "Source-qualify returned-object offset +0xC0 from the accepted E011JJ seven-slot zero function block, execute the 0x5B8274 read, form x0=caller SP+0x60 and x15=0 through 0x5B827C, source-qualify the indirect-call dispatch import loaded from RVA 0xF7E7B8 at 0x5B8284, and stop before 0x5B8288 BLR x17.",
+  "goal": "Resolve returned-object offset +0xC0 in the native front-camera context before executing 0x5B8274. E011JJ qualifies a cold zero-selector model only; do not project that zero into the successful native front path. Use a bounded Windows oracle if needed, then execute the 0x5B8274 read, form x0=caller SP+0x60, source-qualify the GuardCFCheckFunctionPointer cell at RVA 0xF7E7B8, execute its check at 0x5B8288, and stop before the actual x15 function call at 0x5B828C.",
   "current_frontier": {
     "object_field_read_RVA": "0x5b8274",
     "object_RVA": "0x17a70d0",
@@ -9,15 +9,17 @@
   },
   "retained_state": {
     "caller_x26_is_SP": true,
-    "returned_object_store_SP_relative": "0x70"
+    "returned_object_store_SP_relative": "0x70",
+    "cold_zero_authority_experiment": "E011JJ",
+    "cold_zero_is_native_front_authority": false
   },
   "expected_next_frontier": {
-    "dispatch_import_RVA": "0xf7e7b8",
-    "dispatch_call_RVA": "0x5b8288",
-    "dispatch_target_register": "x17",
+    "guard_cf_check_cell_RVA": "0xf7e7b8",
+    "guard_cf_check_call_RVA": "0x5b8288",
     "function_target_register": "x15",
-    "function_target_expected_u64": 0,
-    "dispatch_call_executed": false
+    "function_target_must_be_resolved_before_call": true,
+    "function_call_RVA": "0x5b828c",
+    "function_call_executed": false
   },
   "native_rear_runtime_allowed": false
 }
