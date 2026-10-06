@@ -1,3 +1,7 @@
+## 2026-10-06 E011JZ stack-cookie restore accepted
+
+E011JZ executes `0x5BE368 -> 0x11F0` under the accepted opaque process-cookie contract, proves the paired stack-cookie check succeeds without exposing the native cookie, and stops at `0x5BE374` before nonvolatile restoration. NEXT E011KA completes the factory epilogue and returns `x0=RVA 0x17A70D0` to accepted caller resume RVA `0x5B826C`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JY zero status branch accepted to 0x5BE368
 
 E011JY follows `0x5BE674 -> 0x5BDEB8`, preserves the accepted E011JP `x25=RVA 0x18A2968` authority, reads `x25+4=0`, and proves `0x5BDEC0 b.ne` selects `0x5BE368`. NEXT E011JZ executes the paired stack-cookie check and stops at `0x5BE374` before nonvolatile restoration. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
