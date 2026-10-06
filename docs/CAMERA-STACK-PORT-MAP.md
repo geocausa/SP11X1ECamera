@@ -1,3 +1,7 @@
+## 2026-10-06 E011MD complete vendor numeric metadata accepted
+
+E011MD closes all 519 vendor numeric/core metadata records at indices 282..800 with signature `fdb6847dfafc5172343b5de56abdb3a7d2e56c9e2365054b8c00fee1d643ad9e`, aggregate element bytes 6071452 and 3633 accepted registry-helper reads. Name decoration remains deliberately bypassed under E011MA. NEXT E011ME closes the remaining 239 numeric records and the full 1040-record table.
+
 ## 2026-10-06 E011MC complete standard numeric metadata accepted
 
 E011MC closes all 282 standard numeric/core metadata records in bulk: record stride 168, normalized signature `fb7426a02b5154bb49b58a011dd7eaa3aa06665c90e3fc60d231e9c43e9259ea`, aggregate element bytes 280576. Name decoration is skipped under E011MA's non-numeric proof; six dynamic-count records execute the accepted `0x5BA6B0` helper through guarded dispatch. NEXT E011MD applies the same treatment to 519 vendor tags.
