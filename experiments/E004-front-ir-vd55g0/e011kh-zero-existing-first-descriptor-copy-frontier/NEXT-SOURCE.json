@@ -1,0 +1,18 @@
+{
+  "experiment": "E011KI",
+  "goal": "Source-qualify descriptor entry 0 at RVA 0x1624140 and execute the first 0x5B8344 -> 0x5B9888 copy helper far enough to derive its NUL-terminated name length and scalar fields, initialize the destination entry, and stop before the first nested string allocation at 0x5B9908 -> 0xCAE740. Keep raw OEM table/string material private; publish only safe RVAs, lengths, scalar values and hashes.",
+  "current_frontier": {
+    "copy_call_RVA": "0x5b8344",
+    "copy_target_RVA": "0x5b9888",
+    "destination_is_x24": true,
+    "source_entry_RVA": "0x1624140",
+    "entry_bytes": 32,
+    "copy_call_executed": false
+  },
+  "expected_next_frontier": {
+    "nested_allocator_call_RVA": "0x5b9908",
+    "nested_allocator_target_RVA": "0xcae740",
+    "nested_allocator_call_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

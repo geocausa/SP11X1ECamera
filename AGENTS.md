@@ -1,3 +1,7 @@
+## 2026-10-06 E011KH first native descriptor copy selected
+
+E011KH consumes the accepted native descriptor table (`RVA 0x1624140`, count `0xA4`), confirms the restored caller has zero existing entries, and forms the first 32-byte copy call at `0x5B8344 -> 0x5B9888`, stopping before execution. NEXT E011KI enters descriptor entry 0 only to the first nested string-allocation frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KG 0x1480 clear accepted
 
 E011KG follows the nonzero allocation path and clears the entire owned `0x1480` block through the source-exact `0xF5E600` helper, preserving redzones, then stops at `0x5B82E0`. NEXT E011KH forms the first 32-byte descriptor copy from RVA `0x1624140`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
