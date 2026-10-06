@@ -1,3 +1,7 @@
+## 2026-10-06 E011KZ second descriptor call frontier accepted
+
+E011KZ consumes the first descriptor helper return `w0=0`, advances index/completed counters to 1, takes the table loop back, and forms the second call with source entry RVA `0x1624160` and destination offset 32. NEXT E011LA closes the full 164-entry descriptor materialization loop as one bounded source-exact offline proof. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KY descriptor helper return accepted
 
 E011KY executes the `0x5B9888` success epilogue, restores the caller frame, returns `w0=0` to `0x5B8348`, and stops before the caller result branch. NEXT E011KZ advances the descriptor-table loop to index 1 and forms the second helper-call frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

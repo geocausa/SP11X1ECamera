@@ -1,0 +1,18 @@
+{
+  "experiment": "E011LA",
+  "goal": "Source-exactly close the accepted 164-entry descriptor-table materialization loop rather than repeating one descriptor at a time: replay 0x5B832C -> 0x5B9888 across all 164 source entries, use only owned process-heap allocations, verify every top-level name and all nested payload elements against the original source image, complete the zero-status loop, publish the resulting 0x1480 table into x19+0x18 with count 164, and stop at 0x5B84B8 before subsequent caller logic.",
+  "current_frontier": {
+    "descriptor_index_u32": 1,
+    "source_entry_RVA": "0x1624160",
+    "copy_call_RVA": "0x5b8344",
+    "copy_call_executed": false
+  },
+  "expected_closure": {
+    "source_table_RVA": "0x1624140",
+    "descriptor_count_u32": 164,
+    "destination_bytes": 5248,
+    "stop_RVA": "0x5b84b8",
+    "stop_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}
