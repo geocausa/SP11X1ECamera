@@ -1,0 +1,25 @@
+{
+  "experiment": "E011HZ",
+  "goal": "Execute the CAD868 function epilogue at 0xCAD9B0..0xCAD9C4 under the exact E011HY state with w0=26. Reuse the unique source callsite 0x6BD90 -> 0xCAD868 to qualify return target 0x6BD94, restore the saved caller frame, return to 0x6BD94, and stop before the caller instruction executes.",
+  "reuse": {
+    "cleanup_result": "E011HY",
+    "unique_caller_callsite": "source call 0x6bd90 -> 0xcad868"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xcad9b0",
+    "w0_u32": 26,
+    "epilogue_executed": false
+  },
+  "expected_return": {
+    "epilogue_last_RVA": "0xcad9c4",
+    "return_target_RVA": "0x6bd94",
+    "w0_u32": 26,
+    "return_target_executed": false
+  },
+  "do_not_claim": [
+    "0x6bd94 caller semantics before E011IA",
+    "downstream caller branch/result",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
