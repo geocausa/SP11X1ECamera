@@ -1,0 +1,22 @@
+{
+  "experiment": "E011IW",
+  "goal": "Execute the accepted 0x5BEA08 -> 0xCAE740 allocator thunk, which source-tail-jumps to 0xCB16C0. Reuse the accepted E011ES owned process-heap/HeapAlloc contract for an exact 0xB0 allocation, require a nonzero owned result, return to 0x5BEA0C, and stop before executing its CBZ branch.",
+  "current_frontier": {
+    "call_RVA": "0x5bea08",
+    "target_RVA": "0xcae740",
+    "allocation_bytes": 176,
+    "executed": false
+  },
+  "accepted_allocator_authority": {
+    "thunk_RVA": "0xcae740",
+    "underlying_allocator_RVA": "0xcb16c0",
+    "authority_experiment": "E011ES"
+  },
+  "expected_frontier": {
+    "resume_RVA": "0x5bea0c",
+    "returned_pointer_nonzero": true,
+    "branch_RVA": "0x5bea0c",
+    "branch_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

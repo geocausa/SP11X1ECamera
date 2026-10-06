@@ -1,3 +1,7 @@
+## 2026-10-06 E011IV return object accepted to 0xB0 allocator frontier
+
+E011IV resumes at `0x5BEA00`, preserves the enumeration return object in `x20`, sets exact allocator size `0xB0`, and stops before `0x5BEA08 -> 0xCAE740`; source identifies the thunk target as accepted allocator `0xCB16C0`. NEXT E011IW executes only that 176-byte owned allocation and stops at `0x5BEA0C` before its result branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IU parent cookie epilogue accepted to 0x5BEA00 frontier
 
 E011IU passes the parent `0x5F9438 -> 0x11F0` cookie check, restores the `0x5F8DC0` frame/nonvolatiles, preserves the return object in `x0`, and returns through `0x5F9458` to source caller `0x5BEA00`. NEXT E011IV advances only to the `0x5BEA08 -> 0xCAE740` 0xB0 allocator frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
