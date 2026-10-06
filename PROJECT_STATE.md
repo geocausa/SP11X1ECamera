@@ -1,3 +1,7 @@
+## 2026-10-06 E011IR zero-backed publication accepted to 0x5F9724 frontier
+
+E011IR executes the E011IQ zero-global branch through the helper publication stores: the `0x160A1F0` block is populated with source-owned zero state and ready flag `0x160A270=1`; secondary `0x16A3FE0/+8` stays zero. It stops before the helper epilogue at `0x5F9724`. NEXT E011IS qualifies the opaque-cookie epilogue and return to `0x5F9420`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IQ native 0x160A260 zero accepted to 0x5F96A0 frontier
 
 E011IQ used the bounded SP11 Windows oracle because `RVA 0x160A260` is writable `.data`: the exact QcDeviceMFT8380.dll qword was zero after front-only initialization and remained zero after one successful NV12 1920x1080 front reader Start. The original `0x5F968C` load therefore yields zero and `0x5F9690` branches to `0x5F96A0`. NEXT E011IR continues from that branch target. One Windows one-shot/front Start was used; rear runtime stayed denied, no rear Start or kernel build occurred, and the machine returned to Golden Linux.
