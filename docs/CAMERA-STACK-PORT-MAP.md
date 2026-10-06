@@ -1,3 +1,7 @@
+## 2026-10-06 E011JJ zero function block accepted to 0x5BEC7C frontier
+
+E011JJ reuses E011DH initialization authority for global object `0x17A70D0`: all seven qword slots at `+0xA0..+0xD0` are zero, and the accepted selector-zero path bypasses their selected-mode population stores. Original `0x5BEA80..0x5BEA90` therefore takes the first null branch to `0x5BEC7C`. NEXT E011JK follows that null-block path to its first new source dependency. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JI selector-zero tree accepted to function-block frontier
 
 E011JI executes the accepted `w20=w23=0` selector decision tree without memory access; all seven selector flags remain zero and source reaches `0x5BEA80`. NEXT E011JJ resolves the current `x19+0xA0..0xD0` function-pointer block before any loads or indirect calls. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
