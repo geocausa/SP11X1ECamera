@@ -1,3 +1,7 @@
+## 2026-10-06 E011IG second-iteration cleanup accepted to 0x60046C frontier
+
+E011IG resumes at `0x600454` with `w0=2`, current loop counter `1`, and `x23=RVA 0x10F03B0`; the original caller takes the nonzero path, clears `x20`, zeros the output slot, and stops before the global read at `0x60046C`. NEXT E011IH reuses accepted E011FL native authority for `RVA 0x160A218=0`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IF CED2F0 CRT=2 return joined to 0x600454 frontier
 
 E011IF executes the exact `0x600450` call instruction, rejoins E011FO same-thread CRT error `2` with the accepted E011FJ complete `CED2F0` return contract, and qualifies return `w0=2` to `0x600454`. NEXT E011IG advances the second-iteration caller to the first global read. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
