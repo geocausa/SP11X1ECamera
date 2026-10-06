@@ -1,3 +1,7 @@
+## 2026-10-06 E011JK source path search accepted to 0x5D0C0 frontier
+
+E011JK source-qualifies the 97-byte path at `0x13DBCB0`, executes `0x5BEC84 -> 0xCE7C98` for backslash, and proves the helper returns the final backslash at offset 74; the caller selects basename offset 75. NEXT E011JL executes `0x5BEC98 -> 0x5D0C0` for selector `0x20000` and stops before the logger call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JJ zero function block accepted to 0x5BEC7C frontier
 
 E011JJ reuses E011DH initialization authority for global object `0x17A70D0`: all seven qword slots at `+0xA0..+0xD0` are zero, and the accepted selector-zero path bypasses their selected-mode population stores. Original `0x5BEA80..0x5BEA90` therefore takes the first null branch to `0x5BEC7C`. NEXT E011JK follows that null-block path to its first new source dependency. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
