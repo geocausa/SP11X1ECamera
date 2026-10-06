@@ -1,3 +1,7 @@
+## 2026-10-06 E011JR third cleanup registration accepted to publication frontier
+
+E011JR executes the existing-table registration for callback RVA `0xF7B310`, advances the retained logical encoded exit table from 2 to 3 used entries without reallocation, returns zero through `0xCA34A0`, and stops before `0x5BE670 -> 0xCE7A48` with guard RVA `0x1B302D0`. NEXT E011JS qualifies the publication-helper prologue and first SRW-lock dependency. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JQ registration wrapper accepted to CA3450 frontier
 
 E011JQ enters `0xCA34A0` from `0x5BE660` with callback RVA `0xF7B310`, source-pins the accepted wrapper, and stops before `0xCA34AC -> 0xCA3450`. NEXT E011JR explicitly inherits the retained encoded-exit-table state before executing registration; runtime table state is not guessed. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
