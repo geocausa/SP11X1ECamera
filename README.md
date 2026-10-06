@@ -1,3 +1,7 @@
+## 2026-10-06 E011IS helper cookie epilogue accepted to 0x5F9420 frontier
+
+E011IS executes the `0x5F9724` helper epilogue under the accepted opaque-cookie contract, passes `0x11F0`, restores the frame/nonvolatiles, returns `x0=0` through `0x5F9748`, and stops at caller `0x5F9420`. NEXT E011IT qualifies the caller status publication and stops before its cookie check. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IR zero-backed publication accepted to 0x5F9724 frontier
 
 E011IR executes the E011IQ zero-global branch through the helper publication stores: the `0x160A1F0` block is populated with source-owned zero state and ready flag `0x160A270=1`; secondary `0x16A3FE0/+8` stays zero. It stops before the helper epilogue at `0x5F9724`. NEXT E011IS qualifies the opaque-cookie epilogue and return to `0x5F9420`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
