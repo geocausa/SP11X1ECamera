@@ -1,0 +1,12 @@
+{
+  "experiment": "E011IP",
+  "goal": "Qualify the current published enumeration-buffer field at offset 0x4950 before dereference. Start from the E011DV zeroed 18832-byte publication authority, trace any intervening writes to the published buffer on the accepted 0x600368 path, then execute 0x5F95AC only when the current field value is source-owned.",
+  "current_frontier": {
+    "RVA": "0x5f95ac",
+    "dependency_expression": "[x19+0x4950]",
+    "bytes": 8,
+    "executed": false
+  },
+  "dependency_task": "Prove whether published buffer offset 0x4950 remains zero or was modified before helper consumption.",
+  "native_rear_runtime_allowed": false
+}

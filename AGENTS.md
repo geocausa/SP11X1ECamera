@@ -1,3 +1,7 @@
+## 2026-10-06 E011IO published buffer accepted to 0x5F95AC frontier
+
+E011IO reuses E011DV publication authority for nonzero global `RVA 0x169FDF0`, executes `0x5F95A4/0x5F95A8`, and stops before published-buffer offset `0x4950` is dereferenced. NEXT E011IP traces any intervening buffer writes before qualifying that field. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IN helper prologue accepted to 0x169FDF0 frontier
 
 E011IN executes `0x5F941C -> 0x5F9578` and its exact save/cookie prologue, stopping before `0x5F95A4` reads global `RVA 0x169FDF0`. NEXT E011IO reuses accepted E011DV publication authority for that pointer. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
