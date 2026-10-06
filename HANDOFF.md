@@ -1,3 +1,7 @@
+## 2026-10-06 E011JH selector zero/native globals accepted to 0x5BE510 frontier
+
+E011JH source-audits selector block RVA `0x1798508`: nine exact page+0x508 materializations are immediate readers with no direct writer/address escape, so zero-fill bytes `+1/+2` remain zero. Reusing accepted native `0x160A218=0` and `0x1608858=1`, original code branches to `0x5BE510` with `w23=w20=0`. NEXT E011JI follows only that selector decision tree to `0x5BEA80`, stopping before the x19 function-pointer block. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JG second zero source copy accepted to global-byte frontier
 
 E011JG qualifies zero at `buffer+0x3E28` and executes exact `0x5BE498 -> 0xCAE7C0` to `x26+0x270`; only the terminating NUL is copied. NEXT E011JH resolves the two global bytes at `0x1798509/0x179850A` before `0x5BE4A4/0x5BE4A8`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
