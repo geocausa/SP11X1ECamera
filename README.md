@@ -1,3 +1,7 @@
+## 2026-10-06 E011JP x25 destination accepted to CA34A0 frontier
+
+E011JP source-qualifies `x25` as RVA `0x18A2968`, executes the zero store at `0x5BEDA4`, follows the branch to `0x5BE658`, and stops before `0x5BE660 -> 0xCA34A0` with `x0=RVA 0xF7B310`. NEXT E011JQ qualifies that helper before execution. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JO second diagnostic returned to x25-store frontier
 
 E011JO executes `0x5BEDA0 -> 0x1ACA8` under the accepted no-effect diagnostic contract and stops at `0x5BEDA4` before the store through `x25`. NEXT E011JP qualifies that destination before executing it and following the branch to `0x5BE658`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
