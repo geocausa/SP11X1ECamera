@@ -1,3 +1,7 @@
+## 2026-10-06 E011KL first descriptor payload allocation frontier accepted
+
+E011KL executes the descriptor-0 name copy, publishes the owned name pointer, reads source count 2 and derives an exact 48-byte nested payload allocation. NEXT E011KM executes `0x5B9968 -> 0xCAE740` under the accepted process-heap contract and stops before the result branch. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KK first descriptor string copy frontier accepted
 
 E011KK clears the owned 42-byte string allocation, preserves the accepted descriptor-0 name span at RVA `0x13D9678`, and forms the exact bounded `0x5B9940 -> 0xCAE7C0` copy call without executing it. NEXT E011KL executes the copy, publishes the name pointer, derives a 48-byte nested payload allocation from source count 2, and stops before `0x5B9968 -> 0xCAE740`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
