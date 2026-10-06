@@ -1,3 +1,7 @@
+## 2026-10-06 E011KJ first descriptor string allocation accepted
+
+E011KJ executes the exact 42-byte nested allocation for descriptor 0 through the accepted process-heap path, receives a nonzero owned pointer in `x21`, and stops before `0x5B9910`. NEXT E011KK clears that string buffer and forms the bounded `0xCAE7C0` copy call without executing it. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KI first native descriptor entered
 
 E011KI executes descriptor entry 0 through the source-exact `0x5B9888` prefix, derives the safe 41-byte name span and destination scalars, and stops before the exact 42-byte nested allocation at `0x5B9908 -> 0xCAE740`. Raw OEM descriptor/string bytes remain private. NEXT E011KJ executes only that owned allocation. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
