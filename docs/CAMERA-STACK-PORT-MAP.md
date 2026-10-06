@@ -1,3 +1,7 @@
+## 2026-10-06 E011JQ registration wrapper accepted to CA3450 frontier
+
+E011JQ enters `0xCA34A0` from `0x5BE660` with callback RVA `0xF7B310`, source-pins the accepted wrapper, and stops before `0xCA34AC -> 0xCA3450`. NEXT E011JR explicitly inherits the retained encoded-exit-table state before executing registration; runtime table state is not guessed. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JP x25 destination accepted to CA34A0 frontier
 
 E011JP source-qualifies `x25` as RVA `0x18A2968`, executes the zero store at `0x5BEDA4`, follows the branch to `0x5BE658`, and stops before `0x5BE660 -> 0xCA34A0` with `x0=RVA 0xF7B310`. NEXT E011JQ qualifies that helper before execution. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
