@@ -1,0 +1,5 @@
+# E012F — rear known-screen fixed-profile optical one-shot
+
+Fresh single-use RGB product candidate driven by the concrete E012E optical failure and a same-night OEM Windows baseline. Windows front is genuinely dark tonight (native NV12 mean Y 13.28, p99 44), while Windows rear clearly resolves the illuminated SP7 screen (mean Y 56.99, p95 152, p99 160). E012E Linux rear was nearly flat black, so no soak is permitted.
+
+This candidate changes no maintained product code. It tests one exact already physically accepted OV13858 30-fps V4L2 profile (`exposure=3200, analogue_gain=512, digital_gain=2048`) after verifying the exact baseline (`1600,128,1024`) and current advertised bounds. No direct register write, IR/illumination, VBLANK/FPS change, AI/effect or tone transform is allowed. Capture one root-private rear 4K product-loopback PNG, restore the exact baseline, stop/neutralize, and return Golden. If this restores the visible SP7 scene, the concrete missing product function is exposure/gain management rather than transport/Bayer geometry.
