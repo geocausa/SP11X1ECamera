@@ -1,0 +1,21 @@
+{
+  "experiment": "E011LG",
+  "goal": "Resume at 0x5B8B68 with the accepted ready=1 231-descriptor state. Source-exactly scan descriptor tail fields, qualify the 147 descriptors whose tail equals 0xFFFFFFFF and their aggregate nested count 350, materialize the exact 24-byte caller input at SP+0x80, set x0=SP+0x80, and stop before 0x5B8BC4 -> 0x5E81B8.",
+  "current_frontier": {
+    "RVA": "0x5b8b68",
+    "ready_field_offset": "0x2c",
+    "ready_value_u32": 1,
+    "descriptor_count_u32": 231,
+    "executed": false
+  },
+  "expected_call": {
+    "tail_ff_descriptor_count_u32": 147,
+    "tail_ff_nested_count_u32": 350,
+    "input_SP_relative": "0x80",
+    "input_bytes": 24,
+    "call_RVA": "0x5b8bc4",
+    "target_RVA": "0x5e81b8",
+    "call_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

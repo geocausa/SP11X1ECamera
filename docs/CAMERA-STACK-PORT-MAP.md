@@ -1,3 +1,7 @@
+## 2026-10-06 E011LF descriptor-derived arrays accepted
+
+E011LF normalizes the accepted 231 descriptors, derives an exact 924-byte prefix array and 4152-byte scalar-width array for 519 nested elements, advances the descriptor ID to `0x80E7`, sets ready=1 at object `+0x2C`, and stops before `0x5B8B68`. NEXT E011LG qualifies the ready-state aggregate call input for `0x5E81B8`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011LE complete 231-descriptor merge accepted
 
 E011LE deep-merges the accepted 169 runtime descriptors with the original 62-entry source table at RVA `0x1617B40`, producing 231 exact descriptors. It closes 982 owned allocations/clears and 750 bounded string copies, frees the superseded 169-entry ownership tree and the enumeration-global allocation, zeros the global pair, and stops before `0x5B87F8`. NEXT E011LF derives the descriptor index/prefix/scalar arrays and targets `0x5B8B68`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
