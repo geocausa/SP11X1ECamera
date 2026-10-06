@@ -1,3 +1,7 @@
+## 2026-10-06 E011KU second nested string allocation accepted
+
+E011KU executes the accepted allocator chain for the exact 16-byte second nested string buffer, receives a nonzero owned pointer in `x25`, preserves the second-element selection, and stops before `0x5B99D4`. NEXT E011KV clears and prepares the exact bounded copy. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KT second nested string allocator frontier accepted
 
 E011KT source-qualifies the second nested name at RVA `0x1362938`, measures 15 bytes before NUL, derives the exact 16-byte allocation request, and stops before `0x5B99CC -> 0xCAE740`. NEXT E011KU executes that allocator chain. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
