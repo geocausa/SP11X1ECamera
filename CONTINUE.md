@@ -1,3 +1,7 @@
+## 2026-10-06 E011JN repeated basename search accepted to second logger frontier
+
+E011JN follows the post-diagnostic branch, executes the repeated `0x5BED74 -> 0xCE7C98` basename search, source-qualifies the fatal initialization diagnostic tuple, and stops before `0x5BEDA0 -> 0x1ACA8`. NEXT E011JO executes only that accepted no-effect logger and stops before the `x25` store. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JM diagnostic logger returned to branch frontier
 
 E011JM executes `0x5BECB8 -> 0x1ACA8` under the accepted E011DQ owned no-effect diagnostic contract, returns to `0x5BECBC`, and stops before its unconditional branch to `0x5BED6C`. NEXT E011JN follows that branch and qualifies the repeated basename-search diagnostic setup. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
