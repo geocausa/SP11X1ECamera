@@ -1,3 +1,7 @@
+## 2026-10-06 E011HV CA6280 cookie return accepted to CAD940 frontier
+
+E011HV passes the original cookie checker across four opaque axes, restores the CA6280 frame, and returns to `0xCAD940` with `w0=26`. NEXT E011HW qualifies the immediate caller branch path. No camera Start, reboot, rear runtime, or kernel build; native rear remains denied.
+
 ## 2026-10-06 E011HU zero cleanup leaf accepted to CA63E4 frontier
 
 E011HU qualifies `[sp+0x478]=0`, executes the `CB1650` zero fast path, and resumes with `w0=26`. NEXT E011HV closes the CA6280 cookie/epilogue return to `CAD940`. No camera Start, reboot, rear runtime, or kernel build; native rear remains denied.

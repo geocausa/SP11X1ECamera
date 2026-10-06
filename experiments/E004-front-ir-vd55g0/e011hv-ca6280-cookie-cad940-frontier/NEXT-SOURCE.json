@@ -1,0 +1,29 @@
+{
+  "experiment": "E011HW",
+  "goal": "Reuse accepted E011FX caller register state at the CA6280 call and E011HV return w0=26. Execute 0xCAD940 output terminator store, qualify the return-code branch to 0xCAD95C, set w19=26, qualify the sign-bit branch at 0xCAD960 as taken to 0xCAD9A4, and stop before 0xCAD9A4 prepares the cleanup call.",
+  "reuse": {
+    "caller_state": "E011FX",
+    "return": "E011HV"
+  },
+  "current_camera_frontier": {
+    "RVA": "0xcad940",
+    "w0_u32": 26,
+    "executed": false
+  },
+  "expected_path": {
+    "x19_before_u64": 18446744073709551615,
+    "x20_SP_relative": "0x200",
+    "x21_u32": 1,
+    "x22_u64": 640,
+    "terminator_store_RVA": "0xcad944",
+    "terminator_SP_relative": "0x47f",
+    "return_branch_RVA": "0xcad94c",
+    "return_branch_taken": true,
+    "w19_after_u32": 26,
+    "sign_branch_RVA": "0xcad960",
+    "sign_nonnegative_branch_taken": true,
+    "target_RVA": "0xcad9a4",
+    "target_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}
