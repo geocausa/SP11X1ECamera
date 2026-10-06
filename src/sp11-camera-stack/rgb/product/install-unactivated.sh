@@ -22,7 +22,12 @@ for f in product_owner.py product_daemon.py productctl.py private_optical_previe
 sudo -n install -m 0755 "$HERE/recover-golden.sh" "$DEST/recover-golden.sh"
 for f in session.py media_backend.py rgb_device_backend.py; do sudo -n install -m 0644 "$HERE/../service/$f" "$SERVICE_DEST/$f"; done
 for f in route_policy.py graph_contract.py; do sudo -n install -m 0644 "$REPO/src/sp11-camera-stack/routing/$f" "$ROUTING_DEST/$f"; done
-sudo -n install -d -m 0700 "$STATE" "$STATE/bin" "$STATE/output" "$STATE/private-optical"
+sudo -n install -d -m 0700 "$STATE" "$STATE/bin"
+# Runtime evidence is never part of the immutable product-asset manifest.
+# A fresh inert install clears stale per-boot output/optical/session state.
+sudo -n rm -rf "$STATE/output" "$STATE/private-optical"
+sudo -n rm -f "$STATE/session.lock" "$STATE/ENABLE"
+sudo -n install -d -m 0700 "$STATE/output" "$STATE/private-optical"
 sudo -n install -m 0700 "$TMP/front-direct-publisher" "$STATE/bin/front-direct-publisher"
 sudo -n install -m 0700 "$TMP/rear-direct-publisher" "$STATE/bin/rear-direct-publisher"
 sudo -n install -m 0700 "$HERE/start-session.sh" "$STATE/start-session.sh"
