@@ -8,7 +8,7 @@ ENTRY=/etc/grub.d/99zzzzzz_sp11_camera_e012h
 ID=sp11-camera-e012h-rear-digital-gain-ladder
 KERNEL_SOURCE=/home/geoca/Documents/SP11-PROJECT/02-kernel/sp11-camera-e002k-d-src
 KERNEL_BUILD=/home/geoca/Documents/SP11-PROJECT/02-kernel/build-runtime-v4-headers-20260826
-LOOPROOT=/tmp/sp11-e012h-loopback-build
+LOOPROOT=/tmp/sp11-e012c-loopback-build
 LOOPDEBSHA=86ec85e00c29dd46b70147e509dd164a382f10931b1adc51ce0ffce6030387c7
 LOOPSHA=e53a1474db7e9bea5e68006e5a3163ff487a747bb08e6688e5ad31230180370f
 cd "$R"
