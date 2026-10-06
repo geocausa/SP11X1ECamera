@@ -1,0 +1,22 @@
+{
+  "experiment": "E011IY",
+  "goal": "Source-qualify the NUL-terminated string at RVA 0x13DBC80, execute 0x5BE3B8 -> 0xCAE7C0 with destination allocation+0x30 and bound 0x80, qualify the copied string and return value, then stop at 0x5BE3BC before the next imported-function pointer read/call.",
+  "current_frontier": {
+    "call_RVA": "0x5be3b8",
+    "target_RVA": "0xcae7c0",
+    "executed": false
+  },
+  "expected_source": {
+    "RVA": "0x13dbc80",
+    "first_nul_offset": 9,
+    "ascii": "HwEnvLock"
+  },
+  "expected_frontier": {
+    "resume_RVA": "0x5be3bc",
+    "return_w0_u32": 0,
+    "next_import_read_RVA": "0x5be3c0",
+    "next_import_call_RVA": "0x5be3c8",
+    "next_import_call_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}

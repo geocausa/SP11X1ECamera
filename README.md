@@ -1,3 +1,7 @@
+## 2026-10-06 E011IX 0xB0 zero initialization accepted to 0xCAE7C0 frontier
+
+E011IX follows the nonzero 176-byte allocation path, zeroes the complete object, preserves it in `x24`, and reaches `0x5BE3B8 -> 0xCAE7C0` with the exact bounded-copy tuple. NEXT E011IY source-qualifies `RVA 0x13DBC80` (`HwEnvLock`), executes that construction copy, and stops before the following imported-function call. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IW 0xB0 allocator return accepted to 0x5BEA0C frontier
 
 E011IW executes the source allocator thunk and accepted `0xCB16C0` process-heap path for exactly 176 bytes, obtains a nonzero owned allocation, preserves the enumeration object in `x20`, and stops at `0x5BEA0C` before its branch. NEXT E011IX qualifies the nonzero branch and exact allocation zero-initialization through the `0x5BE39C` tail, stopping before `0x5BE3B8 -> 0xCAE7C0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
