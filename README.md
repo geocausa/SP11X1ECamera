@@ -1,3 +1,7 @@
+## 2026-10-06 E011KY descriptor helper return accepted
+
+E011KY executes the `0x5B9888` success epilogue, restores the caller frame, returns `w0=0` to `0x5B8348`, and stops before the caller result branch. NEXT E011KZ advances the descriptor-table loop to index 1 and forms the second helper-call frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KX nested payload loop complete
 
 E011KX publishes the second nested payload element, raises destination count to 2, completes the two-element source loop, and takes the zero-status success branch to `0x5B9B80` without executing the helper epilogue. NEXT E011KY restores the helper frame and returns `w0=0` to caller `0x5B8348`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
