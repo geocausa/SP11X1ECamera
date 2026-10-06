@@ -1,0 +1,31 @@
+{
+  "experiment": "E011HU",
+  "goal": "Reuse accepted E011FZ setup authority that final CA6280 frame bytes [sp+0x470..+0x47f] are zero, hence [sp+0x478]=0. Execute 0xCA63D8 load and the 0xCA63DC -> 0xCB1650 call with x0=0, qualify its return, set w0=w21=26 at 0xCA63E0, and stop before 0xCA63E4 dismantles the 0x490-byte local frame.",
+  "reuse": {
+    "frame_slot": "E011FZ final_sp+0x470 16 zero bytes",
+    "caller_state": "E011HT"
+  },
+  "current_camera_frontier": {
+    "read_RVA": "0xca63d8",
+    "SP_relative": "0x478",
+    "bytes": 8,
+    "read_executed": false
+  },
+  "expected_path": {
+    "frame_slot_u64": 0,
+    "call_RVA": "0xca63dc",
+    "call_target_RVA": "0xcb1650",
+    "call_x0_u64": 0,
+    "call_executed": true,
+    "resume_RVA": "0xca63e0",
+    "w0_after_u32": 26,
+    "next_RVA": "0xca63e4",
+    "next_executed": false
+  },
+  "do_not_claim": [
+    "frame deallocation/cookie check before E011HV",
+    "CA6280 return target",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
