@@ -1,3 +1,7 @@
+## 2026-10-06 E011JE buffer +0x4890 accepted to +0x3C28 frontier
+
+E011JE qualifies accepted published-buffer `+0x4890=0`, stores zero to outer local `x26+0x474`, and stops before `0x5BE47C` forms source pointer `buffer+0x3C28`. NEXT E011JF source-qualifies that bounded-copy source before `0x5BE480 -> 0xCAE7C0`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JD local/buffer fields accepted to +0x4890 frontier
 
 E011JD reuses the accepted 1040-byte source clear and zero-backed 18,832-byte enumeration buffer to execute `0x5BE424..0x5BE46C`. Buffer `+0x442C/+0x1C/+0x0C` are zero, `+0x20=0x08000000`, and derived outer locals `+0x68/+0x6C/+0x470` are zero. NEXT E011JE source-qualifies `buffer+0x4890`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
