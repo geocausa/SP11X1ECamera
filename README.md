@@ -1,3 +1,7 @@
+## 2026-10-06 E011IH accepted native 0x160A218 zero to 0x600474 frontier
+
+E011IH reuses the accepted E011FL same-boot Windows authority for `RVA 0x160A218=0`, executes the exact `0x60046C` load and bit-16 test, confirms no branch, and stops before `0x600474` reads `RVA 0x1608858`. NEXT E011II reuses E011FM authority for that field. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IG second-iteration cleanup accepted to 0x60046C frontier
 
 E011IG resumes at `0x600454` with `w0=2`, current loop counter `1`, and `x23=RVA 0x10F03B0`; the original caller takes the nonzero path, clears `x20`, zeros the output slot, and stops before the global read at `0x60046C`. NEXT E011IH reuses accepted E011FL native authority for `RVA 0x160A218=0`. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
