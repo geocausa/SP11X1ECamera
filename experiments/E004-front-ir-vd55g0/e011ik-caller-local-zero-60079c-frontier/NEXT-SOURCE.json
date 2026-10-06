@@ -1,0 +1,15 @@
+{
+  "experiment": "E011IL",
+  "goal": "Execute the outer caller epilogue from 0x60079C source-exactly. Reuse the accepted opaque process-cookie contract for 0x11F0, restore the saved frame, and stop at the architectural return target with x0 carrying the surviving x25 object pointer.",
+  "current_frontier": {
+    "RVA": "0x60079c",
+    "executed": false
+  },
+  "expected_sequence": [
+    "0x60079c mov x0,x25",
+    "0x6007a0 add sp,#0x540",
+    "0x6007a4 bl 0x11f0",
+    "0x6007a8..0x6007c4 frame restore/ret"
+  ],
+  "native_rear_runtime_allowed": false
+}

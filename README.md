@@ -1,3 +1,7 @@
+## 2026-10-06 E011IK caller local zero accepted to 0x60079C frontier
+
+E011IK source-qualifies `[sp+4]=0` from the original `0x6003D8` CSEL and `0x600400` store on the accepted allocation-success path, then executes `0x6006DC/0x6006E0` and selects the zero branch to `0x60079C`. NEXT E011IL advances the outer epilogue/cookie return. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IJ loop counter accepted 1→0 to 0x6006DC frontier
 
 E011IJ executes the exact `0x6006D4` decrement, obtains `w26=0`, confirms the `0x6006D8` loop-back is not taken, and stops before `0x6006DC` reads `[sp+4]`. NEXT E011IK traces that caller-local provenance before executing it. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
