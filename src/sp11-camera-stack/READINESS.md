@@ -1,3 +1,7 @@
+## 2026-10-06 E011KW second nested string copy accepted
+
+E011KW executes the exact 16-byte second nested string copy through `0x5B9A08 -> 0xCAE7C0`, returns zero, and stops at `0x5B9A0C` before publication. NEXT E011KX publishes the second element and closes the two-element nested payload loop at the success epilogue frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KV second nested string clear/copy accepted
 
 E011KV clears the exact 16-byte second nested string buffer, preserves the source span at RVA `0x1362938`, and stops before the bounded `0x5B9A08 -> 0xCAE7C0` copy. NEXT E011KW executes that copy and stops before publication. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
