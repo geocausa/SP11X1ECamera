@@ -1,3 +1,7 @@
+## 2026-10-06 E011IP zero enumeration fields accepted to 0x160A260 frontier
+
+E011IP proves the E011DV-published enumeration buffer remains zero through the accepted callee return, executes all current helper field loads, takes the zero-byte branch to `0x5F9684`, and stops before global `RVA 0x160A260`. NEXT E011IQ resolves that global from existing authority/Ghidra/Windows oracle in that order. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IO published buffer accepted to 0x5F95AC frontier
 
 E011IO reuses E011DV publication authority for nonzero global `RVA 0x169FDF0`, executes `0x5F95A4/0x5F95A8`, and stops before published-buffer offset `0x4950` is dereferenced. NEXT E011IP traces any intervening buffer writes before qualifying that field. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.

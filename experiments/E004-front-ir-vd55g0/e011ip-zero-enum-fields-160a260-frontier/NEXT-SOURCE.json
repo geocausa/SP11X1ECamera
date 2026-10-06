@@ -1,0 +1,16 @@
+{
+  "experiment": "E011IQ",
+  "goal": "Qualify the global pointer read at 0x5F968C from RVA 0x160A260 using existing source/native authority if available; otherwise consult the Windows oracle. Execute the read and branch conservatively, then stop before the next unqualified effect.",
+  "current_frontier": {
+    "RVA": "0x5f968c",
+    "dependency_RVA": "0x160a260",
+    "bytes": 8,
+    "executed": false
+  },
+  "authority_order": [
+    "existing accepted source/native checkpoint",
+    "Ghidra static producer/xrefs",
+    "SP11 Windows KD same-boot oracle if still unresolved"
+  ],
+  "native_rear_runtime_allowed": false
+}
