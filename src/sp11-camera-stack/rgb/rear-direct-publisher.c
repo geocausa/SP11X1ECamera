@@ -151,12 +151,22 @@ int rear_publisher_main(int argc,char **argv) {
     if(xioctl(dst,VIDIOC_S_FMT,&output) ||
        output.fmt.pix.width!=DST_W || output.fmt.pix.height!=DST_H ||
        output.fmt.pix.pixelformat!=V4L2_PIX_FMT_NV12 ||
-       output.fmt.pix.bytesperline!=DST_W || output.fmt.pix.sizeimage!=DST_BYTES) goto cleanup;
+       output.fmt.pix.bytesperline!=DST_W || output.fmt.pix.sizeimage!=DST_BYTES) {
+        fputs("SP11_RGB_OUTPUT_S_FMT_FAILED\n",stderr); goto cleanup;
+    }
 #if defined(SP11_RGB_NV12_BT601_TAG) && SP11_RGB_NV12_BT601_TAG
-    /* A driver that does not echo this encoding MUST NOT accept
-     * BT.601-encoded frame bytes while advertising BT.709/unknown.
-     */
-    if(!sp11_rgb_nv12_confirm_bt601(&output.fmt.pix))goto cleanup;
+    /* V4L2 allows optional enc/range/xfer fields to read back as DEFAULT (0).
+     * The accepted E004nb/ne loopback path does exactly that. Re-read the
+     * effective format independently and validate the mapped BT.601 semantics
+     * rather than demanding literal nonzero optional enum values. */
+    struct v4l2_format effective={.type=V4L2_BUF_TYPE_VIDEO_OUTPUT};
+    if(xioctl(dst,VIDIOC_G_FMT,&effective) ||
+       effective.fmt.pix.width!=DST_W || effective.fmt.pix.height!=DST_H ||
+       effective.fmt.pix.pixelformat!=V4L2_PIX_FMT_NV12 ||
+       effective.fmt.pix.bytesperline!=DST_W || effective.fmt.pix.sizeimage!=DST_BYTES ||
+       !sp11_rgb_nv12_confirm_effective_bt601(&effective.fmt.pix)) {
+        fputs("SP11_RGB_OUTPUT_EFFECTIVE_BT601_FAILED\n",stderr); goto cleanup;
+    }
 #endif
     struct v4l2_requestbuffers req={.count=4,.type=type,.memory=V4L2_MEMORY_MMAP};
     if(xioctl(src,VIDIOC_REQBUFS,&req) || req.count<2 || req.count>4) goto cleanup;

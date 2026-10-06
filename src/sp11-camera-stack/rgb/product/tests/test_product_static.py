@@ -21,6 +21,7 @@ class StaticTests(unittest.TestCase):
         self.assertIn('sudo -n "$HERE/verify-unactivated.py"',text)
         self.assertIn('private_optical_preview.py',text)
         self.assertIn('"$STATE/private-optical"',text)
+        self.assertIn('camera-session-contract.py',text)
     def test_visual_gate_helper_is_product_scoped(self):
         text=(P/'private_optical_preview.py').read_text()
         self.assertIn('sp11_camera_rgb_product=1',text)

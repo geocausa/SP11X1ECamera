@@ -29,6 +29,7 @@ sudo -n install -m 0700 "$HERE/start-session.sh" "$STATE/start-session.sh"
 sudo -n install -m 0700 "$HERE/record-stop.py" "$STATE/record-stop.py"
 # Reuse exact maintained route parser; no physical route operation occurs here.
 sudo -n install -m 0600 "$REPO/experiments/E004-front-ir-vd55g0/e004ma-guarded-opt-in-rgb-selector-service-one-shot/route-state.py" "$STATE/route-state.py"
+sudo -n install -m 0600 "$REPO/experiments/E004-front-ir-vd55g0/e004ma-guarded-opt-in-rgb-selector-service-one-shot/camera-session-contract.py" "$STATE/camera-session-contract.py"
 sudo -n install -m 0644 "$HERE/sp11-camera-rgb.service" /etc/systemd/system/sp11-camera-rgb.service
 sudo -n install -m 0644 "$HERE/sp11-camera-rgb-publisher@.service" /etc/systemd/system/sp11-camera-rgb-publisher@.service
 sudo -n install -m 0644 "$HERE/sp11-camera-rgb-recover.service" /etc/systemd/system/sp11-camera-rgb-recover.service
