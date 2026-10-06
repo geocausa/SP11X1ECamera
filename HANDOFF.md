@@ -1,3 +1,7 @@
+## 2026-10-06 E011LT post-publication native gate accepted
+
+E011LT reuses accepted Windows authorities `RVA 0x160A218=0` and `RVA 0x1608858=1`. Original code takes the bit16-clear fallthrough and nonzero second-global branch to `0x5B8FD0`, with no new Windows round trip. NEXT E011LU qualifies the trace flag and skips diagnostic-only logging when disabled. Product scope remains front/rear RGB parity.
+
 ## 2026-10-06 E011LS remaining baseline zero-scalar publications accepted
 
 E011LS source-executes the remaining nine baseline scalar publications. All nine registry fields remain zero under the accepted E011DS clear authority, each publication returns the already-owned scalar-zero node with inserted=0, no additional value node is allocated, and the publication container remains size one after ten total calls. NEXT E011LT reuses accepted native globals `0x160A218=0` and `0x1608858=1` to close the post-publication gate without another Windows round trip. Product scope remains front/rear RGB parity; optional AI/effects/analytics stay non-blocking unless they gate ordinary capture.
