@@ -1,0 +1,21 @@
+{
+  "experiment": "E011HY",
+  "goal": "Source-qualify the cleanup object at caller SP+0x10: object+0x28=1 from accepted CAD8CC ownership store, object+0x30=0 from CAD89C and the accepted success path, object+0x38=0 from CAD8A0. Execute 0xCAD9A8 -> 0xCA8658; qualify the short cleanup branches and return to 0xCAD9AC, set w0=w19=26, and stop before 0xCAD9B0 epilogue.",
+  "current_camera_frontier": {
+    "call_RVA": "0xcad9a8",
+    "target_RVA": "0xca8658",
+    "x0_SP_relative": "0x10",
+    "call_executed": false
+  },
+  "expected_cleanup": {
+    "object_plus_0x28_u8": 1,
+    "object_plus_0x30_u8": 0,
+    "object_plus_0x38_u8": 0,
+    "cleanup_ret_RVA": "0xca8778",
+    "resume_RVA": "0xcad9ac",
+    "w0_after_u32": 26,
+    "next_RVA": "0xcad9b0",
+    "next_executed": false
+  },
+  "native_rear_runtime_allowed": false
+}
