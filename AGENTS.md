@@ -1,3 +1,7 @@
+## 2026-10-06 E011JS publication helper accepted to SRW-lock frontier
+
+E011JS enters `0xCE7A48` with guard RVA `0x1B302D0`, source-qualifies the SRW resource RVA `0x16A3738`, and stops before `AcquireSRWLockExclusive` at `0xCE7A70`. NEXT E011JT executes that accepted lock leaf and stops before reading epoch cell RVA `0x1607B04`, inheriting the accepted E011DU epoch `0x80000042`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JR third cleanup registration accepted to publication frontier
 
 E011JR executes the existing-table registration for callback RVA `0xF7B310`, advances the retained logical encoded exit table from 2 to 3 used entries without reallocation, returns zero through `0xCA34A0`, and stops before `0x5BE670 -> 0xCE7A48` with guard RVA `0x1B302D0`. NEXT E011JS qualifies the publication-helper prologue and first SRW-lock dependency. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
