@@ -1,3 +1,7 @@
+## 2026-10-06 E011IL outer epilogue accepted to 0x5F8EA8 frontier
+
+E011IL executes the original `0x60079C..0x6007C4` epilogue, reuses the accepted opaque process-cookie contract, restores the complete saved frame/entry SP, and returns the nonzero owned object pointer to the E011DV caller at `0x5F8EA8`. NEXT E011IM qualifies the parent compare/store/status branch. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IK caller local zero accepted to 0x60079C frontier
 
 E011IK source-qualifies `[sp+4]=0` from the original `0x6003D8` CSEL and `0x600400` store on the accepted allocation-success path, then executes `0x6006DC/0x6006E0` and selects the zero branch to `0x60079C`. NEXT E011IL advances the outer epilogue/cookie return. No camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
