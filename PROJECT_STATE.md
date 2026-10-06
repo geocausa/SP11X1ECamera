@@ -1,3 +1,7 @@
+## 2026-10-06 E011LW complete registry-helper return accepted
+
+E011LW reloads the accepted cached registry object, restores the 0x220-byte local frame, executes the source-exact 0x11F0 stack-cookie epilogue under the accepted contract, restores saved registers, and returns from `0x5B80A8` at `0x5B9068` to original caller `0x5DE844` with x0 = registry object RVA `0x17A4230`. NEXT E011LX follows the caller descriptor-count reduction to the second registry-helper frontier. Product scope remains front/rear RGB parity.
+
 ## 2026-10-06 E011LV nested lock cleanup accepted
 
 E011LV executes `0x5B9038 -> 0x1B438` from caller local `SP+0x78`, source-qualifies the nested lock object RVA `0x1623598`, vtable slot `+0x10 -> 0x1DF90`, guarded indirect call, and exact `LeaveCriticalSection` on resource RVA `0x16235A0`. Cleanup returns zero to `0x5B903C`. NEXT E011LW closes the `0x5B80A8` epilogue and returns to original caller `0x5DE844`. Product scope remains front/rear RGB parity.
