@@ -1,3 +1,7 @@
+## 2026-10-06 E012B inert RGB product install accepted
+
+E012B installed the new RGB product daemon/publisher/service assets on protected Golden **without activation**. Installed source HEAD is `781d2b01`; product asset manifest SHA-256 is `881d2429082d1b0505c1d19826523d2708b9d85ed7015eb70bc63df7e294b692`. Service is disabled/inactive, ENABLE absent, no product boot entry/token, no camera modules/media nodes, and Golden overlap guard passes. No camera Start/reboot/kernel build. NEXT E012C prepares a fresh guarded product boot for repeated front/rear ordinary-app switching and longer soak. OEM archaeology remains demand-driven only.
+
 ## 2026-10-06 E012A RGB product-integration pivot accepted
 
 E012A ends open-ended OEM DLL archaeology as the default workstream and moves the selected product to integration: normal front/rear RGB only. The new `src/sp11-camera-stack/rgb/product/` layer reuses the physically proven RGBSession, exact 119-edge route controller and front1080/rear4K RAW10→NV12 publishers; it adds an opt-in pre-release daemon, `video`-group selector, exact asset admission, systemd publisher ownership, verified STREAMOFF stop, and fail-safe Golden recovery. 42 existing service tests + 14 new product tests + 11 route-policy tests and the RGB source suite pass. Product publishers refuse on current Golden without the dedicated boot token. No camera Start/reboot/kernel build or service activation occurred. NEXT E012B is inactive Golden installation only; Ghidra/KD/Windows oracle is now demand-driven by concrete RGB product failures.
