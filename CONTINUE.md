@@ -1,3 +1,7 @@
+## 2026-10-06 E011KT second nested string allocator frontier accepted
+
+E011KT source-qualifies the second nested name at RVA `0x1362938`, measures 15 bytes before NUL, derives the exact 16-byte allocation request, and stops before `0x5B99CC -> 0xCAE740`. NEXT E011KU executes that allocator chain. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011KS first nested element publication accepted
 
 E011KS publishes the first nested payload element, copies its byte/qword metadata, increments destination count to 1, advances source index to 1, computes the 24-byte second-element offset, and stops before `0x5B9998`. NEXT E011KT scans the second nested string and derives its exact allocator request. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
