@@ -1,3 +1,7 @@
+## 2026-10-06 E011IU parent cookie epilogue accepted to 0x5BEA00 frontier
+
+E011IU passes the parent `0x5F9438 -> 0x11F0` cookie check, restores the `0x5F8DC0` frame/nonvolatiles, preserves the return object in `x0`, and returns through `0x5F9458` to source caller `0x5BEA00`. NEXT E011IV advances only to the `0x5BEA08 -> 0xCAE740` 0xB0 allocator frontier. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011IT parent status publication accepted to 0x5F9438 frontier
 
 E011IT writes caller status `1` to `RVA 0x1731598`, preserves the caller-owned return object into `x0`, restores `0x1720` bytes of local stack, and stops before `0x5F9438 -> 0x11F0`. NEXT E011IU qualifies the parent cookie epilogue and return to `0x5BEA00`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
