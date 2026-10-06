@@ -11,6 +11,7 @@ class StaticTests(unittest.TestCase):
         self.assertIn('ConditionKernelCommandLine=sp11_camera_rgb_product=1',main)
         self.assertIn('OnFailure=sp11-camera-rgb-recover.service',main)
         self.assertIn('Restart=no',main); self.assertIn('RuntimeMaxSec=4h',main)
+        self.assertIn('Environment=PYTHONDONTWRITEBYTECODE=1',main)
         self.assertIn('SuccessExitStatus=143',pub); self.assertIn('Restart=no',pub)
     def test_installer_never_enables_or_starts(self):
         text=(P/'install-unactivated.sh').read_text()
@@ -23,7 +24,8 @@ class StaticTests(unittest.TestCase):
         self.assertIn('"$STATE/private-optical"',text)
         self.assertIn('camera-session-contract.py',text)
         self.assertIn('rm -rf "$STATE/output" "$STATE/private-optical"',text)
-        self.assertIn('rm -f "$STATE/session.lock" "$STATE/ENABLE"',text)
+        self.assertIn('rm -f "$STATE/session.lock" "$STATE/controller.lock" "$STATE/ENABLE"',text)
+        self.assertIn('rm -rf "$DEST/__pycache__"',text)
     def test_visual_gate_helper_is_product_scoped(self):
         text=(P/'private_optical_preview.py').read_text()
         self.assertIn('sp11_camera_rgb_product=1',text)

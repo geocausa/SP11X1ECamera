@@ -18,6 +18,8 @@ gcc "${CFLAGS[@]}" "$HERE/../rear-direct-publisher.c" -o "$TMP/rear-direct-publi
 # Product boot token is absent on Golden, so even copied binaries remain inert.
 ! grep -qw 'sp11_camera_rgb_product=1' /proc/cmdline
 sudo -n install -d -m 0755 "$DEST" "$SERVICE_DEST" "$ROUTING_DEST"
+# Root-run Python from earlier candidate boots must not leave mutable bytecode in the sealed asset tree.
+sudo -n rm -rf "$DEST/__pycache__" "$SERVICE_DEST/__pycache__" "$ROUTING_DEST/__pycache__"
 for f in product_owner.py product_daemon.py productctl.py private_optical_preview.py; do sudo -n install -m 0755 "$HERE/$f" "$DEST/$f"; done
 sudo -n install -m 0755 "$HERE/recover-golden.sh" "$DEST/recover-golden.sh"
 for f in session.py media_backend.py rgb_device_backend.py; do sudo -n install -m 0644 "$HERE/../service/$f" "$SERVICE_DEST/$f"; done
@@ -26,7 +28,7 @@ sudo -n install -d -m 0700 "$STATE" "$STATE/bin"
 # Runtime evidence is never part of the immutable product-asset manifest.
 # A fresh inert install clears stale per-boot output/optical/session state.
 sudo -n rm -rf "$STATE/output" "$STATE/private-optical"
-sudo -n rm -f "$STATE/session.lock" "$STATE/ENABLE"
+sudo -n rm -f "$STATE/session.lock" "$STATE/controller.lock" "$STATE/ENABLE"
 sudo -n install -d -m 0700 "$STATE/output" "$STATE/private-optical"
 sudo -n install -m 0700 "$TMP/front-direct-publisher" "$STATE/bin/front-direct-publisher"
 sudo -n install -m 0700 "$TMP/rear-direct-publisher" "$STATE/bin/rear-direct-publisher"
