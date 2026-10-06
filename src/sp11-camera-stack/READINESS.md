@@ -1,3 +1,7 @@
+## 2026-10-06 E011JU epoch publication accepted to loader-index frontier
+
+E011JU advances the retained global epoch from `0x80000042` to `0x80000043` while SRW ownership is held, publishes it to RVA `0x1607B04` and guard RVA `0x1B302D0`, and stops before `0xCE7A90` reads loader-index RVA `0x16A3740`. NEXT E011JV resolves the exact loader/TLS index contract, using the bounded Windows oracle if retained authority is not unique. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JT SRW ownership accepted to epoch frontier
 
 E011JT executes the accepted SRW acquire at `0xCE7A70`, holds resource RVA `0x16A3738`, and stops before reading epoch RVA `0x1607B04`; the inherited accepted value is `0x80000042`. NEXT E011JU publishes the next epoch and stops before loader-index RVA `0x16A3740`. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
