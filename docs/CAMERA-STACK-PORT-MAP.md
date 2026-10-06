@@ -1,3 +1,7 @@
+## 2026-10-06 E011JC published-buffer flags accepted to x26 frontier
+
+E011JC qualifies zero-backed buffer offsets `+0x20/+0x14/+0x0C`, executes the source flag clears and bit-27 set, leaves `+0x20=0x08000000`, reloads the nonzero published buffer into `x20`, and stops before `[x26+0x6C]` at `0x5BE424`. NEXT E011JD qualifies that local and buffer `+0x442C` before advancing. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
+
 ## 2026-10-06 E011JB enumeration return object closed to published-buffer field frontier
 
 E011JB closes returned `x20` as source `RVA 0x169FDE0`; its `+0x10` slot is accepted `RVA 0x169FDF0`, the nonzero 18,832-byte published enumeration-buffer pointer. The pointer read at `0x5BE3D8` is executed and the checkpoint stops before buffer `+0x20`. NEXT E011JC qualifies the zero-backed flag fields and advances to the next `x26` dependency. No new camera Start, reboot, rear runtime, or kernel build is used; native rear remains denied.
