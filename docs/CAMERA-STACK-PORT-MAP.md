@@ -1,3 +1,7 @@
+## 2026-10-06 E011LR first baseline scalar publication accepted
+
+E011LR executes `0x5B8DF8 -> 0x5B9F18` with scalar zero. Original helper code hashes the four-byte value with FNV-1a64 to `0x4D25767F9DCE13F5`, selects bucket 5/8, allocates and links one 24-byte node, increments container size to one, and returns inserted=1 at `0x5B8DFC`. NEXT E011LS closes the remaining nine baseline zero-scalar publications before the native gate. Scope remains front/rear RGB parity; optional AI/effects/analytics stay non-blocking unless they gate ordinary capture. No camera Start, reboot, rear runtime, or kernel build is used.
+
 ## 2026-10-06 E011LQ cached registry C0 baseline publication frontier accepted
 
 E011LQ reuses the accepted cached registry object at RVA `0x17A4230`; E011DS clear authority source-qualifies registry `+0xC0=0`. Original caller code forms the first baseline publication call `0x5B8DF8 -> 0x5B9F18` with object RVA `0x17A7088` and scalar zero, then stops before the call. NEXT E011LR executes that publication and returns to `0x5B8DFC`. Scope remains front/rear RGB parity; optional AI/effects/analytics stay non-blocking unless they gate ordinary capture. No camera Start, reboot, rear runtime, or kernel build is used.
