@@ -1,0 +1,26 @@
+{
+  "experiment": "E011IB",
+  "goal": "Source-qualify the unique direct callsite 0x6BE08 -> 0x6BD48 and its architectural return target 0x6BE0C. Execute the 0x6BD48 function epilogue beginning at 0x6BDC0 under E011IA output w0=26, restore its 0x50-byte saved frame, return to 0x6BE0C, and stop before that caller instruction executes.",
+  "reuse": {
+    "result_state": "E011IA",
+    "caller_entry_RVA": "0x6bd48",
+    "unique_callsite_RVA": "0x6be08"
+  },
+  "current_camera_frontier": {
+    "RVA": "0x6bdc0",
+    "w0_u32": 26,
+    "executed": false
+  },
+  "expected_return": {
+    "return_target_RVA": "0x6be0c",
+    "w0_u32": 26,
+    "saved_frame_bytes": 80,
+    "return_target_executed": false
+  },
+  "do_not_claim": [
+    "0x6be0c caller semantics before E011IC",
+    "downstream caller result/return",
+    "native rear runtime"
+  ],
+  "native_rear_runtime_allowed": false
+}
