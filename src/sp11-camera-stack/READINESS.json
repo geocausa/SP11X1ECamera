@@ -10,7 +10,7 @@
     "historical_software_product_readiness_is_not_this_product": true,
     "libcamera_pipeline_and_ipa_authorized": true,
     "literal_kernel_only_policy_superseded": true,
-    "native_linear_nv12_proof_scope": "80 paired frames with typed scalar gain response; short diagnostic",
+    "native_linear_nv12_proof_scope": "standard libcamera cam:80 paired application frames at30.0056fps, fixed manual",
     "continuous_capture_proven": true,
     "optical_quality_parity_proven": false,
     "frame_associated_statistics_proven": true,
@@ -20,7 +20,10 @@
     "diagnostic_raw_startup_control_required": false,
     "private_data_only_tuning_profile_required": true,
     "kernel_firmware_profile_evidence": "docs/NATIVE-RGB-FRONT-PROFILE-01-20261007.json",
-    "redistributable_independent_tuning_established": false
+    "redistributable_independent_tuning_established": false,
+    "actual_libcamera_front_pipeline_proven": true,
+    "libcamera_pipeline_control_scope": "fixed manual; IPA and automatic controls absent",
+    "libcamera_pipeline_evidence": "docs/NATIVE-RGB-FRONT-PIPELINE-02-20261007.json"
   },
   "latest_rgb_product_unactivated_install": {
     "experiment": "E012B",
@@ -7486,5 +7489,22 @@
     "product_complete": false,
     "live_3a_proven": false,
     "evidence": "docs/NATIVE-RGB-FRONT-META-02-20261007.json"
+  },
+  "native_front_libcamera_pipeline_20261007": {
+    "status": "PASS_NATIVE_FRONT_LIBCAMERA_PIPELINE_80_FRAMES",
+    "evidence": "docs/NATIVE-RGB-FRONT-PIPELINE-02-20261007.json",
+    "frames": 80,
+    "metadata_pairs": 80,
+    "frame_rate": 30.005587116284563,
+    "consumed_owner_checks": 425,
+    "retirements": 85,
+    "typed_requests": 88,
+    "raw_command_control_present": false,
+    "automatic_3a_proven": false,
+    "identities_consumed_and_retired": [
+      "native-pipeline-20261007-01",
+      "native-pipeline-20261007-02"
+    ],
+    "product_complete": false
   }
 }

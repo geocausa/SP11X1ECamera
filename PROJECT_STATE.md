@@ -1,3 +1,27 @@
+## 2026-10-07 standard libcamera front capture physically verified
+
+Fresh pipeline02 used0bfda1e3/audit24 and libcamera build03: standard cam captured
+80 hardware2560x1440 NV12 application frames at30.0056fps. All80 requests matched
+stream, sequence and statistics timestamps. Four startup frames and tail spare
+outputs stayed internal. Kernel retired85 frames with425 consumed-owner matches,
+zero rejects or critical faults;88 bounded typed requests accepted, one data-only
+firmware load, raw command control absent. cam exited0, explicit STOP completed,
+release neutralized the graph and suspended all sensors. Golden hashes unchanged;
+returned bootf4fcd6c9-dcd2-421f-a7e5-6d4525d5d30b.
+
+Pipeline01 delivered79 frames before finite-capture tail starvation. The precise
+fix reuses only fully paired/retired internal startup buffers below queue depth2.
+Both pipeline identities are consumed and retired; never rearm. Original logs,
+pixels and tuning stay private on SP11. No daemon, CPU pixel ISP or OEM code runs.
+
+This proves real libcamera application/pipeline integration with fixed manual
+settings, not IPA/automatic3A, rear processed capture or Windows optical parity.
+Y means3.423–3.429/max11 remain dark. NEXT: lifecycle reopen/repeat and actual
+standard IPA/automatic controls with qualified sensor delays; dynamic semantic
+tables, rear ISP/focus, production ABI/clock policy, independent tuning and
+controlled Windows optical acceptance remain required. Product incomplete.
+See docs/NATIVE-RGB-FRONT-PIPELINE-02-20261007.json. Earlier NEXT is history.
+
 ## 2026-10-07 front raw-startup interface replaced and physically verified
 
 Fresh profile01 used63be0add/audit24:80 paired NV12/statistics frames at30.000fps.

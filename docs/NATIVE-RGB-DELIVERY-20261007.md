@@ -17,11 +17,11 @@ execution belongs in the release path.
 | SP11X1ECamera-clean/native/legacy | Prior experiments and retained evidence | Preserve; import only reviewed/hash-pinned needed sources |
 | e003i-front-production-src + build-runtime-v4-headers-20260826 | Compatible kernel build toolchain | External modules, W=1/-Werror, fresh outputs |
 | Qualcomm camera-driver82ac3a6 | Published hardware programming authority | BUSv3, VFE680, CDM validation; no invented reset/register mapping |
-| libcamera pinned ff740913 | Standard Linux control/pipeline framework | Helpers built; CAMSS pipeline/IPA integration remains |
+| libcamera pinned ff740913 | Standard Linux control/pipeline framework | Front pipeline physically passes80 cam frames; IPA remains |
 
 Protected Golden assets/default are never overwritten. Original vendor tuning,
 raw traces and optical pixels remain private on SP11. No system suspend tests.
-Twelve one-use candidate identities are consumed and retired; none may be rearmed.
+Fourteen one-use candidate identities are consumed and retired; none may be rearmed.
 
 ## Verified implementation
 
@@ -32,10 +32,11 @@ Twelve one-use candidate identities are consumed and retired; none may be rearme
 | Native front linear NV12 queue | 80 sequential2560x1440 frames at29.989fps; four reused buffers and reversed queue order;405 ownership checks | Fixed manual IQ, no long soak/reopen or live3A |
 | FULL storage/8-bit programming | Published packer3, linear MODE guard, UV half height, complete readbacks, local CDM helper audit | No compressed-to-linear transition/reopen proof |
 | Stop/return | Explicit STREAMOFF during queue operation; all sensors suspended, graph neutral, Golden unchanged, zero critical faults | Starvation/fault/reopen still unqualified |
-| Frame-associated statistics |80 video/metadata pairs with matching identity/timestamps and valid AEC luma;405 ownership checks | Experimental QXS1 format; complete pipeline/IPA remains |
-| libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Pipeline/IPA runtime absent |
-| Typed front ISP scalars |80 pairs,84 accepted requests,5 negative cases; measured2x gain/reset response;1979 sanitizer checks | Data-only tuning firmware and dynamic tables remain; no live3A |
+| Frame-associated statistics |80 video/metadata pairs with matching identity/timestamps and valid AEC luma;405 ownership checks | Experimental QXS1 format; IPA remains |
+| libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Front pipeline passes80 app frames; actual IPA absent |
+| Typed front ISP scalars |80 pairs,84 accepted requests,5 negative cases; measured2x gain/reset response;1979 sanitizer checks | Data-only firmware qualified; dynamic tables/live3A remain |
 | Kernel-owned startup |80 pairs via data-only firmware; raw control absent; missing/corrupt profile rejected;405 owner checks | Fixed board/mode digest; independent tuning distribution and final ABI remain |
+| Standard libcamera front application |80 NV12 frames at30.0056fps,80 statistics pairs,425 owner matches,88 typed requests; clean stop/release | Fixed manual; dark output, no IPA/3A or rear processed capture |
 | Rear composition |52 fragments compile against real types | Nonadaptive startup inputs and runtime composition incomplete |
 
 NV12-01 stopped before ISP programming: truthful sensor array timing plus the
@@ -91,10 +92,14 @@ blindly replaying request4 forever is not a substitute.
 
 Already passed: native NV12 queue reuse beyond the old27-frame bound, ordered
 delivery, explicit STREAMOFF, stop-before-free, neutral graph and standby.
-Remaining: starvation/fault/reopen qualification, full typed tables and libcamera requests.
+Finite capture tail now passes using retired internal spare buffers. Remaining:
+fault/reopen qualification, full typed tables and automatic request controls.
 Use fresh identities; do not extend one named frame at a time.
 
 **2. libcamera pipeline and IPA runtime.**
+Front graph/request/statistics integration now passes the standard cam app with
+fixed manual settings. pipeline01 tail starvation was diagnosed and corrected;
+pipeline02 passed and both identities retired. Actual IPA/3A remains.
 Discover this exact media graph, configure front/rear modes and streams, associate
 sensor controls/ISP parameters/statistics with libcamera requests, and connect
 the already-tested helpers. Implement 3A inside standard libcamera IPA code.

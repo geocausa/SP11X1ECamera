@@ -31,5 +31,5 @@ the final output waited for a further queued buffer. Zero kernel faults occurred
 Golden was restored. Pipeline02 reuses only fully paired and retired internal
 startup buffers as spare outputs when queued depth falls below two. This lets
 finite application captures drain the last request without exposing spare frames.
-The corrected build passes Werror and8 selected tests with2 VIMC skips; hardware
-qualification is pending. Timeout output is retained privately on SP11.
+The corrected build passes Werror and8 selected tests with2 VIMC skips; pipeline02 hardware qualification passed80 app frames at30.0056fps,425
+owner checks across85 retirements and clean stop/release. Both identities retired. Timeout output is retained privately on SP11.
