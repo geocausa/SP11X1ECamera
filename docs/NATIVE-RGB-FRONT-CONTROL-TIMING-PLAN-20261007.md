@@ -54,6 +54,31 @@ qualification. Keep FLL3554 unless the exposure containment requires an already
 qualified frame-length change. Record CCI and receiver/statistics identities.
 Reject an ambiguous or lighting-confounded result instead of declaring a delay.
 
+## Exposure response and retained controls now observed
+
+response01/02 captured320 frames each through real standard isolated IPA.
+Fresh02 source9c648fd8/audit31/build09 confirms all19 known register readbacks
+match FLL/exposure/analogue/digital commands. Exposure1000/2000 shows six sharp,
+repeatable statistics/processed-output changes at receiver command SOF+2, with
+restored-baseline screening and unchanged receiver/video source observations.
+This is an empirical processed-frame response delay; first-row exposure time
+and SensorTimestamp remain unproven. See NATIVE-RGB-FRONT-CONTROL-RESPONSE-02.
+
+The initial15%-of-absolute-statistics response threshold assumed an optical
+scale/zero point that is not established. Noise-based admission accepts repeated
+small signals over an arbitrary pedestal;8 actual analyzer tests include that
+case,absent/gradual/drift/output/association/malformed rejection. Original01
+record remains unchanged; fresh02 confirms the exposure result.
+
+Analogue and digital register values are retained but their frame response is
+ambiguous in these conditions. No gain delay or full DelayedControls setup is
+qualified. NEXT use native RAW plateau capture to isolate sensor gain behavior
+from ISP/statistics interpretation, retain controlled restore/repeat/readback
+checks and record lighting/scene uncertainty. Compare with a matched Windows
+reference before brightness/quality attribution. A repeated ambiguous ISP run
+alone does not resolve this blocker. RAW diagnostic analysis must not become
+CPU image processing in the release stack. Automatic feedback stays disabled.
+
 ## Current source findings
 
 | Source inspected | Observed behavior | Consequence |
