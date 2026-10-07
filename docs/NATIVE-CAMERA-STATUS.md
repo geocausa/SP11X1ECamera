@@ -1,3 +1,7 @@
+> Current RGB driver status and next gates are in
+> [NATIVE-RGB-ENGINEERING-AUDIT-20261007.md](NATIVE-RGB-ENGINEERING-AUDIT-20261007.md).
+> The earlier statuses/plans below are historical, not current release readiness.
+
 # Native camera stack status — 2026-09-17
 
 Branch: `experiment/e004-front-ir-vd55g0`. Scope: SP11, SP7 and PiMaster.

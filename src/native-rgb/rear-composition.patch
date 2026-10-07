@@ -1,0 +1,153 @@
+--- a/camss-csid-680.c
++++ b/camss-csid-680.c
+@@ -479,6 +479,11 @@
+ 
+ 	return 0;
+ }
++
++#include "camss-csid-e004ns-rear-ipp.inc"
++#include "camss-csid-e008i-rear-observer.inc"
++#include "camss-csid-e008a-rear-quiesce.inc"
++#include "camss-csid-e008k-rear-bridge.inc"
+ 
+ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ {
+@@ -819,6 +824,8 @@
+ 	/* Latch and clear top level BUF_DONE status */
+ 	buf_done_val = readl(csid->base + CSID_BUF_DONE_IRQ_STATUS);
+ 	writel(buf_done_val, csid->base + CSID_BUF_DONE_IRQ_CLEAR);
++	if (buf_done_val && csid_e004ns_rear_ipp_mode0(csid))
++		e008i_rear_latch_buf_done(csid, buf_done_val);
+ 	if (buf_done_val && __csid_sp11_front_ipp_mode0(csid)) {
+ 		WRITE_ONCE(csid->x1e_buf_done_last, buf_done_val);
+ 		if (buf_done_val & CSID_BUF_DONE_VIDEO)
+@@ -840,6 +847,8 @@
+ 
+ 	if (!csid_is_lite(csid)) {
+ 		ipp_val = readl(csid->base + CSID_IPP_IRQ_STATUS);
++		if (ipp_val && csid_e004ns_rear_ipp_mode0(csid))
++			e008i_rear_latch_ipp(csid, ipp_val);
+ 		if (ipp_val && __csid_sp11_front_ipp_mode0(csid)) {
+ 			u32 trace_idx;
+ 
+--- a/camss-csid.h
++++ b/camss-csid.h
+@@ -17,6 +17,7 @@
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-mediabus.h>
+ #include <media/v4l2-subdev.h>
++#include "camss-e008i-rear-observer.h"
+ 
+ #define MSM_CSID_PAD_SINK 0
+ #define MSM_CSID_PAD_FIRST_SRC 1
+@@ -179,6 +180,12 @@
+ 	u32 x1e_buf_done_tintless_count;
+ 	u32 x1e_buf_done_awb_count;
+ 	u32 x1e_buf_done_rs_count;
++	u64 e008i_rear_owner_epoch;
++	u32 e008i_rear_epoch0_count;
++	u32 e008i_rear_done_count;
++	u32 e008i_rear_done_overflow;
++	u32 e008i_rear_latch_errors;
++	struct e008i_rear_done_event e008i_rear_done[E008I_REAR_DONE_DEPTH];
+ 	/* E003h 0050 ordered first-IRQ status/actual-geometry telemetry. */
+ 	u32 x1e_ipp_irq_trace_status[X1E_IPP_IRQ_TRACE_MAX];
+ 	u32 x1e_ipp_irq_trace_actual[X1E_IPP_IRQ_TRACE_MAX];
+--- a/camss-vfe-680.c
++++ b/camss-vfe-680.c
+@@ -12,6 +12,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
++#include <linux/unaligned.h>
+ 
+ #include "camss.h"
+ #include "camss-vfe.h"
+@@ -296,6 +297,55 @@
+ 	u32 image[9];
+ 	u32 full_meta[2];
+ };
++
++static void __iomem *vfe680_x1e_bus_reg(struct vfe_device *vfe, u8 client, u32 reg);
++static bool vfe680_x1e_dma_span_32bit(dma_addr_t dma, size_t size);
++
++#include "camss-e006g-rear-materializer.inc"
++#include "camss-e006j-rear-register-bindings.inc"
++#include "camss-e006m-rear-startup-bindings.inc"
++#include "camss-e006o-rear-steady-singletons.inc"
++#include "camss-e006p-crop-roundclamp.inc"
++#include "camss-e006q-mnds23.inc"
++#include "camss-e006r-cst12.inc"
++#include "camss-e006s-bc101.inc"
++#include "camss-e006t-small-iq.inc"
++#include "camss-e006u-bhist16.inc"
++#include "camss-e006v-rsstats14.inc"
++#include "camss-e006w-aecbe17.inc"
++#include "camss-e006x-tintlessbg17.inc"
++#include "camss-e006y-awbbg17.inc"
++#include "camss-e006z-clean-scalar-bank.inc"
++#include "camss-e007a-bpcabf411.inc"
++#include "camss-e007b-bfstats25.inc"
++#include "camss-e007c-period-cfg.inc"
++#include "camss-e007d-register-integration.inc"
++#include "camss-e007e-bfstats25-dmi.inc"
++#include "camss-e007f-dmi-integration.inc"
++#include "camss-e007i-rear-lsc-handoff.inc"
++#include "camss-e007q-rear-gtm-handoff.inc"
++#include "camss-e007s-zero-stable.inc"
++#include "camss-e007t-gamma151.inc"
++#include "camss-e007u-bpcabf411.inc"
++#include "camss-e007v-dsx101.inc"
++#include "camss-e007w-period-cfg.inc"
++#include "camss-e007x-bhist16-startup-dmi.inc"
++#include "camss-e007y-rear-startup.inc"
++#include "camss-vfe-e004nt-rear-4k-buffer.inc"
++#include "camss-vfe-e004nu-rear-ten-wm.inc"
++#include "camss-vfe-e008d-rear-dma.inc"
++#include "camss-e007z-rear-retirement.inc"
++#include "camss-vfe-e008h-rear-prime.inc"
++#include "camss-vfe-e008j-rear-prebus.inc"
++#include "camss-e008i-rear-observer.h"
++#include "camss-vfe-e008i-rear-status.inc"
++#include "camss-vfe-e008a-rear-bus-stop.inc"
++#include "camss-vfe-e008l-rear-command-dma.inc"
++#include "camss-vfe-e008k-rear-runner.inc"
++#include "camss-vfe-e008n-rear-single-use.inc"
++#include "camss-vfe-e008o-rear-semantic-state.inc"
++#include "camss-vfe-e008t-rear-bf-semantic.inc"
++#include "camss-e011z-rear-startup-adaptive-bind.inc"
+ 
+ static const u8 vfe680_x1e_windows_bus_client_order[] = {
+ 	0, 1, 2, 3, 11, 18, 12, 14, 13,
+--- a/camss.c
++++ b/camss.c
+@@ -7672,6 +7672,8 @@
+ 	return pad && pad->entity == remote && pad->index == remote_pad;
+ }
+ 
++#include "camss-e008k-rear-rtcdm-bridge.inc"
++
+ static int camss_x1e_pix_runner_validate(struct camss *camss,
+ 					 const struct camss_x1e_pix_runner_request *req)
+ {
+@@ -10069,6 +10071,7 @@
+ 	camss->res = of_device_get_match_data(dev);
+ 
+ 	atomic_set(&camss->ref_count, 0);
++	e005y_vfe1_owner_init(&camss->e005y_vfe1_owner);
+ 	camss->dev = dev;
+ 	platform_set_drvdata(pdev, camss);
+ 
+--- a/camss.h
++++ b/camss.h
+@@ -149,7 +149,10 @@
+ 	const unsigned int vfe_num;
+ };
+ 
++#include "camss-e005y-vfe1-owner-observer.inc"
++
+ struct camss {
++	struct e005y_vfe1_owner e005y_vfe1_owner;
+ 	struct v4l2_device v4l2_dev;
+ 	struct v4l2_async_notifier notifier;
+ 	struct media_device media_dev;

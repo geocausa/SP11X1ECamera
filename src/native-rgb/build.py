@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Assemble and build retained native camera sources; never install or access hardware."""
+import argparse
+import hashlib
+import json
+import re
+import runpy
+import shutil
+import subprocess
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def checked_source(name, expected):
+    path = (ROOT / name).resolve()
+    if not path.is_relative_to(ROOT) or not path.is_file():
+        raise ValueError("source outside checkout or missing: " + name)
+    if digest(path) != expected:
+        raise ValueError("source digest changed: " + name)
+    return path
+
+def command(args, **kwargs):
+    subprocess.run([str(a) for a in args], check=True, **kwargs)
+
+def assemble(out):
+    manifest = json.loads((HERE / "sources.json").read_text())
+    for name, expected in manifest["baseline_inputs"].items():
+        checked_source(name, expected)
+    destinations = set()
+    for fragment in manifest["rear_fragments"]:
+        checked_source(fragment["source"], fragment["sha256"])
+        name = fragment["destination"]
+        if Path(name).name != name or name in destinations:
+            raise ValueError("invalid or duplicate fragment destination")
+        destinations.add(name)
+    # Refuse existing outputs: no recycled build identity, no destructive cleanup.
+    out.mkdir(parents=True, exist_ok=False)
+    camss = out / "camss"
+    camss.mkdir()
+    for name in manifest["baseline_inputs"]:
+        path = ROOT / name
+        if path.parent == ROOT / "src/front-imx681/kernel/camss":
+            shutil.copy2(path, camss / path.name)
+    overlay = runpy.run_path(str(ROOT /
+        "experiments/E004-front-ir-vd55g0/e004ip-qc10c-mapped-dma-coverage/make_qc10c_span.py"))
+    overlay_result = overlay["make"](ROOT / "src/front-imx681/kernel/camss", camss)
+    for fragment in manifest["rear_fragments"]:
+        destination = camss / fragment["destination"]
+        shutil.copy2(ROOT / fragment["source"], destination)
+        if fragment.get("transform") == "mark_e011z_binder_maybe_unused":
+            text = destination.read_text()
+            anchor = "static int\ne011z_rear_bind_startup_adaptive("
+            if text.count(anchor) != 1:
+                raise ValueError("adaptive binder declaration drift")
+            destination.write_text(text.replace(anchor,
+                "static int __maybe_unused\ne011z_rear_bind_startup_adaptive(", 1))
+        elif fragment.get("transform"):
+            raise ValueError("unrecognized source transform")
+    command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
+             HERE / "rear-bf-composition.patch"], cwd=camss)
+    # E004IO adds this include at a context line in the pinned rear patch.
+    # Temporarily remove exactly that include, apply with zero fuzz, restore it.
+    vfe = camss / "camss-vfe-680.c"
+    include = "#include <media/videobuf2-dma-sg.h>\n"
+    text = vfe.read_text()
+    if text.count(include) != 1:
+        raise ValueError("NV12 DMA include missing or repeated")
+    vfe.write_text(text.replace(include, "", 1))
+    command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
+             HERE / "rear-composition.patch"], cwd=camss)
+    text = vfe.read_text()
+    anchor = '#include "camss.h"'
+    if text.count(anchor) != 1:
+        raise ValueError("CAMSS include anchor changed")
+    vfe.write_text(text.replace(anchor, include + anchor, 1))
+    (out / "imx681").mkdir()
+    for name in manifest["baseline_inputs"]:
+        path = ROOT / name
+        if path.parent == ROOT / "src/front-imx681/kernel/imx681":
+            shutil.copy2(path, out / "imx681" / path.name)
+    rear = out / "ov13858"
+    rear.mkdir()
+    shutil.copy2(ROOT / "src/sp11-camera-stack/authority/ov13858.c", rear / "ov13858.c")
+    (rear / "Makefile").write_text("obj-m += ov13858.o\n")
+    # Validate include closure; compilation checks actual call/type consistency.
+    for source in camss.iterdir():
+        if source.suffix in (".c", ".h", ".inc"):
+            for name in re.findall(r'^#include "([^"]+)"', source.read_text(), re.M):
+                if not (camss / name).is_file():
+                    raise ValueError("missing local include: " + name)
+    staged = {}
+    for directory in (camss, out / "imx681", rear):
+        for path in directory.iterdir():
+            if path.is_file():
+                staged[str(path.relative_to(out))] = digest(path)
+    result = {
+        "schema": 1, "status": "ASSEMBLED_NOT_INSTALLED",
+        "source_manifest_sha256": digest(HERE / "sources.json"),
+        "rear_fragments": len(destinations),
+        "overlay_audit": overlay_result,
+        "staged_sources": dict(sorted(staged.items())),
+        "runtime_access": False,
+        "nv12_runtime_proven": False,
+        "rear_runtime_proven": False,
+    }
+    (out / "source-manifest.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+    return result
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--kernel-source", type=Path)
+    parser.add_argument("--kernel-output", type=Path)
+    parser.add_argument("--jobs", type=int, default=4)
+    options = parser.parse_args()
+    if bool(options.kernel_source) != bool(options.kernel_output):
+        parser.error("kernel-source and kernel-output must be supplied together")
+    out = options.out.resolve()
+    if out.is_relative_to(ROOT):
+        parser.error("build output must be outside the source checkout")
+    result = assemble(out)
+    if options.kernel_source:
+        result["status"] = "BUILD_IN_PROGRESS"
+        (out / "build-result.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+        try:
+            for name in ("camss", "imx681", "ov13858"):
+                command(["make", "-C", options.kernel_source.resolve(),
+                         "O=" + str(options.kernel_output.resolve()),
+                         "M=" + str(out / name), "CONFIG_VIDEO_QCOM_CAMSS=m",
+                         "W=1", "-j" + str(options.jobs), "modules"])
+            modules = {}
+            for relative in ("camss/qcom-camss.ko", "imx681/imx681.ko", "ov13858/ov13858.ko"):
+                path = out / relative
+                modules[relative] = {
+                    "sha256": digest(path),
+                    "vermagic": subprocess.check_output(
+                        ["modinfo", "-F", "vermagic", str(path)], text=True).strip(),
+                }
+            result.update(status="PASS_NATIVE_SOURCE_BUILD_NOT_INSTALLED", modules=modules)
+        except Exception as exc:
+            result.update(status="FAILED_NATIVE_SOURCE_BUILD", error=str(exc))
+            raise
+        finally:
+            (out / "build-result.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+    print(json.dumps({"status": result["status"], "out": str(out),
+                      "rear_fragments": result["rear_fragments"],
+                      "modules": result.get("modules", {})}, indent=2, sort_keys=True))
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,50 @@
+--- a/camss-vfe-e008t-rear-bf-semantic.inc
++++ b/camss-vfe-e008t-rear-bf-semantic.inc
+@@ -128,7 +128,7 @@
+ }
+ 
+ static int
+-e008t_rear_seed_packet_bf(struct e008o_rear_packet_state *p,
++e008t_rear_seed_packet_bf(struct e008o_rear_packet_semantics *p,
+                           u8 packet, u32 camif_w, u32 camif_h)
+ {
+     struct e007b_bfstats25_calc_state *b;
+@@ -190,14 +190,26 @@
+ }
+ 
+ static int
+-e008t_rear_seed_bootstrap_bf(struct e008o_rear_bootstrap *s,
++e008t_rear_seed_bootstrap_bf(struct e008o_rear_semantic_set *s,
+                              u32 camif_w, u32 camif_h)
+ {
+     unsigned int packet;
+     int ret;
+ 
+-    if (!s || !s->initialized || s->next_packet)
+-        return -EINVAL;
++    /* Build only unsealed, request-tagged packet states. Validate all
++     * identities before changing any BF semantics; caller seals afterward.
++     */
++    if (!s || s->sealed)
++        return -EINVAL;
++    for (packet = 0; packet < E008T_REAR_STARTUP_PACKETS; packet++) {
++        const struct e008o_rear_packet_semantics *p = &s->packet[packet];
++
++        if (p->ready || p->request_id < 4 ||
++            p->regs.scalar.epoch_kind != E006Z_EPOCH_STARTUP ||
++            p->regs.scalar.startup_phase != packet ||
++            p->regs.scalar.request_id != p->request_id)
++            return -EPROTO;
++    }
+ 
+     for (packet = 0; packet < E008T_REAR_STARTUP_PACKETS; packet++) {
+         ret = e008t_rear_seed_packet_bf(&s->packet[packet], packet,
+@@ -209,7 +221,7 @@
+ }
+ 
+ struct e008t_rear_bf_semantic_static_ops {
+-    int (*seed)(struct e008o_rear_bootstrap *s, u32 camif_w, u32 camif_h);
++    int (*seed)(struct e008o_rear_semantic_set *s, u32 camif_w, u32 camif_h);
+ };
+ 
+ static const struct e008t_rear_bf_semantic_static_ops

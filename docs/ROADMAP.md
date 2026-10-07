@@ -1,3 +1,7 @@
+> Current RGB driver status and next gates are in
+> [NATIVE-RGB-ENGINEERING-AUDIT-20261007.md](NATIVE-RGB-ENGINEERING-AUDIT-20261007.md).
+> The earlier statuses/plans below are historical, not current release readiness.
+
 # Roadmap
 
 ## Canonical request-to-hardware slice map

@@ -1,3 +1,30 @@
+## 2026-10-07 current workstream: native front/rear RGB drivers
+
+The user's latest instruction supersedes the October 6 software-camera product
+pivot. Current worktree: `SP11X1ECamera-driver`, branch
+`work/native-rgb-driver-20261007`. Read
+[the engineering audit](docs/NATIVE-RGB-ENGINEERING-AUDIT-20261007.md) and
+[the kernel-only builder](src/native-rgb/README.md) before continuing. Historical
+entries below remain evidence; their NEXT actions are superseded.
+
+Native ordinary processed output, continuous queue-driven capture and baseline
+Windows-comparable IQ are the product. No custom userspace camera runtime,
+loopback, CPU Bayer publisher, AI/effects or protected Hello dependency.
+Do not silently reinterpret the user's literal no-userspace requirement;
+standard Linux host-controlled 3A is an unresolved architecture boundary.
+Tooling, project machines and reboots are authorized. Preserve Golden/default,
+private evidence and fresh one-shot identities; no suspend/hibernate tests.
+
+Current source build gathers 52 rear fragments, includes canonical BF-state
+integration, E011I reclaim candidate and E011Z binder, reuses E004IK–IP and
+builds CAMSS/IMX681/OV13858 from source. It does not authorize rear/NV12 runtime.
+Qualcomm VFE680 uses external CSID completion and has no global reset; do not
+invent a separate-VFE-IRQ/pre-ACK/global-reset prerequisite. Prove consumed
+IOVA/generation, serialized ownership and shutdown before reclaim.
+NEXT: source-justified front stopped-state/UBWC-off transition and bounded native
+linear NV12 optical proof; complete the precisely inventoried rear semantic
+bootstrap. Every new experiment must advance an audit delivery gate.
+
 ## 2026-10-06 E012B optical-first correction before product soak
 
 E012C must not treat service plumbing/soak as the first live gate. The next guarded product boot must first capture and visually inspect current-product front 1080p and rear 4K rendered frames for geometry, Bayer/channel order, colour, exposure, corruption and orientation. Only after both optical renders are accepted may repeated switching or long-duration soak proceed. Private optical frames stay local/uncommitted.
