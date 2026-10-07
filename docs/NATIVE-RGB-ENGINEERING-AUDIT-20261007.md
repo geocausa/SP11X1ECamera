@@ -1,3 +1,27 @@
+## 2026-10-07 bounded grouped frame-length timing built; control-timing01 next
+
+Kernel audit30 passes W=1/-Werror and adds opt-in read-only CCI transaction
+start/end/result tracing. Source composition requires receiver SOF trial and
+rejects missing dependency before creating output. No sensor register values or
+CAMSS programming changed by the trace. libcamera build08 passes9 tests/2 VIMC
+skips, Werror: explicit frame-length-v1 development mode performs six ordinary
+four-member V4L2 control-cluster writes at SOF16/32/48/64/80/96, FLL7108/3554
+three cycles, fixed exposure1000/analogue0/digital256. Restores baseline at96.
+Automatic feedback remains disabled, SensorTimestamp absent, no app controls.
+
+Fresh control-timing01 is the next one-use candidate:128 standard cam NV12
+frames and matched actual isolated IPA, exactly seven CCI transactions including
+initial setup, observed receiver-interval transitions and restored baseline,
+clean STOP/neutral/standby/Golden hashes. Original pixels/tuning/logs remain SP11.
+No physical attempt or additional stream yet; prior frame-start/restart proof
+and26 streams/22 identities/44 boots unchanged. Never reuse spent candidates.
+
+Frame-length timing uses receiver intervals, independent of scene brightness;
+exposure/gain delays and metering normalization remain unmeasured. No matched
+Windows reference and no diagnosed brightness defect. Apply same camera/scene/
+position/lighting/time condition to optical acceptance. Rear ISP/focus and other
+production/tuning/optical gates remain. Earlier NEXT statements are history.
+
 ## 2026-10-07 native receiver frame-start and restart hardware PASS
 
 Kernel audit29/libcamera build07 physically pass both actual standard IPA paths.

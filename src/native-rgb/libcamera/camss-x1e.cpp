@@ -5,6 +5,9 @@
 #include <array>
 #include <cerrno>
 #include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 #include <cmath>
 #include <deque>
 #include <limits>
@@ -53,6 +56,14 @@ constexpr Size kInput{ 3840, 2160 };
 constexpr unsigned int kStartup = 4;
 constexpr unsigned int kMetadataBuffers = 8;
 constexpr uint32_t kParams = V4L2_CID_USER_BASE + 0x1243;
+uint64_t controlTimingNow()
+{
+ struct timespec timestamp{};
+ if (clock_gettime(CLOCK_MONOTONIC, &timestamp))
+  return 0;
+ return uint64_t(timestamp.tv_sec) * 1000000000ULL + timestamp.tv_nsec;
+}
+
 constexpr uint32_t kRawCommands = V4L2_CID_USER_BASE + 0x1240;
 
 struct StatsIdentity {
@@ -85,6 +96,7 @@ public:
  int queueImage(FrameBuffer *buffer);
  int ensureSpare();
  void frameStart(uint32_t sequence);
+ int frameLengthTrial(uint32_t sequence);
  void imageReady(FrameBuffer *buffer);
  void statisticsReady(FrameBuffer *buffer);
  void meteringReady(uint32_t bufferId, uint64_t stream, uint32_t sequence,
@@ -96,6 +108,7 @@ public:
  std::unique_ptr<ipa::camss_x1e::IPAProxyCamssX1E> ipa_;
  bool ipaStarted_ = false;
  bool sofEnabled_ = false;
+ bool controlTimingTrial_ = false;
  uint32_t nextSofSequence_ = 0;
  std::vector<uint32_t> ipaBufferIds_;
  std::shared_ptr<MediaDevice> media_;
@@ -401,6 +414,10 @@ int CamssX1ECameraData::start()
 {
  if (running_ || !startup_.empty() || !metadata_.empty())
   return -EBUSY;
+ const char *timing = std::getenv("LIBCAMERA_CAMSS_X1E_CONTROL_TIMING");
+ if (timing && std::strcmp(timing, "frame-length-v1"))
+  return -EINVAL;
+ controlTimingTrial_ = timing != nullptr;
  nextParameter_ = 5;
  nextSofSequence_ = 0;
  streamId_ = 0;
@@ -577,6 +594,32 @@ void CamssX1ECameraData::fail(const char *reason)
  stop();
 }
 
+int CamssX1ECameraData::frameLengthTrial(uint32_t sequence)
+{
+ /* Explicit bounded development experiment, separate from automatic control.
+  * Six group-held changes: three 30/15fps cycles, then baseline through STOP.
+  * The sensor validates all four controls together in one normal V4L2 ioctl.
+  */
+ if (!controlTimingTrial_ || sequence < 16 || sequence > 96 || sequence % 16)
+  return 0;
+ const uint32_t step = sequence / 16;
+ const int32_t vblank = step % 2 ? 4948 : 1394;
+ ControlList values(sensor_->controls());
+ values.set(V4L2_CID_VBLANK, vblank);
+ values.set(V4L2_CID_EXPOSURE, int32_t(1000));
+ values.set(V4L2_CID_ANALOGUE_GAIN, int32_t(0));
+ values.set(V4L2_CID_DIGITAL_GAIN, int32_t(256));
+ const uint64_t begin = controlTimingNow();
+ if (!begin)
+  return -EIO;
+ int ret = sensor_->setControls(&values);
+ const uint64_t end = controlTimingNow();
+ LOG(CAMSSX1E, Debug) << "CAMSS_X1E_CONTROL_TIMING step=" << step
+  << " sof=" << sequence << " begin=" << begin << " end=" << end
+  << " fll=" << vblank + 2160 << " exposure=1000 again=0 dgain=256 error=" << ret;
+ return ret ? (ret < 0 ? ret : -EINVAL) : (!end || end < begin ? -EIO : 0);
+}
+
 void CamssX1ECameraData::frameStart(uint32_t sequence)
 {
  if (!running_)
@@ -588,9 +631,13 @@ void CamssX1ECameraData::frameStart(uint32_t sequence)
  }
  nextSofSequence_++;
  LOG(CAMSSX1E, Debug) << "CAMSS_X1E_SOF frame=" << sequence;
+ if (frameLengthTrial(sequence)) {
+  fail("Grouped frame-length timing experiment failed");
+  return;
+ }
  /* Receiver SOF is not first-row sensor exposure or BOOTTIME. Keep the
-  * public SensorTimestamp absent. Control scheduling remains disabled until
-  * SOF/output association and sensor application delays are qualified. */
+  * public SensorTimestamp absent. Automatic control scheduling remains disabled.
+  * Only the explicit bounded frame-length measurement above is permitted. */
 }
 
 void CamssX1ECameraData::imageReady(FrameBuffer *buffer)

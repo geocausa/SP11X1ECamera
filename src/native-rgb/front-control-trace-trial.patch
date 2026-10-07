@@ -1,0 +1,50 @@
+--- a/imx681.c
++++ b/imx681.c
+@@ -17,6 +17,7 @@
+ #include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
++#include <linux/ktime.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
+ 
+@@ -24,6 +25,10 @@
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-mediabus.h>
++
++static bool native_control_timing_trace;
++module_param(native_control_timing_trace, bool, 0444);
++MODULE_PARM_DESC(native_control_timing_trace, "Observe native grouped sensor control transactions; no register programming changes");
+ 
+ #define IMX681_REG_WINDOWS_ID	CCI_REG16(0x0004)
+ #define IMX681_WINDOWS_ID	0x0aff
+@@ -79,6 +84,7 @@
+ #include "imx681-sp11-mode2-regs.h"
+ 
+ struct imx681 {
++	u32 native_control_trace_sequence;
+ 	struct device *dev;
+ 	struct regmap *cci;
+ 	struct v4l2_subdev sd;
+@@ -118,6 +124,7 @@
+ 	u32 exposure = imx681->exposure->val & ~1U;
+ 	u32 analogue_gain = imx681->analogue_gain->val;
+ 	u32 digital_gain = imx681->digital_gain->val;
++	u64 trace_start = native_control_timing_trace ? ktime_get_ns() : 0;
+ 	int ret_hold;
+ 	int ret = 0;
+ 
+@@ -131,6 +138,12 @@
+ 	ret_hold = cci_write(imx681->cci, IMX681_REG_GROUP_HOLD, 0, NULL);
+ 	if (ret_hold)
+ 		ret = ret_hold;
++
++	if (native_control_timing_trace)
++		dev_info(imx681->dev,
++			 "NATIVE_IMX681_CONTROL_COMMIT sequence=%u start=%llu end=%llu fll=%u exposure=%u again=%u dgain=%u error=%d\n",
++			 imx681->native_control_trace_sequence++, trace_start, ktime_get_ns(),
++			 frame_length, exposure, analogue_gain, digital_gain, ret);
+ 
+ 	dev_dbg(imx681->dev,
+ 		"AM request controls: FLL=%u exposure=%u again=0x%03x dgain=0x%04x ret=%d\n",
