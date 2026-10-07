@@ -24,6 +24,13 @@ class ResponseAnalysis(unittest.TestCase):
         self.assertFalse(result["DelayedControls_parameters_qualified"])
         self.assertFalse(result["optical_quality_parity_proven"])
 
+    def test_repeatable_small_signal_over_pedestal(self):
+        x,y,c = fixture()
+        x = [0.623+0.018*(v-0.5) for v in x]
+        y = [3.2+0.01*(v-10) for v in y]
+        result = analyze(x,y,c,True)
+        self.assertTrue(result["all_fields_response_timing_qualified"])
+
     def test_no_response_remains_unqualified(self):
         x,y,c = fixture()
         result = analyze([0.5]*324,[10.0]*320,c,True)

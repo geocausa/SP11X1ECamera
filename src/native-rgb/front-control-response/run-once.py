@@ -12,9 +12,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-control-response-20261007-01")
-TOKEN = "sp11_camera_native_control_response_20261007_01=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-01"
+D = Path("/var/lib/sp11-camera-native-control-response-20261007-02")
+TOKEN = "sp11_camera_native_control_response_20261007_02=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-02"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -94,7 +94,7 @@ def main():
              "native_linear_nv12_trial=1", "native_front_owner_trial=1", "native_front_queue_trial=1", "native_front_meta_trial=1", "native_front_params_trial=1", "native_front_profile_trial=1", "native_front_sof_trial=1"])
         for name in ("ov13858", "imx681", "sp11-vd55g0"):
             run(["insmod", str(D / ("modules/" + name + ".ko"))] +
-                (["native_control_timing_trace=1"] if name == "imx681" else []))
+                (["native_control_timing_trace=1", "native_control_timing_readback=1"] if name == "imx681" else []))
         result["phase"] = "sensor_bind_and_initial_suspend"
         for attempt in range(400):
             found = sensors()
@@ -288,6 +288,12 @@ def main():
             commands.append({"step":step,"sof":sof,"ioctl_begin_ns":begin,"ioctl_end_ns":end,
                 "cci_begin_ns":commit[1],"cci_end_ns":commit[2],"fll":fll,"exposure":exposure,
                 "analogue_code":analogue,"digital_code":digital})
+        readbacks = [tuple(map(int,p)) for p in re.findall(
+            r"NATIVE_IMX681_CONTROL_READBACK sequence=(\d+) fll=(\d+) exposure=(\d+) again=(\d+) dgain=(\d+) error=(-?\d+) timestamp=(\d+)", private_log)]
+        need(len(readbacks)==19 and [p[0] for p in readbacks]==list(range(19)),
+             "all nineteen known-register readback observations required")
+        readback_matches = all(p[1:5]==target and p[5]==0 for p,target in
+                               zip(readbacks,[(3554,1000,0,256)]+expected))
         intervals = [b[1]-a[1] for a,b in zip(irq_sofs,irq_sofs[1:])]
         import statistics
         expected_period = 3554*6752*1e9/720000000
@@ -307,6 +313,18 @@ def main():
                 field["response_timing_qualified"] = False
                 field["observed_response_delay_frames"] = None
                 field["reasons"].append("processed storage saturation confounds response")
+        analysis["known_register_readback"] = {
+            "all_reads_successful":all(p[5]==0 for p in readbacks),
+            "all_commanded_values_retained":readback_matches,
+            "observations":[{"sequence":p[0],"fll":p[1],"exposure":p[2],"analogue_code":p[3],
+                "digital_code":p[4],"error":p[5],"timestamp_ns":p[6]} for p in readbacks],
+            "readback_is_not_pixel_application_proof":True}
+        if not readback_matches:
+            analysis["all_fields_response_timing_qualified"] = False
+            for field in analysis["fields"]:
+                field["response_timing_qualified"] = False
+                field["observed_response_delay_frames"] = None
+                field["reasons"].append("known register readback differs or failed")
         result["grouped_control_response"] = analysis
         result["observation"] = data
         run(["sha256sum", "-c", str(D / "ASSETS.sha256")])

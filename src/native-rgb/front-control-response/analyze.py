@@ -27,7 +27,9 @@ def analyze_field(luma, output, commands, field):
         delta = new-old
         rising = command["step"] % 2 == 1
         threshold = (old+new)/2
-        separation = max(8*sigma, abs(old)*0.15, 1e-4)
+        # The statistics domain/pedestal is unqualified. Use measured noise,
+        # not an assumed percentage of its absolute level.
+        separation = max(8*sigma, 1e-4)
         error = []
         if (delta > 0) != rising or abs(delta) <= separation:
             error.append("insufficient directional statistics response")

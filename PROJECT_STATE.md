@@ -1,3 +1,35 @@
+## 2026-10-07 exposure/gain capture PASS; known register readback next
+
+Fresh response01 sourcea05b9673/audit30/build09 passed320 standard cam NV12 frames
+at30.00518fps,324 isolated IPA metering results,1625 owner checks/325 retirements,
+18 grouped control changes/19 CCI writes and328 typed defaults. STOP clean,error0,
+neutral graph,sensors standby,no SOF after STOP,critical0,Golden hashes unchanged.
+Capture UTC17:20:26.585..17:20:38.251 on2026-10-07; returned Golden
+6c63dcc0-8a5b-4436-a5fc-20a13740118f. response01 consumed/retired;29 completed
+streams,25 retired IDs,50 candidate/Golden boots; failure counters unchanged.
+
+Original analysis leaves all field delays unqualified. Exposure has six small,
+repeatable SOF+2 statistics/pixel steps but failed an unsupported15%-of-absolute-
+level threshold. Metering optical units/zero point are not established. Corrected
+noise-based analysis passes8 tests including pedestal-dominated small signals;
+retrospective01 exposure delay2 passes,analogue/digital remain ambiguous. The
+original01 result is preserved; corrected interpretation needs fresh evidence.
+
+Kernel audit31 W=1/-Werror adds opt-in reads of only the four known sensor control
+registers after group release; does not alter writes. Fresh response02 uses same
+build09/18-change/320-frame experiment,readback19 commits,noise-based response
+analysis and restored-baseline screens. Readback confirms register retention,
+not pixel application. Mismatch/read failure blocks timing qualification without
+relabelling a healthy capture as failure. No physical02 attempt yet.
+
+NEXT determine actual exposure response and whether gains reach the known sensor
+registers,then resolve ambiguous gain response/metering using source/readback and
+matched Windows conditions. Do not assume brightness fault from low Y; no matched
+Windows reference. Automatic AE/AWB and DelayedControls still disabled/unqualified;
+SensorTimestamp absent. Rear ISP/focus,normalization/AE targets,dynamic tables,
+production ABI/clock policy,independent tuning and optical acceptance remain.
+Earlier NEXT is history; originals/pixels/logs private SP11,no suspend.
+
 ## 2026-10-07 exposure/analogue/digital response built; response01 next
 
 Pending dc9ca301 frame-length-result push has succeeded. Current Golden is

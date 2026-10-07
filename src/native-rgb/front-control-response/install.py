@@ -9,13 +9,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PROJECT = ROOT.parents[1]
-BUILD = PROJECT / "02-kernel/native-control-response-20261007-01"
-MODULES = PROJECT / "02-kernel/native-rgb-20261007-audit-30"
-D = Path("/var/lib/sp11-camera-native-control-response-20261007-01")
-B = Path("/boot/sp11-7.1.5-camera-native-control-response-20261007-01")
-G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_control_response_20261007_01")
-S = Path("/etc/systemd/system/sp11-camera-native-control-response-20261007-01.service")
-ID = "sp11-camera-native-control-response-20261007-01"
+BUILD = PROJECT / "02-kernel/native-control-response-20261007-02"
+MODULES = PROJECT / "02-kernel/native-rgb-20261007-audit-31"
+D = Path("/var/lib/sp11-camera-native-control-response-20261007-02")
+B = Path("/boot/sp11-7.1.5-camera-native-control-response-20261007-02")
+G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_control_response_20261007_02")
+S = Path("/etc/systemd/system/sp11-camera-native-control-response-20261007-02.service")
+ID = "sp11-camera-native-control-response-20261007-02"
 LIBBUILD = PROJECT / "02-kernel/libcamera-native-rgb-pipeline-20261007-09"
 F = Path("/lib/firmware/qcom/sp11/imx681-2560x1440-nv12-v1.bin")
 GOLDEN = Path("/boot/sp11-7.1.5-audio-fullio-v19c")
@@ -59,6 +59,7 @@ def main():
     assert build["front_profile_trial_staged"] is True
     assert build["front_sof_trial_staged"] is True
     assert build["front_control_trace_trial_staged"] is True
+    assert "native_control_timing_readback:" in run(["modinfo", "-p", MODULES / "imx681/imx681.ko"])
     profile = PROJECT / "02-kernel/native-front-profile-20261007-01/imx681-2560x1440-nv12-v1.bin"
     assert profile.stat().st_size == 36744
     assert sha(profile) == "c59a54b760a8662af650fa8961aab2224c7c0d2a0cdcdea3c9581370ac5ddd03"
@@ -124,8 +125,8 @@ def main():
             existing_blacklist.extend(value.split("=", 1)[1].split(","))
     command = [x for x in command if not x.startswith(
         ("BOOT_IMAGE=", "sp11_entry=", "modprobe.blacklist=", "log_buf_len="))]
-    command += ["log_buf_len=4M", "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-01",
-                "sp11_camera_native_control_response_20261007_01=1",
+    command += ["log_buf_len=4M", "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-02",
+                "sp11_camera_native_control_response_20261007_02=1",
                 "modprobe.blacklist=" + ",".join(dict.fromkeys(existing_blacklist + [
                     "qcom_camss", "imx681", "ov13858", "sp11_vd55g0", "vd55g0"]))]
     uuid = run(["findmnt", "-n", "-o", "UUID", "/"]).strip()
@@ -151,7 +152,7 @@ menuentry 'SP11 native front NV12 — one use' --id '{ID}' {{
     write(grub, G, "0755")
     returning = f"""#!/usr/bin/env bash
 set -Eeuo pipefail
-if grep -qw 'sp11_camera_native_control_response_20261007_01=1' /proc/cmdline; then
+if grep -qw 'sp11_camera_native_control_response_20261007_02=1' /proc/cmdline; then
   printf 'service_result=%s\\nexit_code=%s\\nexit_status=%s\\n' "${{SERVICE_RESULT:-unknown}}" "${{EXIT_CODE:-unknown}}" "${{EXIT_STATUS:-unknown}}" > {D}/SERVICE-RESULT.txt
   if test -f {F}.native-profile-negative; then
     install -m 0600 {D}/imx681-2560x1440-nv12-v1.bin {F}
@@ -171,7 +172,7 @@ Description=SP11 standard libcamera front capture qualification, one use
 Wants=grub-initrd-fallback.service grub2-common.service
 After=grub-initrd-fallback.service grub2-common.service
 Before=display-manager.service
-ConditionKernelCommandLine=sp11_camera_native_control_response_20261007_01=1
+ConditionKernelCommandLine=sp11_camera_native_control_response_20261007_02=1
 
 [Service]
 Type=oneshot
