@@ -11,7 +11,7 @@ esac
 fail(){ echo "SP11_WINDOWS_ORACLE_ONESHOT=FAIL $*" >&2; exit 1; }
 
 "$R/tools/camera-overlap-guard.sh" --require-golden --require-no-camera-process >/dev/null || fail overlap_guard
-[ "$(git -C "$R" rev-parse HEAD)" = "$(git -C "$R" rev-parse origin/experiment/e004-front-ir-vd55g0)" ] || fail head_not_origin
+[ "$(git -C "$R" rev-parse HEAD)" = "$(git -C "$R" rev-parse '@{upstream}')" ] || fail head_not_origin
 
 GRUB=$(sudo -n grub-editenv /boot/grub/grubenv list 2>/dev/null || true)
 grep -qx 'saved_entry=sp11-audio-fullio-v19c' <<<"$GRUB" || fail saved_entry_not_golden

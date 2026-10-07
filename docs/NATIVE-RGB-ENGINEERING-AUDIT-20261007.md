@@ -1,3 +1,32 @@
+## 2026-10-07 room-light Linux-before capture passes all three response delays2
+
+User reports room lights ON18:26:29UTC. Fresh response03 source4fffdaa1/audit31/
+build09 passes320 native standard cam2560x1440 NV12 frames at30.00155fps,324
+isolated IPA results,1625 owner checks/325 retirements,328 typed defaults and
+19 matching known-register readbacks. All exposure1000/2000,analogue0/512 and
+digital256/512 show six repeatable up/down statistics+processed-Y responses at
+command SOF+2,restored baselines and unchanged receiver/video association.
+This is measured empirical response timing for the tested tuples,not copied
+from another sensor or RAW completion. Auto feedback still disabled; first-row
+SensorTimestamp,optical gain law and meter normalization remain unqualified.
+Linux03 capture UTC18:32:26.820..18:32:38.589,at reported new illumination.
+STOP clean,sensors suspended,neutral,critical0,Golden hashes unchanged.
+Candidatea9acc136-3cc0-438c-a938-9a7ac1d18ca8 returned Golden
+8c0c4887-a171-4c8b-a305-7aa34bbab347;03 consumed/retired.
+32streams/28retiredIDs/56candidate-Goldenboots,failurecounts5prestream/3poststart
+unchanged. Original pixels/hashes private; derived03 report omits image hashes.
+
+NEXT same-SP11 Windows front reference -> fresh Linux04 bracket. New Windows
+source in src/native-rgb/front-windows-reference uses atomic one-use entry marker,
+240second return timer before camera,exact FRONT Color/VideoRecord2560x1440
+NV12,16 sparse aggregate Y samples,reported controls/settings/time,CPU buffer
+clear; no pixels/hashes exported. Camera-free synthetic numeric/WinRT layout test
+PASS on SP7 native PowerShell5.1. No Windows camera attempt yet. EFI helper now
+checks actual Git upstream instead of historical branch; persistent order remains.
+Windows ordinary auto controls vs Linux manual are intentionally recorded.
+Lights and scene/position requested unchanged,but not independently measured.
+No qualified matched brightness/quality conclusion yet. Earlier NEXT is history.
+
 ## 2026-10-07 user turned room lights ON; matched comparison starting
 
 User explicitly reports lights ON at18:26:29UTC/19:26:29BST. Asked to preserve
