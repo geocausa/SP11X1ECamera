@@ -16,8 +16,18 @@ def apply(camss):
     (camss / "native-rear-prepared-commands.inc").write_bytes(
         (here / "native-rear-prepared-commands.inc").read_bytes())
     for name in ("native-rear-startup-scalars.h", "native-rear-scalar-binding.inc",
-                 "native-rear-startup-geometry.inc", "native-rear-startup-statistics.inc"):
+                 "native-rear-startup-geometry.inc", "native-rear-startup-statistics.inc",
+                 "native-rear-startup-iq.inc", "native-rear-startup-compose.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
+    # Adopt validated inactive-cold-gamma derivatives; immutable parents retained.
+    cold = here.parents[1] / "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma"
+    for original, replacement in (
+        ("camss-e006g-rear-materializer.inc", "camss-e011as-e006g-rear-materializer.inc"),
+        ("camss-e007e-bfstats25-dmi.inc", "camss-e011as-e007e-bfstats25-dmi.inc"),
+        ("camss-e007f-dmi-integration.inc", "camss-e011as-e007f-dmi-integration.inc"),
+        ("camss-e011as-cold-gamma-policy.inc", "camss-e011as-cold-gamma-policy.inc"),
+    ):
+        (camss / original).write_bytes((cold / replacement).read_bytes())
     path = camss / "camss-vfe-e008l-rear-command-dma.inc"
     text = path.read_text()
     text = replace_once(text, "\tbool allocated;\n\tbool hardware_exposed;\n};",
@@ -32,7 +42,7 @@ def apply(camss):
                         "\tstruct e008l_rear_command_set *commands;")
     a = text.index("static int\ne008k_rear_materialize_all(")
     b = text.index("static int\ne008k_rear_collect_done(", a)
-    text = text[:a] + "static int\ne008k_rear_validate_prepared_packets(struct e008k_rear_request *req)\n{\n unsigned int p;\n int ret;\n if (!req || !req->sensor || !req->commands || !req->first_request_generation)\n  return -EINVAL;\n ret = native_rear_validate_prepared_commands(req->commands);\n if (ret)\n  return ret;\n for (p = 0; p < E007Y_STARTUP_PACKETS; p++)\n  if (req->packet_request_id[p] != req->commands->packet_request_id[p])\n   return -ESTALE;\n return 0;\n}\n\n" + text[b:]
+    text = text[:a] + "static int\ne008k_rear_validate_prepared_packets(struct e008k_rear_request *req)\n{\n unsigned int p;\n int ret;\n if (!req || !req->sensor || !req->commands || !req->first_request_generation ||\n     req->first_request_generation == U64_MAX)\n  return -EINVAL;\n ret = native_rear_validate_prepared_commands(req->commands);\n if (ret)\n  return ret;\n for (p = 0; p < E007Y_STARTUP_PACKETS; p++)\n  if (req->packet_request_id[p] != req->commands->packet_request_id[p])\n   return -ESTALE;\n return 0;\n}\n\n" + text[b:]
     text = replace_once(text, "e008k_rear_materialize_all(req)", "e008k_rear_validate_prepared_packets(req)")
     for p in range(4):
         text = replace_once(text, f"&req->packet[{p}]", f"&req->commands->packet[{p}].out")
@@ -42,6 +52,30 @@ def apply(camss):
     text = replace_once(text, anchor,
                         "\t/* The prepared handoff does not grant rear hardware access. */\n"
                         "\tret = e008k_rear_runtime_authorization();\n\tif (ret)\n\t\treturn ret;\n\n" + anchor)
+    # A failed start may already have exposed hardware. Mark before attempting
+    # each operation so emergency stop/pinning covers partial-start failures.
+    text = replace_once(text,
+        "\tret = e008k_rear_rtcdm_open_start(camss);\n\tif (ret)\n\t\tgoto out_pin;\n\trtcdm_started = true;\n\thardware_touched = true;",
+        "\trtcdm_started = true; /* May expose hardware even on failure. */\n"
+        "\thardware_touched = true;\n\tret = e008k_rear_rtcdm_open_start(camss);\n"
+        "\tif (ret)\n\t\tgoto out_pin;")
+    text = replace_once(text,
+        "\tret = e008j_rear_prepare_slot0_after_packet0(vfe, pair);\n\tif (ret)\n\t\tgoto out_pin;\n\tbus_may_be_enabled = true; /* MMIO is now exposed; pin on all failures. */",
+        "\tbus_may_be_enabled = true; /* Preparation may partially write BUS. */\n"
+        "\tret = e008j_rear_prepare_slot0_after_packet0(vfe, pair);\n"
+        "\tif (ret)\n\t\tgoto out_pin;")
+    text = replace_once(text,
+        "\tret = csid680_e008k_rear_enable(csid);\n\tif (ret)\n\t\tgoto out_pin;\n\tcsid_streaming = true;",
+        "\tcsid_streaming = true;\n\tret = csid680_e008k_rear_enable(csid);\n"
+        "\tif (ret)\n\t\tgoto out_pin;")
+    text = replace_once(text,
+        "\tret = e008k_rear_subdev_stream(&csiphy->subdev, true);\n\tif (ret)\n\t\tgoto out_pin;\n\tcsiphy_streaming = true;",
+        "\tcsiphy_streaming = true;\n\tret = e008k_rear_subdev_stream(&csiphy->subdev, true);\n"
+        "\tif (ret)\n\t\tgoto out_pin;")
+    text = replace_once(text,
+        "\tret = e008k_rear_subdev_stream(req->sensor, true);\n\tif (ret)\n\t\tgoto out_pin;\n\tsensor_streaming = true;",
+        "\tsensor_streaming = true;\n\tret = e008k_rear_subdev_stream(req->sensor, true);\n"
+        "\tif (ret)\n\t\tgoto out_pin;")
     path.write_text(text)
 
     path = camss / "camss-vfe-e008n-rear-single-use.inc"
@@ -81,6 +115,11 @@ def apply(camss):
 
     path = camss / "camss-vfe-e008o-rear-semantic-state.inc"
     text = path.read_text()
+    # Preserve the current prepared-command materializer, adopt activity validation.
+    derivative = (cold / "camss-e011as-vfe-e008o-rear-semantic-state.inc").read_text()
+    begin = "static int\ne008o_rear_validate_packet_semantics("
+    end = "static int\ne008o_rear_validate_semantic_set("
+    text = text[:text.index(begin)] + derivative[derivative.index(begin):derivative.index(end)] + text[text.index(end):]
     a = text.index("static int\ne008o_rear_materialize_commands(")
     b = text.index("struct e008o_rear_semantic_ops {", a)
     text = text[:a] + "static int\ne008o_rear_materialize_commands(struct e008o_rear_semantic_set *set,\n                                 struct e008l_rear_command_set *commands)\n{\n unsigned int p;\n int ret;\n if (!commands || !commands->allocated || commands->prepared ||\n     commands->hardware_exposed)\n  return -EINVAL;\n for (p = 0; p < E007Y_STARTUP_PACKETS; p++)\n  if (!commands->packet[p].allocated || commands->packet[p].submitted)\n   return -EINVAL;\n ret = e008o_rear_validate_semantic_set(set);\n if (ret)\n  return ret;\n for (p = 0; p < E007Y_STARTUP_PACKETS; p++) {\n  struct e007y_rear_startup_output *out = e008l_rear_command_output(commands, p);\n  struct e008o_rear_packet_semantics *s = &set->packet[p];\n  ret = e007y_rear_materialize(&s->regs, &s->dmi, s->request_id, p, out);\n  if (ret)\n   goto fail;\n  commands->packet_request_id[p] = s->request_id;\n }\n commands->prepared = true;\n ret = native_rear_validate_prepared_commands(commands);\n if (!ret)\n  return 0;\nfail:\n /* Publish all four together; no prefix may survive a later packet failure. */\n commands->prepared = false;\n memset(commands->packet_request_id, 0, sizeof(commands->packet_request_id));\n for (p = 0; p < E007Y_STARTUP_PACKETS; p++)\n  e007y_rear_clear_output(&commands->packet[p].out);\n return ret;\n}\n\n" + text[b:]
@@ -95,7 +134,10 @@ def apply(camss):
                         '#include "camss-e011z-rear-startup-adaptive-bind.inc"\n'
                         '#include "native-rear-scalar-binding.inc"\n'
                         '#include "native-rear-startup-geometry.inc"\n'
-                        '#include "native-rear-startup-statistics.inc"')
+                        '#include "native-rear-startup-statistics.inc"\n'
+                        '#include "camss-e011as-cold-gamma-policy.inc"\n'
+                        '#include "native-rear-startup-iq.inc"\n'
+                        '#include "native-rear-startup-compose.inc"')
     path.write_text(text)
     return {"shared_register_DMI_runner_removed": True,
             "prepared_arena_consumer": True, "all_or_none_materialization": True,

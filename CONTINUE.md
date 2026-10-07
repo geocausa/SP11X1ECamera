@@ -1,3 +1,63 @@
+## 2026-10-07 complete integer rear startup integration and partial-start cleanup
+
+Current main-path composition now includes BF ROI finalization plus explicit
+calculated CST/BPC-ABF inputs, the previously validated E011AS inactive cold BF
+gamma derivatives, and all four scalar/geometry/statistics/stable/adaptive DMI
+families in native_rear_compose_startup. Existing52 immutable fragment parents
+remain pinned; E011AS derivatives are separately SHA-pinned integration inputs.
+Do not repeat Windows AF/BF lineage or previously closed scalar/geometry work.
+
+native_rear_bind_startup_iq uses request-tagged integer AF rectangles; no frozen
+transient zoom or captured coordinates. It lowers the supported interior even
+BAF/5x5/BF mapping; unsupported clamp/stripe/overlap shapes reject. Real E008T
+filter/coring/gamma seeds are reused. CST and BPC-ABF calculated states remain
+explicit caller tuning inputs, validated before changing any of four packets.
+Cold packet0 has explicit inactive gamma and no invented dummy gamma table.
+
+The complete sleepable composer snapshots all caller inputs, constructs a fresh
+four-packet set, validates every family/phase/ID, then publishes readiness/sealing
+only on success. All errors/allocation failures preserve the caller destination.
+Cached recursive provider self-pointers are rebound at the final stable address
+before heap scratch is securely cleared/freed. Real provider/allocator/materializer
+host tests prove operation after scratch release and complete all-or-none clearing
+on a late packet3 production error. Inputs in this complete test are SYNTHETIC:
+configuration completeness is proven, independent tuning/IPA runtime is NOT.
+
+Current E008K runner now marks possible RT-CDM/BUS/CSID/CSIPHY/sensor exposure
+BEFORE each attempted start. Every modeled partial-start failure receives stop
+attempts; uncertain hardware remains pinned/owner unsafe. Generation U64_MAX
+rejects before allocation/owner effects. Fault tests bypass authorization ONLY
+in disposable host code; production authorization functions still return
+-EOPNOTSUPP. Physical IRQ/consumed-IOVA/stop/reclaim remains unqualified.
+
+Final source build11 W=1/Werror PASS,zero diagnostics,not installed.
+GCC+Clang ASAN/UBSAN:
+- BF/tuning binder125953 assertions each; same-SP11 BF selector1 exact1200/1200,
+  all4 startup payloads; source-forward caller AF rectangle from observed zoom
+  is oracle-only, upstream transient zoom policy remains unproven.
+- Complete REAL full semantic types/providers/DMI/layout/allocator/materializer:
+  592 assertions each, synthetic inputs, simulated host DMA/allocations.
+- Actual runner orchestration2297 assertions/53 injected failures each; lifecycle
+  helpers and reclaim mocked, no hardware proof.
+- Affected prepared consumer regression387 assertions each;9 composition testsPASS.
+Build08 failed incorrect MNDS member name; corrected09/10/11pass. A whole-host
+negative initially corrupted CST in phase3 where CST is NOT emitted; changed to
+BF for the intended late failure. Fault-fixture PM expectation corrected for
+already-proven successful stop/reclaim before a final owner-release failure.
+Original attempts preserved; no hardware attempt/candidate/reboot/install.
+
+Evidence docs/NATIVE-RGB-REAR-STARTUP-INTEGRATION-20261007.json.
+Golden5a4d7226-d3b1-4c39-b94f-9d16ce4572ce idle unchanged.
+Native44streams/33IDs/66boots,Windows2/2/4,combined70boots/35IDs unchanged.
+Rear FIRST; front calibration deferred. Lights last user OFF. All pixels/RAW/
+images/spatial arrays/image-derived hashes/OEM originals remain SAME SP11 only.
+Backend10bit compressed/private, NOT NV12; no optical quality parity claimed.
+NEXT independent IPA statistics/tuning/adaptive input production and typed runtime
+delivery; integrate the clean retained-source full preflight, then bounded physical
+rear generation/consumed-address/stop proof and qualified linear output.
+User authorizes autonomous progress across milestones; do not ask permission or
+end a turn merely because one source step passed. Earlier NEXT is history.
+
 ## 2026-10-07 rear statistics geometry/binding SOURCE gate CLOSED
 
 native_rear_bind_startup_statistics now builds four independent E008O statistics

@@ -19,6 +19,7 @@ typedef u64 dma_addr_t;
 typedef int atomic_t;
 #define __used __attribute__((used))
 #define GFP_KERNEL 0
+#define U64_MAX UINT64_MAX
 #define ATOMIC_INIT(x) (x)
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
 #undef static_assert
@@ -59,9 +60,17 @@ static int atomic_cmpxchg(atomic_t *p,int before,int after){int old=*p;if(old==b
 #define E007C_PERIOD_VALID_MASK 1
 struct e007d_rear_register_state {
  struct e006z_rear_scalar_state scalar;
+ struct { u8 gamma_lut_enable; } bfstats;
  struct { unsigned valid_mask; } period;
 };
-struct e007v_rear_dmi_state { u64 request_id; };
+struct e007e_bf_dmi_state { bool gamma_valid, gamma_inactive; u16 gamma[32]; };
+struct prepared_f { struct e007e_bf_dmi_state bfstats25; };
+struct prepared_i { struct prepared_f dmi; };
+struct prepared_q { struct prepared_i dmi; };
+struct prepared_s { struct prepared_q dmi; };
+struct prepared_t { struct prepared_s dmi; };
+struct prepared_u { struct prepared_t dmi; };
+struct e007v_rear_dmi_state { u64 request_id; struct prepared_u dmi; };
 static int e007v_rear_validate_request(struct e007v_rear_dmi_state *d,u64 id){
  return d->request_id==id?0:-ESTALE;
 }
@@ -98,6 +107,9 @@ static void init_semantics(struct e008o_rear_semantic_set *s){
   s->packet[p].regs.scalar.startup_phase=p;s->packet[p].regs.scalar.request_id=ids[p];
   s->packet[p].regs.period.valid_mask=E007C_PERIOD_VALID_MASK;
   s->packet[p].dmi.request_id=ids[p];
+  s->packet[p].regs.bfstats.gamma_lut_enable=!!p;
+  s->packet[p].dmi.dmi.dmi.dmi.dmi.dmi.dmi.bfstats25.gamma_valid=!!p;
+  s->packet[p].dmi.dmi.dmi.dmi.dmi.dmi.dmi.bfstats25.gamma_inactive=!p;
  }
 }
 static bool all_zero(const void *ptr,size_t n){
@@ -129,6 +141,9 @@ static void positive_and_corruption_tests(struct vfe_device *v,struct v4l2_subde
   semantic.packet[p].ready=false;
  }
  /* Revalidation must never invoke the semantic writer or change commands. */
+ req.first_request_generation=U64_MAX;
+ CHECK(e008k_rear_validate_prepared_packets(&req)==-EINVAL);
+ req.first_request_generation=1;
  for(j=0;j<20;j++)CHECK(e008k_rear_validate_prepared_packets(&req)==0);
  CHECK(materializations==4);
  for(p=0;p<4;p++){
