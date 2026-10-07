@@ -68,3 +68,18 @@
   mutex_lock(&video->native_params_lock);
   if (video->native_params_profile) {
    capsule = kmemdup(video->native_params_profile, CAMSS_X1E_PIX_CAPSULE_BYTES,
+--- a/camss-video.c
++++ b/camss-video.c
+@@ -834,6 +834,12 @@
+ 	video_device_pipeline_stop(vdev);
+ 
+ 	video->ops->flush_buffers(video, VB2_BUF_STATE_ERROR);
++	/* A successful STREAMOFF retires stream-owned tuning and producer state.
++	 * Pinned/unsafe paths above return before this boundary.
++	 */
++	if (video_is_x1e_front_pix(video) &&
++	    camss_x1e_native_front_profile_trial_allowed(video->camss))
++		camss_x1e_pix_iq_session_close(video);
+ }
+ 
+ static void video_unprepare_streaming(struct vb2_queue *q)

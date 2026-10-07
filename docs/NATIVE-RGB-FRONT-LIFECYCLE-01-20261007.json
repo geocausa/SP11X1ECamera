@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-07",
+  "identity": "native-lifecycle-20261007-01",
+  "source_head": "3254b39a90c7f45740f17fd120eba9f2b8eb75ee",
+  "candidate_boot_id": "bb4de1be-6b02-48bf-8dab-cb7a4546e3bb",
+  "returned_golden_boot_id": "e102c06c-4572-4725-a47f-f2ce5ab87b0f",
+  "status": "FAILED_SECOND_START_STALE_PROFILE_WITH_CLOSED_FIFO",
+  "consumed": true,
+  "retired": true,
+  "critical_faults": {
+    "BUG:": 0,
+    "Oops:": 0,
+    "WARNING:": 0,
+    "Kernel panic": 0,
+    "NATIVE_FRONT_OWNER_REJECT": 0,
+    "teardown unsafe": 0,
+    "intentionally pinned": 0
+  },
+  "golden_assets_unchanged": true,
+  "completed_first_one_frame_capture": true,
+  "first_capture_owner_checks": 30,
+  "first_capture_retirements": 6,
+  "first_capture_clean_stop": true,
+  "second_start_error": "ESHUTDOWN before STREAMON: retained tuning profile caused loader to bypass reopening cleared/closed FIFO",
+  "specific_fix": "clear stream-owned profile/FIFO after successful STREAMOFF, after worker exit, preserving unsafe/pinned early returns",
+  "result": {
+    "application_exit_code": 1,
+    "candidate_boot_id": "bb4de1be-6b02-48bf-8dab-cb7a4546e3bb",
+    "error": "public libcamera lifecycle application failed",
+    "failure_sensor_states": {
+      "1-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "2-0060": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "3-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      }
+    },
+    "grub-initrd-fallback.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "12632400",
+      "ExecMainStartTimestampMonotonic": "12539392",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "grub2-common.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "12674186",
+      "ExecMainStartTimestampMonotonic": "12647451",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "hardware_streams_completed": 1,
+    "initial_sensor_states": {
+      "1-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "2-0060": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "3-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      }
+    },
+    "phase": "public_libcamera_same_camera_restart_and_reacquire",
+    "pixels_private_on_sp11": true,
+    "retry": false,
+    "rounds": [
+      {
+        "all_sensors_suspended": true,
+        "clean_stop": true,
+        "frames": 1,
+        "round": 0,
+        "same_camera": true,
+        "sequences": [
+          4
+        ],
+        "timestamps_ns": [
+          16628646000
+        ]
+      }
+    ],
+    "status": "FAILED_NATIVE_NV12_PROBE"
+  },
+  "product_complete": false
+}
