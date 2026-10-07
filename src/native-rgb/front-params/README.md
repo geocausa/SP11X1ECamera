@@ -29,3 +29,8 @@ not AE/AWB convergence or Windows image quality. It preserves all ownership,
 completion, CDM receipts, safe-stop and Golden protections. Original profile,
 statistics and pixels stay private on SP11. Retire the one-use identity after
 an attempt; never rearm it.
+
+Hardware params01 passed80 pairs at30.006fps,84 typed requests and all5 negative
+cases. Measured Bayer-gain response:3.458 ->7.146 ->3.456. All405 ownership checks
+passed; explicit stop, neutral graph, standby and Golden return verified. Identity
+is consumed and retired; never rearm. See the derived PARAMS-01 evidence.

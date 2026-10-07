@@ -21,7 +21,7 @@ execution belongs in the release path.
 
 Protected Golden assets/default are never overwritten. Original vendor tuning,
 raw traces and optical pixels remain private on SP11. No system suspend tests.
-Ten one-use candidate identities are consumed and retired; none may be rearmed.
+Eleven one-use candidate identities are consumed and retired; none may be rearmed.
 
 ## Verified implementation
 
@@ -32,8 +32,9 @@ Ten one-use candidate identities are consumed and retired; none may be rearmed.
 | Native front linear NV12 queue | 80 sequential2560x1440 frames at29.989fps; four reused buffers and reversed queue order;405 ownership checks | Fixed manual IQ, no long soak/reopen or live3A |
 | FULL storage/8-bit programming | Published packer3, linear MODE guard, UV half height, complete readbacks, local CDM helper audit | No compressed-to-linear transition/reopen proof |
 | Stop/return | Explicit STREAMOFF during queue operation; all sensors suspended, graph neutral, Golden unchanged, zero critical faults | Starvation/fault/reopen still unqualified |
-| Frame-associated statistics |80 video/metadata pairs with matching identity/timestamps and valid AEC luma;405 ownership checks | Experimental QXS1 format; typed parameters remain |
+| Frame-associated statistics |80 video/metadata pairs with matching identity/timestamps and valid AEC luma;405 ownership checks | Experimental QXS1 format; complete pipeline/IPA remains |
 | libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Pipeline/IPA runtime absent |
+| Typed front ISP scalars |80 pairs,84 accepted requests,5 negative cases; measured2x gain/reset response;1979 sanitizer checks | Private startup profile and dynamic tables remain; no live3A |
 | Rear composition |52 fragments compile against real types | Nonadaptive startup inputs and runtime composition incomplete |
 
 NV12-01 stopped before ISP programming: truthful sensor array timing plus the
@@ -77,7 +78,8 @@ This establishes short continuous capture, not a long soak, restart or optical g
 
 The present private raw-command capsule control is a development interface.
 Frame-associated statistics now pass80 pairs on the V4L2 metadata queue.
-Implement typed validated ISP parameters with request association for libcamera.
+Typed validated scalar parameters now pass84 real requests and measured hardware
+gain/reset response. Complete semantic startup/tables and request association for libcamera.
 Expose scalar/ROI/table values with bounded sizes and supported ranges; the kernel
 owns register addresses, CDM framing and DMA binding. Do not expose arbitrary
 MMIO, vendor binary execution or unvalidated command streams as product APIs.
@@ -86,7 +88,7 @@ blindly replaying request4 forever is not a substitute.
 
 Already passed: native NV12 queue reuse beyond the old27-frame bound, ordered
 delivery, explicit STREAMOFF, stop-before-free, neutral graph and standby.
-Remaining: starvation/fault/reopen qualification and typed parameters.
+Remaining: starvation/fault/reopen qualification, semantic startup and full typed tables.
 Use fresh identities; do not extend one named frame at a time.
 
 **2. libcamera pipeline and IPA runtime.**

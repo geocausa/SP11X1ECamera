@@ -1,3 +1,28 @@
+## 2026-10-07 typed front ISP scalars physically verified
+
+Fresh params01 used64a4c840/audit23:80 paired NV12/statistics frames at30.006fps,
+84 typed requests5..88 and5 malformed/forbidden-input cases passed. The kernel
+packs scalar values and owns all16 bank selectors, command/DMA addresses and CDM
+framing. Per-frame raw capsules are rejected. A2x Bayer gain changed measured Y
+from3.4580 to7.1463, then reset to3.4560.
+405 consumed-owner checks passed across81 retirements; zero rejects or critical
+faults. Both queues stopped, sensors suspended, graph neutral, Golden unchanged.
+Returned boot714c4187-aa54-403f-bda7-ceeab8cba8fb. Params01 is consumed and retired;
+never rearm. Original profile, statistics, logs and pixels remain private on SP11.
+
+The shared pointer-free64-byte QXP1 schema passes1979 sanitizer checks and
+92 private fixture comparisons. Its real libcamera libipa encoder builds under
+Werror with8 tests passing and2 VIMC skips. This is scalar control qualification,
+not automatic3A, dynamic table support or the final public request ABI. A private
+R4 bootstrap profile still supplies startup defaults; product incomplete.
+
+NEXT: remove the diagnostic bootstrap dependency and connect actual libcamera
+requests/pipeline/IPA automatic controls, then rear processed capture, reopen,
+soak/switch and controlled Windows optical acceptance. Implement source-qualified
+semantic startup/tuning; do not promote a raw-command interface or a helper-only
+build to a product. See docs/NATIVE-RGB-FRONT-PARAMS-01-20261007.json.
+Earlier NEXT entries are history.
+
 ## 2026-10-07 frame-associated front statistics physically verified
 
 Fresh metadata02 used c4430c42/audit21:80 video/metadata pairs at30.006fps.
