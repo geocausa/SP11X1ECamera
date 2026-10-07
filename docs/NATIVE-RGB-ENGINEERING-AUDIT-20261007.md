@@ -1,3 +1,17 @@
+## 2026-10-07 front consumed-address ownership physically verified
+
+Fresh owner02 used9b5662a0/audit16: four native2560x1440 NV12 frames,
+twenty address/session/sequence checks across VIDEO/AEC-BHist/TLBG/AWB/RS,
+zero rejected owners, STREAMOFF, neutral graph and all sensors suspended.
+Golden hashes unchanged; returned bootf7d6fb1b-ae4d-43b4-ad73-d74195fb0d15.
+Owner01 stopped safely on an incorrect sampler RS mapping (WM16); corrected
+code derives WM18 through the admitted BUS order. Both owner identities are
+consumed and retired; never rearm. See NATIVE-RGB-FRONT-OWNER-02-20261007.json.
+Continuous front queue remains NEXT. CDM FIFO commits already wait for BL_DONE;
+preserve that receipt before reusing command/DMI memory, and every per-group
+consumed-address/session check before reusing a slot. No continuous/IQ parity
+claim from this four-frame proof. Earlier architecture/privacy/Golden rules apply.
+
 ## 2026-10-07 native front NV12 hardware checkpoint — authoritative current state
 
 Fresh NV12-02 used source 0d57e1f5 and audit12 W=1/-Werror modules.

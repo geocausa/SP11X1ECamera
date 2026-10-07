@@ -44,3 +44,8 @@ Published authority: Qualcomm camera-driver82ac3a671a5b0a4e3b3ac4519208af1d37a93
 camera/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe17x/cam_vfe680.h and
 vfe_bus/cam_vfe_bus_ver3.c. Group mapping and two-slot ownership reuse the
 physically exercised SP11 front source. No raw OEM bytes/pixels are embedded.
+
+Owner02 hardware PASS: four frames and twenty address/session checks, zero
+rejections, safe stop/standby/neutral graph and unchanged Golden. Both owner
+identities consumed/retired; this installer must never be rearmed. See
+NATIVE-RGB-FRONT-OWNER-02-20261007.json. Continuous remains unimplemented.
