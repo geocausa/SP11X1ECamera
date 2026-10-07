@@ -1,0 +1,155 @@
+--- a/camss.h
++++ b/camss.h
+@@ -219,6 +219,7 @@
+ 			    const u8 *capsule, size_t capsule_size);
+ bool camss_x1e_native_nv12_trial_allowed(struct camss *camss);
+ bool camss_x1e_native_front_owner_trial_allowed(struct camss *camss);
++bool camss_x1e_native_front_queue_trial_allowed(struct camss *camss);
+ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
+ int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
+ 				     struct camss_buffer *buffer);
+--- a/camss.c
++++ b/camss.c
+@@ -7508,9 +7508,13 @@
+ 	struct camss_buffer *video[6];
+ 	struct camss_video *live_video;
+ 	bool live_requeue;
++	bool native_queue;
+ };
+ 
+ struct camss_x1e_pix_runner_result {
++	struct camss_buffer *native_inflight[2];
++	struct camss_x1e_epoch0_materialized *native_commands;
++	bool native_queue_started;
+ 	struct camss_buffer *video_done;
+ 	struct camss_buffer *video_done_next;
+ 	struct camss_buffer *video_done_third;
+@@ -8010,6 +8014,8 @@
+ 	return 0;
+ }
+ 
++#include "native-front-queue.inc"
++
+ static int camss_x1e_pix_runner_frames(struct camss *camss,
+ 				       const struct camss_x1e_pix_runner_request *req,
+ 				       struct camss_x1e_pix_runner_result *result,
+@@ -8504,6 +8510,14 @@
+ 			camss_x1e_pix_v4l2_complete_live(result, req->video[2], 2);
+ 	}
+ 
++	if (req->native_queue) {
++		result->native_queue_started = true;
++		result->native_inflight[1] = req->video[3];
++		ret = native_front_queue_run(camss, req, result, pix, csid, vfe,
++					    &epoch0_seq, video_seq);
++		goto out_unwind;
++	}
++
+ 	if (frame_limit >= 5 && req->live_requeue) {
+ 		fifth = camss_x1e_pix_v4l2_wait_pending(req->live_video,
+ 						 CAMSS_X1E_PIX_RUNNER_VIDEO_TIMEOUT_US);
+@@ -9178,6 +9192,14 @@
+ 		v4l2_pipeline_pm_put(video_entity);
+ 
+ out_materialized:
++	if (result->native_commands) {
++		unsigned int slot;
++
++		for (slot = 0; slot < 2; slot++)
++			camss_x1e_epoch0_release(camss, &result->native_commands[slot]);
++		kfree(result->native_commands);
++		result->native_commands = NULL;
++	}
+ 	camss_x1e_pix_capsule_materialized_release(camss, materialized_r27);
+ 	camss_x1e_pix_capsule_materialized_release(camss, materialized_r26);
+ 	camss_x1e_pix_capsule_materialized_release(camss, materialized_r25);
+@@ -9273,6 +9295,16 @@
+ 	return native_front_owner_trial && camss_x1e_native_nv12_trial_allowed(camss);
+ }
+ 
++static bool native_front_queue_trial;
++module_param(native_front_queue_trial, bool, 0400);
++MODULE_PARM_DESC(native_front_queue_trial, "Native front serialized NV12 queue qualification");
++
++bool camss_x1e_native_front_queue_trial_allowed(struct camss *camss)
++{
++	return native_front_queue_trial &&
++	       camss_x1e_native_front_owner_trial_allowed(camss);
++}
++
+ #define CAMSS_X1E_PIX_GATE_QC10C_WIDTH		2560
+ #define CAMSS_X1E_PIX_GATE_QC10C_HEIGHT	1440
+ #define CAMSS_X1E_PIX_GATE_QC10C_STRIDE	3584
+@@ -9505,6 +9537,12 @@
+ 		goto out_packet;
+ 	}
+ 
++	if (camss_x1e_native_front_queue_trial_allowed(camss)) {
++		ret = native_nv12_commands_validate(inputs->steady.normalized_main.data,
++						   inputs->steady.normalized_main.size, false);
++		if (ret)
++			goto out_packet;
++	}
+ 	/* R5/R6 consume only the steady section; startup/priming stay R4-owned. */
+ 	ret = camss_x1e_epoch0_materialize(camss, steady, &inputs->steady);
+ 
+@@ -9799,6 +9837,8 @@
+ 	req.video[3] = video3;
+ 	req.live_video = video;
+ 	req.live_requeue = true;
++	req.native_queue = camss_x1e_native_front_queue_trial_allowed(camss) &&
++		video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12;
+ 	ret = camss_x1e_pix_runner_validate(camss, &req);
+ 	if (ret)
+ 		goto out_error_buffers;
+@@ -9816,6 +9856,29 @@
+ 		iq4 = NULL;
+ 		provider_owned = false;
+ 		goto out_done;
++	}
++	if (req.native_queue) {
++		unsigned int i;
++
++		/*
++		 * Original pointer identities may now be pending again. Return only
++		 * buffers still owned by this runner, after proven hardware stop.
++		 */
++		if (result.native_queue_started) {
++			for (i = 0; i < 2; i++)
++				camss_x1e_pix_v4l2_error_buffer(result.native_inflight[i]);
++		} else {
++			for (i = result.live_completed; i < 4; i++)
++				camss_x1e_pix_v4l2_error_buffer(req.video[i]);
++		}
++		video->x1e_pix_runner_stopped = true;
++		if (!ret && !READ_ONCE(video->x1e_pix_stop_requested))
++			ret = -EPROTO;
++		dev_info(camss->dev,
++			 "NATIVE_FRONT_QUEUE_STOPPED completed=%u stop_requested=%u error=%d\n",
++			 result.live_completed,
++			 READ_ONCE(video->x1e_pix_stop_requested), ret);
++		goto out_iq_packet;
+ 	}
+ 	if (video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12) {
+ 		if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+@@ -10032,10 +10095,17 @@
+ 	 * STREAMON and consumed at their proven steady Epoch0 boundaries.
+ 	 */
+ 	mutex_lock(&video->x1e_pix_iq_lock);
+-	if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth != 1 ||
+-	    video->x1e_pix_iq_last_enqueued != 4 ||
+-	    video->x1e_pix_iq_last_dequeued != 3)
++	if (camss_x1e_native_front_queue_trial_allowed(camss)) {
++		if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth < 1 ||
++		    video->x1e_pix_iq_depth > CAMSS_X1E_PIX_IQ_QUEUE_DEPTH_MAX ||
++		    video->x1e_pix_iq_last_dequeued != 3 ||
++		    video->x1e_pix_iq_last_enqueued != 3 + video->x1e_pix_iq_depth)
++			ret = -EAGAIN;
++	} else if (video->x1e_pix_iq_closed || video->x1e_pix_iq_depth != 1 ||
++		   video->x1e_pix_iq_last_enqueued != 4 ||
++		   video->x1e_pix_iq_last_dequeued != 3) {
+ 		ret = -EAGAIN;
++	}
+ 	mutex_unlock(&video->x1e_pix_iq_lock);
+ 	if (ret)
+ 		return ret;

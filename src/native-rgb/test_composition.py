@@ -68,6 +68,26 @@ class CompositionTests(unittest.TestCase):
             self.assertEqual(logical, [0, 1, 2, 3, 11, 12, 13, 14, 18])
             self.assertFalse(list(out.rglob("*.ko")))
 
+    def test_queue_requires_owner_and_nv12(self):
+        with tempfile.TemporaryDirectory(prefix="native-queue-trial-") as directory:
+            out = Path(directory) / "candidate"
+            with self.assertRaisesRegex(ValueError, "requires"):
+                build.assemble(out, nv12_trial=True, front_queue_trial=True)
+            self.assertFalse(out.exists())
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = build.assemble(out, nv12_trial=True, front_owner_trial=True,
+                                        front_queue_trial=True)
+            self.assertTrue(result["front_queue_trial_staged"])
+            self.assertFalse(result["runtime_access"])
+            core = (out / "camss/camss.c").read_text()
+            loop = (out / "camss/native-front-queue.inc").read_text()
+            self.assertIn("result->native_queue_started = true", core)
+            self.assertIn("NATIVE_FRONT_QUEUE_STOPPED", core)
+            self.assertIn("for (frame = 5; ; frame++)", loop)
+            self.assertIn("result->native_inflight[slot]", loop)
+            self.assertIn("frame > U32_MAX - video_base", loop)
+            self.assertFalse(list(out.rglob("*.ko")))
+
     def test_repeatable_composition_and_retained_guards(self):
         with tempfile.TemporaryDirectory(prefix="native-rgb-compose-") as directory:
             a, b = Path(directory) / "a", Path(directory) / "b"
