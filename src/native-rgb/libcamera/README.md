@@ -3,8 +3,9 @@
 Current physical proof: build03/audit27 delivers standard cam80 NV12/statistics
 pairs2560x1440 at30.0056fps, and public API same-camera1/80/80 restart/reacquire
 passes161 app frames/880 owner checks. Fixed manual only; real IPA/3A absent.
-Timestamp pairing currently uses completion time; SensorTimestamp exposure/clock
-semantics are unqualified. Earlier helper-only descriptions below are historical.
+Latest build04/audit27 pipeline03 passes80 standard cam frames at29.9919fps,
+with the incorrect SensorTimestamp field removed. Pairing uses completion time;
+first-row exposure/CLOCK_BOOTTIME remains unqualified. Actual IPA/3A is next. Earlier helper-only descriptions below are historical.
 
 The approved product is Linux sensor/CAMSS drivers, Qualcomm hardware ISP and
 a standard libcamera pipeline/IPA. Automatic control calculations execute in

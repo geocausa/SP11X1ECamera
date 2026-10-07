@@ -21,7 +21,7 @@ execution belongs in the release path.
 
 Protected Golden assets/default are never overwritten. Original vendor tuning,
 raw traces and optical pixels remain private on SP11. No system suspend tests.
-Seventeen one-use candidate identities are consumed and retired; none may be rearmed.
+Eighteen one-use candidate identities are consumed and retired; none may be rearmed.
 
 ## Verified implementation
 
@@ -36,7 +36,7 @@ Seventeen one-use candidate identities are consumed and retired; none may be rea
 | libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Front pipeline passes80 app frames; actual IPA absent |
 | Typed front ISP scalars |80 pairs,84 accepted requests,5 negative cases; measured2x gain/reset response;1979 sanitizer checks | Data-only firmware qualified; dynamic tables/live3A remain |
 | Kernel-owned startup |80 pairs via data-only firmware; raw control absent; missing/corrupt profile rejected;405 owner checks | Fixed board/mode digest; independent tuning distribution and final ABI remain |
-| Standard libcamera front application |80 NV12 frames at30.0056fps,80 statistics pairs,425 owner matches,88 typed requests; clean stop/release | Fixed manual; dark output, no IPA/3A or rear processed capture |
+| Standard libcamera front application |80 NV12 frames at29.9919fps,80 statistics pairs,425 owner matches,88 typed requests; clean stop/release | Fixed manual; dark output, no IPA/3A or rear processed capture |
 | Front libcamera lifecycle |Same CameraManager/Camera captures1,80,80 frames with restart/reacquire;880 owner checks and185 typed requests; sensors standby after each stop | No long soak/switch/fault or automatic controls |
 | Rear composition |52 fragments compile against real types | Nonadaptive startup inputs and runtime composition incomplete |
 
@@ -143,6 +143,6 @@ handoff; historical experiment chains are evidence, not an automatic work queue.
 
 Timestamp audit: current pairing proves matching buffer-completion times only.
 Kernel buffer return uses ktime_get_ns; mapping it to SensorTimestamp does not
-meet the first-row-exposure/CLOCK_BOOTTIME semantics. Remove the advertised
-metadata field until sensor timing is qualified. Do not call this optical timing
+meet the first-row-exposure/CLOCK_BOOTTIME semantics. Build04 removes that metadata field; physical pipeline03 verifies its absence
+while delivering80 hardware frames. Sensor timing remains unqualified. Do not call this optical timing
 proof or feed that mislabeled timestamp into automatic-control delay handling.

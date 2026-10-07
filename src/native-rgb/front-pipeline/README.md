@@ -38,3 +38,7 @@ Fresh pipeline03/audit27/libcamera build04 removes the unqualified SensorTimesta
 control. Kernel/video/statistics completion times still pair every app request,
 but they are not claimed as first-row sensor exposure time or CLOCK_BOOTTIME.
 Qualification requires80 standard cam frames and absence of that control.
+
+Pipeline03 physically passed80 hardware frames at29.9919fps,425 owner checks/
+85 retirements and88 typed requests. Unqualified SensorTimestamp absent; all
+statistics pairs valid and STOP/release clean. All3 pipeline identities retired.

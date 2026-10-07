@@ -1,3 +1,34 @@
+## 2026-10-07 current native front pipeline: real app and truthful metadata
+
+Latest pipeline03 usedacd82c36/audit27/libcamera build04. Standard cam captured
+80 hardware2560x1440 NV12 frames at29.9919fps with80 statistics/request pairs,
+425 owner matches across85 retirements,88 typed requests and one kernel data-only
+profile load. cam exited0, explicit STOP clean, graph neutral, all sensors standby,
+Golden hashes unchanged; returned boot8590cbc2-9808-4f9a-ac64-53e9ece6d5f7.
+Pipeline01/02/03 and lifecycle01/02/03 are consumed/retired; never rearm.
+
+Removed the incorrect SensorTimestamp metadata publication: kernel completion
+ktime_get_ns is not first-row exposure/CLOCK_BOOTTIME. Physical pipeline03 verifies
+that the control is absent while frame/statistics completion-time pairing works.
+Build04 passes Werror with8 tests and2 VIMC-dependent skips.
+Lifecycle03 already passed same CameraManager/Camera1,80,80 restart/reacquire with
+build03/audit27,880 owner checks and185 typed requests; all sensors suspended after
+each STOP. Its test asserted the old timestamp association, not exposure semantics.
+Before reusing that test with build04, update it to use FrameMetadata and assert
+absence of unqualified SensorTimestamp; use fresh candidate/assets identity.
+
+NEXT: implement actual libcamera IPA/automatic controls. Use source-qualified AEC/
+AWB statistics and sensor gain/exposure helpers, establish control delays and real
+SOF/exposure timing, and associate sensor/typed-ISP changes with hardware frames.
+Validate metering domain against fixed dark NV12 and controlled gain response
+before enabling feedback. Do not infer optical quality or tuning correctness from
+valid queue buffers or pair timestamps. No daemon, CPU pixel ISP, AI or OEM code.
+Rear ISP/focus, dynamic tables, production ABI/clock policy, independent tuning,
+long soak/switch/fault tests and controlled Windows optical acceptance remain.
+Product incomplete; fixed manual frames remain dark. See
+docs/NATIVE-RGB-FRONT-PIPELINE-03-20261007.json and lifecycle03 evidence.
+Earlier NEXT is history.
+
 ## 2026-10-07 front libcamera restart and reacquire physically verified
 
 Fresh lifecycle03 usedd1548a01/audit27/libcamera build03. The same CameraManager
