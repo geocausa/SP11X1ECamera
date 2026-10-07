@@ -79,3 +79,10 @@ gains/ratios through the exact shared kernel schema, rejecting invalid masks,
 sizes, sequence bounds and ranges without modifying the caller output.
 See docs/NATIVE-RGB-LIBCAMERA-PARAMETERS-BUILD-20261007.json. Scheduling and the
 camera pipeline remain unfinished; the private startup profile is diagnostic.
+
+An optional --front-pipeline-trial build now stages a real CAMSS X1E pipeline
+and standard cam. It matches the data-only front driver, owns four startup
+buffers and pairs app images/statistics before libcamera request completion.
+The first version uses fixed manual settings, no IPA/automatic controls; do not
+claim runtime PASS from its successful build. Hardware qualification lives in
+src/native-rgb/front-pipeline with a fresh one-use boot.

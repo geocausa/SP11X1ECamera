@@ -20,7 +20,7 @@ def replace(path, old, new):
         raise ValueError("source anchor missing/repeated: " + str(path))
     path.write_text(text.replace(old, new, 1))
 
-def stage(source, destination):
+def stage(source, destination, front_pipeline=False):
     manifest = json.loads((HERE / "sources.json").read_text())
     commit = subprocess.check_output(
         ["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
@@ -29,6 +29,10 @@ def stage(source, destination):
     for name, expected in manifest["libcamera_inputs"].items():
         if sha(source / name) != expected:
             raise ValueError("libcamera source drift: " + name)
+    if front_pipeline:
+        for name, expected in manifest["pipeline_inputs"].items():
+            if sha(source / name) != expected:
+                raise ValueError("pinned pipeline source drift: " + name)
     for name, expected in manifest["camera_sources"].items():
         if sha(ROOT / name) != expected:
             raise ValueError("retained algorithm source drift: " + name)
@@ -75,6 +79,21 @@ def stage(source, destination):
     replace(destination / "test/ipa/libipa/meson.build", "libipa_test = [",
             "libipa_test = [\n    {'name': 'camss-x1e-helpers', "
             "'sources': ['camss-x1e-helpers-test.cpp']},")
+    if front_pipeline:
+        for name, expected in manifest["pipeline_inputs"].items():
+            if sha(destination / name) != expected:
+                raise ValueError("cloned pipeline source differs: " + name)
+        pipeline = destination / "src/libcamera/pipeline/camss-x1e"
+        pipeline.mkdir()
+        shutil.copy2(HERE / "camss-x1e.cpp", pipeline / "camss-x1e.cpp")
+        for name in ("native-front-params.h", "native-front-stats.h"):
+            shutil.copy2(HERE.parent / name, pipeline / name)
+        (pipeline / "meson.build").write_text(
+            "# SPDX-License-Identifier: CC0-1.0\nlibcamera_internal_sources += files('camss-x1e.cpp')\n")
+        replace(destination / "meson_options.txt", "            'all',",
+                "            'camss-x1e',\n            'all',")
+        replace(destination / "meson.build", "pipelines_support = {",
+                "pipelines_support = {\n    'camss-x1e': ['aarch64'],")
     subprocess.run(["git", "-C", str(destination), "diff", "--check"], check=True)
     paths = list(manifest["libcamera_inputs"])
     paths += ["src/ipa/libipa/" + Path(n).name for n in manifest["camera_sources"]]
@@ -83,14 +102,22 @@ def stage(source, destination):
               "src/ipa/libipa/native-front-stats.h",
               "src/ipa/libipa/native-front-params.h",
               "test/ipa/libipa/camss-x1e-helpers-test.cpp"]
+    if front_pipeline:
+        paths += list(manifest["pipeline_inputs"])
+        paths += ["src/libcamera/pipeline/camss-x1e/" + name for name in
+                  ("camss-x1e.cpp", "native-front-params.h", "native-front-stats.h", "meson.build")]
     result = {
-        "status": "STAGED_LIBCAMERA_HELPERS_NOT_INSTALLED",
+        "status": ("STAGED_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
+                   if front_pipeline else "STAGED_LIBCAMERA_HELPERS_NOT_INSTALLED"),
         "libcamera_commit": commit,
         "inputs": manifest,
         "private_stats_helpers_prefixed": ["fadd", "fsub", "fmul"],
         "staged_sources": {n: sha(destination / n) for n in sorted(paths)},
         "new_camera_daemon": False,
-        "pipeline_runtime_implemented": False,
+        "pipeline_runtime_implemented": front_pipeline,
+        "pipeline_hardware_proven": False,
+        "front_pipeline_trial_staged": front_pipeline,
+        "pipeline_control_scope": "fixed manual; IPA and automatic controls still absent",
         "kernel_timing_abi_complete": False,
         "native_nv12_proven": False,
     }

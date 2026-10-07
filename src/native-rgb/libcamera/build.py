@@ -30,6 +30,8 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--build-dir", type=Path, required=True)
     parser.add_argument("--jobs", type=int, default=4)
+    parser.add_argument("--front-pipeline-trial", action="store_true",
+                        help="Build the real fixed-manual native front pipeline; no hardware or install")
     args = parser.parse_args()
     source, out, build = (p.resolve() for p in (args.source, args.out, args.build_dir))
     if args.jobs < 1:
@@ -39,13 +41,14 @@ def main():
             parser.error("output and build must be fresh directories outside the camera checkout")
     if out.is_relative_to(build) or build.is_relative_to(out):
         parser.error("source and build outputs must be separate directories")
-    result = stage(source, out)
+    result = stage(source, out, args.front_pipeline_trial)
+    options = [x.replace("-Dpipelines=uvcvideo,vimc", "-Dpipelines=camss-x1e,vimc") for x in OPTIONS] if args.front_pipeline_trial else OPTIONS
     build.mkdir(parents=True)
     result.update(status="BUILD_IN_PROGRESS", build_dir=str(build),
-                  meson_options=OPTIONS, installed=False, hardware_access=False)
+                  meson_options=options, installed=False, hardware_access=False)
     report = build / "native-rgb-build-result.json"
     try:
-        run(["meson", "setup", build, out, *OPTIONS], build / "native-setup.log")
+        run(["meson", "setup", build, out, *options], build / "native-setup.log")
         run(["meson", "compile", "-C", build, "-j", args.jobs], build / "native-compile.log")
         run(["meson", "test", "-C", build, "--no-rebuild", "--print-errorlogs", *TESTS],
             build / "native-tests.log")
@@ -78,9 +81,14 @@ def main():
             "test/ipa/libipa/camss-x1e-helpers",
         ]
         result["built_outputs"] = {name: sha(build / name) for name in binary_names}
-        result["status"] = "PASS_LIBCAMERA_NATIVE_HELPERS_NOT_INSTALLED"
+        if args.front_pipeline_trial:
+            binary_names += ["src/apps/cam/cam"]
+            result["built_outputs"].update({name: sha(build / name) for name in binary_names})
+        result["status"] = ("PASS_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
+                            if args.front_pipeline_trial else "PASS_LIBCAMERA_NATIVE_HELPERS_NOT_INSTALLED")
     except Exception as exc:
-        result.update(status="FAILED_LIBCAMERA_NATIVE_HELPERS", error=str(exc))
+        result.update(status=("FAILED_LIBCAMERA_NATIVE_FRONT_PIPELINE" if args.front_pipeline_trial
+                              else "FAILED_LIBCAMERA_NATIVE_HELPERS"), error=str(exc))
         raise
     finally:
         report.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
