@@ -240,7 +240,7 @@ def main():
         need("NATIVE_FRONT_OWNER_REJECT" not in private_log,"no consumed-owner rejection")
         matches=re.findall(r"NATIVE_FRONT_OWNER_MATCH group=(\d+) sequence=(\d+)",private_log)
         groups={g:[int(s) for group,s in matches if int(group)==g] for g in range(5)}
-        need(all(seq==groups[0] and seq==list(range(len(seq))) for seq in groups.values()),"all owner groups contiguous")
+        need(all(seq==groups[0] and seq==list(range(seq[0],seq[0]+len(seq))) for seq in groups.values()),"all owner groups contiguous")
         result["request_controls"]={"standard_DelayedControls":True,"all_delays_frames":2,
             "all_priority_writes":False,"public_app":"libcamera cam --script",
             "requests":120,"explicit_requests":9,"changed_sensor_writes":8,
@@ -281,7 +281,7 @@ def main():
         final_stops=re.findall(r"NATIVE_FRONT_QUEUE_STOPPED completed=(\d+) stop_requested=(\d+) error=(-?\d+)",final_log)
         need(len(final_stops)==4 and all(p[1:]==("1","0") for p in final_stops),"four clean STOPs")
         result["queue_stops"]=[{"completed":int(p[0]),"stop_requested":True,"error":0} for p in final_stops]
-        critical=re.findall(r"(?im)^.*(?:BUG:|Oops:|Kernel panic|Call trace:|IOMMU.*fault|arm-smmu.*fault|NATIVE_FRONT_OWNER_REJECT).*$",final_log)
+        critical=re.findall(r"(?im)^.*(?:BUG:|Oops:|Kernel panic|Call trace:|\bIOMMU\b.*\bfault\b|\barm-smmu\b.*\bfault\b|NATIVE_FRONT_OWNER_REJECT).*$",final_log)
         need(not critical,"critical kernel signature")
         result["critical_signature_count"]=0
         run(["sha256sum","-c",str(D/"ASSETS.sha256")]);idle()

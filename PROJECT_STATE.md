@@ -1,3 +1,43 @@
+## 2026-10-07 real standard request controls pass; isolated lifecycle02 next
+
+request01 source6e118a3c/audit31/libcamera11 actually completed120 public cam
+NV12 requests at19:49:27.689..19:49:33.735UTC. All nine explicit request lists,
+eight changed sensor tuples,120 applied public metadata blocks,complete known
+CCI readback values and intended write-SOF intervals PASS. DelayedControls uses
+measured delay2/all non-priority clustered controls. Internal spares interleave;
+admission ledger correctly preserves actual request/output association.
+153 isolated IPA frames,770 owner checks/154 retirements,STOPclean,error0,
+sensors suspended and Golden protected. No SensorTimestamp or automatic AE/AWB.
+
+Original one-use runner FAILED after these checks due to wrongly requiring
+owner sequences to begin0; actual all five groups1..154 contiguous. Preserved
+original RESULT/service exit1 and separately re-evaluated saved private traces
+with corrected origin-independent check: PASS, NO live capture repetition.
+Also fixed fault regex matching benign iommu Default domain substring; six pure
+trace tests pass (zero/one origin,missing group,gap,Default vs real faults).
+Initial arm guard rejected empty next_entry= before ARM/consume/reboot; audited
+absence then parsed empty value correctly. One actual candidate invocation.
+No driver fault was established by either preparation/qualification error.
+
+request01 consumed/retired; candidate d39b1bb8-6ec5-4a5f-a488-e165b754a48a
+returned Golden eea00859-9574-4ffc-a00f-f67025275ca6. Original/private pixels
+retained SP11; derived docs/NATIVE-RGB-FRONT-REQUEST-CONTROLS-01-20261007.json
+records original failure and retrospective qualified scope. Lifecycle was NOT
+attempted. Native totals34 completed streams/30 retiredIDs/60 boots; prestream5,
+poststart qualification failures4 (one harness error added). Windows1/1/2 remain.
+Combined62 boots/31 identities. No candidate boot/unit/writer/FW remains.
+
+NEXT fresh E-NATIVE-FRONT-REQUEST-CONTROLS-02, lifecycle ONLY1/24/24: custom start
+controls then same-configuration restart default reset,release/reacquire default
+reset; independently check public metadata,physical CCI start values,STOP/owners.
+No repeated120-frame optical capture. Identity02 unarmed/not attempted; new
+installer install-lifecycle.py and run-lifecycle-once.py, same audit31/build11.
+Service120s/atomicconsume/automaticGoldenreturn retained. Then calibratedmeter
+normalization/zero point/targets before bounded AE. Lights last reportedON
+18:26:29UTC; no current matched optical settings/scene proof or quality parity.
+Rear ISP/focus/tuning/ABI/clock/soak/fullWindowsquality remain. No OS sleep.
+Earlier NEXT is history.
+
 ## 2026-10-07 standard delayed manual requests built; fresh qualification01 next
 
 Implemented real libcamera DelayedControls with empirical delay2 for all four

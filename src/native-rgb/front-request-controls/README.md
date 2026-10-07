@@ -1,3 +1,16 @@
+# Current qualification status
+
+request01 is CONSUMED AND RETIRED. Its actual120 public cam requests pass all
+control/metadata/readback/write-SOF checks. Original qualification erroneously
+required zero-origin owner logs and failed before lifecycle. Original preserved;
+retrospective offline correction proves all groups1..154 contiguous, STOPclean.
+See docs/NATIVE-RGB-FRONT-REQUEST-CONTROLS-01-20261007.json; no repeat capture.
+
+NEXT fresh request02 using install-lifecycle.py/run-lifecycle-once.py tests ONLY
+public lifecycle1/24/24: custom start settings, same-configuration default reset,
+release/reacquire reset. Current origin-independent trace checks have6 pure tests.
+Golden permanent/service120s/atomicconsume/automaticreturn/pixel privacy retained.
+
 # Standard request control qualification
 
 E-NATIVE-FRONT-REQUEST-CONTROLS-01 is a fresh one-use candidate. It reuses
