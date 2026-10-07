@@ -1,3 +1,26 @@
+## 2026-10-07 continuous front NV12 queue physically verified
+
+Fresh queue01 used 87d52765/audit17: 80 sequential hardware NV12 frames at
+29.989 fps using four reusable vb2 buffers. Reversing the first returned pair
+changed delivered indices to 0,1,2,3,1,0, proving queue-order admission.
+The worker retired 81 frames with 405 matching consumed-address/session/sequence
+checks across all five completion groups; zero rejects or critical kernel faults.
+Explicit STREAMOFF stopped the worker cleanly. All sensors suspended, graph
+neutral, Golden hashes unchanged; returned boot 7bf45528-f40f-4b3a-bb97-8f049c361ab5.
+Queue01, owner01/02, NV12-01/02 and timing01/02/03 are consumed and retired;
+never rearm. Original private fixtures and logs remain on SP11.
+
+The new loop replaces numbered frame orchestration only in the isolated optional
+NV12 path. It preserves Epoch0 serialization, all CDM BL_DONE receipts,
+per-group ownership checks and stop-before-free. Fixed manual IQ uses all
+16 source-qualified alternating DMI bank selectors; this is not live 3A.
+Y means remain 3.40–3.65/max11. No optical parity, long soak or reopen claim.
+
+NEXT: typed kernel ISP parameters and frame-associated metadata statistics,
+then complete the libcamera pipeline/IPA, rear ISP and controlled optical
+acceptance. The raw capsule remains a diagnostic interface, not a product API.
+See docs/NATIVE-RGB-FRONT-QUEUE-01-20261007.json. Earlier conflicting NEXT is history.
+
 ## 2026-10-07 front consumed-address ownership physically verified
 
 Fresh owner02 used9b5662a0/audit16: four native2560x1440 NV12 frames,

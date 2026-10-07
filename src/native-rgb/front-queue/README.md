@@ -10,7 +10,7 @@ completion checks the IRQ-latched consumed addresses, sequence and stream epoch.
 STREAMOFF wakes the worker; hardware producers stop before buffers or commands
 are returned or freed. Failed stop keeps ownership pinned until reboot.
 
-Fresh identity native-queue-20261007-01 targets 80 sequential NV12 frames using
+Consumed and retired identity native-queue-20261007-01 passed 80 sequential NV12 frames using
 four reusable vb2 buffers. The first returned pair is requeued in reverse order,
 and the probe checks that changed order in delivered frames. It submits fixed
 manual IQ requests ahead of use, with all 16 DMI bank selectors generated from
@@ -24,3 +24,6 @@ Preparation checks exact source/module hashes, Golden refusal, clean repository,
 protected Golden assets and a fresh one-use identity. install.py prepares only.
 After a hardware attempt the identity must be consumed, returned to Golden and
 retired; never rearm it.
+
+Evidence: docs/NATIVE-RGB-FRONT-QUEUE-01-20261007.json. 405 ownership checks,
+81 kernel retirements, clean explicit stop, Golden unchanged. Never rearm.

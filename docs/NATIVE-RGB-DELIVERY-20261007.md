@@ -21,7 +21,7 @@ execution belongs in the release path.
 
 Protected Golden assets/default are never overwritten. Original vendor tuning,
 raw traces and optical pixels remain private on SP11. No system suspend tests.
-Five one-use candidate identities are consumed and retired; none may be rearmed.
+Eight one-use candidate identities are consumed and retired; none may be rearmed.
 
 ## Verified implementation
 
@@ -29,9 +29,9 @@ Five one-use candidate identities are consumed and retired; none may be rearmed.
 |---|---|---|
 | Front IMX681 timing controls | Read-only720MHz pixel rate, HBLANK2912,1.2GHz link-frequency menu; two-FLL measurements | Full native array/selection geometry still needs authority |
 | Correct SP11 OV13858 source | Board supplies/reset/runtime PM;120 rear RAW frames and verified stop | Rear processed ISP output not proved |
-| Native front linear NV12 | Four2560x1440 buffers, stride2560,5529600 bytes, sequence0..3; Y/UV written | Cold bounded diagnostic only |
+| Native front linear NV12 queue | 80 sequential2560x1440 frames at29.989fps; four reused buffers and reversed queue order;405 ownership checks | Fixed manual IQ, no long soak/reopen or live3A |
 | FULL storage/8-bit programming | Published packer3, linear MODE guard, UV half height, complete readbacks, local CDM helper audit | No compressed-to-linear transition/reopen proof |
-| Stop/return | All sensors suspended, graph neutral, Golden hashes unchanged; zero critical faults | Continuous starvation/cancel/fault/reopen not exercised |
+| Stop/return | Explicit STREAMOFF during queue operation; all sensors suspended, graph neutral, Golden unchanged, zero critical faults | Starvation/fault/reopen still unqualified |
 | libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Pipeline/IPA runtime absent |
 | Rear composition |52 fragments compile against real types | Nonadaptive startup inputs and runtime composition incomplete |
 
@@ -41,7 +41,7 @@ that existing maximum only for the exact diagnostic mode; requested727000000Hz,
 rounded727000000Hz, actual727000048Hz. No new OPP or fabricated pixels/cycle
 ratio was introduced. Production load voting remains a separate qualification.
 
-The NV12 frames have Y means3.05–3.26 and maximum10, with UV near128.
+The continuous NV12 frames have Y means3.40–3.65 and maximum11, with UV near128.
 This proves hardware-written NV12 buffers, not colour, exposure, focus or Windows
 quality. A dark physical scene, fixed exposure and tuning/processing behaviour
 must be distinguished before drawing an optical conclusion.
@@ -68,13 +68,11 @@ NATIVE-RGB-NV12-BUILD-20261007.json and NATIVE-RGB-LIBCAMERA-BUILD-20261007.json
 ## Remaining delivery gates, in dependency order
 
 **1. Continuous front queue and request contract.**
-Replace numbered-frame orchestration with one serialized worker and bounded
-per-slot ownership. Reuse the verified startup, Epoch0, BUS retarget, completion
-groups and stop operations. Accept pending vb2 buffers in queue order rather than
-requiring pointer identity against a fixed four-buffer pattern. Each reuse needs
-consumed IOVA, owner generation and all relevant completion groups; reject stale,
-missing or ambiguous completion. No buffer/command arena can be freed while any
-WM/CSID/CDM owner may still access it.
+The isolated native path now runs one serialized two-slot queue beyond the old
+27-frame bound. Queue01 passed80 delivered frames, including changed buffer order
+and explicit STREAMOFF;81 retirements had405 consumed-owner checks. Its two command
+slots preserve synchronous CDM BL_DONE and full DMA-owner retirement before reuse.
+This establishes short continuous capture, not a long soak, restart or optical gate.
 
 The present private raw-command capsule control is a development interface.
 Implement typed validated ISP parameters and statistics with frame/request
@@ -85,10 +83,10 @@ MMIO, vendor binary execution or unvalidated command streams as product APIs.
 DMI bank selection and per-request IQ cadence need a source-qualified rule;
 blindly replaying request4 forever is not a substitute.
 
-Acceptance: native NV12 queue reuse beyond the old27-frame bound, ordered
-delivery, bounded starvation, explicit cancel/STREAMOFF, stale completion
-rejection, stop-before-free, neutral graph and standby. Use a fresh candidate
-identity with a specific expected result; do not extend one named frame at a time.
+Already passed: native NV12 queue reuse beyond the old27-frame bound, ordered
+delivery, explicit STREAMOFF, stop-before-free, neutral graph and standby.
+Remaining: starvation/fault/reopen qualification and typed parameters/statistics.
+Use fresh identities; do not extend one named frame at a time.
 
 **2. libcamera pipeline and IPA runtime.**
 Discover this exact media graph, configure front/rear modes and streams, associate
