@@ -247,7 +247,7 @@ int main(int argc, char **argv)
         if (params(packet, request) || call(fd, VIDIOC_S_EXT_CTRLS, &param_controls))
             goto out;
     }
-    	if (call(fd, VIDIOC_REQBUFS, &req) || req.count != BUFFERS) {
+	if (call(fd, VIDIOC_REQBUFS, &req) || req.count != BUFFERS) {
 		goto out;
 	}
 	phase = "buffer_allocate_and_queue";
