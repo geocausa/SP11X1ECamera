@@ -1,3 +1,30 @@
+## 2026-10-07 frame-associated front statistics physically verified
+
+Fresh metadata02 used c4430c42/audit21:80 video/metadata pairs at30.006fps.
+Every pair matched sequence, timestamp, stream identity and exact payload sizes;
+all80 AEC_BE bundles passed the source-qualified luma reduction (0.756–0.760).
+405 consumed-owner checks passed across81 kernel retirements, with zero rejects,
+gaps or critical faults. Both queues stopped; graph neutral, all sensors suspended,
+Golden assets unchanged. Returned boot53ecc444-d0be-491d-9929-df1ce6738a1f.
+
+Metadata01 safely rejected startup because the old runner looked only at the first
+VFE source-pad remote. Adding the statistics sink exposed that assumption.
+Metadata02 uses an exact pixel-link lookup, preserving upstream route gates.
+Both metadata identities are consumed and retired; never rearm. See
+docs/NATIVE-RGB-FRONT-META-02-20261007.json and the recorded metadata01 failure.
+
+The metadata node uses standard V4L2 META_CAPTURE/vb2. It copies owned AEC_BE,
+BHist, AWB_BG and TL_BG snapshots after every consumed-owner group retires,
+before completing the corresponding video buffer. Missing queued metadata is
+marked as discontinuity; the development consumer rejects it. Stream IDs reset at
+STREAMON. The exact shared envelope consumer is built in real libcamera libipa,
+with8 tests passing and2 VIMC-dependent skips; complete pipeline/IPA still absent.
+
+NEXT: typed kernel ISP parameters, then complete libcamera requests/IPA automatic
+controls, rear processed capture, reopen/soak/switch and controlled Windows optical
+acceptance. Raw-command capsules remain diagnostic; Ymeans3.68–3.94/max11 remain
+very dark. No live3A, optical parity or complete product claim. Earlier NEXT is history.
+
 ## 2026-10-07 continuous front NV12 queue physically verified
 
 Fresh queue01 used 87d52765/audit17: 80 sequential hardware NV12 frames at

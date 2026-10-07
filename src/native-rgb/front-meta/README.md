@@ -28,7 +28,7 @@ interpretation is reused. This is still helper integration, not the completed
 CAMSS pipeline/IPA runtime. Raw capsules remain diagnostic until typed parameter
 submission replaces them.
 
-Fresh metadata02 aims to capture80 video/metadata pairs, including reversed vb2
+Consumed and retired metadata02 passed80 video/metadata pairs, including reversed vb2
 pixel order, matching hardware sequence, timestamps, stream ID, exact payload
 bounds and valid AEC luma reduction. Test input and raw statistics stay private
 on SP11; derived counts may be committed. It must stop both queues, reach standby
@@ -43,3 +43,10 @@ suspended; zero ownership/fault markers and unchanged Golden assets. The correct
 metadata overlay looks up the exact pixel link in metadata mode, preserving the
 old upstream route checks. See docs/NATIVE-RGB-FRONT-META-01-20261007.json.
 Never rearm metadata01.
+
+
+Metadata02 physically passed all80 paired frames, exact video timestamps/sequence,
+stable stream ID, no metadata gaps, and80 valid AEC luma reductions. All405
+consumed-owner checks passed. Both queues stopped; neutral topology, standby,
+zero critical faults and unchanged Golden. No live3A or optical claim.
+See docs/NATIVE-RGB-FRONT-META-02-20261007.json. Never rearm metadata02.

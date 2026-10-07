@@ -21,7 +21,7 @@ execution belongs in the release path.
 
 Protected Golden assets/default are never overwritten. Original vendor tuning,
 raw traces and optical pixels remain private on SP11. No system suspend tests.
-Eight one-use candidate identities are consumed and retired; none may be rearmed.
+Ten one-use candidate identities are consumed and retired; none may be rearmed.
 
 ## Verified implementation
 
@@ -32,6 +32,7 @@ Eight one-use candidate identities are consumed and retired; none may be rearmed
 | Native front linear NV12 queue | 80 sequential2560x1440 frames at29.989fps; four reused buffers and reversed queue order;405 ownership checks | Fixed manual IQ, no long soak/reopen or live3A |
 | FULL storage/8-bit programming | Published packer3, linear MODE guard, UV half height, complete readbacks, local CDM helper audit | No compressed-to-linear transition/reopen proof |
 | Stop/return | Explicit STREAMOFF during queue operation; all sensors suspended, graph neutral, Golden unchanged, zero critical faults | Starvation/fault/reopen still unqualified |
+| Frame-associated statistics |80 video/metadata pairs with matching identity/timestamps and valid AEC luma;405 ownership checks | Experimental QXS1 format; typed parameters remain |
 | libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Pipeline/IPA runtime absent |
 | Rear composition |52 fragments compile against real types | Nonadaptive startup inputs and runtime composition incomplete |
 
@@ -41,7 +42,7 @@ that existing maximum only for the exact diagnostic mode; requested727000000Hz,
 rounded727000000Hz, actual727000048Hz. No new OPP or fabricated pixels/cycle
 ratio was introduced. Production load voting remains a separate qualification.
 
-The continuous NV12 frames have Y means3.40–3.65 and maximum11, with UV near128.
+The continuous NV12 frames have Y means3.68–3.94 and maximum11, with UV near128.
 This proves hardware-written NV12 buffers, not colour, exposure, focus or Windows
 quality. A dark physical scene, fixed exposure and tuning/processing behaviour
 must be distinguished before drawing an optical conclusion.
@@ -75,8 +76,8 @@ slots preserve synchronous CDM BL_DONE and full DMA-owner retirement before reus
 This establishes short continuous capture, not a long soak, restart or optical gate.
 
 The present private raw-command capsule control is a development interface.
-Implement typed validated ISP parameters and statistics with frame/request
-association, suitable for standard media/V4L2 metadata queues and libcamera.
+Frame-associated statistics now pass80 pairs on the V4L2 metadata queue.
+Implement typed validated ISP parameters with request association for libcamera.
 Expose scalar/ROI/table values with bounded sizes and supported ranges; the kernel
 owns register addresses, CDM framing and DMA binding. Do not expose arbitrary
 MMIO, vendor binary execution or unvalidated command streams as product APIs.
@@ -85,7 +86,7 @@ blindly replaying request4 forever is not a substitute.
 
 Already passed: native NV12 queue reuse beyond the old27-frame bound, ordered
 delivery, explicit STREAMOFF, stop-before-free, neutral graph and standby.
-Remaining: starvation/fault/reopen qualification and typed parameters/statistics.
+Remaining: starvation/fault/reopen qualification and typed parameters.
 Use fresh identities; do not extend one named frame at a time.
 
 **2. libcamera pipeline and IPA runtime.**
