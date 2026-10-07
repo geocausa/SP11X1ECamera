@@ -56,3 +56,10 @@ NV12-02 votes that existing maximum only for the exact front NV12/RAW mode,
 checks the rounded clock on subsequent power references and logs actual Hz.
 This preserves truthful sensor timing and makes no pixels-per-cycle claim.
 The eventual continuous pipeline still needs a qualified load/clock policy.
+
+Hardware NV12-02 PASS: four native 2560x1440 NV12 buffers, all bytes covered,
+sequence0..3, verified stop, neutral graph/all sensors suspended, Golden hashes
+unchanged, no critical fault markers. Both NV12 identities are consumed and
+retired; this installer is historical and must not be rerun/rearmed. Pixel
+quality remains unproved (very dark scene/output); continuous capture is not
+implemented. See docs/NATIVE-RGB-NV12-02-20261007.json.

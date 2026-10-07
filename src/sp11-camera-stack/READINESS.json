@@ -4,12 +4,15 @@
     "scope": "native front/rear hardware ISP drivers plus standard libcamera control algorithms; no bespoke camera daemon",
     "complete": false,
     "audit": "docs/NATIVE-RGB-ENGINEERING-AUDIT-20261007.md",
-    "native_linear_nv12_proven": false,
+    "native_linear_nv12_proven": true,
     "native_rear_runtime_proven": false,
     "kernel_only_automatic_3a_established": false,
     "historical_software_product_readiness_is_not_this_product": true,
     "libcamera_pipeline_and_ipa_authorized": true,
-    "literal_kernel_only_policy_superseded": true
+    "literal_kernel_only_policy_superseded": true,
+    "native_linear_nv12_proof_scope": "four-frame cold-state diagnostic only",
+    "continuous_capture_proven": false,
+    "optical_quality_parity_proven": false
   },
   "latest_rgb_product_unactivated_install": {
     "experiment": "E012B",
@@ -7411,5 +7414,33 @@
     "pipeline_runtime_implemented": false,
     "installed": false,
     "evidence": "docs/NATIVE-RGB-LIBCAMERA-BUILD-20261007.json"
+  },
+  "native_sensor_timing_20261007": {
+    "front_readonly_abi_verified": true,
+    "front_raw_frames_timing02": 240,
+    "front_raw_frames_timing03": 240,
+    "rear_raw_frames_timing03": 120,
+    "rear_raw_source_runtime_proven": true,
+    "rear_isp_runtime_proven": false,
+    "evidence": "docs/NATIVE-RGB-TIMING-03-20261007.json"
+  },
+  "native_front_nv12_20261007": {
+    "bounded_hardware_runtime_proven": true,
+    "identity": "native-nv12-20261007-02",
+    "source_commit": "0d57e1f56fc106b95f528329a796c2e16e7bfaa9",
+    "frames": 4,
+    "width": 2560,
+    "height": 1440,
+    "stride": 2560,
+    "buffer_bytes": 5529600,
+    "streamoff_verified": true,
+    "all_sensors_suspended": true,
+    "graph_neutral": true,
+    "golden_assets_unchanged": true,
+    "identity_consumed_and_retired": true,
+    "continuous_capture_proven": false,
+    "optical_quality_parity_proven": false,
+    "evidence": "docs/NATIVE-RGB-NV12-02-20261007.json",
+    "next": "continuous_queue_and_typed_parameters_statistics"
   }
 }

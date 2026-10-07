@@ -1,3 +1,32 @@
+## 2026-10-07 native front NV12 hardware checkpoint — authoritative current state
+
+Fresh NV12-02 used source 0d57e1f5 and audit12 W=1/-Werror modules.
+Four hardware ISP NV12 frames passed: 2560x1440, stride2560, 5529600 bytes,
+sequence0..3, both planes written, STREAMOFF verified. All sensors suspended,
+graph neutral, zero critical kernel faults, protected Golden hashes unchanged.
+Golden returned at boot0078655c-99e9-4d37-9535-bdb3db948e36. NV12-01/02 and
+timing-01/02/03 are consumed and retired; never rearm. Pixels remain private.
+
+NV12-01 found a pre-ISP clock-policy rejection. The truthful front720MHz array
+timing clock plus generic PIX margin exceeds admitted727MHz. Diagnostic02
+uses the existing maximum resource vote only for this exact front mode;
+actual727000048Hz verified. This is not the final continuous-load policy.
+Frames are very dark (Ymean3.05–3.26,max10). No optical quality claim.
+
+Architecture: native sensors/CAMSS + Qualcomm hardware ISP + standard
+libcamera pipeline/IPA. No bespoke product daemon, software pixel ISP,
+loopback, AI/effects or Windows binary dependency. Front/rear RAW and timing
+ABI pass; libcamera helpers build/test (8 pass,2 VIMC skips). Product incomplete.
+
+NEXT: replace the numbered 27-frame runner with a real queue worker and
+validated per-request ISP parameters/statistics. Preserve consumed-IOVA,
+owner generation, all completion groups, serialized Epoch0 updates and
+stop-before-free. Do not add frame28 as another named capsule/result field.
+Prove queue reuse/stop on a fresh identity, then connect libcamera requests/IPA;
+rear ISP and controlled-scene Windows quality acceptance remain mandatory.
+See docs/NATIVE-RGB-NV12-02-20261007.json and
+docs/NATIVE-RGB-DELIVERY-20261007.md. Older conflicting NEXT entries are history.
+
 ## 2026-10-06 E012B inert RGB product install accepted
 
 E012B installed the new RGB product daemon/publisher/service assets on protected Golden **without activation**. Installed source HEAD is `781d2b01`; product asset manifest SHA-256 is `881d2429082d1b0505c1d19826523d2708b9d85ed7015eb70bc63df7e294b692`. Service is disabled/inactive, ENABLE absent, no product boot entry/token, no camera modules/media nodes, and Golden overlap guard passes. No camera Start/reboot/kernel build. NEXT E012C prepares a fresh guarded product boot for repeated front/rear ordinary-app switching and longer soak. OEM archaeology remains demand-driven only.
