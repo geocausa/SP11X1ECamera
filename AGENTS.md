@@ -1,3 +1,16 @@
+## 2026-10-07 user requirement: compare brightness under real conditions
+
+Low measured Y is an observation, not an established Linux brightness defect.
+Compare with Windows on the same physical camera, scene, position and lighting,
+as close in time as dual boot permits. Record capture timestamps, time separation,
+resolution/frame rate, automatic/manual settings, available exposure/gain and
+output colour/range interpretation. Changes in daylight, weather or lighting
+between captures confound brightness attribution; use stable lighting or repeat
+the pair. The user reports rainy/cloudy conditions today; do not assume daylight
+brightness or compare a night capture with an unrelated daytime Windows image.
+Current captures have no matched Windows brightness reference, so their optical
+cause remains undetermined. This requirement applies to front and rear acceptance.
+
 ## 2026-10-07 current native front pipeline: real app and truthful metadata
 
 Latest pipeline03 usedacd82c36/audit27/libcamera build04. Standard cam captured
@@ -20,12 +33,12 @@ absence of unqualified SensorTimestamp; use fresh candidate/assets identity.
 NEXT: implement actual libcamera IPA/automatic controls. Use source-qualified AEC/
 AWB statistics and sensor gain/exposure helpers, establish control delays and real
 SOF/exposure timing, and associate sensor/typed-ISP changes with hardware frames.
-Validate metering domain against fixed dark NV12 and controlled gain response
+Validate metering domain against measured NV12 and matched Windows conditions and controlled gain response
 before enabling feedback. Do not infer optical quality or tuning correctness from
 valid queue buffers or pair timestamps. No daemon, CPU pixel ISP, AI or OEM code.
 Rear ISP/focus, dynamic tables, production ABI/clock policy, independent tuning,
 long soak/switch/fault tests and controlled Windows optical acceptance remain.
-Product incomplete; fixed manual frames remain dark. See
+Product incomplete; low measured Y has no established optical cause. See
 docs/NATIVE-RGB-FRONT-PIPELINE-03-20261007.json and lifecycle03 evidence.
 Earlier NEXT is history.
 

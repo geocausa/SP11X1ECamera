@@ -1,5 +1,19 @@
 # Native SP11 camera delivery state — 2026-10-07
 
+## 2026-10-07 user requirement: compare brightness under real conditions
+
+Low measured Y is an observation, not an established Linux brightness defect.
+Compare with Windows on the same physical camera, scene, position and lighting,
+as close in time as dual boot permits. Record capture timestamps, time separation,
+resolution/frame rate, automatic/manual settings, available exposure/gain and
+output colour/range interpretation. Changes in daylight, weather or lighting
+between captures confound brightness attribution; use stable lighting or repeat
+the pair. The user reports rainy/cloudy conditions today; do not assume daylight
+brightness or compare a night capture with an unrelated daytime Windows image.
+Current captures have no matched Windows brightness reference, so their optical
+cause remains undetermined. This requirement applies to front and rear acceptance.
+
+
 The product is native Linux front/rear camera support with hardware ISP processing
 and standard libcamera pipeline/IPA controls. It is not complete. The user's
 acceptance of libcamera supersedes the original literal kernel-only constraint.
