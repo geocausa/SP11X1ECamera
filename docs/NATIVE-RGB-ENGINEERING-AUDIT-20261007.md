@@ -1,3 +1,27 @@
+## 2026-10-07 frame-length capture completed; timestamp precision corrected
+
+Fresh control-timing01 source47176f14/audit30/build08 captured128 frames,132 IPA
+results,133 ordered SOFs,665 owner matches/133 retirements,136 typed defaults.
+All six normal clustered writes and seven CCI transactions succeeded; FLL returned
+3554 before clean STOP,all sensors standby,critical0,Golden hashes unchanged.
+Returned Golden58041c0b-5140-453a-96de-7dc00a3b9ac7. Identity01 consumed/retired.
+
+Overall result remains FAILED: strict individual IRQ-period5% tolerance rejected
+arrival jitter (baseline31.4-35.9ms). IRQ observation times are not ideal hardware
+clock timestamps. Corrected analysis uses multi-period mean3%,median5% and disjoint
+30/15fps interval bands20%; actual failed01 telemetry passes six offset2 transitions.
+Negative CCI error/missing commit/no interval response are rejected by actual code.
+This offline interpretation does not replace a fresh qualification. Evidence:
+docs/NATIVE-RGB-FRONT-CONTROL-TIMING-01-20261007.json and analysis evidence JSON.
+
+Fresh control-timing02 next uses identical audit30/build08,corrected analysis and
+new identity;128 standard cam frames,exact six writes/CCI brackets,three 30/15/30
+cycles,restored baseline and STOP/neutral/standby/Golden checks. No second stream
+or boot yet. Counts27 completed sensor streams,23 consumed IDs,46 candidate/Golden
+boots,5 prior prestream failures,3 poststart qualification failures (one is this
+analysis precision failure). Exposure/gain delays and DelayedControls remain
+unqualified; no brightness or Windows quality inference. Earlier NEXT is history.
+
 ## 2026-10-07 bounded grouped frame-length timing built; control-timing01 next
 
 Kernel audit30 passes W=1/-Werror and adds opt-in read-only CCI transaction

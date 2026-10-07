@@ -1,6 +1,6 @@
 # Native front grouped frame-length timing
 
-Fresh one-use control-timing01 uses audit30/libcamera build08 and standard cam.
+Fresh one-use control-timing02 uses audit30/libcamera build08 and standard cam.
 The explicit frame-length-v1 development mode changes the normal four-member
 sensor V4L2 cluster at receiver sequences16,32,48,64,80,96: FLL7108/3554 repeated
 three times, with exposure1000/analogue0/digital256 fixed. It captures128 NV12
@@ -13,3 +13,8 @@ JSON may be committed; optical pixels/original tuning/private logs remain SP11.
 Do not infer exposure/gain delays or quality from frame-length response. Standard
 DelayedControls parameters still need measured per-field/frame associations.
 The service returns Golden automatically; spent identity must be retired.
+
+control-timing01 completed capture/control writes but failed an overly precise
+per-interrupt timestamp criterion. Its FAILED evidence remains preserved and
+identity retired. Fresh02 uses multi-interval rate acceptance and disjoint
+30/15fps onset bands, with real-trace and negative-admission verification.

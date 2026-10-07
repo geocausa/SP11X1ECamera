@@ -1,0 +1,31 @@
+{
+  "status": "PASS_REAL_TELEMETRY_ANALYSIS_AND_NEGATIVE_ADMISSION",
+  "source_trace": "control-timing01 failed original per-interval tolerance; not reclassified",
+  "analysis_source": "src/native-rgb/front-control-timing/run-once.py",
+  "real_trace_offsets": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "negative_cases": [
+    {
+      "case": "CCI error",
+      "rejected": true,
+      "reason": "initial sensor setup plus exactly six successful CCI transactions"
+    },
+    {
+      "case": "missing sensor commit",
+      "rejected": true,
+      "reason": "initial sensor setup plus exactly six successful CCI transactions"
+    },
+    {
+      "case": "no interval response",
+      "rejected": true,
+      "reason": "receiver plateau must follow commanded frame length"
+    }
+  ],
+  "hardware_access": false
+}

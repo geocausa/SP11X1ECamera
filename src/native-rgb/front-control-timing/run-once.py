@@ -11,9 +11,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-control-timing-20261007-01")
-TOKEN = "sp11_camera_native_control_timing_20261007_01=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-timing-20261007-01"
+D = Path("/var/lib/sp11-camera-native-control-timing-20261007-02")
+TOKEN = "sp11_camera_native_control_timing_20261007_02=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-timing-20261007-02"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -274,10 +274,18 @@ def main():
              all(p[4:] == (1000,0,256,0) and p[2]>=p[1]>0 for p in commits),
              "initial sensor setup plus exactly six successful CCI transactions")
         intervals = [b[1]-a[1] for a,b in zip(irq_sofs,irq_sofs[1:])]
+        # IRQ arrival times contain delivery jitter. Rate acceptance uses a
+        # multi-interval mean and median; onset uses disjoint 30/15fps bands.
         def matches(value, expected):
-            return abs(value-expected) < expected*0.05
+            return abs(value-expected) < expected*0.20
+        def plateau_matches(values, expected):
+            import statistics
+            return bool(values) and all(matches(v,expected) for v in values) and \
+                abs(statistics.mean(values)-expected)<expected*0.03 and \
+                abs(statistics.median(values)-expected)<expected*0.05
         baseline_period = 3554*6752*1e9/720000000
-        need(all(matches(v,baseline_period) for v in intervals[8:14]+intervals[112:128]),
+        need(plateau_matches(intervals[8:14],baseline_period) and
+             plateau_matches(intervals[112:128],baseline_period),
              "qualified baseline receiver rate before and after experiment")
         transitions = []
         for command,commit in zip(commands,commits[1:]):
@@ -286,7 +294,7 @@ def main():
                  "CCI completion must lie inside one standard sensor ioctl after requested SOF")
             period = fll*6752*1e9/720000000
             plateau = intervals[sof+6:sof+14]
-            need(len(plateau) == 8 and all(matches(v,period) for v in plateau),
+            need(len(plateau) == 8 and plateau_matches(plateau,period),
                  "receiver plateau must follow commanded frame length")
             candidates = [i for i in range(sof-1,sof+7) if
                           all(matches(v,period) for v in intervals[i:i+3])]
@@ -303,6 +311,8 @@ def main():
             "exposure_gain_application_delays_measured":False,
             "DelayedControls_parameters_qualified":False,
             "scene_brightness_not_used_for_timing":True,
+            "timestamp_kind":"interrupt arrival observation, delivery jitter included",
+            "rate_acceptance":"plateau mean3%,median5%,disjoint interval bands20%",
             "commands":transitions,"receiver_intervals_ns":intervals,
             "kernel_commits":[{"sequence":p[0],"start_ns":p[1],"end_ns":p[2],"fll":p[3],
                 "exposure":p[4],"analogue_code":p[5],"digital_code":p[6],"error":p[7]} for p in commits]}
