@@ -569,7 +569,7 @@ int CamssX1ECameraData::ensureSpare()
   * outputs admitted, using only fully paired/retired internal buffers when
   * application buffers are unavailable. No application frame is fabricated.
   */
- while (running_ && pixelsQueued_ < 4 && !availableStartup_.empty()) {
+ while (running_ && pixelsQueued_ < 2 && !availableStartup_.empty()) {
   FrameBuffer *buffer = availableStartup_.front();
   availableStartup_.pop_front();
   int ret = queueImage(buffer);

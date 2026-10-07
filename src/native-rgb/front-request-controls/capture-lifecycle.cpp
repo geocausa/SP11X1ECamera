@@ -110,6 +110,10 @@ public:
   std::unique_lock lock(mutex_);
   check(failure_.empty(), failure_);
   check(completed_ == limit && queued_ == limit, "exact finite application count");
+  if (limit > 1) {
+   double fps = (limit - 1) * 1e9 / (frames_.back().second - frames_.front().second);
+   check(fps > 29.5 && fps < 30.5, "contiguous 30fps application delivery");
+  }
   std::cout << "LIFECYCLE_ROUND {\"round\":" << round << ",\"frames\":" << completed_
             << ",\"same_camera\":true,\"sequences\":[";
   for (size_t i=0; i<frames_.size(); ++i)
@@ -162,8 +166,7 @@ private:
   if (!buffer || request->status() != Request::RequestComplete ||
       buffer->metadata().status != FrameMetadata::FrameSuccess ||
       timestamp || !buffer->metadata().timestamp ||
-      buffer->metadata().sequence < 4 ||
-      (!frames_.empty() && buffer->metadata().sequence <= frames_.back().first) ||
+      buffer->metadata().sequence != completed_+4 ||
       request->metadata().get(controls::ExposureTime) != expectedExposure_ ||
       request->metadata().get(controls::AnalogueGain) != expectedGain_ ||
       request->metadata().get(controls::DigitalGain) != expectedGain_ ||

@@ -1,3 +1,39 @@
+## 2026-10-07 control lifecycle03 PASS; spare-delivery regression fixed for04
+
+03 sourcea598793d/audit31/build11 PASSES public1/24/24 lifecycle: custom start
+exposure2000/analogue512/digital512,then same-configuration default reset and
+release/reacquire default reset. All49 real requests/publicmetadata match,three
+physical CCI start readbacks correct,STOP6/34/34 clean,370 owner checks/critical0,
+all sensors suspended,manager shutdown reached and isolated IPA worker exits.
+Correct Camera reference reset before manager.stop plus direct durable logs
+eliminated previous timeout; no backtrace needed. Prior02 pipe/lifetime root
+cause remains inferred,not reconstructed runtime stack. 03full evidence:
+docs/NATIVE-RGB-FRONT-REQUEST-LIFECYCLE-03-20261007.json.
+
+Also found NEW pipeline11 throughput regression:ensureSpare4 inserted internal
+frame after every4 app frames despite30fps sensor. Restored established threshold2
+so four app buffers replenish without unnecessary spares; finite-end safety kept.
+Fresh pipeline12 Werror build10 testsPASS/2 virtualSKIP; native IPA/helpers and
+request/control-schedule tests allPASS. Stricter lifecycle harness now requires
+consecutive app frame sequences and29.5..30.5fps. Build evidence:
+docs/NATIVE-RGB-LIBCAMERA-REQUEST-CONTROLS-BUILD-12-20261007.json.
+
+03 consumed/retired,candidatefe3a526a-9308-4ba6-9449-e01490ab3e9b returned Golden
+3f7b4964-969f-46f7-9c15-4a74392cae72. Golden unchanged/no candidate remains.
+Native totals40 streams/32 retiredIDs/64 boots;failure5pre/5post unchanged.
+Windows1/1/2;combined66 boots/33 identities. AE/AWB off,SensorTimestamp absent.
+No optical quality parity or meter scale/blackpoint/target calibration claimed.
+
+NEXT fresh E-NATIVE-FRONT-REQUEST-CONTROLS-04, SAME audit31/newbuild12: standard
+cam120 public scripted controls with contiguous application sequences and30/15fps
+cadence (NO optical files),then public1/24/24 full-rate controls/reset/reacquire/
+manager/IPAexit. New run-throughput-once.py/install-lifecycle.py and fresh binary.
+Atomic one-use/service120s/automaticGoldenreturn retained.04unarmed/not attempted.
+After full-rate qualification, meter normalization/zero point/target and bounded
+AE;rear ISP/focus/dynamic tuning/ABI/clock/soak/fullWindowsquality remain.
+User lights lastON18:26:29UTC,no new simultaneous Windows/scene assertion.
+No OSsleep. Earlier NEXT is history.
+
 ## 2026-10-07 lifecycle02 transport clean but shutdown unqualified; corrected03 next
 
 request01 remains qualified for120 public manual requests/metadata/CCI write

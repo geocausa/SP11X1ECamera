@@ -1,3 +1,14 @@
+# Current full-rate qualification
+
+03 passed1/24/24 control lifecycle,manager shutdown and isolated-worker exit;
+spent and retired. Pipeline11 still inserted a spare every4 application frames.
+Restored threshold2 in fresh build12. NEXT04 via install-lifecycle.py and
+run-throughput-once.py verifies120 standard public scripted requests with
+consecutive frame sequences/full30fps and scripted15fps,no optical files,
+then stricter1/24/24 contiguous30fps controls/reset/reacquire/shutdown checks.
+Pipeline12 passes10 tests/2 virtual skips with Werror. Golden and one-use rules
+retained. Native AE/AWB and optical/meter calibration remain unfinished.
+
 # Latest lifecycle test
 
 02 is consumed/retired. Three kernel streams stopped clean6/34/34,custom then
