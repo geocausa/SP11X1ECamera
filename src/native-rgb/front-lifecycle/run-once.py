@@ -11,9 +11,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-lifecycle-20261007-04")
-TOKEN = "sp11_camera_native_lifecycle_20261007_04=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-lifecycle-20261007-04"
+D = Path("/var/lib/sp11-camera-native-lifecycle-20261007-05")
+TOKEN = "sp11_camera_native_lifecycle_20261007_05=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-lifecycle-20261007-05"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -90,7 +90,7 @@ def main():
                        "videobuf2_dma_sg", "videobuf2_vmalloc", "v4l2_cci"):
             run(["modprobe", module])
         run(["insmod", str(D / "modules/qcom-camss.ko"), "e004j_ir_dphy_windows_parity=1",
-             "native_linear_nv12_trial=1", "native_front_owner_trial=1", "native_front_queue_trial=1", "native_front_meta_trial=1", "native_front_params_trial=1", "native_front_profile_trial=1"])
+             "native_linear_nv12_trial=1", "native_front_owner_trial=1", "native_front_queue_trial=1", "native_front_meta_trial=1", "native_front_params_trial=1", "native_front_profile_trial=1", "native_front_sof_trial=1"])
         for name in ("ov13858", "imx681", "sp11-vd55g0"):
             run(["insmod", str(D / ("modules/" + name + ".ko"))])
         result["phase"] = "sensor_bind_and_initial_suspend"
@@ -219,6 +219,48 @@ def main():
                  all(mask == "0" for req,mask in accepted) and len(accepted) >= count+3,
                  "semantic FIFO starts fresh on restart")
             parameter_blocks.append({"requests_accepted":len(accepted),"raw_per_frame_capsules":False})
+        app_events = [int(x) for x in re.findall(r"CAMSS_X1E_SOF frame=(\d+)", process.stderr)]
+        app_rounds = []
+        for sequence in app_events:
+            if sequence == 0:
+                app_rounds.append([])
+            need(bool(app_rounds), "first app SOF must be zero")
+            app_rounds[-1].append(sequence)
+        need(len(app_rounds) == 3, "app SOF resets exactly once per start")
+        sof_rounds = []
+        previous = 0
+        for index,stop in enumerate(re.finditer(r"NATIVE_FRONT_QUEUE_STOPPED completed=\d+ stop_requested=\d+ error=-?\d+", private_log)):
+            block = private_log[previous:stop.start()]
+            previous = stop.end()
+            events = [(int(seq),int(ts)) for seq,ts in re.findall(
+                r"NATIVE_FRONT_SOF sequence=(\d+) timestamp=(\d+)", block)]
+            phases = [(int(src),int(count),int(co),int(ts)) for src,count,co,ts in re.findall(
+                r"NATIVE_FRONT_FRAME_PHASE source=(\d+) sof_count=(\d+) co_latched_sof=(\d+) timestamp=(\d+)", block)]
+            count = rounds[index]["frames"]
+            need(len(events) >= count+4 and [e[0] for e in events] == list(range(len(events))) and
+                 all(b[1]>a[1] for a,b in zip(events,events[1:])), "IRQ SOF sequence resets and remains ordered")
+            need(len(app_rounds[index]) >= count+4 and
+                 app_rounds[index] == list(range(len(app_rounds[index]))) and
+                 len(app_rounds[index]) <= len(events), "app SOF sequence continuity per lifetime")
+            need(len(phases) >= count+4 and [p[0] for p in phases] == list(range(1,len(phases)+1)) and
+                 all(0<p[1]<=len(events) for p in phases), "video phase identity per lifetime")
+            selected = phases[4:4+count]
+            histogram = {}
+            for source,sof_count,co,timestamp in selected:
+                delta = str(sof_count-source)
+                histogram[delta] = histogram.get(delta,0)+1
+            sof_rounds.append({"stream_id":rounds[index]["stream_id"], "irq_event_count":len(events),
+                "app_event_count":len(app_rounds[index]), "irq_sequence_reset":True,
+                "app_sequence_reset":True, "steady_sof_count_minus_video_source_histogram":histogram,
+                "receiver_sof_events":[{"sequence":q,"irq_observation_ns":t} for q,t in events],
+                "video_interrupt_phase":[{"source":src,"sof_count":n,"co_latched_sof":bool(co),"irq_observation_ns":t}
+                                         for src,n,co,t in phases]})
+        need("NATIVE_FRONT_SOF" not in private_log[previous:] and
+             "NATIVE_FRONT_FRAME_PHASE" not in private_log[previous:], "no receiver events after final STOP")
+        result["frame_start"] = {"standard_v4l2_frame_sync":True, "standard_libcamera_frameStart":True,
+            "three_stream_sequence_reset_proven":True, "no_events_after_final_stop":True,
+            "sensor_control_delays_measured":False, "sensor_exposure_timestamp_proven":False,
+            "phase_is_observation_not_exposure_identity":True, "rounds":sof_rounds}
         need("NATIVE_FRONT_OWNER_REJECT" not in private_log, "owner rejected")
         for marker in ["BUG:","Oops:","WARNING:","Kernel panic","teardown unsafe","intentionally pinned"]:
             need(marker not in private_log,"critical kernel failure: "+marker)
@@ -231,7 +273,7 @@ def main():
         idle()
         need(classify(run(["media-ctl","-d",media,"-p"]))[0] == "neutral",
              "camera release must leave neutral route")
-        result.update(status="PASS_NATIVE_FRONT_LIBCAMERA_LIFECYCLE_1_80_80",
+        result.update(status="PASS_NATIVE_FRONT_FRAME_SYNC_LIFECYCLE_1_80_80",
                       same_camera_restart_proven=True,same_camera_reacquire_proven=True,
                       one_frame_finite_capture_proven=True,final_route="neutral",
                       all_sensors_suspended=True,automatic_3a_proven=False,

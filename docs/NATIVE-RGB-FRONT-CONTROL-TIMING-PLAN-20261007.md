@@ -6,13 +6,30 @@ at about30fps; stop/restart/reacquire and shared-buffer lifetime pass. Control
 timing and optical tuning are the next engineering work, not further generic
 metadata plumbing.
 
+## Receiver event delivery now hardware-proven
+
+Pipeline05 sourceb08bc32f/audit29/build07 delivered80 standard cam frames at
+30.00469fps and84 consecutive libcamera frameStart callbacks (85 receiver IRQ
+SOFs). CSID680 IPP CAMIF_SOF bit4 comes from pinned Qualcomm GPL register source
+commit38d50357/SHA9240958e and matches the pinned SP11 Windows IPP bit4 test.
+Existing CSID1 owning ISR emits the events; no additional register reader or
+hardware mask programming is introduced. See front-sof-source.json and
+NATIVE-RGB-FRONT-FRAME-SYNC-05-20261007.json.
+
+All80 steady VIDEO source observations have SOF-count minus source0; latest SOF
+observation to VIDEO IRQ20.204-20.355ms, VIDEO IRQ to completion2.877-3.248ms.
+Neither relation measures first-row exposure or actual sensor-control effects.
+Lifecycle05 next checks reset across three starts and silence after final STOP.
+SensorTimestamp remains absent. Ordered implementation steps1/2 have passed the
+single-stream delivery gate; restart qualification is still pending.
+
 ## Current source findings
 
 | Source inspected | Observed behavior | Consequence |
 |---|---|---|
-| audit27 camss/camss-vfe-17x.c, vfe_isr_sof | no-op | No frame-start signal reaches libcamera |
-| audit27 camss/camss-vfe.c, vfe_core_ops | s_power only; no event subscription | VFE subdevice cannot yet provide standard FRAME_SYNC |
-| audit27 camss/camss-csid-680.c | source-qualified Epoch0 counter and five BUF_DONE counters | Frame completion and Epoch0 are not first-row exposure/SOF proof |
+| VFE17x vfe_isr_sof | no-op | Receiver CSID1 supplies the qualified event instead |
+| VFE core ops | no event subscription | CSID1 standard FRAME_SYNC is used |
+| audit29 camss-csid-680.c | source-qualified CAMIF_SOF bit4, existing owning ISR | Ordered actual receiver events physically verified; exposure/control latency remains unmeasured |
 | pinned libcamera v4l2_device.cpp | supportsFrameStartEvent, setFrameStartEnabled, frameStart | Existing standard consumer mechanism available |
 | pinned libcamera rkisp1 pipeline | sensor helper delays into DelayedControls; frameStart applies controls | Reuse standard scheduling once native timings are qualified |
 | current IMX681 native control adapter | group-held four-field sensor controls; analogue law unit-tested | Arithmetic is proven, live per-frame latency is not |

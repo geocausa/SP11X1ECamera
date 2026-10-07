@@ -1,3 +1,32 @@
+## 2026-10-07 native receiver frame-start hardware PASS; lifecycle05 next
+
+Fresh pipeline05 sourceb08bc32f/audit29/libcamera build07 passed80 standard cam
+2560x1440 NV12 frames at30.00469fps,80 app/statistics pairs and84 actual isolated
+IPA metering results. Standard CSID1 V4L2 FRAME_SYNC delivered84 consecutive
+libcamera frameStart callbacks; owning ISR observed85 source-qualified bit4
+SOFs at30.00535fps. All80 steady VIDEO sources had SOF-count minus source0;
+latest receiver SOF observation preceded VIDEO IRQ by20.204-20.355ms and
+completion followed VIDEO IRQ by2.877-3.248ms. This is interrupt phase observation,
+not first-row exposure identity, sensor-control latency or SensorTimestamp proof.
+
+425 owner checks/85 retirements,88 typed defaults,clean STOP,error0,neutral graph,
+all sensors standby,critical faults0,Golden hashes unchanged. Candidate boot
+ ae0cb572-f768-49c8-8cb0-0b86ba7ebba6 returned Golden54041d3b-e446-4720-844a-8c1e48300c37.
+Pipeline05 consumed and retired;21 consumed identities/42 candidate-Golden boots,
+23 completed sensor streams; prior5 prestream/2 poststart failures unchanged.
+Evidence: docs/NATIVE-RGB-FRONT-FRAME-SYNC-05-20261007.json.
+
+Fresh lifecycle05 is the next one-use qualification: same CameraManager/Camera
+1/80/80 restart/reacquire with audit29/build07, signed threaded actual IPA, SOF
+sequence reset and final-stop silence in addition to existing queue/owner/standby
+checks. Its public API binary builds Werror; no stream yet. Never reuse spent IDs.
+Then measure grouped sensor exposure/analogue/digital/frame-length delays before
+standard DelayedControls and automatic feedback. AE/AWB, metering normalization,
+rear ISP/focus, public ABI/clock policy, independent tuning and optical acceptance
+remain. No matched Windows reference; fixed low Y is no proven brightness defect.
+Match camera/scene/position/lighting/capture time, including rainy/cloudy changes.
+Earlier NEXT statements are history. No bespoke daemon/CPU image ISP/AI/OEM runtime.
+
 ## 2026-10-07 native receiver frame-sync built; fresh pipeline05 next
 
 Source-qualified CSID680 IPP CAMIF_SOF is bit4 (status0xac, clear0xb4);
