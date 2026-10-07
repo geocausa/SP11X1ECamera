@@ -83,3 +83,29 @@
  }
  
  static void video_unprepare_streaming(struct vb2_queue *q)
+--- a/camss.c
++++ b/camss.c
+@@ -10131,12 +10131,22 @@
+ 	    video != &camss->vfe[1].line[VFE_LINE_PIX].video_out)
+ 		return -ENODEV;
+ 
++	/* Repeat only after the preceding worker and hardware ownership retired. */
++	if (READ_ONCE(video->x1e_pix_runner_pinned) ||
++	    READ_ONCE(video->x1e_pix_worker_started) ||
++	    READ_ONCE(video->x1e_pix_live_active))
++		return -EBUSY;
++
+ 	if (video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12) {
+ 		static atomic_t attempted = ATOMIC_INIT(0);
+ 
+ 		if (!camss_x1e_native_nv12_trial_allowed(camss))
+ 			return -EOPNOTSUPP;
+-		if (atomic_cmpxchg(&attempted, 0, 1))
++		/* Keep the original cold diagnostic one-use. Profile mode has
++		 * stream-owned teardown and revalidates disabled linear BUS state.
++		 */
++		if (!camss_x1e_native_front_profile_trial_allowed(camss) &&
++		    atomic_cmpxchg(&attempted, 0, 1))
+ 			return -EBUSY;
+ 	}
+ 

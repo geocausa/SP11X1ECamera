@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-07",
+  "identity": "native-lifecycle-20261007-02",
+  "source_head": "21fb0538c3e8af6a024e9792a4e86f43cdccda35",
+  "candidate_boot_id": "1929f0a5-b0cc-401b-9d53-97d5bd0ec6d7",
+  "returned_golden_boot_id": "5eed1407-eb91-482a-8564-1c0eea83ee91",
+  "status": "FAILED_SECOND_START_LEGACY_NV12_ONE_START_PER_MODULE_GUARD",
+  "consumed": true,
+  "retired": true,
+  "critical_faults": {
+    "BUG:": 0,
+    "Oops:": 0,
+    "WARNING:": 0,
+    "Kernel panic": 0,
+    "NATIVE_FRONT_OWNER_REJECT": 0,
+    "teardown unsafe": 0,
+    "intentionally pinned": 0
+  },
+  "golden_assets_unchanged": true,
+  "completed_first_one_frame_capture": true,
+  "first_capture_owner_checks": 30,
+  "first_capture_retirements": 6,
+  "first_capture_clean_stop": true,
+  "profile_fifo_restart_fix_verified": true,
+  "kernel_profile_loads": 2,
+  "typed_requests": 13,
+  "second_start_error": "EBUSY from static atomic attempted guard before hardware start",
+  "specific_fix": "profile mode uses inactive worker/pinned guards plus unchanged hardware cold-state validation; earlier diagnostic retains one-start guard",
+  "result": {
+    "application_exit_code": 1,
+    "candidate_boot_id": "1929f0a5-b0cc-401b-9d53-97d5bd0ec6d7",
+    "error": "public libcamera lifecycle application failed",
+    "failure_sensor_states": {
+      "1-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "2-0060": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "3-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      }
+    },
+    "grub-initrd-fallback.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "12061906",
+      "ExecMainStartTimestampMonotonic": "12003299",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "grub2-common.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "12161849",
+      "ExecMainStartTimestampMonotonic": "12073942",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "hardware_streams_completed": 1,
+    "initial_sensor_states": {
+      "1-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "2-0060": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "3-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      }
+    },
+    "phase": "public_libcamera_same_camera_restart_and_reacquire",
+    "pixels_private_on_sp11": true,
+    "retry": false,
+    "rounds": [
+      {
+        "all_sensors_suspended": true,
+        "clean_stop": true,
+        "frames": 1,
+        "round": 0,
+        "same_camera": true,
+        "sequences": [
+          4
+        ],
+        "timestamps_ns": [
+          14871642000
+        ]
+      }
+    ],
+    "status": "FAILED_NATIVE_NV12_PROBE"
+  },
+  "product_complete": false
+}
