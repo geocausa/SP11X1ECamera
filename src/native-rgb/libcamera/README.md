@@ -1,3 +1,29 @@
+## 2026-10-07 current checkpoint: rear scalar handoff source-qualified
+
+Front full-rate manual requests, restart/reacquire and all four measured sensor
+control delays are hardware-qualified in the current engineering audit. Automatic
+AE/AWB and image-quality tuning remain unfinished. User priority is rear first;
+front calibration is deferred. Older NEXT statements below are historical.
+
+Build13 adds camssX1ERearStartupScalars around the existing, unchanged rear scalar
+arithmetic in libipa. Four explicit request identities and phase-specific results
+are encoded in an internal 208-byte little-endian envelope. Invalid input preserves
+the previous output. The kernel validates all four identities and ranges before
+binding these integers to real E006Z packet scalar state. This is an internal
+source contract, not a published V4L2 ABI or a connected rear pipeline.
+
+Build13 passes Werror with zero warnings, 10 tests pass and two missing-VIMC tests
+skip. Actual libipa -> integer envelope -> C kernel binder -> register packer
+matches all 26 retained original scalar register observations on SP11. Private
+inputs stay on SP11; derived evidence is
+ docs/NATIVE-RGB-REAR-SCALAR-BINDING-20261007.json. No new hardware stream occurred.
+
+Next compose the remaining complete rear geometry/statistics/filter/table states,
+then establish generation-safe hardware delivery and shutdown before optical
+comparison with the retained rear-only Windows screen baseline. The prepared
+command consumer is already source-qualified and must not rematerialize shared
+state. Healthy upper-SP7 screen ROI registration is still required.
+
 ## 2026-10-07 exposure response/readback hardware proven; gains still ambiguous
 
 Fresh response02 source9c648fd8/kernel audit31/libcamera build09 passes320 standard

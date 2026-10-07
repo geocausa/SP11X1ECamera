@@ -11,6 +11,7 @@ extern "C" {
 #include "native-front-stats.h"
 #include "native-front-params.h"
 #include "rear-neutral-scalar.h"
+#include "native-rear-startup-scalars.h"
 }
 
 namespace libcamera::ipa {
@@ -44,5 +45,14 @@ int camssX1EFrontParameters(uint64_t requestId, uint32_t updateMask,
 /* Pure quantized ISP state from caller-owned semantic inputs. */
 int camssX1ERearScalars(const e012k_rear_scalar_input &input,
                        e012k_rear_scalar_output *output);
+
+
+/* Internal startup scalar envelope for four caller-owned semantic inputs.
+ * Explicit request IDs are preserved, including a repeated ID across phases.
+ * No full rear bootstrap, kernel public ABI or hardware access is implied.
+ */
+int camssX1ERearStartupScalars(Span<const e012k_rear_scalar_input> inputs,
+                              Span<const uint64_t> requestIds,
+                              native_rear_startup_scalars *output);
 
 } /* namespace libcamera::ipa */

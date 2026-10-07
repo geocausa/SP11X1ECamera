@@ -111,6 +111,8 @@ def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=F
     vfe.write_text(text.replace(include, "", 1))
     command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
              HERE / "rear-composition.patch"], cwd=camss)
+    prepared = runpy.run_path(str(HERE / "rear-command-consumer.py"))
+    rear_prepared_result = prepared["apply"](camss)
     text = vfe.read_text()
     anchor = '#include "camss.h"'
     if text.count(anchor) != 1:
@@ -177,6 +179,7 @@ def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=F
         "source_manifest_sha256": digest(HERE / "sources.json"),
         "rear_fragments": len(destinations),
         "overlay_audit": overlay_result,
+        "rear_prepared_command_consumer": rear_prepared_result,
         "staged_sources": dict(sorted(staged.items())),
         "runtime_access": False,
         "nv12_trial_staged": nv12_trial,

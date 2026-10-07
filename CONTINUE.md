@@ -1,3 +1,47 @@
+## 2026-10-07 rear prepared-command consumer and scalar binding SOURCE gates CLOSED
+
+Current rear source now removes E008K/E008N shared-state rematerialization:
+E008O materializes each phase once into its own Linux arena, publishes all four
+together, clears every output/identity after any packet failure. The runner only
+validates/consumes prepared arenas; it never rebuilds from one shared regs/DMI.
+Arena checks include exact layout, 32bit span, CPU/DMA separation, BL references,
+phase tag and exact caller request ID. IDs may repeat across distinct phases.
+Preflight denial releases command arena with result flag; uncertain failures
+retain allocations. Explicit E008K/E008O hardware authorization remains denied.
+
+Existing E012K scalar arithmetic was ALREADY in libipa. Reused unchanged;
+camssX1ERearStartupScalars now encodes four caller-owned integer outputs in
+an internal208byte little-endian envelope. Kernel native_rear_bind_startup_scalars
+validates all identities/ranges/readiness before modifying any packet; supplies
+real E006Z scalar members, preserves other register/DMI state. Float policy stays
+in standard libcamera, not kernel; no custom daemon/pixel softwareISP/effects.
+This is not a published V4L2 ABI or runtime-connected rear pipeline.
+Remaining nonadaptive geometry/statistics/BF/BPC/ABF and complete DMI inputs
+must still be supplied. Scalar binder does not make an incomplete base ready.
+
+Final kernel source build03 W1/Werror PASS for CAMSS/IMX681/OV13858,zero diagnostics.
+GCC+Clang ASAN/UBSAN hosted actual allocator/wrapper/validator/binder tests each386
+assertions PASS,zero hardware callbacks,release/repeated-call/error atomicity
+included; semantic materializer and hardware callbacks are explicit mocks.
+Standard libcamera pipeline13 Werror zero warnings,10PASS/2 missing-VIMC SKIP.
+Actual libipa integer-envelope -> actual C kernel binder -> E006Z register packer
+matches retained original oracle26/26 instances (8/8/8/2 across phases).
+Unused packet members omitted ONLY in hosted private fixture; real complete
+kernel types compile separately. This is retained-trace evidence,not new hardware.
+Reports docs/NATIVE-RGB-REAR-COMMAND-HANDOFF-20261007.json and
+docs/NATIVE-RGB-REAR-SCALAR-BINDING-20261007.json; private inputs/words stay SP11.
+
+Golden5a4d7226-d3b1-4c39-b94f-9d16ce4572ce unchanged/no new boot,stream,install,
+camera module/node/process or candidate. Native44streams/33IDs/66boots,
+Windows2streams/2IDs/4boots,combined70boots/35IDs unchanged. Windows rear-only
+4K/lightOFF baseline retained privately; healthy upper SP7 ROI still unregistered.
+User priority REAR first; front calibration remains deferred until rear finished.
+NEXT executable remaining rear register/statistics/BPC/ABF/BF and DMI semantic
+base composer, reuse52 fragments/known defaults/producers. Then source-validated
+bounded candidate with exact-generation completion/stop before any reclaim.
+Do not repeat scalar arithmetic/OEM optional metadata archaeology or front gates.
+No OSsleep. Earlier NEXT entries are history.
+
 ## 2026-10-07 rear-only Windows baseline PASSES; front calibration deferred
 
 User20:37:51UTC: room lights OFF,rear faces SP7 screen; complete rear before

@@ -128,6 +128,42 @@ protected:
             scalar.pdpc_q12[0] != 6144 || scalar.pdpc_q12[1] != 8192 ||
             scalar.pdpc_q12[2] != 2731 || scalar.pdpc_q12[3] != 2048)
             return TestFail;
+
+        std::array<e012k_rear_scalar_input, 4> startupInputs{};
+        std::array<uint64_t, 4> startupIds{ 4, 5, 6, 6 };
+        for (size_t p = 0; p < startupInputs.size(); ++p) {
+            auto &input = startupInputs[p];
+            input.demux_gain = input.awb_g = input.predictive_gain = 1.0f;
+            input.awb_b = 1.0f + float(p) / 2;
+            input.awb_r = 1.0f + float(p) / 4;
+            input.bayer = 2;
+            for (float &channel : input.channel)
+                channel = 1.0f;
+        }
+        native_rear_startup_scalars rearStartup{};
+        if (camssX1ERearStartupScalars(startupInputs, startupIds, &rearStartup) ||
+            native_rear_scalars_validate(rearStartup.data, sizeof(rearStartup)))
+            return TestFail;
+        for (size_t p = 0; p < 4; ++p) {
+            const auto *slot = rearStartup.data + 16 + p * 48;
+            if (native_rear_scalars_get(slot, 8) != startupIds[p] ||
+                native_rear_scalars_get(slot + 8, 4) != p ||
+                native_rear_scalars_get(slot + 16, 2) != 1024 ||
+                native_rear_scalars_get(slot + 40, 2) != 1024 + p * 512 ||
+                native_rear_scalars_get(slot + 42, 2) != 1024 + p * 256)
+                return TestFail;
+        }
+        const auto savedRearStartup = rearStartup;
+        startupInputs[3].awb_b = std::numeric_limits<float>::infinity();
+        if (camssX1ERearStartupScalars(startupInputs, startupIds, &rearStartup) != -EINVAL ||
+            std::memcmp(&savedRearStartup, &rearStartup, sizeof(rearStartup)))
+            return TestFail;
+        startupInputs[3].awb_b = 2.5f;
+        startupIds[3] = 3;
+        if (camssX1ERearStartupScalars(startupInputs, startupIds, &rearStartup) != -EPROTO ||
+            std::memcmp(&savedRearStartup, &rearStartup, sizeof(rearStartup)))
+            return TestFail;
+
         const auto savedScalar = scalar;
         rear.awb_b = std::numeric_limits<float>::infinity();
         if (camssX1ERearScalars(rear, &scalar) != -EINVAL ||

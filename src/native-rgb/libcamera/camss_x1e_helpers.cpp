@@ -146,4 +146,43 @@ int camssX1ERearScalars(const e012k_rear_scalar_input &input,
     return 0;
 }
 
+
+int camssX1ERearStartupScalars(Span<const e012k_rear_scalar_input> inputs,
+                              Span<const uint64_t> requestIds,
+                              native_rear_startup_scalars *output)
+{
+    if (!output || inputs.size() != NATIVE_REAR_SCALARS_PACKETS ||
+        requestIds.size() != NATIVE_REAR_SCALARS_PACKETS)
+        return -EINVAL;
+    native_rear_startup_scalars pending{};
+    auto put = [&pending](size_t offset, uint64_t value, size_t width) {
+        for (size_t i = 0; i < width; ++i)
+            pending.data[offset + i] = uint8_t(value >> (8 * i));
+    };
+    put(0, NATIVE_REAR_SCALARS_MAGIC, 4);
+    put(4, NATIVE_REAR_SCALARS_VERSION, 2);
+    put(6, NATIVE_REAR_SCALARS_BYTES, 2);
+    put(8, NATIVE_REAR_SCALARS_PACKETS, 4);
+    for (size_t p = 0; p < NATIVE_REAR_SCALARS_PACKETS; ++p) {
+        e012k_rear_scalar_output scalar{};
+        int ret = camssX1ERearScalars(inputs[p], &scalar);
+        if (ret)
+            return ret;
+        const size_t offset = 16 + p * NATIVE_REAR_SCALARS_SLOT_BYTES;
+        put(offset, requestIds[p], 8);
+        put(offset + 8, p, 4);
+        for (size_t i = 0; i < 4; ++i) {
+            put(offset + 16 + 2 * i, scalar.demux_q10[i], 2);
+            put(offset + 24 + 4 * i, scalar.pdpc_q12[i], 4);
+        }
+        put(offset + 40, scalar.wb_b_q10, 2);
+        put(offset + 42, scalar.wb_r_q10, 2);
+    }
+    int ret = native_rear_scalars_validate(pending.data, sizeof(pending));
+    if (ret)
+        return ret;
+    *output = pending;
+    return 0;
+}
+
 } /* namespace libcamera::ipa */

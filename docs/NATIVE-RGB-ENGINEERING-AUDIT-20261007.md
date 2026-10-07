@@ -1,3 +1,47 @@
+## 2026-10-07 rear prepared-command consumer and scalar binding SOURCE gates CLOSED
+
+Current rear source now removes E008K/E008N shared-state rematerialization:
+E008O materializes each phase once into its own Linux arena, publishes all four
+together, clears every output/identity after any packet failure. The runner only
+validates/consumes prepared arenas; it never rebuilds from one shared regs/DMI.
+Arena checks include exact layout, 32bit span, CPU/DMA separation, BL references,
+phase tag and exact caller request ID. IDs may repeat across distinct phases.
+Preflight denial releases command arena with result flag; uncertain failures
+retain allocations. Explicit E008K/E008O hardware authorization remains denied.
+
+Existing E012K scalar arithmetic was ALREADY in libipa. Reused unchanged;
+camssX1ERearStartupScalars now encodes four caller-owned integer outputs in
+an internal208byte little-endian envelope. Kernel native_rear_bind_startup_scalars
+validates all identities/ranges/readiness before modifying any packet; supplies
+real E006Z scalar members, preserves other register/DMI state. Float policy stays
+in standard libcamera, not kernel; no custom daemon/pixel softwareISP/effects.
+This is not a published V4L2 ABI or runtime-connected rear pipeline.
+Remaining nonadaptive geometry/statistics/BF/BPC/ABF and complete DMI inputs
+must still be supplied. Scalar binder does not make an incomplete base ready.
+
+Final kernel source build03 W1/Werror PASS for CAMSS/IMX681/OV13858,zero diagnostics.
+GCC+Clang ASAN/UBSAN hosted actual allocator/wrapper/validator/binder tests each386
+assertions PASS,zero hardware callbacks,release/repeated-call/error atomicity
+included; semantic materializer and hardware callbacks are explicit mocks.
+Standard libcamera pipeline13 Werror zero warnings,10PASS/2 missing-VIMC SKIP.
+Actual libipa integer-envelope -> actual C kernel binder -> E006Z register packer
+matches retained original oracle26/26 instances (8/8/8/2 across phases).
+Unused packet members omitted ONLY in hosted private fixture; real complete
+kernel types compile separately. This is retained-trace evidence,not new hardware.
+Reports docs/NATIVE-RGB-REAR-COMMAND-HANDOFF-20261007.json and
+docs/NATIVE-RGB-REAR-SCALAR-BINDING-20261007.json; private inputs/words stay SP11.
+
+Golden5a4d7226-d3b1-4c39-b94f-9d16ce4572ce unchanged/no new boot,stream,install,
+camera module/node/process or candidate. Native44streams/33IDs/66boots,
+Windows2streams/2IDs/4boots,combined70boots/35IDs unchanged. Windows rear-only
+4K/lightOFF baseline retained privately; healthy upper SP7 ROI still unregistered.
+User priority REAR first; front calibration remains deferred until rear finished.
+NEXT executable remaining rear register/statistics/BPC/ABF/BF and DMI semantic
+base composer, reuse52 fragments/known defaults/producers. Then source-validated
+bounded candidate with exact-generation completion/stop before any reclaim.
+Do not repeat scalar arithmetic/OEM optional metadata archaeology or front gates.
+No OSsleep. Earlier NEXT entries are history.
+
 ## 2026-10-07 rear-only Windows baseline PASSES; front calibration deferred
 
 User20:37:51UTC: room lights OFF,rear faces SP7 screen; complete rear before
@@ -1151,7 +1195,7 @@ named missing register/algorithm/behavior question that advances a driver gate.
 | RAW sensor transport | E002/E003 and subsequent optical runs; front 3840x2160 RGGB RAW10, rear 4076x2806 GRBG RAW10 | Maintain ordinary source-built sensor and board support |
 | Native front VFE1 PIX | E003i-Z/HY and E004JC; bounded real QC10C frames, stats and stop | Replace manually expanded 27-frame runner and host-IQ/bootstrap dependence with repeatable queue-driven streaming |
 | Native rear commands | E006G–E008O register/DMI producers and four-packet contract | Compose four complete packet-isolated semantic objects and connect the controlled startup path |
-| Neutral scalar producer | E011X; E012K differential result, 26/26 present register instances | E012K uses float/libm: reference code, not kernel-ready arithmetic |
+| Neutral scalar producer | Existing E012K arithmetic in libipa; new integer envelope/kernel binder, 26/26 retained register instances exact | Connect the typed source contract to a rear runtime API; keep float policy in libcamera |
 | Rear startup LSC/GTM | E011Y/Z clean replay and binder | Binder now compiled against actual kernel structures; caller still must supply all coherent nonadaptive states |
 | Rear DMA lifecycle | E007Z, E008A–N and E011I | Same-generation hardware completion, stop, ownership serialization and release remain physically unproved |
 | Ordinary processed format | Existing E004IK–IP NV12 negotiation, layout, WM and mapped-span planners | No measured native linear NV12 frame; explicit UBWC transition still unresolved |
@@ -1252,10 +1296,10 @@ experiments already closed several of them:
 | Geometry, period and disabled small-IQ | E006P–T, E007W and fixed non-HFR phase policy | Populate each canonical packet from the selected Linux mode |
 | RS/BHist/Tintless/AEC/AWB statistics | E009G/H, E010U/Z, E011A–G and E011M–R | Build packet-specific semantic state from established defaults/geometry; producer tracing is not the same as a Linux composer |
 | BF/AF bootstrap | E008Q–T, E011S–W; canonical E008T adapter now compiles | Source-implemented ROI validation/adjustment and final DMI consistency; preserve packet0/normal distinction |
-| Neutral Demux/PDPC/WB | E011X and E012K, 26/26 differential instances | Kernel-safe arithmetic/input representation and per-phase state binding; float/libm reference cannot run in kernel |
+| Neutral Demux/PDPC/WB | Existing libipa E012K reused; four-phase integer envelope and kernel binding source-qualified, 26/26 retained instances exact | Runtime pipeline/API connection and independent inputs remain; source arithmetic/binding gate closed |
 | BPC/ABF registers | E007A packer and retained clean stable DMI | Explicit calculated register-state producer and bounded initial inputs |
 | LSC/GTM | E007H/P/Q and E011Y/Z | Kernel-suitable producer/input delivery and full nonadaptive base before sealing |
-| Four-packet handoff | E008O materializes independent packet objects | E008K/N old materialize-all path still takes one register/DMI object; consume the four prepared command objects without rematerializing one shared state |
+| Four-packet handoff | E008O all-or-none independent prepared arenas; E008K/N validate and consume without rewriting, GCC/Clang 386 assertions each | Complete coherent producer inputs remain; prepared consumer source gate closed, hardware lifetime still unproven |
 | Ownership and DMA reclaim | E007Z, E008A–N, E011I | Serialized runtime entry plus physical consumed-address/generation and shutdown proof |
 
 The latest RS preset origin is E011M, not the open E011H frontier. AEC/AWB/BF

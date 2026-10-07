@@ -69,6 +69,25 @@ sources, refusal to overwrite an existing candidate, include integration and
 retained DMA/runtime gates. Kbuild separately checks actual ARM64 types, calls
 and module dependencies.
 
+
+## Rear source validation
+
+After a fresh kernel source build, run the hosted actual allocator, command-layout,
+validator and scalar-binder checks against its staged sources:
+
+```sh
+python3 src/native-rgb/test-rear-prepared-commands.py \
+  --staged /absolute/fresh-build/camss \
+  --report /absolute/fresh-build/hosted-handoff.json
+```
+
+GCC and Clang use address/undefined-behavior sanitizers. Semantic materialization
+and hardware callbacks are explicit mocks; this checks ownership, packet separation,
+atomic failure cleanup and validation, not complete register semantics or DMA.
+The private scalar verifier separately links actual built libipa with the actual
+C kernel binder and E006Z register packer. Its inputs stay on SP11 and its report
+contains only aggregate counts. Neither test authorizes a hardware submission.
+
 ## Current next implementation — rear first
 
 User2026-10-07 deferred front calibration until rear finished. Fresh rear-only
@@ -80,8 +99,16 @@ Front linear NV12, continuous queue, metadata/typed parameters, standard
 pipeline/IPA and full-rate manual request controls/lifecycle are physically
 qualified in the current audit. Front meter/AE/AWB/IQ remains incomplete.
 
-Next complete four rear packet-isolated semantic states and the real consumer
-without rematerializing one shared state. Reuse the precise composition-gaps
+The prepared-command consumer and integer scalar binding are now source-qualified.
+Each rear phase is materialized once into an independent arena; the runner validates
+and consumes those outputs without rebuilding them. The existing libipa scalar
+producer supplies an internal 208-byte envelope, validated atomically against all
+four kernel packet identities. This is not a published ABI or a connected rear
+runtime. See docs/NATIVE-RGB-REAR-COMMAND-HANDOFF-20261007.json and
+ docs/NATIVE-RGB-REAR-SCALAR-BINDING-20261007.json for the exact evidence limits.
+
+Next compose the remaining geometry, statistics, BPC/ABF, BF and DMI inputs into
+four complete packet-isolated semantic states. Reuse the precise composition-gaps
 table in the audit and52 gathered fragments, measured OV13858 RAW/power and
 validated NV12 planners. Physical exact-generation completion, serialized owner
 and shutdown evidence precede any reclaim/activation; rear ISP runtime remains
