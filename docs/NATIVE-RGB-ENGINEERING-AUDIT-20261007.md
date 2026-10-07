@@ -1,3 +1,30 @@
+## 2026-10-07 Windows front1440p reference passes; Linux-after04 next
+
+Fresh E-NATIVE-FRONT-WINDOWS-LIGHT-01 source3ee09e32 physically delivered16
+distinct timestamped FRONT Color/VideoRecord2560x1440 NV12 samples. Sparse meanY
+88.067..89.561,zero fraction0,storage255 fraction~2.1..2.24%. Windows ordinary
+auto exposure reportedtrue/API5000ticks; ISO unsupported,white balance API5000K.
+API values are NOT independently proven sensor register settings. No AI/effects
+requested,controls/driver unmodified,IR untouched,no optical files/hashes exported.
+Room lights user reportedON18:26:29UTC; scene/light continuity not instrumented.
+Actual capture18:46:28.478..18:46:39.771UTC,task complete18:46:40.428.
+Initial task registration guard mistakenly counted null trigger list as1 and
+removed unused task BEFORE Start/CONSUMED/camera access. Audited absent evidence,
+re-registered no-trigger task using XML actual trigger count0,started exactlyonce.
+Atomic consume at probe entry,240s return scheduled before camera,task removed.
+No repeated camera capture or consumed-ID reuse. Own return timer expedited
+after verified result; returned Golden with protected assets/EFI order intact.
+Derived Windows report: docs/NATIVE-RGB-WINDOWS-FRONT-LIGHT-01-20261007.json.
+
+NEXT fresh response04 SAME kernel/libcamera/tuning/manualtuples as03 afterWindows
+to finish Linux bracket. Identity04 unarmed/no attempt;03 consumed/retired.
+Compare SAME sparse luma sampling rather than mean vs p99 or full vs sparse.
+03 all3 fields empirically delay2 remains proven;auto feedback still disabled.
+Current Windows-auto vs Linux-fixedmanual brightness comparison is diagnostic,
+not matched sensor gain/exposure or calibrated parity. No defect established
+solely from lowY. Full-range enum1 documented by Microsoft; exact GUID attribute
+association header check pending. Earlier NEXT is history.
+
 ## 2026-10-07 room-light Linux-before capture passes all three response delays2
 
 User reports room lights ON18:26:29UTC. Fresh response03 source4fffdaa1/audit31/

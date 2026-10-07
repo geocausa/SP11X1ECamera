@@ -12,9 +12,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-control-response-20261007-03")
-TOKEN = "sp11_camera_native_control_response_20261007_03=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-03"
+D = Path("/var/lib/sp11-camera-native-control-response-20261007-04")
+TOKEN = "sp11_camera_native_control_response_20261007_04=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-04"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -65,7 +65,7 @@ def main():
     result = {"status": "FAILED_NATIVE_NV12_PROBE", "hardware_streams_completed": 0,
               "pixels_private_on_sp11": True, "retry": False}
     result["comparison_session"] = "front-room-light-20261007-01"
-    result["comparison_role"] = "Linux-before-Windows"
+    result["comparison_role"] = "Linux-after-Windows"
     result["environment"] = {"room_lights_on_user_report_utc":"2026-10-07T18:26:29Z",
         "user_asked_keep_lighting_position_unchanged":True,
         "illuminance_measured":False,"scene_continuity_independently_verified":False,
