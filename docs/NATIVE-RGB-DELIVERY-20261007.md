@@ -21,7 +21,7 @@ execution belongs in the release path.
 
 Protected Golden assets/default are never overwritten. Original vendor tuning,
 raw traces and optical pixels remain private on SP11. No system suspend tests.
-Fourteen one-use candidate identities are consumed and retired; none may be rearmed.
+Seventeen one-use candidate identities are consumed and retired; none may be rearmed.
 
 ## Verified implementation
 
@@ -29,14 +29,15 @@ Fourteen one-use candidate identities are consumed and retired; none may be rear
 |---|---|---|
 | Front IMX681 timing controls | Read-only720MHz pixel rate, HBLANK2912,1.2GHz link-frequency menu; two-FLL measurements | Full native array/selection geometry still needs authority |
 | Correct SP11 OV13858 source | Board supplies/reset/runtime PM;120 rear RAW frames and verified stop | Rear processed ISP output not proved |
-| Native front linear NV12 queue | 80 sequential2560x1440 frames at29.989fps; four reused buffers and reversed queue order;405 ownership checks | Fixed manual IQ, no long soak/reopen or live3A |
-| FULL storage/8-bit programming | Published packer3, linear MODE guard, UV half height, complete readbacks, local CDM helper audit | No compressed-to-linear transition/reopen proof |
-| Stop/return | Explicit STREAMOFF during queue operation; all sensors suspended, graph neutral, Golden unchanged, zero critical faults | Starvation/fault/reopen still unqualified |
+| Native front linear NV12 queue | 80 sequential2560x1440 frames at29.989fps; four reused buffers and reversed queue order;405 ownership checks | Fixed manual IQ, restart/reacquire passed; no long soak/live3A |
+| FULL storage/8-bit programming | Published packer3, linear MODE guard, UV half height, complete readbacks, local CDM helper audit | Linear restart/reacquire passed; compressed transition unqualified |
+| Stop/return | Explicit STREAMOFF during queue operation; all sensors suspended, graph neutral, Golden unchanged, zero critical faults | Finite drain/restart/reacquire passed; fault/long soak remain |
 | Frame-associated statistics |80 video/metadata pairs with matching identity/timestamps and valid AEC luma;405 ownership checks | Experimental QXS1 format; IPA remains |
 | libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Front pipeline passes80 app frames; actual IPA absent |
 | Typed front ISP scalars |80 pairs,84 accepted requests,5 negative cases; measured2x gain/reset response;1979 sanitizer checks | Data-only firmware qualified; dynamic tables/live3A remain |
 | Kernel-owned startup |80 pairs via data-only firmware; raw control absent; missing/corrupt profile rejected;405 owner checks | Fixed board/mode digest; independent tuning distribution and final ABI remain |
 | Standard libcamera front application |80 NV12 frames at30.0056fps,80 statistics pairs,425 owner matches,88 typed requests; clean stop/release | Fixed manual; dark output, no IPA/3A or rear processed capture |
+| Front libcamera lifecycle |Same CameraManager/Camera captures1,80,80 frames with restart/reacquire;880 owner checks and185 typed requests; sensors standby after each stop | No long soak/switch/fault or automatic controls |
 | Rear composition |52 fragments compile against real types | Nonadaptive startup inputs and runtime composition incomplete |
 
 NV12-01 stopped before ISP programming: truthful sensor array timing plus the
@@ -93,7 +94,9 @@ blindly replaying request4 forever is not a substitute.
 Already passed: native NV12 queue reuse beyond the old27-frame bound, ordered
 delivery, explicit STREAMOFF, stop-before-free, neutral graph and standby.
 Finite capture tail now passes using retired internal spare buffers. Remaining:
-fault/reopen qualification, full typed tables and automatic request controls.
+fault/long-soak/switch qualification, full typed tables and automatic request controls.
+Same-object restart and release/reacquire now pass161 frames in one boot; stream
+profile/FIFO lifetime and the old diagnostic one-start guard were corrected.
 Use fresh identities; do not extend one named frame at a time.
 
 **2. libcamera pipeline and IPA runtime.**
@@ -137,3 +140,9 @@ is recorded and retired; only a specific reviewed change earns a fresh identity.
 A compile-only result never becomes a runtime PASS. A four-frame result never
 becomes continuous or quality PASS. Keep one authoritative checkout and current
 handoff; historical experiment chains are evidence, not an automatic work queue.
+
+Timestamp audit: current pairing proves matching buffer-completion times only.
+Kernel buffer return uses ktime_get_ns; mapping it to SensorTimestamp does not
+meet the first-row-exposure/CLOCK_BOOTTIME semantics. Remove the advertised
+metadata field until sensor timing is qualified. Do not call this optical timing
+proof or feed that mislabeled timestamp into automatic-control delay handling.

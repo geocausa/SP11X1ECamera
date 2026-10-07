@@ -1,4 +1,10 @@
-# Native X1E camera helpers in libcamera
+# Native X1E libcamera pipeline and helpers
+
+Current physical proof: build03/audit27 delivers standard cam80 NV12/statistics
+pairs2560x1440 at30.0056fps, and public API same-camera1/80/80 restart/reacquire
+passes161 app frames/880 owner checks. Fixed manual only; real IPA/3A absent.
+Timestamp pairing currently uses completion time; SensorTimestamp exposure/clock
+semantics are unqualified. Earlier helper-only descriptions below are historical.
 
 The approved product is Linux sensor/CAMSS drivers, Qualcomm hardware ISP and
 a standard libcamera pipeline/IPA. Automatic control calculations execute in
@@ -83,6 +89,6 @@ camera pipeline remain unfinished; the private startup profile is diagnostic.
 An optional --front-pipeline-trial build now stages a real CAMSS X1E pipeline
 and standard cam. It matches the data-only front driver, owns four startup
 buffers and pairs app images/statistics before libcamera request completion.
-The first version uses fixed manual settings, no IPA/automatic controls; do not
-claim runtime PASS from its successful build. Hardware qualification lives in
+The first version uses fixed manual settings, no IPA/automatic controls.
+Hardware pipeline02 and lifecycle03 passed the bounded scopes above. Hardware qualification lives in
 src/native-rgb/front-pipeline with a fresh one-use boot.

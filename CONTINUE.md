@@ -1,3 +1,31 @@
+## 2026-10-07 front libcamera restart and reacquire physically verified
+
+Fresh lifecycle03 usedd1548a01/audit27/libcamera build03. The same CameraManager
+and Camera captured1 frame, restarted for80 frames using the same configuration
+and buffers, then released/reacquired/reconfigured for80 more. All161 app requests
+paired correctly with statistics and fresh stream IDs6,7,10. Longer runs held
+30.005fps. Three explicit STOPs retired6,85,85 frames; all880 owner checks passed,
+185 typed requests admitted,3 kernel profile loads, zero critical faults.
+All3 sensors suspended after each STOP, final graph neutral, Golden unchanged;
+returned bootcbf80aa9-4cda-4c9e-a33a-432d4261f080.
+
+Lifecycle01 exposed cached-profile/closed-FIFO restart rejection. Successful
+STREAMOFF now clears stream-owned profile/FIFO after worker exit, preserving
+unsafe/pinned early returns. Lifecycle02 exposed the original static one-start
+NV12 guard. Profile mode now requires an inactive, unpinned worker and still
+checks every WM disabled and linear MODE state before hardware programming.
+Original diagnostic modes retain their one-start guard. All3 lifecycle identities
+are consumed and retired; never rearm. No module reload occurred between rounds.
+
+NEXT: real libcamera IPA/automatic controls with qualified sensor delays.
+Timestamp audit also found that current SensorTimestamp reports buffer-return
+ktime_get_ns, not qualified first-row exposure time/CLOCK_BOOTTIME; remove that
+mislabel until sensor timing is established. Pairing tests prove association only.
+Fixed manual output remains dark; no optical parity. Dynamic tables, rear ISP/
+focus, long soak/switch/fault recovery, production ABI/clock policy and independent
+tuning remain. Product incomplete. See docs/NATIVE-RGB-FRONT-LIFECYCLE-03-20261007.json.
+Earlier NEXT is history.
+
 ## 2026-10-07 standard libcamera front capture physically verified
 
 Fresh pipeline02 used0bfda1e3/audit24 and libcamera build03: standard cam captured

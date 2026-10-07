@@ -24,3 +24,9 @@ one-start-per-module NV12 guard. Profile mode now admits only inactive, unpinned
 workers and retains the exact disabled-WM/linear-MODE cold-state readback gates.
 The earlier diagnostic modes retain their one-start guard. Lifecycle02 consumed
 and retired; never rearm.
+
+Lifecycle03 physically passed161 app frames,880 owner checks/176 retirements,
+185 typed requests and3 firmware loads; all three stops clean and all sensors
+suspended after each. Original Golden hashes unchanged. All three lifecycle
+identities consumed/retired. Pair timestamps are completion-time association;
+SensorTimestamp first-row exposure/CLOCK_BOOTTIME semantics are not qualified.
