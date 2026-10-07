@@ -72,3 +72,10 @@ It uses the exact shared kernel/probe envelope definition. This helper passed
 the real ARM64 libipa build and tests, with no installation or hardware access;
 see docs/NATIVE-RGB-LIBCAMERA-METADATA-BUILD-20261007.json. A complete pipeline/IPA
 is still required to schedule requests and connect this consumer at runtime.
+
+
+The typed front parameter encoder now forwards bounded caller-owned quantized
+gains/ratios through the exact shared kernel schema, rejecting invalid masks,
+sizes, sequence bounds and ranges without modifying the caller output.
+See docs/NATIVE-RGB-LIBCAMERA-PARAMETERS-BUILD-20261007.json. Scheduling and the
+camera pipeline remain unfinished; the private startup profile is diagnostic.

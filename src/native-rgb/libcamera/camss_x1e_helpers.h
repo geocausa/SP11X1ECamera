@@ -9,6 +9,7 @@ extern "C" {
 #include "native-imx681-control.h"
 #include "native-stats3a.h"
 #include "native-front-stats.h"
+#include "native-front-params.h"
 #include "rear-neutral-scalar.h"
 }
 
@@ -32,6 +33,13 @@ int camssX1EFrontLuma(Span<const uint8_t> statistics,
 /* Exact per-frame metadata, including stream and pixel timestamp admission. */
 int camssX1EFrameLuma(Span<const uint8_t> statistics, uint64_t streamId,
                       uint32_t sequence, uint64_t timestampNs, float *luma);
+
+/* Encode caller-owned quantized scalar values. Outputs are atomic on error. */
+int camssX1EFrontParameters(uint64_t requestId, uint32_t updateMask,
+                           Span<const uint16_t> demuxQ10,
+                           Span<const uint32_t> pdpcQ12,
+                           Span<const uint16_t> wbQ10,
+                           native_front_params *output);
 
 /* Pure quantized ISP state from caller-owned semantic inputs. */
 int camssX1ERearScalars(const e012k_rear_scalar_input &input,

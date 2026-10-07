@@ -57,7 +57,7 @@ def stage(source, destination):
             raise ValueError("statistics helper anchor missing: " + name)
         text = re.sub(r"\b" + name + r"\b", "camss_x1e_" + name, text)
     stats.write_text(text)
-    for name in ("camss_x1e_helpers.h", "camss_x1e_helpers.cpp", "../native-front-stats.h"):
+    for name in ("camss_x1e_helpers.h", "camss_x1e_helpers.cpp", "../native-front-stats.h", "../native-front-params.h"):
         shutil.copy2(HERE / name, libipa / Path(name).name)
     shutil.copy2(HERE / "camss-x1e-helpers-test.cpp",
                  destination / "test/ipa/libipa/camss-x1e-helpers-test.cpp")
@@ -81,6 +81,7 @@ def stage(source, destination):
     paths += ["src/ipa/libipa/camss_x1e_helpers.h",
               "src/ipa/libipa/camss_x1e_helpers.cpp",
               "src/ipa/libipa/native-front-stats.h",
+              "src/ipa/libipa/native-front-params.h",
               "test/ipa/libipa/camss-x1e-helpers-test.cpp"]
     result = {
         "status": "STAGED_LIBCAMERA_HELPERS_NOT_INSTALLED",

@@ -1,0 +1,147 @@
+--- a/camss.h
++++ b/camss.h
+@@ -221,6 +221,9 @@
+ bool camss_x1e_native_front_owner_trial_allowed(struct camss *camss);
+ bool camss_x1e_native_front_queue_trial_allowed(struct camss *camss);
+ bool camss_x1e_native_front_meta_trial_allowed(struct camss *camss);
++bool camss_x1e_native_front_params_trial_allowed(struct camss *camss);
++int camss_x1e_front_params_submit(struct camss_video *video, const u8 *packet, size_t bytes);
++void camss_x1e_front_params_clear(struct camss_video *video);
+ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
+ int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
+ 				     struct camss_buffer *buffer);
+--- a/camss.c
++++ b/camss.c
+@@ -9325,6 +9325,15 @@
+  return native_front_meta_trial && camss_x1e_native_front_queue_trial_allowed(camss);
+ }
+ 
++static bool native_front_params_trial;
++module_param(native_front_params_trial, bool, 0400);
++MODULE_PARM_DESC(native_front_params_trial, "Native front typed steady scalar qualification");
++
++bool camss_x1e_native_front_params_trial_allowed(struct camss *camss)
++{
++ return native_front_params_trial && camss_x1e_native_front_meta_trial_allowed(camss);
++}
++
+ #define CAMSS_X1E_PIX_GATE_QC10C_WIDTH		2560
+ #define CAMSS_X1E_PIX_GATE_QC10C_HEIGHT	1440
+ #define CAMSS_X1E_PIX_GATE_QC10C_STRIDE	3584
+@@ -9605,6 +9614,8 @@
+ 	       video == &camss->vfe[1].line[VFE_LINE_PIX].video_out;
+ }
+ 
++#include "native-front-params-kernel.inc"
++
+ int camss_x1e_pix_iq_session_open(struct camss_video *video)
+ {
+ 	if (!camss_x1e_pix_iq_video(video))
+@@ -9617,6 +9628,7 @@
+ 	/* A new exclusive fd always begins with an empty, closed producer FIFO. */
+ 	camss_x1e_pix_iq_provider_close(video);
+ 	camss_x1e_pix_iq_provider_purge(video);
++	camss_x1e_front_params_clear(video);
+ 	return 0;
+ }
+ 
+@@ -9630,6 +9642,7 @@
+ 
+ 	camss_x1e_pix_iq_provider_close(video);
+ 	camss_x1e_pix_iq_provider_purge(video);
++	camss_x1e_front_params_clear(video);
+ }
+ 
+ int camss_x1e_pix_iq_submit(struct camss_video *video,
+@@ -9652,6 +9665,12 @@
+ 	    (!READ_ONCE(video->x1e_pix_worker_started) ||
+ 	     !READ_ONCE(video->x1e_pix_live_active)))
+ 		return -EBUSY;
++
++	if (camss_x1e_native_front_params_trial_allowed(video->camss)) {
++		ret = native_front_params_profile_store(video, capsule, capsule_size);
++		if (ret)
++			return ret;
++	}
+ 
+ 	mutex_lock(&video->x1e_pix_iq_lock);
+ 	closed = video->x1e_pix_iq_closed;
+--- a/camss-video.h
++++ b/camss-video.h
+@@ -53,6 +53,8 @@
+ 
+ struct camss_video {
+ 	struct camss *camss;
++	struct mutex native_params_lock;
++	u8 *native_params_profile;
+ 	struct mutex native_meta_lock;
+ 	struct native_front_meta *native_meta;
+ 	struct vb2_queue vb2_q;
+--- a/camss-video.c
++++ b/camss-video.c
+@@ -493,6 +493,29 @@
+ 	.def = 0,
+ 	.dims = { CAMSS_X1E_3A_SNAPSHOT_BYTES },
+ 	.flags = V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE,
++};
++
++#include "native-front-params.h"
++#define V4L2_CID_QCOM_CAMSS_X1E_PARAMS (V4L2_CID_USER_BASE + 0x1243)
++
++static int video_x1e_params_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++ struct camss_video *video = container_of(ctrl->handler, struct camss_video, ctrl_handler);
++ if (ctrl->id != V4L2_CID_QCOM_CAMSS_X1E_PARAMS || !video_is_x1e_front_pix(video))
++  return -EINVAL;
++ return camss_x1e_front_params_submit(video, ctrl->p_new.p_u8, NATIVE_FRONT_PARAMS_BYTES);
++}
++static const struct v4l2_ctrl_ops video_x1e_params_ops = {
++ .s_ctrl = video_x1e_params_s_ctrl,
++};
++static const struct v4l2_ctrl_config video_x1e_params_ctrl = {
++ .ops = &video_x1e_params_ops,
++ .id = V4L2_CID_QCOM_CAMSS_X1E_PARAMS,
++ .name = "X1E Typed Front Scalars",
++ .type = V4L2_CTRL_TYPE_U8,
++ .min = 0, .max = 255, .step = 1, .def = 0,
++ .dims = { NATIVE_FRONT_PARAMS_BYTES },
++ .flags = V4L2_CTRL_FLAG_WRITE_ONLY | V4L2_CTRL_FLAG_EXECUTE_ON_WRITE,
+ };
+ 
+ static int video_x1e_iq_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -1200,6 +1223,8 @@
+ 	video->x1e_3a_snapshot = NULL;
+ 	mutex_destroy(&video->x1e_3a_lock);
+ 
++	camss_x1e_front_params_clear(video);
++	mutex_destroy(&video->native_params_lock);
+ 	mutex_destroy(&video->native_meta_lock);
+ 	mutex_destroy(&video->q_lock);
+ 	mutex_destroy(&video->lock);
+@@ -1260,6 +1285,8 @@
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
++	mutex_init(&video->native_params_lock);
++	video->native_params_profile = NULL;
+ 	mutex_init(&video->native_meta_lock);
+ 	video->native_meta = NULL;
+ 	mutex_init(&video->x1e_tlbg_lock);
+@@ -1302,6 +1329,8 @@
+ 		v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_iq_ctrl, NULL);
+ 		v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_tlbg_ctrl, NULL);
+ 		v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_3a_ctrl, NULL);
++		if (camss_x1e_native_front_params_trial_allowed(video->camss))
++			v4l2_ctrl_new_custom(&video->ctrl_handler, &video_x1e_params_ctrl, NULL);
+ 		if (video->ctrl_handler.error) {
+ 			ret = video->ctrl_handler.error;
+ 			goto error_vb2_init;
+@@ -1381,6 +1410,8 @@
+ 	kvfree(video->x1e_3a_snapshot);
+ 	video->x1e_3a_snapshot = NULL;
+ 	mutex_destroy(&video->x1e_3a_lock);
++	camss_x1e_front_params_clear(video);
++	mutex_destroy(&video->native_params_lock);
+ 	mutex_destroy(&video->native_meta_lock);
+ 	mutex_destroy(&video->q_lock);
+ 

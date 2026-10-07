@@ -101,6 +101,38 @@ int camssX1EFrameLuma(Span<const uint8_t> statistics, uint64_t streamId,
     return 0;
 }
 
+int camssX1EFrontParameters(uint64_t requestId, uint32_t updateMask,
+                           Span<const uint16_t> demuxQ10,
+                           Span<const uint32_t> pdpcQ12,
+                           Span<const uint16_t> wbQ10,
+                           native_front_params *output)
+{
+    if (!output || demuxQ10.size() != 4 || pdpcQ12.size() != 4 || wbQ10.size() != 2)
+        return -EINVAL;
+    native_front_params pending{};
+    auto *bytes = reinterpret_cast<uint8_t *>(&pending);
+    auto put = [bytes](size_t offset, uint64_t value, size_t width) {
+        for (size_t i = 0; i < width; ++i)
+            bytes[offset + i] = uint8_t(value >> (8*i));
+    };
+    put(0, NATIVE_FRONT_PARAMS_MAGIC, 4);
+    put(4, NATIVE_FRONT_PARAMS_VERSION, 2);
+    put(6, NATIVE_FRONT_PARAMS_BYTES, 2);
+    put(8, requestId, 8);
+    put(16, updateMask, 4);
+    for (size_t i = 0; i < 4; ++i) {
+        put(24 + 2*i, demuxQ10[i], 2);
+        put(32 + 4*i, pdpcQ12[i], 4);
+    }
+    for (size_t i = 0; i < 2; ++i)
+        put(48 + 2*i, wbQ10[i], 2);
+    int ret = native_front_params_validate(bytes, sizeof(pending));
+    if (ret)
+        return ret;
+    *output = pending;
+    return 0;
+}
+
 int camssX1ERearScalars(const e012k_rear_scalar_input &input,
                        e012k_rear_scalar_output *output)
 {

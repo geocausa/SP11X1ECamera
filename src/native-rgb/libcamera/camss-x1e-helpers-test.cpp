@@ -211,6 +211,24 @@ protected:
         if (camssX1EFrontLuma(stats, 17, 12, &luma) != -EINVAL || luma != 42.0f)
             return TestFail;
 
+        const std::array<uint16_t, 4> demuxQ10{1024, 2048, 4096, 8192};
+        const std::array<uint32_t, 4> pdpcQ12{8192, 6144, 2048, 2731};
+        const std::array<uint16_t, 2> wbQ10{1536, 2048};
+        native_front_params parameters{};
+        if (camssX1EFrontParameters(81, 7, demuxQ10, pdpcQ12, wbQ10, &parameters) ||
+            native_front_params_validate(&parameters, sizeof(parameters)))
+            return TestFail;
+        const auto savedParameters = parameters;
+        if (camssX1EFrontParameters(4, 7, demuxQ10, pdpcQ12, wbQ10, &parameters) != -ERANGE ||
+            camssX1EFrontParameters(81, 4, demuxQ10, pdpcQ12, wbQ10, &parameters) != -EINVAL ||
+            std::memcmp(&savedParameters, &parameters, sizeof(parameters)))
+            return TestFail;
+        auto invalidGains = demuxQ10;
+        invalidGains[0] = 32768;
+        if (camssX1EFrontParameters(81, 7, invalidGains, pdpcQ12, wbQ10, &parameters) != -ERANGE ||
+            std::memcmp(&savedParameters, &parameters, sizeof(parameters)))
+            return TestFail;
+
         std::cout << "PASS: registered gain helper, atomic four-field controls, "
                      "range admission, rear scalar forwarding, stats identity and error preservation\n";
         return TestPass;
