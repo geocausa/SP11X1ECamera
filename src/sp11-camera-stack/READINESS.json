@@ -1,13 +1,15 @@
 {
   "current_product_contract": {
     "date": "2026-10-07",
-    "scope": "native front/rear RGB drivers; no custom userspace camera runtime",
+    "scope": "native front/rear hardware ISP drivers plus standard libcamera control algorithms; no bespoke camera daemon",
     "complete": false,
     "audit": "docs/NATIVE-RGB-ENGINEERING-AUDIT-20261007.md",
     "native_linear_nv12_proven": false,
     "native_rear_runtime_proven": false,
     "kernel_only_automatic_3a_established": false,
-    "historical_software_product_readiness_is_not_this_product": true
+    "historical_software_product_readiness_is_not_this_product": true,
+    "libcamera_pipeline_and_ipa_authorized": true,
+    "literal_kernel_only_policy_superseded": true
   },
   "latest_rgb_product_unactivated_install": {
     "experiment": "E012B",
@@ -7400,5 +7402,14 @@
     "new_reboots": 2,
     "returned_to_Golden_Linux": true,
     "native_rear_runtime_allowed": false
+  },
+  "native_libcamera_20261007": {
+    "helpers_build": "PASS",
+    "compiler_warnings": 0,
+    "tests_passed": 8,
+    "tests_skipped": 2,
+    "pipeline_runtime_implemented": false,
+    "installed": false,
+    "evidence": "docs/NATIVE-RGB-LIBCAMERA-BUILD-20261007.json"
   }
 }

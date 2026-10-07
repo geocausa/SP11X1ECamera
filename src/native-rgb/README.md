@@ -1,5 +1,9 @@
 # Native RGB driver integration
 
+The approved architecture also includes [libcamera](libcamera/README.md).
+The kernel-only builder below remains the hardware source build; it does not
+implement the libcamera pipeline.
+
 This is the current kernel-driver workstream for front IMX681 and rear OV13858.
 Read [the engineering audit](../../docs/NATIVE-RGB-ENGINEERING-AUDIT-20261007.md)
 for scope, evidence, architectural limits and delivery gates.

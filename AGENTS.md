@@ -1,3 +1,25 @@
+## 2026-10-07 approved architecture: hardware ISP plus libcamera
+
+The user accepted native kernel drivers + hardware ISP + standard libcamera
+pipeline/automatic-control support. This supersedes the literal kernel-only
+policy below. No separate bespoke camera daemon, loopback, CPU software ISP,
+AI/effects or Windows binary execution is a release dependency. Implement
+platform-specific control algorithms inside libcamera; reuse validated source.
+Kernel owns sensors, power, DMA, streaming, validated parameters/statistics.
+libcamera owns pipeline configuration, request policy and 3A. Prefer built-in
+IPA code with no separate camera service. Windows-comparable quality remains
+an optical acceptance target, not a promise from architecture alone.
+
+Keep the native hardware delivery gates and all Golden/private-data constraints.
+Current checkout/branch remain SP11X1ECamera-driver / work/native-rgb-driver-20261007.
+DONE: real libcamera/libipa helper integration, Werror ARM64 build, 8 passed
+selected tests, 2 VIMC-dependent skips. See docs/NATIVE-RGB-LIBCAMERA-20261007.md
+and src/native-rgb/libcamera/README.md. No camera pipeline/IPA runtime yet.
+NEXT: physically measure front nominal/extended FLL timing; expose truthful
+sensor ABI, then native linear NV12, metadata/parameter queues and continuous
+capture. Preserve native hardware and Windows-quality gates.
+Older entries below are historical whenever they conflict with this instruction.
+
 ## 2026-10-07 current workstream: native front/rear RGB drivers
 
 The user's latest instruction supersedes the October 6 software-camera product

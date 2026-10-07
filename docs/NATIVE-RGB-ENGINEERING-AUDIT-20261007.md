@@ -1,3 +1,7 @@
+> Architecture update: the user accepted hardware ISP + native drivers + standard
+> libcamera pipeline/IPA on 2026-10-07. The literal kernel-only boundary discussed
+> below is now superseded. Hardware and quality gaps remain unchanged.
+
 # SP11 native RGB engineering audit — 2026-10-07
 
 ## Decision and product contract
@@ -14,14 +18,11 @@ The project has valuable hardware and algorithm evidence, but it has not yet
 produced this product. Front native ISP capture is bounded; rear ISP startup is
 source-only; ordinary native NV12 and continuous capture remain unproved.
 
-A literal kernel-only adaptive camera stack is not established. Linux normally
-puts host-side automatic exposure, white balance and focus policy in libcamera
-IPA while kernel drivers control the hardware and exchange parameters/statistics.
-No autonomous sensor ISP or camera-controller firmware implementing those loops
-has been demonstrated on this SP11. Do not silently add userspace dependencies
-or claim fixed parameters meet automatic Windows parity. Continue driver work;
-resolve this architectural boundary before the adaptive-quality milestone.
-Ordinary applications necessarily access the kernel's camera interfaces.
+The user subsequently accepted standard libcamera for host-side automatic
+exposure, white balance and focus policy. Kernel drivers control hardware and
+exchange parameters/statistics. Qualcomm hardware ISP processes pixels. The
+architecture boundary is resolved; hardware output and pipeline integration are
+still open. Read NATIVE-RGB-LIBCAMERA-20261007.md for the compiled integration.
 
 Primary architecture references:
 - https://docs.libcamera.org/master/libcamera_architecture.html
