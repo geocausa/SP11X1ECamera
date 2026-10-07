@@ -12,9 +12,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-control-response-20261007-02")
-TOKEN = "sp11_camera_native_control_response_20261007_02=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-02"
+D = Path("/var/lib/sp11-camera-native-control-response-20261007-03")
+TOKEN = "sp11_camera_native_control_response_20261007_03=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-control-response-20261007-03"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -57,12 +57,19 @@ def main():
     command = Path("/proc/cmdline").read_text().split()
     need(TOKEN in command and ENTRY in command, "dedicated boot required")
     need(run(["uname", "-r"]).strip() == "7.1.5-sp11-render-parity-v4+", "kernel")
-    need(not (D / "ATTEMPT-CONSUMED").exists(), "identity already consumed")
-    (D / "ATTEMPT-CONSUMED").write_text(Path("/proc/sys/kernel/random/boot_id").read_text())
+    need((D / "ARMED").is_file(), "explicit one-use arm required")
+    with (D / "ATTEMPT-CONSUMED").open("x") as consumed:
+        consumed.write(Path("/proc/sys/kernel/random/boot_id").read_text())
     lock = (D / "camera.lock").open("w")
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     result = {"status": "FAILED_NATIVE_NV12_PROBE", "hardware_streams_completed": 0,
               "pixels_private_on_sp11": True, "retry": False}
+    result["comparison_session"] = "front-room-light-20261007-01"
+    result["comparison_role"] = "Linux-before-Windows"
+    result["environment"] = {"room_lights_on_user_report_utc":"2026-10-07T18:26:29Z",
+        "user_asked_keep_lighting_position_unchanged":True,
+        "illuminance_measured":False,"scene_continuity_independently_verified":False,
+        "outdoor_rain_cloud_user_report_date":"2026-10-07"}
     try:
         for unit in ("grub-initrd-fallback.service", "grub2-common.service"):
             state = {}

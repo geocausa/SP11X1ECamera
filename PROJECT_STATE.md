@@ -1,3 +1,19 @@
+## 2026-10-07 user turned room lights ON; matched comparison starting
+
+User explicitly reports lights ON at18:26:29UTC/19:26:29BST. Asked to preserve
+SP11 position and lighting across captures. No lux or camera orientation measured.
+Fresh response03 will capture native standard libcamera320 NV12 frames under
+new lighting BEFORE Windows,using existing qualified audit31/build09 and known
+register readbacks. Identity03 is new,unarmed and has not run. Atomic consume
+at entry and ARMED check added; old01/02 spent. Source changes only identity,
+execution guard and recorded environment; no sensor/ISP/tuning change.
+NEXT Linux03 -> same-SP11 Windows FRONT RGB reference -> fresh Linux04 bracket.
+No matched condition/quality claim until both sides and continuity evidence.
+Previous RAW01 physical gain distribution response proof retained; previous
+exposure/FLL empirical response2 retained,gain delays/auto feedback unqualified.
+Current Goldene0c99b76,31streams/27retiredIDs/54boots;failurecounts5/3 unchanged.
+Earlier NEXT is history.
+
 ## 2026-10-07 native RAW gain actuation proven; optical signal/delay unresolved
 
 E-NATIVE-RAW-CONTROL-01 source9e9e44c5/audit31 modules passes320 native front
