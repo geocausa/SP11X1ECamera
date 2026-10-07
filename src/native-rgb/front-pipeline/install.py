@@ -9,14 +9,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PROJECT = ROOT.parents[1]
-BUILD = PROJECT / "02-kernel/native-pipeline-20261007-04"
-MODULES = PROJECT / "02-kernel/native-rgb-20261007-audit-27"
-D = Path("/var/lib/sp11-camera-native-pipeline-20261007-04")
-B = Path("/boot/sp11-7.1.5-camera-native-pipeline-20261007-04")
-G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_pipeline_20261007_04")
-S = Path("/etc/systemd/system/sp11-camera-native-pipeline-20261007-04.service")
-ID = "sp11-camera-native-pipeline-20261007-04"
-LIBBUILD = PROJECT / "02-kernel/libcamera-native-rgb-pipeline-20261007-06"
+BUILD = PROJECT / "02-kernel/native-pipeline-20261007-05"
+MODULES = PROJECT / "02-kernel/native-rgb-20261007-audit-29"
+D = Path("/var/lib/sp11-camera-native-pipeline-20261007-05")
+B = Path("/boot/sp11-7.1.5-camera-native-pipeline-20261007-05")
+G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_pipeline_20261007_05")
+S = Path("/etc/systemd/system/sp11-camera-native-pipeline-20261007-05.service")
+ID = "sp11-camera-native-pipeline-20261007-05"
+LIBBUILD = PROJECT / "02-kernel/libcamera-native-rgb-pipeline-20261007-07"
 F = Path("/lib/firmware/qcom/sp11/imx681-2560x1440-nv12-v1.bin")
 GOLDEN = Path("/boot/sp11-7.1.5-audio-fullio-v19c")
 
@@ -57,6 +57,7 @@ def main():
     assert build["front_meta_trial_staged"] is True
     assert build["front_params_trial_staged"] is True
     assert build["front_profile_trial_staged"] is True
+    assert build["front_sof_trial_staged"] is True
     profile = PROJECT / "02-kernel/native-front-profile-20261007-01/imx681-2560x1440-nv12-v1.bin"
     assert profile.stat().st_size == 36744
     assert sha(profile) == "c59a54b760a8662af650fa8961aab2224c7c0d2a0cdcdea3c9581370ac5ddd03"
@@ -65,7 +66,7 @@ def main():
     assert library["status"] == "PASS_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
     for relative, expected in library["built_outputs"].items():
         assert sha(LIBBUILD / relative) == expected
-    source = PROJECT / "06-camera/reference/libcamera-native-rgb-pipeline-20261007-06"
+    source = PROJECT / "06-camera/reference/libcamera-native-rgb-pipeline-20261007-07"
     for relative, expected in library["staged_sources"].items():
         assert sha(source / relative) == expected
     assert sha(source / "src/libcamera/pipeline/camss-x1e/camss-x1e.cpp") == sha(ROOT / "src/native-rgb/libcamera/camss-x1e.cpp")
@@ -121,8 +122,8 @@ def main():
             existing_blacklist.extend(value.split("=", 1)[1].split(","))
     command = [x for x in command if not x.startswith(
         ("BOOT_IMAGE=", "sp11_entry=", "modprobe.blacklist="))]
-    command += ["sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-04",
-                "sp11_camera_native_pipeline_20261007_04=1",
+    command += ["sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-05",
+                "sp11_camera_native_pipeline_20261007_05=1",
                 "modprobe.blacklist=" + ",".join(dict.fromkeys(existing_blacklist + [
                     "qcom_camss", "imx681", "ov13858", "sp11_vd55g0", "vd55g0"]))]
     uuid = run(["findmnt", "-n", "-o", "UUID", "/"]).strip()
@@ -148,7 +149,7 @@ menuentry 'SP11 native front NV12 — one use' --id '{ID}' {{
     write(grub, G, "0755")
     returning = f"""#!/usr/bin/env bash
 set -Eeuo pipefail
-if grep -qw 'sp11_camera_native_pipeline_20261007_04=1' /proc/cmdline; then
+if grep -qw 'sp11_camera_native_pipeline_20261007_05=1' /proc/cmdline; then
   printf 'service_result=%s\\nexit_code=%s\\nexit_status=%s\\n' "${{SERVICE_RESULT:-unknown}}" "${{EXIT_CODE:-unknown}}" "${{EXIT_STATUS:-unknown}}" > {D}/SERVICE-RESULT.txt
   if test -f {F}.native-profile-negative; then
     install -m 0600 {D}/imx681-2560x1440-nv12-v1.bin {F}
@@ -168,7 +169,7 @@ Description=SP11 standard libcamera front capture qualification, one use
 Wants=grub-initrd-fallback.service grub2-common.service
 After=grub-initrd-fallback.service grub2-common.service
 Before=display-manager.service
-ConditionKernelCommandLine=sp11_camera_native_pipeline_20261007_04=1
+ConditionKernelCommandLine=sp11_camera_native_pipeline_20261007_05=1
 
 [Service]
 Type=oneshot

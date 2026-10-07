@@ -84,6 +84,7 @@ public:
  int submitParameters();
  int queueImage(FrameBuffer *buffer);
  int ensureSpare();
+ void frameStart(uint32_t sequence);
  void imageReady(FrameBuffer *buffer);
  void statisticsReady(FrameBuffer *buffer);
  void meteringReady(uint32_t bufferId, uint64_t stream, uint32_t sequence,
@@ -94,6 +95,8 @@ public:
 
  std::unique_ptr<ipa::camss_x1e::IPAProxyCamssX1E> ipa_;
  bool ipaStarted_ = false;
+ bool sofEnabled_ = false;
+ uint32_t nextSofSequence_ = 0;
  std::vector<uint32_t> ipaBufferIds_;
  std::shared_ptr<MediaDevice> media_;
  std::unique_ptr<V4L2Subdevice> sensor_, phy_, csid_, vfe_;
@@ -289,6 +292,7 @@ int CamssX1ECameraData::init()
  properties_.set(properties::Location, properties::CameraLocationFront);
  video_->bufferReady.connect(this, &CamssX1ECameraData::imageReady);
  statistics_->bufferReady.connect(this, &CamssX1ECameraData::statisticsReady);
+ csid_->frameStart.connect(this, &CamssX1ECameraData::frameStart);
  closeDevices();
  return 0;
 }
@@ -398,6 +402,7 @@ int CamssX1ECameraData::start()
  if (running_ || !startup_.empty() || !metadata_.empty())
   return -EBUSY;
  nextParameter_ = 5;
+ nextSofSequence_ = 0;
  streamId_ = 0;
  pixelsQueued_ = 0;
  availableStartup_.clear();
@@ -441,6 +446,10 @@ int CamssX1ECameraData::start()
  if (ret)
   goto error;
  ipaStarted_ = true;
+ ret = csid_->setFrameStartEnabled(true);
+ if (ret)
+  goto error;
+ sofEnabled_ = true;
  for (const auto &buffer : metadata_) {
   ret = statistics_->queueBuffer(buffer.get());
   if (ret)
@@ -522,6 +531,12 @@ void CamssX1ECameraData::stop()
  /* Pixel STREAMOFF stops hardware before any statistics/storage is released. */
  int ret = videoAllocated_ ? video_->streamOff() : 0;
  int statsRet = statisticsAllocated_ ? statistics_->streamOff() : 0;
+ if (sofEnabled_) {
+  int eventRet = csid_->setFrameStartEnabled(false);
+  if (eventRet)
+   LOG(CAMSSX1E, Error) << "Frame-start unsubscribe failed: " << eventRet;
+  sofEnabled_ = false;
+ }
  /* stop() is a synchronous IPA barrier: no shared mapping is released while
   * an asynchronous statistics invocation can still be reading it. */
  if (ipaStarted_) {
@@ -560,6 +575,22 @@ void CamssX1ECameraData::fail(const char *reason)
   LOG(CAMSSX1E, Error) << reason;
  }
  stop();
+}
+
+void CamssX1ECameraData::frameStart(uint32_t sequence)
+{
+ if (!running_)
+  return;
+ if (sequence != nextSofSequence_ ||
+     nextSofSequence_ == std::numeric_limits<uint32_t>::max()) {
+  fail("Native frame-start sequence discontinuity");
+  return;
+ }
+ nextSofSequence_++;
+ LOG(CAMSSX1E, Debug) << "CAMSS_X1E_SOF frame=" << sequence;
+ /* Receiver SOF is not first-row sensor exposure or BOOTTIME. Keep the
+  * public SensorTimestamp absent. Control scheduling remains disabled until
+  * SOF/output association and sensor application delays are qualified. */
 }
 
 void CamssX1ECameraData::imageReady(FrameBuffer *buffer)

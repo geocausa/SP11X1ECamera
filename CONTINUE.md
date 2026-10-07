@@ -1,3 +1,25 @@
+## 2026-10-07 native receiver frame-sync built; fresh pipeline05 next
+
+Source-qualified CSID680 IPP CAMIF_SOF is bit4 (status0xac, clear0xb4);
+Qualcomm GPL register source, commit38d50357, SHA9240958e, matches the pinned
+SP11 Windows IPP handler bit4 test. Epoch0 bit21 remains a different event.
+Source evidence: src/native-rgb/front-sof-source.json. Kernel audit29 compiles
+W=1/-Werror: explicit native_front_sof_trial depends on data-only profile mode;
+CSID1 accepts standard FRAME_SYNC, existing owning ISR emits ordered events,
+IRQ barriers reset/start and disarm/stop. No hardware mask/DMA programming change.
+Read-only phase observations relate SOF count to VIDEO interrupt count.
+
+libcamera build07 passes Werror9 tests/2 VIMC skips; subscribes to receiver
+frameStart before capture, checks continuity, unsubscribes after hardware stop.
+No control scheduling or SensorTimestamp publication. Fresh pipeline05 is the
+next one-use candidate, requiring80 standard cam NV12/statistics/IPA pairs and
+actual SOF delivery/phase observations, STOP/neutral/standby/Golden protection.
+Audit28 was an offline SOF-only build; audit29 adds phase observations. Neither
+created a sensor stream or consumed hardware identity. Hardware timing remains
+unproven until pipeline05. Sensor delays/metrology/AE/AWB and rear ISP remain next.
+Matched Windows scene/lighting/capture-time condition still applies to quality;
+low Y alone is not a brightness defect. Earlier NEXT statements are history.
+
 ## 2026-10-07 current native front IPA: both standard paths hardware-proven
 
 Actual libcamera build06/audit27 now passes isolated standard cam80 capture and

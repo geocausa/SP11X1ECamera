@@ -11,9 +11,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-pipeline-20261007-04")
-TOKEN = "sp11_camera_native_pipeline_20261007_04=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-04"
+D = Path("/var/lib/sp11-camera-native-pipeline-20261007-05")
+TOKEN = "sp11_camera_native_pipeline_20261007_05=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-05"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -90,7 +90,7 @@ def main():
                        "videobuf2_dma_sg", "videobuf2_vmalloc", "v4l2_cci"):
             run(["modprobe", module])
         run(["insmod", str(D / "modules/qcom-camss.ko"), "e004j_ir_dphy_windows_parity=1",
-             "native_linear_nv12_trial=1", "native_front_owner_trial=1", "native_front_queue_trial=1", "native_front_meta_trial=1", "native_front_params_trial=1", "native_front_profile_trial=1"])
+             "native_linear_nv12_trial=1", "native_front_owner_trial=1", "native_front_queue_trial=1", "native_front_meta_trial=1", "native_front_params_trial=1", "native_front_profile_trial=1", "native_front_sof_trial=1"])
         for name in ("ov13858", "imx681", "sp11-vd55g0"):
             run(["insmod", str(D / ("modules/" + name + ".ko"))])
         result["phase"] = "sensor_bind_and_initial_suspend"
@@ -228,12 +228,42 @@ def main():
              "one kernel firmware profile admission")
         result["startup_profile"] = {"kernel_firmware_loader":True,"data_only":True,
             "raw_command_control_present":False,"application_reads_startup_profile":False}
+        irq_sofs = [tuple(map(int,p)) for p in re.findall(
+            r"NATIVE_FRONT_SOF sequence=(\d+) timestamp=(\d+)", private_log)]
+        app_sofs = [int(p) for p in re.findall(r"CAMSS_X1E_SOF frame=(\d+)",process.stderr)]
+        need(len(irq_sofs) >= 84 and [p[0] for p in irq_sofs] == list(range(len(irq_sofs))) and
+             all(b[1]>a[1] for a,b in zip(irq_sofs,irq_sofs[1:])), "ordered actual receiver SOF IRQs")
+        need(len(app_sofs) >= 84 and app_sofs == list(range(len(app_sofs))) and
+             len(app_sofs) <= len(irq_sofs), "standard libcamera frameStart delivery without drops")
+        phases = [tuple(map(int,p)) for p in re.findall(
+            r"NATIVE_FRONT_FRAME_PHASE source=(\d+) sof_count=(\d+) co_latched_sof=(\d+) timestamp=(\d+)",
+            private_log)]
+        need(len(phases) >= 84 and [p[0] for p in phases] == list(range(1,len(phases)+1)) and
+             all(0 < p[1] <= len(irq_sofs) for p in phases), "receiver/video interrupt phase observations")
+        selected = phases[4:84]
+        from collections import Counter
+        phase_offsets = dict(Counter(p[1]-p[0] for p in selected))
+        receiver_to_video_irq_ns = [p[3]-irq_sofs[p[1]-1][1] for p in selected]
+        video_irq_to_completion_ns = [timestamps[p[0]-5]-p[3] for p in selected]
+        result["frame_start"] = {
+            "standard_v4l2_frame_sync":True,"standard_libcamera_frameStart":True,
+            "event_source":"CSID680 IPP CAMIF_SOF bit4, existing owning ISR",
+            "event_irq_count":len(irq_sofs),"event_app_count":len(app_sofs),
+            "event_irq_frame_rate":(len(irq_sofs)-1)*1e9/(irq_sofs[-1][1]-irq_sofs[0][1]),
+            "receiver_sof_events":[{"sequence":seq,"monotonic_irq_ns":ts} for seq,ts in irq_sofs],
+            "video_interrupt_phase":[{"source_sequence":src,"observed_sof_count":count,
+                "co_latched_sof":bool(co),"monotonic_observation_ns":ts} for src,count,co,ts in phases],
+            "steady_sof_count_minus_video_source_histogram":phase_offsets,
+            "steady_latest_sof_to_video_irq_ns":receiver_to_video_irq_ns,
+            "steady_video_irq_to_buffer_completion_ns":video_irq_to_completion_ns,
+            "sensor_exposure_timestamp_proven":False,"sensor_control_delays_measured":False,
+            "phase_is_observation_not_exposure_identity":True}
         result["observation"] = data
         run(["sha256sum", "-c", str(D / "ASSETS.sha256")])
         idle()
         need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "neutral", "libcamera release must leave neutral route")
         idle()
-        result.update(status="PASS_NATIVE_FRONT_LIBCAMERA_IPA_80_FRAMES",
+        result.update(status="PASS_NATIVE_FRONT_FRAME_SYNC_80_FRAMES",
                       final_route="neutral", all_sensors_suspended=True,
                       optical_quality_parity_proven=False, continuous_capture_80_frames_proven=True)
     except Exception as exc:

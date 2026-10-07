@@ -25,7 +25,7 @@ def checked_source(name, expected):
 def command(args, **kwargs):
     subprocess.run([str(a) for a in args], check=True, **kwargs)
 
-def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=False, front_meta_trial=False, front_params_trial=False, front_profile_trial=False):
+def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=False, front_meta_trial=False, front_params_trial=False, front_profile_trial=False, front_sof_trial=False):
     manifest = json.loads((HERE / "sources.json").read_text())
     if front_owner_trial and not nv12_trial:
         raise ValueError("front owner trial requires isolated NV12 trial")
@@ -58,6 +58,11 @@ def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=F
         if not front_params_trial:
             raise ValueError("front tuning profile requires typed parameter trial")
         for name, expected in manifest["front_profile_trial_inputs"].items():
+            checked_source(name, expected)
+    if front_sof_trial:
+        if not front_profile_trial:
+            raise ValueError("native SOF events require data-only profile trial")
+        for name, expected in manifest["front_sof_trial_inputs"].items():
             checked_source(name, expected)
     destinations = set()
     for fragment in manifest["rear_fragments"]:
@@ -134,6 +139,9 @@ def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=F
             shutil.copy2(HERE / name, camss / name)
         command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
                  HERE / "front-profile-trial.patch"], cwd=camss)
+    if front_sof_trial:
+        command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
+                 HERE / "front-sof-trial.patch"], cwd=camss)
     (out / "imx681").mkdir()
     for name in manifest["baseline_inputs"]:
         path = ROOT / name
@@ -169,6 +177,7 @@ def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=F
         "front_meta_trial_staged": front_meta_trial,
         "front_params_trial_staged": front_params_trial,
         "front_profile_trial_staged": front_profile_trial,
+        "front_sof_trial_staged": front_sof_trial,
         "nv12_trial_default_denied": True,
         "compiler_policy": "W=1 and -Werror",
         "nv12_runtime_proven": False,
@@ -195,13 +204,15 @@ def main():
                         help="Stage typed front scalar qualification; requires metadata trial")
     parser.add_argument("--front-profile-trial", action="store_true",
                         help="Stage data-only kernel firmware tuning; requires typed parameter trial")
+    parser.add_argument("--front-sof-trial", action="store_true",
+                        help="Stage native receiver frame-sync events; requires profile trial")
     options = parser.parse_args()
     if bool(options.kernel_source) != bool(options.kernel_output):
         parser.error("kernel-source and kernel-output must be supplied together")
     out = options.out.resolve()
     if out.is_relative_to(ROOT):
         parser.error("build output must be outside the source checkout")
-    result = assemble(out, options.nv12_trial, options.front_owner_trial, options.front_queue_trial, options.front_meta_trial, options.front_params_trial, options.front_profile_trial)
+    result = assemble(out, options.nv12_trial, options.front_owner_trial, options.front_queue_trial, options.front_meta_trial, options.front_params_trial, options.front_profile_trial, options.front_sof_trial)
     if options.kernel_source:
         result["status"] = "BUILD_IN_PROGRESS"
         (out / "build-result.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
