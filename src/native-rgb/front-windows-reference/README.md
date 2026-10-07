@@ -22,3 +22,21 @@ No lux measurement or independent scene continuity guarantee. Linux-before03 is
 fixed manual controls,Windows auto; diagnostic brightness comparison only unless
 settings/range/scene can be separately qualified. Fresh Linux-after04 completes
 bracket. Do not call image quality parity from dimensions or raw mean Y alone.
+
+## Completed and consumed
+
+Fresh01 successfully selected and delivered2560x1440 NV12,16 advancing source
+timestamps,meanY88.067..89.561. Single live run completed18:46:40.428UTC and
+task unregistered. Initial bootstrap guard mistook null trigger list for1 and
+removed task beforeStart/noCONSUMED/noRESULT; audit proved zero camera access.
+Corrected bootstrap validates exported Task XML actual trigger children0.
+Do not reuse this identity. Original metadata/source/manifests private Windows.
+
+Linux03/04 bracket complete; sparse restored-baseline medians5.088229/4.940304,
+difference2.907%. Windowsmedian88.255408. This compares automaticWindows against
+fixedmanualLinux,not matched sensor exposure/gain or image-quality parity. Scene
+identity/FOV/lux unqualified. Source-timestamp uniqueness does not establish FPS.
+Both declared full range,official SDK MF GUID/enum checked; no transfer/black
+photometric calibration. Derived reports contain no pixels or image hashes.
+Timing gate closed: exposure/analogue/digital empirical response2 on both Linux
+runs. Next standard libcamera DelayedControls and calibrated bounded AE.

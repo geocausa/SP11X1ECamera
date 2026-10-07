@@ -1,3 +1,71 @@
+## 2026-10-07 illuminated Linux/Windows/Linux bracket complete; all control delays2
+
+Room lights user reportedON18:26:29UTC. Linux03 source4fffdaa1/audit31/build09
+and Linux04 sourcef9c77ffe/SAME modules/libcamera/tuning each pass320 native
+standard cam2560x1440 NV12 frames,324 isolated IPA results,1625 owner checks/
+325 retirements,328 typed defaults,19 matching known-register readbacks. All3
+fields exposure1000/2000,analogue0/512,digital256/512 show six reversible
+statistics+processed-Y responses at command SOF+2 in EACH independent boot.
+Twelve changes/field overall now qualify empirical response delay2 for tested
+tuples; no copied sensor delay or gain inference solely from write/readback.
+Prior RAW01 already showed actual gain-dependent distribution response.
+Auto feedback/DelayedControls runtime integration still disabled/unimplemented;
+first-row SensorTimestamp,optical gain law,meter scale/zero point/AE target
+remain unqualified. Do not infer application exposure timestamp from CSI IRQ.
+
+Fresh Windows reference source3ee09e32 passes16 distinct source-timestamped
+FRONT Color/VideoRecord2560x1440 NV12 samples. Ordinary automatic controls
+unchanged,API reportsauto exposure/5000ticks,ISO unavailable. WinRT API setting
+is NOT independent sensor-register proof. Full nominal Y range declared by
+MF property GUID/value1,verified official SDK header and Microsoft enum docs.
+No optical pixels/files/image hashes exported,IR/AI/effects not requested.
+
+Actual time bracket:
+- Linux-before03 capture18:32:26.820..18:32:38.589UTC.
+- Windows capture18:46:28.478..18:46:39.771UTC.
+- Linux-after04 capture18:55:16.955..18:55:28.675UTC.
+
+Same sparseY sampling2560x1440,every64th horizontal pixel/allrows,57600 values/
+frame,using28 final restored-baseline Linux frames each side. Median meanY
+before5.088229/Windows88.255408/after4.940304. Linux baseline difference2.907%,
+passes5%or measured-temporal-jitter screen. Windows/Linux output-code mean ratio
+17.60086 is diagnostic,NOT optical gain/radiometry or quality ratio. Clear
+captured-mode gap persists under reported room lights; cannot assign its cause
+to weather/lens/driver/ISP alone. Windowsauto vs Linuxfixedmanual controls are
+not matched;lux,scene identity/position and FOV/crop alignment uninstrumented.
+Both declare full nominal range,but transfer/black point not photometrically
+calibrated. Do NOT promote stable aggregate means to complete scene identity,
+image quality parity or conclusively localized driver brightness defect.
+
+All LinuxSTOPs clean,sensors suspended,graph neutral,critical0,Golden unchanged.
+03 candidatea9acc136 returned Golden8c0c4887;Windows returned Golden5a4c829e;
+04 candidate8d1a6317-5d65-4718-a061-ef8b4fc71468 returned current Golden
+f4c6df65-3302-4144-8545-3fd0cf83ea58.03/04/nativeRAW01 all consumed/retired.
+Native totals33 completed sensor streams,29 retired IDs,58 native candidate/
+Goldenboots;failure5prestream/3poststart unchanged. Separate new Windows
+reference1 stream/1 consumedID/2 Windows-and-Goldenboots (combined60 boots,
+30 identities). Windows atomic task executedexactlyonce/unregistered; initial
+NULL-trigger-count preparation error occurred BEFORE Start/camera and was
+audited/corrected with actual XML trigger count0,not a second capture.
+No candidate boot/unit/writer/FW,camera nodes/modules/process remains.
+EFI order0005,0004,0000,0001,0002,0006 unchanged;Golden permanent default.
+
+NEXT implement standard libcamera DelayedControls using measured delay2 for
+FLL/exposure/analogue/digital,all four controls same normal non-priority clustered
+ioctl;metadata describes queued/applied controls without SensorTimestamp. Verify
+explicit bounded request controls and restart/reset at hardware before feedback.
+Then resolve RAW/ISP stats optical domain/black level/normalization and bounded
+AE targets using Windows reference. Do not repeat indistinguishable low-signal
+gain-delay experiments; timing gate now closed for tested tuples. Rear ISP/focus,
+dynamic tuning/ABI/clock policy,independent tuning,soak/switch/fault and full
+Windows optical acceptance remain. No bespoke daemon/CPU image ISP/AI/OEM
+executable runtime,no OS sleep. Source/derived evidence committed below:
+docs/NATIVE-RGB-FRONT-CONTROL-RESPONSE-03/04-20261007.json (two files),
+docs/NATIVE-RGB-WINDOWS-FRONT-LIGHT-01-20261007.json,
+docs/NATIVE-RGB-FRONT-ROOM-LIGHT-BRACKET-20261007.json,
+src/native-rgb/front-windows-reference/analyze-bracket.py.
+Earlier NEXT is history.
+
 ## 2026-10-07 Windows front1440p reference passes; Linux-after04 next
 
 Fresh E-NATIVE-FRONT-WINDOWS-LIGHT-01 source3ee09e32 physically delivered16
