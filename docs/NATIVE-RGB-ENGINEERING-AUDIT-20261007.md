@@ -1,3 +1,43 @@
+## 2026-10-07 native RAW gain actuation proven; optical signal/delay unresolved
+
+E-NATIVE-RAW-CONTROL-01 source9e9e44c5/audit31 modules passes320 native front
+3840x2160 packed10-bit frames at30.005318fps with ISP trials disabled. All19
+known-register readbacks match coherent FLL/exposure/analogue/digital tuples,
+error0;18 changes plus unchanged final restore. Read-only sparse aggregate
+metrology samples31654 photosites/phase/frame,no image conversion/export.
+STOP clean,sensors suspended,graph neutral,critical0,Golden hashes unchanged.
+Capture UTC2026-10-07T17:53:00.473..17:53:11.395; candidate
+a64b9f97-99f7-4bee-a38a-3462ac44452a returned Golden
+e0c99b76-ca28-4be3-9332-86c7cdf6eecd. Identity01 consumed/retired;31 completed
+sensor streams,27 retired identities,54 candidate/Golden boots;5 prestream/
+3 poststart qualification failures unchanged. No boot/unit/writer/FW remains.
+
+RAW means stay near64 with medians64,p01=62/63,p99=65..67; mean-response
+qualification remains inconclusive for exposure and both gains. Physical
+illumination/lens position and optical black reference are unknown; do not infer
+a dark-image defect,covered lens,night or failed gain programming. Retrospective
+spatial-distribution variance shows strong reversible gain response,all4 Bayer
+phases and all3 cycles: analogue raised/baseline variance1.80..2.08,digital
+3.76..4.05. Nine analyzer tests pass,including variance response without mean
+change and drift/no-response rejection. Original runtime mean analysis preserved;
+variance is a separately labelled retrospective interpretation of same capture.
+Controls demonstrably affect sensor RAW. This does NOT qualify nominal optical
+gain scaling,scene brightness or gain application delay. No RAW SOF reference:
+timestamps are buffer completion. Previous processed exposure/FLL response delay2
+remains empirical; no copied gain delay or SensorTimestamp. Auto feedback disabled.
+
+NEXT matched same-SP11 Windows front reference bracketed by fresh Linux captures;
+preserve camera/scene/position/light,record UTC/settings/exposure/gain/range and
+environment changes. Rain/cloud report2026-10-07 persists; no matched Windows
+reference yet. Qualify comparison only with actual condition evidence. Then
+resolve ISP meter domain/black-level/scale using RAW and processed statistics;
+do not repeat indistinguishable low-signal ISP/RAW gain tests. Rear ISP/focus,
+dynamic tuning,production ABI/clock policy,independent tuning,soak/switch/fault
+and Windows optical acceptance remain. No bespoke daemon/CPU image ISP/AI/OEM
+executable runtime,no OS-level sleep. Source: src/native-rgb/front-raw-control;
+evidence: docs/NATIVE-RGB-FRONT-RAW-CONTROL-01-20261007.json.
+Earlier NEXT is history.
+
 ## 2026-10-07 native RAW gain isolation source ready; fresh01 unarmed
 
 The next bounded experiment E-NATIVE-RAW-CONTROL-01 is source-built and camera-free

@@ -11,7 +11,9 @@ def noise(v):
     m=median(v)
     return max(1e-5, 1.4826*median([abs(x-m) for x in v]))
 
-def analyze(frames):
+def analyze(frames, metric="mean"):
+    if metric not in ("mean","variance"):
+        raise ValueError("unsupported RAW metric")
     if len(frames)!=320 or [f["sequence"] for f in frames]!=list(range(320)):
         raise ValueError("complete sequential 320-frame metrology required")
     for f in frames:
@@ -22,9 +24,10 @@ def analyze(frames):
                 math.isfinite(c[k]) and c[k]>=0 for k in
                 ["mean","variance","zero_fraction","storage_saturation_fraction"]):
                 raise ValueError("invalid raw channel")
-    def window(step,ch,key="mean"):
+    def window(step,ch,key=None):
+        key = metric if key is None else key
         return [f["channels"][ch][key] for f in frames[step*16+8:step*16+16]]
-    result={"analysis":"raw_code_value_response_above_temporal_noise",
+    result={"analysis":"raw_"+metric+"_response_above_temporal_jitter", "metric":metric,
         "calibrated_brightness":False, "gain_law_optically_verified":False,
         "sensor_application_delay_qualified":False,
         "frame_sync_reference_available":False, "fields":{}}

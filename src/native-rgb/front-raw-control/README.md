@@ -42,3 +42,22 @@ systemd timeout/stop hook reboots to saved Golden on success or failure.
 Kernel/DTB/initrd manifests are sealed before arm, with unchanged Golden hashes.
 An uncertain stop/graph failure gets no guessed same-boot rollback/retry.
 Retire the boot directory/unit/GRUB writer after return, retain private evidence.
+
+## Hardware01 result — consumed and retired
+
+Source9e9e44c5 passed320frames at30.005318fps;19 hardware register reads matched,
+STOP clean,sensors idle,graph neutral,critical0,Golden unchanged. Candidate
+a64b9f97-99f7-4bee-a38a-3462ac44452a returned Golden
+e0c99b76-ca28-4be3-9332-86c7cdf6eecd. No rearm/retry this identity.
+
+Original mean-response analysis is preserved and remains unqualified for all
+three fields. RAW sample medians64,p01=62/63,p99=65..67; the cause and optical
+black calibration are unestablished. Retrospective variance analysis using the
+same temporal-jitter/restoration/clipping checks passes all4 phases in all3
+cycles for analogue and digital. Nine analyzer tests pass. Spatial distribution
+variance changes do prove captured RAW response to controls; do NOT translate
+this into scene brightness,nominal optical gain,exposure SOF delay or covered
+lens/night/driver brightness failure. No additional hardware experiment was run.
+Derived evidence: docs/NATIVE-RGB-FRONT-RAW-CONTROL-01-20261007.json.
+Next matched Windows same physical front camera/scene/light with Linux bracket;
+record UTC/settings/environment and explicitly reject optical parity if changed.

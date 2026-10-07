@@ -19,6 +19,25 @@ class Tests(unittest.TestCase):
         r=a.analyze(sample())
         self.assertTrue(all(f["all_four_phases_repeatable"] for f in r["fields"].values()))
         self.assertFalse(r["sensor_application_delay_qualified"])
+    def test_variance_response_without_mean_change(self):
+        s=sample()
+        for f in s:
+            step=min(f["sequence"]//16,18)
+            for c in f["channels"]:
+                c["mean"]=64
+                c["variance"]=(2 if step%2 else 1)+((f["sequence"]%3)-1)*0.0001
+        self.assertFalse(a.analyze(s)["fields"]["digital_gain"]["all_four_phases_repeatable"])
+        r=a.analyze(s,"variance")
+        self.assertTrue(all(f["all_four_phases_repeatable"] for f in r["fields"].values()))
+        self.assertFalse(r["gain_law_optically_verified"])
+        self.assertFalse(r["sensor_application_delay_qualified"])
+    def test_variance_no_response(self):
+        self.assertFalse(a.analyze(sample(),"variance")["fields"]["analogue_gain"]["all_four_phases_repeatable"])
+    def test_variance_drift(self):
+        s=sample()
+        for f in s:
+            for c in f["channels"]:c["variance"]=1+f["sequence"]*0.01
+        self.assertFalse(a.analyze(s,"variance")["fields"]["digital_gain"]["all_four_phases_repeatable"])
     def test_no_response(self):
         s=sample()
         for f in s:
