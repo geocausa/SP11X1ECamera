@@ -1,3 +1,51 @@
+## 2026-10-07 standard delayed controls FULL-RATE hardware gate CLOSED
+
+Fresh04 sourceb64a94f2/audit31/pipeline12 PASS:120 standard cam public scripted
+manual requests,all9 explicit lists/eight changes,physical CCI readbacks and
+intended write-SOF intervals match. Applied metadata is associated with exact
+application frame (admission includes internal buffers). Application sequences
+CONTIGUOUS4..123;full-rate measured30.00384/30.00540fps and scripted longer FLL
+15.00326fps. Threshold2 fixes prior11 spare-induced25% application frame loss.
+No optical files written in04; optical two-frame-delay basis remains earlier
+independent illuminated03/04 sensor-response boots,not invented new opticalproof.
+
+Same04boot public1/24/24 lifecycle additionally PASS: custom start exposure2000/
+analogue512/digital512 then baseline restart and release/reacquire. All49 requests
+are contiguous30fps when multiframe,metadata/three CCI readbacks match. Camera
+reference returned before manager.stop;manager shutdown and isolatedIPAworker
+exit verified. Four kernel STOPs125/6/29/29 clean,error0;945 owner checks/critical0,
+all sensors runtime suspended/neutral. No SensorTimestamp (first-row unproven),
+AE/AWB/automatic feedback OFF. Only standard libcamera pipeline/IPA/manual API,
+no daemon/CPU pixelISP/loopback/AI/OEM executable runtime. Private tuning still
+required diagnostically,independent release tuning remains unfinished.
+
+Derived hardware docs/NATIVE-RGB-FRONT-REQUEST-CONTROLS-04-20261007.json;
+source src/native-rgb/libcamera/camss-x1e.cpp/camss-x1e-controls.h plus semantic
+quantization/admission/reset tests;Werror build12 tenPASS/two virtualSKIP.
+Full result UTC capture fields refer lifecycle only because combined harness
+replaced preceding cam fields; do not assert an exact whole-run UTC window.
+Prior01 owner-zero harness failure corrected using saved traces,NOT repeat live.
+Prior02 transport3STOP clean but pipe timeout/publicmetadata incomplete;
+03 corrected Camera lifetime/directlogs passed but exposed spare throughput
+regression;04 qualifies corrected full-rate source. Original failures preserved.
+
+04consumed/retired,candidatee4f325a4-5df9-4f1f-820d-3d5cbe039bb1 returned current
+Golden efcd9f1f-9608-48fe-8612-7b51a3dfb95c. All01/02/03/04spent. No candidate
+boot/unit/writer/FW/nodes/modules/process remains. Protected Golden hashes and
+EFIorder0005,0004,0000,0001,0002,0006 unchanged. Native totals44 completed sensor
+streams/33 retiredIDs/66 candidate+Goldenboots;failure5pre/5post qualification
+unchanged in04. Separate Windows1stream/1ID/2boots;combined68boots/34identities.
+
+NEXT calibrate front meter optical domain/zero point/normalization and bounded
+AE targets,then implement bounded standard IPA feedback through this qualified
+manual scheduling foundation. Do not repeat measured-delay or full-rate tests
+without new code/failures. No fresh hardware candidate currently prepared.
+Lights last user reportedON18:26:29UTC; prior Linux/Windows/Linux bracket showed
+Y~5 vs Windowsauto~88 with unmatched settings,NOT conclusive driverbrightness
+fault or photometric parity. RearISP/focus/dynamic tuning/production ABI/clock/
+independent tuning/soak/switch/fault/fullWindowsquality remain incomplete.
+No OSsleep. Earlier NEXT is history.
+
 ## 2026-10-07 control lifecycle03 PASS; spare-delivery regression fixed for04
 
 03 sourcea598793d/audit31/build11 PASSES public1/24/24 lifecycle: custom start

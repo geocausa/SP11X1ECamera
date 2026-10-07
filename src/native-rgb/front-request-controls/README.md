@@ -1,3 +1,21 @@
+# Qualified full-rate controls; all current identities spent
+
+04 PASSED120 standard public scripted requests,consecutive4..123 frame sequence,
+30.00384/30.00540fps and scripted15.00326fps,plus1/24/24 public lifecycle with
+contiguous30fps metadata/start/default reset/reacquire/manager/isolated-worker exit.
+Four STOPs125/6/29/29 clean,945 owner checks/no critical faults/Golden unchanged.
+04 consumed and retired; ALL01/02/03/04 MUST NOT be reused. Installer currently
+points spent04 intentionally, so its fresh-path guards reject reuse.
+
+Manual controls are standard libcamera DelayedControls with measured2frames,
+full normal non-priority clustered ioctl,per-SOF applied snapshots and complete
+quantized request validation. Source/isolated ARM64Werror build12 qualified by
+04 hardware. AE/AWB feedback still off,SensorTimestamp absent. Meter optical
+domain/zero/normalization/AE targets and independent tuning/production remain.
+Next work must not repeat this gate without a new change/failure. No next runtime
+identity is prepared. Original prior harness failures and throughput regression
+preserved in derived reports/current state.04 wrote no optical files.
+
 # Current full-rate qualification
 
 03 passed1/24/24 control lifecycle,manager shutdown and isolated-worker exit;
