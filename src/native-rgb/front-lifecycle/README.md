@@ -1,3 +1,40 @@
+## 2026-10-07 current native front IPA: both standard paths hardware-proven
+
+Actual libcamera build06/audit27 now passes isolated standard cam80 capture and
+signed threaded same-CameraManager/Camera1,80,80 restart/reacquire. Pipeline04
+source90837d1d delivered80 NV12 frames30.00485fps with84 metering results,
+425 owner checks and88 typed requests. Lifecycle04 source964de842 delivered161
+app frames,173 metering results across fresh streams6,7,10,880 owner checks and
+185 typed defaults; longer captures30.00543/29.98823fps. No module reload.
+All stops clean, sensors suspended after each stop, final graph neutral,
+Golden hashes unchanged, critical faults0. Returned Golden boot
+b2e5554f-6b33-4aca-8e7f-ffac7b241ecf. Pipeline04/lifecycle04 consumed and retired;
+all20 candidate identities retired,22 completed sensor streams,40 candidate/
+Golden boots. Pixels/original tuning remain private SP11.
+
+The actual IPA maps eight read-only shared statistics buffers, meters exact
+stream/sequence/completion-time identities and produces qualified mask0 typed
+defaults. Metadata buffers wait for matching IPA results before requeue; app and
+startup/spare completion also requires metering. Stop barriers precede unmapping.
+Build06 Werror9 tests OK/2 VIMC skips. No bespoke daemon or CPU image ISP.
+
+NEXT concrete blocker: native frame-start events and measured sensor-control
+delays before automatic exposure/gain. Source audit shows the current VFE17x SOF
+handler is a no-op and VFE core ops expose no event subscription. CSID680 Epoch0
+and BUF_DONE counters are not exposure/SOF proof. Qualify an actual receiver SOF
+source, standard V4L2_EVENT_FRAME_SYNC sequence/association and grouped sensor
+change effects; use libcamera DelayedControls only with measured delays. See
+docs/NATIVE-RGB-FRONT-CONTROL-TIMING-PLAN-20261007.md. Meter normalization, AWB and
+dynamic ISP tables still require qualification. SensorTimestamp remains absent.
+
+Fixed settings/low Y do not establish a brightness defect; matched Windows same
+physical camera/scene/position/lighting and time-proximate captures required.
+Rear processed ISP/focus, public ABI/clock policy, independent tuning and long-run/
+switch/fault/Windows optical acceptance block product completion. Actual IPA is
+no longer absent. Earlier NEXT statements are history. Evidence:
+docs/NATIVE-RGB-FRONT-IPA-04-20261007.json and
+docs/NATIVE-RGB-FRONT-IPA-LIFECYCLE-04-20261007.json.
+
 # Fresh lifecycle04: actual signed threaded IPA lifetime qualification
 
 Uses audit27/libcamera build06. The same public CameraManager and Camera capture
