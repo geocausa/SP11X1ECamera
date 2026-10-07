@@ -94,6 +94,23 @@ def stage(source, destination, front_pipeline=False):
                 "            'camss-x1e',\n            'all',")
         replace(destination / "meson.build", "pipelines_support = {",
                 "pipelines_support = {\n    'camss-x1e': ['aarch64'],")
+        shutil.copy2(HERE / "camss_x1e.mojom", destination / "include/libcamera/ipa/camss_x1e.mojom")
+        replace(destination / "include/libcamera/ipa/meson.build",
+                "pipeline_ipa_mojom_mapping = {",
+                "pipeline_ipa_mojom_mapping = {\n    'camss-x1e': 'camss_x1e.mojom',")
+        replace(destination / "meson_options.txt",
+                "choices : ['ipu3', 'mali-c55', 'rkisp1', 'rpi/pisp', 'rpi/vc4', 'simple',",
+                "choices : ['camss-x1e', 'ipu3', 'mali-c55', 'rkisp1', 'rpi/pisp', 'rpi/vc4', 'simple',")
+        ipa = destination / "src/ipa/camss-x1e"
+        ipa.mkdir()
+        shutil.copy2(HERE / "camss-x1e-ipa-test.cpp",
+                     destination / "test/ipa/libipa/camss-x1e-ipa-test.cpp")
+        replace(destination / "test/ipa/libipa/meson.build", "libipa_test = [",
+                "libipa_test = [\n    {'name': 'camss-x1e-ipa', 'sources': ['camss-x1e-ipa-test.cpp']},")
+
+        shutil.copy2(HERE / "camss-x1e-ipa.cpp", ipa / "camss-x1e.cpp")
+        shutil.copy2(HERE / "camss-x1e-ipa-meson.build", ipa / "meson.build")
+
     subprocess.run(["git", "-C", str(destination), "diff", "--check"], check=True)
     paths = list(manifest["libcamera_inputs"])
     paths += ["src/ipa/libipa/" + Path(n).name for n in manifest["camera_sources"]]
@@ -104,6 +121,11 @@ def stage(source, destination, front_pipeline=False):
               "test/ipa/libipa/camss-x1e-helpers-test.cpp"]
     if front_pipeline:
         paths += list(manifest["pipeline_inputs"])
+        paths += ["test/ipa/libipa/camss-x1e-ipa-test.cpp",
+                  "include/libcamera/ipa/camss_x1e.mojom",
+                  "src/ipa/camss-x1e/camss-x1e.cpp",
+                  "src/ipa/camss-x1e/meson.build"]
+
         paths += ["src/libcamera/pipeline/camss-x1e/" + name for name in
                   ("camss-x1e.cpp", "native-front-params.h", "native-front-stats.h", "meson.build")]
     result = {
@@ -117,7 +139,9 @@ def stage(source, destination, front_pipeline=False):
         "pipeline_runtime_implemented": front_pipeline,
         "pipeline_hardware_proven": False,
         "front_pipeline_trial_staged": front_pipeline,
-        "pipeline_control_scope": "fixed manual; IPA and automatic controls still absent",
+        "pipeline_control_scope": "fixed manual; actual IPA meters shared statistics and supplies typed defaults",
+        "ipa_runtime_implemented": front_pipeline,
+        "automatic_feedback_enabled": False,
         "kernel_timing_abi_complete": False,
         "native_nv12_proven": False,
     }

@@ -11,9 +11,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-pipeline-20261007-03")
-TOKEN = "sp11_camera_native_pipeline_20261007_03=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-03"
+D = Path("/var/lib/sp11-camera-native-pipeline-20261007-04")
+TOKEN = "sp11_camera_native_pipeline_20261007_04=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-04"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -130,7 +130,9 @@ def main():
         os.umask(0o077)
         environment = os.environ.copy()
         environment.update(LD_LIBRARY_PATH=str(D / "lib"),
-            LIBCAMERA_PIPELINES_MATCH_LIST="camss-x1e", LIBCAMERA_LOG_LEVELS="*:DEBUG")
+            LIBCAMERA_PIPELINES_MATCH_LIST="camss-x1e", LIBCAMERA_LOG_LEVELS="*:DEBUG",
+            LIBCAMERA_IPA_MODULE_PATH=str(D / "ipa"),
+            LIBCAMERA_IPA_PROXY_PATH=str(D / "proxy"), LIBCAMERA_IPA_FORCE_ISOLATION="1")
         try:
             process = subprocess.run([str(D / "cam"), "--camera=sp11-front-imx681",
                 "--capture=80", "--stream=width=2560,height=1440,pixelformat=NV12,role=viewfinder",
@@ -163,6 +165,26 @@ def main():
         need(not re.search(r"SensorTimestamp = ",process.stdout),
              "unqualified sensor exposure timestamp must not be published")
         timestamps = [p[0]*1000000000 + p[1]*1000 for p in captures]
+        need(process.stderr.count("initializing camss_x1e proxy in isolation: loading IPA from " +
+                                  str(D / "ipa/ipa_camss_x1e.so")) == 1,
+             "actual isolated standard IPA proxy required")
+        need("Isolation of IPA module " + str(D / "ipa/ipa_camss_x1e.so") +
+             " forced through configuration" in process.stderr, "forced IPA isolation proof")
+        meters = [(int(f), int(st), int(ts), float(y)) for f,st,ts,y in re.findall(
+            r"CAMSS_X1E_IPA_METER frame=(\d+) stream=(\d+) timestamp=(\d+) luma=([-+0-9.eE]+)",
+            process.stderr)]
+        need(len(meters) >= 84 and [m[0] for m in meters] == list(range(len(meters))) and
+             all(m[1] == pairs[0][3] and m[3] >= 0 for m in meters),
+             "startup and app frames need ordered actual IPA metering")
+        need(all(meters[sequence][2] // 1000 * 1000 == timestamps[sequence-4]
+                 for sequence in range(4,84)), "IPA/app completion timestamp association")
+        result["ipa"] = {"implementation":"standard libcamera IPA",
+            "isolated_proxy_proven":True,"shared_statistics_buffers":8,
+            "statistics_requeued_after_matching_result":True,
+            "metered_frames":len(meters),
+            "metering":[{"sequence":f,"stream":st,"completion_timestamp_ns":ts,"luma":y}
+                        for f,st,ts,y in meters],
+            "automatic_feedback_enabled":False,"metering_domain_optically_qualified":False}
         files = sorted(D.glob("frame-*.bin"))
         need(len(files) == 80, "80 private app-written frame files required")
         observations = []
@@ -201,7 +223,7 @@ def main():
              list(range(5,5+len(accepted))) and all(mask == "0" for request,mask in accepted),
              "kernel semantic parameter sequence")
         result["typed_parameters"] = {"requests_accepted":len(accepted),
-            "raw_per_frame_capsules":False,"kernel_owned_banks":16,"producer":"libcamera pipeline"}
+            "raw_per_frame_capsules":False,"kernel_owned_banks":16,"producer":"standard libcamera IPA typed defaults"}
         need(private_log.count("NATIVE_FRONT_PROFILE_LOADED data_only=1 raw_control=0") == 1,
              "one kernel firmware profile admission")
         result["startup_profile"] = {"kernel_firmware_loader":True,"data_only":True,
@@ -211,7 +233,7 @@ def main():
         idle()
         need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "neutral", "libcamera release must leave neutral route")
         idle()
-        result.update(status="PASS_NATIVE_FRONT_LIBCAMERA_PIPELINE_80_FRAMES",
+        result.update(status="PASS_NATIVE_FRONT_LIBCAMERA_IPA_80_FRAMES",
                       final_route="neutral", all_sensors_suspended=True,
                       optical_quality_parity_proven=False, continuous_capture_80_frames_proven=True)
     except Exception as exc:

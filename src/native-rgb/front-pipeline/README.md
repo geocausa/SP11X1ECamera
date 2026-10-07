@@ -1,3 +1,25 @@
+# Fresh pipeline04: actual standard libcamera IPA qualification
+
+This fresh one-use identity uses audit27 and libcamera build06. It loads the real
+native IPA through libcamera's generated proxy, forces standard process isolation,
+and maps eight read-only shared statistics buffers. Each metadata buffer stays
+held until the matching stream/sequence/timestamp IPA result returns. Application
+requests and internal startup/spare buffers retire only after video, metadata and
+metering agree. The IPA produces the previously qualified mask0 typed defaults.
+
+The test requires80 standard cam NV12 application frames, ordered IPA metering
+including four hidden startup frames, exact completion-time association, actual
+isolated proxy loading, contiguous kernel typed admission and owners, clean stop,
+neutral graph, sensor standby and unchanged Golden. It does not enable AE/AWB or
+claim exposure timestamps, metering normalization, optical quality, or brightness
+defects. Comparison requires matched Windows scene and lighting conditions.
+
+Build06 passes Werror:9 tests OK,2 VIMC-dependent skips. The added test exercises
+the actual IPA implementation with real shared memfd mappings, atomic map
+admission, typed request order, nonzero AEC metering, stale/duplicate/malformed
+rejection, and restart reset. Build05 failed offline on a staging newline escape;
+no candidate boot or sensor stream occurred. Do not reuse completed identities.
+
 # Standard libcamera front pipeline qualification
 
 Fresh pipeline02 uses the physically verified audit24 kernel, data-only firmware

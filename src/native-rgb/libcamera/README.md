@@ -1,3 +1,18 @@
+# Actual native front standard libcamera IPA
+
+Build06 integrates a real IPA module and generated standard proxy. Hardware pixel
+processing stays in the Qualcomm ISP. The IPA reads shared statistics, validates
+frame identity, computes the retained AEC meter and emits typed mask0 defaults.
+No exposure or colour feedback is enabled. Metrology and sensor delays are next.
+
+Nine offline tests pass with Werror; two VIMC-dependent tests skip. An actual IPA
+implementation test uses real memfd mappings and covers negative admission,
+ordering, nonzero metering and lifecycle reset. Fresh pipeline04 will force normal
+libcamera IPA process isolation and require80 associated application frames.
+No bespoke camera daemon is introduced; the worker belongs to standard libcamera.
+No physical IPA claim until that candidate passes. Optical comparison requires
+Windows on the same physical camera, scene and lighting, with capture times.
+
 # Native X1E libcamera pipeline and helpers
 
 Current physical proof: build03/audit27 delivers standard cam80 NV12/statistics

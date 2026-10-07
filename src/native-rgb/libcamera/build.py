@@ -31,7 +31,7 @@ def main():
     parser.add_argument("--build-dir", type=Path, required=True)
     parser.add_argument("--jobs", type=int, default=4)
     parser.add_argument("--front-pipeline-trial", action="store_true",
-                        help="Build the real fixed-manual native front pipeline; no hardware or install")
+                        help="Build native front pipeline and standard fixed-control IPA; no hardware or install")
     args = parser.parse_args()
     source, out, build = (p.resolve() for p in (args.source, args.out, args.build_dir))
     if args.jobs < 1:
@@ -41,8 +41,9 @@ def main():
             parser.error("output and build must be fresh directories outside the camera checkout")
     if out.is_relative_to(build) or build.is_relative_to(out):
         parser.error("source and build outputs must be separate directories")
+    tests_selected = TESTS + (["camss-x1e-ipa"] if args.front_pipeline_trial else [])
     result = stage(source, out, args.front_pipeline_trial)
-    options = [x.replace("-Dpipelines=uvcvideo,vimc", "-Dpipelines=camss-x1e,vimc") for x in OPTIONS] if args.front_pipeline_trial else OPTIONS
+    options = [x.replace("-Dpipelines=uvcvideo,vimc", "-Dpipelines=camss-x1e,vimc").replace("-Dipas=vimc", "-Dipas=camss-x1e,vimc") for x in OPTIONS] if args.front_pipeline_trial else OPTIONS
     build.mkdir(parents=True)
     result.update(status="BUILD_IN_PROGRESS", build_dir=str(build),
                   meson_options=options, installed=False, hardware_access=False)
@@ -50,7 +51,7 @@ def main():
     try:
         run(["meson", "setup", build, out, *options], build / "native-setup.log")
         run(["meson", "compile", "-C", build, "-j", args.jobs], build / "native-compile.log")
-        run(["meson", "test", "-C", build, "--no-rebuild", "--print-errorlogs", *TESTS],
+        run(["meson", "test", "-C", build, "--no-rebuild", "--print-errorlogs", *tests_selected],
             build / "native-tests.log")
         tests = [json.loads(line) for line in
                  (build / "meson-logs/testlog.json").read_text().splitlines()]
@@ -59,11 +60,15 @@ def main():
              "duration_seconds": test["duration"]}
             for test in tests
         ]
-        if len(tests) != len(TESTS):
+        if len(tests) != len(tests_selected):
             raise ValueError("selected test inventory changed")
         native = [test for test in tests if test["name"].endswith(":camss-x1e-helpers")]
         if len(native) != 1 or native[0]["result"] != "OK":
             raise ValueError("native helper test must pass, never skip")
+        if args.front_pipeline_trial:
+            actual = [test for test in tests if test["name"].endswith(":camss-x1e-ipa")]
+            if len(actual) != 1 or actual[0]["result"] != "OK":
+                raise ValueError("actual native IPA test must pass, never skip")
         if any(test["result"] not in ("OK", "SKIP") for test in tests):
             raise ValueError("selected test failed")
         for name, expected in result["staged_sources"].items():
@@ -82,7 +87,9 @@ def main():
         ]
         result["built_outputs"] = {name: sha(build / name) for name in binary_names}
         if args.front_pipeline_trial:
-            binary_names += ["src/apps/cam/cam"]
+            binary_names += ["src/apps/cam/cam", "src/ipa/camss-x1e/ipa_camss_x1e.so",
+                             "src/ipa/camss-x1e/ipa_camss_x1e.so.sign",
+                             "src/libcamera/proxy/worker/camss_x1e_ipa_proxy"]
             result["built_outputs"].update({name: sha(build / name) for name in binary_names})
         result["status"] = ("PASS_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
                             if args.front_pipeline_trial else "PASS_LIBCAMERA_NATIVE_HELPERS_NOT_INSTALLED")

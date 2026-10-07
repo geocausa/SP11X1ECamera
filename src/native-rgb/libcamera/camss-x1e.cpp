@@ -5,6 +5,7 @@
 #include <array>
 #include <cerrno>
 #include <cstdint>
+#include <cmath>
 #include <deque>
 #include <limits>
 #include <map>
@@ -22,6 +23,8 @@
 #include <libcamera/formats.h>
 #include <libcamera/framebuffer.h>
 #include <libcamera/property_ids.h>
+#include <libcamera/ipa/camss_x1e_ipa_interface.h>
+#include <libcamera/ipa/camss_x1e_ipa_proxy.h>
 #include <libcamera/request.h>
 #include <libcamera/stream.h>
 
@@ -29,6 +32,7 @@
 #include "libcamera/internal/device_enumerator.h"
 #include "libcamera/internal/framebuffer.h"
 #include "libcamera/internal/mapped_framebuffer.h"
+#include "libcamera/internal/ipa_manager.h"
 #include "libcamera/internal/media_device.h"
 #include "libcamera/internal/pipeline_handler.h"
 #include "libcamera/internal/request.h"
@@ -59,6 +63,8 @@ struct StatsIdentity {
 struct FrameState {
  FrameBuffer *image = nullptr;
  std::optional<StatsIdentity> stats;
+ FrameBuffer *metadata = nullptr;
+ std::optional<float> luma;
 };
 }
 
@@ -80,10 +86,15 @@ public:
  int ensureSpare();
  void imageReady(FrameBuffer *buffer);
  void statisticsReady(FrameBuffer *buffer);
+ void meteringReady(uint32_t bufferId, uint64_t stream, uint32_t sequence,
+                    uint64_t timestamp, int32_t ret, float luma);
  void tryComplete(uint32_t sequence);
  void fail(const char *reason);
  void cancelImage(FrameBuffer *buffer);
 
+ std::unique_ptr<ipa::camss_x1e::IPAProxyCamssX1E> ipa_;
+ bool ipaStarted_ = false;
+ std::vector<uint32_t> ipaBufferIds_;
  std::shared_ptr<MediaDevice> media_;
  std::unique_ptr<V4L2Subdevice> sensor_, phy_, csid_, vfe_;
  std::unique_ptr<V4L2VideoDevice> video_, statistics_;
@@ -191,6 +202,14 @@ public:
    return false;
   auto data = std::make_unique<CamssX1ECameraData>(this, media);
   if (data->init())
+   return false;
+  data->ipa_ = IPAManager::createIPA<ipa::camss_x1e::IPAProxyCamssX1E>(this, 0, 0);
+  if (!data->ipa_)
+   return false;
+  data->ipa_->statisticsProcessed.connect(data.get(), &CamssX1ECameraData::meteringReady);
+  IPASettings settings{};
+  settings.sensorModel = "imx681";
+  if (data->ipa_->init(settings))
    return false;
   std::set<Stream *> streams{ &data->stream_ };
   auto camera = Camera::create(std::move(data), "sp11-front-imx681", streams);
@@ -359,18 +378,13 @@ int CamssX1ECameraData::submitParameters()
 {
  if (nextParameter_ > std::numeric_limits<uint32_t>::max())
   return -EOVERFLOW;
- std::array<uint8_t, NATIVE_FRONT_PARAMS_BYTES> packet{};
- auto put = [&](unsigned int offset, uint64_t value, unsigned int bytes) {
-  for (unsigned int i = 0; i < bytes; i++)
-   packet[offset+i] = value >> (8*i);
- };
- put(0, NATIVE_FRONT_PARAMS_MAGIC, 4);
- put(4, 1, 2);
- put(6, NATIVE_FRONT_PARAMS_BYTES, 2);
- put(8, nextParameter_, 8);
- int ret = native_front_params_validate(packet.data(), packet.size());
+ std::vector<uint8_t> packet;
+ int ret = ipa_->computeParameters(nextParameter_, &packet);
  if (ret)
   return ret;
+ ret = native_front_params_validate(packet.data(), packet.size());
+ if (ret || native_front_stats_u64(packet.data() + 8) != nextParameter_)
+  return ret ? ret : -ESTALE;
  ControlList parameters(video_->controls());
  parameters.set(kParams, ControlValue(Span<const uint8_t>(packet)));
  ret = video_->setControls(&parameters);
@@ -389,6 +403,8 @@ int CamssX1ECameraData::start()
  availableStartup_.clear();
  failed_ = false;
  frames_.clear();
+ std::vector<IPABuffer> ipaBuffers;
+ uint32_t bufferId = 0;
  int ret = video_->exportBuffers(kStartup, &startup_);
  if (ret != int(kStartup)) {
   startup_.clear();
@@ -405,12 +421,27 @@ int CamssX1ECameraData::start()
  }
  statisticsAllocated_ = true;
  for (const auto &buffer : metadata_) {
+  buffer->setCookie(++bufferId);
+  const auto &planes = buffer->planes();
+  ipaBuffers.emplace_back(buffer->cookie(),
+                          std::vector<FrameBuffer::Plane>{ planes.begin(), planes.end() });
   auto map = std::make_unique<MappedFrameBuffer>(buffer.get(), MappedFrameBuffer::MapFlag::Read);
   if (!map->isValid()) {
    ret = map->error();
    goto error;
   }
   mappings_.emplace(buffer.get(), std::move(map));
+ }
+ ret = ipa_->mapBuffers(ipaBuffers);
+ if (ret)
+  goto error;
+ for (const IPABuffer &buffer : ipaBuffers)
+  ipaBufferIds_.push_back(buffer.id);
+ ret = ipa_->start();
+ if (ret)
+  goto error;
+ ipaStarted_ = true;
+ for (const auto &buffer : metadata_) {
   ret = statistics_->queueBuffer(buffer.get());
   if (ret)
    goto error;
@@ -491,6 +522,16 @@ void CamssX1ECameraData::stop()
  /* Pixel STREAMOFF stops hardware before any statistics/storage is released. */
  int ret = videoAllocated_ ? video_->streamOff() : 0;
  int statsRet = statisticsAllocated_ ? statistics_->streamOff() : 0;
+ /* stop() is a synchronous IPA barrier: no shared mapping is released while
+  * an asynchronous statistics invocation can still be reading it. */
+ if (ipaStarted_) {
+  ipa_->stop();
+  ipaStarted_ = false;
+ }
+ if (!ipaBufferIds_.empty()) {
+  ipa_->unmapBuffers(ipaBufferIds_);
+  ipaBufferIds_.clear();
+ }
  for (FrameBuffer *buffer : held)
   cancelImage(buffer);
  if (ret || statsRet) {
@@ -585,15 +626,46 @@ void CamssX1ECameraData::statisticsReady(FrameBuffer *buffer)
  }
  frame.stats = StatsIdentity{ stream, native_front_stats_u64(data+16),
                                native_front_stats_u32(data+28) };
+ frame.metadata = buffer;
+ /* Hold this kernel buffer until the matching IPA result arrives. The IPA
+  * receives an ID for its read-only shared mapping, never a CPU pixel image. */
+ ipa_->processStatistics(buffer->cookie(), stream, sequence, frame.stats->timestamp);
+}
+
+void CamssX1ECameraData::meteringReady(uint32_t bufferId, uint64_t stream,
+                                      uint32_t sequence, uint64_t timestamp,
+                                      int32_t ret, float luma)
+{
+ auto it = frames_.find(sequence);
+ if (!running_ || it == frames_.end() || !it->second.stats)
+  return;
+ FrameState &frame = it->second;
+ /* A queued callback from a stopped stream must not complete a new frame. */
+ if (frame.stats->stream != stream || frame.stats->timestamp != timestamp)
+  return;
+ if (!frame.metadata || frame.metadata->cookie() != bufferId || frame.luma ||
+     ret || !std::isfinite(luma) || luma < 0.0f) {
+  fail("IPA metering result rejected");
+  return;
+ }
+ FrameBuffer *buffer = frame.metadata;
+ frame.luma = luma;
+ frame.metadata = nullptr;
+ LOG(CAMSSX1E, Debug) << "CAMSS_X1E_IPA_METER frame=" << sequence
+                     << " stream=" << stream << " timestamp=" << timestamp
+                     << " luma=" << luma;
+ /* Requeue only after the IPA has finished reading this exact buffer. */
+ if (statistics_->queueBuffer(buffer)) {
+  fail("Statistics requeue after IPA failed");
+  return;
+ }
  tryComplete(sequence);
- if (running_ && statistics_->queueBuffer(buffer))
-  fail("Statistics requeue failed");
 }
 
 void CamssX1ECameraData::tryComplete(uint32_t sequence)
 {
  auto it = frames_.find(sequence);
- if (it == frames_.end() || !it->second.image || !it->second.stats)
+ if (it == frames_.end() || !it->second.image || !it->second.stats || !it->second.luma)
   return;
  FrameBuffer *image = it->second.image;
  StatsIdentity stats = *it->second.stats;

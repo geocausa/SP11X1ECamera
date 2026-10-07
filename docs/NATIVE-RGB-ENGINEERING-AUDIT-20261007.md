@@ -1,3 +1,27 @@
+## 2026-10-07 actual native front IPA built; pipeline04 next physical gate
+
+The front pipeline now requires a standard libcamera IPA and generated proxy.
+The IPA maps eight read-only statistics buffers, meters exact stream/sequence/
+completion-time identities and produces qualified mask0 typed default parameters.
+Metadata buffers remain held until matching IPA results; app and startup/spare
+buffers retire only with video, statistics and metering together. Stop barriers
+precede unmapping. Fixed exposure/gains only; no automatic feedback yet.
+
+Pinned libcamera build06 passes Werror with9 tests OK and2 VIMC-dependent skips.
+New actual-implementation memfd tests cover mapping admission, parameter order,
+nonzero AEC reduction, stale/duplicate/malformed rejection and restart reset.
+Build05 failed offline on a staging newline escape; no hardware attempt occurred.
+Fresh pipeline04 is the next one-use hardware identity, using audit27/build06,
+requiring actual isolated standard IPA,80 app frames and ordered metering,
+STOP/neutral/standby and protected Golden return. Never reuse consumed IDs.
+
+NEXT after physical IPA qualification: qualify sensor/application control delays
+and metering domain before AE/AWB feedback. Brightness attribution still requires
+matched Windows camera/scene/lighting/time; low Y alone is not a defect proof.
+Rear processed ISP/focus, dynamic tables, public ABI/clock policy, independent
+tuning and long-run/switch/fault/Windows optical acceptance remain incomplete.
+Earlier statements that actual IPA is absent describe historical builds.
+
 ## 2026-10-07 user requirement: compare brightness under real conditions
 
 Low measured Y is an observation, not an established Linux brightness defect.
