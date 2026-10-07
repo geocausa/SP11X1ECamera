@@ -1,9 +1,11 @@
 # Front sensor timing check
 
 Development-only probe for the approved libcamera sensor timing ABI.
-Identity: native-timing-20261007-01. Never rearm after ATTEMPT-CONSUMED.
+Current identity: native-timing-20261007-02. Never rearm after ATTEMPT-CONSUMED.
+Identity 01 aborted before capture because the source-built rear driver was the
+stale ACPI-assuming snapshot. It returned Golden and must never be reused.
 
-A fresh isolated camera boot uses the source-built native-rgb-20261007-audit-04
+A fresh isolated camera boot uses the source-built native-rgb-20261007-audit-06
 modules and the accepted unified DTB. Golden FullIO v19c remains default; its
 kernel, initrd and DTB are hashed and never overwritten. No product daemon,
 loopback, software ISP, PIX capture or IR stream is activated.

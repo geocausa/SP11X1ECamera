@@ -69,8 +69,8 @@ static int boot_allowed(void)
         return 0;
     char *got = fgets(data, sizeof(data), file);
     fclose(file);
-    return got && strstr(data, "sp11_camera_native_timing_20261007=1") &&
-           strstr(data, "sp11_entry=7.1.5-sp11-camera-native-timing-20261007");
+    return got && strstr(data, "sp11_camera_native_timing_20261007_02=1") &&
+           strstr(data, "sp11_entry=7.1.5-sp11-camera-native-timing-20261007-02");
 }
 static int capture(const char *video, const char *sensor, unsigned fll)
 {

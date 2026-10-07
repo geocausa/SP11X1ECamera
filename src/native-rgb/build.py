@@ -83,7 +83,7 @@ def assemble(out):
             shutil.copy2(path, out / "imx681" / path.name)
     rear = out / "ov13858"
     rear.mkdir()
-    shutil.copy2(ROOT / "src/sp11-camera-stack/authority/ov13858.c", rear / "ov13858.c")
+    shutil.copy2(ROOT / "src/native-rgb/ov13858/ov13858.c", rear / "ov13858.c")
     (rear / "Makefile").write_text("obj-m += ov13858.o\n")
     # Validate include closure; compilation checks actual call/type consistency.
     for source in camss.iterdir():
@@ -103,6 +103,7 @@ def assemble(out):
         "overlay_audit": overlay_result,
         "staged_sources": dict(sorted(staged.items())),
         "runtime_access": False,
+        "compiler_policy": "W=1 and -Werror",
         "nv12_runtime_proven": False,
         "rear_runtime_proven": False,
     }
@@ -130,7 +131,7 @@ def main():
                 command(["make", "-C", options.kernel_source.resolve(),
                          "O=" + str(options.kernel_output.resolve()),
                          "M=" + str(out / name), "CONFIG_VIDEO_QCOM_CAMSS=m",
-                         "W=1", "-j" + str(options.jobs), "modules"])
+                         "W=1", "KCFLAGS=-Werror", "-j" + str(options.jobs), "modules"])
             modules = {}
             for relative in ("camss/qcom-camss.ko", "imx681/imx681.ko", "ov13858/ov13858.ko"):
                 path = out / relative

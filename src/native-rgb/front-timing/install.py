@@ -9,13 +9,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PROJECT = ROOT.parents[1]
-BUILD = PROJECT / "02-kernel/native-timing-20261007-01"
-MODULES = PROJECT / "02-kernel/native-rgb-20261007-audit-04"
-D = Path("/var/lib/sp11-camera-native-timing-20261007-01")
-B = Path("/boot/sp11-7.1.5-camera-native-timing-20261007-01")
-G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_timing_20261007_01")
-S = Path("/etc/systemd/system/sp11-camera-native-timing-20261007-01.service")
-ID = "sp11-camera-native-timing-20261007-01"
+BUILD = PROJECT / "02-kernel/native-timing-20261007-02"
+MODULES = PROJECT / "02-kernel/native-rgb-20261007-audit-06"
+D = Path("/var/lib/sp11-camera-native-timing-20261007-02")
+B = Path("/boot/sp11-7.1.5-camera-native-timing-20261007-02")
+G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_timing_20261007_02")
+S = Path("/etc/systemd/system/sp11-camera-native-timing-20261007-02.service")
+ID = "sp11-camera-native-timing-20261007-02"
 GOLDEN = Path("/boot/sp11-7.1.5-audio-fullio-v19c")
 
 def run(args):
@@ -94,8 +94,8 @@ def main():
             existing_blacklist.extend(value.split("=", 1)[1].split(","))
     command = [x for x in command if not x.startswith(
         ("BOOT_IMAGE=", "sp11_entry=", "modprobe.blacklist="))]
-    command += ["sp11_entry=7.1.5-sp11-camera-native-timing-20261007",
-                "sp11_camera_native_timing_20261007=1",
+    command += ["sp11_entry=7.1.5-sp11-camera-native-timing-20261007-02",
+                "sp11_camera_native_timing_20261007_02=1",
                 "modprobe.blacklist=" + ",".join(dict.fromkeys(existing_blacklist + [
                     "qcom_camss", "imx681", "ov13858", "sp11_vd55g0", "vd55g0"]))]
     uuid = run(["findmnt", "-n", "-o", "UUID", "/"]).strip()
@@ -121,7 +121,7 @@ menuentry 'SP11 native camera front timing — one use' --id '{ID}' {{
     write(grub, G, "0755")
     returning = f"""#!/usr/bin/env bash
 set -Eeuo pipefail
-if grep -qw 'sp11_camera_native_timing_20261007=1' /proc/cmdline; then
+if grep -qw 'sp11_camera_native_timing_20261007_02=1' /proc/cmdline; then
   printf 'service_result=%s\\nexit_code=%s\\nexit_status=%s\\n' "${{SERVICE_RESULT:-unknown}}" "${{EXIT_CODE:-unknown}}" "${{EXIT_STATUS:-unknown}}" > {D}/SERVICE-RESULT.txt
   dmesg > {D}/PRIVATE-DMESG.txt
   grub-reboot sp11-audio-fullio-v19c
@@ -137,7 +137,7 @@ Description=SP11 native front timing diagnostic, one use
 Wants=grub-initrd-fallback.service grub2-common.service
 After=grub-initrd-fallback.service grub2-common.service
 Before=display-manager.service
-ConditionKernelCommandLine=sp11_camera_native_timing_20261007=1
+ConditionKernelCommandLine=sp11_camera_native_timing_20261007_02=1
 
 [Service]
 Type=oneshot

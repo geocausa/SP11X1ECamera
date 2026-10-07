@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0-only
 """Build and test native libipa helpers in a fresh checkout; never install."""
 import argparse
-import hashlib
 import json
 import subprocess
 from pathlib import Path

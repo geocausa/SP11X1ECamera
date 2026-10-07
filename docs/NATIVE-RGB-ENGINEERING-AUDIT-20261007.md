@@ -1,3 +1,7 @@
+> Source correction: the earlier native build copied a stale ACPI-assuming rear
+> snapshot. A real pre-stream test exposed the mistake. The builder now uses the
+> SP11 board-powered source. Read NATIVE-RGB-SOURCE-CORRECTION-20261007.md.
+
 > Architecture update: the user accepted hardware ISP + native drivers + standard
 > libcamera pipeline/IPA on 2026-10-07. The literal kernel-only boundary discussed
 > below is now superseded. Hardware and quality gaps remain unchanged.

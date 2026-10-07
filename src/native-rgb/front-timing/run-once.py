@@ -9,9 +9,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-timing-20261007-01")
-TOKEN = "sp11_camera_native_timing_20261007=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-timing-20261007"
+D = Path("/var/lib/sp11-camera-native-timing-20261007-02")
+TOKEN = "sp11_camera_native_timing_20261007_02=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-timing-20261007-02"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -37,7 +37,7 @@ def sensors():
 def idle():
     for path in sensors().values():
         need((path / "power/runtime_status").read_text().strip() == "suspended",
-             "sensor not suspended")
+             "sensor not suspended: " + path.name)
     # No camera FDs may remain before graph writes. The exclusive probe is
     # single-process; its capture child is synchronously reaped before this.
     for process in Path("/proc").glob("[0-9]*"):
@@ -90,14 +90,18 @@ def main():
         run(["insmod", str(D / "modules/qcom-camss.ko"), "e004j_ir_dphy_windows_parity=1"])
         for name in ("ov13858", "imx681", "sp11-vd55g0"):
             run(["insmod", str(D / ("modules/" + name + ".ko"))])
-        for attempt in range(100):
+        result["phase"] = "sensor_bind_and_initial_suspend"
+        for attempt in range(400):
             found = sensors()
             if all((path / "driver").is_symlink() and
                    (path / "power/runtime_status").read_text().strip() == "suspended"
                    for path in found.values()):
                 break
             time.sleep(0.05)
+        result["initial_sensor_states"] = {path.name: {"bound": (path / "driver").is_symlink(),
+            "runtime_status": (path / "power/runtime_status").read_text().strip()} for path in sensors().values()}
         idle()
+        result["phase"] = "discover_and_select_front_raw_route"
         discover = runpy.run_path(str(D / "discover-unified.py"))["discover"]
         classify = runpy.run_path(str(D / "camera-session-contract.py"))["classify"]
         candidates = []
@@ -127,6 +131,7 @@ def main():
              "--set-fmt-video=width=3840,height=2160,pixelformat=pRAA"])
         observations = []
         for fll in (3554, 7116):
+            result["phase"] = "capture_fll_" + str(fll)
             text = run([str(D / "front-timing-probe"), discovery["front_rdi_video_device"],
                         discovery["front_sensor_device"], str(fll)], timeout=30)
             data = json.loads(text)
@@ -135,18 +140,29 @@ def main():
             observations.append(data)
             result["hardware_streams_completed"] += 1
             idle()
+        result["phase"] = "neutralize_after_verified_stop"
         need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "front-rdi-only",
              "route drift after capture")
         run(["media-ctl", "-d", media, "-l", '"msm_csid1":1 -> "msm_vfe1_rdi0":0 [0]'])
         run(["media-ctl", "-d", media, "-l", '"msm_csiphy2":1 -> "msm_csid1":0 [0]'])
         need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "neutral", "final neutral")
         idle()
+        rates = [observation["inferred_array_rate_hz"] for observation in observations]
+        need(abs(rates[0] / rates[1] - 1) <= 0.002,
+             "nominal and extended frame-length clocks disagree")
+        result["array_rate_estimate_hz"] = sum(rates) / 2
+        result["between_measurement_difference_ppm"] = abs(rates[0] / rates[1] - 1) * 1e6
         result.update(status="PASS_TWO_FRONT_TIMING_STREAMS_NEUTRAL",
                       observations=observations, final_route="neutral",
                       all_sensors_suspended=True)
     except Exception as exc:
         # No speculative graph rollback on failure. Service returns Golden.
         result["error"] = str(exc)
+        try:
+            result["failure_sensor_states"] = {path.name: {"bound": (path / "driver").is_symlink(),
+                "runtime_status": (path / "power/runtime_status").read_text().strip()} for path in sensors().values()}
+        except Exception:
+            pass
         raise
     finally:
         result["candidate_boot_id"] = Path("/proc/sys/kernel/random/boot_id").read_text().strip()
