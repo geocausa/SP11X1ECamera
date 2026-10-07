@@ -10,7 +10,28 @@
  				     struct camss_buffer *buffer);
 --- a/camss.c
 +++ b/camss.c
-@@ -7787,6 +7787,8 @@
+@@ -7771,9 +7771,18 @@
+ 	if (!camss_x1e_pix_link(csid_pix, &vfe->line[VFE_LINE_PIX].subdev.entity,
+ 				MSM_VFE_PAD_SINK))
+ 		return -ENOLINK;
+-	if (!camss_x1e_pix_link(vfe_pix_src,
+-				&vfe->line[VFE_LINE_PIX].video_out.vdev.entity, 0))
++	if (camss_x1e_native_front_meta_trial_allowed(camss)) {
++		struct media_link *link;
++
++		/* PIX may also fan out to the owned statistics sink. */
++		link = media_entity_find_link(vfe_pix_src,
++			&vfe->line[VFE_LINE_PIX].video_out.vdev.entity.pads[0]);
++		if (!link || !(link->flags & MEDIA_LNK_FL_ENABLED))
++			return -ENOLINK;
++	} else if (!camss_x1e_pix_link(vfe_pix_src,
++				&vfe->line[VFE_LINE_PIX].video_out.vdev.entity, 0)) {
+ 		return -ENOLINK;
++	}
+ 
+ 	return 0;
+ }
+@@ -7787,6 +7796,8 @@
  {
  	buffer->vb.vb2_buf.timestamp = ktime_get_ns();
  	buffer->vb.sequence = sequence;
@@ -19,7 +40,7 @@
  	vb2_buffer_done(&buffer->vb.vb2_buf, VB2_BUF_STATE_DONE);
  	result->live_completed++;
  }
-@@ -9303,6 +9305,15 @@
+@@ -9303,6 +9314,15 @@
  {
  	return native_front_queue_trial &&
  	       camss_x1e_native_front_owner_trial_allowed(camss);

@@ -28,9 +28,18 @@ interpretation is reused. This is still helper integration, not the completed
 CAMSS pipeline/IPA runtime. Raw capsules remain diagnostic until typed parameter
 submission replaces them.
 
-Fresh metadata01 aims to capture80 video/metadata pairs, including reversed vb2
+Fresh metadata02 aims to capture80 video/metadata pairs, including reversed vb2
 pixel order, matching hardware sequence, timestamps, stream ID, exact payload
 bounds and valid AEC luma reduction. Test input and raw statistics stay private
 on SP11; derived counts may be committed. It must stop both queues, reach standby
 and neutral topology, return Golden unchanged and retire its one-use identity.
 Never rearm after an attempt.
+
+
+Metadata01 is consumed and retired. It reached the complete120-link graph,
+but the old runner selected msm_vfe1_stats as the first VFE source-pad remote and
+rejected the actual pixel endpoint before hardware startup. All sensors remained
+suspended; zero ownership/fault markers and unchanged Golden assets. The corrected
+metadata overlay looks up the exact pixel link in metadata mode, preserving the
+old upstream route checks. See docs/NATIVE-RGB-FRONT-META-01-20261007.json.
+Never rearm metadata01.
