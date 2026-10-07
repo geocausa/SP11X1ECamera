@@ -22,6 +22,28 @@ class CompositionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "outside checkout"):
             build.checked_source("../not-a-project-source.c", "0" * 64)
 
+    def test_isolated_nv12_trial_composition(self):
+        with tempfile.TemporaryDirectory(prefix="native-nv12-trial-") as directory:
+            out = Path(directory) / "candidate"
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = build.assemble(out, nv12_trial=True)
+            self.assertTrue(result["nv12_trial_staged"])
+            self.assertTrue(result["nv12_trial_default_denied"])
+            self.assertFalse(result["runtime_access"])
+            self.assertFalse(result["nv12_runtime_proven"])
+            core = (out / "camss/camss.c").read_text()
+            self.assertIn("atomic_cmpxchg(&attempted, 0, 1)", core)
+            self.assertIn("native_nv12_commands_validate", core)
+            self.assertIn("native_nv12_commands_transform", core)
+            self.assertIn("result.live_completed != 4", core)
+            vfe = (out / "camss/camss-vfe-680.c").read_text()
+            self.assertIn("vfe680_x1e_linear_cold_state(vfe)", vfe)
+            self.assertIn("explicit bw_limiter disable", vfe)
+            self.assertIn("!addr->linear_nv12 && client == 0", vfe)
+            self.assertIn("own->linear_nv12 ? 5529600", vfe)
+            self.assertTrue((out / "camss/native-front-nv12-commands.h").exists())
+            self.assertFalse(list(out.rglob("*.ko")))
+
     def test_repeatable_composition_and_retained_guards(self):
         with tempfile.TemporaryDirectory(prefix="native-rgb-compose-") as directory:
             a, b = Path(directory) / "a", Path(directory) / "b"
@@ -30,6 +52,8 @@ class CompositionTests(unittest.TestCase):
             self.assertEqual(left["staged_sources"], right["staged_sources"])
             self.assertEqual(left["rear_fragments"], 52)
             self.assertFalse(left["runtime_access"])
+            self.assertFalse(left["nv12_trial_staged"])
+            self.assertFalse((a / "camss/native-front-nv12-commands.h").exists())
             self.assertTrue(left["overlay_audit"]["v4l2_nv12_streaming_still_forbidden"])
             core = (a / "camss/camss.c").read_text()
             self.assertIn("for_each_sgtable_dma_sg(sgt, sg, i)", core)

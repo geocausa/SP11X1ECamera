@@ -25,10 +25,15 @@ def checked_source(name, expected):
 def command(args, **kwargs):
     subprocess.run([str(a) for a in args], check=True, **kwargs)
 
-def assemble(out):
+def assemble(out, nv12_trial=False):
     manifest = json.loads((HERE / "sources.json").read_text())
     for name, expected in manifest["baseline_inputs"].items():
         checked_source(name, expected)
+    for name, expected in manifest["integration_inputs"].items():
+        checked_source(name, expected)
+    if nv12_trial:
+        for name, expected in manifest["nv12_trial_inputs"].items():
+            checked_source(name, expected)
     destinations = set()
     for fragment in manifest["rear_fragments"]:
         checked_source(fragment["source"], fragment["sha256"])
@@ -76,6 +81,11 @@ def assemble(out):
     if text.count(anchor) != 1:
         raise ValueError("CAMSS include anchor changed")
     vfe.write_text(text.replace(anchor, include + anchor, 1))
+    if nv12_trial:
+        shutil.copy2(HERE / "native-front-nv12-commands.h",
+                     camss / "native-front-nv12-commands.h")
+        command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
+                 HERE / "front-linear-nv12-trial.patch"], cwd=camss)
     (out / "imx681").mkdir()
     for name in manifest["baseline_inputs"]:
         path = ROOT / name
@@ -105,6 +115,8 @@ def assemble(out):
         "overlay_audit": overlay_result,
         "staged_sources": dict(sorted(staged.items())),
         "runtime_access": False,
+        "nv12_trial_staged": nv12_trial,
+        "nv12_trial_default_denied": True,
         "compiler_policy": "W=1 and -Werror",
         "nv12_runtime_proven": False,
         "rear_runtime_proven": False,
@@ -118,13 +130,15 @@ def main():
     parser.add_argument("--kernel-source", type=Path)
     parser.add_argument("--kernel-output", type=Path)
     parser.add_argument("--jobs", type=int, default=4)
+    parser.add_argument("--nv12-trial", action="store_true",
+                        help="Stage isolated cold-state four-frame diagnostic; no installation")
     options = parser.parse_args()
     if bool(options.kernel_source) != bool(options.kernel_output):
         parser.error("kernel-source and kernel-output must be supplied together")
     out = options.out.resolve()
     if out.is_relative_to(ROOT):
         parser.error("build output must be outside the source checkout")
-    result = assemble(out)
+    result = assemble(out, options.nv12_trial)
     if options.kernel_source:
         result["status"] = "BUILD_IN_PROGRESS"
         (out / "build-result.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

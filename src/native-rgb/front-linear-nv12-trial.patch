@@ -1,0 +1,464 @@
+--- a/camss.h
++++ b/camss.h
+@@ -217,6 +217,7 @@
+ void camss_x1e_pix_iq_session_close(struct camss_video *video);
+ int camss_x1e_pix_iq_submit(struct camss_video *video,
+ 			    const u8 *capsule, size_t capsule_size);
++bool camss_x1e_native_nv12_trial_allowed(struct camss *camss);
+ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
+ int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
+ 				     struct camss_buffer *buffer);
+--- a/camss.c
++++ b/camss.c
+@@ -7052,6 +7052,29 @@
+ 	memset(out, 0, sizeof(*out));
+ }
+ 
++#include "native-front-nv12-commands.h"
++
++static int camss_x1e_nv12_corpus_transform(struct camss_rtcdm1_corpus *corpus)
++{
++	unsigned int i;
++	int ret;
++
++	/* Validate all four slots before changing any slot. */
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_PACKET_COUNT; i++) {
++		ret = native_nv12_commands_validate((u8 *)corpus->main_cpu + i * SZ_4K,
++						 corpus->packet_len[i], i < 2);
++		if (ret)
++			return ret;
++	}
++	for (i = 0; i < CAMSS_RTCDM1_CORPUS_PACKET_COUNT; i++) {
++		ret = native_nv12_commands_transform((u8 *)corpus->main_cpu + i * SZ_4K,
++						  corpus->packet_len[i], i < 2);
++		if (ret)
++			return ret;
++	}
++	return 0;
++}
++
+ static int camss_x1e_pix_capsule_materialize(
+ 	struct camss *camss, struct camss_x1e_pix_capsule_materialized *out,
+ 	const struct camss_x1e_pix_capsule_inputs *input)
+@@ -7078,6 +7101,28 @@
+ 	if (ret)
+ 		goto err_release;
+ 
++	/* Only the isolated, explicitly enabled NV12 trial changes FULL depth.
++	 * Startup and priming own independent copies and both must be converted.
++	 * Their crop/scaler and all auxiliary/IQ fields remain unchanged.
++	 */
++	if (camss->vfe[1].line[VFE_LINE_PIX].video_out.active_fmt.fmt.pix_mp.pixelformat ==
++	    V4L2_PIX_FMT_NV12) {
++		if (!camss_x1e_native_nv12_trial_allowed(camss)) {
++			ret = -EOPNOTSUPP;
++			goto err_release;
++		}
++		ret = camss_x1e_nv12_corpus_transform(&out->startup);
++		if (ret)
++			goto err_release;
++		ret = camss_x1e_nv12_corpus_transform(&out->priming);
++		if (ret)
++			goto err_release;
++		ret = native_nv12_commands_validate(input->steady.normalized_main.data,
++						 input->steady.normalized_main.size, 0);
++		if (ret)
++			goto err_release;
++		dev_info(camss->dev, "NATIVE_NV12_FULL_8BIT_COMMANDS_PASS\n");
++	}
+ 	ret = camss_x1e_pix_prime_materialize(camss, &out->prime,
+ 					      &out->priming);
+ 	if (ret)
+@@ -9205,6 +9250,17 @@
+ };
+ 
+ /* X1E80100 front PIX production ABI constraints. */
++/* Development-only, cold linear storage experiment. Default is denied. */
++static bool native_linear_nv12_trial;
++module_param(native_linear_nv12_trial, bool, 0400);
++MODULE_PARM_DESC(native_linear_nv12_trial, "One-use front linear NV12 trial");
++
++bool camss_x1e_native_nv12_trial_allowed(struct camss *camss)
++{
++	return native_linear_nv12_trial && camss && camss->res &&
++		camss->res->version == CAMSS_X1E80100;
++}
++
+ #define CAMSS_X1E_PIX_GATE_QC10C_WIDTH		2560
+ #define CAMSS_X1E_PIX_GATE_QC10C_HEIGHT	1440
+ #define CAMSS_X1E_PIX_GATE_QC10C_STRIDE	3584
+@@ -9555,24 +9611,37 @@
+ 	const struct v4l2_pix_format_mplane *fmt;
+ 	struct vb2_buffer *vb;
+ 	u64 end;
++	u32 bytes, stride;
+ 
+ 	if (!video || !buffer)
+ 		return -EINVAL;
+ 	fmt = &video->active_fmt.fmt.pix_mp;
+ 	vb = &buffer->vb.vb2_buf;
+-	if (fmt->pixelformat != V4L2_PIX_FMT_QC10C ||
+-	    fmt->width != CAMSS_X1E_PIX_GATE_QC10C_WIDTH ||
++	if (fmt->pixelformat == V4L2_PIX_FMT_NV12) {
++		if (!camss_x1e_native_nv12_trial_allowed(video->camss))
++			return -EOPNOTSUPP;
++		bytes = 5529600;
++		stride = 2560;
++		if (buffer->addr[1] != buffer->addr[0] + 3686400)
++			return -EINVAL;
++	} else if (fmt->pixelformat == V4L2_PIX_FMT_QC10C) {
++		bytes = CAMSS_X1E_PIX_GATE_QC10C_BYTES;
++		stride = CAMSS_X1E_PIX_GATE_QC10C_STRIDE;
++	} else {
++		return -EINVAL;
++	}
++	if (fmt->width != CAMSS_X1E_PIX_GATE_QC10C_WIDTH ||
+ 	    fmt->height != CAMSS_X1E_PIX_GATE_QC10C_HEIGHT || fmt->num_planes != 1 ||
+-	    fmt->plane_fmt[0].bytesperline != CAMSS_X1E_PIX_GATE_QC10C_STRIDE ||
+-	    fmt->plane_fmt[0].sizeimage != CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++	    fmt->plane_fmt[0].bytesperline != stride ||
++	    fmt->plane_fmt[0].sizeimage != bytes)
+ 		return -EINVAL;
+ 	if (vb->vb2_queue != &video->vb2_q || vb->num_planes != 1 ||
+ 	    vb->state != VB2_BUF_STATE_ACTIVE ||
+-	    vb2_plane_size(vb, 0) < CAMSS_X1E_PIX_GATE_QC10C_BYTES)
++	    vb2_plane_size(vb, 0) < bytes)
+ 		return -EBUSY;
+ 	if (!buffer->addr[0] || !IS_ALIGNED(buffer->addr[0], PAGE_SIZE))
+ 		return -EINVAL;
+-	end = (u64)buffer->addr[0] + CAMSS_X1E_PIX_GATE_QC10C_BYTES - 1;
++	end = (u64)buffer->addr[0] + bytes - 1;
+ 	if (end > U32_MAX)
+ 		return -ERANGE;
+ 
+@@ -9590,7 +9659,7 @@
+ 		struct sg_table *sgt = vb2_dma_sg_plane_desc(vb, 0);
+ 		struct scatterlist *sg;
+ 		u64 cursor = (u64)buffer->addr[0];
+-		u64 remaining = CAMSS_X1E_PIX_GATE_QC10C_BYTES;
++		u64 remaining = bytes;
+ 		unsigned int i;
+ 
+ 		if (!sgt || !sgt->sgl || sgt->nents == 0 ||
+@@ -9723,7 +9792,8 @@
+ 		goto out_error_buffers;
+ 
+ 	runner_called = true;
+-	ret = camss_x1e_pix_runner_frames(camss, &req, &result, 27);
++	ret = camss_x1e_pix_runner_frames(camss, &req, &result,
++		video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 ? 4 : 27);
+ 	if (!result.teardown_safe) {
+ 		video->x1e_pix_runner_pinned = true;
+ 		dev_err(camss->dev,
+@@ -9734,6 +9804,24 @@
+ 		iq4 = NULL;
+ 		provider_owned = false;
+ 		goto out_done;
++	}
++	if (video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12) {
++		if (ret || result.video_done != video0 || result.video_done_next != video1 ||
++		    result.video_done_third != video2 || result.video_done_fourth != video3 ||
++		    result.live_completed != 4 || !result.epoch0_seen ||
++		    !result.epoch0_next_seen || !result.epoch0_steady_seen ||
++		    !result.video_seen || !result.video_next_seen ||
++		    !result.video_third_seen || !result.video_fourth_seen ||
++		    !result.slot0_reusable || !result.slot1_reusable ||
++		    !result.slot0_reused || !result.slot1_reused ||
++		    !result.slot0_reusable_again || !result.slot1_reusable_again) {
++			if (!ret)
++				ret = -EIO;
++			goto out_error_buffers;
++		}
++		video->x1e_pix_runner_stopped = true;
++		dev_info(camss->dev, "NATIVE_NV12_TRIAL_FOUR_FRAMES_STOPPED\n");
++		goto out_iq_packet;
+ 	}
+ 	if (ret || result.video_done != video0 || result.video_done_next != video1 ||
+ 	    result.video_done_third != video2 || result.video_done_fourth != video3 ||
+@@ -9918,6 +10006,15 @@
+ 	    video != &camss->vfe[1].line[VFE_LINE_PIX].video_out)
+ 		return -ENODEV;
+ 
++	if (video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12) {
++		static atomic_t attempted = ATOMIC_INIT(0);
++
++		if (!camss_x1e_native_nv12_trial_allowed(camss))
++			return -EOPNOTSUPP;
++		if (atomic_cmpxchg(&attempted, 0, 1))
++			return -EBUSY;
++	}
++
+ 	/*
+ 	 * Live-adaptive production starts from R4 only. R5/R6 are supplied after
+ 	 * STREAMON and consumed at their proven steady Epoch0 boundaries.
+--- a/camss-video.c
++++ b/camss-video.c
+@@ -663,7 +663,8 @@
+ 
+ 	/* E004il: block even pipeline PM for the unproven alternate mode. */
+ 	if (video_is_x1e_front_pix(video) &&
+-	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12)
++	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 &&
++	    !camss_x1e_native_nv12_trial_allowed(video->camss))
+ 		return -EOPNOTSUPP;
+ 
+ 	ret = v4l2_pipeline_pm_get(&vdev->entity);
+@@ -686,7 +687,8 @@
+ 
+ 	/* E004il: defence in depth if vb2 prepare_streaming is bypassed. */
+ 	if (video_is_x1e_front_pix(video) &&
+-	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12) {
++	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 &&
++	    !camss_x1e_native_nv12_trial_allowed(video->camss)) {
+ 		ret = -EOPNOTSUPP;
+ 		goto flush_buffers;
+ 	}
+--- a/camss-vfe-680.c
++++ b/camss-vfe-680.c
+@@ -16,6 +16,7 @@
+ 
+ #include <media/videobuf2-dma-sg.h>
+ #include "camss.h"
++#include "native-front-nv12-commands.h"
+ #include "camss-vfe.h"
+ 
+ #define VFE_TOP_IRQn_STATUS(vfe, n)		((vfe_is_lite(vfe) ? 0x1c : 0x44) + (n) * 4)
+@@ -284,6 +285,7 @@
+  * here; callers must supply Linux DMA IOVAs for every backing allocation.
+  */
+ struct vfe680_x1e_bus_iovas {
++	bool linear_nv12;
+ 	dma_addr_t qc10c;
+ 	dma_addr_t ds4;
+ 	dma_addr_t ds16;
+@@ -295,6 +297,7 @@
+ };
+ 
+ struct vfe680_x1e_bus_addresses {
++	bool linear_nv12;
+ 	u32 image[9];
+ 	u32 full_meta[2];
+ };
+@@ -443,25 +446,40 @@
+ {
+ 	int ret;
+ 
+-	ret = vfe680_x1e_bus_addr32(iovas->qc10c, 0,
+-				    &addr->full_meta[0]);
+-	if (ret)
+-		return ret;
+-	ret = vfe680_x1e_bus_addr32(iovas->qc10c,
+-				    VFE680_X1E_QC10C_Y_DATA_OFF,
+-					    &addr->image[0]);
+-	if (ret)
+-		return ret;
+-	ret = vfe680_x1e_bus_addr32(iovas->qc10c,
+-				    VFE680_X1E_QC10C_C_META_OFF,
+-					    &addr->full_meta[1]);
+-	if (ret)
+-		return ret;
+-	ret = vfe680_x1e_bus_addr32(iovas->qc10c,
+-				    VFE680_X1E_QC10C_C_DATA_OFF,
+-					    &addr->image[1]);
+-	if (ret)
+-		return ret;
++	addr->linear_nv12 = iovas->linear_nv12;
++	if (iovas->linear_nv12) {
++		if (!vfe680_x1e_dma_span_32bit(iovas->qc10c, 5529600))
++			return -ERANGE;
++		addr->full_meta[0] = 0;
++		addr->full_meta[1] = 0;
++		ret = vfe680_x1e_bus_addr32(iovas->qc10c, 0, &addr->image[0]);
++		if (ret)
++			return ret;
++		ret = vfe680_x1e_bus_addr32(iovas->qc10c, 3686400, &addr->image[1]);
++		if (ret)
++			return ret;
++	} else {
++		ret = vfe680_x1e_bus_addr32(iovas->qc10c, 0,
++					    &addr->full_meta[0]);
++		if (ret)
++			return ret;
++		ret = vfe680_x1e_bus_addr32(iovas->qc10c,
++					    VFE680_X1E_QC10C_Y_DATA_OFF,
++						    &addr->image[0]);
++		if (ret)
++			return ret;
++		ret = vfe680_x1e_bus_addr32(iovas->qc10c,
++					    VFE680_X1E_QC10C_C_META_OFF,
++						    &addr->full_meta[1]);
++		if (ret)
++			return ret;
++		ret = vfe680_x1e_bus_addr32(iovas->qc10c,
++					    VFE680_X1E_QC10C_C_DATA_OFF,
++						    &addr->image[1]);
++		if (ret)
++			return ret;
++
++	}
+ 
+ 	ret = vfe680_x1e_bus_addr32(iovas->ds4, 0, &addr->image[2]);
+ 	if (ret)
+@@ -494,10 +512,10 @@
+ 		void __iomem *cfg = vfe680_x1e_bus_reg(vfe, client, 0);
+ 
+ 		writel_relaxed(addr->image[i], cfg + VFE680_X1E_BUS_IMAGE_ADDR);
+-		if (client == 0)
++		if (!addr->linear_nv12 && client == 0)
+ 			writel_relaxed(addr->full_meta[0],
+ 				       cfg + VFE680_X1E_BUS_META_ADDR);
+-		else if (client == 1)
++		else if (!addr->linear_nv12 && client == 1)
+ 			writel_relaxed(addr->full_meta[1],
+ 				       cfg + VFE680_X1E_BUS_META_ADDR);
+ 	}
+@@ -521,6 +539,44 @@
+ 	}
+ }
+ 
++/* VFE680 FULL line-based NV12 from public BUS-v3 authority. No UBWC
++ * register is written: a non-linear prior state must be rejected, not reset
++ * with invented zeros. The trial admits only a fresh, disabled nine-client bus.
++ */
++static int vfe680_x1e_linear_cold_state(struct vfe_device *vfe)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(vfe680_x1e_windows_bus_client_order); i++) {
++		u8 c = vfe680_x1e_windows_bus_client_order[i];
++
++		if (readl(vfe680_x1e_bus_reg(vfe, c, VFE680_X1E_BUS_CFG)) &
++		    VFE_BUS_WRITE_CLIENT_CFG_EN)
++			return -EBUSY;
++	}
++	for (i = 0; i < 2; i++)
++		if (readl(vfe680_x1e_bus_reg(vfe, i, VFE680_X1E_BUS_MODE_CFG)) & BIT(0))
++			return -EOPNOTSUPP;
++	return 0;
++}
++
++static void vfe680_x1e_linear_config_full(struct vfe_device *vfe, u8 client)
++{
++	void __iomem *cfg = vfe680_x1e_bus_reg(vfe, client, 0);
++	u32 rows = client ? 720 : 1440;
++
++	writel_relaxed(0, cfg + VFE680_X1E_BUS_CFG);
++	writel_relaxed(0, cfg + VFE680_X1E_BUS_BW_LIMIT); /* explicit bw_limiter disable */
++	writel_relaxed((rows << 16) | 2560, cfg + VFE680_X1E_BUS_IMAGE_CFG0);
++	writel_relaxed(3, cfg + VFE680_X1E_BUS_PACKER_CFG);
++	writel_relaxed(2560, cfg + VFE680_X1E_BUS_IMAGE_CFG2);
++	writel_relaxed(rows * 2560, cfg + VFE680_X1E_BUS_FRAME_INCR);
++	writel_relaxed(0, cfg + VFE680_X1E_BUS_IRQ_SUBSAMPLE_PERIOD);
++	writel_relaxed(1, cfg + VFE680_X1E_BUS_IRQ_SUBSAMPLE_PATTERN);
++	writel_relaxed(0, cfg + VFE680_X1E_BUS_FRAMEDROP_PERIOD);
++	writel_relaxed(1, cfg + VFE680_X1E_BUS_FRAMEDROP_PATTERN);
++}
++
+ static int vfe680_x1e_bus_prepare(struct vfe_device *vfe,
+ 				  const struct vfe680_x1e_bus_iovas *iovas)
+ {
+@@ -536,9 +592,17 @@
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Exact SP11 qccamisp BUS-common UBWC static programming. */
+-	writel_relaxed(VFE680_X1E_WINDOWS_UBWC_STATIC_CTRL,
+-		       vfe->base + VFE680_X1E_BUS_UBWC_STATIC_CTRL);
++	if (iovas->linear_nv12) {
++		if (!camss_x1e_native_nv12_trial_allowed(vfe->camss))
++			return -EOPNOTSUPP;
++		ret = vfe680_x1e_linear_cold_state(vfe);
++		if (ret)
++			return ret;
++	} else {
++		/* Retain the proven compressed default, byte for byte. */
++		writel_relaxed(VFE680_X1E_WINDOWS_UBWC_STATIC_CTRL,
++			       vfe->base + VFE680_X1E_BUS_UBWC_STATIC_CTRL);
++	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(vfe680_x1e_windows_bus_client_order); i++) {
+ 		const struct vfe680_x1e_windows_client_contract *c;
+@@ -546,9 +610,38 @@
+ 		c = vfe680_x1e_bus_contract(vfe680_x1e_windows_bus_client_order[i]);
+ 		if (!c)
+ 			return -EINVAL;
+-		vfe680_x1e_bus_config_client(vfe, c);
++		if (iovas->linear_nv12 && c->client < 2)
++			vfe680_x1e_linear_config_full(vfe, c->client);
++		else
++			vfe680_x1e_bus_config_client(vfe, c);
+ 	}
+ 
++	if (iovas->linear_nv12) {
++		for (i = 0; i < 2; i++) {
++			void __iomem *cfg = vfe680_x1e_bus_reg(vfe, i, 0);
++			u32 rows = i ? 720 : 1440;
++
++			if (readl(cfg + VFE680_X1E_BUS_MODE_CFG) & BIT(0) ||
++			    readl(cfg + VFE680_X1E_BUS_PACKER_CFG) != 3 ||
++			    readl(cfg + VFE680_X1E_BUS_IMAGE_CFG0) != ((rows << 16) | 2560) ||
++			    readl(cfg + VFE680_X1E_BUS_IMAGE_CFG2) != 2560 ||
++			    readl(cfg + VFE680_X1E_BUS_FRAME_INCR) != rows * 2560)
++				return -EIO;
++		}
++		for (i = 0; i < 2; i++) {
++			u32 base = i ? 0x9e60 : 0x9c60;
++			unsigned int word;
++
++			for (word = 0; word <= 10; word++) {
++				u32 reg = word ? base + 0x10 + (word - 1) * 4 : base;
++
++				if (readl(vfe->base + reg) != native_nv12_round_word(i, word, 8))
++					return -EIO;
++			}
++		}
++		dev_info(vfe->camss->dev, "NATIVE_NV12_FULL_8BIT_READBACK_PASS\n");
++		dev_info(vfe->camss->dev, "NATIVE_NV12_COLD_FULL_READBACK_PASS\n");
++	}
+ 	/* Exact Windows lifecycle: all resources enabled before initial IOVAs. */
+ 	vfe680_x1e_bus_set_enabled(vfe, true);
+ 	vfe680_x1e_bus_write_addresses(vfe, &addr);
+@@ -774,6 +867,7 @@
+ 	struct vfe680_x1e_pix_slot slot[VFE680_X1E_PIX_SLOT_COUNT];
+ 	struct vfe680_x1e_group_fifo group[VFE680_X1E_PIX_GROUP_COUNT];
+ 	bool allocated;
++	bool linear_nv12;
+ };
+ 
+ static bool vfe680_x1e_dma_span_32bit(dma_addr_t dma, size_t size)
+@@ -893,6 +987,8 @@
+ 		}
+ 	}
+ 
++	own->linear_nv12 = vfe->line[VFE_LINE_PIX].video_out.active_fmt.fmt.pix_mp.pixelformat ==
++		V4L2_PIX_FMT_NV12;
+ 	own->allocated = true;
+ 	return 0;
+ }
+@@ -923,13 +1019,15 @@
+ {
+ 	struct vfe680_x1e_pix_slot *slot;
+ 	unsigned int group;
++	u32 bytes;
+ 
+ 	if (!own || !own->allocated || index >= VFE680_X1E_PIX_SLOT_COUNT ||
+ 	    !video || !iovas)
+ 		return -EINVAL;
+-	if (vb2_plane_size(&video->vb.vb2_buf, 0) < VFE680_X1E_QC10C_SIZE)
+-		return -EINVAL;
+-	if (!vfe680_x1e_dma_span_32bit(video->addr[0], VFE680_X1E_QC10C_SIZE))
++	bytes = own->linear_nv12 ? 5529600 : VFE680_X1E_QC10C_SIZE;
++	if (vb2_plane_size(&video->vb.vb2_buf, 0) < bytes)
++		return -EINVAL;
++	if (!vfe680_x1e_dma_span_32bit(video->addr[0], bytes))
+ 		return -ERANGE;
+ 
+ 	slot = &own->slot[index];
+@@ -946,6 +1044,7 @@
+ 		vfe680_x1e_group_fifo_push(&own->group[group], index);
+ 
+ 	memset(iovas, 0, sizeof(*iovas));
++	iovas->linear_nv12 = own->linear_nv12;
+ 	iovas->qc10c = video->addr[0];
+ 	iovas->ds4 = slot->aux[VFE680_X1E_AUX_DS4].dma;
+ 	iovas->ds16 = slot->aux[VFE680_X1E_AUX_DS16].dma;
