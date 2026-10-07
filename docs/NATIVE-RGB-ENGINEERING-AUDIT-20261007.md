@@ -1,3 +1,41 @@
+## 2026-10-07 native receiver frame-start and restart hardware PASS
+
+Kernel audit29/libcamera build07 physically pass both actual standard IPA paths.
+Pipeline05 sourceb08bc32f:80 standard cam2560x1440 NV12 frames30.00469fps,
+84 isolated IPA metering results,84 consecutive libcamera frameStart callbacks,
+85 receiver IRQ SOFs,425 owner checks,88 typed defaults. Lifecycle05 source81f04f6e:
+same CameraManager/Camera1/80/80 restart/reacquire passes161 app frames and173
+signed threaded IPA results; app SOF counts5/84/84,IRQ counts6/85/85 reset from0
+each start; final STOP has no later SOF/phase events. Stream IDs6/7/10,880 owner
+checks,185 typed defaults; longer runs30.00582/30.00572fps. No module reload.
+
+All241 app frames across these four streams matched hardware statistics/IPA.
+All241 steady observations had SOF-count minus VIDEO source0. Receiver SOF IRQ
+observation to VIDEO IRQ20.204-20.355ms in pipeline05; IRQ to completion2.877-
+3.248ms. These observations are not first-row exposure identity or sensor-control
+latency. SensorTimestamp remains absent; automatic AE/AWB remains disabled.
+
+All STOPs clean,error0,all sensors standby after each stop,final graph neutral,
+critical kernel faults0,Golden hashes unchanged. Both05 IDs consumed and retired;
+all22 candidate IDs retired,26 completed sensor streams,44 candidate/Golden boots;
+prior5 prestream/2 poststart failures unchanged. Latest Golden boot
+33010f45-c44b-4faa-923a-953e90113de3. No candidate boot/unit/writer/FW remains.
+Private original tuning, logs and optical pixels stay on SP11.
+Evidence: docs/NATIVE-RGB-FRONT-FRAME-SYNC-05-20261007.json and
+ docs/NATIVE-RGB-FRONT-FRAME-SYNC-LIFECYCLE-05-20261007.json.
+
+NEXT: bounded grouped sensor exposure/analogue/digital/frame-length response and
+measured per-field delays with CCI completion + receiver/frame/statistics times,
+stable-light screening and repeated up/down steps. Use standard DelayedControls
+only with those measurements. IMX681 already has a four-control atomic V4L2
+cluster with VBLANK master; do not copy another sensor's priorityWrite=true,
+which splits VBLANK into a separate ioctl. See current timing plan.
+Metering normalization, AE/AWB/dynamic tables,rear ISP/focus,public ABI/clock
+policy,independent tuning and soak/switch/fault/Windows optical acceptance remain.
+No matched Windows reference; fixed low Y is no proven brightness defect.
+Match physical camera/scene/position/lighting/time, including weather changes.
+Earlier NEXT statements are history. No bespoke daemon/CPU image ISP/AI/OEM runtime.
+
 ## 2026-10-07 native receiver frame-start hardware PASS; lifecycle05 next
 
 Fresh pipeline05 sourceb08bc32f/audit29/libcamera build07 passed80 standard cam

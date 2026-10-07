@@ -19,9 +19,13 @@ NATIVE-RGB-FRONT-FRAME-SYNC-05-20261007.json.
 All80 steady VIDEO source observations have SOF-count minus source0; latest SOF
 observation to VIDEO IRQ20.204-20.355ms, VIDEO IRQ to completion2.877-3.248ms.
 Neither relation measures first-row exposure or actual sensor-control effects.
-Lifecycle05 next checks reset across three starts and silence after final STOP.
-SensorTimestamp remains absent. Ordered implementation steps1/2 have passed the
-single-stream delivery gate; restart qualification is still pending.
+Lifecycle05 source81f04f6e passes same CameraManager/Camera1/80/80 restart and
+reacquire with actual signed threaded IPA. App event counts5/84/84 and IRQ
+counts6/85/85 reset from0 per start; all161 app-frame phase observations have
+SOF-count minus VIDEO source0. No SOF/phase events after final STOP; all sensors
+standby after each stop. See NATIVE-RGB-FRONT-FRAME-SYNC-LIFECYCLE-05-20261007.json.
+SensorTimestamp remains absent. Ordered steps1/2 pass receiver event delivery
+and restart qualification; step3 is the next physical gate.
 
 ## Current source findings
 
@@ -67,6 +71,40 @@ IRQ bit assignment or sensor delay is accepted as measured.
    range. Run convergence/stability tests across illumination, then longer
    capture, restart, camera switching and fault recovery. Rear hardware ISP and
    focus remain their own required implementation path.
+
+## Next experiment contract: grouped controls
+
+Source review confirms IMX681 v4l2_ctrl_cluster(4, &vblank), with VBLANK as master.
+One extended-control set validates the full frame-length/exposure relationship
+and performs one group hold, four register writes and an unconditional hold
+release, returning the CCI error. Pinned DelayedControls priorityWrite=true sends
+that member through a separate setControls call. Use priorityWrite=false for all
+four cluster members; keep the normal cluster validation. Measure delays for
+each member rather than copying another sensor's delay or forcing equal delays.
+A measured physical delay may differ even though the transaction is grouped.
+
+Before feedback, introduce an explicit development-only bounded experiment in
+standard libcamera's frameStart path. Keep automatic controls disabled and
+existing default typed ISP parameters. The experiment must log command request,
+receiver sequence and timestamps before/after sensor setControls, and kernel
+CCI group-release completion/result. No successful-control or applied-frame
+metadata may be published when a write fails. Delay inference uses observed
+frame/statistic response, not the current cached control value alone.
+
+Use the qualified baseline exposure1000, analogue code0, digital256, FLL3554.
+Change one field at a time using complete four-member ControlLists; candidate
+bounded steps are exposure1000/2000, analogue0/512, digital256/512 and
+FLL3554/7108. Verify current driver limits and exposure containment before any
+write. Hold each plateau for at least16 frames, repeat up/down three times and
+restore baseline between fields and before STOP. Longer FLL requires duration
+and timeout accounting. Never reuse a consumed hardware identity.
+
+Compare AEC regions/statistics and private NV12 metrology against pre/post
+baseline windows. Reject delay attribution if lighting, scene, clipping, noise or
+response ambiguity prevents a repeatable transition. Frame-length response can
+be assessed from receiver intervals without assuming scene brightness. Exposure
+and gain response still require stable lighting and independent metering-unit
+qualification. This experiment does not establish Windows optical parity.
 
 ## Constraints and current acceptance
 
