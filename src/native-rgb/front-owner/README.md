@@ -1,6 +1,6 @@
 # Native front completion ownership qualification
 
-Fresh one-use identity: native-owner-20261007-01. Never rearm after consumption.
+Fresh one-use identity: native-owner-20261007-02. Never rearm after consumption.
 This is a prerequisite for continuous reuse, not continuous capture itself.
 
 The isolated build requires both --nv12-trial and --front-owner-trial.
@@ -14,7 +14,7 @@ for last consumed address after IRQ handling; there is no invented pre-ACK rule.
 
 Five completion groups cover nine WMs:
 VIDEO bit0 -> WM0/1/2/3; AEC/BHist bit4 -> WM11/12; Tintless bit5 -> WM13;
-AWB bit6 -> WM14; RS bit9 -> WM16.
+AWB bit6 -> WM14; RS bit9 -> WM18.
 Eight history records per group retain session epoch, exact sequence, mask and
 consumed IOVAs. IRQ producer/worker reader share a spinlock. Session initialization
 disarms the history, drains the IRQ, initializes history/lock, preserves the
@@ -32,7 +32,7 @@ address checks: four consecutive matching generations for each of five groups,
 zero rejected owners, verified STREAMOFF, neutral graph, all sensor standby,
 unchanged Golden assets and zero critical kernel faults. Pixel files and
 original kernel logs stay root-only/private on SP11; only derived metadata is
-published. Audit13 was uninstalled preparation; audit14 is the final build.
+published. Audit13 was uninstalled preparation; audit14 was the consumed owner01 failure; audit15 was uninstalled mapping preparation; audit16 uses the tested admitted BUS order for RS.
 
 Tests use the same history/check code as the real driver: 3,242 ASan/UBSan checks,
 including 96 generations per group, reused-buffer wrong IOVA, stale session,

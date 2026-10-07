@@ -10,9 +10,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-owner-20261007-01")
-TOKEN = "sp11_camera_native_owner_20261007_01=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-owner-20261007-01"
+D = Path("/var/lib/sp11-camera-native-owner-20261007-02")
+TOKEN = "sp11_camera_native_owner_20261007_02=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-owner-20261007-02"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)

@@ -1,0 +1,76 @@
+{
+  "candidate_boot_id": "09c9bc80-9505-4cdf-b765-222466581ed3",
+  "derived_kernel_marker_counts": {
+    "BUG:": 0,
+    "Kernel panic": 0,
+    "NATIVE_FRONT_OWNER_MATCH": 4,
+    "NATIVE_FRONT_OWNER_REJECT": 1,
+    "NATIVE_NV12_TRIAL_FOUR_FRAMES_STOPPED": 0,
+    "Oops:": 0,
+    "WARNING:": 0
+  },
+  "error": "/var/lib/sp11-camera-native-owner-20261007-01/native-nv12-probe failed: NATIVE_NV12_CAPTURE_FAILED phase=dequeue_and_private_save errno=0 completed=0 streaming=1\n",
+  "failure_analysis": "Sampler implementation mapped RS to WM16. Published VFE680 and existing front table require WM18. Other four groups matched; rejection happened before aux ownership mutation completed.",
+  "failure_sensor_states": {
+    "1-0010": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "2-0060": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "3-0010": {
+      "bound": true,
+      "runtime_status": "suspended"
+    }
+  },
+  "golden_assets_unchanged": true,
+  "grub-initrd-fallback.service": {
+    "ConditionResult": "yes",
+    "ExecMainExitTimestampMonotonic": "12241900",
+    "ExecMainStartTimestampMonotonic": "12173150",
+    "ExecMainStatus": "0",
+    "Result": "success"
+  },
+  "grub2-common.service": {
+    "ConditionResult": "yes",
+    "ExecMainExitTimestampMonotonic": "12352238",
+    "ExecMainStartTimestampMonotonic": "12254646",
+    "ExecMainStatus": "0",
+    "Result": "success"
+  },
+  "hardware_streams_completed": 0,
+  "identity": "native-owner-20261007-01",
+  "initial_sensor_states": {
+    "1-0010": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "2-0060": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "3-0010": {
+      "bound": true,
+      "runtime_status": "suspended"
+    }
+  },
+  "matched_groups": [
+    "NATIVE_FRONT_OWNER_MATCH group=0 sequence=1",
+    "NATIVE_FRONT_OWNER_MATCH group=1 sequence=1",
+    "NATIVE_FRONT_OWNER_MATCH group=2 sequence=1",
+    "NATIVE_FRONT_OWNER_MATCH group=3 sequence=1"
+  ],
+  "phase": "capture_native_nv12_four_buffers",
+  "pixels_private_on_sp11": true,
+  "private_frame_count": 0,
+  "rejected_groups": [
+    "NATIVE_FRONT_OWNER_REJECT group=4 sequence=1 error=-71"
+  ],
+  "retired": true,
+  "retry": false,
+  "returned_golden_boot_id": "c695433d-692f-4369-9f94-dd9bb326683b",
+  "source_commit": "01f419d32fb1ba3194b791a213b9e0da6a53232f",
+  "status": "FAILED_NATIVE_NV12_PROBE"
+}

@@ -209,7 +209,7 @@
  	own->allocated = true;
  	return 0;
  }
-@@ -1057,6 +1062,67 @@
+@@ -1057,6 +1062,69 @@
  	return 0;
  }
  
@@ -217,7 +217,8 @@
 +int vfe680_native_front_snapshot(struct vfe_device *vfe, unsigned int group,
 +				u32 consumed[NATIVE_OWNER_WMS])
 +{
-+	static const u8 wm[NATIVE_OWNER_WMS] = { 0, 1, 2, 3, 11, 12, 13, 14, 16 };
++	/* Logical VIDEO/AEC/BHist/TLBG/AWB/RS order into the admitted BUS table. */
++	static const u8 bus_index[NATIVE_OWNER_WMS] = { 0, 1, 2, 3, 4, 6, 8, 7, 5 };
 +	unsigned int i;
 +
 +	if (!vfe680_x1e_bus_target(vfe) ||
@@ -228,7 +229,8 @@
 +	for (i = 0; i < NATIVE_OWNER_WMS; i++)
 +		if (native_owner_group_masks[group] & BIT(i))
 +			consumed[i] = readl(vfe->base + VFE680_X1E_BUS_CLIENT_BASE +
-+					   wm[i] * VFE680_X1E_BUS_CLIENT_STRIDE +
++					   vfe680_x1e_windows_bus_client_order[bus_index[i]] *
++					   VFE680_X1E_BUS_CLIENT_STRIDE +
 +					   VFE680_X1E_BUS_ADDR_STATUS0);
 +	return 0;
 +}
@@ -277,7 +279,7 @@
  static int vfe680_x1e_pix_ownership_complete(struct vfe680_x1e_pix_ownership *own,
  					     u32 event_id, unsigned int *index,
  					       struct camss_buffer **video_done,
-@@ -1064,7 +1130,7 @@
+@@ -1064,7 +1132,7 @@
  {
  	struct vfe680_x1e_group_fifo *fifo;
  	struct vfe680_x1e_pix_slot *slot;
@@ -286,7 +288,7 @@
  	u8 bit;
  
  	if (!own || !own->allocated || !index || !video_done || !slot_reusable)
-@@ -1087,6 +1153,10 @@
+@@ -1087,6 +1155,10 @@
  	bit = BIT(group);
  	if (!slot->in_use || !(slot->pending_mask & bit))
  		return -EPROTO;
@@ -297,7 +299,7 @@
  
  	vfe680_x1e_group_fifo_pop(fifo);
  	slot->pending_mask &= ~bit;
-@@ -1136,6 +1206,28 @@
+@@ -1136,6 +1208,28 @@
  	struct vfe680_x1e_bus_iovas iovas[VFE680_X1E_PIX_SLOT_COUNT];
  	bool bus_started;
  };

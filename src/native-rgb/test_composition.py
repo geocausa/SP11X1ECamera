@@ -58,6 +58,14 @@ class CompositionTests(unittest.TestCase):
             csid = (out / "camss/camss-csid-680.c").read_text()
             self.assertLess(csid.index("csid680_native_front_owner_latch(csid, buf_done_val);"),
                             csid.index("WRITE_ONCE(csid->x1e_buf_done_last, buf_done_val);"))
+            vfe = (out / "camss/camss-vfe-680.c").read_text()
+            order = __import__("re").search(
+                r"vfe680_x1e_windows_bus_client_order\[\] = \{([^}]+)\}", vfe).group(1)
+            admitted = [int(x.strip()) for x in order.split(",") if x.strip()]
+            mapping = __import__("re").search(
+                r"bus_index\[NATIVE_OWNER_WMS\] = \{([^}]+)\}", vfe).group(1)
+            logical = [admitted[int(x.strip())] for x in mapping.split(",") if x.strip()]
+            self.assertEqual(logical, [0, 1, 2, 3, 11, 12, 13, 14, 18])
             self.assertFalse(list(out.rglob("*.ko")))
 
     def test_repeatable_composition_and_retained_guards(self):

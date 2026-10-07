@@ -19,7 +19,7 @@ typedef uint64_t native_owner_u64;
 #define NATIVE_OWNER_WMS 9
 #define NATIVE_OWNER_HISTORY 8
 
-/* Order: WM0/1/2/3, WM11/12/13/14/16. Front video is one four-WM group. */
+/* Order: WM0/1/2/3, WM11/12/13/14/18. Front video is one four-WM group. */
 static const native_owner_u32 native_owner_group_masks[NATIVE_OWNER_GROUPS] = {
 	0x00f, 0x030, 0x040, 0x080, 0x100,
 };
