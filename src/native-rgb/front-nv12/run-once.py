@@ -9,9 +9,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-nv12-20261007-01")
-TOKEN = "sp11_camera_native_nv12_20261007_01=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-nv12-20261007-01"
+D = Path("/var/lib/sp11-camera-native-nv12-20261007-02")
+TOKEN = "sp11_camera_native_nv12_20261007_02=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-nv12-20261007-02"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -136,6 +136,7 @@ def main():
              '"msm_vfe1_pix":1 [crop:(0,0)/2560x1440]'])
         run(["v4l2-ctl", "-d", discovery["front_video_device"],
              "--set-fmt-video=width=2560,height=1440,pixelformat=NV12"])
+        (D / "PRIVATE-GRAPH-BEFORE-CAPTURE.txt").write_text(run(["media-ctl", "-d", media, "-p"]))
         result["phase"] = "capture_native_nv12_four_buffers"
         data = json.loads(run([str(D / "native-nv12-probe"), discovery["front_video_device"],
                                discovery["front_sensor_device"], str(D / "r4-bootstrap.bin")], timeout=30))

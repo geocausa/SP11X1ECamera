@@ -1,6 +1,6 @@
 # Native front NV12 cold-state trial
 
-Fresh one-use identity: native-nv12-20261007-01. Never rearm after consumption.
+Fresh one-use identity: native-nv12-20261007-02. Never rearm after consumption.
 This is diagnostic boot tooling; it installs no camera product service and
 leaves protected Golden FullIO v19c as the saved default.
 
@@ -32,7 +32,7 @@ derived 41088-byte bootstrap stays private on SP11 and is not committed.
 Validation: 170 synthetic C checks with ASan/UBSan; the actual local bootstrap
 passes the same helper, with no file mutation/hardware access. Four source
 composition tests pass. Kbuild uses W=1/-Werror. Builds 08–10 were uninstalled
-preparation; only the final qualified audit11 is eligible for this candidate.
+preparation; audit11 failed at pipeline power-up before ISP commands. Audit12 adds a\nbounded maximum-resource clock vote for this exact diagnostic mode.
 
 The private capture helper queues four buffers once, requests four frames,
 checks sequence/payload/timestamp/errors, saves pixels at root-only local
@@ -48,3 +48,11 @@ camera/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_bus/cam_vfe_bus_ver3.c,
 camera/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe17x/cam_vfe680.h,
 camera/drivers/cam_cdm/cam_cdm_util.{c,h}.
 Retained semantic authority: camss-e006p-crop-roundclamp.inc (MIT).
+
+NV12-01 was consumed and retired: STREAMON failed with EINVAL during power-up,
+zero frames and zero ISP configuration markers. Sensor PIXEL_RATE 720 MHz plus
+the generic PIX margin exceeds the X1E resource table maximum of 727 MHz.
+NV12-02 votes that existing maximum only for the exact front NV12/RAW mode,
+checks the rounded clock on subsequent power references and logs actual Hz.
+This preserves truthful sensor timing and makes no pixels-per-cycle claim.
+The eventual continuous pipeline still needs a qualified load/clock policy.

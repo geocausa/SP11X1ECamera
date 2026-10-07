@@ -19,7 +19,7 @@
 #define IQ_BYTES 41088U
 #define IQ_ID (V4L2_CID_USER_BASE + 0x1240)
 #define TYPE V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE
-#define D "/var/lib/sp11-camera-native-nv12-20261007-01/"
+#define D "/var/lib/sp11-camera-native-nv12-20261007-02/"
 static int call(int fd, unsigned long command, void *value)
 {
 	int rc;
@@ -38,8 +38,8 @@ static int boot_allowed(void)
 		return 0;
 	int token = 0, entry = 0;
 	for (char *p = strtok(line, " \n"); p; p = strtok(NULL, " \n")) {
-		token |= !strcmp(p, "sp11_camera_native_nv12_20261007_01=1");
-		entry |= !strcmp(p, "sp11_entry=7.1.5-sp11-camera-native-nv12-20261007-01");
+		token |= !strcmp(p, "sp11_camera_native_nv12_20261007_02=1");
+		entry |= !strcmp(p, "sp11_entry=7.1.5-sp11-camera-native-nv12-20261007-02");
 	}
 	return token && entry;
 }

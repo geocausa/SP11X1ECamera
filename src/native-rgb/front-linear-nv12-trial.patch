@@ -8,6 +8,28 @@
  int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
  int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
  				     struct camss_buffer *buffer);
+--- a/camss-video.c
++++ b/camss-video.c
+@@ -663,7 +663,8 @@
+ 
+ 	/* E004il: block even pipeline PM for the unproven alternate mode. */
+ 	if (video_is_x1e_front_pix(video) &&
+-	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12)
++	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 &&
++	    !camss_x1e_native_nv12_trial_allowed(video->camss))
+ 		return -EOPNOTSUPP;
+ 
+ 	ret = v4l2_pipeline_pm_get(&vdev->entity);
+@@ -686,7 +687,8 @@
+ 
+ 	/* E004il: defence in depth if vb2 prepare_streaming is bypassed. */
+ 	if (video_is_x1e_front_pix(video) &&
+-	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12) {
++	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 &&
++	    !camss_x1e_native_nv12_trial_allowed(video->camss)) {
+ 		ret = -EOPNOTSUPP;
+ 		goto flush_buffers;
+ 	}
 --- a/camss.c
 +++ b/camss.c
 @@ -7052,6 +7052,29 @@
@@ -191,28 +213,6 @@
  	/*
  	 * Live-adaptive production starts from R4 only. R5/R6 are supplied after
  	 * STREAMON and consumed at their proven steady Epoch0 boundaries.
---- a/camss-video.c
-+++ b/camss-video.c
-@@ -663,7 +663,8 @@
- 
- 	/* E004il: block even pipeline PM for the unproven alternate mode. */
- 	if (video_is_x1e_front_pix(video) &&
--	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12)
-+	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 &&
-+	    !camss_x1e_native_nv12_trial_allowed(video->camss))
- 		return -EOPNOTSUPP;
- 
- 	ret = v4l2_pipeline_pm_get(&vdev->entity);
-@@ -686,7 +687,8 @@
- 
- 	/* E004il: defence in depth if vb2 prepare_streaming is bypassed. */
- 	if (video_is_x1e_front_pix(video) &&
--	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12) {
-+	    video->active_fmt.fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 &&
-+	    !camss_x1e_native_nv12_trial_allowed(video->camss)) {
- 		ret = -EOPNOTSUPP;
- 		goto flush_buffers;
- 	}
 --- a/camss-vfe-680.c
 +++ b/camss-vfe-680.c
 @@ -16,6 +16,7 @@
@@ -462,3 +462,87 @@
  	iovas->qc10c = video->addr[0];
  	iovas->ds4 = slot->aux[VFE680_X1E_AUX_DS4].dma;
  	iovas->ds16 = slot->aux[VFE680_X1E_AUX_DS16].dma;
+--- a/camss-vfe.c
++++ b/camss-vfe.c
+@@ -971,6 +971,42 @@
+  *
+  * Return 0 on success or a negative error code otherwise
+  */
++
++/*
++ * Diagnostic policy, not a production throughput estimator. The sensor's
++ * array timing clock includes blanking; do not invent an IFE pixels/cycle
++ * ratio or falsify PIXEL_RATE. Retain the pre-metadata bounded front ISP
++ * maximum-resource vote on this one-use NV12 path only.
++ */
++static long vfe_native_nv12_trial_clock_rate(struct vfe_device *vfe,
++					   struct camss_clock *clock)
++{
++	struct vfe_line *line = &vfe->line[VFE_LINE_PIX];
++	struct v4l2_pix_format *format = &line->video_out.active_fmt.fmt.pix;
++	struct media_pad *sensor;
++	u64 pixel_clock;
++
++	if (!camss_x1e_native_nv12_trial_allowed(vfe->camss) ||
++	    vfe->id != 1 || vfe->res->is_lite ||
++	    strcmp(clock->name, "vfe1") || !clock->nfreqs ||
++	    format->pixelformat != V4L2_PIX_FMT_NV12 ||
++	    format->width != 2560 || format->height != 1440 ||
++	    line->fmt[MSM_VFE_PAD_SINK].width != 3840 ||
++	    line->fmt[MSM_VFE_PAD_SINK].height != 2160 ||
++	    line->fmt[MSM_VFE_PAD_SINK].code != MEDIA_BUS_FMT_SRGGB10_1X10)
++		return 0;
++	sensor = camss_find_sensor_pad(&line->subdev.entity);
++	if (!sensor || strncmp(sensor->entity->name, "imx681 ", 7) ||
++	    camss_get_pixel_clock(&line->subdev.entity, &pixel_clock) ||
++	    pixel_clock != 720000000)
++		return 0;
++
++	/* Only the already admitted X1E maximum; never request a new OPP. */
++	if (clock->freq[clock->nfreqs - 1] != 727000000)
++		return -EINVAL;
++	return clk_round_rate(clock->clk, clock->freq[clock->nfreqs - 1]);
++}
++
+ static int vfe_set_clock_rates(struct vfe_device *vfe)
+ {
+ 	struct device *dev = vfe->camss->dev;
+@@ -987,6 +1023,21 @@
+ 
+ 	for (i = 0; i < vfe->nclocks; i++) {
+ 		struct camss_clock *clock = &vfe->clock[i];
++
++		long trial_rate = vfe_native_nv12_trial_clock_rate(vfe, clock);
++
++		if (trial_rate < 0)
++			return trial_rate;
++		if (trial_rate > 0) {
++			ret = clk_set_rate(clock->clk, trial_rate);
++			if (ret)
++				return ret;
++			dev_info(dev,
++				 "NATIVE_NV12_TRIAL_MAX_CLOCK requested=%u rounded=%ld actual=%lu\n",
++				 clock->freq[clock->nfreqs - 1], trial_rate,
++				 clk_get_rate(clock->clk));
++			continue;
++		}
+ 
+ 		if (vfe_match_clock_names(vfe, clock) && vfe_check_clock_levels(clock)) {
+ 			u64 min_rate = 0;
+@@ -1068,6 +1119,16 @@
+ 
+ 	for (i = 0; i < vfe->nclocks; i++) {
+ 		struct camss_clock *clock = &vfe->clock[i];
++
++		long trial_rate = vfe_native_nv12_trial_clock_rate(vfe, clock);
++
++		if (trial_rate < 0)
++			return trial_rate;
++		if (trial_rate > 0) {
++			if (clk_get_rate(clock->clk) < trial_rate)
++				return -EBUSY;
++			continue;
++		}
+ 
+ 		if (vfe_match_clock_names(vfe, clock) && vfe_check_clock_levels(clock)) {
+ 			u64 min_rate = 0;
