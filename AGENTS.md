@@ -1,3 +1,24 @@
+## 2026-10-07 measured sensor ABI and source-built rear RAW verified
+
+Identity 03 used checkpoint eca98741 and audit07 W=1/-Werror modules. Live
+read-only HBLANK=2912, PIXEL_RATE=720000000 and LINK_FREQ=1200000000 verified.
+240 sequential front RAW frames and 120 rear RAW frames passed three STREAMOFF
+checks; all sensors suspended, graph neutral, zero derived critical fault/IR
+stream markers, protected Golden hashes unchanged. Golden returned at boot
+d526eb88-f17c-4e02-b66e-53d4f73f4650. Identities 01/02/03 are consumed, never rearm.
+The earlier source-built rear probe failure was a stale ACPI source import;
+the corrected SP11 regulator/reset/runtime-PM source now binds and streams.
+
+Current architecture is native sensors/CAMSS + hardware ISP + standard
+libcamera pipeline/IPA, no bespoke daemon, loopback, CPU software pixel ISP or
+AI/effects. Libcamera helpers build/test (8 pass, 2 VIMC skips); no complete
+CAMSS pipeline runtime yet. RAW success is not NV12 or optical quality proof.
+NEXT: source-backed format-specific FULL bus/DMA and 8-bit ISP configuration,
+then native NV12 hardware capture, continuous ownership, parameters/statistics,
+CAMSS pipeline/IPA and optical/reopen/switch acceptance. No system suspend tests.
+See docs/NATIVE-RGB-TIMING-03-20261007.json and engineering audit.
+Older NEXT statements below are historical when they conflict with this entry.
+
 ## 2026-10-07 approved architecture: hardware ISP plus libcamera
 
 The user accepted native kernel drivers + hardware ISP + standard libcamera

@@ -30,7 +30,9 @@ this build. This is not an implemented CAMSS pipeline or complete IPA.
    FLL 3554/7116 and HTS 6752; both support nominal 720 MHz, with 15.36 ppm
    between timestamp estimates. The isolated driver now exposes read-only
    PIXEL_RATE=720000000, HBLANK=2912 and LINK_FREQ=1200000000; identity 03
-   will verify the live ABI. Selection/full native array geometry remains
+   verified the live types, read-only flags, ranges, values and link menu during
+   two more 120-frame captures. The corrected rear source also delivered 120
+   sequential RAW frames at about 29.95 fps. Selection/full native array geometry remains
    unproven. Retained exposure policy uses 719898240 as a nominal 30 fps model;
    the pipeline must use the sensor timing ABI rather than conceal this difference.
 2. Native ordinary output: E004IK–IP already supplies NV12 negotiation and DMA

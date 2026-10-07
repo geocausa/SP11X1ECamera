@@ -14,11 +14,18 @@ for scope, evidence, architectural limits and delivery gates.
   memory-layout planners and the physically exercised QC10C mapped-SG guard.
 - 52 rear source fragments with original paths and hashes, including E011I's
   source-only post-stop reclaim candidate and E011Z's startup adaptive binder.
-- IMX681 and OV13858 kernel modules rebuilt from source.
+- IMX681 with measured read-only timing controls and OV13858 with the actual
+  SP11 board-power/runtime-PM source, rebuilt with W=1 and -Werror.
+
+Hardware identity 03 verified the front timing ABI during 240 sequential RAW
+frames, then captured 120 rear RAW frames. All STREAMOFF checks, sensor standby,
+neutral routing and protected Golden asset hashes passed. This establishes
+sensor/RDI transport, not native processed output or Windows image-quality parity.
+See docs/NATIVE-RGB-TIMING-03-20261007.json.
 
 It builds no custom userspace product runtime. Python and compiler commands here
 are developer tooling. The front bounded runner remains diagnostic; rear and
-linear NV12 runtime gates remain denied. These modules are **not a completed
+rear ISP and linear NV12 runtime gates remain denied. These modules are **not a completed
 camera stack or an installation authorization**.
 
 ## Build
