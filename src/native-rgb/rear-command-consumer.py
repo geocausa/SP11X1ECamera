@@ -17,7 +17,8 @@ def apply(camss):
         (here / "native-rear-prepared-commands.inc").read_bytes())
     for name in ("native-rear-startup-scalars.h", "native-rear-scalar-binding.inc",
                  "native-rear-startup-geometry.inc", "native-rear-startup-statistics.inc",
-                 "native-rear-startup-iq.inc", "native-rear-startup-compose.inc"):
+                 "native-rear-startup-iq.inc", "native-rear-startup-compose.inc",
+                 "native-rear-startup-entry.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
     # Adopt validated inactive-cold-gamma derivatives; immutable parents retained.
     cold = here.parents[1] / "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma"
@@ -137,7 +138,8 @@ def apply(camss):
                         '#include "native-rear-startup-statistics.inc"\n'
                         '#include "camss-e011as-cold-gamma-policy.inc"\n'
                         '#include "native-rear-startup-iq.inc"\n'
-                        '#include "native-rear-startup-compose.inc"')
+                        '#include "native-rear-startup-compose.inc"\n'
+                        '#include "native-rear-startup-entry.inc"')
     path.write_text(text)
     return {"shared_register_DMI_runner_removed": True,
             "prepared_arena_consumer": True, "all_or_none_materialization": True,

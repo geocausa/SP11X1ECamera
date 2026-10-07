@@ -1,9 +1,11 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <libcamera/base/span.h>
 #include <libcamera/controls.h>
+#include <libcamera/geometry.h>
 
 extern "C" {
 #include "native-imx681-control.h"
@@ -54,5 +56,27 @@ int camssX1ERearScalars(const e012k_rear_scalar_input &input,
 int camssX1ERearStartupScalars(Span<const e012k_rear_scalar_input> inputs,
                               Span<const uint64_t> requestIds,
                               native_rear_startup_scalars *output);
+
+
+/* Caller-owned AF policy. No request-dependent zoom or tuning is inferred. */
+struct CamssX1ERearAfInput {
+    Size active;
+    float widthFraction, heightFraction, modeScale;
+    float zoom, pdWidthScale, pdHeightScale;
+    bool alternateMode, pdScaleEnabled, sparsePd;
+};
+
+/* Source default ROI, before kernel BAF/BF finalization. */
+int camssX1ERearAfRectangle(const CamssX1ERearAfInput &input,
+                           Rectangle *output);
+
+struct CamssX1ERearBgControls {
+    std::array<uint8_t, 3> aecWeightQ4;
+    uint8_t awbQuad;
+};
+
+/* Source float-to-Q4 conversion; caller owns metering/quad policy. */
+int camssX1ERearBgWeights(Span<const float> weights, bool awbQuad,
+                          CamssX1ERearBgControls *output);
 
 } /* namespace libcamera::ipa */

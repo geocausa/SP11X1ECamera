@@ -1,3 +1,60 @@
+## 2026-10-07 current full rear source-input preflight and internal startup handoff
+
+Standard libipa now provides caller-policy AF default rectangle geometry and
+source-derived nonnegative binary32 AEC weight Q4/AWB quad conversion. AF mode,
+zoom, PD scales and fractions remain caller-owned; no captured transient zoom
+becomes a driver constant. All float fields are finite-admitted, output is atomic
+on error, Q4 ties/one-ULP neighbors and negative zero/subnormal bounds are checked.
+Retained source headers remain pinned and unchanged; staged weight C aggregate
+initializer is spelled out solely for C++ Werror compatibility.
+
+Actual built libipa scalar/AF/weights -> current complete native_rear composer
+and REAL semantic types/providers/allocator/materializer matches every present
+retained startup register word: 714/705/504/345 = 2268/2268, period low5 source bits.
+All four DMI shapes match. Clean LSC4/GTM4/GIC3 and BF selector1 four slots match.
+No captured RT-CDM output words are INPUTS. Source-forward observed semantic
+BG/RS inputs, caller transient zoom and source-produced BPC/LSC/GTM remain SAME
+SP11 private. Fixed zero black/unused weights/enables are explicit bounded
+diagnostic policy; cold initialization/AFD/transient zoom policy and independent
+release tuning/complete adaptive libipa algorithms are NOT proven.
+
+GCC+Clang ASAN/UBSAN full current preflight414 assertions each. Input production
+uses existing validated clean source algorithms, actual built libipa and selected
+CST tuning; no optional OEM archaeology or repeated closed arithmetic tests.
+Evidence includes mixed source/caller policies; exact commands do NOT prove
+Linux physical ISP operation, optical quality, fresh live provenance or NV12.
+
+native-rear-startup-entry.inc connects typed inputs synchronously to the actual
+E008N single-use wrapper: complete composition before owned command materialization,
+then existing prepared runner seam. Heap semantics are erased/freed on every return;
+the synchronous wrapper retains only copied command/DMI bytes, never semantic
+provider pointers. Uncertain command arenas remain independently pinned. This is
+an INTERNAL source contract; no V4L2 callback/public UAPI/rear IPA runtime installed.
+Default production authorization STILL DENIED. Real full types/materializer/E008N
+and actual prepared validator tested:109 assertions/32 allocation cases per compiler,
+zero runner calls, invalid generations and repeated use reject, clean denial frees.
+Route and unused runner body are host models; host-only consumption resets explore
+independent cases, production has NO reset.
+
+Libcamera build15 Werror zero warnings,10 testsPASS/2 missing-VIMC SKIP.
+Build14 first failed C++ aggregate spelling; corrected staged-copy spelling in15.
+Kernel build13 W1/Werror PASS,zero stderr,not installed. Build12 first rejected
+changed consumer digest before staging; new integration pins corrected13.
+Private preflight01 first used wrong stage path and exited before checking;
+actual stage11/camss preflight02 PASS. Attempts/job logs retained; no hardware IDs.
+9 source composition tests and hygiene/diff/manifest checks PASS.
+Evidence docs/NATIVE-RGB-REAR-SOURCE-INPUTS-20261007.json.
+
+Golden5a4d7226-d3b1-4c39-b94f-9d16ce4572ce unchanged; no new camera stream,
+candidate/install/reboot. Native44streams/33IDs/66boots;Windows2/2/4;combined70/35.
+Rear FIRST, front calibration deferred, lights last user OFF. Pixels/photos/RAW/
+spatial arrays/image-derived hashes/OEM originals stay SAME SP11 only.
+NEXT bounded physical rear generation/consumed-address/stop proof with uncertain
+DMA retained through reboot, typed runtime transport and independent release
+IPA tuning/adaptive producers; qualified linear output and matched-scene optics.
+User authorizes autonomous milestone progression; no approval pauses at source
+milestones. Earlier NEXT and source-gate entries below are historical.
+
 ## 2026-10-07 complete integer rear startup integration and partial-start cleanup
 
 Current main-path composition now includes BF ROI finalization plus explicit

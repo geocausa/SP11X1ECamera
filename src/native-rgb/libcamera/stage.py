@@ -52,6 +52,11 @@ def stage(source, destination, front_pipeline=False):
     libipa = destination / "src/ipa/libipa"
     for name in manifest["camera_sources"]:
         shutil.copy2(ROOT / name, libipa / Path(name).name)
+    # The retained C zero initializer triggers C++ missing-field warnings.
+    # Spell out both members in the staged copy; arithmetic stays unchanged.
+    replace(libipa / "weight-quad-producer.h",
+            "struct e011al_weight_quad_output v={0};",
+            "struct e011al_weight_quad_output v={{0,0,0},0};")
     # libcamera enables GNU math declarations, including fadd/fsub/fmul.
     # Namespace the retained file's private helpers without changing arithmetic.
     stats = libipa / "native-stats3a.c"

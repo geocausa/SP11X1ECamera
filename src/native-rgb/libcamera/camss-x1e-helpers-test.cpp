@@ -265,6 +265,98 @@ protected:
             std::memcmp(&savedParameters, &parameters, sizeof(parameters)))
             return TestFail;
 
+
+        /* Synthetic policy exercises source arithmetic, not optical tuning. */
+        CamssX1ERearAfInput af{
+            Size(4064, 2286), 0.2f, 0.2f, 1.0f, 1.0f, 1.0f, 1.0f,
+            false, false, false
+        };
+        Rectangle afRect;
+        if (camssX1ERearAfRectangle(af, &afRect) ||
+            afRect != Rectangle(1626, 915, 812, 457))
+            return TestFail;
+        af.zoom = 2.0f;
+        if (camssX1ERearAfRectangle(af, &afRect) ||
+            afRect != Rectangle(1829, 1029, 406, 228))
+            return TestFail;
+        af.sparsePd = true;
+        if (camssX1ERearAfRectangle(af, &afRect) ||
+            afRect != Rectangle(1829, 943, 406, 400))
+            return TestFail;
+        af = {Size(4064, 2286), 0.2f, 0.2f, 0.5f, 1.0f, 1.5f, 1.5f,
+              true, true, false};
+        if (camssX1ERearAfRectangle(af, &afRect) ||
+            afRect != Rectangle(1728, 972, 609, 342))
+            return TestFail;
+        const auto savedAf = afRect;
+        for (size_t field = 0; field < 6; ++field) {
+            for (float bad : {std::numeric_limits<float>::infinity(),
+                              -std::numeric_limits<float>::infinity(),
+                              std::numeric_limits<float>::quiet_NaN()}) {
+                auto invalid = af;
+                const std::array<float *, 6> fields{
+                    &invalid.widthFraction, &invalid.heightFraction,
+                    &invalid.modeScale, &invalid.zoom,
+                    &invalid.pdWidthScale, &invalid.pdHeightScale
+                };
+                *fields[field] = bad;
+                if (camssX1ERearAfRectangle(invalid, &afRect) != -EINVAL ||
+                    afRect != savedAf)
+                    return TestFail;
+            }
+        }
+        for (unsigned int width : {0U, 65536U}) {
+            auto invalid = af;
+            invalid.active.width = width;
+            if (camssX1ERearAfRectangle(invalid, &afRect) != -EINVAL ||
+                afRect != savedAf)
+                return TestFail;
+        }
+        auto invalidAf = af;
+        invalidAf.zoom = 0.0f;
+        if (camssX1ERearAfRectangle(invalidAf, &afRect) != -ERANGE ||
+            afRect != savedAf || camssX1ERearAfRectangle(af, nullptr) != -EINVAL)
+            return TestFail;
+
+        std::array<float, 3> weights{0.0f, 0.5f, 1.0f};
+        CamssX1ERearBgControls bg{};
+        if (camssX1ERearBgWeights(weights, true, &bg) ||
+            bg.aecWeightQ4 != std::array<uint8_t, 3>{0, 8, 16} ||
+            bg.awbQuad != 1)
+            return TestFail;
+        for (unsigned int step = 0; step < 16; ++step) {
+            const float tie = (float(step) + 0.5f) / 16.0f;
+            weights = {std::nextafter(tie, 0.0f), tie,
+                       std::nextafter(tie, 1.0f)};
+            if (camssX1ERearBgWeights(weights, false, &bg) ||
+                bg.aecWeightQ4 != std::array<uint8_t, 3>{
+                    uint8_t(step), uint8_t(step + 1), uint8_t(step + 1)} ||
+                bg.awbQuad != 0)
+                return TestFail;
+        }
+        weights = {-0.0f, std::numeric_limits<float>::denorm_min(), 0.0f};
+        if (camssX1ERearBgWeights(weights, false, &bg) ||
+            bg.aecWeightQ4 != std::array<uint8_t, 3>{0, 0, 0})
+            return TestFail;
+        const auto savedBg = bg;
+        for (size_t field = 0; field < 3; ++field) {
+            for (float bad : {-0.001f, std::nextafter(1.0f, 2.0f),
+                              std::numeric_limits<float>::infinity(),
+                              std::numeric_limits<float>::quiet_NaN()}) {
+                weights = {0.25f, 0.5f, 0.75f};
+                weights[field] = bad;
+                if (camssX1ERearBgWeights(weights, true, &bg) != -ERANGE ||
+                    bg.aecWeightQ4 != savedBg.aecWeightQ4 ||
+                    bg.awbQuad != savedBg.awbQuad)
+                    return TestFail;
+            }
+        }
+        if (camssX1ERearBgWeights(Span<const float>(weights.data(), 2), false,
+                                  &bg) != -EINVAL ||
+            camssX1ERearBgWeights(weights, false, nullptr) != -EINVAL ||
+            bg.aecWeightQ4 != savedBg.aecWeightQ4 || bg.awbQuad != savedBg.awbQuad)
+            return TestFail;
+
         std::cout << "PASS: registered gain helper, atomic four-field controls, "
                      "range admission, rear scalar forwarding, stats identity and error preservation\n";
         return TestPass;

@@ -4,10 +4,13 @@
 #include <array>
 #include <cerrno>
 #include <cmath>
+#include <cstring>
 #include <limits>
 #include <utility>
 
 #include <linux/videodev2.h>
+#include "af-default-rectangle.h"
+#include "weight-quad-producer.h"
 
 namespace libcamera::ipa {
 
@@ -182,6 +185,54 @@ int camssX1ERearStartupScalars(Span<const e012k_rear_scalar_input> inputs,
     if (ret)
         return ret;
     *output = pending;
+    return 0;
+}
+
+
+int camssX1ERearAfRectangle(const CamssX1ERearAfInput &input,
+                           Rectangle *output)
+{
+    const std::array<float, 6> values{
+        input.widthFraction, input.heightFraction, input.modeScale,
+        input.zoom, input.pdWidthScale, input.pdHeightScale
+    };
+    if (!output || !input.active.width || !input.active.height ||
+        input.active.width > UINT16_MAX || input.active.height > UINT16_MAX)
+        return -EINVAL;
+    for (float value : values)
+        if (!std::isfinite(value))
+            return -EINVAL;
+
+    const e008z_af_default_inputs source{
+        uint16_t(input.active.width), uint16_t(input.active.height),
+        input.widthFraction, input.heightFraction, input.modeScale,
+        input.zoom, input.pdWidthScale, input.pdHeightScale,
+        input.alternateMode, input.pdScaleEnabled, input.sparsePd
+    };
+    e008z_af_rect pending{};
+    if (e008z_af_default_rect(&source, &pending))
+        return -ERANGE;
+    *output = Rectangle(pending.x, pending.y, pending.width, pending.height);
+    return 0;
+}
+
+int camssX1ERearBgWeights(Span<const float> weights, bool awbQuad,
+                          CamssX1ERearBgControls *output)
+{
+    static_assert(sizeof(float) == sizeof(uint32_t));
+    static_assert(std::numeric_limits<float>::is_iec559);
+    if (!output || weights.size() != 3)
+        return -EINVAL;
+    e011al_weight_quad_input source{};
+    for (size_t i = 0; i < 3; ++i)
+        std::memcpy(&source.weight_bits[i], &weights[i], sizeof(float));
+    source.awb_quad = awbQuad;
+    e011al_weight_quad_output pending{};
+    int ret = e011al_produce_weight_quad(&source, &pending);
+    if (ret)
+        return ret;
+    *output = {{pending.aec_weight_q4[0], pending.aec_weight_q4[1],
+                pending.aec_weight_q4[2]}, pending.awb_quad};
     return 0;
 }
 
