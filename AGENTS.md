@@ -1,3 +1,20 @@
+## 2026-10-07 user priority: REAR first; lights OFF; fresh Windows baseline prepared
+
+User20:37:51UTC reports lights OFF and rear pointed at SP7 screen; front
+calibration deferred until rear finished. Current front full-rate manual/request/
+lifecycle gate remains CLOSED; do not repeat those tests or calibrate front now.
+Fresh E-NATIVE-REAR-WINDOWS-SCREEN-01 prepared; NOT yet attempted or consumed.
+Rear-only OEM Windows3840x2160 NV12 baseline,16 advancing sparse timestamps,
+three full-resolution buffers/nativeY saved PRIVATE only on same SP11.
+Source/readme src/native-rgb/rear-windows-reference; SP7 offline testsPASS,
+no camera access. On-demand zero-trigger task, atomic consume before camera,
+240s automatic Golden return; persistent BootOrder/Golden protected.
+SP7 hardware brightness26; healthy upper-screen ROI not yet registered;
+damaged lower band is not a camera fault. No lux/FOV/optical parity claim.
+Native44 streams/33IDs/66boots and Windows1stream/1ID/2boots unchanged.
+NEXT execute one fresh rear-only Windows baseline then native rear ISP delivery.
+Prior front meter/AE NEXT superseded by user. No OSsleep.
+
 ## 2026-10-07 standard delayed controls FULL-RATE hardware gate CLOSED
 
 Fresh04 sourceb64a94f2/audit31/pipeline12 PASS:120 standard cam public scripted
