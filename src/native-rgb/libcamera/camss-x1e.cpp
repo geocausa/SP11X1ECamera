@@ -33,6 +33,8 @@
 
 #include "libcamera/internal/camera.h"
 #include "libcamera/internal/device_enumerator.h"
+#include "libcamera/internal/delayed_controls.h"
+#include "camss-x1e-controls.h"
 #include "libcamera/internal/framebuffer.h"
 #include "libcamera/internal/mapped_framebuffer.h"
 #include "libcamera/internal/ipa_manager.h"
@@ -77,6 +79,7 @@ struct FrameState {
  std::optional<StatsIdentity> stats;
  FrameBuffer *metadata = nullptr;
  std::optional<float> luma;
+ std::optional<CamssX1EManual> appliedControls;
 };
 }
 
@@ -91,7 +94,7 @@ public:
  int openDevices();
  void closeDevices();
  int configure();
- int start();
+ int start(const ControlList *controls);
  void stop();
  int submitParameters();
  int queueImage(FrameBuffer *buffer);
@@ -106,6 +109,10 @@ public:
  void fail(const char *reason);
  void cancelImage(FrameBuffer *buffer);
 
+ std::unique_ptr<DelayedControls> delayedControls_;
+ CamssX1EControlSchedule controlSchedule_;
+ std::map<FrameBuffer *, uint32_t> admittedImages_;
+ std::optional<CamssX1EManual> expectedWrite_;
  std::unique_ptr<ipa::camss_x1e::IPAProxyCamssX1E> ipa_;
  bool ipaStarted_ = false;
  bool sofEnabled_ = false;
@@ -192,9 +199,7 @@ public:
  }
  int start(Camera *camera, const ControlList *controls) override
  {
-  if (controls && !controls->empty())
-   return -EOPNOTSUPP; /* No unqualified automatic/manual control is advertised. */
-  return cameraData(camera)->start();
+  return cameraData(camera)->start(controls);
  }
  void stopDevice(Camera *camera) override { cameraData(camera)->stop(); }
  int queueRequestDevice(Camera *camera, Request *request) override
@@ -202,8 +207,6 @@ public:
   auto *data = cameraData(camera);
   if (!data->running_ || data->failed_)
    return -ESHUTDOWN;
-  if (!request->controls().empty())
-   return -EOPNOTSUPP;
   FrameBuffer *buffer = request->findBuffer(&data->stream_);
   if (!buffer)
    return -ENOENT;
@@ -301,7 +304,15 @@ int CamssX1ECameraData::init()
  if (ret || metadata.fourcc != V4L2PixelFormat(NATIVE_FRONT_STATS_MAGIC) ||
      metadata.planes[0].size != NATIVE_FRONT_STATS_BYTES)
   return ret ? ret : -EINVAL;
- controlInfo_ = ControlInfoMap({}, controls::controls);
+ controlInfo_ = ControlInfoMap({
+  { &controls::AeEnable, ControlInfo(false, false, false) },
+  { &controls::ExposureTimeMode, ControlInfo(controls::ExposureTimeModeManual, controls::ExposureTimeModeManual, controls::ExposureTimeModeManual) },
+  { &controls::AnalogueGainMode, ControlInfo(controls::AnalogueGainModeManual, controls::AnalogueGainModeManual, controls::AnalogueGainModeManual) },
+  { &controls::ExposureTime, ControlInfo(int32_t(CamssX1EManual::duration(4)), int32_t(CamssX1EManual::duration(7104)), int32_t(CamssX1EManual::duration(1000))) },
+  { &controls::AnalogueGain, ControlInfo(1.0f, 16.0f, 1.0f) },
+  { &controls::DigitalGain, ControlInfo(1.0f, 15.0f, 1.0f) },
+  { &controls::FrameDurationLimits, ControlInfo(CamssX1EManual::duration(3554), CamssX1EManual::duration(7108), CamssX1EManual::duration(3554)) },
+ }, controls::controls);
  properties_.set(properties::Model, std::string("IMX681"));
  properties_.set(properties::Location, properties::CameraLocationFront);
  video_->bufferReady.connect(this, &CamssX1ECameraData::imageReady);
@@ -330,6 +341,7 @@ int CamssX1ECameraData::openDevices()
 
 void CamssX1ECameraData::closeDevices()
 {
+ delayedControls_.reset();
  statistics_->close();
  video_->close();
  for (V4L2Subdevice *device : { sensor_.get(), phy_.get(), csid_.get(), vfe_.get() })
@@ -411,7 +423,7 @@ int CamssX1ECameraData::submitParameters()
  return ret ? (ret < 0 ? ret : -EINVAL) : 0;
 }
 
-int CamssX1ECameraData::start()
+int CamssX1ECameraData::start(const ControlList *controls)
 {
  if (running_ || !startup_.empty() || !metadata_.empty())
   return -EBUSY;
@@ -425,6 +437,31 @@ int CamssX1ECameraData::start()
   else
    return -EINVAL;
  }
+ /* Diagnostic timing runs and standard request scheduling are exclusive. */
+ if (controlTimingTrial_ != ControlTimingTrial::None && controls && !controls->empty())
+  return -EOPNOTSUPP;
+ CamssX1EManual initial;
+ if (controls) {
+  int ret = camssX1EManualRequest(*controls, initial, &initial);
+  if (ret) return ret;
+ }
+ ControlList initialControls = initial.sensorControls(sensor_->controls());
+ int controlRet = sensor_->setControls(&initialControls);
+ if (controlRet) return controlRet < 0 ? controlRet : -EINVAL;
+ controlSchedule_.reset(initial);
+ admittedImages_.clear();
+ expectedWrite_.reset();
+ if (controlTimingTrial_ == ControlTimingTrial::None) {
+  for (uint32_t id : { V4L2_CID_VBLANK, V4L2_CID_EXPOSURE, V4L2_CID_ANALOGUE_GAIN, V4L2_CID_DIGITAL_GAIN })
+   if (sensor_->controls().find(id) == sensor_->controls().end()) return -EOPNOTSUPP;
+  delayedControls_ = std::make_unique<DelayedControls>(sensor_.get(),
+   std::unordered_map<uint32_t, DelayedControls::ControlParams>{
+    { V4L2_CID_VBLANK, { 2, false } }, { V4L2_CID_EXPOSURE, { 2, false } },
+    { V4L2_CID_ANALOGUE_GAIN, { 2, false } }, { V4L2_CID_DIGITAL_GAIN, { 2, false } },
+   });
+  auto seed = CamssX1EManual::fromSensor(delayedControls_->get(0));
+  if (!seed || !(*seed == initial)) { delayedControls_.reset(); return -EIO; }
+ } else delayedControls_.reset();
  nextParameter_ = 5;
  nextSofSequence_ = 0;
  streamId_ = 0;
@@ -504,9 +541,24 @@ error:
 
 int CamssX1ECameraData::queueImage(FrameBuffer *buffer)
 {
- int ret = video_->queueBuffer(buffer);
- if (!ret)
+ CamssX1EManual values;
+ Request *request = buffer->request();
+ ControlList empty(controls::controls);
+ const ControlList &requested = request ? request->controls() : empty;
+ if (controlTimingTrial_ != ControlTimingTrial::None && !requested.empty()) return -EOPNOTSUPP;
+ int ret = controlSchedule_.prepare(requested, &values);
+ if (ret) return ret;
+ const uint32_t target = controlSchedule_.nextImage();
+ ret = video_->queueBuffer(buffer);
+ if (!ret) {
   pixelsQueued_++;
+  admittedImages_.emplace(buffer, target);
+  controlSchedule_.admitted(values, !requested.empty());
+  if (!requested.empty())
+   LOG(CAMSSX1E, Debug) << "CAMSS_X1E_REQUEST_CONTROL request=" << request->sequence()
+    << " target=" << target << " fll=" << values.fll << " exposure=" << values.exposure
+    << " again=" << values.analogue << " dgain=" << values.digital;
+ }
  return ret;
 }
 
@@ -517,7 +569,7 @@ int CamssX1ECameraData::ensureSpare()
   * outputs admitted, using only fully paired/retired internal buffers when
   * application buffers are unavailable. No application frame is fabricated.
   */
- while (running_ && pixelsQueued_ < 2 && !availableStartup_.empty()) {
+ while (running_ && pixelsQueued_ < 4 && !availableStartup_.empty()) {
   FrameBuffer *buffer = availableStartup_.front();
   availableStartup_.pop_front();
   int ret = queueImage(buffer);
@@ -552,6 +604,10 @@ void CamssX1ECameraData::stop()
    held.push_back(frame.image);
  }
  frames_.clear();
+ admittedImages_.clear();
+ controlSchedule_.reset();
+ expectedWrite_.reset();
+ delayedControls_.reset();
  /* Pixel STREAMOFF stops hardware before any statistics/storage is released. */
  int ret = videoAllocated_ ? video_->streamOff() : 0;
  int statsRet = statisticsAllocated_ ? statistics_->streamOff() : 0;
@@ -661,9 +717,40 @@ void CamssX1ECameraData::frameStart(uint32_t sequence)
   fail("Grouped sensor control timing experiment failed");
   return;
  }
- /* Receiver SOF is not first-row sensor exposure or BOOTTIME. Keep the
-  * public SensorTimestamp absent. Automatic control scheduling remains disabled.
-  * Only the explicit bounded control response measurements above are permitted. */
+ if (delayedControls_) {
+  std::optional<CamssX1EManual> upcoming;
+  if (controlSchedule_.frameStart(sequence, &upcoming)) {
+   fail("Request control schedule discontinuity"); return;
+  }
+  delayedControls_->applyControls(sequence);
+  /* Upstream applyControls() is void. Cached V4L2 readback must match after
+   * each queued write; the diagnostic CCI trace independently checks hardware.
+   * Do not claim that this ioctl reads the physical registers itself. */
+  if (expectedWrite_) {
+   const std::array<uint32_t, 4> ids{ V4L2_CID_VBLANK, V4L2_CID_EXPOSURE, V4L2_CID_ANALOGUE_GAIN, V4L2_CID_DIGITAL_GAIN };
+   auto observed = CamssX1EManual::fromSensor(sensor_->getControls(ids));
+   if (!observed || !(*observed == *expectedWrite_)) {
+    fail("Delayed sensor write/readback mismatch"); return;
+   }
+   LOG(CAMSSX1E, Debug) << "CAMSS_X1E_DELAYED_WRITE sof=" << sequence
+    << " effective=" << sequence + 2 << " fll=" << observed->fll
+    << " exposure=" << observed->exposure << " again=" << observed->analogue
+    << " dgain=" << observed->digital << " cache_match=1";
+  }
+  auto applied = CamssX1EManual::fromSensor(delayedControls_->get(sequence));
+  if (!applied || frames_.size() > 16) {
+   fail("Applied control identity unavailable"); return;
+  }
+  frames_[sequence].appliedControls = *applied;
+  expectedWrite_ = upcoming;
+  ControlList queued = upcoming ? upcoming->sensorControls(sensor_->controls()) : ControlList(sensor_->controls());
+  if (!delayedControls_->push(queued)) {
+   fail("Delayed control queue rejected"); return;
+  }
+  tryComplete(sequence);
+ }
+ /* Receiver SOF is not first-row sensor exposure or BOOTTIME. SensorTimestamp
+  * stays absent. AE/AWB policy remains disabled until metering is calibrated. */
 }
 
 void CamssX1ECameraData::imageReady(FrameBuffer *buffer)
@@ -677,6 +764,11 @@ void CamssX1ECameraData::imageReady(FrameBuffer *buffer)
   return;
  }
  uint32_t sequence = buffer->metadata().sequence;
+ auto admission = admittedImages_.find(buffer);
+ if (admission == admittedImages_.end() || admission->second != sequence) {
+  cancelImage(buffer); fail("Output admission/frame identity mismatch"); return;
+ }
+ admittedImages_.erase(admission);
  FrameState &frame = frames_[sequence];
  if (frame.image || frames_.size() > 16) {
   cancelImage(buffer);
@@ -769,10 +861,12 @@ void CamssX1ECameraData::meteringReady(uint32_t bufferId, uint64_t stream,
 void CamssX1ECameraData::tryComplete(uint32_t sequence)
 {
  auto it = frames_.find(sequence);
- if (it == frames_.end() || !it->second.image || !it->second.stats || !it->second.luma)
+ if (it == frames_.end() || !it->second.image || !it->second.stats || !it->second.luma ||
+     (delayedControls_ && !it->second.appliedControls))
   return;
  FrameBuffer *image = it->second.image;
  StatsIdentity stats = *it->second.stats;
+ auto applied = it->second.appliedControls;
  if (stats.timestamp / 1000 * 1000 != image->metadata().timestamp) {
   fail("Video and statistics timestamps differ");
   return;
@@ -792,6 +886,12 @@ void CamssX1ECameraData::tryComplete(uint32_t sequence)
  LOG(CAMSSX1E, Debug) << "CAMSS_X1E_PAIR request=" << request->sequence()
                      << " frame=" << sequence << " source=" << stats.source
                      << " stream=" << stats.stream << " timestamp_match=1";
+ if (applied) {
+  applied->metadata(request->_d()->metadata());
+  LOG(CAMSSX1E, Debug) << "CAMSS_X1E_APPLIED_CONTROL request=" << request->sequence()
+   << " frame=" << sequence << " fll=" << applied->fll << " exposure=" << applied->exposure
+   << " again=" << applied->analogue << " dgain=" << applied->digital;
+ }
  auto *handler = static_cast<PipelineHandlerCamssX1E *>(pipe());
  handler->completeBuffer(request, image);
  handler->completeRequest(request);

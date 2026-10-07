@@ -1,3 +1,36 @@
+## 2026-10-07 standard delayed manual requests built; fresh qualification01 next
+
+Implemented real libcamera DelayedControls with empirical delay2 for all four
+non-priority clustered sensor controls. Public manual exposure/analogue/digital
+and bounded frame-duration controls advertise manual-only modes and AeEnable
+false. Exposure quantization/containment, gain conversion, complete request
+validation and error immutability tested. Ordered admission includes internal
+startup/spare buffers; late controlled requests fail instead of wrong-frame
+association. Applied tuples are snapshotted at SOF before ring eviction, then
+published on the matching real request. SensorTimestamp remains absent.
+Upstream applyControls() does not propagate errors; pipeline verifies cached
+V4L2 readback, hardware candidate also independently checks known CCI reads.
+AE/AWB disabled; this is not metering calibration or final image-quality parity.
+
+Fresh build11 passes warnings-as-errors and10 selected tests;2 virtual-device
+control tests SKIP without VIMC. Actual IPA, helper and new request/scheduling
+conversion/reset tests all PASS. Build10 compiler Span-argument error retained,
+corrected before fresh11; no hardware attempt in either build. audit31 kernel
+modules reused unchanged. Public lifecycle test binary builds without warnings.
+Evidence: docs/NATIVE-RGB-LIBCAMERA-REQUEST-CONTROLS-BUILD-11-20261007.json.
+
+NEXT E-NATIVE-FRONT-REQUEST-CONTROLS-01: standard cam120 NV12 public scripted
+requests verifies9 explicit controls/eight changed writes, exact admission/frame
+metadata, physical CCI readback and intended SOF write interval. Then public
+API1/24/24 streams verify custom start controls, default reset on same-camera
+restart, and release/reacquire. Atomic one-use consume/service120s/automatic
+Golden return retained. Fresh identity01 not attempted; no candidate armed.
+Pixels remain private SP11. Lights last user reportedON18:26:29UTC; no newly
+matched Windows exposure/scene or optical quality claim. Current Golden
+f4c6df65-3302-4144-8545-3fd0cf83ea58, native33 streams/29 IDs/58 boots unchanged.
+Separate Windows1 stream/1 identity/2 boots. Golden protected, no system sleep.
+Earlier NEXT is history.
+
 ## 2026-10-07 illuminated Linux/Windows/Linux bracket complete; all control delays2
 
 Room lights user reportedON18:26:29UTC. Linux03 source4fffdaa1/audit31/build09

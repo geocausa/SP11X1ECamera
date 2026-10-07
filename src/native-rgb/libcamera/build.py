@@ -9,7 +9,7 @@ from pathlib import Path
 from stage import ROOT, sha, stage
 
 TESTS = [
-    "camss-x1e-helpers", "vd55g0-helper", "control_info", "control_info_map",
+    "camss-x1e-controls", "camss-x1e-helpers", "vd55g0-helper", "control_info", "control_info_map",
     "control_list", "control_value", "fixedpoint", "histogram", "interpolator", "pwl",
 ]
 OPTIONS = [
@@ -65,6 +65,9 @@ def main():
         native = [test for test in tests if test["name"].endswith(":camss-x1e-helpers")]
         if len(native) != 1 or native[0]["result"] != "OK":
             raise ValueError("native helper test must pass, never skip")
+        manual = [test for test in tests if test["name"].endswith(":camss-x1e-controls")]
+        if len(manual) != 1 or manual[0]["result"] != "OK":
+            raise ValueError("manual request/schedule test must pass, never skip")
         if args.front_pipeline_trial:
             actual = [test for test in tests if test["name"].endswith(":camss-x1e-ipa")]
             if len(actual) != 1 or actual[0]["result"] != "OK":

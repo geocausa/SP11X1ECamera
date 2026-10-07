@@ -63,6 +63,8 @@ def stage(source, destination, front_pipeline=False):
     stats.write_text(text)
     for name in ("camss_x1e_helpers.h", "camss_x1e_helpers.cpp", "../native-front-stats.h", "../native-front-params.h"):
         shutil.copy2(HERE / name, libipa / Path(name).name)
+    shutil.copy2(HERE / "camss-x1e-controls.h", libipa / "camss-x1e-controls.h")
+    shutil.copy2(HERE / "camss-x1e-controls-test.cpp", destination / "test/ipa/libipa/camss-x1e-controls-test.cpp")
     shutil.copy2(HERE / "camss-x1e-helpers-test.cpp",
                  destination / "test/ipa/libipa/camss-x1e-helpers-test.cpp")
 
@@ -77,7 +79,7 @@ def stage(source, destination, front_pipeline=False):
             "    'native-imx681-control.c',\n    'native-stats3a.c',\n"
             "    'rear-neutral-scalar.c',")
     replace(destination / "test/ipa/libipa/meson.build", "libipa_test = [",
-            "libipa_test = [\n    {'name': 'camss-x1e-helpers', "
+            "libipa_test = [\n    {'name': 'camss-x1e-controls', 'sources': ['camss-x1e-controls-test.cpp']},\n    {'name': 'camss-x1e-helpers', "
             "'sources': ['camss-x1e-helpers-test.cpp']},")
     if front_pipeline:
         for name, expected in manifest["pipeline_inputs"].items():
@@ -86,6 +88,7 @@ def stage(source, destination, front_pipeline=False):
         pipeline = destination / "src/libcamera/pipeline/camss-x1e"
         pipeline.mkdir()
         shutil.copy2(HERE / "camss-x1e.cpp", pipeline / "camss-x1e.cpp")
+        shutil.copy2(HERE / "camss-x1e-controls.h", pipeline / "camss-x1e-controls.h")
         for name in ("native-front-params.h", "native-front-stats.h"):
             shutil.copy2(HERE.parent / name, pipeline / name)
         (pipeline / "meson.build").write_text(
@@ -114,7 +117,9 @@ def stage(source, destination, front_pipeline=False):
     subprocess.run(["git", "-C", str(destination), "diff", "--check"], check=True)
     paths = list(manifest["libcamera_inputs"])
     paths += ["src/ipa/libipa/" + Path(n).name for n in manifest["camera_sources"]]
-    paths += ["src/ipa/libipa/camss_x1e_helpers.h",
+    paths += ["src/ipa/libipa/camss-x1e-controls.h",
+              "test/ipa/libipa/camss-x1e-controls-test.cpp",
+              "src/ipa/libipa/camss_x1e_helpers.h",
               "src/ipa/libipa/camss_x1e_helpers.cpp",
               "src/ipa/libipa/native-front-stats.h",
               "src/ipa/libipa/native-front-params.h",
@@ -127,7 +132,7 @@ def stage(source, destination, front_pipeline=False):
                   "src/ipa/camss-x1e/meson.build"]
 
         paths += ["src/libcamera/pipeline/camss-x1e/" + name for name in
-                  ("camss-x1e.cpp", "native-front-params.h", "native-front-stats.h", "meson.build")]
+                  ("camss-x1e.cpp", "camss-x1e-controls.h", "native-front-params.h", "native-front-stats.h", "meson.build")]
     result = {
         "status": ("STAGED_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
                    if front_pipeline else "STAGED_LIBCAMERA_HELPERS_NOT_INSTALLED"),
@@ -139,7 +144,9 @@ def stage(source, destination, front_pipeline=False):
         "pipeline_runtime_implemented": front_pipeline,
         "pipeline_hardware_proven": False,
         "front_pipeline_trial_staged": front_pipeline,
-        "pipeline_control_scope": "fixed manual; actual IPA meters shared statistics and supplies typed defaults",
+        "pipeline_control_scope": "standard delayed manual requests; actual IPA meters shared statistics and supplies typed defaults",
+        "DelayedControls_runtime_integrated": front_pipeline,
+        "DelayedControls_hardware_qualified": False,
         "ipa_runtime_implemented": front_pipeline,
         "automatic_feedback_enabled": False,
         "kernel_timing_abi_complete": False,
