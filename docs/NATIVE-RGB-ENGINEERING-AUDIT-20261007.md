@@ -1,3 +1,43 @@
+## 2026-10-07 lifecycle02 transport clean but shutdown unqualified; corrected03 next
+
+request01 remains qualified for120 public manual requests/metadata/CCI write
+SOF and readback (original owner-zero harness failure corrected offline). No
+repeat of that optical capture. request02 source4c84a923/audit31/build11 shows
+THREE native streams stopped clean with6/34/34 retirements,370 owner checks,
+three physical CCI start values custom2000/512/512 then default1000/0/256 twice.
+No owner rejection/critical fault; all STOP error0. Application subprocess
+communicate timed out25s AFTER these stops. Original RESULT count0 and exit1
+preserved; independent kernel trace proves3 completed transport streams only.
+Exact49 public metadata/process exit unqualified because timeout path failed to
+persist captured pipe output. Do not claim full lifecycle qualification yet.
+
+Source audit finds harness holds final Camera shared_ptr beyond manager.stop,
+contrary to CameraManager API requiring all camera references returned first.
+Likely leaves camera/isolated IPA teardown incomplete; runtime stack not retained,
+so root cause inference remains separate from observation. Corrected harness
+resets camera before manager.stop and emits durable shutdown markers. New runner
+uses direct private output files and bounded process.wait, not pipe EOF; on
+stall after3 clean STOPs/suspended sensors only, collects bounded GDB backtrace.
+It independently requires manager-stop milestone and isolated IPA worker exit.
+No kernel/pipeline rebuild or timing-loop repetition; standard pipeline11 reused.
+
+02 consumed/retired; candidate7693f9c9-ae35-47c9-9806-653b23ad7130 returned Golden
+8db36e54-41a3-4a61-96e3-5d6f87b1d630. Protected assets unchanged, no candidate
+unit/boot/writer/FW remains. Derived partial evidence:
+docs/NATIVE-RGB-FRONT-REQUEST-LIFECYCLE-02-20261007.json. Native37 completed
+transport streams/31 retiredIDs/62 boots;prestream5/poststart qualification5.
+SeparateWindows1/1/2;combined64 boots/32 identities. AE/AWB off,SensorTimestamp
+absent,all quality/calibrated optics/rear ISP/focus/production work incomplete.
+
+NEXT fresh lifecycle-only E-NATIVE-FRONT-REQUEST-CONTROLS-03: public1/24/24,
+correct CameraManager reference lifecycle, actual publicmetadata/start/physical
+readback/default reset/reacquire/IPA worker exit/STOP proof. Fresh03 unarmed/no
+attempt, warning-free newly compiled test binary, audit31/build11 unchanged.
+Atomicconsume/service120s/automaticGoldenreturn; never reuse spent01/02.
+Then metering scale/zero point/targets and boundedAE. Lights last user reported
+ON18:26:29UTC, no new same-settings Windows optical comparison. No OSsleep.
+Earlier NEXT is history.
+
 ## 2026-10-07 real standard request controls pass; isolated lifecycle02 next
 
 request01 source6e118a3c/audit31/libcamera11 actually completed120 public cam

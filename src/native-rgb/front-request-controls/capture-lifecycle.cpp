@@ -31,6 +31,7 @@ public:
  }
  ~Lifecycle()
  {
+  std::cerr << "LC_STAGE destructor_begin" << std::endl;
   if (running_)
    camera_->stop();
   camera_->requestCompleted.disconnect(this);
@@ -38,6 +39,7 @@ public:
   allocator_.reset();
   if (acquired_)
    camera_->release();
+  std::cerr << "LC_STAGE destructor_end" << std::endl;
  }
  void acquireAndConfigure()
  {
@@ -59,7 +61,9 @@ public:
   requests_.clear();
   allocator_.reset();
   configuration_.reset();
+  std::cerr << "LC_STAGE release_begin" << std::endl;
   check(camera_->release() == 0, "release");
+  std::cerr << "LC_STAGE release_end" << std::endl;
   acquired_ = false;
  }
  void capture(unsigned int round, unsigned int limit)
@@ -98,7 +102,9 @@ public:
    if (!done)
     failure_ = "finite capture timeout";
   }
+  std::cerr << "LC_STAGE round=" << round << " stop_begin" << std::endl;
   check(camera_->stop() == 0, "stop");
+  std::cerr << "LC_STAGE round=" << round << " stop_end" << std::endl;
   running_ = false;
   checkSensorStandby();
   std::unique_lock lock(mutex_);
@@ -223,7 +229,13 @@ int main(int argc, char **argv)
    capture.capture(2,24); // Same manager/camera object, closed/reopened devices.
    capture.release();
   }
+  /* Return the application Camera reference before manager cleanup/deferred
+   * Camera/IPA deletion. CameraManager::stop documents this lifetime rule. */
+  std::cerr << "LC_STAGE camera_reset_begin" << std::endl;
+  camera.reset();
+  std::cerr << "LC_STAGE camera_reset_end manager_stop_begin" << std::endl;
   manager.stop();
+  std::cerr << "LC_STAGE manager_stop_end" << std::endl;
   std::cout << "PASS_LIBCAMERA_REQUEST_CONTROLS_LIFECYCLE_1_24_24" << std::endl;
   return 0;
  } catch (const std::exception &error) {

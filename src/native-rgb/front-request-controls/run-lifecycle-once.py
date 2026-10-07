@@ -12,9 +12,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-request-controls-20261007-02")
-TOKEN = "sp11_camera_native_request_controls_20261007_02=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-request-controls-20261007-02"
+D = Path("/var/lib/sp11-camera-native-request-controls-20261007-03")
+TOKEN = "sp11_camera_native_request_controls_20261007_03=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-request-controls-20261007-03"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -141,10 +141,27 @@ def main():
             LIBCAMERA_LOG_LEVELS="*:DEBUG",LIBCAMERA_IPA_MODULE_PATH=str(D/"ipa"),
             LIBCAMERA_IPA_PROXY_PATH=str(D/"proxy"),LIBCAMERA_IPA_FORCE_ISOLATION="1")
         result["capture_started_utc"]=datetime.datetime.now(datetime.timezone.utc).isoformat()
-        lifecycle=subprocess.run([str(D/"capture-lifecycle")],capture_output=True,text=True,
-                                 timeout=25,env=environment)
-        (D/"PRIVATE-LIFECYCLE-STDOUT.txt").write_text(lifecycle.stdout)
-        (D/"PRIVATE-LIFECYCLE-STDERR.txt").write_text(lifecycle.stderr)
+        # Durable files avoid losing output on timeout or waiting indefinitely
+        # for a descendant to close inherited stdout/stderr pipes.
+        with (D/"PRIVATE-LIFECYCLE-STDOUT.txt").open("w") as stdout, (D/"PRIVATE-LIFECYCLE-STDERR.txt").open("w") as stderr:
+            process=subprocess.Popen([str(D/"capture-lifecycle")],stdout=stdout,stderr=stderr,env=environment)
+            result["lifecycle_pid"]=process.pid
+            try:
+                process.wait(timeout=8)
+            except subprocess.TimeoutExpired:
+                log=run(["dmesg"])
+                clean_stops=re.findall(r"NATIVE_FRONT_QUEUE_STOPPED completed=\d+ stop_requested=1 error=0",log)
+                suspended=all((p/"power/runtime_status").read_text().strip()=="suspended" for p in sensors().values())
+                if len(clean_stops)==3 and suspended and process.poll() is None:
+                    with (D/"PRIVATE-SHUTDOWN-BACKTRACE.txt").open("w") as trace:
+                        subprocess.run(["gdb","-batch","-ex","set pagination off","-ex","thread apply all bt",
+                                        "-p",str(process.pid)],stdout=trace,stderr=trace,timeout=5)
+                    result["idle_shutdown_backtrace_taken"]=True
+                process.wait(timeout=12)
+        from types import SimpleNamespace
+        lifecycle=SimpleNamespace(returncode=process.returncode,
+            stdout=(D/"PRIVATE-LIFECYCLE-STDOUT.txt").read_text(),
+            stderr=(D/"PRIVATE-LIFECYCLE-STDERR.txt").read_text())
         result["capture_completed_utc"]=datetime.datetime.now(datetime.timezone.utc).isoformat()
         result["lifecycle_exit_code"]=lifecycle.returncode
         rounds=[json.loads(p) for p in re.findall(r"LIFECYCLE_ROUND (\{[^\n]+\})",lifecycle.stdout)]
@@ -153,6 +170,7 @@ def main():
         need(lifecycle.returncode==0 and len(rounds)==3 and [p["frames"] for p in rounds]==[1,24,24] and
              "PASS_LIBCAMERA_REQUEST_CONTROLS_LIFECYCLE_1_24_24" in lifecycle.stdout,
              "custom start, same-configuration default reset, release/reacquire reset")
+        need("LC_STAGE manager_stop_end" in lifecycle.stderr,"manager shutdown reached")
         need("CAMSS_X1E_CONTROL_TIMING" not in lifecycle.stderr,"no diagnostic control path")
         need(lifecycle.stderr.count("initializing camss_x1e proxy in isolation: loading IPA from "+str(D/"ipa/ipa_camss_x1e.so"))==1,
              "actual single isolated IPA across lifecycle")
@@ -176,9 +194,20 @@ def main():
         need(len(readbacks)==3 and [p[1:5] for p in readbacks]==[(3554,2000,512,512),(3554,1000,0,256),(3554,1000,0,256)] and
              all(p[5]==0 for p in readbacks),"three matching stream-start CCI readbacks")
         result["known_register_readbacks"]=readbacks
-        result["control_lifecycle"]={"start_controls_proven":True,"same_configuration_restart_defaults_proven":True,
+        result["control_lifecycle"]={"manager_shutdown_proven":True,"application_camera_reference_reset_before_manager_stop":True,"start_controls_proven":True,"same_configuration_restart_defaults_proven":True,
             "release_reacquire_defaults_proven":True,"all_public_metadata_match":True,
             "SensorTimestamp_published":False,"automatic_feedback_enabled":False}
+        for attempt in range(100):
+            workers=[]
+            for proc in Path("/proc").glob("[0-9]*"):
+                try:
+                    if str(D/"proxy/camss_x1e_ipa_proxy").encode() in (proc/"cmdline").read_bytes().split(b"\0"):
+                        workers.append(int(proc.name))
+                except (FileNotFoundError,ProcessLookupError):pass
+            if not workers:break
+            time.sleep(0.02)
+        need(not workers,"isolated IPA worker must exit after manager shutdown")
+        result["control_lifecycle"]["isolated_IPA_worker_exited"]=True
         run(["sha256sum","-c",str(D/"ASSETS.sha256")]);idle()
         need(classify(run(["media-ctl","-d",media,"-p"]))[0]=="neutral","final neutral graph")
         result.update(status="PASS_NATIVE_FRONT_DELAYED_CONTROL_START_RESET_REACQUIRE_1_24_24",

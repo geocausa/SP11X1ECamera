@@ -1,3 +1,14 @@
+# Latest lifecycle test
+
+02 is consumed/retired. Three kernel streams stopped clean6/34/34,custom then
+reset physical settings correct;process/49 publicmetadata qualification remains
+incomplete after pipe-output timeout,original preserved. Source audit found
+retained Camera reference after CameraManager::stop; corrected to reset first.
+NEXT03 using install-lifecycle.py/run-lifecycle-once.py,new test binary, direct
+private output files/shutdown markers,manager-stop and isolated-worker exit checks.
+If needed, bounded backtrace is permitted only after3 STOPs/sensor runtime idle.
+No repetition of the already qualified120-frame request capture.
+
 # Current qualification status
 
 request01 is CONSUMED AND RETIRED. Its actual120 public cam requests pass all
