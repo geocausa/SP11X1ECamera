@@ -147,7 +147,7 @@ private:
   auto timestamp = request->metadata().get(controls::SensorTimestamp);
   if (!buffer || request->status() != Request::RequestComplete ||
       buffer->metadata().status != FrameMetadata::FrameSuccess ||
-      !timestamp || *timestamp < 0 || uint64_t(*timestamp) != buffer->metadata().timestamp ||
+      timestamp || !buffer->metadata().timestamp ||
       buffer->metadata().sequence != completed_+4 ||
       buffer->metadata().planes().size() != 2 ||
       buffer->metadata().planes()[0].bytesused != 3686400 ||

@@ -1,3 +1,25 @@
+## 2026-10-07 actual native front IPA physically verified
+
+Fresh pipeline04 used90837d1d/audit27/libcamera build06. Standard cam delivered
+80 hardware2560x1440 NV12 frames at30.00485fps through a real isolated libcamera
+IPA. Eight shared statistics buffers produced84 ordered metering results;
+all80 app frames matched stream/sequence/completion time. The IPA produced88
+typed mask0 defaults. Kernel passed425 owner checks/85 retirements; cam exit0,
+STOP clean, graph neutral, all sensors standby, critical faults0, Golden hashes
+unchanged. Returned boot2aa4c3a8-f6c6-4d6a-b805-b8c0586b7f48. Pipeline04 consumed
+and retired; all older candidate identities remain retired.
+
+Actual IPA is now hardware-proven. Automatic AE/AWB feedback, sensor control
+delays, first-row exposure timestamp and optical metering normalization remain
+unqualified. Fixed settings and low Y do not establish a brightness defect;
+matched Windows camera/scene/lighting/capture-time comparison remains required.
+Next lifetime gate uses fresh lifecycle04 with the same actual IPA in its signed
+standard threaded path:1/80/80 restart/reacquire, stop barriers/shared maps and
+fresh stream identities. Then qualify sensor timing and control feedback.
+Rear ISP/focus, dynamic tables, public ABI/clock policy, independent tuning and
+long-run/switch/fault/Windows optical acceptance still block product completion.
+See docs/NATIVE-RGB-FRONT-IPA-04-20261007.json; earlier NEXT statements are history.
+
 # Fresh pipeline04: actual standard libcamera IPA qualification
 
 This fresh one-use identity uses audit27 and libcamera build06. It loads the real

@@ -1,3 +1,18 @@
+# Fresh lifecycle04: actual signed threaded IPA lifetime qualification
+
+Uses audit27/libcamera build06. The same public CameraManager and Camera capture
+1 frame, restart for80 with the same configuration/app buffers, then release/
+reacquire/reconfigure for80. This exercises actual IPA map/start/stop/unmap and
+queued callbacks across kernel stream/profile resets in the signed threaded path.
+Pipeline04 already proves the isolated path; this gate covers the normal trusted
+opensource module path and repeated mapping lifetime. No automatic feedback.
+
+Every app frame requires an actual IPA metering result with matching completion
+time and a new stream identity per start. SensorTimestamp must be absent, since
+buffer return time is not exposure time. All sensors suspend after each stop;
+final release leaves neutral graph. Identity is fresh and one-use; keep pixels
+private. Product quality and matched Windows lighting acceptance remain separate.
+
 # Front public libcamera lifecycle qualification
 
 Fresh native-lifecycle-20261007-03 uses corrected audit27 and qualified libcamera build03.

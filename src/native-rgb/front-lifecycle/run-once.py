@@ -11,9 +11,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-lifecycle-20261007-03")
-TOKEN = "sp11_camera_native_lifecycle_20261007_03=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-lifecycle-20261007-03"
+D = Path("/var/lib/sp11-camera-native-lifecycle-20261007-04")
+TOKEN = "sp11_camera_native_lifecycle_20261007_04=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-lifecycle-20261007-04"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -130,7 +130,9 @@ def main():
         os.umask(0o077)
         environment = os.environ.copy()
         environment.update(LD_LIBRARY_PATH=str(D / "lib"),
-            LIBCAMERA_PIPELINES_MATCH_LIST="camss-x1e", LIBCAMERA_LOG_LEVELS="*:DEBUG")
+            LIBCAMERA_PIPELINES_MATCH_LIST="camss-x1e", LIBCAMERA_LOG_LEVELS="*:DEBUG",
+            LIBCAMERA_IPA_MODULE_PATH=str(D / "ipa"), LIBCAMERA_IPA_PROXY_PATH=str(D / "proxy"))
+        environment.pop("LIBCAMERA_IPA_FORCE_ISOLATION", None)
         try:
             process = subprocess.run([str(D / "capture-lifecycle")],
                 capture_output=True, text=True, timeout=55, env=environment)
@@ -170,6 +172,29 @@ def main():
             round["stream_id"] = stream
             if count > 1:
                 round["frame_rate"] = (count-1)*1e9/(round["timestamps_ns"][-1]-round["timestamps_ns"][0])
+        need(process.stderr.count("initializing camss_x1e proxy in thread: loading IPA from " +
+                                  str(D / "ipa/ipa_camss_x1e.so")) == 1,
+             "actual signed threaded IPA proxy required")
+        need("IPA module " + str(D / "ipa/ipa_camss_x1e.so") + " signature is valid" in process.stderr,
+             "standard IPA signature admission")
+        meters = [(int(f),int(st),int(ts),float(y)) for f,st,ts,y in re.findall(
+            r"CAMSS_X1E_IPA_METER frame=(\d+) stream=(\d+) timestamp=(\d+) luma=([-+0-9.eE]+)",
+            process.stderr)]
+        need(set(m[1] for m in meters) == set(stream_ids), "IPA stream reset identity")
+        for round,stream in zip(rounds,stream_ids):
+            observations = [m for m in meters if m[1] == stream]
+            count = round["frames"]
+            need(len(observations) >= count+4 and
+                 [m[0] for m in observations] == list(range(len(observations))) and
+                 all(observations[sequence][2] // 1000 * 1000 == round["timestamps_ns"][sequence-4]
+                     for sequence in range(4,4+count)), "IPA metering and callback lifetime across restart")
+            round["metered_frames"] = len(observations)
+        result["ipa"] = {"implementation":"standard libcamera IPA",
+            "signed_threaded_proxy_proven":True,"shared_statistics_buffers":8,
+            "metered_frames":len(meters),"automatic_feedback_enabled":False,
+            "sensor_timestamp_published":False,
+            "metering":[{"sequence":f,"stream":st,"completion_timestamp_ns":ts,"luma":y}
+                        for f,st,ts,y in meters]}
         result["rounds"] = rounds
         result["hardware_streams_completed"] = 3
         private_log = run(["dmesg"])

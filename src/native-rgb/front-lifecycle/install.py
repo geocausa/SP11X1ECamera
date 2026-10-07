@@ -9,14 +9,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PROJECT = ROOT.parents[1]
-BUILD = PROJECT / "02-kernel/native-lifecycle-20261007-03"
+BUILD = PROJECT / "02-kernel/native-lifecycle-20261007-04"
 MODULES = PROJECT / "02-kernel/native-rgb-20261007-audit-27"
-D = Path("/var/lib/sp11-camera-native-lifecycle-20261007-03")
-B = Path("/boot/sp11-7.1.5-camera-native-lifecycle-20261007-03")
-G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_lifecycle_20261007_03")
-S = Path("/etc/systemd/system/sp11-camera-native-lifecycle-20261007-03.service")
-ID = "sp11-camera-native-lifecycle-20261007-03"
-LIBBUILD = PROJECT / "02-kernel/libcamera-native-rgb-pipeline-20261007-03"
+D = Path("/var/lib/sp11-camera-native-lifecycle-20261007-04")
+B = Path("/boot/sp11-7.1.5-camera-native-lifecycle-20261007-04")
+G = Path("/etc/grub.d/99zzzzzz_sp11_camera_native_lifecycle_20261007_04")
+S = Path("/etc/systemd/system/sp11-camera-native-lifecycle-20261007-04.service")
+ID = "sp11-camera-native-lifecycle-20261007-04"
+LIBBUILD = PROJECT / "02-kernel/libcamera-native-rgb-pipeline-20261007-06"
 F = Path("/lib/firmware/qcom/sp11/imx681-2560x1440-nv12-v1.bin")
 GOLDEN = Path("/boot/sp11-7.1.5-audio-fullio-v19c")
 
@@ -65,10 +65,12 @@ def main():
     assert library["status"] == "PASS_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
     for relative, expected in library["built_outputs"].items():
         assert sha(LIBBUILD / relative) == expected
-    source = PROJECT / "06-camera/reference/libcamera-native-rgb-pipeline-20261007-03"
+    source = PROJECT / "06-camera/reference/libcamera-native-rgb-pipeline-20261007-06"
     for relative, expected in library["staged_sources"].items():
         assert sha(source / relative) == expected
     assert sha(source / "src/libcamera/pipeline/camss-x1e/camss-x1e.cpp") == sha(ROOT / "src/native-rgb/libcamera/camss-x1e.cpp")
+    assert library["ipa_runtime_implemented"] and not library["automatic_feedback_enabled"]
+    assert sha(source / "src/ipa/camss-x1e/camss-x1e.cpp") == sha(ROOT / "src/native-rgb/libcamera/camss-x1e-ipa.cpp")
     test_manifest = json.loads((BUILD / "lifecycle-build-result.json").read_text())
     assert test_manifest["status"] == "PASS_PUBLIC_LIBCAMERA_LIFECYCLE_BUILD_NO_HARDWARE"
     assert sha(ROOT / "src/native-rgb/front-lifecycle/capture-lifecycle.cpp") == test_manifest["source_sha256"]
@@ -76,12 +78,15 @@ def main():
     binary = LIBBUILD / "src/apps/cam/cam"
     run([binary, "--help"]) # No enumeration or capture on Golden.
 
-    sudo("install", "-d", "-m", "0700", D, D / "modules", D / "lib")
+    sudo("install", "-d", "-m", "0700", D, D / "modules", D / "lib", D / "ipa", D / "proxy")
     sudo("install", "-d", "-m", "0755", F.parent)
     assets = []
     pairs = [
         (BUILD / "capture-lifecycle", D / "capture-lifecycle", "0700"),
         (binary, D / "cam", "0700"),
+        (LIBBUILD / "src/ipa/camss-x1e/ipa_camss_x1e.so", D / "ipa/ipa_camss_x1e.so", "0600"),
+        (LIBBUILD / "src/ipa/camss-x1e/ipa_camss_x1e.so.sign", D / "ipa/ipa_camss_x1e.so.sign", "0600"),
+        (LIBBUILD / "src/libcamera/proxy/worker/camss_x1e_ipa_proxy", D / "proxy/camss_x1e_ipa_proxy", "0700"),
         (LIBBUILD / "src/libcamera/libcamera.so.0.7.0", D / "lib/libcamera.so.0.7", "0600"),
         (LIBBUILD / "src/libcamera/base/libcamera-base.so.0.7.0", D / "lib/libcamera-base.so.0.7", "0600"),
         (ROOT / "src/native-rgb/front-lifecycle/run-once.py", D / "run-once.py", "0700"),
@@ -120,8 +125,8 @@ def main():
             existing_blacklist.extend(value.split("=", 1)[1].split(","))
     command = [x for x in command if not x.startswith(
         ("BOOT_IMAGE=", "sp11_entry=", "modprobe.blacklist="))]
-    command += ["sp11_entry=7.1.5-sp11-camera-native-lifecycle-20261007-03",
-                "sp11_camera_native_lifecycle_20261007_03=1",
+    command += ["sp11_entry=7.1.5-sp11-camera-native-lifecycle-20261007-04",
+                "sp11_camera_native_lifecycle_20261007_04=1",
                 "modprobe.blacklist=" + ",".join(dict.fromkeys(existing_blacklist + [
                     "qcom_camss", "imx681", "ov13858", "sp11_vd55g0", "vd55g0"]))]
     uuid = run(["findmnt", "-n", "-o", "UUID", "/"]).strip()
@@ -147,7 +152,7 @@ menuentry 'SP11 native front NV12 — one use' --id '{ID}' {{
     write(grub, G, "0755")
     returning = f"""#!/usr/bin/env bash
 set -Eeuo pipefail
-if grep -qw 'sp11_camera_native_lifecycle_20261007_03=1' /proc/cmdline; then
+if grep -qw 'sp11_camera_native_lifecycle_20261007_04=1' /proc/cmdline; then
   printf 'service_result=%s\\nexit_code=%s\\nexit_status=%s\\n' "${{SERVICE_RESULT:-unknown}}" "${{EXIT_CODE:-unknown}}" "${{EXIT_STATUS:-unknown}}" > {D}/SERVICE-RESULT.txt
   if test -f {F}.native-profile-negative; then
     install -m 0600 {D}/imx681-2560x1440-nv12-v1.bin {F}
@@ -167,7 +172,7 @@ Description=SP11 standard libcamera front lifecycle qualification, one use
 Wants=grub-initrd-fallback.service grub2-common.service
 After=grub-initrd-fallback.service grub2-common.service
 Before=display-manager.service
-ConditionKernelCommandLine=sp11_camera_native_lifecycle_20261007_03=1
+ConditionKernelCommandLine=sp11_camera_native_lifecycle_20261007_04=1
 
 [Service]
 Type=oneshot
