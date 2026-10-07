@@ -44,6 +44,22 @@ class CompositionTests(unittest.TestCase):
             self.assertTrue((out / "camss/native-front-nv12-commands.h").exists())
             self.assertFalse(list(out.rglob("*.ko")))
 
+    def test_owner_trial_isolation(self):
+        with tempfile.TemporaryDirectory(prefix="native-owner-trial-") as directory:
+            out = Path(directory) / "candidate"
+            with self.assertRaisesRegex(ValueError, "requires isolated NV12"):
+                build.assemble(out, front_owner_trial=True)
+            self.assertFalse(out.exists())
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = build.assemble(out, nv12_trial=True, front_owner_trial=True)
+            self.assertTrue(result["front_owner_trial_staged"])
+            self.assertFalse(result["runtime_access"])
+            self.assertTrue((out / "camss/native-front-owner.h").exists())
+            csid = (out / "camss/camss-csid-680.c").read_text()
+            self.assertLess(csid.index("csid680_native_front_owner_latch(csid, buf_done_val);"),
+                            csid.index("WRITE_ONCE(csid->x1e_buf_done_last, buf_done_val);"))
+            self.assertFalse(list(out.rglob("*.ko")))
+
     def test_repeatable_composition_and_retained_guards(self):
         with tempfile.TemporaryDirectory(prefix="native-rgb-compose-") as directory:
             a, b = Path(directory) / "a", Path(directory) / "b"
