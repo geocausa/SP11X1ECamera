@@ -27,6 +27,33 @@ standby after each stop. See NATIVE-RGB-FRONT-FRAME-SYNC-LIFECYCLE-05-20261007.j
 SensorTimestamp remains absent. Ordered steps1/2 pass receiver event delivery
 and restart qualification; step3 is the next physical gate.
 
+## Frame-length interval response now measured
+
+Fresh control-timing02 source74fef62f/audit30/build08 passes128 standard cam
+frames,132 actual isolated IPA results,665 owner checks/133 retirements and136
+qualified typed defaults. Six normal four-member sensor control transactions
+alternate FLL7108/3554 at receiver sequences16,32,48,64,80,96. All six CCI writes
+succeed within their userspace ioctl brackets; each response begins at the
+interval starting command SOF+2. Three slow plateaus15.00266/15.00279/15.00276fps;
+three restored30.00534/30.00533/30.00541fps. CCI writes take2.336-3.186ms.
+Baseline held through clean STOP, all sensors standby, graph neutral, no SOF
+following final STOP, Golden unchanged. timing02 is consumed/retired. See
+NATIVE-RGB-FRONT-CONTROL-TIMING-02-20261007.json.
+
+Failed timing01 completed the same capture/write cycle but rejected IRQ arrival
+jitter against individual5% period bounds. Its FAILED record stays preserved.
+Corrected analysis verifies multi-interval means/medians and disjoint 30/15fps
+onset bands; actual negative checks reject CCI error, missing commit and no
+response. Fresh02 qualifies the result. IRQ arrival observations are not ideal
+hardware clock or exposure timestamps. Do not infer exposure/gain delay2 from
+this frame-length response or configure DelayedControls for unmeasured fields.
+
+Step3 is partly complete. NEXT is exposure/analogue/digital response with repeated
+baseline/restored windows and stable-light screening, then metering-domain/AE
+qualification. Keep FLL3554 unless the exposure containment requires an already
+qualified frame-length change. Record CCI and receiver/statistics identities.
+Reject an ambiguous or lighting-confounded result instead of declaring a delay.
+
 ## Current source findings
 
 | Source inspected | Observed behavior | Consequence |
