@@ -23,8 +23,13 @@ source-qualified (207/207 retained semantic instances, build04). Its existing
 10-bit private backend is not linear NV12. See
  docs/NATIVE-RGB-REAR-GEOMETRY-20261007.json.
 
-Next compose the remaining rear statistics/filter/CST/table states,
-then establish generation-safe hardware delivery and shutdown before optical
+The rear statistics geometry composer/binder is also source-qualified (126/126
+retained binding/packer instances, kernel build07). Its scalar control comparison
+uses decoded private semantic inputs, so independent IPA statistics controls and
+runtime delivery remain open. See docs/NATIVE-RGB-REAR-STATISTICS-20261007.json.
+
+Next compose the remaining rear BF/AF/filter/CST/table states and independent IPA
+statistics controls, then establish generation-safe hardware delivery and shutdown before optical
 comparison with the retained rear-only Windows screen baseline. The prepared
 command consumer is already source-qualified and must not rematerialize shared
 state. Healthy upper-SP7 screen ROI registration is still required.

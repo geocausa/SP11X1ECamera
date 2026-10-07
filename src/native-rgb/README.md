@@ -102,6 +102,21 @@ match the actual E007Y source skeleton for each phase; undefined OEM period uppe
 bits are excluded, with Linux producing zero there. This test does not grant
 readiness, seal a bootstrap, touch hardware or establish image-quality parity.
 
+Statistics geometry/binding has its own actual-packer suite:
+
+```sh
+python3 src/native-rgb/test-rear-startup-statistics.py \
+  --staged /absolute/fresh-build/camss \
+  --report /absolute/fresh-build/statistics-hosted.json
+```
+
+On SP11 only, `--private-retained-oracle` compares the locally decoded scalar
+control inputs through the real binder/packers. Geometry candidates come from
+source-closed cold/normal presets. The comparison does not prove an independent
+IPA control producer; absent packet families have explicit synthetic controls.
+The kernel binder is for a sleepable startup context and uses a checked temporary
+allocation, cleared and freed on every path. No readiness or hardware grant.
+
 ## Current next implementation — rear first
 
 User2026-10-07 deferred front calibration until rear finished. Fresh rear-only
@@ -127,8 +142,15 @@ matches 207/207 semantic instances. It enforces the existing top-left CSID windo
 and 10-bit backend; that surface is not linear NV12. See
  docs/NATIVE-RGB-REAR-GEOMETRY-20261007.json. It preserves unrelated state/readiness.
 
-Next compose the remaining statistics, BPC/ABF, BF, explicit CST tuning and DMI
-inputs into four complete packet-isolated semantic states. Reuse the precise composition-gaps
+The statistics geometry composer and four-packet binder now pass source checks:
+757 sanitizer assertions with each compiler and 126/126 retained binding/packer
+observations. Cold presets and caller-owned RS overrides are distinct. Scalar
+controls in that comparison are decoded semantic inputs; an independent rear IPA
+control producer and runtime API are still open. See
+ docs/NATIVE-RGB-REAR-STATISTICS-20261007.json for the exact proof boundary.
+
+Next compose BPC/ABF, BF/AF, explicit CST tuning and DMI inputs into four complete
+packet-isolated semantic states, and supply independent IPA statistics controls. Reuse the precise composition-gaps
 table in the audit and52 gathered fragments, measured OV13858 RAW/power and
 validated NV12 planners. Physical exact-generation completion, serialized owner
 and shutdown evidence precede any reclaim/activation; rear ISP runtime remains

@@ -1,3 +1,50 @@
+## 2026-10-07 rear statistics geometry/binding SOURCE gate CLOSED
+
+native_rear_bind_startup_statistics now builds four independent E008O statistics
+states from explicit caller-owned inputs: BHist, RS, AEC_BE, Tintless_BG, AWB_BG.
+Source-closed cold presets derive90% BHist/AEC/AWB ROI and64x48 AEC/AWB grids;
+Tintless remains full32x24. Normal AEC uses full32x32; AWB full64x48.
+Preset selection is explicit caller policy, NOT inferred from packet number.
+Thresholds, black reference, Q4 weights and enable/sync controls remain explicit
+caller-owned integer inputs with controls_valid; no hidden zero seed or float policy.
+
+Linux non-stripe geometry floors Bayer-grid cells to even dimensions; unsupported
+shapes fail closed rather than guessing OEM clipping/striping. All active/ROI
+bounds, hardware field ranges, phase/IDs and prior mode geometry are validated
+before modifying ANY packet. BHist nonzero origin rejected because other retained
+BHist words assume zero. BG shapes bounded to the reviewed cold/normal backend.
+RS16/1024 is only the cold capability preset: a validated caller AFD override is
+preserved within1..16/1..1024 hardware limits. Shift comes from existing E006V.
+Unrelated registers/DMI, identities and readiness survive; no set sealing or MMIO.
+
+Final build07 W1/Werror actual full kernel types PASS,zero diagnostics,not installed.
+GCC+Clang ASAN/UBSAN actual composer/packers each757 assertions PASS,hardware0.
+Error cases in every phase, late-family invalid input, allocation failure, cleanup,
+repeat binding and RS override checked. A sleepable heap snapshot/candidate workspace
+avoids kernel's1024-byte stack limit; securely cleared/freed on all exits.
+Build05 failed1376-byte stack check; build06 fixes that; build07 additionally fixes
+the initial false permanent-RS-default assumption. Earlier build paths preserved.
+
+Same-SP11 retained differential126/126 (61/59/5/1), actual E007Y address multisets
+match. Geometry candidates use the source-closed cold/normal presets; scalar
+controls and RS request counts are decoded locally from retained semantic fields.
+This is binding/geometry/packing evidence, NOT proof of an independent IPA control
+producer or live optical/ISP runtime. Omitted family controls explicitly synthetic.
+One geometry candidate matches each fully emitted phase0/1; later absent families
+leave4 indistinguishable candidates each, so do not claim their policy uniquely.
+Previous prepared/scalar/geometry fragments unchanged; earlier evidence retained.
+Evidence docs/NATIVE-RGB-REAR-STATISTICS-20261007.json; all private data stays SP11.
+
+Golden5a4d7226-d3b1-4c39-b94f-9d16ce4572ce unchanged. No new stream/reboot/install/
+candidate. Native44/33/66; Windows2/2/4; combined70boots/35IDs unchanged.
+Front calibration DEFERRED; lights last user OFF; matched healthy-upper-SP7 ROI
+and time/conditions required for later optical comparison.
+NEXT BF/AF validation/final DMI, BPC/ABF, explicit CST/tuning and stable/adaptive
+DMI delivery; independent IPA statistics control inputs/runtime API remain open.
+Only complete coherent four-packet bases can be sealed before generation-safe
+completion/stop and a qualified linear output transition. No optional OEM metadata
+archaeology or repeats of already-closed source gates. Earlier NEXT is history.
+
 ## 2026-10-07 rear geometry/disable/non-HFR composer SOURCE gate CLOSED
 
 native_rear_bind_startup_geometry now supplies all four real E008O packet bases
@@ -1330,7 +1377,7 @@ experiments already closed several of them:
 | --- | --- | --- |
 | Geometry, period and disabled small-IQ | New current-mode four-packet composer plus E006P/Q/S/T and E007W; 207/207 retained semantic instances exact | Source gate closed for retained 10-bit backend; linear output transition remains |
 | CST/colour conversion | E006R validated semantic packer | Explicit selected tuning input and independent release calibration; geometry composer leaves this state untouched |
-| RS/BHist/Tintless/AEC/AWB statistics | E009G/H, E010U/Z, E011A–G and E011M–R | Build packet-specific semantic state from established defaults/geometry; producer tracing is not the same as a Linux composer |
+| RS/BHist/Tintless/AEC/AWB statistics | New four-packet geometry composer/binder, E006U–Y packers and later source/live defaults; 126/126 retained instances exact | Geometry/binding source gate closed; independent IPA scalar controls and runtime delivery remain, comparison scalar inputs decoded locally |
 | BF/AF bootstrap | E008Q–T, E011S–W; canonical E008T adapter now compiles | Source-implemented ROI validation/adjustment and final DMI consistency; preserve packet0/normal distinction |
 | Neutral Demux/PDPC/WB | Existing libipa E012K reused; four-phase integer envelope and kernel binding source-qualified, 26/26 retained instances exact | Runtime pipeline/API connection and independent inputs remain; source arithmetic/binding gate closed |
 | BPC/ABF registers | E007A packer and retained clean stable DMI | Explicit calculated register-state producer and bounded initial inputs |

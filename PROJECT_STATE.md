@@ -1,3 +1,50 @@
+## 2026-10-07 rear statistics geometry/binding SOURCE gate CLOSED
+
+native_rear_bind_startup_statistics now builds four independent E008O statistics
+states from explicit caller-owned inputs: BHist, RS, AEC_BE, Tintless_BG, AWB_BG.
+Source-closed cold presets derive90% BHist/AEC/AWB ROI and64x48 AEC/AWB grids;
+Tintless remains full32x24. Normal AEC uses full32x32; AWB full64x48.
+Preset selection is explicit caller policy, NOT inferred from packet number.
+Thresholds, black reference, Q4 weights and enable/sync controls remain explicit
+caller-owned integer inputs with controls_valid; no hidden zero seed or float policy.
+
+Linux non-stripe geometry floors Bayer-grid cells to even dimensions; unsupported
+shapes fail closed rather than guessing OEM clipping/striping. All active/ROI
+bounds, hardware field ranges, phase/IDs and prior mode geometry are validated
+before modifying ANY packet. BHist nonzero origin rejected because other retained
+BHist words assume zero. BG shapes bounded to the reviewed cold/normal backend.
+RS16/1024 is only the cold capability preset: a validated caller AFD override is
+preserved within1..16/1..1024 hardware limits. Shift comes from existing E006V.
+Unrelated registers/DMI, identities and readiness survive; no set sealing or MMIO.
+
+Final build07 W1/Werror actual full kernel types PASS,zero diagnostics,not installed.
+GCC+Clang ASAN/UBSAN actual composer/packers each757 assertions PASS,hardware0.
+Error cases in every phase, late-family invalid input, allocation failure, cleanup,
+repeat binding and RS override checked. A sleepable heap snapshot/candidate workspace
+avoids kernel's1024-byte stack limit; securely cleared/freed on all exits.
+Build05 failed1376-byte stack check; build06 fixes that; build07 additionally fixes
+the initial false permanent-RS-default assumption. Earlier build paths preserved.
+
+Same-SP11 retained differential126/126 (61/59/5/1), actual E007Y address multisets
+match. Geometry candidates use the source-closed cold/normal presets; scalar
+controls and RS request counts are decoded locally from retained semantic fields.
+This is binding/geometry/packing evidence, NOT proof of an independent IPA control
+producer or live optical/ISP runtime. Omitted family controls explicitly synthetic.
+One geometry candidate matches each fully emitted phase0/1; later absent families
+leave4 indistinguishable candidates each, so do not claim their policy uniquely.
+Previous prepared/scalar/geometry fragments unchanged; earlier evidence retained.
+Evidence docs/NATIVE-RGB-REAR-STATISTICS-20261007.json; all private data stays SP11.
+
+Golden5a4d7226-d3b1-4c39-b94f-9d16ce4572ce unchanged. No new stream/reboot/install/
+candidate. Native44/33/66; Windows2/2/4; combined70boots/35IDs unchanged.
+Front calibration DEFERRED; lights last user OFF; matched healthy-upper-SP7 ROI
+and time/conditions required for later optical comparison.
+NEXT BF/AF validation/final DMI, BPC/ABF, explicit CST/tuning and stable/adaptive
+DMI delivery; independent IPA statistics control inputs/runtime API remain open.
+Only complete coherent four-packet bases can be sealed before generation-safe
+completion/stop and a qualified linear output transition. No optional OEM metadata
+archaeology or repeats of already-closed source gates. Earlier NEXT is history.
+
 ## 2026-10-07 standard delayed controls FULL-RATE hardware gate CLOSED
 
 Fresh04 sourceb64a94f2/audit31/pipeline12 PASS:120 standard cam public scripted
