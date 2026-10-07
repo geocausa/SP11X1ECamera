@@ -1,3 +1,32 @@
+## 2026-10-07 exposure/analogue/digital response built; response01 next
+
+Pending dc9ca301 frame-length-result push has succeeded. Current Golden is
+ a2506d21-9074-4cf6-87c9-b3a0f13828e1, camera idle. libcamera build09 passes
+Werror9 tests/2 VIMC skips and adds explicit exposure-gain-v1 bounded development
+mode. At SOF16..288,18 ordinary four-member sensor control ioctls change exposure
+1000/2000,analogue0/512,digital256/512 one field at a time,three up/down cycles per
+field. FLL3554 stays fixed; every second change and the final tail restore defaults.
+No automatic feedback or applied-frame timestamp/control metadata enabled.
+
+Fresh response01 uses unchanged kernel audit30 and build09 for320 standard cam
+NV12 frames/actual isolated IPA pairs,19 CCI commits including setup,STOP/neutral/
+standby/Golden checks. Candidate log buffer4M retains the complete diagnostic
+trace; UTC capture start/end recorded. No hardware stream or boot yet.
+Capture/queue success and per-field timing qualification are separate. Pure
+analyzer7 tests reject absent/gradual response,baseline drift,uncorroborated output,
+changed source association and malformed samples; verifies distinct field delays.
+Require six sharp consistent transitions per field,processed-output corroboration,
+restored-baseline screening and unchanged receiver/video source observation.
+Lighting screen is statistical,not an instrumented illumination reference.
+Ambiguous fields remain unqualified; do not copy FLL offset2 to exposure/gains.
+
+Prior28 completed streams/24 retired IDs/48 candidate-Golden boots unchanged.
+Data-only tuning/pixels/logs remain private SP11. No matched Windows optical
+reference; low Y remains observation,no diagnosed brightness defect. Rear ISP/
+focus,normalization/AE targets,dynamic tables,production ABI/clock policy,
+independent tuning and soak/switch/fault/optical acceptance remain. Earlier NEXT
+statements are history; no daemon/CPU image ISP/AI/OEM executable runtime.
+
 ## 2026-10-07 native grouped frame-length response hardware PASS
 
 Fresh control-timing02 source74fef62f/kernel audit30/libcamera build08 physically
