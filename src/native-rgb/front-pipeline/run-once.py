@@ -11,9 +11,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-pipeline-20261007-02")
-TOKEN = "sp11_camera_native_pipeline_20261007_02=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-02"
+D = Path("/var/lib/sp11-camera-native-pipeline-20261007-03")
+TOKEN = "sp11_camera_native_pipeline_20261007_03=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-03"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -157,12 +157,12 @@ def main():
         captures = [tuple(map(int, p)) for p in re.findall(
             r"(?m)^(\d+)\.(\d{6}) \([^)]+ fps\).*seq: (\d+) bytesused: (\d+)/(\d+)$",
             process.stdout)]
-        timestamps = [int(t) for t in re.findall(r"SensorTimestamp = (\d+)", process.stdout)]
-        need(len(captures) == 80 and len(timestamps) == 80, "80 ordinary application frames/metadata required")
+        need(len(captures) == 80, "80 ordinary application frames required")
         need([p[2] for p in captures] == list(range(4,84)) and
              all(p[3:] == (3686400,1843200) for p in captures), "NV12 colour-plane extents")
-        need([p[0]*1000000000 + p[1]*1000 for p in captures] == timestamps,
-             "application metadata timestamp association")
+        need(not re.search(r"SensorTimestamp = ",process.stdout),
+             "unqualified sensor exposure timestamp must not be published")
+        timestamps = [p[0]*1000000000 + p[1]*1000 for p in captures]
         files = sorted(D.glob("frame-*.bin"))
         need(len(files) == 80, "80 private app-written frame files required")
         observations = []
@@ -177,7 +177,7 @@ def main():
                 "frame_sha256":hashlib.sha256(image).hexdigest()})
         need([o["sequence"] for o in observations] == list(range(4,84)), "private file sequence")
         data = {"status":"PASS_STANDARD_LIBCAMERA_NATIVE_NV12_80_FRAMES", "frames":80,
-            "metadata_pairs":80,"startup_frames_internal":4,"paired_request_log_count":len(pairs),
+            "metadata_pairs":80,"sensor_timestamp_published":False,"timestamp_scope":"buffer completion only","startup_frames_internal":4,"paired_request_log_count":len(pairs),
             "frame_rate":79e9/(timestamps[-1]-timestamps[0]),"observations":observations,
             "private_pixel_files_only":True,"standard_app":"libcamera cam", "custom_probe":False,
             "width":2560,"height":1440,"stride":2560,"fixed_manual_iq":True,"automatic_3a_proven":False}

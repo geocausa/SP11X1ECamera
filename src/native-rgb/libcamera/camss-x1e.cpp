@@ -609,7 +609,10 @@ void CamssX1ECameraData::tryComplete(uint32_t sequence)
    fail("Retired internal output requeue failed");
   return; /* Internal startup/spare frames never escape to an app. */
  }
- request->_d()->metadata().set(controls::SensorTimestamp, image->metadata().timestamp);
+ /* Buffer-return time is sufficient for pair identity, but is not the
+  * first-row exposure/CLOCK_BOOTTIME time required by SensorTimestamp.
+  * Do not publish that control until source-qualified sensor timing exists.
+  */
  LOG(CAMSSX1E, Debug) << "CAMSS_X1E_PAIR request=" << request->sequence()
                      << " frame=" << sequence << " source=" << stats.source
                      << " stream=" << stats.stream << " timestamp_match=1";

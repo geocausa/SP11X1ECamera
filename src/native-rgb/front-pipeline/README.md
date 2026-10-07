@@ -33,3 +33,8 @@ startup buffers as spare outputs when queued depth falls below two. This lets
 finite application captures drain the last request without exposing spare frames.
 The corrected build passes Werror and8 selected tests with2 VIMC skips; pipeline02 hardware qualification passed80 app frames at30.0056fps,425
 owner checks across85 retirements and clean stop/release. Both identities retired. Timeout output is retained privately on SP11.
+
+Fresh pipeline03/audit27/libcamera build04 removes the unqualified SensorTimestamp
+control. Kernel/video/statistics completion times still pair every app request,
+but they are not claimed as first-row sensor exposure time or CLOCK_BOOTTIME.
+Qualification requires80 standard cam frames and absence of that control.
