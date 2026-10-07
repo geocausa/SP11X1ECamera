@@ -88,6 +88,20 @@ The private scalar verifier separately links actual built libipa with the actual
 C kernel binder and E006Z register packer. Its inputs stay on SP11 and its report
 contains only aggregate counts. Neither test authorizes a hardware submission.
 
+The geometry composer has a separate actual-packer sanitizer suite:
+
+```sh
+python3 src/native-rgb/test-rear-startup-geometry.py \
+  --staged /absolute/fresh-build/camss \
+  --report /absolute/fresh-build/geometry-hosted.json
+```
+
+On SP11 only, add `--private-retained-oracle` to compare the retained original
+corpus locally. Only aggregate counts enter the report. Address multisets must
+match the actual E007Y source skeleton for each phase; undefined OEM period upper
+bits are excluded, with Linux producing zero there. This test does not grant
+readiness, seal a bootstrap, touch hardware or establish image-quality parity.
+
 ## Current next implementation — rear first
 
 User2026-10-07 deferred front calibration until rear finished. Fresh rear-only
@@ -107,8 +121,14 @@ four kernel packet identities. This is not a published ABI or a connected rear
 runtime. See docs/NATIVE-RGB-REAR-COMMAND-HANDOFF-20261007.json and
  docs/NATIVE-RGB-REAR-SCALAR-BINDING-20261007.json for the exact evidence limits.
 
-Next compose the remaining geometry, statistics, BPC/ABF, BF and DMI inputs into
-four complete packet-isolated semantic states. Reuse the precise composition-gaps
+The current-mode geometry/disable/period composer is also source-qualified:
+GCC and Clang each pass 565 sanitizer assertions and the same-SP11 retained oracle
+matches 207/207 semantic instances. It enforces the existing top-left CSID window
+and 10-bit backend; that surface is not linear NV12. See
+ docs/NATIVE-RGB-REAR-GEOMETRY-20261007.json. It preserves unrelated state/readiness.
+
+Next compose the remaining statistics, BPC/ABF, BF, explicit CST tuning and DMI
+inputs into four complete packet-isolated semantic states. Reuse the precise composition-gaps
 table in the audit and52 gathered fragments, measured OV13858 RAW/power and
 validated NV12 planners. Physical exact-generation completion, serialized owner
 and shutdown evidence precede any reclaim/activation; rear ISP runtime remains

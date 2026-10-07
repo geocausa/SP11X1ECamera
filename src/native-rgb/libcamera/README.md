@@ -18,7 +18,12 @@ matches all 26 retained original scalar register observations on SP11. Private
 inputs stay on SP11; derived evidence is
  docs/NATIVE-RGB-REAR-SCALAR-BINDING-20261007.json. No new hardware stream occurred.
 
-Next compose the remaining complete rear geometry/statistics/filter/table states,
+The rear kernel current-mode geometry/disable/period composer is now also
+source-qualified (207/207 retained semantic instances, build04). Its existing
+10-bit private backend is not linear NV12. See
+ docs/NATIVE-RGB-REAR-GEOMETRY-20261007.json.
+
+Next compose the remaining rear statistics/filter/CST/table states,
 then establish generation-safe hardware delivery and shutdown before optical
 comparison with the retained rear-only Windows screen baseline. The prepared
 command consumer is already source-qualified and must not rematerialize shared

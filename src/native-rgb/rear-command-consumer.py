@@ -15,7 +15,8 @@ def apply(camss):
     here = Path(__file__).resolve().parent
     (camss / "native-rear-prepared-commands.inc").write_bytes(
         (here / "native-rear-prepared-commands.inc").read_bytes())
-    for name in ("native-rear-startup-scalars.h", "native-rear-scalar-binding.inc"):
+    for name in ("native-rear-startup-scalars.h", "native-rear-scalar-binding.inc",
+                 "native-rear-startup-geometry.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
     path = camss / "camss-vfe-e008l-rear-command-dma.inc"
     text = path.read_text()
@@ -92,7 +93,8 @@ def apply(camss):
                         '#include "camss-vfe-e008k-rear-runner.inc"')
     text = replace_once(text, '#include "camss-e011z-rear-startup-adaptive-bind.inc"',
                         '#include "camss-e011z-rear-startup-adaptive-bind.inc"\n'
-                        '#include "native-rear-scalar-binding.inc"')
+                        '#include "native-rear-scalar-binding.inc"\n'
+                        '#include "native-rear-startup-geometry.inc"')
     path.write_text(text)
     return {"shared_register_DMI_runner_removed": True,
             "prepared_arena_consumer": True, "all_or_none_materialization": True,
