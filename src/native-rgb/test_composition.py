@@ -119,6 +119,23 @@ class CompositionTests(unittest.TestCase):
             self.assertTrue((out / "camss/native-front-params.h").exists())
             self.assertFalse(list(out.rglob("*.ko")))
 
+    def test_profile_requires_parameters_and_stays_isolated(self):
+        with tempfile.TemporaryDirectory(prefix="native-profile-trial-") as directory:
+            out = Path(directory) / "candidate"
+            with self.assertRaisesRegex(ValueError, "requires typed"):
+                build.assemble(out, nv12_trial=True, front_owner_trial=True,
+                               front_queue_trial=True, front_meta_trial=True,
+                               front_profile_trial=True)
+            self.assertFalse(out.exists())
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = build.assemble(out, nv12_trial=True, front_owner_trial=True,
+                                        front_queue_trial=True, front_meta_trial=True,
+                                        front_params_trial=True, front_profile_trial=True)
+            self.assertTrue(result["front_profile_trial_staged"])
+            self.assertFalse(result["runtime_access"])
+            self.assertTrue((out / "camss/native-front-profile-schema.h").exists())
+            self.assertFalse(list(out.rglob("*.ko")))
+
     def test_repeatable_composition_and_retained_guards(self):
         with tempfile.TemporaryDirectory(prefix="native-rgb-compose-") as directory:
             a, b = Path(directory) / "a", Path(directory) / "b"
