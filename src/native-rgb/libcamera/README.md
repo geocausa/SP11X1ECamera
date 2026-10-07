@@ -63,3 +63,12 @@ full pixel-array bounds from the current crop.
 Retained files keep their original licences (front GPL-2.0-only, rear MIT).
 This does not relicense them as LGPL or claim upstream acceptance. No Windows
 binary, tuning dump, optical frame, daemon, loopback or software pixel ISP is added.
+
+
+The frame-associated metadata consumer now validates the experimental QXS1
+envelope, stream ID, video sequence and pixel timestamp before reducing AEC
+luma. Malformed, stale and discontinuous input leaves the caller output untouched.
+It uses the exact shared kernel/probe envelope definition. This helper passed
+the real ARM64 libipa build and tests, with no installation or hardware access;
+see docs/NATIVE-RGB-LIBCAMERA-METADATA-BUILD-20261007.json. A complete pipeline/IPA
+is still required to schedule requests and connect this consumer at runtime.

@@ -1,0 +1,148 @@
+--- a/camss.h
++++ b/camss.h
+@@ -220,6 +220,7 @@
+ bool camss_x1e_native_nv12_trial_allowed(struct camss *camss);
+ bool camss_x1e_native_front_owner_trial_allowed(struct camss *camss);
+ bool camss_x1e_native_front_queue_trial_allowed(struct camss *camss);
++bool camss_x1e_native_front_meta_trial_allowed(struct camss *camss);
+ int camss_x1e_pix_v4l2_start(struct camss_video *video, unsigned int count);
+ int camss_x1e_pix_v4l2_queue_buffer(struct camss_video *video,
+ 				     struct camss_buffer *buffer);
+--- a/camss.c
++++ b/camss.c
+@@ -7787,6 +7787,8 @@
+ {
+ 	buffer->vb.vb2_buf.timestamp = ktime_get_ns();
+ 	buffer->vb.sequence = sequence;
++	camss_x1e_front_meta_complete(vb2_get_drv_priv(buffer->vb.vb2_buf.vb2_queue),
++				    sequence, buffer->vb.vb2_buf.timestamp);
+ 	vb2_buffer_done(&buffer->vb.vb2_buf, VB2_BUF_STATE_DONE);
+ 	result->live_completed++;
+ }
+@@ -9303,6 +9305,15 @@
+ {
+ 	return native_front_queue_trial &&
+ 	       camss_x1e_native_front_owner_trial_allowed(camss);
++}
++
++static bool native_front_meta_trial;
++module_param(native_front_meta_trial, bool, 0400);
++MODULE_PARM_DESC(native_front_meta_trial, "Native front frame-associated metadata qualification");
++
++bool camss_x1e_native_front_meta_trial_allowed(struct camss *camss)
++{
++ return native_front_meta_trial && camss_x1e_native_front_queue_trial_allowed(camss);
+ }
+ 
+ #define CAMSS_X1E_PIX_GATE_QC10C_WIDTH		2560
+--- a/camss-video.h
++++ b/camss-video.h
+@@ -43,6 +43,7 @@
+ };
+ 
+ struct camss_video;
++struct native_front_meta;
+ 
+ struct camss_video_ops {
+ 	int (*queue_buffer)(struct camss_video *vid, struct camss_buffer *buf);
+@@ -52,6 +53,8 @@
+ 
+ struct camss_video {
+ 	struct camss *camss;
++	struct mutex native_meta_lock;
++	struct native_front_meta *native_meta;
+ 	struct vb2_queue vb2_q;
+ 	struct video_device vdev;
+ 	struct media_pad pad;
+@@ -104,6 +107,8 @@
+ 		       const char *name);
+ 
+ void msm_video_unregister(struct camss_video *video);
++void camss_x1e_front_meta_complete(struct camss_video *video,
++				 u32 sequence, u64 timestamp);
+ void camss_x1e_tlbg_reset(struct camss_video *video);
+ int camss_x1e_tlbg_publish(struct camss_video *video, const void *raw,
+ 			   size_t raw_size, u32 source_seq, u32 slot);
+--- a/camss-video.c
++++ b/camss-video.c
+@@ -308,6 +308,8 @@
+ 	       video == &camss->vfe[1].line[VFE_LINE_PIX].video_out;
+ }
+ 
++#include "native-front-meta.inc"
++
+ void camss_x1e_tlbg_reset(struct camss_video *video)
+ {
+ 	if (!video || !video->x1e_tlbg_snapshot)
+@@ -396,6 +398,7 @@
+ 	if (!video || !video->x1e_3a_snapshot)
+ 		return;
+ 
++	native_front_meta_reset(video);
+ 	mutex_lock(&video->x1e_3a_lock);
+ 	memzero_explicit(video->x1e_3a_snapshot, CAMSS_X1E_3A_RAW_BYTES);
+ 	video->x1e_3a_generation = 0;
+@@ -705,6 +708,10 @@
+ 	 * path. This remains diagnostic-arm-only and completes one frame.
+ 	 */
+ 	if (video_is_x1e_front_pix(video)) {
++		if (camss_x1e_native_front_meta_trial_allowed(video->camss)) {
++			camss_x1e_tlbg_reset(video);
++			camss_x1e_3a_reset(video);
++		}
+ 		ret = camss_x1e_pix_v4l2_start(video, count);
+ 		if (ret < 0) {
+ 			if (video->x1e_pix_runner_pinned)
+@@ -1193,6 +1200,7 @@
+ 	video->x1e_3a_snapshot = NULL;
+ 	mutex_destroy(&video->x1e_3a_lock);
+ 
++	mutex_destroy(&video->native_meta_lock);
+ 	mutex_destroy(&video->q_lock);
+ 	mutex_destroy(&video->lock);
+ 
+@@ -1252,6 +1260,8 @@
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
++	mutex_init(&video->native_meta_lock);
++	video->native_meta = NULL;
+ 	mutex_init(&video->x1e_tlbg_lock);
+ 	video->x1e_tlbg_snapshot = NULL;
+ 	video->x1e_tlbg_generation = 0;
+@@ -1351,6 +1361,11 @@
+ 
+ 	video_set_drvdata(vdev, video);
+ 	atomic_inc(&video->camss->ref_count);
++	ret = native_front_meta_register(video);
++	if (ret) {
++		vb2_video_unregister_device(vdev);
++		return ret;
++	}
+ 
+ 	return 0;
+ 
+@@ -1366,6 +1381,7 @@
+ 	kvfree(video->x1e_3a_snapshot);
+ 	video->x1e_3a_snapshot = NULL;
+ 	mutex_destroy(&video->x1e_3a_lock);
++	mutex_destroy(&video->native_meta_lock);
+ 	mutex_destroy(&video->q_lock);
+ 
+ 	return ret;
+@@ -1374,6 +1390,7 @@
+ void msm_video_unregister(struct camss_video *video)
+ {
+ 	atomic_inc(&video->camss->ref_count);
++	native_front_meta_unregister(video);
+ 	vb2_video_unregister_device(&video->vdev);
+ 	atomic_dec(&video->camss->ref_count);
+ }
+--- a/Kconfig
++++ b/Kconfig
+@@ -6,4 +6,5 @@
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select VIDEOBUF2_DMA_SG
++	select VIDEOBUF2_VMALLOC
+ 	select V4L2_FWNODE

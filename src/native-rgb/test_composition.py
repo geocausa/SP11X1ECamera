@@ -88,6 +88,21 @@ class CompositionTests(unittest.TestCase):
             self.assertIn("frame > U32_MAX - video_base", loop)
             self.assertFalse(list(out.rglob("*.ko")))
 
+    def test_metadata_requires_queue_and_stays_isolated(self):
+        with tempfile.TemporaryDirectory(prefix="native-meta-trial-") as directory:
+            out = Path(directory) / "candidate"
+            with self.assertRaisesRegex(ValueError, "requires serialized"):
+                build.assemble(out, nv12_trial=True, front_owner_trial=True,
+                               front_meta_trial=True)
+            self.assertFalse(out.exists())
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = build.assemble(out, nv12_trial=True, front_owner_trial=True,
+                                        front_queue_trial=True, front_meta_trial=True)
+            self.assertTrue(result["front_meta_trial_staged"])
+            self.assertFalse(result["runtime_access"])
+            self.assertTrue((out / "camss/native-front-stats.h").exists())
+            self.assertFalse(list(out.rglob("*.ko")))
+
     def test_repeatable_composition_and_retained_guards(self):
         with tempfile.TemporaryDirectory(prefix="native-rgb-compose-") as directory:
             a, b = Path(directory) / "a", Path(directory) / "b"

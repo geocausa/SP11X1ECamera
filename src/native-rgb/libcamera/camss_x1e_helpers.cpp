@@ -81,6 +81,26 @@ int camssX1EFrontLuma(Span<const uint8_t> statistics,
     return 0;
 }
 
+int camssX1EFrameLuma(Span<const uint8_t> statistics, uint64_t streamId,
+                      uint32_t sequence, uint64_t timestampNs, float *luma)
+{
+    if (!luma || !timestampNs)
+        return -EINVAL;
+    int ret = native_front_stats_validate(statistics.data(), statistics.size(),
+                                         streamId, sequence);
+    if (ret)
+        return ret;
+    /* V4L2 timeval and libcamera FrameMetadata retain microsecond precision. */
+    if (native_front_stats_u64(statistics.data() + 16) / 1000 != timestampNs / 1000)
+        return -ESTALE;
+    float pending;
+    if (e003i_aecbe_frame_luma(statistics.data() + NATIVE_FRONT_STATS_HEADER_BYTES,
+                              &pending) || !std::isfinite(pending) || pending < 0.0f)
+        return -EINVAL;
+    *luma = pending;
+    return 0;
+}
+
 int camssX1ERearScalars(const e012k_rear_scalar_input &input,
                        e012k_rear_scalar_output *output)
 {

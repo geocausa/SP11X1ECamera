@@ -175,6 +175,38 @@ protected:
             camssX1EFrontLuma(Span<const uint8_t>(stats.data(), stats.size() - 1),
                                17, 12, &luma) != -EINVAL || luma != 42.0f)
             return TestFail;
+        std::vector<uint8_t> frame(NATIVE_FRONT_STATS_BYTES);
+        le(frame, 0, NATIVE_FRONT_STATS_MAGIC, 4);
+        le(frame, 4, 1, 2);
+        le(frame, 6, NATIVE_FRONT_STATS_HEADER_BYTES, 2);
+        le(frame, 8, 71, 8);
+        le(frame, 16, 1000000999, 8);
+        le(frame, 24, 0, 4); /* First video buffer is sequence zero. */
+        le(frame, 28, 19, 4);
+        le(frame, 44, NATIVE_FRONT_STATS_AEC_BYTES, 4);
+        le(frame, 48, NATIVE_FRONT_STATS_BHIST_BYTES, 4);
+        le(frame, 52, NATIVE_FRONT_STATS_AWB_BYTES, 4);
+        le(frame, 56, NATIVE_FRONT_STATS_TLBG_BYTES, 4);
+        std::copy(stats.begin() + E003I_STATS3A_HEADER_BYTES, stats.end(),
+                  frame.begin() + NATIVE_FRONT_STATS_HEADER_BYTES);
+        if (camssX1EFrameLuma(frame, 71, 0, 1000000000, &luma) ||
+            std::abs(luma - 49.32134f) > 0.001f)
+            return TestFail;
+        luma = 42.0f;
+        if (camssX1EFrameLuma(frame, 72, 0, 1000000000, &luma) != -ESTALE ||
+            camssX1EFrameLuma(frame, 71, 1, 1000000000, &luma) != -ESTALE ||
+            camssX1EFrameLuma(frame, 71, 0, 1000001000, &luma) != -ESTALE ||
+            luma != 42.0f)
+            return TestFail;
+        le(frame, 40, NATIVE_FRONT_STATS_F_DISCONTINUITY, 4);
+        if (camssX1EFrameLuma(frame, 71, 0, 1000000000, &luma) != -EPIPE ||
+            luma != 42.0f)
+            return TestFail;
+        le(frame, 40, 0, 4);
+        le(frame, 44, NATIVE_FRONT_STATS_AEC_BYTES - 1, 4);
+        if (camssX1EFrameLuma(frame, 71, 0, 1000000000, &luma) != -EINVAL ||
+            luma != 42.0f)
+            return TestFail;
         le(stats, E003I_STATS3A_HEADER_BYTES + 0x06, 0, 2);
         if (camssX1EFrontLuma(stats, 17, 12, &luma) != -EINVAL || luma != 42.0f)
             return TestFail;
