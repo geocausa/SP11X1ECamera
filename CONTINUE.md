@@ -1,3 +1,25 @@
+## 2026-10-07 native RAW gain isolation source ready; fresh01 unarmed
+
+The next bounded experiment E-NATIVE-RAW-CONTROL-01 is source-built and camera-free
+verified. New src/native-rgb/front-raw-control uses qualified audit31 modules with
+ISP trial features disabled, front CSIPHY2/CSID1/RDI0 packed10-bit source,320frames
+and18 grouped exposure/analogue/digital changes. Four Bayer-phase aggregate
+measurements only,no CPU ISP or pixels exported. Six analysis tests plus exact
+RAW10 unpack/bounds and synthetic full-phase sampler pass; Golden invocation
+denies device access. Known-register readback19 transactions expected; final
+baseline command is unchanged and need not create a twentieth CCI write.
+
+No fresh01 hardware attempt yet. NEXT prepare/verify fresh01 assets,checkpoint
+source,arm once,measure gain RAW plateaus and return/verify protected Golden.
+RAW completion timestamps are not SOF; no gain application delay can be accepted
+from this experiment. Optical units,matched Windows light/scene and brightness
+defect remain unqualified. Current Golden8dffb0ec,30 completed streams,26 retired
+IDs,52 candidate/Golden boots;5 prestream/3 poststart failures unchanged. Prior
+response02 exposure delay2 and all register retention remain proven. Auto feedback
+still disabled; original pixels/Windows assets private SP11,no OS sleep.
+Build evidence: docs/NATIVE-RGB-RAW-CONTROL-BUILD-01-20261007.json.
+Earlier NEXT is history.
+
 ## 2026-10-07 exposure response/readback hardware proven; gains still ambiguous
 
 Fresh response02 source9c648fd8/kernel audit31/libcamera build09 passes320 standard

@@ -1,0 +1,54 @@
+{
+  "status": "PASS_RAW_CONTROL_SOURCE_BUILD_NO_HARDWARE",
+  "experiment": "E-NATIVE-RAW-CONTROL-01",
+  "base_head": "9ff9d99c49e2535c68352fe896939df66e324a48",
+  "compiler_policy": "-std=c11 -Wall -Wextra -Werror -O2",
+  "kernel_modules": "native-rgb-20261007-audit-31",
+  "source_hashes": {
+    "src/native-rgb/front-raw-control/README.md": "2a8bd642ae3e3ded78ebf257f2e32c0fdf55caced1116d84792c1f1867d9b66f",
+    "src/native-rgb/front-raw-control/analyze.py": "70938f28488af377c5e1eb1927033b14ba41bd1aca2a3a8834388b2e5c8d3026",
+    "src/native-rgb/front-raw-control/install.py": "e1daece243b666bbe3375b5e73710c01c2eff9380c1410780833ae6f5daa592b",
+    "src/native-rgb/front-raw-control/probe.c": "ecb3d849c03128695eba118627d163048e46623cad18c87f1695c436ef2fd061",
+    "src/native-rgb/front-raw-control/run-once.py": "838ee43d20d0a91d56a67b82fe10ced76bd1f764a8929bcd8e45d4c78bd4f0f6",
+    "src/native-rgb/front-raw-control/test-analysis.py": "6c90e980d29d90858b721105b17e7efa4248705319feddad678a2334fe9c3064"
+  },
+  "binary_sha256": "1de31ac350b8ed2ca47c3820d04b16ef5c1e5faaa4b5bdb2b2340cf23cdc8b4e",
+  "dtb_sha256": "3d56fd6f610576dee5fc97da809f9c48da16952af9a48a5053ea864b94855beb",
+  "analysis_tests": 6,
+  "unpack_bounds_timing_test": "PASS",
+  "synthetic_phase_sampling": "PASS",
+  "golden_device_access_denied": true,
+  "hardware_attempted": false,
+  "gain_frame_delay_qualified": false,
+  "tests": [
+    {
+      "command": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "src/native-rgb/front-raw-control/probe.c",
+        "-lm",
+        "-o",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-raw-control-20261007-01/front-raw-control-probe"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-raw-control-20261007-01/front-raw-control-probe",
+        "--self-test"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "src/native-rgb/front-raw-control/test-analysis.py"
+      ],
+      "returncode": 0
+    }
+  ]
+}
