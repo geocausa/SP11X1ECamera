@@ -9,9 +9,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-timing-20261007-02")
-TOKEN = "sp11_camera_native_timing_20261007_02=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-timing-20261007-02"
+D = Path("/var/lib/sp11-camera-native-timing-20261007-03")
+TOKEN = "sp11_camera_native_timing_20261007_03=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-timing-20261007-03"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -147,14 +147,38 @@ def main():
         run(["media-ctl", "-d", media, "-l", '"msm_csiphy2":1 -> "msm_csid1":0 [0]'])
         need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "neutral", "final neutral")
         idle()
+        result["phase"] = "rear_raw_source_regression"
+        run(["media-ctl", "-d", media, "-l", '"msm_csiphy1":1 -> "msm_csid0":0 [1]'])
+        run(["media-ctl", "-d", media, "-l", '"msm_csid0":1 -> "msm_vfe0_rdi0":0 [1]'])
+        need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "rear-only", "rear route")
+        rear_spec = "SGRBG10_1X10/4076x2806"
+        for entity, pad in [(discovery["rear_sensor_entity"], 0), ("msm_csiphy1", 0),
+                            ("msm_csiphy1", 1), ("msm_csid0", 0), ("msm_csid0", 1),
+                            ("msm_vfe0_rdi0", 0), ("msm_vfe0_rdi0", 1)]:
+            run(["media-ctl", "-d", media, "-V", f'"{entity}":{pad} [fmt:{rear_spec}]'])
+        run(["v4l2-ctl", "-d", discovery["rear_video_device"],
+             "--set-fmt-video=width=4076,height=2806,pixelformat=pgAA"])
+        rear = json.loads(run([str(D / "front-timing-probe"), discovery["rear_video_device"],
+                              discovery["rear_sensor_device"], "rear"], timeout=30))
+        need(rear["status"] == "PASS_REAR_RAW_BUFFER_SEQUENCE" and rear["frames"] == 120 and
+             rear["streamoff"] is True, "rear source capture result")
+        result["hardware_streams_completed"] += 1
+        result["rear_observation"] = rear
+        idle()
+        need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "rear-only", "rear graph drift")
+        run(["media-ctl", "-d", media, "-l", '"msm_csid0":1 -> "msm_vfe0_rdi0":0 [0]'])
+        run(["media-ctl", "-d", media, "-l", '"msm_csiphy1":1 -> "msm_csid0":0 [0]'])
+        need(classify(run(["media-ctl", "-d", media, "-p"]))[0] == "neutral", "final rear neutral")
+        idle()
         rates = [observation["inferred_array_rate_hz"] for observation in observations]
         need(abs(rates[0] / rates[1] - 1) <= 0.002,
              "nominal and extended frame-length clocks disagree")
         result["array_rate_estimate_hz"] = sum(rates) / 2
         result["between_measurement_difference_ppm"] = abs(rates[0] / rates[1] - 1) * 1e6
-        result.update(status="PASS_TWO_FRONT_TIMING_STREAMS_NEUTRAL",
+        result.update(status="PASS_FRONT_TIMING_ABI_AND_REAR_RAW_SOURCE_REGRESSION",
                       observations=observations, final_route="neutral",
-                      all_sensors_suspended=True)
+                      all_sensors_suspended=True, front_standard_timing_controls_verified=True,
+                      rear_new_source_stream_verified=True)
     except Exception as exc:
         # No speculative graph rollback on failure. Service returns Golden.
         result["error"] = str(exc)

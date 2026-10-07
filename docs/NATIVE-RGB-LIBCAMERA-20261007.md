@@ -26,10 +26,13 @@ this build. This is not an implemented CAMSS pipeline or complete IPA.
 ## Current hardware gates
 
 1. Front mode timing: distinguish CSI transport throughput from pixel-array
-   timing. Current driver has no PIXEL_RATE/HBLANK/selection ABI. Retained exposure
-   policy uses 719898240 effective timing. Published IMX681 v7 source measured
-   720 MHz with equivalent VT PLL settings in another mode. Measure this SP11,
-   with known FLL values and frame timestamps, before exposing a clock.
+   timing. Hardware identity 02 captured 240 sequential front RAW frames at
+   FLL 3554/7116 and HTS 6752; both support nominal 720 MHz, with 15.36 ppm
+   between timestamp estimates. The isolated driver now exposes read-only
+   PIXEL_RATE=720000000, HBLANK=2912 and LINK_FREQ=1200000000; identity 03
+   will verify the live ABI. Selection/full native array geometry remains
+   unproven. Retained exposure policy uses 719898240 as a nominal 30 fps model;
+   the pipeline must use the sensor timing ABI rather than conceal this difference.
 2. Native ordinary output: E004IK–IP already supplies NV12 negotiation and DMA
    plans. BUS-v3 NV12 packer/geometry is source-supported. Published start sets
    UBWC MODE_CFG bit 0 only when UBWC is enabled; its forced compression disable

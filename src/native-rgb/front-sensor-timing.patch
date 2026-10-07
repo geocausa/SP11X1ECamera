@@ -1,0 +1,66 @@
+--- a/imx681.c
++++ b/imx681.c
+@@ -56,6 +56,11 @@
+  * V4L2 CSI-2 C-PHY link frequency is half the operating symbol rate. */
+ #define IMX681_CPHY_SYMBOL_RATE_HZ 2400000000ULL
+ #define IMX681_CPHY_LINK_FREQ_HZ   1200000000ULL
++/* Nominal array clock supported by 120-frame measurements at each of
++ * FLL 3554 and 7116 on this SP11. CSI transport throughput is distinct. */
++#define IMX681_PIXEL_RATE_HZ      720000000U
++
++static const s64 imx681_link_frequencies[] = { IMX681_CPHY_LINK_FREQ_HZ };
+ 
+ struct imx681_mode {
+ 	u32 width;
+@@ -68,7 +73,7 @@
+ 
+ /* Same-machine Windows Camera proves resolution record 2; expose only that proven mode. */
+ static const struct imx681_mode imx681_modes[] = {
+-	{ 3840, 2160, 6752, 3554, 548570000, 30 },
++	{ 3840, 2160, 6752, 3554, IMX681_PIXEL_RATE_HZ, 30 },
+ };
+ 
+ #include "imx681-sp11-mode2-regs.h"
+@@ -84,6 +89,10 @@
+ 	struct v4l2_ctrl *exposure;
+ 	struct v4l2_ctrl *analogue_gain;
+ 	struct v4l2_ctrl *digital_gain;
++	/* Keep the four clustered controls above contiguous. */
++	struct v4l2_ctrl *hblank;
++	struct v4l2_ctrl *pixel_rate;
++	struct v4l2_ctrl *link_freq;
+ 	struct clk *xclk;
+ 	struct regulator *dovdd;
+ 	struct regulator *avdd;
+@@ -182,7 +191,7 @@
+ 	u32 vblank = mode->frame_length - mode->height;
+ 	int ret;
+ 
+-	ret = v4l2_ctrl_handler_init(hdl, 4);
++	ret = v4l2_ctrl_handler_init(hdl, 7);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -205,6 +214,22 @@
+ 					       IMX681_DIGITAL_GAIN_MAX, 1,
+ 					       IMX681_DIGITAL_GAIN_DEFAULT);
+ 
++	imx681->hblank = v4l2_ctrl_new_std(hdl, NULL, V4L2_CID_HBLANK,
++					 mode->line_length - mode->width,
++					 mode->line_length - mode->width, 1,
++					 mode->line_length - mode->width);
++	imx681->pixel_rate = v4l2_ctrl_new_std(hdl, NULL, V4L2_CID_PIXEL_RATE,
++					     mode->pixel_rate, mode->pixel_rate,
++					     1, mode->pixel_rate);
++	imx681->link_freq = v4l2_ctrl_new_int_menu(hdl, NULL, V4L2_CID_LINK_FREQ,
++						0, 0, imx681_link_frequencies);
++	if (imx681->hblank)
++		imx681->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++	if (imx681->pixel_rate)
++		imx681->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++	if (imx681->link_freq)
++		imx681->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
+ 	if (hdl->error) {
+ 		ret = hdl->error;
+ 		goto err_free;

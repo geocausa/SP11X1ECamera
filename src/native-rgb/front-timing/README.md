@@ -1,11 +1,15 @@
 # Front sensor timing check
 
 Development-only probe for the approved libcamera sensor timing ABI.
-Current identity: native-timing-20261007-02. Never rearm after ATTEMPT-CONSUMED.
+Current identity: native-timing-20261007-03. Never rearm after ATTEMPT-CONSUMED.
 Identity 01 aborted before capture because the source-built rear driver was the
 stale ACPI-assuming snapshot. It returned Golden and must never be reused.
 
-A fresh isolated camera boot uses the source-built native-rgb-20261007-audit-06
+Identity 02 passed two 120-frame front streams and returned Golden. Its
+independent nominal/extended measurements support a nominal 720 MHz array clock
+(15.36 ppm between estimates); no pixel data was accessed.
+
+A fresh isolated camera boot uses the source-built native-rgb-20261007-audit-07
 modules and the accepted unified DTB. Golden FullIO v19c remains default; its
 kernel, initrd and DTB are hashed and never overwritten. No product daemon,
 loopback, software ISP, PIX capture or IR stream is activated.
@@ -13,7 +17,10 @@ loopback, software ISP, PIX capture or IR stream is activated.
 The probe queues four kernel MMAP buffers without calling mmap/read or copying
 pixels. It measures 120 sequential front RAW frames at FLL 3554 and another 120
 at FLL 7116, with line length 6752 and known atomic exposure/gain controls.
-Timestamp flag, payload length, sequence, errors and successful STREAMOFF are
+Identity 03 also queries the new read-only HBLANK (2912), PIXEL_RATE
+(720 MHz) and LINK_FREQ (1.2 GHz menu) controls, then captures 120 sequential
+rear RAW frames using the corrected SP11 board-power source. No rear clock
+is inferred. Timestamp flag, payload length, sequence, errors and successful STREAMOFF are
 checked. Sensor idle state and the complete 119-edge graph are checked before
 route changes; an uncertain failure performs no guessed rollback.
 

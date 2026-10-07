@@ -48,6 +48,13 @@ static int summarize(const double *time, unsigned fll, int hardware)
         deviation += (sorted[i] - mean) * (sorted[i] - mean);
     deviation = sqrt(deviation / count);
     qsort(sorted, count, sizeof(sorted[0]), compare);
+    if (!fll) {
+        printf("{\"status\":\"PASS_REAR_RAW_BUFFER_SEQUENCE\","
+               "\"frames\":%u,\"intervals\":%u,\"fps\":%.9f,"
+               "\"mean_period_seconds\":%.12f,\"pixels_mapped_or_read\":false,"
+               "\"streamoff\":true}\n", FRAMES, count, 1.0 / span_mean, span_mean);
+        return 0;
+    }
     printf("{\"status\":\"%s\","
            "\"frames\":%u,\"intervals\":%u,\"line_length\":%u,"
            "\"frame_length\":%u,\"mean_period_seconds\":%.12f,"
@@ -69,8 +76,31 @@ static int boot_allowed(void)
         return 0;
     char *got = fgets(data, sizeof(data), file);
     fclose(file);
-    return got && strstr(data, "sp11_camera_native_timing_20261007_02=1") &&
-           strstr(data, "sp11_entry=7.1.5-sp11-camera-native-timing-20261007-02");
+    return got && strstr(data, "sp11_camera_native_timing_20261007_03=1") &&
+           strstr(data, "sp11_entry=7.1.5-sp11-camera-native-timing-20261007-03");
+}
+static int front_metadata(int fd)
+{
+    const unsigned ids[] = { V4L2_CID_HBLANK, V4L2_CID_PIXEL_RATE, V4L2_CID_LINK_FREQ };
+    const unsigned types[] = { V4L2_CTRL_TYPE_INTEGER, V4L2_CTRL_TYPE_INTEGER64,
+                               V4L2_CTRL_TYPE_INTEGER_MENU };
+    const long long expected[] = { 2912, 720000000, 0 };
+    for (unsigned i = 0; i < 3; ++i) {
+        struct v4l2_query_ext_ctrl query = { .id = ids[i] };
+        struct v4l2_ext_control value = { .id = ids[i] };
+        struct v4l2_ext_controls control = { .count = 1, .controls = &value };
+        if (call(fd, VIDIOC_QUERY_EXT_CTRL, &query) || query.type != types[i] ||
+            !(query.flags & V4L2_CTRL_FLAG_READ_ONLY) ||
+            (query.flags & V4L2_CTRL_FLAG_DISABLED) ||
+            query.minimum != expected[i] || query.maximum != expected[i] ||
+            call(fd, VIDIOC_G_EXT_CTRLS, &control) ||
+            (i == 1 ? value.value64 : value.value) != expected[i])
+            return -1;
+    }
+    struct v4l2_querymenu menu = { .id = V4L2_CID_LINK_FREQ, .index = 0 };
+    if (call(fd, VIDIOC_QUERYMENU, &menu) || menu.value != 1200000000LL)
+        return -1;
+    return 0;
 }
 static int capture(const char *video, const char *sensor, unsigned fll)
 {
@@ -92,30 +122,35 @@ static int capture(const char *video, const char *sensor, unsigned fll)
         .which = V4L2_CTRL_WHICH_CUR_VAL,
     };
     double time[FRAMES];
-    if (geteuid() || !boot_allowed() || (fll != 3554 && fll != 7116))
+    if (geteuid() || !boot_allowed() || (fll && fll != 3554 && fll != 7116))
         return -1;
-    sensorfd = open(sensor, O_RDWR | O_CLOEXEC | O_NOFOLLOW);
-    if (sensorfd < 0 || fstat(sensorfd, &st) || !S_ISCHR(st.st_mode) ||
-        call(sensorfd, VIDIOC_S_EXT_CTRLS, &controls))
-        goto out;
-    for (unsigned i = 0; i < 4; ++i)
-        values[i].value = -1;
-    if (call(sensorfd, VIDIOC_G_EXT_CTRLS, &controls) ||
-        values[0].value != (int)fll - 2160 || values[1].value != 1000 ||
-        values[2].value != 0 || values[3].value != 256)
-        goto out;
-    close(sensorfd);
-    sensorfd = -1;
+    if (fll) {
+        sensorfd = open(sensor, O_RDWR | O_CLOEXEC | O_NOFOLLOW);
+        if (sensorfd < 0 || fstat(sensorfd, &st) || !S_ISCHR(st.st_mode) ||
+            call(sensorfd, VIDIOC_S_EXT_CTRLS, &controls))
+            goto out;
+        for (unsigned i = 0; i < 4; ++i)
+            values[i].value = -1;
+        if (call(sensorfd, VIDIOC_G_EXT_CTRLS, &controls) ||
+            values[0].value != (int)fll - 2160 || values[1].value != 1000 ||
+            values[2].value != 0 || values[3].value != 256)
+            goto out;
+        if (front_metadata(sensorfd))
+            goto out;
+        close(sensorfd);
+        sensorfd = -1;
+    }
 
     fd = open(video, O_RDWR | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK);
     if (fd < 0 || fstat(fd, &st) || !S_ISCHR(st.st_mode) ||
         call(fd, VIDIOC_G_FMT, &format))
         goto out;
     const struct v4l2_pix_format_mplane *p = &format.fmt.pix_mp;
-    if (p->width != 3840 || p->height != 2160 ||
-        p->pixelformat != v4l2_fourcc('p', 'R', 'A', 'A') ||
-        p->num_planes != 1 || p->plane_fmt[0].bytesperline != 4800 ||
-        p->plane_fmt[0].sizeimage != IMAGE_BYTES ||
+    if (p->width != (fll ? 3840U : 4076U) || p->height != (fll ? 2160U : 2806U) ||
+        p->pixelformat != (fll ? v4l2_fourcc('p', 'R', 'A', 'A') :
+                                   v4l2_fourcc('p', 'g', 'A', 'A')) ||
+        p->num_planes != 1 || p->plane_fmt[0].bytesperline != (fll ? 4800U : 5104U) ||
+        p->plane_fmt[0].sizeimage != (fll ? IMAGE_BYTES : 14321824U) ||
         call(fd, VIDIOC_REQBUFS, &request) || request.count != 4)
         goto out;
     for (unsigned i = 0; i < request.count; ++i) {
@@ -124,7 +159,7 @@ static int capture(const char *video, const char *sensor, unsigned fll)
             .type = BUFFER_TYPE, .memory = V4L2_MEMORY_MMAP,
             .index = i, .length = 1, .m.planes = &plane,
         };
-        if (call(fd, VIDIOC_QUERYBUF, &buffer) || plane.length < IMAGE_BYTES ||
+        if (call(fd, VIDIOC_QUERYBUF, &buffer) || plane.length < (fll ? IMAGE_BYTES : 14321824U) ||
             call(fd, VIDIOC_QBUF, &buffer))
             goto out;
     }
@@ -144,7 +179,7 @@ static int capture(const char *video, const char *sensor, unsigned fll)
         if (n != 1 || (ready.revents & (POLLERR | POLLHUP | POLLNVAL)) ||
             !(ready.revents & POLLIN) || call(fd, VIDIOC_DQBUF, &buffer) ||
             buffer.sequence != i || buffer.index >= request.count ||
-            buffer.length != 1 || plane.bytesused != IMAGE_BYTES ||
+            buffer.length != 1 || plane.bytesused != (fll ? IMAGE_BYTES : 14321824U) ||
             plane.data_offset || (buffer.flags & V4L2_BUF_FLAG_ERROR) ||
             (buffer.flags & V4L2_BUF_FLAG_TIMESTAMP_MASK) !=
                 V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC)
@@ -189,6 +224,8 @@ int main(int argc, char **argv)
         puts("PASS_SYNTHETIC_TIMING_AND_NONMONOTONIC_REJECTION_NO_DEVICE_ACCESS");
         return 0;
     }
+    if (argc == 4 && !strcmp(argv[3], "rear"))
+        return capture(argv[1], argv[2], 0) ? 1 : 0;
     if (argc != 4 || (strcmp(argv[3], "3554") && strcmp(argv[3], "7116")))
         return 2;
     return capture(argv[1], argv[2], (unsigned)strtoul(argv[3], NULL, 10)) ? 1 : 0;

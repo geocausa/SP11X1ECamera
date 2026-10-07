@@ -81,6 +81,8 @@ def assemble(out):
         path = ROOT / name
         if path.parent == ROOT / "src/front-imx681/kernel/imx681":
             shutil.copy2(path, out / "imx681" / path.name)
+    command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
+             HERE / "front-sensor-timing.patch"], cwd=out / "imx681")
     rear = out / "ov13858"
     rear.mkdir()
     shutil.copy2(ROOT / "src/native-rgb/ov13858/ov13858.c", rear / "ov13858.c")
