@@ -33,3 +33,9 @@ Remaining product work: actual libcamera pipeline/IPA requests and3A, dynamic
 semantic tuning tables, final ABI/clock policy, rear processed capture, reopen,
 soak/switch and controlled optical comparison. No bespoke runtime or software
 pixel ISP is added.
+
+Hardware profile01 passed80 pairs at30.000fps,84 typed requests, missing/corrupt
+firmware rejection and raw-control absence. Measured gain/reset response
+3.8084 ->7.8374 ->3.8113;405 owner checks, zero rejects/faults, safe stop and
+Golden return. Consumed and retired; the installed qualification firmware copy
+was removed, while verified private profile/evidence remain on SP11. Never rearm.

@@ -21,7 +21,7 @@ execution belongs in the release path.
 
 Protected Golden assets/default are never overwritten. Original vendor tuning,
 raw traces and optical pixels remain private on SP11. No system suspend tests.
-Eleven one-use candidate identities are consumed and retired; none may be rearmed.
+Twelve one-use candidate identities are consumed and retired; none may be rearmed.
 
 ## Verified implementation
 
@@ -34,7 +34,8 @@ Eleven one-use candidate identities are consumed and retired; none may be rearme
 | Stop/return | Explicit STREAMOFF during queue operation; all sensors suspended, graph neutral, Golden unchanged, zero critical faults | Starvation/fault/reopen still unqualified |
 | Frame-associated statistics |80 video/metadata pairs with matching identity/timestamps and valid AEC luma;405 ownership checks | Experimental QXS1 format; complete pipeline/IPA remains |
 | libcamera control/statistics helpers | ARM64 Werror build;8 passes,2 VIMC-dependent skips | Pipeline/IPA runtime absent |
-| Typed front ISP scalars |80 pairs,84 accepted requests,5 negative cases; measured2x gain/reset response;1979 sanitizer checks | Private startup profile and dynamic tables remain; no live3A |
+| Typed front ISP scalars |80 pairs,84 accepted requests,5 negative cases; measured2x gain/reset response;1979 sanitizer checks | Data-only tuning firmware and dynamic tables remain; no live3A |
+| Kernel-owned startup |80 pairs via data-only firmware; raw control absent; missing/corrupt profile rejected;405 owner checks | Fixed board/mode digest; independent tuning distribution and final ABI remain |
 | Rear composition |52 fragments compile against real types | Nonadaptive startup inputs and runtime composition incomplete |
 
 NV12-01 stopped before ISP programming: truthful sensor array timing plus the
@@ -76,10 +77,12 @@ and explicit STREAMOFF;81 retirements had405 consumed-owner checks. Its two comm
 slots preserve synchronous CDM BL_DONE and full DMA-owner retirement before reuse.
 This establishes short continuous capture, not a long soak, restart or optical gate.
 
-The present private raw-command capsule control is a development interface.
+The qualified front profile mode removes the raw-command control and loads
+validated data-only tuning through the kernel firmware loader. Original tuning
+remains private; independent distribution is still unresolved.
 Frame-associated statistics now pass80 pairs on the V4L2 metadata queue.
 Typed validated scalar parameters now pass84 real requests and measured hardware
-gain/reset response. Complete semantic startup/tables and request association for libcamera.
+gain/reset response. Complete dynamic semantic tables and request association for libcamera.
 Expose scalar/ROI/table values with bounded sizes and supported ranges; the kernel
 owns register addresses, CDM framing and DMA binding. Do not expose arbitrary
 MMIO, vendor binary execution or unvalidated command streams as product APIs.
@@ -88,7 +91,7 @@ blindly replaying request4 forever is not a substitute.
 
 Already passed: native NV12 queue reuse beyond the old27-frame bound, ordered
 delivery, explicit STREAMOFF, stop-before-free, neutral graph and standby.
-Remaining: starvation/fault/reopen qualification, semantic startup and full typed tables.
+Remaining: starvation/fault/reopen qualification, full typed tables and libcamera requests.
 Use fresh identities; do not extend one named frame at a time.
 
 **2. libcamera pipeline and IPA runtime.**

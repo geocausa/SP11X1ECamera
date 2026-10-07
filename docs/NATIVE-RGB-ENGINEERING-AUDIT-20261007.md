@@ -1,3 +1,29 @@
+## 2026-10-07 front raw-startup interface replaced and physically verified
+
+Fresh profile01 used63be0add/audit24:80 paired NV12/statistics frames at30.000fps.
+The raw command control was absent. Four malformed typed packets rejected;
+missing firmware returned ENOENT and corrupted data returned EKEYREJECTED before
+STREAMON. Restoring the validated data-only profile admitted84 typed requests.
+A2x Bayer gain changed Y3.8084 ->7.8374 ->3.8113. All405 consumed-owner checks
+passed across81 retirements with zero rejects or critical faults. Both queues
+stopped, graph neutral, sensors suspended, Golden assets unchanged. Returned boot
+1b29482f-1b45-4f0d-934b-74845f0eb30b. Profile01 is consumed and retired; never rearm.
+
+The kernel uses Linux request_firmware_direct for a fixed board/mode data-only
+tuning file. GPL source owns334 instruction shapes, every register location,
+DMI/device binding and the internal provider carrier. Firmware carries only
+2661 scalar words and26036 table bytes, with an exact qualification SHA256.
+The materializer reconstructs the qualified startup exactly and269 corruptions
+reject before output mutation under ASan/UBSan. Original tuning remains private
+on SP11; independently redistributable tuning is not established. No OEM code runs.
+
+NEXT: actual libcamera pipeline/request/statistics/IPA integration, then automatic
+controls, full semantic tables, rear processed capture, reopen/soak/switch and
+Windows optical acceptance. Front startup no longer requires a userspace raw
+command packet. This fixed-mode qualification does not prove automatic3A or
+final public ABI/clock policy, tuning distribution, rear ISP or optical parity.
+See docs/NATIVE-RGB-FRONT-PROFILE-01-20261007.json. Earlier NEXT is history.
+
 ## 2026-10-07 typed front ISP scalars physically verified
 
 Fresh params01 used64a4c840/audit23:80 paired NV12/statistics frames at30.006fps,
