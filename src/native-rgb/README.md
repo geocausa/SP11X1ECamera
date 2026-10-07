@@ -24,8 +24,8 @@ sensor/RDI transport, not native processed output or Windows image-quality parit
 See docs/NATIVE-RGB-TIMING-03-20261007.json.
 
 It builds no custom userspace product runtime. Python and compiler commands here
-are developer tooling. The front bounded runner remains diagnostic; rear and
-rear ISP and linear NV12 runtime gates remain denied. These modules are **not a completed
+are developer tooling. The front bounded runner remains diagnostic; rear hardware ISP runtime remains denied; current front linear NV12 evidence
+is described in the engineering audit. These modules are **not a completed
 camera stack or an installation authorization**.
 
 ## Build
@@ -69,14 +69,24 @@ sources, refusal to overwrite an existing candidate, include integration and
 retained DMA/runtime gates. Kbuild separately checks actual ARM64 types, calls
 and module dependencies.
 
-## Next implementation
+## Current next implementation — rear first
 
-Front hardware linear NV12, with a source-justified stopped-state compression
-transition and private optical proof. Reuse the planners; do not rediscover them.
-In parallel within this same workstream, inventory the precise missing rear
-four-packet semantic producers and correlate CSID-delivered completion with
-consumed IOVA/generation before enabling any reclaim or rear runtime.
+User2026-10-07 deferred front calibration until rear finished. Fresh rear-only
+Windows screen/light-OFF baseline PASS; see rear-windows-reference/README.md
+and docs/NATIVE-RGB-WINDOWS-REAR-SCREEN-01-20261007.json. Optical originals
+remain PRIVATE on same SP11; healthy upper-screen ROI registration still needed.
+
+Front linear NV12, continuous queue, metadata/typed parameters, standard
+pipeline/IPA and full-rate manual request controls/lifecycle are physically
+qualified in the current audit. Front meter/AE/AWB/IQ remains incomplete.
+
+Next complete four rear packet-isolated semantic states and the real consumer
+without rematerializing one shared state. Reuse the precise composition-gaps
+table in the audit and52 gathered fragments, measured OV13858 RAW/power and
+validated NV12 planners. Physical exact-generation completion, serialized owner
+and shutdown evidence precede any reclaim/activation; rear ISP runtime remains
+denied until those contracts are independently established.
 
 Qualcomm VFE680 uses external CSID completion and does not advertise global
-reset. Do not invent a separate-VFE-IRQ or reset prerequisite. Completion,
-ownership and shutdown still require SP11 hardware evidence.
+reset. Do not invent a separate-VFE-IRQ or reset prerequisite. Do not revisit
+optional OEM metadata/names or promote compilation to processed-frame proof.

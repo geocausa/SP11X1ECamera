@@ -1,3 +1,38 @@
+## 2026-10-07 rear-only Windows baseline PASSES; front calibration deferred
+
+User20:37:51UTC: room lights OFF,rear faces SP7 screen; complete rear before
+front calibration. Fresh E-NATIVE-REAR-WINDOWS-SCREEN-01 consumed/retired:
+OEM Windows rear-only Color/VideoRecord3840x2160 NV12 advertised30/1 selected;
+16 strictly advancing timestamped samples,20:47:18.994..20:47:26.925UTC.
+Reader started20:47:13.623,completed20:47:27.459; reader Stop and capture Dispose
+succeeded. Three full-resolution12441600byte NV12 buffers at8/12/15 and one
+8294417byte native-Y PGM12 retained PRIVATE on same SP11. No front/IR source
+initialized by probe; their physical power not independently measured.
+Global sparse Ymean55.234..55.527,P95=150/P99=158 across16; no lux/FOV/healthy
+screen-ROI registration or Linux optical parity. SP7 brightness26 before/after;
+its damaged LOWER LCD band must not be judged as a camera defect.
+ExposureAuto APItrue/Value5000ticks; ISO API0/WBauto null are NOT sensortruth.
+
+Zero-trigger interactive task atomically consumed BEFORE camera and240s return
+timer; task unregistered/exit0. Verified stopped result then shortened owned timer.
+Returned Golden5a4d7226-d3b1-4c39-b94f-9d16ce4572ce; hashes/EFIorder unchanged,
+BootNext/GRUBnext absent,no camera nodes/modules/process. One-readonly NTFS mount
+copied originals only to same-SP11 private Linux directory0700/files0600,unmounted.
+Windows private root C:\Users\Geoca\Documents\SP11-Camera-Native-Rear-Screen-20261007-01
+Linux private root /home/geoca/Pictures/SP11-Camera-Private-Native-Rear-Screen-20261007-01
+Derived scalar evidence docs/NATIVE-RGB-WINDOWS-REAR-SCREEN-01-20261007.json;
+source src/native-rgb/rear-windows-reference,prepared source95986265.
+Native counts UNCHANGED44streams/33IDs/66boots; separate Windows2/2/4;
+combined70boots/35consumedIDs. Original front gate CLOSED,calibration DEFERRED.
+
+NEXT native REAR clean bootstrap: executable four packet-isolated semantic
+states and consumer; reuse measured rear RAW/power and52 gathered fragments.
+Do not restart optional OEM metadata archaeology or infer permission from compile.
+L2 config/L3 exact-generation DMA+stop/L5 actual processed frames remain open;
+only then healthy upper-SP7 ROI optical comparison and rear controls/tuning.
+No new Linux camera candidate prepared. Front meter/AE NEXT below superseded.
+No OSsleep. User-priority and this current record supersede older NEXT entries.
+
 ## 2026-10-07 user priority: REAR first; lights OFF; fresh Windows baseline prepared
 
 User20:37:51UTC reports lights OFF and rear pointed at SP7 screen; front

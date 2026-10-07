@@ -7,7 +7,7 @@ front calibration. This supersedes the preceding front-meter NEXT instructions.
 Hypothesis: the same SP11 OEM Windows rear Color/VideoRecord path can deliver
 3840x2160 NV12 using its normal automatic controls and preserve an advancing,
 full-resolution rear-only baseline under this reported scene.
-Evidence tier P (physical Windows output); Windows oracle for Linux L3 ISP,
+Evidence tier P (physical Windows output); Windows oracle for Linux L2 ISP configuration/L3 buffer layout,
 L4 controls/focus and L5 ordinary libcamera delivery. No Linux ISP authorization.
 
 Source base0ae6419f4a1585de23540da8dd2e00cbd560c4da. Reuses the tested front WinRT
@@ -54,3 +54,27 @@ screen comparison to independently registered healthy upper display ROI.
 This baseline alone does not prove Linux rear processed output or optical parity.
 Next: resume source-built native rear ISP integration with a single explicit
 delivery gate; front meter/AE calibration remains deferred.
+
+## Completed — consumed, never rerun
+
+Windows physical run PASS at20:47:13.623..20:47:27.459UTC,16 strictly advancing
+samples; private full-resolution NV12 indices8/12/15 and nativeY PGM12 exact sizes.
+Reader Stop and capture Dispose successful; task unregistered and wrapperexit0.
+Private Windows root above retained; read-only NTFS copied originals ONLY to
+/home/geoca/Pictures/SP11-Camera-Private-Native-Rear-Screen-20261007-01
+with0700directory/0600files; partition unmounted afterwards. No pixels, spatial
+arrays or image-derived hashes exported or committed.
+Global sparse Ymean55.234..55.527,median55.322; P95=150/P99=158 all16.
+These include the whole frame and are NOT registered healthy-screen-only IQ.
+No lux/FOV/matched scene or optical parity claim. ExposureAuto APItrue/value5000
+ticks, WBauto null/5000Kelvin and ISO0 are API outputs, not physical sensor truth.
+Original Windows SOURCE.json is the preparation snapshot; consumed RESULT and
+TASK-RETIRED markers are authoritative runtime evidence.
+Derived scalar record docs/NATIVE-RGB-WINDOWS-REAR-SCREEN-01-20261007.json.
+
+Golden return5a4d7226-d3b1-4c39-b94f-9d16ce4572ce verified; protected hashes and
+persistent EFIorder unchanged,BootNext/GRUBnext empty,camera processes/nodes/
+modules absent. Native44/33/66 unchanged; Windows2streams/2IDs/4boots,
+combined70boots/35identities. Front calibration deferred until rear finished.
+Next gate: executable rear packet-isolated semantic bootstrap and actual consumer,
+then generation/stop-safe hardware delivery and private healthy-screen ROI IQ.
