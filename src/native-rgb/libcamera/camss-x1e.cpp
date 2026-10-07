@@ -5,6 +5,7 @@
 #include <array>
 #include <cerrno>
 #include <cstdint>
+#include <deque>
 #include <limits>
 #include <map>
 #include <memory>
@@ -75,6 +76,8 @@ public:
  int start();
  void stop();
  int submitParameters();
+ int queueImage(FrameBuffer *buffer);
+ int ensureSpare();
  void imageReady(FrameBuffer *buffer);
  void statisticsReady(FrameBuffer *buffer);
  void tryComplete(uint32_t sequence);
@@ -91,6 +94,8 @@ public:
  bool videoAllocated_ = false, statisticsAllocated_ = false;
  uint64_t nextParameter_ = 5;
  uint64_t streamId_ = 0;
+ unsigned int pixelsQueued_ = 0;
+ std::deque<FrameBuffer *> availableStartup_;
  std::map<uint32_t, FrameState> frames_;
  std::vector<std::unique_ptr<FrameBuffer>> startup_, metadata_;
  std::map<FrameBuffer *, std::unique_ptr<MappedFrameBuffer>> mappings_;
@@ -174,7 +179,7 @@ public:
   FrameBuffer *buffer = request->findBuffer(&data->stream_);
   if (!buffer)
    return -ENOENT;
-  return data->video_->queueBuffer(buffer);
+  return data->queueImage(buffer);
  }
  bool match(DeviceEnumerator *enumerator) override
  {
@@ -380,6 +385,8 @@ int CamssX1ECameraData::start()
   return -EBUSY;
  nextParameter_ = 5;
  streamId_ = 0;
+ pixelsQueued_ = 0;
+ availableStartup_.clear();
  failed_ = false;
  frames_.clear();
  int ret = video_->exportBuffers(kStartup, &startup_);
@@ -409,7 +416,7 @@ int CamssX1ECameraData::start()
    goto error;
  }
  for (const auto &buffer : startup_) {
-  ret = video_->queueBuffer(buffer.get());
+  ret = queueImage(buffer.get());
   if (ret)
    goto error;
  }
@@ -431,6 +438,34 @@ error:
  return ret;
 }
 
+int CamssX1ECameraData::queueImage(FrameBuffer *buffer)
+{
+ int ret = video_->queueBuffer(buffer);
+ if (!ret)
+  pixelsQueued_++;
+ return ret;
+}
+
+int CamssX1ECameraData::ensureSpare()
+{
+ /* The qualified kernel binds N+1 before returning N. A finite application
+  * request limit must not prevent retirement of its last image. Keep two
+  * outputs admitted, using only fully paired/retired internal buffers when
+  * application buffers are unavailable. No application frame is fabricated.
+  */
+ while (running_ && pixelsQueued_ < 2 && !availableStartup_.empty()) {
+  FrameBuffer *buffer = availableStartup_.front();
+  availableStartup_.pop_front();
+  int ret = queueImage(buffer);
+  if (ret) {
+   availableStartup_.push_front(buffer);
+   return ret;
+  }
+  LOG(CAMSSX1E, Debug) << "CAMSS_X1E_SPARE queued=" << pixelsQueued_;
+ }
+ return 0;
+}
+
 void CamssX1ECameraData::cancelImage(FrameBuffer *buffer)
 {
  Request *request = buffer->request();
@@ -445,6 +480,7 @@ void CamssX1ECameraData::cancelImage(FrameBuffer *buffer)
 void CamssX1ECameraData::stop()
 {
  running_ = false;
+ availableStartup_.clear();
  std::vector<FrameBuffer *> held;
  for (const auto &[sequence, frame] : frames_) {
   (void)sequence;
@@ -473,6 +509,7 @@ void CamssX1ECameraData::stop()
   videoAllocated_ = false;
  }
  startup_.clear();
+ pixelsQueued_ = 0;
 }
 
 void CamssX1ECameraData::fail(const char *reason)
@@ -486,6 +523,8 @@ void CamssX1ECameraData::fail(const char *reason)
 
 void CamssX1ECameraData::imageReady(FrameBuffer *buffer)
 {
+ if (pixelsQueued_)
+  pixelsQueued_--;
  if (!running_ || buffer->metadata().status != FrameMetadata::FrameSuccess) {
   cancelImage(buffer);
   if (running_)
@@ -501,6 +540,10 @@ void CamssX1ECameraData::imageReady(FrameBuffer *buffer)
  }
  frame.image = buffer;
  /* Replenish the bounded semantic FIFO once per hardware video completion. */
+ if (ensureSpare()) {
+  fail("Internal spare output admission failed");
+  return;
+ }
  if (submitParameters()) {
   fail("Typed parameter queue rejected");
   return;
@@ -560,8 +603,12 @@ void CamssX1ECameraData::tryComplete(uint32_t sequence)
  }
  frames_.erase(it);
  Request *request = image->request();
- if (!request)
-  return; /* Four internally owned startup frames never escape to an app. */
+ if (!request) {
+  availableStartup_.push_back(image);
+  if (ensureSpare())
+   fail("Retired internal output requeue failed");
+  return; /* Internal startup/spare frames never escape to an app. */
+ }
  request->_d()->metadata().set(controls::SensorTimestamp, image->metadata().timestamp);
  LOG(CAMSSX1E, Debug) << "CAMSS_X1E_PAIR request=" << request->sequence()
                      << " frame=" << sequence << " source=" << stats.source

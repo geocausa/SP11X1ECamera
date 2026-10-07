@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-07",
+  "identity": "native-pipeline-20261007-01",
+  "status": "FAILED_STANDARD_APP_FINITE_CAPTURE_TAIL_STARVATION",
+  "source_head": "49a8e76405406c597f9221037d84a991d5cd1ca2",
+  "libcamera_build": "libcamera-native-rgb-pipeline-20261007-02",
+  "candidate_boot_id": "7f461829-b346-40d3-9bd4-135e297a7311",
+  "returned_golden_boot_id": "e8465995-1876-440b-bd46-759e8da82e09",
+  "consumed": true,
+  "retired": true,
+  "private_standard_app_files": 79,
+  "app_frame_sequences": [
+    4,
+    82
+  ],
+  "all_file_sizes": 5529600,
+  "derived_marker_counts": {
+    "BUG:": 0,
+    "Oops:": 0,
+    "WARNING:": 0,
+    "Kernel panic": 0,
+    "NATIVE_FRONT_PROFILE_LOADED": 1,
+    "NATIVE_FRONT_OWNER_MATCH": 415,
+    "NATIVE_FRONT_OWNER_REJECT": 0,
+    "NATIVE_FRONT_PARAMS_ACCEPT": 87,
+    "teardown unsafe": 0,
+    "intentionally pinned": 0
+  },
+  "queue_stop": [
+    [
+      "83",
+      "0",
+      "-110"
+    ]
+  ],
+  "golden_assets_unchanged": true,
+  "all_sensors_suspended_after_process_kill": true,
+  "cause": "Kernel lookahead needs another buffer to retire last output; libcamera finite request limit supplies no extra request. Internal spare output buffer is required.",
+  "specific_next_fix": "reuse only fully paired/retired internal startup buffers when queued pixel depth falls below two",
+  "private_cam_logs_on_timeout_retained": false,
+  "result": {
+    "candidate_boot_id": "7f461829-b346-40d3-9bd4-135e297a7311",
+    "error": "Command '['/var/lib/sp11-camera-native-pipeline-20261007-01/cam', '--camera=sp11-front-imx681', '--capture=80', '--stream=width=2560,height=1440,pixelformat=NV12,role=viewfinder', '--strict-formats', '--metadata', '--file=/var/lib/sp11-camera-native-pipeline-20261007-01/frame-#.bin']' timed out after 50 seconds",
+    "failure_sensor_states": {
+      "1-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "2-0060": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "3-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      }
+    },
+    "grub-initrd-fallback.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "12109604",
+      "ExecMainStartTimestampMonotonic": "12013089",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "grub2-common.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "12183565",
+      "ExecMainStartTimestampMonotonic": "12123581",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "hardware_streams_completed": 0,
+    "initial_sensor_states": {
+      "1-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "2-0060": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "3-0010": {
+        "bound": true,
+        "runtime_status": "suspended"
+      }
+    },
+    "phase": "standard_libcamera_capture_80_frames",
+    "pixels_private_on_sp11": true,
+    "retry": false,
+    "status": "FAILED_NATIVE_NV12_PROBE"
+  },
+  "product_complete": false
+}

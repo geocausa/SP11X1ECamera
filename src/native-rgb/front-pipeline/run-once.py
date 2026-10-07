@@ -11,9 +11,9 @@ import runpy
 import subprocess
 import time
 
-D = Path("/var/lib/sp11-camera-native-pipeline-20261007-01")
-TOKEN = "sp11_camera_native_pipeline_20261007_01=1"
-ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-01"
+D = Path("/var/lib/sp11-camera-native-pipeline-20261007-02")
+TOKEN = "sp11_camera_native_pipeline_20261007_02=1"
+ENTRY = "sp11_entry=7.1.5-sp11-camera-native-pipeline-20261007-02"
 def need(value, reason):
     if not value:
         raise RuntimeError(reason)
@@ -131,10 +131,17 @@ def main():
         environment = os.environ.copy()
         environment.update(LD_LIBRARY_PATH=str(D / "lib"),
             LIBCAMERA_PIPELINES_MATCH_LIST="camss-x1e", LIBCAMERA_LOG_LEVELS="*:DEBUG")
-        process = subprocess.run([str(D / "cam"), "--camera=sp11-front-imx681",
-            "--capture=80", "--stream=width=2560,height=1440,pixelformat=NV12,role=viewfinder",
-            "--strict-formats", "--metadata", "--file=" + str(D / "frame-#.bin")],
-            capture_output=True, text=True, timeout=50, env=environment)
+        try:
+            process = subprocess.run([str(D / "cam"), "--camera=sp11-front-imx681",
+                "--capture=80", "--stream=width=2560,height=1440,pixelformat=NV12,role=viewfinder",
+                "--strict-formats", "--metadata", "--file=" + str(D / "frame-#.bin")],
+                capture_output=True, text=True, timeout=50, env=environment)
+        except subprocess.TimeoutExpired as exc:
+            for stream,value in [("STDOUT",exc.stdout),("STDERR",exc.stderr)]:
+                if isinstance(value,bytes): value=value.decode(errors="replace")
+                (D / ("PRIVATE-CAM-"+stream+".txt")).write_text(value or "")
+            result["cam_timed_out"] = True
+            raise RuntimeError("standard libcamera application timed out") from exc
         (D / "PRIVATE-CAM-STDOUT.txt").write_text(process.stdout)
         (D / "PRIVATE-CAM-STDERR.txt").write_text(process.stderr)
         result["cam_exit_code"] = process.returncode
