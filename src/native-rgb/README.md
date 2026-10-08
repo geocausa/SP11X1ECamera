@@ -1,3 +1,17 @@
+## 2026-10-08 rear22 reproduced linear output; software reclaim guard mismatch
+
+Secondfresh4K NV12 generationpair completes; allstopflags1, packets1111/epochs2
+events6. ReclaimreturnsEPROTO; DMA/owner/PM/commands conservativelyheldtillGolden.
+Sourceguardwronglyrequires slot1 prepared_disabled, but onlyslot0 is disabled-
+preloaded; slot1 is Epoch-retargeted/enabled. No pretendflag or sameboot retry.
+Firsthostfixturemissedreal slot1=false. NEXTcorrectmaintainedreclaimer torequire
+pair-levelstatic/slot0 proof andboth programmed exactcomplete ledgers;
+testactualslot1false positive, then fresh23/sourcebuild28.
+Native47completed55IDs110boots failed20; Windows7/7/14; combined62/124.
+Golden13dcbbd9-5dc6-4c32-9e22-ba18175073b8 hashes/EFI/NTFSverified,hazards0/watchdogfalse.
+22retired unitsdisabled nojobsarmed. PublicV4L2/qualitystillunproven.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-22-20261008.json. Earlierentrieshistorical.
+
 ## 2026-10-08 rear22 native NV12 clean release candidate prepared
 
 Freshbuild27 W1/Werror3modules0diagnostics,10hostchecks PASS.
