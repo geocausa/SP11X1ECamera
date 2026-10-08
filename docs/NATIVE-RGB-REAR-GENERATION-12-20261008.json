@@ -1,0 +1,147 @@
+{
+  "status": "FAIL_FIRST_EPOCH_GOLDEN_RETURN_VERIFIED",
+  "candidate_head": "29146a02fd411aaad9b159e53e287a3f0f7601ad",
+  "result": {
+    "identity": "E-NATIVE-REAR-GENERATION-12",
+    "status": "FAIL_REAR_GENERATION_DIAGNOSTIC",
+    "boot_id": "af9ba05e-7eb5-452f-9bd3-0c03c0e84f75",
+    "single_use": true,
+    "pixel_files_saved": 0,
+    "DMA_reclaim_authorized": false,
+    "phase": "return_Golden_mandatory",
+    "initial_sensors": {
+      "imx681": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "ov13858": {
+        "bound": true,
+        "runtime_status": "suspended"
+      },
+      "sp11-vd55g0": {
+        "bound": true,
+        "runtime_status": "suspended"
+      }
+    },
+    "route": "CSIPHY1->CSID1.IPP->VFE1.PIX",
+    "probe_exit": 6,
+    "probe": {
+      "ioctl_return": -1,
+      "errno": 110,
+      "elapsed_us": 988364,
+      "trigger_writes": 1,
+      "pixel_buffers_requested": 0
+    },
+    "sensor_start_attempts": 1,
+    "kernel_result": {
+      "ret": -110,
+      "composed": 1,
+      "once": 1,
+      "prepared": 1,
+      "owner": 1,
+      "packets": "1100",
+      "epochs": 0,
+      "events": 0,
+      "slot0": 1,
+      "slot1": 0,
+      "complete": 0,
+      "csid_stop": 0,
+      "bus_stop": 0,
+      "rtcdm_stop": 0,
+      "source_stop": 0,
+      "dma_pinned": 1,
+      "dma_reclaimed": 0,
+      "owner_released": 0,
+      "arena_released": 0,
+      "reboot": 1
+    },
+    "error": "single trigger did not finish with conservative pin status"
+  },
+  "Golden_boot_id": "1d781c29-e345-4f0c-8757-58e30f8bc9a5",
+  "Golden_hashes_verified": {
+    "vmlinuz-7.1.5-sp11-render-parity-v4+": "bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
+    "initrd.img-7.1.5-sp11-fullio-v19c": "ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d",
+    "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00"
+  },
+  "hazard_counts": {
+    "BUG": 0,
+    "Oops": 0,
+    "CallTrace": 0,
+    "Unhandled_context_fault": 0,
+    "IO_error": 0
+  },
+  "watchdog_fired": false,
+  "candidate_consumed_retired": true,
+  "kernel_markers": [
+    "[   14.266475] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_ATTEMPT identity=12 consumed=1",
+    "[   14.281283] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_RESET command=2 exact_rear=1",
+    "[   14.281399] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CSI phase=before_transport rx0=00032103 rx1=00000001 rx_status=00000000 rx_mask=00000000 packets=0 ecc=0 crc=0",
+    "[   14.281414] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_PACKET_FIELDS phase=before_transport frame=00000000 irq_pattern=00000001 irq_period=00000000 hcrop=ffff0000 vcrop=3fff0000 measure_cfg0=00000000 measure_cfg1=00000000 rup=00000000",
+    "[   14.281420] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_UNLOGGED_CFG phase=before_transport cfg324=00000000 cfg328=ffff0000 cfg32c=ffff0000",
+    "[   14.281432] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CAMIF phase=before_transport multi_vcdt=00000000 camif1=48000008 camif0=00000000 halt=00000001 measure0=00000000 measure1=00000fff measure2=00000000 lut_bank=00000000 buf_status=00000000 buf_mask=07ffffff",
+    "[   14.281445] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_IPP phase=before_transport cfg0=00000000 cfg1=00000040 ctrl=00000000 status=00000000 mask=00800000 epoch_cfg=00000000 top=00000000/00003fff route=00000101 epochs=0 done=0 overflow=0 errors=0",
+    "[   14.281463] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=before_transport core0=00000000 core1=00000010 top_mask=00000000/00000000 top_status=00000000/00000000 bus_mask=00000000/00000000 bus_status=00000000/00000000 ubwc=00000006 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   14.281489] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CSI phase=after_transport rx0=10232103 rx1=00000001 rx_status=00000000 rx_mask=019fb800 packets=0 ecc=0 crc=0",
+    "[   14.281500] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_PACKET_FIELDS phase=after_transport frame=00000000 irq_pattern=00000001 irq_period=00000000 hcrop=ffff0000 vcrop=3fff0000 measure_cfg0=00000000 measure_cfg1=00000000 rup=00000000",
+    "[   14.281506] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_UNLOGGED_CFG phase=after_transport cfg324=00000000 cfg328=ffff0000 cfg32c=ffff0000",
+    "[   14.281518] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CAMIF phase=after_transport multi_vcdt=00000000 camif1=48000008 camif0=00000000 halt=00000001 measure0=00000000 measure1=00000fff measure2=00000000 lut_bank=00000000 buf_status=00000000 buf_mask=0001ffff",
+    "[   14.281530] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_IPP phase=after_transport cfg0=00000000 cfg1=00000040 ctrl=00000000 status=00000000 mask=00800000 epoch_cfg=00130013 top=00000000/00003fff route=00000101 epochs=0 done=0 overflow=0 errors=0",
+    "[   14.281548] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=after_transport core0=00000000 core1=00000010 top_mask=00000000/00000000 top_status=00000000/00000000 bus_mask=00000000/00000000 bus_status=00000000/00000000 ubwc=00000006 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   14.282533] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CSI phase=after_packet0 rx0=10232103 rx1=00000001 rx_status=00000000 rx_mask=019fb800 packets=0 ecc=0 crc=0",
+    "[   14.282547] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_PACKET_FIELDS phase=after_packet0 frame=02000000 irq_pattern=00000001 irq_period=00000000 hcrop=0fdf0000 vcrop=08ed0000 measure_cfg0=0000001f measure_cfg1=08ee0fe0 rup=00000000",
+    "[   14.282554] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_UNLOGGED_CFG phase=after_packet0 cfg324=00000000 cfg328=ffff0000 cfg32c=ffff0000",
+    "[   14.282566] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CAMIF phase=after_packet0 multi_vcdt=00000000 camif1=48000008 camif0=00000000 halt=00000001 measure0=00000000 measure1=00000fff measure2=00000000 lut_bank=00000000 buf_status=00000000 buf_mask=0001ffff",
+    "[   14.282579] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_IPP phase=after_packet0 cfg0=00000000 cfg1=00000040 ctrl=00000000 status=00000000 mask=00800000 epoch_cfg=00130013 top=00000000/00003fff route=00000101 epochs=0 done=0 overflow=0 errors=0",
+    "[   14.282597] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=after_packet0 core0=00006000 core1=00000010 top_mask=00000000/00000000 top_status=00000000/00000000 bus_mask=00000000/00000000 bus_status=00000000/00000000 ubwc=00000006 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   14.282625] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=before_vfe_prefix core0=00006000 core1=00000010 top_mask=00000000/00000000 top_status=00000000/00000000 bus_mask=00000000/00000000 bus_status=00000000/00000000 ubwc=00000006 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   14.282668] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=after_vfe_prefix core0=00000005 core1=00000010 top_mask=0007f051/00000000 top_status=00000000/00000000 bus_mask=d0000000/00000000 bus_status=00000000/00000000 ubwc=00001046 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   14.284043] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CSI phase=after_packet1 rx0=10232103 rx1=00000001 rx_status=00000000 rx_mask=019fb800 packets=0 ecc=0 crc=0",
+    "[   14.284057] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_PACKET_FIELDS phase=after_packet1 frame=02000000 irq_pattern=00000001 irq_period=00000000 hcrop=0fdf0000 vcrop=08ed0000 measure_cfg0=0000001f measure_cfg1=08ee0fe0 rup=00000000",
+    "[   14.284064] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_UNLOGGED_CFG phase=after_packet1 cfg324=00000000 cfg328=ffff0000 cfg32c=ffff0000",
+    "[   14.284076] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CAMIF phase=after_packet1 multi_vcdt=00000000 camif1=40000048 camif0=00000000 halt=00000001 measure0=00000000 measure1=00000fff measure2=00000000 lut_bank=00000000 buf_status=00000000 buf_mask=0001ffff",
+    "[   14.284089] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_IPP phase=after_packet1 cfg0=802b2000 cfg1=00007241 ctrl=00000000 status=00000000 mask=00800000 epoch_cfg=00130013 top=00000000/00003fff route=00000101 epochs=0 done=0 overflow=0 errors=0",
+    "[   14.284107] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=after_packet1 core0=00006000 core1=00000010 top_mask=0007f051/00000000 top_status=00000000/00000000 bus_mask=d0000000/00000000 bus_status=00000000/00000000 ubwc=00001046 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   14.284220] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_SENSOR_START_ATTEMPT",
+    "[   14.751693] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CSI phase=after_sensor_start rx0=10232103 rx1=00000001 rx_status=00000000 rx_mask=019fb800 packets=0 ecc=0 crc=0",
+    "[   14.751736] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_PACKET_FIELDS phase=after_sensor_start frame=02000000 irq_pattern=00000001 irq_period=00000000 hcrop=0fdf0000 vcrop=08ed0000 measure_cfg0=0000001f measure_cfg1=08ee0fe0 rup=00000000",
+    "[   14.751753] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_UNLOGGED_CFG phase=after_sensor_start cfg324=00000000 cfg328=ffff0000 cfg32c=ffff0000",
+    "[   14.751777] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CAMIF phase=after_sensor_start multi_vcdt=00000000 camif1=40000048 camif0=00000000 halt=00000001 measure0=00000000 measure1=00000fff measure2=00000000 lut_bank=00000000 buf_status=00000000 buf_mask=0001ffff",
+    "[   14.751804] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_IPP phase=after_sensor_start cfg0=802b2000 cfg1=00007241 ctrl=00000001 status=00000000 mask=3cbc601c epoch_cfg=00130013 top=00000000/00000001 route=00000101 epochs=0 done=0 overflow=0 errors=0",
+    "[   14.751948] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=after_sensor_start core0=00006000 core1=00000010 top_mask=0007f051/00000000 top_status=00000000/00000000 bus_mask=d0000000/00000000 bus_status=00000000/00000000 ubwc=00001046 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   15.252004] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CSI phase=before_emergency_stop rx0=10232103 rx1=00000001 rx_status=000000ff rx_mask=019fb800 packets=38602 ecc=0 crc=0",
+    "[   15.252036] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_PACKET_FIELDS phase=before_emergency_stop frame=02000000 irq_pattern=00000001 irq_period=00000000 hcrop=0fdf0000 vcrop=08ed0000 measure_cfg0=0000001f measure_cfg1=08ee0fe0 rup=00000000",
+    "[   15.252053] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_UNLOGGED_CFG phase=before_emergency_stop cfg324=00000000 cfg328=ffff0000 cfg32c=ffff0000",
+    "[   15.252078] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CAMIF phase=before_emergency_stop multi_vcdt=00000000 camif1=08000c19 camif0=00000fec halt=00000001 measure0=00000fec measure1=00000fff measure2=00000000 lut_bank=00000000 buf_status=00000000 buf_mask=0001ffff",
+    "[   15.252104] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_IPP phase=before_emergency_stop cfg0=802b2000 cfg1=00007241 ctrl=00000001 status=00011e00 mask=3cbc601c epoch_cfg=00130013 top=00000000/00000001 route=00000101 epochs=0 done=0 overflow=0 errors=0",
+    "[   15.252142] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=before_emergency_stop core0=00006000 core1=00000010 top_mask=0007f051/00000000 top_status=00000000/00000000 bus_mask=d0000000/00000000 bus_status=00000000/00000000 ubwc=00001046 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   15.254620] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CSI phase=after_emergency_stop rx0=10232103 rx1=00000001 rx_status=000000ff rx_mask=00000000 packets=203 ecc=0 crc=0",
+    "[   15.254646] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_PACKET_FIELDS phase=after_emergency_stop frame=02000000 irq_pattern=00000001 irq_period=00000000 hcrop=0fdf0000 vcrop=08ed0000 measure_cfg0=0000001f measure_cfg1=08ee0fe0 rup=00000000",
+    "[   15.254665] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_UNLOGGED_CFG phase=after_emergency_stop cfg324=00000000 cfg328=ffff0000 cfg32c=ffff0000",
+    "[   15.254694] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_CAMIF phase=after_emergency_stop multi_vcdt=00000000 camif1=48000008 camif0=00000000 halt=00000001 measure0=00000000 measure1=00000fff measure2=00000000 lut_bank=00000000 buf_status=00000000 buf_mask=00000000",
+    "[   15.254719] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_IPP phase=after_emergency_stop cfg0=802b2000 cfg1=00007241 ctrl=00000001 status=00000c00 mask=00000000 epoch_cfg=00130013 top=00000000/00000000 route=00000101 epochs=0 done=0 overflow=0 errors=0",
+    "[   15.254754] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_VFE phase=after_emergency_stop core0=00006000 core1=00000010 top_mask=00000000/00000000 top_status=00000000/00000000 bus_mask=00000000/00000000 bus_status=00000000/00000000 ubwc=00001046 violation=00000000 overflow=00000000 image_violation=00000000",
+    "[   15.254779] qcom-camss acb7000.isp: NATIVE_REAR_GENERATION_RESULT ret=-110 composed=1 once=1 prepared=1 owner=1 packets=1100 epochs=0 events=0 slot0=1 slot1=0 complete=0 csid_stop=0 bus_stop=0 rtcdm_stop=0 source_stop=0 dma_pinned=1 dma_reclaimed=0 owner_released=0 arena_released=0 reboot=1"
+  ],
+  "hypothesis_sufficient_fix": false,
+  "configuration_after_packet0_physically_admitted": true,
+  "CSI_packets": 38602,
+  "ECC": 0,
+  "CRC": 0,
+  "CAMIF_halt": 1,
+  "native_counts": {
+    "streams": 44,
+    "identities": 45,
+    "boots": 90,
+    "failed_started": 13
+  },
+  "Windows_counts": {
+    "streams": 3,
+    "identities": 3,
+    "boots": 6
+  },
+  "combined_counts": {
+    "identities": 48,
+    "boots": 96
+  },
+  "next": "Source audit CAMIF internal halt/debug events and IPP frame-event filters before more startup changes"
+}

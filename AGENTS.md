@@ -1,3 +1,15 @@
+## 2026-10-08 generation12 activation order did not resolve halt
+
+Existing CFG0/CFG1 moved after packet0, exact admission physically passed.
+38602 CSI packets ECC0/CRC0; CAMIF halt1; first Epoch timeout again.
+Crop-before-CFG order is not a sufficient fix. Rear output remains unproven.
+Golden returned unchanged, no hazard/watchdog;12 consumed and retired.
+Native44 streams/45 IDs/90 boots; failed started captures13.
+Windows3/3/6; combined48 IDs/96 boots.
+NEXT source audit CAMIF internal halt/debug events and frame-event filters.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-12-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation12 crop-before-path-config candidate ready
 
 Move only existing CFG0/CFG1 writes after packet0 exact crop/format admission.
