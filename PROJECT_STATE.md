@@ -1,3 +1,25 @@
+## 2026-10-08 rear26 live replacement observed on hardware, clean release PASS
+
+Fresh26/build34 completes two real libcamera DMA-BUF Requests at 3840x2160
+linear NV12/stride3840/12441600 bytes, no CPU pixel access/copy. Actual SPSC
+queue publishes/consumes12 events. Before physical stop, read-only observer
+PASS: old/new ten-WM complete, four command BL_DONE receipts, all three
+replacement readback masks1023, owner1, stable drained event cursor12 and
+Epoch3. No live DMA release was attempted or authorized by observation.
+Kernel ret0 packets1111/epochs2; all four physical stops, mappings/owner/arena
+released; dma_pinned0. All sensors bound/suspended; IFE/CSID/PHY clocks idle.
+Ten VFE/eight IPP scalar phases errors0; no kernel hazards/watchdog; service
+success0. Verified automatic Golden28b279ae-c16c-42ae-a7ae-d74edb91bdab return.
+26 consumed/retired; units disabled; no nodes/modules/jobs/armed experiments.
+Native51 completed/59IDs118boots failed20; combined66IDs132boots.
+NEXT explicit live generation retirement and persistent rear request queue,
+then typed semantic IPA/statistics/controls and matched Windows quality.
+Rear remains bounded to two Requests; live mapping retirement, continuous
+rear, rear IPA/SensorTimestamp and optical parity still unproven. Event queue
+hardware proof is bounded12 events, not wrap/long soak. Front deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-26-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear26 read-only live replacement source qualified
 
 Fresh build34 compiles three ARM64 W1/Werror modules. All 15 hosted checks
