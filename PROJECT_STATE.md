@@ -1,3 +1,26 @@
+## 2026-10-08 rear27 live public FULL unmap on hardware, clean release PASS
+
+Fresh27/build35 retires the old public FULL attachment before physical stop:
+ret0/released1/old-valid1, replacement FULL pinned1, old eight auxiliary buffers
+pinned8, all stop flags0, no VB2 completion/requeue. Actual live observation
+matches both ten-WM ledgers, replacement command receipts and all readback masks
+1023; owner1, events14 drained, stable Epoch3. This is real mapping retirement,
+not merely a read-only observation. Scope is first FULL only, not all outputs.
+Two real libcamera DMA-BUF Requests complete at 3840x2160 linear NV12/stride3840/
+12441600 bytes without CPU pixel access/copy. All four subsequent physical stops
+and remaining DMA/owner/arena release PASS; dma_pinned0. All sensors bound/
+suspended; IFE/CSID/PHY clocks idle. Ten VFE/eight IPP phases errors0.
+No hazards/watchdog; service success0; verified automatic Golden return
+6de92f65-627e-40f5-b71e-1272cfbaf638. 27 consumed/retired; units disabled; no
+camera modules/nodes/jobs/armed experiments. Native52/60IDs120boots failed20;
+combined67IDs134boots. Whole-generation live retirement, persistent rear
+Requests, rear IPA/SensorTimestamp and optical parity remain unproven.
+NEXT retire/recycle old auxiliary outputs and command sets, integrate persistent
+rear scheduler/Requests, then typed semantic IPA/statistics/controls and matched
+Windows quality. Current rear remains two Requests. Front calibration deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-27-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear27 live old FULL retirement source qualified
 
 Fresh build35 compiles three ARM64 W1/Werror modules. All 16 hosted checks PASS.
