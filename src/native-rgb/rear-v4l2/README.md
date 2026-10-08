@@ -1,3 +1,27 @@
+## 2026-10-08 rear auxiliary ownership guard source qualified, hardware27 retained
+
+Recovered clean HEAD/origin f79fc746 on Golden6de92f65-627e-40f5-b71e-1272cfbaf638.
+Before auxiliary recycling, the actual live FULL guard now requires each of the
+16 auxiliary allocations' full DMA address and length to match its completed
+request ledger, and rejects all120 CPU allocation aliases within/across sets.
+The expanded fault matrix reproduced old build35 accepting changed auxiliary DMA.
+Fresh source build36 passes three ARM64 W1/Werror modules, zero diagnostics.
+Six relevant GCC/Clang ASAN/UBSAN checks PASS; actual live helper24494 assertions/
+751 negatives each, including168 new ownership faults with no release/mutation.
+Observer, actual post-stop reclaimer, public/coherent lifecycle and threaded
+event queue regressions PASS. Hardware/MMIO/IRQ/DMA APIs in these checks are
+explicit host models. No new hardware attempt, install, arm, camera start or
+reboot. Source-only identity28 is unconsumed; boot assets are not installed.
+Golden payload hashes verified unchanged. Latest hardware proof remains27:
+two real libcamera4K Requests and old FULL mapping live retirement/clean stop.
+Old auxiliary/command live release and persistent rear Requests remain unproven.
+NEXT guarded old auxiliary retirement, separate command arena recycling and
+persistent request scheduler; then semantic IPA/statistics/controls and optics.
+Front calibration remains deferred. Counts unchanged native52/60IDs120boots
+failed20; combined67IDs134boots.
+Evidence docs/NATIVE-RGB-REAR-AUX-BINDING-20261008.json.
+Earlier entries are historical.
+
 # Rear public V4L2 buffer integration
 
 Rear23 proves two 4K native NV12 generations and clean output/ledger/owner/PM/

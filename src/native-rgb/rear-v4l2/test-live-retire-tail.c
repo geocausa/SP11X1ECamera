@@ -42,9 +42,14 @@ static void extra_matrix(void){
   }
   negative();
  }
- for(unsigned s=0;s<2;s++)for(unsigned i=0;i<8;i++)for(unsigned kind=0;kind<3;kind++){
+ for(unsigned s=0;s<2;s++)for(unsigned i=0;i<8;i++)for(unsigned kind=0;kind<6;kind++){
   fixture();struct e008d_rear_aux_buffer *a=&pair.dma[s].aux[i];
-  if(kind==0)a->cpu=NULL;else if(kind==1)a->wm=99;else a->size--;
+  if(kind==0)a->cpu=NULL;
+  else if(kind==1)a->wm=99;
+  else if(kind==2)a->size--;
+  else if(kind==3)a->dma++;
+  else if(kind==4)a->dma += (u64)1 << 32;
+  else pair.frame[s].slot[e007z_rear_index(a->wm)].owned_bytes--;
   negative();
  }
  for(unsigned kind=0;kind<3;kind++){
@@ -52,6 +57,12 @@ static void extra_matrix(void){
   if(kind==0)pair.dma[0].public_full.dbuf=pair.dma[1].public_full.dbuf;
   if(kind==1)pair.dma[0].public_full.attachment=pair.dma[1].public_full.attachment;
   if(kind==2)pair.dma[0].public_full.table=pair.dma[1].public_full.table;
+  negative();
+ }
+ /* All 120 CPU aliases within/across the two sets must fail unchanged. */
+ for(unsigned first=0;first<16;first++)for(unsigned second=0;second<first;second++){
+  fixture();
+  pair.dma[first/8].aux[first%8].cpu=pair.dma[second/8].aux[second%8].cpu;
   negative();
  }
  for(unsigned kind=0;kind<13;kind++){

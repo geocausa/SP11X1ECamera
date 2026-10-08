@@ -38,7 +38,7 @@ native_rear_live_retire_full(struct vfe_device *vfe, struct csid_device *csid,
 {
  struct native_rear_live_observation observation;
  struct e008d_rear_dma_set *old, *next;
- unsigned int s, i;
+ unsigned int s, i, other, j;
  int ret;
 
  if (!vfe || !csid || !pair || !result)
@@ -65,11 +65,30 @@ native_rear_live_retire_full(struct vfe_device *vfe, struct csid_device *csid,
    const struct e008d_rear_aux_buffer *a = &set->aux[i];
    const struct vfe680_e004nu_rear_wm_static *c =
       e008d_rear_contract_for_wm(a->wm);
-   if (!c || a->wm != e008d_rear_aux_wms[i] || !a->cpu ||
-       a->size != c->frame_incr)
+   int index = e007z_rear_index(a->wm);
+
+   /* Completion belongs to the ledger's allocation, not merely a WM number.
+    * Reject stale/foreign allocations before releasing any mapping.
+    */
+   if (!c || index < 0 || a->wm != e008d_rear_aux_wms[i] || !a->cpu ||
+       a->size != c->frame_incr ||
+       (u64)a->dma != f->slot[index].owned_base_iova ||
+       a->size != f->slot[index].owned_bytes)
     return -EPROTO;
   }
  }
+ /* Every coherent allocation must also have its own CPU identity.
+  * Ledger span validation independently checks owned DMA spans.
+  */
+ for (s = 0; s < E008H_REAR_SLOTS; s++)
+  for (i = 0; i < E008D_REAR_AUX_COUNT; i++)
+   for (other = 0; other <= s; other++)
+    for (j = 0; j < E008D_REAR_AUX_COUNT; j++) {
+     if (other == s && j >= i)
+      break;
+     if (pair->dma[s].aux[i].cpu == pair->dma[other].aux[j].cpu)
+      return -EADDRINUSE;
+    }
  old = &pair->dma[0];
  next = &pair->dma[1];
  if (old->public_full.dbuf == next->public_full.dbuf ||

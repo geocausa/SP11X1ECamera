@@ -82,6 +82,6 @@ static void retire_fixture(void){
    r=subprocess.run([str(binary)],capture_output=True,text=True,timeout=25,env=dict(os.environ,ASAN_OPTIONS="detect_leaks=1:halt_on_error=1",UBSAN_OPTIONS="halt_on_error=1"))
    if r.returncode:raise RuntimeError(r.stdout+r.stderr)
    results.append({"compiler":cc,"ASAN_UBSAN_Werror":True,"result":json.loads(r.stdout),"stderr":r.stderr})
- report={"status":"PASS_ACTUAL_LIVE_REAR_FULL_MAPPING_RETIREMENT_AND_AUX_PINNING","actual_staged_observer_lease_predicates_partial_release_and_retirement":True,"MMIO_IRQ_DMA_BUF_API_and_aux_free_are_models":True,"hardware_access":False,"VB2_completion_or_requeue":False,"results":results}
+ report={"status":"PASS_ACTUAL_LIVE_REAR_FULL_MAPPING_RETIREMENT_AND_AUX_PINNING","actual_staged_observer_lease_predicates_partial_release_and_retirement":True,"MMIO_IRQ_DMA_BUF_API_and_aux_free_are_models":True,"hardware_access":False,"VB2_completion_or_requeue":False,"auxiliary_allocations_match_completed_ledger":True,"all_120_CPU_aliases_rejected":True,"DMA_high_bits_not_truncated":True,"results":results}
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()
