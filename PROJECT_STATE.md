@@ -1,3 +1,15 @@
+## 2026-10-08 generation10 early route did not resolve CAMIF halt
+
+Route0x101 physically confirmed before transport/startup packets.
+38564 CSI packets ECC0/CRC0, CAMIF halt1, first Epoch timeout again.
+Early route hypothesis disproven as a sufficient fix. Rear output remains unproven.
+Golden returned unchanged, no hazard/watchdog;10 consumed and retired.
+Native44 streams/43 IDs/86 boots; failed started captures11.
+Windows2/2/4; combined45 IDs/90 boots.
+NEXT targeted Windows rear CAMIF/CSID dynamic scalar observation.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-10-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation10 route-before-reset candidate validated
 
 Exact admitted rear route0x101 is established before reset/startup RUP packets.
