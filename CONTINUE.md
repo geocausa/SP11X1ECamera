@@ -1,3 +1,19 @@
+## 2026-10-08 generation06 packet fields confirmed; CAMIF halted
+
+Packet0 frame/crop/format fields read back exactly;38570 RX packets,ECC0/CRC0,
+measured4076 input pixels. IPP output SOF/Epoch absent; CAMIF halt status1.
+Golden returned automatically unchanged; no hazard/watchdog;06 retired.
+Informational kernel attempt label05 is stale; firmware/path/worker/boot are fresh06.
+Native44 completed streams/39 IDs/78 boots; failed started captures8.
+Windows2/2/4; combined41 IDs/82 boots.
+Rear runner omits shared VFE1 core/IRQ start_prefix and BUS UBWC static setup.
+Packet IQ and WM helpers do not supply those common writes.
+NEXT integrate source-qualified common VFE1 prefix with all WMs disabled,
+readback and fresh07 physical qualification. DMA remains held till reboot.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-06-20261008.json.
+Rear FIRST; front calibration deferred; same-SP11 privacy unchanged.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation06 read-only packet/CAMIF diagnostic ready
 
 Sourcebuild08 W1/Werror all3 modules zero diagnostics. Actual candidate pinning
