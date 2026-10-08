@@ -3,9 +3,9 @@
 """One rear generation proof, no optical file access, automatic Golden return."""
 import json,os,re,runpy,subprocess,time
 from pathlib import Path
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-21")
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-22")
 ROOT=Path("/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-driver")
-MARKER="sp11_camera_native_rear_generation_20261007_21=1"
+MARKER="sp11_camera_native_rear_generation_20261007_22=1"
 def need(condition,message):
  if not condition:raise RuntimeError(message)
 def run(args,timeout=25):
@@ -54,9 +54,9 @@ def main():
  need(MARKER in Path("/proc/cmdline").read_text().split(),"candidate command line mismatch")
  fd=os.open(D/"CONSUMED",os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
  os.write(fd,(Path("/proc/sys/kernel/random/boot_id").read_text()).encode());os.fsync(fd);os.close(fd)
- result={"identity":"E-NATIVE-REAR-GENERATION-21","status":"STARTED",
+ result={"identity":"E-NATIVE-REAR-GENERATION-22","status":"STARTED",
   "boot_id":Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
-  "single_use":True,"pixel_files_saved":0,"DMA_reclaim_authorized":False}
+  "single_use":True,"pixel_files_saved":0,"DMA_reclaim_authorized":True}
  try:
   expected=(D/"EXPECTED-HEAD").read_text().strip()
   need(run(["git","-C",ROOT,"rev-parse","HEAD"]).strip()==expected,"source HEAD drift")
@@ -117,7 +117,7 @@ def main():
   probe=subprocess.run([str(D/"probe"),video],capture_output=True,text=True,timeout=15)
   (D/"PRIVATE-PROBE-STDOUT.txt").write_text(probe.stdout)
   (D/"PRIVATE-PROBE-STDERR.txt").write_text(probe.stderr)
-  camera_clock_snapshot(result,"after_trigger_pinned")
+  camera_clock_snapshot(result,"after_trigger_released")
   result["probe_exit"]=probe.returncode
   if probe.stdout.strip():result["probe"]=json.loads(probe.stdout)
   log=run(["dmesg"]);(D/"PRIVATE-DMESG.txt").write_text(log)
@@ -134,16 +134,21 @@ def main():
   facts={k:v for k,v in re.findall(r"(\w+)=(-?[0-9]+)",records[0])}
   result["kernel_result"]={k:(v if k=="packets" else int(v)) for k,v in facts.items()}
   save(result)
-  need(probe.returncode==0,"single trigger did not finish with conservative pin status")
+  need(probe.returncode==0,"single trigger did not finish with verified clean release status")
   required=["composed","once","prepared","slot0","slot1","complete","csid_stop","bus_stop",
-            "rtcdm_stop","source_stop","dma_pinned","reboot"]
+            "rtcdm_stop","source_stop","dma_reclaimed","owner_released","arena_released","reboot"]
   need(all(facts.get(k)=="1" for k in required),"incomplete rear generation/stop evidence")
-  need(facts.get("ret")=="-115" and facts.get("packets")=="1111" and facts.get("epochs")=="2",
+  need(facts.get("ret")=="0" and facts.get("packets")=="1111" and facts.get("epochs")=="2",
        "four packets/two epochs required")
-  need(all(facts.get(k)=="0" for k in ["dma_reclaimed","owner_released","arena_released"]),
-       "DMA/owner must stay pinned until reboot")
+  need(facts.get("dma_pinned")=="0","successful clean stop must release DMA/owner")
   need(result["sensor_start_attempts"]==1,"one sensor start required")
-  result["status"]="PASS_REAR_TWO_GENERATION_COMPLETION_AND_STOP_WITH_DMA_PINNED"
+  for _ in range(400):
+   final=states()
+   if all(x["bound"] and x["runtime_status"]=="suspended" for x in final.values()):break
+   time.sleep(0.05)
+  result["final_sensors"]=final
+  need(all(x["bound"] and x["runtime_status"]=="suspended" for x in final.values()),"all sensors must suspend after clean release")
+  result["status"]="PASS_REAR_NV12_TWO_GENERATIONS_CLEAN_STOP_AND_RELEASE"
  except Exception as exc:
   result["status"]="FAIL_REAR_GENERATION_DIAGNOSTIC"
   result["error"]=str(exc)

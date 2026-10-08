@@ -1,3 +1,18 @@
+## 2026-10-08 rear22 native NV12 clean release candidate prepared
+
+Freshbuild27 W1/Werror3modules0diagnostics,10hostchecks PASS.
+Onlysuccessful diagnostic poststop hold bypassed; all hardwareconfiguration
+and stop/reclaim helpers unchanged21. Actualreclaimer349assertions90negatives
+allallocationsvalidatedbeforeanyfree; commandrelease requiresRTCDMstop.
+Actualrunner3539assertions/60steps58faultmodels; successfulallstoponce and
+reclaimmockonce. Linear6508/geometry578/VFE466/transport/NoC/sensor/graph/CSR PASS.
+NEXTfresh22 boot; requirecomplete2generations/allstop then output/ledger/owner/
+PM/commandrelease and sensorssuspended. Failurepathsretain mandatoryGolden.
+No counts changed native47/54IDs108boots Windows7/7/14 combined61/122.
+PublicV4L2/libcamera/opticalquality stillunproven; frontcalibrationdeferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-22-PREP-20261008.json.
+Earlierentrieshistorical.
+
 ## 2026-10-08 rear21 cold native 4K NV12 hardware completion passed
 
 FULL3840x2160 linearNV12 stride3840/image12441600,22eight-bitround/clamp

@@ -4,7 +4,8 @@
  * is compiler-bound to this SP11 candidate, privately generated and SHA-pinned.
  * This is not a product firmware format, userspace command ABI or pixel ISP.
  * No data/profile value or digest is logged. Both output/command DMA and PM
- * remain pinned until reboot on every exposed return, including complete frames.
+ * are released only after complete frame/stop proofs in this fresh qualification.
+ * Every exposed failure still requires Golden return.
  */
 #include <linux/firmware.h>
 #include <crypto/sha2.h>
@@ -45,7 +46,7 @@ int camss_x1e_rear_generation_once(struct camss_video *video)
   ret = -EALREADY;
   goto out;
  }
- dev_info(camss->dev, "NATIVE_REAR_GENERATION_ATTEMPT identity=21 consumed=1\n");
+ dev_info(camss->dev, "NATIVE_REAR_GENERATION_ATTEMPT identity=22 consumed=1\n");
  if (video->vb2_q.streaming || READ_ONCE(video->x1e_pix_live_active) ||
      READ_ONCE(video->x1e_pix_worker_started) || READ_ONCE(video->x1e_pix_runner_pinned)) {
   ret = -EBUSY;
@@ -82,11 +83,13 @@ int camss_x1e_rear_generation_once(struct camss_video *video)
  request.epoch_timeout_us = 500000;
  request.done_timeout_us = 1000000;
  /* Only this synchronous, one-use, exact-profile callback grants permission.
-  * Every exposed return is pinned by the unchanged wrapper/runner cleanup.
+  * Only verified successful teardown can reclaim; failures retain conservative cleanup.
   */
+ WRITE_ONCE(native_rear_diagnostic_reclaim, true);
  WRITE_ONCE(native_rear_diagnostic_active, true);
  ret = native_rear_startup_run_once_unreachable(&camss->vfe[1], &request, &result);
  WRITE_ONCE(native_rear_diagnostic_active, false);
+ WRITE_ONCE(native_rear_diagnostic_reclaim, false);
 out:
  dev_info(camss->dev,
   "NATIVE_REAR_GENERATION_RESULT ret=%d composed=%u once=%u prepared=%u owner=%llu packets=%u%u%u%u epochs=%u events=%u slot0=%u slot1=%u complete=%u csid_stop=%u bus_stop=%u rtcdm_stop=%u source_stop=%u dma_pinned=%u dma_reclaimed=%u owner_released=%u arena_released=%u reboot=%u\n",

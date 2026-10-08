@@ -27,5 +27,5 @@ int main(int argc,char **argv){
  /* Exactly one write; never retry this descriptor, module or candidate. */
  close(fd);
  printf("{\"ioctl_return\":%d,\"errno\":%d,\"elapsed_us\":%lld,\"trigger_writes\":1,\"pixel_buffers_requested\":0}\n",result,error,us);
- return result==-1&&error==EINPROGRESS?0:6;
+ return result==0&&error==0?0:6;
 }
