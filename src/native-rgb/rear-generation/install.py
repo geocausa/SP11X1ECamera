@@ -4,17 +4,17 @@
 import hashlib,json,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[3];PROJECT=ROOT.parents[1]
-BUILD=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-22"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-22"
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-18")
-B=Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-18")
-G=Path("/etc/grub.d/99zzzzzz_sp11_camera_native_rear_generation_20261007_18")
-S=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-18.service")
-T=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-18-watchdog.timer")
-W=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-18-watchdog.service")
-F=Path("/lib/firmware/qcom/sp11/rear-generation-20261007-18.bin")
-ID="sp11-camera-native-rear-generation-20261007-18"
-MARKER="sp11_camera_native_rear_generation_20261007_18=1"
+BUILD=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-24"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-24"
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-19")
+B=Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-19")
+G=Path("/etc/grub.d/99zzzzzz_sp11_camera_native_rear_generation_20261007_19")
+S=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-19.service")
+T=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-19-watchdog.timer")
+W=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-19-watchdog.service")
+F=Path("/lib/firmware/qcom/sp11/rear-generation-20261007-19.bin")
+ID="sp11-camera-native-rear-generation-20261007-19"
+MARKER="sp11_camera_native_rear_generation_20261007_19=1"
 GOLDEN=Path("/boot/sp11-7.1.5-audio-fullio-v19c")
 EXPECTED_GOLDEN={
  "vmlinuz-7.1.5-sp11-render-parity-v4+":"bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
@@ -39,6 +39,8 @@ def main():
   assert sha(BUILD/relative)==entry["sha256"]
   assert run(["modinfo","-F","vermagic",BUILD/relative]).strip()==entry["vermagic"]
  for relative,digest in result["staged_sources"].items():assert sha(BUILD/relative)==digest
+ noc=json.loads((BUILD/"noc-clock-hosted-01.json").read_text())
+ assert noc["status"]=="PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS"
  pin=json.loads((BUILD/"pinning-hosted-02.json").read_text())
  assert pin["status"]=="PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING"
  assert pin["reclaim_function_calls"]==0
@@ -88,7 +90,7 @@ def main():
  for x in command:
   if x.startswith("modprobe.blacklist="):blacklist+=x.split("=",1)[1].split(",")
  command=[x for x in command if not x.startswith(("BOOT_IMAGE=","sp11_entry=","modprobe.blacklist="))]
- command+=["sp11_entry=7.1.5-sp11-camera-native-rear-generation-20261007-18",MARKER,
+ command+=["sp11_entry=7.1.5-sp11-camera-native-rear-generation-20261007-19",MARKER,
   "modprobe.blacklist="+",".join(dict.fromkeys(blacklist+["qcom_camss","imx681","ov13858","sp11_vd55g0","vd55g0"]))]
  uuid=run(["findmnt","-n","-o","UUID","/"]).strip();assert uuid=="33e842b7-0434-4749-b03a-299bdcdb8b9f"
  grub=f"""#!/bin/sh

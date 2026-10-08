@@ -1,3 +1,14 @@
+## 2026-10-08 rear19 candidate-only legal NoC clock floor ready
+
+Exactcamcc legalNoCrates240/300/400M, sharedRT/NRTsource; CAMSSresourcerates0.
+ObservedNoC19.2M despiteICC2GB/s; causalhypothesisunproven. Candidateonly
+CCFfloor240M beforeVFEprefix/sensor, preservehigher; no directCSR/IQ/packetchange.
+Freshbuild24 correctedsignednesscaughtbyhostbuild23 beforeinstall. ThreeW1/Werror
+0diagnostics; sevenhostedchecksPASS: NoC66assertions12negatives7faults GCC+Clang;
+pinning3265assertions55steps54faults/reclaim0. NEXTinstallverifyfresh19.
+No countschanged58combinedIDs116boots. Evidence docs/NATIVE-RGB-REAR-GENERATION-19-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear18 geometry matches; camera NoC clock rate observed
 
 SpecificCFG0/period/bounds all0 exactlyWindows. No simple moduleworddifference.

@@ -11,7 +11,7 @@ def main():
  spec=importlib.util.spec_from_file_location("rear_generation_faults",HERE.parent/"test-rear-runner-faults.py")
  faults=importlib.util.module_from_spec(spec);spec.loader.exec_module(faults)
  text=faults.harness(a.staged)
- text="#define READ_ONCE(x) (x)\n#define native_rear_diagnostic_active host_authorized\n#define dev_info(...) ((void)0)\nstatic unsigned reclaim_calls,csid_stop_calls,bus_stop_calls;\n"+text
+ text="#define native_rear_generation_noc_floor(vfe) step()\n#define READ_ONCE(x) (x)\n#define native_rear_diagnostic_active host_authorized\n#define dev_info(...) ((void)0)\nstatic unsigned reclaim_calls,csid_stop_calls,bus_stop_calls;\n"+text
  text=faults.once(text,"halted|=4;return step();","halted|=4;csid_stop_calls++;return step();")
  text=faults.once(text,"halted|=2;return step();","halted|=2;bus_stop_calls++;return step();")
  text=faults.once(text,"attempted=halted=0;memset(faultable,0,sizeof(faultable));",
