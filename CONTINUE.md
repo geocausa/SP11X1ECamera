@@ -1,3 +1,20 @@
+## 2026-10-08 rear generation diagnostic ready for installation
+
+Fresh isolated source build03 W1/Werror PASS, all3 modules zero diagnostics.
+Rear GRBG admission added only in this candidate; front RGGB default retained.
+Actual runner orchestration GCC+Clang ASAN/UBSAN2278 assertions/52 injected
+failures each PASS, no reclaim calls. Retained real119-edge/45-node graph and
+12 route/format negatives PASS. IRQ/lifecycle helpers remain host models.
+Typed private data-only input is compiler-bound diagnostic transport, not UAPI.
+Candidate holds output/command DMA/PM/owner until reboot EVEN on complete frames.
+One-use worker and independent90sec watchdog return to unchanged Golden.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-PREP-20261008.json.
+NOT installed/armed/streamed yet. Native44streams/33IDs/66boots unchanged.
+NEXT install/verify/boot fresh E-NATIVE-REAR-GENERATION-01 and inspect physical
+packet/generation/consumed-address/stop evidence. No milestone approval pause.
+Rear FIRST; front calibration deferred; pixels/tuning/hash privacy unchanged.
+Previous status entries below are historical.
+
 ## 2026-10-07 current full rear source-input preflight and internal startup handoff
 
 Standard libipa now provides caller-policy AF default rectangle geometry and
