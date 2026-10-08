@@ -1,0 +1,75 @@
+{
+  "identity": "E-NATIVE-REAR-GENERATION-33",
+  "status": "FAIL_PRE_SENSOR_START_UNINITIALIZED_BUFFER_WAITQUEUE",
+  "source_head": "5ef9161d4c6833c13d15e0b765a3ea7083c5b7ce",
+  "kernel_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-44",
+  "library_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261008-04",
+  "candidate_boot": "fb941f67-bb7b-43f1-9037-9e04220c0106",
+  "Golden_return_boot": "6a092b27-5fae-40d7-8ffd-5900bd57a007",
+  "sensor_start_attempts": 0,
+  "libcamera_completed_requests": 0,
+  "kernel_result": {
+    "ret": -110,
+    "composed": 1,
+    "once": 1,
+    "prepared": 1,
+    "owner": 1,
+    "packets": "0000",
+    "epochs": 0,
+    "events": 0,
+    "slot0": 0,
+    "slot1": 0,
+    "complete": 0,
+    "csid_stop": 0,
+    "bus_stop": 0,
+    "rtcdm_stop": 0,
+    "source_stop": 0,
+    "dma_pinned": 1,
+    "dma_reclaimed": 0,
+    "owner_released": 0,
+    "arena_released": 0,
+    "reboot": 1
+  },
+  "kernel_Oops_count": 1,
+  "trace_functions": [
+    "__wake_up_common",
+    "__wake_up",
+    "camss_x1e_pix_v4l2_queue_buffer",
+    "video_buf_queue",
+    "vb2_core_qbuf"
+  ],
+  "source_diagnosis": "Rear public_start sets worker_started without initializing x1e_pix_buf_wait; QBUF3 invokes wake_up_all on zeroed waitqueue. Front start initializes it, rear omitted it.",
+  "continuous_capture_proven": false,
+  "service_result": {
+    "service_result": "exit-code",
+    "exit_code": "exited",
+    "exit_status": 1
+  },
+  "watchdog_fired": false,
+  "retirement": {
+    "identity": "E-NATIVE-REAR-GENERATION-33",
+    "consumed_boot": "fb941f67-bb7b-43f1-9037-9e04220c0106",
+    "Golden_boot": "6a092b27-5fae-40d7-8ffd-5900bd57a007",
+    "units_disabled": true,
+    "watchdog_fired": false,
+    "protected_Golden_unchanged": true,
+    "never_retry": true,
+    "failure_class": "pre_sensor_start_kernel_Oops_uninitialized_buffer_waitqueue_on_third_QBUF"
+  },
+  "privacy": {
+    "pixel_bytes_read": 0,
+    "pixel_files_saved": 0
+  },
+  "native_counts": {
+    "completed_streams": 55,
+    "consumed_identities": 65,
+    "boots": 130,
+    "failed_pre_stream_attempts": 10,
+    "failed_after_start": 20
+  },
+  "combined_counts": {
+    "consumed_identities": 72,
+    "boots": 144
+  },
+  "next": "Initialize shared buffer waitqueue at video registration before any queue or stop callback; regression-test actual queue/start/join, fresh34/build45 once."
+}

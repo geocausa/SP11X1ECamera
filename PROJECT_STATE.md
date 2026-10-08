@@ -1,3 +1,21 @@
+## 2026-10-08 rear34 queue initialization repaired, source qualified, hardware pending
+
+33 consumed/retired after a pre-sensor kernel Oops in QBUF3: rear worker started
+without initializing the shared buffer waitqueue. No packets or frames; mandatory
+return to Golden6a092b27-5fae-40d7-8ffd-5900bd57a007 succeeded, protected hashes
+unchanged; units disabled, no watchdog. Never retry33.
+Fresh34/build45 initializes the queue at video registration before any callback.
+21 checks PASS,3 ARM64 W1/Werror modules0 diagnostics; actual QBUF/start/join
+GCC/Clang271 assertions each plus omitted-initializer negative control rejected.
+Rolling queue28030 assertions/211 negatives/80 simulated frames each retained.
+libcamera04 unchanged. NEXT one-use34 hardware80 reused4K NV12 requests.
+34 unconsumed/uninstalled/unarmed; hardware32 remains latest success.
+Native55/65IDs130boots/prestream10/failed-after-start20; combined72IDs144boots.
+No continuous rear/adaptive IPA/SensorTimestamp/full-rate/optical parity claim.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-33-20261008.json and
+docs/NATIVE-RGB-REAR-GENERATION-34-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear33 continuous Request queue source qualified, hardware pending
 
 Fresh33/build44 + libcamera04 passed20 pre-install checks; all3 ARM64 modules
