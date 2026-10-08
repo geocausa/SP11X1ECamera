@@ -1,3 +1,26 @@
+## 2026-10-08 rear25 real libcamera two-request DMA-BUF capture PASS
+
+Fresh rear25/build31 and isolated rear libcamera build02 complete two real
+CameraManager/FrameBufferAllocator/application Requests at 3840x2160 NV12.
+Exported/imported DMA-BUF buffers, logical Y8294400/UV4147200, stride3840,
+exact sequences0/1 and completion timestamps; SensorTimestamp omitted.
+Camera stop/release and neutral links PASS. Both ten-WM generations complete:
+ret0 packets1111 epochs2 events15; all four stops, DMA lease release,
+owner and command arena release1; dma_pinned0. All sensors bound/suspended.
+Ten VFE/eight IPP scalar phases error0. No hazards/watchdog; service exit0.
+Automatic verified Golden return 0104d011-6c45-4b27-9079-d7ccf60436da.
+25 consumed/retired; units disabled; no armed jobs. Own changes committed.
+Native50 completed/58 IDs/116 boots/20 failed; combined65 IDs/130 boots.
+First real rear libcamera requests and DMA-BUF import hardware qualification.
+NEXT continuous rear event queue/live generation retirement and normal typed
+semantic IPA/adaptive controls. Current rear handler remains two-frame private
+startup qualification. Completion history16/events15 makes longer stream
+unsupported. Never fake stop facts to recycle mappings.
+Continuous rear, independent rear IPA, exposure timing and optical quality
+parity remain unproven. Front calibration deferred; maintained front unchanged.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-25-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear25 real libcamera request candidate prepared
 
 Rear24 standard V4L2 MMAP 4K NV12 two-frame clean release remains PASS.
