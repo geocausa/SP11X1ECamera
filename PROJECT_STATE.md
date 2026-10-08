@@ -1,3 +1,15 @@
+## 2026-10-08 generation11 read-only Windows differential candidate ready
+
+Only3 CSR reads added for324/328/32c at existing phases.
+Actual configuration helpers, CSID source and runner are byte-identical to10.
+Windows live reference324=0,328/32c=ffff0000; Linux values unobserved yet.
+GCC/Clang ASAN/UBSAN route139,VFE248,pinning2949/52 failures,rootgraph12 PASS.
+Sourcebuild14 W1/Werror zero diagnostics all3 modules.
+NEXT install/verify/boot fresh11 autonomously; no new configuration writes.
+Native44/43IDs/86boots; Windows3/3/6; combined46IDs/92boots unchanged.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-11-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 fresh Windows rear live CAMIF comparison completed
 
 Windows rear reader872 advancing4K timestamps, clean stop; no pixels read/saved.

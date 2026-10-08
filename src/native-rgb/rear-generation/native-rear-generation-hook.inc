@@ -45,7 +45,7 @@ int camss_x1e_rear_generation_once(struct camss_video *video)
   ret = -EALREADY;
   goto out;
  }
- dev_info(camss->dev, "NATIVE_REAR_GENERATION_ATTEMPT identity=10 consumed=1\n");
+ dev_info(camss->dev, "NATIVE_REAR_GENERATION_ATTEMPT identity=11 consumed=1\n");
  if (video->vb2_q.streaming || READ_ONCE(video->x1e_pix_live_active) ||
      READ_ONCE(video->x1e_pix_worker_started) || READ_ONCE(video->x1e_pix_runner_pinned)) {
   ret = -EBUSY;
