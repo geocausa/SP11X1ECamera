@@ -1,3 +1,17 @@
+## 2026-10-08 generation08 prefix confirmed; first Epoch still blocked
+
+Common VFE prefix readback admitted, UBWC0x1046 retained. Packet0/1 accepted,
+sensor starts;38546 CSI packets ECC0/CRC0, no output SOF/Epoch, CAMIF halt1.
+Core0 becomes0x6000 afterpacket1; E006o source confirms intentional rear
+steady/startup singleton, NOT an established defect. Do not overwrite it.
+Golden returned unchanged, no hazard/watchdog;08 retired.
+Native44 completed streams/41 IDs/82 boots; failed started captures9.
+Windows2/2/4; combined43 IDs/86 boots.
+NEXT exact rear full-IPP reset admission: current generic RDI HW+SW reset differs
+from qualified full-IPP SW-only reset. Keep other modes/front reset unchanged.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-08-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation08 bounded VFE readback candidate ready
 
 Exact common prefix writes retained. Readback admits only source full values or
