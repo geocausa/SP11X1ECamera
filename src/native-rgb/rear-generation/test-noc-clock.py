@@ -23,7 +23,7 @@ static long bad_round_value;
 static bool mismatch_before,mismatch_after,silent_set;
 #define CHECK(x) do {assertions++;if(!(x)){fprintf(stderr,"failed %d\n",__LINE__);exit(1);}}while(0)
 #define IS_ERR_OR_NULL(p) (!(p)||(intptr_t)(p)<0)
-#define dev_info(...) ((void)0)
+#define dev_dbg(...) ((void)0)
 static bool vfe680_e004nt_rear_4k_target(struct vfe_device *a){return a&&a->target;}
 static unsigned long clk_get_rate(struct clk *c){gets++;return shared_rate+((c->id==2&&((mismatch_before&&!sets)||(mismatch_after&&sets)))?1:0);}
 static long clk_round_rate(struct clk *c,unsigned long rate){rounds++;CHECK(rate==240000000UL);return c->id==bad_round_id?bad_round_value:240000000L;}
@@ -41,10 +41,10 @@ static void init(void){
 """
 MAIN=r"""
 int main(void){
- init();CHECK(native_rear_generation_noc_floor(&v)==0);
+ init();CHECK(native_rear_noc_prepare(&v)==0);
  CHECK(shared_rate==240000000UL&&sets==1&&rounds==2&&gets==4);
  for(unsigned long rate=240000000UL;rate<=400000000UL;rate+=(rate==240000000UL?60000000UL:100000000UL)){
-  init();shared_rate=rate;CHECK(native_rear_generation_noc_floor(&v)==0);CHECK(shared_rate==rate&&sets==0&&rounds==0);
+  init();shared_rate=rate;CHECK(native_rear_noc_prepare(&v)==0);CHECK(shared_rate==rate&&sets==0&&rounds==0);
  }
  for(unsigned n=0;n<11;n++){
   init();struct vfe_device *a=&v;
@@ -53,16 +53,16 @@ int main(void){
    case 6:clocks[0].clk=NULL;break;case 7:clocks[1].clk=(void*)-1;break;
    case 8:clocks[0].name="missing_rt";break;case 9:clocks[1].name="missing_nrt";break;
    case 10:v.nclocks=4;clocks[3].name="camnoc_rt_axi";break;}
-  CHECK(native_rear_generation_noc_floor(a)==-EINVAL);CHECK(sets==0);
+  CHECK(native_rear_noc_prepare(a)==-EINVAL);CHECK(sets==0);
  }
- init();mismatch_before=true;CHECK(native_rear_generation_noc_floor(&v)==-EPROTO);CHECK(sets==0&&rounds==0);
+ init();mismatch_before=true;CHECK(native_rear_noc_prepare(&v)==-EPROTO);CHECK(sets==0&&rounds==0);
  for(int id=1;id<=2;id++){
-  init();bad_round_id=id;bad_round_value=-EINVAL;CHECK(native_rear_generation_noc_floor(&v)==-EINVAL);CHECK(sets==0);
-  init();bad_round_id=id;bad_round_value=300000000L;CHECK(native_rear_generation_noc_floor(&v)==-EPROTO);CHECK(sets==0);
+  init();bad_round_id=id;bad_round_value=-EINVAL;CHECK(native_rear_noc_prepare(&v)==-EINVAL);CHECK(sets==0);
+  init();bad_round_id=id;bad_round_value=300000000L;CHECK(native_rear_noc_prepare(&v)==-EPROTO);CHECK(sets==0);
  }
- init();set_error=-EIO;CHECK(native_rear_generation_noc_floor(&v)==-EIO);CHECK(sets==1&&shared_rate==19200000UL);
- init();silent_set=true;CHECK(native_rear_generation_noc_floor(&v)==-EIO);CHECK(sets==1);
- init();mismatch_after=true;CHECK(native_rear_generation_noc_floor(&v)==-EIO);CHECK(sets==1);
+ init();set_error=-EIO;CHECK(native_rear_noc_prepare(&v)==-EIO);CHECK(sets==1&&shared_rate==19200000UL);
+ init();silent_set=true;CHECK(native_rear_noc_prepare(&v)==-EIO);CHECK(sets==1);
+ init();mismatch_after=true;CHECK(native_rear_noc_prepare(&v)==-EIO);CHECK(sets==1);
  printf("{\"assertions\":%u,\"admission_negatives\":12,\"CCF_fault_cases\":7,\"shared_parent_one_set\":true,\"higher_rate_preserved\":true}\n",assertions);
  return 0;
 }

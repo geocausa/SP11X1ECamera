@@ -14,13 +14,24 @@ PRE=r"""
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 typedef uint32_t u32;
 #define BIT(x) (1U<<(x))
 #define CAMSS_X1E80100 99
 #define VFE680_E004NU_REAR_CLIENTS 10
 #define VFE_BUS_WRITE_CLIENT_CFG_EN 1
 struct res {int version;};struct camss {struct res *res;void *dev;};
-struct vfe_device {struct camss *camss;int id;bool lite;uint8_t *base;};
+struct clk {unsigned long rate;};
+struct camss_clock {struct clk *clk;const char *name;};
+struct vfe_device {struct camss *camss;int id;bool lite;uint8_t *base;struct camss_clock *clock;int nclocks;};
+static struct clk rt_clk,nrt_clk;
+static struct camss_clock clocks[2];
+static unsigned clock_sets;static bool clock_set_error;
+#define IS_ERR_OR_NULL(p) (!(p)||(intptr_t)(p)<0)
+#define dev_dbg(...) ((void)0)
+static unsigned long clk_get_rate(struct clk *c){return c->rate;}
+static long clk_round_rate(struct clk *c,unsigned long rate){(void)c;return rate;}
+static int clk_set_rate(struct clk *c,unsigned long rate){(void)c;clock_sets++;if(clock_set_error)return -EIO;rt_clk.rate=nrt_clk.rate=rate;return 0;}
 static bool vfe_is_lite(struct vfe_device *v){return v->lite;}
 static u32 mem[0x8000/4],offsets[32],values[32];
 static unsigned writes,assertions;static bool contract=true,corrupt,masked_readback;static unsigned bad_readback;
@@ -32,7 +43,7 @@ static void writel(u32 v,void *p){unsigned off=(uint8_t*)p-(uint8_t*)mem;CHECK(o
 static void *vfe680_x1e_bus_reg(struct vfe_device *v,unsigned wm,unsigned off){return v->base+0xe00+wm*0x100+off;}
 static bool vfe680_e004nu_rear_wm_contract_valid(void){return contract;}
 static struct res board;static struct camss cam;static struct vfe_device vfe;
-static void init(void){for(unsigned i=0;i<sizeof(mem)/4;i++)mem[i]=0x55555554;board.version=99;cam=(struct camss){&board,&board};vfe=(struct vfe_device){&cam,1,false,(uint8_t*)mem};writes=0;contract=true;corrupt=false;masked_readback=false;bad_readback=0;}
+static void init(void){for(unsigned i=0;i<sizeof(mem)/4;i++)mem[i]=0x55555554;board.version=99;cam=(struct camss){&board,&board};vfe=(struct vfe_device){&cam,1,false,(uint8_t*)mem,clocks,2};rt_clk.rate=nrt_clk.rate=240000000UL;clocks[0]=(struct camss_clock){&rt_clk,"camnoc_rt_axi"};clocks[1]=(struct camss_clock){&nrt_clk,"camnoc_nrt_axi"};clock_sets=0;clock_set_error=false;writes=0;contract=true;corrupt=false;masked_readback=false;bad_readback=0;}
 """
 MAIN=r"""
 int main(void){
@@ -54,6 +65,12 @@ int main(void){
  init();corrupt=true;CHECK(native_rear_vfe_configure(&vfe)==-EIO);CHECK(writes==7);
  init();masked_readback=true;CHECK(native_rear_vfe_configure(&vfe)==0);CHECK(writes==7);CHECK(mem[0x24/4]==7);CHECK(mem[0xc18/4]==0xdc000000);
  for(unsigned i=1;i<=2;i++){init();masked_readback=true;bad_readback=i;CHECK(native_rear_vfe_configure(&vfe)==-EIO);CHECK(writes==7);}
+ init();vfe.clock=NULL;CHECK(native_rear_vfe_configure(&vfe)==-EINVAL);CHECK(writes==0);
+ init();rt_clk.rate=nrt_clk.rate=19200000UL;clock_set_error=true;
+ CHECK(native_rear_vfe_configure(&vfe)==-EIO);CHECK(writes==0&&clock_sets==1);
+ init();rt_clk.rate=nrt_clk.rate=19200000UL;
+ CHECK(native_rear_vfe_configure(&vfe)==0);CHECK(writes==7&&clock_sets==1);
+ CHECK(rt_clk.rate==240000000UL&&nrt_clk.rate==240000000UL);
  printf("{\"assertions\":%u,\"writes\":7,\"admission_negatives\":19,\"readback_faults\":3,\"WM_IQ_and_addresses_untouched\":true}\n",assertions);
  return 0;
 }
@@ -72,11 +89,11 @@ def main():
   t=Path(t);c=t/"check.c";c.write_text(code)
   for compiler in ["gcc","clang"]:
    binary=t/compiler
-   r=subprocess.run([compiler,"-std=gnu11","-Wall","-Wextra","-Werror","-O1","-g","-fsanitize=address,undefined","-fno-omit-frame-pointer",str(c),"-o",str(binary)],capture_output=True,text=True)
+   r=subprocess.run([compiler,"-std=gnu11","-Wall","-Wextra","-Werror","-O1","-g","-fsanitize=address,undefined","-fno-omit-frame-pointer","-I"+str(a.staged),str(c),"-o",str(binary)],capture_output=True,text=True)
    if r.returncode:raise RuntimeError(r.stdout+r.stderr)
    r=subprocess.run([str(binary)],capture_output=True,text=True,env=dict(os.environ,ASAN_OPTIONS="detect_leaks=1:halt_on_error=1",UBSAN_OPTIONS="halt_on_error=1"))
    if r.returncode or r.stderr:raise RuntimeError(r.stdout+r.stderr)
    results.append({"compiler":compiler,"ASAN_UBSAN_Werror":True,"result":json.loads(r.stdout)})
- report={"status":"PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK","full_and_same_SP11_observed_readback_models_checked":True,"actual_prefix_predicate_and_helper":True,"MMIO_and_contract_validity_host_models":True,"hardware_access":False,"results":results}
+ report={"status":"PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK","full_and_same_SP11_observed_readback_models_checked":True,"actual_prefix_predicate_and_helper":True,"maintained_NoC_preparation_before_prefix_and_no_prefix_write_on_clock_failure":True,"MMIO_and_contract_validity_host_models":True,"hardware_access":False,"results":results}
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()

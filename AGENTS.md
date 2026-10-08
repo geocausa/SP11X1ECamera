@@ -1,3 +1,13 @@
+## 2026-10-08 rear20 maintained NoC correction fresh repetition ready
+
+NoC240M floor viaCCF integrated inmaintainednative rearconfigure afterWMdisabled
+admission/beforeVFEprefix. Candidateonlyclockhook removedfromactualbuild25.
+Sensor/CSI/packet/IQbinding unchanged19. Explicitsourceinventory/includeclosure
+updated. W1/Werror0all3; sevenhostedchecksPASS; VFE299assertions includesnoc
+clockfailurebeforeprefixwrites; pinning3266/55steps54faults/reclaim0.
+NEXTinstallverifyfresh20; requiretwooutputgenerations allstopflags and fault0.
+Countsunchanged59combinedIDs118boots. Evidence docs/NATIVE-RGB-REAR-GENERATION-20-PREP-20261008.json. Earlierentrieshistorical.
+
 ## 2026-10-08 rear19 first native output completion: NoC clock floor fixes stall
 
 Onlyfunctionalchange CCFNoCfloor19.2->240M. PhysicalRT/NRT=240M, IFE594M/

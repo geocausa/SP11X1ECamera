@@ -19,7 +19,8 @@ def apply(camss):
                  "native-rear-startup-geometry.inc", "native-rear-startup-statistics.inc",
                  "native-rear-startup-iq.inc", "native-rear-startup-compose.inc",
                  "native-rear-startup-entry.inc", "native-rear-pix-link.h",
-                 "native-rear-csid-config.inc", "native-rear-vfe-config.inc"):
+                 "native-rear-csid-config.inc", "native-rear-vfe-config.inc",
+                 "native-rear-noc-clock.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
     # The physically qualified rear 4K ISP input is sensor mode1. Preserve the
     # historical E004ns source and apply the maintained exact format admission.

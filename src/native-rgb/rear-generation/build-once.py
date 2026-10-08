@@ -6,9 +6,9 @@ Private compiler-bound semantic firmware and its digest stay on this SP11.
 import argparse,hashlib,importlib.util,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent;ROOT=NATIVE.parents[1]
-PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-24"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-24"
-HEAD="a751c2ff11cc919be855675967d54e82979001a4"
+PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-25"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-25"
+HEAD="0ffcc46f72c565ead23426fc5559efb4c43738d6"
 SOURCE=PROJECT/"06-camera/reference/libcamera-native-rgb-rear-20261007-15"
 LIBBUILD=PROJECT/"02-kernel/libcamera-native-rgb-rear-20261007-15"
 KSOURCE=PROJECT/"02-kernel/e003i-front-production-src"
@@ -37,8 +37,8 @@ def main():
  assert array is not None
  assert [int(x,16) for x in re.findall(r"0x[0-9a-f]+",array[1])]==[int(x,16) for x in manifest["VFE1_offsets"]]
 
- for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-19"),
-              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-19")]:
+ for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-20"),
+              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-20")]:
   if path.exists():raise RuntimeError("candidate path already exists; audit first")
  build=load("native_rear_build",NATIVE/"build.py")
  result=build.assemble(OUT,nv12_trial=True,front_owner_trial=True,front_queue_trial=True,
@@ -97,7 +97,7 @@ def main():
  profile=output/"p0-input-0.bin";digest=hashlib.sha256(profile.read_bytes()).digest()
  identity=camss/"native-rear-generation-identity.h"
  identity.write_text(
-  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-19.bin"\n'
+  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-20.bin"\n'
   +f'#define NATIVE_REAR_GENERATION_INPUT_BYTES {profile.stat().st_size}U\n'
   +'static const u8 native_rear_generation_input_sha256[32]={'
   +','.join(str(x) for x in digest)+'};\n')
@@ -181,15 +181,6 @@ def main():
   '\tnative_rear_generation_vfe_snapshot(vfe, "before_vfe_prefix");\n'
   "\tret = native_rear_vfe_configure(vfe);\n\tif (ret)\n\t\tgoto out_pin;\n"
   '\tnative_rear_generation_vfe_snapshot(vfe, "after_vfe_prefix");')
- # Candidate-only CCF NoC floor, after packet0 before WM activation/sensor.
- clock_inc="native-rear-generation-clock.inc"
- (camss/clock_inc).write_bytes((HERE/clock_inc).read_bytes())
- replace(camss/"camss-vfe-680.c",'#include "'+observe_vfe+'"',
-  '#include "'+observe_vfe+'"\n#include "'+clock_inc+'"')
- replace(runner,'\tret = native_rear_vfe_configure(vfe);',
-  '\tret = native_rear_generation_noc_floor(vfe);\n'
-  '\tif (ret)\n\t\tgoto out_pin;\n'
-  '\tret = native_rear_vfe_configure(vfe);')
  # Localize the new output violation around the first Epoch and packet2.
  for anchor, phase in [
   ("\tepoch_seq++;\n\tret = e008h_rear_epoch0_retarget_slot1(vfe, pair);", "first_epoch_before_retarget"),
@@ -234,7 +225,7 @@ def main():
    for name in re.findall(r'^#include "([^"]+)"',p.read_text(),re.M):
     if not (camss/name).is_file():raise RuntimeError("include closure failed")
  result.update(status="BUILD_REAR_GENERATION_DIAGNOSTIC_IN_PROGRESS",
-  candidate_identity="E-NATIVE-REAR-GENERATION-19",candidate_base_commit=HEAD,
+  candidate_identity="E-NATIVE-REAR-GENERATION-20",candidate_base_commit=HEAD,
   source_validated_non_address_CSR_count=csr_count,
   rear_optin_single_use_control_available=True,private_compiler_bound_data_only_input=True,
   post_stop_output_command_DMA_and_PM_pinned_until_reboot=True,
