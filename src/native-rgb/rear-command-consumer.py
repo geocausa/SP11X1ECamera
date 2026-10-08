@@ -18,8 +18,22 @@ def apply(camss):
     for name in ("native-rear-startup-scalars.h", "native-rear-scalar-binding.inc",
                  "native-rear-startup-geometry.inc", "native-rear-startup-statistics.inc",
                  "native-rear-startup-iq.inc", "native-rear-startup-compose.inc",
-                 "native-rear-startup-entry.inc"):
+                 "native-rear-startup-entry.inc", "native-rear-pix-link.h"):
         (camss / name).write_bytes((here / name).read_bytes())
+    # Find the exact required PIX video edge; metadata fan-out makes first-link
+    # lookup order-dependent. Preserve the pinned original bridge as authority.
+    path = camss / "camss-e008k-rear-rtcdm-bridge.inc"
+    text = path.read_text()
+    text = replace_once(text, '#include "camss-e008k-rear-bridge.h"',
+                        '#include "camss-e008k-rear-bridge.h"\n'
+                        '#include "native-rear-pix-link.h"')
+    text = replace_once(text,
+        "\tif (!camss_x1e_pix_link(&vfe->line[VFE_LINE_PIX].pads[MSM_VFE_PAD_SRC],\n"
+        "\t\t\t\t&vfe->line[VFE_LINE_PIX].video_out.vdev.entity, 0))",
+        "\tif (!native_rear_required_pix_video_link(\n"
+        "\t\t&vfe->line[VFE_LINE_PIX].pads[MSM_VFE_PAD_SRC],\n"
+        "\t\t&vfe->line[VFE_LINE_PIX].video_out.vdev.entity.pads[0]))")
+    path.write_text(text)
     # Adopt validated inactive-cold-gamma derivatives; immutable parents retained.
     cold = here.parents[1] / "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma"
     for original, replacement in (

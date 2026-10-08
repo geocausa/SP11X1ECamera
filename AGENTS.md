@@ -1,3 +1,24 @@
+## 2026-10-08 generation03 reached kernel trigger; exact video link fixed
+
+Generation03 made one kernel trigger. Hook rejected ENOLINK before composition,
+command DMA/owner acquisition or sensor start: legacy required-PIX-video check
+used first enabled remote pad, but immutable stats precedes immutable video.
+Current main-path integration now locates exact required enabled IMMUTABLE
+video link, with source/sink direction and identity checks. Metadata fan-out
+allowed without relying on list order. Pinned52 historical parents unchanged;
+new helper and consumer derivative separately pinned. GCC+Clang ASAN/UBSAN19
+helper assertions each include both orders and missing/disabled/wrong edges.
+Fresh generation04 sourcebuild06 W1/Werror zero diagnostics; pinning2278/52
+failures per compiler and root/real-graph12 negatives PASS.
+Golden c3c024ab-ae34-4ebf-9441-724ae01af5ab returned automatically unchanged,
+no hazard/watchdog; consumed03 retired/services disabled, zero new streams.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-03-20261008.json and
+docs/NATIVE-RGB-REAR-GENERATION-04-PREP-20261008.json.
+Native44streams/36IDs/72boots;Windows2/2/4;combined76boots/38IDs.
+NEXT install/verify/boot fresh04 autonomously, retain all exposed DMA through reboot.
+Rear FIRST; front calibration deferred; same-SP11 optical/tuning privacy unchanged.
+Earlier status entries below are historical.
+
 ## 2026-10-08 generation02 route configured; source-width preflight corrected
 
 Generation02 loaded all3 sensors bound/idle and exact rear PIX-only119-edge
