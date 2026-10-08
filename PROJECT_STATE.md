@@ -1,3 +1,24 @@
+## 2026-10-08 rear27 live old FULL retirement source qualified
+
+Fresh build35 compiles three ARM64 W1/Werror modules. All 16 hosted checks PASS.
+After exact old/new ten-WM completion, synchronous replacement command receipts,
+current exclusive owner and matching live readbacks, the finite runner can unmap
+only the old public FULL attachment. No false stop facts. Its ledger remains,
+its eight auxiliary allocations stay pinned, and the replacement FULL remains
+mapped until all four physical stop barriers. Retired marker binds owner/request;
+duplicate retirement and premature auxiliary release are rejected.
+GCC/Clang actual helper tests20150 assertions/583 negatives each; actual reclaimer
+590 assertions/165 negatives covers retired and ordinary cleanup. Actual lifecycle
+fault models and 44 graph/log parser negatives PASS. Source only: not yet installed,
+armed or hardware attempted. NEXT fresh single-use27 live FULL hardware proof
+with automatic Golden return, then whole-generation retirement/persistent requests.
+Rear26 hardware replacement observation remains PASS. Whole-generation live
+retirement, rear continuous capture, rear IPA/SensorTimestamp/optical parity remain
+unproven. Front calibration deferred. Golden28b279ae-c16c-42ae-a7ae-d74edb91bdab.
+Counts unchanged Native51/59IDs118boots failed20; combined66IDs132boots.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-27-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear26 live replacement observed on hardware, clean release PASS
 
 Fresh26/build34 completes two real libcamera DMA-BUF Requests at 3840x2160
