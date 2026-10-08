@@ -10,7 +10,11 @@ MODULE_AUDIT = HERE.parents[2] / "docs/NATIVE-RGB-REAR-SPARSE-REGISTER-SOURCE-AU
 MODULE_AUDIT_SHA = "78cf38ccd5263820e296b087d7ce2db58a33ee8659576169543c81e3089b031d"
 MODULE_DLL = Path("/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/QcDeviceMFT8380.dll")
 MODULE_DLL_SHA = "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
-MODULE_CONTROL_MAP = {"sparse_pd": {"cfg0": 0x6960}, "lcr": {"cfg0": 0x6b60}}
+MODULE_GEOMETRY_AUDIT = HERE.parents[2] / "docs/NATIVE-RGB-REAR-SPARSE-GEOMETRY-SOURCE-AUDIT-20261008.json"
+MODULE_GEOMETRY_AUDIT_SHA = "d543f911a368a861b7a08941c23f5725f6b37e29327e3669d88dfd5140cd83aa"
+MODULE_CONTROL_MAP = {"sparse_pd": {"cfg0": 0x6960, "cfg3_period_fields": 0x696c,
+                                  "cfg4_14bit_bounds": 0x6970, "cfg5_14bit_bounds": 0x6974},
+                      "lcr": {"cfg0": 0x6b60}}
 
 WM_FIELDS = {"cfg", "frame_incr", "image_cfg_0", "image_cfg_1", "image_cfg_2",
              "packer_cfg", "frame_header_cfg", "irq_subsample_period",
@@ -61,7 +65,7 @@ def verify(manifest, maps):
             BUS_FIELDS | {"irq_mask_0", "irq_mask_1", "irq_status_0", "irq_status_1"}
             if section == "bus" else WM_FIELDS if section in maps and section.startswith("wm") else set())
         if section in MODULE_CONTROL_MAP:
-            allowed = {"cfg0"}
+            allowed = set(MODULE_CONTROL_MAP[section])
         if name not in allowed or maps.get(section, {}).get(name) != offset:
             raise ValueError("unsupported field, address slot, or offset/name mismatch")
     if manifest["VFE1_offsets"] != [r["offset"] for r in records]:
@@ -80,6 +84,16 @@ def source_layout(text):
         raise ValueError("same-SP11 module source identity mismatch")
     if audit["SparsePD_subcommand_range"] != [{"register_offset": "0x6960", "register_words": 1}] or audit["LCR_config_ranges"][0] != {"register_offset": "0x6b60", "register_words": 1}:
         raise ValueError("single scalar module control source mismatch")
+    geometry_raw = MODULE_GEOMETRY_AUDIT.read_bytes()
+    if hashlib.sha256(geometry_raw).hexdigest() != MODULE_GEOMETRY_AUDIT_SHA:
+        raise ValueError("module scalar field source audit drift")
+    geometry = json.loads(geometry_raw)
+    if geometry["DLL_sha256"] != MODULE_DLL_SHA or geometry["method_RVA"] != "0xb48ab0":
+        raise ValueError("geometry source identity mismatch")
+    fields = geometry["scalar_fields"]
+    if [(f["offset"], f["admitted_mask"]) for f in fields] != [
+        ("0x696c", "0x1f1f"), ("0x6970", "0x3fff3fff"), ("0x6974", "0x3fff3fff")]:
+        raise ValueError("specific scalar field proof mismatch")
     maps.update(MODULE_CONTROL_MAP)
     return maps
 
@@ -132,7 +146,8 @@ def main():
               "hardware_access": False,
               "module_source_audit_sha256": MODULE_AUDIT_SHA,
               "module_source_DLL_sha256": MODULE_DLL_SHA,
-              "module_scope": "two exact CFG0 control words only"}
+              "module_scope": "two CFG0 controls plus three source-proven scalar fields; no pattern words",
+              "module_geometry_audit_sha256": MODULE_GEOMETRY_AUDIT_SHA}
     a.report.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report))
 

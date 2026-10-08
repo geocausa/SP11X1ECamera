@@ -53,8 +53,8 @@ try{
 finally{
  if($reader){try{Await-Action ($reader.StopAsync())}catch{};try{$reader.Dispose()}catch{}}
  if($mc){try{$mc.Dispose()}catch{}}
- $result=@{identity='E-NATIVE-REAR-SPARSE-WINDOWS-01';passed=$ok;valid_4k_handles=$valid;distinct_timestamps=$distinct;pixels_read=$false;pixel_files_saved=0;front_opened=$false;error=$err;finished_utc=[DateTime]::UtcNow.ToString('o')}
+ $result=@{identity='E-NATIVE-REAR-SPARSE-WINDOWS-02';passed=$ok;valid_4k_handles=$valid;distinct_timestamps=$distinct;pixels_read=$false;pixel_files_saved=0;front_opened=$false;error=$err;finished_utc=[DateTime]::UtcNow.ToString('o')}
  [IO.File]::WriteAllText((Join-Path $root 'RESULT.json'),($result|ConvertTo-Json),[Text.Encoding]::UTF8)
- try{Unregister-ScheduledTask -TaskName 'SP11-Native-Rear-Sparse-Windows-20261008-01' -Confirm:$false -ErrorAction Stop}catch{}
+ try{Unregister-ScheduledTask -TaskName 'SP11-Native-Rear-Sparse-Windows-20261008-02' -Confirm:$false -ErrorAction Stop}catch{}
 }
 if(-not $ok){exit 1}

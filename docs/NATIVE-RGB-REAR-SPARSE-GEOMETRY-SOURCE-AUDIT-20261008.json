@@ -1,0 +1,72 @@
+{
+  "status": "PASS_EXACT_STATIC_SCALAR_FIELD_WIDTHS_IDENTIFIED_NO_HARDWARE",
+  "base_head": "51f65967d11ea51622e4b27b1d1611bd0954c6fd",
+  "DLL_leaf": "QcDeviceMFT8380.dll",
+  "DLL_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "method_RVA": "0xb48ab0",
+  "source_full_block_start": "0x6960",
+  "source_full_block_words": 6,
+  "scalar_fields": [
+    {
+      "derived_name": "cfg3_period_fields",
+      "offset": "0x696c",
+      "image_byte_offset": 12,
+      "fields": [
+        {
+          "shift": 0,
+          "width": 5,
+          "source_fixed_value": 15
+        },
+        {
+          "shift": 8,
+          "width": 5,
+          "source_fixed_value": 15
+        }
+      ],
+      "admitted_mask": "0x1f1f"
+    },
+    {
+      "derived_name": "cfg4_14bit_bounds",
+      "offset": "0x6970",
+      "image_byte_offset": 16,
+      "fields": [
+        {
+          "shift": 0,
+          "width": 14
+        },
+        {
+          "shift": 16,
+          "width": 14
+        }
+      ],
+      "admitted_mask": "0x3fff3fff"
+    },
+    {
+      "derived_name": "cfg5_14bit_bounds",
+      "offset": "0x6974",
+      "image_byte_offset": 20,
+      "fields": [
+        {
+          "shift": 0,
+          "width": 14
+        },
+        {
+          "shift": 16,
+          "width": 14
+        }
+      ],
+      "admitted_mask": "0x3fff3fff"
+    }
+  ],
+  "field_names_derived_not_official_header_names": true,
+  "bounds_semantic_axes_and_inclusive_convention_not_yet_proven": true,
+  "excluded_words": [
+    "0x6964",
+    "0x6968"
+  ],
+  "exclusions_reason": "unneeded pattern/data words; never admitted to this scalar comparator",
+  "live_values_not_yet_observed": true,
+  "source_formula_symbolic_prototype_not_used_as_proof": true,
+  "evidence_basis": "direct scalar store offsets and exact field-update widths/masks in already source-qualified full Pack method; original disassembly stays sameSP11 private",
+  "hardware_configuration_writes": 0
+}

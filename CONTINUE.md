@@ -1,3 +1,13 @@
+## 2026-10-08 exact sparse period/bounds source audit and Windows02 prep
+
+CFG0zero matchesWindows; no simple enablecorrection. Same-SP11 fullPack method
+uses scalarword3 periodfields5bits at0/8 fixed15; word4/5 paired14bitbounds.
+Derivednames/axesnotofficial; patternwords6964/6968 excluded. Named56VFE+3CSID
+sourcevalidated9negatives. FreshWindowsSPARSE02 prepared notarmed/consumed.
+NEXT freshWindows period/bounds reference then matchingLinux18; no blindwrite.
+Countsunchanged56combinedIDs112boots. Evidence docs/NATIVE-RGB-REAR-SPARSE-GEOMETRY-SOURCE-AUDIT-20261008.json and docs/NATIVE-RGB-WINDOWS-REAR-SPARSE-02-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear17 specific module control mismatch disproved
 
 FreshWindows controls6960/6b60=0; Linux17 same0 everypoweredphase while

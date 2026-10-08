@@ -1,5 +1,5 @@
 {
-  "schema": "native-rear-ccif-csr-v3",
+  "schema": "native-rear-ccif-csr-v4",
   "VFE1_physical_base": "0x0ac71000",
   "VFE1_offsets": [
     "0x24",
@@ -54,7 +54,10 @@
     "0x64",
     "0x404",
     "0x6960",
-    "0x6b60"
+    "0x6b60",
+    "0x696c",
+    "0x6970",
+    "0x6974"
   ],
   "CSID1_physical_base": "0x0acb9000",
   "CSID1_offsets": [
@@ -334,10 +337,26 @@
       "section": "lcr",
       "name": "cfg0",
       "offset": "0x6b60"
+    },
+    {
+      "section": "sparse_pd",
+      "name": "cfg3_period_fields",
+      "offset": "0x696c"
+    },
+    {
+      "section": "sparse_pd",
+      "name": "cfg4_14bit_bounds",
+      "offset": "0x6970"
+    },
+    {
+      "section": "sparse_pd",
+      "name": "cfg5_14bit_bounds",
+      "offset": "0x6974"
     }
   ],
   "source_validator": "validate-registers.py",
   "historical_v1_superseded": "v1 included2 zero inactive frameheader address slots and4 unimplemented UBWC slots; no RAM/pixel read; c18 IRQ mask label corrected",
   "module_source_evidence": "docs/NATIVE-RGB-REAR-SPARSE-REGISTER-SOURCE-AUDIT-20261008.json",
-  "module_probe_scope": "CFG0 only: source-proven single scalar module control words; no spatial pattern or data words"
+  "module_probe_scope": "twoCFG0 and three scalar period/bounds words; patternwords6964/6968 excluded",
+  "module_geometry_source_evidence": "docs/NATIVE-RGB-REAR-SPARSE-GEOMETRY-SOURCE-AUDIT-20261008.json"
 }

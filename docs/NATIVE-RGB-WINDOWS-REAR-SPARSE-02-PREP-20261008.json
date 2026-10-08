@@ -1,0 +1,66 @@
+{
+  "status": "PREPARED_NOT_ARMED",
+  "identity": "E-NATIVE-REAR-SPARSE-WINDOWS-02",
+  "base_head": "51f65967d11ea51622e4b27b1d1611bd0954c6fd",
+  "hypothesis": "Module controls match; omitted scalar period/bounds may differ even while moduledisabled",
+  "new_probe_fields": [
+    {
+      "derived_name": "cfg3_period_fields",
+      "offset": "0x696c",
+      "image_byte_offset": 12,
+      "fields": [
+        {
+          "shift": 0,
+          "width": 5,
+          "source_fixed_value": 15
+        },
+        {
+          "shift": 8,
+          "width": 5,
+          "source_fixed_value": 15
+        }
+      ],
+      "admitted_mask": "0x1f1f"
+    },
+    {
+      "derived_name": "cfg4_14bit_bounds",
+      "offset": "0x6970",
+      "image_byte_offset": 16,
+      "fields": [
+        {
+          "shift": 0,
+          "width": 14
+        },
+        {
+          "shift": 16,
+          "width": 14
+        }
+      ],
+      "admitted_mask": "0x3fff3fff"
+    },
+    {
+      "derived_name": "cfg5_14bit_bounds",
+      "offset": "0x6974",
+      "image_byte_offset": 20,
+      "fields": [
+        {
+          "shift": 0,
+          "width": 14
+        },
+        {
+          "shift": 16,
+          "width": 14
+        }
+      ],
+      "admitted_mask": "0x3fff3fff"
+    }
+  ],
+  "source_audit": "docs/NATIVE-RGB-REAR-SPARSE-GEOMETRY-SOURCE-AUDIT-20261008.json",
+  "VFE_scalar_count": 56,
+  "CSID_count": 3,
+  "configuration_writes": 0,
+  "pixels_or_pattern_tables": false,
+  "reader_atomic_entry_no_future_trigger": true,
+  "return_plan": "bounded900secWindows timer, externalSP7 auto-resuming one-use phases, retire and returnGolden",
+  "counts_unchanged": true
+}
