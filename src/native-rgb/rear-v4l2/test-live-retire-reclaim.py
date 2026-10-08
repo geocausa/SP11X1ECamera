@@ -115,6 +115,10 @@ struct native_rear_video_lease {void *dbuf,*attachment,*table;struct native_rear
   types=types.replace("struct e008l_rear_command_set {","struct e008l_rear_command_set {bool live_retired;u64 retired_owner;")
   # Explicit command-tombstone model, exercised against actual allocation by test-command-retire.py.
   types+="\nstatic bool native_rear_live_commands_retired_valid(const struct e008l_rear_command_set *s,u64 owner){return s&&s->live_retired&&owner&&s->retired_owner==owner;}\n"
+ if (a.staged/"native-rear-queue.inc").exists():
+  types=types.replace("struct e008k_rear_result {","struct e008k_rear_result {u32 queue_handoffs;")
+  # Designated initializers preserve the original physical-stop model.
+  types=types.replace("{true,true,true,true,false,false,false,false};","{.csid_quiesced=true,.bus_stopped=true,.rtcdm_stopped=true,.source_stopped=true};")
  fn=base.function;lease=(a.staged/"native-rear-video-lease.inc").read_text()
  code=base.PRE+macros+wm+aux+types
  code+="static bool "+fn(lease,"native_rear_video_lease_valid")

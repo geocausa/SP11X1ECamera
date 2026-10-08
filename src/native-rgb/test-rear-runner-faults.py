@@ -115,6 +115,8 @@ static int e011i_rear_reclaim_after_stop(struct camss *c,struct vfe_device *v,
  return step();
 }
 """+core[b:]
+ if 'native_rear_queue_run(' in core:
+  core=once(core,'static int\ne008k_rear_pair_stop_release(','/* Explicit queue model; actual rolling queue has its own test. */\nstatic int native_rear_queue_run(struct vfe_device *v,struct csid_device *c,\n struct e008h_rear_prime_pair *p,struct e008k_rear_request *q,\n struct e008k_rear_result *r,u32 *cursor){\n CHECK(v&&c&&p&&q&&r&&r->both_frames_complete&&cursor);return step();\n}\nstatic int\ne008k_rear_pair_stop_release(')
  # The only authorization change exists in this disposable host translation unit.
  core=once(core,"return -EOPNOTSUPP;","return host_authorized ? 0 : -EOPNOTSUPP;")
  tail=(HERE/"rear-runner-fault-main.c").read_text()
