@@ -1,0 +1,160 @@
+{
+  "status": "PASS_REAR_GENERATION_SOURCE_BUILD_NOT_INSTALLED",
+  "candidate_identity": "E-NATIVE-REAR-GENERATION-12",
+  "candidate_base_commit": "b08f2e160422c4dee66d50e5bd4dd33fbc43a71b",
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "165308bec6a56437e4fb8d493145e93b123c96fbedd39b198a96d2b9a98222de",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "e8f8b416e5b03c5e8bed63a9a8bbc93a8ded02129725955653410a719cc168c6",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "6208ed4556accfa45ae13254832eed1e794e82e072a6adf1390a37a704b4786f",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "installed": false,
+  "runtime_actions_performed": false,
+  "hypothesis": "Move existing CSID CFG0/CFG1 writes after packet0 crop/format programming with exact readback admission; values and CTRL/RUP unchanged",
+  "source_differential": "docs/NATIVE-RGB-REAR-CONFIG-ACTIVATION-DIFFERENTIAL-20261008.json",
+  "static_builder_order_inference_not_live_rear_temporal_proof": true,
+  "host_tests": {
+    "transport-hosted-01.json": {
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+      "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked": true,
+      "exact_rear_route_before_reset_and_generic_front_unchanged_checked": true,
+      "actual_helper_and_E004ns_predicate_and_RX_derivation": true,
+      "path_config_after_packet0_guard_and_11_atomic_failures_checked": true,
+      "MMIO_and_format_lookup_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "vfe-hosted-01.json": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK",
+      "full_and_same_SP11_observed_readback_models_checked": true,
+      "actual_prefix_predicate_and_helper": true,
+      "MMIO_and_contract_validity_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        }
+      ]
+    },
+    "pinning-hosted-02.json": {
+      "status": "PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING",
+      "actual_candidate_orchestration_and_stop_pin_branch": true,
+      "lifecycle_IRQ_helpers_and_DMA_allocations_host_models": true,
+      "all_modeled_partial_start_stop_attempts_checked": true,
+      "complete_frames_do_not_authorize_output_reclaim": true,
+      "reclaim_function_calls": 0,
+      "default_authorization_denial_checked": true,
+      "successful_stop_helpers_called_once_checked": true,
+      "physical_completion_not_proven": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3026,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3026,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "offline-runner-01.json": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "actual_rear_boot_VFE_width_clamp_checked": true,
+      "root_service_environment_Git_trust": true,
+      "retained_actual_graph": true,
+      "edges": 119,
+      "device_nodes": 45,
+      "negative_cases": 12,
+      "hardware_access": false,
+      "synthetic_format_changes_for_offline_testing": true
+    }
+  },
+  "source_pins_verified": 96,
+  "build_zero_diagnostics": true,
+  "rollback": "mandatory Golden return plus independent90s watchdog; DMA/PM held until reboot",
+  "hardware_actions": 0,
+  "native_counts": {
+    "streams": 44,
+    "identities": 44,
+    "boots": 88,
+    "failed_started": 12
+  },
+  "Windows_counts": {
+    "streams": 3,
+    "identities": 3,
+    "boots": 6
+  },
+  "combined_counts": {
+    "identities": 47,
+    "boots": 94
+  }
+}

@@ -1,3 +1,16 @@
+## 2026-10-08 generation12 crop-before-path-config candidate ready
+
+Move only existing CFG0/CFG1 writes after packet0 exact crop/format admission.
+Gen2 static builder supports order; rear live temporal sequence/cause unproven.
+All values, CTRL/RUP/ACK and VFE prefix unchanged; no front change.
+GCC+Clang ASAN/UBSAN transport227/20 plus11 atomic failures, VFE248,
+pinning3026/54steps/53 failures and root/realgraph12 PASS.
+Sourcebuild15 W1/Werror zero diagnostics all3 modules.
+NEXT install/verify/boot fresh12 autonomously; retain DMA/PM until Golden.
+Native44/44IDs/88boots failedstarted12; Windows3/3/6; combined47/94 unchanged.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-12-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation11 three fields match live Windows
 
 CSID324=0,328/32c=ffff0000 in every Linux phase; match fresh Windows exactly.

@@ -29,6 +29,7 @@ static int native_rear_validate_prepared_commands(struct e008l_rear_command_set 
  # Direct runner tests have no wrapper/semantic stubs or command rematerializer.
  prefix=prefix.replace("static int atomic_cmpxchg(int *p,int a,int b) {int old=*p;if(old==a)*p=b;return old;}","")
  prefix += "\nstatic int csid680_native_rear_configure(struct csid_device *c) {CHECK(c);attempted|=4;return step();}\n"
+ prefix += "\nstatic int csid680_native_rear_after_packet0_configure(struct csid_device *c) {CHECK(c);attempted|=4;return step();}\n"
  core=(stage/"camss-vfe-e008k-rear-runner.inc").read_text()
  if "native_rear_vfe_configure" in core:
   prefix += "\nstatic int native_rear_vfe_configure(struct vfe_device *v) {CHECK(v);attempted|=2;return step();}\n"

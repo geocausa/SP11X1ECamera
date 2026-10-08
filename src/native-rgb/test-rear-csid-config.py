@@ -62,12 +62,12 @@ static void init(void){
 int main(void){
  init();native_rear_csid_route_before_reset(&csid);CHECK(nwrites==1);
  CHECK(offsets[0]==4 && values[0]==0x101);CHECK(memory[CSID_IPP_CTRL/4]==0);
- init();CHECK(csid680_native_rear_configure(&csid)==0);CHECK(nwrites==15);
+ init();CHECK(csid680_native_rear_configure(&csid)==0);CHECK(nwrites==13);
  CHECK(native_rear_csid_reset_command(&csid)==CSID_RESET_CMD_SW_RESET);
  CHECK(memory[CSID_CSI2_RX_CFG0/4]==0x10232103);
  CHECK(memory[CSID_CSI2_RX_CFG1/4]==1);
- CHECK(memory[CSID_IPP_CFG0/4]==0x802b2000);
- CHECK(memory[CSID_IPP_CFG1/4]==0x7241);
+ CHECK(memory[CSID_IPP_CFG0/4]==0x55555555);
+ CHECK(memory[CSID_IPP_CFG1/4]==0x55555555);
  CHECK(memory[CSID_IPP_EPOCH_IRQ_CFG/4]==0x00130013);
  CHECK(memory[CSID_IPP_HCROP/4]==0x55555555);
  CHECK(memory[CSID_IPP_VCROP/4]==0x55555555);
@@ -100,8 +100,34 @@ int main(void){
   nwrites=0;
   CHECK(native_rear_csid_reset_command(arg)==(negative<16?(CSID_RESET_CMD_HW_RESET|CSID_RESET_CMD_SW_RESET):CSID_RESET_CMD_SW_RESET));
   CHECK(csid680_native_rear_configure(arg)==(negative==19?-EBUSY:-EINVAL));
+  CHECK(csid680_native_rear_after_packet0_configure(arg)==(negative==19?-EBUSY:-EINVAL));
   CHECK(nwrites==0);
  }
+
+ const unsigned packet_offsets[]={CSID_IPP_HCROP,CSID_IPP_VCROP,
+  CSID_IPP_FORMAT_MEASURE_CFG0,CSID_IPP_FORMAT_MEASURE_CFG1,
+  CSID_IPP_SP11_PARITY_ZERO1,CSID_IPP_IRQ_SUBSAMPLE_PATTERN,
+  CSID_IPP_IRQ_SUBSAMPLE_PERIOD};
+ const u32 packet_values[]={0x0fdf0000,0x08ed0000,0x1f,0x08ee0fe0,
+  0x02000000,1,0};
+ for(unsigned negative=0;negative<11;negative++){
+  init();for(unsigned i=0;i<7;i++)memory[packet_offsets[i]/4]=packet_values[i];
+  if(negative<7)memory[packet_offsets[negative]/4]^=1;
+  else if(negative==7)no_format=true;
+  else if(negative==8)format.decode_format=3;
+  else if(negative==9)format.data_type=0x2a;
+  else memory[CSID_IPP_CTRL/4]=1;
+  CHECK(csid680_native_rear_after_packet0_configure(&csid)==
+   (negative<7?-EPROTO:negative==10?-EBUSY:-EINVAL));
+  CHECK(nwrites==0);CHECK(memory[CSID_IPP_CFG0/4]==0x55555555);
+  CHECK(memory[CSID_IPP_CFG1/4]==0x55555555);
+ }
+ init();CHECK(csid680_native_rear_configure(&csid)==0);CHECK(nwrites==13);
+ for(unsigned i=0;i<7;i++)memory[packet_offsets[i]/4]=packet_values[i];
+ CHECK(csid680_native_rear_after_packet0_configure(&csid)==0);CHECK(nwrites==15);
+ CHECK(offsets[13]==CSID_IPP_CFG0 && values[13]==0x802b2000);
+ CHECK(offsets[14]==CSID_IPP_CFG1 && values[14]==0x7241);
+ for(unsigned i=0;i<7;i++)CHECK(memory[packet_offsets[i]/4]==packet_values[i]);
  printf("{\"assertions\":%u,\"writes\":15,\"negative_cases\":20,\"packet_fields_and_ACKs_untouched\":true}\n",assertions);
  return 0;
 }
@@ -110,6 +136,8 @@ def main():
  p=argparse.ArgumentParser();p.add_argument("--staged",type=Path,required=True);p.add_argument("--report",type=Path,required=True);a=p.parse_args()
  assert not a.report.exists()
  source=(a.staged/"camss-csid-680.c").read_text()
+ runner=(a.staged/"camss-vfe-e008k-rear-runner.inc").read_text()
+ assert runner.index("result->packet_submitted[0] = true") < runner.index("csid680_native_rear_after_packet0_configure(csid)") < runner.index("native_rear_vfe_configure(vfe)") < runner.index("e008j_rear_prepare_slot0_after_packet0(vfe, pair)") < runner.index("result->packet_submitted[1] = true")
  reset=source[source.index("static int csid_reset("):source.index("int csid680_x1e_front_ipp_poll_epoch0(")]
  assert reset.index("return __csid_sp11_front_ipp_full_config(csid)") < reset.index("native_rear_csid_route_before_reset(csid)") < reset.index("writel(CSID_IRQ_CMD_CLEAR") < reset.index("native_rear_csid_reset_command(csid)")
  macros="\n".join(line for line in source.split("static inline int reg_update_rdi")[0].splitlines() if line.startswith("#define"))+"\n"
@@ -127,7 +155,7 @@ def main():
    if r.returncode or r.stderr:raise RuntimeError(r.stdout+r.stderr+" return="+str(r.returncode))
    results.append({"compiler":compiler,"result":json.loads(r.stdout),"ASAN_UBSAN_Werror":True})
  report={"status":"PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
- "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked":True,"exact_rear_route_before_reset_and_generic_front_unchanged_checked":True,"actual_helper_and_E004ns_predicate_and_RX_derivation":True,
+ "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked":True,"exact_rear_route_before_reset_and_generic_front_unchanged_checked":True,"actual_helper_and_E004ns_predicate_and_RX_derivation":True,"path_config_after_packet0_guard_and_11_atomic_failures_checked":True,
  "MMIO_and_format_lookup_host_models":True,"hardware_access":False,"results":results}
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()

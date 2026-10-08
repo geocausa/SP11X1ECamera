@@ -39,6 +39,7 @@ def apply(camss):
     text = path.read_text()
     text = replace_once(text, "int csid680_e008k_rear_enable(struct csid_device *csid);",
         "int csid680_native_rear_configure(struct csid_device *csid);\n"
+        "int csid680_native_rear_after_packet0_configure(struct csid_device *csid);\n"
         "int csid680_e008k_rear_enable(struct csid_device *csid);")
     path.write_text(text)
     path = camss / "camss-csid-680.c"
@@ -125,6 +126,7 @@ def apply(camss):
         "\tbus_may_be_enabled = true; /* Preparation may partially write BUS. */",
         "\tbus_may_be_enabled = true; /* Core prefix may expose BUS on failure. */\n"
         "\tret = native_rear_vfe_configure(vfe);\n\tif (ret)\n\t\tgoto out_pin;")
+    text = replace_once(text, "\tret = native_rear_vfe_configure(vfe);", "\tret = csid680_native_rear_after_packet0_configure(csid);\n\tif (ret)\n\t\tgoto out_pin;\n\tret = native_rear_vfe_configure(vfe);")
     path.write_text(text)
 
     path = camss / "camss-vfe-e008n-rear-single-use.inc"
