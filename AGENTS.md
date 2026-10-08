@@ -1,3 +1,16 @@
+## 2026-10-08 Windows rear CCIF reference completed
+
+891 distinct rear4K timestamps, no pixels/front. Exact driver hash matched.
+One preCTRL and one firstEpoch auto-resumed scalar snapshot each; WM20/23
+disabled cfg10, CCIF/image-size detailed status0 at both phases.
+Broad IRQd0000000 already present preCTRL, not alone a failure.
+Golden88097f09-f9c3-40dc-ab5f-a21b64edee64 hash/EFI/NTFS verified.
+Task unregistered, identity retired, SP7 KD/keycopy/firewall cleaned.
+Native44/47IDs94boots failed15; Windows5/5IDs10boots; combined52IDs104boots.
+NEXT matching Linux lowTOP/unusedWM readbacks; no new configuration supported.
+Evidence docs/NATIVE-RGB-WINDOWS-REAR-CCIF-01-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 targeted rear Windows CCIF reference prepared
 
 Fresh E-NATIVE-REAR-CCIF-WINDOWS-01 source prepared; not armed or consumed.
