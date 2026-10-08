@@ -1,3 +1,16 @@
+## 2026-10-08 exact sparse extractor configuration source located
+
+Same-SP11 QcDeviceMFT8380.dll SHA c241b7fb...141c35 contains exact
+IFESparsePDExt10Titan680 and IFELCR10Titan680. Scalar source facts only exported.
+Sparse full6words at6960; subcommand1word6960 updates CFG0lowbit fromcaller
+while preserving otherbits. LCR control6b60 and8words6b68. Exact714rearstartup
+binding contains neither6960 nor6b60; missinginitialization is hypothesis,
+not proven. Live specificmodule config values unobserved. No new hardware.
+NEXT verify installedMFT hash then Windows+Linux scalar config comparison;
+no blindzero control or guessed disable. CurrentGolden/counts unchanged.
+Evidence docs/NATIVE-RGB-REAR-SPARSE-REGISTER-SOURCE-AUDIT-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear16 identifies SPARSE_PD_EXT processing fault
 
 Read TOPIPP64=15 at firstEpoch before retarget/packet2, persists to timeout.
