@@ -1,3 +1,16 @@
+## 2026-10-08 rear initial violation classified from VFE680 source
+
+BUSstatus40000000 is CCIF protocol violation; c64 bitmap00900000 sets clients20/23,
+mapped by exactVFE680 layout to SPARSE PD/LCR. Later c0000000 adds image-size
+bit31 and c70=3 for FULL Y/C. Earliest error is not the later size flag.
+WM20/23 enable/control and lowTOP global routing were not observed in14.
+Do not change fullWM sizes/retarget/packet2 on this evidence.
+Historical E004nq SP7 original roots unavailable in both known user profiles.
+NEXT targeted working Windows scalar reference for CCIF/WM20/23/lowTOP and matching
+Linux readback. No new hardware action/candidate. Current Golden unchanged.
+Evidence docs/NATIVE-RGB-REAR-CCIF-SOURCE-AUDIT-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear14 reproduces mode1 firstEpoch; error starts earlier
 
 Two fresh boots now prove CAMIFhalt0/firstEpoch with matching sensor mode1.
