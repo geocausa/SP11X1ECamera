@@ -3,12 +3,13 @@ set -euo pipefail
 repo="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo"
 require_clean=0; require_golden=0; require_no_camera_process=0
-expect_head=""; expect_origin=""; stage_free=""
+expect_head=""; expect_origin=""; stage_free=""; ignore_parent_builder=0
 while (($#)); do
   case "$1" in
     --require-clean-tracked) require_clean=1; shift ;;
     --require-golden) require_golden=1; shift ;;
     --require-no-camera-process) require_no_camera_process=1; shift ;;
+    --ignore-parent-builder) ignore_parent_builder=1; shift ;;
     --expect-head) expect_head="${2:?missing SHA}"; shift 2 ;;
     --expect-origin) expect_origin="${2:?missing SHA}"; shift 2 ;;
     --stage-free) stage_free="${2:?missing stage prefix}"; shift 2 ;;
@@ -31,6 +32,14 @@ next_entry="$(printf '%s\n' "$grubenv" | sed -n 's/^next_entry=//p' | head -1)"
 nodes="$(compgen -G '/dev/video*' || true; compgen -G '/dev/media*' || true)"
 mods="$(lsmod 2>/dev/null | awk '$1 ~ /^(qcom_camss|imx681|ov13858)$/ {print $1}' || true)"
 procs="$(ps -eo pid=,cmd= | grep -E 'libcamera|v4l2-ctl|ffmpeg|gst-launch|e003i-[a-z0-9-]*native-aec|camera-e003|make-(nine|eleven|twelve|fifteen|eighteen|twentyone|twentyfour|twentyseven)-frame|live-iq-producer.py' | grep -v -E 'grep -E|camera-overlap-guard' || true)"
+if ((ignore_parent_builder)); then
+  parent_command="$(ps -p "$PPID" -o args=)"
+  case "$parent_command" in
+    "python3 src/native-rgb/rear-libcamera/build.py")
+      procs="$(printf '%s\n' "$procs" | awk -v allowed="$PPID" '$1 != allowed')" ;;
+    *) echo "OVERLAP_GUARD=FAIL parent is not the declared source-only builder" >&2; exit 2 ;;
+  esac
+fi
 printf 'OVERLAP_GUARD branch=%s head=%s upstream=%s origin=%s tracked_dirty=%s untracked=%s\n' "$branch" "$head" "${upstream:-none}" "${origin:-none}" "$tracked_dirty" "$untracked"
 printf 'OVERLAP_GUARD boot_id=%s kernel=%s saved_entry=%s next_entry=%s nodes=%s modules=%s active_processes=%s\n' "${boot_id:-unknown}" "${kernel:-unknown}" "${saved_entry:-unknown}" "${next_entry:-}" "$( [[ -n "$nodes" ]] && echo yes || echo no )" "$( [[ -n "$mods" ]] && echo "$mods" | tr '\n' ',' || echo none )" "$( [[ -n "$procs" ]] && echo yes || echo no )"
 fail=0

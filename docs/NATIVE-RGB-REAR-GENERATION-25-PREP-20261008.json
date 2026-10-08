@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "candidate_identity": "E-NATIVE-REAR-GENERATION-25",
+  "status": "PASS_PUBLIC_LIBCAMERA_REAR_REQUEST_CANDIDATE_SOURCE_PREPARED_NOT_ARMED",
+  "base_commit": "d8bfa675e86a2b973c15b8bd80355a725587b707",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-31",
+  "libcamera_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261008-02",
+  "libcamera_commit": "ff740913b1e8907a72fa703afbc1dc6c5536807a",
+  "kernel_modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "0de20dcdb01951958751b00ba832150b70aa6ac64faa3f13108d4fafbf031e5a",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "5e5346cb4880bee475e7c161938d035023f239d4ee1f8a8d05b98449100c9740",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "b6dcbf295d5252dd1556697df04b77ebb1eac54b2a86128220a08e65680f09a2",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "libcamera_outputs": {
+    "src/libcamera/libcamera.so.0.7.0": "c94a2355ce411a1ff0ca0f068acba944eb5388221bfa55f77865b6dac3b6b439",
+    "src/libcamera/base/libcamera-base.so.0.7.0": "8e8b15a1c6975a9e518af87650c3cf93beb86a5461dfab2b5eb4bbf6271fa4e3",
+    "src/apps/cam/cam": "36d69576ef14305a4b01c9658f47c2a38ffdff59be24c32ff78d1e1060991442",
+    "capture": "0bd19f75e61d61bbf37f3641ca9b2d32b219ed8814c90997692ee346b9d81b4a"
+  },
+  "libcamera_tests": [
+    {
+      "name": "controls - libcamera:control_info",
+      "result": "OK"
+    },
+    {
+      "name": "controls - libcamera:control_value",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:fixedpoint",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:histogram",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:interpolator",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:pwl",
+      "result": "OK"
+    }
+  ],
+  "kernel_hosted_checks": {
+    "dma-hosted-01": "PASS_ACTUAL_REAR_VB2_MAPPED_SG_APERTURE_ADMISSION",
+    "lease-hosted-01": "PASS_ACTUAL_REAR_RETAINED_DMABUF_MAPPING_LEASE",
+    "public-reclaim-hosted-01": "PASS_ACTUAL_REAR_COHERENT_AND_PUBLIC_LEASE_ALL_OR_NONE_RECLAIM",
+    "clean-lifecycle-hosted-01": "PASS_CANDIDATE_CLEAN_STOP_RELEASE_AND_FAILURE_STOP_MODELS",
+    "public-lifecycle-hosted-01": "PASS_ACTUAL_PUBLIC_REAR_RUNNER_LIFECYCLE_FAILURE_MODELS",
+    "linear-nv12-hosted-01": "PASS_ACTUAL_REAR_LINEAR_LAYOUT_BUS_AND_LEDGER",
+    "vfe-hosted-02": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK",
+    "linear-geometry-hosted-01": "PASS_HOSTED_REAR_GEOMETRY_COMPOSER",
+    "transport-hosted-01": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+    "sensor-mode-hosted-01": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE",
+    "noc-clock-hosted-01": "PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS",
+    "offline-runner-01": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+    "csr-whitelist-hosted-01": "PASS_EXACT_VFE680_NAMED_SCALAR_WHITELIST"
+  },
+  "kernel_hosted_check_count": 13,
+  "hypothesis": "Real libcamera CameraManager, exported/imported DMA-BUF application buffers and two ordinary Request completions reach the hardware rear NV12 output then clean stop/release.",
+  "request_transport": {
+    "camera_id": "sp11-rear-ov13858-qualification",
+    "requests": 2,
+    "exported_application_buffers": 4,
+    "width": 3840,
+    "height": 2160,
+    "stride": 3840,
+    "image_bytes": 12441600,
+    "logical_planes": 2,
+    "physical_V4L2_planes": 1,
+    "memory_mode": "DMA_BUF",
+    "new_camera_daemon": false,
+    "CPU_pixel_map_read_copy_or_ISP": false
+  },
+  "queue_order_fix": "Candidate rear VFE1 PIX min_queued_buffers=2 permits empty STREAMON before ordinary application requests. Generic front default remains unchanged.",
+  "guard_self_process_fix": "Explicit source-only builder option ignores only exact declared parent PID; other active processes remain checked; invalid parent rejected.",
+  "retained_iterations": [
+    {
+      "stage": "libcamera-native-rgb-rear-v4l2-20261008-01",
+      "compile": "PASS_NO_WARNINGS",
+      "qualification": "FAIL_OVERSTRICT_TWO_HARDWARE_DEPENDENT_TEST_SKIPS"
+    },
+    {
+      "stage": "libcamera-native-rgb-rear-v4l2-20261008-02",
+      "compile": "PASS_NO_WARNINGS",
+      "qualification": "PASS_SIX_HARDWARE_INDEPENDENT_TESTS"
+    }
+  ],
+  "candidate_single_use": true,
+  "automatic_Golden_return_and_independent_watchdog": true,
+  "hardware_attempted": false,
+  "no_counts_changed": true,
+  "golden_boot_id": "fc78315d-81e3-4c67-acd6-f8995f8e60e3",
+  "still_unproven": [
+    "actual rear libcamera requests on hardware",
+    "DMA_BUF import on hardware",
+    "continuous rear capture",
+    "independent rear semantic IPA",
+    "sensor exposure timestamp",
+    "matched Windows quality parity"
+  ],
+  "continuous_audit_findings": [
+    "rear software completion history fixed at 16 events",
+    "rear ten-WM ledger release and mapping lease release require full hardware stop",
+    "live retirement must be established without claiming false stop conditions"
+  ],
+  "front_pipeline_IPA_sources_unchanged": true,
+  "front_calibration_deferred": true
+}

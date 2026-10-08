@@ -1,3 +1,23 @@
+## 2026-10-08 rear25 real libcamera request candidate prepared
+
+Rear24 standard V4L2 MMAP 4K NV12 two-frame clean release remains PASS.
+Rear25/build31 adds candidate rear min_queued_buffers=2 for libcamera's empty
+STREAMON then ordinary request queueing. Three ARM64 W1/Werror modules and
+all 13 hosted checks PASS. Separate standard rear libcamera transport handler,
+library build rear-v4l2-20261008-02, six hardware-independent tests PASS,
+zero warnings. Real application exports/imports DMA-BUF, two Requests,
+logical NV12 planes and stop/release. No CPU pixel maps/read/copy/software ISP.
+Prepared, not hardware attempted/armed. NEXT fresh25 libcamera two requests
+and DMA-BUF stop/release proof, then continuous kernel queue and semantic IPA.
+Handler is explicitly finite qualification, not final automatic rear product.
+Continuous audit: rear latch history is 16 events; ledger/mapping retirement
+currently requires full stop. Establish live retirement before buffer reuse;
+never fake stop facts. Completion times are not SensorTimestamp.
+Native counts unchanged49/57IDs114boots failed20; combined64IDs128boots.
+Golden fc78315d-81e3-4c67-acd6-f8995f8e60e3;24 retired. Front deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-25-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear24 standard V4L2 4K NV12 two-frame capture PASS
 
 Fresh rear24/build30 passes standard S_FMT/REQBUFS/QBUF/STREAMON/DQBUF x2,

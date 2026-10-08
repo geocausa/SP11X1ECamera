@@ -79,7 +79,14 @@ void camss_x1e_rear_public_join(struct camss_video *video);""");p.write_text(t)
 \t}
 
 """+anchor)
- t=t[:a]+part+t[b:];p.write_text(t)
+ t=t[:a]+part+t[b:]
+ anchor="\tq->lock = &video->q_lock;\n\tret = vb2_queue_init(q);"
+ t=once(t,anchor,"\tq->lock = &video->q_lock;\n"
+  "\tif (video_is_x1e_front_pix(video) &&\n"
+  "\t    camss_x1e_rear_generation_trial_allowed(video->camss))\n"
+  "\t\tq->min_queued_buffers = 2;\n"
+  "\tret = vb2_queue_init(q);")
+ p.write_text(t)
  return dict(standard_STREAMON_STREAMOFF_and_QBUF_DQBUF_connected=True,
   bounded_generation_count=2,legacy_single_use_S_CTRL_disabled=True,
   continuous_or_libcamera_integration_proven=False)
