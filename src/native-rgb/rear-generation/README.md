@@ -1,3 +1,16 @@
+## 2026-10-08 rear14 output-localization candidate ready
+
+Proven exact mode1 admission is integrated in maintained compositor; historical
+E004ns retained untouched. Effective sensor/CSID/packet/control/IRQ code matches13.
+Only non-pixel WM0..3 and MNDS register reads plus firstEpoch/retarget/packet2
+snapshots added. No new configuration/RUP/CTRL/ACK writes.
+Build18 W1/Werror zero diagnostics; GCC+Clang transport227,VFE248,
+pinning3230/53failures and root realgraph13 negatives PASS.
+NEXT install/verify/boot fresh14 autonomously; DMA/PM/owner held until Golden.
+Counts unchanged native44/46IDs92boots failed14; Windows4/4/8; combined50/100.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-14-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear13 fixes initial halt; next output-size failure exposed
 
 Exact sensor mode1 readback4064x2286/VTS3214, clean34509 CSI packets ECC0/CRC0.

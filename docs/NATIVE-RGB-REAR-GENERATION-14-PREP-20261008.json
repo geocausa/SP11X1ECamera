@@ -1,0 +1,189 @@
+{
+  "status": "PASS_REAR14_READ_ONLY_OUTPUT_LOCALIZATION_PREPARED",
+  "identity": "E-NATIVE-REAR-GENERATION-14",
+  "base_head": "6bd37cbe3fb95294757b524bde966b8822b0d462",
+  "build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-18",
+  "mode1_admission_in_maintained_source_compositor": true,
+  "runtime_controls_IRQ_observer_sensor_packet_WRITES_byte_identical_to13": [
+    "camss/camss-csid-e004ns-rear-ipp.inc",
+    "camss/native-rear-csid-config.inc",
+    "camss/native-rear-vfe-config.inc",
+    "camss/camss-vfe-e008h-rear-prime.inc",
+    "camss/camss-e007y-rear-startup.inc",
+    "camss/camss-csid-e008i-rear-observer.inc",
+    "ov13858/ov13858.c"
+  ],
+  "new_camera_control_or_ACK_writes": false,
+  "readbacks_no_pixels_no_DMA_addresses": true,
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "6aa7a19d19f2c82911334544d0a949d17d7ccc3b9d2ffdc494fafaa02d7a7fac",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "de2fa95e01a841258fcc5b5e6e45a5045cb40fc5d8610a779c6980386ad7c2b3",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "f2bc0a420dcf525040942a1672707fc4974fa54f40bfe00425950393d9a0e97f",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "source_profile_register_words_exact": 2268,
+  "source_profile_DMI_matches": {
+    "lsc_selector_slots_exact": 4,
+    "gtm_slots_exact": 4,
+    "gic_alias_slots_exact": 3,
+    "BF_selector1_slots_exact": 4
+  },
+  "hosted": {
+    "sensor-mode-hosted-01": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE",
+      "modes": [
+        {
+          "mode": 0,
+          "width": 4076,
+          "height": 2806,
+          "Windows_covered_registers_exact": 207,
+          "VTS": 3214,
+          "line_length_register": 1122
+        },
+        {
+          "mode": 1,
+          "width": 4064,
+          "height": 2286,
+          "Windows_covered_registers_exact": 207,
+          "VTS": 3214,
+          "line_length_register": 1122
+        }
+      ],
+      "mode1_geometry_only_delta_count": 7,
+      "mode0_remains_first_default": true,
+      "link_PLL_HTS_VTS_VT_clock_PM_controls_unchanged": true,
+      "extra_upstream_test_pattern_disabled_register": 1,
+      "vendor_table_exported": false,
+      "hardware_access": false,
+      "source_sha256": "f64edd02d482c350f584faf32635cf933f004d3af0754046c1cbcfc98bad1646"
+    },
+    "transport-hosted-01": {
+      "sensor_mode": "mode1",
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+      "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked": true,
+      "exact_rear_route_before_reset_and_generic_front_unchanged_checked": true,
+      "actual_helper_and_E004ns_predicate_and_RX_derivation": true,
+      "path_config_after_packet0_guard_and_11_atomic_failures_checked": true,
+      "MMIO_and_format_lookup_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "vfe-hosted-01": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK",
+      "full_and_same_SP11_observed_readback_models_checked": true,
+      "actual_prefix_predicate_and_helper": true,
+      "MMIO_and_contract_validity_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        }
+      ]
+    },
+    "pinning-hosted-02": {
+      "status": "PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING",
+      "actual_candidate_orchestration_and_stop_pin_branch": true,
+      "lifecycle_IRQ_helpers_and_DMA_allocations_host_models": true,
+      "all_modeled_partial_start_stop_attempts_checked": true,
+      "complete_frames_do_not_authorize_output_reclaim": true,
+      "reclaim_function_calls": 0,
+      "default_authorization_denial_checked": true,
+      "successful_stop_helpers_called_once_checked": true,
+      "physical_completion_not_proven": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3230,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3230,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "offline-runner-01": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "legacy_mode0_graph_rejected": true,
+      "exact_mode1_pad_readbacks_checked": true,
+      "root_service_environment_Git_trust": true,
+      "retained_actual_graph": true,
+      "edges": 119,
+      "device_nodes": 45,
+      "negative_cases": 13,
+      "hardware_access": false,
+      "synthetic_format_changes_for_offline_testing": true
+    }
+  },
+  "hardware_actions_performed": false,
+  "expected": "Locate full output bus/image-size violation relative to firstEpoch retarget/packet2 and actual programmed WM/MNDS values",
+  "rollback": "ImmutableGolden; one-use14, exposed DMA/PM/owner held until automatic Golden reboot"
+}

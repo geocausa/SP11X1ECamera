@@ -21,6 +21,13 @@ def apply(camss):
                  "native-rear-startup-entry.inc", "native-rear-pix-link.h",
                  "native-rear-csid-config.inc", "native-rear-vfe-config.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
+    # The physically qualified rear 4K ISP input is sensor mode1. Preserve the
+    # historical E004ns source and apply the maintained exact format admission.
+    path = camss / "camss-csid-e004ns-rear-ipp.inc"
+    text = replace_once(path.read_text(),
+        "fmt->width == 4076 && fmt->height == 2806",
+        "fmt->width == 4064 && fmt->height == 2286")
+    path.write_text(text)
     # Find the exact required PIX video edge; metadata fan-out makes first-link
     # lookup order-dependent. Preserve the pinned original bridge as authority.
     path = camss / "camss-e008k-rear-rtcdm-bridge.inc"

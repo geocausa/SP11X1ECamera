@@ -133,7 +133,7 @@ int main(void){
 }
 """
 def main():
- p=argparse.ArgumentParser();p.add_argument("--staged",type=Path,required=True);p.add_argument("--report",type=Path,required=True);p.add_argument("--sensor-mode",choices=["mode0","mode1"],default="mode0");a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument("--staged",type=Path,required=True);p.add_argument("--report",type=Path,required=True);p.add_argument("--sensor-mode",choices=["mode0","mode1"],default="mode1");a=p.parse_args()
  assert not a.report.exists()
  source=(a.staged/"camss-csid-680.c").read_text()
  runner=(a.staged/"camss-vfe-e008k-rear-runner.inc").read_text()
