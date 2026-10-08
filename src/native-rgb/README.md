@@ -1,3 +1,14 @@
+## 2026-10-08 rear19 first native output completion: NoC clock floor fixes stall
+
+Onlyfunctionalchange CCFNoCfloor19.2->240M. PhysicalRT/NRT=240M, IFE594M/
+CSID300M. Packets1111 epochs2 events8, bothoutputgenerationscomplete, all
+sensor/CSID/BUS/RTCDM stopflags1; TOPIPP/CCIF/imagesize0 allphases.
+No opticalpixelread/quality/continuouslibcamera deliveryclaim. DMA/PM/ownerheld
+throughmandatoryGolden. Golden 7baa3a64-03f8-498f-866b-5e94d298a3e6 hashes/EFI/NTFSverified;
+nohazard/watchdog,19retired/unitsdisabled. Native45streams52IDs104boots failed19;
+Windows7IDs14boots; combined59IDs118boots. NEXTintegrateinmaintainedrear path
+and fresh20/build25 repetition. Evidence docs/NATIVE-RGB-REAR-GENERATION-19-20261008.json. Earlierentrieshistorical.
+
 ## 2026-10-08 rear19 candidate-only legal NoC clock floor ready
 
 Exactcamcc legalNoCrates240/300/400M, sharedRT/NRTsource; CAMSSresourcerates0.
