@@ -1,3 +1,15 @@
+## 2026-10-08 generation08 bounded VFE readback candidate ready
+
+Exact common prefix writes retained. Readback admits only source full values or
+same-SP11 observed core5/BUSmask0xd0000000; no invented bit semantics.
+Actual helper/predicate/prefix248 assertions/19 admission negatives/3 readback
+faults per GCC+Clang ASAN/UBSAN PASS; both full and observed MMIO models.
+Candidate pinning2949/53steps/52failures, transport86/20 and root/graph12 PASS.
+Sourcebuild11 W1/Werror zero diagnostics all3 modules.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-08-PREP-20261008.json.
+NEXT install/verify/boot fresh08 autonomously. Native44/40IDs/80boots unchanged.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation07 stopped at common VFE readback guard
 
 Packet0 accepted; prefix wrote source-qualified core7/BUSmask0xdc000000.
