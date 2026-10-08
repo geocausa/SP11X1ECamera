@@ -11,7 +11,7 @@ def once(t,a,b):
 def apply(camss):
  camss=Path(camss)
  for name in ("native-rear-command-receipt.h","native-rear-command-receipts.inc",
-              "native-rear-command-observe.inc"):
+              "native-rear-command-observe.inc","native-rear-command-irq.inc"):
   (camss/name).write_bytes((HERE/name).read_bytes())
  p=camss/"camss-vfe-e008l-rear-command-dma.inc";t=p.read_text()
  t=once(t,"struct e008l_rear_packet_dma {",'#include "native-rear-command-receipt.h"\n\nstruct e008l_rear_packet_dma {')
@@ -35,11 +35,20 @@ int e008k_rear_rtcdm_submit_bl_receipt(struct camss *, u32, u16,
 int e008k_rear_rtcdm_receipt_current(struct camss *,
                                     const struct native_rear_bl_receipt *);""")
  p.write_text(t)
+ # A BL_DONE record is independent of later generated INLINE status.
+ p=camss/"camss.h";t=p.read_text()
+ t=once(t,"\tu32 diag_fifo_seq;","\tu32 diag_fifo_seq;\n u32 receipt_sequence, receipt_dma, receipt_len, receipt_irq_status;")
+ p.write_text(t)
  # Fill receipt while the original submit mutex still owns the completion.
  p=camss/"camss.c";t=p.read_text()
  old="static int camss_rtcdm1_windows_fifo0_commit(struct camss *camss,\n\t\t\t\t\t     u32 base, u32 len_low20)"
  new='#include "native-rear-command-receipt.h"\n\nstatic int camss_rtcdm1_windows_fifo0_commit_receipt(struct camss *camss,\n u32 base, u32 len_low20, struct native_rear_bl_receipt *receipt)'
  t=once(t,old,new)
+ t=once(t,"static irqreturn_t camss_rtcdm1_isr(int irq, void *data)",
+  '#include "native-rear-command-receipt.h"\n#include "native-rear-command-irq.inc"\n\nstatic irqreturn_t camss_rtcdm1_isr(int irq, void *data)')
+ t=once(t,"\t/* Windows completion callback is driven by the masked FIFO0 status. */",
+  "\tnative_rear_command_irq_record(rt, status0);\n\t/* Windows completion callback is driven by the masked FIFO0 status. */")
+
  start=t.index(new);end=t.index("\nstatic void camss_rtcdm1_windows_stop(",start)
  fn=t[start:end]
  fn=once(fn,"\tif (!rt->present || !rt->base)","\tif (receipt)\n\t\tmemset(receipt, 0, sizeof(*receipt));\n\tif (!rt->present || !rt->base)")
@@ -47,12 +56,24 @@ int e008k_rear_rtcdm_receipt_current(struct camss *,
   ret = -EOVERFLOW;
   goto out_unlock;
  }
+ if (receipt) {
+  synchronize_irq(rt->irq);
+  smp_store_release(&rt->receipt_sequence, 0);
+  WRITE_ONCE(rt->receipt_dma, 0);
+  WRITE_ONCE(rt->receipt_len, 0);
+  WRITE_ONCE(rt->receipt_irq_status, 0);
+ }
 \treinit_completion(&rt->completion);""")
+ fn=once(fn,"\tret = camss_rtcdm1_windows_wait(rt, CAMSS_RTCDM_IRQ_BL_DONE);",
+  "\tret = receipt ? native_rear_command_wait_receipt(rt) :\n\t\tcamss_rtcdm1_windows_wait(rt, CAMSS_RTCDM_IRQ_BL_DONE);")
  fn=once(fn,"out_unlock:\n\tmutex_unlock(&rt->lock);","""out_unlock:
  if (!ret && receipt) {
   synchronize_irq(rt->irq);
   if (!READ_ONCE(rt->irq_armed) || READ_ONCE(rt->faulted) ||
-      READ_ONCE(rt->last_irq_status) != CAMSS_RTCDM_IRQ_BL_DONE ||
+      !native_rear_bl_status_valid(READ_ONCE(rt->receipt_irq_status)) ||
+      smp_load_acquire(&rt->receipt_sequence) != READ_ONCE(rt->diag_fifo_seq) ||
+      READ_ONCE(rt->receipt_dma) != base ||
+      READ_ONCE(rt->receipt_len) != len_low20 ||
       READ_ONCE(rt->diag_base) != base ||
       READ_ONCE(rt->diag_len_low20) != len_low20 ||
       !READ_ONCE(rt->diag_fifo_seq) ||
@@ -62,7 +83,7 @@ int e008k_rear_rtcdm_receipt_current(struct camss *,
    receipt->sequence = READ_ONCE(rt->diag_fifo_seq);
    receipt->dma = base;
    receipt->bytes = len_low20 + 1;
-   receipt->irq_status = READ_ONCE(rt->last_irq_status);
+   receipt->irq_status = READ_ONCE(rt->receipt_irq_status);
    receipt->complete = true;
   }
  }
@@ -96,7 +117,7 @@ int e008k_rear_rtcdm_receipt_current(struct camss *camss,
  struct camss_rtcdm *rt;
  int ret = 0;
  if (!camss || !r || !r->complete || !r->sequence || !r->dma ||
-     !r->bytes || r->irq_status != CAMSS_RTCDM_IRQ_BL_DONE ||
+     !r->bytes || !native_rear_bl_status_valid(r->irq_status) ||
      !camss->rtcdm1.present || !camss->rtcdm1.base)
   return -EINVAL;
  rt = &camss->rtcdm1;
@@ -106,7 +127,10 @@ int e008k_rear_rtcdm_receipt_current(struct camss *camss,
      READ_ONCE(rt->diag_fifo_seq) != r->sequence ||
      READ_ONCE(rt->diag_base) != r->dma ||
      READ_ONCE(rt->diag_len_low20) != r->bytes - 1U ||
-     READ_ONCE(rt->last_irq_status) != CAMSS_RTCDM_IRQ_BL_DONE)
+     smp_load_acquire(&rt->receipt_sequence) != r->sequence ||
+     READ_ONCE(rt->receipt_dma) != r->dma ||
+     READ_ONCE(rt->receipt_len) != r->bytes - 1U ||
+     READ_ONCE(rt->receipt_irq_status) != r->irq_status)
   ret = -ESTALE;
  mutex_unlock(&rt->lock);
  return ret;
@@ -135,6 +159,6 @@ e008k_rear_submit_packet(struct camss *camss, struct e008k_rear_request *req,
  t=once(t,anchor,anchor+"\n native_rear_command_receipts_observe(vfe, csid, pair, req, result, done_cursor);")
  p.write_text(t)
  return {"exact_serialized_22_BL_receipts":True,"allocation_request_owner_binding":True,
-         "receipt_capture_under_FIFO_mutex":True,"live_command_observation_only":True,
+         "receipt_capture_under_FIFO_mutex":True,"dedicated_BL_DONE_record_survives_INLINE":True,"live_command_observation_only":True,
          "live_command_free_rewrite_or_requeue":False,"commands_retained_until_stop":True,
          "hardware_contract":"existing serialized synchronous FIFO0 BL_DONE; software sequence is not a hardware request ID"}

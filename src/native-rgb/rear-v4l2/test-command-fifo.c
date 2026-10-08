@@ -13,6 +13,8 @@ typedef uint32_t u32;typedef uint16_t u16;
 #define U16_MAX UINT16_MAX
 #define READ_ONCE(x) (x)
 #define WRITE_ONCE(x,v) ((x)=(v))
+#define smp_store_release(p,v) (*(p)=(v))
+#define smp_load_acquire(p) (*(p))
 #define CAMSS_RTCDM_IRQ_BL_DONE BIT(2)
 #define CAMSS_RTCDM_IRQ_KNOWN 0x70007U
 #define CAMSS_RTCDM_WINDOWS_WAIT_MS 100
@@ -28,7 +30,8 @@ static unsigned assertions,negative_cases,writes,synchronizations,order[3];
 #define CHECK(x) do{assertions++;if(!(x)){fprintf(stderr,"FAIL:%d %s\n",__LINE__,#x);exit(2);}}while(0)
 struct camss_rtcdm {bool present,irq_armed,faulted;unsigned char *base;int lock,completion;unsigned irq;
  u32 last_irq_context,last_irq_status,last_irq_status1,last_irq_status2,last_irq_status3,last_user_data;
- u32 diag_fifo_seq,diag_base,diag_len_low20;};
+ u32 diag_fifo_seq,diag_base,diag_len_low20;
+ u32 receipt_sequence,receipt_dma,receipt_len,receipt_irq_status;};
 struct camss {struct camss_rtcdm rtcdm1;};
 static struct camss cam;
 static unsigned char registers[12];
@@ -37,6 +40,8 @@ static void mutex_lock(int *p){CHECK(*p==0);*p=1;}
 static void mutex_unlock(int *p){CHECK(*p==1);*p=0;}
 static void reinit_completion(int *p){*p=0;}
 static unsigned long msecs_to_jiffies(unsigned long t){return t;}
+static unsigned long wait_for_completion_timeout(int *,unsigned long);
+#include "native-rear-command-irq.inc"
 static unsigned long wait_for_completion_timeout(int *p,unsigned long t){
  CHECK(p==&cam.rtcdm1.completion&&cam.rtcdm1.lock==1&&t==100);
  if(timeout_kind==1)return 0;
@@ -44,7 +49,17 @@ static unsigned long wait_for_completion_timeout(int *p,unsigned long t){
  if(timeout_kind==2)cam.rtcdm1.faulted=true;
  if(timeout_kind==3)cam.rtcdm1.last_irq_status=0;
  if(timeout_kind==4)cam.rtcdm1.last_irq_status|=BIT(30);
- if(timeout_kind==5)cam.rtcdm1.last_irq_status|=BIT(1);
+ if(timeout_kind!=7)native_rear_command_irq_record(&cam.rtcdm1,cam.rtcdm1.last_irq_status);
+ if(timeout_kind==5) {
+  cam.rtcdm1.last_irq_status=BIT(1);
+  native_rear_command_irq_record(&cam.rtcdm1,BIT(1));
+ }
+ if(timeout_kind==6) {
+  cam.rtcdm1.last_irq_status=BIT(1)|BIT(2);
+  native_rear_command_irq_record(&cam.rtcdm1,BIT(1)|BIT(2));
+ }
+ if(timeout_kind==7)cam.rtcdm1.last_irq_status=BIT(1);
+
  return 1;
 }
 static void camss_rtcdm1_diag_set(struct camss *c,int stage,u32 required,int error){
@@ -61,11 +76,11 @@ static void synchronize_irq(unsigned irq){
  switch(sync_kind){
   case 1:cam.rtcdm1.irq_armed=false;break;
   case 2:cam.rtcdm1.faulted=true;break;
-  case 3:cam.rtcdm1.last_irq_status=0;break;
+  case 3:cam.rtcdm1.receipt_irq_status=0;break;
   case 4:cam.rtcdm1.diag_base++;break;
   case 5:cam.rtcdm1.diag_len_low20++;break;
   case 6:cam.rtcdm1.diag_fifo_seq=0;break;
-  case 7:cam.rtcdm1.last_irq_status|=BIT(0);break;
+  case 7:cam.rtcdm1.receipt_irq_status|=BIT(0);break;
  }
 }
 #include "actual-fifo-functions.h"
@@ -96,7 +111,7 @@ int main(void){
    case 7:cam.rtcdm1.diag_fifo_seq=U32_MAX;break;
    case 8:timeout_kind=1;break;case 9:timeout_kind=2;break;
    case 10:timeout_kind=3;break;case 11:timeout_kind=4;break;
-   case 12:timeout_kind=5;break;
+   case 12:timeout_kind=7;break;
    default:sync_kind=(int)f-12;break;
   }
   CHECK(camss_rtcdm1_windows_fifo0_commit_receipt(&cam,dma,len,&r)<0);
@@ -106,22 +121,41 @@ int main(void){
  fixture();CHECK(e008k_rear_rtcdm_submit_bl_receipt(&cam,0x1000,4,&r)==0);saved=r;
  for(unsigned f=0;f<13;f++){
   fixture();cam.rtcdm1.diag_fifo_seq=saved.sequence;cam.rtcdm1.diag_base=saved.dma;
-  cam.rtcdm1.diag_len_low20=saved.bytes-1;cam.rtcdm1.last_irq_status=BIT(2);r=saved;
+  cam.rtcdm1.diag_len_low20=saved.bytes-1;cam.rtcdm1.last_irq_status=BIT(2);
+  native_rear_command_irq_record(&cam.rtcdm1,BIT(2));r=saved;
   switch(f){
    case 0:r.complete=false;break;case 1:r.sequence=0;break;case 2:r.dma=0;break;
    case 3:r.bytes=0;break;case 4:r.irq_status=0;break;case 5:r.sequence++;break;
    case 6:r.dma++;break;case 7:r.bytes++;break;
    case 8:cam.rtcdm1.irq_armed=false;break;case 9:cam.rtcdm1.faulted=true;break;
-   case 10:cam.rtcdm1.last_irq_status|=BIT(1);break;
+   case 10:cam.rtcdm1.receipt_irq_status|=BIT(0);break;
    case 11:cam.rtcdm1.present=false;break;case 12:cam.rtcdm1.base=NULL;break;
   }
   CHECK(e008k_rear_rtcdm_receipt_current(&cam,&r)<0);CHECK(writes==0&&cam.rtcdm1.lock==0);negative_cases++;
  }
  for(unsigned f=1;f<=7;f++){
   fixture();cam.rtcdm1.diag_fifo_seq=saved.sequence;cam.rtcdm1.diag_base=saved.dma;
-  cam.rtcdm1.diag_len_low20=saved.bytes-1;cam.rtcdm1.last_irq_status=BIT(2);sync_kind=f;
+  cam.rtcdm1.diag_len_low20=saved.bytes-1;cam.rtcdm1.last_irq_status=BIT(2);
+  native_rear_command_irq_record(&cam.rtcdm1,BIT(2));sync_kind=f;
   CHECK(e008k_rear_rtcdm_receipt_current(&cam,&saved)<0);CHECK(writes==0&&cam.rtcdm1.lock==0);negative_cases++;
  }
+ for(int mode=5;mode<=6;mode++){
+  fixture();timeout_kind=mode;
+  CHECK(e008k_rear_rtcdm_submit_bl_receipt(&cam,0x1000,4,&r)==0);
+  CHECK(r.complete&&native_rear_bl_status_valid(r.irq_status));
+  CHECK(e008k_rear_rtcdm_receipt_current(&cam,&r)==0);
+ }
+ fixture();
+ cam.rtcdm1.diag_fifo_seq=7;cam.rtcdm1.diag_base=0x1230;cam.rtcdm1.diag_len_low20=3;
+ native_rear_command_irq_record(&cam.rtcdm1,BIT(2));
+ CHECK(cam.rtcdm1.receipt_sequence==7&&cam.rtcdm1.receipt_dma==0x1230);
+ for(unsigned status=0;status<8;status++){
+  if(native_rear_bl_status_valid(status))continue;
+  native_rear_command_irq_record(&cam.rtcdm1,status);
+  CHECK(cam.rtcdm1.receipt_sequence==7&&cam.rtcdm1.receipt_irq_status==BIT(2));
+ }
+ cam.rtcdm1.faulted=true;cam.rtcdm1.diag_fifo_seq=8;
+ native_rear_command_irq_record(&cam.rtcdm1,BIT(2));CHECK(cam.rtcdm1.receipt_sequence==7);
  fixture();cam.rtcdm1.diag_fifo_seq=U32_MAX;
  CHECK(camss_rtcdm1_windows_fifo0_commit(&cam,0x1000,3)==0);CHECK(cam.rtcdm1.diag_fifo_seq==0);CHECK(synchronizations==0);
  fixture();CHECK(e008k_rear_rtcdm_submit_bl_receipt(&cam,0x1000,4,NULL)==-EINVAL);CHECK(writes==0);

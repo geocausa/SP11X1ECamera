@@ -1,3 +1,24 @@
+## 2026-10-08 rear31 dedicated BL_DONE receipt source qualified
+
+Fresh31/build39 all3 ARM64 modules W1/Werror0; all18 checks PASS.
+Dedicated ISR record publishes BL_DONE sequence/base/length/status before
+completion wake. Separate INLINE cannot overwrite it; FIFO receipt wait and
+current check consume that release/acquire record, retaining sticky error and
+exact request/owner/allocation/22-BL binding. Existing generic commit/wait
+behaviour stays intact. Actual hosted FIFO/IRQ-record tests GCC/Clang each
+762 assertions/40 negatives; packet/allocator/layout tests9935/350 each,
+including16 mixed BL_DONE/INLINE receipt matrices. Hardware APIs are models.
+Read-only eligibility only: all4 command slabs stay until physical stop.
+NEXT fresh31 hardware qualification with automatic Golden return.
+30 was consumed/retired pre-stream protocol failure, not a camera frame failure;
+its physical IRQ cause is not independently observed. Hardware29 remains the
+latest successful proof. Native53/62IDs124boots/prestream9/after-start20;
+combined69IDs138boots. Golden d37972ea-7752-4066-8b5e-c6ff6901f59f.
+31 is unconsumed/uninstalled/unarmed; continuous rear/live command recycling/
+optical parity unproven; front deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-31-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear30 receipt protocol gate rejected before sensor Start, retired
 
 Fresh30/build38 booted and packet0 completed, slot0 enabled. Packet1 receipt

@@ -56,7 +56,7 @@ native_rear_submit_receipted_packet(struct camss *camss,
   if (ret || !receipt.complete || receipt.sequence != expected ||
       receipt.dma != p->out.bl[i].dma ||
       receipt.bytes != p->out.bl[i].bytes ||
-      receipt.irq_status != NATIVE_REAR_COMMAND_BL_DONE) {
+      !native_rear_bl_status_valid(receipt.irq_status)) {
    set->receipt_faulted = true; /* A touched FIFO never retries. */
    return ret ? ret : -EPROTO;
   }
@@ -108,7 +108,7 @@ native_rear_command_receipts_check(const struct e008k_rear_request *req,
    }
    if (!r->complete || r->sequence != sequence++ ||
        r->dma != a->out.bl[i].dma || r->bytes != a->out.bl[i].bytes ||
-       r->irq_status != NATIVE_REAR_COMMAND_BL_DONE)
+       !native_rear_bl_status_valid(r->irq_status))
     return -EPROTO;
    count++;
   }

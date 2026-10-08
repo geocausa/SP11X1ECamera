@@ -11,4 +11,10 @@ struct native_rear_bl_receipt {
  bool complete;
 };
 #define NATIVE_REAR_COMMAND_BL_DONE (1U << 2)
+static inline bool native_rear_bl_status_valid(u32 status)
+{
+ return (status & NATIVE_REAR_COMMAND_BL_DONE) &&
+        !(status & ~(NATIVE_REAR_COMMAND_BL_DONE | (1U << 1)));
+}
+
 #endif

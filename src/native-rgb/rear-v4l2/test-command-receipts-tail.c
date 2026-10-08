@@ -60,6 +60,12 @@ static void receipt_tests(struct vfe_device *v){
  CHECK(native_rear_command_receipts_check(&q,&r,&n)==0&&n==22);
  CHECK(e008l_rear_command_release(v,&s,false)==-EBUSY);
  good=s;
+ for(unsigned mask=0;mask<16;mask++){
+  for(unsigned p=0;p<4;p++)for(unsigned i=0;i<s.packet[p].receipt_count;i++)
+   s.packet[p].receipt[i].irq_status=NATIVE_REAR_COMMAND_BL_DONE|((mask&(1U<<p))?2U:0U);
+  CHECK(native_rear_command_receipts_check(&q,&r,&n)==0&&n==22);
+ }
+ s=good;
  for(unsigned p=0;p<4;p++){
   unsigned calls=submit_calls;
   CHECK(native_rear_submit_receipted_packet(v->camss,&q,p,7)==-EALREADY);

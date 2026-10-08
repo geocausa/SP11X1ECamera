@@ -12,6 +12,7 @@ def function(t,n):
 def main():
  p=argparse.ArgumentParser();p.add_argument("--staged",type=Path,required=True);p.add_argument("--report",type=Path,required=True);a=p.parse_args();assert not a.report.exists()
  t=(a.staged/"camss.c").read_text();bridge=(a.staged/"camss-e008k-rear-rtcdm-bridge.inc").read_text()
+ assert t.index("native_rear_command_irq_record(rt, status0);") < t.index("complete(&rt->completion);")
  functions=""
  for name in ("camss_rtcdm1_windows_wait","camss_rtcdm1_windows_fifo0_commit_receipt","camss_rtcdm1_windows_fifo0_commit"):
   functions+="static int "+function(t,name)
