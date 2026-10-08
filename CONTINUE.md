@@ -1,3 +1,13 @@
+## 2026-10-08 targeted rear Windows CCIF reference prepared
+
+Fresh E-NATIVE-REAR-CCIF-WINDOWS-01 source prepared; not armed or consumed.
+Observe exact VFE1 CCIF/WM20/23 and lowTOP at preCTRL and firstEpoch using
+auto-resuming one-use SP7 breakpoints; no configuration writes or pixels.
+Reader atomic entry consumption, private ACL, rear-only4K timestamps, nofuturetrigger.
+Golden/current counts unchanged; restore Golden and retire after one Windows episode.
+Evidence docs/NATIVE-RGB-WINDOWS-REAR-CCIF-01-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear initial violation classified from VFE680 source
 
 BUSstatus40000000 is CCIF protocol violation; c64 bitmap00900000 sets clients20/23,
