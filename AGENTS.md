@@ -1,3 +1,18 @@
+## 2026-10-08 rear21 cold native linear NV12 candidate prepared
+
+Freshsourcebuild26 W1/Werror all3 modules0diagnostics. Exactmode1/route/tuning,
+commandorder/NoC240M/auxiliaries retained. FULL3840x2160 linearNV12 stride3840,
+Y0 UV8294400 image12441600 allocation12443648; FULL8bit/DS10bit.
+Coldonly; noFULLcompression/meta/addresswrites. Actualstaged GCC+Clang
+layout6508assertions46readbackfaults12coldneg6DMAneg; geometry578,
+compressedregression570; VFE466/prefix6writes; pinning3302/56steps55faults.
+Transport/sensormodes/NoC/CSR/119edgegraph PASS. Default rear runtime denied.
+NEXTinstallverifyfresh21 and physicallinear completion/stop; pixelsnotread,
+publicV4L2/libcamera delivery and opticalquality stillunproven.
+Counts unchanged native46streams53IDs106boots; Windows7/7/14; combined60/120.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-21-PREP-20261008.json.
+Earlierentrieshistorical.
+
 ## 2026-10-08 rear20 maintained NoC correction confirmed on second fresh boot
 
 Both19and20 complete2outputgenerations each, packets1111/epochs2 allstopflags1.

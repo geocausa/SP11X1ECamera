@@ -4,17 +4,17 @@
 import hashlib,json,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[3];PROJECT=ROOT.parents[1]
-BUILD=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-25"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-25"
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-20")
-B=Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-20")
-G=Path("/etc/grub.d/99zzzzzz_sp11_camera_native_rear_generation_20261007_20")
-S=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-20.service")
-T=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-20-watchdog.timer")
-W=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-20-watchdog.service")
-F=Path("/lib/firmware/qcom/sp11/rear-generation-20261007-20.bin")
-ID="sp11-camera-native-rear-generation-20261007-20"
-MARKER="sp11_camera_native_rear_generation_20261007_20=1"
+BUILD=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-26"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-26"
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-21")
+B=Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-21")
+G=Path("/etc/grub.d/99zzzzzz_sp11_camera_native_rear_generation_20261007_21")
+S=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-21.service")
+T=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-21-watchdog.timer")
+W=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-21-watchdog.service")
+F=Path("/lib/firmware/qcom/sp11/rear-generation-20261007-21.bin")
+ID="sp11-camera-native-rear-generation-20261007-21"
+MARKER="sp11_camera_native_rear_generation_20261007_21=1"
 GOLDEN=Path("/boot/sp11-7.1.5-audio-fullio-v19c")
 EXPECTED_GOLDEN={
  "vmlinuz-7.1.5-sp11-render-parity-v4+":"bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
@@ -41,6 +41,12 @@ def main():
  for relative,digest in result["staged_sources"].items():assert sha(BUILD/relative)==digest
  noc=json.loads((BUILD/"noc-clock-hosted-01.json").read_text())
  assert noc["status"]=="PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS"
+ geometry=json.loads((BUILD/"linear-geometry-hosted-01.json").read_text())
+ assert geometry["linear_FULL_NV12"] is True and geometry["FULL_output_bits"]==8
+ assert geometry["fixture_and_translation_unit_resolve_actual_staged_includes"] is True
+ linear=json.loads((BUILD/"linear-nv12-hosted-01.json").read_text())
+ assert linear["status"]=="PASS_ACTUAL_REAR_LINEAR_LAYOUT_BUS_AND_LEDGER"
+ assert linear["FULL_compression_register_writes"]==0
  pin=json.loads((BUILD/"pinning-hosted-02.json").read_text())
  assert pin["status"]=="PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING"
  assert pin["reclaim_function_calls"]==0
@@ -53,7 +59,7 @@ def main():
  assert transport["sensor_mode"]=="mode1"
  mode=json.loads((BUILD/"sensor-mode-hosted-01.json").read_text())
  assert mode["status"]=="PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE"
- vfe=json.loads((BUILD/"vfe-hosted-01.json").read_text())
+ vfe=json.loads((BUILD/"vfe-hosted-02.json").read_text())
  assert vfe["status"]=="PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK"
  assert vfe["full_and_same_SP11_observed_readback_models_checked"] is True
  for name,digest in EXPECTED_GOLDEN.items():
@@ -90,7 +96,7 @@ def main():
  for x in command:
   if x.startswith("modprobe.blacklist="):blacklist+=x.split("=",1)[1].split(",")
  command=[x for x in command if not x.startswith(("BOOT_IMAGE=","sp11_entry=","modprobe.blacklist="))]
- command+=["sp11_entry=7.1.5-sp11-camera-native-rear-generation-20261007-20",MARKER,
+ command+=["sp11_entry=7.1.5-sp11-camera-native-rear-generation-20261007-21",MARKER,
   "modprobe.blacklist="+",".join(dict.fromkeys(blacklist+["qcom_camss","imx681","ov13858","sp11_vd55g0","vd55g0"]))]
  uuid=run(["findmnt","-n","-o","UUID","/"]).strip();assert uuid=="33e842b7-0434-4749-b03a-299bdcdb8b9f"
  grub=f"""#!/bin/sh

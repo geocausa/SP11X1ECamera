@@ -118,6 +118,7 @@ def main():
     parser.add_argument("--staged", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--private-retained-oracle", action="store_true")
+    parser.add_argument("--linear-full-nv12", action="store_true")
     args = parser.parse_args()
     if args.report.exists():
         raise SystemExit("report identity already exists")
@@ -129,6 +130,20 @@ def main():
         if period.count(anchor) != 1:
             raise RuntimeError("period provider extraction anchor drift")
         (temporary / "e007c-period-types.h").write_text(period[:period.index(anchor)])
+        if args.linear_full_nv12 and args.private_retained_oracle:
+            raise RuntimeError("8-bit diagnostic output cannot be claimed exact to compressed 10-bit oracle")
+        # Put fixture beside the temporary translation unit so every included
+        # packer and binder resolves to --staged, rather than HERE implicitly.
+        (temporary / "rear-geometry-host-fixture.h").write_bytes(
+            (HERE / "rear-geometry-host-fixture.h").read_bytes())
+        test_source = (HERE / "test-rear-startup-geometry.c").read_text()
+        if args.linear_full_nv12:
+            test_source = test_source.replace("value == 1023", "value == (path ? 1023U : 255U)")
+            anchor = "\t\tCHECK(base[p].regs.mnds.input_width == 4064);"
+            test_source = test_source.replace(anchor,
+                "\t\tCHECK(base[p].regs.geometry.full.bit_width == 8);\n"
+                "\t\tCHECK(base[p].regs.geometry.ds4.bit_width == 10 && base[p].regs.geometry.ds16.bit_width == 10);\n" + anchor)
+        (temporary / "test-rear-startup-geometry.c").write_text(test_source)
         results = []
         for compiler in ("gcc", "clang"):
             executable = shutil.which(compiler)
@@ -138,7 +153,7 @@ def main():
             checked([executable, "-std=gnu11", "-Wall", "-Wextra", "-Werror",
                      "-O1", "-g", "-fsanitize=address,undefined",
                      "-fno-omit-frame-pointer", "-I" + str(temporary),
-                     "-I" + str(staged), str(HERE / "test-rear-startup-geometry.c"),
+                     "-I" + str(staged), str(temporary / "test-rear-startup-geometry.c"),
                      "-o", str(binary)])
             env = dict(os.environ, ASAN_OPTIONS="detect_leaks=1:halt_on_error=1",
                        UBSAN_OPTIONS="halt_on_error=1:print_stacktrace=1")
@@ -156,6 +171,9 @@ def main():
                   "linear_NV12_or_full_rear_bootstrap_proven": False}
         if args.private_retained_oracle:
             report["retained_oracle"] = private_oracle(staged, temporary)
+    report["linear_FULL_NV12"] = args.linear_full_nv12
+    report["FULL_output_bits"] = 8 if args.linear_full_nv12 else 10
+    report["fixture_and_translation_unit_resolve_actual_staged_includes"] = True
     args.report.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report))
 

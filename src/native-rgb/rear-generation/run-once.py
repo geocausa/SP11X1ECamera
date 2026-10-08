@@ -3,9 +3,9 @@
 """One rear generation proof, no optical file access, automatic Golden return."""
 import json,os,re,runpy,subprocess,time
 from pathlib import Path
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-20")
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-21")
 ROOT=Path("/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-driver")
-MARKER="sp11_camera_native_rear_generation_20261007_20=1"
+MARKER="sp11_camera_native_rear_generation_20261007_21=1"
 def need(condition,message):
  if not condition:raise RuntimeError(message)
 def run(args,timeout=25):
@@ -54,7 +54,7 @@ def main():
  need(MARKER in Path("/proc/cmdline").read_text().split(),"candidate command line mismatch")
  fd=os.open(D/"CONSUMED",os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
  os.write(fd,(Path("/proc/sys/kernel/random/boot_id").read_text()).encode());os.fsync(fd);os.close(fd)
- result={"identity":"E-NATIVE-REAR-GENERATION-20","status":"STARTED",
+ result={"identity":"E-NATIVE-REAR-GENERATION-21","status":"STARTED",
   "boot_id":Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
   "single_use":True,"pixel_files_saved":0,"DMA_reclaim_authorized":False}
  try:
@@ -122,6 +122,13 @@ def main():
   if probe.stdout.strip():result["probe"]=json.loads(probe.stdout)
   log=run(["dmesg"]);(D/"PRIVATE-DMESG.txt").write_text(log)
   result["sensor_start_attempts"]=log.count("NATIVE_REAR_GENERATION_SENSOR_START_ATTEMPT")
+  result["linear_NV12_readback_passes"]=log.count("NATIVE_REAR_NV12_READBACK_PASS")
+  need(result["linear_NV12_readback_passes"]==1,"one cold FULL NV12 readback required")
+  result["rear_FULL_storage"]="linear_NV12"
+  result["output_width"]=3840;result["output_height"]=2160
+  result["output_stride"]=3840;result["output_image_bytes"]=12441600
+  result["FULL_output_bits"]=8;result["DS_output_bits"]=10
+  result["optical_pixels_read_or_saved"]=False
   records=re.findall(r"NATIVE_REAR_GENERATION_RESULT ([^\n]+)",log)
   need(len(records)==1,"one kernel result required")
   facts={k:v for k,v in re.findall(r"(\w+)=(-?[0-9]+)",records[0])}

@@ -80,10 +80,24 @@ def main():
  s=(a.staged/"camss-vfe-680.c").read_text()
  needed=["VFE680_X1E_WINDOWS_BUS_MASK0","VFE_TOP_IRQn_MASK","VFE_BUS_IRQn_MASK","VFE680_X1E_WINDOWS_TOP_MASK0","VFE680_X1E_SP11_DAL_CORE_CFG0","VFE680_X1E_SP11_DAL_CORE_CFG1","VFE680_X1E_SP11_DAL_BUS_MASK0","VFE680_X1E_BUS_UBWC_STATIC_CTRL","VFE680_X1E_WINDOWS_UBWC_STATIC_CTRL"]
  macros="\n".join(l for l in s.splitlines() if l.startswith("#define") and any(re.match(r"#define\s+"+n+r"(?:\(|\s)",l) for n in needed+["VFE680_X1E_SP11_DAL_CORE_CFG0_VALUE","VFE680_X1E_SP11_DAL_CORE_CFG1_VALUE"]))+"\n"
- code=PRE+macros+function(s,"static bool vfe680_x1e_bus_target(")
+ linear=(a.staged/"native-rear-nv12-bus.inc").exists()
+ pre=PRE;main=MAIN
+ if linear:
+  macros+="\n".join(l for l in s.splitlines() if l.startswith("#define VFE680_X1E_BUS_MODE_CFG"))+"\n"
+  pre=pre.replace("corrupt&&off==0xc58","corrupt&&off==0x28")
+  main=main.replace("writes==7","writes==6").replace("i<7","i<6")
+  main=main.replace("wantoff[7]={0x34,0x38,0xc1c,0x24,0x28,0xc18,0xc58}","wantoff[6]={0x34,0x38,0xc1c,0x24,0x28,0xc18}")
+  main=main.replace("wantval[7]={0x7f051,0,0,7,0x10,0xdc000000,0x1046}","wantval[6]={0x7f051,0,0,7,0x10,0xdc000000}")
+  main=main.replace(r'\"writes\":7',r'\"writes\":6')
+  # Both inherited compressed states must reject before clock/prefix writes.
+  pos=main.index(" printf(")
+  main=main[:pos]+' for(unsigned i=0;i<2;i++){init();mem[(0xe00+i*0x100+0x48)/4]|=1;CHECK(native_rear_vfe_configure(&vfe)==-EOPNOTSUPP);CHECK(writes==0&&clock_sets==0);}\n init();CHECK(native_rear_vfe_configure(&vfe)==0);CHECK(mem[0xc58/4]==0x55555554);\n'+main[pos:]
+ code=pre+macros+function(s,"static bool vfe680_x1e_bus_target(")
  other=(a.staged/"camss-vfe-e004nt-rear-4k-buffer.inc").read_text()
  code+="static bool "+function(other,"vfe680_e004nt_rear_4k_target(")
- code+=function(s,"int vfe680_x1e_pix_runtime_start_prefix(")+(a.staged/"native-rear-vfe-config.inc").read_text()+MAIN
+ if linear:
+  code+=function((a.staged/"native-rear-nv12-bus.inc").read_text(),"static int native_rear_nv12_cold_admit(")
+ code+=function(s,"int vfe680_x1e_pix_runtime_start_prefix(")+(a.staged/"native-rear-vfe-config.inc").read_text()+main
  results=[]
  with tempfile.TemporaryDirectory() as t:
   t=Path(t);c=t/"check.c";c.write_text(code)
@@ -95,5 +109,7 @@ def main():
    if r.returncode or r.stderr:raise RuntimeError(r.stdout+r.stderr)
    results.append({"compiler":compiler,"ASAN_UBSAN_Werror":True,"result":json.loads(r.stdout)})
  report={"status":"PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK","full_and_same_SP11_observed_readback_models_checked":True,"actual_prefix_predicate_and_helper":True,"maintained_NoC_preparation_before_prefix_and_no_prefix_write_on_clock_failure":True,"MMIO_and_contract_validity_host_models":True,"hardware_access":False,"results":results}
+ report["rear_FULL_storage"]="linear_NV12" if linear else "QC10C"
+ report["FULL_UBWC_common_writes"]=0 if linear else 1
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()

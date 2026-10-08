@@ -1,0 +1,18 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+#ifndef NATIVE_REAR_NV12_LAYOUT_H
+#define NATIVE_REAR_NV12_LAYOUT_H
+/* Internal cold-start FULL storage contract. Sensor, DS and statistics stay
+ * 10-bit/source-qualified. This header grants no V4L2 or hardware access.
+ * BUS-v3 NV12 uses packer 3, line mode, and half-height interleaved UV.
+ */
+#define NATIVE_REAR_NV12_WIDTH 3840U
+#define NATIVE_REAR_NV12_HEIGHT 2160U
+#define NATIVE_REAR_NV12_STRIDE NATIVE_REAR_NV12_WIDTH
+#define NATIVE_REAR_NV12_Y_BYTES (NATIVE_REAR_NV12_STRIDE * NATIVE_REAR_NV12_HEIGHT)
+#define NATIVE_REAR_NV12_UV_BYTES (NATIVE_REAR_NV12_Y_BYTES / 2U)
+#define NATIVE_REAR_NV12_UV_OFFSET NATIVE_REAR_NV12_Y_BYTES
+#define NATIVE_REAR_NV12_BYTES (NATIVE_REAR_NV12_Y_BYTES + NATIVE_REAR_NV12_UV_BYTES)
+#define NATIVE_REAR_NV12_ALLOCATION_BYTES ((NATIVE_REAR_NV12_BYTES + 4095U) & ~4095U)
+#define NATIVE_REAR_NV12_PACKER 3U
+#define NATIVE_REAR_NV12_ENABLED_CFG 1U
+#endif

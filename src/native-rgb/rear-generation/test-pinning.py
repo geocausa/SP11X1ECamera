@@ -16,6 +16,9 @@ def main():
   "static int native_rear_vfe_configure(struct vfe_device *v) {CHECK(v);attempted|=2;return step();}",
   "static int native_rear_vfe_configure(struct vfe_device *v) {CHECK(v);attempted|=2;int r=step();return r?r:step();}")
 
+ if (a.staged/"native-rear-nv12-bus.inc").exists():
+  text=faults.once(text,"int r=step();return r?r:step();}","int r=step();if(r)return r;r=step();return r?r:step();}")
+
  text="#define READ_ONCE(x) (x)\n#define native_rear_diagnostic_active host_authorized\n#define dev_info(...) ((void)0)\nstatic unsigned reclaim_calls,csid_stop_calls,bus_stop_calls;\n"+text
  text=faults.once(text,"halted|=4;return step();","halted|=4;csid_stop_calls++;return step();")
  text=faults.once(text,"halted|=2;return step();","halted|=2;bus_stop_calls++;return step();")
