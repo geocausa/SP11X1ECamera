@@ -1,3 +1,24 @@
+## 2026-10-08 rear26 read-only live replacement source qualified
+
+Fresh build34 compiles three ARM64 W1/Werror modules. All 15 hosted checks
+PASS, including actual SPSC event queue and read-only replacement observer.
+Observer requires both ten-WM ledgers complete, four command BL_DONE receipts,
+distinct DMA spans, matching enabled/programmed/consumed replacement addresses,
+current owner and stable drained event snapshot. It runs before physical stop;
+no MMIO writes, IRQ ACK, DMA puts/frees, VB2 completions or live reuse authority.
+GCC/Clang observer16479 assertions/473 invalid or racing cases each; actual
+clean lifecycle3745/62steps60faults, public3958/64steps62faults. Parser rejects
+18 malformed/incomplete observations; retained media graph admission still PASS.
+Failed frozen33 preserved; Linux current macro collision fixed in fresh34.
+Source ready, not yet installed/armed/attempted. NEXT install/fresh single-use26
+hardware proof with mandatory Golden return, then live retirement/persistent
+requests and semantic IPA. Rear libcamera remains bounded to two requests.
+Continuous rear, live DMA retirement and optical parity still unproven.
+Maintenance reboot Golden2c19627c-2c51-45be-bd54-2d2d824af838 verified; camera
+counts unchanged Native50/58IDs116boots failed20; combined65IDs130boots.
+Front calibration deferred. Evidence docs/NATIVE-RGB-REAR-GENERATION-26-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear continuous event-queue prerequisite source-qualified
 
 Rear25 real libcamera DMA-BUF 4K NV12 two requests + clean release remains PASS.
