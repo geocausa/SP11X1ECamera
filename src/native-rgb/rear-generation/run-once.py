@@ -3,9 +3,9 @@
 """One rear generation proof, no optical file access, automatic Golden return."""
 import json,os,re,runpy,subprocess,time
 from pathlib import Path
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-02")
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-03")
 ROOT=Path("/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-driver")
-MARKER="sp11_camera_native_rear_generation_20261007_02=1"
+MARKER="sp11_camera_native_rear_generation_20261007_03=1"
 def need(condition,message):
  if not condition:raise RuntimeError(message)
 def run(args,timeout=25):
@@ -30,14 +30,16 @@ def validate_formats(graph,pads):
   block=re.search(r"- entity [0-9]+: "+re.escape(name)+r" \(.*?(?=\n- entity|\Z)",graph,re.S)
   need(block is not None,"pad entity absent")
   desc=re.search(r"pad"+str(pad)+r":.*?(?=\n\s*pad[0-9]+:|\Z)",block[0],re.S)
-  need(desc is not None and re.search(r"\[(?:stream:0 )?fmt:SGRBG10_1X10/4076x2806(?: |\])",desc[0]) is not None,"pad format drift")
+  # Generic VFE source crop is 16-pixel aligned; this diagnostic has no VB2 pixels.
+  geometry="4064x2806" if name=="msm_vfe1_pix" and pad==1 else "4076x2806"
+  need(desc is not None and re.search(r"\[(?:stream:0 )?fmt:SGRBG10_1X10/"+geometry+r"(?: |\])",desc[0]) is not None,"pad format drift:"+name+":"+str(pad))
 def main():
  os.umask(0o077)
  need(os.geteuid()==0,"root required")
  need(MARKER in Path("/proc/cmdline").read_text().split(),"candidate command line mismatch")
  fd=os.open(D/"CONSUMED",os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
  os.write(fd,(Path("/proc/sys/kernel/random/boot_id").read_text()).encode());os.fsync(fd);os.close(fd)
- result={"identity":"E-NATIVE-REAR-GENERATION-02","status":"STARTED",
+ result={"identity":"E-NATIVE-REAR-GENERATION-03","status":"STARTED",
   "boot_id":Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
   "single_use":True,"pixel_files_saved":0,"DMA_reclaim_authorized":False}
  try:

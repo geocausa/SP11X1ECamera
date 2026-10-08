@@ -1,3 +1,22 @@
+## 2026-10-08 generation02 route configured; source-width preflight corrected
+
+Generation02 loaded all3 sensors bound/idle and exact rear PIX-only119-edge
+graph, then stopped before trigger/sensor start. Generic VFE PIX source crops
+4076 input width to16-aligned4064; worker incorrectly expected4076 everywhere.
+Actual boot graph now validates in source regression. VFE graph source4064x2806
+is diagnostic negotiation, NOT pixel output; native profile ISP crop4064x2286
+and full output3840x2160 remain independent. No optical quality/NV12 claim.
+Golden5e09eb64-8675-4128-9533-6befb088f52c returned automatically unchanged,
+no hazard/watchdog. Generation02 consumed/retired and services disabled.
+Fresh generation03 sourcebuild05 W1/Werror zero diagnostics, GCC+Clang2278
+assertions/52 failures, actual rear graph+root service environment and12 negatives PASS.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-02-20261008.json and
+docs/NATIVE-RGB-REAR-GENERATION-03-PREP-20261008.json.
+Native44streams/35IDs/70boots;Windows2/2/4;combined74boots/37IDs.
+NEXT install/verify/boot fresh generation03 autonomously; retain DMA until reboot.
+Rear FIRST; front calibration deferred; same-SP11 privacy unchanged.
+Earlier status entries below are historical.
+
 ## 2026-10-08 generation01 retired before modules; fresh generation02 prepared
 
 Generation01 returned automatically to Golden602875be-51f9-4a06-9e6e-4c676548f9da.
