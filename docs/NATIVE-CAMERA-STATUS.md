@@ -1,3 +1,24 @@
+## 2026-10-08 rear35 source-locked output commit qualified, hardware pending
+
+34 hardware fixed the QBUF waitqueue fault and delivered1 VB2 buffer while live.
+Generation3 address writes alone produced no consumed receipts: timeout-110,
+IPP33epochs/12events, no overflow/errors/hazards; mappings conservatively held
+until automatic Golden8be04a9a-5760-416c-9f4e-25c2a16ad619.34 consumed/retired,
+units disabled, no watchdog, protected hashes unchanged. Never retry34.
+Source startup packets end with CSID RUP/AUP0x01f501f5 at named register0x18.
+Fresh35/build46 applies that exact commit after all10 address readbacks under
+exclusive rear-owner/epoch/live-path guards; no command-DMA resubmission.
+22 checks PASS,3 ARM64 W1/Werror modules0 diagnostics; actual fixed MMIO helper
+GCC/Clang537 assertions,15 negatives each; queue26529 assertions/211 negatives/
+80 model frames each. Runtime103 negatives. All hardware APIs are models.
+35 unconsumed/uninstalled/unarmed; libcamera04 unchanged. NEXT35 real80 Requests.
+Hardware32 remains latest clean success; no persistent rear proof yet.
+Native56/66IDs132boots/prestream10/failed-after-start21; combined73IDs146boots.
+No adaptive IPA, SensorTimestamp, full-rate/soak or optical parity claim.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-34-20261008.json and
+docs/NATIVE-RGB-REAR-GENERATION-35-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear34 queue initialization repaired, source qualified, hardware pending
 
 33 consumed/retired after a pre-sensor kernel Oops in QBUF3: rear worker started

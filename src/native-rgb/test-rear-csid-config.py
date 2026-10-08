@@ -11,7 +11,7 @@ PRELUDE=r"""
 #include <string.h>
 #include <errno.h>
 #include <linux/v4l2-mediabus.h>
-typedef uint32_t u32;typedef uint8_t u8;typedef uint16_t u16;
+typedef uint32_t u32;typedef uint8_t u8;typedef uint16_t u16;typedef uint64_t u64;
 #define BIT(n) (1U<<(n))
 #define __used __attribute__((unused))
 #define CAMSS_X1E80100 100

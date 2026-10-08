@@ -28,6 +28,8 @@ def main():
  t=t.replace("/* ACTUAL_PRIME_HELPERS */",code)
  t=t.replace("/* ACTUAL_AUX_FREE */","static void "+fn(dma,"e008d_rear_aux_release"))
  t=t.replace("/* ACTUAL_RETIRE */",'#include "native-rear-live-retire.inc"\n#include "native-rear-live-aux-retire.inc"')
+ if (a.staged/"native-rear-output-update.inc").exists():
+  t=t.replace("/* ACTUAL_QUEUE */","static int csid680_native_rear_output_update(struct csid_device *c,u64 owner){CHECK(c&&owner==7);return step();}\n/* ACTUAL_QUEUE */")
  t=t.replace("/* ACTUAL_QUEUE */",'#include "native-rear-queue.inc"')
  results=[]
  with tempfile.TemporaryDirectory(prefix="rear-rolling-queue-") as temp:
