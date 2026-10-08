@@ -19,7 +19,7 @@ def apply(camss):
                  "native-rear-startup-geometry.inc", "native-rear-startup-statistics.inc",
                  "native-rear-startup-iq.inc", "native-rear-startup-compose.inc",
                  "native-rear-startup-entry.inc", "native-rear-pix-link.h",
-                 "native-rear-csid-config.inc"):
+                 "native-rear-csid-config.inc", "native-rear-vfe-config.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
     # Find the exact required PIX video edge; metadata fan-out makes first-link
     # lookup order-dependent. Preserve the pinned original bridge as authority.
@@ -114,6 +114,11 @@ def apply(camss):
         "\tret = e008k_rear_subdev_stream(req->sensor, true);\n\tif (ret)\n\t\tgoto out_pin;\n\tsensor_streaming = true;",
         "\tsensor_streaming = true;\n\tret = e008k_rear_subdev_stream(req->sensor, true);\n"
         "\tif (ret)\n\t\tgoto out_pin;")
+    # Shared IFE1 core/IRQ prefix and compressed BUS setup are not IQ packets.
+    text = replace_once(text,
+        "\tbus_may_be_enabled = true; /* Preparation may partially write BUS. */",
+        "\tbus_may_be_enabled = true; /* Core prefix may expose BUS on failure. */\n"
+        "\tret = native_rear_vfe_configure(vfe);\n\tif (ret)\n\t\tgoto out_pin;")
     path.write_text(text)
 
     path = camss / "camss-vfe-e008n-rear-single-use.inc"
@@ -167,6 +172,7 @@ def apply(camss):
     text = path.read_text()
     text = replace_once(text, '#include "camss-vfe-e008k-rear-runner.inc"',
                         '#include "native-rear-prepared-commands.inc"\n'
+                        '#include "native-rear-vfe-config.inc"\n'
                         '#include "camss-vfe-e008k-rear-runner.inc"')
     text = replace_once(text, '#include "camss-e011z-rear-startup-adaptive-bind.inc"',
                         '#include "camss-e011z-rear-startup-adaptive-bind.inc"\n'

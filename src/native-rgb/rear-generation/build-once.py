@@ -6,9 +6,9 @@ Private compiler-bound semantic firmware and its digest stay on this SP11.
 import argparse,hashlib,importlib.util,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent;ROOT=NATIVE.parents[1]
-PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-08"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-08"
-HEAD="5233d8e87049d8b8a3aa57075756fd373be5b6a4"
+PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-10"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-10"
+HEAD="d72e04b621d5fa6e0a925efc95ed5060e7e17a8b"
 SOURCE=PROJECT/"06-camera/reference/libcamera-native-rgb-rear-20261007-15"
 LIBBUILD=PROJECT/"02-kernel/libcamera-native-rgb-rear-20261007-15"
 KSOURCE=PROJECT/"02-kernel/e003i-front-production-src"
@@ -28,8 +28,8 @@ def guard():
  if r.returncode:raise RuntimeError("overlap guard failed")
 def main():
  os.umask(0o077);guard()
- for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-06"),
-              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-06")]:
+ for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-07"),
+              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-07")]:
   if path.exists():raise RuntimeError("candidate path already exists; audit first")
  build=load("native_rear_build",NATIVE/"build.py")
  result=build.assemble(OUT,nv12_trial=True,front_owner_trial=True,front_queue_trial=True,
@@ -56,7 +56,7 @@ def main():
  profile=output/"p0-input-0.bin";digest=hashlib.sha256(profile.read_bytes()).digest()
  identity=camss/"native-rear-generation-identity.h"
  identity.write_text(
-  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-06.bin"\n'
+  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-07.bin"\n'
   +f'#define NATIVE_REAR_GENERATION_INPUT_BYTES {profile.stat().st_size}U\n'
   +'static const u8 native_rear_generation_input_sha256[32]={'
   +','.join(str(x) for x in digest)+'};\n')
@@ -121,6 +121,20 @@ def main():
   "\t\t/* PM ref + DMA stay pinned intentionally until reboot. */",
   '\t\tcsid680_native_rear_generation_snapshot(csid, "after_emergency_stop");\n'
   "\t\t/* PM ref + DMA stay pinned intentionally until reboot. */")
+ # Observe common VFE registers at every existing powered CSI snapshot.
+ observe_vfe="native-rear-generation-vfe-observe.inc"
+ (camss/observe_vfe).write_bytes((HERE/observe_vfe).read_bytes())
+ replace(camss/"camss-vfe-680.c",'#include "native-rear-vfe-config.inc"',
+  '#include "native-rear-vfe-config.inc"\n#include "'+observe_vfe+'"')
+ runner=camss/"camss-vfe-e008k-rear-runner.inc"
+ text=runner.read_text()
+ text=re.sub(r'(\t+)csid680_native_rear_generation_snapshot\(csid, ("[^"]+")\);',
+  lambda m:m.group(0)+'\n'+m[1]+'native_rear_generation_vfe_snapshot(vfe, '+m[2]+');',text)
+ runner.write_text(text)
+ replace(runner,"\tret = native_rear_vfe_configure(vfe);\n\tif (ret)\n\t\tgoto out_pin;",
+  '\tnative_rear_generation_vfe_snapshot(vfe, "before_vfe_prefix");\n'
+  "\tret = native_rear_vfe_configure(vfe);\n\tif (ret)\n\t\tgoto out_pin;\n"
+  '\tnative_rear_generation_vfe_snapshot(vfe, "after_vfe_prefix");')
  # Candidate-only media-bus admission retains front RGGB and adds rear GRBG.
  # No video STREAMON or NV12 claim is made by this generation-only diagnostic.
  replace(camss/"camss-vfe.c",
@@ -158,7 +172,7 @@ def main():
    for name in re.findall(r'^#include "([^"]+)"',p.read_text(),re.M):
     if not (camss/name).is_file():raise RuntimeError("include closure failed")
  result.update(status="BUILD_REAR_GENERATION_DIAGNOSTIC_IN_PROGRESS",
-  candidate_identity="E-NATIVE-REAR-GENERATION-06",candidate_base_commit=HEAD,
+  candidate_identity="E-NATIVE-REAR-GENERATION-07",candidate_base_commit=HEAD,
   rear_optin_single_use_control_available=True,private_compiler_bound_data_only_input=True,
   post_stop_output_command_DMA_and_PM_pinned_until_reboot=True,
   source_profile_register_words_exact=sum(x["register_instances"] for x in phases),

@@ -1,3 +1,19 @@
+## 2026-10-08 generation07 common VFE prefix ready
+
+Main rear path now runs source-qualified shared IFE1 core/IRQ prefix afterpacket0,
+with all10 WMs disabled, sets current QC10C common UBWC control and verifies7 fields.
+No packet IQ or dynamic address writes. Actual helper/predicate/prefix GCC+Clang
+ASAN/UBSAN172 assertions/19 admission negatives/1 readback fault PASS.
+Actual candidate orchestration2949 assertions/53 steps/52 failures per compiler
+PASS; success stop once, no reclaim. Transport86/20 and root/graph12 PASS.
+Fresh sourcebuild10 W1/Werror zero diagnostics all3 modules; build09 source-only
+patch order failure retained, corrected before any hardware use.
+Candidate-only VFE common status/violation reads; identity label corrected07.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-07-PREP-20261008.json.
+Native44 completed streams/39 IDs/78 boots unchanged;06 retired.
+NEXT install/verify/boot fresh07 autonomously; DMA held until mandatoryGolden.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation06 packet fields confirmed; CAMIF halted
 
 Packet0 frame/crop/format fields read back exactly;38570 RX packets,ECC0/CRC0,

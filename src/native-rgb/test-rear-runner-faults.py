@@ -30,8 +30,12 @@ static int native_rear_validate_prepared_commands(struct e008l_rear_command_set 
  prefix=prefix.replace("static int atomic_cmpxchg(int *p,int a,int b) {int old=*p;if(old==a)*p=b;return old;}","")
  prefix += "\nstatic int csid680_native_rear_configure(struct csid_device *c) {CHECK(c);attempted|=4;return step();}\n"
  core=(stage/"camss-vfe-e008k-rear-runner.inc").read_text()
+ if "native_rear_vfe_configure" in core:
+  prefix += "\nstatic int native_rear_vfe_configure(struct vfe_device *v) {CHECK(v);attempted|=2;return step();}\n"
  if "csid680_native_rear_generation_snapshot" in core:
   prefix += "\nstatic void csid680_native_rear_generation_snapshot(struct csid_device *c,const char *p) {CHECK(c&&p);}\n"
+ if "native_rear_generation_vfe_snapshot" in core:
+  prefix += "\nstatic void native_rear_generation_vfe_snapshot(struct vfe_device *v,const char *p) {CHECK(v&&p);}\n"
  a=core.index("static int\ne011i_rear_reclaim_after_stop(")
  b=core.index("static int\ne008k_rear_pair_stop_release(",a)
  core=core[:a]+"""/* Explicit mock: actual physical reclaim is not exercised here. */
