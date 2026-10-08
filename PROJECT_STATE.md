@@ -1,3 +1,15 @@
+## 2026-10-08 generation09 reset hypothesis did not resolve CAMIF halt
+
+Exact rear SW reset command2 completed, but first Epoch still timed out.
+38567 CSI packets ECC0/CRC0; CAMIF halt1; no output frame. Packet0/1 accepted.
+Golden returned unchanged, no kernel hazard/watchdog;09 consumed and retired.
+Native44 streams/42 IDs/84 boots; failed started captures10.
+Windows2/2/4; combined44 IDs/88 boots. Rear output remains unproven.
+NEXT compare exact Windows CSID/CAMIF activation and CPU order before more
+startup changes. Known stable Windows CTRL=1 already matches Linux.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-09-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation09 exact rear full-IPP reset candidate ready
 
 Exact rearIPP route selects SW-only full-CSID reset; front early branch unchanged,
