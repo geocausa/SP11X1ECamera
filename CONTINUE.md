@@ -1,3 +1,26 @@
+## 2026-10-08 rear generation04 sensor start; generation05 transport fix ready
+
+Generation04 accepted packet0/1 and started OV13858, then first Epoch0 timed out.
+No completed stream; Golden1986da69-9b65-4018-ab78-9856c44882b7 returned automatically.
+No observed kernel hazard/watchdog. Identity04 retired, services disabled.
+Old fault dma_pin flag was incomplete telemetry: exposed DMA/PM/owner remained
+held through reboot. Stop helpers were attempted; their physical success is unproven.
+Main rear path lacked receiver lane/decode/drop/EPOCH initialization after reset.
+New source helper derives exact Linux route/format and writes15 transport fields
+before packet0, excluding packet-owned crop/format/subsample/RUP/IRQ ACKs.
+GCC+Clang ASAN/UBSAN86 assertions/20 negatives verify scope. Sourcebuild07
+W1/Werror all3 modules zero diagnostics; pinning2452 assertions/52 steps/51 failures
+per compiler. Complete-success stop helpers called once; all DMA retained until reboot.
+Candidate-only read-only CSI/IPP snapshots will establish physical transport state.
+Root/actual119-edge graph preflight and12 negatives PASS. No rear NV12/quality proof.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-04-20261008.json and
+docs/NATIVE-RGB-REAR-GENERATION-05-PREP-20261008.json.
+Native44 completed streams/37 IDs/74 boots; failed started captures6.
+Windows2/2/4; combined39 IDs/78 boots. Generation05 not installed/armed yet.
+NEXT install, verify and boot fresh05 autonomously, inspect transport and frame events.
+Rear FIRST; front calibration deferred; same-SP11 optical/tuning privacy unchanged.
+Earlier status entries below are historical.
+
 ## 2026-10-08 generation03 reached kernel trigger; exact video link fixed
 
 Generation03 made one kernel trigger. Hook rejected ENOLINK before composition,

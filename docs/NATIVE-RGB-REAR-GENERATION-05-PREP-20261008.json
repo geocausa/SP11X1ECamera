@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "identity": "E-NATIVE-REAR-GENERATION-05",
+  "status": "PASS_SOURCE_BUILD_AND_HOST_CHECKS_NOT_INSTALLED",
+  "source_base_head": "a6f48b4274f410b8778dddfc271f0a6f7971d4e3",
+  "build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-07",
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "9ac3f33541cb9c5168a451f4413a7bddd5542b48a2ec19f676a65711c2e1060a",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "ad45caa45b7cd02aec469cefe8587f8fec043003486d5333ea7c0c53f8196137",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "6d797b688c79fcb21f9a4967df999d1c5cb315454cf3176cd49f9d2e68f53298",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "source_profile_register_words_exact": 2268,
+  "transport_hosted": {
+    "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+    "actual_helper_and_E004ns_predicate_and_RX_derivation": true,
+    "MMIO_and_format_lookup_host_models": true,
+    "hardware_access": false,
+    "results": [
+      {
+        "compiler": "gcc",
+        "result": {
+          "assertions": 86,
+          "writes": 15,
+          "negative_cases": 20,
+          "packet_fields_and_ACKs_untouched": true
+        },
+        "ASAN_UBSAN_Werror": true
+      },
+      {
+        "compiler": "clang",
+        "result": {
+          "assertions": 86,
+          "writes": 15,
+          "negative_cases": 20,
+          "packet_fields_and_ACKs_untouched": true
+        },
+        "ASAN_UBSAN_Werror": true
+      }
+    ]
+  },
+  "pinning_hosted": {
+    "status": "PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING",
+    "actual_candidate_orchestration_and_stop_pin_branch": true,
+    "lifecycle_IRQ_helpers_and_DMA_allocations_host_models": true,
+    "all_modeled_partial_start_stop_attempts_checked": true,
+    "complete_frames_do_not_authorize_output_reclaim": true,
+    "reclaim_function_calls": 0,
+    "default_authorization_denial_checked": true,
+    "successful_stop_helpers_called_once_checked": true,
+    "physical_completion_not_proven": true,
+    "hardware_access": false,
+    "results": [
+      {
+        "compiler": "gcc",
+        "ASAN_UBSAN_Werror": true,
+        "result": {
+          "assertions": 2452,
+          "lifecycle_steps": 52,
+          "injected_failures": 51,
+          "partial_start_stop_attempts_complete": true,
+          "lifecycle_helpers_and_reclaim_mocked": true,
+          "runtime_denial_bypassed_only_in_host_test": true,
+          "hardware_proof": false
+        },
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "ASAN_UBSAN_Werror": true,
+        "result": {
+          "assertions": 2452,
+          "lifecycle_steps": 52,
+          "injected_failures": 51,
+          "partial_start_stop_attempts_complete": true,
+          "lifecycle_helpers_and_reclaim_mocked": true,
+          "runtime_denial_bypassed_only_in_host_test": true,
+          "hardware_proof": false
+        },
+        "stderr": ""
+      }
+    ]
+  },
+  "worker_preflight": {
+    "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+    "actual_rear_boot_VFE_width_clamp_checked": true,
+    "root_service_environment_Git_trust": true,
+    "retained_actual_graph": true,
+    "edges": 119,
+    "device_nodes": 45,
+    "negative_cases": 12,
+    "hardware_access": false,
+    "synthetic_format_changes_for_offline_testing": true
+  },
+  "source_change": "Initialize rear CSI transport after PM/reset before packet0; derive RX/IPP format from exact Linux route. Packet-owned crop/format/subsample/RUP/ACK fields untouched.",
+  "physical_rationale": "Generation04 accepted packet0/1 and started sensor; first Epoch0 timed out. Main rear reset path lacks RX/drop/EPOCH setup. Physical register confirmation pending.",
+  "candidate_only_observations": "Read-only receiver/IPP snapshots before and after transport, packet1, sensor and stop; no DMA contents or addresses.",
+  "successful_stop_policy": "Stop helpers called once; output/command DMA, PM and unsafe owner retained through mandatory reboot even after complete frames.",
+  "fault_dma_pin_telemetry_corrected": true,
+  "production_authorization_default_denied": true,
+  "physical_completion_proven": false,
+  "linear_NV12_or_optical_quality_proven": false,
+  "private_input_bytes_and_digest_exported": false
+}

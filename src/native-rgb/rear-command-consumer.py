@@ -18,7 +18,8 @@ def apply(camss):
     for name in ("native-rear-startup-scalars.h", "native-rear-scalar-binding.inc",
                  "native-rear-startup-geometry.inc", "native-rear-startup-statistics.inc",
                  "native-rear-startup-iq.inc", "native-rear-startup-compose.inc",
-                 "native-rear-startup-entry.inc", "native-rear-pix-link.h"):
+                 "native-rear-startup-entry.inc", "native-rear-pix-link.h",
+                 "native-rear-csid-config.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
     # Find the exact required PIX video edge; metadata fan-out makes first-link
     # lookup order-dependent. Preserve the pinned original bridge as authority.
@@ -33,6 +34,16 @@ def apply(camss):
         "\tif (!native_rear_required_pix_video_link(\n"
         "\t\t&vfe->line[VFE_LINE_PIX].pads[MSM_VFE_PAD_SRC],\n"
         "\t\t&vfe->line[VFE_LINE_PIX].video_out.vdev.entity.pads[0]))")
+    path.write_text(text)
+    path = camss / "camss-e008k-rear-bridge.h"
+    text = path.read_text()
+    text = replace_once(text, "int csid680_e008k_rear_enable(struct csid_device *csid);",
+        "int csid680_native_rear_configure(struct csid_device *csid);\n"
+        "int csid680_e008k_rear_enable(struct csid_device *csid);")
+    path.write_text(text)
+    path = camss / "camss-csid-680.c"
+    text = replace_once(path.read_text(), '#include "camss-csid-e008k-rear-bridge.inc"',
+        '#include "native-rear-csid-config.inc"\n#include "camss-csid-e008k-rear-bridge.inc"')
     path.write_text(text)
     # Adopt validated inactive-cold-gamma derivatives; immutable parents retained.
     cold = here.parents[1] / "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma"
@@ -67,6 +78,18 @@ def apply(camss):
     text = replace_once(text, anchor,
                         "\t/* The prepared handoff does not grant rear hardware access. */\n"
                         "\tret = e008k_rear_runtime_authorization();\n\tif (ret)\n\t\treturn ret;\n\n" + anchor)
+    # Reset powers CSID but rear lacks the front-only transport builder.
+    # Configure only transport before packet0; packet-owned fields are untouched.
+    text = replace_once(text,
+        "\tret = csid680_e008i_rear_reset(csid, owner_epoch);\n\tif (ret)\n\t\tgoto out_clean_power;",
+        "\tret = csid680_e008i_rear_reset(csid, owner_epoch);\n\tif (ret)\n\t\tgoto out_clean_power;\n\n"
+        "\tcsid_streaming = true; /* Configuration may expose CSID even on failure. */\n"
+        "\thardware_touched = true;\n\tret = csid680_native_rear_configure(csid);\n"
+        "\tif (ret)\n\t\tgoto out_pin;")
+    text = replace_once(text,
+        "\t\t/* PM ref + DMA stay pinned intentionally until reboot. */",
+        "\t\tresult->dma_intentionally_pinned = true;\n"
+        "\t\t/* PM ref + DMA stay pinned intentionally until reboot. */")
     # A failed start may already have exposed hardware. Mark before attempting
     # each operation so emergency stop/pinning covers partial-start failures.
     text = replace_once(text,

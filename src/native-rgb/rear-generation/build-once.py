@@ -6,9 +6,9 @@ Private compiler-bound semantic firmware and its digest stay on this SP11.
 import argparse,hashlib,importlib.util,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent;ROOT=NATIVE.parents[1]
-PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-06"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-06"
-HEAD="9a41488befb46ecf5acda35508f53941949dc27a"
+PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-07"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-07"
+HEAD="a6f48b4274f410b8778dddfc271f0a6f7971d4e3"
 SOURCE=PROJECT/"06-camera/reference/libcamera-native-rgb-rear-20261007-15"
 LIBBUILD=PROJECT/"02-kernel/libcamera-native-rgb-rear-20261007-15"
 KSOURCE=PROJECT/"02-kernel/e003i-front-production-src"
@@ -28,8 +28,8 @@ def guard():
  if r.returncode:raise RuntimeError("overlap guard failed")
 def main():
  os.umask(0o077);guard()
- for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-04"),
-              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-04")]:
+ for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-05"),
+              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-05")]:
   if path.exists():raise RuntimeError("candidate path already exists; audit first")
  build=load("native_rear_build",NATIVE/"build.py")
  result=build.assemble(OUT,nv12_trial=True,front_owner_trial=True,front_queue_trial=True,
@@ -56,7 +56,7 @@ def main():
  profile=output/"p0-input-0.bin";digest=hashlib.sha256(profile.read_bytes()).digest()
  identity=camss/"native-rear-generation-identity.h"
  identity.write_text(
-  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-04.bin"\n'
+  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-05.bin"\n'
   +f'#define NATIVE_REAR_GENERATION_INPUT_BYTES {profile.stat().st_size}U\n'
   +'static const u8 native_rear_generation_input_sha256[32]={'
   +','.join(str(x) for x in digest)+'};\n')
@@ -76,6 +76,47 @@ def main():
                    ("camss-vfe-e008o-rear-semantic-state.inc","e008o_rear_runtime_authorization")]:
   replace(camss/name,func+"(void)\n{\n\treturn -EOPNOTSUPP;",
    func+"(void)\n{\n\tif (READ_ONCE(native_rear_diagnostic_active))\n\t\treturn 0;\n\treturn -EOPNOTSUPP;")
+ # Register-only diagnostics after pipeline power; no pixel/DMA reads.
+ observe="native-rear-generation-observe.inc"
+ (camss/observe).write_bytes((HERE/observe).read_bytes())
+ replace(camss/"camss-e008k-rear-bridge.h",
+  "int csid680_native_rear_configure(struct csid_device *csid);",
+  "int csid680_native_rear_configure(struct csid_device *csid);\n"
+  "void csid680_native_rear_generation_snapshot(struct csid_device *, const char *);")
+ replace(camss/"camss-csid-680.c",'#include "native-rear-csid-config.inc"',
+  '#include "native-rear-csid-config.inc"\n#include "'+observe+'"')
+ replace(camss/"camss-vfe-e008k-rear-runner.inc",
+  "\tret = csid680_native_rear_configure(csid);\n\tif (ret)\n\t\tgoto out_pin;",
+  '\tcsid680_native_rear_generation_snapshot(csid, "before_transport");\n'
+  "\tret = csid680_native_rear_configure(csid);\n\tif (ret)\n\t\tgoto out_pin;\n"
+  '\tcsid680_native_rear_generation_snapshot(csid, "after_transport");')
+ replace(camss/"camss-vfe-e008k-rear-runner.inc",
+  "\tresult->packet_submitted[1] = true;",
+  "\tresult->packet_submitted[1] = true;\n"
+  '\tcsid680_native_rear_generation_snapshot(csid, "after_packet1");')
+ replace(camss/"camss-vfe-e008k-rear-runner.inc",
+  "\t/* First Epoch0 owns slot1 address retarget, then E007y packet2. */",
+  '\tcsid680_native_rear_generation_snapshot(csid, "after_sensor_start");\n'
+  "\t/* First Epoch0 owns slot1 address retarget, then E007y packet2. */")
+ # A deliberate post-stop hold must not repeat CSID/BUS stop.
+ replace(camss/"camss-vfe-e008k-rear-runner.inc",
+  "\tif (ret)\n\t\tgoto out_pin;\n\n\t/* The two DMA sets have been reclaimed;",
+  "\tif (ret == -EINPROGRESS && result->dma_intentionally_pinned &&\n"
+  "\t    result->both_frames_complete && result->csid_quiesced &&\n"
+  "\t    result->bus_stopped && result->rtcdm_stopped && result->source_stopped) {\n"
+  '\t\tcsid680_native_rear_generation_snapshot(csid, "complete_stopped_pinned");\n'
+  "\t\t(void)e005y_vfe1_owner_release(&camss->e005y_vfe1_owner,\n"
+  "\t\t\tE005Y_VFE1_OWNER_REAR, owner_epoch, false);\n"
+  "\t\tkfree(pair);\n\t\treturn ret;\n\t}\n"
+  "\tif (ret)\n\t\tgoto out_pin;\n\n\t/* The two DMA sets have been reclaimed;")
+ replace(camss/"camss-vfe-e008k-rear-runner.inc",
+  "\t\te008k_rear_emergency_pin(camss, vfe, csid, csiphy, req->sensor,",
+  '\t\tcsid680_native_rear_generation_snapshot(csid, "before_emergency_stop");\n'
+  "\t\te008k_rear_emergency_pin(camss, vfe, csid, csiphy, req->sensor,")
+ replace(camss/"camss-vfe-e008k-rear-runner.inc",
+  "\t\t/* PM ref + DMA stay pinned intentionally until reboot. */",
+  '\t\tcsid680_native_rear_generation_snapshot(csid, "after_emergency_stop");\n'
+  "\t\t/* PM ref + DMA stay pinned intentionally until reboot. */")
  # Candidate-only media-bus admission retains front RGGB and adds rear GRBG.
  # No video STREAMON or NV12 claim is made by this generation-only diagnostic.
  replace(camss/"camss-vfe.c",
@@ -113,7 +154,7 @@ def main():
    for name in re.findall(r'^#include "([^"]+)"',p.read_text(),re.M):
     if not (camss/name).is_file():raise RuntimeError("include closure failed")
  result.update(status="BUILD_REAR_GENERATION_DIAGNOSTIC_IN_PROGRESS",
-  candidate_identity="E-NATIVE-REAR-GENERATION-04",candidate_base_commit=HEAD,
+  candidate_identity="E-NATIVE-REAR-GENERATION-05",candidate_base_commit=HEAD,
   rear_optin_single_use_control_available=True,private_compiler_bound_data_only_input=True,
   post_stop_output_command_DMA_and_PM_pinned_until_reboot=True,
   source_profile_register_words_exact=sum(x["register_instances"] for x in phases),

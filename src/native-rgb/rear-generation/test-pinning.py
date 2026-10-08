@@ -11,7 +11,11 @@ def main():
  spec=importlib.util.spec_from_file_location("rear_generation_faults",HERE.parent/"test-rear-runner-faults.py")
  faults=importlib.util.module_from_spec(spec);spec.loader.exec_module(faults)
  text=faults.harness(a.staged)
- text="#define READ_ONCE(x) (x)\n#define native_rear_diagnostic_active host_authorized\n#define dev_info(...) ((void)0)\nstatic unsigned reclaim_calls;\n"+text
+ text="#define READ_ONCE(x) (x)\n#define native_rear_diagnostic_active host_authorized\n#define dev_info(...) ((void)0)\nstatic unsigned reclaim_calls,csid_stop_calls,bus_stop_calls;\n"+text
+ text=faults.once(text,"halted|=4;return step();","halted|=4;csid_stop_calls++;return step();")
+ text=faults.once(text,"halted|=2;return step();","halted|=2;bus_stop_calls++;return step();")
+ text=faults.once(text,"attempted=halted=0;memset(faultable,0,sizeof(faultable));",
+  "attempted=halted=0;csid_stop_calls=bus_stop_calls=0;memset(faultable,0,sizeof(faultable));")
  before=" CHECK(!r->owner_released&&!r->dma_reclaimed);\n return step();"
  after=" CHECK(!r->owner_released&&!r->dma_reclaimed);\n reclaim_calls++;return step();"
  text=faults.once(text,before,after)
@@ -23,7 +27,7 @@ def main():
   CHECK(result.both_frames_complete&&result.csid_quiesced&&result.bus_stopped);
   CHECK(result.rtcdm_stopped&&result.source_stopped&&result.dma_intentionally_pinned);
   CHECK(!result.dma_reclaimed&&!result.owner_released&&!result.ledgers_released);
-  CHECK(pm_refs==1&&unsafe_release>0);
+  CHECK(pm_refs==1&&unsafe_release>0);\n CHECK(csid_stop_calls==1&&bus_stop_calls==1);
  }
 """
  text=faults.once(text,needle,extra)
@@ -42,6 +46,6 @@ def main():
   "all_modeled_partial_start_stop_attempts_checked":True,
   "complete_frames_do_not_authorize_output_reclaim":True,
   "reclaim_function_calls":0,"default_authorization_denial_checked":True,
-  "physical_completion_not_proven":True,"hardware_access":False,"results":results}
+  "successful_stop_helpers_called_once_checked":True,"physical_completion_not_proven":True,"hardware_access":False,"results":results}
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()
