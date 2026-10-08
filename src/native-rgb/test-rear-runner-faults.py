@@ -39,6 +39,8 @@ static int native_rear_validate_prepared_commands(struct e008l_rear_command_set 
   prefix += "\nstatic void csid680_native_rear_generation_snapshot(struct csid_device *c,const char *p) {CHECK(c&&p);}\n"
  if "native_rear_generation_vfe_snapshot" in core:
   prefix += "\nstatic void native_rear_generation_vfe_snapshot(struct vfe_device *v,const char *p) {CHECK(v&&p);}\n"
+ if "csid680_e008i_rear_retire_event" in core:
+  prefix += "\nstatic int csid680_e008i_rear_retire_event(struct csid_device *c,u32 index,u64 epoch) {CHECK(c&&epoch==41);(void)index;return step();}\n"
  if "native_rear_public_pair_alloc" in core:
   prefix=prefix.replace("struct vfe_device {","struct vfe_device {void *native_rear_faulted_pair;")
   prefix=prefix.replace("struct e008h_rear_prime_pair {","struct native_rear_video_lease {bool exposed;};\nstruct camss_buffer {int dummy;};\nstruct e008h_rear_prime_pair {struct {struct native_rear_video_lease public_full;} dma[2];")

@@ -1,3 +1,26 @@
+## 2026-10-08 rear continuous event-queue prerequisite source-qualified
+
+Rear25 real libcamera DMA-BUF 4K NV12 two requests + clean release remains PASS.
+Fixed 16-record history was nearly full (15 events) after just two frames.
+Maintained event queue now uses monotonic producer/consumer sequences and
+release/acquire publication; IRQ reuses storage only after exact owner/
+sequence and every observed WM have been consumed by the runner.
+Overflow, counter wrap, stale/malformed records fail closed. No new hardware
+ACK/control writes and no live image DMA release authority.
+Fresh build32 compiles all three ARM64 W1/Werror modules. All 13 checks PASS:
+actual queue GCC/Clang ASAN/UBSAN,76922 assertions each,1024 sequential and4096
+concurrent events; actual runner clean model3733/62steps60faults, public
+model3946/64steps62faults; remaining mapping/layout/transport/sensor/clock/CSR
+checks PASS. Source only; no install, arm, stream or reboot. Counts unchanged.
+NEXT live generation replacement/retirement, persistent rear queue/libcamera
+request recycling, typed rear semantic IPA/statistics/controls and optical
+comparison. Never fake full-stop facts to authorize live mapping reuse.
+Latest hardware Golden 0104d011-6c45-4b27-9079-d7ccf60436da,25 retired.
+Native50/58IDs116boots failed20; combined65IDs130boots. No armed jobs.
+Front calibration deferred; continuous rear and optical parity still unproven.
+Evidence docs/NATIVE-RGB-REAR-EVENT-QUEUE-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear25 real libcamera two-request DMA-BUF capture PASS
 
 Fresh rear25/build31 and isolated rear libcamera build02 complete two real

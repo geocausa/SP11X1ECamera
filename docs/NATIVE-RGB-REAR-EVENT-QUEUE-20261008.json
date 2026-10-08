@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "status": "PASS_REAR_CONSUMED_EVENT_QUEUE_SOURCE_HOSTED_AND_ARM64_BUILD_ONLY",
+  "base_commit": "78bbc5036fbfb4e64e3a6508c6c9469e5ce55281",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-32",
+  "build_modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "2eb833141fbbceecae38d6c8ff82649cd4f78a4cc2f838084b91391847b442df",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "cf7abf82c87e9032815e247bd625bd1ef472ad65848463799879286863d7d9ad",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "20842829cedb9acfa7750a11f4539b9da9d8ab8576c9c11d76112c8bd1cf1e77",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "hosted_check_count": 13,
+  "hosted_checks": {
+    "event-queue-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_SPSC_EVENT_QUEUE_WRAP_OVERFLOW_AND_THREADED_PUBLICATION",
+      "compiler_results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 76922,
+            "sequential_wrap_events": 1024,
+            "concurrent_events": 4096,
+            "capacity": 16,
+            "event_storage_reuse_only": true,
+            "hardware_MMIO_IRQ_route_are_mocks": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 76922,
+            "sequential_wrap_events": 1024,
+            "concurrent_events": 4096,
+            "capacity": 16,
+            "event_storage_reuse_only": true,
+            "hardware_MMIO_IRQ_route_are_mocks": true
+          }
+        }
+      ]
+    },
+    "dma-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_VB2_MAPPED_SG_APERTURE_ADMISSION"
+    },
+    "lease-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_RETAINED_DMABUF_MAPPING_LEASE"
+    },
+    "public-reclaim-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_COHERENT_AND_PUBLIC_LEASE_ALL_OR_NONE_RECLAIM"
+    },
+    "clean-lifecycle-hosted-01": {
+      "status": "PASS_CANDIDATE_CLEAN_STOP_RELEASE_AND_FAILURE_STOP_MODELS",
+      "compiler_results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 3733,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 3733,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        }
+      ]
+    },
+    "public-lifecycle-hosted-01": {
+      "status": "PASS_ACTUAL_PUBLIC_REAR_RUNNER_LIFECYCLE_FAILURE_MODELS",
+      "compiler_results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 3946,
+            "lifecycle_steps": 64,
+            "injected_failures": 62,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 3946,
+            "lifecycle_steps": 64,
+            "injected_failures": 62,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        }
+      ]
+    },
+    "linear-nv12-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LINEAR_LAYOUT_BUS_AND_LEDGER"
+    },
+    "vfe-hosted-02": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK"
+    },
+    "linear-geometry-hosted-01": {
+      "status": "PASS_HOSTED_REAR_GEOMETRY_COMPOSER"
+    },
+    "transport-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES"
+    },
+    "sensor-mode-hosted-01": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE"
+    },
+    "noc-clock-hosted-01": {
+      "status": "PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS"
+    },
+    "csr-whitelist-hosted-01": {
+      "status": "PASS_EXACT_VFE680_NAMED_SCALAR_WHITELIST"
+    }
+  },
+  "reason": "Rear25 used 15 of the fixed 16 completion records in only two frames. A fixed history cannot support a longer stream.",
+  "implementation": {
+    "IRQ_producer_and_single_runner_consumer": true,
+    "storage_capacity": 16,
+    "monotonic_event_sequences": true,
+    "release_acquire_publication": true,
+    "array_slot_reused_only_after_exact_owner_sequence_checked_and_WM_consumption": true,
+    "overflow_counter_wrap_stale_malformed_history_fail_closed": true,
+    "no_new_hardware_IRQ_ACK_or_control_MMIO": true,
+    "runner_retires_event_only_after_processing_every_observed_WM": true,
+    "event_storage_reuse_grants_image_DMA_free_authority": false
+  },
+  "verification_limits": [
+    "MMIO, route and IRQ drain are explicit host mocks",
+    "sequential and threaded tests are host software qualification",
+    "live image mapping retirement and continuous capture still require implementation and hardware proof"
+  ],
+  "hardware_actions_performed": false,
+  "installed": false,
+  "armed": false,
+  "candidate_identity_consumed": false,
+  "last_hardware_milestone": "E-NATIVE-REAR-GENERATION-25 real libcamera two-request DMA-BUF capture and clean release PASS",
+  "golden_boot_id": "0104d011-6c45-4b27-9079-d7ccf60436da",
+  "counts_unchanged": {
+    "native_completed_streams": 50,
+    "native_consumed_ids": 58,
+    "native_boots": 116,
+    "failed_started": 20,
+    "combined_ids": 65,
+    "combined_boots": 130
+  },
+  "next_work": [
+    "Live generation replacement must require all ten exact consumed IOVAs and receipt of the replacement address/command phase, without false stop facts",
+    "Integrate persistent rear queue and libcamera request recycling",
+    "Provide typed rear semantic IPA/statistics/controls",
+    "Matched Windows image-quality comparison before rear/front calibration claims"
+  ],
+  "front_calibration_deferred": true
+}
