@@ -1,3 +1,17 @@
+## 2026-10-08 fresh Windows rear live CAMIF comparison completed
+
+Windows rear reader872 advancing4K timestamps, clean stop; no pixels read/saved.
+SP7 external KD physical CSR read succeeded. CAMIF halt0 and4064x2286 debug
+dimensions versus Linux10 halt1 and4076 input width. VFE core6000/10 and
+UBWC1046 match exactly; do not alter them speculatively.
+Windows324=0,328/32c=ffff0000 require Linux read-only comparison.
+Pre-enable temporal breakpoint NOT obtained; live reference only.
+Golden verified unchanged; Windows task retired; KD/key/firewall cleanup complete.
+Native44/43IDs/86boots unchanged; Windows3/3/6; combined46IDs/92boots.
+NEXT fresh Linux read-only snapshot for324/328/32c; no new config writes.
+Evidence docs/NATIVE-RGB-WINDOWS-REAR-CAMIF-01-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation10 early route did not resolve CAMIF halt
 
 Route0x101 physically confirmed before transport/startup packets.
