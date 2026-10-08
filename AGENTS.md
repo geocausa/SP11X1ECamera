@@ -1,3 +1,13 @@
+## 2026-10-08 Windows sparse period/bounds reference completed
+
+Rear4K1667distincttimestamps, phase59scalarrows eachonce. Period696c and
+bounds6970/74 all0 atpreCTRL/firstEpoch, controlsalso0, CCIF/TOPfault0.
+No patternwords/pixels/front/configwrites. Taskgone/SP7clean/identityretired.
+Golden 22f64b3f-d6eb-4e3b-84f6-0a52e031aeac verified3hash/EFI/NTFS. CountsNative50IDs100boots
+failed18/streams44; Windows7IDs14boots streams7; combined57IDs114boots.
+NEXT Linux18 compare addedscalarfields and actual camera clocks; no blindzero.
+Evidence docs/NATIVE-RGB-WINDOWS-REAR-SPARSE-02-20261008.json. Earlier entries below are historical.
+
 ## 2026-10-08 exact sparse period/bounds source audit and Windows02 prep
 
 CFG0zero matchesWindows; no simple enablecorrection. Same-SP11 fullPack method
