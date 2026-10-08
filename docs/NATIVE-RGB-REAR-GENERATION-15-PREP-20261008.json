@@ -1,0 +1,213 @@
+{
+  "status": "PASS_REAR15_READ_ONLY_WINDOWS_CCIF_COMPARATOR_NOT_INSTALLED",
+  "identity": "E-NATIVE-REAR-GENERATION-15",
+  "base_head": "15ba4c7af85aca22614899d9c0d92e7b3a5f4905",
+  "hypothesis": "Linux14 CCIF detail20/23 may derive from unused WM or lowTOP activation differing from working Windows; measure exact whitelist before changing configuration",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-19",
+  "source_file_hashes": {
+    "src/native-rgb/rear-generation/build-once.py": "cbd1aeccb91a4266b7907c9fc974d68bc2558d3a3a67713f650fa217a31194e6",
+    "src/native-rgb/rear-generation/install.py": "831c9e1e262dbb31794a924e17d3e4ee21d1c7c9fd9812b65c57c2b4e1331d27",
+    "src/native-rgb/rear-generation/run-once.py": "0b24022898294315fcd7d865a5a850bded544eac122d78550e3061ebe70f1a78",
+    "src/native-rgb/rear-generation/test-offline.py": "690d22b52c46ef16cbfcd91f9e8d7f3dbdb0af6276b9340801e1a24f05f6f76a",
+    "src/native-rgb/rear-generation/native-rear-generation-hook.inc": "6b274cc8336bc4d167b0cda33cf4a2a63466c0ee179460b39ba7568f81275781",
+    "src/native-rgb/rear-generation/native-rear-generation-vfe-observe.inc": "ac1b71fd5b2cf60b23959f552ce394bba03f7104dabe37258b466abd92868bb9"
+  },
+  "unchanged_staged_control_sensor_packet_files": [
+    "ov13858/ov13858.c",
+    "camss/native-rear-csid-config.inc",
+    "camss/native-rear-vfe-config.inc",
+    "camss/camss-vfe-e008k-rear-runner.inc",
+    "camss/native-rear-prepared-commands.inc"
+  ],
+  "only_functional_delta": "45 scalar CSR reads at existing powered snapshots; no new configuration/control/ACK writes",
+  "hardware_writes_added": 0,
+  "Windows_reference": "docs/NATIVE-RGB-WINDOWS-REAR-CCIF-01-20261008.json",
+  "extra_reads_no_pixel_DMA_image_meta_frameheader_addresses": true,
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "217b0bc53bb7625e7127f75366db8a1fb71f5048bb3934df66c04e53f66a216b",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "2009a020e942e701913b5844c5fcccfb6712c23419aa70787d47c26b4a220c74",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "7ddc4e1268e574c9af6b1269ad26379f9401fe273073545ccc6e4667fdc51a02",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "W1_Werror_diagnostics": {
+    "camss": 0,
+    "imx681": 0,
+    "ov13858": 0
+  },
+  "source_profile_register_words_exact": 2268,
+  "host_checks": {
+    "transport-hosted-01.json": {
+      "sensor_mode": "mode1",
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+      "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked": true,
+      "exact_rear_route_before_reset_and_generic_front_unchanged_checked": true,
+      "actual_helper_and_E004ns_predicate_and_RX_derivation": true,
+      "path_config_after_packet0_guard_and_11_atomic_failures_checked": true,
+      "MMIO_and_format_lookup_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "vfe-hosted-01.json": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK",
+      "full_and_same_SP11_observed_readback_models_checked": true,
+      "actual_prefix_predicate_and_helper": true,
+      "MMIO_and_contract_validity_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        }
+      ]
+    },
+    "sensor-mode-hosted-01.json": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE",
+      "modes": [
+        {
+          "mode": 0,
+          "width": 4076,
+          "height": 2806,
+          "Windows_covered_registers_exact": 207,
+          "VTS": 3214,
+          "line_length_register": 1122
+        },
+        {
+          "mode": 1,
+          "width": 4064,
+          "height": 2286,
+          "Windows_covered_registers_exact": 207,
+          "VTS": 3214,
+          "line_length_register": 1122
+        }
+      ],
+      "mode1_geometry_only_delta_count": 7,
+      "mode0_remains_first_default": true,
+      "link_PLL_HTS_VTS_VT_clock_PM_controls_unchanged": true,
+      "extra_upstream_test_pattern_disabled_register": 1,
+      "vendor_table_exported": false,
+      "hardware_access": false,
+      "source_sha256": "f64edd02d482c350f584faf32635cf933f004d3af0754046c1cbcfc98bad1646"
+    },
+    "pinning-hosted-02.json": {
+      "status": "PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING",
+      "actual_candidate_orchestration_and_stop_pin_branch": true,
+      "lifecycle_IRQ_helpers_and_DMA_allocations_host_models": true,
+      "all_modeled_partial_start_stop_attempts_checked": true,
+      "complete_frames_do_not_authorize_output_reclaim": true,
+      "reclaim_function_calls": 0,
+      "default_authorization_denial_checked": true,
+      "successful_stop_helpers_called_once_checked": true,
+      "physical_completion_not_proven": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3230,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3230,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "offline-runner-01.json": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "legacy_mode0_graph_rejected": true,
+      "exact_mode1_pad_readbacks_checked": true,
+      "root_service_environment_Git_trust": true,
+      "retained_actual_graph": true,
+      "edges": 119,
+      "device_nodes": 45,
+      "negative_cases": 13,
+      "hardware_access": false,
+      "synthetic_format_changes_for_offline_testing": true
+    }
+  },
+  "kernel_release": "7.1.5-sp11-render-parity-v4+",
+  "Golden_hashes": {
+    "vmlinuz-7.1.5-sp11-render-parity-v4+": "bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
+    "initrd.img-7.1.5-sp11-fullio-v19c": "ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d",
+    "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00"
+  },
+  "candidate_DTB_sha256": "3d56fd6f610576dee5fc97da809f9c48da16952af9a48a5053ea864b94855beb",
+  "expected_observation": "Same4064x2286 sensor, firstEpoch; exact unused WM20/23 and lowTOP status before retarget. No new completed-frame claim expected",
+  "rollback": "75-second oneuse service and90-second independent watchdog return Golden; output and command DMA/PM/owner remain pinned through mandatory reboot",
+  "counts_unchanged": {
+    "native_streams": 44,
+    "native_identities": 47,
+    "native_boots": 94,
+    "failed_started": 15,
+    "Windows_streams": 5,
+    "Windows_identities": 5,
+    "Windows_boots": 10,
+    "combined_identities": 52,
+    "combined_boots": 104
+  }
+}

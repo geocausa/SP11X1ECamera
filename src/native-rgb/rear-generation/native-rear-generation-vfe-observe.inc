@@ -12,6 +12,19 @@ static void native_rear_generation_vfe_snapshot(struct vfe_device *vfe,const cha
   readl(vfe->base+VFE680_X1E_BUS_UBWC_STATIC_CTRL),readl(vfe->base+VFE_BUS_WR_VIOLATION_STATUS(vfe)),
   readl(vfe->base+VFE_BUS_WR_OVERFLOW_STATUS(vfe)),readl(vfe->base+VFE_BUS_WR_IMAGE_VIOLATION_STATUS(vfe)));
 
+ /* Exact Windows scalar whitelist; unused WM20/23 and lowTOP routing. */
+ {
+  static const unsigned int offsets[] = {
+   0x24, 0x28, 0x2c, 0x68, 0x70, 0x74, 0x78, 0x80, 0x84, 0x88, 0x8c, 0x90, 0x94, 0x98, 0x9c, 0xc18, 0xc1c, 0xc58, 0xc64, 0xc68, 0xc70, 0xe00, 0xf00, 0x1000, 0x1100, 0x2200, 0x220c, 0x2210, 0x2214, 0x2218, 0x2220, 0x2228, 0x2238, 0x2240, 0x2250, 0x2500, 0x250c, 0x2510, 0x2514, 0x2518, 0x2520, 0x2528, 0x2538, 0x2540, 0x2550
+  };
+  unsigned int i;
+
+  for (i = 0; i < ARRAY_SIZE(offsets); i++)
+   dev_info(vfe->camss->dev,
+    "NATIVE_REAR_GENERATION_CCIF phase=%s offset=%04x value=%08x\n",
+    phase, offsets[i], readl(vfe->base + offsets[i]));
+ }
+
  /* Sizes, formats and counters only; never image/meta addresses or contents. */
  for (unsigned int wm = 0; wm < 4; wm++) {
   void __iomem *cfg = vfe680_x1e_bus_reg(vfe, wm, 0);

@@ -1,3 +1,14 @@
+## 2026-10-08 rear15 matching Windows CCIF comparator ready
+
+Only45 scalar CSR reads added to existing powered snapshots; sensor, packet,
+CSID/VFE control and retarget orchestration byte-identical14. No hardware writes.
+Build19 W1/Werror zero diagnostics all3 modules; GCC+Clang transport227/VFE248,
+pinning3230/53failures/reclaim0; exact sensor oracle and root realgraph13 negatives PASS.
+NEXT install/verify/boot fresh15; keep DMA/PM/owner pinned until Golden.
+Counts unchanged native44/47IDs94boots failed15; Windows5/5IDs10boots; combined52/104.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-15-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 Windows rear CCIF reference completed
 
 891 distinct rear4K timestamps, no pixels/front. Exact driver hash matched.
