@@ -1,0 +1,512 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "identity": "E-NATIVE-REAR-GENERATION-32",
+  "status": "PASS_SOURCE_BUILD_AND_19_CHECKS_READY_FOR_LIVE_COMMAND_RETIREMENT",
+  "base_commit": "036495a4fb0156b272582e6a7c662179d1304a76",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-42",
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "131a92d5c0b55b4c583a2a298a79e6d69fb6a8fbec7be0294dcc3731f102eba4",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "0a453061b73eec33cc2d98d709964e2546ff4ebf040054ff6c1cdab5ae8d062f",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "7fbb1447d030ce8b225f9805c70930c151a14d041863975686e53b5986e28545",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "ARM64_W1_Werror_modules": 3,
+  "compile_diagnostics": 0,
+  "hosted_check_count": 19,
+  "hosted_checks": {
+    "offline-runner-01": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "negative_cases": 86,
+      "negative_live_command_retirement_cases": 16
+    },
+    "csr-whitelist-hosted-01": {
+      "status": "PASS_EXACT_VFE680_NAMED_SCALAR_WHITELIST",
+      "negative_cases": 9
+    },
+    "noc-clock-hosted-01": {
+      "status": "PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 66,
+            "admission_negatives": 12,
+            "CCF_fault_cases": 7,
+            "shared_parent_one_set": true,
+            "higher_rate_preserved": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 66,
+            "admission_negatives": 12,
+            "CCF_fault_cases": 7,
+            "shared_parent_one_set": true,
+            "higher_rate_preserved": true
+          }
+        }
+      ]
+    },
+    "linear-geometry-hosted-01": {
+      "status": "PASS_HOSTED_REAR_GEOMETRY_COMPOSER",
+      "results": [
+        {
+          "compiler": "gcc",
+          "compile_Werror": true,
+          "sanitizers": [
+            "ASAN",
+            "UBSAN"
+          ]
+        },
+        {
+          "compiler": "clang",
+          "compile_Werror": true,
+          "sanitizers": [
+            "ASAN",
+            "UBSAN"
+          ]
+        }
+      ]
+    },
+    "sensor-mode-hosted-01": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE"
+    },
+    "linear-nv12-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LINEAR_LAYOUT_BUS_AND_LEDGER",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 6508,
+            "FULL_compression_register_writes": 0,
+            "readback_faults": 46,
+            "cold_admission_negatives": 12,
+            "DMA_span_negatives": 6,
+            "ten_WM_exact_consumed_identity_checked": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 6508,
+            "FULL_compression_register_writes": 0,
+            "readback_faults": 46,
+            "cold_admission_negatives": 12,
+            "DMA_span_negatives": 6,
+            "ten_WM_exact_consumed_identity_checked": true
+          }
+        }
+      ]
+    },
+    "clean-lifecycle-hosted-01": {
+      "status": "PASS_CANDIDATE_CLEAN_STOP_RELEASE_AND_FAILURE_STOP_MODELS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3930,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3930,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        }
+      ]
+    },
+    "public-reclaim-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_COHERENT_AND_PUBLIC_LEASE_ALL_OR_NONE_RECLAIM",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 739,
+            "admission_negatives": 216,
+            "all_allocations_checked_before_any_release": true,
+            "successful_DMA_set_releases": 2,
+            "command_release_requires_RTCDM_stop": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 739,
+            "admission_negatives": 216,
+            "all_allocations_checked_before_any_release": true,
+            "successful_DMA_set_releases": 2,
+            "command_release_requires_RTCDM_stop": true
+          }
+        }
+      ]
+    },
+    "lease-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_RETAINED_DMABUF_MAPPING_LEASE",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 856,
+            "lease_cases": 48,
+            "MMAP_and_DMABUF": true,
+            "own_mapping_differs_from_VB2_and_survives_VB2_cancel": true,
+            "all_16_stop_flag_combinations": true,
+            "partial_get_unwinds_reverse_order": true,
+            "unproven_exposed_mapping_never_released": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 856,
+            "lease_cases": 48,
+            "MMAP_and_DMABUF": true,
+            "own_mapping_differs_from_VB2_and_survives_VB2_cancel": true,
+            "all_16_stop_flag_combinations": true,
+            "partial_get_unwinds_reverse_order": true,
+            "unproven_exposed_mapping_never_released": true
+          }
+        }
+      ]
+    },
+    "dma-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_VB2_MAPPED_SG_APERTURE_ADMISSION",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 658,
+            "negative_cases": 155,
+            "valid_mapped_segment_partitions": 64,
+            "cached_first_address_ignored": true,
+            "ACTIVE_VB2_ownership_unchanged": true,
+            "CPU_pixel_access_or_MMIO": false
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 658,
+            "negative_cases": 155,
+            "valid_mapped_segment_partitions": 64,
+            "cached_first_address_ignored": true,
+            "ACTIVE_VB2_ownership_unchanged": true,
+            "CPU_pixel_access_or_MMIO": false
+          }
+        }
+      ]
+    },
+    "public-lifecycle-hosted-01": {
+      "status": "PASS_ACTUAL_PUBLIC_REAR_RUNNER_LIFECYCLE_FAILURE_MODELS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 4361,
+            "lifecycle_steps": 66,
+            "injected_failures": 64,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 4361,
+            "lifecycle_steps": 66,
+            "injected_failures": 64,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          }
+        }
+      ]
+    },
+    "transport-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+      "results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "vfe-hosted-02": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 466,
+            "writes": 6,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 466,
+            "writes": 6,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        }
+      ]
+    },
+    "event-queue-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_SPSC_EVENT_QUEUE_WRAP_OVERFLOW_AND_THREADED_PUBLICATION",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 76922,
+            "sequential_wrap_events": 1024,
+            "concurrent_events": 4096,
+            "capacity": 16,
+            "event_storage_reuse_only": true,
+            "hardware_MMIO_IRQ_route_are_mocks": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 76922,
+            "sequential_wrap_events": 1024,
+            "concurrent_events": 4096,
+            "capacity": 16,
+            "event_storage_reuse_only": true,
+            "hardware_MMIO_IRQ_route_are_mocks": true
+          }
+        }
+      ]
+    },
+    "live-observe-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LIVE_REPLACEMENT_READ_ONLY_OBSERVATION",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 16479,
+            "negative_cases": 473,
+            "read_only_live_observer": true,
+            "modelled_MMIO_and_IRQ": true,
+            "DMA_release_or_reuse_authority": false
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 16479,
+            "negative_cases": 473,
+            "read_only_live_observer": true,
+            "modelled_MMIO_and_IRQ": true,
+            "DMA_release_or_reuse_authority": false
+          }
+        }
+      ]
+    },
+    "live-retire-hosted-01": {
+      "status": "PASS_ACTUAL_LIVE_REAR_FULL_MAPPING_RETIREMENT_AND_AUX_PINNING",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 50339,
+            "negative_cases": 1245,
+            "actual_live_FULL_retirement": true,
+            "modelled_MMIO_and_IRQ": true,
+            "old_FULL_unmap_only_after_actual_guard": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 50339,
+            "negative_cases": 1245,
+            "actual_live_FULL_retirement": true,
+            "modelled_MMIO_and_IRQ": true,
+            "old_FULL_unmap_only_after_actual_guard": true
+          }
+        }
+      ]
+    },
+    "command-receipts-hosted-01": {
+      "status": "PASS_ACTUAL_EXACT_COMMAND_ALLOCATION_REQUEST_OWNER_AND_22_BL_RECEIPTS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "assertions": 9935,
+          "negative_cases": 350
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "assertions": 9935,
+          "negative_cases": 350
+        }
+      ]
+    },
+    "command-fifo-hosted-01": {
+      "status": "PASS_ACTUAL_SERIALIZED_FIFO_RECEIPT_CAPTURE_AND_CURRENT_CHECK",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 762,
+            "negative_cases": 40,
+            "actual_FIFO_commit_wait_and_current_check": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 762,
+            "negative_cases": 40,
+            "actual_FIFO_commit_wait_and_current_check": true
+          }
+        }
+      ]
+    },
+    "command-retire-hosted-01": {
+      "status": "PASS_ACTUAL_LIVE_COMMAND_RETIREMENT_AND_POST_STOP_ZERO_STATE_RELEASE",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "assertions": 15609,
+          "negative_cases": 1580,
+          "command_CPU_aliases": 66,
+          "auxiliary_CPU_aliases": 192,
+          "command_output_DMA_aliases": 88
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "assertions": 15609,
+          "negative_cases": 1580,
+          "command_CPU_aliases": 66,
+          "auxiliary_CPU_aliases": 192,
+          "command_output_DMA_aliases": 88
+        }
+      ]
+    }
+  },
+  "hypothesis": "All four startup command arenas can be freed while the rear ISP remains live after exact22 serialized FIFO0 BL_DONE receipts and stable complete replacement output ownership, with zero packet tombstones preventing post-stop double free.",
+  "contract": {
+    "live_completed_command_arena_retirement": true,
+    "all22_exact_receipts_and_current_owner_required": true,
+    "all12_command_CPU_allocations_cross_type_disjoint": true,
+    "all_command_slabs_disjoint_from20_output_DMA_spans": true,
+    "pre_hardware_and_pre_output_retire_admission": true,
+    "retired_tombstone_checked_before_post_stop_cleanup": true,
+    "command_rewrite_address_reuse_or_VB2_delivery": false,
+    "continuous_capture": false
+  },
+  "allocation_guard_scope": {
+    "command_CPU_pairs": 66,
+    "command_vs_auxiliary_CPU_pairs": 192,
+    "command_vs_output_DMA_aliases_and_FULL_mapping_tails": 88,
+    "32bit_full_retained_mapping_admission": true
+  },
+  "hardware_contract": "Existing serialized synchronous FIFO0 BL_DONE; software sequence is not a hardware Request ID.",
+  "hardware_attempted": false,
+  "candidate_consumed": false,
+  "installed": false,
+  "armed": false,
+  "Golden_hashes_unchanged": true,
+  "boot_before": "aa8479b7-fe8d-45ec-a41f-10d86bb26f89",
+  "superseded_source_only_builds": [
+    {
+      "build_suffix": 40,
+      "reason": "Cross-type alias guards moved before command descriptor dereference",
+      "installed": false,
+      "consumed": false
+    },
+    {
+      "build_suffix": 41,
+      "reason": "Added explicit32bit retained FULL mapping admission before u32 overlap comparison",
+      "installed": false,
+      "consumed": false
+    }
+  ],
+  "latest_hardware_evidence": "docs/NATIVE-RGB-REAR-GENERATION-31-20261008.json",
+  "limitations": {
+    "MMIO_IRQ_DMA_and_semantic_provider_APIs_modelled_in_hosted_tests": true,
+    "command_address_reuse_or_resubmission": false,
+    "early_VB2_delivery": false,
+    "continuous_rear_capture_proven": false,
+    "optical_quality_parity_proven": false,
+    "SensorTimestamp_proven": false,
+    "front_calibration": "deferred"
+  },
+  "next": "Fresh32 guarded live command retirement qualification, automatic Golden return; then independent safe early delivery and persistent rear Request scheduler."
+}

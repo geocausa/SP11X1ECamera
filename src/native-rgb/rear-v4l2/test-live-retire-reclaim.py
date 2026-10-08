@@ -111,6 +111,10 @@ struct native_rear_video_lease {void *dbuf,*attachment,*table;struct native_rear
   types=types.replace("{true,true,true,true,false,false,false};","{true,true,true,true,false,false,false,false};")
   types=types.replace("struct aux {void *cpu;size_t size;u8 wm;};","struct aux {void *cpu;size_t size;u8 wm;u64 dma;};")
   types=types.replace("(struct aux){&cam,c->frame_incr,c->wm}","(struct aux){&cam,c->frame_incr,c->wm,0}")
+ if (a.staged/"native-rear-command-retired.inc").exists():
+  types=types.replace("struct e008l_rear_command_set {","struct e008l_rear_command_set {bool live_retired;u64 retired_owner;")
+  # Explicit command-tombstone model, exercised against actual allocation by test-command-retire.py.
+  types+="\nstatic bool native_rear_live_commands_retired_valid(const struct e008l_rear_command_set *s,u64 owner){return s&&s->live_retired&&owner&&s->retired_owner==owner;}\n"
  fn=base.function;lease=(a.staged/"native-rear-video-lease.inc").read_text()
  code=base.PRE+macros+wm+aux+types
  code+="static bool "+fn(lease,"native_rear_video_lease_valid")

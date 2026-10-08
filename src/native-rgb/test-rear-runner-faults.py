@@ -82,6 +82,17 @@ static void native_rear_command_receipts_observe(struct vfe_device *v,
  CHECK(v&&c&&p&&q&&r&&r->both_frames_complete);(void)cursor;
 }
 ''')
+ if '#include "native-rear-command-retire.inc"' in core:
+  core=once(core,'#include "native-rear-command-retire.inc"','''/* Explicit mocks: actual retirement and alias admission tested separately. */
+static int native_rear_command_allocations_check(const struct e008k_rear_request *q,
+ const struct e008h_rear_prime_pair *p,u64 owner){
+ CHECK(q&&q->commands&&p&&owner==41);return step();
+}
+static void native_rear_live_retire_commands_observe(struct vfe_device *v,struct csid_device *c,
+ struct e008h_rear_prime_pair *p,struct e008k_rear_request *q,struct e008k_rear_result *r,u32 cursor){
+ CHECK(v&&c&&p&&q&&r&&r->both_frames_complete);(void)cursor;
+}
+''')
  if "native_rear_public_pair_alloc" in core:
   prefix=prefix.replace("struct vfe_device {","struct vfe_device {void *native_rear_faulted_pair;")
   prefix=prefix.replace("struct e008h_rear_prime_pair {","struct native_rear_video_lease {bool exposed;};\nstruct camss_buffer {int dummy;};\nstruct e008h_rear_prime_pair {struct {struct native_rear_video_lease public_full;} dma[2];")

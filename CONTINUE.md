@@ -1,3 +1,23 @@
+## 2026-10-08 rear32 live command retirement source qualified
+
+Fresh32/build42 all3 ARM64 modules W1/Werror with zero diagnostics;19 checks PASS.
+Actual command allocator/layout/receipts/live free/tombstone harness GCC/Clang
+ASAN/UBSAN/Werror each15609 cumulative assertions and1580 retirement negatives,
+including66 cross-type command CPU aliases,192 command/aux CPU aliases and88
+command/output DMA overlaps including FULL mapped tails. Hardware APIs are models.
+All exact22 receipts, current FIFO completion, exclusive owner, completed ledgers
+and stable live replacement observation precede all4 command arena frees.
+Retired packet zero state and retained owner/last receipt are verified before
+post-stop cleanup; no command reuse/resubmission or early VB2 delivery.
+Graph/runtime parser86 negatives,16 new strict retirement-record cases.
+Build40 and41 superseded source-only, never installed/consumed; build42 current.
+NEXT fresh32 one-use hardware qualification with automatic Golden return.
+31 remains latest hardware PASS. Native54/63IDs126boots/prestream9/after-start20;
+combined70IDs140boots. Golden aa8479b7-fe8d-45ec-a41f-10d86bb26f89.
+32 unconsumed/uninstalled/unarmed; rear continuous capture and optics unproven.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-32-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear31 exact22 command receipts live-qualified, clean return PASS
 
 Fresh31/build39 physically verifies4 packets/22 serialized FIFO0 BL_DONE
