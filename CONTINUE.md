@@ -1,3 +1,17 @@
+## 2026-10-08 rear20 maintained NoC correction confirmed on second fresh boot
+
+Both19and20 complete2outputgenerations each, packets1111/epochs2 allstopflags1.
+MaintainedrearNoC240M viaCCF physicallyqualified; TOPIPP/CCIF/imagesize0 allphases.
+20 events14; do not treat varyingeventcounts as identicalframes or optical proof.
+Sensorstartupfix8freshboots; hardwarecompletion2freshboots. Native46streams53IDs
+106boots failed19; Windows7IDs14boots; combined60IDs120boots.
+Golden 2840c662-c15e-45c8-89af-80a3024bb7f4 3hash/EFI/NTFSverified, hazards0/watchdogfalse.
+20retired, unitsdisabled, nofreshcandidate/jobsarmed. DMA/PM/ownerheldthroughreboot.
+NEXT completedrearbuffer delivery via standardV4L2/libcamera, native linearNV12
+and continuouscapture, then matchedWindowsopticalquality; frontcalibrationdeferred.
+Rearpublicruntime/continuousdelivery/opticalquality are NOT complete.
+Nextfreshcandidate21/sourcebuild26. Evidence docs/NATIVE-RGB-REAR-GENERATION-20-20261008.json. Earlierentrieshistorical.
+
 ## 2026-10-08 rear20 maintained NoC correction fresh repetition ready
 
 NoC240M floor viaCCF integrated inmaintainednative rearconfigure afterWMdisabled
