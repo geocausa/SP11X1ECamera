@@ -1,3 +1,33 @@
+## 2026-10-08 rear35 continuous reused Requests and clean shutdown hardware PASS
+
+Fresh35/build46 + libcamera04:80 actual application Requests completed through
+four reused DMA-BUF buffers,3840x2160 linearNV12,stride3840/image12441600,
+two logical planes; zero pixel reads/CPUcopy, no SensorTimestamp.
+81 VB2 buffers completed live,80 output handoffs and source-locked RUP/AUP
+commits,318 exact-owner IRQ records drained through16-slot queue wrap,203epochs.
+Current mapping stays held until all10 replacement consumed addresses and stable
+owner proof permit old FULL+8aux retirement; final current mapping held to4stops.
+Startup4command arenas retired after exact22BL receipts, no DMAcommand replay.
+Application80 vs kernel81 is an extra completion racing STREAMOFF, not an
+additional application success. Strict sequences/planes/timestamps checked.
+Elapsed6.96817s including startup/stop,11.4808fps delivered: full rate unqualified.
+All4 physical stops/DMA/owner/arena cleanup PASS; all3sensors bound/suspended,
+IFE594MHz CSID/PHY300MHz counts0;10VFE/8IPP error phases0, hazards0, no watchdog.
+Automatic Golden36563c89-5d18-40bc-8fa1-ba366c5d79c8; protected hashes unchanged.
+35 consumed/retired, units disabled; no armed tests/nodes/modules/jobs.
+22 source checks PASS,3 ARM64 W1/Werror0; queue GCC/Clang26529 assertions/211
+negatives each; fixed output commit537 assertions/15 negatives each,103parser
+negatives, waitqueue271 assertions plus rejected omitted-initializer control.
+33 pre-sensor QBUF waitqueue Oops and34 third-generation commit timeout are
+fully retired;35 fixes held. Never retry33/34/35. Source28 still unconsumed.
+Native57/67IDs134boots/prestream10/failed-after-start21; combined74IDs148boots.
+NEXT same-boot rear restart/open-close and recovery; then full-rate delivery,
+semantic IPA/statistics/3A/controls/SensorTimestamp and matched Windows optics.
+Single-use startup remains; no repeat lifecycle/long soak/adaptive3A/optics claim.
+Front calibration deferred until rear finished.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-35-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear35 source-locked output commit qualified, hardware pending
 
 34 hardware fixed the QBUF waitqueue fault and delivered1 VB2 buffer while live.
