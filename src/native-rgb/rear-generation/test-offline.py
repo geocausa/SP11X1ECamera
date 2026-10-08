@@ -5,10 +5,15 @@ import json,re,runpy,subprocess,tempfile
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 GRAPH=Path("/var/lib/sp11-camera-native-profile-20261007-01/PRIVATE-GRAPH-BEFORE-CAPTURE.txt")
-OUT=Path("/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-03/offline-runner-01.json")
+OUT=Path("/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-04/offline-runner-01.json")
 def main():
  classify=runpy.run_path(str(HERE/"route-contract.py"))["classify"]
- validate=runpy.run_path(str(HERE/"run-once.py"))["validate_formats"]
+ runtime=runpy.run_path(str(HERE/"run-once.py"))
+ validate=runtime["validate_formats"];run=runtime["run"]
+ root=HERE.parents[2]
+ assert run(["git","-C",root,"rev-parse","HEAD"]).strip()==subprocess.check_output(
+  ["git","-c","safe.directory="+str(root),"-C",root,"rev-parse","HEAD"],text=True).strip()
+ run(["bash",root/"tools/camera-overlap-guard.sh","--require-golden"])
  graph=GRAPH.read_text()
  rear=re.findall(r"^- entity [0-9]+: (ov13858 [0-9]+-0010) ",graph,re.M)
  assert len(rear)==1
@@ -53,7 +58,7 @@ def main():
   subprocess.run(["gcc","-std=gnu11","-Wall","-Wextra","-Werror","-O2",HERE/"probe.c","-o",Path(tmp)/"probe"],check=True)
  assert failures==12
  result={"status":"PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
- "retained_actual_graph":True,"edges":119,"device_nodes":45,"negative_cases":failures,
+ "root_service_environment_Git_trust":True,"retained_actual_graph":True,"edges":119,"device_nodes":45,"negative_cases":failures,
  "hardware_access":False,"synthetic_format_changes_for_offline_testing":True}
  assert not OUT.exists();OUT.write_text(json.dumps(result,indent=2)+"\n")
  print(json.dumps(result))

@@ -3,13 +3,14 @@
 """One rear generation proof, no optical file access, automatic Golden return."""
 import json,os,re,runpy,subprocess,time
 from pathlib import Path
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-01")
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-02")
 ROOT=Path("/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-driver")
-MARKER="sp11_camera_native_rear_generation_20261007_01=1"
+MARKER="sp11_camera_native_rear_generation_20261007_02=1"
 def need(condition,message):
  if not condition:raise RuntimeError(message)
 def run(args,timeout=25):
- return subprocess.check_output([str(x) for x in args],text=True,stderr=subprocess.STDOUT,timeout=timeout)
+ return subprocess.check_output([str(x) for x in args],text=True,stderr=subprocess.STDOUT,timeout=timeout,
+  env=dict(os.environ,GIT_CONFIG_COUNT="1",GIT_CONFIG_KEY_0="safe.directory",GIT_CONFIG_VALUE_0=str(ROOT)))
 def save(result): (D/"RESULT.json").write_text(json.dumps(result,indent=2)+"\n")
 def sensors():
  result={}
@@ -36,7 +37,7 @@ def main():
  need(MARKER in Path("/proc/cmdline").read_text().split(),"candidate command line mismatch")
  fd=os.open(D/"CONSUMED",os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
  os.write(fd,(Path("/proc/sys/kernel/random/boot_id").read_text()).encode());os.fsync(fd);os.close(fd)
- result={"identity":"E-NATIVE-REAR-GENERATION-01","status":"STARTED",
+ result={"identity":"E-NATIVE-REAR-GENERATION-02","status":"STARTED",
   "boot_id":Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
   "single_use":True,"pixel_files_saved":0,"DMA_reclaim_authorized":False}
  try:

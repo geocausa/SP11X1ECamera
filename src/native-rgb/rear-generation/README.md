@@ -1,3 +1,20 @@
+## 2026-10-08 generation01 retired before modules; fresh generation02 prepared
+
+Generation01 returned automatically to Golden602875be-51f9-4a06-9e6e-4c676548f9da.
+Worker consumed identity but Git rejected root-service repo ownership before
+camera module load. Zero sensor starts/streams; no kernel hazard or watchdog.
+Reproduced in clean HOME=/root environment. Fix trusts only this exact repo in
+each subprocess environment; no global Git exception. Clean root runner/guard
+preflight now PASS. Fresh sourcebuild04/generation02 W1/Werror zero diagnostics,
+GCC+Clang2278 orchestration assertions/52 injected failures and12 graph negatives PASS.
+All exposed DMA/PM/owner remain pinned until mandatory Golden reboot.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-01-20261008.json and
+docs/NATIVE-RGB-REAR-GENERATION-02-PREP-20261008.json.
+Native44streams/34IDs/68boots;Windows2/2/4;combined72boots/36IDs.
+NEXT install/verify/boot fresh generation02 autonomously. Never retry01.
+Rear FIRST; front calibration deferred; same-SP11 optical/tuning privacy unchanged.
+Earlier preparation/status entries below are historical.
+
 # Rear generation and stop diagnostic
 
 This isolated build connects the current typed rear startup composer to the
