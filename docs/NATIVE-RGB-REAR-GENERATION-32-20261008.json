@@ -1,0 +1,216 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "identity": "E-NATIVE-REAR-GENERATION-32",
+  "status": "PASS_REAR_PUBLIC_LIBCAMERA_LIVE_COMMAND_RETIREMENT_AND_CLEAN_RELEASE",
+  "source_commit": "ee592809928d0b276041670ac562e81a4eebd6c9",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-42",
+  "preflight": "docs/NATIVE-RGB-REAR-GENERATION-32-PREP-20261008.json",
+  "candidate_boot_id": "d986d891-8f4e-427d-bb08-46bdd2b683f8",
+  "verified_Golden_boot_id": "8ec205f1-a1c1-4493-96ad-3f6d9e6a1395",
+  "public_libcamera": {
+    "status": "PASS_LIBCAMERA_REAR_TWO_PUBLIC_REQUESTS",
+    "completed_frames": 2,
+    "width": 3840,
+    "height": 2160,
+    "stride": 3840,
+    "image_bytes": 12441600,
+    "logical_planes": 2,
+    "pixel_bytes_read": 0,
+    "SensorTimestamp_present": false,
+    "stop_and_release": true
+  },
+  "public_V4L2_result": {
+    "ret": 0,
+    "frames": 2,
+    "width": 3840,
+    "height": 2160,
+    "bytes": 12441600,
+    "retained_public_FULL": 1,
+    "cpu_pixel_copy": 0
+  },
+  "kernel_result": {
+    "ret": 0,
+    "composed": 1,
+    "once": 1,
+    "prepared": 1,
+    "owner": 1,
+    "packets": "1111",
+    "epochs": 2,
+    "events": 13,
+    "slot0": 1,
+    "slot1": 1,
+    "complete": 1,
+    "csid_stop": 1,
+    "bus_stop": 1,
+    "rtcdm_stop": 1,
+    "source_stop": 1,
+    "dma_pinned": 0,
+    "dma_reclaimed": 1,
+    "owner_released": 1,
+    "arena_released": 1,
+    "reboot": 1
+  },
+  "command_receipts": {
+    "ret": 0,
+    "packets": 4,
+    "BL_complete": 22,
+    "first_seq": 1,
+    "last_seq": 22,
+    "command_arenas_pinned": 4,
+    "live_release": 0,
+    "rewrite": 0,
+    "requeue": 0
+  },
+  "live_command_retirement": {
+    "ret": 0,
+    "released": 4,
+    "retired_valid": 1,
+    "command_arenas_pinned": 0,
+    "owner": 1,
+    "BL_complete": 22,
+    "stop_flags": 0,
+    "vb2_complete": 0,
+    "requeue": 0
+  },
+  "exact_serialized_command_receipts_proven": true,
+  "software_sequence_is_not_hardware_request_ID": true,
+  "live_replacement_observation": {
+    "ret": 0,
+    "owner": 1,
+    "old_complete": 1,
+    "next_complete": 1,
+    "receipts": 1,
+    "enabled": 1023,
+    "programmed": 1023,
+    "consumed_addr": 1023,
+    "published": 13,
+    "consumed": 13,
+    "cursor": 13,
+    "epoch_before": 3,
+    "epoch_after": 3,
+    "live_release": 0
+  },
+  "live_FULL_retirement": {
+    "ret": 0,
+    "released": 1,
+    "old_valid": 1,
+    "next_pinned": 1,
+    "aux_pinned": 8,
+    "stop_flags": 0,
+    "vb2_complete": 0,
+    "requeue": 0
+  },
+  "live_auxiliary_retirement": {
+    "ret": 0,
+    "released": 8,
+    "old_valid": 1,
+    "next_aux_pinned": 8,
+    "next_FULL_pinned": 1,
+    "stop_flags": 0,
+    "vb2_complete": 0,
+    "requeue": 0
+  },
+  "live_first_generation_all_output_retirement_proven": true,
+  "live_command_arena_retirement_proven": true,
+  "live_command_address_reuse_or_resubmission_proven": false,
+  "continuous_rear_capture_proven": false,
+  "early_VB2_delivery_proven": false,
+  "proof_scope": "All4 startup command slabs/DMI descriptors/dynamic allocations freed while exclusive rear ISP live after exact22 bound serialized FIFO0 BL_DONE receipts, current FIFO completion and stable complete ten-WM replacement. Both ledgers and replacement FULL+8aux held until4 physical stops. Retired owner/receipt and zero packet tombstones verified for post-stop cleanup. No command resubmit/rewrite/address reuse or early VB2 delivery.",
+  "initial_sensors": {
+    "imx681": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "ov13858": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "sp11-vd55g0": {
+      "bound": true,
+      "runtime_status": "suspended"
+    }
+  },
+  "final_sensors": {
+    "imx681": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "ov13858": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "sp11-vd55g0": {
+      "bound": true,
+      "runtime_status": "suspended"
+    }
+  },
+  "sensor_start_attempts": 1,
+  "errors": {
+    "VFE": {
+      "phases": 10,
+      "all_observed_errors_zero": true
+    },
+    "IPP": {
+      "phases": 8,
+      "all_observed_errors_zero": true
+    }
+  },
+  "after_release_camera_clocks": {
+    "cam_cc_ife_1_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 594000000
+    },
+    "cam_cc_ife_1_clk_src": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 594000000
+    },
+    "cam_cc_csid_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    },
+    "cam_cc_csid_clk_src": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    },
+    "cam_cc_csiphy1_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    }
+  },
+  "kernel_hazards": 0,
+  "watchdog_fired": false,
+  "service_result": {
+    "service_result": "success",
+    "exit_code": "exited",
+    "exit_status": 0
+  },
+  "Golden_payload_hashes_verified_unchanged": true,
+  "retired": true,
+  "units_disabled": true,
+  "experiment_armed": false,
+  "counts": {
+    "native_completed_streams": 55,
+    "native_consumed_ids": 64,
+    "native_boots": 128,
+    "failed_pre_stream": 9,
+    "failed_started": 20,
+    "combined_ids": 71,
+    "combined_boots": 142
+  },
+  "source_only_identity28_remains_unconsumed": true,
+  "front_calibration_deferred": true,
+  "optical_pixels_read_or_saved": false,
+  "SensorTimestamp_and_semantic_rear_IPA_proven": false,
+  "next": "Persistent rear Request scheduler with independently guarded command address reuse/resubmission and safe early delivery. Then semantic rear IPA/statistics/controls/SensorTimestamp and matched Windows optics."
+}

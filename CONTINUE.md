@@ -1,3 +1,30 @@
+## 2026-10-08 rear32 live command retirement and clean return hardware PASS
+
+Fresh32/build42 frees all4 startup command arenas while exclusive rear ISP live,
+after exact22 serial FIFO0 BL_DONE receipts/current completion and stable complete
+replacement ownership. ret0/released4/tombstone-valid1/arenas-pinned0/owner1/
+BL-complete22/stop-flags0/VB2-complete0/requeue0. Software sequence is not hardware
+Request ID. All packet allocations zero; retained owner/last receipt validates
+post-stop cleanup without double free. Commands are not rewritten/resubmitted.
+First FULL+old8aux retired live again; both ledgers and replacement FULL+8aux
+held until4 physical stops. All10 replacement WM masks1023,13 events drained,
+stableEpoch3. Two real libcamera DMA-BUF 3840x2160 linear NV12 Requests,
+stride3840/image12441600; zero pixel reads/copy, SensorTimestamp absent.
+All4 stops/DMA/owner/arena cleanup PASS; all3 sensors bound/runtime-suspended,
+IFE594MHz CSID/PHY300MHz counts0;10VFE/8IPP errors0, hazards0, no watchdog.
+Automatic Golden 8ec205f1-a1c1-4493-96ad-3f6d9e6a1395 verified, protected hashes unchanged.
+32 consumed/retired, units disabled; no armed tests/nodes/modules/jobs.
+Source19 checks PASS,3 ARM64 W1/Werror modules0 diagnostics; GCC/Clang retirement
+harness15609 cumulative assertions/1580 negatives each, graph parser86 negatives.
+Native55 completed/64IDs128boots/prestream9/failed-after-start20;
+combined71IDs142boots. Source28 still unconsumed/uninstalled.
+NEXT persistent rear Request scheduler, separately guarded command reuse and
+safe early delivery; then semantic IPA/statistics/controls/SensorTimestamp and
+matched Windows optics. Front calibration deferred; continuous rear/optical
+parity and command address reuse remain unproven.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-32-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear32 live command retirement source qualified
 
 Fresh32/build42 all3 ARM64 modules W1/Werror with zero diagnostics;19 checks PASS.
