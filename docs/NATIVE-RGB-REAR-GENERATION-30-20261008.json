@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "identity": "E-NATIVE-REAR-GENERATION-30",
+  "source_commit": "406cae230dedac69e331efa01d94d872d775c915",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-38",
+  "status": "FAIL_RECEIPT_PROTOCOL_GUARD_BEFORE_SENSOR_START_AUTO_GOLDEN_RETURN_RETIRED",
+  "candidate_boot": "2ace6251-f826-4111-a922-f87e9bc94116",
+  "Golden_return_boot": "d37972ea-7752-4066-8b5e-c6ff6901f59f",
+  "sensor_start_attempts": 0,
+  "completed_requests": 0,
+  "kernel_result": {
+    "ret": -71,
+    "composed": 1,
+    "once": 1,
+    "prepared": 1,
+    "owner": 1,
+    "packets": "1000",
+    "epochs": 0,
+    "events": 0,
+    "slot0": 1,
+    "slot1": 0,
+    "complete": 0,
+    "csid_stop": 0,
+    "bus_stop": 0,
+    "rtcdm_stop": 0,
+    "source_stop": 0,
+    "dma_pinned": 1,
+    "dma_reclaimed": 0,
+    "owner_released": 0,
+    "arena_released": 0,
+    "reboot": 1
+  },
+  "probe_exit": 1,
+  "service_result": "service_result=exit-code\nexit_code=exited\nexit_status=1\n",
+  "watchdog_fired": false,
+  "kernel_hazards": 0,
+  "protected_Golden_hashes_unchanged": true,
+  "consumed": true,
+  "retired": true,
+  "units_disabled": true,
+  "pixel_files_saved": 0,
+  "DMA_held_until_reboot_on_failure": true,
+  "latest_successful_hardware_identity": "E-NATIVE-REAR-GENERATION-29",
+  "native_counts": {
+    "completed_streams": 53,
+    "failed_pre_stream_attempts": 9,
+    "failed_after_start": 20,
+    "consumed_identities": 62,
+    "boots": 124
+  },
+  "combined_counts": {
+    "consumed_identities": 69,
+    "boots": 138
+  },
+  "cause": {
+    "confirmed": "packet0 completes and enables slot0; receipt path rejects during packet1 before sensor Start",
+    "working_hypothesis": "ISR last_irq_status is overwritten by generated INLINE IRQ; strict post-synchronize BL_DONE-only snapshot unsuitable",
+    "not_yet_proven_on_hardware": true
+  },
+  "next": "Separate BL_DONE completion record in ISR; prove INLINE cannot overwrite exact receipt in hosted model, then fresh independent31/build39 hardware test."
+}

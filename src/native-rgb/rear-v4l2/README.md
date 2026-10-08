@@ -1,3 +1,21 @@
+## 2026-10-08 rear30 receipt protocol gate rejected before sensor Start, retired
+
+Fresh30/build38 booted and packet0 completed, slot0 enabled. Packet1 receipt
+path returns EPROTO(-71) before any sensor Start: packets1000/epochs0/events0/
+frames0, all exposed DMA/commands intentionally held through recovery reboot.
+No physical live receipt eligibility or live command retirement proof.
+Two cold boots completed; service exit1, no watchdog/kernel hazard. Automatic
+Golden d37972ea-7752-4066-8b5e-c6ff6901f59f verified; all protected hashes unchanged.
+30 consumed/retired; units disabled, no armed tests/nodes/modules/processes.
+Native53 completed/62IDs124boots/prestream9/failed-after-start20; combined69IDs138boots.
+Working hypothesis: last_irq_status is overwritten by generated INLINE
+IRQ in packet1, so strict post-synchronize BL_DONE-only snapshot rejects.
+Do not present this as a physically observed IRQ cause yet. NEXT dedicated
+BL_DONE record, INLINE overwrite fault proof, fresh31/build39 hardware test.
+Latest successful hardware29 remains authoritative. Front deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-30-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear30 exact command receipts source qualified, hardware29 retained
 
 Fresh source build38 compiles all3 ARM64 modules W1/Werror with zero diagnostics.
