@@ -1,3 +1,18 @@
+## 2026-10-08 generation05 receiver traffic verified; first frame still blocked
+
+Generation05 transport configuration reads back correctly. Receiver observed38911
+packets with ECC0/CRC0; IPP status0x11e00 has input events but no CAMIF SOF/Epoch.
+Packet0/1 accepted, sensor start succeeded, first Epoch0 timed out. No completed
+stream/optical claim. DMA pin1, reclaim/owner/arena release0; mandatory reboot.
+Golden returned automatically, hashes unchanged, no hazard/watchdog;05 retired.
+Native44 completed streams/38 IDs/76 boots; failed started captures7.
+Windows2/2/4; combined40 IDs/80 boots.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-05-20261008.json.
+NEXT fresh06 read-only packet-owned register/CAMIF debug observations to distinguish
+command programming from downstream activation. No blind mask/tuning changes.
+Rear FIRST; front calibration deferred; same-SP11 privacy unchanged.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear generation04 sensor start; generation05 transport fix ready
 
 Generation04 accepted packet0/1 and started OV13858, then first Epoch0 timed out.
