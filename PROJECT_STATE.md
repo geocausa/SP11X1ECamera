@@ -1,3 +1,13 @@
+## 2026-10-08 Windows sparse module reference completed
+
+Installed MFT/driver identities exact. Rear4K reader1679distincttimestamps;
+preCTRL/firstEpoch each once, both CFG0 controls6960/6b60=0, TOPIPP64=0,
+CCIFc64=0. No pixels/front/configwrites. Taskgone, SP7clean, identityretired.
+Golden ba87227a-1f1e-4579-873a-8b2ef8ce3acf verified hashes/EFI/NTFS.
+Counts native44streams49IDs98boots failed17; Windows6streams6IDs12boots;
+combined55IDs110boots. NEXT freshLinux17 CFG0readback, then evidence-basedchange.
+Evidence docs/NATIVE-RGB-WINDOWS-REAR-SPARSE-01-20261008.json. Earlier entries below are historical.
+
 ## 2026-10-08 targeted sparse module Windows reference prepared
 
 Fresh E-NATIVE-REAR-SPARSE-WINDOWS-01 prepared, not armed/consumed.
