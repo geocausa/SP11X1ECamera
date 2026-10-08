@@ -1,3 +1,18 @@
+## 2026-10-08 rear21 cold native 4K NV12 hardware completion passed
+
+FULL3840x2160 linearNV12 stride3840/image12441600,22eight-bitround/clamp
+and BUSgeometry readbacks admitted beforeenable. Both10-WMoutputgenerations
+complete; packets1111/epochs2/events12 and allsource/CSID/BUS/RTCDMstopflags1.
+NoC240M/IFE594M/CSID300M;11poweredCSRphases CCIF/overflow/imagesize0,
+UBWCcommon remainscold6; noFULLcompression/meta/addresswrites.
+Pixelsnotread/saved; ordinaryV4L2/libcamera delivery/continuous/quality unproven.
+Native47streams54IDs108boots failed19; Windows7/7/14; combined61IDs122boots.
+Golden6484b59a-14cb-459a-9b6a-01d694bfd3de hashes/EFI/NTFSverified,hazards0/watchdogfalse.
+21retired unitsdisabled, nojobsarmed. Nextfresh22/sourcebuild27:
+qualify clean post-stop DMA/ledger/command/owner/PM release beforepublicbuffers.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-21-20261008.json.
+Earlierentrieshistorical.
+
 # Rear cold linear NV12 qualification
 
 Candidate21/sourcebuild26 is isolated diagnostic tooling. It keeps the proven
