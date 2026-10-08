@@ -1,3 +1,19 @@
+## 2026-10-08 rear23 maintained reclaim repair prepared
+
+Fresh build28 compiles three ARM64 modules W1/Werror without diagnostics.
+Maintained native-rear-reclaim.inc requires slot0 disabled/static preparation,
+both programmed exact-complete ledgers, all four stop barriers and the matching
+owner epoch. Slot1 is Epoch-retargeted; no fabricated prepared_disabled flag.
+All allocation/aux WM identities are checked before any free. Failure paths pin.
+The earlier positive fixture missed slot1=false; faithful actual reclaimer test
+now passes 356 assertions / 93 negative cases with GCC/Clang ASAN/UBSAN/Werror.
+All ten hosted checks pass. Candidate23 is unarmed; NEXT one fresh boot verifies
+DMA/ledgers/owner/PM/commands release and all sensors suspended, then public V4L2.
+Native47 completed /55 IDs /110 boots /20 failed; Windows7/7/14; combined62/124.
+Golden13dcbbd9-5dc6-4c32-9e22-ba18175073b8. Front calibration remains deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-23-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear22 reproduced linear output; software reclaim guard mismatch
 
 Secondfresh4K NV12 generationpair completes; allstopflags1, packets1111/epochs2

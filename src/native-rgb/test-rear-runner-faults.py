@@ -31,6 +31,8 @@ static int native_rear_validate_prepared_commands(struct e008l_rear_command_set 
  prefix += "\nstatic int csid680_native_rear_configure(struct csid_device *c) {CHECK(c);attempted|=4;return step();}\n"
  prefix += "\nstatic int csid680_native_rear_after_packet0_configure(struct csid_device *c) {CHECK(c);attempted|=4;return step();}\n"
  core=(stage/"camss-vfe-e008k-rear-runner.inc").read_text()
+ if (stage/"native-rear-reclaim.inc").exists():
+  core=once(core,'#include "native-rear-reclaim.inc"',(stage/"native-rear-reclaim.inc").read_text())
  if "native_rear_vfe_configure" in core:
   prefix += "\nstatic int native_rear_vfe_configure(struct vfe_device *v) {CHECK(v);attempted|=2;return step();}\n"
  if "csid680_native_rear_generation_snapshot" in core:

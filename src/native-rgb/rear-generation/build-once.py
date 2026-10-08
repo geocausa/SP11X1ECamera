@@ -6,9 +6,9 @@ Private compiler-bound semantic firmware and its digest stay on this SP11.
 import argparse,hashlib,importlib.util,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent;ROOT=NATIVE.parents[1]
-PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-27"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-27"
-HEAD="b0ffd573a1e0502eba7e21b312a36aef44a22d14"
+PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-28"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-28"
+HEAD="516b91923224d5d5498d556c176d22ff91f50da0"
 SOURCE=PROJECT/"06-camera/reference/libcamera-native-rgb-rear-20261007-15"
 LIBBUILD=PROJECT/"02-kernel/libcamera-native-rgb-rear-20261007-15"
 KSOURCE=PROJECT/"02-kernel/e003i-front-production-src"
@@ -37,8 +37,8 @@ def main():
  assert array is not None
  assert [int(x,16) for x in re.findall(r"0x[0-9a-f]+",array[1])]==[int(x,16) for x in manifest["VFE1_offsets"]]
 
- for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-22"),
-              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-22")]:
+ for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-23"),
+              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-23")]:
   if path.exists():raise RuntimeError("candidate path already exists; audit first")
  build=load("native_rear_build",NATIVE/"build.py")
  result=build.assemble(OUT,nv12_trial=True,front_owner_trial=True,front_queue_trial=True,
@@ -97,7 +97,7 @@ def main():
  profile=output/"p0-input-0.bin";digest=hashlib.sha256(profile.read_bytes()).digest()
  identity=camss/"native-rear-generation-identity.h"
  identity.write_text(
-  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-22.bin"\n'
+  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-23.bin"\n'
   +f'#define NATIVE_REAR_GENERATION_INPUT_BYTES {profile.stat().st_size}U\n'
   +'static const u8 native_rear_generation_input_sha256[32]={'
   +','.join(str(x) for x in digest)+'};\n')
@@ -220,6 +220,17 @@ def main():
   "\t\tif (camss_x1e_rear_generation_trial_allowed(video->camss))\n"
   "\t\t\tv4l2_ctrl_new_custom(&video->ctrl_handler, &video_rear_generation_ctrl, NULL);\n"
   "\t\tif (video->ctrl_handler.error) {")
+ # Observe only safe ownership/size flags, before the corrected all-or-none guard.
+ reclaim=camss/"native-rear-reclaim.inc"
+ text=reclaim.read_text()
+ needle="        return -EBUSY;\n\n    for (s = 0; s < E008H_REAR_SLOTS; s++) {"
+ assert text.count(needle)==1
+ log=('    dev_info(camss->dev, "NATIVE_REAR_RECLAIM_STATE pair_alloc=%u pair_enabled=%u preload0=%u static0=%u static1=%u prog0=%u prog1=%u size0=%zu size1=%zu\\n",\n'
+  '        pair->allocated, pair->enabled, pair->slot0_preloaded_disabled,\n'
+  '        pair->dma[0].prepared_disabled, pair->dma[1].prepared_disabled,\n'
+  '        pair->programmed[0], pair->programmed[1], pair->dma[0].full.size, pair->dma[1].full.size);\n')
+ text=text.replace(needle,"        return -EBUSY;\n\n"+log+"\n    for (s = 0; s < E008H_REAR_SLOTS; s++) {")
+ reclaim.write_text(text)
  linear=load("native_rear_linear_overlay",NATIVE/"rear-linear-nv12/apply.py")
  linear_contract=linear.apply(camss)
  for p in camss.iterdir():
@@ -227,7 +238,7 @@ def main():
    for name in re.findall(r'^#include "([^"]+)"',p.read_text(),re.M):
     if not (camss/name).is_file():raise RuntimeError("include closure failed")
  result.update(status="BUILD_REAR_GENERATION_DIAGNOSTIC_IN_PROGRESS",
-  candidate_identity="E-NATIVE-REAR-GENERATION-22",candidate_base_commit=HEAD,
+  candidate_identity="E-NATIVE-REAR-GENERATION-23",candidate_base_commit=HEAD,
   linear_NV12_contract=linear_contract,
   source_validated_non_address_CSR_count=csr_count,
   rear_optin_single_use_control_available=True,private_compiler_bound_data_only_input=True,

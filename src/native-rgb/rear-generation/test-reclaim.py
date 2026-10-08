@@ -17,6 +17,7 @@ typedef uint8_t u8;typedef uint32_t u32;typedef uint64_t u64;
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof((x)[0]))
 #define VFE_BUS_WRITE_CLIENT_CFG_EN 1U
 #define READ_ONCE(x) (x)
+#define dev_info(...) ((void)0)
 #define E008H_REAR_SLOTS 2U
 #define E008D_REAR_AUX_COUNT 8
 #define E007Y_STARTUP_PACKETS 4
@@ -32,7 +33,7 @@ struct full {void *cpu;size_t size;bool in_flight;};
 struct aux {void *cpu;size_t size;u8 wm;};
 struct e008d_rear_dma_set {struct full full;struct aux aux[8];bool allocated,prepared_disabled;};
 struct e007z_rear_frame {u64 owner_epoch,request_generation;unsigned pending;bool active,faulted;};
-struct e008h_rear_prime_pair {struct e008d_rear_dma_set dma[2];struct e007z_rear_frame frame[2];bool ledgers_bound,faulted,programmed[2];};
+struct e008h_rear_prime_pair {struct e008d_rear_dma_set dma[2];struct e007z_rear_frame frame[2];bool allocated,enabled,slot0_preloaded_disabled,ledgers_bound,faulted,programmed[2];};
 struct e008k_rear_result {bool csid_quiesced,bus_stopped,rtcdm_stopped,source_stopped,owner_released,dma_reclaimed;};
 static const struct vfe680_e004nu_rear_wm_static *e008d_rear_contract_for_wm(u8 wm){
  for(unsigned i=0;i<10;i++){if(vfe680_e004nu_rear_wm_contract[i].wm==wm)return &vfe680_e004nu_rear_wm_contract[i];}
@@ -49,9 +50,9 @@ static struct camss cam;static struct vfe_device vfe;static struct e008h_rear_pr
 static void init(void){
  memset(&pair,0,sizeof(pair));vfe=(struct vfe_device){&cam,true};owner_valid=true;owner_epoch=7;releases=command_releases=0;
  result=(struct e008k_rear_result){true,true,true,true,false,false};
- pair.ledgers_bound=pair.programmed[0]=pair.programmed[1]=true;
+ pair.allocated=pair.enabled=pair.slot0_preloaded_disabled=pair.ledgers_bound=pair.programmed[0]=pair.programmed[1]=true;
  for(unsigned s=0;s<2;s++){
-  struct e008d_rear_dma_set *set=&pair.dma[s];set->allocated=set->prepared_disabled=true;
+  struct e008d_rear_dma_set *set=&pair.dma[s];set->allocated=true;set->prepared_disabled=(s==0);
   set->full=(struct full){&cam,VFE680_E004NT_REAR_TOTAL_BYTES,true};
   pair.frame[s]=(struct e007z_rear_frame){7,s+1,0,true,false};
   for(unsigned i=0;i<8;i++){
@@ -65,13 +66,13 @@ MAIN=r"""
 int main(void){
  init();CHECK(e011i_rear_reclaim_after_stop(&cam,&vfe,&pair,7,&result)==0);
  CHECK(releases==2&&!pair.dma[0].full.cpu&&!pair.dma[1].full.cpu);
- for(unsigned i=0;i<16;i++){
+ for(unsigned i=0;i<19;i++){
   init();struct camss *c=&cam;struct vfe_device *v=&vfe;struct e008h_rear_prime_pair *p=&pair;const struct e008k_rear_result *r=&result;u64 epoch=7;
   switch(i){case 0:c=NULL;break;case 1:v=NULL;break;case 2:p=NULL;break;case 3:r=NULL;break;case 4:epoch=0;break;
    case 5:vfe.camss=NULL;break;case 6:vfe.exact=false;break;case 7:result.csid_quiesced=false;break;
    case 8:result.bus_stopped=false;break;case 9:result.rtcdm_stopped=false;break;case 10:result.source_stopped=false;break;
    case 11:result.owner_released=true;break;case 12:result.dma_reclaimed=true;break;case 13:owner_valid=false;break;
-   case 14:owner_epoch=8;break;case 15:pair.faulted=true;break;}
+   case 14:owner_epoch=8;break;case 15:pair.faulted=true;break;case 16:pair.allocated=false;break;case 17:pair.enabled=false;break;case 18:pair.slot0_preloaded_disabled=false;break;}
   struct e008h_rear_prime_pair before=pair;
   CHECK(e011i_rear_reclaim_after_stop(c,v,p,epoch,r)!=0);CHECK(releases==0);CHECK(!memcmp(&before,&pair,sizeof(pair)));negative_cases++;
  }
@@ -80,7 +81,7 @@ int main(void){
    init();struct e008d_rear_dma_set *set=&pair.dma[s];struct e007z_rear_frame *frame=&pair.frame[s];
    switch(i){case 0:pair.ledgers_bound=false;break;case 1:pair.programmed[s]=false;break;
     case 2:frame->active=false;break;case 3:frame->faulted=true;break;case 4:frame->owner_epoch++;break;case 5:frame->pending=1;break;
-    case 6:set->allocated=false;break;case 7:set->prepared_disabled=false;break;case 8:set->full.in_flight=false;break;
+    case 6:set->allocated=false;break;case 7:pair.dma[0].prepared_disabled=false;break;case 8:set->full.in_flight=false;break;
     case 9:set->full.cpu=NULL;break;case 10:set->full.size--;break;case 11:frame->request_generation=0;break;
     case 12:pair.dma[s].aux[7].size--;break;}
    struct e008h_rear_prime_pair before=pair;
@@ -111,9 +112,11 @@ def main():
  macros=layout[layout.index('#include "native-rear-nv12-layout.h"'):layout.index("/* Compile-time fit")]
  wm=(a.staged/"camss-vfe-e004nu-rear-ten-wm.inc").read_text()
  wm_prefix=wm[wm.index("#define VFE680_E004NU_REAR_CLIENTS"):wm.index("static bool __used")]
- code=PRE+macros+wm_prefix+TYPES
+ aux_source=(a.staged/"camss-vfe-e008d-rear-dma.inc").read_text()
+ aux_array=aux_source[aux_source.index("static const u8 e008d_rear_aux_wms"):aux_source.index("static const struct vfe680_e004nu_rear_wm_static *")]
+ code=PRE+macros+wm_prefix+aux_array+TYPES
  code+="static bool "+function((a.staged/"camss-vfe-e008h-rear-prime.inc").read_text(),"e008h_rear_both_complete")
- code+="static int "+function((a.staged/"camss-vfe-e008k-rear-runner.inc").read_text(),"e011i_rear_reclaim_after_stop")
+ code+="static int "+function((a.staged/"native-rear-reclaim.inc").read_text(),"e011i_rear_reclaim_after_stop")
  code+="static int "+function((a.staged/"camss-vfe-e008l-rear-command-dma.inc").read_text(),"e008l_rear_command_release")+MAIN
  results=[]
  with tempfile.TemporaryDirectory(prefix="sp11-rear-reclaim-host-") as td:
@@ -126,6 +129,6 @@ def main():
    if r.returncode or r.stderr:raise RuntimeError(r.stdout+r.stderr)
    results.append({"compiler":compiler,"ASAN_UBSAN_Werror":True,"result":json.loads(r.stdout)})
  report={"status":"PASS_ACTUAL_ALL_OR_NONE_REAR_POST_STOP_RECLAIM_ADMISSION","actual_staged_reclaim_complete_ledger_and_command_release_admission":True,
-         "owner_query_DMA_set_and_command_packet_frees_are_models":True,"hardware_access":False,"results":results}
+         "owner_query_DMA_set_and_command_packet_frees_are_models":True,"real_slot0_prepared_true_slot1_prepared_false_positive_checked":True,"hardware_access":False,"results":results}
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()

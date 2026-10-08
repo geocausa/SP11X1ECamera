@@ -20,7 +20,7 @@ def apply(camss):
                  "native-rear-startup-iq.inc", "native-rear-startup-compose.inc",
                  "native-rear-startup-entry.inc", "native-rear-pix-link.h",
                  "native-rear-csid-config.inc", "native-rear-vfe-config.inc",
-                 "native-rear-noc-clock.inc"):
+                 "native-rear-noc-clock.inc", "native-rear-reclaim.inc"):
         (camss / name).write_bytes((here / name).read_bytes())
     # The physically qualified rear 4K ISP input is sensor mode1. Preserve the
     # historical E004ns source and apply the maintained exact format admission.
@@ -135,6 +135,17 @@ def apply(camss):
         "\tbus_may_be_enabled = true; /* Core prefix may expose BUS on failure. */\n"
         "\tret = native_rear_vfe_configure(vfe);\n\tif (ret)\n\t\tgoto out_pin;")
     text = replace_once(text, "\tret = native_rear_vfe_configure(vfe);", "\tret = csid680_native_rear_after_packet0_configure(csid);\n\tif (ret)\n\t\tgoto out_pin;\n\tret = native_rear_vfe_configure(vfe);")
+    path.write_text(text)
+
+    # The second generation is Epoch-retargeted, not disabled-preloaded.
+    # Keep the historical reclaimer intact and use the maintained proof here.
+    path = camss / "camss-vfe-e008k-rear-runner.inc"
+    text = path.read_text()
+    a = text.index("static int\ne011i_rear_reclaim_after_stop(")
+    b = text.index("static int\ne008k_rear_pair_stop_release(", a)
+    if text[a:b].count("!set->prepared_disabled") != 1:
+        raise ValueError("rear historical reclaim admission drift")
+    text = text[:a] + '#include "native-rear-reclaim.inc"\n\n' + text[b:]
     path.write_text(text)
 
     path = camss / "camss-vfe-e008n-rear-single-use.inc"
