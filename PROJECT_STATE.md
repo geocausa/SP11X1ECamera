@@ -1,3 +1,18 @@
+## 2026-10-08 rear16 identifies SPARSE_PD_EXT processing fault
+
+Read TOPIPP64=15 at firstEpoch before retarget/packet2, persists to timeout.
+Exact GPL TOPver4 handler indexes ipp_module_desc[val]:15HEX=21DEC,
+CLC_SPARSE_PD_EXT. It is a MODULE ID, NOT bitmap. PDAF404=0. BUSCCIF9M persists.
+Mode1 firstEpoch now4freshboots; no complete rearframes. Generic lowTOP/unused
+WM20/23 enable mismatch disproved15; specific sparse extractor config unobserved.
+No hardwareconfiguration writes added; named51VFE non-address reads qualified.
+Golden be366a38-1fe9-43e6-9da3-95cfe5e66774 verified,16retired, unitsdisabled.
+Native44/49IDs98boots failed17; Windows5/5IDs10boots; combined54IDs108boots.
+NEXT derive exact SPARSE_PD_EXT configuration/control from same-SP11 Titan680
+evidence and compare workingWindows; no guessed disable/enable bit.
+Fresh nextcandidate17/sourcebuild21. Evidence docs/NATIVE-RGB-REAR-GENERATION-16-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear16 TOP fault bitmap candidate ready
 
 Build20 adds validated named non-address TOP64/404 reads, actualIRQstatus
