@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "identity": "E-NATIVE-REAR-GENERATION-29",
+  "status": "PASS_SOURCE_BUILD_AND_16_HOSTED_CHECKS_READY_FOR_FRESH_LIVE_AUXILIARY_RETIREMENT",
+  "base_commit": "50274848e4a6f7d07d2cc1b95ef583a0abe505ae",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-37",
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "d74f068000756caac2efe561a056a020fa177c2b3a529510872cee6f28b38abf",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "bbc44f3c88b461724ff7123dcf1e86a72009430c1df1e19831032ae1df4e85d9",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "cd1d1b217c9b02188552305e9ebb618177378260e0fbb44cc006f35b186c2e05",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "hosted_check_count": 16,
+  "hosted_checks": {
+    "offline-runner-01": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "negative_cases": 57
+    },
+    "csr-whitelist-hosted-01": {
+      "status": "PASS_EXACT_VFE680_NAMED_SCALAR_WHITELIST"
+    },
+    "noc-clock-hosted-01": {
+      "status": "PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS"
+    },
+    "linear-geometry-hosted-01": {
+      "status": "PASS_HOSTED_REAR_GEOMETRY_COMPOSER"
+    },
+    "linear-nv12-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LINEAR_LAYOUT_BUS_AND_LEDGER"
+    },
+    "clean-lifecycle-hosted-01": {
+      "status": "PASS_CANDIDATE_CLEAN_STOP_RELEASE_AND_FAILURE_STOP_MODELS",
+      "compiler_results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 3745,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 3745,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "public-reclaim-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_COHERENT_AND_PUBLIC_LEASE_ALL_OR_NONE_RECLAIM",
+      "compiler_results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 739,
+            "admission_negatives": 216,
+            "all_allocations_checked_before_any_release": true,
+            "successful_DMA_set_releases": 2,
+            "command_release_requires_RTCDM_stop": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 739,
+            "admission_negatives": 216,
+            "all_allocations_checked_before_any_release": true,
+            "successful_DMA_set_releases": 2,
+            "command_release_requires_RTCDM_stop": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "lease-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_RETAINED_DMABUF_MAPPING_LEASE"
+    },
+    "dma-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_VB2_MAPPED_SG_APERTURE_ADMISSION"
+    },
+    "public-lifecycle-hosted-01": {
+      "status": "PASS_ACTUAL_PUBLIC_REAR_RUNNER_LIFECYCLE_FAILURE_MODELS",
+      "compiler_results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 3982,
+            "lifecycle_steps": 64,
+            "injected_failures": 62,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 3982,
+            "lifecycle_steps": 64,
+            "injected_failures": 62,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "transport-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES"
+    },
+    "sensor-mode-hosted-01": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE"
+    },
+    "vfe-hosted-02": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK"
+    },
+    "event-queue-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_SPSC_EVENT_QUEUE_WRAP_OVERFLOW_AND_THREADED_PUBLICATION"
+    },
+    "live-observe-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LIVE_REPLACEMENT_READ_ONLY_OBSERVATION"
+    },
+    "live-retire-hosted-01": {
+      "status": "PASS_ACTUAL_LIVE_REAR_FULL_MAPPING_RETIREMENT_AND_AUX_PINNING",
+      "compiler_results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 50339,
+            "negative_cases": 1245,
+            "actual_live_FULL_retirement": true,
+            "modelled_MMIO_and_IRQ": true,
+            "old_FULL_unmap_only_after_actual_guard": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 50339,
+            "negative_cases": 1245,
+            "actual_live_FULL_retirement": true,
+            "modelled_MMIO_and_IRQ": true,
+            "old_FULL_unmap_only_after_actual_guard": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    }
+  },
+  "implementation": {
+    "old_FULL_mapping_and_old_eight_aux_outputs_retired_live": true,
+    "shared_exact_completed_allocation_guard": true,
+    "fresh_live_ten_WM_replacement_read_required": true,
+    "all_old_auxiliary_fields_zero_and_owner_request_marker_bound": true,
+    "old_ledgers_and_command_arenas_retained_until_physical_stop": true,
+    "replacement_FULL_and_all_eight_auxiliaries_remain_pinned": true,
+    "post_stop_reclaimer_handles_live_retired_old_aux_without_double_free": true,
+    "duplicate_retirement_stale_allocations_and_210_readback_races_rejected": true,
+    "fabricated_stop_facts": false,
+    "early_VB2_delivery": false,
+    "command_recycling": false
+  },
+  "MMIO_IRQ_DMA_APIs_are_explicit_host_models": true,
+  "hardware_attempted": false,
+  "installed": false,
+  "armed": false,
+  "current_Golden_boot_id": "6de92f65-627e-40f5-b71e-1272cfbaf638",
+  "counts_unchanged": {
+    "native_completed_streams": 52,
+    "native_consumed_ids": 60,
+    "native_boots": 120,
+    "failed_started": 20,
+    "combined_ids": 67,
+    "combined_boots": 134
+  },
+  "offline_runner_permission_note": "Initial user read of private retained graph was denied; rerun with existing sudo authority passes all57 offline admission/parser negatives. No hardware access.",
+  "rear_capture_remains_two_requests": true,
+  "front_calibration_deferred": true,
+  "next": "Fresh single-use29 live old auxiliary output retirement proof and automatic Golden return; then command arena recycling and persistent rear Requests."
+}

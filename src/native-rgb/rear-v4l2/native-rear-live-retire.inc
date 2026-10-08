@@ -32,34 +32,15 @@ native_rear_live_full_retired_valid(const struct e008d_rear_dma_set *set,
 }
 
 static int
-native_rear_live_retire_full(struct vfe_device *vfe, struct csid_device *csid,
-                            struct e008h_rear_prime_pair *pair,
-                            struct e008k_rear_result *result, u32 cursor)
+native_rear_live_aux_bindings_check(const struct e008h_rear_prime_pair *pair)
 {
- struct native_rear_live_observation observation;
- struct e008d_rear_dma_set *old, *next;
  unsigned int s, i, other, j;
- int ret;
-
- if (!vfe || !csid || !pair || !result)
+ if (!pair)
   return -EINVAL;
- if (result->live_full_retired || pair->dma[0].public_full_retired ||
-     pair->dma[1].public_full_retired)
-  return -EALREADY;
- if (!result->both_frames_complete)
-  return -EBUSY;
  for (s = 0; s < E008H_REAR_SLOTS; s++) {
   const struct e008d_rear_dma_set *set = &pair->dma[s];
-  const struct native_rear_video_lease *l = &set->public_full;
   const struct e007z_rear_frame *f = &pair->frame[s];
-  if (!set->allocated || !native_rear_dma_full_valid(set) ||
-      !set->full.in_flight || !l->acquired || !l->exposed ||
-      l->stop_proven || set->retired_aux_stop_proven ||
-      set->retired_owner_epoch || set->retired_request_generation ||
-      l->span.y_iova != f->slot[0].owned_base_iova ||
-      l->span.uv_iova != f->slot[1].owned_base_iova ||
-      f->slot[0].owned_bytes != NATIVE_REAR_NV12_Y_BYTES ||
-      f->slot[1].owned_bytes != NATIVE_REAR_NV12_UV_BYTES)
+  if (!set->allocated)
    return -EPROTO;
   for (i = 0; i < E008D_REAR_AUX_COUNT; i++) {
    const struct e008d_rear_aux_buffer *a = &set->aux[i];
@@ -89,6 +70,43 @@ native_rear_live_retire_full(struct vfe_device *vfe, struct csid_device *csid,
      if (pair->dma[s].aux[i].cpu == pair->dma[other].aux[j].cpu)
       return -EADDRINUSE;
     }
+ return 0;
+}
+
+static int
+native_rear_live_retire_full(struct vfe_device *vfe, struct csid_device *csid,
+                            struct e008h_rear_prime_pair *pair,
+                            struct e008k_rear_result *result, u32 cursor)
+{
+ struct native_rear_live_observation observation;
+ struct e008d_rear_dma_set *old, *next;
+ unsigned int s;
+ int ret;
+
+ if (!vfe || !csid || !pair || !result)
+  return -EINVAL;
+ if (result->live_full_retired || pair->dma[0].public_full_retired ||
+     pair->dma[1].public_full_retired)
+  return -EALREADY;
+ if (!result->both_frames_complete)
+  return -EBUSY;
+ for (s = 0; s < E008H_REAR_SLOTS; s++) {
+  const struct e008d_rear_dma_set *set = &pair->dma[s];
+  const struct native_rear_video_lease *l = &set->public_full;
+  const struct e007z_rear_frame *f = &pair->frame[s];
+  if (!set->allocated || !native_rear_dma_full_valid(set) ||
+      !set->full.in_flight || !l->acquired || !l->exposed ||
+      l->stop_proven || set->retired_aux_stop_proven ||
+      set->retired_owner_epoch || set->retired_request_generation ||
+      l->span.y_iova != f->slot[0].owned_base_iova ||
+      l->span.uv_iova != f->slot[1].owned_base_iova ||
+      f->slot[0].owned_bytes != NATIVE_REAR_NV12_Y_BYTES ||
+      f->slot[1].owned_bytes != NATIVE_REAR_NV12_UV_BYTES)
+   return -EPROTO;
+ }
+ ret = native_rear_live_aux_bindings_check(pair);
+ if (ret)
+  return ret;
  old = &pair->dma[0];
  next = &pair->dma[1];
  if (old->public_full.dbuf == next->public_full.dbuf ||

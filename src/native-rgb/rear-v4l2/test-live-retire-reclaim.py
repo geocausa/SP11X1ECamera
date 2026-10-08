@@ -104,6 +104,13 @@ struct native_rear_video_lease {void *dbuf,*attachment,*table;struct native_rear
  types=types.replace("{true,true,true,true,false,false};","{true,true,true,true,false,false,false};")
  types=types.replace("CHECK(!set->full.in_flight);","CHECK(!set->full.in_flight);CHECK(!set->public_full_retired||set->retired_aux_stop_proven);")
 
+ auxiliary=(a.staged/"native-rear-live-aux-retire.inc").is_file()
+ if auxiliary:
+  types=types.replace("bool public_full_retired,retired_aux_stop_proven;","bool public_full_retired,retired_aux_stop_proven,auxiliary_live_retired;")
+  types=types.replace("live_full_retired;","live_full_retired,live_aux_retired;")
+  types=types.replace("{true,true,true,true,false,false,false};","{true,true,true,true,false,false,false,false};")
+  types=types.replace("struct aux {void *cpu;size_t size;u8 wm;};","struct aux {void *cpu;size_t size;u8 wm;u64 dma;};")
+  types=types.replace("(struct aux){&cam,c->frame_incr,c->wm}","(struct aux){&cam,c->frame_incr,c->wm,0}")
  fn=base.function;lease=(a.staged/"native-rear-video-lease.inc").read_text()
  code=base.PRE+macros+wm+aux+types
  code+="static bool "+fn(lease,"native_rear_video_lease_valid")
@@ -111,12 +118,21 @@ struct native_rear_video_lease {void *dbuf,*attachment,*table;struct native_rear
  code+="static bool "+fn(dma,"native_rear_dma_full_valid")
  code+="static bool "+fn((a.staged/"camss-vfe-e008h-rear-prime.inc").read_text(),"e008h_rear_both_complete")
  code+="static bool "+fn((a.staged/"native-rear-live-retire.inc").read_text(),"native_rear_live_full_retired_valid")
+ if auxiliary:
+  code+="static bool "+fn((a.staged/"native-rear-live-aux-retire.inc").read_text(),"native_rear_live_aux_retired_valid")
  code+="static int "+fn((a.staged/"native-rear-reclaim.inc").read_text(),"e011i_rear_reclaim_after_stop")
  code+="static int "+fn((a.staged/"camss-vfe-e008l-rear-command-dma.inc").read_text(),"e008l_rear_command_release")
  main=base.MAIN.replace(" struct e008l_rear_command_set commands=",MATRIX+" struct e008l_rear_command_set commands=")
  main=main.replace(" struct e008l_rear_command_set commands=",RETIRED_MATRIX+" struct e008l_rear_command_set commands=")
  main=main.replace("{true,true,true,true,false,false};","{true,true,true,true,false,false,false};")
- code+=EXTRA+RETIRED_EXTRA+main
+ if auxiliary:
+  main=main.replace("{true,true,true,true,false,false,false};","{true,true,true,true,false,false,false,false};")
+  extra=(HERE/"test-live-aux-reclaim-tail.c").read_text()
+  declarations,aux_matrix=extra.split("/* MATRIX */")
+  main=main.replace(" struct e008l_rear_command_set commands=",aux_matrix+" struct e008l_rear_command_set commands=")
+  code+=EXTRA+RETIRED_EXTRA+declarations+main
+ else:
+  code+=EXTRA+RETIRED_EXTRA+main
  results=[]
  with tempfile.TemporaryDirectory(prefix="native-rear-public-reclaim-") as name:
   d=Path(name);(d/"test.c").write_text(code)
@@ -130,5 +146,6 @@ struct native_rear_video_lease {void *dbuf,*attachment,*table;struct native_rear
   actual_reclaimer_lease_valid_stop_and_FULL_predicate=True,DMA_frees_and_owner_query_are_host_models=True,
   both_public_and_mixed_coherent_public_checked=True,invalid_either_lease_or_any_stop_flag_leaves_both_sets_unchanged=True,
   hardware_access=False,actual_retired_old_FULL_and_remaining_DMA_cleanup_checked=True,results=results)
+ report["actual_live_retired_auxiliary_zero_state_cleanup_checked"]=auxiliary
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()

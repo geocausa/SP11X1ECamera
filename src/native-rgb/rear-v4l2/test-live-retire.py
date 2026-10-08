@@ -11,6 +11,7 @@ def function(t,name):
  return t[i:j]+"\n"
 def main():
  p=argparse.ArgumentParser();p.add_argument("--staged",type=Path,required=True);p.add_argument("--report",type=Path,required=True);a=p.parse_args();assert not a.report.exists()
+ auxiliary=(a.staged/"native-rear-live-aux-retire.inc").is_file()
  t=(HERE/"test-live-observe.c").read_text()
  t=t.replace("typedef uint8_t u8;","typedef uint64_t dma_addr_t;\ntypedef uint8_t u8;")
  t=t.replace("#define E008H_REAR_SLOTS", "#define NATIVE_REAR_NV12_BYTES 12441600U\n#define NATIVE_REAR_NV12_UV_OFFSET 8294400U\n#define VFE680_E004NT_REAR_TOTAL_BYTES NATIVE_REAR_NV12_BYTES\n#define E008D_REAR_AUX_COUNT 8U\n#define DMA_FROM_DEVICE 2\n#define E008H_REAR_SLOTS")
@@ -70,10 +71,16 @@ static void retire_fixture(void){
  t=t.replace("int main(void){",(HERE/"test-live-retire-tail.c").read_text()+"\nint main(void){")
  t=t.replace(' printf("{\\"assertions\\"',' live_positive();extra_matrix();\n printf("{\\"assertions\\"')
  t=t.replace('\\"read_only_live_observer\\":true','\\"actual_live_FULL_retirement\\":true').replace('\\"DMA_release_or_reuse_authority\\":false','\\"old_FULL_unmap_only_after_actual_guard\\":true')
+ if auxiliary:
+  t=t.replace("both_frames_complete,live_full_retired;","both_frames_complete,live_full_retired,live_aux_retired;")
+  t=t.replace('#include "native-rear-live-retire.inc"','#include "native-rear-live-retire.inc"\n#include "native-rear-live-aux-retire.inc"')
+  t=t.replace("int main(void){",(HERE/"test-live-aux-retire-tail.c").read_text()+"\nint main(void){")
+  t=t.replace("live_positive();extra_matrix();","live_positive();extra_matrix();aux_matrix();")
  results=[]
  with tempfile.TemporaryDirectory(prefix="rear-live-retire-") as tmp:
   tmp=Path(tmp)
   for n in ["native-rear-live-observe.inc","native-rear-live-retire.inc","camss-e007z-rear-retirement.inc"]:shutil.copyfile(a.staged/n,tmp/n)
+  if auxiliary:shutil.copyfile(a.staged/"native-rear-live-aux-retire.inc",tmp/"native-rear-live-aux-retire.inc")
   (tmp/"test.c").write_text(t)
   for cc in ["gcc","clang"]:
    binary=tmp/cc
@@ -83,5 +90,7 @@ static void retire_fixture(void){
    if r.returncode:raise RuntimeError(r.stdout+r.stderr)
    results.append({"compiler":cc,"ASAN_UBSAN_Werror":True,"result":json.loads(r.stdout),"stderr":r.stderr})
  report={"status":"PASS_ACTUAL_LIVE_REAR_FULL_MAPPING_RETIREMENT_AND_AUX_PINNING","actual_staged_observer_lease_predicates_partial_release_and_retirement":True,"MMIO_IRQ_DMA_BUF_API_and_aux_free_are_models":True,"hardware_access":False,"VB2_completion_or_requeue":False,"auxiliary_allocations_match_completed_ledger":True,"all_120_CPU_aliases_rejected":True,"DMA_high_bits_not_truncated":True,"results":results}
+ report["actual_old_auxiliary_live_release_checked"]=auxiliary
+ report["command_recycling_or_VB2_live_delivery_authorized"]=False
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()

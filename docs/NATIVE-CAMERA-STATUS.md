@@ -1,3 +1,23 @@
+## 2026-10-08 rear29 old auxiliary live retirement source qualified
+
+Fresh source build37 compiles three ARM64 W1/Werror modules with zero diagnostics.
+All16 pre-install checks PASS. Actual shared guard/release helper GCC/Clang
+ASAN/UBSAN50339 assertions/1245 negatives each, including old/new DMA and length
+bindings, all120 CPU aliases and210 live readback races; actual post-stop
+reclaimer739 assertions/216 negatives each. Real graph/parser57 negatives PASS.
+The finite exclusive runner retires old eight auxiliary allocations only after
+old FULL live retirement, both ten-WM completions, replacement command receipts,
+current ownership, drained events and all ten replacement address readbacks.
+Old ledgers/command arenas and all replacement outputs remain pinned until
+physical stop. No false stop flags, early VB2 delivery or address requeue.
+Source only, uninstalled/unarmed/unconsumed; latest hardware proof remains27.
+NEXT fresh single-use29 hardware proof with automatic Golden return, then
+command arena recycling and persistent rear Requests; semantic IPA/optics follow.
+Front calibration deferred. Golden6de92f65-627e-40f5-b71e-1272cfbaf638; counts
+unchanged native52/60IDs120boots failed20; combined67IDs134boots.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-29-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear auxiliary ownership guard source qualified, hardware27 retained
 
 Recovered clean HEAD/origin f79fc746 on Golden6de92f65-627e-40f5-b71e-1272cfbaf638.
