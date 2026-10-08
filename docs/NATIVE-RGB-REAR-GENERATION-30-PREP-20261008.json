@@ -1,0 +1,501 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "identity": "E-NATIVE-REAR-GENERATION-30",
+  "status": "PASS_SOURCE_BUILD_AND_18_CHECKS_READY_FOR_FRESH_EXACT_COMMAND_RECEIPT_OBSERVATION",
+  "base_commit": "2dbfcf328a117b648d1adc31926e0e5da05d3846",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-38",
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "a2f6a7639d7741dea53253efc601041ed3c6a3f12d29fe8c1540b6f510ec69d4",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "baad20c0c7c40bde0dcdd2c9ad1a31ad45f14cd5da00223711c338e9fae34d8a",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "6e53a21b49893ac970249dbb976d34832a2928d8a4d53fdb02e56c6aa829686a",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "ARM64_W1_Werror_modules": 3,
+  "compile_diagnostics": 0,
+  "hosted_check_count": 18,
+  "hosted_checks": {
+    "offline-runner-01": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "negative_cases": 70
+    },
+    "csr-whitelist-hosted-01": {
+      "status": "PASS_EXACT_VFE680_NAMED_SCALAR_WHITELIST",
+      "negative_cases": 9
+    },
+    "noc-clock-hosted-01": {
+      "status": "PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 66,
+            "admission_negatives": 12,
+            "CCF_fault_cases": 7,
+            "shared_parent_one_set": true,
+            "higher_rate_preserved": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 66,
+            "admission_negatives": 12,
+            "CCF_fault_cases": 7,
+            "shared_parent_one_set": true,
+            "higher_rate_preserved": true
+          }
+        }
+      ]
+    },
+    "linear-geometry-hosted-01": {
+      "status": "PASS_HOSTED_REAR_GEOMETRY_COMPOSER",
+      "results": [
+        {
+          "compiler": "gcc",
+          "compile_Werror": true,
+          "sanitizers": [
+            "ASAN",
+            "UBSAN"
+          ],
+          "stdout": "NATIVE_REAR_GEOMETRY_PASS assertions=578 hardware_callbacks=0",
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "compile_Werror": true,
+          "sanitizers": [
+            "ASAN",
+            "UBSAN"
+          ],
+          "stdout": "NATIVE_REAR_GEOMETRY_PASS assertions=578 hardware_callbacks=0",
+          "stderr": ""
+        }
+      ]
+    },
+    "linear-nv12-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LINEAR_LAYOUT_BUS_AND_LEDGER",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 6508,
+            "FULL_compression_register_writes": 0,
+            "readback_faults": 46,
+            "cold_admission_negatives": 12,
+            "DMA_span_negatives": 6,
+            "ten_WM_exact_consumed_identity_checked": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 6508,
+            "FULL_compression_register_writes": 0,
+            "readback_faults": 46,
+            "cold_admission_negatives": 12,
+            "DMA_span_negatives": 6,
+            "ten_WM_exact_consumed_identity_checked": true
+          }
+        }
+      ]
+    },
+    "clean-lifecycle-hosted-01": {
+      "status": "PASS_CANDIDATE_CLEAN_STOP_RELEASE_AND_FAILURE_STOP_MODELS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3930,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3930,
+            "lifecycle_steps": 62,
+            "injected_failures": 60,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "public-reclaim-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_COHERENT_AND_PUBLIC_LEASE_ALL_OR_NONE_RECLAIM",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 739,
+            "admission_negatives": 216,
+            "all_allocations_checked_before_any_release": true,
+            "successful_DMA_set_releases": 2,
+            "command_release_requires_RTCDM_stop": true
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 739,
+            "admission_negatives": 216,
+            "all_allocations_checked_before_any_release": true,
+            "successful_DMA_set_releases": 2,
+            "command_release_requires_RTCDM_stop": true
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "lease-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_RETAINED_DMABUF_MAPPING_LEASE",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 856,
+            "lease_cases": 48,
+            "MMAP_and_DMABUF": true,
+            "own_mapping_differs_from_VB2_and_survives_VB2_cancel": true,
+            "all_16_stop_flag_combinations": true,
+            "partial_get_unwinds_reverse_order": true,
+            "unproven_exposed_mapping_never_released": true
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 856,
+            "lease_cases": 48,
+            "MMAP_and_DMABUF": true,
+            "own_mapping_differs_from_VB2_and_survives_VB2_cancel": true,
+            "all_16_stop_flag_combinations": true,
+            "partial_get_unwinds_reverse_order": true,
+            "unproven_exposed_mapping_never_released": true
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "dma-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_VB2_MAPPED_SG_APERTURE_ADMISSION",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 658,
+            "negative_cases": 155,
+            "valid_mapped_segment_partitions": 64,
+            "cached_first_address_ignored": true,
+            "ACTIVE_VB2_ownership_unchanged": true,
+            "CPU_pixel_access_or_MMIO": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 658,
+            "negative_cases": 155,
+            "valid_mapped_segment_partitions": 64,
+            "cached_first_address_ignored": true,
+            "ACTIVE_VB2_ownership_unchanged": true,
+            "CPU_pixel_access_or_MMIO": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "public-lifecycle-hosted-01": {
+      "status": "PASS_ACTUAL_PUBLIC_REAR_RUNNER_LIFECYCLE_FAILURE_MODELS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 4167,
+            "lifecycle_steps": 64,
+            "injected_failures": 62,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 4167,
+            "lifecycle_steps": 64,
+            "injected_failures": 62,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "transport-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+      "results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "sensor-mode-hosted-01": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE"
+    },
+    "vfe-hosted-02": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 466,
+            "writes": 6,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 466,
+            "writes": 6,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        }
+      ]
+    },
+    "event-queue-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_SPSC_EVENT_QUEUE_WRAP_OVERFLOW_AND_THREADED_PUBLICATION",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 76922,
+            "sequential_wrap_events": 1024,
+            "concurrent_events": 4096,
+            "capacity": 16,
+            "event_storage_reuse_only": true,
+            "hardware_MMIO_IRQ_route_are_mocks": true
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 76922,
+            "sequential_wrap_events": 1024,
+            "concurrent_events": 4096,
+            "capacity": 16,
+            "event_storage_reuse_only": true,
+            "hardware_MMIO_IRQ_route_are_mocks": true
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "live-observe-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LIVE_REPLACEMENT_READ_ONLY_OBSERVATION",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 16479,
+            "negative_cases": 473,
+            "read_only_live_observer": true,
+            "modelled_MMIO_and_IRQ": true,
+            "DMA_release_or_reuse_authority": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 16479,
+            "negative_cases": 473,
+            "read_only_live_observer": true,
+            "modelled_MMIO_and_IRQ": true,
+            "DMA_release_or_reuse_authority": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "live-retire-hosted-01": {
+      "status": "PASS_ACTUAL_LIVE_REAR_FULL_MAPPING_RETIREMENT_AND_AUX_PINNING",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 50339,
+            "negative_cases": 1245,
+            "actual_live_FULL_retirement": true,
+            "modelled_MMIO_and_IRQ": true,
+            "old_FULL_unmap_only_after_actual_guard": true
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 50339,
+            "negative_cases": 1245,
+            "actual_live_FULL_retirement": true,
+            "modelled_MMIO_and_IRQ": true,
+            "old_FULL_unmap_only_after_actual_guard": true
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "command-receipts-hosted-01": {
+      "status": "PASS_ACTUAL_EXACT_COMMAND_ALLOCATION_REQUEST_OWNER_AND_22_BL_RECEIPTS",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "assertions": 9919,
+          "negative_cases": 350,
+          "stdout": "COMMAND_RECEIPTS_PASS assertions=9919 negatives=350\nNATIVE_REAR_PREPARED_HANDOFF_PASS assertions=10306 hardware_callbacks=0",
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "assertions": 9919,
+          "negative_cases": 350,
+          "stdout": "COMMAND_RECEIPTS_PASS assertions=9919 negatives=350\nNATIVE_REAR_PREPARED_HANDOFF_PASS assertions=10306 hardware_callbacks=0",
+          "stderr": ""
+        }
+      ],
+      "actual_staged_allocator_layout_wrapper_and_receipt_helpers": true,
+      "hardware_FIFO_and_semantic_provider_are_models": true,
+      "commands_remain_pinned_until_stop": true,
+      "hardware_access": false,
+      "live_command_release_or_requeue": false
+    },
+    "command-fifo-hosted-01": {
+      "status": "PASS_ACTUAL_SERIALIZED_FIFO_RECEIPT_CAPTURE_AND_CURRENT_CHECK",
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 686,
+            "negative_cases": 40,
+            "actual_FIFO_commit_wait_and_current_check": true
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 686,
+            "negative_cases": 40,
+            "actual_FIFO_commit_wait_and_current_check": true
+          },
+          "stderr": ""
+        }
+      ],
+      "actual_staged_wait_commit_and_bridge": true,
+      "IRQ_MMIO_completion_and_timeouts_are_models": true,
+      "hardware_access": false,
+      "hardware_BL_DONE_contract_independently_reproven": false
+    }
+  },
+  "hypothesis": "All22 serial FIFO0 BL_DONE completions can be captured under the submit mutex and bound to the exact packet request owner and command allocation while camera remains live.",
+  "contract": {
+    "exact_serialized_22_BL_receipts": true,
+    "allocation_request_owner_binding": true,
+    "receipt_capture_under_FIFO_mutex": true,
+    "live_command_observation_only": true,
+    "live_command_free_rewrite_or_requeue": false,
+    "commands_retained_until_stop": true,
+    "hardware_contract": "existing serialized synchronous FIFO0 BL_DONE; software sequence is not a hardware request ID"
+  },
+  "latest_hardware_evidence": "docs/NATIVE-RGB-REAR-GENERATION-29-20261008.json",
+  "hardware_attempted": false,
+  "candidate_consumed": false,
+  "installed": false,
+  "armed": false,
+  "Golden_hashes_unchanged": true,
+  "boot_before": "a516a2a1-3bd5-44d4-8abc-64b2d68df545",
+  "next": "Fresh30 single-use physical receipt observation with unchanged libcamera; automatic Golden return. Independently qualify command arena retirement/recycling next; persistent Requests and safe early delivery later.",
+  "limitations": {
+    "MMIO_IRQ_DMA_hardware_APIs_modelled_in_hosted_tests": true,
+    "software_sequence_is_not_hardware_request_ID": true,
+    "live_command_release_rewrite_requeue": false,
+    "continuous_rear_capture_proven": false,
+    "optical_quality_parity_proven": false,
+    "SensorTimestamp_proven": false,
+    "front_calibration": "deferred"
+  }
+}

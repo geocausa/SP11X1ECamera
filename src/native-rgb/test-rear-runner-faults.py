@@ -62,6 +62,26 @@ static void native_rear_live_retire_aux_observe(struct vfe_device *v,struct csid
  CHECK(v&&c&&p&&r&&r->both_frames_complete);(void)cursor;
 }
 ''')
+ if '#include "native-rear-command-receipts.inc"' in core:
+  core=once(core,'#include "native-rear-command-receipts.inc"','''/* Explicit mock; exact allocation/BL receipts have a separate actual-code test. */
+static int native_rear_submit_receipted_packet(struct camss *c,
+ struct e008k_rear_request *q,unsigned packet,u64 owner){
+ CHECK(c&&q&&q->commands&&packet<4&&owner==41);
+ const struct e007y_rear_startup_output *out=&q->commands->packet[packet].out;
+ for(unsigned i=0;i<out->bl_count;i++){
+  int ret=e008k_rear_rtcdm_submit_bl(c,out->bl[i].dma,out->bl[i].bytes);
+  if(ret)return ret;
+ }
+ return 0;
+}
+''')
+  core=once(core,'#include "native-rear-command-observe.inc"','''/* Observation only, actual receipts tested independently. */
+static void native_rear_command_receipts_observe(struct vfe_device *v,
+ struct csid_device *c,const struct e008h_rear_prime_pair *p,
+ struct e008k_rear_request *q,const struct e008k_rear_result *r,u32 cursor){
+ CHECK(v&&c&&p&&q&&r&&r->both_frames_complete);(void)cursor;
+}
+''')
  if "native_rear_public_pair_alloc" in core:
   prefix=prefix.replace("struct vfe_device {","struct vfe_device {void *native_rear_faulted_pair;")
   prefix=prefix.replace("struct e008h_rear_prime_pair {","struct native_rear_video_lease {bool exposed;};\nstruct camss_buffer {int dummy;};\nstruct e008h_rear_prime_pair {struct {struct native_rear_video_lease public_full;} dma[2];")

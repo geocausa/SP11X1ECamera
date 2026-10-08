@@ -1,3 +1,27 @@
+## 2026-10-08 rear30 exact command receipts source qualified, hardware29 retained
+
+Fresh source build38 compiles all3 ARM64 modules W1/Werror with zero diagnostics.
+All18 pre-install checks PASS. Actual allocator/layout/packet/receipt helpers
+GCC/Clang ASAN/UBSAN each9919 receipt assertions/350 negatives; actual staged
+FIFO wait/commit/current checks each686 assertions/40 negatives. Actual live
+output release50339 assertions/1245 negatives and post-stop reclaim739/216
+remain PASS; retained119-edge graph/strict scalar parsers now70 negatives.
+Capture all22 serialized FIFO0 BL_DONE receipts under the submit mutex, bind
+each to exact slab/DMI/dynamic allocations, packet Request and current owner,
+then observe unchanged all-ten-WM live replacement and current final receipt.
+Sequence is a software serialization tag, not a hardware Request identity.
+No live command frees/rewrites/requeue; all4 command slabs remain until stop.
+MMIO/IRQ/DMA APIs in hosted checks are models; physical receipt proof pending.
+NEXT install/verify fresh30 one-use candidate and automatic Golden return;
+then independent live command retirement/recycling, persistent rear Requests,
+safe early delivery, semantic IPA/SensorTimestamp/optics. Front deferred.
+Latest hardware29 remains: first FULL and eight auxiliaries retired live,
+two real4K libcamera Requests, clean stop/release and Golden return PASS.
+Source30 unconsumed/uninstalled/unarmed; counts unchanged native53/61IDs122boots
+failed20; combined68IDs136boots. Golden a516a2a1-3bd5-44d4-8abc-64b2d68df545,
+protected hashes unchanged. Evidence docs/NATIVE-RGB-REAR-GENERATION-30-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear29 live old FULL and all auxiliary outputs retired, clean release PASS
 
 Fresh29/build37 physically frees old eight auxiliary allocations before stop,
