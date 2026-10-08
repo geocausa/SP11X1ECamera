@@ -47,6 +47,9 @@ def apply(camss):
     text = replace_once(text,
         "\tval = CSID_RESET_CMD_HW_RESET | CSID_RESET_CMD_SW_RESET;",
         "\tval = native_rear_csid_reset_command(csid);")
+    text = replace_once(text, "\twritel(CSID_IRQ_CMD_CLEAR, csid->base + CSID_IRQ_CMD);\n\n\t/* preserve registers */",
+        "\tnative_rear_csid_route_before_reset(csid);\n"
+        "\twritel(CSID_IRQ_CMD_CLEAR, csid->base + CSID_IRQ_CMD);\n\n\t/* preserve registers */")
     path.write_text(text)
     # Adopt validated inactive-cold-gamma derivatives; immutable parents retained.
     cold = here.parents[1] / "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma"

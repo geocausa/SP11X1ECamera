@@ -1,0 +1,31 @@
+{
+  "status": "SOURCE_DIFFERENTIAL_ROUTE_BEFORE_RESET_CANDIDATE_NOT_QUALIFIED",
+  "source_head": "45a6624afb7a8c8e63702de94e8b5f547cb5b48c",
+  "exact_driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+  "source_evidence": "experiments/E003-front-imx681-cphy/e003h-windows-parity-transport-static/windows-csid1-common-reset-oracle.json",
+  "rear_stable_register_evidence": "experiments/E004-front-ir-vd55g0/e004ns-rear-csid1-ipp-offline/CSID1-RESULT.json",
+  "shared_manager_calls": {
+    "route": {
+      "command": 7,
+      "rva": "0x18dd8"
+    },
+    "reset": {
+      "command": 4,
+      "rva": "0x18e88"
+    },
+    "configure": {
+      "command": 6,
+      "rva": "0x191b8"
+    }
+  },
+  "Linux09_route_before_transport": "0x1",
+  "Linux09_route_after_packet1": "0x1",
+  "Linux09_route_after_enable": "0x101",
+  "Windows_common_route_precedes_reset_and_configuration": true,
+  "rear_temporal_live_observation_available": false,
+  "inference": "Rear uses shared DEVICE_CONFIG lifecycle and independently observed same 0x101 full-CSID route. Earlier route admission is a bounded hypothesis; no claim of cause or output.",
+  "hypothesis": "Enable only the exact admitted rear wrapper route before reset/startup RUP packets; keep masks/reset/packet content/enable/sensor order fixed.",
+  "candidate": "E-NATIVE-REAR-GENERATION-10",
+  "build": "native-rgb-rear-generation-20261007-13",
+  "new_camera_actions": 0
+}

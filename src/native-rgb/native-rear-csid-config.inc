@@ -18,6 +18,19 @@ static u32 native_rear_csid_reset_command(struct csid_device *csid)
         (CSID_RESET_CMD_HW_RESET | CSID_RESET_CMD_SW_RESET);
 }
 
+/* The shared Windows DEVICE_CONFIG route precedes reset/configuration.
+ * Exact rear final route is independently observed as 0x101. Establish it
+ * before any startup RUP/AUP submission; do not change CTRL or packet data.
+ * Called within media PM acquisition under the already-held rear owner.
+ * Other routes and the earlier front reset branch remain unchanged.
+ */
+static void native_rear_csid_route_before_reset(struct csid_device *csid)
+{
+ if (csid_e004ns_rear_ipp_mode0(csid))
+  writel(CSID_E004NS_REAR_WRAPPER_CFG0,
+         csid->camss->csid_wrapper_base + CSID_TOP_IO_PATH_CFG0(csid->id));
+}
+
 int csid680_native_rear_configure(struct csid_device *csid)
 {
  const struct csid_format_info *format;

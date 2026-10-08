@@ -1,3 +1,15 @@
+## 2026-10-08 generation10 route-before-reset candidate validated
+
+Exact admitted rear route0x101 is established before reset/startup RUP packets.
+Shared Windows DEVICE_CONFIG static order and rear stable route support this
+bounded timing hypothesis; rear temporal live order/cause are not claimed.
+Actual helper/predicate/reset position139 assertions/20 negatives per GCC+Clang
+ASAN/UBSAN PASS; VFE248, pinning2949/52 failures and root/realgraph12 PASS.
+Sourcebuild13 W1/Werror zero diagnostics all3 modules.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-10-PREP-20261008.json.
+NEXT install/verify/boot fresh10 autonomously. Native44/42IDs/84boots unchanged.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation09 reset hypothesis did not resolve CAMIF halt
 
 Exact rear SW reset command2 completed, but first Epoch still timed out.
