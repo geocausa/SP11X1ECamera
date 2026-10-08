@@ -1,3 +1,14 @@
+## 2026-10-08 rear18 geometry matches; camera NoC clock rate observed
+
+SpecificCFG0/period/bounds all0 exactlyWindows. No simple moduleworddifference.
+FaultTOPmodule21/CCIF00900000 persists;6freshmode1boots, rearcomplete0.
+CCFpoweredposttrigger IFE1=594M CSID=300M but cameraNoC RT/NRT=19.2M;
+ratecausality unproven, next auditDT/controllerfreqtable/ICCvotes.
+Golden c73eb834-7e4c-450c-bc3f-13d270dac110 3hash/EFI/NTFSverified; hazards0/watchdogfalse.
+18retired unitsdisabled DMA/PM/ownerheldthroughreboot. Native44streams51IDs102boots
+failed19; Windows7streams7IDs14boots; combined58IDs116boots. Nextcandidate19/build23.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-18-20261008.json. Earlier entries below are historical.
+
 ## 2026-10-08 rear18 sparse period/bounds and actual clocks ready
 
 Freshbuild22 onlyadds3sourceproven scalarCSRreads696c/6970/74 and CCF
