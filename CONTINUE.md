@@ -1,3 +1,17 @@
+## 2026-10-08 rear halt audit narrows next Windows observation
+
+CSID680 status11e00 is input EOF/EOL/SOL/SOF plus VCDT group1 selection.
+Output CAMIF events absent; no evidence of pixel/line-count/overflow error.
+Front/rear and exact retained Windows start stores agree on CTRL then masks.
+No extra post-CTRL RUP/common builder write identified; do not add guessed writes.
+Fresh Windows live CSR valid, but qccamisp module/pre-enable probe unresolved.
+Retained qcISP and CameraSecureISP are distinct demand-start kernel services.
+NEXT resolve actual active rear Windows device/service/module/hash, then start/RUP
+temporal trace externally from SP7. One displayed module alone is not ownership.
+No hardware actions/new candidate. Golden1d781c29-e345-4f0c-8757-58e30f8bc9a5.
+Evidence docs/NATIVE-RGB-REAR-HALT-SOURCE-AUDIT-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation12 activation order did not resolve halt
 
 Existing CFG0/CFG1 moved after packet0, exact admission physically passed.

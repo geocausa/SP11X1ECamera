@@ -1,0 +1,79 @@
+{
+  "status": "SOURCE_DIFFERENTIAL_NEXT_REAR_WINDOWS_DRIVER_OWNERSHIP_AUDIT",
+  "Linux_status": "0x11e00",
+  "status_source": "/home/geoca/Documents/SP11-PROJECT/06-camera/reference/csid680-sof-20261007/cam_ife_csid680.h",
+  "status_source_sha256": "9240958ec453e3946dca6bf8cbeca5b383e034050ae6fd62a0a74e9339d55e06",
+  "status_decode": [
+    {
+      "bit": 9,
+      "name": "INFO_INPUT_EOF"
+    },
+    {
+      "bit": 10,
+      "name": "INFO_INPUT_EOL"
+    },
+    {
+      "bit": 11,
+      "name": "INFO_INPUT_SOL"
+    },
+    {
+      "bit": 12,
+      "name": "INFO_INPUT_SOF"
+    },
+    {
+      "bit": 16,
+      "name": "VCDT_GRP1_SEL"
+    }
+  ],
+  "observations": {
+    "input_SOF_EOF_SOL_EOL_present": true,
+    "output_CAMIF_SOF_EOF_Epoch_absent_in_retained_status": true,
+    "CAMIF_halt": 1,
+    "ECC": 0,
+    "CRC": 0,
+    "unknown_extra_debug_camif1_bits_semantics_not_inferred": true
+  },
+  "start_source_audit": {
+    "front_enable": "CTRL1 then final IPP mask then TOP mask",
+    "rear_enable": "wrapper101 then CTRL1 then final IPP mask then TOP mask",
+    "exact_retained_Windows_IPP_enable_RVA": "0x1b3d0",
+    "IPP_store_RVAs_offsets": [
+      {
+        "rva": "0x1b4b8",
+        "offset": "0x304"
+      },
+      {
+        "rva": "0x1b4c4",
+        "offset": "0xb0"
+      },
+      {
+        "rva": "0x1b4cc",
+        "offset": "0x80"
+      }
+    ],
+    "extra_post_CTRL_RUP_store_identified": false,
+    "missing_global_config_write_in_retained_Gen2_builder_identified": false,
+    "new_start_write_justified": false
+  },
+  "runtime_owner_gap": {
+    "fresh_live_CSR_read_succeeded": true,
+    "fresh_pre_enable_temporal_breakpoint_succeeded": false,
+    "qccamisp_module_resolution_succeeded": false,
+    "qccamsecure_module_displayed": true,
+    "that_module_display_does_not_establish_rear_driver_ownership": true,
+    "retained_qcISP_kernel_driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+    "retained_CameraSecureISP_kernel_driver_sha256": "47c944fa497477751073ec79a27a589a55e884178c1859d6f27388ec7af2ad53",
+    "INF_services_distinct": [
+      "qcISP",
+      "CameraSecureISP"
+    ],
+    "both_INF_demand_start_kernel_drivers": true
+  },
+  "next_observation": [
+    "Fresh rear Windows session: identify enumerated device service, active qcISP/CameraSecureISP status and actual loaded binary hashes on SP11",
+    "Resolve loaded module base/ownership before enabling pre-start breakpoints",
+    "Compare actual rear start and RUP timing using external SP7; retain OEM originals and optical data only on SP11"
+  ],
+  "hardware_actions_performed": 0,
+  "no_new_candidate_installed_or_armed": true
+}
