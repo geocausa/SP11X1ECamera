@@ -133,7 +133,7 @@ int main(void){
 }
 """
 def main():
- p=argparse.ArgumentParser();p.add_argument("--staged",type=Path,required=True);p.add_argument("--report",type=Path,required=True);a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument("--staged",type=Path,required=True);p.add_argument("--report",type=Path,required=True);p.add_argument("--sensor-mode",choices=["mode0","mode1"],default="mode0");a=p.parse_args()
  assert not a.report.exists()
  source=(a.staged/"camss-csid-680.c").read_text()
  runner=(a.staged/"camss-vfe-e008k-rear-runner.inc").read_text()
@@ -141,7 +141,10 @@ def main():
  reset=source[source.index("static int csid_reset("):source.index("int csid680_x1e_front_ipp_poll_epoch0(")]
  assert reset.index("return __csid_sp11_front_ipp_full_config(csid)") < reset.index("native_rear_csid_route_before_reset(csid)") < reset.index("writel(CSID_IRQ_CMD_CLEAR") < reset.index("native_rear_csid_reset_command(csid)")
  macros="\n".join(line for line in source.split("static inline int reg_update_rdi")[0].splitlines() if line.startswith("#define"))+"\n"
- code=PRELUDE+macros+'#include "camss-csid-e004ns-rear-ipp.inc"\n#include "native-rear-csid-config.inc"\n'+MAIN
+ main=MAIN
+ if a.sensor_mode=="mode1":
+  main=main.replace("csid.fmt[4].width=4076;csid.fmt[4].height=2806","csid.fmt[4].width=4064;csid.fmt[4].height=2286").replace("case 14:csid.fmt[4].width=4064","case 14:csid.fmt[4].width=4076")
+ code=PRELUDE+macros+'#include "camss-csid-e004ns-rear-ipp.inc"\n#include "native-rear-csid-config.inc"\n'+main
  results=[]
  with tempfile.TemporaryDirectory(prefix="rear-transport-test-") as tmp:
   tmp=Path(tmp);c=tmp/"check.c";c.write_text(code)
@@ -154,7 +157,7 @@ def main():
     env=dict(os.environ,ASAN_OPTIONS="detect_leaks=1:halt_on_error=1",UBSAN_OPTIONS="halt_on_error=1"))
    if r.returncode or r.stderr:raise RuntimeError(r.stdout+r.stderr+" return="+str(r.returncode))
    results.append({"compiler":compiler,"result":json.loads(r.stdout),"ASAN_UBSAN_Werror":True})
- report={"status":"PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+ report={"sensor_mode":a.sensor_mode,"status":"PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
  "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked":True,"exact_rear_route_before_reset_and_generic_front_unchanged_checked":True,"actual_helper_and_E004ns_predicate_and_RX_derivation":True,"path_config_after_packet0_guard_and_11_atomic_failures_checked":True,
  "MMIO_and_format_lookup_host_models":True,"hardware_access":False,"results":results}
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))

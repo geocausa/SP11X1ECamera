@@ -29,7 +29,12 @@ def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=F
     manifest = json.loads((HERE / "sources.json").read_text())
     if front_owner_trial and not nv12_trial:
         raise ValueError("front owner trial requires isolated NV12 trial")
+    maintained_sensor = manifest.get("maintained_sensor_inputs", {})
+    if set(maintained_sensor) - {"src/native-rgb/ov13858/ov13858.c"}:
+        raise ValueError("unsupported maintained sensor override")
     for name, expected in manifest["baseline_inputs"].items():
+        checked_source(name, maintained_sensor.get(name, expected))
+    for name, expected in maintained_sensor.items():
         checked_source(name, expected)
     for name, expected in manifest["integration_inputs"].items():
         checked_source(name, expected)

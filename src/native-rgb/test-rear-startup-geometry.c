@@ -113,6 +113,22 @@ int main(void)
 {
 	positive();
 	negative();
+	{
+		struct e008o_rear_packet_semantics a[4], b[4];
+		struct native_rear_geometry_mode full, crop;
+		native_rear_geometry_test_init(a, &full);
+		native_rear_geometry_test_init(b, &crop);
+		crop.sensor_width = 4064;
+		crop.sensor_height = 2286;
+		CHECK(native_rear_bind_startup_geometry(a, &full) == 0);
+		CHECK(native_rear_bind_startup_geometry(b, &crop) == 0);
+		CHECK(!memcmp(a, b, sizeof(a)));
+		crop.sensor_height = 2806;
+		CHECK(native_rear_bind_startup_geometry(b, &crop) == -EOPNOTSUPP);
+		crop.sensor_width = 4076;
+		crop.sensor_height = 2286;
+		CHECK(native_rear_bind_startup_geometry(b, &crop) == -EOPNOTSUPP);
+	}
 	printf("NATIVE_REAR_GEOMETRY_PASS assertions=%u hardware_callbacks=0\n", assertions);
 	return 0;
 }

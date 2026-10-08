@@ -126,6 +126,8 @@ struct ov13858_mode {
 	struct ov13858_reg_list reg_list;
 	/* Optional clean-room mode-specific overrides applied in standby. */
 	struct ov13858_reg_list override_reg_list;
+	/* Additional sensor-side crop, applied after the common Surface profile. */
+	struct ov13858_reg_list crop_reg_list;
 };
 
 /* 4224x3136 needs 1080Mbps/lane, 4 lanes */
@@ -1095,6 +1097,17 @@ static const struct ov13858_mode supported_modes[] = {
 	}
 };
 
+/* Surface 16:9 mode: seven geometry facts relative to the common profile. */
+static const struct ov13858_reg surface_pro11_mode1_crop[] = {
+	{0x3802, 0x01},
+	{0x3806, 0x0a},
+	{0x3809, 0xe0},
+	{0x380a, 0x08},
+	{0x380b, 0xee},
+	{0x3811, 0x20},
+	{0x3813, 0x18},
+};
+
 static const struct ov13858_mode surface_pro11_modes[] = {
 	{
 		.width = 4076,
@@ -1110,6 +1123,26 @@ static const struct ov13858_mode surface_pro11_modes[] = {
 		.override_reg_list = {
 			.num_of_regs = ARRAY_SIZE(surface_pro11_mode0_delta),
 			.regs = surface_pro11_mode0_delta,
+		},
+	},
+	{
+		.width = 4064,
+		.height = 2286,
+		.vts_def = 3214,
+		.vts_min = 3214,
+		.link_freq_index = OV13858_LINK_FREQ_INDEX_SURFACE_PRO11,
+		.pixel_rate = OV13858_SURFACE_PRO11_MODE0_PIXEL_RATE,
+		.reg_list = {
+			.num_of_regs = ARRAY_SIZE(mode_4224x3136_regs),
+			.regs = mode_4224x3136_regs,
+		},
+		.override_reg_list = {
+			.num_of_regs = ARRAY_SIZE(surface_pro11_mode0_delta),
+			.regs = surface_pro11_mode0_delta,
+		},
+		.crop_reg_list = {
+			.num_of_regs = ARRAY_SIZE(surface_pro11_mode1_crop),
+			.regs = surface_pro11_mode1_crop,
 		},
 	},
 };
@@ -1635,6 +1668,13 @@ static int ov13858_start_streaming(struct ov13858 *ov13858)
 				__func__);
 			return ret;
 		}
+	}
+
+	if (ov13858->cur_mode->crop_reg_list.num_of_regs) {
+		ret = ov13858_write_reg_list(ov13858,
+				      &ov13858->cur_mode->crop_reg_list);
+		if (ret)
+			return ret;
 	}
 
 	/* Apply customized values from user */

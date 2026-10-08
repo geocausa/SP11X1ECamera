@@ -1,0 +1,32 @@
+{
+  "status": "SOURCE_MODE_MISMATCH_IDENTIFIED_NOT_CAUSALLY_PROVEN",
+  "base_head": "2bc3b339b2ea035910e525e055f8052dd459df20",
+  "Linux_selected_sensor_mode": {
+    "width": 4076,
+    "height": 2806,
+    "mode": 0
+  },
+  "Windows_live_measured_geometry": {
+    "width": 4064,
+    "height": 2286,
+    "evidence": "docs/NATIVE-RGB-WINDOWS-REAR-CAMIF-01-20261008.json"
+  },
+  "CSID_cfg0": "0x802b2000",
+  "horizontal_crop_enable_bit12": false,
+  "vertical_crop_enable_bit13": true,
+  "mode1_sensor_package_geometry": {
+    "width": 4064,
+    "height": 2286,
+    "mode": 1,
+    "x_offset": 6,
+    "y_offset": 260
+  },
+  "mode1_geometry_only_delta_register_count": 7,
+  "inference": "Working live width with horizontal crop disabled is consistent with sensor mode1 rather than current Linux mode0. Dynamic Windows sensor-register readback not obtained.",
+  "hypothesis": "Matching physical sensor width and height to the working ISP input may remove startup halt or reveal the next distinct failure.",
+  "changes": "Add standard sensor S_FMT mode1 via seven register delta; candidate13 only admits exact mode1 graph; ISP packet words, RUP/CTRL and start order unchanged.",
+  "expected": "Sensor standby readback4064x2286 VTS3214; observe first Epoch and slot completion, or record no-fix with unchanged exact input.",
+  "rollback": "Candidate13 one-use, mandatory reboot, immutable Golden, DMA/PM/owner pinned until reboot.",
+  "hardware_actions_performed": false,
+  "next": "Build16 and hosted tests, then one-use hardware attempt."
+}

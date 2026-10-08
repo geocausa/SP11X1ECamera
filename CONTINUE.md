@@ -1,3 +1,19 @@
+## 2026-10-08 rear13 matching sensor mode1 candidate ready
+
+Linux mode0 4076x2806 differs from working Windows CAMIF4064x2286.
+CFG0 horizontal crop disabled; same-SP11 package mode1 has seven geometry deltas.
+Mode1 inferred from input/live width; dynamic Windows sensor registers unobserved.
+Standard OV13858 S_FMT adds4064x2286, mode0 remains first/default and arrays unchanged.
+Candidate13 exact mode1 graph/predicate; sensor standby size/VTS readback required.
+2268 ISP words and DMI match; packet/CTRL/RUP/start order unchanged.
+Build17 W1/Werror zero diagnostics; GCC+Clang sanitizer geometry570,
+transport227, VFE248, pinning3026/53faults and root realgraph13negatives PASS.
+Failed sourcebuild16 preserved, no hardware/identity consumption there.
+NEXT install/verify/boot fresh13 autonomously, DMA/PM/owner held until Golden.
+Counts unchanged native44/45IDs90boots failed13; Windows4/4/8, combined49/98.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-13-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 fresh Windows rear pre/post CTRL trace completed
 
 qcISP and CameraSecureISP running; both actual binary hashes match retained.

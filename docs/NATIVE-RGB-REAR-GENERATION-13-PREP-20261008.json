@@ -1,0 +1,235 @@
+{
+  "status": "PASS_REAR13_MODE1_PREPARATION_NOT_HARDWARE_PROVEN",
+  "identity": "E-NATIVE-REAR-GENERATION-13",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-17",
+  "base_head": "2bc3b339b2ea035910e525e055f8052dd459df20",
+  "hypothesis": "Matching physical sensor width and height to the working ISP input may remove startup halt or reveal the next distinct failure.",
+  "mode_inference_qualified_not_dynamic_sensor_observation": true,
+  "sensor_selected": [
+    4064,
+    2286
+  ],
+  "sensor_mode1_delta_register_count": 7,
+  "mode0_arrays_byte_identical": true,
+  "ISP_packet_RUP_CTRL_and_start_order_unchanged": true,
+  "post_stop_DMA_PM_owner_pinned_until_reboot": true,
+  "private_vendor_tables_or_pixels_exported": false,
+  "source_build_failed16_preserved": true,
+  "build16_failure": "Candidate readback insertion anchor matched both start and stop; stopped before compile/hardware. Fresh build17 used.",
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "35508bb8197a3eb9008e09de80959781efbc73f8a3a6e9245dfa1b1557a9a4ed",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "a127fea8d564e572a27ef0ad5e8cd306160707f1f647e140dc88a4a74110b18c",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "9539c26fa48b84e715eb5e46f6b5eeb767bec9162a0d7d71400ffead5d0d1e6a",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "source_profile_register_words_exact": 2268,
+  "source_profile_DMI_matches": {
+    "lsc_selector_slots_exact": 4,
+    "gtm_slots_exact": 4,
+    "gic_alias_slots_exact": 3,
+    "BF_selector1_slots_exact": 4
+  },
+  "hosted": {
+    "sensor-mode-hosted-01": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE",
+      "modes": [
+        {
+          "mode": 0,
+          "width": 4076,
+          "height": 2806,
+          "Windows_covered_registers_exact": 207,
+          "VTS": 3214,
+          "line_length_register": 1122
+        },
+        {
+          "mode": 1,
+          "width": 4064,
+          "height": 2286,
+          "Windows_covered_registers_exact": 207,
+          "VTS": 3214,
+          "line_length_register": 1122
+        }
+      ],
+      "mode1_geometry_only_delta_count": 7,
+      "mode0_remains_first_default": true,
+      "link_PLL_HTS_VTS_VT_clock_PM_controls_unchanged": true,
+      "extra_upstream_test_pattern_disabled_register": 1,
+      "vendor_table_exported": false,
+      "hardware_access": false,
+      "source_sha256": "f64edd02d482c350f584faf32635cf933f004d3af0754046c1cbcfc98bad1646"
+    },
+    "geometry-mode1-hosted-01": {
+      "status": "PASS_HOSTED_REAR_GEOMETRY_COMPOSER",
+      "actual_geometry_period_disable_packers_and_binder": true,
+      "unrelated_full_packet_fields_omitted_in_host_fixture": true,
+      "results": [
+        {
+          "compiler": "gcc",
+          "compile_Werror": true,
+          "sanitizers": [
+            "ASAN",
+            "UBSAN"
+          ],
+          "stdout": "NATIVE_REAR_GEOMETRY_PASS assertions=570 hardware_callbacks=0",
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "compile_Werror": true,
+          "sanitizers": [
+            "ASAN",
+            "UBSAN"
+          ],
+          "stdout": "NATIVE_REAR_GEOMETRY_PASS assertions=570 hardware_callbacks=0",
+          "stderr": ""
+        }
+      ],
+      "hardware_access": false,
+      "ready_or_sealed_state_granted": false,
+      "linear_NV12_or_full_rear_bootstrap_proven": false
+    },
+    "transport-hosted-01": {
+      "sensor_mode": "mode1",
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+      "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked": true,
+      "exact_rear_route_before_reset_and_generic_front_unchanged_checked": true,
+      "actual_helper_and_E004ns_predicate_and_RX_derivation": true,
+      "path_config_after_packet0_guard_and_11_atomic_failures_checked": true,
+      "MMIO_and_format_lookup_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        },
+        {
+          "compiler": "clang",
+          "result": {
+            "assertions": 227,
+            "writes": 15,
+            "negative_cases": 20,
+            "packet_fields_and_ACKs_untouched": true
+          },
+          "ASAN_UBSAN_Werror": true
+        }
+      ]
+    },
+    "vfe-hosted-01": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK",
+      "full_and_same_SP11_observed_readback_models_checked": true,
+      "actual_prefix_predicate_and_helper": true,
+      "MMIO_and_contract_validity_host_models": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 248,
+            "writes": 7,
+            "admission_negatives": 19,
+            "readback_faults": 3,
+            "WM_IQ_and_addresses_untouched": true
+          }
+        }
+      ]
+    },
+    "pinning-hosted-02": {
+      "status": "PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING",
+      "actual_candidate_orchestration_and_stop_pin_branch": true,
+      "lifecycle_IRQ_helpers_and_DMA_allocations_host_models": true,
+      "all_modeled_partial_start_stop_attempts_checked": true,
+      "complete_frames_do_not_authorize_output_reclaim": true,
+      "reclaim_function_calls": 0,
+      "default_authorization_denial_checked": true,
+      "successful_stop_helpers_called_once_checked": true,
+      "physical_completion_not_proven": true,
+      "hardware_access": false,
+      "results": [
+        {
+          "compiler": "gcc",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3026,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        },
+        {
+          "compiler": "clang",
+          "ASAN_UBSAN_Werror": true,
+          "result": {
+            "assertions": 3026,
+            "lifecycle_steps": 54,
+            "injected_failures": 53,
+            "partial_start_stop_attempts_complete": true,
+            "lifecycle_helpers_and_reclaim_mocked": true,
+            "runtime_denial_bypassed_only_in_host_test": true,
+            "hardware_proof": false
+          },
+          "stderr": ""
+        }
+      ]
+    },
+    "offline-runner-01": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "legacy_mode0_graph_rejected": true,
+      "exact_mode1_pad_readbacks_checked": true,
+      "root_service_environment_Git_trust": true,
+      "retained_actual_graph": true,
+      "edges": 119,
+      "device_nodes": 45,
+      "negative_cases": 13,
+      "hardware_access": false,
+      "synthetic_format_changes_for_offline_testing": true
+    }
+  },
+  "runtime_actions_performed": false,
+  "rollback": "One-use13; automatic75s service/90s watchdog Golden return, no DMA reclaim",
+  "next": "Install/verify/arm and boot13 autonomously",
+  "changed_source_hashes": {
+    "src/native-rgb/build.py": "878763b08bc19ecdcdbc37a5817c21eb69d62951cd6e9f7ca52089f584049030",
+    "src/native-rgb/native-rear-startup-geometry.inc": "78453d14110bcdeab89d2fe0381367292fe42482d348b2ac220776cb698f764e",
+    "src/native-rgb/ov13858/PROVENANCE.json": "e526ed3a12f32410de1313cf6233466bc52a546fdbee6fb9b13457f7ac429f4f",
+    "src/native-rgb/ov13858/ov13858.c": "44b25737f9e15aa1b81a9040c168dca41714fdacf6ca9efba3bd49ad131bc147",
+    "src/native-rgb/rear-generation/build-once.py": "f894025244d9424f75c7f9d55e8fd27e00d81ff39e1da5e99f7426281963e52f",
+    "src/native-rgb/rear-generation/install.py": "35691c3f2fc80a6459fe86988ddf537d4d7ce4cafe1ecb1f028d2d4cac7740f6",
+    "src/native-rgb/rear-generation/native-rear-generation-hook.inc": "7c2aea55b6a28d26fc1653b4618dafc19ff840a57c89f89423b2e3976569fd47",
+    "src/native-rgb/rear-generation/run-once.py": "0b1f87f4320a96d2337bb5e27614edfdc02ed76269f419d2027e52e00edd23e3",
+    "src/native-rgb/rear-generation/test-offline.py": "fa0ed584d3d9d4604bf1987da38ecb6423606f7b4ea0a53e8485e7501f8670f6",
+    "src/native-rgb/sources.json": "3ee753d493699b5c60e9461ae92f12299ce8fccb729c3f7631bfe09817341774",
+    "src/native-rgb/test-rear-csid-config.py": "53dd1bf23cbfc1adfb584f871f479328e7db2144dc590d264d9aaeefabe0a847",
+    "src/native-rgb/test-rear-startup-geometry.c": "71d962732bbae4fbf6dc0889c681cbf93f904041ab7b31790b1abaf2692fa83d",
+    "src/native-rgb/test-rear-sensor-modes.py": "70d655e9556398b75d9d735c89e470eb9554e8f4f1d57e5ceccdc1a26aff0ae9"
+  }
+}

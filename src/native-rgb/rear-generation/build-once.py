@@ -6,9 +6,9 @@ Private compiler-bound semantic firmware and its digest stay on this SP11.
 import argparse,hashlib,importlib.util,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent;ROOT=NATIVE.parents[1]
-PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-15"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-15"
-HEAD="b08f2e160422c4dee66d50e5bd4dd33fbc43a71b"
+PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-17"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-17"
+HEAD="2bc3b339b2ea035910e525e055f8052dd459df20"
 SOURCE=PROJECT/"06-camera/reference/libcamera-native-rgb-rear-20261007-15"
 LIBBUILD=PROJECT/"02-kernel/libcamera-native-rgb-rear-20261007-15"
 KSOURCE=PROJECT/"02-kernel/e003i-front-production-src"
@@ -28,21 +28,57 @@ def guard():
  if r.returncode:raise RuntimeError("overlap guard failed")
 def main():
  os.umask(0o077);guard()
- for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-12"),
-              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-12")]:
+ for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-13"),
+              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-13")]:
   if path.exists():raise RuntimeError("candidate path already exists; audit first")
  build=load("native_rear_build",NATIVE/"build.py")
  result=build.assemble(OUT,nv12_trial=True,front_owner_trial=True,front_queue_trial=True,
    front_meta_trial=True,front_params_trial=True,front_profile_trial=True,front_sof_trial=True,
    front_control_trace_trial=True)
  camss=OUT/"camss";PRIVATE.mkdir(mode=0o700)
+ # Only this diagnostic admits the matching 16:9 sensor mode.
+ replace(camss/"camss-csid-e004ns-rear-ipp.inc",
+  "fmt->width == 4076 && fmt->height == 2806",
+  "fmt->width == 4064 && fmt->height == 2286")
+ # Read back sensor geometry/VTS in standby before the existing stream write.
+ sensor=OUT/"ov13858/ov13858.c"
+ before="	return ov13858_write_reg(ov13858, OV13858_REG_MODE_SELECT,\n"
+ sensor_text=sensor.read_text()
+ start=sensor_text.index("static int ov13858_start_streaming(")
+ stop=sensor_text.index("/* Stop streaming */",start)
+ assert sensor_text[start:stop].count(before)==1
+ pos=sensor_text.index(before,start)
+ assert pos<stop
+ verify_mode="""	{
+		u32 width, height, vts, standby;
+		ret = ov13858_read_reg(ov13858, 0x3808, 2, &width);
+		if (ret)
+			return ret;
+		ret = ov13858_read_reg(ov13858, 0x380a, 2, &height);
+		if (ret)
+			return ret;
+		ret = ov13858_read_reg(ov13858, 0x380e, 2, &vts);
+		if (ret)
+			return ret;
+		ret = ov13858_read_reg(ov13858, 0x0100, 1, &standby);
+		if (ret)
+			return ret;
+		if (width != 4064 || height != 2286 || vts != 3214 || standby)
+			return -EPROTO;
+		dev_info(ov13858->dev, "NATIVE_REAR_GENERATION_SENSOR_MODE width=%u height=%u vts=%u standby=%u\\n",
+			 width, height, vts, standby);
+	}
+
+"""
+ sensor.write_text(sensor_text[:pos]+verify_mode+sensor_text[pos:])
+
  verify=load("native_rear_current_verify",NATIVE/"verify-rear-startup-private.py")
  wire,ag,bpc,adaptive=verify.producer_wire(SOURCE,LIBBUILD,PRIVATE)
  code=PRIVATE/"profile-check.c"
  text=(NATIVE/"rear-startup-private-check.c").read_text().replace("/* CST_SOURCE */",verify.cst_source())
  needle="CHECK(native_rear_compose_startup(set,in)==0);"
  assert text.count(needle)==1
- text=text.replace(needle,'write_private(argv[1],"input",0,0,in,sizeof(*in));\n '+needle)
+ text=text.replace(needle,'in->geometry.sensor_width=4064;in->geometry.sensor_height=2286;\n write_private(argv[1],"input",0,0,in,sizeof(*in));\n '+needle)
  code.write_text(text)
  binary=PRIVATE/"profile-check"
  verify.checked(["gcc","-std=gnu11","-Wall","-Wextra","-Werror","-O1","-g",
@@ -56,7 +92,7 @@ def main():
  profile=output/"p0-input-0.bin";digest=hashlib.sha256(profile.read_bytes()).digest()
  identity=camss/"native-rear-generation-identity.h"
  identity.write_text(
-  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-12.bin"\n'
+  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-13.bin"\n'
   +f'#define NATIVE_REAR_GENERATION_INPUT_BYTES {profile.stat().st_size}U\n'
   +'static const u8 native_rear_generation_input_sha256[32]={'
   +','.join(str(x) for x in digest)+'};\n')
@@ -177,7 +213,7 @@ def main():
    for name in re.findall(r'^#include "([^"]+)"',p.read_text(),re.M):
     if not (camss/name).is_file():raise RuntimeError("include closure failed")
  result.update(status="BUILD_REAR_GENERATION_DIAGNOSTIC_IN_PROGRESS",
-  candidate_identity="E-NATIVE-REAR-GENERATION-12",candidate_base_commit=HEAD,
+  candidate_identity="E-NATIVE-REAR-GENERATION-13",candidate_base_commit=HEAD,
   rear_optin_single_use_control_available=True,private_compiler_bound_data_only_input=True,
   post_stop_output_command_DMA_and_PM_pinned_until_reboot=True,
   source_profile_register_words_exact=sum(x["register_instances"] for x in phases),

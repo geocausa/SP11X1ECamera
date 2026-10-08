@@ -50,9 +50,11 @@ native_rear_bind_startup_geometry(
 	/*
 	 * Fail closed against this backend's existing fixed CSID crop and ten-WM
 	 * surface. A different crop, mode, format or stripe needs its own contract.
-	 * The current crop starts at (0,0); do not invent a centered sensor crop.
+	 * CSID starts at (0,0). The 4064x2286 sensor mode supplies its own crop;
+	 * the legacy full sensor mode is retained for source comparisons.
 	 */
-	if (selected.sensor_width != 4076 || selected.sensor_height != 2806 ||
+	if (!((selected.sensor_width == 4076 && selected.sensor_height == 2806) ||
+	      (selected.sensor_width == 4064 && selected.sensor_height == 2286)) ||
 	    selected.isp_width != 4064 || selected.isp_height != 2286 ||
 	    selected.output_width != 3840 || selected.output_height != 2160 ||
 	    selected.bit_width != 10)
