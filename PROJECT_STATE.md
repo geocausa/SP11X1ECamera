@@ -1,3 +1,23 @@
+## 2026-10-08 rear24 public V4L2 mapping/worker candidate prepared
+
+Rear23 hardware clean 4K NV12 release remains PASS. Fresh rear24/build30
+builds three ARM64 W1/Werror modules. All 13 hosted checks PASS, including
+actual independent DMA-BUF leases, all-or-none reclaim, runner fault models,
+linear layout, sensor/transport/clocks and real-graph/probe admission.
+Standard V4L2 MMAP worker now source-connected for exactly two 3840x2160
+NV12 frames; retained independent maps protect pages/IOVAs through VB2
+cancellation and uncertain stop; faulted pair retained on VFE until reboot.
+Candidate source-qualified, not yet hardware attempted or armed.
+NEXT fresh rear24 STREAMON/DQBUF x2/STREAMOFF/REQBUFS0 hardware proof,
+then continuous rear queue and normal libcamera/IPA typed semantic controls.
+Private compiled profile remains qualification only. Completion timestamps
+are not exposure timestamps. DMABUF import hardware, rear libcamera,
+continuous delivery and optical quality remain unproven; front deferred.
+Counts unchanged48/56IDs112boots failed20; combined63IDs126boots.
+Golden f6afd4f8-cdf2-4d91-a57f-f587315001ed. Rear23 retired.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-24-PREP-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear public-buffer DMA admission compiled and tested
 
 Rear23 physical clean NV12 release remains PASS. Actual rear VB2 mapping

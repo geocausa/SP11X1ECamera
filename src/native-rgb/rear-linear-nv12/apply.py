@@ -93,14 +93,14 @@ def apply(camss, public_dma_admission=False):
  c=once(c,'#include "camss-vfe-e008d-rear-dma.inc"','#include "native-rear-nv12-bus.inc"\n#include "camss-vfe-e008d-rear-dma.inc"')
  if public_dma_admission:
   c=once(c,'#include "camss-vfe-e004nt-rear-4k-buffer.inc"',
-         '#include "camss-vfe-e004nt-rear-4k-buffer.inc"\n#include "native-rear-video-dma.inc"')
+         '#include "camss-vfe-e004nt-rear-4k-buffer.inc"\n#include "native-rear-video-dma.inc"\n#include "native-rear-video-lease.inc"')
  texts["camss-vfe-680.c"]=c
  # Reject any unexpected source drift before mutating this fresh staging tree.
  for n,t in texts.items(): (camss/n).write_text(t)
  for n in ["native-rear-nv12-layout.h","native-rear-nv12-bus.inc"]:
   (camss/n).write_bytes((HERE/n).read_bytes())
  if public_dma_admission:
-  for n in ["native-rear-video-dma.h","native-rear-video-dma.inc"]:
+  for n in ["native-rear-video-dma.h","native-rear-video-dma.inc","native-rear-video-lease.inc"]:
    (camss/n).write_bytes((HERE.parent/"rear-v4l2"/n).read_bytes())
  return {"rear_full_storage":"linear_NV12","width":3840,"height":2160,
          "stride":3840,"image_bytes":12441600,"allocation_bytes":12443648,

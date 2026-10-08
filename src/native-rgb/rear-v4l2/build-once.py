@@ -4,8 +4,8 @@
 import hashlib,importlib.util,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent;ROOT=NATIVE.parents[1];PROJECT=ROOT.parents[1]
-OUT=PROJECT/"02-kernel/native-rgb-rear-v4l2-20261008-01"
-HEAD="a46a703ea4358859d195c39b9e961bc2a557e00d"
+OUT=PROJECT/"02-kernel/native-rgb-rear-v4l2-20261008-04"
+HEAD="05cfcf88d9f9302af1364b52c6d1661c7f84499e"
 def load(name,path):
  spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -17,10 +17,12 @@ def main():
  result=build.assemble(OUT,nv12_trial=True,front_owner_trial=True,front_queue_trial=True,front_meta_trial=True,front_params_trial=True,front_profile_trial=True,front_sof_trial=True,front_control_trace_trial=True)
  linear=load("native_rgb_public_linear_overlay",NATIVE/"rear-linear-nv12/apply.py")
  result["rear_linear_storage"]=linear.apply(OUT/"camss",public_dma_admission=True)
+ public=load("native_rear_public_outputs",HERE/"apply-public-output.py")
+ result["public_outputs"]=public.apply(OUT/"camss")
  result["base_commit"]=HEAD
  result["public_rear_runtime_callbacks_installed"]=False
  result["private_firmware_loaded"]=False
- result["source_inputs"]={str(p.relative_to(ROOT)):sha(p) for p in [HERE/"native-rear-video-dma.h",HERE/"native-rear-video-dma.inc",NATIVE/"rear-linear-nv12/native-rear-nv12-layout.h",NATIVE/"rear-linear-nv12/apply.py"]}
+ result["source_inputs"]={str(p.relative_to(ROOT)):sha(p) for p in [HERE/"native-rear-video-dma.h",HERE/"native-rear-video-dma.inc",HERE/"native-rear-video-lease.inc",HERE/"apply-public-output.py",NATIVE/"rear-linear-nv12/native-rear-nv12-layout.h",NATIVE/"rear-linear-nv12/apply.py"]}
  result["staged_sources"]={}
  for directory in [OUT/"camss",OUT/"imx681",OUT/"ov13858"]:
   for p in directory.iterdir():

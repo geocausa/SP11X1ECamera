@@ -1,0 +1,149 @@
+{
+  "schema": 1,
+  "date": "2026-10-08",
+  "candidate_identity": "E-NATIVE-REAR-GENERATION-24",
+  "status": "PASS_PUBLIC_V4L2_CANDIDATE_SOURCE_AND_HOSTED_TESTS_PREPARED_NOT_ARMED",
+  "base_commit": "05cfcf88d9f9302af1364b52c6d1661c7f84499e",
+  "source_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-30",
+  "candidate_runtime": "/var/lib/sp11-camera-native-rear-generation-20261007-24",
+  "golden_boot_id": "f6afd4f8-cdf2-4d91-a57f-f587315001ed",
+  "hypothesis": "Standard V4L2 MMAP queue receives two hardware 4K NV12 FULL outputs, then STREAMOFF and REQBUFS(0) finish after verified complete hardware/command retirement.",
+  "public_format": {
+    "fourcc": "NV12",
+    "width": 3840,
+    "height": 2160,
+    "planes": 1,
+    "stride": 3840,
+    "image_bytes": 12441600,
+    "FULL_output_bits": 8,
+    "DS_output_bits": 10
+  },
+  "retained_mapping_contract": {
+    "MMAP_export_holds_VB2_allocator_pages": true,
+    "DMABUF_import_gets_separate_reference": true,
+    "independent_attachment_and_DMA_map": true,
+    "all_mapped_SG_entries_validated": true,
+    "original_VB2_mapping_or_wrapper_not_retained": true,
+    "separate_mapping_survives_VB2_cancel": true,
+    "stop_barriers": [
+      "CSID",
+      "BUS",
+      "RTCDM",
+      "sensor_source"
+    ],
+    "uncertain_exposed_mapping_retained_until_reboot": true,
+    "faulted_pair_recorded_on_VFE_prevents_new_runner": true,
+    "FULL_coherent_free_for_borrowed_buffer": false,
+    "same_DMA_BUF_for_both_outputs_rejected": true
+  },
+  "worker_contract": {
+    "standard_V4L2_ioctl_transport": true,
+    "bounded_frames": 2,
+    "private_compiled_semantic_profile_qualification_only": true,
+    "buffer_done_success_only_after_hardware_and_command_retirement": true,
+    "STREAMOFF_joins_worker_before_VB2_cancel": true,
+    "CPU_pixel_copy_or_ISP": false,
+    "timestamps_are_completion_time_not_sensor_exposure": true
+  },
+  "build_modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "e87d7ebf71805d22aaef1bb0ac75ac38063f2f55fe52d8fee0025b7785890721",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "d940ace5d9634750044280faf903a9ddd6f5fff128e621974437ef1e67509740",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "e9c10109e2e9a387dea99c69138b1361e0ab680e887c0e9e3975e9a09ccb0007",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "compiler_policy": "ARM64 W=1 -Werror; GCC/Clang hosted ASAN/UBSAN -Werror",
+  "hosted_checks": {
+    "dma-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_VB2_MAPPED_SG_APERTURE_ADMISSION"
+    },
+    "lease-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_RETAINED_DMABUF_MAPPING_LEASE"
+    },
+    "public-reclaim-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_COHERENT_AND_PUBLIC_LEASE_ALL_OR_NONE_RECLAIM"
+    },
+    "clean-lifecycle-hosted-01": {
+      "status": "PASS_CANDIDATE_CLEAN_STOP_RELEASE_AND_FAILURE_STOP_MODELS"
+    },
+    "public-lifecycle-hosted-01": {
+      "status": "PASS_ACTUAL_PUBLIC_REAR_RUNNER_LIFECYCLE_FAILURE_MODELS"
+    },
+    "linear-nv12-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_LINEAR_LAYOUT_BUS_AND_LEDGER"
+    },
+    "vfe-hosted-02": {
+      "status": "PASS_REAL_SHARED_VFE_PREFIX_REAR_ADMISSION_AND_READBACK"
+    },
+    "linear-geometry-hosted-01": {
+      "status": "PASS_HOSTED_REAR_GEOMETRY_COMPOSER"
+    },
+    "transport-hosted-01": {
+      "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES"
+    },
+    "sensor-mode-hosted-01": {
+      "status": "PASS_SOURCE_SENSOR_MODES_MATCH_LOCAL_ORACLE"
+    },
+    "noc-clock-hosted-01": {
+      "status": "PASS_ACTUAL_CANDIDATE_NOC_FLOOR_SHARED_PARENT_CCF_FAILURE_MODELS"
+    },
+    "offline-runner-02": {
+      "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+      "edges": 119,
+      "device_nodes": 45,
+      "negative_cases": 13
+    },
+    "csr-whitelist-hosted-01": {
+      "status": "PASS_EXACT_VFE680_NAMED_SCALAR_WHITELIST",
+      "negative_cases": 9
+    }
+  },
+  "hosted_check_count": 13,
+  "source_only_iteration_record": [
+    {
+      "stage": "native-rgb-rear-v4l2-20261008-02",
+      "result": "FAIL_MODPOST_DMA_BUF_NAMESPACE_IMPORT_MISSING"
+    },
+    {
+      "stage": "native-rgb-rear-v4l2-20261008-03",
+      "result": "PASS_NAMESPACE_AND_RETAINED_LEASE_BUILD"
+    },
+    {
+      "stage": "native-rgb-rear-v4l2-20261008-04",
+      "result": "PASS_PUBLIC_FULL_BORROWED_OUTPUT_BUILD"
+    },
+    {
+      "stage": "native-rgb-rear-generation-20261007-29",
+      "result": "PASS_PUBLIC_WORKER_PROTOTYPE_BUILD"
+    },
+    {
+      "stage": "native-rgb-rear-generation-20261007-30",
+      "result": "PASS_PUBLIC_WORKER_WITH_FAULTED_PAIR_REGISTRY_BUILD"
+    }
+  ],
+  "hardware_this_candidate_attempted": false,
+  "rear_public_V4L2_delivery_hardware_proven": false,
+  "rear_libcamera_pipeline_proven": false,
+  "rear_continuous_delivery_proven": false,
+  "DMABUF_import_hardware_proven": false,
+  "optical_quality_parity_proven": false,
+  "front_calibration_deferred": true,
+  "pixel_bytes_read_or_saved": 0,
+  "candidate_single_use": true,
+  "automatic_Golden_return_and_independent_watchdog": true,
+  "counts_unchanged": {
+    "native_completed_streams": 48,
+    "native_consumed_ids": 56,
+    "native_boots": 112,
+    "native_failed_started": 20,
+    "combined_ids": 63,
+    "combined_boots": 126
+  }
+}

@@ -39,6 +39,17 @@ static int native_rear_validate_prepared_commands(struct e008l_rear_command_set 
   prefix += "\nstatic void csid680_native_rear_generation_snapshot(struct csid_device *c,const char *p) {CHECK(c&&p);}\n"
  if "native_rear_generation_vfe_snapshot" in core:
   prefix += "\nstatic void native_rear_generation_vfe_snapshot(struct vfe_device *v,const char *p) {CHECK(v&&p);}\n"
+ if "native_rear_public_pair_alloc" in core:
+  prefix=prefix.replace("struct vfe_device {","struct vfe_device {void *native_rear_faulted_pair;")
+  prefix=prefix.replace("struct e008h_rear_prime_pair {","struct native_rear_video_lease {bool exposed;};\nstruct camss_buffer {int dummy;};\nstruct e008h_rear_prime_pair {struct {struct native_rear_video_lease public_full;} dma[2];")
+  prefix += """
+static int native_rear_public_pair_alloc(struct vfe_device *v,struct e008h_rear_prime_pair *p,struct camss_buffer *b[2]){
+ CHECK(b&&b[0]&&b[1]&&b[0]!=b[1]);return e008j_rear_alloc_pair_no_mmio(v,p);
+}
+static int native_rear_video_lease_expose(struct native_rear_video_lease *l){
+ CHECK(l&&!l->exposed);attempted|=4;int r=step();if(!r)l->exposed=true;return r;
+}
+"""
  a=core.index("static int\ne011i_rear_reclaim_after_stop(")
  b=core.index("static int\ne008k_rear_pair_stop_release(",a)
  core=core[:a]+"""/* Explicit mock: actual physical reclaim is not exercised here. */

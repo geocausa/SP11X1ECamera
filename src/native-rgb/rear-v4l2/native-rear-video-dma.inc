@@ -6,16 +6,34 @@
  * No CPU pixel mapping/copy, MMIO, VB2 completion, or ownership transfer.
  */
 static int __used
+native_rear_video_dma_table(struct sg_table *table, u64 plane_bytes,
+                            struct native_rear_video_dma *out)
+{
+ struct native_rear_video_dma_scan scan = {};
+ struct scatterlist *sg;
+ unsigned int i;
+ int ret;
+
+ if (!table || !table->sgl || !table->nents || !out)
+  return -EINVAL;
+ for_each_sgtable_dma_sg(table, sg, i) {
+  ret = native_rear_video_dma_append(&scan, sg_dma_address(sg),
+                                    sg_dma_len(sg));
+  if (ret)
+   return ret;
+ }
+ if (scan.segments != table->nents)
+  return -EPROTO;
+ return native_rear_video_dma_finish(&scan, plane_bytes, out);
+}
+
+static int __used
 native_rear_video_buffer_dma(struct vfe_device *vfe, struct camss_video *video,
                             struct camss_buffer *buffer,
                             struct native_rear_video_dma *out)
 {
- struct native_rear_video_dma_scan scan = {};
  const struct v4l2_pix_format_mplane *format;
  struct sg_table *table;
- struct scatterlist *sg;
- unsigned int i;
- int ret;
 
  if (!vfe680_e004nt_rear_4k_target(vfe) || !video || !buffer || !out ||
      vfe != &vfe->camss->vfe[1] ||
@@ -34,16 +52,6 @@ native_rear_video_buffer_dma(struct vfe_device *vfe, struct camss_video *video,
      format->plane_fmt[0].sizeimage != NATIVE_REAR_NV12_BYTES)
   return -EINVAL;
  table = vb2_dma_sg_plane_desc(&buffer->vb.vb2_buf, 0);
- if (!table || !table->sgl || !table->nents)
-  return -EINVAL;
- for_each_sgtable_dma_sg(table, sg, i) {
-  ret = native_rear_video_dma_append(&scan, sg_dma_address(sg),
-                                    sg_dma_len(sg));
-  if (ret)
-   return ret;
- }
- if (scan.segments != table->nents)
-  return -EPROTO;
- return native_rear_video_dma_finish(&scan,
+ return native_rear_video_dma_table(table,
         vb2_plane_size(&buffer->vb.vb2_buf, 0), out);
 }
