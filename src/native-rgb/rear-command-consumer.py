@@ -44,6 +44,9 @@ def apply(camss):
     path = camss / "camss-csid-680.c"
     text = replace_once(path.read_text(), '#include "camss-csid-e008k-rear-bridge.inc"',
         '#include "native-rear-csid-config.inc"\n#include "camss-csid-e008k-rear-bridge.inc"')
+    text = replace_once(text,
+        "\tval = CSID_RESET_CMD_HW_RESET | CSID_RESET_CMD_SW_RESET;",
+        "\tval = native_rear_csid_reset_command(csid);")
     path.write_text(text)
     # Adopt validated inactive-cold-gamma derivatives; immutable parents retained.
     cold = here.parents[1] / "experiments/E004-front-ir-vd55g0/e011as-rear-explicit-inactive-cold-gamma"

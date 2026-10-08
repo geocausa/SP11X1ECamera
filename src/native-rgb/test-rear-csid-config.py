@@ -61,6 +61,7 @@ static void init(void){
 }
 int main(void){
  init();CHECK(csid680_native_rear_configure(&csid)==0);CHECK(nwrites==15);
+ CHECK(native_rear_csid_reset_command(&csid)==CSID_RESET_CMD_SW_RESET);
  CHECK(memory[CSID_CSI2_RX_CFG0/4]==0x10232103);
  CHECK(memory[CSID_CSI2_RX_CFG1/4]==1);
  CHECK(memory[CSID_IPP_CFG0/4]==0x802b2000);
@@ -91,6 +92,7 @@ int main(void){
   case 16:no_format=true;break;case 17:format.decode_format=3;break;
   case 18:format.data_type=0x2a;break;case 19:memory[CSID_IPP_CTRL/4]=1;break;
   }
+  CHECK(native_rear_csid_reset_command(arg)==(negative<16?(CSID_RESET_CMD_HW_RESET|CSID_RESET_CMD_SW_RESET):CSID_RESET_CMD_SW_RESET));
   CHECK(csid680_native_rear_configure(arg)==(negative==19?-EBUSY:-EINVAL));
   CHECK(nwrites==0);
  }
@@ -117,7 +119,7 @@ def main():
    if r.returncode or r.stderr:raise RuntimeError(r.stdout+r.stderr+" return="+str(r.returncode))
    results.append({"compiler":compiler,"result":json.loads(r.stdout),"ASAN_UBSAN_Werror":True})
  report={"status":"PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
- "actual_helper_and_E004ns_predicate_and_RX_derivation":True,
+ "exact_rear_SW_reset_and_other_mode_combined_reset_admission_checked":True,"actual_helper_and_E004ns_predicate_and_RX_derivation":True,
  "MMIO_and_format_lookup_host_models":True,"hardware_access":False,"results":results}
  a.report.write_text(json.dumps(report,indent=2)+"\n");print(json.dumps(report))
 if __name__=="__main__":main()

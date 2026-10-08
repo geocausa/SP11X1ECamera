@@ -1,3 +1,15 @@
+## 2026-10-08 generation09 exact rear full-IPP reset candidate ready
+
+Exact rearIPP route selects SW-only full-CSID reset; front early branch unchanged,
+other generic routes retain combined HW+SW. Default runtime authorization denied.
+Actual helper/predicate/reset admission107 assertions/20 negatives per GCC+Clang
+ASAN/UBSAN PASS. VFE248/19/3, candidate pinning2949/53steps/52failures and
+root/realgraph12 PASS. Sourcebuild12 W1/Werror zero diagnostics all3 modules.
+Candidate records selected reset command; physical cause of halt remains unproven.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-09-PREP-20261008.json.
+NEXT install/verify/boot fresh09 autonomously. Native44/41IDs/82boots unchanged.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation08 prefix confirmed; first Epoch still blocked
 
 Common VFE prefix readback admitted, UBWC0x1046 retained. Packet0/1 accepted,

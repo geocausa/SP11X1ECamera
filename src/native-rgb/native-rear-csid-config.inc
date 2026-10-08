@@ -10,6 +10,14 @@
 #define NATIVE_REAR_CSID_CONFIG_INC
 #include "camss-e008k-rear-bridge.h"
 
+/* Full rear IPP uses the qualified full-CSID software reset. Other generic
+ * routes retain combined reset; the existing front branch returns earlier. */
+static u32 native_rear_csid_reset_command(struct csid_device *csid)
+{
+ return csid_e004ns_rear_ipp_mode0(csid) ? CSID_RESET_CMD_SW_RESET :
+        (CSID_RESET_CMD_HW_RESET | CSID_RESET_CMD_SW_RESET);
+}
+
 int csid680_native_rear_configure(struct csid_device *csid)
 {
  const struct csid_format_info *format;
