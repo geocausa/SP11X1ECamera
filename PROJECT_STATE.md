@@ -1,3 +1,19 @@
+## 2026-10-08 rear14 reproduces mode1 firstEpoch; error starts earlier
+
+Two fresh boots now prove CAMIFhalt0/firstEpoch with matching sensor mode1.
+Packet2/slot1 reached; secondEpoch/completedframes still absent.
+Violation00900000 exists BEFORE retarget/packet2 while image_violation is0.
+At timeout image_violation3, overflow0. Full WM sizes/strides/packer/meta/mode
+and DS registers read back exactly as source contract at all sampled phases.
+Initial bus error is not caused by the later retarget/packet2; secondary error
+remains unqualified. Zero WM debug counters lack configured-selector meaning.
+No new control/ACK writes/pixels/DMA addresses.14 retired; units disabled.
+Goldena774cffc-76fc-44b2-a5d7-ca3f6faf7f77 hashes/EFI/NTFS clean, no hazard/watchdog.
+Native44/47IDs94boots failed15; Windows4/4/8; combined51IDs102boots.
+NEXT exact VFE00900000 semantics and full-output activation before firstEpoch.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-14-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear14 output-localization candidate ready
 
 Proven exact mode1 admission is integrated in maintained compositor; historical
