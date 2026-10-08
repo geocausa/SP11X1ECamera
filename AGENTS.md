@@ -1,3 +1,25 @@
+## 2026-10-08 rear24 standard V4L2 4K NV12 two-frame capture PASS
+
+Fresh rear24/build30 passes standard S_FMT/REQBUFS/QBUF/STREAMON/DQBUF x2,
+STREAMOFF and REQBUFS(0). 3840x2160 NV12, stride3840, bytesused12441600
+for both completed public MMAP buffers; no CPU pixel copy/software ISP.
+Independent retained DMA-BUF FULL mappings release only after verified
+CSID/BUS/RTCDM/source stops. Both ten-WM generations, commands and pipeline
+owner retire: ret0 packets1111 epochs2 events9, all completion/release1,
+dma_pinned0. Borrowed FULL size12441600; static0=1/static1=0/programmedboth1.
+All sensors bound/suspended. All observed VFE/IPP errors zero; no hazards,
+watchdogfalse, service exit0. Automatic verified Golden return
+fc78315d-81e3-4c67-acd6-f8995f8e60e3. 24 consumed/retired; units disabled.
+Native49 completed/57 IDs/114 boots/20 failed; combined64 IDs/128 boots.
+First public V4L2 MMAP delivery; fourth linear and second clean-release boot.
+NEXT continuous rear buffer retirement/replacement and ordinary libcamera/
+IPA typed semantic request pipeline. Current worker is exactly two frames,
+uses private compiled qualification profile and completion-time timestamps.
+Rear continuous/libcamera, DMABUF import hardware, exposure timing and optical
+quality parity unproven. Front calibration deferred. No armed jobs.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-24-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear24 public V4L2 mapping/worker candidate prepared
 
 Rear23 hardware clean 4K NV12 release remains PASS. Fresh rear24/build30
