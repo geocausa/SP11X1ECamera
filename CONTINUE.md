@@ -1,3 +1,18 @@
+## 2026-10-08 fresh Windows rear pre/post CTRL trace completed
+
+qcISP and CameraSecureISP running; both actual binary hashes match retained.
+Explicit external KD reload resolved qccamisp8380; old unresolved module view
+was not evidence of a changed/absent driver. Pre/post one-use breakpoints fired.
+Before CTRL all sampled fields match Linux12 afterpacket1, debug40000048/0/halt1.
+Immediately after CTRL1 Windows remains halt1; normal before input starts.
+896 advancing4K handles, clean stop; no pixels/front. Task retired; KD/key/rule cleaned.
+Late manual live read ran after STOPPED, invalid80000000 values discarded.
+Golden returned unchanged: 66ac5c47-2f8c-46ef-adb2-9edf2aa171fc. Native44/45IDs90boots failed13;
+Windows4/4/8; combined49IDs98boots. Rear output still unproven.
+NEXT exact rear PHY/sensor mode/start and RUP timing after input begins.
+Evidence docs/NATIVE-RGB-WINDOWS-REAR-OWNER-01-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear halt audit narrows next Windows observation
 
 CSID680 status11e00 is input EOF/EOL/SOL/SOF plus VCDT group1 selection.

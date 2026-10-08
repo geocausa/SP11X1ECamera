@@ -1,0 +1,1 @@
+Own one-use rear handle/timestamp reader, no pixel read or save. Original executed Windows source hash is recorded separately from retained LF text. External SP7 pre/post CTRL breakpoints auto-resumed and were consumed. Late manual live read executed after STOPPED and is invalid/discarded. No same-boot retry.

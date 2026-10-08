@@ -1,0 +1,163 @@
+{
+  "status": "PASS_WINDOWS_REAR_OWNER_AND_PRE_POST_CTRL_TEMPORAL_OBSERVATION",
+  "identity": "E-NATIVE-REAR-OWNER-WINDOWS-01",
+  "base_head": "8422033457f2ea313e986809ef935e4e0d938fe0",
+  "Windows_boot_utc": "2026-10-08T04:23:09.4864680Z",
+  "Windows_result": {
+    "pixel_files_saved": 0,
+    "pixels_read": false,
+    "finished_utc": "2026-10-08T04:28:44.5266306Z",
+    "passed": true,
+    "error": "",
+    "front_opened": false,
+    "identity": "E-NATIVE-REAR-OWNER-WINDOWS-01",
+    "distinct_timestamps": 896,
+    "valid_4k_handles": 896
+  },
+  "holder_original_Windows_sha256": "bdb4fadd7021ec83f7334407c951f815cb1aa511d894e08c677cb380b25d038f",
+  "holder_Linux_LF_text_sha256": "4f8fab584f16b9f020200bb4d7d855b99ad86e26e3c20f7755fbcdcbca43d4f2",
+  "driver_PnP_service_facts": {
+    "drivers": [
+      {
+        "sha256": "47c944fa497477751073ec79a27a589a55e884178c1859d6f27388ec7af2ad53",
+        "name": "CameraSecureISP",
+        "started": true,
+        "binary_leaf": "qccamsecureisp8380.sys",
+        "state": "Running",
+        "start_mode": "Manual"
+      },
+      {
+        "sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+        "name": "qcISP",
+        "started": true,
+        "binary_leaf": "qccamisp8380.sys",
+        "state": "Running",
+        "start_mode": "Manual"
+      }
+    ],
+    "devices": [
+      {
+        "status": "OK",
+        "name": "Qualcomm(R) Spectra(TM) 695 ISP Camera MipiCsi Device",
+        "service": "qcCameraMipiCsi"
+      },
+      {
+        "status": "OK",
+        "name": "Surface Camera Rear",
+        "service": "CameraRearSensor"
+      },
+      {
+        "status": "OK",
+        "name": "Surface Camera AVStream Device",
+        "service": "QCCamAvs"
+      },
+      {
+        "status": "OK",
+        "name": "Surface Camera Front",
+        "service": "CameraFrontSensor"
+      },
+      {
+        "status": "OK",
+        "name": "Qualcomm(R) Spectra(TM) 695 ISP Camera Flash Device",
+        "service": "qcFlash"
+      },
+      {
+        "status": "OK",
+        "name": "Qualcomm(R) Spectra(TM) 695 ISP Camera Device",
+        "service": "qcISP"
+      },
+      {
+        "status": "OK",
+        "name": "Surface Camera Platform Device",
+        "service": "qcCameraPlatform"
+      },
+      {
+        "status": "OK",
+        "name": "Surface IR Camera Front",
+        "service": "CameraAuxSensor"
+      },
+      {
+        "status": "OK",
+        "name": "Qualcomm(R) Spectra(TM) 695 ISP Camera JPEG Encoder Device",
+        "service": "JpegE"
+      }
+    ]
+  },
+  "after_services": [
+    {
+      "Name": "CameraSecureISP",
+      "State": "Running",
+      "Started": true
+    },
+    {
+      "Name": "qcISP",
+      "State": "Running",
+      "Started": true
+    }
+  ],
+  "external_debugger": {
+    "post_ctrl_RVA": "0x1b4cc",
+    "physical_CSR_only": true,
+    "module_resolved_after_reload": true,
+    "pre_ctrl_RVA": "0x1b4b8",
+    "late_live_read_not_qualified": true,
+    "late_live_read_after_STOPPED_discarded": true,
+    "status": "PASS_PRE_POST_RESUME_TEMPORAL_READS",
+    "stages": {
+      "POST_CTRL": {
+        "0xacb9344": "00000000",
+        "0xacb9304": "00000001",
+        "0xacb9348": "00000001",
+        "0xacb9340": "40000048"
+      },
+      "PRE_CTRL": {
+        "0xacb9340": "40000048",
+        "0xacb9388": "08ee0fe0",
+        "0xacb9334": "00130013",
+        "0xacb9384": "0000001f",
+        "0xacb9300": "802b2000",
+        "0xacb9348": "00000001",
+        "0xacb9304": "00000000",
+        "0xacb9330": "02000000",
+        "0xacb9360": "08ed0000",
+        "0xacb9018": "00000000",
+        "0xacb935c": "0fdf0000",
+        "0xacb938c": "00000000",
+        "0xacb9310": "00007241",
+        "0xacb9344": "00000000"
+      }
+    },
+    "module_base": "fffff800bf000000"
+  },
+  "module_resolution_gap_closed_by_explicit_reload": true,
+  "before_resume_registers_match_Linux12_after_packet1": true,
+  "Windows_immediately_after_CTRL1_halt1_is_not_alone_a_defect": true,
+  "stable_Windows_reference": "docs/NATIVE-RGB-WINDOWS-REAR-CAMIF-01-20261008.json",
+  "late_live_physical_read_after_stop_invalid_discarded": true,
+  "full_rear_temporal_RUP_sensor_start_trace_proven": false,
+  "Golden_boot_id": "66ac5c47-2f8c-46ef-adb2-9edf2aa171fc",
+  "Golden_hashes_verified": {
+    "vmlinuz-7.1.5-sp11-render-parity-v4+": "bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
+    "initrd.img-7.1.5-sp11-fullio-v19c": "ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d",
+    "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00"
+  },
+  "persistent_EFI_Linux_first_verified": true,
+  "candidate_retired": true,
+  "SP7_cleanup_complete": true,
+  "native_counts": {
+    "streams": 44,
+    "identities": 45,
+    "boots": 90,
+    "failed_started": 13
+  },
+  "Windows_counts": {
+    "streams": 4,
+    "identities": 4,
+    "boots": 8
+  },
+  "combined_counts": {
+    "identities": 49,
+    "boots": 98
+  },
+  "next": "Compare exact rear PHY/sensor mode and start timing and RUP latch after input begins; current pre/post CTRL state matches, do not vary resume value"
+}
