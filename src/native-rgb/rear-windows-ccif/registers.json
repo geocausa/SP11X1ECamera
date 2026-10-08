@@ -1,17 +1,17 @@
 {
-  "schema": "native-rear-ccif-csr-v1",
+  "schema": "native-rear-ccif-csr-v2",
   "VFE1_physical_base": "0x0ac71000",
   "VFE1_offsets": [
     "0x24",
     "0x28",
     "0x2c",
     "0x68",
-    "0x70",
-    "0x74",
-    "0x78",
     "0x80",
     "0x84",
     "0x88",
+    "0x70",
+    "0x74",
+    "0x78",
     "0x8c",
     "0x90",
     "0x94",
@@ -19,6 +19,8 @@
     "0x9c",
     "0xc18",
     "0xc1c",
+    "0xc28",
+    "0xc2c",
     "0xc58",
     "0xc64",
     "0xc68",
@@ -28,25 +30,27 @@
     "0x1000",
     "0x1100",
     "0x2200",
+    "0x2208",
     "0x220c",
     "0x2210",
     "0x2214",
     "0x2218",
-    "0x2220",
     "0x2228",
+    "0x2230",
+    "0x2234",
     "0x2238",
-    "0x2240",
-    "0x2250",
+    "0x223c",
     "0x2500",
+    "0x2508",
     "0x250c",
     "0x2510",
     "0x2514",
     "0x2518",
-    "0x2520",
     "0x2528",
+    "0x2530",
+    "0x2534",
     "0x2538",
-    "0x2540",
-    "0x2550"
+    "0x253c"
   ],
   "CSID1_physical_base": "0x0acb9000",
   "CSID1_offsets": [
@@ -60,5 +64,254 @@
   },
   "driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
   "reads": "physical scalar CSR only, no image/meta/frameheader addresses or RAM",
-  "writes": "no hardware configuration writes; auto-resuming software debugger breakpoints only"
+  "writes": "no hardware configuration writes; auto-resuming software debugger breakpoints only",
+  "VFE1_registers": [
+    {
+      "section": "top",
+      "name": "core_cfg_0",
+      "offset": "0x24"
+    },
+    {
+      "section": "top",
+      "name": "core_cfg_1",
+      "offset": "0x28"
+    },
+    {
+      "section": "top",
+      "name": "core_cfg_2",
+      "offset": "0x2c"
+    },
+    {
+      "section": "top",
+      "name": "core_cfg_3",
+      "offset": "0x68"
+    },
+    {
+      "section": "top",
+      "name": "core_cfg_4",
+      "offset": "0x80"
+    },
+    {
+      "section": "top",
+      "name": "core_cfg_5",
+      "offset": "0x84"
+    },
+    {
+      "section": "top",
+      "name": "core_cfg_6",
+      "offset": "0x88"
+    },
+    {
+      "section": "top",
+      "name": "stats_throttle_cfg_0",
+      "offset": "0x70"
+    },
+    {
+      "section": "top",
+      "name": "stats_throttle_cfg_1",
+      "offset": "0x74"
+    },
+    {
+      "section": "top",
+      "name": "stats_throttle_cfg_2",
+      "offset": "0x78"
+    },
+    {
+      "section": "top",
+      "name": "period_cfg",
+      "offset": "0x8c"
+    },
+    {
+      "section": "top",
+      "name": "irq_sub_pattern_cfg",
+      "offset": "0x90"
+    },
+    {
+      "section": "top",
+      "name": "epoch0_pattern_cfg",
+      "offset": "0x94"
+    },
+    {
+      "section": "top",
+      "name": "epoch1_pattern_cfg",
+      "offset": "0x98"
+    },
+    {
+      "section": "top",
+      "name": "epoch_height_cfg",
+      "offset": "0x9c"
+    },
+    {
+      "section": "bus",
+      "name": "irq_mask_0",
+      "offset": "0xc18"
+    },
+    {
+      "section": "bus",
+      "name": "irq_mask_1",
+      "offset": "0xc1c"
+    },
+    {
+      "section": "bus",
+      "name": "irq_status_0",
+      "offset": "0xc28"
+    },
+    {
+      "section": "bus",
+      "name": "irq_status_1",
+      "offset": "0xc2c"
+    },
+    {
+      "section": "bus",
+      "name": "ubwc_static_ctrl",
+      "offset": "0xc58"
+    },
+    {
+      "section": "bus",
+      "name": "ccif_violation_status",
+      "offset": "0xc64"
+    },
+    {
+      "section": "bus",
+      "name": "overflow_status",
+      "offset": "0xc68"
+    },
+    {
+      "section": "bus",
+      "name": "image_size_violation_status",
+      "offset": "0xc70"
+    },
+    {
+      "section": "wm0",
+      "name": "cfg",
+      "offset": "0xe00"
+    },
+    {
+      "section": "wm1",
+      "name": "cfg",
+      "offset": "0xf00"
+    },
+    {
+      "section": "wm2",
+      "name": "cfg",
+      "offset": "0x1000"
+    },
+    {
+      "section": "wm3",
+      "name": "cfg",
+      "offset": "0x1100"
+    },
+    {
+      "section": "wm20",
+      "name": "cfg",
+      "offset": "0x2200"
+    },
+    {
+      "section": "wm20",
+      "name": "frame_incr",
+      "offset": "0x2208"
+    },
+    {
+      "section": "wm20",
+      "name": "image_cfg_0",
+      "offset": "0x220c"
+    },
+    {
+      "section": "wm20",
+      "name": "image_cfg_1",
+      "offset": "0x2210"
+    },
+    {
+      "section": "wm20",
+      "name": "image_cfg_2",
+      "offset": "0x2214"
+    },
+    {
+      "section": "wm20",
+      "name": "packer_cfg",
+      "offset": "0x2218"
+    },
+    {
+      "section": "wm20",
+      "name": "frame_header_cfg",
+      "offset": "0x2228"
+    },
+    {
+      "section": "wm20",
+      "name": "irq_subsample_period",
+      "offset": "0x2230"
+    },
+    {
+      "section": "wm20",
+      "name": "irq_subsample_pattern",
+      "offset": "0x2234"
+    },
+    {
+      "section": "wm20",
+      "name": "framedrop_period",
+      "offset": "0x2238"
+    },
+    {
+      "section": "wm20",
+      "name": "framedrop_pattern",
+      "offset": "0x223c"
+    },
+    {
+      "section": "wm23",
+      "name": "cfg",
+      "offset": "0x2500"
+    },
+    {
+      "section": "wm23",
+      "name": "frame_incr",
+      "offset": "0x2508"
+    },
+    {
+      "section": "wm23",
+      "name": "image_cfg_0",
+      "offset": "0x250c"
+    },
+    {
+      "section": "wm23",
+      "name": "image_cfg_1",
+      "offset": "0x2510"
+    },
+    {
+      "section": "wm23",
+      "name": "image_cfg_2",
+      "offset": "0x2514"
+    },
+    {
+      "section": "wm23",
+      "name": "packer_cfg",
+      "offset": "0x2518"
+    },
+    {
+      "section": "wm23",
+      "name": "frame_header_cfg",
+      "offset": "0x2528"
+    },
+    {
+      "section": "wm23",
+      "name": "irq_subsample_period",
+      "offset": "0x2530"
+    },
+    {
+      "section": "wm23",
+      "name": "irq_subsample_pattern",
+      "offset": "0x2534"
+    },
+    {
+      "section": "wm23",
+      "name": "framedrop_period",
+      "offset": "0x2538"
+    },
+    {
+      "section": "wm23",
+      "name": "framedrop_pattern",
+      "offset": "0x253c"
+    }
+  ],
+  "source_validator": "validate-registers.py",
+  "historical_v1_superseded": "v1 included2 zero inactive frameheader address slots and4 unimplemented UBWC slots; no RAM/pixel read; c18 IRQ mask label corrected"
 }

@@ -29,21 +29,16 @@
       "phases": {
         "PRE_CTRL": {
           "0ac71028": "00000010",
-          "0ac73250": "00000000",
           "0ac71094": "00000001",
           "0acb9348": "00000001",
           "0ac73218": "00000000",
           "0ac7109c": "00000000",
           "0ac73200": "00000010",
           "0ac71e00": "00000011",
-          "0ac73540": "00000000",
           "0ac71084": "00012491",
-          "0ac73240": "00000000",
           "0ac71074": "0f0f1503",
           "0ac73210": "00000000",
           "0ac71088": "00040001",
-          "0ac73220": "00000000",
-          "0ac73520": "00000000",
           "0ac71c70": "00000000",
           "0ac71c68": "00000000",
           "0acb9340": "40000048",
@@ -56,7 +51,6 @@
           "0ac71080": "000aaaa0",
           "0ac73528": "00000000",
           "0ac71078": "00000f07",
-          "0ac73550": "00000000",
           "0ac71f00": "00000011",
           "0ac71068": "000aaaa0",
           "0ac71090": "00000001",
@@ -79,21 +73,16 @@
         },
         "FIRST_EPOCH": {
           "0ac71028": "00000010",
-          "0ac73250": "00000000",
           "0ac71094": "00000001",
           "0acb9348": "00000000",
           "0ac73218": "00000000",
           "0ac7109c": "00000000",
           "0ac73200": "00000010",
           "0ac71e00": "00000011",
-          "0ac73540": "00000000",
           "0ac71084": "00012491",
-          "0ac73240": "00000000",
           "0ac71074": "0f0f1503",
           "0ac73210": "00000000",
           "0ac71088": "00040001",
-          "0ac73220": "00000000",
-          "0ac73520": "00000000",
           "0ac71c70": "00000000",
           "0ac71c68": "00000000",
           "0acb9340": "48000a08",
@@ -106,7 +95,6 @@
           "0ac71080": "000aaaa0",
           "0ac73528": "00000000",
           "0ac71078": "00000f07",
-          "0ac73550": "00000000",
           "0ac71f00": "00000011",
           "0ac71068": "000aaaa0",
           "0ac71090": "00000001",
@@ -128,7 +116,9 @@
           "0ac71070": "0f150f0f"
         }
       },
-      "no_pixel_or_DMA_RAM_reads": true
+      "no_pixel_or_DMA_RAM_contents_read": true,
+      "original_private_snapshot_register_count_per_phase": 48,
+      "retained_qualified_register_count_per_phase": 42
     },
     "private_key_copy_removed": true,
     "temporary_firewall_removed": true,
@@ -137,7 +127,6 @@
   "Golden_boot": "88097f09-f9c3-40dc-ab5f-a21b64edee64",
   "WM20_and_23_disabled_both_phases": true,
   "CCIF_and_image_violation_status_zero_both_phases": true,
-  "IRQ_status_d0000000_already_present_pre_CTRL_not_alone_a_failure": true,
   "configuration_snapshot_equal_pre_CTRL_and_first_Epoch_except_CAMIF_state": true,
   "task_unregistered": true,
   "task_trigger_count_verified_XML": 0,
@@ -165,5 +154,15 @@
     "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00"
   },
   "EFI_Linux_first_no_BootNext": true,
-  "NTFS_unmounted": true
+  "NTFS_unmounted": true,
+  "bus_IRQ_mask_d0000000_enabled_pre_CTRL_and_first_Epoch": true,
+  "bus_IRQ_status_not_observed_in_this_Windows_probe": true,
+  "register_audit_correction": {
+    "two_unnecessary_frameheader_address_CSRS_read": true,
+    "both_values_zero_on_disabled_clients": true,
+    "unimplemented_UBWC_slots_also_removed": true,
+    "no_RAM_or_pixels_read": true,
+    "retained_scalar_map_sanitized": true,
+    "previous_IRQ_status_label_incorrect_mask_at_c18": true
+  }
 }

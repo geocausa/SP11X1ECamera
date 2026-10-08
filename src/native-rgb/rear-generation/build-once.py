@@ -28,6 +28,15 @@ def guard():
  if r.returncode:raise RuntimeError("overlap guard failed")
 def main():
  os.umask(0o077);guard()
+ # Every diagnostic CSR must match a named non-address field in exact GPL layout.
+ validator=load("native_rear_csr_validator",NATIVE/"rear-windows-ccif/validate-registers.py")
+ manifest=json.loads((NATIVE/"rear-windows-ccif/registers.json").read_text())
+ validator.verify(manifest,validator.layout(validator.HEADER.read_text()))
+ observer=(HERE/"native-rear-generation-vfe-observe.inc").read_text()
+ array=re.search(r"static const unsigned int offsets\[\] = \{(.*?)\};",observer,re.S)
+ assert array is not None
+ assert [int(x,16) for x in re.findall(r"0x[0-9a-f]+",array[1])]==[int(x,16) for x in manifest["VFE1_offsets"]]
+
  for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-15"),
               Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-15")]:
   if path.exists():raise RuntimeError("candidate path already exists; audit first")

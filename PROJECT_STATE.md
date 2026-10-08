@@ -1,3 +1,20 @@
+## 2026-10-08 rear15 disproves unused writer/lowTOP enable mismatch
+
+All45 original VFE fields afterpacket1 matched fresh working Windows; firstEpoch
+only difference c64=00900000. WM20/23 remain disabled; lowTOP routing matches.
+Mode1 firstEpoch reproduced thirdfreshboot, completeframes still0; later c70=3.
+Golden d943b750-2b13-4db4-8597-3c42f11e45a0 verified; no hazard/watchdog;15retired.
+Native44/48IDs96boots failed16; Windows5/5IDs10boots; combined53IDs106boots.
+Corrected c18 IRQMASK, notstatus. V1 whitelist had2 zero inactive frameheader
+address slots and4 unimplemented UBWC slots; noRAM/pixels. Removedqualifiedexports;
+maintained namedv2 whitelist49VFE+3CSID validated exactGPLsource with6 negatives.
+Build now requires named non-address whitelist and exact observer offset agreement.
+TOPstatus11 includes IPPmodulefault bit4, detailedTOP0x64 unobserved; NEXT smallest
+read-only candidate16/build20 observes TOP64/PDAF404 and decodes exact module IDs.
+No functional configuration correction justified by current lowTOP/unusedWM comparison.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-15-20261008.json and TOP-error-source audit.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear15 matching Windows CCIF comparator ready
 
 Only45 scalar CSR reads added to existing powered snapshots; sensor, packet,
