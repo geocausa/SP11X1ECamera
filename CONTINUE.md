@@ -1,3 +1,17 @@
+## 2026-10-08 generation07 stopped at common VFE readback guard
+
+Packet0 accepted; prefix wrote source-qualified core7/BUSmask0xdc000000.
+SP11 reads core5/BUSmask0xd0000000, all other common fields match.
+Existing source WINDOWS_BUS_MASK0 already0xd0000000; core bit1 readback meaning
+is not established. Exact-write-equals-read check was too strict; sensor neverstarted.
+Golden returned automatically unchanged; no hazard/watchdog;07 retired.
+Native44 completed streams/40 IDs/80 boots; failed started captures8 unchanged.
+Windows2/2/4; combined42 IDs/84 boots.
+NEXT retain exact writes, admit bounded observed readback variants and fault-test
+both full/read-masked MMIO models; fresh08 physical test. No guessed bit semantics.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-07-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation07 common VFE prefix ready
 
 Main rear path now runs source-qualified shared IFE1 core/IRQ prefix afterpacket0,
