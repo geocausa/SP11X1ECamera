@@ -1,3 +1,27 @@
+## 2026-10-08 rear29 live old FULL and all auxiliary outputs retired, clean release PASS
+
+Fresh29/build37 physically frees old eight auxiliary allocations before stop,
+after old FULL mapping retirement: aux ret0/released8/old-valid1; replacement
+FULL pinned1/all8 auxiliaries pinned; all stop flags0, no early VB2 completion
+or request/address reuse. Both ten-WM ledgers, replacement command receipts and
+all live readback masks1023 match;14 events drained, stable Epoch3. Scope is
+the first completed output generation only. Old ledgers/command arenas remain
+owned until physical stop; live command retirement/recycling is still unproven.
+Two real libcamera Requests complete at3840x2160 linear NV12/stride3840/
+12441600bytes with zero pixel bytes read/copied. All four subsequent physical
+stops and remaining DMA/owner/arena release PASS; dma_pinned0. All sensors
+bound/suspended, IFE/CSID/PHY clocks idle,10 VFE/eight IPP error phases zero.
+No kernel hazards or watchdog; service success0. Verified automatic Golden
+return a516a2a1-3bd5-44d4-8abc-64b2d68df545; protected payload hashes unchanged.
+29 consumed/retired; units disabled; no camera nodes/modules/jobs/armed tests.
+Native53 completed/61IDs122boots failed20; combined68IDs136boots.
+NEXT independently qualify live command arena retirement/recycling, persistent
+rear Request scheduler and safe early buffer delivery; then semantic rear IPA/
+statistics/controls/SensorTimestamp and matched Windows optics. Rear still two
+Requests, continuous delivery/optical parity unproven. Front calibration deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-29-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear29 old auxiliary live retirement source qualified
 
 Fresh source build37 compiles three ARM64 W1/Werror modules with zero diagnostics.
