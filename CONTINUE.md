@@ -1,3 +1,16 @@
+## 2026-10-08 generation11 three fields match live Windows
+
+CSID324=0,328/32c=ffff0000 in every Linux phase; match fresh Windows exactly.
+38576 CSI packets ECC0/CRC0, CAMIF halt1, first Epoch timeout again.
+No new config writes; no justification to change these fields.
+Golden returned unchanged, no hazard/watchdog;11 consumed and retired.
+Native44 streams/44 IDs/88 boots; failed started captures12.
+Windows3/3/6; combined47 IDs/94 boots.
+NEXT audit full-builder/config activation and actual RTCDM RUP transport;
+do not vary register values or overwrite matched VFE core/UBWC.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-11-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation11 read-only Windows differential candidate ready
 
 Only3 CSR reads added for324/328/32c at existing phases.
