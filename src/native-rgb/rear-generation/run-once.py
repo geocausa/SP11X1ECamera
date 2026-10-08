@@ -3,15 +3,30 @@
 """One rear generation proof, no optical file access, automatic Golden return."""
 import json,os,re,runpy,subprocess,time
 from pathlib import Path
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-17")
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-18")
 ROOT=Path("/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-driver")
-MARKER="sp11_camera_native_rear_generation_20261007_17=1"
+MARKER="sp11_camera_native_rear_generation_20261007_18=1"
 def need(condition,message):
  if not condition:raise RuntimeError(message)
 def run(args,timeout=25):
  return subprocess.check_output([str(x) for x in args],text=True,stderr=subprocess.STDOUT,timeout=timeout,
   env=dict(os.environ,GIT_CONFIG_COUNT="1",GIT_CONFIG_KEY_0="safe.directory",GIT_CONFIG_VALUE_0=str(ROOT)))
 def save(result): (D/"RESULT.json").write_text(json.dumps(result,indent=2)+"\n")
+def camera_clock_snapshot(result,phase):
+ # Observational CCF rates/counts only; no hardware writes and no imaging data.
+ try:
+  text=Path("/sys/kernel/debug/clk/clk_summary").read_text()
+  (D/("PRIVATE-CLOCKS-"+phase+".txt")).write_text(text)
+  rates={}
+  for line in text.splitlines():
+   fields=line.split()
+   if len(fields)>=5 and fields[0].startswith(("cam_cc_","gcc_cam")) and all(x.isdigit() for x in fields[1:5]):
+    rates[fields[0]]={"enable_count":int(fields[1]),"prepare_count":int(fields[2]),
+                      "protect_count":int(fields[3]),"rate_hz":int(fields[4])}
+  result.setdefault("camera_clock_snapshots",{})[phase]=rates
+ except Exception as exc:
+  result.setdefault("camera_clock_snapshot_errors",{})[phase]=str(exc)
+
 def sensors():
  result={}
  for path in Path("/sys/bus/i2c/devices").glob("*"):
@@ -39,7 +54,7 @@ def main():
  need(MARKER in Path("/proc/cmdline").read_text().split(),"candidate command line mismatch")
  fd=os.open(D/"CONSUMED",os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
  os.write(fd,(Path("/proc/sys/kernel/random/boot_id").read_text()).encode());os.fsync(fd);os.close(fd)
- result={"identity":"E-NATIVE-REAR-GENERATION-17","status":"STARTED",
+ result={"identity":"E-NATIVE-REAR-GENERATION-18","status":"STARTED",
   "boot_id":Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
   "single_use":True,"pixel_files_saved":0,"DMA_reclaim_authorized":False}
  try:
@@ -97,10 +112,12 @@ def main():
   need(video and Path(video).is_char_device(),"PIX control endpoint")
   validate_formats(graph,pads)
   result["phase"]="single_kernel_trigger";result["route"]="CSIPHY1->CSID1.IPP->VFE1.PIX";save(result)
+  camera_clock_snapshot(result,"before_trigger")
   os.sync()
   probe=subprocess.run([str(D/"probe"),video],capture_output=True,text=True,timeout=15)
   (D/"PRIVATE-PROBE-STDOUT.txt").write_text(probe.stdout)
   (D/"PRIVATE-PROBE-STDERR.txt").write_text(probe.stderr)
+  camera_clock_snapshot(result,"after_trigger_pinned")
   result["probe_exit"]=probe.returncode
   if probe.stdout.strip():result["probe"]=json.loads(probe.stdout)
   log=run(["dmesg"]);(D/"PRIVATE-DMESG.txt").write_text(log)

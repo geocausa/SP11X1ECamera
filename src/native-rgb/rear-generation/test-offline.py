@@ -5,7 +5,7 @@ import json,re,runpy,subprocess,tempfile
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 GRAPH=Path("/var/lib/sp11-camera-native-profile-20261007-01/PRIVATE-GRAPH-BEFORE-CAPTURE.txt")
-OUT=Path("/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-21/offline-runner-01.json")
+OUT=Path("/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-22/offline-runner-01.json")
 def main():
  classify=runpy.run_path(str(HERE/"route-contract.py"))["classify"]
  runtime=runpy.run_path(str(HERE/"run-once.py"))

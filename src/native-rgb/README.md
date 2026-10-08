@@ -1,3 +1,13 @@
+## 2026-10-08 rear18 sparse period/bounds and actual clocks ready
+
+Freshbuild22 onlyadds3sourceproven scalarCSRreads696c/6970/74 and CCF
+clockrate/count snapshots aroundtrigger. No hardwarewrites added; sensor/
+CSI/VFE/packets/retarget byte-identical17. All3W1/Werror0diagnostics; six
+requiredhostedchecksPASS. GoldenCCF parser checked actualcamera rows.
+NEXT install/verify/fresh18 and compare Windowszero; no guessed configuration.
+Countsunchanged57combinedIDs114boots. Evidence docs/NATIVE-RGB-REAR-GENERATION-18-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 Windows sparse period/bounds reference completed
 
 Rear4K1667distincttimestamps, phase59scalarrows eachonce. Period696c and
