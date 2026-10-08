@@ -1,3 +1,18 @@
+## 2026-10-08 rear13 fixes initial halt; next output-size failure exposed
+
+Exact sensor mode1 readback4064x2286/VTS3214, clean34509 CSI packets ECC0/CRC0.
+CAMIFhalt0/debug08000019 and measured4064x2286; FIRST Epoch0 physically observed.
+Packet2 accepted, slot1 retargeted; packet3/secondEpoch/completedframes still unproven.
+VFE new violation00900000/image_violation3, overflow0. No image/pixel read or save.
+Sensor-mode mismatch explained initial12 halt in bounded13 experiment.
+Golden0bc9b09f-33c1-46ea-94b4-6ce735ce2c9f verified unchanged; no hazard/watchdog.
+13 consumed/retired, units disabled; DMA/PM/owner kept pinned until reboot.
+Native44 streams/46IDs92boots failed14; Windows4/4/8; combined50IDs100boots.
+NEXT integrate exact mode1 backend admission then audit output WM sizes/first-to-second
+Epoch handling; no completed rear output or quality-parity claim.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-13-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear13 matching sensor mode1 candidate ready
 
 Linux mode0 4076x2806 differs from working Windows CAMIF4064x2286.
