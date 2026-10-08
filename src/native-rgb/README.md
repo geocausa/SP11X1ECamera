@@ -1,3 +1,22 @@
+## 2026-10-08 rear23 clean native NV12 completion and release PASS
+
+Fresh rear23/build28 completes both ten-WM generations at 3840x2160 NV12,
+stride3840/image12441600 bytes. All CSID/BUS/RTCDM/source stop barriers pass.
+ret0, packets1111, epochs2, events13, both complete1; dma_pinned0,
+DMA_reclaimed1, owner_released1, arena_released1. Ledgers and pipeline PM release.
+Physical reclaim log confirms static0=1/static1=0, both programmed1, matching
+the maintained repair and faithful hosted fixture. All sensors bound/suspended;
+IFE/CSID clock enable and prepare counts zero after release. No kernel hazards,
+watchdogfalse; automatic verified Golden return f6afd4f8-cdf2-4d91-a57f-f587315001ed.
+23 consumed/retired; units disabled; no camera modules/nodes or armed jobs.
+Native48 completed/56 IDs/112 boots/20 failed; Windows7/7/14; combined63/126.
+Three fresh linear NV12 hardware completions; first qualified clean release.
+NEXT public V4L2 NV12 buffers and normal libcamera transport/lifecycle.
+Rear continuous/application delivery and optical quality remain unproven;
+front calibration deferred. No pixels, tuning arrays or image hashes exported.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-23-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear23 maintained reclaim repair prepared
 
 Fresh build28 compiles three ARM64 modules W1/Werror without diagnostics.
