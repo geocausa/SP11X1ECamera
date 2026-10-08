@@ -6,6 +6,12 @@ from pathlib import Path
 
 HEADER = Path("/home/geoca/Documents/SP11-PROJECT/00-RE-archive/qcom-camera-kernel-KleeUI/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe17x/cam_vfe680.h")
 HERE = Path(__file__).resolve().parent
+MODULE_AUDIT = HERE.parents[2] / "docs/NATIVE-RGB-REAR-SPARSE-REGISTER-SOURCE-AUDIT-20261008.json"
+MODULE_AUDIT_SHA = "78cf38ccd5263820e296b087d7ce2db58a33ee8659576169543c81e3089b031d"
+MODULE_DLL = Path("/home/geoca/Documents/SP11-PROJECT/00-RE-archive/sp11-driverdump/surfacecamavs8380.inf_arm64_2b9eaefcbe9d3342/QcDeviceMFT8380.dll")
+MODULE_DLL_SHA = "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35"
+MODULE_CONTROL_MAP = {"sparse_pd": {"cfg0": 0x6960}, "lcr": {"cfg0": 0x6b60}}
+
 WM_FIELDS = {"cfg", "frame_incr", "image_cfg_0", "image_cfg_1", "image_cfg_2",
              "packer_cfg", "frame_header_cfg", "irq_subsample_period",
              "irq_subsample_pattern", "framedrop_period", "framedrop_pattern"}
@@ -54,6 +60,8 @@ def verify(manifest, maps):
         allowed = TOP_FIELDS if section == "top" else (
             BUS_FIELDS | {"irq_mask_0", "irq_mask_1", "irq_status_0", "irq_status_1"}
             if section == "bus" else WM_FIELDS if section in maps and section.startswith("wm") else set())
+        if section in MODULE_CONTROL_MAP:
+            allowed = {"cfg0"}
         if name not in allowed or maps.get(section, {}).get(name) != offset:
             raise ValueError("unsupported field, address slot, or offset/name mismatch")
     if manifest["VFE1_offsets"] != [r["offset"] for r in records]:
@@ -72,10 +80,22 @@ def main():
         raise SystemExit("report already exists")
     raw = a.header.read_bytes()
     maps = layout(raw.decode())
+    audit_raw = MODULE_AUDIT.read_bytes()
+    if hashlib.sha256(audit_raw).hexdigest() != MODULE_AUDIT_SHA:
+        raise ValueError("module source audit drift")
+    audit = json.loads(audit_raw)
+    if audit["driver_sha256"] != MODULE_DLL_SHA or hashlib.sha256(MODULE_DLL.read_bytes()).hexdigest() != MODULE_DLL_SHA:
+        raise ValueError("same-SP11 module source identity mismatch")
+    if audit["SparsePD_subcommand_range"] != [{"register_offset": "0x6960", "register_words": 1}] or audit["LCR_config_ranges"][0] != {"register_offset": "0x6b60", "register_words": 1}:
+        raise ValueError("single scalar module control source mismatch")
+    maps.update(MODULE_CONTROL_MAP)
     manifest = json.loads(a.manifest.read_text())
     count = verify(manifest, maps)
     negatives = 0
     for section, name, offset in [
+        ("sparse_pd", "cfg0", "0x6964"),
+        ("sparse_pd", "image_addr", "0x6960"),
+        ("lcr", "cfg0", "0x6b64"),
         ("bus", "irq_status_0", "0xc18"),
         ("wm20", "frame_header_addr", "0x2220"),
         ("wm23", "image_addr", "0x2504"),
@@ -104,7 +124,10 @@ def main():
               "VFE_registers": count, "CSID_registers": 3, "negative_cases": negatives,
               "source_sha256": hashlib.sha256(raw).hexdigest(),
               "address_or_clear_command_fields_allowed": False,
-              "hardware_access": False}
+              "hardware_access": False,
+              "module_source_audit_sha256": MODULE_AUDIT_SHA,
+              "module_source_DLL_sha256": MODULE_DLL_SHA,
+              "module_scope": "two exact CFG0 control words only"}
     a.report.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report))
 

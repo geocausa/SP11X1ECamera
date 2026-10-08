@@ -1,3 +1,14 @@
+## 2026-10-08 targeted sparse module Windows reference prepared
+
+Fresh E-NATIVE-REAR-SPARSE-WINDOWS-01 prepared, not armed/consumed.
+Only added specific scalarCFG0 words6960/6b60, exact same-SP11 DLL source;
+53VFE+3CSID named whitelist validated with9negativecases. No fullpatterns,
+DMA addresses, pixels, or hardwareconfiguration writes. Manual-only entryguarded
+rear4K reader; SP7 one-use autoresuming preCTRL/firstEpoch breakpoints.
+NEXT verify installedMFT and driver then fresh Windows episode/Goldenreturn.
+No counts changed; native49IDs98boots failed17, Windows5IDs10boots.
+Evidence docs/NATIVE-RGB-WINDOWS-REAR-SPARSE-01-PREP-20261008.json. Earlier entries below are historical.
+
 ## 2026-10-07 current full rear source-input preflight and internal startup handoff
 
 Standard libipa now provides caller-policy AF default rectangle geometry and

@@ -1,0 +1,28 @@
+{
+  "status": "PREPARED_SOURCE_VALIDATED_NOT_ARMED",
+  "identity": "E-NATIVE-REAR-SPARSE-WINDOWS-01",
+  "base_head": "a66b5bfaa09e3227f0ec9a1701824b0acc49a868",
+  "hypothesis": "Linux omitted specific SparsePD/LCR initialization; compare only source-proven CFG0 at6960/6b60 in working Windows before changing hardware",
+  "source_files": {
+    "src/native-rgb/rear-windows-sparse/holder.ps1": "6af53565d3a4959377292ef77d51171c890bad5c577a9aded3bbfd41d5a4c573",
+    "src/native-rgb/rear-windows-sparse/README.md": "7342dfa3d7ff6a680992ce7f3384706262fe67d6a70b7da642eef453ecc852a3",
+    "src/native-rgb/rear-windows-ccif/registers.json": "a469cb448f4f349f2204a2b09b7227bb19d2ca82bd296411e857a09701ec0700",
+    "src/native-rgb/rear-windows-ccif/validate-registers.py": "918dd730f344c198fb73de83611f2a7acbd3958f651291c1334059006cbc34ce"
+  },
+  "probe_register_count": {
+    "VFE": 53,
+    "CSID": 3
+  },
+  "module_probe_scope": "two exact scalar CFG0 words; no full patterns/spatial arrays, DMA addresses or pixels",
+  "source_validation_negative_cases": 9,
+  "breakpoint_phases": [
+    "pre_CTRL",
+    "first_Epoch_post_BUS_pre_packet2"
+  ],
+  "required_installed_MFT_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+  "required_installed_kernel_driver_sha256": "64463b4d78894fdeee01ce87b51e3153662243e3fdf16f87596579b58617c21c",
+  "return_plan": "install900sec Windows return timer immediately after reconnect; Linux-first persistent EFI order and Golden unchanged; SP7 separate live debugger; auto-resuming one-use BPs; task manual-only",
+  "counts_unchanged": true,
+  "camera_opened": false,
+  "rebooted": false
+}
