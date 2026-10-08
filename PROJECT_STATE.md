@@ -1,3 +1,14 @@
+## 2026-10-08 rear16 TOP fault bitmap candidate ready
+
+Build20 adds validated named non-address TOP64/404 reads, actualIRQstatus
+c28/c2c and exactsafe auxiliary config fields.51VFE+3CSID whitelist sourcevalid.
+No new hardware writes; sensor/control/packets/retarget byte-identical15.
+All3 W1/Werror modules zero diagnostics; required sensor/transport/VFE/pinning
+and rootrealgraph checks PASS. Counts unchanged native44/48IDs96boots failed16,
+Windows5/5IDs10boots; combined53/106. NEXT verify/install/fresh16boot autonomously.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-16-PREP-20261008.json.
+Earlier entries below are historical.
+
 ## 2026-10-08 rear15 disproves unused writer/lowTOP enable mismatch
 
 All45 original VFE fields afterpacket1 matched fresh working Windows; firstEpoch

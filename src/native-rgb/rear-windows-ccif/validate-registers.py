@@ -12,7 +12,7 @@ WM_FIELDS = {"cfg", "frame_incr", "image_cfg_0", "image_cfg_1", "image_cfg_2",
 TOP_FIELDS = {"core_cfg_" + str(n) for n in range(7)} | {
     "stats_throttle_cfg_" + str(n) for n in range(3)} | {
     "period_cfg", "irq_sub_pattern_cfg", "epoch0_pattern_cfg",
-    "epoch1_pattern_cfg", "epoch_height_cfg"}
+    "epoch1_pattern_cfg", "epoch_height_cfg", "ipp_violation_status", "pdaf_violation_status"}
 BUS_FIELDS = {"ubwc_static_ctrl", "ccif_violation_status",
               "overflow_status", "image_size_violation_status"}
 

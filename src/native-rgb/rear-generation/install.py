@@ -4,17 +4,17 @@
 import hashlib,json,shlex,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[3];PROJECT=ROOT.parents[1]
-BUILD=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-19"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-19"
-D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-15")
-B=Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-15")
-G=Path("/etc/grub.d/99zzzzzz_sp11_camera_native_rear_generation_20261007_15")
-S=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-15.service")
-T=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-15-watchdog.timer")
-W=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-15-watchdog.service")
-F=Path("/lib/firmware/qcom/sp11/rear-generation-20261007-15.bin")
-ID="sp11-camera-native-rear-generation-20261007-15"
-MARKER="sp11_camera_native_rear_generation_20261007_15=1"
+BUILD=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-20"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-20"
+D=Path("/var/lib/sp11-camera-native-rear-generation-20261007-16")
+B=Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-16")
+G=Path("/etc/grub.d/99zzzzzz_sp11_camera_native_rear_generation_20261007_16")
+S=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-16.service")
+T=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-16-watchdog.timer")
+W=Path("/etc/systemd/system/sp11-camera-native-rear-generation-20261007-16-watchdog.service")
+F=Path("/lib/firmware/qcom/sp11/rear-generation-20261007-16.bin")
+ID="sp11-camera-native-rear-generation-20261007-16"
+MARKER="sp11_camera_native_rear_generation_20261007_16=1"
 GOLDEN=Path("/boot/sp11-7.1.5-audio-fullio-v19c")
 EXPECTED_GOLDEN={
  "vmlinuz-7.1.5-sp11-render-parity-v4+":"bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
@@ -33,6 +33,8 @@ def main():
  assert ID not in sudo("cat","/boot/grub/grub.cfg")
  result=json.loads((BUILD/"build-result.json").read_text())
  assert result["status"]=="PASS_REAR_GENERATION_SOURCE_BUILD_NOT_INSTALLED"
+ manifest=json.loads((ROOT/"src/native-rgb/rear-windows-ccif/registers.json").read_text())
+ assert result["source_validated_non_address_CSR_count"]==len(manifest["VFE1_registers"])
  for relative,entry in result["modules"].items():
   assert sha(BUILD/relative)==entry["sha256"]
   assert run(["modinfo","-F","vermagic",BUILD/relative]).strip()==entry["vermagic"]
@@ -86,7 +88,7 @@ def main():
  for x in command:
   if x.startswith("modprobe.blacklist="):blacklist+=x.split("=",1)[1].split(",")
  command=[x for x in command if not x.startswith(("BOOT_IMAGE=","sp11_entry=","modprobe.blacklist="))]
- command+=["sp11_entry=7.1.5-sp11-camera-native-rear-generation-20261007-15",MARKER,
+ command+=["sp11_entry=7.1.5-sp11-camera-native-rear-generation-20261007-16",MARKER,
   "modprobe.blacklist="+",".join(dict.fromkeys(blacklist+["qcom_camss","imx681","ov13858","sp11_vd55g0","vd55g0"]))]
  uuid=run(["findmnt","-n","-o","UUID","/"]).strip();assert uuid=="33e842b7-0434-4749-b03a-299bdcdb8b9f"
  grub=f"""#!/bin/sh
