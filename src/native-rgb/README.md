@@ -1,3 +1,12 @@
+## 2026-10-08 rear17 exact sparse module control comparison ready
+
+Freshbuild21 adds only CFG0 scalar reads6960/6b60 to proven16. Sensor/CSI/VFE
+control/packet/retarget code byte-identical16. Sharednamed53VFE+3CSID validator
+now verifies exact module source audit and sameSP11 DLL identity;9negatives PASS.
+All3 W1/Werror zero diagnostics; required six hostedcheckreports PASS.
+NEXT install/verify/fresh17 boot; compare Windows0/0 controls before correcting.
+No countschanged. Evidence docs/NATIVE-RGB-REAR-GENERATION-17-PREP-20261008.json. Earlier entries below are historical.
+
 ## 2026-10-08 Windows sparse module reference completed
 
 Installed MFT/driver identities exact. Rear4K reader1679distincttimestamps;

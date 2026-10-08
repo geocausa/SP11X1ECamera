@@ -6,9 +6,9 @@ Private compiler-bound semantic firmware and its digest stay on this SP11.
 import argparse,hashlib,importlib.util,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent;ROOT=NATIVE.parents[1]
-PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-20"
-PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-20"
-HEAD="abc4428eef361d884665f141a67caedb8b5936cf"
+PROJECT=ROOT.parents[1];OUT=PROJECT/"02-kernel/native-rgb-rear-generation-20261007-21"
+PRIVATE=ROOT.parent/"private/NATIVE-REAR-GENERATION-20261007-21"
+HEAD="8e4bb4b476444577b4a17454597d9422db6431bc"
 SOURCE=PROJECT/"06-camera/reference/libcamera-native-rgb-rear-20261007-15"
 LIBBUILD=PROJECT/"02-kernel/libcamera-native-rgb-rear-20261007-15"
 KSOURCE=PROJECT/"02-kernel/e003i-front-production-src"
@@ -31,14 +31,14 @@ def main():
  # Every diagnostic CSR must match a named non-address field in exact GPL layout.
  validator=load("native_rear_csr_validator",NATIVE/"rear-windows-ccif/validate-registers.py")
  manifest=json.loads((NATIVE/"rear-windows-ccif/registers.json").read_text())
- csr_count=validator.verify(manifest,validator.layout(validator.HEADER.read_text()))
+ csr_count=validator.verify(manifest,validator.source_layout(validator.HEADER.read_text()))
  observer=(HERE/"native-rear-generation-vfe-observe.inc").read_text()
  array=re.search(r"static const unsigned int offsets\[\] = \{(.*?)\};",observer,re.S)
  assert array is not None
  assert [int(x,16) for x in re.findall(r"0x[0-9a-f]+",array[1])]==[int(x,16) for x in manifest["VFE1_offsets"]]
 
- for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-16"),
-              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-16")]:
+ for path in [OUT,PRIVATE,Path("/var/lib/sp11-camera-native-rear-generation-20261007-17"),
+              Path("/boot/sp11-7.1.5-camera-native-rear-generation-20261007-17")]:
   if path.exists():raise RuntimeError("candidate path already exists; audit first")
  build=load("native_rear_build",NATIVE/"build.py")
  result=build.assemble(OUT,nv12_trial=True,front_owner_trial=True,front_queue_trial=True,
@@ -97,7 +97,7 @@ def main():
  profile=output/"p0-input-0.bin";digest=hashlib.sha256(profile.read_bytes()).digest()
  identity=camss/"native-rear-generation-identity.h"
  identity.write_text(
-  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-16.bin"\n'
+  '#define NATIVE_REAR_GENERATION_FIRMWARE "qcom/sp11/rear-generation-20261007-17.bin"\n'
   +f'#define NATIVE_REAR_GENERATION_INPUT_BYTES {profile.stat().st_size}U\n'
   +'static const u8 native_rear_generation_input_sha256[32]={'
   +','.join(str(x) for x in digest)+'};\n')
@@ -225,7 +225,7 @@ def main():
    for name in re.findall(r'^#include "([^"]+)"',p.read_text(),re.M):
     if not (camss/name).is_file():raise RuntimeError("include closure failed")
  result.update(status="BUILD_REAR_GENERATION_DIAGNOSTIC_IN_PROGRESS",
-  candidate_identity="E-NATIVE-REAR-GENERATION-16",candidate_base_commit=HEAD,
+  candidate_identity="E-NATIVE-REAR-GENERATION-17",candidate_base_commit=HEAD,
   source_validated_non_address_CSR_count=csr_count,
   rear_optin_single_use_control_available=True,private_compiler_bound_data_only_input=True,
   post_stop_output_command_DMA_and_PM_pinned_until_reboot=True,

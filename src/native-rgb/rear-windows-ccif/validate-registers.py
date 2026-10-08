@@ -70,16 +70,8 @@ def verify(manifest, maps):
         raise ValueError("CSID scalar scope drift")
     return len(records)
 
-def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--manifest", type=Path, default=HERE / "registers.json")
-    p.add_argument("--header", type=Path, default=HEADER)
-    p.add_argument("--report", type=Path, required=True)
-    a = p.parse_args()
-    if a.report.exists():
-        raise SystemExit("report already exists")
-    raw = a.header.read_bytes()
-    maps = layout(raw.decode())
+def source_layout(text):
+    maps = layout(text)
     audit_raw = MODULE_AUDIT.read_bytes()
     if hashlib.sha256(audit_raw).hexdigest() != MODULE_AUDIT_SHA:
         raise ValueError("module source audit drift")
@@ -89,6 +81,19 @@ def main():
     if audit["SparsePD_subcommand_range"] != [{"register_offset": "0x6960", "register_words": 1}] or audit["LCR_config_ranges"][0] != {"register_offset": "0x6b60", "register_words": 1}:
         raise ValueError("single scalar module control source mismatch")
     maps.update(MODULE_CONTROL_MAP)
+    return maps
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--manifest", type=Path, default=HERE / "registers.json")
+    p.add_argument("--header", type=Path, default=HEADER)
+    p.add_argument("--report", type=Path, required=True)
+    a = p.parse_args()
+    if a.report.exists():
+        raise SystemExit("report already exists")
+    raw = a.header.read_bytes()
+    maps = source_layout(raw.decode())
+
     manifest = json.loads(a.manifest.read_text())
     count = verify(manifest, maps)
     negatives = 0
