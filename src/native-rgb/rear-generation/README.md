@@ -1,3 +1,15 @@
+## 2026-10-08 generation06 read-only packet/CAMIF diagnostic ready
+
+Sourcebuild08 W1/Werror all3 modules zero diagnostics. Actual candidate pinning
+2452 assertions/52 steps/51 failures per GCC+Clang PASS, stop helpers once.
+Transport86 assertions/20 negatives and root/real graph12 negatives PASS.
+Adds read-only packet-owned configuration and CAMIF/debug observations, including
+after packet0. No new control writes, mask guesses, tuning or recovery behavior.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-06-PREP-20261008.json.
+NEXT install/verify/boot fresh06 autonomously; exposed DMA retained until reboot.
+Native44 completed streams/38 IDs/76 boots unchanged;05 retired.
+Earlier entries below are historical.
+
 ## 2026-10-08 generation05 receiver traffic verified; first frame still blocked
 
 Generation05 transport configuration reads back correctly. Receiver observed38911

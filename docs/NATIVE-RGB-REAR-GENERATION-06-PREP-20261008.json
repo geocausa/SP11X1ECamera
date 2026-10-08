@@ -1,0 +1,107 @@
+{
+  "identity": "E-NATIVE-REAR-GENERATION-06",
+  "status": "PASS_REAR_GENERATION_SOURCE_BUILD_NOT_INSTALLED",
+  "source_base_head": "5233d8e87049d8b8a3aa57075756fd373be5b6a4",
+  "build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-08",
+  "modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "eda969a142e56dae89a49db3970a82ffd8a1cf4dce0c8edd45a4e66bdae9a463",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "30562a8e240f5aae5ed217b31c7ceed2e650878b3ef96a4c69ad6b8dab4eeec0",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "f37223c4f68472f23267ee4954b62a122aaf268680908f5caad905743af89d25",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "source_profile_register_words_exact": 2268,
+  "additional_observations": "Read-only packet-owned frame/subsample/crop/format/RUP and CAMIF/debug/multiVCDT/LUT/BUF status at each phase, including after packet0. No new MMIO writes or recovery behavior.",
+  "register_layout_authority": "Same-SP11 reference/csid680-sof-20261007/cam_ife_csid680.h, IPP register table",
+  "physical_question": "Why input events without output CAMIF SOF/Epoch? First verify command-programmed fields before modifying masks or policy.",
+  "private_input_digest_exported": false,
+  "physical_generation_proven": false,
+  "pinning_hosted": {
+    "status": "PASS_CANDIDATE_FAILURE_PATHS_AND_COMPLETE_POST_STOP_PINNING",
+    "actual_candidate_orchestration_and_stop_pin_branch": true,
+    "lifecycle_IRQ_helpers_and_DMA_allocations_host_models": true,
+    "all_modeled_partial_start_stop_attempts_checked": true,
+    "complete_frames_do_not_authorize_output_reclaim": true,
+    "reclaim_function_calls": 0,
+    "default_authorization_denial_checked": true,
+    "successful_stop_helpers_called_once_checked": true,
+    "physical_completion_not_proven": true,
+    "hardware_access": false,
+    "results": [
+      {
+        "compiler": "gcc",
+        "ASAN_UBSAN_Werror": true,
+        "result": {
+          "assertions": 2494,
+          "lifecycle_steps": 52,
+          "injected_failures": 51,
+          "partial_start_stop_attempts_complete": true,
+          "lifecycle_helpers_and_reclaim_mocked": true,
+          "runtime_denial_bypassed_only_in_host_test": true,
+          "hardware_proof": false
+        },
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "ASAN_UBSAN_Werror": true,
+        "result": {
+          "assertions": 2494,
+          "lifecycle_steps": 52,
+          "injected_failures": 51,
+          "partial_start_stop_attempts_complete": true,
+          "lifecycle_helpers_and_reclaim_mocked": true,
+          "runtime_denial_bypassed_only_in_host_test": true,
+          "hardware_proof": false
+        },
+        "stderr": ""
+      }
+    ]
+  },
+  "transport_hosted": {
+    "status": "PASS_ACTUAL_REAR_TRANSPORT_HELPER_PREDICATE_NO_PACKET_FIELD_OR_ACK_WRITES",
+    "actual_helper_and_E004ns_predicate_and_RX_derivation": true,
+    "MMIO_and_format_lookup_host_models": true,
+    "hardware_access": false,
+    "results": [
+      {
+        "compiler": "gcc",
+        "result": {
+          "assertions": 86,
+          "writes": 15,
+          "negative_cases": 20,
+          "packet_fields_and_ACKs_untouched": true
+        },
+        "ASAN_UBSAN_Werror": true
+      },
+      {
+        "compiler": "clang",
+        "result": {
+          "assertions": 86,
+          "writes": 15,
+          "negative_cases": 20,
+          "packet_fields_and_ACKs_untouched": true
+        },
+        "ASAN_UBSAN_Werror": true
+      }
+    ]
+  },
+  "worker_preflight": {
+    "status": "PASS_REAL_GRAPH_ADMISSION_FORMAT_READBACK_AND_PROBE_COMPILE",
+    "actual_rear_boot_VFE_width_clamp_checked": true,
+    "root_service_environment_Git_trust": true,
+    "retained_actual_graph": true,
+    "edges": 119,
+    "device_nodes": 45,
+    "negative_cases": 12,
+    "hardware_access": false,
+    "synthetic_format_changes_for_offline_testing": true
+  }
+}
