@@ -7,7 +7,7 @@ HERE=Path(__file__).resolve().parent
 def once(text,old,new):
  if text.count(old)!=1: raise RuntimeError("rear NV12 anchor drift: "+old[:90])
  return text.replace(old,new,1)
-def apply(camss):
+def apply(camss, public_dma_admission=False):
  camss=Path(camss)
  names=["camss-vfe-e004nt-rear-4k-buffer.inc","camss-vfe-e004nu-rear-ten-wm.inc",
         "camss-vfe-e008d-rear-dma.inc","camss-vfe-e008h-rear-prime.inc",
@@ -91,12 +91,19 @@ def apply(camss):
  texts[n]=s
  c=(camss/"camss-vfe-680.c").read_text()
  c=once(c,'#include "camss-vfe-e008d-rear-dma.inc"','#include "native-rear-nv12-bus.inc"\n#include "camss-vfe-e008d-rear-dma.inc"')
+ if public_dma_admission:
+  c=once(c,'#include "camss-vfe-e004nt-rear-4k-buffer.inc"',
+         '#include "camss-vfe-e004nt-rear-4k-buffer.inc"\n#include "native-rear-video-dma.inc"')
  texts["camss-vfe-680.c"]=c
  # Reject any unexpected source drift before mutating this fresh staging tree.
  for n,t in texts.items(): (camss/n).write_text(t)
  for n in ["native-rear-nv12-layout.h","native-rear-nv12-bus.inc"]:
   (camss/n).write_bytes((HERE/n).read_bytes())
+ if public_dma_admission:
+  for n in ["native-rear-video-dma.h","native-rear-video-dma.inc"]:
+   (camss/n).write_bytes((HERE.parent/"rear-v4l2"/n).read_bytes())
  return {"rear_full_storage":"linear_NV12","width":3840,"height":2160,
          "stride":3840,"image_bytes":12441600,"allocation_bytes":12443648,
          "FULL_bits":8,"DS_bits":10,"public_video_buffers_exposed":False,
+         "public_DMA_span_admission_compiled":public_dma_admission,
          "modified_files":names,"cold_only":True,"pixel_CPU_processing":False}

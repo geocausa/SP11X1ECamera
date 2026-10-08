@@ -1,0 +1,92 @@
+{
+  "schema": "native-rear-public-buffer-source-v1",
+  "base_commit": "a46a703ea4358859d195c39b9e961bc2a557e00d",
+  "status": "PASS_REAR_VB2_DMA_ADMISSION_SOURCE_BUILD_NOT_INSTALLED",
+  "build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-v4l2-20261008-01",
+  "scope": "actual VB2 format/ACTIVE mapped-SG aperture admission; not a queue callback or lifetime grant",
+  "module_compile_diagnostics": 0,
+  "ARM64_W1_Werror_modules": {
+    "camss/qcom-camss.ko": {
+      "sha256": "b7d90d35023093ce3e42d8d6d33caf3fd62eef325e21d5d8aac1f9bfca307b92",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "imx681/imx681.ko": {
+      "sha256": "f80bca01a0b42d2da1f537aa9232649fbf75d2e890e10515813627e089dedb03",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    },
+    "ov13858/ov13858.ko": {
+      "sha256": "d33ea7a6ca1d9f0dd61e1ec8ee79e7d4496b35dca1abdadef27cc47f61d5dd68",
+      "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64"
+    }
+  },
+  "hosted_checks": {
+    "status": "PASS_ACTUAL_REAR_VB2_MAPPED_SG_APERTURE_ADMISSION",
+    "actual_staged_adapter_and_arithmetic": true,
+    "VB2_SG_types_mapping_descriptors_and_target_predicate_are_host_models": true,
+    "hardware_access": false,
+    "buffer_ownership_or_completion_authority_granted": false,
+    "results": [
+      {
+        "compiler": "gcc",
+        "ASAN_UBSAN_Werror": true,
+        "result": {
+          "assertions": 658,
+          "negative_cases": 155,
+          "valid_mapped_segment_partitions": 64,
+          "cached_first_address_ignored": true,
+          "ACTIVE_VB2_ownership_unchanged": true,
+          "CPU_pixel_access_or_MMIO": false
+        },
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "ASAN_UBSAN_Werror": true,
+        "result": {
+          "assertions": 658,
+          "negative_cases": 155,
+          "valid_mapped_segment_partitions": 64,
+          "cached_first_address_ignored": true,
+          "ACTIVE_VB2_ownership_unchanged": true,
+          "CPU_pixel_access_or_MMIO": false
+        },
+        "stderr": ""
+      }
+    ]
+  },
+  "source_inputs": {
+    "src/native-rgb/rear-v4l2/native-rear-video-dma.h": "140707a895d53ad18d1ff0f23541aa41ff8d0afe445eff704ecbf9c35de71e7b",
+    "src/native-rgb/rear-v4l2/native-rear-video-dma.inc": "e13fc40b5555c6c2d19ad2487feb55206bec5f60fd9b5d4c9ba662c3a00d6abd",
+    "src/native-rgb/rear-linear-nv12/native-rear-nv12-layout.h": "7437f538b9a078b74699b3ae76421b553bce2b7a7c1280c1b15cbf484c41e1f6",
+    "src/native-rgb/rear-linear-nv12/apply.py": "f6dd666d76f11fd7f329dd0736b222561bb03dae5d3c4c6870e66f5777bde378"
+  },
+  "all_mapped_SG_entries_checked_not_orig_nents_or_cached_first_addr": true,
+  "public_NV12_single_plane_format_exact": {
+    "width": 3840,
+    "height": 2160,
+    "stride": 3840,
+    "sizeimage": 12441600
+  },
+  "all_mapped_segments_contiguous_page_aligned_base_and_32bit_aperture_required": true,
+  "gapped_overlapping_truncated_zero_length_overflow_bad_format_nonACTIVE_bad_offset_rejected": true,
+  "output_addresses_unchanged_on_any_failure": true,
+  "CPU_pixel_mapping_copy_processing_or_MMIO": false,
+  "output_allocation_free_or_buffer_completion": false,
+  "public_stream_callbacks_connected": false,
+  "runtime_or_install_or_boot_actions_performed": false,
+  "next_integration_requirements": [
+    "explicit borrowed public FULL surface ownership separate from coherent auxiliary/command ownership",
+    "VB2 mapping lifetime retained through exact ten-WM retirement and hardware stop, including all failure/cancel/close cases",
+    "ordinary STREAMON/STREAMOFF worker and pending request queue rather than the one-use diagnostic control",
+    "rear-specific libcamera configuration and typed semantic IQ submission; no private compiled-command UAPI",
+    "continuous frame ledger/steady packet lifecycle and frame-matched metadata",
+    "matched-scene Windows quality comparison after real public frames"
+  ],
+  "native_counts_unchanged": {
+    "completed_streams": 48,
+    "consumed_identities": 56,
+    "boots": 112,
+    "failed_started_captures": 20
+  },
+  "Golden_boot_id": "f6afd4f8-cdf2-4d91-a57f-f587315001ed"
+}

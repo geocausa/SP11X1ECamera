@@ -1,3 +1,21 @@
+## 2026-10-08 rear public-buffer DMA admission compiled and tested
+
+Rear23 physical clean NV12 release remains PASS. Actual rear VB2 mapping
+admission is now source-qualified: exact 4K NV12 ACTIVE single-plane buffer,
+every mapped SG entry contiguous and inside 32-bit DMA aperture, advertised
+plane covered; ignores orig_nents and cached first addr. No CPU pixel/MMIO
+access or allocation/free/completion authority. GCC/Clang ASAN/UBSAN/Werror:
+658 assertions, 155 negative cases, 64 valid partitions each.
+Fresh native-rgb-rear-v4l2-20261008-01 builds three ARM64 W1/Werror modules,
+zero diagnostics. Source only: no install, public callback, stream or reboot.
+NEXT borrowed FULL ownership/mapping lifetime through stop/failure, ordinary
+V4L2 worker/queue and rear libcamera typed semantic IQ, continuous metadata.
+Application delivery and optical quality still unproven. Front calibration
+deferred. Counts unchanged48/56IDs112boots failed20; combined63IDs126boots.
+Golden f6afd4f8-cdf2-4d91-a57f-f587315001ed;23 retired; no armed jobs.
+Evidence docs/NATIVE-RGB-REAR-V4L2-DMA-ADMISSION-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear23 clean native NV12 completion and release PASS
 
 Fresh rear23/build28 completes both ten-WM generations at 3840x2160 NV12,
