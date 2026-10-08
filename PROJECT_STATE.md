@@ -1,3 +1,14 @@
+## 2026-10-08 rear17 specific module control mismatch disproved
+
+FreshWindows controls6960/6b60=0; Linux17 same0 everypoweredphase while
+TOPIPPmodule21/CCIF00900000 persists. Do not blindly clear already-zero controls.
+Sensorstartupfix now5freshboots; completedrearframes0, packets1110/epochs1.
+Golden 0e0d9458-4cc1-4a14-9005-c293667e0289 hashes/EFI/NTFS verified; hazards0/watchdogfalse.
+17retired unitsdisabled, DMA/PM/owner heldthroughreboot. Native44streams50IDs100boots
+failed18; Windows6streams6IDs12boots; combined56IDs112boots. Nextcandidate18/build22.
+NEXT source-qualified modulegeometry and configurationactivation audit.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-17-20261008.json. Earlier entries below are historical.
+
 ## 2026-10-08 rear17 exact sparse module control comparison ready
 
 Freshbuild21 adds only CFG0 scalar reads6960/6b60 to proven16. Sensor/CSI/VFE
