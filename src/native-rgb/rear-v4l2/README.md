@@ -1,3 +1,30 @@
+## 2026-10-08 rear31 exact22 command receipts live-qualified, clean return PASS
+
+Fresh31/build39 physically verifies4 packets/22 serialized FIFO0 BL_DONE
+receipts sequence1..22 bound to exact packet request/owner/slab allocation.
+Dedicated ISR completion record survives separate INLINE in source/tests;
+hardware receipt check ret0 while camera live and all4 command slabs pinned.
+Sequence is software serialization, not hardware Request ID; no command live
+free/rewrite/requeue. All10 replacement WM masks1023, nine events drained,
+stable Epoch3; both ledgers complete. Old FULL+all8 auxiliary allocations
+retired live again, replacement FULL+eight auxiliaries retained until four stops.
+Two actual libcamera DMA-BUF Requests at3840x2160 linear NV12/stride3840/
+12441600bytes; zero pixel reads/copy. Complete clean stops/DMA/owner/arena release.
+All3 sensors bound/suspended, IFE/CSID/PHY clocks idle; tenVFE/eightIPP error
+phases zero. Service success0, no watchdog/kernel hazard. Automatic Golden
+aa8479b7-fe8d-45ec-a41f-10d86bb26f89 verified; protected hashes unchanged.
+31 consumed/retired, units disabled; no armed tests/nodes/modules/jobs.
+Earlier30 protocol rejection retired before sensor Start; original IRQ cause
+was not directly logged and is not claimed as independently observed.
+Native54 completed/63IDs126boots/prestream9/failed-after-start20;
+combined70IDs140boots. Source28 still unconsumed/uninstalled.
+NEXT independent live command arena retirement/recycling with exact receipts,
+then persistent rear Request scheduler and safe early delivery. Semantic rear
+IPA/statistics/controls/SensorTimestamp and matched Windows optics follow;
+front calibration deferred, continuous rear/optical parity remain unproven.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-31-20261008.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear31 dedicated BL_DONE receipt source qualified
 
 Fresh31/build39 all3 ARM64 modules W1/Werror0; all18 checks PASS.
