@@ -1,3 +1,34 @@
+## 2026-10-09 rear54 natural-scene exposure/gain response proven
+
+User confirmed lit scene and uncovered rear lens for this comparison.
+1200 actual libcamera Requests in three400 same-boot sessions completed.
+Existing sensor controls and actual readbacks match default/high/default:
+exposure1600/3206/1600lines, analogue128/1024/128, digitalBGR1024,
+test_pattern0 all. Unchanged sensor/mode/VTS/ISP/queue/lifetime policy from53.
+Scene Y means10.440-10.824 default1,78.753-89.744 high2,
+11.935-13.967 restored-default3; p99s30 /190-205 /29-36.
+High scene median65-85 versus defaults7-15; black fraction8.29-14.61%
+versus54.22-71.65% default. No degenerate/identical flags in nine frames.
+Substantial reversible brightness response to manual exposure/gain proven.
+Supports underexposure/missing automatic controls as a next engineering focus;
+does not establish full root cause, identical scene/lighting stability, or
+visual/color/focus/denoise/Windows parity.54 defaults brighter than53, so do not
+claim cross-boot brightness difference was caused by a source-policy change.
+All four stops/owner/DMA/arena/cache release, sensors suspended,
+graph neutral and five camera clocks idle each; no kernel hazards/watchdog.
+Automatic Golden9bd8e4bb-aeb0-49f7-8b94-206749402374, hashes unchanged.
+54 consumed/retired/unarmed, units disabled; never retry.
+9 native NV12 frames111974400bytes/27 unverified previews remain sealed SP11.
+Scalar facts only exported; kernel pixel reads/copies0; diagnostic timing
+does not promote new performance qualification.38checks/build67/lib10.
+Native99streams/86IDs/172boots,12pre-stream/24after-start failures;
+combined93IDs/186boots. Manual photometric response PASS, optical-quality and
+automatic-control gates still PENDING. Performance remains deferred.
+NEXT private visual/color/focus screening and matched Windows photometry;
+native libcamera IPA automatic exposure/gain with qualified control timing.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-54-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear54 controlled exposure/gain source PASS; hardware pending
 
 User confirms current rear lens uncovered and scene lit.
