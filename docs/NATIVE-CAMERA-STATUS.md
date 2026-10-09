@@ -1,3 +1,34 @@
+## 2026-10-09 rear40 three same-boot captures and clean shutdown hardware PASS
+
+Fresh40/build51+libcamera04: three independent open/configure/start/80 real
+reused Requests/stop/release sessions in ONE boot,240 actual application
+Requests total; four application DMA-BUFs per session,4K linearNV12,
+stride3840/image12441600/two logical planes. No reboot/module reload/OS sleep
+between sessions. Unique owner epochs1->2->3; both guards completed3/unpoisoned.
+Each session:81 live VB2 completions/80handoffs+source-locked RUP commits,
+4 physical stops and DMA/owner/command arena cleanup.243 kernel completions
+include3 extras racing STREAMOFF; only240 application successes claimed.
+All3 sensors bound/runtime-suspended, media graph neutral and ISP clocks idle
+after EACH session. Startup22 exact serialized BL receipts/4 arenas retired
+each, no command replay.898IRQ records drained through16-slot wrap,518epochs.
+Snapshot retries0/1/0: original strict proof recovered one real IRQ/epoch race
+without reprogramming, disabling IRQs or releasing an uncertain mapping.
+Rates14.2641/11.5617/14.187fps including start/stop; aggregate13.21089fps.
+Full rate, adaptiveIPA/3A, SensorTimestamp, matched optics and long soak incomplete.
+Service success0, no kernel hazards/watchdog. Automatic distinct Golden
+5aafe7af-4479-4a75-b998-ee5ccc65450a; protected hashes unchanged.
+40 consumed/retired, service+timer disabled/static watchdog inactive;
+no armed test/nodes/modules/jobs. Never retry36..40. Source28 unconsumed.
+28 source checks PASS,3 ARM64 W1/Werror0 diagnostics,233 admission negatives.
+Native66/72IDs144boots/pre10/failed-after-start22; combined79IDs158boots.
+37..39 clean hardware captures but harness failures remain documented, never
+promoted to full qualification successes.40 fully passed its3-session harness.
+NEXT full-rate/cadence profiling then semantic IPA/statistics/3A/controls/
+SensorTimestamp and matched Windows optics; longer lifecycle/soak afterward.
+Front calibration deferred until rear finished. Product stack incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-40-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear40 exact per-session command owner parser qualified
 
 39's two hardware captures were clean; only parser owner=1 assumption failed

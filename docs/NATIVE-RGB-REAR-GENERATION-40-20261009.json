@@ -1,0 +1,671 @@
+{
+  "identity": "E-NATIVE-REAR-GENERATION-40",
+  "status": "PASS_REAR_THREE_SAME_BOOT_LIBCAMERA_SESSIONS_AND_CLEAN_RELEASE",
+  "date": "2026-10-09",
+  "consumer": "real_public_libcamera_camera_manager_and_requests",
+  "source_head": "b379bc806fd1609d7ca8097de651ad342747823f",
+  "kernel_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-51",
+  "library_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261008-04",
+  "candidate_boot": "cdfba45d-fd3f-425d-870e-2c4a02054210",
+  "Golden_return_boot": "5aafe7af-4479-4a75-b998-ee5ccc65450a",
+  "retirement": {
+    "identity": "E-NATIVE-REAR-GENERATION-40",
+    "consumed": true,
+    "retired": true,
+    "never_retry": true,
+    "candidate_boot": "cdfba45d-fd3f-425d-870e-2c4a02054210",
+    "Golden_return_boot": "5aafe7af-4479-4a75-b998-ee5ccc65450a",
+    "units_disabled": true,
+    "unit_install_states": {
+      "sp11-camera-native-rear-generation-20261007-40.service": "disabled",
+      "sp11-camera-native-rear-generation-20261007-40-watchdog.timer": "disabled",
+      "sp11-camera-native-rear-generation-20261007-40-watchdog.service": "static"
+    },
+    "all_units_inactive": true,
+    "watchdog_fired": false,
+    "kernel_hazards": 0,
+    "protected_Golden_hashes_unchanged": true,
+    "service_result": "success",
+    "reason": "PASS three same-boot80-request sessions with four physical stops and complete cleanup each; automatic distinct Golden return."
+  },
+  "sessions": [
+    {
+      "probe": {
+        "status": "PASS_LIBCAMERA_REAR_CONTINUOUS_REQUEST_REUSE",
+        "completed_frames": 80,
+        "width": 3840,
+        "height": 2160,
+        "stride": 3840,
+        "image_bytes": 12441600,
+        "logical_planes": 2,
+        "pixel_bytes_read": 0,
+        "SensorTimestamp_present": false,
+        "stop_and_release": true,
+        "application_buffers": 4,
+        "reused_requests": true,
+        "elapsed_seconds": 5.60849,
+        "completion_rate_fps": 14.2641
+      },
+      "kernel_result": {
+        "ret": 0,
+        "composed": 1,
+        "once": 1,
+        "prepared": 1,
+        "owner": 1,
+        "packets": "1111",
+        "epochs": 163,
+        "events": 338,
+        "slot0": 1,
+        "slot1": 1,
+        "complete": 1,
+        "csid_stop": 1,
+        "bus_stop": 1,
+        "rtcdm_stop": 1,
+        "source_stop": 1,
+        "dma_pinned": 0,
+        "dma_reclaimed": 1,
+        "owner_released": 1,
+        "arena_released": 1,
+        "reboot": 1
+      },
+      "public_V4L2_result": {
+        "ret": 0,
+        "frames": 81,
+        "width": 3840,
+        "height": 2160,
+        "bytes": 12441600,
+        "retained_public_FULL": 1,
+        "cpu_pixel_copy": 0
+      },
+      "rolling_queue": {
+        "ret": 0,
+        "live_completed": 81,
+        "handoffs": 80,
+        "output_updates": 80,
+        "cursor": 338,
+        "starved": 0,
+        "command_resubmissions": 0,
+        "cpu_pixel_copy": 0
+      },
+      "queue_snapshot": {
+        "retries": 0,
+        "attempts_limit": 256,
+        "address_reprograms": 0,
+        "command_resubmissions": 0,
+        "irq_disabled": 0
+      },
+      "session_gate": {
+        "attempted": 1,
+        "completed": 1,
+        "active": 0,
+        "poisoned": 0,
+        "owner": 1,
+        "inner_attempted": 1,
+        "inner_completed": 1,
+        "inner_poisoned": 0
+      },
+      "command_receipts": {
+        "ret": 0,
+        "packets": 4,
+        "BL_complete": 22,
+        "first_seq": 1,
+        "last_seq": 22,
+        "command_arenas_pinned": 4,
+        "live_release": 0,
+        "rewrite": 0,
+        "requeue": 0
+      },
+      "live_replacement_observation": {
+        "ret": 0,
+        "owner": 1,
+        "old_complete": 1,
+        "next_complete": 1,
+        "receipts": 1,
+        "enabled": 1023,
+        "programmed": 1023,
+        "consumed_addr": 1023,
+        "published": 14,
+        "consumed": 14,
+        "cursor": 14,
+        "epoch_before": 3,
+        "epoch_after": 3,
+        "live_release": 0
+      },
+      "live_FULL_retirement": {
+        "ret": 0,
+        "released": 1,
+        "old_valid": 1,
+        "next_pinned": 1,
+        "aux_pinned": 8,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "live_auxiliary_retirement": {
+        "ret": 0,
+        "released": 8,
+        "old_valid": 1,
+        "next_aux_pinned": 8,
+        "next_FULL_pinned": 1,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "live_command_retirement": {
+        "ret": 0,
+        "released": 4,
+        "retired_valid": 1,
+        "command_arenas_pinned": 0,
+        "owner": 1,
+        "BL_complete": 22,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "final_sensors": {
+        "imx681": {
+          "bound": true,
+          "runtime_status": "suspended"
+        },
+        "ov13858": {
+          "bound": true,
+          "runtime_status": "suspended"
+        },
+        "sp11-vd55g0": {
+          "bound": true,
+          "runtime_status": "suspended"
+        }
+      },
+      "sensor_start_attempts": 1,
+      "linear_NV12_readback_passes": 1,
+      "session": 1,
+      "boot_id": "cdfba45d-fd3f-425d-870e-2c4a02054210",
+      "neutral_media_graph_after_release_verified": true,
+      "kernel_hazard_admission_passed": true,
+      "clocks_after_idle": {
+        "cam_cc_ife_1_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 594000000
+        },
+        "cam_cc_ife_1_clk_src": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 594000000
+        },
+        "cam_cc_csid_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        },
+        "cam_cc_csid_clk_src": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        },
+        "cam_cc_csiphy1_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        }
+      }
+    },
+    {
+      "probe": {
+        "status": "PASS_LIBCAMERA_REAR_CONTINUOUS_REQUEST_REUSE",
+        "completed_frames": 80,
+        "width": 3840,
+        "height": 2160,
+        "stride": 3840,
+        "image_bytes": 12441600,
+        "logical_planes": 2,
+        "pixel_bytes_read": 0,
+        "SensorTimestamp_present": false,
+        "stop_and_release": true,
+        "application_buffers": 4,
+        "reused_requests": true,
+        "elapsed_seconds": 6.91939,
+        "completion_rate_fps": 11.5617
+      },
+      "kernel_result": {
+        "ret": 0,
+        "composed": 1,
+        "once": 1,
+        "prepared": 1,
+        "owner": 2,
+        "packets": "1111",
+        "epochs": 192,
+        "events": 218,
+        "slot0": 1,
+        "slot1": 1,
+        "complete": 1,
+        "csid_stop": 1,
+        "bus_stop": 1,
+        "rtcdm_stop": 1,
+        "source_stop": 1,
+        "dma_pinned": 0,
+        "dma_reclaimed": 1,
+        "owner_released": 1,
+        "arena_released": 1,
+        "reboot": 1
+      },
+      "public_V4L2_result": {
+        "ret": 0,
+        "frames": 81,
+        "width": 3840,
+        "height": 2160,
+        "bytes": 12441600,
+        "retained_public_FULL": 1,
+        "cpu_pixel_copy": 0
+      },
+      "rolling_queue": {
+        "ret": 0,
+        "live_completed": 81,
+        "handoffs": 80,
+        "output_updates": 80,
+        "cursor": 218,
+        "starved": 0,
+        "command_resubmissions": 0,
+        "cpu_pixel_copy": 0
+      },
+      "queue_snapshot": {
+        "retries": 1,
+        "attempts_limit": 256,
+        "address_reprograms": 0,
+        "command_resubmissions": 0,
+        "irq_disabled": 0
+      },
+      "session_gate": {
+        "attempted": 2,
+        "completed": 2,
+        "active": 0,
+        "poisoned": 0,
+        "owner": 2,
+        "inner_attempted": 2,
+        "inner_completed": 2,
+        "inner_poisoned": 0
+      },
+      "command_receipts": {
+        "ret": 0,
+        "packets": 4,
+        "BL_complete": 22,
+        "first_seq": 1,
+        "last_seq": 22,
+        "command_arenas_pinned": 4,
+        "live_release": 0,
+        "rewrite": 0,
+        "requeue": 0
+      },
+      "live_replacement_observation": {
+        "ret": 0,
+        "owner": 1,
+        "old_complete": 1,
+        "next_complete": 1,
+        "receipts": 1,
+        "enabled": 1023,
+        "programmed": 1023,
+        "consumed_addr": 1023,
+        "published": 7,
+        "consumed": 7,
+        "cursor": 7,
+        "epoch_before": 3,
+        "epoch_after": 3,
+        "live_release": 0
+      },
+      "live_FULL_retirement": {
+        "ret": 0,
+        "released": 1,
+        "old_valid": 1,
+        "next_pinned": 1,
+        "aux_pinned": 8,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "live_auxiliary_retirement": {
+        "ret": 0,
+        "released": 8,
+        "old_valid": 1,
+        "next_aux_pinned": 8,
+        "next_FULL_pinned": 1,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "live_command_retirement": {
+        "ret": 0,
+        "released": 4,
+        "retired_valid": 1,
+        "command_arenas_pinned": 0,
+        "owner": 2,
+        "BL_complete": 22,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "final_sensors": {
+        "imx681": {
+          "bound": true,
+          "runtime_status": "suspended"
+        },
+        "ov13858": {
+          "bound": true,
+          "runtime_status": "suspended"
+        },
+        "sp11-vd55g0": {
+          "bound": true,
+          "runtime_status": "suspended"
+        }
+      },
+      "sensor_start_attempts": 1,
+      "linear_NV12_readback_passes": 1,
+      "session": 2,
+      "boot_id": "cdfba45d-fd3f-425d-870e-2c4a02054210",
+      "neutral_media_graph_after_release_verified": true,
+      "kernel_hazard_admission_passed": true,
+      "clocks_after_idle": {
+        "cam_cc_ife_1_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 594000000
+        },
+        "cam_cc_ife_1_clk_src": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 594000000
+        },
+        "cam_cc_csid_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        },
+        "cam_cc_csid_clk_src": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        },
+        "cam_cc_csiphy1_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        }
+      }
+    },
+    {
+      "probe": {
+        "status": "PASS_LIBCAMERA_REAR_CONTINUOUS_REQUEST_REUSE",
+        "completed_frames": 80,
+        "width": 3840,
+        "height": 2160,
+        "stride": 3840,
+        "image_bytes": 12441600,
+        "logical_planes": 2,
+        "pixel_bytes_read": 0,
+        "SensorTimestamp_present": false,
+        "stop_and_release": true,
+        "application_buffers": 4,
+        "reused_requests": true,
+        "elapsed_seconds": 5.63895,
+        "completion_rate_fps": 14.187
+      },
+      "kernel_result": {
+        "ret": 0,
+        "composed": 1,
+        "once": 1,
+        "prepared": 1,
+        "owner": 3,
+        "packets": "1111",
+        "epochs": 163,
+        "events": 342,
+        "slot0": 1,
+        "slot1": 1,
+        "complete": 1,
+        "csid_stop": 1,
+        "bus_stop": 1,
+        "rtcdm_stop": 1,
+        "source_stop": 1,
+        "dma_pinned": 0,
+        "dma_reclaimed": 1,
+        "owner_released": 1,
+        "arena_released": 1,
+        "reboot": 1
+      },
+      "public_V4L2_result": {
+        "ret": 0,
+        "frames": 81,
+        "width": 3840,
+        "height": 2160,
+        "bytes": 12441600,
+        "retained_public_FULL": 1,
+        "cpu_pixel_copy": 0
+      },
+      "rolling_queue": {
+        "ret": 0,
+        "live_completed": 81,
+        "handoffs": 80,
+        "output_updates": 80,
+        "cursor": 342,
+        "starved": 0,
+        "command_resubmissions": 0,
+        "cpu_pixel_copy": 0
+      },
+      "queue_snapshot": {
+        "retries": 0,
+        "attempts_limit": 256,
+        "address_reprograms": 0,
+        "command_resubmissions": 0,
+        "irq_disabled": 0
+      },
+      "session_gate": {
+        "attempted": 3,
+        "completed": 3,
+        "active": 0,
+        "poisoned": 0,
+        "owner": 3,
+        "inner_attempted": 3,
+        "inner_completed": 3,
+        "inner_poisoned": 0
+      },
+      "command_receipts": {
+        "ret": 0,
+        "packets": 4,
+        "BL_complete": 22,
+        "first_seq": 1,
+        "last_seq": 22,
+        "command_arenas_pinned": 4,
+        "live_release": 0,
+        "rewrite": 0,
+        "requeue": 0
+      },
+      "live_replacement_observation": {
+        "ret": 0,
+        "owner": 1,
+        "old_complete": 1,
+        "next_complete": 1,
+        "receipts": 1,
+        "enabled": 1023,
+        "programmed": 1023,
+        "consumed_addr": 1023,
+        "published": 12,
+        "consumed": 12,
+        "cursor": 12,
+        "epoch_before": 3,
+        "epoch_after": 3,
+        "live_release": 0
+      },
+      "live_FULL_retirement": {
+        "ret": 0,
+        "released": 1,
+        "old_valid": 1,
+        "next_pinned": 1,
+        "aux_pinned": 8,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "live_auxiliary_retirement": {
+        "ret": 0,
+        "released": 8,
+        "old_valid": 1,
+        "next_aux_pinned": 8,
+        "next_FULL_pinned": 1,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "live_command_retirement": {
+        "ret": 0,
+        "released": 4,
+        "retired_valid": 1,
+        "command_arenas_pinned": 0,
+        "owner": 3,
+        "BL_complete": 22,
+        "stop_flags": 0,
+        "vb2_complete": 0,
+        "requeue": 0
+      },
+      "final_sensors": {
+        "imx681": {
+          "bound": true,
+          "runtime_status": "suspended"
+        },
+        "ov13858": {
+          "bound": true,
+          "runtime_status": "suspended"
+        },
+        "sp11-vd55g0": {
+          "bound": true,
+          "runtime_status": "suspended"
+        }
+      },
+      "sensor_start_attempts": 1,
+      "linear_NV12_readback_passes": 1,
+      "session": 3,
+      "boot_id": "cdfba45d-fd3f-425d-870e-2c4a02054210",
+      "neutral_media_graph_after_release_verified": true,
+      "kernel_hazard_admission_passed": true,
+      "clocks_after_idle": {
+        "cam_cc_ife_1_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 594000000
+        },
+        "cam_cc_ife_1_clk_src": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 594000000
+        },
+        "cam_cc_csid_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        },
+        "cam_cc_csid_clk_src": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        },
+        "cam_cc_csiphy1_clk": {
+          "enable_count": 0,
+          "prepare_count": 0,
+          "protect_count": 0,
+          "rate_hz": 300000000
+        }
+      }
+    }
+  ],
+  "application_requests": 240,
+  "application_buffers_per_session": 4,
+  "application_request_reuse": true,
+  "live_VB2_completed": 243,
+  "live_output_handoffs": 240,
+  "fixed_RUP_AUP_commits": 240,
+  "IRQ_records_drained": 898,
+  "epochs": 518,
+  "strict_owner_epochs": [
+    1,
+    2,
+    3
+  ],
+  "per_session_command_BL_receipts": 22,
+  "per_session_command_arenas_retired": 4,
+  "snapshot_retries": [
+    0,
+    1,
+    0
+  ],
+  "snapshot_retry_hardware_recovery_proven": true,
+  "three_same_boot_open_start_stop_release_proven": true,
+  "reboot_between_sessions": false,
+  "module_reload_between_sessions": false,
+  "OS_sleep_between_sessions": false,
+  "all_three_sensors_bound_runtime_suspended_after_each": true,
+  "neutral_media_graph_after_each": true,
+  "ISP_clock_enable_and_prepare_counts_idle_after_each": 0,
+  "each_current_mapping_held_until_replacement_complete_or_four_stops": true,
+  "repeated_start_failure_gates_not_poisoned": true,
+  "per_session_all_four_physical_stops": true,
+  "per_session_DMA_owner_and_command_arena_cleanup": true,
+  "kernel_hazards": 0,
+  "watchdog_fired": false,
+  "service_result": "success",
+  "protected_Golden_hashes_unchanged": true,
+  "source_check_count": 28,
+  "runtime_admission_negative_cases": 233,
+  "total_capture_elapsed_seconds_with_start_stop": 18.16683,
+  "aggregate_completion_rate_with_start_stop_fps": 13.21089,
+  "per_session_rate_range_with_start_stop_fps": [
+    11.5617,
+    14.2641
+  ],
+  "extra_kernel_completions_racing_STREAMOFF": 3,
+  "no_extra_application_success_claim": true,
+  "CPU_pixel_copy": 0,
+  "pixel_bytes_read": 0,
+  "optical_pixels_read_or_saved": false,
+  "source_profile_fixed_ISP": true,
+  "adaptive_IPA_proven": false,
+  "SensorTimestamp_proven": false,
+  "strict_full_rate_qualified": false,
+  "optical_quality_parity_proven": false,
+  "long_soak_proven": false,
+  "qualification_bounded_to_three_sessions": true,
+  "product_complete": false,
+  "native_counts": {
+    "completed_streams": 66,
+    "consumed_identities": 72,
+    "boots": 144,
+    "failed_pre_stream_attempts": 10,
+    "failed_after_start": 22
+  },
+  "combined_counts": {
+    "consumed_identities": 79,
+    "boots": 158
+  },
+  "successful_clean_capture_fresh_boot_count_additions": [
+    37,
+    38,
+    39,
+    40
+  ],
+  "harness_failures_preserved_in_evidence": [
+    37,
+    38,
+    39
+  ],
+  "next": "Full-rate/cadence profiling and removal of measured bottlenecks, then semantic IPA/statistics/3A/controls/SensorTimestamp, matched Windows optical parity and longer lifecycle/soak. Front calibration deferred until rear finished. Never retry consumed40."
+}
