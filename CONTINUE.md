@@ -1,3 +1,37 @@
+## 2026-10-09 rear56 live exposure/gain control timing source qualified
+
+Automatic exposure priority continues after Windows01/Linux55 comparison.
+Rear libcamera now translates bounded standard ExposureTime/AnalogueGain
+controls into existing sensor V4L2 controls. Unknown, non-scalar, non-finite
+or out-of-range controls fail before I2C. Validate buffer binding first.
+Gain uses upstream OV13858 code128 per1x; current qualified window1-8x.
+Exposure uses actual mode1 VT clock432732960Hz/pixels-per-line4488,
+4-3206lines; configure verifies pixel rate/HBLANK424/VBLANK928.
+No group-hold, atomic exposure/gain pair, automatic AE or per-frame
+control metadata/SensorTimestamp is claimed.
+
+Fresh56/build69/lib12 retains all55 ISP/queue/lifetime protections.
+Read-only live sensor helper checks only changed exposure/gain register
+under existing sensor lock, with no public ctrl lookup/reentrant lock.
+Original register writes unchanged; streaming flag only scopes diagnostics.
+Probe schedules separate exposure up/down then gain up/down after64/128/
+192/256 completions.96 completed full-Y means around edges and3 native
+snapshots per session are SAME SP11 only; global scalar facts may export.
+Extra diagnostic reads796262400bytes/session are explicit, not performance.
+
+39 actual selected checks PASS.3 ARM64 W1/Werror modules0diagnostics;
+libcamera6 tests and strict manual pipeline compile PASS0warnings.
+Actual shared C++ helper4130assertions/19negatives each GCC/Clang ASANUBSAN;
+sensor helper34/14 each, parser87negatives; optical55/39 each.
+Previous guarded overlapping builder refused before staging; serialized
+build then passed. Source fixture/comment/foreign-identity corrections
+remain in original logs.56 remains unconsumed, unarmed, not installed.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-56-PREP-20261009.json.
+NEXT clean pushed checkpoint, guarded install/one-shot56, measure actual
+live control latency and reversible image response, automatic Golden.
+Image quality first; no automatic exposure or quality parity claim.
+Earlier entries are historical.
+
 ## 2026-10-09 actual Windows01 / Linux55 private native comparison complete
 
 One-shot GRUB Windows quality01 completed eight distinct OEM rear 4K NV12
