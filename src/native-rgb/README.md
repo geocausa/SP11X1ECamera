@@ -1,3 +1,27 @@
+## 2026-10-09 rear47 three400-request qualification PASS; no late long gaps
+
+1200 real4K linearNV12 Requests, three400 sessions, four reused appbuffers.
+Callback29.9547/29.8835/29.9569fps over399 intervals each; final1200 aggregate
+validated before PASS. No >50ms gaps after first80 in any session (960 late
+intervals total). Full400 long-gap counts0/1/0; sole63.687ms gap at session2
+sequence1, prepare5.143142ms+collect56.516185ms. Startup issue intermittent;
+46 saw first-handoff gap all3,45 only1. Allocation deadline causality unproven.
+397 mapping hits/3misses each;1191hits/9misses total,0 rolling FULL physicalunmaps,
+3cachedmaps physically flushed after all4 stops each/9total. Original all10
+owner/consumed-address ledger/snapshot proof unchanged; 1200 handoffs/commits.
+1203 VB2 completions (3extra STOP races),1210epochs/3474events,retries0.
+All stops/owner/DMA/arena/neutralgraph/sensors/idleclocks PASS each; no hazards/
+watchdog. Golden bfa198ec-9b36-486a-b026-1589f251f057 automatic return; hashes unchanged.
+47 consumed/retired/unarmed, units disabled.34 sourcechecks/build60/lib06.
+46 immutable raw final240 harnessFAIL retained; 47corrected fulltrial PASS.
+Native87streams/79IDs158boots,combined86IDs172boots/failedafterstart23.
+Extended bounded duration~13.3s each qualified; longsoak/strictgapfree30fps/
+IPA3A/SOF/controls/optical parity still unqualified; front deferred.
+NEXT target first rolling handoff preparation/collection phase, then longer
+soak/lifecycle and automatic controls/SOF/Windows optical parity.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-47-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear47 final1200 aggregate source qualified; hardware pending
 
 Fresh47/build60/unchanged lib06 retains46 camera/queue/cache/probe policy.
