@@ -1,3 +1,34 @@
+## 2026-10-09 rear42 reaches ~30fps in two sessions; first-session consistency open
+
+Measured change removes only the extra rolling handoff epoch wait; all10
+replacement address readbacks, exact consumed-address/owner/ledger snapshots,
+live FULL+8aux retirement and4-stage physical stop remain mandatory.
+Fresh42/build53+unchanged libcamera05 delivered3same-boot80-request captures:
+240 real4K linearNV12 Requests/four reused buffers,243 VB2 completions.
+Callback interval rates15.1686/29.9479/29.9452fps. Sessions2/3 each80sensor
+epochs for80 handoffs,160 real full-cadence Requests total. First session
+remained slow (158epochs/80handoffs); uniform30fps startup NOT yet qualified.
+Measured baseline41 callback10.2426/14.9776/12.0093fps; aggregate237-interval
+rate12.113->22.605fps (1.866x), using identical libcamera05 probe.
+Completion wait55.73/25.45/25.37ms per handoff; explicit epoch wait0 in all3.
+Prepare4.76/3.54/3.59ms,retire5.31/4.28/4.32ms. Allocation/retirement crossing a
+frame deadline is a next hypothesis, not yet independently proven causality.
+No pixel reads/copy, command replay, IRQ mask/ACK or MMIO-value changes.
+All4 stops and DMA/owner/arena cleanup PASS each;3 sensors suspended,
+neutral graph and ISP clocks idle each. Snapshot retries1/0/0 recovered safely.
+No hazards/watchdog; automatic distinct Golden607ade99-8f89-4728-be8e-495fca08e681,
+protected hashes unchanged.42 consumed/retired, service/timer disabled,
+static watchdog inactive; no armed jobs/nodes/modules. Never retry40..42.
+29 source checksPASS,3 ARM64 W1/Werror0 diagnostics; actual queue GCC/Clang
+ASAN/UBSAN28019 assertions/211 negatives each and68 measurement negatives.
+Native72/74IDs148boots/pre10/failed-after-start22; combined81IDs162boots.
+NEXT consistent30fps from first session by investigated allocation/mapping/
+retirement deadline work, preserving strict consumed-address/owner proof;
+then longer lifecycle/soak, semanticIPA3A/controls/SensorTimestamp and matched
+Windows optical parity. Front calibration deferred; product incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-42-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear42 measured scheduler change source qualified; hardware pending
 
 Fresh42/build53 removes ONLY the extra rolling per-handoff epoch wait.

@@ -11,16 +11,27 @@ approved_linux_camera_architecture:
   product_complete: false
 
 native_rgb_driver_current:
+  rear_generation42_evidence: docs/NATIVE-RGB-REAR-GENERATION-42-20261009.json
+  rear_generation42_consumed_and_retired: true
+  rear_extra_epoch_wait_removal_hardware_proven: true
+  rear_warm_30fps_capture_proven: true
+  rear_warm_30fps_scope_sessions: [2, 3]
+  rear_warm_30fps_scope_application_requests: 160
+  rear_first_session_callback_rate_fps: 15.1686
+  rear_consistent_30fps_first_session_qualified: false
+  rear_allocator_retirement_frame_deadline_causality_proven: false
+  rear_driver_completion_timestamp_is_sensor_SOF: false
+  rear_snapshot_retry_per_session: [1, 0, 0]
   rear_generation42_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-42-PREP-20261009.json
   rear_only_per_handoff_epoch_wait_removed_source_qualified: true
-  rear_epoch_wait_removal_hardware_pending: true
+  rear_epoch_wait_removal_hardware_pending: false
   rear_generation41_evidence: docs/NATIVE-RGB-REAR-GENERATION-41-20261009.json
   rear_generation41_consumed_and_retired: true
   rear_read_only_stage_cadence_hardware_proven: true
-  rear_sensor_pipeline_epoch_cadence_Hz: [29.947984, 29.953094, 29.954061]
-  rear_callback_interval_rates_fps: [10.2426, 14.9776, 12.0093]
-  rear_per_handoff_collect_ms: [57.27738, 56.872789, 56.200173]
-  rear_per_handoff_extra_epoch_wait_ms: [29.839244, 1.939996, 17.302929]
+  rear_sensor_pipeline_epoch_cadence_Hz: [29.947777, 29.944171, 29.941517]
+  rear_callback_interval_rates_fps: [15.1686, 29.9479, 29.9452]
+  rear_per_handoff_collect_ms: [55.732746, 25.448561, 25.366485]
+  rear_per_handoff_extra_epoch_wait_ms: [0, 0, 0]
   rear_generation41_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-41-PREP-20261009.json
   rear_read_only_stage_cadence_source_qualified: true
   rear_stage_cadence_hardware_pending: false
@@ -58,16 +69,16 @@ native_rgb_driver_current:
   rear_restart_source_session_limit: 3
   rear_restart_any_failure_poisoned: true
   rear_generation35_evidence: docs/NATIVE-RGB-REAR-GENERATION-35-20261008.json
-  rear_latest_successful_hardware_identity: E-NATIVE-REAR-GENERATION-41
+  rear_latest_successful_hardware_identity: E-NATIVE-REAR-GENERATION-42
   rear_current_libcamera_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261009-05
   rear_continuous_capture_proof_application_requests: 240
   rear_continuous_capture_proof_live_VB2: 243
   rear_application_buffers_reused: 4
   rear_live_output_handoffs: 240
   rear_direct_output_commits: 240
-  rear_continuous_irq_records_drained: 856
-  rear_continuous_epochs: 602
-  rear_delivered_completion_rate_with_start_stop_fps: 11.612064160525176
+  rear_continuous_irq_records_drained: 1046
+  rear_continuous_epochs: 327
+  rear_delivered_completion_rate_with_start_stop_fps: 20.975555611878807
   rear_full_rate_qualified: false
   rear_same_boot_repeat_start_stop_qualified: true
   rear_long_soak_qualified: false
@@ -84,7 +95,7 @@ native_rgb_driver_current:
   rear_generation33_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-33-PREP-20261008.json
   rear_generation33_consumed_and_retired: true
   rear_queue_source_qualified: true
-  rear_queue_hosted_assertions_each: 26529
+  rear_queue_hosted_assertions_each: 28019
   rear_queue_hosted_negative_cases_each: 211
   rear_current_source_check_count: 29
   rear_queue_hardware_pending: false
@@ -115,7 +126,7 @@ native_rgb_driver_current:
   custom_userspace_camera_runtime_required: false
   kernel_only_automatic_3a_established: false
   software_product_pivot_superseded: true
-  next_gate: rear_remove_measured_extra_epoch_wait_then_full_rate_IPA_3A_controls_SensorTimestamp_optics_soak
+  next_gate: rear_consistent30fps_first_session_allocation_retirement_deadline_then_IPA_3A_controls_SensorTimestamp_optics_soak
   rear_iq_binding_source_qualified: true
   rear_BF_selector1_retained_bytes_exact: 1200
   rear_explicit_inactive_cold_gamma_integrated: true
@@ -126,7 +137,7 @@ native_rgb_driver_current:
   rear_live_command_retirement_source_qualified: true
   rear_live_command_arena_retirement_proven: true
   rear_live_command_address_reuse_proven: false
-  rear_command_retirement_source_identity: E-NATIVE-REAR-GENERATION-40
+  rear_command_retirement_source_identity: E-NATIVE-REAR-GENERATION-42
   rear_generation32_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-32-PREP-20261008.json
   rear_generation32_consumed_and_retired: true
   rear_generation32_evidence: docs/NATIVE-RGB-REAR-GENERATION-32-20261008.json
@@ -134,9 +145,9 @@ native_rgb_driver_current:
   rear_live_command_recycling_proven: false
   rear_exact_command_receipts_source_qualified: true
   rear_exact_command_receipts_hardware_proven: true
-  rear_command_receipt_source_identity: E-NATIVE-REAR-GENERATION-40
+  rear_command_receipt_source_identity: E-NATIVE-REAR-GENERATION-42
   rear_command_receipt_candidate_consumed: true
-  rear_command_receipt_evidence: docs/NATIVE-RGB-REAR-GENERATION-40-20261009.json
+  rear_command_receipt_evidence: docs/NATIVE-RGB-REAR-GENERATION-42-20261009.json
   rear_live_command_receipt_observation_only: false
   rear_independent_IPA_tuning_adaptive_producers_proven: false
   autonomous_milestone_progress_user_authorized: true
@@ -218,8 +229,8 @@ native_rgb_driver_current:
   linux_bracket_baseline_relative_change: 0.029072068567840944
   windows_auto_linux_manual_output_gap_observed: true
   matched_sensor_settings_optical_comparison_qualified: false
-  combined_native_windows_workstream_boots: 158
-  combined_native_windows_consumed_identities: 79
+  combined_native_windows_workstream_boots: 162
+  combined_native_windows_consumed_identities: 81
   room_lights_on_user_report_utc: 2026-10-07T18:26:29Z
   room_lights_current_user_report: OFF
   room_lights_off_user_report_utc: 2026-10-07T20:37:51Z
@@ -245,11 +256,11 @@ native_rgb_driver_current:
   windows_oracle_completed_streams: 7
   unqualified_sensor_timestamp_published: false
   automatic_3a_proven: false
-  completed_sensor_streams_this_workstream: 69
+  completed_sensor_streams_this_workstream: 72
   failed_pre_stream_attempts_this_workstream: 10
   failed_capture_after_stream_start_this_workstream: 22
-  consumed_candidate_identities_this_workstream: 73
-  completed_candidate_and_golden_boots_this_workstream: 146
+  consumed_candidate_identities_this_workstream: 74
+  completed_candidate_and_golden_boots_this_workstream: 148
 
   rear_actual_built_libipa_AF_and_weight_helpers: true
   rear_complete_current_retained_register_words_exact: 2268
@@ -367,7 +378,7 @@ native_rgb_driver_current:
   rear_generation19_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-19-PREP-20261008.json
   rear_generation19_evidence: docs/NATIVE-RGB-REAR-GENERATION-19-20261008.json
   rear_two_output_generations_completed: true
-  rear_hardware_completion_successful_fresh_boots: 17
+  rear_hardware_completion_successful_fresh_boots: 19
   rear_optical_pixels_or_continuous_delivery_proven: false
   rear_generation20_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-20-PREP-20261008.json
   rear_NoC_floor_maintained_source_integrated: true
@@ -381,7 +392,7 @@ native_rgb_driver_current:
   rear_linear_NV12_public_buffers_exposed: true
   rear_linear_NV12_optical_quality_proven: false
   rear_generation21_evidence: docs/NATIVE-RGB-REAR-GENERATION-21-20261008.json
-  rear_linear_NV12_hardware_successful_fresh_boots: 15
+  rear_linear_NV12_hardware_successful_fresh_boots: 17
   rear_clean_post_stop_release_hardware_qualified: true
   rear_generation22_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-22-PREP-20261008.json
   rear_generation22_evidence: docs/NATIVE-RGB-REAR-GENERATION-22-20261008.json
@@ -391,7 +402,7 @@ native_rgb_driver_current:
   rear_reclaim_actual_slot1_state_hosted_qualified: true
   rear_generation23_evidence: docs/NATIVE-RGB-REAR-GENERATION-23-20261008.json
   rear_clean_release_guard_slot1_mismatch_resolved_on_hardware: true
-  rear_clean_post_stop_release_successful_fresh_boots: 13
+  rear_clean_post_stop_release_successful_fresh_boots: 15
   rear_public_DMA_admission_source_evidence: docs/NATIVE-RGB-REAR-V4L2-DMA-ADMISSION-20261008.json
   rear_public_DMA_mapped_SG_admission_source_qualified: true
   rear_public_DMA_mapped_SG_admission_hardware_qualified: true
