@@ -1,3 +1,23 @@
+## 2026-10-09 rear43 DMA operation timing source qualified; hardware pending
+
+Fresh43/build55+unchanged libcamera05 adds aggregate timings for FULL mapping
+get/put and eight auxiliary allocate/zero/free operations. Queue-only reset
+excludes startup; final log precedes stop. No control/release predicate reads
+the timing fields. Whole-source tokens equal42 after exact observer removal.
+All10 consumed-address/owner/ledger/snapshot proofs, mappings and4stops unchanged.
+30 source checks PASS;3 ARM64 W1/Werror modules0 diagnostics; actual queue
+GCC/Clang ASAN/UBSAN28019 assertions/211 negatives each.
+Fresh43 unconsumed/uninstalled/unarmed.54 source assembly filename error
+preserved;55 fresh successful build; whitespace-only comparison fixture fixed.
+Latest hardware42 remains240 real4K NV12 Requests/3clean sessions, rates
+15.1686/29.9479/29.9452fps; first-session uniform30fps not qualified.
+Golden607ade99 safe, protected payload unchanged; native72/74IDs148boots,
+combined81IDs162boots. No optical reads. Front deferred; product incomplete.
+NEXT one43 scoped timing comparison, automatic Golden return and retire;
+then remove measured per-handoff overhead without weakening retirement.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-43-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear42 reaches ~30fps in two sessions; first-session consistency open
 
 Measured change removes only the extra rolling handoff epoch wait; all10
