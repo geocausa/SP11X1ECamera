@@ -1,3 +1,26 @@
+## 2026-10-09 rear41 read-only cadence source qualified; hardware pending
+
+Fresh41/build52+libcamera05 adds aggregate stage timing around the exact
+qualified rear40 queue calls and branches. No per-frame logging, pixel read,
+address/IRQ changes, DMA-policy change or timing-based retirement authority.
+GCC/Clang compiled actual kernel formatter is admitted by the actual parser;
+67 malformed timing negatives. Removing only instrumentation reproduces
+the complete qualified queue source (whitespace normalized).
+Application probe separates79 callback intervals/driver-completion timestamp
+gaps from start/stop overhead. Driver timestamps are NOT sensor SOF timestamps.
+All29 source checks PASS,3 ARM64 W1/Werror modules0 diagnostics; six standard
+libcamera Werror testsPASS. Retained ownership/reclaim/gate/snapshot negatives
+remain. Source-harness invocation/fixture/access repairs logged, no hardware
+attempt; original failure logs retained. 41 unconsumed/uninstalled/unarmed.
+Latest hardware PASS40 remains3same-boot sessions/240 real4K NV12 requests,
+Golden5aafe7af-4479-4a75-b998-ee5ccc65450a. Never retry consumed40.
+Native66/72IDs144boots/pre10/failed-after-start22; combined79IDs158boots.
+NEXT one41 timing-baseline boot, automatic Golden return, retire; measured
+bottleneck repair then full-rate/IPA3A/controls/SensorTimestamp/optics/longsoak.
+Front calibration deferred; full rate and optical parity remain unproven.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-41-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear40 three same-boot captures and clean shutdown hardware PASS
 
 Fresh40/build51+libcamera04: three independent open/configure/start/80 real
