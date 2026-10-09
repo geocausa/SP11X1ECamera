@@ -20,6 +20,11 @@ def main():
   h=(a.staged/"native-rear-command-receipt.h").read_text().replace("#include <linux/types.h>","")
   (d/"native-rear-command-receipt.h").write_text(h)
   t=(HERE.parent/"test-rear-prepared-commands.c").read_text()
+  if (a.staged/"native-rear-session.h").exists():
+   t=t.replace("static int atomic_cmpxchg(", "static __attribute__((unused)) int atomic_cmpxchg(")
+   t=t.replace("e008n_rear_run_once_unreachable(v,&req,&result)==-EALREADY",
+               "e008n_rear_run_once_unreachable(v,&req,&result)==-EIO")
+
   t=t.replace("#define U64_MAX UINT64_MAX","#define U64_MAX UINT64_MAX\n#define U32_MAX UINT32_MAX\n#define READ_ONCE(x) (x)\nstatic bool native_rear_diagnostic_active;")
   tail=(HERE/"test-command-receipts-tail.c").read_text()
   t=t.replace("int main(void){",tail+"\nint main(void){")

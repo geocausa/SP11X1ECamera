@@ -1,3 +1,25 @@
+## 2026-10-09 rear36 same-boot restart source qualified; hardware pending
+
+Fresh36/build47 permits exactly three serialized rear sessions in one boot.
+Both outer and arena gates require full clean teardown and increasing owner
+epochs; any failed attempt permanently poisons admission. No reset API.
+Outer candidate remains single-use with mandatory automatic Golden return.
+Libcamera04 unchanged: three independent open/configure/start/80 reused
+Requests/stop/release processes; four application buffers per session.
+Neutral graph, all three sensors runtime-suspended and idle ISP clock counts
+required between sessions; no module reload, reboot or OS sleep between them.
+24 checks PASS; three ARM64 W1/Werror modules, zero diagnostics.
+Actual staged gate/clean predicate/arena wrapper: GCC and Clang ASAN/UBSAN,
+179 assertions and31 negatives each,12 fault stages; hardware APIs modeled.
+Runtime160 strict admission negatives (103 retained graph/queue +57 restart/clock).
+36 unconsumed/uninstalled/unarmed. Latest hardware PASS remains35,80 Requests.
+Native57/67IDs134boots/pre10/failed-after-start21; combined74IDs148boots.
+NEXT one36 hardware candidate: three sessions/240 Requests, then retire36.
+No same-boot restart hardware proof, full-rate, adaptive3A, optics or soak claim.
+Never retry consumed33/34/35. Source28 remains unconsumed.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-36-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-08 rear35 continuous reused Requests and clean shutdown hardware PASS
 
 Fresh35/build46 + libcamera04:80 actual application Requests completed through

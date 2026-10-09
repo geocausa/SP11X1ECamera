@@ -36,6 +36,11 @@ struct native_rear_live_observation {int model;};
   for source,name in [(lease,"native_rear_video_lease_valid"),(dma,"native_rear_dma_full_valid"),((a.staged/"native-rear-live-retire.inc").read_text(),"native_rear_live_full_retired_valid"),((a.staged/"native-rear-live-aux-retire.inc").read_text(),"native_rear_live_aux_retired_valid"),((a.staged/"camss-e007z-rear-retirement.inc").read_text(),"e007z_rear_spans_overlap")]:
    types+="static bool "+function(source,name)
   t=(HERE.parent/"test-rear-prepared-commands.c").read_text()
+  if (a.staged/"native-rear-session.h").exists():
+   t=t.replace("static int atomic_cmpxchg(", "static __attribute__((unused)) int atomic_cmpxchg(")
+   t=t.replace("e008n_rear_run_once_unreachable(v,&req,&result)==-EALREADY",
+               "e008n_rear_run_once_unreachable(v,&req,&result)==-EIO")
+
   t=t.replace("typedef uint64_t u64;","typedef unsigned long long u64;")
   t=t.replace("#define U64_MAX UINT64_MAX","#define U64_MAX UINT64_MAX\n#define U32_MAX UINT32_MAX\n#define READ_ONCE(x) (x)\nstatic bool native_rear_diagnostic_active;")
   t=t.replace("int main(void){",(HERE/"test-command-receipts-tail.c").read_text()+"\n"+types+"\n"+(HERE/"test-command-retire-tail.c").read_text()+"\nint main(void){")
