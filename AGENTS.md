@@ -1,3 +1,33 @@
+## 2026-10-09 rear57 partial hardware statistics; fresh58 source ready
+
+Rear57 is consumed/retired/unarmed, units disabled/inactive and Golden restored.
+296 real images joined owner-bound statistics through the native IPA. Probe20s
+deadline expired before400. Original both-complete stop guard returnedEBUSY:
+four-stop/DMA release was NOT proven; uncertain mappings stayed pinned until
+mandatory reboot. Zero kernel hazards; permanent Golden hashes unchanged.
+This is a failed capture with partial delivery evidence, never a full pass.
+Evidence: docs/NATIVE-RGB-REAR-GENERATION-57-20261009.json.
+
+24 private raw statistics packets validated1024 AEC regions each with4
+channels: 80-byte stride,2205 samples/channel in current126x70 Bayer cells.
+Independent decoder239 assertions/117 rejection cases per compiler passed.
+98304 actual channel records admitted. Four scheduled sensor changes
+have actual register readbacks and raw global meter responses. Exposure
+increase ratio1.79; gain increase6.73; restores lower the meter. No raw bit
+depth/full scale, calibrated black/weights, clipping decoder, same-optical-
+exposure metadata, AE or Windows quality parity is claimed. Raw/spatial data
+stays SAME SP11. Changing evening light and defective lower SP7 LCD band stay
+in the comparison context. Performance remains deferred.
+
+Fresh58 build71/lib16 passes40 source checks plus7 real libcamera tests,
+zero warnings. Original stop guard unchanged; a read-only predicate-state
+record will identify rejection. Probe35s/consumer40s and service120s/watchdog
+150s cover the observed slower statistics-qualified cadence. No OS sleep or
+Golden default change. Never retry57; never install source04 quarantine.
+Native counts178boots/89IDs/105completed streams, failed-pre12/after25.
+Combined Windows+native194boots/97IDs; Windows counts unchanged.
+Fresh58 source: docs/NATIVE-RGB-REAR-GENERATION-58-PREP-20261009.json.
+
 ## 2026-10-09 fresh rear57 statistics hardware candidate prepared
 
 Fresh rear57 source passes40 checks plus7 real libcamera tests. ARM64 kernel
