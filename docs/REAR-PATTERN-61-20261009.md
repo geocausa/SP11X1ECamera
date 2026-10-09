@@ -65,3 +65,38 @@ AE or lack of light: the raw signal is linear and far from clipping while
 the output stays near the bottom of its range. The replacement tuning must
 set output gain and tone curve from measurement. Raw full-scale is still
 undeclared; a Windows reference capture of the same pattern loop is next.
+
+## Windows reference run 62 and matched comparison
+
+SP11 booted Windows once (GRUB one-shot), captured the same SP7 loop through
+the OEM Surface Camera Rear path (3840x2160 NV12) and returned to Linux.
+Phase 0 used Windows automatic controls; phases 1-4 used manual exposure
+33.25 ms with ISO 100/200/400/800, all accepted. 7,975 frames (26.4 fps
+average, ~29 fps in manual phases). Windows clock was 4.4 s off after the
+OS switch; alignment by luminance correlation 0.963. Comparison uses one
+shared central ROI (13 grid cells, rows 2-6, cols 5-9). Values are Y (0-255).
+
+| same exposure | white Linux | white Windows | grey128 Linux | grey128 Windows | black Linux | black Windows |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1x / ISO100 | 22.2 | 59.0 | 9.2 | 23.9 | 0.2 | 1.3 |
+| 2x / ISO200 | 35.8 | 89.7 | 16.2 | 40.8 | 0.3 | 1.4 |
+| 4x / ISO400 | 57.7 | 126.1 | 27.5 | 69.3 | 0.6 | 1.7 |
+| 8x / ISO800 | 91.5 | 165.7 | 45.4 | 103.4 | 1.0 | 2.1 |
+
+Chroma distance from neutral (|U-128|+|V-128|), 8x / ISO800:
+
+| patch | Linux | Windows |
+| --- | --- | --- |
+| red | 33 | 111 |
+| green | 23 | 139 |
+| blue | 31 | 99 |
+| yellow | 19 | 61 |
+
+Windows automatic mode settles full-screen white at Y 185 with a slightly
+warm white (U 121, V 130).
+
+At identical sensor exposure Windows output is 1.8-2.7x brighter with a
+contrast (S-shaped) tone curve, and 3-6x more colour saturation. Linux
+greys stay neutral but the output lacks the final tone curve and colour
+correction that Windows applies. These matched pairs are the measurement
+basis for an independently fitted tone curve and colour matrix.
