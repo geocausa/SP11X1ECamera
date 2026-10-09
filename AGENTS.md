@@ -1,3 +1,27 @@
+## 2026-10-09 rear41 hardware cadence baseline PASS; targeted scheduler change next
+
+Three independent same-boot80-request libcamera sessions passed at4K linear
+NV12/four reused buffers:240 actual Requests,243 VB2 completions, owner1->2->3.
+Every session completed all4 stops and DMA/owner/arena cleanup, all3 sensors
+suspended, neutral graph and ISP clocks idle. No hazards/watchdog. Automatic
+distinct Golden8b3227b1-2960-45a6-8720-3ffcecc6295c; protected hashes unchanged.
+41 consumed/retired, service/timer disabled, static watchdog inactive.
+No armed test, camera jobs/nodes/modules. Never retry consumed40/41.
+
+Read-only baseline measures sensor-pipeline epochs29.948/29.953/29.954Hz,
+not sensor SOF timestamps. Real79-interval callback rates10.2426/14.9776/12.0093fps.
+Each handoff spends56.2--57.3ms in completion collection; per-handoff explicit
+epoch wait averages29.84/1.94/17.30ms and accounts for most session variation.
+Prepare3.53--4.68ms,retire4.29--5.34ms. Startup0.247--0.272s, teardown0.090--0.130s.
+Thus startup overhead is not the major bottleneck. No queue policy changed.
+NEXT fresh42 removal of extra per-handoff epoch wait; preserve strict owner/
+all10 consumed-address/live-retirement proof, mappings and4-stop failure path.
+Compare measured cadence and all3 clean sessions before any performance claim.
+Source29 checksPASS; native69/73IDs146boots/pre10/failed-after-start22,
+combined80IDs160boots. Full rate/IPA3A/SensorTimestamp/optics/longsoak incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-41-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear41 read-only cadence source qualified; hardware pending
 
 Fresh41/build52+libcamera05 adds aggregate stage timing around the exact
