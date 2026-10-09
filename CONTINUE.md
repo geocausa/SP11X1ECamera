@@ -1,3 +1,21 @@
+## 2026-10-09 rear39 two clean captures; owner1 parser assumption exposed
+
+Two same-boot libcamera processes each delivered80 real Requests,160 total,
+four reused buffers.81 VB2 completions/80handoffs+commits each, owner1->2.
+All4stops and DMA/owner/arena cleanup PASS each; no kernel hazards/watchdog.
+Explicit unique session markers and rotation-tolerant scoping worked.
+Command retirement record carries the actual owner epoch, not a bool.
+Runtime parser retained owner=1 from historical single-use proof and rejected
+successful owner2 retirement in session2; session3 not started.
+Three-session qualification FAIL; two-session restart proof remains valid.
+39 consumed/retired, units disabled; Golden76bb4540-da51-4b1a-a7d7-dacd55705373,
+protected hashes unchanged. Never retry39.
+Native63/71IDs142boots/pre10/failed-after-start22; combined78IDs156boots.
+NEXT fresh40/build51 parser takes exact session owner; actual emitted command
+retirement formats tested for1/2/3 and retained owner2 logs before hardware.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-39-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear39 explicit session scope qualified; hardware pending
 
 38 completed two clean80-request same-boot captures but harness history-prefix
