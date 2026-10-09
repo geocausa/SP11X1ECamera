@@ -1,3 +1,24 @@
+## 2026-10-10 compact rear AEC66 hardware passes native AE and clean release
+
+Fresh66 consumed once:400 real3840x2160 NV12 requests/400 native IPA joins,
+QXA2 version2 honest82016-byte AEC-only transport, failures0. Five acknowledged
+AE proposals/six exact sensor-register receipts; raw meter579.64->11295.25,
+last80 within10%of provisional12000 target. Final3206lines/gain1597.
+Callback29.9705fps, total delivery29.2159fps including lifecycle; no gaps>50ms.
+All four STOPs/DMA/cache/owner/arena release pass, graph neutral, sensors suspended.
+Candidate2f49814a-bffe-40d2-99ca-48883de3d958 returned protected Golden
+1504c8ef-270c-4543-853b-30992895d8e5, hazards0. Units disabled/inactive,
+next entry empty, consumed/retired/do-not-retry. Never rearm66.
+
+Measured63 tone/CST retained. Engineering raw target remains uncalibrated;
+settled whole-frameY51.85 is not Windows image-quality parity or confirmed
+day/night. SensorTimestamp and same-exposure association absent. Private3NV12/
+24QXA2 remain SP11; no exported pixels/spatial data. Private profile dependency,
+production UAPI, independent tuning, front AE/AWB and optical parity still block
+upstream readiness. Next front meter/optical control response qualification.
+Evidence: docs/REAR-COMPACT-AEC66-HARDWARE-20261010.json.
+Earlier entries are historical.
+
 ## 2026-10-10 native front/back upstream direction and compact rear AEC66
 
 Goal is native Linux front and rear RGB with Windows quality/function parity:
