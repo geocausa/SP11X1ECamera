@@ -1,3 +1,24 @@
+## 2026-10-09 rear44 owner-bound FULL mapping cache source qualified; hardware pending
+
+Fresh44/build57 keeps proof-retired FULL DMA-BUF mappings per exclusive owner.
+Cache move follows the ORIGINAL last all10 consumed-address/owner snapshot;
+take requires same DMA-BUF, owner/generation and unchanged mapped span. Original
+pair/aux/retirement checks remain; cache alias/dirty state rejects before exposure.
+At most4 mappings cached; full cache falls back to original proven live unmap.
+Cache physical flush validates all entries and all4 stops before releasing;
+clean reopen requires cache idle. Uncertain generation/cache stays pinned.
+31 checksPASS,3 ARM64 W1/Werror0 diagnostics; actual cache GCC/Clang ASAN/UBSAN
+models3owners/240handoffs and missing-stop/foreign/alias/stale failures.
+44 exact result identity constant tested;43 legacy label defect preserved.
+56 extractor failure and57 fixture compile repair logs preserved; no hardware.
+Libcamera05 unchanged.44 unconsumed/uninstalled/unarmed; latest hardware43.
+Native75/75IDs150boots,combined82IDs164boots; Golden37184b04 safe.
+NEXT one44 three80-request capture/cache/cadence comparison and automatic
+Golden return; retire44. Uniform30fps/IPA3A/SOF/optics/longsoak still unproven.
+Front deferred; product incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-44-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear43 proves mapping overhead; slow cadence also occurs in session3
 
 Three80-request captures PASS;240 real4K linearNV12 Requests/four reused
