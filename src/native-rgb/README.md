@@ -1,3 +1,23 @@
+## 2026-10-09 rear38 emitted scalar format fixed and qualified; hardware pending
+
+Fresh38/build49 fixes only the added snapshot log's literal backslash-n.
+Actual staged kernel format strings compile and their real stdout is accepted
+by the actual runtime parsers under GCC/Clang; the exact retired37 malformed
+formatter is compiled too and rejected. No synthetic replacement log in this check.
+26 checks PASS;3 ARM64 W1/Werror modules0 diagnostics,170 runtime negatives,
+snapshot retry2506 assertions/33negatives and gate179/31 each GCC/Clang.
+Bounded snapshot-EAGAIN read/drain and strict fatal-error admission retained.
+Three same-boot open/configure/start/80Requests/stop/release sessions required,
+with neutral graph,3 idle sensors and idle ISP clocks between each.
+38 unconsumed/uninstalled/unarmed; libcamera04 unchanged.
+37 had one clean80-request capture, then failed harness log format before session2.
+36/37 retired, never retry; Golden d2af624e safe, protected hashes unchanged.
+Native59/69IDs138boots/pre10/failed-after-start22; combined76IDs152boots.
+NEXT one38 hardware boot and mandatory Golden return, then retire38.
+No same-boot restart hardware proof, full-rate/adaptiveIPA/optics/soak claim yet.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-38-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear37 one clean80-request capture; harness record failure
 
 37/build48 delivered80 actual reused libcamera Requests through4 buffers,
