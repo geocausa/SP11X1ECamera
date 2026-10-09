@@ -1,3 +1,25 @@
+## 2026-10-09 rear43 proves mapping overhead; slow cadence also occurs in session3
+
+Three80-request captures PASS;240 real4K linearNV12 Requests/four reused
+buffers,243 VB2 completions, all4 stops/owner/DMA/arena cleanup and sensors/
+graph/clocks idle each. Rates15.164/29.947/15.2704fps; slow sessions1 AND3.
+FULL DMA-BUF mapping get+put6.69/4.90/6.56ms per handoff, accounting for
+67.3/63.2/65.1% of prepare+retire. AUX alloc+free3.00/2.62/3.27ms; zero0.098ms.
+No pixel reads, queue policy change or timing-based release authority.
+Three owners1->2->3, snapshot retries0/0/0,404epochs/878events; no hazards/watchdog.
+Automatic Golden37184b04-09d9-466c-bf49-beea1fb192a5; protected hashes unchanged.
+43 consumed/retired; units disabled/inactive. Never retry43.
+Raw runtime JSON inherited identity40 label; immutable result preserved.
+Exact43 kernel session markers, one-use root/boot manifest and CONSUMED agree;
+label was not used for admission. Fix descriptor and add assertion in next harness.
+30 source checks PASS/build55, unchanged libcamera05; native75/75IDs150boots,
+combined82IDs164boots. Uniform30fps/IPA3A/SOF/optics/longsoak unproven.
+NEXT per-session retained FULL mapping cache with exact retired-generation/
+owner proof before reuse and all4 physical stops before final cache flush.
+Front calibration deferred; product incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-43-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear43 DMA operation timing source qualified; hardware pending
 
 Fresh43/build55+unchanged libcamera05 adds aggregate timings for FULL mapping
