@@ -1,3 +1,22 @@
+## 2026-10-09 rear45 gap localized to first rolling handoff; three captures PASS
+
+240 real4K NV12 Requests; callback29.6112/29.9916/29.9672fps. Kernel first80
+completion timestamps exactly match application span/min/max each session.
+>50ms gap counts1/0/0. Sole64.002ms gap at session1 sequence1 (first handoff):
+prepare5.040897ms,collect57.047934ms,retire1.748422ms. Sessions2/3 maxima35.994/
+33.554ms. Localizes this run's gap to startup transition; allocation deadline
+causality not proven. Queue/cache/lifetime policy unchanged from44.
+All3 four-stop/cacheflush/DMA/owner/arena/graph/sensor/clock cleanup PASS;
+243 VB2 completions,250 epochs/892events; retries0; no hazards/watchdog.
+Golden cf960bf7-4050-4dae-8db6-e509ebc87d33 automatic return; protected hashes unchanged.
+45 consumed/retired, units disabled.32 source checks/build58/lib05.
+Native81 streams/77IDs154boots,combined84IDs168boots.
+NEXT longer three400-request captures to determine whether late gaps recur;
+then targeted startup optimization and IPA3A/SOF/controls/optics. Front deferred.
+Strict gap-free30fps, long soak and product parity remain unqualified.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-45-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear45 scalar gap timing source qualified; hardware pending
 
 Fresh45/build58 adds scalar first80 completion gap counts/positions and rolling
