@@ -1,0 +1,67 @@
+# Rear pattern calibration run 61 (2026-10-09)
+
+First screen-driven calibration capture. SP7 displayed a looped sequence
+(sync flashes, 12 grey levels, primaries/secondaries, 2 s each) while the
+SP11 rear camera captured 4,500 4K NV12 frames with AE off and a fixed
+exposure/gain ladder (900 frames each). Per-frame 16x9 Y/U/V grid means,
+per-frame raw IPA meter and wall-clock times were aligned to the SP7 player
+log. Pixels and grid data stay on SP11; only scalars below are published.
+
+Code: `src/native-rgb/rear-pattern61/` (capture, lib19 build, runner,
+installer, analyser). Boot: rear60 kernel/modules, own one-shot GRUB entry,
+systemd runner + 720 s watchdog. First attempt failed in 0.3 s on a capture
+bug (both NV12 planes share one dma-buf); fixed; second attempt PASS and
+returned to Golden automatically. Golden assets unchanged.
+
+## Run facts
+
+| item | value |
+| --- | --- |
+| frames | 4500 / 4500 |
+| cadence | 15.0-15.5 fps |
+| raw meter samples | 4500 |
+| SP7/SP11 alignment | offset -0.06 s, correlation 0.968 |
+| screen coverage | grid columns 0-12 of 16, all rows (57 cells r>=0.97) |
+
+Phase 0 (800 lines, 1x) is not usable: values are not monotonic with the
+displayed level, consistent with start-time controls not taking effect as
+requested. Phases 1-4 (3206 lines = 33.25 ms) are consistent.
+
+## Full-screen white and black (ROI means)
+
+| gain | white raw meter | white Y (0-255) | black raw meter | black Y |
+| --- | --- | --- | --- | --- |
+| 1x | 2813 | 8.0 | 181 | 0.46 |
+| 2x | 5350 | 13.3 | 205 | 0.56 |
+| 4x | 10647 | 22.2 | 280 | 0.91 |
+| 8x | 21510 | 36.8 | 419 | 1.45 |
+
+* Raw meter doubles per gain step (x1.90, x1.99, x2.02): sensor gain is
+  accurate and the raw path is linear and unclipped up to at least 21.5k.
+* Grey ramp top-step ratio (224->255) is 1.18 at both 4x and 8x, i.e. the
+  display response, not sensor saturation.
+* Output Y follows raw meter^~0.73 and full-screen white at the longest
+  exposure and 8x gain reaches only 36.8/255 (14%).
+
+## Colour (8x gain)
+
+| patch | Y | U | V |
+| --- | --- | --- | --- |
+| white | 36.8 | 128.2 | 127.7 |
+| red | 12.0 | 123.8 | 136.8 |
+| green | 26.0 | 123.8 | 123.1 |
+| blue | 9.9 | 136.6 | 124.5 |
+| cyan | 30.7 | 130.7 | 121.2 |
+| magenta | 19.0 | 132.6 | 133.1 |
+| yellow | 32.5 | 121.4 | 129.8 |
+
+The display white point renders neutral (U/V within 0.4 of 128).
+
+## Conclusion
+
+The dark rear image is caused by the output side of the current private
+ISP profile (gain/tone mapping from raw to NV12), not by sensor exposure,
+AE or lack of light: the raw signal is linear and far from clipping while
+the output stays near the bottom of its range. The replacement tuning must
+set output gain and tone curve from measurement. Raw full-scale is still
+undeclared; a Windows reference capture of the same pattern loop is next.
