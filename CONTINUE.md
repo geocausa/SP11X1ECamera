@@ -1,3 +1,24 @@
+## 2026-10-09 rear58 actual400 statistics joins; CSID stop residue
+
+Rear58 is consumed/retired/unarmed; units disabled/inactive; Golden restored
+boot01fb9adc-cfa7-4463-b478-4e6cbdfcb440.400 actual4K NV12 requests joined
+400 native IPA statistics packets, owner1, failed0;24 private packets saved.
+Probe exits0 after26.7s, but kernel normal stop returnsEBUSY and retains DMA.
+New trace proves both-complete predicate PASSED: both programmed, active,
+pending0, exactowner1, generations401/402. CSID quiesce returnedEBUSY before
+BUS/CDM/source stops. Thus earlier57 summary attributing failure to the
+both-complete predicate was an inference and is superseded by58 trace.
+Do not call58 clean or three-session qualified; onlyfirstsessionran.
+Zero kernel hazards, Golden protected assets unchanged. Evidence:
+docs/NATIVE-RGB-REAR-GENERATION-58-20261009.json. AE/parity stillunproven.
+Next fresh59 will stop the upstream CSIPHY then sensor after exact pair
+completion, before CSID reset/drain. Allfour stop proofs remain mandatory
+before DMA/cache/owner release; failure pins mappings and returnsGolden.
+This is a declared lifecycle-order experiment, not a relaxed stop predicate.
+Image-quality priority remains; raw/pixels stay SAME SP11, no OS sleep change.
+Native180boots/90IDs/105completed streams, failed-pre12/after26.
+Combined196boots/98IDs; Windows16boots/8IDs/8streams unchanged.
+
 ## 2026-10-09 rear57 partial hardware statistics; fresh58 source ready
 
 Rear57 is consumed/retired/unarmed, units disabled/inactive and Golden restored.
