@@ -1,3 +1,55 @@
+## 2026-10-09 rear statistics transport and IPA source qualification
+
+Rear56 remains the latest hardware result: live exposure/gain changes and
+their scoped response timing passed;56 is consumed/retired/unarmed. No new
+camera Start, reboot or candidate arm occurred in this statistics source work.
+
+New source E-NATIVE-REAR-STATISTICS-SOURCE-01 passes in quarantined source04.
+The original all-ten-WM completed-generation/replacement-address proof is
+unchanged. Six statistics allocations (WM11/12/13/14/16/18) are copied before
+AUX zero/free into an independent V4L2 metadata buffer. Image WM0/1/2/3 are
+not copied. Envelope stream/owner/request generation/sequence/completion
+timestamp bind the copied allocations to the public completion. This transport
+association does not establish same optical exposure/sensor-frame provenance. Timestamp is not SOF or
+exposure time. Capacities are opaque allocation spans, NOT decoded active
+grid lengths or a metering result. Raw/spatial statistics stay SAME SP11 only.
+
+Rear libcamera joins each successful image with the generated native IPA's
+validated receipt before completing its application Request. Duplicate,
+foreign-owner/stream, skipped sequence, dropped statistics, malformed lengths
+and mismatched timestamps are rejected. Metadata requeues only after the
+IPA callback; synchronous IPA stop precedes mapping release. Unpaired final
+tails are cancelled instead of fabricating a statistics association.
+
+Actual shared producer/receiver117 assertions/59 negatives and actual kernel
+copy hook30/23 passed under GCC and Clang with ASAN/UBSAN. ARM64 CAMSS W=1,
+KCFLAGS=-Werror compiled; generated IPA interface/proxy, pipeline and module
+compiled with zero warnings. Seven real libcamera tests passed, including
+the actual rear IPA with shared memfd maps, callbacks, rejection and restart.
+No photometric decoder, adaptive IPA, AE or image-quality parity is proven.
+Source-only stage explicitly disables rear runtime authorization and has no
+valid private profile. NEVER install/arm the source-only module.
+
+Source-only failed01 fixture indentation, failed02 unused WM constant and
+failed03 IPA option staging are preserved in original logs. Parent builder
+guard initially refused before any stage; exact source-only declaration was
+then added. Fresh04 passed; no hardware identities/counts changed.
+Native105 streams/88 IDs/176 boots; Windows8 streams/8 IDs/16 boots.
+Golden remains f8af5d50-9fab-4e7d-8489-4884c01a8e37. No OS sleep.
+
+User update2026-10-09 18:30 BST: rear is still aimed at SP7 LCD; evening
+outside light is shifting. This is contemporaneous subject information,
+not independent illumination stability or output quality proof. Healthy
+upper LCD ROI only for private comparisons; known dark lower display band
+must not be diagnosed as a camera/lens defect. Reassess lighting per capture.
+
+NEXT fresh57 runtime integration/qualification of statistics-to-IPA delivery
+and clean cancellation/stop, then verify actual payload format/grid/counts
+and exposure response before enabling bounded AE. Do not reuse56 or pretend
+opaque statistics transport is decoded photometry. Performance deferred.
+Evidence docs/NATIVE-REAR-STATISTICS-SOURCE-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 current gate after native live-control qualification
 
 Windows01/Linux55 reference comparison showed a native photometric gap.
