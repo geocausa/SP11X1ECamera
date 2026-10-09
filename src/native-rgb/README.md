@@ -1,3 +1,21 @@
+## 2026-10-09 rear37 one clean80-request capture; harness record failure
+
+37/build48 delivered80 actual reused libcamera Requests through4 buffers,
+4K linearNV12,elapsed5.64215s/rate14.179fps including start/stop.
+81 live VB2 completions,80 handoffs/commits,338 exact-owner events,163epochs.
+All4 stops, DMA/owner/arena release succeeded; both gates completed1,unpoisoned.
+New scalar queue-snapshot log contained a literal backslash-n suffix.
+Strict harness rejected that malformed record and did not start session2.
+Three-session qualification FAIL; no same-boot restart proof yet.
+Snapshot retries0: new bounded path not exercised by a race on this hardware run.
+37 consumed/retired, units disabled; automatic Golden d2af624e-1718-422c-9057-714a76b6246f,
+no watchdog or kernel hazards; protected hashes unchanged. Never retry37.
+Native59/69IDs138boots/pre10/failed-after-start22; combined76IDs152boots.
+NEXT fresh38/build49: corrected actual formatter, compiled-log parser regression,
+then three same-boot80-request sessions. Full rate/3A/optics/soak still incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-37-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear37 snapshot race repair qualified; hardware pending
 
 36 first rolling stream rejected-EAGAIN after2 VB2 buffers/1 handoff.
