@@ -1,3 +1,30 @@
+## 2026-10-09 rear44 mapping cache hardware PASS; all3 sessions near30fps
+
+Three independent80-request sessions delivered240 real4K linearNV12 Requests,
+four reused buffers,243 VB2 completions. Callback29.6292/29.643/29.9696fps;
+43 baseline15.164/29.947/15.2704. Sustained half-rate absent in44 short trial.
+Each owner1/2/3:77 cache hits/3 fresh mapping misses,80 exact proven retired
+mapping transfers;3 cached mappings held to4 physical stops, then all3 freed.
+231 hits/9 rolling map misses total,0 rolling physical FULL unmaps,9 final
+cache flush frees. Current active mapping separately reclaimed at stop.
+Prepare+retire3.283/3.432/3.025ms per handoff vs43's9.940/7.757/10.077ms.
+Original all10 consumed-address/owner/ledger/snapshot and stop guards unchanged;
+FULL retired logically before cache move, physically released after4 stops.
+Max completion gaps62.236/62.100/33.550ms; queue epoch deltas81/81/80.
+Near30fps from first session proven in this3x80 trial; strict gap-free30fps,
+residual gap timing/location/cause and long-soak reliability NOT qualified.
+All stops/DMA/owner/arena release, sensors suspended, neutral graph/idle clocks
+PASS each; retries0/0/0;251epochs/760events; no hazards/watchdog.
+Automatic Goldenc88f40bf-b0c2-4cb7-aa35-a7ded9f0488a/protected hashes unchanged.
+44 consumed/retired, units disabled/static watchdog inactive; no armed jobs.
+Exact runtime result44 identity fixed/tested;43 raw legacy label preserved.
+31 source checksPASS/build57+unchanged libcamera05. Native78/76IDs152boots,
+combined83IDs166boots. No optical reads; IPA3A/SOF/controls/optics incomplete.
+NEXT remove residual long completion gaps and longer capture/lifecycle tests;
+then semanticIPA3A/SensorTimestamp and matched Windows optics. Front deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-44-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear44 owner-bound FULL mapping cache source qualified; hardware pending
 
 Fresh44/build57 keeps proof-retired FULL DMA-BUF mappings per exclusive owner.
