@@ -1,3 +1,23 @@
+## 2026-10-09 rear39 explicit session scope qualified; hardware pending
+
+38 completed two clean80-request same-boot captures but harness history-prefix
+check rejected ring rotation before session3. First real snapshot race recovered.
+Fresh39/build50 emits identity39/session1,2,3 before each transaction.
+Runtime scopes strict mandatory records to the unique current session marker.
+Old ring history may rotate; missing/duplicate/foreign current markers fail.
+Actual retained38 scalar records with synthetic labels/history rotation and
+actual compiled current marker/gate/snapshot formats pass real runtime parsers.
+27 checks PASS,3 ARM64 W1/Werror modules0 diagnostics;200 runtime negatives.
+Bounded snapshot-EAGAIN proof retry, full cleanup and permanent failure gates
+unchanged. Libcamera04 unchanged,3 independent80-request opens remain target.
+39 unconsumed/uninstalled/unarmed;38 retired, no hazards/watchdog, Golden d695ef7f safe.
+Native61/70IDs140boots/pre10/failed-after-start22; combined77IDs154boots.
+NEXT one39 boot, strict3sessions/240Requests, mandatory Golden return and retire39.
+Two-session restart proven38; three-session qualification pending.
+Full rate, adaptiveIPA/3A, SensorTimestamp, matched optics and long soak incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-39-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear38 two clean same-boot captures; log-history harness failure
 
 Two independent libcamera processes each delivered80 real reused Requests,
