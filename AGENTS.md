@@ -1,3 +1,25 @@
+## 2026-10-09 rear37 snapshot race repair qualified; hardware pending
+
+36 first rolling stream rejected-EAGAIN after2 VB2 buffers/1 handoff.
+All startup/BL22/first-generation FULL+8aux/command retirement proofs succeeded;
+later strict observation can race IRQ publication or epoch advancement.
+Fresh37/build48 drains exact-owner events and repeats only snapshot-EAGAIN,
+bounded256 attempts at250-500us; original ownership/address/completion proof
+remains required. Hardware/address/owner errors remain immediately fatal.
+Old mappings remain held; a FULL release is never repeated if AUX proof races.
+No reprogramming, command replay or IRQ disabling occurs in a snapshot retry.
+Three clean sessions remain the target; all per-session failure gates retained.
+25 checks PASS,3 ARM64 W1/Werror modules0 diagnostics; actual retry functions
+GCC/Clang ASAN/UBSAN with persistent races, partial retirement and fatal errors.
+170 runtime admission negatives; hardware APIs in hosted checks are models.
+37 unconsumed/uninstalled/unarmed; libcamera04 unchanged. Hardware35 latest PASS.
+36 consumed/retired, no watchdog/kernel hazards; Golden11f64619 safe, hashes intact.
+Native58/68IDs136boots/pre10/failed-after-start22; combined75IDs150boots.
+NEXT one37 boot, three sessions/240 Requests; mandatory Golden return then retire.
+No same-boot restart hardware proof, full-rate/adaptiveIPA/optics/soak claim.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-37-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear36 failed first rolling stream; safely retired
 
 36/build47 completed startup packets and22 exact BL receipts, retired all4
