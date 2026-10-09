@@ -1,3 +1,21 @@
+## 2026-10-09 rear50 pre-stream harness failure; Golden safe; no optical data
+
+50 consumed once, stopped at cached test_pattern CLI-text readback before any
+sensor start:0 sensor starts/0 kernel attempt/mode/result markers/0 Requests.
+Error sensor cached test pattern readback; actual CLI text was not retained.
+Menu-label formatting is suspected, not an observed root cause. Replace this
+fragile text comparison with checked binary VIDIOC_G_CTRL readback in fresh51.
+Raw failure preserved;50 retired/unarmed, units disabled. Automatic Golden
+fc38c6fb-8188-4e9b-a04f-c19d5e0274f5; protected hashes unchanged, no hazards or
+watchdog. Native93 streams/82 consumedIDs/164 boots;11 pre-stream failures/
+23 after-start failures; combined89 IDs/178 boots.
+49 remains latest completed optical capture:9 near-black native frames in
+user-confirmed lit/uncovered scene. Image quality BLOCKED; no parity.
+NEXT fresh51 scene/pattern/scene, actual sensor exposure/gain/pattern registers,
+binary cached control admission, unchanged ISP/queue/lifetime/Golden safeguards.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-50-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear50 sensor/pattern diagnostic source PASS; hardware pending
 
 Image-quality defect49 remains blocked: nearly black native NV12 in a user-
