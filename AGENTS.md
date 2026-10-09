@@ -1,3 +1,24 @@
+## 2026-10-09 fresh rear57 statistics hardware candidate prepared
+
+Fresh rear57 source passes40 checks plus7 real libcamera tests. ARM64 kernel
+and generated IPA/pipeline compile with zero warnings. Build70 has an ordinary
+valid private profile; never use the quarantined statistics source04 module.
+Fresh lib15 includes the rear IPA, proxy worker and qualification-only recorder.
+Each successful image requires the IPA-validated envelope and matching driver
+completion timestamp. Raw statistics are opaque allocation capacities; same
+optical exposure provenance, photometry decoding, AE and quality parity remain
+unproven. Original replacement, retirement, cache and four-stop policies are
+preserved; final tails without statistics are cancelled.
+
+The one-shot57 will run three400-request sessions with four existing manual
+sensor changes each.24 private raw packets per session cover before/after
+each change; spatial payloads and pixels remain SAME SP11. SP7 LCD subject,
+known dark lower display band and changing evening illumination remain in the
+comparison context. Performance work stays deferred. Golden permanent assets
+and default are protected; mandatory return, no same-boot retry, retire57.
+Before hardware execution56 remains the latest consumed/retired result.
+Source evidence: docs/NATIVE-RGB-REAR-GENERATION-57-PREP-20261009.json.
+
 ## 2026-10-09 rear statistics transport and IPA source qualification
 
 Rear56 remains the latest hardware result: live exposure/gain changes and
