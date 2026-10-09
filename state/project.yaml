@@ -183,8 +183,8 @@ native_rgb_driver_current:
   rear_restart_source_session_limit: 3
   rear_restart_any_failure_poisoned: true
   rear_generation35_evidence: docs/NATIVE-RGB-REAR-GENERATION-35-20261008.json
-  rear_latest_successful_hardware_identity: E-NATIVE-REAR-GENERATION-47
-  rear_current_libcamera_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261009-06
+  rear_latest_successful_hardware_identity: E-NATIVE-REAR-GENERATION-55
+  rear_current_libcamera_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261009-11
   rear_continuous_capture_proof_application_requests: 1200
   rear_continuous_capture_proof_live_VB2: 1203
   rear_application_buffers_reused: 4
@@ -240,7 +240,10 @@ native_rgb_driver_current:
   custom_userspace_camera_runtime_required: false
   kernel_only_automatic_3a_established: false
   software_product_pivot_superseded: true
-  next_gate: Windows01_native_optical_reference_then_fresh_Linux55_private_comparison
+  next_gate: Implement bounded automatic exposure/gain in native libcamera IPA with
+    real sensor-control timing, then privately validate tone/color/detail against
+    new Windows one-shot references as needed. No more cadence optimization until
+    image-quality baseline.
   rear_iq_binding_source_qualified: true
   rear_BF_selector1_retained_bytes_exact: 1200
   rear_explicit_inactive_cold_gamma_integrated: true
@@ -333,7 +336,7 @@ native_rgb_driver_current:
   analogue_digital_raw_distribution_response_proven: true
   raw_optical_mean_response_qualified: false
   raw_control_evidence: docs/NATIVE-RGB-FRONT-RAW-CONTROL-01-20261007.json
-  current_golden_boot_id: af7a7ecc-dfd2-43df-91aa-9c82bcb7e3a5
+  current_golden_boot_id: 3a0fcc8a-5d9f-49e2-81ce-644e19f382de
   latest_control_response_evidence: docs/NATIVE-RGB-FRONT-CONTROL-RESPONSE-04-20261007.json
   all_three_control_response_delays_frames: 2
   qualified_changes_per_field_across_two_boots: 12
@@ -343,8 +346,8 @@ native_rgb_driver_current:
   linux_bracket_baseline_relative_change: 0.029072068567840944
   windows_auto_linux_manual_output_gap_observed: true
   matched_sensor_settings_optical_comparison_qualified: false
-  combined_native_windows_workstream_boots: 182
-  combined_native_windows_consumed_identities: 91
+  combined_native_windows_workstream_boots: 190
+  combined_native_windows_consumed_identities: 95
   room_lights_on_user_report_utc: 2026-10-07 18:26:29+00:00
   room_lights_current_user_report: false
   room_lights_off_user_report_utc: 2026-10-07 20:37:51+00:00
@@ -365,22 +368,22 @@ native_rgb_driver_current:
   windows_front_light_reference_passed: true
   windows_front_light_distinct_samples: 16
   windows_front_light_reference_evidence: docs/NATIVE-RGB-WINDOWS-FRONT-LIGHT-01-20261007.json
-  windows_oracle_boot_and_golden_return_count: 14
-  windows_oracle_consumed_identities: 7
-  windows_oracle_completed_streams: 7
+  windows_oracle_boot_and_golden_return_count: 16
+  windows_oracle_consumed_identities: 8
+  windows_oracle_completed_streams: 8
   unqualified_sensor_timestamp_published: false
   automatic_3a_proven: false
-  completed_sensor_streams_this_workstream: 93
+  completed_sensor_streams_this_workstream: 102
   failed_pre_stream_attempts_this_workstream: 12
-  failed_capture_after_stream_start_this_workstream: 23
-  consumed_candidate_identities_this_workstream: 84
-  completed_candidate_and_golden_boots_this_workstream: 168
+  failed_capture_after_stream_start_this_workstream: 24
+  consumed_candidate_identities_this_workstream: 87
+  completed_candidate_and_golden_boots_this_workstream: 174
   rear_generation48_evidence: docs/NATIVE-RGB-REAR-GENERATION-48-20261009.json
   rear_generation48_consumed_and_retired: true
   rear_startup_prefetch_hardware_proven: true
   rear_startup_prefetch_three400_no_over50ms_gaps: true
   rear_no_long_gap_actual_callback_interval_scope: 1197
-  rear_current_source_head: db2b25f6628bc076b22d03aa8c2b26b2dc76c8a0
+  rear_current_source_head: 17bd8267ddb830b47fed690faa7056b7d5546d8d
   rear_full_prestartup_mapping_per_session:
   - 1
   - 1
@@ -394,11 +397,11 @@ native_rgb_driver_current:
   rear_image_quality_priority_date: '2026-10-09'
   rear_image_quality_gate_plan: docs/REAR-IMAGE-QUALITY-GATE-20261009.md
   rear_more_cadence_optimization_deferred_until_image_baseline: true
-  rear_current_native_NV12_optical_capture_performed: false
+  rear_current_native_NV12_optical_capture_performed: true
   rear_generation49_evidence: docs/NATIVE-RGB-REAR-GENERATION-49-20261009.json
   rear_generation49_consumed_and_retired: true
   rear_native_optical_capture_performed: true
-  rear_image_quality_gate: MANUAL_EXPOSURE_GAIN_RESPONSE_PROVEN_AUTOMATIC_CONTROL_AND_VISUAL_QUALITY_PENDING
+  rear_image_quality_gate: WINDOWS_NATIVE_BASELINE_CAPTURED_LINUX_PHOTOMETRY_GAP_AUTOMATIC_CONTROL_AND_VISUAL_QUALITY_PENDING
   rear_image_quality_root_cause_identified: false
   rear_private_native_frames: 9
   rear_private_preview_hypotheses: 27
@@ -459,12 +462,11 @@ native_rgb_driver_current:
   rear_automatic_exposure_implemented: false
   rear_visual_quality_qualified: false
   rear_generation55_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-55-PREP-20261009.json
-  rear_generation55_consumed: false
+  rear_generation55_consumed: true
   rear_generation55_armed: false
   rear_Windows_GRUB_one_shot_quality_reference_authorized: true
   rear_Windows_current_reference_identity: E-WINDOWS-REAR-QUALITY-20261009-01
-  rear_Windows_current_reference_pending: true
-
+  rear_Windows_current_reference_pending: false
   rear_actual_built_libipa_AF_and_weight_helpers: true
   rear_complete_current_retained_register_words_exact: 2268
   rear_complete_current_source_input_preflight_evidence: docs/NATIVE-RGB-REAR-SOURCE-INPUTS-20261007.json
@@ -536,8 +538,12 @@ native_rgb_driver_current:
   rear_mode1_first_Epoch0_fresh_boot_reproductions: 8
   rear_CCIF_source_audit: docs/NATIVE-RGB-REAR-CCIF-SOURCE-AUDIT-20261008.json
   rear_initial_error_class: CCIF_protocol
-  rear_initial_CCIF_source_client_bits: [20, 23]
-  rear_later_image_size_client_bits: [0, 1]
+  rear_initial_CCIF_source_client_bits:
+  - 20
+  - 23
+  rear_later_image_size_client_bits:
+  - 0
+  - 1
   windows_rear_CCIF_evidence: docs/NATIVE-RGB-WINDOWS-REAR-CCIF-01-20261008.json
   Windows_rear_WM20_23_disabled: true
   Windows_rear_first_Epoch_CCIF_detail_zero: true
@@ -552,8 +558,8 @@ native_rgb_driver_current:
   rear_TOP_IPP_fault_module_name: CLC_SPARSE_PD_EXT
   rear_TOP_IPP_status_is_module_id_not_bitmap: true
   rear_sparse_config_source_audit: docs/NATIVE-RGB-REAR-SPARSE-REGISTER-SOURCE-AUDIT-20261008.json
-  rear_sparse_CFG0_register: 0x6960
-  rear_LCR_CFG0_register: 0x6b60
+  rear_sparse_CFG0_register: 26976
+  rear_LCR_CFG0_register: 27488
   rear_sparse_missing_initialization_hypothesis_proven: false
   windows_rear_sparse_reference_identity: E-NATIVE-REAR-SPARSE-WINDOWS-01
   windows_rear_sparse_prepared: true
@@ -641,7 +647,6 @@ native_rgb_driver_current:
   rear_event_queue_storage_capacity: 16
   rear_event_queue_hosted_threaded_events: 4096
   rear_event_queue_software_retirement_grants_image_DMA_release: false
-
   rear_generation26_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-26-PREP-20261008.json
   rear_live_replacement_observer_source_qualified: true
   rear_live_replacement_observer_hardware_qualified: true
@@ -667,12 +672,27 @@ native_rgb_driver_current:
   rear_live_auxiliary_release_source_qualified: true
   rear_generation29_source_only_unconsumed: false
   rear_live_auxiliary_release_proven: true
-  rear_live_command_recycling_proven: false
   rear_generation29_evidence: docs/NATIVE-RGB-REAR-GENERATION-29-20261008.json
   rear_generation29_consumed_and_retired: true
   rear_generation29_units_disabled: true
   rear_live_all_output_generation_retirement_scope: first_completed_output_generation_only_old_commands_and_all_replacement_outputs_retained_no_requeue
   rear_generation29_Golden_return_boot_id: a516a2a1-3bd5-44d4-8abc-64b2d68df545
+  rear_generation55_retired: true
+  rear_generation55_consumed_and_retired: true
+  rear_generation55_evidence: docs/NATIVE-RGB-REAR-GENERATION-55-20261009.json
+  rear_current_kernel_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-68
+  rear_Windows_current_reference_consumed_and_retired: true
+  rear_Windows_current_reference_evidence: docs/WINDOWS-REAR-QUALITY-20261009-01.json
+  rear_Windows_Linux_private_native_comparison_evidence: docs/WINDOWS01-LINUX55-PRIVATE-COMPARISON-20261009.json
+  rear_Windows_Linux_private_comparison_performed: true
+  rear_Windows_Linux_visual_quality_parity_proven: false
+  completed_streams_this_workstream: 102
+  consumed_identities_this_workstream: 87
+  rear_units_disabled: true
+  rear_candidate_retired: true
+  rear_scene55_independent_lit_stability_confirmation: false
+  rear_ambient_day_night_classification_proven: false
+
 e012b_rgb_product_unactivated_install:
   experiment: E012B
   next_experiment: E012C

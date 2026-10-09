@@ -1,3 +1,41 @@
+## 2026-10-09 actual Windows01 / Linux55 private native comparison complete
+
+One-shot GRUB Windows quality01 completed eight distinct OEM rear 4K NV12
+samples; three native originals remain private on the SAME SP11. Exposure
+and ISO auto flags true; their nominal numbers are not sensor readbacks.
+White-balance auto is null/unproven. Windows task unregistered, identity
+consumed/retired, clean release and Golden return verified. Never retry01.
+
+Fresh Linux55/build68/lib11 completed 3x400 real libcamera Requests with
+four reused application buffers, default/high/default actual sensor
+readbacks 1600/128 -> 3206/1024 -> 1600/128, digital BGR1024, pattern0.
+All four stops, owner/DMA/arena/cache release and sensor/graph/clock cleanup
+passed; no kernel hazard/watchdog. Golden3a0fcc8a-5d9f-49e2-81ce-644e19f382de
+verified unchanged, next_entry empty, units disabled;55 consumed/retired.
+
+Native Windows saved bytes reproduce original scalar metrics. SAME-SP11
+read-only NTFS comparison completed, partition unmounted. Windows native
+Y means84.106-85.216 versus Linux default8.029-8.038 / restored7.032-7.045,
+high61.036-61.286. High-setting coarse scene correlation0.9499-0.9507,
+original orientation, approximate8-native-pixel shift. Windows within-run
+coarse correlation0.9998. Linux writes were386-416seconds after reference;
+file times are not capture times. This supports broadly similar content,
+not identical lighting/content or quality parity. Chroma differs;
+matrix/range/transfer and actual Windows controls are not matched.
+No reliable ambient day/night, true SNR, focus/color/visual parity proof.
+Private unscaled native-Y comparison is available locally on SP11 only.
+
+Counts: native102 streams/87 consumed IDs/174 boots; Windows8/8/16;
+combined95 IDs/190 boots. Source17bd8267ddb830b47fed690faa7056b7d5546d8d.
+Evidence docs/WINDOWS-REAR-QUALITY-20261009-01.json,
+docs/NATIVE-RGB-REAR-GENERATION-55-20261009.json and
+docs/WINDOWS01-LINUX55-PRIVATE-COMPARISON-20261009.json.
+NEXT bounded native libcamera IPA automatic exposure/gain with qualified
+sensor-control timing, then tone/color/detail calibration against private
+Windows references. Image quality remains first; performance deferred.
+User authorizes future one-shot Windows comparisons whenever useful.
+Earlier entries are historical.
+
 ## 2026-10-09 on-demand Windows quality oracle; fresh Linux55 comparison ready
 
 User explicitly authorizes repeated one-shot GRUB Windows reference captures

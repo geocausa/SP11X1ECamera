@@ -19,3 +19,21 @@ Cross-boot scene stability/registration, color range/matrix, ambient lux,
 recognizable detail, true SNR/color/focus and full parity remain unproven
 unless independently measured. Camera-rendered brightness is not ambient
 light measurement; the wall clock does not prove whether a scene is lit.
+
+## Windows01 / Linux55 actual result
+
+Both identities are consumed and retired; never rerun them. Windows saved
+native bytes reproduced original scalar metrics during SAME-SP11 read-only
+NTFS analysis. Linux completed three400-request sessions with full cleanup.
+Windows Y mean84.106-85.216; Linux default7.032-8.038, high61.036-61.286.
+High-setting coarse scene correlation0.9499-0.9507 supports broadly similar
+scene structure; exact cross-boot lighting/content stability remains unproven.
+Exposure/ISO auto flags were true; nominal values are not sensor readbacks.
+White-balance auto was null/unproven. No ambient day/night or full IQ parity.
+
+compare-native-01.py is fixed to these retired identities for local analysis.
+Its --selftest uses only synthetic grids (six alignment/geometry assertions).
+The private report and unscaled Y viewing panel remain on SP11; only scalar
+JSON/code are versioned. Downsampled residual correlation is not a focus,
+resolution, SNR or noise-quality metric. Windows partition was unmounted
+after analysis. Evidence: docs/WINDOWS01-LINUX55-PRIVATE-COMPARISON-20261009.json.
