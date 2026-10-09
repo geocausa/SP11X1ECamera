@@ -1,3 +1,29 @@
+## 2026-10-09 rear59 hardware statistics and clean repeated capture passed
+
+Rear59 completed three 400-request sessions: 1,200 actual 4K NV12 images
+paired with native IPA statistics. Moving CSIPHY then sensor stop before
+CSID reset/drain fixed the observed teardown failure. All four stop barriers,
+DMA/cache/owner/arena release, sensor/graph/clock cleanup passed every session.
+59 is consumed/retired/unarmed, units disabled and Golden restored at
+29dbb50a-0a2a-4170-a9ad-5a89bd95aa75; protected hashes unchanged, zero hazards.
+Never retry59. Evidence: docs/NATIVE-RGB-REAR-GENERATION-59-20261009.json.
+
+72 private packets decoded 294,912 normal AEC channel records. Exact driver
+completion times pair with sampled NV12 global Y to within UAPI rounding.
+Meter/Y correlation is 0.996-0.999 across the three sessions; all twelve
+scheduled control directions agree. This proves the fixed-mode field layout
+and usable brightness feedback, not raw full-scale/black calibration or
+same optical exposure metadata. Evidence: docs/NATIVE-RGB-REAR-AEC-59-20261009.json.
+Images remain underexposed at the conservative eightfold gain limit. Next:
+opt-in bounded native IPA exposure controller with conservative 16x ceiling,
+explicit engineering raw target (quality calibration pending), settling guard,
+actual register readbacks and a fresh60 convergence/clipping capture.
+No AE or Windows parity pass yet. Performance remains deferred; current
+statistics-qualified cadence is about15fps, not a full-rate qualification.
+All raw statistics and pixels remain SAME SP11. No OS sleep changes.
+Native182boots/91IDs/108completed streams, failed-pre12/after26.
+Combined198boots/99IDs; Windows16boots/8IDs/8streams unchanged.
+
 ## 2026-10-09 fresh59 upstream-stop-before-CSID source qualified
 
 Fresh59 build72/lib17 passes41 source checks plus7 real libcamera tests,
