@@ -1,3 +1,29 @@
+## 2026-10-09 rear48 startup preallocation hardware PASS; no long gaps
+
+1200 actual4K linearNV12 Requests, three400 sessions, four reused appbuffers.
+Callback29.9543/29.9619/29.9609fps;0 >50ms gaps across all1197 intervals.
+Full400 maxgaps33.556/35.885/35.901ms; no first-handoff stall observed.
+First rolling FULL+8AUX allocation moved before pipeline power:1.715456/
+5.104026/2.282674ms; same-owner exact nextgen transfer once each, FIFO intact.
+Original all10 consumed snapshot/ledger/owner and all4 stops unchanged.
+400 handoffs/updates each;1203VB2 completions include3 STOP extras.
+397 cachehits/2 rolling misses each +1 prestartup mapping each;1191hits/
+6rolling misses+3 prestartup maps;9 total new mappings.400 logical retirements
+each;3 cached mappings physically flushed after all4 stops each. Rolling FULL
+get399/AUXalloc3192 vs FULLretire400/AUXfree3200: preallocation accounted.
+1209epochs/3591events,retries0; clean owner/DMA/arenas/graph/all3sensors/5clocks
+each; no hazards/watchdog. Automatic Golden89ea6ddb-103d-46d5-a756-c003f06e94d5,
+protected hashes unchanged.48 consumed/retired/unarmed; units disabled.
+35 sourcechecks/build61/lib06; changes+scalar evidence committed.
+Native90streams/80IDs160boots,combined87IDs174boots; failedafterstart23.
+This is one candidate boot with3 starts, not universal startup/longsoak parity.
+First callback latency246.561/424.371/375.751ms; no overall latency improvement
+claim. Timing association supports preallocation; causality remains inference.
+NEXT independent-boot repeat, longer capture/stop-reopen soak, then semantic
+IPA3A/controls/SensorTimestamp/SOF and Windows optical parity. Front deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-48-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear48 startup allocation source qualified; hardware pending
 
 Fresh48/build61, unchanged lib06/probe400. First rolling FULL+8AUX set is
