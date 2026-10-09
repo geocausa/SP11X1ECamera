@@ -1,0 +1,218 @@
+{
+  "identity": "E-NATIVE-REAR-GENERATION-66",
+  "status": "PASS_COMPACT_AEC66_SOURCE_PREP_NOT_INSTALLED",
+  "base_source_head": "8186b59b8e4bb23ce28489ac31f8e9e5babdb4d1",
+  "kernel_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261010-67",
+  "libcamera_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261010-21",
+  "format": "QXA2",
+  "version": 2,
+  "wire_bytes": 82016,
+  "active_AEC_bytes": 81920,
+  "absent_statistics_fabricated": false,
+  "hosted": {
+    "status": "PASS_COMPACT_AEC_V2_IDENTICAL_KERNEL_USER_PACKER_AND_DECODER",
+    "hardware_access": false,
+    "kernel_and_user_algorithm_identical": true,
+    "actual_kernel_types_only_shimmed": true,
+    "wire_bytes": 82016,
+    "active_AEC_bytes": 81920,
+    "absent_statistics_fabricated": false,
+    "legacy_QXR1_rejected": true,
+    "results": [
+      {
+        "compiler": "gcc",
+        "mode": "user",
+        "status": "PASS_EXACT_ACTIVE_PREFIX_AND_NO_OTHER_DMA_READ",
+        "assertions": 43,
+        "negative_cases": 13,
+        "guard_page_tail_and_absent_planes": true,
+        "output_canaries": true
+      },
+      {
+        "compiler": "gcc",
+        "mode": "kernel",
+        "status": "PASS_EXACT_ACTIVE_PREFIX_AND_NO_OTHER_DMA_READ",
+        "assertions": 43,
+        "negative_cases": 13,
+        "guard_page_tail_and_absent_planes": true,
+        "output_canaries": true
+      },
+      {
+        "compiler": "clang",
+        "mode": "user",
+        "status": "PASS_EXACT_ACTIVE_PREFIX_AND_NO_OTHER_DMA_READ",
+        "assertions": 43,
+        "negative_cases": 13,
+        "guard_page_tail_and_absent_planes": true,
+        "output_canaries": true
+      },
+      {
+        "compiler": "clang",
+        "mode": "kernel",
+        "status": "PASS_EXACT_ACTIVE_PREFIX_AND_NO_OTHER_DMA_READ",
+        "assertions": 43,
+        "negative_cases": 13,
+        "guard_page_tail_and_absent_planes": true,
+        "output_canaries": true
+      },
+      {
+        "compiler": "g++",
+        "label": "receiver",
+        "status": "PASS_COMPACT_AEC_V2_RECEIVER",
+        "assertions": 120,
+        "negative_cases": 60
+      },
+      {
+        "compiler": "g++",
+        "label": "decoder",
+        "status": "PASS_ACTUAL_REAR_NORMAL_AEC_DECODER",
+        "assertions": 239,
+        "negative_cases": 117
+      },
+      {
+        "compiler": "clang++",
+        "label": "receiver",
+        "status": "PASS_COMPACT_AEC_V2_RECEIVER",
+        "assertions": 120,
+        "negative_cases": 60
+      },
+      {
+        "compiler": "clang++",
+        "label": "decoder",
+        "status": "PASS_ACTUAL_REAR_NORMAL_AEC_DECODER",
+        "assertions": 239,
+        "negative_cases": 117
+      }
+    ]
+  },
+  "runtime": {
+    "status": "PASS_COMPACT_AEC66_RUNTIME_RECEIPTS_AND_PRESERVED_LIFECYCLE",
+    "unchanged_runtime_functions": [
+      "need",
+      "run",
+      "save",
+      "camera_clock_snapshot",
+      "sensors",
+      "states",
+      "validate_formats",
+      "live_observation",
+      "live_retirement",
+      "live_aux_retirement",
+      "command_receipts",
+      "command_retirement",
+      "rear_queue",
+      "rear_cadence",
+      "rear_startup_prefetch",
+      "rear_dma_timing",
+      "rear_full_cache",
+      "validate_probe_cadence",
+      "rear_gap_timing",
+      "prefix_probe",
+      "validate_longer_probe",
+      "validate_optical_probe",
+      "validate_trial_totals",
+      "session_log",
+      "queue_snapshot",
+      "validate_idle_clocks",
+      "session_gate",
+      "rear_sensor_controls",
+      "set_rear_test_pattern",
+      "rear_photometric_plan",
+      "set_rear_photometric_controls",
+      "validate_rear_photometric_controls"
+    ],
+    "negative_receipt_cases": 14,
+    "synthetic_fixture_only": true,
+    "hardware_access": false,
+    "baseline_runtime_policy_unchanged": true,
+    "private_wire_extent": 82016
+  },
+  "stop": {
+    "status": "PASS_ACTUAL_EARLY_SOURCE_STOP_ORDER_AND_FAILURE_PINNING",
+    "actual_pair_stop_function_executed": true,
+    "hardware_stop_helpers_mocked": true,
+    "DMA_release_requires_all_four_proofs": true,
+    "completion_guard_unchanged": true,
+    "hardware_access": false,
+    "results": [
+      {
+        "compiler": "gcc",
+        "ASAN_UBSAN_Werror": true,
+        "assertions": 142,
+        "fault_and_denial_cases": 13,
+        "all_four_stops_before_reclaim": true,
+        "source_stop_before_CSID": true
+      },
+      {
+        "compiler": "clang",
+        "ASAN_UBSAN_Werror": true,
+        "assertions": 142,
+        "fault_and_denial_cases": 13,
+        "all_four_stops_before_reclaim": true,
+        "source_stop_before_CSID": true
+      }
+    ]
+  },
+  "copy_guard": [
+    {
+      "status": "PASS_REAR_STATISTICS_COPY_ADMISSION",
+      "assertions": 30,
+      "negative_cases": 23
+    },
+    {
+      "status": "PASS_REAR_STATISTICS_COPY_ADMISSION",
+      "assertions": 30,
+      "negative_cases": 23
+    }
+  ],
+  "real_libcamera_tests": [
+    {
+      "name": "controls - libcamera:control_info",
+      "result": "OK"
+    },
+    {
+      "name": "controls - libcamera:control_value",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:camss-x1e-rear-ipa",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:fixedpoint",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:histogram",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:interpolator",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:pwl",
+      "result": "OK"
+    }
+  ],
+  "compiler_warnings": 0,
+  "declared_kernel_changes": [
+    "camss/native-rear-generation-identity.h",
+    "camss/native-rear-generation-hook.inc",
+    "camss/native-rear-stats.h",
+    "camss/camss-e007t-gamma151.inc",
+    "camss/native-rear-startup-iq.inc"
+  ],
+  "remaining_kernel_sources_byte_identical_to_verified73": true,
+  "measured63_tone_colour_retained": true,
+  "original_three_clean_session_limit_retained": true,
+  "source_only_failed_stage66_preserved": true,
+  "one_shot_requests": 400,
+  "automatic_exposure_opt_in": true,
+  "raw_target_engineering_only": 12000,
+  "hardware_qualified": false,
+  "Windows_parity": false,
+  "upstream_UAPI_allocation_claimed": false,
+  "private_baseline_profile_dependency_remains": true,
+  "no_OS_sleep": true
+}

@@ -1,3 +1,38 @@
+## 2026-10-10 native front/back upstream direction and compact rear AEC66
+
+Goal is native Linux front and rear RGB with Windows quality/function parity:
+V4L2/Media Controller kernel sensor/CAMSS/ISP support, libcamera pipeline/IPA
+and independently measured redistributable tuning. Webcam loopback is optional
+compatibility work; unfinished source is preserved in8186b59b. Temporary bridge
+stopped without module unloading; Golden restored19241b94-b890-44ee-94d2-30ea573f9d56.
+Golden assets/default unchanged. Spent61/63 services disabled. Never unload
+camera modules while desktop clients own their nodes; earlier UAF was real.
+
+Claude63 completed4500 frames with clean four-stop/DMA/owner release. Measured
+tone/colour improvement is chart-scoped, not general lighting or Windows parity.
+Daily65 improved throughput but its QXR1 contract falsely described zero-filled
+unused statistics as full captured planes. Fresh66 replaces it with experimental
+QXA2 version2:96-byte header +81920 active normal AEC bytes, WM11 only, remaining
+lengths0. Six source allocations still require original exact lifetime proof.
+No conditional kernel/user packing algorithm; actual guard-page tests pass both.
+
+Fresh kernel stage67/lib21 builds zero warnings;7 real libcamera tests pass.
+Kernel/user pack tests43 assertions/13 negatives each compiler/mode; receiver
+120/60 and decoder239/117 each C++ compiler; actual copy guard30/23 and stop
+142/13 per compiler.32 lifecycle parser functions unchanged;14 new receipt
+negatives. Private source-only failed stage66 is preserved, never installed.
+Prepared hardware66 is one400-frame native AE test, target12000 engineering
+units,16x bound, all cleanup proofs mandatory, automatic Golden. No hardware
+or upstream-readiness claim yet. Baseline private profile dependency remains.
+
+Front RGB already has qualified30fps manual request controls via delayed
+controls (request04); automatic controls and image-quality calibration remain.
+Next advance front metering/control feedback and matched optical tests after
+compact rear validation. No OS sleep changes. Pixels/spatial data SAME SP11.
+Earlier counter totals are verified only through59; later counts need audit.
+Evidence: docs/REAR-COMPACT-AEC66-PREP-20261010.json.
+Earlier entries are historical.
+
 ## 2026-10-09 fresh60 opt-in native IPA automatic exposure source ready
 
 Fresh60 build73/lib18 passes41 retained kernel/lifecycle source checks and7
