@@ -100,3 +100,25 @@ contrast (S-shaped) tone curve, and 3-6x more colour saturation. Linux
 greys stay neutral but the output lacks the final tone curve and colour
 correction that Windows applies. These matched pairs are the measurement
 basis for an independently fitted tone curve and colour matrix.
+
+## Measured tone curve and colour matrix (run 63)
+
+From the matched 61/62 pairs the current Linux output path was inverted to
+linear camera RGB and fitted to the Windows output: one monotone 12-bit tone
+curve (257 samples, from 40 grey points) for the IFE Gamma1.5 LUT, and a
+gamma-domain 3x3 colour matrix (rows sum to 1, greys stay neutral) folded
+into CST12 as BT.601 x matrix. Values: `tuning/rear-ov13858-measured-v1.json`.
+Module built from the rear60 sources with only those two changes
+(`build-tone63.py`); capture run 63 repeated run 61 exactly. PASS, 4,500
+frames, returned to Golden.
+
+| vs Windows (same exposure) | run 61 (old) | run 63 (measured tuning) |
+| --- | --- | --- |
+| mean abs Y error (0-255) | 27.3 | 6.3 |
+| mean chroma error | 19.7 | 9.0 |
+| white level ratio 1x/2x/4x/8x | 0.38/0.40/0.46/0.55 | 0.92/0.93/0.91/0.94 |
+| colour saturation ratio | 0.20 | 0.98 |
+
+Remaining: saturated colours at high gain up to ~30 levels too bright;
+Windows renders this white slightly warm while Linux keeps it neutral;
+real-illuminant white balance/colour still to be measured.
