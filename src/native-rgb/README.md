@@ -1,3 +1,22 @@
+## 2026-10-09 rear46 three400 captures physically clean; final aggregate harness failed
+
+All1200 real4K NV12 Requests completed; three400 sessions callback29.8859/
+29.8841/29.8859fps.397 cache hits/3misses each; all4 stops/cacheflush/owner/DMA/
+arena/graph/sensors/clocks cleanup PASS. Each has one62.5ms gap at sequence1;
+no >50ms gaps after first80. Prefix kernel/application timestamps exact.
+Raw final status FAIL: final aggregate mistakenly still required240 despite
+recorded1200. This is a harness failure, not promoted to full qualification PASS.
+All three physical completed streams counted; failed-after-start counter23.
+1203 VB2,1212epochs/3380events,retries0; no hazards/watchdog.46 consumed/retired.
+Golden dda8274c-5a6f-4292-aa34-a8fd24735a3f; protected hashes unchanged; units disabled.
+Native84streams/78IDs156boots,combined85IDs170boots. Latest full qualification45.
+NEXT fresh47 final1200 total validation+real retained46 scalar negative tests,
+rerun three400 under fresh identity then automatic Golden return/retire.
+Never retry46; immutable raw failure preserved. Product/long-soak/IPA/SOF/
+optical parity incomplete. Front calibration deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-46-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear46 three400-request duration extension source qualified; hardware pending
 
 Fresh46/build59/lib06 targets3x400=1200 real4K NV12 Requests/four reusedbuffers.
