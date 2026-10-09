@@ -1,3 +1,24 @@
+## 2026-10-09 rear38 two clean same-boot captures; log-history harness failure
+
+Two independent libcamera processes each delivered80 real reused Requests,
+160 total,4K linearNV12/four buffers per session. Same boot, no module reload.
+Owner epochs1->2; each81 VB2 completions/80handoffs+commits and4 clean stops,
+DMA/owner/arena releases. First session used1 bounded-EAGAIN snapshot retry:
+hardware read/drain repair now exercised; second used0. No hardware errors/hazards.
+All3 sensors suspended and neutral graph proven before session2; ISP clocks
+idle after both. Second final sensor state not recorded by stopped harness.
+Rates11.8539/13.0545fps including start/stop, full rate still unqualified.
+Harness required complete dmesg history as prefix; kernel ring rotation
+invalidated that condition after session2. Third session did not start.
+Three-session qualification FAIL; two-session same-boot restart hardware proven.
+38 consumed/retired, units disabled; Golden d695ef7f-7361-4a4d-ab29-728a26ce39d1,
+no watchdog, protected hashes unchanged. Never retry38.
+Native61/70IDs140boots/pre10/failed-after-start22; combined77IDs154boots.
+NEXT fresh39/build50 unique per-session markers and rotation-tolerant strict
+record scoping; then complete3sessions/240Requests and mandatory Golden return.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-38-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear38 emitted scalar format fixed and qualified; hardware pending
 
 Fresh38/build49 fixes only the added snapshot log's literal backslash-n.

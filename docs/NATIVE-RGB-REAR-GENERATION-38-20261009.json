@@ -1,0 +1,271 @@
+{
+  "identity": "E-NATIVE-REAR-GENERATION-38",
+  "status": "FAIL_THREE_SESSION_HARNESS_HISTORY_ADMISSION_AFTER_TWO_CLEAN80_REQUEST_SESSIONS",
+  "runtime_status": "FAIL_REAR_GENERATION_DIAGNOSTIC",
+  "runtime_error": "dmesg history must remain intact",
+  "candidate_boot": "c2e96942-3a69-4ccc-b60c-d063438d3a86",
+  "sessions": [
+    {
+      "session": 1,
+      "probe": {
+        "status": "PASS_LIBCAMERA_REAR_CONTINUOUS_REQUEST_REUSE",
+        "completed_frames": 80,
+        "width": 3840,
+        "height": 2160,
+        "stride": 3840,
+        "image_bytes": 12441600,
+        "logical_planes": 2,
+        "pixel_bytes_read": 0,
+        "SensorTimestamp_present": false,
+        "stop_and_release": true,
+        "application_buffers": 4,
+        "reused_requests": true,
+        "elapsed_seconds": 6.74886,
+        "completion_rate_fps": 11.8539
+      },
+      "kernel_result": {
+        "ret": 0,
+        "composed": 1,
+        "once": 1,
+        "prepared": 1,
+        "owner": 1,
+        "packets": "1111",
+        "epochs": 196,
+        "events": 196,
+        "slot0": 1,
+        "slot1": 1,
+        "complete": 1,
+        "csid_stop": 1,
+        "bus_stop": 1,
+        "rtcdm_stop": 1,
+        "source_stop": 1,
+        "dma_pinned": 0,
+        "dma_reclaimed": 1,
+        "owner_released": 1,
+        "arena_released": 1,
+        "reboot": 1
+      },
+      "rolling_queue": {
+        "ret": 0,
+        "live_completed": 81,
+        "handoffs": 80,
+        "output_updates": 80,
+        "cursor": 196,
+        "starved": 0,
+        "command_resubmissions": 0,
+        "cpu_pixel_copy": 0
+      },
+      "session_gate": {
+        "attempted": 1,
+        "completed": 1,
+        "active": 0,
+        "poisoned": 0,
+        "owner": 1,
+        "inner_attempted": 1,
+        "inner_completed": 1,
+        "inner_poisoned": 0
+      },
+      "queue_snapshot": {
+        "retries": 1,
+        "attempts_limit": 256,
+        "address_reprograms": 0,
+        "command_resubmissions": 0,
+        "irq_disabled": 0
+      },
+      "VFE_error_phases_zero": 10,
+      "IPP_error_phases_zero": 8,
+      "kernel_hazards": 0
+    },
+    {
+      "session": 2,
+      "probe": {
+        "status": "PASS_LIBCAMERA_REAR_CONTINUOUS_REQUEST_REUSE",
+        "completed_frames": 80,
+        "width": 3840,
+        "height": 2160,
+        "stride": 3840,
+        "image_bytes": 12441600,
+        "logical_planes": 2,
+        "pixel_bytes_read": 0,
+        "SensorTimestamp_present": false,
+        "stop_and_release": true,
+        "application_buffers": 4,
+        "reused_requests": true,
+        "elapsed_seconds": 6.12818,
+        "completion_rate_fps": 13.0545
+      },
+      "kernel_result": {
+        "ret": 0,
+        "composed": 1,
+        "once": 1,
+        "prepared": 1,
+        "owner": 2,
+        "packets": "1111",
+        "epochs": 176,
+        "events": 228,
+        "slot0": 1,
+        "slot1": 1,
+        "complete": 1,
+        "csid_stop": 1,
+        "bus_stop": 1,
+        "rtcdm_stop": 1,
+        "source_stop": 1,
+        "dma_pinned": 0,
+        "dma_reclaimed": 1,
+        "owner_released": 1,
+        "arena_released": 1,
+        "reboot": 1
+      },
+      "rolling_queue": {
+        "ret": 0,
+        "live_completed": 81,
+        "handoffs": 80,
+        "output_updates": 80,
+        "cursor": 228,
+        "starved": 0,
+        "command_resubmissions": 0,
+        "cpu_pixel_copy": 0
+      },
+      "session_gate": {
+        "attempted": 2,
+        "completed": 2,
+        "active": 0,
+        "poisoned": 0,
+        "owner": 2,
+        "inner_attempted": 2,
+        "inner_completed": 2,
+        "inner_poisoned": 0
+      },
+      "queue_snapshot": {
+        "retries": 0,
+        "attempts_limit": 256,
+        "address_reprograms": 0,
+        "command_resubmissions": 0,
+        "irq_disabled": 0
+      },
+      "VFE_error_phases_zero": 10,
+      "IPP_error_phases_zero": 8,
+      "kernel_hazards": 0
+    }
+  ],
+  "same_boot_repeat_start_stop_proven": true,
+  "same_boot_repeat_scope_sessions": 2,
+  "three_session_qualification_completed": false,
+  "completed_application_sessions": 2,
+  "completed_application_requests": 160,
+  "live_VB2_completed_total": 162,
+  "no_extra_application_success_claim": true,
+  "sensor_start_attempts": 2,
+  "source_head": "7d3812b9b1792d3dd316157ccf722996e9d3fec8",
+  "kernel_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-49",
+  "retirement": {
+    "identity": "E-NATIVE-REAR-GENERATION-38",
+    "consumed": true,
+    "retired": true,
+    "never_retry": true,
+    "candidate_boot": "c2e96942-3a69-4ccc-b60c-d063438d3a86",
+    "Golden_return_boot": "d695ef7f-7361-4a4d-ab29-728a26ce39d1",
+    "units_disabled": true,
+    "watchdog_fired": false,
+    "kernel_hazards": 0,
+    "protected_Golden_hashes_unchanged": true,
+    "reason": "Two clean80-request captures, owner1->2 in same boot. Runtime rejected rotated dmesg prefix before verifying session2/starting3."
+  },
+  "clock_after_session1_idle": {
+    "cam_cc_ife_1_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 594000000
+    },
+    "cam_cc_ife_1_clk_src": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 594000000
+    },
+    "cam_cc_csid_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    },
+    "cam_cc_csid_clk_src": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    },
+    "cam_cc_csiphy1_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    }
+  },
+  "clock_after_session2": {
+    "cam_cc_ife_1_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 594000000
+    },
+    "cam_cc_ife_1_clk_src": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 594000000
+    },
+    "cam_cc_csid_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    },
+    "cam_cc_csid_clk_src": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    },
+    "cam_cc_csiphy1_clk": {
+      "enable_count": 0,
+      "prepare_count": 0,
+      "protect_count": 0,
+      "rate_hz": 300000000
+    }
+  },
+  "all_three_sensors_suspended_before_session2": {
+    "imx681": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "ov13858": {
+      "bound": true,
+      "runtime_status": "suspended"
+    },
+    "sp11-vd55g0": {
+      "bound": true,
+      "runtime_status": "suspended"
+    }
+  },
+  "second_final_sensor_idle_not_recorded_by_harness": true,
+  "snapshot_EAGAIN_retry_hardware_proven": true,
+  "snapshot_retries_per_session": [
+    1,
+    0
+  ],
+  "service_result": "service_result=exit-code\nexit_code=exited\nexit_status=1\n",
+  "native_counts": {
+    "completed_streams": 61,
+    "consumed_identities": 70,
+    "boots": 140,
+    "failed_pre_stream_attempts": 10,
+    "failed_after_start": 22
+  },
+  "combined_counts": {
+    "consumed_identities": 77,
+    "boots": 154
+  },
+  "next": "Fresh39/build50: unique kernel session markers, strict record scoping tolerant of old ring history rotation, then three-session hardware qualification."
+}
