@@ -1,3 +1,24 @@
+## 2026-10-09 rear52 sensor diagnostic mutex deadlock; Golden recovered
+
+Actual52 entered owner/session1 and sensor mode4064x2286/VTS3214, then hung
+before sensor controls readback or capture completion. Source shows new helper
+v4l2_ctrl_find calls find_ref_lock->mutex_lock on control handler's lock, which
+is the already-held ov13858 mutex in s_stream. Diagnostic introduced recursive
+locking. No actual hung-task stack; deterministic source path and last log
+support this diagnosis. Service75s timeout killed main; capture survivedSIGKILL.
+Original RESULT remains STARTED/session1; service timeout and journal preserved.
+No completed Requests/images qualified; no clean candidate DMA/stop claim.
+Golden af7a7ecc-dfd2-43df-91aa-9c82bcb7e3a5 recovered without user intervention,
+after delayed shutdown. Protected hashes unchanged; no kernel hazards.
+Watchdog did not fire: shutdown stopped timer before90s. Do not claim bounded
+90s recovery.52 consumed/retired/unarmed, units disabled, never retry.
+Native93streams/84IDs/168boots,12pre-stream/24after-start failures.
+Combined91IDs/182boots.49 near-black image-quality defect remains BLOCKED.
+NEXT fresh53 retained control pointers with already-held-lock tests; exact53
+probe/analyzer rebuilt lib09, then scene/pattern/scene. Performance deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-52-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear52 exact optical identity source PASS; hardware pending
 
 Fresh52/build65/lib08 probe and analyzer are both bound to exact private root52;
