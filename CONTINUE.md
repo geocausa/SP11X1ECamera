@@ -1,3 +1,25 @@
+## 2026-10-09 rear42 measured scheduler change source qualified; hardware pending
+
+Fresh42/build53 removes ONLY the extra rolling per-handoff epoch wait.
+The latest stable exact-owner/full ledger snapshot still precedes the handoff.
+All10 address writes/readbacks and source-locked RUP/AUP are unchanged.
+Every FULL and auxiliary mapping remains held until the original exact all10
+consumed-address completion and stable retirement proof, or4 physical stops.
+No register-value/mask/ACK changes, command replay, new pixel read or release
+authority from timing. The actual queue's other source tokens equal baseline.
+29 source checks PASS;3 ARM64 W1/Werror modules0 diagnostics; retained queue
+GCC/Clang ASAN/UBSAN80 model completions and211 negatives each. Measurement
+parser requires policy1 and epoch-wait0; existing ownership/failure gates intact.
+Libcamera05 unchanged from hardware41. 42 unconsumed/uninstalled/unarmed.
+Baseline41:240 real4K NV12 Requests/3clean same-boot sessions; ~29.95sensor epochs/s,
+callback10.24/14.98/12.01fps; collection56--57ms and added epoch wait2--30ms.
+41 retired, Golden8b3227b1-2960-45a6-8720-3ffcecc6295c, no hazards/watchdog.
+Native69/73IDs146boots/pre10/failed-after-start22; combined80IDs160boots.
+NEXT one42 three80-request comparison boot, automatic Golden return and retire.
+Full-rate/adaptiveIPA3A/SensorTimestamp/optics/longsoak still unproven.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-42-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear41 hardware cadence baseline PASS; targeted scheduler change next
 
 Three independent same-boot80-request libcamera sessions passed at4K linear
