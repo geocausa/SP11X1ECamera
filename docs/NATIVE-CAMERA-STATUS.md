@@ -1,3 +1,27 @@
+## 2026-10-09 rear49 private optical source qualified; hardware pending
+
+User priority image quality first. Fresh49/build62/lib07 retains48 kernel ISP/
+queue/lifetime policy; libcamera handler unchanged. New optical probe retains
+original400 Request/metadata/reuse/stop flow and snapshots sequences15/79/199
+each session. Exact same-FD Y/UV offsets/lengths/extent; DMA READ START/map/copy/
+unmap/END before requeue. Save3 native NV12 files/session only AFTER camera
+release;9 frames111974400 diagnostic bytes total, sealed root0700/0600 SP11.
+Private local scalar analyzer and27 decoder-hypothesis previews; pixels/photos/
+spatial arrays/image hashes never Git/chat/exported. Color-space metadata is
+unspecified; BT601-limited/BT709-limited/full previews are unverified hypotheses.
+No visual or Windows optical parity claim from scalar screening.
+36 sourcechecks PASS;3 ARM64 W1/Werror modules;6 libcamera tests/compile0warnings.
+Actual optical helper GCC/Clang ASAN/UBSAN37assertions+24negatives each;
+9 decoder vectors,12 optical probe parser negatives, real sealed synthetic
+file/preview/error models PASS. Original Request flow comparison exact.
+49 unconsumed/uninstalled/unarmed. Latest actual hardware48, counts unchanged:
+native90 streams/80IDs160boots;combined87IDs174boots.
+NEXT fresh49 bounded native optical capture/scalar image screening, automatic
+Golden return, retirement, then fix dominant picture defect/compare Windows.
+Front deferred, no OS sleep; image quality remains unknown.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-49-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 user priority: rear image quality before more optimization
 
 The user directs actual image quality to be the immediate next gate.
