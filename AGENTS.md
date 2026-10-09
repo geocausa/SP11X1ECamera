@@ -1,3 +1,24 @@
+## 2026-10-09 rear54 controlled exposure/gain source PASS; hardware pending
+
+User confirms current rear lens uncovered and scene lit.
+Fresh54/build67/lib10 compares scene default/high/default:
+exposure1600/3206/1600 lines, analogue register128/1024/128,
+test_pattern0 each, digitalBGR1024. Uses existing V4L2 controls only;
+strict cached binary UAPI and actual register match required per session.
+No sensor/mode/VTS/ISP/queue/lifetime source-policy change from completed53.
+Photometric models24 assertions/40negatives; actual installed UAPI compiled.
+Exact54 optical probe/analyzer preflight passed; current54 optical model
+53 assertions/37negatives each GCC/Clang ASAN/UBSAN; stale53 path rejected.
+38 selected checks/3 ARM64 W1/Werror modules/6 libcamera tests allPASS,
+zero diagnostics. Historical observer baseline corrected; superseded optical
+and sensor report scope/failed qualification logs retained before hardware.
+54 unconsumed/uninstalled/unarmed at this source checkpoint.
+53 retired: bright sensor pattern, nearly black scene; image-quality BLOCKED.
+NEXT guarded fresh54 same3x400 capture, native private optics and original
+all-owner/four-stop/Golden safeguards. No visual/Windows parity claim.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-54-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear53 scene/pattern/scene completed; scene quality blocked
 
 1200 actual libcamera Requests in three400 same-boot sessions completed.
