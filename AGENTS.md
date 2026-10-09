@@ -1,3 +1,23 @@
+## 2026-10-09 fresh60 opt-in native IPA automatic exposure source ready
+
+Fresh60 build73/lib18 passes41 retained kernel/lifecycle source checks and7
+real libcamera tests, including mapped shared-memory normal-AEC decoding,
+control proposals, acknowledgements and malformed-payload rejection.
+Two sanitizer compilers each pass2717 controller assertions,36 negatives and9
+delayed-plant cases. Strict hardware receipt parser passes35 rejection cases.
+Actual hardware AE/convergence and Windows image-quality parity are pending.
+
+One400-frame fresh one-shot enables standard AeEnable; raw engineering target
+12000 is provisional, not a full-scale/black/Windows calibration. Exposure
+4-3206lines, internal AE gain1-16x; manual public controls remain1-8x.
+Controller waits8 frames and requires acknowledgement before proposing again.
+Every actual write must have live sensor register readback. Last80 metered
+frames and paired global Y assess convergence separately from optical parity.
+Qualified59 kernel stop order/all-four-stop/reclaim proofs stay unchanged.
+Private24 packets/3 NV12 frames and all spatial data stay SAME SP11.
+No OS sleep changes. Performance deferred. Never retry59 or any consumed ID.
+Evidence: docs/NATIVE-RGB-REAR-GENERATION-60-PREP-20261009.json.
+
 ## 2026-10-09 rear59 hardware statistics and clean repeated capture passed
 
 Rear59 completed three 400-request sessions: 1,200 actual 4K NV12 images

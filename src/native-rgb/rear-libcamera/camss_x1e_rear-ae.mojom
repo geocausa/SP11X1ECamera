@@ -1,0 +1,16 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+module ipa.camss_x1e_rear;
+import "include/libcamera/ipa/core.mojom";
+interface IPACamssX1ERearInterface {
+ init(libcamera.IPASettings settings) => (int32 ret);
+ mapBuffers(array<libcamera.IPABuffer> buffers) => (int32 ret);
+ unmapBuffers(array<uint32> ids);
+ start(bool automaticExposure,int32 lines,int32 gain,double target) => (int32 ret);
+ [async] controlsApplied(uint64 stream,uint32 sequence,int32 ret);
+ stop();
+ [async] processStatistics(uint32 bufferId,uint64 stream,uint32 sequence,uint64 timestamp);
+};
+interface IPACamssX1ERearEventInterface {
+ statisticsValidated(uint32 bufferId,uint64 stream,uint32 sequence,uint64 timestamp,
+                     int32 ret,uint64 owner,uint64 generation,double meter,bool apply,int32 lines,int32 gain,bool limited);
+};
