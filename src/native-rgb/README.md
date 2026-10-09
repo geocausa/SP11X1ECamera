@@ -1,3 +1,26 @@
+## 2026-10-09 on-demand Windows quality oracle; fresh Linux55 comparison ready
+
+User explicitly authorizes repeated one-shot GRUB Windows reference captures
+when useful, including changing daytime/nighttime illumination, then Linux
+comparison. Permanent Golden remains unchanged. SP11/SP7/PiMaster only.
+Windows quality01 source: rear OEM4K nativeNV12, eight unique timestamps,
+three private native frames after stop/release; nominal automatic exposure/
+ISO/WB read only. Atomic CreateNew entry guard and300s Windows return reboot
+before camera APIs; fresh interactive Geoca task must be retired.
+SP7 synthetic metrics35assertions/13negatives +actual WinRT NV12 lock/copy
+PASS with no camera activated. Code and global scalar facts only may travel.
+Fresh Linux55/build68/lib11 retains54 default/high/default controls and all
+ISP/queue/lifetime/Golden safeguards;38 selected checks/3 ARM64 W1/Werror/
+6 libcamera tests PASS,0diagnostics. Exact55 optical model54assertions/
+38negatives each; compile-bound probe/analyzer identity preflight passed.
+Neither new identity has run/consumed at this source checkpoint.
+NEXT one-shot Windows quality01, automatic Golden, fresh Linux55, same-SP11
+private native comparison. Scene registration and temporal illumination
+must be measured; brightness alone does not certify detail/color/SNR/parity.
+Evidence docs/WINDOWS-REAR-QUALITY-20261009-01-PREP.json and
+docs/NATIVE-RGB-REAR-GENERATION-55-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear54 natural-scene exposure/gain response proven
 
 User confirmed lit scene and uncovered rear lens for this comparison.
