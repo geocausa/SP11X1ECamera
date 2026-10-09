@@ -1,3 +1,23 @@
+## 2026-10-09 rear53 locked sensor readback source PASS; hardware pending
+
+Fresh53/build66/lib09 fixes52 diagnostic mutex recursion. Exposure/analog/
+digital/testpattern pointers retained at original control creation; helper
+asserts existing sensor mutex held, performs no lookup or lock acquisition.
+Actual old52 helper triggers modeled recursive acquisition under held lock;
+fixed helper passes45 assertions/18negatives each GCC/Clang ASAN/UBSAN.
+41 control/parser negatives;141 CAMSS sources equal52 except identity.
+Exact53 probe/analyzer preflight passed;52 optical assertions/36negatives each
+GCC/Clang verify current53 header including stale52 root rejection.
+37 selected sourcechecks/3 ARM64 W1/Werror modules/6 libcamera tests allPASS,
+zero diagnostics. Prior optical01 report using52 model preserved/superseded by02.
+ISP/queue/lifetime/owner proof unchanged; same3x400 scene/pattern/scene plan.
+53 source qualified only, not installed/armed/consumed at this checkpoint.
+52 retired after delayed automatic Golden recovery, no clean-stop/optics claim.
+49 near-black native image remains BLOCKED; performance deferred; no parity.
+NEXT guarded fresh53 actual capture; never retry52.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-53-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear52 sensor diagnostic mutex deadlock; Golden recovered
 
 Actual52 entered owner/session1 and sensor mode4064x2286/VTS3214, then hung
