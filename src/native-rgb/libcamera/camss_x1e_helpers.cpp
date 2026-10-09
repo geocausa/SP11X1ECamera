@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 #include "camss_x1e_helpers.h"
+#include "front-aec-decoder.h"
 
 #include <array>
 #include <cerrno>
@@ -96,11 +97,13 @@ int camssX1EFrameLuma(Span<const uint8_t> statistics, uint64_t streamId,
     /* V4L2 timeval and libcamera FrameMetadata retain microsecond precision. */
     if (native_front_stats_u64(statistics.data() + 16) / 1000 != timestampNs / 1000)
         return -ESTALE;
-    float pending;
-    if (e003i_aecbe_frame_luma(statistics.data() + NATIVE_FRONT_STATS_HEADER_BYTES,
-                              &pending) || !std::isfinite(pending) || pending < 0.0f)
+    FrontAec::Meter meter{};
+    if (FrontAec::decodeNormal(statistics.data() + NATIVE_FRONT_STATS_HEADER_BYTES,
+                              NATIVE_FRONT_STATS_AEC_BYTES, &meter))
         return -EINVAL;
-    *luma = pending;
+    /* Equal green-channel sample mean. Raw engineering units, no OEM float
+     * scale/checkerboard/colour weighting, black subtraction or AE target. */
+    *luma = static_cast<float>((meter.gr + meter.gb) / 2.0);
     return 0;
 }
 

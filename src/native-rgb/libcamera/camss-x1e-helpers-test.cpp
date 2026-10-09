@@ -226,7 +226,7 @@ protected:
         std::copy(stats.begin() + E003I_STATS3A_HEADER_BYTES, stats.end(),
                   frame.begin() + NATIVE_FRONT_STATS_HEADER_BYTES);
         if (camssX1EFrameLuma(frame, 71, 0, 1000000000, &luma) ||
-            std::abs(luma - 49.32134f) > 0.001f)
+            std::abs(luma - float(100000000.0/1980.0)) > 0.01f)
             return TestFail;
         luma = 42.0f;
         if (camssX1EFrameLuma(frame, 72, 0, 1000000000, &luma) != -ESTALE ||

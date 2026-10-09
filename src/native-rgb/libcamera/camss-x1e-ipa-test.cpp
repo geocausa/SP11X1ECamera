@@ -99,7 +99,7 @@ protected:
   if (!result(1, -ESTALE, 72, 0))
    return TestFail;
   ipa.processStatistics(1, 71, 0, 1000000999);
-  if (!result(2, 0, 71, 0) || std::abs(luma_ - 49.32134f) > 0.001f)
+  if (!result(2, 0, 71, 0) || std::abs(luma_ - float(100000000.0/1980.0)) > 0.01f)
    return TestFail;
   ipa.processStatistics(1, 71, 0, 1000000999);
   if (!result(3, -EINVAL, 71, 0))
