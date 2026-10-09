@@ -183,8 +183,8 @@ native_rgb_driver_current:
   rear_restart_source_session_limit: 3
   rear_restart_any_failure_poisoned: true
   rear_generation35_evidence: docs/NATIVE-RGB-REAR-GENERATION-35-20261008.json
-  rear_latest_successful_hardware_identity: E-NATIVE-REAR-GENERATION-55
-  rear_current_libcamera_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261009-11
+  rear_latest_successful_hardware_identity: E-NATIVE-REAR-GENERATION-56
+  rear_current_libcamera_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261009-12
   rear_continuous_capture_proof_application_requests: 1200
   rear_continuous_capture_proof_live_VB2: 1203
   rear_application_buffers_reused: 4
@@ -240,8 +240,10 @@ native_rgb_driver_current:
   custom_userspace_camera_runtime_required: false
   kernel_only_automatic_3a_established: false
   software_product_pivot_superseded: true
-  next_gate: Fresh56 hardware qualification of live ExposureTime/AnalogueGain changes
-    and optical response timing; then bounded native IPA AE.
+  next_gate: Connect owner-bound rear ISP statistics to native libcamera IPA and implement
+    bounded automatic exposure/gain with measured settling admission; independently
+    qualify statistics, clipping and control metadata. Preserve manual path and original
+    lifetime checks. Performance deferred.
   rear_iq_binding_source_qualified: true
   rear_BF_selector1_retained_bytes_exact: 1200
   rear_explicit_inactive_cold_gamma_integrated: true
@@ -334,7 +336,7 @@ native_rgb_driver_current:
   analogue_digital_raw_distribution_response_proven: true
   raw_optical_mean_response_qualified: false
   raw_control_evidence: docs/NATIVE-RGB-FRONT-RAW-CONTROL-01-20261007.json
-  current_golden_boot_id: 3a0fcc8a-5d9f-49e2-81ce-644e19f382de
+  current_golden_boot_id: f8af5d50-9fab-4e7d-8489-4884c01a8e37
   latest_control_response_evidence: docs/NATIVE-RGB-FRONT-CONTROL-RESPONSE-04-20261007.json
   all_three_control_response_delays_frames: 2
   qualified_changes_per_field_across_two_boots: 12
@@ -344,8 +346,8 @@ native_rgb_driver_current:
   linux_bracket_baseline_relative_change: 0.029072068567840944
   windows_auto_linux_manual_output_gap_observed: true
   matched_sensor_settings_optical_comparison_qualified: false
-  combined_native_windows_workstream_boots: 190
-  combined_native_windows_consumed_identities: 95
+  combined_native_windows_workstream_boots: 192
+  combined_native_windows_consumed_identities: 96
   room_lights_on_user_report_utc: 2026-10-07 18:26:29+00:00
   room_lights_current_user_report: false
   room_lights_off_user_report_utc: 2026-10-07 20:37:51+00:00
@@ -371,17 +373,17 @@ native_rgb_driver_current:
   windows_oracle_completed_streams: 8
   unqualified_sensor_timestamp_published: false
   automatic_3a_proven: false
-  completed_sensor_streams_this_workstream: 102
+  completed_sensor_streams_this_workstream: 105
   failed_pre_stream_attempts_this_workstream: 12
   failed_capture_after_stream_start_this_workstream: 24
-  consumed_candidate_identities_this_workstream: 87
-  completed_candidate_and_golden_boots_this_workstream: 174
+  consumed_candidate_identities_this_workstream: 88
+  completed_candidate_and_golden_boots_this_workstream: 176
   rear_generation48_evidence: docs/NATIVE-RGB-REAR-GENERATION-48-20261009.json
   rear_generation48_consumed_and_retired: true
   rear_startup_prefetch_hardware_proven: true
   rear_startup_prefetch_three400_no_over50ms_gaps: true
   rear_no_long_gap_actual_callback_interval_scope: 1197
-  rear_current_source_head: 17bd8267ddb830b47fed690faa7056b7d5546d8d
+  rear_current_source_head: 6184bc73a9217c883fe6c61be93228d6138a0d69
   rear_full_prestartup_mapping_per_session:
   - 1
   - 1
@@ -399,7 +401,7 @@ native_rgb_driver_current:
   rear_generation49_evidence: docs/NATIVE-RGB-REAR-GENERATION-49-20261009.json
   rear_generation49_consumed_and_retired: true
   rear_native_optical_capture_performed: true
-  rear_image_quality_gate: WINDOWS_NATIVE_BASELINE_CAPTURED_LINUX_PHOTOMETRY_GAP_AUTOMATIC_CONTROL_AND_VISUAL_QUALITY_PENDING
+  rear_image_quality_gate: LIVE_LIBCAMERA_EXPOSURE_GAIN_AND_RESPONSE_TIMING_PROVEN_NATIVE_AE_STATISTICS_FEED_AND_VISUAL_QUALITY_PENDING
   rear_image_quality_root_cause_identified: false
   rear_private_native_frames: 9
   rear_private_preview_hypotheses: 27
@@ -678,24 +680,40 @@ native_rgb_driver_current:
   rear_generation55_retired: true
   rear_generation55_consumed_and_retired: true
   rear_generation55_evidence: docs/NATIVE-RGB-REAR-GENERATION-55-20261009.json
-  rear_current_kernel_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-68
+  rear_current_kernel_build: /home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-69
   rear_Windows_current_reference_consumed_and_retired: true
   rear_Windows_current_reference_evidence: docs/WINDOWS-REAR-QUALITY-20261009-01.json
   rear_Windows_Linux_private_native_comparison_evidence: docs/WINDOWS01-LINUX55-PRIVATE-COMPARISON-20261009.json
   rear_Windows_Linux_private_comparison_performed: true
   rear_Windows_Linux_visual_quality_parity_proven: false
-  completed_streams_this_workstream: 102
-  consumed_identities_this_workstream: 87
+  completed_streams_this_workstream: 105
+  consumed_identities_this_workstream: 88
   rear_units_disabled: true
   rear_candidate_retired: true
   rear_scene55_independent_lit_stability_confirmation: false
   rear_ambient_day_night_classification_proven: false
   rear_generation56_preflight_evidence: docs/NATIVE-RGB-REAR-GENERATION-56-PREP-20261009.json
-  rear_generation56_consumed: false
+  rear_generation56_consumed: true
   rear_generation56_armed: false
   rear_live_manual_libcamera_controls_source_qualified: true
   rear_live_sensor_register_readback_source_qualified: true
-  rear_live_control_response_timing_hardware_qualified: false
+  rear_live_control_response_timing_hardware_qualified: true
+  rear_generation56_retired: true
+  rear_generation56_consumed_and_retired: true
+  rear_generation56_evidence: docs/NATIVE-RGB-REAR-GENERATION-56-20261009.json
+  rear_live_manual_libcamera_controls_hardware_proven: true
+  rear_live_sensor_register_readback_hardware_proven: true
+  rear_live_control_response_after_trigger_frames:
+  - 2
+  - 3
+  rear_live_control_timing_scope: 12 separately scheduled changes in three400-request
+    sessions; diagnostic first three consistent native-Y means; not SOF latch/per-request
+    association
+  rear_live_sensor_control_changes_verified: 12
+  rear_live_control_global_Y_samples: 288
+  rear_adaptive_IPA_implemented: false
+  rear_per_request_exposure_metadata_association_proven: false
+  rear_scene56_independent_lit_stability_confirmation: false
 
 e012b_rgb_product_unactivated_install:
   experiment: E012B

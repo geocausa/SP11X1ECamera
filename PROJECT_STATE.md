@@ -1,3 +1,41 @@
+## 2026-10-09 rear56 live libcamera exposure/gain and response timing proven
+
+Real standard libcamera ExposureTime/AnalogueGain controls now reach the
+OV13858 while streaming.12 separate changes have exact sensor-register
+readbacks (exposure1600/3206lines, gain128/1024) inside libcamera set-control
+clock boundaries. Three400-request sessions/1200 actual Requests completed;
+four application buffers reused.288 completed full-frame global Y samples.
+Exposure changes and gain changes caused reversible brightness response.
+Observed first three-frame-consistent Y response2-3 sequence counts after
+scheduled triggers64/128/192/256 (3-4 after last completion at apply).
+This scoped observation is not a universal sensor-latch delay, atomic pair,
+SOF timestamp, per-request exposure metadata association or visual parity.
+
+All four stops, exact owner/DMA/arena/cache release, neutral graph, all
+three sensors suspended and five camera clocks idle passed every session.
+No reported runtime kernel hazards/watchdog. Final dmesg retains2/3;
+session1 ring history rotated. All original strict per-session checks
+passed before rotation; retained scalar proofs remain. Do not require
+earlier ring history or weaken current-session marker admission.
+Automatic Goldenf8af5d50-9fab-4e7d-8489-4884c01a8e37, hashes unchanged.
+56 consumed/retired/unarmed; units disabled. NEVER retry consumed56.
+Source6184bc73a9217c883fe6c61be93228d6138a0d69, build69/lib12.
+9 private native NV12 frames/27 previews remain sealed SAME SP11 only.
+Diagnostic userspace reads2500761600bytes (snapshot plus96Y means/session);
+kernel pixel reads/copies0. This is not new performance qualification.
+Current56 scene is darker than55; fresh matched Windows/lighting stability
+is not established. No day/night or output/color/detail parity conclusion.
+
+Native105 streams/88 IDs/176 boots; Windows8 streams/8 IDs/16 boots;
+combined96 IDs/192 boots. Evidence
+docs/NATIVE-RGB-REAR-GENERATION-56-20261009.json.
+NEXT owner-bound rear hardware ISP statistics delivery to native libcamera
+IPA, bounded automatic exposure/gain with measured settling admission, then
+tone/color/detail against fresh Windows references. Adaptive IPA/AE remain
+unimplemented; expose no fabricated ExposureTime metadata. Front calibration
+and cadence optimization remain deferred. No OS sleep.
+Earlier entries are historical.
+
 ## 2026-10-09 rear56 live exposure/gain control timing source qualified
 
 Automatic exposure priority continues after Windows01/Linux55 comparison.

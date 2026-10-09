@@ -1,3 +1,21 @@
+## 2026-10-09 current gate after native live-control qualification
+
+Windows01/Linux55 reference comparison showed a native photometric gap.
+Linux56 now proves twelve real libcamera exposure/gain changes reached
+sensor registers during1200 Requests, with reversible global Y response.
+Observed response2-3 frame-sequence counts after scheduled changes is a
+scoped diagnostic measurement. Do not publish fictitious per-request
+exposure metadata or claim universal SOF-latch timing from it.
+
+Next: owner-bound hardware ISP statistics delivered to native libcamera
+IPA, then bounded automatic exposure/gain with qualified settling and
+stale-statistics rejection. The diagnostic completed-image Y reader stays
+a qualification tool; it does not substitute for production ISP statistics.
+Adaptive IPA/automatic exposure and visual/color/focus/Windows parity
+remain unqualified. Native images and previews remain private on SP11.
+Independent camera lifecycle safeguards stay mandatory; performance and
+front calibration stay deferred. Earlier evidence below is historical.
+
 # Rear image quality is the next release gate
 
 User direction, 2026-10-09: prioritize actual image quality before further
