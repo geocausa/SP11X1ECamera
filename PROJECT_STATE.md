@@ -1,3 +1,30 @@
+## 2026-10-09 rear53 scene/pattern/scene completed; scene quality blocked
+
+1200 actual libcamera Requests in three400 same-boot sessions completed.
+Lock-safe retained sensor control pointers/readback fix proven on hardware.
+Actual controls agree: exposure1600 lines, analog128, digitalB/G/R1024,
+test_pattern0/1/0; original ISP/queue/lifetime unchanged.
+Scene Y means2.816-2.899, every scene p99=9: still nearly black.
+Internal sensor color bars span Y0-255, mean126.531/std84.882.
+Static identical bar frames expected; not stale-buffer or corruption proof.
+Bright pattern narrows next investigation toward optical signal and sensor
+photometric configuration; does not clear all natural-data ISP processing.
+53 scene lighting not independently confirmed;49 user lit/uncovered confirmation
+remains historical. No visual/color/Windows optical parity or root-cause claim.
+All four stops/owner/DMA/arena/cache release each, sensors suspended,
+graph neutral and five camera clocks idle; no kernel hazards/watchdog.
+Automatic Golden2e99dffe-0fd7-4df0-9820-a51d05401379, protected hashes unchanged.
+53 consumed/retired/unarmed, units disabled; never retry53 or52.
+9 native NV12 frames111974400bytes/27 unverified previews sealed SAME SP11.
+Only global scalar metrics exported; kernel pixel reads/copies0.
+37 source checks/build66/lib09; diagnostic capture not performance promotion.
+Native96streams/85IDs/170boots,12pre-stream/24after-start failures;
+combined92IDs/184boots. Image quality remains BLOCKED; performance deferred.
+NEXT fresh bounded natural-scene exposure/gain response with actual register
+verification, then matched Windows photometry/optical comparison.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-53-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear53 locked sensor readback source PASS; hardware pending
 
 Fresh53/build66/lib09 fixes52 diagnostic mutex recursion. Exposure/analog/
