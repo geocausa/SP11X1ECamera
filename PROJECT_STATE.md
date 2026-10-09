@@ -1,3 +1,20 @@
+## 2026-10-09 rear51 pre-stream probe identity failure; retired safe
+
+Numeric cached test_pattern0 readback passed. CameraManager discovered camera,
+but optical probe rejected directory51: binary lib07 is compile-bound to49.
+Reusing lib07 for51 was an integration error. No sensor start/mode/kernel
+attempt/result marker, no Requests, no optical files. Raw probe stderr preserved.
+Runtime's missing-session-marker error masked the earlier probe admission error.
+NEXT fresh52 rebuilt lib08/probe with exact52 directory and explicit no-hardware
+identity preflight before install/arm; add stale path negatives. Keep numeric
+sensor controls +scene/pattern/scene, all private optics and lifecycle guards.
+51 consumed/retired/unarmed, units disabled. Automatic Golden
+b5d6e524-2631-4324-ad68-9b35a0532202; hashes unchanged/no hazards/watchdog.
+Native93 streams/83IDs/166boots;12pre-stream failures,23after-start.
+Combined90 IDs/180boots. Latest optical49 remains near-black BLOCKED; no parity.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-51-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear51 sensor/pattern diagnostic source PASS; hardware pending
 
 Image-quality defect49 remains blocked: nearly black native NV12 in a user-
@@ -11,7 +28,7 @@ Three400 sessions use sensor test_pattern0/1/0 (scene/colorbars/scene).
 replaces CLI menu-text parsing; installed UAPI definitions compiled and checked.141 CAMSS sources match49 except identity. Private optical
 capture/stop/release, exactonce consumption, independent watchdog and automatic
 Golden return unchanged. No images or image hashes exported, no parity claim.
-Source qualified only:50 not installed/armed/consumed at this checkpoint.
+Source qualified only:51 not installed/armed/consumed at that source checkpoint.
 NEXT guarded install and fresh51 scene/pattern/scene, then diagnose.
 Evidence docs/NATIVE-RGB-REAR-GENERATION-51-PREP-20261009.json.
 Earlier entries are historical.
