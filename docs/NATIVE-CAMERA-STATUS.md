@@ -1,3 +1,21 @@
+## 2026-10-09 rear47 final1200 aggregate source qualified; hardware pending
+
+Fresh47/build60/unchanged lib06 retains46 camera/queue/cache/probe policy.
+Corrects final aggregate: three independently completed400 Request sessions
+and actual1200 sum required before PASS. Per-session epoch lower bound400.
+34 source checksPASS; three ARM64 W1/Werror modules0diagnostics. Real immutable
+46 scalar result accepted by corrected aggregate, rejected by actual old240
+check;57 partial/mixed/miscounted/wrong-owner negatives PASS.46 rawFAIL preserved.
+Probe/queue/cache/gap source unchanged; source model checks repeat passed.
+47 unconsumed/uninstalled/unarmed.46 physically completed1200 with all cleanup
+but final harnessFAIL; latest full qualification45. Counts native84streams/
+78IDs156boots,combined85IDs170boots/failedafterstart23. Golden dda8274c safe.
+NEXT fresh47 three400 capture/1200 aggregate qualification, Golden return and
+retire47. No consumed identity retry. Startup gap/longsoak/IPA3A/SOF/optics
+still incomplete; front calibration deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-47-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear46 three400 captures physically clean; final aggregate harness failed
 
 All1200 real4K NV12 Requests completed; three400 sessions callback29.8859/
