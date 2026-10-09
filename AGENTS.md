@@ -1,3 +1,22 @@
+## 2026-10-09 rear36 failed first rolling stream; safely retired
+
+36/build47 completed startup packets and22 exact BL receipts, retired all4
+command arenas and the first FULL+8aux generation, then completed2 live VB2
+buffers. First rolling stream ended with-11 after1 handoff/RUP commit,
+cursor14: no completed80-request application session, no restart hardware proof.
+Live observer returns-EAGAIN when IRQ publication/epoch changes during the
+strict snapshot; source investigation targets a bounded drain-and-reobserve
+path that retains all old mappings until the original complete proof succeeds.
+Any actual ownership/address/error failure must remain fatal and pin state.
+Both session gates poisoned (attempted1/completed0); no second start occurred.
+Automatic Golden11f64619-454f-41df-b03f-e60b5feab79a succeeded; no kernel hazards,
+no watchdog, protected hashes unchanged.36 consumed/retired, units disabled.
+Never retry36. Latest successful hardware remains35 with80 actual Requests.
+Native58/68IDs136boots/pre10/failed-after-start22; combined75IDs150boots.
+NEXT fresh37/build48 repair transient queue snapshot admission and repeat3sessions.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-36-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear36 same-boot restart source qualified; hardware pending
 
 Fresh36/build47 permits exactly three serialized rear sessions in one boot.
