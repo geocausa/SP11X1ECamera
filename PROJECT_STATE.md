@@ -1,3 +1,26 @@
+## 2026-10-09 rear49 capture PASS; image quality BLOCKED near black
+
+User priority: image quality before further cadence optimization.
+Nine real native 3840x2160 NV12 snapshots from three400 libcamera sessions:
+Y means2.735-2.813/255; every frame p99=9 and >99.998% Y<=16.
+User confirmed lit scene and uncovered lens. Nearly black output fails the
+usable image gate. Frames vary; no constant or identical-frame finding.
+Exposure/ISP root cause unknown. Color space unspecified; three local decode
+interpretations per frame are unverified, not color or Windows parity.
+9 raw frames111974400 bytes and27 previews remain private SAME SP11 only.
+Scalar analysis only exported. DMA_BUF READ START/END before Request reuse;
+private disk writes after camera release. Unchanged kernel ISP/queue/lifetime.
+1200 actual Requests; all four stops, owner/DMA/arenas/cache release and
+sensors/clocks/graph idle. No kernel hazards/watchdog. Automatic Golden
+7affb8ed-babf-496b-a041-f8e55482f96a; protected hashes unchanged.
+49 consumed/retired/unarmed, units disabled.36 sourcechecks/build62/lib07.
+Native93 streams/81 consumed IDs/162 boots; combined88 IDs/176 boots.
+NEXT diagnose sensor actual exposure/gains and internal test pattern versus
+scene with fresh identity50 and original capture/stop/Golden safeguards.
+Further performance optimization/longsoak deferred until usable image baseline.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-49-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear49 private optical source qualified; hardware pending
 
 User priority image quality first. Fresh49/build62/lib07 retains48 kernel ISP/
