@@ -1,3 +1,21 @@
+## 2026-10-09 rear51 sensor/pattern diagnostic source PASS; hardware pending
+
+Image-quality defect49 remains blocked: nearly black native NV12 in a user-
+confirmed lit/uncovered scene. Fresh51/build64 reuses immutable libcamera07.
+37 source checks and3 ARM64 W1/Werror modules passed, zero diagnostics.
+Sensor reads exposure/analog/digitalBGR/test pattern after normal control setup
+before STREAMING; mismatch/read error aborts. Existing control writes preserved.
+Three400 sessions use sensor test_pattern0/1/0 (scene/colorbars/scene).
+41 actual helper assertions and17 failure cases each GCC/Clang ASAN/UBSAN;
+41 parser and binary-control negatives. Binary VIDIOC_G_CTRL readback
+replaces CLI menu-text parsing; installed UAPI definitions compiled and checked.141 CAMSS sources match49 except identity. Private optical
+capture/stop/release, exactonce consumption, independent watchdog and automatic
+Golden return unchanged. No images or image hashes exported, no parity claim.
+Source qualified only:50 not installed/armed/consumed at this checkpoint.
+NEXT guarded install and fresh51 scene/pattern/scene, then diagnose.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-51-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear50 pre-stream harness failure; Golden safe; no optical data
 
 50 consumed once, stopped at cached test_pattern CLI-text readback before any
