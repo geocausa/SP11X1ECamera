@@ -1,3 +1,22 @@
+## 2026-10-09 rear45 scalar gap timing source qualified; hardware pending
+
+Fresh45/build58 adds scalar first80 completion gap counts/positions and rolling
+stage maxima plus stage timings associated with the largest gap. Existing lib05
+and capture unchanged. V4L2 microsecond completion timestamps must match the
+application prefix exactly; extra STREAMOFF completions excluded. No per-frame
+logs, pixel reads, MMIO/IRQ changes or timing-based lifetime authority.
+All44 queue tokens identical after exact observer-tag removal; mapping cache,
+strict all10 owner/consumed-address proofs and four-stop flush unchanged.
+32 checksPASS; three ARM64 W1/Werror modules zero diagnostics. Actual timing
+helpers/log GCC+Clang ASAN/UBSAN264 assertions each/240-buffer prefix models,
+strict parser negatives and existing28019/211 queue models retained.
+45 unconsumed/uninstalled/unarmed; latest hardware44 near30fps all3 sessions.
+Counts native78streams/76IDs152boots,combined83IDs166boots unchanged.
+Golden c88f40bf safe. NEXT one45 three80-request captures and automatic Golden
+return; retire45. Residual gap cause/long soak/IPA3A/SOF/optics unqualified.
+Front deferred. Evidence docs/NATIVE-RGB-REAR-GENERATION-45-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear44 mapping cache hardware PASS; all3 sessions near30fps
 
 Three independent80-request sessions delivered240 real4K linearNV12 Requests,
