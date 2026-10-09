@@ -1,3 +1,19 @@
+## 2026-10-09 user priority: rear image quality before more optimization
+
+The user directs actual image quality to be the immediate next gate.
+Latest48 transport remains qualified and consumed/retired; its1200-request
+probe never read pixels, so picture quality is still unknown. Freeze further
+cadence optimization/longer soak while establishing a usable rear picture.
+NEXT fresh one-use short capture from the CURRENT native hardware-ISP/
+libcamera NV12 path, private frames/previews SAME SP11 ONLY, image integrity/
+geometry/exposure/color/focus screening, then matched Windows comparison.
+Fix the dominant picture defect first; adaptive3A/focus/tuning remain open.
+Original all10 owner/retirement/four-stop proofs and Golden fallback remain.
+No consumed identity retry, no OS sleep, no optical bytes exported.
+No new hardware capture performed by this priority update; counts unchanged.
+Plan docs/REAR-IMAGE-QUALITY-GATE-20261009.md.
+Earlier immediate-next instructions are superseded by this user direction.
+
 ## 2026-10-09 rear48 startup preallocation hardware PASS; no long gaps
 
 1200 actual4K linearNV12 Requests, three400 sessions, four reused appbuffers.
