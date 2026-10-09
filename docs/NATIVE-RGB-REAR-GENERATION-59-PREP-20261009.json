@@ -1,0 +1,79 @@
+{
+  "identity": "E-NATIVE-REAR-GENERATION-59",
+  "status": "PASS_REAR59_SOURCE_PREP_NOT_INSTALLED",
+  "base_source_head": "3ce95146a6b648bb71d6374c9d79e379500e0ab7",
+  "kernel_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-72",
+  "libcamera_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/libcamera-native-rgb-rear-v4l2-20261009-17",
+  "source_checks": 41,
+  "libcamera_tests": [
+    {
+      "name": "controls - libcamera:control_info",
+      "result": "OK"
+    },
+    {
+      "name": "controls - libcamera:control_value",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:camss-x1e-rear-ipa",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:fixedpoint",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:histogram",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:interpolator",
+      "result": "OK"
+    },
+    {
+      "name": "ipa - libcamera:pwl",
+      "result": "OK"
+    }
+  ],
+  "compiler_warnings": 0,
+  "declared_delta": "CSIPHY then sensor stop moved after exact both-complete guard and before CSID reset/drain; all four stop flags mandatory before release",
+  "actual_pair_stop_test": {
+    "status": "PASS_ACTUAL_EARLY_SOURCE_STOP_ORDER_AND_FAILURE_PINNING",
+    "actual_pair_stop_function_executed": true,
+    "hardware_stop_helpers_mocked": true,
+    "DMA_release_requires_all_four_proofs": true,
+    "completion_guard_unchanged": true,
+    "hardware_access": false,
+    "results": [
+      {
+        "compiler": "gcc",
+        "ASAN_UBSAN_Werror": true,
+        "assertions": 142,
+        "fault_and_denial_cases": 13,
+        "all_four_stops_before_reclaim": true,
+        "source_stop_before_CSID": true
+      },
+      {
+        "compiler": "clang",
+        "ASAN_UBSAN_Werror": true,
+        "assertions": 142,
+        "fault_and_denial_cases": 13,
+        "all_four_stops_before_reclaim": true,
+        "source_stop_before_CSID": true
+      }
+    ]
+  },
+  "original_quiesce_bus_CDM_reclaim_checks_unchanged": true,
+  "statistics_delivery_requires_IPA_pair": true,
+  "qualification_frames": 400,
+  "same_boot_sessions": 3,
+  "private_packets_per_session": 24,
+  "probe_timeout_seconds": 35,
+  "consumer_timeout_seconds": 40,
+  "service_timeout_seconds": 120,
+  "watchdog_seconds": 150,
+  "automatic_exposure": false,
+  "hardware_qualified": false,
+  "source_only_quarantine04_remains_uninstalled": true,
+  "no_OS_sleep": true
+}

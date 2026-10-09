@@ -1,3 +1,17 @@
+## 2026-10-09 fresh59 upstream-stop-before-CSID source qualified
+
+Fresh59 build72/lib17 passes41 source checks plus7 real libcamera tests,
+zero compiler warnings. Actual pair-stop extraction tested142 assertions and
+13 fault/denial cases perGCC/Clang withASAN/UBSAN/Werror. Exact complete
+pair stillmandatory; CSIPHY then sensor nowstop before unchangedCSID
+reset/drain, BUSstop and RT-CDMstop. Everyfour-stop/owner/cache/DMA proof
+stillmandatory; failurespinuncertain mappings untilGolden reboot. This
+changes lifecycle order explicitly; hardware success remainsunproven.
+Fresh59 uses three400-frame requests,35s probe/40s consumer,120s service,
+150s watchdog. Source evidence: docs/NATIVE-RGB-REAR-GENERATION-59-PREP-20261009.json.
+Rear58 remainslatestconsumed/retiredhardware with400 joins andCSIDEBUSY.
+No AE, optical parity or performance qualification claim. Neverretry58.
+
 ## 2026-10-09 rear58 actual400 statistics joins; CSID stop residue
 
 Rear58 is consumed/retired/unarmed; units disabled/inactive; Golden restored
