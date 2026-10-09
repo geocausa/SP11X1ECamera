@@ -1,3 +1,22 @@
+## 2026-10-09 rear46 three400-request duration extension source qualified; hardware pending
+
+Fresh46/build59/lib06 targets3x400=1200 real4K NV12 Requests/four reusedbuffers.
+Actual kernel queue/cache/gap observer byte-identical to45; userspace pipeline
+unchanged. Probe retains original request/metadata/release flow, target400/
+timeout20s and scalar timing only. First80 kernel/application prefix must match;
+all400 gap count/max ordinal and >50ms late gap count now explicit.
+33 checksPASS,3 ARM64 W1/Werror modules0diagnostics,6 libcamera Werror testsPASS.
+Actual probe stats GCC/Clang ASAN/UBSAN1218 assertions each/1200 synthetic
+completions with no-gap/first-prefix/late-gap fixtures; strict type/count parser.
+46 unconsumed/uninstalled/unarmed. Latest hardware45 localized one64ms gap at
+first handoff, prepare5.04ms+collect57.05ms; causal fix not established.
+Counts native81streams/77IDs154boots,combined84IDs168boots unchanged.
+Golden cf960bf7 safe. NEXT one46 three400 captures, automatic Golden return
+and retire46. Extended bounded duration, not long-soak qualification.
+IPA3A/SOF/controls/optical parity remain incomplete; front calibration deferred.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-46-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear45 gap localized to first rolling handoff; three captures PASS
 
 240 real4K NV12 Requests; callback29.6112/29.9916/29.9672fps. Kernel first80
