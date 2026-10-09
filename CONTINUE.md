@@ -1,3 +1,22 @@
+## 2026-10-09 rear40 exact per-session command owner parser qualified
+
+39's two hardware captures were clean; only parser owner=1 assumption failed
+successful owner2 command retirement. Fresh40/build51 keeps hardware behavior,
+takes exact session owner1/2/3 in command-retirement parser and blocked-state
+checks. No blanket acceptance of arbitrary owner values.
+28 checks PASS,3 ARM64 W1/Werror0 diagnostics;233 admission negatives.
+Actual staged C marker/gate/snapshot/command log formats:13 emitted records
+per GCC/Clang, including command owners1/2/3, all parsed by actual runtime.
+All mandatory parsers checked against actual two-session39 scalar records and
+a clearly synthetic third-owner fixture. No fixture presented as hardware.
+40 unconsumed/uninstalled/unarmed;libcamera04 unchanged;3sessions/240Requests target.
+39 retired, Golden76bb4540 safe, no watchdog/hazards, protected hashes intact.
+Native63/71IDs142boots/pre10/failed-after-start22; combined78IDs156boots.
+NEXT one40 hardware boot, strict3sessions, mandatory Golden return and retire40.
+Two-session restart proven38/39; full-rate/adaptiveIPA/optics/soak incomplete.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-40-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear39 two clean captures; owner1 parser assumption exposed
 
 Two same-boot libcamera processes each delivered80 real Requests,160 total,
