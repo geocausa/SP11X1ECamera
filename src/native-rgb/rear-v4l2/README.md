@@ -1,3 +1,25 @@
+## 2026-10-09 rear48 startup allocation source qualified; hardware pending
+
+Fresh48/build61, unchanged lib06/probe400. First rolling FULL+8AUX set is
+allocated before pipeline power/MMIO/sensor start. Its pending VB2 wrapper
+stays on the FIFO; whole allocations are checked against BOTH startup sets
+and command arenas. Exact owner+next generation required for a one-time move.
+Original rolling bind/alias/all10 consumed proof and all4 stops remain.
+Uncertain hardware failure retains the spare descriptor with the faulted pair.
+Rolling allocation/cache accounting explicitly subtracts the one preallocation;
+logical retirement still occurs every handoff. No timestamp shifting.
+35 source checks PASS; three ARM64 W1/Werror modules, zero diagnostics.
+Actual new helper GCC/Clang ASAN/UBSAN:84 assertions each,10 allocation/API
+failure stages,12 stale-take cases;67 parser negatives. Original source tokens
+match47 after removing only declared startup-spare hooks.
+48 unconsumed/uninstalled/unarmed; latest hardware47 three400/1200 PASS.
+Counts remain native87 streams/79IDs158 boots; combined86IDs172 boots.
+NEXT fresh48 same three400 Requests, first-handoff timing comparison, Golden
+return/retirement. Causality/startup reliability/longsoak/IPA3A/SOF/optical
+parity unqualified; front deferred. No OS sleep; all pixels stay on SP11.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-48-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear47 three400-request qualification PASS; no late long gaps
 
 1200 real4K linearNV12 Requests, three400 sessions, four reused appbuffers.
