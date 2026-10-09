@@ -23,6 +23,22 @@ def main():
  f=copy.deepcopy(frames)
  for r in f[320:]:r["meter"]=2000;r["limited"]=1
  assert call(ff=f)["last80_within_ten_percent"] is False
+
+ # Both values change in the next proposal; either ControlList ordering is
+ # valid only when actual kernel and library receipts agree exactly.
+ pair_frames=copy.deepcopy(frames)
+ for row in pair_frames[16:]:row["lines"]=3206;row["gain"]=256
+ pair_frames[16]["update"]=1
+ pair_summary=copy.deepcopy(summary);pair_summary[0]["updates"]=2
+ pair_kernel=copy.deepcopy(kernel)+[
+  dict(id=0x009e0903,value=256,reg=0x3508,readback=256,before_ns=702,after_ns=703),
+  dict(id=0x00980911,value=3206,reg=0x3500,readback=3206<<4,before_ns=704,after_ns=705)]
+ pair_library=copy.deepcopy(library)+[
+  dict(id=row["id"],value=row["value"],last_completed_sequence=15,before_ns=701,after_ns=706,cached_readback=1,per_frame_association=0)
+  for row in pair_kernel[1:]]
+ assert call(kk=pair_kernel,ll=pair_library,ff=pair_frames,ss=pair_summary)["updates"]==2
+ assert call(kk=pair_kernel[:1]+pair_kernel[1:][::-1],ll=pair_library[:3]+pair_library[3:][::-1],ff=pair_frames,ss=pair_summary)["updates"]==2
+
  negatives=0
  def reject(**args):
   nonlocal negatives
@@ -43,14 +59,16 @@ def main():
   x=copy.deepcopy(probe);x[key]=value;reject(pp=x)
  for key,value in [("driver_completion_ns",1),("Y_mean",float("nan")),("sequence",400)]:
   x=copy.deepcopy(probe);x["AE_control_timing_samples"][0][key]=value;reject(pp=x)
+ x=copy.deepcopy(pair_kernel);x[2]=copy.deepcopy(x[1]);reject(kk=x,ll=pair_library,ff=pair_frames,ss=pair_summary)
+ reject(kk=pair_kernel,ll=pair_library[:3]+pair_library[3:][::-1],ff=pair_frames,ss=pair_summary)
  baseline=(P/"run-rear-cadence-v20.py").read_text()
  actual=(P/"run-rear-ae60.py").read_text()
  need_fragments=['"csid_stop","bus_stop"','"rtcdm_stop","source_stop","dma_reclaimed","owner_released","arena_released","reboot"','"successful clean stop must release DMA/owner"','"all sensors must suspend after clean release"','validate_idle_clocks','"libcamera release restores neutral links"','"exact_serialized_command_receipts_proven"','"live_public_FULL_retirement_proven"']
  for fragment in need_fragments:assert fragment in baseline and fragment in actual,fragment
  assert 'for session in range(1,2):' in actual and 'f["automatic_exposure"]==1' in actual and 'sp11-audio-fullio-v19c' in actual and 'v20c' not in actual
  assert '"same_boot_restart_proven"]=False' in actual
- result=dict(status="PASS_NATIVE_AE_RECEIPT_PARSER_AND_NEGATIVE_CASES",negative_cases=negatives,synthetic_fixture_only=True,hardware_access=False,actual_runner_lifecycle_checks_preserved=True,convergence_failure_not_falsely_promoted=True,bounded_async_acknowledgement_admitted=True)
- report=P.parents[4]/"02-kernel/native-rgb-rear-generation-20261007-73/AE-parser-hosted-01.json"
+ result=dict(status="PASS_NATIVE_AE_RECEIPT_PARSER_AND_NEGATIVE_CASES",negative_cases=negatives,synthetic_fixture_only=True,hardware_access=False,actual_runner_lifecycle_checks_preserved=True,convergence_failure_not_falsely_promoted=True,bounded_async_acknowledgement_admitted=True,exact_proposal_pair_both_ControlList_orders_checked=True)
+ report=P.parents[4]/"02-kernel/native-rgb-rear-generation-20261007-73/AE-parser-hosted-02.json"
  # Project storage is outside the repository.
  assert not report.exists();report.write_text(json.dumps(result,indent=2)+"\n");print(json.dumps(result))
 if __name__=="__main__":main()

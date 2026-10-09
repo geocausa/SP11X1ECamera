@@ -45,8 +45,14 @@ def validate(log,stderr,probe,session):
   else:
    need((f["lines"],f["gain"])==(lines,gain) or (f["sequence"]-last_update<8 and (f["lines"],f["gain"])==previous_pair),"foreign AE state outside bounded IPC acknowledgement interval")
  need(updates and len(expected_controls)==len(kernel),"actual AE writes must match proposals exactly")
- receipts=[]
- for k,l,(sequence,cid,value) in zip(kernel,library[2:],expected_controls):
+ # V4L2 ControlList iteration order is not exposure-before-gain. Match the
+ # exact changed pair within each proposal; kernel/library order still agrees.
+ receipts=[];remaining=list(expected_controls)
+ for k,l in zip(kernel,library[2:]):
+  sequence=remaining[0][0]
+  matches=[item for item in remaining if item[0]==sequence and item[1:]==(k["id"],k["value"])]
+  need(len(matches)==1,"AE write is missing, duplicated or crosses proposal boundary")
+  item=matches[0];remaining.remove(item);sequence,cid,value=item
   reg=0x3500 if cid==0x00980911 else 0x3508;readback=value<<4 if reg==0x3500 else value
   need((k["id"],k["value"],k["reg"],k["readback"])==(cid,value,reg,readback) and (l["id"],l["value"])==(cid,value),"AE actual sensor register readback mismatch")
   need(0<l["before_ns"]<=k["before_ns"]<=k["after_ns"]<=l["after_ns"] and sequence-2<=l["last_completed_sequence"]<=sequence and l["cached_readback"]==1 and l["per_frame_association"]==0,"AE sensor receipt clock/order or unproven optical association")
