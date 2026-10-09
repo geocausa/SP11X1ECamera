@@ -1,3 +1,19 @@
+## 2026-10-09 rear52 exact optical identity source PASS; hardware pending
+
+Fresh52/build65/lib08 probe and analyzer are both bound to exact private root52;
+actual no-hardware identity checks passed.35 optical negatives include11 wrong
+directory/identity cases, retaining all original DMA READ/layout/save safeguards.
+37 checks/3 ARM64 W1/Werror modules/6 libcamera tests passed with0 diagnostics.
+Binary cached test_pattern readback, actual sensor exposure/gain/pattern
+readbacks and three400 scene/pattern/scene preserved.141 CAMSS sources match51
+except identity, retaining unchanged ISP/queue/lifetime. Guard's source-only
+builder inventory includes only the new exact build-optical-v2 command.
+52 not yet installed/armed/consumed at this source checkpoint.
+49 near-black native picture remains BLOCKED. No optics/parity/full-stack claim.
+50 and51 consumed/retired; never retry. NEXT guarded52 actual diagnostic.
+Evidence docs/NATIVE-RGB-REAR-GENERATION-52-PREP-20261009.json.
+Earlier entries are historical.
+
 ## 2026-10-09 rear51 pre-stream probe identity failure; retired safe
 
 Numeric cached test_pattern0 readback passed. CameraManager discovered camera,
