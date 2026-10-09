@@ -3,7 +3,8 @@
 """Daily boot: load the rear camera stack and route it (idempotent, no capture, no reboot).
 
 Runs from sp11-camera-daily.service only when the kernel command line carries
-sp11_camera_daily=1. Writes /run/sp11-camera/ready (media device, sensor) on success.
+sp11_camera_daily=1. Also loads the v4l2loopback webcam device (/dev/video50) fed by sp11-webcam.
+Writes /run/sp11-camera/ready (media device, sensor) on success.
 """
 import json, os, re, runpy, subprocess, sys, time
 from pathlib import Path
@@ -68,6 +69,9 @@ def main():
     g = run(["media-ctl", "-d", media, "-p"])
     need(classify(g)[0] == "rear-pix-only", "rear PIX route")
     H["validate_formats"](g, pads)
+    if not re.search(r"^v4l2loopback ", Path("/proc/modules").read_text(), re.M):
+        run(["insmod", D / "modules/v4l2loopback.ko", "video_nr=50", "card_label=SP11 Rear Camera",
+             "exclusive_caps=1", "max_buffers=8"])
     (RUN / "ready").write_text(json.dumps(dict(media=media, sensor=rear[0], time=time.time())) + "\n")
     print("SP11_CAMERA_DAILY_READY", media)
 
