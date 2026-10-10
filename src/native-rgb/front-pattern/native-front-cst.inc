@@ -249,3 +249,52 @@ static int native_front_lsc_apply(struct camss_video *video, u8 *capsule, size_t
 		 2 * ARRAY_SIZE(native_front_lsc_sel1_at));
 	return 0;
 }
+
+/* Own BPC_ABF noise LUT (open-profile work). The 64-entry table holds an
+ * inverse noise level per intensity bin: bits 0-8 value, bits 9 and up the
+ * decrement to the next entry (see open-profile/gen-abf-lut.py, built from our
+ * measured noise model). When enabled, both copies of the 256-byte payload in
+ * the one admitted profile are replaced by qcom/sp11/imx681-front-abf-v1.bin;
+ * the copies must currently be identical and non-zero or nothing is written.
+ */
+#define NATIVE_FRONT_ABF_FW "qcom/sp11/imx681-front-abf-v1.bin"
+#define NATIVE_FRONT_ABF_TABLE 256U
+static bool native_front_abf;
+module_param(native_front_abf, bool, 0400);
+MODULE_PARM_DESC(native_front_abf, "Replace the profile BPC_ABF noise LUT with " NATIVE_FRONT_ABF_FW);
+static const u32 native_front_abf_at[] = { 0x64c0, 0x8280 };
+
+static int native_front_abf_apply(struct camss_video *video, u8 *capsule, size_t bytes)
+{
+	const struct firmware *fw;
+	unsigned int i, j;
+	int ret;
+
+	if (!native_front_abf)
+		return 0;
+	if (!capsule)
+		return -EINVAL;
+	for (i = 0; i < ARRAY_SIZE(native_front_abf_at); i++) {
+		if (native_front_abf_at[i] + NATIVE_FRONT_ABF_TABLE > bytes ||
+		    memcmp(capsule + native_front_abf_at[i], capsule + native_front_abf_at[0],
+			   NATIVE_FRONT_ABF_TABLE))
+			return -ENOENT;
+	}
+	for (j = 0; j < NATIVE_FRONT_ABF_TABLE && !capsule[native_front_abf_at[0] + j]; j++)
+		;
+	if (j == NATIVE_FRONT_ABF_TABLE)
+		return -ENOENT;
+	ret = request_firmware_direct(&fw, NATIVE_FRONT_ABF_FW, video->camss->dev);
+	if (ret)
+		return ret;
+	if (fw->size != NATIVE_FRONT_ABF_TABLE) {
+		release_firmware(fw);
+		return -EINVAL;
+	}
+	for (i = 0; i < ARRAY_SIZE(native_front_abf_at); i++)
+		memcpy(capsule + native_front_abf_at[i], fw->data, NATIVE_FRONT_ABF_TABLE);
+	release_firmware(fw);
+	dev_info(video->camss->dev, "NATIVE_FRONT_ABF_OVERRIDE tables=%zu\n",
+		 ARRAY_SIZE(native_front_abf_at));
+	return 0;
+}
