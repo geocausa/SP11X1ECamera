@@ -1,0 +1,13 @@
+{
+  "identity": "E-FRONT-CONTOUR-REGISTRATION-20261010-01",
+  "source_base": "da331e5e029f51eceda55805a846d4a97c3b6211",
+  "hypothesis": "Contour-based outer-edge fitting improves corner precision for small decoded tags without relying on a fixed subpixel window across nearby internal cells.",
+  "change": "Independent supplemental registrar replaces only OpenCV CORNER_REFINE_SUBPIX with CORNER_REFINE_CONTOUR; original registrar, private results, raw capture identities and camera parameters remain unchanged.",
+  "gates": "Exactly one four-independently-decoded-ID candidate, each held-out marker predicted by the other three with max3px reprojection; convex/in-bounds healthy patch polygons >=64pixels; six gray medians increasing>1. No threshold change.",
+  "tests": "Same11 synthetic positive/negative tests: affine/perspective/mirror/rotation, dark lower band, missing marker/plain/no-code scene/displaced tag rejection, small marker and low-light fixture.",
+  "private_analysis": "Fresh immutable supplemental artifact from native08 and Windows08 saved originals; all original images/spatial/patch arrays stay privately on sameSP11.",
+  "hardware_access": false,
+  "new_capture": false,
+  "new_reboot": false,
+  "parity": false
+}
