@@ -1,3 +1,18 @@
+## 2026-10-10 GRUB menu cleanup complete
+
+Archived73 dormant camera-development GRUB scripts to
+/var/lib/sp11-grub-retired-camera-20261010-01/scripts; original bytes/modes,
+previous grub.cfg/grubenv and full audit retained. Generated replacement passed
+grub-script-check before atomic install. Menu records81->8 (seven boot entries,
+one Ubuntu Advanced submenu; six top-level items). Golden v19c saved default,
+Windows, Ubuntu/recovery, UEFI firmware and firmware shell retained. GRUBenv
+byte-identical, next_entry empty, Golden assets unchanged. No boot image or
+camera evidence deletion; no reboot. Consumed tests must never be rearmed.
+Historical ASSETS manifests referencing old /etc/grub.d camera scripts now resolve
+to the archived same-name script for offline provenance checks. New camera tests
+must install a fresh identity/menu script and retire it after Golden return.
+Evidence docs/GRUB-CAMERA-MENU-CLEANUP-20261010.json. Camera frontier unchanged.
+
 ## 2026-10-10 storage headroom restored
 
 Removed28,486 reproducible non-media .o intermediates only from the fixed old
