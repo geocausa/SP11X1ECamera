@@ -9,11 +9,13 @@ interface IPACamssX1EInterface {
  start() => (int32 ret);
  stop();
  computeParameters(uint64 request) => (int32 ret, array<uint8> packet, array<uint8> ispPacket);
+ [async] computeParametersAsync(uint64 epoch, uint64 request);
  [async] processStatistics(uint32 bufferId, uint64 stream,
                            uint32 sequence, uint64 timestamp);
 };
 
 interface IPACamssX1EEventInterface {
+ parametersComputed(uint64 epoch, uint64 request, int32 ret, array<uint8> packet, array<uint8> ispPacket);
  statisticsProcessed(uint32 bufferId, uint64 stream, uint32 sequence,
                      uint64 timestamp, int32 ret, float luma);
 };

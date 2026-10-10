@@ -20,6 +20,8 @@
 #include <linux/media-bus-format.h>
 
 #include <libcamera/base/log.h>
+#include <libcamera/base/object.h>
+#include "camss-x1e-parameter-schedule.h"
 #include <libcamera/base/span.h>
 #include <libcamera/camera.h>
 #include <libcamera/control_ids.h>
@@ -86,11 +88,11 @@ struct FrameState {
 
 class PipelineHandlerCamssX1E;
 
-class CamssX1ECameraData final : public Camera::Private
+class CamssX1ECameraData final : public Camera::Private, public Object
 {
 public:
  CamssX1ECameraData(PipelineHandler *pipe, std::shared_ptr<MediaDevice> media)
-  : Camera::Private(pipe), media_(std::move(media)) {}
+  : Camera::Private(pipe), Object(pipe), media_(std::move(media)) {}
  int init();
  int openDevices();
  void closeDevices();
@@ -98,6 +100,13 @@ public:
  int start(const ControlList *controls);
  void stop();
  int submitParameters();
+ int publishParameters(uint64_t request, const std::vector<uint8_t> &packet,
+                       const std::vector<uint8_t> &ispPacket, FrameBuffer *buffer);
+ void pumpParameters();
+ void parametersComputed(uint64_t epoch, uint64_t request, int32_t ret,
+                         const std::vector<uint8_t> &packet, const std::vector<uint8_t> &ispPacket);
+ void stopFailed(uint64_t epoch);
+
  int queueImage(FrameBuffer *buffer);
  int queueApplicationImage(FrameBuffer *buffer);
  int pumpPending();
@@ -137,7 +146,8 @@ public:
  std::deque<FrameBuffer *> availableParameters_;
  std::map<FrameBuffer *, uint64_t> parameterRequests_;
  std::map<FrameBuffer *, std::unique_ptr<MappedFrameBuffer>> parameterMappings_;
- uint64_t nextParameter_ = 5;
+ CamssX1EParameterSchedule parameterSchedule_;
+ FrameBuffer *computingParameter_ = nullptr;
  uint64_t streamId_ = 0;
  unsigned int pixelsQueued_ = 0;
  std::deque<FrameBuffer *> availableStartup_;
@@ -237,6 +247,7 @@ public:
   if (!data->ipa_)
    return false;
   data->ipa_->statisticsProcessed.connect(data.get(), &CamssX1ECameraData::meteringReady);
+  data->ipa_->parametersComputed.connect(data.get(), &CamssX1ECameraData::parametersComputed);
   IPASettings settings{};
   settings.sensorModel = "imx681";
   if (const char *tuning = std::getenv("LIBCAMERA_CAMSS_X1E_TUNING_FILE")) {
@@ -435,42 +446,70 @@ int CamssX1ECameraData::configure()
 
 int CamssX1ECameraData::submitParameters()
 {
- if (nextParameter_ > std::numeric_limits<uint32_t>::max())
-  return -EOVERFLOW;
- if (parameters_ && availableParameters_.empty()) return -ENOBUFS;
+ /* Synchronous seed only before pixel STREAMON. Live requests use async IPC. */
  std::vector<uint8_t> packet, ispPacket;
- int ret = ipa_->computeParameters(nextParameter_, &packet, &ispPacket);
+ const uint64_t request = parameterSchedule_.next();
+ int ret = ipa_->computeParameters(request, &packet, &ispPacket);
  if (ret) return ret;
- ret = native_front_params_validate(packet.data(), packet.size());
- if (ret || native_front_stats_u64(packet.data() + 8) != nextParameter_)
-  return ret ? ret : -ESTALE;
+ FrameBuffer *buffer = nullptr;
+ if (parameters_) {
+  if (availableParameters_.empty()) return -ENOBUFS;
+  buffer = availableParameters_.front();
+  availableParameters_.pop_front();
+ }
+ ret = publishParameters(request, packet, ispPacket, buffer);
+ return ret ? ret : parameterSchedule_.seedAccepted();
+}
+int CamssX1ECameraData::publishParameters(uint64_t request,
+ const std::vector<uint8_t> &packet, const std::vector<uint8_t> &ispPacket, FrameBuffer *buffer)
+{
+ int ret = native_front_params_validate(packet.data(), packet.size());
+ if (ret || native_front_stats_u64(packet.data()+8) != request) return ret ? ret : -ESTALE;
  std::array<uint32_t, NF_GAMMA_WORD_COUNT> scratch{};
  std::array<uint8_t, NF_GAMMA_BYTES> gamma{};
- int update = 0;
- ret = native_front_isp_decode(ispPacket.data(), ispPacket.size(), scratch.data(),
-                               scratch.size(), gamma.data(), gamma.size(), &update);
- if (ret) return ret;
- if (parameters_) {
-  /* This META_OUTPUT subset carries only gamma. Never drop a future scalar
-   * update merely because a metadata node is present. */
-  if (native_front_stats_u32(packet.data() + 16)) return -EOPNOTSUPP;
-  FrameBuffer *buffer = availableParameters_.front();
-  auto &plane = parameterMappings_.at(buffer)->planes()[0];
-  if (plane.size() < ispPacket.size()) return -ENOSPC;
-  memcpy(plane.data(), ispPacket.data(), ispPacket.size());
-  buffer->_d()->metadata().planes()[0].bytesused = ispPacket.size();
-  parameterRequests_.emplace(buffer, nextParameter_);
-  ret = parameters_->queueBuffer(buffer);
-  if (ret) parameterRequests_.erase(buffer);
-  else availableParameters_.pop_front();
+ int update=0;
+ ret=native_front_isp_decode(ispPacket.data(),ispPacket.size(),scratch.data(),scratch.size(),gamma.data(),gamma.size(),&update);
+ if(ret)return ret;
+ if(parameters_) {
+  if(!buffer || native_front_stats_u32(packet.data()+16))return -EOPNOTSUPP;
+  auto &plane=parameterMappings_.at(buffer)->planes()[0];
+  if(plane.size()<ispPacket.size())return -ENOSPC;
+  memcpy(plane.data(),ispPacket.data(),ispPacket.size());
+  buffer->_d()->metadata().planes()[0].bytesused=ispPacket.size();
+  parameterRequests_.emplace(buffer,request);
+  ret=parameters_->queueBuffer(buffer);
+  if(ret)parameterRequests_.erase(buffer);
  } else {
-  if (update) return -EOPNOTSUPP; /* Legacy driver must not discard tuning. */
+  if(update)return -EOPNOTSUPP;
   ControlList parameters(video_->controls());
-  parameters.set(kParams, ControlValue(Span<const uint8_t>(packet)));
-  ret = video_->setControls(&parameters);
+  parameters.set(kParams,ControlValue(Span<const uint8_t>(packet)));
+  ret=video_->setControls(&parameters);
  }
- if (!ret) nextParameter_++;
- return ret ? (ret < 0 ? ret : -EINVAL) : 0;
+ if(!ret)LOG(CAMSSX1E,Debug)<<"CAMSS_X1E_PARAMS_SUBMIT request="<<request<<" gamma="<<update<<" bytes="<<ispPacket.size();
+ return ret ? (ret<0?ret:-EINVAL) : 0;
+}
+void CamssX1ECameraData::pumpParameters()
+{
+ if(!running_ || failed_)return;
+ if(!parameterSchedule_.begin(!parameters_ || !availableParameters_.empty()))return;
+ if(parameters_) {
+  computingParameter_=availableParameters_.front();
+  availableParameters_.pop_front();
+ }
+ ipa_->computeParametersAsync(parameterSchedule_.epoch(),parameterSchedule_.next());
+}
+void CamssX1ECameraData::parametersComputed(uint64_t epoch,uint64_t request,int32_t ret,
+ const std::vector<uint8_t> &packet,const std::vector<uint8_t> &ispPacket)
+{
+ if(!running_ || epoch!=parameterSchedule_.epoch())return;
+ if(!parameterSchedule_.busy() || request!=parameterSchedule_.next()) {
+  fail("Asynchronous parameter identity mismatch");return;
+ }
+ if(!ret)ret=publishParameters(request,packet,ispPacket,computingParameter_);
+ computingParameter_=nullptr;
+ ret=parameterSchedule_.complete(epoch,request,ret);
+ if(ret){fail("Asynchronous parameter submission failed");return;}
+ pumpParameters();
 }
 
 void CamssX1ECameraData::parametersReady(FrameBuffer *buffer)
@@ -485,6 +524,7 @@ void CamssX1ECameraData::parametersReady(FrameBuffer *buffer)
  }
  parameterRequests_.erase(it);
  availableParameters_.push_back(buffer);
+ pumpParameters();
 }
 
 int CamssX1ECameraData::start(const ControlList *controls)
@@ -526,7 +566,8 @@ int CamssX1ECameraData::start(const ControlList *controls)
   auto seed = CamssX1EManual::fromSensor(delayedControls_->get(0));
   if (!seed || !(*seed == initial)) { delayedControls_.reset(); return -EIO; }
  } else delayedControls_.reset();
- nextParameter_ = 5;
+ parameterSchedule_.reset();
+ computingParameter_ = nullptr;
  nextSofSequence_ = 0;
  streamId_ = 0;
  pixelsQueued_ = 0;
@@ -719,6 +760,8 @@ void CamssX1ECameraData::cancelImage(FrameBuffer *buffer)
 void CamssX1ECameraData::stop()
 {
  running_ = false;
+ parameterSchedule_.stop();
+ computingParameter_ = nullptr;
  availableStartup_.clear();
  auto pending = pendingRequests_.take();
  std::vector<FrameBuffer *> held;
@@ -783,11 +826,15 @@ void CamssX1ECameraData::stop()
 
 void CamssX1ECameraData::fail(const char *reason)
 {
- if (!failed_) {
-  failed_ = true;
-  LOG(CAMSSX1E, Error) << reason;
- }
- stop();
+ if(failed_)return;
+ failed_=true;running_=false;
+ LOG(CAMSSX1E,Error)<<reason;
+ /* Unwind the active notifier before teardown removes poll FDs. */
+ invokeMethod(&CamssX1ECameraData::stopFailed,ConnectionTypeQueued,parameterSchedule_.epoch());
+}
+void CamssX1ECameraData::stopFailed(uint64_t epoch)
+{
+ if(failed_ && epoch==parameterSchedule_.epoch())stop();
 }
 
 int CamssX1ECameraData::controlTimingStep(uint32_t sequence)
@@ -914,10 +961,10 @@ void CamssX1ECameraData::imageReady(FrameBuffer *buffer)
   fail("Internal spare output admission failed");
   return;
  }
- if (submitParameters()) {
-  fail("Typed parameter queue rejected");
-  return;
+ if (parameterSchedule_.add()) {
+  fail("Bounded parameter completion debt exceeded");return;
  }
+ pumpParameters();
  tryComplete(sequence);
 }
 

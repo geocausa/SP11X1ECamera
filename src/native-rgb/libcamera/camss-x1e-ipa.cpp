@@ -114,6 +114,13 @@ public:
   return 0;
  }
 
+ void computeParametersAsync(uint64_t epoch, uint64_t request) override
+ {
+  std::vector<uint8_t> packet, ispPacket;
+  int ret = computeParameters(request, &packet, &ispPacket);
+  parametersComputed.emit(epoch, request, ret, packet, ispPacket);
+ }
+
  void processStatistics(uint32_t bufferId, uint64_t stream,
                         uint32_t sequence, uint64_t timestamp) override
  {

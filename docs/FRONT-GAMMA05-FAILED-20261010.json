@@ -1,0 +1,52 @@
+{
+  "candidate_boot_id": "1fad3d10-b408-4b76-a784-29e24f39b4bd",
+  "cause_scope": "Verified synchronous live IPA calculation nested poll dispatch; failure teardown removed notifier and camera aborted. Initial parameter rejection precise return code unrecorded. Prior04 timeout mechanism not independently traced.",
+  "error": "bounded cam/IPA process group timed out; see private signal trace",
+  "fix": "Live async parameter messages, one in-flight calculation, bounded completion debt and reserved metadata buffer; epoch guard; defer failure stop until active notifier unwinds",
+  "frames": 15,
+  "gamma_response_proven": false,
+  "hardware_streams_completed": 0,
+  "identity": "E-NATIVE-FRONT-PARAM-QUEUE-20261010-05",
+  "isolated_IPA_descendant_remained_alive": true,
+  "kernel_stop": "completed21 stop_requested1 error0",
+  "parameter_rejection_preceded_abort": true,
+  "poll_notifier_assertion": true,
+  "private_pixels_and_trace_same_SP11": true,
+  "process_result": {
+    "log_files_direct_no_communicate_pipe": true,
+    "returncode": -9,
+    "signal_trace_enabled": true,
+    "timed_out": true
+  },
+  "quality_parity": false,
+  "retirement": {
+    "Golden_asset_hashes_unchanged": true,
+    "candidate_boot_id": "1fad3d10-b408-4b76-a784-29e24f39b4bd",
+    "experiment_units_disabled_and_inactive": true,
+    "golden_boot_id": "426f41e7-19e5-4c44-b4db-234723ef17f7",
+    "grub_script_archived": true,
+    "identity": "E-NATIVE-FRONT-PARAM-QUEUE-20261010-05",
+    "next_entry_empty": true,
+    "owned_temporary_profile_removed": true,
+    "private_pixels_same_SP11": true,
+    "result_status": "FAILED_FRONT_GAMMA_DIAGNOSTIC",
+    "retired": true,
+    "retired_utc": "2026-10-10T08:52:30.218768+00:00",
+    "retry": false,
+    "saved_default_unchanged": true
+  },
+  "retry": false,
+  "source_commit": "043237271e273469abf3eefa82870d9c7b8da86b",
+  "status": "FAILED_FRONT_GAMMA_DIAGNOSTIC",
+  "timeout_process_snapshot_names": [
+    "strace"
+  ],
+  "trace_backtrace_functions": [
+    "EventDispatcherPoll::processNotifiers",
+    "IPCPipeUnixSocket::sendSync",
+    "IPAProxyCamssX1EIsolated::computeParameters",
+    "CamssX1ECameraData::submitParameters",
+    "CamssX1ECameraData::imageReady"
+  ],
+  "trace_camera_SIGABRT": true
+}

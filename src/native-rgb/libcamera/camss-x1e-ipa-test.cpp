@@ -23,6 +23,16 @@ class CamssX1EIPATest : public Test
   ret_ = ret;
   luma_ = luma;
  }
+ void parameters(uint64_t epoch, uint64_t request, int32_t ret,
+                 const std::vector<uint8_t> &packet, const std::vector<uint8_t> &isp)
+ {
+  parameterCalls_++;
+  parameterValid_ = epoch == 901 && request == 7 && ret == 0 &&
+   !native_front_params_validate(packet.data(), packet.size()) &&
+   native_front_stats_u64(packet.data()+8) == request && isp.size() == NF_ISP_HEADER_BYTES;
+ }
+ uint32_t parameterCalls_ = 0;
+ bool parameterValid_ = false;
  bool result(uint32_t calls, int ret, uint64_t stream, uint32_t sequence)
  {
   return calls_ == calls && buffer_ == 1 && ret_ == ret &&
@@ -73,6 +83,10 @@ protected:
   if (ipa.computeParameters(5, &packet, &ispPacket) != -EINVAL || packet != saved ||
       ipa.computeParameters(6, &packet, &ispPacket))
    return TestFail;
+
+  ipa.parametersComputed.connect(this, &CamssX1EIPATest::parameters);
+  ipa.computeParametersAsync(901,7);
+  if(parameterCalls_!=1 || !parameterValid_)return TestFail;
 
   std::vector<uint8_t> data(NATIVE_FRONT_STATS_BYTES);
   le(data, 0, NATIVE_FRONT_STATS_MAGIC, 4);
