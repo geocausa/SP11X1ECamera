@@ -38,7 +38,8 @@ def main():
     need(stat.S_ISDIR(s.st_mode) and s.st_uid == 0 and not s.st_mode & 0o077,
          "private root directory required")
     report = json.loads((REPO / ("docs/NATIVE-RGB-FRONT-CONTROL-RESPONSE-" + args.identity + "-20261007.json")).read_text())
-    need(report["candidate_retired"] is True and report["golden_assets_unchanged"] is True,
+    retired = report["candidate_retired"] if args.identity == "02" else report["consumed_retired"]
+    need(retired is True and report["golden_assets_unchanged"] is True,
          "retirement and Golden proof required")
     need((d / "ATTEMPT-CONSUMED").is_file(), "consumed identity required")
     lock = (d / "camera.lock").open("a")
