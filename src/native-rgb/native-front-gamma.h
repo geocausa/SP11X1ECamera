@@ -111,4 +111,39 @@ static inline int native_front_gamma10_expand(const nf_gamma_u32 *words,
   }
  return 0;
 }
+
+static inline nf_gamma_u32 nf_gamma_get32(const nf_gamma_u8 *p)
+{
+ return (nf_gamma_u32)p[0] | (nf_gamma_u32)p[1] << 8 |
+        (nf_gamma_u32)p[2] << 16 | (nf_gamma_u32)p[3] << 24;
+}
+
+/* Revalidate prepared data at the kernel backend boundary. This verifies
+ * encoding and continuity, not monotonicity, tuning quality or hardware.
+ */
+static inline int native_front_gamma12_validate(const nf_gamma_u8 *data,
+                                                size_t bytes)
+{
+ unsigned int c, i;
+
+ if (!data || bytes != NF_GAMMA_BYTES)
+  return -EINVAL;
+ for (c = 0; c < NF_GAMMA_CHANNELS; c++)
+  for (i = 0; i < NF_GAMMA_WORDS; i++) {
+   const nf_gamma_u8 *p = data + 4 * (c * NF_GAMMA_WORDS + i);
+   nf_gamma_u32 word = nf_gamma_get32(p);
+   unsigned int raw = (word >> 12) & 0xfffU;
+   int delta = raw & 0x800U ? (int)raw - 4096 : (int)raw;
+   int end = (int)(word & 0xfffU) + delta;
+
+   if (word & 0xff000000U)
+    return -EINVAL;
+   if (end < 0 || end > 4095)
+    return -ERANGE;
+   if (i + 1 < NF_GAMMA_WORDS &&
+       (nf_gamma_get32(p + 4) & 0xfffU) != (unsigned int)end)
+    return -EINVAL;
+  }
+ return 0;
+}
 #endif

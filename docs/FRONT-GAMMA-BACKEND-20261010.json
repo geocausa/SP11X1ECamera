@@ -1,0 +1,80 @@
+{
+  "identity": "E-NATIVE-FRONT-GAMMA-BACKEND-20261010-01",
+  "status": "PASS_KERNEL_QUEUE_BACKEND_SOURCE_ONLY_NOT_INSTALLED",
+  "base_source_head": "f7e44b9f7d651970198c77dceaa351af68043f6c",
+  "date": "2026-10-10",
+  "goal": "Native front/rear Linux drivers and libcamera IPA with independently measured tuning and upstream interfaces.",
+  "implementation": {
+    "kernel_internal_entry": "camss_x1e_front_params_gamma_submit",
+    "source": "src/native-rgb/native-front-params-kernel.inc",
+    "binder": "src/native-rgb/native-front-gamma-kernel.inc",
+    "header": "src/native-rgb/native-front-gamma-kernel.h",
+    "prepared_format": "Semantic R/G/B, 256 little-endian base12/signed12-delta words per channel; encoding revalidated after owned copy.",
+    "ownership": "Owned gamma copy and private profile-derived capsule. Existing provider obtains its independent copy before both temporaries are explicitly erased and freed.",
+    "frame_identity": "Existing validated scalar packet request ID and bank parity, including inverse GTM/Gamma banks; unchanged provider FIFO identity/depth enforcement.",
+    "sections": "Actual capsule descriptor validation and named gamma payload lookup; all three bounds, sizes, identities and disjointness validated before gamma destination mutation.",
+    "source_channel_binding": "Semantic G/B/R to retained payload0/1/2, matching existing gamma selector1/2/3 topology and v41x proposal names.",
+    "existing_scalar_packet_unchanged": true,
+    "existing_scalar_control_dimensions_unchanged": true,
+    "new_userspace_entry": false,
+    "metadata_params_node": false,
+    "IPA_sender": false,
+    "new_runtime_caller": false,
+    "hardware_channel_binding_or_encoding_qualified": false,
+    "private_startup_profile_dependency_remains": true
+  },
+  "qualification": {
+    "kernel_build": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-front-gamma-20261010-34",
+    "kernel_status": "PASS_NATIVE_SOURCE_BUILD_NOT_INSTALLED",
+    "compiler_policy": "W=1 and -Werror",
+    "kernel_modules": [
+      "qcom-camss.ko",
+      "imx681.ko",
+      "ov13858.ko"
+    ],
+    "front_SOF_sensor_trace_stack_staged": true,
+    "hosted_actual_bridge": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-front-gamma-bridge-host-20261010-03/RESULT.json",
+    "hosted_actual_bridge_checks": 210,
+    "actual_bridge_section_validator_lookup_and_cleanup_tested": true,
+    "hosted_allocation_locks_eligibility_provider_enqueue_and_profile_load_are_mocks": true,
+    "ASAN": true,
+    "UBSAN": true,
+    "Werror": true,
+    "gamma_compiler_validation_checks": 10203,
+    "scalar_regression_checks": 1979,
+    "source_composition_tests": 9,
+    "failure_cases": "Late malformed gamma, truncation, missing profile, disabled/ineligible/pinned/worker state, allocation failures, profile load failure, malformed/overlapping/duplicate/missing destinations, provider depth/identity rejection.",
+    "success_cases": "Three distinct mathematical channel curves mapped as G/B/R, correct request/banks, all other bytes preserved, baseline/input unchanged, queued capsule immutable after caller buffer overwrite, scalar-only tables preserved.",
+    "source_only_failed_composition_directories": [
+      "native-rgb-front-gamma-20261010-32",
+      "native-rgb-front-gamma-20261010-33"
+    ],
+    "hardware_access": false,
+    "installed": false
+  },
+  "hardware": {
+    "Golden_boot": "e66b1658-106b-476e-acbb-6d044addd43d",
+    "new_camera_runs": 0,
+    "new_reboots": 0,
+    "experiment_armed": false,
+    "front_current": "E-NATIVE-FRONT-METER-20261010-04",
+    "rear_current": "E-NATIVE-REAR-GENERATION-66",
+    "native05_uninstalled_unconsumed": true
+  },
+  "upstream": {
+    "gamma_proposal_url": "https://lists.openwall.net/linux-kernel/2026/10/06/1832",
+    "uapi_proposal_url": "https://lists.openwall.net/linux-kernel/2026/10/06/1797",
+    "state": "Proposed; not claimed merged or SP11-hardware qualified.",
+    "next": "Standard metadata params transport and libcamera/IPA producer, with format negotiation and stream/request ownership. No private scalar packet enlargement."
+  },
+  "image_quality": {
+    "front_chart_registration_qualified": false,
+    "registered_patch_calibration_authorized": false,
+    "automatic_front_feedback_enabled": false,
+    "new_tone_curve_calibrated": false,
+    "new_gamma_hardware_response_validated": false,
+    "Windows_quality_parity_proven": false,
+    "private_pixels_and_spatial_data_same_SP11_only": true,
+    "no_new_pixel_analysis": true
+  }
+}

@@ -49,22 +49,22 @@
  		if (camss_x1e_native_front_params_trial_allowed(video->camss))
 --- a/native-front-params-kernel.inc
 +++ b/native-front-params-kernel.inc
-@@ -61,6 +61,8 @@
+@@ -62,6 +62,8 @@
   return ret;
  }
  
 +#include "native-front-profile-kernel.inc"
 +
- int camss_x1e_front_params_submit(struct camss_video *video,
-                                 const u8 *packet, size_t bytes)
- {
-@@ -84,6 +86,9 @@
-      (!READ_ONCE(video->x1e_pix_worker_started) ||
-       !READ_ONCE(video->x1e_pix_live_active)))
-   return -EBUSY;
+ static int native_front_params_submit(struct camss_video *video,
+                                       const u8 *packet, size_t bytes,
+                                       const u8 *gamma, size_t gamma_bytes)
+@@ -98,6 +100,9 @@
+  } else if (gamma_bytes) {
+   return -EINVAL;
+  }
 + ret = native_front_profile_load(video);
 + if (ret)
-+  return ret;
++  goto out;
   mutex_lock(&video->native_params_lock);
   if (video->native_params_profile) {
    capsule = kmemdup(video->native_params_profile, CAMSS_X1E_PIX_CAPSULE_BYTES,

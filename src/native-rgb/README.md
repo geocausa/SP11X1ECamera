@@ -1,3 +1,40 @@
+## Current gamma backend — 2026-10-10
+
+Gamma now has a source-qualified kernel queue backend:
+`camss_x1e_front_params_gamma_submit()` copies and revalidates prepared semantic
+R/G/B tables, binds all three named sections in an owned capsule, and enqueues it
+under the existing frame ID and bank rules. Both temporary copies are erased.
+The baseline profile and caller data remain unchanged. The existing 64-byte
+scalar packet/control is unchanged.
+
+The complete front SOF/control-trace kernel stack builds with W=1/-Werror.
+Hosted tests exercise the actual submission/binder and actual capsule section
+validator/lookup; allocation, locks, eligibility, profile loading and provider
+enqueue are explicit mocks. They cover error cleanup, immutable queued copies,
+wrong identities, malformed/overlapping destinations and the scalar-only path.
+This is kernel backend source integration. There is no metadata output node,
+IPA sender, new userspace entry, installed module, or new optical qualification.
+
+Reproduce the hosted bridge checks against a fresh composed kernel tree:
+
+```sh
+python3 src/native-rgb/test-front-gamma-kernel.py \
+  --staged /absolute/fresh-build/camss \
+  --out /absolute/fresh-hosted-results
+```
+
+Semantic G/B/R maps to retained payloads0/1/2, consistent with selector1/2/3 names
+in the public v41x gamma proposal. Hardware channel interpretation and the
+candidate 12-bit encoding remain unqualified. No proposal register assumptions
+or retained curve values are copied into this backend.
+
+Next implement the standard metadata params adapter and IPA sender, qualify a
+fresh fully registered chart reference, measure independent front tone/color,
+then validate the complete update optically with clean stop. Private startup
+profile replacement and upstream review remain required.
+
+Evidence: [FRONT-GAMMA-BACKEND-20261010.json](../../docs/FRONT-GAMMA-BACKEND-20261010.json).
+
 ## Current checkpoint — 2026-10-10
 
 The delivery target is native Linux front and rear V4L2/Media Controller drivers

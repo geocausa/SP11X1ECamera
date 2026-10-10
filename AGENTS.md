@@ -1,3 +1,24 @@
+## 2026-10-10 front gamma kernel backend source PASS; no hardware
+Kernel-internal gamma submission shares the existing typed request/bank/FIFO
+path. Prepared tables copied/revalidated; all three named capsule sections
+validated before writes; queue owns a copy; temporaries erased/freed. Existing
+64-byte scalar packet/control unchanged. No new userspace entry or runtime caller.
+Fresh kernel34 builds all three modules W=1/-Werror, uninstalled.
+Hosted actual kernel bridge/section validator/lookup passes210 ASAN/UBSAN checks
+with allocation/locks/profile loading/provider enqueue explicitly mocked.
+Gamma compiler/validator10203, scalar regression1979, composition9 PASS.
+Kernel backend source integration only: no metadata params node/IPA sender,
+hardware channel/encoding/curve qualification, calibrated tuning or parity.
+Source G/B/R binding matches retained payload0/1/2 and public selector1/2/3 names.
+Private startup-profile dependency remains. Evidence
+docs/FRONT-GAMMA-BACKEND-20261010.json.
+No new camera run/reboot/pixel analysis. Golden e66b1658-106b-476e-acbb-6d044addd43d
+unarmed. Front04/rear66 remain hardware foundations; native05 uninstalled/unconsumed.
+Next standard metadata adapter/IPA producer plus corrected physical chart view,
+fresh strict registered reference and independently measured front tone/color.
+Failed source composition32/33 never installed; successful34 source only.
+Earlier entries are historical; no spent hardware identity retries.
+
 ## 2026-10-10 front gamma/visibility source checkpoint; no new hardware
 Independent front gamma data compiler passes10197 hosted ASAN/UBSAN checks,
 C11/C++17 and actual SP11 kernel-header object compilation with Werror.

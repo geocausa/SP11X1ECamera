@@ -142,7 +142,9 @@ def assemble(out, nv12_trial=False, front_owner_trial=False, front_queue_trial=F
         command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
                  HERE / "front-meta-trial.patch"], cwd=camss)
     if front_params_trial:
-        for name in ("native-front-params-kernel.inc", "native-front-params.h"):
+        for name in ("native-front-params-kernel.inc", "native-front-params.h",
+                     "native-front-gamma-kernel.inc", "native-front-gamma-kernel.h",
+                     "native-front-gamma.h"):
             shutil.copy2(HERE / name, camss / name)
         command(["patch", "--batch", "--fuzz=0", "-p1", "-i",
                  HERE / "front-params-trial.patch"], cwd=camss)

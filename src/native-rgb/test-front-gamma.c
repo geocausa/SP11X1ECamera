@@ -26,12 +26,21 @@ int main(void)
  for(unsigned c=0;c<3;c++)for(unsigned i=0;i<257;i++)
   points[c*257+i]=(unsigned short)((i*4095U+128U)/256U);
  need(native_front_gamma12_pack(points,771,out,3072)==0);verify(out,points);
+ need(native_front_gamma12_validate(out,3072)==0);
  /* Hand-calculated signed slope and exact LE bytes. */
  points[0]=100;points[1]=99;
  need(native_front_gamma12_pack(points,771,out,3072)==0);
  need(out[0]==0x64 && out[1]==0xf0 && out[2]==0xff && out[3]==0);
  verify(out,points);
  memcpy(before,out,sizeof(out));
+ need(native_front_gamma12_validate(NULL,3072)==-EINVAL);
+ need(native_front_gamma12_validate(out,3071)==-EINVAL);
+ out[3071]=1;need(native_front_gamma12_validate(out,3072)==-EINVAL);
+ memcpy(out,before,sizeof(out));out[4]^=1;
+ need(native_front_gamma12_validate(out,3072)==-EINVAL);
+ memcpy(out,before,sizeof(out));out[0]=0;out[1]=0xf0;out[2]=0xff;
+ need(native_front_gamma12_validate(out,3072)==-ERANGE);
+ memcpy(out,before,sizeof(out));
  memcpy(badpoints,points,sizeof(points));badpoints[770]=4096;
  need(native_front_gamma12_pack(badpoints,771,out,3072)==-ERANGE);
  need(!memcmp(out,before,sizeof(out)));

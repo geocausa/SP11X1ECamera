@@ -3,6 +3,7 @@
  * remains a private development dependency; this is not the final product ABI.
  */
 #include "native-front-params.h"
+#include "native-front-gamma-kernel.inc"
 static_assert(sizeof(struct native_front_params) == NATIVE_FRONT_PARAMS_BYTES);
 
 void camss_x1e_front_params_clear(struct camss_video *video)
@@ -61,13 +62,14 @@ static int native_front_params_profile_store(struct camss_video *video,
  return ret;
 }
 
-int camss_x1e_front_params_submit(struct camss_video *video,
-                                const u8 *packet, size_t bytes)
+static int native_front_params_submit(struct camss_video *video,
+                                      const u8 *packet, size_t bytes,
+                                      const u8 *gamma, size_t gamma_bytes)
 {
  const u8 *section;
  size_t section_bytes;
  u32 values[9][6];
- u8 *capsule = NULL;
+ u8 *capsule = NULL, *owned_gamma = NULL;
  u64 request;
  unsigned int i, j;
  int ret;
@@ -84,6 +86,18 @@ int camss_x1e_front_params_submit(struct camss_video *video,
      (!READ_ONCE(video->x1e_pix_worker_started) ||
       !READ_ONCE(video->x1e_pix_live_active)))
   return -EBUSY;
+ if (gamma) {
+  if (gamma_bytes != NF_GAMMA_BYTES)
+   return -EINVAL;
+  owned_gamma = kmemdup(gamma, gamma_bytes, GFP_KERNEL);
+  if (!owned_gamma)
+   return -ENOMEM;
+  ret = native_front_gamma12_validate(owned_gamma, gamma_bytes);
+  if (ret)
+   goto out;
+ } else if (gamma_bytes) {
+  return -EINVAL;
+ }
  mutex_lock(&video->native_params_lock);
  if (video->native_params_profile) {
   capsule = kmemdup(video->native_params_profile, CAMSS_X1E_PIX_CAPSULE_BYTES,
@@ -94,7 +108,7 @@ int camss_x1e_front_params_submit(struct camss_video *video,
  }
  mutex_unlock(&video->native_params_lock);
  if (ret)
-  return ret;
+  goto out;
  ret = camss_x1e_pix_capsule_section(capsule,
        CAMSS_X1E_PIX_CAPSULE_TYPE_STEADY_MODULES, 0, &section, &section_bytes);
  if (ret || section_bytes != 9 * CAMSS_X1E_PIX_CAPSULE_MODULE_RECORD_BYTES) {
@@ -114,6 +128,12 @@ int camss_x1e_front_params_submit(struct camss_video *video,
   for (j = 0; j < 6; j++)
    put_unaligned_le32(values[i][j], (u8 *)section +
         i * CAMSS_X1E_PIX_CAPSULE_MODULE_RECORD_BYTES + 4 + 4*j);
+ if (owned_gamma) {
+  ret = native_front_gamma_bind(capsule, CAMSS_X1E_PIX_CAPSULE_BYTES,
+                                owned_gamma, gamma_bytes);
+  if (ret)
+   goto out;
+ }
  /* The existing FIFO checks monotonic request identity and bounded depth.
   * It owns a copy before this temporary profile-derived capsule is erased.
   */
@@ -127,7 +147,31 @@ int camss_x1e_front_params_submit(struct camss_video *video,
            (unsigned long long)request, native_params_le32(packet + 16));
  }
 out:
- memzero_explicit(capsule, CAMSS_X1E_PIX_CAPSULE_BYTES);
- kfree(capsule);
+ if (capsule) {
+  memzero_explicit(capsule, CAMSS_X1E_PIX_CAPSULE_BYTES);
+  kfree(capsule);
+ }
+ if (owned_gamma) {
+  memzero_explicit(owned_gamma, gamma_bytes);
+  kfree(owned_gamma);
+ }
  return ret;
+}
+
+int camss_x1e_front_params_submit(struct camss_video *video,
+                                const u8 *packet, size_t bytes)
+{
+ return native_front_params_submit(video, packet, bytes, NULL, 0);
+}
+
+/* Internal target for a future metadata-params adapter. No userspace entry
+ * point invokes this; the existing scalar control and packet stay unchanged.
+ */
+int camss_x1e_front_params_gamma_submit(struct camss_video *video,
+                                      const u8 *packet, size_t bytes,
+                                      const u8 *gamma, size_t gamma_bytes)
+{
+ if (!gamma)
+  return -EINVAL;
+ return native_front_params_submit(video, packet, bytes, gamma, gamma_bytes);
 }
