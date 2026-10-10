@@ -24,16 +24,50 @@ def template():
     return t
 def detect(y):
     par=cv2.aruco.DetectorParameters();par.cornerRefinementMethod=cv2.aruco.CORNER_REFINE_SUBPIX
+    par.minMarkerPerimeterRate=.005
+    par.cornerRefinementWinSize=2
+    par.adaptiveThreshWinSizeMin=3;par.adaptiveThreshWinSizeMax=63;par.adaptiveThreshWinSizeStep=4
     detector=cv2.aruco.ArucoDetector(D,par)
-    # Mirroring is resolved from decoded IDs; photometry uses the matching original view.
     candidates=[]
     for mirror in [False,True]:
         view=np.fliplr(y).copy() if mirror else y
-        corners,ids,_=detector.detectMarkers(view)
-        if ids is None:continue
-        ids=ids.ravel().tolist()
-        if all(ids.count(n)==1 for n in IDS):
-            candidates.append((mirror,view,[corners[ids.index(n)].reshape(4,2) for n in IDS]))
+        enhanced=cv2.createCLAHE(clipLimit=3,tileGridSize=(16,16)).apply(view)
+        for search in [view,enhanced]:
+            corners,ids,_=detector.detectMarkers(search)
+            if ids is None:continue
+            ids=ids.ravel().tolist()
+            known={n:corners[ids.index(n)].reshape(4,2) for n in IDS if ids.count(n)==1}
+            if len(known)>=2 and len(known)<4:
+                # A partial fit only proposes bounded searches. Every recovered ID
+                # must independently decode; the four-marker held-out gate still applies.
+                src=np.concatenate([layout()[IDS.index(n)] for n in known])
+                dst=np.concatenate(list(known.values()))
+                seed,_=cv2.findHomography(src,dst,0)
+                if seed is not None:
+                    for n in IDS:
+                        if n in known:continue
+                        predicted=cv2.perspectiveTransform(layout()[IDS.index(n)].reshape(-1,1,2),seed).reshape(4,2)
+                        if not np.isfinite(predicted).all():continue
+                        side=float(np.max(np.ptp(predicted,axis=0)))
+                        if not 8<=side<=200:continue
+                        pad=side*.5
+                        x0=max(0,int(np.floor(predicted[:,0].min()-pad)))
+                        y0=max(0,int(np.floor(predicted[:,1].min()-pad)))
+                        x1=min(view.shape[1],int(np.ceil(predicted[:,0].max()+pad)))
+                        y1=min(view.shape[0],int(np.ceil(predicted[:,1].max()+pad)))
+                        if x1<=x0 or y1<=y0:continue
+                        crop=search[y0:y1,x0:x1]
+                        enlarged=cv2.resize(crop,None,fx=3,fy=3,interpolation=cv2.INTER_LINEAR)
+                        recovered,rids,_=detector.detectMarkers(enlarged)
+                        if rids is None:continue
+                        rids=rids.ravel().tolist()
+                        if rids.count(n)==1:
+                            # Resize uses half-pixel centers; undo that convention.
+                            c=(recovered[rids.index(n)].reshape(4,2)+.5)/3-.5
+                            known[n]=c+np.float32([x0,y0])
+            if len(known)==4:
+                candidates.append((mirror,view,[known[n] for n in IDS]))
+                break
     return candidates
 def locate(y,uv=None):
     out={"qualified":False,"reason":"four_unique_fiducials_not_visible"}
@@ -102,7 +136,12 @@ def selftest():
     moved[ny-q:ny+size+q,nx-q:nx+size+q]=255
     moved[ny:ny+size,nx:nx+size]=cv2.aruco.generateImageMarker(D,211,size)
     assert not locate(moved)["qualified"]
-    print("PASS_CODED_CHART_REGISTRATION tests=9 no_camera_access=true")
+    small=np.full((1440,2560),90,np.uint8)
+    small[300:500,600:900]=cv2.resize(t,(300,200),interpolation=cv2.INTER_NEAREST)
+    assert locate(small)["qualified"]
+    darker=np.clip(small.astype(np.float32)*.3+10,0,255).astype(np.uint8)
+    assert locate(darker)["qualified"]
+    print("PASS_CODED_CHART_REGISTRATION tests=11 no_camera_access=true")
 if __name__=="__main__":
     if "--self-test" in sys.argv:selftest()
     else:

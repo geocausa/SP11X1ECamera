@@ -1,3 +1,23 @@
+## 2026-10-10 Windows04/05/06 retired; front chart calibration blocked
+All three fresh Windows references passed eight distinct NV12 samples/three
+private originals each, clean release and task unregistration. Latest06 returned
+Golden e66b1658-106b-476e-acbb-6d044addd43d with protected asset hashes unchanged.
+Windows06 original bytes reproduce stored whole-frame Y/U/V metrics on SP11.
+Plain04 chart fails unique template-feature registration. Coded05 full fixture
+and coded06 inset-upper fixture both fail four-ID geometry. Two expected markers
+are detectable in06. Source tests3 plain and11 coded pass; native-size
+GDI144 cells pass. Four decoded markers plus held-out geometry remain mandatory.
+Small-marker/low-light and bounded crop recovery do not qualify actual06.
+No registered patch tuning, blind AE, or Windows image-quality parity.
+Physical framing/display visibility cause remains unproven. Need a physical
+framing check, then a fresh reference; native05 remains source-only UNINSTALLED,
+UNCONSUMED and has never accessed hardware. Never retry Windows04/05/06 or
+native02/03/04. Preserve qualified rear66 and front04 manual-bracket foundation.
+SP7 tasks04/05/06 stopped/unregistered; Windows NTFS read-only analysis closed.
+All pixels/spatial results remain SP11. Evidence
+docs/WINDOWS-FRONT06-UPPER-CODED-GEOMETRY-20261010.json.
+Earlier entries are historical; totals only verified throughrear59.
+
 ## 2026-10-10 Windows04 retired; coded chart05 source checkpoint
 Windows04 passed eight distinct native NV12 samples/three private frames, clean
 release and task unregistration. Normal reboot returned protected Golden
