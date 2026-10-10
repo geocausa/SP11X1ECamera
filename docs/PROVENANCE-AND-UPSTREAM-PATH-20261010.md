@@ -37,11 +37,11 @@ our own earlier register work. Names marked ? are not yet confirmed.
 | 0x3b60 | 13 regs | DEMUX | functional (Bayer order, gains) |
 | 0x3d08/0x3d58 | 512 B table + 10 regs | BPC_PDPC | tuning-light (PD pixel map, thresholds) |
 | 0x3f60 | 3 regs | BINCORRECT | functional |
-| 0x4308/0x4358 | 3 x 884 B (17x13 mesh) + 13 regs | LSC | **tuning** (lens shading) |
+| 0x4308/0x4358 | 3 x 884 B (17x13 mesh) + 13 regs | LSC | **replaced by ours**: measured flat field (camera on diffuser over the SP7, LSC off, linear), `open-profile/fit-lsc.py`, table `front-ae/tuning/imx681-front-lsc-v1.bin`. Format: 13x17 x u32, bits 0-12 channel gain, bits 14-26 green gain, Q10; sel1 R/G, sel2 B/G, sel3 zero. Uncorrected corners 0.17/0.21/0.20 (R/G/B) -> 0.64-0.67 with strength 0.82; colour spread R/G 1.29 -> 1.04, B/G 1.08 -> 1.03. |
 | 0x4560 | 13 regs | WB_GAIN | ours (AWB) |
 | 0x4708/0x4758 | 512 B + 5 regs | GIC | **tuning** (noise model) |
 | 0x4908/0x4958 | 256 B + 26 regs | BPC_ABF | **tuning** (denoise) |
-| 0x4b60 | 7 regs | BLS | measurable (black level) |
+| 0x4b60 | 7 regs | BLS | **measured by us**: dark frames (BLS off, then offset 1200 at gain 1.0) give pedestal 1649 in BLS units (offset field = reg 0x4b68[31:16], gain 0x4b6c = 2048*65536/(65536-offset)). Pedestal rises to ~1900 at sensor digital gain 4x. |
 | 0x4d60, 0x5260 | 1 reg each | BAYER_GTM / LCAC ? | probably disabled |
 | 0x5408/0x5458 | 2 x 68 B + 22 regs | DEMOSAIC ? | **tuning** (interpolation) |
 | 0x5660 | 5 regs | ? | to identify |

@@ -118,3 +118,134 @@ static int native_front_ccm_apply(struct camss_video *video, u8 *capsule, size_t
 	dev_info(video->camss->dev, "NATIVE_FRONT_CCM_OVERRIDE commands=%u\n", found);
 	return 0;
 }
+
+/* Experimental register masks for module studies (e.g. switching a module's
+ * enable bit off): up to eight (register, AND mask, OR mask) triples applied
+ * to every REG_CONT command word that writes the register in the command
+ * area of the materialized capsule. Each listed register must be found at
+ * least once; nothing is written otherwise.
+ */
+#define NATIVE_FRONT_REGMASK_MAX 8U
+#define NATIVE_FRONT_REGMASK_AREA 0x7400U
+static u32 native_front_reg_mask[3 * NATIVE_FRONT_REGMASK_MAX];
+static int native_front_reg_mask_count;
+module_param_array(native_front_reg_mask, uint, &native_front_reg_mask_count, 0400);
+MODULE_PARM_DESC(native_front_reg_mask,
+	"Front ISP register study: triples reg,and,or applied to all REG_CONT writes of reg");
+
+static int native_front_regmask_walk(u8 *capsule, size_t bytes, bool write, unsigned int *hits)
+{
+	size_t limit = min_t(size_t, bytes, NATIVE_FRONT_REGMASK_AREA);
+	size_t p;
+	unsigned int t;
+
+	for (p = 0x400; p + 8 <= limit; p += 4) {
+		u32 h = get_unaligned_le32(capsule + p);
+		u32 n = h & 0xffffU, start;
+
+		if ((h >> 24) != 3U || (h & 0x00ff0000U) || !n || n >= 512U ||
+		    p + 8 + 4 * (size_t)n > limit)
+			continue;
+		start = get_unaligned_le32(capsule + p + 4);
+		if (start >= 0x10000U || (start & 3U))
+			continue;
+		for (t = 0; t < (unsigned int)native_front_reg_mask_count / 3; t++) {
+			u32 reg = native_front_reg_mask[3 * t];
+			u8 *w;
+
+			if (reg < start || reg >= start + 4 * n)
+				continue;
+			w = capsule + p + 8 + (reg - start);
+			hits[t]++;
+			if (write)
+				put_unaligned_le32((get_unaligned_le32(w) & native_front_reg_mask[3 * t + 1]) |
+						   native_front_reg_mask[3 * t + 2], w);
+		}
+		p += 4 + 4 * (size_t)n; /* skip this command's body */
+	}
+	return 0;
+}
+
+static int native_front_regmask_apply(struct camss_video *video, u8 *capsule, size_t bytes)
+{
+	unsigned int hits[NATIVE_FRONT_REGMASK_MAX] = { 0 };
+	unsigned int t, total = 0;
+
+	if (!native_front_reg_mask_count)
+		return 0;
+	if (!capsule || native_front_reg_mask_count % 3)
+		return -EINVAL;
+	native_front_regmask_walk(capsule, bytes, false, hits);
+	for (t = 0; t < (unsigned int)native_front_reg_mask_count / 3; t++) {
+		if (!hits[t])
+			return -ENOENT;
+		total += hits[t];
+	}
+	memset(hits, 0, sizeof(hits));
+	native_front_regmask_walk(capsule, bytes, true, hits);
+	for (t = 0; t < (unsigned int)native_front_reg_mask_count / 3; t++)
+		dev_info(video->camss->dev, "NATIVE_FRONT_REGMASK reg=0x%04x and=0x%08x or=0x%08x writes=%u\n",
+			 native_front_reg_mask[3 * t], native_front_reg_mask[3 * t + 1],
+			 native_front_reg_mask[3 * t + 2], hits[t]);
+	return 0;
+}
+
+/* Own measured lens-shading mesh (open-profile work). When enabled, the
+ * 17x13 LSC DMI payloads of this exact profile are replaced by
+ * qcom/sp11/imx681-front-lsc-v1.bin: three 884-byte selector tables (red/green,
+ * blue/green, zeros; Q10 gains, see open-profile/fit-lsc.py). The payload
+ * offsets below belong to the one admitted profile digest; every target must
+ * currently hold a non-zero table or nothing is written.
+ */
+#define NATIVE_FRONT_LSC_FW "qcom/sp11/imx681-front-lsc-v1.bin"
+#define NATIVE_FRONT_LSC_TABLE 884U
+static bool native_front_lsc;
+module_param(native_front_lsc, bool, 0400);
+MODULE_PARM_DESC(native_front_lsc, "Replace the profile LSC mesh with " NATIVE_FRONT_LSC_FW);
+static const u32 native_front_lsc_sel1_at[] = { 0x3b40, 0x4740, 0x7600 };
+static const u32 native_front_lsc_sel2_at[] = { 0x3ec0, 0x65c0, 0x7980 };
+
+static bool native_front_lsc_nonzero(const u8 *p)
+{
+	unsigned int i;
+
+	for (i = 0; i < NATIVE_FRONT_LSC_TABLE; i++)
+		if (p[i])
+			return true;
+	return false;
+}
+
+static int native_front_lsc_apply(struct camss_video *video, u8 *capsule, size_t bytes)
+{
+	const struct firmware *fw;
+	unsigned int i;
+	int ret;
+
+	if (!native_front_lsc)
+		return 0;
+	if (!capsule)
+		return -EINVAL;
+	for (i = 0; i < ARRAY_SIZE(native_front_lsc_sel1_at); i++)
+		if (native_front_lsc_sel1_at[i] + NATIVE_FRONT_LSC_TABLE > bytes ||
+		    native_front_lsc_sel2_at[i] + NATIVE_FRONT_LSC_TABLE > bytes ||
+		    !native_front_lsc_nonzero(capsule + native_front_lsc_sel1_at[i]) ||
+		    !native_front_lsc_nonzero(capsule + native_front_lsc_sel2_at[i]))
+			return -ENOENT;
+	ret = request_firmware_direct(&fw, NATIVE_FRONT_LSC_FW, video->camss->dev);
+	if (ret)
+		return ret;
+	if (fw->size != 3 * NATIVE_FRONT_LSC_TABLE ||
+	    native_front_lsc_nonzero(fw->data + 2 * NATIVE_FRONT_LSC_TABLE)) {
+		release_firmware(fw);
+		return -EINVAL;
+	}
+	for (i = 0; i < ARRAY_SIZE(native_front_lsc_sel1_at); i++) {
+		memcpy(capsule + native_front_lsc_sel1_at[i], fw->data, NATIVE_FRONT_LSC_TABLE);
+		memcpy(capsule + native_front_lsc_sel2_at[i], fw->data + NATIVE_FRONT_LSC_TABLE,
+		       NATIVE_FRONT_LSC_TABLE);
+	}
+	release_firmware(fw);
+	dev_info(video->camss->dev, "NATIVE_FRONT_LSC_OVERRIDE tables=%zu\n",
+		 2 * ARRAY_SIZE(native_front_lsc_sel1_at));
+	return 0;
+}

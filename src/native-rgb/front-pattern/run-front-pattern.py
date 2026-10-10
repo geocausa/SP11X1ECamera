@@ -70,6 +70,8 @@ def main():
         shutil.copyfile(D / "imx681-2560x1440-nv12-v1.bin", FW)
         os.chmod(FW, 0o600)
         fw_installed = True
+        for name in CFG.get("firmware_extra", []):  # own measured tables, removed after capture
+            shutil.copyfile(D / name, FW.parent / name); os.chmod(FW.parent / name, 0o600)
         run(["insmod", D / "modules/qcom-camss.ko", *CFG["camss_params"]])
         for name in ["ov13858", "imx681", "sp11-vd55g0"]:
             run(["insmod", D / ("modules/" + name + ".ko")])
@@ -133,6 +135,11 @@ def main():
         if fw_installed:
             try:
                 FW.unlink()
+            except OSError:
+                pass
+        for name in CFG.get("firmware_extra", []):
+            try:
+                (FW.parent / name).unlink()
             except OSError:
                 pass
         r["private_profile_removed"] = not FW.exists()
