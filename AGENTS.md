@@ -1,3 +1,20 @@
+## 2026-10-10 front gamma/visibility source checkpoint; no new hardware
+Independent front gamma data compiler passes10197 hosted ASAN/UBSAN checks,
+C11/C++17 and actual SP11 kernel-header object compilation with Werror.
+Three private front table spans match base12/signed12 delta continuity, not the
+proposed upstream base10/signed10 format. No coefficients/originals exported.
+This is structural candidate encoding, NOT hardware interpretation, calibrated
+tuning, kernel/IPA integration, selector binding, or upstream readiness.
+Source docs/FRONT-GAMMA-SOURCE-20261010.json includes primary proposal references.
+Visibility diagnostic passes3 synthetic checks; saved Windows06 partial models
+do not support all four expected codes inside the frame. Physical cause unproven.
+Strict four-ID/held-out geometry gate unchanged; no calibration/AE authorized.
+No new camera run/reboot. Golden e66b1658-106b-476e-acbb-6d044addd43d unarmed,
+Windows read-only analysis closed. Front04/rear66 remain hardware-qualified;
+native05 uninstalled/unconsumed. Next correct physical chart framing, fresh
+one-use reference and measured front tuning with frame-owned native parameters.
+Earlier entries are historical; no spent identity retries.
+
 ## 2026-10-10 Windows04/05/06 retired; front chart calibration blocked
 All three fresh Windows references passed eight distinct NV12 samples/three
 private originals each, clean release and task unregistration. Latest06 returned

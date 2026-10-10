@@ -1,3 +1,46 @@
+## Current checkpoint — 2026-10-10
+
+The delivery target is native Linux front and rear V4L2/Media Controller drivers
+with a libcamera pipeline and IPA, independent tuning, Windows image-quality
+parity, and upstreamable interfaces. Front04 manual exposure/gain capture and
+rear66 automatic exposure remain the last qualified hardware foundations.
+Front tone/color calibration is blocked: the saved Windows06 chart does not
+qualify all four marker IDs and held-out geometry. No fresh capture was made
+for this source checkpoint. Older milestones below are historical.
+
+The source-only front gamma helper in `native-front-gamma.h` compiles semantic
+R/G/B curves to explicit little-endian base12/signed12-delta words. Its optional
+10-bit input adapter follows the October 6 proposed Qualcomm IFE gamma table
+semantics, rescales endpoints exactly, validates every channel before output
+mutation, and rejects invalid continuity, reserved bits, ranges and overlap.
+This is a data compiler, not a new ABI, UAPI parser, calibrated curve, or enabled
+kernel/IPA update. Private retained table continuity supports the candidate
+12+12-bit encoding; it does not prove hardware interpretation or selector binding.
+
+Reproduce the hosted synthetic checks without camera access:
+
+```sh
+cc -std=c11 -O1 -g -Wall -Wextra -Werror \
+  -fsanitize=address,undefined -fno-omit-frame-pointer \
+  src/native-rgb/test-front-gamma.c -o /tmp/test-front-gamma
+/tmp/test-front-gamma
+python3 src/native-rgb/front-windows-quality/diagnose-chart-visibility.py --self-test
+```
+
+The visibility tool's real-image mode is same-SP11/private-only and writes spatial
+diagnostics into a root-owned private directory. A partial model is diagnostic;
+it never authorizes calibration. The existing strict registration gate is unchanged.
+
+Next: correct full-chart framing, qualify a fresh reference, independently measure
+front black/tone/color, then implement a frame-owned tuning update. The proposed
+standard metadata params transport is the alignment target; the existing private
+64-byte front packet cannot carry a gamma table. Verify SP11 layout/selectors and
+queue ownership before enabling an adapter. No v41x register assumptions, OEM
+curve copying, webcam bridge, or private startup dependency can substitute for
+the upstream delivery target.
+
+Evidence: [FRONT-GAMMA-SOURCE-20261010.json](../../docs/FRONT-GAMMA-SOURCE-20261010.json).
+
 ## 2026-10-10 native direction: rear AE qualified; front quality blocker isolated
 
 Native Linux sensor/CAMSS/ISP kernel + libcamera pipeline/IPA remains the goal,
@@ -2221,7 +2264,7 @@ IPA control producer; absent packet families have explicit synthetic controls.
 The kernel binder is for a sleepable startup context and uses a checked temporary
 allocation, cleared and freed on every path. No readiness or hardware grant.
 
-## Current next implementation — rear first
+## Historical implementation plan — rear first (2026-10-07)
 
 User2026-10-07 deferred front calibration until rear finished. Fresh rear-only
 Windows screen/light-OFF baseline PASS; see rear-windows-reference/README.md

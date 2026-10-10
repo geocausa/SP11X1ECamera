@@ -1,0 +1,83 @@
+{
+  "identity": "E-NATIVE-FRONT-GAMMA-SOURCE-20261010-01",
+  "status": "PASS_SOURCE_ONLY_GAMMA_COMPILER_AND_PRIVATE_VISIBILITY_DIAGNOSTIC",
+  "date": "2026-10-10",
+  "base_source_head": "d824f9ff112f0f9cf1b4ecac251f5e5a1ff23560",
+  "goal": "Native Linux front/rear V4L2 Media Controller drivers and libcamera IPA, independent tuning, Windows image-quality parity and upstreamable interfaces.",
+  "gamma": {
+    "source": "src/native-rgb/native-front-gamma.h",
+    "test": "src/native-rgb/test-front-gamma.c",
+    "input": "Semantic R/G/B 257 mathematical points per channel, or 256 proposed 10-bit base/signed10 delta words per channel.",
+    "output": "Explicit little-endian 256 words per channel, 12-bit base and signed12 delta.",
+    "private_structural_check": {
+      "tables_checked": 3,
+      "all_tables_base12_signed12_delta_continuity": true,
+      "all_tables_base10_signed10_delta_continuity": false,
+      "coefficients_originals_or_hashes_exported": false,
+      "hardware_effect_tested": false
+    },
+    "checks": 10197,
+    "C11_Werror": true,
+    "ASAN": true,
+    "UBSAN": true,
+    "CXX17_header_Werror": true,
+    "SP11_kernel_header_object_Werror": true,
+    "validation": "Exact sizes and endpoints, full-channel validation before output mutation, reserved-bit/continuity/range/alias rejection; rejects unrepresentable scaled slopes rather than clamping.",
+    "independent_input_fixture": true,
+    "kernel_integration": false,
+    "IPA_integration": false,
+    "hardware_access": false,
+    "module_installed": false,
+    "hardware_interpretation_confirmed": false,
+    "channel_selectors_bound": false,
+    "curve_calibrated": false,
+    "scope": "Structural consistency and data conversion only. Private retained table continuity does not independently prove hardware semantics, channel selectors, calibrated curves or image quality."
+  },
+  "upstream_proposal": {
+    "state": "Mailing-list proposal, not asserted merged",
+    "date": "2026-10-06",
+    "uapi": {
+      "subject": "[PATCH 23/45] media: uapi: add Qualcomm IFE parameters",
+      "url": "https://lists.openwall.net/linux-kernel/2026/10/06/1797",
+      "message_id": "20261006223953.3382273-24-gjorgji.rosikopulos@oss.qualcomm.com"
+    },
+    "gamma": {
+      "subject": "[PATCH 38/45] media: qcom: camss: sa8775p: add gamma parameters",
+      "url": "https://lists.openwall.net/linux-kernel/2026/10/06/1832",
+      "message_id": "20261006223953.3382273-39-gjorgji.rosikopulos@oss.qualcomm.com"
+    },
+    "scope": "Proposed standard params format is an alignment target. Its v41x registers/selectors cannot be assumed to apply to SP11. This helper is not a UAPI block parser or new ABI."
+  },
+  "visibility": {
+    "source": "src/native-rgb/front-windows-quality/diagnose-chart-visibility.py",
+    "synthetic_tests": 3,
+    "saved_reference_identity": "E-WINDOWS-FRONT-QUALITY-20261010-06",
+    "partial_model_available": true,
+    "all_expected_codes_supported_under_any_partial_model": false,
+    "all_expected_codes_inside_under_any_partial_model": false,
+    "diagnostic_only": true,
+    "physical_framing_cause_proven": false,
+    "calibration_authorized": false,
+    "private_result_directory": "/var/lib/sp11-camera-windows-front-quality-20261010-06",
+    "pixels_spatial_data_same_SP11_only": true,
+    "pixels_spatial_arrays_or_image_hashes_exported": false,
+    "read_only_Windows_analysis_unmounted": true
+  },
+  "hardware": {
+    "new_camera_runs": 0,
+    "new_reboots": 0,
+    "Golden_boot_id": "e66b1658-106b-476e-acbb-6d044addd43d",
+    "experiment_armed": false,
+    "native05_installed": false,
+    "native05_consumed": false,
+    "front_current": "E-NATIVE-FRONT-METER-20261010-04",
+    "rear_current": "E-NATIVE-REAR-GENERATION-66",
+    "automatic_front_feedback_enabled": false,
+    "image_quality_parity_proven": false
+  },
+  "next": [
+    "Correct physical framing for all four coded markers on the healthy upper SP7 LCD; obtain a fresh one-use Windows reference and qualify strict held-out geometry.",
+    "Integrate an independently measured front tone curve through frame-owned native parameters after verifying SP11 DMI selector/layout binding; do not change the existing 64-byte packet without negotiated transport support.",
+    "Align metadata params transport with upstream CAMSS work; preserve standard libcamera controls and stop/DMA ownership proofs. Replace private startup-profile dependencies before upstream readiness."
+  ]
+}
