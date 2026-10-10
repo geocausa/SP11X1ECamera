@@ -1,3 +1,27 @@
+## 2026-10-10 front03 late admission hardware PASS; front brightness next
+All160 app request IDs and all5 known CCI sensor-register receipts/applied metadata
+match. Real late request32 target36/nextSOF34 deferred ETIME once, one fully
+retired internal output padded slot36; app admitted at37. No cancellation,
+clean166-completion stop, hazards0, all sensors suspended/graph neutral.
+Candidate df8124fc-0e23-4808-8137-25e5ca472147 returned Golden
+24467a0a-13fd-4e3f-95ce-a722a7073e74.03 consumed/retired/do-not-retry, unarmed,
+units disabled/inactive, fixed firmware absent. Fresh menu script archived in
+same private03 root; regenerated GRUB checked before atomic installation.
+Protected Golden hashes/env byte unchanged. No OS power changes.
+
+Front gain is now positively measured in lit chart: baselineY3.30/raw751.3,
+longer exposureY3.65/raw827.5, analogue16xY6.10/raw1088.6; restoreY3.27/raw743.8.
+Raw black/fullscale/AE target remain uncalibrated, no blind AE.
+Same-SP11 original-byte Windows03 comparison reproduces scalar metrics;
+WindowsY26.32..26.36, gain16 coarse correlation0.85684 below0.95 gate.
+Read-only Windows partition unmounted; all pixels/spatial data remain SP11.
+Source tests10PASS/two missing-deviceSKIP. Source fixes committed/pushed.
+Next fresh bounded combined exposure/analogue/digital bracket before tone/AE,
+independent tuning/upstream sources remain goal. Never retry spent02/03.
+Evidence docs/FRONT-ADMISSION03-HARDWARE-20261010.json and
+docs/WINDOWS-FRONT03-LINUX-METER03-20261010.json.
+Earlier entries are historical; totals only verified throughrear59.
+
 ## 2026-10-10 front late-control admission fix; fresh03 source qualified
 Valid late requests are retained FIFO and admitted only at a safe future real
 image slot. Fully retired internal outputs pad the horizon; exhausted spares
