@@ -1,3 +1,38 @@
+## 2026-10-10 native front gamma brightness and private chart gate progress
+Front07:96 realNV12 requests, six controls/registers/metadata verified,109 gamma
+blocks, clean106-completion stop,28.5003fps. Three of15 images pass strict four-ID
+held-out3px/gray-order gate with independent all-channel sqrt lift; uncalibrated.
+Windows07:8 unique samples/3 private snapshots/clean release; no four-code gate.
+Compact independent40percent healthy-upper chart08 resolved Windows visibility:
+all four IDs decode in all3 Windows snapshots, but held-out geometry still fails.
+Native08:96 realNV12 requests/six verified controls/109 gamma blocks, clean106
+stop,28.5174fps, no cancellation/critical signature/watchdog. Original subpixel
+registrar1/15 qualified; supplemental contour registrar8/15 qualified after same
+11 synthetic positive/negative tests. All4 IDs/held-out<=3px/patch bounds/gray
+order unchanged. Windows08 remains0/3 under both methods, comparison not valid.
+Same-SP11 original NV12 means/std/extrema/percentiles independently reproduce.
+No tone/color fit, calibrated front curve, automatic front feedback, Windows
+quality parity or upstream readiness claim. Geometric failure cause unproven.
+07/08 native and Windows attempts spent/retired; chart tasks stopped/unregistered;
+Windows originals read-only/unmounted; private pixels/spatial/patch data retained.
+Protected Golden1507554b-9889-47ff-b0f9-d70298c9d951, default/assets unchanged,
+next entry empty, candidate GRUB scripts archived/profile removed/units inactive.
+Native source da331e5e029f51eceda55805a846d4a97c3b6211; kernel36/libcamera18.
+Contour source f459a47b03be51b2109a07672ecbf5ff016c3246. Historical comparator08
+first artifact had stale07 filename/status label but payload identities08;
+preserved original, corrected distinct filenames before supplemental analysis.
+Pure analysis reruns after mount/private-name preflight failure had no camera
+access/reboot; no spent hardware identity replay. Manifest permission diagnostic
+refused before pixel read; the root0700 evidence directory stayed private.
+03..08 counts recomputed:1119 saved native files,960 fully qualified requests/
+60 control groups/10 fully qualified streams. Earlier879/975/1071 turn counters
+were arithmetic errors, superseded; lifetime totals remain unreconciled.
+Next independent tested geometry/localization/distortion assessment using saved
+originals, strict paired Windows/native gate, then tone/color and frontAE/AWB.
+Front04/rear66 and async/gamma06 proofs retained; native-meter05 untouched.
+Evidence docs/FRONT-COMPACT08-HARDWARE-20261010.json and
+docs/FRONT-03-08-COUNTS-20261010.json. Earlier entries historical.
+
 ## 2026-10-10 front gamma/channel response hardware PASS; async fix qualified
 Probe06:480 real2560x1440NV12 frames/five same-boot streams under narrow
 process/signal tracing; all clean stops, no abort/assertion/timeout/owner reject.
