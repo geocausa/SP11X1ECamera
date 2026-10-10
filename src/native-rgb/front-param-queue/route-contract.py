@@ -9,7 +9,7 @@ def classify(text):
  selected=[b for b in blocks if re.match(r"- entity \d+: msm_vfe1_params ",b)]
  if len(selected)!=1:raise ValueError("MISSING_OR_DUPLICATE_PARAMS_ENTITY")
  block=selected[0]
- if not re.match(r"- entity \d+: msm_vfe1_params \(1 pad, 0 links(?:, 0 routes)?\)\n",block):
+ if not re.match(r"- entity \d+: msm_vfe1_params \(1 pad, 0 links?(?:, 0 routes)?\)\n",block):
   raise ValueError("PARAMS_PAD_LINK_COUNT_DRIFT")
  nodes=re.findall(r"device node name (/dev/video\d+)",block)
  if len(nodes)!=1 or len(re.findall(r"device node name "+re.escape(nodes[0])+r"\s*$",text,re.M))!=1:

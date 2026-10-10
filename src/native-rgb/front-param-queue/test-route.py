@@ -48,6 +48,7 @@ class RouteTests(unittest.TestCase):
  def reject(self,graph):
   with self.assertRaises(ValueError):self.classify(graph)
  def test_complete_neutral(self):self.assertEqual(self.classify(self.graph)[0],"neutral")
+ def test_singular_zero_link(self):self.assertEqual(self.classify(self.graph.replace("msm_vfe1_params (1 pad, 0 links)","msm_vfe1_params (1 pad, 0 link)"))[0],"neutral")
  def test_missing(self):self.reject(self.graph[:self.graph.index("- entity 46:")])
  def test_extra_links(self):self.reject(self.graph.replace("msm_vfe1_params (1 pad, 0 links)","msm_vfe1_params (1 pad, 1 links)"))
  def test_wrong_direction(self):self.reject(self.graph.replace("device node name /dev/video45\n    pad0: SOURCE","device node name /dev/video45\n    pad0: SINK"))
