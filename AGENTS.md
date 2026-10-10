@@ -1,3 +1,33 @@
+## 2026-10-10 front gamma/channel response hardware PASS; async fix qualified
+Probe06:480 real2560x1440NV12 frames/five same-boot streams under narrow
+process/signal tracing; all clean stops, no abort/assertion/timeout/owner reject.
+546 decoded gamma1/3088 submissions match ordered provider acceptance IDs.
+R/G/B independent mathematical lift causes expected YUV direction in all five
+non-restored control plateaus/channel; all six baseline plateaus stable.
+30 manual control groups physically read back/applied metadata match.
+Per-stream28.22..28.51fps with5/6 internal-padding app sequence gaps, no
+cancellations. No strict gap-free/full-rate claim for this diagnostic.
+Live IPA parameter calculations now asynchronous, one in flight/reserved
+metadata buffer/bounded pending debt; epoch guard/deferred failure stop.
+Traced05 proved parameter rejection then nested synchronous poll dispatch/
+notifier teardown assertion/SIGABRT/orphan IPA. Exact initial rejection code
+unrecorded; prior04 timeout mechanism not independently traced.03 bad lifetime
+CCI counter assertion fixed,04 partial48 green frames,05 partial15 frames.
+03/04/05/06 all spent/retired.06 returned protected Golden
+616da82b-f35e-4083-913a-4e242133e594; hashes/default unchanged, next entry empty,
+profile removed/scripts archived/units inactive, main/timers disabled.
+Libcamera18 builds/tests10OK/2expectedSKIP plus actual async IPA callback,
+hosted schedulerASAN/UBSAN. Failed source build17 never installed.
+Empirical gamma/channel response only: exact numeric encoding, calibrated
+front curve/automatic feedback/Windows quality parity/upstream readiness
+remain unproven; private startup dependency remains.
+SP7 post-run query has no chart window/task. Do not treat historical scene
+label as controlled current chart. Next fresh independent SP7 chart, strict
+native four-marker/held-out geometry, fresh registered Windows/native tuning.
+Front04/rear66 foundations retained; unrelated native-meter05 untouched.
+Evidence docs/FRONT-GAMMA06-HARDWARE-20261010.json and
+docs/FRONT-ASYNC-PARAM-20261010.json. Earlier entries historical.
+
 ## 2026-10-10 front META_OUTPUT empty transport hardware PASS; probe02 retired
 Fresh probe02 completed192 real2560x1440NV12 frames at29.84965fps.
 QCIP META_OUTPUT buffer3088, old private scalar control absent.201 ordered
