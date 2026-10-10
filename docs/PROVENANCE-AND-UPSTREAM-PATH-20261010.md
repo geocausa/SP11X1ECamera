@@ -35,24 +35,33 @@ our own earlier register work. Names marked ? are not yet confirmed.
 | Base | Contents in profile | Module | Class |
 |---|---|---|---|
 | 0x3b60 | 13 regs | DEMUX | functional (Bayer order, gains) |
-| 0x3d08/0x3d58 | 512 B table + 10 regs | BPC_PDPC | tuning-light (PD pixel map, thresholds) |
+| 0x3d08/0x3d58 | 512 B table + 10 regs | BPC_PDPC | **not needed**: disabling (0x3d60 bit0) gives no measurable change (ablation run ae-29) |
 | 0x3f60 | 3 regs | BINCORRECT | functional |
 | 0x4308/0x4358 | 3 x 884 B (17x13 mesh) + 13 regs | LSC | **replaced by ours**: measured flat field (camera on diffuser over the SP7, LSC off, linear), `open-profile/fit-lsc.py`, table `front-ae/tuning/imx681-front-lsc-v1.bin`. Format: 13x17 x u32, bits 0-12 channel gain, bits 14-26 green gain, Q10; sel1 R/G, sel2 B/G, sel3 zero. Uncorrected corners 0.17/0.21/0.20 (R/G/B) -> 0.64-0.67 with strength 0.82; colour spread R/G 1.29 -> 1.04, B/G 1.08 -> 1.03. |
 | 0x4560 | 13 regs | WB_GAIN | ours (AWB) |
-| 0x4708/0x4758 | 512 B + 5 regs | GIC | **tuning** (noise model) |
-| 0x4908/0x4958 | 256 B + 26 regs | BPC_ABF | **tuning** (denoise) |
+| 0x4708/0x4758 | 512 B + 5 regs | GIC | **not needed**: disabling (0x4760 bit0) gives no measurable change, no green-imbalance checker pattern (ae-30) |
+| 0x4908/0x4958 | 256 B + 26 regs | BPC_ABF | **tuning, still vendor**. Enable 0x4960 = bit0 module, bit8 filter, bit9 no measurable effect. Filter off (ae-31, ae-36): temporal noise +15-20 %, isolated defects in flat areas +16 %, checker energy +27 %. Needs our own settings. |
 | 0x4b60 | 7 regs | BLS | **measured by us**: dark frames (BLS off, then offset 1200 at gain 1.0) give pedestal 1649 in BLS units (offset field = reg 0x4b68[31:16], gain 0x4b6c = 2048*65536/(65536-offset)). Pedestal rises to ~1900 at sensor digital gain 4x. |
 | 0x4d60, 0x5260 | 1 reg each | BAYER_GTM / LCAC ? | probably disabled |
-| 0x5408/0x5458 | 2 x 68 B + 22 regs | DEMOSAIC ? | **tuning** (interpolation) |
-| 0x5660 | 5 regs | ? | to identify |
+| 0x5408/0x5458 | 2 x 68 B + 22 regs | not demosaic | **not needed**: disabling (0x5460 bit0) gives no measurable change (ae-32); the demosaic itself is not in the profile |
+| 0x5660 | 5 regs | colour/level stage (enable 0x5660 = 0x4001; generic constants 0, 0x80, 1<<24, 0x66) | functional: disabling darkens mid/high tones by 18-49 and shifts U/V by -30 (ae-33) |
 | 0x5860 | 11 regs | COLOR_CORRECT | ours (CCM) |
-| 0x5a08/0x5a58 | 2048 B + 263 regs | GTM/LTM ? | **tuning** (tone mapping) |
+| 0x5a08/0x5a58 | 2048 B + 263 regs | tone mapper (behaves locally: lifts shadows more in darker scenes) | **tuning, still vendor**. Off (ae-34): mid tones -3 to -4 at fixed exposure, shadows -6 to -8 under auto exposure; sharpness and noise unchanged. Replace by our own tone curve/local tone mapping. |
 | 0x5f08/0x5f58 | 3 x 1024 B + 3 regs | GLUT (gamma) | ours (per-frame LUT) |
 | 0x6160 | 19 regs | COLOR_TRANSFORM | functional (BT.601) |
 | 0x6360 | 1 reg | UVG ? | to identify |
 | 0x9860-0x9e94, 0xa008-0xa2e0 | scalers, crop/round/clamp, DSX | output path | functional (from mode) |
 | 0xb060-0xbe70 | AEC BE, BHIST, tintless BG, AWB BG, BF, RS | statistics | functional (geometry) |
 | 0x0024, 0x002c, 0x008c, 0x0090 | top core cfg / period | top | functional |
+
+Ablation method (2026-10-10): our own static chart on the SP7 screen (slanted edges, star,
+gratings, colour patches, grey wedge; `C:\ProgramData\SP11CamCal\show-chart.ps1`), one boot per
+variant with `native_front_reg_mask`, six consecutive full frames at fixed exposure plus six under
+auto exposure (`open-profile/capture-front-still.cpp`), compared per pixel against a baseline boot
+(`open-profile/ablate-compare.py`; run-to-run noise floor: mean |dY| ~1.0). All variants streamed
+without errors. Combined open configuration (ae-38: PDPC, GIC, 0x5460 and tone mapper off, our LSC
+and our black level): mean |dY| 1.08 against the vendor profile at fixed exposure, differing
+only by the missing tone-mapper lift.
 
 ## Path to a distributable, upstreamable front camera
 
