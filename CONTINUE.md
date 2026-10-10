@@ -1,3 +1,16 @@
+## 2026-10-10 storage headroom restored
+
+Removed28,486 reproducible non-media .o intermediates only from the fixed old
+02-kernel/e002k-d-kernel-build output tree:15.93GB allocated cache reclaimed,
+free space3.86GB->19.78GB. Sources, config, Module.symvers, System.map, vmlinux,
+vmlinux.unstripped, root vmlinux.o, scripts/headers and all7,883 finished .ko
+modules retained. Key final-artifact and Golden hashes unchanged; all finished
+module stat fingerprints unchanged. No camera evidence/pixels removed. Complete
+file-disposition manifest stays in that old build. A future full-tree rebuild
+must recompile removed objects; current native camera module builders use the
+separate e003i/build-runtime-v4 headers. No camera/boot/power-policy action.
+Evidence docs/STORAGE-OLD-KERNEL-CACHE-20261010.json. Camera frontier below stands.
+
 ## 2026-10-10 front lit-chart run: request cancellation blocker; all retired
 
 SP11 front now user-aimed at SP7. Independently written fixed grey/RGB chart
