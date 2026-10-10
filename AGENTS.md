@@ -1,3 +1,31 @@
+## 2026-10-10 front04 combined exposure/gain brightness hardware PASS
+Fresh04 completed192 real2560x1440 NV12 requests at30.0038fps, six clustered
+exposure/analogue/digital groups all physically read back and applied metadata
+matched. No cancellations, no app gaps, clean197-completion stop, hazards0,
+sensors suspended/neutral graph. Candidate b784186b-62f2-4a56-a0ab-091282f970c1
+returned Golden c73de980-7899-4cca-8d69-ed2e5a785dfe.04 consumed/retired/unarmed,
+units disabled/inactive/watchdog static/inactive, no watchdog firing. Firmware
+restored absent. Current one-use GRUB script archived under private04; generated
+config syntax checked before atomic install, protected hashes/env unchanged.
+
+Whole-frame raw green750.99 baseline ->827.30 max33.254ms ->1125.35 analogue4x
+->2324.93 analogue16x ->3975.01 digital2x; baseline restore743.60.
+Y3.30 ->3.65 ->4.70 ->8.69 ->13.44 ->3.28. At fixed exposure, analogue/digital
+response is positive; provisional two-exposure affine raw offset fit is about721,
+with near expected corrected gain ratios. This is statistic-domain engineering
+analysis, NOT physical black calibration, general target, or AE authorization.
+No automatic feedback enabled. ISP tone/color unchanged from qualified03.
+
+Original Windows03 bytes remain SP11 and reproduce metrics: Y26.32..26.36.
+Combined16x/digital2 correlation0.93084 below0.95 gate; no Windows quality parity.
+Read-only Windows partition unmounted, all pixels/spatial data SAME SP11.
+NEXT fresh matched Windows reference and private registration of healthy LCD
+chart, then independently measured front black/tone/color tuning before AE/AWB.
+Retain qualified rear66 and front03 request retention. Never retry02/03/04.
+Evidence docs/FRONT-BRIGHTNESS04-HARDWARE-20261010.json and
+docs/WINDOWS-FRONT03-LINUX-METER04-20261010.json.
+Earlier entries are historical; counters only verified throughrear59.
+
 ## 2026-10-10 front03 late admission hardware PASS; front brightness next
 All160 app request IDs and all5 known CCI sensor-register receipts/applied metadata
 match. Real late request32 target36/nextSOF34 deferred ETIME once, one fully
