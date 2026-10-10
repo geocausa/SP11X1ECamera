@@ -43,6 +43,7 @@ def main():
     for path in (D, B, G, S, T, W, F, Path(str(F) + ".native-profile-negative")):
         assert subprocess.run(["sudo", "-n", "test", "!", "-e", str(path)]).returncode == 0
     assert ID not in sudo("cat", "/boot/grub/grub.cfg")
+    BUILD.mkdir(parents=True, exist_ok=False)
     build = json.loads((MODULES / "build-result.json").read_text())
     assert build["status"] == "PASS_NATIVE_SOURCE_BUILD_NOT_INSTALLED"
     for relative, entry in build["modules"].items():
