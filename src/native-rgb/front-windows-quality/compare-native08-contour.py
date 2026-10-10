@@ -74,9 +74,9 @@ def main():
                 "color_U_mean_absolute_difference_8bit":float(np.mean(np.abs(delta[6:,1]))),
                 "color_V_mean_absolute_difference_8bit":float(np.mean(np.abs(delta[6:,2])))})
         summary["registered_aggregate_errors"]=errors
-    summary["status"]="PASS_REGISTERED_COMPARISON_MEASUREMENTS_PARITY_UNPROVEN" if summary["registered_comparison_possible"] else "FAILED_WINDOWS07_STRICT_GEOMETRY_GATE"
+    summary["status"]="PASS_REGISTERED_COMPARISON_MEASUREMENTS_PARITY_UNPROVEN" if summary["registered_comparison_possible"] else "FAILED_WINDOWS08_STRICT_GEOMETRY_GATE"
     os.umask(0o077)
-    with (OUTPUT/"PRIVATE-WINDOWS-NATIVE07-COMPARISON.json").open("x") as out:
+    with (OUTPUT/"PRIVATE-WINDOWS-NATIVE08-CONTOUR-COMPARISON.json").open("x") as out:
         json.dump({"summary":summary,"private_Windows_registration":rows,"private_native_registration":native},out,indent=2);out.write("\n")
     print(json.dumps(summary,sort_keys=True))
 if __name__=="__main__":main()
