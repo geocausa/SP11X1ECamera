@@ -66,7 +66,7 @@ def stage(source, destination, front_pipeline=False):
             raise ValueError("statistics helper anchor missing: " + name)
         text = re.sub(r"\b" + name + r"\b", "camss_x1e_" + name, text)
     stats.write_text(text)
-    for name in ("camss_x1e_helpers.h", "camss_x1e_helpers.cpp", "../native-front-stats.h", "../native-front-params.h"):
+    for name in ("camss_x1e_helpers.h", "camss_x1e_helpers.cpp", "../native-front-stats.h", "../native-front-params.h", "../native-front-gamma.h", "../native-front-isp-params.h"):
         shutil.copy2(HERE / name, libipa / Path(name).name)
     shutil.copy2(HERE.parent / "front-meter/front-aec-decoder.h", libipa / "front-aec-decoder.h")
     shutil.copy2(HERE / "camss-x1e-controls.h", libipa / "camss-x1e-controls.h")
@@ -97,7 +97,7 @@ def stage(source, destination, front_pipeline=False):
         shutil.copy2(HERE / "camss-x1e.cpp", pipeline / "camss-x1e.cpp")
         shutil.copy2(HERE / "camss-x1e-controls.h", pipeline / "camss-x1e-controls.h")
         shutil.copy2(HERE / "camss-x1e-admission.h", pipeline / "camss-x1e-admission.h")
-        for name in ("native-front-params.h", "native-front-stats.h"):
+        for name in ("native-front-params.h", "native-front-stats.h", "native-front-gamma.h", "native-front-isp-params.h"):
             shutil.copy2(HERE.parent / name, pipeline / name)
         (pipeline / "meson.build").write_text(
             "# SPDX-License-Identifier: CC0-1.0\nlibcamera_internal_sources += files('camss-x1e.cpp')\n")
@@ -133,6 +133,8 @@ def stage(source, destination, front_pipeline=False):
               "src/ipa/libipa/camss_x1e_helpers.cpp",
               "src/ipa/libipa/native-front-stats.h",
               "src/ipa/libipa/native-front-params.h",
+              "src/ipa/libipa/native-front-gamma.h",
+              "src/ipa/libipa/native-front-isp-params.h",
               "test/ipa/libipa/camss-x1e-helpers-test.cpp"]
     if front_pipeline:
         paths += list(manifest["pipeline_inputs"])
@@ -142,7 +144,7 @@ def stage(source, destination, front_pipeline=False):
                   "src/ipa/camss-x1e/meson.build"]
 
         paths += ["src/libcamera/pipeline/camss-x1e/" + name for name in
-                  ("camss-x1e.cpp", "camss-x1e-controls.h", "camss-x1e-admission.h", "native-front-params.h", "native-front-stats.h", "meson.build")]
+                  ("camss-x1e.cpp", "camss-x1e-controls.h", "camss-x1e-admission.h", "native-front-params.h", "native-front-stats.h", "native-front-gamma.h", "native-front-isp-params.h", "meson.build")]
     result = {
         "status": ("STAGED_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
                    if front_pipeline else "STAGED_LIBCAMERA_HELPERS_NOT_INSTALLED"),

@@ -10,7 +10,12 @@
 #include <libcamera/ipa/camss_x1e_ipa_interface.h>
 #include <libcamera/ipa/ipa_module_info.h>
 
+#include <libcamera/base/file.h>
+#include "libcamera/internal/yaml_parser.h"
 #include "libcamera/internal/mapped_framebuffer.h"
+extern "C" {
+#include "libipa/native-front-isp-params.h"
+}
 #include "libipa/camss_x1e_helpers.h"
 
 namespace libcamera {
@@ -19,9 +24,32 @@ class IPACamssX1E final : public ipa::camss_x1e::IPACamssX1EInterface
 public:
  int init(const IPASettings &settings) override
  {
-  if (running_ || settings.sensorModel != "imx681" ||
-      !settings.configurationFile.empty())
+  if (running_ || !buffers_.empty() || settings.sensorModel != "imx681")
    return -EINVAL;
+  std::vector<uint8_t> candidate(NF_ISP_HEADER_BYTES);
+  int ret = native_front_isp_encode(nullptr, 0, candidate.data(), candidate.size());
+  if (!settings.configurationFile.empty()) {
+   File file(settings.configurationFile);
+   if (!file.open(File::OpenModeFlag::ReadOnly))
+    return file.error();
+   auto data = YamlParser::parse(file);
+   if (!data || !data->isDictionary() || data->size() != 6 ||
+       (*data)["version"].get<uint32_t>(0) != 1 ||
+       (*data)["sensor"].get<std::string>("") != "imx681" ||
+       (*data)["layout"].get<std::string>("") != "rgb257-u10") return -EINVAL;
+   std::array<uint16_t, NF_GAMMA_POINT_COUNT> points{};
+   size_t at = 0;
+   for (const char *key : {"gamma_r", "gamma_g", "gamma_b"}) {
+    auto values = (*data)[key].getList<uint16_t>();
+    if (!values || values->size() != NF_GAMMA_POINTS) return -EINVAL;
+    for (uint16_t value : *values) points[at++] = value;
+   }
+   candidate.resize(NF_ISP_MAX_BYTES);
+   ret = native_front_isp_encode(points.data(), points.size(),
+                                 candidate.data(), candidate.size());
+  }
+  if (ret) return ret;
+  ispTemplate_ = std::move(candidate);
   initialized_ = true;
   return 0;
  }
@@ -66,9 +94,11 @@ public:
  }
  void stop() override { running_ = false; }
 
- int computeParameters(uint64_t request, std::vector<uint8_t> *packet) override
+ int computeParameters(uint64_t request, std::vector<uint8_t> *packet,
+                       std::vector<uint8_t> *ispPacket) override
  {
-  if (!packet || !running_ || request != nextParameter_)
+  if (!packet || !ispPacket || packet == ispPacket || !running_ ||
+      request != nextParameter_ || request > 0xffffffffULL)
    return -EINVAL;
   const std::array<uint16_t, 4> demux{};
   const std::array<uint32_t, 4> pdpc{};
@@ -79,6 +109,7 @@ public:
    return ret;
   const auto *bytes = reinterpret_cast<const uint8_t *>(&parameters);
   packet->assign(bytes, bytes + sizeof(parameters));
+  *ispPacket = ispTemplate_;
   nextParameter_++;
   return 0;
  }
@@ -103,6 +134,7 @@ public:
   statisticsProcessed.emit(bufferId, stream, sequence, timestamp, ret, luma);
  }
 private:
+ std::vector<uint8_t> ispTemplate_;
  bool initialized_ = false;
  bool running_ = false;
  uint64_t stream_ = 0;

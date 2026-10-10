@@ -2,6 +2,7 @@
 /* Exercise the actual IPA implementation and real shared memfd mappings. */
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include <sys/mman.h>
 #include <unistd.h>
 #include "test.h"
@@ -60,16 +61,17 @@ protected:
   if (ipa.mapBuffers(invalid) != -EINVAL || ipa.start() != -EINVAL ||
       ipa.mapBuffers(buffers) || ipa.start() || ipa.start() != -EINVAL)
    return TestFail;
-  std::vector<uint8_t> packet{0xa5};
-  if (ipa.computeParameters(6, &packet) != -EINVAL || packet != std::vector<uint8_t>{0xa5} ||
-      ipa.computeParameters(5, &packet) ||
+  std::vector<uint8_t> packet{0xa5}, ispPacket{0xa6};
+  if (ipa.computeParameters(6, &packet, &ispPacket) != -EINVAL || packet != std::vector<uint8_t>{0xa5} ||
+      ipa.computeParameters(5, &packet, &ispPacket) ||
       native_front_params_validate(packet.data(), packet.size()) ||
       native_front_stats_u64(packet.data()+8) != 5 ||
       native_front_stats_u32(packet.data()+16) != 0)
    return TestFail;
+  if (ispPacket.size() != NF_ISP_HEADER_BYTES || nf_gamma_get32(ispPacket.data()+4)) return TestFail;
   auto saved = packet;
-  if (ipa.computeParameters(5, &packet) != -EINVAL || packet != saved ||
-      ipa.computeParameters(6, &packet))
+  if (ipa.computeParameters(5, &packet, &ispPacket) != -EINVAL || packet != saved ||
+      ipa.computeParameters(6, &packet, &ispPacket))
    return TestFail;
 
   std::vector<uint8_t> data(NATIVE_FRONT_STATS_BYTES);
@@ -120,11 +122,11 @@ protected:
    return TestFail;
   ipa.stop();
   saved = packet;
-  if (ipa.computeParameters(7, &packet) != -EINVAL || packet != saved)
+  if (ipa.computeParameters(7, &packet, &ispPacket) != -EINVAL || packet != saved)
    return TestFail;
   ipa.processStatistics(1, 71, 1, 1000000999);
   if (!result(6, -EINVAL, 71, 1) || ipa.start() ||
-      ipa.computeParameters(5, &packet))
+      ipa.computeParameters(5, &packet, &ispPacket))
    return TestFail;
   le(data, 8, 72, 8);
   le(data, 24, 0, 4);
@@ -138,6 +140,57 @@ protected:
   ipa.unmapBuffers({1,2,3,4,5,6,7,8});
   if (ipa.start() != -EINVAL)
    return TestFail;
+  /* Synthetic independent tuning only: actual YAML reader, real shared
+   * mappings, actual IPA encoder. No camera image or OEM tuning. */
+  auto configure = [&](IPACamssX1E &target, const std::string &yaml) {
+   char path[] = "/tmp/camss-x1e-tuning-test-XXXXXX";
+   int fd = mkstemp(path);
+   if (fd < 0) return -EIO;
+   ssize_t n = ::write(fd, yaml.data(), yaml.size());
+   close(fd);
+   if (n != ssize_t(yaml.size())) { unlink(path); return -EIO; }
+   IPASettings tune{};
+   tune.sensorModel = "imx681";
+   tune.configurationFile = path;
+   int ret = target.init(tune);
+   unlink(path);
+   return ret;
+  };
+  std::ostringstream yaml;
+  yaml << "version: 1\nsensor: imx681\nlayout: rgb257-u10\n";
+  std::array<uint16_t, NF_GAMMA_POINT_COUNT> points{};
+  size_t at = 0;
+  for (unsigned c = 0; c < 3; c++) {
+   yaml << (c == 0 ? "gamma_r: [" : c == 1 ? "gamma_g: [" : "gamma_b: [");
+   for (unsigned i = 0; i < 257; i++) {
+    points[at] = 100*c + 3*i;
+    yaml << (i ? ", " : "") << points[at++];
+   }
+   yaml << "]\n";
+  }
+  IPACamssX1E tuned;
+  auto valid = yaml.str();
+  for (const std::string &bad : {
+       std::string("version: 1\n"),
+       std::string(valid + "unsupported: true\n"),
+       std::string("version: 2") + valid.substr(10),
+       std::string(valid).replace(valid.find("gamma_b: [200"), 13, "gamma_b: [1024")}) {
+   if (configure(tuned, bad) == 0 || tuned.start() != -EINVAL) return TestFail;
+  }
+  if (configure(tuned, valid) || tuned.mapBuffers(buffers) || tuned.start())
+   return TestFail;
+  std::vector<uint8_t> scalar{0xa5}, isp{0xa6}, expected(NF_ISP_MAX_BYTES);
+  if (tuned.computeParameters(6, &scalar, &isp) != -EINVAL ||
+      scalar != std::vector<uint8_t>{0xa5} || isp != std::vector<uint8_t>{0xa6} ||
+      native_front_isp_encode(points.data(), points.size(), expected.data(), expected.size()) ||
+      tuned.computeParameters(5, &scalar, &isp) || isp != expected)
+   return TestFail;
+  auto prior = isp;
+  if (tuned.computeParameters(6, &scalar, &scalar) != -EINVAL ||
+      isp != prior || tuned.computeParameters(6, &scalar, &isp) || isp != expected)
+   return TestFail;
+  tuned.stop();
+  tuned.unmapBuffers({1,2,3,4,5,6,7,8});
   std::cout << "PASS actual IPA: shared mappings, atomic admission, typed order, "
                "metering, stale/duplicate/malformed rejection and restart reset\\n";
   return TestPass;

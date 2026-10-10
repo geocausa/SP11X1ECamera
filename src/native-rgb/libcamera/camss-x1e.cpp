@@ -46,6 +46,7 @@
 
 extern "C" {
 #include "native-front-params.h"
+#include "native-front-isp-params.h"
 #include "native-front-stats.h"
 }
 
@@ -105,6 +106,7 @@ public:
  int controlTimingStep(uint32_t sequence);
  void imageReady(FrameBuffer *buffer);
  void statisticsReady(FrameBuffer *buffer);
+ void parametersReady(FrameBuffer *buffer);
  void meteringReady(uint32_t bufferId, uint64_t stream, uint32_t sequence,
                     uint64_t timestamp, int32_t ret, float luma);
  void tryComplete(uint32_t sequence);
@@ -124,12 +126,17 @@ public:
  std::vector<uint32_t> ipaBufferIds_;
  std::shared_ptr<MediaDevice> media_;
  std::unique_ptr<V4L2Subdevice> sensor_, phy_, csid_, vfe_;
- std::unique_ptr<V4L2VideoDevice> video_, statistics_;
+ std::unique_ptr<V4L2VideoDevice> video_, statistics_, parameters_;
  std::string sensorName_;
  Stream stream_;
  bool running_ = false;
  bool failed_ = false;
  bool videoAllocated_ = false, statisticsAllocated_ = false;
+ bool parametersAllocated_ = false, parametersStopping_ = true;
+ std::vector<std::unique_ptr<FrameBuffer>> parameterBuffers_;
+ std::deque<FrameBuffer *> availableParameters_;
+ std::map<FrameBuffer *, uint64_t> parameterRequests_;
+ std::map<FrameBuffer *, std::unique_ptr<MappedFrameBuffer>> parameterMappings_;
  uint64_t nextParameter_ = 5;
  uint64_t streamId_ = 0;
  unsigned int pixelsQueued_ = 0;
@@ -232,6 +239,10 @@ public:
   data->ipa_->statisticsProcessed.connect(data.get(), &CamssX1ECameraData::meteringReady);
   IPASettings settings{};
   settings.sensorModel = "imx681";
+  if (const char *tuning = std::getenv("LIBCAMERA_CAMSS_X1E_TUNING_FILE")) {
+   if (!data->parameters_) return false;
+   settings.configurationFile = tuning;
+  }
   if (data->ipa_->init(settings))
    return false;
   std::set<Stream *> streams{ &data->stream_ };
@@ -273,6 +284,8 @@ int CamssX1ECameraData::init()
  csid_ = V4L2Subdevice::fromEntityName(media_.get(), "msm_csid1");
  vfe_ = V4L2Subdevice::fromEntityName(media_.get(), "msm_vfe1_pix");
  statistics_ = V4L2VideoDevice::fromEntityName(media_.get(), "msm_vfe1_stats");
+ if (media_->getEntityByName("msm_vfe1_params"))
+  parameters_ = V4L2VideoDevice::fromEntityName(media_.get(), "msm_vfe1_params");
  MediaEntity *pixel = media_->getEntityByName("msm_vfe1_pix");
  if (!phy_ || !csid_ || !vfe_ || !statistics_ || !pixel)
   return -ENODEV;
@@ -299,7 +312,8 @@ int CamssX1ECameraData::init()
  int ret = openDevices();
  if (ret)
   return ret;
- if (!video_->controlInfo(kParams) || video_->controlInfo(kRawCommands) ||
+ if ((parameters_ ? (video_->controlInfo(kParams) || !parameters_->caps().isMetaOutput())
+                   : !video_->controlInfo(kParams)) || video_->controlInfo(kRawCommands) ||
      !statistics_->caps().isMetaCapture())
   return -EOPNOTSUPP; /* Match only the qualified data-only driver mode. */
  V4L2DeviceFormat metadata;
@@ -320,6 +334,8 @@ int CamssX1ECameraData::init()
  properties_.set(properties::Location, properties::CameraLocationFront);
  video_->bufferReady.connect(this, &CamssX1ECameraData::imageReady);
  statistics_->bufferReady.connect(this, &CamssX1ECameraData::statisticsReady);
+ if (parameters_)
+  parameters_->bufferReady.connect(this, &CamssX1ECameraData::parametersReady);
  csid_->frameStart.connect(this, &CamssX1ECameraData::frameStart);
  closeDevices();
  return 0;
@@ -337,6 +353,7 @@ int CamssX1ECameraData::openDevices()
  int ret = video_->open();
  if (!ret)
   ret = statistics_->open();
+ if (!ret && parameters_) ret = parameters_->open();
  if (ret)
   closeDevices();
  return ret;
@@ -345,6 +362,7 @@ int CamssX1ECameraData::openDevices()
 void CamssX1ECameraData::closeDevices()
 {
  delayedControls_.reset();
+ if (parameters_) parameters_->close();
  statistics_->close();
  video_->close();
  for (V4L2Subdevice *device : { sensor_.get(), phy_.get(), csid_.get(), vfe_.get() })
@@ -391,6 +409,14 @@ int CamssX1ECameraData::configure()
  ret = vfe_->setSelection(1, V4L2_SEL_TGT_CROP, &crop);
  if (ret || crop != Rectangle(kOutput))
   return ret ? ret : -EINVAL;
+ if (parameters_) {
+  V4L2DeviceFormat params{};
+  params.fourcc = V4L2PixelFormat(NF_ISP_FORMAT);
+  params.planes[0].size = NF_ISP_MAX_BYTES;
+  ret = parameters_->setFormat(&params);
+  if (ret || params.fourcc != V4L2PixelFormat(NF_ISP_FORMAT) ||
+      params.planes[0].size != NF_ISP_MAX_BYTES) return ret ? ret : -EINVAL;
+ }
  V4L2DeviceFormat format{};
  format.fourcc = V4L2PixelFormat(V4L2_PIX_FMT_NV12);
  format.size = kOutput;
@@ -411,19 +437,54 @@ int CamssX1ECameraData::submitParameters()
 {
  if (nextParameter_ > std::numeric_limits<uint32_t>::max())
   return -EOVERFLOW;
- std::vector<uint8_t> packet;
- int ret = ipa_->computeParameters(nextParameter_, &packet);
- if (ret)
-  return ret;
+ if (parameters_ && availableParameters_.empty()) return -ENOBUFS;
+ std::vector<uint8_t> packet, ispPacket;
+ int ret = ipa_->computeParameters(nextParameter_, &packet, &ispPacket);
+ if (ret) return ret;
  ret = native_front_params_validate(packet.data(), packet.size());
  if (ret || native_front_stats_u64(packet.data() + 8) != nextParameter_)
   return ret ? ret : -ESTALE;
- ControlList parameters(video_->controls());
- parameters.set(kParams, ControlValue(Span<const uint8_t>(packet)));
- ret = video_->setControls(&parameters);
- if (!ret)
-  nextParameter_++;
+ std::array<uint32_t, NF_GAMMA_WORD_COUNT> scratch{};
+ std::array<uint8_t, NF_GAMMA_BYTES> gamma{};
+ int update = 0;
+ ret = native_front_isp_decode(ispPacket.data(), ispPacket.size(), scratch.data(),
+                               scratch.size(), gamma.data(), gamma.size(), &update);
+ if (ret) return ret;
+ if (parameters_) {
+  /* This META_OUTPUT subset carries only gamma. Never drop a future scalar
+   * update merely because a metadata node is present. */
+  if (native_front_stats_u32(packet.data() + 16)) return -EOPNOTSUPP;
+  FrameBuffer *buffer = availableParameters_.front();
+  auto &plane = parameterMappings_.at(buffer)->planes()[0];
+  if (plane.size() < ispPacket.size()) return -ENOSPC;
+  memcpy(plane.data(), ispPacket.data(), ispPacket.size());
+  buffer->_d()->metadata().planes()[0].bytesused = ispPacket.size();
+  parameterRequests_.emplace(buffer, nextParameter_);
+  ret = parameters_->queueBuffer(buffer);
+  if (ret) parameterRequests_.erase(buffer);
+  else availableParameters_.pop_front();
+ } else {
+  if (update) return -EOPNOTSUPP; /* Legacy driver must not discard tuning. */
+  ControlList parameters(video_->controls());
+  parameters.set(kParams, ControlValue(Span<const uint8_t>(packet)));
+  ret = video_->setControls(&parameters);
+ }
+ if (!ret) nextParameter_++;
  return ret ? (ret < 0 ? ret : -EINVAL) : 0;
+}
+
+void CamssX1ECameraData::parametersReady(FrameBuffer *buffer)
+{
+ if (parametersStopping_) return;
+ auto it = parameterRequests_.find(buffer);
+ if (it == parameterRequests_.end() ||
+     buffer->metadata().status != FrameMetadata::FrameSuccess ||
+     buffer->metadata().sequence != it->second) {
+  fail("Parameter acceptance identity mismatch");
+  return;
+ }
+ parameterRequests_.erase(it);
+ availableParameters_.push_back(buffer);
 }
 
 int CamssX1ECameraData::start(const ControlList *controls)
@@ -489,6 +550,19 @@ int CamssX1ECameraData::start(const ControlList *controls)
   goto error;
  }
  statisticsAllocated_ = true;
+ if (parameters_) {
+  ret = parameters_->allocateBuffers(kMetadataBuffers, &parameterBuffers_);
+  if (ret != int(kMetadataBuffers)) { ret = ret < 0 ? ret : -ENOMEM; goto error; }
+  parametersAllocated_ = true;
+  parametersStopping_ = false;
+  for (const auto &buffer : parameterBuffers_) {
+   auto map = std::make_unique<MappedFrameBuffer>(buffer.get(), MappedFrameBuffer::MapFlag::Write);
+   if (!map->isValid() || map->planes().size() != 1 ||
+       map->planes()[0].size() < NF_ISP_MAX_BYTES) { ret = -EINVAL; goto error; }
+   parameterMappings_.emplace(buffer.get(), std::move(map));
+   availableParameters_.push_back(buffer.get());
+  }
+ }
  for (const auto &buffer : metadata_) {
   buffer->setCookie(++bufferId);
   const auto &planes = buffer->planes();
@@ -528,6 +602,10 @@ int CamssX1ECameraData::start(const ControlList *controls)
   ret = submitParameters();
   if (ret)
    goto error;
+ }
+ if (parameters_) {
+  ret = parameters_->streamOn();
+  if (ret) goto error;
  }
  ret = statistics_->streamOn();
  if (ret)
@@ -655,7 +733,9 @@ void CamssX1ECameraData::stop()
  expectedWrite_.reset();
  delayedControls_.reset();
  /* Pixel STREAMOFF stops hardware before any statistics/storage is released. */
+ parametersStopping_ = true;
  int ret = videoAllocated_ ? video_->streamOff() : 0;
+ int paramRet = parametersAllocated_ ? parameters_->streamOff() : 0;
  int statsRet = statisticsAllocated_ ? statistics_->streamOff() : 0;
  if (sofEnabled_) {
   int eventRet = csid_->setFrameStartEnabled(false);
@@ -677,11 +757,16 @@ void CamssX1ECameraData::stop()
   cancelImage(buffer);
  for (FrameBuffer *buffer : pending)
   cancelImage(buffer);
- if (ret || statsRet) {
+ if (ret || statsRet || paramRet) {
   failed_ = true;
   LOG(CAMSSX1E, Error) << "Capture stop failed; retain internal buffers until device close";
   return;
  }
+ parameterRequests_.clear();
+ availableParameters_.clear();
+ parameterMappings_.clear();
+ if (parametersAllocated_) { parameters_->releaseBuffers(); parametersAllocated_ = false; }
+ parameterBuffers_.clear();
  mappings_.clear();
  if (statisticsAllocated_) {
   statistics_->releaseBuffers();

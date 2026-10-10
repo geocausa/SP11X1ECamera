@@ -136,6 +136,25 @@ class CompositionTests(unittest.TestCase):
             self.assertTrue((out / "camss/native-front-profile-schema.h").exists())
             self.assertFalse(list(out.rglob("*.ko")))
 
+    def test_parameter_queue_dependency_and_composition(self):
+        with tempfile.TemporaryDirectory(prefix="native-param-output-") as directory:
+            out = Path(directory) / "candidate"
+            with self.assertRaisesRegex(ValueError, "requires data-only"):
+                build.assemble(out, front_param_queue_trial=True)
+            self.assertFalse(out.exists())
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = build.assemble(out, nv12_trial=True, front_owner_trial=True,
+                                        front_queue_trial=True, front_meta_trial=True,
+                                        front_params_trial=True, front_profile_trial=True,
+                                        front_sof_trial=True, front_control_trace_trial=True,
+                                        front_param_queue_trial=True)
+            self.assertTrue(result["front_param_queue_trial_staged"])
+            video = (out / "camss/camss-video.c").read_text()
+            self.assertIn("!atomic_read(&video->native_param_queue_ready)", video)
+            self.assertIn("!camss_x1e_native_front_param_queue_trial_allowed(video->camss)", video)
+            self.assertIn("native_front_param_unregister(video)", video)
+            self.assertFalse(list(out.rglob("*.ko")))
+
     def test_repeatable_composition_and_retained_guards(self):
         with tempfile.TemporaryDirectory(prefix="native-rgb-compose-") as directory:
             a, b = Path(directory) / "a", Path(directory) / "b"

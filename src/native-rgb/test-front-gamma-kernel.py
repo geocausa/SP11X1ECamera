@@ -11,7 +11,7 @@ ap.add_argument("--staged",type=pathlib.Path,required=True)
 ap.add_argument("--out",type=pathlib.Path,required=True)
 args=ap.parse_args();staged=args.staged.resolve();out=args.out.resolve()
 if out.exists() or out.is_relative_to(HERE):raise RuntimeError("fresh outside source output required")
-names=("native-front-params-kernel.inc","native-front-params.h","native-front-gamma-kernel.inc","native-front-gamma-kernel.h","native-front-gamma.h")
+names=("native-front-params-kernel.inc","native-front-params.h","native-front-gamma-kernel.inc","native-front-gamma-kernel.h","native-front-gamma.h","native-front-isp-params.h","native-front-param-state.h")
 profile_include='#include "native-front-profile-kernel.inc"\n\n'
 profile_load=" ret = native_front_profile_load(video);\n if (ret)\n  goto out;\n"
 for name in names:

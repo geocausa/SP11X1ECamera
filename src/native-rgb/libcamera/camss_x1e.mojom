@@ -8,7 +8,7 @@ interface IPACamssX1EInterface {
  unmapBuffers(array<uint32> ids);
  start() => (int32 ret);
  stop();
- computeParameters(uint64 request) => (int32 ret, array<uint8> packet);
+ computeParameters(uint64 request) => (int32 ret, array<uint8> packet, array<uint8> ispPacket);
  [async] processStatistics(uint32 bufferId, uint64 stream,
                            uint32 sequence, uint64 timestamp);
 };

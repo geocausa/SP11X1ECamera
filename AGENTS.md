@@ -1,3 +1,26 @@
+## 2026-10-10 front META_OUTPUT gamma transport source PASS; overlap audit
+Trial-only CPU META_OUTPUT QCIP envelope (empty or gamma256/type10) and native
+IPA sender/pipeline pool implemented. Proposed ABI subset, not merged upstream.
+Exclusive node and typed-control exclusion; driver assigns IDs5 onward; copies
+before ack; omission preserves last successful gamma; failure latches stream.
+Ack proves CPU/provider acceptance only, not hardware application.
+Kernel36 all three modules W=1/-Werror uninstalled. Libcamera16 Werror builds
+pipeline/IPA/worker/cam; actual IPA synthetic YAML/shared-mapping tests pass:
+10 selected OK, 2 expected no-device SKIP. Codec/state6218 and actual hosted
+kernel bridge259 ASAN/UBSAN checks PASS; provider/locks/profile mocks explicit.
+Composition10 PASS. No calibrated front curve, automatic feedback or parity.
+Explicit independent YAML via LIBCAMERA_CAMSS_X1E_TUNING_FILE; absent file emits
+empty update. Other blocks/flags reject. Private startup dependency remains.
+Reconnect audit: libcamera16 job completed 07:36:06Z despite unavailable UI/
+connector. All15 dirty source paths match prior turn; no additional writer
+evidence, active camera/build jobs, commit, reboot or hardware attempt found.
+Golden e66b1658-106b-476e-acbb-6d044addd43d unarmed. Front04/rear66 remain
+hardware foundations; native05 still uninstalled/unconsumed.
+Next new single-use parameter-queue hardware test, gamma/channel response proof,
+correct physical chart framing and fresh strict registered calibration.
+Evidence docs/FRONT-PARAM-QUEUE-20261010.json. Never retry spent hardware IDs.
+Earlier entries are historical.
+
 ## 2026-10-10 front gamma kernel backend source PASS; no hardware
 Kernel-internal gamma submission shares the existing typed request/bank/FIFO
 path. Prepared tables copied/revalidated; all three named capsule sections

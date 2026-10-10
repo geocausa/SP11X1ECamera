@@ -104,6 +104,7 @@ static int profile_error;
 static int native_front_profile_load(struct camss_video *v)
 { (void)v;return profile_error; }
 #include "hosted-front-params-kernel.inc"
+#include "native-front-param-state.h"
 
 static void description(u8 *data,unsigned slot,unsigned type,unsigned index,
                          unsigned offset,unsigned size)
@@ -134,6 +135,12 @@ static void packet_fixture(u8 *packet,u64 request)
  memset(packet,0,64);
  put_unaligned_le32(NATIVE_FRONT_PARAMS_MAGIC,packet);
  packet[4]=1;packet[6]=64;put_unaligned_le64(request,packet+8);
+}
+static int queue_adapter(void *ctx,u64 request,const u8 *gamma,size_t bytes)
+{
+ u8 packet[64];packet_fixture(packet,request);
+ return gamma?camss_x1e_front_params_gamma_submit(ctx,packet,64,gamma,bytes):
+              camss_x1e_front_params_submit(ctx,packet,64);
 }
 static void clean_request(void) { free(queued);queued=NULL;need(active==0 && locks==0); }
 int main(void)
@@ -257,6 +264,35 @@ int main(void)
  clean_request();packet_fixture(packet,6);
  need(camss_x1e_front_params_gamma_submit(&video,packet,64,gamma,3072)==-EPROTO);
  need(closes==2 && purges==2);clean_request();
+ /* Generic envelope -> persistent queue state -> actual scalar/gamma bridge.
+  * Only allocation/profile/provider/hardware primitives remain mocked. */
+ struct native_front_param_state state;
+ u8 isp[NF_ISP_MAX_BYTES],empty[NF_ISP_HEADER_BYTES];
+ u32 scratch[NF_GAMMA_WORD_COUNT];int update;
+ for(unsigned c=0;c<3;c++)for(unsigned i=0;i<257;i++)points[c*257+i]=c*100+i*3;
+ need(!native_front_isp_encode(points,NF_GAMMA_POINT_COUNT,isp,sizeof(isp)));
+ need(!native_front_isp_decode(isp,sizeof(isp),scratch,NF_GAMMA_WORD_COUNT,gamma,3072,&update));
+ memcpy(saved_gamma,gamma,sizeof(gamma));last_request=4;
+ native_front_param_state_reset(&state);
+ need(!native_front_param_state_submit(&state,gamma,update,queue_adapter,&video));
+ for(unsigned i=0;i<3;i++) {
+  const u8 *section;
+  need(!camss_x1e_pix_capsule_section(queued,5,7+i,&section,&bytes));
+  need(!memcmp(section,saved_gamma+order[i]*1024,1024));
+ }
+ clean_request();memset(isp,0xa5,sizeof(isp));memset(gamma,0xa5,sizeof(gamma));
+ need(!native_front_isp_encode(NULL,0,empty,sizeof(empty)));
+ need(!native_front_isp_decode(empty,sizeof(empty),NULL,0,NULL,0,&update));
+ need(!native_front_param_state_submit(&state,NULL,update,queue_adapter,&video));
+ need(get_unaligned_le64(queued+0x2c)==6);
+ for(unsigned i=0;i<3;i++) {
+  const u8 *section;
+  need(!camss_x1e_pix_capsule_section(queued,5,7+i,&section,&bytes));
+  need(!memcmp(section,saved_gamma+order[i]*1024,1024));
+ }
+ clean_request();queue_error=-ENOSPC;
+ need(native_front_param_state_submit(&state,NULL,0,queue_adapter,&video)==-ENOSPC);
+ need(state.next==7 && state.failed);clean_request();queue_error=0;
  video.native_params_profile=NULL;camss_x1e_front_params_clear(&video);
  free(candidate);free(before);free(baseline);
  printf("PASS_FRONT_GAMMA_KERNEL_BRIDGE checks=%u hardware_access=false provider_enqueue=mock\n",checks);
