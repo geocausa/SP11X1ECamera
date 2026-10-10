@@ -1,3 +1,43 @@
+## 2026-10-10 front lit-chart run: request cancellation blocker; all retired
+
+SP11 front now user-aimed at SP7. Independently written fixed grey/RGB chart
+ran throughout Linux front-meter02 and fresh Windows-front03 captures with SP7
+brightness unchanged26percent. No lux measurement or real-illuminant AWB claim.
+
+Front02 FAILED after158/160 output requests: requests96/128 (the analogue gain
+changes) were cancelled, three exposure groups reached sensor readbacks, then
+standard cam waited until40s timeout. Kernel queue stopped1190 completions with
+error0, critical signatures0, automatic Golden returned. Identity consumed,
+retired, service/timer disabled and watchdog static/untriggered; firmware restored
+absent. Never retry02. Timing-horizon admission is the source-derived suspected
+cause; add explicit rejection diagnostics and preserve valid pending requests
+until a safe delayed-control slot, keeping the two-frame association guard.
+
+Partial original pixels remain SP11: baseline Y3.30/raw green751.3; longer exposure
+Y3.65/green827.0; gain response unqualified because those requests cancelled.
+Windows-front03 PASS: eight unique native2560x1440 NV12 samples, three private
+snapshots, normal automatic controls, clean stop and task unregistered. Y26.32..
+26.36. Same-SP11 original-byte comparison reproduces metrics, but coarse scene
+correlation only0.24 baseline/0.64 longer exposure, below0.95 gate. No matched
+photometry, tone/color calibration or Windows image-quality parity follows.
+
+Golden783cc2d6-4267-4193-ad35-2c6b184de931 restored; next_entry empty, camera idle.
+Windows partition unmounted after strictly read-only comparison. All960 older
+control-response02/03/04 NV12 originals byte-for-byte verified in private lossless
+archives, five loose representatives retained per run. Recovered3.79GB; current
+free about3.8GB after new capture. Future full-series analysis must restore old
+archives to a fresh private directory. No pixels, spatial arrays or image hashes
+exported; no OS power policy changes. No new AE enabled.
+
+NEXT fix native front valid-control cancellation, then qualify sensor/input,
+statistics black/gain and ISP brightness using the lit reference. Continue native
+kernel/libcamera/IPA with independent tuning and upstreamable sources; loopback
+remains optional. Rear66 qualifications retained. Evidence:
+docs/FRONT-METER02-FAILED-20261010.json,
+docs/WINDOWS-FRONT03-LINUX-METER02-PARTIAL-20261010.json,
+docs/FRONT-EVIDENCE-STORAGE-20261010.json.
+Earlier entries are historical; totals still require reconciliation after59.
+
 ## 2026-10-10 native direction: rear AE qualified; front quality blocker isolated
 
 Native Linux sensor/CAMSS/ISP kernel + libcamera pipeline/IPA remains the goal,
