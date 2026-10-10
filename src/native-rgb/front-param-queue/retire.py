@@ -3,7 +3,7 @@
 """Retire a spent front parameter probe on Golden; never stream or replay."""
 import argparse,datetime,hashlib,json,os,subprocess
 from pathlib import Path
-ap=argparse.ArgumentParser();ap.add_argument("--attempt",choices=["01","02","03","04"],required=True);args=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument("--attempt",choices=["01","02","03","04","05"],required=True);args=ap.parse_args()
 need=lambda ok: None if ok else (_ for _ in ()).throw(RuntimeError("retirement precondition"))
 need(os.geteuid()==0)
 r=Path(__file__).resolve().parents[3]
