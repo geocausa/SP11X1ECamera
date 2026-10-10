@@ -1,3 +1,26 @@
+## 2026-10-10 front META_OUTPUT empty transport hardware PASS; probe02 retired
+Fresh probe02 completed192 real2560x1440NV12 frames at29.84965fps.
+QCIP META_OUTPUT buffer3088, old private scalar control absent.201 ordered
+provider accepts IDs5..205, all empty updates; eight-buffer pool reuse inferred.
+Six manual exposure/analogue/digital groups physically read back; applied
+metadata matches.192 app completions/no cancellation. One app sequence gap
+with internal delayed-control padding; no strict gap-free cadence claim.
+Isolated real IPA metered197 frames with eight shared stats buffers.
+Consumed owner990 checks/no rejection; clean198-completion stop/error0,
+neutral graph/all sensors suspended/critical signatures0; watchdog not fired.
+Candidate94ba0a39-3dc2-4a22-ab7c-c2d8f47dc4a7 returned Golden
+8b44e376-cb69-43ed-ab60-4fbad0f5d727; protected Golden hashes unchanged.
+Probe01 failed harness zero-link grammar before capture and is retired;
+probe02 spent/retired, own profile removed, script archived, units inactive,
+main/timer disabled, watchdog static; no GRUB next entry. Never replay01/02.
+Source b3564923, kernel36/libcamera16. No gamma update was submitted;
+transport ACK is not hardware gamma application proof. No automatic front
+feedback, calibrated tuning, registered comparison or Windows-quality parity.
+Front04/rear66 remain existing quality/control foundations; native05 untouched.
+Next fresh gamma/channel-response qualification and corrected physical chart
+view/fresh strict registered calibration. Evidence
+docs/FRONT-PARAM-QUEUE-02-HARDWARE-20261010.json. Earlier entries historical.
+
 ## 2026-10-10 front META_OUTPUT gamma transport source PASS; overlap audit
 Trial-only CPU META_OUTPUT QCIP envelope (empty or gamma256/type10) and native
 IPA sender/pipeline pool implemented. Proposed ABI subset, not merged upstream.

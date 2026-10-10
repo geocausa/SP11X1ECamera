@@ -38,10 +38,22 @@ two no-device control tests skip as expected. Actual IPA tests use synthetic
 YAML and real shared memfd mappings. Codec/state tests6218 and actual kernel
 bridge259 pass ASAN/UBSAN. The hosted bridge uses the staged scalar/gamma
 submission and section parser; allocation, locks, eligibility, startup loading
-and provider enqueue are explicit mocks. Vb2 node behavior, runtime graph,
-acceptance timing and optical gamma interpretation remain untested on hardware.
+and provider enqueue are explicit mocks. Fresh probe02 now qualifies the actual vb2 node, isolated runtime graph,
+empty-update delivery/reuse and clean retirement. Optical gamma interpretation
+remains untested on hardware.
 
-Next is a fresh single-use hardware transport/response qualification. Front
+Hardware probe02 completed192 real2560x1440NV12 frames at29.84965fps,
+with201 ordered empty provider accepts IDs5..205 and all six manual sensor
+control groups verified through register reads/applied metadata. No valid app
+request was cancelled; one delayed-control padding event produced one physical
+app sequence gap. Clean stop completed198 requests,197 frames were metered
+through the isolated IPA,990 consumed-owner checks had zero rejections, all
+sensors suspended and the image graph returned neutral. Golden returned with
+protected asset hashes unchanged; the spent probe is fully retired. This does
+not qualify gap-free cadence or gamma hardware application because all updates
+were empty. Evidence: docs/FRONT-PARAM-QUEUE-02-HARDWARE-20261010.json.
+
+Next is fresh single-use gamma/channel hardware response qualification. Front
 calibration still needs corrected full-chart framing and a fresh Windows
 reference passing four-marker and held-out geometry gates. Existing front04
 manual-bracket and rear66 evidence remain valid; no new quality-parity claim.
