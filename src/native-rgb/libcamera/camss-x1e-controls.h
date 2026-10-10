@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 #pragma once
+#include "camss-x1e-admission.h"
 #include <algorithm>
 #include <array>
 #include <cerrno>

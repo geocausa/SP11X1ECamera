@@ -70,6 +70,7 @@ def stage(source, destination, front_pipeline=False):
         shutil.copy2(HERE / name, libipa / Path(name).name)
     shutil.copy2(HERE.parent / "front-meter/front-aec-decoder.h", libipa / "front-aec-decoder.h")
     shutil.copy2(HERE / "camss-x1e-controls.h", libipa / "camss-x1e-controls.h")
+    shutil.copy2(HERE / "camss-x1e-admission.h", libipa / "camss-x1e-admission.h")
     shutil.copy2(HERE / "camss-x1e-controls-test.cpp", destination / "test/ipa/libipa/camss-x1e-controls-test.cpp")
     shutil.copy2(HERE / "camss-x1e-helpers-test.cpp",
                  destination / "test/ipa/libipa/camss-x1e-helpers-test.cpp")
@@ -95,6 +96,7 @@ def stage(source, destination, front_pipeline=False):
         pipeline.mkdir()
         shutil.copy2(HERE / "camss-x1e.cpp", pipeline / "camss-x1e.cpp")
         shutil.copy2(HERE / "camss-x1e-controls.h", pipeline / "camss-x1e-controls.h")
+        shutil.copy2(HERE / "camss-x1e-admission.h", pipeline / "camss-x1e-admission.h")
         for name in ("native-front-params.h", "native-front-stats.h"):
             shutil.copy2(HERE.parent / name, pipeline / name)
         (pipeline / "meson.build").write_text(
@@ -123,7 +125,8 @@ def stage(source, destination, front_pipeline=False):
     subprocess.run(["git", "-C", str(destination), "diff", "--check"], check=True)
     paths = list(manifest["libcamera_inputs"])
     paths += ["src/ipa/libipa/" + Path(n).name for n in manifest["camera_sources"]]
-    paths += ["src/ipa/libipa/camss-x1e-controls.h",
+    paths += ["src/ipa/libipa/camss-x1e-admission.h",
+              "src/ipa/libipa/camss-x1e-controls.h",
               "test/ipa/libipa/camss-x1e-controls-test.cpp",
               "src/ipa/libipa/front-aec-decoder.h",
               "src/ipa/libipa/camss_x1e_helpers.h",
@@ -139,7 +142,7 @@ def stage(source, destination, front_pipeline=False):
                   "src/ipa/camss-x1e/meson.build"]
 
         paths += ["src/libcamera/pipeline/camss-x1e/" + name for name in
-                  ("camss-x1e.cpp", "camss-x1e-controls.h", "native-front-params.h", "native-front-stats.h", "meson.build")]
+                  ("camss-x1e.cpp", "camss-x1e-controls.h", "camss-x1e-admission.h", "native-front-params.h", "native-front-stats.h", "meson.build")]
     result = {
         "status": ("STAGED_LIBCAMERA_NATIVE_FRONT_PIPELINE_NOT_INSTALLED"
                    if front_pipeline else "STAGED_LIBCAMERA_HELPERS_NOT_INSTALLED"),

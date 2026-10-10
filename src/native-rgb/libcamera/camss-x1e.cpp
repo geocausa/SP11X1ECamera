@@ -98,6 +98,8 @@ public:
  void stop();
  int submitParameters();
  int queueImage(FrameBuffer *buffer);
+ int queueApplicationImage(FrameBuffer *buffer);
+ int pumpPending();
  int ensureSpare();
  void frameStart(uint32_t sequence);
  int controlTimingStep(uint32_t sequence);
@@ -111,6 +113,7 @@ public:
 
  std::unique_ptr<DelayedControls> delayedControls_;
  CamssX1EControlSchedule controlSchedule_;
+ CamssX1EOrderedAdmission<FrameBuffer> pendingRequests_;
  std::map<FrameBuffer *, uint32_t> admittedImages_;
  std::optional<CamssX1EManual> expectedWrite_;
  std::unique_ptr<ipa::camss_x1e::IPAProxyCamssX1E> ipa_;
@@ -210,7 +213,7 @@ public:
   FrameBuffer *buffer = request->findBuffer(&data->stream_);
   if (!buffer)
    return -ENOENT;
-  return data->queueImage(buffer);
+  return data->queueApplicationImage(buffer);
  }
  bool match(DeviceEnumerator *enumerator) override
  {
@@ -425,7 +428,7 @@ int CamssX1ECameraData::submitParameters()
 
 int CamssX1ECameraData::start(const ControlList *controls)
 {
- if (running_ || !startup_.empty() || !metadata_.empty())
+ if (running_ || !startup_.empty() || !metadata_.empty() || pendingRequests_.size())
   return -EBUSY;
  const char *timing = std::getenv("LIBCAMERA_CAMSS_X1E_CONTROL_TIMING");
  controlTimingTrial_ = ControlTimingTrial::None;
@@ -547,7 +550,13 @@ int CamssX1ECameraData::queueImage(FrameBuffer *buffer)
  const ControlList &requested = request ? request->controls() : empty;
  if (controlTimingTrial_ != ControlTimingTrial::None && !requested.empty()) return -EOPNOTSUPP;
  int ret = controlSchedule_.prepare(requested, &values);
- if (ret) return ret;
+ if (ret) {
+  if (request)
+   LOG(CAMSSX1E, Debug) << "CAMSS_X1E_ADMISSION_WAIT request=" << request->sequence()
+    << " target=" << controlSchedule_.nextImage() << " next_sof=" << nextSofSequence_
+    << " error=" << ret;
+  return ret;
+ }
  const uint32_t target = controlSchedule_.nextImage();
  ret = video_->queueBuffer(buffer);
  if (!ret) {
@@ -562,6 +571,40 @@ int CamssX1ECameraData::queueImage(FrameBuffer *buffer)
  return ret;
 }
 
+int CamssX1ECameraData::queueApplicationImage(FrameBuffer *buffer)
+{
+ Request *request = buffer->request();
+ if (!request) return -EINVAL;
+ if (controlTimingTrial_ != ControlTimingTrial::None && !request->controls().empty()) return -EOPNOTSUPP;
+ /* Reject invalid controls before acceptance. Valid late controls are retained
+  * and converted again against the preceding admitted request at their turn. */
+ CamssX1EManual values;
+ int ret = controlSchedule_.prepare(request->controls(), &values);
+ if (ret && ret != -ETIME) return ret;
+ ret = pendingRequests_.push(buffer, stream_.configuration().bufferCount);
+ if (ret) return ret;
+ ret = pumpPending();
+ if (ret) fail("Pending app request admission failed");
+ /* Accepted requests are completed or explicitly cancelled by stop(). Returning
+  * an error here after fail() would make PipelineHandler cancel twice. */
+ return 0;
+}
+
+int CamssX1ECameraData::pumpPending()
+{
+ return pendingRequests_.drain([this](FrameBuffer *buffer) { return queueImage(buffer); },
+  [this]() {
+   if (availableStartup_.empty()) return -EAGAIN;
+   FrameBuffer *buffer = availableStartup_.front();
+   availableStartup_.pop_front();
+   int ret = queueImage(buffer);
+   if (ret) { availableStartup_.push_front(buffer); return ret; }
+   LOG(CAMSSX1E, Debug) << "CAMSS_X1E_CONTROL_PAD target=" << controlSchedule_.nextImage()-1
+    << " pending=" << pendingRequests_.size() << " queued=" << pixelsQueued_;
+   return 0;
+  });
+}
+
 int CamssX1ECameraData::ensureSpare()
 {
  /* The qualified kernel binds N+1 before returning N. A finite application
@@ -569,6 +612,8 @@ int CamssX1ECameraData::ensureSpare()
   * outputs admitted, using only fully paired/retired internal buffers when
   * application buffers are unavailable. No application frame is fabricated.
   */
+ int pendingRet = pumpPending();
+ if (pendingRet) return pendingRet;
  while (running_ && pixelsQueued_ < 2 && !availableStartup_.empty()) {
   FrameBuffer *buffer = availableStartup_.front();
   availableStartup_.pop_front();
@@ -597,6 +642,7 @@ void CamssX1ECameraData::stop()
 {
  running_ = false;
  availableStartup_.clear();
+ auto pending = pendingRequests_.take();
  std::vector<FrameBuffer *> held;
  for (const auto &[sequence, frame] : frames_) {
   (void)sequence;
@@ -628,6 +674,8 @@ void CamssX1ECameraData::stop()
   ipaBufferIds_.clear();
  }
  for (FrameBuffer *buffer : held)
+  cancelImage(buffer);
+ for (FrameBuffer *buffer : pending)
   cancelImage(buffer);
  if (ret || statsRet) {
   failed_ = true;

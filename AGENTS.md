@@ -1,3 +1,17 @@
+## 2026-10-10 front late-control admission fix; fresh03 source qualified
+Valid late requests are retained FIFO and admitted only at a safe future real
+image slot. Fully retired internal outputs pad the horizon; exhausted spares
+wait for completion. Stop takes and cancels pending once. The exact two-frame
+delayed-control guard remains unchanged. Fresh libcamera14 builds no warnings:
+10 tests PASS, two general missing-device tests SKIP. Actual control regression
+covers late96/128, padding, spare exhaustion, FIFO and stop take semantics.
+Fresh03 harness requires all160 application request IDs, all5 controls/physical
+CCI readbacks and metadata, continuous internal owner/SOF/IPA identities and
+clean stop/Golden. Physical app sequence gaps legitimately admit internal frames.
+No hardware claim yet; automatic exposure remains disabled. Spent02 never retry.
+Evidence docs/FRONT-ADMISSION03-PREP-20261010.json. Protected Golden unchanged.
+Earlier entries are historical.
+
 ## 2026-10-10 front lit-chart run: request cancellation blocker; all retired
 
 SP11 front now user-aimed at SP7. Independently written fixed grey/RGB chart
