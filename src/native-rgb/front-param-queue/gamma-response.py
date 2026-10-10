@@ -2,6 +2,10 @@
 # SPDX-License-Identifier: GPL-2.0-only
 """Whole-frame scalar diagnostic gates. No patch geometry or quality calibration."""
 import math
+def cci_sequence_matches(commits, readbacks, stream_index):
+    expected=list(range(stream_index*6,(stream_index+1)*6))
+    return len(commits)==6 and len(readbacks)==6 and [p[0] for p in commits]==expected and [p[0] for p in readbacks]==expected
+
 def evaluate(streams):
     if len(streams)!=5 or any(len(p)!=6 for p in streams):
         raise ValueError("five streams/six plateaus required")
