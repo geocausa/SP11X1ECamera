@@ -1,3 +1,18 @@
+## 2026-10-10 Windows04 retired; coded chart05 source checkpoint
+Windows04 passed eight distinct native NV12 samples/three private frames, clean
+release and task unregistration. Normal reboot returned protected Golden
+d88384b3-ce02-4eb1-a544-f10ebde32041; all three Golden asset hashes unchanged.
+Whole-frame Windows Y27.85..27.89, native04 brightest Y13.442. Best coarse
+correlation0.92684 below0.95. Plain chart template method failed unique-feature
+registration in all nine tested frames. No patch calibration or quality parity.
+Four independently generated public ArUco markers now identify the healthy
+upper chart; nine synthetic geometry/rejection checks and144 native-size GDI
+cell checks pass. Fresh Windows/native05 source only at this checkpoint.
+Never retry Windows04 or native04. All camera pixels/spatial results stay SP11.
+NEXT fresh coded-chart pair and held-out geometry, then measured black/tone/color.
+Evidence docs/WINDOWS-FRONT04-REGISTRATION-20261010.json.
+Earlier entries are historical; counts only verified throughrear59.
+
 ## 2026-10-10 front04 combined exposure/gain brightness hardware PASS
 Fresh04 completed192 real2560x1440 NV12 requests at30.0038fps, six clustered
 exposure/analogue/digital groups all physically read back and applied metadata
