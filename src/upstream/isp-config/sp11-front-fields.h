@@ -86,8 +86,8 @@ static inline int sp11_front_ccm_commands(u8 *out, size_t capacity,
  * Crop registers and each block's +4 word are excluded. This does not create
  * a scaler, configure the bus write masters or assert a complete NV12 path.
  */
-static inline int sp11_front_round_commands(u8 *out, size_t capacity,
-					  unsigned int bits)
+static inline int sp11_front_round_commands_state(u8 *out, size_t capacity,
+						unsigned int bits, bool enabled)
 {
 	u8 tmp[SP11_FRONT_ROUND_COMMAND_BYTES];
 	u32 values[10], enable, maximum, round;
@@ -105,6 +105,8 @@ static inline int sp11_front_round_commands(u8 *out, size_t capacity,
 		u8 *p = tmp + 60 * chroma;
 
 		enable = chroma ? 0x3e01U : 0x0e01U;
+		if (!enabled)
+			enable &= ~1U;
 		memset(values, 0, sizeof(values));
 		values[1] = (chroma ? 7U : 6U) | (round << 3);
 		values[6] = maximum;
@@ -122,5 +124,10 @@ static inline int sp11_front_round_commands(u8 *out, size_t capacity,
 	}
 	memcpy(out, tmp, sizeof(tmp));
 	return 0;
+}
+static inline int sp11_front_round_commands(u8 *out, size_t capacity,
+					  unsigned int bits)
+{
+	return sp11_front_round_commands_state(out, capacity, bits, true);
 }
 #endif

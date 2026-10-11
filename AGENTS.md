@@ -1,3 +1,29 @@
+## 2026-10-11 Windows replacement first: independent front processing sequence
+
+Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
+sp11-front-minimal.h emits1204bytes/81 REG_CONT/zero DMI without firmware reader,
+private schema/carrier, table input or legacy fallback.64 module enables clear;
+public GPL RFC four demosaic words, own BT.601/geometry/rounding, final6 enables.
+This is PROCESSING SOURCE ONLY, not complete startup or runtime independence.
+GCC/Clang ASAN/UBSAN384 geometry +1242 atomic rejection cases each PASS;
+64 public module addresses,4 public demosaic words,18 math CST words,
+1024 neutral semantic vectors,4 crop words;6 reference pin rejections PASS.
+Affected geometry/front/CST tests PASS. ARM64 public-candidate03 object
+W=1/-Werror PASS,0warnings; only memcpy/memset/stack-protection dependencies.
+No module link/load.37 original public RFC source pins unchanged.
+Evidence docs/UPSTREAM-FRONT-MINIMAL-VALIDATION-20261011.json; provenance/repro
+src/upstream/isp-config/FRONT-MINIMAL-PROVENANCE-20261011.md.
+NEXT reviewed VFE680 core input/Bayer routing, DEMUX/CHANNEL_GAIN bypass,
+internal precision/channel order; independent CSID/NV12/CDM binding with
+physical DMA/IRQ retirement. New candidate must have no private startup or
+retained steady-update carrier/fallback. Rear GRBG provider is separate.
+Both installed private consumers remain; all14 readiness components blocked.
+Dark scene: rear points at SP7 LCD; front does not. Ask user to turn front
+before front optical tests; use healthy upper SP7 area. No captures this run.
+No private input/pixels, capture/reboot/module/DT/runtime or OS-suspend change.
+Golden/daily2/default/original baseline preserved. No maintainer mail sent.
+Earlier checkpoints below are historical.
+
 ## 2026-10-11 CAMSS source series compiled; allocator pairing checked
 
 Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.

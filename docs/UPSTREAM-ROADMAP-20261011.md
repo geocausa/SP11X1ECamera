@@ -1,19 +1,26 @@
-## Current upstream alignment, checked 2026-10-11
+## Current implementation priority, checked 2026-10-11
 
-Read UPSTREAM-VFE680-INTEGRATION-20261011.md and UPSTREAM-OVERLAP-20261011.md.
-The posted Oct5 existing-CAMSS/VFE RFC is fully pinned and source-replayed:
-74 patches,325 matching before/after Git blob hashes; one explicit mirror
-context restoration from its pinned base. It is not a compiled full tree,
-settled ABI or accepted submission. A different author WIP branch is pinned
-separately; its VFE680 backend is still missing the needed PIX implementation.
-All130 typed-field addresses have public register names, but bit semantics,
-provenance and hardware qualification remain separate gates.
-NEXT prepare an isolated build on the declared full base, implement VFE680
-output groups/IPP/frame identity and physical DMA stop ownership, complete
-independent startup/DMI and generic metadata blocks, then compile/qualify.
-Source-only helpers remain field tests, not submission ABI or full startup.
-Current coverage130fields/270occurrences; both private runtime profiles remain.
-This updates W0/W1/W4 implementation order, not their readiness gates.
+Windows runtime dependency removal comes first. A new independent front
+processing builder now emits1204bytes/81 register commands with zero DMI:
+explicit module disables, public demosaic parameters, mathematical BT.601,
+derived geometry/rounding and final enables. GCC/Clang sanitizer and ARM64
+kernel-object checks pass. This is not a complete startup provider; both
+installed private consumers remain. Read
+src/upstream/isp-config/FRONT-MINIMAL-PROVENANCE-20261011.md and
+docs/UPSTREAM-FRONT-MINIMAL-VALIDATION-20261011.json for source pins and limits.
+
+NEXT resolve VFE680 core/Bayer routing, internal precision and bypass, then
+bind independently generated CSID/NV12/CDM setup with physical DMA/IRQ retirement.
+No unknown setting may come from a private carrier, schema or retained
+steady-update fallback. Compile a fresh candidate before optical qualification.
+Rear GRBG needs a separate provider. Add open tuning/statistics afterward.
+
+Supporting CAMSS work: posted74-patch RFC replay325 Git blobs; prepared full
+public base; four local source patches compile CAMSS/generic ISP objects.
+Candidate03 preserves allocator-paired stop/release and passes688 host cases
+per compiler. VFE680 is still RDI-only; full kernel/modpost/PIX/hardware and
+public generated-header provenance remain unqualified. This changes W0/W1
+implementation order, not any readiness gate.
 
 # SP11 RGB camera upstream implementation plan
 

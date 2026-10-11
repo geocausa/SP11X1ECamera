@@ -71,8 +71,9 @@ static inline void sp11_geometry_axis(u32 input, u32 output,
 	}
 }
 
-static inline int sp11_geometry_commands(u8 *out, size_t capacity,
-					const struct sp11_geometry *s)
+static inline int sp11_geometry_commands_state(u8 *out, size_t capacity,
+					      const struct sp11_geometry *s,
+					      bool enabled)
 {
 	u8 tmp[SP11_GEOMETRY_COMMAND_BYTES];
 	u32 words[10], fx, fy, crop[2];
@@ -89,7 +90,7 @@ static inline int sp11_geometry_commands(u8 *out, size_t capacity,
 		return ret;
 	for (ch = 0; ch < 2; ch++) {
 		u32 divisor = ch ? 2U : 1U;
-		words[0] = 1; words[1] = 0x600;
+		words[0] = enabled ? 1U : 0U; words[1] = 0x600;
 		words[2] = (s->input_width - 1) << 16 | (s->input_height - 1);
 		sp11_geometry_axis(s->input_width, s->output_width / divisor,
 				   &words[3], &words[4], &fx);
@@ -111,6 +112,12 @@ static inline int sp11_geometry_commands(u8 *out, size_t capacity,
 	}
 	memcpy(out, tmp, sizeof(tmp));
 	return 0;
+}
+
+static inline int sp11_geometry_commands(u8 *out, size_t capacity,
+					const struct sp11_geometry *s)
+{
+	return sp11_geometry_commands_state(out, capacity, s, true);
 }
 
 /* Validate ROI against the actual active sensor region, not just field fit.

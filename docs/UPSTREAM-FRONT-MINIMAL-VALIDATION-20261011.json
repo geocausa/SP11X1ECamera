@@ -1,0 +1,327 @@
+{
+  "schema": "sp11-front-minimal-validation-v1",
+  "utc": "2026-10-11T19:43:00.974891+00:00",
+  "source_parent_commit": "df0b9ceb8c3605e28d7a642a25deeb95ef93e5cf",
+  "status": "PROCESSING_SEQUENCE_SOURCE_TESTED_STARTUP_PROVIDER_REQUIRED",
+  "source": "src/upstream/isp-config/sp11-front-minimal.h",
+  "provenance": "src/upstream/isp-config/FRONT-MINIMAL-PROVENANCE-20261011.md",
+  "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-front-minimal-20261011-02",
+  "compile_plan": {
+    "schema": "sp11-front-minimal-compile-plan-v1",
+    "utc": "2026-10-11T19:41:52.638183+00:00",
+    "source_parent_commit": "df0b9ceb8c3605e28d7a642a25deeb95ef93e5cf",
+    "source_sha256": {
+      "sp11-front-minimal.h": "75656614b9d2582c942f954c23e5c9db5465961eb14d20c868f9592627cb1dd5",
+      "sp11-cst-stats.h": "2e108eee37bf69b85e3db41460509eadbad9010eaf6adf2ece50f71dafc31c67",
+      "sp11-front-fields.h": "f37dfdc80695def4001ca67301dbddd13a2dc9647e86738cdce804b444a678ae",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+      "sp11-geometry-stats.h": "233a4e1acc6924df9f5c5e9ab0c432b3a62db1b2c62a631b853613523e28a187"
+    },
+    "command": [
+      "make",
+      "-C",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+      "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/build",
+      "M=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-front-minimal-20261011-02",
+      "W=1",
+      "KCFLAGS=-Werror",
+      "sp11-open-front-minimal.o"
+    ],
+    "hardware_access": false,
+    "runtime_changed": false,
+    "never_load": true,
+    "prior_source_attempt_preserved": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-front-minimal-20261011-01",
+    "change": "Replace flow-control macro with explicit checked calls; generated commands must remain identical."
+  },
+  "kernel_object_compile": {
+    "utc": "2026-10-11T19:41:56.140450+00:00",
+    "exit_code": 0,
+    "command": [
+      "make",
+      "-C",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+      "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/build",
+      "M=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-front-minimal-20261011-02",
+      "W=1",
+      "KCFLAGS=-Werror",
+      "sp11-open-front-minimal.o"
+    ],
+    "warning_lines": 0,
+    "object_created": true,
+    "hardware_access": false,
+    "runtime_changed": false,
+    "module_linked": false,
+    "never_load": true,
+    "object_sha256": "cda2f380e961c50328f4e01d26ba1bcf45e7c8c311f5d29028aefd86a1c295ca",
+    "undefined_symbols": [
+      "                 U memcpy",
+      "                 U memset",
+      "                 U __stack_chk_fail"
+    ]
+  },
+  "host": {
+    "utc": "2026-10-11T19:41:53.694084+00:00",
+    "tests": [
+      {
+        "command": [
+          "python3",
+          "src/upstream/isp-config/test_front_minimal.py",
+          "--vfe680-header",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-public-vfe680-20261011-01/source/drivers/media/platform/qcom/camss/camss-vfe-680-pp-regs.h",
+          "--vfe880-source",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source/drivers/media/platform/qcom/camss/camss-vfe-880-pp.c"
+        ],
+        "exit_code": 0,
+        "result": {
+          "schema": "sp11-front-minimal-tests-v1",
+          "tests": [
+            {
+              "compiler": "gcc",
+              "status": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS minimal processing geometry=384 rejected=1242 bytes=1204 commands=81 DMI=0",
+              "semantic": {
+                "public_module_addresses": 64,
+                "public_demosaic_configuration_words": 4,
+                "neutral_colour_vectors": 1024,
+                "optional_modules_disabled": 58,
+                "mathematical_cst_words": 18,
+                "crop_geometry_words": 4
+              }
+            },
+            {
+              "compiler": "clang",
+              "status": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS minimal processing geometry=384 rejected=1242 bytes=1204 commands=81 DMI=0",
+              "semantic": {
+                "public_module_addresses": 64,
+                "public_demosaic_configuration_words": 4,
+                "neutral_colour_vectors": 1024,
+                "optional_modules_disabled": 58,
+                "mathematical_cst_words": 18,
+                "crop_geometry_words": 4
+              }
+            }
+          ],
+          "reference_rejection_cases": 6,
+          "public_reference_sha256": {
+            "vfe680": "bce9607bac5b46ce907a1434b3a772c5c40b753b1c933db7d37822b9c26e020e",
+            "vfe880": "c4845b4e33212267db16200574686b0b8898d5c3af1a73580761fb72c94fefd0"
+          },
+          "builder_include_closure_sha256": {
+            "sp11-front-minimal.h": "75656614b9d2582c942f954c23e5c9db5465961eb14d20c868f9592627cb1dd5",
+            "sp11-cst-stats.h": "2e108eee37bf69b85e3db41460509eadbad9010eaf6adf2ece50f71dafc31c67",
+            "sp11-front-fields.h": "f37dfdc80695def4001ca67301dbddd13a2dc9647e86738cdce804b444a678ae",
+            "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+            "sp11-geometry-stats.h": "233a4e1acc6924df9f5c5e9ab0c432b3a62db1b2c62a631b853613523e28a187"
+          },
+          "generated_public_program_sha256": "781f8073602b2c3fcb5d34340c44e750841b05dead9f3f368b57fe1809b3588d",
+          "program_bytes": 1204,
+          "register_commands": 81,
+          "dmi_transfers": 0,
+          "hardware_access": false,
+          "private_profile_read": false,
+          "complete_startup_provider": false,
+          "runtime_dependencies_removed": false
+        }
+      },
+      {
+        "command": [
+          "python3",
+          "src/upstream/isp-config/test_geometry_stats.py"
+        ],
+        "exit_code": 0,
+        "result": {
+          "hardware_access": false,
+          "private_profile_read": false,
+          "complete_startup_profile": false,
+          "pinned_reference_compared": false,
+          "tests": [
+            {
+              "compiler": "gcc",
+              "status": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS geometry_cases=194 grid_cases=12297; bounds/atomic rejection/130-field composition"
+            },
+            {
+              "compiler": "clang",
+              "status": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS geometry_cases=194 grid_cases=12297; bounds/atomic rejection/130-field composition"
+            }
+          ]
+        }
+      },
+      {
+        "command": [
+          "python3",
+          "src/upstream/isp-config/test_front_fields.py"
+        ],
+        "exit_code": 0,
+        "result": {
+          "hardware_access": false,
+          "private_profile_read": false,
+          "complete_startup_profile": false,
+          "tests": [
+            {
+              "compiler": "gcc",
+              "result": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS: CDM bounds/atomic rejection; 8192 CST and 4096 CCM values; sparse fields; 22 round/clamp fields match the existing validated converter"
+            },
+            {
+              "compiler": "clang",
+              "result": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS: CDM bounds/atomic rejection; 8192 CST and 4096 CCM values; sparse fields; 22 round/clamp fields match the existing validated converter"
+            }
+          ]
+        }
+      },
+      {
+        "command": [
+          "python3",
+          "src/upstream/isp-config/test_cst_stats.py"
+        ],
+        "exit_code": 0,
+        "result": {
+          "hardware_access": false,
+          "private_profile_read": false,
+          "complete_startup_profile": false,
+          "pinned_reference_compared": false,
+          "tests": [
+            {
+              "compiler": "gcc",
+              "status": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS cst=12290 rs=16490 bhist_geometry=16385; sparse ownership/bounds/atomicity"
+            },
+            {
+              "compiler": "clang",
+              "status": "PASS",
+              "asan": true,
+              "ubsan": true,
+              "detail": "PASS cst=12290 rs=16490 bhist_geometry=16385; sparse ownership/bounds/atomicity"
+            }
+          ]
+        }
+      }
+    ],
+    "unchanged_affected_helpers_test_stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-front-minimal-20261011-01"
+  },
+  "original_public_rfc_file_pins_unchanged": 37,
+  "runtime_changed": false,
+  "hardware_qualified": false,
+  "private_input_read": false,
+  "private_pixels_read": false,
+  "complete_startup_provider": false,
+  "runtime_dependencies_removed": false,
+  "installed_private_profile_consumers_remaining": 2,
+  "upstream_ready": false,
+  "remaining_integration": [
+    "Reviewed VFE680 core input and RGGB routing; DEMUX/CHANNEL_GAIN bypass proof",
+    "Internal precision and G,B,R order proof for mathematical CST",
+    "Independent CSID/NV12 bus-client/CDM setup, IRQ and physical DMA retirement",
+    "Candidate with no private loader, legacy carrier or retained steady-update fallback",
+    "Fresh cold-start/stop-reopen/switching qualification, no system sleep",
+    "Separate rear GRBG provider; open tuning/automatic controls/libcamera"
+  ],
+  "checkpatch": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "scope": "new processing header only; no DCO or submission acceptance claim"
+  },
+  "prior_attempts_preserved": [
+    {
+      "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-front-minimal-20261011-01",
+      "kernel_object_compile": {
+        "utc": "2026-10-11T19:36:01.479551+00:00",
+        "exit_code": 0,
+        "command": [
+          "make",
+          "-C",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/build",
+          "M=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-front-minimal-20261011-01",
+          "W=1",
+          "KCFLAGS=-Werror",
+          "sp11-open-front-minimal.o"
+        ],
+        "warning_lines": 0,
+        "object_created": true,
+        "hardware_access": false,
+        "runtime_changed": false,
+        "module_linked": false,
+        "never_load": true,
+        "object_sha256": "53f137abc700dae6cbebe165f3ef29d8adb8ec7b1918af2247b575e52aafe034",
+        "undefined_symbols": [
+          "                 U memcpy",
+          "                 U memset",
+          "                 U __stack_chk_fail"
+        ]
+      },
+      "note": "Passing initial source attempt retained; flow-control macro had one style error/one warning and was replaced by explicit checks."
+    }
+  ],
+  "validation_source_sha256": {
+    "sp11-front-minimal.h": "75656614b9d2582c942f954c23e5c9db5465961eb14d20c868f9592627cb1dd5",
+    "test-front-minimal.c": "5b8523d400f9f80303ebed9b6058fb1f53bfad71b42096ac21894b95d337df8f",
+    "test_front_minimal.py": "664a0eabc63ec324b7bc1a610fa59a4bb473a2b017b36816afab86ea19da7129",
+    "open_config.py": "ff48a4272422966e2681113e5122d8c9d037f81e2b89bc78143ff1d6c6248052",
+    "FRONT-MINIMAL-PROVENANCE-20261011.md": "99d598399aba618998c78422df33a4f0828e1d480880358c25f6c2e8afd87640",
+    "front-minimal-compile-probe/Makefile": "2a61aaf6bdc2437736bbcf55ce626528ad2cc5f35956a4e053505ced4a9a7504",
+    "front-minimal-compile-probe/sp11-open-front-minimal.c": "6e7ee3129f46054b49ad8270fe84ab99e9e8ac7afe1f8043e9a6987bdbdcde30"
+  },
+  "final_checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test-upstream-readiness.py"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "",
+      "stderr": "test_changed_source_invalidates_evidence (__main__.GateTests.test_changed_source_invalidates_evidence) ... ok\ntest_duplicate_component (__main__.GateTests.test_duplicate_component) ... ok\ntest_empty_manifest_cannot_pass (__main__.GateTests.test_empty_manifest_cannot_pass) ... ok\ntest_hardware_opt_out_cannot_bypass_camera_qualification (__main__.GateTests.test_hardware_opt_out_cannot_bypass_camera_qualification) ... ok\ntest_malformed_identifier_and_version (__main__.GateTests.test_malformed_identifier_and_version) ... ok\ntest_missing_component (__main__.GateTests.test_missing_component) ... ok\ntest_missing_evidence (__main__.GateTests.test_missing_evidence) ... ok\ntest_no_hardware_evidence (__main__.GateTests.test_no_hardware_evidence) ... ok\ntest_paths_and_symlinks_rejected (__main__.GateTests.test_paths_and_symlinks_rejected) ... ok\ntest_private_runtime_dependency (__main__.GateTests.test_private_runtime_dependency) ... ok\ntest_submission_documentation_can_have_source_only_evidence (__main__.GateTests.test_submission_documentation_can_have_source_only_evidence) ... ok\ntest_unknown_provenance (__main__.GateTests.test_unknown_provenance) ... ok\ntest_unreviewed_trace_or_license (__main__.GateTests.test_unreviewed_trace_or_license) ... ok\ntest_valid_synthetic_gate (__main__.GateTests.test_valid_synthetic_gate) ... ok\ntest_wrong_component_evidence (__main__.GateTests.test_wrong_component_evidence) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.011s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/check-upstream-readiness.py"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "{\n  \"upstream_ready\": false,\n  \"blockers\": [\n    \"front-startup: private-runtime-dependency\",\n    \"rear-startup: private-runtime-dependency\",\n    \"cphy: needs-upstream-rebase\",\n    \"camss-driver: experimental-driver-cleanup\",\n    \"params-stats-api: interface-design-required\",\n    \"imx681: sensor-review-required\",\n    \"ov13858: sensor-review-required\",\n    \"focus-driver: userspace-i2c-dependency\",\n    \"regulator-dt: standard-topology-hang-unresolved\",\n    \"libcamera-pipeline: pipeline-rewrite-required\",\n    \"ipa: ipa-review-required\",\n    \"image-processing: bridge-migration-and-calibration-required\",\n    \"validation: qualification-incomplete\",\n    \"submission-export: curated-series-required\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "tools/check-repo-hygiene.sh"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "repository hygiene: OK\n",
+      "stderr": ""
+    }
+  ]
+}

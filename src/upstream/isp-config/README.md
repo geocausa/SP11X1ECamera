@@ -112,3 +112,25 @@ The referenced earlier MIT CST packer is used only for functional encoding
 comparison on synthetic inputs. Its old proprietary tuning producer is excluded.
 Earlier dated evidence/provenance documents record their original source snapshots;
 they are not claims about current runtime or current interface shape.
+
+## Combined minimal front processing sequence
+
+sp11-front-minimal.h now assembles a bounded 1204-byte processing program:
+64 module disables, public demosaic bring-up parameters, mathematical BT.601,
+derived geometry and eight-bit rounding, then six final module enables.
+There are 81 REG_CONT commands and zero DMI transfers. The source helper has
+no firmware reader, private carrier or legacy fallback. Existing enabled
+geometry/rounding wrappers preserve their behavior; state variants allow
+configuration before the final enable phase.
+
+This is still a processing sequence, not complete camera startup. The public
+demosaic words, optional-block bypass, channel order and internal precision
+are unqualified on VFE680. Core/Bayer routing, CSID, bus clients, DMA/IRQ
+ownership and safe submission are required before any hardware candidate.
+Both installed private dependencies remain.
+
+Read FRONT-MINIMAL-PROVENANCE-20261011.md for exact source pins, borrowed GPL
+parameters versus own mathematics, reproduction and hardware integration order.
+The required-reference test is test_front_minimal.py; the new object-only
+probe is front-minimal-compile-probe. Evidence:
+docs/UPSTREAM-FRONT-MINIMAL-VALIDATION-20261011.json.
