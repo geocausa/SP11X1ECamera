@@ -38,8 +38,16 @@ install -m 644 "$B/src/ipa/camss-x1e/ipa_camss_x1e.so" "$B/src/ipa/camss-x1e/ipa
   "$B/src/ipa/camss-x1e-rear/ipa_camss_x1e_rear.so" "$B/src/ipa/camss-x1e-rear/ipa_camss_x1e_rear.so.sign" "$D/lib/ipa/"
 install -m 755 "$B/src/libcamera/proxy/worker/camss_x1e_ipa_proxy" "$B/src/libcamera/proxy/worker/camss_x1e_rear_ipa_proxy" "$D/lib/proxy/"
 install -d -m 755 "$BOOT"
-install -m 644 /boot/sp11-camera-front-ae-93/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb "$BOOT/" 2>/dev/null || \
-  install -m 644 /boot/sp11-7.1.5-camera-daily/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb "$BOOT/"
+# camera device tree (superset of Golden) + rear lens actuator supply (make-daily-dtb.py)
+CAMDTB=/boot/sp11-7.1.5-camera-daily/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb
+test "$(md5sum < $CAMDTB | cut -d' ' -f1)" = 22ca17bf6c265d356bb841ede864a9c0
+# The lens supply variant hung the machine on its first boot (2026-10-11 12:15);
+# it stays opt-in (SP11_REAR_VAF=1) until it is qualified on its own.
+if [ "${SP11_REAR_VAF:-0}" = 1 ]; then
+  python3 "$HERE/make-daily-dtb.py" "$CAMDTB" "$BOOT/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb"
+else
+  install -m 644 "$CAMDTB" "$BOOT/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb"
+fi
 
 cat > /etc/systemd/system/$ID.service <<EOF
 [Unit]
@@ -58,6 +66,13 @@ for cam in front:sp11-front-imx681:camss-x1e:/dev/video50 rear:sp11-rear-ov13858
   IFS=: read -r name cid handler dev <<<"$cam"
   extra=""
   [ "$name" = front ] && extra="Environment=LIBCAMERA_CAMSS_X1E_TUNING_FILE=$D/tuning/imx681-front.yaml"
+  # both bridges enumerate the same media device: let the front one go first
+  [ "$name" = rear ] && extra="ExecStartPre=/bin/sleep 4"
+  # rendering measured against Windows (fit-look.py); identity when absent
+  lookarg=""
+  if [ -f "$HERE/looks/look-$name.look" ]; then
+    install -m 644 "$HERE/looks/look-$name.look" "$D/look-$name.look"; lookarg="$D/look-$name.look"
+  fi
   cat > /etc/systemd/system/sp11-webcam-$name.service <<EOF
 [Unit]
 Description=SP11 $name camera webcam bridge ($dev)
@@ -72,7 +87,7 @@ Environment=LIBCAMERA_IPA_PROXY_PATH=$D/lib/proxy
 Environment=LIBCAMERA_PIPELINES_MATCH_LIST=$handler
 Environment=LIBCAMERA_LOG_LEVELS=*:WARN
 $extra
-ExecStart=$D/sp11-webcam $cid $dev
+ExecStart=$D/sp11-webcam $cid $dev $lookarg
 Restart=on-failure
 RestartSec=2
 Nice=-5

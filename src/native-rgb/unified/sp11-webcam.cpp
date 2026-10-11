@@ -4,27 +4,34 @@
  * camss-x1e front or camss-x1e-rear pipeline, NV12) to a v4l2loopback device
  * that ordinary applications use as a webcam (1920x1080 YUYV, 30 fps).
  *
- * Usage: sp11-webcam <libcamera camera id> <loopback device>
+ * Usage: sp11-webcam <libcamera camera id> <loopback device> [look file]
  * One instance per camera. The camera runs only while another process holds the
  * loopback device open and is released a few seconds after the last reader
  * closes it. Both cameras share one media device, so only one can stream at a
  * time; a start that finds the other camera busy is retried.
+ *
+ * The optional look file (fit-look.py, measured against a same-scene Windows
+ * capture) sets the output rendering: a luma tone table, chroma gain and
+ * neutral offset, a cored unsharp mask and a motion-adaptive temporal filter.
  */
 #include <algorithm>
 #include <atomic>
 #include <cerrno>
 #include <chrono>
+#include <cmath>
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
+#include <fstream>
 #include <iostream>
 #include <linux/dma-buf.h>
 #include <linux/videodev2.h>
 #include <map>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -55,6 +62,59 @@ void dmaSync(int fd, bool start)
 	}
 }
 
+/* Output rendering. Defaults are the identity. */
+struct Look {
+	uint8_t lut[256];
+	float chromaGain = 1.0f, uOffset = 0.0f, vOffset = 0.0f;
+	float sharpen = 0.0f, sharpenCore = 2.0f;
+	float tnrStrength = 0.0f, tnrThreshold = 12.0f;
+	Look()
+	{
+		for (unsigned i = 0; i < 256; i++)
+			lut[i] = uint8_t(i);
+	}
+	bool load(const std::string &path)
+	{
+		std::ifstream in(path);
+		if (!in)
+			return false;
+		std::string line;
+		while (std::getline(in, line)) {
+			std::istringstream s(line);
+			std::string key;
+			if (!(s >> key) || key[0] == '#')
+				continue;
+			if (key == "lut") {
+				for (unsigned i = 0; i < 256; i++) {
+					int v;
+					if (!(s >> v))
+						return false;
+					lut[i] = uint8_t(std::clamp(v, 0, 255));
+				}
+			} else if (key == "chroma_gain") {
+				s >> chromaGain;
+			} else if (key == "u_offset") {
+				s >> uOffset;
+			} else if (key == "v_offset") {
+				s >> vOffset;
+			} else if (key == "sharpen") {
+				s >> sharpen;
+			} else if (key == "sharpen_core") {
+				s >> sharpenCore;
+			} else if (key == "tnr_strength") {
+				s >> tnrStrength;
+			} else if (key == "tnr_threshold") {
+				s >> tnrThreshold;
+			}
+		}
+		chromaGain = std::clamp(chromaGain, 0.0f, 3.0f);
+		sharpen = std::clamp(sharpen, 0.0f, 4.0f);
+		tnrStrength = std::clamp(tnrStrength, 0.0f, 0.9f);
+		tnrThreshold = std::clamp(tnrThreshold, 1.0f, 64.0f);
+		return true;
+	}
+};
+
 /* Bilinear resampling tables: output index -> source index and 8-bit weight. */
 struct Axis {
 	std::vector<unsigned> i0;
@@ -73,47 +133,153 @@ struct Axis {
 	}
 };
 
-class Converter
+/*
+ * NV12 (any size) -> rendered YUYV 4:2:2 at OW x OH. Rows are processed in
+ * parallel bands; the temporal filter keeps its state per output sample.
+ */
+class Renderer
 {
 public:
-	void setup(unsigned w, unsigned h, unsigned ystride, unsigned cstride)
+	void setup(unsigned w, unsigned h, unsigned stride, const Look &look)
 	{
-		ys_ = ystride;
-		cs_ = cstride;
+		ys_ = stride;
 		yx_.build(w, OW);
 		yy_.build(h, OH);
 		cx_.build(w / 2, OW / 2);
 		cy_.build(h / 2, OH);
+		look_ = look;
+		y_.assign(size_t(OW) * OH, 0);
+		u_.assign(size_t(OW / 2) * OH, 128);
+		v_.assign(size_t(OW / 2) * OH, 128);
+		prevY_.assign(size_t(OW) * OH, 0);
+		prevU_.assign(size_t(OW / 2) * OH, 0);
+		prevV_.assign(size_t(OW / 2) * OH, 0);
+		primed_ = false;
+		for (unsigned d = 0; d < 256; d++) {
+			float w = look.tnrStrength * std::max(0.0f, 1.0f - float(d) / look.tnrThreshold);
+			tnr_[d] = int(std::lround(w * 256.0f));
+			/* chroma noise is smaller in code values: half the threshold */
+			float wc = look.tnrStrength * std::max(0.0f, 1.0f - float(d) / (0.5f * look.tnrThreshold));
+			tnrC_[d] = int(std::lround(wc * 256.0f));
+		}
+		for (int d = -255; d <= 255; d++) {
+			float c = std::max(0.0f, std::fabs(float(d)) - look.sharpenCore);
+			sharp_[d + 255] = int(std::lround(look.sharpen * (d < 0 ? -c : c)));
+		}
+		for (int c = 0; c < 256; c++) {
+			cu_[c] = uint8_t(std::clamp(int(std::lround(128 + look.chromaGain * (c - 128) + look.uOffset)), 0, 255));
+			cv_[c] = uint8_t(std::clamp(int(std::lround(128 + look.chromaGain * (c - 128) + look.vOffset)), 0, 255));
+		}
 	}
-	/* NV12 -> YUYV 4:2:2 at OW x OH. */
-	void run(const uint8_t *y, const uint8_t *uv, uint8_t *out) const
+
+	void run(const uint8_t *y, const uint8_t *uv, uint8_t *out)
 	{
-		for (unsigned r = 0; r < OH; r++) {
+		const bool temporal = primed_ && look_.tnrStrength > 0.0f;
+		bands([&](unsigned r0, unsigned r1) { pass1(y, uv, r0, r1, temporal); });
+		primed_ = true;
+		bands([&](unsigned r0, unsigned r1) { pass2(out, r0, r1); });
+	}
+
+private:
+	template<typename F>
+	void bands(F fn)
+	{
+		constexpr unsigned N = 4;
+		std::thread t[N - 1];
+		for (unsigned b = 1; b < N; b++)
+			t[b - 1] = std::thread(fn, OH * b / N, OH * (b + 1) / N);
+		fn(0, OH / N);
+		for (auto &th : t)
+			th.join();
+	}
+
+	static inline uint8_t filt(int cur, uint16_t &prev, const int *table)
+	{
+		/* prev is Q8; blend toward it where the change is small */
+		int c = cur << 8, p = prev;
+		int d = std::abs(c - p) >> 8;
+		int w = table[std::min(d, 255)];
+		int o = c + (((p - c) * w) >> 8);
+		prev = uint16_t(o);
+		return uint8_t((o + 128) >> 8);
+	}
+
+	void pass1(const uint8_t *y, const uint8_t *uv, unsigned r0, unsigned r1, bool temporal)
+	{
+		for (unsigned r = r0; r < r1; r++) {
 			const uint8_t *y0 = y + size_t(yy_.i0[r]) * ys_, *y1 = y0 + ys_;
 			const unsigned wy = yy_.w1[r];
-			const uint8_t *c0 = uv + size_t(cy_.i0[r]) * cs_, *c1 = c0 + cs_;
+			const uint8_t *c0 = uv + size_t(cy_.i0[r]) * ys_, *c1 = c0 + ys_;
 			const unsigned wc = cy_.w1[r];
-			uint8_t *o = out + size_t(r) * OW * 2;
+			uint8_t *oy = &y_[size_t(r) * OW];
+			uint16_t *py = &prevY_[size_t(r) * OW];
 			for (unsigned x = 0; x < OW; x++) {
 				const unsigned a = yx_.i0[x], wx = yx_.w1[x];
 				const unsigned t = y0[a] * (256 - wx) + y0[a + 1] * wx;
 				const unsigned b = y1[a] * (256 - wx) + y1[a + 1] * wx;
-				o[2 * x] = uint8_t((t * (256 - wy) + b * wy + 32768) >> 16);
+				int v = int((t * (256 - wy) + b * wy + 32768) >> 16);
+				if (temporal)
+					v = filt(v, py[x], tnr_);
+				else
+					py[x] = uint16_t(v << 8);
+				oy[x] = look_.lut[v];
 			}
+			uint8_t *ou = &u_[size_t(r) * (OW / 2)], *ov = &v_[size_t(r) * (OW / 2)];
+			uint16_t *pu = &prevU_[size_t(r) * (OW / 2)], *pv = &prevV_[size_t(r) * (OW / 2)];
 			for (unsigned x = 0; x < OW / 2; x++) {
 				const unsigned a = 2 * cx_.i0[x], wx = cx_.w1[x];
+				int s[2];
 				for (unsigned k = 0; k < 2; k++) {
 					const unsigned t = c0[a + k] * (256 - wx) + c0[a + 2 + k] * wx;
 					const unsigned b = c1[a + k] * (256 - wx) + c1[a + 2 + k] * wx;
-					o[4 * x + 1 + 2 * k] = uint8_t((t * (256 - wc) + b * wc + 32768) >> 16);
+					s[k] = int((t * (256 - wc) + b * wc + 32768) >> 16);
 				}
+				if (temporal) {
+					s[0] = filt(s[0], pu[x], tnrC_);
+					s[1] = filt(s[1], pv[x], tnrC_);
+				} else {
+					pu[x] = uint16_t(s[0] << 8);
+					pv[x] = uint16_t(s[1] << 8);
+				}
+				ou[x] = cu_[s[0]];
+				ov[x] = cv_[s[1]];
 			}
 		}
 	}
 
-private:
-	unsigned ys_ = 0, cs_ = 0;
+	void pass2(uint8_t *out, unsigned r0, unsigned r1) const
+	{
+		const bool sharpen = look_.sharpen > 0.0f;
+		for (unsigned r = r0; r < r1; r++) {
+			const uint8_t *m = &y_[size_t(r) * OW];
+			const uint8_t *a = r ? m - OW : m, *b = r + 1 < OH ? m + OW : m;
+			const uint8_t *u = &u_[size_t(r) * (OW / 2)], *v = &v_[size_t(r) * (OW / 2)];
+			uint8_t *o = out + size_t(r) * OW * 2;
+			for (unsigned x = 0; x < OW; x++) {
+				int val = m[x];
+				if (sharpen && x > 0 && x + 1 < OW) {
+					const int sum = a[x - 1] + a[x] + a[x + 1] + m[x - 1] + m[x] + m[x + 1] +
+							b[x - 1] + b[x] + b[x + 1];
+					const int blur = (sum * 7282 + 32768) >> 16; /* /9 */
+					val = std::clamp(val + sharp_[val - blur + 255], 0, 255);
+				}
+				o[2 * x] = uint8_t(val);
+			}
+			for (unsigned x = 0; x < OW / 2; x++) {
+				o[4 * x + 1] = u[x];
+				o[4 * x + 3] = v[x];
+			}
+		}
+	}
+
+	unsigned ys_ = 0;
 	Axis yx_, yy_, cx_, cy_;
+	Look look_;
+	std::vector<uint8_t> y_, u_, v_;
+	std::vector<uint16_t> prevY_, prevU_, prevV_;
+	bool primed_ = false;
+	int tnr_[256] = {}, tnrC_[256] = {}, sharp_[511] = {};
+	uint8_t cu_[256] = {}, cv_[256] = {};
 };
 
 /* Count other processes holding the loopback device open. */
@@ -154,7 +320,8 @@ int readers(const std::string &dev)
 class Bridge
 {
 public:
-	Bridge(std::shared_ptr<Camera> cam, int out) : cam_(std::move(cam)), out_(out), frame_(OUT_BYTES)
+	Bridge(std::shared_ptr<Camera> cam, int out, const Look &look)
+		: cam_(std::move(cam)), out_(out), frame_(OUT_BYTES), look_(look)
 	{
 		cam_->requestCompleted.connect(this, &Bridge::complete);
 	}
@@ -178,7 +345,7 @@ public:
 			stop();
 			return false;
 		}
-		conv_.setup(sc.size.width, sc.size.height, sc.stride, sc.stride);
+		render_.setup(sc.size.width, sc.size.height, sc.stride, look_);
 		stream_ = sc.stream();
 		alloc_ = std::make_unique<FrameBufferAllocator>(cam_);
 		if (alloc_->allocate(stream_) <= 0) {
@@ -267,7 +434,7 @@ private:
 				dmaSync(f0, true);
 				if (f1 != f0)
 					dmaSync(f1, true);
-				conv_.run(yb + pl[0].offset, cb + pl[1].offset, frame_.data());
+				render_.run(yb + pl[0].offset, cb + pl[1].offset, frame_.data());
 				if (f1 != f0)
 					dmaSync(f1, false);
 				dmaSync(f0, false);
@@ -286,7 +453,8 @@ private:
 	std::shared_ptr<Camera> cam_;
 	int out_;
 	std::vector<uint8_t> frame_;
-	Converter conv_;
+	Look look_;
+	Renderer render_;
 	std::unique_ptr<CameraConfiguration> cfg_;
 	std::unique_ptr<FrameBufferAllocator> alloc_;
 	Stream *stream_ = nullptr;
@@ -336,32 +504,58 @@ int openLoopback(const std::string &dev)
 
 int main(int argc, char **argv)
 {
-	if (argc != 3) {
-		std::cerr << "usage: sp11-webcam <camera id> <loopback device>" << std::endl;
+	if (argc != 3 && argc != 4) {
+		std::cerr << "usage: sp11-webcam <camera id> <loopback device> [look file]" << std::endl;
 		return 2;
 	}
 	const std::string id = argv[1], dev = argv[2];
 	gTag = "sp11-webcam[" + id + "]";
 	signal(SIGTERM, [](int) { gQuit = true; });
 	signal(SIGINT, [](int) { gQuit = true; });
+	Look look;
+	if (argc == 4) {
+		if (look.load(argv[3]))
+			logmsg(std::string("look ") + argv[3]);
+		else
+			logmsg(std::string("cannot read look ") + argv[3] + "; using identity rendering");
+	}
 	int out = openLoopback(dev);
 	if (out < 0) {
 		logmsg("cannot open/configure " + dev);
 		return 1;
 	}
-	CameraManager cm;
-	if (cm.start()) {
-		logmsg("camera manager failed");
-		return 1;
+	/*
+	 * The loopback stays open (and so stays a capture device for PipeWire)
+	 * while the camera is looked up. At boot both bridges enumerate the same
+	 * media device at once and one may find a node busy: retry instead of
+	 * exiting, which would hide the device from applications that already
+	 * enumerated it.
+	 */
+	std::unique_ptr<CameraManager> cm;
+	std::shared_ptr<Camera> cam;
+	for (unsigned attempt = 0; !gQuit && !cam; attempt++) {
+		cm = std::make_unique<CameraManager>();
+		if (!cm->start())
+			cam = cm->get(id);
+		if (cam)
+			break;
+		cm.reset();
+		if (attempt == 60) {
+			logmsg("camera not found");
+			close(out);
+			return 1;
+		}
+		if (attempt == 0)
+			logmsg("camera not available yet; retrying");
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000 + 250 * (attempt % 4)));
 	}
-	auto cam = cm.get(id);
 	if (!cam) {
-		logmsg("camera not found");
-		return 1;
+		close(out);
+		return 0;
 	}
 	logmsg("ready on " + dev + " (1920x1080 YUYV, camera off until opened)");
 	{
-		Bridge br(cam, out);
+		Bridge br(cam, out, look);
 		auto lastSeen = std::chrono::steady_clock::now();
 		auto nextTry = lastSeen;
 		unsigned failures = 0;
@@ -392,7 +586,7 @@ int main(int argc, char **argv)
 		br.stop();
 	}
 	cam.reset();
-	cm.stop();
+	cm->stop();
 	close(out);
 	return 0;
 }

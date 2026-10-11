@@ -92,6 +92,15 @@ def main():
         "  const uint64_t counted=value>>48;\n"
         "  if(counted>kSamples||(value&0x0000fffc00000000ULL))return -EPROTO;\n"
         "  total[channel]+=(value&kSumMask)+(kSamples-counted)*kSaturated;\n")
+    # Rear AE target: the engineering 12000 left daylight scenes about one stop
+    # darker than Windows. Default 18000, overridable with SP11_REAR_AE_TARGET.
+    rep(rear, "ret=ipa_->start(aeEnabled_,seedLines_,seedGain_,12000.0);",
+        "ret=ipa_->start(aeEnabled_,seedLines_,seedGain_,[]{const char *v=std::getenv(\"SP11_REAR_AE_TARGET\");"
+        "double t=v?std::atof(v):18000.0;return t>1000.0&&t<100000.0?t:18000.0;}());")
+    # Applications expect automatic exposure unless they ask otherwise.
+    rep(rear, " bool aeEnabled_=false;\n", " bool aeEnabled_=true;\n")
+    rep(rear, "manual.emplace(&controls::AeEnable,ControlInfo{false,true,false});",
+        "manual.emplace(&controls::AeEnable,ControlInfo{false,true,true});")
     print("WROTE", OUT)
     if "--build" in sys.argv:
         if BUILD.exists():
