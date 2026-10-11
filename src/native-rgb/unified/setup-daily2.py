@@ -66,6 +66,10 @@ def main():
         run(["insmod", D / "modules/qcom-camss.ko", *CAMSS_PARAMS])
         for name in ["ov13858", "imx681", "sp11-vd55g0"]:
             run(["insmod", D / ("modules/" + name + ".ko")])
+        # rear lens actuator supply provider (present only with the v2 device tree)
+        vaf = D / "modules/sp11_camera_rpmh_regulator.ko"
+        if vaf.exists() and Path("/proc/device-tree/sp11-rear-vaf").exists():
+            run(["insmod", vaf])
     if not re.search(r"^v4l2loopback ", Path("/proc/modules").read_text(), re.M):
         run(["insmod", D / "modules/v4l2loopback.ko", *LOOPBACK])
     for _ in range(400):

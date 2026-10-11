@@ -41,10 +41,13 @@ install -d -m 755 "$BOOT"
 # camera device tree (superset of Golden) + rear lens actuator supply (make-daily-dtb.py)
 CAMDTB=/boot/sp11-7.1.5-camera-daily/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb
 test "$(md5sum < $CAMDTB | cut -d' ' -f1)" = 22ca17bf6c265d356bb841ede864a9c0
-# The lens supply variant hung the machine on its first boot (2026-10-11 12:15);
-# it stays opt-in (SP11_REAR_VAF=1) until it is qualified on its own.
-if [ "${SP11_REAR_VAF:-0}" = 1 ]; then
+# Rear lens supply (make-daily-dtb.py v2: separate camera-only RPMh provider,
+# loaded by setup.py). On by default; SP11_REAR_VAF=0 installs the plain camera tree.
+if [ "${SP11_REAR_VAF:-1}" = 1 ]; then
   python3 "$HERE/make-daily-dtb.py" "$CAMDTB" "$BOOT/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb"
+  T=$(mktemp -d); cp "$HERE/vaf/Kbuild" "$HERE/vaf/sp11_camera_rpmh_regulator.c" "$T/"
+  make -s -C /lib/modules/$(uname -r)/build M="$T" W=1 modules
+  install -m 644 "$T/sp11_camera_rpmh_regulator.ko" "$D/modules/"; rm -rf "$T"
 else
   install -m 644 "$CAMDTB" "$BOOT/x1e80100-microsoft-denali-sp11-unified-rgb-ir.dtb"
 fi

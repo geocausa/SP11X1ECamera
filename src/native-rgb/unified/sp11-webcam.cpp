@@ -13,6 +13,7 @@
  * The optional look file (fit-look.py, measured against a same-scene Windows
  * capture) sets the output rendering: a luma tone table, chroma gain and
  * neutral offset, a cored unsharp mask and a motion-adaptive temporal filter.
+ * With "af 1" (rear camera) the bridge also drives the lens: see Focus.
  */
 #include <algorithm>
 #include <atomic>
@@ -28,9 +29,11 @@
 #include <fstream>
 #include <iostream>
 #include <linux/dma-buf.h>
+#include <linux/i2c-dev.h>
 #include <linux/videodev2.h>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <sstream>
 #include <string>
 #include <sys/ioctl.h>
@@ -68,6 +71,8 @@ struct Look {
 	float chromaGain = 1.0f, uOffset = 0.0f, vOffset = 0.0f;
 	float sharpen = 0.0f, sharpenCore = 2.0f;
 	float tnrStrength = 0.0f, tnrThreshold = 12.0f;
+	bool af = false;
+	int afMin = 380, afMax = 900, afStart = 520;
 	Look()
 	{
 		for (unsigned i = 0; i < 256; i++)
@@ -105,12 +110,25 @@ struct Look {
 				s >> tnrStrength;
 			} else if (key == "tnr_threshold") {
 				s >> tnrThreshold;
+			} else if (key == "af") {
+				int v = 0;
+				s >> v;
+				af = v != 0;
+			} else if (key == "af_min") {
+				s >> afMin;
+			} else if (key == "af_max") {
+				s >> afMax;
+			} else if (key == "af_start") {
+				s >> afStart;
 			}
 		}
 		chromaGain = std::clamp(chromaGain, 0.0f, 3.0f);
 		sharpen = std::clamp(sharpen, 0.0f, 4.0f);
 		tnrStrength = std::clamp(tnrStrength, 0.0f, 0.9f);
 		tnrThreshold = std::clamp(tnrThreshold, 1.0f, 64.0f);
+		afMin = std::clamp(afMin, 0, 1023);
+		afMax = std::clamp(afMax, afMin, 1023);
+		afStart = std::clamp(afStart, afMin, afMax);
 		return true;
 	}
 };
@@ -317,12 +335,270 @@ int readers(const std::string &dev)
 	return n;
 }
 
+/*
+ * Rear lens: a DW9800 voice-coil actuator at 0x0c on the rear sensor's CCI bus,
+ * powered from the camera VAF rail through the sp11-rear-vaf regulator-output
+ * device (only while the rear camera streams; the bus is usable only while the
+ * sensor is powered, so the actuator is set up on the first frames).
+ * Contrast autofocus on the native frames: normalised horizontal gradient
+ * energy of the centre region, a coarse then a fine sweep over the useful code
+ * range, then hold. A lasting drop in sharpness or a large brightness change
+ * re-runs the sweep once the scene is steady again.
+ */
+class Focus
+{
+public:
+	void configure(const Look &l)
+	{
+		enabled_ = l.af;
+		min_ = l.afMin;
+		max_ = l.afMax;
+		best_ = l.afStart;
+	}
+	void begin()
+	{
+		active_ = false;
+		if (!enabled_)
+			return;
+		bus_ = findBus();
+		if (bus_ < 0 || !power(true)) {
+			logmsg("focus: lens supply or rear bus not available; fixed focus");
+			return;
+		}
+		active_ = true;
+		ready_ = false;
+		n_ = 0;
+	}
+	void end()
+	{
+		std::lock_guard<std::mutex> lock(mu_);
+		if (fd_ >= 0) {
+			/* ease the lens back towards its rest before the supply goes */
+			for (int p = pos_; p > min_; p -= 40) {
+				move(p);
+				usleep(3000);
+			}
+			move(min_);
+			usleep(3000);
+			close(fd_);
+			fd_ = -1;
+		}
+		if (active_ || powered_)
+			power(false);
+		active_ = false;
+	}
+	/* Once per delivered frame, from the completion thread. */
+	void frame(const uint8_t *y, unsigned w, unsigned h, unsigned stride)
+	{
+		std::lock_guard<std::mutex> lock(mu_);
+		if (!active_)
+			return;
+		n_++;
+		double mean;
+		const double m = metric(y, w, h, stride, &mean);
+		if (!ready_) {
+			if (n_ < 4)
+				return;
+			if (!init()) {
+				active_ = false;
+				power(false);
+				return;
+			}
+			ready_ = true;
+			move(best_);
+			wait_ = 0;
+			state_ = Settle;
+			return;
+		}
+		switch (state_) {
+		case Settle:
+			/* auto exposure converges first */
+			if (n_ >= 12)
+				sweep(min_, max_, 48);
+			break;
+		case Sweep:
+			if (++wait_ < kSettleFrames)
+				break;
+			wait_ = 0;
+			scores_.push_back({ pos_, m });
+			if (next_ < plan_.size()) {
+				move(plan_[next_++]);
+				break;
+			}
+			done(m);
+			break;
+		case Hold:
+			monitor(m, mean);
+			break;
+		}
+		lastMean_ = mean;
+	}
+
+private:
+	enum State { Settle, Sweep, Hold };
+	static constexpr unsigned kSettleFrames = 3;
+
+	static int findBus()
+	{
+		DIR *d = opendir("/sys/bus/i2c/devices");
+		if (!d)
+			return -1;
+		int bus = -1;
+		while (dirent *e = readdir(d)) {
+			std::string n = e->d_name;
+			if (n.size() < 6 || n.compare(n.size() - 5, 5, "-0010"))
+				continue;
+			std::ifstream c("/sys/bus/i2c/devices/" + n + "/of_node/compatible");
+			std::string v;
+			std::getline(c, v, '\0');
+			if (v == "ovti,ov13858")
+				bus = std::atoi(n.c_str());
+		}
+		closedir(d);
+		return bus;
+	}
+	bool power(bool on)
+	{
+		std::ofstream s("/sys/devices/platform/sp11-rear-vaf/state");
+		if (!s)
+			return false;
+		s << (on ? "enabled" : "disabled");
+		s.flush();
+		powered_ = on && bool(s);
+		return bool(s);
+	}
+	bool init()
+	{
+		const std::string p = "/dev/i2c-" + std::to_string(bus_);
+		fd_ = open(p.c_str(), O_RDWR);
+		if (fd_ < 0 || ioctl(fd_, I2C_SLAVE, 0x0c) < 0) {
+			logmsg("focus: cannot open " + p + "; fixed focus");
+			return false;
+		}
+		const uint8_t ctl[2] = { 0x02, 0x00 }; /* active, direct drive */
+		if (write(fd_, ctl, 2) != 2) {
+			logmsg(std::string("focus: actuator not responding (") + strerror(errno) + "); fixed focus");
+			close(fd_);
+			fd_ = -1;
+			return false;
+		}
+		return true;
+	}
+	void move(int p)
+	{
+		p = std::clamp(p, 0, 1023);
+		const uint8_t b[3] = { 0x03, uint8_t(p >> 8), uint8_t(p & 0xff) };
+		if (fd_ >= 0 && write(fd_, b, 3) == 3)
+			pos_ = p;
+	}
+	/* Normalised gradient energy of the centre half, every 4th row. */
+	static double metric(const uint8_t *y, unsigned w, unsigned h, unsigned stride, double *mean)
+	{
+		uint64_t g = 0, s = 0, n = 0;
+		for (unsigned r = h / 4; r < 3 * h / 4; r += 4) {
+			const uint8_t *row = y + size_t(r) * stride;
+			for (unsigned x = w / 4; x < 3 * w / 4; x++) {
+				g += unsigned(std::abs(int(row[x + 1]) - int(row[x])));
+				s += row[x];
+			}
+			n += w / 2;
+		}
+		*mean = n ? double(s) / n : 0.0;
+		return s ? double(g) / double(s) : 0.0;
+	}
+	void sweep(int lo, int hi, int step)
+	{
+		plan_.clear();
+		scores_.clear();
+		for (int p = std::max(lo, min_); p <= std::min(hi, max_); p += step)
+			plan_.push_back(p);
+		fine_ = step < 48;
+		next_ = 1;
+		wait_ = 0;
+		move(plan_[0]);
+		state_ = Sweep;
+	}
+	void done(double)
+	{
+		auto best = std::max_element(scores_.begin(), scores_.end(),
+					     [](const auto &a, const auto &b) { return a.second < b.second; });
+		auto worst = std::min_element(scores_.begin(), scores_.end(),
+					      [](const auto &a, const auto &b) { return a.second < b.second; });
+		const bool flat = best->second <= 0 || (best->second - worst->second) / best->second < 0.04;
+		if (!fine_) {
+			if (flat) {
+				/* no contrast to focus on: keep the previous position */
+				move(best_);
+				hold();
+				logmsg("focus: low contrast, holding " + std::to_string(best_));
+				return;
+			}
+			sweep(best->first - 48, best->first + 48, 12);
+			return;
+		}
+		best_ = best->first;
+		move(best_);
+		hold();
+		logmsg("focus: position " + std::to_string(best_) + " contrast " + std::to_string(best->second));
+	}
+	void hold()
+	{
+		state_ = Hold;
+		ref_ = 0;
+		refMean_ = 0;
+		refN_ = 0;
+		bad_ = 0;
+		steady_ = 0;
+		lastSweep_ = n_;
+	}
+	void monitor(double m, double mean)
+	{
+		if (refN_ < 6) {
+			/* reference: average of the first frames at the chosen position */
+			if (refN_ >= kSettleFrames) {
+				ref_ += m;
+				refMean_ += mean;
+			}
+			if (++refN_ == 6) {
+				ref_ /= 6 - kSettleFrames;
+				refMean_ /= 6 - kSettleFrames;
+			}
+			return;
+		}
+		const bool changed = m < 0.75 * ref_ ||
+				     (refMean_ > 1 && std::fabs(mean / refMean_ - 1.0) > 0.3);
+		bad_ = changed ? bad_ + 1 : 0;
+		if (bad_ < 20) {
+			steady_ = 0;
+			lastMetric_ = m;
+			return;
+		}
+		/* the scene changed: wait until it is steady, at most one sweep per 3 s */
+		steady_ = std::fabs(m - lastMetric_) < 0.06 * std::max(m, 1e-6) ? steady_ + 1 : 0;
+		lastMetric_ = m;
+		if (steady_ >= 8 && n_ - lastSweep_ > 90)
+			sweep(min_, max_, 48);
+	}
+
+	std::mutex mu_;
+	bool enabled_ = false, active_ = false, ready_ = false, fine_ = false, powered_ = false;
+	int bus_ = -1, fd_ = -1, min_ = 380, max_ = 900, best_ = 520, pos_ = 0;
+	State state_ = Settle;
+	unsigned long n_ = 0, lastSweep_ = 0;
+	unsigned wait_ = 0, refN_ = 0, bad_ = 0, steady_ = 0;
+	size_t next_ = 0;
+	std::vector<int> plan_;
+	std::vector<std::pair<int, double>> scores_;
+	double ref_ = 0, refMean_ = 0, lastMetric_ = 0, lastMean_ = 0;
+};
+
 class Bridge
 {
 public:
 	Bridge(std::shared_ptr<Camera> cam, int out, const Look &look)
 		: cam_(std::move(cam)), out_(out), frame_(OUT_BYTES), look_(look)
 	{
+		focus_.configure(look_);
 		cam_->requestCompleted.connect(this, &Bridge::complete);
 	}
 	~Bridge() { stop(); cam_->requestCompleted.disconnect(this); }
@@ -346,6 +622,9 @@ public:
 			return false;
 		}
 		render_.setup(sc.size.width, sc.size.height, sc.stride, look_);
+		width_ = sc.size.width;
+		height_ = sc.size.height;
+		stride_ = sc.stride;
 		stream_ = sc.stream();
 		alloc_ = std::make_unique<FrameBufferAllocator>(cam_);
 		if (alloc_->allocate(stream_) <= 0) {
@@ -363,7 +642,9 @@ public:
 		ControlList c(cam_->controls());
 		if (cam_->controls().count(&controls::AeEnable))
 			c.set(controls::AeEnable, true);
+		focus_.begin();
 		if (cam_->start(&c)) {
+			focus_.end();
 			stop();
 			return false;
 		}
@@ -380,6 +661,7 @@ public:
 	{
 		if (running_) {
 			stopping_ = true;
+			focus_.end(); /* while the sensor, and so the lens bus, is powered */
 			cam_->stop();
 			running_ = false;
 			stopping_ = false;
@@ -434,6 +716,7 @@ private:
 				dmaSync(f0, true);
 				if (f1 != f0)
 					dmaSync(f1, true);
+				focus_.frame(yb + pl[0].offset, width_, height_, stride_);
 				render_.run(yb + pl[0].offset, cb + pl[1].offset, frame_.data());
 				if (f1 != f0)
 					dmaSync(f1, false);
@@ -455,6 +738,8 @@ private:
 	std::vector<uint8_t> frame_;
 	Look look_;
 	Renderer render_;
+	Focus focus_;
+	unsigned width_ = 0, height_ = 0, stride_ = 0;
 	std::unique_ptr<CameraConfiguration> cfg_;
 	std::unique_ptr<FrameBufferAllocator> alloc_;
 	Stream *stream_ = nullptr;
