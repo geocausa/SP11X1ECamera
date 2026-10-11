@@ -42,6 +42,7 @@
 #include <libcamera/ipa/ipa_module_info.h>
 
 #include <libcamera/base/file.h>
+#include <libcamera/base/log.h>
 #include "libcamera/internal/yaml_parser.h"
 #include "libcamera/internal/mapped_framebuffer.h"
 extern "C" {
@@ -58,6 +59,8 @@ constexpr int32_t kMaxExposure = 3550; /* 3554-line frame at 30 fps, minus margi
 constexpr int32_t kMaxAnalogueCode = 960; /* 16x */
 double analogueGain(int32_t code) { return 1024.0 / (1024 - code); }
 }
+
+LOG_DEFINE_CATEGORY(CamssX1EIpa)
 
 class IPACamssX1E final : public ipa::camss_x1e::IPACamssX1EInterface
 {
@@ -99,6 +102,25 @@ public:
 				    !(awbStrength_ >= 0.0 && awbStrength_ <= 1.0) || !(awbBlack_ >= 0.0) || !(awbMinLevel_ > 0.0))
 					return -EINVAL;
 				awbEnabled_ = true;
+			}
+			if (data->contains("tone_dark_lift")) {
+				auto lift = (*data)["tone_dark_lift"].getList<double>();
+				if (!lift || lift->size() != toneLift_.size())
+					return -EINVAL;
+				std::copy(lift->begin(), lift->end(), toneLift_.begin());
+				toneShadowLo_ = (*data)["tone_shadow_lo"].get<double>(48.0);
+				toneShadowHi_ = (*data)["tone_shadow_hi"].get<double>(440.0);
+				toneDarkLow_ = (*data)["tone_dark_low"].get<double>(0.05);
+				toneDarkHigh_ = (*data)["tone_dark_high"].get<double>(0.5);
+				toneSpeed_ = (*data)["tone_speed"].get<double>(0.05);
+				if (!(toneShadowLo_ >= 0.0 && toneShadowHi_ > toneShadowLo_ && toneShadowHi_ <= 1023.0) ||
+				    !(toneDarkLow_ >= 0.0 && toneDarkHigh_ > toneDarkLow_ && toneDarkHigh_ <= 1.0) ||
+				    !(toneSpeed_ > 0.0 && toneSpeed_ <= 1.0))
+					return -EINVAL;
+				for (double l : toneLift_)
+					if (!(std::fabs(l) <= 200.0))
+						return -EINVAL;
+				toneEnabled_ = true;
 			}
 			greenLut_.assign(points.begin() + NF_GAMMA_POINTS,
 					 points.begin() + 2 * NF_GAMMA_POINTS);
@@ -214,7 +236,7 @@ public:
 			return ret;
 		const auto *bytes = reinterpret_cast<const uint8_t *>(&parameters);
 		packet->assign(bytes, bytes + sizeof(parameters));
-		if (awbEnabled_)
+		if (awbEnabled_ || toneEnabled_)
 			refreshLut();
 		*ispPacket = ispTemplate_;
 		nextParameter_++;
@@ -254,6 +276,8 @@ public:
 				blue = float(meter.b);
 				if (awbEnabled_)
 					updateAwb(meter, luma);
+				if (toneEnabled_ && outputTarget_ > 0.0)
+					updateTone();
 				if (exposure >= kMinExposure && analogue >= 0 &&
 				    analogue <= kMaxAnalogueCode && digital >= 256)
 					autoExposure(luma, exposure, analogue, digital,
@@ -326,6 +350,30 @@ private:
 		return lut[i] * (1.0 - f) + lut[i + 1] * f;
 	}
 
+	/*
+	 * Scene-adaptive shadow lift (our replacement for the vendor local tone
+	 * mapper): the weight follows the fraction of metering regions whose
+	 * displayed level lies in the shadow band, smoothed over frames.
+	 */
+	void updateTone()
+	{
+		size_t shadow = 0;
+		for (double g : green_) {
+			const double x = std::min(g, 1023.0) * (NF_GAMMA_POINTS - 1) / 1023.0;
+			const size_t i = std::min<size_t>(size_t(x), NF_GAMMA_POINTS - 2);
+			const double f = x - i;
+			const double d = greenLut_[i] * (1.0 - f) + greenLut_[i + 1] * f;
+			if (d >= toneShadowLo_ && d <= toneShadowHi_)
+				shadow++;
+		}
+		const double fraction = double(shadow) / green_.size();
+		const double target = std::clamp((fraction - toneDarkLow_) / (toneDarkHigh_ - toneDarkLow_), 0.0, 1.0);
+		toneWeight_ += toneSpeed_ * (target - toneWeight_);
+		if (!(toneLogCount_++ % 30))
+			LOG(CamssX1EIpa, Debug) << "CAMSS_X1E_TONE fraction=" << fraction
+						 << " target=" << target << " weight=" << toneWeight_;
+	}
+
 	/* Re-encode the red and blue LUTs as base(gain * x) when the gains moved.
 	 * A gain below 1 ramps the top quarter to full scale so clipped
 	 * highlights stay neutral. */
@@ -333,12 +381,30 @@ private:
 	{
 		const std::array<double, 2> gains = { std::exp(logGain_[0]), std::exp(logGain_[1]) };
 		if (std::fabs(std::log(gains[0] / appliedGain_[0])) < 0.004 &&
-		    std::fabs(std::log(gains[1] / appliedGain_[1])) < 0.004)
+		    std::fabs(std::log(gains[1] / appliedGain_[1])) < 0.004 &&
+		    std::fabs(toneWeight_ - appliedToneWeight_) < 0.01)
 			return;
-		std::array<uint16_t, NF_GAMMA_POINT_COUNT> points = baseLut_;
+		/* Tone-lifted base curves (output-level lift, kept monotone). */
+		std::array<uint16_t, NF_GAMMA_POINT_COUNT> toned = baseLut_;
+		if (toneEnabled_) {
+			for (size_t c = 0; c < 3; c++) {
+				int prev = 0;
+				for (size_t i = 0; i < NF_GAMMA_POINTS; i++) {
+					const double y = baseLut_[c * NF_GAMMA_POINTS + i];
+					const double p = std::clamp(y, 0.0, 1023.0) / 64.0;
+					const size_t j = std::min<size_t>(size_t(p), toneLift_.size() - 2);
+					const double f = p - j;
+					const double lift = toneLift_[j] * (1.0 - f) + toneLift_[j + 1] * f;
+					const int v = std::clamp<int>(int(std::lround(y + toneWeight_ * lift)), prev, 1023);
+					toned[c * NF_GAMMA_POINTS + i] = uint16_t(v);
+					prev = v;
+				}
+			}
+		}
+		std::array<uint16_t, NF_GAMMA_POINT_COUNT> points = toned;
 		const size_t channels[2] = { 0, 2 };
 		for (size_t k = 0; k < 2; k++) {
-			const uint16_t *base = baseLut_.data() + channels[k] * NF_GAMMA_POINTS;
+			const uint16_t *base = toned.data() + channels[k] * NF_GAMMA_POINTS;
 			uint16_t *dst = points.data() + channels[k] * NF_GAMMA_POINTS;
 			const double top = sample(base, 1023.0 * gains[k]);
 			int prev = 0;
@@ -360,6 +426,7 @@ private:
 			return;
 		ispTemplate_ = std::move(candidate);
 		appliedGain_ = gains;
+		appliedToneWeight_ = toneWeight_;
 	}
 
 	/* Per-region green means (BE sum/count, meter units) as tone-LUT input. */
@@ -440,6 +507,12 @@ private:
 	double awbBlack_ = 835.0, awbMinLevel_ = 300.0;
 	std::array<double, 2> logGain_{};
 	std::array<double, 2> appliedGain_{ 1.0, 1.0 };
+	bool toneEnabled_ = false;
+	std::array<double, 17> toneLift_{};
+	double toneShadowLo_ = 48.0, toneShadowHi_ = 440.0;
+	double toneDarkLow_ = 0.05, toneDarkHigh_ = 0.5, toneSpeed_ = 0.05;
+	double toneWeight_ = 0.0, appliedToneWeight_ = 0.0;
+	unsigned int toneLogCount_ = 0;
 	std::array<double, FrontAec::kRegions> green_{};
 	double outputTarget_ = 0.0;
 	double meterBlack_ = 0.0;

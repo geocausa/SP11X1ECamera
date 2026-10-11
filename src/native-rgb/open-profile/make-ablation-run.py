@@ -43,7 +43,7 @@ run = {
     "watchdog_seconds": 420,
     "env": {"SP11_KEEP_PER_PHASE": "6", **({"SP11_HOLD_AT": os.environ["ABL_HOLD"].split(",")[0], "SP11_HOLD_MS": os.environ["ABL_HOLD"].split(",")[1]} if os.environ.get("ABL_HOLD") else {})},
     "camss_params": params,
-    "log_levels": "CAMSSX1E:DEBUG,Camera:INFO",
+    "log_levels": os.environ.get("ABL_LOG", "CAMSSX1E:DEBUG,CamssX1EIpa:DEBUG,Camera:INFO"),
 }
 if os.environ.get("ABL_STALL"):
     at, dur = (float(x) for x in os.environ["ABL_STALL"].split(","))

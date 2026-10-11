@@ -137,6 +137,8 @@ def main():
     # kernel's dropped-metadata counter / discontinuity flag is information, not
     # an error (both pipeline and IPA copies of the header check).
     ipa = OUT / "src/ipa/camss-x1e/camss-x1e.cpp"
+    # The IPA source of record is front-ae/camss-x1e-ipa.cpp (adds the adaptive shadow lift).
+    shutil.copyfile(Path(__file__).resolve().parent.parent / "front-ae/camss-x1e-ipa.cpp", ipa)
     rep(ipa, "\t\t    sequence == nextSequence_ && (!stream_ || stream == stream_)) {\n",
         "\t\t    sequence >= nextSequence_ && (!stream_ || stream == stream_)) {\n")
     rep(ipa, "\t\t\t\tnextSequence_++;\n", "\t\t\t\tnextSequence_ = sequence + 1;\n")
