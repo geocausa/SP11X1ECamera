@@ -135,3 +135,24 @@ no AE yet and runs at 2.2 fps, so only geometry and colour neutrality compare.
 Next for front parity: noise reduction (temporal and spatial), sharpening,
 saturation and the shadow floor / upper-mid tone. Rear: robust queue, full frame
 rate and AE before any tuning.
+
+## Daily camera boot (2026-10-11)
+
+GRUB entry `SP11 Golden + Cameras` (`sp11-camera-daily2`, `unified/install-daily2.sh`):
+Golden kernel, initrd and command line plus the camera device tree; Golden stays
+the default entry. One camss module (build 48) and one libcamera build (tree 21)
+drive both cameras; two bridges expose them as `SP11 Front Camera` (/dev/video50)
+and `SP11 Rear Camera` (/dev/video51), 1920x1080 YUYV 30 fps, also via PipeWire.
+The bridges render through per-camera looks fitted against Windows and drive the
+rear lens (contrast autofocus; lens supply through a camera-only RPMh provider).
+
+Soak (fresh boot): eight alternating rear/front application sessions, 27-29 fps
+including start-up, autofocus on every rear session, no bridge failures, no kernel
+warnings or CCI timeouts; both cameras stream through PipeWire.
+
+Known limits: the front ISP startup profile used by the daily boot is still the
+private OEM-derived one (the open configuration is proven in the ablation runs
+but not yet the daily default); only one camera streams at a time (shared
+CSID1/VFE1); the rear 4K stream is scaled to 1080p for applications.
+A systemd hardware watchdog (60 s) is enabled; it does not cover hangs before
+systemd starts.
