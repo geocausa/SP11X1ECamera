@@ -125,7 +125,7 @@ static int native_front_ccm_apply(struct camss_video *video, u8 *capsule, size_t
  * area of the materialized capsule. Each listed register must be found at
  * least once; nothing is written otherwise.
  */
-#define NATIVE_FRONT_REGMASK_MAX 8U
+#define NATIVE_FRONT_REGMASK_MAX 32U
 #define NATIVE_FRONT_REGMASK_AREA 0x7400U
 static u32 native_front_reg_mask[3 * NATIVE_FRONT_REGMASK_MAX];
 static int native_front_reg_mask_count;

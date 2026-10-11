@@ -1,0 +1,41 @@
+# SP11 front (imx681) open ISP register set, applied over the startup profile with
+# native_front_reg_mask (kernel build 45, up to 32 reg,and,or triples) plus
+# native_front_lsc=1 (imx681-front-lsc-v1) and native_front_abf=1 (gen-abf-lut.py,
+# imx681-front-abf-v1.json), tuning imx681-front-v10.yaml. Validated: run ae-74.
+# Modules not needed (no measurable effect): PDPC, GIC, 0x5400 block; tone mapper off
+0x3d60,0xfffffffe,0
+0x4760,0xfffffffe,0
+0x5460,0xfffffffe,0
+0x5a60,0xfffffffe,0
+# Black level, measured (dark frames ae-23/ae-24): offset 1649, gain 2048*65536/(65536-1649)
+0x4b68,0x0000ffff,108068864
+0x4b6c,0,0x835
+# BPC_ABF: enable module + filter (bit9 no effect)
+0x4960,0,0x101
+# BPC_ABF registers with no measurable effect (single and joint zero tests ae-44..ae-69)
+0x496c,0,0
+0x4980,0,0
+0x4984,0,0
+0x498c,0,0
+0x49a0,0,0
+0x49a4,0,0
+0x49a8,0,0
+0x49ac,0,0
+0x49b0,0,0
+0x49b4,0,0
+0x49b8,0,0
+0x49bc,0,0
+0x49c8,0,0
+0x49cc,0,0
+0x49d8,0,0
+0x49dc,0,0
+0x49e4,0,0
+0x49e8,0,0
+# BPC_ABF thresholds at their saturated value (zero gives heavy smoothing, ae-47/ae-49)
+0x49d0,0,0xffffffff
+0x49d4,0,0xffffffff
+0x49e0,0,0xffffffff
+# BPC_ABF filter parameters at the optimum of our sweep (ae-63..ae-73): lower or
+# higher values both weaken the filter
+0x4968,0,4
+0x4988,0,0x003c0044

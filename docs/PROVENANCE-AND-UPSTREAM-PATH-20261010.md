@@ -40,7 +40,7 @@ our own earlier register work. Names marked ? are not yet confirmed.
 | 0x4308/0x4358 | 3 x 884 B (17x13 mesh) + 13 regs | LSC | **replaced by ours**: measured flat field (camera on diffuser over the SP7, LSC off, linear), `open-profile/fit-lsc.py`, table `front-ae/tuning/imx681-front-lsc-v1.bin`. Format: 13x17 x u32, bits 0-12 channel gain, bits 14-26 green gain, Q10; sel1 R/G, sel2 B/G, sel3 zero. Uncorrected corners 0.17/0.21/0.20 (R/G/B) -> 0.64-0.67 with strength 0.82; colour spread R/G 1.29 -> 1.04, B/G 1.08 -> 1.03. |
 | 0x4560 | 13 regs | WB_GAIN | ours (AWB) |
 | 0x4708/0x4758 | 512 B + 5 regs | GIC | **not needed**: disabling (0x4760 bit0) gives no measurable change, no green-imbalance checker pattern (ae-30) |
-| 0x4908/0x4958 | 256 B + 26 regs | BPC_ABF | **tuning, still vendor**. Enable 0x4960 = bit0 module, bit8 filter, bit9 no measurable effect. Filter off (ae-31, ae-36): temporal noise +15-20 %, isolated defects in flat areas +16 %, checker energy +27 %. **Noise LUT now ours**: the 64-entry table (bits 0-8 inverse noise level, bits 9+ decrement to next entry) is generated from our measured noise model var = 0.147*m + 0.79 (8-bit linear units, analogue gain 16; linear capture ae-40) as v_i = S/sqrt(i + 1.34), S = 450 (`open-profile/gen-abf-lut.py`, kernel `native_front_abf`). Strengths 300/450/650 (ae-41..43) all give the same noise and sharpness as the vendor table, so the filter is driven by its 26 registers, which remain vendor values for now. |
+| 0x4908/0x4958 | 256 B + 26 regs | BPC_ABF | **tuning, still vendor**. Enable 0x4960 = bit0 module, bit8 filter, bit9 no measurable effect. Filter off (ae-31, ae-36): temporal noise +15-20 %, isolated defects in flat areas +16 %, checker energy +27 %. **Noise LUT now ours**: the 64-entry table (bits 0-8 inverse noise level, bits 9+ decrement to next entry) is generated from our measured noise model var = 0.147*m + 0.79 (8-bit linear units, analogue gain 16; linear capture ae-40) as v_i = S/sqrt(i + 1.34), S = 450 (`open-profile/gen-abf-lut.py`, kernel `native_front_abf`). Strengths 300/450/650 (ae-41..43) all give the same noise and sharpness as the vendor table, so the filter is driven by its registers. **Register set now ours** (`front-ae/tuning/imx681-front-open-regs.txt`, runs ae-44..ae-74): 18 registers have no measurable effect alone or together and are set to 0; three thresholds (0x49d0/0x49d4/0x49e0) stay saturated (0 gives heavy smoothing); 0x4968 and 0x4988 are the filter parameters, set to the optimum of our sweep (2/8 and half/double both weaken the filter). The complete open configuration (ae-74) matches the vendor profile at fixed exposure (mean abs dY 1.16, run-to-run floor ~1.0). |
 | 0x4b60 | 7 regs | BLS | **measured by us**: dark frames (BLS off, then offset 1200 at gain 1.0) give pedestal 1649 in BLS units (offset field = reg 0x4b68[31:16], gain 0x4b6c = 2048*65536/(65536-offset)). Pedestal rises to ~1900 at sensor digital gain 4x. |
 | 0x4d60, 0x5260 | 1 reg each | BAYER_GTM / LCAC ? | probably disabled |
 | 0x5408/0x5458 | 2 x 68 B + 22 regs | not demosaic | **not needed**: disabling (0x5460 bit0) gives no measurable change (ae-32); the demosaic itself is not in the profile |
@@ -62,6 +62,12 @@ auto exposure (`open-profile/capture-front-still.cpp`), compared per pixel again
 without errors. Combined open configuration (ae-38: PDPC, GIC, 0x5460 and tone mapper off, our LSC
 and our black level): mean |dY| 1.08 against the vendor profile at fixed exposure, differing
 only by the missing tone-mapper lift.
+
+Known issue (2026-10-11): one of ~50 capture boots (ae-46) froze the whole machine. The capture
+process stalled at frame 394 (auto exposure, 23 fps), the kernel stopped the queue after its 500 ms
+IQ-packet timeout (error -110, no stop request) and the system hung in the following teardown;
+the same configuration passed when repeated (ae-62). The error-path teardown needs review, and a
+persistent kernel log (ramoops) should be enabled for the next occurrence.
 
 ## Path to a distributable, upstreamable front camera
 
