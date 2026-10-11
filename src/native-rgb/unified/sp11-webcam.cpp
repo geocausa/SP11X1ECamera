@@ -82,6 +82,8 @@ struct Look {
 	float ltm = 0.0f;        /* local tone mapping strength; 0 = off */
 	float ltmPivot = 110.0f; /* local level left unchanged */
 	float ltmMaxGain = 2.5f, ltmMinGain = 0.85f;
+	float nrRefGain = 0.0f; /* total sensor gain the noise settings are tuned for; 0 = fixed */
+	float hlChromaStart = 0.0f, hlChromaMin = 0.4f; /* highlight chroma suppression; start 0 = off */
 	bool af = false;
 	int afMin = 380, afMax = 900, afStart = 520;
 	Look()
@@ -137,6 +139,12 @@ struct Look {
 				s >> ltmPivot;
 			} else if (key == "ltm_max_gain") {
 				s >> ltmMaxGain;
+			} else if (key == "nr_ref_gain") {
+				s >> nrRefGain;
+			} else if (key == "hl_chroma_start") {
+				s >> hlChromaStart;
+			} else if (key == "hl_chroma_min") {
+				s >> hlChromaMin;
 			} else if (key == "ltm_min_gain") {
 				s >> ltmMinGain;
 			} else if (key == "af") {
@@ -164,6 +172,8 @@ struct Look {
 		ltmPivot = std::clamp(ltmPivot, 16.0f, 240.0f);
 		ltmMaxGain = std::clamp(ltmMaxGain, 1.0f, 4.0f);
 		ltmMinGain = std::clamp(ltmMinGain, 0.25f, 1.0f);
+		hlChromaStart = std::clamp(hlChromaStart, 0.0f, 250.0f);
+		hlChromaMin = std::clamp(hlChromaMin, 0.0f, 1.0f);
 		afMin = std::clamp(afMin, 0, 1023);
 		afMax = std::clamp(afMax, afMin, 1023);
 		afStart = std::clamp(afStart, afMin, afMax);
@@ -219,20 +229,17 @@ public:
 		v2_.assign(size_t(OW / 2) * OH, 128);
 		grid_.assign(size_t(GW) * GH, 0.0f);
 		gain_.assign(size_t(GW) * GH, 256);
-		for (int d = 0; d < 256; d++) {
-			const float T = std::max(look.chromaNr, 1.0f);
-			cw_[d] = int(std::lround(16.0f * std::max(0.0f, 1.0f - float(d) / T)));
-		}
 		for (int n = 1; n < 26; n++)
 			rec_[n] = 65536 / n;
-		primed_ = false;
-		for (unsigned d = 0; d < 256; d++) {
-			float w = look.tnrStrength * std::max(0.0f, 1.0f - float(d) / look.tnrThreshold);
-			tnr_[d] = int(std::lround(w * 256.0f));
-			/* chroma noise is smaller in code values: half the threshold */
-			float wc = look.tnrStrength * std::max(0.0f, 1.0f - float(d) / (0.5f * look.tnrThreshold));
-			tnrC_[d] = int(std::lround(wc * 256.0f));
+		for (int yv = 0; yv < 256; yv++) {
+			float k = 1.0f;
+			if (look.hlChromaStart > 0.0f && yv > look.hlChromaStart)
+				k = 1.0f - (1.0f - look.hlChromaMin) * (yv - look.hlChromaStart) / (255.0f - look.hlChromaStart);
+			hl_[yv] = int(std::lround(256.0f * k));
 		}
+		primed_ = false;
+		noiseScale_ = -1.0f;
+		setNoiseScale(1.0f);
 		for (int d = -255; d <= 255; d++) {
 			float c = std::max(0.0f, std::fabs(float(d)) - look.sharpenCore);
 			sharp_[d + 255] = int(std::lround(look.sharpen * (d < 0 ? -c : c)));
@@ -242,6 +249,28 @@ public:
 			cv_[c] = uint8_t(std::clamp(int(std::lround(128 + look.chromaGain * look.vGain * (c - 128) + look.vOffset)), 0, 255));
 		}
 	}
+
+	/*
+	 * Noise thresholds follow the sensor gain: noise grows with gain, so the
+	 * spatial and temporal filter thresholds scale with sqrt(gain / reference).
+	 */
+	void setNoiseScale(float s)
+	{
+		if (std::fabs(s - noiseScale_) < 0.05f * std::max(s, 0.1f))
+			return;
+		noiseScale_ = s;
+		lumaT_ = std::max(1, int(std::lround(look_.lumaNr * s)));
+		const float T = std::max(look_.chromaNr * s, 1.0f), tt = look_.tnrThreshold * s;
+		for (int d = 0; d < 256; d++) {
+			cw_[d] = int(std::lround(16.0f * std::max(0.0f, 1.0f - float(d) / T)));
+			const float w = look_.tnrStrength * std::max(0.0f, 1.0f - float(d) / tt);
+			tnr_[d] = int(std::lround(w * 256.0f));
+			/* chroma noise is smaller in code values: half the threshold */
+			const float wc = look_.tnrStrength * std::max(0.0f, 1.0f - float(d) / (0.5f * tt));
+			tnrC_[d] = int(std::lround(wc * 256.0f));
+		}
+	}
+	float noiseScale() const { return noiseScale_; }
 
 	void run(const uint8_t *y, const uint8_t *uv, uint8_t *out)
 	{
@@ -273,7 +302,7 @@ private:
 	template<typename F>
 	void bandsN(unsigned rows, F fn)
 	{
-		constexpr unsigned N = 4;
+		constexpr unsigned N = 6;
 		std::thread t[N - 1];
 		for (unsigned b = 1; b < N; b++)
 			t[b - 1] = std::thread(fn, rows * b / N, rows * (b + 1) / N);
@@ -284,7 +313,7 @@ private:
 	template<typename F>
 	void bands(F fn)
 	{
-		constexpr unsigned N = 4;
+		constexpr unsigned N = 6;
 		std::thread t[N - 1];
 		for (unsigned b = 1; b < N; b++)
 			t[b - 1] = std::thread(fn, OH * b / N, OH * (b + 1) / N);
@@ -391,7 +420,7 @@ private:
 	}
 	void lowFilter(unsigned r0, unsigned r1)
 	{
-		const int T = std::max(1, int(look_.lumaNr));
+		const int T = lumaT_;
 		for (unsigned r = r0; r < r1; r++) {
 			int rows[5];
 			for (int k = 0; k < 5; k++)
@@ -581,6 +610,12 @@ private:
 			}
 			for (unsigned x = 0; x < OW / 2; x++) {
 				int cu = u[x], cv = v[x];
+				if (look_.hlChromaStart > 0.0f) {
+					/* near-white areas: tints (reflections, shading, clipping) fade out */
+					const int k = hl_[(m[2 * x] + m[2 * x + 1] + 1) >> 1];
+					cu = 128 + (((cu - 128) * k) >> 8);
+					cv = 128 + (((cv - 128) * k) >> 8);
+				}
 				if (tone) {
 					/* keep saturation roughly with the luma gain */
 					const int g = gainAt(2 * x, r);
@@ -602,7 +637,9 @@ private:
 	const uint8_t *Yp_ = nullptr, *Up_ = nullptr, *Vp_ = nullptr;
 	std::vector<float> grid_;
 	std::vector<int> gain_;
-	int cw_[256] = {}, rec_[26] = {};
+	int cw_[256] = {}, rec_[26] = {}, hl_[256] = {};
+	int lumaT_ = 1;
+	float noiseScale_ = 1.0f;
 	Look look_;
 	std::vector<uint8_t> y_, u_, v_;
 	std::vector<uint16_t> prevY_, prevU_, prevV_;
@@ -1048,6 +1085,7 @@ private:
 				if (f1 != f0)
 					dmaSync(f1, true);
 				focus_.frame(yb + pl[0].offset, width_, height_, stride_);
+				noiseFromMetadata(r->metadata());
 				render_.run(yb + pl[0].offset, cb + pl[1].offset, frame_.data());
 				if (f1 != f0)
 					dmaSync(f1, false);
@@ -1064,8 +1102,25 @@ private:
 		if (running_ && !stopping_)
 			cam_->queueRequest(r);
 	}
+	void noiseFromMetadata(const ControlList &md)
+	{
+		const auto ag = md.get(controls::AnalogueGain);
+		if (!ag)
+			return;
+		const auto dg = md.get(controls::DigitalGain);
+		const double g = double(*ag) * (dg ? double(*dg) : 1.0);
+		gain_ = gain_ > 0 ? 0.9 * gain_ + 0.1 * g : g;
+		if (look_.nrRefGain > 0.0f)
+			render_.setNoiseScale(float(std::clamp(std::sqrt(gain_ / look_.nrRefGain), 0.7, 2.5)));
+		if (frames_ % 300 == 0) {
+			const auto ex = md.get(controls::ExposureTime);
+			logmsg("gain " + std::to_string(gain_) + " exposure " + std::to_string(ex ? *ex : -1) +
+			       " us noise scale " + std::to_string(render_.noiseScale()));
+		}
+	}
 	std::shared_ptr<Camera> cam_;
 	int out_;
+	double gain_ = 0.0;
 	std::vector<uint8_t> frame_;
 	Look look_;
 	Renderer render_;
