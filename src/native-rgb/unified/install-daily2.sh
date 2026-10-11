@@ -70,7 +70,7 @@ for cam in front:sp11-front-imx681:camss-x1e:/dev/video50 rear:sp11-rear-ov13858
   extra=""
   [ "$name" = front ] && extra="Environment=LIBCAMERA_CAMSS_X1E_TUNING_FILE=$D/tuning/imx681-front.yaml"
   # both bridges enumerate the same media device: let the front one go first
-  [ "$name" = rear ] && extra="ExecStartPre=/bin/sleep 4"
+  [ "$name" = rear ] && extra="Environment=SP11_WEBCAM_LOOKUP_DELAY=4"
   # rendering measured against Windows (fit-look.py); identity when absent
   lookarg=""
   if [ -f "$HERE/looks/look-$name.look" ]; then
@@ -83,7 +83,13 @@ ConditionKernelCommandLine=$MARK=1
 Requires=$ID.service
 StartLimitIntervalSec=0
 After=$ID.service
+# applications (PipeWire) must find the loopback already configured as a webcam
+Before=display-manager.service systemd-user-sessions.service
 [Service]
+Type=notify
+NotifyAccess=main
+# re-announce the device so a running PipeWire picks up a restarted bridge
+ExecStartPost=/bin/sh -c 'udevadm trigger --action=remove --settle $dev; udevadm trigger --action=add --settle $dev; true'
 Environment=LD_LIBRARY_PATH=$D/lib
 Environment=LIBCAMERA_IPA_MODULE_PATH=$D/lib/ipa
 Environment=LIBCAMERA_IPA_PROXY_PATH=$D/lib/proxy
@@ -116,4 +122,6 @@ grep -q -- "--id '$ID'" "$DST"; grep -q "devicetree $BOOT/" "$DST"; grep -q "$MA
 update-grub >/dev/null 2>&1
 grep -q -- "--id '$ID'" /boot/grub/grub.cfg
 grub-editenv list
+# already in the camera boot: bring the (re)installed stack back up
+if grep -qw "$MARK=1" /proc/cmdline; then systemctl start $ID.service sp11-webcam-front.service sp11-webcam-rear.service; fi
 echo DAILY2_INSTALLED_NOT_DEFAULT

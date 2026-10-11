@@ -23,6 +23,7 @@
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
+#include <cstddef>
 #include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
@@ -38,6 +39,8 @@
 #include <string>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <thread>
 #include <unistd.h>
 #include <vector>
@@ -752,6 +755,27 @@ private:
 	std::chrono::steady_clock::time_point started_;
 };
 
+/* systemd readiness (Type=notify): the loopback is configured as a webcam. */
+void notifyReady()
+{
+	const char *path = std::getenv("NOTIFY_SOCKET");
+	if (!path || (path[0] != '/' && path[0] != '@'))
+		return;
+	sockaddr_un sa{};
+	sa.sun_family = AF_UNIX;
+	const size_t len = std::min(strlen(path), sizeof(sa.sun_path) - 1);
+	memcpy(sa.sun_path, path, len);
+	if (sa.sun_path[0] == '@')
+		sa.sun_path[0] = 0;
+	int s = socket(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+	if (s < 0)
+		return;
+	const char msg[] = "READY=1";
+	sendto(s, msg, sizeof(msg) - 1, 0, reinterpret_cast<sockaddr *>(&sa),
+	       socklen_t(offsetof(sockaddr_un, sun_path) + len));
+	close(s);
+}
+
 int openLoopback(const std::string &dev)
 {
 	int fd = open(dev.c_str(), O_RDWR | O_NONBLOCK);
@@ -809,6 +833,10 @@ int main(int argc, char **argv)
 		logmsg("cannot open/configure " + dev);
 		return 1;
 	}
+	notifyReady();
+	/* both bridges enumerate the same media device; one may start later */
+	if (const char *d = std::getenv("SP11_WEBCAM_LOOKUP_DELAY"))
+		std::this_thread::sleep_for(std::chrono::milliseconds(int(1000 * std::clamp(std::atof(d), 0.0, 30.0))));
 	/*
 	 * The loopback stays open (and so stays a capture device for PipeWire)
 	 * while the camera is looked up. At boot both bridges enumerate the same
