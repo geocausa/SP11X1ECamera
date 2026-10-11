@@ -10,7 +10,9 @@ import json
 from pathlib import Path
 
 FIELDS = {
-    "cst-coefficients": [0x6168 + 24 * i + 4 * j for i in range(3) for j in range(2)],
+    "cst-complete-fields": [0x6160] + list(range(0x6168, 0x61b0, 4)),
+    "row-sums": [0xbe60, 0xbe68, 0xbe6c, 0xbe70],
+    "histogram-region-count": [0xb26c],
     "ccm-coefficients": list(range(0x5868, 0x5880, 4)),
     "mnds-scaler": list(range(0x9860, 0x9888, 4)) + list(range(0x9a60, 0x9a88, 4)),
     "full-crop": [0x9c68, 0x9c6c, 0x9e68, 0x9e6c],

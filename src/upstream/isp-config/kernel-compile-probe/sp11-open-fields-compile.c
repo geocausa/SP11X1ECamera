@@ -8,7 +8,9 @@ static u8 output[SP11_FRAME_FIELDS_BYTES];
  .threshold_gb=0x3ffff, .y_weight_q4={4,8,4}, .enabled=true }
 static const struct sp11_frame_fields fields = {
  .geometry={3840,2160,2560,1440}, .bg={OPEN_BG,OPEN_BG,OPEN_BG},
- .cst={601,117,306,-339,512,-173,-429,-83,512},
+ .cst={.matrix={601,117,306,-339,512,-173,-429,-83,512},
+ .maximum={4095,4095,4095},.enabled=true},
+ .rs={.width=3840,.height=2160,.columns=16,.rows=1024}, .bhist={3840,2160},
  .ccm={128,0,0,0,128,0,0,0,128}, .output_bits=8
 };
 #undef OPEN_BG

@@ -1,0 +1,146 @@
+{
+  "status": "PASS_SOURCE_CST_RS_HISTOGRAM_GEOMETRY_NOT_HARDWARE_QUALIFIED",
+  "private_profile_read": false,
+  "hardware_access": false,
+  "runtime_changed": false,
+  "complete_startup_profile": false,
+  "private_runtime_dependencies_removed": false,
+  "tests": [
+    {
+      "command": [
+        "python3",
+        "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/isp-config/test_cst_stats.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"hardware_access\": false,\n  \"private_profile_read\": false,\n  \"complete_startup_profile\": false,\n  \"pinned_reference_compared\": false,\n  \"tests\": [\n    {\n      \"compiler\": \"gcc\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS cst=12290 rs=16490 bhist_geometry=16385; sparse ownership/bounds/atomicity\"\n    },\n    {\n      \"compiler\": \"clang\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS cst=12290 rs=16490 bhist_geometry=16385; sparse ownership/bounds/atomicity\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/isp-config/test_cst_stats.py",
+        "--reference-dir",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-unified-48/camss"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"hardware_access\": false,\n  \"private_profile_read\": false,\n  \"complete_startup_profile\": false,\n  \"pinned_reference_compared\": true,\n  \"tests\": [\n    {\n      \"compiler\": \"gcc\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS cst=12290 rs=16490 bhist_geometry=16385; sparse ownership/bounds/atomicity; unchanged pinned MIT packers\"\n    },\n    {\n      \"compiler\": \"clang\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS cst=12290 rs=16490 bhist_geometry=16385; sparse ownership/bounds/atomicity; unchanged pinned MIT packers\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/isp-config/test_geometry_stats.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"hardware_access\": false,\n  \"private_profile_read\": false,\n  \"complete_startup_profile\": false,\n  \"pinned_reference_compared\": false,\n  \"tests\": [\n    {\n      \"compiler\": \"gcc\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS geometry_cases=194 grid_cases=12297; bounds/atomic rejection/130-field composition\"\n    },\n    {\n      \"compiler\": \"clang\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS geometry_cases=194 grid_cases=12297; bounds/atomic rejection/130-field composition\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/isp-config/test_geometry_stats.py",
+        "--reference-dir",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-unified-48/camss"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"hardware_access\": false,\n  \"private_profile_read\": false,\n  \"complete_startup_profile\": false,\n  \"pinned_reference_compared\": true,\n  \"tests\": [\n    {\n      \"compiler\": \"gcc\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS geometry_cases=194 grid_cases=12297; bounds/atomic rejection/130-field composition; unchanged pinned semantic references\"\n    },\n    {\n      \"compiler\": \"clang\",\n      \"status\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS geometry_cases=194 grid_cases=12297; bounds/atomic rejection/130-field composition; unchanged pinned semantic references\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/isp-config/test_front_fields.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"hardware_access\": false,\n  \"private_profile_read\": false,\n  \"complete_startup_profile\": false,\n  \"tests\": [\n    {\n      \"compiler\": \"gcc\",\n      \"result\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS: CDM bounds/atomic rejection; 8192 CST and 4096 CCM values; sparse fields; 22 round/clamp fields match the existing validated converter\"\n    },\n    {\n      \"compiler\": \"clang\",\n      \"result\": \"PASS\",\n      \"asan\": true,\n      \"ubsan\": true,\n      \"detail\": \"PASS: CDM bounds/atomic rejection; 8192 CST and 4096 CCM values; sparse fields; 22 round/clamp fields match the existing validated converter\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/isp-config/test_open_config.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_bad_alignment (__main__.ConfigTests.test_bad_alignment) ... ok\ntest_bad_dimensions (__main__.ConfigTests.test_bad_dimensions) ... ok\ntest_bad_matrix_values_and_shapes (__main__.ConfigTests.test_bad_matrix_values_and_shapes) ... ok\ntest_bad_mesh_extents (__main__.ConfigTests.test_bad_mesh_extents) ... ok\ntest_both_camera_modes_are_distinct (__main__.ConfigTests.test_both_camera_modes_are_distinct) ... ok\ntest_ccm_numerical_range_distinct_from_cst (__main__.ConfigTests.test_ccm_numerical_range_distinct_from_cst) ... ok\ntest_ccm_transpose_with_asymmetric_fixture (__main__.ConfigTests.test_ccm_transpose_with_asymmetric_fixture) ... ok\ntest_cli_refuses_overwrite (__main__.ConfigTests.test_cli_refuses_overwrite) ... ok\ntest_exact_front_layout (__main__.ConfigTests.test_exact_front_layout) ... ok\ntest_exact_rear_layout (__main__.ConfigTests.test_exact_rear_layout) ... ok\ntest_gamma_rejects_bad_inputs (__main__.ConfigTests.test_gamma_rejects_bad_inputs) ... ok\ntest_gamma_round_trip_and_endpoints (__main__.ConfigTests.test_gamma_round_trip_and_endpoints) ... ok\ntest_gamma_signed_negative_delta (__main__.ConfigTests.test_gamma_signed_negative_delta) ... ok\ntest_generator_has_no_runtime_inputs (__main__.ConfigTests.test_generator_has_no_runtime_inputs) ... ok\ntest_grid_bounds_and_bayer_alignment (__main__.ConfigTests.test_grid_bounds_and_bayer_alignment) ... ok\ntest_grid_rejects_unrepresentable (__main__.ConfigTests.test_grid_rejects_unrepresentable) ... ok\ntest_invalid_coefficient_range_policy (__main__.ConfigTests.test_invalid_coefficient_range_policy) ... ok\ntest_known_bt601_coefficients (__main__.ConfigTests.test_known_bt601_coefficients) ... ok\ntest_neutral_preservation_every_u8_level (__main__.ConfigTests.test_neutral_preservation_every_u8_level) ... ok\ntest_padded_nv12 (__main__.ConfigTests.test_padded_nv12) ... ok\ntest_primary_colours_against_standard (__main__.ConfigTests.test_primary_colours_against_standard) ... ok\ntest_signed_field_encoding_exhaustive (__main__.ConfigTests.test_signed_field_encoding_exhaustive) ... ok\ntest_srgb_midpoint (__main__.ConfigTests.test_srgb_midpoint) ... ok\ntest_unity_mesh_neutral_and_reserved_bits (__main__.ConfigTests.test_unity_mesh_neutral_and_reserved_bits) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 0.121s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test-upstream-readiness.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_changed_source_invalidates_evidence (__main__.GateTests.test_changed_source_invalidates_evidence) ... ok\ntest_duplicate_component (__main__.GateTests.test_duplicate_component) ... ok\ntest_empty_manifest_cannot_pass (__main__.GateTests.test_empty_manifest_cannot_pass) ... ok\ntest_hardware_opt_out_cannot_bypass_camera_qualification (__main__.GateTests.test_hardware_opt_out_cannot_bypass_camera_qualification) ... ok\ntest_malformed_identifier_and_version (__main__.GateTests.test_malformed_identifier_and_version) ... ok\ntest_missing_component (__main__.GateTests.test_missing_component) ... ok\ntest_missing_evidence (__main__.GateTests.test_missing_evidence) ... ok\ntest_no_hardware_evidence (__main__.GateTests.test_no_hardware_evidence) ... ok\ntest_paths_and_symlinks_rejected (__main__.GateTests.test_paths_and_symlinks_rejected) ... ok\ntest_private_runtime_dependency (__main__.GateTests.test_private_runtime_dependency) ... ok\ntest_submission_documentation_can_have_source_only_evidence (__main__.GateTests.test_submission_documentation_can_have_source_only_evidence) ... ok\ntest_unknown_provenance (__main__.GateTests.test_unknown_provenance) ... ok\ntest_unreviewed_trace_or_license (__main__.GateTests.test_unreviewed_trace_or_license) ... ok\ntest_valid_synthetic_gate (__main__.GateTests.test_valid_synthetic_gate) ... ok\ntest_wrong_component_evidence (__main__.GateTests.test_wrong_component_evidence) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.011s\n\nOK\n"
+    }
+  ],
+  "reference_rejections": {
+    "missing": true,
+    "changed": true
+  },
+  "readiness": {
+    "exit_code": 1,
+    "stdout": "{\n  \"upstream_ready\": false,\n  \"blockers\": [\n    \"front-startup: private-runtime-dependency\",\n    \"rear-startup: private-runtime-dependency\",\n    \"cphy: needs-upstream-rebase\",\n    \"camss-driver: experimental-driver-cleanup\",\n    \"params-stats-api: interface-design-required\",\n    \"imx681: sensor-review-required\",\n    \"ov13858: sensor-review-required\",\n    \"focus-driver: userspace-i2c-dependency\",\n    \"regulator-dt: standard-topology-hang-unresolved\",\n    \"libcamera-pipeline: pipeline-rewrite-required\",\n    \"ipa: ipa-review-required\",\n    \"image-processing: bridge-migration-and-calibration-required\",\n    \"validation: qualification-incomplete\",\n    \"submission-export: curated-series-required\"\n  ]\n}\n",
+    "stderr": ""
+  },
+  "coverage": {
+    "private_profile_read": false,
+    "hardware_access": false,
+    "unique_fields": {
+      "cst-complete-fields": 19,
+      "row-sums": 4,
+      "histogram-region-count": 1,
+      "ccm-coefficients": 6,
+      "mnds-scaler": 20,
+      "full-crop": 4,
+      "bayer-grid": 54,
+      "round-clamp": 22
+    },
+    "covered_scalar_occurrences": {
+      "cst-complete-fields": 38,
+      "row-sums": 12,
+      "histogram-region-count": 2,
+      "ccm-coefficients": 18,
+      "mnds-scaler": 40,
+      "full-crop": 8,
+      "bayer-grid": 108,
+      "round-clamp": 44
+    },
+    "mapped_register_scalar_words": 2603,
+    "unimplemented_register_occurrences": 2333,
+    "complete_startup_profile": false,
+    "runtime_dependencies_removed": false
+  },
+  "kernel_evidence": "docs/UPSTREAM-CST-STATS-KERNEL05-20261011.json",
+  "current_upstream_overlap": "docs/UPSTREAM-OVERLAP-20261011.md",
+  "source_hashes": {
+    "src/upstream/isp-config/CST-STATS-PROVENANCE-20261011.md": "fade407c7ce764362c087c665c36e8156c5cb78e5d12bd2b9d7ebc1ff5719bd4",
+    "src/upstream/isp-config/FRONT-FIELDS-PROVENANCE-20261011.md": "d9d11bed729c99fcf822f0c96a0bd76c34cc27a665f6c48b466210eaa51b7785",
+    "src/upstream/isp-config/GEOMETRY-STATS-PROVENANCE-20261011.md": "b56668a2ceeae114eb8930f019581f6739cd22c88bea65431910a2676904abb3",
+    "src/upstream/isp-config/README.md": "0fc25229d9859006ab0878a1b0b5927efd64a08d0afc133a8726b45bc0e0bec7",
+    "src/upstream/isp-config/cdm-reference-20261011.json": "27b603c53a984740957a2f228d3c483a63e3b293fc3b37cb53c3a42480bb94f8",
+    "src/upstream/isp-config/cst-stats-reference-20261011.json": "35e4580a418ea19ae4306e8946628e2c85c3c9b549d52d750da3cb39f5d9c213",
+    "src/upstream/isp-config/geometry-stats-reference-20261011.json": "97ce48f322dc9b8e2b903193f0a13d3d7d901f4c096ff902a0231732ce37229e",
+    "src/upstream/isp-config/inventory_front_fields.py": "a2d6ebad56e79166665c7d50060b87364c7a30097aee17bb624e3ea50f43ac47",
+    "src/upstream/isp-config/inventory_front_schema.py": "38843401b30eeb109b31ff33b939a0a2bdc7fe8d2d4fca74d53cdd8ea1a9db3a",
+    "src/upstream/isp-config/kernel-compile-probe/Makefile": "f8fe66a6c79bbf5e45c6aaad1bcb69ae24a58979f7f40c20cbc71232a51e0ac7",
+    "src/upstream/isp-config/kernel-compile-probe/sp11-open-fields-compile.c": "234f3168d0576ae184d5b92750ee7a0e2407fabc52944888f122bcf1d979c411",
+    "src/upstream/isp-config/open_config.py": "ff48a4272422966e2681113e5122d8c9d037f81e2b89bc78143ff1d6c6248052",
+    "src/upstream/isp-config/sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+    "src/upstream/isp-config/sp11-cst-stats.h": "2e108eee37bf69b85e3db41460509eadbad9010eaf6adf2ece50f71dafc31c67",
+    "src/upstream/isp-config/sp11-frame-fields.h": "aee389c6fe31a564b724d7d5995a5c212e1171d5e164c91e3dbd2b424ad6bacd",
+    "src/upstream/isp-config/sp11-front-fields.h": "c00e3d41e37a691cda987eeebeb17c9ea5939a8414eba737665a01534179fa38",
+    "src/upstream/isp-config/sp11-geometry-stats.h": "d4627cb714b294cf59734979d441999e5fb9eaa98950c1329fa478dcba027cea",
+    "src/upstream/isp-config/test-cst-stats.c": "26ada1bfa76b40b3bdfda5d7009afd98b3ca5c8a50e2d8de0fcfbc72a708f007",
+    "src/upstream/isp-config/test-front-fields.c": "cc29305aee1fa318a70dc6b9e405111e5ec8653a691a9e34d1a857bf48d95604",
+    "src/upstream/isp-config/test-geometry-stats.c": "99f843d8b36722d92fed5f432c60b6010055ea1a8235d7b4ea04d44280f0bba8",
+    "src/upstream/isp-config/test_cdm_compat.py": "a6534e697b373f0862db295405c40b31674dafaee0687c2779c4db2a531ec2a1",
+    "src/upstream/isp-config/test_cst_stats.py": "0d854ee31dfd0f82baf0434725217c52088a4a236407b95cadbd6e83fa37405d",
+    "src/upstream/isp-config/test_front_fields.py": "96b649634e0f778bb04f024d6388ba7b9100145a4464eb338500d45ea10482c9",
+    "src/upstream/isp-config/test_gamma_compat.py": "0f82578cca37bae1602bf2be19ba323794c73049e4cf7692e3f137306bbf2a2e",
+    "src/upstream/isp-config/test_geometry_stats.py": "d61a03b068e9f0bf53e41cb03498af6a2de40861a5766b024f599e02fda84ad2",
+    "src/upstream/isp-config/test_open_config.py": "ec5d70396e734b35e506cafd5c92a8f75126b43c316f98d0ba3e77a1f148808b",
+    "tools/check-upstream-readiness.py": "8d1108d3ae9f9e95f6e976b88f8ab7ddabae6776a02946e9806d22540c384ab2",
+    "tools/test-upstream-readiness.py": "eee4f95a010ab4f2d2c6e969a0bbf111ed6b400a2eb466e3ac6d2414d0230557"
+  }
+}

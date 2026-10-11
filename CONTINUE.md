@@ -1,3 +1,32 @@
+## 2026-10-11 CST/RS source proof and current upstream alignment
+
+Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
+New source-only typed CST19-field encoder, enabled RS4-field and BHist region
+count1-field fragments; atomic compositor656bytes /130 distinct fields /
+270 scalar occurrences,2333 mapped occurrences remain unclassified/unimplemented.
+GCC/Clang ASAN/UBSAN12290CST/16490RS/16385BHist vectors per suite/compiler PASS;
+prior194scaler/12297BG,24math,15readiness and colour/CDM regression PASS.
+Exact pinned MIT semantic function comparison and missing/changed rejection PASS.
+Kernel compile-only stage05 W=1/-Werror PASS without warnings; NEVER LOAD.
+Stage04/initial whitespace-source evidence preserved separately.
+Evidence docs/UPSTREAM-CST-STATS-VALIDATION-20261011.json and provenance
+src/upstream/isp-config/CST-STATS-PROVENANCE-20261011.md.
+CST auxiliary meaning/policy pending; public VFE880 calls it SUBOFFSET but has
+other channel/clamp choices. BHist count alone is not complete histogram setup.
+No private profile read, camera capture, reboot, module/DT/runtime change.
+Both private consumers remain, all14readiness components blocked. Preserve
+Golden/daily2 and original5317d528/untracked baseline evidence.
+NEW priority: docs/UPSTREAM-OVERLAP-20261011.md records Oct5 Bryan74-patch
+existing-VFE RFC and Oct6/7 Qualcomm45-patch alternative/review. Review favours
+integration into existing CAMSS, rejects pixel-only DT compatible. Neither is
+SP11 hardware proof. Patch52 publicGPL source downloaded/pinned, not transplanted;
+whole RFC rawmbox403/500, partial mirror attempt8mails then60s bound; receipts kept.
+NEXT pin/review whole RFC/current revisions/dependencies and map VFE680 backend,
+output grouping/params/stats/lifetime to accepted structures; reconcile module
+setup, CST policy, independent DMI/real allocation lifetimes before fresh isolated
+hardware qualification with both private consumers/fallbacks absent. No mailing
+sent. Earlier historical frontier/checkpoint paragraphs below are stale.
+
 ## 2026-10-11 upstream geometry/Bayer-grid source checkpoint
 
 Active branch work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.

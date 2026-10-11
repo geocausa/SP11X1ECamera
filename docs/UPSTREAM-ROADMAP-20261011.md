@@ -1,3 +1,14 @@
+## Current upstream alignment, checked 2026-10-11
+
+Read UPSTREAM-OVERLAP-20261011.md before choosing an ISP integration base.
+Fresh October5/6/7 proposals and review favour extending existing CAMSS/VFE.
+Pin/review the full current RFC/dependencies, then add SP11 VFE680 blocks,
+metadata/output grouping and lifetime changes on that structure. The new typed
+field compilers remain source tests, not a submission ABI or startup proof.
+Public VFE880 setup is a reference with hardware differences; no drop-in port.
+Current source coverage130fields/270occurrences, both runtime profiles remain.
+This updates the implementation order within W0/W1/W4, not their readiness gates.
+
 # SP11 RGB camera upstream implementation plan
 
 Date: 2026-10-11. User authorised planning and implementation of the remaining

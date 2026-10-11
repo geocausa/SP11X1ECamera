@@ -115,7 +115,7 @@ static void valid_cases(void)
 }
 static void rejections(void)
 {
-	u8 out[600];struct sp11_geometry g={3840,2160,2560,1440};
+	u8 out[688];struct sp11_geometry g={3840,2160,2560,1440};
 	struct sp11_bg_config s=grid(3840,2160),bad;
 	memset(out,0xa5,sizeof(out));
 	assert(sp11_geometry_commands(out,127,&g)==-ENOSPC);
@@ -142,39 +142,40 @@ static void rejections(void)
 	struct sp11_bg_config set[3]={s,s,s};set[2].threshold_b=0x40000;
 	assert(sp11_bg_set_commands(out,sizeof(out),3840,2160,set)==-ERANGE);
 	untouched(out,sizeof(out));
-	union {struct sp11_frame_fields s;u8 out[600];} alias;
+	union {struct sp11_frame_fields s;u8 out[688];} alias;
 	memset(&alias,0xa5,sizeof(alias));
-	assert(sp11_geometry_commands(alias.out,600,&alias.s.geometry)==-EINVAL);
-	assert(sp11_bg_commands(alias.out,600,SP11_BG_AEC,3840,2160,alias.s.bg)==-EINVAL);
-	assert(sp11_bg_set_commands(alias.out,600,3840,2160,alias.s.bg)==-EINVAL);
-	assert(sp11_frame_fields_commands(alias.out,600,&alias.s)==-EINVAL);
+	assert(sp11_geometry_commands(alias.out,688,&alias.s.geometry)==-EINVAL);
+	assert(sp11_bg_commands(alias.out,688,SP11_BG_AEC,3840,2160,alias.s.bg)==-EINVAL);
+	assert(sp11_bg_set_commands(alias.out,688,3840,2160,alias.s.bg)==-EINVAL);
+	assert(sp11_frame_fields_commands(alias.out,688,&alias.s)==-EINVAL);
 	untouched(alias.out,sizeof(alias.out));
 }
 static void composition(void)
 {
-	u8 out[600],part[240];
+	u8 out[688],part[240];
 	struct sp11_frame_fields s={.geometry={3840,2160,2560,1440},
-		.cst={601,117,306,-339,512,-173,-429,-83,512},
+		.cst={.matrix={601,117,306,-339,512,-173,-429,-83,512}, .maximum={4095,4095,4095}, .enabled=true},
+		.rs={.width=3840,.height=2160,.columns=16,.rows=1024},.bhist={3840,2160},
 		.ccm={128,0,0,0,128,0,0,0,128},.output_bits=8};
 	for(unsigned int i=0;i<3;i++) s.bg[i]=grid(3840,2160);
-	assert(SP11_FRAME_FIELDS_BYTES==568);
+	assert(SP11_FRAME_FIELDS_BYTES==656);
 	memset(out,0xa5,sizeof(out));
 	assert(sp11_frame_fields_commands(out,sizeof(out),&s)==0);
 	assert(sp11_geometry_commands(part,sizeof(part),&s.geometry)==0);
-	assert(memcmp(part,out+200,128)==0);
+	assert(memcmp(part,out+244,128)==0);
 	assert(sp11_bg_set_commands(part,sizeof(part),3840,2160,s.bg)==0);
-	assert(memcmp(part,out+328,240)==0);
-	untouched(out+568,32);
-	/* Walk commands: exactly 112 unique owned registers, no duplicates. */
-	u32 regs[112];size_t pos=0,n=0;
-	while(pos<568){u32 count=rd(out+pos)&0xffff,base=rd(out+pos+4);
+	assert(memcmp(part,out+372,240)==0);
+	untouched(out+656,32);
+	/* Walk commands: exactly 130 unique owned registers, no duplicates. */
+	u32 regs[130];size_t pos=0,n=0;
+	while(pos<656){u32 count=rd(out+pos)&0xffff,base=rd(out+pos+4);
 		assert(rd(out+pos)>>24==3 && count>0);
-		for(u32 j=0;j<count;j++){u32 reg=base+4*j;assert(n<112);
+		for(u32 j=0;j<count;j++){u32 reg=base+4*j;assert(n<130);
 			for(size_t k=0;k<n;k++)
 				assert(regs[k]!=reg);
 			regs[n++]=reg;}
 		pos+=8+count*4;}
-	assert(pos==568 && n==112);
+	assert(pos==656 && n==130);
 	memset(out,0xa5,sizeof(out));s.bg[2].y_weight_q4[2]=128;
 	assert(sp11_frame_fields_commands(out,sizeof(out),&s)==-ERANGE);
 	s.bg[2].y_weight_q4[2]=4;s.geometry.output_width=4000;
@@ -182,14 +183,14 @@ static void composition(void)
 	s.geometry.output_width=2560;s.ccm[8]=2048;
 	assert(sp11_frame_fields_commands(out,sizeof(out),&s)==-ERANGE);
 	s.ccm[8]=128;
-	assert(sp11_frame_fields_commands(out,567,&s)==-ENOSPC);
+	assert(sp11_frame_fields_commands(out,655,&s)==-ENOSPC);
 	assert(sp11_frame_fields_commands(out,sizeof(out),NULL)==-EINVAL);
 	untouched(out,sizeof(out));
 }
 int main(void)
 {
 	valid_cases();rejections();composition();
-	printf("PASS geometry_cases=%u grid_cases=%u; bounds/atomic rejection/112-field composition",geometry_cases,grid_cases);
+	printf("PASS geometry_cases=%u grid_cases=%u; bounds/atomic rejection/130-field composition",geometry_cases,grid_cases);
 #ifdef SP11_REFERENCE
 	printf("; unchanged pinned semantic references");
 #endif
