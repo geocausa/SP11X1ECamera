@@ -6,7 +6,7 @@ Loads the qualified front param-queue camera modules, installs the private
 startup profile only for the capture, runs the configured capture tool and always
 returns to Golden through ExecStopPost. Pixels/records stay on SP11.
 """
-import json, os, re, shutil, subprocess, sys, time
+import json, os, re, shutil, signal, subprocess, sys, threading, time
 from pathlib import Path
 
 D = Path(__file__).resolve().parent
@@ -45,6 +45,41 @@ def idle_bound():
     s = sensors()
     return len(s) == 3 and all((p / "driver").is_symlink() and
                                (p / "power/runtime_status").read_text().strip() == "suspended" for p in s.values())
+
+
+def follow_kmsg(path, stop):
+    """Copy kernel messages to disk as they arrive (fsync per record), so a
+    machine freeze still leaves the last messages behind."""
+    try:
+        fd = os.open("/dev/kmsg", os.O_RDONLY | os.O_NONBLOCK)
+    except OSError:
+        return
+    out = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    while not stop.is_set():
+        try:
+            rec = os.read(fd, 8192)
+        except BlockingIOError:
+            time.sleep(0.02)
+            continue
+        except OSError:
+            continue
+        os.write(out, rec)
+        os.fsync(out)
+    os.close(out)
+    os.close(fd)
+
+
+def stall(proc, at_s, for_s, r):
+    """Error-path test: stop the capture process for for_s seconds at at_s."""
+    time.sleep(at_s)
+    if proc.poll() is None:
+        proc.send_signal(signal.SIGSTOP)
+        r["stall_test_stopped_at"] = time.time()
+        save(r)
+        time.sleep(for_s)
+        if proc.poll() is None:
+            proc.send_signal(signal.SIGCONT)
+        r["stall_test_continued_at"] = time.time()
 
 
 def main():
@@ -108,8 +143,24 @@ def main():
             env["LIBCAMERA_CAMSS_X1E_TUNING_FILE"] = str(D / CFG["tuning"])
         env.update(CFG.get("env", {}))
         stderr = open(D / "PRIVATE-CAPTURE-STDERR.txt", "w")
-        p = subprocess.run([str(D / CFG.get("capture", "capture-front-pattern"))], stdout=subprocess.PIPE,
-                           stderr=stderr, text=True, timeout=CFG["capture_timeout"], env=env)
+        kstop = threading.Event()
+        kthread = threading.Thread(target=follow_kmsg, args=(D / "PRIVATE-KMSG-LIVE.txt", kstop), daemon=True)
+        kthread.start()
+        p = subprocess.Popen([str(D / CFG.get("capture", "capture-front-pattern"))], stdout=subprocess.PIPE,
+                             stderr=stderr, text=True, env=env)
+        if CFG.get("stall_test"):
+            threading.Thread(target=stall, args=(p, CFG["stall_test"]["at_s"], CFG["stall_test"]["for_s"], r),
+                             daemon=True).start()
+        try:
+            out, _ = p.communicate(timeout=CFG["capture_timeout"])
+        except subprocess.TimeoutExpired:
+            p.send_signal(signal.SIGCONT)
+            p.kill()
+            out, _ = p.communicate()
+            raise
+        finally:
+            kstop.set()
+        p.stdout = out
         stderr.close()
         (D / "PRIVATE-CAPTURE-STDOUT.txt").write_text(p.stdout)
         r["capture_exit"] = p.returncode

@@ -44,6 +44,9 @@ run = {
     "camss_params": params,
     "log_levels": "CAMSSX1E:DEBUG,Camera:INFO",
 }
+if os.environ.get("ABL_STALL"):
+    at, dur = (float(x) for x in os.environ["ABL_STALL"].split(","))
+    run["stall_test"] = {"at_s": at, "for_s": dur}
 if lsc:
     run["extra"][str(K / "front-lsc-v1/imx681-front-lsc-v1.bin")] = "imx681-front-lsc-v1.bin"
     run["firmware_extra"] = ["imx681-front-lsc-v1.bin"]

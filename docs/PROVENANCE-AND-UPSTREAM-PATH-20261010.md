@@ -67,7 +67,16 @@ Known issue (2026-10-11): one of ~50 capture boots (ae-46) froze the whole machi
 process stalled at frame 394 (auto exposure, 23 fps), the kernel stopped the queue after its 500 ms
 IQ-packet timeout (error -110, no stop request) and the system hung in the following teardown;
 the same configuration passed when repeated (ae-62). The error-path teardown needs review, and a
-persistent kernel log (ramoops) should be enabled for the next occurrence.
+persistent kernel log (ramoops) should be enabled for the next occurrence. The run harness now copies
+kernel messages to disk as they arrive (fsync per record). Deliberate error-path test (ae-75: capture
+process stopped for 1 s at 20 s): the kernel hits the same 500 ms timeout (-110, no stop request),
+the stream ends and the machine stays healthy; the freeze did not reproduce.
+
+Daily-driver gap: the native queue is a serialized loop that needs a returned buffer and the next
+IQ packet every frame. Any consumer stall over 500 ms ends the stream, and frame numbering is tied
+to the IPA request id, so a later resume cannot resynchronise. A daily-driver queue needs a scratch
+buffer for dropped frames, reuse of the last IQ parameters when none arrived, and resynchronisation
+of the frame/request sequence, as in other V4L2 ISP drivers.
 
 ## Path to a distributable, upstreamable front camera
 
