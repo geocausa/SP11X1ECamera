@@ -10,6 +10,7 @@ Run from the checkout root:
 python3 src/upstream/isp-config/test_open_config.py
 python3 src/upstream/isp-config/test_gamma_compat.py
 python3 src/upstream/isp-config/test_front_fields.py
+python3 src/upstream/isp-config/test_geometry_stats.py
 python3 src/upstream/isp-config/open_config.py --camera front --output /tmp/front-open.json
 python3 src/upstream/isp-config/open_config.py --camera rear --output /tmp/rear-open.json
 python3 tools/test-upstream-readiness.py
@@ -61,17 +62,36 @@ python3 src/upstream/isp-config/inventory_front_fields.py docs/UPSTREAM-FRONT-RE
 ```
 
 The GPL reference is a test-only input. Its C file and companion header hashes
-must match; they are never loaded by the production helpers. Coverage is 34
-unique fields / 74 scalar occurrences, not a count of runtime dependencies removed.
+must match; they are never loaded by the production helpers. Coverage is now 112
+unique fields / 230 scalar occurrences, not a count of runtime dependencies removed.
 
 The compile-only probe can be rebuilt against a prepared kernel tree. Set
 `SP11_KERNEL_SOURCE` and `SP11_KERNEL_BUILD` to those directories first:
 
 ```sh
 fields_stage=$(mktemp -d)
-cp src/upstream/isp-config/sp11-cdm.h src/upstream/isp-config/sp11-front-fields.h src/upstream/isp-config/kernel-compile-probe/Makefile src/upstream/isp-config/kernel-compile-probe/sp11-open-fields-compile.c "$fields_stage/"
+cp src/upstream/isp-config/sp11-cdm.h src/upstream/isp-config/sp11-front-fields.h src/upstream/isp-config/sp11-geometry-stats.h src/upstream/isp-config/sp11-frame-fields.h src/upstream/isp-config/kernel-compile-probe/Makefile src/upstream/isp-config/kernel-compile-probe/sp11-open-fields-compile.c "$fields_stage/"
 make -C "$SP11_KERNEL_SOURCE" O="$SP11_KERNEL_BUILD" M="$fields_stage" W=1 KCFLAGS=-Werror modules
 ```
 
 Do not load the probe. A passing build proves kernel type compatibility only;
 it neither changes camera operation nor qualifies a new startup provider.
+
+The geometry and statistics layer is described in
+`GEOMETRY-STATS-PROVENANCE-20261011.md`. It supports bounded full-frame 4:2:0
+MNDS downscale/crop and three explicit Bayer grids, without camera tuning presets.
+`sp11-frame-fields.h` atomically composes 568 bytes of source fragments; it does
+not establish hardware startup order, a module graph or DMA ownership.
+
+For optional compatibility tests against the exact existing project semantic
+packers, set `SP11_SEMANTIC_REFERENCE_DIR` to a directory containing the pinned
+MIT sources listed in `geometry-stats-reference-20261011.json`:
+
+```sh
+python3 src/upstream/isp-config/test_geometry_stats.py --reference-dir "$SP11_SEMANTIC_REFERENCE_DIR"
+```
+
+Reference source is test-only, and its absence or hash mismatch rejects the
+requested comparison. Neither suite reads a private profile. Front/rear geometry
+vectors prove compiler compatibility, not a qualified camera mode or complete
+rear colour/statistics pipeline. The running stack still uses both private inputs.

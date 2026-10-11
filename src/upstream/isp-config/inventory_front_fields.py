@@ -12,6 +12,9 @@ from pathlib import Path
 FIELDS = {
     "cst-coefficients": [0x6168 + 24 * i + 4 * j for i in range(3) for j in range(2)],
     "ccm-coefficients": list(range(0x5868, 0x5880, 4)),
+    "mnds-scaler": list(range(0x9860, 0x9888, 4)) + list(range(0x9a60, 0x9a88, 4)),
+    "full-crop": [0x9c68, 0x9c6c, 0x9e68, 0x9e6c],
+    "bayer-grid": [base + 4 * i for base in (0xb060, 0xb660, 0xb860) for i in range(18)],
     "round-clamp": [base for base in (0x9c60, 0x9e60)] +
                    [base + 0x10 + 4 * i for base in (0x9c60, 0x9e60) for i in range(10)],
 }

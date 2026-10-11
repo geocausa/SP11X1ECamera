@@ -1,3 +1,26 @@
+## 2026-10-11 upstream geometry/Bayer-grid source checkpoint
+
+Active branch work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
+New GPL typed geometry/stats headers generate MNDS23 + FULL crop and explicit
+AEC/tintless/AWB grids without private inputs or old schema/carrier. Atomic
+568-byte source fragment compositor owns112 distinct fields /230 scalar
+occurrences (2373 remaining mapped occurrences need implementation/classification).
+GCC/Clang ASAN/UBSAN194 scaler +12297 grid cases per suite/compiler PASS,
+unchanged hash-pinned MIT semantic packer comparison PASS; missing/changed
+reference rejection PASS. Prior24 math/15 gate/typed-colour tests PASS.
+Kernel compile-only stage upstream-open-fields-20261011-03 W=1/-Werror PASS
+without warnings, probe NEVER LOAD. Stage02 warning/build retained separately.
+Evidence docs/UPSTREAM-GEOMETRY-STATS-VALIDATION-20261011.json;
+provenance src/upstream/isp-config/GEOMETRY-STATS-PROVENANCE-20261011.md.
+Functional trace-derived field provenance review remains pending. No complete
+startup sequence, UAPI, buffer layout, DMA ownership or hardware grant implied.
+Both private runtime consumers remain. No private profile read, capture, reboot,
+module, DT or runtime changes. Preserve daily2/Golden and original5317d528.
+Next resolve remaining CST fields, module graph/enables/minimal processing,
+BHist/RS/AF/output bus, own DMI bindings and complete independent provider;
+then compile and fresh guarded hardware qualification with no private fallback.
+Earlier source/hardware checkpoint paragraphs below are historical.
+
 ## 2026-10-11 upstream typed front fields source checkpoint
 
 Active branch work/upstream-open-stack-20261011, SP11X1ECamera-upstream.
