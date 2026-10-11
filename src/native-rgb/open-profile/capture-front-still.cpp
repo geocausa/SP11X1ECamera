@@ -31,6 +31,7 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <thread>
 #include <vector>
 #include <libcamera/camera.h>
 #include <libcamera/camera_manager.h>
@@ -48,7 +49,7 @@ int32_t exposureUs(int32_t lines) { return int32_t((int64_t(lines) * 422 + 22) /
 struct Phase { int32_t lines; float again, dgain; bool automatic; };
 Phase kPhases[] = { { 3546, 16.0f, 1.0f, false }, { 0, 0.0f, 0.0f, true } };
 constexpr unsigned kPhaseCount = sizeof(kPhases) / sizeof(kPhases[0]);
-unsigned gKeep = 1;
+unsigned gKeep = 1, gHoldAt = 0, gHoldMs = 0;
 struct Record {
 	uint32_t sequence, phase;
 	uint64_t completion_ns, realtime_ns;
@@ -99,6 +100,8 @@ public:
 	}
 	~Capture()
 	{
+		if (holdThread_.joinable())
+			holdThread_.join();
 		if (running_)
 			camera_->stop();
 		camera_->requestCompleted.disconnect(this);
@@ -145,6 +148,8 @@ public:
 				failure_ = "completion timeout";
 			stopping_ = true;
 		}
+		if (holdThread_.joinable())
+			holdThread_.join();
 		need(!camera_->stop(), "stop");
 		running_ = false;
 		double elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now() - started_).count();
@@ -167,7 +172,7 @@ public:
 				  << exposureUs(kPhases[i].lines) << ",\"again\":" << kPhases[i].again
 				  << ",\"dgain\":" << kPhases[i].dgain << ",\"automatic\":" << kPhases[i].automatic << "}";
 		std::cout << "],\"grid\":[" << GX << "," << GY << "],\"record_bytes\":" << sizeof(Record)
-			  << ",\"full_frames_saved\":" << savedFrames_ << ",\"metadata_mismatches\":" << mismatches_
+			  << ",\"full_frames_saved\":" << savedFrames_ << ",\"metadata_mismatches\":" << mismatches_ << ",\"held_released\":" << heldReleased_
 			  << "}" << std::endl;
 		need(completed_ >= total_ / 2, failure_.empty() ? "too few frames" : failure_);
 	}
@@ -276,10 +281,37 @@ private:
 		request->reuse(Request::ReuseBuffers);
 		if (completed_ % perPhase_ == 0)
 			setPhase(request->controls(), kPhases[completed_ / perPhase_]);
+		if (holding(request))
+			return;
 		if (camera_->queueRequest(request)) {
 			failure_ = "requeue failed";
 			cv_.notify_one();
 		}
+	}
+	/* Called with mutex_ held. */
+	bool holding(Request *request)
+	{
+		if (!gHoldMs)
+			return false;
+		const auto now = std::chrono::steady_clock::now();
+		if (completed_ == gHoldAt && !holdThread_.joinable()) {
+			holdUntil_ = now + std::chrono::milliseconds(gHoldMs);
+			holdThread_ = std::thread([this] { releaseHeld(); });
+		}
+		if (now < holdUntil_) {
+			held_.push_back(request);
+			return true;
+		}
+		return false;
+	}
+	void releaseHeld()
+	{
+		std::this_thread::sleep_until(holdUntil_);
+		std::unique_lock lock(mutex_);
+		for (Request *request : held_)
+			if (!stopping_ && !camera_->queueRequest(request))
+				heldReleased_++;
+		held_.clear();
 	}
 	void writeOutputs()
 	{
@@ -317,7 +349,10 @@ private:
 	std::vector<Meta> meta_;
 	std::vector<std::vector<uint8_t>> keep_;
 	std::vector<unsigned> keepSeq_;
-	unsigned savedFrames_ = 0, mismatches_ = 0;
+	unsigned savedFrames_ = 0, mismatches_ = 0, heldReleased_ = 0;
+	std::vector<Request *> held_;
+	std::chrono::steady_clock::time_point holdUntil_{};
+	std::thread holdThread_;
 	std::mutex mutex_;
 	std::condition_variable cv_;
 	bool acquired_ = false, running_ = false, stopping_ = false;
@@ -342,6 +377,11 @@ int main(int argc, char **argv)
 		if (const char *k = std::getenv("SP11_KEEP_PER_PHASE"))
 			gKeep = unsigned(std::strtoul(k, nullptr, 10));
 		need(gKeep >= 1 && gKeep <= 12, "keep per phase range");
+		if (const char *h = std::getenv("SP11_HOLD_AT"))
+			gHoldAt = unsigned(std::strtoul(h, nullptr, 10));
+		if (const char *h = std::getenv("SP11_HOLD_MS"))
+			gHoldMs = unsigned(std::strtoul(h, nullptr, 10));
+		need(gHoldMs <= 10000, "hold range");
 		if (const char *l = std::getenv("SP11_MANUAL_LINES"))
 			kPhases[0].lines = int32_t(std::strtol(l, nullptr, 10));
 		if (const char *a = std::getenv("SP11_MANUAL_AGAIN"))

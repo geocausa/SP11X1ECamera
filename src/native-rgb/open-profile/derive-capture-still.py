@@ -5,6 +5,7 @@
 from the middle of each phase (temporal noise / module ablation against a static
 chart) and lets SP11_MANUAL_LINES / SP11_MANUAL_AGAIN override the manual phase.
 Build: derive-capture-still.py --build <libcamera build dir>
+Env SP11_HOLD_AT/SP11_HOLD_MS simulate an application that stops returning buffers.
 """
 import subprocess, sys
 from pathlib import Path
@@ -41,6 +42,42 @@ rep("\t\tneed(perPhase >= 60 && perPhase <= 3000, \"frames per phase range\");\n
 rep('"SP11 front AE/tone validation capture (env SP11_PATTERN_DIR, SP11_PATTERN_FRAMES_PER_PHASE)',
     '"SP11 front still capture (env SP11_PATTERN_DIR, SP11_PATTERN_FRAMES_PER_PHASE, SP11_KEEP_PER_PHASE,'
     ' SP11_MANUAL_LINES, SP11_MANUAL_AGAIN)')
+# Consumer-stall simulation: SP11_HOLD_AT (completed frame) and SP11_HOLD_MS hold
+# every request completing in that window and requeue them together afterwards
+# from a helper thread, like an application that stops returning buffers.
+rep("#include <vector>\n", "#include <thread>\n#include <vector>\n")
+rep("unsigned gKeep = 1;", "unsigned gKeep = 1, gHoldAt = 0, gHoldMs = 0;")
+rep("\t~Capture()\n\t{\n", "\t~Capture()\n\t{\n\t\tif (holdThread_.joinable())\n\t\t\tholdThread_.join();\n")
+rep("\t\tneed(!camera_->stop(), \"stop\");\n",
+    "\t\tif (holdThread_.joinable())\n\t\t\tholdThread_.join();\n\t\tneed(!camera_->stop(), \"stop\");\n")
+rep("\t\tif (camera_->queueRequest(request)) {\n",
+    "\t\tif (holding(request))\n\t\t\treturn;\n\t\tif (camera_->queueRequest(request)) {\n")
+rep("\tvoid writeOutputs()\n",
+    "\t/* Called with mutex_ held. */\n"
+    "\tbool holding(Request *request)\n\t{\n"
+    "\t\tif (!gHoldMs)\n\t\t\treturn false;\n"
+    "\t\tconst auto now = std::chrono::steady_clock::now();\n"
+    "\t\tif (completed_ == gHoldAt && !holdThread_.joinable()) {\n"
+    "\t\t\tholdUntil_ = now + std::chrono::milliseconds(gHoldMs);\n"
+    "\t\t\tholdThread_ = std::thread([this] { releaseHeld(); });\n\t\t}\n"
+    "\t\tif (now < holdUntil_) {\n\t\t\theld_.push_back(request);\n\t\t\treturn true;\n\t\t}\n"
+    "\t\treturn false;\n\t}\n"
+    "\tvoid releaseHeld()\n\t{\n"
+    "\t\tstd::this_thread::sleep_until(holdUntil_);\n"
+    "\t\tstd::unique_lock lock(mutex_);\n"
+    "\t\tfor (Request *request : held_)\n"
+    "\t\t\tif (!stopping_ && !camera_->queueRequest(request))\n\t\t\t\theldReleased_++;\n"
+    "\t\theld_.clear();\n\t}\n"
+    "\tvoid writeOutputs()\n")
+rep("\tunsigned savedFrames_ = 0, mismatches_ = 0;\n",
+    "\tunsigned savedFrames_ = 0, mismatches_ = 0, heldReleased_ = 0;\n"
+    "\tstd::vector<Request *> held_;\n\tstd::chrono::steady_clock::time_point holdUntil_{};\n\tstd::thread holdThread_;\n")
+rep("<< \",\\\"metadata_mismatches\\\":\" << mismatches_", "<< \",\\\"metadata_mismatches\\\":\" << mismatches_ << \",\\\"held_released\\\":\" << heldReleased_")
+rep("\t\tif (const char *l = std::getenv(\"SP11_MANUAL_LINES\"))\n",
+    "\t\tif (const char *h = std::getenv(\"SP11_HOLD_AT\"))\n\t\t\tgHoldAt = unsigned(std::strtoul(h, nullptr, 10));\n"
+    "\t\tif (const char *h = std::getenv(\"SP11_HOLD_MS\"))\n\t\t\tgHoldMs = unsigned(std::strtoul(h, nullptr, 10));\n"
+    "\t\tneed(gHoldMs <= 10000, \"hold range\");\n"
+    "\t\tif (const char *l = std::getenv(\"SP11_MANUAL_LINES\"))\n")
 out = HERE / "capture-front-still.cpp"
 out.write_text(src)
 print("WROTE", out)

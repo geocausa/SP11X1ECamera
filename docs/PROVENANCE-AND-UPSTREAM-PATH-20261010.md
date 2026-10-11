@@ -72,7 +72,19 @@ kernel messages to disk as they arrive (fsync per record). Deliberate error-path
 process stopped for 1 s at 20 s): the kernel hits the same 500 ms timeout (-110, no stop request),
 the stream ends and the machine stays healthy; the freeze did not reproduce.
 
-Daily-driver gap: the native queue is a serialized loop that needs a returned buffer and the next
+**Robust queue (2026-10-11, kernel build 46 `native_front_queue_robust=1` + libcamera tree 20,
+`front-robust/`):** a frame without an application buffer is written to a driver-owned scratch
+buffer and dropped; a frame without a new IQ packet reuses the newest parameters (stale packets
+are skipped); the statistics generation still advances every frame. The pipeline accepts images
+later than predicted (all admissions and the control schedule shift by the gap), retires
+frame-start records of dropped frames, resynchronises after lost frame-start events (DelayedControls
+reset and re-based) and the IPA accepts statistics after a gap. Results: application holding its
+buffers 1.5 s (ae-77): 600/600, the pipeline's spare buffers absorb it; whole capture process
+frozen 1 s (ae-80, 21 frames dropped) and 5 s (ae-83, 114 dropped, frame-start events lost): stream
+recovers, 600/600, no errors. Normal streaming with the full open configuration (ae-84): 0 drops,
+image identical to the earlier open run. Before: any stall over 500 ms ended the stream (ae-75).
+
+Original gap description: the native queue is a serialized loop that needs a returned buffer and the next
 IQ packet every frame. Any consumer stall over 500 ms ends the stream, and frame numbering is tied
 to the IPA request id, so a later resume cannot resynchronise. A daily-driver queue needs a scratch
 buffer for dropped frames, reuse of the last IQ parameters when none arrived, and resynchronisation
