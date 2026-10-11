@@ -28,7 +28,7 @@ PROFILE=$P/02-kernel/native-front-profile-20261007-01/imx681-2560x1440-nv12-v1.b
 test "$(sha256sum "$PROFILE" | cut -d' ' -f1)" = c59a54b760a8662af650fa8961aab2224c7c0d2a0cdcdea3c9581370ac5ddd03
 install -m 600 "$PROFILE" "$D/firmware/qcom/sp11/"
 install -m 600 "$P/02-kernel/front-lsc-v1/imx681-front-lsc-v1.bin" "$PRIV/imx681-front-abf-v1.bin" "$D/firmware/qcom/sp11/"
-install -m 644 "$HERE/../front-ae/tuning/imx681-front-v14.yaml" "$D/tuning/imx681-front.yaml"
+install -m 644 "$HERE/../front-ae/tuning/imx681-front-v15.yaml" "$D/tuning/imx681-front.yaml"
 python3 -c "import json;j=json.load(open('$P/02-kernel/front-ae-93/run-93.json'));print(' '.join(j['camss_params']+['native_rear_generation_trial=1']))" > "$D/camss-params.txt"
 install -m 755 "$HERE/setup-daily2.py" "$D/setup.py"
 install -m 755 "$B/sp11-webcam" "$D/sp11-webcam"

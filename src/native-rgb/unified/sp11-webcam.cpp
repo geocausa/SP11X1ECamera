@@ -12,7 +12,8 @@
  *
  * The optional look file (fit-look.py, measured against a same-scene Windows
  * capture) sets the output rendering: a luma tone table, chroma gain and
- * neutral offset, a cored unsharp mask and a motion-adaptive temporal filter.
+ * neutral offset, a cored unsharp mask and a motion-adaptive temporal filter,
+ * plus edge-preserving luma/chroma noise reduction and a local tone mapper.
  * With "af 1" (rear camera) the bridge also drives the lens: see Focus.
  */
 #include <algorithm>
@@ -72,8 +73,15 @@ void dmaSync(int fd, bool start)
 struct Look {
 	uint8_t lut[256];
 	float chromaGain = 1.0f, uOffset = 0.0f, vOffset = 0.0f;
+	float uGain = 1.0f, vGain = 1.0f; /* per-axis chroma gain on top of chromaGain */
 	float sharpen = 0.0f, sharpenCore = 2.0f;
 	float tnrStrength = 0.0f, tnrThreshold = 12.0f;
+	float lumaNr = 0.0f;     /* half-scale sigma filter threshold, codes; 0 = off */
+	float lumaCore = 0.0f;   /* full-scale detail coring, codes */
+	float chromaNr = 0.0f;   /* quarter-scale luma-guided chroma filter edge threshold; 0 = off */
+	float ltm = 0.0f;        /* local tone mapping strength; 0 = off */
+	float ltmPivot = 110.0f; /* local level left unchanged */
+	float ltmMaxGain = 2.5f, ltmMinGain = 0.85f;
 	bool af = false;
 	int afMin = 380, afMax = 900, afStart = 520;
 	Look()
@@ -101,6 +109,10 @@ struct Look {
 				}
 			} else if (key == "chroma_gain") {
 				s >> chromaGain;
+			} else if (key == "u_gain") {
+				s >> uGain;
+			} else if (key == "v_gain") {
+				s >> vGain;
 			} else if (key == "u_offset") {
 				s >> uOffset;
 			} else if (key == "v_offset") {
@@ -113,6 +125,20 @@ struct Look {
 				s >> tnrStrength;
 			} else if (key == "tnr_threshold") {
 				s >> tnrThreshold;
+			} else if (key == "luma_nr") {
+				s >> lumaNr;
+			} else if (key == "luma_core") {
+				s >> lumaCore;
+			} else if (key == "chroma_nr") {
+				s >> chromaNr;
+			} else if (key == "ltm") {
+				s >> ltm;
+			} else if (key == "ltm_pivot") {
+				s >> ltmPivot;
+			} else if (key == "ltm_max_gain") {
+				s >> ltmMaxGain;
+			} else if (key == "ltm_min_gain") {
+				s >> ltmMinGain;
 			} else if (key == "af") {
 				int v = 0;
 				s >> v;
@@ -126,9 +152,18 @@ struct Look {
 			}
 		}
 		chromaGain = std::clamp(chromaGain, 0.0f, 3.0f);
+		uGain = std::clamp(uGain, 0.5f, 2.0f);
+		vGain = std::clamp(vGain, 0.5f, 2.0f);
 		sharpen = std::clamp(sharpen, 0.0f, 4.0f);
 		tnrStrength = std::clamp(tnrStrength, 0.0f, 0.9f);
 		tnrThreshold = std::clamp(tnrThreshold, 1.0f, 64.0f);
+		lumaNr = std::clamp(lumaNr, 0.0f, 32.0f);
+		lumaCore = std::clamp(lumaCore, 0.0f, 16.0f);
+		chromaNr = std::clamp(chromaNr, 0.0f, 128.0f);
+		ltm = std::clamp(ltm, 0.0f, 1.0f);
+		ltmPivot = std::clamp(ltmPivot, 16.0f, 240.0f);
+		ltmMaxGain = std::clamp(ltmMaxGain, 1.0f, 4.0f);
+		ltmMinGain = std::clamp(ltmMinGain, 0.25f, 1.0f);
 		afMin = std::clamp(afMin, 0, 1023);
 		afMax = std::clamp(afMax, afMin, 1023);
 		afStart = std::clamp(afStart, afMin, afMax);
@@ -175,6 +210,21 @@ public:
 		prevY_.assign(size_t(OW) * OH, 0);
 		prevU_.assign(size_t(OW / 2) * OH, 0);
 		prevV_.assign(size_t(OW / 2) * OH, 0);
+		y2_.assign(size_t(OW) * OH, 0);
+		yh_.assign(size_t(HW) * HH, 0);
+		yhs_.assign(size_t(HW) * HH, 0);
+		for (auto *q : { &qu_, &qv_, &qum_, &qvm_, &qus_, &qvs_ })
+			q->assign(size_t(QW) * HH, 128);
+		u2_.assign(size_t(OW / 2) * OH, 128);
+		v2_.assign(size_t(OW / 2) * OH, 128);
+		grid_.assign(size_t(GW) * GH, 0.0f);
+		gain_.assign(size_t(GW) * GH, 256);
+		for (int d = 0; d < 256; d++) {
+			const float T = std::max(look.chromaNr, 1.0f);
+			cw_[d] = int(std::lround(16.0f * std::max(0.0f, 1.0f - float(d) / T)));
+		}
+		for (int n = 1; n < 26; n++)
+			rec_[n] = 65536 / n;
 		primed_ = false;
 		for (unsigned d = 0; d < 256; d++) {
 			float w = look.tnrStrength * std::max(0.0f, 1.0f - float(d) / look.tnrThreshold);
@@ -188,8 +238,8 @@ public:
 			sharp_[d + 255] = int(std::lround(look.sharpen * (d < 0 ? -c : c)));
 		}
 		for (int c = 0; c < 256; c++) {
-			cu_[c] = uint8_t(std::clamp(int(std::lround(128 + look.chromaGain * (c - 128) + look.uOffset)), 0, 255));
-			cv_[c] = uint8_t(std::clamp(int(std::lround(128 + look.chromaGain * (c - 128) + look.vOffset)), 0, 255));
+			cu_[c] = uint8_t(std::clamp(int(std::lround(128 + look.chromaGain * look.uGain * (c - 128) + look.uOffset)), 0, 255));
+			cv_[c] = uint8_t(std::clamp(int(std::lround(128 + look.chromaGain * look.vGain * (c - 128) + look.vOffset)), 0, 255));
 		}
 	}
 
@@ -198,10 +248,39 @@ public:
 		const bool temporal = primed_ && look_.tnrStrength > 0.0f;
 		bands([&](unsigned r0, unsigned r1) { pass1(y, uv, r0, r1, temporal); });
 		primed_ = true;
+		Yp_ = y_.data();
+		Up_ = u_.data();
+		Vp_ = v_.data();
+		if (look_.lumaNr > 0.0f || look_.chromaNr > 0.0f) {
+			bandsN(HH, [&](unsigned r0, unsigned r1) { down(r0, r1); });
+			bandsN(HH, [&](unsigned r0, unsigned r1) { lowFilter(r0, r1); });
+			if (look_.chromaNr > 0.0f)
+				bandsN(HH, [&](unsigned r0, unsigned r1) { chromaGuided(r0, r1); });
+			bands([&](unsigned r0, unsigned r1) { rebuild(r0, r1); });
+			if (look_.lumaNr > 0.0f)
+				Yp_ = y2_.data();
+			if (look_.chromaNr > 0.0f) {
+				Up_ = u2_.data();
+				Vp_ = v2_.data();
+			}
+		}
+		if (look_.ltm > 0.0f)
+			localTone();
 		bands([&](unsigned r0, unsigned r1) { pass2(out, r0, r1); });
 	}
 
 private:
+	template<typename F>
+	void bandsN(unsigned rows, F fn)
+	{
+		constexpr unsigned N = 4;
+		std::thread t[N - 1];
+		for (unsigned b = 1; b < N; b++)
+			t[b - 1] = std::thread(fn, rows * b / N, rows * (b + 1) / N);
+		fn(0, rows / N);
+		for (auto &th : t)
+			th.join();
+	}
 	template<typename F>
 	void bands(F fn)
 	{
@@ -268,14 +347,220 @@ private:
 		}
 	}
 
+
+	static inline void sort2(int &a, int &b)
+	{
+		if (a > b)
+			std::swap(a, b);
+	}
+	static inline int median9(int p[9])
+	{
+		sort2(p[1], p[2]); sort2(p[4], p[5]); sort2(p[7], p[8]);
+		sort2(p[0], p[1]); sort2(p[3], p[4]); sort2(p[6], p[7]);
+		sort2(p[1], p[2]); sort2(p[4], p[5]); sort2(p[7], p[8]);
+		sort2(p[0], p[3]); sort2(p[5], p[8]); sort2(p[4], p[7]);
+		sort2(p[3], p[6]); sort2(p[1], p[4]); sort2(p[2], p[5]);
+		sort2(p[4], p[7]); sort2(p[4], p[2]); sort2(p[6], p[4]);
+		sort2(p[4], p[2]);
+		return p[4];
+	}
+	/*
+	 * Two-scale noise reduction. Half scale (960x540): luma 2x2 means, then a
+	 * 5x5 sigma filter (mean of neighbours within +-lumaNr) removes the blotchy
+	 * low-frequency noise while keeping edges. Chroma goes to quarter scale
+	 * (480x540 per plane), a 3x3 median removes colour speckles and a 5x5
+	 * luma-guided mean smooths what is left without bleeding across edges.
+	 * Full scale: luma = filtered half scale + cored fine detail; chroma is the
+	 * filtered quarter scale, interpolated back.
+	 */
+	void down(unsigned r0, unsigned r1)
+	{
+		for (unsigned r = r0; r < r1; r++) {
+			const uint8_t *a = &y_[size_t(2 * r) * OW], *b = a + OW;
+			uint8_t *o = &yh_[size_t(r) * HW];
+			for (unsigned x = 0; x < HW; x++)
+				o[x] = uint8_t((a[2 * x] + a[2 * x + 1] + b[2 * x] + b[2 * x + 1] + 2) >> 2);
+			const uint8_t *ua = &u_[size_t(2 * r) * CW], *ub = ua + CW;
+			const uint8_t *va = &v_[size_t(2 * r) * CW], *vb = va + CW;
+			uint8_t *ou = &qu_[size_t(r) * QW], *ov = &qv_[size_t(r) * QW];
+			for (unsigned x = 0; x < QW; x++) {
+				ou[x] = uint8_t((ua[2 * x] + ua[2 * x + 1] + ub[2 * x] + ub[2 * x + 1] + 2) >> 2);
+				ov[x] = uint8_t((va[2 * x] + va[2 * x + 1] + vb[2 * x] + vb[2 * x + 1] + 2) >> 2);
+			}
+		}
+	}
+	void lowFilter(unsigned r0, unsigned r1)
+	{
+		const int T = std::max(1, int(look_.lumaNr));
+		for (unsigned r = r0; r < r1; r++) {
+			int rows[5];
+			for (int k = 0; k < 5; k++)
+				rows[k] = std::clamp(int(r) + k - 2, 0, int(HH) - 1);
+			uint8_t *o = &yhs_[size_t(r) * HW];
+			for (int x = 0; x < int(HW); x++) {
+				const int c = yh_[size_t(r) * HW + x];
+				int s = 0, n = 0;
+				for (int ky = 0; ky < 5; ky++) {
+					const uint8_t *q = &yh_[size_t(rows[ky]) * HW];
+					for (int kx = -2; kx <= 2; kx++) {
+						const int v = q[std::clamp(x + kx, 0, int(HW) - 1)];
+						if (std::abs(v - c) <= T) {
+							s += v;
+							n++;
+						}
+					}
+				}
+				o[x] = uint8_t((s * rec_[n] + 32768) >> 16);
+			}
+			if (look_.chromaNr <= 0.0f)
+				continue;
+			const size_t ra = size_t(r ? r - 1 : r) * QW, rm = size_t(r) * QW,
+				     rb = size_t(r + 1 < HH ? r + 1 : r) * QW;
+			for (unsigned pl = 0; pl < 2; pl++) {
+				const uint8_t *sp = pl ? qv_.data() : qu_.data();
+				uint8_t *om = pl ? &qvm_[rm] : &qum_[rm];
+				for (unsigned x = 0; x < QW; x++) {
+					const unsigned xl = x ? x - 1 : x, xr = x + 1 < QW ? x + 1 : x;
+					int pp[9] = { sp[ra + xl], sp[ra + x], sp[ra + xr], sp[rm + xl], sp[rm + x],
+						      sp[rm + xr], sp[rb + xl], sp[rb + x], sp[rb + xr] };
+					om[x] = uint8_t(median9(pp));
+				}
+			}
+		}
+	}
+	void chromaGuided(unsigned r0, unsigned r1)
+	{
+		for (unsigned r = r0; r < r1; r++) {
+			int rows[5];
+			for (int k = 0; k < 5; k++)
+				rows[k] = std::clamp(int(r) + k - 2, 0, int(HH) - 1);
+			for (int x = 0; x < int(QW); x++) {
+				const int yc = yh_[size_t(r) * HW + 2 * x];
+				int su = 0, sv = 0, sw = 0;
+				for (int ky = 0; ky < 5; ky++) {
+					const size_t cr = size_t(rows[ky]) * QW, yr = size_t(rows[ky]) * HW;
+					for (int kx = -2; kx <= 2; kx++) {
+						const int xx = std::clamp(x + kx, 0, int(QW) - 1);
+						const int w = cw_[std::abs(int(yh_[yr + 2 * xx]) - yc)];
+						su += w * qum_[cr + xx];
+						sv += w * qvm_[cr + xx];
+						sw += w;
+					}
+				}
+				const size_t o = size_t(r) * QW + x;
+				qus_[o] = sw ? uint8_t((su + sw / 2) / sw) : qum_[o];
+				qvs_[o] = sw ? uint8_t((sv + sw / 2) / sw) : qvm_[o];
+			}
+		}
+	}
+	/* 2x bilinear interpolation weights: output i -> source i0/i1, weights /4. */
+	static inline void up2(int i, int n, int &i0, int &i1, int &w0, int &w1)
+	{
+		const int k = i >> 1;
+		if (i & 1) {
+			i0 = k; i1 = k + 1; w0 = 3; w1 = 1;
+		} else {
+			i0 = k - 1; i1 = k; w0 = 1; w1 = 3;
+		}
+		i0 = std::clamp(i0, 0, n - 1);
+		i1 = std::clamp(i1, 0, n - 1);
+	}
+	void rebuild(unsigned r0, unsigned r1)
+	{
+		const int core = int(look_.lumaCore);
+		const bool luma = look_.lumaNr > 0.0f, chroma = look_.chromaNr > 0.0f;
+		for (unsigned r = r0; r < r1; r++) {
+			int a0, a1, b0, b1;
+			up2(int(r), int(HH), a0, a1, b0, b1);
+			if (luma) {
+				const uint8_t *m = &y_[size_t(r) * OW];
+				const uint8_t *h0 = &yh_[size_t(a0) * HW], *h1 = &yh_[size_t(a1) * HW];
+				const uint8_t *s0 = &yhs_[size_t(a0) * HW], *s1 = &yhs_[size_t(a1) * HW];
+				uint8_t *o = &y2_[size_t(r) * OW];
+				for (int x = 0; x < int(OW); x++) {
+					int c0, c1, d0, d1;
+					up2(x, int(HW), c0, c1, d0, d1);
+					const int low = (b0 * (d0 * h0[c0] + d1 * h0[c1]) + b1 * (d0 * h1[c0] + d1 * h1[c1]) + 8) >> 4;
+					const int lows = (b0 * (d0 * s0[c0] + d1 * s0[c1]) + b1 * (d0 * s1[c0] + d1 * s1[c1]) + 8) >> 4;
+					int det = m[x] - low;
+					det = det > core ? det - core : det < -core ? det + core : 0;
+					o[x] = uint8_t(std::clamp(lows + det, 0, 255));
+				}
+			}
+			if (chroma) {
+				const uint8_t *u0 = &qus_[size_t(a0) * QW], *u1 = &qus_[size_t(a1) * QW];
+				const uint8_t *v0 = &qvs_[size_t(a0) * QW], *v1 = &qvs_[size_t(a1) * QW];
+				uint8_t *ou = &u2_[size_t(r) * CW], *ov = &v2_[size_t(r) * CW];
+				for (int x = 0; x < int(CW); x++) {
+					int c0, c1, d0, d1;
+					up2(x, int(QW), c0, c1, d0, d1);
+					ou[x] = uint8_t((b0 * (d0 * u0[c0] + d1 * u0[c1]) + b1 * (d0 * u1[c0] + d1 * u1[c1]) + 8) >> 4);
+					ov[x] = uint8_t((b0 * (d0 * v0[c0] + d1 * v0[c1]) + b1 * (d0 * v1[c0] + d1 * v1[c1]) + 8) >> 4);
+				}
+			}
+		}
+	}
+	/*
+	 * Local tone mapping: the local level (8x8 block means, blurred over about
+	 * 1/10 of the frame) sets a gain pivoting at ltmPivot: darker areas are
+	 * lifted, brighter ones compressed, so a bright window and a dim room both
+	 * keep detail. Gains are interpolated per pixel in pass2.
+	 */
+	void localTone()
+	{
+		const uint8_t *Y = Yp_;
+		for (unsigned gy = 0; gy < GH; gy++)
+			for (unsigned gx = 0; gx < GW; gx++) {
+				unsigned s = 0;
+				for (unsigned r = gy * 8; r < gy * 8 + 8; r += 2) {
+					const uint8_t *q = Y + size_t(r) * OW + gx * 8;
+					s += q[0] + q[2] + q[4] + q[6];
+				}
+				grid_[gy * GW + gx] = s / 16.0f;
+			}
+		/* separable box blur, radius 6 cells, twice */
+		std::vector<float> tmp(grid_.size());
+		for (int pass = 0; pass < 2; pass++) {
+			for (unsigned gy = 0; gy < GH; gy++)
+				for (int gx = 0; gx < int(GW); gx++) {
+					float s = 0;
+					for (int k = -6; k <= 6; k++)
+						s += grid_[gy * GW + std::clamp(gx + k, 0, int(GW) - 1)];
+					tmp[gy * GW + gx] = s / 13.0f;
+				}
+			for (int gy = 0; gy < int(GH); gy++)
+				for (unsigned gx = 0; gx < GW; gx++) {
+					float s = 0;
+					for (int k = -6; k <= 6; k++)
+						s += tmp[std::clamp(gy + k, 0, int(GH) - 1) * GW + gx];
+					grid_[gy * GW + gx] = s / 13.0f;
+				}
+		}
+		const float piv = look_.ltmPivot + 8.0f;
+		for (size_t i = 0; i < grid_.size(); i++) {
+			const float g = std::pow((grid_[i] + 8.0f) / piv, -look_.ltm);
+			gain_[i] = int(std::lround(256.0f * std::clamp(g, look_.ltmMinGain, look_.ltmMaxGain)));
+		}
+	}
+	int gainAt(unsigned x, unsigned r) const
+	{
+		const float fx = std::clamp((float(x) - 3.5f) / 8.0f, 0.0f, float(GW - 1));
+		const float fy = std::clamp((float(r) - 3.5f) / 8.0f, 0.0f, float(GH - 1));
+		const unsigned x0 = std::min(unsigned(fx), GW - 2), y0 = std::min(unsigned(fy), GH - 2);
+		const float ax = fx - x0, ay = fy - y0;
+		const int *g = &gain_[y0 * GW + x0];
+		return int((g[0] * (1 - ax) + g[1] * ax) * (1 - ay) + (g[GW] * (1 - ax) + g[GW + 1] * ax) * ay);
+	}
+
 	void pass2(uint8_t *out, unsigned r0, unsigned r1) const
 	{
 		const bool sharpen = look_.sharpen > 0.0f;
 		for (unsigned r = r0; r < r1; r++) {
-			const uint8_t *m = &y_[size_t(r) * OW];
+			const uint8_t *m = &Yp_[size_t(r) * OW];
 			const uint8_t *a = r ? m - OW : m, *b = r + 1 < OH ? m + OW : m;
-			const uint8_t *u = &u_[size_t(r) * (OW / 2)], *v = &v_[size_t(r) * (OW / 2)];
+			const uint8_t *u = &Up_[size_t(r) * (OW / 2)], *v = &Vp_[size_t(r) * (OW / 2)];
 			uint8_t *o = out + size_t(r) * OW * 2;
+			const bool tone = look_.ltm > 0.0f;
 			for (unsigned x = 0; x < OW; x++) {
 				int val = m[x];
 				if (sharpen && x > 0 && x + 1 < OW) {
@@ -284,17 +569,40 @@ private:
 					const int blur = (sum * 7282 + 32768) >> 16; /* /9 */
 					val = std::clamp(val + sharp_[val - blur + 255], 0, 255);
 				}
+				if (tone) {
+					const int g = gainAt(x, r);
+					/* lift fades out towards white so whites stay white */
+					if (g > 256)
+						val += (((val * (g - 256)) >> 8) * (255 - val)) / 255;
+					else
+						val = (val * g + 128) >> 8;
+				}
 				o[2 * x] = uint8_t(val);
 			}
 			for (unsigned x = 0; x < OW / 2; x++) {
-				o[4 * x + 1] = u[x];
-				o[4 * x + 3] = v[x];
+				int cu = u[x], cv = v[x];
+				if (tone) {
+					/* keep saturation roughly with the luma gain */
+					const int g = gainAt(2 * x, r);
+					const int gc = int(std::sqrt(float(g) * 256.0f));
+					cu = std::clamp(128 + (((cu - 128) * gc) >> 8), 0, 255);
+					cv = std::clamp(128 + (((cv - 128) * gc) >> 8), 0, 255);
+				}
+				o[4 * x + 1] = uint8_t(cu);
+				o[4 * x + 3] = uint8_t(cv);
 			}
 		}
 	}
 
+	static constexpr unsigned GW = OW / 8, GH = OH / 8;
+	static constexpr unsigned CW = OW / 2, HW = OW / 2, HH = OH / 2, QW = OW / 4;
 	unsigned ys_ = 0;
 	Axis yx_, yy_, cx_, cy_;
+	std::vector<uint8_t> y2_, u2_, v2_, yh_, yhs_, qu_, qv_, qum_, qvm_, qus_, qvs_;
+	const uint8_t *Yp_ = nullptr, *Up_ = nullptr, *Vp_ = nullptr;
+	std::vector<float> grid_;
+	std::vector<int> gain_;
+	int cw_[256] = {}, rec_[26] = {};
 	Look look_;
 	std::vector<uint8_t> y_, u_, v_;
 	std::vector<uint16_t> prevY_, prevU_, prevV_;
@@ -420,10 +728,14 @@ public:
 				sweep(min_, max_, 48);
 			break;
 		case Sweep:
-			if (++wait_ < kSettleFrames)
+			if (++wait_ < kSettleFrames - 1)
+				break;
+			acc_ += m;
+			if (wait_ < kSettleFrames)
 				break;
 			wait_ = 0;
-			scores_.push_back({ pos_, m });
+			scores_.push_back({ pos_, acc_ / 2.0 });
+			acc_ = 0.0;
 			if (next_ < plan_.size()) {
 				move(plan_[next_++]);
 				break;
@@ -494,19 +806,34 @@ private:
 		if (fd_ >= 0 && write(fd_, b, 3) == 3)
 			pos_ = p;
 	}
-	/* Normalised gradient energy of the centre half, every 4th row. */
+	/*
+	 * Focus measure: 4x4 block means over the centre half of the native frame,
+	 * summed absolute differences between neighbouring blocks (both axes),
+	 * normalised by the mean level. Block means suppress sensor noise, which
+	 * otherwise dominates pixel-level gradients at 4K and hides the peak.
+	 */
 	static double metric(const uint8_t *y, unsigned w, unsigned h, unsigned stride, double *mean)
 	{
-		uint64_t g = 0, s = 0, n = 0;
-		for (unsigned r = h / 4; r < 3 * h / 4; r += 4) {
-			const uint8_t *row = y + size_t(r) * stride;
-			for (unsigned x = w / 4; x < 3 * w / 4; x++) {
-				g += unsigned(std::abs(int(row[x + 1]) - int(row[x])));
-				s += row[x];
+		const unsigned x0 = w / 4, nb = (w / 2) / 4, y0 = h / 4, nr = (h / 2) / 4;
+		std::vector<uint32_t> cur(nb), prev(nb);
+		uint64_t g = 0, s = 0;
+		for (unsigned j = 0; j < nr; j++) {
+			std::fill(cur.begin(), cur.end(), 0u);
+			for (unsigned k = 0; k < 4; k++) {
+				const uint8_t *row = y + size_t(y0 + 4 * j + k) * stride + x0;
+				for (unsigned i = 0; i < nb; i++)
+					cur[i] += row[4 * i] + row[4 * i + 1] + row[4 * i + 2] + row[4 * i + 3];
 			}
-			n += w / 2;
+			for (unsigned i = 0; i < nb; i++) {
+				s += cur[i];
+				if (i)
+					g += unsigned(std::abs(int(cur[i]) - int(cur[i - 1])));
+				if (j)
+					g += unsigned(std::abs(int(cur[i]) - int(prev[i])));
+			}
+			std::swap(cur, prev);
 		}
-		*mean = n ? double(s) / n : 0.0;
+		*mean = nb && nr ? double(s) / (16.0 * nb * nr) : 0.0;
 		return s ? double(g) / double(s) : 0.0;
 	}
 	void sweep(int lo, int hi, int step)
@@ -518,6 +845,7 @@ private:
 		fine_ = step < 48;
 		next_ = 1;
 		wait_ = 0;
+		acc_ = 0.0;
 		move(plan_[0]);
 		state_ = Sweep;
 	}
@@ -592,7 +920,7 @@ private:
 	size_t next_ = 0;
 	std::vector<int> plan_;
 	std::vector<std::pair<int, double>> scores_;
-	double ref_ = 0, refMean_ = 0, lastMetric_ = 0, lastMean_ = 0;
+	double ref_ = 0, refMean_ = 0, lastMetric_ = 0, lastMean_ = 0, acc_ = 0;
 };
 
 class Bridge

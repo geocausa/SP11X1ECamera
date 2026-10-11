@@ -279,7 +279,7 @@ public:
 				red = float(meter.r);
 				blue = float(meter.b);
 				if (awbEnabled_)
-					updateAwb(meter, luma);
+					updateAwb(meter, luma, grid);
 				if (toneEnabled_ && outputTarget_ > 0.0)
 					updateTone(luma, exposure, analogue, digital);
 				if (exposure >= kMinExposure && analogue >= 0 &&
@@ -331,19 +331,79 @@ private:
 		*d = std::clamp<int32_t>(std::lround(dg * 256.0), 256, std::lround(aeMaxDigital_ * 256.0));
 	}
 
-	/* Smoothed log gains for red and blue relative to the calibrated LUTs. */
-	void updateAwb(const FrontAec::Meter &m, double luma)
+	/*
+	 * Smoothed log gains for red and blue relative to the calibrated LUTs.
+	 * Grey world over the 32x32 metering regions, each weighted by how close
+	 * to neutral it already is under the current gains (Gaussian, sigma 0.2
+	 * in log ratio), so large coloured areas (orange blinds, a red sofa) do not
+	 * tint the whites. The brightest 2 % of regions (possible clipping) are
+	 * left out. Without enough near-neutral regions the whole-frame means
+	 * are used, as before.
+	 */
+	void updateAwb(const FrontAec::Meter &m, double luma, const uint8_t *grid)
 	{
+		const double lim = std::log(2.0);
+		double tr = 0.0, tb = 0.0;
+		if (regionAwb(grid, &tr, &tb)) {
+			tr = std::clamp(tr, -lim, lim);
+			tb = std::clamp(tb, -lim, lim);
+			logGain_[0] += awbSpeed_ * (tr - logGain_[0]);
+			logGain_[1] += awbSpeed_ * (tb - logGain_[1]);
+			return;
+		}
 		const double g = luma - awbBlack_;
 		if (g < awbMinLevel_)
 			return;
 		const double rg = std::max(m.r - awbBlack_, 1.0) / g;
 		const double bg = std::max(m.b - awbBlack_, 1.0) / g;
-		const double lim = std::log(2.0);
-		const double tr = std::clamp(std::log(awbRefRg_ / rg) * awbStrength_, -lim, lim);
-		const double tb = std::clamp(std::log(awbRefBg_ / bg) * awbStrength_, -lim, lim);
+		tr = std::clamp(std::log(awbRefRg_ / rg) * awbStrength_, -lim, lim);
+		tb = std::clamp(std::log(awbRefBg_ / bg) * awbStrength_, -lim, lim);
 		logGain_[0] += awbSpeed_ * (tr - logGain_[0]);
 		logGain_[1] += awbSpeed_ * (tb - logGain_[1]);
+	}
+
+	bool regionAwb(const uint8_t *grid, double *tr, double *tb) const
+	{
+		std::array<double, FrontAec::kRegions> g, lr, lb;
+		const double ref0 = std::log(awbRefRg_), ref1 = std::log(awbRefBg_);
+		size_t n = 0;
+		for (size_t i = 0; i < FrontAec::kRegions; i++) {
+			const uint8_t *p = grid + i * FrontAec::kStride;
+			const double k = double(FrontAec::kSamples);
+			const double r = double(FrontAec::le64(p) & FrontAec::kSumMask) / k - awbBlack_;
+			const double gg = (double(FrontAec::le64(p + 8) & FrontAec::kSumMask) +
+					   double(FrontAec::le64(p + 16) & FrontAec::kSumMask)) / (2.0 * k) - awbBlack_;
+			const double b = double(FrontAec::le64(p + 24) & FrontAec::kSumMask) / k - awbBlack_;
+			g[i] = gg;
+			if (gg < awbMinLevel_)
+				continue;
+			/* residual log ratios after the current correction */
+			lr[i] = std::log(std::max(r, 1.0) / gg) + logGain_[0] - ref0;
+			lb[i] = std::log(std::max(b, 1.0) / gg) + logGain_[1] - ref1;
+			n++;
+		}
+		if (n < FrontAec::kRegions / 10)
+			return false;
+		std::array<double, FrontAec::kRegions> sorted = g;
+		std::sort(sorted.begin(), sorted.end());
+		const double hi = sorted[size_t(0.98 * (sorted.size() - 1))];
+		double sr = 0, sb = 0, sw = 0, sg = 0;
+		for (size_t i = 0; i < FrontAec::kRegions; i++) {
+			if (g[i] < awbMinLevel_ || g[i] > hi)
+				continue;
+			const double d2 = lr[i] * lr[i] + lb[i] * lb[i];
+			const double w = g[i] * std::exp(-d2 / (2.0 * 0.2 * 0.2));
+			sr += w * lr[i];
+			sb += w * lb[i];
+			sw += w;
+			sg += g[i];
+		}
+		/* need at least ~5 % of the frame's signal in near-neutral regions */
+		if (!(sg > 0.0) || sw < 0.05 * sg)
+			return false;
+		*tr = logGain_[0] - awbStrength_ * sr / sw;
+		*tb = logGain_[1] - awbStrength_ * sb / sw;
+		return true;
 	}
 
 	static double sample(const uint16_t *lut, double x)
