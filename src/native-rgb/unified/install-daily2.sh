@@ -70,7 +70,8 @@ for cam in front:sp11-front-imx681:camss-x1e:/dev/video50 rear:sp11-rear-ov13858
   extra=""
   [ "$name" = front ] && extra="Environment=LIBCAMERA_CAMSS_X1E_TUNING_FILE=$D/tuning/imx681-front.yaml"
   # both bridges enumerate the same media device: let the front one go first
-  [ "$name" = rear ] && extra="Environment=SP11_WEBCAM_LOOKUP_DELAY=4"
+  # rear: lower AE target (greys within ~8 codes of Windows on the chart)
+  [ "$name" = rear ] && extra="Environment=SP11_WEBCAM_LOOKUP_DELAY=4 SP11_REAR_AE_TARGET=15500"
   # rendering measured against Windows (fit-look.py); identity when absent
   lookarg=""
   if [ -f "$HERE/looks/look-$name.look" ]; then
