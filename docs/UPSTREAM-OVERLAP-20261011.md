@@ -1,3 +1,16 @@
+## Complete posted source recovered later on 2026-10-11
+
+The earlier partial-download limitation below is superseded by
+UPSTREAM-IFE-RFC-REFERENCE-20261011.json and
+UPSTREAM-VFE680-INTEGRATION-20261011.md: all74 patches are source-replayed on
+the declared base with325 matching Git blob checks. Original failed/partial
+archives remain. One mirror-redacted unchanged context line was restored from
+the pinned base in a separate normalized patch; raw mail headers remain
+obfuscated. A separate VFE680 author WIP branch is pinned independently, not
+misidentified as this RFC. No full-tree compile or SP11 hardware proof yet.
+Next implement the mapped VFE680 backend/provider and prepare its isolated build.
+The proposals/review and all existing readiness limits below remain applicable.
+
 # Upstream overlap checked on 2026-10-11
 
 This replaces the earlier unverified current-upstream-overlap placeholder.

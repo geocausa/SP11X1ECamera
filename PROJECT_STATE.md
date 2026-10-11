@@ -1,3 +1,29 @@
+## 2026-10-11 complete IFE reference pinned; VFE680 integration mapped
+
+Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
+Posted Oct5 RFC all74 patches recovered, original mirrors retained. Normalized
+replay on declared base8d3ae592 passes325 before/after Git blob checks,369 pinned
+files. One unchanged MODULE_AUTHOR context email redaction restored from pinned
+base in patch8; original failed application retained. This proves source identity/
+application only, not raw author headers, full kernel tree/build or acceptance.
+Separate author WIP8fba1208 has11 public-source files/tree blobs pinned; diverged
+from RFC. Its VFE680 ops still RDI-only, no complete PIX/params/stats provider.
+All130 owned addresses have public VFE680 register names; no bit-semantic/
+hardware/provenance clearance implied. Coverage remains130/270,656-byte fragments.
+Read docs/UPSTREAM-VFE680-INTEGRATION-20261011.md for output descriptors, metadata
+copy/validation/IRQ constraints, independent frame counters, stop/reset/DMA gaps.
+Verifier replay plus9 real fail-closed tests PASS. Evidence
+docs/UPSTREAM-IFE-BASELINE-VALIDATION-20261011.json; full pins
+docs/UPSTREAM-IFE-RFC-REFERENCE-20261011.json. Earlier partial downloads preserved.
+NEXT budget/prepare full-base isolated build source; implement VFE680 output-group/
+IPP/completion/physical stop ownership on existing CAMSS plus independent minimal
+startup/DMI and generic typed metadata. Compile and review before any fresh
+single-use hardware candidate, with both private consumers/fallbacks absent.
+Both private profiles still used in installed daily stack, all14 readiness
+components blocked. No private input/pixels read, capture/reboot/module/DT/runtime
+change. Golden/daily2/default and original5317d528/untracked evidence preserved.
+No maintainer mail sent. Earlier checkpoint paragraphs below are historical.
+
 ## 2026-10-11 CST/RS source proof and current upstream alignment
 
 Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.

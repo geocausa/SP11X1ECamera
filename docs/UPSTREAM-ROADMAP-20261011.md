@@ -1,13 +1,19 @@
 ## Current upstream alignment, checked 2026-10-11
 
-Read UPSTREAM-OVERLAP-20261011.md before choosing an ISP integration base.
-Fresh October5/6/7 proposals and review favour extending existing CAMSS/VFE.
-Pin/review the full current RFC/dependencies, then add SP11 VFE680 blocks,
-metadata/output grouping and lifetime changes on that structure. The new typed
-field compilers remain source tests, not a submission ABI or startup proof.
-Public VFE880 setup is a reference with hardware differences; no drop-in port.
-Current source coverage130fields/270occurrences, both runtime profiles remain.
-This updates the implementation order within W0/W1/W4, not their readiness gates.
+Read UPSTREAM-VFE680-INTEGRATION-20261011.md and UPSTREAM-OVERLAP-20261011.md.
+The posted Oct5 existing-CAMSS/VFE RFC is fully pinned and source-replayed:
+74 patches,325 matching before/after Git blob hashes; one explicit mirror
+context restoration from its pinned base. It is not a compiled full tree,
+settled ABI or accepted submission. A different author WIP branch is pinned
+separately; its VFE680 backend is still missing the needed PIX implementation.
+All130 typed-field addresses have public register names, but bit semantics,
+provenance and hardware qualification remain separate gates.
+NEXT prepare an isolated build on the declared full base, implement VFE680
+output groups/IPP/frame identity and physical DMA stop ownership, complete
+independent startup/DMI and generic metadata blocks, then compile/qualify.
+Source-only helpers remain field tests, not submission ABI or full startup.
+Current coverage130fields/270occurrences; both private runtime profiles remain.
+This updates W0/W1/W4 implementation order, not their readiness gates.
 
 # SP11 RGB camera upstream implementation plan
 

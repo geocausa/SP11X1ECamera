@@ -1,0 +1,118 @@
+{
+  "status": "PASS_PUBLIC_SOURCE_REPLAY_AND_INTEGRATION_REVIEW_NOT_KERNEL_OR_HARDWARE_QUALIFIED",
+  "created_utc": "2026-10-11T18:43:30.377767+00:00",
+  "source_baseline": "aa02d246dfd903bb01b4296dd44223b7a758ca68",
+  "posted_patches_replayed": 74,
+  "matching_git_blob_checks": 325,
+  "pinned_rfc_archive_files": 369,
+  "source_verifier_tests": 9,
+  "readiness_tests": 15,
+  "vfe680_branch_files_and_git_blobs": 11,
+  "public_named_field_addresses": 130,
+  "tests": [
+    {
+      "command": [
+        "python3",
+        "tools/verify-upstream-ife-reference.py",
+        "--archive",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-public-ife-20261011-05",
+        "--manifest",
+        "docs/UPSTREAM-IFE-RFC-REFERENCE-20261011.json",
+        "--replay"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": \"PASS_PUBLIC_SOURCE_IDENTITY\", \"pinned_files\": 369, \"patches_replayed\": 74, \"git_blob_checks\": 325, \"compiled\": false, \"hardware_qualified\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test-upstream-ife-reference.py",
+        "--archive",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-public-ife-20261011-05",
+        "--manifest",
+        "docs/UPSTREAM-IFE-RFC-REFERENCE-20261011.json"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_changed_patch_rejected (__main__.ReferenceTests.test_changed_patch_rejected) ... ok\ntest_complete_source_and_replay (__main__.ReferenceTests.test_complete_source_and_replay) ... ok\ntest_duplicate_pin_rejected (__main__.ReferenceTests.test_duplicate_pin_rejected) ... ok\ntest_incomplete_series_rejected (__main__.ReferenceTests.test_incomplete_series_rejected) ... ok\ntest_missing_patch_rejected (__main__.ReferenceTests.test_missing_patch_rejected) ... ok\ntest_path_escape_rejected (__main__.ReferenceTests.test_path_escape_rejected) ... ok\ntest_replay_blob_mismatch_rejected (__main__.ReferenceTests.test_replay_blob_mismatch_rejected) ... ok\ntest_symlink_rejected (__main__.ReferenceTests.test_symlink_rejected) ... ok\ntest_wrong_identity_rejected (__main__.ReferenceTests.test_wrong_identity_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 2.079s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test-upstream-readiness.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_changed_source_invalidates_evidence (__main__.GateTests.test_changed_source_invalidates_evidence) ... ok\ntest_duplicate_component (__main__.GateTests.test_duplicate_component) ... ok\ntest_empty_manifest_cannot_pass (__main__.GateTests.test_empty_manifest_cannot_pass) ... ok\ntest_hardware_opt_out_cannot_bypass_camera_qualification (__main__.GateTests.test_hardware_opt_out_cannot_bypass_camera_qualification) ... ok\ntest_malformed_identifier_and_version (__main__.GateTests.test_malformed_identifier_and_version) ... ok\ntest_missing_component (__main__.GateTests.test_missing_component) ... ok\ntest_missing_evidence (__main__.GateTests.test_missing_evidence) ... ok\ntest_no_hardware_evidence (__main__.GateTests.test_no_hardware_evidence) ... ok\ntest_paths_and_symlinks_rejected (__main__.GateTests.test_paths_and_symlinks_rejected) ... ok\ntest_private_runtime_dependency (__main__.GateTests.test_private_runtime_dependency) ... ok\ntest_submission_documentation_can_have_source_only_evidence (__main__.GateTests.test_submission_documentation_can_have_source_only_evidence) ... ok\ntest_unknown_provenance (__main__.GateTests.test_unknown_provenance) ... ok\ntest_unreviewed_trace_or_license (__main__.GateTests.test_unreviewed_trace_or_license) ... ok\ntest_valid_synthetic_gate (__main__.GateTests.test_valid_synthetic_gate) ... ok\ntest_wrong_component_evidence (__main__.GateTests.test_wrong_component_evidence) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.011s\n\nOK\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "tools/check-repo-hygiene.sh"
+      ],
+      "exit_code": 0,
+      "stdout": "repository hygiene: OK\n",
+      "stderr": ""
+    }
+  ],
+  "readiness_gate_exit_code": 1,
+  "readiness_gate": {
+    "upstream_ready": false,
+    "blockers": [
+      "front-startup: private-runtime-dependency",
+      "rear-startup: private-runtime-dependency",
+      "cphy: needs-upstream-rebase",
+      "camss-driver: experimental-driver-cleanup",
+      "params-stats-api: interface-design-required",
+      "imx681: sensor-review-required",
+      "ov13858: sensor-review-required",
+      "focus-driver: userspace-i2c-dependency",
+      "regulator-dt: standard-topology-hang-unresolved",
+      "libcamera-pipeline: pipeline-rewrite-required",
+      "ipa: ipa-review-required",
+      "image-processing: bridge-migration-and-calibration-required",
+      "validation: qualification-incomplete",
+      "submission-export: curated-series-required"
+    ]
+  },
+  "blocked_components": 14,
+  "source_sha256": {
+    "tools/verify-upstream-ife-reference.py": "6bee52177685f99b0456e20439f0994afbdee8a2c7a8d27a1edcd27e59c993ba",
+    "tools/test-upstream-ife-reference.py": "28280079be9616916f6d530a5423798c007448f73965546001c952cc75030e7a",
+    "docs/UPSTREAM-IFE-RFC-REFERENCE-20261011.json": "581d93459a821c879050269fe66eeb1f02581e7db4838a5cd550f9e19bf631e1",
+    "docs/UPSTREAM-VFE680-BRANCH-REFERENCE-20261011.json": "ccb92df664f55a2d4a2639ae811715a459c8f284cd70b9ae282e81398476af81",
+    "docs/UPSTREAM-VFE680-ADDRESS-COMPARISON-20261011.json": "64a8d8a0ad183500971d59463098d12f52a123c67c83794aecc2118a31e2b1c4",
+    "docs/UPSTREAM-VFE680-INTEGRATION-20261011.md": "bdc75f4399a06404d6ec4a2aad59125db648e50e629f718eb875b9cf955750da",
+    "docs/UPSTREAM-OVERLAP-20261011.md": "cf28ca93f43cad668a550e4b6b3a8ce67d978cdc204d199a0df310d9d6194423",
+    "docs/UPSTREAM-ROADMAP-20261011.md": "1787a88a0b5a8fb4503c102f4911e428025d81cff51a7c00bb3824ecc7ea1c14",
+    "docs/UPSTREAM-COMPONENTS-20261011.json": "e4d05a4b3beb69ce9a866126e279d6401b74896a38d7dc2c8c1390606c0380ac",
+    "state/upstream.json": "e4954b5399f25e5da2ab965865f2c5328273f7c5f460637e316c3838710be102",
+    "AGENTS.md": "58b0c0d630935126e6fdf0cf8c2e8243772967d9563535b2d483c54b09089fcd",
+    "CONTINUE.md": "e65adef27354de965d92fe01db2adc3293f96a4ff69b7b77219f26f83ad0dcae",
+    "PROJECT_STATE.md": "cbc335f25763ec4929efd395d6530d80c70e20549eb5cd1b2befdad0d0436ee2"
+  },
+  "reference_full_kernel_tree_retrieved": false,
+  "reference_kernel_compiled": false,
+  "reference_loaded": false,
+  "runtime_changed": false,
+  "hardware_qualified": false,
+  "private_profile_read": false,
+  "camera_pixels_read": false,
+  "complete_startup_profile": false,
+  "private_runtime_dependencies_removed": false,
+  "provenance_license_review_complete": false,
+  "maintainer_contacted": false,
+  "kernel_previous_compile_evidence": "docs/UPSTREAM-CST-STATS-KERNEL05-20261011.json",
+  "limits": "Prior fragment kernel compile is not an RFC tree/provider compile. All 14 readiness components remain blocked. Public field address matches do not prove numerical bit encoding or hardware semantics."
+}
