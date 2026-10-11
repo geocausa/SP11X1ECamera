@@ -112,3 +112,26 @@ of the frame/request sequence, as in other V4L2 ISP drivers.
 Sources: Heidelberg C-PHY CAMSS series (v5-v9); Qualcomm C-PHY
 series for sa8775p/sa8300 and O'Donoghue's review; O'Donoghue `phy: qcom-mipi-csi2` v15;
 linux-media review of CSIPHY Gen2 v1.2.2 tables (table sourcing from downstream trees).
+
+## Daylight comparison with Windows (2026-10-11)
+
+One Windows boot captured both cameras with OEM defaults (`windows-daylight/`):
+front 2560x1440 NV12 6+3 frames (the second front set, 75 s later, checks light
+drift: quantiles moved by under 1 code), rear 3840x2160 NV12 4 frames. Linux front
+run 93 (open profile, tuning v14, robust queue) ran 8 minutes later.
+`open-profile/compare-windows.py` gives illumination-robust scalars.
+
+Front, Linux auto vs Windows (same pose):
+- Brightness close (median 75 vs 81). AWB neutral on both (neutral U/V within 1 code).
+- Shadows: Linux floor lower (p1 8.8 vs 13.3, p10 19 vs 27; 7.8 % vs 3.2 % at or below 17).
+- Upper mids darker on Linux (p90 164 vs 189).
+- Temporal noise 2-4x higher on Linux in shadows and mids (e.g. 6.4 vs 1.6).
+- Windows is sharper (edge gradient p99 41.6 vs 27.1) and more saturated (chroma p95 41 vs 26).
+- Tone lift stays off in daylight (lux 3200, weight 0) as intended.
+
+Rear: Windows framing matches Linux exactly (no shift). The Linux rear stack has
+no AE yet and runs at 2.2 fps, so only geometry and colour neutrality compare.
+
+Next for front parity: noise reduction (temporal and spatial), sharpening,
+saturation and the shadow floor / upper-mid tone. Rear: robust queue, full frame
+rate and AE before any tuning.

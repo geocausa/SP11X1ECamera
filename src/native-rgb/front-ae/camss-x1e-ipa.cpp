@@ -113,6 +113,10 @@ public:
 				toneDarkLow_ = (*data)["tone_dark_low"].get<double>(0.05);
 				toneDarkHigh_ = (*data)["tone_dark_high"].get<double>(0.5);
 				toneSpeed_ = (*data)["tone_speed"].get<double>(0.05);
+				toneLuxDark_ = (*data)["tone_lux_dark"].get<double>(0.0);
+				toneLuxBright_ = (*data)["tone_lux_bright"].get<double>(0.0);
+				if (toneLuxBright_ > 0.0 && !(toneLuxDark_ > 0.0 && toneLuxBright_ > toneLuxDark_))
+					return -EINVAL;
 				if (!(toneShadowLo_ >= 0.0 && toneShadowHi_ > toneShadowLo_ && toneShadowHi_ <= 1023.0) ||
 				    !(toneDarkLow_ >= 0.0 && toneDarkHigh_ > toneDarkLow_ && toneDarkHigh_ <= 1.0) ||
 				    !(toneSpeed_ > 0.0 && toneSpeed_ <= 1.0))
@@ -277,7 +281,7 @@ public:
 				if (awbEnabled_)
 					updateAwb(meter, luma);
 				if (toneEnabled_ && outputTarget_ > 0.0)
-					updateTone();
+					updateTone(luma, exposure, analogue, digital);
 				if (exposure >= kMinExposure && analogue >= 0 &&
 				    analogue <= kMaxAnalogueCode && digital >= 256)
 					autoExposure(luma, exposure, analogue, digital,
@@ -355,7 +359,7 @@ private:
 	 * mapper): the weight follows the fraction of metering regions whose
 	 * displayed level lies in the shadow band, smoothed over frames.
 	 */
-	void updateTone()
+	void updateTone(double luma, int32_t exposure, int32_t analogue, int32_t digital)
 	{
 		size_t shadow = 0;
 		for (double g : green_) {
@@ -367,10 +371,20 @@ private:
 				shadow++;
 		}
 		const double fraction = double(shadow) / green_.size();
-		const double target = std::clamp((fraction - toneDarkLow_) / (toneDarkHigh_ - toneDarkLow_), 0.0, 1.0);
+		double target = std::clamp((fraction - toneDarkLow_) / (toneDarkHigh_ - toneDarkLow_), 0.0, 1.0);
+		/* Only dim scenes get the lift: full at or below toneLuxDark_, none at or
+		 * above toneLuxBright_ (same scene-light estimate as the AE target). */
+		double lux = -1.0;
+		if (toneLuxBright_ > toneLuxDark_ && exposure >= kMinExposure && analogue >= 0 &&
+		    analogue <= kMaxAnalogueCode && digital >= 256) {
+			const double current = exposure * analogueGain(analogue) * digital / 256.0;
+			lux = std::max(luma - meterBlack_, 1.0) * kMaxExposure / std::max(current, 1.0);
+			target *= std::clamp(std::log(toneLuxBright_ / lux) / std::log(toneLuxBright_ / toneLuxDark_),
+					     0.0, 1.0);
+		}
 		toneWeight_ += toneSpeed_ * (target - toneWeight_);
 		if (!(toneLogCount_++ % 30))
-			LOG(CamssX1EIpa, Debug) << "CAMSS_X1E_TONE fraction=" << fraction
+			LOG(CamssX1EIpa, Debug) << "CAMSS_X1E_TONE lux=" << lux << " fraction=" << fraction
 						 << " target=" << target << " weight=" << toneWeight_;
 	}
 
@@ -512,6 +526,7 @@ private:
 	double toneShadowLo_ = 48.0, toneShadowHi_ = 440.0;
 	double toneDarkLow_ = 0.05, toneDarkHigh_ = 0.5, toneSpeed_ = 0.05;
 	double toneWeight_ = 0.0, appliedToneWeight_ = 0.0;
+	double toneLuxDark_ = 0.0, toneLuxBright_ = 0.0;
 	unsigned int toneLogCount_ = 0;
 	std::array<double, FrontAec::kRegions> green_{};
 	double outputTarget_ = 0.0;
