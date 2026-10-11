@@ -3,8 +3,9 @@
 The complete October 5 posted 74-patch RFC has been recovered and replayed
 against its declared base, `8d3ae59288f1e7d58d76558a6ee96d533bc5019f`.
 All 325 before/after Git blob checks match the hashes in the patches. This is
-source identity and application proof. The reference was not compiled, loaded
-or tested on SP11, and it is not a merged or accepted interface.
+source identity and application proof. The unmodified full reference has now been compile-attempted and fails the
+strict build; the isolated four-patch candidate compiles. Neither was loaded or
+camera-tested on SP11, and this is not a merged or accepted interface.
 
 The archive is pinned by `UPSTREAM-IFE-RFC-REFERENCE-20261011.json`: 369
 files, covering the public HTML/mail bodies, original and normalized patches,
@@ -48,6 +49,20 @@ it does not establish bit fields, channel order, ISP domain, safe defaults,
 licensing clearance, frame timing or hardware behavior. Coverage remains
 130 fields / 270 historical scalar occurrences, not 130 new replacements.
 
+## First source series now built
+
+The full public base was prepared separately from the touched-file archive.
+Four own patches repair strict-build issues, pair completion-port release with
+its allocator while preserving VFE17x allocated-WM release, and convert VFE680
+RDI writes to output descriptors. Candidate03 compiles ARM64 CAMSS and generic
+ISP objects with W=1/-Werror. GCC/Clang regression covers688 production-body
+cases each with sanitizers. Four patches replay across8files. Baseline and
+candidate01 failures, and review-rejected candidate02, remain preserved.
+See ../src/upstream/camss/README.md and
+UPSTREAM-CAMSS-DESCRIPTORS-VALIDATION-20261011.json for reproduction and limits.
+VFE680 remains RDI-only; the complete PIX startup and physical stop ownership
+in the table below remain required.
+
 ## Concrete backend work
 
 | Area | Reference behavior | SP11 work before qualification |
@@ -66,19 +81,16 @@ RFC. Our older SP11 lifecycle proofs do not automatically transfer to this tree.
 
 ## Next source changes and gates
 
-1. Prepare a buildable isolated candidate on the pinned kernel base with the
-   generic ISP helpers and existing CAMSS framework. Record full-tree and
-   configuration identity; budget disk before a full source/build copy.
-2. Add the smallest VFE680 output/backend changes with explicit plane/client
-   descriptors, frame routing, completion status and reviewed stop ownership.
-   Keep every private startup consumer disabled in the new provider path.
-3. Complete source-owned minimal processing and DMI tables; extend typed
-   blocks through the generic interface. The existing 656-byte fragments
-   remain field tests and are not a complete hardware submission protocol.
-4. Compile and review locking/error/DMA lifetime. Only then create a fresh
-   single-use hardware candidate, with Golden rollback and no private fallback.
-5. Qualify front first, then the distinct rear startup. Curate sensors, focus,
-   regulator/DT and PHY series separately; integrate libcamera and open tuning.
+1. Establish physical VFE680/CSID IPP DMA retirement and IRQ/work draining
+   before freeing or returning image, statistics or CDM/DMI allocations.
+2. Extend the compiled VFE680 descriptors with bounded PIX groups, frame
+   routing and initialized completion status. Preserve RDI behavior.
+3. Complete owned minimal processing/DMI tables and generic typed blocks.
+   The656-byte fragments are field tests, not a complete hardware protocol.
+4. Review/compile locking/error/DMA lifetime before a fresh single-use hardware
+   candidate with protected Golden rollback and no private fallback.
+5. Qualify front, then distinct rear; curate sensor/focus/regulator/DT/PHY series
+   separately and integrate libcamera/IPA with open tuning.
 
 Neither private runtime profile has been removed. All 14 readiness components
 remain blocked. Running cameras, Golden, module trees and boot configuration

@@ -1,0 +1,152 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -1016,6 +1016,28 @@
+ }
+ 
+ /*
++ * vfe_put_output_v2 - Release a line's completion-port mapping
++ *
++ * Gen2+ completions are routed by line/CSID port, independently of the bus
++ * clients which write the output. Gen1 keeps its write-master reservation
++ * path in vfe_put_output().
++ */
++static void vfe_put_output_v2(struct vfe_line *line)
++{
++	struct vfe_device *vfe = to_vfe(line);
++	unsigned long flags;
++	unsigned int i;
++
++	spin_lock_irqsave(&vfe->output_lock, flags);
++
++	vfe->wm_output_map[line->id] = VFE_LINE_NONE;
++	for (i = 0; i < line->num_outputs; i++)
++		line->output[i].state = VFE_OUTPUT_OFF;
++
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++}
++
++/*
+  * vfe_enable_v2 - Enable streaming on VFE line
+  * @line: VFE line
+  *
+@@ -1056,7 +1078,7 @@
+ 	return 0;
+ 
+ error_enable_output:
+-	vfe_put_output(line);
++	vfe_put_output_v2(line);
+ 
+ error_get_output:
+ 	mutex_lock(&vfe->stream_lock);
+@@ -1261,7 +1283,7 @@
+  *
+  * Return 0 on success or a negative error code otherwise
+  */
+-int vfe_disable(struct vfe_line *line)
++static int vfe_disable_common(struct vfe_line *line, bool port_mapping)
+ {
+ 	struct vfe_device *vfe = to_vfe(line);
+ 	int ret;
+@@ -1270,7 +1292,10 @@
+ 	if (ret)
+ 		goto error;
+ 
+-	vfe_put_output(line);
++	if (port_mapping)
++		vfe_put_output_v2(line);
++	else
++		vfe_put_output(line);
+ 
+ 	mutex_lock(&vfe->stream_lock);
+ 
+@@ -1280,6 +1305,16 @@
+ 
+ error:
+ 	return ret;
++}
++
++int vfe_disable(struct vfe_line *line)
++{
++	return vfe_disable_common(line, false);
++}
++
++int vfe_disable_v2(struct vfe_line *line)
++{
++	return vfe_disable_common(line, true);
+ }
+ 
+ /**
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -325,6 +325,9 @@
+  */
+ int vfe_disable(struct vfe_line *line);
+ 
++/* Pair with vfe_enable_v2() for line/CSID completion-port mappings. */
++int vfe_disable_v2(struct vfe_line *line);
++
+ /*
+  * vfe_pm_domain_off - Disable power domains specific to this VFE.
+  * @vfe: VFE Device
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-340.c b/drivers/media/platform/qcom/camss/camss-vfe-340.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-340.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-340.c
+@@ -376,7 +376,7 @@
+ 	.pm_domain_off = vfe_pm_domain_off,
+ 	.pm_domain_on = vfe_pm_domain_on,
+ 	.subdev_init = vfe_subdev_init,
+-	.vfe_disable = vfe_disable,
++	.vfe_disable = vfe_disable_v2,
+ 	.vfe_enable = vfe_enable_v2,
+ 	.vfe_halt = vfe_halt,
+ 	.vfe_wm_start = vfe_wm_start,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-480.c b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-480.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-480.c
+@@ -291,7 +291,7 @@
+ 	.pm_domain_off = vfe_pm_domain_off,
+ 	.pm_domain_on = vfe_pm_domain_on,
+ 	.subdev_init = vfe_subdev_init,
+-	.vfe_disable = vfe_disable,
++	.vfe_disable = vfe_disable_v2,
+ 	.vfe_enable = vfe_enable_v2,
+ 	.vfe_halt = vfe_halt,
+ 	.violation_read = vfe_violation_read,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-680.c b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -232,7 +232,7 @@
+ 	.pm_domain_off = vfe_pm_domain_off,
+ 	.pm_domain_on = vfe_pm_domain_on,
+ 	.subdev_init = vfe_subdev_init,
+-	.vfe_disable = vfe_disable,
++	.vfe_disable = vfe_disable_v2,
+ 	.vfe_enable = vfe_enable_v2,
+ 	.vfe_halt = vfe_halt,
+ 	.vfe_wm_start = vfe_wm_start,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-690.c b/drivers/media/platform/qcom/camss/camss-vfe-690.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-690.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-690.c
+@@ -158,7 +158,7 @@
+ 	.reg_update = vfe_reg_update,
+ 	.reg_update_clear = vfe_reg_update_clear,
+ 	.subdev_init = vfe_subdev_init,
+-	.vfe_disable = vfe_disable,
++	.vfe_disable = vfe_disable_v2,
+ 	.vfe_enable = vfe_enable_v2,
+ 	.vfe_halt = vfe_halt,
+ 	.vfe_wm_start = vfe_wm_start,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-780.c b/drivers/media/platform/qcom/camss/camss-vfe-780.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-780.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-780.c
+@@ -405,7 +405,7 @@
+ 	.reg_update = vfe_reg_update,
+ 	.reg_update_clear = vfe_reg_update_clear,
+ 	.subdev_init = vfe_subdev_init,
+-	.vfe_disable = vfe_disable,
++	.vfe_disable = vfe_disable_v2,
+ 	.vfe_enable = vfe_enable_v2,
+ 	.vfe_line_prepare = vfe_line_prepare,
+ 	.params_info = vfe_params_info,

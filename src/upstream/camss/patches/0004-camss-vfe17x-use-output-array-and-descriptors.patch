@@ -1,0 +1,30 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-17x.c b/drivers/media/platform/qcom/camss/camss-vfe-17x.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-17x.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-17x.c
+@@ -392,7 +392,7 @@
+ 
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 
+-	output = &line->output;
++	output = &line->output[0];
+ 	if (output->state > VFE_OUTPUT_RESERVED) {
+ 		dev_err(vfe->camss->dev, "Output is running\n");
+ 		goto error;
+@@ -405,7 +405,7 @@
+ 		dev_err(vfe->camss->dev, "Can not reserve wm\n");
+ 		goto error_get_wm;
+ 	}
+-	output->wm_idx[0] = wm_idx;
++	output->wm[0].bus_client = wm_idx;
+ 
+ 	output->drop_update_idx = 0;
+ 
+@@ -414,7 +414,7 @@
+ 	return 0;
+ 
+ error_get_wm:
+-	vfe_release_wm(vfe, output->wm_idx[0]);
++	vfe_release_wm(vfe, output->wm[0].bus_client);
+ 	output->state = VFE_OUTPUT_OFF;
+ error:
+ 	spin_unlock_irqrestore(&vfe->output_lock, flags);

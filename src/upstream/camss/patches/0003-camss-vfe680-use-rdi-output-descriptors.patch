@@ -1,0 +1,102 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-680.c b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -100,11 +100,8 @@
+  * BE			5
+  */
+ 
+-/* TODO: assign an ENUM in resources and use the provided master
+- *       id directly for RDI, STATS, AWB_BG, BHIST.
+- *       This macro only works because RDI is all we support right now.
+- */
+-#define RDI_WM(n)			((vfe_is_lite(vfe) ? 0 : 24) + (n))
++#define VFE_680_WM_RDI0			24
++#define VFE_680_LITE_WM_RDI0		0
+ 
+ static void vfe_global_reset(struct vfe_device *vfe)
+ {
+@@ -144,24 +141,24 @@
+ 	writel(0u, vfe->base + VFE_BUS_IRQn_MASK(vfe, 1));
+ }
+ 
+-static void vfe_wm_update(struct vfe_device *vfe, u8 rdi, u32 addr,
+-			  struct vfe_line *line)
+-{
+-	u8 wm = RDI_WM(rdi);
+-
+-	writel(addr, vfe->base + VFE_BUS_IMAGE_ADDR(vfe, wm));
+-}
+-
+-static void vfe_wm_start(struct vfe_device *vfe, u8 rdi, struct vfe_line *line)
++static void vfe_output_update(struct vfe_device *vfe, struct vfe_output *output,
++			      struct camss_buffer *buf)
++{
++	u8 wm = output->wm[0].bus_client;
++
++	writel(buf->addr[output->wm[0].plane],
++	       vfe->base + VFE_BUS_IMAGE_ADDR(vfe, wm));
++}
++
++static void vfe_output_start(struct vfe_device *vfe, struct vfe_output *output)
+ {
+ 	struct v4l2_pix_format_mplane *pix =
+-		&line->output[0].video_out.active_fmt.fmt.pix_mp;
++		&output->video_out.active_fmt.fmt.pix_mp;
+ 	u32 stride = pix->plane_fmt[0].bytesperline;
++	u8 wm = output->wm[0].bus_client;
+ 	u32 cfg;
+-	u8 wm;
+ 
+ 	cfg = VFE_BUS_IMAGE_CFG0_DATA(pix->height, stride);
+-	wm = RDI_WM(rdi);
+ 
+ 	writel(cfg, vfe->base + VFE_BUS_IMAGE_CFG0(vfe, wm));
+ 	writel(0, vfe->base + VFE_BUS_IMAGE_CFG1(vfe, wm));
+@@ -190,12 +187,12 @@
+ 	       vfe->base + VFE_BUS_WRITE_CLIENT_CFG(vfe, wm));
+ 
+ 	dev_dbg(vfe->camss->dev, "RDI%d WM:%d width %d height %d stride %d\n",
+-		rdi, wm, pix->width, pix->height, stride);
+-}
+-
+-static void vfe_wm_stop(struct vfe_device *vfe, u8 rdi, struct vfe_line *line)
+-{
+-	u8 wm = RDI_WM(rdi);
++		output->line->id, wm, pix->width, pix->height, stride);
++}
++
++static void vfe_output_stop(struct vfe_device *vfe, struct vfe_output *output)
++{
++	u8 wm = output->wm[0].bus_client;
+ 
+ 	writel(0, vfe->base + VFE_BUS_WRITE_CLIENT_CFG(vfe, wm));
+ }
+@@ -207,7 +204,14 @@
+ 
+ static void vfe_subdev_init(struct device *dev, struct vfe_device *vfe)
+ {
++	u8 first_rdi = vfe_is_lite(vfe) ? VFE_680_LITE_WM_RDI0 : VFE_680_WM_RDI0;
++	unsigned int i;
++
+ 	vfe->video_ops = vfe_video_ops_680;
++
++	/* This backend currently exposes RDI outputs only. */
++	for (i = 0; i < vfe->res->line_num; i++)
++		vfe->line[i].output[0].wm[0].bus_client = first_rdi + i;
+ }
+ 
+ static void vfe_reg_update(struct vfe_device *vfe, enum vfe_line_id line_id)
+@@ -235,10 +239,10 @@
+ 	.vfe_disable = vfe_disable_v2,
+ 	.vfe_enable = vfe_enable_v2,
+ 	.vfe_halt = vfe_halt,
+-	.vfe_wm_start = vfe_wm_start,
+-	.vfe_wm_stop = vfe_wm_stop,
++	.vfe_output_start = vfe_output_start,
++	.vfe_output_stop = vfe_output_stop,
+ 	.vfe_buf_done = vfe_buf_done,
+-	.vfe_wm_update = vfe_wm_update,
++	.vfe_output_update = vfe_output_update,
+ 	.reg_update = vfe_reg_update,
+ 	.reg_update_clear = vfe_reg_update_clear,
+ };

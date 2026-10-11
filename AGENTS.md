@@ -1,3 +1,28 @@
+## 2026-10-11 CAMSS source series compiled; allocator pairing checked
+
+Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
+Full public base prepared; posted74-patch RFC replay325 Git blob checks.
+Four patches: unused helper removal; paired completion-port release/disable
+with enable_v2 while preserving VFE17x allocated-WM release; VFE680 explicit
+RDI bus-client/output callbacks; VFE17x obsolete structure references.
+Candidate03 ARM64 CAMSS + generic ISP objects W=1/-Werror PASS,0warnings.
+GCC/Clang ASAN/UBSAN688 production-body cases each PASS;4-patch/8-file replay,
+16source pins,4patch pins;5 changed/missing/symlink pin rejections PASS.
+checkpatch --no-tree --no-signoff all4 patches0errors/0warnings; no DCO or
+acceptance claim. Baseline unused-helper and candidate01 VFE17x compile
+failures retained. Candidate02 compiled but review found wrong VFE17x release;
+SUPERSEDED, never loaded. Candidate03 separates/tests both stop paths.
+37 original RFC file pins unchanged after builds. Evidence
+docs/UPSTREAM-CAMSS-DESCRIPTORS-VALIDATION-20261011.json; series/repro/limits
+src/upstream/camss/README.md. Full kernel/modpost/hardware NOT qualified.
+NEXT real VFE680/CSID IPP DMA/IRQ retirement, bounded output groups/status,
+complete independent minimal startup/DMI and generic params/stats; then
+review and fresh hardware qualification with no private consumers/fallback.
+VFE680 remains RDI-only. Both installed private profiles remain; all14
+components blocked. No private input/pixels, camera capture/reboot/module/DT/
+runtime or OS-suspend change. Golden/daily2/default/original baseline preserved.
+No maintainer messages sent. Earlier checkpoint paragraphs are historical.
+
 ## 2026-10-11 complete IFE reference pinned; VFE680 integration mapped
 
 Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
