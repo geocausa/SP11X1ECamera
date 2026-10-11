@@ -1,3 +1,23 @@
+## 2026-10-11 upstream open-stack implementation started
+
+User authorised completing the open/upstream preparation work. Active upstream
+checkout: /home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream,
+branch work/upstream-open-stack-20261011. Claude daily baseline is 5317d528
+in SP11X1ECamera-driver; preserve it and its untracked evidence.
+Read docs/UPSTREAM-ROADMAP-20261011.md and UPSTREAM-COMPONENTS-20261011.json
+for current scope/remaining work. New source-only compiler/tests live under
+src/upstream/isp-config; 22 numerical tests, 13 gate tests, GCC/Clang real gamma
+packer ASAN+UBSAN compatibility PASS. Source schema inventory accounts for
+2603 private register scalars plus58 semantic words and26036 table bytes.
+These are work units, not an open startup proof. Both installed private profiles
+remain: front daily2 firmware plus rear /lib/firmware generation input. No camera
+capture/reboot/module/DT/runtime change in this initial slice. Golden remains
+saved default; daily2 continues running. Readiness gate intentionally fails all
+14 components. Next: derive open front scaler/CST/stats/module register setup,
+then source compile/guarded fresh hardware qualification; rear remains distinct.
+Never use old historical frontier paragraphs below as this branch's next action.
+Evidence docs/UPSTREAM-SOURCE-VALIDATION-20261011.json.
+
 ## 2026-10-10 front lit-chart run: request cancellation blocker; all retired
 
 SP11 front now user-aimed at SP7. Independently written fixed grey/RGB chart

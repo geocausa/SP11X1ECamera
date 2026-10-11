@@ -1,0 +1,179 @@
+{
+  "version": 1,
+  "baseline_commit": "5317d52801ae300eab7a39ec517f248e69fcd0df",
+  "branch": "work/upstream-open-stack-20261011",
+  "components": [
+    {
+      "id": "front-startup",
+      "status": "private-runtime-dependency",
+      "provenance": "unknown",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [
+        "qcom/sp11/imx681-2560x1440-nv12-v1.bin"
+      ],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Complete front CDM/startup generation; primitive compiler only so far."
+    },
+    {
+      "id": "rear-startup",
+      "status": "private-runtime-dependency",
+      "provenance": "unknown",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [
+        "qcom/sp11/rear-generation-20261007-60.bin"
+      ],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Replace all typed four-packet startup inputs including adaptive LSC/GTM."
+    },
+    {
+      "id": "cphy",
+      "status": "needs-upstream-rebase",
+      "provenance": "upstream-open-source",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Public-source table tested; remove lab toggles and rebase against actual PHY maintainer tree."
+    },
+    {
+      "id": "camss-driver",
+      "status": "experimental-driver-cleanup",
+      "provenance": "unknown",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Separate clean CSI/ISP/output/CDM changes; remove board-specific trial paths."
+    },
+    {
+      "id": "params-stats-api",
+      "status": "interface-design-required",
+      "provenance": "project-mathematics",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Agree and document typed buffers, frame identity, validation and compatibility."
+    },
+    {
+      "id": "imx681",
+      "status": "sensor-review-required",
+      "provenance": "trace-derived-functional",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Audit init/mode provenance, standard controls, runtime PM and bindings."
+    },
+    {
+      "id": "ov13858",
+      "status": "sensor-review-required",
+      "provenance": "upstream-open-source",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Identify minimal additions to existing driver and validate them."
+    },
+    {
+      "id": "focus-driver",
+      "status": "userspace-i2c-dependency",
+      "provenance": "project-mathematics",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Replace bridge raw I2C with compatible or new actuator subdevice."
+    },
+    {
+      "id": "regulator-dt",
+      "status": "standard-topology-hang-unresolved",
+      "provenance": "project-mathematics",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Diagnose normal provider boot hang before proposing standard DT topology."
+    },
+    {
+      "id": "libcamera-pipeline",
+      "status": "pipeline-rewrite-required",
+      "provenance": "project-mathematics",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Clean hardware pipeline independent of loopback bridge and lab paths."
+    },
+    {
+      "id": "ipa",
+      "status": "ipa-review-required",
+      "provenance": "project-measurements",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Standard algorithms/protocol, controls-to-image provenance and deterministic processing."
+    },
+    {
+      "id": "image-processing",
+      "status": "bridge-migration-and-calibration-required",
+      "provenance": "project-measurements",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Open tuning plus held-out image quality, motion/detail/noise and CPU/power tests."
+    },
+    {
+      "id": "validation",
+      "status": "qualification-incomplete",
+      "provenance": "project-mathematics",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": true,
+      "sources": [],
+      "evidence": null,
+      "next": "Failing test exit status, cold boots, long soaks, fault recovery and regressions."
+    },
+    {
+      "id": "submission-export",
+      "status": "curated-series-required",
+      "provenance": "unknown",
+      "provenance_reviewed": false,
+      "license_reviewed": false,
+      "private_runtime_dependencies": [],
+      "hardware_required": false,
+      "sources": [],
+      "evidence": null,
+      "next": "Clean kernel/libcamera patch series, attribution, DCO and dependency graph audit."
+    }
+  ]
+}
