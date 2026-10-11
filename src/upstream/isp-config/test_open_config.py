@@ -90,6 +90,25 @@ class ConfigTests(unittest.TestCase):
         m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
         self.assertEqual(c.matrix_words(m, True), [1 | 4 << 16, 7, 2 | 5 << 16, 8, 3 | 6 << 16, 9])
 
+    def test_ccm_numerical_range_distinct_from_cst(self):
+        for boundary in (-2048, 2047):
+            m = [[0, 0, 0], [0, 0, 0], [0, 0, boundary]]
+            words = c.matrix_words(m, transpose=True, coefficient_bits=12)
+            self.assertEqual(sign13(words[-1]), boundary)
+        for outside in (-2049, 2048):
+            m = [[0, 0, 0], [0, 0, 0], [0, 0, outside]]
+            with self.assertRaises(ValueError):
+                c.matrix_words(m, transpose=True, coefficient_bits=12)
+            self.assertEqual(sign13(c.matrix_words(m)[-1]), outside)
+        config = c.generate("front")
+        self.assertEqual(config["ccm"]["coefficient_range"], [-2048, 2047])
+        self.assertEqual(config["cst"]["coefficient_range"], [-4096, 4095])
+
+    def test_invalid_coefficient_range_policy(self):
+        for bits in (11, 14, True, 12.0):
+            with self.assertRaises(ValueError):
+                c.matrix_words([[0] * 3] * 3, coefficient_bits=bits)
+
     def test_gamma_round_trip_and_endpoints(self):
         for curve in ("identity", "srgb"):
             points = c.gamma_points(curve)

@@ -18,6 +18,7 @@ REQUIRED = {
     "imx681", "ov13858", "focus-driver", "regulator-dt", "libcamera-pipeline",
     "ipa", "image-processing", "validation", "submission-export",
 }
+HARDWARE_REQUIRED = REQUIRED - {"submission-export"}
 OPEN_KINDS = {"project-mathematics", "project-measurements", "upstream-open-source",
               "trace-derived-functional"}
 
@@ -68,6 +69,8 @@ def audit(manifest, root):
             problems.append(f"{name}: private runtime dependencies remain or are undeclared")
         if item.get("license_reviewed") is not True:
             problems.append(f"{name}: license/attribution review incomplete")
+        if name in HARDWARE_REQUIRED and item.get("hardware_required") is False:
+            problems.append(f"{name}: required hardware qualification cannot be disabled")
         source_paths = item.get("sources")
         if not isinstance(source_paths, list) or not source_paths:
             problems.append(f"{name}: sources undeclared")
@@ -78,7 +81,7 @@ def audit(manifest, root):
                 raise ValueError("evidence is not a PASS for this component")
             if not evidence.get("validation_scope"):
                 raise ValueError("validation scope missing")
-            if item.get("hardware_required") is not False and evidence.get("hardware_qualified") is not True:
+            if (name in HARDWARE_REQUIRED or item.get("hardware_required") is not False) and evidence.get("hardware_qualified") is not True:
                 raise ValueError("hardware qualification missing")
             pins = evidence.get("source_sha256")
             if not isinstance(pins, dict) or set(pins) != set(source_paths):

@@ -86,6 +86,20 @@ from the mode and verified public definitions, enumerate all remaining private
 scalar fields, implement a new provider without importing private data, then
 compile and test a fresh guarded candidate. Rear geometry is kept distinct.
 
+## Second implementation slice: typed front field compiler
+
+`sp11-cdm.h` now generates bounded contiguous register and DMI commands from
+kernel-owned inputs; `sp11-front-fields.h` produces sparse CST/CCM coefficients
+and FULL round/clamp commands. Public CDM revision/hashes and functional field
+provenance are recorded. GCC/Clang sanitizer checks and an SP11 kernel-header
+compile pass. 34 distinct fields cover 74 occurrences in the existing source
+inventory. This is still a partial compiler, not a complete startup provider.
+Source qualification and the precise hardware admission gates are documented in
+`src/upstream/isp-config/FRONT-FIELDS-PROVENANCE-20261011.md`. Both installed
+private dependencies remain; no new module was loaded and no camera capture
+or reboot was performed. The readiness gate cannot waive required camera
+hardware qualification through a manifest flag.
+
 ## Hardware experiment admission and rollback
 
 Before each mutation, run the overlap guard and confirm current HEAD, active

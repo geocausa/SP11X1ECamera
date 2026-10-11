@@ -1,3 +1,21 @@
+## 2026-10-11 upstream typed front fields source checkpoint
+
+Active branch work/upstream-open-stack-20261011, SP11X1ECamera-upstream.
+The next implementation layer adds bounded CDM REG_CONT/DMI serialization and
+kernel-usable typed CST/CCM/FULL round-clamp fragments, without private schema
+or profile inputs. 34 distinct fields cover74 scalar occurrences; these are
+source capabilities, not installed replacements. GCC/Clang ASAN+UBSAN tests,
+8192 CST/4096 CCM numerical values and 97 REG_CONT/36 DMI reference cases PASS.
+Separate SP11 kernel-header compile W=1 KCFLAGS=-Werror PASS; probe NOT loaded.
+Generator CCM bounds corrected; camera readiness cannot waive hardware checks.
+Source evidence docs/UPSTREAM-FRONT-FIELDS-VALIDATION-20261011.json;
+provenance/hardware gates src/upstream/isp-config/FRONT-FIELDS-PROVENANCE-20261011.md.
+Both private runtime dependencies remain. No capture/reboot/runtime/DT/module
+change. Preserve daily2/Golden and original baseline5317d528/untracked evidence.
+Next complete functional scaler/crop/statistics/module setup, then independent
+startup/DMI provider, compile and guarded fresh hardware qualification. Do not
+fill unknowns from private values. Historical frontier notes below are stale.
+
 ## 2026-10-11 upstream open-stack implementation started
 
 User authorised completing the open/upstream preparation work. Active upstream

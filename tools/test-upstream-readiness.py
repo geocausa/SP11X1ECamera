@@ -84,6 +84,26 @@ class GateTests(unittest.TestCase):
         f.write_text(json.dumps(data))
         self.assertTrue(gate.audit(self.doc, self.root))
 
+    def test_hardware_opt_out_cannot_bypass_camera_qualification(self):
+        item = next(i for i in self.doc["components"] if i["id"] == "front-startup")
+        item["hardware_required"] = False
+        f = self.root / item["evidence"]
+        data = json.loads(f.read_text())
+        data["hardware_qualified"] = False
+        f.write_text(json.dumps(data))
+        problems = gate.audit(self.doc, self.root)
+        self.assertTrue(any("cannot be disabled" in p for p in problems))
+        self.assertTrue(any("hardware qualification missing" in p for p in problems))
+
+    def test_submission_documentation_can_have_source_only_evidence(self):
+        item = next(i for i in self.doc["components"] if i["id"] == "submission-export")
+        item["hardware_required"] = False
+        f = self.root / item["evidence"]
+        data = json.loads(f.read_text())
+        data["hardware_qualified"] = False
+        f.write_text(json.dumps(data))
+        self.assertEqual(gate.audit(self.doc, self.root), [])
+
     def test_missing_evidence(self):
         self.doc["components"][0]["evidence"] = "missing.json"
         self.assertTrue(gate.audit(self.doc, self.root))

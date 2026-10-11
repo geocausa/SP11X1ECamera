@@ -125,17 +125,19 @@ def pack_s13_pair(a, b):
     return (a & 0x1fff) | ((b & 0x1fff) << 16)
 
 
-def matrix_words(matrix, transpose=False):
+def matrix_words(matrix, transpose=False, coefficient_bits=13):
     """Six coefficient words. Front CST row order / CCM transposed order.
 
     These field layouts match the previously tested front coefficient adapter.
     This does not establish the rear module's packing or a complete register block.
     """
+    bits = integer(coefficient_bits, 12, 13, "coefficient bits")
+    minimum, maximum = -(1 << (bits - 1)), (1 << (bits - 1)) - 1
     if len(matrix) != 3 or any(len(row) != 3 for row in matrix):
         raise ValueError("matrix must be 3x3")
     for row in matrix:
         for v in row:
-            integer(v, -4096, 4095, "matrix coefficient")
+            integer(v, minimum, maximum, "matrix coefficient")
     rows = list(zip(*matrix)) if transpose else matrix
     return [v for a, b, c in rows for v in (pack_s13_pair(a, b), pack_s13_pair(c, 0))]
 
@@ -170,8 +172,10 @@ def generate(camera, curve="identity"):
             "nv12": Mode(*out).nv12(), "metering_example": metering_grid(*source[:2]),
             "cst": {"input_order": "GBR", "output_order": "Y,Cb,Cr", "q": 10,
                     "matrix": cst, "coefficient_words": matrix_words(cst),
+                    "coefficient_range": [-4096, 4095],
                     "output_offsets_u8": [0, 128, 128], "hardware_offset_packing_qualified": False},
-            "ccm": {"q": 7, "matrix": ccm, "coefficient_words": matrix_words(ccm, transpose=True)},
+            "ccm": {"q": 7, "matrix": ccm, "coefficient_range": [-2048, 2047],
+                    "coefficient_words": matrix_words(ccm, transpose=True, coefficient_bits=12)},
             "gamma": {"curve": curve, "points": gp, "channel_words": gamma_words(gp),
                       "channel_order": ["R", "G", "B"], "hardware_selectors_qualified": False},
             "lsc": unity_lsc(), "runtime_file_dependencies": [],
