@@ -1,0 +1,148 @@
+{
+  "schema": "sp11-existing-calibration-audit-v1",
+  "utc": "2026-10-12T05:48:57.178084+00:00",
+  "source_parent_commit": "03cb73e53a0ca068626eaa72f4232b2c5ea638fa",
+  "baseline_commit": "5317d52801ae300eab7a39ec517f248e69fcd0df",
+  "scope": "Existing recorded work; no new optical measurement or hardware requalification",
+  "claude_authorship": "Verified Co-Authored-By trailers for listed commits; no contact data exported",
+  "packages": [
+    {
+      "camera": "front",
+      "work": "Tone/colour matrix, automatic exposure and white balance",
+      "dates": [
+        "2026-10-10",
+        "2026-10-11"
+      ],
+      "commits": [
+        "341c13c0",
+        "c21863e9"
+      ],
+      "records": [
+        "docs/FRONT-CAMERA-PARITY-20261010.md",
+        "src/native-rgb/front-ae/tuning/imx681-front-v15.yaml"
+      ],
+      "generators": [
+        "src/native-rgb/front-pattern/fit-front-param.py",
+        "src/native-rgb/front-pattern/fit-front-tone-ccm.py"
+      ],
+      "basis": "Independent fits from Linux captures against same-scene Windows output; documented IPA controls",
+      "reuse": "Preserve the fitted data and algorithms; revalidate their domains and exposure/colour response on the independent startup path"
+    },
+    {
+      "camera": "front",
+      "work": "Lens shading and black level",
+      "dates": [
+        "2026-10-10"
+      ],
+      "commits": [
+        "a70934c0"
+      ],
+      "records": [
+        "docs/PROVENANCE-AND-UPSTREAM-PATH-20261010.md",
+        "src/native-rgb/front-ae/tuning/imx681-front-lsc-v1.txt"
+      ],
+      "generators": [
+        "src/native-rgb/open-profile/fit-lsc.py",
+        "src/native-rgb/open-profile/flat-check.py"
+      ],
+      "basis": "Documented flat-field/diffuser captures with LSC disabled and linear processing; dark-frame black-level measurements",
+      "reuse": "Audit reproducible generation and calibration domains; carry independently measured data into the new ISP provider"
+    },
+    {
+      "camera": "front",
+      "work": "Noise model, denoise LUT/register sweeps, global/adaptive tone lift",
+      "dates": [
+        "2026-10-11"
+      ],
+      "commits": [
+        "a0c14330",
+        "9e60a211",
+        "a06b46f0"
+      ],
+      "records": [
+        "docs/PROVENANCE-AND-UPSTREAM-PATH-20261010.md",
+        "src/native-rgb/front-ae/tuning/imx681-front-abf-v1.json",
+        "src/native-rgb/front-ae/tuning/imx681-front-open-regs.txt"
+      ],
+      "generators": [
+        "src/native-rgb/open-profile/fit-noise-model.py",
+        "src/native-rgb/open-profile/gen-abf-lut.py",
+        "src/native-rgb/open-profile/fit-tone-lift.py",
+        "src/native-rgb/open-profile/fit-tone-adaptive.py"
+      ],
+      "basis": "Documented linear capture noise fit, module ablation and parameter sweeps; fixed/automatic exposure comparisons",
+      "reuse": "Preserve own generators and measurement evidence; review functional-versus-tuning provenance and integration into libcamera/ISP"
+    },
+    {
+      "camera": "rear",
+      "work": "Measured tone curve and colour matrix",
+      "dates": [
+        "2026-10-09"
+      ],
+      "commits": [
+        "a3136555",
+        "d5b44b6e"
+      ],
+      "records": [
+        "docs/REAR-PATTERN-61-20261009.md",
+        "tuning/rear-ov13858-measured-v1.json"
+      ],
+      "generators": [
+        "src/native-rgb/rear-pattern61/fit-tone-ccm.py"
+      ],
+      "basis": "SP7 screen pattern, Linux/Windows matched exposures; documented follow-up hardware capture with fitted processing",
+      "reuse": "Preserve own fitted data and scripts; the record explicitly leaves real-illuminant white balance/colour work open"
+    },
+    {
+      "camera": "rear",
+      "work": "Contrast autofocus in webcam bridge",
+      "dates": [
+        "2026-10-11"
+      ],
+      "commits": [
+        "7c87550e"
+      ],
+      "records": [
+        "src/native-rgb/unified/README.md",
+        "src/native-rgb/unified/sp11-webcam.cpp"
+      ],
+      "generators": [],
+      "basis": "Documented physical lens sweeps and native-frame contrast evaluation; camera-only regulator workaround",
+      "reuse": "Preserve algorithm/measurement evidence; standard actuator/regulator driver and libcamera migration still required"
+    },
+    {
+      "camera": "both",
+      "work": "Bridge colour/tone looks, highlight handling, sharpening and gain/motion-adaptive noise reduction",
+      "dates": [
+        "2026-10-11"
+      ],
+      "commits": [
+        "c21863e9",
+        "26a87d05"
+      ],
+      "records": [
+        "src/native-rgb/unified/README.md",
+        "src/native-rgb/unified/looks/look-front.look",
+        "src/native-rgb/unified/looks/look-rear.look"
+      ],
+      "generators": [
+        "src/native-rgb/unified/fit-look.py",
+        "src/native-rgb/unified/verify-look.py"
+      ],
+      "basis": "Documented same-scene Windows comparisons and application/bridge validation",
+      "reuse": "Preserve the algorithms and reference methodology; relocate processing into the libcamera pipeline/IPA as appropriate"
+    }
+  ],
+  "important_limits": [
+    "Complete open configuration in Claude's notes refers to measured tuning/ablation runs, not elimination of the installed private startup loader",
+    "The same provenance note explicitly states the daily front boot still uses the private OEM-derived startup profile",
+    "Both installed private runtime consumers remain; source tuning evidence does not waive readiness or license/provenance review",
+    "Retain existing measurements and generators; independently reconstruct startup without a private carrier, then revalidate calibration against changed processing domains"
+  ],
+  "private_profile_read": false,
+  "raw_tuning_values_exported": false,
+  "private_pixels_read": false,
+  "runtime_changed": false,
+  "hardware_requalified": false,
+  "upstream_ready": false
+}

@@ -1,3 +1,18 @@
+## 2026-10-12 existing Claude calibration recovered: reuse before new measurements
+
+Audit docs/UPSTREAM-EXISTING-CALIBRATION-AUDIT-20261012.json verifies Claude
+coauthor trailers and existing paths for six front/rear/both work packages.
+Front: measured tone/CCM, AE/AWB, flat-field LSC, dark-frame black level,
+noise model/ABF LUT+register sweeps, global/adaptive tone. Rear: measured
+tone/CCM plus contrast AF. Both: bridge looks/highlights/sharpening/noise.
+Preserve/reuse the data, fit generators and evidence; audit domains/provenance
+and revalidate on the new startup path. Do not restart all calibration from zero.
+Claude's complete-open-configuration claim is an ablation/tuning result;
+the same notes confirm daily front startup still loads the private OEM profile.
+Both private consumers remain. TOP4 core routing and safe owned resource
+binding remain next. No private values/pixels or hardware changes in this audit.
+Previous technical checkpoint below remains current.
+
 ## 2026-10-12 private startup replacement: disabled FULL NV12 bus setup
 
 Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
