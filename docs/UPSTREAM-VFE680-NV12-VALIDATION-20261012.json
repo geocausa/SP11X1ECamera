@@ -1,0 +1,170 @@
+{
+  "schema": "sp11-vfe680-nv12-validation-v1",
+  "utc": "2026-10-12T05:32:08.511199+00:00",
+  "source_parent_commit": "26fac4b1b1e398e3526596d11a5122136ed46daf",
+  "status": "DISABLED_NV12_BUS_SOURCE_PASS_CORE_STARTUP_REQUIRED",
+  "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-vfe680-nv12-20261012-01",
+  "source": "src/upstream/isp-config/sp11-vfe680-nv12.h",
+  "provenance": "src/upstream/isp-config/NV12-BUS-PROVENANCE.md",
+  "input_audit": "docs/UPSTREAM-VFE680-INPUT-AUDIT-20261012.md",
+  "reference": "src/upstream/isp-config/nv12-bus-reference-20261012.json",
+  "source_sha256": {
+    "sp11-vfe680-nv12.h": "fbad9277a518d1b77060ebff2b415067740ef67e3153b8fbe8d0f4156c344a71",
+    "test-vfe680-nv12.c": "c6aa8c2a30d7cc1c42c8a8a148d0084af0829e608888a45a737a21822f8bb30b",
+    "test_vfe680_nv12.py": "efbe6aad2598fa82b15f196b7532fc5c9d7d723f298869917014d61026190e61",
+    "NV12-BUS-PROVENANCE.md": "12ac53a761b000e9a03fcd7bbcf2e195da3b9c08114e552819e7e64e394a5af6",
+    "nv12-bus-reference-20261012.json": "3e346865e41cb73cb9f0e1a8d62ebf7f1ac6f93121ee2cf43bafb9393031f703",
+    "nv12-compile-probe/Makefile": "ce0981c65cbeef787b632b6fb8d34a06c2a44e8edb394a411639c5a0edbb20e6",
+    "nv12-compile-probe/sp11-open-nv12.c": "960cfc25ae3dbd4ff481be28d86f37f4ededfcefa2abea83758d2ce9674fe324"
+  },
+  "compile_plan": {
+    "utc": "2026-10-12T05:23:27.044214+00:00",
+    "source_parent_commit": "26fac4b1b1e398e3526596d11a5122136ed46daf",
+    "source_sha256": {
+      "sp11-vfe680-nv12.h": "fbad9277a518d1b77060ebff2b415067740ef67e3153b8fbe8d0f4156c344a71",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "command": [
+      "make",
+      "-C",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+      "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/build",
+      "M=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-vfe680-nv12-20261012-01",
+      "W=1",
+      "KCFLAGS=-Werror",
+      "sp11-open-nv12.o"
+    ],
+    "hardware_access": false,
+    "never_load": true
+  },
+  "kernel_object_compile": {
+    "utc": "2026-10-12T05:23:29.374390+00:00",
+    "exit_code": 0,
+    "warning_lines": 0,
+    "object_created": true,
+    "never_load": true,
+    "module_linked": false,
+    "runtime_changed": false,
+    "object_sha256": "caa472d2acea590cdf76ff347ecc1059293d0f68e3405fa9f407bd944d9132eb",
+    "undefined_symbols": [
+      "                 U memcpy",
+      "                 U memset",
+      "                 U __stack_chk_fail"
+    ]
+  },
+  "host_command": [
+    "python3",
+    "src/upstream/isp-config/test_vfe680_nv12.py",
+    "--reference-dir",
+    "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-vfe680-official-public-20261011-01/source"
+  ],
+  "host_result": {
+    "schema": "sp11-vfe680-nv12-tests-v1",
+    "tests": [
+      {
+        "compiler": "gcc",
+        "status": "PASS",
+        "asan": true,
+        "ubsan": true,
+        "detail": "PASS NV12 geometry=258 atomic_rejections=266 bytes=232 commands=12 clients_enabled=0",
+        "actual_public_packer_function": true,
+        "public_register_addresses": 34
+      },
+      {
+        "compiler": "clang",
+        "status": "PASS",
+        "asan": true,
+        "ubsan": true,
+        "detail": "PASS NV12 geometry=258 atomic_rejections=266 bytes=232 commands=12 clients_enabled=0",
+        "actual_public_packer_function": true,
+        "public_register_addresses": 34
+      }
+    ],
+    "public_files_verified": 11,
+    "public_pin_rejection_cases": 3,
+    "production_headers_sha256": {
+      "sp11-vfe680-nv12.h": "fbad9277a518d1b77060ebff2b415067740ef67e3153b8fbe8d0f4156c344a71",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "source_register_commands": 12,
+    "source_bytes": 232,
+    "clients_enabled": 0,
+    "dmi_transfers": 0,
+    "private_input_read": false,
+    "hardware_access": false,
+    "mapping_ownership_proven": false,
+    "complete_startup_provider": false,
+    "runtime_dependencies_removed": false
+  },
+  "style": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "scope": "new production header only, no submission/DCO claim"
+  },
+  "original_rfc_files_unchanged": 37,
+  "public_vfe680_top_version": 4,
+  "core_via_cdm_confirmed": true,
+  "public_row_pattern_ordinals": {
+    "PIXEL_PATTERN_RGRGRG": "0x0",
+    "PIXEL_PATTERN_GRGRGR": "0x1",
+    "PIXEL_PATTERN_BGBGBG": "0x2",
+    "PIXEL_PATTERN_GBGBGB": "0x3"
+  },
+  "runtime_changed": false,
+  "hardware_qualified": false,
+  "private_input_read": false,
+  "private_pixels_read": false,
+  "complete_startup_provider": false,
+  "runtime_dependencies_removed": false,
+  "mapping_ownership_proven": false,
+  "physical_retirement_proven": false,
+  "installed_private_consumers_remaining": 2,
+  "upstream_ready": false,
+  "final_checks": {
+    "checks": [
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exit_code": 0,
+        "expected_exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "python3",
+          "tools/test-upstream-readiness.py"
+        ],
+        "exit_code": 0,
+        "expected_exit": 0,
+        "stdout": "",
+        "stderr": "test_changed_source_invalidates_evidence (__main__.GateTests.test_changed_source_invalidates_evidence) ... ok\ntest_duplicate_component (__main__.GateTests.test_duplicate_component) ... ok\ntest_empty_manifest_cannot_pass (__main__.GateTests.test_empty_manifest_cannot_pass) ... ok\ntest_hardware_opt_out_cannot_bypass_camera_qualification (__main__.GateTests.test_hardware_opt_out_cannot_bypass_camera_qualification) ... ok\ntest_malformed_identifier_and_version (__main__.GateTests.test_malformed_identifier_and_version) ... ok\ntest_missing_component (__main__.GateTests.test_missing_component) ... ok\ntest_missing_evidence (__main__.GateTests.test_missing_evidence) ... ok\ntest_no_hardware_evidence (__main__.GateTests.test_no_hardware_evidence) ... ok\ntest_paths_and_symlinks_rejected (__main__.GateTests.test_paths_and_symlinks_rejected) ... ok\ntest_private_runtime_dependency (__main__.GateTests.test_private_runtime_dependency) ... ok\ntest_submission_documentation_can_have_source_only_evidence (__main__.GateTests.test_submission_documentation_can_have_source_only_evidence) ... ok\ntest_unknown_provenance (__main__.GateTests.test_unknown_provenance) ... ok\ntest_unreviewed_trace_or_license (__main__.GateTests.test_unreviewed_trace_or_license) ... ok\ntest_valid_synthetic_gate (__main__.GateTests.test_valid_synthetic_gate) ... ok\ntest_wrong_component_evidence (__main__.GateTests.test_wrong_component_evidence) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.011s\n\nOK\n"
+      },
+      {
+        "command": [
+          "python3",
+          "tools/check-upstream-readiness.py"
+        ],
+        "exit_code": 1,
+        "expected_exit": 1,
+        "stdout": "{\n  \"upstream_ready\": false,\n  \"blockers\": [\n    \"front-startup: private-runtime-dependency\",\n    \"rear-startup: private-runtime-dependency\",\n    \"cphy: needs-upstream-rebase\",\n    \"camss-driver: experimental-driver-cleanup\",\n    \"params-stats-api: interface-design-required\",\n    \"imx681: sensor-review-required\",\n    \"ov13858: sensor-review-required\",\n    \"focus-driver: userspace-i2c-dependency\",\n    \"regulator-dt: standard-topology-hang-unresolved\",\n    \"libcamera-pipeline: pipeline-rewrite-required\",\n    \"ipa: ipa-review-required\",\n    \"image-processing: bridge-migration-and-calibration-required\",\n    \"validation: qualification-incomplete\",\n    \"submission-export: curated-series-required\"\n  ]\n}\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "bash",
+          "tools/check-repo-hygiene.sh"
+        ],
+        "exit_code": 0,
+        "expected_exit": 0,
+        "stdout": "repository hygiene: OK\n",
+        "stderr": ""
+      }
+    ],
+    "blockers": 14
+  }
+}

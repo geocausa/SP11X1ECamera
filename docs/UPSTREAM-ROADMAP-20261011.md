@@ -1,3 +1,16 @@
+## Current checkpoint, 2026-10-12
+
+Independent front processing and disabled FULL NV12 bus setup now pass host
+and ARM64 object checks. The new bus setup derives its34 fields from exact
+public VFE680 definitions and bounded extents, with no private input or enable.
+Evidence docs/UPSTREAM-VFE680-NV12-VALIDATION-20261012.json;
+input audit docs/UPSTREAM-VFE680-INPUT-AUDIT-20261012.md.
+VFE680 uses TOP4 and expects core setup via CDM; older CAMIF3 logic and
+different TOP4.1x addresses do not resolve its bit fields.
+NEXT exact core/Bayer routing/precision, independent CSID and owned bus/CDM
+binding with physical DMA/IRQ retirement. Both installed private consumers remain.
+No source result waives provenance, upstream review or hardware gates.
+
 ## Current implementation priority, checked 2026-10-11
 
 Windows runtime dependency removal comes first. A new independent front

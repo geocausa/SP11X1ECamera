@@ -134,3 +134,18 @@ parameters versus own mathematics, reproduction and hardware integration order.
 The required-reference test is test_front_minimal.py; the new object-only
 probe is front-minimal-compile-probe. Evidence:
 docs/UPSTREAM-FRONT-MINIMAL-VALIDATION-20261011.json.
+
+## Disabled FULL NV12 bus setup
+
+sp11-vfe680-nv12.h now generates232bytes/12 register commands for FULL Y/C
+clients0/1. It derives dimensions, addresses, stride and frame increments from
+bounded declared extents, with both clients disabled and no enable command.
+It has no private carrier or file dependency. FULL width units and NV12 packing
+are checked against pinned Qualcomm GPL source; read NV12-BUS-PROVENANCE.md.
+
+Run test_vfe680_nv12.py --reference-dir with the pinned public source root.
+The source-only object probe is nv12-compile-probe. Evidence:
+docs/UPSTREAM-VFE680-NV12-VALIDATION-20261012.json.
+The helper does not prove mappings, completion or physical stop. The exact
+TOP4 input audit is docs/UPSTREAM-VFE680-INPUT-AUDIT-20261012.md; core/Bayer
+routing remains unresolved, so no complete startup or runtime independence.

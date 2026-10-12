@@ -1,3 +1,32 @@
+## 2026-10-12 private startup replacement: disabled FULL NV12 bus setup
+
+Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
+Resumed after UI/usage cutoff:26fac4b1 clean/synced,same boot,no pending build.
+21 selected cached GPL sources intact. Exact Qualcomm publication now pinned:
+11 files/819024bytes,Git blobs+SHA256; revision3f5ef25e12b501a518d2d4f4a870288e9bb127a0.
+VFE680 selects TOP ver4; reviewed driver expects core config through CDM.
+Older CAMIF ver3 packing is not applicable. Bayer ordinals need explicit
+translation (local BGGR/GBRG ordering differs); RGGB-only helper unchanged.
+New sp11-vfe680-nv12.h emits232bytes/12 REG_CONT/zero DMI for FULL clients0/1.
+Both clients disabled;34 public field addresses; derived extents/stride/dimensions,
+correct FULL width units and actual public NV12 packer. No private input/fallback,
+allocation/MMIO/submission/enable. Declared DMA bounds are not ownership proof.
+GCC/Clang ASAN/UBSAN258 geometry/buffer +266 atomic rejections each PASS;
+actual GPL packer function compiled;11 source pins/3 pin rejections PASS.
+ARM64 kernel object W=1/-Werror PASS,0warnings; header checkpatch PASS.
+37 original RFC source pins unchanged. Compile-only probe never loaded.
+Evidence docs/UPSTREAM-VFE680-NV12-VALIDATION-20261012.json;
+input findings docs/UPSTREAM-VFE680-INPUT-AUDIT-20261012.md;
+provenance/repro src/upstream/isp-config/NV12-BUS-PROVENANCE.md.
+NEXT exact VFE680 core/Bayer/DEMUX routing and precision, independent CSID,
+owned bus/CDM binding/shared initialization and physical DMA/IRQ retirement.
+Other TOP v4.1x source has different offsets; no blind mask transplant.
+Both installed private dependencies remain; no complete startup provider;
+all14 readiness gates remain blocked. No camera/private pixel/boot/runtime/
+module/DT/system-sleep change. Golden and original baseline preserved.
+Last reported orientation:rear toward SP7 LCD,front away; ask before front optics.
+Earlier checkpoints below are historical.
+
 ## 2026-10-11 Windows replacement first: independent front processing sequence
 
 Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
