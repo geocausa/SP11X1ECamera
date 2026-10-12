@@ -1,3 +1,20 @@
+## Completion integration checkpoint, 2026-10-12
+
+Storage headroom restored by removing only reproducible build intermediates
+(9276964864 allocated bytes), retaining source/final artifacts/calibration/evidence.
+The next real CAMSS integration slice initializes CSID680 completion status and
+bounds hardware/port/line/output/group routing; composite scan takes one mapping
+snapshot. Candidate06 strict ARM64 CAMSS/generic ISP objects: zero warnings.
+GCC/Clang2630 actual-function hosted cases each, six pin-rejection cases and
+five-patch/ten-file replay pass. Evidence:
+docs/UPSTREAM-CAMSS-COMPLETION-VALIDATION-20261012.json.
+This supports resource integration but is not physical DMA/IRQ retirement,
+a processed provider or runtime independence. Both private consumers remain.
+The author VFE680 branch was rechecked and is still the pinned8fba1208 source;
+no new exact core/Bayer field encoder was found in the checked public sources.
+NEXT exact core/Bayer/precision and owned CSID/VFE/CDM integration, physical
+stop/IRQ retirement, then fresh no-private-input hardware qualification.
+
 ## Processed input checkpoint, 2026-10-12
 
 A separate public-derived CSID680 RAW10 IPP register plan now passes actual

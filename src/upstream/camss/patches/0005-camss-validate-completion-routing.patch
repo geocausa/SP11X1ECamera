@@ -1,0 +1,102 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -373,7 +373,7 @@
+  */
+ static irqreturn_t csid_isr(int irq, void *dev)
+ {
+-	struct camss_buf_done_info info;
++	struct camss_buf_done_info info = { };
+ 	struct csid_device *csid = dev;
+ 	u32 buf_done_val, val, val_top;
+ 	int i;
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5037,11 +5037,12 @@
+ {
+ 	struct vfe_device *vfe;
+ 
+-	if (info->hw_id < camss->res->vfe_num) {
+-		vfe = &camss->vfe[info->hw_id];
+-
+-		vfe->res->hw_ops->vfe_buf_done(vfe, info->port_id, info);
+-	}
++	if (!info || info->hw_id < 0 ||
++	    (unsigned int)info->hw_id >= camss->res->vfe_num || info->port_id < 0)
++		return;
++
++	vfe = &camss->vfe[info->hw_id];
++	vfe->res->hw_ops->vfe_buf_done(vfe, info->port_id, info);
+ }
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -839,14 +839,26 @@
+ 	unsigned int o;
+ 	u64 ts = ktime_get_ns();
+ 
++	if (wm < 0 || (unsigned int)wm >= ARRAY_SIZE(vfe->wm_output_map)) {
++		dev_err_ratelimited(vfe->camss->dev,
++				    "Received completion for invalid port\n");
++		return;
++	}
++
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 
+-	if (vfe->wm_output_map[wm] == VFE_LINE_NONE) {
++	if ((unsigned int)vfe->wm_output_map[wm] >= vfe->res->line_num ||
++	    (unsigned int)vfe->wm_output_map[wm] >= ARRAY_SIZE(vfe->line)) {
+ 		dev_err_ratelimited(vfe->camss->dev,
+ 				    "Received wm done for unmapped index\n");
+ 		goto out_unlock;
+ 	}
+ 	line = &vfe->line[vfe->wm_output_map[wm]];
++	if (!line->num_outputs || line->num_outputs > ARRAY_SIZE(line->output)) {
++		dev_err_ratelimited(vfe->camss->dev,
++				    "Received completion for invalid output count\n");
++		goto out_unlock;
++	}
+ 
+ 	/* Without per-group status (RDI lines, TFE) there is a single output */
+ 	if (!line->is_pix || !buf_done_info || !buf_done_info->status) {
+@@ -855,8 +867,14 @@
+ 		for (o = 0; o < line->num_outputs; o++) {
+ 			struct vfe_output *output = &line->output[o];
+ 
+-			if (output->state != VFE_OUTPUT_ON || !output->wm_num ||
+-			    !(buf_done_info->status & BIT(output->comp_group)))
++			if (output->state != VFE_OUTPUT_ON || !output->wm_num)
++				continue;
++			if (output->comp_group >= 32) {
++				dev_err_ratelimited(vfe->camss->dev,
++						    "Invalid completion group\n");
++				continue;
++			}
++			if (!(buf_done_info->status & BIT(output->comp_group)))
+ 				continue;
+ 
+ 			ready[o] = vfe_output_done(vfe, line, output, ts);
+@@ -1326,12 +1344,17 @@
+ {
+ 	unsigned int i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(vfe->wm_output_map); i++)
+-		if (vfe->wm_output_map[i] != VFE_LINE_NONE &&
+-		    vfe->line[vfe->wm_output_map[i]].is_pix) {
++	for (i = 0; i < ARRAY_SIZE(vfe->wm_output_map); i++) {
++		int line_id = READ_ONCE(vfe->wm_output_map[i]);
++
++		if ((unsigned int)line_id >= vfe->res->line_num ||
++		    (unsigned int)line_id >= ARRAY_SIZE(vfe->line))
++			continue;
++		if (vfe->line[line_id].is_pix) {
+ 			vfe->isr_ops.wm_done(vfe, i);
+ 			break;
+ 		}
++	}
+ }
+ 
+ void vfe_isr_reset_ack(struct vfe_device *vfe)

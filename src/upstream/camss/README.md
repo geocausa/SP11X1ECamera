@@ -1,3 +1,16 @@
+## Latest completion checkpoint, 2026-10-12
+
+The original four source patches now have a fifth completion-routing patch.
+Candidate06 builds the CAMSS/generic ISP objects with zero warnings and passes
+2630 hosted cases per GCC/Clang, six source/patch rejection cases and five-patch
+replay across ten files. It initializes CSID680 status and bounds completion
+routing, including a single mapping snapshot in the unlocked composite scan.
+See COMPLETION-ROUTING-20261012.md for reproduction and explicit limits.
+The original candidate03 instructions below reproduce the historical four
+patches. Candidate04/05 are preserved intermediate sources, superseded by06.
+No pixel provider or physical stop/DMA/IRQ qualification is claimed; no runtime
+consumer is removed by this fix.
+
 # First CAMSS source series for SP11 upstream work
 
 This four-patch series builds on the posted Oct5 2026 74-patch IFE RFC,

@@ -1,3 +1,22 @@
+## 2026-10-12 CAMSS completion integration source qualified
+
+Active upstream checkout; daily5317d528 preserved. New patch0005 initializes
+CSID680 completion status; dispatcher/VFE port/line/output/group bounds checked.
+Composite scan uses one READ_ONCE mapping snapshot. Final candidate06:
+02-kernel/upstream-ife-base-build-20261011-01/candidate-06; ARM64 CAMSS/generic
+ISP objects W=1/-Werror PASS,0warnings. GCC/Clang2630 actual-function hosted
+cases each PASS;6 real pin rejections;5patch/10file replay;checkpatch clean.
+Hosted MMIO/buffers/locks/READ_ONCE are test adapters,not hardware/concurrency
+proof. Candidate04/05 source/build/patches retained and superseded. Evidence:
+docs/UPSTREAM-CAMSS-COMPLETION-VALIDATION-20261012.json; reproducibility:
+src/upstream/camss/COMPLETION-ROUTING-20261012.md. Never install these object
+candidates as hardware providers. Author branch rechecked,same8fba1208.
+NEXT exact VFE core/Bayer/precision and owned CSID/VFE/CDM/image integration;
+physical completion/stop/IRQ retirement; fresh no-private-loader/fallback test.
+Both private startup consumers remain;all14 readiness gates blocked. No private
+input/pixels,capture,reboot,module/DT/runtime or OS sleep changes. Golden preserved.
+User's space cleanup completed below; prior checkpoints remain historical.
+
 ## 2026-10-12 storage headroom restored before startup integration
 
 User explicitly requested space reclamation and continuing camera work.

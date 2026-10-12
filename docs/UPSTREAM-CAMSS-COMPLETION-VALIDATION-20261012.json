@@ -1,0 +1,284 @@
+{
+  "schema": "sp11-camss-completion-validation-v1",
+  "utc": "2026-10-12T08:20:54.131562+00:00",
+  "status": "PASS_SOURCE_ONLY_COMPLETION_ROUTING",
+  "source_candidate": {
+    "schema": "sp11-completion-routing-candidate-v1",
+    "utc": "2026-10-12T08:17:43.397852+00:00",
+    "parent": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+    "source": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/source",
+    "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06",
+    "changed_source_pins": {
+      "drivers/media/platform/qcom/camss/camss-csid-680.c": {
+        "parent": "804001536fee3123536edfa1f1476c83b12872dff993d9e70645d80ee0a6be16",
+        "candidate": "e546e09dd13f1e0be0fb63f164519ec43a119a54a64049daa97c5ed25325d9d6"
+      },
+      "drivers/media/platform/qcom/camss/camss.c": {
+        "parent": "32404c0f137a2c7a0da791cfbfc9051c2b3451f7ad4d41d1255a73ea90dd1fe0",
+        "candidate": "1fb1bf12382f5e687903ced5707486eb08ed43095358de179220369884d404c2"
+      },
+      "drivers/media/platform/qcom/camss/camss-vfe.c": {
+        "parent": "278c8f6fa942836f4cea08a6ca3643d5efea7045e5d4e68c2e6498770c929f1b",
+        "candidate": "42155f444290c82494278f6016e5916158196ae39ee30d0cfffea5519b93c81d"
+      }
+    },
+    "patch_sha256": "41c4add40c2b1bcb296d1fc5433426b0bfee5e11eac1597bd7f7f3ae0aed7375",
+    "installed": false,
+    "loaded": false,
+    "hardware_qualified": false,
+    "supersedes": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-05",
+    "reason": "Review: use one READ_ONCE mapping snapshot for unlocked composite scan, avoiding index reread between bounds validation and array access. Callback and epoch retirement remain separate integration requirements."
+  },
+  "kernel_object_build": {
+    "status": "PASS_CANDIDATE_KERNEL_OBJECT_COMPILE_W1_WERROR",
+    "source": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/source",
+    "output": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build",
+    "base_commit": "8d3ae59288f1e7d58d76558a6ee96d533bc5019f",
+    "compiled_scope": "ARM64 CAMSS composite and generic ISP helper objects; no modpost/full kernel or runtime",
+    "installed": false,
+    "loaded": false,
+    "hardware_qualified": false,
+    "commands": [
+      {
+        "label": "candidate-defconfig",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build",
+          "ARCH=arm64",
+          "defconfig"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/candidate-defconfig.log"
+      },
+      {
+        "label": "candidate-config",
+        "argv": [
+          "scripts/config",
+          "--file",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build/.config",
+          "-e",
+          "MEDIA_SUPPORT",
+          "-e",
+          "MEDIA_CAMERA_SUPPORT",
+          "-e",
+          "V4L_PLATFORM_DRIVERS",
+          "-e",
+          "VIDEO_DEV",
+          "-e",
+          "MEDIA_CONTROLLER",
+          "-e",
+          "VIDEO_V4L2_SUBDEV_API",
+          "-m",
+          "VIDEO_QCOM_CAMSS"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/candidate-config.log"
+      },
+      {
+        "label": "candidate-olddefconfig",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build",
+          "ARCH=arm64",
+          "olddefconfig"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/candidate-olddefconfig.log"
+      },
+      {
+        "label": "candidate-prepare",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build",
+          "ARCH=arm64",
+          "-j4",
+          "modules_prepare"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/candidate-prepare.log"
+      },
+      {
+        "label": "candidate-objects",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build",
+          "ARCH=arm64",
+          "-j4",
+          "W=1",
+          "KCFLAGS=-Werror",
+          "drivers/media/platform/qcom/camss/qcom-camss.o",
+          "drivers/media/v4l2-core/v4l2-isp.o"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/candidate-objects.log"
+      }
+    ],
+    "objects": [
+      {
+        "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build/drivers/media/platform/qcom/camss/qcom-camss.o",
+        "sha256": "a95083e23dee6eeda015c1b66a0249b63d110b02ed944218cf2c97df9801091c",
+        "bytes": 2125464
+      },
+      {
+        "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/build/drivers/media/v4l2-core/v4l2-isp.o",
+        "sha256": "e2dd481c16927e85898cb0e997b2e70ffe58332e8735df731533987374cec366",
+        "bytes": 21560
+      }
+    ],
+    "config_sha256": "4c2b3a3ef04f01b9da1f045ff7275cf7c1b733ea9bd607ba1b1be9d8328eb691"
+  },
+  "kernel_build_warning_lines": 0,
+  "host": {
+    "tests": [
+      {
+        "command": [
+          "python3",
+          "tools/test-upstream-camss-completion.py",
+          "--parent",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+          "--candidate",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/source",
+          "--cc",
+          "gcc"
+        ],
+        "result": {
+          "status": "PASS",
+          "compiler": "gcc",
+          "sanitizers": [
+            "address",
+            "undefined"
+          ],
+          "detail": "PASS completion routing cases=2630 actual CSID/VFE/dispatcher functions; no hardware",
+          "actual_production_functions": 4,
+          "patch_replay_files": 3,
+          "source_pins": 9,
+          "patch_pins": 1,
+          "kernel_primitives_mmio_and_buffers_are_test_adapters": true,
+          "hardware_qualified": false,
+          "read_once_test_adapter_is_not_kernel_concurrency_proof": true
+        }
+      },
+      {
+        "command": [
+          "python3",
+          "tools/test-upstream-camss-completion.py",
+          "--parent",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+          "--candidate",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/source",
+          "--cc",
+          "clang"
+        ],
+        "result": {
+          "status": "PASS",
+          "compiler": "clang",
+          "sanitizers": [
+            "address",
+            "undefined"
+          ],
+          "detail": "PASS completion routing cases=2630 actual CSID/VFE/dispatcher functions; no hardware",
+          "actual_production_functions": 4,
+          "patch_replay_files": 3,
+          "source_pins": 9,
+          "patch_pins": 1,
+          "kernel_primitives_mmio_and_buffers_are_test_adapters": true,
+          "hardware_qualified": false,
+          "read_once_test_adapter_is_not_kernel_concurrency_proof": true
+        }
+      }
+    ],
+    "reference_rejections": {
+      "status": "PASS",
+      "reference_rejections": [
+        {
+          "case": "parent_changed",
+          "status": "PASS",
+          "reason": "changed pinned source"
+        },
+        {
+          "case": "parent_missing",
+          "status": "PASS",
+          "reason": "missing or symlink source"
+        },
+        {
+          "case": "parent_symlink",
+          "status": "PASS",
+          "reason": "missing or symlink source"
+        },
+        {
+          "case": "candidate_changed",
+          "status": "PASS",
+          "reason": "changed pinned source"
+        },
+        {
+          "case": "header_changed",
+          "status": "PASS",
+          "reason": "changed pinned source"
+        },
+        {
+          "case": "patch_changed",
+          "status": "PASS",
+          "reason": "changed pinned source"
+        }
+      ],
+      "hardware_access": false
+    }
+  },
+  "patch_chain_replayed": {
+    "patches": 5,
+    "files": 10,
+    "matches_actual_candidate": true
+  },
+  "checkpatch": {
+    "exit_code": 0,
+    "detail": "total: 0 errors, 0 warnings, 88 lines checked\n\n/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/camss/patches/0005-camss-validate-completion-routing.patch has no obvious style problems and is ready for submission."
+  },
+  "source_and_artifact_pins": {
+    "src/upstream/camss/patches/0001-camss-drop-unused-rfc-format-helper.patch": "7c57d76f70d41563b61c8913024f0ccb195bac077925fe555d68b87d96784b6b",
+    "src/upstream/camss/patches/0002-camss-release-gen2-completion-port.patch": "d01697d8e4e47af86081315e41a7b323c02f1a439e7f258f420e4538d49e8878",
+    "src/upstream/camss/patches/0003-camss-vfe680-use-rdi-output-descriptors.patch": "e74e9f877bcf6a0a1e8fecb7a15496f5ad33f8c00792d31e1e89598e8a391f90",
+    "src/upstream/camss/patches/0004-camss-vfe17x-use-output-array-and-descriptors.patch": "267807334c002a2831078a33ce525ce99d680efd39fd3af563bb4895096db3ee",
+    "src/upstream/camss/patches/0005-camss-validate-completion-routing.patch": "41c4add40c2b1bcb296d1fc5433426b0bfee5e11eac1597bd7f7f3ae0aed7375",
+    "tools/test-upstream-camss-completion.py": "54b5a92fe37941fed7e4e64b6e28a7f7a8a33f3facdbd786edf478fbab12d26d",
+    "tools/test-upstream-camss-completion-pins.py": "ecc600dfa242cc674db99a6b5b2e75f091f200dc36ab9d9f398ee5111b7d8f91"
+  },
+  "limits": [
+    "No module link/modpost/full kernel or hardware qualification",
+    "Kernel primitives/MMIO/buffer management are hosted test adapters",
+    "No processed startup provider, Bayer/precision resolution, physical DMA/IRQ retirement or statistics frame identity proof",
+    "Both installed private startup consumers remain",
+    "No camera pixels or private tuning read; no runtime/boot/DT/power changes"
+  ],
+  "preserved_attempts": [
+    {
+      "candidate": "04",
+      "strict_kernel_build": "PASS",
+      "superseded_reason": "Explicit sign cast for strict hosted compiler; source and initial patch retained"
+    },
+    {
+      "test": "initial hosted adapters",
+      "result": "FAILED_FIXED",
+      "corrections": [
+        "Add missing vfe_line.id member",
+        "Use pointer in CSID IRQ macro fixture",
+        "Suppress unused callback parameter diagnostic like kernel build",
+        "Make dispatch signedness explicit in candidate05"
+      ]
+    },
+    {
+      "candidate": "05",
+      "strict_kernel_build": "PASS",
+      "superseded_reason": "Review found unlocked scan needs single mapping snapshot. Source/build/patch retained. Candidate06 uses READ_ONCE and tests mapping changed after snapshot."
+    }
+  ],
+  "retained_parent_source_verified": {
+    "candidate": "03",
+    "source_files": 8,
+    "unchanged": true
+  },
+  "public_reference_identity_recheck": {
+    "pinned_files": 369,
+    "status": "PASS_PUBLIC_SOURCE_IDENTITY",
+    "new_patch_replay": false
+  }
+}
