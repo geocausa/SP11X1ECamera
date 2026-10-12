@@ -1,3 +1,17 @@
+## 2026-10-12 storage headroom restored before startup integration
+
+User explicitly requested space reclamation and continuing camera work.
+Removed only single-link old Meson object intermediates and historical Kbuild
+command/dependency caches outside media/include/scripts:58364 files,
+9276964864 allocated bytes. Free space increased3883372544->13147607040bytes.
+All retained build-file stat fingerprints and protected final kernel/config/
+symbol/Golden SHA256 checks unchanged. Current libcamera18/front21/rear21,
+finished binaries/modules, source, calibration and all evidence preserved.
+Future incremental builds recompile deleted objects. Exact disposal manifest:
+02-kernel/CAMERA-REPRODUCIBLE-CACHE-PRUNE-20261012-01.json; scalar evidence
+in docs/UPSTREAM-STORAGE-RECLAIM-20261012.json. No capture/runtime/boot changes.
+Resume exact VFE680 core/Bayer/precision and owned-resource integration below.
+
 ## 2026-10-12 exact processed RAW10 input setup prepared
 
 Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
