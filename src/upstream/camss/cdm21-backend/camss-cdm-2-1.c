@@ -10,6 +10,7 @@
 #include <linux/platform_device.h>
 #include <linux/slab.h>
 #include "camss-cdm-2-1.h"
+#include "camss-cdm-power.h"
 
 #define CDM21_HW_VERSION 0x0
 #define CDM21_RESET_CMD 0x10
@@ -126,7 +127,8 @@ irqreturn_t camss_cdm21_isr(int irq, void *data)
 	return observed ? IRQ_HANDLED : IRQ_NONE;
 }
 
-int camss_cdm21_reset_paused(struct camss_cdm21 *cdm)
+int camss_cdm21_reset_paused_owned(struct camss_cdm21 *cdm,
+				 struct camss_cdm21_power *owner)
 {
 	struct sp11_cdm21_pending pending;
 	unsigned long flags, time;
@@ -137,6 +139,15 @@ int camss_cdm21_reset_paused(struct camss_cdm21 *cdm)
 	if (!cdm || !cdm->initialized)
 		return -EINVAL;
 	mutex_lock(&cdm->lock);
+	if (cdm->power_owner != owner) {
+		ret = -EPERM;
+		goto unlock;
+	}
+	if (owner && (!owner->initialized || !owner->held || !owner->touched ||
+		      owner->fault || owner->cdm != cdm)) {
+		ret = -EPERM;
+		goto unlock;
+	}
 	if (cdm->quarantined) {
 		ret = -EIO;
 		goto unlock;
@@ -246,6 +257,11 @@ finish:
 unlock:
 	mutex_unlock(&cdm->lock);
 	return ret;
+}
+
+int camss_cdm21_reset_paused(struct camss_cdm21 *cdm)
+{
+	return camss_cdm21_reset_paused_owned(cdm, NULL);
 }
 
 int camss_cdm21_bind(struct platform_device *pdev,

@@ -16,8 +16,11 @@
  * A failed transaction quarantines this instance; do not reinitialize it to
  * bypass failure. Full parent power/reset and DMA recovery need separate proof.
  */
+struct camss_cdm21_power;
+
 struct camss_cdm21 {
 	void __iomem *base;
+	struct camss_cdm21_power *power_owner;
 	int irq;
 	struct mutex lock;
 	spinlock_t irq_lock;
@@ -61,5 +64,8 @@ irqreturn_t camss_cdm21_isr(int irq, void *data);
  * register. Neither success nor failure permits DMA release or power removal.
  */
 int camss_cdm21_reset_paused(struct camss_cdm21 *cdm);
+/* Internal power-owner entry; invoke through camss_cdm21_power_reset only. */
+int camss_cdm21_reset_paused_owned(struct camss_cdm21 *cdm,
+				 struct camss_cdm21_power *owner);
 
 #endif

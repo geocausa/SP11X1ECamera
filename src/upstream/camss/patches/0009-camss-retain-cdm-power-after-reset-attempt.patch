@@ -1,0 +1,257 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-power.c b/drivers/media/platform/qcom/camss/camss-cdm-power.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-cdm-power.c
+@@ -0,0 +1,123 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Dormant parent power ownership. No DT values, clock rates or DMA release. */
++#include <linux/pm_runtime.h>
++#include "camss-cdm-power.h"
++
++int camss_cdm21_power_init(struct camss_cdm21_power *power,
++			  struct camss_cdm21 *cdm, struct device *dev,
++			  const struct clk_bulk_data *clocks, int num_clocks)
++{
++	int i, j, ret = 0;
++
++	if (!power || !cdm || !dev || IS_ERR(dev) || !clocks || num_clocks <= 0)
++		return -EINVAL;
++	if (power->initialized)
++		return -EBUSY;
++	for (i = 0; i < num_clocks; i++) {
++		if (!clocks[i].clk || IS_ERR(clocks[i].clk))
++			return -EINVAL;
++		for (j = 0; j < i; j++)
++			if (clocks[j].clk == clocks[i].clk)
++				return -EINVAL;
++	}
++	if (!cdm->initialized)
++		return -EINVAL;
++	mutex_lock(&cdm->lock);
++	if (cdm->power_owner || cdm->active || cdm->reset.epoch ||
++	    cdm->quarantined || !cdm->irq_disabled) {
++		ret = -EBUSY;
++		goto unlock;
++	}
++	power->cdm = cdm;
++	power->dev = dev;
++	power->clocks = clocks;
++	power->num_clocks = num_clocks;
++	mutex_init(&power->lock);
++	power->initialized = true;
++	cdm->power_owner = power;
++unlock:
++	mutex_unlock(&cdm->lock);
++	return ret;
++}
++
++static int cdm21_power_hold_locked(struct camss_cdm21_power *power)
++{
++	int ret;
++
++	if (power->fault || power->cdm->quarantined)
++		return -EIO;
++	if (power->cdm->power_owner != power)
++		return -EPERM;
++	if (power->held)
++		return 0;
++	ret = pm_runtime_resume_and_get(power->dev);
++	if (ret < 0)
++		return ret;
++	ret = clk_bulk_prepare_enable(power->num_clocks, power->clocks);
++	if (ret) {
++		/* Bulk helper rolls back its partial clocks. Drop only our PM ref. */
++		if (pm_runtime_put_sync(power->dev) < 0)
++			power->fault = true;
++		return ret;
++	}
++	power->held = true;
++	return 0;
++}
++
++int camss_cdm21_power_hold(struct camss_cdm21_power *power)
++{
++	int ret;
++
++	if (!power || !power->initialized)
++		return -EINVAL;
++	mutex_lock(&power->lock);
++	ret = cdm21_power_hold_locked(power);
++	mutex_unlock(&power->lock);
++	return ret;
++}
++
++int camss_cdm21_power_reset(struct camss_cdm21_power *power)
++{
++	int ret;
++
++	if (!power || !power->initialized)
++		return -EINVAL;
++	mutex_lock(&power->lock);
++	ret = cdm21_power_hold_locked(power);
++	if (!ret) {
++		/* Even timeout or unsupported version must not drop power implicitly. */
++		power->touched = true;
++		ret = camss_cdm21_reset_paused_owned(power->cdm, power);
++	}
++	mutex_unlock(&power->lock);
++	return ret;
++}
++
++int camss_cdm21_power_release_unused(struct camss_cdm21_power *power)
++{
++	int ret = 0;
++
++	if (!power || !power->initialized)
++		return -EINVAL;
++	mutex_lock(&power->lock);
++	if (power->touched || power->cdm->quarantined) {
++		ret = -EBUSY;
++		goto unlock;
++	}
++	if (power->cdm->power_owner != power) {
++		ret = -EPERM;
++		goto unlock;
++	}
++	if (power->held) {
++		clk_bulk_disable_unprepare(power->num_clocks, power->clocks);
++		ret = pm_runtime_put_sync(power->dev);
++		power->held = false;
++		if (ret < 0)
++			power->fault = true;
++		else
++			ret = 0;
++	}
++unlock:
++	mutex_unlock(&power->lock);
++	return ret;
++}
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-power.h b/drivers/media/platform/qcom/camss/camss-cdm-power.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-cdm-power.h
+@@ -0,0 +1,40 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef CAMSS_CDM_POWER_H
++#define CAMSS_CDM_POWER_H
++
++#include <linux/clk.h>
++#include <linux/device.h>
++#include "camss-cdm-2-1.h"
++
++/* Parent supplies reviewed, live PM-device and clock handles/array extent.
++ * This does not discover DT routing, program clock rates, certify fresh power
++ * or replace regulator/interconnect/domain sequencing in the parent.
++ * Zeroed state, clock array and provider handles must outlive the bound backend.
++ * Parent serializes construction, runtime operations and detach; callbacks
++ * must not reenter these operations while the power mutex is held.
++ */
++struct camss_cdm21_power {
++	struct camss_cdm21 *cdm;
++	struct device *dev;
++	const struct clk_bulk_data *clocks;
++	int num_clocks;
++	struct mutex lock;
++	bool initialized;
++	bool held;
++	bool touched;
++	bool fault;
++};
++
++int camss_cdm21_power_init(struct camss_cdm21_power *power,
++			  struct camss_cdm21 *cdm, struct device *dev,
++			  const struct clk_bulk_data *clocks, int num_clocks);
++int camss_cdm21_power_hold(struct camss_cdm21_power *power);
++int camss_cdm21_power_reset(struct camss_cdm21_power *power);
++
++/* Release only an unused acquisition, before any reset/MMIO attempt.
++ * There is deliberately no post-reset power-release API. Physical retirement
++ * and full parent recovery must be implemented before runtime admission.
++ */
++int camss_cdm21_power_release_unused(struct camss_cdm21_power *power);
++
++#endif
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-2-1.h b/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
+--- a/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
++++ b/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
+@@ -16,8 +16,11 @@
+  * A failed transaction quarantines this instance; do not reinitialize it to
+  * bypass failure. Full parent power/reset and DMA recovery need separate proof.
+  */
++struct camss_cdm21_power;
++
+ struct camss_cdm21 {
+ 	void __iomem *base;
++	struct camss_cdm21_power *power_owner;
+ 	int irq;
+ 	struct mutex lock;
+ 	spinlock_t irq_lock;
+@@ -61,5 +64,8 @@
+  * register. Neither success nor failure permits DMA release or power removal.
+  */
+ int camss_cdm21_reset_paused(struct camss_cdm21 *cdm);
++/* Internal power-owner entry; invoke through camss_cdm21_power_reset only. */
++int camss_cdm21_reset_paused_owned(struct camss_cdm21 *cdm,
++				 struct camss_cdm21_power *owner);
+ 
+ #endif
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-2-1.c b/drivers/media/platform/qcom/camss/camss-cdm-2-1.c
+--- a/drivers/media/platform/qcom/camss/camss-cdm-2-1.c
++++ b/drivers/media/platform/qcom/camss/camss-cdm-2-1.c
+@@ -10,6 +10,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include "camss-cdm-2-1.h"
++#include "camss-cdm-power.h"
+ 
+ #define CDM21_HW_VERSION 0x0
+ #define CDM21_RESET_CMD 0x10
+@@ -126,7 +127,8 @@
+ 	return observed ? IRQ_HANDLED : IRQ_NONE;
+ }
+ 
+-int camss_cdm21_reset_paused(struct camss_cdm21 *cdm)
++int camss_cdm21_reset_paused_owned(struct camss_cdm21 *cdm,
++				 struct camss_cdm21_power *owner)
+ {
+ 	struct sp11_cdm21_pending pending;
+ 	unsigned long flags, time;
+@@ -137,6 +139,15 @@
+ 	if (!cdm || !cdm->initialized)
+ 		return -EINVAL;
+ 	mutex_lock(&cdm->lock);
++	if (cdm->power_owner != owner) {
++		ret = -EPERM;
++		goto unlock;
++	}
++	if (owner && (!owner->initialized || !owner->held || !owner->touched ||
++		      owner->fault || owner->cdm != cdm)) {
++		ret = -EPERM;
++		goto unlock;
++	}
+ 	if (cdm->quarantined) {
+ 		ret = -EIO;
+ 		goto unlock;
+@@ -248,6 +259,11 @@
+ 	return ret;
+ }
+ 
++int camss_cdm21_reset_paused(struct camss_cdm21 *cdm)
++{
++	return camss_cdm21_reset_paused_owned(cdm, NULL);
++}
++
+ int camss_cdm21_bind(struct platform_device *pdev,
+ 		    const struct camss_cdm21_resource_names *names,
+ 		    struct camss_cdm21 **out)
+diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
+--- a/drivers/media/platform/qcom/camss/Makefile
++++ b/drivers/media/platform/qcom/camss/Makefile
+@@ -4,6 +4,7 @@
+ qcom-camss-objs += \
+ 		camss.o \
+ 		camss-cdm-2-1.o \
++		camss-cdm-power.o \
+ 		camss-csid.o \
+ 		camss-csid-4-1.o \
+ 		camss-csid-4-7.o \

@@ -1,3 +1,24 @@
+## Dormant CDM2.1 power ownership checkpoint, 2026-10-12
+
+Patch0009 adds parent-supplied PM/clock ownership and a pre-MMIO owned reset
+guard. Partial acquisition unwinds only its references; every reset attempt
+retains power. Unused release is blocked after reset/quarantine; post-reset
+retirement/recovery and release remain unimplemented. No parent runtime calls,
+DT/provider routing, capture or installed stack changes.
+Candidate14 ARM64 CAMSS/generic ISP objects W=1/-Werror0warnings; GCC/Clang
+ASAN/UBSAN201 power+659 reset+899 binding cases/423965 assertions each,
+18 pin rejection controls, six exact kernel bulk functions executed.
+9patch/17file replay;46 other CAMSS files unchanged. Standard checkpatch has one
+FILE_PATH_CHANGES advisory; recursive CAMSS MAINTAINERS covers the new files.
+Ignored-advisory and four per-file checks clean; no signoffs/submission claim.
+Evidence:docs/UPSTREAM-CDM21-POWER-VALIDATION-20261012.json; reproduction:
+src/upstream/camss/CDM21-POWER-20261012.md. Candidate13, failed host fixture and
+first replay preserved. Hosted models do not prove hardware/provider contracts.
+Both private startup consumers/all14 blockers remain; Golden and daily stack/
+evidence/calibration preserved. NEXT exact provider routing, command/image
+lifetime and physical retirement/recovery before runtime admission; exact VFE
+fields, compatible full build and hardware qualification.
+
 ## Dormant CDM2.1 resource binding checkpoint, 2026-10-12
 
 Patch0008 binds named platform register extent and an exclusive NO_AUTOEN IRQ,
