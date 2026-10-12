@@ -1,5 +1,30 @@
 # Reused ooaklee IMX681 sensor source — 2026-10-12
 
+## User reuse boundary, 2026-10-12
+
+Use independently reverse-engineered Windows hardware behavior and functional
+register transactions. Do not copy/extract Windows calibration data, vendor
+tables, tuning payloads or blobs into the replacement. Public availability or
+a GPL label alone does not establish admissible provenance. A source array
+representing independently observed functional transactions is distinguished
+from an extracted vendor table; review its derivation before runtime admission.
+
+Compare our existing work and ooaklee component by component. Prefer matching
+same-machine hardware evidence, correct interface/timing/power behavior and
+maintainable source. Keep our qualified control/timing, allocator/completion/
+reset/ownership work and independently measured or mathematically generated
+calibration where applicable. No wholesale replacement or fresh calibration
+restart. Directly extracted Windows factory tuning remains reference-only and
+must not become replacement runtime data.
+
+The reused ooaklee source comments declare independently transcribed MMIO/I2C
+observations. Keep that declaration and original authorship; complete the
+provenance review rather than treating it as proof. Its imported functional
+sequence is a source candidate, not runtime admission or an extracted vendor
+calibration profile. Hardware-ISP/NV12 and Windows parity remain the target.
+This boundary governs future reuse decisions and supersedes ambiguous earlier
+calibration-reuse language. No source/runtime/install changes accompany it.
+
 This is an isolated source candidate, not an installed driver or an upstream-ready
 submission. It reuses the public standalone sensor from
 [ooaklee/linux_ms_dev_kit-sp11](https://github.com/ooaklee/linux_ms_dev_kit-sp11)
