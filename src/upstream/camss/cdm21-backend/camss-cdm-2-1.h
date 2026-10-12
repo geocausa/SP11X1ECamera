@@ -10,7 +10,7 @@
 #include "sp11-cdm21-state.h"
 
 /* Parent-owned, initially zeroed storage. No command or DMA-buffer ownership.
- * Parent must provide a fresh powered CDM instance, exclusive mapped register
+ * Reset caller must provide a fresh powered CDM instance, exclusive mapped register
  * extent and IRQ, with no other reset/submission owner. Keep power, mapping,
  * IRQ registration and storage live through every operation and handler.
  * A failed transaction quarantines this instance; do not reinitialize it to
@@ -30,11 +30,32 @@ struct camss_cdm21 {
 	bool irq_disabled;
 };
 
+struct platform_device;
+
+struct camss_cdm21_resource_names {
+	const char *registers;
+	const char *irq;
+};
+
+/* Bind managed platform resources only; no power operation or MMIO.
+ * Caller supplies reviewed firmware resource names. IRQ starts disabled.
+ * Serialize binding with all parent devres acquisition and detach operations.
+ * Output is published only after complete binding. Parent must quiesce calls
+ * before detach, maintain power/clock ownership for reset, and independently
+ * establish DMA/producer retirement before teardown.
+ */
+int camss_cdm21_bind(struct platform_device *pdev,
+		    const struct camss_cdm21_resource_names *names,
+		    struct camss_cdm21 **out);
+
+/* Raw initialization requires a separately registered, enabled exclusive IRQ.
+ * The managed bind helper owns the initially disabled IRQ state instead.
+ */
 int camss_cdm21_init(struct camss_cdm21 *cdm, void __iomem *base,
 		    size_t span, int irq);
 irqreturn_t camss_cdm21_isr(int irq, void *data);
 
-/* Sleepable. Parent must register the ISR before calling, and prevent all
+/* Sleepable. Parent must bind/register the ISR before calling, and prevent all
  * concurrent producers/submissions. Success means four reset ACKs, observed
  * zero FIFO counts and a pause request/readback; CDM2.1 has no pause-done
  * register. Neither success nor failure permits DMA release or power removal.

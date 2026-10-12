@@ -7,6 +7,8 @@
  */
 #include <linux/jiffies.h>
 #include <linux/limits.h>
+#include <linux/platform_device.h>
+#include <linux/slab.h>
 #include "camss-cdm-2-1.h"
 
 #define CDM21_HW_VERSION 0x0
@@ -98,7 +100,7 @@ irqreturn_t camss_cdm21_isr(int irq, void *data)
 	if (!cdm || !cdm->initialized || irq != cdm->irq)
 		return IRQ_NONE;
 	spin_lock_irqsave(&cdm->irq_lock, flags);
-	if (!cdm->active || !cdm->issued) {
+	if (!cdm->active) {
 		spin_unlock_irqrestore(&cdm->irq_lock, flags);
 		return IRQ_NONE;
 	}
@@ -108,12 +110,17 @@ irqreturn_t camss_cdm21_isr(int irq, void *data)
 	}
 	if (observed) {
 		cdm21_clear_status(cdm, status);
-		for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++)
-			sp11_cdm21_reset_note(&cdm->reset, cdm->reset.epoch,
-					     i, status[i]);
-		if (cdm->reset.fault ||
-		    sp11_cdm21_reset_ack_complete(&cdm->reset, cdm->reset.epoch))
-			complete(&cdm->reset_complete);
+		if (!cdm->issued) {
+			/* Clear a stale level IRQ, but never count it as a fresh ACK. */
+			cdm->reset.fault = true;
+		} else {
+			for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++)
+				sp11_cdm21_reset_note(&cdm->reset, cdm->reset.epoch,
+						     i, status[i]);
+			if (cdm->reset.fault ||
+			    sp11_cdm21_reset_ack_complete(&cdm->reset, cdm->reset.epoch))
+				complete(&cdm->reset_complete);
+		}
 	}
 	spin_unlock_irqrestore(&cdm->irq_lock, flags);
 	return observed ? IRQ_HANDLED : IRQ_NONE;
@@ -163,6 +170,11 @@ int camss_cdm21_reset_paused(struct camss_cdm21 *cdm)
 	spin_unlock_irqrestore(&cdm->irq_lock, flags);
 	if (ret)
 		goto finish;
+	if (cdm->irq_disabled) {
+		/* Only after version, mask, drain, clear, pause and epoch admission. */
+		enable_irq(cdm->irq);
+		cdm->irq_disabled = false;
+	}
 	for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++)
 		writel(CDM21_RESET_ACK, cdm->base + CDM21_IRQ_MASK(i));
 	for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++)
@@ -172,6 +184,8 @@ int camss_cdm21_reset_paused(struct camss_cdm21 *cdm)
 		}
 	/* Reject status arriving during unmask, before this command exists. */
 	spin_lock_irqsave(&cdm->irq_lock, flags);
+	if (cdm->reset.fault)
+		ret = -EIO;
 	for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++)
 		if (readl(cdm->base + CDM21_IRQ_STATUS(i)))
 			ret = -EIO;
@@ -223,11 +237,68 @@ finish:
 	}
 	if (ret) {
 		/* Own exclusive IRQ: prevent storms if device masking failed. */
-		disable_irq(cdm->irq);
-		cdm->irq_disabled = true;
+		if (!cdm->irq_disabled) {
+			disable_irq(cdm->irq);
+			cdm->irq_disabled = true;
+		}
 		cdm->quarantined = true;
 	}
 unlock:
 	mutex_unlock(&cdm->lock);
+	return ret;
+}
+
+int camss_cdm21_bind(struct platform_device *pdev,
+		    const struct camss_cdm21_resource_names *names,
+		    struct camss_cdm21 **out)
+{
+	struct camss_cdm21 *cdm;
+	struct resource *mem;
+	resource_size_t span;
+	void __iomem *base;
+	void *group;
+	int irq, ret;
+
+	if (!pdev || !names || !out || !names->registers ||
+	    !names->registers[0] || !names->irq || !names->irq[0])
+		return -EINVAL;
+	mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, names->registers);
+	if (!mem)
+		return -ENODEV;
+	if (mem->end < mem->start || (mem->start & 3))
+		return -EINVAL;
+	span = resource_size(mem);
+	if (span < CDM21_REQUIRED_SPAN || span != (size_t)span)
+		return -EINVAL;
+	irq = platform_get_irq_byname(pdev, names->irq);
+	if (irq < 0)
+		return irq;
+	group = devres_open_group(&pdev->dev, NULL, GFP_KERNEL);
+	if (!group)
+		return -ENOMEM;
+	base = devm_ioremap_resource(&pdev->dev, mem);
+	if (IS_ERR(base)) {
+		ret = PTR_ERR(base);
+		goto release;
+	}
+	cdm = devm_kzalloc(&pdev->dev, sizeof(*cdm), GFP_KERNEL);
+	if (!cdm) {
+		ret = -ENOMEM;
+		goto release;
+	}
+	ret = camss_cdm21_init(cdm, base, span, irq);
+	if (ret)
+		goto release;
+	cdm->irq_disabled = true;
+	ret = devm_request_irq(&pdev->dev, irq, camss_cdm21_isr, IRQF_NO_AUTOEN,
+			       "camss-cdm21", cdm);
+	if (ret)
+		goto release;
+	/* Managed cleanup releases IRQ before state and mapping, in reverse order. */
+	devres_remove_group(&pdev->dev, group);
+	*out = cdm;
+	return 0;
+release:
+	devres_release_group(&pdev->dev, group);
 	return ret;
 }

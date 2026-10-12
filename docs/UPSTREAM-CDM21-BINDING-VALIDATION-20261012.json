@@ -1,0 +1,422 @@
+{
+  "schema": "sp11-cdm21-binding-validation-v1",
+  "utc": "2026-10-12T11:03:19.189842+00:00",
+  "project_parent_commit": "0594e901f6691ef231866418aeb2da8c787fafc1",
+  "status": "PASS_DORMANT_RESOURCE_BINDING_SOURCE_ONLY",
+  "candidate": {
+    "schema": "sp11-cdm21-binding-candidate-v1",
+    "utc": "2026-10-12T11:00:01.327844+00:00",
+    "parent": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-10/source",
+    "source": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/source",
+    "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12",
+    "source_pins": {
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.c": {
+        "parent": "73c317bb91b2bc37ea1e1cb21dd4cf73032aedc376aea697bd3fda09a44e828f",
+        "candidate": "30ba7eae789c61b8aa6401a4d5540790b15d3ef2724c4ee6eb4481ad0173fe20"
+      },
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.h": {
+        "parent": "8c304142631f82938b3883a1a454c89e340238baeed24d2a54a16892cca3c6a6",
+        "candidate": "d26d07fee1bd165bc5b2abf8fafa0f4cf0fcc3147907adfe8ebd2a03c1022b80"
+      }
+    },
+    "patch_sha256": "24931de213884e8a27b3a13a17284f6fe6afcabfd5694c9a17483740096fad03",
+    "installed": false,
+    "loaded": false,
+    "hardware_qualified": false,
+    "scope": "Managed named platform extent and exclusive NO_AUTOEN IRQ binding, rollback on failure, reset enables only after fresh admission and does not nest disable on already-disabled failure. No parent calls, DT values, PM/clock integration, submission or DMA release.",
+    "supersedes": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-11",
+    "reason": "Review handles pre-command level status by clear/fault/HANDLED, rejects fault before reset command, and clarifies binding serialization and raw IRQ contract."
+  },
+  "kernel_object_build": {
+    "status": "PASS_CANDIDATE_KERNEL_OBJECT_COMPILE_W1_WERROR",
+    "source": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/source",
+    "output": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build",
+    "base_commit": "8d3ae59288f1e7d58d76558a6ee96d533bc5019f",
+    "compiled_scope": "ARM64 CAMSS composite and generic ISP helper objects; no modpost/full kernel or runtime",
+    "installed": false,
+    "loaded": false,
+    "hardware_qualified": false,
+    "commands": [
+      {
+        "label": "candidate-defconfig",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build",
+          "ARCH=arm64",
+          "defconfig"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/candidate-defconfig.log"
+      },
+      {
+        "label": "candidate-config",
+        "argv": [
+          "scripts/config",
+          "--file",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build/.config",
+          "-e",
+          "MEDIA_SUPPORT",
+          "-e",
+          "MEDIA_CAMERA_SUPPORT",
+          "-e",
+          "V4L_PLATFORM_DRIVERS",
+          "-e",
+          "VIDEO_DEV",
+          "-e",
+          "MEDIA_CONTROLLER",
+          "-e",
+          "VIDEO_V4L2_SUBDEV_API",
+          "-m",
+          "VIDEO_QCOM_CAMSS"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/candidate-config.log"
+      },
+      {
+        "label": "candidate-olddefconfig",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build",
+          "ARCH=arm64",
+          "olddefconfig"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/candidate-olddefconfig.log"
+      },
+      {
+        "label": "candidate-prepare",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build",
+          "ARCH=arm64",
+          "-j4",
+          "modules_prepare"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/candidate-prepare.log"
+      },
+      {
+        "label": "candidate-objects",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build",
+          "ARCH=arm64",
+          "-j4",
+          "W=1",
+          "KCFLAGS=-Werror",
+          "drivers/media/platform/qcom/camss/qcom-camss.o",
+          "drivers/media/v4l2-core/v4l2-isp.o"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/candidate-objects.log"
+      }
+    ],
+    "objects": [
+      {
+        "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build/drivers/media/platform/qcom/camss/qcom-camss.o",
+        "sha256": "665180c3dcbe528d0f29d9d3865746b89daa10b9c73a0306c49f00bf3bc2e190",
+        "bytes": 2167448
+      },
+      {
+        "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build/drivers/media/v4l2-core/v4l2-isp.o",
+        "sha256": "b26e03e7b8399214f66d62ebf9b235bf932c1bdeb3c223f1c584f8f128654048",
+        "bytes": 21560
+      }
+    ],
+    "config_sha256": "4c2b3a3ef04f01b9da1f045ff7275cf7c1b733ea9bd607ba1b1be9d8328eb691"
+  },
+  "host_validation": {
+    "schema": "sp11-cdm21-binding-host-v1",
+    "status": "PASS_SOURCE_ONLY",
+    "candidate_pins": {
+      "camss-cdm-2-1.c": "30ba7eae789c61b8aa6401a4d5540790b15d3ef2724c4ee6eb4481ad0173fe20",
+      "camss-cdm-2-1.h": "d26d07fee1bd165bc5b2abf8fafa0f4cf0fcc3147907adfe8ebd2a03c1022b80",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+      "sp11-cdm21-state.h": "64f0b9551bd080a656bc716a8d4d87f675d89247fa9bbd630c2711b3c8cb8fff"
+    },
+    "reset_model_pin": "7ad3f6aad2f658066a58d0cc878e3df59d88b27a227d30900a323aa5d13e7729",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "sanitizers": [
+          "address",
+          "undefined"
+        ],
+        "counts": {
+          "reset_cases": 659,
+          "binding_cases": 899,
+          "total_assertions": 257422
+        },
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "sanitizers": [
+          "address",
+          "undefined"
+        ],
+        "counts": {
+          "reset_cases": 659,
+          "binding_cases": 899,
+          "total_assertions": 257422
+        },
+        "stderr": ""
+      }
+    ],
+    "candidate_rejections": [
+      {
+        "file": "camss-cdm-2-1.c",
+        "mode": "changed",
+        "positive_control_passed": true
+      },
+      {
+        "file": "camss-cdm-2-1.c",
+        "mode": "missing",
+        "positive_control_passed": true
+      },
+      {
+        "file": "camss-cdm-2-1.c",
+        "mode": "symlink",
+        "positive_control_passed": true
+      },
+      {
+        "file": "camss-cdm-2-1.h",
+        "mode": "changed",
+        "positive_control_passed": true
+      },
+      {
+        "file": "camss-cdm-2-1.h",
+        "mode": "missing",
+        "positive_control_passed": true
+      },
+      {
+        "file": "camss-cdm-2-1.h",
+        "mode": "symlink",
+        "positive_control_passed": true
+      },
+      {
+        "file": "sp11-cdm.h",
+        "mode": "changed",
+        "positive_control_passed": true
+      },
+      {
+        "file": "sp11-cdm.h",
+        "mode": "missing",
+        "positive_control_passed": true
+      },
+      {
+        "file": "sp11-cdm.h",
+        "mode": "symlink",
+        "positive_control_passed": true
+      },
+      {
+        "file": "sp11-cdm21-state.h",
+        "mode": "changed",
+        "positive_control_passed": true
+      },
+      {
+        "file": "sp11-cdm21-state.h",
+        "mode": "missing",
+        "positive_control_passed": true
+      },
+      {
+        "file": "sp11-cdm21-state.h",
+        "mode": "symlink",
+        "positive_control_passed": true
+      }
+    ],
+    "executed": "Complete unchanged own binding/reset/IRQ backend with hosted device-resource, MMIO, IRQ-depth and lock models",
+    "framework_cleanup_is_modeled": true,
+    "installed": false,
+    "hardware_qualified": false,
+    "dma_retirement_proven": false
+  },
+  "patch_chain_replayed": {
+    "patches": 8,
+    "files": 15,
+    "matches_candidate": true,
+    "runs": [
+      {
+        "patch": "0001-camss-drop-unused-rfc-format-helper.patch",
+        "sha256": "7c57d76f70d41563b61c8913024f0ccb195bac077925fe555d68b87d96784b6b",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-vfe.c\n"
+      },
+      {
+        "patch": "0002-camss-release-gen2-completion-port.patch",
+        "sha256": "d01697d8e4e47af86081315e41a7b323c02f1a439e7f258f420e4538d49e8878",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-vfe.c\npatching file drivers/media/platform/qcom/camss/camss-vfe.h\npatching file drivers/media/platform/qcom/camss/camss-vfe-340.c\npatching file drivers/media/platform/qcom/camss/camss-vfe-480.c\npatching file drivers/media/platform/qcom/camss/camss-vfe-680.c\npatching file drivers/media/platform/qcom/camss/camss-vfe-690.c\npatching file drivers/media/platform/qcom/camss/camss-vfe-780.c\n"
+      },
+      {
+        "patch": "0003-camss-vfe680-use-rdi-output-descriptors.patch",
+        "sha256": "e74e9f877bcf6a0a1e8fecb7a15496f5ad33f8c00792d31e1e89598e8a391f90",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-vfe-680.c\n"
+      },
+      {
+        "patch": "0004-camss-vfe17x-use-output-array-and-descriptors.patch",
+        "sha256": "267807334c002a2831078a33ce525ce99d680efd39fd3af563bb4895096db3ee",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-vfe-17x.c\n"
+      },
+      {
+        "patch": "0005-camss-validate-completion-routing.patch",
+        "sha256": "41c4add40c2b1bcb296d1fc5433426b0bfee5e11eac1597bd7f7f3ae0aed7375",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-csid-680.c\npatching file drivers/media/platform/qcom/camss/camss.c\npatching file drivers/media/platform/qcom/camss/camss-vfe.c\n"
+      },
+      {
+        "patch": "0006-camss-csid680-use-fresh-software-reset.patch",
+        "sha256": "6a9216b549e2aece4af85c816eba051d792b69b57a71e4d35c562b0a7a0e3dcc",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-csid-680.c\n"
+      },
+      {
+        "patch": "0007-camss-add-dormant-cdm21-reset-backend.patch",
+        "sha256": "499776c5e214c691c852cf2e86ccf4d26bc8fbed22e549688745343b560f4cd5",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-cdm-2-1.h\npatching file drivers/media/platform/qcom/camss/camss-cdm-2-1.c\npatching file drivers/media/platform/qcom/camss/sp11-cdm.h\npatching file drivers/media/platform/qcom/camss/sp11-cdm21-state.h\npatching file drivers/media/platform/qcom/camss/Makefile\n"
+      },
+      {
+        "patch": "0008-camss-bind-cdm21-resources-with-disabled-irq.patch",
+        "sha256": "24931de213884e8a27b3a13a17284f6fe6afcabfd5694c9a17483740096fad03",
+        "exit_code": 0,
+        "output": "patching file drivers/media/platform/qcom/camss/camss-cdm-2-1.c\npatching file drivers/media/platform/qcom/camss/camss-cdm-2-1.h\n"
+      }
+    ]
+  },
+  "prior_camss_files_unchanged": {
+    "drivers/media/platform/qcom/camss/camss-tpg-gen1.c": "7def09f8c4f44720b72a19fa98ee92b611dc66f0e0dab365d4b95a5e3cf8faef",
+    "drivers/media/platform/qcom/camss/sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+    "drivers/media/platform/qcom/camss/Kconfig": "8bfc4349ecfb4f4a4ceae33c33ee77b32cf348d1bd8b2ddb09498a87f131ca3e",
+    "drivers/media/platform/qcom/camss/camss-format.c": "6241fd017d136af2d2a8483c7811d1338e8a5ede65b499a953efc0885c43f53d",
+    "drivers/media/platform/qcom/camss/camss-vfe.h": "e7f4a827d67605166dd61dcad30aa7f64e946c47a97ca204b0a8f3a795d19980",
+    "drivers/media/platform/qcom/camss/camss-csid-4-7.c": "de87454462a015d7a01a2d29f63da4793f5953d62c2038f446b66e7149c31973",
+    "drivers/media/platform/qcom/camss/camss-vfe-4-7.c": "59fdf45200de4e25b8a7489850956e43f6c78c8805b7fd4181e171f65ea73c18",
+    "drivers/media/platform/qcom/camss/camss-csid-gen3.c": "5286ddda9a9f85837e1637f4a5d5f811f59988b194439cc6a0b38f7fa33c0bf2",
+    "drivers/media/platform/qcom/camss/camss-tpg.h": "4a9b6e4e2b859661134d462a02556c9573c756e1c9bc88ef9656e528950671ab",
+    "drivers/media/platform/qcom/camss/camss-vfe-780.c": "93fa79579ac485faa13164e19dec5bc89a214642d9e533b701174cb09ab70fd4",
+    "drivers/media/platform/qcom/camss/camss-csid-gen2.h": "aa06ec13ac34c76ee71f646dea5b3e7fc98d6d3fc6e19b137eacb1ee37ad6a49",
+    "drivers/media/platform/qcom/camss/camss-csiphy.h": "b07b8ac6e5911c4d8a7f35e5a4937e4735d1845aca22622898cbab910cdbe51a",
+    "drivers/media/platform/qcom/camss/camss-vfe-vbif.c": "f11e75cb2e52d9afa6ee374d6dda30d50857a0daea68aab3926943318d7aada8",
+    "drivers/media/platform/qcom/camss/camss-ispif.c": "e24b81817abbca48a81e12285867e585a76b5e116de175edf2fc4b725b744baa",
+    "drivers/media/platform/qcom/camss/camss-ispif.h": "36045eece5c4b3e98a35a68fcfed569d588b52a0b80bd80439245ba6e1906842",
+    "drivers/media/platform/qcom/camss/camss-vfe-vbif.h": "69642214067893253c6da1e32c7ad11f83f66b3d48158bbc34fa86d96d969cb6",
+    "drivers/media/platform/qcom/camss/camss-video.h": "1e4b7341be5cac0032e3e4b71868433acde4fd61da9d6048dd6f9e17ec220a3a",
+    "drivers/media/platform/qcom/camss/camss-vfe-340.c": "c103246f09d796bd34528d3dae1565752370d7b663ab852003b0c7508c518056",
+    "drivers/media/platform/qcom/camss/camss-vfe-4-8.c": "ccc9c79e7c11a2da0ca08ebcb26890aa3034bc0b76cd1911b578a35421485561",
+    "drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c": "370181d484c6284820e867089b72ec4e2e7d21becce512cbf0902db9f1e8080f",
+    "drivers/media/platform/qcom/camss/camss-csid.h": "170c9314e633f2978ebecd0a346e300cb0b267695761caab551502e17beac7b0",
+    "drivers/media/platform/qcom/camss/camss-vfe-17x.c": "f81a3d464f12c27e31fa5a4a5ab8e0bac25abbdf25c2c2bbc73ce435703e1ca3",
+    "drivers/media/platform/qcom/camss/camss-vfe-880-pp.h": "1da7d5881fbae3491d5e4aae0f20d63a30605e5aaa930999690e97aa55299b92",
+    "drivers/media/platform/qcom/camss/camss-csid.c": "7eac4e773bd66291c02ff773b45f39c95c49b7afcaaaeba0d12867aee1f57037",
+    "drivers/media/platform/qcom/camss/camss-vfe-880-pp.c": "c4845b4e33212267db16200574686b0b8898d5c3af1a73580761fb72c94fefd0",
+    "drivers/media/platform/qcom/camss/camss-csid-680.c": "84aea2239ea7d8db62d82721fe5fcd6d25f0c0f26a84e29f184391e6f67ad255",
+    "drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c": "7b1fc8f45d02bd861455ab90ca509e3a688e1714290121e6f7319c8a10091d71",
+    "drivers/media/platform/qcom/camss/camss-vfe-gen1.c": "51542c5f40b8fd0d437af5d080d9186517c488539c6f82f06cc0417d4abe2ebf",
+    "drivers/media/platform/qcom/camss/camss-vfe-480.c": "a7149811a3e9fee3c288d70c6b8f83061494038329b289c0fc18c219c6f79664",
+    "drivers/media/platform/qcom/camss/camss.c": "1fb1bf12382f5e687903ced5707486eb08ed43095358de179220369884d404c2",
+    "drivers/media/platform/qcom/camss/camss-vfe-680.c": "78f78ee24343a929fda2b95cf06b5c604904fbf4bc37aa86af5d4410321575cd",
+    "drivers/media/platform/qcom/camss/camss-csid-gen2.c": "b12324980ee9759e34f6591f3dc6669c1dd70ec16859e50d177929953e60b3c0",
+    "drivers/media/platform/qcom/camss/camss-csid-4-1.c": "12e2907fbc8aa5e09670e2169ac93cd103795d07dfad9be3c00598ad91420f64",
+    "drivers/media/platform/qcom/camss/camss-csid-340.c": "75c352a85330a813fb02271e0f52208b380b8e6b002fcdfd7a291ac191848658",
+    "drivers/media/platform/qcom/camss/camss-video.c": "cfff3c70df9753b62ce74f80d6469f37f30aac4448f59d287e142b69cee7493f",
+    "drivers/media/platform/qcom/camss/camss-tpg.c": "f17719e34631e91a780aafcc288526dd1682372d70d4aa991f75ccafc498aaaa",
+    "drivers/media/platform/qcom/camss/camss-vfe-gen1.h": "ca014d421ab7d93ceb01005d415953c65bc483f9991937d9a5681a92cc3cb8a8",
+    "drivers/media/platform/qcom/camss/Makefile": "affb6891232d2ac9ededbf168c242924f2d57dc1a483d356b6fdacaa571eebd1",
+    "drivers/media/platform/qcom/camss/sp11-cdm21-state.h": "64f0b9551bd080a656bc716a8d4d87f675d89247fa9bbd630c2711b3c8cb8fff",
+    "drivers/media/platform/qcom/camss/camss.h": "52cc0bc056bde6637f5ed539ebed310456f71776a39a42ac89af94d236d265cf",
+    "drivers/media/platform/qcom/camss/camss-vfe-4-1.c": "f6e21f4aaf2561b45e20ad560b74855db42d5e86fd9a2831b3f348d486c09422",
+    "drivers/media/platform/qcom/camss/camss-vfe-690.c": "4d1521365a1928277413c733120842d4fbea258304511336fc95fa347d3a233b",
+    "drivers/media/platform/qcom/camss/camss-format.h": "6c777565a3cf5e90a6380dc2ab11753759c509ac2fb2a2b8c6e3a4de679d2b36",
+    "drivers/media/platform/qcom/camss/camss-csid-gen1.h": "973bb1c556229fa190dcdb9e77cdc98fae3b964df3bb97af650fc0c0c4392d7f",
+    "drivers/media/platform/qcom/camss/camss-vfe.c": "42155f444290c82494278f6016e5916158196ae39ee30d0cfffea5519b93c81d",
+    "drivers/media/platform/qcom/camss/camss-csiphy.c": "9694bc604c745f17ebe7962752af510b3657030560b3597aabdde2c970da6eab",
+    "drivers/media/platform/qcom/camss/camss-csid-gen3.h": "bb4e989eb6aaa8af5428ff6abd51789bbe777d365551a94c4370679887d1ee6b"
+  },
+  "checkpatch": {
+    "exit_code": 0,
+    "output": "total: 0 errors, 0 warnings, 169 lines checked\n\n/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/camss/patches/0008-camss-bind-cdm21-resources-with-disabled-irq.patch has no obvious style problems and is ready for submission.\n"
+  },
+  "backend_object": {
+    "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-12/build/drivers/media/platform/qcom/camss/camss-cdm-2-1.o",
+    "sha256": "8baf9bdd7f7fcc8da0ebec5fd150f2f78591c22dbc684e19d4e6d138fa8950d4",
+    "machine": "AArch64",
+    "undefined": "                 U complete\n                 U devm_ioremap_resource\n                 U devm_kmalloc\n                 U devm_request_threaded_irq\n                 U devres_open_group\n                 U devres_release_group\n                 U devres_remove_group\n                 U disable_irq\n                 U enable_irq\n                 U __init_swait_queue_head\n                 U mutex_init_generic\n                 U mutex_lock\n                 U mutex_unlock\n                 U platform_get_irq_byname\n                 U platform_get_resource_byname\n                 U _raw_spin_lock_irqsave\n                 U _raw_spin_unlock_irqrestore\n                 U __stack_chk_fail\n                 U synchronize_irq\n                 U wait_for_completion_timeout\n"
+  },
+  "pinned_kernel_api_and_binding_sources": {
+    "include/linux/interrupt.h": "f75c0a916391a51c9572f27c8ea56bc1fae06919b2c204a2d335b841842022d4",
+    "include/linux/device.h": "0b969470fc9791cf21e4fb232d1bc8558a1bf8e56119ff5df427b07ca43891b1",
+    "include/linux/ioport.h": "25b3b02afab635cf7420e3de685b4310265c5c731fccc791d3de9ca61e41f688",
+    "lib/devres.c": "47a3b009c2ac8800ea853937bb4cb43f9e2613f98f14f35f2482df5a48139c10",
+    "drivers/base/devres.c": "71e9a931b8746a85a0c67c9f2370aace6aa2c1c67e1110cf49e157fb79522d4d",
+    "kernel/irq/devres.c": "6d14378297fa53ea932184bf6b575c67c11b813ce559b2f706fbdc3df31e2f80",
+    "Documentation/driver-api/driver-model/devres.rst": "c90ea93abdb73e61fb652f1332d4a98a77a4022cdf0bf49ad26dea19666b9bd9",
+    "Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml": "dc8fcc73f2b85a0200190a2888f97685bc0d3ec624c73f7adae6bbf7f4438f2a",
+    "drivers/media/platform/qcom/camss/camss.c": "1fb1bf12382f5e687903ced5707486eb08ed43095358de179220369884d404c2"
+  },
+  "primary_docs": [
+    "https://docs.kernel.org/driver-api/driver-model/devres.html",
+    "https://docs.kernel.org/core-api/genericirq.html"
+  ],
+  "public_register_reference": "src/upstream/camss/cdm-lifetime-reference-20261012.json",
+  "preserved_attempts": [
+    {
+      "candidate": "11",
+      "kernel_objects": "PASS",
+      "host": "PASS_659_RESET_899_BINDING",
+      "reason": "Review handles pre-command level status by clear/fault/HANDLED, rejects fault before reset command, and clarifies binding serialization and raw IRQ contract.",
+      "fixture": "candidate-11/host-fixture-attempt01.py"
+    }
+  ],
+  "source_pins": {
+    "src/upstream/camss/cdm21-backend/camss-cdm-2-1.c": "30ba7eae789c61b8aa6401a4d5540790b15d3ef2724c4ee6eb4481ad0173fe20",
+    "src/upstream/camss/cdm21-backend/camss-cdm-2-1.h": "d26d07fee1bd165bc5b2abf8fafa0f4cf0fcc3147907adfe8ebd2a03c1022b80",
+    "tools/test-upstream-cdm21-binding.py": "114117cbab2f0d85f6e2fca6459e55cc80c30d91be9c6f284ae86cce954909e8",
+    "src/upstream/camss/patches/0008-camss-bind-cdm21-resources-with-disabled-irq.patch": "24931de213884e8a27b3a13a17284f6fe6afcabfd5694c9a17483740096fad03",
+    "src/upstream/camss/CDM21-BINDING-20261012.md": "cab9e37fcf00066d88fdd766f754e56ee93e3ad7dd025897621192675f0014d8"
+  },
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "limits": [
+    "No parent probe/runtime calls or active DT/resource/IRQ changes",
+    "No CDM resource addresses, IRQ numbers or clocks were invented",
+    "Managed framework cleanup and IRQ depth are hosted models, not real teardown/concurrency evidence",
+    "No PM/clock ownership integration, command/image buffers or DMA release",
+    "Reset requires a parent-owned fresh powered instance with no outstanding prior reset/submission",
+    "Success still does not prove pause-complete, bus retirement or physical DMA lifetime",
+    "Both private startup consumers and all14 upstream readiness blockers remain",
+    "No capture, module/DT/service/boot/OS-sleep change; no full compatible kernel/modpost/module qualification"
+  ],
+  "readiness_validation": {
+    "test_exit_code": 0,
+    "gate_exit_code": 1,
+    "result": {
+      "upstream_ready": false,
+      "blockers": [
+        "front-startup: private-runtime-dependency",
+        "rear-startup: private-runtime-dependency",
+        "cphy: needs-upstream-rebase",
+        "camss-driver: experimental-driver-cleanup",
+        "params-stats-api: interface-design-required",
+        "imx681: sensor-review-required",
+        "ov13858: sensor-review-required",
+        "focus-driver: userspace-i2c-dependency",
+        "regulator-dt: standard-topology-hang-unresolved",
+        "libcamera-pipeline: pipeline-rewrite-required",
+        "ipa: ipa-review-required",
+        "image-processing: bridge-migration-and-calibration-required",
+        "validation: qualification-incomplete",
+        "submission-export: curated-series-required"
+      ]
+    }
+  },
+  "post_work_status": {
+    "boot_id": "936d7197-d2ee-415d-a907-450a2e7b9cb2",
+    "services": "Id=sp11-camera-daily2.service\nActiveState=active\nSubState=exited\nNRestarts=0\n\nId=sp11-webcam-front.service\nActiveState=active\nSubState=running\nNRestarts=0\n\nId=sp11-webcam-rear.service\nActiveState=active\nSubState=running\nNRestarts=0\n",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "",
+    "available_bytes": 11309756416
+  }
+}

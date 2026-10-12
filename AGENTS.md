@@ -1,3 +1,25 @@
+## Dormant CDM2.1 resource binding checkpoint, 2026-10-12
+
+Patch0008 binds named platform register extent and an exclusive NO_AUTOEN IRQ,
+with managed-group rollback and atomic output publication. Binding performs no
+MMIO/power operation. Reset enables IRQ only after fresh version/mask/drain/
+clear/pause/epoch admission; pre-enable failures do not nest disable depth.
+Active pre-command status is cleared and faults without counting ACKs; caller
+rejects the fault before issuing reset. This supersedes pre-command ignore in10.
+Candidate12 ARM64 CAMSS/generic ISP objects W=1/-Werror0warnings; GCC/Clang
+ASAN/UBSAN899 binding+659 reset hosted cases/257422 assertions each;12 pin
+rejection controls. New patch checkpatch0warnings;8patch/15file replay;47 other
+CAMSS files unchanged. Candidate11 source/build/first patch/pass fixture retained.
+Evidence:docs/UPSTREAM-CDM21-BINDING-VALIDATION-20261012.json; reproduction:
+src/upstream/camss/CDM21-BINDING-20261012.md. Managed cleanup, IRQ depth and
+MMIO are hosted models, not physical teardown/concurrency/DMA evidence.
+No parent probe/runtime calls or DT/resource/IRQ/PM/clock changes; current
+upstream X1E binding has no CDM resources. Both private startup consumers/all14
+readiness blockers remain. Daily2/Golden and original evidence preserved.
+NEXT reviewed CDM DT and power/clock ownership, command/image allocation and
+physical retirement; exact VFE core/Bayer/precision, compatible full provider
+build and fresh hardware qualification without private startup/carrier fallback.
+
 ## Dormant CDM2.1 kernel backend checkpoint, 2026-10-12
 
 Patch0007 adds an actual CAMSS-compiled internal reset/IRQ backend. No parent
