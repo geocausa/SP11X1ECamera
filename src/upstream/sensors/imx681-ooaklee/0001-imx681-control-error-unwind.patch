@@ -1,0 +1,46 @@
+Subject: [PATCH] media: imx681: unwind group hold and runtime PM errors
+
+Propagate a negative runtime-PM result before I2C writes. Attempt group
+hold release independently after an earlier write error. Preserve the first
+error and report release failure when no earlier failure occurred.
+
+Public baseline: ooaklee/linux_ms_dev_kit-sp11.
+The immutable revision and source hashes are in reference.json.
+No sign-off or upstream submission is claimed.
+---
+--- a/drivers/media/i2c/imx681.c
++++ b/drivers/media/i2c/imx681.c
+@@ -147,6 +147,7 @@
+ {
+ 	struct imx681 *sensor =
+ 		container_of(ctrl->handler, struct imx681, ctrl_handler);
++	int release_ret;
+ 	int ret = 0;
+ 
+ 	if (ctrl->id == V4L2_CID_VBLANK) {
+@@ -162,8 +163,11 @@
+ 			return ret;
+ 	}
+ 
+-	if (!pm_runtime_get_if_in_use(sensor->dev))
+-		return 0;
++	ret = pm_runtime_get_if_in_use(sensor->dev);
++	if (ret <= 0)
++		return ret;
++
++	ret = 0;
+ 
+ 	cci_write(sensor->regmap, IMX681_REG_GROUP_HOLD, 1, &ret);
+ 	switch (ctrl->id) {
+@@ -186,7 +190,10 @@
+ 	default:
+ 		break;
+ 	}
+-	cci_write(sensor->regmap, IMX681_REG_GROUP_HOLD, 0, &ret);
++	/* Release group hold even if an earlier write failed. */
++	release_ret = cci_write(sensor->regmap, IMX681_REG_GROUP_HOLD, 0, NULL);
++	if (!ret)
++		ret = release_ret;
+ 
+ 	pm_runtime_put_autosuspend(sensor->dev);
+ 

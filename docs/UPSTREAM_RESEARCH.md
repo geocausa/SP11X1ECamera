@@ -1,3 +1,11 @@
+# Current reuse checkpoint — 2026-10-12
+
+The August E000 snapshot below is historical. The merged ooaklee front-camera
+implementation and public runtime results are now compared at immutable source
+revisions. See [current comparison](UPSTREAM-OOAKLEE-COMPARISON-20261012.md).
+Reusable source work is integrated in an isolated sensor candidate; source/link
+qualification does not replace our hardware tests or hardware-ISP/NV12 target.
+
 # Upstream and community research snapshot — 2026-08-26
 
 This is a dated research snapshot, not timeless truth. Re-check upstream before importing patches.

@@ -1,3 +1,33 @@
+## ooaklee reuse/comparison checkpoint, 2026-10-12
+
+17 public source/DT/API files at validated64999b9f and current2cbd1ec3 are
+byte-identical. Existing front RAW/RDI bring-up is a reusable implementation,
+superseding E000's no-proven-community-stream snapshot. Author-reported capture
+results are not our hardware qualification. Target remains hardware-ISP/NV12.
+Public exact C-PHY admission accepts2.406Gsymbols/s/trio0; our2.400Gsymbol/s
+mode is rejected by actual public configure. Do not mix the profiles or copy
+the temporary D-PHY configure-field carrier as a settled generic C-PHY ABI.
+Public16-bitFLL0x0340/bus-pixel metadata differ from our24-bit0x033d/timing.
+
+Reused standalone sensor source under src/upstream/sensors/imx681-ooaklee:
+unchanged public mode table, two isolated PM/group-hold error fixes, provenance
+and immutable pins. GCC/Clang ASAN/UBSAN each1080 controls after3 original
+counterexamples;36 profile+66submode+3DPHY controls;12 pin rejection cases.
+AArch64 sensor module W=1/-Werror/modpost/link PASS,zero warnings,against
+candidate17 source/config and pinned candidate16 symbols; not installed/loaded.
+Patch replay exact. Local no-signoff checkpatch clean; standard check retains
+the absent certification. No signoffs or upstream submission are claimed.
+Evidence:docs/UPSTREAM-OOAKLEE-COMPARISON-20261012.json; detailed reuse decisions:
+docs/UPSTREAM-OOAKLEE-COMPARISON-20261012.md.
+
+NEXT bounded receiver lifecycle and CAMSS routing on a matching profile,
+typed PHY configuration, sensor endpoint/timing/power graph qualification,
+then fresh fully open RAW and clean stop/reopen. RAW does not require completing
+processed ISP/CDM startup. Continue ISP/NV12 resource retirement separately,
+reuse existing calibration. Both private startup consumers/all14 gates remain.
+Golden, daily installation, original evidence and calibration preserved.
+No capture/boot/module/service/DT/runtime or system-sleep changes in this stage.
+
 ## 2026-10-06 E012B inert RGB product install accepted
 
 E012B installed the new RGB product daemon/publisher/service assets on protected Golden **without activation**. Installed source HEAD is `781d2b01`; product asset manifest SHA-256 is `881d2429082d1b0505c1d19826523d2708b9d85ed7015eb70bc63df7e294b692`. Service is disabled/inactive, ENABLE absent, no product boot entry/token, no camera modules/media nodes, and Golden overlap guard passes. No camera Start/reboot/kernel build. NEXT E012C prepares a fresh guarded product boot for repeated front/rear ordinary-app switching and longer soak. OEM archaeology remains demand-driven only.
