@@ -46,4 +46,7 @@ has not been applied to candidate16. The GPL Qualcomm CSIPHY2.1.2 header is
 also reverified at an immutable public revision in
 `cphy-rate-reference-20261012/public-cphy-source.json`. This is a source
 reference, not a runtime table selection or generic C-PHY API implementation.
-Do not copy private Windows tuning/deltas into the new standalone driver.
+Exclude copied/extracted Windows calibration, vendor tuning tables and blobs.
+Independently reconstructed functional register behavior is eligible, including
+source arrays representing observed transactions. See the recovered121-write
+comparison in docs/UPSTREAM-REVERSE-ENGINEERING-AUDIT-20261012.md.

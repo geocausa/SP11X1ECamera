@@ -1,3 +1,19 @@
+## Recovered functional C-PHY observations, 2026-10-12
+
+Our existing121 configuration address/value pairs match ooaklee's public
+independently transcribed runtime observations. Pinned GPL source retained in
+src/upstream/phy/cphy-x1e-observed. The blanket Windows tuning/deltas exclusion
+is corrected: vendor calibration/table/blob copies excluded; independently
+reconstructed functional behavior eligible. Port from observed working source
+plus project hardware evidence; no need to re-derive all functional settings
+solely from generic GPL tables. Delay/lifecycle/clock/retirement equivalence
+still unproven. Public2.406 and project2.400Gsymbol/s profiles remain distinct.
+No hardware admission. Existing sensor/timing/calibration/ownership work intact.
+Evidence:docs/UPSTREAM-REVERSE-ENGINEERING-AUDIT-20261012.json.
+NEXT bounded observed-sequence receiver port and typed PHY/CAMSS routing.
+Upstream permits hardware reverse-engineering and separately loaded firmware;
+our proprietary-camera-input exclusion is the user's project requirement.
+
 ## User reuse boundary, 2026-10-12
 
 Use independently reverse-engineered Windows hardware behavior and functional
