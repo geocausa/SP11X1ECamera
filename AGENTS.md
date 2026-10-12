@@ -1,3 +1,24 @@
+## Dormant CDM2.1 kernel backend checkpoint, 2026-10-12
+
+Patch0007 adds an actual CAMSS-compiled internal reset/IRQ backend. No parent
+runtime hooks, DT/resource/IRQ/PM binding, submission, allocation or DMA release.
+Exact revision read before writes; four-bank mask/drain/clear, reject pre-command
+status, one reset command, unique four-bank ACKs, final late-fault check and
+empty FIFO readbacks. Errors quarantine and disable the exclusive Linux IRQ;
+pause request/readback is not pause completion or DMA retirement certification.
+Candidate10:ARM64 CAMSS/generic ISP objects W=1/-Werror0warnings; GCC/Clang
+ASAN/UBSAN659 hosted cases/233600 assertions each;12 pin rejection controls.
+Seven patches/15files replay;44 earlier CAMSS source files unchanged. Standard
+checkpatch has one reviewed FILE_PATH_CHANGES advisory; existing CAMSS entry
+covers these paths; per-file/advisory-reviewed checks clean. No signoffs invented.
+Candidate09 and corrected initial host fixture preserved; evidence:
+docs/UPSTREAM-CDM21-BACKEND-VALIDATION-20261012.json; reproduction:
+src/upstream/camss/CDM21-BACKEND-20261012.md. Source-only, not runtime admission.
+Both private startup dependencies/all14 readiness blockers remain. No capture,
+module/DT/runtime/service/boot changes; Golden and daily2 remain preserved.
+NEXT parent CDM resource/IRQ/PM and command/image ownership integration;
+exact VFE core/Bayer/precision, compatible full build and physical qualification.
+
 ## CDM 2.1 observation checkpoint, 2026-10-12
 
 Own source helper bounds four public FIFO counts and observes four unique reset
