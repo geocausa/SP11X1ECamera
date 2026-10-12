@@ -1,3 +1,21 @@
+## CSID680 shared initialization checkpoint, 2026-10-12
+
+Patch0006 selects the exact public complete software reset and receiver cutoff;
+old reset IRQ is masked/drained/cleared before fresh completion, stuck status
+rejects and timeout leaves TOP masked with handler drained. This is power-up
+initialization only, not a streaming stop or physical DMA retirement proof.
+Candidate08 ARM64 CAMSS/generic ISP objects W=1/-Werror:0warnings. GCC/Clang:
+102 freshness/failure cases +26 actual public reset comparisons each PASS;
+5 tool-input rejection cases;6-patch/10-file replay;prior completion source
+unchanged. Nine exact Qualcomm GPL source files pinned. Evidence:
+docs/UPSTREAM-CSID680-RESET-VALIDATION-20261012.json; repro:
+src/upstream/camss/CSID680-RESET-20261012.md. Candidate07 source/build/style
+attempt retained;08 corrects comment spelling only. Initial halt-enum fixture
+error corrected with named public enum choices;no initial pass claimed.
+No capture/reboot/module/DT/runtime/power changes;both private consumers remain.
+NEXT exact core/Bayer/precision and owned CDM/FIFO/image resource integration,
+including separately established physical stop/IRQ retirement, then qualification.
+
 ## Completion integration checkpoint, 2026-10-12
 
 Storage headroom restored by removing only reproducible build intermediates

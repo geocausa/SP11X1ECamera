@@ -1,0 +1,298 @@
+{
+  "schema": "sp11-csid680-reset-validation-v1",
+  "utc": "2026-10-12T09:01:44.085979+00:00",
+  "project_parent_commit": "491a6daf1edfcaef4a92cf4c191aab60896b4fbe",
+  "status": "PASS_SOURCE_ONLY_CSID680_POWERUP_RESET",
+  "source_candidate": {
+    "schema": "sp11-csid680-reset-candidate-v1",
+    "utc": "2026-10-12T08:52:03.432740+00:00",
+    "parent": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/source",
+    "source": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source",
+    "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08",
+    "source_pins": {
+      "drivers/media/platform/qcom/camss/camss-csid-680.c": {
+        "parent": "e546e09dd13f1e0be0fb63f164519ec43a119a54a64049daa97c5ed25325d9d6",
+        "candidate": "84aea2239ea7d8db62d82721fe5fcd6d25f0c0f26a84e29f184391e6f67ad255"
+      }
+    },
+    "patch_sha256": "6a9216b549e2aece4af85c816eba051d792b69b57a71e4d35c562b0a7a0e3dcc",
+    "installed": false,
+    "loaded": false,
+    "hardware_qualified": false,
+    "scope": "Power-up reset selects exact public CSID680 software command and RX cutoff, excludes old acknowledgement by mask/readback/synchronize/clear before new completion, leaves top masked and drains handler on timeout. Not streaming stop or VFE/CDM/DMA retirement proof.",
+    "supersedes": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-07",
+    "reason": "Checkpatch comment spelling corrected; logic unchanged; candidate07 source/build/patch retained."
+  },
+  "kernel_object_build": {
+    "status": "PASS_CANDIDATE_KERNEL_OBJECT_COMPILE_W1_WERROR",
+    "source": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source",
+    "output": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build",
+    "base_commit": "8d3ae59288f1e7d58d76558a6ee96d533bc5019f",
+    "compiled_scope": "ARM64 CAMSS composite and generic ISP helper objects; no modpost/full kernel or runtime",
+    "installed": false,
+    "loaded": false,
+    "hardware_qualified": false,
+    "commands": [
+      {
+        "label": "candidate-defconfig",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build",
+          "ARCH=arm64",
+          "defconfig"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/candidate-defconfig.log"
+      },
+      {
+        "label": "candidate-config",
+        "argv": [
+          "scripts/config",
+          "--file",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build/.config",
+          "-e",
+          "MEDIA_SUPPORT",
+          "-e",
+          "MEDIA_CAMERA_SUPPORT",
+          "-e",
+          "V4L_PLATFORM_DRIVERS",
+          "-e",
+          "VIDEO_DEV",
+          "-e",
+          "MEDIA_CONTROLLER",
+          "-e",
+          "VIDEO_V4L2_SUBDEV_API",
+          "-m",
+          "VIDEO_QCOM_CAMSS"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/candidate-config.log"
+      },
+      {
+        "label": "candidate-olddefconfig",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build",
+          "ARCH=arm64",
+          "olddefconfig"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/candidate-olddefconfig.log"
+      },
+      {
+        "label": "candidate-prepare",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build",
+          "ARCH=arm64",
+          "-j4",
+          "modules_prepare"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/candidate-prepare.log"
+      },
+      {
+        "label": "candidate-objects",
+        "argv": [
+          "make",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build",
+          "ARCH=arm64",
+          "-j4",
+          "W=1",
+          "KCFLAGS=-Werror",
+          "drivers/media/platform/qcom/camss/qcom-camss.o",
+          "drivers/media/v4l2-core/v4l2-isp.o"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/candidate-objects.log"
+      }
+    ],
+    "objects": [
+      {
+        "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build/drivers/media/platform/qcom/camss/qcom-camss.o",
+        "sha256": "ccdd5c8fb28c92c50fdc2804d02030e7390d40f2b3b87b65b49c75bc5be7e32a",
+        "bytes": 2128304
+      },
+      {
+        "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build/drivers/media/v4l2-core/v4l2-isp.o",
+        "sha256": "3b0008904583d1a2055fd36e7453f7dfa631f41e744632f97f30d4c5ef777b95",
+        "bytes": 21560
+      }
+    ],
+    "config_sha256": "4c2b3a3ef04f01b9da1f045ff7275cf7c1b733ea9bd607ba1b1be9d8328eb691"
+  },
+  "kernel_warnings": 0,
+  "host": [
+    {
+      "command": [
+        "python3",
+        "tools/test-upstream-csid680-reset.py",
+        "--parent",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/source",
+        "--candidate",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source",
+        "--reference-dir",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-csid680-reset-public-20261012-01/source",
+        "--cc",
+        "gcc"
+      ],
+      "exit_code": 0,
+      "result": {
+        "status": "PASS",
+        "compiler": "gcc",
+        "detail": "PASS reset freshness=102 public_reset_cases=26 exact_SW_command=2 RX_cutoff=2 timeout_top_masked=1",
+        "asan": true,
+        "ubsan": true,
+        "unchanged_actual_public_function_compiled": true,
+        "actual_candidate_reset_compiled": true,
+        "reference_source_files": 9,
+        "public_scalar_definitions": {
+          "cmn_reg": {
+            "reset_cfg_addr": "0xc",
+            "reset_cmd_addr": "0x10",
+            "rst_cmd_hw_reset_complete_val": "0x1",
+            "rst_cmd_irq_ctrl_only_val": "0x4",
+            "rst_cmd_sw_reset_complete_val": "0x2",
+            "rst_loc_complete_csid_val": "0x1",
+            "rst_loc_path_only_val": "0x0",
+            "rst_location_shift_val": "4",
+            "rst_mode_frame_boundary_val": "0x0",
+            "rst_mode_immediate_val": "0x1",
+            "rst_mode_shift_val": "0"
+          },
+          "csi2_reg": {
+            "cfg0_addr": "0x200",
+            "cfg1_addr": "0x204"
+          },
+          "IRQ": {
+            "CSID_TOP_IRQ_STATUS": "0x7C",
+            "CSID_TOP_IRQ_MASK": "0x80",
+            "CSID_TOP_IRQ_CLEAR": "0x84",
+            "CSID_IRQ_CMD": "0x14",
+            "CSID_TOP_IRQ_RESET": "0x1"
+          }
+        },
+        "kernel_primitives_IRQ_MMIO_and_waits_are_test_adapters": true,
+        "hardware_qualified": false,
+        "streaming_stop_or_DMA_retirement_proven": false
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test-upstream-csid680-reset.py",
+        "--parent",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-06/source",
+        "--candidate",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source",
+        "--reference-dir",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-csid680-reset-public-20261012-01/source",
+        "--cc",
+        "clang"
+      ],
+      "exit_code": 0,
+      "result": {
+        "status": "PASS",
+        "compiler": "clang",
+        "detail": "PASS reset freshness=102 public_reset_cases=26 exact_SW_command=2 RX_cutoff=2 timeout_top_masked=1",
+        "asan": true,
+        "ubsan": true,
+        "unchanged_actual_public_function_compiled": true,
+        "actual_candidate_reset_compiled": true,
+        "reference_source_files": 9,
+        "public_scalar_definitions": {
+          "cmn_reg": {
+            "reset_cfg_addr": "0xc",
+            "reset_cmd_addr": "0x10",
+            "rst_cmd_hw_reset_complete_val": "0x1",
+            "rst_cmd_irq_ctrl_only_val": "0x4",
+            "rst_cmd_sw_reset_complete_val": "0x2",
+            "rst_loc_complete_csid_val": "0x1",
+            "rst_loc_path_only_val": "0x0",
+            "rst_location_shift_val": "4",
+            "rst_mode_frame_boundary_val": "0x0",
+            "rst_mode_immediate_val": "0x1",
+            "rst_mode_shift_val": "0"
+          },
+          "csi2_reg": {
+            "cfg0_addr": "0x200",
+            "cfg1_addr": "0x204"
+          },
+          "IRQ": {
+            "CSID_TOP_IRQ_STATUS": "0x7C",
+            "CSID_TOP_IRQ_MASK": "0x80",
+            "CSID_TOP_IRQ_CLEAR": "0x84",
+            "CSID_IRQ_CMD": "0x14",
+            "CSID_TOP_IRQ_RESET": "0x1"
+          }
+        },
+        "kernel_primitives_IRQ_MMIO_and_waits_are_test_adapters": true,
+        "hardware_qualified": false,
+        "streaming_stop_or_DMA_retirement_proven": false
+      }
+    }
+  ],
+  "reference_rejections": [
+    {
+      "case": "public_changed",
+      "status": "PASS",
+      "reason": "changed pinned source"
+    },
+    {
+      "case": "public_missing",
+      "status": "PASS",
+      "reason": "missing or symlink source"
+    },
+    {
+      "case": "public_symlink",
+      "status": "PASS",
+      "reason": "missing or symlink source"
+    },
+    {
+      "case": "candidate_changed",
+      "status": "PASS",
+      "reason": "changed pinned source"
+    },
+    {
+      "case": "patch_changed",
+      "status": "PASS",
+      "reason": "changed pinned source"
+    }
+  ],
+  "public_reference_files_verified": 9,
+  "previous_completion_source_unchanged": true,
+  "patch_chain_replayed": {
+    "patches": 6,
+    "files": 10,
+    "matches_candidate": true
+  },
+  "checkpatch": {
+    "exit_code": 0,
+    "detail": "total: 0 errors, 0 warnings, 44 lines checked\n\n/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/camss/patches/0006-camss-csid680-use-fresh-software-reset.patch has no obvious style problems and is ready for submission."
+  },
+  "pins": {
+    "src/upstream/camss/patches/0006-camss-csid680-use-fresh-software-reset.patch": "6a9216b549e2aece4af85c816eba051d792b69b57a71e4d35c562b0a7a0e3dcc",
+    "tools/test-upstream-csid680-reset.py": "34e85b0fe971283304dd189f85b653750d48a02052b868fdc50f367d8cf72445",
+    "src/upstream/camss/csid680-reset-reference-20261012.json": "a069673985b9b834833399f2ad0e6373eae5f5e615d47c589c6b451a82799fbf"
+  },
+  "preserved_attempts": [
+    {
+      "candidate": "07",
+      "kernel_compile": "PASS",
+      "style": "One comment spelling warning corrected in08; source/build/patch retained"
+    },
+    {
+      "test": "initial hosted reference loop",
+      "status": "FAILED_FIXED",
+      "reason": "Public halt enum contains RESUME between FRAME_BOUNDARY and IMMEDIATELY; fixture now uses named public enum instead of casting ordinal loop index. Failure log was not persisted before correction; no initial pass claimed."
+    }
+  ],
+  "limits": [
+    "Power-up initialization, not a streaming-stop backend",
+    "Kernel MMIO, IRQ, synchronization and wait primitives are hosted adapters",
+    "No real reset latch/IRQ/concurrency or physical CSID/VFE/CDM/DMA retirement proof",
+    "No full kernel/modpost/module link or hardware qualification",
+    "Exact VFE core/Bayer/precision and complete independent startup remain required",
+    "Both installed private startup consumers remain; no runtime/boot/DT/module changes"
+  ]
+}

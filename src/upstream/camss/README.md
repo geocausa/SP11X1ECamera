@@ -1,3 +1,13 @@
+## Latest reset checkpoint, 2026-10-12
+
+A sixth patch now initializes CSID680 through a fresh single-command software
+reset. Candidate08 builds CAMSS/generic ISP objects with zero warnings and
+passes 102 hosted freshness cases plus26 actual public-reset comparisons per
+compiler, five pin rejection cases and six-patch replay across ten files.
+See CSID680-RESET-20261012.md. No camera/runtime consumer was changed; physical
+streaming-stop and DMA retirement remain unqualified in this candidate.
+The following completion and four-patch checkpoints remain reproducible history.
+
 ## Latest completion checkpoint, 2026-10-12
 
 The original four source patches now have a fifth completion-routing patch.

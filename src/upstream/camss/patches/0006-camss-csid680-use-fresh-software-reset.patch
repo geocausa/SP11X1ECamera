@@ -1,0 +1,48 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -324,22 +324,36 @@
+ 	u32 val;
+ 	int i;
+ 
++	/* Power-up initialization only: no streaming path may share this reset. */
++	writel(0, csid->base + CSID_TOP_IRQ_MASK);
++	readl(csid->base + CSID_TOP_IRQ_MASK);
++	synchronize_irq(csid->irq);
++
++	/* Drain an old acknowledgment before arming the fresh completion. */
++	writel(CSID_TOP_IRQ_RESET, csid->base + CSID_TOP_IRQ_CLEAR);
++	writel(CSID_IRQ_CMD_CLEAR, csid->base + CSID_IRQ_CMD);
++	if (readl(csid->base + CSID_TOP_IRQ_STATUS) & CSID_TOP_IRQ_RESET) {
++		dev_err(csid->camss->dev, "CSID stale reset status did not clear\n");
++		return -EIO;
++	}
+ 	reinit_completion(&csid->reset_complete);
+-
+-	writel(CSID_IRQ_CMD_CLEAR, csid->base + CSID_IRQ_CMD);
+-
+-	/* preserve registers */
++	writel(CSID_TOP_IRQ_RESET, csid->base + CSID_TOP_IRQ_MASK);
++
++	/* The public CSID680 complete software reset cuts off receiver input. */
++	writel(0, csid->base + CSID_CSI2_RX_CFG0);
++	writel(0, csid->base + CSID_CSI2_RX_CFG1);
+ 	val = CSID_RESET_CFG_MODE_IMMEDIATE | CSID_RESET_CFG_LOCATION_COMPLETE;
+ 	writel(val, csid->base + CSID_RESET_CFG);
+-
+-	val = CSID_RESET_CMD_HW_RESET | CSID_RESET_CMD_SW_RESET;
+-	writel(val, csid->base + CSID_RESET_CMD);
++	writel(CSID_RESET_CMD_SW_RESET, csid->base + CSID_RESET_CMD);
+ 
+ 	time = wait_for_completion_timeout(&csid->reset_complete,
+ 					   msecs_to_jiffies(CSID_RESET_TIMEOUT_MS));
+ 	if (!time) {
++		writel(0, csid->base + CSID_TOP_IRQ_MASK);
++		readl(csid->base + CSID_TOP_IRQ_MASK);
++		synchronize_irq(csid->irq);
+ 		dev_err(csid->camss->dev, "CSID reset timeout\n");
+-		return -EIO;
++		return -ETIMEDOUT;
+ 	}
+ 
+ 	for (i = 0; i < MSM_CSID_MAX_SRC_STREAMS; i++) {
