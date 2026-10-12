@@ -1,3 +1,15 @@
+## Processed input checkpoint, 2026-10-12
+
+A separate public-derived CSID680 RAW10 IPP register plan now passes actual
+GPL-function comparison and ARM64 object checks. Seven writes prepare the
+disabled input path; the target is CSID, distinct from VFE CDM. Evidence:
+docs/UPSTREAM-CSID680-IPP-VALIDATION-20261012.json.
+The prepared source pieces cover input decode, front processing and FULL NV12
+bus setup, with no private input in these helpers. A full provider still needs
+exact VFE core/Bayer/precision and safe owned-resource linking/retirement.
+Reuse Claude's measured front/rear calibration and generators, then revalidate
+domains on the independent path. Both installed private consumers remain.
+
 ## Current checkpoint, 2026-10-12
 
 Independent front processing and disabled FULL NV12 bus setup now pass host

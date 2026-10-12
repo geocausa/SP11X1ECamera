@@ -1,3 +1,32 @@
+## 2026-10-12 exact processed RAW10 input setup prepared
+
+Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.
+New sp11-csid680-ipp.h derives seven disabled IPP writes from public Qualcomm
+CSID680 definitions: RAW10 decode, single VC/DT slot, pixel store/timestamps
+and every-frame policy. A typed CSID target keeps offsets separate from VFE
+CDM. No firmware/carrier/schema, MMIO, allocation, path enable, CTRL, reset,
+IRQ mask or apply. Full sensor pass-through; no CFA/precision interpretation.
+Six public GPL files pinned; four unchanged actual public decoder/config
+functions compiled with test-only structures/fake MMIO. Reference initial
+CFG0 and CFG1 match128 VC/slot cases each under GCC/Clang ASAN/UBSAN;
+31 atomic rejections each,3 reference pin rejections PASS.
+Final ARM64 kernel object W=1/-Werror PASS,0warnings; header checkpatch PASS.
+Only stack protection undefined. Initial comment-style warning corrected;
+attempt01 retained, final attempt02 pins current source. Probe never loaded.
+37 original public RFC source pins unchanged. Evidence:
+docs/UPSTREAM-CSID680-IPP-VALIDATION-20261012.json; provenance/repro
+src/upstream/isp-config/CSID680-IPP-PROVENANCE.md.
+Independent source pieces now include processed input preparation, front
+processing and disabled FULL NV12 bus setup. They are not a complete provider.
+NEXT exact VFE core/Bayer/DEMUX/precision and owned CSID/VFE/CDM/DMA linking,
+shared initialization, completion and physical retirement; qualify a fresh
+candidate with no private startup or retained steady-update carrier/fallback.
+Reuse Claude's existing calibration packages/generators; revalidate domains.
+Both installed private consumers remain,all14 readiness gates blocked.
+No private input/pixels,camera capture,boot/module/DT/runtime/system-sleep change.
+Golden and original baseline preserved. Ask before prepared front optics.
+Earlier technical/calibration checkpoints below remain historical context.
+
 ## 2026-10-12 existing Claude calibration recovered: reuse before new measurements
 
 Audit docs/UPSTREAM-EXISTING-CALIBRATION-AUDIT-20261012.json verifies Claude

@@ -1,0 +1,164 @@
+{
+  "schema": "sp11-csid680-ipp-validation-v1",
+  "utc": "2026-10-12T06:23:04.366566+00:00",
+  "source_parent_commit": "6184f340423478613816c477cec33547d8ee1e1b",
+  "status": "DISABLED_RAW10_IPP_INPUT_SOURCE_PASS_PROVIDER_REQUIRED",
+  "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-csid680-ipp-build-20261012-02",
+  "source": "src/upstream/isp-config/sp11-csid680-ipp.h",
+  "provenance": "src/upstream/isp-config/CSID680-IPP-PROVENANCE.md",
+  "reference": "src/upstream/isp-config/csid680-ipp-reference-20261012.json",
+  "source_sha256": {
+    "sp11-csid680-ipp.h": "71e92964e69aca0cb5ef2112cce8182fa4c53d3c7f47c21a3d00dc7d6665fc5f",
+    "test-csid680-ipp.c": "625436dacd612dd5e2ada1f9a9ff97f293c6ee0ed134b5f86b697d0b5d6fbeb5",
+    "test_csid680_ipp.py": "16ddf9938bea05bc9ac0bb32307d1bb7d6f4fb59cdd3edbdbcd4f6e4d33a7084",
+    "csid680-ipp-reference-20261012.json": "102e59cc977b211350c99031d0648ef64ea499e25e8b1e7caa2622d71ac0f653",
+    "CSID680-IPP-PROVENANCE.md": "8fe88f8e72f74269ce515bc01c5067650b898c214639d315ab629b72f6ad0b09",
+    "csid680-ipp-compile-probe/Makefile": "453c0d20e302026a42f28781f59c5ccd51d141bca517eff1423bfb05cf48a406",
+    "csid680-ipp-compile-probe/sp11-open-csid680-ipp.c": "695cbb58a7dcad97ad53919091bd1097d4ccf4c09d4a65c495a2df718bd50e46"
+  },
+  "compile_plan": {
+    "utc": "2026-10-12T06:16:01.572717+00:00",
+    "source_parent_commit": "6184f340423478613816c477cec33547d8ee1e1b",
+    "source_sha256": {
+      "sp11-csid680-ipp.h": "71e92964e69aca0cb5ef2112cce8182fa4c53d3c7f47c21a3d00dc7d6665fc5f",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "command": [
+      "make",
+      "-C",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/source",
+      "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-03/build",
+      "M=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-csid680-ipp-build-20261012-02",
+      "W=1",
+      "KCFLAGS=-Werror",
+      "sp11-open-csid680-ipp.o"
+    ],
+    "runtime_changed": false,
+    "never_load": true,
+    "prior_attempt_preserved": {
+      "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-csid680-ipp-build-20261012-01",
+      "note": "Initial kernel object passes; one comment alignment warning corrected. No logic change."
+    }
+  },
+  "kernel_object_compile": {
+    "utc": "2026-10-12T06:16:04.874763+00:00",
+    "exit_code": 0,
+    "warning_lines": 0,
+    "object_created": true,
+    "never_load": true,
+    "module_linked": false,
+    "runtime_changed": false,
+    "object_sha256": "cc443b08c913e93c2839c154ab2b3958381cf6190b71cb5badc4c3f194f6d314",
+    "undefined_symbols": [
+      "                 U __stack_chk_fail"
+    ]
+  },
+  "host": {
+    "command": [
+      "python3",
+      "src/upstream/isp-config/test_csid680_ipp.py",
+      "--reference-dir",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-csid680-ipp-public-20261012-01/source"
+    ],
+    "exit_code": 0,
+    "result": {
+      "schema": "sp11-csid680-ipp-tests-v1",
+      "tests": [
+        {
+          "compiler": "gcc",
+          "status": "PASS",
+          "asan": true,
+          "ubsan": true,
+          "detail": "PASS CSID680 IPP routes=128 atomic_rejections=31 writes=7 path_enabled=0 separate_target=CSID",
+          "actual_public_functions_compiled": 4
+        },
+        {
+          "compiler": "clang",
+          "status": "PASS",
+          "asan": true,
+          "ubsan": true,
+          "detail": "PASS CSID680 IPP routes=128 atomic_rejections=31 writes=7 path_enabled=0 separate_target=CSID",
+          "actual_public_functions_compiled": 4
+        }
+      ],
+      "public_source_files_verified": 6,
+      "reference_pin_rejections": 3,
+      "production_header_sha256": {
+        "sp11-csid680-ipp.h": "71e92964e69aca0cb5ef2112cce8182fa4c53d3c7f47c21a3d00dc7d6665fc5f",
+        "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+      },
+      "register_writes": 7,
+      "target": "CSID680_IPP_ONLY",
+      "private_input_read": false,
+      "hardware_access": false,
+      "path_enabled": false,
+      "complete_startup_provider": false,
+      "runtime_dependencies_removed": false
+    }
+  },
+  "style": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "scope": "new production header only; no DCO or submission acceptance claim"
+  },
+  "original_public_rfc_files_unchanged": 37,
+  "register_target": "CSID680_IPP_ONLY_SEPARATE_FROM_VFE",
+  "register_writes": 7,
+  "hardware_qualified": false,
+  "path_enabled": false,
+  "private_input_read": false,
+  "private_pixels_read": false,
+  "runtime_changed": false,
+  "complete_startup_provider": false,
+  "runtime_dependencies_removed": false,
+  "vfe_core_bayer_and_precision_resolved": false,
+  "physical_retirement_proven": false,
+  "mapping_ownership_proven": false,
+  "installed_private_consumers_remaining": 2,
+  "upstream_ready": false,
+  "measurement_reuse": "docs/UPSTREAM-EXISTING-CALIBRATION-AUDIT-20261012.json",
+  "final_checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "tools/test-upstream-readiness.py"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "stdout": "",
+      "stderr": "test_changed_source_invalidates_evidence (__main__.GateTests.test_changed_source_invalidates_evidence) ... ok\ntest_duplicate_component (__main__.GateTests.test_duplicate_component) ... ok\ntest_empty_manifest_cannot_pass (__main__.GateTests.test_empty_manifest_cannot_pass) ... ok\ntest_hardware_opt_out_cannot_bypass_camera_qualification (__main__.GateTests.test_hardware_opt_out_cannot_bypass_camera_qualification) ... ok\ntest_malformed_identifier_and_version (__main__.GateTests.test_malformed_identifier_and_version) ... ok\ntest_missing_component (__main__.GateTests.test_missing_component) ... ok\ntest_missing_evidence (__main__.GateTests.test_missing_evidence) ... ok\ntest_no_hardware_evidence (__main__.GateTests.test_no_hardware_evidence) ... ok\ntest_paths_and_symlinks_rejected (__main__.GateTests.test_paths_and_symlinks_rejected) ... ok\ntest_private_runtime_dependency (__main__.GateTests.test_private_runtime_dependency) ... ok\ntest_submission_documentation_can_have_source_only_evidence (__main__.GateTests.test_submission_documentation_can_have_source_only_evidence) ... ok\ntest_unknown_provenance (__main__.GateTests.test_unknown_provenance) ... ok\ntest_unreviewed_trace_or_license (__main__.GateTests.test_unreviewed_trace_or_license) ... ok\ntest_valid_synthetic_gate (__main__.GateTests.test_valid_synthetic_gate) ... ok\ntest_wrong_component_evidence (__main__.GateTests.test_wrong_component_evidence) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.011s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "tools/check-upstream-readiness.py"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "stdout": "{\n  \"upstream_ready\": false,\n  \"blockers\": [\n    \"front-startup: private-runtime-dependency\",\n    \"rear-startup: private-runtime-dependency\",\n    \"cphy: needs-upstream-rebase\",\n    \"camss-driver: experimental-driver-cleanup\",\n    \"params-stats-api: interface-design-required\",\n    \"imx681: sensor-review-required\",\n    \"ov13858: sensor-review-required\",\n    \"focus-driver: userspace-i2c-dependency\",\n    \"regulator-dt: standard-topology-hang-unresolved\",\n    \"libcamera-pipeline: pipeline-rewrite-required\",\n    \"ipa: ipa-review-required\",\n    \"image-processing: bridge-migration-and-calibration-required\",\n    \"validation: qualification-incomplete\",\n    \"submission-export: curated-series-required\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "tools/check-repo-hygiene.sh"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "stdout": "repository hygiene: OK\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -149,3 +149,16 @@ docs/UPSTREAM-VFE680-NV12-VALIDATION-20261012.json.
 The helper does not prove mappings, completion or physical stop. The exact
 TOP4 input audit is docs/UPSTREAM-VFE680-INPUT-AUDIT-20261012.md; core/Bayer
 routing remains unresolved, so no complete startup or runtime independence.
+
+## Separate disabled CSID680 RAW10 input plan
+
+sp11-csid680-ipp.h prepares seven processed-input register writes with a CSID
+target, not VFE CDM bytes. It derives bounded VC/DT-slot routing and RAW10
+decoder configuration from exact public source, with no activation or firmware.
+Read CSID680-IPP-PROVENANCE.md for supported pass-through policy and limits.
+test_csid680_ipp.py requires the pinned source root and compares four actual
+GPL functions under fake MMIO. csid680-ipp-compile-probe is object-only.
+Evidence: docs/UPSTREAM-CSID680-IPP-VALIDATION-20261012.json.
+The provider still needs exact VFE core/Bayer/precision and physical ownership/
+retirement. Existing Claude calibration is recorded for reuse; no runtime
+private dependency is removed by these source helpers.
