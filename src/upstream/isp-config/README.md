@@ -162,3 +162,9 @@ Evidence: docs/UPSTREAM-CSID680-IPP-VALIDATION-20261012.json.
 The provider still needs exact VFE core/Bayer/precision and physical ownership/
 retirement. Existing Claude calibration is recorded for reuse; no runtime
 private dependency is removed by these source helpers.
+
+CDM 2.1 FIFO/reset observations are now source qualified; see
+CDM21-STATE-PROVENANCE.md and docs/UPSTREAM-CDM21-STATE-VALIDATION-20261012.json.
+The helper observes four FIFO counts and four unique reset ACK contexts, with
+stale/duplicate/fault handling. It has no MMIO or release operation and cannot
+prove DMA retirement. Hardware provider integration remains required.

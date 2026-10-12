@@ -1,0 +1,218 @@
+{
+  "schema": "sp11-cdm21-state-validation-v1",
+  "utc": "2026-10-12T09:53:23.997499+00:00",
+  "project_parent_commit": "91114e3684f7f7d1613575d82158f7c47adbb1a6",
+  "status": "PASS_SOURCE_ONLY_FIFO_AND_RESET_OBSERVATIONS",
+  "reference": "src/upstream/camss/cdm-lifetime-reference-20261012.json",
+  "host_validation": {
+    "schema": "sp11-cdm21-host-validation-v1",
+    "status": "PASS_SOURCE_ONLY",
+    "reference_pins": {
+      "cam_cdm.h": "fd4fa4a7469c2de259148e4e4921c2e2b4620c1330428b6fc799bb6846b252c2",
+      "cam_cdm_hw_core.c": "97189415ec8f1d0edf92b68e7590a907a009ee83a4d1ef0f9faf67635a4270d8",
+      "cam_cdm_hw_reg_2_1.h": "cc05c85f95e41d8d4940bf84620cdfe7cc320be10e05f21387a04af37d096955"
+    },
+    "helper_pins": {
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+      "sp11-cdm21-state.h": "64f0b9551bd080a656bc716a8d4d87f675d89247fa9bbd630c2711b3c8cb8fff"
+    },
+    "oracle": "unchanged public FIFO decoder and two exact public descriptors; test-only structures/MMIO adapter",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "sanitizers": [
+          "address",
+          "undefined"
+        ],
+        "counts": {
+          "checks": 111298,
+          "pending_snapshots": 12048,
+          "bank_order_sequences": 24
+        },
+        "stderr": "",
+        "compiler_version": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0"
+      },
+      {
+        "compiler": "clang",
+        "sanitizers": [
+          "address",
+          "undefined"
+        ],
+        "counts": {
+          "checks": 111298,
+          "pending_snapshots": 12048,
+          "bank_order_sequences": 24
+        },
+        "stderr": "",
+        "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)"
+      }
+    ],
+    "reference_rejections": [
+      {
+        "file": "cam_cdm.h",
+        "mode": "changed"
+      },
+      {
+        "file": "cam_cdm.h",
+        "mode": "missing"
+      },
+      {
+        "file": "cam_cdm.h",
+        "mode": "symlink"
+      },
+      {
+        "file": "cam_cdm_hw_core.c",
+        "mode": "changed"
+      },
+      {
+        "file": "cam_cdm_hw_core.c",
+        "mode": "missing"
+      },
+      {
+        "file": "cam_cdm_hw_core.c",
+        "mode": "symlink"
+      },
+      {
+        "file": "cam_cdm_hw_reg_2_1.h",
+        "mode": "changed"
+      },
+      {
+        "file": "cam_cdm_hw_reg_2_1.h",
+        "mode": "missing"
+      },
+      {
+        "file": "cam_cdm_hw_reg_2_1.h",
+        "mode": "symlink"
+      }
+    ],
+    "hardware_qualified": false,
+    "installed": false,
+    "dma_retirement_proven": false
+  },
+  "kernel_object_build": {
+    "schema": "sp11-cdm21-kernel-compile-v1",
+    "utc": "2026-10-12T09:51:05.801571+00:00",
+    "source_pins": {
+      "Makefile": "610275f384318124758faef74ac718713c319ec402fdfcecfe9fa87d35925096",
+      "sp11-open-cdm21.c": "cf807ef5b68c26b41337b75a5a2a5b5b635cfc0ede66d8ee63c9057273f40b58",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+      "sp11-cdm21-state.h": "64f0b9551bd080a656bc716a8d4d87f675d89247fa9bbd630c2711b3c8cb8fff"
+    },
+    "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01",
+    "kernel": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08",
+    "runs": [
+      {
+        "label": "checkpatch-header",
+        "argv": [
+          "perl",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source/scripts/checkpatch.pl",
+          "--no-tree",
+          "--file",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe/sp11-cdm21-state.h"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/checkpatch-header.log",
+        "output": "total: 0 errors, 0 warnings, 115 lines checked\n\n/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe/sp11-cdm21-state.h has no obvious style problems and is ready for submission.\n"
+      },
+      {
+        "label": "checkpatch-probe",
+        "argv": [
+          "perl",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source/scripts/checkpatch.pl",
+          "--no-tree",
+          "--file",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe/sp11-open-cdm21.c"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/checkpatch-probe.log",
+        "output": "total: 0 errors, 0 warnings, 33 lines checked\n\n/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe/sp11-open-cdm21.c has no obvious style problems and is ready for submission.\n"
+      },
+      {
+        "label": "object-build",
+        "argv": [
+          "make",
+          "-C",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source",
+          "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/build",
+          "M=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe",
+          "ARCH=arm64",
+          "W=1",
+          "KCFLAGS=-Werror",
+          "sp11-open-cdm21.o"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/object-build.log",
+        "output": "make: Entering directory '/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source'\nmake[1]: Entering directory '/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe'\n  CC [M]  sp11-open-cdm21.o\nmake[1]: Leaving directory '/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe'\nmake: Leaving directory '/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-08/source'\n"
+      },
+      {
+        "label": "object-machine",
+        "argv": [
+          "readelf",
+          "-h",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe/sp11-open-cdm21.o"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/object-machine.log",
+        "output": "ELF Header:\n  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 \n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              REL (Relocatable file)\n  Machine:                           AArch64\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          0 (bytes into file)\n  Start of section headers:          15720 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               64 (bytes)\n  Size of program headers:           0 (bytes)\n  Number of program headers:         0\n  Size of section headers:           64 (bytes)\n  Number of section headers:         24\n  Section header string table index: 23\n"
+      },
+      {
+        "label": "object-undefined",
+        "argv": [
+          "nm",
+          "-u",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/probe/sp11-open-cdm21.o"
+        ],
+        "exit_code": 0,
+        "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm21-state-build-20261012-01/object-undefined.log",
+        "output": "                 U __stack_chk_fail\n"
+      }
+    ],
+    "installed": false,
+    "loaded": false,
+    "hardware_qualified": false
+  },
+  "previous_attempt": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-cdm-public-20261012-01/host-validation-attempt01.json",
+  "limitations": [
+    "No fresh CDM hardware version read",
+    "No MMIO/IRQ reset or DMA lifetime proof",
+    "No provider integration, firmware replacement or optical qualification",
+    "Hosted adapter is not physical, concurrency or hardware evidence",
+    "No kernel/module installation or daily service change"
+  ],
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "validation_source_pins": {
+    "src/upstream/isp-config/test_cdm21_state.py": "63bddf38f12a44faf3e6eff5a6370d6059cc2dba678b06be7e742b5a660e967d",
+    "src/upstream/isp-config/CDM21-STATE-PROVENANCE.md": "9dde137da2f8a92f540403fd6750558c4bf0d6ae7d1a9a599f865ad5c6b3d52b"
+  },
+  "readiness_validation": {
+    "test_exit_code": 0,
+    "gate_exit_code": 1,
+    "result": {
+      "upstream_ready": false,
+      "blockers": [
+        "front-startup: private-runtime-dependency",
+        "rear-startup: private-runtime-dependency",
+        "cphy: needs-upstream-rebase",
+        "camss-driver: experimental-driver-cleanup",
+        "params-stats-api: interface-design-required",
+        "imx681: sensor-review-required",
+        "ov13858: sensor-review-required",
+        "focus-driver: userspace-i2c-dependency",
+        "regulator-dt: standard-topology-hang-unresolved",
+        "libcamera-pipeline: pipeline-rewrite-required",
+        "ipa: ipa-review-required",
+        "image-processing: bridge-migration-and-calibration-required",
+        "validation: qualification-incomplete",
+        "submission-export: curated-series-required"
+      ]
+    }
+  },
+  "post_work_readonly_status": {
+    "boot_id": "936d7197-d2ee-415d-a907-450a2e7b9cb2",
+    "services": "Id=sp11-camera-daily2.service\nActiveState=active\nSubState=exited\nNRestarts=0\n\nId=sp11-webcam-front.service\nActiveState=active\nSubState=running\nNRestarts=0\n\nId=sp11-webcam-rear.service\nActiveState=active\nSubState=running\nNRestarts=0\n",
+    "saved_entry": "sp11-audio-fullio-v19c",
+    "next_entry": "",
+    "available_bytes": 12131491840
+  }
+}

@@ -1,3 +1,20 @@
+## CDM 2.1 observation checkpoint, 2026-10-12
+
+Own source helper bounds four public FIFO counts and observes four unique reset
+ACK banks in a serialized epoch; duplicates/stale epochs cannot advance it and
+unexpected status latches a fault. No MMIO/submission/free or retirement claim.
+Public CDM2.1 lacks pause-complete status; CDM3.1 fields are not substituted.
+GCC/Clang ASAN/UBSAN each:12048 actual-public-decoder snapshots,24 IRQ bank
+orders,111298 assertions PASS;9 reference pin rejections. ARM64 object and
+checkpatch:0warnings. Eight exact public GPL files pinned; three used by oracle.
+Evidence:docs/UPSTREAM-CDM21-STATE-VALIDATION-20261012.json; repro:
+src/upstream/isp-config/CDM21-STATE-PROVENANCE.md. Epoch is software bookkeeping,
+not hardware IRQ freshness; all hardware ordering/retirement gates remain.
+Both private startup consumers and all14 readiness blockers remain.
+No capture/runtime/boot/service changes. Prior CSID candidate08 preserved.
+NEXT integrate owned CDM FIFO/reset/IRQ resources with physical stop/retirement;
+resolve exact VFE core/Bayer/precision, build compatible provider and qualify.
+
 ## CSID680 shared initialization checkpoint, 2026-10-12
 
 Patch0006 selects the exact public complete software reset and receiver cutoff;
