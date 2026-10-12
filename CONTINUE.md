@@ -1,3 +1,25 @@
+## Internal C-PHY preparation checkpoint, 2026-10-12
+
+Candidate17 compiles a dormant Qualcomm2.1.2 numerical preparation helper.
+Explicit frequency bounded before doubling;28 nominal symbol-rate bins;
+logical trios1..3, duplicate/unused-entry rejection; nonzero16-bit settle counter;
+atomic output publication. No MMIO/power/reset or runtime caller; no generic
+PHY ABI change. Counter bounds do not qualify MIPI timing or its clock domain.
+Four ARM64 objects W=1/-Werror0warnings; same-source external provider module
+links against candidate16's7.2.0 symbols with zero warnings. Candidate17 full
+Image not built/booted; candidate16 remains the latest full kernel checkpoint.
+GCC/Clang ASAN/UBSAN each6150 valid cases+150 atomic range+21 atomic errors;
+9 pin rejections,3file replay PASS. Original PHY files unchanged except Makefile.
+Per-file checkpatch clean; one FILE_PATH_CHANGES advisory covered by existing
+MAINTAINERS wildcards; advisory-reviewed check clean, no signoffs/submission.
+Evidence:docs/UPSTREAM-CPHY-CONFIG-VALIDATION-20261012.json; reproduction:
+src/upstream/phy/CPHY-CONFIG-20261012.md.
+NEXT qualified receiver timing and GPL sequence, typed PHY configure/consumer
+routing, sensor/power graph and guarded hardware; CDM physical retirement open.
+Both private consumers/all14 readiness blockers remain. Golden, inactive daily
+services, original evidence and calibration preserved; no installation/runtime
+or system sleep change. Prior checkpoint4ff3c0f5 is committed/pushed.
+
 ## Public PHY/platform integration checkpoint, 2026-10-12
 
 Candidate16 combines own CAMSS patches0001..0009 with12 selected public PHY

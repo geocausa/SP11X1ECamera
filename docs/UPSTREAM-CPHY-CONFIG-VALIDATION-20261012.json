@@ -1,0 +1,348 @@
+{
+  "status": "PASS_CPHY_NUMERICAL_PREPARATION_ARM64_AND_HOST_SOURCE_ONLY",
+  "head": "4ff3c0f5913ef22e891ce81de5707c4154c602a3",
+  "installed": false,
+  "hardware_qualified": false,
+  "runs": [
+    {
+      "label": "olddefconfig",
+      "argv": [
+        "make",
+        "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build",
+        "ARCH=arm64",
+        "olddefconfig"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "prepare",
+      "argv": [
+        "make",
+        "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build",
+        "ARCH=arm64",
+        "-j4",
+        "modules_prepare"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "objects",
+      "argv": [
+        "make",
+        "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build",
+        "ARCH=arm64",
+        "-j4",
+        "W=1",
+        "KCFLAGS=-Werror",
+        "drivers/media/platform/qcom/camss/qcom-camss.o",
+        "drivers/media/v4l2-core/v4l2-isp.o",
+        "drivers/phy/phy-core.o",
+        "drivers/phy/qualcomm/phy-qcom-mipi-csi2.o"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "source-style",
+      "exit_code": 0
+    },
+    {
+      "label": "header-style",
+      "exit_code": 0
+    }
+  ],
+  "public_nominal_symbol_rates": [
+    100000000,
+    200000000,
+    300000000,
+    350000000,
+    400000000,
+    500000000,
+    600000000,
+    700000000,
+    800000000,
+    900000000,
+    1000000000,
+    1200000000,
+    1500000000,
+    1700000000,
+    2000000000,
+    2100000000,
+    2350000000,
+    2500000000,
+    2600000000,
+    2800000000,
+    3000000000,
+    3300000000,
+    3500000000,
+    4000000000,
+    4500000000,
+    5000000000,
+    5500000000,
+    6000000000
+  ],
+  "public_array_names": [
+    "datarate_212_100Msps",
+    "datarate_212_200Msps",
+    "datarate_212_300Msps",
+    "datarate_212_350Msps",
+    "datarate_212_400Msps",
+    "datarate_212_500Msps",
+    "datarate_212_600Msps",
+    "datarate_212_700Msps",
+    "datarate_212_800Msps",
+    "datarate_212_900Msps",
+    "datarate_212_1p0Gsps",
+    "datarate_212_1p2Gsps",
+    "datarate_212_1p5Gsps",
+    "datarate_212_1p7Gsps",
+    "datarate_212_2p0Gsps",
+    "datarate_212_2p1Gsps",
+    "datarate_212_2p35Gsps",
+    "datarate_212_2p5Gsps",
+    "datarate_212_2p6Gsps",
+    "datarate_212_2p8Gsps",
+    "datarate_212_3p0Gsps",
+    "datarate_212_3p3Gsps",
+    "datarate_212_3p5Gsps",
+    "datarate_212_4p0Gsps",
+    "datarate_212_4p5Gsps",
+    "datarate_212_5p0Gsps",
+    "datarate_212_5p5Gsps",
+    "datarate_212_6p0Gsps"
+  ],
+  "parent_makefile_sha256": "1295f98d87cb0624d2f943177a8dc50bb9c8f5101aa35d75bf13fb4882c297f6",
+  "source_sha256": {
+    "drivers/phy/qualcomm/Makefile": "04748486776856803fa9d5c99feb73eebc23f86264d82169510ee40483165e8c",
+    "drivers/phy/qualcomm/phy-qcom-mipi-csi2-cphy-config.c": "f1ac5a3d30f941579ee6c415dc6872f8dcbc7b8b4a04fbd2356a97370dfc30d3",
+    "drivers/phy/qualcomm/phy-qcom-mipi-csi2-cphy-config.h": "2550ebb4bce2a655ddf9023fdfa4c97a8e66856f73f26e47c8b9eff52d55fe25"
+  },
+  "objects": [
+    {
+      "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build/drivers/media/platform/qcom/camss/qcom-camss.o",
+      "sha256": "7e5757b406d41566a9fafb09f426b01e34543cbf2f5655545c7235158869eab8",
+      "bytes": 2015616,
+      "machine": "AArch64"
+    },
+    {
+      "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build/drivers/media/v4l2-core/v4l2-isp.o",
+      "sha256": "43a3e7e1eb7b0fa6578211e8d4b97e15a202b236bd559af346bf66e92131afca",
+      "bytes": 21560,
+      "machine": "AArch64"
+    },
+    {
+      "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build/drivers/phy/phy-core.o",
+      "sha256": "1a266c1fc20cd26028e6376c9f222c3fbd87c55d71e7cf044b2a3adcdea354d7",
+      "bytes": 120936,
+      "machine": "AArch64"
+    },
+    {
+      "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build/drivers/phy/qualcomm/phy-qcom-mipi-csi2.o",
+      "sha256": "cc7aed059338cd2e340cbec057e78626777d3978b067aedecaef9c561d93afdc",
+      "bytes": 114488,
+      "machine": "AArch64"
+    }
+  ],
+  "limits": [
+    "Internal numerical preparation; no generic PHY C-PHY ABI or runtime caller",
+    "Caller settle count bounds do not establish MIPI timing or clock-domain validity",
+    "No register writes, power/reset, DT or installation changes",
+    "Standalone C-PHY power-on remains unsupported"
+  ],
+  "host_tests": {
+    "result": "PASS_CPHY_NUMERICAL_PREPARATION_SOURCE_ONLY",
+    "source_sha256": {
+      "phy-qcom-mipi-csi2-cphy-config.c": "f1ac5a3d30f941579ee6c415dc6872f8dcbc7b8b4a04fbd2356a97370dfc30d3",
+      "phy-qcom-mipi-csi2-cphy-config.h": "2550ebb4bce2a655ddf9023fdfa4c97a8e66856f73f26e47c8b9eff52d55fe25"
+    },
+    "public_header_sha256": "1f5dc382c0d3d62714195022f2b811a058eb80642821c38f5737488d36352bf5",
+    "compilers": [
+      {
+        "compiler": "gcc",
+        "result": {
+          "successful_boundary_route_counter_cases": 6150,
+          "out_of_range_atomic_cases": 150,
+          "extra_atomic_error_cases": 21,
+          "front_2p4_selects_2p5_bin": true
+        }
+      },
+      {
+        "compiler": "clang",
+        "result": {
+          "successful_boundary_route_counter_cases": 6150,
+          "out_of_range_atomic_cases": 150,
+          "extra_atomic_error_cases": 21,
+          "front_2p4_selects_2p5_bin": true
+        }
+      }
+    ],
+    "hardware_qualified": false,
+    "settle_timing_or_clock_domain_qualified": false,
+    "runtime_caller_present": false
+  },
+  "component": "cphy",
+  "result": "PARTIAL_SOURCE_PASS",
+  "upstream_ready": false,
+  "patch_replay": {
+    "result": "PASS",
+    "files": 3,
+    "output": "patching file drivers/phy/qualcomm/Makefile\npatching file drivers/phy/qualcomm/phy-qcom-mipi-csi2-cphy-config.c\npatching file drivers/phy/qualcomm/phy-qcom-mipi-csi2-cphy-config.h\n",
+    "patch_sha256": "304c1eca0165959673f729d10fe989e08b13189f6422c05b6c7cf040a982c0a5"
+  },
+  "pin_rejections": 9,
+  "patch_style": {
+    "exit_code": 1,
+    "output": "WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?\n#25: \nnew file mode 100644\n\ntotal: 0 errors, 1 warnings, 138 lines checked\n\nNOTE: For some of the reported defects, checkpatch may be able to\n      mechanically convert to the typical style using --fix or --fix-inplace.\n\n/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream/src/upstream/phy/patches/0001-qualcomm-csi2-prepare-cphy-config.patch has style problems, please review.\n\nNOTE: If any of the errors are false positives, please report\n      them to the maintainer, see CHECKPATCH in MAINTAINERS.\n",
+    "reviewed_advisory": "FILE_PATH_CHANGES; existing Qualcomm CSI2 wildcard covers new files",
+    "maintainers_patterns": [
+      "F:\tdrivers/phy/qualcomm/phy-qcom-mipi-csi2*.c",
+      "F:\tdrivers/phy/qualcomm/phy-qcom-mipi-csi2*.h"
+    ]
+  },
+  "repo_source_sha256": {
+    "src/upstream/phy/cphy-config/phy-qcom-mipi-csi2-cphy-config.c": "f1ac5a3d30f941579ee6c415dc6872f8dcbc7b8b4a04fbd2356a97370dfc30d3",
+    "src/upstream/phy/cphy-config/phy-qcom-mipi-csi2-cphy-config.h": "2550ebb4bce2a655ddf9023fdfa4c97a8e66856f73f26e47c8b9eff52d55fe25",
+    "src/upstream/phy/patches/0001-qualcomm-csi2-prepare-cphy-config.patch": "304c1eca0165959673f729d10fe989e08b13189f6422c05b6c7cf040a982c0a5",
+    "tools/test-upstream-cphy-config.py": "297433b80eb0ca8257bc16507fc561f57c196467402d57a9dc16a8f2fc2d8909"
+  },
+  "module_link": {
+    "installed": false,
+    "hardware_qualified": false,
+    "external_composite_link_probe": true,
+    "result": "PASS_LINKED_PROVIDER_WITH_PREPARATION_HELPER",
+    "argv": [
+      "make",
+      "O=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/build",
+      "M=/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-17/module-link01/source",
+      "ARCH=arm64",
+      "-j2",
+      "W=1",
+      "KCFLAGS=-Werror",
+      "modules"
+    ],
+    "exit_code": 0,
+    "same_provider_source_sha256": {
+      "phy-qcom-mipi-csi2-core.c": "3e68a92c46d71657b07e82ebb885d39ff15781762c90b0030d488ba68ee799ef",
+      "phy-qcom-mipi-csi2-3ph-dphy.c": "3f9b8b6a7bc56f4acc0238d1fd25346b945d22ab4587fe9f7072388f195aa766",
+      "phy-qcom-mipi-csi2.h": "75b9855d7eec8935ff34c4a4214083ae2e1c1b0c46c4d0fb50f12b50dbd7b8a2",
+      "phy-qcom-mipi-csi2-cphy-config.c": "f1ac5a3d30f941579ee6c415dc6872f8dcbc7b8b4a04fbd2356a97370dfc30d3",
+      "phy-qcom-mipi-csi2-cphy-config.h": "2550ebb4bce2a655ddf9023fdfa4c97a8e66856f73f26e47c8b9eff52d55fe25"
+    },
+    "parent_module_symvers_sha256": "5c16e085a18bfa70dd1c339e6da55b0cfe418c3bed4035c4378624f08967b26b",
+    "module_sha256": "ec6e3a89fd85f36bab253f9f3ac76787529837bd7eab44518604294e3900c9a5",
+    "vermagic": "7.2.0 SMP preempt mod_unload aarch64",
+    "log_reviewed_zero_warnings": true
+  },
+  "validation_scope": "Internal numerical preparation only; actual helper host tests, strict ARM64 objects and matching-parent module link; no timing/routing/power hardware admission",
+  "unchanged_phy_source_sha256": {
+    "phy-qcom-qmp-qserdes-txrx-v3.h": "62da2ec2e394ec3ef70d33280f44814dc3d55e900ab2620c4c4e35f276320688",
+    "phy-qcom-usb-hs.c": "c99c92c7574c42e2f9e6f8e7502358228bbd47feb64ac3340307268897e9978c",
+    "phy-qcom-qmp-pcs-v6-n4.h": "5551e09086e57b6b04defcf25f812e8da39904a3bfbab2d184ce06ac6b3fd993",
+    "phy-qcom-qmp-usbc.c": "2f944371a13eaee31c86db4d5d8fda36e42c1169bf5c68736f47d6ad3a1f1114",
+    "phy-qcom-qmp-pcs-aon-v8.h": "aa7e91e89491ba78ef55674debe3e73e7cec936a1342dffe784aa7d32a3e015c",
+    "phy-qcom-snps-femto-v2.c": "b3ada16f3fce7e5600b063016dfe2e81f66d8f092d2051c01f392010a8868f92",
+    "phy-qcom-qmp-pcs-pcie-v4.h": "85da4c22373896ea716f2dcaaecaa55d46580f1f345ee666556d20146cd1db89",
+    "Kconfig": "ecbebc8ad40f8aa8fe033fd636831e3e5bcc93e51e16c301e2d097237fad3612",
+    "phy-qcom-qmp-pcs-v7.h": "4a843b15c3e3d243d0ef5594b6a68b300e4bf01bb9c290ea4693a9d80904e2c3",
+    "phy-qcom-qmp-qserdes-txrx-v5_5nm.h": "e16a4d7de23143a3e5feb22e45a73a18b6baa951ececd5a45657763c19b39ddf",
+    "phy-qcom-qmp-usb.c": "46cfa2afde0e9fe31eceaf1cead08266d61b0f07beb92975674696eaf60af85e",
+    "phy-qcom-qmp-pcie.c": "04804a1d6dac7b8ae955c091c1a5a9ba82f9480ae02edea1c8b3e045c291db9f",
+    "phy-qcom-qmp-pcs-v4.h": "75c2912b6632f5d2955b48d112132cc229e55f58f9a00e440462bee0be6ab78c",
+    "phy-qcom-qmp-dp-qserdes-com-v8.h": "bc1af997e3de99d52c877734bdf8b402363acc1d87674f796cfa4bcb2d9e2d30",
+    "phy-qcom-qmp-pcs-usb-v4.h": "8cb7f39375d74e43ccfde6e6712d81a79e3b71af6145bd2c6ed3dc323e2c41b2",
+    "phy-qcom-qmp-pcs-v8.h": "2a4bb246f2be7320bf6e411d84818bb93f3555feb473d09c85a9338a96f6dae3",
+    "phy-qcom-qmp-qserdes-com-v4.h": "f529a988745568ed5384121a317ce497bdfca4df46d02d41f8c443ff83cb98a9",
+    "phy-qcom-qmp-qserdes-txrx-ufs-v7.h": "90d71d0ff84777eb578421dd8601ce9ba34152665a12d9dc8af40aa392bd33d4",
+    "phy-qcom-qmp.h": "622ce22277eaf14d5914a37ba04050784b447d3895b4b7f5b468d1e9330c2f97",
+    "phy-qcom-qmp-dp-phy-v4.h": "c0dedaffbbeca1c3e883dc9834e547f28d595bcb1b54cf999c9eb418edc7c84d",
+    "phy-qcom-qmp-pcs-sgmii.h": "1eb783e035dfef6b5192aac7ec7626971c553759159c0b4f61666ecf19712d23",
+    "phy-qcom-qmp-qserdes-dp-com-v8.h": "304c2f7e338a73cfbd29cbd11107d6a17626b8bad6eee0ee5f7f90e0dd7d794a",
+    "phy-qcom-qmp-pcs-usb-v8.h": "c69f4530beeaee9e215014832be883a5b12bd0e15a2c47286a523c59d95e014e",
+    "phy-qcom-qmp-pcs-misc-v8.h": "c198873437c49168b356e77828b4562c8f9e395fa72a43597e22e86798089835",
+    "phy-qcom-qmp-pcs-misc-v5.h": "4a3d93ada0b78b8a7fb7adb482bb28f638667c8842a3741946a8a2d7342a684f",
+    "phy-qcom-qmp-dp-phy-v2.h": "d8763c25cbfa6b4586c877c400d0918915249a1efc801b44b26b91354f456b0f",
+    "phy-qcom-qmp-pcs-pcie-v6.h": "94c874146205004a18bf01ccc99796b412b73f67e33b438a68630ed4e2915e0b",
+    "phy-qcom-qmp-pcs-ufs-v5.h": "dfedfb431da26739e4ab0a200d97034a3b6c02075872ebc095d4b3956f8b0bb5",
+    "phy-qcom-qmp-pcs-v3.h": "655f52d837b0a91bc4f7c632682ca16f29fbb939acae9ca9489662008a87a8de",
+    "phy-qcom-mipi-csi2-3ph-dphy.c": "3f9b8b6a7bc56f4acc0238d1fd25346b945d22ab4587fe9f7072388f195aa766",
+    "phy-qcom-qmp-pcs-pcie-v4_20.h": "b991e98f888a9bed189dd0b635e7e9e5752b48265ef0612af3ddfd6b913e1890",
+    "phy-qcom-qmp-qserdes-txrx-v2.h": "8fa7365541df708489df7f439c03c04ce546a0c5fa70d215f860fba6c5d8191f",
+    "phy-qcom-qmp-qserdes-txrx-v6_n4.h": "b7254abaeaa33fc76794246bcced1e98355fddcaa30929fe2543eb28d7400781",
+    "phy-qcom-sgmii-eth.c": "49f22fecd31a2271849d704ca006cb6283a18b76a1b74cae74cad9bc2226feea",
+    "phy-qcom-qmp-pcs-aon-v6.h": "5cd86562bf4a8240223bbb0ac874e181e3bbdef1ee44cc3b3c16297b91f9324e",
+    "phy-qcom-qmp-pcs-ufs-v2.h": "57477ba548853113f870f0e4545dd9dae242411d9222f26ca64eb4fb044935ee",
+    "phy-qcom-qmp-qserdes-txrx-pcie-v8.h": "f6915b6652337b9d5371b8fbcd2d10ec1e284dcbc7d5998dafd2e6df67083c3d",
+    "phy-qcom-qmp-pcs-pcie-v5_20.h": "9d6f299830593a829e2690576df6422962b7e7cf060ea09f384421bb6b2b20fe",
+    "phy-qcom-qmp-dp-phy-v6.h": "6db2c0f7e6c8f3790b104fd17b81eb4dd696f59beb229553c4f38a9e7a05a6c9",
+    "phy-qcom-edp.c": "6d37a71deba4db19739f8eafd56833f0ca7e41cfc5f9dc9bdaf6d76af48efc23",
+    "phy-qcom-qmp-qserdes-com-v8.h": "89110804b8524cd37438fbfc67982700ab1473715f33a9de4b67dcaa8777076d",
+    "phy-qcom-qmp-pcs-v8_50.h": "60dd11d1fa579b3df91e14d42ec98b01cc1b02c6122723b1ef130e37a8f15a6f",
+    "phy-qcom-ipq4019-usb.c": "9614186f8ab40b7dcb31e484f8fc61096e4f7d28bef2f6883d87df38dd04eae3",
+    "phy-qcom-qmp-combo.c": "7f4b7e4a20fe82e0a52649001c43f0f4260742b42eed7138911d93332b0f1470",
+    "phy-qcom-qmp-pcs-ufs-v6.h": "6ac26640c19dc19dfaccf93aeb639d35395afb52658fd0bdd00a78a3efbf0f6a",
+    "phy-qcom-qusb2.c": "4e0c7eae5f524dc5393bc017f5b38c47126924fccef7e39609788823faf8c825",
+    "phy-qcom-qmp-pcs-usb-v5.h": "8f13b885e8775661833ada6a87a731c331de2703c65c9d64f40f999890cb63c1",
+    "phy-qcom-qmp-qserdes-lalb-v8.h": "7f38f6652dc0c7752d4991db1e51481de25a61e4fe8f3e08c435c8b17ea32854",
+    "phy-qcom-qmp-usb-legacy.c": "6ec5d96da16c5d5c5f9a3bfab4e078106503c0ef38b8c3395e4e7779e32923cc",
+    "phy-qcom-qmp-pcs-ufs-v3.h": "af2676e8a79ba1c469153c0fe9a2bbf3a66d19748fcb623ba9784a03c87a7348",
+    "phy-qcom-qmp-qserdes-ln-shrd-v6.h": "c38469869b558cf9712a71ee349b85c2c1fb01c7650131b849d8320079718b29",
+    "phy-qcom-qmp-qserdes-com-v6.h": "b7b3e2cdfb767f365b0f3376be48ca2327218aade6b7067f7c4ef7f78541943a",
+    "phy-qcom-qmp-qserdes-txrx-v4.h": "12bd13bcc5d2514f631d4990603277091853f0ef552f6d9488be105da324c55d",
+    "phy-qcom-qmp-common.h": "6812948a3dcc49351e2493676b79c3ee9fb4eeaa516a041b13c3fa93c31c5b2e",
+    "phy-qcom-qmp-pcs-ufs-v4.h": "25fd2cb6ce37b93f9c5bffab89824371dfccc925c07e971ffe402996c43eb97d",
+    "phy-qcom-qmp-qserdes-txrx-v4_20.h": "e699e329d6d12d0c9e92993e3dfc55722ab4a93ea3e1ccf2a7cf2a26d12cb822",
+    "phy-qcom-ipq806x-usb.c": "b05a622db8acdd5f93194b028cfe788f175ea5b16efa0b00c0d0ff15c1546c2f",
+    "phy-qcom-qmp-pcs-misc-v3.h": "43cdccceca31fcda6dd32ccb77f32547941f5acd5a7870f33988f6c39930d26e",
+    "phy-qcom-qmp-dp-phy.h": "727ff7bc45b642ea5db00f54c6590a0957454ec3c3a55ce428b578fea0731b7c",
+    "phy-qcom-qmp-pcs-v5_20.h": "1bf9bae245769d30ee696119548d149ba4fd2f320a84beadc99ab88dbddac4b6",
+    "phy-qcom-qmp-usb43-qserdes-com-v8.h": "e83d6a6c2a1e0645d3c27be5530ace09ea3869462131f7a415a0bfb808b8cbae",
+    "phy-qcom-m31.c": "d77ff8b91fe5cc88141d9dada110397e48d1960ecdaa81eaf6c065c5e9ed9f44",
+    "phy-qcom-qmp-pcie-msm8996.c": "50e958d4789515eb2205bcacf21ed09f5506def9492677d5a537aa05e3c95094",
+    "phy-qcom-qmp-qserdes-txrx-v6_20.h": "3357a168a0ef866380249da93aebf9fea9aadbb72fe59d7981a83e172229e8e2",
+    "phy-qcom-qmp-pcs-usb-v7.h": "582de6744d9d7157f9caedc26f3e50b3c4c573ba05cf7898b3014cca8f3138e0",
+    "phy-qcom-qmp-qserdes-txrx-v5.h": "861375c042b3773a504991ef65acb395ead6d24aab53575a44df4257014fe512",
+    "phy-qcom-qmp-pcs-v6_20.h": "987fe2731f663fe925a82e923d69b419fcbbf72d60255d73d922b5bdfe75ab15",
+    "phy-qcom-qmp-usb43-pcs-v8.h": "0e08521248d5fa4b2a6615b135ef47bf2ebdd2b818a04720eb3baf9e32eed168",
+    "phy-qcom-qmp-qserdes-com-v7.h": "d1540bbc719d263b0efdd2b5823dd7640ecc60f890a3314ed74df41ee3dd169a",
+    "phy-qcom-qmp-qserdes-com-v3.h": "1375cba01d3124f36514877a40e247028d28312d650f7dc4d490866fd740cf46",
+    "phy-qcom-qmp-dp-phy-v5.h": "76276abf8c8ab3c06d7d7238256aa79d3e860551e41d8973c828f57a551a6e10",
+    "phy-qcom-mipi-csi2.h": "75b9855d7eec8935ff34c4a4214083ae2e1c1b0c46c4d0fb50f12b50dbd7b8a2",
+    "phy-qcom-qmp-pcs-pcie-v8.h": "37b0806e1e9357baf264c1917410b65dd2723742476e83f5a703fc946221bb90",
+    "phy-qcom-qmp-ufs.c": "47e941f37fcf28b5a311087bebc48dc68ef3cb329183f0c1d62afb1fa2897bad",
+    "phy-qcom-qmp-dp-phy-v8.h": "8fbb21745f2d4ef0d8cb40450641e473cead295148e1342f87044a726dc419f1",
+    "phy-qcom-mipi-csi2-core.c": "3e68a92c46d71657b07e82ebb885d39ff15781762c90b0030d488ba68ee799ef",
+    "phy-qcom-m31-eusb2.c": "4e75319b6b3862778be33234b6385d19c684e10bcf88ab74b894627ca0839142",
+    "phy-qcom-qmp-dp-phy-v3.h": "6611b9d93692870e94f55d68bee7fab036aa169bd7fa05ae6ae711e22a5b90e4",
+    "phy-qcom-usb-ss.c": "f55a7e2ab403e95445342e682f5ff06ccbf7e9ccdecd6296c4278e1e39dd0148",
+    "phy-qcom-qmp-pcs-pcie-v6_20.h": "eb1e2dcaf009da0a5dfa16add81e6b000d98800c761563d6a232dafe78434940",
+    "phy-qcom-qmp-pcs-pcie-v6_30.h": "005902e0937e0dc352a35af2882751cc61713d5dc6e94fb77c0771cfbfc80639",
+    "phy-qcom-qmp-qserdes-txrx-v6.h": "b3058d41c64f7fadefa921df9efc967bb11c0d33a290bf865236687993235d12",
+    "phy-qcom-usb-hsic.c": "9641c26a6491f4d78ca60d3c0aedf4bed1e0936e994f3b61e0db46264d2ca3bb",
+    "phy-qcom-qmp-pcs-v6.h": "223333ae32d6f9238c3cd98369a593318447a225f4b30d71336a055887a7b9ff",
+    "phy-qcom-qmp-qserdes-com-v5.h": "80845088565bf4009134d6dbc6d098bff0f28d0082c86e6fc9be0fbddd5f2744",
+    "phy-qcom-qmp-qserdes-ln-shrd-v5.h": "46e37ebf417dff3d3faf51db7fb68759f6c9da14fec13f0862848f08cf7553aa",
+    "phy-qcom-qmp-qserdes-pll.h": "61ba329a79a6ab09a7f71e968efa3f5e8ee76e397fc82c019190673a081c97cd",
+    "phy-qcom-qmp-pcs-usb-v6.h": "54c8cbfe495e63c3f95eb89239bc3b22dfb123c505529e88b05876fb09f1ca4a",
+    "phy-qcom-eusb2-repeater.c": "74fb34dcc0ad2377d12969e78a20c7e307f24ed46acd1ad4c150397ac0964c6d",
+    "phy-ath79-usb.c": "77341682f6e15892c615f819c3b7194066f23418ddf9f9540c1fe3e39410634a",
+    "phy-qcom-qmp-qserdes-txrx-v8.h": "b970d041e7e20c42e431c1b64d5b5e875e4723e8cb1c256ad9a534185d4726a9",
+    "phy-qcom-qmp-pcs-v2.h": "561384773ffa82ced4026395bf1d1db4c234f895805f94252329fc90219a978b",
+    "phy-qcom-ipq806x-sata.c": "cc32f27c4c410e7477703158611c7c8198faa434d729e9030ae2033cac4c39ad",
+    "phy-qcom-qmp-pcs-v5.h": "24d627624e8a402a79464a20187e78d0407ad1a721d501cdb564f10f38324c37",
+    "phy-qcom-qmp-qserdes-txrx-v5_20.h": "be74e5cd9a3e13c49358ead029b9c8f98115a99e291a80fbd6222f850fc3ef9b",
+    "phy-qcom-qmp-pcs-pcie-v5.h": "4ba2a411a616183f1d836934893b10d29b3877a6c1f197936850c8fe7cf8297b",
+    "phy-qcom-usb-hs-28nm.c": "c7326d8dd42a99d1d4b17a2991327cb8927f23bfa0667b1b6e0484b65bcfad84",
+    "phy-qcom-apq8064-sata.c": "4ef2c30e33d5cdb9049c5ec9eef8f6d9a116c830a86bc2561fafda797175c557",
+    "phy-qcom-pcie2.c": "6bd6d424fb4df766ac0d97d420c05d59fcda64535624aadcda1138d3eddaaec4",
+    "phy-qcom-qmp-qserdes-txrx-v7.h": "7a1d156f5d057d10eaa76b2de414ea68444c5d59793cd783d07978289d4fef03",
+    "phy-qcom-qmp-pcs-v4_20.h": "13d5a3f8a93744e1e7989f80fdfdde398052c0830123e1d185fa07fc7e35c4d1",
+    "phy-qcom-qmp-pcs-v6_30.h": "07a57baa7616caf7dc5a90b01963938c20694faa9615ede05fd3c328d14acc0c",
+    "phy-qcom-qmp-dp-com-v3.h": "e6c545a6cfb121fea9ff120c7e56d704cc5f9ae536e6d34788fea2071f767864",
+    "phy-qcom-qmp-qserdes-com-v2.h": "bf520cdb645b4e88bdb820b5caaa0c291007d7b8482a39841be138ad8e239fd9",
+    "phy-qcom-qmp-pcs-misc-v4.h": "063445421a4f6ed23d463391a3862704c3ba60a2908c98e891a61d47881a713f",
+    "phy-qcom-qmp-qserdes-txrx-ufs-v6.h": "dac5c7b1d59428c08ac44d9e33f3320cd03450e4b764ecc44d3c3dd401e404a0",
+    "phy-qcom-qmp-pcie-qhp.h": "8c13a46405233dbe89e65fdedf06013e7b9533fd7f490931ac11dca7e698ba94",
+    "phy-qcom-uniphy-pcie-28lp.c": "54079115722a1680ee7544dbf7e4c9078ba2748b6ebadedb0112eb42ec230c59"
+  },
+  "parent_full_image_candidate": 16,
+  "candidate17_full_image_built": false
+}
