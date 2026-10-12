@@ -42,7 +42,10 @@
       "hardware_required": true,
       "sources": [],
       "evidence": null,
-      "next": "Compare public-source C-PHY table and board deltas against current X1E DTSI/PHY split proposals; remove lab toggles, qualify on pinned base"
+      "next": "Split PHY/API/platform public dependencies replay and strict objects/DT pass. Complete typed C-PHY configure and explicit sensor link-frequency contract, settle timing and supported-rate validation, public GPL sequence/CSID routing and guarded hardware qualification.",
+      "partial_public_dependency_evidence": "docs/UPSTREAM-X1E-DEPENDENCIES-VALIDATION-20261012.json",
+      "partial_rate_audit_evidence": "docs/UPSTREAM-CPHY-RATE-AUDIT-20261012.json",
+      "partial_public_reader_evidence": "docs/UPSTREAM-CPHY-PUBLIC-READER-20261012.json"
     },
     {
       "id": "camss-driver",
@@ -54,12 +57,13 @@
       "hardware_required": true,
       "sources": [],
       "evidence": null,
-      "next": "Candidate14 compiles dormant CDM2.1 PM/clock ownership and pre-MMIO owned reset guard. All reset attempts retain power; post-reset retirement/recovery and release remain unimplemented. Exact CDM provider routing, command/image lifetime, VFE core fields, compatible full build and hardware qualification remain.",
+      "next": "Candidate16 public split-PHY/platform dependencies source-qualified; full normal W1 Image/modules/modpost link passes with baseline warnings. Dormant CDM power ownership remains compiled but unwired. C-PHY, exact provider routing, VFE fields, command/image lifetime and physical retirement/recovery still required before hardware.",
       "partial_source_evidence": "docs/UPSTREAM-CSID680-RESET-VALIDATION-20261012.json",
       "partial_lifetime_source_evidence": "docs/UPSTREAM-CDM21-STATE-VALIDATION-20261012.json",
       "partial_backend_source_evidence": "docs/UPSTREAM-CDM21-BACKEND-VALIDATION-20261012.json",
       "partial_binding_source_evidence": "docs/UPSTREAM-CDM21-BINDING-VALIDATION-20261012.json",
-      "partial_power_source_evidence": "docs/UPSTREAM-CDM21-POWER-VALIDATION-20261012.json"
+      "partial_power_source_evidence": "docs/UPSTREAM-CDM21-POWER-VALIDATION-20261012.json",
+      "partial_public_dependency_evidence": "docs/UPSTREAM-X1E-DEPENDENCIES-VALIDATION-20261012.json"
     },
     {
       "id": "params-stats-api",
@@ -119,7 +123,8 @@
       "hardware_required": true,
       "sources": [],
       "evidence": null,
-      "next": "Diagnose normal provider boot hang before proposing standard DT topology."
+      "next": "Diagnose normal provider boot hang before proposing standard DT topology.",
+      "partial_public_dependency_evidence": "docs/UPSTREAM-X1E-DEPENDENCIES-VALIDATION-20261012.json"
     },
     {
       "id": "libcamera-pipeline",

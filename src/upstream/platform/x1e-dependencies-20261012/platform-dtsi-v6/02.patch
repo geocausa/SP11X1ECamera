@@ -1,0 +1,27 @@
+The vdd-csiphy supplies power the CSIPHY blocks. CSIPHYs may be
+described as standalone phy nodes carrying their own supplies, in which
+case the CAMSS node has none. Make the supplies optional; existing DTS
+remain valid.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+---
+ Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml b/Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml
+index 126400772d028..57a838fe2d229 100644
+--- a/Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml
+@@ -186,8 +186,6 @@ required:
+   - iommus
+   - power-domains
+   - power-domain-names
+-  - vdd-csiphy-0p8-supply
+-  - vdd-csiphy-1p2-supply
+   - ports
+ 
+ additionalProperties: false
+
+-- 
+2.55.0

@@ -1,0 +1,38 @@
+{
+  "result": "PASS_SOURCE_RATE_DISCREPANCY_REPRODUCED",
+  "actual_kernel_function": "v4l2_get_link_freq_ctrl",
+  "source_sha256": {
+    "drivers/media/v4l2-core/v4l2-common.c": "52aab0e884ce74f08228be7bd2562bea8a284fe7205cabc545e7eb5011a695e4",
+    "Documentation/driver-api/media/tx-rx.rst": "d477c2897633372631ea442b092414c669e96d464a86b67128fa9279c8d34b15",
+    "Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst": "13dffdde313d857f16934161b2624d10d207ef525dd76a262dabc69ee971a294"
+  },
+  "proposal_sha256": "75da3f037cd4ba74442049217c86717110a2253ef0285ba809b340c39b5c3846",
+  "compilers": [
+    {
+      "compiler": "gcc",
+      "result": {
+        "cphy_proposal_discrepancies": 75,
+        "dphy_controls": 100,
+        "explicit_link_controls": 3,
+        "error_controls": 4
+      }
+    },
+    {
+      "compiler": "clang",
+      "result": {
+        "cphy_proposal_discrepancies": 75,
+        "dphy_controls": 100,
+        "explicit_link_controls": 3,
+        "error_controls": 4
+      }
+    }
+  ],
+  "hardware_qualified": false,
+  "production_policy": "Require an explicit sensor link frequency; pixel-array rate is not bus pixel rate",
+  "validation_scope": "Pinned actual V4L2 fallback function in GCC/Clang ASAN/UBSAN host models; no live media graph or hardware",
+  "tool": "tools/test-upstream-cphy-rate.py",
+  "public_references": [
+    "src/upstream/phy/cphy-rate-reference-20261012/camss-resend-v9-08.patch",
+    "src/upstream/phy/cphy-rate-reference-20261012/public-cphy-source.json"
+  ]
+}

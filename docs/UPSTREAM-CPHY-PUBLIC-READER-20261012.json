@@ -1,0 +1,45 @@
+{
+  "result": "PASS_PUBLIC_CPHY_READER_SEMANTICS_SOURCE_ONLY",
+  "source_sha256": {
+    "cam_csiphy_2_1_2_hwreg.h": "1f5dc382c0d3d62714195022f2b811a058eb80642821c38f5737488d36352bf5",
+    "downstream-semantics-01/cam_csiphy_dev.h": "efef1af717f54ad458a1db00c989fcaa4fdd775a8572d49ea8924cfad0ccee82",
+    "downstream-semantics-01/cam_csiphy_core.c": "8a0e25e478bb76cef373b6a8ddfba03554a81e3bf9919371541b2c606da22119"
+  },
+  "actual_function": "cam_csiphy_cphy_data_rate_config",
+  "compilers": [
+    {
+      "compiler": "gcc",
+      "result": {
+        "bins": 28,
+        "boundary_phy_settle_cases": 2688,
+        "dynamic_settle_writes": 16128,
+        "default_cdr_writes": 8064,
+        "early_error_controls": 5,
+        "missing_table_noop": true,
+        "above_maximum_clamps_last_bin": true
+      }
+    },
+    {
+      "compiler": "clang",
+      "result": {
+        "bins": 28,
+        "boundary_phy_settle_cases": 2688,
+        "dynamic_settle_writes": 16128,
+        "default_cdr_writes": 8064,
+        "early_error_controls": 5,
+        "missing_table_noop": true,
+        "above_maximum_clamps_last_bin": true
+      }
+    }
+  ],
+  "hardware_qualified": false,
+  "limits": [
+    "Host MMIO and sleep models",
+    "CDR sweep/auxiliary settings not enabled",
+    "No generic C-PHY mode/API or live board graph qualification",
+    "Downstream out-of-range clamp and missing-table no-op must not be treated as upstream admission"
+  ],
+  "validation_scope": "Unchanged public GPL data-rate function, definitions and 28 arrays; modeled MMIO/sleep; GCC and Clang ASAN/UBSAN",
+  "first_failed_host_fixture": "reader-test-attempt01 retained on SP11; missing separator after macro extraction corrected; public sources unchanged",
+  "tool": "tools/test-upstream-cphy-public-reader.py"
+}

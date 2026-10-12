@@ -1,3 +1,35 @@
+## Public PHY/platform integration checkpoint, 2026-10-12
+
+Candidate16 combines own CAMSS patches0001..0009 with12 selected public PHY
+v17/API v17/platform v6 patches. Only2 contexts rebased; original bodies and
+adaptation separately pinned, with original author/review tags preserved for
+the original publications only. Final portable replay:16changed files and47
+unchanged CAMSS/ISP files;18 reference pin rejections and retained/nested-output
+guards PASS. Four retained AArch64 objects W=1/-Werror0warnings; scoped binding
+examples and disabled Denali OLED DTB/schema validation PASS.
+Full ARM64 Image/modules W=1 link PASS, with baseline warnings and zero
+camera/PHY/ISP warnings. Evidence:
+docs/UPSTREAM-X1E-DEPENDENCIES-VALIDATION-20261012.json.
+Reproduction:src/upstream/platform/X1E-DEPENDENCIES-20261012.md.
+
+C-PHY v9 pixel-rate fallback discrepancy reproduced in the actual pinned V4L2
+helper:75 cases,100 D-PHY controls,3 explicit link controls and4 error controls
+per GCC/Clang ASAN/UBSAN. Existing IMX681 explicit1.2GHz/2.4Gsymbol/s link is
+unaffected by that fallback. Public GPL2.1.2 reader:28bins/2688 cases per
+compiler,16128 dynamic settle writes/8064 default CDR writes. Table settle bytes
+are placeholders; missing-table no-op/out-of-range clamp are not admission.
+See docs/UPSTREAM-CPHY-RATE-AUDIT-20261012.json and
+docs/UPSTREAM-CPHY-PUBLIC-READER-20261012.json. Host fixtures model MMIO/sleep.
+
+The standalone PHY still implements D-PHY only. NEXT typed C-PHY configure,
+explicit sensor frequency, dynamic settle/supported-rate validation, public
+GPL sequence/CSID routing and sensor/power graph. CDM provider wiring, command/
+image ownership and physical retirement/recovery remain open. Both private
+startup consumers/all14 readiness blockers remain;15 readiness unit tests PASS.
+No installation/boot/capture/service/system-sleep changes. Protected Golden,
+inactive daily camera services, original evidence and calibration preserved.
+Earlier handoffs below are historical; current source counts are9own+12public.
+
 ## 2026-10-12 exact processed RAW10 input setup prepared
 
 Active work/upstream-open-stack-20261011 in SP11X1ECamera-upstream.

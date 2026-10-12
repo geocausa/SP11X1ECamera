@@ -1,3 +1,23 @@
+## Public split-PHY/platform source checkpoint, 2026-10-12
+
+Candidate16 applies project CAMSS patches0001..0009, then12 selected public
+PHY/API/platform patches. Two hunk contexts are separately rebased without
+changing additions/deletions. Portable replay verifies16 changed and47 unchanged
+CAMSS/ISP files;18 reference pin controls and nested-output/existing-path guards
+pass. Four retained ARM64 objects pass W=1/-Werror with zero warnings. Targeted
+binding examples and the disabled Denali OLED DTB pass scoped schema validation.
+Full Image/modules link qualification is recorded in
+docs/UPSTREAM-X1E-DEPENDENCIES-VALIDATION-20261012.json. See
+../platform/X1E-DEPENDENCIES-20261012.md for reproducible ordering and limits.
+
+The standalone PHY remains D-PHY-only. C-PHY rate audit and unchanged public
+GPL reader tests are in ../phy/CPHY-RATE-AUDIT-20261012.md and
+../phy/CPHY-PUBLIC-READER-20261012.md. Explicit link frequency, dynamic settle
+timing and supported-rate rejection must precede the new C-PHY path. The CDM
+backend remains dormant; physical retirement/provider integration are open.
+No camera installation/runtime change; both private consumers/all14 gates remain.
+Older checkpoints below are historical, not the current patch count.
+
 ## Latest reset checkpoint, 2026-10-12
 
 A sixth patch now initializes CSID680 through a fresh single-command software
