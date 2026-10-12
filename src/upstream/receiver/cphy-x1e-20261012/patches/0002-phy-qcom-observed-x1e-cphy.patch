@@ -1,0 +1,654 @@
+diff --git a/drivers/phy/qualcomm/Makefile b/drivers/phy/qualcomm/Makefile
+--- a/drivers/phy/qualcomm/Makefile
++++ b/drivers/phy/qualcomm/Makefile
+@@ -31,3 +31,5 @@
+ obj-$(CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2)+= phy-qcom-snps-femto-v2.o
+ obj-$(CONFIG_PHY_QCOM_IPQ806X_USB)	+= phy-qcom-ipq806x-usb.o
+ obj-$(CONFIG_PHY_QCOM_SGMII_ETH)	+= phy-qcom-sgmii-eth.o
++
++phy-qcom-mipi-csi2-y += phy-qcom-mipi-csi2-3ph-cphy.o
+diff --git a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-cphy.c b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-cphy.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-cphy.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++
++#include "phy-qcom-mipi-csi2.h"
++#include "phy-qcom-mipi-csi2-cphy-x1e80100.h"
++
++int mipi_csi2phy_cphy_validate(struct mipi_csi2phy_device *csi2phy,
++			     const struct mipi_csi2phy_stream_cfg *cfg)
++{
++	if (!csi2phy || !cfg)
++		return -EINVAL;
++
++	if (!csi2phy->cphy_supported ||
++	    csi2phy->phy_mode != PHY_MODE_MIPI_CPHY ||
++	    csi2phy->soc_cfg != &mipi_csi2_dphy_4nm_x1e)
++		return -EOPNOTSUPP;
++
++	if (cfg->num_data_lanes != 1 || cfg->lane_cfg.data[0].pos ||
++	    cfg->lane_cfg.data[0].pol || cfg->lane_cfg.clk.pol)
++		return -EOPNOTSUPP;
++
++	if (cfg->symbol_rate != csi2phy->soc_cfg->cphy_symbol_rate)
++		return -EOPNOTSUPP;
++
++	return 0;
++}
++
++static void
++mipi_csi2phy_cphy_write(struct mipi_csi2phy_device *csi2phy,
++		       const struct x1e80100_cphy_reg *table,
++		       unsigned int count)
++{
++	unsigned int i;
++
++	might_sleep();
++
++	for (i = 0; i < count; i++) {
++		u32 delay_us;
++
++		writel(table[i].reg_data, csi2phy->base + table[i].reg_addr);
++		if (!table[i].delay_ns)
++			continue;
++
++		delay_us = max_t(u32, table[i].delay_ns / NSEC_PER_USEC, 1);
++		if (delay_us <= 10)
++			udelay(delay_us);
++		else
++			usleep_range(delay_us,
++				     delay_us + max(delay_us / 100, 10U));
++	}
++}
++
++irqreturn_t mipi_csi2phy_cphy_irq(int irq, void *data)
++{
++	struct mipi_csi2phy_device *csi2phy = data;
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(x1e80100_cphy_irq_clear); i++) {
++		u32 delay_us;
++
++		writel(x1e80100_cphy_irq_clear[i].reg_data,
++		       csi2phy->base + x1e80100_cphy_irq_clear[i].reg_addr);
++		if (!x1e80100_cphy_irq_clear[i].delay_ns)
++			continue;
++
++		delay_us = max_t(u32, x1e80100_cphy_irq_clear[i].delay_ns /
++				 NSEC_PER_USEC, 1);
++		udelay(delay_us);
++	}
++
++	return IRQ_HANDLED;
++}
++
++int mipi_csi2phy_cphy_enable(struct mipi_csi2phy_device *csi2phy,
++			   struct mipi_csi2phy_stream_cfg *cfg)
++{
++	int ret;
++
++	ret = mipi_csi2phy_cphy_validate(csi2phy, cfg);
++	if (ret)
++		return ret;
++
++	mipi_csi2phy_cphy_write(csi2phy, x1e80100_cphy_reset,
++			       ARRAY_SIZE(x1e80100_cphy_reset));
++	mipi_csi2phy_cphy_write(csi2phy, x1e80100_cphy_toggle,
++			       ARRAY_SIZE(x1e80100_cphy_toggle));
++	mipi_csi2phy_cphy_write(csi2phy, x1e80100_cphy_common,
++			       ARRAY_SIZE(x1e80100_cphy_common));
++	mipi_csi2phy_cphy_write(csi2phy, x1e80100_cphy_config,
++			       ARRAY_SIZE(x1e80100_cphy_config));
++	/* Clear stale status before the core enables the owned Linux IRQ. */
++	mipi_csi2phy_cphy_irq(csi2phy->irq, csi2phy);
++
++	return 0;
++}
++
++void mipi_csi2phy_cphy_disable(struct mipi_csi2phy_device *csi2phy)
++{
++	unsigned int i;
++
++	/* The core has synchronously drained the Linux handler, with clocks on. */
++	for (i = 11; i < 22; i++)
++		writel(0, csi2phy->base + 0x1000 + 4 * i);
++
++	mipi_csi2phy_cphy_irq(csi2phy->irq, csi2phy);
++	mipi_csi2phy_cphy_write(csi2phy, x1e80100_cphy_shutdown,
++			       ARRAY_SIZE(x1e80100_cphy_shutdown));
++}
+diff --git a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
+--- a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-3ph-dphy.c
+@@ -277,6 +277,9 @@
+ 	u8 val;
+ 	int i;
+ 
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY)
++		return mipi_csi2phy_cphy_enable(csi2phy, cfg);
++
+ 	if (cfg->link_freq <= 0)
+ 		return -EINVAL;
+ 
+@@ -338,6 +341,11 @@
+ {
+ 	const struct mipi_csi2phy_device_regs *regs = csi2phy_dev_to_regs(csi2phy);
+ 
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY) {
++		mipi_csi2phy_cphy_disable(csi2phy);
++		return;
++	}
++
+ 	writel(0, csi2phy->base +
+ 	       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->common_regs_offset, 5));
+ 
+@@ -371,6 +379,9 @@
+ 
+ const struct mipi_csi2phy_soc_cfg mipi_csi2_dphy_4nm_x1e = {
+ 	.ops = &phy_qcom_mipi_csi2_ops_3ph_1_0,
++	.cphy_symbol_rate = 2406000000ULL,
++	.cphy_core_rate = 480000000,
++	.cphy_timer_rate = 400000000,
+ 	.reg_info = {
+ 		.init_seq = lane_regs_x1e80100,
+ 		.lane_array_size = ARRAY_SIZE(lane_regs_x1e80100),
+diff --git a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c
+--- a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c
+@@ -8,6 +8,7 @@
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/io.h>
++#include <linux/interrupt.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -35,11 +36,20 @@
+ 	int i, pstate;
+ 	int ret;
+ 
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY)
++		opp_rate = csi2phy->soc_cfg->cphy_core_rate;
++
+ 	opp = dev_pm_opp_find_freq_ceil(dev, &opp_rate);
+ 	if (IS_ERR(opp)) {
+ 		dev_err(csi2phy->dev, "Couldn't find ceiling for %lld Hz\n",
+ 			link_freq);
+ 		return PTR_ERR(opp);
++	}
++
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY &&
++	    opp_rate != csi2phy->soc_cfg->cphy_core_rate) {
++		dev_pm_opp_put(opp);
++		return -ERANGE;
+ 	}
+ 
+ 	pstate = 0;
+@@ -68,9 +78,17 @@
+ 		goto unset_opp_rate;
+ 	}
+ 
+-	timer_rate = clk_round_rate(csi2phy->timer_clk, link_freq / 4);
++	timer_rate = clk_round_rate(csi2phy->timer_clk,
++				    csi2phy->phy_mode == PHY_MODE_MIPI_CPHY ?
++				    csi2phy->soc_cfg->cphy_timer_rate : link_freq / 4);
+ 	if (timer_rate <= 0) {
+ 		ret = -ENODEV;
++		goto unset_opp_rate;
++	}
++
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY &&
++	    timer_rate != csi2phy->soc_cfg->cphy_timer_rate) {
++		ret = -ERANGE;
+ 		goto unset_opp_rate;
+ 	}
+ 
+@@ -100,10 +118,31 @@
+ 					union phy_configure_opts *opts)
+ {
+ 	struct mipi_csi2phy_device *csi2phy = phy_get_drvdata(phy);
+-	struct phy_configure_opts_mipi_dphy *dphy_cfg = &opts->mipi_dphy;
++	struct phy_configure_opts_mipi_dphy *dphy_cfg;
+ 	struct mipi_csi2phy_stream_cfg *stream_cfg = &csi2phy->stream_cfg;
+ 	int ret;
+ 
++	if (!opts)
++		return -EINVAL;
++	dphy_cfg = &opts->mipi_dphy;
++
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY) {
++		struct mipi_csi2phy_stream_cfg next = *stream_cfg;
++
++		if (opts->mipi_cphy.num_trios != stream_cfg->num_data_lanes)
++			return -EINVAL;
++		next.symbol_rate = opts->mipi_cphy.symbol_rate;
++		ret = mipi_csi2phy_cphy_validate(csi2phy, &next);
++		if (ret)
++			return ret;
++
++		*stream_cfg = next;
++		return 0;
++	}
++
++	if (csi2phy->phy_mode != PHY_MODE_MIPI_DPHY)
++		return -EOPNOTSUPP;
++
+ 	ret = phy_mipi_dphy_config_validate(dphy_cfg);
+ 	if (ret)
+ 		return ret;
+@@ -121,7 +160,17 @@
+ {
+ 	struct mipi_csi2phy_device *csi2phy = phy_get_drvdata(phy);
+ 
+-	if (mode != PHY_MODE_MIPI_DPHY)
++	if (mode == PHY_MODE_MIPI_CPHY) {
++		if (submode)
++			return -EINVAL;
++		if (!csi2phy->cphy_supported ||
++		    csi2phy->phy_mode != PHY_MODE_MIPI_CPHY)
++			return -EOPNOTSUPP;
++		return 0;
++	}
++
++	if (mode != PHY_MODE_MIPI_DPHY ||
++	    csi2phy->phy_mode != PHY_MODE_MIPI_DPHY)
+ 		return -EOPNOTSUPP;
+ 
+ 	csi2phy->phy_mode = mode;
+@@ -133,6 +182,14 @@
+ 	struct mipi_csi2phy_device *csi2phy = phy_get_drvdata(phy);
+ 	const struct mipi_csi2phy_hw_ops *ops = csi2phy->soc_cfg->ops;
+ 	int i, ret;
++
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY) {
++		ret = mipi_csi2phy_cphy_validate(csi2phy, &csi2phy->stream_cfg);
++		if (ret)
++			return ret;
++		if (csi2phy->irq <= 0)
++			return -ENODEV;
++	}
+ 
+ 	ret = regulator_bulk_enable(csi2phy->soc_cfg->num_supplies,
+ 				    csi2phy->supplies);
+@@ -154,13 +211,19 @@
+ 		goto unset_rate;
+ 	}
+ 
+-	ops->reset(csi2phy);
+-
+-	ops->hw_version_read(csi2phy);
++	if (csi2phy->phy_mode != PHY_MODE_MIPI_CPHY) {
++		ops->reset(csi2phy);
++		ops->hw_version_read(csi2phy);
++	}
+ 
+ 	ret = ops->lanes_enable(csi2phy, &csi2phy->stream_cfg);
+ 	if (ret)
+ 		goto unset_clocks;
++
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY) {
++		enable_irq(csi2phy->irq);
++		csi2phy->irq_enabled = true;
++	}
+ 
+ 	return 0;
+ 
+@@ -193,6 +256,11 @@
+ 	struct mipi_csi2phy_device *csi2phy = phy_get_drvdata(phy);
+ 	const struct mipi_csi2phy_hw_ops *ops = csi2phy->soc_cfg->ops;
+ 	int i;
++
++	if (csi2phy->irq_enabled) {
++		disable_irq(csi2phy->irq);
++		csi2phy->irq_enabled = false;
++	}
+ 
+ 	ops->lanes_disable(csi2phy, &csi2phy->stream_cfg);
+ 
+@@ -275,11 +343,52 @@
+ 	bus_type = MEDIA_BUS_TYPE_CSI2_DPHY;
+ 	fwnode_property_read_u32(ep, "bus-type", &bus_type);
+ 
++	if (bus_type == MEDIA_BUS_TYPE_CSI2_CPHY) {
++		u32 order = 0;
++
++		if (!csi2phy->soc_cfg->cphy_symbol_rate ||
++		    fwnode_property_present(ep, "clock-lanes") ||
++		    fwnode_property_present(ep, "lane-polarities")) {
++			ret = -EOPNOTSUPP;
++			goto out_put;
++		}
++		num_data_lanes = fwnode_property_count_u32(ep, "data-lanes");
++		if (num_data_lanes != 1) {
++			ret = -EOPNOTSUPP;
++			goto out_put;
++		}
++		ret = fwnode_property_read_u32_array(ep, "data-lanes",
++						   data_lanes, 1);
++		if (ret)
++			goto out_put;
++		if (data_lanes[0]) {
++			ret = -EOPNOTSUPP;
++			goto out_put;
++		}
++		if (fwnode_property_present(ep, "line-orders")) {
++			ret = fwnode_property_read_u32_array(ep, "line-orders",
++							   &order, 1);
++			if (ret)
++				goto out_put;
++			if (fwnode_property_count_u32(ep, "line-orders") != 1 ||
++			    order) {
++				ret = -EOPNOTSUPP;
++				goto out_put;
++			}
++		}
++		stream_cfg->num_data_lanes = 1;
++		csi2phy->phy_mode = PHY_MODE_MIPI_CPHY;
++		ret = 0;
++		goto out_put;
++	}
++
+ 	if (bus_type != MEDIA_BUS_TYPE_CSI2_DPHY) {
+ 		ret = -EOPNOTSUPP;
+ 		dev_err(dev, "Unsupported bus-type %u\n", bus_type);
+ 		goto out_put;
+ 	}
++
++	csi2phy->phy_mode = PHY_MODE_MIPI_DPHY;
+ 
+ 	num_data_lanes = fwnode_property_count_u32(ep, "data-lanes");
+ 	if (num_data_lanes < 1 || num_data_lanes > CSI2_MAX_DATA_LANES) {
+@@ -352,6 +461,7 @@
+ 		return -ENOMEM;
+ 
+ 	csi2phy->dev = dev;
++	csi2phy->irq = -1;
+ 	dev_set_drvdata(dev, csi2phy);
+ 
+ 	csi2phy->soc_cfg = device_get_match_data(&pdev->dev);
+@@ -422,6 +532,23 @@
+ 	csi2phy->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(csi2phy->base))
+ 		return PTR_ERR(csi2phy->base);
++
++	if (csi2phy->phy_mode == PHY_MODE_MIPI_CPHY) {
++		struct resource *res;
++
++		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++		if (!res || res->start != 0x0ace8000 ||
++		    resource_size(res) != 0x2000)
++			return -EOPNOTSUPP;
++		csi2phy->irq = platform_get_irq(pdev, 0);
++		if (csi2phy->irq <= 0)
++			return csi2phy->irq ? csi2phy->irq : -ENODEV;
++		ret = devm_request_irq(dev, csi2phy->irq, mipi_csi2phy_cphy_irq,
++				       IRQF_NO_AUTOEN, dev_name(dev), csi2phy);
++		if (ret)
++			return ret;
++		csi2phy->cphy_supported = true;
++	}
+ 
+ 	generic_phy = devm_phy_create(dev, NULL, &phy_qcom_mipi_csi2_ops);
+ 	if (IS_ERR(generic_phy)) {
+diff --git a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-cphy-x1e80100.h b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-cphy-x1e80100.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-cphy-x1e80100.h
+@@ -0,0 +1,198 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Qualcomm X1E80100 C-PHY register observations.
++ *
++ * These address/value/delay triples were independently transcribed from
++ * runtime WinDbg MMIO observations on the maintainer's own Surface Pro 11
++ * while its front camera was streaming.  They are hardware observations, not
++ * copied vendor source, decompiled output, or an extracted binary payload.
++ * Delays retain the observed nanosecond argument passed to the common writer.
++ */
++struct x1e80100_cphy_reg {
++	u32 reg_addr;
++	u32 reg_data;
++	u32 delay_ns;
++};
++
++static const struct x1e80100_cphy_reg x1e80100_cphy_reset[] = {
++	{ 0x1000, 0x01, 0x00000014 },
++	{ 0x1000, 0x00, 0x00000000 },
++};
++
++static const struct x1e80100_cphy_reg x1e80100_cphy_toggle[] = {
++	{ 0x025c, 0x10, 0x00000064 },
++	{ 0x025c, 0x00, 0x00000000 },
++	{ 0x065c, 0x10, 0x00000064 },
++	{ 0x065c, 0x00, 0x00000000 },
++	{ 0x0a5c, 0x10, 0x00000064 },
++	{ 0x0a5c, 0x00, 0x00000000 },
++};
++
++static const struct x1e80100_cphy_reg x1e80100_cphy_common[] = {
++	{ 0x1084, 0x00, 0x00000000 },
++	{ 0x108c, 0x00, 0x000003e8 },
++	{ 0x02f0, 0x00, 0x00000000 },
++	{ 0x06f0, 0x00, 0x00000000 },
++	{ 0x0af0, 0x00, 0x00000000 },
++	{ 0x1014, 0x02, 0x00000000 },
++	{ 0x101c, 0x7a, 0x00000000 },
++	{ 0x1018, 0x01, 0x00000000 },
++	{ 0x101c, 0x7a, 0x00000000 },
++};
++
++static const struct x1e80100_cphy_reg x1e80100_cphy_config[] = {
++	{ 0x0268, 0xf1, 0x00 },
++	{ 0x0294, 0x01, 0x00 },
++	{ 0x0278, 0x20, 0x00 },
++	{ 0x0288, 0x20, 0x00 },
++	{ 0x026c, 0x3d, 0x00 },
++	{ 0x028c, 0x30, 0x00 },
++	{ 0x0270, 0x00, 0x00 },
++	{ 0x0274, 0x03, 0x00 },
++	{ 0x0668, 0xf1, 0x00 },
++	{ 0x0694, 0x01, 0x00 },
++	{ 0x0678, 0x20, 0x00 },
++	{ 0x0688, 0x20, 0x00 },
++	{ 0x066c, 0x3d, 0x00 },
++	{ 0x068c, 0x30, 0x00 },
++	{ 0x0670, 0x00, 0x00 },
++	{ 0x0674, 0x03, 0x00 },
++	{ 0x0a68, 0xf1, 0x00 },
++	{ 0x0a94, 0x01, 0x00 },
++	{ 0x0a78, 0x20, 0x00 },
++	{ 0x0a88, 0x20, 0x00 },
++	{ 0x0a6c, 0x3d, 0x00 },
++	{ 0x0a8c, 0x30, 0x00 },
++	{ 0x0a70, 0x00, 0x00 },
++	{ 0x0a74, 0x03, 0x00989680 },
++	{ 0x0294, 0x09, 0x00000000 },
++	{ 0x02f4, 0x00, 0x00000000 },
++	{ 0x02f8, 0x00, 0x00000000 },
++	{ 0x02fc, 0x00, 0x00000000 },
++	{ 0x02f0, 0xef, 0x000f4240 },
++	{ 0x0694, 0x09, 0x00000000 },
++	{ 0x06f4, 0x00, 0x00000000 },
++	{ 0x06f8, 0x00, 0x00000000 },
++	{ 0x06fc, 0x00, 0x00000000 },
++	{ 0x06f0, 0xef, 0x00000000 },
++	{ 0x0a94, 0x09, 0x00000000 },
++	{ 0x0af4, 0x00, 0x00000000 },
++	{ 0x0af8, 0x00, 0x00000000 },
++	{ 0x0afc, 0x00, 0x00000000 },
++	{ 0x0af0, 0xef, 0x00989680 },
++	{ 0x020c, 0x22, 0x00 },
++	{ 0x0208, 0x00, 0x00 },
++	{ 0x0210, 0x00, 0x00 },
++	{ 0x0214, 0x00, 0x00 },
++	{ 0x0204, 0x00, 0x00 },
++	{ 0x02e4, 0x00, 0x00 },
++	{ 0x02e8, 0x7f, 0x00 },
++	{ 0x02ec, 0x7f, 0x00 },
++	{ 0x0218, 0x3e, 0x00 },
++	{ 0x021c, 0x41, 0x00 },
++	{ 0x0220, 0x41, 0x00 },
++	{ 0x0224, 0x7f, 0x00 },
++	{ 0x0228, 0x00, 0x00 },
++	{ 0x022c, 0x00, 0x00 },
++	{ 0x0264, 0x01, 0x00 },
++	{ 0x0244, 0xb2, 0x00 },
++	{ 0x0310, 0x35, 0x00 },
++	{ 0x02bc, 0xd0, 0x00 },
++	{ 0x0254, 0x00, 0x00 },
++	{ 0x0240, 0x00, 0x00 },
++	{ 0x0260, 0xa8, 0x00 },
++	{ 0x0284, 0x00, 0x00 },
++	{ 0x0290, 0x02, 0x00 },
++	{ 0x060c, 0x22, 0x00 },
++	{ 0x0608, 0x00, 0x00 },
++	{ 0x0610, 0x00, 0x00 },
++	{ 0x0614, 0x00, 0x00 },
++	{ 0x0604, 0x00, 0x00 },
++	{ 0x06e4, 0x00, 0x00 },
++	{ 0x06e8, 0x7f, 0x00 },
++	{ 0x06ec, 0x7f, 0x00 },
++	{ 0x0618, 0x3e, 0x00 },
++	{ 0x061c, 0x41, 0x00 },
++	{ 0x0620, 0x41, 0x00 },
++	{ 0x0624, 0x7f, 0x00 },
++	{ 0x0628, 0x00, 0x00 },
++	{ 0x062c, 0x00, 0x00 },
++	{ 0x0664, 0x01, 0x00 },
++	{ 0x0644, 0xb2, 0x00 },
++	{ 0x0710, 0x35, 0x00 },
++	{ 0x06bc, 0xd0, 0x00 },
++	{ 0x0654, 0x00, 0x00 },
++	{ 0x0640, 0x00, 0x00 },
++	{ 0x0660, 0xa8, 0x00 },
++	{ 0x0684, 0x00, 0x00 },
++	{ 0x0690, 0x02, 0x00 },
++	{ 0x0a0c, 0x22, 0x00 },
++	{ 0x0a08, 0x00, 0x00 },
++	{ 0x0a10, 0x00, 0x00 },
++	{ 0x0a14, 0x00, 0x00 },
++	{ 0x0a00, 0x00, 0x00 },
++	{ 0x0a04, 0x00, 0x00 },
++	{ 0x0ae4, 0x00, 0x00 },
++	{ 0x0ae8, 0x7f, 0x00 },
++	{ 0x0aec, 0x7f, 0x00 },
++	{ 0x0a18, 0x3e, 0x00 },
++	{ 0x0a1c, 0x41, 0x00 },
++	{ 0x0a20, 0x41, 0x00 },
++	{ 0x0a24, 0x7f, 0x00 },
++	{ 0x0a28, 0x00, 0x00 },
++	{ 0x0a2c, 0x00, 0x00 },
++	{ 0x0a64, 0x01, 0x00 },
++	{ 0x0a44, 0xb2, 0x00 },
++	{ 0x0b10, 0x35, 0x00 },
++	{ 0x0abc, 0xd0, 0x00 },
++	{ 0x0a54, 0x00, 0x00 },
++	{ 0x0a40, 0x00, 0x00 },
++	{ 0x0a60, 0xa8, 0x00 },
++	{ 0x0a84, 0x00, 0x00 },
++	{ 0x0a90, 0x02, 0x00 },
++	{ 0x102c, 0xff, 0x00 },
++	{ 0x1030, 0xfe, 0x00 },
++	{ 0x1034, 0xe2, 0x00 },
++	{ 0x1038, 0xdf, 0x00 },
++	{ 0x103c, 0x5f, 0x00 },
++	{ 0x1040, 0xfc, 0x00 },
++	{ 0x1044, 0xfb, 0x00 },
++	{ 0x1048, 0x8b, 0x00 },
++	{ 0x104c, 0x7f, 0x00 },
++	{ 0x1050, 0xbf, 0x00 },
++	{ 0x1054, 0xff, 0x00 },
++	{ 0x1000, 0x0e, 0x00 },
++};
++
++static const struct x1e80100_cphy_reg x1e80100_cphy_irq_clear[] = {
++	{ 0x1058, 0xff, 0x00000000 },
++	{ 0x105c, 0xff, 0x00000000 },
++	{ 0x1060, 0xff, 0x00000000 },
++	{ 0x1064, 0xff, 0x00000000 },
++	{ 0x1068, 0xff, 0x00000000 },
++	{ 0x106c, 0xff, 0x00000000 },
++	{ 0x1070, 0xff, 0x00000000 },
++	{ 0x1074, 0xff, 0x00000000 },
++	{ 0x1078, 0xff, 0x00000000 },
++	{ 0x107c, 0xff, 0x00000000 },
++	{ 0x1080, 0xff, 0x00000064 },
++	{ 0x1028, 0x01, 0x00000064 },
++	{ 0x1058, 0x00, 0x00000000 },
++	{ 0x105c, 0x00, 0x00000000 },
++	{ 0x1060, 0x00, 0x00000000 },
++	{ 0x1064, 0x00, 0x00000000 },
++	{ 0x1068, 0x00, 0x00000000 },
++	{ 0x106c, 0x00, 0x00000000 },
++	{ 0x1070, 0x00, 0x00000000 },
++	{ 0x1074, 0x00, 0x00000000 },
++	{ 0x1078, 0x00, 0x00000000 },
++	{ 0x107c, 0x00, 0x00000000 },
++	{ 0x1080, 0x00, 0x00000064 },
++	{ 0x1028, 0x00, 0x00000064 },
++};
++
++static const struct x1e80100_cphy_reg x1e80100_cphy_shutdown[] = {
++	{ 0x1014, 0x00, 0x00000000 },
++	{ 0x101c, 0x00, 0x00000000 },
++	{ 0x1018, 0x00, 0x00000000 },
++};
+diff --git a/drivers/phy/qualcomm/phy-qcom-mipi-csi2.h b/drivers/phy/qualcomm/phy-qcom-mipi-csi2.h
+--- a/drivers/phy/qualcomm/phy-qcom-mipi-csi2.h
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2.h
+@@ -8,6 +8,7 @@
+ #ifndef __PHY_QCOM_MIPI_CSI2_H__
+ #define __PHY_QCOM_MIPI_CSI2_H__
+ 
++#include <linux/interrupt.h>
+ #include <linux/phy/phy.h>
+ 
+ #define CSI2_MAX_DATA_LANES	4
+@@ -25,6 +26,7 @@
+ 
+ struct mipi_csi2phy_stream_cfg {
+ 	s64 link_freq;
++	u64 symbol_rate;
+ 	u8 num_data_lanes;
+ 	struct mipi_csi2phy_lanes_cfg lane_cfg;
+ };
+@@ -68,13 +70,20 @@
+ 	const char ** const clk_names;
+ 	const unsigned int num_clk;
+ 
++	u64 cphy_symbol_rate;
++	unsigned long cphy_core_rate;
++	unsigned long cphy_timer_rate;
++
+ 	const struct mipi_csi2_genpd *genpds;
+ 	const unsigned int num_genpds;
+ };
+ 
+ struct mipi_csi2phy_device {
+ 	struct device *dev;
+-	u8 phy_mode;
++	enum phy_mode phy_mode;
++	int irq;
++	bool irq_enabled;
++	bool cphy_supported;
+ 
+ 	struct phy *phy;
+ 	void __iomem *base;
+@@ -94,4 +103,11 @@
+ 
+ extern const struct mipi_csi2phy_soc_cfg mipi_csi2_dphy_4nm_x1e;
+ 
++int mipi_csi2phy_cphy_validate(struct mipi_csi2phy_device *csi2phy,
++			     const struct mipi_csi2phy_stream_cfg *cfg);
++int mipi_csi2phy_cphy_enable(struct mipi_csi2phy_device *csi2phy,
++			   struct mipi_csi2phy_stream_cfg *cfg);
++void mipi_csi2phy_cphy_disable(struct mipi_csi2phy_device *csi2phy);
++irqreturn_t mipi_csi2phy_cphy_irq(int irq, void *data);
++
+ #endif /* __PHY_QCOM_MIPI_CSI2_H__ */

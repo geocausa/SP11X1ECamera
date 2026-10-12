@@ -1,3 +1,33 @@
+## Bounded observed C-PHY receiver checkpoint, 2026-10-12
+
+Candidate19 now implements typed C-PHY options and a standalone receiver leaf,
+exclusive NO_AUTOEN IRQ, exact PHY2/trio0/ABC/2.406Gsymbol/s admission,480MHz
+core/400MHz timer, ordered observed startup/clear/shutdown and power unwind.
+CAMSS typed routing,CSID0/PHY2 receiver0x11300000,disabled unconfigured crop/drop,
+and packed MIPI RAW writer0x10001 integrated. Existing ownership/reset/completion
+and dormant CDM work preserved; numerical broad-rate helper remains dormant.
+Public independently observed header unchanged. Local2.400 profile, measured
+timing/frame-length ABI and calibration remain intact; do not mix profiles.
+
+Five ARM64 objects W=1/-Werror0warnings; real same-source receiver+IMX681
+modpost/module links0warnings against pinned candidate16 symbols. GCC/Clang
+ASAN/UBSAN each448 provider+488 CAMSS cases;12 actual binding controls;8 pin/output
+rejections. Five patches/20changed files replay with protected parent pins.
+Final Kconfig help-only cleanup yields identical config; portable final-source
+tests pass. Critical CSID reset,VFE stop/WM mapping functions unchanged.
+Reviewed no-signoff/new-file-advisory checks clean; standard DCO/maintainer
+review remains. No invented signoffs or submission/acceptance claim.
+Evidence:docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json; reproduction:
+src/upstream/receiver/cphy-x1e-20261012/README.md.
+
+No board graph enabled, install/boot/module/service/capture or sleep changes.
+Golden/daily stack/evidence/calibration preserved. Candidate16 latest full
+Image/modules; no candidate19 full Image. Both private consumers/all14 gates
+still open. NEXT sensor endpoint/clock/timing and power/regulator graph (normal
+topology boot hang), compatible full build, guarded fresh open RAW stop/reopen.
+Hardware ISP/NV12 remains target; physical CDM/image retirement work continues
+separately with existing calibration. Prior sections below are historical.
+
 ## Internal C-PHY preparation checkpoint, 2026-10-12
 
 Candidate17 compiles a dormant Qualcomm2.1.2 numerical preparation helper.

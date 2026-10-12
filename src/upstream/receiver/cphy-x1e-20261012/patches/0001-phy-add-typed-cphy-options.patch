@@ -1,0 +1,60 @@
+diff --git a/include/linux/phy/phy-mipi-cphy.h b/include/linux/phy/phy-mipi-cphy.h
+new file mode 100644
+--- /dev/null
++++ b/include/linux/phy/phy-mipi-cphy.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __PHY_MIPI_CPHY_H_
++#define __PHY_MIPI_CPHY_H_
++
++#include <linux/types.h>
++
++/**
++ * struct phy_configure_opts_mipi_cphy - MIPI C-PHY configuration
++ * @symbol_rate: Symbol rate in symbols per second, not V4L2 link frequency.
++ * @num_trios: Number of active three-wire trios. There is no clock lane.
++ *
++ * Physical routing and wire order come from the PHY's firmware endpoint.
++ * Providers must reject configurations they cannot support.
++ */
++struct phy_configure_opts_mipi_cphy {
++	u64 symbol_rate;
++	unsigned int num_trios;
++};
++
++#endif /* __PHY_MIPI_CPHY_H_ */
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -20,6 +20,7 @@
+ #include <linux/phy/phy-hdmi.h>
+ #include <linux/phy/phy-lvds.h>
+ #include <linux/phy/phy-mipi-dphy.h>
++#include <linux/phy/phy-mipi-cphy.h>
+ 
+ struct phy;
+ 
+@@ -45,6 +46,7 @@
+ 	PHY_MODE_LVDS,
+ 	PHY_MODE_DP,
+ 	PHY_MODE_HDMI,
++	PHY_MODE_MIPI_CPHY,
+ };
+ 
+ enum phy_media {
+@@ -67,6 +69,7 @@
+  *
+  * @mipi_dphy:	Configuration set applicable for phys supporting
+  *		the MIPI_DPHY phy mode.
++ * @mipi_cphy:	Configuration set applicable for MIPI C-PHY phys.
+  * @dp:		Configuration set applicable for phys supporting
+  *		the DisplayPort protocol.
+  * @lvds:	Configuration set applicable for phys supporting
+@@ -76,6 +79,7 @@
+  */
+ union phy_configure_opts {
+ 	struct phy_configure_opts_mipi_dphy	mipi_dphy;
++	struct phy_configure_opts_mipi_cphy	mipi_cphy;
+ 	struct phy_configure_opts_dp		dp;
+ 	struct phy_configure_opts_lvds		lvds;
+ 	struct phy_configure_opts_hdmi		hdmi;

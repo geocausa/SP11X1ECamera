@@ -1,0 +1,194 @@
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -190,8 +190,14 @@
+ 	struct camss *camss;
+ 
+ 	camss = csid->camss;
+-	val = (phy->lane_cnt - 1) << CSI2_RX_CFG0_NUM_ACTIVE_LANES;
+-	val |= phy->lane_assign << CSI2_RX_CFG0_DL0_INPUT_SEL;
++	if (phy->bus_type == V4L2_MBUS_CSI2_CPHY) {
++		/* One physical trio zero; preserve the observed inert TPG selector. */
++		val = BIT(CSI2_RX_CFG0_PHY_TYPE_SEL);
++		val |= FIELD_PREP(CSI2_RX_CFG0_TPG_MUX_SEL, 1);
++	} else {
++		val = (phy->lane_cnt - 1) << CSI2_RX_CFG0_NUM_ACTIVE_LANES;
++		val |= phy->lane_assign << CSI2_RX_CFG0_DL0_INPUT_SEL;
++	}
+ 
+ 	if (camss->tpg && csid->tpg_linked &&
+ 	    camss->tpg[phy->csiphy_id].testgen.mode != TPG_PAYLOAD_MODE_DISABLED) {
+@@ -271,10 +277,7 @@
+ 	val = RDI_CFG1_TIMESTAMP_STB_FRAME;
+ 	val |= RDI_CFG1_BYTE_CNTR_EN;
+ 	val |= RDI_CFG1_TIMESTAMP_EN;
+-	val |= RDI_CFG1_DROP_H_EN;
+-	val |= RDI_CFG1_DROP_V_EN;
+-	val |= RDI_CFG1_CROP_H_EN;
+-	val |= RDI_CFG1_CROP_V_EN;
++	/* Optional crop/drop engines have no programmed configuration. */
+ 	val |= RDI_CFG1_PACKING_MIPI;
+ 
+ 	writel(val, csid->base + CSID_RDI_CFG1(port));
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -546,8 +546,11 @@
+ 
+ 	fmt = csid_get_fmt_entry(csid->res->formats->formats, csid->res->formats->nformats,
+ 				 csid->fmt[MSM_CSIPHY_PAD_SINK].code);
+-	link_freq = camss_get_link_freq(&csid->subdev.entity, fmt->bpp,
+-					csid->phy.lane_cnt);
++	if (csid->phy.bus_type == V4L2_MBUS_CSI2_CPHY)
++		link_freq = camss_get_link_freq(&csid->subdev.entity, 0, 0);
++	else
++		link_freq = camss_get_link_freq(&csid->subdev.entity, fmt->bpp,
++						csid->phy.lane_cnt);
+ 	if (link_freq < 0)
+ 		link_freq = 0;
+ 
+@@ -1270,6 +1273,7 @@
+ 		if (sd->grp_id == TPG_GRP_ID) {
+ 			tpg = v4l2_get_subdevdata(sd);
+ 
++			csid->phy.bus_type = V4L2_MBUS_CSI2_DPHY;
+ 			csid->phy.lane_cnt = tpg->res->lane_cnt;
+ 			csid->phy.csiphy_id = tpg->id;
+ 			csid->phy.lane_assign = csid_get_lane_assign(NULL, csid->phy.lane_cnt);
+@@ -1282,6 +1286,11 @@
+ 			if (!csiphy->cfg.csi2)
+ 				return -EPERM;
+ 
++			if (csiphy->cfg.csi2->bus_type == V4L2_MBUS_CSI2_CPHY &&
++			    (csid->camss->res->version != CAMSS_X1E80100 ||
++			     csid->id != 0 || csiphy->id != 2))
++				return -EOPNOTSUPP;
++			csid->phy.bus_type = csiphy->cfg.csi2->bus_type;
+ 			csid->phy.csiphy_id = csiphy->id;
+ 
+ 			lane_cfg = &csiphy->cfg.csi2->lane_cfg;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -72,6 +72,7 @@
+ };
+ 
+ struct csid_phy_config {
++	enum v4l2_mbus_type bus_type;
+ 	u8 csiphy_id;
+ 	u8 lane_cnt;
+ 	u32 lane_assign;
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -328,6 +328,7 @@
+ 				csiphy->fmt[MSM_CSIPHY_PAD_SINK].code);
+ 	struct csiphy_lanes_cfg *lncfg = &csiphy->cfg.csi2->lane_cfg;
+ 	struct phy_configure_opts_mipi_dphy *dphy_cfg;
++	bool is_cphy = csiphy->cfg.csi2->bus_type == V4L2_MBUS_CSI2_CPHY;
+ 	union phy_configure_opts dphy_opts = { 0 };
+ 	struct device *dev = csiphy->camss->dev;
+ 	u8 num_lanes = lncfg->num_data;
+@@ -336,7 +337,10 @@
+ 
+ 	dphy_cfg = &dphy_opts.mipi_dphy;
+ 
+-	link_freq = camss_get_link_freq(&csiphy->subdev.entity, bpp, num_lanes);
++	if (is_cphy)
++		link_freq = camss_get_link_freq(&csiphy->subdev.entity, 0, 0);
++	else
++		link_freq = camss_get_link_freq(&csiphy->subdev.entity, bpp, num_lanes);
+ 
+ 	if (link_freq < 0) {
+ 		dev_err(dev,
+@@ -344,9 +348,21 @@
+ 		return -EINVAL;
+ 	}
+ 
+-	phy_mipi_dphy_get_default_config_for_hsclk(link_freq, num_lanes, dphy_cfg);
+-
+-	phy_set_mode(csiphy->phy, PHY_MODE_MIPI_DPHY);
++	if (is_cphy) {
++		if (link_freq <= 0 || link_freq > S64_MAX / 2)
++			return -ERANGE;
++		if (num_lanes != 1 || lncfg->data[0].pos || lncfg->data[0].pol)
++			return -EOPNOTSUPP;
++
++		dphy_opts.mipi_cphy.symbol_rate = (u64)link_freq * 2;
++		dphy_opts.mipi_cphy.num_trios = num_lanes;
++		ret = phy_set_mode(csiphy->phy, PHY_MODE_MIPI_CPHY);
++	} else {
++		phy_mipi_dphy_get_default_config_for_hsclk(link_freq, num_lanes, dphy_cfg);
++		ret = phy_set_mode(csiphy->phy, PHY_MODE_MIPI_DPHY);
++	}
++	if (ret)
++		return ret;
+ 
+ 	ret = phy_configure(csiphy->phy, &dphy_opts);
+ 	if (ret) {
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.h
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
+@@ -42,6 +42,7 @@
+ };
+ 
+ struct csiphy_csi2_cfg {
++	enum v4l2_mbus_type bus_type;
+ 	struct csiphy_lanes_cfg lane_cfg;
+ };
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-680.c b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -38,6 +38,7 @@
+ 
+ #define VFE_BUS_WRITE_CLIENT_CFG(vfe, c)	((vfe_is_lite(vfe) ? 0x400 : 0xe00) + (c) * 0x100)
+ #define		VFE_BUS_WRITE_CLIENT_CFG_EN	BIT(0)
++#define		VFE_BUS_WRITE_CLIENT_CFG_MODE_MIPI_RAW	BIT(16)
+ #define VFE_BUS_IMAGE_ADDR(vfe, c)		((vfe_is_lite(vfe) ? 0x404 : 0xe04) + (c) * 0x100)
+ #define VFE_BUS_FRAME_INCR(vfe, c)		((vfe_is_lite(vfe) ? 0x408 : 0xe08) + (c) * 0x100)
+ #define VFE_BUS_IMAGE_CFG0(vfe, c)		((vfe_is_lite(vfe) ? 0x40c : 0xe0c) + (c) * 0x100)
+@@ -183,7 +184,8 @@
+ 	vfe_disable_irq(vfe);
+ 
+ 	/* Enable WM */
+-	writel(VFE_BUS_WRITE_CLIENT_CFG_EN,
++	writel(VFE_BUS_WRITE_CLIENT_CFG_EN |
++	       VFE_BUS_WRITE_CLIENT_CFG_MODE_MIPI_RAW,
+ 	       vfe->base + VFE_BUS_WRITE_CLIENT_CFG(vfe, wm));
+ 
+ 	dev_dbg(vfe->camss->dev, "RDI%d WM:%d width %d height %d stride %d\n",
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -4755,15 +4755,25 @@
+ 	if (ret)
+ 		return ret;
+ 
+-	/*
+-	 * Most SoCs support both D-PHY and C-PHY standards, but currently only
+-	 * D-PHY is supported in the driver.
+-	 */
+-	if (vep.bus_type != V4L2_MBUS_CSI2_DPHY) {
++	/* C-PHY is supported through the standalone provider on the observed route. */
++	if (vep.bus_type != V4L2_MBUS_CSI2_DPHY &&
++	    vep.bus_type != V4L2_MBUS_CSI2_CPHY) {
+ 		dev_err(dev, "Unsupported bus type %d\n", vep.bus_type);
+ 		return -EINVAL;
+ 	}
+ 
++	if (vep.bus_type == V4L2_MBUS_CSI2_CPHY) {
++		if (lane_base != 1 || vep.base.port != 2 ||
++		    vep.bus.mipi_csi2.num_data_lanes != 1 ||
++		    vep.bus.mipi_csi2.data_lanes[0] ||
++		    vep.bus.mipi_csi2.line_orders[0] !=
++			V4L2_MBUS_CSI2_CPHY_LINE_ORDER_ABC ||
++		    fwnode_property_present(ep, "clock-lanes") ||
++		    fwnode_property_present(ep, "lane-polarities"))
++			return -EOPNOTSUPP;
++		lane_base = 0;
++	}
++	csd->interface.csi2.bus_type = vep.bus_type;
+ 	csd->interface.csiphy_id = vep.base.port;
+ 
+ 	mipi_csi2 = &vep.bus.mipi_csi2;

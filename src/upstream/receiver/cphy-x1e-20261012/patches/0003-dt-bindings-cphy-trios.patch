@@ -1,0 +1,52 @@
+diff --git a/Documentation/devicetree/bindings/phy/qcom,x1e80100-csi2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,x1e80100-csi2-phy.yaml
+--- a/Documentation/devicetree/bindings/phy/qcom,x1e80100-csi2-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,x1e80100-csi2-phy.yaml
+@@ -64,8 +64,9 @@
+         $ref: /schemas/graph.yaml#/$defs/port-base
+         description:
+           Sensor input. Always present. A single sensor is described by a
+-          single endpoint with the D-PHY clock lane at position 0 and one to
+-          four data lanes.
++          single endpoint. D-PHY has a clock lane at position 0 and one to
++          four data lanes. C-PHY has one to three zero-based trio positions,
++          no clock lane, and uses line-orders to describe wire ordering.
+ 
+           DPHY split mode, where two independent sensors share the same PHY,
+           is described by two endpoints, each with its own clock lane position;
+@@ -92,12 +93,34 @@
+                 minItems: 1
+                 maxItems: 4
+                 items:
+-                  minimum: 1
++                  minimum: 0
+                   maximum: 4
+                 description:
+                   Data lane positions following this endpoint's clock
+-                  lane. Positions are a per-port logical numbering, not
++                  lane for D-PHY. C-PHY positions are zero-based trio indices.
++                  Positions are a per-port logical numbering, not
+                   package pad or ball positions.
++
++            allOf:
++              - if:
++                  properties:
++                    bus-type:
++                      const: 1
++                  required:
++                    - bus-type
++                then:
++                  properties:
++                    clock-lanes: false
++                    lane-polarities: false
++                    data-lanes:
++                      maxItems: 3
++                      items:
++                        maximum: 2
++                else:
++                  properties:
++                    data-lanes:
++                      items:
++                        minimum: 1
+ 
+             required:
+               - data-lanes
