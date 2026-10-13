@@ -1,3 +1,9 @@
+# E005 latest outcome
+
+Fresh identity02 passed registration/cache/parent and lossless kernel RPMh checks. Both identities returned to Golden and are consumed/retired. Initial01 debug-query failure is retained.
+
+[Final scoped evidence](../../docs/UPSTREAM-FRONT-PROVIDER-VALIDATION-20261013.json). Sensor/modes/electrical/7.2/capture remain pending.
+
 # E005 standard front provider registration
 
 Source and experiment contract: [front provider bundle](../../src/upstream/platform/front-providers-20261013/README.md).

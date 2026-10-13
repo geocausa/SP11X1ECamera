@@ -1,7 +1,7 @@
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: REGULATOR_CONSTRAINT_SOURCE_PASS_HARDWARE_PENDING
-  evidence: docs/UPSTREAM-REGULATOR-CONSTRAINT-VALIDATION-20261013.json
+  status: STANDARD_FRONT_PROVIDER_GOLDEN_REGISTRATION_PASS_RUNTIME_PENDING
+  evidence: docs/UPSTREAM-FRONT-PROVIDER-VALIDATION-20261013.json
   retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
   standalone_phy_cphy_implemented: true
@@ -31,7 +31,7 @@ upstream_open_stack_current:
   physical_dma_retirement_proven: false
   private_runtime_dependencies_remaining: true
   upstream_ready: false
-  runtime_changed: false
+  runtime_changed: true
   calibration: Reuse measured Claude packages and generators; validate new domains
   sensor_endpoint_clock_source_qualified: true
   sensor_hardware_qualified: false
@@ -46,7 +46,18 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Isolated standard front providers and supply-parent/mode ownership, compatible full build and fresh provider-only boot; then sensor/reset/privacy graph, guarded RAW and VT/physical FLL timing; CDM retirement open
+  next: Front mode/headroom/physical voltage and sensor/reset/privacy graph qualification on compatible full7.2, then guarded RAW stop/reopen and VT/FLL; keep2.900V VAF separate; CDM retirement open
+  front_provider_registration_hardware_qualified: true
+  front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
+  front_provider_registration_trace_events: 2275
+  front_provider_registration_child_requests: 0
+  front_provider_modes_hardware_qualified: false
+  front_provider_electrical_voltage_qualified: false
+  front_provider_sensor_sequence_qualified: false
+  front_provider_identities_consumed_retired: true
+  live_golden_boot_id: 88de3ef8-0081-4655-a791-e25e455a90f2
+  runtime_changed_scope: Two isolated Golden7.1.5 provider-only one-shot boots, returned and retired; protected daily stack preserved
+  preferred_control_transport: PiMaster
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true

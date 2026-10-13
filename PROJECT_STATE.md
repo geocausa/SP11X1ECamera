@@ -1,3 +1,32 @@
+## 2026-10-13 standard front provider Golden registration qualification
+
+Isolated standard PM8550-B LDO7 and PM8010-M LDO3 register at supported
+2.8/1.8V constraints, zero users, exact BOB2/SMPS4_C parent links.
+Lossless retained kernel trace:2275 RPMh events,12 CPU rings,2275/2275
+entries,zero drops/overruns; no requests to either child's voltage/enable/mode
+addresses. Independent full-line/address/debug-site recheck PASS.
+Evidence: docs/UPSTREAM-FRONT-PROVIDER-VALIDATION-20261013.json.
+
+Identity01 bound providers but its double-escaped GRUB dyndbg query failed;
+collector stopped before trace snapshot. Original failure retained, never
+reused. Fresh02 uses module-qualified debug and trace-before-address snapshot;
+service PASS and automatic Golden return. Both identities consumed/retired,
+GRUB scripts archived, conditional units disabled. Golden3 hashes/default and
+module tree preserved; live boot88de3ef8-0081-4655-a791-e25e455a90f2,
+7.1.5-sp11-render-parity-v4+, no next entry/camera nodes/modules/processes.
+
+This proves Golden7.1.5 registration, cache and parent bindings only.
+Voltages are driver cache, not electrical measurements; initial modes omitted.
+No sensor/clock/reset/privacy/capture or system sleep. No full7.2 source23/
+sensor24 runtime qualification; full Image16 remains latest. Both private
+startup consumers/all14 readiness categories remain open. NEXT front mode/
+headroom/voltage and sensor/reset/privacy graph, compatible full build, fresh
+RAW stop/reopen and imported2.406 profile VT/FLL; retain local2.400/720MHz
+mode/calibration. VAF exact2.900 remains unsupported; do not round it.
+User switched control to PiMaster; successful guarded retirement/read calls,
+one workspace-list EOF observed. Fabric repair belongs to separate work.
+Prior checkpoints below are historical.
+
 ## 2026-10-13 standard regulator constraint source diagnosis
 
 The historical E002b exact2.900V LDO16/VAF request has no standard PLDO
