@@ -1,3 +1,44 @@
+## 2026-10-13 front26 hardware registration/runtime PM/unload PASS
+
+Source/kernel26 (7.2.0-sp11-upstream-front26) now booted on SP11.
+Fresh E005 probe02 PASS: model0x0681, one media graph/14 video nodes,
+sensor runtime suspended, IO/analog child references0, MCLK4 enable/prepare0
+at19.2MHz, reset237 TLMM output-low/function0, clean camera module unloading.
+This validates the port of retained E003b/native power sequencing at
+probe/shutdown; it does not qualify streaming or electrical rail voltage.
+Evidence docs/UPSTREAM-FRONT-PROBE02-20261013.json.
+
+Candidate02 boot901bf98b-9f7e-4ef9-a900-827e8fe7e81c returned automatically
+to Golden4f09f0fb-47bc-4ee7-9ab0-7c4d37aa7cf2. Return service success;
+watchdog did not fire. No tested critical kernel/power-cleanup signatures.
+Both01/02 consumed/retired/do-not-retry; conditional units disabled/inactive,
+GRUB scripts archived privately, saved Golden default intact, no pending
+entry/camera modules/nodes. Protected v19c hashes match; daily branch unchanged.
+
+Preparation retained a failed no-argument initrd hook, then reconciled all1640
+installed modules and existing Wi-Fi firmware before fresh initrd02 PASS.
+Unique module release, boot directories and kernel-specific decoded Wi-Fi
+OS dependency preserve Golden/common firmware. No proprietary camera inputs
+were installed or committed. Detailed text logs/media metadata remain SP11.
+Probe01 boot21290ce4-ce33-446d-a725-7c86190081a9 already passed identity,
+registration and runtime PM, but stopped on obsolete GPIO debug grammar.
+Actual retained TLMM239/reset237 output-low evidence was checked; corrected
+probe02 observer also rejects five malformed controls. Never replay01.
+
+Temporary headless new-kernel scope was explicit: generic7.2 lacks Golden's
+custom audio/touch/Surface Aggregator integration. No daily parity claim.
+No stream/capture/DMA, camera pixels, Windows optical comparison or OS sleep.
+Cached regulator microvolts are not physical measurements. Native2.400/720MHz
+timing/calibration remains in its proven domain; imported2.406 VT/FLL unmeasured.
+
+Three CAMSS TPG entity-function initialization warnings remain a concrete
+source metadata correction. Full streaming/privacy/RAW stop-reopen, sensor
+schema/maintainer review, hardware ISP/libcamera/IPA and both private startup
+consumers/all14 release categories stay open. NEXT correct TPG metadata, then
+guarded new-implementation privacy/RAW lifecycle and imported-profile timing.
+Reuse retained sources/RE/calibration; do not redo wiring, rails or provider
+registration experiments. Earlier checkpoints below are historical.
+
 ## 2026-10-13 full front graph/kernel26 integration
 
 Full source26 joins qualified receiver/hardware-config23 with FLL24/power25

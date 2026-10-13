@@ -1,7 +1,7 @@
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: FRONT_GRAPH_FULL_IMAGE_MODULES_SOURCE_PASS_HARDWARE_PENDING
-  evidence: docs/UPSTREAM-FRONT-GRAPH-BUILD-20261013.json
+  status: FRONT26_PROBE_RUNTIME_PM_UNLOAD_HARDWARE_PASS_STREAMING_PENDING
+  evidence: docs/UPSTREAM-FRONT-PROBE02-20261013.json
   retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
   standalone_phy_cphy_implemented: true
@@ -46,17 +46,17 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Candidate initrd/boot compatibility and guarded new-implementation identity/privacy/RAW stop-reopen, imported-profile VT/FLL; preserve native timing/calibration and separate2.900V VAF
+  next: Correct CAMSS TPG entity metadata, then guarded privacy/RAW stop-reopen and imported-profile VT/FLL; reuse retained timing/calibration and separate2.900V VAF
   front_provider_registration_hardware_qualified: true
   front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
   front_provider_registration_trace_events: 2275
   front_provider_registration_child_requests: 0
   front_provider_modes_hardware_qualified: false
   front_provider_electrical_voltage_qualified: false
-  front_provider_sensor_sequence_qualified: false
+  front_provider_sensor_sequence_qualified: true
   front_provider_identities_consumed_retired: true
-  live_golden_boot_id: 7722ffff-f92e-4faa-a0a3-06c684abd821
-  runtime_changed_scope: Three isolated Golden7.1.5 provider-only one-shot boots, returned and retired; protected daily stack preserved
+  live_golden_boot_id: 4f09f0fb-47bc-4ee7-9ab0-7c4d37aa7cf2
+  runtime_changed_scope: Three Golden provider boots and two isolated headless7.2 front26 probe boots, returned and retired; daily stack preserved
   preferred_control_transport: PiMaster
   front_provider_HPM_kernel_request_hardware_qualified: true
   front_provider_HPM_request_kernel: 7.1.5-sp11-render-parity-v4+
@@ -67,16 +67,28 @@ upstream_open_stack_current:
   front_provider_electrical_mode_readback_qualified: false
   sensor_power_sequence_retained_hardware_qualified: true
   sensor_power_port_source_qualified: true
-  sensor_power_port_hardware_qualified: false
+  sensor_power_port_hardware_qualified: true
   sensor_power_port_evidence: docs/UPSTREAM-IMX681-POWER-VALIDATION-20261013.json
   candidate25_full_image_built: false
-  front_provider_sensor_sequence_scope: Current standard upstream graph unbooted; historical E003b/native sequence already proven
+  front_provider_sensor_sequence_scope: Source26 probe identity/runtime PM shutdown and unload; no stream or voltage measurement
   front_graph_build_evidence: docs/UPSTREAM-FRONT-GRAPH-BUILD-20261013.json
   candidate26_full_image_built: true
   front_graph_source_qualified: true
   front_graph_hardware_qualified: false
   front_graph_build_runtime_changed: false
   sensor_binding_schema_qualified: false
+  front26_boot_dependency_package_qualified: true
+  front26_probe_runtime_pm_evidence: docs/UPSTREAM-FRONT-PROBE02-20261013.json
+  front_graph_registration_hardware_qualified: true
+  sensor_identity_hardware_qualified: true
+  sensor_runtime_pm_shutdown_hardware_qualified: true
+  front26_camera_module_unload_hardware_qualified: true
+  front26_tpg_entity_function_warning_count: 3
+  front26_streaming_hardware_qualified: false
+  front26_privacy_runtime_qualified: false
+  front26_identities_consumed_retired: true
+  front26_candidate_boot_id: 901bf98b-9f7e-4ef9-a900-827e8fe7e81c
+  front26_sensor_power_port_hardware_scope: probe identity, runtime PM power-off and module removal only
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true
