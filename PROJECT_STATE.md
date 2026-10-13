@@ -1,3 +1,41 @@
+## 2026-10-13 full front graph/kernel26 integration
+
+Full source26 joins qualified receiver/hardware-config23 with FLL24/power25
+and the retained front graph adapted to the standalone PHY API:
+IMX681 -> PHY2 port0; PHY2 port1 -> CAMSS port2. Explicit C-PHY/trio0/ABC,
+1.203GHz link/2.406Gsymbol/s; CCI1/master1 at400kHz; MCLK4 GPIO100/cam_aon
+19.2MHz; active-low reset237; IO LDO3_M1.8V, analog LDO7_B2.8V.
+Standard parent links/HPM retained; L2_C/L1_C PHY supplies come from the
+working native graph. Parent constraint ranges match protected Golden.
+The original board target/SoC sources and native daily stack remain intact.
+
+Complete ARM64 Image/modules PASS:7.2.0-sp11-upstream-front26.
+Strict CAMSS/PHY/IMX681/CCI/ISP objects W=1/-Werror:zero warnings.
+Five module identities/ELF/vermagic and101 output pins verified.
+Compiled graph plus9 broken graph controls,9 preparation-input refusals,
+scoped CAMSS/PHY bindings/schema and source checkpatch/hygiene PASS.
+Full build has1153 compiler +175 kernel-doc warning lines in unchanged
+baseline source; diagnostics retained/reviewed, not a zero-warning full tree.
+Evidence docs/UPSTREAM-FRONT-GRAPH-BUILD-20261013.json.
+Reproduction src/upstream/platform/front-graph-20261013/README.md.
+
+Storage constrained (~4GiB before build), so final02 explicitly disables old
+DWARF choices/enables DEBUG_INFO_NONE. Only debug metadata/tool-capability
+choices changed; unique LOCALVERSION isolates candidate modules. ~1.6GiB
+remains. Initial debug-choice refusal/stopped run and the PAHOLE dependency
+guard failure retained; final02 passes. PiMaster briefly reset two read calls;
+durable result files reconciled, no mutation or boot replay.
+
+No install/load/boot/capture/system-sleep changes. Golden live boot7722ffff-f92e-4faa-a0a3-06c684abd821; saved default preserved,
+no pending entry/camera stack. Latest full source/kernel26,sensor package25. IMX681-specific binding
+schema/maintainer review and new graph runtime privacy/identity/RAW stop/reopen/
+imported-profile VT/FLL remain. Existing native2.400/720MHz timing/calibration
+stays valid for its original domain. Both private startup consumers/all14
+release categories remain open; hardware ISP/libcamera target preserved.
+NEXT candidate initrd/boot compatibility and guarded new-implementation
+hardware validation; reuse retained RE, no duplicate isolated provider tests.
+Prior checkpoints below are historical.
+
 ## 2026-10-13 retained IMX681 power sequence port
 
 Candidate25 sensor-only source ports the already proven E003b/working native
