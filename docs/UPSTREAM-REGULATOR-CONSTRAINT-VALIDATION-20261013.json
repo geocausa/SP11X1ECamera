@@ -1,0 +1,157 @@
+{
+  "result": "PASS_SOURCE_CONSTRAINT_DIAGNOSIS",
+  "component": "regulator-dt",
+  "validation_scope": "Pinned actual old/current voltage-registration functions and current RPMh cache/set/get; actual parsed rail maps/ranges; explicitly modeled surrounding registration/transport",
+  "hardware_qualified": false,
+  "installed": false,
+  "parent_git_commit": "1b6e9a68f7bbf9969f666841d56b8c55d894469e",
+  "reference": {
+    "version": 1,
+    "source_sha256": {
+      "baseline": {
+        "drivers/regulator/core.c": "d28587cfd6b0d2349473616b581f060691f74116404a4fd383ec7d70b04f1de8",
+        "drivers/regulator/qcom-rpmh-regulator.c": "036a42419906dadc79e5465286923642bc55aa68786448f270e9ed60399634c2"
+      },
+      "candidate": {
+        "drivers/regulator/core.c": "e4528a01297618f987d85a335194c30c65d7a7b8a04ac730ef937406db61690e",
+        "drivers/regulator/qcom-rpmh-regulator.c": "796f955c42dc7491690a148d5d20711a59af314ba55b3eee51ed49f38f6a63d0",
+        "scripts/Makefile.warn": "a733b6c0768deb4e3a4f3d84f9b77071328b87b26d41960e38436c36fffb719e"
+      }
+    },
+    "baseline": "retained Golden source; not a fresh runtime measurement",
+    "candidate": "retained candidate23 source",
+    "hardware_qualified": false,
+    "warning_profile": "Unmodified imported C; -Wno-sign-compare matches the pinned kernel's W=1/default policy (W=3 enables it)."
+  },
+  "host": {
+    "gcc": {
+      "constraint_cases": 48,
+      "ldo16_exact_2900000_rejected": true,
+      "front_1800000_2800000_selectors_supported": true,
+      "voltage_stage_rpmh_requests": 0,
+      "ok": true,
+      "compiler": "gcc",
+      "sanitizers": [
+        "address",
+        "undefined"
+      ],
+      "hardware_qualified": false,
+      "installed": false,
+      "scope": "actual old/current core voltage-admission and current RPMh cache/set/get bodies; parsed actual rail mappings/ranges; modeled selector lookup, RPMh transport and registration surrounding stages",
+      "reference": {
+        "version": 1,
+        "source_sha256": {
+          "baseline": {
+            "drivers/regulator/core.c": "d28587cfd6b0d2349473616b581f060691f74116404a4fd383ec7d70b04f1de8",
+            "drivers/regulator/qcom-rpmh-regulator.c": "036a42419906dadc79e5465286923642bc55aa68786448f270e9ed60399634c2"
+          },
+          "candidate": {
+            "drivers/regulator/core.c": "e4528a01297618f987d85a335194c30c65d7a7b8a04ac730ef937406db61690e",
+            "drivers/regulator/qcom-rpmh-regulator.c": "796f955c42dc7491690a148d5d20711a59af314ba55b3eee51ed49f38f6a63d0",
+            "scripts/Makefile.warn": "a733b6c0768deb4e3a4f3d84f9b77071328b87b26d41960e38436c36fffb719e"
+          }
+        },
+        "baseline": "retained Golden source; not a fresh runtime measurement",
+        "candidate": "retained candidate23 source",
+        "hardware_qualified": false,
+        "warning_profile": "Unmodified imported C; -Wno-sign-compare matches the pinned kernel's W=1/default policy (W=3 enables it)."
+      }
+    },
+    "clang": {
+      "constraint_cases": 48,
+      "ldo16_exact_2900000_rejected": true,
+      "front_1800000_2800000_selectors_supported": true,
+      "voltage_stage_rpmh_requests": 0,
+      "ok": true,
+      "compiler": "clang",
+      "sanitizers": [
+        "address",
+        "undefined"
+      ],
+      "hardware_qualified": false,
+      "installed": false,
+      "scope": "actual old/current core voltage-admission and current RPMh cache/set/get bodies; parsed actual rail mappings/ranges; modeled selector lookup, RPMh transport and registration surrounding stages",
+      "reference": {
+        "version": 1,
+        "source_sha256": {
+          "baseline": {
+            "drivers/regulator/core.c": "d28587cfd6b0d2349473616b581f060691f74116404a4fd383ec7d70b04f1de8",
+            "drivers/regulator/qcom-rpmh-regulator.c": "036a42419906dadc79e5465286923642bc55aa68786448f270e9ed60399634c2"
+          },
+          "candidate": {
+            "drivers/regulator/core.c": "e4528a01297618f987d85a335194c30c65d7a7b8a04ac730ef937406db61690e",
+            "drivers/regulator/qcom-rpmh-regulator.c": "796f955c42dc7491690a148d5d20711a59af314ba55b3eee51ed49f38f6a63d0",
+            "scripts/Makefile.warn": "a733b6c0768deb4e3a4f3d84f9b77071328b87b26d41960e38436c36fffb719e"
+          }
+        },
+        "baseline": "retained Golden source; not a fresh runtime measurement",
+        "candidate": "retained candidate23 source",
+        "hardware_qualified": false,
+        "warning_profile": "Unmodified imported C; -Wno-sign-compare matches the pinned kernel's W=1/default policy (W=3 enables it)."
+      }
+    }
+  },
+  "controls": [
+    {
+      "case": "changed-source",
+      "exit_code": 1,
+      "new_output_created": false
+    },
+    {
+      "case": "symlink-source",
+      "exit_code": 1,
+      "new_output_created": false
+    },
+    {
+      "case": "missing-source",
+      "exit_code": 1,
+      "new_output_created": false
+    },
+    {
+      "case": "occupied-output",
+      "exit_code": 1,
+      "new_output_created": false
+    },
+    {
+      "case": "nested-output",
+      "exit_code": 1,
+      "new_output_created": false
+    },
+    {
+      "case": "symlink-output-parent",
+      "exit_code": 1,
+      "new_output_created": false
+    },
+    {
+      "case": "optimized-python",
+      "exit_code": 1,
+      "new_output_created": false
+    },
+    {
+      "case": "altered-pin",
+      "exit_code": 1,
+      "new_output_created": false
+    }
+  ],
+  "kernel_sources_unchanged": true,
+  "retained_failure": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-regulator-audit-20261013-01/result.json",
+  "retained_success": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-regulator-audit-20261013-02/result.json",
+  "retained_controls": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-regulator-audit-20261013-02/controls-01/result.json",
+  "ldo16": {
+    "target_uv": 2900000,
+    "exact_selector": false,
+    "lower_uv": 2896000,
+    "upper_uv": 2904000,
+    "electrical_tolerance_qualified": false
+  },
+  "front_supply_selectors_supported": true,
+  "provider_boot_qualified": false,
+  "provider_graph_changed": false,
+  "readiness_categories_remaining": 14,
+  "private_startup_consumers_remaining": 2,
+  "source_sha256": {
+    "src/upstream/platform/regulator-audit-20261013/test-constraints.py": "c680486de4d39cf5ae712a2a70fa0906d100c5cc3867013c516418c3df5a5060",
+    "src/upstream/platform/regulator-audit-20261013/reference.json": "3902bcd41d77d52a327733a41911112764d27763eebeeaf0fc024019a70491f5",
+    "src/upstream/platform/regulator-audit-20261013/README.md": "d2dcfdb664bdf31bc79827e06ff89ff9f570eb1ee2c3400ce871ed17c5bbbc43"
+  }
+}

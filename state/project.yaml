@@ -1,7 +1,7 @@
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: IMX681_FLL_CONTROL_SOURCE_PASS_HARDWARE_BLOCKED
-  evidence: docs/UPSTREAM-IMX681-FLL-VALIDATION-20261013.json
+  status: REGULATOR_CONSTRAINT_SOURCE_PASS_HARDWARE_PENDING
+  evidence: docs/UPSTREAM-REGULATOR-CONSTRAINT-VALIDATION-20261013.json
   retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
   standalone_phy_cphy_implemented: true
@@ -35,6 +35,10 @@ upstream_open_stack_current:
   calibration: Reuse measured Claude packages and generators; validate new domains
   sensor_endpoint_clock_source_qualified: true
   sensor_hardware_qualified: false
+  regulator_constraint_source_diagnosis: true
+  regulator_hardware_qualified: false
+  regulator_ldo16_fixed_2900_supported: false
+  sensor_frame_length_evidence: docs/UPSTREAM-IMX681-FLL-VALIDATION-20261013.json
   latest_sensor_package_candidate: 24
   sensor_frame_length_source_qualified: true
   sensor_vt_clock_hardware_qualified: false
@@ -42,7 +46,7 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Measured VT/cadence and physical FLL, normal regulator/provider boot issue, sensor/reset/privacy graph, compatible full build and fresh RAW stop/reopen; CDM physical retirement open
+  next: Isolated standard front providers and supply-parent/mode ownership, compatible full build and fresh provider-only boot; then sensor/reset/privacy graph, guarded RAW and VT/physical FLL timing; CDM retirement open
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true

@@ -1,3 +1,24 @@
+## 2026-10-13 standard regulator constraint source diagnosis
+
+The historical E002b exact2.900V LDO16/VAF request has no standard PLDO
+selector: adjacent2.896/2.904V. Actual old/current core and RPMh callback
+bodies reproduce rejection under GCC/Clang ASAN/UBSAN,48 cases each.
+Front1.8V LDO3_M and2.8V LDO7_B map to valid selectors; rear capture
+1.8/1.2/2.8V also maps. Eight input/output/pin rejection controls pass.
+Evidence docs/UPSTREAM-REGULATOR-CONSTRAINT-VALIDATION-20261013.json.
+The old normal-provider 'boot hang' label is narrowed to the reproduced
+constraint/registration failure; fresh provider hardware proof remains open.
+Initial fixture signedness failure retained; final host warning policy matches
+pinned kernel default/W=1. No imported callback or kernel input was changed.
+
+Do not round VAF voltage or invent tolerance. Keep actuator power separate
+from sensor capture supplies and preserve Golden provider ownership. NEXT
+isolated standard front providers, supply parents/modes/bindings, compatible
+full build and fresh provider-only boot; then sensor/reset/privacy graph and
+guarded RAW stop/reopen/VT timing. Full source23/sensor package24/full Image16
+remain latest. Both private startup consumers/all14 readiness categories open.
+No install/load/capture/DT/runtime/reboot/sleep change. Prior sections historical.
+
 ## 2026-10-13 IMX681 frame-length source correction
 
 Candidate24 is a sensor-only package on candidate23's qualified full source.
