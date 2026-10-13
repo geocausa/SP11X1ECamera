@@ -34,6 +34,43 @@ def run(label, args, env=None):
     need(p.returncode == 0, label + ': ' + p.stderr[-1200:])
     return p.stdout
 
+def build_initrd(firmware):
+    conf = STAGE / 'conf'
+    for n in ['hooks', 'scripts', 'conf.d']:
+        (conf / n).mkdir(parents=True)
+    (conf / 'initramfs.conf').write_text('MODULES=most\nBUSYBOX=auto\nCOMPRESS=zstd\nRUNSIZE=10%\n')
+    (conf / 'modules').write_text('nvme\nath12k_wifi7\npci_pwrctrl_pwrseq\npwrseq_qcom_wcn\n')
+    hooks = STAGE / 'distribution-hooks'
+    shutil.copytree('/usr/share/initramfs-tools/hooks', hooks)
+    # This distro sweep copies all Qualcomm firmware. Only our copied
+    # hook set is narrowed; system hooks and original firmware stay intact.
+    (hooks / 'ubuntu-x1e-settings').unlink()
+    firmware_hook = conf / 'hooks/front-boot-wifi'
+    firmware_hook.write_text('#!/bin/sh\nset -eu\ncase "${1:-}" in prereqs) exit 0;; esac\n'
+                              '. /usr/share/initramfs-tools/hook-functions\n'
+                              'mkdir -p "$DESTDIR/lib/firmware/' + KREL + '/ath12k/WCN7850/hw2.0"\n'
+                              'cp /lib/firmware/' + KREL + '/ath12k/WCN7850/hw2.0/*.bin "$DESTDIR/lib/firmware/' + KREL + '/ath12k/WCN7850/hw2.0/"\n')
+    firmware_hook.chmod(0o700)
+    wrapper = STAGE / 'mkinitramfs-isolated'
+    original = Path('/usr/sbin/mkinitramfs').read_text()
+    needle = 'run_scripts_optional /usr/share/initramfs-tools/hooks'
+    need(original.count(needle) == 1, 'initrd hook API drift')
+    wrapper.write_text(original.replace(needle, 'run_scripts_optional "' + str(hooks) + '"', 1))
+    wrapper.chmod(0o700)
+    image = STAGE / ('initrd.img-' + KREL)
+    env = os.environ.copy()
+    env['TMPDIR'] = str(STAGE)
+    run('mkinitramfs', [wrapper, '-d', conf, '-o', image, KREL], env)
+    listing = run('initrd-list', ['lsinitramfs', image]).splitlines()
+    need(any(x.endswith('/nvme.ko') for x in listing), 'initrd NVMe missing')
+    need(any(x.endswith('/ath12k_wifi7.ko') for x in listing), 'initrd WiFi missing')
+    for name in firmware:
+        need(any(x.endswith('/' + KREL + '/ath12k/WCN7850/hw2.0/' + name) for x in listing), 'decoded WiFi missing')
+    need(not any('qcom/sp11/' in x or 'imx681-' in x or 'rear-generation-' in x for x in listing), 'private camera input in initrd')
+    need(not any('7.1.5-' in x and '.ko' in x for x in listing), 'mixed module release')
+    return image, wrapper, original
+
+
 def main():
     need(os.geteuid() == 0, 'root required')
     os.environ.update(GIT_CONFIG_COUNT='1', GIT_CONFIG_KEY_0='safe.directory', GIT_CONFIG_VALUE_0=str(R))
@@ -77,39 +114,7 @@ def main():
         need(wifi == ['ath12k_wifi7'], 'WiFi alias mismatch')
         run('wifi-dependencies', ['modprobe', '--show-depends', '--set-version', KREL, 'ath12k_wifi7'])
         run('nvme-dependencies', ['modprobe', '--show-depends', '--set-version', KREL, 'nvme'])
-        conf = STAGE / 'conf'
-        for n in ['hooks', 'scripts', 'conf.d']:
-            (conf / n).mkdir(parents=True)
-        (conf / 'initramfs.conf').write_text('MODULES=most\nBUSYBOX=auto\nCOMPRESS=zstd\nRUNSIZE=10%\n')
-        (conf / 'modules').write_text('nvme\nath12k_wifi7\npci_pwrctrl_pwrseq\npwrseq_qcom_wcn\n')
-        hooks = STAGE / 'distribution-hooks'
-        shutil.copytree('/usr/share/initramfs-tools/hooks', hooks)
-        # This distro sweep copies all Qualcomm firmware. Only our copied
-        # hook set is narrowed; system hooks and original firmware stay intact.
-        (hooks / 'ubuntu-x1e-settings').unlink()
-        firmware_hook = conf / 'hooks/front-boot-wifi'
-        firmware_hook.write_text('#!/bin/sh\nset -eu\ncase "$1" in prereqs) exit 0;; esac\n'
-                                  '. /usr/share/initramfs-tools/hook-functions\n'
-                                  'mkdir -p "$DESTDIR/lib/firmware/' + KREL + '/ath12k/WCN7850/hw2.0"\n'
-                                  'cp /lib/firmware/' + KREL + '/ath12k/WCN7850/hw2.0/*.bin "$DESTDIR/lib/firmware/' + KREL + '/ath12k/WCN7850/hw2.0/"\n')
-        firmware_hook.chmod(0o700)
-        wrapper = STAGE / 'mkinitramfs-isolated'
-        original = Path('/usr/sbin/mkinitramfs').read_text()
-        needle = 'run_scripts_optional /usr/share/initramfs-tools/hooks'
-        need(original.count(needle) == 1, 'initrd hook API drift')
-        wrapper.write_text(original.replace(needle, 'run_scripts_optional "' + str(hooks) + '"', 1))
-        wrapper.chmod(0o700)
-        image = STAGE / ('initrd.img-' + KREL)
-        env = os.environ.copy()
-        env['TMPDIR'] = str(STAGE)
-        run('mkinitramfs', [wrapper, '-d', conf, '-o', image, KREL], env)
-        listing = run('initrd-list', ['lsinitramfs', image]).splitlines()
-        need(any(x.endswith('/nvme.ko') for x in listing), 'initrd NVMe missing')
-        need(any(x.endswith('/ath12k_wifi7.ko') for x in listing), 'initrd WiFi missing')
-        for name in firmware:
-            need(any(x.endswith('/' + KREL + '/ath12k/WCN7850/hw2.0/' + name) for x in listing), 'decoded WiFi missing')
-        need(not any('qcom/sp11/' in x or 'imx681-' in x or 'rear-generation-' in x for x in listing), 'private camera input in initrd')
-        need(not any('7.1.5-' in x and '.ko' in x for x in listing), 'mixed module release')
+        image, wrapper, original = build_initrd(firmware)
         for n, pin in PINS.items():
             need(sha(GOLDEN / n) == pin, 'Golden drift after packaging')
         result.update(status='PASS_ISOLATED_FRONT_BOOT_PACKAGE_UNARMED',

@@ -64,3 +64,12 @@ asset hashes after the run, retire the one-use entry/units, and leave no
 pending boot. Registration/runtime PM does not qualify RAW timing, streaming,
 DMA stop/reopen, privacy behavior, hardware ISP/libcamera/IPA or Windows1:1.
 Both private startup consumers and all14 release categories remain open.
+
+## Initrd preparation correction
+
+The first initrd stage stopped before boot: its local Wi-Fi hook assumed a
+positional argument under set -u. The distro invokes hooks with no arguments.
+The fixed hook uses ${1:-}. recover-initrd.py reconciles every installed
+module against the qualified build and every decoded Wi-Fi file against
+the original installed compressed file before writing a fresh initrd02
+stage. The failed stage is preserved and no runtime attempt was consumed.

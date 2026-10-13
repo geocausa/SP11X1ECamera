@@ -12,7 +12,8 @@ spec = importlib.util.spec_from_file_location('package', Q / 'prepare-package.py
 package = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(package)
 KREL = package.KREL
-STAGE, O = package.STAGE, package.O
+STAGE = package.STAGE.with_name(package.STAGE.name + '-initrd02')
+O = package.O
 ID = 'sp11-camera-upstream-front-20261013-01'
 TOKEN = 'sp11_camera_upstream_front_20261013_01=1'
 D = Path('/var/lib') / ID
