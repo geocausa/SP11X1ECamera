@@ -1,3 +1,7 @@
+# E005 latest HPM outcome
+
+Identity03 passed HPM kernel request/cache, lossless trace and Golden return, then retired. [Scoped HPM evidence](../../docs/UPSTREAM-FRONT-PROVIDER-HPM-VALIDATION-20261013.json). Physical electrical margins, sensor sequencing and7.2 capture remain pending.
+
 # E005 latest outcome
 
 Fresh identity02 passed registration/cache/parent and lossless kernel RPMh checks. Both identities returned to Golden and are consumed/retired. Initial01 debug-query failure is retained.

@@ -1,3 +1,39 @@
+## 2026-10-13 isolated front HPM kernel request qualification
+
+Fresh identity03 PASS under copied Golden7.1.5 kernel/initrd. Standard LDO7_B
+and LDO3_M each send exactly one active HPM7 request at resource+8, with
+response-request bit8, and zero voltage/enable requests. Both bind, report
+logical mode normal, zero users and correct BOB2/SMPS4_C supply links.
+Frozen lossless trace:1977 events/1977 ring entries,12 CPUs,zero drops/overruns.
+Independent parser/debug-address recheck PASS. Trace complete:0 is cmd->wait,
+not the synchronous-response flag; acknowledgement interpretation uses
+pinned RSC/RPMh source and successful standard registration/cache update.
+Evidence docs/UPSTREAM-FRONT-PROVIDER-HPM-VALIDATION-20261013.json.
+
+Actual old/current mode callback excerpts identical; GCC/Clang ASAN/UBSAN
+41 cases each per source, including HPM-only IO rail and error cache integrity.
+Transport in hosted fixture modeled. Eight DTB + nine trace-parser rejection
+controls, scoped schema and Golden/unprivileged runner refusals PASS.
+All Golden nodes/properties/reservations unchanged; only two new initial-HPM
+properties relative to the prior qualified provider-only graph.
+
+Automatic Golden return verified. Identity03 consumed/retired, menu archived,
+conditional unit disabled; earlier01/02 remain retired. Golden hashes/default/
+module tree preserved; live boot7722ffff-f92e-4faa-a0a3-06c684abd821,
+7.1.5-sp11-render-parity-v4+, no pending entry/camera stack. PiMaster used;
+a file-write failure and one output-read EOF were reconciled from retained
+files; SP11 calls serialized afterward. Fabric repair remains separate.
+
+This qualifies HPM kernel programming/cache and successful synchronous path,
+not electrical mode readback, rated current, voltage or dropout margin.
+Parents'3.0/1.856V values are cached only. No rail-enable/sensor/clock/GPIO/
+privacy/capture or OS sleep test. Whole regulator component, full7.2 source23/
+sensor24 runtime, both private startup consumers/all14 release gates remain.
+NEXT sensor MCLK/IO/analog/reset/privacy order + failure unwind, physical
+voltage/headroom and compatible full graph, guarded RAW stop/reopen and
+imported2.406 profile VT/FLL. Keep local2.400/720MHz mode/calibration and
+unsupported exact2.900V VAF separate. Prior checkpoints below historical.
+
 ## 2026-10-13 standard front provider Golden registration qualification
 
 Isolated standard PM8550-B LDO7 and PM8010-M LDO3 register at supported

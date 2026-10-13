@@ -1,0 +1,282 @@
+{
+  "HPM_kernel_request_hardware_qualified": true,
+  "all_three_provider_identities_consumed_retired": true,
+  "arm": {
+    "control_transport": "PiMaster",
+    "expected": "HPM7 mode requests only, no voltage or enable requests",
+    "identity": "sp11-camera-standard-front-providers-20261013-03",
+    "preboot_id": "88de3ef8-0081-4655-a791-e25e455a90f2",
+    "retry": false,
+    "source_head": "aa15095d72a96d6a27fd265f7f73fdc5a0d6d88e"
+  },
+  "audio_network_scope": "device registration only; not playback/throughput",
+  "camera_access": false,
+  "candidate23_24_7_2_hardware_qualified": false,
+  "golden_assets_unchanged": true,
+  "hardware_result": {
+    "camera_access": false,
+    "candidate_boot_id": "f8135142-9d31-4fab-8932-275113d34b3d",
+    "child_rpmh_requests_observed": {
+      "ldob7": {
+        "counts": {
+          "enable": 0,
+          "mode": 1,
+          "voltage": 0
+        },
+        "mode_request": {
+          "addr": 268296,
+          "cmd": 0,
+          "cmd_wait": 0,
+          "controller": "apps_rsc",
+          "data": 7,
+          "msgid": 65800,
+          "state": "active",
+          "tcs": 0
+        }
+      },
+      "ldom3": {
+        "counts": {
+          "enable": 0,
+          "mode": 1,
+          "voltage": 0
+        },
+        "mode_request": {
+          "addr": 264968,
+          "cmd": 0,
+          "cmd_wait": 0,
+          "controller": "apps_rsc",
+          "data": 7,
+          "msgid": 65800,
+          "state": "active",
+          "tcs": 0
+        }
+      }
+    },
+    "grub-initrd-fallback.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "13124625",
+      "ExecMainStartTimestampMonotonic": "13019910",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "grub2-common.service": {
+      "ConditionResult": "yes",
+      "ExecMainExitTimestampMonotonic": "13182270",
+      "ExecMainStartTimestampMonotonic": "13145290",
+      "ExecMainStatus": "0",
+      "Result": "success"
+    },
+    "kernel_release": "7.1.5-sp11-render-parity-v4+",
+    "mode_qualification": true,
+    "mode_qualification_scope": "logical HPM cache and synchronous response-request path; electrical/current capability not measured",
+    "network_interfaces": [
+      "lo",
+      "wlP4p1s0"
+    ],
+    "providers": {
+      "vreg_l3m_1p8": {
+        "driver": "qcom-rpmh-regulator",
+        "max_microvolts": 1800000,
+        "microvolts": 1800000,
+        "min_microvolts": 1800000,
+        "node": "/soc@0/rsc@17500000/regulators-11/ldo3",
+        "num_users": 0,
+        "opmode": "normal",
+        "parent": "vreg_s4c_1p8",
+        "parent_link": "regulator.26-SUPPLY",
+        "voltage_is_driver_cache": true
+      },
+      "vreg_l7b_2p8": {
+        "driver": "qcom-rpmh-regulator",
+        "max_microvolts": 2800000,
+        "microvolts": 2800000,
+        "min_microvolts": 2800000,
+        "node": "/soc@0/rsc@17500000/regulators-10/ldo7",
+        "num_users": 0,
+        "opmode": "normal",
+        "parent": "vreg_bob2",
+        "parent_link": "regulator.44-SUPPLY",
+        "voltage_is_driver_cache": true
+      }
+    },
+    "rail_enable_requests": false,
+    "retry": false,
+    "rpmh_resource_addresses": {
+      "ldob7": 268288,
+      "ldom3": 264960
+    },
+    "sound_cards": [
+      "card0"
+    ],
+    "status": "PASS_STANDARD_FRONT_PROVIDER_HPM_ONLY",
+    "trace_events": 1977,
+    "trace_frozen_before_snapshot": true,
+    "trace_overruns_or_drops": 0,
+    "trace_ring_entries": 1977,
+    "trace_scope": "kernel boot through frozen collector snapshot; electrical rail state not measured"
+  },
+  "independent_trace_recheck": {
+    "all_event_lines_parsed": true,
+    "cmd_wait_is_not_response_request": true,
+    "cpu_count": 12,
+    "debug_site_and_addresses_verified": true,
+    "event_lines": 1977,
+    "frozen_ring_entries": 1977,
+    "mode_value": 7,
+    "raw_evidence_pins": {
+      "PRIVATE-DMESG.txt": "4bfc07e60fdb8b1a71e094c97bfbb06191d7b8256dd23245f00b058f5ccc3232",
+      "PRIVATE-RPMH-DYNAMIC-DEBUG.txt": "c6fd1475571fd7d7a2811f3e6ec7d2d837cb1ace479bdc5703426ebf43da1383",
+      "PRIVATE-RPMH-TRACE.txt": "132b0649806a2edc6340b257b2d3c0abcec296a28b2d35a06ac9a7334bbff4ec",
+      "PRIVATE-TRACE-STATS.json": "f5d7e07823830cb7b8cc1a78eff28bd2d6dc282986c1d0cd68f7dc2f2f830f1b"
+    },
+    "request_evidence": {
+      "ldob7": {
+        "addr": 268296,
+        "cmd_wait": 0,
+        "data": 7,
+        "msgid": 65800,
+        "state": "active"
+      },
+      "ldom3": {
+        "addr": 264968,
+        "cmd_wait": 0,
+        "data": 7,
+        "msgid": 65800,
+        "state": "active"
+      }
+    },
+    "response_request_bit": 256,
+    "scope": "kernel HPM request/cache and successful synchronous path; no electrical readback or current capability",
+    "status": "PASS_INDEPENDENT_HPM_RETAINED_TRACE_RECHECK",
+    "zero_child_voltage_enable_requests": true
+  },
+  "install": {
+    "HPM_mode_test": true,
+    "candidate_sha256": "6da79578a9ef5644473ee0ce0c45d95e76f1e36a9126c9b8b25484df4c83491b",
+    "capture_test": false,
+    "command_line": [
+      "root=UUID=33e842b7-0434-4749-b03a-299bdcdb8b9f",
+      "ro",
+      "clk_ignore_unused",
+      "pd_ignore_unused",
+      "cma=128M",
+      "efi=noruntime",
+      "quiet",
+      "splash",
+      "console=tty0",
+      "crashkernel=2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M",
+      "mshw0485_touch.windows_init_parity=1",
+      "mshw0485_touch.parity_linux_power=1",
+      "mshw0485_touch.windows_read_cadence=1",
+      "mshw0485_touch.parity_display_bitmap=1",
+      "mshw0485_touch.parity_stitching_flag=0",
+      "mshw0485_touch.parity_hinge_angle=400",
+      "mshw0485_touch.parity_fast_host_id=400",
+      "mshw0485_touch.parity_report56_identity=0xbc,0xe6,0x4a,0x2e,0x86,0x78",
+      "mshw0485_touch.parity_report56_flag=0",
+      "mshw0485_touch.parity_cfu_inventory=1",
+      "mshw0485_touch.parity_cfu_offer=0x00,0x00,0x12,0x00,0x89,0x14,0x00,0x3f,0xff,0xff,0xff,0xff,0x04,0x04,0x75,0x00",
+      "mshw0485_touch.parity_heat_input=1",
+      "mshw0485_touch.behavior_v2=1",
+      "mshw0485_touch.host_fault_recovery=1",
+      "mshw0485_touch.ready_quiesce=1",
+      "sp11_cps_parity_v2=1",
+      "sp11_cps_v3=1",
+      "sp11_volume_transaction=1",
+      "sp11_softpause=1",
+      "sp11_headroom_link=1",
+      "sp11_wsa_clockstop=1",
+      "sp11_visense_parity=1",
+      "sp11_wsa_windows_init=1",
+      "sp11_wsa_macro0db_oracle=1",
+      "sp11_wsa_winproducer_nohd2_v3=1",
+      "sp11_wsa_csren0_v4=1",
+      "sp11_wsa_csren0_v5_idlegated=1",
+      "sp11_wsa_windows_3state_v26=1",
+      "sp11_wsa_windows_3state_retain_v27=1",
+      "sp11_wsa_dp2_offsetctrl2_v28=1",
+      "soundwire_qcom.sp11_feedback_active_offset2_zero=1",
+      "soundwire_qcom.sp11_cps_pcm_route_105c=1",
+      "sp11_entry=7.1.5-sp11-camera-standard-front-providers-20261013-03",
+      "sp11_camera_standard_front_providers_20261013_03=1",
+      "modprobe.blacklist=qcom_camss,imx681,ov13858,sp11_vd55g0,vd55g0,v4l2loopback",
+      "trace_event=rpmh:rpmh_send_msg",
+      "trace_buf_size=2M",
+      "qcom_rpmh_regulator.dyndbg=+p"
+    ],
+    "golden_hashes": {
+      "initrd.img-7.1.5-sp11-fullio-v19c": "ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d",
+      "vmlinuz-7.1.5-sp11-render-parity-v4+": "bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
+      "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00"
+    },
+    "identity": "sp11-camera-standard-front-providers-20261013-03",
+    "source_head": "aa15095d72a96d6a27fd265f7f73fdc5a0d6d88e",
+    "status": "PASS_HPM_PROVIDER_CANDIDATE_INSTALLED_UNARMED"
+  },
+  "live_golden_return_boot": "7722ffff-f92e-4faa-a0a3-06c684abd821",
+  "open_readiness_categories": [
+    "front-startup",
+    "rear-startup",
+    "cphy",
+    "camss-driver",
+    "params-stats-api",
+    "imx681",
+    "ov13858",
+    "focus-driver",
+    "regulator-dt",
+    "libcamera-pipeline",
+    "ipa",
+    "image-processing",
+    "validation",
+    "submission-export"
+  ],
+  "physical_mode_voltage_current_dropout_qualified": false,
+  "preparation": "docs/UPSTREAM-FRONT-PROVIDER-HPM-PREPARATION-20261013.json",
+  "private_startup_dependencies": {
+    "front-startup": [
+      "qcom/sp11/imx681-2560x1440-nv12-v1.bin"
+    ],
+    "rear-startup": [
+      "qcom/sp11/rear-generation-20261007-60.bin"
+    ]
+  },
+  "reboot_request": {
+    "command": [
+      "systemctl",
+      "reboot",
+      "--no-block"
+    ],
+    "one_use": true,
+    "preboot_id": "88de3ef8-0081-4655-a791-e25e455a90f2",
+    "retry": false
+  },
+  "retirement": {
+    "candidate_boot_id": "f8135142-9d31-4fab-8932-275113d34b3d",
+    "golden_assets_unchanged": true,
+    "golden_return_boot_id": "7722ffff-f92e-4faa-a0a3-06c684abd821",
+    "menu_archived": "/var/lib/sp11-camera-standard-front-providers-20261013-03/RETIRED-GRUB-SCRIPT",
+    "menu_sha256": "c5f14dd347505d0ac037b769eed633ba0ab79f78585f08c39e0f92bd2e5259df",
+    "raw_logs_remain_on_sp11": true,
+    "status": "PASS_HPM_IDENTITY_CONSUMED_RETIRED_AFTER_GOLDEN_RETURN",
+    "transport": "PiMaster",
+    "unit_disabled": true
+  },
+  "sensor_sequence_qualified": false,
+  "service_result": "service_result=success\nexit_code=exited\nexit_status=0\n",
+  "source_checkpoint": "aa15095d72a96d6a27fd265f7f73fdc5a0d6d88e",
+  "source_sha256": {
+    "src/upstream/platform/front-providers-20261013-03/README.md": "9e5b6d2969d173c2614d324c750729af5fd937dead19858fdc487983d52d6125",
+    "src/upstream/platform/front-providers-20261013-03/audit-modes.py": "1090a36e7faab2aadba41fa1c24500aa166404c8ea2f737249ded4fb3659a00d",
+    "src/upstream/platform/front-providers-20261013-03/install.py": "64772915150948fe174ea4a43ac92b7f76f9295b1620018ef6f2a6a2fce1ea7f",
+    "src/upstream/platform/front-providers-20261013-03/prepare.py": "fc8412f3aff559052c44106a794c1d7eeb1deaffe4643da9ffc0a15fc4a5ffc2",
+    "src/upstream/platform/front-providers-20261013-03/run-once.py": "bdcfdf8ec1f0a9e8edc0fe90f3294caa163f8740b13692aec33eea7c866502b5",
+    "src/upstream/platform/front-providers-20261013-03/test-delta.py": "b5f90b89d945b263d229598170b11935518070fa202fb6e32b861cb711025ac5",
+    "src/upstream/platform/front-providers-20261013-03/test-trace.py": "f24e045e12fe1abc246535b8dcc54ee11be184e4bbef4e560f48dcfd878a2b7e"
+  },
+  "status": "PASS_STANDARD_FRONT_HPM_KERNEL_REQUESTS_GOLDEN_ONLY",
+  "system_sleep": false,
+  "transport": "PiMaster",
+  "transport_observation": "guarded source/build/install/reboot/evidence/retirement succeeded; one file-write failed and one completed-job output read returned EOF; retained files reconciled, subsequent calls serialized",
+  "upstream_ready": false,
+  "whole_regulator_component_qualified": false
+}
