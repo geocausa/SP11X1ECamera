@@ -1,0 +1,141 @@
+Subject: [PATCH] media: imx681: validate hardware configuration
+
+The observed mode requires one zero-based C-PHY trio in ABC order,
+an explicit 1.203 GHz link frequency and a 19.2 MHz input clock.
+Validate these properties before reset acquisition, sensor power and
+register access. Reject raw properties that the common parser could
+silently default or truncate.
+
+Recheck the clock before each runtime power-on and require reset GPIO.
+Keep the existing mode transactions and control ABI unchanged. VT timing,
+calibration, board power behavior and hardware recovery remain unproven.
+
+---
+--- a/drivers/media/i2c/imx681.c
++++ b/drivers/media/i2c/imx681.c
+@@ -15,6 +15,7 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
+ #include <linux/regulator/consumer.h>
+ #include <media/v4l2-cci.h>
+ #include <media/v4l2-ctrls.h>
+@@ -47,6 +48,7 @@
+ #define IMX681_PIXEL_RATE	548571428
+ /* V4L2 C-PHY link frequency is half the 2406-Msym/s symbol rate. */
+ #define IMX681_LINK_FREQ	1203000000
++#define IMX681_XCLK_FREQ	19200000
+ #define IMX681_MBUS_CODE	MEDIA_BUS_FMT_SRGGB10_1X10
+ 
+ #define IMX681_XCLR_MIN_DELAY_US	6200
+@@ -82,11 +84,94 @@
+ 	return container_of(sd, struct imx681, sd);
+ }
+ 
++
++/* Reject properties that the common parser may otherwise default or truncate. */
++static int imx681_validate_endpoint(struct fwnode_handle *endpoint)
++{
++	u32 value;
++	int ret;
++
++	ret = fwnode_property_read_u32(endpoint, "bus-type", &value);
++	if (ret || value != V4L2_FWNODE_BUS_TYPE_CSI2_CPHY)
++		return -EINVAL;
++
++	if (fwnode_property_count_u32(endpoint, "data-lanes") != 1)
++		return -EINVAL;
++	ret = fwnode_property_read_u32(endpoint, "data-lanes", &value);
++	if (ret || value != 0)
++		return -EINVAL;
++
++	/* This observed profile has no separate clock lane or polarity option. */
++	if (fwnode_property_present(endpoint, "clock-lanes") ||
++	    fwnode_property_present(endpoint, "lane-polarities") ||
++	    fwnode_property_present(endpoint, "clock-noncontinuous"))
++		return -EINVAL;
++
++	if (fwnode_property_present(endpoint, "line-orders")) {
++		if (fwnode_property_count_u32(endpoint, "line-orders") != 1)
++			return -EINVAL;
++		ret = fwnode_property_read_u32(endpoint, "line-orders", &value);
++		if (ret || value != V4L2_MBUS_CSI2_CPHY_LINE_ORDER_ABC)
++			return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int imx681_check_hwcfg(struct imx681 *sensor)
++{
++	struct v4l2_fwnode_endpoint bus = {
++		.bus_type = V4L2_MBUS_CSI2_CPHY,
++	};
++	struct fwnode_handle *endpoint;
++	int ret;
++
++	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(sensor->dev), NULL);
++	if (!endpoint)
++		return dev_err_probe(sensor->dev, -ENXIO, "missing endpoint\n");
++
++	ret = imx681_validate_endpoint(endpoint);
++	if (ret)
++		goto put_endpoint;
++
++	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &bus);
++	if (ret)
++		goto free_endpoint;
++
++	if (bus.bus_type != V4L2_MBUS_CSI2_CPHY ||
++	    bus.bus.mipi_csi2.num_data_lanes != 1 ||
++	    bus.bus.mipi_csi2.data_lanes[0] != 0 ||
++	    bus.bus.mipi_csi2.line_orders[0] !=
++			V4L2_MBUS_CSI2_CPHY_LINE_ORDER_ABC ||
++	    bus.bus.mipi_csi2.flags ||
++	    bus.nr_of_link_frequencies != 1 || !bus.link_frequencies ||
++	    bus.link_frequencies[0] != IMX681_LINK_FREQ)
++		ret = -EINVAL;
++
++free_endpoint:
++	v4l2_fwnode_endpoint_free(&bus);
++put_endpoint:
++	fwnode_handle_put(endpoint);
++	if (ret)
++		return dev_err_probe(sensor->dev, ret,
++				     "unsupported C-PHY endpoint\n");
++
++	if (clk_get_rate(sensor->xclk) != IMX681_XCLK_FREQ)
++		return dev_err_probe(sensor->dev, -EINVAL,
++				     "xclk must be 19.2 MHz\n");
++
++	return 0;
++}
++
+ static int imx681_power_on(struct device *dev)
+ {
+ 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct imx681 *sensor = to_imx681(sd);
+ 	int ret;
++
++	/* Recheck the assigned rate before every runtime power transition. */
++	if (clk_get_rate(sensor->xclk) != IMX681_XCLK_FREQ)
++		return -EINVAL;
+ 
+ 	ret = regulator_bulk_enable(ARRAY_SIZE(imx681_supply_name),
+ 				    sensor->supplies);
+@@ -457,8 +542,12 @@
+ 		return dev_err_probe(dev, PTR_ERR(sensor->xclk),
+ 				     "failed to get xclk\n");
+ 
+-	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+-						     GPIOD_OUT_HIGH);
++	ret = imx681_check_hwcfg(sensor);
++	if (ret)
++		return ret;
++
++	sensor->reset_gpio = devm_gpiod_get(dev, "reset",
++					    GPIOD_OUT_HIGH);
+ 	if (IS_ERR(sensor->reset_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(sensor->reset_gpio),
+ 				     "failed to get reset gpio\n");

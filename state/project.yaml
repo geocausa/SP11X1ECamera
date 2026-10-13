@@ -1,14 +1,14 @@
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: CPHY_PREPARATION_SOURCE_PASS_HARDWARE_BLOCKED
-  evidence: docs/UPSTREAM-X1E-DEPENDENCIES-VALIDATION-20261012.json
-  source_only_camss_patches: 9
+  status: IMX681_ENDPOINT_CLOCK_SOURCE_PASS_HARDWARE_BLOCKED
+  evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
+  retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
-  standalone_phy_cphy_implemented: false
+  standalone_phy_cphy_implemented: true
   cphy_internal_preparation_compiled: true
   cphy_preparation_evidence: docs/UPSTREAM-CPHY-CONFIG-VALIDATION-20261012.json
-  source_only_phy_patches: 1
-  latest_source_candidate: 17
+  retained_cphy_preparation_patches: 1
+  latest_source_candidate: 23
   latest_full_kernel_candidate: 16
   candidate17_full_image_built: false
   full_kernel_image_modules_build_passed: true
@@ -33,7 +33,11 @@ upstream_open_stack_current:
   upstream_ready: false
   runtime_changed: false
   calibration: Reuse measured Claude packages and generators; validate new domains
-  next: Typed C-PHY frequency/timing/routing, sensor power graph and CDM provider/physical retirement
+  sensor_endpoint_clock_source_qualified: true
+  sensor_hardware_qualified: false
+  candidate23_full_image_built: false
+  cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
+  next: Measured VT/frame-length and sensor/power graph, compatible full build, fresh RAW stop/reopen; CDM physical retirement remains open
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true

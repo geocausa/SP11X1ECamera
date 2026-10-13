@@ -1,3 +1,34 @@
+## 2026-10-13 IMX681 endpoint/clock source qualification
+
+Active checkout: SP11X1ECamera-upstream, work/upstream-open-stack-20261011.
+Candidate23 adds explicit one-trio0/ABC C-PHY and1.203GHz-link admission,
+19.2MHz input clock checks before probe power and every runtime power-on,
+and mandatory reset GPIO. Raw properties reject parser default/truncation.
+Observed mode/control transactions unchanged; qualified local2.400 profile,
+measured timing and calibration preserved separately.
+
+GCC/Clang each106 ASAN/UBSAN cases using actual function bodies/constants/
+supply declarations; six input/fixture/output controls reject safely.
+Actual ARM64 module W=1/-Werror/modpost/link PASS,zero warnings/errors,
+vermagic7.2.0. Exact final patch replay and no-signoff checkpatch clean.
+No DCO/maintainer certification or upstream acceptance is claimed.
+Evidence docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json.
+
+User-requested clean reboot succeeded: boot31b909b2-38c3-4843-af10-25139cacbf21,
+protected Golden7.1.5-sp11-render-parity-v4+, saved default unchanged,
+next entry empty, no camera modules/nodes/processes. Fabric remained
+intermittent; bundle-file transfer and direct commands allowed completion.
+Failed preparation/fixture/syntax/packaging stages retained, excluded from
+qualification. Initial body-only fixture missed a generator stray '+' in a
+constant; full compile caught it and the harness now imports actual constants.
+
+No module installed/loaded, camera stream, full candidate23 Image or sleep test.
+Candidate16 remains latest full Image. Both private startup consumers/all14
+readiness gates remain open. NEXT measured VT/frame-length and sensor/power
+graph qualification, including the normal regulator boot issue, compatible full
+build and guarded fresh open RAW stop/reopen. ISP/NV12 retirement remains open.
+Prior sections below are historical.
+
 ## Bounded observed C-PHY receiver checkpoint, 2026-10-12
 
 Candidate19 now implements typed C-PHY options and a standalone receiver leaf,
