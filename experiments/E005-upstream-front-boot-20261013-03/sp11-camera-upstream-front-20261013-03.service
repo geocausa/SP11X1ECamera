@@ -1,0 +1,16 @@
+[Unit]
+Description=One-use upstream front26 registration and runtime PM probe
+ConditionKernelCommandLine=sp11_camera_upstream_front_20261013_03=1
+Wants=network-online.target grub-initrd-fallback.service grub2-common.service
+After=network-online.target grub-initrd-fallback.service grub2-common.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -u /var/lib/sp11-camera-upstream-front-20261013-03/run-once.py
+ExecStopPost=/var/lib/sp11-camera-upstream-front-20261013-03/return-golden.sh
+TimeoutStartSec=120
+TimeoutStopSec=20
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
