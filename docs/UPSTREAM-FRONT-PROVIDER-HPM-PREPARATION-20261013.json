@@ -1,0 +1,289 @@
+{
+  "DTB": {
+    "added_nodes": [
+      "/soc@0/rsc@17500000/regulators-10",
+      "/soc@0/rsc@17500000/regulators-10/ldo7",
+      "/soc@0/rsc@17500000/regulators-11",
+      "/soc@0/rsc@17500000/regulators-11/ldo3"
+    ],
+    "candidate_nodes": 1406,
+    "candidate_sha256": "6da79578a9ef5644473ee0ce0c45d95e76f1e36a9126c9b8b25484df4c83491b",
+    "enable_properties": false,
+    "golden_hashes": {
+      "initrd.img-7.1.5-sp11-fullio-v19c": "ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d",
+      "vmlinuz-7.1.5-sp11-render-parity-v4+": "bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
+      "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00"
+    },
+    "golden_nodes": 1402,
+    "initial_mode_hpm_on_both_children": true,
+    "kernel_release": "7.1.5-sp11-render-parity-v4+",
+    "original_properties_byte_identical": true,
+    "parent_paths": {
+      "bob2": "/soc@0/rsc@17500000/regulators-0/bob2",
+      "smps4": "/soc@0/rsc@17500000/regulators-1/smps4"
+    },
+    "reservation_map_byte_identical": true,
+    "sensor_or_mode_runtime_qualified": false,
+    "status": "PASS_ISOLATED_FRONT_PROVIDER_HPM_DTB_PREPARED_NOT_INSTALLED"
+  },
+  "cached_parent_values_uv": {
+    "vreg_bob2": 3000000,
+    "vreg_s4c_1p8": 1856000
+  },
+  "electrical_voltage_or_dropout_qualified": false,
+  "expected_hardware": "one active HPM7 synchronous response-request per rail; zero voltage/enable requests; normal logical cache, zero users, exact parents, automatic Golden return",
+  "first_preparation_failure": {
+    "hardware_access": false,
+    "phase": "before DTB build/install",
+    "reason": "test-trace file write failed; following source test found file absent; verified absence and repeated file write successfully"
+  },
+  "graph_controls": {
+    "candidate_revalidated": {
+      "added_nodes": [
+        "/soc@0/rsc@17500000/regulators-10",
+        "/soc@0/rsc@17500000/regulators-10/ldo7",
+        "/soc@0/rsc@17500000/regulators-11",
+        "/soc@0/rsc@17500000/regulators-11/ldo3"
+      ],
+      "candidate_nodes": 1406,
+      "enable_properties": false,
+      "golden_nodes": 1402,
+      "initial_mode_hpm_on_both_children": true,
+      "original_properties_byte_identical": true,
+      "parent_paths": {
+        "bob2": "/soc@0/rsc@17500000/regulators-0/bob2",
+        "smps4": "/soc@0/rsc@17500000/regulators-1/smps4"
+      },
+      "reservation_map_byte_identical": true
+    },
+    "controls": [
+      {
+        "name": "wrong-parent",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-10",
+        "rejected": true
+      },
+      {
+        "name": "unsupported-voltage",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-10/ldo7",
+        "rejected": true
+      },
+      {
+        "name": "wrong-initial-mode",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-11/ldo3",
+        "rejected": true
+      },
+      {
+        "name": "existing-property",
+        "reason": "Golden property changed: /soc@0/rsc@17500000/regulators-0/bob2",
+        "rejected": true
+      },
+      {
+        "name": "extra-actuator",
+        "reason": "node delta",
+        "rejected": true
+      },
+      {
+        "name": "missing-constraint",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-11/ldo3",
+        "rejected": true
+      },
+      {
+        "name": "missing-mode",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-11/ldo3",
+        "rejected": true
+      },
+      {
+        "name": "boot-on",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-10/ldo7",
+        "rejected": true
+      }
+    ],
+    "status": "PASS_PROVIDER_DELTA_REJECTION_CONTROLS"
+  },
+  "mode_callback_audit": {
+    "excerpts": {
+      "candidate23": "4e2cd6795c6720014d9b1cd3a7bca61f777368769da195f83cfbb2f5d15c463a",
+      "golden-reference": "4e2cd6795c6720014d9b1cd3a7bca61f777368769da195f83cfbb2f5d15c463a"
+    },
+    "runs": [
+      {
+        "command": [
+          "gcc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-O1",
+          "-fno-omit-frame-pointer",
+          "-fsanitize=address,undefined",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/golden-reference.c",
+          "-o",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/golden-reference-gcc"
+        ],
+        "compiler": "gcc",
+        "result": "PASS_ACTUAL_MODE_CALLBACKS cases=41",
+        "source": "golden-reference"
+      },
+      {
+        "command": [
+          "clang",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-O1",
+          "-fno-omit-frame-pointer",
+          "-fsanitize=address,undefined",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/golden-reference.c",
+          "-o",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/golden-reference-clang"
+        ],
+        "compiler": "clang",
+        "result": "PASS_ACTUAL_MODE_CALLBACKS cases=41",
+        "source": "golden-reference"
+      },
+      {
+        "command": [
+          "gcc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-O1",
+          "-fno-omit-frame-pointer",
+          "-fsanitize=address,undefined",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/candidate23.c",
+          "-o",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/candidate23-gcc"
+        ],
+        "compiler": "gcc",
+        "result": "PASS_ACTUAL_MODE_CALLBACKS cases=41",
+        "source": "candidate23"
+      },
+      {
+        "command": [
+          "clang",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-O1",
+          "-fno-omit-frame-pointer",
+          "-fsanitize=address,undefined",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/candidate23.c",
+          "-o",
+          "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-mode-audit-20261013-01/candidate23-clang"
+        ],
+        "compiler": "clang",
+        "result": "PASS_ACTUAL_MODE_CALLBACKS cases=41",
+        "source": "candidate23"
+      }
+    ],
+    "source_pins": {
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/regulator/core.c": "d28587cfd6b0d2349473616b581f060691f74116404a4fd383ec7d70b04f1de8",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/regulator/of_regulator.c": "579515ae767807809b52ee1b6a275343636add4fb1ec3a0f12ef92af3b402bf1",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/regulator/qcom-rpmh-regulator.c": "036a42419906dadc79e5465286923642bc55aa68786448f270e9ed60399634c2",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/soc/qcom/rpmh-rsc.c": "2b684127b60e9ce437b844a75145371f3898509a50f2543f2000c4d2a70fcb7d",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/soc/qcom/rpmh.c": "83d958d6754d40efbed720f6bfc6c1218f28bd0c5ece39b8961226bbca04202c",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/drivers/soc/qcom/trace-rpmh.h": "34bf52059981f0f9223732122de7560baf05e1b5e900cbe062939cf1c3f2d588",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/dt-bindings/regulator/qcom,rpmh-regulator.h": "9024ec736a8bca4cc31d414ea2978b237ac6c4ff0409988f8434147a29ecd622",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/e003i-front-production-src/include/linux/regulator/consumer.h": "87501f03cd27f1be8ae24ea6c4d26d63eda3521d528fa37a543a418c9140b9e7",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/drivers/regulator/core.c": "e4528a01297618f987d85a335194c30c65d7a7b8a04ac730ef937406db61690e",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/drivers/regulator/of_regulator.c": "579515ae767807809b52ee1b6a275343636add4fb1ec3a0f12ef92af3b402bf1",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/drivers/regulator/qcom-rpmh-regulator.c": "796f955c42dc7491690a148d5d20711a59af314ba55b3eee51ed49f38f6a63d0",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/drivers/soc/qcom/rpmh-rsc.c": "2b684127b60e9ce437b844a75145371f3898509a50f2543f2000c4d2a70fcb7d",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/drivers/soc/qcom/rpmh.c": "83d958d6754d40efbed720f6bfc6c1218f28bd0c5ece39b8961226bbca04202c",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/drivers/soc/qcom/trace-rpmh.h": "34bf52059981f0f9223732122de7560baf05e1b5e900cbe062939cf1c3f2d588",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/include/dt-bindings/regulator/qcom,rpmh-regulator.h": "9024ec736a8bca4cc31d414ea2978b237ac6c4ff0409988f8434147a29ecd622",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-23/source/include/linux/regulator/consumer.h": "87501f03cd27f1be8ae24ea6c4d26d63eda3521d528fa37a543a418c9140b9e7"
+    },
+    "status": "PASS_PINNED_MODE_CALLBACK_SOURCE",
+    "transport": "modeled synchronous/asynchronous request and error return; no device access"
+  },
+  "runner_refusals": {
+    "attempt_marker_created": false,
+    "root_Golden": true,
+    "unprivileged": true
+  },
+  "schema": {
+    "command": [
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-16/schema-venv/bin/dt-validate",
+      "-s",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-16/build/Documentation/devicetree/bindings/processed-schema.json",
+      "-l",
+      "qcom,rpmh-regulator",
+      "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-providers-20261013-03/front-providers.dtb"
+    ],
+    "diagnostics": "",
+    "schema_sha256": "d857017081414151fe266adcc097391ee65943d2f5bd50f0283799a6d140fdca",
+    "status": "PASS_HPM_SCOPED_RPMH_SCHEMA"
+  },
+  "sensor_or_clock_access": false,
+  "source_base": "f75fd0bddb4a91ab57a29a4794f155eaebba9df6",
+  "source_sha256": {
+    "src/upstream/platform/front-providers-20261013-03/README.md": "9e5b6d2969d173c2614d324c750729af5fd937dead19858fdc487983d52d6125",
+    "src/upstream/platform/front-providers-20261013-03/audit-modes.py": "1090a36e7faab2aadba41fa1c24500aa166404c8ea2f737249ded4fb3659a00d",
+    "src/upstream/platform/front-providers-20261013-03/install.py": "64772915150948fe174ea4a43ac92b7f76f9295b1620018ef6f2a6a2fce1ea7f",
+    "src/upstream/platform/front-providers-20261013-03/prepare.py": "fc8412f3aff559052c44106a794c1d7eeb1deaffe4643da9ffc0a15fc4a5ffc2",
+    "src/upstream/platform/front-providers-20261013-03/run-once.py": "bdcfdf8ec1f0a9e8edc0fe90f3294caa163f8740b13692aec33eea7c866502b5",
+    "src/upstream/platform/front-providers-20261013-03/test-delta.py": "b5f90b89d945b263d229598170b11935518070fa202fb6e32b861cb711025ac5",
+    "src/upstream/platform/front-providers-20261013-03/test-trace.py": "f24e045e12fe1abc246535b8dcc54ee11be184e4bbef4e560f48dcfd878a2b7e"
+  },
+  "status": "PASS_FRONT_PROVIDER_HPM_SOURCE_AND_DTB_HARDWARE_PENDING",
+  "system_sleep": false,
+  "trace_parser_controls": {
+    "cmd_wait_zero_with_response_bit_admitted": true,
+    "nominal_events": 3,
+    "rejections": [
+      {
+        "name": "wrong-HPM-value",
+        "reason": "HPM value/state/response request mismatch",
+        "rejected": true
+      },
+      {
+        "name": "missing-response-request",
+        "reason": "HPM value/state/response request mismatch",
+        "rejected": true
+      },
+      {
+        "name": "wrong-state",
+        "reason": "HPM value/state/response request mismatch",
+        "rejected": true
+      },
+      {
+        "name": "unexpected-voltage",
+        "reason": "unexpected child request count",
+        "rejected": true
+      },
+      {
+        "name": "unexpected-enable",
+        "reason": "unexpected child request count",
+        "rejected": true
+      },
+      {
+        "name": "duplicate-mode",
+        "reason": "unexpected child request count",
+        "rejected": true
+      },
+      {
+        "name": "missing-mode",
+        "reason": "unexpected child request count",
+        "rejected": true
+      },
+      {
+        "name": "unparsed-event",
+        "reason": "unparsed RPMh event",
+        "rejected": true
+      },
+      {
+        "name": "resource-address-alias",
+        "rejected": true
+      }
+    ],
+    "status": "PASS_HPM_TRACE_PARSER_NO_DEVICE_ACCESS"
+  }
+}
