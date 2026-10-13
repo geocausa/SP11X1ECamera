@@ -1,3 +1,25 @@
+## 2026-10-13 IMX681 frame-length source correction
+
+Candidate24 is a sensor-only package on candidate23's qualified full source.
+The observed mode initializes24-bit FLL0x033d to3554; imported controls instead
+wrote16-bit0x0340/default2708. The new patch fixes exactly those two definitions.
+65535 maximum, margin, mode tables and all existing control/admission bodies stay.
+GCC/Clang each63430 ASAN/UBSAN cases; eleven rejection controls; exact replay;
+real ARM64 module W=1/-Werror/modpost/link and no-signoff checkpatch clean.
+Evidence docs/UPSTREAM-IMX681-FLL-VALIDATION-20261013.json.
+Initial patch-message formatting failure retained; final-qual01 passes.
+
+Source consistency is qualified, physical timing is not. Imported3840x2640/
+2.406-Gsymbol/s profile's VT clock remains unmeasured; its existing548571428
+PIXEL_RATE is transport-derived. Local3840x2160/2.400 profile's measured720MHz
+does not automatically transfer. NEXT VT/cadence and physical FLL qualification,
+normal regulator/provider boot issue, sensor/reset/privacy graph, compatible
+full kernel and fresh guarded RAW stop/reopen. Both private startup consumers
+and all14 readiness categories remain open; hardware ISP/NV12 remains target.
+No installed/loaded module, camera stream, full24 Image, new reboot or sleep test.
+Latest full source23/full Image16; protected Golden and daily branch preserved.
+Prior sections below are historical.
+
 ## 2026-10-13 IMX681 endpoint/clock source qualification
 
 Active checkout: SP11X1ECamera-upstream, work/upstream-open-stack-20261011.

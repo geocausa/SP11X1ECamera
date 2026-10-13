@@ -1,0 +1,27 @@
+media: imx681: align frame-length control with the observed mode
+
+The retained mode initializes three frame-length bytes at 0x033d to 3554.
+The control path instead writes two bytes at 0x0340 and advertises 2708.
+Use the observed address, width and default. Keep the conservative 16-bit
+maximum, exposure margin and all observed initialization transactions.
+This source correction does not qualify VT timing or hardware behavior.
+
+---
+diff --git a/drivers/media/i2c/imx681.c b/drivers/media/i2c/imx681.c
+--- a/drivers/media/i2c/imx681.c
++++ b/drivers/media/i2c/imx681.c
+@@ -34,12 +34,12 @@
+ #define IMX681_REG_EXPOSURE	CCI_REG24(0x0229)
+ #define IMX681_REG_ANALOG_GAIN	CCI_REG16(0x0204)
+ #define IMX681_REG_DIGITAL_GAIN	CCI_REG16(0x020e)
+-#define IMX681_REG_FRAME_LENGTH	CCI_REG16(0x0340)
++#define IMX681_REG_FRAME_LENGTH	CCI_REG24(0x033d)
+ 
+ #define IMX681_WIDTH		3840
+ #define IMX681_HEIGHT		2640
+ #define IMX681_LINE_LENGTH	6752
+-#define IMX681_FRAME_LENGTH_DEF	2708
++#define IMX681_FRAME_LENGTH_DEF	3554
+ #define IMX681_FRAME_LENGTH_MAX	0xffff
+ #define IMX681_EXPOSURE_MARGIN	48
+ #define IMX681_EXPOSURE_DEF	1600
