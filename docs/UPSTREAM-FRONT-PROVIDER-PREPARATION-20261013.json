@@ -1,0 +1,188 @@
+{
+  "attempt_identity": "sp11-camera-standard-front-providers-20261013-01",
+  "board_inputs": {
+    "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ooaklee-camera-20261012-01/validated/arch/arm64/boot/dts/qcom/x1-microsoft-denali.dtsi": "afdc9d83fefba1223639c140a8de9558be59f4ddbf0991a206a52a4ed9967eca",
+    "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ooaklee-camera-20261012-01/validated/arch/arm64/boot/dts/qcom/x1e80100-microsoft-denali-oled.dts": "2beacc7b5136a2f9ff90c50f4a9c3896c4cbaf3a25c48fc633501f2848cab3ea"
+  },
+  "camera_runtime_access": false,
+  "controls_original": {
+    "candidate_revalidated": {
+      "added_nodes": [
+        "/soc@0/rsc@17500000/regulators-10",
+        "/soc@0/rsc@17500000/regulators-10/ldo7",
+        "/soc@0/rsc@17500000/regulators-11",
+        "/soc@0/rsc@17500000/regulators-11/ldo3"
+      ],
+      "candidate_nodes": 1406,
+      "golden_nodes": 1402,
+      "initial_mode_or_enable_properties": false,
+      "original_properties_byte_identical": true,
+      "parent_paths": {
+        "bob2": "/soc@0/rsc@17500000/regulators-0/bob2",
+        "smps4": "/soc@0/rsc@17500000/regulators-1/smps4"
+      },
+      "reservation_map_byte_identical": true
+    },
+    "controls": [
+      {
+        "name": "wrong-parent",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-10",
+        "rejected": true
+      },
+      {
+        "name": "unsupported-voltage",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-10/ldo7",
+        "rejected": true
+      },
+      {
+        "name": "initial-mode",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-11/ldo3",
+        "rejected": true
+      },
+      {
+        "name": "existing-property",
+        "reason": "Golden property changed: /soc@0/rsc@17500000/regulators-0/bob2",
+        "rejected": true
+      },
+      {
+        "name": "extra-actuator",
+        "reason": "node delta",
+        "rejected": true
+      },
+      {
+        "name": "missing-constraint",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-11/ldo3",
+        "rejected": true
+      },
+      {
+        "attempt_marker_created": false,
+        "name": "Golden-runner-refusal",
+        "rejected": true
+      }
+    ],
+    "status": "PASS_PROVIDER_DELTA_REJECTION_CONTROLS"
+  },
+  "controls_reproduced": {
+    "candidate_revalidated": {
+      "added_nodes": [
+        "/soc@0/rsc@17500000/regulators-10",
+        "/soc@0/rsc@17500000/regulators-10/ldo7",
+        "/soc@0/rsc@17500000/regulators-11",
+        "/soc@0/rsc@17500000/regulators-11/ldo3"
+      ],
+      "candidate_nodes": 1406,
+      "golden_nodes": 1402,
+      "initial_mode_or_enable_properties": false,
+      "original_properties_byte_identical": true,
+      "parent_paths": {
+        "bob2": "/soc@0/rsc@17500000/regulators-0/bob2",
+        "smps4": "/soc@0/rsc@17500000/regulators-1/smps4"
+      },
+      "reservation_map_byte_identical": true
+    },
+    "controls": [
+      {
+        "name": "wrong-parent",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-10",
+        "rejected": true
+      },
+      {
+        "name": "unsupported-voltage",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-10/ldo7",
+        "rejected": true
+      },
+      {
+        "name": "initial-mode",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-11/ldo3",
+        "rejected": true
+      },
+      {
+        "name": "existing-property",
+        "reason": "Golden property changed: /soc@0/rsc@17500000/regulators-0/bob2",
+        "rejected": true
+      },
+      {
+        "name": "extra-actuator",
+        "reason": "node delta",
+        "rejected": true
+      },
+      {
+        "name": "missing-constraint",
+        "reason": "provider property changed: /soc@0/rsc@17500000/regulators-11/ldo3",
+        "rejected": true
+      }
+    ],
+    "status": "PASS_PROVIDER_DELTA_REJECTION_CONTROLS"
+  },
+  "first_combined_validation": "timed out after retained controls, during broad schema-path search; controls read back; no install",
+  "guard_boot_id": "31b909b2-38c3-4843-af10-25139cacbf21",
+  "hypothesis": "supported fixed front voltage constraints register on isolated standard providers with documented parents",
+  "preparation": {
+    "added_nodes": [
+      "/soc@0/rsc@17500000/regulators-10",
+      "/soc@0/rsc@17500000/regulators-10/ldo7",
+      "/soc@0/rsc@17500000/regulators-11",
+      "/soc@0/rsc@17500000/regulators-11/ldo3"
+    ],
+    "candidate_nodes": 1406,
+    "candidate_sha256": "ae9e93ef6f62990b712f884bebdbf9d5f35638cfcee1c363f637c60c9f58553c",
+    "golden_hashes": {
+      "initrd.img-7.1.5-sp11-fullio-v19c": "ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d",
+      "vmlinuz-7.1.5-sp11-render-parity-v4+": "bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a",
+      "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00"
+    },
+    "golden_nodes": 1402,
+    "initial_mode_or_enable_properties": false,
+    "kernel_release": "7.1.5-sp11-render-parity-v4+",
+    "original_properties_byte_identical": true,
+    "parent_paths": {
+      "bob2": "/soc@0/rsc@17500000/regulators-0/bob2",
+      "smps4": "/soc@0/rsc@17500000/regulators-1/smps4"
+    },
+    "reservation_map_byte_identical": true,
+    "sensor_or_mode_runtime_qualified": false,
+    "status": "PASS_ISOLATED_FRONT_PROVIDER_DTB_PREPARED_NOT_INSTALLED"
+  },
+  "schema": {
+    "baseline_diagnostics_retained": false,
+    "candidate": {
+      "command": [
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-16/schema-venv/bin/dt-validate",
+        "-s",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-16/build/Documentation/devicetree/bindings/processed-schema.json",
+        "-l",
+        "qcom,rpmh-regulator",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/standard-front-providers-20261013-01/front-providers.dtb"
+      ],
+      "rc": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "golden": {
+      "command": [
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-16/schema-venv/bin/dt-validate",
+        "-s",
+        "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-16/build/Documentation/devicetree/bindings/processed-schema.json",
+        "-l",
+        "qcom,rpmh-regulator",
+        "/boot/sp11-7.1.5-audio-fullio-v19c/x1e80100-microsoft-denali-sp11-fullio-v19c.dtb"
+      ],
+      "rc": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    "schema_sha256": "d857017081414151fe266adcc097391ee65943d2f5bd50f0283799a6d140fdca",
+    "status": "PASS_SCOPED_RPMH_SCHEMA_NO_NEW_DIAGNOSTICS"
+  },
+  "scope": "Golden7.1.5 registration only; no rail/mode/sensor/capture/electrical/7.2 qualification",
+  "source_base": "f16a3c6a249e851d2736c26f31478cc5f48eee75",
+  "source_pins": {
+    "src/upstream/platform/front-providers-20261013/README.md": "dab9d894c137ff8e0b45565816c62251cbc9a436133101d5207553cf8e997ac7",
+    "src/upstream/platform/front-providers-20261013/install.py": "ac9c40fd4d1a16cd6e55ec424cf36c75825e828d37b9568efb30f11518c0d21f",
+    "src/upstream/platform/front-providers-20261013/prepare.py": "9a46b059550ff8ba54fa55fe7267b78bf4e125f4ee667d4bf5b4879a070818ad",
+    "src/upstream/platform/front-providers-20261013/run-once.py": "af2076e4c56f198b526ad700e4d73ffed72ea24c1d0bd60203c82b199ec87289",
+    "src/upstream/platform/front-providers-20261013/test-delta.py": "eed137e4de595bd0abd8cf5280b929a92d242354e933fbc781a40f25f4c59b5a"
+  },
+  "status": "PASS_FRONT_PROVIDER_PREPARATION_HARDWARE_PENDING",
+  "system_sleep": false
+}
