@@ -1,0 +1,204 @@
+{
+  "status": "PASS_RETAINED_IMX681_POWER_PORT_SOURCE_ARM64",
+  "source_checkpoint": "537c6aad62c74809ce1b76498bd5687a15545301",
+  "transport": "PiMaster",
+  "sensor_package_candidate": 25,
+  "latest_full_source_candidate": 23,
+  "latest_full_image_candidate": 16,
+  "validation": {
+    "status": "PASS_SOURCE_POWER_PORT_ARM64",
+    "host": {
+      "status": "PASS_ACTUAL_BODY_POWER_PORT",
+      "source_sha256": "987675da1321cd9b595ab09b1aee6d55aec63f5120352be12e0b30f20fa84f02",
+      "results": [
+        {
+          "compiler": "gcc",
+          "label": "actual",
+          "exit_code": 0,
+          "expected_success": true,
+          "stdout": "PASS actual-body power/CCI/PM/error cases=139"
+        },
+        {
+          "compiler": "clang",
+          "label": "actual",
+          "exit_code": 0,
+          "expected_success": true,
+          "stdout": "PASS actual-body power/CCI/PM/error cases=139"
+        },
+        {
+          "compiler": "gcc",
+          "label": "short-reset-delay",
+          "exit_code": -6,
+          "expected_success": false,
+          "stdout": ""
+        },
+        {
+          "compiler": "gcc",
+          "label": "ignore-analog-release-error",
+          "exit_code": -6,
+          "expected_success": false,
+          "stdout": ""
+        },
+        {
+          "compiler": "gcc",
+          "label": "missing-identify-guard",
+          "exit_code": -6,
+          "expected_success": false,
+          "stdout": ""
+        },
+        {
+          "compiler": "gcc",
+          "label": "missing-control-guard",
+          "exit_code": -6,
+          "expected_success": false,
+          "stdout": ""
+        },
+        {
+          "compiler": "gcc",
+          "label": "missing-start-guard",
+          "exit_code": -6,
+          "expected_success": false,
+          "stdout": ""
+        },
+        {
+          "compiler": "gcc",
+          "label": "missing-stop-guard",
+          "exit_code": -6,
+          "expected_success": false,
+          "stdout": ""
+        }
+      ],
+      "negative_controls": 6,
+      "transport_modeled": true,
+      "hardware_qualified": false,
+      "retained_hardware_sequence_reused": true,
+      "register_payloads_unchanged_except_guards": true
+    },
+    "sensor_sha256": "987675da1321cd9b595ab09b1aee6d55aec63f5120352be12e0b30f20fa84f02",
+    "tables_sha256": "fad73d655d9afb511d537690ec32e4c14426e4f2be615c2db5b7f4a002468710",
+    "module_sha256": "84a249a1c23571d985d37c63ca231da6875765208dd930d68662dbbf70a79c6c",
+    "installed": false,
+    "hardware_qualified": false,
+    "full_image_built": false
+  },
+  "source_sha256": {
+    "src/upstream/sensors/imx681-power-20261013/0001-imx681-port-retained-power-sequence.patch": "bf5e3fd8b5641838cb35fea1e2f2b80518096f337b4c9240456156217a7f4173",
+    "src/upstream/sensors/imx681-power-20261013/README.md": "a916c17d862a216916f5a4b393387dca7ca5737254211d04a911358d8c55478f",
+    "src/upstream/sensors/imx681-power-20261013/manifest.json": "290fcc57d397fcd41e2321391fc366db178ad6b928640c6fc12f375c0464c9dc",
+    "src/upstream/sensors/imx681-power-20261013/power-harness.c": "aa76bbf8e24ee521346b0deaf499e345ce88d2e44a49cd6eb525dbcd5136dd05",
+    "src/upstream/sensors/imx681-power-20261013/power-stub.c": "e767b81c7980e8e7dc851057d9e1de7840237670cf28ca212a514de0837d06cf",
+    "src/upstream/sensors/imx681-power-20261013/prepare.py": "9462723fe34cf4e1346b54f5f550e55ca81892bee9dca5cd84e5f48a4646a372",
+    "src/upstream/sensors/imx681-power-20261013/test-power.py": "756c5e7837eb69ef77fbf668bab0ac39c3a2e249896957b74fa0e085a6d6d2c4"
+  },
+  "retained_hardware_evidence": {
+    "experiments/E003-front-imx681-cphy/e003b-imx681-identity/PREFLIGHT.md": "3f932e30d3ed404058273826cae1584b8bf07576b55f3fc51046cc255e0b0d34",
+    "experiments/E003-front-imx681-cphy/e003b-imx681-identity/RUNTIME-EVIDENCE.txt": "cb01d48579b579e98c62d61cfab6198c803266c87e8a08f0aceeda39c2dfde05",
+    "experiments/E003-front-imx681-cphy/e003b-imx681-identity/sp11_imx681_probe.c": "9f948c6a3a16a5ffa1299265dfb82cc14c408518e4bff97950e9229701753444",
+    "src/front-imx681/kernel/imx681/imx681.c": "6e14f6d345759eb61a2a54129437e04f747e64d59d3bfc264069a0ecddeeb78e"
+  },
+  "retained_sequence": {
+    "assert_reset_low": true,
+    "xclk_hz": 19200000,
+    "IO": "LDO3_M 1.8V",
+    "analog": "LDO7_B 2.8V",
+    "on": [
+      "reset low",
+      "MCLK on",
+      "IO on",
+      "analog on",
+      "delay 1-1.5ms",
+      "reset high",
+      "delay 10-12ms"
+    ],
+    "off": [
+      "reset low",
+      "delay 1-1.5ms",
+      "MCLK off",
+      "analog off",
+      "IO off"
+    ],
+    "historical_identity": "E003b historical register0x0004 ID0x0aff; both regulator use counts0 after teardown",
+    "scope": "Retained E003b and working native implementation already prove this sensor sequence on SP11. Current standard upstream graph and candidate25 implementation have not been booted."
+  },
+  "error_semantics": [
+    "Track only successfully acquired Linux API references",
+    "Preserve original enable/probe error; log secondary cleanup error",
+    "Keep IO acquired after analog-disable failure",
+    "Retain fault/owned flags after release failure; block duplicate power-on and CCI",
+    "Balance PM references acquired by control/start guard",
+    "Do not mark remove as runtime suspended after power-off failure"
+  ],
+  "limitations": [
+    "Hosted APIs/transport and fixture register arrays modeled",
+    "Flags do not measure electrical rail state on failed provider transport",
+    "Remove/probe failure logs provider faults; cannot guarantee physical recovery from unresponsive provider",
+    "Imported 3840x2640/2.406 profile VT timing remains unmeasured; keep native2.400/720MHz mode/calibration separate",
+    "Current full upstream graph and RAW stop/reopen not qualified",
+    "Both private startup consumers and14 release categories remain open"
+  ],
+  "unchanged": {
+    "mode_tables": true,
+    "FLL_control_payloads": true,
+    "endpoint_admission": true,
+    "clock_rate_admission": true,
+    "native_driver": true,
+    "Golden_assets": true,
+    "daily_branch": true
+  },
+  "golden_hashes": {
+    "x1e80100-microsoft-denali-sp11-fullio-v19c.dtb": "2fcfa738c229b32764ff2722847cf4056b3153c64a12f8490429309f29df6d00",
+    "initrd.img-7.1.5-sp11-fullio-v19c": "ac3ba64bd1c6bd6b8c0dc01b9836fb7466128fcc687903673b6fd598ebefb66d",
+    "vmlinuz-7.1.5-sp11-render-parity-v4+": "bca0a336c15d2995c61b8df9d449afb9df5fc8776a3da1ad034616f917bb428a"
+  },
+  "live_golden_boot_id": "7722ffff-f92e-4faa-a0a3-06c684abd821",
+  "failed_stage": {
+    "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-25/host-tests",
+    "reason": "Clang unused fixture supply declaration; GCC139 passed; reference names explicitly checked in final fixture; retained initial run"
+  },
+  "successful_stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-25/final-qual01",
+  "runtime_changed": false,
+  "installed": false,
+  "system_sleep": false,
+  "hardware_qualified": false,
+  "upstream_ready": false,
+  "next": "Integrate source25 with compatible full7.2 standard sensor graph using retained power knowledge; bounded changed-implementation identity/RAW stop/reopen and imported-profile VT/FLL. New measurements only for changed operating point or fault evidence; no duplicate sequence discovery.",
+  "repository_checks": {
+    "readiness_tests": 15,
+    "readiness_tests_passed": true,
+    "readiness": {
+      "upstream_ready": false,
+      "blockers": [
+        "front-startup: private-runtime-dependency",
+        "rear-startup: private-runtime-dependency",
+        "cphy: needs-upstream-rebase",
+        "camss-driver: experimental-driver-cleanup",
+        "params-stats-api: interface-design-required",
+        "imx681: sensor-review-required",
+        "ov13858: sensor-review-required",
+        "focus-driver: userspace-i2c-dependency",
+        "regulator-dt: standard-front-HPM-request-qualified-power-port-source-pass-full-graph-pending",
+        "libcamera-pipeline: pipeline-rewrite-required",
+        "ipa: ipa-review-required",
+        "image-processing: bridge-migration-and-calibration-required",
+        "validation: qualification-incomplete",
+        "submission-export: curated-series-required"
+      ]
+    },
+    "repo_hygiene": "PASS",
+    "diff_check": "PASS",
+    "log_sha256": {
+      "readiness-tests.log": "2a9d94509853785d6a25a6aa71f471fba8d61afe8fd326e4e810b67dbbef1007",
+      "readiness-gate.log": "9f74fe7aa40706efea7309a47ff9a78f4ff59af403f337aed29028ea4347fa65",
+      "repo-hygiene.log": "7727b71a702dc1096a855c1b78827ff0c6f1a546bac11d62761ca0922a50f092",
+      "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "repo-hygiene-final.log": "7727b71a702dc1096a855c1b78827ff0c6f1a546bac11d62761ca0922a50f092",
+      "staged-diff-check-final02.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "staged_diff_check": "PASS"
+  },
+  "validation_wrapper_note": "Initial repository-check wrapper stopped on a wrong JSON field name after gate returned expected exit1. Reconciled its retained blocker report; remaining hygiene/diff checks completed without rerunning passed tests.",
+  "packaging_note": "Added standard repo -text/-whitespace attribute for the pinned unified-diff artifact after staged diff check rejected context-prefix spaces; kernel checkpatch already passed changed source. Source/module hashes unchanged. Removed an extra EOF blank line from copied prepare helper; executable body unchanged.",
+  "packaging_sha256": {
+    ".gitattributes": "49a451f85931ef0b0a6112be5f8d7b2921395fc1874a5ad10cc93eb381ae4091"
+  }
+}

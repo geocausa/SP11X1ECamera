@@ -1,3 +1,36 @@
+## 2026-10-13 retained IMX681 power sequence port
+
+Candidate25 sensor-only source ports the already proven E003b/working native
+sequence: asserted active-low reset,19.2MHz MCLK,IO1.8V,analog2.8V,1ms delay,
+reset release,10ms delay. Shutdown reset low,1ms,MCLK off,analog off,IO off.
+This is reuse of retained functional reverse engineering and hardware evidence,
+not fresh discovery. Current standard full7.2 implementation remains unbooted.
+Historical E003b ID0x0aff uses its own register; imported0x0016/0x0681 identity
+and distinct2.406 mode are preserved. Evidence/source pins in
+docs/UPSTREAM-IMX681-POWER-VALIDATION-20261013.json.
+
+Explicit acquired-reference flags replace bulk enables. Failed analog release
+retains IO; disable failures retain owned/fault state, block reacquisition and
+CCI. Control/start guards balance acquired PM references; probe preserves the
+primary error; remove does not report suspended on failed power-off. Flags
+describe Linux ownership, not electrical recovery after transport failure.
+Mode tables,FLL/control payloads,endpoint/clock admission stay unchanged.
+GCC/Clang each139 actual-body ASAN/UBSAN cases; six mutated regressions caught;
+exact replay,no-signoff checkpatch and real ARM64 W=1/-Werror module link pass,
+zero warnings/errors,vermagic7.2.0. Initial Clang fixture-unused failure retained;
+final-qual01 passes. No DCO/submission/acceptance claim.
+
+No install/load/boot/stream/system-sleep or Golden/daily-stack change. Live
+Golden boot7722ffff-f92e-4faa-a0a3-06c684abd821; no pending entry/camera stack.
+Latest full source23, sensor package25, full Image16; all14 release categories
+and both private startup consumers remain open. NEXT compatible full7.2 sensor
+graph and bounded test of changed implementation, then RAW stop/reopen and
+imported2.406-profile VT/FLL. Preserve native2.400/720MHz mode/calibration.
+Use PiMaster; reuse retained RE first and test only changed behavior. Do not
+repeat isolated provider/sequence discovery or make new physical mV measurements
+a prerequisite absent changed operating point or fault evidence. Proprietary
+camera inputs remain excluded. Prior checkpoints below are historical.
+
 ## 2026-10-13 isolated front HPM kernel request qualification
 
 Fresh identity03 PASS under copied Golden7.1.5 kernel/initrd. Standard LDO7_B

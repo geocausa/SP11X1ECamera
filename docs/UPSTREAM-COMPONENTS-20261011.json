@@ -92,9 +92,13 @@
       "hardware_required": true,
       "sources": [],
       "evidence": null,
-      "next": "Isolated public standalone sensor source compiles/links with two tested PM/group-hold fixes. Reconcile endpoint/clock, measured VT timing and local24-bit frame-length ABI; bindings/provenance and guarded hardware remain.",
+      "next": "Retained E003b/native power sequence port source/ARM64 pass with owned-reference error handling; integrate full7.2 standard graph and test changed implementation, RAW stop/reopen and imported2.406 VT/FLL; preserve native timing/calibration.",
       "partial_ooaklee_comparison_evidence": "docs/UPSTREAM-OOAKLEE-COMPARISON-20261012.json",
-      "partial_receiver_integration_evidence": "docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json"
+      "partial_receiver_integration_evidence": "docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json",
+      "partial_power_port_evidence": "docs/UPSTREAM-IMX681-POWER-VALIDATION-20261013.json",
+      "partial_frame_length_evidence": "docs/UPSTREAM-IMX681-FLL-VALIDATION-20261013.json",
+      "partial_endpoint_clock_evidence": "docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json",
+      "retained_power_sequence_hardware_proven": true
     },
     {
       "id": "ov13858",
@@ -122,7 +126,7 @@
     },
     {
       "id": "regulator-dt",
-      "status": "standard-front-HPM-request-golden-qualified-power-sequence-pending",
+      "status": "standard-front-HPM-request-qualified-power-port-source-pass-full-graph-pending",
       "provenance": "project-mathematics",
       "provenance_reviewed": false,
       "license_reviewed": false,
@@ -130,7 +134,7 @@
       "hardware_required": true,
       "sources": [],
       "evidence": null,
-      "next": "Reconcile sensor MCLK/IO/analog/reset/privacy sequence and failure unwind, qualify physical voltage/headroom and compatible full7.2 sensor graph, then guarded RAW stop/reopen and VT/FLL; keep2.900V VAF separate.",
+      "next": "Reuse proven E003b/native sensor order and source25 port; integrate compatible full7.2 standard graph and test changed implementation, RAW stop/reopen. Physical operating-point checks only where change/fault warrants; keep2.900V VAF separate.",
       "partial_public_dependency_evidence": "docs/UPSTREAM-X1E-DEPENDENCIES-VALIDATION-20261012.json",
       "partial_ooaklee_comparison_evidence": "docs/UPSTREAM-OOAKLEE-COMPARISON-20261012.json",
       "constraint_source_evidence": "docs/UPSTREAM-REGULATOR-CONSTRAINT-VALIDATION-20261013.json",
@@ -141,7 +145,8 @@
       "front_provider_no_linux_rpmh_requests_observed": true,
       "front_provider_HPM_request_evidence": "docs/UPSTREAM-FRONT-PROVIDER-HPM-VALIDATION-20261013.json",
       "front_provider_HPM_request_qualified": true,
-      "front_provider_HPM_request_scope": "Golden7.1.5 HPM7 active synchronous request/cache; no electrical mode readback or current capability"
+      "front_provider_HPM_request_scope": "Golden7.1.5 HPM7 active synchronous request/cache; no electrical mode readback or current capability",
+      "partial_sensor_power_port_evidence": "docs/UPSTREAM-IMX681-POWER-VALIDATION-20261013.json"
     },
     {
       "id": "libcamera-pipeline",

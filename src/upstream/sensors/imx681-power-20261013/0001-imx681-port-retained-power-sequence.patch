@@ -1,0 +1,244 @@
+Subject: [PATCH] media: imx681: reuse retained SP11 power sequence
+
+Use the independently observed and hardware-proven clock, IO, analog and
+reset sequence retained in E003b and the working native driver. Track owned
+references and report release failures; block register access while power
+is incomplete. Preserve mode tables and endpoint/clock admission.
+
+---
+
+diff --git a/drivers/media/i2c/imx681.c b/drivers/media/i2c/imx681.c
+--- a/drivers/media/i2c/imx681.c
++++ b/drivers/media/i2c/imx681.c
+@@ -51,8 +51,15 @@
+ #define IMX681_XCLK_FREQ	19200000
+ #define IMX681_MBUS_CODE	MEDIA_BUS_FMT_SRGGB10_1X10
+ 
+-#define IMX681_XCLR_MIN_DELAY_US	6200
+-#define IMX681_XCLR_DELAY_RANGE_US	1000
++#define IMX681_POWER_DELAY_MIN_US	1000
++#define IMX681_POWER_DELAY_MAX_US	1500
++#define IMX681_RESET_DELAY_MIN_US	10000
++#define IMX681_RESET_DELAY_MAX_US	12000
++
++enum imx681_supply {
++	IMX681_DOVDD,
++	IMX681_AVDD,
++};
+ 
+ static const char * const imx681_supply_name[] = {
+ 	"dovdd",	/* IO 1.8 V (PM8010 LDO3_M) */
+@@ -69,6 +76,10 @@
+ 	struct clk *xclk;
+ 	struct gpio_desc *reset_gpio;
+ 	struct regulator_bulk_data supplies[ARRAY_SIZE(imx681_supply_name)];
++	bool clock_on;
++	bool dovdd_on;
++	bool avdd_on;
++	bool power_fault;
+ 
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pad;
+@@ -163,56 +174,105 @@
+ 	return 0;
+ }
+ 
+-static int imx681_power_on(struct device *dev)
++static bool imx681_power_ready(struct imx681 *sensor)
++{
++	return sensor->clock_on && sensor->dovdd_on && sensor->avdd_on &&
++	       !sensor->power_fault;
++}
++
++static int imx681_power_off(struct device *dev)
+ {
+ 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct imx681 *sensor = to_imx681(sd);
+ 	int ret;
++
++	sensor->power_fault = true;
++	/* Assert reset before stopping MCLK, analog, then IO. */
++	gpiod_set_value_cansleep(sensor->reset_gpio, 1);
++	usleep_range(IMX681_POWER_DELAY_MIN_US, IMX681_POWER_DELAY_MAX_US);
++
++	if (sensor->clock_on) {
++		clk_disable_unprepare(sensor->xclk);
++		sensor->clock_on = false;
++	}
++	if (sensor->avdd_on) {
++		ret = regulator_disable(sensor->supplies[IMX681_AVDD].consumer);
++		if (ret) {
++			dev_err(dev, "failed to disable avdd: %d\n", ret);
++			return ret;
++		}
++		sensor->avdd_on = false;
++	}
++	/* Keep IO acquired if analog could not be released. */
++	if (sensor->dovdd_on) {
++		ret = regulator_disable(sensor->supplies[IMX681_DOVDD].consumer);
++		if (ret) {
++			dev_err(dev, "failed to disable dovdd: %d\n", ret);
++			return ret;
++		}
++		sensor->dovdd_on = false;
++	}
++	sensor->power_fault = false;
++	return 0;
++}
++
++static int imx681_power_on(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct imx681 *sensor = to_imx681(sd);
++	int cleanup_ret;
++	int ret;
++
++	if (sensor->clock_on || sensor->dovdd_on || sensor->avdd_on ||
++	    sensor->power_fault)
++		return -EIO;
+ 
+ 	/* Recheck the assigned rate before every runtime power transition. */
+ 	if (clk_get_rate(sensor->xclk) != IMX681_XCLK_FREQ)
+ 		return -EINVAL;
+ 
+-	ret = regulator_bulk_enable(ARRAY_SIZE(imx681_supply_name),
+-				    sensor->supplies);
+-	if (ret) {
+-		dev_err(dev, "failed to enable regulators: %d\n", ret);
+-		return ret;
+-	}
+-
++	/* Retained SP11 sequence: reset low, MCLK, IO, analog, reset high. */
++	gpiod_set_value_cansleep(sensor->reset_gpio, 1);
+ 	ret = clk_prepare_enable(sensor->xclk);
+ 	if (ret) {
+ 		dev_err(dev, "failed to enable xclk: %d\n", ret);
+-		goto disable_reg;
+-	}
+-
++		return ret;
++	}
++	sensor->clock_on = true;
++
++	ret = regulator_enable(sensor->supplies[IMX681_DOVDD].consumer);
++	if (ret) {
++		dev_err(dev, "failed to enable dovdd: %d\n", ret);
++		goto power_off;
++	}
++	sensor->dovdd_on = true;
++
++	ret = regulator_enable(sensor->supplies[IMX681_AVDD].consumer);
++	if (ret) {
++		dev_err(dev, "failed to enable avdd: %d\n", ret);
++		goto power_off;
++	}
++	sensor->avdd_on = true;
++
++	usleep_range(IMX681_POWER_DELAY_MIN_US, IMX681_POWER_DELAY_MAX_US);
+ 	gpiod_set_value_cansleep(sensor->reset_gpio, 0);
+-	usleep_range(IMX681_XCLR_MIN_DELAY_US,
+-		     IMX681_XCLR_MIN_DELAY_US + IMX681_XCLR_DELAY_RANGE_US);
+-	return 0;
+-
+-disable_reg:
+-	regulator_bulk_disable(ARRAY_SIZE(imx681_supply_name),
+-			       sensor->supplies);
++	usleep_range(IMX681_RESET_DELAY_MIN_US, IMX681_RESET_DELAY_MAX_US);
++	return 0;
++
++power_off:
++	cleanup_ret = imx681_power_off(dev);
++	if (cleanup_ret)
++		dev_err(dev, "power-on cleanup failed: %d\n", cleanup_ret);
+ 	return ret;
+ }
+ 
+-static int imx681_power_off(struct device *dev)
+-{
+-	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+-	struct imx681 *sensor = to_imx681(sd);
+-
+-	gpiod_set_value_cansleep(sensor->reset_gpio, 1);
+-	clk_disable_unprepare(sensor->xclk);
+-	regulator_bulk_disable(ARRAY_SIZE(imx681_supply_name),
+-			       sensor->supplies);
+-	return 0;
+-}
+-
+ static int imx681_identify(struct imx681 *sensor)
+ {
+ 	u64 id = 0;
+ 	int ret;
++
++	if (!imx681_power_ready(sensor))
++		return -EIO;
+ 
+ 	ret = cci_read(sensor->regmap, IMX681_REG_MODEL_ID, &id, NULL);
+ 	if (ret) {
+@@ -251,6 +311,11 @@
+ 	ret = pm_runtime_get_if_in_use(sensor->dev);
+ 	if (ret <= 0)
+ 		return ret;
++
++	if (!imx681_power_ready(sensor)) {
++		pm_runtime_put_autosuspend(sensor->dev);
++		return -EIO;
++	}
+ 
+ 	ret = 0;
+ 
+@@ -444,6 +509,11 @@
+ 	if (ret < 0)
+ 		return ret;
+ 
++	if (!imx681_power_ready(sensor)) {
++		ret = -EIO;
++		goto err_rpm_put;
++	}
++
+ 	ret = cci_multi_reg_write(sensor->regmap, imx681_global_init_table,
+ 				  ARRAY_SIZE(imx681_global_init_table), NULL);
+ 	if (!ret)
+@@ -480,6 +550,9 @@
+ {
+ 	int ret;
+ 
++	if (!imx681_power_ready(sensor))
++		return -EIO;
++
+ 	ret = cci_write(sensor->regmap, IMX681_REG_MODE_SELECT,
+ 			IMX681_MODE_STANDBY, NULL);
+ 	pm_runtime_put_autosuspend(sensor->dev);
+@@ -520,6 +593,7 @@
+ 	struct device *dev = &client->dev;
+ 	struct imx681 *sensor;
+ 	unsigned int i;
++	int cleanup_ret;
+ 	int ret;
+ 
+ 	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+@@ -604,7 +678,9 @@
+ err_ctrls:
+ 	v4l2_ctrl_handler_free(&sensor->ctrl_handler);
+ err_power_off:
+-	imx681_power_off(dev);
++	cleanup_ret = imx681_power_off(dev);
++	if (cleanup_ret)
++		dev_err(dev, "probe cleanup failed: %d\n", cleanup_ret);
+ 	return ret;
+ }
+ 
+@@ -619,9 +695,10 @@
+ 	v4l2_ctrl_handler_free(&sensor->ctrl_handler);
+ 
+ 	pm_runtime_disable(&client->dev);
+-	if (!pm_runtime_status_suspended(&client->dev))
+-		imx681_power_off(&client->dev);
+-	pm_runtime_set_suspended(&client->dev);
++	if (imx681_power_off(&client->dev))
++		dev_err(&client->dev, "remove power-off failed\n");
++	else
++		pm_runtime_set_suspended(&client->dev);
+ }
+ 
+ static const struct dev_pm_ops imx681_pm_ops = {
