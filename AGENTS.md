@@ -1,3 +1,48 @@
+## 2026-10-14 CAMSS module27 TPG classification hardware PASS
+
+The one-source-pad TPG now has explicit synthetic-sensor classification,
+matching the retained GPL VIMC generator role. The newer public CAMSS
+two-pad formatter API was reviewed but not transplanted. Sole camera source
+change: entity.function; pads, modes, stream operations and registers unchanged.
+Strict ARM64 CAMSS27 module build/checkpatch PASS, zero warnings/errors;
+all101 parent source pins preserved. Source/build evidence
+docs/UPSTREAM-TPG-ENTITY-VALIDATION-20261013.json.
+
+Fresh E005 probe03 PASS on kernel26 ABI7.2.0-sp11-upstream-front26:
+three TPG entities classified Sensor, all synthetic links disabled, immutable
+physical IMX681 -> PHY2 retained, model0x0681, runtime suspended, rail users0,
+MCLK enable/prepare0 at19.2MHz, reset237 output-low, clean module unload.
+TPG registration warnings3 ->0. Evidence docs/UPSTREAM-FRONT-PROBE03-20261013.json.
+Module27 was loaded from a pinned private copied module root; installed26
+CAMSS and the qualified original source/build remain unchanged. No full
+kernel27 build claim. Detailed logs/media metadata remain SP11.
+
+Candidate03 boot66bc1fd9-3bc1-418d-ad4f-c006dc0a5310 returned automatically to
+Golden a7c3654e-3a02-466a-a450-fdb9cb307fc5. Return success/watchdog not fired;
+tested critical signatures0, protected v19c hashes match, saved default intact.
+03 consumed/retired/do-not-retry; units disabled/inactive, menu archived,
+no pending boot/camera stack. Golden/daily branch preserved. Temporary
+headless scope remains; no OS sleep, stream, DMA, pixels or camera firmware.
+
+Initial module artifact-path lookup and raw-diff missing-description failures
+are retained; compilation itself was clean. Correct artifact/header reviewed
+and pinned. Initial install refused the uncommitted checkpoint before mutation.
+Probe03 uses one fresh identity; no hardware retry/reuse.
+
+RAW lifecycle review found an actual missing partial-STREAMON unwind:
+video_start_streaming enables downstream stages first, then on a later failure
+jumps to pipeline_stop/flush without stopping those stages. This is a static
+source finding, not an observed hardware/memory fault. Existing native runner
+already documents reverse ownership and pinning DMA/power on stop failure.
+Evidence docs/UPSTREAM-RAW-LIFECYCLE-READINESS-20261013.json.
+NEXT port that retained fail-closed contract into standard video start/stop,
+qualify partial start/reset timeout/owned buffers/power before guarded RAW.
+Do not rediscover wiring/rails, repeat old native RDI transport proof, or
+rearm01/02/03. New implementation/profile qualification remains separate from
+native2.400/720MHz timing/calibration. Both private startup consumers/all14
+release categories, hardware ISP/libcamera/IPA and Windows parity stay open.
+Earlier checkpoints below are historical.
+
 ## 2026-10-13 front26 hardware registration/runtime PM/unload PASS
 
 Source/kernel26 (7.2.0-sp11-upstream-front26) now booted on SP11.

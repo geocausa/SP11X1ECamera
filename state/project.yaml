@@ -1,14 +1,14 @@
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: FRONT26_PROBE_RUNTIME_PM_UNLOAD_HARDWARE_PASS_STREAMING_PENDING
-  evidence: docs/UPSTREAM-FRONT-PROBE02-20261013.json
+  status: CAMSS27_TPG_CLASSIFICATION_HARDWARE_PASS_RAW_LIFECYCLE_BLOCKED
+  evidence: docs/UPSTREAM-FRONT-PROBE03-20261013.json
   retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
   standalone_phy_cphy_implemented: true
   cphy_internal_preparation_compiled: true
   cphy_preparation_evidence: docs/UPSTREAM-CPHY-CONFIG-VALIDATION-20261012.json
   retained_cphy_preparation_patches: 1
-  latest_source_candidate: 26
+  latest_source_candidate: 27
   latest_full_kernel_candidate: 26
   candidate17_full_image_built: false
   full_kernel_image_modules_build_passed: true
@@ -46,7 +46,7 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Correct CAMSS TPG entity metadata, then guarded privacy/RAW stop-reopen and imported-profile VT/FLL; reuse retained timing/calibration and separate2.900V VAF
+  next: Port retained fail-closed DMA/power ownership into partial-STREAMON and stop lifecycle; qualify errors before guarded RAW/profile timing
   front_provider_registration_hardware_qualified: true
   front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
   front_provider_registration_trace_events: 2275
@@ -55,8 +55,8 @@ upstream_open_stack_current:
   front_provider_electrical_voltage_qualified: false
   front_provider_sensor_sequence_qualified: true
   front_provider_identities_consumed_retired: true
-  live_golden_boot_id: 4f09f0fb-47bc-4ee7-9ab0-7c4d37aa7cf2
-  runtime_changed_scope: Three Golden provider boots and two isolated headless7.2 front26 probe boots, returned and retired; daily stack preserved
+  live_golden_boot_id: a7c3654e-3a02-466a-a450-fdb9cb307fc5
+  runtime_changed_scope: Three Golden provider boots and three isolated headless7.2 probes, returned and retired; daily stack preserved
   preferred_control_transport: PiMaster
   front_provider_HPM_kernel_request_hardware_qualified: true
   front_provider_HPM_request_kernel: 7.1.5-sp11-render-parity-v4+
@@ -89,6 +89,14 @@ upstream_open_stack_current:
   front26_identities_consumed_retired: true
   front26_candidate_boot_id: 901bf98b-9f7e-4ef9-a900-827e8fe7e81c
   front26_sensor_power_port_hardware_scope: probe identity, runtime PM power-off and module removal only
+  latest_camss_module_candidate: 27
+  current_tpg_entity_function_warning_count: 0
+  tpg_classification_hardware_qualified: true
+  tpg_classification_runtime_evidence: docs/UPSTREAM-FRONT-PROBE03-20261013.json
+  raw_lifecycle_readiness_evidence: docs/UPSTREAM-RAW-LIFECYCLE-READINESS-20261013.json
+  raw_partial_streamon_unwind_qualified: false
+  probe03_consumed_retired: true
+  candidate27_full_kernel_built: false
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true

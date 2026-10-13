@@ -1,0 +1,27 @@
+{
+  "status": "BLOCKED_PARTIAL_STREAMON_ROLLBACK_BEFORE_RAW_HARDWARE",
+  "analysis_kind": "static source review; no DMA/stream/fault reproduced",
+  "source_candidate": 27,
+  "parent_kernel_candidate": 26,
+  "source_sha256": {
+    "drivers/media/platform/qcom/camss/camss-video.c": "cfff3c70df9753b62ce74f80d6469f37f30aac4448f59d287e142b69cee7493f",
+    "drivers/media/platform/qcom/camss/camss-vfe.c": "42155f444290c82494278f6016e5916158196ae39ee30d0cfffea5519b93c81d",
+    "drivers/media/platform/qcom/camss/camss-vfe-680.c": "40930eeb4539dbc66efec0ec9e23a9541528be63eb163b0e54878ad5f82d2c6a",
+    "drivers/media/platform/qcom/camss/camss-csid.c": "5deec572f7d495674b766a53470508b147272e0e2fde5ba585ac2eb89060aa0f"
+  },
+  "observations": [
+    "video_start_streaming iterates from capture sink toward the sensor and enables each subdevice",
+    "When a later enable fails, error jumps directly to video_device_pipeline_stop and flush_buffers(QUEUED)",
+    "Already enabled downstream stages are not explicitly stopped on this error path",
+    "VFE disable calls output stop then reset; output ownership is released only on successful reset",
+    "video_stop_streaming returns early on a stop error, before pipeline stop/flush; VB2 ownership and power failure behavior need qualification"
+  ],
+  "retained_contract": "docs/runbooks/2026-08-28-e003h-windows-parity-static.md: callable native runner reverse ownership on failure; stop failure pins DMA/pipeline power until reboot",
+  "next": "Port existing fail-closed owned-resource contract into the standard video start/stop lifecycle; test partial start, sensor error, reset timeout, buffer ownership and power references before one-use RAW hardware run",
+  "rail_wiring_or_sequence_rediscovery_required": false,
+  "new_raw_stream_started": false,
+  "physical_dma_retirement_proven": false,
+  "private_startup_consumers_remaining": 2,
+  "release_categories_remaining": 14,
+  "limits": "This source review identifies a missing unwind path; it does not prove an observed memory corruption or hardware failure."
+}
