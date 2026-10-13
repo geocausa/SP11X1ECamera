@@ -17,11 +17,14 @@
     "video_stop_streaming returns early on a stop error, before pipeline stop/flush; VB2 ownership and power failure behavior need qualification"
   ],
   "retained_contract": "docs/runbooks/2026-08-28-e003h-windows-parity-static.md: callable native runner reverse ownership on failure; stop failure pins DMA/pipeline power until reboot",
-  "next": "Port existing fail-closed owned-resource contract into the standard video start/stop lifecycle; test partial start, sensor error, reset timeout, buffer ownership and power references before one-use RAW hardware run",
+  "next": "Adapt retained implemented native acquired-state/unwind/safe-release/PM-retention helpers to the standard callback and validate only the compatibility gaps; do not reinvent the ownership solution.",
   "rail_wiring_or_sequence_rediscovery_required": false,
   "new_raw_stream_started": false,
   "physical_dma_retirement_proven": false,
   "private_startup_consumers_remaining": 2,
   "release_categories_remaining": 14,
-  "limits": "This source review identifies a missing unwind path; it does not prove an observed memory corruption or hardware failure."
+  "limits": "This source review identifies a missing unwind path; it does not prove an observed memory corruption or hardware failure.",
+  "prior_solution_audit": "docs/UPSTREAM-LIFECYCLE-PRIOR-SOLUTION-AUDIT-20261014.json",
+  "usable_native_owned_runner_exists": true,
+  "generic_callback_direct_drop_in_found": false
 }

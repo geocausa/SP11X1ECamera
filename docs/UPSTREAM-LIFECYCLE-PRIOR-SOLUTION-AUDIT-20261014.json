@@ -1,0 +1,69 @@
+{
+  "status": "PASS_PRIOR_SOLUTION_REUSE_AUDIT",
+  "request": "Check usable prior implementations before every future change",
+  "audited_checkpoint": "6b42bd4a2e379164b95bc0958245a9c69398aae1",
+  "implemented_native_solution_found": true,
+  "source_bundle_introduction_commit": "8a9c780e455e9c07a9eeb51b3d4534c2d7b41cb7",
+  "later_stream_retirement_commit": "d1548a0155a083a434f0cde4b6d47cf24841d8a5",
+  "native_implementation": [
+    "acquired-stage flags in camss.c runner",
+    "out_unwind reverse acquired ownership on start failure",
+    "teardown_safe blocks auxiliary DMA release and pipeline PM put after failed stop",
+    "PIX-specific error_pinned and unprepare power guard in camss-video.c",
+    "video_stop_streaming_x1e and stop_subdev helpers for ordered native shutdown"
+  ],
+  "source_sha256": {
+    "src/front-imx681/kernel/camss/camss.c": "117136b2c624de5ef3f4c081cdcf9c363cda9f6db5c752b7ade5f5e11b1b3e95",
+    "src/front-imx681/kernel/camss/camss-video.c": "c046b3156f5507755fd6df6cc5398ea1513ce4365ee1feb9395828f2495121ac",
+    "src/front-imx681/PROVENANCE.json": "7819e37456298e6239d3c14322d3b9380804431ffc7540be9e5f7a7666c27f06",
+    "experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/inspect-pix-first-frame-runner.py": "dbd70a81f1057f5992e3b9afecbb930ce29e1f5e603c27915b31b6eab2449983",
+    "experiments/E003-front-imx681-cphy/e003h-bounded-vfe1-pix-runtime-candidate/0033-x1e-pix-first-frame-runner-unarmed.patch": "431cd2b5f8736dac25abf4f2a9f675002406874968a879cf7d2c7193342883c4"
+  },
+  "evidence_sha256": {
+    "docs/NATIVE-RGB-FRONT-LIFECYCLE-03-20261007.json": "f1081e979522134903304714777ab98dd3b0248b16133f4b30a644cbfc79ec3e",
+    "docs/NATIVE-RGB-FRONT-REQUEST-LIFECYCLE-03-20261007.json": "0d5122c2f5c98e60cb7dac93cb424afe22ca45e8b49d25662d723d13f5927062",
+    "docs/FRONT-PARAM-QUEUE-02-HARDWARE-20261010.json": "75a0305ff0668ddd71195ec88a891b85f8f50e448aaf49cb9c5258364f1cbcc1"
+  },
+  "observed_hardware_scope": {
+    "docs/NATIVE-RGB-FRONT-LIFECYCLE-03-20261007.json": {
+      "status": "PASS_NATIVE_FRONT_LIBCAMERA_LIFECYCLE_1_80_80",
+      "source_head": "d1548a0155a083a434f0cde4b6d47cf24841d8a5",
+      "total_application_frames": 161,
+      "total_retirements": 176
+    },
+    "docs/NATIVE-RGB-FRONT-REQUEST-LIFECYCLE-03-20261007.json": {
+      "source_head": "a598793d738dc49dd0ecb5c7007ea60cf7c3f5ad",
+      "qualification_scope": "custom start controls then same-configuration restart and release/reacquire, applied metadata,CCI retention,STOP,manager and IPA worker exit"
+    },
+    "docs/FRONT-PARAM-QUEUE-02-HARDWARE-20261010.json": {
+      "status": "PASS_NATIVE_FRONT_META_OUTPUT_EMPTY_TRANSPORT_AND_MANUAL_BRACKET_CLEAN_RELEASE",
+      "source_commit": "b3564923294bf3f01488a6964d50bd6034da6d8b",
+      "hardware_streams_completed": 1,
+      "queue_stops": [
+        {
+          "completed": 198,
+          "error": 0,
+          "stop_requested": true
+        }
+      ]
+    }
+  },
+  "scope_limit": "Normal native stop/restart/release is hardware-qualified. These records do not prove every injected partial-STREAMON/reset-timeout case on the new standard CAMSS route.",
+  "generic_callback_audit": "Maintained native camss-video.c still has the unrolled generic start loop; only the front PIX branch enters the dedicated owned runner. New7.2 standard callback likewise has no partial-start unwind.",
+  "direct_drop_in_standard_callback_found": false,
+  "reuse_decision": "Port acquired-state tracking, reverse unwind, safe-release gating, PM retention and available stop helpers from retained native code; keep private startup/capsule/tuning consumers outside the new standard stack. Do not rebuild the whole solution.",
+  "gaps_to_validate": [
+    "new standalone PHY graph and standard VFE reset/stop callbacks",
+    "VB2 failed-start/forced buffer-return ownership behavior",
+    "partial start and teardown-failure behavior under current module and sensor PM contracts"
+  ],
+  "history_search_scope": [
+    "all refs file history of maintained native camss-video.c",
+    "all refs pickaxe for video_start_streaming and out_unwind in src/patches",
+    "nine retained .c callback copies plus native runner patches and static inspectors"
+  ],
+  "personal_context_search": "Returned only recent issue summaries; repository implementation and evidence supplied the answer.",
+  "runtime_changed": false,
+  "retained_unwind_identical_to_introduction_commit": true,
+  "retained_unwind_sha256": "41c050e5363ba9b09a75a0d59a249c9d4374374b0c79b7cedaea93e7bdc231d3"
+}

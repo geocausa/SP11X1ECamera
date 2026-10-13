@@ -1,3 +1,39 @@
+## 2026-10-14 mandatory prior-solution reuse check
+
+User requirement: before tackling any issue, verify whether a genuine usable
+solution already exists. Apply this to every camera component and all future
+work, including tracing, driver fixes, RE, calibration, tooling and validation.
+
+Before new implementation, investigation or hardware repetition:
+- Check current source, retained experiment results, handoffs, prior builds and
+  Git history/all relevant refs. Search the behavior and ownership contract,
+  including alternate names/interfaces, not only today's function name.
+- Inspect candidate code and its actual validation scope. Record exact
+  paths/commits/pins and whether evidence is source-only, hardware normal-path,
+  fault-path or a different implementation/profile. A note is not a proof.
+- Prefer the usable retained implementation; port only incompatible interfaces
+  and qualify the changed behavior. Preserve valid work in its proven domain.
+- If new work is needed, state the specific missing behavior or compatibility
+  gap and why the retained solution cannot be used directly. Record the reuse
+  decision before proceeding. This is an automatic engineering check, not a
+  new user-permission requirement. Do not repeat proven experiments by default.
+- Legitimate independently reconstructed functional RE, original code and
+  measured/generated project calibration remain eligible. Proprietary camera
+  blobs, copied vendor tuning/calibration/firmware remain excluded.
+
+Current rollback audit confirms implemented native source, not just a design:
+camss.c acquired-stage flags/out_unwind/teardown_safe gate plus camss-video.c
+front PIX owned-runner/error_pinned/unprepare guard and X1E stop helpers.
+Stable source bundle introduction8a9c780e; later lifecycle retirementd1548a01.
+Native hardware stop/restart evidence is retained (lifecycle03 and later runs).
+The generic start loop in the maintained native source still lacks unwind;
+the new standard7.2 path also lacks it. Reuse/port the native owned-resource
+implementation into that path; validate standalone PHY/VFE callbacks, VB2
+failed-start ownership and fault cases, without copying private startup inputs.
+Do not claim all injected-fault cases were already hardware-qualified.
+Audit docs/UPSTREAM-LIFECYCLE-PRIOR-SOLUTION-AUDIT-20261014.json.
+Earlier checkpoints below are historical.
+
 ## 2026-10-14 CAMSS module27 TPG classification hardware PASS
 
 The one-source-pad TPG now has explicit synthetic-sensor classification,
