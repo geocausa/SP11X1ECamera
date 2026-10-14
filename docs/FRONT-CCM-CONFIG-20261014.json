@@ -1,0 +1,201 @@
+{
+  "schema": "sp11-front-complete-ccm-qualification-v1",
+  "status": "PASS_SOURCE_AND_COMPILE_ONLY",
+  "prior_measured_matrix_and_transpose_reused_unchanged": true,
+  "new_optical_calibration": false,
+  "legacy_encoder_reserved_bits_canonicalized_to_original_source": true,
+  "source_acceptance": "native03",
+  "compile_acceptance": "native-compile01",
+  "excluded_attempts": [
+    "native01 direct source comparison exposed thirteen-bit legacy sign-fill vs actual twelve-bit CC131 and declaration alignment; native02 uses canonicalization; final native03 corrects common census to13 incl qfactor4"
+  ],
+  "source": {
+    "schema": "sp11-front-ccm-source-v1",
+    "status": "PASS_OWN_MEASURED_Q7_COMPLETE_CONFIGURATION",
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_immutable": true,
+    "original_PE_exported": false,
+    "source_cases": 456,
+    "comparison_records": 453,
+    "original_common_cases": 13,
+    "original_common_comparison_cases": 12,
+    "native_instructions": 55707,
+    "placements": 3,
+    "SP_callee_saved_restored": true,
+    "canaries_intact": true,
+    "native_entries": {
+      "common": "0x9ade70",
+      "packer": "0xb43910",
+      "builder": "0xb43340",
+      "original_FRINTA": "0x14d0"
+    },
+    "CC131_source_dispatch_table_rva": "0x1620188",
+    "original_common_scale_relation": "fractional_bits = qfactor + 7",
+    "packer_factor_bits": 2,
+    "source_common_qfactor4_packer_wrap_counterexample": true,
+    "source_unpacked_fields": "enable, nine GBR coefficients, three offsets, scale control",
+    "source_coefficient_field_bits": 12,
+    "retained_coefficient_encoder_bits": 13,
+    "coefficient_numeric_values_unchanged": true,
+    "canonicalized_reserved_sign_fill": true,
+    "source_offset_field_bits": 13,
+    "source_offset_shift": 19,
+    "intercepted_helpers": [
+      "0x85ee78 command observer/success only"
+    ],
+    "arithmetic_or_branch_shims": false,
+    "original_builder_fixed_addresses_observed": true,
+    "addresses_substituted": false,
+    "constructor_executed": false,
+    "initial_image": "own zero",
+    "nonzero_residual_counterexample_checked": true,
+    "own_measured_matrix_q7": [
+      216,
+      -26,
+      -61,
+      -72,
+      205,
+      -5,
+      -92,
+      -5,
+      224
+    ],
+    "own_run93_sha256": "a5f27787588c2bb0297b57ff672b912f96ec34e3628be0904bcdc12e37f7e0d1",
+    "new_optical_fit": false,
+    "own_policy_offsets": [
+      0,
+      0,
+      0
+    ],
+    "own_policy_scale_control": 0,
+    "configuration_words": 10,
+    "configuration_bytes": 48,
+    "module_control_commands_emitted": 0,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted_native_cases": 408,
+          "rejected_other_policy_cases": 45,
+          "atomic_negatives": 108
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted_native_cases": 408,
+          "rejected_other_policy_cases": 45,
+          "atomic_negatives": 108
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "uncleared_reserved_sign_bits",
+      "wrong_slice",
+      "early_publication",
+      "foreign_precision",
+      "bypass_offsets",
+      "bypass_domain"
+    ],
+    "header_pins": {
+      "sp11-front-ccm-config.h": "de5b3bfe3b687a8705b0e0b1c54991acf464e841e297ccc66237a8643feb2647",
+      "sp11-front-ccm-measured.h": "399acd8cce44bce8ac23f2fcebece6e00a521ea45afb1685ecae8e6213ad453c",
+      "sp11-front-fields.h": "f37dfdc80695def4001ca67301dbddd13a2dc9647e86738cdce804b444a678ae",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/front-channel-gain-20261014/test-native.py": "8b1fbceb4516d97b141f6cc9fdf3e3ff13fe0bdfa48c0fa5e81ac9ffa6183a0e",
+      "src/native-rgb/front-pattern/native-front-cst.inc": "73b39718a3c553bf2cb07e7b46359e37fe3ed67c467e8e0a0fd7b103b41134d4"
+    },
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "calibration_remeasured": false,
+    "installed": false,
+    "loaded": false,
+    "runtime_changed": false,
+    "hardware": false,
+    "limits": [
+      "Source binds coefficient Q7 to scale0; it does not establish physical CCM input/output sample precision",
+      "Zero offsets and software image are own policies, not equality with inherited private startup or physical reset",
+      "No module enable, whole colour-chain precision, core/Gamma/Crop12/DMI/startup ownership integration",
+      "Existing measured matrix is reused only in its admitted native2160-to1440 calibration domain; physical new-path image parity remains required"
+    ]
+  },
+  "build": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-ccm-config-20261014-01/native-compile01/sp11_ccm_compile.ko",
+    "module_sha256": "2261e0fe8e0505b6580e219a6c742aa912b6d1a13e8fdc957efafab921d501c6",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "header_styles": {
+      "sp11-front-ccm-config.h": {
+        "errors": 0,
+        "warnings": 0,
+        "checks": 0
+      },
+      "sp11-front-ccm-measured.h": {
+        "errors": 0,
+        "warnings": 0,
+        "checks": 0
+      }
+    },
+    "header_pins": {
+      "sp11-front-ccm-config.h": "de5b3bfe3b687a8705b0e0b1c54991acf464e841e297ccc66237a8643feb2647",
+      "sp11-front-ccm-measured.h": "399acd8cce44bce8ac23f2fcebece6e00a521ea45afb1685ecae8e6213ad453c",
+      "sp11-front-fields.h": "f37dfdc80695def4001ca67301dbddd13a2dc9647e86738cdce804b444a678ae",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "new_source_pins": {
+    "test-host.c": "01c2978a04670a7c26b4c9ce7ce277ee6eafa78a73589b8c00e8df571bf212ff",
+    "README.md": "d9e916d4115aa9d8eb14c129e218444b0feae481d3d471572816fcf2beb039a7",
+    "generate-policy.py": "13daf20efc4f23343a050ec478bcd7cc485f93c3f42aa845074553529d3c16f6",
+    "qualify.py": "89a0cac6e1ae914f16aaf48bdc9280569fb20c83c0ea99ec08fde1f88fc23a66",
+    "sp11-front-ccm-config.h": "de5b3bfe3b687a8705b0e0b1c54991acf464e841e297ccc66237a8643feb2647",
+    "sp11-front-ccm-measured.h": "399acd8cce44bce8ac23f2fcebece6e00a521ea45afb1685ecae8e6213ad453c",
+    "build-worker.py": "8fdf15e7ec886a70acd7cb17eebbe472a230fd85b972a4aa87634c9d7e8cd56c",
+    "test-native.py": "92a490bf944d9804702882c65d2b6c9c67a2a12bac9e1391ece51688a95cc7e9"
+  },
+  "configuration_registers": [
+    "0x5868",
+    "0x586c",
+    "0x5870",
+    "0x5874",
+    "0x5878",
+    "0x587c",
+    "0x5880",
+    "0x5884",
+    "0x5888",
+    "0x588c"
+  ],
+  "candidate_unique_configuration_addresses_before": 101,
+  "candidate_unique_configuration_addresses_after": 111,
+  "retained_crop_static_method_entries": {
+    "packer": "0xb57980",
+    "builder": "0xb57740",
+    "scope": "static binding in CCM proof; separately executed in FRONT-CROP-CONFIG-20261014"
+  },
+  "coefficient_fractional_precision_bound_to_scale_control": true,
+  "physical_CCM_sample_precision_qualified": false,
+  "full_Gamma_CST_video_precision_bound": false,
+  "candidate_leaves_are_not_a_complete_program": true,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "next": "Reuse retained Crop12 and core/Gamma field work to complete explicit module/precision/startup around native lifetime; replace private loading in fresh candidate, then physical/image parity"
+}

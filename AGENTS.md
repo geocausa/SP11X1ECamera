@@ -1,3 +1,56 @@
+## 2026-10-14 complete measured CCM and front Crop12 source/compile PASS
+
+Reused own run93 measured GBR Q7 matrix, native transpose, E006p Crop12 and
+existing geometry/field compilers. No optical refit or working-driver rewrite.
+New complete CCM configuration owns10 words/48bytes at0x5868..0x588c;
+new front crop wrapper owns4 words/32bytes at0x9c68/0x9e68.
+
+IMPORTANT original CC131 source proves12-bit coefficient fields, not the
+retained helper's13-bit sign-fill. Negative values had extra reserved bits12/28
+in the old helper. New CCM wrapper preserves matrix/numeric signed12 values
+and transpose, clears only that extra sign-fill, and chooses own offsets0/0/0.
+Old helper/native driver remain unchanged historical compatibility references.
+New startup must use complete source-canonical CCM, not raw legacy sparse bytes.
+CST coefficient fields remain13-bit; do not apply this CCM fix to CST.
+
+Exact common0x9ade70 is selected by CC131 table0x1620188; fractional coefficient
+precision=scale_control+7. Control0 reproduces own Q7 matrix exactly.
+Packer0xb43910/builder0xb43340 bind module0x5860/count1 and config0x5868/count10.
+Offsets13 bits<<19; scale control2 bits. Source common factor4 generates Q11
+but packed control wraps0; checked counterexample, NOT an admitted policy.
+Own policy admits only fractional_bits7, zero offsets and calibrated geometry.
+456 source cases,453 C records,13 common calls (12 factor0..3 comparisons plus
+factor4 counterexample), GCC/Clang ASan/UBSan408 admitted/45 rejected,
+108 atomic negatives and6 compiled mutations each PASS. Acceptance native03/
+compile01; native01 mismatch/alignment and native02 census superseded.
+
+Exact Crop12 packer0xb57980/builder0xb57740 uses object48=1 for Video Full,
+slot0; selector0 chooses display7c68/7e68, slot16. Owned selectors/partial
+contexts only, not original constructor/live routing proof.
+Two fixed count2 commands at9c68/9e68; no module or extra CFG write.
+Existing compiler produces origin-zero2560x1440 luma/1280x720 chroma.
+31 source cases/24 C records,3 admitted front/21 rejected other dimensions,
+GCC/Clang ASan/UBSan36 atomic negatives/3 compiled mutations PASS.
+Both checkpoints preserve source PE/arithmetic, restore actual SP/X19..29/
+D8..15 and check canaries/immutable inputs/nonzero-image residual.
+Native ARM64 W1/Werror and all3 new header styles0/0/0 PASS; Crop native01/
+compile01. Only command helper85ee78 observed/success; serializer not executed.
+
+Evidence docs/FRONT-CCM-CONFIG-20261014.json and FRONT-CROP-CONFIG-20261014.json.
+Configuration catalog101->111->115 addresses, NOT a complete startup program.
+Coefficient fractional precision is bound; physical CCM sample depth and full
+Gamma/CST/video precision are still unqualified. Zero offsets/images are own
+policies, not private inherited equality or physical reset.
+Both private consumers remain/upstream_ready=false. Existing calibrated
+unified48/libcamera21/run93/v15, Golden/default/daily preserved.
+No install/load/camera/reboot/private profile/tuning/pixel read or refit.
+
+NEXT reuse core/Gamma/module graph and source input/precision work to complete
+startup around proven native lifetime. Do not repeat measured matrix or scaler/
+crop/rounding arithmetic. Replace only private loading in a fresh isolated
+candidate after source closure, then guarded physical/image precision parity.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 calibrated front Video Full scaler binding source/compile PASS
 
 Existing E006q MNDS23 and sp11-geometry-stats.h reused unchanged.

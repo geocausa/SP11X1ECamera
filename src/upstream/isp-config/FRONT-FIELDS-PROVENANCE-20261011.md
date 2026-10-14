@@ -1,3 +1,25 @@
+## Current correction: original CC131 coefficient width (2026-10-14)
+
+The complete original common/packer/builder comparison now establishes
+**twelve-bit CC131 coefficient fields** on Titan680. The retained sparse
+CCM helper uses thirteen-bit sign-fill inherited from the native patch's
+historical byte format. Its signed numerical range is already twelve-bit;
+for negative values the extra bits12/28 are outside the source coefficient
+lanes. It remains unchanged as a historical compatibility helper.
+
+New startup code must use the complete CCM wrapper in
+[front-ccm-config-20261014](front-ccm-config-20261014/README.md), which reuses
+the own measured matrix/transpose and clears that extra sign-fill.
+The original common links scale control0 to Q7 via control+7.
+Three offsets are own explicit zero policy; scale control is explicitly0.
+The exact native source and mutation evidence are in
+docs/FRONT-CCM-CONFIG-20261014.json.
+
+This correction is specific to CCM: actual CST coefficients remain13-bit.
+The older field-format descriptions and tests below document the retained
+helper and do not establish exact CC131 packing or new hardware parity.
+No installed native driver, measured matrix or optical calibration changed.
+
 # Front field compiler: provenance and limits
 
 This second slice generates bounded CDM commands from typed coefficients and an

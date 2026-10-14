@@ -1,0 +1,145 @@
+{
+  "schema": "sp11-front-crop-qualification-v1",
+  "status": "PASS_SOURCE_AND_COMPILE_ONLY",
+  "existing_coordinate_arithmetic_reused_unchanged": true,
+  "source_acceptance": "native01",
+  "compile_acceptance": "native-compile01",
+  "source": {
+    "schema": "sp11-front-crop-source-v1",
+    "status": "PASS_REUSED_FRONT_VIDEO_CROP",
+    "source_cases": 31,
+    "comparison_records": 24,
+    "native_instructions": 3721,
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_immutable": true,
+    "original_PE_exported": false,
+    "SP_callee_saved_restored": true,
+    "canaries_intact": true,
+    "placements": 3,
+    "native_entries": {
+      "packer": "0xb57980",
+      "builder": "0xb57740"
+    },
+    "intercepted_helpers": [
+      "0x85ee78 command observer/success only"
+    ],
+    "arithmetic_or_branch_shims": false,
+    "partial_context": {
+      "object_image_pointer": 32,
+      "object_video_selector": 48,
+      "video_selector_value": 1,
+      "metadata_luma_pointer": 16,
+      "metadata_chroma_pointer": 24,
+      "rectangle_order": "first_pixel,first_line,last_pixel,last_line",
+      "source_video_image_offset": 0,
+      "source_display_image_offset": 16
+    },
+    "source_builder_fixed_addresses_observed": true,
+    "addresses_substituted": false,
+    "constructor_executed": false,
+    "display_counterexample_checked": true,
+    "nonzero_residual_counterexample_checked": true,
+    "configuration_words": 4,
+    "configuration_bytes": 32,
+    "module_or_extra_CFG_commands_emitted": 0,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted_front_cases": 3,
+          "rejected_other_dimensions": 21,
+          "atomic_negatives": 36
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted_front_cases": 3,
+          "rejected_other_dimensions": 21,
+          "atomic_negatives": 36
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_slice",
+      "early_publication",
+      "bypass_domain"
+    ],
+    "header_pins": {
+      "sp11-front-crop-config.h": "fdb508f2c6e79400ce09e6b2a056642290e6861e6d30cfae7ab3d1e63214cf7b",
+      "sp11-geometry-stats.h": "233a4e1acc6924df9f5c5e9ab0c432b3a62db1b2c62a631b853613523e28a187",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/front-scaler-config-20261014/test-native.py": "2963e9896800a69cc16de087c5842c90910ccecd4722bc14682be69654c7f763",
+      "experiments/E004-front-ir-vd55g0/e006p-rear-crop-roundclamp-packers/camss-e006p-crop-roundclamp.inc": "60c95d074efe357f6905daa31c42fa72c1e3a6a9bb6528cb246faa9d8f96e889"
+    },
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "calibration_remeasured": false,
+    "runtime_changed": false,
+    "installed": false,
+    "loaded": false,
+    "hardware": false,
+    "limits": [
+      "Own video selector1 and partial contexts are source field binding, not a constructor/live routing proof",
+      "Own origin-zero2560x1440 luma/1280x720 chroma policy only; runtime sensor/format negotiation remains unqualified",
+      "No pixel-depth inference from dimension packing; full colour/module/Gamma/DMI/startup ownership remains open",
+      "Zero software image does not establish hardware reset or inherited startup equivalence"
+    ]
+  },
+  "build": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-crop-config-20261014-01/native-compile01/sp11_crop_compile.ko",
+    "module_sha256": "0277d367f3ce01f4cffef22ba63a2f62185d803844e5f140c88e575d745bc648",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "style": {
+      "errors": 0,
+      "warnings": 0,
+      "checks": 0
+    },
+    "header_pins": {
+      "sp11-front-crop-config.h": "fdb508f2c6e79400ce09e6b2a056642290e6861e6d30cfae7ab3d1e63214cf7b",
+      "sp11-geometry-stats.h": "233a4e1acc6924df9f5c5e9ab0c432b3a62db1b2c62a631b853613523e28a187",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "new_source_pins": {
+    "test-host.c": "fb17d6860fd190fe40c2b4ec509b3309ecfd8e5b379077ab553218f27d97b09c",
+    "README.md": "f262e76a241251a94b7cec3e2ced975df6571e62291fe8a43e521ae64bd7c73b",
+    "qualify.py": "693d6bb5b3d1d04d955fc7f0b195f2812e4539e65ada59b4a31ab67d8c86b96e",
+    "sp11-front-crop-config.h": "fdb508f2c6e79400ce09e6b2a056642290e6861e6d30cfae7ab3d1e63214cf7b",
+    "build-worker.py": "8b80d898e0485a6ed6940770c75d117c120af7062f7f74540b4cde129992f124",
+    "test-native.py": "14a6b99b9c6e0120eacf8d080b310ff16bf1bc78cccd0fc8183168f49589d9be"
+  },
+  "configuration_registers": [
+    "0x9c68",
+    "0x9c6c",
+    "0x9e68",
+    "0x9e6c"
+  ],
+  "candidate_unique_configuration_addresses_before": 111,
+  "candidate_unique_configuration_addresses_after": 115,
+  "full_Gamma_CST_video_precision_bound": false,
+  "candidate_leaves_are_not_a_complete_program": true,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "next": "Reuse source core/Gamma/module inputs to finish full precision/startup around native lifetime; private-loader replacement and fresh physical/image parity remain"
+}

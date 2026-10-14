@@ -1,3 +1,12 @@
+## 2026-10-14 front CCM/crop source policy
+
+Use front-ccm-config-20261014 for complete measured Q7 CCM configuration;
+its original-source proof clears the old sparse helper's extra reserved
+coefficient sign-fill. CCM fields are12-bit; CST fields remain13-bit.
+Use front-crop-config-20261014 for the calibrated front output coordinates.
+Both reuse existing arithmetic/calibration; neither is a complete startup
+or hardware-qualified pipeline. See their README files and source evidence.
+
 # Open ISP configuration primitives
 
 These are source-only replacement slices for the SP11 RGB ISP startup
