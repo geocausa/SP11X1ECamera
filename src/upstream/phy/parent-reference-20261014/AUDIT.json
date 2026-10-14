@@ -1,0 +1,15 @@
+{
+  "status": "PASS_BORROWED_PARENT_PM_PRIOR_SOLUTION_AUDIT",
+  "prior_runtime": "docs/UPSTREAM-PHY-CYCLE07-20261014.json",
+  "retained_standard_interface": "include/linux/pm_runtime.h pm_runtime_put_noidle drops only usage count",
+  "core_context": "drivers/phy/phy-core.c invokes power_off before dropping the active PHY child",
+  "runtime_check": "drivers/base/power/runtime.c rpm_check_suspend_allowed returns EBUSY for active children",
+  "reuse_decision": "Use existing noidle count-release primitive; let generic PHY core release the active child and request final idle. Keep owned flags/error propagation; add step-specific failure diagnostics.",
+  "source_sha256": {
+    "drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c": "b51c471c53b0d54f364af1969d0a7613d53a4361c5080ca8bfc6ad1df9bdd0c6",
+    "drivers/phy/phy-core.c": "d354f790f83b3369ce2d88977c3f3a974e0d0737050430047156db10da0317b0",
+    "drivers/base/power/runtime.c": "86a4ab8982d610b0ff1a1eb998adaf99a5f914833a56e70fb62efda2764af566",
+    "include/linux/pm_runtime.h": "1c1383101d72ce3028df6d9ad3640c2020a041f5c1820b1698d1657b648b04f6"
+  },
+  "physical_failing_step_in07_not_individually_logged": true
+}

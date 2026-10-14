@@ -1,0 +1,63 @@
+Subject: [PATCH] phy: qcom: release the owned parent count without early suspend
+
+Generic PHY core still holds its active child while invoking power_off.
+Drop only the provider-owned count; core drops the child and requests
+final idle. Keep release errors and reboot-only ownership quarantine.
+
+---
+--- a/drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c
++++ b/drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c
+@@ -159,6 +159,7 @@
+ static int phy_qcom_mipi_csi2_release_owned(struct mipi_csi2phy_device *csi2phy)
+ {
+ 	const struct mipi_csi2phy_hw_ops *ops = csi2phy->soc_cfg->ops;
++	const char *operation = "none";
+ 	int i, ret;
+ 
+ 	if (csi2phy->power_fault)
+@@ -177,6 +178,7 @@
+ 		csi2phy->clocks_owned = false;
+ 	}
+ 	if (csi2phy->opp_owned) {
++		operation = "OPP";
+ 		ret = dev_pm_opp_set_rate(csi2phy->dev, 0);
+ 		if (ret)
+ 			goto fault;
+@@ -185,23 +187,20 @@
+ 	for (i = csi2phy->pd_list->num_pds - 1; i >= 0; i--) {
+ 		if (!(csi2phy->perf_owned & BIT(i)))
+ 			continue;
++		operation = "performance vote";
+ 		ret = dev_pm_genpd_set_performance_state(csi2phy->pd_list->pd_devs[i], 0);
+ 		if (ret)
+ 			goto fault;
+ 		csi2phy->perf_owned &= ~BIT(i);
+ 	}
+ 	if (csi2phy->pm_owned) {
+-		ret = pm_runtime_put_sync(csi2phy->dev);
++		/* The core still holds its active PHY child during this callback. */
++		pm_runtime_put_noidle(csi2phy->dev);
+ 		csi2phy->pm_owned = false;
+-		if (ret < 0) {
+-			/* put consumed our count even when runtime suspend failed. */
+-			pm_runtime_get_noresume(csi2phy->dev);
+-			csi2phy->pm_owned = true;
+-			goto fault;
+-		}
+ 	}
+ 	while (csi2phy->supplies_owned) {
+ 		i = csi2phy->supplies_owned - 1;
++		operation = "supply";
+ 		ret = regulator_disable(csi2phy->supplies[i].consumer);
+ 		if (ret)
+ 			goto fault;
+@@ -217,7 +216,8 @@
+ 		__module_get(THIS_MODULE);
+ 		csi2phy->fault_module_held = true;
+ 	}
+-	dev_err(csi2phy->dev, "PHY release failed: %d; ownership retained until reboot\n", ret);
++	dev_err(csi2phy->dev, "PHY %s release failed: %d; held until reboot\n",
++		operation, ret);
+ 	return ret;
+ }
+ 

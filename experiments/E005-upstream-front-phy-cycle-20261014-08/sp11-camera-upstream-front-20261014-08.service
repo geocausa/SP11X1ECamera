@@ -1,0 +1,16 @@
+[Unit]
+Description=One-use upstream front26 PHY owned parent reference and final teardown probe
+ConditionKernelCommandLine=sp11_camera_upstream_front_20261014_08=1
+Wants=network-online.target grub-initrd-fallback.service grub2-common.service
+After=network-online.target grub-initrd-fallback.service grub2-common.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -u /var/lib/sp11-camera-upstream-front-20261014-08/run-once.py
+ExecStopPost=/var/lib/sp11-camera-upstream-front-20261014-08/return-golden.sh
+TimeoutStartSec=120
+TimeoutStopSec=20
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target

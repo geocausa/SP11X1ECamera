@@ -1,0 +1,192 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+/* Kernel API model; actual provider header and functions are inserted by runner. */
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+typedef uint8_t u8;typedef uint32_t u32;typedef uint64_t u64;typedef int32_t s32;typedef int64_t s64;
+typedef int irqreturn_t;
+#define __iomem
+#define BIT(i) (1UL << (i))
+#define BITS_PER_LONG (sizeof(unsigned long)*8)
+#define IS_ERR(p) ((uintptr_t)(p)>=(uintptr_t)-4095)
+#define PTR_ERR(p) ((intptr_t)(p))
+#define THIS_MODULE NULL
+#define dev_err(d,...) model_dev_error(d,__VA_ARGS__)
+#define ENOTSUPP 524
+#define mutex_lock(p) ((void)(p))
+#define mutex_unlock(p) ((void)(p))
+enum phy_mode {PHY_MODE_MIPI_DPHY=2,PHY_MODE_MIPI_CPHY=3};
+enum {RPM_ACTIVE,RPM_SUSPENDED,RPM_SUSPENDING,RPM_REQ_RESUME};
+#define atomic_read(p) (*(p))
+struct device {int id;struct {int runtime_error,disable_depth,usage_count,child_count;bool ignore_children,deferred_resume,request_pending;int runtime_status,request;} power;};
+static void model_dev_error(struct device *d,const char *fmt,...) {(void)d;(void)fmt;}
+static int __dev_pm_qos_resume_latency(struct device *d) {(void)d;return -1;}
+static int rpm_check_suspend_allowed(struct device *dev);
+struct regulator {unsigned id;int refs;};
+struct regulator_bulk_data {struct regulator *consumer;};
+struct clk {int dummy;};
+struct clk_bulk_data {int dummy;};
+struct dev_pm_domain_list {int num_pds;struct device **pd_devs;};
+struct dev_pm_opp {int dummy;};
+struct phy;
+struct phy_ops {int (*power_on)(struct phy *);int (*power_off)(struct phy *);};
+struct phy {void *drvdata;struct device dev;int mutex,power_count;struct regulator *pwr;const struct phy_ops *ops;};
+union phy_configure_opts {
+ struct phy_configure_opts_mipi_dphy {unsigned lanes;unsigned long hs_clk_rate;} mipi_dphy;
+ struct {unsigned num_trios;u64 symbol_rate;} mipi_cphy;
+};
+#include "actual-phy.h"
+static int fail_start,fail_stop,validation_fail,ceil_mismatch;
+static int start_failed,stop_failed,api_calls,pm_refs,generic_refs,clock_refs,module_refs,invalid_parent_suspend;
+static bool irq_live,lanes_live;
+static unsigned perf[3];static unsigned long opp_rate;
+static struct dev_pm_opp fake_opp;
+static int tick_start(int stage) {api_calls++;if(fail_start==stage){start_failed=1;return -EREMOTEIO;}return 0;}
+static int tick_stop(int stage) {api_calls++;if(fail_stop==stage){stop_failed=1;return -ETIMEDOUT;}return 0;}
+static void *phy_get_drvdata(struct phy *p) {return p->drvdata;}
+static int regulator_enable(struct regulator *r) {int ret=tick_start(1+r->id);if(!ret)r->refs++;return ret;}
+static int regulator_disable(struct regulator *r) {int ret=tick_stop(r->id?5:6);if(!ret){assert(r->refs==1);r->refs--;}return ret;}
+static int pm_runtime_resume_and_get(struct device *d) {(void)d;int ret=tick_start(3);if(!ret)pm_refs++;return ret;}
+static int pm_runtime_put_sync(struct device *d) {
+ assert(pm_refs>generic_refs);pm_refs--;api_calls++;
+ d->power.usage_count=pm_refs-generic_refs;d->power.child_count=generic_refs?1:0;
+ d->power.runtime_status=RPM_ACTIVE;
+ int ret=rpm_check_suspend_allowed(d);
+ if(ret==-EBUSY)invalid_parent_suspend++;
+ return ret;
+}
+static void pm_runtime_put_noidle(struct device *d) {(void)d;assert(pm_refs>generic_refs);pm_refs--;api_calls++;}
+static int phy_pm_runtime_get_sync(struct phy *p) {(void)p;generic_refs++;pm_refs++;return 0;}
+static int phy_pm_runtime_put_sync(struct phy *p) {(void)p;assert(generic_refs>0);generic_refs--;pm_refs--;return 0;}
+static void pm_runtime_get_noresume(struct device *d) {(void)d;api_calls++;pm_refs++;}
+static void __module_get(void *m) {(void)m;module_refs++;}
+static struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *d,unsigned long *rate) {
+ (void)d;if(tick_start(4))return (void *)(intptr_t)-EREMOTEIO;if(ceil_mismatch)(*rate)++;return &fake_opp;
+}
+static void dev_pm_opp_put(struct dev_pm_opp *o) {assert(o==&fake_opp);}
+static unsigned dev_pm_opp_get_required_pstate(struct dev_pm_opp *o,int index) {assert(o==&fake_opp);return 100+index;}
+static int dev_pm_genpd_set_performance_state(struct device *d,unsigned value) {
+ int ret=value?tick_start(d->id==1?5:6):tick_stop(d->id==2?2:3);
+ if(!ret)perf[d->id]=value;
+ return ret;
+}
+static int dev_pm_opp_set_rate(struct device *d,unsigned long value) {
+ (void)d;int ret=value?tick_start(7):tick_stop(1);if(!ret)opp_rate=value;return ret;
+}
+static long clk_round_rate(struct clk *c,unsigned long rate) {(void)c;return tick_start(8)?0:(long)rate;}
+static int clk_set_rate(struct clk *c,long rate) {(void)c;(void)rate;return tick_start(9);}
+static int clk_bulk_prepare_enable(unsigned n,struct clk_bulk_data *c) {(void)n;(void)c;int ret=tick_start(10);if(!ret)clock_refs++;return ret;}
+static void clk_bulk_disable_unprepare(unsigned n,struct clk_bulk_data *c) {(void)n;(void)c;api_calls++;assert(clock_refs==1&&!irq_live&&!lanes_live);clock_refs--;}
+int mipi_csi2phy_cphy_validate(struct mipi_csi2phy_device *d,const struct mipi_csi2phy_stream_cfg *s) {
+ (void)d;(void)s;return validation_fail?-EINVAL:0;
+}
+static int phy_mipi_dphy_config_validate(struct phy_configure_opts_mipi_dphy *cfg) {(void)cfg;return 0;}
+static int lanes_enable(struct mipi_csi2phy_device *d,struct mipi_csi2phy_stream_cfg *s) {
+ (void)d;(void)s;assert(clock_refs==1&&pm_refs>0);int ret=tick_start(11);if(!ret)lanes_live=true;return ret;
+}
+static void lanes_disable(struct mipi_csi2phy_device *d,struct mipi_csi2phy_stream_cfg *s) {
+ (void)d;(void)s;api_calls++;assert(clock_refs==1&&!irq_live&&lanes_live);lanes_live=false;
+}
+static void reset_hw(struct mipi_csi2phy_device *d) {(void)d;assert(clock_refs==1);}
+static void version_hw(struct mipi_csi2phy_device *d) {(void)d;assert(clock_refs==1);}
+static void enable_irq(int irq) {assert(irq>0&&clock_refs==1&&lanes_live&&!irq_live);api_calls++;irq_live=true;}
+static void disable_irq(int irq) {assert(irq>0&&clock_refs==1&&irq_live);api_calls++;irq_live=false;}
+static void phy_pm_runtime_put(struct phy *p) {(void)p;assert(generic_refs==1&&pm_refs>0);generic_refs--;pm_refs--;}
+struct csiphy_device {struct phy *phy;};
+struct v4l2_subdev {void *data;};
+static void *v4l2_get_subdevdata(struct v4l2_subdev *s) {return s->data;}
+static int csiphy_stream_on(struct csiphy_device *c);
+/* ACTUAL_FUNCTIONS */
+static int csiphy_stream_on(struct csiphy_device *c) {return phy_qcom_mipi_csi2_power_on(c->phy);}
+static const struct mipi_csi2phy_hw_ops model_ops={.reset=reset_hw,.hw_version_read=version_hw,.lanes_enable=lanes_enable,.lanes_disable=lanes_disable};
+static const struct mipi_csi2_genpd model_pds[3]={{.scaled=false},{.scaled=true},{.scaled=true}};
+static const struct mipi_csi2phy_soc_cfg model_cfg={.ops=&model_ops,.num_supplies=2,.num_clk=2,.num_genpds=3,.genpds=model_pds,.cphy_core_rate=480000000,.cphy_timer_rate=400000000};
+struct fixture {
+ struct mipi_csi2phy_device dev;
+ struct dev_pm_domain_list pd_list;struct device main,domains[3],*domain_ptrs[3];
+ struct regulator rails[2];struct regulator_bulk_data supplies[2];
+ struct clk timer;struct clk_bulk_data clocks[2];struct phy phy;struct phy_ops phy_ops;
+ struct csiphy_device csiphy;struct v4l2_subdev sd;
+};
+static void init(struct fixture *f,bool cphy) {
+ memset(f,0,sizeof(*f));fail_start=fail_stop=validation_fail=ceil_mismatch=0;
+ start_failed=stop_failed=api_calls=pm_refs=generic_refs=clock_refs=module_refs=invalid_parent_suspend=0;
+ irq_live=lanes_live=false;memset(perf,0,sizeof(perf));opp_rate=0;
+ f->pd_list.num_pds=3;f->pd_list.pd_devs=f->domain_ptrs;
+ for(unsigned i=0;i<3;i++){f->domains[i].id=i;f->domain_ptrs[i]=&f->domains[i];}
+ for(unsigned i=0;i<2;i++){f->rails[i].id=i;f->supplies[i].consumer=&f->rails[i];}
+ f->dev.dev=&f->main;f->dev.phy_mode=cphy?PHY_MODE_MIPI_CPHY:PHY_MODE_MIPI_DPHY;
+ f->dev.cphy_supported=cphy;f->dev.irq=5;f->dev.soc_cfg=&model_cfg;f->dev.pd_list=&f->pd_list;
+ f->dev.supplies=f->supplies;f->dev.clks=f->clocks;f->dev.timer_clk=&f->timer;
+ f->dev.stream_cfg.link_freq=1203000000;f->dev.stream_cfg.num_data_lanes=1;
+ f->phy.drvdata=&f->dev;f->phy.ops=&f->phy_ops;f->phy_ops.power_off=phy_qcom_mipi_csi2_power_off;f->phy_ops.power_on=phy_qcom_mipi_csi2_power_on;
+ f->csiphy.phy=&f->phy;f->sd.data=&f->csiphy;
+}
+static void consistent(struct fixture *f) {
+ assert(!invalid_parent_suspend);
+ for(unsigned i=0;i<2;i++)assert(f->rails[i].refs==(f->dev.supplies_owned>i));
+ assert(pm_refs==(int)f->dev.pm_owned+generic_refs);
+ assert(clock_refs==(int)f->dev.clocks_owned&&irq_live==f->dev.irq_enabled&&lanes_live==f->dev.lanes_owned);
+ for(unsigned i=0;i<3;i++)assert(!!perf[i]==!!(f->dev.perf_owned&BIT(i)));
+ assert(!!opp_rate==f->dev.opp_owned);assert(module_refs==(int)f->dev.fault_module_held);
+}
+static void blocked(struct fixture *f) {
+ int before=api_calls;assert(f->dev.power_fault&&module_refs==1);
+ assert(phy_qcom_mipi_csi2_power_on(&f->phy)==-EUCLEAN);
+ assert(phy_qcom_mipi_csi2_power_off(&f->phy)==-EUCLEAN);
+ union phy_configure_opts opts={0};
+ assert(phy_qcom_mipi_csi2_configure(&f->phy,&opts)==-EUCLEAN);
+ assert(phy_qcom_mipi_csi2_set_mode(&f->phy,PHY_MODE_MIPI_CPHY,0)==-EUCLEAN);
+ assert(api_calls==before);consistent(f);
+}
+int main(void) {
+ unsigned cases=0;
+ for(unsigned mode=0;mode<2;mode++) {
+  struct fixture f;init(&f,mode);
+  for(unsigned cycle=0;cycle<3;cycle++) {
+   assert(!phy_power_on(&f.phy));consistent(&f);
+   assert(!phy_power_off(&f.phy));consistent(&f);
+   assert(!pm_refs&&!clock_refs&&!module_refs&&!f.dev.supplies_owned&&!f.dev.perf_owned);cases++;
+  }
+ }
+ for(int start=1;start<=11;start++)for(int stop=0;stop<=6;stop++) {
+  if(stop==4)continue;
+  struct fixture f;init(&f,true);fail_start=start;fail_stop=stop;
+  int ret=phy_power_on(&f.phy);assert(ret<0&&start_failed&&!f.phy.power_count&&!generic_refs);
+  assert(f.dev.power_fault==(bool)stop_failed);consistent(&f);
+  if(stop_failed){assert(ret==-EUCLEAN);blocked(&f);}
+  else {assert(ret==(start==8?-ENODEV:-EREMOTEIO));assert(!pm_refs&&!clock_refs&&!module_refs&&!f.dev.supplies_owned&&!f.dev.perf_owned);}
+  cases++;
+ }
+ for(int stop=0;stop<=6;stop++) {
+  if(stop==4)continue;
+  struct fixture f;init(&f,true);assert(!phy_power_on(&f.phy));
+  fail_stop=stop;
+  int ret=csiphy_set_stream(&f.sd,0);consistent(&f);
+  if(stop){assert(ret==-ETIMEDOUT&&f.phy.power_count==1&&generic_refs==1);blocked(&f);}
+  else {assert(!ret&&!f.phy.power_count&&!generic_refs&&!pm_refs&&!module_refs);}
+  cases++;
+ }
+ {struct fixture f;init(&f,true);validation_fail=1;assert(phy_qcom_mipi_csi2_power_on(&f.phy)==-EINVAL&&!api_calls);consistent(&f);cases++;}
+ {struct fixture f;init(&f,true);f.dev.irq=-1;assert(phy_qcom_mipi_csi2_power_on(&f.phy)==-ENODEV&&!api_calls);consistent(&f);cases++;}
+ {struct fixture f;init(&f,true);ceil_mismatch=1;assert(phy_qcom_mipi_csi2_power_on(&f.phy)==-ERANGE);consistent(&f);assert(!pm_refs&&!f.dev.supplies_owned);cases++;}
+ {struct fixture f;init(&f,true);assert(!phy_qcom_mipi_csi2_power_on(&f.phy));int calls=api_calls;assert(phy_qcom_mipi_csi2_power_on(&f.phy)==-EBUSY&&api_calls==calls);assert(!phy_qcom_mipi_csi2_power_off(&f.phy));cases++;}
+ {struct fixture f;init(&f,true);assert(!phy_power_on(&f.phy));
+  assert(pm_runtime_put_sync(&f.main)==-EBUSY&&invalid_parent_suspend==1);
+  pm_runtime_get_noresume(&f.main);invalid_parent_suspend=0;
+  assert(!csiphy_set_stream(&f.sd,0));consistent(&f);
+  assert(!pm_refs&&!generic_refs&&!f.phy.power_count);cases++;
+ }
+ {struct fixture f;init(&f,true);f.main.power.child_count=1;
+  assert(rpm_check_suspend_allowed(&f.main)==-EBUSY);
+  f.main.power.child_count=0;assert(!rpm_check_suspend_allowed(&f.main));
+  f.main.power.usage_count=1;assert(rpm_check_suspend_allowed(&f.main)==-EAGAIN);
+  f.main.power.usage_count=0;f.main.power.runtime_status=RPM_SUSPENDED;
+  assert(rpm_check_suspend_allowed(&f.main)==1);cases+=4;
+ }
+ printf("Actual PHY ownership, core and CAMSS error propagation tests passed\ncases=%u\n",cases);return 0;
+}
