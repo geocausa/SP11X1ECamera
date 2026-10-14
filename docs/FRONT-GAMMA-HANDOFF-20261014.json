@@ -1,0 +1,164 @@
+{
+  "schema": "sp11-front-gamma-handoff-qualification-v1",
+  "status": "PASS_SOURCE_AND_COMPILE_ONLY",
+  "prior_Gamma_codec_and_CDM_serializers_reused_unchanged": true,
+  "source_acceptance": "native02",
+  "compile_acceptance": "native-compile02",
+  "excluded_attempts": {
+    "native01": "Negative fixture changed base and endpoint; validator rejected continuity first, corrected fixture isolates endpoint overflow",
+    "native-compile01": "Native compile passed; one constant-comparison style warning corrected"
+  },
+  "source": {
+    "schema": "sp11-front-gamma-handoff-source-v1",
+    "status": "PASS_REUSED_GAMMA_BANK_AND_DMI_HANDOFF",
+    "source_cases": 34,
+    "native_instructions": 2788,
+    "placements": 3,
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_immutable": true,
+    "SP_callee_saved_restored": true,
+    "canaries_intact": true,
+    "inputs_immutable": true,
+    "native_entries": {
+      "packer": "0xb394a0",
+      "builder": "0xb38dd0"
+    },
+    "intercepted_helpers": [
+      "0x85ee78 register command observer/success",
+      "0x85f108 DMI argument observer/success"
+    ],
+    "arithmetic_or_branch_shims": false,
+    "serializer_executed": false,
+    "constructor_executed": false,
+    "source_context": {
+      "object_image_pointer": 32,
+      "common_bank_u16": 0,
+      "common_enable_u16": 2,
+      "common_G_B_R_pointers": [
+        8,
+        24,
+        40
+      ],
+      "request_command_pointer": 80,
+      "request_DMI_buffer_pointer": 88,
+      "builder_metadata_offset_unit": "u32 words; helper receives bytes"
+    },
+    "source_fixed_addresses_observed": true,
+    "addresses_substituted": false,
+    "source_bank_fields": "bit0 in both5f58 and5f5c",
+    "source_enable_field": "bit0 at5f60",
+    "source_truncation_counterexamples_checked": true,
+    "nonzero_residual_counterexample_checked": true,
+    "configuration_addresses": [
+      "0x5f58",
+      "0x5f5c"
+    ],
+    "separate_activation_address": "0x5f60",
+    "prepare_bytes": 52,
+    "activation_bytes": 12,
+    "DMI_selector_register": "0x5f08",
+    "semantic_RGB_DMA_channel_offsets": [
+      1024,
+      2048,
+      0
+    ],
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted": 2048,
+          "atomic_negatives": 3151
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted": 2048,
+          "atomic_negatives": 3151
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_semantic_channel",
+      "wrong_read_bank",
+      "early_publication",
+      "skip_encoding_validation",
+      "bypass_domain"
+    ],
+    "header_pins": {
+      "sp11-front-gamma-handoff.h": "cd382ad113c3ad7a64a1baf9d3f7fc86210325d492c75657c13ff8da762db1b8",
+      "native-front-gamma.h": "6b3fa1634d6bef88064a9d7d611c8ad4dbaac62265e19010416c603b7f26f308",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/front-scaler-config-20261014/test-native.py": "2963e9896800a69cc16de087c5842c90910ccecd4722bc14682be69654c7f763",
+      "src/native-rgb/native-front-gamma-kernel.inc": "5e40005ee40f61ba5913211d4e82bae8e87701b445fa1148678ff7c3fedc1b40"
+    },
+    "CPU_DMA_correspondence_proven": false,
+    "physical_channel_binding_proven": false,
+    "activation_after_DMI_hardware_order_proven": false,
+    "request_bank_lifetime_integrated": false,
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "calibration_remeasured": false,
+    "runtime_changed": false,
+    "installed": false,
+    "loaded": false,
+    "hardware": false
+  },
+  "build": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-gamma-handoff-20261014-01/native-compile02/sp11_gamma_handoff_compile.ko",
+    "module_sha256": "b53c01c896b7b4a37222cc42923aae561328ea9ddfd2cc03d83cb970dbcc8d26",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "style": {
+      "errors": 0,
+      "warnings": 0,
+      "checks": 0
+    },
+    "header_pins": {
+      "sp11-front-gamma-handoff.h": "cd382ad113c3ad7a64a1baf9d3f7fc86210325d492c75657c13ff8da762db1b8",
+      "native-front-gamma.h": "6b3fa1634d6bef88064a9d7d611c8ad4dbaac62265e19010416c603b7f26f308",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "new_source_pins": {
+    "test-host.c": "a8c5f9832abc91a0667ff6dab5b9114566c7cf6154af0113e4982f405114a40b",
+    "README.md": "729617e1363e8497b76124ead7071df4ac0c04d6aa2d2ed9d86cf3f2dc222349",
+    "qualify.py": "3833002c4906ba1c3454226d034825c1e760623a28eed029ab12330b4a00bd0a",
+    "sp11-front-gamma-handoff.h": "cd382ad113c3ad7a64a1baf9d3f7fc86210325d492c75657c13ff8da762db1b8",
+    "build-worker.py": "bfba167573ce10dbb21f430bd6ce04e6731a135962b682aa206044895fa7b219",
+    "test-native.py": "03b004334d82fca4241ccdb3c2dd861d7ec4b8019fedfcba9538b38b6ff91bb8"
+  },
+  "configuration_registers": [
+    "0x5f58",
+    "0x5f5c"
+  ],
+  "separate_activation_register": "0x5f60",
+  "candidate_unique_configuration_addresses_before": 115,
+  "candidate_unique_configuration_addresses_after": 117,
+  "new_DMI_commands": 3,
+  "existing_Gamma_data_bytes": 3072,
+  "new_calibration": false,
+  "complete_startup": false,
+  "physical_precision_chain_qualified": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "next": "Reuse core/module source and own LSC/ABF table handoffs to complete startup; bind Gamma to native request/bank/DMA ownership in fresh isolated loader replacement, then hardware/image parity"
+}

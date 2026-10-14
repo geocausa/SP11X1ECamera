@@ -1,3 +1,38 @@
+## 2026-10-14 Gamma151 bank/table handoff source/compile PASS
+
+Reused prior native RGB12 validator/startup conversion, Gamma queue backend
+G/B/R binding and bounded CDM serializers unchanged. Added only typed52byte
+bank/DMI preparation plus separate12byte activation; no tone refit or queue/
+allocator/IPA rewrite. Tables remain semanticRGB in one caller-owned allocation;
+selectors1/2/3 reference G/B/R offsets1024/2048/0.
+
+Original Gamma151 packer0xb394a0/builder0xb38dd0 source-bind bank bit0 at5f58/
+5f5c, enable bit0 at5f60 and three1024byte transfers at5f08 selectors1/2/3.
+Builder metadata offset is u32 words; DMI helper receives bytes. Wider bank
+values truncate in source but are rejected by own policy. Source pointers/
+arguments, fixed addresses, immutable PE and SP/X19..29/D8..15 restoration/
+canaries checked. Original serializer and constructor NOT executed.
+34 original-code cases; GCC/Clang ASan/UBSan2048 command cases/3151 atomic
+negatives/five compiled unsafe mutations each PASS. Native ARM64 W1/Werror and
+header style0/0/0 PASS. Acceptance native02/compile02; initial negative-fixture
+expected error and one style comparison warning corrected; excluded attempts
+retained. Evidence docs/FRONT-GAMMA-HANDOFF-20261014.json.
+
+Preparation deliberately excludes activation, unlike original combined command.
+Future native caller must prove live immutable CPU/DMA correspondence, request/
+bank eligibility, completion lifetime and activation-after-table ordering.
+Source/channel mapping is NOT physical optical order, precision or runtime proof.
+Catalog115->117 configuration addresses plus separate Gamma activation; not a
+complete startup. Both private consumers remain/upstream_ready=false.
+Golden/default/daily/calibrated unified48/libcamera21/run93/v15 preserved.
+No install/load/camera/reboot/private profile/tuning/pixel read or calibration.
+
+NEXT reuse retained core/module source and own LSC/ABF handoffs to finish startup,
+then bind these leaves to proven native request/DMA ownership in a fresh isolated
+private-loader replacement. Guarded hardware/image precision parity follows.
+Do not repeat measured CCM, tone, scaler/crop/rounding arithmetic or calibration.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 complete measured CCM and front Crop12 source/compile PASS
 
 Reused own run93 measured GBR Q7 matrix, native transpose, E006p Crop12 and
