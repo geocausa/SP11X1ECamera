@@ -1,0 +1,18 @@
+Subject: [PATCH] arm64: dts: qcom: denali: own sensor runtime camera domain
+
+Claim the existing shared TITAN_TOP domain for IMX681 through genpd so its
+MCLK runtime transition does not depend on a CAMSS consumer
+remaining bound.
+Keep the clock configuration and sensor sequencing unchanged.
+
+---
+--- a/arch/arm64/boot/dts/qcom/x1e80100-denali-front-camera.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1e80100-denali-front-camera.dtsi
+@@ -41,6 +41,7 @@
+ 		reg = <0x10>;
+ 		clocks = <&camcc CAM_CC_MCLK4_CLK>;
+ 		clock-names = "xclk";
++		power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
+ 		assigned-clocks = <&camcc CAM_CC_MCLK4_CLK>;
+ 		assigned-clock-rates = <19200000>;
+ 		reset-gpios = <&tlmm 237 GPIO_ACTIVE_LOW>;

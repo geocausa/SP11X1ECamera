@@ -1,0 +1,30 @@
+{
+  "status": "PRIOR_SOLUTION_AND_DOMAIN_OWNERSHIP_AUDITED",
+  "source_head": "a46b9ba9a9d78efe451c14d2f0d2f30e4e51763d",
+  "prior_runtime_evidence": "docs/UPSTREAM-MMAP04-20261014.json",
+  "retained_domain_source": "experiments/E003-front-imx681-cphy/e003b-imx681-identity/0001-x1e-add-cci1.patch",
+  "source_sha256": {
+    "arch/arm64/boot/dts/qcom/x1e80100-denali-front-camera.dtsi": "80bb2e528feebe0fbbee149ac8f017e0b2f7cee54acc96adcfdfd08bc2b8266c",
+    "arch/arm64/boot/dts/qcom/hamoa.dtsi": "f3903bd7aa0677110646f34f40d7a712418be5f27a72ce53269403d5d78a0737",
+    "drivers/media/platform/qcom/camss/camss.c": "709707dd73a628d3e4704796ca532e440dfcda53329b8bea2dc4320a4242774e",
+    "drivers/media/i2c/imx681.c": "987675da1321cd9b595ab09b1aee6d55aec63f5120352be12e0b30f20fa84f02",
+    "drivers/base/dd.c": "12b0555ee317adb59b09dc16c6fc7113c72e7148961f772d3f51f9a0c8dcb9b3",
+    "drivers/i2c/i2c-core-base.c": "27292509c7f46b54c80d8e9dbba3b0b5ae5240a143bba6b203ac69d6e379ea19",
+    "drivers/clk/qcom/camcc-x1e80100.c": "ccabe0061cd0436d7531eea3fd6c6b5ca0afbe60cdd8870948e5f19a4cf8f44e"
+  },
+  "retained_cci_domain_definition_commit": "3e801f36",
+  "direct_sensor_domain_ownership_fix_found": false,
+  "observations": [
+    "Retained CCI1 already uses CAM_CC_TITAN_TOP_GDSC",
+    "CAMSS attaches/links TITAN_TOP and releases it in camss_genpd_cleanup",
+    "I2C core dev_pm_domain_attach uses PD_FLAG_ATTACH_POWER_ON and PD_FLAG_DETACH_POWER_OFF for the DT sensor client",
+    "I2C adapter ignore_children is true; parent hierarchy does not give sensor independent domain ownership",
+    "Driver core runtime-resumes client before sensor remove",
+    "Current sensor node has MCLK4 clock but no power-domains property"
+  ],
+  "reuse_decision": "Use the existing retained shared-domain provider via standard DT/genpd ownership on the sensor; preserve clocks, sensor power order, graph, IRQ and all kernel modules",
+  "hypothesis": "Independent runtime domain ownership allows sensor MCLK resume after CAMSS removal without relying on another consumer",
+  "physical_cause_proven": false,
+  "schema_review_pending": true,
+  "hardware_streamon": false
+}
