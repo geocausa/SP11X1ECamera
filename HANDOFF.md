@@ -1,3 +1,26 @@
+## 2026-10-14 source31 PHY three-cycle hardware PASS
+Retained acquired-resource/release-error policy is ported to standalone PHY
+and typed CAMSS stop (source30). Fresh07 powered on but first stop returned
+-EBUSY, quarantined its ownership and auto-returned; consumed/retired.
+Source31 drops only its own parent PM reference with put_noidle while the
+generic PHY child remains active; core owns the final child put. Actual
+runtime-admission/core/provider/CAMSS models87 per compiler, six compiled
+unsafe mutations, strict ARM64 build/patch/pins/checkpatch PASS.
+
+Fresh08 reuses exact07 diagnostic/CAMSS30/DT29/kernel26. Three C-PHY cycles
+completed, provider suspended, PHY rail users and all three clock counts
+0->0; sensor stayed suspended/reset-low/MCLK-off. All camera modules unload
+cleanly; complete post-unload AND return logs pass16 signatures. Evidence
+docs/UPSTREAM-PHY-CYCLE08-20261014.json.07/08 retired, units disabled,
+menus archived; no retry/pending entry. Golden6d1bcf07-8ae2-4a54-bf55-8fe358f45774
+and protected assets/global26 modules/daily branch/prior04 tree preserved.
+
+NEXT audit/reuse retained RAW capture and DMA/reset-stop implementation before
+a fresh standard RDI stream/stop/reopen qualification. No stream, image/DMA
+retirement, electrical voltage, OS sleep or full fault-matrix hardware proof
+in08. Both private startup consumers/all14 release categories remain open;
+upstream_ready=false. Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 source29 sensor-owned TOP domain hardware PASS
 
 A one-property DT port gives IMX681 its own runtime-PM claim on the retained
