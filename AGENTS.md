@@ -1,3 +1,44 @@
+## 2026-10-14 FULL video rounding configuration reused; source/compile PASS
+
+Preserved calibrated unified48/libcamera21/run93/v15 and all prior packers.
+Existing E006p and sp11-front-fields.h already implement video rounding.
+Added only a96-byte configuration wrapper:20 words at0x9c70/0x9e70.
+No field algorithm, calibration, scaler, queue, allocator or IPA rewrite.
+
+Exact original packer0xb54b50/builder0xb54810 run with owned partial contexts;
+fixed addresses are observed, not substituted. Request0xf80 selects the path;
+0x16cd8 declares output bits. Video Full0/DS4 2/DS16 3 use max(0,10-output_bits);
+RAW8 uses14-output_bits. Original PE/instructions remain immutable.
+110 native cases,18 admitted FULL comparisons, caller/canary checks,
+GCC/Clang ASan/UBSan,164 atomic negatives and four compiled mutations each PASS.
+Native ARM64 W1/Werror/header style0/0/0 PASS. Final native05/compile02;
+earlier fixture/store/logging and header-alignment attempts excluded.
+
+Original zero-image module controls differ from the historical helper.
+All module-control commands are omitted, not silently equated.
+Nonzero source image residuals are checked; own zero software image is not
+hardware reset proof. Wrapper requires explicit input_bits10/output8 or10.
+A precision tag is not proof; Gamma12 lookup representation does not establish
+the live RoundClamp domain or a CST12-to-video10 conversion.
+
+Retained E006q MNDS23 already supplies scaler arithmetic; do not rewrite it.
+Its old4064x2286->3840x2160 fixture is rear, not our front3840x2160->2560x1440.
+E011DJ explicitly leaves complete independent bootstrap/selected binding open.
+Reuse those implementations and bind the front inputs and precision transition.
+
+Evidence docs/FRONT-ROUND-CONFIG-20261014.json. Independent configuration
+catalog63->83 addresses, NOT a complete precision-bound startup program.
+Both private consumers remain; complete_startup/upstream_ready=false.
+State/upstream.json synchronized with channel/Gamma/CST and current evidence.
+Golden/default/daily unchanged; no install/load/camera/reboot/private tuning/
+profile/pixel read, calibration change or optical export.
+
+NEXT bind original core/MNDS video precision to own CST/Gamma policy and front
+geometry using retained scaler; complete own CCM auxiliary state and remaining
+startup around proven native lifecycle. Then replace private loading only in a
+fresh isolated candidate and qualify original-domain physical/image parity.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 complete CST configuration policy reuses existing encoder PASS
 
 Existing calibrated unified48/libcamera21/run93/v15 and all old source unchanged.

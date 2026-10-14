@@ -1,0 +1,192 @@
+{
+  "schema": "sp11-front-round-configuration-qualification-v1",
+  "status": "PASS_SOURCE_AND_COMPILE_ONLY",
+  "prior_implementations_reused_unchanged": true,
+  "new_field_math": false,
+  "source_acceptance": "native05",
+  "compile_acceptance": "native-compile02",
+  "excluded_attempts": [
+    "native01/02 fixture omitted original builder object+40 store",
+    "native03 attempted unsupported output declaration0 logging path outside bounded fixture",
+    "native04 source PASS superseded after final header formatting"
+  ],
+  "excluded_compile_attempts": [
+    "native-compile01 header alignment check only"
+  ],
+  "source": {
+    "schema": "sp11-front-round-config-v1",
+    "status": "PASS_REUSED_FULL_VIDEO_CONFIGURATION",
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_immutable": true,
+    "original_PE_exported": false,
+    "source_cases": 110,
+    "admitted_full_config_cases": 18,
+    "native_instructions": 20581,
+    "placements": 3,
+    "SP_callee_saved_restored": true,
+    "canaries_intact": true,
+    "native_entries": {
+      "packer": "0xb54b50",
+      "builder": "0xb54810"
+    },
+    "partial_source_context": {
+      "object_image_pointer": 32,
+      "object_path_and_control_writes": [
+        40,
+        44
+      ],
+      "request_command_pointer": 80,
+      "request_output_context_pointer": "0xf28",
+      "request_path": "0xf80",
+      "request_output_bits": "0x16cd8"
+    },
+    "native_source_register_binding": true,
+    "builder_addresses_substituted": false,
+    "constructor_executed": false,
+    "intercepted_helpers": [
+      "0x85ee78 command observer/success only"
+    ],
+    "arithmetic_or_branch_shims": false,
+    "initial_software_image": "own zero",
+    "nonzero_residual_counterexample_checked": true,
+    "unsupported_source_output_widths_executed": false,
+    "video_source_paths": [
+      0,
+      2,
+      3
+    ],
+    "raw_source_counterexample_path": 8,
+    "source_rounding_formula": {
+      "video": "max(0,10-output_bits)",
+      "pixel_raw": "14-output_bits"
+    },
+    "historical_module_control_not_equivalent": true,
+    "compiler_excludes_all_module_control": true,
+    "configuration_bytes": 96,
+    "configuration_register_words": 20,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "native_full_vectors": 18,
+          "atomic_negatives": 164
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "native_full_vectors": 18,
+          "atomic_negatives": 164
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_slice",
+      "early_publication",
+      "foreign_input_precision",
+      "bypass_policy"
+    ],
+    "header_pins": {
+      "sp11-front-round-config.h": "2b7216778310b50f1b7adc3053030d815213e90c2a3900879b1cec017aaaf064",
+      "sp11-front-fields.h": "f37dfdc80695def4001ca67301dbddd13a2dc9647e86738cdce804b444a678ae",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/front-channel-gain-20261014/test-native.py": "8b1fbceb4516d97b141f6cc9fdf3e3ff13fe0bdfa48c0fa5e81ac9ffa6183a0e",
+      "experiments/E004-front-ir-vd55g0/e006p-rear-crop-roundclamp-packers/camss-e006p-crop-roundclamp.inc": "60c95d074efe357f6905daa31c42fa72c1e3a6a9bb6528cb246faa9d8f96e889"
+    },
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "calibration_changed": false,
+    "installed": false,
+    "loaded": false,
+    "runtime_changed": false,
+    "hardware": false,
+    "limits": [
+      "Source-only semantic output declaration and partial owned contexts; no physical video input-depth proof",
+      "Gamma12 lookup representation does not prove a12-bit input to RoundClamp",
+      "CST12-to-video10 conversion remains unbound; caller precision tag is a gate, not evidence",
+      "Source zero-image policy is not hardware reset proof or inherited startup equivalence",
+      "Source module controls differ from old helper and are excluded, not silently reconciled",
+      "No crop/scaler/bus/DMI/activation/private-loader integration"
+    ]
+  },
+  "build": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-round-config-20261014-01/native-compile02/sp11_round_compile.ko",
+    "module_sha256": "b76bff2892f20e7c39fbae16d7c777c278fb8d43f33cbd16f1d8211ab39ce93e",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "style": {
+      "errors": 0,
+      "warnings": 0,
+      "checks": 0
+    },
+    "header_pins": {
+      "sp11-front-round-config.h": "2b7216778310b50f1b7adc3053030d815213e90c2a3900879b1cec017aaaf064",
+      "sp11-front-fields.h": "f37dfdc80695def4001ca67301dbddd13a2dc9647e86738cdce804b444a678ae",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "new_source_pins": {
+    "test-host.c": "9979ccfc0f887ce08eb80d5803f1a3026650e68ca4a3d49714c459f67babe073",
+    "README.md": "138f4d24455270650d69d49120017bc836c1c51c5b300e20710024675a9766e4",
+    "sp11-front-round-config.h": "2b7216778310b50f1b7adc3053030d815213e90c2a3900879b1cec017aaaf064",
+    "qualify.py": "a4d5bbddf13d40323a1610aff9a2adf02e2abcc430cd887cd655325c185adfa9",
+    "build-worker.py": "33e3c415bc84bda902a154388fb1c8ad3c8899e83b90167891ceadbc0ce1ffd2",
+    "test-native.py": "2bda02482d4b7f1fd9ed23e02661e5e012b00b8c5e9f74449d5b119bde1f4815"
+  },
+  "configuration_registers": [
+    "0x9c70",
+    "0x9c74",
+    "0x9c78",
+    "0x9c7c",
+    "0x9c80",
+    "0x9c84",
+    "0x9c88",
+    "0x9c8c",
+    "0x9c90",
+    "0x9c94",
+    "0x9e70",
+    "0x9e74",
+    "0x9e78",
+    "0x9e7c",
+    "0x9e80",
+    "0x9e84",
+    "0x9e88",
+    "0x9e8c",
+    "0x9e90",
+    "0x9e94"
+  ],
+  "candidate_unique_configuration_addresses_before": 63,
+  "candidate_unique_configuration_addresses_after": 83,
+  "candidate_leaves_are_not_a_precision_bound_complete_program": true,
+  "retained_scaler_and_bootstrap_audit": {
+    "MNDS_packer_already_exists_unchanged": true,
+    "MNDS_source_fixture_is_rear4064x2286_to3840x2160_not_front_mode": true,
+    "existing_full_bootstrap_ledger_claims_complete_independent_bootstrap": false,
+    "prior_reference_pins": {
+      "experiments/E004-front-ir-vd55g0/e006q-rear-mnds23-packer/camss-e006q-mnds23.inc": "efeea39fc21abae1c3b26e5a588c146ca3a82b74267b717a0fac6c7ab57bd46b",
+      "experiments/E004-front-ir-vd55g0/e011dj-selected-baseline-input-ledger/INPUT-LEDGER.json": "8912e19e5440d604a984c00f7e5596753e88d9dd3fe76d7d17c2802ce3f3bd48"
+    }
+  },
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "next": "Bind original core/MNDS video precision to own CST/Gamma policy; reuse retained scaler and own CCM auxiliary fields before private-loader replacement and guarded hardware parity"
+}
