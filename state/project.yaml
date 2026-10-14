@@ -6,15 +6,15 @@ prior_solution_reuse_policy:
   current_audit: docs/UPSTREAM-LIFECYCLE-PRIOR-SOLUTION-AUDIT-20261014.json
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: CAMSS28_MMAP_ALLOCATION_HARDWARE_PASS_TEARDOWN_CONTRACTS_OPEN
-  evidence: docs/UPSTREAM-MMAP04-20261014.json
+  status: SENSOR29_TOP_DOMAIN_HARDWARE_PASS_PHY_ERROR_CONTRACT_OPEN
+  evidence: docs/UPSTREAM-SENSOR-DOMAIN06-20261014.json
   retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
   standalone_phy_cphy_implemented: true
   cphy_internal_preparation_compiled: true
   cphy_preparation_evidence: docs/UPSTREAM-CPHY-CONFIG-VALIDATION-20261012.json
   retained_cphy_preparation_patches: 1
-  latest_source_candidate: 28
+  latest_source_candidate: 29
   latest_full_kernel_candidate: 26
   candidate17_full_image_built: false
   full_kernel_image_modules_build_passed: true
@@ -52,7 +52,7 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Audit retained clock-domain and removal ownership for pre-existing MCLK removal warning; resolve standalone PHY shutdown error contract before STREAMON
+  next: Reuse retained ownership/error flags to propagate and qualify standalone PHY shutdown/unwind failures before STREAMON
   front_provider_registration_hardware_qualified: true
   front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
   front_provider_registration_trace_events: 2275
@@ -61,8 +61,8 @@ upstream_open_stack_current:
   front_provider_electrical_voltage_qualified: false
   front_provider_sensor_sequence_qualified: true
   front_provider_identities_consumed_retired: true
-  live_golden_boot_id: f51a1ab5-2bf3-409c-98f7-345237e16253
-  runtime_changed_scope: Three Golden provider boots and four isolated headless7.2 checks, returned and retired; daily stack preserved
+  live_golden_boot_id: 1ff1779d-8fb2-4b02-97c6-7d7520ac8591
+  runtime_changed_scope: Three Golden provider boots and six isolated headless7.2 checks, returned and retired; daily stack preserved
   preferred_control_transport: PiMaster
   front_provider_HPM_kernel_request_hardware_qualified: true
   front_provider_HPM_request_kernel: 7.1.5-sp11-render-parity-v4+
@@ -91,6 +91,12 @@ upstream_open_stack_current:
   front26_camera_module_unload_hardware_qualified: false
   front26_camera_module_removal_commands_completed: true
   sensor_remove_mclk_warning_observed: true
+  source29_sensor_domain_hardware_qualified: true
+  current_sensor_remove_mclk_warning_count: 0
+  source29_warning_free_unload_hardware_qualified: true
+  source29_sensor_domain_evidence: docs/UPSTREAM-SENSOR-DOMAIN06-20261014.json
+  probe05_consumed_retired: true
+  probe06_consumed_retired: true
   sensor_remove_mclk_warning_in_prior02_and03: true
   full_final_kernel_log_audit_required: true
   front26_tpg_entity_function_warning_count: 3

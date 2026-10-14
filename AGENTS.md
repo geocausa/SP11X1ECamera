@@ -1,3 +1,35 @@
+## 2026-10-14 source29 sensor-owned TOP domain hardware PASS
+
+A one-property DT port gives IMX681 its own runtime-PM claim on the retained
+CAM_CC_TITAN_TOP_GDSC. Reuses CCI1's existing shared domain and I2C/genpd
+attachment; no MCLK/halt workaround, sensor sequence or kernel module change.
+Scoped DTB build/config/checkpatch, one-property decoded-tree diff, exact
+patch replay and missing/wrong-domain/provider refusals PASS;102 parent pins
+preserved. Source docs/UPSTREAM-SENSOR-DOMAIN-20261014.json.
+
+Fresh06 confirmed live supplier equality, sensor genpd membership/suspension,
+rail users0, MCLK enable/prepare0 at19.2MHz, reset237 low, and the SAME CAMSS-
+first module removal order. Prior02/03/04 MCLK warning1 each ->06 warning0.
+Complete post-unload AND return kernel logs pass all16 diagnostic signatures.
+Kernel26/module28 unchanged; pinned existing kernel/initrd/module tree reused
+read-only, only164416-byte DTB added. Evidence
+ docs/UPSTREAM-SENSOR-DOMAIN06-20261014.json.
+
+05 initially confirmed attachment, but observer expected full paths while
+kernel genpd_summary_one prints dev_name. Stopped before unload;05 retained
+partial evidence/retired. Corrected06 reader was tested against actual05
+snapshot and seven malformed controls, without rebuilding/retracing hardware.
+Both05/06 consumed/retired/unarmed, units disabled, menus archived; never retry.
+Golden1ff1779d-8fb2-4b02-97c6-7d7520ac8591 restored; default/assets/installed26
+module and daily branch unchanged, no pending entry/camera stack.
+
+NEXT reuse retained ownership/error flags to propagate standalone PHY release
+errors and qualify callback unwind/teardown before STREAMON. Sensor-specific
+binding/schema, physical stream/DMA/ISP/libcamera/IPA/parity remain open;
+both private consumers/all14 release categories stay open. No pixel access,
+new camera firmware, voltage measurement or OS suspend/hibernate. Prior-solution
+and complete final-log audit policies below remain mandatory.
+
 ## 2026-10-14 candidate28 MMAP hardware PASS; final teardown warning open
 
 Fresh04 tested three allocation/map/release cycles, nine MMAP buffers and nine
