@@ -1,3 +1,28 @@
+## 2026-10-14 standard front RAW capture/stop/reopen hardware PASS
+Fresh10 on source33/kernel26/DT29/PHY31 delivered24 full pRAA3840x2640 buffers
+(three8-frame sessions, stride4800/plane12672000;304128000 reported bytes).
+Each queue had sequences0..7 and monotonic driver completion timestamps.
+Short samples29.76..30.01fps are not sustained timing/VT-clock proof.
+Stops drained owned FIFO, required fresh CSID ACK/masked IRQ/readbacks/barriers,
+and released sensor/PHY runtime PM, rails/clocks and reset-low each cycle.
+Matched PHY2->CSID1->VFE1 RDI0 returned neutral; camera modules unloaded cleanly.
+Post-session, final-post-unload AND return logs pass18 signatures; all14 actual
+delta records reviewed, no camera fault. Automatic Golden return succeeded.
+Evidence docs/UPSTREAM-RAW10-HARDWARE-20261014.json.10 retired/no retry, units
+disabled/menu archived; Golden75e71a3e-b23c-49e3-8ffa-d79803efa9d4/no pending
+entry/camera modules; protected assets/global26 CAMSS/daily branch unchanged.
+Root disk still~40.88GB available. No image files/hashes/export or system sleep.
+
+This is a bounded standard RAW transport/normal stop/reopen qualification,
+with no private camera startup blob needed for this path. Pixels were discarded,
+so optical content/IQ was not qualified. Sustained/stall recovery, full hardware
+fault/concurrency matrix, controls, standard processed ISP/params/stats,
+libcamera/IPA, binding/schema/provenance/series review and Windows parity remain.
+Both processed private startup consumers/all14 release categories remain open;
+upstream_ready=false. NEXT audit/reuse prior sustained RAW and stall evidence,
+then fresh bounded stress qualification; do not repeat the already-proven short
+capture or retrace known routing. Earlier current/NEXT sections are historical.
+
 ## 2026-10-14 fresh09 route refusal; retained CSID1 fix source33 PASS
 09 consumed before capture: media-ctl link failed; no STREAMON, buffer/image
 or shutdown proof. Root command stderr-only reporting omitted exact errno;
