@@ -1,0 +1,111 @@
+
+static unsigned checks,cases;
+#define CHECK(v) do {checks++;if(!(v)){fprintf(stderr,"case%u line%d: %s\n",cases,__LINE__,#v);abort();}}while(0)
+static struct sp11_front_minimal mode={{3840,2640,2560,1440},10,SP11_FRONT_RGGB};
+static bool model_program_retained(void) {
+ return allocated_object&&((struct camss_cdm21_program *)allocated_object)->retained;
+}
+/* Fixture reset simulates reboot only; never invokes a production exposed-free
+ * path or claims physical retirement. It avoids leaks in the sanitizer model.
+ */
+static void simulated_reboot(void) {
+ free(allocated_cpu);free(allocated_object);allocated_cpu=allocated_object=NULL;
+ module_refs=device_refs=coherent_refs=object_refs=0;
+}
+static void fresh(struct camss_cdm21 *c,struct camss_cdm21_power *p) {
+ CHECK(!module_refs&&!device_refs&&!coherent_refs&&!object_refs);
+ memset(c,0,sizeof(*c));memset(p,0,sizeof(*p));memset(regs,0,sizeof(regs));
+ c->base=regs;c->irq=7;c->initialized=true;c->power_owner=p;p->cdm=c;p->initialized=true;p->dev=&dma_device;
+ live=c;regs[0]=SP11_CDM21_VERSION;fault=NONE;allocated_dma=0x1000;alloc_fail=0;
+ writes=stores=masks=drains=pauses=clears=enables=barriers=retains=polls=disables=dma_frees=0;fifo_issued=false;
+}
+static void powered_reset_state(struct camss_cdm21 *c,struct camss_cdm21_power *p) {
+ p->held=p->touched=true;c->reset_ready=true;c->reset.epoch=1;
+}
+static void refs(unsigned expected) {
+ CHECK(module_refs==expected&&device_refs==expected&&coherent_refs==expected&&object_refs==expected);
+}
+static void constructed(struct camss_cdm21_power *p,struct camss_cdm21_program **q) {
+ CHECK(camss_cdm21_program_create(p,9,5,&mode,q)==0&&*q);
+ CHECK(!writes&&!stores);refs(1);
+ CHECK(p->programs==1&&(*q)->power==p&&!(*q)->retained&&!(*q)->attempted);
+ CHECK((*q)->command.cpu==allocated_cpu&&(*q)->command.dma==allocated_dma&&(*q)->command.capacity==4096&&(*q)->command.bytes==1204);
+ CHECK(sp11_cdm21_command_validate(&(*q)->command)==0);
+ for(size_t i=1204;i<4096;i++)CHECK(!((u8 *)allocated_cpu)[i]);
+}
+int main(void) {
+ struct camss_cdm21 c;struct camss_cdm21_power p,other;
+ struct camss_cdm21_program *q=NULL,*q2=NULL;struct sp11_cdm21_receipt r,old;
+ fresh(&c,&p);CHECK(camss_cdm21_power_detach_ready(&p)==0);
+ constructed(&p,&q);CHECK(camss_cdm21_power_detach_ready(&p)==-EBUSY);
+ CHECK(camss_cdm21_program_create(&p,9,6,&mode,&q2)==-EBUSY&&!q2);refs(1);
+ CHECK(camss_cdm21_program_destroy_unused(&p,&q)==0&&!q&&p.programs==0&&dma_frees==1);refs(0);
+ CHECK(camss_cdm21_power_detach_ready(&p)==0);cases++;
+ for(unsigned stage=1;stage<=4;stage++) {
+  fresh(&c,&p);alloc_fail=stage;
+  CHECK(camss_cdm21_program_create(&p,9,5,&mode,&q)<0&&!q&&!p.programs&&!writes);refs(0);cases++;
+ }
+ const u64 bad_dma[]={0,0x1001,0x100000000ULL,0xfffffff0ULL,UINT64_MAX};
+ for(unsigned i=0;i<sizeof(bad_dma)/sizeof(*bad_dma);i++) {
+  fresh(&c,&p);allocated_dma=bad_dma[i];
+  CHECK(camss_cdm21_program_create(&p,9,5,&mode,&q)==-ERANGE&&!q&&!p.programs&&!writes);refs(0);cases++;
+ }
+ fresh(&c,&p);allocated_dma=0xfffff000;
+ constructed(&p,&q);CHECK(camss_cdm21_program_destroy_unused(&p,&q)==0&&!q);refs(0);cases++;
+ for(unsigned i=0;i<12;i++) {
+  fresh(&c,&p);struct sp11_front_minimal bad=mode;u64 owner=9,req=5;
+  switch(i){case 0:owner=0;break;case 1:req=0;break;case 2:bad.input_bits=8;break;case 3:bad.bayer=SP11_FRONT_BGGR;break;
+   case 4:bad.geometry.input_width=0;break;case 5:bad.geometry.output_width=3;break;
+   case 6:p.initialized=false;break;case 7:c.initialized=false;break;case 8:c.power_owner=NULL;break;
+   case 9:p.fault=true;break;case 10:c.quarantined=true;break;case 11:c.active=true;break;}
+  CHECK(camss_cdm21_program_create(&p,owner,req,&bad,&q)<0&&!q&&!p.programs&&!writes);refs(0);cases++;
+ }
+ fresh(&c,&p);constructed(&p,&q);memset(&other,0,sizeof(other));other.initialized=true;
+ CHECK(camss_cdm21_program_destroy_unused(&other,&q)==-EPERM&&q);refs(1);
+ CHECK(camss_cdm21_program_submit(&other,q,&r)==-EPERM&&!q->attempted);refs(1);
+ CHECK(camss_cdm21_program_create(&p,9,5,&mode,&q)==-EINVAL);refs(1);
+ CHECK(camss_cdm21_program_submit(&p,q,(void *)q)==-EINVAL&&!q->attempted);
+ CHECK(camss_cdm21_program_destroy_unused(&p,&q)==0);refs(0);cases++;
+ /* Backend pre-retention refusals consume attempt but permit unused cleanup. */
+ for(unsigned i=0;i<3;i++) {
+  fresh(&c,&p);constructed(&p,&q);memset(&r,0xa5,sizeof(r));old=r;
+  if(i==1){powered_reset_state(&c,&p);regs[0]=0x30010000;}
+  if(i==2){powered_reset_state(&c,&p);c.reset_ready=false;}
+  CHECK(camss_cdm21_program_submit(&p,q,&r)<0&&!q->retained&&q->attempted&&!stores);
+  CHECK(!memcmp(&r,&old,sizeof(r)));CHECK(camss_cdm21_program_submit(&p,q,&r)==-EALREADY);
+  CHECK(camss_cdm21_program_destroy_unused(&p,&q)==0&&!q);refs(0);cases++;
+ }
+ for(unsigned f=0;f<=FINAL_STICKY;f++) {
+  fresh(&c,&p);constructed(&p,&q);powered_reset_state(&c,&p);
+  fault=(enum fault)f;memset(&r,0xa5,sizeof(r));old=r;
+  if(f==OLD_STICKY)regs[0x44/4]=4;
+  if(f==PENDING_FIRST)regs[0x6c/4]=1;
+  if(f==OTHER_FIFO)regs[0x35c/4]=0x10000;
+  int ret=camss_cdm21_program_submit(&p,q,&r);
+  if(f==NONE){CHECK(ret==0&&r.owner==9&&r.request==5&&r.bytes==1204&&r.status==6&&r.sequence==1);}
+  else {CHECK(ret<0&&!memcmp(&r,&old,sizeof(r)));}
+  CHECK(q->retained&&q->attempted&&c.command_held&&p.programs==1);refs(1);
+  CHECK(camss_cdm21_program_submit(&p,q,&r)==-EALREADY);
+  CHECK(camss_cdm21_program_destroy_unused(&p,&q)==-EBUSY&&q&&!dma_frees);refs(1);
+  CHECK(camss_cdm21_power_detach_ready(&p)==-EBUSY);
+  q->retained=false;CHECK(camss_cdm21_program_destroy_unused(&p,&q)==-EBUSY&&q&&!dma_frees);q->retained=true;refs(1);
+  simulated_reboot();q=NULL;cases++;
+ }
+ /* Hold callback binds every field of the opaque allocation, owner and request. */
+ for(unsigned i=0;i<6;i++) {
+  fresh(&c,&p);constructed(&p,&q);q->attempted=true;struct sp11_cdm21_command bad=q->command;
+  switch(i){case 0:bad.cpu++;break;case 1:bad.dma+=4;break;case 2:bad.bytes-=4;break;
+   case 3:bad.capacity-=4;break;case 4:bad.owner++;break;case 5:bad.request++;break;}
+  mutex_lock(&p.lock);mutex_lock(&c.lock);
+  CHECK(cdm21_program_retain(q,&bad)==-EPERM&&!q->retained);
+  mutex_unlock(&c.lock);mutex_unlock(&p.lock);
+  CHECK(camss_cdm21_program_destroy_unused(&p,&q)==0&&!q);refs(0);cases++;
+ }
+ for(unsigned i=0;i<8;i++) {
+  fresh(&c,&p);
+  switch(i){case 0:p.held=true;break;case 1:p.touched=true;break;case 2:p.fault=true;break;case 3:c.active=true;break;
+   case 4:c.command_held=true;break;case 5:c.reset.epoch=1;break;case 6:c.quarantined=true;break;case 7:p.programs=1;break;}
+  CHECK(camss_cdm21_power_detach_ready(&p)==-EBUSY&&!writes);cases++;
+ }
+ refs(0);printf("{\"cases\":%u,\"checks\":%u}\n",cases,checks);return 0;
+}

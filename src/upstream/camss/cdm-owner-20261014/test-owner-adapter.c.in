@@ -1,0 +1,37 @@
+
+#define GFP_KERNEL 0
+#define THIS_MODULE ((void *)1)
+#define PAGE_ALIGN(n) (((n)+4095U)&~4095U)
+#define lockdep_assert_held(m) assert((m)->held)
+static unsigned alloc_fail, module_refs, device_refs, coherent_refs, object_refs, dma_frees;
+static u64 allocated_dma=0x1000;
+static void *allocated_cpu, *allocated_object;
+static struct device dma_device;
+static bool model_program_retained(void);
+static void *kzalloc(size_t n,int flags) {
+ (void)flags;assert(live->lock.held&&live->power_owner->lock.held);
+ if(alloc_fail==1)return NULL;
+ assert(!allocated_object);allocated_object=calloc(1,n);assert(allocated_object);object_refs++;return allocated_object;
+}
+static void kfree(void *p) {
+ assert(p==allocated_object&&object_refs==1);free(p);allocated_object=NULL;object_refs--;
+}
+static bool try_module_get(void *m) {
+ assert(m==THIS_MODULE);if(alloc_fail==2)return false;module_refs++;return true;
+}
+static void module_put(void *m) { assert(m==THIS_MODULE&&module_refs==1);module_refs--; }
+static struct device *get_device(struct device *d) {
+ assert(d==&dma_device);if(alloc_fail==3)return NULL;device_refs++;return d;
+}
+static void put_device(struct device *d) { assert(d==&dma_device&&device_refs==1);device_refs--; }
+static void *dma_alloc_coherent(struct device *d,size_t n,dma_addr_t *dma,int flags) {
+ assert(d==&dma_device&&n==4096&&flags==GFP_KERNEL);if(alloc_fail==4)return NULL;
+ *dma=allocated_dma;allocated_cpu=malloc(n);assert(allocated_cpu);memset(allocated_cpu,0xa5,n);coherent_refs++;return allocated_cpu;
+}
+static void memzero_explicit(void *p,size_t n) { memset(p,0,n); }
+static void dma_free_coherent(struct device *d,size_t n,void *cpu,dma_addr_t dma) {
+ assert(d==&dma_device&&n==4096&&cpu==allocated_cpu&&dma==allocated_dma);
+ assert(!model_program_retained()&&coherent_refs==1);
+ for(size_t i=0;i<n;i++)assert(!((u8 *)cpu)[i]);
+ free(cpu);allocated_cpu=NULL;coherent_refs--;dma_frees++;
+}

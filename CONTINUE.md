@@ -1,3 +1,43 @@
+## 2026-10-14 source35 typed coherent command owner qualified
+
+Verified prior native build72 allocator pin and actual rear59 ownership/stop
+evidence before porting. docs/UPSTREAM-COMMAND-OWNER-PRIOR-AUDIT-20261014.json
+separates reusable coherent allocation, full32-bit extent and unused cleanup
+from private-profile/DMI layouts, native stop authority and7.1.5 carrier.
+
+Fresh sparse source35 creates an opaque typed1204-byte REG_CONT program in a
+padded coherent allocation, pins module/device and transfers those independent
+holds to the source34 backend on submission. No raw payload/CPU-pointer API.
+All-or-none construction, immutable allocation/owner/request identity,
+consumed software attempt, unused-only destruction and two independent exposed
+release refusals are implemented. Detach-readiness predicate is implemented.
+
+IMPORTANT: predicate is not wired to actual parent pre-detach admission.
+Void platform remove/devres still releases IRQ/mapping/clock handles; object
+references do not protect them. Parent power/backend/handle storage lifetime
+and real teardown architecture remain required before hardware admission.
+No exposed release/rewrite/retry/reset or DMA-retirement authority introduced.
+
+Strict ARM64 kernel26 ABI W1/Werror:0 warnings/errors. Actual complete owner C,
+actual headers, independent compiler and source34 submission bodies pass60
+cases/compiler under GCC/Clang ASan/UBSan; eight compiled unsafe mutations
+rejected each. Per-process core limit0 for mutation tests. Two inherited helper
+headers formatted only; normalized code equals originals and all three strict
+module builds have identical bytes. Fresh zero-fuzz patch replay/pins pass.
+C/header and reviewed patch code style0/0; unsigned draft DCO and reviewed CAMSS
+new-file advisory remain. docs/UPSTREAM-CDM21-COMMAND-OWNER-20261014.json.
+
+No runtime caller, physical allocation/MMIO, install/load/capture/reboot.
+Hardware baseline still RAW33 sustained/starvation/stop/reopen; Golden
+b716b5cd-7ebd-4b2d-8901-3806085a5483 remains/default/no pending/camera stack.
+Whole processed PIX/CSID/BUS/params/stats/libcamera/IPA, physical CDM/resource/
+DMA qualification, sensor timing/optical IQ and provenance/DCO/bindings/API
+review remain open; upstream_ready=false, private processed consumers2.
+NEXT audit/reuse native resource mapping and standard CDM binding/power,
+implement actual parent lifetime/pre-detach or resource-retaining teardown
+before hardware; complete independent PIX startup and guarded CDM qualification.
+Earlier current/NEXT paragraphs below are historical.
+
 ## 2026-10-14 source34 dormant owned CDM submission qualified
 
 Prior usable work checked first: actual native rear59/build72 completed1200

@@ -1,0 +1,38 @@
+{
+  "schema": "sp11-command-owner-prior-audit-v1",
+  "utc": "2026-10-14T10:30:13.892064+00:00",
+  "project_parent": "994e876605231cca9ce11ccbd9ed46eb21a43c82",
+  "native_stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-72",
+  "native_allocator_pin": {
+    "camss/camss-vfe-e008l-rear-command-dma.inc": "2e85a44b14ed9544fb716c6e96e3903fb9344284682a4597ce76b3b0e40c8b75"
+  },
+  "native_build_pin": "c9d31f0772533a196344bfaa5cd5244f6fd6683625be4104a35476483de0f79e",
+  "actual_hardware": "docs/NATIVE-RGB-REAR-GENERATION-59-20261009.json",
+  "reuse": [
+    "coherent allocation bound to CAMSS DMA device",
+    "validate entire allocated 32-bit DMA extent",
+    "clear allocation before independent compiler writes",
+    "all-or-none construction and reverse cleanup",
+    "release unused only; exposed resources need proven stop/retirement"
+  ],
+  "do_not_port": [
+    "four private profile-derived packet shapes/DMI wrappers",
+    "native stopped/retirement facts as authority for dormant standard CDM",
+    "private tuning bytes",
+    "native7.1.5 provider ABI"
+  ],
+  "standard_source_pins": {
+    "drivers/base/dd.c": "12b0555ee317adb59b09dc16c6fc7113c72e7148961f772d3f51f9a0c8dcb9b3",
+    "Documentation/core-api/dma-api-howto.rst": "92070ca3b5e150580c26d39be990b109053951a767fb3fd1d695aece478bbff2",
+    "drivers/media/platform/qcom/camss/camss.c": "709707dd73a628d3e4704796ca532e440dfcda53329b8bea2dc4320a4242774e",
+    "drivers/media/platform/qcom/camss/Makefile": "6a91c5510da7b8ebc24d333f661510dca1e8b23a0fdda129a96e440bc0e6b58e"
+  },
+  "compatibility_gap": "Standard34 callback is a contract with no owned allocator/immutable compiler object. Standard binding uses devm resources; Linux driver core releases devres after remove. Device/module references alone do not protect mapping/IRQ/clock handles from unbind.",
+  "chosen_step": "Opaque typed independent REG_CONT coherent program owner, module/device pins, backend retention transfer, unused-only destroy, detach-readiness refusal predicate. No runtime parent integration or physical DMA-retirement authority.",
+  "limits": [
+    "A predicate does not veto void platform remove or devres release; require real pre-detach admission or resource-retaining teardown architecture before hardware",
+    "Power/backend storage must remain parent-owned and live; full graph/interconnect/reset ownership still open",
+    "No hardware access or upstream release approval implied"
+  ],
+  "upstream_ready": false
+}

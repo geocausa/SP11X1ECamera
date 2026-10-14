@@ -1,0 +1,1065 @@
+Subject: [PATCH] media: camss: own a typed coherent CDM program
+
+Reuse native coherent allocation and unused-only cleanup for an
+opaque typed program. Pin code/device lifetime, transfer allocation
+ownership on submission, and refuse exposed release or detach
+readiness. Keep runtime parent wiring and physical retirement
+blocked. Unsigned development patch.
+
+---
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-command.h b/drivers/media/platform/qcom/camss/camss-cdm-command.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-cdm-command.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef CAMSS_CDM_COMMAND_H
++#define CAMSS_CDM_COMMAND_H
++#include "camss-cdm-power.h"
++#include "sp11-front-minimal.h"
++
++/* Opaque coherent command allocation. Its CPU pointer is never published.
++ * Parent power/backend storage, DMA-device binding and reviewed handles must
++ * outlive every program. Serialize construction, calls and all parent detach
++ * operations. Device/module refs preserve objects/code, not devres or clocks.
++ */
++struct camss_cdm21_program;
++
++int camss_cdm21_program_create(struct camss_cdm21_power *power,
++			      u64 owner, u64 request,
++			      const struct sp11_front_minimal *mode,
++			      struct camss_cdm21_program **out);
++int camss_cdm21_program_submit(struct camss_cdm21_power *power,
++			      struct camss_cdm21_program *program,
++			      struct sp11_cdm21_receipt *receipt);
++/* Only an untransferred allocation can be destroyed. Submitted, failed after
++ * retention, and successfully completed commands remain pinned until reboot.
++ */
++int camss_cdm21_program_destroy_unused(struct camss_cdm21_power *power,
++				      struct camss_cdm21_program **program);
++
++/* A refusal predicate for future parent admission, not a platform .remove
++ * veto. Linux core still releases devres after a void remove callback. Real
++ * pre-detach exclusion or resource-retaining teardown is required before use.
++ */
++int camss_cdm21_power_detach_ready(struct camss_cdm21_power *power);
++#endif
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-command.c b/drivers/media/platform/qcom/camss/camss-cdm-command.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-cdm-command.c
+@@ -0,0 +1,245 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Adapt retained native coherent command allocation/unused cleanup to one
++ * independent typed REG_CONT program. Prior functional source/evidence:
++ * docs/UPSTREAM-COMMAND-OWNER-PRIOR-AUDIT-20261014.json.
++ * No runtime caller, MMIO constructor, raw payload input or exposed free API.
++ */
++#include <linux/dma-mapping.h>
++#include <linux/lockdep.h>
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/slab.h>
++#include "camss-cdm-command.h"
++
++struct camss_cdm21_program {
++	struct camss_cdm21_power *power;
++	struct device *dma_dev;
++	struct sp11_cdm21_command command;
++	void *cpu;
++	dma_addr_t dma;
++	bool retained;
++	bool attempted;
++};
++
++/* Caller already owns power then CDM mutexes. Transfer pre-acquired independent
++ * allocation/device/module holds, without publishing a mutable command pointer.
++ */
++static int cdm21_program_retain(void *context,
++			       const struct sp11_cdm21_command *command)
++{
++	struct camss_cdm21_program *program = context;
++	const struct sp11_cdm21_command *owned;
++
++	if (!program || !command || !program->power)
++		return -EINVAL;
++	lockdep_assert_held(&program->power->lock);
++	lockdep_assert_held(&program->power->cdm->lock);
++	owned = &program->command;
++	if (program->retained || !program->attempted ||
++	    program->power->programs != 1 ||
++	    program->dma_dev != program->power->dev ||
++	    command->cpu != owned->cpu || command->dma != owned->dma ||
++	    command->capacity != owned->capacity || command->bytes != owned->bytes ||
++	    command->owner != owned->owner || command->request != owned->request)
++		return -EPERM;
++	program->retained = true;
++	return 0;
++}
++
++int camss_cdm21_program_create(struct camss_cdm21_power *power,
++			      u64 owner, u64 request,
++			      const struct sp11_front_minimal *mode,
++			      struct camss_cdm21_program **out)
++{
++	struct camss_cdm21_program *program;
++	struct sp11_front_minimal next;
++	struct camss_cdm21 *cdm;
++	size_t capacity = PAGE_ALIGN(SP11_FRONT_MINIMAL_BYTES);
++	int ret;
++
++	if (!power || !power->initialized || !owner || !request || !mode || !out)
++		return -EINVAL;
++	if (sp11_cdm_overlap(out, sizeof(*out), power, sizeof(*power)) ||
++	    sp11_cdm_overlap(out, sizeof(*out), mode, sizeof(*mode)) || *out)
++		return -EINVAL;
++	next = *mode;
++	ret = sp11_front_minimal_validate(&next);
++	if (ret)
++		return ret;
++	mutex_lock(&power->lock);
++	cdm = power->cdm;
++	if (!cdm || !cdm->initialized || cdm->power_owner != power) {
++		ret = -EPERM;
++		goto unlock_power;
++	}
++	mutex_lock(&cdm->lock);
++	if (power->fault || cdm->quarantined) {
++		ret = -EIO;
++		goto unlock;
++	}
++	if (power->programs || cdm->active || cdm->command_held) {
++		ret = -EBUSY;
++		goto unlock;
++	}
++	program = kzalloc(sizeof(*program), GFP_KERNEL);
++	if (!program) {
++		ret = -ENOMEM;
++		goto unlock;
++	}
++	if (!try_module_get(THIS_MODULE)) {
++		ret = -ENODEV;
++		goto free_program;
++	}
++	program->dma_dev = get_device(power->dev);
++	if (!program->dma_dev) {
++		ret = -ENODEV;
++		goto put_module;
++	}
++	program->cpu = dma_alloc_coherent(program->dma_dev, capacity,
++					&program->dma, GFP_KERNEL);
++	if (!program->cpu) {
++		ret = -ENOMEM;
++		goto put_device;
++	}
++	/* Validate the whole allocation, including padding, before any narrowing. */
++	if (!program->dma || (program->dma & 3) ||
++	    program->dma > 0xffffffffULL ||
++	    capacity > 0x100000000ULL - program->dma) {
++		ret = -ERANGE;
++		goto free_dma;
++	}
++	memset(program->cpu, 0, capacity);
++	ret = sp11_front_minimal_commands(program->cpu, capacity, &next);
++	if (ret)
++		goto free_dma;
++	program->command.cpu = program->cpu;
++	program->command.dma = program->dma;
++	program->command.capacity = capacity;
++	program->command.bytes = SP11_FRONT_MINIMAL_BYTES;
++	program->command.owner = owner;
++	program->command.request = request;
++	ret = sp11_cdm21_command_validate(&program->command);
++	if (ret)
++		goto free_dma;
++	program->power = power;
++	power->programs = 1;
++	*out = program;
++	goto unlock;
++free_dma:
++	memzero_explicit(program->cpu, capacity);
++	dma_free_coherent(program->dma_dev, capacity, program->cpu, program->dma);
++put_device:
++	put_device(program->dma_dev);
++put_module:
++	module_put(THIS_MODULE);
++free_program:
++	kfree(program);
++unlock:
++	mutex_unlock(&cdm->lock);
++unlock_power:
++	mutex_unlock(&power->lock);
++	return ret;
++}
++
++int camss_cdm21_program_submit(struct camss_cdm21_power *power,
++			      struct camss_cdm21_program *program,
++			      struct sp11_cdm21_receipt *receipt)
++{
++	struct camss_cdm21_retention retention;
++	int ret;
++
++	if (!power || !power->initialized || !program || !receipt)
++		return -EINVAL;
++	mutex_lock(&power->lock);
++	if (program->power != power || program->dma_dev != power->dev ||
++	    power->programs != 1) {
++		ret = -EPERM;
++		goto unlock;
++	}
++	if (program->attempted || program->retained) {
++		ret = -EALREADY;
++		goto unlock;
++	}
++	if (sp11_cdm_overlap(receipt, sizeof(*receipt), program, sizeof(*program))) {
++		ret = -EINVAL;
++		goto unlock;
++	}
++	/* A failed admission is still a consumed software attempt. No retry API. */
++	program->attempted = true;
++	retention.hold = cdm21_program_retain;
++	retention.context = program;
++	ret = camss_cdm21_submit_owned(power->cdm, power, &program->command,
++				      &retention, receipt);
++unlock:
++	mutex_unlock(&power->lock);
++	return ret;
++}
++
++int camss_cdm21_program_destroy_unused(struct camss_cdm21_power *power,
++				      struct camss_cdm21_program **owned)
++{
++	struct camss_cdm21_program *program;
++	struct camss_cdm21 *cdm;
++	bool released = false;
++	int ret = 0;
++
++	if (!power || !power->initialized || !owned || !*owned)
++		return -EINVAL;
++	mutex_lock(&power->lock);
++	cdm = power->cdm;
++	if (!cdm || !cdm->initialized || cdm->power_owner != power) {
++		ret = -EPERM;
++		goto unlock_power;
++	}
++	mutex_lock(&cdm->lock);
++	program = *owned;
++	if (program->power != power || program->dma_dev != power->dev ||
++	    power->programs != 1) {
++		ret = -EPERM;
++		goto unlock;
++	}
++	/* Independent backend identity also refuses a lost software retained flag. */
++	if (program->retained || cdm->retained_command.cpu == program->command.cpu) {
++		ret = -EBUSY;
++		goto unlock;
++	}
++	memzero_explicit(program->cpu, program->command.capacity);
++	dma_free_coherent(program->dma_dev, program->command.capacity,
++			  program->cpu, program->dma);
++	put_device(program->dma_dev);
++	power->programs = 0;
++	*owned = NULL;
++	kfree(program);
++	released = true;
++unlock:
++	mutex_unlock(&cdm->lock);
++unlock_power:
++	mutex_unlock(&power->lock);
++	if (released)
++		module_put(THIS_MODULE);
++	return ret;
++}
++
++int camss_cdm21_power_detach_ready(struct camss_cdm21_power *power)
++{
++	struct camss_cdm21 *cdm;
++	int ret = 0;
++
++	if (!power || !power->initialized)
++		return -EINVAL;
++	mutex_lock(&power->lock);
++	cdm = power->cdm;
++	if (!cdm || !cdm->initialized || cdm->power_owner != power) {
++		ret = -EPERM;
++		goto unlock_power;
++	}
++	mutex_lock(&cdm->lock);
++	if (power->programs || power->held || power->touched || power->fault ||
++	    cdm->active || cdm->command_held || cdm->reset.epoch || cdm->quarantined)
++		ret = -EBUSY;
++	mutex_unlock(&cdm->lock);
++unlock_power:
++	mutex_unlock(&power->lock);
++	return ret;
++}
+diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
+--- a/drivers/media/platform/qcom/camss/Makefile
++++ b/drivers/media/platform/qcom/camss/Makefile
+@@ -5,6 +5,7 @@
+ 		camss.o \
+ 		camss-cdm-2-1.o \
+ 		camss-cdm-power.o \
++		camss-cdm-command.o \
+ 		camss-csid.o \
+ 		camss-csid-4-1.o \
+ 		camss-csid-4-7.o \
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-power.h b/drivers/media/platform/qcom/camss/camss-cdm-power.h
+--- a/drivers/media/platform/qcom/camss/camss-cdm-power.h
++++ b/drivers/media/platform/qcom/camss/camss-cdm-power.h
+@@ -18,6 +18,7 @@
+ 	struct device *dev;
+ 	const struct clk_bulk_data *clocks;
+ 	int num_clocks;
++	unsigned int programs;
+ 	struct mutex lock;
+ 	bool initialized;
+ 	bool held;
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-2-1.h b/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
+--- a/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
++++ b/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
+@@ -73,8 +73,8 @@
+ int camss_cdm21_reset_paused_owned(struct camss_cdm21 *cdm,
+ 				 struct camss_cdm21_power *owner);
+ 
+-/* Parent callback must acquire independent command allocation/mapping/module
+- * and device lifetime holds, or fail without acquiring any hold. It runs under
++/* Parent callback transfers independent command allocation/mapping/module
++ * and device lifetime holds, or fails without transferring any hold. It runs under
+  * power->lock then cdm->lock and must not reenter either owner. A successful
+  * hold transfers to this backend permanently; there is no exposed-command
+  * release API. Parent detach/unbind needs a separate hold and retirement gate.
+diff --git a/drivers/media/platform/qcom/camss/sp11-front-minimal.h b/drivers/media/platform/qcom/camss/sp11-front-minimal.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/sp11-front-minimal.h
+@@ -0,0 +1,178 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Independent minimal front pixel-processing program, not a bootable provider.
++ * No firmware reader, legacy carrier, table input, DMI address or MMIO.
++ * Public register names: pinned VFE680 GPL header. The four demosaic words
++ * are the posted GPL IFE RFC's bring-up parameters, with attribution and
++ * qualification limits in FRONT-MINIMAL-PROVENANCE-20261011.md.
++ */
++#ifndef SP11_OPEN_FRONT_MINIMAL_H
++#define SP11_OPEN_FRONT_MINIMAL_H
++#include "sp11-geometry-stats.h"
++#include "sp11-cst-stats.h"
++
++enum sp11_front_bayer {
++	SP11_FRONT_RGGB, SP11_FRONT_GRBG, SP11_FRONT_GBRG, SP11_FRONT_BGGR
++};
++
++struct sp11_front_minimal {
++	struct sp11_geometry geometry;
++	unsigned int input_bits;
++	enum sp11_front_bayer bayer;
++};
++
++/* Exclusive, stopped full VFE pixel path is an integration prerequisite.
++ * Zero every listed module before programming: optional IQ, LUT consumers,
++ * statistics and unused pixel outputs cannot inherit prior settings.
++ * This does not stop bus clients or prove DMA retirement.
++ */
++static const u32 sp11_front_minimal_module_regs[] = {
++	0x3960, /* DEMUX */
++	0x3b60, /* CHANNEL_GAIN */
++	0x3d60, /* BPC_PDPC */
++	0x3f60, /* BINCORRECT */
++	0x4160, /* COMPDECOMP */
++	0x4360, /* LSC */
++	0x4560, /* WB_GAIN */
++	0x4760, /* GIC */
++	0x4960, /* BPC_ABF */
++	0x4b60, /* BLS */
++	0x4d60, /* BAYER_GTM */
++	0x5260, /* BAYER_LTM */
++	0x5460, /* LCAC */
++	0x5660, /* DEMOSAIC */
++	0x5860, /* COLOR_CORRECT */
++	0x5a60, /* GTM */
++	0x5f60, /* GLUT */
++	0x6160, /* COLOR_XFORM */
++	0x6360, /* UVG */
++	0x6560, /* PREPROCESSOR */
++	0x6760, /* CHROMA_UP */
++	0x6960, /* SPARSE_PD_EXT */
++	0x6b60, /* LCR */
++	0x6d60, /* COMPDECOMP_HVX_TX */
++	0x6f60, /* COMPDECOMP_HVX_RX */
++	0x7160, /* GTM_FD_OUT */
++	0x7660, /* CROP_RND_CLAMP_PIXEL_RAW_OUT */
++	0x7860, /* DOWNSCALE_MN_Y_FD_OUT */
++	0x7a60, /* DOWNSCALE_MN_C_FD_OUT */
++	0x7c60, /* CROP_RND_CLAMP_POST_DOWNSCALE_MN_Y_FD_OUT */
++	0x7e60, /* CROP_RND_CLAMP_POST_DOWNSCALE_MN_C_FD_OUT */
++	0x8060, /* DOWNSCALE_MN_Y_DISP_OUT */
++	0x8260, /* DOWNSCALE_MN_C_DISP_OUT */
++	0x8460, /* CROP_RND_CLAMP_POST_DOWNSCALE_MN_Y_DISP_OUT */
++	0x8660, /* CROP_RND_CLAMP_POST_DOWNSCALE_MN_C_DISP_OUT */
++	0x8860, /* DOWNSCALE_4TO1_Y_DISP_DS4_OUT */
++	0x8a60, /* DOWNSCALE_4TO1_C_DISP_DS4_OUT */
++	0x8c60, /* CROP_RND_CLAMP_POST_DOWNSCALE_4TO1_Y_DISP_DS4_OUT */
++	0x8e60, /* CROP_RND_CLAMP_POST_DOWNSCALE_4TO1_C_DISP_DS4_OUT */
++	0x9060, /* DOWNSCALE_4TO1_Y_DISP_DS16_OUT */
++	0x9260, /* DOWNSCALE_4TO1_C_DISP_DS16_OUT */
++	0x9460, /* CROP_RND_CLAMP_POST_DOWNSCALE_4TO1_Y_DISP_DS16_OUT */
++	0x9660, /* CROP_RND_CLAMP_POST_DOWNSCALE_4TO1_C_DISP_DS16_OUT */
++	0x9860, /* DOWNSCALE_MN_Y_VID_OUT */
++	0x9a60, /* DOWNSCALE_MN_C_VID_OUT */
++	0x9c60, /* CROP_RND_CLAMP_POST_DOWNSCALE_MN_Y_VID_OUT */
++	0x9e60, /* CROP_RND_CLAMP_POST_DOWNSCALE_MN_C_VID_OUT */
++	0xa060, /* DSX_Y_VID_OUT */
++	0xa260, /* DSX_C_VID_OUT */
++	0xa460, /* CROP_RND_CLAMP_POST_DSX_Y_VID_OUT */
++	0xa660, /* CROP_RND_CLAMP_POST_DSX_C_VID_OUT */
++	0xa860, /* DOWNSCALE_4TO1_Y_VID_DS16_OUT */
++	0xaa60, /* DOWNSCALE_4TO1_C_VID_DS16_OUT */
++	0xac60, /* CROP_RND_CLAMP_POST_DOWNSCALE_4TO1_Y_VID_DS16_OUT */
++	0xae60, /* CROP_RND_CLAMP_POST_DOWNSCALE_4TO1_C_VID_DS16_OUT */
++	0xb060, /* STATS_AEC_BE */
++	0xb260, /* STATS_AEC_BHIST */
++	0xb460, /* STATS_BHIST */
++	0xb660, /* STATS_TINTLESS_BG */
++	0xb860, /* STATS_AWB_BG */
++	0xba60, /* STATS_BFW */
++	0xbc60, /* STATS_BAF */
++	0xbe60, /* STATS_RS */
++	0xc060, /* STATS_IHIST */
++};
++
++#define SP11_FRONT_MINIMAL_MODULES 64U
++#define SP11_FRONT_MINIMAL_BYTES (SP11_FRONT_MINIMAL_MODULES * 12U + \
++	24U + SP11_CST_COMMAND_BYTES + SP11_GEOMETRY_COMMAND_BYTES + \
++	SP11_FRONT_ROUND_COMMAND_BYTES + 6U * 12U)
++
++static inline int sp11_front_minimal_validate(const struct sp11_front_minimal *s)
++{
++	if (!s)
++		return -EINVAL;
++	/* Domain and Bayer routing are deliberately not guessed for other modes. */
++	if (s->input_bits != 10 || s->bayer != SP11_FRONT_RGGB)
++		return -EOPNOTSUPP;
++	return sp11_geometry_validate(&s->geometry);
++}
++
++/* Mathematical full-range BT.601 for a hypothesised identity 10-bit path.
++ * Hardware domain, channel order, bypass behavior and demosaic interpretation
++ * are explicit qualification gates. This does not grant hardware admission.
++ */
++static inline int sp11_front_minimal_commands(u8 *out, size_t capacity,
++					    const struct sp11_front_minimal *s)
++{
++	u8 tmp[SP11_FRONT_MINIMAL_BYTES];
++	const struct sp11_cst_config cst = {
++		.matrix = {601, 117, 306, -339, 512, -173, -429, -83, 512},
++		.offset = {0, 512, 512},
++		.maximum = {1023, 1023, 1023},
++	};
++	/* GPL RFC vfe_setup_demosaic() parameters, not a Windows profile read. */
++	const u32 demosaic[4] = {0x80, 0, 0x40, 0x66};
++	const u32 enable_regs[6] = {0x5660, 0x6160, 0x9860, 0x9a60, 0x9c60, 0x9e60};
++	const u32 enable_values[6] = {1, 1, 1, 1, 0x0e01, 0x3e01};
++	u32 disabled = 0;
++	size_t pos = 0;
++	unsigned int i;
++	int ret;
++
++	if (!out || !s)
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), s, sizeof(*s)))
++		return -EINVAL;
++	ret = sp11_front_minimal_validate(s);
++	if (ret)
++		return ret;
++	for (i = 0; i < SP11_FRONT_MINIMAL_MODULES; i++) {
++		ret = sp11_cdm_reg_cont(tmp + pos, sizeof(tmp) - pos,
++					sp11_front_minimal_module_regs[i], &disabled, 1);
++		if (ret)
++			return ret;
++		pos += 12;
++	}
++	ret = sp11_cdm_reg_cont(tmp + pos, sizeof(tmp) - pos, 0x5668, demosaic, 4);
++	if (ret)
++		return ret;
++	pos += 24;
++	ret = sp11_cst_commands(tmp + pos, sizeof(tmp) - pos, &cst);
++	if (ret)
++		return ret;
++	pos += SP11_CST_COMMAND_BYTES;
++	ret = sp11_geometry_commands_state(tmp + pos, sizeof(tmp) - pos,
++					  &s->geometry, false);
++	if (ret)
++		return ret;
++	pos += SP11_GEOMETRY_COMMAND_BYTES;
++	ret = sp11_front_round_commands_state(tmp + pos, sizeof(tmp) - pos, 8, false);
++	if (ret)
++		return ret;
++	pos += SP11_FRONT_ROUND_COMMAND_BYTES;
++	/* Only enable the minimal image graph after all its configuration words. */
++	for (i = 0; i < 6; i++) {
++		ret = sp11_cdm_reg_cont(tmp + pos, sizeof(tmp) - pos,
++					enable_regs[i], &enable_values[i], 1);
++		if (ret)
++			return ret;
++		pos += 12;
++	}
++	if (pos != sizeof(tmp))
++		return -EINVAL;
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++#endif
+diff --git a/drivers/media/platform/qcom/camss/sp11-cst-stats.h b/drivers/media/platform/qcom/camss/sp11-cst-stats.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/sp11-cst-stats.h
+@@ -0,0 +1,174 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Typed source fragments; no tuning presets, private input, MMIO or DMA.
++ * CST auxiliary-lane meaning still requires review; not a public ABI.
++ * See CST-STATS-PROVENANCE-20261011.md for field provenance and limits.
++ */
++#ifndef SP11_OPEN_CST_STATS_H
++#define SP11_OPEN_CST_STATS_H
++#include "sp11-front-fields.h"
++
++#define SP11_CST_COMMAND_BYTES 92U
++#define SP11_RS_COMMAND_BYTES 32U
++#define SP11_BHIST_GEOMETRY_BYTES 12U
++
++struct sp11_cst_config {
++	s16 matrix[9];
++	s16 offset[3], auxiliary[3];
++	u32 minimum[3], maximum[3];
++	bool enabled;
++};
++
++struct sp11_rs_config {
++	u32 left, top, width, height;
++	u32 columns, rows;
++	bool color_conversion;
++};
++
++/* Region-count field only; origin zero. No channel/enable/offset or DMI reset. */
++struct sp11_bhist_geometry {
++	u32 width, height;
++};
++
++static inline int sp11_cst_validate(const struct sp11_cst_config *s)
++{
++	unsigned int i;
++
++	if (!s)
++		return -EINVAL;
++	for (i = 0; i < 9; i++)
++		if (s->matrix[i] < -4096 || s->matrix[i] > 4095)
++			return -ERANGE;
++	for (i = 0; i < 3; i++)
++		if (s->offset[i] < -4096 || s->offset[i] > 4095 ||
++		    s->auxiliary[i] < -4096 || s->auxiliary[i] > 4095 ||
++		    s->minimum[i] > s->maximum[i] || s->maximum[i] > 4095)
++			return -ERANGE;
++	return 0;
++}
++
++static inline int sp11_cst_commands(u8 *out, size_t capacity,
++				   const struct sp11_cst_config *s)
++{
++	u8 tmp[SP11_CST_COMMAND_BYTES];
++	u32 w[18], enable;
++	unsigned int i;
++
++	int ret;
++
++	if (!out || !s)
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), s, sizeof(*s)))
++		return -EINVAL;
++	ret = sp11_cst_validate(s);
++	if (ret)
++		return ret;
++	for (i = 0; i < 3; i++) {
++		w[6 * i] = sp11_front_pair(s->matrix[3 * i], s->matrix[3 * i + 1]);
++		w[6 * i + 1] = sp11_front_pair(s->matrix[3 * i + 2], 0);
++		w[6 * i + 2] = ((u32)s->offset[i] & 0x1fffU) << 19;
++		w[6 * i + 3] = ((u32)s->auxiliary[i] & 0x1fffU) << 19;
++		w[6 * i + 4] = s->minimum[i] << 20;
++		w[6 * i + 5] = s->maximum[i] << 20;
++	}
++	enable = s->enabled ? 1U : 0U;
++	ret = sp11_cdm_reg_cont(tmp, 12, 0x6160, &enable, 1);
++	if (ret)
++		return ret;
++	ret = sp11_cdm_reg_cont(tmp + 12, sizeof(tmp) - 12, 0x6168, w, 18);
++	if (ret)
++		return ret;
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++
++static inline unsigned int sp11_rs_shift(u32 width, u32 height)
++{
++	u32 area = width * height;
++	unsigned int bits = 0;
++
++	while (area) {
++		bits++;
++		area >>= 1;
++	}
++	return bits > 4 ? bits - 4 : 0;
++}
++
++static inline int sp11_rs_validate(const struct sp11_rs_config *s,
++				  u32 active_width, u32 active_height)
++{
++	u32 cw, ch;
++
++	if (!s || !active_width || !active_height || !s->width || !s->height ||
++	    !s->columns || !s->rows)
++		return -EINVAL;
++	if (active_width > 16384 || active_height > 16384 ||
++	    s->left > 0x1fff || s->top > 0x3fff || ((s->left | s->top) & 1U) ||
++	    s->left >= active_width || s->top >= active_height ||
++	    s->width > active_width - s->left || s->height > active_height - s->top ||
++	    s->columns > 16 || s->rows > 1024)
++		return -ERANGE;
++	cw = s->width / s->columns;
++	ch = (s->height / s->rows) & ~1U;
++	if (cw < 2 || cw > 8192 || ch < 2 || ch > 16 || sp11_rs_shift(cw, ch) > 15)
++		return -ERANGE;
++	return 0;
++}
++
++/* Enabled single-stripe row-sum fragment. Cell floor leaves explicit margins.
++ * Does not establish statistic DMA size, parser layout or anti-flicker policy.
++ */
++static inline int sp11_rs_commands(u8 *out, size_t capacity,
++				  u32 active_width, u32 active_height,
++				  const struct sp11_rs_config *s)
++{
++	u8 tmp[SP11_RS_COMMAND_BYTES];
++	u32 cfg, w[3], cw, ch;
++	int ret;
++
++	if (!out || !s)
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), s, sizeof(*s)))
++		return -EINVAL;
++	ret = sp11_rs_validate(s, active_width, active_height);
++	if (ret)
++		return ret;
++	cw = s->width / s->columns;
++	ch = (s->height / s->rows) & ~1U;
++	cfg = 1U | (s->color_conversion ? 0x10U : 0U) | sp11_rs_shift(cw, ch) << 8;
++	w[0] = s->top << 16 | s->left;
++	w[1] = (s->rows - 1) << 16 | (s->columns - 1);
++	w[2] = (ch - 1) << 16 | (cw - 1);
++	ret = sp11_cdm_reg_cont(tmp, 12, 0xbe60, &cfg, 1);
++	if (ret)
++		return ret;
++	ret = sp11_cdm_reg_cont(tmp + 12, sizeof(tmp) - 12, 0xbe68, w, 3);
++	if (ret)
++		return ret;
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++
++static inline int sp11_bhist_geometry_commands(u8 *out, size_t capacity,
++					      u32 active_width, u32 active_height,
++					      const struct sp11_bhist_geometry *s)
++{
++	u32 word;
++
++	if (!out || !s)
++		return -EINVAL;
++	if (capacity < SP11_BHIST_GEOMETRY_BYTES)
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, SP11_BHIST_GEOMETRY_BYTES, s, sizeof(*s)))
++		return -EINVAL;
++	if (!active_width || !active_height || active_width > 16384 || active_height > 16384 ||
++	    s->width < 4 || s->height < 2 || ((s->width | s->height) & 1U) ||
++	    s->width > active_width || s->height > active_height)
++		return -ERANGE;
++	word = (s->width / 2 - 1) | (s->height / 2 - 1) << 16;
++	return sp11_cdm_reg_cont(out, capacity, 0xb26c, &word, 1);
++}
++#endif
+diff --git a/drivers/media/platform/qcom/camss/sp11-front-fields.h b/drivers/media/platform/qcom/camss/sp11-front-fields.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/sp11-front-fields.h
+@@ -0,0 +1,133 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Typed front coefficient/rounding command fragments, not a startup profile.
++ * Functional field layouts come from the project's independently tested front
++ * coefficient and RoundClamp12 adapters; see FRONT-FIELDS-PROVENANCE-20261011.md.
++ * No private schema, tuning file, enable/shift default, DMI bank or DMA address
++ * is imported. Missing scaler/crop/statistics and module setup remains mandatory.
++ */
++#ifndef SP11_OPEN_FRONT_FIELDS_H
++#define SP11_OPEN_FRONT_FIELDS_H
++#include "sp11-cdm.h"
++
++#define SP11_FRONT_CST_COMMAND_BYTES 48U
++#define SP11_FRONT_CCM_COMMAND_BYTES 32U
++#define SP11_FRONT_ROUND_COMMAND_BYTES 120U
++
++static inline u32 sp11_front_pair(s16 a, s16 b)
++{
++	return ((u32)a & 0x1fffU) | (((u32)b & 0x1fffU) << 16);
++}
++
++/* Matrix rows are Y,Cb,Cr; columns G,B,R; Q10. Only coefficients are owned.
++ * Offsets, shifts, clamps and module enables are NOT synthesized by this slice.
++ */
++static inline int sp11_front_cst_commands(u8 *out, size_t capacity,
++					const s16 matrix[9])
++{
++	u8 tmp[SP11_FRONT_CST_COMMAND_BYTES];
++	u32 values[2];
++	unsigned int i;
++	int ret;
++
++	if (!out || !matrix)
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), matrix, 9 * sizeof(*matrix)))
++		return -EINVAL;
++	for (i = 0; i < 9; i++)
++		if (matrix[i] < -4096 || matrix[i] > 4095)
++			return -ERANGE;
++	for (i = 0; i < 3; i++) {
++		values[0] = sp11_front_pair(matrix[3 * i], matrix[3 * i + 1]);
++		values[1] = sp11_front_pair(matrix[3 * i + 2], 0);
++		ret = sp11_cdm_reg_cont(tmp + 16 * i, 16,
++					0x6168U + 24 * i, values, 2);
++		if (ret)
++			return ret;
++	}
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++
++/* Matrix rows/columns G,B,R; Q7. Hardware coefficient groups are transposed.
++ * The qualified CCM policy uses the signed 12-bit numerical range, packed in
++ * the observed 13-bit fields. This is narrower than the CST numerical range.
++ */
++static inline int sp11_front_ccm_commands(u8 *out, size_t capacity,
++					const s16 matrix[9])
++{
++	u8 tmp[SP11_FRONT_CCM_COMMAND_BYTES];
++	u32 values[6];
++	unsigned int i;
++	int ret;
++
++	if (!out || !matrix)
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), matrix, 9 * sizeof(*matrix)))
++		return -EINVAL;
++	for (i = 0; i < 9; i++)
++		if (matrix[i] < -2048 || matrix[i] > 2047)
++			return -ERANGE;
++	for (i = 0; i < 3; i++) {
++		values[2 * i] = sp11_front_pair(matrix[i], matrix[3 + i]);
++		values[2 * i + 1] = sp11_front_pair(matrix[6 + i], 0);
++	}
++	ret = sp11_cdm_reg_cont(tmp, sizeof(tmp), 0x5868U, values, 6);
++	if (ret)
++		return ret;
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++
++/* FULL luma and interleaved chroma rounding/clamping, 8- or 10-bit output.
++ * Crop registers and each block's +4 word are excluded. This does not create
++ * a scaler, configure the bus write masters or assert a complete NV12 path.
++ */
++static inline int sp11_front_round_commands_state(u8 *out, size_t capacity,
++						unsigned int bits, bool enabled)
++{
++	u8 tmp[SP11_FRONT_ROUND_COMMAND_BYTES];
++	u32 values[10], enable, maximum, round;
++	unsigned int chroma;
++	int ret;
++
++	if (!out || (bits != 8 && bits != 10))
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	maximum = (1U << bits) - 1;
++	round = 10 - bits;
++	for (chroma = 0; chroma < 2; chroma++) {
++		u32 base = chroma ? 0x9e60U : 0x9c60U;
++		u8 *p = tmp + 60 * chroma;
++
++		enable = chroma ? 0x3e01U : 0x0e01U;
++		if (!enabled)
++			enable &= ~1U;
++		memset(values, 0, sizeof(values));
++		values[1] = (chroma ? 7U : 6U) | (round << 3);
++		values[6] = maximum;
++		if (chroma) {
++			values[3] = 7U | (round << 3);
++			values[7] = maximum;
++		}
++		ret = sp11_cdm_reg_cont(p, 12, base, &enable, 1);
++		if (ret)
++			return ret;
++		ret = sp11_cdm_reg_cont(p + 12, 48, base + 0x10,
++					values, 10);
++		if (ret)
++			return ret;
++	}
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++static inline int sp11_front_round_commands(u8 *out, size_t capacity,
++					  unsigned int bits)
++{
++	return sp11_front_round_commands_state(out, capacity, bits, true);
++}
++#endif
+diff --git a/drivers/media/platform/qcom/camss/sp11-geometry-stats.h b/drivers/media/platform/qcom/camss/sp11-geometry-stats.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/sp11-geometry-stats.h
+@@ -0,0 +1,228 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Internal typed Titan680 fragments. No private carrier, DMA or submission.
++ * Functional definitions: retained E006p/q/w/x/y semantic packers; see
++ * GEOMETRY-STATS-PROVENANCE-20261011.md for provenance and hardware gates.
++ */
++#ifndef SP11_OPEN_GEOMETRY_STATS_H
++#define SP11_OPEN_GEOMETRY_STATS_H
++#include "sp11-cdm.h"
++
++#define SP11_GEOMETRY_COMMAND_BYTES 128U
++#define SP11_BG_COMMAND_BYTES 80U
++#define SP11_BG_SET_COMMAND_BYTES 240U
++
++/* Full-frame, origin-zero, single-stripe 4:2:0 downscale only. */
++struct sp11_geometry {
++	u32 input_width, input_height;
++	u32 output_width, output_height;
++};
++
++struct sp11_bg_config {
++	u32 left, top, width, height;
++	u32 columns, rows;
++	u32 threshold_r, threshold_b, threshold_gr, threshold_gb;
++	u32 black_level;
++	u8 y_weight_q4[3];
++	bool quad_sync, enabled;
++};
++
++enum sp11_bg_kind {
++	SP11_BG_AEC, SP11_BG_TINTLESS, SP11_BG_AWB
++};
++
++static inline u32 sp11_geometry_round(u64 numerator, u32 denominator)
++{
++	return (u32)((numerator + denominator / 2U) / denominator);
++}
++
++static inline int sp11_geometry_validate(const struct sp11_geometry *s)
++{
++	u32 iw, ih, ow, oh;
++
++	if (!s)
++		return -EINVAL;
++	iw = s->input_width; ih = s->input_height;
++	ow = s->output_width; oh = s->output_height;
++	if (!iw || !ih || !ow || !oh || ((iw | ih | ow | oh) & 1U))
++		return -EINVAL;
++	if (iw > 0x4000 || ih > 0x4000 || ow > iw || oh > ih ||
++	    (u64)iw > (u64)(ow / 2) * 128U ||
++	    (u64)ih > (u64)(oh / 2) * 128U)
++		return -ERANGE;
++	return 0;
++}
++
++static inline u32 sp11_geometry_phase(u32 input, u32 output)
++{
++	u32 interp = input > output * 64U ? 0U :
++		     input > output * 32U ? 1U :
++		     input > output * 16U ? 2U : 3U;
++	return interp << 30 | sp11_geometry_round((u64)input << 21, output);
++}
++
++static inline void sp11_geometry_axis(u32 input, u32 output,
++				    u32 *phase, u32 *initial, u32 *frac)
++{
++	*phase = sp11_geometry_phase(input, output);
++	*initial = 0; *frac = 0;
++	if (input > output && input < output * 2U) {
++		u64 residual = (u64)output * 2U - input;
++		*initial = (0U - sp11_geometry_round(residual << 20, output)) & 0x1fffffffU;
++		*frac = sp11_geometry_round(residual * 16U, output) & 0xfU;
++	}
++}
++
++static inline int sp11_geometry_commands_state(u8 *out, size_t capacity,
++					      const struct sp11_geometry *s,
++					      bool enabled)
++{
++	u8 tmp[SP11_GEOMETRY_COMMAND_BYTES];
++	u32 words[10], fx, fy, crop[2];
++	unsigned int ch;
++	int ret;
++
++	if (!out || !s)
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), s, sizeof(*s)))
++		return -EINVAL;
++	ret = sp11_geometry_validate(s);
++	if (ret)
++		return ret;
++	for (ch = 0; ch < 2; ch++) {
++		u32 divisor = ch ? 2U : 1U;
++
++		words[0] = enabled ? 1U : 0U;
++		words[1] = 0x600;
++		words[2] = (s->input_width - 1) << 16 | (s->input_height - 1);
++		sp11_geometry_axis(s->input_width, s->output_width / divisor,
++				   &words[3], &words[4], &fx);
++		sp11_geometry_axis(s->input_height, s->output_height / divisor,
++				   &words[5], &words[6], &fy);
++		words[7] = s->input_height - 1;
++		words[8] = s->input_width - 1;
++		words[9] = fx << 16 | fy;
++		ret = sp11_cdm_reg_cont(tmp + 48 * ch, 48,
++					ch ? 0x9a60 : 0x9860, words, 10);
++		if (ret)
++			return ret;
++		crop[0] = s->output_height / divisor - 1;
++		crop[1] = s->output_width / divisor - 1;
++		ret = sp11_cdm_reg_cont(tmp + 96 + 16 * ch, 16,
++					ch ? 0x9e68 : 0x9c68, crop, 2);
++		if (ret)
++			return ret;
++	}
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++
++static inline int sp11_geometry_commands(u8 *out, size_t capacity,
++					const struct sp11_geometry *s)
++{
++	return sp11_geometry_commands_state(out, capacity, s, true);
++}
++
++/* Validate ROI against the actual active sensor region, not just field fit.
++ * Floor each cell to an even Bayer extent; unmetered right/bottom edges remain
++ * explicit policy. Sample count is geometric, not a DMA allocation size.
++ */
++static inline int sp11_bg_validate(const struct sp11_bg_config *s,
++				  u32 active_width, u32 active_height)
++{
++	u32 cw, ch;
++
++	unsigned int i;
++
++	if (!s || !active_width || !active_height ||
++	    !s->width || !s->height || !s->columns || !s->rows)
++		return -EINVAL;
++	if (active_width > 0x4000 || active_height > 0x4000 ||
++	    s->left >= active_width || s->top >= active_height ||
++	    s->width > active_width - s->left || s->height > active_height - s->top ||
++	    ((s->left | s->top) & 1U) || s->columns > 64 || s->rows > 64)
++		return -ERANGE;
++	cw = (s->width / s->columns) & ~1U;
++	ch = (s->height / s->rows) & ~1U;
++	if (cw < 16 || cw > 512 || ch < 16 || ch > 512 ||
++	    s->threshold_r > 0x3ffff || s->threshold_b > 0x3ffff ||
++	    s->threshold_gr > 0x3ffff || s->threshold_gb > 0x3ffff ||
++	    s->black_level > 0x3ffff)
++		return -ERANGE;
++	for (i = 0; i < 3; i++)
++		if (s->y_weight_q4[i] > 0x7f)
++			return -ERANGE;
++	return 0;
++}
++
++static inline int sp11_bg_commands(u8 *out, size_t capacity,
++				  enum sp11_bg_kind kind,
++				  u32 active_width, u32 active_height,
++				  const struct sp11_bg_config *s)
++{
++	u8 tmp[SP11_BG_COMMAND_BYTES];
++	u32 w[18], base;
++	unsigned int i;
++
++	int ret;
++
++	if (!out || !s || (kind != SP11_BG_AEC && kind != SP11_BG_TINTLESS && kind != SP11_BG_AWB))
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), s, sizeof(*s)))
++		return -EINVAL;
++	ret = sp11_bg_validate(s, active_width, active_height);
++	if (ret)
++		return ret;
++	w[0] = 0xffff0000U | (s->quad_sync ? 1U << 9 : 0U) | (s->enabled ? 1U : 0U);
++	w[1] = s->black_level << 14;
++	w[2] = (u32)s->y_weight_q4[0] << 9 |
++	       (u32)s->y_weight_q4[1] << 17 |
++	       (u32)s->y_weight_q4[2] << 25;
++	w[3] = (s->columns - 1) << 16 | s->left;
++	w[4] = ((s->width / s->columns) & ~1U) - 1;
++	w[5] = (s->rows - 1) << 16 | s->top;
++	w[6] = ((s->height / s->rows) & ~1U) - 1;
++	w[7] = 0;
++	w[8] = s->threshold_gr << 14; w[9] = s->threshold_r << 14;
++	w[10] = s->threshold_gb << 14; w[11] = s->threshold_b << 14;
++	w[12] = s->threshold_gb << 14;
++	for (i = 13; i < 18; i++)
++		w[i] = 0U - (s->black_level << 13);
++	base = kind == SP11_BG_AEC ? 0xb060 : kind == SP11_BG_TINTLESS ? 0xb660 : 0xb860;
++	ret = sp11_cdm_reg_cont(tmp, sizeof(tmp), base, w, 18);
++	if (ret)
++		return ret;
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++
++/* AEC, tintless, AWB are explicit independent caller-owned inputs. No presets. */
++static inline int sp11_bg_set_commands(u8 *out, size_t capacity,
++				      u32 active_width, u32 active_height,
++				      const struct sp11_bg_config config[3])
++{
++	u8 tmp[SP11_BG_SET_COMMAND_BYTES];
++	unsigned int i;
++
++	int ret;
++
++	if (!out || !config)
++		return -EINVAL;
++	if (capacity < sizeof(tmp))
++		return -ENOSPC;
++	if (sp11_cdm_overlap(out, sizeof(tmp), config, 3 * sizeof(*config)))
++		return -EINVAL;
++	for (i = 0; i < 3; i++) {
++		ret = sp11_bg_commands(tmp + i * SP11_BG_COMMAND_BYTES,
++			SP11_BG_COMMAND_BYTES, (enum sp11_bg_kind)i,
++			active_width, active_height, &config[i]);
++		if (ret)
++			return ret;
++	}
++	memcpy(out, tmp, sizeof(tmp));
++	return 0;
++}
++#endif
