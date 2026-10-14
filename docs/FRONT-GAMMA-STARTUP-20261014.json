@@ -1,0 +1,166 @@
+{
+  "schema": "sp11-front-gamma-startup-validation-v1",
+  "utc": "2026-10-14T15:32:12.881697+00:00",
+  "project_parent": "d4a6095081a78c0104833d4d707f0f66b36e8a3d",
+  "status": "PASS_OWN_TONE_STARTUP_DATA_REUSES_CALIBRATED_NATIVE_PRECISION_BRIDGE",
+  "host_qualification": {
+    "schema": "sp11-front-gamma-startup-source-v1",
+    "status": "PASS_STARTUP_BYTES_EQUAL_WORKING_NATIVE_TONE_BRIDGE",
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "differential_cases": 6209,
+          "slope_rejections": 1024,
+          "boundary_rejections": 3850,
+          "own_v15_curves": 1,
+          "workspace_bytes": 6160
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "differential_cases": 6209,
+          "slope_rejections": 1024,
+          "boundary_rejections": 3850,
+          "own_v15_curves": 1,
+          "workspace_bytes": 6160
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "early_publication",
+      "bypass_domain",
+      "missing_point_output_overlap",
+      "shifted_payload_output"
+    ],
+    "unchanged_prior_tests": [
+      {
+        "compiler": "gcc",
+        "unchanged_test": "test-front-gamma.c",
+        "result": "PASS_FRONT_GAMMA_DATA_COMPILER checks=10203 hardware_access=false"
+      },
+      {
+        "compiler": "gcc",
+        "unchanged_test": "test-front-isp-params.c",
+        "result": "PASS_FRONT_ISP_CODEC_STATE checks=6218 provider=mock hardware_access=false"
+      },
+      {
+        "compiler": "clang",
+        "unchanged_test": "test-front-gamma.c",
+        "result": "PASS_FRONT_GAMMA_DATA_COMPILER checks=10203 hardware_access=false"
+      },
+      {
+        "compiler": "clang",
+        "unchanged_test": "test-front-isp-params.c",
+        "result": "PASS_FRONT_ISP_CODEC_STATE checks=6218 provider=mock hardware_access=false"
+      }
+    ],
+    "header_pins": {
+      "sp11-front-gamma-startup.h": "12d242c75daa9551aeb6a2b9da20ea0d7d3890be27cae5a31e6ba1960728de13",
+      "native-front-gamma.h": "6b3fa1634d6bef88064a9d7d611c8ad4dbaac62265e19010416c603b7f26f308",
+      "native-front-isp-params.h": "149dfd05847eea7c45bffb098ba92d69ec06bdd41a60f8bd832c6fd8bd44b6bd",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/native-rgb/native-front-gamma.h": "6b3fa1634d6bef88064a9d7d611c8ad4dbaac62265e19010416c603b7f26f308",
+      "src/native-rgb/native-front-isp-params.h": "149dfd05847eea7c45bffb098ba92d69ec06bdd41a60f8bd832c6fd8bd44b6bd",
+      "src/native-rgb/front-ae/camss-x1e-ipa.cpp": "c3f2f9b1e88c5343dd224a5a36a16df595298695a6152b93e20edcda2ed6a7a5",
+      "src/native-rgb/native-front-gamma-kernel.inc": "5e40005ee40f61ba5913211d4e82bae8e87701b445fa1148678ff7c3fedc1b40",
+      "src/native-rgb/native-front-nv12-commands.h": "3a335fa99fddd616335db1c88fe8c195bb9734f7d426ef42f1e270226215bba2",
+      "src/native-rgb/front-pattern/native-front-cst.inc": "73b39718a3c553bf2cb07e7b46359e37fe3ed67c467e8e0a0fd7b103b41134d4",
+      "src/native-rgb/test-front-gamma.c": "95f9f3e29a96c443a3948193ba008de234e278e5612c8d5eb34d5192e75e1cc4",
+      "src/native-rgb/test-front-isp-params.c": "e6ce45fe87b4a5d011b9d3846fa2a44e48343d375db31a6817e59c08782835e2"
+    },
+    "own_v15_tuning_sha256": "c2102f561b784e6cfe74d4f818759ab30aa910e9f419ec11f3ff7a315d266051",
+    "own_curve_samples": 771,
+    "native_gamma_words": 768,
+    "native_gamma_bytes": 3072,
+    "semantic_input_bits": 10,
+    "native_base_delta_bits": 12,
+    "scale_formula": "(value*4095+511)/1023",
+    "endpoint_input_max": 1023,
+    "endpoint_output_max": 4095,
+    "working_native_baseline_codecs_unchanged": true,
+    "own_tone_curves_exported": false,
+    "large_kernel_stack_workspace": false,
+    "private_startup_or_tuning_read": false,
+    "calibration_remeasured": false,
+    "runtime_changed": false,
+    "hardware": false,
+    "limits": [
+      "Numerical Gamma leaf only; no source/physical proof of the complete CST/core precision chain",
+      "No DMI bank/selector/address/lifetime or module activation or loader replacement",
+      "Caller must own workspace outside the kernel stack and immutable input/output extents"
+    ]
+  },
+  "native_ABI_compile": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-gamma-startup-20261014-01/native-compile02/sp11_gamma_startup_compile.ko",
+    "module_sha256": "1313971edcf4733e2de73097ee5e40aea9985393423233716a62a403baaa95a4",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "header_pins": {
+      "sp11-front-gamma-startup.h": "12d242c75daa9551aeb6a2b9da20ea0d7d3890be27cae5a31e6ba1960728de13",
+      "native-front-gamma.h": "6b3fa1634d6bef88064a9d7d611c8ad4dbaac62265e19010416c603b7f26f308",
+      "native-front-isp-params.h": "149dfd05847eea7c45bffb098ba92d69ec06bdd41a60f8bd832c6fd8bd44b6bd",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "workspace_on_kernel_stack": false,
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "package_pins": {
+    "test-host.c": "09a5b10472d79dc84190f68c85a2dfe001e03456b2ed88b20fab688ea378591a",
+    "README.md": "b8699eeefeaa877d32658593195e4f994d727ed4fdcdb4ca4c2227e394bd59a5",
+    "qualify.py": "31ef92d213b14b225f2cfb50bb419d434f9d2601d2c47d5e7a0a856af477012d",
+    "test-worker.py": "382d2c0492819ce4f02478ee6d93a951446e52c2be3b95571a7c3855bc0dd5f3",
+    "sp11-front-gamma-startup.h": "12d242c75daa9551aeb6a2b9da20ea0d7d3890be27cae5a31e6ba1960728de13",
+    "build-worker.py": "ebb134d38a180b102c37ca829306693f6576fcdd24c99a3eeaaf0ff8286f7d06"
+  },
+  "precision_reference_pins": {
+    "experiments/E004-front-ir-vd55g0/e006r-rear-cst12-tuning-packer/README.md": "2fae95517ac68a6e8dca3deadc48e8045a25ac980cb197d3029ff9dd6d4e3fc3",
+    "experiments/E004-front-ir-vd55g0/e006r-rear-cst12-tuning-packer/camss-e006r-cst12.inc": "1cb5b1453c33a5111e95076d53d1e6422f8fe80ea21573bb147d56a6c0623534",
+    "experiments/E004-front-ir-vd55g0/e011m-rs-titan680-capability-origin/README.md": "ee1b1b811b5139e651cdd927ce64131b68418760415388fda992455860f1e4a4",
+    "src/upstream/isp-config/FRONT-MINIMAL-PROVENANCE-20261011.md": "99d598399aba618998c78422df33a4f0828e1d480880358c25f6c2e8afd87640"
+  },
+  "semantic_tone_bits": 10,
+  "native_Gamma_base_delta_bits": 12,
+  "startup_generated_data_bytes": 3072,
+  "workspace_bytes": 6160,
+  "configuration_register_addresses_added": 0,
+  "total_unique_configuration_candidates": 45,
+  "module_activation_commands": 0,
+  "DMI_commands_or_selectors_emitted": 0,
+  "run93_own_CCM_override_present": true,
+  "run93_CST_matrix_override_present": false,
+  "inherited_CST_auxiliary_state_removed": false,
+  "full_core_CST_processing_precision_bound": false,
+  "prior_native_codecs_or_calibration_modified": false,
+  "calibration_remeasured": false,
+  "private_startup_or_tuning_read": false,
+  "pixels_read_or_exported": false,
+  "runtime_changed": false,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "header_style_errors": 0,
+  "header_style_warnings": 0,
+  "header_style_checks": 0,
+  "excluded_attempts": [
+    "host01/native-compile01 functional pass with two alignment style checks; final source pins in02"
+  ],
+  "next": "Reuse retained functional CST12 packer and original front source to bind calibrated core/colour precision, offsets/scales/clamps; preserve measured CCM/tone/native lifecycle, complete startup before private loader replacement and fresh physical parity"
+}

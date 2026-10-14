@@ -1,3 +1,38 @@
+## 2026-10-14 startup Gamma data reuses actual calibrated10->12 bridge PASS
+
+Retained unified48/libcamera21/run93/v15 and all prior source/calibration.
+Existing IPA points are10-bit. Its actual unchanged encode/decode expands to
+native12-bit base/delta, exact0/1023 ->0/4095 endpoints. Do not confuse tone
+point precision with DMI or assume one bit depth across the whole pipeline.
+
+Added only an internal typed startup data entry point around those two codecs:
+own771 R/G/B points ->3072 Gamma data bytes. No new Gamma algorithm/public ABI,
+private default curve, DMI command/bank/selector/address, activation or runtime
+caller.6160-byte workspace is explicitly caller-owned outside kernel stack.
+Immutable inputs/policy and disjoint extents; atomic output/tail preservation.
+
+6209 source differential cases each GCC/Clang ASan/UBSan including own v15,
+1024 native slope rejections,3850 boundary rejection cases, four compiled
+unsafe mutations each PASS. Unchanged prior Gamma/ISP codec-state tests PASS.
+Tiny native ARM64 W1/Werror and header style0/0/0 PASS, final host02/compile02.
+No CAMSS/kernel rebuild, install/load/camera/reboot/private tuning or pixel read.
+Evidence docs/FRONT-GAMMA-STARTUP-20261014.json. Own curves/data stay SP11.
+
+Exact remaining boundary: run93 records own measured CCM, no CST matrix override.
+The optional CST patch leaves offsets/scales/clamps inherited. Merely having
+that function or a10-bit mathematical demo does not remove the private CST
+dependency or prove its complete precision domain. Titan680 capability18/14/14
+is source capacity/default evidence, not a physical front processing measurement.
+
+NEXT reuse retained E006r functional CST12 packer and original front source to
+bind matrix/offset/scale/clamp plus core/geometry in the calibrated domain.
+Preserve own CCM/tone/LSC/ABF/AE/AWB and proven native lifecycle; exclude rear/vendor
+reserve values. Complete startup before replacing only private loading in a
+fresh isolated candidate and original-domain hardware/image parity.
+45 config candidate addresses unchanged; this adds a3072-byte Gamma data leaf,
+not a complete program. Both private consumers remain/upstream_ready=false.
+Golden/daily branch unchanged. Earlier current/NEXT entries are historical.
+
 ## 2026-10-14 retained front Bayer0 adapted; speculative DEMUX addition avoided
 
 Preserved unified48/libcamera21/run93/v15 and all previous production fragments.
