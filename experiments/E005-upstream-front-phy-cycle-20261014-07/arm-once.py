@@ -4,7 +4,7 @@
 from pathlib import Path
 import hashlib,json,os,subprocess,time
 R=Path('/home/geoca/Documents/SP11-PROJECT/06-camera/SP11X1ECamera-upstream')
-Q=R/'experiments/E005-upstream-front-domain-20261014-07'
+Q=Path(__file__).resolve().parent
 D=Path('/var/lib/sp11-camera-upstream-front-20261014-07')
 ID=D.name
 HEAD=(D/'EXPECTED-HEAD').read_text().strip()
