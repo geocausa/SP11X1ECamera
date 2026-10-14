@@ -1,0 +1,53 @@
+{
+  "status": "PREPARED_SOURCE_ONLY_UNARMED",
+  "new_identity": "sp11-camera-upstream-front-20261014-06",
+  "source_candidate": 29,
+  "kernel_candidate": 26,
+  "module_candidate": 28,
+  "change": "one sensor power-domains property",
+  "previous04_retired": true,
+  "reused_artifacts": [
+    "qualified03 kernel/initrd",
+    "immutable qualified04 module tree"
+  ],
+  "same_camss_first_unload_order": true,
+  "buffer_allocation": false,
+  "streamon": false,
+  "pixels_accessed": false,
+  "system_sleep": false,
+  "automatic_return_seconds": 180,
+  "strict_post_unload_log_required": true,
+  "source_sha256": {
+    "README.md": "a26360be70a39cd0bf4233ef6193b5a9db35caa5cefcc780b4e60aea691d0929",
+    "test-observer.py": "d116291ca2fa99c7b07e3e2de8ba8dccca71df18caf772f2bdf12f9dd8674f5e",
+    "run-once.py": "4c3d7c123b672f73d4cf11e196b1012ef78090086f7d26d2ddfc17bce4742fba",
+    "sp11-camera-upstream-front-20261014-06-return.service": "e555d0939ab3d1e475ea80cbbcfc09d4d65ce8f1f90a0bacf2618611708bbf79",
+    "camera_final_log_guard.py": "43e94b7ef2f2e0931923408e28f516b37c890b7729e7d2411f993bfe97a5197a",
+    "return-golden.sh": "6d5c067d898bc3b82c2da64d3e7be6831400dfb9613cc4f2c90f71f96455bd53",
+    "arm-once.py": "81e0ce72fc3417f920d712bbc2023a2cc3e2592f1499ffb62d0ece231f7059db",
+    "kernel_log_window.py": "237f831dced4441fa2d0a36e241d241655936ad7d909c6d004a432b647ff4437",
+    "retire-once.py": "b9538a672ff6ed7f8861187a404912c5c4d7ff4a07086a9c5abc0ce7d8487015",
+    "sp11-camera-upstream-front-20261014-06-watchdog.timer": "31a7af4fab6d59e013e2d1141d9c0a020ea7007161fb1df339e124abfd59864a",
+    "install-candidate.py": "c19e6a7460039334682263894b19decde56e2fe266073da25ef57c9bcc42f80e",
+    "sp11-camera-upstream-front-20261014-06.service": "96ef60fe5ab6ae2753de491c9a9295072487fc6cd7120d464c1632dc56546fea"
+  },
+  "previous05_retired": true,
+  "observer_fix": "Use exact dev_name/status from actual kernel genpd_summary_one; source29 DTB unchanged",
+  "genpd_parser_tests": {
+    "status": "PASS_ACTUAL_GENPD_FORMAT_REGRESSION",
+    "real_retained_positive": {
+      "domain": "cam_cc_titan_top_gdsc",
+      "device_name": "8-0010",
+      "runtime_status": "suspended"
+    },
+    "negative_controls": [
+      "missing_sensor",
+      "similar_name",
+      "duplicate_sensor",
+      "duplicate_top_header",
+      "missing_top_header",
+      "sensor_active",
+      "sensor_other_domain"
+    ]
+  }
+}
