@@ -1,3 +1,38 @@
+## 2026-10-14 retained front Bayer0 adapted; speculative DEMUX addition avoided
+
+Preserved unified48/libcamera21/run93/v15 and all previous production fragments.
+Prior front E003h/DV source proof declares Bayer0; previous new fragment explicitly
+qualified Bayer2 using the retained rear fixture. Gains match; patterns differ.
+Added only a staging adapter around the existing field/compiler policy:
+front source Bayer0 CFG0=0xc9/CFG1=0xac instead of Bayer2 0xca/0x9c.
+Previous Bayer2 fragment remains unchanged and valid in its declared scope.
+No gain algorithm, calibration, queue, allocator, transport or IPA rewrite.
+
+927 original normal-slot common/packer/builder comparisons;210 unchanged prior
+producer comparisons and explicit Bayer0/Bayer2 gain equivalence in admitted
+zero-BLS/non-normalizing scope PASS. GCC/Clang ASan/UBSan and five compiled
+unsafe mutations each PASS. Named caller restoration/canaries and immutable
+original code PASS; four original writable data stores allowed. Tiny native
+ARM64 W1/Werror and header style0/0/0 PASS, final source/compile native02.
+Evidence docs/FRONT-CHANNEL-BAYER0-20261014.json.
+
+Separate public DEMUX0x3960/0x3968/0x396c exists, but retained front inventory's
+274 commands contain zero writes to those addresses and five module0x3b60 writes.
+Do not add separate DEMUX setup merely because addresses exist. Absence is only
+this inventory's coverage, not hardware bypass/reset proof. No private tuning/
+profile read or optical calibration imported; prior vendor black defaults excluded.
+
+Adapter changes two values within12 config words/56bytes; no new addresses,
+45 unique candidate configuration addresses remain. No activation or runtime
+caller; both installed private startup consumers remain/upstream_ready=false.
+Source front pattern is now bound to retained front branch; physical live routing/
+precision and chosen zero/unity/BLS policy remain qualification gates.
+NEXT audit/reuse original front core-input/precision/geometry and measured BLS/
+colour domain chain, finish surrounding startup with own matrices/LSC/ABF/tone/
+AE/AWB and proven native lifecycle, then replace only private loading and fresh
+guarded original-domain physical parity. Golden/daily preserved; no camera/reboot.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 normal-slot CHANNEL_GAIN startup source PASS; prior producers reused
 
 Preserved calibrated unified48/libcamera21/run93/v15. Reused E006z gain packing,
