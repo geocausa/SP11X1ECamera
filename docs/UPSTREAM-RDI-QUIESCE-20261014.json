@@ -1,0 +1,162 @@
+{
+  "status": "PASS_OWNED_RDI_QUIESCE_SOURCE_MODULE_MODELS",
+  "source_candidate": 32,
+  "parent_candidate": 31,
+  "kernel_candidate": 26,
+  "build": {
+    "status": "PASS_RDI_QUIESCE_CAMSS_MODULE_ARM64_W1_WERROR",
+    "source_candidate": 32,
+    "full_kernel_candidate": 26,
+    "source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-csid.h": "5c1376a9bb8ab36702bd9fc8396b7b8cb57adb7c66e4db335d17539367ea68bf",
+      "drivers/media/platform/qcom/camss/camss-csid.c": "8b6ba539944767dd52b291712c7fca0ee31d0b47a9d056d84afefb49dd077062",
+      "drivers/media/platform/qcom/camss/camss-csid-680.c": "f4eec449b2336076d3d3b5715bc58228706aaf7482d02507a3738fabd1a1dff3",
+      "drivers/media/platform/qcom/camss/camss-vfe.h": "8411b5dcaea6f5e29f059a8e8fc8de477d61c83d9e97c7e97ad882e04350ab66",
+      "drivers/media/platform/qcom/camss/camss-vfe.c": "70fcbe539a7d056b7d6394054883c5481e4f7b884703e1378347ba6cf164b899",
+      "drivers/media/platform/qcom/camss/camss-vfe-680.c": "358b9e2132b0581c4d085a007492eec8ed605b5935a9d92823455edcca38afd4",
+      "drivers/media/platform/qcom/camss/camss-video.c": "10d1f36ee91b12fa3b7623c664ec32b6af1d55683a1eb47a6fcd826eda8c58ac"
+    },
+    "config_sha256": "5415823fd3d198494ccce80ec69fdfd4102bdfc7c5ac1848cd2a3716fa35bf6a",
+    "artifacts": {
+      "camss": {
+        "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-32/rdi-quiesce-qual01/camss-module03/qcom-camss.ko",
+        "sha256": "8b793da45016171bfd1a9fb7a5422959ad579827fb6269fa11ff5d24c1a281d6",
+        "bytes": 784304,
+        "vermagic": "7.2.0-sp11-upstream-front26 SMP preempt mod_unload aarch64",
+        "strict_warnings": 0,
+        "strict_errors": 0
+      }
+    },
+    "installed": false,
+    "hardware_qualified": false
+  },
+  "integration": {
+    "scope": "Deterministic kernel API model, actual CAMSS and VB2 DMA-SG bodies; no hardware claim",
+    "source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-video.c": "10d1f36ee91b12fa3b7623c664ec32b6af1d55683a1eb47a6fcd826eda8c58ac",
+      "drivers/media/common/videobuf2/videobuf2-dma-sg.c": "30a61669e50b0364757d8f7131c6651962e9acb3fef40140a0304c0a519ca9fb",
+      "drivers/media/platform/qcom/camss/camss-vfe.c": "70fcbe539a7d056b7d6394054883c5481e4f7b884703e1378347ba6cf164b899"
+    },
+    "runs": [
+      {
+        "compiler": "gcc",
+        "result": "Actual CAMSS/VB2 DMA-SG source32 integration tests passed\ncases=56"
+      },
+      {
+        "compiler": "clang",
+        "result": "Actual CAMSS/VB2 DMA-SG source32 integration tests passed\ncases=56"
+      }
+    ],
+    "status": "PASS_ACTUAL_BODY_INTEGRATION_MODEL"
+  },
+  "quiesce": {
+    "status": "PASS_ACTUAL_QUIESCE_FIFO_DMA_EXTENT_MODEL",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "output": "Actual CSID/VFE/FIFO/DMA extent model passed cases=35"
+      },
+      {
+        "compiler": "clang",
+        "output": "Actual CSID/VFE/FIFO/DMA extent model passed cases=35"
+      }
+    ],
+    "source_sha256": {
+      "camss-csid-680.c": "f4eec449b2336076d3d3b5715bc58228706aaf7482d02507a3738fabd1a1dff3",
+      "camss-csid.c": "8b6ba539944767dd52b291712c7fca0ee31d0b47a9d056d84afefb49dd077062",
+      "camss-vfe-680.c": "358b9e2132b0581c4d085a007492eec8ed605b5935a9d92823455edcca38afd4",
+      "camss-vfe.c": "70fcbe539a7d056b7d6394054883c5481e4f7b884703e1378347ba6cf164b899",
+      "camss-video.c": "10d1f36ee91b12fa3b7623c664ec32b6af1d55683a1eb47a6fcd826eda8c58ac"
+    },
+    "actual_functions": 17,
+    "scope": "Actual control/MMIO/FIFO/DMA-admission bodies with deterministic kernel/IRQ/MMIO/wait adapters; not hardware/electrical/concurrency proof"
+  },
+  "mutations": {
+    "status": "PASS_TEN_COMPILED_UNSAFE_QUIESCE_MUTATIONS_REJECTED",
+    "mutations": [
+      {
+        "name": "skip_fresh_ack",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_csid_irq_drain",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_reopen_irq_restore",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "hide_active_dma",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "refill_during_drain",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_last_buffer_pause",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_vfe_irq_barrier",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "allow_split_dma_extent",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "allow_dma_address_wrap",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "enable_before_address_on_resume",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      }
+    ],
+    "hardware_access": false
+  },
+  "patch_sha256": "c9477630872e112c3bc6f184653f0146ab70ed56ca3771a81c57c3ad7970893e",
+  "parent_pins": 102,
+  "exact_replay": true,
+  "checkpatch_errors": 0,
+  "checkpatch_warnings": 0,
+  "hardware_qualified": false,
+  "installed": false,
+  "scope": "Matched exclusive X1E MMAP RDI qualification; no release or electrical/concurrency claim",
+  "reuse_audit": "docs/UPSTREAM-RAW-PRIOR-SOLUTION-AUDIT-20261014.json",
+  "source_package_sha256": {
+    "camss-video-lifecycle.h": "ba2b6ababdf770ab74e80f1657b1b8a83b0613bb73b2954b49e7d886a901dc30",
+    "README.md": "7869f732c558f839e0ecc01cf71ce2a095a3397c8cf8fdbb7db92e4e8dde36a7",
+    "0001-owned-rdi-quiesce.patch": "c9477630872e112c3bc6f184653f0146ab70ed56ca3771a81c57c3ad7970893e",
+    "prepare.py": "ac780c5f044dd2aacd6bf1aff80f2e9602134711d08313298926dc13e9f25581",
+    "test-integration.py": "f471743e27630b149494fb86114577c6f7490a0a78a6fe73291684684bfadc89",
+    "test-quiesce.c.in": "5fa1a00a2b51ffdc0349128915e36b26331337235a1174836ebbda55fc416a99",
+    "test-mutations.py": "8e2b93411bf93e8bcf74dbcd909d3f22769662d86fb2cb3f34eb4b04431c5435",
+    "test-quiesce.py": "55de422f6cbd7a541d24daa5e27efa97a8e3fefacf7477792a7f19f49d989f5c",
+    "manifest.json": "9d2b37d4cdddcd39458840c304fe18c92e2435c42fea21ac2b5b54648773bcb7",
+    "build-worker.py": "ee7247a5bb47c1d333dc7ef179ee4590a54ef3957ff4f2984e6104c15ade6f47",
+    "test-integration.c.in": "dec0ae204c4e28841029cc34e918b3929cbf4ff6342499b6d29e49a93e138320"
+  }
+}

@@ -1,3 +1,23 @@
+## 2026-10-14 source32 standard RAW quiesce source PASS; fresh09 prepared
+docs/UPSTREAM-RDI-QUIESCE-20261014.json pins the reused native stop/capture audit,
+strict ARM64 module, exact sparse patch replay/style and actual-body models:
+56 integration +35 quiesce/FIFO/DMA-admission cases per GCC/Clang ASAN/UBSAN,
+ten compiled unsafe mutations refused. Fault retains DMA mappings and PM/graph/
+module ownership until reboot. Last active buffer pauses WM before retirement;
+CSID reset requires fresh ACK, masks/readbacks/IRQ drain, warm reopen IRQ restore.
+Final kernel log guard now18 signatures (adds CSID quiesce and RDI pause failures).
+No hardware stream claim or whole fault/concurrency/electrical proof.
+Fresh09 prepared for three8-frame standard MMAP captures/stop/close/reopen:
+exact matched CSID1/VFE1 RDI0; current sensor3840x2640 pRAA4800/12672000.
+Old native2160 sample/FPS is not this profile. Standard v4l2-ctl discards payloads;
+only scalar metadata retained. Reuses kernel26/DT29/PHY31/recovery08; only CAMSS32
+changes. Failure skips route changes/unload and returns Golden. No retry of08/09.
+Before boot, commit/push source checkpoint and verify isolated unarmed package.
+Golden6d1bcf07 remains running/no camera modules/no pending entry. Both private
+startup consumers/all14 release categories remain open; upstream_ready=false.
+Generic mismatched-route admission still needs release gating; exact09 observer
+already requires matched route. Earlier NEXT paragraphs below are historical.
+
 ## 2026-10-14 downloadable OS ISO cleanup authorized and completed
 User explicitly requested removal of redownloadable Windows/Ubuntu ISOs.
 Removed Windows11 ARM64 8.01GB and Ubuntu26.04 ARM64/X1E 4.08GB installers;

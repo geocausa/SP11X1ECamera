@@ -9,7 +9,7 @@ PATTERNS=('BUG:','Oops:','Kernel panic','Unable to handle kernel',
           'WARNING:','status stuck at','failed to enable xclk',
           'power-on cleanup failed','failed to disable avdd',
           'failed to disable dovdd','remove power-off failed',
-          'Stream teardown fault')
+          'Stream teardown fault','CSID quiesce failed','RDI pause failed')
 def analyse(before,after,before_boot_id,after_boot_id):
     delta=window(after,make_boundary(before,before_boot_id),after_boot_id)
     records=list(entries(delta))

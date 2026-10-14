@@ -1,0 +1,560 @@
+Subject: [PATCH] media: camss: quiesce the owned X1E RDI pipeline
+
+Drain programmed buffers without refilling. Stop the owned write master,
+acknowledge a fresh CSID reset and synchronize IRQs before DMA release.
+Keep acquired resources and DMA mappings on failed teardown. Qualification
+is limited to a matched CSID/VFE and one RDI MMAP owner.
+
+---
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -12,6 +12,7 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/interrupt.h>
++#include <linux/mutex.h>
+ #include <media/media-entity.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+@@ -87,6 +88,8 @@
+ 	 * @csid: CSID device
+ 	 */
+ 	void (*configure_stream)(struct csid_device *csid, u8 enable);
++	/* Optional owned stream control with acknowledged/drained stop. */
++	int (*configure_stream_checked)(struct csid_device *csid, u8 enable);
+ 
+ 	/*
+ 	 * configure_testgen_pattern - Validates and configures output pattern mode
+@@ -152,6 +155,8 @@
+ 	const struct parent_dev_ops *parent_dev_ops;
+ 	const struct csid_formats *formats;
+ };
++
++struct camss_video;
+ 
+ struct csid_device {
+ 	struct camss *camss;
+@@ -168,6 +173,11 @@
+ 	struct regulator_bulk_data *supplies;
+ 	int num_supplies;
+ 	struct completion reset_complete;
++	struct mutex stream_lock;
++	struct camss_video *stream_owner;
++	bool stream_owned;
++	bool stream_quiesced;
++	bool stream_fault;
+ 	struct csid_testgen_config testgen;
+ 	bool tpg_linked;
+ 	struct csid_phy_config phy;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -778,6 +778,9 @@
+ 			return -ENOLINK;
+ 	}
+ 
++	if (csid->res->hw_ops->configure_stream_checked)
++		return csid->res->hw_ops->configure_stream_checked(csid, enable);
++
+ 	csid->res->hw_ops->configure_stream(csid, enable);
+ 
+ 	return 0;
+@@ -1099,6 +1102,7 @@
+ 	int ret;
+ 
+ 	csid->camss = camss;
++	mutex_init(&csid->stream_lock);
+ 	csid->id = id;
+ 	csid->res = &res->csid;
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-680.c b/drivers/media/platform/qcom/camss/camss-csid-680.c
+--- a/drivers/media/platform/qcom/camss/camss-csid-680.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-680.c
+@@ -86,6 +86,10 @@
+ #define CSID_CSI2_RX_IRQ_MASK					0xa0
+ #define CSID_CSI2_RX_IRQ_CLEAR					0xa4
+ 
++#define CSID_IPP_IRQ_STATUS					0xac
++#define CSID_IPP_IRQ_MASK					0xb0
++#define CSID_IPP_IRQ_CLEAR					0xb4
++
+ #define CSID_RESET_CFG						0xc
+ #define		CSID_RESET_CFG_MODE_IMMEDIATE			BIT(0)
+ #define		CSID_RESET_CFG_LOCATION_COMPLETE		BIT(4)
+@@ -321,6 +325,155 @@
+  *
+  * Return 0 on success or a negative error code otherwise
+  */
++static void csid_mask_stream_irqs(struct csid_device *csid, u32 top)
++{
++	int i;
++
++	writel(top, csid->base + CSID_TOP_IRQ_MASK);
++	writel(0, csid->base + CSID_BUF_DONE_IRQ_MASK);
++	writel(0, csid->base + CSID_CSI2_RX_IRQ_MASK);
++	writel(0, csid->base + CSID_IPP_IRQ_MASK);
++	for (i = 0; i < MSM_CSID_MAX_SRC_STREAMS; i++)
++		writel(0, csid->base + CSID_CSI2_RDIN_IRQ_MASK(i));
++	readl(csid->base + CSID_TOP_IRQ_MASK);
++}
++
++static void csid_clear_stream_status(struct csid_device *csid)
++{
++	u32 val;
++	int i;
++
++	val = readl(csid->base + CSID_TOP_IRQ_STATUS);
++	writel(val, csid->base + CSID_TOP_IRQ_CLEAR);
++	val = readl(csid->base + CSID_BUF_DONE_IRQ_STATUS);
++	writel(val, csid->base + CSID_BUF_DONE_IRQ_CLEAR);
++	val = readl(csid->base + CSID_CSI2_RX_IRQ_STATUS);
++	writel(val, csid->base + CSID_CSI2_RX_IRQ_CLEAR);
++	val = readl(csid->base + CSID_IPP_IRQ_STATUS);
++	writel(val, csid->base + CSID_IPP_IRQ_CLEAR);
++	for (i = 0; i < MSM_CSID_MAX_SRC_STREAMS; i++) {
++		val = readl(csid->base + CSID_CSI2_RDIN_IRQ_STATUS(i));
++		writel(val, csid->base + CSID_CSI2_RDIN_IRQ_CLEAR(i));
++	}
++	writel(CSID_IRQ_CMD_CLEAR, csid->base + CSID_IRQ_CMD);
++}
++
++static bool csid_stream_irqs_quiet(struct csid_device *csid)
++{
++	int i;
++
++	if (readl(csid->base + CSID_TOP_IRQ_MASK) ||
++	    readl(csid->base + CSID_BUF_DONE_IRQ_MASK) ||
++	    readl(csid->base + CSID_CSI2_RX_IRQ_MASK) ||
++	    readl(csid->base + CSID_IPP_IRQ_MASK) ||
++	    readl(csid->base + CSID_TOP_IRQ_STATUS) ||
++	    readl(csid->base + CSID_BUF_DONE_IRQ_STATUS) ||
++	    readl(csid->base + CSID_CSI2_RX_IRQ_STATUS) ||
++	    readl(csid->base + CSID_IPP_IRQ_STATUS))
++		return false;
++	for (i = 0; i < MSM_CSID_MAX_SRC_STREAMS; i++)
++		if (readl(csid->base + CSID_CSI2_RDIN_IRQ_MASK(i)) ||
++		    readl(csid->base + CSID_CSI2_RDIN_IRQ_STATUS(i)))
++			return false;
++	return true;
++}
++
++static int csid_quiesce_stream(struct csid_device *csid)
++{
++	unsigned long time;
++
++	/* Reuse the native reset/drain contract with a fresh ACK boundary. */
++	csid_mask_stream_irqs(csid, 0);
++	synchronize_irq(csid->irq);
++	csid_clear_stream_status(csid);
++	if (readl(csid->base + CSID_TOP_IRQ_STATUS) & CSID_TOP_IRQ_RESET)
++		return -EIO;
++
++	reinit_completion(&csid->reset_complete);
++	csid_mask_stream_irqs(csid, CSID_TOP_IRQ_RESET);
++	writel(0, csid->base + CSID_CSI2_RX_CFG0);
++	writel(0, csid->base + CSID_CSI2_RX_CFG1);
++	writel(CSID_RESET_CFG_MODE_IMMEDIATE | CSID_RESET_CFG_LOCATION_COMPLETE,
++	       csid->base + CSID_RESET_CFG);
++	writel(CSID_RESET_CMD_HW_RESET, csid->base + CSID_RESET_CMD);
++	time = wait_for_completion_timeout(&csid->reset_complete,
++					  msecs_to_jiffies(CSID_RESET_TIMEOUT_MS));
++
++	/* Even a timeout drains Linux callbacks but retains all DMA/PM ownership. */
++	csid_mask_stream_irqs(csid, 0);
++	synchronize_irq(csid->irq);
++	csid_clear_stream_status(csid);
++	synchronize_irq(csid->irq);
++	if (!time)
++		return -ETIMEDOUT;
++	if (!csid_stream_irqs_quiet(csid) ||
++	    readl(csid->base + CSID_CSI2_RX_CFG0) ||
++	    readl(csid->base + CSID_CSI2_RX_CFG1))
++		return -EBUSY;
++
++	csid->reg_update = 0;
++	return 0;
++}
++
++static void csid_enable_stream_irqs(struct csid_device *csid)
++{
++	int i;
++
++	for (i = 0; i < MSM_CSID_MAX_SRC_STREAMS; i++)
++		writel(CSID_CSI2_RDIN_RUP_DONE, csid->base + CSID_CSI2_RDIN_IRQ_MASK(i));
++	writel(~0u, csid->base + CSID_BUF_DONE_IRQ_CLEAR);
++	writel(~0u, csid->base + CSID_BUF_DONE_IRQ_MASK);
++	writel(~0u, csid->base + CSID_TOP_IRQ_MASK);
++}
++
++static int csid_configure_stream_checked(struct csid_device *csid, u8 enable)
++{
++	struct camss_video *owner = READ_ONCE(csid->camss->stream_owner);
++	int ret = 0;
++
++	mutex_lock(&csid->stream_lock);
++	if (csid->stream_fault) {
++		ret = -EUCLEAN;
++		goto out;
++	}
++	if (!owner || !csid->irq ||
++	    csid->camss->res->version != CAMSS_X1E80100 ||
++	    !csid->phy.en_vc ||
++	    (csid->phy.en_vc & ~GENMASK(MSM_CSID_MAX_SRC_STREAMS - 1, 0)) ||
++	    hweight32(csid->phy.en_vc) != 1) {
++		ret = -EINVAL;
++		goto out;
++	}
++	if (enable) {
++		if (csid->stream_owned) {
++			ret = -EBUSY;
++			goto out;
++		}
++		csid->stream_owner = owner;
++		csid->stream_quiesced = false;
++		/* Reopen need not cause a pipeline power cycle. */
++		csid_enable_stream_irqs(csid);
++		csid_configure_stream(csid, 1);
++		csid->stream_owned = true;
++	} else {
++		if (csid->stream_owner != owner || !csid->stream_owned) {
++			ret = -EINVAL;
++			goto out;
++		}
++		ret = csid_quiesce_stream(csid);
++		if (ret) {
++			csid->stream_fault = true;
++			dev_err(csid->camss->dev, "CSID quiesce failed: %d\n", ret);
++			goto out;
++		}
++		csid->stream_owned = false;
++		csid->stream_quiesced = true;
++	}
++out:
++	mutex_unlock(&csid->stream_lock);
++	return ret;
++}
++
+ static int csid_reset(struct csid_device *csid)
+ {
+ 	unsigned long time;
+@@ -446,6 +599,7 @@
+ const struct csid_hw_ops csid_ops_680 = {
+ 	.configure_testgen_pattern = NULL,
+ 	.configure_stream = csid_configure_stream,
++	.configure_stream_checked = csid_configure_stream_checked,
+ 	.hw_version = csid_hw_version,
+ 	.isr = csid_isr,
+ 	.reset = csid_reset,
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -133,6 +133,7 @@
+ 		} gen1;
+ 		struct {
+ 			int active_num;
++			bool wm_stopped;
+ 		} gen2;
+ 	};
+ 	enum vfe_output_state state;
+@@ -141,6 +142,7 @@
+ 	int wait_reg_update;
+ 	struct completion sof;
+ 	struct completion reg_update;
++	struct completion drain_complete;
+ 
+ 	struct vfe_line *line;
+ 	struct camss_video video_out;
+@@ -219,6 +221,9 @@
+ 	/* Output based API - new and shiny */
+ 	void (*vfe_output_start)(struct vfe_device *vfe, struct vfe_output *output);
+ 	void (*vfe_output_stop)(struct vfe_device *vfe, struct vfe_output *output);
++	/* pause is IRQ-safe; quiesce runs outside output_lock. */
++	int (*vfe_output_pause)(struct vfe_device *vfe, struct vfe_output *output);
++	int (*vfe_output_quiesce)(struct vfe_line *line);
+ 	void (*vfe_output_buf_done)(struct vfe_device *vfe, struct vfe_output *output);
+ 	void (*vfe_output_update)(struct vfe_device *vfe, struct vfe_output *output,
+ 				  struct camss_buffer *buf);
+@@ -295,6 +300,8 @@
+ 
+ struct camss_buffer *vfe_buf_get_pending(struct vfe_output *output);
+ 
++int vfe_prepare_stop(struct vfe_line *line);
++
+ int vfe_flush_buffers(struct camss_video *vid, enum vb2_buffer_state state);
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -792,6 +792,21 @@
+ 		return NULL;
+ 	}
+ 
++	/* Pause before returning the last programmed buffer: never replay its IOVA. */
++	if (ops->vfe_output_pause && output->gen2.active_num == 1 &&
++	    (output->state == VFE_OUTPUT_STOPPING || list_empty(&output->pending_bufs))) {
++		int ret = ops->vfe_output_pause(vfe, output);
++
++		if (ret) {
++			WRITE_ONCE(output->video_out.lifecycle.fault, true);
++			WRITE_ONCE(vfe->camss->stream_fault, true);
++			vb2_queue_error(&output->video_out.vb2_q);
++			dev_err_ratelimited(vfe->camss->dev, "RDI pause failed: %d\n", ret);
++			return NULL;
++		}
++		output->gen2.wm_stopped = true;
++	}
++
+ 	ready_buf->vb.vb2_buf.timestamp = ts;
+ 	ready_buf->vb.sequence = output->sequence++;
+ 
+@@ -803,7 +818,8 @@
+ 	if (output->buf[0])
+ 		index = 1;
+ 
+-	output->buf[index] = vfe_buf_get_pending(output);
++	output->buf[index] = output->state == VFE_OUTPUT_STOPPING ?
++		NULL : vfe_buf_get_pending(output);
+ 
+ 	if (output->buf[index]) {
+ 		if (ops->vfe_output_update)
+@@ -815,6 +831,8 @@
+ 		ops->reg_update(vfe, line->id);
+ 	} else {
+ 		output->gen2.active_num--;
++		if (!output->gen2.active_num && output->state == VFE_OUTPUT_STOPPING)
++			complete(&output->drain_complete);
+ 	}
+ 
+ 	return ready_buf;
+@@ -930,6 +948,7 @@
+ 
+ 	output->state = VFE_OUTPUT_ON;
+ 
++	output->gen2.wm_stopped = false;
+ 	output->sequence = 0;
+ 	output->wait_reg_update = 0;
+ 	reinit_completion(&output->reg_update);
+@@ -1024,6 +1043,10 @@
+ 			ops->vfe_wm_update(vfe, output->wm[0].bus_client,
+ 					   buf->addr[0], line);
+ 		ops->reg_update(vfe, line->id);
++		if (ops->vfe_output_pause && output->gen2.wm_stopped) {
++			ops->vfe_output_start(vfe, output);
++			output->gen2.wm_stopped = false;
++		}
+ 	} else {
+ 		vfe_buf_add_pending(output, buf);
+ 	}
+@@ -1268,12 +1291,44 @@
+ 	return 0;
+ }
+ 
++int vfe_prepare_stop(struct vfe_line *line)
++{
++	struct vfe_device *vfe = to_vfe(line);
++	struct vfe_output *output = &line->output[0];
++	unsigned long flags;
++	unsigned long time;
++
++	if (!vfe->res->hw_ops->vfe_output_quiesce)
++		return 0;
++	if (line->is_pix || line->num_outputs != 1 ||
++	    READ_ONCE(vfe->camss->stream_owner) != &output->video_out)
++		return -EINVAL;
++
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	reinit_completion(&output->drain_complete);
++	output->state = VFE_OUTPUT_STOPPING;
++	if (!output->gen2.active_num)
++		complete(&output->drain_complete);
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++
++	time = wait_for_completion_timeout(&output->drain_complete,
++					  msecs_to_jiffies(CSID_RESET_TIMEOUT_MS));
++	if (!time)
++		return -ETIMEDOUT;
++	if (READ_ONCE(output->video_out.lifecycle.fault))
++		return -EUCLEAN;
++	return 0;
++}
++
+ static int vfe_disable_output(struct vfe_line *line)
+ {
+ 	struct vfe_device *vfe = to_vfe(line);
+ 	const struct vfe_hw_ops *ops = vfe->res->hw_ops;
+ 	unsigned long flags;
+ 	unsigned int i, o;
++
++	if (ops->vfe_output_quiesce)
++		return ops->vfe_output_quiesce(line);
+ 
+ 	spin_lock_irqsave(&vfe->output_lock, flags);
+ 	for (o = 0; o < line->num_outputs; o++) {
+@@ -2481,6 +2536,7 @@
+ 			l->output[o].video_out.camss = camss;
+ 			init_completion(&l->output[o].sof);
+ 			init_completion(&l->output[o].reg_update);
++			init_completion(&l->output[o].drain_complete);
+ 		}
+ 
+ 		l->output[0].video_out.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-680.c b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+--- a/drivers/media/platform/qcom/camss/camss-vfe-680.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-680.c
+@@ -14,6 +14,7 @@
+ 
+ #include "camss.h"
+ #include "camss-vfe.h"
++#include "camss-csid.h"
+ 
+ #define VFE_TOP_IRQn_STATUS(vfe, n)		((vfe_is_lite(vfe) ? 0x1c : 0x44) + (n) * 4)
+ #define VFE_TOP_IRQn_MASK(vfe, n)		((vfe_is_lite(vfe) ? 0x24 : 0x34) + (n) * 4)
+@@ -199,6 +200,70 @@
+ 	writel(0, vfe->base + VFE_BUS_WRITE_CLIENT_CFG(vfe, wm));
+ }
+ 
++static int vfe_output_pause(struct vfe_device *vfe, struct vfe_output *output)
++{
++	u8 wm = output->wm[0].bus_client;
++
++	writel(0, vfe->base + VFE_BUS_WRITE_CLIENT_CFG(vfe, wm));
++	if (readl(vfe->base + VFE_BUS_WRITE_CLIENT_CFG(vfe, wm)))
++		return -EBUSY;
++	return 0;
++}
++
++static int vfe_output_quiesce(struct vfe_line *line)
++{
++	struct vfe_device *vfe = to_vfe(line);
++	struct camss *camss = vfe->camss;
++	struct vfe_output *output = &line->output[0];
++	struct csid_device *csid;
++	struct media_pad *pad;
++	unsigned long flags;
++	u8 wm = output->wm[0].bus_client;
++	int ret;
++
++	if (camss->res->version != CAMSS_X1E80100 ||
++	    READ_ONCE(camss->stream_owner) != &output->video_out ||
++	    line->is_pix || line->num_outputs != 1 ||
++	    output->wm_num != 1 || vfe->id >= camss->res->csid_num ||
++	    vfe->stream_count != 1 || !vfe->irq ||
++	    wm != (vfe_is_lite(vfe) ? VFE_680_LITE_WM_RDI0 : VFE_680_WM_RDI0) +
++		  line->id)
++		return -EINVAL;
++
++	csid = &camss->csid[vfe->id];
++	pad = media_pad_remote_pad_first(&line->pads[MSM_VFE_PAD_SINK]);
++	if (!pad || pad->entity != &csid->subdev.entity)
++		return -ENOLINK;
++
++	spin_lock_irqsave(&vfe->output_lock, flags);
++	ret = vfe_output_pause(vfe, output);
++	if (!ret)
++		output->gen2.wm_stopped = true;
++	/* An uncompleted programmed buffer is never released on failed start. */
++	if (!ret && (output->gen2.active_num || output->buf[0] || output->buf[1]))
++		ret = -EUCLEAN;
++	spin_unlock_irqrestore(&vfe->output_lock, flags);
++	if (ret)
++		return ret;
++	if (!READ_ONCE(csid->stream_quiesced) ||
++	    READ_ONCE(csid->stream_owner) != &output->video_out ||
++	    READ_ONCE(csid->stream_fault))
++		return -EUCLEAN;
++
++	vfe_disable_irq(vfe);
++	/* Publish IRQ masks before waiting for the handler to leave. */
++	wmb();
++	synchronize_irq(vfe->irq);
++	if (readl(vfe->base + VFE_BUS_WRITE_CLIENT_CFG(vfe, wm)) ||
++	    readl(vfe->base + VFE_TOP_IRQn_MASK(vfe, 0)) ||
++	    readl(vfe->base + VFE_TOP_IRQn_MASK(vfe, 1)) ||
++	    readl(vfe->base + VFE_BUS_IRQn_MASK(vfe, 0)) ||
++	    readl(vfe->base + VFE_BUS_IRQn_MASK(vfe, 1)))
++		return -EBUSY;
++
++	return 0;
++}
++
+ static const struct camss_video_ops vfe_video_ops_680 = {
+ 	.queue_buffer = vfe_queue_buffer_v2,
+ 	.flush_buffers = vfe_flush_buffers,
+@@ -243,6 +308,8 @@
+ 	.vfe_halt = vfe_halt,
+ 	.vfe_output_start = vfe_output_start,
+ 	.vfe_output_stop = vfe_output_stop,
++	.vfe_output_pause = vfe_output_pause,
++	.vfe_output_quiesce = vfe_output_quiesce,
+ 	.vfe_buf_done = vfe_buf_done,
+ 	.vfe_output_update = vfe_output_update,
+ 	.reg_update = vfe_reg_update,
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -324,17 +324,34 @@
+ 	struct camss_video_lifecycle *state = &video->lifecycle;
+ 	unsigned int order[CAMSS_VIDEO_MAX_SUBDEVS];
+ 	unsigned int count = 0, i;
+-
+-	/* Reuse the native X1E CSID -> VFE -> PHY/sensor normal stop order. */
++	int ret;
++
++	/* Drain the finite programmed FIFO before stopping its upstream source. */
++	for (i = 0; i < state->count; i++) {
++		struct v4l2_subdev *subdev = state->stages[i].device;
++
++		if (!state->stages[i].owned ||
++		    !video_subdev_is_vfe(video->camss, subdev))
++			continue;
++		ret = vfe_prepare_stop(v4l2_get_subdevdata(subdev));
++		if (ret) {
++			state->fault = true;
++			/* Reuse best-effort unwind; fault retains DMA/graph/PM. */
++			camss_video_unwind(state, video, video_owned_stage_call);
++			return ret;
++		}
++	}
++
++	/* Reuse latest native source-before-CSID-drain ordering. */
++	for (i = 0; i < state->count; i++)
++		if (!video_subdev_is_csid(video->camss, state->stages[i].device) &&
++		    !video_subdev_is_vfe(video->camss, state->stages[i].device))
++			order[count++] = i;
+ 	for (i = 0; i < state->count; i++)
+ 		if (video_subdev_is_csid(video->camss, state->stages[i].device))
+ 			order[count++] = i;
+ 	for (i = 0; i < state->count; i++)
+ 		if (video_subdev_is_vfe(video->camss, state->stages[i].device))
+-			order[count++] = i;
+-	for (i = 0; i < state->count; i++)
+-		if (!video_subdev_is_csid(video->camss, state->stages[i].device) &&
+-		    !video_subdev_is_vfe(video->camss, state->stages[i].device))
+ 			order[count++] = i;
+ 
+ 	return camss_video_stop_owned(state, order, video, video_owned_stage_call);
+@@ -351,10 +368,22 @@
+ 	struct sg_table *sgt;
+ 	unsigned int i;
+ 
++	if (video_owned_lifecycle(video) &&
++	    (!format->num_planes || format->num_planes > ARRAY_SIZE(buffer->addr) ||
++	     format->num_planes > vb->num_planes))
++		return -EINVAL;
++
+ 	for (i = 0; i < format->num_planes; i++) {
+ 		sgt = vb2_dma_sg_plane_desc(vb, i);
+ 		if (!sgt)
+ 			return -EFAULT;
++		if (video_owned_lifecycle(video) &&
++		    (sgt->nents != 1 || !format->plane_fmt[i].sizeimage ||
++		     sg_dma_len(sgt->sgl) < format->plane_fmt[i].sizeimage ||
++		     (u64)sg_dma_address(sgt->sgl) > U32_MAX ||
++		     (u64)sg_dma_address(sgt->sgl) + format->plane_fmt[i].sizeimage - 1 >
++		     U32_MAX))
++			return -EOPNOTSUPP;
+ 
+ 		buffer->addr[i] = sg_dma_address(sgt->sgl);
+ 	}
