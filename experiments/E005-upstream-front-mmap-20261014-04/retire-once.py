@@ -13,7 +13,7 @@ for p,h in json.loads((D/'GOLDEN-HASHES.json').read_text()).items():assert hashl
 for unit in [ID+'.service',ID+'-watchdog.timer',ID+'-return.service']:
  subprocess.run(['systemctl','stop',unit],check=True)
 subprocess.run(['systemctl','disable',ID+'.service',ID+'-watchdog.timer'],check=True)
-g=Path('/etc/grub.d/99zzzzzz_sp11_camera_upstream_front_20261013_03')
+g=Path('/etc/grub.d/99zzzzzz_sp11_camera_upstream_front_20261014_04')
 g.rename(D/('RETIRED-'+g.name))
 subprocess.run(['update-grub'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 subprocess.run(['grub-script-check','/boot/grub/grub.cfg'],check=True)

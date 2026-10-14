@@ -1,5 +1,5 @@
 {
-  "status": "PASS_FRONT26_REGISTRATION_RUNTIME_PM_UNLOAD_AND_GOLDEN_RETURN",
+  "status": "PASS_FRONT26_REGISTRATION_RUNTIME_PM_WITH_SENSOR_REMOVE_MCLK_WARNING",
   "experiment": "E005-upstream-front-boot-20261013-02",
   "source_checkpoint": "6dbd990a5aeacc14a93c5593f046e50532bc3fdd",
   "result": {
@@ -145,5 +145,35 @@
     "gpio_guard_controls": "PASS; retained format and five negatives",
     "readiness_unit_tests": "PASS",
     "upstream_release_gate": "correctly blocked all14 categories"
+  },
+  "post_teardown_warning_correction_20261014": {
+    "evidence": "docs/UPSTREAM-MMAP04-20261014.json",
+    "final_kernel_log_audit": {
+      "status": "FAIL_FINAL_KERNEL_LOG",
+      "scope": "same-boot records after initial boundary, including module teardown",
+      "new_records": 52,
+      "signature_counts": {
+        "BUG:": 0,
+        "Oops:": 0,
+        "Kernel panic": 0,
+        "Unable to handle kernel": 0,
+        "general protection fault": 0,
+        "use-after-free": 0,
+        "KASAN:": 0,
+        "DMA-API:": 0,
+        "WARNING:": 1,
+        "status stuck at": 1,
+        "failed to enable xclk": 1,
+        "power-on cleanup failed": 0,
+        "failed to disable avdd": 0,
+        "failed to disable dovdd": 0,
+        "remove power-off failed": 0,
+        "Stream teardown fault": 0
+      }
+    },
+    "module_removal_commands_completed": true,
+    "warning_free_unload_qualified": false,
+    "original_critical_signature_list_missed_WARNING_and_xclk_failure": true,
+    "registration_identity_runtime_suspend_and_tpg_scope_preserved": true
   }
 }

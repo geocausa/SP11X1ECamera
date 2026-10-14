@@ -6,8 +6,8 @@ prior_solution_reuse_policy:
   current_audit: docs/UPSTREAM-LIFECYCLE-PRIOR-SOLUTION-AUDIT-20261014.json
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: CAMSS28_OWNED_RDI_SOURCE_MODULE_PASS_PHY_ERROR_CONTRACT_OPEN
-  evidence: docs/UPSTREAM-FRONT-PROBE03-20261013.json
+  status: CAMSS28_MMAP_ALLOCATION_HARDWARE_PASS_TEARDOWN_CONTRACTS_OPEN
+  evidence: docs/UPSTREAM-MMAP04-20261014.json
   retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
   standalone_phy_cphy_implemented: true
@@ -52,7 +52,7 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Reuse retained ownership/error handling to resolve standalone PHY release error propagation before STREAMON; qualify MMAP allocation separately
+  next: Audit retained clock-domain and removal ownership for pre-existing MCLK removal warning; resolve standalone PHY shutdown error contract before STREAMON
   front_provider_registration_hardware_qualified: true
   front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
   front_provider_registration_trace_events: 2275
@@ -61,8 +61,8 @@ upstream_open_stack_current:
   front_provider_electrical_voltage_qualified: false
   front_provider_sensor_sequence_qualified: true
   front_provider_identities_consumed_retired: true
-  live_golden_boot_id: a7c3654e-3a02-466a-a450-fdb9cb307fc5
-  runtime_changed_scope: Three Golden provider boots and three isolated headless7.2 probes, returned and retired; daily stack preserved
+  live_golden_boot_id: f51a1ab5-2bf3-409c-98f7-345237e16253
+  runtime_changed_scope: Three Golden provider boots and four isolated headless7.2 checks, returned and retired; daily stack preserved
   preferred_control_transport: PiMaster
   front_provider_HPM_kernel_request_hardware_qualified: true
   front_provider_HPM_request_kernel: 7.1.5-sp11-render-parity-v4+
@@ -88,7 +88,11 @@ upstream_open_stack_current:
   front_graph_registration_hardware_qualified: true
   sensor_identity_hardware_qualified: true
   sensor_runtime_pm_shutdown_hardware_qualified: true
-  front26_camera_module_unload_hardware_qualified: true
+  front26_camera_module_unload_hardware_qualified: false
+  front26_camera_module_removal_commands_completed: true
+  sensor_remove_mclk_warning_observed: true
+  sensor_remove_mclk_warning_in_prior02_and03: true
+  full_final_kernel_log_audit_required: true
   front26_tpg_entity_function_warning_count: 3
   front26_streaming_hardware_qualified: false
   front26_privacy_runtime_qualified: false
@@ -103,6 +107,10 @@ upstream_open_stack_current:
   owned_lifecycle_model_tests_passed: true
   standalone_phy_shutdown_errors_propagated: false
   candidate28_stream_hardware_ready: false
+  candidate28_mmap_allocation_hardware_qualified: true
+  candidate28_mmap_cycles: 3
+  candidate28_mmap_buffers: 9
+  probe04_consumed_retired: true
   raw_lifecycle_readiness_evidence: docs/UPSTREAM-RAW-LIFECYCLE-READINESS-20261013.json
   raw_partial_streamon_unwind_qualified: false
   probe03_consumed_retired: true

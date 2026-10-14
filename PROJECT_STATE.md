@@ -1,3 +1,37 @@
+## 2026-10-14 candidate28 MMAP hardware PASS; final teardown warning open
+
+Fresh04 tested three allocation/map/release cycles, nine MMAP buffers and nine
+plane maps (37,324,800 mapped bytes total), three imported DMA-BUF refusals.
+No QBUF/STREAMON, sensor/media configuration writes or pixel access. Allocation
+left sensor suspended, rails/MCLK reference counts0 and reset237 low.
+Camera removal commands completed and automatic return succeeded;04 retired,
+units disabled, no pending boot. Golden now f51a1ab5-2bf3-409c-98f7-345237e16253;
+protected assets/installed26 module and daily branch preserved.
+Evidence docs/UPSTREAM-MMAP04-20261014.json.
+
+Final log review found a real MCLK stuck-off/-EBUSY warning when driver core
+runtime-resumes IMX681 during module removal after CAMSS is removed. Retained
+probe02 and03 final logs contain the same warning: it predates candidate28.
+Their old critical-signature checks missed WARNING/xclk enable errors. Those
+records are corrected; registration/identity/runtime suspension/TPG proofs
+remain valid, warning-free module teardown is NOT qualified. Do not repeat
+old experiments or infer an allocation regression. Exact physical clock/domain
+cause and a usable fix are not yet proven. Reuse/audit retained clock ownership
+and dependency/removal contracts before a minimal change and fresh test.
+
+Future qualification MUST examine the complete final same-boot kernel log,
+including module teardown, before reporting success. Reuse
+ tools/kernel_log_window.py via tools/camera-final-log-guard.py: positive and16
+negative diagnostics, boot mismatch and actual02/03/04 warnings tested. Module
+unload exit status alone is insufficient. No broad ignore of clock warnings.
+A GRUB underscore spelling in the retirement helper was corrected before
+retirement mutation; corrected private worker pin recorded, no failed replay.
+
+PHY callbacks hiding release errors remain an independent STREAMON blocker.
+Candidate28 rollback/model/module tests remain valid. Both private consumers/
+all14 release categories and physical streaming/DMA/ISP/libcamera/IPA/parity
+remain open. Mandatory prior-solution policy below applies to every issue.
+
 ## 2026-10-14 standard CAMSS owned lifecycle source/module28 qualified
 
 Reused native acquired-stage/reverse-unwind/safe-release in standard CAMSS.

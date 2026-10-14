@@ -1,3 +1,11 @@
+## Consumed and retired; do not retry04
+
+Allocation passed. Final teardown log contains an MCLK enable warning, also
+found retrospectively in02/03; warning-free unload remains unqualified.
+Evidence docs/UPSTREAM-MMAP04-20261014.json. Corrected retirement helper
+spelling matches the actually used private worker; original boot sources
+remain in commit e801147b and the pinned private runtime directory.
+
 # Candidate28 MMAP allocation/release only — fresh04
 
 Reuses retired probe03 recovery/module-isolation harness. Distinct04 identity;
