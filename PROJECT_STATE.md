@@ -1,3 +1,21 @@
+## 2026-10-14 disk sweep: storage headroom restored
+User requested cleanup before further camera work. Initial available217MB;
+now~28.96GB (~26.97GiB). Evidence docs/UPSTREAM-STORAGE-RECLAIM-20261014.json.
+Consolidated exact retired boot and archived kernel/initrd/CPIO/module copies,
+preserving every payload pathname/hash/permissions; Golden remains a separate
+unchanged inode. Removed only recognized single-link generated OLD Kbuild
+objects and disposable APT/npm/unreferenced Snap downloads; current apps kept.
+Sources, logs, calibration/private pixels/statistics, unique finished binaries,
+current26/29/30/31, native59 source, daily branch and Windows partition preserved.
+Exact disposition manifests:02-kernel/STORAGE-SWEEP-20261014-01.
+Old builds recompile missing objects. Historical duplicate payloads share
+immutable inodes; ALWAYS use fresh build directories and unlink/detach a copied
+destination before overwrite. Reuse pinned kernel/initrd/module assets rather
+than repeating whole payload copies. Check df and budget temporary/final output
+before large builds; keep working headroom instead of filling disk again.
+Golden same boot6d1bcf07-8ae2-4a54-bf55-8fe358f45774,no pending entry/hardware action.
+NEXT retained standard RAW quiesce port from the audit immediately below.
+
 ## 2026-10-14 RAW prior usable solutions confirmed; standard quiesce port next
 Audit docs/UPSTREAM-RAW-PRIOR-SOLUTION-AUDIT-20261014.json pins current31,
 retained native sources/history and actual hardware59 build. Matched front

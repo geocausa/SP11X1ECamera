@@ -1,0 +1,86 @@
+{
+  "status": "PASS_STORAGE_HEADROOM_RESTORED_PROTECTED_STACK_PRESERVED",
+  "source_checkpoint": "948d030e6b23932a320a733c4cb74a645f63b830",
+  "filesystem": "/dev/nvme0n1p5",
+  "filesystem_total_bytes": 288026681344,
+  "free_before_bytes": 217165824,
+  "free_after_bytes": 28958932992,
+  "net_reclaimed_bytes": 28741767168,
+  "boot_id_unchanged": true,
+  "hardware_action": false,
+  "reboot": false,
+  "system_sleep": false,
+  "actions": [
+    {
+      "action": "Exact retired boot kernel/initrd copies consolidated",
+      "allocated_bytes": 12557893632,
+      "files": 126,
+      "all_paths_and_hashes_retained": true
+    },
+    {
+      "action": "Exact archived initrd/CPIO/module copies consolidated",
+      "allocated_bytes": 8780079104,
+      "files": 126,
+      "all_paths_and_hashes_retained": true
+    },
+    {
+      "action": "Generated old Kbuild object intermediates removed",
+      "allocated_bytes": 4226641920,
+      "files": 14812,
+      "retained_file_fingerprints_verified": 52173
+    },
+    {
+      "action": "Disposable npm/Snap download caches removed",
+      "allocated_bytes": 2982600704,
+      "installed_apps_and_npx_packages_preserved": true
+    },
+    {
+      "action": "APT downloaded caches cleared",
+      "free_space_gain_bytes": 210386944
+    },
+    {
+      "action": "Inactive Snap revisions removed",
+      "revisions": 13,
+      "current_apps_sha256_preserved": true,
+      "note": "Most bytes remained linked in cache/seed; reclaim accounted by actual cache removal and df"
+    }
+  ],
+  "protected": {
+    "golden_payload_sha256": true,
+    "golden_inode_link_counts_and_ctime": true,
+    "default_and_pending_grub": true,
+    "current_upstream26_image_config_symbols": true,
+    "current29_DTB30_CAMSS31_PHY": true,
+    "private08_asset_manifest": true,
+    "private08_assets_checked": 3326,
+    "retired08_grub_archive_matched_original_pin": true,
+    "native59_reusable_sources": true,
+    "daily_branch": true,
+    "all_source_logs_measurements_unique_completed_payloads": true,
+    "Windows_partition": true
+  },
+  "manifest_directory": "/home/geoca/Documents/SP11-PROJECT/02-kernel/STORAGE-SWEEP-20261014-01",
+  "rebuild_cost": "Older incremental builds recompile removed object intermediates; final binaries/modules and source remain",
+  "archive_policy": "Historical exact duplicates now share immutable inodes. Keep fresh build directories and detach destinations before any overwrite; original inode/timestamp metadata retained in private disposition manifests.",
+  "further_options_deferred": [
+    {
+      "area": "Windows installation ISO in Downloads",
+      "bytes": 8008972288,
+      "reason": "Preserved recovery installer; optional later removal after checking recovery requirements"
+    },
+    {
+      "area": "Desktop search index cache",
+      "allocated_bytes": 5708861440,
+      "reason": "Regenerable, but rebuilding/excluding build trees changes desktop search coverage; untouched"
+    },
+    {
+      "area": "HostFabric caches and Rust build directories",
+      "reason": "Separate project; untouched"
+    },
+    {
+      "area": "Reverse-engineering originals and private optical/statistical evidence",
+      "reason": "Retained for prior-solution reuse and calibration; no deletion or export"
+    }
+  ],
+  "next": "Resume retained quiescence port for standard RAW; budget large full builds and reuse pinned boot/module artifacts"
+}
