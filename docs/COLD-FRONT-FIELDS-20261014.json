@@ -1,0 +1,146 @@
+{
+  "schema": "sp11-cold-front-fields-validation-v1",
+  "utc": "2026-10-14T12:05:42.766559+00:00",
+  "project_parent": "3a77f40ab2a68b952460f524f29974e5c0cb067f",
+  "status": "PASS_SOURCE_COLD_POLICY_NATIVE_FIELD_SEMANTICS",
+  "native_field_tests": {
+    "status": "PASS_SYNTHETIC_EXACT_NATIVE_FIELD_ROUTINES",
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_exported": false,
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "module_cases": 560,
+    "bls_cases": 1668,
+    "old_mask_fraction_cases": 4,
+    "prior_reused_source_pins": {
+      "experiments/E004-front-ir-vd55g0/e006t-rear-disabled-small-iq-providers/README.md": "84c8803252448d67e2ab9e20677d0b6d62cdf37a8cd5aee400ea68a72ac61165",
+      "experiments/E004-front-ir-vd55g0/e006t-rear-disabled-small-iq-providers/camss-e006t-small-iq.inc": "e5eb7ee138fb57c7be493f2094c5c3a0329704aadb87ede78e303a97ae81e216",
+      "experiments/E003-front-imx681-cphy/e003h-iq-producer-0073-static/SURFACE-TITAN680-STEADY-PACKERS.md": "b7e4f1a6fbc287a6742c09629fec81580efb88276237943a50d801787135595f",
+      "src/native-rgb/front-ae/tuning/imx681-front-open-regs.txt": "1c58a25cf42a61c79896df1f6a52cbdaf92c37eab2b933a74641c188deee0b9c"
+    },
+    "public_address_header_sha256": "bce9607bac5b46ce907a1434b3a772c5c40b753b1c933db7d37822b9c26e020e",
+    "native_module_subcommand_anchors": [
+      {
+        "name": "PDPC",
+        "rva": "0xb3cac0",
+        "control_register": "0x3d60"
+      },
+      {
+        "name": "GIC",
+        "rva": "0xb4b670",
+        "control_register": "0x4760"
+      },
+      {
+        "name": "LCAC",
+        "rva": "0xb3acc0",
+        "control_register": "0x5460"
+      },
+      {
+        "name": "GTM",
+        "rva": "0xb5aa80",
+        "control_register": "0x5a60"
+      }
+    ],
+    "native_BLS121_packer_rva": "0xb4bf30",
+    "bls_layouts": {
+      "13": {
+        "offset_bits": 18,
+        "offset_shift": 14
+      },
+      "199": {
+        "offset_bits": 12,
+        "offset_shift": 20
+      }
+    },
+    "old_mask_low16_explanation": "low14 preserved bits plus low2 of IFE18 offset",
+    "candidate_policy": {
+      "module_cold_images": "zero",
+      "integer_black_offset16": 1649,
+      "fraction2": 0
+    },
+    "native_execution_shims": "none; intercept the CDM builder only to observe synthetic command arguments",
+    "cold_zero_source_evidence": "E006t exact Titan680 LCAC source audit reused; synthetic zero images in all four native subcommand routines",
+    "constructor_executed": false,
+    "bls_selector13_native_front_runtime_observed": false,
+    "complete_startup": false,
+    "hardware": false,
+    "calibration_remeasured": false,
+    "remaining": "Qualify selector/domain and chosen fraction/cold policies on original calibrated front mode; surrounding functional startup/own tables remain"
+  },
+  "host_tests": {
+    "status": "PASS",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "exhaustive_offset_vectors": 262144,
+          "status": "PASS"
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "exhaustive_offset_vectors": 262144,
+          "status": "PASS"
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_offset_shift",
+      "admit_unqualified_fraction",
+      "admit_wrong_layout",
+      "publish_before_validation"
+    ],
+    "source_pins": {
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    }
+  },
+  "native_ABI_compile": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "host_result_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-cold-fields-20261014-01/host03/RESULT.json",
+    "module_sha256": "c6a393b68b055664d79e343a554155e19f4d8acb01a2b3a60e3396ea99a314f8",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-cold-fields-20261014-01/native-compile03/sp11_cold_compile.ko",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "header_sha256": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "header_style_errors": 0,
+  "header_style_warnings": 0,
+  "header_style_checks": 0,
+  "package_pins": {
+    "test-host.c": "e6a928b3fdfbc4dc0f322b220947f58dc52a30b3c466f3ac08c716adbcb0491c",
+    "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+    "README.md": "83aef0b71407ebc634343e2762c289f9f8e93dafeab3817a535feef9e4358d29",
+    "qualify.py": "a7c9af478b7656a87611489e1e36dc57fcaadf90a30b4ae2ba597c5717be6a0d",
+    "build-worker.py": "6415d9cd66f483ee712784672dc1a557a268ee2367fde9d4891204fd00e236e7",
+    "test-native.py": "c11d5699b50bc4d052d397d758410a4649bf01de147e4a0784909cb9de9335b7"
+  },
+  "new_fragment_words": 5,
+  "new_fragment_bytes": 60,
+  "prior_measured_fragment_words": 24,
+  "calibration_remeasured": false,
+  "runtime_changed": false,
+  "private_profile_read": false,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "limits": [
+    "Source policy only, not full startup or equality with inherited private words",
+    "Native BLS selector13/precision not yet observed in live calibrated front context",
+    "Chosen offset fraction0 and four cold-zero images need original-domain physical qualification",
+    "Other functional scalar setup, own DMI binding, independent startup/steady loader replacement remain",
+    "No fresh calibration, camera allocation, frame/pixel access, MMIO, module installation/load or reboot",
+    "No parent teardown, standard API, whole-series provenance/license/DCO approval established"
+  ]
+}

@@ -1,3 +1,33 @@
+## 2026-10-14 retained Titan680 fields reused; independent cold policy source PASS
+
+The calibrated unified48/libcamera21/run93/v15 stack remains the baseline.
+Reused E006t's exact LCAC cold-image proof and earlier front packer anchors.
+No calibration, queue/allocator/driver rewrite, camera access or reboot.
+
+Exact native PDPC/GIC/LCAC/GTM subcommands on synthetic state confirm bit0
+disable and retained other bits. BLS121 selector13 packs an18-bit offset at
+bit14; selector199 instead uses12 bits at bit20. The old measured mask leaves
+two low offset bits plus fourteen other bits inherited from the private input.
+
+Added a separate60-byte/five-word cold policy: four zero disabled images and
+measured integer1649 with fraction0. Uses existing encoder/domain type. No
+activation, DMI or runtime caller; prior24-word fragment unchanged.
+560 native module cases/1668 native BLS vectors PASS; exhaustive18-bit C packer,
+GCC/Clang ASan/UBSan, four compiled unsafe mutations, strict native7.1.5 ARM64
+compile and header style0/0/0 PASS. Evidence docs/COLD-FRONT-FIELDS-20261014.json.
+
+Scope is SOURCE policy/field semantics. Complete constructors were not executed;
+zero software images do not establish physical cold reset or equality with
+inherited words. Actual live front BLS selector/precision and chosen fraction/
+cold policies need qualification. Other functional scalar/table startup and
+both private loader consumers remain; complete_startup=false/upstream_ready=false.
+
+NEXT reuse retained front setup/trace evidence to bind BLS selector/precision,
+complete surrounding independent startup using existing own calibration/native
+pipeline, then replace only private loading and run a fresh guarded hardware
+qualification. Preserve Golden/daily source and RAW33/source35 artifacts.
+Earlier current/NEXT entries below remain historical.
+
 ## 2026-10-14 calibrated native baseline restored; own configuration reused
 
 User correction accepted: the working Claude-calibrated native stack is the
