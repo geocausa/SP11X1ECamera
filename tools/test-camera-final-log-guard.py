@@ -14,7 +14,9 @@ signatures=('BUG:','Oops:','Kernel panic','Unable to handle kernel',
             'general protection fault','use-after-free','KASAN:','DMA-API:',
             'WARNING:','status stuck at','failed to enable xclk',
             'power-on cleanup failed','failed to disable avdd',
-            'failed to disable dovdd','remove power-off failed','Stream teardown fault','CSID quiesce failed','RDI pause failed')
+            'failed to disable dovdd','remove power-off failed','Stream teardown fault','CSID quiesce failed','RDI pause failed','Missing ready buf','Received completion for invalid port',
+          'Received wm done for unmapped index','Received completion for invalid output count',
+          'Invalid completion group')
 for signature in signatures:
     assert guard.analyse(before,'[2.000000] '+signature+'\n continuation\n','a','a')['status']=='FAIL_FINAL_KERNEL_LOG'
 try:

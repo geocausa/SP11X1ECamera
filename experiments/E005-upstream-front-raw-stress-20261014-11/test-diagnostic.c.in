@@ -1,0 +1,116 @@
+// SPDX-License-Identifier: GPL-2.0-only
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#define __init
+#define BIT(x) (1U<<(x))
+#define READ_ONCE(x) (x)
+#define CAMSS_X1E80100 11
+#define VB2_MEMORY_MMAP 1
+#define VFE_OUTPUT_ON 2
+#define FULL_RDI0_WM_CFG (0xe00 + 24 * 0x100)
+#define pr_info(...) ((void)0)
+struct module {int unused;};
+struct driver {const char *name;struct module *owner;};
+struct device {struct driver *driver;void *of_node,*data;};
+struct resource {unsigned version,vfe_num,csid_num;};
+struct list {bool empty;};
+struct camss_video {bool module_held,pm_held,pipeline_started;struct {bool fault;}lifecycle;struct {unsigned memory;}vb2_q;};
+struct vfe_output {struct camss_video video_out;unsigned wm_num;struct {unsigned bus_client;}wm[1];struct {unsigned active_num;bool wm_stopped;}gen2;unsigned state;void *buf[2],*last_buffer;struct list pending_bufs;};
+struct vfe_line {bool is_pix;unsigned num_outputs;struct vfe_output output[1];};
+struct camss;
+struct vfe_device {struct camss *camss;unsigned id;void *base;int power_count,stream_count;int stream_lock,output_lock;struct vfe_line line[1];};
+struct csid_device {struct {unsigned csiphy_id,en_vc;}phy;bool stream_owned,stream_fault,stream_quiesced;struct camss_video *stream_owner;};
+struct camss {struct resource *res;struct vfe_device *vfe;struct csid_device *csid;struct camss_video *stream_owner;bool stream_fault;int stream_guard;};
+static bool execute,paused;
+static int result;
+static unsigned active,wm_cfg;
+static int device_refs,module_refs,device_locked,mutex_depth,spin_depth,reads;
+static bool present,compatible,module_fail;
+static unsigned register_value;
+static struct device dev;
+static int platform_bus_type;
+static void mutex_lock(int *p){(void)p;mutex_depth++;}
+static void mutex_unlock(int *p){(void)p;assert(mutex_depth>0);mutex_depth--;}
+#define spin_lock_irqsave(p,f) do {(void)(p);(f)=0;spin_depth++;}while(0)
+#define spin_unlock_irqrestore(p,f) do {(void)(p);(void)(f);assert(spin_depth==1);spin_depth--;}while(0)
+static bool list_empty(struct list *l){return l->empty;}
+static unsigned readl(void *p){assert(p==(void*)(uintptr_t)(0x100000+FULL_RDI0_WM_CFG));assert(device_refs==1&&module_refs==1&&device_locked==1&&mutex_depth==2&&spin_depth==1);reads++;return register_value;}
+static int of_device_is_compatible(void *n,const char *s){(void)n;assert(!strcmp(s,"qcom,x1e80100-camss"));return compatible;}
+static struct device *bus_find_device(void *bus,void *start,void *data,int(*match)(struct device*,const void*)){(void)bus;(void)start;if(!present||!match(&dev,data))return NULL;device_refs++;return &dev;}
+static void device_lock(struct device *d){assert(d==&dev);device_locked++;}
+static void device_unlock(struct device *d){assert(d==&dev&&device_locked==1);device_locked--;}
+static bool try_module_get(struct module *m){assert(m);if(module_fail)return false;module_refs++;return true;}
+static void module_put(struct module *m){assert(m&&module_refs==1);module_refs--;}
+static void *dev_get_drvdata(struct device *d){return d->data;}
+static void put_device(struct device *d){assert(d==&dev&&device_refs==1&&!device_locked);device_refs--;}
+/* ACTUAL_OBSERVER_FUNCTIONS */
+int main(void){
+ unsigned cases=0;
+ for(unsigned c=0;c<44;c++){
+  struct module module={0};struct driver driver={"qcom-camss",&module};
+  struct resource res={CAMSS_X1E80100,2,2};
+  struct vfe_device vfe[2]={0};struct csid_device csid[2]={0};
+  struct camss camss={.res=&res,.vfe=vfe,.csid=csid};
+  struct vfe_line *line=&vfe[1].line[0];struct vfe_output *o=&line->output[0];struct camss_video *v=&o->video_out;
+  vfe[1].camss=&camss;vfe[1].id=1;vfe[1].base=(void*)0x100000;vfe[1].power_count=1;vfe[1].stream_count=1;
+  line->num_outputs=1;o->wm_num=1;o->wm[0].bus_client=24;o->gen2.wm_stopped=true;o->state=VFE_OUTPUT_ON;o->pending_bufs.empty=true;
+  v->module_held=v->pm_held=v->pipeline_started=true;v->vb2_q.memory=VB2_MEMORY_MMAP;camss.stream_owner=v;
+  csid[1].phy.csiphy_id=2;csid[1].phy.en_vc=1;csid[1].stream_owned=true;csid[1].stream_owner=v;
+  dev=(struct device){&driver,NULL,&camss};execute=present=compatible=true;module_fail=false;register_value=0;result=active=wm_cfg=0;paused=false;reads=0;
+  if(c==1)execute=false;
+  if(c==2)present=false;
+  if(c==3)compatible=false;
+  if(c==4)dev.driver=NULL;
+  if(c==5)driver.name="wrong";
+  if(c==6)module_fail=true;
+  if(c==7)dev.data=NULL;
+  if(c==8)camss.res=NULL;
+  if(c==9)res.version=0;
+  if(c==10)res.vfe_num=1;
+  if(c==11)res.csid_num=1;
+  if(c==12)camss.vfe=NULL;
+  if(c==13)camss.csid=NULL;
+  if(c==14)vfe[1].camss=NULL;
+  if(c==15)vfe[1].id=0;
+  if(c==16)vfe[1].base=NULL;
+  if(c==17)vfe[1].power_count=0;
+  if(c==18)vfe[1].stream_count=2;
+  if(c==19)line->is_pix=true;
+  if(c==20)line->num_outputs=2;
+  if(c==21)camss.stream_owner=NULL;
+  if(c==22)camss.stream_fault=true;
+  if(c==23)v->pm_held=false;
+  if(c==24)v->module_held=false;
+  if(c==25)v->pipeline_started=false;
+  if(c==26)v->lifecycle.fault=true;
+  if(c==27)v->vb2_q.memory=4;
+  if(c==28)csid[1].phy.csiphy_id=0;
+  if(c==29)csid[1].phy.en_vc=2;
+  if(c==30)csid[1].stream_owned=false;
+  if(c==31)csid[1].stream_owner=NULL;
+  if(c==32)csid[1].stream_fault=true;
+  if(c==33)csid[1].stream_quiesced=true;
+  if(c==34)o->wm_num=2;
+  if(c==35)o->wm[0].bus_client=0;
+  if(c==36)o->state=0;
+  if(c==37)o->gen2.active_num=1;
+  if(c==38)o->gen2.wm_stopped=false;
+  if(c==39)o->buf[0]=(void*)1;
+  if(c==40)o->buf[1]=(void*)1;
+  if(c==41)o->last_buffer=(void*)1;
+  if(c==42)o->pending_bufs.empty=false;
+  if(c==43)register_value=1;
+  int ret=sp11_rdi_idle_probe_init();
+  if(c==1||c==2||c==3)assert(ret<0);else assert(ret==0);
+  if(c==0)assert(result==1&&paused&&active==0&&wm_cfg==0);
+  else if(c>3)assert(result<0);
+  assert(reads==((c==0||c==43)?1:0));
+  assert(!device_refs&&!module_refs&&!device_locked&&!mutex_depth&&!spin_depth);cases++;
+ }
+ printf("Actual read-only observer acquisition/eligibility/MMIO/cleanup cases=%u\n",cases);
+}

@@ -1,0 +1,148 @@
+{
+  "status": "PASS_PRIOR_WORK_REUSE_AND_SCOPED_UPSTREAM_SUITABILITY_AUDIT",
+  "checkpoint": "71fbfeefd277c8caac78b2dc26764140e5c6f65b",
+  "prior_commit": "49746d7542e429f8914ada94c5efdc1538d9e02f",
+  "source_sha256": {
+    "src/native-rgb/front-robust/native-front-queue.inc": "8c081de095558492463868cd795cca0312a1ab61302475ad400dab4d9152634d",
+    "src/native-rgb/front-robust/patch-libcamera-robust.py": "5e82f4fcc43889d3306f31953c93ad0074b5d06667feaaddbe89627ae236f1e8",
+    "src/native-rgb/front-robust/robust-iq.c": "7839da5d7b4fc407a6242007b54d68c4ce98777c64c3ba6bc790c318dfb9cd12",
+    "src/native-rgb/front-ae/build-kernel46.py": "1005cde84c6d43688ec748b0d0f14432ab5d68a3d385b4ffac2f30474580457c",
+    "docs/PROVENANCE-AND-UPSTREAM-PATH-20261010.md": "08e4715dbc2793f541852ad1fa705123d71c1340b6802c25139a2b49946f4024",
+    "src/upstream/lifecycle/rdi-quiesce-20261014/manifest.json": "9d2b37d4cdddcd39458840c304fe18c92e2435c42fea21ac2b5b54648773bcb7",
+    "src/upstream/receiver/matched-front-route-20261014/manifest.json": "6303945d2d17ff4730b616a24a0e1e53163eb11c76f9d625a50baa554c959da5",
+    "src/upstream/sensors/imx681-ooaklee/reference.json": "63801a911e84909813b53845a5eea627df8c6349ee8e81a282251b2445cfbce5"
+  },
+  "native_stall_evidence": [
+    {
+      "run": 80,
+      "status": "PASS_E-FRONT-ABLATE-ROBUSTSTALL4-80",
+      "frames_completed": 600,
+      "requested_frames": 600,
+      "metadata_mismatches": 0,
+      "stall_test": {
+        "at_s": 20.0,
+        "for_s": 1.0
+      },
+      "robust_queue": {
+        "frames": 625,
+        "dropped": 21,
+        "iq_reused": 24,
+        "ret": 0
+      },
+      "actual_config_sha256": "41d67f346d1395a16d4b2eb7f8471c371b1c298536feb790cfcbd5a899a3beb8",
+      "scope": "Native processed PIX queue/libcamera20; hardware evidence verified from retained scalar records, not replayed"
+    },
+    {
+      "run": 83,
+      "status": "PASS_E-FRONT-ABLATE-ROBUSTSTALL5SC-83",
+      "frames_completed": 600,
+      "requested_frames": 600,
+      "metadata_mismatches": 0,
+      "stall_test": {
+        "at_s": 20.0,
+        "for_s": 5.0
+      },
+      "robust_queue": {
+        "frames": 718,
+        "dropped": 114,
+        "iq_reused": 117,
+        "ret": 0
+      },
+      "actual_config_sha256": "99d0be2a5ba925205525022569bc8a6be1335fe62659d8595e53b0f192dddbe2",
+      "scope": "Native processed PIX queue/libcamera20; hardware evidence verified from retained scalar records, not replayed"
+    },
+    {
+      "run": 84,
+      "status": "PASS_E-FRONT-ABLATE-OPENROBUST-84",
+      "frames_completed": 600,
+      "requested_frames": 600,
+      "metadata_mismatches": 0,
+      "stall_test": null,
+      "robust_queue": {
+        "frames": 602,
+        "dropped": 0,
+        "iq_reused": 1,
+        "ret": 0
+      },
+      "actual_config_sha256": "80344627a85284d57854b53efac177d1462aec171c18c8cade76494eeffc9168",
+      "scope": "Native processed PIX queue/libcamera20; hardware evidence verified from retained scalar records, not replayed"
+    }
+  ],
+  "prior_sustained_raw": {
+    "evidence": "experiments/E004-front-ir-vd55g0/e004le-timing-clock-session-one-shot/RESULT.json",
+    "source_commit": "c42bb240337920159b03fb76777c9a956997a995",
+    "frames": 1803,
+    "seconds": 60.05682,
+    "fps": 30.004918675347778,
+    "profile": "Native3840x2160/2.400Gsymbol mode; distinct from current standard2640/2.406Gsymbol domain"
+  },
+  "reuse": {
+    "kernel_robust_queue": "Reuse safety/lifetime/drop-recovery reasoning; scratch/PIX/IQ implementation needs adaptation to standard RDI ownership. No wholesale private-profile dependency port.",
+    "libcamera_robust": "Retain dropped-frame/control/statistics resynchronisation implementation for later reviewed pipeline/IPA port; current test has no libcamera dependency.",
+    "test_method": "Reuse existing one/five-second SIGSTOP/SIGCONT consumer-freeze methodology, with bounded duration and deterministic process cleanup.",
+    "current_driver": "Source33 already pauses empty RDI WM and reprograms DMA before enable; no new camera-driver change required for this test"
+  },
+  "upstream_suitability": {
+    "native_kernel_source_spdx": "GPL-2.0-only in retained files; existing attribution kept",
+    "public_kernel_base": "Pinned GPL CAMSS/standalone PHY sources and reference manifests retained",
+    "sensor_table_origin": "Public pinned GPL source; author declares independent runtime I2C transcription. Preserve provenance; license header alone is not a complete derivation review.",
+    "new_observer": "Lab-only GPL read-only module, excluded from any upstream driver ABI/patch submission",
+    "standard_interface": "V4L2 MMAP, standard queue/restart semantics; no private startup blob required by this RAW path",
+    "proprietary_camera_blob_tuning_redistribution": false,
+    "full_series_provenance_license_review_complete": false,
+    "upstream_ready": false,
+    "remaining": "Typed PHY API/bindings, generic hardware limits instead of lab allowlists, patch attribution/sign-offs/review, full fault/concurrency controls and processed ISP params/stats/IPA still open"
+  },
+  "new_qualification_scope": "Standard2640 RAW one-RDI sustained900frames +180 after1s starvation +180 after5s starvation; verify actual empty FIFO/WM CFG0 with read-only observer, normal teardown/reopen/final logs",
+  "camera_driver_unchanged": true,
+  "diagnostic": {
+    "status": "PASS_READ_ONLY_RDI_DIAGNOSTIC_ARM64_W1_WERROR",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-33/matched-route-qual01/diag-module11-02/sp11_rdi_idle_probe.ko",
+    "sha256": "dff293f0eaef54043da4fe5ea2e374295a1f76fc47693efd12549ef56561d508",
+    "bytes": 9776,
+    "vermagic": "7.2.0-sp11-upstream-front26 SMP preempt mod_unload aarch64",
+    "source_sha256": "905c561273b82de66a2d8aea80ed8d1e34f433f475b2eca99090084e54f65d53",
+    "camera_driver_unchanged": true,
+    "installed": false,
+    "models": {
+      "status": "PASS_ACTUAL_READ_ONLY_RDI_OBSERVER_MODEL",
+      "runs": [
+        {
+          "compiler": "gcc",
+          "output": "Actual read-only observer acquisition/eligibility/MMIO/cleanup cases=44"
+        },
+        {
+          "compiler": "clang",
+          "output": "Actual read-only observer acquisition/eligibility/MMIO/cleanup cases=44"
+        }
+      ],
+      "source_sha256": "905c561273b82de66a2d8aea80ed8d1e34f433f475b2eca99090084e54f65d53",
+      "hardware_access": false,
+      "scope": "Actual observer bodies, deterministic adapters; no physical concurrency claim"
+    },
+    "mutations": {
+      "status": "PASS_THREE_COMPILED_UNSAFE_OBSERVER_MUTATIONS_REJECTED",
+      "mutations": [
+        {
+          "name": "skip_power_admission",
+          "compiled": true,
+          "rejected": true,
+          "returncode": -6
+        },
+        {
+          "name": "hide_enabled_write_master",
+          "compiled": true,
+          "rejected": true,
+          "returncode": -6
+        },
+        {
+          "name": "leak_camera_module_reference",
+          "compiled": true,
+          "rejected": true,
+          "returncode": -6
+        }
+      ]
+    }
+  },
+  "hardware_attempted": false
+}

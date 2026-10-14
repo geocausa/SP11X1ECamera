@@ -1,3 +1,27 @@
+## 2026-10-14 prior sustained/stall work verified; fresh11 prepared
+docs/UPSTREAM-RAW-STRESS-PRIOR-AUDIT-20261014.json verifies retained native
+ae80/83/84 actual600/600 records:1s freeze21 drops,5s114 drops, normal0.
+Pins GPL robust kernel/libcamera source and commit49746d75, build46; earlier
+E004le1803 RAW frames/60s is a distinct native2160/2.400Gsymbol domain.
+Reuse freeze/recovery method and safety reasoning; scratch/PIX/IQ/admission
+code needs compatible standard ownership/params/stats integration. Do not copy
+private startup/tuning or call a GPL header complete provenance/review approval.
+Whole upstream series attribution/bindings/API/generalisation review stays open.
+
+Fresh11 keeps kernel26/DT29/PHY31/CAMSS33 exact10 bytes. Lab-only read-only
+owned VFE1 RDI0 observer (no PM/DMA/queue/register writes) checks empty FIFO,
+paused WM and real CFG0 under locks while consumer is stopped.44 actual-source
+cases/compiler,three compiled unsafe mutations, strict ARM64/style PASS;
+nine actual-process/scalar gates check stop/resume and failure cleanup.
+Plan900 baseline +180 after1s +180 after5s freeze; monotonic completion metadata,
+post-stop runtime/rail/clock/reset, final/unload/return23 diagnostic gates.
+Five new signatures include missing-ready-buffer/invalid completion routing.
+Retained10 also passes new23 final/return audit. No hardware attempted11 yet.
+Golden75e71a3e-b23c-49e3-8ffa-d79803efa9d4 remains/no pending/camera stack.
+Commit/push/package verification precede one-use11; no repeat10/11 identity.
+Earlier NEXT is historical. Upstream_ready=false, full processed pipeline,
+controls/fault/concurrency/optical/VT-clock and libcamera/IPA gaps remain.
+
 ## 2026-10-14 standard front RAW capture/stop/reopen hardware PASS
 Fresh10 on source33/kernel26/DT29/PHY31 delivered24 full pRAA3840x2640 buffers
 (three8-frame sessions, stride4800/plane12672000;304128000 reported bytes).
