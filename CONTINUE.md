@@ -1,3 +1,35 @@
+## 2026-10-14 unchanged33 RAW sustained and starvation recovery hardware PASS
+Prior work verified, not retraced: actual native ae80/83/84 records600/600,
+1s/5s freezes21/114 drops, normal0; GPL source/commit49746d75/build46 pinned.
+Upstream reuse audit docs/UPSTREAM-RAW-STRESS-PRIOR-AUDIT-20261014.json separates
+compatible safety/test method from bespoke scratch/PIX/IQ/libcamera admission
+code and private startup/tuning. Whole provenance/license/API review remains open.
+
+Fresh11 used exact10 kernel26/DT29/PHY31/CAMSS33 bytes. Standard RAW3840x2640:
+900 frames/29.961344s =30.00533 completionfps, maximum baseline gap35.279ms.
+One-second stopped consumer:180/180, paused1.00249s, empty FIFO/WM CFG0 confirmed,
+recovery107 measured frames30.00537fps. Five-second stopped consumer:180/180,
+paused5.00076s, same actual empty/paused/CFG0, recovery107 frames29.99852fps.
+Total1260 full12672000-byte buffers,15966720000 reported bytes, no pixels saved.
+Both dedicated child process groups reaped; lab-only read-only observer removed.
+Every normal stop released sensor/PHY PM/rails/clocks/reset; neutral graph and
+all camera modules cleanly unload. Complete post-session/final/return23 signatures0;
+all16 return records inspected. Evidence docs/UPSTREAM-RAW-STRESS11-HARDWARE-20261014.json.
+11 retired/no retry, units disabled/menu archived, no pending/camera stack;
+Goldenb716b5cd-7ebd-4b2d-8901-3806085a5483, protected assets/global26 CAMSS/daily
+branch intact; root still~40.84GB free. No OS suspend/hibernate.
+
+Normal bounded sustained RAW and1s/5s starvation recovery now hardware qualified.
+Completion sequences count delivered buffers; independent sensor SOF/drop identity
+during pause is not proved. Optical/IQ, VT-clock/control domains, full hardware
+fault/concurrency/multicamera/DMABUF/PIX, processed ISP/params/stats/libcamera/IPA,
+bindings/provenance/attribution/series review remain open. Both processed private
+startup consumers/all14 release categories remain open; upstream_ready=false.
+NEXT audit/reuse retained processed ISP/params/stats/libcamera/IPA and measured
+calibration, port only profile-domain/standard ownership/API gaps; no private
+startup dependency, repeated prior hardware or unnecessary full kernel rebuild.
+Earlier current/NEXT paragraphs below are historical.
+
 ## 2026-10-14 prior sustained/stall work verified; fresh11 prepared
 docs/UPSTREAM-RAW-STRESS-PRIOR-AUDIT-20261014.json verifies retained native
 ae80/83/84 actual600/600 records:1s freeze21 drops,5s114 drops, normal0.

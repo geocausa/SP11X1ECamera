@@ -3,11 +3,11 @@ prior_solution_reuse_policy:
   source_experiment_and_history_audit_before_new_work: true
   exact_reference_and_compatibility_gap_record_required: true
   prefer_reuse_and_minimal_port: true
-  current_audit: docs/UPSTREAM-RAW-PRIOR-SOLUTION-AUDIT-20261014.json
+  current_audit: docs/UPSTREAM-RAW-STRESS-PRIOR-AUDIT-20261014.json
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: STANDARD_FRONT_RAW33_CAPTURE_STOP_REOPEN_HARDWARE_PASS
-  evidence: docs/UPSTREAM-RAW10-HARDWARE-20261014.json
+  status: STANDARD_RAW33_SUSTAINED_STARVATION_RECOVERY_HARDWARE_PASS
+  evidence: docs/UPSTREAM-RAW-STRESS11-HARDWARE-20261014.json
   retained_own_camss_patch_count: 9
   selected_public_dependency_patches: 12
   standalone_phy_cphy_implemented: true
@@ -52,8 +52,9 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Audit/reuse retained sustained RAW and stall recovery results before a fresh
-    bounded stress qualification, then integrate standard ISP params/stats and libcamera/IPA
+  next: Audit/reuse retained processed ISP, params/stats, libcamera/IPA and measured
+    calibration; port only standard ABI/lifetime/profile-domain gaps and keep private
+    startup/tuning out
   front_provider_registration_hardware_qualified: true
   front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
   front_provider_registration_trace_events: 2275
@@ -62,7 +63,7 @@ upstream_open_stack_current:
   front_provider_electrical_voltage_qualified: false
   front_provider_sensor_sequence_qualified: true
   front_provider_identities_consumed_retired: true
-  live_golden_boot_id: 75e71a3e-b23c-49e3-8ffa-d79803efa9d4
+  live_golden_boot_id: b716b5cd-7ebd-4b2d-8901-3806085a5483
   runtime_changed_scope: Source33 bounded RAW normal capture/stop/reopen and clean
     camera unload on isolated kernel26; returned Golden, daily stack preserved
   preferred_control_transport: PiMaster
@@ -143,6 +144,16 @@ upstream_open_stack_current:
   source33_matched_route_evidence: docs/UPSTREAM-MATCHED-FRONT-ROUTE-20261014.json
   probe09_consumed_retired: true
   probe10_consumed_retired: true
+  standard_raw_sustained_frames: 900
+  standard_raw_sustained_completion_fps: 30.00532953394881
+  standard_raw_starvation_hardware_qualified_seconds:
+  - 1
+  - 5
+  standard_raw_starvation_owned_wm_readback_zero: true
+  standard_raw_stress_total_dequeued_frames: 1260
+  probe11_consumed_retired: true
+  raw_stress_reuse_upstream_audit: docs/UPSTREAM-RAW-STRESS-PRIOR-AUDIT-20261014.json
+  whole_series_provenance_license_review_complete: false
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true
