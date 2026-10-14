@@ -1,3 +1,49 @@
+## 2026-10-14 LSC/ABF bank pairs source/compile PASS
+
+Reused existing table handoff/source fixtures, bounded CDM serializer and
+retained E006z startup/steady bank evidence. New typed32byte bank configuration
+owns four words4358/435c/4958/495c; explicit LSC/ABF0/1 inputs only.
+No calibration, table, allocator, queue or request scheduling rewrite.
+Do not infer steady banks for startup: retained startup all families use
+startup_phase&1; steady LSC/Gamma use request_id&1, ABF(request_id+1)&1.
+New compiler accepts parent-owned banks and does not grant request admission.
+
+Complete original LSC packer0xb3d8a0/ABF packer0xb41090 execute with owned
+synthetic common/descriptor/output tables; existing builders0xb3cda0/0xb404f0
+observe fixed bank+module commands. New slice omits module word and all other
+configuration, emits whole zero-reserved software bank words only.
+ABF descriptor4<2,8<3; owned0/0 context and common pointer16, bank halfword38.
+Source object80 holds output table pointer; LSC object40/48/56 hold three tables.
+Initial exploratory fixture mistook descriptor8 for a pointer and used excluded
+2/3 values; corrected source ABI, no logging/numeric/branch shim or camera fault.
+
+50 full original calls,12 comparisons across3 placements, actual SP/X19..29/
+D8..15 restoration, immutable PE/inputs, exact object metadata and table/image
+canaries PASS. GCC/Clang ASan/UBSan2081 atomic negatives/five compiled mutations
+each PASS. Native ARM64 W1/Werror and header style0/0/0 PASS; native01/compile01.
+Original command helpers85ee78/85f108 observe arguments/success only; no source
+constructor or serializer execution. Evidence docs/FRONT-TABLE-BANK-20261014.json.
+
+IMPORTANT LSC hardware gain lanes are14+14 bits. Existing measured fit-lsc uses
+a narrower13-bit Q10 subset, preserved unchanged. Existing table admission's
+bit13/27 zero rule is OWN generator policy, not reserved hardware bits.
+Source bit13 synthetic counterexample checked; no actual mesh/optical data read
+or exported. Old E003i-K functional packing reusable, vendor tuning/OTP/defaults
+are not new open startup policy. Own measured generator remains authoritative.
+
+Catalog117->121 configuration addresses, not complete startup. Bank scheduling,
+CPU/DMA correspondence, eligible frame ownership/retirement and physical reset/
+mesh/channel/precision remain integration gates. Both private consumers remain/
+upstream_ready=false. Golden/default/daily/unified48/libcamera21/run93/v15
+preserved; no install/load/camera/reboot/tuning/profile/pixel access or refit.
+
+NEXT bind full13-word LSC and23-word ABF configuration blocks/module controls
+and VFE core/input to own geometry/noise policy using retained source work.
+Then bind existing bank/Gamma/LSC/ABF handoffs to proven native lifecycle for
+fresh isolated private-loader replacement and guarded hardware/image parity.
+Do not repeat qualified banks, table/calibration generators or prior arithmetic.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 own front LSC/ABF table handoff source/compile PASS
 
 Reused existing fit-lsc.py/gen-abf-lut.py, actual already-generated measured

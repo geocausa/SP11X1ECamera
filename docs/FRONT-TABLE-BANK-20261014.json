@@ -1,0 +1,143 @@
+{
+  "schema": "sp11-front-table-bank-qualification-v1",
+  "status": "PASS_SOURCE_AND_COMPILE_ONLY",
+  "source_acceptance": "native01",
+  "compile_acceptance": "native-compile01",
+  "source": {
+    "schema": "sp11-front-table-bank-source-v1",
+    "status": "PASS_SOURCE_TABLE_BANK_FIELDS",
+    "original_source_calls": 50,
+    "comparison_records": 12,
+    "native_instructions": 128556,
+    "placements": 3,
+    "complete_packers_and_builders_executed": true,
+    "native_entries": {
+      "LSC_packer": "0xb3d8a0",
+      "LSC_builder": "0xb3cda0",
+      "ABF_packer": "0xb41090",
+      "ABF_builder": "0xb404f0"
+    },
+    "original_PE_immutable": true,
+    "SP_callee_saved_restored": true,
+    "input_and_object_metadata_checks": true,
+    "canaries_intact": true,
+    "intercepted_helpers": [
+      "0x85ee78 register command observer/success",
+      "0x85f108 DMI argument observer/success"
+    ],
+    "arithmetic_or_branch_shims": false,
+    "constructors_or_serializer_executed": false,
+    "source_bank_field_bits": 1,
+    "bank_registers": [
+      "0x4358",
+      "0x435c",
+      "0x4958",
+      "0x495c"
+    ],
+    "LSC_hardware_gain_lane_bits": 14,
+    "own_LSC_prepared_policy_bits": 13,
+    "LSC_bit13_source_counterexample_checked": true,
+    "existing_table_policy_or_data_changed": false,
+    "ABF_descriptor_fields": {
+      "4": 0,
+      "8": 0,
+      "16": "owned common pointer"
+    },
+    "ABF_common_bank_halfword": 38,
+    "ABF_object_table_pointer_metadata": 80,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "source_comparisons": 12,
+          "atomic_negatives": 2081
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "source_comparisons": 12,
+          "atomic_negatives": 2081
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_LSC_register",
+      "wrong_ABF_bank",
+      "early_publication",
+      "accept_masked_banks",
+      "bypass_domain"
+    ],
+    "header_pins": {
+      "sp11-front-table-bank.h": "943103a06ca97c9042c5cb60f10070776b1c0c561f5510006b4dcd2d25a813cf",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/front-table-handoff-20261014/test-native.py": "599b155ae56830cbe996aa478c17465e62bce423e6aef39407627c5ab7b132f1",
+      "experiments/E004-front-ir-vd55g0/e006z-rear-clean-scalar-bank-providers/camss-e006z-clean-scalar-bank.inc": "0889ffa9f9f846a43fcea05d730501fe096e7a164ada0d7bc99ba433da7c6a40"
+    },
+    "bank_scheduling_reimplemented": false,
+    "source_startup_schedule": "all families startup_phase&1",
+    "source_steady_schedule": "LSC/Gamma request_id&1; ABF(request_id+1)&1",
+    "full_LSC_ABF_configuration_or_geometry_qualified": false,
+    "native_request_lifetime_integrated": false,
+    "hardware_reset_or_reserved_bits_proven": false,
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "own_optical_arrays_or_pixels_read": false,
+    "runtime_changed": false,
+    "installed": false,
+    "loaded": false,
+    "hardware": false
+  },
+  "build": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-table-bank-20261014-01/native-compile01/sp11_table_bank_compile.ko",
+    "module_sha256": "d25f49c881bb8c2a13bcf0564f3c969ad7350eaddc180940ef7f7c4348fef01c",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "style": {
+      "errors": 0,
+      "warnings": 0,
+      "checks": 0
+    },
+    "header_pins": {
+      "sp11-front-table-bank.h": "943103a06ca97c9042c5cb60f10070776b1c0c561f5510006b4dcd2d25a813cf",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "new_source_pins": {
+    "test-host.c": "9d4d0e2c4f7df5cacfb58286c0b34fb3831eb9571d63edceae81e7a98c53cc60",
+    "README.md": "a6e7a6f15a72054957aa06f6d49cdd31776b04a08e3ead4bb57f12ab66fb0297",
+    "qualify.py": "0c63639cafeb8490c9a9da71e2b6a2411aae7a1d70760b4f3baaad8e95fff311",
+    "sp11-front-table-bank.h": "943103a06ca97c9042c5cb60f10070776b1c0c561f5510006b4dcd2d25a813cf",
+    "build-worker.py": "a88fa03c59de2453dc95b2b3ede83c987ccc7e6810146e4c81c46e3b1a259ca2",
+    "test-native.py": "4acc9392e2c3b09a05534fa453dcc643c63ceccae1450738bb1f3bb011d009f7"
+  },
+  "prior_startup_and_steady_scheduling_reused_not_reimplemented": true,
+  "new_configuration_words": 4,
+  "command_bytes": 32,
+  "candidate_unique_configuration_addresses_before": 117,
+  "candidate_unique_configuration_addresses_after": 121,
+  "module_activation_emitted": false,
+  "complete_LSC_ABF_configuration": false,
+  "complete_startup": false,
+  "physical_precision_chain_qualified": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "next": "Bind remaining13 LSC and23 ABF configuration words/module controls plus VFE core to own geometry/noise policy; integrate handoffs with native lifetime in isolated private-loader replacement, then hardware/image parity"
+}
