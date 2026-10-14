@@ -1,3 +1,46 @@
+## 2026-10-14 calibrated native baseline restored; own configuration reused
+
+User correction accepted: the working Claude-calibrated native stack is the
+integration baseline. It already has camera capture/ISP/IPA/AE/AWB, measured
+tone/CCM/LSC/black-level/noise work and native allocation/queue/retirement.
+Source34/35 standard-branch helpers remain qualified artifacts, not evidence
+that those native capabilities are missing or require wholesale replacement.
+Before reworking any proven subsystem, document the exact native function/
+hardware evidence and the unavoidable interface/ownership/provenance delta.
+Do not redo calibration/bring-up unless an actual changed domain needs it.
+
+Actual unified48 profile loader requests/materializes the private file before
+own CST/CCM/masks/LSC/ABF and IQ enqueue. Open ablation/calibration proves own
+replacements, not removal of that loader. The existing own30-mask file matches
+actual run93 exactly.25 words are independent of prior data; one is ABF enable
+and must wait for owned tables/complete setup. Five still preserve old bits.
+
+Reused24 complete configuration words as a fixed288-byte standalone REG_CONT
+fragment, using the existing CDM encoder and original native2160->1440 domain.
+No arbitrary register input, activation, DMI, private file reader or runtime call.
+Own matrices/LSC/ABF/tuning and native pipeline are preserved; no new measurements.
+Source/private startup and calibrated-mode provenance are pinned in
+src/upstream/isp-config/measured-front-reuse-20261014/baseline-audit.json.
+
+Actual native mask-walk body on synthetic old states proves exact24-word
+behavior across144 startup occurrences.301 cases/compiler under GCC/Clang
+ASan/UBSan; five compiled data/domain/activation/publication mutations rejected.
+Tiny native7.1.5 ARM64 compile-only probe W1/Werror0 diagnostics. No CAMSS/kernel
+rebuild, installation, module load, physical allocation/MMIO or reboot.
+Evidence docs/CALIBRATED-NATIVE-REUSE-20261014.json; source header style0/0.
+
+Five partial words deferred:0x3d60/0x4760/0x5460/0x5a60 module controls and
+0x4b68 lower16 BLS bits. ABF enable0x4960 also deferred. These six entries are
+not the whole remaining startup: other functional setup and private copied
+scalar/table regions remain. Installed front/rear private consumers remain2.
+Standard RAW33 and source35 owner artifacts/Golden/daily source stay intact;
+upstream_ready=false; no optical or complete-startup hardware claim.
+NEXT use retained functional RE and GPL definitions to explain the five words,
+complete independent startup around the existing own calibration and native
+pipeline, replace only the private loader, then fresh guarded hardware proof.
+Standard API work follows actual documented gaps; no restart from raw bring-up.
+Earlier current/NEXT paragraphs below are historical.
+
 ## 2026-10-14 source35 typed coherent command owner qualified
 
 Verified prior native build72 allocator pin and actual rear59 ownership/stop

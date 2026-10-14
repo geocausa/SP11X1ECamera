@@ -1,0 +1,222 @@
+{
+  "schema": "sp11-calibrated-native-reuse-validation-v1",
+  "utc": "2026-10-14T11:24:18.848029+00:00",
+  "status": "PASS_EXISTING_MEASURED_CONFIG_EXTRACTED_WITH_NATIVE_BEHAVIOR_PARITY",
+  "project_parent": "6bc852689333e7ddc4d6b4d887aeb695efbf30ca",
+  "baseline_audit": {
+    "schema": "sp11-calibrated-native-baseline-extraction-v1",
+    "utc": "2026-10-14T11:15:37.152889+00:00",
+    "project_parent": "6bc852689333e7ddc4d6b4d887aeb695efbf30ca",
+    "repository_pins": {
+      "src/native-rgb/front-ae/tuning/imx681-front-open-regs.txt": "1c58a25cf42a61c79896df1f6a52cbdaf92c37eab2b933a74641c188deee0b9c",
+      "src/native-rgb/front-ae/tuning/imx681-front-v15.yaml": "c2102f561b784e6cfe74d4f818759ab30aa910e9f419ec11f3ff7a315d266051",
+      "src/native-rgb/open-profile/make-ablation-run.py": "87b439e120cfd5fe24caa9f7c7989dcd5719a1e83d34647ece54ae5f76b839f6",
+      "src/native-rgb/unified/install-daily2.sh": "4b99cfede0c0289109008fd6f06540be6c9c0f4634f038e8efd6300b3ed32d11",
+      "docs/UPSTREAM-EXISTING-CALIBRATION-AUDIT-20261012.json": "54962030540d195d54ee1d7f0fcc7fc7157d4ab55b6d959b2b3a4b16794e9b55",
+      "docs/PROVENANCE-AND-UPSTREAM-PATH-20261010.md": "08e4715dbc2793f541852ad1fa705123d71c1340b6802c25139a2b49946f4024",
+      "src/upstream/isp-config/sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "native_source_pins": {
+      "native-front-profile-kernel.inc": "792c479a8cecd860197956f81780657782caa95afa9ca9c37bb384c19ab9bdef",
+      "native-front-profile.h": "a5db2c53a9d12f34277760ed0dffdbc7df064de4ae427e7534cb92decf37901d",
+      "native-front-cst.inc": "73b39718a3c553bf2cb07e7b46359e37fe3ed67c467e8e0a0fd7b103b41134d4",
+      "camss.c": "2634c9a06147f3195cc408203886adbc4fb949f5b49587a50d684483e9ed17f3",
+      "camss-video.c": "9a730b6ee96ea7c8a35691b7e186e28160055c570818ff083820d6912447747a"
+    },
+    "run93_config_pin": "a5f27787588c2bb0297b57ff672b912f96ec34e3628be0904bcdc12e37f7e0d1",
+    "native_stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-unified-48/camss",
+    "run93_stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-ae-93",
+    "baseline_geometry": {
+      "sensor_width": 3840,
+      "sensor_height": 2160,
+      "output_width": 2560,
+      "output_height": 1440
+    },
+    "same_calibration_mask_configuration_as_run93": true,
+    "rows": 30,
+    "complete_word_replacements": 25,
+    "standalone_configuration_writes": 24,
+    "deferred_activation_registers": [
+      18784
+    ],
+    "partial_bit_dependencies": [
+      {
+        "register": 15712,
+        "unresolved_bits_mask": 4294967294
+      },
+      {
+        "register": 18272,
+        "unresolved_bits_mask": 4294967294
+      },
+      {
+        "register": 21600,
+        "unresolved_bits_mask": 4294967294
+      },
+      {
+        "register": 23136,
+        "unresolved_bits_mask": 4294967294
+      },
+      {
+        "register": 19304,
+        "unresolved_bits_mask": 65535
+      }
+    ],
+    "complete_startup_replacement": false,
+    "actual_private_loader_order": [
+      "request_firmware_direct",
+      "native_front_profile_materialize",
+      "native_front_cst_apply",
+      "native_front_ccm_apply",
+      "native_front_regmask_apply",
+      "native_front_lsc_apply",
+      "native_front_abf_apply",
+      "native_front_params_profile_store",
+      "camss_x1e_pix_iq_provider_open",
+      "camss_x1e_pix_iq_provider_enqueue"
+    ],
+    "reuse_decision": "Preserve native driver/sensor2160/calibration/IPA as baseline. Reuse actual override data and implementation; compile only complete owned configuration words into a standalone no-activation fragment. Do not redo optical measurements or treat standard35 helpers as necessary native replacement.",
+    "not_claimed": [
+      "private profile removed",
+      "full startup built",
+      "unused tuning harmless to ship",
+      "partial mask establishes complete provenance",
+      "measured calibration transferred to2640 or another ISP domain",
+      "upstream readiness"
+    ],
+    "private_profile_read": false,
+    "calibration_remeasured": false,
+    "pixels_read_or_exported": false,
+    "installed_or_hardware_changed": false
+  },
+  "generated": {
+    "schema": "sp11-own-measured-configuration-fragment-v1",
+    "source_pin": "1c58a25cf42a61c79896df1f6a52cbdaf92c37eab2b933a74641c188deee0b9c",
+    "source_rows": 30,
+    "full_configuration_words": 24,
+    "bytes": 288,
+    "dmi": 0,
+    "activation_writes": 0,
+    "deferred": [
+      {
+        "register": 15712,
+        "reason": "preserves_prior_word_bits",
+        "unresolved_bits": 4294967294
+      },
+      {
+        "register": 18272,
+        "reason": "preserves_prior_word_bits",
+        "unresolved_bits": 4294967294
+      },
+      {
+        "register": 21600,
+        "reason": "preserves_prior_word_bits",
+        "unresolved_bits": 4294967294
+      },
+      {
+        "register": 23136,
+        "reason": "preserves_prior_word_bits",
+        "unresolved_bits": 4294967294
+      },
+      {
+        "register": 19304,
+        "reason": "preserves_prior_word_bits",
+        "unresolved_bits": 65535
+      },
+      {
+        "register": 18784,
+        "reason": "activation_requires_owned_ABF_DMI_and_complete_setup",
+        "unresolved_bits": 0
+      }
+    ],
+    "header_sha256": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+    "baseline": "native-ae74/93 3840x2160->2560x1440",
+    "new_calibration": false,
+    "private_profile_read": false,
+    "complete_startup": false,
+    "hardware_qualified": false
+  },
+  "actual_native_override_tests": {
+    "status": "PASS_OWN_CONFIGURATION_MATCHES_ACTUAL_NATIVE_OVERRIDES",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "result": {
+          "cases": 301,
+          "checks": 1295,
+          "native_oracle_occurrences": 144,
+          "partial_private_dependencies": 5,
+          "activation_deferred": 1
+        },
+        "ASan_UBSan": true,
+        "actual_native_body": true
+      },
+      {
+        "compiler": "clang",
+        "result": {
+          "cases": 301,
+          "checks": 1295,
+          "native_oracle_occurrences": 144,
+          "partial_private_dependencies": 5,
+          "activation_deferred": 1
+        },
+        "ASan_UBSan": true,
+        "actual_native_body": true
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "admit_2640_domain",
+      "export_private_partial_word",
+      "export_activation",
+      "change_measured_word",
+      "write_before_validation"
+    ],
+    "native_source_sha256": "73b39718a3c553bf2cb07e7b46359e37fe3ed67c467e8e0a0fd7b103b41134d4",
+    "header_sha256": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+    "private_profile_read": false,
+    "optical_measurement": false,
+    "hardware": false
+  },
+  "native_ABI_compile": {
+    "status": "PASS_NATIVE_ABI_ARM64_COMPILE_ONLY",
+    "header_sha256": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+    "module_sha256": "2431a9c8807f49f7c8589685ebc42fc7c6212472e2430ccf703d8f079ecf29e6",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-measured-reuse-20261014-01/native-compile01/sp11_measured_compile.ko",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "hardware": false
+  },
+  "deterministic_regeneration": true,
+  "header_style_errors": 0,
+  "header_style_warnings": 0,
+  "package_pins": {
+    "baseline-audit.json": "4c5b5117e7e4ddc5bd1912b7a841fa05463012fa1b4b3e7c9c28a71756ead632",
+    "README.md": "70817be9ab240434fd966cf698c82778f28552bc56dc5ce46d3714736a3fdb78",
+    "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+    "qualify.py": "69f0dc0f9ed52121672310d64403c16bd3af8f72482d37fbdd98bb54118a7521",
+    "generate.py": "d00ccb7970c2ffdd16eb2b0cd5679bddc45c20c3f9b9d89b01c64ad1ad0b7083",
+    "GENERATED.json": "e667383b9804ec0f439074caef817c6695539747cbda0716d0763b32930d9fad",
+    "test-native-main.c.in": "beeeaf27db697ba72db93be5c11af4f07793cbc4e1a4888db1b5601b69f32905",
+    "build-worker.py": "959e27aeb485ff888e46357f89ca95459c6761d008f8b06dae2c8791975562a6",
+    "test-native.py": "5cfc68bcb48af1bbc08ec42bcabe0ebe60efc484c092ddcd61e00f30f56b7b39"
+  },
+  "reused_calibration": true,
+  "calibration_remeasured": false,
+  "private_profile_read": false,
+  "physical_capture_or_runtime_changed": false,
+  "installed": false,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "limits": [
+    "Fragment only; private startup loader/materializer still required by installed calibrated stack",
+    "Five partial mask words and ABF activation are deferred; other profile scalars/tables also remain",
+    "Own LSC/ABF/tone/CCM/AE/AWB calibration remains valid in original domain and must be reused; no new measurement done",
+    "Host synthetic command seeds are not optical pixels, physical register access, frame parity, timing or IRQ/DMA proof",
+    "Only original native2160->1440 mode allowed; other domains including standard2640 need explicit compatibility proof",
+    "Complete independent startup, loader replacement, native hardware qualification and full standard API/provenance/DCO/upstream review remain open"
+  ]
+}

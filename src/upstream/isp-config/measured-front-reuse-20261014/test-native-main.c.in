@@ -1,0 +1,73 @@
+
+static unsigned checks,cases;
+#define CHECK(v) do{checks++;if(!(v)){fprintf(stderr,"line%d: %s\n",__LINE__,#v);abort();}}while(0)
+static struct sp11_front_measured_domain good={
+ SP11_FRONT_MEASURED_NATIVE_AE74_93,3840,2160,2560,1440
+};
+static u8 native_buffer[4096], out[SP11_FRONT_MEASURED_CONFIG_BYTES+32], old[sizeof(out)];
+static bool blocked(u32 reg) {
+ return reg==0x4960||reg==0x3d60||reg==0x4760||reg==0x5460||reg==0x5a60||reg==0x4b68;
+}
+static void build_native(u32 seed) {
+ memset(native_buffer,0,sizeof(native_buffer));
+ for(unsigned copy=0;copy<2;copy++)for(unsigned i=0;i<30;i++) {
+  size_t at=0x400+(copy*30+i)*12;
+  sp11_cdm_put32(native_buffer+at,(3U<<24)|1);
+  sp11_cdm_put32(native_buffer+at+4,native_front_reg_mask[3*i]);
+  sp11_cdm_put32(native_buffer+at+8,seed);
+ }
+ unsigned hits[NATIVE_FRONT_REGMASK_MAX]={0};
+ CHECK(native_front_regmask_walk(native_buffer,sizeof(native_buffer),false,hits)==0);
+ for(unsigned i=0;i<30;i++)CHECK(hits[i]==2);
+ memset(hits,0,sizeof(hits));
+ CHECK(native_front_regmask_walk(native_buffer,sizeof(native_buffer),true,hits)==0);
+ for(unsigned i=0;i<30;i++)CHECK(hits[i]==2);
+}
+int main(void) {
+ const u32 seeds[]={0,0xffffffffU,0xa596c3f0U};
+ CHECK(SP11_FRONT_MEASURED_CONFIG_WORDS==24&&SP11_FRONT_MEASURED_CONFIG_BYTES==288);
+ memset(out,0xa5,sizeof(out));CHECK(sp11_front_measured_config(out,sizeof(out),&good)==0);
+ for(size_t i=288;i<sizeof(out);i++)CHECK(out[i]==0xa5);
+ for(unsigned s=0;s<3;s++) {
+  build_native(seeds[s]);
+  for(unsigned i=0;i<24;i++) {
+   const u8 *p=out+12*i;u32 reg=get_unaligned_le32(p+4),value=get_unaligned_le32(p+8);unsigned found=0;
+   CHECK(get_unaligned_le32(p)==((3U<<24)|1)&&!blocked(reg));
+   for(unsigned k=0;k<30;k++)if(native_front_reg_mask[3*k]==reg) {
+    CHECK((native_front_reg_mask[3*k+1]&~native_front_reg_mask[3*k+2])==0);
+    for(unsigned copy=0;copy<2;copy++)
+     CHECK(value==get_unaligned_le32(native_buffer+0x400+(copy*30+k)*12+8));
+    found++;
+   }
+   CHECK(found==1);
+  }
+  cases++;
+ }
+ /* Show each deferred partial word still depends on old bits across two seeds. */
+ build_native(0);u32 zero[30];for(unsigned i=0;i<30;i++)zero[i]=get_unaligned_le32(native_buffer+0x408+12*i);
+ build_native(0xffffffff);unsigned partial=0,activation=0;
+ for(unsigned i=0;i<30;i++) {
+  u32 reg=native_front_reg_mask[3*i],dep=native_front_reg_mask[3*i+1]&~native_front_reg_mask[3*i+2];
+  if(dep){CHECK((zero[i]^get_unaligned_le32(native_buffer+0x408+12*i))==dep&&blocked(reg));partial++;}
+  if(reg==0x4960)activation++;
+ }
+ CHECK(partial==5&&activation==1);cases++;
+ for(size_t capacity=0;capacity<288;capacity++) {
+  memset(out,0xa5,sizeof(out));memcpy(old,out,sizeof(out));
+  CHECK(sp11_front_measured_config(out,capacity,&good)==-ENOSPC);CHECK(!memcmp(out,old,sizeof(out)));cases++;
+ }
+ for(unsigned i=0;i<6;i++) {
+  struct sp11_front_measured_domain wrong=good;
+  switch(i){case 0:wrong.calibration=0;break;case 1:wrong.sensor_width=1920;break;
+   case 2:wrong.sensor_height=2640;break;case 3:wrong.output_width=1920;break;
+   case 4:wrong.output_height=1080;break;case 5:wrong.calibration=2;break;}
+  memset(out,0xa5,sizeof(out));memcpy(old,out,sizeof(out));
+  CHECK(sp11_front_measured_config(out,sizeof(out),&wrong)==-EOPNOTSUPP&&!memcmp(out,old,sizeof(out)));cases++;
+ }
+ CHECK(sp11_front_measured_config(NULL,288,&good)==-EINVAL);
+ CHECK(sp11_front_measured_config(out,288,NULL)==-EINVAL);
+ struct sp11_front_measured_domain saved=good;
+ CHECK(sp11_front_measured_config((void *)&good,288,&good)==-EINVAL&&!memcmp(&good,&saved,sizeof(good)));cases+=3;
+ printf("{\"cases\":%u,\"checks\":%u,\"native_oracle_occurrences\":144,\"partial_private_dependencies\":5,\"activation_deferred\":1}\n",cases,checks);
+ return 0;
+}
