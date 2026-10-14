@@ -1,3 +1,45 @@
+## 2026-10-14 calibrated front Video Full scaler binding source/compile PASS
+
+Existing E006q MNDS23 and sp11-geometry-stats.h reused unchanged.
+Added only an88-byte front-policy wrapper:18 configuration words at
+0x9864..0x9884/0x9a64..0x9a84. Both module words and separate Crop12 commands
+omitted; no new scaler arithmetic or optical calibration.
+
+Exact original packer0xb4a140/builder0xb48e10 source-bind Video Full path1,
+image offsets160/200 and fixed addresses0x9860/0x9a60 count10.
+Chroma divisors are source float32 2.0 at metadata12/16, not integer bit patterns.
+Geometry input dimensions0x3c/0x40, output0x64/0x68 and crop coordinates4/8/12/16.
+Request0xf20 has owned stripe context with0xd920=0. Partial context only;
+constructor/full platform ABI/runtime negotiation remain unclaimed.
+
+30 original-source cases,24 comparison records across3 placements PASS;
+GCC/Clang ASan/UBSan compare both unchanged prior packers. Wrapper admits only
+3 cases for calibrated3840x2160->2560x1440 and rejects21 other geometries.
+93 atomic negatives and four compiled unsafe mutations each PASS.
+SP/X19..29/D8..15 restoration, canaries, immutable source PE/arithmetic and
+input metadata/unused image slots PASS. Original FRINTA0x14d0 executes;
+only command argument observer0x85ee78 intercepted, no serializer execution.
+Native ARM64 W1/Werror and header style0/0/0 PASS. Acceptance native05/compile01;
+earlier fixture image-span/slot and host u16-type attempts excluded.
+
+Source request output-depth8/10/12/14 changes no normal MNDS configuration.
+Fixed normal word0x600 is source encoding, not a named sample-depth conversion.
+Do not change it or rounding shifts from Gamma table representation alone.
+Actual full Gamma/CST/video precision remains unbound; nonzero source-image
+residual checked and zero software image is own policy, not hardware reset.
+
+Evidence docs/FRONT-SCALER-CONFIG-20261014.json. Independent configuration
+catalog83->101 addresses; these leaves are NOT a complete startup program.
+Both private consumers remain/upstream_ready=false. Calibrated native
+unified48/libcamera21/run93/v15 and Golden/default/daily preserved.
+No install/load/camera/reboot/private profile/tuning/pixel read or refit.
+
+NEXT reuse retained Crop12 and source core/Gamma evidence to bind full colour
+pipeline/module policy, complete own CCM auxiliary fields and remaining startup
+around proven native lifetime. Replace only private loading in a fresh isolated
+candidate after that closure; qualify actual precision/image parity on hardware.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 FULL video rounding configuration reused; source/compile PASS
 
 Preserved calibrated unified48/libcamera21/run93/v15 and all prior packers.

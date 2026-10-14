@@ -1,0 +1,195 @@
+{
+  "schema": "sp11-front-scaler-qualification-v1",
+  "status": "PASS_SOURCE_AND_COMPILE_ONLY",
+  "prior_implementations_reused_unchanged": true,
+  "new_scaler_arithmetic": false,
+  "source_acceptance": "native05",
+  "compile_acceptance": "native-compile01",
+  "excluded_attempts": [
+    "native01/02 assumed wrong source image span; native03 wrong Video Full slot80",
+    "native04 original source PASS but host legacy u16 type shim missing; final native05 repeats with actual slot160"
+  ],
+  "source": {
+    "schema": "sp11-front-scaler-source-v1",
+    "status": "PASS_REUSED_FRONT_VIDEO_SCALER_CONFIGURATION",
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_immutable": true,
+    "original_PE_exported": false,
+    "native_source_cases": 30,
+    "native_comparison_records": 24,
+    "native_instructions": 11310,
+    "placements": 3,
+    "SP_callee_saved_restored": true,
+    "canaries_intact": true,
+    "native_entries": {
+      "packer": "0xb4a140",
+      "builder": "0xb48e10",
+      "video_luma": "0xb49438",
+      "round_float": "0x14d0"
+    },
+    "intercepted_helpers": [
+      "0x85ee78 command observer/success only"
+    ],
+    "arithmetic_or_branch_shims": false,
+    "constructor_executed": false,
+    "partial_owned_contexts": true,
+    "normal_path_source_inputs": {
+      "metadata_geometry_pointer": 0,
+      "metadata_chroma_divisors_float32": [
+        12,
+        16
+      ],
+      "metadata_path": 20,
+      "video_full_path": 1,
+      "geometry_input_dimensions": [
+        "0x3c",
+        "0x40"
+      ],
+      "geometry_output_dimensions": [
+        "0x64",
+        "0x68"
+      ],
+      "geometry_origin_and_end_coordinates": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "request_stripe_pointer": "0xf20",
+      "stripe_override_flag": "0xd920"
+    },
+    "original_builder_fixed_addresses_observed": true,
+    "addresses_substituted": false,
+    "unrelated_request_output_depths_unchanged": [
+      8,
+      10,
+      12,
+      14
+    ],
+    "normal_MNDS_sample_depth_conversion_proven": false,
+    "initial_image": "own zero",
+    "nonzero_residual_counterexample_checked": true,
+    "source_video_image_offset": 160,
+    "configuration_words": 18,
+    "configuration_bytes": 88,
+    "module_control_commands_emitted": 0,
+    "Crop12_commands_emitted": 0,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "native_vectors": 24,
+          "admitted_front_vectors": 3,
+          "rejected_other_geometry": 21,
+          "atomic_negatives": 93
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "native_vectors": 24,
+          "admitted_front_vectors": 3,
+          "rejected_other_geometry": 21,
+          "atomic_negatives": 93
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_slice",
+      "wrong_video_target",
+      "early_publication",
+      "bypass_domain"
+    ],
+    "header_pins": {
+      "sp11-front-scaler-config.h": "f3af661db4250e7ab4802698449c8e95e801bd68a102c8644be9a1c283cce031",
+      "sp11-geometry-stats.h": "233a4e1acc6924df9f5c5e9ab0c432b3a62db1b2c62a631b853613523e28a187",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/front-channel-gain-20261014/test-native.py": "8b1fbceb4516d97b141f6cc9fdf3e3ff13fe0bdfa48c0fa5e81ac9ffa6183a0e",
+      "experiments/E004-front-ir-vd55g0/e006q-rear-mnds23-packer/camss-e006q-mnds23.inc": "efeea39fc21abae1c3b26e5a588c146ca3a82b74267b717a0fac6c7ab57bd46b"
+    },
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "calibration_remeasured": false,
+    "runtime_changed": false,
+    "installed": false,
+    "loaded": false,
+    "hardware": false,
+    "limits": [
+      "Only calibrated front3840x2160 to2560x1440 wrapper admitted; other synthetic dimensions test existing packers",
+      "Owned partial contexts and source normal stripe-disabled path; no independent source constructor or runtime mode negotiation",
+      "Gamma table precision, CST12 output policy and video10 rounding are not a bound physical precision chain",
+      "Configuration word0x600 is source normal-path encoding, not proof of a named sample-depth conversion",
+      "Source image can preserve reserved residue; own zero image is not physical reset or inherited-profile equality",
+      "No separate Crop12/module/bus/DMI/activation/startup ownership integration"
+    ]
+  },
+  "build": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-scaler-config-20261014-01/native-compile01/sp11_scaler_compile.ko",
+    "module_sha256": "3f3f9842e8427854610cd1898abd955f8705f75e8fdec2809889dedec5d8c769",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "style": {
+      "errors": 0,
+      "warnings": 0,
+      "checks": 0
+    },
+    "header_pins": {
+      "sp11-front-scaler-config.h": "f3af661db4250e7ab4802698449c8e95e801bd68a102c8644be9a1c283cce031",
+      "sp11-geometry-stats.h": "233a4e1acc6924df9f5c5e9ab0c432b3a62db1b2c62a631b853613523e28a187",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "new_source_pins": {
+    "test-host.c": "bdf028763ae491ac00f94c89d7e24c36d944bde92cd132db1e72fd22c1f2a724",
+    "README.md": "64e18a79966088a2a282d1ca7b357030abc15914d4fffc5de9df67fcc3cb584e",
+    "qualify.py": "8ee523a3e99cda1baf4868d50de0ff8e09a675d70b00f1dd19edc9317c28f44e",
+    "sp11-front-scaler-config.h": "f3af661db4250e7ab4802698449c8e95e801bd68a102c8644be9a1c283cce031",
+    "build-worker.py": "02d4e7ef94eb961c7cd4dda6d9bede16834519d11e0f60f98bfd7f9458c8a520",
+    "test-native.py": "2963e9896800a69cc16de087c5842c90910ccecd4722bc14682be69654c7f763"
+  },
+  "configuration_registers": [
+    "0x9864",
+    "0x9868",
+    "0x986c",
+    "0x9870",
+    "0x9874",
+    "0x9878",
+    "0x987c",
+    "0x9880",
+    "0x9884",
+    "0x9a64",
+    "0x9a68",
+    "0x9a6c",
+    "0x9a70",
+    "0x9a74",
+    "0x9a78",
+    "0x9a7c",
+    "0x9a80",
+    "0x9a84"
+  ],
+  "candidate_unique_configuration_addresses_before": 83,
+  "candidate_unique_configuration_addresses_after": 101,
+  "candidate_leaves_are_not_a_precision_bound_complete_program": true,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "next": "Reuse retained Crop12 and source core/Gamma precision work; bind module and full colour pipeline policy, complete own CCM auxiliary state and startup before private-loader replacement and fresh hardware parity"
+}
