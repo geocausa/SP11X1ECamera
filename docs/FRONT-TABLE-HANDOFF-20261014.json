@@ -1,0 +1,174 @@
+{
+  "schema": "sp11-front-table-handoff-qualification-v1",
+  "status": "PASS_SOURCE_AND_COMPILE_ONLY",
+  "existing_own_measured_LSC_ABF_data_and_generators_reused_unchanged": true,
+  "source_acceptance": "native02",
+  "compile_acceptance": "native-compile02",
+  "excluded_attempts": {
+    "native01": "Source/host PASS, superseded only by final header style pin",
+    "native-compile01": "Native compile PASS; one parameter-alignment style check corrected"
+  },
+  "source": {
+    "schema": "sp11-front-table-handoff-source-v1",
+    "status": "PASS_REUSED_FRONT_MEASURED_TABLE_HANDOFF",
+    "source_cases": 38,
+    "native_instructions": 3078,
+    "placements": 3,
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_immutable": true,
+    "SP_callee_saved_restored": true,
+    "canaries_intact": true,
+    "inputs_immutable": true,
+    "native_entries": {
+      "LSC_builder": "0xb3cda0",
+      "ABF_builder": "0xb404f0"
+    },
+    "intercepted_helpers": [
+      "0x85ee78 register command observer/success",
+      "0x85f108 DMI argument observer/success"
+    ],
+    "arithmetic_or_branch_shims": false,
+    "serializer_executed": false,
+    "constructor_executed": false,
+    "arithmetic_packers_executed": false,
+    "source_fixed_DMI_addresses_observed": true,
+    "addresses_substituted": false,
+    "source_word_to_byte_offsets_observed": true,
+    "ordinary_stripe_context": true,
+    "ABF_request_flag_17130": 0,
+    "optional_ABF_flag1_context_qualified": false,
+    "command_bytes": 48,
+    "source_DMI_arguments": [
+      {
+        "register": "0x4308",
+        "selector": 1,
+        "offset": 148,
+        "bytes": 884
+      },
+      {
+        "register": "0x4308",
+        "selector": 2,
+        "offset": 1032,
+        "bytes": 884
+      },
+      {
+        "register": "0x4308",
+        "selector": 3,
+        "offset": 1916,
+        "bytes": 884
+      },
+      {
+        "register": "0x4908",
+        "selector": 1,
+        "offset": 148,
+        "bytes": 256
+      }
+    ],
+    "existing_own_measured_table_pairs_validated_each_compiler": 1,
+    "own_data_values_or_hashes_exported": false,
+    "new_calibration": false,
+    "module_or_bank_commands_emitted": 0,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted": 2050,
+          "atomic_negatives": 3702,
+          "existing_own_table_pairs": 1
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "status": "PASS",
+          "admitted": 2050,
+          "atomic_negatives": 3702,
+          "existing_own_table_pairs": 1
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_LSC_selector",
+      "wrong_ABF_register",
+      "early_publication",
+      "skip_prepared_validation",
+      "accept_stale_request",
+      "bypass_domain"
+    ],
+    "header_pins": {
+      "sp11-front-table-handoff.h": "a8eb390bc8eebc230d69fe925bb12994d745f2c6674faabbf46fb8227413b5b6",
+      "native-front-gamma.h": "6b3fa1634d6bef88064a9d7d611c8ad4dbaac62265e19010416c603b7f26f308",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/front-scaler-config-20261014/test-native.py": "2963e9896800a69cc16de087c5842c90910ccecd4722bc14682be69654c7f763",
+      "src/native-rgb/open-profile/fit-lsc.py": "4d513235cd7660884f9e66377281a4e60b43aa17478a0b9a97754a05f6e929b6",
+      "src/native-rgb/open-profile/gen-abf-lut.py": "063cbe357d9df0ae847dadb6f6779b37fee780f59cd6e4059ca9ebdc3f854b6a",
+      "experiments/E004-front-ir-vd55g0/e007i-rear-lsc-dmi-handoff/camss-e007i-rear-lsc-handoff.inc": "c747fd0a8e5a351eb9307fad906ce31ddcb4de996f9fbdf6eac103a35545d57c"
+    },
+    "CPU_DMA_correspondence_proven": false,
+    "bank_config_integrated": false,
+    "completion_lifetime_integrated": false,
+    "physical_channel_or_mesh_binding_proven": false,
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "runtime_changed": false,
+    "installed": false,
+    "loaded": false,
+    "hardware": false
+  },
+  "build": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-table-handoff-20261014-01/native-compile02/sp11_table_handoff_compile.ko",
+    "module_sha256": "4ddd50d1c2b7169cc20db98834a0ef842ec15abce0747e222eebc813f9095fdc",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "style": {
+      "errors": 0,
+      "warnings": 0,
+      "checks": 0
+    },
+    "header_pins": {
+      "sp11-front-table-handoff.h": "a8eb390bc8eebc230d69fe925bb12994d745f2c6674faabbf46fb8227413b5b6",
+      "native-front-gamma.h": "6b3fa1634d6bef88064a9d7d611c8ad4dbaac62265e19010416c603b7f26f308",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "new_source_pins": {
+    "test-host.c": "f51fe6cb8ae755ef0d4c8e287cbfba5c8d892ddb54cde284ff638e8be46ea5c2",
+    "README.md": "cd942ba0858c81e4415ad87cfed84e0ee703e667e321fed8cd2a454b7acb803c",
+    "qualify.py": "bc567f63f0275a83caaadee26e65b3ae36fa08d6af2a343e74be367aa845407c",
+    "sp11-front-table-handoff.h": "a8eb390bc8eebc230d69fe925bb12994d745f2c6674faabbf46fb8227413b5b6",
+    "build-worker.py": "314ded9c47cf228e7f423c671458ed9b4124e4e458d3b20e6fb3adf62d942b05",
+    "test-native.py": "599b155ae56830cbe996aa478c17465e62bce423e6aef39407627c5ab7b132f1"
+  },
+  "prepared_table_bytes": {
+    "LSC": 2652,
+    "ABF": 256
+  },
+  "command_bytes": 48,
+  "DMI_transfers": 4,
+  "candidate_unique_configuration_addresses_before": 117,
+  "candidate_unique_configuration_addresses_after": 117,
+  "module_or_bank_commands_emitted": 0,
+  "full_LSC_ABF_configuration_qualified": false,
+  "complete_startup": false,
+  "physical_precision_chain_qualified": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "next": "Reuse retained core/module source and full LSC/ABF configuration; bind own Gamma/LSC/ABF handoffs to native request/bank/DMA lifetime in fresh isolated private-loader replacement, then hardware/image parity"
+}

@@ -1,3 +1,47 @@
+## 2026-10-14 own front LSC/ABF table handoff source/compile PASS
+
+Reused existing fit-lsc.py/gen-abf-lut.py, actual already-generated measured
+front LSC/ABF files and native RGB little-endian/CDM helpers unchanged.
+No refit, spatial math, resampling, vendor reserve or calibration replacement.
+Native unified48 loader still patches private capsule offsets; new typed table
+preparation accepts existing own prepared data without that carrier.
+
+Original LSC builder0xb3cda0 emits4308 selectors1/2/3,884bytes each;
+ABF builder0xb404f0 emits4908 selector1,256bytes. Both execute unchanged source
+with owned ordinary stripe contexts and metadata word-to-byte offset checks.
+New48byte plan owns only four DMI commands; no bank/module/config activation.
+Parent-owned matching nonzero request identity, disjoint full allocation extents
+and whole prepared encoding are checked before atomic publication.
+Own LSC13-bit Q10 lanes0/14, common green lanes, zero selector3; own ABF9-bit
+inverse-noise values/decrements, final decrement0. These are generator policy,
+not all hardware modes or optical verification. Actual own data tested locally;
+no table values/hashes or pixels exported/committed.
+
+38 original-builder cases, GCC/Clang ASan/UBSan2050 command cases/3702 atomic
+negatives/six compiled unsafe mutations each PASS, including actual own measured
+table pair per compiler. Native ARM64 W1/Werror and style0/0/0 PASS.
+Acceptance native02/compile02; initial source/compile PASS superseded by one
+parameter alignment correction. Evidence docs/FRONT-TABLE-HANDOFF-20261014.json.
+Original arithmetic packers/constructors/serializers NOT executed by new fixture.
+ABF request17130=1 reaches unmodeled source context; unqualified, not shimmed.
+Actual bank configuration, CPU/DMA correspondence, native queue completion/
+retirement integration and physical channel/mesh/precision proof remain open.
+Catalog117 unchanged; both private consumers remain/upstream_ready=false.
+Golden/default/daily/calibrated unified48/libcamera21/run93/v15 preserved.
+No install/load/camera/reboot/private tuning/profile/pixel read or calibration.
+
+PRIOR AUDIT: E007i supplies request-tagged ownership, not front startup request>=4.
+E007w already resolves PERIOD_CFG semantics; reuse its producer, do not rediscover.
+E011CF original core/interface creation is Windows manager/tuning producer proof,
+not a complete front Linux VFE bootstrap; optional numeric policy/lifetime remain
+open. Its private manager inputs are not a new open configuration authority.
+
+NEXT bind retained VFE core/module and full LSC/ABF configuration/mesh geometry
+to own measured policy. Reuse Gamma/LSC/ABF handoffs and proven native lifetime
+for fresh isolated private-loader replacement, then guarded hardware/image parity.
+Do not repeat existing calibration, table generators or qualified arithmetic.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 Gamma151 bank/table handoff source/compile PASS
 
 Reused prior native RGB12 validator/startup conversion, Gamma queue backend
