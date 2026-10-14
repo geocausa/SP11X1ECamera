@@ -1,0 +1,72 @@
+{
+  "schema": "sp11-processed-stack-prior-reuse-audit-v1",
+  "utc": "2026-10-14T09:56:10.670622+00:00",
+  "project_parent": "8ac38bc71555df1abbfe9fe6f0673de132433d57",
+  "current_hardware": "docs/UPSTREAM-RAW-STRESS11-HARDWARE-20261014.json",
+  "audited_repository_source_pins": {
+    "src/native-rgb/rear-v4l2/apply-command-receipts.py": "b0bc100706770369cc68963ef78e7706f3bac2222a31384ce47c4cf6644a0cff",
+    "src/native-rgb/rear-v4l2/native-rear-command-receipt.h": "94f83ccef9a1715899b271d6b0a85a957485a7a5b985768ec67a505bdcd39905",
+    "src/native-rgb/rear-v4l2/native-rear-command-receipts.inc": "6f66f27f13b3e39bc64c99b204200b81cff8d64355c363792f30b1d71d084280",
+    "src/native-rgb/front-robust/native-front-queue.inc": "8c081de095558492463868cd795cca0312a1ab61302475ad400dab4d9152634d",
+    "src/native-rgb/front-robust/patch-libcamera-robust.py": "5e82f4fcc43889d3306f31953c93ad0074b5d06667feaaddbe89627ae236f1e8",
+    "src/native-rgb/front-pipeline/README.md": "0d698934803a108edb5aa9a3a8b5fb283ede845c9860d592d4fb8c33932ef0f1",
+    "src/upstream/isp-config/sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c",
+    "src/upstream/isp-config/sp11-front-minimal.h": "75656614b9d2582c942f954c23e5c9db5465961eb14d20c868f9592627cb1dd5",
+    "src/upstream/isp-config/sp11-vfe680-nv12.h": "fbad9277a518d1b77060ebff2b415067740ef67e3153b8fbe8d0f4156c344a71",
+    "src/upstream/isp-config/sp11-csid680-ipp.h": "71e92964e69aca0cb5ef2112cce8182fa4c53d3c7f47c21a3d00dc7d6665fc5f",
+    "docs/UPSTREAM-EXISTING-CALIBRATION-AUDIT-20261012.json": "54962030540d195d54ee1d7f0fcc7fc7157d4ab55b6d959b2b3a4b16794e9b55",
+    "docs/UPSTREAM-VFE680-INPUT-AUDIT-20261012.md": "945984a29cf6ff2605c550bb6d1ed9ad12decf6ddc8282ad347a2360ce0829dc"
+  },
+  "native_receipt_source_and_build": {
+    "stage": "/home/geoca/Documents/SP11-PROJECT/02-kernel/native-rgb-rear-generation-20261007-72",
+    "sha256": {
+      "camss/camss.c": "618b40c25b248a0cf1cd6da775ad130ea6ddf75e8983de20095575a1e2cffb7f",
+      "camss/native-rear-command-receipt.h": "94f83ccef9a1715899b271d6b0a85a957485a7a5b985768ec67a505bdcd39905",
+      "camss/native-rear-command-receipts.inc": "6f66f27f13b3e39bc64c99b204200b81cff8d64355c363792f30b1d71d084280",
+      "camss/native-rear-command-irq.inc": "af2754ac5176abc8bae180802292989eb42071681692f25a87196bfc0eacb42d",
+      "build-result.json": "c9d31f0772533a196344bfaa5cd5244f6fd6683625be4104a35476483de0f79e",
+      "source-manifest.json": "88eda70404a646395743e09bf8742d89abe47fb12de6c921141dd112a0f2aa34",
+      "command-receipts-hosted-01.json": "942294020952a11463f2952b1de91982c9671cc5bc3d01322238a0dfa5f83c42",
+      "command-fifo-hosted-01.json": "095fb84d4c00ca29c672579b4c8a6044c39d9f58e6775a9d4b4550e5b1449899"
+    },
+    "record": "docs/NATIVE-RGB-REAR-GENERATION-59-20261009.json",
+    "record_sha256": "fcc56b0720f53e2d7ba393a46966d617c58409989e9ce5a3997e6b8eed2b3110",
+    "source_head": "319a72ebcc8650b8370a671509f084ee806d97ef",
+    "status": "PASS_REAR_THREE_SAME_BOOT_LIBCAMERA_SESSIONS_AND_CLEAN_RELEASE",
+    "requests": 1200,
+    "receipt_scalars": {
+      "ret": 0,
+      "packets": 4,
+      "BL_complete": 22,
+      "first_seq": 1,
+      "last_seq": 22,
+      "command_arenas_pinned": 4,
+      "live_release": 0,
+      "rewrite": 0,
+      "requeue": 0
+    },
+    "stop_release_each": true,
+    "reusable": "FIFO BASE/encoded byte-count-minus-one/LEN/STORE ordering; exclusive serialization; allocation/owner/request/sequence receipts; faults retain resources",
+    "compatibility_gap": "Native kernel7.1.5 carrier,22-BL four-packet private-profile/DMI startup and bespoke PIX producer are not standard7.2.0 ownership/params API"
+  },
+  "public_reference": "src/upstream/camss/cdm-lifetime-reference-20261012.json",
+  "standard_gaps": [
+    "Standard VFE680 is RDI only; no complete PIX startup/params/stats callbacks",
+    "Dormant CDM2.1 provides reset/IRQ/resource-binding/power ownership, previously no submission",
+    "Generic RFC params_apply is void and IRQ/output-lock context; synchronous submission cannot be copied into it",
+    "Independent ISP builders lack complete owner/input/output-group startup and physical optical/IQ qualification",
+    "Own measured calibration needs matching sensor timing/CFA/precision/crop/ISP domains",
+    "Native libcamera/IPA delayed-control/statistics methods exist; private profile and bespoke ABI require compatible port",
+    "Retained simple libcamera pipeline selects software ISP for qcom-camss and lacks qualified matched-route admission; not release integration"
+  ],
+  "chosen_port": "candidate34 single retained REG_CONT submission, native ordering/receipt reuse plus pinned public definitions",
+  "excluded": [
+    "Windows binaries/firmware/vendor tuning",
+    "private startup packet/profile payloads",
+    "pixels/hashes/spatial evidence export",
+    "software ISP release dependency"
+  ],
+  "provenance": "New adaptation GPL-2.0-only uses retained independent native work and public Qualcomm functional definitions. Original public notices remain in pinned reference. GPL labels alone do not close whole-series derivation, attribution, DCO, bindings/API or maintainer review.",
+  "upstream_ready": false,
+  "hardware_attempted": false
+}

@@ -1,0 +1,88 @@
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <limits.h>
+#include <stdlib.h>
+#include "sp11-cdm21-state.h"
+#include "sp11-cdm21-command.h"
+#include "sp11-front-minimal.h"
+#define U64_MAX UINT64_MAX
+#define __iomem
+struct mutex { int held; };
+typedef struct { int held; } spinlock_t;
+struct completion { unsigned done; };
+struct camss_cdm21_power;
+struct camss_cdm21 {
+ void *base; struct camss_cdm21_power *power_owner; int irq;
+ struct mutex lock; spinlock_t irq_lock; struct completion reset_complete;
+ struct sp11_cdm21_reset_observation reset;
+ struct sp11_cdm21_command retained_command; u64 command_sequence;
+ bool command_held, reset_ready, initialized, active, issued, quarantined, irq_disabled;
+};
+struct camss_cdm21_power {
+ struct camss_cdm21 *cdm; void *dev, *clocks; int num_clocks;
+ struct mutex lock; bool initialized, held, touched, fault;
+};
+struct camss_cdm21_retention {
+ int (*hold)(void *, const struct sp11_cdm21_command *); void *context;
+};
+static void mutex_lock(struct mutex *m) { assert(!m->held); m->held=1; }
+static void mutex_unlock(struct mutex *m) { assert(m->held); m->held=0; }
+enum fault {
+ NONE, MASK_FIRST, MASK_LAST, PAUSE_FIRST, PAUSE_LAST, OLD_STICKY,
+ CORE_CFG_BAD, FIFO_CFG_BAD, ENABLE_BAD, TIMEOUT,
+ IRQ_ERROR, IRQ_RESET, OTHER_IRQ, PENDING_FIRST, PENDING_LAST,
+ OTHER_FIFO, EARLY_STATUS, LATE_ERROR, FINAL_STICKY, RETAIN_FAIL
+};
+static uint32_t regs[0x400/4];
+static enum fault fault;
+static unsigned writes, stores, masks, drains, pauses, clears, enables, barriers, retains, polls, disables;
+static bool fifo_issued;
+static struct camss_cdm21 *live;
+static size_t offset(const void *p) {
+ size_t o=(const unsigned char *)p-(const unsigned char *)regs;
+ assert(o < sizeof(regs) && !(o&3)); return o;
+}
+static uint32_t readl(const void *p) {
+ size_t o=offset(p);
+ if (o==0x30 && ((fault==MASK_FIRST && masks==4)||(fault==MASK_LAST && masks>=8)))return 1;
+ if (o==0x1c && ((fault==PAUSE_FIRST&&pauses==1)||(fault==PAUSE_LAST&&pauses>=2)))return 0;
+ if (o==0x18&&fault==CORE_CFG_BAD)return regs[o/4]^1;
+ if (o==0x5c&&fault==FIFO_CFG_BAD)return regs[o/4]^1;
+ if (o==0x1c&&fault==ENABLE_BAD&&enables&&pauses==1)return 0;
+ return regs[o/4];
+}
+static void writel(uint32_t v,void *p) {
+ size_t o=offset(p); writes++; regs[o/4]=v;
+ if (o==0x30||o==0x130||o==0x230||o==0x330) {
+  masks++;assert(v==0);
+  if (fault==LATE_ERROR&&masks==8)regs[0x44/4]|=1U<<16;
+ }
+ if (o==0x1c&&v==3)pauses++;
+ if (o==0x38) {
+  clears++;
+  for(unsigned i=0;i<4;i++)
+   if (!((fault==OLD_STICKY&&i==0)||(fault==FINAL_STICKY&&enables&&i==0)))regs[(0x44+i*0x100)/4]=0;
+ }
+ if (o==0x18&&fault==EARLY_STATUS)regs[0x44/4]=4;
+ if (o==0x58) {
+  assert(v==1 && retains==1 && barriers==1 && masks>=4 && drains>=1);
+  assert(regs[0x1c/4]==3 && !regs[0x44/4] && !stores);
+  assert(regs[0x18/4]==0x11f && regs[0x5c/4]==0x10000);
+  stores++;fifo_issued=true;
+ }
+ if(o==0x1c&&v==1) {
+  assert(fifo_issued);enables++;
+  regs[0x44/4]=fault==TIMEOUT ? 2 : 6;
+  if(fault==IRQ_ERROR)regs[0x44/4]|=1U<<16;
+  if(fault==IRQ_RESET)regs[0x44/4]|=1;
+  if(fault==OTHER_IRQ)regs[0x344/4]=4;
+  if(fault==PENDING_LAST)regs[0x70/4]=1U<<16;
+ }
+}
+static void synchronize_irq(int irq) { assert(irq==7);drains++; }
+static void disable_irq(int irq) { assert(irq==7);disables++; }
+static void dma_wmb(void) { barriers++; }
+#define read_poll_timeout(op,val,cond,delay,timeout,sleep,...) \
+ ({ int pr=-ETIMEDOUT; (void)(delay);(void)(timeout);(void)(sleep); \
+ for(unsigned pi=0;pi<5;pi++){polls++;(val)=op(__VA_ARGS__);if(cond){pr=0;break;}}pr; })

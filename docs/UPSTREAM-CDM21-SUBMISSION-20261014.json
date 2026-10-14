@@ -1,0 +1,210 @@
+{
+  "schema": "sp11-cdm21-owned-submit-qualification-v1",
+  "utc": "2026-10-14T09:56:10.670622+00:00",
+  "status": "PASS_DORMANT_CDM21_SINGLE_PROGRAM_SOURCE_QUALIFICATION",
+  "prior_reuse_audit": "docs/UPSTREAM-PROCESSED-PRIOR-REUSE-AUDIT-20261014.json",
+  "candidate": {
+    "schema": "sp11-cdm21-submit-candidate-v1",
+    "parent": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-33/matched-route-qual01/source",
+    "project_parent": "8ac38bc71555df1abbfe9fe6f0673de132433d57",
+    "parent_pins": {
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.c": "cfe0f22c817b5dd553755c3a182d20174ad9ef36a0c5c69502f55826dcc68f31",
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.h": "42c762b6e83fdfe828efb4806b357ab54602ee3429c819f138d6bd88df0f9733",
+      "drivers/media/platform/qcom/camss/camss-cdm-power.c": "4e8b48815922a0954d18227dd5456e7d65feada31f9ab5b792963594f6f83e76",
+      "drivers/media/platform/qcom/camss/camss-cdm-power.h": "26626dfbfac68214e87edba2dced73205501179cb427b89320e13106c773c41d"
+    },
+    "output_sha256": {
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.c": "334a3d6b82af59b1bdbe9492b8fbe239b4043f4eae963d5a5c9d2049987f09c6",
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.h": "8866f7844ec1e824b9623aa28c512554898204ec0105de022f2ba46bb8a69010",
+      "drivers/media/platform/qcom/camss/camss-cdm-power.c": "2b2b8c2f73f549ad8400106e8f4ecfb87ea95d2347a73656e06a8aa81f057603",
+      "drivers/media/platform/qcom/camss/camss-cdm-power.h": "ec1c02bc1a46c45b07cfb5ecd7653784e25f0614257733f3525f3c6c73f1e747",
+      "drivers/media/platform/qcom/camss/sp11-cdm21-command.h": "dad95348ae2fc1f2567cad7ce1e874adad220749f4571ceca4fd0ed1668e78b7"
+    },
+    "patch_sha256": "90110a229dbb0e01bdeef2fbf0954fe446fc6e9a31b404cef22bdb06713c7f10",
+    "installed": false,
+    "hardware_qualified": false
+  },
+  "kernel_build": {
+    "status": "PASS_CDM21_SUBMIT_CAMSS_MODULE_ARM64_W1_WERROR",
+    "source_candidate": 34,
+    "full_kernel_candidate": 26,
+    "source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.c": "334a3d6b82af59b1bdbe9492b8fbe239b4043f4eae963d5a5c9d2049987f09c6",
+      "drivers/media/platform/qcom/camss/camss-cdm-2-1.h": "8866f7844ec1e824b9623aa28c512554898204ec0105de022f2ba46bb8a69010",
+      "drivers/media/platform/qcom/camss/camss-cdm-power.c": "2b2b8c2f73f549ad8400106e8f4ecfb87ea95d2347a73656e06a8aa81f057603",
+      "drivers/media/platform/qcom/camss/camss-cdm-power.h": "ec1c02bc1a46c45b07cfb5ecd7653784e25f0614257733f3525f3c6c73f1e747",
+      "drivers/media/platform/qcom/camss/sp11-cdm21-command.h": "dad95348ae2fc1f2567cad7ce1e874adad220749f4571ceca4fd0ed1668e78b7"
+    },
+    "config_sha256": "5415823fd3d198494ccce80ec69fdfd4102bdfc7c5ac1848cd2a3716fa35bf6a",
+    "artifacts": {
+      "camss": {
+        "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-34/cdm-submit-qual01/camss-module01/qcom-camss.ko",
+        "sha256": "e393798b8e3b8adefd838d0d0be9f33253f1f6f733ec8ed2d4485a36ff5d4de5",
+        "bytes": 788104,
+        "vermagic": "7.2.0-sp11-upstream-front26 SMP preempt mod_unload aarch64",
+        "strict_warnings": 0,
+        "strict_errors": 0
+      }
+    },
+    "installed": false,
+    "hardware_qualified": false
+  },
+  "actual_submission_body_tests": {
+    "status": "PASS_ACTUAL_CDM21_SUBMISSION_BODIES",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "result": {
+          "cases": 60,
+          "checks": 284
+        },
+        "sanitizers": [
+          "ASan",
+          "UBSan"
+        ],
+        "actual_source": true
+      },
+      {
+        "compiler": "clang",
+        "result": {
+          "cases": 60,
+          "checks": 284
+        },
+        "sanitizers": [
+          "ASan",
+          "UBSan"
+        ],
+        "actual_source": true
+      }
+    ],
+    "mutations_rejected_each_compiler": [
+      "skip_extent_check",
+      "accept_inline_as_done",
+      "ignore_late_error",
+      "ignore_pending",
+      "drop_retention",
+      "wrong_length"
+    ],
+    "hardware": false,
+    "source_sha256": {
+      "camss-cdm-2-1.c": "334a3d6b82af59b1bdbe9492b8fbe239b4043f4eae963d5a5c9d2049987f09c6",
+      "camss-cdm-power.c": "2b2b8c2f73f549ad8400106e8f4ecfb87ea95d2347a73656e06a8aa81f057603",
+      "sp11-cdm21-command.h": "dad95348ae2fc1f2567cad7ce1e874adad220749f4571ceca4fd0ed1668e78b7"
+    }
+  },
+  "reused_reset_body_regression": {
+    "status": "PASS_REUSED_ACTUAL_RESET_ISR_BODY_SUITE",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "result": {
+          "cases": 661,
+          "assertions": 234088
+        },
+        "sanitizers": [
+          "ASan",
+          "UBSan"
+        ]
+      },
+      {
+        "compiler": "clang",
+        "result": {
+          "cases": 661,
+          "assertions": 234088
+        },
+        "sanitizers": [
+          "ASan",
+          "UBSan"
+        ]
+      }
+    ],
+    "retained_fixture": "tools/test-upstream-cdm21-backend.py",
+    "hardware": false
+  },
+  "public_writer_encoding_oracle": {
+    "status": "PASS_PINNED_PUBLIC_ACTUAL_FIFO_WRITER",
+    "reference_revision": "3f5ef25e12b501a518d2d4f4a870288e9bb127a0",
+    "all_reference_pins_checked": 8,
+    "runs": [
+      {
+        "compiler": "gcc",
+        "result": {
+          "byte_length_cases": 262144,
+          "status_cases": 524288
+        }
+      },
+      {
+        "compiler": "clang",
+        "result": {
+          "byte_length_cases": 262144,
+          "status_cases": 524288
+        }
+      }
+    ],
+    "hardware": false
+  },
+  "patch_replay": {
+    "fresh_sparse": true,
+    "zero_fuzz_offsets": true,
+    "parent_output_pins_verified": true,
+    "path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-34/cdm-submit-qual01/replay02"
+  },
+  "style": [
+    {
+      "file": "camss-cdm-2-1.c",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "camss-cdm-2-1.h",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "camss-cdm-power.c",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "camss-cdm-power.h",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "sp11-cdm21-command.h",
+      "errors": 0,
+      "warnings": 0
+    }
+  ],
+  "standard_patch_advisory": "Unsigned development patch: one MISSING_SIGN_OFF error and one FILE_PATH_CHANGES warning. Code-style review with --no-signoff and reviewed CAMSS file-path advisory ignored is zero errors/warnings. Whole-series provenance/DCO and maintainer review remain open; no author/signoff invented.",
+  "test_attempt_history": [
+    "Wrapper quoting SyntaxError before execution; missing-script job recorded, no production mutation.",
+    "host01/02 initial synthetic REG_CONT passed; host03 uses actual independent minimum compiler at3840x2640.",
+    "reset02 encountered original stale-IRQ IRQ_NONE fixture. Reused known Oct12 binding-suite IRQ_HANDLED/fault correction; reset03 passed. No provider source change for fixture correction.",
+    "Initial diff-only style check required a commit description; a subsequent mail wrapper needed a proper separator/git diff headers. Final unsigned packet replays exactly; only missing DCO and reviewed new-file advisory remain. Provider source/module unchanged during formatting."
+  ],
+  "test_source_sha256": {
+    "test-submit-prefix.c.in": "5049b752d21e95175138e13c045d5b3ccf9c615440d5516589e3d044c5514044",
+    "test-public-fifo.py": "4632333ccd4ffab699ee29d0644eb39417f97c206bd7462f6b41de7611b9d713",
+    "test-reset-regression.py": "bd025ac6b7c0722c229d62e8967598ed6f6b7f5e7ce2563cbf6d0912da731e78",
+    "prepare.py": "251c8943d9a3acacc750ab56896dfe0de3c63ead4d6165cfe672a33cc39b601e",
+    "test-submit.py": "1a40280623fc6041b2c0428776edd13be871a697fb70d12c5d92f5f455c88d03",
+    "test-submit-main.c.in": "50a4624a7b0753ab971c4e06461d7b8d1b22555ec57cb0270bb14548bd1e7979",
+    "build-worker.py": "9e0173bfbda61fde0d23223caa7411d2b1e2dc3d10f8f6528cabae93d97a79e5"
+  },
+  "limits": [
+    "No parent runtime caller/binding deployment/install/load/MMIO/reboot",
+    "Single program only; no multi-request queue,DMI,automatic release,reset-after-command or complete processed provider",
+    "Parent coherent allocator/immutable typed compiler binding/module-device holds/detach gate need implementation/qualification",
+    "Masked-IRQ status polling,FIFO depth1 and core config require physical qualification",
+    "Models do not prove real IRQ concurrency,DMA coherence/address translation,pause completion,AXI drain,request-to-frame identity,optical/IQ",
+    "Standard IRQ-context params need nonblocking integration/error propagation; do not call this sleepable primitive there",
+    "Whole-series provenance/attribution/DCO/bindings/API/generalization/review remains open"
+  ],
+  "installed": false,
+  "hardware_qualified": false,
+  "upstream_ready": false,
+  "hardware_baseline_source": 33,
+  "hardware_baseline_evidence": "docs/UPSTREAM-RAW-STRESS11-HARDWARE-20261014.json",
+  "private_processed_runtime_consumers_remaining": 2
+}

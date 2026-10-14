@@ -1,0 +1,94 @@
+
+static unsigned checks,cases;
+#define CHECK(v) do { checks++; if(!(v)) { fprintf(stderr,"line %d: %s\n",__LINE__,#v);abort(); } } while(0)
+static unsigned char payload[1204];
+static int hold(void *ctx,const struct sp11_cdm21_command *cmd) {
+ CHECK(ctx==live && live->lock.held && live->power_owner->lock.held);
+ CHECK(cmd->owner==9 && cmd->request==5 && cmd->cpu==payload);
+ retains++; return fault==RETAIN_FAIL ? -ENOMEM : 0;
+}
+static void fresh(struct camss_cdm21 *c,struct camss_cdm21_power *p) {
+ memset(regs,0,sizeof(regs));writes=stores=masks=drains=pauses=clears=enables=barriers=retains=polls=disables=0;
+ fifo_issued=false; fault=NONE;
+ memset(c,0,sizeof(*c));memset(p,0,sizeof(*p));
+ c->base=regs;c->irq=7;c->initialized=true;c->reset_ready=true;c->power_owner=p;
+ p->cdm=c;p->initialized=p->held=p->touched=true;live=c;regs[0]=SP11_CDM21_VERSION;
+ memset(payload,0,sizeof(payload));sp11_cdm_put32(payload,3U<<24|1);sp11_cdm_put32(payload+4,0x40);sp11_cdm_put32(payload+8,1);
+}
+static struct sp11_cdm21_command command(void) {
+ return (struct sp11_cdm21_command){.cpu=payload,.dma=0x1000,.capacity=sizeof(payload),.bytes=12,.owner=9,.request=5};
+}
+static int submit(struct camss_cdm21_power *p,struct sp11_cdm21_command *cmd,struct sp11_cdm21_receipt *r) {
+ struct camss_cdm21_retention retention={.hold=hold,.context=p->cdm};
+ return camss_cdm21_power_submit(p,cmd,&retention,r);
+}
+static void run_failure(enum fault f,int expected,bool retained,bool exposed) {
+ struct camss_cdm21 c;struct camss_cdm21_power p;struct sp11_cdm21_command cmd;
+ struct sp11_cdm21_receipt r,original;
+ fresh(&c,&p);fault=f;cmd=command();memset(&r,0xa5,sizeof(r));original=r;
+ if(f==OLD_STICKY)regs[0x44/4]=4;
+ if(f==PENDING_FIRST)regs[0x6c/4]=1;
+ if(f==OTHER_FIFO)regs[0x35c/4]=0x10000;
+ CHECK(submit(&p,&cmd,&r)==expected);CHECK(!memcmp(&r,&original,sizeof(r)));
+ CHECK(c.command_held==retained);CHECK(stores==(unsigned)exposed);
+ CHECK(!c.lock.held&&!p.lock.held);
+ if(retained){CHECK(c.quarantined&&c.command_sequence==1&&retains==1);CHECK(c.retained_command.dma==cmd.dma);
+  CHECK(submit(&p,&cmd,&r)==-EIO);CHECK(stores==(unsigned)exposed&&retains==1);}
+ else CHECK(!c.quarantined&&!c.command_sequence&&!stores);
+ cases++;
+}
+int main(void) {
+ struct camss_cdm21 c;struct camss_cdm21_power p;struct sp11_cdm21_command cmd;
+ struct sp11_cdm21_receipt r,original;
+ fresh(&c,&p);cmd=command();memset(&r,0xa5,sizeof(r));
+ CHECK(submit(&p,&cmd,&r)==0);CHECK(c.command_held&&!c.quarantined&&!c.reset_ready);
+ CHECK(r.owner==9&&r.request==5&&r.sequence==1&&r.dma==0x1000&&r.bytes==12&&r.status==6);
+ CHECK(stores==1&&barriers==1&&retains==1&&masks==8&&drains==2&&pauses==2);
+ CHECK(regs[0x54/4]==0x10000b&&regs[0x1c/4]==3&&!regs[0x44/4]);
+ CHECK(submit(&p,&cmd,&r)==-EBUSY&&stores==1&&retains==1);cases++;
+ for(unsigned i=0;i<12;i++) {
+  fresh(&c,&p);cmd=command();memset(&r,0xa5,sizeof(r));original=r;
+  switch(i){case 0:c.reset_ready=false;break;case 1:c.active=true;break;case 2:c.command_held=true;break;
+   case 3:p.held=false;break;case 4:p.touched=false;break;case 5:p.fault=true;break;case 6:c.power_owner=NULL;break;
+   case 7:p.cdm=NULL;break;case 8:c.command_sequence=U64_MAX;break;case 9:c.quarantined=true;break;
+   case 10:regs[0]=0x30010000;break;case 11:p.initialized=false;break;}
+  CHECK(submit(&p,&cmd,&r)<0&&writes==0&&retains==0&&stores==0);CHECK(!memcmp(&r,&original,sizeof(r)));cases++;
+ }
+ for(unsigned i=0;i<15;i++) {
+  fresh(&c,&p);cmd=command();memset(&r,0xa5,sizeof(r));original=r;
+  switch(i){case 0:cmd.cpu=NULL;break;case 1:cmd.owner=0;break;case 2:cmd.request=0;break;case 3:cmd.dma=0;break;
+   case 4:cmd.dma=0x100000000ULL;break;case 5:cmd.dma=0xfffffff8ULL;break;case 6:cmd.dma=0x1001;break;
+   case 7:cmd.bytes=11;break;case 8:cmd.capacity=8;break;case 9:cmd.bytes=0x100004;break;
+   case 10:sp11_cdm_put32(payload,1U<<24|11);break;case 11:sp11_cdm_put32(payload,3U<<24);break;
+   case 12:sp11_cdm_put32(payload,3U<<24|65535);break;case 13:sp11_cdm_put32(payload+4,0xfffffc);sp11_cdm_put32(payload,3U<<24|2);cmd.bytes=16;break;
+   case 14:sp11_cdm_put32(payload+4,3);break;}
+  CHECK(submit(&p,&cmd,&r)<0&&writes==0&&retains==0&&stores==0);CHECK(!memcmp(&r,&original,sizeof(r)));cases++;
+ }
+ run_failure(MASK_FIRST,-EIO,true,false);run_failure(MASK_LAST,-EIO,true,true);
+ run_failure(PAUSE_FIRST,-EIO,true,false);run_failure(PAUSE_LAST,-EIO,true,true);
+ run_failure(OLD_STICKY,-EIO,true,false);run_failure(CORE_CFG_BAD,-EIO,true,false);
+ run_failure(FIFO_CFG_BAD,-EIO,true,false);run_failure(ENABLE_BAD,-EIO,true,true);
+ run_failure(TIMEOUT,-ETIMEDOUT,true,true);run_failure(IRQ_ERROR,-EIO,true,true);
+ run_failure(IRQ_RESET,-EIO,true,true);run_failure(OTHER_IRQ,-EIO,true,true);
+ run_failure(PENDING_FIRST,-EBUSY,true,false);run_failure(PENDING_LAST,-EBUSY,true,true);
+ run_failure(OTHER_FIFO,-EBUSY,true,false);run_failure(EARLY_STATUS,-EIO,true,false);
+ run_failure(LATE_ERROR,-EIO,true,true);run_failure(FINAL_STICKY,-EIO,true,true);
+ run_failure(RETAIN_FAIL,-ENOMEM,false,false);
+ fresh(&c,&p);cmd=command();
+ {struct camss_cdm21_retention rt={.hold=hold,.context=&c};
+ CHECK(camss_cdm21_submit_owned(&c,&p,&cmd,&rt,(void *)&cmd)==-EINVAL&&writes==0&&retains==0);
+ CHECK(camss_cdm21_submit_owned(&c,&p,&cmd,&rt,(void *)&c)==-EINVAL&&writes==0&&retains==0);
+ CHECK(camss_cdm21_submit_owned(&c,&p,&cmd,&rt,(void *)payload)==-EINVAL&&writes==0&&retains==0);cases+=3;}
+ /* Real independent minimum compiler, current RAW input geometry.
+  * Admission does not prove Bayer/domain/optical correctness.
+  */
+ fresh(&c,&p);cmd=command();
+ {struct sp11_front_minimal mode={{3840,2640,2560,1440},10,SP11_FRONT_RGGB};
+  CHECK(sp11_front_minimal_commands(payload,sizeof(payload),&mode)==0);
+  cmd.bytes=SP11_FRONT_MINIMAL_BYTES;CHECK(submit(&p,&cmd,&r)==0&&r.bytes==1204);cases++;}
+ /* Exact 32-bit last-byte boundary and each rejected reserved opcode bit. */
+ fresh(&c,&p);cmd=command();cmd.dma=0xfffffff4;cmd.capacity=cmd.bytes=12;
+ CHECK(sp11_cdm21_command_validate(&cmd)==0);cases++;
+ for(unsigned i=16;i<24;i++){sp11_cdm_put32(payload,(3U<<24)|1U|(1U<<i));CHECK(sp11_cdm21_command_validate(&cmd)==-EINVAL);cases++;}
+ printf("{\"cases\":%u,\"checks\":%u}\n",cases,checks);return 0;
+}

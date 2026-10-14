@@ -1,0 +1,420 @@
+Subject: [PATCH] media: camss: add dormant retained CDM2.1 register submission
+
+The retained CDM2.1 backend supports reset only. Add a single-program
+sleepable submission primitive with coherent-allocation retention supplied
+by the parent, bounded REG_CONT admission, exclusive FIFO0 ownership and
+conservative completion receipts. Retain resources after every exposure.
+
+No runtime caller is added. Parent allocation and detach ownership,
+physical qualification, processed startup and full upstream review remain
+required before admission. This is an unsigned development patch.
+
+---
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-2-1.c b/drivers/media/platform/qcom/camss/camss-cdm-2-1.c
+--- a/drivers/media/platform/qcom/camss/camss-cdm-2-1.c
++++ b/drivers/media/platform/qcom/camss/camss-cdm-2-1.c
+@@ -3,9 +3,11 @@
+  * Independently written CDM2.1 reset backend, dormant until parent integration.
+  * Exact Qualcomm GPL definitions are pinned in
+  * src/upstream/camss/cdm-lifetime-reference-20261012.json.
+- * No command submission, DMA allocation/release, DT binding or power operation.
++ * Single retained REG_CONT submission; no DMA release or runtime parent call.
+  */
+ #include <linux/jiffies.h>
++#include <linux/iopoll.h>
++#include <linux/dma-mapping.h>
+ #include <linux/limits.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+@@ -21,10 +23,18 @@
+ #define CDM21_IRQ_STATUS(n) (0x44 + (n) * 0x100)
+ #define CDM21_PENDING0 0x6c
+ #define CDM21_PENDING1 0x70
+-#define CDM21_REQUIRED_SPAN 0x348
++#define CDM21_REQUIRED_SPAN 0x360
+ #define CDM21_RESET_TIMEOUT_MS 300
+ #define CDM21_PAUSE_REQUEST 3U
+ #define CDM21_RESET_ACK 1U
++#define CDM21_CORE_CFG 0x18
++#define CDM21_FIFO_CFG(n) (0x5c + (n) * 0x100)
++#define CDM21_FIFO_BASE 0x50
++#define CDM21_FIFO_LEN 0x54
++#define CDM21_FIFO_STORE 0x58
++#define CDM21_SINGLE_FIFO_CFG (1U << 16)
++/* Qualcomm public AHB STOP_ON_ERROR | BURST_EN | BURST_LEN_16. */
++#define CDM21_SINGLE_CORE_CFG 0x11fU
+ 
+ int camss_cdm21_init(struct camss_cdm21 *cdm, void __iomem *base,
+ 		    size_t span, int irq)
+@@ -148,6 +158,11 @@
+ 		ret = -EPERM;
+ 		goto unlock;
+ 	}
++	if (cdm->command_held) {
++		ret = -EBUSY;
++		goto unlock;
++	}
++	cdm->reset_ready = false;
+ 	if (cdm->quarantined) {
+ 		ret = -EIO;
+ 		goto unlock;
+@@ -254,6 +269,7 @@
+ 		}
+ 		cdm->quarantined = true;
+ 	}
++	cdm->reset_ready = !ret;
+ unlock:
+ 	mutex_unlock(&cdm->lock);
+ 	return ret;
+@@ -318,3 +334,181 @@
+ 	devres_release_group(&pdev->dev, group);
+ 	return ret;
+ }
++
++static int cdm21_empty(struct camss_cdm21 *cdm)
++{
++	struct sp11_cdm21_pending pending;
++	u32 raw[2];
++	unsigned int i;
++	int ret;
++
++	raw[0] = readl(cdm->base + CDM21_PENDING0);
++	raw[1] = readl(cdm->base + CDM21_PENDING1);
++	ret = sp11_cdm21_decode_pending(SP11_CDM21_VERSION, raw, &pending);
++	for (i = 0; !ret && i < SP11_CDM21_FIFO_COUNT; i++)
++		if (pending.count[i])
++			ret = -EBUSY;
++	return ret;
++}
++
++/* IRQ remains masked and drained; this sleepable finite polling path does not
++ * participate in the reset ISR. Accumulate faults before accepting BL_DONE.
++ */
++static int cdm21_command_status(struct camss_cdm21 *cdm, u32 *seen)
++{
++	u32 status;
++	unsigned int i;
++
++	for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++) {
++		status = readl(cdm->base + CDM21_IRQ_STATUS(i));
++		if ((!i && (status & ~6U)) || (i && status))
++			return -EIO;
++		if (!i)
++			*seen |= status;
++	}
++	return sp11_cdm21_command_status_valid(*seen) ? 0 : -EAGAIN;
++}
++
++int camss_cdm21_submit_owned(struct camss_cdm21 *cdm,
++			    struct camss_cdm21_power *owner,
++			    const struct sp11_cdm21_command *command,
++			    const struct camss_cdm21_retention *retention,
++			    struct sp11_cdm21_receipt *receipt)
++{
++	struct sp11_cdm21_command next;
++	struct sp11_cdm21_receipt done;
++	u32 status[4], seen = 0, version;
++	unsigned int i;
++	int ret, poll_ret, drain_ret, pause_ret;
++
++	if (!cdm || !cdm->initialized || !owner || !command ||
++	    !retention || !retention->hold || !receipt)
++		return -EINVAL;
++	/* Serialize parent storage and ownership throughout this copy and call. */
++	next = *command;
++	ret = sp11_cdm21_command_validate(&next);
++	if (ret)
++		return ret;
++	if (sp11_cdm_overlap(receipt, sizeof(*receipt), cdm, sizeof(*cdm)) ||
++	    sp11_cdm_overlap(receipt, sizeof(*receipt), command, sizeof(*command)) ||
++	    sp11_cdm_overlap(receipt, sizeof(*receipt), next.cpu, next.capacity) ||
++	    sp11_cdm_overlap(receipt, sizeof(*receipt), owner, sizeof(*owner)) ||
++	    sp11_cdm_overlap(receipt, sizeof(*receipt), retention, sizeof(*retention)))
++		return -EINVAL;
++	mutex_lock(&cdm->lock);
++	if (cdm->power_owner != owner || !owner->initialized ||
++	    !owner->held || !owner->touched || owner->fault || owner->cdm != cdm) {
++		ret = -EPERM;
++		goto unlock;
++	}
++	if (cdm->quarantined) {
++		ret = -EIO;
++		goto unlock;
++	}
++	if (!cdm->reset_ready || cdm->active || cdm->command_held) {
++		ret = -EBUSY;
++		goto unlock;
++	}
++	if (cdm->command_sequence == U64_MAX) {
++		ret = -EOVERFLOW;
++		goto unlock;
++	}
++	version = readl(cdm->base + CDM21_HW_VERSION);
++	if (version != SP11_CDM21_VERSION) {
++		ret = -ENODEV;
++		cdm->quarantined = true;
++		goto unlock;
++	}
++	ret = retention->hold(retention->context, &next);
++	if (ret)
++		goto unlock;
++	/* Even a pre-STORE MMIO failure retains these independent parent holds.
++	 * No return path frees, rewrites, retries or drops exposed dependencies.
++	 */
++	cdm->retained_command = next;
++	cdm->command_held = true;
++	cdm->reset_ready = false;
++	cdm->command_sequence++;
++	ret = cdm21_mask_and_drain(cdm);
++	if (ret)
++		goto finish;
++	ret = cdm21_request_pause(cdm);
++	if (ret)
++		goto finish;
++	ret = cdm21_empty(cdm);
++	if (ret)
++		goto finish;
++	ret = cdm21_clear_old(cdm);
++	if (ret)
++		goto finish;
++	/* Only FIFO0, one outstanding program, no implicit wait or other bank. */
++	writel(CDM21_SINGLE_CORE_CFG, cdm->base + CDM21_CORE_CFG);
++	writel(CDM21_SINGLE_FIFO_CFG, cdm->base + CDM21_FIFO_CFG(0));
++	if (readl(cdm->base + CDM21_CORE_CFG) != CDM21_SINGLE_CORE_CFG ||
++	    readl(cdm->base + CDM21_FIFO_CFG(0)) != CDM21_SINGLE_FIFO_CFG) {
++		ret = -EIO;
++		goto finish;
++	}
++	/* All other FIFO banks must remain disabled after the fresh reset. */
++	for (i = 1; i < SP11_CDM21_FIFO_COUNT; i++)
++		if (readl(cdm->base + CDM21_FIFO_CFG(i))) {
++			ret = -EBUSY;
++			goto finish;
++		}
++	for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++)
++		if (readl(cdm->base + CDM21_IRQ_STATUS(i))) {
++			ret = -EIO;
++			goto finish;
++		}
++	dma_wmb();
++	writel((u32)next.dma, cdm->base + CDM21_FIFO_BASE);
++	writel(sp11_cdm21_command_length(next.bytes), cdm->base + CDM21_FIFO_LEN);
++	writel(1, cdm->base + CDM21_FIFO_STORE);
++	/* Ordered read flushes the posted STORE before the core can consume it. */
++	readl(cdm->base + CDM21_FIFO_LEN);
++	writel(1, cdm->base + CDM21_CORE_EN);
++	if (readl(cdm->base + CDM21_CORE_EN) != 1) {
++		ret = -EIO;
++		goto finish;
++	}
++	poll_ret = read_poll_timeout(cdm21_command_status, ret, ret != -EAGAIN,
++				     50, 300000, false, cdm, &seen);
++	if (poll_ret)
++		ret = poll_ret;
++finish:
++	drain_ret = cdm21_mask_and_drain(cdm);
++	pause_ret = cdm21_request_pause(cdm);
++	if (!ret && (drain_ret || pause_ret))
++		ret = -EIO;
++	for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++) {
++		status[i] = readl(cdm->base + CDM21_IRQ_STATUS(i));
++		if (!ret && ((!i && (status[i] & ~6U)) || (i && status[i])))
++			ret = -EIO;
++	}
++	if (!ret && !sp11_cdm21_command_status_valid(seen))
++		ret = -EIO;
++	if (!ret)
++		ret = cdm21_empty(cdm);
++	cdm21_clear_status(cdm, status);
++	for (i = 0; i < SP11_CDM21_FIFO_COUNT; i++)
++		if (!ret && readl(cdm->base + CDM21_IRQ_STATUS(i)))
++			ret = -EIO;
++	if (ret) {
++		if (!cdm->irq_disabled) {
++			disable_irq(cdm->irq);
++			cdm->irq_disabled = true;
++		}
++		cdm->quarantined = true;
++		goto unlock;
++	}
++	done.owner = next.owner;
++	done.request = next.request;
++	done.sequence = cdm->command_sequence;
++	done.dma = next.dma;
++	done.bytes = next.bytes;
++	done.status = seen;
++	*receipt = done;
++unlock:
++	mutex_unlock(&cdm->lock);
++	return ret;
++}
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-2-1.h b/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
+--- a/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
++++ b/drivers/media/platform/qcom/camss/camss-cdm-2-1.h
+@@ -8,6 +8,7 @@
+ #include <linux/mutex.h>
+ #include <linux/spinlock.h>
+ #include "sp11-cdm21-state.h"
++#include "sp11-cdm21-command.h"
+ 
+ /* Parent-owned, initially zeroed storage. No command or DMA-buffer ownership.
+  * Reset caller must provide a fresh powered CDM instance, exclusive mapped register
+@@ -26,6 +27,10 @@
+ 	spinlock_t irq_lock;
+ 	struct completion reset_complete;
+ 	struct sp11_cdm21_reset_observation reset;
++	struct sp11_cdm21_command retained_command;
++	u64 command_sequence;
++	bool command_held;
++	bool reset_ready;
+ 	bool initialized;
+ 	bool active;
+ 	bool issued;
+@@ -68,4 +73,25 @@
+ int camss_cdm21_reset_paused_owned(struct camss_cdm21 *cdm,
+ 				 struct camss_cdm21_power *owner);
+ 
++/* Parent callback must acquire independent command allocation/mapping/module
++ * and device lifetime holds, or fail without acquiring any hold. It runs under
++ * power->lock then cdm->lock and must not reenter either owner. A successful
++ * hold transfers to this backend permanently; there is no exposed-command
++ * release API. Parent detach/unbind needs a separate hold and retirement gate.
++ */
++struct camss_cdm21_retention {
++	int (*hold)(void *context, const struct sp11_cdm21_command *command);
++	void *context;
++};
++
++/* Internal entry, only through camss_cdm21_power_submit. Single program on a
++ * freshly reset instance; sleepable. Success publishes a software-bound BL_DONE
++ * receipt, not a hardware request ID or permission to free DMA/power/objects.
++ */
++int camss_cdm21_submit_owned(struct camss_cdm21 *cdm,
++			    struct camss_cdm21_power *owner,
++			    const struct sp11_cdm21_command *command,
++			    const struct camss_cdm21_retention *retention,
++			    struct sp11_cdm21_receipt *receipt);
++
+ #endif
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-power.c b/drivers/media/platform/qcom/camss/camss-cdm-power.c
+--- a/drivers/media/platform/qcom/camss/camss-cdm-power.c
++++ b/drivers/media/platform/qcom/camss/camss-cdm-power.c
+@@ -121,3 +121,19 @@
+ 	mutex_unlock(&power->lock);
+ 	return ret;
+ }
++
++int camss_cdm21_power_submit(struct camss_cdm21_power *power,
++			    const struct sp11_cdm21_command *command,
++			    const struct camss_cdm21_retention *retention,
++			    struct sp11_cdm21_receipt *receipt)
++{
++	int ret;
++
++	if (!power || !power->initialized)
++		return -EINVAL;
++	mutex_lock(&power->lock);
++	ret = camss_cdm21_submit_owned(power->cdm, power, command,
++				      retention, receipt);
++	mutex_unlock(&power->lock);
++	return ret;
++}
+diff --git a/drivers/media/platform/qcom/camss/camss-cdm-power.h b/drivers/media/platform/qcom/camss/camss-cdm-power.h
+--- a/drivers/media/platform/qcom/camss/camss-cdm-power.h
++++ b/drivers/media/platform/qcom/camss/camss-cdm-power.h
+@@ -37,4 +37,9 @@
+  */
+ int camss_cdm21_power_release_unused(struct camss_cdm21_power *power);
+ 
++int camss_cdm21_power_submit(struct camss_cdm21_power *power,
++			    const struct sp11_cdm21_command *command,
++			    const struct camss_cdm21_retention *retention,
++			    struct sp11_cdm21_receipt *receipt);
++
+ #endif
+diff --git a/drivers/media/platform/qcom/camss/sp11-cdm21-command.h b/drivers/media/platform/qcom/camss/sp11-cdm21-command.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/sp11-cdm21-command.h
+@@ -0,0 +1,81 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Single owned REG_CONT program. No userspace ABI or DMA retirement claim. */
++#ifndef SP11_CDM21_COMMAND_H
++#define SP11_CDM21_COMMAND_H
++#include "sp11-cdm.h"
++
++struct sp11_cdm21_command {
++	const u8 *cpu;
++	u64 dma;
++	size_t capacity;
++	size_t bytes;
++	u64 owner;
++	u64 request;
++};
++
++struct sp11_cdm21_receipt {
++	u64 owner;
++	u64 request;
++	u64 sequence;
++	u32 dma;
++	u32 bytes;
++	u32 status;
++};
++
++static inline u32 sp11_cdm21_get32(const u8 *p)
++{
++	return (u32)p[0] | ((u32)p[1] << 8) |
++	       ((u32)p[2] << 16) | ((u32)p[3] << 24);
++}
++
++/* Arithmetic and opcode admission only. The parent must independently own
++ * this coherent allocation and retain it immutable through hardware exposure.
++ * DMI, indirect programs, jumps and generated IRQ payloads are not admitted.
++ * Typed compilers retain responsibility for their allowed register fields.
++ */
++static inline int sp11_cdm21_command_validate(
++	const struct sp11_cdm21_command *cmd)
++{
++	size_t pos = 0, count, need;
++	u32 word, reg;
++
++	if (!cmd || !cmd->cpu || !cmd->owner || !cmd->request ||
++	    !cmd->dma || !cmd->bytes || !cmd->capacity)
++		return -EINVAL;
++	if ((cmd->dma & 3) || (cmd->bytes & 3) ||
++	    cmd->dma > 0xffffffffULL ||
++	    cmd->capacity > 0x100000000ULL - cmd->dma ||
++	    cmd->bytes > cmd->capacity || cmd->bytes > 0x100000U)
++		return -ERANGE;
++	while (pos < cmd->bytes) {
++		if (cmd->bytes - pos < 12)
++			return -EINVAL;
++		word = sp11_cdm21_get32(cmd->cpu + pos);
++		count = word & 0xffffU;
++		if ((word & 0xffff0000U) != (3U << 24) || !count)
++			return -EINVAL;
++		reg = sp11_cdm21_get32(cmd->cpu + pos + 4);
++		if ((reg & 3) || reg > 0x00ffffffU ||
++		    (count - 1) * 4 > 0x00ffffffU - reg)
++			return -ERANGE;
++		need = 8 + count * 4;
++		if (need > cmd->bytes - pos)
++			return -EINVAL;
++		pos += need;
++	}
++	return 0;
++}
++
++/* Same FIFO0 byte-count-minus-one and ARB bit as the retained native recipe;
++ * independently corroborated by pinned Qualcomm CDM2.1 GPL definitions.
++ */
++static inline u32 sp11_cdm21_command_length(size_t bytes)
++{
++	return (u32)(bytes - 1) | (1U << 20);
++}
++
++static inline bool sp11_cdm21_command_status_valid(u32 status)
++{
++	return (status & 4U) && !(status & ~6U);
++}
++#endif

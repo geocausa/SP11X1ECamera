@@ -1,3 +1,41 @@
+## 2026-10-14 source34 dormant owned CDM submission qualified
+
+Prior usable work checked first: actual native rear59/build72 completed1200
+libcamera requests and22 exact startup BL receipts, with command arenas pinned
+until stop. Source/build/record pins and retained ISP/params/stats/IPA/calibration
+compatibility gaps are in docs/UPSTREAM-PROCESSED-PRIOR-REUSE-AUDIT-20261014.json.
+Reused native FIFO ordering/receipt safety and pinned Qualcomm GPL definitions;
+no vendor startup/tuning/firmware bytes or image evidence were copied.
+
+Fresh sparse source34 adds one sleepable REG_CONT-only CDM2.1 submission behind
+a parent coherent-allocation retention contract and existing power owner.
+It requires fresh reset/exclusive FIFO0, keeps allocation/mapping/module/device
+holds, bounds status polling, catches timeout/stale/late/other-bank faults,
+checks final IRQ drain/pause/FIFO/status and publishes an exact software receipt.
+No command release/rewrite/retry/reset-after-exposure API or runtime caller.
+Parent constructor, immutable typed compiler binding and detach/retirement
+holds still need implementation; models do not certify those physical holds.
+
+Strict ARM64 kernel26-ABI CAMSS module W1/Werror:0 diagnostics. Actual-body
+submission60 cases/compiler +6 compiled unsafe mutations rejected each;
+retained actual reset661 cases/compiler; pinned public FIFO writer262144 byte
+lengths +524288 status cases/compiler; GCC/Clang ASan/UBSan PASS.
+Actual independent1204-byte minimum compiler accepted at3840x2640 input, without
+claiming optical/domain/complete PIX correctness. Fresh patch replay exact,
+C/header style0/0. Unsigned draft patch still needs author DCO/signoff; CAMSS
+new-file MAINTAINERS advisory reviewed. Full series provenance/API/bindings
+and maintainer review remain open. docs/UPSTREAM-CDM21-SUBMISSION-20261014.json.
+
+No module installed/loaded, no MMIO/capture/reboot attempt. Hardware-qualified
+baseline remains source33 RAW1260 full frames/30fps and1s/5s starvation recovery.
+Goldenb716b5cd-7ebd-4b2d-8901-3806085a5483 remains/no pending/camera stack.
+Both processed private startup consumers and full standard PIX/params/stats/
+libcamera/IPA remain open; upstream_ready=false.
+NEXT audit/reuse native coherent command allocation and parent resource/lifetime
+holds, adapt to standard7.2/CDM ownership and independent REG_CONT compiler,
+then complete independent PIX startup and bounded physical CDM qualification.
+Earlier current/NEXT paragraphs below are historical.
+
 ## 2026-10-14 unchanged33 RAW sustained and starvation recovery hardware PASS
 Prior work verified, not retraced: actual native ae80/83/84 records600/600,
 1s/5s freezes21/114 drops, normal0; GPL source/commit49746d75/build46 pinned.
