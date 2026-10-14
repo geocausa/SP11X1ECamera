@@ -1,0 +1,153 @@
+{
+  "schema": "sp11-front-bls121-validation-v1",
+  "utc": "2026-10-14T12:55:19.138667+00:00",
+  "project_parent": "f3324f7fe0738c5bbdda8840ec694fed207064f3",
+  "status": "PASS_IFE18_SOURCE_FACTORY_TO_CONFIGURATION_COMPILER",
+  "native_source_bridge": {
+    "schema": "sp11-bls121-native-factory-command-bridge-v1",
+    "status": "PASS_EXACT_NATIVE_FACTORY_PACKER_COMMAND_ARGUMENTS_AND_C_ENCODER",
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_PE_exported": false,
+    "original_image_immutable": true,
+    "native_primary_cases": 712,
+    "native_other_layout_cases": 8,
+    "native_instructions": 122464,
+    "native_factory_entry": "0xa19140",
+    "native_packer_entry": "0xb4bf30",
+    "native_command_entry": "0xb4b980",
+    "source_bound_selector_registers": {
+      "13": {
+        "module_register": "0x4b60",
+        "configuration_register": "0x4b68",
+        "offset_shift": 14,
+        "offset_width": 18
+      },
+      "199": {
+        "module_register": "0x2260",
+        "configuration_register": "0x2268",
+        "offset_shift": 20,
+        "offset_width": 12
+      }
+    },
+    "cold_register_image_zero_from_poisoned_allocation": true,
+    "allocation_sizes": [
+      88,
+      28
+    ],
+    "placements": 4,
+    "original_callee_saved_and_SP_restored": true,
+    "allocation_canaries_intact": true,
+    "hardware_environment": "Owned partial source context: selector at20 and hardware-version0x60800 at0x17eb0; not observed Windows/physical context",
+    "original_helpers_intercepted": [
+      "0xcae740 bounded allocator",
+      "0x85ee78 observed command arguments/success status"
+    ],
+    "field_or_constructor_or_branch_shims": false,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "native_vectors": 712,
+          "rejections": 48,
+          "status": "PASS"
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "native_vectors": 712,
+          "rejections": 48,
+          "status": "PASS"
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_register",
+      "truncate_gain",
+      "reverse_thresholds",
+      "publish_before_validation",
+      "bypass_calibration_policy"
+    ],
+    "header_pins": {
+      "sp11-front-bls121.h": "763daebc8ee6ffff964f56db73b435ffd5add2158216d29b958c4baa6a7bd068",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "src/upstream/isp-config/cold-front-fields-20261014/test-native.py": "c11d5699b50bc4d052d397d758410a4649bf01de147e4a0784909cb9de9335b7",
+      "experiments/E004-front-ir-vd55g0/e011cz-original-runtime-helpers/README.md": "0687bd39b036e887a04fa2e8f3923c3c43d56e1819a686a5295790be2199f82b",
+      "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/native-private.py": "c139cc404414e4d505e1e2e4392b70d635de8407609aec8093d67650e15df60e",
+      "src/native-rgb/front-ae/tuning/imx681-front-open-regs.txt": "1c58a25cf42a61c79896df1f6a52cbdaf92c37eab2b933a74641c188deee0b9c"
+    },
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "calibration_remeasured": false,
+    "runtime_changed": false,
+    "hardware": false,
+    "limits": [
+      "Native source bridge only; live front BLS object/precision not observed",
+      "Cold fraction0/threshold0 policy requires original-domain physical validation",
+      "Configuration-only compiler emits no module-enable command; surrounding startup/DMI/loader remain"
+    ]
+  },
+  "native_ABI_compile": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-bls121-20261014-01/native-compile01/sp11_bls121_compile.ko",
+    "module_sha256": "ce708ee40f51ad37fa5ba8b3d69061c5b0dcc9faf0359fd284c5cf2b1cc13b75",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "header_pins": {
+      "sp11-front-bls121.h": "763daebc8ee6ffff964f56db73b435ffd5add2158216d29b958c4baa6a7bd068",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "package_pins": {
+    "test-native-c.c": "3660703fb94a470ceca91cce930c6aff14fed1b28428ea2a62fee7d7582f7392",
+    "README.md": "e707d7f3e1503d6960c7798447a1a829d93fe645ed70bd6f358409cb49803d82",
+    "qualify.py": "d5dad883cc1cb8128afdaa2920e7ba050f24f36c8a438563e3eb01e60a23dea1",
+    "build-worker.py": "f85bcb47b21da81060c6428979ba8c68e59b87c2f3b12a1d93a220aa95dced79",
+    "test-native.py": "98892e66712bdcef6145ef1e394cc0437c5d7974bfc52ee4f4f64defe3100c6e",
+    "sp11-front-bls121.h": "763daebc8ee6ffff964f56db73b435ffd5add2158216d29b958c4baa6a7bd068"
+  },
+  "header_style_errors": 0,
+  "header_style_warnings": 0,
+  "header_style_checks": 0,
+  "configuration_words": 6,
+  "command_bytes": 32,
+  "module_activation_commands": 0,
+  "new_unique_threshold_fields": 4,
+  "total_unique_configuration_candidates": 33,
+  "bls_selector13_bound_to_ife_address_by_source": true,
+  "live_front_bls_selector_or_precision_observed": false,
+  "calibration_remeasured": false,
+  "private_profile_read": false,
+  "private_tuning_read": false,
+  "runtime_changed": false,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "excluded_attempts": [
+    "native01 syntax/context experiment",
+    "native02 partial parent output16",
+    "native03 partial parent output32",
+    "other module constructor exploration with unmodeled CRT boundaries"
+  ],
+  "limits": [
+    "Source bridge uses owned partial context/parent fixtures, not a complete independent Windows runtime",
+    "Live front precision/domain and fraction0/threshold0 need physical validation",
+    "No module activation, DMI, MMIO, image/frame access, allocation on hardware or private loader replacement",
+    "Surrounding independent startup plus standard API, provenance/license/DCO review remain"
+  ]
+}

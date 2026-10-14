@@ -8,8 +8,8 @@ prior_solution_reuse_policy:
   no_proven_subsystem_rewrite_without_concrete_compatibility_gap: true
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: COLD_FRONT_FIELD_POLICY_SOURCE_PASS_NATIVE_CALIBRATION_REUSED
-  evidence: docs/COLD-FRONT-FIELDS-20261014.json
+  status: BLS121_IFE_SOURCE_CONFIGURATION_PASS_NATIVE_CALIBRATION_REUSED
+  evidence: docs/FRONT-BLS121-20261014.json
   calibrated_native_pipeline_baseline: unified48_libcamera21_run93_v15
   measured_configuration_reused_words: 24
   measured_configuration_fragment_bytes: 288
@@ -72,9 +72,9 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Bind BLS selector/precision from retained front setup; complete independent
-    startup around existing calibration/native pipeline, replace private loading,
-    then fresh guarded hardware proof
+  next: Reuse retained DEMUX/channel-gain/common BLS and original native precision/geometry
+    to complete surrounding independent startup; preserve calibration/pipeline, replace
+    private loading, then fresh guarded hardware proof
   front_provider_registration_hardware_qualified: true
   front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
   front_provider_registration_trace_events: 2275
@@ -181,6 +181,12 @@ upstream_open_stack_current:
   cold_policy_fraction2: 0
   native_front_bls_selector_observed: false
   latest_action_runtime_changed: false
+  bls121_source_selector_bound_to_ife: true
+  bls121_configuration_generated_words: 6
+  bls121_configuration_fragment_bytes: 32
+  bls121_configuration_hardware_qualified: false
+  bls121_cold_register_image_source_constructor_proven: true
+  independent_configuration_unique_candidate_addresses: 33
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true

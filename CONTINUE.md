@@ -1,3 +1,38 @@
+## 2026-10-14 BLS121 source layout bound; independent six-word config PASS
+
+Reused the retained native scalar hardware-version input, exact BLS121 packer,
+CDM encoder and calibrated offset/gain. Existing unified48/libcamera21/run93/v15
+remains the baseline; no calibration or proven subsystem rewrite.
+
+Exact constructor0xa19140 -> packer0xb4bf30 -> builder0xb4b980 source bridge:
+selector13 constructs IFE BLS module0x4b60/config0x4b68,18-bit fields shifted14.
+Selector199 constructs0x2260/0x2268 with12-bit fields shifted20; its wider
+pipeline identity is unclaimed. Source context has selector20/hardware-version
+0x17eb0; uses owned0x60800 fixture. Parent scratch is partial256-byte metadata,
+not a complete independent platform/runtime ABI. Register image is actually
+zero-initialized from poisoned allocation, with88/28-byte allocations.
+
+New typed compiler emits all six BLS config words at0x4b68 in32bytes, without
+module-enable/DMI/MMIO/runtime callers. Measured wrapper reuses integer1649 and
+gain0x835, chooses fraction0 and four cold thresholds0, with existing native
+domain policy validation. Prior fragments unchanged;33 unique configuration
+candidate addresses, not complete startup.
+
+712 native IFE cases plus8 alternate cases, actual caller restoration/canaries/
+immutable original image, GCC/Clang ASan/UBSan C oracle comparison, five compiled
+unsafe mutations, strict native7.1.5 ARM64 and header style0/0/0 PASS.
+Evidence docs/FRONT-BLS121-20261014.json. Failed partial-fixture experiments and
+other modules' unmodeled CRT constructor explorations excluded, no original
+code changed. Both installed private consumers remain; upstream_ready=false.
+
+NEXT reuse retained DEMUX/channel-gain/common BLS and original calibrated
+precision/geometry source to finish independent surrounding startup with own
+matrices/LSC/ABF/tone/AE/AWB and proven native lifetime/transport. Only then
+replace private loading and fresh guarded original-domain physical proof.
+Live front precision and chosen fraction/thresholds remain physically unqualified.
+No camera access, module install/load, reboot, pixel export or new calibration.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 retained Titan680 fields reused; independent cold policy source PASS
 
 The calibrated unified48/libcamera21/run93/v15 stack remains the baseline.
