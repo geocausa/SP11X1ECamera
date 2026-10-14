@@ -1,3 +1,41 @@
+## 2026-10-14 complete CST configuration policy reuses existing encoder PASS
+
+Existing calibrated unified48/libcamera21/run93/v15 and all old source unchanged.
+The complete sp11-cst-stats encoder and rational BT.601 generator already existed;
+no CST field algorithm or optical calibration rewritten. Added only front12-bit
+full-range policy around existing encoder, omitting its module-control command.
+
+Exact original Titan680 packer0xb4d900 and builder0xb4d390 source-bind fields to
+module0x6160/count1 and configuration0x6168/count18. Packer common22 u16 fields;
+object+32 image pointer. Fixed source addresses observed, not substituted.
+675 native comparisons across three placements:558 admitted matrix configurations,
+117 generic offset/aux/clamp states match old encoder but reject new policy.
+Actual caller restoration/canaries/immutable PE and nonzero-image residual
+counterexample PASS. Source constructor not executed; zero image is own policy.
+
+New candidate uses own exact-rational GBR BT.601 Q10, offsets0/2048/2048 and
+maxima4095 from powers of2, suboffsets0 only; no rear/vendor reserve imported.
+Compiler emits18 config words/80bytes, no activation/disable/DMI/MMIO/runtime.
+GCC/Clang ASan/UBSan, four compiled unsafe mutations,4096 mathematical neutral
+values, native ARM64 W1/Werror and both header styles0/0/0 PASS. Acceptance
+native02/compile02; native01 host signedness warning excluded.
+Evidence docs/FRONT-CST12-POLICY-20261014.json.
+
+Selected independent config candidate addresses45->63; existing3072-byte Gamma
+leaf unchanged. This is a source policy candidate, not inherited-front equality
+or full processing precision/hardware proof. The auxiliary lane's nonzero
+mathematical position remains unknown and is not admitted. Neither numeric
+Gamma12 tag nor matching packer establishes real core/scaler/rounding domain.
+Both installed private consumers and private CST runtime remain/upstream_ready=false.
+
+NEXT audit/reuse retained output/scaler/RoundClamp/core source to bind selected
+12-bit Gamma/CST range to final8-bit NV12; do not inherit old10-to8 assumptions.
+Complete measured CCM auxiliary state and remaining startup around own CCM/tone/
+LSC/ABF/AE/AWB and proven native lifecycle. Only then replace private loading in
+fresh isolated candidate and original-domain physical/image parity.
+Golden/daily preserved; no camera, reboot, tuning/profile/pixel read or refit.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 startup Gamma data reuses actual calibrated10->12 bridge PASS
 
 Retained unified48/libcamera21/run93/v15 and all prior source/calibration.

@@ -8,8 +8,8 @@ prior_solution_reuse_policy:
   no_proven_subsystem_rewrite_without_concrete_compatibility_gap: true
 upstream_open_stack_current:
   branch: work/upstream-open-stack-20261011
-  status: STARTUP_GAMMA_DATA_REUSES_NATIVE_CALIBRATED_PRECISION_BRIDGE_PASS
-  evidence: docs/FRONT-GAMMA-STARTUP-20261014.json
+  status: CST12_CONFIGURATION_POLICY_REUSES_EXISTING_ENCODER_SOURCE_PASS
+  evidence: docs/FRONT-CST12-POLICY-20261014.json
   calibrated_native_pipeline_baseline: unified48_libcamera21_run93_v15
   measured_configuration_reused_words: 24
   measured_configuration_fragment_bytes: 288
@@ -72,10 +72,9 @@ upstream_open_stack_current:
   sensor_endpoint_clock_evidence: docs/UPSTREAM-IMX681-HWCFG-VALIDATION-20261013.json
   candidate23_full_image_built: false
   cphy_receiver_evidence: docs/UPSTREAM-CPHY-RECEIVER-VALIDATION-20261012.json
-  next: Reuse retained functional CST12 field packer and original front source to
-    bind calibrated core/colour precision, offsets/scales/clamps; preserve own measured
-    CCM/tone/native lifecycle, complete startup before private loader replacement
-    and fresh physical parity
+  next: Reuse retained scaler/RoundClamp/core source to bind12-bit Gamma/CST output
+    to8-bit NV12 and own measured CCM auxiliary state; complete startup before private
+    loader replacement and fresh original-domain physical/image parity
   front_provider_registration_hardware_qualified: true
   front_provider_registration_kernel: 7.1.5-sp11-render-parity-v4+
   front_provider_registration_trace_events: 2275
@@ -187,7 +186,7 @@ upstream_open_stack_current:
   bls121_configuration_fragment_bytes: 32
   bls121_configuration_hardware_qualified: false
   bls121_cold_register_image_source_constructor_proven: true
-  independent_configuration_unique_candidate_addresses: 45
+  independent_configuration_unique_candidate_addresses: 63
   front_channel_gain_configuration_source_qualified: true
   front_channel_gain_configuration_words: 12
   front_channel_gain_configuration_bytes: 56
@@ -197,7 +196,7 @@ upstream_open_stack_current:
   front_channel_gain_live_front_bayer_or_precision_qualified: false
   front_channel_gain_module_activation_emitted: false
   front_channel_gain_configuration_runtime_changed: false
-  independent_configuration_candidate_unique_addresses: 45
+  independent_configuration_candidate_unique_addresses: 63
   front_channel_gain_source_bayer0_adapter_qualified: true
   front_channel_gain_preferred_source_fragment: src/upstream/isp-config/front-channel-bayer0-20261014/sp11-front-channel-bayer0.h
   front_channel_gain_configuration_pattern_source: 0
@@ -221,6 +220,19 @@ upstream_open_stack_current:
   front_CCM_run93_measured_matrix_override_present: true
   front_CST_auxiliary_state_private_dependency_removed: false
   front_complete_core_colour_precision_domain_bound: false
+  front_CST_candidate_configuration_source_qualified: true
+  front_CST_candidate_configuration_words: 18
+  front_CST_candidate_configuration_bytes: 80
+  front_CST_candidate_gamma_domain_declaration_bits: 12
+  front_CST_candidate_suboffset_policy: zero_only
+  front_CST_original_generic_encoder_modified: false
+  front_CST_existing_math_generator_modified: false
+  front_CST_native_source_comparisons: 675
+  front_CST_source_builder_registers_bound: true
+  front_CST_candidate_hardware_qualified: false
+  front_CST_nonzero_suboffset_math_qualified: false
+  front_CST_candidate_module_control_emitted: false
+  front_complete_Gamma_CST_scaler_rounding_domain_bound: false
 approved_linux_camera_architecture:
   date: '2026-10-07'
   user_accepted: true
