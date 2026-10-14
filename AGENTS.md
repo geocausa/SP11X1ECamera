@@ -1,3 +1,12 @@
+## 2026-10-14 downloadable OS ISO cleanup authorized and completed
+User explicitly requested removal of redownloadable Windows/Ubuntu ISOs.
+Removed Windows11 ARM64 8.01GB and Ubuntu26.04 ARM64/X1E 4.08GB installers;
+no backups created. Preserved small binaryanalysis-ng ISO test fixtures.
+Available Linux-root space now~41.05GB (~38.23GiB). Evidence appended in
+docs/UPSTREAM-STORAGE-RECLAIM-20261014.json; exact disposition
+02-kernel/STORAGE-SWEEP-20261014-01/ISO-CLEAN.json. Golden/current source,
+research and private optical/calibration evidence intact; no reboot/runtime action.
+
 ## 2026-10-14 disk sweep: storage headroom restored
 User requested cleanup before further camera work. Initial available217MB;
 now~28.96GB (~26.97GiB). Evidence docs/UPSTREAM-STORAGE-RECLAIM-20261014.json.

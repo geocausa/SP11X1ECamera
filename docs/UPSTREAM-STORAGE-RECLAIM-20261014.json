@@ -64,11 +64,6 @@
   "archive_policy": "Historical exact duplicates now share immutable inodes. Keep fresh build directories and detach destinations before any overwrite; original inode/timestamp metadata retained in private disposition manifests.",
   "further_options_deferred": [
     {
-      "area": "Windows installation ISO in Downloads",
-      "bytes": 8008972288,
-      "reason": "Preserved recovery installer; optional later removal after checking recovery requirements"
-    },
-    {
       "area": "Desktop search index cache",
       "allocated_bytes": 5708861440,
       "reason": "Regenerable, but rebuilding/excluding build trees changes desktop search coverage; untouched"
@@ -82,5 +77,42 @@
       "reason": "Retained for prior-solution reuse and calibration; no deletion or export"
     }
   ],
-  "next": "Resume retained quiescence port for standard RAW; budget large full builds and reuse pinned boot/module artifacts"
+  "next": "Resume retained quiescence port for standard RAW; budget large full builds and reuse pinned boot/module artifacts",
+  "additional_iso_cleanup": {
+    "status": "PASS_DOWNLOADABLE_OS_ISOS_REMOVED",
+    "source_head": "61371a4d1957c61867b3f894029a48ad1e520233",
+    "free_before_bytes": 28957388800,
+    "files": [
+      {
+        "path": "/home/geoca/Downloads/Win11_25H2_EnglishInternational_Arm64_v2.iso",
+        "bytes": 8008972288,
+        "dev": 66309,
+        "ino": 7912331,
+        "mtime_ns": 1784118812449877499,
+        "label": "Windows11 ARM64 installer",
+        "allocated_bytes": 8008978432,
+        "type": "ISO 9660 CD-ROM filesystem data 'CCCOMA_A64FRE_EN-GB_DV9' (bootable)",
+        "removed": true
+      },
+      {
+        "path": "/home/geoca/Documents/SP11-PROJECT/03-iso/resolute-desktop-arm64+x1e.iso",
+        "bytes": 4084543488,
+        "dev": 66309,
+        "ino": 7908233,
+        "mtime_ns": 1785136954475033339,
+        "label": "Ubuntu26.04 ARM64 X1E installer",
+        "allocated_bytes": 4084547584,
+        "type": "ISO 9660 CD-ROM filesystem data (DOS/MBR boot sector) 'Ubuntu 26.04 arm64' (bootable)",
+        "removed": true
+      }
+    ],
+    "backups_created": false,
+    "tool_test_fixtures_preserved": true,
+    "free_after_bytes": 41050910720,
+    "freed_allocated_bytes": 12093526016,
+    "Golden_preserved": true,
+    "current_boot_unchanged": true
+  },
+  "current_free_bytes": 41050910720,
+  "total_net_reclaimed_bytes": 40833744896
 }
