@@ -1,3 +1,52 @@
+## 2026-10-14 COMPLETE own ABF configuration and control source/compile PASS
+
+PRIOR WORK REUSED: all23 ABF configuration words were already owned in the
+24-word measured-front-reuse fragment from run93. Previous NEXT requesting
+their reconstruction is superseded. New124byte wrapper calls that exact old
+compiler and groups only those23 words into source blocks4968/count2,
+4980/count4,49a0/count8,49c8/count9. BLS, bank and module words are excluded.
+No ABF mathematics, tuning/measurement, table, allocator, queue or IPA rewrite.
+
+Own4960,and0,or101 is already a COMPLETE measured control replacement, not a
+partial mask/private retained field. New generated scalar policy reuses only
+that row; separate12byte activation command, no runtime caller.
+Original ABF packer0xb41090 reproduces101 from own common halfwords0=1,2=1,
+4=0,6=0, descriptor4/8=0/0, pointer16, bank halfword38.
+Original builder0xb404f0 observes all four fixed config groups and control
+inside its4958/count3 command; no address replacement or numerical shims.
+Configuration source fixture accepts owned existing measured words directly;
+it does NOT claim original vendor arithmetic generates our measured calibration.
+Source command binding and own policy are distinct evidence.
+
+18 original calls,6 comparisons across3 placements, immutable original PE,
+actual SP/X19..29/D8..15 restoration, exact input/object metadata and canaries
+PASS. GCC/Clang ASan/UBSan152 atomic negatives/five compiled mutations each PASS.
+Native ARM64 W1/Werror/both header styles0/0/0 PASS; native01/compile01.
+No original constructor or serializer execution. Evidence
+docs/FRONT-ABF-CONFIG-20261014.json. All old measured/generator source unchanged.
+
+Remaining ABF boundary is owned DMI/banks/native request/lifetime and physical
+activation-after-preparation ordering, NOT missing23 configuration words.
+Catalog121 unchanged plus separate source-bound own ABF activation4960.
+Complete source ABF block/control is not complete startup/physical precision.
+Both private runtime consumers remain/upstream_ready=false. Golden/default/daily/
+unified48/libcamera21/run93/v15 preserved; no load/install/camera/reboot/private
+tuning/profile/pixel or optical-array read/export/refit.
+
+LSC PRIOR AUDIT: old g-cleanroom-lsc geometry starts4048x3152 with crop104/496,
+cell half-spacing120/96 and vertical adjustment36. It is not automatically
+qualified for current native3840x2160->2560x1440; establish mode mapping.
+Older e-template-free static_recipe explicitly reads recorded Windows main-CDM/
+DMI binaries and normalized startup/steady instruction topology. Its name does
+not make it a source-generated replacement. Reuse codecs/ownership/functional
+algorithms, not its private carrier. No original blobs were read by this audit.
+
+NEXT full13-word LSC geometry/module controls and VFE core/input source binding,
+then combine existing COMPLETE own ABF/Gamma/CCM/scaler/crop/round/table/bank
+leaves with proven native lifecycle in fresh isolated private-loader replacement,
+followed by guarded physical/image precision parity. Do not redo ABF23 or tuning.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 LSC/ABF bank pairs source/compile PASS
 
 Reused existing table handoff/source fixtures, bounded CDM serializer and
