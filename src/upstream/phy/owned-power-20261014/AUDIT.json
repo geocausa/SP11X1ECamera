@@ -1,0 +1,23 @@
+{
+  "status": "PASS_PRIOR_OWNERSHIP_REUSE_AUDIT",
+  "source_head": "01382aed28b786d8695efff14515a625f466685c",
+  "native_source_reused": "src/upstream/sensors/imx681-power-20261013/0001-imx681-port-retained-power-sequence.patch",
+  "native_validation": "docs/UPSTREAM-IMX681-POWER-VALIDATION-20261013.json",
+  "camss_retention_reused": "src/upstream/lifecycle/owned-stream-20261014",
+  "current_source_sha256": {
+    "drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c": "11d0211df424f32e2abdf26aacdfbb0558a15f3f2adef982ecbdaf15b8907908",
+    "drivers/phy/qualcomm/phy-qcom-mipi-csi2.h": "55b6eb952bce0f0590cb1605ffd97f3521b4f15282e1e4575dd49097eef5cc81",
+    "drivers/media/platform/qcom/camss/camss-csiphy.c": "20ba8bfb3a409f5acd6930c74a079471bb71b8e274e06026ccaafc31490d1c01",
+    "drivers/media/platform/qcom/camss/camss-video.c": "ba8017e6a45fdb04bcd20450b9ba52d719f9778ed146d4f18d01bfc31c544354"
+  },
+  "direct_standalone_owned_release_port_found": false,
+  "history": "git log --all -S phy_qcom_mipi_csi2_power_off found public dependency import only",
+  "compatibility_gaps": [
+    "public PHY bulk/rate/PM release paths discard errors and successful partial acquisitions",
+    "CAMSS csiphy_stream_off discards generic PHY release result",
+    "failed-start cleanup faults need to reach VB2 independent-DMA quarantine"
+  ],
+  "reuse_decision": "Port explicit acquired-reference flags, reverse release and permanent fault latch from native sensor ownership; connect to retained CAMSS fault retention",
+  "scope": "X1E standalone provider; checked API reference ownership/error propagation; reboot-only faults, no root unbind qualification",
+  "errno_contract": "Clean failed start preserves primary error; cleanup fault reports EUCLEAN and logs both codes; CAMSS pins resources on EUCLEAN"
+}

@@ -1,0 +1,79 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdio.h>
+#include <errno.h>
+#define EPROBE_DEFER 517
+#define __init
+#define __exit
+#define module_param(...)
+#define module_init(...)
+#define module_exit(...)
+#define MODULE_LICENSE(...)
+#define MODULE_DESCRIPTION(...)
+#define pr_err(...) ((void)0)
+#define pr_info(...) ((void)0)
+#define mutex_lock(p) ((void)(p))
+#define mutex_unlock(p) ((void)(p))
+#define THIS_MODULE NULL
+#define IS_ERR(p) ((uintptr_t)(p)>=(uintptr_t)-4095)
+#define PTR_ERR(p) ((intptr_t)(p))
+#define PHY_MODE_MIPI_CPHY 3
+struct phy {int mutex,power_count;};
+struct device_node {int dummy;};
+union phy_configure_opts {struct {unsigned num_trios;uint64_t symbol_rate;} mipi_cphy;};
+static struct phy fake_phy;
+static struct device_node fake_node;
+static int failure,node_refs,get_refs,init_refs,module_refs,calls,off_calls;
+static struct device_node *of_find_node_by_path(const char *path) {
+ assert(!strcmp(path,"/soc@0/phy@ace8000"));calls++;if(failure==1)return NULL;node_refs++;return &fake_node;
+}
+static bool of_device_is_available(struct device_node *n) {assert(n==&fake_node);return failure!=2;}
+static bool of_device_is_compatible(struct device_node *n,const char *type) {assert(n==&fake_node);assert(!strcmp(type,"qcom,x1e80100-csi2-phy"));return true;}
+static void of_node_put(struct device_node *n) {assert(n==&fake_node&&node_refs==1);node_refs--;}
+static struct phy *phy_get_by_of_node(struct device_node *n) {assert(n==&fake_node);calls++;if(failure==3)return (void *)(intptr_t)-EPROBE_DEFER;get_refs++;return &fake_phy;}
+static void of_phy_put(struct phy *p) {assert(p==&fake_phy&&get_refs==1);calls++;get_refs--;}
+static int phy_init(struct phy *p) {assert(p==&fake_phy);calls++;if(failure==5)return -EHOSTDOWN;init_refs++;return 0;}
+static int phy_exit(struct phy *p) {assert(p==&fake_phy&&init_refs==1);calls++;if(failure==11)return -EIO;init_refs--;return 0;}
+static int phy_set_mode(struct phy *p,int mode) {assert(p==&fake_phy&&mode==PHY_MODE_MIPI_CPHY);calls++;return failure==6?-EOPNOTSUPP:0;}
+static int phy_configure(struct phy *p,union phy_configure_opts *o) {
+ assert(p==&fake_phy&&o->mipi_cphy.num_trios==1&&o->mipi_cphy.symbol_rate==2406000000ULL);
+ calls++;return failure==7?-EINVAL:failure==12?-EUCLEAN:0;
+}
+static int phy_power_on(struct phy *p) {
+ assert(p==&fake_phy&&!p->power_count);calls++;
+ if(failure==8)return -EAGAIN;
+ if(failure==9)return -EUCLEAN;
+ p->power_count++;return 0;
+}
+static int phy_power_off(struct phy *p) {assert(p==&fake_phy&&p->power_count==1);calls++;off_calls++;if(failure==10)return -ETIMEDOUT;p->power_count--;return 0;}
+static void msleep(unsigned n) {assert(n==20&&fake_phy.power_count==1);}
+static void __module_get(void *m) {(void)m;module_refs++;}
+/* ACTUAL_DIAGNOSTIC */
+static void reset(int f) {
+ failure=f;node_refs=get_refs=init_refs=module_refs=calls=off_calls=0;
+ fake_phy=(struct phy){.power_count=f==4?1:0};
+ execute=true;result=0;completed=stage=pinned=0;owned_phy=NULL;initialized=powered=false;
+}
+int main(void) {
+ unsigned cases=0;
+ reset(0);execute=false;assert(sp11_phy_owned_cycle_init()==-EPERM&&!calls);cases++;
+ reset(0);assert(!sp11_phy_owned_cycle_init());assert(result==1&&completed==3&&stage==9&&!pinned);
+ assert(!node_refs&&!get_refs&&!init_refs&&!module_refs&&!fake_phy.power_count&&off_calls==3);sp11_phy_owned_cycle_exit();cases++;
+ for(int f=1;f<=12;f++) {
+  reset(f);assert(!sp11_phy_owned_cycle_init()&&result<0&&!node_refs);
+  bool quarantine_expected=f==9||f==10||f==11||f==12;
+  assert(!!pinned==quarantine_expected&&module_refs==(int)quarantine_expected);
+  if(quarantine_expected)assert(get_refs==1&&init_refs==1);
+  else assert(!get_refs&&!init_refs&&!module_refs);
+  assert(fake_phy.power_count==((f==4||f==10)?1:0));
+  if(f==9)assert(!off_calls&&!powered); /* Failed start never decrements power_count. */
+  if(f==10)assert(powered&&off_calls==1);
+  if(f==11)assert(completed==3&&!powered);
+  cases++;
+ }
+ printf("Actual diagnostic gate/acquisition/cleanup/quarantine cases passed\ncases=%u\n",cases);
+ return 0;
+}
