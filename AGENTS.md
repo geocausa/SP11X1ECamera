@@ -1,3 +1,28 @@
+## 2026-10-14 standard CAMSS owned lifecycle source/module28 qualified
+
+Reused native acquired-stage/reverse-unwind/safe-release in standard CAMSS.
+VB2 force-cancels queues, so private DMA-SG MMAP export references retain
+original pages/mapping on propagated shutdown faults. IRQ bookkeeping is
+detached; graph/power/module ownership retained and global fault rejects
+new starts until reboot. One X1E RDI image owner; imported DMA-BUF/PIX excluded.
+
+GCC/Clang actual-header1137 cases each and actual CAMSS/VB2 body integration47
+cases each PASS with ASan/UBSan, including three restarts. Five unsafe mutations
+rejected; template/patch replay exact; checkpatch zero diagnostics. Scoped ARM64
+module28 W=1/-Werror PASS zero warnings/errors, kernel26 ABI. No full kernel28
+build, install, boot or STREAMON. Evidence
+ docs/UPSTREAM-OWNED-LIFECYCLE-VALIDATION-20261014.json.
+
+Hurdle after prior-source/history check: standalone PHY shutdown hides release
+errors. CAMSS discards phy_power_off result; provider ignores OPP/runtime-PM/
+regulator release results. Wrapper retention handles propagated errors only.
+Resolve/qualify this compatibility gap before streaming. Buffer allocation/
+release can be tested without STREAMON on a fresh guarded identity. Supported
+fault exit is reboot; root manual unbind is unqualified. Reuse existing RE,
+source and calibration. Mandatory prior-solution policy below still applies.
+Golden a7c3654e-3a02-466a-a450-fdb9cb307fc5 and installed26/daily stack preserved;
+both private consumers/all14 release categories remain open.
+
 ## 2026-10-14 mandatory prior-solution reuse check
 
 User requirement: before tackling any issue, verify whether a genuine usable

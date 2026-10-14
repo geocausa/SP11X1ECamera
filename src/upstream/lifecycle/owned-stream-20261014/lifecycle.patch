@@ -1,0 +1,626 @@
+Subject: [PATCH] media: qcom: camss: retain owned RDI stages and DMA on faults
+
+Adapt retained native acquired-state unwind and safe-release gating to the
+standard X1E RDI path. Keep MMAP allocator references independently of VB2
+queue ownership. Hold graph, power and module references on stop faults.
+Imported DMA-BUF and PIX admission remain outside this qualification scope.
+
+---
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -8,6 +8,8 @@
+  * Copyright (C) 2015-2018 Linaro Ltd.
+  */
+ #include <linux/slab.h>
++#include <linux/dma-buf.h>
++#include <linux/module.h>
+ #include <media/media-entity.h>
+ #include <media/v4l2-dev.h>
+ #include <media/v4l2-device.h>
+@@ -147,6 +149,194 @@
+ 	return 0;
+ }
+ 
++struct camss_video_dma_hold {
++	struct list_head list;
++	struct dma_buf *planes[3];
++	unsigned int count;
++	bool exposed;
++};
++
++static bool video_owned_lifecycle(struct camss_video *video)
++{
++	return video->camss->res->version == CAMSS_X1E80100 &&
++	       video->vb2_q.type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
++}
++
++static bool video_raw_output(struct camss_video *video)
++{
++	struct camss *camss = video->camss;
++	unsigned int v, l;
++
++	for (v = 0; v < camss->res->vfe_num; v++)
++		for (l = 0; l < camss->vfe[v].res->line_num; l++)
++			if (&camss->vfe[v].line[l].output[0].video_out == video)
++				return !camss->vfe[v].line[l].is_pix;
++
++	return false;
++}
++
++static void video_dma_hold_put(struct camss_video_dma_hold *hold)
++{
++	while (hold->count)
++		dma_buf_put(hold->planes[--hold->count]);
++	kfree(hold);
++}
++
++static int video_dma_hold_get(struct camss_video *video,
++			      struct vb2_buffer *vb,
++			      struct camss_buffer *buffer)
++{
++	struct camss_video_dma_hold *hold;
++	struct dma_buf *plane;
++	unsigned int i;
++
++	if (!video_owned_lifecycle(video))
++		return 0;
++	if (!vb->num_planes || !vb->vb2_queue->mem_ops->get_dmabuf ||
++	    vb->vb2_queue->memory != VB2_MEMORY_MMAP ||
++	    vb->num_planes > ARRAY_SIZE(hold->planes))
++		return -EOPNOTSUPP;
++
++	hold = kzalloc_obj(*hold);
++	if (!hold)
++		return -ENOMEM;
++
++	for (i = 0; i < vb->num_planes; i++) {
++		plane = vb->vb2_queue->mem_ops->get_dmabuf(vb,
++				vb->planes[i].mem_priv, O_RDWR);
++		if (IS_ERR_OR_NULL(plane)) {
++			video_dma_hold_put(hold);
++			return -ENOMEM;
++		}
++		hold->planes[hold->count++] = plane;
++	}
++
++	list_add_tail(&hold->list, &video->dma_holds);
++	buffer->dma_hold = hold;
++	return 0;
++}
++
++static void video_buf_cleanup(struct vb2_buffer *vb)
++{
++	struct camss_video *video = vb2_get_drv_priv(vb->vb2_queue);
++	struct camss_buffer *buffer = container_of(to_vb2_v4l2_buffer(vb),
++						  struct camss_buffer, vb);
++	struct camss_video_dma_hold *hold = buffer->dma_hold;
++
++	if (!hold)
++		return;
++
++	buffer->dma_hold = NULL;
++	if (video->lifecycle.fault && hold->exposed)
++		return; /* Independent hold remains mapped until candidate reboot. */
++
++	list_del(&hold->list);
++	video_dma_hold_put(hold);
++}
++
++static void video_mark_dma_exposed(struct camss_video *video)
++{
++	struct camss_video_dma_hold *hold;
++
++	list_for_each_entry(hold, &video->dma_holds, list)
++		hold->exposed = true;
++}
++
++static int video_collect_subdevs(struct camss_video *video, void **subdevs)
++{
++	struct media_entity *entity = &video->vdev.entity;
++	struct media_pad *pad;
++	struct v4l2_subdev *subdev;
++	unsigned int count = 0, i;
++
++	while (entity->num_pads) {
++		pad = &entity->pads[0];
++		if (!(pad->flags & MEDIA_PAD_FL_SINK))
++			break;
++
++		pad = media_pad_remote_pad_first(pad);
++		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
++			break;
++		subdev = media_entity_to_v4l2_subdev(pad->entity);
++		if (count == CAMSS_VIDEO_MAX_SUBDEVS)
++			return -E2BIG;
++		for (i = 0; i < count; i++)
++			if (subdevs[i] == subdev)
++				return -ELOOP;
++		subdevs[count++] = subdev;
++		entity = pad->entity;
++	}
++
++	return count;
++}
++
++static bool video_subdev_is_csid(struct camss *camss,
++				 struct v4l2_subdev *subdev)
++{
++	unsigned int i;
++
++	for (i = 0; i < camss->res->csid_num; i++)
++		if (subdev == &camss->csid[i].subdev)
++			return true;
++	return false;
++}
++
++static bool video_subdev_is_vfe(struct camss *camss,
++				struct v4l2_subdev *subdev)
++{
++	unsigned int i, l;
++
++	for (i = 0; i < camss->res->vfe_num; i++)
++		for (l = 0; l < camss->vfe[i].res->line_num; l++)
++			if (subdev == &camss->vfe[i].line[l].subdev)
++				return true;
++	return false;
++}
++
++static int video_owned_stage_call(void *context, void *device, bool on)
++{
++	struct camss_video *video = context;
++	struct v4l2_subdev *subdev = device;
++	int ret;
++
++	ret = v4l2_subdev_call(subdev, video, s_stream, on);
++	if (ret < 0 && ret != -ENOIOCTLCMD)
++		dev_err(video->camss->dev, "Stream %s failed on %s: %d\n",
++			on ? "start" : "stop", subdev->name, ret);
++	return ret;
++}
++
++static void video_lifecycle_fault(struct camss_video *video)
++{
++	mutex_lock(&video->camss->stream_guard);
++	video->camss->stream_fault = true;
++	mutex_unlock(&video->camss->stream_guard);
++	vb2_queue_error(&video->vb2_q);
++	dev_err(video->camss->dev,
++		"Stream teardown fault: DMA, graph, power and module held until reboot\n");
++}
++
++static int video_stop_owned(struct camss_video *video)
++{
++	struct camss_video_lifecycle *state = &video->lifecycle;
++	unsigned int order[CAMSS_VIDEO_MAX_SUBDEVS];
++	unsigned int count = 0, i;
++
++	/* Reuse the native X1E CSID -> VFE -> PHY/sensor normal stop order. */
++	for (i = 0; i < state->count; i++)
++		if (video_subdev_is_csid(video->camss, state->stages[i].device))
++			order[count++] = i;
++	for (i = 0; i < state->count; i++)
++		if (video_subdev_is_vfe(video->camss, state->stages[i].device))
++			order[count++] = i;
++	for (i = 0; i < state->count; i++)
++		if (!video_subdev_is_csid(video->camss, state->stages[i].device) &&
++		    !video_subdev_is_vfe(video->camss, state->stages[i].device))
++			order[count++] = i;
++
++	return camss_video_stop_owned(state, order, video, video_owned_stage_call);
++}
++
+ static int video_buf_init(struct vb2_buffer *vb)
+ {
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+@@ -174,7 +364,7 @@
+ 				format->plane_fmt[0].bytesperline *
+ 				format->height;
+ 
+-	return 0;
++	return video_dma_hold_get(video, vb, buffer);
+ }
+ 
+ static int video_buf_prepare(struct vb2_buffer *vb)
+@@ -185,6 +375,9 @@
+ 						&video->active_fmt.fmt.pix_mp;
+ 	unsigned int i;
+ 
++	if (READ_ONCE(video->camss->stream_fault))
++		return -EIO;
++
+ 	for (i = 0; i < format->num_planes; i++) {
+ 		if (format->plane_fmt[i].sizeimage > vb2_plane_size(vb, i))
+ 			return -EINVAL;
+@@ -204,6 +397,11 @@
+ 	struct camss_buffer *buffer = container_of(vbuf, struct camss_buffer,
+ 						   vb);
+ 
++	if (READ_ONCE(video->camss->stream_fault)) {
++		vb2_buffer_done(vb, VB2_BUF_STATE_ERROR);
++		return;
++	}
++
+ 	video->ops->queue_buffer(video, buffer);
+ }
+ 
+@@ -238,15 +436,50 @@
+ static int video_prepare_streaming(struct vb2_queue *q)
+ {
+ 	struct camss_video *video = vb2_get_drv_priv(q);
+-	struct video_device *vdev = &video->vdev;
++	struct camss *camss = video->camss;
++	bool owned = video_owned_lifecycle(video);
+ 	int ret;
+ 
+-	ret = v4l2_pipeline_pm_get(&vdev->entity);
+-	if (ret < 0) {
+-		dev_err(video->camss->dev, "Failed to power up pipeline: %d\n",
+-			ret);
++	mutex_lock(&camss->stream_guard);
++	if (camss->stream_fault || (owned && camss->stream_owner)) {
++		ret = camss->stream_fault ? -EIO : -EBUSY;
++		mutex_unlock(&camss->stream_guard);
++		return ret;
+ 	}
++	if (owned && (!video_raw_output(video) || q->memory != VB2_MEMORY_MMAP)) {
++		mutex_unlock(&camss->stream_guard);
++		return -EOPNOTSUPP;
++	}
++	if (owned)
++		camss->stream_owner = video;
++	mutex_unlock(&camss->stream_guard);
++
++	if (owned) {
++		if (!try_module_get(THIS_MODULE)) {
++			ret = -ENODEV;
++			goto release_owner;
++		}
++		video->module_held = true;
++	}
++
++	ret = v4l2_pipeline_pm_get(&video->vdev.entity);
++	if (ret) {
++		dev_err(camss->dev, "Failed to power up pipeline: %d\n", ret);
++		if (video->module_held) {
++			video->module_held = false;
++			module_put(THIS_MODULE);
++		}
++		goto release_owner;
++	}
++	video->pm_held = true;
++	return 0;
+ 
++release_owner:
++	if (owned) {
++		mutex_lock(&camss->stream_guard);
++		camss->stream_owner = NULL;
++		mutex_unlock(&camss->stream_guard);
++	}
+ 	return ret;
+ }
+ 
+@@ -257,6 +490,7 @@
+ 	struct media_entity *entity;
+ 	struct media_pad *pad;
+ 	struct v4l2_subdev *subdev;
++	void *stages[CAMSS_VIDEO_MAX_SUBDEVS];
+ 	int ret;
+ 
+ 	ret = video_device_pipeline_alloc_start(vdev);
+@@ -265,10 +499,31 @@
+ 		goto flush_buffers;
+ 	}
+ 
++	video->pipeline_started = true;
++
+ 	ret = video_check_format(video);
+ 	if (ret < 0)
+ 		goto error;
+ 
++	if (video_owned_lifecycle(video)) {
++		ret = video_collect_subdevs(video, stages);
++		if (ret <= 0) {
++			ret = ret ? ret : -ENOLINK;
++			goto error;
++		}
++		video_mark_dma_exposed(video);
++		ret = camss_video_start_owned(&video->lifecycle, stages, ret,
++					      video, video_owned_stage_call);
++		if (ret) {
++			if (video->lifecycle.fault) {
++				video_lifecycle_fault(video);
++				goto flush_buffers;
++			}
++			goto error;
++		}
++		return 0;
++	}
++
+ 	entity = &vdev->entity;
+ 	while (1) {
+ 		pad = &entity->pads[0];
+@@ -291,6 +546,7 @@
+ 
+ error:
+ 	video_device_pipeline_stop(vdev);
++	video->pipeline_started = false;
+ 
+ flush_buffers:
+ 	video->ops->flush_buffers(video, VB2_BUF_STATE_QUEUED);
+@@ -307,6 +563,19 @@
+ 	struct v4l2_subdev *subdev;
+ 	int ret;
+ 
++	if (video_owned_lifecycle(video)) {
++		ret = video_stop_owned(video);
++		if (ret)
++			video_lifecycle_fault(video);
++		if (!video->lifecycle.fault && video->pipeline_started) {
++			video_device_pipeline_stop(vdev);
++			video->pipeline_started = false;
++		}
++		/* Detach IRQ-visible queue pointers; independent DMA holds persist. */
++		video->ops->flush_buffers(video, VB2_BUF_STATE_ERROR);
++		return;
++	}
++
+ 	entity = &vdev->entity;
+ 	while (1) {
+ 		pad = &entity->pads[0];
+@@ -336,14 +605,30 @@
+ static void video_unprepare_streaming(struct vb2_queue *q)
+ {
+ 	struct camss_video *video = vb2_get_drv_priv(q);
+-	struct video_device *vdev = &video->vdev;
+ 
+-	v4l2_pipeline_pm_put(&vdev->entity);
++	if (video->lifecycle.fault)
++		return;
++
++	if (video->pm_held) {
++		v4l2_pipeline_pm_put(&video->vdev.entity);
++		video->pm_held = false;
++	}
++	if (video_owned_lifecycle(video)) {
++		mutex_lock(&video->camss->stream_guard);
++		if (video->camss->stream_owner == video)
++			video->camss->stream_owner = NULL;
++		mutex_unlock(&video->camss->stream_guard);
++	}
++	if (video->module_held) {
++		video->module_held = false;
++		module_put(THIS_MODULE);
++	}
+ }
+ 
+ static const struct vb2_ops msm_video_vb2_q_ops = {
+ 	.queue_setup     = video_queue_setup,
+ 	.buf_init        = video_buf_init,
++	.buf_cleanup     = video_buf_cleanup,
+ 	.buf_prepare     = video_buf_prepare,
+ 	.buf_queue       = video_buf_queue,
+ 	.prepare_streaming = video_prepare_streaming,
+@@ -882,6 +1167,7 @@
+ 	vdev = &video->vdev;
+ 
+ 	mutex_init(&video->q_lock);
++	INIT_LIST_HEAD(&video->dma_holds);
+ 
+ 	q = &video->vb2_q;
+ 	q->drv_priv = video;
+@@ -895,6 +1181,8 @@
+ 	q->type = meta ? video->type : V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+ 	q->io_modes = meta ? VB2_DMABUF | VB2_MMAP :
+ 			     VB2_DMABUF | VB2_MMAP | VB2_READ;
++	if (video->camss->res->version == CAMSS_X1E80100 && !meta)
++		q->io_modes = VB2_MMAP | VB2_READ;
+ 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+ 	q->buf_struct_size = sizeof(struct camss_buffer);
+ 	q->dev = video->camss->dev;
+--- a/drivers/media/platform/qcom/camss/camss-video.h
++++ b/drivers/media/platform/qcom/camss/camss-video.h
+@@ -19,6 +19,8 @@
+ #include <media/v4l2-mediabus.h>
+ #include <media/videobuf2-v4l2.h>
+ 
++struct camss_video_dma_hold;
++
+ struct camss_buffer {
+ 	struct vb2_v4l2_buffer vb;
+ 	dma_addr_t addr[3];
+@@ -26,6 +28,7 @@
+ 
+ 	/* Metadata output nodes: kernel copy of the buffer, validated at prepare */
+ 	void *meta;
++	struct camss_video_dma_hold *dma_hold;
+ };
+ 
+ struct camss_video;
+@@ -41,6 +44,8 @@
+ 	int (*prepare_buffer)(struct camss_video *vid, struct camss_buffer *buf);
+ };
+ 
++#include "camss-video-lifecycle.h"
++
+ struct camss_video {
+ 	struct camss *camss;
+ 	struct vb2_queue vb2_q;
+@@ -49,6 +54,11 @@
+ 	struct v4l2_format active_fmt;
+ 	enum v4l2_buf_type type;
+ 	struct media_pipeline pipe;
++	struct camss_video_lifecycle lifecycle;
++	struct list_head dma_holds;
++	bool pipeline_started;
++	bool pm_held;
++	bool module_held;
+ 	const struct camss_video_ops *ops;
+ 	struct mutex lock;
+ 	struct mutex q_lock;
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -139,6 +139,10 @@
+ 	struct icc_path *icc_path[ICC_SM8250_COUNT];
+ 	const struct camss_resources *res;
+ 	bool legacy_phy;
++	/* Serializes the X1E RDI owner and permanent stream-fault latch. */
++	struct mutex stream_guard;
++	struct camss_video *stream_owner;
++	bool stream_fault;
+ };
+ 
+ struct camss_buf_done_info {
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -5463,6 +5463,7 @@
+ 		return -ENOMEM;
+ 
+ 	camss->res = of_device_get_match_data(dev);
++	mutex_init(&camss->stream_guard);
+ 
+ 	atomic_set(&camss->ref_count, 0);
+ 	camss->dev = dev;
+@@ -5917,3 +5918,4 @@
+ MODULE_DESCRIPTION("Qualcomm Camera Subsystem driver");
+ MODULE_AUTHOR("Todor Tomov <todor.tomov@linaro.org>");
+ MODULE_LICENSE("GPL v2");
++MODULE_IMPORT_NS("DMA_BUF");
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-video-lifecycle.h
+@@ -0,0 +1,136 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * CAMSS acquired-stage lifecycle, adapted from the retained native runner.
++ * The caller retains DMA, graph, PM and module ownership after any stop fault.
++ */
++#ifndef CAMSS_VIDEO_LIFECYCLE_H
++#define CAMSS_VIDEO_LIFECYCLE_H
++
++#include <linux/errno.h>
++#include <linux/types.h>
++
++#define CAMSS_VIDEO_MAX_SUBDEVS 16
++
++struct camss_video_stage {
++	void *device;
++	bool owned;
++};
++
++struct camss_video_lifecycle {
++	struct camss_video_stage stages[CAMSS_VIDEO_MAX_SUBDEVS];
++	unsigned int count;
++	bool fault;
++};
++
++typedef int (*camss_video_stage_call)(void *context, void *device, bool on);
++
++static inline int
++camss_video_unwind(struct camss_video_lifecycle *state, void *context,
++		   camss_video_stage_call call)
++{
++	unsigned int i = state->count;
++	int first = 0;
++	int ret;
++
++	while (i--) {
++		if (!state->stages[i].owned)
++			continue;
++
++		ret = call(context, state->stages[i].device, false);
++		if (ret < 0 && ret != -ENOIOCTLCMD) {
++			if (!first)
++				first = ret;
++			state->fault = true;
++		} else {
++			state->stages[i].owned = false;
++		}
++	}
++
++	if (!state->fault)
++		state->count = 0;
++
++	return first;
++}
++
++static inline int
++camss_video_start_owned(struct camss_video_lifecycle *state,
++			void *const *devices, unsigned int count,
++			void *context, camss_video_stage_call call)
++{
++	unsigned int i;
++	int ret;
++
++	if (state->fault)
++		return -EIO;
++	if (state->count)
++		return -EBUSY;
++	if (!count || count > CAMSS_VIDEO_MAX_SUBDEVS)
++		return -EINVAL;
++
++	state->count = count;
++	for (i = 0; i < count; i++) {
++		state->stages[i].device = devices[i];
++		state->stages[i].owned = false;
++	}
++
++	for (i = 0; i < count; i++) {
++		ret = call(context, devices[i], true);
++		if (ret == -ENOIOCTLCMD)
++			continue;
++		if (ret < 0) {
++			/* Preserve the start error even if acquired-stage unwind fails. */
++			camss_video_unwind(state, context, call);
++			return ret;
++		}
++
++		state->stages[i].owned = true;
++	}
++
++	return 0;
++}
++
++static inline int
++camss_video_stop_owned(struct camss_video_lifecycle *state,
++		       const unsigned int *order, void *context,
++		       camss_video_stage_call call)
++{
++	unsigned int seen = 0;
++	unsigned int i, index;
++	int first = 0;
++	int ret;
++
++	if (state->fault)
++		return -EIO;
++
++	/* Reject malformed order before any hardware callback or release. */
++	for (i = 0; i < state->count; i++) {
++		index = order[i];
++		if (index >= state->count || (seen & (1U << index))) {
++			state->fault = true;
++			return -EINVAL;
++		}
++		seen |= 1U << index;
++	}
++
++	for (i = 0; i < state->count; i++) {
++		index = order[i];
++		if (!state->stages[index].owned)
++			continue;
++
++		ret = call(context, state->stages[index].device, false);
++		if (ret < 0 && ret != -ENOIOCTLCMD) {
++			if (!first)
++				first = ret;
++			state->fault = true;
++		} else {
++			state->stages[index].owned = false;
++		}
++	}
++
++	if (!state->fault)
++		state->count = 0;
++
++	return first;
++}
++
++#endif /* CAMSS_VIDEO_LIFECYCLE_H */

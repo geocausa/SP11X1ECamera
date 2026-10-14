@@ -1,0 +1,171 @@
+{
+  "status": "PASS_OWNED_RDI_SOURCE_MODULE_AND_MODELED_LIFECYCLE",
+  "source_candidate": 28,
+  "parent_source_candidate": 27,
+  "parent_full_kernel_candidate": 26,
+  "source_head": "6394465db0cad84cfeb0ac4dcc182ff81b18dd6c",
+  "prior_solution_audit": "docs/UPSTREAM-LIFECYCLE-PRIOR-SOLUTION-AUDIT-20261014.json",
+  "reuse": "native acquired-stage reverse rollback and safe-release/PM retention; adapt standard callbacks and VB2 lifetime",
+  "qualification_scope": "one X1E RDI allocator-owned MMAP image queue; propagated callback errors",
+  "source_sha256": {
+    "camss-video.c": "ba8017e6a45fdb04bcd20450b9ba52d719f9778ed146d4f18d01bfc31c544354",
+    "camss-video.h": "8ad45bfbd839deb0c3838148aa73ba106fdd0bbcb6b0436ca57fbc770bb7c0f0",
+    "camss.h": "a036d882680dc99ae8dfb7b70993d8824a542d032b257d14d5456986d2218499",
+    "camss.c": "709707dd73a628d3e4704796ca532e440dfcda53329b8bea2dc4320a4242774e",
+    "camss-video-lifecycle.h": "ba2b6ababdf770ab74e80f1657b1b8a83b0613bb73b2954b49e7d886a901dc30"
+  },
+  "parent_source_pin_count": 101,
+  "parent_source_preserved": true,
+  "build": {
+    "status": "PASS_LIFECYCLE_MODULE_ARM64_W1_WERROR",
+    "source_head": "6394465db0cad84cfeb0ac4dcc182ff81b18dd6c",
+    "source_candidate": 28,
+    "full_kernel_candidate": 26,
+    "installed": false,
+    "module_sha256": "d87e6036ad38736817129f64388a1dc4944f3173a191c93c998d71dce35eb61f",
+    "module_bytes": 777336,
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-28/lifecycle-qual01/module01/qcom-camss.ko",
+    "vermagic": "7.2.0-sp11-upstream-front26 SMP preempt mod_unload aarch64",
+    "config_sha256": "5415823fd3d198494ccce80ec69fdfd4102bdfc7c5ac1848cd2a3716fa35bf6a",
+    "strict_warnings": 0,
+    "strict_errors": 0,
+    "qualification_scope": "X1E RDI allocator-owned MMAP lifecycle; imported DMA-BUF and PIX excluded"
+  },
+  "checkpatch": {
+    "errors": 0,
+    "warnings": 0,
+    "checks": 0,
+    "log": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-28/lifecycle-qual01/checkpatch-final.log"
+  },
+  "header_tests": {
+    "gcc_cases": 1137,
+    "clang_cases": 1137,
+    "sanitizers": [
+      "address",
+      "undefined"
+    ],
+    "private_results": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-28/lifecycle-qual01/tests01"
+  },
+  "integration": {
+    "scope": "Deterministic kernel API model, actual CAMSS and VB2 DMA-SG bodies; no hardware claim",
+    "source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-video.c": "ba8017e6a45fdb04bcd20450b9ba52d719f9778ed146d4f18d01bfc31c544354",
+      "drivers/media/common/videobuf2/videobuf2-dma-sg.c": "30a61669e50b0364757d8f7131c6651962e9acb3fef40140a0304c0a519ca9fb",
+      "drivers/media/platform/qcom/camss/camss-vfe.c": "42155f444290c82494278f6016e5916158196ae39ee30d0cfffea5519b93c81d"
+    },
+    "runs": [
+      {
+        "compiler": "gcc",
+        "result": "Actual CAMSS/VB2 DMA-SG body integration tests passed\ncases=47"
+      },
+      {
+        "compiler": "clang",
+        "result": "Actual CAMSS/VB2 DMA-SG body integration tests passed\ncases=47"
+      }
+    ],
+    "status": "PASS_ACTUAL_BODY_INTEGRATION_MODEL"
+  },
+  "mutations": {
+    "status": "PASS_UNSAFE_MUTATIONS_REJECTED",
+    "scope": "Fault quarantine, power and graph retention, IRQ buffer detachment",
+    "mutations": [
+      {
+        "name": "release_dma_on_fault",
+        "returncode": -6,
+        "rejected": true
+      },
+      {
+        "name": "drop_faulted_power",
+        "returncode": -6,
+        "rejected": true
+      },
+      {
+        "name": "omit_global_fault_latch",
+        "returncode": -6,
+        "rejected": true
+      },
+      {
+        "name": "retain_irq_buffer_pointer",
+        "returncode": -6,
+        "rejected": true
+      },
+      {
+        "name": "stop_graph_after_failed_shutdown",
+        "returncode": -6,
+        "rejected": true
+      }
+    ]
+  },
+  "replay": {
+    "status": "PASS_EXACT_REPLAY",
+    "template_replay": {
+      "camss-video.c": "ba8017e6a45fdb04bcd20450b9ba52d719f9778ed146d4f18d01bfc31c544354",
+      "camss-video.h": "8ad45bfbd839deb0c3838148aa73ba106fdd0bbcb6b0436ca57fbc770bb7c0f0",
+      "camss.h": "a036d882680dc99ae8dfb7b70993d8824a542d032b257d14d5456986d2218499",
+      "camss.c": "709707dd73a628d3e4704796ca532e440dfcda53329b8bea2dc4320a4242774e",
+      "camss-video-lifecycle.h": "ba2b6ababdf770ab74e80f1657b1b8a83b0613bb73b2954b49e7d886a901dc30"
+    },
+    "patch_replay": {
+      "camss-video.c": "ba8017e6a45fdb04bcd20450b9ba52d719f9778ed146d4f18d01bfc31c544354",
+      "camss-video.h": "8ad45bfbd839deb0c3838148aa73ba106fdd0bbcb6b0436ca57fbc770bb7c0f0",
+      "camss.h": "a036d882680dc99ae8dfb7b70993d8824a542d032b257d14d5456986d2218499",
+      "camss.c": "709707dd73a628d3e4704796ca532e440dfcda53329b8bea2dc4320a4242774e",
+      "camss-video-lifecycle.h": "ba2b6ababdf770ab74e80f1657b1b8a83b0613bb73b2954b49e7d886a901dc30"
+    }
+  },
+  "source_package_sha256": {
+    "video-owned-unprepare.c.inc": "05a82512cbeb97ab6919188950523d4868b1f1afa3db706860653f1293c06569",
+    "camss-video-lifecycle.h": "ba2b6ababdf770ab74e80f1657b1b8a83b0613bb73b2954b49e7d886a901dc30",
+    "lifecycle.patch": "39d2280d6b8558d9e5591c0ddcfa871aae049981e3472199562beab613a6940f",
+    "README.md": "da2d2416cf4274bf6fe232ddd0a77274537296b30e2da7df0a81798706f6e2c0",
+    "prepare.py": "3e712d7e9f89bb858103a77fc05f78f98e99378bd48cfafd234a2fc32468a3da",
+    "test-integration.py": "f471743e27630b149494fb86114577c6f7490a0a78a6fe73291684684bfadc89",
+    "test-lifecycle.c": "c81e215a7799d25b5bb9fb1254a3827c2d3ee37c007cbd50c90648d9f2be69a6",
+    "test-mutations.py": "594ddd17a42c7f2db91d844c1890fb5ab2fd6fc889803ae51393027929dccd42",
+    "video-owned-prepare.c.inc": "e4ed306d9f0729b11be6b31ce36302b7cd9690dc4fd0bcc85f4ea147940e2952",
+    "test-replay.py": "7f1b1872543a9864171c14f157f4afd6f0a1d4dc166243afcbb5a9f22a97b8ed",
+    "video-owned-helpers.c.inc": "684fbdc1aba6c0b0ecc6ccfcd1759b5bf6a8d63abecbe1d18a0039681c8c6e0a",
+    "build-worker.py": "e7ba366368f6dd2c666d56ffd6cc3e44752eacd4d4fa557f9c48b7d6a6cef67b",
+    "test-integration.c.in": "6fc501fed772be2fa98d4550beeca3f9ef3b0f09b534a2af91e3c22702ac1c99"
+  },
+  "callback_hurdle": {
+    "hardware_streamon_ready": false,
+    "prior_usable_standalone_phy_error_port_found": false,
+    "history": {
+      "phy_error_forwarding": [],
+      "provider_error_history": [
+        "4ff3c0f5 Qualify public X1E PHY/platform dependencies and C-PHY rate semantics"
+      ],
+      "native_phy_history": [
+        "8a9c780e camera: add stable front IMX681 source bundle"
+      ]
+    },
+    "source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-csiphy.c": "20ba8bfb3a409f5acd6930c74a079471bb71b8e274e06026ccaafc31490d1c01",
+      "drivers/phy/qualcomm/phy-qcom-mipi-csi2-core.c": "11d0211df424f32e2abdf26aacdfbb0558a15f3f2adef982ecbdaf15b8907908",
+      "drivers/phy/phy-core.c": "d354f790f83b3369ce2d88977c3f3a974e0d0737050430047156db10da0317b0",
+      "drivers/media/i2c/imx681.c": "987675da1321cd9b595ab09b1aee6d55aec63f5120352be12e0b30f20fa84f02"
+    },
+    "observations": [
+      "CAMSS csiphy_stream_off discards phy_power_off result",
+      "Standalone provider ignores OPP/runtime-PM/regulator release results and returns zero",
+      "Generic PHY core preserves power_count on negative provider return but cannot detect hidden errors",
+      "Single RDI VFE enable_one_output negative return precedes DMA enable; multioutput PIX excluded",
+      "Sensor standby CCI failure propagates while runtime-PM put runs; failed-start resource contracts need explicit qualification"
+    ],
+    "next": "Audit retained ownership/error flags; minimally port PHY error propagation and failed-start cleanup ownership before STREAMON"
+  },
+  "installed": false,
+  "hardware_booted": false,
+  "hardware_streamon": false,
+  "physical_dma_retirement_proven": false,
+  "limits": [
+    "API model is not interrupt/electrical/hardware fault proof",
+    "Imported DMA-BUF and PIX excluded",
+    "Root manual unbind/device removal after fault not qualified",
+    "Fault recovery is machine reboot",
+    "Native2.400/720MHz calibration remains valid in original domain"
+  ],
+  "private_startup_consumers_remaining": 2,
+  "release_categories_remaining": 14
+}
