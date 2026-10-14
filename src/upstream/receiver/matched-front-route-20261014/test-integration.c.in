@@ -1,0 +1,326 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+/* Test scaffolding only; production bodies are extracted from pinned source. */
+#include <assert.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
+#define ENOIOCTLCMD 515
+#include "camss-video-lifecycle.h"
+#define ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
+#define container_of(p,t,m) ((t *)((char *)(p)-offsetof(t,m)))
+struct list_head { struct list_head *next, *prev; };
+static void INIT_LIST_HEAD(struct list_head *h) { h->next=h->prev=h; }
+static bool list_empty(struct list_head *h) { return h->next==h; }
+static void list_add_tail(struct list_head *n,struct list_head *h) { n->prev=h->prev;n->next=h;h->prev->next=n;h->prev=n; }
+static void list_del(struct list_head *n) { n->prev->next=n->next;n->next->prev=n->prev; }
+#define list_for_each_entry(p,h,m) \
+ for(p=container_of((h)->next,__typeof__(*p),m); &p->m!=(h);p=container_of(p->m.next,__typeof__(*p),m))
+#define list_for_each_entry_safe(p,t,h,m) \
+ for(p=container_of((h)->next,__typeof__(*p),m),t=container_of(p->m.next,__typeof__(*p),m); \
+ &p->m!=(h);p=t,t=container_of(t->m.next,__typeof__(*t),m))
+#define IS_ERR(p) ((uintptr_t)(p) >= (uintptr_t)-4095)
+#define IS_ERR_OR_NULL(p) (!(p)||IS_ERR(p))
+#define WARN_ON(x) (x)
+#define READ_ONCE(x) (x)
+#define THIS_MODULE NULL
+#define CAMSS_X1E80100 17
+#define V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE 9
+#define VB2_MEMORY_MMAP 1
+#define VB2_MEMORY_DMABUF 4
+#define MEDIA_PAD_FL_SINK 1
+#define DMA_ATTR_SKIP_CPU_SYNC 1
+#define mutex_lock(p) ((void)(p))
+#define mutex_unlock(p) ((void)(p))
+#define dev_err(d,...) ((void)(d))
+#define dprintk(...) ((void)0)
+#define spin_lock_irqsave(p,f) do { (void)(p);(f)=0; } while(0)
+#define spin_unlock_irqrestore(p,f) do { (void)(p);(void)(f); } while(0)
+static int alloc_fail,export_fail,export_calls,unmaps,module_refs,pm_refs;
+static int module_fail,pm_fail,pipeline_fail,format_fail,pipeline_refs;
+static bool live[4];
+static void *test_zalloc(size_t n) { if(alloc_fail)return NULL;return calloc(1,n); }
+#define kzalloc_obj(v) test_zalloc(sizeof(v))
+#define kfree free
+#define kvfree free
+struct sg_table { int dummy; };
+struct vb2_dma_sg_buf { int refcount,num_pages,dma_dir;void *dev,*vaddr;void **pages;size_t size;struct sg_table sg_table,*dma_sgt; };
+struct dma_buf { struct vb2_dma_sg_buf *priv; };
+struct export_info { void *ops;size_t size;unsigned long flags;void *priv; };
+#define DEFINE_DMA_BUF_EXPORT_INFO(n) struct export_info n={0}
+static int vb2_dma_sg_dmabuf_ops;
+static bool refcount_dec_and_test(int *r) { assert(*r>0);return --*r==0; }
+static void refcount_inc(int *r) { ++*r; }
+static void dma_unmap_sgtable(void *d,struct sg_table *t,int dir,int attrs) {
+ (void)d;(void)t;(void)dir;(void)attrs;
+ for(unsigned i=0;i<4;i++)assert(!live[i]);
+ unmaps++;
+}
+static void vm_unmap_ram(void *v,int n) { (void)v;(void)n; }
+static void sg_free_table(struct sg_table *t) { (void)t; }
+static void __free_page(void *p) { free(p); }
+static void put_device(void *p) { (void)p; }
+static struct dma_buf *dma_buf_export(struct export_info *e) {
+ if(export_calls++==export_fail)return (void *)(intptr_t)-ENOMEM;
+ struct dma_buf *d=malloc(sizeof(*d));assert(d);d->priv=e->priv;return d;
+}
+struct vb2_buffer;
+static struct dma_buf *vb2_dma_sg_get_dmabuf(struct vb2_buffer *,void *,unsigned long);
+static void vb2_dma_sg_put(void *);
+static void dma_buf_put(struct dma_buf *d) { vb2_dma_sg_put(d->priv);free(d); }
+struct mem_ops { struct dma_buf *(*get_dmabuf)(struct vb2_buffer *,void *,unsigned long); };
+struct vb2_queue { int type,memory,error;struct mem_ops *mem_ops;void *drv_priv; };
+enum vb2_buffer_state { VB2_BUF_STATE_QUEUED,VB2_BUF_STATE_ERROR };
+struct vb2_buffer { struct vb2_queue *vb2_queue;unsigned num_planes;struct {void *mem_priv;} planes[3];int done;enum vb2_buffer_state state; };
+struct vb2_v4l2_buffer { struct vb2_buffer vb2_buf; };
+struct camss_video_dma_hold;
+struct camss_buffer { struct vb2_v4l2_buffer vb;struct list_head queue;struct camss_video_dma_hold *dma_hold; };
+#define to_vb2_v4l2_buffer(v) container_of(v,struct vb2_v4l2_buffer,vb2_buf)
+static void *vb2_get_drv_priv(struct vb2_queue *q) { return q->drv_priv; }
+static void vb2_buffer_done(struct vb2_buffer *v,enum vb2_buffer_state s) { assert(!v->done);v->done++;v->state=s; }
+static void vb2_queue_error(struct vb2_queue *q) { q->error=1; }
+struct media_entity;
+struct media_pad { unsigned index;unsigned flags;struct media_entity *entity;struct media_pad *remote; };
+struct media_entity { unsigned num_pads;struct media_pad *pads;bool subdev; };
+struct v4l2_subdev { struct media_entity entity;int id;const char *name;void *priv; };
+static void *v4l2_get_subdevdata(struct v4l2_subdev *s) { return s->priv; }
+struct video_device { struct media_entity entity; };
+struct camss;
+struct camss_video;
+struct video_ops { int (*flush_buffers)(struct camss_video *,enum vb2_buffer_state); };
+struct camss_video { struct camss *camss;struct vb2_queue vb2_q;struct video_device vdev;struct camss_video_lifecycle lifecycle;struct list_head dma_holds;bool pipeline_started,pm_held,module_held;struct video_ops *ops; };
+struct vfe_line;
+struct vfe_output { struct camss_video video_out;struct vfe_line *line;struct list_head pending_bufs;struct camss_buffer *buf[2],*last_buffer;struct {int active_num;} gen2; };
+struct vfe_device;
+struct vfe_line { struct v4l2_subdev subdev;struct vfe_output output[1];bool is_pix;struct vfe_device *vfe; };
+struct vfe_resource { unsigned line_num; };
+struct vfe_device { struct vfe_resource *res;struct vfe_line line[1];int output_lock; };
+struct csid_device { struct v4l2_subdev subdev; };
+struct camss_resource { unsigned version,vfe_num,csid_num; };
+struct camss { struct camss_resource *res;struct vfe_device *vfe;struct csid_device *csid;int stream_guard;bool stream_fault;struct camss_video *stream_owner;void *dev; };
+#define MSM_VFE_PAD_SINK 0
+#define MSM_CSID_PAD_FIRST_SRC 1
+#define to_vfe(l) ((l)->vfe)
+static struct media_pad *media_pad_remote_pad_first(struct media_pad *p) { return p->remote; }
+static bool is_media_entity_v4l2_subdev(struct media_entity *e) { return e->subdev; }
+#define media_entity_to_v4l2_subdev(e) container_of(e,struct v4l2_subdev,entity)
+static bool try_module_get(void *m) { (void)m;if(module_fail)return false;module_refs++;return true; }
+static void module_put(void *m) { (void)m;assert(module_refs>0);module_refs--; }
+static int v4l2_pipeline_pm_get(struct media_entity *e) { (void)e;if(pm_fail)return -EHOSTDOWN;pm_refs++;return 0; }
+static void v4l2_pipeline_pm_put(struct media_entity *e) { (void)e;assert(pm_refs>0);pm_refs--; }
+static int video_device_pipeline_alloc_start(struct video_device *v) { (void)v;if(pipeline_fail)return -EBUSY;pipeline_refs++;return 0; }
+static void video_device_pipeline_stop(struct video_device *v) { (void)v;assert(pipeline_refs>0);pipeline_refs--; }
+static int video_check_format(struct camss_video *v) { (void)v;return format_fail ? -EINVAL : 0; }
+static int start_fail,stop_fail,unsupported,trace[32],calls,drain_fail,fatal_start;
+static int vfe_prepare_stop(struct vfe_line *line) { assert(line);return drain_fail ? -ETIMEDOUT : 0; }
+static struct vfe_output *active_output;
+static int test_stream(struct v4l2_subdev *s,bool on) {
+ int id=s->id;assert(id>=0&&id<4);trace[calls++]=(on?100:200)+id;
+ if(on&&id==unsupported)return -ENOIOCTLCMD;
+ if(on&&id==fatal_start) { live[id]=true;return -EUCLEAN; }
+ if(on&&id==start_fail)return -EAGAIN;
+ if(!on&&id==stop_fail)return -ETIMEDOUT;
+ live[id]=on;
+ if(on&&id==0) {
+  for(unsigned j=0;j<2&&!list_empty(&active_output->pending_bufs);j++) {
+   struct camss_buffer *b=container_of(active_output->pending_bufs.next,struct camss_buffer,queue);
+   list_del(&b->queue);active_output->buf[j]=b;active_output->gen2.active_num++;
+  }
+ }
+ return 0;
+}
+#define v4l2_subdev_call(s,a,b,on) test_stream(s,on)
+/* EXTRACTED_FUNCTIONS */
+struct fixture {
+ struct camss camss;struct camss_resource res;
+ struct vfe_device vfe;struct vfe_resource vres;struct csid_device csid;
+ struct v4l2_subdev phy,sensor;struct media_pad pads[5];
+ struct mem_ops memops;struct video_ops ops;struct camss_buffer *buffers[3];
+};
+static struct camss_video *init(struct fixture *f) {
+ memset(f,0,sizeof(*f));memset(live,0,sizeof(live));
+ alloc_fail=module_fail=pm_fail=pipeline_fail=format_fail=0;
+ export_fail=start_fail=stop_fail=unsupported=-1;export_calls=unmaps=calls=0;
+ module_refs=pm_refs=pipeline_refs=0;drain_fail=0;fatal_start=-1;
+ f->res=(struct camss_resource){CAMSS_X1E80100,1,1};
+ f->vres.line_num=1;f->vfe.res=&f->vres;f->vfe.line[0].vfe=&f->vfe;
+ f->camss.res=&f->res;f->camss.vfe=&f->vfe;f->camss.csid=&f->csid;
+ struct camss_video *v=&f->vfe.line[0].output[0].video_out;
+ f->vfe.line[0].subdev.priv=&f->vfe.line[0];
+ active_output=&f->vfe.line[0].output[0];active_output->line=&f->vfe.line[0];
+ INIT_LIST_HEAD(&active_output->pending_bufs);INIT_LIST_HEAD(&v->dma_holds);
+ v->camss=&f->camss;v->vb2_q=(struct vb2_queue){V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,VB2_MEMORY_MMAP,0,&f->memops,v};
+ f->memops.get_dmabuf=vb2_dma_sg_get_dmabuf;f->ops.flush_buffers=vfe_flush_buffers;v->ops=&f->ops;
+ struct v4l2_subdev *sd[4]={&f->vfe.line[0].subdev,&f->csid.subdev,&f->phy,&f->sensor};
+ v->vdev.entity=(struct media_entity){1,&f->pads[0],false};
+ for(unsigned i=0;i<4;i++) {
+  sd[i]->id=i;sd[i]->name="mock";sd[i]->entity=(struct media_entity){1,&f->pads[i+1],true};
+  f->pads[i].flags=MEDIA_PAD_FL_SINK;f->pads[i].remote=&f->pads[i+1];
+  f->pads[i+1].entity=&sd[i]->entity;
+ }
+ f->pads[2].index=MSM_CSID_PAD_FIRST_SRC;
+ return v;
+}
+static struct camss_buffer *new_buffer(struct camss_video *v,unsigned planes) {
+ struct camss_buffer *b=calloc(1,sizeof(*b));assert(b);
+ b->vb.vb2_buf.vb2_queue=&v->vb2_q;b->vb.vb2_buf.num_planes=planes;
+ for(unsigned i=0;i<planes;i++) {
+  struct vb2_dma_sg_buf *sg=calloc(1,sizeof(*sg));assert(sg);
+  sg->refcount=1;sg->num_pages=1;sg->pages=calloc(1,sizeof(void *));assert(sg->pages);
+  sg->pages[0]=malloc(16);assert(sg->pages[0]);sg->dma_sgt=&sg->sg_table;sg->size=16;
+  b->vb.vb2_buf.planes[i].mem_priv=sg;
+ }
+ return b;
+}
+static void delete_buffer(struct camss_buffer *b) {
+ video_buf_cleanup(&b->vb.vb2_buf);
+ for(unsigned i=0;i<b->vb.vb2_buf.num_planes;i++)vb2_dma_sg_put(b->vb.vb2_buf.planes[i].mem_priv);
+ free(b);
+}
+static void queue_three(struct fixture *f,struct camss_video *v) {
+ for(unsigned i=0;i<3;i++) {
+  f->buffers[i]=new_buffer(v,1);
+  assert(!video_dma_hold_get(v,&f->buffers[i]->vb.vb2_buf,f->buffers[i]));
+  list_add_tail(&f->buffers[i]->queue,&active_output->pending_bufs);
+ }
+}
+static void assert_detached(void) {
+ assert(list_empty(&active_output->pending_bufs));
+ assert(!active_output->buf[0]&&!active_output->buf[1]&&!active_output->last_buffer);
+ assert(!active_output->gen2.active_num);
+}
+static void finish(struct fixture *f,struct camss_video *v,bool fault) {
+ assert_detached();
+ for(unsigned i=0;i<3;i++) {
+  assert(f->buffers[i]->vb.vb2_buf.done==1);
+  delete_buffer(f->buffers[i]);f->buffers[i]=NULL;
+ }
+ if(fault) {
+  assert(!unmaps&&pm_refs==1&&module_refs==1&&pipeline_refs==1);
+  assert(v->pipeline_started&&v->pm_held&&v->module_held&&v->camss->stream_owner==v);
+  assert(video_prepare_streaming(&v->vb2_q)==-EIO);
+  /* Test-only destruction after simulated machine reset, not a recovery API. */
+  memset(live,0,sizeof(live));
+  while(!list_empty(&v->dma_holds)) {
+   struct camss_video_dma_hold *h=container_of(v->dma_holds.next,struct camss_video_dma_hold,list);
+   list_del(&h->list);video_dma_hold_put(h);
+  }
+  module_refs=pm_refs=pipeline_refs=0;
+ } else {
+  assert(!pm_refs&&!module_refs&&!pipeline_refs&&!v->pipeline_started);
+  assert(list_empty(&v->dma_holds)&&!v->camss->stream_owner);
+ }
+ assert(unmaps==3);
+}
+int main(void) {
+ unsigned cases=0;
+ for(int fail=-1;fail<4;fail++)for(int stop=-1;stop<fail;stop++) {
+  struct fixture f;struct camss_video *v=init(&f);queue_three(&f,v);
+  assert(!video_prepare_streaming(&v->vb2_q));start_fail=fail;stop_fail=stop;
+  int ret=video_start_streaming(&v->vb2_q,3);
+  assert(ret==-EAGAIN);
+  bool fault=stop>=0;
+  assert(v->lifecycle.fault==fault&&f.camss.stream_fault==fault);
+  assert(v->vb2_q.error==fault);
+  assert_detached();
+  for(unsigned i=0;i<3;i++)assert(f.buffers[i]->vb.vb2_buf.state==VB2_BUF_STATE_QUEUED);
+  video_unprepare_streaming(&v->vb2_q);finish(&f,v,fault);cases++;
+ }
+ for(int stop=-1;stop<4;stop++) {
+  struct fixture f;struct camss_video *v=init(&f);queue_three(&f,v);
+  assert(!video_prepare_streaming(&v->vb2_q));assert(!video_start_streaming(&v->vb2_q,3));
+  stop_fail=stop;video_stop_streaming(&v->vb2_q);
+  assert(calls==8&&trace[4]==202&&trace[5]==203&&trace[6]==201&&trace[7]==200);
+  for(unsigned i=0;i<3;i++)assert(f.buffers[i]->vb.vb2_buf.state==VB2_BUF_STATE_ERROR);
+  video_unprepare_streaming(&v->vb2_q);finish(&f,v,stop>=0);cases++;
+ }
+ for(int skip=0;skip<4;skip++) {
+  struct fixture f;struct camss_video *v=init(&f);queue_three(&f,v);
+  unsupported=skip;assert(!video_prepare_streaming(&v->vb2_q));
+  assert(!video_start_streaming(&v->vb2_q,3));video_stop_streaming(&v->vb2_q);
+  assert(calls==7);video_unprepare_streaming(&v->vb2_q);finish(&f,v,false);cases++;
+ }
+ { struct fixture f;struct camss_video *v=init(&f);
+  for(unsigned cycle=0;cycle<3;cycle++) {
+   calls=unmaps=0;queue_three(&f,v);assert(!video_prepare_streaming(&v->vb2_q));
+   assert(!video_start_streaming(&v->vb2_q,3));video_stop_streaming(&v->vb2_q);
+   video_unprepare_streaming(&v->vb2_q);finish(&f,v,false);cases++;
+  }
+ }
+ for(int pre=0;pre<4;pre++) {
+  struct fixture f;struct camss_video *v=init(&f);queue_three(&f,v);
+  assert(!video_prepare_streaming(&v->vb2_q));
+  if(pre==0)pipeline_fail=1;
+  if(pre==1)format_fail=1;
+  if(pre==2)f.pads[0].remote=NULL;
+  if(pre==3)f.pads[3].remote=&f.pads[1];
+  assert(video_start_streaming(&v->vb2_q,3)<0&&calls==0);
+  video_unprepare_streaming(&v->vb2_q);finish(&f,v,false);cases++;
+ }
+ for(int pre=0;pre<5;pre++) {
+  struct fixture f;struct camss_video *v=init(&f);
+  if(pre==0)module_fail=1;
+  if(pre==1)pm_fail=1;
+  if(pre==2)v->vb2_q.memory=VB2_MEMORY_DMABUF;
+  if(pre==3)f.vfe.line[0].is_pix=true;
+  if(pre==4)f.camss.stream_fault=true;
+  assert(video_prepare_streaming(&v->vb2_q)<0);
+  assert(!module_refs&&!pm_refs&&!pipeline_refs&&!f.camss.stream_owner);cases++;
+ }
+ { struct fixture f;struct camss_video *v=init(&f);
+  assert(!video_prepare_streaming(&v->vb2_q));
+  assert(video_prepare_streaming(&v->vb2_q)==-EBUSY);
+  video_unprepare_streaming(&v->vb2_q);assert(!pm_refs&&!module_refs);cases++;
+ }
+ for(unsigned planes=1;planes<=3;planes++)for(int fail=-2;fail<(int)planes;fail++) {
+  struct fixture f;struct camss_video *v=init(&f);
+  struct camss_buffer *b=new_buffer(v,planes);
+  alloc_fail=fail==-2;export_fail=fail;
+  int ret=video_dma_hold_get(v,&b->vb.vb2_buf,b);
+  assert(ret==(fail==-1?0:-ENOMEM));
+  assert(!b->dma_hold||(fail==-1));
+  for(unsigned i=0;i<planes;i++) {
+   struct vb2_dma_sg_buf *sg=b->vb.vb2_buf.planes[i].mem_priv;
+   assert(sg->refcount==(fail==-1?2:1));
+  }
+  delete_buffer(b);assert(unmaps==(int)planes&&list_empty(&v->dma_holds));cases++;
+ }
+ for(unsigned pre=0;pre<3;pre++) {
+  struct fixture f;struct camss_video *v=init(&f);struct camss_buffer b={0};
+  b.vb.vb2_buf.vb2_queue=&v->vb2_q;b.vb.vb2_buf.num_planes=pre==0?0:pre==1?4:1;
+  if(pre==2)f.memops.get_dmabuf=NULL;
+  assert(video_dma_hold_get(v,&b.vb.vb2_buf,&b)==-EOPNOTSUPP);
+  assert(!export_calls&&!b.dma_hold);cases++;
+ }
+ for(int stop=-1;stop<4;stop++) {
+  struct fixture f;struct camss_video *v=init(&f);queue_three(&f,v);
+  assert(!video_prepare_streaming(&v->vb2_q));assert(!video_start_streaming(&v->vb2_q,3));
+  drain_fail=1;stop_fail=stop;video_stop_streaming(&v->vb2_q);
+  assert(calls==8&&trace[4]==203&&trace[5]==202&&trace[6]==201&&trace[7]==200);
+  assert(v->lifecycle.fault&&f.camss.stream_fault);
+  video_unprepare_streaming(&v->vb2_q);finish(&f,v,true);cases++;
+ }
+ for(int fail=0;fail<4;fail++) {
+  struct fixture f;struct camss_video *v=init(&f);queue_three(&f,v);
+  fatal_start=fail;assert(!video_prepare_streaming(&v->vb2_q));
+  assert(video_start_streaming(&v->vb2_q,3)==-EUCLEAN);
+  assert(v->lifecycle.fault&&f.camss.stream_fault);
+  video_unprepare_streaming(&v->vb2_q);finish(&f,v,true);cases++;
+ }
+ for(unsigned route=0;route<4;route++) {
+  struct fixture f;struct camss_video *v=init(&f);
+  if(route==0)f.pads[1].remote=NULL;
+  if(route==1)f.pads[2].entity=&f.sensor.entity;
+  if(route==2)f.pads[2].index=MSM_CSID_PAD_FIRST_SRC+1;
+  if(route==3)f.res.csid_num=0;
+  assert(video_prepare_streaming(&v->vb2_q)==-EOPNOTSUPP);
+  assert(!module_refs&&!pm_refs&&!pipeline_refs&&!f.camss.stream_owner&&!calls);
+  cases++;
+ }
+ puts("Actual CAMSS/VB2 DMA-SG source33 matched route integration tests passed");
+ printf("cases=%u\n",cases);return 0;
+}

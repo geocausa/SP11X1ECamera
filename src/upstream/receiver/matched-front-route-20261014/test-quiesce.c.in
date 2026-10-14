@@ -1,0 +1,274 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+/* Kernel adapters only. Actual source32 bodies are inserted by test-quiesce.py. */
+#include <assert.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+typedef uint32_t u32; typedef uint8_t u8; typedef uint64_t u64,dma_addr_t;
+#define U32_MAX UINT32_MAX
+#define BIT(n) (1U << (n))
+#define GENMASK(h,l) ((~0U >> (31-(h))) & (~0U << (l)))
+#define ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
+#define hweight32(n) __builtin_popcount(n)
+#define READ_ONCE(v) (v)
+#define WRITE_ONCE(v,x) ((v)=(x))
+#define CAMSS_X1E80100 17
+#define MSM_CSID_MAX_SRC_STREAMS 4
+#define MSM_CSID_PAD_SINK 0
+#define MSM_VFE_PAD_SINK 0
+#define MSM_VFE_PAD_SRC_STATS 4
+#define V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE 9
+#define V4L2_PIX_FMT_NV12 1
+#define V4L2_PIX_FMT_NV21 2
+#define V4L2_PIX_FMT_NV16 3
+#define V4L2_PIX_FMT_NV61 4
+#define ENOIOCTLCMD 515
+#define CSID_PAYLOAD_MODE_DISABLED 0
+#define IRQ_HANDLED 1
+typedef int irqreturn_t;
+#define container_of(p,t,m) ((t *)((char *)(p)-offsetof(t,m)))
+struct list_head { struct list_head *next,*prev; };
+static void INIT_LIST_HEAD(struct list_head *h) { h->next=h->prev=h; }
+static bool list_empty(struct list_head *h) { return h->next==h; }
+static void list_add_tail(struct list_head *n,struct list_head *h) { n->prev=h->prev;n->next=h;h->prev->next=n;h->prev=n; }
+static void list_del(struct list_head *n) { n->prev->next=n->next;n->next->prev=n->prev; }
+#define list_first_entry(h,t,m) container_of((h)->next,t,m)
+struct completion { bool done; };
+static unsigned spins,barriers,mmio_writes,reset_commands,done_count,holds,programs,starts,cases;
+static bool reset_ack=true,stale_stuck,rx_stuck,mask_stuck,wm_stuck,drain_timeout,drain_in_progress;
+static unsigned drain_frames;
+static void reinit_completion(struct completion *c) { c->done=false; }
+static void complete(struct completion *c) { c->done=true; }
+#define msecs_to_jiffies(n) (n)
+#define mutex_lock(p) ((void)(p))
+#define mutex_unlock(p) ((void)(p))
+#define spin_lock_irqsave(p,f) do { (void)(p);(f)=0;spins++; } while(0)
+#define spin_unlock_irqrestore(p,f) do { (void)(p);(void)(f);assert(spins);spins--; } while(0)
+static void synchronize_irq(unsigned irq) { assert(irq&&spins==0);barriers++; }
+static void wmb(void) { assert(spins==0); }
+#define dev_err(d,...) ((void)(d))
+#define dev_dbg(d,...) ((void)(d))
+#define dev_err_ratelimited(d,...) ((void)(d))
+enum vfe_output_state { VFE_OUTPUT_OFF,VFE_OUTPUT_RESERVED,VFE_OUTPUT_STOPPING,VFE_OUTPUT_ON };
+struct camss; struct vfe_device; struct vfe_line; struct vfe_output; struct csid_device;
+struct media_entity { int id; };
+struct media_pad { struct media_entity *entity;struct media_pad *remote; };
+struct v4l2_subdev { struct media_entity entity;void *priv; };
+struct scatterlist { u64 address;unsigned length; };
+struct sg_table { struct scatterlist *sgl;unsigned nents; };
+struct vb2_queue { unsigned type;void *drv_priv;bool error; };
+struct vb2_buffer { struct vb2_queue *vb2_queue;unsigned num_planes;u64 timestamp;struct sg_table *planes[3]; };
+struct vb2_v4l2_buffer { struct vb2_buffer vb2_buf;unsigned sequence; };
+struct camss_buffer { struct vb2_v4l2_buffer vb;dma_addr_t addr[3];struct list_head queue; };
+struct camss_video_lifecycle { bool fault; };
+struct v4l2_pix_format_mplane { unsigned num_planes,pixelformat,bytesperline,height,width;struct {unsigned sizeimage,bytesperline;} plane_fmt[3]; };
+struct camss_video { struct camss *camss;struct vb2_queue vb2_q;struct camss_video_lifecycle lifecycle;struct {struct {struct v4l2_pix_format_mplane pix_mp;} fmt;} active_fmt; };
+struct vfe_wm { u8 bus_client,plane; };
+struct vfe_output { struct vfe_line *line;u8 pad;unsigned wm_num;struct vfe_wm wm[1];struct camss_buffer *buf[2];struct list_head pending_bufs;struct {int active_num;bool wm_stopped;} gen2;enum vfe_output_state state;unsigned sequence;struct completion drain_complete;struct camss_video video_out; };
+struct vfe_line { unsigned id,num_outputs;bool is_pix;struct v4l2_subdev subdev;struct media_pad pads[1];struct vfe_output output[1];struct vfe_device *vfe; };
+struct vfe_hw_ops { int (*vfe_output_pause)(struct vfe_device *,struct vfe_output *);int (*vfe_output_quiesce)(struct vfe_line *);void (*vfe_output_start)(struct vfe_device *,struct vfe_output *);void (*vfe_output_update)(struct vfe_device *,struct vfe_output *,struct camss_buffer *);void (*vfe_wm_update)(struct vfe_device *,unsigned,u32,struct vfe_line *);void (*reg_update)(struct vfe_device *,unsigned); };
+struct vfe_resource { struct vfe_hw_ops *hw_ops;bool is_lite; };
+struct vfe_device { struct camss *camss;unsigned id,irq;void *base;struct vfe_resource *res;struct vfe_line line[1];int stream_count,output_lock; };
+struct csid_hw_ops { int (*configure_stream_checked)(struct csid_device *,u8);void (*configure_stream)(struct csid_device *,u8); };
+struct csid_resource { struct csid_hw_ops *hw_ops;bool is_lite; };
+struct csid_device { struct camss *camss;unsigned id,irq;void *base;struct csid_resource *res;struct completion reset_complete;int stream_lock;struct camss_video *stream_owner;bool stream_owned,stream_quiesced,stream_fault;struct {u32 en_vc;} phy;u32 reg_update;struct {unsigned nmodes;bool enabled;} testgen;int ctrls;struct media_pad pads[1];struct v4l2_subdev subdev; };
+struct camss_resource { unsigned version,csid_num; };
+struct camss { struct camss_resource *res;struct camss_video *stream_owner;bool stream_fault;void *dev;struct csid_device *csid; };
+#define to_vfe(l) ((l)->vfe)
+#define vfe_is_lite(v) ((v)->res->is_lite)
+#define csid_is_lite(c) ((c)->res->is_lite)
+static void *v4l2_get_subdevdata(struct v4l2_subdev *s) { return s->priv; }
+static int v4l2_ctrl_handler_setup(int *p) { (void)p;return 0; }
+static struct media_pad *media_pad_remote_pad_first(struct media_pad *p) { return p->remote; }
+static void vb2_queue_error(struct vb2_queue *q) { q->error=true; }
+static struct sg_table *vb2_dma_sg_plane_desc(struct vb2_buffer *v,unsigned n) { return v->planes[n]; }
+#define sg_dma_address(s) ((s)->address)
+#define sg_dma_len(s) ((s)->length)
+#define to_vb2_v4l2_buffer(v) container_of(v,struct vb2_v4l2_buffer,vb2_buf)
+static void *vb2_get_drv_priv(struct vb2_queue *q) { return q->drv_priv; }
+static int video_dma_hold_get(struct camss_video *v,struct vb2_buffer *vb,struct camss_buffer *b) { (void)v;(void)vb;(void)b;holds++;return 0; }
+static void vfe_stats_fill(struct vfe_device *v,struct vfe_output *o,struct camss_buffer *b) { (void)v;(void)o;(void)b;abort(); }
+/* PRODUCTION_DEFINES */
+static struct csid_device *current_csid;
+static struct vfe_device *current_vfe;
+static u32 readl(void *p) { return *(u32 *)p; }
+static void writel(u32 value,void *p) {
+ mmio_writes++;
+ if(current_csid) {
+  size_t off=(uintptr_t)p-(uintptr_t)current_csid->base;
+  u32 status=UINT32_MAX;
+  if(off==CSID_TOP_IRQ_CLEAR)status=CSID_TOP_IRQ_STATUS;
+  if(off==CSID_BUF_DONE_IRQ_CLEAR)status=CSID_BUF_DONE_IRQ_STATUS;
+  if(off==CSID_CSI2_RX_IRQ_CLEAR)status=CSID_CSI2_RX_IRQ_STATUS;
+  if(off==CSID_IPP_IRQ_CLEAR)status=CSID_IPP_IRQ_STATUS;
+  for(unsigned i=0;i<4;i++)if(off==CSID_CSI2_RDIN_IRQ_CLEAR(i))status=CSID_CSI2_RDIN_IRQ_STATUS(i);
+  if(status!=UINT32_MAX) {
+   if(stale_stuck&&status==CSID_TOP_IRQ_STATUS)return;
+   *(u32 *)(current_csid->base+status)&=~value;return;
+  }
+  if(rx_stuck&&off==CSID_CSI2_RX_IRQ_CLEAR)return;
+  if(mask_stuck&&off==CSID_IPP_IRQ_MASK&&value==0)return;
+  if(off==CSID_RESET_CMD) { assert(value==CSID_RESET_CMD_HW_RESET);assert(!spins);reset_commands++; }
+ }
+ if(current_vfe) {
+  size_t off=(uintptr_t)p-(uintptr_t)current_vfe->base;
+  if(wm_stuck&&off==(size_t)VFE_BUS_WRITE_CLIENT_CFG(current_vfe,current_vfe->line[0].output[0].wm[0].bus_client)&&value==0)return;
+ }
+ *(u32 *)p=value;
+}
+static void csid_configure_stream(struct csid_device *c,u8 on) {
+ assert(on);writel(1,c->base+CSID_CSI2_RX_CFG0);
+}
+static struct camss_buffer *vfe_output_done(struct vfe_device *,struct vfe_line *,struct vfe_output *,u64);
+static unsigned long wait_for_completion_timeout(struct completion *c,unsigned long timeout) {
+ assert(timeout&&spins==0);
+ if(current_csid&&c==&current_csid->reset_complete) {
+  assert(!c->done);assert(reset_commands);
+  if(!reset_ack)return 0;
+  complete(c); /* Fresh hardware IRQ adapter: command must precede it. */
+  return 1;
+ }
+ assert(current_vfe&&c==&current_vfe->line[0].output[0].drain_complete);
+ drain_in_progress=true;
+ while(!c->done&&!drain_timeout&&drain_frames<3) {
+  unsigned long flags;spin_lock_irqsave(&current_vfe->output_lock,flags);
+  struct camss_buffer *b=vfe_output_done(current_vfe,&current_vfe->line[0],&current_vfe->line[0].output[0],100+drain_frames);
+  spin_unlock_irqrestore(&current_vfe->output_lock,flags);
+  if(b)done_count++;
+  drain_frames++;
+ }
+ drain_in_progress=false;
+ return c->done ? 1 : 0;
+}
+static void model_update(struct vfe_device *v,struct vfe_output *o,struct camss_buffer *b) {
+ assert(b);programs++;writel(b->addr[0],v->base+VFE_BUS_IMAGE_ADDR(v,o->wm[0].bus_client));
+}
+static void model_start(struct vfe_device *v,struct vfe_output *o) {
+ assert(!o->gen2.wm_stopped||programs);starts++;writel(1,v->base+VFE_BUS_WRITE_CLIENT_CFG(v,o->wm[0].bus_client));
+}
+static void model_reg_update(struct vfe_device *v,unsigned id) { (void)v;(void)id; }
+/* PRODUCTION_BODIES */
+struct fixture {
+ struct camss cam;struct camss_resource cres;struct csid_device csid[2];struct csid_resource csres;
+ struct csid_hw_ops csops;struct vfe_device vfe;struct vfe_resource vres;struct vfe_hw_ops vops;
+ struct camss_buffer buf[4];struct media_pad link;u32 csr[1024],vfer[10000];
+ struct scatterlist sg;struct sg_table sgt;
+};
+static struct vfe_output *init(struct fixture *f) {
+ memset(f,0,sizeof(*f));spins=barriers=mmio_writes=reset_commands=done_count=holds=programs=starts=drain_frames=0;
+ reset_ack=true;stale_stuck=rx_stuck=mask_stuck=wm_stuck=drain_timeout=drain_in_progress=false;
+ f->cres=(struct camss_resource){CAMSS_X1E80100,2};f->cam.res=&f->cres;f->cam.csid=f->csid;
+ struct csid_device *c=&f->csid[1];c->camss=&f->cam;c->base=f->csr;c->irq=11;c->id=1;
+ c->res=&f->csres;c->phy.en_vc=1;c->subdev.priv=c;c->pads[0].remote=&f->link;
+ f->csops.configure_stream_checked=csid_configure_stream_checked;f->csops.configure_stream=csid_configure_stream;f->csres.hw_ops=&f->csops;
+ f->vfe.camss=&f->cam;f->vfe.id=1;f->vfe.irq=22;f->vfe.base=f->vfer;f->vfe.res=&f->vres;f->vfe.stream_count=1;f->vres.hw_ops=&f->vops;
+ f->vops.vfe_output_pause=vfe_output_pause;f->vops.vfe_output_quiesce=vfe_output_quiesce;
+ f->vops.vfe_output_start=model_start;f->vops.vfe_output_update=model_update;f->vops.reg_update=model_reg_update;
+ struct vfe_line *l=&f->vfe.line[0];l->vfe=&f->vfe;l->num_outputs=1;
+ f->link.entity=&c->subdev.entity;l->pads[0].remote=&f->link;
+ struct vfe_output *o=&l->output[0];o->line=l;o->wm_num=1;o->wm[0].bus_client=24;o->state=VFE_OUTPUT_ON;
+ o->video_out.camss=&f->cam;f->cam.stream_owner=&o->video_out;o->video_out.vb2_q.type=9;o->video_out.vb2_q.drv_priv=&o->video_out;
+ INIT_LIST_HEAD(&o->pending_bufs);current_csid=c;current_vfe=&f->vfe;
+ for(unsigned i=0;i<4;i++) { f->buf[i].addr[0]=0x1000+0x1000*i;INIT_LIST_HEAD(&f->buf[i].queue); }
+ o->video_out.active_fmt.fmt.pix_mp.num_planes=1;o->video_out.active_fmt.fmt.pix_mp.pixelformat=5;
+ o->video_out.active_fmt.fmt.pix_mp.plane_fmt[0].sizeimage=4096;f->sg=(struct scatterlist){0x1000,4096};f->sgt=(struct sg_table){&f->sg,1};
+ model_start(&f->vfe,o);mmio_writes=0;starts=0;return o;
+}
+static void fifo(struct fixture *f,unsigned n) {
+ struct vfe_output *o=&f->vfe.line[0].output[0];
+ for(unsigned i=0;i<n;i++)o->buf[i]=&f->buf[i];
+ o->gen2.active_num=n;
+}
+static void finish_csid(struct fixture *f) {
+ assert(!csid_set_stream(&f->csid[1].subdev,1));assert(!csid_set_stream(&f->csid[1].subdev,0));
+}
+int main(void) {
+ for(unsigned mode=0;mode<7;mode++) {
+  struct fixture f;struct vfe_output *o=init(&f);(void)o;
+  struct csid_device *c=&f.csid[1];
+  if(mode==0)f.cam.stream_owner=NULL;
+  if(mode==1)c->phy.en_vc=0;
+  if(mode==2)c->phy.en_vc=3;
+  if(mode==3)c->phy.en_vc=BIT(8);
+  if(mode==4)c->irq=0;
+  if(mode==5)f.cres.version=0;
+  if(mode==6)c->stream_fault=true;
+  assert(csid_set_stream(&c->subdev,1)<0);assert(!mmio_writes);cases++;
+ }
+ { struct fixture f;init(&f);struct csid_device *c=&f.csid[1];
+  assert(!csid_set_stream(&c->subdev,1));assert(c->stream_owned&&!c->stream_quiesced);
+  unsigned writes=mmio_writes;assert(csid_set_stream(&c->subdev,1)==-EBUSY);assert(mmio_writes==writes);
+  assert(!csid_set_stream(&c->subdev,0));assert(!c->stream_owned&&c->stream_quiesced&&c->stream_owner==f.cam.stream_owner);
+  assert(barriers==3&&reset_commands==1&&csid_stream_irqs_quiet(c));
+  assert(!csid_set_stream(&c->subdev,1));
+  assert(readl(c->base+CSID_BUF_DONE_IRQ_MASK)==UINT32_MAX&&readl(c->base+CSID_TOP_IRQ_MASK)==UINT32_MAX);
+  assert(!csid_set_stream(&c->subdev,0));cases+=2;
+ }
+ for(unsigned fail=0;fail<3;fail++) {
+  struct fixture f;init(&f);struct csid_device *c=&f.csid[1];assert(!csid_set_stream(&c->subdev,1));
+  if(fail==0)reset_ack=false;
+  if(fail==1) { f.csr[CSID_TOP_IRQ_STATUS/4]=CSID_TOP_IRQ_RESET;stale_stuck=true; }
+  if(fail==2) { f.csr[CSID_IPP_IRQ_MASK/4]=1;mask_stuck=true; }
+  int ret=csid_set_stream(&c->subdev,0);
+  assert(ret<0&&c->stream_fault&&c->stream_owned&&!c->stream_quiesced);
+  unsigned writes=mmio_writes;assert(csid_set_stream(&c->subdev,1)==-EUCLEAN&&mmio_writes==writes);cases++;
+ }
+ for(unsigned n=0;n<=2;n++) {
+  struct fixture f;struct vfe_output *o=init(&f);fifo(&f,n);if(!n)o->gen2.wm_stopped=true;
+  list_add_tail(&f.buf[2].queue,&o->pending_bufs);
+  assert(!vfe_prepare_stop(&f.vfe.line[0]));
+  assert(o->state==VFE_OUTPUT_STOPPING&&!o->gen2.active_num&&!o->buf[0]&&!o->buf[1]);
+  assert(!list_empty(&o->pending_bufs)&&!programs&&done_count==n);finish_csid(&f);
+  assert(!vfe_output_quiesce(&f.vfe.line[0]));assert(barriers==4);cases++;
+ }
+ { struct fixture f;struct vfe_output *o=init(&f);fifo(&f,2);drain_timeout=true;
+  assert(vfe_prepare_stop(&f.vfe.line[0])==-ETIMEDOUT);assert(o->gen2.active_num==2&&o->buf[0]&&o->buf[1]);cases++;
+ }
+ { struct fixture f;struct vfe_output *o=init(&f);fifo(&f,1);wm_stuck=true;
+  assert(vfe_prepare_stop(&f.vfe.line[0])<0);assert(o->gen2.active_num==1&&o->buf[0]);
+  assert(f.cam.stream_fault&&o->video_out.lifecycle.fault&&o->video_out.vb2_q.error);cases++;
+ }
+ { struct fixture f;struct vfe_output *o=init(&f);fifo(&f,1);
+  assert(vfe_output_done(&f.vfe,&f.vfe.line[0],o,42)==&f.buf[0]);
+  assert(o->gen2.wm_stopped&&readl(f.vfe.base+VFE_BUS_WRITE_CLIENT_CFG(&f.vfe,24))==0);
+  assert(!vfe_queue_buffer_v2(&o->video_out,&f.buf[1]));
+  assert(o->buf[0]==&f.buf[1]&&o->gen2.active_num==1&&!o->gen2.wm_stopped&&programs==1&&starts==1);
+  assert(readl(f.vfe.base+VFE_BUS_IMAGE_ADDR(&f.vfe,24))==f.buf[1].addr[0]);cases++;
+ }
+ for(unsigned bad=0;bad<6;bad++) {
+  struct fixture f;struct vfe_output *o=init(&f);finish_csid(&f);o->gen2.wm_stopped=true;
+  if(bad==0)f.cam.stream_owner=NULL;
+  if(bad==1)f.vfe.line[0].is_pix=true;
+  if(bad==2)f.vfe.stream_count=2;
+  if(bad==3)o->wm[0].bus_client=0;
+  if(bad==4)f.link.entity=NULL;
+  if(bad==5)f.csid[1].stream_quiesced=false;
+  assert(vfe_output_quiesce(&f.vfe.line[0])<0);cases++;
+ }
+ { struct fixture f;struct vfe_output *o=init(&f);fifo(&f,2);finish_csid(&f);
+  assert(vfe_output_quiesce(&f.vfe.line[0])==-EUCLEAN);
+  assert(o->gen2.active_num==2&&o->buf[0]&&o->buf[1]);cases++;
+ }
+ for(unsigned bad=0;bad<10;bad++) {
+  struct fixture f;struct vfe_output *o=init(&f);struct vb2_buffer *vb=&f.buf[0].vb.vb2_buf;
+  vb->vb2_queue=&o->video_out.vb2_q;vb->num_planes=1;vb->planes[0]=&f.sgt;
+  if(bad==1)f.sgt.nents=2;
+  if(bad==2)f.sg.length=4095;
+  if(bad==3)f.sg.address=(u64)UINT32_MAX+1;
+  if(bad==4)f.sg.address=UINT32_MAX-2047;
+  if(bad==5)f.sg.address=UINT64_MAX;
+  if(bad==6)o->video_out.active_fmt.fmt.pix_mp.num_planes=4;
+  if(bad==7)vb->num_planes=0;
+  if(bad==8)o->video_out.active_fmt.fmt.pix_mp.plane_fmt[0].sizeimage=0;
+  if(bad==9)vb->planes[0]=NULL;
+  int ret=video_buf_init(vb);
+  assert(ret==(bad==0?0:bad==6||bad==7?-EINVAL:bad==9?-EFAULT:-EOPNOTSUPP));
+  assert(holds==(bad==0?1U:0U));cases++;
+ }
+ printf("Actual CSID/VFE/FIFO/DMA extent model passed cases=%u\n",cases);
+ return 0;
+}

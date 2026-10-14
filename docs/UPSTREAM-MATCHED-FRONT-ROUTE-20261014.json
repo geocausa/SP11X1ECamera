@@ -1,0 +1,197 @@
+{
+  "status": "PASS_MATCHED_FRONT_ROUTE_SOURCE_MODULE_MODELS",
+  "source_candidate": 33,
+  "parent_candidate": 32,
+  "build": {
+    "status": "PASS_MATCHED_ROUTE_CAMSS_MODULE_ARM64_W1_WERROR",
+    "source_candidate": 33,
+    "full_kernel_candidate": 26,
+    "source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-csid.c": "984c9fba53307e7952a57f2d621a63add5a9b06a745db4ebc278e8698d0f41bf",
+      "drivers/media/platform/qcom/camss/camss-video.c": "84d61d6b29898851fe5882ce3912ea8aba1dc5c4920d5cf5c30e19ed8585ddde"
+    },
+    "config_sha256": "5415823fd3d198494ccce80ec69fdfd4102bdfc7c5ac1848cd2a3716fa35bf6a",
+    "artifacts": {
+      "camss": {
+        "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/upstream-ife-base-build-20261011-01/candidate-33/matched-route-qual01/camss-module01/qcom-camss.ko",
+        "sha256": "9f622b6bbfcf102f6e3d009dc7e86904c811abcd319ceaf174cf58f93d97a620",
+        "bytes": 784392,
+        "vermagic": "7.2.0-sp11-upstream-front26 SMP preempt mod_unload aarch64",
+        "strict_warnings": 0,
+        "strict_errors": 0
+      }
+    },
+    "installed": false,
+    "hardware_qualified": false
+  },
+  "integration": {
+    "scope": "Deterministic kernel API model, actual CAMSS and VB2 DMA-SG bodies; no hardware claim",
+    "source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-video.c": "84d61d6b29898851fe5882ce3912ea8aba1dc5c4920d5cf5c30e19ed8585ddde",
+      "drivers/media/common/videobuf2/videobuf2-dma-sg.c": "30a61669e50b0364757d8f7131c6651962e9acb3fef40140a0304c0a519ca9fb",
+      "drivers/media/platform/qcom/camss/camss-vfe.c": "70fcbe539a7d056b7d6394054883c5481e4f7b884703e1378347ba6cf164b899"
+    },
+    "runs": [
+      {
+        "compiler": "gcc",
+        "result": "Actual CAMSS/VB2 DMA-SG source33 matched route integration tests passed\ncases=60"
+      },
+      {
+        "compiler": "clang",
+        "result": "Actual CAMSS/VB2 DMA-SG source33 matched route integration tests passed\ncases=60"
+      }
+    ],
+    "status": "PASS_ACTUAL_BODY_INTEGRATION_MODEL"
+  },
+  "route": {
+    "status": "PASS_ACTUAL_FRONT_CPHY_LINK_POLICY",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "output": "Actual retained front C-PHY link policy passed cases=15"
+      },
+      {
+        "compiler": "clang",
+        "output": "Actual retained front C-PHY link policy passed cases=15"
+      }
+    ],
+    "source_sha256": "984c9fba53307e7952a57f2d621a63add5a9b06a745db4ebc278e8698d0f41bf",
+    "hardware_access": false
+  },
+  "quiesce": {
+    "status": "PASS_ACTUAL_QUIESCE_FIFO_DMA_EXTENT_MODEL",
+    "runs": [
+      {
+        "compiler": "gcc",
+        "output": "Actual CSID/VFE/FIFO/DMA extent model passed cases=35"
+      },
+      {
+        "compiler": "clang",
+        "output": "Actual CSID/VFE/FIFO/DMA extent model passed cases=35"
+      }
+    ],
+    "source_sha256": {
+      "camss-csid-680.c": "f4eec449b2336076d3d3b5715bc58228706aaf7482d02507a3738fabd1a1dff3",
+      "camss-csid.c": "984c9fba53307e7952a57f2d621a63add5a9b06a745db4ebc278e8698d0f41bf",
+      "camss-vfe-680.c": "358b9e2132b0581c4d085a007492eec8ed605b5935a9d92823455edcca38afd4",
+      "camss-vfe.c": "70fcbe539a7d056b7d6394054883c5481e4f7b884703e1378347ba6cf164b899",
+      "camss-video.c": "84d61d6b29898851fe5882ce3912ea8aba1dc5c4920d5cf5c30e19ed8585ddde"
+    },
+    "actual_functions": 17,
+    "scope": "Actual control/MMIO/FIFO/DMA-admission bodies with deterministic kernel/IRQ/MMIO/wait adapters; not hardware/electrical/concurrency proof"
+  },
+  "route_mutations": {
+    "status": "PASS_THREE_COMPILED_UNSAFE_ROUTE_MUTATIONS_REJECTED",
+    "mutations": [
+      {
+        "name": "old_csid0_allowlist",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "allow_all_csids",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "allow_cross_vfe_route",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      }
+    ],
+    "hardware_access": false
+  },
+  "quiesce_mutations_reused": {
+    "status": "PASS_TEN_COMPILED_UNSAFE_QUIESCE_MUTATIONS_REJECTED",
+    "mutations": [
+      {
+        "name": "skip_fresh_ack",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_csid_irq_drain",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_reopen_irq_restore",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "hide_active_dma",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "refill_during_drain",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_last_buffer_pause",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "skip_vfe_irq_barrier",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "allow_split_dma_extent",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "allow_dma_address_wrap",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      },
+      {
+        "name": "enable_before_address_on_resume",
+        "compiled": true,
+        "rejected": true,
+        "returncode": -6
+      }
+    ],
+    "hardware_access": false
+  },
+  "quiesce_actual_body_harness_identical_to32": true,
+  "exact_replay": true,
+  "checkpatch_errors": 0,
+  "checkpatch_warnings": 0,
+  "parent_pins": 102,
+  "source_package_sha256": {
+    "camss-video-lifecycle.h": "ba2b6ababdf770ab74e80f1657b1b8a83b0613bb73b2954b49e7d886a901dc30",
+    "test-route.c.in": "0ba94106f7008dff5c3e90d3521dadbcfd4c5e6152cd868b2d9ea1fa13a8b84a",
+    "README.md": "f9a3ef6efbab00eab3082af535d45c53ce3c307220b3ac52df454c0df078a67f",
+    "prepare.py": "113a63595c69928f73fcd6eecf18ff3923ccbcbeda656e4f0a9313a471f263c5",
+    "test-integration.py": "f471743e27630b149494fb86114577c6f7490a0a78a6fe73291684684bfadc89",
+    "test-route.py": "0a8cc7701ede92b6759eab664eb50570c84e321d5b5e95fb78f02241e7cdb9f0",
+    "test-quiesce.c.in": "5fa1a00a2b51ffdc0349128915e36b26331337235a1174836ebbda55fc416a99",
+    "test-mutations.py": "8e2b93411bf93e8bcf74dbcd909d3f22769662d86fb2cb3f34eb4b04431c5435",
+    "test-quiesce.py": "55de422f6cbd7a541d24daa5e27efa97a8e3fefacf7477792a7f19f49d989f5c",
+    "manifest.json": "6303945d2d17ff4730b616a24a0e1e53163eb11c76f9d625a50baa554c959da5",
+    "test-route-mutations.py": "ed0ef86d271c6a91a7fd8cd743b3b51b5bc4379e172c5c09f237c9f2f93c1a12",
+    "build-worker.py": "53f0737d83975dc007f0a5813d707b28c050017ef4bd9c6b58b476a4c8930ddf",
+    "test-integration.c.in": "8420e937e0c9cc6dced4b246a6a2c9275c4f72aead66f61d7c9630e29148498e",
+    "0001-matched-front-route.patch": "d523ea44199f6d1f39337e986bc7805361f4e5c1523e03bdc55fdd8249933617"
+  },
+  "hardware_qualified": false,
+  "installed": false,
+  "upstream_ready": false
+}

@@ -1,3 +1,25 @@
+## 2026-10-14 fresh09 route refusal; retained CSID1 fix source33 PASS
+09 consumed before capture: media-ctl link failed; no STREAMON, buffer/image
+or shutdown proof. Root command stderr-only reporting omitted exact errno;
+do not invent it. Retained source decisively contains C-PHY CSID0-only gate,
+contradicting already-proven native PHY2->CSID1->VFE1 RDI0. Golden returned
+3fe7306d-2799-4820-b8a0-7966f83eab35, complete return18 signatures0;09 retired,
+units disabled/menu archived, no pending entry/modules. Evidence
+docs/UPSTREAM-RAW09-ROUTE-REFUSAL-20261014.json. No retry09.
+
+Source33 ports the known matched-front route into the C-PHY allowlist and
+gates VFE/CSID/source-port equality before PM. Exact patch/replay/style/strict
+ARM64 module PASS; actual link15 +integration60 +quiesce35 cases per compiler
+ASAN/UBSAN, three compiled unsafe route mutations refused; ten prior quiesce
+mutation tests reused via byte-identical actual-body harness. Evidence
+docs/UPSTREAM-MATCHED-FRONT-ROUTE-20261014.json. Shutdown/PHY31/DT29/kernel26
+unchanged. Fresh10 prepared same three8-frame2640 standardRAW stop/reopen
+observer, now retaining scalar command arguments/status/stdout/stderr.
+Commit/push/verify isolated package before one-use hardware. No optical/timing,
+DMA/quiesce hardware or full fault-matrix proof yet; upstream_ready=false.
+Both private consumers/all14 release categories remain open. Prior NEXT below
+is historical; do not retrace/repeat consumed hardware or overwrite hardlinks.
+
 ## 2026-10-14 source32 standard RAW quiesce source PASS; fresh09 prepared
 docs/UPSTREAM-RDI-QUIESCE-20261014.json pins the reused native stop/capture audit,
 strict ARM64 module, exact sparse patch replay/style and actual-body models:

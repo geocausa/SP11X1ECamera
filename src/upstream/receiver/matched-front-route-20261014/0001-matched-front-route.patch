@@ -1,0 +1,43 @@
+Subject: [PATCH] media: camss: admit the retained matched front RDI route
+
+Use the hardware-proven PHY2 to CSID1 front route in the C-PHY allowlist.
+Refuse mismatched CSID/VFE and source-port links before pipeline PM/DMA.
+The old CSID0 allowlist contradicts the retained native front capture.
+
+---
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
+--- a/drivers/media/platform/qcom/camss/camss-csid.c
++++ b/drivers/media/platform/qcom/camss/camss-csid.c
+@@ -1292,7 +1292,7 @@
+ 
+ 			if (csiphy->cfg.csi2->bus_type == V4L2_MBUS_CSI2_CPHY &&
+ 			    (csid->camss->res->version != CAMSS_X1E80100 ||
+-			     csid->id != 0 || csiphy->id != 2))
++			     csid->id != 1 || csiphy->id != 2))
+ 				return -EOPNOTSUPP;
+ 			csid->phy.bus_type = csiphy->cfg.csi2->bus_type;
+ 			csid->phy.csiphy_id = csiphy->id;
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -169,8 +169,18 @@
+ 
+ 	for (v = 0; v < camss->res->vfe_num; v++)
+ 		for (l = 0; l < camss->vfe[v].res->line_num; l++)
+-			if (&camss->vfe[v].line[l].output[0].video_out == video)
+-				return !camss->vfe[v].line[l].is_pix;
++			if (&camss->vfe[v].line[l].output[0].video_out == video) {
++				struct vfe_line *line = &camss->vfe[v].line[l];
++				struct media_pad *pad;
++
++				if (line->is_pix || v >= camss->res->csid_num)
++					return false;
++				pad = media_pad_remote_pad_first(
++					&line->subdev.entity.pads[MSM_VFE_PAD_SINK]);
++				return pad &&
++				       pad->entity == &camss->csid[v].subdev.entity &&
++				       pad->index == MSM_CSID_PAD_FIRST_SRC + l;
++			}
+ 
+ 	return false;
+ }

@@ -1,0 +1,63 @@
+// SPDX-License-Identifier: GPL-2.0-only
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <errno.h>
+typedef uint32_t u32;
+#define BIT(x) (1U<<(x))
+#define MEDIA_PAD_FL_SINK 1
+#define MEDIA_PAD_FL_SOURCE 2
+#define MEDIA_LNK_FL_ENABLED 1
+#define CAMSS_X1E80100 11
+#define V4L2_MBUS_CSI2_DPHY 4
+#define V4L2_MBUS_CSI2_CPHY 5
+#define TPG_GRP_ID 77
+#define CSID_PAYLOAD_MODE_DISABLED 0
+#define container_of(p,t,m) ((t*)((char*)(p)-offsetof(t,m)))
+struct media_entity {int unused;};
+struct media_pad {u32 flags;unsigned index;struct media_entity *entity;};
+struct v4l2_subdev {struct media_entity entity;unsigned grp_id;void *priv;};
+struct csiphy_lanes_cfg {unsigned num_data;};
+struct csi2 {unsigned bus_type;struct csiphy_lanes_cfg lane_cfg;};
+struct csiphy_device {unsigned id;struct {struct csi2 *csi2;}cfg;};
+struct tpg_device {unsigned id;struct {unsigned lane_cnt;}*res;};
+struct camss {struct {unsigned version;}*res;void *dev;};
+struct ctrl {struct {int val;}cur;};
+struct csid_device {unsigned id;struct camss *camss;struct {int nmodes;}testgen;struct ctrl *testgen_mode;struct {unsigned bus_type,lane_cnt,csiphy_id,lane_assign,en_vc;}phy;bool tpg_linked;};
+static bool occupied;
+static struct media_pad *media_pad_remote_pad_first(const struct media_pad *p) {(void)p;return occupied?(void*)1:NULL;}
+#define media_entity_to_v4l2_subdev(e) container_of(e,struct v4l2_subdev,entity)
+static void *v4l2_get_subdevdata(struct v4l2_subdev *s){return s->priv;}
+static unsigned csid_get_lane_assign(void *p,unsigned n){(void)p;return n;}
+#define dev_dbg(dev,...) ((void)(dev))
+/* ACTUAL_LINK_SETUP */
+int main(void){
+ unsigned cases=0;
+ struct camss cam={0};typeof(*cam.res) res={CAMSS_X1E80100};cam.res=&res;
+ struct ctrl ctrl={0};struct csid_device csid={.id=1,.camss=&cam,.testgen_mode=&ctrl};
+ struct csi2 csi={V4L2_MBUS_CSI2_CPHY,{1}};
+ struct csiphy_device phy={2,{&csi}};
+ struct v4l2_subdev local={.priv=&csid},remote={.priv=&phy};
+ struct media_pad sink={MEDIA_PAD_FL_SINK,0,&local.entity},rp={MEDIA_PAD_FL_SOURCE,1,&remote.entity};
+ assert(!csid_link_setup(&local.entity,&sink,&rp,MEDIA_LNK_FL_ENABLED));
+ assert(csid.phy.bus_type==V4L2_MBUS_CSI2_CPHY&&csid.phy.csiphy_id==2&&csid.phy.lane_cnt==1&&!csid.tpg_linked);cases++;
+ for(unsigned id=0;id<5;id++){
+  if(id==1)continue;
+  csid.id=id;assert(csid_link_setup(&local.entity,&sink,&rp,1)==-EOPNOTSUPP);cases++;
+ }csid.id=1;
+ for(unsigned id=0;id<4;id++){
+  if(id==2)continue;
+  phy.id=id;assert(csid_link_setup(&local.entity,&sink,&rp,1)==-EOPNOTSUPP);cases++;
+ }phy.id=2;
+ res.version=0;assert(csid_link_setup(&local.entity,&sink,&rp,1)==-EOPNOTSUPP);res.version=CAMSS_X1E80100;cases++;
+ occupied=true;assert(csid_link_setup(&local.entity,&sink,&rp,1)==-EBUSY);occupied=false;cases++;
+ phy.cfg.csi2=NULL;assert(csid_link_setup(&local.entity,&sink,&rp,1)==-EPERM);phy.cfg.csi2=&csi;cases++;
+ csid.testgen.nmodes=1;ctrl.cur.val=1;assert(csid_link_setup(&local.entity,&sink,&rp,1)==-EBUSY);csid.testgen.nmodes=0;ctrl.cur.val=0;cases++;
+ csi.bus_type=V4L2_MBUS_CSI2_DPHY;assert(!csid_link_setup(&local.entity,&sink,&rp,1));cases++;
+ struct media_pad src={MEDIA_PAD_FL_SOURCE,1,&local.entity};
+ assert(!csid_link_setup(&local.entity,&src,&rp,1)&&csid.phy.en_vc==1);cases++;
+ assert(!csid_link_setup(&local.entity,&src,&rp,0)&&csid.phy.en_vc==0);cases++;
+ printf("Actual retained front C-PHY link policy passed cases=%u\n",cases);
+}
