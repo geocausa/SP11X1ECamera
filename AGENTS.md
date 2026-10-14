@@ -1,3 +1,36 @@
+## 2026-10-14 normal-slot CHANNEL_GAIN startup source PASS; prior producers reused
+
+Preserved calibrated unified48/libcamera21/run93/v15. Reused E006z gain packing,
+E012k MIT producer, actual native-front-params bridge and E011AI original
+scalar oracle unchanged. Added only the missing12 startup configuration words:
+patterns and channel input/output black offsets at0x3b68..0x3b94,56bytes.
+No new gain algorithm or optical calibration, queue, allocator, transport or IPA.
+
+Exact normal-slot source packer0xb42840 -> builder0xb41ff0: source Bayer2,
+period0, zero image; CFG0=0xca/CFG1=0x9c. Four gains retain existing packing.
+Eight14-bit offsets shift18. Public addresses are Linux-owned builder metadata,
+not a native full constructor/live-front binding. Source builder activation
+word is observed but excluded from compiler. Original lower unnamed bits can
+survive a nonzero image; new zero image/neutral offsets/unity are own policies.
+Native front Bayer0 label and source Bayer2 equivalence/precision remain unbound.
+
+927 source cases,210 using unchanged prior producer, GCC/Clang ASan/UBSan and
+five compiled unsafe mutations each PASS. Original common's four writable
+non-executable .data stores run unchanged; all other PE bytes/code immutable.
+Actual caller restoration/canaries PASS. Tiny native7.1.5 ARM64 W1/Werror and
+header style0/0/0 PASS; no installed module, CAMSS/kernel rebuild or runtime use.
+Evidence docs/FRONT-CHANNEL-GAIN-20261014.json. Acceptance native04; earlier
+verifier-only path/immutability/host-typedef/register-enum attempts excluded.
+
+45 unique configuration candidate addresses, not a complete startup program.
+Both private consumers remain; complete_startup=false/upstream_ready=false.
+NEXT audit/reuse separate DEMUX0x3968/0x396c routing and original front Bayer/
+precision/geometry source, finish surrounding startup using existing own
+matrices/LSC/ABF/tone/AE/AWB and proven native lifetime, then replace only private
+loading and fresh guarded original-domain physical parity. Golden/daily preserved.
+No camera access, reboot, pixel export or private tuning/profile read.
+Earlier current/NEXT entries below are historical.
+
 ## 2026-10-14 BLS121 source layout bound; independent six-word config PASS
 
 Reused the retained native scalar hardware-version input, exact BLS121 packer,

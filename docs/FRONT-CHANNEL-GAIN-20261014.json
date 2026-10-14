@@ -1,0 +1,181 @@
+{
+  "schema": "sp11-front-channel-gain-validation-v1",
+  "utc": "2026-10-14T14:13:20.471378+00:00",
+  "project_parent": "4cb935ae7a59eb78a49c37ea8e109887f88ce87f",
+  "status": "PASS_CHANNEL_GAIN_SOURCE_CONFIGURATION_PRIOR_PRODUCERS_REUSED",
+  "native_source_bridge": {
+    "schema": "sp11-channel-gain-native-config-v1",
+    "status": "PASS_RETAINED_PRODUCERS_AND_NORMAL_SLOT_NATIVE_CONFIGURATION",
+    "original_PE_sha256": "c241b7fbb2ec54e439752a1ea7ad25da10ca740012a54bd0e7a87ea94a141c35",
+    "original_executable_and_other_image_bytes_immutable": true,
+    "original_PE_exported": false,
+    "source_owned_writable_nonexecuting_data_cells": [
+      {
+        "rva": "0x1798f20",
+        "bytes": 4
+      },
+      {
+        "rva": "0x1686ed8",
+        "bytes": 2
+      },
+      {
+        "rva": "0x1795ccc",
+        "bytes": 4
+      },
+      {
+        "rva": "0x1795cc8",
+        "bytes": 4
+      }
+    ],
+    "native_cases": 927,
+    "prior_producer_cases": 210,
+    "native_instructions": 207849,
+    "placements": 3,
+    "SP_callee_saved_restored": true,
+    "image_canaries_intact": true,
+    "native_entries": {
+      "common": "0x998e70",
+      "packer": "0xb42840",
+      "builder": "0xb41ff0"
+    },
+    "intercepted_helpers": [
+      "0x85ee78 command arguments observer/success status"
+    ],
+    "packing_arithmetic_or_field_shims": false,
+    "constructor_executed": false,
+    "public_address_metadata_owned": {
+      "module": "0x3b60",
+      "configuration": "0x3b68"
+    },
+    "scope": {
+      "descriptor_slots": [
+        0,
+        0
+      ],
+      "source_bayer": 2,
+      "period": 0,
+      "initial_register_image": "zero",
+      "producer_black_offsets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "producer_max_gain_below_normalization": true
+    },
+    "nonzero_old_image_counterexample_checked": true,
+    "compiler_runs": [
+      {
+        "compiler": "gcc",
+        "ASan_UBSan": true,
+        "result": {
+          "native_vectors": 927,
+          "prior_producer_vectors": 210,
+          "status": "PASS"
+        }
+      },
+      {
+        "compiler": "clang",
+        "ASan_UBSan": true,
+        "result": {
+          "native_vectors": 927,
+          "prior_producer_vectors": 210,
+          "status": "PASS"
+        }
+      }
+    ],
+    "compiled_mutations_rejected_each": [
+      "wrong_pattern",
+      "reverse_gain_order",
+      "wrong_black_shift",
+      "early_publication",
+      "bypass_policy"
+    ],
+    "header_pins": {
+      "sp11-front-channel-gain.h": "ab6c343ec1353aee81215063b47fc7944f629c5c73c42ba280fd3de623c82081",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "prior_reference_pins": {
+      "experiments/E004-front-ir-vd55g0/e011ai-rear-neutral-scalar-full-integration/native-private.py": "c139cc404414e4d505e1e2e4392b70d635de8407609aec8093d67650e15df60e",
+      "experiments/E004-front-ir-vd55g0/e012k-rear-neutral-scalar-clean-producer/rear-neutral-scalar.h": "59e55e51b7f501aaf188202ac35d6ae11e8859a18a7ddd1581d4fe77fe77fa89",
+      "experiments/E004-front-ir-vd55g0/e012k-rear-neutral-scalar-clean-producer/rear-neutral-scalar.c": "8f9628e57f91b6571d5c5736694d429650cee6fb32ed25ebd6259a85c8edb6f2",
+      "src/native-rgb/native-front-params.h": "181aafe910fd99bb3c47be36bbd35e335dd2ef814536d0c6ce9d381ec5bc70e1",
+      "experiments/E004-front-ir-vd55g0/e006z-rear-clean-scalar-bank-providers/camss-e006z-clean-scalar-bank.inc": "0889ffa9f9f846a43fcea05d730501fe096e7a164ada0d7bc99ba433da7c6a40"
+    },
+    "private_profile_read": false,
+    "private_tuning_read": false,
+    "pixels_read": false,
+    "calibration_remeasured": false,
+    "runtime_changed": false,
+    "hardware": false,
+    "limits": [
+      "Source-only startup configuration; no live front Bayer/pattern/precision/domain proof",
+      "Builder address metadata is owned public input, not a source constructor binding",
+      "Zero initial image/lower unnamed bits/neutral channel BLS are independent policies, not inherited tuning equivalence",
+      "Existing producer is reused only in the non-normalizing synthetic zero-BLS domain",
+      "No module activation or separate DEMUX0x3968/0x396c setup or runtime loader replacement"
+    ]
+  },
+  "native_ABI_compile": {
+    "status": "PASS_NATIVE_ABI_COMPILE_ONLY",
+    "module_path": "/home/geoca/Documents/SP11-PROJECT/02-kernel/front-channel-gain-20261014-01/native-compile01/sp11_channel_gain_compile.ko",
+    "module_sha256": "7c24e821ccac454560cd70de3424a0d622d4a72bb59ef26210ea217e25639593",
+    "vermagic": "7.1.5-sp11-render-parity-v4+ SMP preempt mod_unload modversions aarch64",
+    "warnings": 0,
+    "errors": 0,
+    "header_pins": {
+      "sp11-front-channel-gain.h": "ab6c343ec1353aee81215063b47fc7944f629c5c73c42ba280fd3de623c82081",
+      "sp11-front-cold-fields.h": "6f983dd01660db5b2ad7c862ba371f6539689237ff17e322483e5e26e6347041",
+      "sp11-front-measured-config.h": "900a0ed85acdb4ae0a9587cb621c46391cfbab1c135c3c6a5ea784953587098c",
+      "sp11-cdm.h": "2d13187fdb4170779bbd811400ed4b0a6b2649377fc72ecbac9d5dc2cda8f53c"
+    },
+    "installed": false,
+    "loaded": false,
+    "CAMSS_or_kernel_rebuilt": false,
+    "runtime_changed": false,
+    "hardware": false
+  },
+  "public_register_header_sha256": "bce9607bac5b46ce907a1434b3a772c5c40b753b1c933db7d37822b9c26e020e",
+  "package_pins": {
+    "test-native-c.c": "d062ff52b43e449f4746824d73a35be55b099963102635ab38707e4be0d226bc",
+    "README.md": "4a35465f446f872fed474daed9cf4e24bb345fbb3aeb8b94d90f580fcf148dae",
+    "sp11-front-channel-gain.h": "ab6c343ec1353aee81215063b47fc7944f629c5c73c42ba280fd3de623c82081",
+    "qualify.py": "e47ce6749d78b208142642a687086cf0c043c878925e551a72fd477edb804158",
+    "build-worker.py": "182756e4ed35bc78c971b39f29a75acbf42866be7c65155c88903ebdac08d8f0",
+    "test-native.py": "8b1fbceb4516d97b141f6cc9fdf3e3ff13fe0bdfa48c0fa5e81ac9ffa6183a0e"
+  },
+  "header_style_errors": 0,
+  "header_style_warnings": 0,
+  "header_style_checks": 0,
+  "configuration_words": 12,
+  "command_bytes": 56,
+  "module_activation_commands": 0,
+  "prior_unique_configuration_candidates": 33,
+  "total_unique_configuration_candidates": 45,
+  "source_bayer2_normal_slot_pattern_qualified": true,
+  "live_front_bayer_or_precision_observed": false,
+  "prior_gain_producer_modified": false,
+  "prior_native_bridge_modified": false,
+  "calibration_remeasured": false,
+  "private_profile_read": false,
+  "private_tuning_read": false,
+  "runtime_changed": false,
+  "complete_startup": false,
+  "private_runtime_consumers_remaining": 2,
+  "upstream_ready": false,
+  "excluded_attempts": [
+    "missing parent output stage before any oracle work",
+    "native01 whole-image immutability assertion did not account for original writable data stores",
+    "native02 redundant conflicting host endian typedef",
+    "native03 verifier register enum arithmetic did not include actual X29; use explicit named registers in native04"
+  ],
+  "limits": [
+    "Normal slots0/0, source Bayer2 and period0 only; native front Bayer0 enum equivalence unbound",
+    "Public addresses are owned builder metadata; full native constructor binding not executed",
+    "Neutral zero initial image/offsets and unity gains need original-domain physical parity",
+    "E012k source producer checked only below native gain normalization boundary with zero channel BLS",
+    "Separate DEMUX, other startup, private loader replacement and standard API/provenance review remain"
+  ]
+}
