@@ -1,3 +1,22 @@
+## 2026-10-14 RAW prior usable solutions confirmed; standard quiesce port next
+Audit docs/UPSTREAM-RAW-PRIOR-SOLUTION-AUDIT-20261014.json pins current31,
+retained native sources/history and actual hardware59 build. Matched front
+CSID1->VFE1 RDI already delivered8 real pRAA3840x2160 buffers; later1803 source
+frames at30.0049fps. Latest rear59 had3 sessions/1200 joined images with all
+four stops and DMA/cache/owner/arena release. Reuse these implementations.
+
+Current standard VFE680 reset_complete is software-only; CSID RDI stop has
+no acknowledged/drained stop hook. Explicit-failure ownership guards28/30/31
+cannot detect successful void/no-op teardown. Standard RAW remains NOT
+hardware-ready until typed quiesce errors, owned WM stop readback and real IRQ
+drain are ported under exclusive ownership before VB2 release. IRQ barriers
+must run outside output spinlock. Source08 power-up reset is not streaming
+DMA proof. Latest59 stops upstream sources before strict CSID drain; older
+front/rear prefix is not a universal drop-in. Preserve normal acquired-stage
+unwind/fault quarantine and port only one-RDI/7.2 API compatibility gaps.
+No new stream/reboot or Windows tracing in this audit; source31 PHY08 PASS
+and protected Golden remain current. Earlier NEXT paragraphs are historical.
+
 ## 2026-10-14 source31 PHY three-cycle hardware PASS
 Retained acquired-resource/release-error policy is ported to standalone PHY
 and typed CAMSS stop (source30). Fresh07 powered on but first stop returned
